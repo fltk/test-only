@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.4 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.5 2001/02/20 19:58:49 robertk Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,8 @@ static unsigned char nosuch_bits[] = {
    0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
    0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
    0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
-Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+
+FL_IMAGES_API Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
 Fl_Image_Type fl_image_filetypes[] = {
   { "XPM", Fl_XPM_Image::test, Fl_XPM_Image::get},
@@ -77,5 +78,5 @@ Fl_Image_Type* Fl_Shared_Image::guess(const char* name, const uchar* datas)
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.4 2000/09/05 17:36:20 spitzak Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.5 2001/02/20 19:58:49 robertk Exp $"
 //

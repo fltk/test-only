@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.9 2001/02/20 19:58:49 robertk Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -142,15 +142,15 @@ void fl_font_rid() {
     fl_fonts[i].first = 0;
   }
   for (int j = 0; j < num_fonts; j++) {
-    for (Fl_FontSize* fs = font_array[j].first; fs;) {
+    for (Fl_FontSize* fs = font_array[j]->first; fs;) {
       Fl_FontSize* next = fs->next;
       delete fs;
       fs = next;
     }
-    font_array[j].first = 0;
+    ((Fl_Font_**)(font_array))[j]->first = 0;
   }
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.9 2001/02/20 19:58:49 robertk Exp $"
 //

@@ -242,10 +242,6 @@ SOURCE=..\src\fl_call_main.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\forms\Fl_Chart.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Check_Button.cxx
 # End Source File
 # Begin Source File
@@ -394,10 +390,6 @@ SOURCE=..\src\Fl_Group.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\images\Fl_Guess_Image.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Highlight_Button.cxx
 # End Source File
 # Begin Source File
@@ -414,10 +406,6 @@ SOURCE=..\src\Fl_Item.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\images\fl_jpeg.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_key_name.cxx
 # End Source File
 # Begin Source File
@@ -427,10 +415,6 @@ SOURCE=..\src\fl_labeltype.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Light_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_line_style.cxx
 # End Source File
 # Begin Source File
 
@@ -515,14 +499,6 @@ SOURCE=..\src\Fl_Pack.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Pixmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\images\fl_png.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\Fl_Positioner.cxx
 # End Source File
 # Begin Source File
 
@@ -683,34 +659,6 @@ SOURCE=..\src\Fl_XColor.H
 # Begin Source File
 
 SOURCE=..\src\fl_xpm.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_bitmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_compatability.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_free.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_fselect.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_pixmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\forms_timer.cxx
 # End Source File
 # Begin Source File
 

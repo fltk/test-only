@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.19 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.20 2001/02/20 19:58:49 robertk Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -184,7 +184,8 @@ public:
   }
 };
 
-class FL_API Fl_Bitmap;
+//class FL_API Fl_Bitmap;
+class Fl_Bitmap;
 extern FL_IMAGES_API Fl_Bitmap nosuch_bitmap;
 
 class FL_IMAGES_API Fl_UNKNOWN_Image {
@@ -198,5 +199,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.19 2001/02/16 22:55:45 robertk Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.20 2001/02/20 19:58:49 robertk Exp $"
 //

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386
+# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /libpath:"../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -92,14 +92,78 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\images\Fl_Guess_Image.cxx
+DEP_CPP_FL_GU=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
+	
+
+!IF  "$(CFG)" == "fltkdll_images - Win32 Release"
+
+# ADD CPP /D "FL_SHARED"
+# SUBTRACT CPP /D "FL_DLL"
+
+!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
+
+# SUBTRACT CPP /D "FL_DLL"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_jpeg.cxx
+DEP_CPP_FL_JP=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_png.cxx
+DEP_CPP_FL_PN=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
+	
 # End Source File
 # End Target
 # End Project

@@ -368,11 +368,41 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_images"=.\fltk_images.lib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
 
 Project: "fltkdll"=.\fltkdll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltkdll_images
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltkdll_images"=.\fltkdll_images.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -393,10 +423,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltkdll
+    Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkdll_images
+    Project_Dep_Name fltk_images
     End Project Dependency
 }}}
 
@@ -583,6 +613,21 @@ Package=<4>
 ###############################################################################
 
 Project: "pixmap_browser"=.\pixmap_browser.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "radio"=.\radio.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

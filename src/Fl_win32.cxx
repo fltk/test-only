@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.137 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.138 2001/02/20 19:58:49 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1206,7 +1206,8 @@ void fl_get_system_colors() {
   Fl_Font font; int size;
 
   // get font info for regular widgets from LOGFONT structure
-  font = fl_font((const char*)ncm.lfMessageFont.lfFaceName);
+  //  font = fl_font((const char*)ncm.lfMessageFont.lfFaceName);
+  font = fl_find_font((const char*)ncm.lfMessageFont.lfFaceName);
   if (ncm.lfMessageFont.lfWeight >= 600) font = font->bold();
   if (ncm.lfMessageFont.lfItalic) font = font->italic();
   size = win_fontsize(ncm.lfMessageFont.lfHeight);
@@ -1218,7 +1219,8 @@ void fl_get_system_colors() {
 
   if ((style = Fl_Style::find("item"))) {
   // get font info for menu items from LOGFONT structure
-    font = fl_font((const char*)ncm.lfMenuFont.lfFaceName);
+    //font = fl_font((const char*)ncm.lfMenuFont.lfFaceName);
+    font = fl_find_font((const char*)ncm.lfMenuFont.lfFaceName);
     if (ncm.lfMenuFont.lfWeight >= 600) font = font->bold();
     if (ncm.lfMenuFont.lfItalic) font = font->italic();
     size = win_fontsize(ncm.lfMenuFont.lfHeight);
@@ -1239,7 +1241,8 @@ void fl_get_system_colors() {
 
   if ((style = Fl_Style::find("tooltip"))) {
   // get font info for tooltips from LOGFONT structure
-    font = fl_font((const char*)ncm.lfStatusFont.lfFaceName);
+    //font = fl_font((const char*)ncm.lfStatusFont.lfFaceName);
+    font = fl_find_font((const char*)ncm.lfStatusFont.lfFaceName);
     if (ncm.lfStatusFont.lfWeight >= 600) font = font->bold();
     if (ncm.lfStatusFont.lfItalic) font = font->italic();
     size = win_fontsize(ncm.lfStatusFont.lfHeight);
@@ -1252,5 +1255,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.137 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.138 2001/02/20 19:58:49 robertk Exp $".
 //

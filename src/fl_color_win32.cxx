@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.26 2001/02/20 19:58:49 robertk Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -94,7 +94,7 @@ HPEN fl_create_pen() {
   if (line_style || line_width || dash_pattern_size) {
     LOGBRUSH penbrush = {BS_SOLID, fl_colorref, 0}; // can this be fl_brush?
     return ExtCreatePen(line_style, line_width, &penbrush,
-			dash_pattern_size, dash_pattern_size?dash_patern:0);
+			dash_pattern_size, dash_pattern_size?dash_pattern:0);
   } else {
     return CreatePen(PS_SOLID, 1, fl_colorref);
   }
@@ -175,5 +175,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.26 2001/02/20 19:58:49 robertk Exp $".
 //
