@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.91 2004/06/19 23:02:12 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.92 2004/07/02 05:40:57 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -450,8 +450,10 @@ void Input::draw(int X, int Y, int W, int H)
   }
 
   pop_clip();
-  transform(spot_x, spot_y);
-  fl_set_spot(textfont(), this, spot_x, spot_y);
+  if (focused()) {
+    transform(spot_x, spot_y);
+    fl_set_spot(textfont(), this, spot_x, spot_y);
+  }
 }
 
 static int isword(char c) {
@@ -1324,7 +1326,7 @@ bool Input::handle_key() {
 #endif
 
   case '/': // Emacs undo
-    if (key_is_shortcut()) return true;
+    if (!ctrl || key_is_shortcut()) return true;
   case 'z':
     // For undo we undo local typing first. Only if this fails do
     // we run some appliation menu item for undo:
@@ -1431,6 +1433,8 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     return 2; // returns 2 to make Group think it really important
 
   case UNFOCUS:
+	// disable input method
+	fl_set_spot(NULL, this, 0, 0);
     // redraw the highlight area:
     if (mark_ != position_) minimal_update(mark_, position_);
     // else make the cursor disappear:
@@ -1642,5 +1646,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.91 2004/06/19 23:02:12 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.92 2004/07/02 05:40:57 spitzak Exp $".
 //

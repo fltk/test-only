@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.182 2004/06/29 00:19:30 xpxqx Exp $"
+// "$Id: Fl_x.cxx,v 1.183 2004/07/02 05:40:58 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -44,6 +44,10 @@
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
 #include <fltk/utf.h>
+
+#if !defined(X_HAVE_UTF8_STRING)
+# include "xutf8.cxx"
+#endif
 
 using namespace fltk;
 
@@ -172,14 +176,14 @@ void fl_init_xim()
   if (!xdisplay) return;
   if (fl_xim_im) return;
 
-  XSetLocaleModifiers("@im=");
+  XSetLocaleModifiers("");
   fl_xim_im = XOpenIM(xdisplay, NULL, NULL, NULL);
   xim_styles = NULL;
   fl_xim_ic = NULL;
 
   if (fl_xim_im) {
     XGetIMValues (fl_xim_im, XNQueryInputStyle,
-      &xim_styles, NULL, NULL);
+		  &xim_styles, NULL, NULL);
   } else {
     warning("XOpenIM() failed\n");
     return;
@@ -193,6 +197,7 @@ void fl_init_xim()
     fl_xim_im = NULL;
     return;
   }
+
   if (!fl_xim_ic) {
     warning("XCreateIC() failed\n");
     XCloseIM(fl_xim_im);
@@ -227,15 +232,19 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   }
   if (f != spotf) {
     spotf = f;
-    fnt = f->system_name();
-    if (fnt)
-      fs = XCreateFontSet(xdisplay, fnt, &missing_list,
-			  &missing_count, &def_string);
-    else
-      return;
-    if (fs) {
-      XFreeFontSet(xdisplay, fl_xim_fs);
-      fl_xim_fs = fs;
+    if (f) {
+      fnt = f->system_name();
+      if (fnt)
+        fs = XCreateFontSet(xdisplay, fnt, &missing_list,
+			    &missing_count, &def_string);
+      else
+        return;
+      if (fs) {
+        XFreeFontSet(xdisplay, fl_xim_fs);
+        fl_xim_fs = fs;
+        change = 1;
+      }
+    } else {
       change = 1;
     }
   }
@@ -246,19 +255,24 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 
   if (!change) return;
 
-  XFontSetExtents *extents;
-  int ascent;
-  extents = XExtentsOfFontSet(fl_xim_fs);
-  ascent=-extents->max_logical_extent.y;
-  spot_set = spot;
-  spot_set.y += ascent;
-  preedit_attr =
-    XVaCreateNestedList(0,
-			XNSpotLocation, &spot_set,
-			XNFontSet, fl_xim_fs, NULL);
-  if (preedit_attr) {
-    XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
-    XFree(preedit_attr);
+  if (f) {
+    XFontSetExtents *extents;
+    int ascent;
+    extents = XExtentsOfFontSet(fl_xim_fs);
+    ascent=-extents->max_logical_extent.y;
+    spot_set = spot;
+    spot_set.y += ascent;
+    preedit_attr =
+      XVaCreateNestedList(0,
+			  XNSpotLocation, &spot_set,
+			  XNFontSet, fl_xim_fs, NULL);
+    if (preedit_attr) {
+      XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
+      XFree(preedit_attr);
+    }
+    XSetICFocus(fl_xim_ic);
+  } else {
+    XUnsetICFocus(fl_xim_ic);
   }
 }
 
@@ -2126,5 +2140,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.182 2004/06/29 00:19:30 xpxqx Exp $".
+// End of "$Id: Fl_x.cxx,v 1.183 2004/07/02 05:40:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.5 2004/06/28 20:46:30 xpxqx Exp $"
+// "$Id: utf.c,v 1.6 2004/07/02 05:40:59 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -512,7 +512,7 @@ char* utf8to8(const char* text, int n, int* charcount) {
   const char* e = text+n;
   int sawutf8 = 0;
   int count = 0;
-  unsigned char* buffer;
+  char* buffer;
   while (p < e) {
     unsigned char c = *(unsigned char*)p;
     if (c < 0xC2) p++; // ascii letter or bad code

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.21 2004/06/22 08:28:57 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.22 2004/07/02 05:40:59 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+/*! Donated code that selects from an alternative font if the character
+  cannot be printed in the current font. Did not work very well for me
+  and it slows down normal printing a lot. */
+#define X_UTF8_FONT 0
+
 #include <fltk/draw.h>
 #include <fltk/error.h>
 #include <fltk/x.h>
 #include <fltk/math.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fltk/utf.h>
@@ -159,6 +165,158 @@ static XChar2b* utf8to2b(const char* text, int n, int* charcount) {
   return buffer;
 }
 
+#if X_UTF8_FONT
+
+typedef struct {
+  const char* name;
+  XFontStruct* font;
+  bool enable;
+} XFontUtf8;
+XFontUtf8 xfont_utf8[32] = {0};
+
+static void get_font_entry(char *buf, int buf_size, char **pp)
+{
+  char *p, *r;
+  int len;
+
+  r = *pp;
+  p = strchr(r, '-');
+  if (!p) {
+    if (buf)
+      buf[0] = '\0';
+  } else {
+    if (buf) {
+      len = p - r;
+      if (len >= buf_size)
+        len = buf_size - 1;
+      memcpy(buf, r, len);
+      buf[len] = '\0';
+    }
+    *pp = p + 1;
+  }
+}
+
+static const char* get_utf8_font_name_from_basefont(const char *basefont, bool safe = false)
+{
+  char *pname = strdup(basefont), *pnameold;
+  char weight[16], slant[16], ptsize[16];
+  static char fontname[256];
+
+  pnameold = pname;
+  get_font_entry(NULL, 0, &pname);
+  get_font_entry(NULL, 0, &pname);
+  get_font_entry(NULL, 0, &pname);
+  get_font_entry(weight, sizeof(weight), &pname); /* weight */
+  get_font_entry(slant, sizeof(slant), &pname); /* slant */
+  get_font_entry(NULL, 0, &pname); /* adstyle */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  get_font_entry(ptsize, sizeof(ptsize), &pname); /* size */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  get_font_entry(NULL, 0, &pname); /* pixsize */
+  free(pnameold);
+
+  if (!safe)
+    sprintf(fontname, "-*-unifont-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
+      weight, slant, "*");
+  else
+    sprintf(fontname, "-*-unifont-*-*-*--*-*-*-*-*-*-iso10646-1");
+  return fontname;
+}
+
+#define FONT_INDEX_DISABLE -1
+#define FONT_INDEX_FULL    -2
+static int get_xfont_utf8_index(const char *fontname)
+{
+  for(unsigned int i = 0; i < sizeof(xfont_utf8)/sizeof(XFontUtf8); i++) {
+	if (xfont_utf8[i].name == NULL)
+      return i;
+	if (xfont_utf8[i].enable == false)
+      return -1;
+    if (!strcmp(xfont_utf8[i].name, fontname)) {
+	  return i;
+	}
+  }
+  return -2;
+}
+
+static bool font_is_showable(XFontStruct *f, unsigned int cc)
+{
+  unsigned int b1, b2;
+  XCharStruct *cs;
+
+  if (f->min_byte1 == 0 && f->max_byte1 == 0) {
+    if (cc > f->max_char_or_byte2)
+      return false;
+    cc -= f->min_char_or_byte2;
+    if (cc < 0)
+      return false;
+  } else {
+    b1 = (cc >> 8) & 0xff;
+    b2 = cc & 0xff;
+    if (b1 > f->max_byte1)
+      return false;
+    b1 -= f->min_byte1;
+    if (b1 < 0)
+      return false;
+    if (b2 > f->max_char_or_byte2)
+      return false;
+    b2 -= f->min_char_or_byte2;
+    if (b2 < 0)
+      return false;
+    cc = b1 * (f->max_char_or_byte2 - f->min_char_or_byte2 + 1) + b2;
+	if (cc >= 0xffff)
+	  return false;
+  }
+  if (cc < 0)
+    return false;
+  cs = f->per_char;
+  if (!cs)
+    return &f->min_bounds; /* all char have same metrics */
+  cs += cc;
+  /* fast test for non existant char */
+  if (cs && cs->width == 0 &&
+    (cs->ascent | cs->descent | cs->rbearing | cs->lbearing) == 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+static XFontStruct* get_xfont_utf8(const char* basefont)
+{
+  XFontStruct* f = 0;
+  const char* utf8_fontname = get_utf8_font_name_from_basefont(basefont);
+  int font_index = get_xfont_utf8_index(utf8_fontname);
+  switch(font_index) {
+  case FONT_INDEX_FULL:
+  case FONT_INDEX_DISABLE:
+    break;
+  default:
+    if (!xfont_utf8[font_index].name) {
+      xfont_utf8[font_index].font = XLoadQueryFont(xdisplay, utf8_fontname);
+  	  if (!xfont_utf8[font_index].font) {
+  	    const char* safe_fontname = get_utf8_font_name_from_basefont(basefont, true);
+        xfont_utf8[font_index].font = XLoadQueryFont(xdisplay, safe_fontname);
+  	  }
+  	  if (xfont_utf8[font_index].font) {
+        xfont_utf8[font_index].name = strdup(utf8_fontname);
+        xfont_utf8[font_index].enable = true;
+  	    f = xfont_utf8[font_index].font;
+  	  } else {
+        xfont_utf8[font_index].name = 0;
+        xfont_utf8[font_index].enable = false;
+  	  }
+    } else
+  	  f = xfont_utf8[font_index].font;
+  }
+  return f;
+}
+
+#endif // X_UTF8_FONT
+
 /*! Draw text starting at a point returned by fltk::transform(). This
   is needed for complex text layout when the current transform may
   not match the transform being used by the font.
@@ -173,9 +331,34 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   int count;
   XChar2b* buffer = utf8to2b(text,n,&count);
   if (buffer) {
+#if !X_UTF8_FONT
     XDrawString16(xdisplay, xwindow, gc,
 		  int(floorf(x+.5f)),
-		  int(floorf(y+.5f)), buffer, count);
+		  int(floorf(y+.5f)), buffer, n);
+#else
+    XFontStruct *f = current->font, *oldf = f;
+    for(int i = 0; i < count; i++) {
+      int cc = (buffer[i].byte1 << 8) + buffer[i].byte2;
+      if (!font_is_showable(current->font, cc)) {
+        f = get_xfont_utf8(current->name);
+	if (!f) {
+	  f = current->font;
+	  buffer[i].byte1 = '?' << 8;
+	  buffer[i].byte2 = '?';
+	}
+      } else
+	f = current->font;
+      if (f != oldf) {
+        XSetFont(xdisplay, gc, f->fid);
+	oldf = f;
+      }
+      XDrawString16(xdisplay, xwindow, gc,
+		  int(floorf(x+.5f)),
+		  int(floorf(y+.5f)), &buffer[i], 1);
+      x += XTextWidth16(f, &buffer[i], 1);
+    }
+    XSetFont(xdisplay, gc, current->font->fid);
+#endif
     delete[] buffer;
   } else {
     XDrawString(xdisplay, xwindow, gc,
@@ -198,7 +381,25 @@ float fltk::getwidth(const char *text, int n) {
   int count;
   XChar2b* buffer = utf8to2b(text,n,&count);
   if (buffer) {
+#if !X_UTF8_FONT
     float r = XTextWidth16(current->font, buffer, count);
+#else
+    float r = 0;
+    XFontStruct *f = current->font;
+    for(int i = 0; i < count; i++) {
+      int cc = (buffer[i].byte1 << 8) + buffer[i].byte2;
+      if (!font_is_showable(current->font, cc)) {
+        f = get_xfont_utf8(current->name);
+	if (!f) {
+	  f = current->font;
+	  buffer[i].byte1 = '?' << 8;
+	  buffer[i].byte2 = '?';
+	}
+      } else
+	f = current->font;
+      r += XTextWidth16(f, &buffer[i], 1);
+    }
+#endif
     delete[] buffer;
     return r;
   } else {
@@ -261,7 +462,8 @@ void fltk::setfont(Font* font, float psize) {
 
   // See if the current font is correct:
   if (font == current_font_ && psize == current_size_ &&
-      (f->encoding==encoding_ || !strcmp(f->encoding, encoding_)))
+      (f->encoding==encoding_ ||
+	   (!encoding_ || !strcmp(f->encoding, encoding_))))
     return;
   current_font_ = font; current_size_ = psize;
 
@@ -269,7 +471,8 @@ void fltk::setfont(Font* font, float psize) {
   for (f = t->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size
         && (f->encoding==encoding_ ||
- 	    !f->encoding || !strcmp(f->encoding, encoding_))) {
+ 	    !f->encoding ||
+		(!encoding_ || !strcmp(f->encoding, encoding_)))) {
       goto DONE;
     }
 
@@ -437,5 +640,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.21 2004/06/22 08:28:57 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.22 2004/07/02 05:40:59 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.29 2004/06/24 07:05:16 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.30 2004/07/02 05:40:58 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1274,10 +1274,12 @@ void TextDisplay::draw_cursor( int X, int Y ) {
   for ( int k = 0; k < nSegs; k++ ) {
     drawline( segs[ k ].x1, segs[ k ].y1, segs[ k ].x2, segs[ k ].y2 );
   }
-  int spot_x = X;
-  int spot_y = Y;
-  transform(spot_x, spot_y);
-  fl_set_spot(textfont(), this, spot_x, spot_y);
+  if (focused()) {
+    int spot_x = X;
+    int spot_y = Y;
+    transform(spot_x, spot_y);
+    fl_set_spot(textfont(), this, spot_x, spot_y);
+  }
 }
 
 /*
@@ -2011,6 +2013,8 @@ int TextDisplay::handle(int event) {
       return 1;
 
     case UNFOCUS:
+      // disable input method
+      fl_set_spot(NULL, this, 0, 0);
       show_cursor(mCursorOn); // redraws the cursor
       return 1;
 
@@ -2113,5 +2117,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.29 2004/06/24 07:05:16 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.30 2004/07/02 05:40:58 spitzak Exp $".
 //

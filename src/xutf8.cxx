@@ -1,3 +1,9 @@
+/* Emulate the XFree86 Xutf8LookupString call. This tries to call the
+   "iconv" program to convert the result of XmbLookupString. If that
+   does not work it falls back on a xkeysym->unicode translation
+   table.
+*/
+
 /* This module converts keysym values into the corresponding ISO 10646
  * (UCS, Unicode) values.
  *
@@ -34,7 +40,6 @@
 #include <fltk/x.h>
 #include <fltk/utf.h>
 
-#if !defined(HAVE_ICONV)
 static struct codepair {
   unsigned short keysym;
   unsigned short ucs;
@@ -846,52 +851,8 @@ long keysym2ucs(KeySym keysym)
   return -1;
 }
 
-// Emulate Xutf8LookupString from XFree86 converting keysym values into the
-// corresponding ISO 10646-1 (UCS, Unicode) values and, finally, to UTF-8.
-int Xutf8LookupString(XIC, XKeyPressedEvent* event,
-		      char* buffer, int buffer_len,
-		      KeySym *keysym_return, Status* status_return)
-{
-  int rc;
-  KeySym keysym;
-  int codepoint;
-  int len;
+#if HAVE_ICONV
 
-  rc = XLookupString(event, buffer, buffer_len, &keysym, NULL);
-
-  if (rc > 0) {
-    codepoint = buffer[0] & 0xFF;
-  } else {
-    codepoint = keysym2ucs(keysym);
-  }
-
-  if (codepoint < 0) {
-    if (keysym == None) {
-      *status_return = XLookupNone;
-    } else {
-      *status_return = XLookupKeySym;
-      *keysym_return = keysym;
-    }
-    return 0;
-  }
-
-  if (buffer_len < utf8bytes(codepoint)) {
-    *status_return = XBufferOverflow;
-    return utf8bytes(codepoint);
-  }
-
-  len = utf8encode(codepoint, buffer);
-
-  if (keysym != None) {
-    *keysym_return = keysym;
-    *status_return = XLookupBoth;
-  } else {
-    *status_return = XLookupChars;
-  }
-
-  return len;
-}
-#else
 #  include <errno.h>
 #  include <iconv.h>
 
@@ -908,50 +869,93 @@ int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
   // locale...
   if (!cd_to) cd_to = iconv_open("UTF-8", "char");
 
-  // If iconv is not going to work, report no conversion, which makes
-  // my code call XLookupString (this is probably not exact emulation
-  // of Xutf8LookupString):
-  if (cd_to == (iconv_t)(-1)) {
-    *status = XLookupNone;
+  if (cd_to != (iconv_t)(-1)) { // only if iconv is going to work
+
+    static char* mb_buffer = 0;
+    static int mb_buffer_len;
+    if (!mb_buffer) mb_buffer = (char*)malloc(mb_buffer_len = buffer_len);
+    else if (buffer_len > mb_buffer_len)
+      mb_buffer = (char*)realloc(mb_buffer, mb_buffer_len = buffer_len);
+    int len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
+
+    switch (*status) { 
+    case XLookupChars:
+    case XLookupKeySym:
+    case XLookupBoth:
+      break;
+    default:
+      return len; // return the error back to the caller
+    }
+
+    //   printf("mb:");
+    //   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
+
+    char* inbuf = mb_buffer;
+    size_t inbytesleft = mb_buffer_len;
+    char* outbuf = buffer;
+    size_t outbytesleft = buffer_len;
+    if (iconv(cd_to, &inbuf, &inbytesleft, &outbuf, &outbytesleft) < 0) {
+      if (errno==E2BIG) {
+	*status = XBufferOverflow;
+	// guess that the remaining characters are the number of bytes needed:
+	return buffer_len + inbytesleft;
+      }
+    }
+
+    //   printf(" utf8:");
+    //   for (int i = 0; buffer+i < outbuf; i++) printf(" %02x", buffer[i]&0xff);
+    //   printf("\n");
+
+    // otherwise, even on conversion errors, we return the result length:
+    return outbuf-buffer;
+  }
+
+  // else use the keysym-translator:
+#else // !HAVE_ICONV
+int Xutf8LookupString(XIC, XKeyPressedEvent* event,
+		      char* buffer, int buffer_len,
+		      KeySym *keysym, Status* status)
+{
+#endif
+
+  // Emulate Xutf8LookupString from XFree86 converting keysym values into the
+  // corresponding ISO 10646-1 (UCS, Unicode) values and, finally, to UTF-8.
+
+  int rc;
+  int codepoint;
+  int len;
+
+  rc = XLookupString(event, buffer, buffer_len, keysym, NULL);
+
+  if (rc > 0) {
+    codepoint = buffer[0] & 0xFF;
+  } else {
+    codepoint = keysym2ucs(*keysym);
+  }
+
+  if (codepoint < 0) {
+    if (*keysym == None) {
+      *status = XLookupNone;
+    } else {
+      *status = XLookupKeySym;
+    }
     return 0;
   }
 
-  static char* mb_buffer = 0;
-  static int mb_buffer_len;
-  if (!mb_buffer) mb_buffer = (char*)malloc(mb_buffer_len = buffer_len);
-  else if (buffer_len > mb_buffer_len)
-    mb_buffer = (char*)realloc(mb_buffer, mb_buffer_len = buffer_len);
-  int len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
-
-  switch (*status) { 
-  case XLookupChars:
-  case XLookupKeySym:
-  case XLookupBoth:
-    break;
-  default:
-    return len; // return the error back to the caller
+  if (buffer_len < utf8bytes(codepoint)) {
+    *status = XBufferOverflow;
+    return utf8bytes(codepoint);
   }
 
-//   printf("mb:");
-//   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
+  len = utf8encode(codepoint, buffer);
 
-  const char* inbuf = mb_buffer;
-  size_t inbytesleft = mb_buffer_len;
-  char* outbuf = buffer;
-  size_t outbytesleft = buffer_len;
-  if (iconv(cd_to, &inbuf, &inbytesleft, &outbuf, &outbytesleft) < 0) {
-    if (errno==E2BIG) {
-      *status = XBufferOverflow;
-      // guess that the remaining characters are the number of bytes needed:
-      return buffer_len + inbytesleft;
-    }
+  if (*keysym != None) {
+    *status = XLookupBoth;
+  } else {
+    *status = XLookupChars;
   }
 
-//   printf(" utf8:");
-//   for (int i = 0; buffer+i < outbuf; i++) printf(" %02x", buffer[i]&0xff);
-//   printf("\n");
-
-  // otherwise, even on conversion errors, we return the result length:
-  return outbuf-buffer;
+  return len;
 }
-#endif /* HAVE_ICONV */
+
+// End of xutf8.cxx

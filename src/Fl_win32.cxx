@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.214 2004/06/24 07:05:17 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.215 2004/07/02 05:40:58 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -88,7 +88,63 @@ using namespace fltk;
 // like GUI programs on more sensible operating systems
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
 
-#pragma comment(lib, "imm32.lib")
+#define IMM_DYNAMIC_LOADING
+#ifdef IMM_DYNAMIC_LOADING
+# ifdef NOIME
+typedef struct tagCOMPOSITIONFORM {
+  DWORD dwStyle;
+  POINT ptCurrentPos;
+  RECT  rcArea;
+} COMPOSITIONFORM, *PCOMPOSITIONFORM, NEAR *NPCOMPOSITIONFORM, FAR *LPCOMPOSITIONFORM;
+typedef HANDLE HIMC;
+#endif
+HINSTANCE hLibImm = NULL;
+HIMC (WINAPI *pfnImmGetContext)(HWND);
+BOOL (WINAPI *pfnImmSetCompositionWindow)(HIMC, LPCOMPOSITIONFORM);
+BOOL (WINAPI *pfnImmSetCompositionFontW)(HIMC, LPLOGFONTW);
+BOOL (WINAPI *pfnImmReleaseContext)(HWND, HIMC);
+HIMC (WINAPI *pfnImmAssociateContext)(HWND, HIMC);
+#else
+# pragma comment(lib, "imm32.lib")
+# define pfnImmGetContext ImmGetContext
+# define pfnImmSetCompositionWindow ImmSetCompositionWindow
+# define pfnImmSetCompositionFontW ImmSetCompositionFontW
+# define pfnImmReleaseContext ImmReleaseContext
+# define pfnImmAssociateContext ImmAssociateContext
+#endif
+
+bool fl_use_imm32 = false;
+
+bool fl_load_imm32()
+{
+#ifdef IMM_DYNAMIC_LOADING
+  hLibImm = LoadLibrary("imm32.dll");
+  if (hLibImm == NULL)
+	return false;
+
+  *(FARPROC*)&pfnImmGetContext
+    = GetProcAddress(hLibImm, "ImmGetContext");
+  *(FARPROC*)&pfnImmReleaseContext
+    = GetProcAddress(hLibImm, "ImmReleaseContext");
+  *(FARPROC*)&pfnImmSetCompositionFontW
+    = GetProcAddress(hLibImm, "ImmSetCompositionFontW");
+  *(FARPROC*)&pfnImmSetCompositionWindow
+    = GetProcAddress(hLibImm, "ImmSetCompositionWindow");
+  *(FARPROC*)&pfnImmAssociateContext
+    = GetProcAddress(hLibImm, "ImmAssociateContext");
+  
+  if (!pfnImmGetContext ||
+	  !pfnImmReleaseContext ||
+	  !pfnImmSetCompositionFontW ||
+	  !pfnImmSetCompositionWindow ||
+	  !pfnImmAssociateContext) {
+	FreeLibrary(hLibImm);
+	return false;
+  }
+#endif
+  return true;
+}
+
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 {
   int change = 0;
@@ -97,11 +153,13 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static Widget *spotw = NULL;
   static RECT spot, spot_set;
 
+  if (!fl_use_imm32)
+	  return;
+
   if (w != spotw) {
 	spotw = w;
 	change = 1;
   }
-  transform(x, y);
   if (x != spot.left || y != spot.top) {
 	spot.left = x;
 	spot.top = y;
@@ -114,17 +172,32 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 
   if (!change) return;
 
-  HIMC himc = ImmGetContext(xid(w->window()));
-  if (himc) {
-    COMPOSITIONFORM	cfs;
-	LOGFONTW lf;
-    cfs.dwStyle = CFS_POINT;
-    cfs.ptCurrentPos.x = spot.left;
-    cfs.ptCurrentPos.y = spot.top;
-    ImmSetCompositionWindow(himc, &cfs);
-	GetObject(fltk::xfont(), sizeof(LOGFONTW), &lf);
-	ImmSetCompositionFontW(himc, &lf);
-    ImmReleaseContext(xid(w->window()), himc);
+  static HIMC himcold = 0;
+  if (f != NULL) {
+    HIMC himc = pfnImmGetContext(xid(w->window()));
+	if (himc == NULL) {
+	  himc = himcold;
+      pfnImmAssociateContext(xid(w->window()), himc);
+	}
+    if (himc) {
+      COMPOSITIONFORM	cfs;
+      LOGFONTW lf;
+      cfs.dwStyle = CFS_POINT;
+      cfs.ptCurrentPos.x = spot.left;
+      cfs.ptCurrentPos.y = spot.top;
+      pfnImmSetCompositionWindow(himc, &cfs);
+      GetObject(fltk::xfont(), sizeof(LOGFONTW), &lf);
+      pfnImmSetCompositionFontW(himc, &lf);
+      pfnImmReleaseContext(xid(w->window()), himc);
+      himcold = 0;
+    }
+  } else {
+    if (!himcold) {
+      HIMC himc = pfnImmGetContext(xid(w->window()));
+      pfnImmAssociateContext(xid(w->window()), NULL);
+      himcold = himc;
+      pfnImmReleaseContext(xid(w->window()), himc);
+    }
   }
 }
 
@@ -1152,7 +1225,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	unsigned short ucs[11];
 	int ucslen, len = 0;
 	ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
-				     (char*)buffer, 2, (wchar_t*)ucs, 10);
+				     (char*)dbcsbuf, 2, (wchar_t*)ucs, 10);
 	// This is not doing the "surrogate characters"!!!
      	for (int i = 0; i < ucslen; i++)
           len += utf8encode(ucs[i], buffer + len);
@@ -1431,6 +1504,8 @@ void CreatedWindow::create(Window* window) {
 #if USE_DRAGDROP
     OleInitialize(0L);
 #endif
+
+	fl_use_imm32 = fl_load_imm32();
   }
 
   HWND parent;
@@ -1764,5 +1839,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.214 2004/06/24 07:05:17 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.215 2004/07/02 05:40:58 spitzak Exp $".
 //

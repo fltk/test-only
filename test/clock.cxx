@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: clock.cxx,v 1.13 2004/07/02 05:41:00 spitzak Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,67 +23,75 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Shaped_Window.h>
-#include <fltk/Fl_Round_Clock.h>
-#include <fltk/Fl_Menu_Button.h>
-#include <fltk/Fl_Item.h>
-#include <fltk/fl_ask.h>
+#include <fltk/ShapedWindow.h>
+#include <fltk/Clock.h>
+#include <fltk/PopupMenu.h>
+#include <fltk/Menu.h>
+#include <fltk/Item.h>
+#include <fltk/SharedImage.h>
+#include <fltk/ask.h>
+#include <fltk/events.h>
+#include <fltk/run.h>
 #include <stdlib.h>
 
+using namespace fltk;
 #include "circle.xbm" // bitmap mask for window shape
 
-class ClockWindow : public Fl_Shaped_Window {
+class ClockWindow : public ShapedWindow {
   public:
-    ClockWindow(int W, int H, const char *l = 0) : Fl_Shaped_Window(W,H,l) {}
+    ClockWindow(int W, int H, const char *l = 0) : ShapedWindow(W,H,l) {}
     int handle(int);
 };
 
 int ClockWindow::handle(int e) {
   static int bx, by;
   static int button1 = 0;
-  if (e == FL_PUSH) button1 = (Fl::event_button() == 1);
+  if (e == PUSH) button1 = (fltk::event_button() == 1);
   if (button1) switch(e) {
-    case FL_DRAG:
-      position(x()+Fl::event_x_root()-bx, y()+Fl::event_y_root()-by);
-    case FL_PUSH:
-      bx = Fl::event_x_root(); by = Fl::event_y_root();
+    case DRAG:
+      position(x()+event_x_root()-bx, y()+event_y_root()-by);
+    case PUSH:
+      bx = event_x_root(); by = event_y_root();
       show(); // so the window will click-to-front
       return 1;
   }
-  return Fl_Shaped_Window::handle(e);
+  return ShapedWindow::handle(e);
 }
 
-Fl_Item *about_item, *exit_item;
-void callback(Fl_Widget*, void* d) {
-  if (d == (void*)exit_item) exit(0);
-  fl_message("FLTK-- Copyright 2000 Bill Spitzak and others");
+Item *about_item, *exit_item;
+void callback(Widget* w, void* d) {
+  if (((Menu*)w)->value()) exit(0);
+  message("FLTK-- Copyright 2000 Bill Spitzak and others");
 }
 
 int main(int argc, char **argv) {
-  ClockWindow window(220, 220, "Fl_Round_Clock");
-  window.color(FL_BLACK);
+  ClockWindow window(220, 220, "fltk::Clock");
+  window.color(BLACK);
+  window.begin();
   // don't show window manager border-- some window managers do this for you
   // if an arbitrary shape is assigned to the window.
-  window.clear_border();
-  Fl_Round_Clock clock(2,2,216,216);
-  Fl_Menu_Button popup(0, 0, 220, 220);
-  popup.type(Fl_Menu_Button::POPUP3);
+  //window.clear_border();
+  Clock clock(2,2,217,217);
+  clock.type(ClockOutput::ROUND);
+  //clock.box(fltk::OSHADOW_BOX);
+  clock.align(fltk::ALIGN_BOTTOM|fltk::ALIGN_WRAP);
+  PopupMenu popup(0, 0, 220, 220);
+  popup.type(PopupMenu::POPUP3);
   popup.begin();
-  about_item = new Fl_Item("About clock");
-  exit_item = new Fl_Item("Exit clock");
+  about_item = new Item("About clock");
+  exit_item = new Item("Exit clock");
   popup.end();
   popup.callback(callback);
-  // window.resizable(popup); - Not today, maybe never!
+  //window.resizable(popup); //- Not today, maybe never!
   window.end();
-  window.xclass("Fl_Clock");
+  window.xclass("fltkClock");
   window.show(argc, argv);
-  Fl_Bitmap shape(circle_bits, circle_width, circle_height); // window shape data
+  xbmImage shape(circle_bits, circle_width, circle_height);
   window.shape(shape);
 
-  return Fl::run();
+  return run();
 }
 
 //
-// End of "$Id: clock.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: clock.cxx,v 1.13 2004/07/02 05:41:00 spitzak Exp $".
 //

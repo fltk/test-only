@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.31 2004/05/04 07:30:44 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.32 2004/07/02 05:41:00 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -87,7 +87,11 @@ void font_cb(fltk::Widget *, long) {
   if (italic_button->value()) f = f->italic();
   textobj->font = f;
 
-  char saved[30]; strncpy(saved, textobj->encoding, 29);
+  char saved[30];
+  if (textobj->encoding)
+    strncpy(saved, textobj->encoding, 29);
+  else
+    saved[0] = 0;
   encobj->clear();
   const char** encodings; int ne = f->encodings(encodings);
   int picked = -1;
@@ -204,5 +208,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.31 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.32 2004/07/02 05:41:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.23 2004/06/27 01:25:03 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.24 2004/07/02 05:40:58 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -261,7 +261,7 @@ static const char compose_pairs[] = {
   "*Z"
   "*z"
   "vZ"
-  "vz" // U+017E
+  "vz"
 };
 
 #if USE_X11 // X only
@@ -277,14 +277,14 @@ static const char dead_keys[] = {
   '^',	// XK_dead_circumflex
   '~',	// XK_dead_tilde
   '-',	// XK_dead_macron
-  0,	// XK_dead_breve
+  'u',	// XK_dead_breve
   '.',	// XK_dead_abovedot
   ':',	// XK_dead_diaeresis
   '*',	// XK_dead_abovering
   '"',	// XK_dead_doubleacute
   'v',	// XK_dead_caron
-  ','	// XK_dead_cedilla
-//   0,	// XK_dead_ogonek
+  ',',	// XK_dead_cedilla
+  ','	// XK_dead_ogonek
 //   0,	// XK_dead_iota
 //   0,	// XK_dead_voiced_sound
 //   0,	// XK_dead_semivoiced_sound
