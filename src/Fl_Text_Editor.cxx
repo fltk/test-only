@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.4 2000/08/09 04:22:36 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -59,9 +59,11 @@ static struct {
   Fl_Text_Editor::Key_Func func;
 } default_key_bindings[] = {
   { FL_Escape,    FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_ignore     },
-  { FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_backspace  },
   { FL_Enter,     FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_enter      },
   { FL_KP_Enter,  FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_enter      },
+  { FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_backspace  },
+  { FL_Insert,    FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_insert     },
+  { FL_Delete,    FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_delete     },
   { FL_Home,      0,                        Fl_Text_Editor::kf_move       },
   { FL_End,       0,                        Fl_Text_Editor::kf_move       },
   { FL_Left,      0,                        Fl_Text_Editor::kf_move       },
@@ -94,18 +96,16 @@ static struct {
   { FL_Down,      FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Up,   FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Down, FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
-  { FL_Insert,    0,                        Fl_Text_Editor::kf_insert     },
-  { FL_Delete,    0,                        Fl_Text_Editor::kf_delete     },
-  //  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_select_all },
-  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_home       },
-  { 'b',          FL_CTRL,                  Fl_Text_Editor::kf_left       },
+//  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_select_all },
+//  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_home       },
+//  { 'b',          FL_CTRL,                  Fl_Text_Editor::kf_left       },
   { 'c',          FL_CTRL,                  Fl_Text_Editor::kf_copy       },
   { 'd',          FL_CTRL,                  Fl_Text_Editor::kf_delete     },
-  { 'e',          FL_CTRL,                  Fl_Text_Editor::kf_end        },
-  { 'f',          FL_CTRL,                  Fl_Text_Editor::kf_right      },
+//  { 'e',          FL_CTRL,                  Fl_Text_Editor::kf_end        },
+//  { 'f',          FL_CTRL,                  Fl_Text_Editor::kf_right      },
   { 'h',          FL_CTRL,                  Fl_Text_Editor::kf_backspace  },
-  { 'n',          FL_CTRL,                  Fl_Text_Editor::kf_down       },
-  { 'p',          FL_CTRL,                  Fl_Text_Editor::kf_up         },
+//  { 'n',          FL_CTRL,                  Fl_Text_Editor::kf_down       },
+//  { 'p',          FL_CTRL,                  Fl_Text_Editor::kf_up         },
   { 'v',          FL_CTRL,                  Fl_Text_Editor::kf_paste      },
   { 'x',          FL_CTRL,                  Fl_Text_Editor::kf_cut        },
   { 0,            0,                        0                             }
@@ -175,7 +175,7 @@ static void kill_selection(Fl_Text_Editor* e) {
 }
 
 int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
-  if (!c || !isprint(c)) return 0;
+  if (!c || (!isprint(c) && c != '\t')) return 0;
   char s[2] = "\0";
   s[0] = (char)c;
   kill_selection(e);
@@ -384,6 +384,7 @@ int Fl_Text_Editor::handle_key() {
   }
 
   int key = Fl::event_key(), state = Fl::event_state(), c = Fl::event_text()[0];
+  state &= FL_SHIFT|FL_CTRL|FL_ALT|FL_META; // only care about these states
   Key_Func f;
   f = bound_key_function(key, state, global_key_bindings);
   if (!f) f = bound_key_function(key, state, key_bindings);
@@ -434,5 +435,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.4 2000/08/09 04:22:36 clip Exp $".
 //
