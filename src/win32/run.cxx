@@ -1166,6 +1166,33 @@ extern "C" {
 };
 #endif
 
+// Return the shift flags for event_state():
+static unsigned long shiftflags(bool ignorealt=false) {
+  unsigned long state = 0;
+  // if GetKeyState is expensive we might want to comment some of these out:
+  if (GetKeyState(VK_SHIFT)&~1) state |= SHIFT;
+  if (GetKeyState(VK_CAPITAL)) state |= CAPSLOCK;
+  if (GetKeyState(VK_CONTROL)&~1) state |= CTRL;
+  // Alt gets reported for the Alt-GR switch on foreign keyboards.
+  // ignorealt is turned on in this case so we don't act like alt is on
+  if (!ignorealt && (GetKeyState(VK_MENU)&~1)) {
+    // Some weird bugfix by Microsoft in recent versions of Windows makes
+    // alt "stay on" until the next keystroke. But calling async seems
+    // to fix it.
+    if (GetAsyncKeyState(VK_MENU)&~1) state |= ALT;
+  }
+  if (GetKeyState(VK_NUMLOCK)) state |= NUMLOCK;
+  if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
+    // _WIN32 bug?  GetKeyState returns garbage if the user hit the
+    // Windows key to pop up start menu. Again calling async seems
+    // to fix it:
+    if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
+      state |= META;
+  }
+  if (GetKeyState(VK_SCROLL)) state |= SCROLLLOCK;
+  return state;
+}
+
 static bool mouse_event(Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
@@ -1191,7 +1218,7 @@ static bool mouse_event(Window *window, int what, int button,
     window = window->window();
   }
 
-  unsigned long state = e_state & 0xff0000; // keep shift key states
+  unsigned long state = shiftflags();
 #if 0
   // mouse event reports some shift flags, perhaps save them?
   if (wParam & MK_SHIFT) state |= SHIFT;
@@ -1204,7 +1231,7 @@ static bool mouse_event(Window *window, int what, int button,
 
   // make the stylus data produce something useful if there's no pen
   if (!stylus_data_valid) {
-    e_pressure = e_state&BUTTON(1) ? 1.0f : 0.0f;
+    e_pressure = e_state&BUTTON1 ? 1.0f : 0.0f;
     e_x_tilt = e_y_tilt = 0.0f;
     e_device = DEVICE_MOUSE;
   }
@@ -1502,25 +1529,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSDEADCHAR:
   case WM_CHAR:
   case WM_SYSCHAR: {
+    // Mask keeps the mouse button state:
+    // Alt gets reported for the Alt-GR switch on foreign keyboards,
+    // so we ignore it for WM_CHAR messages:
+    e_state = (e_state & 0xff000000) | shiftflags(uMsg==WM_CHAR);
     static unsigned lastkeysym;
-    unsigned long state = e_state & 0xff000000; // keep the mouse button state
-    // if GetKeyState is expensive we might want to comment some of these out:
-    if (GetKeyState(VK_SHIFT)&~1) state |= SHIFT;
-    if (GetKeyState(VK_CAPITAL)) state |= CAPSLOCK;
-    if (GetKeyState(VK_CONTROL)&~1) state |= CTRL;
-    // Alt gets reported for the Alt-GR switch on foreign keyboards.
-    // so we need to check the event as well to get it right:
-    if ((lParam&(1<<29)) //same as GetKeyState(VK_MENU)
-	&& uMsg != WM_CHAR) state |= ALT;
-    if (GetKeyState(VK_NUMLOCK)) state |= NUMLOCK;
-    if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
-      // _WIN32 bug?  GetKeyState returns garbage if the user hit the
-      // Windows key to pop up start menu.  Sigh.
-      if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	state |= META;
-    }
-    if (GetKeyState(VK_SCROLL)) state |= SCROLLLOCK;
-    e_state = state;
     if (lParam & (1<<31)) { // key up events.
       e_is_click = (e_keysym == lastkeysym);
       lastkeysym = 0;
@@ -1573,11 +1586,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     // for (int i = lParam&0xff; i--;)
     if (window) while (window->parent()) window = window->window();
-    int r = handle(KEY,window);
-    buffer[0] = 0;
-    if (r)
-      return 0;
-    break;}
+    handle(KEY,window);
+    return 0;}
 
   case WM_MOUSEWHEEL: {
     static int delta = 0; // running total of all motion
