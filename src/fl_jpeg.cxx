@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.8 1999/09/27 18:28:10 vincent Exp $"
+// "$Id: fl_jpeg.cxx,v 1.9 1999/09/28 08:08:51 bill Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -238,7 +238,7 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
+static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 {
   // x,y,w *should* be used, if this can be called by fl_draw_image
   // while clipping is on.  However when an Fl_Offscreen is being
@@ -252,7 +252,8 @@ static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
 
 #endif
 
-void declare_now(void*) { }
+// Dummy function to remove gcc's nasty warning about longjmp:
+static void declare_now(void*) { }
 
 void Fl_JPEG_Image::measure(int &W, int &H)
 {
@@ -403,5 +404,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.8 1999/09/27 18:28:10 vincent Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.9 1999/09/28 08:08:51 bill Exp $"
 //

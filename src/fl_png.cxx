@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.10 1999/09/27 18:28:10 vincent Exp $"
+// "$Id: fl_png.cxx,v 1.11 1999/09/28 08:08:51 bill Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -44,8 +44,8 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 }
 #endif
 
-
-void declare_now(void*) { }
+// Dummy function to remove gcc's nasty warning about longjmp:
+static void declare_now(void*) { }
 
 int Fl_PNG_Image::test(unsigned char *datas, size_t size)
 {
@@ -79,7 +79,7 @@ void Fl_PNG_Image::measure(int &W, int &H)
   }
   info_ptr = png_create_info_struct(png_ptr);
   FILE *fp=0;
-  declare_now(&fp); // To remove this nasty warning about longjmp
+  declare_now(&fp);
   if(datas)
   {
     cur_datas=(png_bytep)datas;
@@ -134,7 +134,7 @@ void Fl_PNG_Image::measure(int &W, int &H)
 }
 
 #if HAVE_PNG
-static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
+static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 {
   png_read_row((png_structp)v, b, NULL);
 }
@@ -160,7 +160,7 @@ void Fl_PNG_Image::read()
   info_ptr = png_create_info_struct(png_ptr);
 
   FILE *fp=0;
-  declare_now(&fp); // To remove this nasty warning about longjmp
+  declare_now(&fp);
   if(datas)
   {
     cur_datas=(png_bytep)datas;
@@ -251,5 +251,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.10 1999/09/27 18:28:10 vincent Exp $"
+// End of "$Id: fl_png.cxx,v 1.11 1999/09/28 08:08:51 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.9 1999/09/01 08:23:53 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.10 1999/09/28 08:08:50 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -158,9 +158,6 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
     if (cb && cb(argc,argv,i)) continue;
     if (!arg(argc,argv,i)) {if (!return_i) i = 0; break;}
   }
-  getsyscolor(COLOR_BTNFACE,	bg, fl_background);
-  getsyscolor(COLOR_WINDOW,	bg2,fl_text_background);
-  getsyscolor(COLOR_WINDOWTEXT,	fg, fl_foreground);
   return i;
 }
 
@@ -173,6 +170,10 @@ void Fl_Window::show(int argc, char **argv) {
   static char beenhere;
   if (!beenhere) {
     beenhere = 1;
+    getsyscolor(COLOR_BTNFACE,	  bg, fl_background);
+    getsyscolor(COLOR_WINDOW,	  bg2,fl_text_background);
+    getsyscolor(COLOR_WINDOWTEXT, fg, fl_foreground);
+    // load the theme here?
     if (geometry) {
       int flags = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
       flags = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
@@ -377,5 +378,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.9 1999/09/01 08:23:53 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.10 1999/09/28 08:08:50 bill Exp $".
 //
