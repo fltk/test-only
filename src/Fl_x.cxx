@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.196 2004/11/12 06:50:18 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.197 2004/11/21 05:41:48 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1316,7 +1316,8 @@ bool fltk::handle()
     //the new parent. FLTK cares about the position on the root window.
     XTranslateCoordinates(xdisplay, xid(window), XRootWindow(xdisplay,xscreen),
 			  0, 0, &X, &Y, &junk);
-    window->position(X, Y);
+    window->x(X);
+    window->y(Y);
     break;}
 
   case UnmapNotify:
@@ -2327,5 +2328,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.196 2004/11/12 06:50:18 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.197 2004/11/21 05:41:48 spitzak Exp $".
 //

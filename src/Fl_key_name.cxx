@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.14 2004/11/12 06:50:17 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.15 2004/11/21 05:41:48 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -170,7 +170,7 @@ unsigned fltk::key(const char* name) {
   if (!name || !*name) return 0;
   // read all the shift prefixes:
   int shifts = 0;
-  for (;;) {
+  while (name[0] && name[1]) {
     if (*name == '#') {
       shifts |= fltk::ALT; name++;
     } else if (*name == '+') {
@@ -195,5 +195,5 @@ unsigned fltk::key(const char* name) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.14 2004/11/12 06:50:17 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.15 2004/11/21 05:41:48 spitzak Exp $"
 //

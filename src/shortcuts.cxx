@@ -1,5 +1,5 @@
 //
-// "$Id: shortcuts.cxx,v 1.1 2004/11/12 06:50:19 spitzak Exp $"
+// "$Id: shortcuts.cxx,v 1.2 2004/11/21 05:41:48 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -134,6 +134,12 @@ static unsigned last_list_length = 0;
 bool Widget::add_shortcut(unsigned key) {
   if (!key) return false;
   if (!(key&0xff00u)) key = key&0xffff0000u|tolower(key&0xffu);
+  // return false if any duplicates, then point after last one:
+  ShortcutAssignment* p = findwidget(this);
+  while (p < widgetlist+num_shortcuts && p->widget == this) {
+    if (p->key == key) return false;
+    p++;
+  }
   if (num_shortcuts >= array_size) {
     array_size = array_size ? 2*array_size : 64;
     ShortcutAssignment* newlist = new ShortcutAssignment[array_size];
@@ -142,20 +148,15 @@ bool Widget::add_shortcut(unsigned key) {
     keylist = newlist;
     newlist = new ShortcutAssignment[array_size];
     memcpy(newlist, widgetlist, num_shortcuts*sizeof(*widgetlist));
+    p = p-widgetlist+newlist;
     delete[] widgetlist;
     widgetlist = newlist;
-  }
-  // return false if any duplicates, then point after last one:
-  ShortcutAssignment* p = findwidget(this);
-  while (p < widgetlist+num_shortcuts && p->widget == this) {
-    if (p->key == key) return false;
-    p++;
   }
   // insert the new assignment:
   memmove(p+1, p, (widgetlist+num_shortcuts-p)*sizeof(*widgetlist));
   p->widget = this;
   p->key = key;
-  // also insert it into keylist, sort by widget address:
+  // also insert it into keylist, after all other matching keys:
   p = findkey(key);
   while (p < keylist+num_shortcuts && p->key==key) p++;
   memmove(p+1, p, (keylist+num_shortcuts-p)*sizeof(*keylist));
@@ -447,6 +448,6 @@ bool Widget::test_shortcut(bool test_label) const {
   return false;
 }
 
-// End of $Id: shortcuts.cxx,v 1.1 2004/11/12 06:50:19 spitzak Exp $
+// End of $Id: shortcuts.cxx,v 1.2 2004/11/21 05:41:48 spitzak Exp $
 
 
