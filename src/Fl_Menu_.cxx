@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.35 2001/07/25 19:05:44 robertk Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.36 2001/07/29 21:39:54 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -93,6 +93,9 @@ Fl_Widget* Fl_Menu_::child(int n) const {
 
 FL_API int fl_dont_execute = 0; // hack for fluid
 
+// This pointer can be used by callbacks to find the menu
+Fl_Menu_* Fl_Menu_::callback_menu;
+
 // Do the callback for the current item:
 void Fl_Menu_::execute(Fl_Widget* widget) {
   item(widget);
@@ -117,25 +120,20 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
     }
   }
 
-  Fl_Callback* callback = widget->callback();
-
-  // If the item's callback is not set, use the menu's callback:
-  if (callback == Fl_Widget::default_callback) callback = this->callback();
-
-#if 0
-  // Notice that "this" is passed as the widget. This appears to
-  // be necessary for back compatability. You can use item() to
-  // get the actual widget.
-  callback(this, widget->user_data());
-#endif
-  // If the item has data, use it, else use the menus data:
-  void* data = widget->user_data() ? widget->user_data() : this->user_data(); 
-  // If the item's callback is not set, use the menu's callback:
+  // For back compatability, if there is no callback set we use the
+  // menu's callback the way fltk1.0 did:
   if (widget->callback() == Fl_Widget::default_callback) {
-    if (!data) data = widget;
-    widget = this;
+    void* data = widget->user_data();
+    // fltk1.0 also did this, but this prevents a null pointer from
+    // being used as the data:
+    //if (!data) data = widget;
+    do_callback(this, data);
+  } else {
+    // set a pointer so the callback can find the menu:
+    callback_menu = this;
+    // and do the callback normally for this widget:
+    widget->do_callback();
   }
-  callback(widget, data);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -152,8 +150,9 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
 // own code (with the insert/delete broken) to get around this.
 //
 // item() is set to the located widget.
+// True is returned if the indexes differ from last time.
 
-int Fl_Menu_::goto_item(const int* indexes, int level) {
+bool Fl_Menu_::goto_item(const int* indexes, int level) {
   int i = indexes[0];
   bool ret = false;
   if (focus() != i) {focus(i); ret = true;}
@@ -169,21 +168,20 @@ int Fl_Menu_::goto_item(const int* indexes, int level) {
   return ret;
 }
 
-#if 0
-// Before I restored the item_ field, I used this method to go to the
-// current item by using the focus_ pointers to track down to it.
-Fl_Widget* Fl_Menu_::get_item() const {
+// Set item() according to the focus fields. item() may have been altered
+// by the widget drawing or because an Fl_List is being used. The new
+// value for item() is returned.
+Fl_Widget* Fl_Menu_::get_item() {
   int i = focus();
-  Fl_Widget* item = child(i);
-  while (item && item->is_group()) {
-    Fl_Group* group = (Fl_Group*)item;
+  item(child(i));
+  while (item() && item()->is_group()) {
+    Fl_Group* group = (Fl_Group*)item();
     int i = group->focus();
     if (i < 0 || i >= group->children()) break;
-    item = group->child(i);
+    item(group->child(i));
   }
-  return item;
+  return item();
 }
-#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -227,5 +225,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.35 2001/07/25 19:05:44 robertk Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.36 2001/07/29 21:39:54 spitzak Exp $"
 //
