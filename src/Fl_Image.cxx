@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.32 2003/08/05 08:13:21 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -80,7 +80,7 @@ void Image::_draw(float XP, float YP, Flags) const
       HDC new_gc2 = CreateCompatibleDC(gc);
       SelectObject(new_gc, mask);
       SelectObject(new_gc2, id);
-      BitBlt(new_gc2, 0, 0, w, h, new_gc, 0, 0, SRCAND); // This should be done only once for performance
+      BitBlt(new_gc2, 0,0,w(),h(), new_gc, 0, 0, SRCAND); // This should be done only once for performance
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(gc, X, Y, W, H, new_gc, cx, cy, 0xE20746L);
       BitBlt(gc, X, Y, W, H, new_gc2, cx, cy, SRCPAINT);
@@ -150,5 +150,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.32 2003/08/05 08:13:21 spitzak Exp $".
 //
