@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.5 2000/01/16 07:44:34 robertk Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.6 2000/04/16 13:09:14 mike Exp $"
 //
 // Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -147,7 +147,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == '(')
         break;
-      else if (ptr < command+sizeof(command)-1)
+      else if ((ptr - command) < (sizeof(command) - 1))
         *ptr++ = ch;
     }
 
@@ -168,7 +168,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == ')')
         break;
-      else if (ptr < params+sizeof(params)-1)
+      else if ((ptr - command) < (sizeof(command) - 1))
         *ptr++ = ch;
     }
 
@@ -241,7 +241,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
       if (strcmp(params, "iconcolor") == 0)
         data_[outline] = 256;
       else if (strcmp(params, "shadowcolor") == 0)
-		data_[outline] = FL_DARK3;
+	data_[outline] = FL_DARK3;
       else if (strcmp(params, "outlinecolor") == 0)
         data_[outline] = FL_BLACK;
       else
@@ -424,11 +424,11 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
     else
     {
       // Read a color name...
-      if (strncmp(ptr + 2, "white", 5) == 0)
+      if (strncasecmp(ptr + 2, "white", 5) == 0)
         colors[ch] = FL_WHITE;
-      else if (strncmp(ptr + 2, "black", 5) == 0)
+      else if (strncasecmp(ptr + 2, "black", 5) == 0)
         colors[ch] = FL_BLACK;
-      else if (strncmp(ptr + 2, "none", 4) == 0)
+      else if (strncasecmp(ptr + 2, "none", 4) == 0)
       {
         colors[ch] = FL_BLACK;
 	bg = ch;
@@ -439,7 +439,6 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
   }
 
   // Read the image data...
-  startx = 0;
   for (y = height - 1; y >= 0; y --)
   {
     while (fgets(line, sizeof(line), fp) != NULL)
@@ -453,7 +452,8 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
       return;
     }
 
-    ch = bg;
+    startx = 0;
+    ch     = bg;
     ptr ++;
 
     for (x = 0; x < width; x ++, ptr ++)
@@ -698,10 +698,9 @@ load_kde_icons(const char *directory)	// I - Directory to load
       else
 	load_kde_mimelnk(full);				
     }
-  }
 
-  for (i = 0; i < n; i ++)
     free((void *)entries[i]);
+  }
 
   free((void*)entries);
 }
@@ -724,7 +723,7 @@ load_kde_mimelnk(const char *filename)
   Fl_FileIcon	*icon;
 
 
-  if ((fp = fopen(filename, "r")) == NULL)
+  if ((fp = fopen(filename, "rb")) != NULL)
   {
     while (fgets(tmp, sizeof(tmp), fp))
     {
@@ -808,5 +807,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.5 2000/01/16 07:44:34 robertk Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.6 2000/04/16 13:09:14 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.86 2000/04/16 08:31:46 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.87 2000/04/16 13:09:15 mike Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -65,6 +65,7 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L, Fl_Group* button)
 {
   end();
   copy_style(button->style());
+  window_box(FL_DOWN_BOX);  // Make sure that the popup title is raised
   set_modal();
   clear_border();
   item = L;
@@ -779,5 +780,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.86 2000/04/16 08:31:46 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.87 2000/04/16 13:09:15 mike Exp $".
 //
