@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.14 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // The base class of all widgets.
 //
@@ -83,6 +83,8 @@ public:
   bool  resize(int x,int y,int w,int h);
   bool	position(int x, int y)	;
   bool	resize(int w, int h)	;
+
+  void  get_absolute_rect( Rectangle *rect ) const;
 
   const char* label() const	{ return label_; }
   void	label(const char* a);
@@ -310,5 +312,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.14 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

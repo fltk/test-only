@@ -23,17 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Drawing function to move the contents of a rectangle.  This is passed
-// a "callback" which is called to draw rectangular areas that are moved
-// into the drawing area.
-
 #include <config.h>
 #include <fltk/Window.h>
 #include <fltk/x.h>
 #include <fltk/draw.h>
 
+// Turn this off to stop using copy-area for scrolling:
+#define USE_SCROLL 1
 
-#ifdef _WIN32
+#if USE_SCROLL && defined(_WIN32)
 
 #ifndef SYSRGN
 // Missing declaration in old WIN32 API headers.
@@ -52,7 +50,7 @@ extern int has_unicode();
 
 // Return true if rect is completely visible on screen.
 // If other window is overlapping rect, return false.
-static bool is_visible(int x, int y, int w, int h) 
+static bool is_visible(int x, int y, int w, int h)
 {
   // Get visible region of window
   HRGN rgn0 = CreateRectRgn (0, 0, 0, 0);
@@ -61,7 +59,7 @@ static bool is_visible(int x, int y, int w, int h)
   GetRandomRgn (fltk::dc, rgn0, SYSRGN);
 
   if (has_unicode()) {
-    // Windows 9x operating systems the region is returned in window coordinates, 
+    // Windows 9x operating systems the region is returned in window coordinates,
     // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
     POINT pt = { 0, 0 };
     ClientToScreen(fltk::xid(fltk::Window::current()), &pt);
@@ -90,16 +88,27 @@ static bool is_visible(int x, int y, int w, int h)
 
 #endif /* _WIN32 */
 
+/**
+  Move the contents of a rectangle by \a dx and \a dy. The area that
+  was previously outside the rectangle or obscured by other windows is
+  then redrawn by calling \a draw_area for each rectangle.  <i>This is a
+  drawing function and can only be called inside the draw() method of
+  a widget.</i>
 
-// scroll a rectangle and redraw the newly exposed portions:
+  If \a dx and \a dy are zero this returns without doing anything.
+
+  If \a dx or \a dy are larger than the rectangle then this just calls
+  \a draw_area for the entire rectangle. This is also done on systems
+  (Quartz) that do not support copying screen regions.
+*/
 void fltk::scrollrect(const Rectangle& r, int dx, int dy,
 		       void (*draw_area)(void*, const Rectangle&), void* data)
 {
   if (!dx && !dy) return;
-#ifdef USE_QUARTZ
+#if !USE_SCROLL || defined(USE_QUARTZ)
   draw_area(data, r);
   return;
-#endif
+#else
   if (dx <= -r.w() || dx >= r.w() || dy <= -r.h() || dy >= r.h()) {
     // no intersection of old an new scroll
     draw_area(data, r);
@@ -158,14 +167,12 @@ void fltk::scrollrect(const Rectangle& r, int dx, int dy,
     draw_area(data, r);
     return;
   }
-#elif USE_QUARTZ
-  //+++ Quartz can not scroll an area! You must redraw from scratch or 
-  //+++ store the content inside an image!
-  ;
 #else
+# error
 #endif
   if (dx) draw_area(data, Rectangle(clip_x, dest_y, clip_w, src_h));
   if (dy) draw_area(data, Rectangle(r.x(), clip_y, r.w(), clip_h));
+#endif
 }
 
 //

@@ -241,7 +241,7 @@ int TabGroup::handle(int event) {
     } else {
       push(i >= 0 ? child(i) : 0);
     }
-    return 1;
+    return i>=0 ? 1 : 0;
 
   // handle pointing at the tabs to bring up tooltip:
   case ENTER:
@@ -391,23 +391,6 @@ void TabGroup::draw() {
   Widget *v = selected_child();
 
   H = tab_height();
-  if (damage() & DAMAGE_ALL) { // redraw the entire thing:
-#if USE_CLIPOUT
-    push_clip(0, 0, w(), h());
-    if (v) {
-      fl_did_clipping = 0;
-      draw_child(*v);
-      if (fl_did_clipping != v) clipout(v->x(), v->y(), v->w(), v->h());
-    }
-    draw_background();
-    pop_clip();
-#else
-    draw_background();
-    if (v) draw_child(*v);
-#endif
-  } else { // redraw the child
-    if (v) update_child(*v);
-  }
 
   // draw the tabs if needed:
   if (damage() & (DAMAGE_VALUE|DAMAGE_ALL)) {
@@ -428,8 +411,26 @@ void TabGroup::draw() {
       int b = H >= 0 ? H : h()+H;
       drawline(0, b, this->w(), b);
     }
-
   }
+
+  if (damage() & DAMAGE_ALL) { // redraw the entire thing:
+#if USE_CLIPOUT
+    push_clip(0, 0, w(), h());
+    if (v) {
+      fl_did_clipping = 0;
+      draw_child(*v);
+      if (fl_did_clipping != v) clipout(v->x(), v->y(), v->w(), v->h());
+    }
+    draw_tab_background();
+    pop_clip();
+#else
+    draw_tab_background();
+    if (v) draw_child(*v);
+#endif
+  } else { // redraw the child
+    if (v) update_child(*v);
+  }
+
 #if USE_CLIPOUT
   if (damage() & DAMAGE_EXPOSE) {
     clipout(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
@@ -437,6 +438,31 @@ void TabGroup::draw() {
     fl_did_clipping = this;
   }
 #endif
+}
+
+void TabGroup::set_draw_outline( bool draw_outline )
+{
+  _drawOutline = draw_outline;
+  redraw();
+}
+
+void TabGroup::draw_tab_background()
+{
+  draw_background();
+  if ( _drawOutline ) {
+    int x1 = 0;
+    int th = tab_height();
+    int y1 = th >= 0 ? th : 0;
+    int x2 = w()-1;
+    int y2 = h()-1 + ( th<0 ? th : 0 );
+    if ( w() > 3 ) {
+      setcolor( Color(GRAY95) );
+      drawline( x1, y1, x1, y2 );
+      setcolor( Color(GRAY33) );
+      drawline( x1, y2, x2, y2 );
+      drawline( x2, y1, x2, y2 );
+    }
+  }
 }
 
 void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
@@ -521,7 +547,8 @@ sees. The children should be sized to stay away from the top or bottom
 edge of the <TT>fltk::Tabs</TT>, which is where the tabs are drawn.
 */
 TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
-  : Group(X,Y,W,H,l)
+  : Group(X,Y,W,H,l),
+    _drawOutline( false )
 {
   style(default_style);
   focus_index(0);

@@ -688,7 +688,7 @@ int MWindow::handle(int event) {
   switch (event) {
 
   case KEY:
-    track_mouse = false;
+    track_mouse = event_state(ANY_BUTTON);
     switch (event_key()) {
     case LeftAltKey:
     case RightAltKey:

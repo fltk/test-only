@@ -312,6 +312,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   HICommand cmd;
 
   fl_lock_function();
+  in_main_thread_ = true;
 
   got_events = 1;
 
@@ -357,6 +358,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
     ret = CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
   QuitApplicationEventLoop();
 
+  in_main_thread_ = false;
   fl_unlock_function();
 
   return ret;
@@ -368,9 +370,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
  */
 static pascal void timerProcCB( EventLoopTimerRef, void* )
 {
-  fl_lock_function();
   QuitApplicationEventLoop();
-  fl_unlock_function();
 }
 
 /**
@@ -381,13 +381,11 @@ static pascal void timerProcCB( EventLoopTimerRef, void* )
 static void breakMacEventLoop()
 {
   EventRef breakEvent;
-  // fl_lock_function(); // WAS: I don't think the lock is needed
   CreateEvent( 0, kEventClassFLTK, kEventFLTKBreakLoop, 0,
 	       kEventAttributeUserEvent, &breakEvent );
   PostEventToQueue( GetCurrentEventQueue(), breakEvent,
 		    kEventPriorityLow /*kEventPriorityStandard*/ );
   ReleaseEvent( breakEvent );
-  // fl_unlock_function();
 }
 
 /**
@@ -452,6 +450,7 @@ static inline int fl_wait(double time)
     pthread_create(&dataready_tid, NULL, dataready_thread, userdata);
   }
 
+  in_main_thread_ = false;
   fl_unlock_function();
 
   if ( time > 0.0 )
@@ -460,6 +459,9 @@ static inline int fl_wait(double time)
     breakMacEventLoop();
 
   RunApplicationEventLoop(); // will return after the previously set time
+  fl_lock_function();
+  in_main_thread_ = true;
+
   if ( dataready_tid != 0 ) {
     DEBUGMSG("*** CANCEL THREAD: ");
     pthread_cancel(dataready_tid);		// cancel first
@@ -471,7 +473,6 @@ static inline int fl_wait(double time)
     DEBUGMSG("OK\n");
   }
 
-  fl_lock_function();
   // we send LEAVE only if the mouse did not enter some other window:
   // I'm not sure if this is needed or if it works...
   //if (!xmousewin) handle(LEAVE, 0);
@@ -505,7 +506,6 @@ static inline int fl_ready() {
 //+++ verify port to FLTK2
 static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* reply, UInt32 refcon )
 {
-  fl_lock_function();
   while (!modal() && CreatedWindow::first ) {
     CreatedWindow *x = CreatedWindow::first;
     if (!x->window->parent()) x->window->do_callback();
@@ -513,7 +513,6 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
     if ( CreatedWindow::first == x ) break;
   }
   QuitApplicationEventLoop();
-  fl_unlock_function();
   return noErr;
 }
 
@@ -532,8 +531,6 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   Window *window = (Window*)userData;
 
   static Window *activeWindow = 0;
-  
-  fl_lock_function();
   
   switch ( kind )
   {
@@ -587,8 +584,6 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     break;
   }
 
-  fl_unlock_function();
-
   return ret;
 }
 
@@ -602,34 +597,25 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   Window *window = (Window*)userData;
   EventMouseWheelAxis axis;
 
-  fl_lock_function();
-  
   GetEventParameter( event, kEventParamMouseWheelAxis, typeMouseWheelAxis, 
                      NULL, sizeof(EventMouseWheelAxis), NULL, &axis );
   long delta;
   GetEventParameter( event, kEventParamMouseWheelDelta, typeLongInteger, 
                      NULL, sizeof(long), NULL, &delta );
-  if ( axis == kEventMouseWheelAxisX )
-  {
+  OSStatus ret = noErr;
+  if ( axis == kEventMouseWheelAxisX ) {
     e_dx = delta;
     e_dy = 0;
     if ( e_dx) handle( MOUSEWHEEL, window );
-  }
-  else if ( axis == kEventMouseWheelAxisY )
-  {
+  } else if ( axis == kEventMouseWheelAxisY ) {
     e_dx = 0;
     e_dy = -delta;
     if ( e_dy) handle( MOUSEWHEEL, window );
-  }
-  else {
-    fl_unlock_function();
-
-    return eventNotHandledErr;
+  } else {
+    ret = eventNotHandledErr;
   }
 
-  fl_unlock_function();
-  
-  return noErr;
+  return ret;
 }
 
 
@@ -657,8 +643,6 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   static int keysym[] = { 0, 1, 3, 2};
   static int px, py;
 
-  fl_lock_function();
-  
   os_event = event;
   Window *window = (Window*)userData;
   Point pos;
@@ -676,7 +660,6 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   case kEventMouseDown:
     part = FindWindow( pos, &tempXid );
     if ( part != inContent ) {
-      fl_unlock_function();
       return CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
     }
     if ( !IsWindowActive( xid ) )
@@ -728,8 +711,6 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     break;
   }
 
-  fl_unlock_function();
-  
   return noErr;
 }
 
@@ -805,8 +786,6 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   static char buffer[5];
   int sendEvent = 0;
   Window *window = (Window*)userData;
-
-  fl_lock_function();
   
   UInt32 keyCode;
   GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
@@ -866,12 +845,8 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   }
   while (window->parent()) window = window->window();
   if (sendEvent && handle(sendEvent,window)) {
-    fl_unlock_function();
-  
     return noErr; // return noErr if FLTK handled the event
   } else {
-    fl_unlock_function();
-  
     return CallNextEventHandler( nextHandler, event );
   }
 }

@@ -436,6 +436,7 @@ void *create_quartz_bitmap_from_xpm(char const* const* di) {
   return (void*)img;
 }
 #endif
+
 //
 // End of "$Id$".
 //

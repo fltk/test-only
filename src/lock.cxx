@@ -3,14 +3,14 @@
   Fltk has no multithreaded support unless the main thread calls
   fltk::lock().
 
-  You must have a "master" thread. Only this thread is allowed to wait
+  You must have a "main" thread. Only this thread is allowed to wait
   for events by calling fltk::wait() or fltk::run() or any similar
   call.  From then on fltk will be locked except when the main thread
   is actually waiting for events from the user. Other threads must
   call fltk::lock() and fltk::unlock() to surround \e all calls
   to fltk (such as to change widgets or redraw them).
 
-  FLTK provides the file <fltk/Thread.h> which defines some
+  FLTK provides the file <fltk/Threads.h> which defines some
   convenience portability wrappers around the native threads
   system. It provides a Thread type and the classes Mutex and
   SignalMutex. <i>This file is optional</i>. Fltk does not use it (it
@@ -46,9 +46,9 @@
   }
   \endcode
 
-  Warning: on Windows including <fltk/Thread.h> will cause the
-  <windows.h> header file to be included. This nasty file defines
-  no end of macros and other things designed to screw up your programs.
+  Warning: on Windows including <fltk/Threads.h> will cause the
+  <windows.h> header file to be included. This file often has
+  undesirable effects and should be avoided if possible.
 
 */
 
@@ -97,6 +97,14 @@
   Returns an argument sent to an awake call, or returns null if none.
   Warning: the current implementation only has a one-entry queue and
   only returns the most recent value!
+*/
+
+/*! \fn bool fltk::in_main_thread()
+  Returns true if the current thread is the main thread, i.e. the one
+  that called wait() first. Many fltk calls such as wait() will not
+  work correctly if this is not true. Notice that this function must
+  be surrounded by lock() and unlock() just like all other fltk
+  functions.
 */
 
 #include <fltk/run.h>
@@ -159,25 +167,32 @@ void fltk::awake(void* msg) {
 #endif
 #include <pthread.h>
 
-#ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
-// Linux supports recursive locks, use them directly:
+#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
+
+namespace fltk {pthread_mutexattr_t Mutex_attrib={PTHREAD_MUTEX_RECURSIVE_NP};}
 
 static pthread_mutex_t fltk_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+#define _DO_INIT 0
 
-static void lock_function() {
-  pthread_mutex_lock(&fltk_mutex);
-}
+static void lock_function() {pthread_mutex_lock(&fltk_mutex);}
 
-void fltk::unlock() {
-  pthread_mutex_unlock(&fltk_mutex);
-}
+void fltk::unlock() {pthread_mutex_unlock(&fltk_mutex);}
 
-//Possibly more portable to do this at startup:
-//static pthread_mutexattr_t attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
-//pthread_mutex_init(&fltk_mutex, &attrib);
+#elif defined(PTHREAD_MUTEX_RECURSIVE)
+
+namespace fltk {pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE};}
+
+static pthread_mutex_t fltk_mutex;
+#define _DO_INIT 1
+
+static void lock_function() {pthread_mutex_lock(&fltk_mutex);}
+
+void fltk::unlock() {pthread_mutex_unlock(&fltk_mutex);}
 
 #else
 // Make a recursive lock out of the pthread mutex:
+
+#define _DO_INIT 0
 
 static pthread_mutex_t fltk_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t fltk_owner;
@@ -225,7 +240,6 @@ static void thread_awake_cb(int fd, void*) {
 }
 
 void fltk::lock() {
-  lock_function();
   if (!thread_filedes[1]) { // initialize the mt support
     // Init threads communication pipe to let threads awake FLTK from wait
     pipe(thread_filedes);
@@ -233,7 +247,11 @@ void fltk::lock() {
     add_fd(thread_filedes[0], READ, thread_awake_cb);
     fl_lock_function = lock_function;
     fl_unlock_function = unlock;
+#if _DO_INIT
+    pthread_mutex_init(&fltk_mutex, &attrib);
+#endif
   }
+  lock_function();
 }
 
 void fltk::awake(void* msg) {

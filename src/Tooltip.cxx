@@ -71,7 +71,7 @@ Tooltip::Tooltip() : MenuWindow(0, 0) {
 void Tooltip::layout() {
   setfont(textfont(), textsize());
   int ww=MAX_WIDTH, hh=0;
-  measure(label(), ww, hh, flags()|OUTPUT);
+  measure(label(), ww, hh, flags());
   ww += 7; hh += 6;
 
   // We may want to skip some of this is this!=instance_
@@ -99,7 +99,7 @@ void Tooltip::layout() {
 void Tooltip::draw() {
   draw_box();
   Rectangle r(w(),h()); //box()->inset(r);
-  draw_label(r, style(), flags()|OUTPUT);
+  draw_label(r, style(), flags());
 }
 
 static void recent_timeout(void*) {

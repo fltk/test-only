@@ -155,6 +155,9 @@ void Group::insert(Widget &o, int index) {
     array_[index] = &o;
   }
   ++children_;
+  if ( o.visible_r() ) {
+    o.handle( SHOW );
+  }
   init_sizes();
 }
 
@@ -621,22 +624,15 @@ void Group::layout(const Rectangle& r, int layout_damage) {
 
   Widget*const* a = array_;
   Widget*const* e = a+children_;
-  if ((layout_damage & LAYOUT_XY) && !is_window()) {
-    // If this is not a Window and the xy position is changed, we must
-    // call layout() on every child. This is necessary so that child
-    // Windows will move to their new positions.
-    while (a < e) {
-      Widget* widget = *a++;
-      widget->layout_damage(widget->layout_damage()|LAYOUT_XY);
-      widget->layout();
-    }
-  } else {
-    // Otherwise we only need to call layout on children with the
-    // layout bit set:
-    while (a < e) {
-      Widget* widget = *a++;
-      if (widget->layout_damage()) widget->layout();
-    }
+  int extradamage = layout_damage & LAYOUT_DAMAGE;
+  // If this is not a Window and the xy position is changed, we must
+  // call layout() on every child. This is necessary so that child
+  // Windows will move to their new positions:
+  if ((layout_damage & LAYOUT_XY) && !is_window()) extradamage |= LAYOUT_XY;
+  while (a < e) {
+    Widget* widget = *a++;
+    widget->layout_damage(widget->layout_damage()|extradamage);
+    if (widget->layout_damage()) widget->layout();
   }
 }
 

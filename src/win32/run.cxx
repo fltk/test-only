@@ -357,20 +357,25 @@ static inline int fl_wait(double time_to_wait) {
   }
 #endif // USE_ASYNC_SELECT
 
+  in_main_thread_ = false;
   fl_unlock_function();
   if (time_to_wait < 2147483.648) {
     have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
     if (!have_message) {
       int t = (int)(time_to_wait * 1000.0 + .5);
-      if (t <= 0) {fl_lock_function(); return 0;} // too short to measure
-      timerid = SetTimer(NULL, 0, t, NULL);
-      have_message = __GetMessage(&msg, NULL, 0, 0);
-      KillTimer(NULL, timerid);
+      if (t <= 0) { // too short to measure
+	have_message = false;
+      } else {
+	timerid = SetTimer(NULL, 0, t, NULL);
+	have_message = __GetMessage(&msg, NULL, 0, 0);
+	KillTimer(NULL, timerid);
+      }
     }
   } else {
     have_message = __GetMessage(&msg, NULL, 0, 0);
   }
   fl_lock_function();
+  in_main_thread_ = true;
 
   // Execute the message we got, and all other pending messages:
   while (have_message) {

@@ -292,6 +292,8 @@ void ScrollGroup::layout() {
     scrollbar.value(yposition_ = (R.y()-t), R.h(), 0, b-t);
     hscrollbar.resize(R.x(), scrollbar_align()&ALIGN_TOP ? R.y()-sw : R.b(), R.w(), sw);
     hscrollbar.value(xposition_ = (R.x()-l), R.w(), 0, r-l);
+    max_x_scroll_ = r-l-R.w();
+    max_y_scroll_ = b-t-R.h();
 
     // We are done if the new rectangle is the same as last time:
     if (R.x() == rectangle.x() &&
@@ -344,6 +346,13 @@ static inline int nogroup(int X) {Group::current(0); return X;}
 ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
   : Group(X,Y,W,H,L),
     // This initial size & position of scrollbars is probably not used:
+    enable_drag_scroll_( true ),
+    drag_scrolling_( false ),
+    delegate_alt_click_( true ),
+    drag_x_( 0 ),
+    drag_y_( 0 ),
+    pos_x_( 0 ),
+    pos_y_( 0 ),
     scrollbar(nogroup(X)+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH)
 {
@@ -386,23 +395,93 @@ int ScrollGroup::handle(int event) {
     scrollTo(xposition_-dx, yposition_-dy);
     break;}
 
-  case PUSH:
   case ENTER:
   case MOVE:
   case DND_ENTER:
   case DND_DRAG:
-    // For all mouse events check to see if we are in the scrollbar
-    // areas and send to them:
-    if (scrollbar.visible() &&
-	(scrollbar_align()&ALIGN_LEFT ?
-	 (event_x() < scrollbar.x()+scrollbar.w()) :
-	 (event_x() >= scrollbar.x())))
-      return scrollbar.send(event);
-    if (hscrollbar.visible() &&
-	(scrollbar_align()&ALIGN_TOP ?
-	 (event_y() < hscrollbar.y()+hscrollbar.h()) :
-	 (event_y() >= hscrollbar.y())))
-      return hscrollbar.send(event);
+    {
+      // For all mouse events check to see if we are in the scrollbar
+      // areas and send to them:
+      if (scrollbar.visible() &&
+          (scrollbar_align()&ALIGN_LEFT ?
+           (event_x() < scrollbar.x()+scrollbar.w()) :
+           (event_x() >= scrollbar.x()))) {
+        return scrollbar.send(event);
+      } else if (hscrollbar.visible() &&
+                 (scrollbar_align()&ALIGN_TOP ?
+                  (event_y() < hscrollbar.y()+hscrollbar.h()) :
+                  (event_y() >= hscrollbar.y()))) {
+        return hscrollbar.send(event);
+      }
+    }
+    if ( delegate_alt_click_ == false &&
+         ((event_state()&(ALT|CTRL|SHIFT)) != ALT ) ) {
+      delegate_alt_click_ = true;
+    }
+    break;
+
+  case PUSH:
+    {
+      // For all mouse events check to see if we are in the scrollbar
+      // areas and send to them:
+      if (scrollbar.visible() &&
+          (scrollbar_align()&ALIGN_LEFT ?
+           (event_x() < scrollbar.x()+scrollbar.w()) :
+           (event_x() >= scrollbar.x()))) {
+        return scrollbar.send(event);
+      } else if (hscrollbar.visible() &&
+                 (scrollbar_align()&ALIGN_TOP ?
+                  (event_y() < hscrollbar.y()+hscrollbar.h()) :
+                  (event_y() >= hscrollbar.y()))) {
+        return hscrollbar.send(event);
+      }
+      if ( !drag_scrolling_ &&
+           ((event_state()&(ALT|CTRL|SHIFT)) == ALT ) &&
+           enable_drag_scroll_ ) {
+        if ( delegate_alt_click_ ) {
+          int retVal = Group::handle( event );
+          if ( retVal ) {
+            return retVal;
+          }
+        }
+        drag_scrolling_ = true;
+        drag_x_ = event_x();
+        drag_y_ = event_y();
+        pos_x_ = xposition();
+        pos_y_ = yposition();
+        delegate_alt_click_ = false;
+        return true;
+      }
+    }
+    break;
+
+  case DRAG:
+    {
+      if ( drag_scrolling_ ) {
+        int dx = event_x() - drag_x_;
+        int dy = event_y() - drag_y_;
+        int newX = pos_x_-dx;
+        int minX = 0;
+        int maxX = max_x_scroll_ >= 0 ? max_x_scroll_ : 0;
+        int newY = pos_y_-dy;
+        int minY = 0;
+        int maxY = max_y_scroll_ >= 0 ? max_y_scroll_ : 0;
+        newX = newX<maxX ? newX : maxX;
+        newX = newX>minX ? newX : minX;
+        newY = newY<maxY ? newY : maxY;
+        newY = newY>minY ? newY : minY;
+        scrollTo( newX, newY );
+      }
+    }
+    break;
+
+  case RELEASE:
+    if ( drag_scrolling_ ) {
+      drag_scrolling_ = false;
+      if ((event_state()&(ALT|CTRL|SHIFT)) != ALT ) {
+        delegate_alt_click_ = true;
+      }
+    }
     break;
 
   case MOUSEWHEEL:
@@ -418,6 +497,16 @@ int ScrollGroup::handle(int event) {
     if (scrollbar.send(event)) return 1;
     if (hscrollbar.send(event)) return 1;
     break;
+
+  case KEYUP:
+    {
+      if ( delegate_alt_click_ == false &&
+           ((event_state()&(ALT|CTRL|SHIFT)) != ALT ) ) {
+        delegate_alt_click_ = true;
+      }
+    }
+    break;
+
   }
 
   return Group::handle(event);

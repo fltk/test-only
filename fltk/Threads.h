@@ -1,5 +1,6 @@
-// Inline classes to provide portable support for threads and mutexes.
-//
+// Inline classes to provide a "toy" interface for threads and mutexes.
+// These are used by the fltk demo programs. They have been improved
+// quite a bit and may be useful for non-toy programs, too.
 
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
@@ -13,97 +14,108 @@ namespace fltk {
 /*! \addtogroup multithreading
   \{ */
 
-/*! Hides whatever the system uses to identify a thread. Used so
+/** Hides whatever the system uses to identify a thread. Used so
   the "toy" interface is portable. */
 typedef pthread_t Thread;
 
-/*! Fork a new thread and make it run \a f(p). Returns negative number
+/** Fork a new thread and make it run \a f(p). Returns negative number
   on error, otherwise \a t is set to the new thread. */
-int create_thread(Thread& t, void *(*f) (void *), void* p)
-{
+int create_thread(Thread& t, void *(*f) (void *), void* p) {
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
-// Linux supports recursive locks, use them directly, with some cheating:
-#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) && !defined(DOXYGEN)
-
-extern pthread_mutexattr_t Mutex_attrib;
-
+/*!
+  "Mutual-exclusion lock" for simple multithreaded programs.  Calling
+  lock() will wait until nobody else has the lock and then will
+  return. <i>Calling lock() more than once will "deadlock"!</i>
+  To avoid this, use RecursiveMutex.
+*/
 class Mutex {
   friend class SignalMutex;
   pthread_mutex_t mutex;
   Mutex(const Mutex&);
   Mutex& operator=(const Mutex&);
+protected:
+  Mutex(const pthread_mutexattr_t* a) {pthread_mutex_init(&mutex, a);}
 public:
-  Mutex() {pthread_mutex_init(&mutex, &Mutex_attrib);}
+  Mutex() {pthread_mutex_init(&mutex, 0);}
   void lock() {pthread_mutex_lock(&mutex);}
   void unlock() {pthread_mutex_unlock(&mutex);}
+  bool trylock() {return pthread_mutex_trylock(&mutex) == 0;}
   ~Mutex() {pthread_mutex_destroy(&mutex);}
 };
 
+/*!
+  A portable "semaphore". A thread that holds this lock() can call
+  wait(), which will unlock it, then wait for another thread to
+  call signal(), then lock() it again.
+
+  The other thread can call signal() at any time, though usually
+  it will have called lock() as well, as the lock can be used to
+  protect the data that is actually being shared between the threads.
+
+  If more than one thread is in wait(), then calling signal_one()
+  will only wake one of them up. This may be more efficient, and
+  can be done safely if all threads that call wait() also call
+  signal_one() just before calling unlock().
+
+  Warning: wait() can return even if signal() was not called. You
+  must then check other data (protected by the lock()) to see if
+  the condition really is fulfilled. In many cases this is the
+  best implementation, it is also necessary to work around design
+  errors in Windows, where always returns after 1/2 second to
+  avoid a deadlock due to the non-atomic nature of Windows calls.
+*/
 class SignalMutex : public Mutex {
   pthread_cond_t cond;
 public:
   SignalMutex() : Mutex() {pthread_cond_init(&cond, 0);}
   void signal() {pthread_cond_broadcast(&cond);}
+  void signal_one() {pthread_cond_signal(&cond);}
   void wait() {pthread_cond_wait(&cond, &mutex);}
+};
+
+// Linux supports recursive locks, use them directly, with some cheating:
+#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) || defined(PTHREAD_MUTEX_RECURSIVE)
+
+extern pthread_mutexattr_t Mutex_attrib;
+
+class RecursiveMutex : public Mutex {
+public:
+  RecursiveMutex() : Mutex(&Mutex_attrib) {}
 };
 
 #else // standard pthread mutexes need a bit of work to be recursive:
 
 /*!
-  Simple wrapper for the locking provided by the operating system
-  so you can write portable toy or demo programs. This is a "recursive
-  lock". Calling lock() will wait until nobody else has the lock and then
-  will take it. Calling lock() N times means you must call unlock()
-  N times before another thread can get it.
+  "Mutual exclusion lock" to protect data in multithreaded programs.
+  This is a "recursive lock". Calling lock() will wait until nobody
+  else has the lock and then will take it. Calling lock() multiple
+  times by the same thread is allowed, and unlock() must then be
+  called the same number of times before another thread can get the
+  lock.
 */
-class Mutex {
-  friend class SignalMutex;
-  pthread_mutex_t mutex;
+class RecursiveMutex : public Mutex {
   pthread_t owner;
   int counter;
-  Mutex(const Mutex&);
-  Mutex& operator=(const Mutex&);
 public:
-  Mutex() : counter(0) {pthread_mutex_init(&mutex, 0);}
+  RecursiveMutex() : Mutex(), counter(0) {}
   void lock() {
     if (!counter || owner != pthread_self()) {
-      pthread_mutex_lock(&mutex); owner = pthread_self();
+      Mutex::lock();
+      owner = pthread_self();
     }
     counter++;
   }
-  void unlock() {if (!--counter) pthread_mutex_unlock(&mutex);}
-  ~Mutex() {pthread_mutex_destroy(&mutex);}
-};
-
-/*!
-  Proper semaphore with good behavior, useful for portable toy or
-  demo programs. Besides a lock, this has a method of pausing until
-  another thread completes an action. You \e must lock() this before
-  you call wait(). wait() will unlock it, wait for a signal() from
-  another thread, and then lock() it again. You must unlock() it
-  some time after wait() returns. You can call signal() at any time,
-  though usually you will have called lock() and then unlock() this
-  afterwards.
-
-  Warning: wait() may return even if nobody else did signal()! This is
-  unavoidable. In particular, the WIN32 api is severely broken and
-  cannot correctly implement this.  It can easily lock up and never
-  return, so this always puts a timeout of .5 second to get around
-  this.
-*/
-class SignalMutex : public Mutex {
-  pthread_cond_t cond;
-public:
-  SignalMutex() : Mutex() {pthread_cond_init(&cond, 0);}
-  void signal() {pthread_cond_broadcast(&cond);}
-  void wait() {
-    int save_counter = counter; counter = 0;
-    pthread_cond_wait(&cond, &mutex);
-    counter = save_counter;
-    owner = pthread_self();
+  bool trylock() {
+    if (!counter || owner != pthread_self()) {
+      if (!Mutex::trylock()) return false;
+      owner = pthread_self();
+    }
+    counter++;
+    return true;
   }
+  void unlock() {if (!--counter) Mutex::unlock();}
 };
 
 #endif
@@ -112,8 +124,19 @@ public:
 
 #else // _WIN32:
 
-#include <windows.h>
-#include <process.h>
+# define _WIN32_WINNT 0x0500
+# include <Windows.h>
+# include <process.h>
+// undefine some of the more annoying crap:
+# undef DELETE
+# undef ERROR
+# undef IN
+# undef OUT
+# undef POINT
+# undef far
+# undef max
+# undef min
+# undef near
 
 namespace fltk {
 
@@ -124,33 +147,62 @@ int create_thread(Thread& t, void *(*f) (void *), void* p) {
 }
 
 class FL_API Mutex {
-  friend class SignalMutex;
   CRITICAL_SECTION cs;
   Mutex(const Mutex&);
   Mutex& operator=(const Mutex&);
 public:
   Mutex() {InitializeCriticalSection(&cs);}
-  void lock() {EnterCriticalSection(&cs);}
+  void lock() {while (!TryEnterCriticalSection(&cs)) SwitchToThread();}
   void unlock() {LeaveCriticalSection(&cs);}
+  bool trylock() {return TryEnterCriticalSection(&cs);}
   ~Mutex() {DeleteCriticalSection(&cs);}
 };
 
+// After many experiments we have determined that this very stupid
+// implementation has the lowest overhead:
 class FL_API SignalMutex : public Mutex {
-  HANDLE event;
 public:
-  SignalMutex() : Mutex() {event = CreateEvent(0, FALSE, FALSE, 0);}
-  void signal() {SetEvent(event);}
+  SignalMutex() : Mutex() {}
+  void signal() {}
+  void signal_one() {}
   void wait() {
-    // int save_counter = cs.count; cs.count = 1;
     // the following three calls should be atomic, sigh...
-    LeaveCriticalSection(&cs);
-    WaitForSingleObject(event, 500 /*INFINITE*/);
-    EnterCriticalSection(&cs);
-    // cs.count = save_counter;
+    unlock();
+    SwitchToThread();
+    lock();
   }
 };
 
+typedef Mutex RecursiveMutex;
+
 /*! \} */
+
+/**
+   C++ convienence object for locking a Mutex.
+   Creating a local one of these will lock() the mutex and it means
+   unlock() will be called no matter how a function exits, because
+   the destructor ~Guard() does an unlock().
+
+\code
+   static fltk::Mutex mutex;
+   function() {
+     fltk::Guard guard(mutex);
+     do_stuff;
+     throw_exceptions;
+     if (test()) return;
+     etc;
+   }
+\endcode
+
+*/
+class FL_API Guard {
+  Mutex& lock;
+ public:
+  Guard(Lock& m) : lock(m) {lock.lock();}
+  Guard(Lock* m) : lock(*m) {lock.lock();}
+  ~Guard() {lock.unlock();}
+};
+
 
 }
 

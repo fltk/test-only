@@ -40,6 +40,11 @@ class FL_API ScrollGroup : public Group {
   int xposition_, yposition_;
   int layoutdx, layoutdy;
   int scrolldx, scrolldy;
+  bool enable_drag_scroll_;
+  bool drag_scrolling_;
+  bool delegate_alt_click_;
+  int drag_x_, drag_y_, pos_x_, pos_y_;
+  int max_x_scroll_, max_y_scroll_;
   static void hscrollbar_cb(Widget*, void*);
   static void scrollbar_cb(Widget*, void*);
   static void draw_clip(void*,const Rectangle&);
@@ -53,6 +58,8 @@ public:
   void bbox(Rectangle&);
   Scrollbar scrollbar;
   Scrollbar hscrollbar;
+
+  void enable_drag_scroll( bool enable ) { enable_drag_scroll_ = true; }
 
   virtual int handle(int);
   virtual void layout();

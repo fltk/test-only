@@ -115,7 +115,7 @@ extern "C" bool fltk_theme() {
 
   if ((style = Style::find("Tooltip"))) {
     style->color_ = tooltip_background;
-    style->textcolor_ = tooltip_foreground;
+    style->labelcolor_ = tooltip_foreground;
   }
 
   /*
@@ -187,8 +187,8 @@ extern "C" bool fltk_theme() {
 		       (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
       size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
-      style->textfont_ = font;
-      style->textsize_ = size;
+      style->labelfont_ = font;
+      style->labelsize_ = size;
     }
 
   } else {
@@ -232,8 +232,8 @@ extern "C" bool fltk_theme() {
 		       (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
       size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
-      style->textfont_ = font;
-      style->textsize_ = size;
+      style->labelfont_ = font;
+      style->labelsize_ = size;
     }
   }
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: TabGroup.h,v 1.4 2004/08/25 17:10:35 spitzak Exp $"
+// "$Id$"
 //
 // For making a "tabbed dialog box". Each child widget creates a tab.
 // Only one is visible at a time. This works best if all the children
@@ -46,6 +46,7 @@ public:
   int which(int event_x, int event_y);
   Widget *selected_child();
   bool selected_child(Widget *);
+  void set_draw_outline( bool draw_outline );
 
 protected:
   void draw();
@@ -55,6 +56,9 @@ private:
   int tab_positions(int*, int*);
   int tab_height();
   void draw_tab(int x1, int x2, int W, int H, Widget* o, int sel=0);
+  void draw_tab_background();
+
+  bool _drawOutline;
 };
 
 }
@@ -62,5 +66,5 @@ private:
 #endif
 
 //
-// End of "$Id: TabGroup.h,v 1.4 2004/08/25 17:10:35 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: threads.cxx,v 1.13 2002/12/13 19:42:59 easysw Exp $"
+// "$Id$"
 //
 // Threading example program for the Fast Light Tool Kit (FLTK).
 //
@@ -79,6 +79,8 @@ void* prime_func(void* p)
 
 int main()
 {
+  fltk::lock(); // you must do this before creating any threads!
+
   fltk::Window* w = new fltk::Window(200, 200, "Single Thread");
   w->begin();
   browser1 = new fltk::Browser(0, 0, 200, 175);
@@ -93,11 +95,9 @@ int main()
   value2 = new fltk::ValueInput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show();
-  
+
   browser1->add("Prime numbers:");
   browser2->add("Prime numbers:");
-
-  fltk::lock(); // you must do this before creating any threads!
 
   // One thread displaying in one browser
   fltk::create_thread(prime_thread, prime_func, browser1);
@@ -128,5 +128,5 @@ int main() {
 
 
 //
-// End of "$Id: threads.cxx,v 1.13 2002/12/13 19:42:59 easysw Exp $".
+// End of "$Id$".
 //

@@ -30,18 +30,8 @@
 
 FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory=0);
 inline char* filename_normalize(char* o, int l, char* i, const char* d=0) {return (char*)(filename_normalize(o,l,(const char*)i,d));}
-
-/* FIXME VC++ 6.0 complains about these two lines:
-..\..\fltk/filename.h(33) : error C2375: 'filename_name' : redefinition; different linkage
-        C:\prj\cxx\fltk-2.0\src\run.cxx(163) : see declaration of 'filename_name'
-..\..\fltk/filename.h(34) : error C2264: 'filename_name' : error in function definition or declaration; function not called
- Maybe this should be in run.h ?
-*/
-#ifndef _MSC_VER
-  FL_API const char *filename_name(const char *);
-  inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a));}
-#endif
-
+FL_API const char *filename_name(const char *);
+inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a));}
 FL_API const char *filename_ext(const char *);
 inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a));}
 FL_API bool filename_match(const char *, const char *pattern); // glob match

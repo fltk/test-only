@@ -436,6 +436,7 @@ static inline int fl_wait(float time_to_wait) {
   fdt[2] = fdsets[2];
 #endif
 
+  in_main_thread_ = false;
   fl_unlock_function();
 #if USE_POLL
   int n = ::poll(pollfds, nfds,
@@ -452,6 +453,7 @@ static inline int fl_wait(float time_to_wait) {
   }
 #endif
   fl_lock_function();
+  in_main_thread_ = true;
 
   if (n > 0) {
     for (int i=0; i<nfds; i++) {
@@ -1081,8 +1083,6 @@ static void set_event_xy(bool push) {
 
 ////////////////////////////////////////////////////////////////
 
-static Window* resize_from_system;
-
 static unsigned wheel_up_button = 4;
 static unsigned wheel_down_button = 5;
 
@@ -1265,16 +1265,8 @@ bool fltk::handle()
     XWindow junk; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
-    // We don't want to override any pending changes from the user:
-    if (window != resize_from_system && (window->layout_damage() & LAYOUT_XYWH)) {
-      if (window->layout_damage() & LAYOUT_XY) {X=window->x(); Y=window->y();}
-      if (window->layout_damage() & LAYOUT_WH) {W=window->w(); H=window->h();}
-      window->resize(X, Y, W, H);
-    } else {
-      // Set a flag so we don't echo the resize back to the window manager.
-       // Some badly-written ones will bounce it forever:
-      if (window->resize(X, Y, W, H)) resize_from_system = window;
-    }
+    CreatedWindow::find(window)->current_size.set(X,Y,W,H);
+    window->resize(X, Y, W, H);
     break;} // allow add_handler to do something too
 
   case ReparentNotify: {
@@ -1308,13 +1300,11 @@ bool fltk::handle()
     if (!window) break;
     // If this window completely fills it's parent, parent will not get
     // an expose event and the wait flag will not turn off. So force this:
-    if (CreatedWindow::find(window)->wait_for_expose) {
-      for (Window* w = window;;) {
-	CreatedWindow::find(w)->wait_for_expose = false;
-	w = w->window();
-	if (!w) break;
-      }
-    }
+    {for (Window* w = window;;) {
+      CreatedWindow::find(w)->wait_for_expose = false;
+      w = w->window();
+      if (!w) break;
+    }}
     // Inside of Xexpose event is exactly the same as Rectangle structure,
     // so we pass a pointer.
     CreatedWindow::find(window)->expose(*(Rectangle*)(&xevent.xexpose.x));
@@ -1837,9 +1827,11 @@ void CreatedWindow::create(Window* window,
 		  InputOutput,
 		  visual->visual,
 		  mask, &attr));
+  x->current_size.set(X, Y, W, H);
 
   if (!window->parent() && !window->override()) {
     // send all kinds 'o junk to X Window Manager:
+    x->wait_for_expose = true;
 
     // Set the label:
     window->label(window->label(), window->iconlabel());
@@ -1916,7 +1908,7 @@ CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
   x->overlay = false;
   x->window = window; window->i = x;
   x->region = 0;
-  x->wait_for_expose = true;
+  x->wait_for_expose = false;
   x->cursor = None;
   x->cursor_for = 0;
   x->next = CreatedWindow::first;
@@ -2296,26 +2288,25 @@ void Window::layout() {
 #endif
       free_backbuffer();
   }
-  if (this == resize_from_system) {
-    // Ignore changes that came from the system
-    resize_from_system = 0;
-  } else if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
+  if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
     // figure out where the window should be in it's parent:
     int x = this->x(); int y = this->y();
     for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
       x += p->x(); y += p->y();
     }
-    if (layout_damage() & LAYOUT_WH) {
+    int w = this->w(); if (w <= 0) w = 1;
+    int h = this->h(); if (h <= 0) h = 1;
+    if (w != i->current_size.w() || h != i->current_size.h()) {
       // Some window managers refuse to allow resizes unless the resize
       // information allows it:
-      if (minw == maxw && minh == maxh) size_range(w(), h(), w(), h());
-      XMoveResizeWindow(xdisplay, i->xid, x, y,
-			w()>0 ? w() : 1, h()>0 ? h() : 1);
+      if (!parent() && minw == maxw && minh == maxh) size_range(w,h,w,h);
+      XMoveResizeWindow(xdisplay, i->xid, x, y, w, h);
       // Wait for echo (relies on window having StaticGravity!!!)
-      i->wait_for_expose = true;
-    } else {
+      if (!parent()) i->wait_for_expose = true;
+    } else if (x != i->current_size.x() || y != i->current_size.y()) {
       XMoveWindow(xdisplay, i->xid, x, y);
     }
+    i->current_size.set(x,y,w,h);
   }
   if (layout_damage() & ~LAYOUT_XY) Group::layout();
   else layout_damage(0);

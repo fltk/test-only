@@ -172,6 +172,7 @@ public:
 		     XVisualInfo*, Colormap,
 		     int background = -1);
   static CreatedWindow* set_xid(Window*, XWindow);
+  Rectangle current_size;
 };
 
 // convert xid <-> Window:

@@ -116,6 +116,7 @@ int main(int argc, char** argv) {
   }
   Drawing drawing(0,8*25,5*75,5*75,0);
   scroll.end();
+  scroll.type(scroll.VERTICAL);
   window.resizable(scroll);
 
   Fl_Box box(0,300,5*75,window.h()-300); // gray area below the scroll
@@ -123,7 +124,7 @@ int main(int argc, char** argv) {
 
   Fl_Light_Button but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);
-  
+
   Fl_Choice choice(150, 335, 200, 25, "type():");
   choice.menu(choices);
   choice.value(3);

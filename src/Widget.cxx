@@ -114,6 +114,27 @@ bool Widget::contains(const Widget* b) const {
   return false;
 }
 
+/*! Fills the Rectangle pointed to by \a rect with the widget's
+  rectangle expressed in absolute (i.e. screen) coordinates.
+*/
+void Widget::get_absolute_rect( Rectangle *rect ) const
+{
+  if ( rect ) {
+    int ax = x();
+    int ay = y();
+    Widget *widget = parent_;
+    while ( widget ) {
+      ax += widget->x();
+      ay += widget->y();
+      widget = widget->parent_;
+    }
+    rect->x( ax );
+    rect->y( ay );
+    rect->w( w() );
+    rect->h( h() );
+  }
+}
+
 /*! bool Widget::inside(const Widget* a) const
   Returns true if this is a child of a, or is equal to a. Returns
   false if a is NULL. */

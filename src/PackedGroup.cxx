@@ -78,6 +78,7 @@ void PackedGroup::layout() {
       Group::layout();
       if (!(layout_damage() & LAYOUT_CHILD)) break;
     }
+    int extradamage = layout_damage()&LAYOUT_DAMAGE;
 
     // clear the layout flags, so any resizes of children will set them again:
     Widget::layout();
@@ -96,11 +97,13 @@ void PackedGroup::layout() {
       if (!widget->visible()) continue;
       if (is_vertical(widget)) {
 	widget->resize(r.x(), r.y(), widget->w(), r.h());
+        widget->layout_damage(widget->layout_damage()|extradamage);
 	widget->layout();
 	r.move_x(widget->w()+spacing_);
 	saw_vertical = true;
       } else { // put along top edge:
 	widget->resize(r.x(), r.y(), r.w(), widget->h());
+        widget->layout_damage(widget->layout_damage()|extradamage);
 	widget->layout();
 	r.move_y(widget->h()+spacing_);
 	saw_horizontal = true;
@@ -116,12 +119,14 @@ void PackedGroup::layout() {
       if (is_vertical(widget)) {
 	int W = widget->w();
 	widget->resize(r.r()-W, r.y(), W, r.h());
+        widget->layout_damage(widget->layout_damage()|extradamage);
 	widget->layout();
 	r.set_r(widget->x()-spacing_);
 	saw_vertical = true;
       } else { // put along top edge:
 	int H = widget->h();
 	widget->resize(r.x(), r.b()-H, r.w(), H);
+        widget->layout_damage(widget->layout_damage()|extradamage);
 	widget->layout();
 	r.set_b(widget->y()-spacing_);
 	saw_horizontal = true;
@@ -132,6 +137,7 @@ void PackedGroup::layout() {
     if (resizable_index < children()) {
       Widget* widget = child(resizable_index);
       widget->resize(r.x(), r.y(), r.w(), r.h());
+      widget->layout_damage(widget->layout_damage()|extradamage);
       widget->layout();
     }
 

@@ -161,7 +161,7 @@ const char* newstring(const char *from) {
   ends with a slash then this returns a pointer to the NUL. If there
   is no slash this returns a pointer to the start of \a name.
 */
-const char *filename_name(const char *name) {
+FL_API const char *filename_name(const char *name) {
   const char *p,*q;
   q = name;
 #ifdef _WIN32
@@ -172,6 +172,8 @@ const char *filename_name(const char *name) {
 #endif
   return q;
 }
+
+bool fltk::in_main_thread_ = true;
 
 #if USE_X11
 # include "x11/run.cxx"
