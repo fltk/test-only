@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.43 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.44 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -114,12 +114,12 @@ int fltk::arg(int argc, char **argv, int &i) {
   return 2;
 }
 
-// consume all switches from argv.  Returns number of words eaten.
-// Returns zero on error.  'i' will either point at first word that
-// does not start with '-', at the error word, or after a '--', or at
-// argc.  If your program does not take any word arguments you can
-// report an error if i < argc.
-
+/*! consume all switches from argv.  Returns number of words eaten.
+  Returns zero on error.  'i' will either point at first word that
+  does not start with '-', at the error word, or after a '--', or at
+  argc.  If your program does not take any word arguments you can
+  report an error if i < argc.
+*/
 int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   arg_called = true;
   i = 1; // skip argv[0]
@@ -130,7 +130,11 @@ int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   return i;
 }
 
-// show a main window, use any parsed arguments
+/*! This must be called after fltk::args(argc,argv) to show the "main"
+  window, this indicates which window should be affected by any
+  -geometry switch. In addition if fltk::args() has not been called
+  yet this does so, this is a useful shortcut for the main window in a
+  small program. */
 void Window::show(int argc, char **argv) {
   if (argc < 1) {show(); return;}
   if (!arg_called) args(argc,argv);
@@ -157,10 +161,10 @@ void Window::show(int argc, char **argv) {
   }
 
   // can't just assume argv[0], since you don't always *have* one on win32...
-  if(argc && !name)  name = filename_name(argv[0]);
+  if (argc && !name)  name = filename_name(argv[0]);
   // make sure name exists and isn't empty...
   // Windows doesn't like empty window class names
-  if(name && *name) xclass(name);
+  if (name && *name) xclass(name);
   if (!label()) label(name);
 
   show();
@@ -335,5 +339,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.43 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.44 2003/11/11 07:36:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.11 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.12 2003/11/11 07:36:31 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,8 @@
 #define DEBUGMSG(msg)
 #define DEBUGPERRORMSG(msg)
 #endif /*DEBUGSELECT*/
+
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 // interface to select call:
@@ -1580,6 +1582,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.11 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.12 2003/11/11 07:36:31 spitzak Exp $".
 //
 

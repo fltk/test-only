@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.21 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.22 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -32,16 +32,24 @@
 
 using namespace fltk;
 
-void Window::hotspot(const Widget *o, bool offscreen) {
-  int X = o->w()/2;
-  int Y = o->h()/2;
-  while (o != this) {
-    X += o->x(); Y += o->y();
-    o = o->parent();
+/*! position() the window so that the mouse is pointing at the center
+  of the \a widget, which may be the window itself. If \a offscreen is
+  true then the window is allowed to extend off the Monitor (some X
+  window managers do not allow this). */
+void Window::hotspot(const Widget *widget, bool offscreen) {
+  int X = widget->w()/2;
+  int Y = widget->h()/2;
+  while (widget != this) {
+    X += widget->x(); Y += widget->y();
+    widget = widget->parent();
   }
   hotspot(X, Y, offscreen);
 }
 
+/*! position() the window so that the mouse is pointing at the \a
+  cx,cy position. If \a offscreen is true then the window is allowed
+  to extend off the Monitor (some X window managers do not allow
+  this). */
 void Window::hotspot(int cx, int cy, bool offscreen) {
   int X,Y; get_mouse(X,Y); X -= cx; Y -= cy;
   if (!offscreen) {
@@ -72,5 +80,5 @@ void Window::hotspot(int cx, int cy, bool offscreen) {
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.21 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.22 2003/11/11 07:36:31 spitzak Exp $".
 //

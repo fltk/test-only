@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.20 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -83,6 +83,25 @@ static void fsonoff(XWindow xwindow, bool onoff) {
 #endif
 #endif
 
+/*! Makes the window completely fill the Monitor, without any window
+  manager border or taskbar or anything else visible.
+
+  You must use fullscreen_off() to undo this. resize() may appear to
+  work but it may not turn off the necessary flags!
+
+  Many older X window managers will not work and insist the border be
+  visible.  You may be able to avoid this bug by calling destroy()
+  first, then fullscreen(), and then show(). You will probably also
+  have to do the same thing when calling fullscreen_off().
+
+  Older versions of KDE, Gnome, and Windows would not hide the
+  taskbar. It appears newer versions recognize attempts to make
+  full-screen windows and do hide the taskbar. (I tried the
+  _NET_WM_STATE_FULLSCREEN that is supposed to hide the taskbar on
+  older KDE and Gnome, but saw no sign that it worked. On older
+  Windows it is apparently impossible to hide the taskbar without
+  using DirectX, which would require all drawing code to change)
+*/
 void Window::fullscreen() {
   const Monitor& monitor = Monitor::find(x()+w()/2, y()+h()/2);
 #ifdef _WIN32
@@ -106,6 +125,7 @@ void Window::fullscreen() {
 #endif
 }
 
+/*! Turns off any side effects of fullscreen() and does resize(x,y,w,h). */
 void Window::fullscreen_off(int X,int Y,int W,int H) {
   // This function must exactly undo whatever fullscreen() did
 #ifdef _WIN32
@@ -120,6 +140,35 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
 #endif
 }
 
+/*! void Window::clear_border()
+  You may turn off the window manager border before calling show() on
+  the window the first time. On most window managers this means the
+  user cannot move, iconize, or resize the window (unless your program
+   does it).
+*/
+
+/*! bool Window::border() const
+  Returns false if clear_border() has been called. */
+
+/*! bool Window::set_override()
+
+  Windows with this property set will use the exact position and size
+  set by the programmer (will not be handled by the window manager)
+  and will not have an entry in the task list. This will also clear
+  the window's border like clear_border() above. This is used by the
+  fltk menus and tooltips.
+
+  On X this causes "override redirect". This is only good for
+  short-lived windows as it can confuse X window managers, however
+  this is the only reliable and fast way to do it. This also turns on
+  "save under" which on many X servers (like XFree86) can make the
+  window disappear much faster by having the server rememeber what was
+  behind it.
+*/
+
+/*! bool Window::override() const
+  Returns true if set_override() has been called. */
+
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.20 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $".
 //

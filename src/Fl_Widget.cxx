@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,31 @@
 #include <config.h>
 using namespace fltk;
 
+/*! \class fltk::Widget
+
+  The base class for all widgets in FLTK. The basic Widget draws an
+  empty box() and the label(), and ignores all events. This can be
+  useful for making decorations or providing areas that pop up a
+  tooltip().
+*/
+
+/*! This turns on the changed() flag in the widget. callback() is
+  initialized to this.
+*/
 void Widget::default_callback(Widget* w, void*) {w->set_changed();}
-    
+
+/*! Standard constructor for a widget.
+  The default constructor takes a value for x(), y(), w(), and h(),
+  and an optional value for label(). All subclasses must provide an
+  identical constructor in order to work with Fluid. They may also
+  provide alternative constructors.
+
+  If Group::begin() has been called, this widget is added as a new
+  child of that group, and parent() is set to the group. If
+  Group::begin() has not been called, or Group::end() has been called,
+  or Group::current(0), then the parent() is set to null. In this case
+  you must add the widget yourself in order to see it.
+*/
 Widget::Widget(int X, int Y, int W, int H, const char* L) {
   style_	= default_style;
   parent_	= 0;
@@ -58,6 +81,9 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) {
   if (Group::current()) Group::current()->add(this);
 }
 
+/*! The destructor is virtual. The base class removes itself from the
+  parent widget (if any), and destroys any label made with copy_label().
+*/
 Widget::~Widget() {
   remove_timeout();
   if (parent_) parent_->remove(this);
@@ -69,6 +95,28 @@ Widget::~Widget() {
   if (flags_&COPIED_LABEL) free((void*)label_);
 }
 
+/*! \fn Group* Widget::parent() const
+  Returns a pointer to the parent widget.  Usually this is a
+  fltk::Group or fltk::Window.  Returns NULL if none.
+*/
+
+/*! Returns true if \a b is a child of this widget, or is equal to
+  this widget. Returns false if \a b is NULL. */
+bool Widget::contains(const Widget* b) const {
+  for (; b; b = b->parent_) if (b == this) return true;
+  return false;
+}
+
+/*! bool Widget::inside(const Widget* a) const
+  Returns true if this is a child of a, or is equal to a. Returns
+  false if a is NULL. */
+
+/*! Sets the label directly to a string.
+  The label is printed somewhere on the widget or next to it. The
+  string passed to label() is \e not copied, instead the pointer to
+  the string is stored. If copy_label()
+  was called earlier the old string's memory is freed.
+*/
 void Widget::label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) {
@@ -78,6 +126,13 @@ void Widget::label(const char* s) {
   label_ = s;
 }
 
+/*! Sets the label to a copy of the string.
+  The passed string is copied to private storage and used to set the
+  label(). The memory will be freed when the widget is destroyed or when
+  copy_label() is called again, or label(const char*) is called.
+
+  Passing NULL will set label() to NULL.
+*/
 void Widget::copy_label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) free((void*)label_);
@@ -90,23 +145,270 @@ void Widget::copy_label(const char* s) {
   }
 }
 
+/*! void Widget::image(Image*)
+  Sets the image. The image is drawn as part of the label, usually to
+  the left of the text. This is designed for icons on menu items. If
+  you want to replace the entire background of the widget with a picture
+  you should set box() instead. Notice that you can also get images into
+  labels by putting '@' commands into the label().
+*/
+
+/*! void Widget::tooltip(const char*)
+  Set the string used as the pop-up tooltip. The pointer to the passed string
+  is stored, it is not copied! Passing null indicates that the tooltip
+  of the parent() should be used (or no
+  tooltip if no parent has one). If you want to disable the tooltip but
+  let the parent have one, set this tooltip to <tt>""</tt>.
+
+  Putting '@' commands in to bring up Symbol objects will allow a lot
+  of interesting things to be put into the tooltip.
+*/
+
+/*! void Widget::shortcut(ulong key)
+
+  Set the shortcut() value. 
+  Buttons and menu items use the shortcut to identify a keystroke
+  that will activate them. The value is a bitwise OR of a key and a set
+  of shift flags, for example <CODE>fltk::ALT | 'a'</CODE> , <CODE>fltk::ALT |
+  (fltk::F1Key)</CODE>, or just <CODE>'a'</CODE>.  A value of 0 disables
+  the shortcut.
+
+  The key can be any value returned by fltk::event_key(), but will
+  usually be an ASCII letter. Use a lower-case letter unless you
+  require the shift key to be held down.
+
+  The shift flags can be any set of values accepted by
+  fltk::event_state(). If the bit is on that shift key must be pushed.
+  META, ALT, CTRL, and SHIFT must be off if they are not in the shift
+  flags (zero for the other bits indicates a "don't care" setting).
+
+  Shortcuts can also be done in the MS Windows way
+  by putting an '&amp;' in front of a letter in the label(). This is
+  equivalent to <tt>fltk::ALT</tt> and the letter.
+*/
+
+/*! \fn void Widget::callback(fltk::Callback*, void*)
+  Each widget has a single callback.  You can set it or examine it with 
+  these methods. The callback is called with the widget as the first
+  argument and the void* as the second argument. It is called in response
+  to user events, but exactly whe depends on the widget. For instance a
+  button calls it when the button is released.
+*/
+
+/*! \fn void Widget::user_data(void*)
+  Set the second argument to the callback.
+*/
+
+/*! \fn void Widget::callback(fltk::Callback1*, long = 0)
+  For convenience you can also define the callback as taking a long
+  integer argument.  This is implemented by casting the function to a
+  fltk::Callback and casting the <tt>long</tt> to a <tt>void*</tt> and
+  may not be portable to some machines.
+*/
+
+/*! \fn void Widget::argument(long)
+  Sets the second argument to the callback to a number. This is done
+  by casting the long to a void*.
+*/
+
+/*! \fn void Widget::callback(fltk::Callback0*)
+  For convenience you can also define the callback as taking only the
+  Widget as an argument.  This is implemented by casting this to a
+  fltk::Callback and may not be portable to some machines.
+*/
+
+/*! \fn void Widget::do_callback()
+  You can cause a widget to do its callback at any time. The callback
+  function is called with this and user_data() as arguments.
+*/
+
+/*! \fn void Widget::do_callback(Widget*, void*)
+  You can also call the callback function with arbitrary arguments. */
+
+/*! \fn void Widget::do_callback(Widget*, long)
+  You can also call the callback function with arbitrary arguments. */
+
+/*! \fn int Widget::x() const
+  Left edge of the widget, relative to the x() of its enclosing 
+  Widget. If this is an outer fltk::Window than this is the position of
+  the left edge of the \e contents (not the frame) on the screen.
+*/
+
+/*! \fn int Widget::y() const
+  Top edge of the widget, relative to the y() of its enclosing 
+  Widget. If this is an outer fltk::Window than this is the position of
+  the top edge of the \e contents (not the frame) on the screen.
+*/
+
+/*! \fn int Widget::w() const
+  Width of the widget in pixels.
+*/
+
+/*! \fn int Widget::h() const
+  Height of the widget in pixels.
+*/
+
+/*! \fn uchar Widget::type() const
+
+  8-bit identifier that controls how widget works.
+  This value had to be provided for Forms compatibility, but
+  you can use it for any purpose you want (mostly for "bad object
+  oriented programming" where you insert some subclass functionality
+  into the base class). Widget subclasses may store values in the
+  range 0-99 here (larger values are reserved for use by FLTK).
+
+  The fltk::PackedGroup widget uses the low bit of the type() of
+  each child to indicate HORIZONTAL (1) or VERTICAL (0).
+
+  For portability FLTK does not use RTTI (Run Time Typing Infomation)
+  internally (you are free to use it, though). If you don't have RTTI you can
+  use the clumsy FLTK mechanisim, by having type() use a unique
+  value.  These unique values must be greater than the symbol
+  Widget::RESERVED_TYPE (which is 100).  Look through the header
+  files for Widget::RESERVED_TYPE to find an unused number.  If you
+  make a subclass of fltk::Window you must use Widget::WINDOW_TYPE+n
+  (\e n must be in the range 1 to 7) so that is_window() will work, if you
+  make a subclass of fltk::Group you must use Widget::GROUP_TYPE+n
+  (\e n must be in the range 1 to 7) so that is_group() will work.  */
+
+/*! \fn bool Widget::is_group() const
+  Returns true for subclasses of fltk::Group. If so you can cast it to
+  a group with <tt>(fltk::Group*)(widget)</tt>. This is done by using
+  type(), but if your compiler supports RTTI you may want to safer
+  <tt>dynamic_cast&lt;fltk::Group*&gt;(widget)</tt>.
+*/
+
+/*! \fn bool Widget::is_window() const
+  Returns true for subclasses of fltk::Window. If so you can cast it
+  to a window with <tt>(fltk::Window*)(widget)</tt>. This is done by
+  using type(), but if your compiler supports RTTI you may want to safer
+  <tt>dynamic_cast&lt;fltk::Window*&gt;(widget)</tt>. If this is true,
+  is_group() is also true.
+*/
+
+/*! \fn Flags Widget::flags() const
+
+  Each Widget, and most drawing functions, take a bitmask of
+  flags that indicate the current state and exactly how to draw
+  things. The following flags are defined:
+
+  - fltk::INVISIBLE - !visible() 
+  - fltk::INACTIVE - !active() 
+  - fltk::OUTPUT - output() 
+  - fltk::VALUE - value() 
+  - fltk::SELECTED - selected() 
+  - fltk::HIGHLIGHT - draw highlighted 
+  - fltk::CHANGED - changed() 
+  - fltk::COPIED_LABEL - indicates copy_label() was called 
+  - fltk::RAW_LABEL - prevents interpretation of '&' and '@' in labels 
+  - fltk::ALIGN_* - see align()
+  - fltk::PACK_VERTICAL - fltk::Pack puts this widget vertical 
+  - fltk::CLICK_TO_FOCUS - click_to_focus() 
+*/
+
+/*! void Widget::align(Flags);
+
+  Forces the values of all the fltk::ALIGN_* flags to the passed
+  value. This determines how the label is printed next to or inside
+  the widget. The default value is fltk::ALIGN_CENTER, which centers
+  the label. The value can be any of these constants or'd together:
+
+  - fltk::ALIGN_CENTER - The label is centered (0). 
+  - fltk::ALIGN_TOP - The label is top-aligned. 
+  - fltk::ALIGN_BOTTOM - The label is bottom-aligned. 
+  - fltk::ALIGN_LEFT - The label is left-aligned. 
+  - fltk::ALIGN_RIGHT - The label is right-aligned. 
+  - fltk::ALIGN_CLIP - The label is clipped to the widget. 
+  - fltk::ALIGN_WRAP - The label text is wrapped as needed. 
+  - fltk::ALIGN_TOP_LEFT
+  - fltk::ALIGN_TOP_RIGHT
+  - fltk::ALIGN_BOTTOM_LEFT
+  - fltk::ALIGN_BOTTOM_RIGHT
+  - fltk::ALIGN_LEFT_TOP
+  - fltk::ALIGN_RIGHT_TOP
+  - fltk::ALIGN_LEFT_BOTTOM
+  - fltk::ALIGN_RIGHT_BOTTOM
+  - fltk::ALIGN_INSIDE - 'or' this with other values to put label inside the widget.
+*/
+
+/*! \fn uchar Widget::when() const
+
+  Flags indicating when to do the callback(). This field is in the
+  base class so that you can scan a panel and do_callback() on all the
+  ones that don't do their own callbacks in response to an "OK"
+  button.
+
+  The following constants can be used, their exact meaning depends on
+  the widget's implementation:
+  - fltk::WHEN_NEVER - Never call the callback (0). 
+  - fltk::WHEN_CHANGED - Do the callback each time the widget's value
+  is changed by the user (many callbacks may be done as the user drags
+  the mouse)
+  - fltk::WHEN_RELEASE - Each keystroke that modifies the value, or
+  when the mouse is released and the value has changed, causes the
+  callback (some widgets do not implement this and act like
+  fltk::WHEN_CHANGED)
+  - fltk::WHEN_RELEASE_ALWAYS - Each recognized keystroke and the
+  mouse being released will cause the callback, even if the value did
+  not change. (some widgets do not implement this and act like
+  fltk::WHEN_RELEASE)
+  - fltk::WHEN_ENTER_KEY - Do the callback when the user presses the
+  ENTER key and the value has chagned (used by fltk::Input and
+  fltk::Browser.
+  - fltk::WHEN_ENTER_KEY_ALWAYS - Do the callback when the user
+  presses the ENTER key, even if the value has not changed.
+  -fltk::WHEN_ENTER_KEY_CHANGED - Do the callback when the user
+  presses the ENTER key and each time the value changes.
+
+*/
+
 ////////////////////////////////////////////////////////////////
 // layout damage:
 
+/*! Respond to a change in size or position. You should not call this!
+  Calling relayout() or resize() with a different size will cause this
+  to be called later (after all pending events are handled and just
+  before draw is called).
+
+  This is useful for widget that need to do expensive calculations to
+  arrange the display in response to changes of the size or contents
+  of the widget. By using this you can defer these calculations until
+  fltk is ready to draw, rather than doing them on every change to the
+  widget.
+
+  For more elaborate automatic layout, a widget is allowed to
+  alter it's own size in a layout() method. A parent widget is then
+  expected to rearrange itself to accomodate the new size (notice that
+  the basic Group does not do this). Any widget that does this must
+  return the same size if called again when no other changes have happened.
+
+  You can look at layout_damage() to find out why this is being called.
+
+  If you subclass this, you must call the base class version!  */
 void Widget::layout() {
   layout_damage_ = 0;
 }
 
+/*! Returns h() but if the current value is zero it calls layout()
+  before returning the value.  Using these calls allows a widget to
+  delay the calculation of size until it is needed. */
 int Widget::height() {
   if (!h_) layout();
   return h_;
 }
 
+/*! Returns w() but if the current value is zero it calls layout()
+  before returning the value.  Using these calls allows a widget to
+  delay the calculation of size until it is needed. */
 int Widget::width() {
   if (!w_) layout();
   return w_;
 }
 
+/*! Change the size or position of the widget. Nothing is done if the
+  passed size and position are the same as before. If there is a
+  change then relayout() is called so that the virtual function
+  layout() is called before the next draw().  */
 bool Widget::resize(int X, int Y, int W, int H) {
   uchar flags = 0;
   if (X != x_) flags = LAYOUT_X;
@@ -128,10 +430,24 @@ bool Widget::resize(int X, int Y, int W, int H) {
   }
 }
 
+/*! \fn void Widget::position(int x, int y)
+  Same as resize(x,y,w(),h())
+*/
+
+/*! \fn void Widget::size(int w, int h)
+  Same as resize(x(),y(),w,h)
+*/
+
+/* Cause layout() to be called later. Turns on the LAYOUT_DAMAGE flag
+   in layout_damage().
+*/
 void Widget::relayout() {
   relayout(LAYOUT_DAMAGE);
 }
 
+/* Cause layout() to be called later. Turns on the specified flags
+   in layout_damage(). \a flags cannot be zero.
+*/
 void Widget::relayout(uchar flags) {
   //if (!(flags & ~layout_damage_)) return;
   layout_damage_ |= flags;
@@ -140,8 +456,108 @@ void Widget::relayout(uchar flags) {
   fltk::damage(1); // make flush() do something
 }
 
+/*! \fn uchar Widget::layout_damage() const
+
+  The 'or' of all the calls to relayout() or resize() done since the
+  last time layout() was called. Cleared to zero by
+  Widget::layout().
+
+  A typical layout function does not care about the widget moving, an
+  easy way to skip it is as follows:
+
+\code
+MyClass::layout() {
+  if (!(layout_damage() & ~LAYOUT_XY)) return;
+  do_expensive_layout();
+  redraw();
+}
+\endcode
+
+  The following bit values are defined: 
+
+  - fltk::LAYOUT_X - x() changed by resize()
+  - fltk::LAYOUT_Y - y() changed by resize()
+  - fltk::LAYOUT_XY - same as fltk::LAYOUT_X|fltk::LAYOUT_Y
+  - fltk::LAYOUT_W - w() changed by resize()
+  - fltk::LAYOUT_H - h() changed by resize()
+  - fltk::LAYOUT_WH - same as fltk::LAYOUT_W|fltk::LAYOUT_H
+  - fltk::LAYOUT_XYWH - same as fltk::LAYOUT_XY|fltk::LAYOUT_WH
+  - fltk::LAYOUT_CHILD - layout() needs to be called on a child of this group widget.
+  - fltk::LAYOUT_DAMAGE - relayout() was called.
+*/
+
+/*! \fn void Widget::layout_damage(uchar c)
+  Directly change the value returned by layout_damage(). */
+
 ////////////////////////////////////////////////////////////////
 // damage:
+
+/*! \fn uchar Widget::damage() const
+
+  The 'or' of all the calls to redraw() done since the last
+  draw(). Cleared to zero after draw() is called.
+
+  When redrawing your widgets you should look at the damage bits to
+  see what parts of your widget need redrawing. The handle() method
+  can then set individual damage bits to limit the amount of drawing
+  that needs to be done:
+
+  \code
+MyClass::handle(int event) {
+  ...
+  if (change_to_part1) damage(1);
+  if (change_to_part2) damage(2);
+  if (change_to_part3) damage(4);
+}
+
+MyClass::draw() {
+  if (damage() & fltk::DAMAGE_ALL) {
+    ... draw frame/box and other static stuff ...
+  }
+  if (damage() & (fltk::DAMAGE_ALL | 1)) draw_part1();
+  if (damage() & (fltk::DAMAGE_ALL | 2)) draw_part2();
+  if (damage() & (fltk::DAMAGE_ALL | 4)) draw_part3();
+}
+  \endcode
+
+  Fltk assigns meaning to the following bits in the damage: 
+
+  - fltk::DAMAGE_CHILD - A child of this group widget needs to be
+  redrawn (non-group widgets can use this bit for their own purposes).
+
+  - fltk::DAMAGE_CHILD_LABEL - An outside label of this widget needs
+  to be redrawn. This is handled (and this bit is cleared) by the
+  parent group.
+
+  - fltk::DAMAGE_EXPOSE - Damage caused by damage() or by expose
+  events from the operating system. If this and fltk::DAMAGE_ALL is on
+  the widget should draw every pixel inside it's region.
+
+  - fltk::DAMAGE_ALL - This bit is set by redraw() and indicates that
+  all of the widget (but not "holes" where the background shows
+  through) needs to be redraw.
+
+  To avoid collisions with the these and
+  any other future assigned bit values, widgets should limit
+  themselves to these predefined bits for managing their own
+  damage. You can use the names if they are appropriate, or define
+  your own symbols with the same values:
+
+  - fltk::DAMAGE_VALUE
+  - fltk::DAMAGE_PUSHED
+  - fltk::DAMAGE_SCROLL
+  - fltk::DAMAGE_OVERLAY Same value as fltk::DAMAGE_SCROLL. 
+  - fltk::DAMAGE_HIGHLIGHT
+  - fltk::DAMAGE_CONTENTS Same as fltk::DAMAGE_EXPOSE but if fltk::DAMAGE_ALL is off you can use this for your own purposes.
+
+*/
+
+/*! \fn void Widget::set_damage(uchar c)
+
+  Directly change the value returned by damage(). Note that this
+  \e replaces the value, it does not turn bits on. Use redraw()
+  to turn bits on.
+*/
 
 /*
 
@@ -172,10 +588,17 @@ windows can tell these apart from normal expose events.
 
 */
 
+/*! Same as redraw(DAMAGE_ALL). This bit is used by most widgets to
+  indicate that they should not attempt any incremental update, and
+  should instead completely draw themselves.
+*/
 void Widget::redraw() {
   redraw(DAMAGE_ALL);
 }
 
+/*! Indicates that draw() should be called, and turns on the given
+  bits in damage(). At least these bits, and possibly others, will
+  still be on when draw() is called. */
 void Widget::redraw(uchar flags) {
   if (!(flags & ~damage_)) return;
   damage_ |= flags;
@@ -187,6 +610,10 @@ void Widget::redraw(uchar flags) {
   fltk::damage(1); // make flush() do something
 }
 
+/*! Indicates that the label() should be redrawn. This does nothing
+  if there is no label. If it is an outside label (see align()) then
+  the parent() is told to redraw it. Otherwise redraw() is called.
+*/
 void Widget::redraw_label() {
   if (!label() && !image()) return;
   // inside label redraws the widget:
@@ -209,9 +636,21 @@ void Widget::redraw_highlight() {
 ////////////////////////////////////////////////////////////////
 // Events:
 
-// Default handler. This returns 1 for mouse movement over opaque widgets,
-// so they can block widgets they overlap from getting events, also so
-// you can put tooltips on them.
+/*! Handle an <a href=events.html>event</a>. Returns non-zero if the
+  widget understood and used the event.
+
+  The default version returns true for
+  fltk::ENTER, fltk::LEAVE, and fltk::MOVE over any opaque widgets
+  (ones where box() is not NO_BOX). This is done so you can put tooltips
+  on the base widget.
+
+  Information on how to write your own version of handle() is <a
+  href=subclassing.html#handle>here</a>.
+
+  If you want to send an event to a widget you probably want to use
+  send() which will do some extra processing before and
+  after the event is handled.
+*/
 int Widget::handle(int event) {
   switch (event) {
   case ENTER:
@@ -234,21 +673,28 @@ int Widget::handle(int event) {
   }
 }
 
-// send(event) is a wrapper for handle() that should be called to send
-// events. It does a few things:
-//
-// 1. It adjusts event_x/y to be relative to the widget.
-//
-// 2. It makes sure the widget is active and/or visible if the event
-// requres this. It is the caller's responsibility to see if the
-// mouse is pointing at the widget.
-//
-// 3. If handle returns true it sets the belowmouse or focus widget
-// to reflect this.
-
 int fl_pushed_dx;
 int fl_pushed_dy;
 
+/*! Wrapper for handle(). This should be called to send
+  events. It does a few things:
+
+  - It adjusts event_x/y to be relative to the widget
+  (It is the caller's responsibility to see if the
+  mouse is pointing at the widget).
+
+  - It makes sure the widget is active and/or visible if the event
+  requres this.
+
+  - If this is not the fltk::belowmouse() widget then it changes
+  fltk::MOVE into fltk::ENTER and turns fltk::DND_DRAG into
+  fltk::DND_ENTER. If this \e is the fltk::belowmouse() widget then
+  the opposite conversion is done.
+
+  - For move, focus, and push events if handle() returns true it sets
+  the fltk::belowmouse() or fltk::focus() or fltk::pushed() widget to
+  reflect this.
+*/
 int Widget::send(int event) {
 
   int save_x = e_x;
@@ -341,8 +787,11 @@ int Widget::send(int event) {
   return ret;
 }
 
-// Very similar to send(FOCUS) except it does not send it if it already
-// has the focus.
+/*! Tries to make this widget be the keyboard focus widget, by first
+  sending it an fltk::FOCUS event, and if it returns non-zero, setting
+  fltk::focus() to this widget. You should use this method to assign
+  the focus to a widget. Returns true if the widget accepted the
+  focus.  */
 bool Widget::take_focus() {
   if (focused()) return true;
   if (!takesevents() || !handle(FOCUS)) return false;
@@ -350,6 +799,22 @@ bool Widget::take_focus() {
   return true;
 }
 
+/*! \fn bool Widget::active() const
+  Returns the active state of this widget. The widget is only really
+  active if all parents are active, use active_r() to test this.
+*/
+
+/*! Returns whether the widget is active. THis is true if active() is
+  true for this and all parent widgets. An inactive widget does not
+  get any events, but it does get redrawn. */
+bool Widget::active_r() const {
+  for (const Widget* o = this; o; o = o->parent())
+    if (!o->active()) return false;
+  return true;
+}
+
+/*! If active() is false, this turns it on. If active_r() is now true
+  send() an fltk::ACTIVATE event. */
 void Widget::activate() {
   if (!active()) {
     clear_flag(INACTIVE);
@@ -361,6 +826,8 @@ void Widget::activate() {
   }
 }
 
+/*! If active() is true, this turns it off. If active_r() was true
+  send() an fltk::DEACTIVATE event. */
 void Widget::deactivate() {
   if (active_r()) {
     set_flag(INACTIVE);
@@ -371,12 +838,29 @@ void Widget::deactivate() {
   }
 }
 
-bool Widget::active_r() const {
+/*! \fn bool Widget::output() const
+  This flag is similar to !active() except it does not change how the
+  widget is drawn. The widget will not recieve any events. This is
+  useful for making scrollbars or buttons that work as displays rather
+  than input devices.
+
+  Set or clear this flag with set_output() and clear_output().
+*/
+
+/*! bool Widget::visible() const
+  Returns true if the widget is visible (flags() & INVISIBLE is false)
+*/
+
+/*! Returns true if the widget and all of its parents are visible. Only
+  if this is true can the user see the widget. */
+bool Widget::visible_r() const {
   for (const Widget* o = this; o; o = o->parent())
-    if (!o->active()) return false;
+    if (!o->visible()) return false;
   return true;
 }
 
+/*! If visible() is false, turn it on. If visible_r() is then true, send()
+  a fltk::SHOW event. */
 void Widget::show() {
   if (!visible()) {
     clear_flag(INVISIBLE);
@@ -387,6 +871,8 @@ void Widget::show() {
   }
 }
 
+/*! If visible() is true, turn it off. If visible_r() was true then
+  send() a fltk::HIDE event, and redraw() the parent if necessary. */
 void Widget::hide() {
   if (visible_r()) {
     set_flag(INVISIBLE);
@@ -399,23 +885,59 @@ void Widget::hide() {
   }
 }
 
-bool Widget::visible_r() const {
-  for (const Widget* o = this; o; o = o->parent())
-    if (!o->visible()) return false;
-  return true;
-}
+/*! bool Widget::takesevents() const
+  This is the same as (active() && visible() && !output()) but faster.
+  send() uses this to decide whether or not to call handle() for most
+  events.
+*/
 
-// return true if widget is inside (or equal to) this:
-// Returns false for null widgets.
-bool Widget::contains(const Widget *o) const {
-  for (; o; o = o->parent_) if (o == this) return true;
-  return false;
-}
+/*! bool Widget::click_to_focus() const
+  If this flag is set then if this widget returns true for an
+  fltk::PUSH event then fltk will attempt to give it the focus (by
+  calling take_focus(), so it will work if this widget also returns
+  true for fltk::FOCUS events). By default fltk only turns this on on
+  certain widgets such as fltk::Input. Turning this on on all widgets
+  will make the user interface match Windows more closely.
+*/
 
+/*! bool Widget::changed() const
+
+  The default callback() turns this flag on. This can be used to find
+  what widgets have had their value changed by the user, for instance
+  in response to an "OK" button.
+
+  Most widgets turn this flag off when they do the callback, and when
+  the program sets the stored value.
+*/
+
+/*! bool Widget::value() const
+  A true/false flag used by fltk::Button to indicate the current state
+  and by "parent" items in a hierarchial fltk::Browser to indicate if
+  they are open. Many widgets will draw pushed-in or otherwise
+  indicate that this flag is on.
+*/
+
+/*! bool Widget::selected() const
+  A true/false flag used to mark widgets currently selected in
+  fltk::Menu and fltk::Browser widgets. Some widgets will draw with
+  much different colors if this is on.  */
+
+/*!  Returns true if this is equal to fltk::pushed(), meaning it has
+  responded to an fltk::PUSH event and the mouse is still held
+  down. Using this function avoids the need to include the <fltk/Fl.h>
+  header file. */
 bool Widget::pushed() const {return this == fltk::pushed();}
 
+/*!  Returns true if this is equal to fltk::focus(), meaning it has
+  the keyboard focus and fltk::KEY events will be sent to this
+  widget. Using this function avoids the need to include the
+  <fltk/Fl.h> header file. */
 bool Widget::focused() const {return this == fltk::focus();}
 
+/*!  Returns true if this is equal to fltk::belowmouse(), meaning it
+  has the keyboard focus and fltk::MOVE or fltk::PUSH events will be
+  sent to this widget. Using this function avoids the need to include
+  the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 static void widget_timeout(void* data) {
@@ -436,8 +958,8 @@ void Widget::remove_timeout() {
 
 #include <ctype.h>
 
-/** Test to see if the current KEY or SHORTCUT event matches a
-    shortcut() value.
+/*! Test to see if the current KEY or SHORTCUT event matches a
+  shortcut() value.
 
   A shortcut is a key number (as returned by event_key()) or'd
   with shift flags (as returned by event_state()). Basically
@@ -495,7 +1017,7 @@ bool fltk::test_shortcut(int shortcut) {
   return false;
 }
 
-/** Test to see if the current KEY or SHORTCUT event matches a shortcut
+/*! Test to see if the current KEY or SHORTCUT event matches a shortcut
     specified with &x in the label.
 
     This will match if the character after the first '&' matches the
@@ -523,7 +1045,7 @@ bool Widget::test_label_shortcut() const {
   }
 }
 
-/** Same as fltk::test_shortcut(shortcut()) || test_label_shortcut().
+/*! Same as fltk::test_shortcut(shortcut()) || test_label_shortcut().
 
     This can be used by simple button type widgets to trigger a callback
     on a shortcut for either complex shortcut() values or for &x in
@@ -537,7 +1059,18 @@ bool Widget::test_shortcut() const {
 
 extern Widget* fl_did_clipping;
 
-// This should eventually do all of the button->draw stuff:
+/* Draw the widget. Do not call this directly! You probably want to
+   call redraw() instead. This is called by fltk and by the parent()
+   group after the fltk drawing context is set up.
+
+   The default version calls draw_box() and draw_label(), thus drawing
+   the box() to fill the widget and putting the label() and image()
+   inside it to fill it, unless the align() flags are set to put it
+   outside.
+
+   Information on how to write your own version is <a
+   href=subclassing.html#draw>here</a>.
+*/
 void Widget::draw()
 {
   if (box() == NO_BOX) {
@@ -558,5 +1091,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $".
 //

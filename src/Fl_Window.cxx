@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,31 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// The Window is a window in the fltk library.
+/*! \class fltk::Window
+
+This widget produces an actual window. This can either be a main
+window, with a border and title and all the window management
+controls, or a "subwindow" inside a window. This is controlled by
+whether or not the window has a parent(). Internally there are now
+significant differences between "main" windows and "subwindows" and
+these really should be different classes, they are the same for
+historic fltk reasons.
+
+Once you create a window, you usually add children Widgets to it by
+using add(child) or by using begin() and then constructing the
+children. See fltk::Group for more information on how to add and
+remove children.
+
+There are several subclasses of fltk::Window that provide
+double-buffering, overlay, menu, and OpenGL support.
+
+The window's callback is done if the user tries to close a window
+using the window manager and fltk::modal() is zero or equal to the
+window. Window has a default callback that calls Window::hide() and
+calls exit(0) if this is the last top-level window.
+
+*/
+
 // This is the system-independent portions.  The huge amount of
 // crap you need to do to communicate with X is in x.C, the
 // equivalent (but totally different) crap for MSWindows is in win32.C
@@ -37,6 +61,12 @@
 #include <config.h>
 using namespace fltk;
 
+/*! Return a pointer to the fltk::Window this widget is in.
+  (it will skip any and all parent widgets between this and
+  the window).  Returns NULL if none.  Note: for an
+  fltk::Window, this returns the \e parent window (if any),
+  not \e this window.
+*/
 Window *Widget::window() const {
   for (Widget *o = parent(); o; o = o->parent())
     if (o->is_window()) return (Window*)o;
@@ -45,8 +75,13 @@ Window *Widget::window() const {
 
 void Window::draw() {Group::draw();}
 
+/*! Sets the window title, which is drawn in the titlebar by the system. */
 void Window::label(const char *name) {label(name, iconlabel());}
 
+/*! Sets the text displayed below the icon (or in the taskbar). If
+  you don't set this it defaults to the label() but if that appears
+  to be a filename, it defaults to the last portion after the last
+  '/' character. */
 void Window::iconlabel(const char *iname) {label(label(), iname);}
 
 void Window::default_callback(Window* window, void*) {
@@ -62,6 +97,17 @@ static void revert(fltk::Style* s) {
   s->box_ = FLAT_BOX;
 }
 static NamedStyle style("Window", revert, &Window::default_style);
+/*! By default a window has box() set to \c FLAT_BOX, and the color()
+  set to \c GRAY75, which is a special color cell that is altered by
+  fltk::set_background().
+
+  If you plan to turn the border() off you may want to change
+  the box() to \c UP_BOX. You can also produce something that looks
+  like an arbitrary shape (though really it is showing the original
+  screen contents in the "outside" area, so the window had better
+  be temporary and the user cannot move it) by setting the box()
+  to \c NO_BOX and making draw() only draw the opaque part.
+*/
 NamedStyle* Window::default_style = &::style;
 
 void Window::_Window() {
@@ -78,11 +124,24 @@ void Window::_Window() {
   callback((Callback*)default_callback);
 }
 
+/*! This constructor is for \e child windows. You should use the
+  constructor with just W and H for normal parent windows. This
+  constructor leaves visible() true, so the child window will appear
+  when the parent window has show() called. */
 Window::Window(int X,int Y,int W, int H, const char *l, bool begin)
 : Group(X, Y, W, H, l, begin) {
   _Window();
 }
 
+/*! This form of the constructor should be used for a "top-level"
+  window (that is, one that is not inside another window). It
+  correctly sets visible() to false and parent() to NULL. By not
+  specifying the position of the window, the window system will pick a
+  place to show the window (some older X window managers will allow
+  the user to place the window by hand). If you want to force a
+  position you should call position(x,y) or hotspot() before calling
+  show().
+*/
 Window::Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
   : Group((Group::current(0),USEDEFAULT), USEDEFAULT, W, H, l) {
@@ -90,12 +149,70 @@ Window::Window(int W, int H, const char *l)
   clear_visible();
 }
 
+/*! \fn void Window::size_range(int minw, int minh, int maxw, int maxh, int dw, int dh, int aspect)
+
+  Set the allowable range the user can resize this window to. This
+  only works for top-level windows.
+
+  - minw and minh are the smallest the window can be. 
+  - maxw and maxh are the largest the window can be. If either is
+  equal to the minimum then you cannot resize in that direction. If
+  either is zero then FLTK picks a maximum size in that direction such
+  that the window will fill the screen.
+  - dw and dh are size increments. The window will be constrained to
+  widths of minw + N * dw, where N is any non-negative integer. If
+  these are less or equal to 1 they are ignored. (this is ignored on
+  WIN32)
+
+  - aspect is a flag that indicates that the window should preserve
+  it's aspect ratio. This is ignored by WIN32 and by most X window
+  managers (in addition X does not describe what to do if the minimum
+  and maximum sizes have different aspect ratios...)
+
+  It is undefined what happens if the current size does not fit in the
+  constraints passed to size_range().
+
+  If this function is not called, FLTK tries to figure out the range
+  from the setting of resizeable():
+
+  - If resizeable() is NULL (this is the default) then the window
+  cannot be resized.
+  - If either dimension of resizeable() is less than 100, then that is
+  considered the minimum size. Otherwise the resizeable() has a
+  minimum size of 100.
+  - If either dimension of resizeable() is zero, then that is also the
+  maximum size (so the window cannot resize in that direction).
+
+*/
+
+/*! void Window::resize(int,int,int,int)
+
+  Change the size and position of the window. If shown() is true,
+  these changes are communicated to the window server (which may
+  refuse that size and cause a further resize). If shown() is false,
+  the size and position are used when show() is called. See
+  fltk::Group for the effect of resizing on the child widgets.
+
+  The special value fltk::USEDEFAULT may be used for x and y indicate
+  that the system should choose the window's position. This will only
+  work before show() is called.
+
+*/
+
+////////////////////////////////////////////////////////////////
+// show() and hide()...
 // SHOW events will normally create and map the window, HIDE will
 // unmap.  On both X and Win32 creating a window requires a lot of ugly
 // cruft, some of it is here and much of it is in the machine-specific
-// code like x.cxx.  There are also static variables (!) used to
+// code like Fl_x.cxx.  There are also static variables (!) used to
 // modify how the window is created, such as to create it iconized or
 // to create it with a parent.
+
+/*! \fn bool Window::shown() const
+  Returns non-zero if show() has been called, but destroy() has not
+  been called. Note that this returns true if hide() was called or
+  if the user has iconized the window.
+*/
 
 // This is set by arg to argv[0], or the user can set it.
 // It is used by X to look up stuff in the X resource database:
@@ -168,7 +285,7 @@ int Window::handle(int event) {
       return 1;
     }
     break;
-#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
+#if USE_X11
   case PUSH:
     // unused clicks raise the window.
     if (shown()) XMapRaised(xdisplay, i->xid);
@@ -177,35 +294,43 @@ int Window::handle(int event) {
   return 0;
 }
 
-/** Cause the window to become visible.
+/*! \fn void Window::hide()
+  Remove the window from the screen. If the window is already hidden
+  or show() has not been called then this does nothing and is harmless.  */
+  
+/*! Cause the window to become visible. It is harmless to call this
+    multiple times.
 
-    For inner windows (with a parent()) this just causes the window
+    For subwindows (with a parent()) this just causes the window
     to appear. Currently no guarantee about stacking order is made.
 
     For a outer window (one with no parent()) this causes the window
     to appear on the screen, be de-iconized, and be raised to the top.
     Depending on child_of() settings of this window and of windows
     pointing to it, and on system and window manager settings, this
-    may cause other windows to also be deiconized and raised, or this
-    window may remain iconized.
+    may cause other windows to also be deiconized and raised, or if this
+    window is a child_of() then this window \e may remain iconized.
 
-    Window::show() is not a virtual override of Widget::show(), and
-    you can call either one. The \e only difference is that outer windows
-    are raised and deiconized by Window::show(), while Widget::show()
-    only "maps" the window, which on most systems causes it to appear
-    in the same stacking order it was in when hidden.
+    <i>Window::show() is not a virtual override of Widget::show()</i>.
+    You can call either one. The \e only difference is that if an outer
+    window has had show() called already, Window::show() will raise
+    and deiconize it, while Widget::show() will only un-hide() it,
+    making it appear in the same stacking order as before but not
+    changing the iconization state (on some X window managers it will
+    deiconize anyway).
 
-    On current systems the first time this is called is when the
-    actual "system window" is created. Before that an fltk window is
-    simply an internal data structure and is not visible by any
-    outside code. Calling hide() will unmap this system window, but to
-    actually go back to the non-window state you must call destroy()
-    or ~Window(). The first time show() is called on any window is
-    when fltk will call open_display() and load_theme(), this allows
-    these expensive operations to be deferred as long as possible, and
-    allows fltk programs to be written that need no display (as long
-    as they never show a window).
-*/
+    The first time this is called is when the actual "system" window
+    (ie the X window) is created. Before that an fltk window is simply
+    an internal data structure and is not visible outside your
+    program. To return to the non-system-window state call destroy()
+    or ~Window(). hide() will "unmap" the system window.
+
+    The first time show() is called on any window is when fltk will
+    call fltk::open_display() and fltk::load_theme(), unless you have
+    already called them. This allows these expensive operations to be
+    deferred as long as possible, and allows fltk programs to be
+    written that will run without an X server as long as they don't
+    actually show a window.  */
 void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
@@ -322,21 +447,60 @@ void Window::show() {
   }
 }
 
-void Window::show(const Window* w) {
-  child_of(w);
+/*! Tell the system that this window will not have an icon, it will
+  dissappear and reappear when \a parent is iconized or shown, and it
+  is forced to always be above \a parent. On X this is called a
+  "Transient window", and Windows calls this a "overlapping child". \a
+  parent is different than the parent(), which must be zero.
+
+  Changing this value causes destroy() to be called, due to stupid
+  limitations in X and Windows.
+
+  Win32 and some X window managers have an annoying bug where calling
+  show() on this will also raise the parent window to right below
+  this, making many useful user interface designs impossible!
+
+  If you want a dialog that blocks interaction with the other windows
+  of your application or with all other applications, you need to look
+  at exec() (or possibly fltk::modal()). */
+void Window::child_of(const Window* parent) {
+  if (contains(parent)) return;
+  while (parent && parent->parent()) parent = parent->window();
+  if (child_of_ != parent) destroy();
+  child_of_ = parent;
+}
+
+/*! Same as child_of(parent); show(). */
+void Window::show(const Window* parent) {
+  child_of(parent);
   show();
 }
 
-void Window::child_of(const Window* w) {
-  if (contains(w)) return;
-  while (w && w->parent()) w = w->window();
-  if (child_of_ != w) destroy();
-  child_of_ = w;
-}
+/*! Simple description: the window is popped up and this function
+  waits until the user closes it, this then returns a true if the user
+  hit ok, false if the user cancelled or closed the window in some
+  other way. During this time events to other windows in this
+  application are either thrown away or redirected to this window.
 
-bool Window::exec(const Window* w, bool grab) {
+  This does child_of(parent) (using fltk::first_window() if parent is
+  null). It then does show() to make this window visible and raise
+  it. It then uses fltk::modal(this,grab) to make all events go to
+  this window, and waits until fltk::exit_modal() is called (typically
+  by the window being hidden or destroyed).
+
+  The return value is value() of the window, which is true only if
+  some callback does window->set(). To use this, make an OK button
+  with a callback that does this.
+
+  If parent is null the window that last received an event is used as
+  the parent. This is convenient for popups that appear in response to
+  a mouse or key click.
+
+  See fltk::modal() for what grab does. This is useful for popup menus.
+*/
+bool Window::exec(const Window* parent, bool grab) {
   clear_value();
-  child_of(w ? w : first());
+  child_of(parent ? parent : first());
   Widget* saved_modal = fltk::modal(); bool saved_grab = fltk::grab();
   fltk::modal(this, grab);
   show();
@@ -346,21 +510,53 @@ bool Window::exec(const Window* w, bool grab) {
   return value();
 }
 
-#ifdef _WIN32
+/*! Make the window with a normal system border and behavior, but
+  place it inside the \a frame as though that was the desktop. This is
+  what Windows calls "MDI". Typically the other window (which must
+  already be shown) is a child window so that space can remain around
+  it for a menu/tool bar.
+
+  Notice that parent() of the window must be zero and it will remain
+  zero after this is called. Fltk uses a zero parent to indicate that
+  the system is managing the window.
+
+  On systems that don't support nested desktops (i.e. X) this does
+  child_of(frame) and show(), which produces an overlapping window
+  that will remain above the frame window. (IMHO this is a great
+  improvement over MDI!).
+*/
+#if defined(_WIN32) && !USE_X11
 extern const Window* fl_mdi_window;
-void Window::show_inside(const Window* w) {
-  fl_mdi_window = w;
+void Window::show_inside(const Window* frame) {
+  fl_mdi_window = frame;
   show();
   fl_mdi_window = 0;
 }
 #else
-void Window::show_inside(const Window* w) {
-  show(w);
+void Window::show_inside(const Window* frame) {
+  show(frame);
 }
 #endif
 
 ////////////////////////////////////////////////////////////////
 
+/*! Indicates that a rectangular region is damaged. draw() will be
+  called later with damage() set to
+  fltk::DAMAGE_ALL|fltk::DAMAGE_EXPOSE and with FLTK's clipping set to
+  at least the given rectangle. Normally this is called more than once
+  and the clip region will be the union of all these calls. In
+  addition damage from the operating system (ie from overlapping
+  windows) will increase the clipping region.
+
+  This can be used to get speed up and improve complex displays of
+  many overlapping and changing objects. Even if you do nothing else
+  about it, it is usually faster to do a drawing operation that is
+  clipped than one that appears, so display will be faster. You can
+  also check to see if anything by testing fltk::not_clipped(x,y,w,h)
+  or fltk::clip_box(...) and skipping unnecessary drawing calls
+  completely. Also if your normal drawing causes blinking (due to
+  overlapping objects) this can make the display look much better by
+  limiting the blinking to the small area that is actually changing.  */
 void Widget::redraw(int X, int Y, int W, int H) {
   // go up to the window, clipping to each widget's area, quit if empty:
   Widget* window = this;
@@ -431,6 +627,13 @@ void Window::flush() {
 
 ////////////////////////////////////////////////////////////////
 
+/*! Hides the window and also deletes all window system information
+  about the window, and thus returns it back to the state it was in
+  before the first show(). It is harmless to call this if the window
+  is already destroyed.
+
+  Subclasses can override this, if you do this you must also override
+  the destructor and make it call destroy().  */
 void Window::destroy() {
   CreatedWindow* x = i;
   if (!x) return;
@@ -466,10 +669,16 @@ void Window::destroy() {
 #endif
 }
 
+/*! Calls destroy(). The destructor <i>also deletes all the
+  children</i>. This allows a whole tree to be deleted at once, without
+  having to keep a pointer to all the children in the user code. A
+  kludge has been done so the Window and all of it's children
+  can be automatic (local) variables, but you must declare the
+  Window first so that it is destroyed last. */
 Window::~Window() {
   destroy();
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $".
 //

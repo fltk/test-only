@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.23 2003/08/25 15:28:48 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.24 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -31,7 +31,10 @@
 #include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////
-// Transformation:
+/** \defgroup transformation Transformation
+    \ingroup drawing
+    \{
+*/
 
 struct Matrix {
   float a, b, c, d, x, y;
@@ -161,7 +164,11 @@ void fltk::transform_distance(int& x, int& y) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Path construction:
+/** \}
+    \defgroup path Path Construction
+    \ingroup drawing
+    \{
+*/
 
 // typedef what the x,y fields in a point are:
 #ifdef _WIN32
@@ -354,13 +361,17 @@ void fltk::addellipse(float x, float y, float w, float h) {
 #endif
 }
 
-////////////////////////////////////////////////////////////////
-// Draw the path:
-
 static inline void inline_newpath() {
   numpoints = loop_start = loops = circle_w = 0;
 }
 void fltk::newpath() {inline_newpath();}
+
+////////////////////////////////////////////////////////////////
+/** \}
+    \defgroup stroke Path Drawing
+    \ingroup drawing
+    \{
+*/
 
 void fltk::drawpoints() {
 #ifdef _WIN32
@@ -544,6 +555,8 @@ void fltk::fillstrokepath(Color color) {
 #endif
 }
 
+/** \} */
+
 //
-// End of "$Id: fl_vertex.cxx,v 1.23 2003/08/25 15:28:48 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.24 2003/11/11 07:36:31 spitzak Exp $".
 //

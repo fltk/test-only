@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $"
+// "$Id: Fl_Window_iconize.cxx,v 1.19 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,15 @@ using namespace fltk;
 
 extern bool fl_show_iconic; // in x.C/win32.C
 
+/*! Iconifies the window. If you call this when shown() is false it
+  will show() it as an icon. If the window is already iconified this
+  does nothing.
+
+  Call show() to restore the window. 
+
+  Currently there are only X and Win32 system-specific ways to control
+  what is drawn in the icon. You should not rely on window managers
+  displaying the icons. */
 void Window::iconize() {
   if (!i) {
     fl_show_iconic = true;
@@ -47,5 +56,5 @@ void Window::iconize() {
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.19 2003/11/11 07:36:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.199 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.200 2003/11/11 07:36:31 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -42,6 +42,8 @@
 #include <winsock.h>
 #include <commctrl.h>
 #include <ctype.h>
+
+using namespace fltk;
 
 //
 // USE_ASYNC_SELECT - define it if you have WSAAsyncSelect()...
@@ -1699,5 +1701,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.199 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.200 2003/11/11 07:36:31 spitzak Exp $".
 //

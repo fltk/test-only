@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.49 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.50 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -71,10 +71,12 @@ static void revert(Style* s) {
 static NamedStyle default_named_style("default", ::revert, &Widget::default_style);
 NamedStyle* Widget::default_style = &default_named_style;
 
-// Copying a style pointer from another widget is not safe if that
-// style is dynamic() because it may change or be deleted.  This makes
-// another dynamic() copy if necessary.
-
+/*! Copy the Style from another widget. Copying a style pointer from
+  another widget is not safe if that
+  style is dynamic() because it may change or be deleted.  This makes
+  another dynamic() copy if necessary. For non-dynamic styles the
+  pointer is copied.
+*/
 bool Widget::copy_style(const Style* t) {
   if (style_ == t) return false;
   if (style_ && style_->dynamic()) delete (Style*)style_;
@@ -89,7 +91,7 @@ bool Widget::copy_style(const Style* t) {
 // of their current style and setting it there.  Because this copy does
 // not have any children the recursive search is not needed:
 
-Style* unique_style(const Style* & pointer) {
+static Style* unique_style(const Style* & pointer) {
   if (pointer->dynamic()) return (Style*)pointer;
   Style* newstyle = new Style;
   newstyle->parent_ = (Style*)pointer;
@@ -266,8 +268,8 @@ NamedStyle::NamedStyle(const char* n, void (*revert)(Style*), NamedStyle** pds) 
   name = n;
 }
 
-// This constructor is used to create dynamic() styles for widgets that
-// change their own attributes:
+/*! This constructor is used to create dynamic() styles for widgets that
+  change their own attributes. */
 Style::Style() {
   memset((void*)this, 0, sizeof(*this));
 }
@@ -430,5 +432,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.49 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.50 2003/11/11 07:36:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.155 2003/11/05 08:09:10 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.156 2003/11/11 07:36:31 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -37,6 +37,8 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <limits.h>
+
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -1395,12 +1397,14 @@ void Window::size_range_() {
   if (i) i->sendxjunk();
 }
 
-/**
- * Returns true if the window is shown but is iconized. On X this is
- * also true in the time between when show() is called and when the
- * window manager finally puts the window on the screen and causes
- * an expose event.
- */
+/*! Returns true if the window is currently displayed as an
+  icon. Returns false if the window is not shown() or hide() has been
+  called.
+
+  <i>On X this will return true in the time between when show() is
+  called and when the window manager finally puts the window on the
+  screen and causes an expose event.</i>
+*/
 bool Window::iconic() const {
   return (i && visible() && i->wait_for_expose);
 }
@@ -1437,6 +1441,11 @@ XWindow fltk::xwindow;
 const Window *Window::current_;
 GC fltk::gc;
 
+/*! Sets things up so that the drawing functions in <fltk/draw.h> will
+  go into this window. This is useful for incremental update of
+  windows, such as in an idle callback, which will make your program
+  behave much better if it draws a slow graphic. <i>This call does not
+  work for DoubleBufferWindow!</i> */
 void Window::make_current() const {
   current_ = this;
   i->make_current();
@@ -1444,6 +1453,9 @@ void Window::make_current() const {
   if (!normalgc) normalgc = XCreateGC(xdisplay, i->xid, 0, 0);
   fltk::gc = normalgc;
 }
+
+/*! static Window* Window::current()
+  Returns the last window make_current() was called on. */
 
 ////////////////////////////////////////////////////////////////
 // fltk::system_theme() reads xrdb database for some colors.
@@ -1612,5 +1624,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.155 2003/11/05 08:09:10 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.156 2003/11/11 07:36:31 spitzak Exp $".
 //

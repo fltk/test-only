@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.37 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.38 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -266,7 +266,7 @@ void Symbol::measure(int& w, int& h) const {
 */
 void Symbol::_measure(float& w, float& h) const {}
 
-/** \fn void Symbol::draw(float x, float y, float w, float h, Style*, Flags=0) const;
+/** \fn void Symbol::draw(float x, float y, float w, float h, const Style*, Flags=0) const;
     Draw the symbol in a box.
 
     Calls the _draw() virtual function with the same arguements. The
@@ -275,7 +275,7 @@ void Symbol::_measure(float& w, float& h) const {}
     to indicate if it is pushed, highlighted, etc.
 */
 
-/** \fn void Symbol::draw(int x, int y, int w, int h, Style*, Flags=0) const;
+/** \fn void Symbol::draw(int x, int y, int w, int h, const Style*, Flags=0) const;
 
     Draw the symbol in an integer box.
 
@@ -672,5 +672,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.37 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.38 2003/11/11 07:36:31 spitzak Exp $".
 //

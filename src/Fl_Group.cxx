@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.128 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.129 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,36 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Window itself is a subclass of this, and most of the event
-// handling is designed so windows themselves work correctly.
+/*! \class fltk::Group
+
+The fltk::Group class is the FLTK container widget. It maintains an
+array of child widgets. These children can themselves be any widget
+including fltk::Group, nesting groups allows much more control over
+layout and resize behavior. Nested groups are also necessary to group
+radio buttons together.
+
+By default fltk::Group preserves the positions and sizes of all it's
+children, they do not move no matter what sizes or other children are
+added or removed.
+
+Setting resizable() will change the layout behavior so that it
+responds to resizing by moving or resizing the children to fit. See
+below for details.
+
+You may want to use an fltk::Pack or a fltk::Scroll to get other
+common layout behavior that can respond to changes in the sizes of
+child widgets.
+
+The most-used subclass of fltk::Group is fltk::Window, all the rules
+about resizing apply to windows. Setting resizable() on a window will
+allow the user to resize it. If you want different behavior (such as
+from fltk::Pack) for your window you should make the window have that
+as a single resizable child that fills it.
+
+fltk::Menu is a subclass and thus all menus and browsers are groups
+and the items in them are widgets.
+
+*/
 
 #include <fltk/Group.h>
 #include <fltk/Box.h>
@@ -50,6 +78,8 @@ extern NamedStyle* group_style;
 static NamedStyle the_style(0, revert, &group_style);
 NamedStyle* group_style = &the_style;
 
+/*! Creates a new fltk::Group widget using the given position, size,
+  and label string. The default boxtype is fltk::NO_BOX. */
 Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
 : Widget(X,Y,W,H,l),
   children_(0),
@@ -64,6 +94,8 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   if (begin) this->begin();
 }
 
+/*! \e Deletes all children from the group and makes it empty. 
+  This calls the destructor on all the children!!! */
 void Group::clear() {
   init_sizes();
   if (children_) {
@@ -83,8 +115,18 @@ void Group::clear() {
   }
 }
 
+/*! Calls clear(), and thus <i>deletes all child widgets</i> */
 Group::~Group() {clear();}
 
+/*! \fn Widget * Group::child(int n) const
+  Returns a child, n >= 0 && n < children(). <i>No range checking is done!</i
+*/
+
+/*! \fn int Group::children() const
+  Returns how many child widgets the group has. */
+
+/*! This does insert(w, find(beforethis)). This will append the
+  widget if beforethis is not in the group. */
 void Group::insert(Widget &o, int index) {
   if (o.parent()) {
     int n = o.parent()->find(o);
@@ -110,10 +152,34 @@ void Group::insert(Widget &o, int index) {
   init_sizes();
 }
 
+/*! \fn Group * Group::current()
+  Returns the group being currently built. The fltk::Widget
+  constructor automatically does current()->add(widget) if this is not
+  null. To prevent new widgets from being added to a group, call
+  Group::current(0).
+*/
+
+/*! \fn void Group::begin()
+
+  begin() sets the current group so you can build the widget tree by
+  just constructing the widgets. begin() is exactly the same as current(this).
+
+  <i>Don't forget to end() the group or window!</i>
+*/
+
+/*! \fn void Group::end()
+  end() is exactly the same as current(this->parent()). Any new
+  widgets added to the widget tree will be added to the parent of the
+  group.
+*/
+
+/*! The widget is removed from it's current group (if any) and then
+  added to the end of this group. */
 void Group::add(Widget &o) {
   insert(o, children_);
 }
 
+/*! Remove the indexed widget from the group. */
 void Group::remove(int index) {
   if (index >= children_) return;
   Widget* o = array_[index];
@@ -123,6 +189,11 @@ void Group::remove(int index) {
   init_sizes();
 }
 
+/*! \fn void Group::remove(Widget& widget)
+  Removes a widget from the group. This does nothing if the widget is
+  not currently a child of this group. */
+
+/*! Remove the indexed widget and insert the passed widget in it's place. */
 void Group::replace(int index, Widget& o) {
   if (index >= children_) {add(o); return;}
   o.parent(this);
@@ -130,6 +201,11 @@ void Group::replace(int index, Widget& o) {
   array_[index] = &o;
   init_sizes();
 }
+
+/*! \fn void Group::replace(Widget& old, Widget& nu)
+  Find the \a old widget and remove it and insert the \a nu one. If \a old
+  is not a child, the new widget is appended to the end of the
+  list. */
 
 void Group::swap(int indexA, int indexB) {
   if (indexA >= children_ || indexB >= children_) return;
@@ -139,23 +215,31 @@ void Group::swap(int indexA, int indexB) {
   init_sizes();
 }
 
-int Group::find(const Widget* o) const {
+/*! Searches the children for \a widget, returns the index of \a
+  widget or of a parent of \a widget that is a child() of
+  this. Returns children() if the widget is NULL or not found. */
+int Group::find(const Widget* widget) const {
   for (;;) {
-    if (!o) return children_;
-    if (o->parent() == this) break;
-    o = o->parent();
+    if (!widget) return children_;
+    if (widget->parent() == this) break;
+    widget = widget->parent();
   }
   // Search backwards so if children are deleted in backwards order
   // they are found quickly:
   for (int index = children_; index--;)
-    if (array_[index] == o) return index;
+    if (array_[index] == widget) return index;
   return children_;
 }
 
 ////////////////////////////////////////////////////////////////
 // Handle
 
-// Turn Tab into Right or Left for keyboard navigation
+/*! \fn int Group::focus() const
+  The index of the widget that contains the focus. You can initialize
+  this before the group is displayed. Changing it while it is
+  displayed does not work, use widget->take_focus() instead.  */
+
+/*! Turn Tab into Right or Left for keyboard navigation */
 int Group::navigation_key() {
   switch (event_key()) {
   case TabKey:
@@ -171,6 +255,7 @@ int Group::navigation_key() {
   }
 }
 
+/*! Calls send() on some or all of the children widgets. */
 int Group::handle(int event) {
   const int numchildren = children();
   int i;
@@ -293,6 +378,30 @@ int Group::handle(int event) {
 ////////////////////////////////////////////////////////////////
 // Layout
 
+/*! \fn Widget* Group::resizable() const
+
+  The resizable widget defines the resizing box for the group. When
+  the group is resized it calculates a new size and position for all
+  of its children. Widgets that are horizontally or vertically inside
+  the dimensions of the box are scaled to the new size. Widgets
+  outside the box are moved.
+
+  Orignal size, the gray area is the resizable():
+  \image html resizebox1.gif
+
+  And here is the same Group resized larger:
+  \image html resizebox2.gif
+
+  The resizable may be set to the group itself, in which case all the
+  contents are resized. If the resizable is NULL (the default) then
+  all widgets remain a fixed size and distance from the top-left
+  corner.
+
+  It is possible to achieve any type of resize behavior by using an
+  InvisibleBox as the resizable and/or by using a hierarchy of child
+  fltk::Group's.
+*/
+
 /** Indicate that all the remembered child sizes should be reinitialized.
 
     The group remembers the initial size of itself and all it's children,
@@ -312,8 +421,7 @@ int Group::handle(int event) {
     this if you manually adjust the sizes of the children, or attempt
     to change the size of the group without wanting the children to scale.
 
-    This is automatically done when any child is added or removed.
-*/
+    This is automatically done when any child is added or removed.  */
 void Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
   relayout();
@@ -484,11 +592,11 @@ void Group::draw() {
 
 // Pieces of draw() that subclasses may want to use:
 
-// Draw the background. If DAMAGE_EXPOSE is on, widgets are expected
-// to completely fill their rectangle. To allow non-rectangular widgets
-// to appear to work, a widget can call this to draw the area of it's
-// parent that is visible behind it. If you want to avoid blinking you
-// should draw your contents first, clip them out, then call this.
+/*! Draw the background. If DAMAGE_EXPOSE is on, widgets are expected
+  to completely fill their rectangle. To allow non-rectangular widgets
+  to appear to work, a widget can call this to draw the area of it's
+  parent that is visible behind it. If you want to avoid blinking you
+  should draw your contents first, clip them out, then call this. */
 void Widget::draw_background() const {
   if (!parent()) {
     setcolor(color());
@@ -513,8 +621,8 @@ void Widget::draw_background() const {
 // it does not fool this into thinking the clipping is done.
 Widget* fl_did_clipping;
 
-// Force a child to redraw and remove the rectangle it used from the clip
-// region.
+/*! Force a child to redraw and remove the rectangle it used from the clip
+  region. */
 void Group::draw_child(Widget& w) const {
   if (w.visible() && !w.is_window()) {
     if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
@@ -529,7 +637,7 @@ void Group::draw_child(Widget& w) const {
   }
 }
 
-// Redraw a single child in response to it's damage:
+/*! Redraw a single child in response to it's damage. */
 void Group::update_child(Widget& w) const {
   if (w.damage() && w.visible() && !w.is_window()) {
     if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
@@ -555,5 +663,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.128 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.129 2003/11/11 07:36:31 spitzak Exp $".
 //

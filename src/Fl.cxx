@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.170 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.171 2003/11/11 07:36:31 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -464,14 +464,13 @@ void fltk::pushed(Widget *o) {
   pushed_ = o;
 }
 
-// This function is called by ~Widget() and by Widget::deactivate
-// and by Widget::hide().  It indicates that the widget does not want
-// to receive any more events, and also removes all global variables that
-// point at the widget.
-// I changed this from the 1.0.1 behavior, the older version could send
-// LEAVE or UNFOCUS events to the widget.  This appears to not be
-// desirable behavior and caused flwm to crash.
-
+/*! This function is called by ~Widget() and by deactivate() and by
+  hide(). It indicates that the widget does not want to receive any
+  more events, and also removes all global variables that point at the
+  widget (not just the fltk::focus(), but the fltk::belowmouse(),
+  fltk::modal(), and some internal pointers). Unlike older versions of
+  fltk, no events (i.e. fltk::LEAVE or fltk::UNFOCUS) are sent to the
+  widget.  */
 void Widget::throw_focus() {
   if (contains(fltk::pushed())) pushed_ = 0;
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
@@ -723,5 +722,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.170 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.171 2003/11/11 07:36:31 spitzak Exp $".
 //
