@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.3 2003/04/20 03:17:50 easysw Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.4 2003/08/05 08:09:54 spitzak Exp $"
 //
 // HelpView widget routines.
 //
@@ -612,12 +612,7 @@ void
 
             if (get_attr (attrs, "SRC", attr, sizeof (attr))) {
               img = get_image (attr, width, height);
-			  int iw, ih; 
-			  img->measure( iw, ih );
-              if (!width)
-                width = iw;
-              if (!height)
-                height = ih;
+	      img->measure(width, height);
             }
 
             if (!width || !height) {
@@ -2597,5 +2592,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.3 2003/04/20 03:17:50 easysw Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.4 2003/08/05 08:09:54 spitzak Exp $".
 //

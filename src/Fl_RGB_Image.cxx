@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.18 2003/08/05 08:09:55 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 {
   int wdt, hgt;
   measure( wdt, hgt );
-  if (!w || !h || !data ) return false;
+  if (!w() || !h() || !data ) return false;
   if ( depth!=3 ) return false; // for now, we only write RGB images
 
   JSAMPLE *image_buffer = (unsigned char*)data;
@@ -116,5 +116,5 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 #endif // WRITE_JPEG
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.18 2003/08/05 08:09:55 spitzak Exp $".
 //

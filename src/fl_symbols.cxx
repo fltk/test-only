@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.35 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.36 2003/08/05 08:09:55 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -204,6 +204,43 @@ const Symbol* Symbol::find(const char* name, const char* end) {
 */
 
 const char* Symbol::text_ = "";
+
+/** void Symbol::measure(float& w, float& h) const;
+
+    This virtual function is used to return the size a Symbol will
+    draw. The referenced variables w and h should be preset to a size
+    you \e want to draw the symbol. Many Symbols can scale and will
+    return without changing these values. Or they may alter the values to
+    preserve aspect ratio. Or they may just return constant sizes.
+*/
+
+/** void Symbol::draw(float x, float y, float w, float h, Flags=0) const;
+
+    Virtual function to draw the symbol. \a xywh is the bounding box
+    (in the current coordinate system) that the symbol should be fit
+    into. If you can't do anything else you should crop your drawing
+    to this box.
+
+    The \a Flags can be used to control how the symbol is drawn.
+    (list useful ones like VALUE)
+
+    You can examine the current color with getcolor() and the current
+    font with getfont() and getsize(). If you want to draw letters
+    that line up with other text in a label you should place the
+    baseline at y+(getascent()-getdescent()+H)/2) where H is the
+    height that your measure() function returns.
+*/
+
+/** Return the width and height returned by the virtual measure()
+    function rounded to the nearest integer. This function is mostly
+    provided for back compatability.  */
+void Symbol::measure(int& w, int& h) const {
+  float fw = w;
+  float fh = h;
+  measure(fw,fh);
+  w = int(fw+.5f);
+  h = int(fh+.5f);
+}
 
 /**************** The routines seen by the user *************************/
 
@@ -479,5 +516,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.35 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.36 2003/08/05 08:09:55 spitzak Exp $".
 //

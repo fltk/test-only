@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.7 2003/08/05 08:09:54 spitzak Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -137,6 +137,7 @@ public:
 // Check the given buffer if it is in PNG format
   static bool test(const uchar* datas, unsigned size=0);
   void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -149,6 +150,7 @@ class FL_IMAGES_API gifImage : public SharedImage {
 public:
   static bool test(const uchar* datas, unsigned size=0);
   void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -162,6 +164,7 @@ class FL_IMAGES_API xpmFileImage : public SharedImage {
 public:
   static bool test(const uchar* datas, unsigned size=0);
   void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -174,6 +177,7 @@ class FL_IMAGES_API bmpImage : public SharedImage {
 public:
   static bool test(const uchar* datas, unsigned size=0);
   void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -186,6 +190,7 @@ class FL_IMAGES_API jpegImage : public SharedImage {
 public:
   static bool test(const uchar* datas, unsigned size=0);
   void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -196,5 +201,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.7 2003/08/05 08:09:54 spitzak Exp $"
 //

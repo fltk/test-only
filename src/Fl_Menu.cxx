@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.143 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.144 2003/08/05 08:09:55 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -146,7 +146,7 @@ void MenuTitle::draw() {
   push_matrix();
   translate(5, (h()-widget->height())>>1);
   int save_w = widget->w(); widget->w(w()-10);
-  Item::set_style(style_widget);
+
   widget->draw();
   widget->w(save_w);
   widget->clear_flag(SELECTED);
@@ -699,6 +699,7 @@ int Menu::popup(
   p.level = 0;
   p.indexes[0] = value();
   p.indexes[1] = -1;
+
   MWindow toplevel(&p, 0, X, Y, W, H, title);
   toplevel.child_of(Window::first());
   p.menus[0] = &toplevel;
@@ -812,6 +813,7 @@ int Menu::popup(
   }
 
   fltk::remove_timeout(autoscroll_timeout, &p);
+  Item::clear_style();
 
   // destroy all the submenus we created:
   delete p.fakemenu;
@@ -835,5 +837,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.143 2003/07/23 04:55:50 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.144 2003/08/05 08:09:55 spitzak Exp $".
 //

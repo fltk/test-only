@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.74 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.75 2003/08/05 08:09:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -448,7 +448,7 @@ void Browser::draw_item() {
 		      (flags&SELECTED) ? widget->selection_textcolor()
 		      : widget->textcolor(), INVISIBLE);
   }
-  Item::set_style(this);
+
   push_matrix();
   y += (int(leading())-1)/2;
   widget->x(x);
@@ -490,6 +490,7 @@ void Browser::draw() {
 	const int *last_columns = column_widths();
 	column_widths(column_widths_);
   uchar d = damage();
+  Item::set_style(this);
   if (d & DAMAGE_ALL) { // full redraw
     //printf("full redraw damage %x\n", d);
     draw_frame();
@@ -545,6 +546,7 @@ void Browser::draw() {
   update_child(scrollbar);
   update_child(hscrollbar);
   column_widths(last_columns);
+  Item::clear_style();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -669,6 +671,7 @@ void Browser::layout() {
   goto_mark(FOCUS); make_item_visible(NOSCROLL);
 
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
+  Item::clear_style();
 }
 
 void Browser::hscrollbar_cb(Widget* o, void*) {
@@ -1141,5 +1144,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.74 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.75 2003/08/05 08:09:54 spitzak Exp $".
 //

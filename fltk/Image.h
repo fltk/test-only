@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Image.h,v 1.7 2003/08/05 08:09:53 spitzak Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -46,6 +46,7 @@ public:
 
   Image() : Symbol(0), id(0), mask(0) {}
   virtual void measure(float& W, float& H) const;
+  void measure(int& w, int& h) const {Symbol::measure(w,h);}
   virtual void draw(float x, float y, float w, float h, Flags = 0) const = 0;
   void draw(float x, float y, Flags f = 0) const {draw(x,y,w_,h_,f);}
   virtual ~Image();
@@ -100,5 +101,5 @@ public:
 #endif
 
 //
-// End of "$Id: Image.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Image.h,v 1.7 2003/08/05 08:09:53 spitzak Exp $".
 //

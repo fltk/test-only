@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.49 2003/03/31 07:17:46 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.50 2003/08/05 08:09:55 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -98,7 +98,10 @@ Widget* Menu::child(int n) const {
 
 FL_API bool fl_dont_execute; // hack for fluid
 
-// Do the callback for the current item:
+/** Remembers the widget as the current item(), and if it is not
+    NULL this calls the callback. The default version of callback
+    calls item()->do_callback().
+*/
 void Menu::execute(Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
@@ -128,11 +131,15 @@ void Menu::execute(Widget* widget) {
   do_callback();
 }
 
-// Normally the callback for the menu is set to this:
+/** The default callback for Menu calls item()->do_callback() if item()
+    is not NULL. */
 void Menu::default_callback(Widget* widget, void*) {
   Widget* item = ((Menu*)widget)->item();
   if (item) item->do_callback();
 }
+
+/** Does nothing. This avoids wasting time measuring all the menu items. */
+void Menu::layout() {}
 
 ////////////////////////////////////////////////////////////////
 //
@@ -248,5 +255,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.49 2003/03/31 07:17:46 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.50 2003/08/05 08:09:55 spitzak Exp $"
 //
