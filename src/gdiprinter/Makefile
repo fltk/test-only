@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.4 2004/09/21 15:03:14 rokan Exp $"
+# "$Id$"
 #
 # Gdi printing library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -97,5 +97,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.4 2004/09/21 15:03:14 rokan Exp $".
+# End of "$Id$".
 #

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.5 2005/01/27 21:24:34 rokan Exp $"
+// "$Id$"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,6 +52,8 @@ extern const char* i18n_function;
 extern const char* i18n_file;
 extern const char* i18n_set;
 
+int Fl_Widget_Type::default_size = FL_NORMAL_SIZE;
+
 int Fl_Widget_Type::is_widget() const {return 1;}
 int Fl_Widget_Type::is_public() const {return public_;}
 
@@ -60,9 +62,34 @@ const char* subclassname(Fl_Type* l) {
     Fl_Widget_Type* p = (Fl_Widget_Type*)l;
     const char* c = p->subclass();
     if (c) return c;
+    if (l->is_class()) return "Fl_Group";
     if (p->o->type() == FL_WINDOW+1) return "Fl_Double_Window";
   }
   return l->type_name();
+}
+
+// Return the ideal widget size...
+void
+Fl_Widget_Type::ideal_size(int &w, int &h) {
+  h = o->labelsize();
+  o->measure_label(w, h);
+
+  w += Fl::box_dw(o->box());
+  h += Fl::box_dh(o->box());
+
+  if (w < 15) w = 15;
+  if (h < 15) h = 15;
+}
+
+// Return the ideal widget spacing...
+void
+Fl_Widget_Type::ideal_spacing(int &x, int &y) {
+  if (o->labelsize() < 10)
+    x = y = 0;
+  else if (o->labelsize() < 14)
+    x = y = 5;
+  else
+    x = y = 10;
 }
 
 Fl_Type *Fl_Widget_Type::make() {
@@ -143,7 +170,7 @@ Fl_Type *Fl_Widget_Type::make() {
 #include "Fluid_Image.h"
 
 void Fl_Widget_Type::setimage(Fluid_Image *i) {
-  if (i == image) return;
+  if (i == image || is_window()) return;
   if (image) image->decrement();
   if (i) i->increment();
   image = i;
@@ -153,7 +180,7 @@ void Fl_Widget_Type::setimage(Fluid_Image *i) {
 }
 
 void Fl_Widget_Type::setinactive(Fluid_Image *i) {
-  if (i == inactive) return;
+  if (i == inactive || is_window()) return;
   if (inactive) inactive->decrement();
   if (i) i->increment();
   inactive = i;
@@ -266,16 +293,17 @@ static int haderror;
 
 void name_cb(Fl_Input* o, void *v) {
   if (v == LOAD) {
+    static char buf[1024];
     if (numselected != 1) {
-      static char buf[16];
-      sprintf(buf,"(%d widgets)",numselected);
-      the_panel->label(buf);
+      snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", numselected);
       o->hide();
     } else {
       o->static_value(current_widget->name());
       o->show();
-      the_panel->label(current_widget->title());
+      snprintf(buf, sizeof(buf), "%s Properties", current_widget->title());
     }
+
+    the_panel->label(buf);
   } else {
     if (numselected == 1) {
       current_widget->name(o->value());
@@ -396,7 +424,11 @@ void x_cb(Fl_Value_Input *i, void *v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize((int)i->value(), w->y(), w->w(), w->h());
-	if (w->window()) w->window()->redraw();
+	if (w->window()) w->window();
+	if (o->is_window()) {
+          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+                                       gridx, gridy, 0);
+	}
       }
   }
 }
@@ -414,6 +446,10 @@ void y_cb(Fl_Value_Input *i, void *v) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), (int)i->value(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
+	if (o->is_window()) {
+          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+                                       gridx, gridy, 0);
+	}
       }
   }
 }
@@ -431,6 +467,10 @@ void w_cb(Fl_Value_Input *i, void *v) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), (int)i->value(), w->h());
 	if (w->window()) w->window()->redraw();
+	if (o->is_window()) {
+          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+                                       gridx, gridy, 0);
+	}
       }
   }
 }
@@ -448,6 +488,10 @@ void h_cb(Fl_Value_Input *i, void *v) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), w->w(), (int)i->value());
 	if (w->window()) w->window()->redraw();
+	if (o->is_window()) {
+          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+                                       gridx, gridy, 0);
+	}
       }
   }
 }
@@ -527,7 +571,7 @@ Fl_Menu_Item boxmenu[] = {
 const char *boxname(int i) {
   if (!i) i = ZERO_ENTRY;
   for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
-    if (boxmenu[j].argument() == i) return boxmenu[j].label();
+    if (Fl::box_index((Fl_Symbol *)(boxmenu[j].user_data())) == i) return boxmenu[j].label();
   return 0;
 }
 
@@ -535,7 +579,7 @@ int boxnumber(const char *i) {
   if (i[0]=='F' && i[1]=='L' && i[2]=='_') i += 3;
   for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
     if (boxmenu[j].label() && !strcmp(boxmenu[j].label(), i)) {
-      return int(boxmenu[j].argument());
+      return Fl::box_index((Fl_Symbol *)(boxmenu[j].user_data()));
     }
   return 0;
 }
@@ -543,7 +587,7 @@ int boxnumber(const char *i) {
 void box_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    int n = current_widget->o->box(); if (!n) n = ZERO_ENTRY;
+    int n = Fl::box_index(current_widget->o->box()); if (!n) n = ZERO_ENTRY;
     for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
       if (boxmenu[j].argument() == n) {i->value(j); break;}
   } else {
@@ -554,7 +598,7 @@ void box_cb(Fl_Choice* i, void *v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-        q->o->box((Fl_Boxtype)n);
+  q->o->box(Fl::box(n));
         q->redraw();
       }
   }
@@ -564,9 +608,11 @@ void down_box_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
     int n;
     if (current_widget->is_button() && !current_widget->is_menu_item())
-      n = ((Fl_Button*)(current_widget->o))->down_box();
+      n = Fl::box_index(((Fl_Button*)(current_widget->o))->down_box());
+    else if (!strcmp(current_widget->type_name(), "Fl_Input_Choice"))
+      n = Fl::box_index(((Fl_Input_Choice*)(current_widget->o))->down_box());
     else if (current_widget->is_menu_button())
-      n = ((Fl_Menu_*)(current_widget->o))->down_box();
+      n = Fl::box_index(((Fl_Menu_*)(current_widget->o))->down_box());
     else {
       i->deactivate(); return;
     }
@@ -582,11 +628,14 @@ void down_box_cb(Fl_Choice* i, void *v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) if (o->selected) {
       if (o->is_button() && !o->is_menu_item()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-        ((Fl_Button*)(q->o))->down_box((Fl_Boxtype)n);
+  ((Fl_Button*)(q->o))->down_box(Fl::box(n));
         if (((Fl_Button*)(q->o))->value()) q->redraw();
+      } else if (!strcmp(o->type_name(), "Fl_Input_Choice")) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+  ((Fl_Input_Choice*)(q->o))->down_box(Fl::box(n));
       } else if (o->is_menu_button()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-        ((Fl_Menu_*)(q->o))->down_box((Fl_Boxtype)n);
+  ((Fl_Menu_*)(q->o))->down_box(Fl::box(n));
       }
     }
   }
@@ -779,7 +828,7 @@ void labelsize_cb(Fl_Value_Input* i, void *v) {
     n = current_widget->o->labelsize();
   } else {
     n = int(i->value());
-    if (n <= 0) n = FL_NORMAL_SIZE;
+    if (n <= 0) n = Fl_Widget_Type::default_size;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -947,7 +996,7 @@ void align_cb(Fl_Button* i, void *v) {
 
 ////////////////////////////////////////////////////////////////
 
-void callback_cb(Fl_Text_Editor* i, void *v) {
+void callback_cb(CodeEditor* i, void *v) {
   if (v == LOAD) {
     const char *cbtext = current_widget->callback();
     i->buffer()->text( cbtext ? cbtext : "" );
@@ -1065,7 +1114,7 @@ void textsize_cb(Fl_Value_Input* i, void* v) {
     i->activate();
   } else {
     s = int(i->value());
-    if (s <= 0) s = FL_NORMAL_SIZE;
+    if (s <= 0) s = Fl_Widget_Type::default_size;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -1270,7 +1319,7 @@ void cancel_cb(Fl_Button* o, void* v) {
   the_panel->hide();
 }
 
-void toggle_overlays(Fl_Widget *,void *); // in Fl_Window_Type.C
+void toggle_overlays(Fl_Widget *,void *); // in Fl_Window_Type.cxx
 void overlay_cb(Fl_Button*o,void *v) {
   toggle_overlays(o,v);
 }
@@ -1396,7 +1445,7 @@ int isdeclare(const char *c) {
 
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
-  if (!subclass()) write_declare("#include <FL/%s.H>", t);
+  if (!subclass() || is_class()) write_declare("#include <FL/%s.H>", t);
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))
       write_declare("%s", extra_code(n));
@@ -1406,7 +1455,7 @@ void Fl_Widget_Type::write_static() {
 		  user_data_type() ? user_data_type() : "void*");
   const char* c = array_name(this);
   const char* k = class_name(1);
-  if (c && !k) {
+  if (c && !k && !is_class()) {
     write_c("\n");
     if (!public_) write_c("static ");
     else write_h("extern %s *%s;\n", t, c);
@@ -1541,7 +1590,6 @@ void Fl_Widget_Type::write_code1() {
 void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
   const char* color_name = 0;
   switch (color) {
-  case FL_TRANSPARENT_COLOR:	color_name = "FL_TRANSPARENT_COLOR";	break;
   case FL_FOREGROUND_COLOR:	color_name = "FL_FOREGROUND_COLOR";	break;
   case FL_BACKGROUND2_COLOR:	color_name = "FL_BACKGROUND2_COLOR";	break;
   case FL_INACTIVE_COLOR:	color_name = "FL_INACTIVE_COLOR";	break;
@@ -1603,19 +1651,22 @@ void Fl_Widget_Type::write_widget_code() {
   if (o->type() != tplate->type() && !is_window())
     write_c("%so->type(%d);\n", indent(), o->type());
   if (o->box() != tplate->box() || subclass())
-    write_c("%so->box(FL_%s);\n", indent(), boxname(o->box()));
+    write_c("%so->box(FL_%s);\n", indent(), boxname(Fl::box_index(o->box())));
   if (is_button()) {
     Fl_Button* b = (Fl_Button*)o;
     if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
-			       boxname(b->down_box()));
+      boxname(Fl::box_index(b->down_box())));
     if (b->value()) write_c("%so->value(1);\n", indent());
     if (b->shortcut())
       write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
-  }
-  if (is_menu_button()) {
+  } else if (!strcmp(type_name(), "Fl_Input_Choice")) {
+    Fl_Input_Choice* b = (Fl_Input_Choice*)o;
+    if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
+      boxname(Fl::box_index(b->down_box())));
+  } else if (is_menu_button()) {
     Fl_Menu_* b = (Fl_Menu_*)o;
     if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
-			       boxname(b->down_box()));
+      boxname(Fl::box_index(b->down_box())));
   }
   if (o->color() != tplate->color() || subclass())
     write_color("color", o->color());
@@ -1726,18 +1777,21 @@ void Fl_Widget_Type::write_properties() {
     write_word(item_name(subtypes(), o->type()));
   }
   if (o->box() != tplate->box()) {
-    write_string("box"); write_word(boxname(o->box()));}
+    write_string("box"); write_word(boxname(Fl::box_index(o->box())));}
   if (is_button()) {
     Fl_Button* b = (Fl_Button*)o;
     if (b->down_box()) {
-      write_string("down_box"); write_word(boxname(b->down_box()));}
+      write_string("down_box"); write_word(boxname(Fl::box_index(b->down_box())));}
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
     if (b->value()) write_string("value 1");
-  }
-  if (is_menu_button()) {
+  } else if (!strcmp(type_name(), "Fl_Input_Choice")) {
+    Fl_Input_Choice* b = (Fl_Input_Choice*)o;
+    if (b->down_box()) {
+      write_string("down_box"); write_word(boxname(Fl::box_index(b->down_box())));}
+  } else if (is_menu_button()) {
     Fl_Menu_* b = (Fl_Menu_*)o;
     if (b->down_box()) {
-      write_string("down_box"); write_word(boxname(b->down_box()));}
+      write_string("down_box"); write_word(boxname(Fl::box_index(b->down_box())));}
   }
   if (o->color()!=tplate->color())
     write_string("color %d", o->color());
@@ -1816,19 +1870,25 @@ void Fl_Widget_Type::read_property(const char *c) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      o->box((Fl_Boxtype)x);
-    } else if (sscanf(value,"%d",&x) == 1) o->box((Fl_Boxtype)x);
+      o->box(Fl::box(x));
+    } else if (sscanf(value,"%d",&x) == 1) o->box(Fl::box(x));
   } else if (is_button() && !strcmp(c,"down_box")) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      ((Fl_Button*)o)->down_box((Fl_Boxtype)x);
+      ((Fl_Button*)o)->down_box(Fl::box(x));
+    }
+  } else if (!strcmp(type_name(), "Fl_Input_Choice") && !strcmp(c,"down_box")) {
+    const char* value = read_word();
+    if ((x = boxnumber(value))) {
+      if (x == ZERO_ENTRY) x = 0;
+      ((Fl_Input_Choice*)o)->down_box(Fl::box(x));
     }
   } else if (is_menu_button() && !strcmp(c,"down_box")) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      ((Fl_Menu_*)o)->down_box((Fl_Boxtype)x);
+      ((Fl_Menu_*)o)->down_box(Fl::box(x));
     }
   } else if (is_button() && !strcmp(c,"value")) {
     const char* value = read_word();
@@ -2012,7 +2072,7 @@ int Fl_Widget_Type::read_fdesign(const char* propname, const char* value) {
       x = 0;
       if (o->box() != ((Fl_Widget_Type*)factory)->o->box()) return 1; // kludge for frame
     }
-    o->box((Fl_Boxtype)x);
+    o->box(Fl::box(x));
   } else {
     return 0;
   }
@@ -2020,5 +2080,5 @@ int Fl_Widget_Type::read_fdesign(const char* propname, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.5 2005/01/27 21:24:34 rokan Exp $".
+// End of "$Id$".
 //

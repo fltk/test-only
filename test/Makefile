@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19.2.7.2.38.2.4 2004/04/06 22:37:24 rokan Exp $"
+# "$Id$"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -380,5 +380,5 @@ shape$(EXEEXT): shape.o
 
 
 #
-# End of "$Id: Makefile,v 1.19.2.7.2.38.2.4 2004/04/06 22:37:24 rokan Exp $".
+# End of "$Id$".
 #

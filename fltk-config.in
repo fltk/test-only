@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in,v 1.12.2.16.2.8 2004/09/10 02:38:48 rokan Exp $"
+# "$Id$"
 # 
 # FLTK configuration utility.
 #
@@ -292,5 +292,5 @@ if test "$echo_libs" = "yes"; then
 fi
 
 #
-# End of "$Id: fltk-config.in,v 1.12.2.16.2.8 2004/09/10 02:38:48 rokan Exp $".
+# End of "$Id$".
 #

@@ -1,87 +1,87 @@
-# Menu description file for the generic demo program
-#
-# Each line consists of three fields, separated by :
-#
-# - menu name	: To which the item belongs (starts with @)
-# - item name	: Placed on button. (use \n for newline)
-# - command name: To be executed. Use a menu name to define a submenu.
-#
-# @main indicates the main menu.
-#
+# Menu description file for the generic demo progra
 
-@main:Widget\nTests:@x
-	@x:Fl_Browser:browser
-	@x:Fl_Input:input
-	@x:Fl_Output:output
-	@x:Fl_Button:radio
-	@x:Fl_Tabs:tabs
-	@x:Fl_Tile:tile
-	@x:Fl_Scroll:scroll
-	@x:Fl_Pack:pack
-	@x:Fl_Menu:menubar
+# Each line consists of three fields, separated by 
 
-@main:Window\nTests:@w
-	@w:overlay:overlay
-	@w:subwindow:subwindow
-	@w:double\nbuffer:doublebuffer
-	@w:GL window:cube
-	@w:GL overlay:gl_overlay
-	@w:iconize:iconize
-	@w:fullscreen:fullscreen
-	@w:resizable:resizebox
-	@w:resize:resize
+# - menu name	: To which the item belongs (starts with @
+# - item name	: Placed on button. (use \n for newline
+# - command name: To be executed. Use a menu name to define a submenu
 
-@main:Drawing\nTests:@d
-	@d:Images:@di
-		@di:Fl_Bitmap:bitmap
-		@di:Fl_Pixmap:pixmap
-		@di:Fl_RGB\n_Image:image
-		@di:Fl_Shared\n_Image:pixmap_browser
-		@di:Fl_Tiled\n_Image:tiled_image
-	@d:cursor:cursor
-	@d:labels:label
-	@d:fl_arc:arc
-	@d:fl_curve:curve
-	@d:fl_line_style:line_style
-	@d:Printing:device
+# @main indicates the main menu
 
-@main:Events:@u
-	@u:navigation:navigation
-	@u:minimum update:minimum
-	@u:keyboard:keyboard
-	@u:fast & slow widgets:fast_slow
-	@u:inactive:inactive
 
-@main:Fluid\n(UI design tool):../fluid/fluid valuators.fl
+@main:Widget\nTests:@
+	@x:Fl_Browser:browse
+	@x:Fl_Input:inpu
+	@x:Fl_Output:outpu
+	@x:Fl_Button:radi
+	@x:Fl_Tabs:tab
+	@x:Fl_Tile:til
+	@x:Fl_Scroll:scrol
+	@x:Fl_Pack:pac
+	@x:Fl_Menu:menuba
 
-@main:Cool\nDemos:@e
-	@e:X Color\nBrowser:colbrowser
-	@e:Mandelbrot:mandelbrot
-	@e:Fractals:fractals
-	@e:Puzzle:glpuzzle
-	@e:Checkers:checkers
+@main:Window\nTests:@
+	@w:overlay:overla
+	@w:subwindow:subwindo
+	@w:double\nbuffer:doublebuffe
+	@w:GL window:cub
+	@w:GL overlay:gl_overla
+	@w:iconize:iconiz
+	@w:fullscreen:fullscree
+	@w:resizable:resizebo
+	@w:resize:resiz
 
-@main:Other\nTests:@o
-	@o:Color Choosers:color_chooser r
-	@o:File Chooser:file_chooser
-	@o:Fonts:fonts
-	@o:HelpDialog:help
-	@o:Preferences:preferences
-	@o:Threading:threads
-	@o:XForms Emulation:forms
+@main:Drawing\nTests:@
+	@d:Images:@d
+		@di:Fl_Bitmap:bitma
+		@di:Fl_Pixmap:pixma
+		@di:Fl_RGB\n_Image:imag
+		@di:Fl_Shared\n_Image:pixmap_browse
+		@di:Fl_Tiled\n_Image:tiled_imag
+	@d:cursor:curso
+	@d:labels:labe
+	@d:fl_arc:ar
+	@d:fl_curve:curv
+	@d:fl_line_style:line_styl
+	@d:Printing:devic
 
-@main:Tutorial\nfrom\nManual:@j
-	@j:ask\n(modified):ask
-	@j:button:button
-	@j:CubeView:CubeView
-	@j:editor:editor editor.cxx
-	@j:hello:hello
-	@j:shape:shape
+@main:Events:@
+	@u:navigation:navigatio
+	@u:minimum update:minimu
+	@u:keyboard:keyboar
+	@u:fast & slow widgets:fast_slo
+	@u:inactive:inactiv
 
-@main:Images\nfor\nManual:@i
-	@i:valuators:valuators
-	@i:symbols:symbols
-	@i:buttons:buttons
-	@i:clock:clock
-	@i:popups:message
-	@i:boxtypes:boxtype
+@main:Fluid\n(UI design tool):../fluid/fluid valuators.f
+
+@main:Cool\nDemos:@
+	@e:X Color\nBrowser:colbrowse
+	@e:Mandelbrot:mandelbro
+	@e:Fractals:fractal
+	@e:Puzzle:glpuzzl
+	@e:Checkers:checker
+
+@main:Other\nTests:@
+	@o:Color Choosers:color_chooser 
+	@o:File Chooser:file_choose
+	@o:Fonts:font
+	@o:HelpDialog:hel
+	@o:Preferences:preference
+	@o:Threading:thread
+	@o:XForms Emulation:form
+
+@main:Tutorial\nfrom\nManual:@
+	@j:ask\n(modified):as
+	@j:button:butto
+	@j:CubeView:CubeVie
+	@j:editor:editor editor.cx
+	@j:hello:hell
+	@j:shape:shap
+
+@main:Images\nfor\nManual:@
+	@i:valuators:valuator
+	@i:symbols:symbol
+	@i:buttons:button
+	@i:clock:cloc
+	@i:popups:messag
+	@i:boxtypes:boxtyp

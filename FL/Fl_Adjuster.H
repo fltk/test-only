@@ -32,9 +32,9 @@
 #include "Fl_Valuator.H
 #endi
 
-/** The Fl_Adjuster widget was inspired from Prisms, and has proven to be very useful fo
- * values that need a large dynamic range
- *   \image html adjuster1.gi
+/// The Fl_Adjuster widget was inspired from Prisms, and has proven to be very useful fo
+/// values that need a large dynamic range
+/**   \image html adjuster1.gi
  *
  * When you press a button and drag to the right the value increases. When you drag to
  * the left it decreases. The largest button adjusts by 100 * step(), the next by

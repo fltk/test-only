@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6.2.4 2004/11/25 03:21:20 rokan Exp $"
+// "$Id$"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -7,7 +7,7 @@
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,8 +31,10 @@
 #include <FL/Fl_Overlay_Window.H>
 #include <FL/fl_message.H>
 #include <FL/fl_draw.H>
+#include <FL/x.H>
 #include <FL/Fl_Menu_Item.H>
 #include "Fl_Widget_Type.h"
+#include "undo.h"
 #include <math.h>
 #include <stdlib.h>
 #include "alignment_panel.h"
@@ -41,6 +43,7 @@
 extern int gridx;
 extern int gridy;
 extern int snap;
+extern int show_guides;
 
 int include_H_from_C = 1;
 extern int i18n_type;
@@ -48,9 +51,34 @@ extern const char* i18n_include;
 extern const char* i18n_function;
 extern const char* i18n_file;
 extern const char* i18n_set;
-extern int modflag;
 
 extern Fl_Preferences	fluid_prefs;
+
+inline int fl_min(int a, int b) { return (a < b ? a : b); } 
+
+#include "widget_panel.h"
+
+// Update the XYWH values in the widget panel...
+static void update_xywh() {
+  if (current_widget && current_widget->is_widget()) {
+    widget_x_input->value(((Fl_Widget_Type *)current_widget)->o->x());
+    widget_y_input->value(((Fl_Widget_Type *)current_widget)->o->y());
+    widget_w_input->value(((Fl_Widget_Type *)current_widget)->o->w());
+    widget_h_input->value(((Fl_Widget_Type *)current_widget)->o->h());
+  }
+}
+
+void guides_cb(Fl_Check_Button *i, long) {
+  show_guides = i->value();
+  fluid_prefs.set("show_guides", show_guides);
+
+  for (Fl_Type *p = Fl_Type::first; p; p = p->next) {
+    if (p->is_window()) {
+      Fl_Window_Type *w = (Fl_Window_Type *)p;
+      ((Fl_Overlay_Window *)(w->o))->redraw_overlay();
+    }
+  }
+}
 
 void grid_cb(Fl_Input *i, long v) {
   int n = atoi(i->value());
@@ -78,14 +106,16 @@ void grid_cb(Fl_Input *i, long v) {
   for (p = Fl_Type::first; p; p = p->next) {
     if (p->is_window()) {
       w = (Fl_Window_Type *)p;
-      ((Fl_Window *)(w->o))->size_range(gridx * snap, gridy * snap,
+      ((Fl_Window *)(w->o))->size_range(gridx, gridy,
                                         Fl::w(), Fl::h(),
-                                        gridx * snap, gridy * snap, 0);
+                                        gridx, gridy, 0);
     }
   }
 }
 
 void i18n_type_cb(Fl_Choice *c, void *) {
+  undo_checkpoint();
+
   switch (i18n_type = c->value()) {
   case 0 : /* None */
       i18n_include_input->hide();
@@ -117,10 +147,12 @@ void i18n_type_cb(Fl_Choice *c, void *) {
       break;
   }
 
-  modflag = 1;
+  set_modflag(1);
 }
 
 void i18n_text_cb(Fl_Input *i, void *) {
+  undo_checkpoint();
+
   if (i == i18n_function_input)
     i18n_function = i->value();
   else if (i == i18n_file_input)
@@ -130,7 +162,7 @@ void i18n_text_cb(Fl_Input *i, void *) {
   else if (i == i18n_include_input)
     i18n_include = i->value();
 
-  modflag = 1;
+  set_modflag(1);
 }
 
 extern const char* header_file_name;
@@ -175,6 +207,7 @@ void show_grid_cb(Fl_Widget *, void *) {
   sprintf(buf,"%d",gridx); horizontal_input->value(buf);
   sprintf(buf,"%d",gridy); vertical_input->value(buf);
   sprintf(buf,"%d",snap); snap_input->value(buf);
+  guides_toggle->value(show_guides);
   grid_window->hotspot(grid_window);
   grid_window->show();
 }
@@ -215,12 +248,13 @@ public:
   int handle(int);
   Overlay_Window(int W,int H) : Fl_Overlay_Window(W,H) {Fl_Group::current(0);}
   void resize(int,int,int,int);
+  uchar *read_image(int &ww, int &hh);
 };
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
   if ((damage()&FL_DAMAGE_ALL) &&
-      (!box() || (box()>=4&&!(box()&2)) || box()>=_FL_ROUNDED_BOX)) {
+    (!box() || (Fl::box_index(box())>=4&&!(Fl::box_index(box())&2)) || Fl::box_index(box())>=Fl::box_index(_FL_ROUNDED_BOX))) {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int Y = 0; Y < h(); Y += CHECKSIZE) 
       for (int X = 0; X < w(); X += CHECKSIZE) {
@@ -230,6 +264,38 @@ void Overlay_Window::draw() {
       }
   }
   Fl_Overlay_Window::draw();
+}
+
+extern Fl_Window *main_window;
+
+// Read an image of the overlay window
+uchar *Overlay_Window::read_image(int &ww, int &hh) {
+  // Create an off-screen buffer for the window...
+  main_window->make_current();
+
+  ww = w();
+  hh = h();
+
+  Fl_Offscreen offscreen = fl_create_offscreen(ww, hh);
+  uchar *pixels;
+
+  // Redraw the window into the offscreen buffer...
+  fl_begin_offscreen(offscreen);
+
+  if (!shown()) image(Fl::scheme_bg_);
+
+  redraw();
+  draw();
+
+  // Read the screen image...
+  pixels = fl_read_image(0, 0, 0, ww, hh);
+
+  fl_end_offscreen();
+
+  // Cleanup and return...
+  fl_delete_offscreen(offscreen);
+
+  return pixels;
 }
 
 void Overlay_Window::draw_overlay() {
@@ -253,9 +319,9 @@ Fl_Type *Fl_Window_Type::make() {
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
-  ((Fl_Window *)(this->o))->size_range(gridx * snap, gridy * snap,
+  ((Fl_Window *)(this->o))->size_range(gridx, gridy,
                                        3072, 2048,
-                                       gridx * snap, gridy * snap, 0);
+                                       gridx, gridy, 0);
   myo->factory = this;
   myo->drag = 0;
   myo->numselected = 0;
@@ -269,6 +335,7 @@ Fl_Type *Fl_Window_Type::make() {
 }
 
 void Fl_Window_Type::add_child(Fl_Type* cc, Fl_Type* before) {
+  if (!cc->is_widget()) return;
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   Fl_Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
   ((Fl_Window*)o)->insert(*(c->o), b);
@@ -305,12 +372,20 @@ void Fl_Window_Type::open() {
     w->resizable(p);
   }
 
-  w->size_range(gridx * snap, gridy * snap, Fl::w(), Fl::h(),
-                gridx * snap, gridy * snap, 0);
+  w->image(Fl::scheme_bg_);
+  w->size_range(gridx, gridy, Fl::w(), Fl::h(), gridx, gridy, 0);
 }
 
+// Read an image of the window
+uchar *Fl_Window_Type::read_image(int &ww, int &hh) {
+  Overlay_Window *w = (Overlay_Window *)o;
+
+  // Read the screen image...
+  return (w->read_image(ww, hh));
+}
+
+
 // control panel items:
-#include "widget_panel.h"
 
 void modal_cb(Fl_Light_Button* i, void* v) {
   if (v == LOAD) {
@@ -368,41 +443,23 @@ void Fl_Window_Type::setlabel(const char *n) {
 // make() is called on this widget when user picks window off New menu:
 Fl_Window_Type Fl_Window_type;
 
-// Resize from window manager, try to resize it back to a legal size.
-// This is not proper X behavior, but works on 4DWM and fvwm
+// Resize from window manager...
 void Overlay_Window::resize(int X,int Y,int W,int H) {
-//   if (!visible() || W==w() && H==h()) {
-//     Fl_Overlay_Window::resize(X,Y,W,H);
-//     return;
-//   }
-//   int nw = gridx&&W!=w() ? ((W+gridx/2)/gridx)*gridx : W;
-//   int nh = gridy&&H!=h() ? ((H+gridy/2)/gridy)*gridy : H;
   Fl_Widget* t = resizable(); resizable(0);
   Fl_Overlay_Window::resize(X,Y,W,H);
   resizable(t);
-//   // make sure new window size surrounds the widgets:
-//   int b = 0;
-//   int r = 0;
-//   for (Fl_Type *o=window->next; o && o->level>window->level; o=o->next)
-//     if (o->is_widget() && !o->is_menu_item()) {
-//       Fl_Widget* w = ((Fl_Widget_Type*)o)->o;
-//       if (w->x()+w->w() > r) r = w->x()+w->w();
-//       if (w->y()+w->h() > b) b = w->y()+w->h();
-//     }
-//   if (nh < b) nh = b;
-//   if (nw < r) nw = r;
-//   // If changed, tell the window manager.  Skip really big windows
-//   // that might be bigger than screen:
-//   if (nw != W && nw < Fl::w()-100 || nh != H && nh < Fl::h()-100) size(nw,nh);
+  update_xywh();
 }
 
 // calculate actual move by moving mouse position (mx,my) to
 // nearest multiple of gridsize, and snap to original position
 void Fl_Window_Type::newdx() {
   int mydx, mydy;
-  if (Fl::event_state(FL_ALT)) {
+  if (Fl::event_state(FL_ALT) || !snap) {
     mydx = mx-x1;
     mydy = my-y1;
+
+    if (abs(mydx) < 2 && abs(mydy) < 2) mydx = mydy = 0;
   } else {
     int dx0 = mx-x1;
     int ix = (drag&RIGHT) ? br : bx;
@@ -423,6 +480,17 @@ void Fl_Window_Type::newdx() {
     } else 
       mydy = 0;
   }
+
+  if (!(drag & (DRAG | BOX | LEFT | RIGHT))) {
+    mydx = 0;
+    dx = 0;
+  }
+
+  if (!(drag & (DRAG | BOX | TOP | BOTTOM))) {
+    mydy = 0;
+    dy = 0;
+  }
+
   if (dx != mydx || dy != mydy) {
     dx = mydx; dy = mydy;
     ((Overlay_Window *)o)->redraw_overlay();
@@ -443,12 +511,124 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
     T += dy;
   } else {
     if (drag&LEFT) if (X==bx) X += dx; else if (X<bx+dx) X = bx+dx;
-    if (drag&BOTTOM) if (Y==by) Y += dy; else if (Y<by+dy) Y = by+dy;
+    if (drag&TOP) if (Y==by) Y += dy; else if (Y<by+dy) Y = by+dy;
     if (drag&RIGHT) if (R==br) R += dx; else if (R>br+dx) R = br+dx;
-    if (drag&TOP) if (T==bt) T += dy; else if (T>bt+dx) T = bt+dx;
+    if (drag&BOTTOM) if (T==bt) T += dy; else if (T>bt+dx) T = bt+dx;
   }
   if (R<X) {int n = X; X = R; R = n;}
   if (T<Y) {int n = Y; Y = T; T = n;}
+}
+
+// draw a vertical arrow pointing toward y2
+static void draw_v_arrow(int x, int y1, int y2) {
+  int dy = (y1>y2) ? -1 : 1 ;
+  fl_yxline(x, y1, y2);
+  fl_xyline(x-4, y2, x+4);
+  fl_line(x-2, y2-dy*5, x, y2-dy);
+  fl_line(x+2, y2-dy*5, x, y2-dy);
+}
+
+static void draw_h_arrow(int x1, int y, int x2) {
+  int dx = (x1>x2) ? -1 : 1 ;
+  fl_xyline(x1, y, x2);
+  fl_yxline(x2, y-4, y+4);
+  fl_line(x2-dx*5, y-2, x2-dx, y);
+  fl_line(x2-dx*5, y+2, x2-dx, y);
+}
+
+static void draw_top_brace(const Fl_Widget *w) {
+  fl_yxline(w->x(), w->y()-2, w->y()+6);
+  fl_yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
+  fl_xyline(w->x()-2, w->y(), w->x()+w->w()+1);
+}
+
+static void draw_left_brace(const Fl_Widget *w) {
+  fl_xyline(w->x()-2, w->y(), w->x()+6);
+  fl_xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
+  fl_yxline(w->x(), w->y()-2, w->y()+w->h()+1);
+}
+
+static void draw_right_brace(const Fl_Widget *w) {
+  int xx = w->x() + w->w() - 1;
+  fl_xyline(xx-6, w->y(), xx+2);
+  fl_xyline(xx-6, w->y()+w->h()-1, xx+2);
+  fl_yxline(xx, w->y()-2, w->y()+w->h()+1);
+}
+
+static void draw_bottom_brace(const Fl_Widget *w) {
+  int yy = w->y() + w->h() - 1;
+  fl_yxline(w->x(), yy-6, yy+2);
+  fl_yxline(w->x()+w->w()-1, yy-6, yy+2);
+  fl_xyline(w->x()-2, yy, w->x()+w->w()+1);
+}
+
+static void draw_height(int x, int y, int b, Fl_Align a) {
+  char buf[16];
+  int h = b - y;
+  sprintf(buf, "%d", h);
+  fl_font(FL_HELVETICA, 9);
+  int lw = (int)fl_width(buf);
+  int lx;
+
+  b --;
+  if (h < 30) {
+    // Move height to the side...
+    if (a == FL_ALIGN_LEFT) lx = x - lw - 2;
+    else lx = x + 2;
+
+    fl_yxline(x, y, b);
+  } else {
+    // Put height inside the arrows...
+    lx = x - lw / 2;
+
+    fl_yxline(x, y, y + (h - 11) / 2);
+    fl_yxline(x, y + (h + 11) / 2, b);
+  }
+
+  // Draw the height...
+  fl_draw(buf, lx, y + (h + 9) / 2);
+
+  // Draw the arrowheads...
+  fl_line(x-2, y+5, x, y+1, x+2, y+5);
+  fl_line(x-2, b-5, x, b-1, x+2, b-5);
+
+  // Draw the end lines...
+  fl_xyline(x - 4, y, x + 4);
+  fl_xyline(x - 4, b, x + 4);
+}
+
+static void draw_width(int x, int y, int r, Fl_Align a) {
+  char buf[16];
+  int w = r-x;
+  sprintf(buf, "%d", w);
+  fl_font(FL_HELVETICA, 9);
+  int lw = (int)fl_width(buf);
+  int ly = y + 4;
+
+  r --;
+
+  if (lw > (w - 20)) {
+    // Move width above/below the arrows...
+    if (a == FL_ALIGN_TOP) ly -= 10;
+    else ly += 10;
+
+    fl_xyline(x, y, r);
+  } else {
+    // Put width inside the arrows...
+    fl_xyline(x, y, x + (w - lw - 2) / 2);
+    fl_xyline(x + (w + lw + 2) / 2, y, r);
+  }
+
+  // Draw the width...
+  fl_draw(buf, x + (w - lw) / 2, ly);
+
+  // Draw the arrowheads...
+  fl_line(x+5, y-2, x+1, y, x+5, y+2);
+  fl_line(r-5, y-2, r-1, y, r-5, y+2);
+
+  // Draw the end lines...
+  fl_yxline(x, y - 4, y + 4);
+  fl_yxline(r, y - 4, y + 4);
 }
 
 void Fl_Window_Type::draw_overlay() {
@@ -477,27 +657,330 @@ void Fl_Window_Type::draw_overlay() {
   if (!numselected) return;
   int mybx,myby,mybr,mybt;
   mybx = o->w(); myby = o->h(); mybr = 0; mybt = 0;
+  Fl_Type *selection = 0L; // used to store the one selected widget (if n==1)
   for (Fl_Type *q=next; q && q->level>level; q = q->next)
     if (q->selected && q->is_widget() && !q->is_menu_item()) {
+      selection = q;
       Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(myo,x,y,r,t);
-      fl_rect(x,y,r-x,t-y);
+      if (!show_guides || !drag || numselected != 1) fl_rect(x,y,r-x,t-y);
+      if (!(myo->o->align() & FL_ALIGN_INSIDE)) {
+        // Adjust left/right/top/bottom for top/bottom labels...
+	int ww, hh;
+	ww = (myo->o->align() & FL_ALIGN_WRAP) ? myo->o->w() : 0;
+	hh = myo->o->labelsize();
+	myo->o->measure_label(ww, hh);
+	if (myo->o->align() & FL_ALIGN_TOP) y -= hh;
+	else if (myo->o->align() & FL_ALIGN_BOTTOM) t += hh;
+	else if (myo->o->align() & FL_ALIGN_LEFT) x -= ww + 4;
+	else if (myo->o->align() & FL_ALIGN_RIGHT) r += ww + 4;
+      }
       if (x < mybx) mybx = x;
       if (y < myby) myby = y;
       if (r > mybr) mybr = r;
       if (t > mybt) mybt = t;
     }
   if (selected) return;
-  if (numselected>1) fl_rect(mybx,myby,mybr-mybx,mybt-myby);
+
+  if (show_guides && drag) {
+    // draw overlays for UI Guideline distances
+    // - check for distance to the window edge
+    //    * FLTK suggests 10 pixels from the edge
+    int d;
+    int xsp, ysp;
+    Fl_Widget_Type *mysel = (Fl_Widget_Type *)selection;
+
+
+    ideal_spacing(xsp, ysp);
+
+    if (drag) {
+      // Check top spacing...
+      if (abs(d = myby - ysp) < 3) {
+	dy -= d;
+	if (drag & DRAG) mybt -= d;
+	myby -= d;
+	draw_v_arrow(mybx+5, myby, 0);
+      }
+
+      // Check bottom spacing...
+      if (abs(d = o->h() - mybt - ysp) < 3) {
+	dy += d;
+	if (drag & DRAG) myby += d;
+	mybt += d;
+	draw_v_arrow(mybx+5, mybt, o->h());
+      }
+
+      // Check left spacing...
+      if (abs(d = mybx - xsp) < 3) {
+        dx -= d;
+	if (drag & DRAG) mybr -= d;
+	mybx -= d;
+	draw_h_arrow(mybx, myby+5, 0);
+      }
+
+      // Check right spacing...
+      if (abs(d = o->w() - mybr - xsp) < 3) {
+	dx += d;
+	if (drag & DRAG) mybx += d;
+	mybr += d;
+	draw_h_arrow(mybr, myby+5, o->w());
+      }
+    }
+
+    if (numselected==1 && selection && !(drag & DRAG)) {
+      // Check ideal sizes
+      int x,y,r,t;
+      newposition(mysel,x,y,r,t);
+      int w = r-x;
+      int h = t-y;
+      int iw = w, ih = h;
+
+      mysel->ideal_size(iw, ih);
+
+      if (drag & (TOP | BOTTOM)) {
+	// Check height
+	if (abs(d = ih - h) < 5) {
+          // Resize height
+	  if (drag & TOP) {
+	    myby -= d;
+	    y -= d;
+	    dy -= d;
+	  } else {
+	    mybt += d;
+	    t += d;
+	    dy += d;
+	  }
+	}
+
+	// Draw height guide
+	draw_height(x < 50 ? x+10 : x-10, y, t,
+	            x < 50 ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
+      }
+
+      if (drag & (LEFT | RIGHT)) {
+	// Check width
+	if (abs(d = iw - w) < 5) {
+          // Resize width
+          if (drag & LEFT) {
+	    mybx -= d;
+	    x -= d;
+	    dx -= d;
+	  } else {
+	    mybr += d;
+	    r += d;
+	    dx += d;
+	  }
+	}
+
+	// Draw width guide
+	draw_width(x, y < 50 ? y+10 : y-10, r,
+	           y < 50 ? FL_ALIGN_BOTTOM : FL_ALIGN_TOP);
+      }
+    }
+
+    // Check spacing and alignment between individual widgets
+    if (drag && selection->is_widget()) {
+      for (Fl_Type *q=next; q && q->level>level; q = q->next)
+	if (q != selection && q->is_widget()) {
+          Fl_Widget_Type *qw = (Fl_Widget_Type*)q;
+          // Only check visible widgets...
+	  if (!qw->o->visible_r()) continue;
+
+          // Get bounding box of widget...
+	  int qx = qw->o->x();
+	  int qr = qw->o->x() + qw->o->w();
+	  int qy = qw->o->y();
+	  int qt = qw->o->y() + qw->o->h();
+
+	  if (!(qw->o->align() & FL_ALIGN_INSIDE)) {
+            // Adjust top/bottom for top/bottom labels...
+	    int ww, hh;
+	    ww = qw->o->w();
+	    hh = qw->o->labelsize();
+	    qw->o->measure_label(ww, hh);
+	    if (qw->o->align() & FL_ALIGN_TOP) qy -= hh;
+	    if (qw->o->align() & FL_ALIGN_BOTTOM) qt += hh;
+	  }
+
+          // Do horizontal alignment when the widget is within 25
+	  // pixels vertically...
+	  if (fl_min(abs(qy - mysel->o->y() - mysel->o->h()),
+	             abs(mysel->o->y() - qt)) < 25) {
+            // Align to left of other widget...
+            if ((drag & (LEFT | DRAG)) && abs(d = mybx - qx) < 3) {
+	      dx += d;
+              mybx += d;
+	      if (drag & DRAG) mybr += d;
+
+	      draw_left_brace(qw->o);
+	    }
+
+            // Align to right of other widget...
+            if ((drag & (RIGHT | DRAG)) &&
+	        abs(d = qr - mybr) < 3) {
+	      dx += d;
+              if (drag & DRAG) mybx += d;
+	      mybr += d;
+
+	      draw_right_brace(qw->o);
+	    }
+          }
+
+          // Align to top of other widget...
+          if ((drag & (TOP | DRAG)) && abs(d = myby - qy) < 3) {
+	    dy += d;
+            myby += d;
+	    if (drag & DRAG) mybt += d;
+
+	    draw_top_brace(qw->o);
+	  }
+
+          // Align to bottom of other widget...
+          if ((drag & (BOTTOM | DRAG)) && abs(d = qt - mybt) < 3) {
+	    dy += d;
+            if (drag & DRAG) myby += d;
+	    mybt += d;
+
+	    draw_bottom_brace(qw->o);
+	  }
+
+          // Check spacing between widgets
+	  if (mysel->is_group()) mysel->ideal_spacing(xsp, ysp);
+          else qw->ideal_spacing(xsp, ysp);
+
+          if ((qt)>=myby && qy<=mybt) {
+            if (drag & (LEFT | DRAG)) {
+	      // Compare left of selected to left of current
+	      if (abs(d = qx - mybx - xsp) >= 3)
+	        d = qx - mybx + xsp;
+
+	      if (abs(d) < 3) {
+		dx += d;
+        	mybx += d;
+		if (drag & DRAG) mybr += d;
+
+        	// Draw left arrow
+		draw_h_arrow(mybx, (myby+mybt)/2, qx);
+              }
+
+	      // Compare left of selected to right of current
+              if (abs(d = qr - mybx - xsp) >= 3)
+	        d = qr - mybx + xsp;
+
+	      if (abs(d) < 3) {
+		dx += d;
+        	mybx += d;
+		if (drag & DRAG) mybr += d;
+
+        	// Draw left arrow
+		draw_h_arrow(mybx, (myby+mybt)/2, qr);
+              }
+	    }
+
+            if (drag & (RIGHT | DRAG)) {
+	      // Compare right of selected to left of current
+	      if (abs(d = qx - mybr - xsp) >= 3)
+	        d = qx - mybr + xsp;
+
+	      if (abs(d) < 3) {
+		dx += d;
+        	if (drag & DRAG) mybx += d;
+		mybr += d;
+
+        	// Draw right arrow
+		draw_h_arrow(mybr, (myby+mybt)/2, qx);
+              }
+
+	      // Compare right of selected to right of current
+              if (abs(d = qr - mybr + xsp) >= 3)
+	        d = qr - mybr - xsp;
+
+              if (abs(d) < 3) {
+		dx += d;
+        	if (drag & DRAG) mybx += d;
+		mybr += d;
+
+        	// Draw right arrow
+		draw_h_arrow(mybr, (myby+mybt)/2, qr);
+              }
+            }
+	  }
+
+          if (qr>=mybx && qx<=mybr) {
+            // Compare top of selected to top of current
+            if (drag & (TOP | DRAG)) {
+	      if (abs(d = qy - myby - ysp) >= 3)
+	        d = qy - myby + ysp;
+
+	      if (abs(d) < 3) {
+		dy += d;
+		myby += d;
+		if (drag & DRAG) mybt += d;
+
+		// Draw up arrow...
+		draw_v_arrow((mybx+mybr)/2, myby, qy);
+              }
+
+              // Compare top of selected to bottom of current
+              if (abs(d = qt - myby - ysp) >= 3)
+                d = qt - myby + ysp;
+
+              if (abs(d) < 3) {
+		dy += d;
+		myby += d;
+		if (drag & DRAG) mybt += d;
+
+		// Draw up arrow...
+		draw_v_arrow((mybx+mybr)/2, myby, qt);
+              }
+	    }
+
+	    // Compare bottom of selected to top of current
+            if (drag & (BOTTOM | DRAG)) {
+	      if (abs(d = qy - mybt - ysp) >= 3)
+	        d = qy - mybt + ysp;
+
+	      if (abs(d) < 3) {
+		dy += d;
+		if (drag & DRAG) myby += d;
+		mybt += d;
+
+		// Draw down arrow...
+		draw_v_arrow((mybx+mybr)/2, mybt, qy);
+              }
+
+	      // Compare bottom of selected to bottom of current
+              if (abs(d = qt - mybt - ysp) >= 3)
+                d = qt - mybt + ysp;
+
+              if (abs(d) < 3) {
+		dy += d;
+		if (drag & DRAG) myby += d;
+		mybt += d;
+
+		// Draw down arrow...
+		draw_v_arrow((mybx+mybr)/2, mybt, qt);
+              }
+	    }
+          }
+	}
+    }
+  }
+
+  // Draw selection box + resize handles...
+  fl_rect(mybx,myby,mybr-mybx,mybt-myby);
   fl_rectf(mybx,myby,5,5);
   fl_rectf(mybr-5,myby,5,5);
   fl_rectf(mybr-5,mybt-5,5,5);
   fl_rectf(mybx,mybt-5,5,5);
 }
 
+extern Fl_Menu_Item Main_Menu[];
+
 // Calculate new bounding box of selected widgets:
 void Fl_Window_Type::fix_overlay() {
+  Main_Menu[40].label("Hide O&verlays");
   overlays_invisible = 0;
   recalc = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
@@ -511,6 +994,10 @@ void redraw_overlays() {
 
 void toggle_overlays(Fl_Widget *,void *) {
   overlays_invisible = !overlays_invisible;
+
+  if (overlays_invisible) Main_Menu[40].label("Show O&verlays");
+  else Main_Menu[40].label("Hide O&verlays");
+
   for (Fl_Type *o=Fl_Type::first; o; o=o->next)
     if (o->is_window()) {
       Fl_Widget_Type* w = (Fl_Widget_Type*)o;
@@ -527,19 +1014,10 @@ extern void fix_group_size(Fl_Type *t);
 extern Fl_Menu_Item Main_Menu[];
 extern Fl_Menu_Item New_Menu[];
 
-// Update the XYWH values in the widget panel...
-static void update_xywh() {
-  if (current_widget && current_widget->is_widget()) {
-    widget_x_input->value(((Fl_Widget_Type *)current_widget)->o->x());
-    widget_y_input->value(((Fl_Widget_Type *)current_widget)->o->y());
-    widget_w_input->value(((Fl_Widget_Type *)current_widget)->o->w());
-    widget_h_input->value(((Fl_Widget_Type *)current_widget)->o->h());
-  }
-}
-
 // move the selected children according to current dx,dy,drag state:
 void Fl_Window_Type::moveallchildren()
 {
+  undo_checkpoint();
   Fl_Type *i;
   for (i=next; i && i->level>level;) {
     if (i->selected && i->is_widget() && !i->is_menu_item()) {
@@ -566,9 +1044,9 @@ void Fl_Window_Type::moveallchildren()
   o->redraw();
   recalc = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
-  modflag = 1;
+  set_modflag(1);
   dx = dy = 0;
-  
+
   update_xywh();
 }
 
@@ -578,7 +1056,7 @@ int Fl_Window_Type::handle(int event) {
   case FL_PUSH:
     x1 = mx = Fl::event_x();
     y1 = my = Fl::event_y();
-    drag = 0;
+    drag = dx = dy = 0;
     // test for popup menu:
     if (Fl::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
@@ -606,8 +1084,8 @@ int Fl_Window_Type::handle(int event) {
       if (mx>=br-w1) drag |= RIGHT;
       else if (mx<bx+w1) drag |= LEFT;
       w1 = (bt-by)/4; if (w1 > snap1) w1 = snap1;
-      if (my<=by+w1) drag |= BOTTOM;
-      else if (my>bt-w1) drag |= TOP;
+      if (my<=by+w1) drag |= TOP;
+      else if (my>bt-w1) drag |= BOTTOM;
       if (!drag) drag = DRAG;
     }
     // do object-specific selection of other objects:
@@ -640,7 +1118,6 @@ int Fl_Window_Type::handle(int event) {
     if (!drag) return 0;
     mx = Fl::event_x();
     my = Fl::event_y();
-    newdx();
     if (drag != BOX && (dx || dy || !Fl::event_is_click())) {
       if (dx || dy) moveallchildren();
     } else if ((Fl::event_clicks() || Fl::event_state(FL_CTRL))) {
@@ -672,6 +1149,7 @@ int Fl_Window_Type::handle(int event) {
       }
     }
     drag = 0;
+    ((Overlay_Window *)o)->redraw_overlay();
     return 1;
 
   case FL_KEYBOARD: {
@@ -751,6 +1229,11 @@ void Fl_Window_Type::write_code2() {
   if (modal) write_c("%so->set_modal();\n", indent());
   else if (non_modal) write_c("%so->set_non_modal();\n", indent());
   if (!((Fl_Window*)o)->border()) write_c("%so->clear_border();\n", indent());
+  if (xclass) {
+    write_c("%so->xclass(", indent());
+    write_cstring(xclass);
+    write_c(");\n");
+  }
   write_c("%so->end();\n", indent());
   if (((Fl_Window*)o)->resizable() == o)
     write_c("%so->resizable(o);\n", indent());
@@ -806,6 +1289,104 @@ int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
   return 1;
 }
 
+///////////////////////////////////////////////////////////////////////
+
+Fl_Widget_Class_Type Fl_Widget_Class_type;
+Fl_Widget_Class_Type *current_widget_class = 0;
+
+Fl_Type *Fl_Widget_Class_Type::make() {
+  Fl_Type *p = Fl_Type::current;
+  while (p && !p->is_decl_block()) p = p->parent;
+  Fl_Widget_Class_Type *myo = new Fl_Widget_Class_Type();
+  myo->name("UserInterface");
+
+  if (!this->o) {// template widget
+    this->o = new Fl_Window(100,100);
+    Fl_Group::current(0);
+  }
+  // Set the size ranges for this window; in order to avoid opening the
+  // X display we use an arbitrary maximum size...
+  ((Fl_Window *)(this->o))->size_range(gridx, gridy,
+                                       3072, 2048,
+                                       gridx, gridy, 0);
+  myo->factory = this;
+  myo->drag = 0;
+  myo->numselected = 0;
+  Overlay_Window *w = new Overlay_Window(100,100);
+  w->window = myo;
+  myo->o = w;
+  myo->add(p);
+  myo->modal = 0;
+  myo->non_modal = 0;
+
+  return myo;
+}
+
+
+void Fl_Widget_Class_Type::write_code1() {
+#if 0
+  Fl_Widget_Type::write_code1();
+#endif // 0
+
+  current_widget_class = this;
+  write_public_state = 1;
+
+  const char *c = subclass();
+  if (!c) c = "Fl_Group";
+
+  write_h("\nclass %s : public %s {\n", name(), c);
+  if (!strcmp(c, "Fl_Window") ||
+      !strcmp(c, "Fl_Double_Window") ||
+      !strcmp(c, "Fl_Gl_Window") ||
+      !strcmp(c, "Fl_Overlay_Window")) {
+    write_h("  void _%s();\n", name());
+    write_h("public:\n");
+    write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
+    write_h("  %s(int W, int H, const char *L = 0);\n");
+
+    write_c("%s::%s(int X, int Y, int W, int H, const char *L)\n", name(), name());
+    write_c("  : %s(X, Y, W, H, L) {\n", c);
+    write_c("  _%s();\n", name());
+    write_c("}\n\n");
+
+    write_c("%s::%s(int W, int H, const char *L)\n", name(), name());
+    write_c("  : %s(0, 0, W, H, L) {\n", c);
+    write_c("  clear_flag(16);\n");
+    write_c("  _%s();\n", name());
+    write_c("}\n\n");
+
+    write_c("void %s::_%s() {\n", name(), name());
+    write_c("  %s *w = this;\n", name());
+  } else {
+    write_h("public:\n");
+    write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
+
+    write_c("%s::%s(int X, int Y, int W, int H, const char *L)\n", name(), name());
+    write_c("  : %s(X, Y, W, H, L) {\n", c);
+  }
+
+  write_c("  %s *o = this;\n", name());
+
+  write_widget_code();
+}
+
+void Fl_Widget_Class_Type::write_code2() {
+  write_extra_code();
+  if (modal) write_c("%sset_modal();\n", indent());
+  else if (non_modal) write_c("%sset_non_modal();\n", indent());
+  if (!((Fl_Window*)o)->border()) write_c("%sclear_border();\n", indent());
+  if (xclass) {
+    write_c("%sxclass(", indent());
+    write_cstring(xclass);
+    write_c(");\n");
+  }
+  write_c("%send();\n", indent());
+  if (((Fl_Window*)o)->resizable() == o)
+    write_c("%sresizable(this);\n", indent());
+  write_c("}\n");
+}
+
+
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6.2.4 2004/11/25 03:21:20 rokan Exp $".
+// End of "$Id$".
 //

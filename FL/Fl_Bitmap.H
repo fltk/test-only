@@ -30,8 +30,9 @@
 class Fl_Widget
 struct Fl_Menu_Item
 
-/** The Fl_Bitmap class supports caching and drawing of mono-color (bitmap) images.
- * Images are drawn using the current color. *
+/// Fl_Bitmap draws images are drawn using the current color.
+/** It supports caching and drawing of mono-color (bitmap) images. *
+
 class FL_EXPORT Fl_Bitmap : public Fl_Image 
   public
 

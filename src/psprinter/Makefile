@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.4 2004/07/28 05:25:35 matthiaswm Exp $"
+# "$Id$"
 #
 # Postscript library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -163,5 +163,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.4 2004/07/28 05:25:35 matthiaswm Exp $".
+# End of "$Id$".
 #

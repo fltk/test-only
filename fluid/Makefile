@@ -1,9 +1,9 @@
 #
-# "$Id: Makefile,v 1.10.2.6.2.23.2.5 2004/11/10 00:38:25 rokan Exp $"
+# "$Id$"
 #
 # FLUID makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2003 by Bill Spitzak and others.
+# Copyright 1998-2005 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -24,30 +24,32 @@
 #
 
 CPPFILES = \
+	CodeEditor.cxx \
 	Fl_Function_Type.cxx \
-	Fl_Menu_Type.cxx \
 	Fl_Group_Type.cxx \
-	Fl_Widget_Type.cxx \
+	Fl_Menu_Type.cxx \
 	Fl_Type.cxx \
+	Fl_Widget_Type.cxx \
 	Fl_Window_Type.cxx \
 	Fluid_Image.cxx \
+	about_panel.cxx \
+	align_widget.cxx \
+	alignment_panel.cxx \
 	code.cxx \
 	factory.cxx \
 	file.cxx \
 	fluid.cxx \
-	align_widget.cxx \
-	about_panel.cxx \
-	widget_panel.cxx \
-	alignment_panel.cxx \
-	function_panel.cxx
+	function_panel.cxx \
+	print_panel.cxx \
+	template_panel.cxx \
+	undo.cxx \
+	widget_panel.cxx
 
 ################################################################
 
 OBJECTS = $(CPPFILES:.cxx=.o)
 
 CLEAN	= core*
-
-INCLUDES = -I..
 
 include ../makeinclude
 
@@ -97,5 +99,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.10.2.6.2.23.2.5 2004/11/10 00:38:25 rokan Exp $".
+# End of "$Id$".
 #

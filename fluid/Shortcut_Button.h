@@ -1,9 +1,9 @@
 //
-// "$Id: Shortcut_Button.h,v 1.3.2.3.2.2.2.3 2004/03/18 08:00:40 matthiaswm Exp $"
+// "$Id$"
 //
 // Shortcut header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,5 +35,5 @@ public:
 };
 
 //
-// End of "$Id: Shortcut_Button.h,v 1.3.2.3.2.2.2.3 2004/03/18 08:00:40 matthiaswm Exp $".
+// End of "$Id$".
 //

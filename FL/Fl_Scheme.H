@@ -28,17 +28,17 @@
 #ifndef Fl_Scheme_
 #define Fl_Scheme_
 
+/// A base style class for all widget styles within a scheme (see Fl_Scheme)
+/** @ingroup styles */
 
 
 class Fl_Widget_Style: public Fl_Style
-  friend class Fl_Scheme
+  friend class Fl_Scheme;
+
  
-
-  //enum {COLOR=1, SELECTION_COLOR=2, BOX=4, ALIGN=8, LABELTYPE=16, LABELCOLOR=32, LABELFONT=64, LABELSIZE=128}
-
-protected
+protected:
+  Fl_Widget_Style * parent_
   unsigned color_
- 
   uchar box_
   uchar labeltype_
   unsigned labelcolor_
@@ -46,19 +46,45 @@ protected
   uchar labelsize_
   unsigned selection_color_
 
-  int set_flags_; // these flags are used when system values are read
+  void * data_;
+  int set_flags_; // these flags are used when system values are read.
 
-   enum {COLOR=1, SELECTION_COLOR=2, BOX=4, LABELTYPE=8, LABELCOLOR=0x10, LABELFONT=0x20, LABELSIZE=0x40, ALIGN=0x80
-    DOWN_BOX =0x100, HIGHLIGHTED_COLOR= 0x200, HIGHLIGHTED_SELECTION_COLOR =0x400, HIGHLIGHTED_BOX = 0x800, HIGHLIGHTED_LABELCOLOR = 0x1000
-    HIGHLIGHTED_DOWN_BOX = 0x2000, TEXTCOLOR = 0x4000, TEXTFONT = 0x8000, TEXTSIZE = 0x10000}
+  void apply(Fl_Widget * w);
+
+public:
+  virtual void update()
+  /** \internal \c set_flags inform if a style parameter was explicitly set, or should be inherited from its parent. *
+  enum Parameter {STATIC = 1, COLOR=2, SELECTION_COLOR=4, BOX=8, LABELTYPE=0x10, LABELCOLOR=0x20, LABELFONT=0x40, LABELSIZE=0x80, ALIGN=0x100
+    DOWN_BOX =0x200, TEXTCOLOR = 0x400, TEXTFONT = 0x800, TEXTSIZE = 0x1000, DATA = 0x10000000, HANDLE = 0x20000000, DRAW = 0x40000000}
  
 
+  /** @internal Gets \c set_flags flags from a style. \see Fl_Widget_Style::Parameter*/
+  int set_flags() {return set_flags_;};
+  
+  /** @internal */
+  void set_flags(int flags) {set_flags_ = flags;};
+  
+  /** @interval  Compares values with parent ones and returns values with bits set if particular data differ */
+  virtual int compare_flags();
+
+  Fl_Handle_Style * handle_function(){return handle_;}
+  void handle_function(Fl_Handle_Style * f){handle_ = f; set_flags_ |= HANDLE;};
 
 
-  virtual void update()=0
+  Fl_Draw_Style * draw_function(){return draw_;}
+  void draw_function(Fl_Draw_Style * f){draw_ = f;  set_flags_ |= DRAW;}
 
-public
-  void apply(Fl_Widget * w)
+  
+  
+  
+ 
+
+  void * data(){return data_;};
+  void data(void * d){data_ = d; set_flags_ |= DATA;};
+
+  Fl_Widget_Style(Fl_Widget_Style * parent)
+  
+ 
 
   Fl_Color color() const {return (Fl_Color)color_;}
   void color(unsigned c){color_ = c; set_flags_ |=COLOR;}
@@ -73,131 +99,81 @@ public
   Fl_Color selection_color() const {return (Fl_Color)selection_color_;
   void selection_color(unsigned c){selection_color_ = c; set_flags_ |= SELECTION_COLOR;}
   Fl_Boxtype box() const {return (Fl_Boxtype) box_;}
-  void box(uchar b) {box_= b; set_flags_ |= BOX;
-
-  Fl_Widget_Style()
-
-}
+  void box(uchar b) {box_= b; set_flags_ |= BOX;}
 
 
-class Fl_Button_Style: public Fl_Widget_Style
+
+};
+
+class Fl_Browser_Style: public Fl_Widget_Style{
+  unsigned textcolor_;
+  uchar textfont_;
+  uchar textsize_;
+protected:
+  
+
+public:
+  void update();
+  Fl_Browser_Style(Fl_Browser_Style * parent=0):Fl_Widget_Style(parent){};
+  
+  Fl_Color background_color(){return color();};
+  void background_color(unsigned c){color(c);};
+
+  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+  void textcolor(unsigned c){ textcolor_ = c; set_flags_ |= TEXTCOLOR;}
+  Fl_Font textfont() const {return (Fl_Font)labelfont_;}
+  void textfont(uchar f){textfont_ = f; set_flags_ |= TEXTFONT;}
+  uchar textsize() const {return textsize_;}
+  void textsize(uchar s){textsize_=s; set_flags_ |= TEXTSIZE;}
+
+
+};
+
+
+
+
+class Fl_Button_Style: public Fl_Widget_Style{
 protected
-  Fl_Widget_Style * parent_
-  //uchar down_box_
-  unsigned highlighted_color_
-  //unsigned highlighted_selection_color_
-  uchar highlighted_box_
-  //static int handle(Fl_Widget * w, int event)
+  uchar down_box_
 protected
-  void update()
-public
+
+public:
+  void update();
+  int compare_flags();
+  Fl_Color background_color(){return color();};
+  void background_color(unsigned c){color(c);}
 
 
   // These are new parameters applicable to buttons onl
- // Fl_Boxtype down_box() const {return (Fl_Boxtype) down_box_;}
- // void down_box(uchar b) {down_box_= b; set_flags_ |= DOWN_BOX;
-   // Highlightin
-  Fl_Color highlighted_color() const {return (Fl_Color) highlighted_color_;}
-  void highlighted_color(unsigned c){highlighted_color_ = c; set_flags_ |=HIGHLIGHTED_COLOR;}
-  Fl_Boxtype highlighted_box() const {return (Fl_Boxtype) highlighted_box_; }
-  void highlighted_box(uchar b) {highlighted_box_= b; set_flags_ |= HIGHLIGHTED_BOX; 
-
-  // These are highlighted colors when button is "down"
-  //Fl_Color highlighted_selection_color() const { return (Fl_Color) highlighted_selection_color_;
-  //void highlighted_selection_color(unsigned c){highlighted_selection_color_ = c; set_flags_ |= HIGHLIGHTED_SELECTION_COLOR;}
+ Fl_Boxtype down_box() const {return (Fl_Boxtype) down_box_;}
+ void down_box(uchar b) {down_box_= b; set_flags_ |= DOWN_BOX;
 
   // overriding function to apply the style
   void apply(Fl_Widget *)
-  Fl_Button_Style(Fl_Widget_Style * parent)
+
+  Fl_Button_Style(Fl_Button_Style * parent = 0);
 }
 
 
-
-class Fl_Light_Button_Style: public Fl_Button_Style
-protected
-  void update()
-public
-  Fl_Light_Button_Style(Fl_Button_Style * parent)
-}
-
-
-class Fl_Global_Style
-
-class Fl_Browser__Style: public Fl_Widget_Style
-  Fl_Global_Style * parent_
-  unsigned textcolor_
-  uchar textfont_
-  uchar textsize_
-protected
-  void update()
-public
-   Fl_Color textcolor() const {return (Fl_Color)textcolor_;
-  void textcolor(unsigned c){ textcolor_ = c; set_flags_ |= TEXTCOLOR;
-  Fl_Font textfont() const {return (Fl_Font)labelfont_;
-  void textfont(uchar f){textfont_ = f; set_flags_ |= TEXTFONT;
-  uchar textsize() const {return textsize_;
-  void textsize(uchar s){textsize_=s; set_flags_ |= TEXTSIZE;
-  Fl_Browser__Style(Fl_Global_Style * parent):parent_(parent){}
-}
-
-
-
-class Fl_Global_Style: public Fl_Browser__Style
-
-protected
-  unsigned canvas_color_; // this is background2 colo
-  void update()
-  enum {CANVAS_COLOR = DOWN_BOX}; // global style don not need downbox, spare this bit for background
-public
-  Fl_Color canvas_color() const {return (Fl_Color)canvas_color_;}
-  void canvas_color(unsigned c){canvas_color_ = c; set_flags_ |= CANVAS_COLOR;}
-  Fl_Global_Style():Fl_Browser__Style(0),canvas_color_(FL_BACKGROUND2_COLOR){}
-}
-
-
+/** \ingroup styles 
+* Scheme defines default appereance and highlighting od FLTK widgets. It conmprises of instances
+* of Fl_Style classes (ot ots subclassess) like Fl_Scheme::button, Fl_Scheme::browser, ... to define styles of 
+* corresponding classess *
 
 class Fl_Scheme:public Fl_Scheme_
-  Fl_Global_Style * global
 
 public
   void update()
 
-   // default color of widgets and window
-  Fl_Color color() const {return global->color();};
-  void color(unsigned c){global->color(c);}
- 
-  // Default label for all widget
-  Fl_Labeltype labeltype() const {return global->labeltype();} //default
-  void labeltype(Fl_Labeltype t){global->labeltype(t);
-  Fl_Color labelcolor() const {return global->labelcolor();
-  void labelcolor(unsigned c){ global->labelcolor(c);
-  Fl_Font labelfont() const {return global->labelfont();
-  void labelfont(uchar f){global->labelfont(f);
-  uchar labelsize() const {return global->labelsize();
-  void labelsize(uchar s){global->labelsize(s);
- 
 
-  // This is background color of text widgets, inputs etc (usualy white), it has the meaning of FL_BACLGROUND
-  Fl_Color canvas_color() const {return global->canvas_color();
-  void canvas_color(unsigned c){global->canvas_color(c);}
+  /** Defines appereance of Fl_Button class *
+  Fl_Button_Style button;
+  Fl_Button_Style highlighted_button;
 
-  // This is selection color for text etc, not buttons when dow
-  Fl_Color selection_color() const {return global->selection_color();
-  void selection_color(unsigned c){global->selection_color(c);}
+  Fl_Button_Style tool_button;
+  Fl_Button_Style highlighted_tool_button;
 
-
-  // These are the defaults for their tex
-  Fl_Color textcolor() const {return global->textcolor();
-  void textcolor(unsigned c){ global->textcolor(c);
-  Fl_Font textfont() const {return global->textfont();
-  void textfont(uchar f){global->labelfont(f);
-  uchar textsize() const {return global->textsize();
-  void textsize(uchar s){global->textsize(s);
-
-  Fl_Button_Style * button
-  Fl_Button_Style * tool_button
-  Fl_Browser__Style * browser
-  Fl_Light_Button_Style * light_button
+  Fl_Browser_Style browser
 
   Fl_Scheme()
   ~Fl_Scheme()

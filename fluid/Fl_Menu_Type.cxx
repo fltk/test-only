@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.16.2.12.2.6.2.5 2004/11/25 03:21:20 rokan Exp $"
+// "$Id$"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -9,7 +9,7 @@
 // This file also contains code to make Fl_Menu_Button, Fl_Menu_Bar,
 // etc widgets.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -55,6 +55,54 @@ extern const char* i18n_set;
 
 static char submenuflag;
 
+void Fl_Input_Choice_Type::build_menu() {
+  Fl_Input_Choice* w = (Fl_Input_Choice*)o;
+  // count how many Fl_Menu_Item structures needed:
+  int n = 0;
+  Fl_Type* q;
+  for (q = next; q && q->level > level; q = q->next) {
+    if (q->is_parent()) n++; // space for null at end of submenu
+    n++;
+  }
+  if (!n) {
+    if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+    w->menu(0);
+    menusize = 0;
+  } else {
+    n++; // space for null at end of menu
+    if (menusize<n) {
+      if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+      menusize = n+10;
+      w->menu(new Fl_Menu_Item[menusize]);
+    }
+    // fill them all in:
+    Fl_Menu_Item* m = (Fl_Menu_Item*)(w->menu());
+    int lvl = level+1;
+    for (q = next; q && q->level > level; q = q->next) {
+      Fl_Menu_Item_Type* i = (Fl_Menu_Item_Type*)q;
+      if (i->o->image()) i->o->image()->label(m);
+      else {
+        m->label(i->o->label() ? i->o->label() : "(nolabel)");
+        m->labeltype(i->o->labeltype());
+      }
+      m->shortcut(((Fl_Button*)(i->o))->shortcut());
+      m->callback(0,(void*)i);
+      m->flags = i->flags();
+      m->labelfont(i->o->labelfont());
+      m->labelsize(i->o->labelsize());
+      m->labelcolor(i->o->labelcolor());
+      if (q->is_parent()) {lvl++; m->flags |= FL_SUBMENU;}
+      m++;
+      int l1 =
+	(q->next && q->next->is_menu_item()) ? q->next->level : level;
+      while (lvl > l1) {m->label(0); m++; lvl--;}
+      lvl = l1;
+    }
+  }
+  o->redraw();
+}
+
+
 Fl_Type *Fl_Menu_Item_Type::make() {
   // Find the current menu item:
   Fl_Type* q = Fl_Type::current;
@@ -69,6 +117,7 @@ Fl_Type *Fl_Menu_Item_Type::make() {
   }
   if (!o) {
     o = new Fl_Button(0,0,100,20); // create template widget
+    o->labelsize(Fl_Widget_Type::default_size);
   }
 
   Fl_Menu_Item_Type* t = submenuflag ? new Fl_Submenu_Type() : new Fl_Menu_Item_Type();
@@ -216,6 +265,17 @@ int Fl_Menu_Item_Type::flags() {
 }
 
 void Fl_Menu_Item_Type::write_item() {
+  static const char * const labeltypes[] = {
+    "FL_NORMAL_LABEL",
+    "FL_NO_LABEL",
+    "FL_SHADOW_LABEL",
+    "FL_ENGRAVED_LABEL",
+    "FL_EMBOSSED_LABEL",
+    "FL_MULTI_LABEL",
+    "FL_ICON_LABEL",
+    "FL_IMAGE_LABEL"
+  };
+
   write_c(" {");
   if (image) write_c("0");
   else if (label()) {
@@ -254,8 +314,8 @@ void Fl_Menu_Item_Type::write_item() {
     write_c(" (void*)(%s),", user_data());
   else
     write_c(" 0,");
-  write_c(" %d, %d, %d, %d, %d", flags(),
-	  o->labeltype(), o->labelfont(), o->labelsize(), o->labelcolor());
+  write_c(" %d, %s, %d, %d, %d", flags(),
+	  labeltypes[o->labeltype()], o->labelfont(), o->labelsize(), o->labelcolor());
   write_c("},\n");
 }
 
@@ -408,6 +468,8 @@ Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
 
 Fl_Choice_Type Fl_Choice_type;
 
+Fl_Input_Choice_Type Fl_Input_Choice_type;
+
 ////////////////////////////////////////////////////////////////
 
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
@@ -468,5 +530,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.16.2.12.2.6.2.5 2004/11/25 03:21:20 rokan Exp $".
+// End of "$Id$".
 //

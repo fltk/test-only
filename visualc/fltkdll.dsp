@@ -1776,6 +1776,10 @@ DEP_CPP_FL_PRO=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_read_image.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_rect.cxx
 DEP_CPP_FL_RE=\
 	"..\fl\enumerations.h"\

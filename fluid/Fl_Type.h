@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.6 2004/04/06 18:33:17 easysw Exp $"
+// "$Id$"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -11,7 +11,7 @@
 // instance of this object.  It could also have a "copy()" function,
 // but it was easier to implement this by using the file read/write
 // that is needed to save the setup anyways.
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,6 +34,9 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Menu.H>
 #include "Fluid_Image.h"
+#include <FL/fl_draw.H>
+
+void set_modflag(int mf);
 
 class Fl_Type {
 
@@ -124,6 +127,7 @@ public:
   virtual int is_window() const;
   virtual int is_code_block() const;
   virtual int is_decl_block() const;
+  virtual int is_comment() const;
   virtual int is_class() const;
   virtual int is_public() const;
 
@@ -212,6 +216,21 @@ public:
   int pixmapID() { return 11; }
 };
 
+class Fl_Comment_Type : public Fl_Type {
+  char in_c_, in_h_, style_;
+public:
+  Fl_Type *make();
+  void write_code1();
+  void write_code2();
+  void open();
+  virtual const char *type_name() {return "comment";}
+  void write_properties();
+  void read_property(const char *);
+  virtual int is_public() const { return 1; }
+  virtual int is_comment() const { return 1; }
+  int pixmapID() { return 46; }
+};
+
 class Fl_Class_Type : public Fl_Type {
   const char* subclass_of;
   char public_;
@@ -265,6 +284,7 @@ protected:
   void write_color(const char*, Fl_Color);
 
 public:
+  static int default_size;
 
   const char *xclass; // junk string, used for shortcut
   Fl_Widget *o;
@@ -303,6 +323,9 @@ public:
   virtual void write_properties();
   virtual void read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
+
+  virtual void ideal_size(int &w, int &h);
+  virtual void ideal_spacing(int &x, int &y);
 
   ~Fl_Widget_Type();
   void redraw();
@@ -365,6 +388,11 @@ extern const char tabs_type_name[];
 
 class Fl_Tabs_Type : public Fl_Group_Type {
 public:
+  virtual void ideal_spacing(int &x, int &y) {
+     x = 10;
+     fl_font(o->labelfont(), o->labelsize());
+     y = fl_height() + o->labelsize() - 6;
+  }
   virtual const char *type_name() {return tabs_type_name;}
   Fl_Widget *widget(int X,int Y,int W,int H) {
     itabs *g = new itabs(X,Y,W,H); Fl_Group::current(0); return g;}
@@ -409,6 +437,8 @@ public:
 extern Fl_Menu_Item window_type_menu[];
 
 class Fl_Window_Type : public Fl_Widget_Type {
+protected:
+
   Fl_Menu_Item* subtypes() {return window_type_menu;}
 
   friend class Overlay_Window;
@@ -434,6 +464,7 @@ class Fl_Window_Type : public Fl_Widget_Type {
 
 public:
 
+  Fl_Window_Type() { drag = dx = dy = 0; }
   uchar modal, non_modal;
 
   Fl_Type *make();
@@ -441,7 +472,8 @@ public:
 
   void open();
 
-  void fix_overlay();	// update the bounding box, etc
+  void fix_overlay();			// Update the bounding box, etc
+  uchar *read_image(int &ww, int &hh);	// Read an image of the window
 
   virtual void write_properties();
   virtual void read_property(const char *);
@@ -456,12 +488,27 @@ public:
   int is_window() const {return 1;}
 };
 
+class Fl_Widget_Class_Type : private Fl_Window_Type {
+public:
+  // state variables for output:
+  char write_public_state; // true when public: has been printed
+
+  void write_code1();
+  void write_code2();
+  Fl_Type *make();
+  virtual const char *type_name() {return "widget_class";}
+  int is_parent() const {return 1;}
+  int is_decl_block() const {return 1;}
+  int is_class() const {return 1;}
+};
+
+
 extern Fl_Menu_Item menu_item_type_menu[];
 
 class Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
   Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
-  const char* type_name() {return "menuitem";}
+  const char* type_name() {return "MenuItem";}
   Fl_Type* make();
   int is_menu_item() const {return 1;}
   int is_button() const {return 1;} // this gets shortcut to work
@@ -479,7 +526,7 @@ public:
 class Fl_Submenu_Type : public Fl_Menu_Item_Type {
 public:
   Fl_Menu_Item* subtypes() {return 0;}
-  const char* type_name() {return "submenu";}
+  const char* type_name() {return "Submenu";}
   int is_parent() const {return 1;}
   int is_button() const {return 0;} // disable shortcut
   Fl_Type* make();
@@ -509,7 +556,7 @@ public:
   int is_menu_button() const {return 1;}
   int is_parent() const {return 1;}
   int menusize;
-  void build_menu();
+  virtual void build_menu();
   Fl_Menu_Type() : Fl_Widget_Type() {menusize = 0;}
   ~Fl_Menu_Type() {
     if (menusize) delete[] (Fl_Menu_Item*)(((Fl_Menu_*)o)->menu());
@@ -527,6 +574,13 @@ extern Fl_Menu_Item button_type_menu[];
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
   Fl_Menu_Item *subtypes() {return button_type_menu;}
 public:
+  virtual void ideal_size(int &w, int &h) {
+    Fl_Widget_Type::ideal_size(w, h);
+    w += 2 * ((o->labelsize() - 3) & ~1) + o->labelsize() - 4;
+    h = (h / 5) * 5;
+    if (h < 15) h = 15;
+    if (w < (15 + h)) w = 15 + h;
+  }
   virtual const char *type_name() {return "Fl_Menu_Button";}
   Fl_Widget *widget(int X,int Y,int W,int H) {
     return new Fl_Menu_Button(X,Y,W,H,"menu");}
@@ -539,6 +593,17 @@ extern Fl_Menu_Item dummymenu[];
 #include <FL/Fl_Choice.H>
 class Fl_Choice_Type : public Fl_Menu_Type {
 public:
+  virtual void ideal_size(int &w, int &h) {
+    Fl_Widget_Type::ideal_size(w, h);
+    int w1 = o->h() - Fl::box_dh(o->box());
+    if (w1 > 20) w1 = 20;
+    w1 = (w1 - 4) / 3;
+    if (w1 < 1) w1 = 1;
+    w += 2 * w1 + o->labelsize() - 4;
+    h = (h / 5) * 5;
+    if (h < 15) h = 15;
+    if (w < (15 + h)) w = 15 + h;
+  }
   virtual const char *type_name() {return "Fl_Choice";}
   Fl_Widget *widget(int X,int Y,int W,int H) {
     Fl_Choice *myo = new Fl_Choice(X,Y,W,H,"choice:");
@@ -549,12 +614,53 @@ public:
   int pixmapID() { return 15; }
 };
 
+#include <FL/Fl_Input_Choice.H>
+class Fl_Input_Choice_Type : public Fl_Menu_Type {
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+    Fl_Menu_ *myo = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
+    switch (w) {
+    case 4:
+    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 1: myo->textfont(f); break;
+    case 2: myo->textsize(s); break;
+    case 3: myo->textcolor(c); break;
+    }
+    return 1;
+  }
+public:
+  virtual void ideal_size(int &w, int &h) {
+    Fl_Input_Choice *myo = (Fl_Input_Choice *)o;
+    fl_font(myo->textfont(), myo->textsize());
+    h = fl_height() + myo->textsize() - 6;
+    w = o->w() - 20 - Fl::box_dw(o->box());
+    int ww = (int)fl_width('m');
+    w = ((w + ww - 1) / ww) * ww + 20 + Fl::box_dw(o->box());
+    if (h < 15) h = 15;
+    if (w < (15 + h)) w = 15 + h;
+  }
+  virtual const char *type_name() {return "Fl_Input_Choice";}
+  Fl_Widget *widget(int X,int Y,int W,int H) {
+    Fl_Input_Choice *myo = new Fl_Input_Choice(X,Y,W,H,"input choice:");
+    myo->menu(dummymenu);
+    myo->value("input");
+    return myo;
+  }
+  Fl_Widget_Type *_make() {return new Fl_Input_Choice_Type();}
+  virtual void build_menu();
+  int pixmapID() { return 15; }
+};
+
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
 class Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
+  virtual void ideal_size(int &w, int &h) {
+    w = o->window()->w();
+    h = ((o->labelsize() + Fl::box_dh(o->box()) + 4) / 5) * 5;
+    if (h < 15) h = 15;
+  }
   virtual const char *type_name() {return "Fl_Menu_Bar";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
-    return new Fl_Menu_Bar(X,Y,W,H);}
+  Fl_Widget *widget(int X,int Y,int W,int H) {return new Fl_Menu_Bar(X,Y,W,H);}
   Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
   int pixmapID() { return 17; }
 };
@@ -599,5 +705,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.6 2004/04/06 18:33:17 easysw Exp $".
+// End of "$Id$".
 //

@@ -29,7 +29,8 @@
 #include "Fl.H
 #include "Fl_Group.H
 #include "Fl_Window.H
-#include "fl_draw.H
+#include "fl_draw.H"
+
 
 typedef Fl_Widget FL_OBJECT
 typedef Fl_Window FL_FORM

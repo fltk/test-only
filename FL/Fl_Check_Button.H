@@ -36,7 +36,8 @@
  * initially set to \c FL_DIAMOND_DOWN_BOX. The color of the light whe
  * on is controlled with selection_color(), which defaults to \c FL_RED. *
 class FL_EXPORT Fl_Check_Button : public Fl_Light_Button 
-public
+public:
+  static Style * default_style()
     /** Creates a new Fl_Check_Button widget using the given \a position,
      * \a size, and \a label string. *
   Fl_Check_Button(int x,int y,int width,int height,const char *label = 0)

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.5 2004/05/13 21:04:18 easysw Exp $"
+// "$Id$"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -15,7 +15,7 @@
 // not in the linked list and are not written to files or
 // copied or otherwise examined.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@
 #include <stdio.h>
 
 #include "Fl_Type.h"
+#include "undo.h"
 
 #include <FL/Fl_Pixmap.H>
 #include "pixmaps/lock.xpm"
@@ -60,6 +61,7 @@ static Fl_Pixmap	lock_pixmap(lock_xpm);
 #include "pixmaps/flFunction.xpm"
 #include "pixmaps/flCode.xpm"
 #include "pixmaps/flCodeBlock.xpm"
+#include "pixmaps/flComment.xpm"
 #include "pixmaps/flDeclaration.xpm"
 #include "pixmaps/flDeclarationBlock.xpm"
 #include "pixmaps/flClass.xpm"
@@ -96,6 +98,7 @@ static Fl_Pixmap	lock_pixmap(lock_xpm);
 #include "pixmaps/flRoller.xpm"
 #include "pixmaps/flValueInput.xpm"
 #include "pixmaps/flValueOutput.xpm"
+#include "pixmaps/flSpinner.xpm"
 
 static Fl_Pixmap	window_pixmap(flWindow_xpm);
 static Fl_Pixmap	button_pixmap(flButton_xpm);
@@ -106,6 +109,7 @@ static Fl_Pixmap	group_pixmap(flGroup_xpm);
 static Fl_Pixmap	function_pixmap(flFunction_xpm);
 static Fl_Pixmap	code_pixmap(flCode_xpm);
 static Fl_Pixmap	codeblock_pixmap(flCodeBlock_xpm);
+static Fl_Pixmap	comment_pixmap(flComment_xpm);
 static Fl_Pixmap	declaration_pixmap(flDeclaration_xpm);
 static Fl_Pixmap	declarationblock_pixmap(flDeclarationBlock_xpm);
 static Fl_Pixmap	class_pixmap(flClass_xpm);
@@ -142,6 +146,7 @@ static Fl_Pixmap	dial_pixmap(flDial_xpm);
 static Fl_Pixmap	roller_pixmap(flRoller_xpm);
 static Fl_Pixmap	valueinput_pixmap(flValueInput_xpm);
 static Fl_Pixmap	valueoutput_pixmap(flValueOutput_xpm);
+static Fl_Pixmap	spinner_pixmap(flSpinner_xpm);
 
 Fl_Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixmap, &roundbutton_pixmap, /* 0..4 */
  &box_pixmap, &group_pixmap, &function_pixmap, &code_pixmap, &codeblock_pixmap, &declaration_pixmap, /* 5..10 */ 
@@ -151,7 +156,7 @@ Fl_Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixmap, 
  &output_pixmap, &textdisplay_pixmap, &textedit_pixmap, &fileinput_pixmap, &browser_pixmap,          /* 27..32 */
  &checkbrowser_pixmap, &filebrowser_pixmap, &clock_pixmap, &help_pixmap, &progress_pixmap,	     /* 33..36 */
  &slider_pixmap, &scrollbar_pixmap, &valueslider_pixmap, &adjuster_pixmap, &counter_pixmap,          /* 37..41 */
- &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, /* 42..45*/ };
+ &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap, &spinner_pixmap /* 42..47 */ };
 
 ////////////////////////////////////////////////////////////////
 
@@ -447,6 +452,7 @@ void Fl_Type::remove_child(Fl_Type*) {}
 // add a list of widgets as a new child of p:
 void Fl_Type::add(Fl_Type *p) {
   if (p && parent == p) return;
+  undo_checkpoint();
   parent = p;
   Fl_Type *end = this;
   while (end->next) end = end->next;
@@ -479,7 +485,7 @@ void Fl_Type::add(Fl_Type *p) {
   if (p) p->add_child(this,0);
   open_ = 1;
   fixvisible(this);
-  modflag = 1;
+  set_modflag(1);
   widget_browser->redraw();
 }
 
@@ -542,6 +548,7 @@ Fl_Type *Fl_Type::remove() {
 // update a string member:
 int storestring(const char *n, const char * & p, int nostrip) {
   if (n == p) return 0;
+  undo_checkpoint();
   int length = 0;
   if (n) { // see if blank, strip leading & trailing blanks
     if (!nostrip) while (isspace(*n)) n++;
@@ -560,12 +567,13 @@ int storestring(const char *n, const char * & p, int nostrip) {
     strlcpy(q,n,length+1);
     p = q;
   }
-  modflag = 1;
+  set_modflag(1);
   return 1;
 }
 
 void Fl_Type::name(const char *n) {
-  if (storestring(n,name_)) {
+  int nostrip = is_comment();
+  if (storestring(n,name_,nostrip)) {
     if (visible) widget_browser->redraw();
   }
 }
@@ -601,7 +609,6 @@ Fl_Type::~Fl_Type() {
   if (prev) prev->next = next; else first = next;
   if (next) next->prev = prev; else last = prev;
   if (current == this) current = 0;
-  modflag = 1;
   if (parent) parent->remove_child(this);
 }
 
@@ -615,6 +622,7 @@ int Fl_Type::is_group() const {return 0;}
 int Fl_Type::is_window() const {return 0;}
 int Fl_Type::is_code_block() const {return 0;}
 int Fl_Type::is_decl_block() const {return 0;}
+int Fl_Type::is_comment() const {return 0;}
 int Fl_Type::is_class() const {return 0;}
 int Fl_Type::is_public() const {return 1;}
 
@@ -644,6 +652,30 @@ void select_all_cb(Fl_Widget *,void *) {
     } else {
       for (Fl_Type *t = Fl_Type::first; t; t = t->next)
 	widget_browser->select(t,1,0);
+      break;
+    }
+  }
+  selection_changed(p);
+}
+
+void select_none_cb(Fl_Widget *,void *) {
+  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
+  if (in_this_only) {
+    Fl_Type *t = p;
+    for (; t && t != in_this_only; t = t->parent);
+    if (t != in_this_only) p = in_this_only;
+  }
+  for (;;) {
+    if (p) {
+      int foundany = 0;
+      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
+	if (t->new_selected) {widget_browser->select(t,0,0); foundany = 1;}
+      }
+      if (foundany) break;
+      p = p->parent;
+    } else {
+      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
+	widget_browser->select(t,0,0);
       break;
     }
   }
@@ -791,5 +823,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.5 2004/05/13 21:04:18 easysw Exp $".
+// End of "$Id$".
 //

@@ -57,7 +57,6 @@
  * operation.
  *
 class FL_EXPORT Fl_Browser_ : public Fl_Group 
-  FL_STYLE
   uchar style_flags2_
 protected
   enum {TEXTCOLOR = 1, TEXTFONT = 2, TEXTSIZE = 3}

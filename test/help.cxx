@@ -1,67 +1,67 @@
-//
-// "$Id: help.cxx,v 1.1.2.8.2.3 2004/07/26 20:56:15 easysw Exp $"
-//
-// Fl_Help_Dialog test program.
-//
-// Copyright 1999-2003 by Easy Software Products.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-// Contents:
-//
-//   main() - Display the help GUI...
-//
+/
+// "$Id$
+/
+// Fl_Help_Dialog test program
+/
+// Copyright 1999-2003 by Easy Software Products
+/
+// This library is free software; you can redistribute it and/o
+// modify it under the terms of the GNU Library General Publi
+// License as published by the Free Software Foundation; eithe
+// version 2 of the License, or (at your option) any later version
+/
+// This library is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty o
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+// Library General Public License for more details
+/
+// You should have received a copy of the GNU Library General Publi
+// License along with this library; if not, write to the Free Softwar
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+// USA
+/
+// Please report all bugs and problems to "fltk-bugs@fltk.org"
+/
+// Contents
+/
+//   main() - Display the help GUI..
+/
 
-//
-// Include necessary headers...
-//
+/
+// Include necessary headers..
+/
 
-#include <FL/Fl_Help_Dialog.H>
-
-
-//
-// 'main()' - Display the help GUI...
-//
-
-int				// O - Exit status
-main(int  argc,			// I - Number of command-line arguments
-     char *argv[])		// I - Command-line arguments
-{
-  Fl_Help_Dialog	*help;		// Help dialog
+#include <FL/Fl_Help_Dialog.H
 
 
-  help = new Fl_Help_Dialog;
+/
+// 'main()' - Display the help GUI..
+/
 
-  if (argc < 2)
-    help->load("../documentation/index.html");
-  else
-    help->load(argv[1]);
+int				// O - Exit statu
+main(int  argc,			// I - Number of command-line argument
+     char *argv[])		// I - Command-line argument
 
-  help->show(1, argv);
-
-  Fl::run();
-
-  delete help;
-
-  return (0);
-}
+  Fl_Help_Dialog	*help;		// Help dialo
 
 
-//
-// End of "$Id: help.cxx,v 1.1.2.8.2.3 2004/07/26 20:56:15 easysw Exp $".
-//
+  help = new Fl_Help_Dialog
+
+  if (argc < 2
+    help->load("../documentation/index.html")
+  els
+    help->load(argv[1])
+
+  help->show(1, argv)
+
+  Fl::run()
+
+  delete help
+
+  return (0)
+
+
+
+/
+// End of "$Id$"
+/

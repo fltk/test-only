@@ -31,7 +31,6 @@
 // Tool button only implements new style, by default it has flat_bo
 
 class FL_EXPORT Fl_Tool_Button : public Fl_Button 
-  FL_STYLE
   Fl_Tool_Button(int x,int y,int width,int height,const char *label = 0)
 }
 

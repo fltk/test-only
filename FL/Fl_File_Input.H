@@ -39,7 +39,7 @@ class FL_EXPORT Fl_File_Input : public Fl_Inpu
 
   Fl_Color	errorcolor_
   char		ok_entry_
-  uchar		down_box_
+  Fl_Boxtype		down_box_
   short		buttons_[200]
   short		pressed_
 

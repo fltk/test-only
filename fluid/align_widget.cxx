@@ -1,9 +1,9 @@
 //
-// "$Id: align_widget.cxx,v 1.1.2.1.2.6 2004/04/06 18:33:17 easysw Exp $"
+// "$Id$"
 //
-// alignment code for the Fast Light Tool Kit (FLTK).
+// Alignment code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,10 +26,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include "Fl_Widget_Type.h"
+#include "undo.h"
 
 /**
  * the first behaviour always uses the first selected widget as a reference
- * the second behaviour uses the larges widget (most extreme positions) as a reference
+ * the second behaviour uses the largest widget (most extreme positions) as
+ * a reference.
  */
 #define BREAK_ON_FIRST break
 //#define BREAK_ON_FIRST
@@ -39,6 +41,7 @@ void align_widget_cb(Fl_Widget*, long how)
   const int max = 32768, min = -32768;
   int left, right, top, bot, wdt, hgt, n;
   Fl_Type *o;
+  int changed = 0;
   switch ( how )
   {
   //---- align
@@ -56,8 +59,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(left, w->y(), w->w(), w->h());
 	  } else {
@@ -86,8 +96,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize((center2-w->w())/2, w->y(), w->w(), w->h());
 	  } else {
@@ -113,8 +130,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(right-w->w(), w->y(), w->w(), w->h());
 	  } else {
@@ -139,8 +163,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(w->x(), top, w->w(), w->h());
 	  } else {
@@ -169,8 +200,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	  } else {
@@ -196,8 +234,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize( w->x(), bot-w->h(), w->w(), w->h());
 	  } else {
@@ -230,8 +275,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(left+wsum+wdt*cnt/n, w->y(), w->w(), w->h());
 	  } else {
@@ -266,8 +318,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(w->x(), top+hsum+hgt*cnt/n, w->w(), w->h());
 	  } else {
@@ -296,8 +355,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize(w->x(), w->y(), wdt, w->h());
 	  } else {
@@ -322,8 +388,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize( w->x(), w->y(), w->w(), hgt);
 	  } else {
@@ -350,8 +423,15 @@ void align_widget_cb(Fl_Widget*, long how)
       for (Fl_Type *o = Fl_Type::first; o; o = o->next)
 	if (o->selected && o->is_widget())
 	{
+	  if (!changed) {
+	    changed = 1;
+	    set_modflag(1);
+	    undo_checkpoint();
+	  }
+
 	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	  if (o->next && o->next->level > o->level && !o->next->selected) {
+	  if (o->next && o->next->level > o->level && !o->next->selected &&
+	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
 	    ((igroup *)w)->full_resize( w->x(), w->y(), wdt, hgt);
 	  } else {
@@ -367,6 +447,12 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget() && o->parent)
       {
+	if (!changed) {
+	  changed = 1;
+	  set_modflag(1);
+	  undo_checkpoint();
+	}
+
 	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	Fl_Widget *p = ((Fl_Widget_Type *)o->parent)->o;
 	int center2;
@@ -374,7 +460,8 @@ void align_widget_cb(Fl_Widget*, long how)
 	if (w->window() == p) center2 = p->w();
 	else center2 = 2*p->x()+p->w();
 
-	if (o->next && o->next->level > o->level && !o->next->selected) {
+	if (o->next && o->next->level > o->level && !o->next->selected &&
+	    !o->is_menu_button() && !o->is_menu_button()) {
 	  // When resizing a group, make sure we also move the children...
 	  ((igroup *)w)->full_resize((center2-w->w())/2, w->y(), w->w(), w->h());
 	} else {
@@ -389,6 +476,12 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget() && o->parent)
       {
+	if (!changed) {
+	  changed = 1;
+	  set_modflag(1);
+	  undo_checkpoint();
+	}
+
 	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	Fl_Widget *p = ((Fl_Widget_Type *)o->parent)->o;
 	int center2;
@@ -396,13 +489,15 @@ void align_widget_cb(Fl_Widget*, long how)
 	if (w->window() == p) center2 = p->h();
 	else center2 = 2*p->y()+p->h();
 
-	if (o->next && o->next->level > o->level && !o->next->selected) {
+	if (o->next && o->next->level > o->level && !o->next->selected &&
+	    !o->is_menu_button()) {
 	  // When resizing a group, make sure we also move the children...
 	  ((igroup *)w)->full_resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	} else {
 	  // Otherwise, just do the widget...
 	  w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	}
+	set_modflag(1);
 	w->redraw();
 	if (w->window()) w->window()->redraw();
       }
@@ -411,7 +506,34 @@ void align_widget_cb(Fl_Widget*, long how)
 }
 
 
+// Set default widget sizes...
+void widget_size_cb(Fl_Widget *, long size) {
+  // Update the "normal" text size of new widgets...
+  Fl_Widget_Type::default_size = size;
+
+  // Update any selected widgets...
+  int changed = 0;
+  for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+    if (o->selected && o->is_widget()) {
+      if (!changed) {
+	changed = 1;
+	set_modflag(1);
+	undo_checkpoint();
+      }
+
+      Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+      w->labelsize(size);
+      Fl_Font f;
+      int s = (int)size;
+      Fl_Color c;
+      ((Fl_Widget_Type *)o)->textstuff(2, f, s, c);
+
+      w->redraw();
+    }
+}
+
+
 //
-// End of "$Id: align_widget.cxx,v 1.1.2.1.2.6 2004/04/06 18:33:17 easysw Exp $".
+// End of "$Id$".
 //
 

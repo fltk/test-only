@@ -1,5 +1,5 @@
 #
-# "$Id: fltk.spec,v 1.1.2.9.2.20.2.5 2004/03/18 08:00:27 matthiaswm Exp $"
+# "$Id$"
 #
 # RPM spec file for FLTK.
 #
@@ -96,5 +96,5 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/doc/fltk/*
 
 #
-# End of "$Id: fltk.spec,v 1.1.2.9.2.20.2.5 2004/03/18 08:00:27 matthiaswm Exp $".
+# End of "$Id$".
 #

@@ -1,27 +1,27 @@
-/* XPM */
-static char	tile_cmap[3][32] = {
-"O c #FFFFFF",
-"o c #EFEFEF",
-". c #E8E8E8"
-};
-static const char * tile_xpm[] = {
-"16 16 3 1",
-tile_cmap[0],
-tile_cmap[1],
-tile_cmap[2],
-"oooooooooooooooo",
-"................",
-"oooooooooooooooo",
-"OOOOOOOOOOOOOOOO",
-"oooooooooooooooo",
-"................",
-"oooooooooooooooo",
-"OOOOOOOOOOOOOOOO",
-"oooooooooooooooo",
-"................",
-"oooooooooooooooo",
-"OOOOOOOOOOOOOOOO",
-"oooooooooooooooo",
-"................",
-"oooooooooooooooo",
-"OOOOOOOOOOOOOOOO"};
+/* XPM *
+static char	tile_cmap[3][32] = 
+"O c #FFFFFF"
+"o c #EFEFEF"
+". c #E8E8E8
+}
+static const char * tile_xpm[] = 
+"16 16 3 1"
+tile_cmap[0]
+tile_cmap[1]
+tile_cmap[2]
+"oooooooooooooooo"
+"................"
+"oooooooooooooooo"
+"OOOOOOOOOOOOOOOO"
+"oooooooooooooooo"
+"................"
+"oooooooooooooooo"
+"OOOOOOOOOOOOOOOO"
+"oooooooooooooooo"
+"................"
+"oooooooooooooooo"
+"OOOOOOOOOOOOOOOO"
+"oooooooooooooooo"
+"................"
+"oooooooooooooooo"
+"OOOOOOOOOOOOOOOO"}

@@ -134,7 +134,7 @@ class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widge
   Fl_Scrollbar	scrollbar_,		// Vertical scrollbar for documen
 		hscrollbar_;		// Horizontal scrollba
 
-  Fl_Help_Block	*add_block(const char *s, int xx, int yy, int ww, int hh, uchar border = 0)
+  Fl_Help_Block	*add_block(const char *s, int xx, int yy, int ww, int hh, unsigned char border = 0)
   void		add_link(const char *n, int xx, int yy, int ww, int hh)
   void		add_target(const char *n, int yy)
   static int	compare_targets(const Fl_Help_Target *t0, const Fl_Help_Target *t1)

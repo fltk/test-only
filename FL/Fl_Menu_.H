@@ -46,8 +46,9 @@ class FL_EXPORT Fl_Menu_ : public Fl_Widget
 
 protected
 
-  uchar alloc
-  uchar down_box_
+  uchar alloc;
+  Fl_Boxtype down_box_;
+  //uchar down_box_
   uchar textfont_
   uchar textsize_
   unsigned textcolor_

@@ -38,7 +38,6 @@
  * when on is controlled with selection_color(), which defaults
  * to \c FL_YELLOW. *
 class FL_EXPORT Fl_Light_Button : public Fl_Button 
-  FL_STYLE
 
 
 protected
@@ -47,7 +46,8 @@ protected
 
 
 
-public
+public:
+  static Style * default_style();
    virtual int handle(int event)
       /** Creates a new Fl_Light_Button widget using the given \a position,
        * \a size, and \a label string. *

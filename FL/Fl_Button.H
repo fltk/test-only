@@ -50,22 +50,27 @@ extern FL_EXPORT int fl_old_shortcut(const char*)
  * the \a Alt key so that the input field does not eat the event first as an
  * \c FL_KEYBOARD event
  *
+
 class FL_EXPORT Fl_Button : public Fl_Widget 
-  FL_STYLE
+
 
   int shortcut_
   char value_
   char oldval
-  uchar down_box_
+  Fl_Boxtype * down_box_
 
 
 protected
-  uchar style_flags2_
+
 
   virtual void draw()
 
-  enum {DOWN_BOX=1}
+
 public
+
+  class Style
+  static Style * default_style()
+  void style(Style *s )
 
 
   virtual int handle(int event)
@@ -101,10 +106,10 @@ public
      * a "don't care" setting). *
   void shortcut(int s) {shortcut_ = s;
     /** Returns the current down box type, which is drawn when value() is non-zero. *
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;
+  Fl_Boxtype down_box() const;
     /** Sets the down box type. The default value of 0 causes FLTK to figure out
      * the correct matching down version of box(). *
-  void down_box(Fl_Boxtype b) {down_box_ = b; style_flags2_ |= DOWN_BOX;
+  void down_box(Fl_Boxtype b)
 
     /** \deprecated old way to set shortcut *
   void shortcut(const char *s) {shortcut(fl_old_shortcut(s));
@@ -113,10 +118,19 @@ public
     /** \deprecated same as selection_color() *
   void down_color(unsigned c) {selection_color(c);
 
-  char try_down_box(uchar b){if ((style_flags2_ & DOWN_BOX) || (b == down_box_)) return 0; down_box_ = b; return 1;
+  //~ char try_down_box(uchar b){if ((style_flags2_ & DOWN_BOX) || (b == down_box_)) return 0; down_box_ = b; return 1;
 
 
-}
+};
+
+
+#ifdef Fl_Style_H
+#include <FL/Fl_Style.H>
+#endif
+
+
+
+
 
 #endi
 

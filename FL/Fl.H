@@ -41,7 +41,7 @@ class Fl_Image
 struct Fl_Label
 typedef void (Fl_Label_Draw_F)(const Fl_Label*, int,int,int,int, Fl_Align)
 typedef void (Fl_Label_Measure_F)(const Fl_Label*, int&, int&)
-typedef void (Fl_Box_Draw_F)(int,int,int,int, Fl_Color)
+//typedef void (Fl_Box_Draw_F)(int,int,int,int, Fl_Color)
 
 typedef void (*Fl_Timeout_Handler)(void*)
 
@@ -88,11 +88,11 @@ public
   static double version()
 
   // argument parsers
-    /** Consume a single switch from \a argv, starting at word \i i. Returns th
+    /** Consume a single switch from \a argv, starting at word \a i. Returns th
      * number of words eaten (1 or 2, or 0 if it is not recognized) and adds the sam
      * value to \a i. You can use this function if you prefer to control th
      * incrementing through the arguments yourself. *
-  static int arg(int, char**, int&)
+  static int arg(int argc, char** argv, int& i)
     /** FLTK provides an <i>entirely optional</i> command-line switch parser. You don'
      * have to call it if you don't like them! Everything it can do can be done with othe
      * calls to FLTK
@@ -261,8 +261,9 @@ public
   static void event_is_click(int i) {e_is_click = i;} // only 0 works
   static int event_button()	{return e_keysym-FL_Button;
   static int event_state()	{return e_state;
-  static int event_state(int i) {return e_state&i;
-  static int event_key()	{return e_keysym;
+  static int event_state(int i) {return e_state&i;}
+  /** Function returns which key on the keyboard was last pushed. It returns zero if the last event was not a key press or release. *
+  static int event_key()	{return e_keysym;}
   static int event_key(int)
   static int get_key(int)
   static const char* event_text() {return e_text;
@@ -337,14 +338,16 @@ public
   static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype)
   static void set_boxtype(Fl_Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar)
   static void set_boxtype(Fl_Boxtype, Fl_Boxtype from)
-  static Fl_Boxtype add_boxtype(Fl_Box_Draw_F*,uchar,uchar,uchar,uchar)
-  static Fl_Boxtype add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d, Fl_Boxtype down_box)
+  //static Fl_Boxtype add_boxtype(Fl_Box_Draw_F*,uchar,uchar,uchar,uchar)
+  //static Fl_Boxtype add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d, Fl_Boxtype down_box)
 
   static int box_dx(Fl_Boxtype)
   static int box_dy(Fl_Boxtype)
   static int box_dw(Fl_Boxtype)
   static int box_dh(Fl_Boxtype)
-  static int draw_box_active()
+  static int draw_box_active();
+  static int box_index(Fl_Boxtype);
+  static Fl_Boxtype box(int index)
 
   // back compatability
   static void set_abort(void (*f)(const char*,...)) {fatal = f;
@@ -381,7 +384,7 @@ public
   static void do_widget_deletion()
 
 
-  static void redraw_scheme()
+  //static void redraw_scheme()
 }
 
 #endif // !Fl_

@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.5.2.5.2.9.2.5 2004/11/24 16:38:16 rokan Exp $"
+ * "$Id$"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
@@ -164,15 +164,15 @@
  * Do we have various image libraries?
  */
 
-#undef HAVE_LIBPNG
-#undef HAVE_LIBZ
-#undef HAVE_LIBJPEG
+#define HAVE_LIBPNG
+#define HAVE_LIBZ
+#define HAVE_LIBJPEG
 
 /*
  * Which header file do we include for libpng?
  */
 
-#undef HAVE_PNG_H
+#define HAVE_PNG_H
 #undef HAVE_LIBPNG_PNG_H
 
 /*
@@ -200,5 +200,5 @@
 
 
 /*
- * End of "$Id: config.h,v 1.5.2.5.2.9.2.5 2004/11/24 16:38:16 rokan Exp $".
+ * End of "$Id$".
  */

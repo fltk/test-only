@@ -1,9 +1,9 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.4 2004/03/18 08:00:40 matthiaswm Exp $"
+// "$Id$"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,11 +37,11 @@ extern void goto_source_dir(); // in fluid.C
 extern void leave_source_dir(); // in fluid.C
 
 void Fluid_Image::image(Fl_Widget *o) {
-  o->image(img);
+  if (o->window() != o) o->image(img);
 }
 
 void Fluid_Image::deimage(Fl_Widget *o) {
-  o->deimage(img);
+  if (o->window() != o) o->deimage(img);
 }
 
 static int pixmap_header_written = 0;
@@ -212,7 +212,9 @@ Fluid_Image::~Fluid_Image() {
 const char *ui_find_image_name;
 Fluid_Image *ui_find_image(const char *oldname) {
   goto_source_dir();
-  const char *name = fl_file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname);
+/// \todo CRITICAL  fl_file_chooser_ok_label("Use Image");
+  const char *name = fl_file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname,1);
+// fl_file_chooser_ok_label(NULL);
   ui_find_image_name = name;
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_source_dir();
@@ -221,5 +223,5 @@ Fluid_Image *ui_find_image(const char *oldname) {
 
 
 //
-// End of "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.4 2004/03/18 08:00:40 matthiaswm Exp $".
+// End of "$Id$".
 //

@@ -1,104 +1,104 @@
-//
-// "$Id: filename_match.cxx,v 1.5.2.4.2.4.2.3 2004/03/18 08:01:04 matthiaswm Exp $"
-//
-// Pattern matching routines for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2004 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+/
+// "$Id$
+/
+// Pattern matching routines for the Fast Light Tool Kit (FLTK)
+/
+// Copyright 1998-2004 by Bill Spitzak and others
+/
+// This library is free software; you can redistribute it and/o
+// modify it under the terms of the GNU Library General Publi
+// License as published by the Free Software Foundation; eithe
+// version 2 of the License, or (at your option) any later version
+/
+// This library is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty o
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+// Library General Public License for more details
+/
+// You should have received a copy of the GNU Library General Publi
+// License along with this library; if not, write to the Free Softwar
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+// USA
+/
+// Please report all bugs and problems to "fltk-bugs@fltk.org"
+/
 
-/* Adapted from Rich Salz. */
-#include <FL/filename.H>
-#include <ctype.h>
+/* Adapted from Rich Salz. *
+#include <FL/filename.H
+#include <ctype.h
 
-int fl_filename_match(const char *s, const char *p) {
-  int matched;
+int fl_filename_match(const char *s, const char *p) 
+  int matched
 
-  for (;;) {
-    switch(*p++) {
+  for (;;) 
+    switch(*p++) 
 
-    case '?' :	// match any single character
-      if (!*s++) return 0;
-      break;
+    case '?' :	// match any single characte
+      if (!*s++) return 0
+      break
 
-    case '*' :	// match 0-n of any characters
-      if (!*p) return 1; // do trailing * quickly
-      while (!fl_filename_match(s, p)) if (!*s++) return 0;
-      return 1;
+    case '*' :	// match 0-n of any character
+      if (!*p) return 1; // do trailing * quickl
+      while (!fl_filename_match(s, p)) if (!*s++) return 0
+      return 1
 
-    case '[': {	// match one character in set of form [abc-d] or [^a-b]
-      if (!*s) return 0;
-      int reverse = (*p=='^' || *p=='!'); if (reverse) p++;
-      matched = 0;
-      char last = 0;
-      while (*p) {
-	if (*p=='-' && last) {
-	  if (*s <= *++p && *s >= last ) matched = 1;
-	  last = 0;
-	} else {
-	  if (*s == *p) matched = 1;
-	}
-	last = *p++;
-	if (*p==']') break;
-      }
-      if (matched == reverse) return 0;
-      s++; p++;}
-    break;
+    case '[': {	// match one character in set of form [abc-d] or [^a-b
+      if (!*s) return 0
+      int reverse = (*p=='^' || *p=='!'); if (reverse) p++
+      matched = 0
+      char last = 0
+      while (*p) 
+	if (*p=='-' && last) 
+	  if (*s <= *++p && *s >= last ) matched = 1
+	  last = 0
+	} else 
+	  if (*s == *p) matched = 1
+	
+	last = *p++
+	if (*p==']') break
+      
+      if (matched == reverse) return 0
+      s++; p++;
+    break
 
-    case '{' : // {pattern1|pattern2|pattern3}
-    NEXTCASE:
-    if (fl_filename_match(s,p)) return 1;
-    for (matched = 0;;) {
-      switch (*p++) {
-      case '\\': if (*p) p++; break;
-      case '{': matched++; break;
-      case '}': if (!matched--) return 0; break;
-      case '|': case ',': if (matched==0) goto NEXTCASE;
-      case 0: return 0;
-      }
-    }
-    case '|':	// skip rest of |pattern|pattern} when called recursively
-    case ',':
-      for (matched = 0; *p && matched >= 0;) {
-	switch (*p++) {
-	case '\\': if (*p) p++; break;
-	case '{': matched++; break;
-	case '}': matched--; break;
-	}
-      }
-      break;
-    case '}':
-      break;
+    case '{' : // {pattern1|pattern2|pattern3
+    NEXTCASE
+    if (fl_filename_match(s,p)) return 1
+    for (matched = 0;;) 
+      switch (*p++) 
+      case '\\': if (*p) p++; break
+      case '{': matched++; break
+      case '}': if (!matched--) return 0; break
+      case '|': case ',': if (matched==0) goto NEXTCASE
+      case 0: return 0
+      
+    
+    case '|':	// skip rest of |pattern|pattern} when called recursivel
+    case ','
+      for (matched = 0; *p && matched >= 0;) 
+	switch (*p++) 
+	case '\\': if (*p) p++; break
+	case '{': matched++; break
+	case '}': matched--; break
+	
+      
+      break
+    case '}'
+      break
 
-    case 0:	// end of pattern
-      return !*s;
+    case 0:	// end of patter
+      return !*s
 
-    case '\\':	// quote next character
-      if (*p) p++;
-    default:
-      if (tolower(*s) != tolower(*(p-1))) return 0;
-      s++;
-      break;
-    }
-  }
-}
+    case '\\':	// quote next characte
+      if (*p) p++
+    default
+      if (tolower(*s) != tolower(*(p-1))) return 0
+      s++
+      break
+    
+  
 
-//
-// End of "$Id: filename_match.cxx,v 1.5.2.4.2.4.2.3 2004/03/18 08:01:04 matthiaswm Exp $".
-//
+
+/
+// End of "$Id$"
+/

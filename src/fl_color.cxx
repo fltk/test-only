@@ -1,109 +1,109 @@
-//
-// "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.5 2004/03/28 10:30:31 rokan Exp $"
-//
-// Color functions for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2004 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+/
+// "$Id$
+/
+// Color functions for the Fast Light Tool Kit (FLTK)
+/
+// Copyright 1998-2004 by Bill Spitzak and others
+/
+// This library is free software; you can redistribute it and/o
+// modify it under the terms of the GNU Library General Publi
+// License as published by the Free Software Foundation; eithe
+// version 2 of the License, or (at your option) any later version
+/
+// This library is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty o
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+// Library General Public License for more details
+/
+// You should have received a copy of the GNU Library General Publi
+// License along with this library; if not, write to the Free Softwar
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+// USA
+/
+// Please report all bugs and problems to "fltk-bugs@fltk.org"
+/
 
-// Implementation of fl_color(i), fl_color(r,g,b).
-
-
-#  include <FL/Fl.H>
+// Implementation of fl_color(i), fl_color(r,g,b)
 
 
+#  include <FL/Fl.H
 
 
-static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.cxx":
-};
 
 
-unsigned Fl::get_color(Fl_Color i) {
-  if (i & 0xffffff00) return (i);
-  else return fl_cmap[i];
+static unsigned fl_cmap[256] = 
+#include "fl_cmap.h" // this is a file produced by "cmap.cxx"
 }
 
-void Fl::set_color(Fl_Color i, uchar red, uchar green, uchar blue) {
-  Fl::set_color((Fl_Color)(i & 255),
-	((unsigned)red<<24)+((unsigned)green<<16)+((unsigned)blue<<8));
-}
 
-void Fl::get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue) {
-  unsigned c;
+unsigned Fl::get_color(Fl_Color i) 
+  if (i & 0xffffff00) return (i)
+  else return fl_cmap[i]
 
-  if (i & 0xffffff00) c = (unsigned)i;
-  else c = fl_cmap[i];
 
-  red   = uchar(c>>24);
-  green = uchar(c>>16);
-  blue  = uchar(c>>8);
-}
+void Fl::set_color(Fl_Color i, uchar red, uchar green, uchar blue) 
+  Fl::set_color((Fl_Color)(i & 255)
+	((unsigned)red<<24)+((unsigned)green<<16)+((unsigned)blue<<8))
 
-Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) {
-  unsigned rgb1;
-  unsigned rgb2;
-  uchar r, g, b;
 
-  if (color1 & 0xffffff00) rgb1 = color1;
-  else rgb1 = fl_cmap[color1 & 255];
+void Fl::get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue) 
+  unsigned c
 
-  if (color2 & 0xffffff00) rgb2 = color2;
-  else rgb2 = fl_cmap[color2 & 255];
+  if (i & 0xffffff00) c = (unsigned)i
+  else c = fl_cmap[i]
 
-  r = (uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb2>>24))*(1-weight));
-  g = (uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb2>>16))*(1-weight));
-  b = (uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb2>>8))*(1-weight));
+  red   = uchar(c>>24)
+  green = uchar(c>>16)
+  blue  = uchar(c>>8)
 
-  return fl_rgb_color(r, g, b);
-}
 
-Fl_Color fl_inactive(Fl_Color c) {
-  return fl_color_average(c, FL_GRAY, .33f);
-}
+Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) 
+  unsigned rgb1
+  unsigned rgb2
+  uchar r, g, b
 
-Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
-  unsigned c1, c2;
+  if (color1 & 0xffffff00) rgb1 = color1
+  else rgb1 = fl_cmap[color1 & 255]
 
-  if (fg & 0xffffff00) c1 = (unsigned)fg;
-  else c1 = fl_cmap[fg];
+  if (color2 & 0xffffff00) rgb2 = color2
+  else rgb2 = fl_cmap[color2 & 255]
 
-  if (bg & 0xffffff00) c2 = (unsigned)bg;
-  else c2 = fl_cmap[bg];
+  r = (uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb2>>24))*(1-weight))
+  g = (uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb2>>16))*(1-weight))
+  b = (uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb2>>8))*(1-weight))
 
-  if ((c1^c2)&0x80800000)
-    return fg;
-  else if (c2&0x80800000)
-    return FL_BLACK;
-  else
-    return FL_WHITE;
-}
+  return fl_rgb_color(r, g, b)
 
-#ifdef WIN32
-#  include "win/color.cxx"
-#elif defined(__APPLE__)
-#  include "carbon/color.cxx"
-#else
-#  include "xlib/color.cxx"
-#endif
 
-//
-// End of "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.5 2004/03/28 10:30:31 rokan Exp $".
-//
+Fl_Color fl_inactive(Fl_Color c) 
+  return fl_color_average(c, FL_GRAY, .33f)
+
+
+Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) 
+  unsigned c1, c2
+
+  if (fg & 0xffffff00) c1 = (unsigned)fg
+  else c1 = fl_cmap[fg]
+
+  if (bg & 0xffffff00) c2 = (unsigned)bg
+  else c2 = fl_cmap[bg]
+
+  if ((c1^c2)&0x80800000
+    return fg
+  else if (c2&0x80800000
+    return FL_BLACK
+  els
+    return FL_WHITE
+
+
+#ifdef WIN3
+#  include "win/color.cxx
+#elif defined(__APPLE__
+#  include "carbon/color.cxx
+#els
+#  include "xlib/color.cxx
+#endi
+
+/
+// End of "$Id$"
+/

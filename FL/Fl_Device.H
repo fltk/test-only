@@ -111,7 +111,9 @@ protected:
   friend   void fl_yxline(int x, int y, int y1, int x2) 
   friend   void fl_yxline(int x, int y, int y1, int x2, int y3) 
   friend   void fl_arc(int x, int y, int w, int h, double a1, double a2) 
-  friend   void fl_pie(int x, int y, int w, int h, double a1, double a2) 
+  friend   void fl_pie(int x, int y, int w, int h, double a1, double a2) ;
+  friend   void fl_circle(int x, int y, int w, int h) ;
+  friend   void fl_circlef(int x, int y, int w, int h) 
   friend   void fl_begin_points() 
   friend   void fl_begin_line() 
   friend   void fl_begin_loop() 
@@ -186,7 +188,9 @@ protected:
   virtual   void yxline(int x, int y, int y1, int x2, int y3) = 0
 
   virtual   void arc(int x, int y, int w, int h, double a1, double a2) = 0
-  virtual   void pie(int x, int y, int w, int h, double a1, double a2) = 0
+  virtual   void pie(int x, int y, int w, int h, double a1, double a2) = 0;
+  virtual   void circle(int x, int y, int w, int h){ arc(x, y, w, h, 0, 360);}
+  virtual   void circlef(int x, int y, int w, int h){ pie(x, y, w, h, 0, 360);
 
   // "double" (path) primisives should perform drawings with sub-pixel precision on devices which allow tha
   // (such as printers). They also obey transformation matrix -with the exception of transformed_verte

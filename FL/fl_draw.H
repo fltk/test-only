@@ -45,15 +45,34 @@ class Fl_Image
 
 // Label flags..
 FL_EXPORT extern char fl_draw_shortcut
+extern FL_EXPORT Fl_Color fl_color_
 
-// Colors
+
+/** @defgroup drawing Drawing function
+*  This module covers the drawing functions that are provided with FLTK.
+*
+*/
+
+/**	 @name Drawing Colors
+*  @ingroup drawing
+* \copydoc _drawing_colors
+* @{
+*/
+
+/** 
+*Function color
+*
+*
+inline void	fl_color(Fl_Color c){fl_device->color(c);}; // select indexed color
+
+/** @} */
 
 
-inline void	fl_color(Fl_Color c){fl_device->color(c);}; // select indexed colo
 inline void fl_color(int c) {fl_color((Fl_Color)c);} // for back compatabilit
 inline void	fl_color(uchar r, uchar g , uchar b){fl_device->color(r,g,b);}; // select actual colo
-extern FL_EXPORT Fl_Color fl_color_
 inline Fl_Color fl_color(){return fl_device->color();
+
+
 
 
 

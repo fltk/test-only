@@ -59,12 +59,15 @@ class FL_EXPORT Fl_Preferences
 
 public
 
-  enum Root { SYSTEM=0, USER }
+  enum Root {
+    SYSTEM=0, /**< System wide preferences */
+    USER /**< User specific preferences */
+  }
   // enum Type { win32, macos, fltk }
 
     /** The constructor creates a group that manages name/value pairs and child groups
      * Groups are ready for reading and writing at any time. The root argument is eithe
-     * \c Fl_Preferences::USER or \c Fl_Preferences::SYSTEM
+     * Fl_Preferences::USER or Fl_Preferences::SYSTEM
      
      * This constructor creates the base instance for all following entries and read
      * existing databases into memory. The vendor argument is a unique text strin
@@ -77,8 +80,13 @@ public
     /** Create the initial preferences base
      * \arg \a path: an application-supplied pat
      * \arg \a vendor: unique vendor string, e.g. a domain nam
-     * \arg \a application: application nam
-     * \example Fl_Preferences base( "/usr/foo" )
+     * \arg \a application: application name
+     *
+     *
+     * Example:
+     * \cod
+     *  Fl_Preferences base( "/usr/foo" );
+     * \endcod
      *
   Fl_Preferences( const char *path, const char *vendor, const char *application )
     /** This version of the constructor accesses a subgroup in relaton to the

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.11.2.11.2.15.2.8 2004/11/10 00:38:25 rokan Exp $"
+ * "$Id$"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -234,5 +234,5 @@
 #define HAVE_DCBRUSH        1
 
 /*
- * End of "$Id: configh.in,v 1.11.2.11.2.15.2.8 2004/11/10 00:38:25 rokan Exp $".
+ * End of "$Id$".
  */

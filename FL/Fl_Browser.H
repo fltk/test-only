@@ -176,12 +176,12 @@ public
      * \arg \c @@s Use a small (11 point) fon
      * \arg \c @@b Use a bold font (adds FL_BOLD to font
      * \arg \c @@i Use an italic font (adds FL_ITALIC to font
-     * \arg \c @@f or @t Use a fixed-pitch font (sets font to FL_COURIER
+     * \arg \c @@f or @@t Use a fixed-pitch font (sets font to FL_COURIER
      * \arg \c @@c Center the line horizontall
      * \arg \c @@r Right-justify the tex
      * \arg <tt>@@B0, @@B1, ... @@B255</tt> Fill the backgound with fl_color(n
      * \arg <tt>@@C0, @@C1, ... @@C255</tt> Use fl_color(n) to draw the tex
-     * \arg <tt>\@@F0, @@F1, ...</tt> Use fl_font(n) to draw the tex
+     * \arg <tt>@@F0, @@F1, ...</tt> Use fl_font(n) to draw the tex
      * \arg <tt>@@S1, @@S2, ...</tt> Use point size n to draw the tex
      * \arg \c @@u or \c @@_ Underline the text
      * \arg \c @@- draw an engraved line through the middle

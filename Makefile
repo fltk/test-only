@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12.2.6.2.14.2.8 2004/11/09 01:52:29 rokan Exp $"
+# "$Id$"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -100,5 +100,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.12.2.6.2.14.2.8 2004/11/09 01:52:29 rokan Exp $".
+# End of "$Id$".
 #
