@@ -53,26 +53,14 @@ void Window::hotspot(const Widget *widget, bool offscreen) {
 void Window::hotspot(int cx, int cy, bool offscreen) {
   int X,Y; get_mouse(X,Y); X -= cx; Y -= cy;
   if (!offscreen) {
-#ifdef _WIN32
-    int dx, dy, dr, db;
-    CreatedWindow::borders(this, dx, dy, dr, db); dr -= dx; db -= dy;
-#else
-    // We have to guess as to the thickness of the X window manager
-    // borders. This can be determined by querying the server for the
-    // parent window, but I don't bother as most window managers will
-    // force the window onscreen anyway.
-    const int dx = 1;
-    const int dy = 20;
-    const int dr = 1;
-    const int db = 1;
-#endif
+    Rectangle r; borders(&r);
     const Monitor& monitor = Monitor::find(X,Y);
-    if (X+w()+dr > monitor.r()) X = monitor.r()-dr-w();
-    if (X < monitor.x()+dx) X = monitor.x()+dx;
+    if (X+w()+r.r() > monitor.r()) X = monitor.r()-r.r()-w();
+    if (X+r.x() < monitor.x()) X = monitor.x()-r.x();
     if (X+w() > monitor.r()) X = monitor.r()-w();
     if (X < monitor.x()) X = monitor.x();
-    if (Y+h()+db > monitor.h()) Y = monitor.h()-db-h();
-    if (Y < monitor.y()+dy) Y = monitor.y()+dy;
+    if (Y+h()+r.b() > monitor.h()) Y = monitor.h()-r.b()-h();
+    if (Y+r.y() < monitor.y()) Y = monitor.y()-r.y();
     if (Y+h() > monitor.h()) Y = monitor.h()-h();
     if (Y < monitor.y()) Y = monitor.y();
   }

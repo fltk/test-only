@@ -1187,6 +1187,17 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
 
 ////////////////////////////////////////////////////////////////
 
+void Window::borders( fltk::Rectangle *r ) const {
+  // dummy implementation that guesses, made this match Gnome...
+  if (!this->border() || this->override() || this->parent()) {
+    r->set(0,0,0,0);
+  } else if (maxw != minw || maxh != minh) { // resizable
+    r->set(-4,-21,4+4,21+4);
+  } else {
+    r->set(-4,-21,4+4,21+4);
+  }
+}
+
 /**
  * Resizes the actual system window in response to a resize() call from
  * the program.
@@ -1555,6 +1566,12 @@ void Window::flush() {
 
 //+++ verify port to FLTK2
 void Window::free_backbuffer() {}
+
+bool fltk::enable_tablet_events() {
+  return false;
+}
+
+
 
 ////////////////////////////////////////////////////////////////
 // Cut & paste.

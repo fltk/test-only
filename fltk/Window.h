@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.7 2004/11/17 08:48:04 spitzak Exp $"
+// "$Id$"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -108,6 +108,8 @@ public:
   static void first(Window*);
   Window* next();
 
+  void borders( Rectangle *r ) const;
+
 protected:
   virtual void create();
   static const Window *current_;
@@ -140,5 +142,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.7 2004/11/17 08:48:04 spitzak Exp $".
+// End of "$Id$".
 //

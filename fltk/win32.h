@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.29 2005/01/24 17:25:04 spitzak Exp $"
+// "$Id$"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -131,7 +131,6 @@ public:
   const Widget* cursor_for;
   static CreatedWindow* first;
   static CreatedWindow* find(const Window* window) {return window->i;}
-  static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
   void set_minmax(LPMINMAXINFO minmax);
   static void create(Window*);
 };
@@ -150,5 +149,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.29 2005/01/24 17:25:04 spitzak Exp $".
+// End of "$Id$".
 //

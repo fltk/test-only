@@ -142,7 +142,7 @@ static bool fl_load_imm32() {
     = GetProcAddress(hLibImm, "ImmSetCompositionWindow");
   *(FARPROC*)&pfnImmAssociateContext
     = GetProcAddress(hLibImm, "ImmAssociateContext");
-  
+
   if (!pfnImmGetContext ||
       !pfnImmReleaseContext ||
       !pfnImmSetCompositionFontW ||
@@ -389,7 +389,7 @@ static inline int fl_wait(double time_to_wait) {
       // This is used by awake() and by WndProc() in an attempt
       // to get wait() to return. That does not always work
       // unfortunately, as Windoze calls WndProc directly sometimes.
-      // If that happens it gives up and calls flush() 
+      // If that happens it gives up and calls flush()
       if (msg.wParam) thread_message_ = (void*)msg.wParam;
     }
     // WM_MAKEWAITRETURN is used by WndProc to try to make wait()
@@ -629,7 +629,7 @@ static HCTX wintab_ctx = 0;
 static bool stylus_data_valid = false;
 static float pressure_add, pressure_mul;
 
-// this class makes sure that the tablet resources are relesed, even 
+// this class makes sure that the tablet resources are relesed, even
 // if the application crashes!
 class Wintab32MustUnload {
 public:
@@ -789,7 +789,7 @@ bool fltk::enable_tablet_events() {
 ////////////////////////////////////////////////////////////////
 // Determite if windows has unicode capability
 
-int has_unicode() 
+int has_unicode()
 {
   static int has_unicode = -1;
   if (has_unicode == -1) {
@@ -827,11 +827,11 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
       // We might want to use CF_TEXT if there are any illegal UTF-8
       // characters so the bytes are preserved?
       if (has_unicode()) {
-        // w2k/xp
-        SetClipboardData(CF_UNICODETEXT, NULL);
+	// w2k/xp
+	SetClipboardData(CF_UNICODETEXT, NULL);
       } else {
-        // w9x
-        SetClipboardData(CF_TEXT, NULL);
+	// w9x
+	SetClipboardData(CF_TEXT, NULL);
       }
       CloseClipboard();
     }
@@ -933,10 +933,10 @@ HANDLE fl_global_selection(int clipboard) {
 // Clipboard format: CF_TEXT
 HANDLE fl_global_selection_ansi(int clipboard) {
   //printf("fl_global_selection_ansi(%d)\n", clipboard);
-  int n = utf8tomb(selection_buffer[clipboard], selection_length[clipboard], 0, 0);  
+  int n = utf8tomb(selection_buffer[clipboard], selection_length[clipboard], 0, 0);
   HANDLE h = GlobalAlloc(GHND, n+1);
   LPSTR p = (LPSTR)GlobalLock(h);
-  utf8tomb(selection_buffer[clipboard], selection_length[clipboard], p, n+1);    
+  utf8tomb(selection_buffer[clipboard], selection_length[clipboard], p, n+1);
   GlobalUnlock(h);
   return h;
 }
@@ -990,8 +990,8 @@ public:
     if( !pDataObj ) return E_INVALIDARG;
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
     // check if FLTK handles this drag and return if it can't (i.e. BMP drag without filename)
-    POINT ppt; 
-    e_x_root = ppt.x = pt.x; 
+    POINT ppt;
+    e_x_root = ppt.x = pt.x;
     e_y_root = ppt.y = pt.y;
     HWND hWnd = WindowFromPoint( ppt );
     Window *target = find( hWnd );
@@ -1010,8 +1010,8 @@ public:
     flush(); // get the display to update for local drags
     return S_OK;
   }
-  HRESULT STDMETHODCALLTYPE DragOver( DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {    
-		if ( px==pt.x && py==pt.y ) 
+  HRESULT STDMETHODCALLTYPE DragOver( DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
+		if ( px==pt.x && py==pt.y )
     {
       *pdwEffect = lastEffect;
       return S_OK;
@@ -1022,7 +1022,7 @@ public:
       return S_OK;
     }
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
-    e_x_root = pt.x; 
+    e_x_root = pt.x;
     e_y_root = pt.y;
     if (dnd_target_window) {
       e_x = e_x_root-dnd_target_window->x();
@@ -1031,7 +1031,7 @@ public:
     // Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
     if ( handle( DND_DRAG, dnd_target_window ) )
       *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
-    else 
+    else
       *pdwEffect = DROPEFFECT_NONE;
     px = pt.x; py = pt.y;
     lastEffect = *pdwEffect;
@@ -1052,7 +1052,7 @@ public:
       return S_OK;
     Window *target_window = dnd_target_window;
     dnd_target_window = 0;
-    e_x_root = pt.x; 
+    e_x_root = pt.x;
     e_y_root = pt.y;
     if (target_window) {
       e_x = e_x_root-target_window->x();
@@ -1126,7 +1126,7 @@ public:
 	char* buffer = new char[nn+1];
 	e_length = nn;
 	char *dst = buffer;
-        e_text = buffer;
+	e_text = buffer;
 	for ( i=0; i<nf; i++ ) {
 	  n = DragQueryFileA( hdrop, i, dst, nn );
 	  dst += n;
@@ -1203,7 +1203,7 @@ static bool mouse_event(Window *window, int what, int button,
   e_state = state;
 
   // make the stylus data produce something useful if there's no pen
-  if (!stylus_data_valid) { 
+  if (!stylus_data_valid) {
     e_pressure = e_state&BUTTON(1) ? 1.0f : 0.0f;
     e_x_tilt = e_y_tilt = 0.0f;
     e_device = DEVICE_MOUSE;
@@ -1534,30 +1534,30 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       e_clicks = 0;
     }
     lastkeysym = e_keysym;
-    
+
     // translate to text:
-    static char buffer[31]; // must be big enough for fltk::compose() output    
+    static char buffer[31]; // must be big enough for fltk::compose() output
     static char dbcsbuf[3];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) {
 	buffer[0] = '\r';
 	e_length = 1;
-      } else if (has_unicode()) 			
+      } else if (has_unicode())
       {
 	// If we have registered UNICODE window under NT4, 2000, XP
 	// We get WCHAR as wParam
-	e_length = utf8encode((unsigned short)wParam, &buffer[0]);								
+	e_length = utf8encode((unsigned short)wParam, &buffer[0]);
       } else {
-        if (!dbcsbuf[0] && IsDBCSLeadByte((unsigned char)wParam)) {
-          dbcsbuf[0] = (char)wParam;
+	if (!dbcsbuf[0] && IsDBCSLeadByte((unsigned char)wParam)) {
+	  dbcsbuf[0] = (char)wParam;
 	  break;
 	}
 	int dbcsl = 1;
 	if(dbcsbuf[0]) {
 	  dbcsbuf[1] = (unsigned char) wParam;
 	  dbcsl = 2;
-      	} else {
-     	  dbcsbuf[0] = (unsigned char) wParam;
+	} else {
+	  dbcsbuf[0] = (unsigned char) wParam;
 	}
 	dbcsbuf[2] = 0;
 	e_length = utf8frommb(buffer, sizeof(buffer), dbcsbuf, dbcsl);
@@ -1570,7 +1570,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     buffer[e_length] = 0;
     e_text = buffer;
-		
+
     // for (int i = lParam&0xff; i--;)
     if (window) while (window->parent()) window = window->window();
     int r = handle(KEY,window);
@@ -1612,20 +1612,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     break;
 
-  case WM_SIZE:
-    if (window && !window->parent()) {
-      if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) { // iconize
-	CreatedWindow::find(window)->wait_for_expose = true;
-      } else { // resize, deiconize
-	// supposedly a Paint event will come in turn off iconize indicator
-	if (window->resize(window->x(), window->y(),
-			   LOWORD(lParam), HIWORD(lParam)))
-	  resize_from_system = window;
-      }
-    }
-    MakeWaitReturn();
-    break;
-
   case WM_MAKEWAITRETURN:
     // This will be called if MakeWaitReturn fails because Stoopid Windows
     // called the WndProc directly. Instead do the best we can, which is
@@ -1633,6 +1619,44 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     flush();
     break;
 
+  case WM_WINDOWPOSCHANGING:
+    {
+      if (!window || window->parent()) break; // ignore child windows
+      fltk::Rectangle r; window->borders(&r);
+
+      WINDOWPOS *pos = (WINDOWPOS*)lParam;
+
+      fltk::Rectangle newRect;
+      if ( pos->flags & SWP_NOMOVE ) {
+	newRect.x( window->x() );
+	newRect.y( window->y() );
+      } else {
+	newRect.x( pos->x-r.x() );
+	newRect.y( pos->y-r.y() );
+      }
+      if ( pos->flags & SWP_NOSIZE ) {
+	newRect.w( window->w() );
+	newRect.h( window->h() );
+      } else {
+	newRect.w( pos->cx-r.w() );
+	newRect.h( pos->cy-r.h() );
+      }
+
+      if ( window->resize( newRect.x(), newRect.y(), newRect.w(), newRect.h() ) ) {
+	// FIXME do we need the line below??
+	// resize_from_system = window;
+	window->layout();
+	pos->x = window->x()+r.x();
+	pos->y = window->y()+r.y();
+	pos->cx = window->w()+r.w();
+	pos->cy = window->h()+r.h();
+      }
+    }
+    break;
+
+#if 0
+    // This was here before the WM_WINDOWPOSCHANGING case took care of
+    // it all.
   case WM_MOVE:
     if (!window || window->parent()) break; // ignore child windows
 #if 1
@@ -1651,6 +1675,21 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #endif
     MakeWaitReturn();
     break;
+
+  case WM_SIZE:
+    if (window && !window->parent()) {
+      if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) { // iconize
+	CreatedWindow::find(window)->wait_for_expose = true;
+      } else { // resize, deiconize
+	// supposedly a Paint event will come in turn off iconize indicator
+	if (window->resize(window->x(), window->y(),
+			   LOWORD(lParam), HIWORD(lParam)))
+	  resize_from_system = window;
+      }
+    }
+    MakeWaitReturn();
+    break;
+#endif
 
   case WM_SETCURSOR:
     if (window && LOWORD(lParam) == HTCLIENT) {
@@ -1737,7 +1776,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       e_y_tilt = cosf(a) * b;
       //++ incidently, the device numbers are correct for pen and eraser on Wacom
       //++ however, this code must be updated for other devices to function properly
-      e_device = pkt.pkCursor; 
+      e_device = pkt.pkCursor;
     } }
     return 1;
 
@@ -1755,34 +1794,23 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 ////////////////////////////////////////////////////////////////
 
-/**
- * Sets the 4 return values to the thickness of the window border,
- * and returns the value to put into the window style. This is used
- * so that window positions are specified for the contents of the
- * window, rather than for the border, to match how X works.
- */
-int CreatedWindow::borders(const Window* window,
-			   int& dx,int& dy,int& dw,int& dh)
+void Window::borders( fltk::Rectangle *r ) const
 {
-  if (!window->border() || window->override() || window->parent()) {
-    dx = dy = dw = dh = 0;
-    return WS_POPUP;
-  } else if (window->maxw != window->minw || window->maxh != window->minh) { // resizable
-    dx = GetSystemMetrics(SM_CXSIZEFRAME);
-    dw = 2*dx;
+  if (!this->border() || this->override() || this->parent()) {
+    r->set(0,0,0,0);
+    return;
+  } else if (maxw != minw || maxh != minh) { // resizable
+    int dx = GetSystemMetrics(SM_CXSIZEFRAME);
     int bt = GetSystemMetrics(SM_CYCAPTION);
     int by = GetSystemMetrics(SM_CYSIZEFRAME);
-    dy = bt+by;
-    dh = bt+2*by;
-    return WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION;
+    r->set(-dx, -(bt+by), 2*dx, bt+2*by);
+    return;
   } else {
-    dx = GetSystemMetrics(SM_CXFIXEDFRAME);
-    dw = 2*dx;
+    int dx = GetSystemMetrics(SM_CXFIXEDFRAME);
     int bt = GetSystemMetrics(SM_CYCAPTION);
     int by = GetSystemMetrics(SM_CYFIXEDFRAME);
-    dy = bt+by;
-    dh = bt+2*by;
-    return WS_DLGFRAME | WS_CAPTION;
+    r->set(-dx, -(bt+by), 2*dx, bt+2*by);
+    return;
   }
 }
 
@@ -1808,8 +1836,9 @@ void Window::layout() {
      for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
        real_x += p->x(); real_y += p->y();
      }
-     int dx, dy, dw, dh; CreatedWindow::borders(this, dx, dy, dw, dh);
-     SetWindowPos(i->xid, 0, real_x-dx, real_y-dy, w()+dw, h()+dh, flags);
+     fltk::Rectangle r;
+     borders(&r);
+     SetWindowPos(i->xid, 0, real_x+r.x(), real_y+r.y(), w()+r.w(), h()+r.h(), flags);
      if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
   }
 }
@@ -1830,7 +1859,7 @@ static void register_unicode(HICON icon)
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
   wc.lpfnWndProc = (WNDPROC)WndProc;
   wc.cbClsExtra = wc.cbWndExtra = 0;
-  wc.hInstance = xdisplay;  
+  wc.hInstance = xdisplay;
   wc.hIcon = wc.hIconSm = icon;
   if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
   wc.hCursor = default_cursor;
@@ -1864,7 +1893,7 @@ static void register_ansi(HICON icon)
   wc.lpszMenuName = NULL;
   wc.lpszClassName = "fltk";
   wc.cbSize = sizeof(wc);
-  RegisterClassExA(&wc);	
+  RegisterClassExA(&wc);
   // This is needed or multiple DLL's get confused (?):
   // No, doing this makes none of the windows appear:
   //UnregisterClass(wc.lpszClassName, xdisplay);
@@ -1875,20 +1904,20 @@ static void register_ansi(HICON icon)
 void CreatedWindow::create(Window* window) {
 
   static bool registered = false;
-  if (!registered) {		
+  if (!registered) {
     registered = true;
-		
+
     HICON icon = (HICON)window->icon();
     if (!icon) {
       icon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(101),
-                              IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
+			      IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
       if (!icon) icon = LoadIcon(NULL, IDI_APPLICATION);
     }
     if(has_unicode()) {
       register_unicode(icon);
     } else {
       register_ansi(icon);
-    }	  
+    }
 
 #if USE_DRAGDROP
     OleInitialize(0L);
@@ -1905,12 +1934,11 @@ void CreatedWindow::create(Window* window) {
 
   int xp = window->x();
   int yp = window->y();
-
-  int dx, dy, dw, dh;
+  int wp = window->w();
+  int hp = window->h();
 
   if (window->parent()) {
 
-    dx=dy=dw=dh=0;
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     Widget* p = window->parent();
@@ -1924,18 +1952,26 @@ void CreatedWindow::create(Window* window) {
 
     // Ideally window should be above everything including taskbar, not
     // raise anything, and not alter the keyboard focus!
-    dx=dy=dw=dh=0;
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_POPUP;
     styleEx = WS_EX_LEFT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
     parent = 0;
 
   } else {
 
-    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx,dy,dw,dh);
+    if (!window->border())
+      style = WS_POPUP;
+    else if (window->maxw != window->minw || window->maxh != window->minh)
+      style = WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION;
+    else
+      style = WS_DLGFRAME | WS_CAPTION;
+    style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    fltk::Rectangle r; window->borders(&r);
     if (!window->contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
-    if (xp != USEDEFAULT) xp -= dx;
-    if (yp != USEDEFAULT) yp -= dy;
+    if (xp != USEDEFAULT) xp += r.x();
+    if (yp != USEDEFAULT) yp += r.y();
+    wp += r.w();
+    hp += r.h();
     if (window->child_of() && window->child_of()->shown()) {
       parent = window->child_of()->i->xid;
     } else if (fl_mdi_window) {
@@ -1961,8 +1997,8 @@ void CreatedWindow::create(Window* window) {
   else ucs_name[0] = 0;
 
   x->xid = __CreateWindowExW(styleEx,
-                             L"fltk", ucs_name, style,
-			     xp, yp, window->w()+dw, window->h()+dh,
+			     L"fltk", ucs_name, style,
+			     xp, yp, wp, hp,
 			     parent,
 			     NULL, // menu
 			     xdisplay,
@@ -2041,17 +2077,17 @@ void Window::size_range_() {
 
 void CreatedWindow::set_minmax(LPMINMAXINFO minmax)
 {
-  int dx, dy, dw, dh; borders(window, dx, dy, dw, dh);
+  fltk::Rectangle r; window->borders(&r);
 
-  minmax->ptMinTrackSize.x = window->minw + dw;
-  minmax->ptMinTrackSize.y = window->minh + dh;
+  minmax->ptMinTrackSize.x = window->minw + r.w();
+  minmax->ptMinTrackSize.y = window->minh + r.h();
   if (window->maxw) {
-    minmax->ptMaxTrackSize.x = window->maxw + dw;
-    minmax->ptMaxSize.x = window->maxw + dw;
+    minmax->ptMaxTrackSize.x = window->maxw + r.w();
+    minmax->ptMaxSize.x = window->maxw + r.w();
   }
   if (window->maxh) {
-    minmax->ptMaxTrackSize.y = window->maxh + dw;
-    minmax->ptMaxSize.y = window->maxh + dw;
+    minmax->ptMaxTrackSize.y = window->maxh + r.h();
+    minmax->ptMaxSize.y = window->maxh + r.h();
   }
 }
 
@@ -2180,7 +2216,7 @@ void Window::flush() {
 	set_damage(DAMAGE_ALL);
 	draw();
       } else {
-        // draw all the changed widgets:
+	// draw all the changed widgets:
 	if (damage & ~DAMAGE_EXPOSE) {
 	  set_damage(damage & ~DAMAGE_EXPOSE);
 	  draw();
@@ -2212,7 +2248,7 @@ void Window::flush() {
     if (intersect_with_clip(r))
       BitBlt(dc, r.x(), r.y(), r.w(), r.h(), i->bdc, r.x(), r.y(), SRCCOPY);
 
-    if (i->overlay) draw_overlay();    
+    if (i->overlay) draw_overlay();
     clip_region(0);
 
   }  else {
@@ -2229,7 +2265,7 @@ void Window::flush() {
       set_damage(DAMAGE_EXPOSE); draw();
       clip_region(0);
     }
-  }  
+  }
 }
 
 /*! Get rid of extra storage created by drawing when double_buffer() was
@@ -2272,7 +2308,7 @@ static inline void CVT2ANSI(LPCWSTR src, char dst[], int dstlen) {
   // msdn documentation claims it does.
   int len = 0;
   if (src && *src)
-    len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
+    len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL);
   dst[len] = 0;
 }
 

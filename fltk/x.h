@@ -41,7 +41,8 @@
 #if defined(_WIN32) && !USE_X11
 # include "win32.h"
 
-#elif USE_QUARTZ
+#elif defined(__APPLE__) && !USE_X11
+# define USE_QUARTZ 1
 # include "mac.h"
 
 #else

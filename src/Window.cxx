@@ -836,6 +836,18 @@ Window::~Window() {
   destroy();
 }
 
+/** \fn void Window::borders( Rectangle *r ) const
+
+  Rectangle is set to the the size of the borders that will be added
+  around this window. This is done by querying the window system.
+  Because it is more convienent for most code the result is actually
+  the rectangle that would be around the border if this window was
+  zero in size and placed at 0,0. x,y are typically negative and w,h
+  are typically positive. To get the actual rectangle around your
+  window, add these values to the window's size.
+*/
+// Implementation in the system-specific code
+
 //
 // End of "$Id$".
 //

@@ -28,6 +28,7 @@
 
 #if USE_QUARTZ
 # include "osx/clip.cxx"
+# include <string.h>
 #else
 
 #include <fltk/Window.h>
