@@ -4589,6 +4589,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\src\shortcuts.cxx">
+		</File>
+		<File
 			RelativePath="..\..\src\slowarrow.h">
 		</File>
 		<File

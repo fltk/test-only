@@ -36,10 +36,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkd.lib wsock32.lib"
-				OutputFile="../test/color_chooserd.exe"
+				OutputFile="../../test/color_chooser_d.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\color_chooser_/color_chooserd.pdb"
@@ -100,10 +100,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk.lib wsock32.lib"
-				OutputFile="../test/color_chooser.exe"
+				OutputFile="../../test/color_chooser.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				ProgramDatabaseFile=".\Release/color_chooser.pdb"
 				TargetMachine="1"/>
@@ -162,10 +162,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkd.lib wsock32.lib"
-				OutputFile="../test/color_chooserd.exe"
+				OutputFile="../test/color_chooser_d.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\color_chooser___Win32_Debug_MinSize/color_chooserd.pdb"
@@ -211,7 +211,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,..,../visualc"
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;_MSC_DLL"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -226,10 +226,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk.lib wsock32.lib"
-				OutputFile="../test/color_chooser.exe"
+				OutputFile="../../test/color_chooser.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				ProgramDatabaseFile=".\color_chooser___Win32_Release_MinSize/color_chooser.pdb"
 				TargetMachine="1"/>
@@ -267,37 +267,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\color_chooser.cxx">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
+			RelativePath="..\..\test\color_chooser.cxx">
 		</File>
 	</Files>
 	<Globals>

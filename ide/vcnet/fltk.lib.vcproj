@@ -122,6 +122,7 @@
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="NDEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
+				KeepComments="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
@@ -4783,6 +4784,9 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\src\shortcuts.cxx">
 		</File>
 		<File
 			RelativePath="..\..\src\slowarrow.h">
