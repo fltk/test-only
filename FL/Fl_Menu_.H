@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.19 2000/02/14 11:32:35 bill Exp $"
+// "$Id: Fl_Menu_.H,v 1.20 2000/03/17 09:49:56 bill Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -103,7 +103,7 @@ public:
 
   // in fltk 1.0 these returned/took an Fl_Menu_Item*:
   Fl_Widget* mvalue() {return item();}
-  int value(Fl_Widget* o) {item(o);}
+  void value(Fl_Widget* o) {item(o);}
 
   const char *text(int i) const {return i >= 0 ? child(i)->label() : 0;}
   const char *text() const {return text(value());}
@@ -118,5 +118,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.19 2000/02/14 11:32:35 bill Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.20 2000/03/17 09:49:56 bill Exp $".
 //

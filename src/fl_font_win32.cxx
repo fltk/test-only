@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.20 2000/01/11 00:20:15 mike Exp $"
+// "$Id: fl_font_win32.cxx,v 1.21 2000/03/17 09:50:10 bill Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Fl_FontSize::Fl_FontSize(const char* name, int size) {
+Fl_FontSize::Fl_FontSize(const char* name, int size, int encoding) {
   int weight = FW_NORMAL;
   int italic = 0;
   switch (*name++) {
@@ -49,7 +49,7 @@ Fl_FontSize::Fl_FontSize(const char* name, int size) {
     italic,
     FALSE,	        // underline attribute flag 
     FALSE,	        // strikeout attribute flag 
-    DEFAULT_CHARSET,    // character set identifier (this should use encoding)
+    encoding,		// character set identifier
     OUT_DEFAULT_PRECIS,	// output precision 
     CLIP_DEFAULT_PRECIS,// clipping precision 
     DEFAULT_QUALITY,	// output quality 
@@ -111,21 +111,25 @@ Fl_Font_ fl_fonts[] = {
 
 HFONT fl_xfont;
 
+// Static variable for the default encoding:
+const char *fl_encoding = (const char*)DEFAULT_CHARSET;
+
 void fl_font(Fl_Font font, unsigned size) {
   fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
 }
 
 void fl_font(Fl_Font font, unsigned size, const char* encoding) {
-  // CET - FIXME - Are we doing this encoding stuff on Windows?
-  if (font == fl_font_ && size == fl_size_) return;
+  if (font == fl_font_ && size == fl_size_ &&
+      fl_fontsize->encoding == (int)encoding) return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
   for (f = font->first; f; f = f->next)
-    if (f->minsize <= size && f->maxsize >= size) break;
+    if (f->minsize <= size && f->maxsize >= size &&
+	f->encoding == (int)encoding) break;
   if (!f) {
-    f = new Fl_FontSize(font->name_, size);
+    f = new Fl_FontSize(font->name_, size, (int)encoding);
     f->next = font->first;
     ((Fl_Font_*)font)->first = f;
   }
@@ -170,5 +174,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.20 2000/01/11 00:20:15 mike Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.21 2000/03/17 09:50:10 bill Exp $".
 //

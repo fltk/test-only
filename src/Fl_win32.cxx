@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.92 2000/03/08 05:18:31 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.93 2000/03/17 09:50:09 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -868,8 +868,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
       parent = fl_modal_for->i->xid;
     } else {
       parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
-      if (w->border()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
     }
+    if (!w->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
   }
 
   Fl_X* x = new Fl_X;
@@ -1126,5 +1126,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.92 2000/03/08 05:18:31 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.93 2000/03/17 09:50:09 bill Exp $".
 //

@@ -36,6 +36,16 @@ extern void hotspot_cb(Fl_Light_Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 extern void tooltip_cb(Fl_Input*, void*);
+extern void x_cb(Fl_Value_Input*, void*);
+extern Fl_Value_Input *widget_x;
+extern void y_cb(Fl_Value_Input*, void*);
+extern Fl_Value_Input *widget_y;
+extern void width_cb(Fl_Value_Input*, void*);
+extern Fl_Value_Input *widget_width;
+extern void height_cb(Fl_Value_Input*, void*);
+extern Fl_Value_Input *widget_height;
+extern void set_xy_cb(Fl_Light_Button*, void*);
+extern Fl_Light_Button *set_xy;
 #include <FL/Fl_Choice.H>
 extern Fl_Menu_Item boxmenu[];
 extern void box_cb(Fl_Choice*, void*);

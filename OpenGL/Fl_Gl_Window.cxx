@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.3 2000/03/02 20:47:08 carl Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.4 2000/03/17 09:49:59 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -171,7 +171,8 @@ void Fl_Gl_Window::flush() {
       if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !valid()) draw();
       // we use a seperate context for the copy because rasterpos must be 0
       // and depth test needs to be off:
-      static GLXContext ortho_context;
+      static GLXContext ortho_context = 0;
+      static Fl_Gl_Window* ortho_window = 0;
       if (!ortho_context) {
 #ifdef WIN32
 	ortho_context = wglCreateContext(Fl_X::i(this)->private_dc);
@@ -181,7 +182,8 @@ void Fl_Gl_Window::flush() {
 	save_valid = 0;
       }
       fl_set_gl_context(this, ortho_context);
-      if (!save_valid) {
+      if (!save_valid || ortho_window != this) {
+	ortho_window = this;
 	glDisable(GL_DEPTH_TEST);
 	glReadBuffer(GL_BACK);
 	glDrawBuffer(GL_FRONT);
@@ -286,5 +288,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.3 2000/03/02 20:47:08 carl Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.4 2000/03/17 09:49:59 bill Exp $".
 //

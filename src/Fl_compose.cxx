@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.3 2000/02/29 21:59:45 mike Exp $"
+// "$Id: Fl_compose.cxx,v 1.4 2000/03/17 09:50:08 bill Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -132,7 +132,7 @@ int Fl::compose(int& del) {
 #endif
 
   // Only insert non-control characters:
-  if (e_length && (ascii&~31)) {compose_state = 0; return 1;}
+  if (e_length && (ascii & ~31 && ascii != 127)) {compose_state = 0; return 1;}
 
   return 0;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.38 2000/02/14 11:32:54 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.39 2000/03/17 09:50:08 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -144,6 +144,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     int H = (horizontal() ? h : w);
     int mx = (horizontal() ? Fl::event_x()-x : Fl::event_y()-y);
     int S = slider_size(W,H);
+    if (W <= S) return 1;
     int X;
     static int offcenter;
     if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
@@ -241,5 +242,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.38 2000/02/14 11:32:54 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.39 2000/03/17 09:50:08 bill Exp $".
 //

@@ -9,7 +9,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {751 364 380 375} resizable hotspot visible
+    xywh {549 155 380 375} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
       callback propagate_tabs open
@@ -17,7 +17,7 @@ Function {make_widget_panel()} {open
     } {
       Fl_Group {} {
         label GUI
-        callback propagate_group
+        callback propagate_group open
         xywh {10 35 360 295} resizable
       } {
         Fl_Input {} {
@@ -108,92 +108,92 @@ label.  This is slower so it should be left off if label will fit}
           label {X Class:}
           callback xclass_cb
           tooltip {The X class name which should be used for this widget.  This can be used to choose icons.}
-          xywh {90 130 90 20} when 1
+          xywh {90 170 90 20} when 1
         }
         Fl_Light_Button {} {
           label Border
           callback border_cb
           tooltip {Enable the window manager border}
-          xywh {180 130 55 20} labelsize 10
+          xywh {180 170 55 20} labelsize 10
         }
         Fl_Light_Button {} {
           label Modal
           callback modal_cb
           tooltip {This window will stay on top of others in the
 application and will prevent events from going to other windows.}
-          xywh {235 130 55 20} labelsize 10
+          xywh {235 170 55 20} labelsize 10
         }
         Fl_Light_Button {} {
           label Nonmodal
           callback non_modal_cb
           tooltip {This window will stay on top of others in the application.}
-          xywh {290 130 70 20} labelsize 10
+          xywh {290 170 70 20} labelsize 10
         }
         Fl_Value_Input {} {
           label {Value:}
           callback value_cb
           tooltip {The initial value (integer) of this widget}
-          xywh {90 135 55 20} align 4101 hide labelsize 10
+          xywh {90 170 55 20} align 4101 hide labelsize 10
         }
         Fl_Value_Input {} {
           label {Minimum:}
           callback min_cb
           tooltip {The minimum value for this valuator}
-          xywh {145 135 55 20} align 4101 hide labelsize 10
+          xywh {145 170 55 20} align 4101 hide labelsize 10
         }
         Fl_Value_Input {} {
           label {Maximum:}
           callback max_cb
           tooltip {The maximum value for this valuator}
-          xywh {200 135 55 20} align 4101 hide labelsize 10 value 1
+          xywh {200 170 55 20} align 4101 hide labelsize 10 value 1
         }
         Fl_Value_Input {} {
           label {Size:}
           callback slider_size_cb
           tooltip {The size of the scroller}
-          xywh {255 135 55 20} align 4101 hide labelsize 10
+          xywh {255 170 55 20} align 4101 hide labelsize 10
         }
         Fl_Value_Input {} {
           label {Step:}
           callback step_cb
           tooltip {Amount to change this valuator when mouse moves 1 pixel}
-          xywh {310 135 50 20} align 4101 hide labelsize 10
+          xywh {310 170 50 20} align 4101 hide labelsize 10
         }
         Fl_Group {} {
           label {Attributes:}
           callback propagate_group open
-          xywh {90 155 270 25} align 4
+          xywh {90 195 270 20} align 4
         } {
           Fl_Light_Button {} {
             label Visible
             callback visible_cb
             tooltip {Determines whether the widget is initially visible}
-            xywh {90 160 70 20} labelsize 10
+            xywh {90 195 70 20} labelsize 10
           }
           Fl_Light_Button {} {
             label Active
             callback active_cb
             tooltip {Determines whether the widget is initially active (enabled)}
-            xywh {160 160 65 20} labelsize 10
+            xywh {160 195 65 20} labelsize 10
           }
           Fl_Light_Button {} {
             label Resizable
             callback resizable_cb
             tooltip {If on, this widget and all it's parents are resizable.  When the parent resizes it moves/resizes all it's children so that this widget's edges remain the same distance from all four sides of the parent.  If this is off this widget will not resize, unless it overlaps a resizable sibling.}
-            xywh {225 160 70 20} when 1 labelsize 10
+            xywh {225 195 70 20} when 1 labelsize 10
           }
           Fl_Light_Button {} {
             label Hotspot
             callback hotspot_cb
             tooltip {Positions the window so this widget is under the mouse.  This is done when show() is called.}
-            xywh {295 160 65 20} when 1 labelsize 10
+            xywh {295 195 65 20} when 1 labelsize 10
           }
         }
         Fl_Button {} {
           label {Shortcut:}
           callback shortcut_in_cb
           tooltip {To set a shortcut click here, then type the key combination you want.  To delete the shortcut type backspace.  To stop setting the shortcut click the mouse on some other field.}
-          xywh {90 185 270 20} align 524292 box THIN_DOWN_BOX color 7 selection_color 7
+          xywh {90 220 270 20} align 524292 box THIN_DOWN_BOX color 7 selection_color 7
           code0 {\#include "Shortcut_Button.h"}
           class Shortcut_Button
         }
@@ -201,11 +201,41 @@ application and will prevent events from going to other windows.}
           label {Tooltip:}
           callback tooltip_cb
           tooltip {The pop up tooltip which should be used for the widget.}
-          xywh {90 210 270 110} type Multiline
+          xywh {90 245 270 75} type Multiline
         }
         Fl_Box {} {
           label resizable
           xywh {90 210 270 110} hide deactivate resizable
+        }
+        Fl_Value_Input widget_x {
+          label {X:}
+          callback x_cb
+          tooltip {The x coordinate of the widget.}
+          xywh {90 135 55 20} align 5 labelsize 10 maximum 2000 step 1 value 10
+        }
+        Fl_Value_Input widget_y {
+          label {Y:}
+          callback y_cb
+          tooltip {The y coordinate of the widget.}
+          xywh {145 135 55 20} align 5 labelsize 10 maximum 2000 step 1 value 10
+        }
+        Fl_Value_Input widget_width {
+          label {Width:}
+          callback width_cb
+          tooltip {The width of the widget.}
+          xywh {200 135 55 20} align 5 labelsize 10 maximum 2000 step 1 value 10
+        }
+        Fl_Value_Input widget_height {
+          label {Height:}
+          callback height_cb selected
+          tooltip {The height of the widget.}
+          xywh {255 135 55 20} align 5 labelsize 10 maximum 2000 step 1 value 10
+        }
+        Fl_Light_Button set_xy {
+          label {Set xy}
+          callback set_xy_cb
+          tooltip {Determines if a window is initially set to a given position.}
+          xywh {310 135 50 20} labelsize 10
         }
       }
       Fl_Group {} {
@@ -444,11 +474,11 @@ application and will prevent events from going to other windows.}
         label OK
         callback ok_cb
         tooltip {Closes this attribute window}
-        xywh {225 340 65 25}
+        xywh {225 340 65 25} shortcut 0xff0d
       }
       Fl_Button {} {
         label Cancel
-        callback cancel_cb selected
+        callback cancel_cb
         xywh {300 340 70 25}
       }
     }

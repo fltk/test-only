@@ -8,6 +8,16 @@ Fl_Box *image_label=(Fl_Box *)0;
 
 Fl_Light_Button *include_image_button=(Fl_Light_Button *)0;
 
+Fl_Value_Input *widget_x=(Fl_Value_Input *)0;
+
+Fl_Value_Input *widget_y=(Fl_Value_Input *)0;
+
+Fl_Value_Input *widget_width=(Fl_Value_Input *)0;
+
+Fl_Value_Input *widget_height=(Fl_Value_Input *)0;
+
+Fl_Light_Button *set_xy=(Fl_Light_Button *)0;
+
 Fl_Input *v_input[4]={(Fl_Input *)0};
 
 Fl_Box *callback_label=(Fl_Box *)0;
@@ -95,43 +105,43 @@ o it should be left off if label will fit");
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_INSIDE));
           o->tooltip("Places label inside the widget");
         }
-        { Fl_Input* o = new Fl_Input(90, 130, 90, 20, "X Class:");
+        { Fl_Input* o = new Fl_Input(90, 170, 90, 20, "X Class:");
           o->callback((Fl_Callback*)xclass_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("The X class name which should be used for this widget.  This can be used to c\
 hoose icons.");
         }
-        { Fl_Light_Button* o = new Fl_Light_Button(180, 130, 55, 20, "Border");
+        { Fl_Light_Button* o = new Fl_Light_Button(180, 170, 55, 20, "Border");
           o->label_size(10);
           o->callback((Fl_Callback*)border_cb);
           o->tooltip("Enable the window manager border");
         }
-        { Fl_Light_Button* o = new Fl_Light_Button(235, 130, 55, 20, "Modal");
+        { Fl_Light_Button* o = new Fl_Light_Button(235, 170, 55, 20, "Modal");
           o->label_size(10);
           o->callback((Fl_Callback*)modal_cb);
           o->tooltip("This window will stay on top of others in the\napplication and will prevent e\
 vents from going to other windows.");
         }
-        { Fl_Light_Button* o = new Fl_Light_Button(290, 130, 70, 20, "Nonmodal");
+        { Fl_Light_Button* o = new Fl_Light_Button(290, 170, 70, 20, "Nonmodal");
           o->label_size(10);
           o->callback((Fl_Callback*)non_modal_cb);
           o->tooltip("This window will stay on top of others in the application.");
         }
-        { Fl_Value_Input* o = new Fl_Value_Input(90, 135, 55, 20, "Value:");
+        { Fl_Value_Input* o = new Fl_Value_Input(90, 170, 55, 20, "Value:");
           o->label_size(10);
           o->callback((Fl_Callback*)value_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The initial value (integer) of this widget");
         }
-        { Fl_Value_Input* o = new Fl_Value_Input(145, 135, 55, 20, "Minimum:");
+        { Fl_Value_Input* o = new Fl_Value_Input(145, 170, 55, 20, "Minimum:");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The minimum value for this valuator");
         }
-        { Fl_Value_Input* o = new Fl_Value_Input(200, 135, 55, 20, "Maximum:");
+        { Fl_Value_Input* o = new Fl_Value_Input(200, 170, 55, 20, "Maximum:");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
@@ -139,34 +149,34 @@ vents from going to other windows.");
           o->hide();
           o->tooltip("The maximum value for this valuator");
         }
-        { Fl_Value_Input* o = new Fl_Value_Input(255, 135, 55, 20, "Size:");
+        { Fl_Value_Input* o = new Fl_Value_Input(255, 170, 55, 20, "Size:");
           o->label_size(10);
           o->callback((Fl_Callback*)slider_size_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The size of the scroller");
         }
-        { Fl_Value_Input* o = new Fl_Value_Input(310, 135, 50, 20, "Step:");
+        { Fl_Value_Input* o = new Fl_Value_Input(310, 170, 50, 20, "Step:");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("Amount to change this valuator when mouse moves 1 pixel");
         }
-        { Fl_Group* o = new Fl_Group(90, 155, 270, 25, "Attributes:");
+        { Fl_Group* o = new Fl_Group(90, 195, 270, 20, "Attributes:");
           o->callback((Fl_Callback*)propagate_group);
           o->align(FL_ALIGN_LEFT);
-          { Fl_Light_Button* o = new Fl_Light_Button(90, 160, 70, 20, "Visible");
+          { Fl_Light_Button* o = new Fl_Light_Button(90, 195, 70, 20, "Visible");
             o->label_size(10);
             o->callback((Fl_Callback*)visible_cb);
             o->tooltip("Determines whether the widget is initially visible");
           }
-          { Fl_Light_Button* o = new Fl_Light_Button(160, 160, 65, 20, "Active");
+          { Fl_Light_Button* o = new Fl_Light_Button(160, 195, 65, 20, "Active");
             o->label_size(10);
             o->callback((Fl_Callback*)active_cb);
             o->tooltip("Determines whether the widget is initially active (enabled)");
           }
-          { Fl_Light_Button* o = new Fl_Light_Button(225, 160, 70, 20, "Resizable");
+          { Fl_Light_Button* o = new Fl_Light_Button(225, 195, 70, 20, "Resizable");
             o->label_size(10);
             o->callback((Fl_Callback*)resizable_cb);
             o->when(FL_WHEN_CHANGED);
@@ -175,7 +185,7 @@ zes it moves/resizes all it\'s children so that this widget\'s edges remain th\
 e same distance from all four sides of the parent.  If this is off this widget\
  will not resize, unless it overlaps a resizable sibling.");
           }
-          { Fl_Light_Button* o = new Fl_Light_Button(295, 160, 65, 20, "Hotspot");
+          { Fl_Light_Button* o = new Fl_Light_Button(295, 195, 65, 20, "Hotspot");
             o->label_size(10);
             o->callback((Fl_Callback*)hotspot_cb);
             o->when(FL_WHEN_CHANGED);
@@ -184,7 +194,7 @@ ow() is called.");
           }
           o->end();
         }
-        { Shortcut_Button* o = new Shortcut_Button(90, 185, 270, 20, "Shortcut:");
+        { Shortcut_Button* o = new Shortcut_Button(90, 220, 270, 20, "Shortcut:");
           o->box(FL_THIN_DOWN_BOX);
           o->color((Fl_Color)7);
           o->selection_color((Fl_Color)7);
@@ -194,7 +204,7 @@ ow() is called.");
 ete the shortcut type backspace.  To stop setting the shortcut click the mouse\
  on some other field.");
         }
-        { Fl_Input* o = new Fl_Input(90, 210, 270, 110, "Tooltip:");
+        { Fl_Input* o = new Fl_Input(90, 245, 270, 75, "Tooltip:");
           o->type(4);
           o->callback((Fl_Callback*)tooltip_cb);
           o->tooltip("The pop up tooltip which should be used for the widget.");
@@ -203,6 +213,47 @@ ete the shortcut type backspace.  To stop setting the shortcut click the mouse\
           o->hide();
           o->deactivate();
           Fl_Group::current()->resizable(o);
+        }
+        { Fl_Value_Input* o = widget_x = new Fl_Value_Input(90, 135, 55, 20, "X:");
+          o->label_size(10);
+          o->maximum(2000);
+          o->step(1);
+          o->value(10);
+          o->callback((Fl_Callback*)x_cb);
+          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->tooltip("The x coordinate of the widget.");
+        }
+        { Fl_Value_Input* o = widget_y = new Fl_Value_Input(145, 135, 55, 20, "Y:");
+          o->label_size(10);
+          o->maximum(2000);
+          o->step(1);
+          o->value(10);
+          o->callback((Fl_Callback*)y_cb);
+          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->tooltip("The y coordinate of the widget.");
+        }
+        { Fl_Value_Input* o = widget_width = new Fl_Value_Input(200, 135, 55, 20, "Width:");
+          o->label_size(10);
+          o->maximum(2000);
+          o->step(1);
+          o->value(10);
+          o->callback((Fl_Callback*)width_cb);
+          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->tooltip("The width of the widget.");
+        }
+        { Fl_Value_Input* o = widget_height = new Fl_Value_Input(255, 135, 55, 20, "Height:");
+          o->label_size(10);
+          o->maximum(2000);
+          o->step(1);
+          o->value(10);
+          o->callback((Fl_Callback*)height_cb);
+          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->tooltip("The height of the widget.");
+        }
+        { Fl_Light_Button* o = set_xy = new Fl_Light_Button(310, 135, 50, 20, "Set xy");
+          o->label_size(10);
+          o->callback((Fl_Callback*)set_xy_cb);
+          o->tooltip("Determines if a window is initially set to a given position.");
         }
         o->end();
         Fl_Group::current()->resizable(o);

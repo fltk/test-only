@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.4 2000/01/17 21:36:17 bill Exp $"
+// "$Id: Fl_FontSize.H,v 1.5 2000/03/17 09:50:07 bill Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,9 @@
 // point size and a specific encoding.  These are created the first
 // time each combination is used.
 
+// This is a private object and it is not necessary to replicate this
+// on other systems.
+
 #ifndef FL_FONT_
 #define FL_FONT_
 
@@ -37,15 +40,16 @@
 class Fl_FontSize {
 public:
   Fl_FontSize *next;	// linked list for this Fl_Fontdesc
-#ifndef WIN32
-  const char* encoding;
-  XFontStruct* font;	// X font information
-  FL_EXPORT Fl_FontSize(const char* xfontname);
-#else
+#ifdef WIN32
+  int encoding;
   HFONT fid;
   int width[256];
   TEXTMETRIC metr;
-  FL_EXPORT Fl_FontSize(const char* fontname, int size);
+  FL_EXPORT Fl_FontSize(const char* fontname, int size, int encoding);
+#else
+  const char* encoding;
+  XFontStruct* font;
+  FL_EXPORT Fl_FontSize(const char* xfontname);
 #endif
   unsigned minsize;	// smallest point size that should use this
   unsigned maxsize;	// largest point size that should use this
@@ -60,5 +64,5 @@ extern Fl_FontSize *fl_fontsize;
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.4 2000/01/17 21:36:17 bill Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.5 2000/03/17 09:50:07 bill Exp $".
 //

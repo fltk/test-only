@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.30 2000/02/22 00:58:10 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.31 2000/03/17 09:50:07 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -97,6 +97,8 @@ int Fl_Input::handle_key() {
     ascii = ctrl('A'); break;
   case FL_End:
     ascii = ctrl('E'); break;
+  case FL_BackSpace:
+    ascii = ctrl('H'); break;
   case FL_Enter:
   case FL_KP_Enter:
     if (when() & FL_WHEN_ENTER_KEY) {
@@ -132,6 +134,7 @@ int Fl_Input::handle_key() {
   case ctrl('C'): // copy
     return copy();
   case ctrl('D'):
+  case ctrl('?'):
     if (mark() != position()) return cut();
     else return cut(1);
   case ctrl('E'):
@@ -182,6 +185,13 @@ int Fl_Input::handle_key() {
   case ctrl('Z'):
   case ctrl('_'):
     return undo();
+  case ctrl('I'):
+  case ctrl('J'):
+  case ctrl('L'):
+  case ctrl('M'):
+    // insert a few selected control characters literally:
+    if (type() != FL_FLOAT_INPUT || type() != FL_INT_INPUT)
+      return replace(position(), mark(), &ascii, 1);
   }
   return 0;
 }
@@ -226,11 +236,13 @@ int Fl_Input::handle(int event) {
   case FL_PUSH:
     if (!focused()) {
       take_focus();
-      // Windoze-style: select everything on first click:
+#if 0 // Misguided attempt to simulate Windoze select-all-on-first-click
+      // that it does for *some* (but not all) text fields:
       if (type() != FL_MULTILINE_INPUT) {
         position(size(), 0); // select everything
         return 1;
       }
+#endif
     }
     Fl::compose_reset();
     break;
@@ -257,5 +269,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.30 2000/02/22 00:58:10 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.31 2000/03/17 09:50:07 bill Exp $".
 //

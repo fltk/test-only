@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.25 2000/02/14 11:32:41 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.26 2000/03/17 09:50:03 bill Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -150,6 +150,7 @@ Fl_Type *Fl_Window_Type::make() {
   o->add(p);
   o->modal = 0;
   o->non_modal = 0;
+  o->set_xy = 1;
   o->border = 1;
   return o;
 }
@@ -516,6 +517,13 @@ int Fl_Window_Type::handle(int event) {
       if (overlays_invisible) toggle_overlays(0,0);
     }
     drag = 0;
+    if (widget_x)
+      {
+	x_cb (widget_x, LOAD);
+	y_cb (widget_y, LOAD);
+	width_cb (widget_width, LOAD);
+	height_cb (widget_height, LOAD);
+      }
     return 1;
 
   case FL_KEYBOARD: {
@@ -650,5 +658,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.25 2000/02/14 11:32:41 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.26 2000/03/17 09:50:03 bill Exp $".
 //

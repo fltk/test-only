@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.39 2000/02/14 11:32:48 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.40 2000/03/17 09:50:06 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -90,12 +90,6 @@ int Fl_Choice::handle(int e) {
     // user must drag the mouse to select a different item.  Depending on
     // the size and usage of the menu, this may be more user-friendly.
 //  Fl::event_is_click(0);
-    // The first click on the text just moves the focus here:
-    if (box()!=FL_UP_BOX // don't do this when doing motif emulation
-	&& !focused() && Fl::event_x() < x()+w()-h()*4/5) {
-      take_focus();
-      return 1;
-    }
     take_focus();
   J1:
     if (pulldown(x(), y(), w(), h(), 0)) redraw();
@@ -149,5 +143,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.39 2000/02/14 11:32:48 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.40 2000/03/17 09:50:06 bill Exp $".
 //

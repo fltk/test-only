@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.22 2000/01/17 21:36:17 bill Exp $"
+// "$Id: fl_font.cxx,v 1.23 2000/03/17 09:50:10 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,13 +32,11 @@ Fl_Font fl_font_;
 unsigned fl_size_;
 Fl_FontSize* fl_fontsize;
 
-// Static variable for the default encoding:
-const char *fl_encoding = "iso8859-1";
-
 #ifdef WIN32
 #include "fl_font_win32.cxx"
 #else
 
+#include <FL/Fl.H>
 #include <FL/x.H>
 #include "Fl_FontSize.H"
 
@@ -114,12 +112,10 @@ static const char* font_word(const char* p, int n) {
 Fl_FontSize::Fl_FontSize(const char* name) {
   font = XLoadQueryFont(fl_display, name);
   if (!font) {
-//    Fl::warning("bad font: %s", name);
+    Fl::warning("bad font: %s", name);
     font = XLoadQueryFont(fl_display, "fixed"); // if fixed fails we crash
   }
-  const char* c = font_word(name, 13);
-  if (*c++) encoding = c;
-  else encoding = 0;
+  encoding = 0;
 #if HAVE_GL
   listbase = 0;
 #endif
@@ -157,6 +153,9 @@ Fl_FontSize::~Fl_FontSize() {
 // correctly.  What a pita!
 // Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
 
+// Static variable for the default encoding:
+const char *fl_encoding = "iso8859-1";
+
 void fl_font(Fl_Font font, unsigned size) {
   fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
 }
@@ -191,7 +190,7 @@ void fl_font(Fl_Font font, unsigned size, const char* encoding) {
   unsigned ptsize = 0;	// best one found so far
   unsigned matchedlength = 32767;
   char namebuffer[1024];	// holds scalable font name
-  int found_encoding = 0;
+  const char* found_encoding = 0;
   int m = font->n; if (m<0) m = -m;
 
   for (int n=0; n < m; n++) {
@@ -202,7 +201,7 @@ void fl_font(Fl_Font font, unsigned size, const char* encoding) {
     if (*c++ && !strcmp(c, encoding)) {
       // yes, encoding matches
       if (!found_encoding) ptsize = 0; // force it to choose this
-      found_encoding = 1;
+      found_encoding = c;
     } else {
       if (found_encoding) continue;
     }
@@ -247,6 +246,7 @@ void fl_font(Fl_Font font, unsigned size, const char* encoding) {
 
   // okay, we definately have some name, make the font:
   f = new Fl_FontSize(name);
+  f->encoding = found_encoding;
   if (ptsize < size) {f->minsize = ptsize; f->maxsize = size;}
   else {f->minsize = size; f->maxsize = ptsize;}
   f->next = font->first;
@@ -280,5 +280,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.22 2000/01/17 21:36:17 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.23 2000/03/17 09:50:10 bill Exp $".
 //

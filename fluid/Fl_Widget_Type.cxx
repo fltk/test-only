@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.62 2000/02/14 11:32:40 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.63 2000/03/17 09:50:02 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -157,6 +157,7 @@ Fl_Widget_Type::Fl_Widget_Type() {
   xclass = 0;
   o = 0;
   public_ = 1;
+  set_xy = 0;
 }
 
 Fl_Widget_Type::~Fl_Widget_Type() {
@@ -309,6 +310,96 @@ void tooltip_cb(Fl_Input* i, void *v) {
   if (current_widget->tooltip() && *(current_widget->tooltip())) tc = FL_RED;
   if (i->label_color() != tc)
     { i->label_color(tc); i->damage_label(); }
+}
+
+void x_cb(Fl_Value_Input* i, void *v) {
+  int x;
+  if (v != LOAD) {
+    x = int(i->value());
+    if (x <= -1) x = -1;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	q->o->position(x, q->o->y());
+	q->redraw();      
+      }
+  } else {
+    x = current_widget->o->x();
+  }
+  i->value(x);
+}
+
+void y_cb(Fl_Value_Input* i, void *v) {
+  int y;
+  if (v != LOAD) {
+    y = int(i->value());
+    if (y <= -1) y = -1;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	q->o->position(q->o->x(), y);
+	q->redraw();
+      }
+  } else {
+    y = current_widget->o->y();    
+  }
+  i->value (y);
+}
+
+void width_cb(Fl_Value_Input* i, void *v) {
+  int width;
+  if (v != LOAD) {
+    width = int(i->value());
+    if (width <= 0) width = 0;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	q->o->size(width, q->o->h());
+	q->redraw();
+      }
+  } else {
+    width = current_widget->o->w();
+  }
+  i->value (width);
+}
+
+void height_cb(Fl_Value_Input* i, void *v) {
+  int height;
+  if (v != LOAD) {
+    height = int(i->value());
+    if (height <= 0) height = 0;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	q->o->size(q->o->w(), height);
+	q->redraw();
+      }  
+  } else {
+    height = current_widget->o->h();  
+  }
+  i->value (height);
+}
+
+void set_xy_cb(Fl_Light_Button* i, void *v) {
+  if (v == LOAD) {
+    if (current_widget->is_window())
+      i->show();
+    else i->hide();
+    i->value(!current_widget->set_xy);
+  } else {
+    modflag = 1;
+    current_widget->set_xy = !i->value();  
+  }
+  if (current_widget->set_xy) {
+    widget_x->deactivate ();
+    widget_y->deactivate ();  
+  } else {
+    widget_x->activate ();
+    widget_y->activate ();  
+  }
+  if (i->value()) i->label_color(FL_RED);
+  else i->label_color(FL_BLACK);  
+  i->redraw();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1631,14 +1722,11 @@ void Fl_Widget_Type::write_code1() {
   if (varused) write_c("{ %s* o = ", t);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
-    // Handle special case of Fl_Group class type within a window -
-    // output constructor using x, y, w, h...
-    if (strcmp(t, "Fl_Group") == 0)
-      write_c("new %s(0, 0, %d, %d", t, o->w(), o->h());
-    else
-      write_c("new %s(%d, %d", t, o->w(), o->h());
-    // prevent type() code from being emitted:
     ((Fl_Widget_Type*)factory)->o->type(o->type());
+    if (set_xy && strcmp(t,"Fl_Group")!=0)
+      write_c("new %s(%d, %d", t, o->w(), o->h());
+    else
+      write_c("new %s(%d, %d, %d, %d", t, o->x(), o->y(), o->w(), o->h());
   } else if (is_menu_item()) {
     write_c("new %s(", t);
   } else {
@@ -1790,6 +1878,9 @@ void Fl_Widget_Type::write_properties() {
     write_string("type");
     write_word(item_name(subtypes(), o->type()));
   }
+  if ((!set_xy) && (is_window())) {
+    write_string("set_xy");  
+  }
   if ((o->flags()&FL_ALIGN_MASK)!=(tplate->flags()&FL_ALIGN_MASK))
     write_string("align %d", o->flags());
   if (o->when() != tplate->when())
@@ -1885,6 +1976,8 @@ void Fl_Widget_Type::read_property(const char *c) {
     }
   } else if (!strcmp(c,"type")) {
     o->type(item_number(subtypes(), read_word()));
+  } else if (!strcmp(c,"set_xy")) {
+    set_xy = 0;
   } else if (!strcmp(c,"align")) {
     if (sscanf(read_word(),"%d",&x) == 1) {o->align(x);}
   } else if (!strcmp(c,"when")) {
@@ -2111,5 +2204,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.62 2000/02/14 11:32:40 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.63 2000/03/17 09:50:02 bill Exp $".
 //
