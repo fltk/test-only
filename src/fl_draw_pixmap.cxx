@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.21 2004/08/27 15:07:44 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -289,11 +289,11 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   }
  NO_MASK:
 
-  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, RGB, x, y, d.w, d.h, 4);
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.21 2004/08/27 15:07:44 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $".
 //

@@ -175,12 +175,20 @@ inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk
 //  inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
 
 // images:
-#define fl_draw_image fltk::drawimage
-#define fl_draw_image_mono fltk::drawimagemono
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::RGB,x,y,w,h,delta,ldelta);}
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fltk::RGB,x,y,w,h,delta);}
+
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::GRAY,x,y,w,h,delta,ldelta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::GRAY,x,y,w,h,delta);}
+
 typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
+inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fltk::RGB,x,y,w,h,delta);}
+inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::GRAY,x,y,w,h,delta);}
+
+inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, x,y,w,h, alpha?4:3);}
+
 inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(x,y,w,h);}
 
-#define fl_read_image		fltk::readimage
 #define fl_draw_pixmap		fltk::draw_xpm
 #define fl_measure_pixmap	fltk::measure_xpm
 #define fl_scroll		fltk::scrollrect
@@ -193,5 +201,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.34 2003/12/16 18:27:18 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.35 2004/08/30 02:35:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.19 2004/08/05 17:53:16 laza2000 Exp $"
+// "$Id: fl_jpeg.cxx,v 1.20 2004/08/30 02:35:13 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -361,7 +361,7 @@ void fltk::jpegImage::read()
   jpeg_start_decompress(&cinfo);
 
   ImageDraw idraw(this);
-  drawimage(drawimage_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
+  drawimage(drawimage_cb, &cinfo, RGB, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
 
   jpeg_finish_decompress(&cinfo);
 
@@ -411,5 +411,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.19 2004/08/05 17:53:16 laza2000 Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.20 2004/08/30 02:35:13 spitzak Exp $"
 //

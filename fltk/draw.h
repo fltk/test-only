@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.9 2004/02/17 07:46:02 spitzak Exp $"
+// "$Id: draw.h,v 1.10 2004/08/30 02:35:13 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -167,12 +167,29 @@ inline void column_widths(const int* i) {column_widths_ = i;}
 
 /*! \addtogroup images
   \{ */
-FL_API void drawimage(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
-FL_API void drawimagemono(const uchar*, int,int,int,int, int delta=1, int ld=0);
+enum PixelType {
+  // Commented out ones are nyi and will only be done as people need them
+  // Low 2 bits indicate number of bytes to use!
+  GRAY	= 1, /*!< 1 byte, 0xff = white, 0 = black */
+  //GRAYA= 2, /*!< 2 bytes: brightness, alpha. Unpremultiplied. */
+  RGB	= 3, /*!< 3 bytes: r,g,b */
+  RGBA	= 4, /*!< 4 bytes: r,g,b,a. Unpremultiplied. */
+  //MASK= 5, /*!< 1 byte alpha, fltk::getcolor() is used to fill it. */
+  //AGRAY= 6,/*!< 2 bytes: alpha, brightness. Unpremultiplied. */
+  //BGR	= 7, /*!< 3 bytes: b,g,r */
+  //ABGR= 8  /*!< 4 bytes: a,g,b,r. Unpremultiplied */
+};
+FL_API void drawimage(const uchar*, PixelType, int,int,int,int, int delta, int ldelta);
+FL_API void drawimage(const uchar*, PixelType, int,int,int,int, int delta);
+FL_API void drawimage(const uchar*, PixelType, int,int,int,int);
+
 typedef void (*DrawImageCallback)(void*,int,int,int,uchar*);
-FL_API void drawimage(DrawImageCallback, void*, int,int,int,int, int delta=3);
-FL_API void drawimagemono(DrawImageCallback, void*, int,int,int,int, int delta=1);
-FL_API uchar *readimage(uchar *p, int x,int y, int w, int h, int alpha=0);
+FL_API void drawimage(DrawImageCallback, void*, PixelType, int,int,int,int, int delta);
+FL_API void drawimage(DrawImageCallback, void*, PixelType, int,int,int,int);
+
+FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h, int delta, int ldelta);
+FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h, int delta);
+FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h);
 /*! \} */
 
 // depreciated:
@@ -190,5 +207,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.9 2004/02/17 07:46:02 spitzak Exp $".
+// End of "$Id: draw.h,v 1.10 2004/08/30 02:35:13 spitzak Exp $".
 //

@@ -98,7 +98,7 @@ class ImageTest : public Widget {
     addvertex(0,0);
     addvertex(w(),h());
     strokepath();
-    drawimage(rgbadata, 0, 0, WIDTH, HEIGHT, 4);
+    drawimage(rgbadata, RGBA, 0, 0, WIDTH, HEIGHT, 4);
   }
 public:
   ImageTest(int x, int y, int w, int h) : Widget(x,y,w,h) {}
@@ -274,5 +274,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $".
 //

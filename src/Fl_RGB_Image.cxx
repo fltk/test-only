@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ void rgbImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 {
   if (!drawn()) {
     ImageDraw idraw(const_cast<rgbImage*>(this));
-    drawimage(data, 0, 0, this->w(), this->h(), depth);
+    drawimage(data, PixelType(depth), 0, 0, this->w(), this->h(), depth);
     if(depth == 4) {
       const_cast<rgbImage*>(this)->alpha = rgb;
     }
@@ -117,5 +117,5 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 #endif // WRITE_JPEG
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $".
 //

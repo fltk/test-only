@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $"
+// "$Id: fl_draw_image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -54,56 +54,81 @@ using namespace fltk;
 
   If you plan to draw the same image many times, you may want an
   fltk::Image subclass and call draw() on it. The advantage of using
-  such an object is that FLTK will cache translated forms of the image (on
-  X it uses a server pixmap) and thus redrawing is much faster. In
-  addition, on current systems, fltk::Image is the only way to get
-  transparency or to draw 1-bit bitmaps.
+  such an object is that the image data is stored already-translated
+  to whatever form the display needs (and on X at least it is stored
+  in the same memory space as the server), so drawing it is much
+  faster. (Also currently alpha transparency is broken on X and Windows
+  unless you use an Image).
 
-  The advantage of drawing directly is that it is more intuitive, and
-  it is faster if the image data changes more often than it is
-  redrawn.
+  The advantage of using these calls verses fltk::Image is that it is
+  a lot easier to write the program. It also is the fastest way if you
+  are only going to draw the image once (for instance a video image
+  that is changing, or the output of your painting program that you
+  want the user to change).
 
   Currently the image is only affected by the integer portion of the
   current transformation. This may change in future versions!
+
+  The X version does not support some visuals and will abort() if
+  this is called on them. Currently only TrueColor, the rare
+  DirectColor, and PseudoColor of less or equal to 8 bits are
+  supported. It is recommended that you put fltk::visual(fltk::RGB)
+  at the start of your program to indicate that you want TrueColor,
+  all known X servers unsupported by FLTK in their default mode
+  provide a working full-color mode.
 */
 
 /*!
 
-  Draw an 8-bit per color RGB or luminance image. The pointer points
-  at the byte of red data of the top-left pixel. Data must be in r,g,b
-  order. \a x,y are where to put the top-left corner. \a w,h define the
-  size of the image. \a d is the delta to add to the pointer between
-  pixels, it may be any value greater than 0, or it can be
-  negative to flip the image horizontally. \a ld is the delta to add to
-  the pointer between lines (if 0 is passed it uses w*d), and may be
-  larger than w*d to crop data, or negative to flip the image
-  vertically. You can also get 90 degree rotations by clever
-  settings of \a d and \a l.
+  Draw an image.
 
-  It is highly recommended that you put fltk::visual(fltk::RGB) at the
-  start of your code to force the X visual to one that is nice. This
-  probably does nothing on non-X systems and on any modern X system,
-  but it is still a good idea.
+  - \a pointer points at the first byte of the top-left pixel.
+  - \a type describes how to interpret the bytes of each pixel.
+  - \a x,y are where to put the top-left corner.
+  - \a w,h define the width and height to draw of the image
+  - \a delta is how much to add to \a pointer to go 1 pixel to the right
+  - \a line_delta is how much to add to \a pointer to go 1 pixel down
 
-  If abs(d) is less than 3 a monochrome image is drawn. You can also
-  force monochrome by calling drawimagemono().
+  By setting \a line_delta to larger than \a delta*w you can crop a
+  picture out of a larger buffer. By setting \a delta to larger than
+  the size of the pixel data you can skip extra bytes, such as alpha
+  information you don't want, or draw one channel of an rgb image as a
+  gray-scale iamge. By setting \a line_delta and/or \a delta negative
+  you can get 90 degree rotations and mirror images of the data.
 
-  The X version does not support some visuals and will abort() if
-  this is called. This includes PsuedoColor maps of more than 8 bits.
-  Fortunately all such X servers are pretty much gone now.
 */
-void fltk::drawimage(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
+void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
+		     int x, int y, int w, int h,
+		     int delta, int line_delta) {
+  innards(pointer, type, x,y,w,h, delta, line_delta, 0, 0);
 }
 
 /*!
-  Gray scale (1-channel) images may be drawn. Only one 8-bit sample is
-  used for each pixel, and on screens with different numbers of bits
-  for red, green, and blue only gray colors are used. Setting D
-  greater than 1 will let you display one channel of a color image.
+  Same except \a line_delta is set to \a w times \a delta, indicating
+  the rows are packed together one after another with no gap.
+
+  If you use fltk::RGB make sure your source data really is packed,
+  if each row starts word-aligned then you must use the version where
+  you pass the line_delta
 */
-void fltk::drawimagemono(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,1,0,0);
+void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
+		     int x, int y, int w, int h,
+		     int delta) {
+  innards(pointer, type, x,y,w,h, delta, delta*w, 0, 0);
+}
+
+/*!
+  Same except \a delta is set to the number of bytes used by \a type,
+  and \a line_delta is set to \a w times \a delta, indicating
+  the rows are packed together one after another with no gap.
+
+  If you use fltk::RGB make sure your source data really is packed,
+  if each row starts word-aligned then you must use the version where
+  you pass the line_delta
+*/
+void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
+		     int x, int y, int w, int h) {
+  innards(pointer, type, x,y,w,h, type&3, (type&3)*w, 0, 0);
 }
 
 /*! \typedef fltk::DrawImageCallback
@@ -112,45 +137,49 @@ void fltk::drawimagemono(const uchar* buf, int x, int y, int w, int h, int d, in
 */
 
 /*!
+
   Call the passed function to provide each scan line of the
   image. This lets you generate the image as it is being drawn, or do
   arbitrary decompression of stored data (provided it can be
   decompressed to individual scan lines easily).
 
-  The callback is called with the void* \a data argument (this can be
+  \a callback is called with the void* \a data argument (this can be
   used to point at a structure of information about the image), and
-  the x, y, and w of the scan line desired from the image. 0,0 is the
-  upper-left corner (not the x,y passed to this!). A pointer to a
-  buffer to put the data into is passed. You must copy w pixels from
-  scanline y, starting at pixel x, to this buffer.
+  the x, y, and w of the scan line desired from the image, measured
+  from the upper-left corner. (notice that the upper-left corner is
+  passed as 0,0 to the callback, not \a x,y!). The \a pointer argument
+  to the callback is a buffer, and \a w pixels of data in the form
+  specified by \a type must be written here by \a callback, \a delta
+  apart from each other.
 
-  Due to cropping, less than the whole image may be requested. So x
-  may be greater than zero, the first y may be greater than zero, and
-  w may be less than W. The buffer is long enough to store the entire
-  W * D pixels, this is for convienence with some decompression
-  schemes where you must decompress the entire line at once:
-  decompress it into the buffer, and then if x is not zero, copy the
-  data over so the x'th pixel is at the start of the buffer.
+  Due to cropping, less than the whole image may be requested. So the
+  callback may get an \a x greater than zero, the first \a y passed to
+  it may be greater than zero, and \a x+w may be less than the width
+  of the image. The passed buffer is long enough to store the entire
+  \a w * \a delta bytes, this is for convienence with some
+  decompression schemes where you must decompress the entire line at
+  once: decompress it into the buffer, and then if x is not zero,
+  shift the data over so the x'th pixel is at the start of the buffer.
 
   You can assume the y's will be consecutive, except the first one may
   be greater than zero.
-
-  If \a d is 4 or more, you must fill in the unused bytes with zero.
 */
-void fltk::drawimage(DrawImageCallback cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
+void fltk::drawimage(DrawImageCallback cb,
+		     void* data, fltk::PixelType type,
+		     int x, int y, int w, int h, int delta) {
+  innards(0, type, x,y,w,h, delta, 0, cb, data);
 }
 
-/*!
-  Similar but force a single channel to be drawn even if d is larger than 1.
-*/
-void fltk::drawimagemono(DrawImageCallback cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,1,cb,data);
+/*! Same except the \a delta is figured out from the \a type. */
+void fltk::drawimage(DrawImageCallback cb,
+		     void* data, fltk::PixelType type,
+		     int x, int y, int w, int h) {
+  innards(0, type, x,y,w,h, type&3, 0, cb, data);
 }
 
 #if 0
+// obsolete method that used the image dithering to get better color
+// chips on 8-bit displays.
 void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
   if (!DITHER_FILLRECT) {
     setcolor(C);
@@ -164,5 +193,5 @@ void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
+// "$Id: fl_bmp.cxx,v 1.25 2004/08/30 02:35:14 spitzak Exp $"
 //
 // bmpImage routines.
 //
@@ -488,7 +488,7 @@ void bmpImage::read()
   }
 
   ImageDraw idraw(this);
-  drawimage(array, 0, 0, w_, h_, bDepth);
+  drawimage(array, PixelType(bDepth), 0, 0, w_, h_, bDepth);
 
   // Close the file and return...
   if (!datas) fclose(bmpFile);
@@ -546,5 +546,5 @@ read_long() {
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.25 2004/08/30 02:35:14 spitzak Exp $"
 //

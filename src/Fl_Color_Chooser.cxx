@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.38 2004/08/07 20:48:35 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.39 2004/08/30 02:35:13 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -212,7 +212,7 @@ void ccHueBox::draw() {
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == DAMAGE_VALUE) push_clip(x1+px,y1+py,6,6);
-  drawimage(generate_image, this, x1, y1, w1, h1);
+  drawimage(generate_image, this, RGB, x1, y1, w1, h1);
   if (damage() == DAMAGE_VALUE) pop_clip();
   ColorChooser* c = (ColorChooser*)parent();
 #ifdef CIRCLE
@@ -308,7 +308,7 @@ void ccValueBox::draw() {
     i.aimage = false;
   }
   if (damage() == DAMAGE_VALUE) push_clip(x1,y1+py,i.w,6);
-  drawimage(generate_vimage, &i, x1, y1, i.w, i.h);
+  drawimage(generate_vimage, &i, RGB, x1, y1, i.w, i.h);
   if (damage() == DAMAGE_VALUE) pop_clip();
   int Y = int((1-v) * (i.h-6));
   if (Y < 0) Y = 0; else if (Y > i.h-6) Y = i.h-6;
@@ -668,5 +668,5 @@ bool fltk::color_chooser(const char* name, Color& c) {
 /*! \} */
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.38 2004/08/07 20:48:35 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.39 2004/08/30 02:35:13 spitzak Exp $".
 //

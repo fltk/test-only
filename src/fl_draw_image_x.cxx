@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.7 2002/12/10 02:00:59 easysw Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.8 2004/08/30 02:35:14 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -444,8 +444,10 @@ static void figure_out_visual() {
 
 #define MAXBUFFER 0x40000 // 256k
 
-static void innards(const uchar *buf, int X, int Y, int W, int H,
-		    int delta, int linedelta, int mono,
+// Combines both the callback and buffer image drawing functions
+static void innards(const uchar *buf, PixelType type,
+		    int X, int Y, int W, int H,
+		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
@@ -461,7 +463,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   i.height = h;
 
   void (*conv)(const uchar *from, uchar *to, int w, int delta) = converter;
-  if (mono) conv = mono_converter;
+  if (type == Y) conv = mono_converter;
 
   // See if the data is already in the right format.  Unfortunately
   // some 32-bit x servers (XFree86) care about the unknown 8 bits
@@ -533,5 +535,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #define DITHER_FILLRECT (xvisual->depth <= 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.7 2002/12/10 02:00:59 easysw Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.8 2004/08/30 02:35:14 spitzak Exp $"
 //

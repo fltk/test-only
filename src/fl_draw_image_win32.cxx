@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.22 2004/07/20 11:58:21 laza2000 Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.23 2004/08/30 02:35:14 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -118,8 +118,9 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
-static void innards(const uchar *buf, int X, int Y, int W, int H,
-		    int delta, int linedelta, int mono,
+static void innards(const uchar *buf, PixelType type,
+		    int X, int Y, int W, int H,
+		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
 #if USE_COLORMAP
@@ -162,6 +163,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
     }
   } else
 #endif
+    bool mono = (type == Y);
   if (mono) {
     if(current_cmap != 1) {
       current_cmap = 1;
@@ -311,5 +313,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.22 2004/07/20 11:58:21 laza2000 Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.23 2004/08/30 02:35:14 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.7 2004/08/30 02:35:14 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,8 +48,9 @@ using namespace fltk;
  *   dst:       destinaation buffer
  * userdata:  ?
  */
-static void innards(const uchar *buf, int X, int Y, int W, int H,
-		    int delta, int linedelta, int mono,
+static void innards(const uchar *buf, PixelType type,
+		    int X, int Y, int W, int H,
+		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
@@ -62,6 +63,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   Rect bounds;
   bounds.left=0; bounds.right=W; bounds.top=0; bounds.bottom=H;
   QDErr err = NewGWorld( &gw, 32, &bounds, 0L, 0L, useTempMem );
+  bool mono = (type==Y);
   if (err==noErr && gw) {
     PixMapHandle pm = GetGWorldPixMap( gw );
     if ( pm ) {
@@ -254,5 +256,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.7 2004/08/30 02:35:14 spitzak Exp $".
 //
