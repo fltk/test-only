@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.16 1999/04/05 06:38:06 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.17 1999/04/05 15:21:45 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/conf.h>
+#include <config.h>
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
@@ -163,5 +164,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.16 1999/04/05 06:38:06 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.17 1999/04/05 15:21:45 carl Exp $".
 //
