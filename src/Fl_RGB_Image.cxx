@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.13 2003/03/26 21:53:40 easysw Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.14 2003/04/01 07:24:05 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,15 +29,6 @@
 #include <fltk/draw.h>
 #include <fltk/x.h>
 
-#if 0
-#if HAVE_LIBJPEG
-extern "C" {
-#  include <stdio.h>
-#  include <jpeglib.h>
-}
-#endif // HAVE_LIBJPEG
-#endif // 0
-
 using namespace fltk;
 
 void rgbImage::draw(int x, int y, int, int, Flags flags)
@@ -52,11 +43,19 @@ void rgbImage::draw(int x, int y, int, int, Flags flags)
   _draw(x, y, flags);
 }
 
-#if 0 // MRS: remove lame-o JPEG code here; it doesn't belong here, it MUST
-      //      be in the images library!
+// This function should be somewhere else!
+// For temporary purposes it is conditiallly compiled here for use in
+// Digital Domain's programs, but not in the public fltk version:
+#if WRITE_JPEG
+extern "C" {
+#  include <stdio.h>
+#  include <jpeglib.h>
+}
+#endif
+
 bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 {
-#if HAVE_LIBJPEG
+#if WRITE_JPEG
   int wdt, hgt;
   measure( wdt, hgt );
   if (!w || !h || !data ) return false;
@@ -113,13 +112,11 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 
   return true;
 
-#else // HAVE_LIBJPEG
+#else // WRITE_JPEG
   return false;
-#endif // HAVE_LIBJPEG
+#endif // WRITE_JPEG
 }
-#endif // 0
-
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.13 2003/03/26 21:53:40 easysw Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.14 2003/04/01 07:24:05 spitzak Exp $".
 //
