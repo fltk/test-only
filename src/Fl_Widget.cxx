@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.6 2005/01/27 21:24:41 rokan Exp $"
+// "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.7 2005/01/27 22:31:20 rokan Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -108,13 +108,13 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
 
 void Fl_Widget::revert_style(){
 
-  char try_color(FL_GRAY);
-  char try_selection_color(FL_GRAY);
-  char try_box(FL_NO_BOX);
-  char try_labeltype(FL_NORMAL_LABEL);
-  char try_labelcolor(FL_FOREGROUND_COLOR); //was:FL_BLACK
-  char try_labelfont(FL_HELVETICA);
-  char try_labelsize(FL_NORMAL_SIZE);
+  try_color(FL_GRAY);
+  try_selection_color(FL_GRAY);
+  try_box(FL_NO_BOX);
+  try_labeltype(FL_NORMAL_LABEL);
+  try_labelcolor(FL_FOREGROUND_COLOR); //was:FL_BLACK
+  try_labelfont(FL_HELVETICA);
+  try_labelsize(FL_NORMAL_SIZE);
 }
 
 
@@ -310,5 +310,5 @@ Fl_Scheme_::~Fl_Scheme_(){
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.6 2005/01/27 21:24:41 rokan Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.7 2005/01/27 22:31:20 rokan Exp $".
 //
