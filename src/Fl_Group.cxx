@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.9 1999/03/14 06:46:30 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.10 1999/03/20 14:27:16 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -435,7 +435,6 @@ void Fl_Group::draw() {
     for (int i=children_; i--;) {
       Fl_Widget& o = **a++;
       draw_child(o);
-      draw_outside_label(o);
     }
   } else {	// only redraw the children that need it:
     for (int i=children_; i--;) update_child(**a++);
@@ -445,8 +444,11 @@ void Fl_Group::draw() {
 // Draw a child only if it needs it:
 void Fl_Group::update_child(Fl_Widget& w) const {
   if (w.damage() && w.visible() && w.type() < FL_WINDOW &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-    w.draw();	
+      fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
+  {
+    if (w.damage() & FL_DAMAGE_CHILD_LABEL) draw_outside_label(w);
+    w.clear_damage(FL_DAMAGE_CHILD_LABEL);
+    if (w.damage()) w.draw();	
     w.clear_damage();
   }
 }
@@ -454,9 +456,11 @@ void Fl_Group::update_child(Fl_Widget& w) const {
 // Force a child to redraw:
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (w.visible() && w.type() < FL_WINDOW &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+      fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
+  {
     w.clear_damage(FL_DAMAGE_ALL);
     w.draw();
+    draw_outside_label(w);
     w.clear_damage();
   }
 }
@@ -495,5 +499,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.9 1999/03/14 06:46:30 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.10 1999/03/20 14:27:16 carl Exp $".
 //

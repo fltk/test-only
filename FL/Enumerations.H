@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.20 1999/03/18 05:33:18 carl Exp $"
+// "$Id: Enumerations.H,v 1.21 1999/03/20 14:27:15 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -361,11 +361,12 @@ enum Fl_Mode { // visual types and Fl_Gl_Window::mode() (values match Glut)
 // damage masks
 
 enum Fl_Damage {
-  FL_DAMAGE_CHILD    = 0x01,
-  FL_DAMAGE_EXPOSE   = 0x02,
-  FL_DAMAGE_SCROLL   = 0x04,
-  FL_DAMAGE_OVERLAY  = 0x08,
-  FL_DAMAGE_ALL      = 0x80
+  FL_DAMAGE_CHILD       = 0x01,
+  FL_DAMAGE_EXPOSE      = 0x02,
+  FL_DAMAGE_SCROLL      = 0x04,
+  FL_DAMAGE_OVERLAY     = 0x08,
+  FL_DAMAGE_CHILD_LABEL = 0x10,
+  FL_DAMAGE_ALL         = 0x80
 };
 
 enum Fl_Widget_Style {
@@ -376,5 +377,5 @@ enum Fl_Widget_Style {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.20 1999/03/18 05:33:18 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.21 1999/03/20 14:27:15 carl Exp $".
 //
