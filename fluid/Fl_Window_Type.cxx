@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.16 1999/03/31 19:14:21 carl Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.17 1999/04/11 01:18:35 carl Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -87,7 +87,7 @@ Fl_Menu_Item window_type_menu[] = {
   {"Double",0,0,(void*)(FL_WINDOW+1)},
   {0}};
 
-static int overlays_invisible;
+int overlays_invisible;
 
 // The following Fl_Widget is used to simulate the windows.  It has
 // an overlay for the fluid ui, and special-cases the FL_NO_BOX.
@@ -358,7 +358,6 @@ void Fl_Window_Type::draw_overlay() {
 
 // Calculate new bounding box of selected widgets:
 void Fl_Window_Type::fix_overlay() {
-  overlays_invisible = 0;
   recalc = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
 }
@@ -369,7 +368,14 @@ void redraw_overlays() {
     if (o->is_window()) ((Fl_Window_Type*)o)->fix_overlay();
 }
 
+extern Fl_Menu_Bar* menubar;
+
 void toggle_overlays(Fl_Widget *,void *) {
+  menubar->find("&Edit/Show Overlays")->value(overlays_invisible);
+  if (overlaybutton) {
+    overlaybutton->value(overlays_invisible);
+    overlaybutton->redraw();
+  }
   overlays_invisible = !overlays_invisible;
   for (Fl_Type *o=Fl_Type::first; o; o=o->next)
     if (o->is_window()) {
@@ -635,5 +641,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.16 1999/03/31 19:14:21 carl Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.17 1999/04/11 01:18:35 carl Exp $".
 //

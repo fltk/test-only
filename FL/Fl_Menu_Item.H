@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.17 1999/04/10 19:29:18 gustavo Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.18 1999/04/11 01:18:32 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -152,6 +152,7 @@ struct Fl_Menu_Item {
   int checkbox() const {return flags&FL_MENU_TOGGLE;}
   int radio() const {return flags&FL_MENU_RADIO;}
   int value() const {return flags&FL_MENU_VALUE;}
+  void value(int b) { if (b) set(); else clear(); }
   void set() {flags |= FL_MENU_VALUE;}
   void clear() {flags &= ~FL_MENU_VALUE;}
   void setonly();
@@ -227,5 +228,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.17 1999/04/10 19:29:18 gustavo Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.18 1999/04/11 01:18:32 carl Exp $".
 //

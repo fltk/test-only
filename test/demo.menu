@@ -13,7 +13,7 @@
 	@x:Fl_Browser:browser
 	@x:Fl_Input:input
 	@x:Fl_Output:output
-	@x:Fl_Button:radio
+	@x:Fl_Button\n&&\nFl_Tooltip:radio
 	@x:Fl_Tabs:tabs
 	@x:Fl_Tile:tile
 	@x:Fl_Scroll:scroll

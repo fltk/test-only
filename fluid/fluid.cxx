@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.17 1999/03/18 05:33:26 carl Exp $"
+// "$Id: fluid.cxx,v 1.18 1999/04/11 01:18:35 carl Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -51,6 +51,7 @@ const char *copyright =
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Tooltip.H>
 #include <FL/fl_ask.H>
 #include <FL/fl_draw.H>
 #include <FL/fl_file_chooser.H>
@@ -275,6 +276,12 @@ void about_cb(Fl_Widget *, void *) {
   about_panel->show();
 }
 
+void tt_cb(Fl_Widget *w, void *) {
+  Fl_Menu_* mw = (Fl_Menu_*)w;
+  const Fl_Menu_Item* m = mw->mvalue();
+  Fl_Tooltip::enable(m->value());
+}
+
 ////////////////////////////////////////////////////////////////
 
 extern Fl_Menu_Item New_Menu[];
@@ -290,7 +297,7 @@ Fl_Menu_Item Main_Menu[] = {
   {"Quit", FL_ALT+'q', exit_cb},
   {0},
 {"&Edit",0,0,0,FL_SUBMENU},
-  {"Undo", FL_ALT+'z', nyi},
+//  {"Undo", FL_ALT+'z', nyi},
   {"Cut", FL_ALT+'x', cut_cb},
   {"Copy", FL_ALT+'c', copy_cb},
   {"Paste", FL_ALT+'v', paste_cb},
@@ -305,12 +312,13 @@ Fl_Menu_Item Main_Menu[] = {
   {"Ungroup", FL_F+8, ungroup_cb,0, FL_MENU_DIVIDER},
 //{"Deactivate", 0, nyi},
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
-  {"Overlays on/off",FL_ALT+'O',toggle_overlays},
+  {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_ALT+'p',show_alignment_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
 {"&Help",0,0,0,FL_SUBMENU},
   {"About fluid",0,about_cb},
+  {"Tooltips", 0, tt_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
 //{"Manual",0,nyi},
   {0},
 {0}};
@@ -323,6 +331,8 @@ Fl_Menu_Item Main_Menu[] = {
 
 extern void fill_in_New_Menu();
 
+Fl_Menu_Bar* menubar;
+
 void make_main_window() {
   if (!main_window) {
     Fl_Widget *o;
@@ -331,10 +341,10 @@ void make_main_window() {
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
     o->box(FL_FLAT_BOX);
     main_window->resizable(o);
-    Fl_Menu_Bar *m = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
+    menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
     fill_in_New_Menu();
-    m->menu(Main_Menu);
-    m->global();
+    menubar->menu(Main_Menu);
+    menubar->global();
     main_window->end();
   }
 }
@@ -419,5 +429,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.17 1999/03/18 05:33:26 carl Exp $".
+// End of "$Id: fluid.cxx,v 1.18 1999/04/11 01:18:35 carl Exp $".
 //

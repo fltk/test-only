@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.11 1999/03/14 06:46:30 carl Exp $"
+// "$Id: Fl_Input.cxx,v 1.12 1999/04/11 01:18:37 carl Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -275,6 +275,7 @@ int Fl_Input::handle_key() {
 int Fl_Input::handle(int event) {
   switch (event) {
 
+  case FL_ENTER: return 1; // For tooltips
   case FL_FOCUS:
     switch (Fl::event_key()) {
     case FL_Right:
@@ -331,5 +332,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.11 1999/03/14 06:46:30 carl Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.12 1999/04/11 01:18:37 carl Exp $".
 //
