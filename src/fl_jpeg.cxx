@@ -26,11 +26,6 @@ static int INPUT_BUF_SIZE;
 
 typedef my_source_mgr * my_src_ptr;
 
-METHODDEF(void)
-output_message (j_common_ptr cinfo)
-{
-}
-
 /*
  * Initialize source --- called by jpeg_read_header
  * before any data is actually read.
@@ -159,9 +154,7 @@ term_source (j_decompress_ptr cinfo)
 
 
 /*
- * Prepare for input from a stdio stream.
- * The caller must have already opened the stream, and is responsible
- * for closing it after finishing decompression.
+ * Prepare for input from memory.
  */
 
 METHODDEF(void)
@@ -169,13 +162,6 @@ jpeg_rawdatas_src (j_decompress_ptr cinfo, JOCTET * datas)
 {
   my_src_ptr src;
 
-  /* The source object and input buffer are made permanent so that a series
-   * of JPEG images can be read from the same file by calling jpeg_stdio_src
-   * only before the first one.  (If we discarded the buffer at the end of
-   * one image, we'd likely lose the start of the next one.)
-   * This makes it unsafe to use this manager and a different source
-   * manager serially with the same JPEG object.  Caveat programmer.
-   */
   if (cinfo->src == NULL) {	/* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
@@ -204,6 +190,11 @@ struct my_error_mgr {
 };
 
 typedef struct my_error_mgr * my_error_ptr;
+
+METHODDEF(void)
+output_message (j_common_ptr cinfo)
+{
+}
 
 /*
  * Here's the routine that will replace the standard error_exit method:
@@ -276,15 +267,13 @@ void Fl_JPEG_Image::measure(int &W, int &H)
 
   jpeg_read_header(&cinfo, TRUE);
 
-  w = cinfo.image_width;
-  h = cinfo.image_height;
+  W=w = cinfo.image_width;
+  H=h = cinfo.image_height;
 
   jpeg_destroy_decompress(&cinfo);
 
   if (!datas) fclose(infile);
 
-  W=w;
-  H=h;
   return;
 #endif
 }
@@ -372,12 +361,10 @@ bool Fl_JPEG_Image::test(uchar* datas, size_t size)
 
   jpeg_read_header(&cinfo, TRUE);
 
-  bool ispng = cinfo.image_width;
-
   jpeg_destroy_decompress(&cinfo);
 
   if (!datas) fclose(infile);
 
-  return ispng;
+  return 1;
 #endif
 }

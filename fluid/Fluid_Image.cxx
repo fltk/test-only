@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.14 1999/08/28 15:39:09 vincent Exp $"
+// "$Id: Fluid_Image.cxx,v 1.15 1999/08/28 19:51:42 vincent Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -66,33 +66,33 @@ static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
 
 ////////////////////////////////////////////////////////////////
 
-static char xpm_filetype[] = "XPM";
-class pixmap_image : public Fluid_Image {
+class generic_image : public Fluid_Image {
 protected:
   Fl_Shared_Image *p;
   int *linelength;
-  char *filetype;
+  Fl_Image_Type* filetype;
 public:
-  pixmap_image(const char *name, bool subclass = 1);
-  ~pixmap_image();
+  generic_image(const char *name);
+  ~generic_image();
   virtual void label(Fl_Widget *); // set the label of this widget
   virtual void write_static();
   virtual void write_code();
   static int test_file(char *buffer);
 };
 
-int pixmap_image::test_file(char *buffer) {
-  return Fl_XPM_Image::test((uchar*)buffer, 0);
+int generic_image::test_file(char *buffer) {
+  Fl_Image_Type* ft = Fl_Shared_Image::guess("", (uchar*)buffer);
+  return ft->name != 0;
 }
 
-void pixmap_image::label(Fl_Widget *o) {
+void generic_image::label(Fl_Widget *o) {
   o->image(p);
 }
 
 static int image_file_header_written;
 
 #define MAX_CLINESIZE 256
-void pixmap_image::write_static() {
+void generic_image::write_static() {
   uchar* d=0;
   if (!p) return;
   if(image_file_header_written != write_number)
@@ -103,7 +103,7 @@ void pixmap_image::write_static() {
   if (inlined) {
     size_t l=0;
     goto_images_dir();
-    if (filetype == xpm_filetype) {
+    if (!strcmp(filetype->name, "XPM")) {
       write_c("static char *%s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
       FILE* fp = fopen(name(), "rb");
       if(fp) {
@@ -119,7 +119,7 @@ void pixmap_image::write_static() {
     } else {
       d = fl_store_datas_from_file(name(), l);
       if(d) {
-#if 0
+#if 1
 	write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
 	write_carray((const char*)d, l);
 	write_c("};\n");
@@ -136,108 +136,22 @@ void pixmap_image::write_static() {
   }
 }
 
-void pixmap_image::write_code() {
+void generic_image::write_code() {
   if (!p) return;
-  write_c("%so->image(Fl_%s_Image::get(\"%s\"", indent(), filetype, name());
+  write_c("%so->image(Fl_%s_Image::get(\"%s\"", indent(), filetype->name, name());
   if (inlined)
-    write_c(", %s%s", filetype==xpm_filetype? "(uchar*)" : "",
+    write_c(", %s%s", !strcmp(filetype->name, "XPM")? "(uchar*)" : "",
 	    unique_id(this, "datas", filename_name(name()), 0));
   write_c("));\n");
 }
 
-pixmap_image::pixmap_image(const char *name, bool subclass) : Fluid_Image(name) {
-  if(!subclass) {
-    filetype = xpm_filetype;
-    p = Fl_XPM_Image::get((char*) name);
-  }
+generic_image::generic_image(const char *name) : Fluid_Image(name) {
+  filetype = Fl_Shared_Image::guess((char *) name);
+  p = filetype->get((char*) name);
   inlined = 1;
 }
 
-pixmap_image::~pixmap_image() {
-}
-
-////////////////////////////////////////////////////////////////
-
-class gif_image : public pixmap_image {
-public:
-  gif_image(const char *name);
-  ~gif_image();
-  static int test_file(char *buffer);
-};
-
-int gif_image::test_file(char *buffer) {
-  return Fl_GIF_Image::test((uchar*)buffer, 3);
-}
-
-gif_image::gif_image(const char *name) : pixmap_image(name) {
-  filetype = "GIF";
-  p = Fl_GIF_Image::get((char*)name);
-}
-
-gif_image::~gif_image() {
-}
-
-////////////////////////////////////////////////////////////////
-
-class png_image : public pixmap_image {
-public:
-  png_image(const char *name);
-  ~png_image();
-  static int test_file(char *buffer);
-};
-
-int png_image::test_file(char *buffer) {
-  return Fl_PNG_Image::test((uchar*)buffer, 3);
-}
-
-png_image::png_image(const char *name) : pixmap_image(name) {
-  filetype = "PNG";
-  p = Fl_PNG_Image::get((char*)name);
-}
-
-png_image::~png_image() {
-}
-
-////////////////////////////////////////////////////////////////
-
-class bmp_image : public pixmap_image {
-public:
-  bmp_image(const char *name);
-  ~bmp_image();
-  static int test_file(char *buffer);
-};
-
-int bmp_image::test_file(char *buffer) {
-  return Fl_BMP_Image::test((uchar*)buffer, 1024);
-}
-
-bmp_image::bmp_image(const char *name) : pixmap_image(name) {
-  filetype = "BMP";
-  p = Fl_BMP_Image::get((char*)name);
-}
-
-bmp_image::~bmp_image() {
-}
-
-////////////////////////////////////////////////////////////////
-
-class jpeg_image : public pixmap_image {
-public:
-  jpeg_image(const char *name);
-  ~jpeg_image();
-  static int test_file(char *buffer);
-};
-
-int jpeg_image::test_file(char *buffer) {
-  return Fl_JPEG_Image::test((uchar*)buffer, 1024);
-}
-
-jpeg_image::jpeg_image(const char *name) : pixmap_image(name) {
-  filetype = "JPEG";
-  p = Fl_JPEG_Image::get((char*)name);
-}
-
-jpeg_image::~jpeg_image() {
+generic_image::~generic_image() {
 }
 
 ////////////////////////////////////////////////////////////////
@@ -305,14 +219,6 @@ void bitmap_image::write_code() {
   write_c("%so->image(%s);\n", indent(),
 	  unique_id(this, "bitmap", filename_name(name()), 0));
 }
-
-#define nosuch_width 16
-#define nosuch_height 16
-static unsigned char nosuch_bits[] = {
-   0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
-   0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
-   0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
-static Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
 bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
   p = &nosuch_bitmap; // if any problems with parse we exit with this
@@ -393,16 +299,8 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     fread(buffer, 1, 1024, f);
     rewind(f);
     buffer[1024] = 0; // null-terminate so strstr() works
-    if (pixmap_image::test_file(buffer)) {
-      ret = new pixmap_image(name,0);
-    } else if (png_image::test_file(buffer)) {
-      ret = new png_image(name);
-    } else if (bmp_image::test_file(buffer)) {
-      ret = new bmp_image(name);
-    } else if (jpeg_image::test_file(buffer)) {
-      ret = new jpeg_image(name);
-    } else if (gif_image::test_file(buffer)) {
-      ret = new gif_image(name);
+    if (generic_image::test_file(buffer)) {
+      ret = new generic_image(name);
     } else if (bitmap_image::test_file(buffer)) {
       ret = new bitmap_image(name,f);
     } else {
@@ -494,5 +392,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.14 1999/08/28 15:39:09 vincent Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.15 1999/08/28 19:51:42 vincent Exp $".
 //

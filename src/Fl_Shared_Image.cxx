@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.1 1999/08/28 15:39:11 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.2 1999/08/28 19:51:43 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,31 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Shared_Image.H>
+#include <FL/Fl_Bitmap.H>
 #include <FL/x.H>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+// Bitmap used when we couldn't guess the filetype
+#define nosuch_width 16
+#define nosuch_height 16
+static unsigned char nosuch_bits[] = {
+   0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
+   0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
+   0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
+Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+
+struct Fl_Image_Type fl_image_filetypes[] = {
+  { "XPM", Fl_XPM_Image::test, Fl_XPM_Image::get},
+  { "GIF", Fl_GIF_Image::test, Fl_GIF_Image::get},
+  { "PNG", Fl_PNG_Image::test, Fl_PNG_Image::get},
+  { "BMP", Fl_BMP_Image::test, Fl_BMP_Image::get},
+  { "JPEG", Fl_JPEG_Image::test, Fl_JPEG_Image::get},
+  { 0, Fl_UNKNOWN_Image::test, Fl_UNKNOWN_Image::get }
+};
 
 static char *root=0;
 
@@ -47,18 +67,24 @@ static size_t mem_usage_limit=0;
 // WARNING : this is updated incrementally, so beware that it keeps balanced !
 static size_t mem_used=0; 
 
+
+
+Fl_Shared_Image::~Fl_Shared_Image()
+{
+ fprintf(stderr, 
+   "FLTK user error : deleting an Fl_Shared_Image object is forbiden !\n");
+}
+
 void fl_set_images_cache_size(size_t l)
 {
   mem_usage_limit = l;
 }
 
-Fl_Shared_Image *limage;
-size_t Fl_Shared_Image::count() {
-  size_t s = mem;
-  if(l1) s += l1->count();
-  if(l2) s += l2->count();
+static Fl_Shared_Image *limage; // used to find the less used image
+void Fl_Shared_Image::find_less_used() {
+  if(l1) l1->find_less_used();
+  if(l2) l2->find_less_used();
   if(id && (limage->id == 0 || used<limage->used)) limage=this;
-  return s;
 }
 void Fl_Shared_Image::check_mem_usage()
 {
@@ -67,14 +93,13 @@ void Fl_Shared_Image::check_mem_usage()
 
   do {
     limage=first_image;
-    first_image->count();
+    first_image->find_less_used();
     if(limage->id) {
-      mem_used -= limage->mem;
-      limage->mem=0;
+      mem_used -= limage->w*limage->h;
       fl_delete_offscreen(limage->id);
       limage->id=0;
       if(limage->mask) {
-	fl_delete_offscreen(limage->mask);
+	fl_delete_bitmap(limage->mask);
 	limage->mask = 0;
       }
     } else return;
@@ -138,7 +163,6 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
     image->datas=datas;
     image->w = -1;
     image->measure(dummy, dummy);
-    image->mem=0;
     image->l1 = image->l2 = 0;
     image->id=image->mask=0;
     Fl_Shared_Image::insert(first_image, image);
@@ -148,15 +172,39 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   return image;
 }
 
+Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
+{
+  bool loaded = 0;
+  size_t size = 1024;
+  if (!datas) {
+    datas = new uchar[1024];
+    char *s;
+    if(!root) root=strdup("");
+    s = (char*) malloc(strlen(name)+strlen(root)+1);
+    strcpy(s, root);
+    strcat(s, name);
+    FILE* fp = fopen(s, "rb");
+    size = fread(datas, 1, size, fp);
+    fclose(fp);
+    free(s);
+    loaded = 1;
+  }
+  Fl_Image_Type* ft;
+  for (ft=fl_image_filetypes; ft->name; ft++) {
+    if (ft->test(datas, size)) break;
+  }
+  if(loaded) free(datas);
+  return ft;
+}
+
 void Fl_Shared_Image::draw(int X, int Y, int W, int H, 
 				int cx, int cy)
 {
   if(w==0) return;
   if(!id && !mask) // Need to uncompress the image ?
   {
-    mem=w*h;
     used = image_used++; // do this before check_mem_usage
-    mem_used += mem;
+    mem_used += w*h;
     check_mem_usage();
 
     read();
@@ -168,5 +216,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.1 1999/08/28 15:39:11 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.2 1999/08/28 19:51:43 vincent Exp $"
 //

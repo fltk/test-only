@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.7 1999/08/23 16:43:11 vincent Exp $"
+// "$Id: Fl_Image.cxx,v 1.8 1999/08/28 19:51:43 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <FL/Fl_Image.H>
 
 void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
+  if (w<0) measure(w, h);
   int cx;
   if (f & FL_ALIGN_LEFT) cx = 0;
   else if (f & FL_ALIGN_RIGHT) cx = w-W;
@@ -44,26 +45,26 @@ void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
 }
 
 // tiled image with minimal redraw
-void Fl_Image::draw_tiled(int x, int y, int w, int h, int cx, int cy) {
-  int iw, ih; measure(iw, ih);
-  if (iw==0) return;
+void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
+  if (w<0) measure(w, h);
+  if (w==0) return;
 
-  int X,Y,W,H; fl_clip_box(x, y, w, h, X, Y, W, H);
+  int X,Y,W,H; fl_clip_box(x, y, pw, ph, X, Y, W, H);
   if(W <= 0 || H <= 0) return;
   cx += X-x; cy += Y-y;
 
-  int temp = -cx % iw;
-  cx = (temp>0 ? iw : 0) - temp;
-  temp = -cy % ih;
-  cy = (temp>0 ? ih : 0) - temp;
+  int temp = -cx % w;
+  cx = (temp>0 ? w : 0) - temp;
+  temp = -cy % h;
+  cy = (temp>0 ? h : 0) - temp;
 
   int ccx=cx;
   while(-cy<H) {
     while(-cx<W) {
       draw(X, Y, W, H, cx, cy);
-      cx -= iw;
+      cx -= w;
     }
-    cy -= ih;
+    cy -= h;
     cx = ccx;
   }
 }
@@ -168,5 +169,5 @@ void Fl_Image::label(Fl_Menu_Item* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.7 1999/08/23 16:43:11 vincent Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.8 1999/08/28 19:51:43 vincent Exp $".
 //

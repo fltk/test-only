@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
+// "$Id: fl_png.cxx,v 1.5 1999/08/28 19:51:44 vincent Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ bool Fl_PNG_Image::test(unsigned char *datas, size_t size)
 void Fl_PNG_Image::measure(int &W, int &H)
 {
 #if !HAVE_PNG
-  W=H=0;
+  W = w = 0;
 #else
   if (w>=0) { 
     W=w; H=h; 
@@ -181,7 +181,7 @@ void Fl_PNG_Image::read()
   error:
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
     if(buffer) free(buffer);
-    if(row_pointers) delete[] row_pointers;
+    if(row_pointers) delete row_pointers;
     if(fp) fclose(fp);
     return;
   }
@@ -250,5 +250,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
+// End of "$Id: fl_png.cxx,v 1.5 1999/08/28 19:51:44 vincent Exp $"
 //

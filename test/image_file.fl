@@ -13,14 +13,14 @@ Function {main()} {open return_type int
   code {fl_set_images_root_directory("images");} {}
   Fl_Window window {
     label {The background is a BMP file} open
-    xywh {231 395 660 405} resizable box NO_BOX visible
+    xywh {235 419 660 405} resizable box NO_BOX visible
   } {
     Fl_Box {} {
       xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {ulon.bmp} labelcolor 3
     }
     Fl_Box {} {
-      label {tiled GIF image loaded from disk}
-      xywh {23 158 352 197} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.gif} labelcolor 3
+      label {tiled GIF image loaded from disk} selected
+      xywh {23 158 352 197} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image not_inlined {coucou.gif} labelcolor 3
     }
     Fl_Box {} {
       label {PNG image with datas included in code}
@@ -42,13 +42,13 @@ Function {main()} {open return_type int
   }
   Fl_Window browser_window {
     label {Image in the cache} open
-    xywh {558 210 255 120} visible
+    xywh {562 234 255 120} visible
   } {
     Fl_Browser browser {
       xywh {0 0 255 85}
     }
     Fl_Box {} {
-      label {Italic : out of the cache Grey : just loaded} selected
+      label {Italic : out of the cache Grey : just loaded}
       xywh {0 85 165 35} align 149
     }
   }
