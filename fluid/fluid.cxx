@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.53 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.54 2001/11/20 20:23:39 robertk Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,10 @@ const char *copyright =
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+
+#ifdef WIN32
+#include <fltk/win32.h>	// for MAX_PATH definition
+#endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 # include <direct.h>
@@ -521,5 +525,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.53 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.54 2001/11/20 20:23:39 robertk Exp $".
 //

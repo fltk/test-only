@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.48 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.49 2001/11/20 20:23:39 robertk Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -807,6 +807,7 @@ int Fl_Browser::handle(int event) {
 	list()->flags_changed(this, item());
 	relayout();
 	Fl::event_is_click(0); // make next click not be double
+	damage(FL_DAMAGE_EXPOSE, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
 	goto RELEASE;
       } else if (when()) {
 	Fl::event_clicks(1); // make program think it was a double-click
@@ -974,5 +975,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.48 2001/11/14 09:21:42 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.49 2001/11/20 20:23:39 robertk Exp $".
 //

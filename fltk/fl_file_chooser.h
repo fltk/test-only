@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: fl_file_chooser.h,v 1.3 2001/11/20 20:23:39 robertk Exp $"
 //
 // File chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,11 +32,12 @@
 FL_API void use_windows_stock_file_requester(int useit=1);
 #endif
 
-FL_API char *fl_file_chooser(const char *message,const char *pat,const char *fname);
+// the last parameter "bSave" is 1 to use the "save" dialong on Win32, 0 to use "load"
+FL_API char *fl_file_chooser(const char *message,const char *pat,const char *fname, int bSave = 1);
 FL_API void fl_file_chooser_callback(void (*cb)(const char *));
 
 #endif
 
 //
-// End of "$Id: fl_file_chooser.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: fl_file_chooser.h,v 1.3 2001/11/20 20:23:39 robertk Exp $".
 //

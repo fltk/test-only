@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.2 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.3 2001/11/20 20:23:39 robertk Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ enum { // Fl_Widget::when():
 };
 
 // Fl::event_key() and Fl::get_key(n) (use ascii letters for all other keys):
-#define FL_Button(n)	(0xfee8+(n))
+#define FL_Button(n)	(0xfee8+(n))	// use Fl_Button+FL_*_MOUSE
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
 #define FL_Clear	0xff0b // '5' key on windows, ^K
@@ -124,8 +124,10 @@ enum { // Fl_Widget::when():
 #define FL_Caps_Lock	0xffe5
 #define FL_Alt_L	0xffe9
 #define FL_Alt_R	0xffea
-#define FL_Super_L	0xffeb // the left MSWindows key on XFree86
-#define FL_Super_R	0xffec // the right MSWindows key on XFree86
+#define FL_Meta_L	0xffeb // the left MSWindows key on XFree86
+#define FL_Meta_R	0xffec // the right MSWindows key on XFree86
+#define FL_Super_L	FL_Meta_L	// for back compatibility
+#define FL_Super_R	FL_Meta_R	// for back compatibility
 #define FL_Delete	0xffff
 
 // Fl::event_button():
@@ -214,5 +216,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.2 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.3 2001/11/20 20:23:39 robertk Exp $".
 //
