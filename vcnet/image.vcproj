@@ -23,7 +23,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,.."
-				PreprocessorDefinitions="FL_SHARED;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\image___Win32_Release_MinSize/image.pch"
@@ -37,7 +37,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib fltkdll_images.lib wsock32.lib"
+				AdditionalDependencies="fltk.lib fltk_images.lib wsock32.lib"
 				OutputFile="../test/image.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -86,7 +86,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,..,../visualc"
-				PreprocessorDefinitions="FL_SHARED;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\image___Win32_Debug_MinSize/image.pch"
@@ -101,7 +101,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll_imagesd.lib fltkdlld.lib wsock32.lib"
+				AdditionalDependencies="fltk_imagesd.lib fltkd.lib wsock32.lib"
 				OutputFile="../test/imaged.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -272,41 +272,6 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\src\fl_call_main.c">
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-		</File>
 		<File
 			RelativePath="..\test\image.cxx">
 			<FileConfiguration
