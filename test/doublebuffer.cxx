@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.13 2004/05/04 07:30:44 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.14 2004/06/25 19:02:10 xpxqx Exp $"
 //
 // Test of double_buffer and overlay of Windows.
 // This demo shows how double buffering helps, by drawing the
@@ -32,7 +32,7 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/draw.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/CheckButton.h>
 #include <fltk/visual.h>
 #include <fltk/math.h>
@@ -55,9 +55,12 @@ class BlinkWindow : public Window {
     for (int i = 0; i < n; i++) {
       for (int j = i+1; j < n; j++) {
 	setcolor((i+j)%(5*8*5)+BLACK); // random color from cube
-	addvertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
-	addvertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
-	addvertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
+	fltk::addvertex(float(cosf(2*M_PI*(j-1)/n+.1)),
+                        float(sinf(2*M_PI*(j-1)/n+.1)));
+	fltk::addvertex(float(cosf(2*M_PI*i/n+.1)),
+                        float(sinf(2*M_PI*i/n+.1)));
+	fltk::addvertex(float(cosf(2*M_PI*j/n+.1)),
+                        float(sinf(2*M_PI*j/n+.1)));
 	fillstrokepath(WHITE);
       }
     }
@@ -77,9 +80,12 @@ class BlinkWindow : public Window {
     int n = overlay_sides;
     for (int i = 0; i < n; i++) {
       for (int j = i+1; j < n; j++) {
-	addvertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
-	addvertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
-	addvertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
+        fltk::addvertex(float(cosf(2*M_PI*(j-1)/n+.1)),
+                        float(sinf(2*M_PI*(j-1)/n+.1)));
+	fltk::addvertex(float(cosf(2*M_PI*i/n+.1)),
+                        float(sinf(2*M_PI*i/n+.1)));
+	fltk::addvertex(float(cosf(2*M_PI*j/n+.1)),
+                        float(sinf(2*M_PI*j/n+.1)));
 	strokepath();
       }
     }
@@ -125,17 +131,17 @@ int main(int argc, char** argv) {
 		       "Turn on the double buffer checkmark to hide the "
 		       "blinking.");
   int y = 420;
-  HorizontalSlider slider0(60,y,340,22,"sides:");
+  Slider slider0(60,y,340,22,"sides:");
   slider0.tooltip("Redraw above graphic with this many slides");
   slider0.align(ALIGN_LEFT);
-  slider0.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  slider0.type(Slider::TICK_ABOVE);
   slider0.callback(slider_cb);
   y += 25;
-  HorizontalSlider slider1(60,y,340,22,"overlay:");
+  Slider slider1(60,y,340,22,"overlay:");
   slider1.tooltip("Redraw red overlay if the overlay checkmark is turned on.");
   slider1.callback(oslider_cb);
   slider1.align(ALIGN_LEFT);
-  slider1.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  slider1.type(Slider::TICK_ABOVE);
   y += 25;
   CheckButton b1(60,y,150,25,"double buffer");
   b1.tooltip("Turns on double-buffer mode in the above window for smooth "
@@ -164,5 +170,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.13 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.14 2004/06/25 19:02:10 xpxqx Exp $".
 //
