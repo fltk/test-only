@@ -211,7 +211,6 @@ void Fl_FileChooser::textcolor(Fl_Color c) {
 
 Fl_Color Fl_FileChooser::textcolor() {
   return (fileList->textcolor());
-    return (fileList->textcolor());
 }
 
 void Fl_FileChooser::textfont(Fl_Font f) {
@@ -220,7 +219,6 @@ void Fl_FileChooser::textfont(Fl_Font f) {
 
 Fl_Font Fl_FileChooser::textfont() {
   return (fileList->text_font());
-    return (fileList->textfont());
 }
 
 void Fl_FileChooser::textsize(uchar s) {

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_color_win32.cxx,v 1.23 2000/07/21 00:31:52 clip Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -96,7 +96,7 @@ void fl_color(Fl_Color i) {
   fl_brush = newbrush;
 }
 
-void fl_free_color(Fl_Color i) {
+void fl_free_color(Fl_Color) {
   // CET - FIXME - Are there colormapped displays on Windows?
   //               Would this only be used for private colormaps?
 }
@@ -148,5 +148,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.23 2000/07/21 00:31:52 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.4 2000/07/14 08:35:00 clip Exp $"
+// "$Id: fl_jpeg.cxx,v 1.5 2000/07/21 00:31:52 clip Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -252,8 +252,10 @@ static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 
 #endif
 
+#if HAVE_JPEG
 // Dummy function to remove gcc's nasty warning about longjmp:
 static void declare_now(void*) { }
+#endif
 
 void Fl_JPEG_Image::measure(int &W, int &H)
 {
@@ -404,5 +406,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.4 2000/07/14 08:35:00 clip Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.5 2000/07/21 00:31:52 clip Exp $"
 //

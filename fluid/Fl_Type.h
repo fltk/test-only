@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.23 2000/05/30 07:42:04 bill Exp $"
+// "$Id: Fl_Type.h,v 1.24 2000/07/21 00:31:52 clip Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -285,7 +285,8 @@ public:
   void redraw();
 };
 
-void* const LOAD = (void *)9831;
+#define LOAD ((void*)9831)
+
 FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 #include <FL/Fl_Tabs.H>
@@ -521,5 +522,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.23 2000/05/30 07:42:04 bill Exp $".
+// End of "$Id: Fl_Type.h,v 1.24 2000/07/21 00:31:52 clip Exp $".
 //

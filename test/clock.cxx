@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.7 2000/06/06 23:32:12 carl Exp $"
+// "$Id: clock.cxx,v 1.8 2000/07/21 00:31:52 clip Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,8 +55,8 @@ int ClockWindow::handle(int e) {
 }
 
 Fl_Item *about_item, *exit_item;
-void callback(Fl_Widget* w, void* d) {
-  if (d == exit_item) exit(0);
+void callback(Fl_Widget*, void* d) {
+  if (d == (void*)exit_item) exit(0);
   fl_message("FLTK-- Copyright 2000 Bill Spitzak and others");
 }
 
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   // window.resizable(popup); - Not today, maybe never!
   window.end();
   window.xclass("Fl_Clock");
-  window.show();
+  window.show(argc, argv);
   Fl_Bitmap shape(circle_bits, circle_width, circle_height); // window shape data
   window.shape(shape);
 
@@ -83,5 +83,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.7 2000/06/06 23:32:12 carl Exp $".
+// End of "$Id: clock.cxx,v 1.8 2000/07/21 00:31:52 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.90 2000/05/30 07:42:13 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.91 2000/07/21 00:31:52 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -288,7 +288,7 @@ void MenuWindow::draw() {
 	glyph()(FL_GLYPH_RIGHT, X+W-nh, Y+(H-nh)/2, nh, nh, bgcolor,
 		label_color, flags, FL_NO_BOX);
       } else if (widget->shortcut()) {
-	flags = flags & ~FL_ALIGN_MASK | FL_ALIGN_RIGHT;
+	flags = (flags & (~FL_ALIGN_MASK)) | FL_ALIGN_RIGHT;
 	widget->label_type()->draw(fl_shortcut_label(widget->shortcut()),
 			      X, Y, W-3, H, label_color, flags);
       }
@@ -694,5 +694,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.90 2000/05/30 07:42:13 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.91 2000/07/21 00:31:52 clip Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.15 2000/07/20 05:28:32 clip Exp $"
+   "$Id: conf.h,v 1.16 2000/07/21 00:31:51 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -150,14 +150,14 @@ extern "C" {
 
 
   /*
-        void conf_clear_cache()
+        void conf_clear_cached(void)
 
         description:
                 clears all cached config file data so it will be reread
                 from disk
   */
 
-  FL_API void conf_clear_cached();
+  FL_API void conf_clear_cached(void);
 
 
 
@@ -477,5 +477,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.15 2000/07/20 05:28:32 clip Exp $".
+ * End of "$Id: conf.h,v 1.16 2000/07/21 00:31:51 clip Exp $".
  */

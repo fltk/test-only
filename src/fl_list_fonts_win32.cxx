@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.6 2000/05/27 01:17:32 carl Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.7 2000/07/21 00:31:52 clip Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <config.h>
 
-int Fl_Font_::encodings(const char**& arrayp) const {
+int Fl_Font_::encodings(const char**& /* arrayp */) const {
   // CET - FIXME - What about this encoding stuff?
   return 0;
 }
@@ -86,8 +86,8 @@ static Fl_Font* array = 0;
 static int num_fonts = 0;
 static int array_size = 0;
 
-static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf,
-  NEWTEXTMETRIC FAR *lpntm, int FontType, LPARAM)
+static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
+                           int, LPARAM)
 {
   // we need to do something about different encodings of the same font
   // in order to match X!  I can't tell if each different encoding is
@@ -151,5 +151,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.6 2000/05/27 01:17:32 carl Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.7 2000/07/21 00:31:52 clip Exp $"
 //

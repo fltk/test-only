@@ -21,7 +21,7 @@ Fl_Pixmap* folderSmall;
 Fl_Pixmap* fileSmall;
 
 void
-cb_test(Fl_Widget* t, void* u) {
+cb_test(Fl_Widget*, void* u) {
   Fl_Widget* w = (Fl_Widget*)u;
   printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
 }

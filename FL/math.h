@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.5 1999/06/20 15:24:25 mike Exp $"
+// "$Id: math.h,v 1.6 2000/07/21 00:31:51 clip Exp $"
 //
 // Math header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,15 @@
 #ifdef WIN32
 // things missing from <math.h>:
 
+// stop redefinition warnings
+#undef M_PI
+#undef M_PI_2
+#undef M_PI_4
+#undef M_1_PI
+#undef M_2_PI
+#undef M_SQRT2
+#undef M_SQRT1_2
+
 #define M_PI            3.14159265358979323846
 #define M_PI_2          1.57079632679489661923
 #define M_PI_4          0.78539816339744830962
@@ -57,5 +66,5 @@ inline double copysign(double a, double b) {return b<0 ? -a : a;}
 #endif
 
 //
-// End of "$Id: math.h,v 1.5 1999/06/20 15:24:25 mike Exp $".
+// End of "$Id: math.h,v 1.6 2000/07/21 00:31:51 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.118 2000/07/20 05:28:32 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.119 2000/07/21 00:31:52 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -352,7 +352,7 @@ typedef struct _tagTRACKMOUSEEVENT {
 static BOOL (WINAPI *_TrackMouseEvent)(_TRACKMOUSEEVENT *ptme) = NULL;
 
 static VOID CALLBACK
-TrackMouseTimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
+TrackMouseTimerProc(HWND hWnd, UINT, UINT idEvent, DWORD) {
   RECT rect;
   POINT pt;
 
@@ -1159,5 +1159,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.118 2000/07/20 05:28:32 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.119 2000/07/21 00:31:52 clip Exp $".
 //
