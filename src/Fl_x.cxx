@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.93 2000/08/20 04:31:39 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.94 2000/09/05 17:36:21 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -840,7 +840,7 @@ int fl_handle(const XEvent& xevent)
 	// easier to program shortcuts and is Windows-compatable:
 	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
       }
-      if (Fl::event_state(FL_CTRL) && keysym == '-') buffer[0] = 0x1f; // ^_
+      if (fl_xevent->xbutton.state&4 && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
       Fl::e_text = buffer;
       Fl::e_length = len;
@@ -1297,5 +1297,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.93 2000/08/20 04:31:39 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.94 2000/09/05 17:36:21 spitzak Exp $".
 //

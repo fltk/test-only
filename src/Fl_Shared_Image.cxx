@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.17 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.18 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,17 +109,8 @@ void Fl_Shared_Image::clear_cache()
   if (l2) l2->clear_cache();
 }
 
-void Fl_Shared_Image::set_root_directory(const char *d)
-{
-  if(fl_shared_image_root) free(fl_shared_image_root);
-  if(d[0] && d[strlen(d)-1]!='/')
-  {
-    fl_shared_image_root=(char *) malloc(strlen(d)+2);
-    strcpy(fl_shared_image_root, d);
-    strcat(fl_shared_image_root, "/");
-  }
-  else
-    fl_shared_image_root=strdup(d);
+void Fl_Shared_Image::set_root_directory(const char *d) {
+  fl_shared_image_root = d;
 }
 
 void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
@@ -141,21 +132,28 @@ Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, const char* name)
 }
 
 
-const char* Fl_Shared_Image::get_filename()
+const char* Fl_Shared_Image::get_filename() {
+  return get_filename(name);
+}
+
+const char* Fl_Shared_Image::get_filename(const char* name)
 {
-  if (name[0] == '/') return name;
+  if (name[0] == '/' || !fl_shared_image_root || !*fl_shared_image_root)
+    return name;
+  int m = strlen(fl_shared_image_root);
+  int n = strlen(name) + m + 2;
   static char *s;
-  if(s) free(s);
-  if(!fl_shared_image_root) fl_shared_image_root=strdup("");
-  s = (char*) malloc(strlen(name)+strlen(fl_shared_image_root)+1);
+  if (s) free(s);
+  s = (char*) malloc(n+1);
   strcpy(s, fl_shared_image_root);
-  strcat(s, name);
+  if (s[m-1] != '/') s[m++] = '/';
+  strcpy(s+m, name);
   return s;
 }
 
 
 Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
-				      const char* name, unsigned char *datas)
+				      const char* name, const uchar *datas)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if(!image)
@@ -176,7 +174,7 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   return image;
 }
 
-void Fl_Shared_Image::reload(uchar* pdatas)
+void Fl_Shared_Image::reload(const uchar* pdatas)
 {
   if (id) {
     mem_used -= w*h;
@@ -190,7 +188,7 @@ void Fl_Shared_Image::reload(uchar* pdatas)
   if (pdatas) datas = pdatas;
   measure(w, h);
 }
-void Fl_Shared_Image::reload(const char* name, uchar* pdatas)
+void Fl_Shared_Image::reload(const char* name, const uchar* pdatas)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if (image) image->reload(pdatas);
@@ -250,5 +248,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.17 2000/07/14 08:35:01 clip Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.18 2000/09/05 17:36:21 spitzak Exp $"
 //

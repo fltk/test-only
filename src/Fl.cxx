@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.108 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.109 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ int		Fl::e_length;
 Fl_Font* Fl_Font_::array = 0;
 int Fl_Font_::num_fonts = 0;
 
-char *Fl_Shared_Image::fl_shared_image_root=0;
+const char *Fl_Shared_Image::fl_shared_image_root=0;
 
 Fl_Shared_Image  *Fl_Shared_Image::first_image = 0;
 
@@ -583,5 +583,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.108 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.109 2000/09/05 17:36:20 spitzak Exp $".
 //

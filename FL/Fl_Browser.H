@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.19 2000/08/21 03:56:23 spitzak Exp $"
+// "$Id: Fl_Browser.H,v 1.20 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -47,42 +47,23 @@ public:
     NUMMARKS
   };
 
-  Fl_Widget* goto_top(); // set current item to top item in browser?
-  Fl_Widget* goto_mark(int mark); // set current item to one of the marks?
-  Fl_Widget* goto_position(int y); // set current item to one (near) y pixels from top?
-  Fl_Widget* goto_number(int y); // go to toplevel item number
-  Fl_Widget* goto_visible_focus();
-  Fl_Widget* forward(); // set current item to next visible item?
-  Fl_Widget* backward(); // set current item to previous visible item?
-
-  // are these two marks the same item?
-  int marks_equal(int mark1, int mark2);
-  // is this mark the current item?
-  int at_mark(int mark) { return marks_equal(mark, HERE); }
-  // compare relative locations of these two marks
-  int compare_mark_locations(int mark1, int mark2);
-  // is current item before this mark?
-  int before_mark(int mark) { return compare_mark_locations(HERE, mark) < 0; }
-  // is current item after this mark?
-  int after_mark(int mark) { return compare_mark_locations(HERE, mark) > 0; }
-  // copy one mark to another
-  void copy_mark(int dest_mark, int src_mark);
-  // set this mark to current item
-  void set_mark(int mark) { copy_mark(mark, HERE); }
-  // unsets this mark (toplevel only)?
-  void unset_mark(int mark);
-  // is this toplevel mark set?
-  int is_set(int mark);
-  void damage_item(int mark = HERE);
-
+  Fl_Widget* goto_top(); // set HERE to top of browser
+  Fl_Widget* goto_mark(int mark); // set HERE to mark
+  Fl_Widget* goto_position(int y); // set HERE to item y pixels from top
+  Fl_Widget* goto_number(int n); // set HERE to n'th visible item
+  Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
+  Fl_Widget* forward(); // set HERE to next visible item
+  Fl_Widget* backward(); // set HERE to previous visible item
+  void set_mark(int dest, int mark); // set dest to mark
+  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
+  int at_mark(int mark) { return !compare_marks(HERE,mark); }
+  void unset_mark(int mark);  // makes mark have illegal value
+  int is_set(int mark);  // false if unset_mark was called
+  void damage_item(int mark); // make this item redraw
   int set_focus();
   void set_top();
-  int item_selected() const {return widget->flags()&FL_VALUE;}
   int item_select(int value = 1, int do_callback = 0);
   int item_select_only(int do_callback = 0);
-  int item_visible() const {return widget->visible_r();}
-  void item_show() {widget->show(); relayout();}
-  void item_hide() {widget->hide(); relayout();}
 
   Fl_Browser(int X,int Y,int W,int H,const char*l=0);
   ~Fl_Browser();
@@ -130,7 +111,6 @@ public:
 
 private:
 
-  void set_item();
   char indented_;
   char format_char_;
   char column_char_;
@@ -144,7 +124,6 @@ private:
   int X,Y,W,H; // bounding box area
 
   // Mark and current item storage:
-  Fl_Widget* widget;
   int item_level[NUMMARKS]; // mark item's nesting depth in group hierarchy?
   int item_position[NUMMARKS]; // distance in pixels from top of browser?
   int item_number[NUMMARKS];
@@ -165,5 +144,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.19 2000/08/21 03:56:23 spitzak Exp $".
+// End of "$Id: Fl_Browser.H,v 1.20 2000/09/05 17:36:20 spitzak Exp $".
 //

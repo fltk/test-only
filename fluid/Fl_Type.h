@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.24 2000/07/21 00:31:52 clip Exp $"
+// "$Id: Fl_Type.h,v 1.25 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,15 +56,19 @@ protected:
 
 public:	// things that should not be public:
 
-  Fl_Type *parent; // parent, which is previous in list
+  Fl_Type* parent;
+  Fl_Type* first_child;
+  Fl_Type* next_brother;
+  Fl_Type* previous_brother;
+
+  Fl_Type* walk(const Fl_Type* top) const;
+  Fl_Type* walk() const;
+
+  static Fl_Type *first;
+
   char new_selected; // browser highlight
   char selected; // copied here by selection_changed()
-  char open_;	// state of triangle in browser
-  char visible; // true if all parents are open
-  int level;	// number of parents over this
-  static Fl_Type *first;
-  static Fl_Type *last; // linked list of all objects
-  Fl_Type *next, *prev;	// linked list of all objects
+  char open_;	// open/close state of this parent in browser
 
   Fl_Type *factory;
   const char *callback_name();
@@ -76,7 +80,7 @@ public:
 
   void add(Fl_Type *parent); // add as new child
   void insert(Fl_Type *n); // insert into list before n
-  Fl_Type* remove();	// remove from list
+  void remove(); // remove from list
   void move_before(Fl_Type*); // move before a sibling
 
   virtual const char *title(); // string for browser
@@ -111,8 +115,7 @@ public:
 
   // write code, these are called in order:
   virtual void write_static(); // write static stuff to .c file
-  virtual void write_code1(); // code and .h before children
-  virtual void write_code2(); // code and .h after children
+  virtual void write_code();   // write .h and .c file
 
   // fake rtti:
   virtual int is_parent() const;
@@ -141,95 +144,7 @@ public:
   const char* class_name(const int need_nest) const;
 };
 
-class FLUID_API Fl_Function_Type : public Fl_Type {
-  const char* return_type;
-  const char* attributes;
-  char public_, cdecl_, constructor, havewidgets;
-public:
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  int ismain() {return name_ == 0;}
-  virtual const char *type_name() {return "Function";}
-  virtual const char *title() {
-    return name() ? name() : "main()";
-  }
-  int is_parent() const {return 1;}
-  int is_code_block() const {return 1;}
-  void write_properties();
-  void read_property(const char *);
-};
-
-class FLUID_API Fl_Code_Type : public Fl_Type {
-public:
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  virtual const char *type_name() {return "code";}
-  int is_code_block() const {return 0;}
-};
-
-class FLUID_API Fl_CodeBlock_Type : public Fl_Type {
-  const char* after;
-public:
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  virtual const char *type_name() {return "codeblock";}
-  int is_code_block() const {return 1;}
-  int is_parent() const {return 1;}
-  void write_properties();
-  void read_property(const char *);
-};
-
-class FLUID_API Fl_Decl_Type : public Fl_Type {
-  char public_;
-public:
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  virtual const char *type_name() {return "decl";}
-  void write_properties();
-  void read_property(const char *);
-};
-
-class FLUID_API Fl_DeclBlock_Type : public Fl_Type {
-  const char* after;
-public:
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  virtual const char *type_name() {return "declblock";}
-  void write_properties();
-  void read_property(const char *);
-  int is_parent() const {return 1;}
-  int is_decl_block() const {return 1;}
-};
-
-class FLUID_API Fl_Class_Type : public Fl_Type {
-  const char* subclass_of;
-  char public_;
-public:
-  // state variables for output:
-  char write_public_state; // true when public: has been printed
-  Fl_Class_Type* parent_class; // save class if nested
-//
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void open();
-  virtual const char *type_name() {return "class";}
-  int is_parent() const {return 1;}
-  int is_decl_block() const {return 1;}
-  int is_class() const {return 1;}
-  void write_properties();
-  void read_property(const char *);
-};
+////////////////////////////////////////////////////////////////
 
 #define NUM_EXTRA_CODE 4
 
@@ -245,11 +160,11 @@ class FLUID_API Fl_Widget_Type : public Fl_Type {
 protected:
 
   void write_static();
+  void write_code();
   void write_code1();
-  virtual void write_widget_code();
+  void write_widget_code();
   void write_extra_code();
   void write_block_close();
-  void write_code2();
 
 public:
 
@@ -289,81 +204,7 @@ public:
 
 FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
 
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Pack.H>
-
-class igroup : public Fl_Group {
-public:
-  igroup(int x,int y,int w,int h) : Fl_Group(x,y,w,h) {
-    Fl_Group::current(0);
-    resizable(0);
-  }
-};
-
-class itabs : public Fl_Tabs {
-public:
-  itabs(int x,int y,int w,int h) : Fl_Tabs(x,y,w,h) {
-    Fl_Group::current(0);
-    resizable(0);
-  }
-};
-
-class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
-public:
-  virtual const char *type_name() {return "Fl_Group";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    igroup *g = new igroup(x,y,w,h); Fl_Group::current(0); return g;}
-  Fl_Widget_Type *_make() {return new Fl_Group_Type();}
-  Fl_Type *make();
-  void write_code1();
-  void write_code2();
-  void add_child(Fl_Type*, Fl_Type*);
-  void move_child(Fl_Type*, Fl_Type*);
-  void remove_child(Fl_Type*);
-  int is_parent() const {return 1;}
-  int is_group() const {return 1;}
-};
-
-FLUID_API extern const char pack_type_name[];
-FLUID_API extern Fl_Menu_Item pack_type_menu[];
-
-class FLUID_API Fl_Pack_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return pack_type_menu;}
-public:
-  virtual const char *type_name() {return pack_type_name;}
-  Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
-};
-
-FLUID_API extern const char tabs_type_name[];
-
-class FLUID_API Fl_Tabs_Type : public Fl_Group_Type {
-public:
-  virtual const char *type_name() {return tabs_type_name;}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    itabs *g = new itabs(x,y,w,h); Fl_Group::current(0); return g;}
-  Fl_Widget_Type *_make() {return new Fl_Tabs_Type();}
-  Fl_Type* click_test(int,int);
-  void add_child(Fl_Type*, Fl_Type*);
-  void remove_child(Fl_Type*);
-};
-
-FLUID_API extern const char scroll_type_name[];
-FLUID_API extern Fl_Menu_Item scroll_type_menu[];
-
-class FLUID_API Fl_Scroll_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return scroll_type_menu;}
-public:
-  virtual const char *type_name() {return scroll_type_name;}
-  Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
-};
-
-FLUID_API extern const char tile_type_name[];
-
-class FLUID_API Fl_Tile_Type : public Fl_Group_Type {
-public:
-  virtual const char *type_name() {return tile_type_name;}
-  Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
-};
+////////////////////////////////////////////////////////////////
 
 FLUID_API extern Fl_Menu_Item window_type_menu[];
 
@@ -383,12 +224,12 @@ class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
   void newposition(Fl_Widget_Type *,int &x,int &y,int &w,int &h);
   int handle(int);
   virtual void setlabel(const char *);
-  void write_code1();
-  void write_code2();
+  void write_code();
   Fl_Widget_Type *_make() {return 0;} // we don't call this
   Fl_Widget *widget(int,int,int,int) {return 0;}
   int recalc;		// set by fix_overlay()
   void moveallchildren();
+  void move_children(Fl_Type*, int);
 
 public:
 
@@ -414,72 +255,25 @@ public:
   int is_window() const {return 1;}
 };
 
-FLUID_API extern Fl_Menu_Item menu_item_type_menu[];
-
-class FLUID_API Fl_Menu_Item_Type : public Fl_Widget_Type {
-public:
-  Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
-  const char* type_name() {return "Fl_Item";}
-  int is_menu_item() const {return 1;}
-  int is_button() const {return 1;} // this gets shortcut to work
-  Fl_Widget *widget(int x,int y,int w,int h);
-  Fl_Widget_Type *_make() {return new Fl_Menu_Item_Type();}
-};
-
-class FLUID_API Fl_Submenu_Type : public Fl_Group_Type {
-public:
-  Fl_Menu_Item* subtypes() {return 0;}
-  const char* type_name() {return "Fl_Item_Group";}
-  int is_menu_item() const {return 1;}
-  Fl_Widget *widget(int x,int y,int w,int h);
-  Fl_Widget_Type *_make() {return new Fl_Submenu_Type();}
-};
-
-#include <FL/Fl_Menu_.H>
 ////////////////////////////////////////////////////////////////
-// This is the base class for widgets that contain a menu (ie
-// subclasses of Fl_Menu_).
 
-class FLUID_API Fl_Menu_Type : public Fl_Group_Type {
+class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
 public:
-  int is_menu_button() const {return 1;}
-  Fl_Menu_Type() : Fl_Group_Type() {}
-  ~Fl_Menu_Type() {}
-  Fl_Type* click_test(int x, int y);
+  virtual const char *type_name();
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type* _make();
+  Fl_Type *make();
+  void write_code();
+  void add_child(Fl_Type*, Fl_Type*);
+  void move_child(Fl_Type*, Fl_Type*);
+  void remove_child(Fl_Type*);
+  int is_parent() const;
+  int is_group() const;
 };
 
-FLUID_API extern Fl_Menu_Item button_type_menu[];
+////////////////////////////////////////////////////////////////
+// This header file also declares all the global functions in fluid:
 
-#include <FL/Fl_Menu_Button.H>
-class FLUID_API Fl_Menu_Button_Type : public Fl_Menu_Type {
-  Fl_Menu_Item *subtypes() {return button_type_menu;}
-public:
-  virtual const char *type_name() {return "Fl_Menu_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Menu_Button(x,y,w,h,"menu");}
-  Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
-};
-
-#include <FL/Fl_Choice.H>
-class FLUID_API Fl_Choice_Type : public Fl_Menu_Type {
-public:
-  int is_choice() const {return 1;}
-  virtual const char *type_name() {return "Fl_Choice";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
-    return o;
-  }
-  Fl_Widget_Type *_make() {return new Fl_Choice_Type();}
-};
-
-#include <FL/Fl_Menu_Bar.H>
-class FLUID_API Fl_Menu_Bar_Type : public Fl_Menu_Type {
-public:
-  virtual const char *type_name() {return "Fl_Menu_Bar";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Menu_Bar(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
-};
 // object list operations:
 Fl_Widget *make_widget_browser(int x,int y,int w,int h);
 extern int modflag;
@@ -522,5 +316,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.24 2000/07/21 00:31:52 clip Exp $".
+// End of "$Id: Fl_Type.h,v 1.25 2000/09/05 17:36:20 spitzak Exp $".
 //

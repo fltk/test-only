@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.13 2000/06/18 07:57:29 bill Exp $"
+// "$Id: code.cxx,v 1.14 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -218,16 +218,21 @@ void write_cstring(const char *w, int length) {
 // write an array of C characters in a decimal format
 void write_carray(const char *w, int length) {
   if (varused_test) return;
+#if 0
+  write_cstring(w,length);
+#else
   const char *e = w+length;
   int linelength = 1;
   for (; w < e;) {
     if (linelength >= 75) {fputs("\n",code_file); linelength = 0;}
     int c = (uchar)*w++;
-    fprintf(code_file, "%d,", c);
+    fprintf(code_file, "%d", c);
+    if (w < e) fputc(',',code_file);
     linelength+=2;
     if(c>=10) linelength++;
     if(c>=100) linelength++;
   }
+#endif
 }
 
 // write a C string, quoting characters if necessary:
@@ -252,16 +257,6 @@ void write_h(const char* format,...) {
 
 #include <FL/filename.H>
 int write_number;
-
-// recursively dump code, putting children between the two parts
-// of the parent code:
-static Fl_Type* write_code(Fl_Type* p) {
-  p->write_code1();
-  Fl_Type* q;
-  for (q = p->next; q && q->level > p->level;) q = write_code(q);
-  p->write_code2();
-  return q;
-}
 
 int write_code(const char *s, const char *t) {
   write_number++;
@@ -298,13 +293,13 @@ int write_code(const char *s, const char *t) {
 
   if (t && include_H_from_C)
     write_c("#include \"%s\"\n", filename_name(t));
-  for (Fl_Type* p = Fl_Type::first; p;) {
+  for (Fl_Type* p = Fl_Type::first; p; p = p->next_brother) {
     // write all static data for this & all children first
     p->write_static();
-    for (Fl_Type* q = p->next; q && q->level > p->level; q = q->next)
+    for (Fl_Type* q = p->first_child; q; q = q->walk(p))
       q->write_static();
     // then write the nested code:
-    p = write_code(p);
+    p->write_code();
   }
 
   delete included_root; included_root = 0;
@@ -321,12 +316,12 @@ int write_code(const char *s, const char *t) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Type::write_static() {}
-void Fl_Type::write_code1() {
+
+void Fl_Type::write_code() {
   write_h("// Header for %s\n", title());
   write_c("// Code for %s\n", title());
 }
-void Fl_Type::write_code2() {}
 
 //
-// End of "$Id: code.cxx,v 1.13 2000/06/18 07:57:29 bill Exp $".
+// End of "$Id: code.cxx,v 1.14 2000/09/05 17:36:20 spitzak Exp $".
 //

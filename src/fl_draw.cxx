@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.13 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.14 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -151,7 +151,8 @@ void fl_draw(
 void fl_draw(
   const char* str,	// the (multi-line) string
   int x, int y, int w, int h,	// bounding box
-  Fl_Align align) {
+  Fl_Align align)
+{
   if (!str || !*str) return;
   if (w && h && !fl_not_clipped(x, y, w, h)) return;
   fl_draw(str, x, y, w, h, align, fl_draw);
@@ -179,5 +180,5 @@ void fl_measure(const char* str, int& w, int& h) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.13 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.14 2000/09/05 17:36:21 spitzak Exp $".
 //

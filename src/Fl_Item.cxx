@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.7 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.8 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -100,12 +100,14 @@ Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l) {
   style(::style);
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  item_ = 0;
   end();
 }
 
 Fl_Menu_::Fl_Menu_(const char* l) : Fl_Group(0,0,0,0,l) {
   style(::style);
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  item_ = 0;
   // end()?
 }
 

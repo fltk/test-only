@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
+// "$Id: fl_png.cxx,v 1.3 2000/09/05 17:36:20 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 static void declare_now(void*) { }
 #endif
 
-int Fl_PNG_Image::test(unsigned char *datas, size_t size)
+int Fl_PNG_Image::test(const uchar* datas, size_t size)
 {
 #if !HAVE_PNG
   return 0;
@@ -97,12 +97,12 @@ void Fl_PNG_Image::measure(int &W, int &H)
 
   if(datas)
   {
-    if (png_sig_cmp(datas, (png_size_t)0, 8))
+    if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
       goto error;
   }
   else
   {
-    unsigned char buf[8];
+    uchar buf[8];
     if (fread(buf, 1, 8, fp) != 8 || png_sig_cmp(buf, (png_size_t)0, 8))
       goto error;
     png_init_io(png_ptr, fp);
@@ -135,7 +135,7 @@ void Fl_PNG_Image::measure(int &W, int &H)
 }
 
 #if HAVE_PNG
-static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
+static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
 {
   png_read_row((png_structp)v, b, NULL);
 }
@@ -175,18 +175,18 @@ void Fl_PNG_Image::read()
     return;
   }
 
-  unsigned char *buffer=0;
+  uchar* buffer=0;
   int d=3;
   declare_now(&d);
 
   if(datas)
   {
-    if (png_sig_cmp(datas, (png_size_t)0, 8))
+    if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
       goto error;
   }
   else
   {
-    unsigned char buf[8];
+    uchar buf[8];
     if (fread(buf, 1, 8, fp) != 8 || png_sig_cmp(buf, (png_size_t)0, 8))
       goto error;
     png_init_io(png_ptr, fp);
@@ -252,5 +252,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
+// End of "$Id: fl_png.cxx,v 1.3 2000/09/05 17:36:20 spitzak Exp $"
 //

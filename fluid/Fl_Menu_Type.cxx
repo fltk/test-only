@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.35 2000/08/22 16:38:11 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.36 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,14 +38,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Fl_Menu_Item menu_item_type_menu[] = {
+static Fl_Menu_Item menu_item_type_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_TOGGLE_ITEM},
   {"Radio",0,0,(void*)FL_RADIO_ITEM},
   {0}};
 
+class Fl_Menu_Item_Type : public Fl_Widget_Type {
+public:
+  Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
+  const char* type_name() {return "Fl_Item";}
+  int is_menu_item() const {return 1;}
+  int is_button() const {return 1;} // this gets shortcut to work
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type *_make() {return new Fl_Menu_Item_Type();}
+};
+
+class Fl_Submenu_Type : public Fl_Group_Type {
+public:
+  Fl_Menu_Item* subtypes() {return 0;}
+  const char* type_name() {return "Fl_Item_Group";}
+  int is_menu_item() const {return 1;}
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type *_make() {return new Fl_Submenu_Type();}
+};
+
 extern int reading_file;
-extern int force_parent;
 
 Fl_Widget *Fl_Menu_Item_Type::widget(int,int,int,int) {
   return new Fl_Item(reading_file ? 0 : "item");
@@ -61,6 +79,17 @@ Fl_Menu_Item_Type Fl_Menu_Item_type;
 Fl_Submenu_Type Fl_Submenu_type;
 
 ////////////////////////////////////////////////////////////////
+
+// This is the base class for widgets that contain a menu (ie
+// subclasses of Fl_Menu_).
+
+class Fl_Menu_Type : public Fl_Group_Type {
+public:
+  int is_menu_button() const {return 1;}
+  Fl_Menu_Type() : Fl_Group_Type() {}
+  ~Fl_Menu_Type() {}
+  Fl_Type* click_test(int x, int y);
+};
 
 extern FL_API int fl_dont_execute; // in Fl_Menu.cxx
 
@@ -83,7 +112,7 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Menu_Button.H>
-Fl_Menu_Item button_type_menu[] = {
+static Fl_Menu_Item button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)Fl_Menu_Button::POPUP1},
   {"popup2",0,0,(void*)Fl_Menu_Button::POPUP2},
@@ -94,8 +123,48 @@ Fl_Menu_Item button_type_menu[] = {
   {"popup123",0,0,(void*)Fl_Menu_Button::POPUP123},
   {0}};
 
+FLUID_API extern Fl_Menu_Item button_type_menu[];
+
+class Fl_Menu_Button_Type : public Fl_Menu_Type {
+  Fl_Menu_Item *subtypes() {return button_type_menu;}
+public:
+  virtual const char *type_name() {return "Fl_Menu_Button";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    return new Fl_Menu_Button(x,y,w,h,"menu");}
+  Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
+};
+
 Fl_Menu_Button_Type Fl_Menu_Button_type;
+
+////////////////////////////////////////////////////////////////
+
+#include <FL/Fl_Choice.H>
+
+class Fl_Choice_Type : public Fl_Menu_Type {
+public:
+  int is_choice() const {return 1;}
+  virtual const char *type_name() {return "Fl_Choice";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
+    return o;
+  }
+  Fl_Widget_Type *_make() {return new Fl_Choice_Type();}
+};
+
 Fl_Choice_Type Fl_Choice_type;
+
+////////////////////////////////////////////////////////////////
+
+#include <FL/Fl_Menu_Bar.H>
+
+class FLUID_API Fl_Menu_Bar_Type : public Fl_Menu_Type {
+public:
+  virtual const char *type_name() {return "Fl_Menu_Bar";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    return new Fl_Menu_Bar(x,y,w,h);}
+  Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
+};
+
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
 ////////////////////////////////////////////////////////////////
@@ -147,7 +216,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
     i->svalue = ((current_widget->o))->shortcut();
     i->redraw();
   } else {
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+    for (Fl_Type *o = Fl_Type::first; o; o = o->walk())
       if (o->selected && o->is_widget()) {
 	Fl_Widget* b = ((Fl_Widget_Type*)o)->o;
 	b->shortcut(i->svalue);
@@ -161,5 +230,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.35 2000/08/22 16:38:11 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.36 2000/09/05 17:36:20 spitzak Exp $".
 //

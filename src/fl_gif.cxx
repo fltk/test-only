@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_gif.cxx,v 1.8 2000/09/05 17:36:21 spitzak Exp $"
 //
 // fl_gif.cxx
 //
@@ -57,7 +57,7 @@ typedef unsigned char uchar;
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
 
-int Fl_GIF_Image::test(unsigned char *datas, size_t size)
+int Fl_GIF_Image::test(const unsigned char *datas, size_t size)
 {
   return !strncmp((char*) datas,"GIF", size<3? size:3);
 }
@@ -72,7 +72,7 @@ void Fl_GIF_Image::measure(int  &W, int &H)
   FILE *GifFile=0;
 
   char b[6];
-  uchar* dat = datas;
+  const uchar* dat = datas;
   if(dat)
   {
     memcpy(b, dat, 6);
@@ -108,7 +108,7 @@ void Fl_GIF_Image::read()
   int inumber=0;
   FILE *GifFile=0;
 
-  uchar* dat = datas;
+  const uchar* dat = datas;
   {char b[6];
   if(dat)
   {
@@ -421,5 +421,5 @@ extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
+// End of "$Id: fl_gif.cxx,v 1.8 2000/09/05 17:36:21 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.3 1999/12/06 18:50:08 vincent Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.4 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,8 +45,6 @@ static unsigned char nosuch_bits[] = {
    0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
 Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
-FL_API extern char *fl_shared_image_root;
-
 Fl_Image_Type fl_image_filetypes[] = {
   { "XPM", Fl_XPM_Image::test, Fl_XPM_Image::get},
   { "GIF", Fl_GIF_Image::test, Fl_GIF_Image::get},
@@ -56,35 +54,28 @@ Fl_Image_Type fl_image_filetypes[] = {
   { 0, Fl_UNKNOWN_Image::test, Fl_UNKNOWN_Image::get }
 };
 
-Fl_Image_Type* Fl_Shared_Image::guess(const char* name, unsigned char *datas)
+Fl_Image_Type* Fl_Shared_Image::guess(const char* name, const uchar* datas)
 {
-  int loaded = 0;
+  uchar* read_data = 0;
+  const uchar* test_data = datas;
   size_t size = 1024;
   if (!datas) {
-    datas = new uchar[1025];
-    datas[1024] = 0; // null-terminate so strstr() works
-    char s[1024];
-    if (name[0] == '/') strcpy(s, name);
-    else {
-      if(!fl_shared_image_root) fl_shared_image_root=strdup("");
-      strcpy(s, fl_shared_image_root);
-      strcat(s, name);
-    }
-    FILE* fp = fopen(s, "rb");
+    FILE* fp = fopen(get_filename(name), "rb");
     if (!fp)
       return fl_image_filetypes + 
 	sizeof(fl_image_filetypes)/sizeof(fl_image_filetypes[0]) - 1;
-    size = fread(datas, 1, size, fp);
+    test_data = read_data = new uchar[1025];
+    read_data[1024] = 0; // null-terminate so strstr() works
+    size = fread(read_data, 1, size, fp);
     fclose(fp);
-    loaded = 1;
   }
   Fl_Image_Type* ft;
   for (ft=fl_image_filetypes; ft->name; ft++)
-    if (ft->test(datas, size)) break;
-  if(loaded) free(datas);
+    if (ft->test(test_data, size)) break;
+  delete[] read_data;
   return ft;
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.3 1999/12/06 18:50:08 vincent Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.4 2000/09/05 17:36:20 spitzak Exp $"
 //

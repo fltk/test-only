@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.20 2000/07/21 01:24:35 clip Exp $"
+// "$Id: file.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -337,10 +337,9 @@ int write_file(const char *filename, int selected_only) {
     if (!selected_only || p->selected) {
       p->write();
       write_string("\n");
-      int q = p->level;
-      for (p = p->next; p && p->level > q; p = p->next);
+      p = p->next_brother;
     } else {
-      p = p->next;
+      p = p->walk();
     }
   }
   return close_write();
@@ -477,7 +476,7 @@ int read_file(const char *filename, int merge) {
   }
   read_children(Fl_Type::current, merge);
   Fl_Type::current = 0;
-  for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+  for (Fl_Type *o = Fl_Type::first; o; o = o->walk())
     if (o->selected) {Fl_Type::current = o; break;}
   Fl_Style::start("style1");
   if (scheme) Fl::scheme(scheme);
@@ -656,5 +655,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.20 2000/07/21 01:24:35 clip Exp $".
+// End of "$Id: file.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.94 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.95 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -684,31 +684,28 @@ int Fl_Menu_::pulldown(
   }
 
   Fl::remove_timeout(autoscroll_timeout, &p);
+  delete fakemenu;
+  while (--p.nummenus) delete p.menus[p.nummenus];
+  mw.hide();
+  Fl::release();
 
-  Fl_Widget* widget = 0;
   if (p.state == DONE_STATE) {
+    item(p.current_widget());
     // set the focus of all the parents so item() returns the it:
     focus(p.indexes[0]);
     for (int i=0; i < p.level; i++) {
       Fl_Group* g = (Fl_Group*)p.current_widget(i);
       g->focus(i < p.level ? p.indexes[i+1] : -1);
     }
-    widget = p.current_widget();
+    if (item()) {
+      execute(item());
+      if (menubar && !p.level &&
+	  (item()->type() == FL_RADIO_ITEM || item()->type() == FL_TOGGLE_ITEM))
+	redraw();
+      return 1;
+    }
   }
-
-  delete fakemenu;
-  while (--p.nummenus) delete p.menus[p.nummenus];
-  mw.hide();
-  Fl::release();
-
-  if (widget) {
-    execute(widget);
-    if (menubar && !p.level &&
-	(widget->type() == FL_RADIO_ITEM || widget->type() == FL_TOGGLE_ITEM))
-      redraw();
-    return 1;
-  }
-  else return 0;
+  return 0;
 }
 
 int Fl_Menu_::popup(int X, int Y, const char* title) {
@@ -718,5 +715,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.94 2000/08/21 03:56:24 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.95 2000/09/05 17:36:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.28 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.29 2000/09/05 17:36:21 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -64,28 +64,6 @@ void Fl_Menu_::execute(Fl_Widget* w) {
   w->do_callback(w, data);
 }
 
-Fl_Widget* Fl_Menu_::item() const {
-  const Fl_Group* parent = this;
-  Fl_Widget* widget = 0;
-  for (;;) {
-    int i = parent->focus();
-    if (i < 0) break;
-    if (i >= parent->children()) return 0; // some kind of foul-up
-    widget = parent->child(i);
-    if (!widget->is_group()) break;
-    parent = (Fl_Group*)widget;
-  }
-  return widget;
-}
-
-void Fl_Menu_::item(Fl_Widget* w) {
-  if (!w) {focus(-1); return;}
-  while (w->parent()) {
-    w->parent()->focus(w);
-    w = w->parent();
-  }
-}
-
 ////////////////////////////////////////////////////////////////
 
 // recursive innards of handle_shortcut:
@@ -110,5 +88,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.28 2000/08/21 03:56:24 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.29 2000/09/05 17:36:21 spitzak Exp $"
 //

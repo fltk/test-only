@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.20 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,7 @@
 ////////////////////////////////////////////////////////////////
 
 Fl_Type *Fl_Type::first;
-Fl_Type *Fl_Type::last;
+Fl_Type *Fl_Type::current;
 
 class Widget_List : public Fl_List {
   virtual int children(const Fl_Group*, int* indexes, int level);
@@ -81,20 +81,11 @@ int Widget_List::children(const Fl_Group*, int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0; l < level; l++) {
-    int i = indexes[l];
-    for (;;) {
-      if (!item || item->level < l) return -1;
-      if (item->level == l) {if (!i) break; --i;}
-      item = item->next;
-    }
-    if (!item->is_parent()) return -1;
-    item = item->next;
+    for (int i = indexes[l]; item && i; --i) item = item->next_brother;
+    if (!item || !item->is_parent()) return -1;
+    item = item->first_child;
   }
-  int n = 0;
-  while (item && item->level >= level) {
-    if (item->level == level) n++;
-    item = item->next;
-  }
+  int n; for (n = 0; item; item = item->next_brother) n++;
   return n;
 }
 
@@ -102,14 +93,10 @@ Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0;; l++) {
-    int i = indexes[l];
-    for (;;) {
-      if (!item || item->level < l) return 0;
-      if (item->level == l) {if (!i) break; --i;}
-      item = item->next;
-    }
+    for (int i = indexes[l]; item && i; --i) item = item->next_brother;
+    if (!item) return 0;
     if (l >= level) break;
-    item = item->next;
+    item = item->first_child;
   }
   static Fl_Widget* widget;
   if (!widget) {
@@ -122,6 +109,7 @@ Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
   else widget->clear_flag(FL_VALUE);
   if (item->open_) widget->set_flag(FL_OPEN);
   else widget->clear_flag(FL_OPEN);
+
   widget->label(item->title());
   widget->w(0);
 
@@ -130,12 +118,13 @@ Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
 
 void Widget_List::value_changed(const Fl_Group*, Fl_Widget* w) {
   Fl_Type* item = (Fl_Type*)(w->user_data());
-  item->open_ = w->flags()&FL_OPEN ? 1 : 0;
-  int i = w->flags()&FL_VALUE ? 1 : 0;
-  if (i != item->new_selected) {
-    item->new_selected = i;
+  item->open_ = (w->flags()&FL_OPEN)!=0;
+  int value = (w->flags()&FL_VALUE)!=0;
+  if (value != item->new_selected) {
+    item->new_selected = value;
     selection_changed(item);
   }
+  if (value) Fl_Type::current = item;
 }
 
 void select(Fl_Type* item, int value) {
@@ -144,202 +133,42 @@ void select(Fl_Type* item, int value) {
     selection_changed(item);
     widget_browser->redraw();
   }
+  if (value) Fl_Type::current = item;
 }
 
 void select_only(Fl_Type* i) {
-  Fl_Type* item = Fl_Type::first;
-  while (item) {select(item, item==i); item = item->next;}
+  for (Fl_Type* item = Fl_Type::first; item; item = item->walk())
+    select(item, item == i);
 }
 
 void deselect() {
-  Fl_Type* item = Fl_Type::first;
-  while (item) {select(item,0); item = item->next;}
-  Fl_Type::current = 0; // this breaks the paste & merge functions
+  for (Fl_Type* item = Fl_Type::first; item; item = item->walk())
+    select(item,0);
 }
+
+extern const char* subclassname(Fl_Type*);
 
 // Generate a descriptive text for this item, to put in browser & window titles
 const char* Fl_Type::title() {
   const char* c = name(); if (c) return c;
+  if (is_widget() || is_class()) {
+    c = label();
+    if (c && *c) return c;
+    c = subclassname(this);
+    if (c) return c;
+  }
   return type_name();
 }
-
-#if 0
-extern const char* subclassname(Fl_Type*);
-
-void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
-  Fl_Type *l = (Fl_Type *)v;
-  x += 3 + l->level * 10;
-  fl_color(item_selected(v) ? selection_text_color() : text_color());
-  if (l->is_parent()) {
-    int dy = (h-11)/2;
-    if (!l->next || l->next->level <= l->level) {
-      if (l->open_!=(l==pushedtitle)) {
-	fl_loop(x,y+dy+5,x+5,y+dy+10,x+10,y+dy+5);
-      } else {
-	fl_loop(x+2,y+dy,x+7,y+dy+5,x+2,y+dy+10);
-      }
-    } else {
-      if (l->open_!=(l==pushedtitle)) {
-	fl_polygon(x,y+dy+5,x+5,y+dy+10,x+10,y+dy+5);
-      } else {
-	fl_polygon(x+2,y+dy,x+7,y+dy+5,x+2,y+dy+10);
-      }
-    }
-    x += 10;
-  }
-  if (l->is_widget() || l->is_class()) {
-    const char* c = subclassname(l);
-    if (!strncmp(c,"Fl_",3)) c += 3;
-    fl_font(text_font(), text_size());
-    fl_draw(c, x, y+h-fl_descent());
-    x += int(fl_width(c)+fl_width('n'));
-    c = l->name();
-    if (c) {
-      fl_font(text_font()->bold(), text_size());
-      fl_draw(c, x, y+h-fl_descent());
-    } else if ((c=l->label())) {
-      char buf[50]; char* p = buf;
-      *p++ = '"';
-      for (int i = 20; i--;) {
-	if (! (*c & -32)) break;
-	*p++ = *c++;
-      }
-      if (*c) {strcpy(p,"..."); p+=3;}
-      *p++ = '"';
-      *p = 0;
-      fl_draw(buf, x, y+h-fl_descent());
-    }
-  } else {
-    const char* c = l->title();
-    char buf[60]; char* p = buf;
-    for (int i = 55; i--;) {
-      if (! (*c & -32)) break;
-      *p++ = *c++;
-    }
-    if (*c) {strcpy(p,"..."); p+=3;}
-    *p = 0;
-    fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
-	     ? text_font() : text_font()->bold(), text_size());
-    fl_draw(buf, x, y+h-fl_descent());
-  }
-}
-
-int Widget_Browser::item_width(void *v) const {
-  Fl_Type *l = (Fl_Type *)v;
-
-  int w = 3 + l->level*10;
-  if (l->is_parent()) w += 10;
-
-  if (l->is_widget() || l->is_class()) {
-    const char* c = l->type_name();
-    if (!strncmp(c,"Fl_",3)) c += 3;
-    fl_font(text_font(), text_size());
-    w += int(fl_width(c) + fl_width('n'));
-    c = l->name();
-    if (c) {
-      fl_font(text_font()->bold(), text_size());
-      w += int(fl_width(c));
-    } else if ((c=l->label())) {
-      char buf[50]; char* p = buf;
-      *p++ = '"';
-      for (int i = 20; i--;) {
-	if (! (*c & -32)) break;
-	*p++ = *c++;
-      }
-      if (*c) {strcpy(p,"..."); p+=3;}
-      *p++ = '"';
-      *p = 0;
-      w += int(fl_width(buf));
-    }
-  } else {
-    const char* c = l->title();
-    char buf[60]; char* p = buf;
-    for (int i = 55; i--;) {
-      if (! (*c & -32)) break;
-      *p++ = *c++;
-    }
-    if (*c) {strcpy(p,"..."); p+=3;}
-    *p = 0;
-    fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
-	    ? text_font() : text_font()->bold(), text_size());
-    w += int(fl_width(buf));
-  }
-
-  return w;
-}
-#endif
 
 void redraw_browser() {
   widget_browser->relayout();
 }
 
-#if 0
-int Widget_Browser::handle(int e) {
-  static Fl_Type *title;
-  Fl_Type *l;
-  int X,Y,W,H; bbox(X,Y,W,H);
-  switch (e) {
-  case FL_PUSH:
-    if (!Fl::event_inside(X,Y,W,H)) break;
-    l = (Fl_Type*)find_item(Fl::event_y());
-    if (l) {
-      X += 10*l->level;
-      if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) {
-	title = pushedtitle = l;
-	redraw_line(l);
-	return 1;
-      }
-    }
-    break;
-  case FL_DRAG:
-    if (!title) break;
-    l = (Fl_Type*)find_item(Fl::event_y());
-    if (l) {
-      X += 10*l->level;
-      if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) ;
-      else l = 0;
-    }
-    if (l != pushedtitle) {
-      if (pushedtitle) redraw_line(pushedtitle);
-      if (l) redraw_line(l);
-      pushedtitle = l;
-    }
-    return 1;
-  case FL_RELEASE:
-    if (!title) {
-      l = (Fl_Type*)find_item(Fl::event_y());
-      if (l && l->new_selected && (Fl::event_clicks() || Fl::event_state(FL_CTRL)))
-	l->open();
-      break;
-    }
-    l = pushedtitle;
-    title = pushedtitle = 0;
-    if (l) {
-      if (l->open_) {
-	l->open_ = 0;
-      } else {
-	l->open_ = 1;
-	for (Fl_Type*k=l->next; k&&k->level>l->level;) {
-	  if (k->is_parent() && !k->open_) {
-	    Fl_Type *j;
-	    for (j = k->next; j && j->level>k->level; j = j->next);
-	    k = j;
-	  } else
-	    k = k->next;
-	}
-      }
-      redraw();
-    }
-    return 1;
-  }
-  return Fl_Browser_::handle(e);
-}
-#endif
-
 Fl_Type::Fl_Type() {
   factory = 0;
   parent = 0;
-  next = prev = 0;
+  first_child = 0;
+  next_brother = previous_brother = 0;
   selected = new_selected = 0;
   name_ = 0;
   label_ = 0;
@@ -347,7 +176,30 @@ Fl_Type::Fl_Type() {
   user_data_ = 0;
   user_data_type_ = 0;
   callback_ = 0;
-  level = 0;
+}
+
+// Calling walk(N) will return every Fl_Type under N by scanning
+// the tree. Start with N->first_child. If N is null this will
+// walk the entire tree, start with Fl_Type::first.
+
+Fl_Type* Fl_Type::walk(const Fl_Type* topmost) const {
+  if (first_child) return first_child;
+  const Fl_Type* p = this;
+  while (!p->next_brother) {
+    p = p->parent;
+    if (p == topmost) return 0;
+  }
+  return p->next_brother;
+}
+
+Fl_Type* Fl_Type::walk() const {
+  if (first_child) return first_child;
+  const Fl_Type* p = this;
+  while (!p->next_brother) {
+    p = p->parent;
+    if (!p) return 0;
+  }
+  return p->next_brother;
 }
 
 // turn a click at x,y on this into the actual picked object:
@@ -356,36 +208,22 @@ void Fl_Type::add_child(Fl_Type*, Fl_Type*) {}
 void Fl_Type::move_child(Fl_Type*, Fl_Type*) {}
 void Fl_Type::remove_child(Fl_Type*) {}
 
-// add a list of widgets as a new child of p:
+// add as a new child of p:
 void Fl_Type::add(Fl_Type *p) {
   parent = p;
-  Fl_Type *end = this;
-  while (end->next) end = end->next;
-  Fl_Type *q;
-  int newlevel;
-  if (p) {
-    for (q = p->next; q && q->level > p->level; q = q->next);
-    newlevel = p->level+1;
-  } else {
-    q = 0;
-    newlevel = 0;
-  }
-  for (Fl_Type *t = this->next; t; t = t->next) t->level += (newlevel-level);
-  level = newlevel;
+  Fl_Type* q = p ? p->first_child : Fl_Type::first;
   if (q) {
-    prev = q->prev;
-    prev->next = this;
-    q->prev = end;
-    end->next = q;
-  } else if (first) {
-    prev = last;
-    prev->next = this;
-    end->next = 0;
-    last = end;
+    // find the last child:
+    while (q->next_brother) q = q->next_brother;
+    this->previous_brother = q;
+    q->next_brother = this;
   } else {
-    first = this;
-    last = end;
-    prev = end->next = 0;
+    // no other children
+    this->previous_brother = 0;
+    if (p)
+      p->first_child = this;
+    else
+      Fl_Type::first = this;
   }
   if (p) p->add_child(this,0);
   open_ = 1;
@@ -395,38 +233,28 @@ void Fl_Type::add(Fl_Type *p) {
 
 // add to a parent before another widget:
 void Fl_Type::insert(Fl_Type *g) {
-  Fl_Type *end = this;
-  while (end->next) end = end->next;
   parent = g->parent;
-  int newlevel = g->level;
-  for (Fl_Type *t = this->next; t; t = t->next) t->level += newlevel-level;
-  level = newlevel;
-  prev = g->prev;
-  if (prev) prev->next = this; else first = this;
-  end->next = g;
-  g->prev = end;
+  previous_brother = g->previous_brother;
+  if (previous_brother) previous_brother->next_brother = this;
+  else if (parent) parent->first_child = this;
+  else Fl_Type::first = this;
+  next_brother = g;
+  g->previous_brother = this;
   if (parent) parent->add_child(this, g);
   redraw_browser();
 }
 
 // delete from parent:
-Fl_Type *Fl_Type::remove() {
-  Fl_Type *end = this;
-  for (;;) {
-    if (!end->next || end->next->level <= level) break;
-    end = end->next;
-  }
-  if (prev) prev->next = end->next;
-  else first = end->next;
-  if (end->next) end->next->prev = prev;
-  else last = prev;
-  Fl_Type *r = end->next;
-  prev = end->next = 0;
+void Fl_Type::remove() {
+  if (previous_brother) previous_brother->next_brother = next_brother;
+  else if (parent) parent->first_child = next_brother;
+  else Fl_Type::first = next_brother;
+  if (next_brother) next_brother->previous_brother = previous_brother;
+  previous_brother = next_brother = 0;
   if (parent) parent->remove_child(this);
   parent = 0;
   redraw_browser();
   selection_changed(0);
-  return r;
 }
 
 // update a string member:
@@ -489,12 +317,17 @@ void Fl_Type::open() {
 void Fl_Type::setlabel(const char *) {}
 
 Fl_Type::~Fl_Type() {
-  // warning: destructor only works for widgets that have been add()ed.
-  if (prev) prev->next = next; else first = next;
-  if (next) next->prev = prev; else last = prev;
+  for (Fl_Type* f = first_child; f;) {
+    Fl_Type* next = f->next_brother;
+    delete f;
+    f = next;
+  }
+  if (previous_brother) previous_brother->next_brother = next_brother;
+  else if (parent) parent->first_child = next_brother;
+  else first = next_brother;
+  if (next_brother) next_brother->previous_brother = previous_brother;
   if (current == this) current = 0;
   modflag = 1;
-  if (parent) parent->remove_child(this);
   if (widget_browser) redraw_browser();
 }
 
@@ -526,100 +359,65 @@ int Fl_Type::is_value_slider() const {return 0;}
 Fl_Type *in_this_only; // set if menu popped-up in window
 
 void select_all_cb(Fl_Widget *,void *) {
-  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
+  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
   if (in_this_only) {
-    Fl_Type *t = p;
+    Fl_Type *t = parent;
     for (; t && t != in_this_only; t = t->parent);
-    if (t != in_this_only) p = in_this_only;
+    if (t != in_this_only) parent = in_this_only;
   }
-  for (;;) {
-    if (p) {
-      int foundany = 0;
-      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
-	if (!t->new_selected) {select(t,1); foundany = 1;}
-      }
-      if (foundany) break;
-      p = p->parent;
-    } else {
-      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
-	select(t,1);
-      break;
-    }
-  }
-  selection_changed(p);
-}
-
-static void delete_children(Fl_Type *p) {
-  Fl_Type *f;
-  for (f = p; f && f->next && f->next->level > p->level; f = f->next);
-  for (; f != p; ) {
-    Fl_Type *g = f->prev;
-    delete f;
-    f = g;
-  }
+  for (Fl_Type *t = parent?parent->first_child:Fl_Type::first;
+       t; t = t->walk()) select(t,1);
 }
 
 void delete_all(int selected_only) {
   for (Fl_Type *f = Fl_Type::first; f;) {
-    if (f->selected || !selected_only) {
-      delete_children(f);
-      Fl_Type *g = f->next;
+    if (f->selected) {
+      Fl_Type* next = f->next_brother;
       delete f;
-      f = g;
-    } else f = f->next;
+      f = next;
+    } else {
+      f = f->walk();
+    }
   }
-  if(!selected_only)
-  {
-    include_H_from_C=1;
-    images_dir="./";
+  if(!selected_only) {
+    include_H_from_C = 1;
+    images_dir = "./";
   }
-
   selection_changed(0);
 }
 
 // move f (and it's children) into list before g:
 // returns pointer to whatever is after f & children
 void Fl_Type::move_before(Fl_Type* g) {
-  if (level != g->level) printf("move_before levels don't match! %d %d\n",
-				level, g->level);
-  Fl_Type* n;
-  for (n = next; n && n->level > level; n = n->next);
-  if (n == g) return;
-  Fl_Type *l = n ? n->prev : Fl_Type::last;
-  prev->next = n;
-  if (n) n->prev = prev; else Fl_Type::last = prev;
-  prev = g->prev;
-  l->next = g;
-  if (prev) prev->next = this; else Fl_Type::first = this;
-  g->prev = l;
-  if (parent) parent->move_child(this,g);
-  redraw_browser();
+  remove();
+  insert(g);
 }
 
 // move selected widgets in their parent's list:
 void earlier_cb(Fl_Widget*,void*) {
-  Fl_Type *f;
-  for (f = Fl_Type::first; f; ) {
-    Fl_Type* nxt = f->next;
+  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
+  for (Fl_Type* f = parent ? parent->first_child : Fl_Type::first; f; ) {
+    Fl_Type* next = f->next_brother;
     if (f->selected) {
-      Fl_Type* g;
-      for (g = f->prev; g && g->level > f->level; g = g->prev);
-      if (g && g->level == f->level && !g->selected) f->move_before(g);
+      Fl_Type* g = f->previous_brother;
+      if (g && !g->selected) f->move_before(g);
     }
-    f = nxt;
+    f = next;
   }
 }
 
 void later_cb(Fl_Widget*,void*) {
+  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
   Fl_Type *f;
-  for (f = Fl_Type::last; f; ) {
-    Fl_Type* prv = f->prev;
+  for (f = parent ? parent->first_child : Fl_Type::first;f && f->next_brother;)
+    f = f->next_brother;
+  for (;f;) {
+    Fl_Type* prev = f->previous_brother;
     if (f->selected) {
-      Fl_Type* g;
-      for (g = f->next; g && g->level > f->level; g = g->next);
-      if (g && g->level == f->level && !g->selected) g->move_before(f);
+      Fl_Type* g = f->next_brother;
+      if (g && !g->selected) g->move_before(f);
     }
-    f = prv;
+    f = prev;
   }
 }
 
@@ -627,22 +425,25 @@ void later_cb(Fl_Widget*,void*) {
 
 // write a widget and all it's children:
 void Fl_Type::write() {
-    write_indent(level);
-    write_word(type_name());
-    write_word(name());
-    write_open(level);
-    write_properties();
-    write_close(level);
-    if (!is_parent()) return;
-    // now do children:
-    write_open(level);
-    Fl_Type *child;
-    for (child = next; child && child->level > level; child = child->next)
-	if (child->level == level+1) child->write();
-    write_close(level);
+  int level = 0;
+  for (Fl_Type* p = parent; p; p = p->parent) level++;
+  write_indent(level);
+  write_word(type_name());
+  write_word(name());
+  write_open(level);
+  write_properties();
+  write_close(level);
+  if (!is_parent()) return;
+  // now do children:
+  write_open(level);
+  Fl_Type *child;
+  for (child = first_child; child; child = child->next_brother) child->write();
+  write_close(level);
 }
 
 void Fl_Type::write_properties() {
+  int level = 0;
+  for (Fl_Type* p = parent; p; p = p->parent) level++;
   // repeat this for each attribute:
   if (label()) {
     write_indent(level+1);
@@ -694,5 +495,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.20 2000/08/21 03:56:24 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $".
 //

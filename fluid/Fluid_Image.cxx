@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.16 1999/09/14 17:52:33 carl Exp $"
+// "$Id: Fluid_Image.cxx,v 1.17 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -120,11 +120,11 @@ void generic_image::write_static() {
       d = fl_store_datas_from_file(name(), l);
       if(d) {
 #if 1
-	write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
+	write_c("static const unsigned char %s[%d] = {\n", unique_id(this, "datas", filename_name(name()), 0), l);
 	write_carray((const char*)d, l);
 	write_c("};\n");
 #else
-	write_c("static unsigned char* %s = (unsigned char*)\n",
+	write_c("static const unsigned char %s[] =\n",
 		unique_id(this, "datas", filename_name(name()), 0));
 	write_cstring((const char*)d, l);
 	write_c(";\n");
@@ -186,25 +186,17 @@ void bitmap_image::write_static() {
     write_c("#include <FL/Fl_Bitmap.H>\n");
     bitmap_header_written = write_number;
   }
-#if 0 // older one
-  write_c("static unsigned char %s[] = {  \n",
-	  unique_id(this, "bits", filename_name(name()), 0));
-  int n = ((p->w+7)/8)*p->h;
-  int linelength = 0;
-  for (int i = 0; i < n; i++) {
-    if (i) {write_c(","); linelength++;}
-    if (linelength > 75) {write_c("\n"); linelength=0;}
-    int v = p->array[i];
-    write_c("%d",v);
-    linelength++; if (v>9) linelength++; if (v>99) linelength++;
-  }
-  write_c("\n};\n");
-#else // this seems to produce slightly shorter c++ files
-  write_c("static unsigned char %s[] =\n",
-	  unique_id(this, "bits", filename_name(name()), 0));
   int w, h;
   p->measure(w, h);
   int n = ((w+7)/8)*h;
+#if 1 // older one
+  write_c("static const unsigned char %s[%d] = {\n",
+	  unique_id(this, "bits", filename_name(name()), 0), n);
+  write_carray((const char*)(p->array), n);
+  write_c("};\n");
+#else // this seems to produce slightly shorter c++ files
+  write_c("static const unsigned char %s[] =\n",
+	  unique_id(this, "bits", filename_name(name()), 0));
   write_cstring((const char*)(p->array), n);
   write_c(";\n");
 #endif
@@ -392,5 +384,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.16 1999/09/14 17:52:33 carl Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.17 2000/09/05 17:36:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.9 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_bmp.cxx,v 1.10 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -83,7 +83,7 @@ typedef unsigned char uchar;
 static FILE *bmpFile;
 static uchar* bmpDatas;
 
-int Fl_BMP_Image::test(uchar* buffer, size_t size)
+int Fl_BMP_Image::test(const uchar* buffer, size_t size)
 {
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
@@ -173,7 +173,7 @@ void Fl_BMP_Image::measure(int &W, int &H)
     return; 
   }
 
-  bmpDatas = datas;
+  bmpDatas = (uchar*)datas;
 
   BITMAP_FILE_HEADER fileHeader;
   BITMAP_INFO_HEADER infoHeader;
@@ -222,7 +222,7 @@ void Fl_BMP_Image::read()
 {
   id = mask = 0;
 
-  bmpDatas = datas;
+  bmpDatas = (uchar*)datas;
 
   BITMAP_FILE_HEADER fileHeader;
   BITMAP_INFO_HEADER infoHeader;
@@ -823,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.9 2000/07/14 08:35:01 clip Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.10 2000/09/05 17:36:21 spitzak Exp $"
 //

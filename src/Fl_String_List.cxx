@@ -21,7 +21,7 @@ Fl_Widget* Fl_String_List::child(const Fl_Group* group, int* indexes, int level)
     Fl_Group::current(0);
     widget = new Fl_Item();
   }
-  widget->type(n==1 ? FL_GROUP: 0);
+  widget->type(0);
   widget->label(array[n]);
   widget->clear_value();
   widget->w(0);

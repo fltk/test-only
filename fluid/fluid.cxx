@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.42 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.43 2000/09/05 17:36:20 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ const char *copyright =
 "Please report bugs to fltk-bugs@easysw.com.";
 
 #include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Hold_Browser.H>
@@ -309,10 +309,10 @@ void earlier_cb(Fl_Widget*,void*);
 
 void later_cb(Fl_Widget*,void*);
 
-Fl_Type *sort(Fl_Type *parent);
+void sort(Fl_Type *parent); // in Fl_Widget_Type.cxx
 
 static void sort_cb(Fl_Widget *,void *) {
-  sort((Fl_Type*)0);
+  for (Fl_Type* f = Fl_Type::first; f; f = f->next_brother) sort(f);
 }
 
 void show_alignment_cb(Fl_Widget *, void *);
@@ -403,7 +403,7 @@ Fl_Menu_Bar* menubar;
 void make_main_window() {
   if (!main_window) {
     Fl_Widget *o;
-    main_window = new Fl_Double_Window(WINWIDTH,WINHEIGHT,"fluid");
+    main_window = new Fl_Window(WINWIDTH,WINHEIGHT,"fluid");
     main_window->box(FL_NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
     o->text_box(FL_FLAT_BOX);
@@ -502,5 +502,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.42 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.43 2000/09/05 17:36:20 spitzak Exp $".
 //

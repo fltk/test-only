@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.6 2000/06/11 07:31:09 bill Exp $"
+// "$Id: Fl_compose.cxx,v 1.7 2000/09/05 17:36:21 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -25,10 +25,115 @@
 
 #include <FL/Fl.H>
 
-static const char* const compose_pairs =
-"  ! % # $ y=| & : c a <<~ - r _ * +-2 3 ' u p . , 1 o >>141234? "
-"`A'A^A~A:A*AAE,C`E'E^E:E`I'I^I:I-D~N`O'O^O~O:Ox O/`U'U^U:U'YTHss"
-"`a'a^a~a:a*aae,c`e'e^e:e`i'i^i:i-d~n`o'o^o~o:o-:o/`u'u^u:u'yth:y";
+// Before searching anything the following conversions are made:
+// '"', ';' -> ":"     "/" -> "|"    "=",'_' -> "-"
+
+// This table starts at character 0xA0 (non-breaking space)
+// The characters may be typed in either order after the compose key.
+// If the second character is a space then only the first character
+// needs to be typed.
+// I changed these slightly from fltk 1.0 to match X compose
+// sequences in cases when my version did not use the same characters
+// as the X sequence. Comments show the original versions.
+
+static const char compose_pairs[] = {
+  "  "	// nbsp
+  "! "	// inverted !
+  "c|"	// cent		 (was "% ")
+  "l-"	// pound	 (was "# ")
+  "xo"	// currency	 (was "$ ")
+  "y-"	// yen
+  "| "	// broken bar
+  "s "	// section	 (was "& ", X uses "so")
+  ": "	// dieresis
+  "c "	// copyright	 (X uses "co")
+  "a "	// superscript a (X uses "a-")
+  "<<"	// <<
+  "-,"	// not sign	 (was "~ ")
+  "- "	// hyphen
+  "r "	// registered	 (X uses "ro")
+  "--"	// macron	 (was "_ ", X uses "-^")
+  "0 "	// superscript 0 (degree, was "* ", X uses "0^")
+  "+-"	// plusminus
+  "2 "	// superscript 2 (X uses "2^")
+  "3 "	// superscript 3 (X uses "3^")
+  "' "	// acute
+  "u "	// mu
+  "p "	// paragraph
+  ". "	// centered dot
+  ", "	// cedilla
+  "1 "	// superscript 1 (X uses "1^")
+  "o "	// superscript o (X uses "o-")
+  ">>"	// >>
+  "14"	// 1/4
+  "12"	// 1/2
+  "34"	// 3/4
+  "? "	// inverted ?
+  "`A"
+  "'A"
+  "^A"
+  "~A"
+  ":A"
+  "*A"
+  "AE"
+  ",C"
+  "`E"
+  "'E"
+  "^E"
+  ":E"
+  "`I"
+  "'I"
+  "^I"
+  ":I"
+  "-D"
+  "~N"
+  "`O"
+  "'O"
+  "^O"
+  "~O"
+  ":O"
+  "x "	// multiply
+  "O|"
+  "`U"
+  "'U"
+  "^U"
+  ":U"
+  "'Y"
+  "TH"
+  "ss"
+  "`a"
+  "'a"
+  "^a"
+  "~a"
+  ":a"
+  "*a"
+  "ae"
+  ",c"
+  "`e"
+  "'e"
+  "^e"
+  ":e"
+  "`i"
+  "'i"
+  "^i"
+  ":i"
+  "-d"
+  "~n"
+  "`o"
+  "'o"
+  "^o"
+  "~o"
+  ":o"
+  "-:"	// divide
+  "o|"
+  "`u"
+  "'u"
+  "^u"
+  ":u"
+  "'y"
+  "th"
+  ":y"
+};
 
 #ifndef WIN32 // X only
 // X dead-key lookup table.  This turns a dead-key keysym into the
@@ -36,7 +141,7 @@ static const char* const compose_pairs =
 // keysyms start at 0xFE50.
 // Win32 handles the dead keys before fltk can see them.  This is
 // unfortunate, because you don't get the preview effect.
-static char dead_keys[] = {
+static const char dead_keys[] = {
   '`',	// XK_dead_grave
   '\'',	// XK_dead_acute
   '^',	// XK_dead_circumflex
@@ -63,6 +168,9 @@ int Fl::compose(int& del) {
 
   del = 0;
   char ascii = e_text[0];
+  if      (ascii == '"' || ascii == ';') ascii = ':';
+  else if (ascii == '/') ascii = '|';
+  else if (ascii == '_' || ascii == '=') ascii = '-';
 
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
@@ -70,20 +178,15 @@ int Fl::compose(int& del) {
   if (e_state & (FL_ALT|FL_META) && !(ascii & 128)) return 0;
 
   if (compose_state == 1) { // after the compose key
-
-    if (ascii == ' ') { // space turns into nbsp
-      e_text[0] = char(0xA0);
-      compose_state = 0;
-      return 1;
-    }
-
+    
     // see if it is either character of any pair:
     for (const char *p = compose_pairs; *p; p += 2) 
       if (p[0] == ascii || p[1] == ascii) {
-	if (p[1] == ' ') e_text[0] = (p-compose_pairs)/2+0xA0;
 	compose_state = ascii;
-	return 1;
+	// prefer the single-character versions:
+	if (p[1] == ' ') {e_text[0] = (p-compose_pairs)/2+0xA0; return 1;}
       }
+    if (compose_state != 1) return 1;
 
     if (e_length) { // compose key also "quotes" control characters
       compose_state = 0;
@@ -113,7 +216,7 @@ int Fl::compose(int& del) {
     return 1;
   }
 
-#ifndef WIN32 // X only
+#ifndef _WIN32 // X only
   // See if they typed a dead key.  This gets it into the same state as
   // typing prefix+accent:
   if (i >= 0xfe50 && i <= 0xfe5b) {

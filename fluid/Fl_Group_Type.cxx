@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.9 2000/02/14 11:32:39 bill Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.10 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,27 @@
 #include <FL/fl_message.H>
 #include "Fl_Type.h"
 
+class igroup : public Fl_Group {
+public:
+  igroup(int x,int y,int w,int h) : Fl_Group(x,y,w,h) {
+    Fl_Group::current(0);
+    resizable(0);
+  }
+};
+
+Fl_Widget_Type* Fl_Group_Type::_make() {return new Fl_Group_Type();}
+
+Fl_Widget *Fl_Group_Type::widget(int x,int y,int w,int h) {
+  igroup *g = new igroup(x,y,w,h);
+  Fl_Group::current(0);
+  return g;
+}
+
+const char* Fl_Group_Type::type_name() {return "Fl_Group";}
+
+int Fl_Group_Type::is_parent() const {return 1;}
+int Fl_Group_Type::is_group() const {return 1;}
+
 Fl_Group_Type Fl_Group_type;	// the "factory"
 
 Fl_Type *Fl_Group_Type::make() {
@@ -42,26 +63,21 @@ Fl_Type *Fl_Group_Type::make() {
 // Enlarge the group to surround all it's children.  This is done to
 // all groups whenever the user moves any widgets.
 void fix_group_size(Fl_Type *t) {
-  if (!t || !t->is_group()) return;
+  if (!t || !t->is_group() || t->is_menu_button()) return;
   Fl_Group* g = (Fl_Group*)((Fl_Group_Type*)t)->o;
   //if (g->resizable()) return;
   int X = g->x();
   int Y = g->y();
   int R = X+g->w();
   int B = Y+g->h();
-  for (Fl_Type *nn = t->next; nn && nn->level > t->level;) {
-    if (!nn->is_widget() || nn->is_menu_item()) {
-      Fl_Type* m = nn->next;
-      for (;m && m->level > nn->level; m = m->next) ;
-      nn = m;
-      continue;
+  for (Fl_Type *nn = t->first_child; nn; nn = nn->next_brother) {
+    if (nn->is_widget()) {
+      Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
+      int x = n->o->x();  if (x < X) X = x;
+      int y = n->o->y();  if (y < Y) Y = y;
+      int r = x+n->o->w();if (r > R) R = r;
+      int b = y+n->o->h();if (b > B) B = b;
     }
-    Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
-    int x = n->o->x();	if (x < X) X = x;
-    int y = n->o->y();	if (y < Y) Y = y;
-    int r = x+n->o->w();if (r > R) R = r;
-    int b = y+n->o->h();if (b > B) B = b;
-    nn = n->next;
   }
   g->resize(X,Y,R-X,B-Y);
   g->init_sizes();
@@ -73,7 +89,7 @@ void group_cb(Fl_Widget *, void *) {
   // Find the current widget:
   Fl_Type *qq = Fl_Type::current;
   while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
-  if (!qq || qq->level <= 1) {
+  if (!qq || !qq->parent || !qq->parent->is_widget()) {
     fl_message("Please select widgets to group");
     return;
   }
@@ -82,12 +98,13 @@ void group_cb(Fl_Widget *, void *) {
   Fl_Group_Type *n = (Fl_Group_Type*)(Fl_Group_type.make());
   n->move_before(q);
   n->o->resize(q->o->x(),q->o->y(),q->o->w(),q->o->h());
-  for (Fl_Type *t = Fl_Type::first; t;) {
-    if (t->level != n->level || t == n || !t->selected) {
-      t = t->next; continue;}
-    Fl_Type *nxt = t->remove();
-    t->add(n);
-    t = nxt;
+  for (Fl_Type *t = q->parent->first_child; t;) {
+    Fl_Type* next = t->next_brother;
+    if (t->selected && t != n) {
+      t->remove();
+      t->add(n);
+    }
+    t = next;
   }
   fix_group_size(n);
 }
@@ -97,34 +114,28 @@ void ungroup_cb(Fl_Widget *, void *) {
   Fl_Type *q = Fl_Type::current;
   while (q && (!q->is_widget() || q->is_menu_item())) q = q->parent;
   if (q) q = q->parent;
-  if (!q || q->level <= 1) {
+  if (!q || !q->parent->is_widget()) {
     fl_message("Please select widgets in a group");
     return;
   }
-  Fl_Type* n;
-  for (n = q->next; n && n->level > q->level; n = n->next) {
-    if (n->level == q->level+1 && !n->selected) {
-      fl_message("Please select all widgets in group");
-      return;
+  for (Fl_Type* n = q->first_child; n;) {
+    Fl_Type* next = n->next_brother;
+    if (n->selected) {
+      n->remove();
+      n->insert(q);
     }
+    n = next;
   }
-  for (n = q->next; n && n->level > q->level;) {
-    Fl_Type *nxt = n->remove();
-    n->insert(q);
-    n = nxt;
-  }
-  delete q;
+  if (!q->first_child) delete q;
 }
 
 ////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
 
-void Fl_Group_Type::write_code1() {
-  Fl_Widget_Type::write_code1();
-}
-
-void Fl_Group_Type::write_code2() {
+void Fl_Group_Type::write_code() {
+  write_code1();
+  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
   write_extra_code();
   write_c("%so->end();\n", indent());
   if (resizable()) write_c("%sFl_Group::current()->resizable(o);\n", indent());
@@ -133,18 +144,44 @@ void Fl_Group_Type::write_code2() {
 
 ////////////////////////////////////////////////////////////////
 
-const char pack_type_name[] = "Fl_Pack";
+#include <FL/Fl_Pack.H>
 
-Fl_Menu_Item pack_type_menu[] = {
+static Fl_Menu_Item pack_type_menu[] = {
   {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
   {"VERTICAL", 0, 0, (void*)Fl_Pack::VERTICAL},
   {0}};
+
+class Fl_Pack_Type : public Fl_Group_Type {
+  Fl_Menu_Item *subtypes() {return pack_type_menu;}
+public:
+  virtual const char *type_name() {return "Fl_Pack";}
+  Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
+};
 
 Fl_Pack_Type Fl_Pack_type;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
 
-const char tabs_type_name[] = "Fl_Tabs";
+#include <FL/Fl_Tabs.H>
+
+class itabs : public Fl_Tabs {
+public:
+  itabs(int x,int y,int w,int h) : Fl_Tabs(x,y,w,h) {
+    Fl_Group::current(0);
+    resizable(0);
+  }
+};
+
+class Fl_Tabs_Type : public Fl_Group_Type {
+public:
+  virtual const char *type_name() {return "Fl_Tabs";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    itabs *g = new itabs(x,y,w,h); Fl_Group::current(0); return g;}
+  Fl_Widget_Type *_make() {return new Fl_Tabs_Type();}
+  Fl_Type* click_test(int,int);
+  void add_child(Fl_Type*, Fl_Type*);
+  void remove_child(Fl_Type*);
+};
 
 Fl_Tabs_Type Fl_Tabs_type;	// the "factory"
 
@@ -209,9 +246,7 @@ void Fl_Group_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 
 #include <FL/Fl_Scroll.H>
 
-const char scroll_type_name[] = "Fl_Scroll";
-
-Fl_Menu_Item scroll_type_menu[] = {
+static Fl_Menu_Item scroll_type_menu[] = {
   {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},
   {"HORIZONTAL", 0, 0, (void*)Fl_Scroll::HORIZONTAL},
   {"VERTICAL", 0, 0, (void*)Fl_Scroll::VERTICAL},
@@ -220,14 +255,25 @@ Fl_Menu_Item scroll_type_menu[] = {
   {"BOTH_ALWAYS", 0, 0, (void*)Fl_Scroll::BOTH_ALWAYS},
   {0}};
 
+class Fl_Scroll_Type : public Fl_Group_Type {
+  Fl_Menu_Item *subtypes() {return scroll_type_menu;}
+public:
+  virtual const char *type_name() {return "Fl_Scroll";}
+  Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
+};
+
 Fl_Scroll_Type Fl_Scroll_type;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
 
-const char tile_type_name[] = "Fl_Tile";
+class Fl_Tile_Type : public Fl_Group_Type {
+public:
+  virtual const char *type_name() {return "Fl_Tile";}
+  Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
+};
 
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.9 2000/02/14 11:32:39 bill Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.10 2000/09/05 17:36:20 spitzak Exp $".
 //

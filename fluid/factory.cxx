@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.14 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: factory.cxx,v 1.15 2000/09/05 17:36:20 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -484,9 +484,9 @@ Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
   int level = 0;
   reading_file = 1; // makes labels be null
   Fl_Type *r = 0;
-  if (!strcasecmp(tn, "submenu")) r = Fl_Submenu_type.make();
-  else if (!strcasecmp(tn, "menuitem")) r = Fl_Menu_Item_type.make();
-  else for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
+  if (!strcasecmp(tn, "submenu")) tn = "Fl_Item_Group";
+  else if (!strcasecmp(tn, "menuitem")) tn = "Fl_Item";
+  for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
     Fl_Menu_Item *m = menu+i;
     if (m->flags & FL_SUBMENU) level++;
     if (!m->text && !m->user_data()) level--;
@@ -646,5 +646,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.14 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.15 2000/09/05 17:36:20 spitzak Exp $".
 //

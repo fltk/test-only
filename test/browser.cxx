@@ -115,7 +115,8 @@ void cb_sort_reverse(Fl_Widget*, void*) {
 void cb_sort_random(Fl_Widget*, void*) {
 }
 
-#if 1
+#define USE_STRING_LIST 0
+#if USE_STRING_LIST
 #include <FL/Fl_String_List.H>
 
 const char* const strings[] = {
@@ -154,7 +155,7 @@ int main(int argc,char** argv) {
   folderSmall = new Fl_Pixmap(folder_small);
   fileSmall = new Fl_Pixmap(file_small);
 
-#if 1
+#if USE_STRING_LIST
   //tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
   tree.list(new Fl_String_List(strings, sizeof(strings)/sizeof(*strings)));
   //tree.list(new Fl_String_List(strings));
