@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.20 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: fltk_theme_x.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -21,13 +21,18 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Read the "INI" style files written by KDE 1,2,3 and extract some
-// appearance information for fltk from it. Older KDE also indicated
-// if windows or Motif style is wanted, but this code is commented out
-// because newer KDE ignores it.
+// This is the default fltk_theme() function for fltk on X. It
+// reads the "INI" style files written by KDE 1,2,3 and extracts some
+// appearance information for fltk from them. It also installs a
+// handler for KDE style change messages and calls fltk::reload_theme
+// when they come in.
 
 // Original KDE theme code by Carl Thompson (clip@home.net)
-// Rewritten to single file by Bill Spitzak
+// Rewritten to single source file by Bill Spitzak
+
+// At the bottom of the file are the commented-out remains of all the
+// Xresources reading code. It is all obsolete, nobody writes useful
+// information there anymore.
 
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
@@ -35,7 +40,7 @@
 #include <fltk/events.h>
 #include <stdio.h>
 #include <fltk/string.h>
-#ifndef _WIN32
+#if USE_X11
 # include <fltk/x.h>
 #endif
 #ifndef PATH_MAX
@@ -47,7 +52,7 @@ using namespace fltk;
 //kdewin_menu_text_box("kde windows menu window", "2AAUUIIXX", &fltk::downBox);
 
 ////////////////////////////////////////////////////////////////
-#ifndef _WIN32
+#if USE_X11
 // this function handles KDE style change messages:
 
 // I think these are for KDE1:
@@ -63,12 +68,15 @@ enum KIPCMessage {
 static int x_event_handler(int,Window*) {
   if (fltk::xevent.type != ClientMessage) return 0; // not a Client message
   XClientMessageEvent* cm = (XClientMessageEvent*)&fltk::xevent;
+  static bool sawKIPC = false;
   if (cm->message_type == KIPC) {
+    sawKIPC = true;
     if (cm->data.l[0] == PaletteChanged) ;
     else if (cm->data.l[0] == FontChanged) ;
     //else if (cm->data.l[0] == StyleChanged) ; // only if Motif is used
     else return 0;
-  } else if (cm->message_type == ChangeGeneral) ;
+  } else if (sawKIPC) return 0;
+  else if (cm->message_type == ChangeGeneral) ;
   else if (cm->message_type == ChangePalette) ;
   //else if (cm->message_type == ChangeStyle) ;
   else return 0;
@@ -80,7 +88,7 @@ static int x_event_handler(int,Window*) {
 static void add_event_handler() {
   static bool done;
   if (!done) {
-    done = 1;
+    done = true;
     open_display();
     Atom kde_atom = XInternAtom(xdisplay, "KDE_DESKTOP_WINDOW", False);
     long data = 1;
@@ -101,76 +109,19 @@ static void add_event_handler() {
 #define R_OK 4
 #endif
 ////////////////////////////////////////////////////////////////
-
-// Fonts have been seen defined several ways in the .kderc files:
-//
-// name,ptsize,pxlsize?,encoding?,weight,slant,<up to 4 mystery numbers>
-//
-// pxlsize?: some files have ptsize==-1, in this case this appears to be
-// a size in pixels, but I am unsure. When ptsize is greater than 0 this
-// seems to be some mystery number.
-//
-// encoding? early versions had the iso8859-1 type name here as text. Now
-// there is a number that may be the Windows number, or x from iso8859-x?
-// Sometimes it is zero. Currently I ignore this.
-
-static fltk::Font* grok_font(char* s, float& fontsize, char* fontencoding)
-{
-  char* sv; // to save strtok_r() state
-  const char* p;
-
-  // get the name:
-  char fontname[64] = "";
-  if ( (p = strtok_r(s, ",", &sv)) ) {
-    // Turn "adobe-foobar" into just "foobar":
-    char* q = strchr(p, '-');
-    if (q) p = q+1;
-    strncpy(fontname, p, sizeof(fontname));
-  }
-
-  // Read point size field:
-  fontsize = 12;
-  if ( (p = strtok_r(0, ",", &sv)) )
-    fontsize = atoi(p) * Monitor::all().dpi()/72;
-
-  // If it is bad, guess that the next is pixelsize:
-  p = strtok_r(0, ",", &sv);
-  if (fontsize < 5 || fontsize > 64) {
-    if (p) fontsize = atoi(p);
-    // go back to default if it looks completely messed up:
-    if (fontsize < 5 || fontsize > 64) fontsize = 12;
-  }
-
-  // next field may be the encoding:
-  fontencoding[0] = 0;
-  if ( (p = strtok_r(0, ",", &sv)) ) {
-    strncpy(fontencoding, p, sizeof(fontencoding));
-    // remove dash between iso and rest of text:
-    if (!strncasecmp(fontencoding, "iso-", 4))
-      memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1);
-  }
-  // next two fields are the weight and slant:
-  int attrib = 0;
-  if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = BOLD;
-  if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= ITALIC;
-
-  return fltk::font(fontname, attrib);
-}
-
-////////////////////////////////////////////////////////////////
 // Mini INI file reader:
 // You can load several files. The first occurance of a name takes
 // precedence, so load the files "backwards", with the user's local
 // one first.
 
 class INIFile {
-  struct {
+  struct Entry {
     const char* section;
     const char* name;
     const char* value;
     int serial;
-  } Entry;
-  Entry* entries;
+  };
+  Entry** entries;
   unsigned count;
   unsigned array_size;
   static int compare(const void*, const void*);
@@ -185,9 +136,9 @@ public:
 int INIFile::compare(const void* ap, const void* bp) {
   Entry* a = *(Entry**)ap;
   Entry* b = *(Entry**)bp;
-  int n = strcasecmp(a->section,b->section);
-  if (!n) n = strcasecmp(a->value,b->value);
-  if (!n) n = a->serial-b->serial;
+  int n = strcasecmp(a->section, b->section);
+  if (!n) n = strcasecmp(a->name, b->name);
+  if (!n) n = a->serial - b->serial;
   return n;
 }
 
@@ -202,7 +153,7 @@ bool INIFile::load(const char* filename) {
     while (isspace(*p)) p++;
     if (*p == '[') {
       // it's a section title
-      char* q = p+1;
+      char* q = ++p;
       while (*q && *q != ']') q++;
       if (*q == ']' && q-p < 128) {
 	*q = 0;
@@ -220,16 +171,15 @@ bool INIFile::load(const char* filename) {
       char* value = "";
       if (q) {
 	while (isspace(*q)) q++;
-	for (r = q; *r && *r != '\n') r++;
+	for (r = q; *r && *r != '\n'; ) r++;
 	while (r>q && isspace(*(r-1))) r--;
 	if (r > q) {*r = 0; value = strdup(q);}
       }
-      printf("Creating %s,%s,%s\n", section,name,value);
       Entry* entry = new Entry();
-      entry.section = strdup(section);
-      entry.name = name;
-      entry.value = value;
-      entry.serial = count;
+      entry->section = strdup(section);
+      entry->name = name;
+      entry->value = value;
+      entry->serial = count;
       if (count >= array_size) {
 	array_size = array_size ? 2*array_size : 100;
 	Entry** newarray = new Entry*[array_size];
@@ -240,7 +190,7 @@ bool INIFile::load(const char* filename) {
       entries[count++] = entry;
     }
   }
-  fclose(FILE);
+  fclose(file);
   qsort(entries, count, sizeof(*entries), compare);
   return true;
 }
@@ -262,11 +212,12 @@ const char* INIFile::get(const char* section, const char* name) {
       // search backwards for earliest one read:
       while (c>0) {
 	Entry* e1 = entries[--c];
-	if (strcasecmp(e->section, section)) break;
-	if (strcasecmp(e->name, name)) break;
+	if (strcasecmp(e1->section, section)) break;
+	if (strcasecmp(e1->name, name)) break;
 	e = e1;
       }
       return e->value;
+    }
   }
   return 0;
 }
@@ -287,24 +238,91 @@ void INIFile::clear() {
 
 ////////////////////////////////////////////////////////////////
 
-extern "C" bool fltk_theme() {
+// Fonts have been seen defined several ways in the .kderc files:
+//
+// name,ptsize,pxlsize?,encoding?,weight,slant,<up to 4 mystery numbers>
+//
+// pxlsize?: some files have ptsize==-1, in this case this appears to be
+// a size in pixels, but I am unsure. When ptsize is greater than 0 this
+// seems to be some mystery number.
+//
+// encoding? early versions had the iso8859-1 type name here as text. Now
+// there is a number that may be the Windows number, or x from iso8859-x?
+// Sometimes it is zero. Currently I ignore this.
 
+static fltk::Font* grok_font(const char* s, float& fontsize, char* fontencoding)
+{
+  char* sv; // to save strtok_r() state
+  const char* p;
+
+  // get the name:
+  char fontname[64] = "";
+  if ( (p = strtok_r((char*)s, ",", &sv)) ) {
+    // Turn "adobe-foobar" into just "foobar":
+    char* q = strchr(p, '-');
+    if (q) p = q+1;
+    strncpy(fontname, p, sizeof(fontname));
+  }
+
+  // Read point size field:
+  fontsize = 12;
+  p = strtok_r(0, ",", &sv);
+  if (p) {
+    fontsize = atoi(p) * Monitor::all().dpi()/72;
+  }
+
+  // If it is bad, guess that the next is pixelsize:
+  p = strtok_r(0, ",", &sv);
+  if (fontsize < 5 || fontsize > 64) {
+    if (p) fontsize = atoi(p);
+    // go back to default if it looks completely messed up:
+    if (fontsize < 5 || fontsize > 64) fontsize = 12;
+  }
+
+  // next field may be the encoding?
+  // In KDE 1 it was the name of encoding, now it is a number.
+  p = strtok_r(0, ",", &sv);
+  fontencoding[0] = 0;
+  if (p) {
+    strncpy(fontencoding, p, sizeof(fontencoding));
+    // remove dash between iso and rest of text:
+    if (!strncasecmp(fontencoding, "iso-", 4))
+      memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1);
+  }
+
+  int attrib = 0;
+  // Next is the weight. Not clear where the cutoff is between normal
+  // and bold. I have not seen any fonts with more than 2 weights, this
+  // seems to be betweem the apparently random values KDE chooses:
+  p = strtok_r(0, ",", &sv);
+  if (p && atoi(p) > 60 ) attrib = BOLD;
+
+  // Next is the slant/italics flag.
+  p = strtok_r(0, ",", &sv);
+  if (p && atoi(p) > 0 ) attrib |= ITALIC;
+
+  return fltk::font(fontname, attrib);
+}
+
+////////////////////////////////////////////////////////////////
+
+extern "C" bool fltk_theme() {
   fltk::reset_theme();
 
   const char* home = getenv("HOME");
-  if (!home) return;
+  if (!home) return false;
   char kderc[PATH_MAX];
   int kde1 = 0;
   snprintf(kderc, sizeof(kderc), "%s/.kde/share/config/kdeglobals", home);
-  if (access(kderc, R_OK)) {
-    snprintf(kderc, sizeof(kderc), "%s/.kderc", home);
-    kde1 = 1;
-  }
 
   INIFile f;
-  f.read(kderc);
+  if (!f.load(kderc)) {
+    snprintf(kderc, sizeof(kderc), "%s/.kderc", home);
+    kde1 = 1;
+    f.load(kderc);
+  }
   // skipt the rest if it looks like kde does not exist:
-  if (!f.read("/usr/share/config/kdeglobals")) return;
+  if (!f.load("/usr/share/config/kdeglobals")) return false;
 
   const char* s;
 
@@ -326,7 +344,7 @@ extern "C" bool fltk_theme() {
 #endif
 
   Color foreground = NO_COLOR;
-  if ((s=f.getf("General", "foreground")))
+  if ((s=f.get("General", "foreground")))
     foreground = color(s);
 
   Color background = NO_COLOR;
@@ -462,12 +480,181 @@ extern "C" bool fltk_theme() {
   }
 #endif
 
-#ifndef _WIN32
+#if USE_X11
   add_event_handler();
 #endif
   return true;
 }
 
+////////////////////////////////////////////////////////////////
+#if USE_XRDB
+// OBSOLETE X-resource-reading stuff
+
+// Set this to 1 to get my attempt to improve XGetDefault:
+#define MY_GET_DEFAULT 0
+
+#if MY_GET_DEFAULT
+
+// Simplified resource search that understands periods in the names.
+// Matches class.a:, class*a:, *.a:, *a:, and a:
+// Ignores case on everything.
+// Strips whitespace from both sides of the value
+// An empty value returns null.
+// Also understands = instead of :
+// Comments start with ! or ;
+// No quoting of any kind on the values!
+
+// case independent compare, r advanced to point after match:
+static int match(char* & rr, const char* a) {
+  for (char* r = rr; ; a++, r++) {
+    if (!*a) {rr = r; return 1;}
+    if (tolower(*r) != tolower(*a)) return 0;
+  }
+}
+
+// return true if this character is the end of line:
+static int iseol(char c) {return !c || c=='\n' || c=='!' ||c==';';}
+
+// like strtok, this mangles the string temporarily using these:
+static char* resourcestring;
+static char* clobbered;
+static char clobbered_value;
+
+static const char* get_default(const char* a) {
+  if (clobbered) {*clobbered = clobbered_value; clobbered = 0;}
+  if (!resourcestring) resourcestring = XResourceManagerString(xdisplay);
+  char* r = resourcestring;
+  char* found = 0;
+  for (;;) { // for each line in r
+    // skip leading whitespace (and also all blank lines):
+    while (isspace(*r)) r++;
+    if (!*r) break;
+    // exact is true if the program name is matched:
+    int exact = 0;
+    if (*r == '*') {
+      // checked for * or *.:
+      r++;
+      if (*r == '.') r++;
+    } else if (match(r, Window::xclass()) && (*r == '.' || *r == '*')) {
+      // matched the program name:
+      r++;
+      exact = 1;
+    } // otherwise try just 'a':
+    if (match(r, a)) {
+      while (*r != '\n' && isspace(*r)) r++;
+      if (*r == ':' || *r == '=') {
+	r++;
+	while (*r != '\n' && isspace(*r)) r++;
+	if (iseol(*r)) { // blank attribute
+	  if (exact) return 0;
+	  goto SKIP;
+	}
+	// find the end of the word (point to first whitespace at eol or \n):
+	char* e = r; while (!iseol(*e)) e++;
+	while (e > r && isspace(*(e-1))) e--;
+	// remove anything for previous find
+	if (clobbered) *clobbered = clobbered_value;
+	// replace the end with a null, which we will put back later:
+	clobbered = e;
+	clobbered_value = *e;
+	*e = 0;
+	if (exact || !clobbered_value) return r;
+	found = r; r = e+1;
+      } else {
+	// check for blank attribute name with no : or = sign:
+	if (exact && iseol(*r)) return 0;
+      }
+    }
+  SKIP:
+    while (*r && *r++ != '\n'); // go to next line
+  }
+  return found;
+}
+
+#else
+
+static inline const char* get_default(const char* a) {
+  return XGetDefault(xdisplay, Window::xclass(), a);
+}
+
+static inline const char* get_default(const char* a, const char* b) {
+  return XGetDefault(xdisplay, a, b);
+}
+
+#endif
+
+static Color to_color(const char* p) {
+  return p ? color(p) : 0;
+}
+
+extern "C" bool fltk_theme() {
+  fltk::reset_theme();
+  open_display();
+
+  Color color;
+
+  color = to_color(get_default("background"));
+  if (color) set_background(color);
+
+  color = to_color(get_default("foreground"));
+  if (color) {
+    Widget::default_style->labelcolor(color);
+    Widget::default_style->highlight_textcolor(color);
+  }
+
+#if MY_GET_DEFAULT
+  color = to_color(get_default("Text.background"));
+  if (color) Widget::default_style->color(color);
+
+  color = to_color(get_default("Text.foreground"));
+  if (color) Widget::default_style->textcolor(color);
+
+  color = to_color(get_default("Text.selectBackground"));
+  if (color) Widget::default_style->selection_color(color);
+
+  color = to_color(get_default("Text.selectForeground"));
+  if (color) Widget::default_style->selection_textcolor(color);
+#else
+  color = to_color(get_default("Text","background"));
+  if (color) Widget::default_style->color(color);
+
+  color = to_color(get_default("Text","foreground"));
+  if (color) Widget::default_style->textcolor(color);
+
+  color = to_color(get_default("Text","selectBackground"));
+  if (color) Widget::default_style->selection_color(color);
+
+  color = to_color(get_default("Text","selectForeground"));
+  if (color) Widget::default_style->selection_textcolor(color);
+#endif
+
+  // also Scrollbar,width
+  // does not appear to be anything there for setting the tooltips...
+  // Maybe I should just add Tooltip,back/foreground.
+
+  // Mousewheel stuff is read from the XDefaults database but there
+  // are no standards for these. We should change these to match any
+  // standards that arise:
+
+  const char* w = get_default("wheel_scroll_lines");
+  if (w) Widget::default_style->wheel_scroll_lines(atoi(w));
+
+  w = get_default("wheel_up_button");
+  if (w) wheel_up_button = atoi(w);
+
+  w = get_default("wheel_down_button");
+  if (w) wheel_down_button = atoi(w);
+
+#if MY_GET_DEFAULT
+  // undo my mangling of the x resource string:
+  if (clobbered) {*clobbered = clobbered_value; clobbered = 0;}
+#endif
+
+  return true;
+}
+
+#endif
+
 //
-// End of "$Id: KDE.cxx,v 1.20 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: fltk_theme_x.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $".
 //

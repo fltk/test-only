@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.14 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.15 2004/03/07 20:40:31 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1575,14 +1575,7 @@ bool fltk::dnd()
   return true;
 }
 
-////////////////////////////////////////////////////////////////
-
-bool fltk::system_theme() {
-  // maybe this should get whether it is set to gray or blue theme?
-  return true;
-}
-
 //
-// End of "$Id: Fl_mac.cxx,v 1.14 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.15 2004/03/07 20:40:31 spitzak Exp $".
 //
 

@@ -424,7 +424,10 @@ fl_symbols.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
 fl_symbols.o: ../fltk/Symbol.h ../fltk/math.h ../fltk/error.h
 fl_vertex.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
 fl_vertex.o: ../fltk/math.h ../fltk/x.h ../fltk/draw.h
-fltk_theme.o: ../fltk/Style.h
+fltk_theme.o: ../config.h fltk_theme_x.cxx ../fltk/Widget.h ../fltk/Style.h
+fltk_theme.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h
+fltk_theme.o: ../fltk/Monitor.h ../fltk/events.h ../fltk/string.h ../fltk/x.h
+fltk_theme.o: ../fltk/draw.h
 scandir.o: ../config.h
 string.o: ../fltk/string.h ../fltk/FL_API.h
 vsnprintf.o: ../config.h ../fltk/string.h ../fltk/FL_API.h

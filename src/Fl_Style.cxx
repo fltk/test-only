@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.54 2004/01/25 08:49:52 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.55 2004/03/07 20:40:31 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -498,8 +498,8 @@ extern "C" FL_API bool fltk_theme();
 */
 
 /*! \fn fltk::theme()
-  Returns the current Theme function. By default this is an internal
-  function that calls reset_theme() and then system_theme().
+  Returns the current Theme function. By default this points at
+  fltk_theme().
 */
 
 /*! \fn fltk::theme(Theme)
@@ -581,21 +581,6 @@ bool fltk::reset_theme() {
   return true;
 }
 
-/*! \fn fltk::system_theme()
-  Modify the current styles according to standard information read
-  from the operating system.
-
-  On Windows this will read colors and fonts using GetSysColor() and
-  SystemParametersInfo().
-
-  On X this used to read some colors such as "background",
-  "text.foreground", etc, from the XGetDefault database, which is
-  typically set by the xrdb program from the contents of
-  ~/.xdefaults. However no modern systems use this so the current
-  version on X does nothing.
-
-*/
-
 ///////////////////////////////////////////////////////////////
 
 /*!
@@ -627,5 +612,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.54 2004/01/25 08:49:52 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.55 2004/03/07 20:40:31 spitzak Exp $".
 //

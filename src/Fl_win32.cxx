@@ -1,10 +1,10 @@
 //
-// "$Id: Fl_win32.cxx,v 1.202 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.203 2004/03/07 20:40:31 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 //
 
 // This file contains win32-specific code for fltk which is always linked
-// in.	Search other files for "_WIN32" or filenames ending in _win32.C
+// in.	Search other files for "_WIN32" or filenames ending in _win32.cxx
 // for other system-specific code.
 
 #include <config.h>
@@ -1538,170 +1538,6 @@ Cleanup::~Cleanup() {
   fl_font_rid();
 }
 
-////////////////////////////////////////////////////////////////
-
-#ifndef SPI_GETWHEELSCROLLLINES
-#define SPI_GETWHEELSCROLLLINES   104
-#endif
-
-#ifndef WHEEL_PAGESCROLL
-#define WHEEL_PAGESCROLL	(UINT_MAX) /* Scroll one page */
-#endif
-
-static Color win_color(int wincol) {
-  int R = wincol&0xff;
-  int G = (wincol >> 8)&0xff;
-  int B = (wincol >> 16)&0xff;
-  Color col = color(R, G, B);
-  if (col) return col;
-  return BLACK;
-}
-
-static int win_fontsize(int winsize) {
-  if (winsize < 0) return -winsize; // -charsize: which is what FLTK uses
-  if (winsize == 0) return 12; // pick any good size.  12 is good!
-  return winsize*3/4; // cellsize: convert to charsize
-}
-
-bool fltk::system_theme() {
-
-  Color background = win_color(GetSysColor(COLOR_BTNFACE));
-  Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
-  Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
-  Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
-  Color text_background = win_color(GetSysColor(COLOR_WINDOW));
-  Color text_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
-  Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
-  Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
-  Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
-  Color tooltip_foreground = win_color(GetSysColor(COLOR_INFOTEXT));
-// Windows doesn't seem to honor this one
-// Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
-
-  fltk::set_background(background);
-  Widget::default_style->labelcolor_ = foreground;
-  Widget::default_style->highlight_textcolor_ = foreground;
-  Widget::default_style->color_ = text_background;
-  Widget::default_style->textcolor_ = text_foreground;
-  Widget::default_style->selection_color_ = select_background;
-  Widget::default_style->selection_textcolor_ = select_foreground;
-
-  Style* style;
-
-  if ((style = Style::find("ScrollBar"))) {
-//    style->color = lerp(slider_background, text_background, .5);
-    style->color_ = lerp(background, text_background, .5);
-  }
-
-  if (menuitem_background != background || menuitem_foreground != foreground) {
-    if ((style = Style::find("MenuBar"))) {
-      style->color_ = menuitem_background;
-      style->textcolor_ = menuitem_foreground;
-//    style->selection_color_ = select_background;
-//    style->selection_textcolor_ = select_foreground;
-    }
-    if ((style = Style::find("PopupMenu"))) {
-      style->color_ = menuitem_background;
-      style->textcolor_ = menuitem_foreground;
-//    style->selection_color_ = select_background;
-//    style->selection_textcolor_ = select_foreground;
-    }
-  }
-
-/* This is the same as the defaults:
-  if ((style = Style::find("menu title"))) {
-    style->highlight_color_ = GRAY75;
-    style->highlight_textcolor_ = foreground;
-    style->selection_color_ = GRAY75;
-    style->selection_textcolor_ = foreground;
-  }
-*/
-
-  if ((style = Style::find("MenuBar"))) {
-    style->highlight_color_ = GRAY75; // enable title highlightig
-  }
-
-  if ((style = Style::find("Tooltip"))) {
-    style->color_ = tooltip_background;
-    style->textcolor_ = tooltip_foreground;
-  }
-
-  /*
-     Windows font stuff
-
-     It looks Windows has just three separate fonts that it actually
-     uses for stuff replaced by FLTK.  But the "Display Properties"
-     dialog has a lot more fonts that you can set?  Wrong, look again.
-     Some of the fonts are duplicates and another doesn't do anything!
-     It has fonts for the titlebar and icons which we don't have to worry
-     about, a menu font which is used for menubars and menu items, a
-     status font which is for status bars and tooltips, and a message
-     box font which is used for everything else.  Except that it's not
-     used by everything else;  almost all non-menu widgets in every
-     application I tested did not respond to font changes.  The fonts
-     are apparently hard coded by the applications which seems to me to
-     bad programming considering that Windows has an adequate system for
-     allowing the user to specify font preferences.  This is especially
-     true of Microsoft applications and Windows itself!  We will allow
-     FLTK applications to automatically use the fonts specified by the
-     user.
-
-     CET
-  */
-
-  NONCLIENTMETRICS ncm;
-  int sncm = sizeof(ncm);
-  ncm.cbSize = sncm;
-  SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
-
-  Font* font; float size;
-
-  // get font info for regular widgets from LOGFONT structure
-  font = fltk::font((const char*)ncm.lfMessageFont.lfFaceName,
-		    (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
-		    (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
-  size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
-
-  Widget::default_style->labelfont_ = font;
-  Widget::default_style->textfont_ = font;
-  Widget::default_style->labelsize_ = size;
-  Widget::default_style->textsize_ = size;
-
-  // get font info for menu items from LOGFONT structure
-  font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
-		    (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
-		    (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
-  size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
-  if ((style = Style::find("MenuBar"))) {
-    style->textfont_ = font;
-    style->textsize_ = size;
-  }
-  if ((style = Style::find("PopupMenu"))) {
-    style->textfont_ = font;
-    style->textsize_ = size;
-  }
-
-  if ((style = Style::find("Tooltip"))) {
-    // get font info for tooltips from LOGFONT structure
-    font = fltk::font((const char*)ncm.lfStatusFont.lfFaceName,
-		      (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
-		      (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
-    size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
-
-    style->textfont_ = font;
-    style->textsize_ = size;
-  }
-
-  // grab mousewheel stuff from Windows
-  UINT delta;
-  SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
-  if (delta == WHEEL_PAGESCROLL) Style::wheel_scroll_lines_ = 10000;
-  else Style::wheel_scroll_lines_ = (int)delta;
-
-  // CET - FIXME - do encoding stuff
-  return true;
-}
-
 //
-// End of "$Id: Fl_win32.cxx,v 1.202 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.203 2004/03/07 20:40:31 spitzak Exp $".
 //
