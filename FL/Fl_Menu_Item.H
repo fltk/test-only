@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.27 1999/09/24 16:03:42 vincent Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.28 1999/10/03 06:31:32 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,15 +32,16 @@
 #endif
 
 enum { // values for flags:
-  FL_MENU_INACTIVE = 1,
-  FL_MENU_TOGGLE= 2,
-  FL_MENU_VALUE = 4,
-  FL_MENU_RADIO = 8,
-  FL_MENU_INVISIBLE = 0x10,
-  FL_SUBMENU_POINTER = 0x20,
-  FL_SUBMENU = 0x40,
-  FL_MENU_DIVIDER = 0x80,
-  FL_MENU_HORIZONTAL = 0x100
+  FL_MENU_INACTIVE	= 0x001,
+  FL_MENU_TOGGLE	= 0x002,
+  FL_MENU_VALUE		= 0x004,
+  FL_MENU_RADIO		= 0x008,
+  FL_MENU_INVISIBLE	= 0x010,
+  FL_SUBMENU_POINTER	= 0x020,
+  FL_SUBMENU		= 0x040,
+  FL_MENU_DIVIDER	= 0x080,
+  FL_MENU_HORIZONTAL	= 0x100,
+  FL_MENU_STAYS_UP	= 0x200
 };
 
 FL_IMPORT extern FL_EXPORT int fl_old_shortcut(const char*);
@@ -54,11 +55,11 @@ struct Fl_Menu_Item {
   Fl_Callback *callback_;
   void *user_data_;
   unsigned flags_;
+
+#ifndef FLTK_2
   // Fltk 1.0 had 4 extra fields here: labeltype, labelfont,
   // labelsize, labelcolor.  These are no longer supported with the
   // style code and must eventually be deleted from your initializers.
-
-#ifndef FLTK_2
   // Dummy variables to handle static initializers (see above).  These are
   // not used-- you can't initialize style information with the initializers
   // anymore.
@@ -70,8 +71,6 @@ struct Fl_Menu_Item {
 
   Fl_Image* image_;
   const Fl_Style* style_;
-  char junk1;
-  char junk2;
 
   // advance N items, skipping submenus:
   const Fl_Menu_Item *next(int=1) const;
@@ -248,5 +247,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.27 1999/09/24 16:03:42 vincent Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.28 1999/10/03 06:31:32 bill Exp $".
 //

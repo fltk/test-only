@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.33 1999/09/14 17:52:42 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.34 1999/10/03 06:31:41 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -159,7 +159,7 @@ static Fl_Window* send_motion;
 extern Fl_Window* fl_xmousewin;
 #endif
 static void do_queued_events() {
- while (XEventsQueued(fl_display,QueuedAfterReading)) {
+  while (XEventsQueued(fl_display,QueuedAfterReading)) {
     XEvent xevent;
     XNextEvent(fl_display, &xevent);
     fl_handle(xevent);
@@ -234,7 +234,7 @@ Colormap fl_colormap;
 
 static Atom wm_delete_window;
 static Atom wm_protocols;
-static Atom _motif_wm_hints;
+       Atom fl_motif_wm_hints;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
@@ -262,7 +262,7 @@ void fl_open_display() {
 
   wm_delete_window = XInternAtom(d,"WM_DELETE_WINDOW",0);
   wm_protocols = XInternAtom(d,"WM_PROTOCOLS",0);
-  _motif_wm_hints = XInternAtom(d,"_MOTIF_WM_HINTS",0);
+  fl_motif_wm_hints = XInternAtom(d,"_MOTIF_WM_HINTS",0);
   Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
 
   fl_screen = DefaultScreen(fl_display);
@@ -566,7 +566,7 @@ void Fl_Window::layout() {
     else if (i) {
       XMoveResizeWindow(fl_display, i->xid, x(), y(),
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      redraw(); i->wait_for_expose = 1;
+      redraw(); // i->wait_for_expose = 1; (breaks menus somehow...)
     }
     Fl_Group::layout();
   }
@@ -575,76 +575,48 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create()
 
-char fl_show_iconic;	// hack for iconize()
-int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
-extern const Fl_Window* fl_modal_for;
-
-static const int childEventMask = ExposureMask;
-
-static const int XEventMask =
-ExposureMask|StructureNotifyMask
-|KeyPressMask|KeyReleaseMask|KeymapStateMask|FocusChangeMask
-|ButtonPressMask|ButtonReleaseMask
-|EnterWindowMask|LeaveWindowMask
-|PointerMotionMask;
+bool fl_show_iconic;		// true if called from iconize()
+int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
+const Fl_Window* fl_modal_for;	// parent of modal() window
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
 		  int background)
 {
-  Fl_Group::current(0); // get rid of very common user bug: forgot end()
-
-  int X = w->x();
-  int Y = w->y();
-  int W = w->w();
-  if (W <= 0) W = 1; // X don't like zero...
-  int H = w->h();
-  if (H <= 0) H = 1; // X don't like zero...
-  if (!w->parent() && !Fl::grab()) {
-    // force the window to be on-screen.  Usually the X window manager
-    // does this, but a few don't, so we do it here for consistency:
-    if (w->border()) {
-      // ensure border is on screen:
-      // (assumme extremely minimal dimensions for this border)
-      const int top = 20;
-      const int left = 1;
-      const int right = 1;
-      const int bottom = 1;
-      if (X+W+right > Fl::w()) X = Fl::w()-right-W;
-      if (X-left < 0) X = left;
-      if (Y+H+bottom > Fl::h()) Y = Fl::h()-bottom-H;
-      if (Y-top < 0) Y = top;
-    }
-    // now insure contents are on-screen (more important than border):
-    if (X+W > Fl::w()) X = Fl::w()-W;
-    if (X < 0) X = 0;
-    if (Y+H > Fl::h()) Y = Fl::h()-H;
-    if (Y < 0) Y = 0;
-  }
-
-  ulong root = w->parent() ?
-    fl_xid(w->window()) : RootWindow(fl_display, fl_screen);
-
+  ulong root;
   XSetWindowAttributes attr;
   int mask = CWBorderPixel|CWColormap|CWEventMask|CWBitGravity;
-  attr.event_mask = w->parent() ? childEventMask : XEventMask;
-  attr.colormap = colormap;
-  attr.border_pixel = 0;
-  attr.bit_gravity = 0; // StaticGravity;
-  attr.override_redirect = 0;
-  if (Fl::grab()) {
-    attr.save_under = 1; mask |= CWSaveUnder;
-    if (!w->border()) {attr.override_redirect = 1; mask |= CWOverrideRedirect;}
+
+  if (w->parent()) {
+    root = w->window()->i->xid;
+    attr.event_mask = ExposureMask;
+  } else {
+    root = RootWindow(fl_display, fl_screen);
+    attr.event_mask =
+      ExposureMask | StructureNotifyMask
+      | KeyPressMask | KeyReleaseMask | KeymapStateMask | FocusChangeMask
+      | ButtonPressMask | ButtonReleaseMask
+      | EnterWindowMask | LeaveWindowMask
+      | PointerMotionMask;
+    if (!w->border()) {
+      attr.override_redirect = 1;
+      attr.save_under = 1;
+      mask |= CWOverrideRedirect | CWSaveUnder;
+    }
   }
+  attr.border_pixel = 0;
+  attr.colormap = colormap;
+  attr.bit_gravity = 0; // StaticGravity;
+
   if (background >= 0) {
-    attr.background_pixel = background;
+    attr.background_pixel=background;
     mask |= CWBackPixel;
   }
 
   Fl_X* x = new Fl_X;
   x->xid = XCreateWindow(fl_display,
 			 root,
-			 X, Y, W, H,
+			 w->x(), w->y(), w->w()>0?w->w():1, w->h()>0?w->h():1,
 			 0, // borderwidth
 			 visual->depth,
 			 InputOutput,
@@ -659,7 +631,7 @@ void Fl_X::create(Fl_Window* w,
 
   w->redraw(); // force draw to happen
 
-  if (!w->parent() && !attr.override_redirect) {
+  if (!w->parent() && w->border()) {
     // Communicate all kinds 'o junk to the X Window Manager:
 
     w->label(w->label(), w->iconlabel());
@@ -685,7 +657,7 @@ void Fl_X::create(Fl_Window* w,
 		      (unsigned char *)buffer, p-buffer-1);
     }
 
-    if (fl_modal_for && !fl_disable_transient_for && fl_modal_for->i)
+    if (fl_modal_for && !fl_disable_transient_for)
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
 
     XWMHints hints;
@@ -710,18 +682,6 @@ void Fl_X::create(Fl_Window* w,
 
 void Fl_X::sendxjunk() {
   if (w->parent()) return; // it's not a window manager window!
-
-  if (!w->size_range_set) { // default size_range based on resizable():
-    if (w->resizable()) {
-      Fl_Widget *o = w->resizable();
-      int minw = o->w(); if (minw > 100) minw = 100;
-      int minh = o->h(); if (minh > 100) minh = 100;
-      w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
-    } else {
-      w->size_range(w->w(), w->h(), w->w(), w->h());
-    }
-    return; // because this recursively called here
-  }
 
   XSizeHints hints;
   // memset(&hints, 0, sizeof(hints)); jreiser suggestion to fix purify?
@@ -769,14 +729,14 @@ void Fl_X::sendxjunk() {
     hints.y = w->y();
   }
 
-  if (!w->border()) {
-    prop[0] |= 2; // MWM_HINTS_DECORATIONS
-    prop[2] = 0; // no decorations
-  }
+//   if (!w->border()) {
+//     prop[0] |= 2; // MWM_HINTS_DECORATIONS
+//     prop[2] = 0; // no decorations
+//   }
 
   XSetWMNormalHints(fl_display, xid, &hints);
   XChangeProperty(fl_display, xid,
-		  _motif_wm_hints, _motif_wm_hints,
+		  fl_motif_wm_hints, fl_motif_wm_hints,
 		  32, 0, (unsigned char *)prop, 5);
 }
 
@@ -843,5 +803,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.33 1999/09/14 17:52:42 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.34 1999/10/03 06:31:41 bill Exp $".
 //

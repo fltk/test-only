@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_grab.cxx,v 1.2 1999/04/11 02:17:31 gustavo Exp $"
+// "$Id: Fl_grab.cxx,v 1.3 1999/10/03 06:31:41 bill Exp $"
 //
 // Grab/release code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,19 +37,13 @@
 
 extern void fl_fix_focus(); // in Fl.cxx
 
-#ifdef WIN32
-// We have to keep track of whether we have captured the mouse, since
-// MSWindows shows little respect for this... Grep for fl_capture to
-// see where and how this is used.
-extern HWND fl_capture;
-#endif
-
 void Fl::grab(Fl_Window* w) {
   if (w) {
     if (!grab_) {
 #ifdef WIN32
-      SetActiveWindow(fl_capture = fl_xid(first_window()));
-      SetCapture(fl_capture);
+      HWND w = fl_xid(first_window());
+      SetActiveWindow(w); // is this necessary?
+      SetCapture(w);
 #else
       XGrabPointer(fl_display,
 		   fl_xid(first_window()),
@@ -73,7 +67,6 @@ void Fl::grab(Fl_Window* w) {
   } else {
     if (grab_) {
 #ifdef WIN32
-      fl_capture = 0;
       ReleaseCapture();
 #else
       XUngrabKeyboard(fl_display, fl_event_time);
@@ -89,5 +82,5 @@ void Fl::grab(Fl_Window* w) {
 }
 
 //
-// End of "$Id: Fl_grab.cxx,v 1.2 1999/04/11 02:17:31 gustavo Exp $".
+// End of "$Id: Fl_grab.cxx,v 1.3 1999/10/03 06:31:41 bill Exp $".
 //

@@ -1,13 +1,12 @@
 //
-// "$Id: fullscreen.cxx,v 1.4 1999/01/07 19:17:54 mike Exp $"
+// "$Id: fullscreen.cxx,v 1.5 1999/10/03 06:31:45 bill Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
-// This demo shows how to do many of the window manipulations that
-// are popular on SGI programs, even though X does not really like
-// them.  You can toggle the border on/off, change the visual to
-// switch between single/double buffer, and make the window take
-// over the screen.
+// This demo shows how to do many of the window manipulations that are
+// popular on SGI programs, even though X does not really like them.
+// You can change the visual to switch between single/double buffer,
+// and make the window take over the screen.
 //
 // Normally the program makes a single window with a child GL window.
 // This simulates a program where the 3D display is surrounded by
@@ -23,8 +22,6 @@
 // code arranged here seems to be keeping that to a minimu.
 //
 // Apparently unavoidable bugs:
-//
-// Turning the border on causes an unnecessary redraw.
 //
 // Turning off full screen when the border is on causes an unnecessary
 // resize and redraw when the program turns the border on.
@@ -138,14 +135,8 @@ void double_cb(Fl_Widget *o, void *p) {
 void double_cb(Fl_Widget *, void *) {}
 #endif
 
-void border_cb(Fl_Widget *o, void *p) {
-  Fl_Window *w = (Fl_Window *)p;
-  int d = ((Fl_Button *)o)->value();
-  w->border(d);
-}
-
 int px,py,pw,ph;
-Fl_Button *border_button;
+
 void fullscreen_cb(Fl_Widget *o, void *p) {
   Fl_Window *w = (Fl_Window *)p;
   int d = ((Fl_Button *)o)->value();
@@ -217,12 +208,6 @@ int main(int argc, char **argv) {
   b1.callback(double_cb,&sw);
   y+=30;
 
-  Fl_Toggle_Light_Button b2(50,y,window.w()-60,30,"Border");
-  b2.callback(border_cb,w);
-  b2.set();
-  border_button = &b2;
-  y+=30;
-
   Fl_Toggle_Light_Button b3(50,y,window.w()-60,30,"FullScreen");
   b3.callback(fullscreen_cb,w);
   y+=30;
@@ -240,5 +225,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.4 1999/01/07 19:17:54 mike Exp $".
+// End of "$Id: fullscreen.cxx,v 1.5 1999/10/03 06:31:45 bill Exp $".
 //

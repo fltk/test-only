@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.48 1999/09/17 16:23:56 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.49 1999/10/03 06:31:41 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -245,8 +245,6 @@ void Fl::get_mouse(int &x, int &y) {
 
 ////////////////////////////////////////////////////////////////
 
-HWND fl_capture;
-
 static int mouse_event(Fl_Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
@@ -280,14 +278,14 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 0: // single-click
     Fl::e_clicks = 0;
   J1:
-    if (!fl_capture) SetCapture(fl_xid(window));
+    if (!Fl::grab()) SetCapture(fl_xid(window));
     Fl::e_keysym = FL_Button + button;
     Fl::e_is_click = 1;
     px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
     return Fl::handle(FL_PUSH,window);
 
   case 2: // release:
-    if (!fl_capture) ReleaseCapture();
+    if (!Fl::grab()) ReleaseCapture();
     Fl::e_keysym = FL_Button + button;
     return Fl::handle(FL_RELEASE,window);
 
@@ -566,59 +564,32 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 ////////////////////////////////////////////////////////////////
-// This function gets the dimensions of the top/left borders and
-// the title bar, if there is one, based on the FL_BORDER, FL_MODAL
-// and FL_NONMODAL flags, and on the window's size range.
-// It returns the following values:
-//
-// value | border | title bar
-//   0   |  none  |   no
-//   1   |  fix   |   yes
-//   2   |  size  |   yes
+// Sets the 4 return values to the thickness of the window border, so
+// that window positions can be adjusted to match the X method of
+// placing the contents at an absolute position.  The return value
+// is also the value to put in the window style.
 
-int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) {
-  int W, H, xoff, yoff, dx, dy;
-  int ret = bx = by = bt = 0;
-  if (w->border() && !w->parent()) {
-    if (w->maxw != w->minw || w->maxh != w->minh) {
-      ret = 2;
-      bx = GetSystemMetrics(SM_CXSIZEFRAME);
-      by = GetSystemMetrics(SM_CYSIZEFRAME);
-    } else {
-      ret = 1;
-      bx = GetSystemMetrics(SM_CXFIXEDFRAME);
-      by = GetSystemMetrics(SM_CYFIXEDFRAME);
-    }
-    bt = GetSystemMetrics(SM_CYCAPTION);
+int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
+  if (!w->border()) {
+    dx = dy = dw = dh = 0;
+    return WS_POPUP;
+  } else if (w->maxw != w->minw || w->maxh != w->minh) { // resizable
+    dx = GetSystemMetrics(SM_CXSIZEFRAME);
+    dw = 2*dx;
+    int bt = GetSystemMetrics(SM_CYCAPTION);
+    int by = GetSystemMetrics(SM_CYSIZEFRAME);
+    dy = bt+by;
+    dh = bt+2*by;
+    return WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION;
+  } else {
+    dx = GetSystemMetrics(SM_CXFIXEDFRAME);
+    dw = 2*dx;
+    int bt = GetSystemMetrics(SM_CYCAPTION);
+    int by = GetSystemMetrics(SM_CYFIXEDFRAME);
+    dy = bt+by;
+    dh = bt+2*by;
+    return WS_DLGFRAME | WS_CAPTION;
   }
-  //The coordinates of the whole window, including non-client area
-  xoff = bx;
-  yoff = by + bt;
-  dx = 2*bx;
-  dy = 2*by + bt;
-  X = w->x()-xoff;
-  Y = w->y()-yoff;
-  W = w->w()+dx;
-  H = w->h()+dy;
-
-  //Proceed to positioning the window fully inside the screen, if possible
-  //Make border's lower right corner visible
-  if (Fl::w() < X+W) X = Fl::w() - W;
-  if (Fl::h() < Y+H) Y = Fl::h() - H;
-  //Make border's upper left corner visible
-  if (X<0) X = 0;
-  if (Y<0) Y = 0;
-  //Make client area's lower right corner visible
-  if (Fl::w() < X+dx+ w->w()) X = Fl::w() - w->w() - dx;
-  if (Fl::h() < Y+dy+ w->h()) Y = Fl::h() - w->h() - dy;
-  //Make client area's upper left corner visible
-  if (X+xoff < 0) X = -xoff;
-  if (Y+yoff < 0) Y = -yoff;
-  //Return the client area's top left corner in (X,Y)
-  X+=xoff;
-  Y+=yoff;
-
-  return ret;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -633,33 +604,28 @@ void Fl_Window::layout() {
     flags |= SWP_NOSIZE;
   } else {
     Fl_Group::layout();
-    if (i) {redraw(); i->wait_for_expose = 1;}
+    if (i) {redraw(); /*i->wait_for_expose = 1;*/}
   }
   if (this == resize_from_system) {
     resize_from_system = 0;
   } else if (i) {
-    int dummy, bt, bx, by;
-    //Ignore window managing when resizing, so that windows (and more
-    //specifically menus) can be moved offscreen.
-    if (!Fl_X::fake_X_wm(this, dummy, dummy, bt, bx, by))  bx = by = bt = 0; 
-    SetWindowPos(i->xid, 0, ox()-bx, oy()-by-bt, 
-                 ow()-2*bx, oh()-2*by+bt, flags);
+    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
+    SetWindowPos(i->xid, 0, x()-dx, y()-dy, w()+dw, h()+dh, flags);
   }
 }
 
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create():
 
-char fl_show_iconic;	// hack for Fl_Window::iconic()
+bool fl_show_iconic;		// true if called from iconize()
+int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
+const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
-int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
-extern const Fl_Window* fl_modal_for;
 
 Fl_X* Fl_X::create(Fl_Window* w) {
-  Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
-  const char* class_name = w->xclass();
-  if (!class_name) class_name = "FLTK"; // create a "FLTK" WNDCLASS
+  const char* class_name = "FLTK"; // create a "FLTK" WNDCLASS
 
   WNDCLASSEX wc;
   // Documentation states a device context consumes about 800 bytes
@@ -673,7 +639,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   if (!w->icon())
     w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
   wc.hIcon = wc.hIconSm = (HICON)w->icon();
-  wc.hCursor = fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
+  if (!fl_default_cursor) fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hCursor = fl_default_cursor;
   //uchar r,g,b; Fl::get_color(FL_GRAY,r,g,b);
   //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
   wc.hbrBackground = NULL;
@@ -683,61 +650,32 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   RegisterClassEx(&wc);
 
   HWND parent;
-  DWORD style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-  DWORD styleEx = WS_EX_LEFT;
+  DWORD style;
+  DWORD styleEx;
 
   int xp = w->x();
   int yp = w->y();
-  int wp = w->w();
-  int hp = w->h();
 
   if (w->parent()) {
     style = WS_CHILD;
     styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     parent = fl_xid(w->window());
   } else {
-    if (!w->size_range_set) {
-      if (w->resizable()) {
-	Fl_Widget *o = w->resizable();
-	int minw = o->w(); if (minw > 100) minw = 100;
-	int minh = o->h(); if (minh > 100) minh = 100;
-	w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
-      } else {
-	w->size_range(w->w(), w->h(), w->w(), w->h());
-      }
-    }
-    styleEx |= WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
-    int xwm = xp , ywm = yp , bt, bx, by;
-    switch (fake_X_wm(w, xwm, ywm, bt, bx, by)) {
-      // No border (user for menus)
-      case 0: style |= WS_POPUP; break;
-
-      // Thin border and title bar
-      case 1: style |= WS_DLGFRAME | WS_CAPTION; break;
-
-      // Thick, resizable border and title bar, with maximize button
-      case 2: style |= WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION ; break;
-    }
-    if (by+bt) {
-      if (!w->non_modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
-      wp += 2*bx;
-      hp += 2*by+bt;
-    }
+    int dx, dy, dw, dh;
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(w, dx, dy, dw, dh);
+    styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     if (!(w->flags() & Fl_Window::FL_FORCE_POSITION)) {
       xp = yp = CW_USEDEFAULT;
     } else {
-      if (!Fl::grab()) {
-	xp = xwm; yp = ywm;
-        w->x(xp);w->y(yp);
-      }
-      xp -= bx;
-      yp -= by+bt;
+      xp = x()-dx;
+      yp = y()-dy;
     }
-
-    if (fl_modal_for && !fl_disable_transient_for && fl_modal_for->i)
+    if (fl_modal_for && !fl_disable_transient_for) {
       parent = fl_modal_for->i->xid;
-    else
-      parent = 0;
+    } else {
+      parent = fl_mdi_window ? fl_mdi_window->i->xid : 0
+      if (w->border()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    }
   }
 
   Fl_X* x = new Fl_X;
@@ -749,7 +687,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   x->xid = CreateWindowEx(
     styleEx,
     class_name, w->label(), style,
-    xp, yp, wp, hp,
+    xp, yp, w->w(), w->h(),
     parent,
     NULL, // menu
     fl_display,
@@ -764,7 +702,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   // If we've captured the mouse, we dont want do activate any
   // other windows from the code, or we loose the capture.
   ShowWindow(x->xid, fl_show_iconic ? SW_SHOWMINNOACTIVE :
-             fl_capture? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
+	     Fl::grab() ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
   fl_show_iconic = 0;
   return x;
 }
@@ -779,22 +717,17 @@ void Fl_Window::size_range_() {
 
 void Fl_X::set_minmax(LPMINMAXINFO minmax)
 {
-  int td, wd, hd, dummy;
+  int dx, dy, dw, dh; borders(w, dx, dy, dw, dh);
 
-  fake_X_wm(w, dummy, dummy, td, wd, hd);
-  wd *= 2;
-  hd *= 2;
-  hd += td;
-
-  minmax->ptMinTrackSize.x = w->minw + wd;
-  minmax->ptMinTrackSize.y = w->minh + hd;
+  minmax->ptMinTrackSize.x = w->minw + dw;
+  minmax->ptMinTrackSize.y = w->minh + dh;
   if (w->maxw) {
-    minmax->ptMaxTrackSize.x = w->maxw + wd;
-    minmax->ptMaxSize.x = w->maxw + wd;
+    minmax->ptMaxTrackSize.x = w->maxw + dw;
+    minmax->ptMaxSize.x = w->maxw + dw;
   }
   if (w->maxh) {
-    minmax->ptMaxTrackSize.y = w->maxh + hd;
-    minmax->ptMaxSize.y = w->maxh + hd;
+    minmax->ptMaxTrackSize.y = w->maxh + dw;
+    minmax->ptMaxSize.y = w->maxh + dw;
   }
 }
 
@@ -879,5 +812,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.48 1999/09/17 16:23:56 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.49 1999/10/03 06:31:41 bill Exp $".
 //

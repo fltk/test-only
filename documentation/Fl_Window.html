@@ -49,6 +49,7 @@ exit(0)</TT> if this is the last top-level window. </P>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
+<LI><A href=#Fl_Window.exec>exec</A></LI>
 <LI><A href=#Fl_Window.first_window>first_window</A></LI>
 <LI><A href=#Fl_Window.free_position>free_position</A></LI>
 <LI><A href=#Fl_Window.fullscreen>fullscreen</A></LI>
@@ -75,10 +76,9 @@ exit(0)</TT> if this is the last top-level window. </P>
 <UL>
 <LI><A href=#Fl_Window.set_non_modal>set_non_modal</A></LI>
 <LI><A href=#Fl_Window.show>show</A></LI>
-<LI><A href=#Fl_Window.exec>exec</A></LI>
+<LI><A href=#Fl_Window.show_inside>show_inside</A></LI>
 <LI><A href=#Fl_Window.shown>shown</A></LI>
 <LI><A href=#Fl_Window.size_range>size_range</A></LI>
-<LI><A href=#Fl_Window.xclass>xclass</A></LI>
 </UL>
 </TD></TR>
 </TABLE>
@@ -126,25 +126,25 @@ be constrained to widths of <TT>minw + N * dw</TT>,  where <TT>N</TT>
  is any non-negative integer.  If these are  less or equal to 1 they 
 are ignored.  (this is ignored on WIN32)</LI>
 <LI><TT>aspect</TT> is a flag that indicates that the window should 
- preserve it's aspect ratio.  This only works if both the maximum and 
- minimum have the same aspect ratio.  (ignored on WIN32 and by many X
- window managers)</LI>
+preserve it's aspect ratio.  This is ignored by WIN32 and by most X
+window managers (in addition X does not describe what to do if the
+minimum and maximum sizes have different aspect ratios...)
 </UL>
+It is undefined what happens if the current size does not fit in the 
+constraints passed to <TT>size_range()</TT>.
+
  If this function is not called, FLTK tries to figure out the range 
 from the setting of <A href=#Fl_Group.resizable><TT>resizeable()</TT></A>
 : 
 <UL>
 <LI>If <TT>resizeable()</TT> is <TT>NULL</TT> (this is the  default) 
-then the window cannot be resized and the resize  border and max-size 
-control will not be displayed for the  window. </LI>
+then the window cannot be resized. </LI>
 <LI>If either dimension of <TT>resizeable()</TT> is less than  100, 
 then that is considered the minimum size.  Otherwise the <TT>
 resizeable()</TT> has a minimum size of 100. </LI>
 <LI>If either dimension of <TT>resizeable()</TT> is zero, then  that is 
 also the maximum size (so the window cannot resize in  that direction). </LI>
 </UL>
- It is undefined what happens if the current size does not fit in the 
-constraints passed to <TT>size_range()</TT>.
 
 <h4><A name=Fl_Window.show>void Fl_Window::show()</h4>
 
@@ -183,38 +183,56 @@ inside the window, such as an OK button).  During this time events to
 other windows in this application are either thrown away or redirected
 to this window.
 
-<p>The return value is the value() of the window.  This is cleared at
-entry and is is true only if some callback called window->set(), an OK
-button would do this.
+<p>The return value is true only if some callback does window->set().
+To use this, make an OK button with a callback that does this.
 
 <p>If parent is null the window that last received an event is used as
-the parent.  This is convienent for popups that appear in response to
+the parent.  This is convenient for popups that appear in response to
 a mouse or key click.
 
 <p>While the loop is running the function <A
 href=functions.html#modal><TT> Fl::modal()</TT></A> returns true.
+
+<h4><a name=Fl_Window.show_inside>bool Fl_Window::show_inside(const Fl_Window* frame);</h4>
+
+Make the window with a normal system border and behavior, but place it
+inside the <i>frame</i> as though that was the desktop.  This is what
+Windows calls "MDI".  Typically the other window (which must already
+be shown) is a child window so that space can remain around it for a
+title bar.
+
+<p>Notice that parent() of the window must be zero and it will remain
+zero after this is called.  Fltk uses a zero parent to indicate that
+the system is managing the window.
+
+<p>On systems that don't support nested desktops (i.e. X) this does
+show(frame), which produces a normal overlapping window that is tied
+to remain atop and iconize with the frame window (IMHO this is
+a great improvement over MDI!).
 
 <H4><A name=Fl_Window.hide>virtual void Fl_Window::hide()</A></H4>
 
 Remove the window from the screen.  If the window is already hidden or 
 has not been shown then this does nothing and is harmless.
 
+<p>Fltk tries to conserve resources by actually destroying the
+system's copy of the window.  If for some reason you want to just tell
+the system to hide the window use <tt>((Fl_Widget*)window)->hide()</tt>.
+
 <H4><A name=Fl_Window.shown>int Fl_Window::shown() const</A></H4>
 
 Returns non-zero if <TT>show()</TT> has been called (but not <TT>hide()</TT>
 ). You can tell if a window is iconified with <TT>(w-&gt;shown() 
-&amp;!w-&gt;visible())</TT>. 
+&amp;&amp; !w-&gt;visible())</TT>. 
 
 <H4><A name=Fl_Window.iconize>void Fl_Window::iconize()</A></H4>
  Iconifies the window.  If you call this when <TT>shown()</TT> is false 
 it will <TT>show()</TT> it as an icon.  If the window is already 
 iconified this does nothing. 
 <P>Call <TT>show()</TT> to restore the window. </P>
-<P>When a window is iconified/restored (either by these calls or by the 
-user) the <TT>handle()</TT> method is called with <TT>FL_HIDE</TT> and <TT>
-FL_SHOW</TT> events and <TT>visible()</TT> is turned on and off. </P>
-<P>There is no way to control what is drawn in the icon except with the 
-string passed to <TT>Fl_Window::xclass()</TT>.  You should not rely on 
+
+<p>Currently there are only <a href=osissues.html#icon>system-specific
+ways</a> to control what is drawn in the icon.  You should not rely on 
 window managers displaying the icons. </P>
 <H4><A name=Fl_Window.first_window>Fl_Window *Fl::first_window()</A></H4>
  Returns the first <TT>shown()</TT> window in the widget hierarchy. If 
@@ -246,24 +264,34 @@ given position, or at the center of the given widget, which may be the
 window itself.  If the optional <TT>offscreen</TT> parameter is 
 non-zero, then the window is allowed to extend off the screen (this 
 does not work with some X window managers). 
+
 <H4><A name=Fl_Window.fullscreen>void Fl_Window::fullscreen()</A></H4>
- Makes the window completely fill the screen, without any window 
+Makes the window completely fill the screen, without any window 
 manager border visible.  You must use <TT>fullscreen_off()</TT> to undo 
-this. This may not work with all window managers. 
+this. This may not work with all X window managers (and currently it
+is not successful at hiding the Windows taskbar).
+
 <H4><A name=Fl_Window.fullscreen_off>int Fl_Window::fullscreen_off(int 
 x, int y, int w, int h)</A></H4>
- Turns off any side effects of <TT>fullscreen()</TT> and does <TT>
+Turns off any side effects of <TT>fullscreen()</TT> and does <TT>
 resize(x,y,w,h)</TT>. 
-<H4><A name=Fl_Window.border>int Fl_Window::border(int)
-<BR> uchar Fl_Window::border() const</A></H4>
- Gets or sets whether or not the window manager border is around the 
-window.  The default value is true. <TT>border(n)</TT> can be used to 
-turn the border on and off, and returns non-zero if the value has been 
-changed. <I>Under most X window managers this does not work after <TT>
-show()</TT> has been called, although SGI's 4DWM does work.</I>
-<H4><A name=Fl_Window.clear_border>void Fl_Window::clear_border()</A></H4>
-<TT>clear_border()</TT> is a fast inline function to turn the border 
-off. It only works before <TT>show()</TT> is called. 
+
+<H4><A name=Fl_Window.clear_border>void Fl_Window::clear_border()</H4>
+
+You may turn off the window manager border before calling show() on
+the window the first time.  This will also mean the user cannot move,
+iconize, or resize the window (unless your program does it).  This is
+used by the fltk menus and tooltips.
+
+<p>On X this causes "override redirect".  This is only good for
+short-lived windows as it can confuse X window managers, however this
+is the only reliable and fast way to do it.  This also turns on "save
+under" which on many X servers (like XFree86) can make the window
+pop-down much faster.
+
+<h4><A name=Fl_Window.border>bool Fl_Window::border() const</h4>
+
+Returns false if clear_border() has been called.
 
 <H4><A name=Fl_Window.set_modal>void Fl_Window::set_modal()</A></H4>
 
@@ -283,27 +311,13 @@ Obsolete, use <a href=Fl_Window.show>show(parent)</a> instead.
 <H4><A name=Fl_Window.iconlabel>void Fl_Window::iconlabel(const char*)
 <BR> const char* Fl_Window::iconlabel() const</A></H4>
  Gets or sets the icon label. 
-<H4><A name=Fl_Window.xclass>void Fl_Window::xclass(const char*)
-<BR> const char* Fl_Window::xclass() const</A></H4>
- A string used to tell the system what type of window this is. Mostly 
-this identifies the picture to draw in the icon. <I>Under X, this is 
-turned into a <TT>XA_WM_CLASS</TT> pair by truncating at the first 
-non-alphanumeric character and capitalizing the first character, and 
-the second one if the first is 'x'.  Thus &quot;foo&quot; turns into &quot;foo, Foo&quot;, 
-and &quot;xprog.1&quot; turns into &quot;xprog, XProg&quot;.</I> This only works if called <I>
-before</I> calling <TT>show()</TT>. 
-<P>Under Microsoft Windows this string is used as the name of the
-WNDCLASS structure, though it is not clear if this can have any
-visible effect. </P>
 <H4><A name=Fl_Window.make_current>void Fl_Window::make_current()</A></H4>
 <TT>make_current()</TT> sets things up so that the drawing functions in <A
 href=drawing.html#Drawing><TT>&lt;FL/fl_draw.H&gt;</TT></A> will go into this 
 window. This is useful for incremental update of windows, such as in an 
 idle callback, which will make your program behave much better if it 
-draws a slow graphic. <B>Danger: incremental update is very hard to 
-debug and maintain!</B>
-<P>This method only works for the <TT>Fl_Window</TT> and <TT>
-Fl_Gl_Window</TT> classes. </P>
+draws a slow graphic.  <i>This call does not work for Fl_Double_Window!</i>.
+
 <H4><A name=Fl_Window.current>static Fl_Window* Fl_Window::current()</A></H4>
  Returns the last window that was made current.
 <H4><A name=Fl_Window.cursor>void Fl_Window::cursor(Fl_Cursor, Fl_Color = FL_WHITE, Fl_Color = FL_BLACK)</H4>

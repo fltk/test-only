@@ -1,5 +1,5 @@
 //
-// "$Id: ask.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $"
+// "$Id: ask.cxx,v 1.5 1999/10/03 06:31:44 bill Exp $"
 //
 // Standard dialog test program for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,7 @@ int get_string(char*buffer) {
   window.hotspot(&cancel); // you must position modal windows
   window.end();
   window.set_modal();
+  window.clear_border();
   window.show();
   for (;;) {
     Fl::wait();
@@ -110,5 +111,5 @@ int main(int argc, char **argv) {
 }
     
 //
-// End of "$Id: ask.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $".
+// End of "$Id: ask.cxx,v 1.5 1999/10/03 06:31:44 bill Exp $".
 //

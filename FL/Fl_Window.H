@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.22 1999/09/19 04:58:57 vincent Exp $"
+// "$Id: Fl_Window.H,v 1.23 1999/10/03 06:31:32 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,6 @@ public:
 
   virtual int handle(int);
 
-  void border(int b);
   void clear_border()	{set_flag(FL_NOBORDER);}
   int border() const	{return !(flags() & FL_NOBORDER);}
   void set_modal()	{set_flag(FL_MODAL);}
@@ -48,9 +47,10 @@ public:
   void set_non_modal()	{set_flag(FL_NON_MODAL);}
   int non_modal() const	{return flags() & (FL_NON_MODAL|FL_MODAL);}
 
-  void hotspot(int x, int y, int offscreen = 0);
-  void hotspot(const Fl_Widget*, int offscreen = 0);
-  void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
+  void move(int x, int y);
+  void hotspot(int x, int y, bool offscreen = 0);
+  void hotspot(const Fl_Widget*, bool offscreen = 0);
+  void hotspot(const Fl_Widget& p, bool offscreen = 0) {hotspot(&p,offscreen);}
   void free_position()	{clear_flag(FL_FORCE_POSITION);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0)
     { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_(); }
@@ -70,6 +70,7 @@ public:
   void show(int, char**);
   void show(const Fl_Window* parent);
   int exec(const Fl_Window* parent = 0);
+  void show_inside(const Fl_Window* parent);
   void hide();
   void fullscreen();
   void fullscreen_off(int,int,int,int);
@@ -117,5 +118,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.22 1999/09/19 04:58:57 vincent Exp $".
+// End of "$Id: Fl_Window.H,v 1.23 1999/10/03 06:31:32 bill Exp $".
 //

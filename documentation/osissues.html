@@ -242,9 +242,21 @@ MyWindow::~MyWindow() {
 }
 </PRE>
 </UL>
+<a name=icon>
 <H3>Setting the Icon of a Window</H3>
- FLTK currently supports setting a window's icon *before* it is shown 
-using the <TT>Fl_Window::icon()</TT> method. 
+FLTK can set the icon a window displays.  These only work if called <I>
+before</I> calling <TT>show()</TT>. 
+
+<H4><A name=Fl_Window.xclass>void Fl_Window::xclass(const char*)
+<BR> const char* Fl_Window::xclass() const</A></H4>
+
+This string is turned into a <TT>XA_WM_CLASS</TT> pair by truncating
+at the first non-alphanumeric character and capitalizing the first
+character, and the second one if the first is 'x'.  Thus
+"foo" turns into "foo, Foo" and "xprog.1" turns into "xprog, XProg".
+Many window managers can use this string to select an icon.  This call
+is provided on WIN32 for compatability, but the value is ignored.
+
 <H4>void Fl_Window::icon(char *)</H4>
  Sets the icon for the window to the passed pointer.  You will need to 
 cast the icon <TT>Pixmap</TT> to a <TT>char *</TT> when calling this 

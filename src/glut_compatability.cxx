@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.7 1999/08/16 07:31:31 bill Exp $"
+// "$Id: glut_compatability.cxx,v 1.8 1999/10/03 06:31:42 bill Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -226,8 +226,7 @@ int glutCreateWindow(char *title) {
 int glutCreateSubWindow(int win, int x, int y, int w, int h) {
   Fl_Glut_Window *W = new Fl_Glut_Window(x,y,w,h,0);
   windows[win]->add(W);
-  if (windows[win]->shown()) W->show();
-  W->make_current();
+  if (windows[win]->shown()) {W->show(); W->make_current();}
   return W->number;
 }
 
@@ -400,5 +399,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.7 1999/08/16 07:31:31 bill Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.8 1999/10/03 06:31:42 bill Exp $".
 //

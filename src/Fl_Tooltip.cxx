@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.11 1999/09/25 22:27:09 vincent Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.12 1999/10/03 06:31:39 bill Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -98,10 +98,7 @@ static void tooltip_timeout(Fl_Widget *v) {
   ((Fl_Widget*)window)->label(v->tooltip());
 
   window->resize(ox, oy, ww, hh);
-
-  Fl::grab(Fl::first_window()); // necessary to get override_redirect turned on
   window->show();
-  Fl::grab(0);
 }
 
 static int cheesy_flag = 0;
@@ -138,5 +135,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.11 1999/09/25 22:27:09 vincent Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.12 1999/10/03 06:31:39 bill Exp $".
 //

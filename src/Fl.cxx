@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.42 1999/09/20 04:33:45 bill Exp $"
+// "$Id: Fl.cxx,v 1.43 1999/10/03 06:31:37 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -78,12 +78,6 @@ static struct Timeout {
 } * timeout;
 static int numtimeouts;
 static int timeout_array_size;
-#ifdef WIN32
-// We have to keep track of whether we have captured the mouse, since
-// MSWindows shows little respect for this... Grep for fl_capture to
-// see where and how this is used.
-extern HWND fl_capture;
-#endif
 
 void Fl::add_timeout(double t, void (*cb)(void *), void *v) {
 
@@ -616,20 +610,33 @@ Fl_Window::~Fl_Window() {
 // !visible()" means it is iconized, while !shown() means that the
 // program has hidden the window.
 
-const Fl_Window* fl_modal_for; // used by Fl_Window::create
+extern const Fl_Window* fl_modal_for; // in Fl_x.cxx
 
 void Fl_Window::show() {
   if (parent()) {
-    Fl_Widget::show();
+    set_visible();
+    handle(FL_SHOW);
   } else if (!i) {
+    Fl_Group::current(0); // get rid of very common user bug: forgot end()
 #ifndef WIN32
     fl_open_display();
 #endif
+    // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
-      // back compatability with older modal() and non_modal() flags:
       fl_modal_for = Fl::first_window();
       while (fl_modal_for && fl_modal_for->parent())
 	fl_modal_for = fl_modal_for->window();
+    }
+    // back-compatability automatic size_range() based on resizable():
+    if (!size_range_set) {
+      if (resizable()) {
+	Fl_Widget *o = resizable();
+	int minw = o->w(); if (minw > 100) minw = 100;
+	int minh = o->h(); if (minh > 100) minh = 100;
+	size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
+      } else {
+	size_range(w(), h(), w(), h());
+      }
     }
     create();
     fl_modal_for = 0;
@@ -638,9 +645,9 @@ void Fl_Window::show() {
     if (modal()) {Fl::modal_ = this; fl_fix_focus();}
   } else {
 #ifdef WIN32
-    // Once again, we would lose the capture if we activated the window.
     if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!fl_capture) BringWindowToTop(i->xid);
+    if (!Fl::grab()) // we would lose the capture if we activated the window
+      BringWindowToTop(i->xid);
 #else
     XMapRaised(fl_display, i->xid);
 #endif
@@ -648,19 +655,33 @@ void Fl_Window::show() {
 }
 
 void Fl_Window::show(const Fl_Window* modal_for) {
-  fl_modal_for = modal_for;
+  // find the outermost window and make sure it has been shown():
+  while (modal_for && modal_for->parent()) modal_for = modal_for->window();
+  if (modal_for && modal_for->shown()) fl_modal_for = modal_for;
   show();
   fl_modal_for = 0;
 }
 
 int Fl_Window::exec(const Fl_Window* modal_for) {
+  clear(); // clear the value()
   set_modal();
-  clear();
-  fl_modal_for = modal_for;
-  show();
+  show(modal_for);
   while (shown()) Fl::wait();
   return value();
 }
+
+#ifdef WIN32
+extern const Fl_Window* fl_mdi_window;
+void Fl_Window::show_inside(const Fl_Window* w) {
+  fl_mdi_window = w;
+  show();
+  fl_mdi_window = 0;
+}
+#else
+void Fl_Window::show_inside(const Fl_Window* w) {
+  show(w);
+}
+#endif
 
 void Fl_Window::hide() {
   destroy();
@@ -780,5 +801,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.42 1999/09/20 04:33:45 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.43 1999/10/03 06:31:37 bill Exp $".
 //

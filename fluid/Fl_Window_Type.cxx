@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.20 1999/09/10 16:48:22 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.21 1999/10/03 06:31:36 bill Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -148,6 +148,7 @@ Fl_Type *Fl_Window_Type::make() {
   o->add(p);
   o->modal = 0;
   o->non_modal = 0;
+  o->border = 1;
   return o;
 }
 
@@ -214,9 +215,9 @@ void border_cb(Fl_Light_Button* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window*)(current_widget->o))->border());
+    i->value(((Fl_Window_Type *)current_widget)->border);
   } else {
-    ((Fl_Window*)(current_widget->o))->border(i->value());
+    ((Fl_Window_Type *)current_widget)->border = i->value();
   }
 }
 
@@ -593,7 +594,7 @@ void Fl_Window_Type::write_code2() {
   write_extra_code();
   if (modal) write_c("%so->set_modal();\n", indent());
   else if (non_modal) write_c("%so->set_non_modal();\n", indent());
-  if (!((Fl_Window*)o)->border()) write_c("%so->clear_border();\n", indent());
+  if (!border) write_c("%so->clear_border();\n", indent());
   write_c("%so->end();\n", indent());
   if (((Fl_Window*)o)->resizable() == o)
     write_c("%so->resizable(o);\n", indent());
@@ -604,7 +605,7 @@ void Fl_Window_Type::write_properties() {
   Fl_Widget_Type::write_properties();
   if (modal) write_string("modal");
   else if (non_modal) write_string("non_modal");
-  if (!((Fl_Window*)o)->border()) write_string("noborder");
+  if (!border) write_string("noborder");
   if (xclass) {write_string("xclass"); write_word(xclass);}
   if (o->visible()) write_string("visible");
 }
@@ -618,7 +619,7 @@ void Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c, "visible")) {
     if (Fl::first_window()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
-    ((Fl_Window*)o)->border(0);
+    border = 0;
   } else if (!strcmp(c,"xclass")) {
     storestring(read_word(),xclass);
     ((Fl_Window*)o)->xclass(xclass);
@@ -640,7 +641,7 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
   } else if (!strcmp(name,"NumberofWidgets")) {
     return 1; // we can figure out count from file
   } else if (!strcmp(name,"border")) {
-    if (sscanf(value,"%d",&x) == 1) ((Fl_Window*)o)->border(x);
+    if (sscanf(value,"%d",&x) == 1) border = x;
   } else if (!strcmp(name,"title")) {
     label(value);
   } else {
@@ -650,5 +651,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.20 1999/09/10 16:48:22 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.21 1999/10/03 06:31:36 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.21 1999/09/19 04:58:58 vincent Exp $"
+// "$Id: win32.H,v 1.22 1999/10/03 06:31:32 bill Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -80,8 +80,8 @@ public:
   inline void flush() {w->flush();}
   FL_IMPORT static FL_EXPORT Fl_X* first;
   FL_IMPORT static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
-  FL_IMPORT static FL_EXPORT int fake_X_wm(const Fl_Window* w,int &X, int &Y,
-		                 int &bt,int &bx,int &by);
+  FL_IMPORT static FL_EXPORT int borders(const Fl_Window* w,
+					 int& dx, int& dy, int& dw, int& dh);
   FL_EXPORT void set_minmax(LPMINMAXINFO minmax);
   FL_IMPORT static FL_EXPORT Fl_X* create(Fl_Window*);
 };
@@ -130,5 +130,5 @@ FL_IMPORT extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.21 1999/09/19 04:58:58 vincent Exp $".
+// End of "$Id: win32.H,v 1.22 1999/10/03 06:31:32 bill Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.9 1999/10/03 06:31:40 bill Exp $"
 //
-// Common hotspot routines for the Fast Light Tool Kit (FLTK).
+// Move windows but keep them on-screen.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -30,23 +30,46 @@
 #include <FL/win32.H>
 #endif
 
-void Fl_Window::hotspot(int X, int Y, int /*offscreen*/) {
-  int mx,my; Fl::get_mouse(mx,my);
-  X = mx-X; Y = my-Y;
+void Fl_Window::move(int X, int Y) {
+#ifdef WIN32
+  int dx, dy, dr, db;
+  Fl_X::borders(this, dx, dy, dr, db); dr -= dx; db -= dy;
+#else
+  // guess very thin borders for X (most X window managers will further
+  // move the window to be on-screen)
+  const int dx = 1;
+  const int dy = 20;
+  const int dr = 1;
+  const int db = 1;
+#endif
+  int W = Fl::w();
+  if (X+w()+dr > W) X = W-dr-w();
+  if (X < dx) X = dx;
+  if (X+w() > W) X = W-w();
+  if (X < 0) X = 0;
+  int H = Fl::h();
+  if (Y+h()+db > H) Y = H-db-h();
+  if (Y < dy) Y = dy;
+  if (Y+h() > H) Y = H-h();
+  if (Y < 0) Y = 0;
   position(X,Y);
-  layout();
 }
 
-void Fl_Window::hotspot(const Fl_Widget *o, int offscreen) {
+void Fl_Window::hotspot(int X, int Y, bool offscreen) {
+  int mx,my; Fl::get_mouse(mx,my); mx -= X; my -= Y;
+  if (offscreen) position(mx, my); else move(mx, my);
+}
+
+void Fl_Window::hotspot(const Fl_Widget *o, bool offscreen) {
   int X = o->w()/2;
   int Y = o->h()/2;
   while (o != this) {
     X += o->x(); Y += o->y();
     o = o->window();
   }
-  hotspot(X,Y,offscreen);
+  hotspot(X, Y, offscreen);
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.9 1999/10/03 06:31:40 bill Exp $".
 //

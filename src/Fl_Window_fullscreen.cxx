@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.6 1999/09/14 07:17:24 bill Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.7 1999/10/03 06:31:40 bill Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,53 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Turning the border on/off by changing the motif_wm_hints property
-// works on Irix 4DWM.  Does not appear to work for any other window
-// manager.  Fullscreen still works on some window managers (fvwm is one)
-// because they allow the border to be placed off-screen.
-
-// Unfortunatly most X window managers ignore changes to the border
-// and refuse to position the border off-screen, so attempting to make
-// the window full screen will lose the size of the border off the
-// bottom and right.
-
 #include <FL/Fl.H>
-#include <FL/x.H>
 
-void Fl_Window::border(int b) {
-  if (b) {
-    if (border()) return;
-    clear_flag(FL_NOBORDER);
-  } else {
-    if (!border()) return;
-    set_flag(FL_NOBORDER);
-  }
-#ifdef WIN32
-  // not yet implemented, but it's possible
-  // for full fullscreen we have to make the window topmost as well
-#else
-  if (i) i->sendxjunk();
+#ifndef WIN32
+#include <FL/x.H>
+extern Atom fl_motif_wm_hints; // in Fl_x.cxx
 #endif
-}
 
 void Fl_Window::fullscreen() {
-#ifndef WIN32
-  //this would clobber the fake wm, since it relies on the border flags to
-  //determine its thickness
-  border(0);
+#ifdef WIN32
+  // something must be done so that the taskbar is hidden...
+#else
+  // Irix 4DWM will work if we use the motif_wm_hints property to turn
+  // the border off.  Most other window managers will ignore this and
+  // leave the border on.  Newer window managers will position the
+  // window correctly even if the border is on, but far too many of
+  // them will insist on moving it down&right by the border thickness...
+  if (i) {
+    // see the file /usr/include/X11/Xm/MwmUtil.h:
+    long prop[5] = {2, 1, 0, 0, 0};
+    XChangeProperty(fl_display, fl_xid(this),
+		    fl_motif_wm_hints, fl_motif_wm_hints,
+		    32, 0, (unsigned char *)prop, 5);
+  }
 #endif
   if (!x()) x(1); // force it to call XResizeWindow()
   resize(0,0,Fl::w(),Fl::h());
 }
 
 void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
-  // this order produces less blinking on IRIX:
   resize(X,Y,W,H);
 #ifndef WIN32
-  border(1);
+  if (i) i->sendxjunk(); // makes the border turn back on
 #endif
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.6 1999/09/14 07:17:24 bill Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.7 1999/10/03 06:31:40 bill Exp $".
 //
