@@ -1,5 +1,5 @@
 //
-// "$Id: shape.cxx,v 1.10 2002/12/10 02:01:06 easysw Exp $"
+// "$Id: shape.cxx,v 1.11 2004/06/07 00:26:22 spitzak Exp $"
 //
 // Tiny OpenGL demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <config.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/math.h>
 
 #if HAVE_GL
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
   window.resizable(&sw);
   //  window.size_range(300,330,0,0,1,1,1);
 // add a knob to control it:
-  fltk::HorizontalSlider slider(50, 295, window.w()-60, 30, "Sides:");
+  fltk::Slider slider(50, 295, window.w()-60, 30, "Sides:");
   slider.clear_flag(fltk::ALIGN_MASK);
   slider.set_flag(fltk::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
@@ -113,5 +113,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shape.cxx,v 1.10 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id: shape.cxx,v 1.11 2004/06/07 00:26:22 spitzak Exp $".
 //
