@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.8 2004/10/04 00:22:06 rokan Exp $"
+// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.9 2004/11/25 03:21:18 rokan Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,7 @@ protected:
   void set_flag(int c) {flags_ |= c;}
   void clear_flag(int c) {flags_ &= ~c;}
   enum {INACTIVE=1, INVISIBLE=2, OUTPUT=4, SHORTCUT_LABEL=64,
-        CHANGED=128, VISIBLE_FOCUS=512};
+        CHANGED=128, VISIBLE_FOCUS=512, COPIED_LABEL = 1024};
 
   void draw_box() const;
   void draw_box(Fl_Boxtype, Fl_Color) const;
@@ -209,8 +209,10 @@ public:
      * to the widget. The passed pointer is stored unchanged in the widget 
      * (the string is not copied), so if you need to set the label to a formatted
      * value, make sure the buffer is static, global, or allocated. \see align(), box() */
-  void label(const char* text) {label_.value=text; redraw_label();}
+  void label(const char* a);
     /** Set the current label type and label pointer. \see align(), image() */
+  void copy_label(const char* a);
+      /** Copies given label to internal buffer. This buffer is fried when label is changed or widget is destroyed. */
   void label(Fl_Labeltype a,const char* b) {label_.type = a; label_.value = b;}
     /** Gets the labeltype which identifies the function that draws the label of the widget. */
   Fl_Labeltype labeltype() const {return (Fl_Labeltype)label_.type;}
@@ -414,5 +416,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.8 2004/10/04 00:22:06 rokan Exp $".
+// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.9 2004/11/25 03:21:18 rokan Exp $".
 //

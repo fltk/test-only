@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18.2.14.2.48.2.11 2004/11/09 01:52:33 rokan Exp $"
+# "$Id: Makefile,v 1.18.2.14.2.48.2.12 2004/11/25 03:21:24 rokan Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -252,7 +252,7 @@ libfltk_forms.$(FL_DSO_MAJOR).dylib: $(FLOBJECTS) libfltk.$(FL_DSO_MAJOR).dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(DESTDIR)$(libdir)/$@ \
-		$(FLOBJECTS) $(LDLIBS) -L. -lfltk
+		$(FLOBJECTS) -L. $(LDLIBS) -lfltk
 	-$(RM) libfltk_forms.dylib
 	$(LN) libfltk_forms.$(FL_DSO_MAJOR).dylib libfltk_forms.dylib
 
@@ -286,7 +286,7 @@ libfltk_gl.$(FL_DSO_MAJOR).dylib: $(GLOBJECTS) libfltk.$(FL_DSO_MAJOR).dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(DESTDIR)$(libdir)/$@ \
-		$(GLOBJECTS) $(GLDLIBS) -L. -lfltk
+		$(GLOBJECTS) -L. $(GLDLIBS) -lfltk
 	-$(RM) libfltk_gl.dylib
 	$(LN) libfltk_gl.$(FL_DSO_MAJOR).dylib libfltk_gl.dylib
 
@@ -320,7 +320,7 @@ libfltk_images.$(FL_DSO_MAJOR).dylib: $(IMGOBJECTS) libfltk.$(FL_DSO_MAJOR).dyli
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(DESTDIR)$(libdir)/$@ \
-		$(IMGOBJECTS) $(LDLIBS) $(IMAGELIBS) -L. -lfltk
+		$(IMGOBJECTS) $(LDLIBS) -L. $(IMAGELIBS) -lfltk
 	-$(RM) libfltk_images.dylib
 	$(LN) libfltk_images.$(FL_DSO_MAJOR).dylib libfltk_images.dylib
 
@@ -588,5 +588,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.18.2.14.2.48.2.11 2004/11/09 01:52:33 rokan Exp $".
+# End of "$Id: Makefile,v 1.18.2.14.2.48.2.12 2004/11/25 03:21:24 rokan Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.4 2004/03/18 08:01:02 matthiaswm Exp $"
+// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.5 2004/11/25 03:21:23 rokan Exp $"
 //
 // MacOS system menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,7 @@
 
 #if defined(__APPLE__)
 
-#include <FL/X.H>
+#include <FL/x.H>
 #include <FL/Fl.H>
 #include <FL/Fl_Sys_Menu_Bar.H>
 
@@ -320,5 +320,5 @@ int Fl_Menu_Bar::handle(int event) {
 #endif /* __APPLE__ */
 
 //
-// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.4 2004/03/18 08:01:02 matthiaswm Exp $".
+// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.5 2004/11/25 03:21:23 rokan Exp $".
 //

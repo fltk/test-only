@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.8 2004/03/29 21:22:35 rokan Exp $"
+// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.9 2004/11/25 03:21:21 rokan Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -228,6 +228,8 @@ extern int fl_wait(double time); // in Fl_<platform>.cxx
 static char in_idle;
 
 double Fl::wait(double time_to_wait) {
+  do_widget_deletion();
+
   if (first_timeout) {
     elapse_timeouts();
     Timeout *t;
@@ -949,6 +951,13 @@ void Fl_Widget::damage(uchar fl, int X, int Y, int W, int H) {
   if (W > wi->w()-X) W = wi->w()-X;
   if (H > wi->h()-Y) H = wi->h()-Y;
   if (W <= 0 || H <= 0) return;
+  
+  if (!X && !Y && W==wi->w() && H==wi->h()) {
+    // if damage covers entire window delete region:
+    wi->damage(fl);
+    return;
+  }
+
 
   if (wi->damage()) {
     // if we already have damage we must merge with existing region:
@@ -986,6 +995,50 @@ void Fl_Window::flush() {
 }
 
 
+
+
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.8 2004/03/29 21:22:35 rokan Exp $".
+// The following methods allow callbacks to schedule the deletion of
+// widgets at "safe" times.
+//
+
+static int		num_dwidgets = 0, alloc_dwidgets = 0;
+static Fl_Widget	**dwidgets = 0;
+
+void
+Fl::delete_widget(Fl_Widget *w) {
+  if (!w) return;
+
+  if (num_dwidgets >= alloc_dwidgets) {
+    Fl_Widget	**temp;
+
+    temp = new Fl_Widget *[alloc_dwidgets + 10];
+    if (alloc_dwidgets) {
+      memcpy(temp, dwidgets, alloc_dwidgets * sizeof(Fl_Widget *));
+      delete[] dwidgets;
+    }
+
+    dwidgets = temp;
+    alloc_dwidgets += 10;
+  }
+
+  dwidgets[num_dwidgets] = w;
+  num_dwidgets ++;
+}
+
+
+void
+Fl::do_widget_deletion() {
+  if (!num_dwidgets) return;
+
+  for (int i = 0; i < num_dwidgets; i ++)
+    delete dwidgets[i];
+
+  num_dwidgets = 0;
+}
+
+
+
+//
+// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.9 2004/11/25 03:21:21 rokan Exp $".
 //

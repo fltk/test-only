@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.5 2004/09/12 19:31:12 rokan Exp $"
+// "$Id: x.cxx,v 1.1.2.6 2004/11/25 03:21:25 rokan Exp $"
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1162,7 +1162,8 @@ int fl_handle(const XEvent& thisevent)
                             XRootWindow(fl_display, fl_screen),
                             xevent.xreparent.x, xevent.xreparent.y,
                             &xpos, &ypos, &junk);
-  
+     // tell Fl_Window about it and set flag to prevent echoing:
+      resize_bug_fix = window;
       window->position(xpos, ypos);
       break;
     }
@@ -1178,8 +1179,8 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   int is_a_resize = (W != w() || H != h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
-  if (X != x() || Y != y()) set_flag(FL_FORCE_POSITION);
-  else if (!is_a_resize) return;
+  if (is_a_move && resize_from_program) set_flag(FL_FORCE_POSITION);
+  else if (!is_a_resize && !is_a_move) return;
   if (is_a_resize) {
     Fl_Group::resize(X,Y,W,H);
     if (shown()) {redraw(); i->wait_for_expose = 1;}
@@ -1255,10 +1256,13 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
   if (H <= 0) H = 1; // X don't like zero...
   if (!win->parent() && !Fl::grab()) {
     // center windows in case window manager does not do anything:
+#ifdef FL_CENTER_WINDOWS
     if (!(win->flags() & Fl_Window::FL_FORCE_POSITION)) {
       win->x(X = (Fl::w()-W)/2);
       win->y(Y = (Fl::h()-H)/2);
     }
+#endif // FL_CENTER_WINDOWS
+
     // force the window to be on-screen.  Usually the X window manager
     // does this, but a few don't, so we do it here for consistency:
     if (win->border()) {
@@ -1533,5 +1537,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: x.cxx,v 1.1.2.5 2004/09/12 19:31:12 rokan Exp $".
+// End of "$Id: x.cxx,v 1.1.2.6 2004/11/25 03:21:25 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.12 2004/07/27 18:51:35 easysw Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.13 2004/11/25 03:21:23 rokan Exp $"
 //
 // Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
@@ -1146,6 +1146,7 @@ void Fl_Text_Display::next_word() {
 
 void Fl_Text_Display::previous_word() {
   int pos = insert_position();
+  if(!pos) return;
   pos--;
   while (pos && fl_isseparator(buffer()->character(pos))) {
     pos--;
@@ -3110,6 +3111,23 @@ int Fl_Text_Display::handle(int event) {
       if (buffer()->selected()) redraw();
 
       return 1;
+      
+    case FL_KEYBOARD:
+      // Copy?
+      if ((Fl::event_state()&(FL_CTRL|FL_COMMAND)) && Fl::event_key()=='c') {
+          if (!buffer()->selected()) return 1;
+          const char *copy = buffer()->selection_text();
+          if (*copy) Fl::copy(copy, strlen(copy), 1);
+          free((void*)copy);
+          return 1;
+      }
+
+      // Select all ?
+      if ((Fl::event_state()&(FL_CTRL|FL_COMMAND)) && Fl::event_key()=='a') {
+          buffer()->select(0,buffer()->length());
+          return 1;
+      }
+      break;
   }
 
   return 0;
@@ -3117,5 +3135,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.12 2004/07/27 18:51:35 easysw Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.13 2004/11/25 03:21:23 rokan Exp $".
 //

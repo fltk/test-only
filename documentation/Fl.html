@@ -49,6 +49,7 @@ state information and global methods for the current application.</P>
 	<LI><A HREF="#Fl.copy">copy</A></LI>
 	<LI><A HREF="#Fl.damage">damage</A></LI>
 	<LI><A HREF="#Fl.default_atclose">default_atclose</A></LI>
+	<LI><A HREF="#Fl.delete_widget">delete_widget</A></LI>
 	<LI><A HREF="#Fl.display">display</A></LI>
 	<LI><A HREF="#Fl.dnd">dnd</A></LI>
 	<LI><A HREF="#Fl.dnd_text_ops">dnd_text_ops</A></LI>
@@ -232,6 +233,29 @@ FLTK will not recursively call the idle callback.
 <P>Add a one-shot timeout callback.  The function will be called by
 <tt>Fl::wait()</tt> at <i>t</i> seconds after this function is called.
 The optional <tt>void*</tt> argument is passed to the callback.
+
+<P>You can have multiple timeout callbacks. To remove an timeout
+callback use <A
+href="#Fl.remove_timeout"><tt>Fl::remove_timeout()</tt></A>.
+
+<p>If you need more accurate, repeated timeouts, use <a
+href='#Fl.repeat_timeout'><tt>Fl::repeat_timeout()</tt></a> to
+reschedule the subsequent timeouts.</p>
+
+<p>The following code will print &quot;TICK&quot; each second on
+<tt>stdout</tt> with a fair degree of accuracy:</p>
+
+<PRE>
+    void callback(void*) {
+      puts("TICK");
+      Fl::repeat_timeout(1.0, callback);
+    }
+
+    int main() {
+      Fl::add_timeout(1.0, callback);
+      return Fl::run();
+    }
+</PRE>
 
 <H4><A NAME="Fl.arg">int arg(int, char**, int&amp;);</A></H4>
 
@@ -467,6 +491,16 @@ void damage(int x);</A></H4>
 <P>If true then <A href="#Fl.flush"><tt>flush()</tt></A> will do something.
 
 <H4><A NAME="Fl.default_atclose">void default_atclose(Fl_Window*,void*);</A></H4>
+
+<p>This is the default callback for window widgets. It hides the
+window and then calls the default widget callback.</p>
+
+<H4><A NAME="Fl.delete_widget">void delete_widget(Fl_Widget*);</A></H4>
+
+<p>Schedules a widget for deletion when it is safe to do so. Use
+this method to delete a widget inside a callback function. When
+deleting groups or windows, you must only delete the group or
+window widget and not the individual child widgets.</p>
 
 <H4><A NAME="Fl.display">void display(const char*);</A></H4>
 
@@ -988,31 +1022,24 @@ callback that no longer exists.
 
 <H4><A NAME="Fl.repeat_timeout">void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);</A></H4>
 
-<P>Inside a timeout callback you can call this to add another timeout.
-Rather than the time being measured from "now", it is measured from
-when the system call elapsed that caused this timeout to be called.  This
-will result in far more accurate spacing of the timeout callbacks, it
-also has slightly less system call overhead.  (It will also use all
-your machine time if your timeout code and FLTK's overhead take more
-than <i>t</i> seconds, as the real timeout will be reduced to zero).
+<P>This method repeats a timeout callback from the expiration of the
+previous timeout, allowing for more accurate timing. You may only call
+this method inside a timeout callback.
 
-<p>It is undefined what this does if called from outside a timeout
-callback.
+<p>The following code will print &quot;TICK&quot; each second on
+<tt>stdout</tt> with a fair degree of accuracy:</p>
 
-<P>This code will print &quot;TICK&quot; each second on stdout, with a
-fair degree of accuracy:
+<PRE>
+    void callback(void*) {
+      puts("TICK");
+      Fl::repeat_timeout(1.0, callback);
+    }
 
-<UL><PRE>
-void callback(void*) {
-  printf(&quot;TICK\n&quot;);
-  Fl::repeat_timeout(1.0,callback);
-}
-
-main() {
-  Fl::add_timeout(1.0,callback);
-  return Fl::run();
-}
-</PRE></UL>
+    int main() {
+      Fl::add_timeout(1.0, callback);
+      return Fl::run();
+    }
+</PRE>
 
 <H4><A NAME="Fl.run">int run();</A></H4>
 
