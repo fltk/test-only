@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.19 1999/09/20 04:33:46 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.20 1999/09/20 16:36:48 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -413,59 +413,8 @@ Fl_Style Fl_Widget::default_style = {
   FL_NO_COLOR,	// text_color
   FL_NORMAL_SIZE,// label_size
   FL_NORMAL_SIZE,// text_size
-  &Fl_Input::default_style,	// child
-  0,		// next
-  // make the previous pointer be non-zero so that style(this) does
-  // not try to insert it into an inheritance tree:
-  &(default_style.next) // previous
-};
-
-// Fl_Input, the box, color, and selection color are different:
-
-Fl_Style Fl_Input::default_style = {
-  FL_THIN_DOWN_BOX, // box DIFF
-  fl_glyph,	// glyphs
-  FL_HELVETICA,	// label_font
-  FL_HELVETICA,	// text_font
-  FL_NORMAL_LABEL, // label_type
-  FL_WHITE,	// color DIFF
-  FL_NO_COLOR,	// label_color
-  FL_BLUE_SELECTION_COLOR, // selection_color DIFF
-  FL_WHITE,	// selection_text_color
-  FL_NO_COLOR,	// off_color
-  FL_NO_COLOR,	// highlight_color
-  FL_NO_COLOR,	// highlight_label_color
-  FL_NO_COLOR,	// text_color
-  FL_NORMAL_SIZE,// label_size
-  FL_NORMAL_SIZE,// text_size
-  &Fl_Output::default_style,	// child
-  0,		// next
-  &(Fl_Widget::default_style.child) // previous
-};
-
-// Fl_Output defaults to the same as Fl_Input and is a child of it:
-
-Fl_Style Fl_Output::default_style = {
-  FL_THIN_DOWN_BOX, // box DIFF
-  fl_glyph,	// glyphs
-  FL_HELVETICA,	// label_font
-  FL_HELVETICA,	// text_font
-  FL_NORMAL_LABEL, // label_type
-  FL_WHITE,	// color DIFF
-  FL_NO_COLOR,	// label_color
-  FL_BLUE_SELECTION_COLOR, // selection_color DIFF
-  FL_WHITE,	// selection_text_color
-  FL_NO_COLOR,	// off_color
-  FL_NO_COLOR,	// highlight_color
-  FL_NO_COLOR,	// highlight_label_color
-  FL_NO_COLOR,	// text_color
-  FL_NORMAL_SIZE,// label_size
-  FL_NORMAL_SIZE,// text_size
-  0,		// child
-  0,		// next
-  &(Fl_Input::default_style.child) // previous
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.19 1999/09/20 04:33:46 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.20 1999/09/20 16:36:48 vincent Exp $".
 //

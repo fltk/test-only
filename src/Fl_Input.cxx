@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.15 1999/08/16 07:31:17 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.16 1999/09/20 16:36:47 vincent Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -330,10 +330,32 @@ int Fl_Input::handle(int event) {
 			       w()-box()->dw(), h()-box()->dh());
 }
 
+// Fl_Input, the box, color, and selection color are different:
+
+Fl_Style Fl_Input::default_style = {
+  FL_THIN_DOWN_BOX, // box DIFF
+  fl_glyph,	// glyphs
+  FL_HELVETICA,	// label_font
+  FL_HELVETICA,	// text_font
+  FL_NORMAL_LABEL, // label_type
+  FL_WHITE,	// color DIFF
+  FL_NO_COLOR,	// label_color
+  FL_BLUE_SELECTION_COLOR, // selection_color DIFF
+  FL_WHITE,	// selection_text_color
+  FL_NO_COLOR,	// off_color
+  FL_NO_COLOR,	// highlight_color
+  FL_NO_COLOR,	// highlight_label_color
+  FL_WHITE,	// text_color
+  FL_NORMAL_SIZE,// label_size
+  FL_NORMAL_SIZE,// text_size
+};
+
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
   : Fl_Input_(x, y, w, h, l)
-{}
+{
+  style(&default_style);
+}
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.15 1999/08/16 07:31:17 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.16 1999/09/20 16:36:47 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.11 1999/08/16 07:31:19 bill Exp $"
+// "$Id: Fl_Output.cxx,v 1.12 1999/09/20 16:36:48 vincent Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,12 +44,24 @@ int Fl_Output::handle(int event) {
 			       w()-box()->dw(), h()-box()->dh());
 }
 
+// Fl_Output defaults to the same as Fl_Input and is a child of it:
+Fl_Style Fl_Output::default_style = {
+};
+
+#include <FL/Fl_Input.H>
 Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
   : Fl_Input_(x, y, w, h, l)
 {
-  style(default_style);
+  style(&Fl_Input::default_style); // so that Fl_Output's style will be a 
+                                   // child of Fl_Input's style
+  style(&default_style);
 }
 
+// dummy widgets to make sure the style is initialised
+// we declare them together to be sure they will be initialised in this order !
+Fl_Input fl_init_input_style(0,0,0,0,0); 
+Fl_Output fl_init_output_style(0,0,0,0,0);
+
 //
-// End of "$Id: Fl_Output.cxx,v 1.11 1999/08/16 07:31:19 bill Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.12 1999/09/20 16:36:48 vincent Exp $".
 //

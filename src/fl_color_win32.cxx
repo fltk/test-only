@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $"
+// "$Id: fl_color_win32.cxx,v 1.16 1999/09/20 16:36:48 vincent Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -83,21 +83,33 @@ void fl_color(Fl_Color i) {
     uchar r = i>>24;
     uchar g = i>>16;
     uchar b = i>> 8;
-    rgb = RGB(r,g,b);
-    if (r == g && r == b) { // get it out of gray ramp
-      index = fl_gray_ramp(r*FL_NUM_GRAY/256);
-    } else {		// get it out of color cube:
-      index =
-	fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    }
+#if USE_COLORMAP
+    if(fl_palette) {
+#endif
+      if (r == g && r == b) { // get it out of gray ramp
+        index = fl_gray_ramp(r*FL_NUM_GRAY/256);
+      } else {		// get it out of color cube:
+        index =
+	  fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+      }
+#if USE_COLORMAP
+    } else
+#endif
+       rgb = RGB(r,g,b);
   } else {
     // translate index into rgb:
     index = i;
-    unsigned c = fl_cmap[i];
-    rgb = RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8));
+#if USE_COLORMAP
+    if(!fl_palette) {
+#endif
+      unsigned c = fl_cmap[i];
+      rgb = RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8));
+#if USE_COLORMAP
+    }
+#endif
   }
 #if USE_COLORMAP
-  if (fl_palette) rgb = PALETTEINDEX(i);
+  if (fl_palette) rgb = PALETTEINDEX(index);
 #endif
   Fl_XMap &xmap = fl_xmap[index];
   if (xmap.rgb != rgb) {
@@ -205,5 +217,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.16 1999/09/20 16:36:48 vincent Exp $".
 //
