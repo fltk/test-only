@@ -32,13 +32,20 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 using namespace fltk;
+
+// This fixes linkage problem in VC++ 6.0
+#if defined(_MSC_VER) && defined(__cplusplus)
+  extern "C" const char* newstring(const char *from);
+#endif
 
 const char*	SharedImage::shared_image_root=0;
 SharedImage*	SharedImage::first_image = 0;
 int		SharedImage::image_used=0;
 unsigned	SharedImage::mem_usage_limit=0;
 unsigned	SharedImage::mem_used=0;
+
 
 // static unsigned mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache

@@ -32,7 +32,13 @@
 #include <fltk/string.h> // for newstring
 #include <stdlib.h> // for free
 #include <config.h>
+
 using namespace fltk;
+
+// This fixes linkage problem in VC++ 6.0
+#if defined(_MSC_VER) && defined(__cplusplus)
+  extern "C" const char* newstring(const char *from);
+#endif
 
 /*! \class fltk::Widget
 

@@ -35,6 +35,11 @@
 #include <fltk/x.h>
 #endif
 
+// This fixes linkage problem in VC++ 6.0
+#if defined(_MSC_VER) && defined(__cplusplus)
+  extern "C" const char* newstring(const char *from);
+#endif
+
 static struct stat last_stat;
 static const char *last_statname = 0;
 static bool last_result = false;

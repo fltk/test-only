@@ -52,6 +52,11 @@ int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 
 using namespace fltk;
 
+// This fixes linkage problem in VC++ 6.0
+#if defined(_MSC_VER)
+  extern FL_API const char *filename_name(const char *);
+#endif
+
 /*! \addtogroup startup
 
   Warning: most of these functions will not work (and may crash) after
