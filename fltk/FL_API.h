@@ -1,3 +1,32 @@
+//
+// "$Id: FL_API.h,v 1.3 2004/09/29 16:11:25 leka Exp $"
+//
+// Fractal drawing demo for the Fast Light Tool Kit (FLTK).
+//
+// This is a GLUT demo program, with modifications to
+// demonstrate how to add fltk controls to a glut program.   The glut
+// code is unchanged except for the end (search for fltk to find changes).
+//
+// Copyright 1998-2004 by Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
+
 /* Stuff needed to compile DLL's on Windows. These symbols pollute all
    the header files. Make sure you put them on anything you want to go
    into a DLL!
@@ -41,6 +70,10 @@
 #  define FL_GL_API
 #endif
 
-typedef unsigned char	uchar;
+typedef unsigned char uchar;
 
 #endif
+
+//
+// End of "$Id: FL_API.h,v 1.3 2004/09/29 16:11:25 leka Exp $".
+//
