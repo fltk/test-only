@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.94 2001/07/23 09:50:05 spitzak Exp $"
+# "$Id: Makefile,v 1.95 2001/07/24 04:44:26 clip Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -118,6 +118,7 @@ CPPFILES = \
 	fl_ask.cxx \
 	fl_clip.cxx \
 	fl_color.cxx \
+	fl_conf.cxx \
 	fl_cursor.cxx \
 	fl_curve.cxx \
 	fl_diamond_box.cxx \
@@ -287,5 +288,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.94 2001/07/23 09:50:05 spitzak Exp $".
+# End of "$Id: Makefile,v 1.95 2001/07/24 04:44:26 clip Exp $".
 #

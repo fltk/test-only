@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.9 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.10 2001/07/24 04:44:26 clip Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -57,11 +57,14 @@ class ComboWindow : public Fl_Menu_Window {
     ComboWindow(int x, int y, int w, int h) : Fl_Menu_Window(x, y, w, h) {}
 };
 
+static int button_abort;
+
 int
 ComboWindow::handle(int e) {
   if ((!Fl::event_inside(0, 0, w(), h()) && e == FL_PUSH) ||
       (e == FL_SHORTCUT && Fl::event_key() == FL_Escape))
   {
+    button_abort = (e == FL_PUSH);
     hide();
     return 1;
   }
@@ -97,15 +100,22 @@ ComboBrowser::handle(int e) {
   return Fl_Browser::handle(e);
 }
 
-static void ComboBrowser_cb(Fl_Widget* w, void*) {
+static void ComboBrowser_cb(Fl_Widget *w, void *v) {
   // we get callbacks for all keys?
-  if (Fl::event() == FL_KEY && Fl::event_key() != FL_Enter) return;
-  Fl_Browser* browser = (Fl_Browser*)w;
-  ib->goto_item(browser->indexes(), browser->level());
+  if (Fl::event() != FL_KEY && Fl::event() != FL_RELEASE) return;
+  if (Fl::event() == FL_KEY && Fl::event_key() != FL_Enter
+      && Fl::event_key() != ' ')
+    return;
+  Fl_Widget *item = b->item();
+  if (item->is_group()) return; // can't select a group!
+  ib->item(item);
+  ib->value(item->label());
   ib->damage(FL_DAMAGE_CHILD);
+  button_abort = 0;
   mw->hide();
 }
 
+// CET - FIXME - this doesn't seem to be working
 // Use this to copy all the items out of one group into another:
 class Share_List : public Fl_List {
 public:
@@ -120,6 +130,8 @@ public:
     other->list()->flags_changed(other,widget);
   }
 } share_list; // only one instance of this.
+
+extern FL_API void fl_bounce_button_press();
 
 int
 Fl_Input_Browser::handle(int e) {
@@ -192,12 +204,13 @@ Fl_Input_Browser::handle(int e) {
       b->Fl_Widget::size(W, H);
 
       b->layout();// shouldn't call this directly
-      b->value(focus()); // should copy the indexes!
+      b->goto_number(item() ? b->Fl_Group::find(item()) : 0);
       b->item_select();
       b->set_middle();
-      Fl::focus(b);
+      Fl::focus(b); // CET - FIXME - why isn't this working?
       mw->exec();
       Fl::release();
+// CET - FIXME      if (button_abort) fl_bounce_button_press();
       delete mw;
       if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
       else Fl::focus(input);
@@ -248,5 +261,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.9 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.10 2001/07/24 04:44:26 clip Exp $".
 //

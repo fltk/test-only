@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.35 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.36 2001/07/24 04:44:26 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -68,8 +68,9 @@ alt_glyph(const Fl_Widget* widget, int t,
           int x, int y, int w, int h,
           Fl_Flags f)
 {
-  Fl_Color bc = widget->get_glyph_background(f);
-  Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
+  Fl_Color gbc = widget->get_glyph_background(f);
+  Fl_Color gfc = widget->get_glyph_color(f&(~FL_SELECTED));
+  Fl_Color bc = widget->get_box_color(f);
   switch (t) {
     case FL_GLYPH_CHECK: {
       w = (w-1)|1; h = (h-1)|1;
@@ -84,7 +85,7 @@ alt_glyph(const Fl_Widget* widget, int t,
       fl_newpath();
       fl_vertex(x+3, y1); fl_vertex(x1, y+3);
       fl_vertex(x+w-4, y1); fl_vertex(x1, y+h-4);
-      fl_color((f&FL_VALUE) ? fc : bc);
+      fl_color((f&FL_VALUE) ? gfc : gbc);
       fl_fill();
 
       fl_color(dark);
@@ -114,7 +115,7 @@ alt_glyph(const Fl_Widget* widget, int t,
 //        d = (d - 1)|1;
         d &= (~1);
 
-    fl_color((f&FL_VALUE) ? fc : bc);
+    fl_color((f&FL_VALUE) ? gfc : gbc);
     fl_pie(x+2, y+2, d-4, d-4, 0, 360);
 
     lozenge(UPPER_LEFT,  x+2, y+1, d-4, d-2, light);
@@ -140,22 +141,22 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_HSLIDER: {
-      widget->box()->draw(x,y,w,h, fc, f);
+      widget->box()->draw(x,y,w,h, bc, f);
       widget->box()->inset(x,y,w,h);
-      if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, fc, f);
+      if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, bc, f);
       if (w>18) {
-        FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, fc, f);
-        FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, fc, f);
+        FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, bc, f);
+        FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, bc, f);
       }
       break;
     }
     case FL_GLYPH_VSLIDER: {
-      widget->box()->draw(x,y,w,h, fc, f);
+      widget->box()->draw(x,y,w,h, bc, f);
       widget->box()->inset(x,y,w,h);
-      if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, fc, f);
+      if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, bc, f);
       if (h>18) {
-        FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, fc, f);
-        FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, fc, f);
+        FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, bc, f);
+        FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, bc, f);
       }
       break;
     }
@@ -185,7 +186,6 @@ alt_glyph(const Fl_Widget* widget, int t,
         d1 = fl_inactive(d1); d2 = fl_inactive(d2);
       }
 
-      bc = widget->get_box_color(f);
       if (t == FL_GLYPH_RIGHT) {
         fl_color(bc);
         fl_newpath();
@@ -227,19 +227,19 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_VNSLIDER: {
-      widget->box()->draw(x,y,w,h, fc, f);
+      widget->box()->draw(x,y,w,h, bc, f);
       int d = (h-4)/2;
-      FL_THIN_UP_BOX->draw(x+2, y+d, w-4, h-2*d, fc);
+      FL_THIN_UP_BOX->draw(x+2, y+d, w-4, h-2*d, bc);
       break;
     }
     case FL_GLYPH_HNSLIDER: {
-      widget->box()->draw(x,y,w,h, fc, f);
+      widget->box()->draw(x,y,w,h, bc, f);
       int d = (w-4)/2;
-      FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
+      FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, bc);
       break;
     }
     default:
-      widget->box()->draw(x,y,w,h, fc, f);
+      widget->box()->draw(x,y,w,h, bc, f);
   }
 }
 
@@ -255,10 +255,10 @@ static void choice_glyph(const Fl_Widget* widget, int,
                          int x,int y,int w, int h,
                          Fl_Flags f)
 {
-//  FL_FLAT_BOX->draw(x,y,w,h,widget->color(),f);
+  FL_FLAT_BOX->draw(x,y,w,h,widget->color(),f);
   int H = h/3;
   int Y = y + (h-H)/2;
-  widget->box()->draw(x,Y,w,H,widget->color(),f);
+  widget->box()->draw(x,Y,w,H,widget->get_box_color(f),f);
 }
 
 static void light_glyph(const Fl_Widget* widget, int,
@@ -354,5 +354,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.35 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.36 2001/07/24 04:44:26 clip Exp $".
 //

@@ -59,7 +59,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = up                                      # boxtype of the counter's text area
 
   [widgets/tooltip]
-    box = engraved                                # box around tooltips
+    box = thin up                                 # box around tooltips
 
   [widgets/item]                                  # menu items
     text color = red                              # color of check marks

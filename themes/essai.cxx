@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.31 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: essai.cxx,v 1.32 2001/07/24 04:44:26 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -47,15 +47,15 @@
 class Fl_Image_Box : public Fl_Boxtype_ {
   Fl_Flags mask;
 public:
-  void draw(const Fl_Widget*, int,int,int,int, Fl_Flags) const;
+  void draw(const int,int,int,int, Fl_Color, Fl_Flags) const;
   Fl_Shared_Image* normal_img;
   Fl_Shared_Image* down_img;
   Fl_Shared_Image* highlight_img;
   Fl_Image_Box(const char*, const char*, const char*, Fl_Flags = 0);
 };
 
-void Fl_Image_Box::draw(const Fl_Widget*, int x, int y, int w, int h,
-			Fl_Flags flags) const
+void Fl_Image_Box::draw(int x, int y, int w, int h,
+			Fl_Color color, Fl_Flags flags) const
 {
   Fl_Shared_Image* img;
 
@@ -67,12 +67,6 @@ void Fl_Image_Box::draw(const Fl_Widget*, int x, int y, int w, int h,
   if (!(flags&FL_FRAME_ONLY)) {
     fl_up_box.inset(x,y,w,h);
     img->draw_tiled(x,y,w,h, -w/2, -h/2);
-    if ((flags & FL_FOCUSED) && h > 4 && w > 4) {
-      fl_color(FL_BLACK);
-      fl_line_style(FL_DOT);
-      fl_rect(x+1,y+1,w-2,h-2);
-      fl_line_style(0);
-    }
   }
 }
 
@@ -89,26 +83,20 @@ Fl_Boxtype_(0), mask(m) {
 }
 
 class Fl_Image_NoBorderBox : public Fl_Image_Box {
-  void draw(const Fl_Widget*, int,int,int,int, Fl_Flags) const;
+  void draw(int,int,int,int, Fl_Color, Fl_Flags) const;
 public:
   Fl_Image_NoBorderBox(const char*a, const char*b, const char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {dx_=dy_=dw_=dh_=0;}
 };
 
-void Fl_Image_NoBorderBox::draw(const Fl_Widget* widget,
-			int x, int y, int w, int h, Fl_Flags flags) const
+void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
+                                Fl_Color color, Fl_Flags flags) const
 {
   if (flags&(FL_SELECTED|FL_HIGHLIGHT)) {
-    Fl_Image_Box::draw(widget, x,y,w,h, flags);
+    Fl_Image_Box::draw(x,y,w,h, color, flags);
     return;
   }
   if (!(flags&FL_FRAME_ONLY)) {
     normal_img->draw_tiled(x, y, w, h, -w/2, -h/2);
-    if ((flags & FL_FOCUSED) && h > 4 && w > 4) {
-      fl_color(FL_BLACK);
-      fl_line_style(FL_DOT);
-      fl_rect(x+1,y+1,w-2,h-2);
-      fl_line_style(0);
-    }
   }
 }
 
@@ -154,5 +142,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.31 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: essai.cxx,v 1.32 2001/07/24 04:44:26 clip Exp $".
 //
