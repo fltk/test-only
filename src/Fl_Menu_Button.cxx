@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.10 1999/08/16 07:31:19 bill Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.11 1999/08/20 22:19:01 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,14 @@ void Fl_Menu_Button::draw() {
 
 const Fl_Menu_Item* Fl_Menu_Button::popup() {
   const Fl_Menu_Item* m;
-  if (!box() || type()) {
+
+// back compatibility hack
+  if (box() == FL_NO_BOX) {
+    box(FL_UP_BOX);
+    type(POPUP3);
+  }
+
+  if (type()) {
     m = menu()->popup(Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
   } else {
     m = menu()->pulldown(x(), y(), w(), h(), 0, this);
@@ -66,7 +73,7 @@ int Fl_Menu_Button::handle(int e) {
     }
     return 0;
   case FL_PUSH:
-    if (!box()) {
+    if (box() == FL_NO_BOX) {
       if (Fl::event_button() != 3) return 0;
     } else if (type()) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
@@ -84,5 +91,5 @@ int Fl_Menu_Button::handle(int e) {
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l) : Fl_Menu_(X,Y,W,H,l) {}
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.10 1999/08/16 07:31:19 bill Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.11 1999/08/20 22:19:01 carl Exp $".
 //
