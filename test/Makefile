@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.46 2000/06/10 04:10:32 carl Exp $"
+# "$Id: Makefile,v 1.47 2000/06/12 09:01:58 carl Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,18 +51,13 @@ all:	$(ALL)
 include ../makeinclude
 
 .cxx:
-	$(CXX) -I.. $(CXXFLAGS) $< $(LDLIBS) -o $@
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
 
 $(ALL):  ../lib/$(LIBNAME).a
 
 # FLUID file rules
 .fl.cxx .fl.h:
 	../fluid/fluid -c $<
-
-.fl:
-	../fluid/fluid -c $<
-	$(CXX) -I.. $(CXXFLAGS) $@.cxx $(LDLIBS) -o $@
-
 
 # Other programs needing special "help"...
 CubeView: CubeMain.o CubeView.o CubeViewUI.o
@@ -102,5 +97,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.46 2000/06/10 04:10:32 carl Exp $".
+# End of "$Id: Makefile,v 1.47 2000/06/12 09:01:58 carl Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.59 2000/06/11 07:31:11 bill Exp $"
+// "$Id: fl_options.cxx,v 1.60 2000/06/12 09:01:55 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -343,6 +343,8 @@ int Fl::scheme(const char *s) {
 }
 
 int Fl::theme(const char *t) {
+// don't try to load themes if not linked to shared libraries
+#ifdef FL_SHARED
   if (!t) { Fl_Style::revert(); return 0; }
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
@@ -368,6 +370,7 @@ int Fl::theme(const char *t) {
   }
 
   Fl::redraw();
+#endif
   return 0;
 }
 
@@ -415,7 +418,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.59 2000/06/11 07:31:11 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.60 2000/06/12 09:01:55 carl Exp $".
 //
 
 

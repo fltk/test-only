@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.21 2000/06/10 04:10:34 carl Exp $"
+# "$Id: Makefile,v 1.22 2000/06/12 09:02:00 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,7 +34,6 @@ SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 XTRAFLAGS =
 
 include ../makeinclude
-include $(THEMEINCLUDE)
 
 LIBRARY = ../lib/$(LIBNAME)_themes
 
@@ -52,7 +51,7 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-ESSAI_OBJ = essai.shared.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
+ESSAI_OBJ = essai.shared.o
 essai.theme : $(ESSAI_OBJ)
 	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
@@ -69,28 +68,28 @@ classic.theme : $(CLASSIC_OBJ)
 	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-WINDOWS_OBJ = windows.shared.o fl_windows.shared.o fl_engraved_label.po
+WINDOWS_OBJ = windows.shared.o fl_windows.shared.o
 windows.theme : $(WINDOWS_OBJ)
 	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-ALT_OBJ = Alternative.shared.o fl_arci.po
+ALT_OBJ = Alternative.shared.o
 Alternative.theme : $(ALT_OBJ)
 	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDE_OBJ = KDE.shared.o fl_kde.shared.o fl_list_fonts.po
+KDE_OBJ = KDE.shared.o fl_kde.shared.o
 KDE.theme : $(KDE_OBJ)
 	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o fl_list_fonts.po
+KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o
 KDE_colors.theme : $(KDEC_OBJ)
 	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
 clean :
-	-@ rm -f *.shared.o *.po $(LIBRARY)$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
+	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
 	@touch makedepend
 
 install : all
@@ -110,5 +109,5 @@ install : all
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.21 2000/06/10 04:10:34 carl Exp $".
+# End of "$Id: Makefile,v 1.22 2000/06/12 09:02:00 carl Exp $".
 #

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.79 2000/06/12 06:35:33 bill Exp $"
+dnl# "$Id: configure.in,v 1.80 2000/06/12 09:01:27 carl Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -25,6 +25,11 @@ dnl#
 dnl# Please report all bugs and problems to "fltk-bugs@easysw.com".
 dnl#
 
+if test "configure" -ot "configure.in"; then
+  echo "*** You must run autoconf first! ***"
+  exit 1
+fi
+
 AC_INIT(src/Fl.cxx)
 
 AC_PROG_RANLIB
@@ -41,7 +46,6 @@ DSOEXT=""
 DSOSHORTEXT=""
 DSOLIBS=""
 THEMELIBS=""
-THEMEINCLUDE="makeinclude.with-po"
 dnl# Get the operating system and version number...
 
 uname=`uname`
@@ -53,21 +57,28 @@ if test "$uname" = "IRIX64"; then uname="IRIX"; fi
 dnl# Clear debugging flags and only enable debugging if the user asks for
 dnl# it.
 
+LD="\${CXX}"
 LDLIBS="-lX11 -lXext"
+FLLIB="../lib/libfltk\${LIBEXT}"
+FLGLLIB="../lib/libfltk_gl\${LIBEXT}"
+FLGLUTLIB="../lib/libfltk_glut\${LIBEXT}"
+FLFORMSLIB="../lib/libfltk_forms\${LIBEXT}"
+FLIMAGESLIB="../lib/libfltk_images\${LIBEXT}"
 DEBUGFLAG=""
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
 SYSTYPE="UNIX"
-DSOCFLAGS="-fPIC"
+DSOCFLAGS="-fPIC -DFL_SHARED"
+EXEFLAGS=""
 case $uname in
       SunOS* | UNIX_S*)
 	  DSOCFLAGS="-KPIC"
-	  DSOCOMMAND="\${CXX} -Wl,-h,\$@ -G $DEBUGFLAG -o"
-	  THEMECOMMAND="\${CXX} -Wl,-h,\$@ -G $DEBUGFLAG -o"
+	  DSOCOMMAND="\${CXX} -Wl,-h,\${DSONAME} -G $DEBUGFLAG -o"
+	  THEMECOMMAND="\${CXX} -G $DEBUGFLAG -o"
 	  ;;
       HP-UX*)
-	  DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
-	  THEMECOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
+	  DSOCOMMAND="ld -b -z +h \${DSONAME} $DEBUGFLAG -o"
+	  THEMECOMMAND="ld -b -z $DEBUGFLAG -o"
 	  ;;
       CYGWIN* | WIN32)
           uname="WIN32"
@@ -76,15 +87,14 @@ case $uname in
 	  LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -mwindows"
 	  SYSTYPE="WIN32"
 	  DSOLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lopengl32 -lglu32"
-          DSOCFLAGS="-DFL_DLL"
+          DSOCFLAGS="-DFL_SHARED"
           DSOCOMMAND="\${CXX} -Wl,--out-implib,\$@.import -shared $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
 	  THEMELIBS="-L ../lib -lfltk.2.dll"
-	  THEMEINCLUDE="makeinclude.no-po"
 	  ;;
       *)
           echo Using GNU GCC style shared libraries
-          DSOCOMMAND="\${CXX} -shared $DEBUGFLAG -o"
+          DSOCOMMAND="\${CXX} -Wl,-soname,\${DSONAME} -shared $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
 	  ;;
 esac
@@ -101,6 +111,12 @@ if eval "test x$enable_shared = xyes"; then
   DSOLIBglutNAME="libfltk_glut"
   DSOEXT=".so.2"
   DSOSHORTEXT=".so"
+  FLLIB="../lib/libfltk\${DSOEXT}"
+  FLGLLIB="../lib/libfltk_gl\${DSOEXT}"
+  FLGLUTLIB="../lib/libfltk_glut\${DSOEXT}"
+  FLFORMSLIB="../lib/libfltk_forms\${DSOEXT}"
+  FLIMAGESLIB="../lib/libfltk_images\${DSOEXT}"
+  EXEFLAGS="-DFL_SHARED"
   case $uname in
       HP-UX*)
 	  DSOEXT=".sl.2"
@@ -114,14 +130,25 @@ if eval "test x$enable_shared = xyes"; then
           DSOLIBglutNAME="fltk_glut"
 	  DSOEXT=".2.dll"
 	  DSOSHORTEXT=""
+	  FLLIB="../lib/libfltk.2.dll.a"
+	  FLGLLIB="../lib/libfltk_gl.2.dll.a"
+	  FLGLUTLIB="../lib/libfltk_glut.2.dll.a"
+	  FLFORMSLIB="../lib/libfltk_forms.2.dll.a"
+	  FLIMAGESLIB="../lib/libfltk_images.2.dll.a"
 	  ;;
   esac
 fi])
 
+AC_SUBST(LD)
 AC_SUBST(LDLIBS)
+AC_SUBST(FLLIB)
+AC_SUBST(FLGLLIB)
+AC_SUBST(FLGLUTLIB)
+AC_SUBST(FLFORMSLIB)
+AC_SUBST(FLIMAGESLIB)
 AC_SUBST(DSOLIBS)
 AC_SUBST(THEMELIBS)
-AC_SUBST(THEMEINCLUDE)
+AC_SUBST(EXEFLAGS)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -257,9 +284,9 @@ fi
 
 if test "$have_dlopen" = yes; then
     AC_DEFINE(HAVE_DLOPEN)
-    if test "$uname" = "Linux"; then
-        LD_DLOPEN_FLAGS="${LD_DLOPEN_FLAGS} -rdynamic"
-    fi
+#    if test "$uname" = "Linux"; then
+#        LD_DLOPEN_FLAGS="${LD_DLOPEN_FLAGS} -rdynamic"
+#    fi
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
@@ -375,10 +402,10 @@ AC_SUBST(LIBCOMMAND)
 AC_SUBST(MAKEDEPEND)
 AC_SUBST(SYSTYPE)
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk-config)
+AC_OUTPUT(makeinclude fltk-config Makefile)
 
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.79 2000/06/12 06:35:33 bill Exp $".
+dnl# End of "$Id: configure.in,v 1.80 2000/06/12 09:01:27 carl Exp $".
 dnl#

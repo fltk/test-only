@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.76 2000/06/11 07:31:10 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.77 2000/06/12 09:01:52 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -271,6 +271,19 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
+// this function handles FLTK style change messages
+static int style_event_handler(int) {
+  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
+  Atom Scheme = XInternAtom(fl_display, "FLTKChangeScheme", False);
+  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
+  if (cm->message_type != Scheme || !strcasecmp(Fl::scheme(), "none")) return 0;
+  char scheme[80];
+  if (!Fl::getconf("scheme", scheme, sizeof(scheme))) {
+    Fl::scheme(scheme);
+  }
+  return 1;
+}
+
 void fl_open_display() {
   if (fl_display) return;
 
@@ -302,6 +315,34 @@ void fl_open_display(Display* d) {
   // a style client message.  I would prefer to either leave this up
   // to the plugin, or use the SAME atoms as KDE (to avoid even more
   // namespace pollution).  See the kde plugin for sample code.
+
+  // I don't think an X window with the name "FLTK_STYLE_WINDOW" pollutes
+  // the namespace very badly.  We could use the same atoms as KDE, but then
+  // FLTK windows would redraw every time we changed the KDE scheme, and
+  // KDE windows would redraw every time we changed the FLTK scheme which
+  // to me would be unacceptable.  Moreover, this would make FLTK dependant
+  // on a particular KDE version; different versions of KDE (currently just
+  // v1 & v2) handle this in different ways.  We would need put logic in
+  // FLTK to figure out which version of KDE is running and do it in that
+  // way, and that would break again if the KDE folks changed methods again.
+  // It doesn't hurt anything and saves code needed for KDE compatibility
+  // to just do it our own way.  Finally, it just doesn't seem "right" for
+  // FLTK applications to advertise themselves as KDE applications when in
+  // fact they are not.  That could potentially break KDE as it waits for
+  // a FLTK application to do some KDE thing that it doesn't know how to
+  // respond to.  That's what the KDE theme is for!
+  //
+  // CET
+
+  Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
+  Window root = RootWindow(fl_display, fl_screen);
+  Window style_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
+  long data = 1;
+  XChangeProperty(fl_display, style_win, style_atom, style_atom, 32,
+                  PropModeReplace, (unsigned char *)&data, 1);
+
+  // add handler to process style change X events
+  Fl::add_handler(style_event_handler);
 
 #if !USE_COLORMAP
   Fl::visual(FL_RGB);
@@ -901,5 +942,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.76 2000/06/11 07:31:10 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.77 2000/06/12 09:01:52 carl Exp $".
 //

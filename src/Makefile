@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.79 2000/06/10 04:10:31 carl Exp $"
+# "$Id: Makefile,v 1.80 2000/06/12 09:01:53 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -197,23 +197,25 @@ XTRAFLAGS = -DFL_LIBRARY
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
-DSONAME = ../lib/$(DSOLIBNAME)
+DSO = ../lib/$(DSOLIBNAME)
+DSONAME = $(DSOLIBNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
+all:	$(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@rm -f $@
 	$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	$(RANLIB) $@
 
-$(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
+$(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
 	@-rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	mv $(DSONAME) $@
 
 DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
-$(DSONAME).2.dll: $(OBJECTS:.o=.shared.o)
+$(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 	@-rm -f $@
 	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
 	mv $@.import ../lib/$(DLLIMPORTNAME)
@@ -221,7 +223,7 @@ $(DSONAME).2.dll: $(OBJECTS:.o=.shared.o)
 clean :
 	@rm -f *.o $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) $(CLEAN) \
 	        core *~ ../include/*~ makedepend cmap
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSONAME)$(DSOEXT); fi
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSO)$(DSOEXT); fi
 	@touch makedepend
 
 depend:
@@ -230,7 +232,7 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
+install: $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 	@echo "Installing libraries..."
 	@mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)$(LIBEXT)
@@ -240,7 +242,7 @@ install: $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
 	@cp $(LIBRARY)$(LIBEXT) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)$(LIBEXT)
 	@if [ -n "$(DSOEXT)" ]; then \
-		cp $(DSONAME)$(DSOEXT) $(libdir); \
+		cp $(DSO)$(DSOEXT) $(libdir); \
 		chmod 755 $(libdir)/$(DSOLIBNAME)$(DSOEXT) ; \
 		if [ -n "$(DSOSHORTEXT)" ]; then \
 			ln -s $(DSOLIBNAME)$(DSOEXT) $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi; \
@@ -263,5 +265,5 @@ install: $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.79 2000/06/10 04:10:31 carl Exp $".
+# End of "$Id: Makefile,v 1.80 2000/06/12 09:01:53 carl Exp $".
 #

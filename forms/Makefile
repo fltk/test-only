@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.9 2000/06/10 04:10:26 carl Exp $"
+# "$Id: Makefile,v 1.10 2000/06/12 09:01:42 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -44,11 +44,12 @@ XTRAFLAGS = -DFL_FORMS_LIBRARY
 include ../makeinclude
 
 .cxx:
-	$(CXX) -I.. $(CXXFLAGS) $< $(FORMSLIBS) -o $@
+	$(CXX) $(EXEFLAGS) -I.. $(CXXFLAGS) $< $(FORMSLIBS) -o $@
 
 LIBRARY = ../lib/$(LIBNAME)_forms
-DSONAME = ../lib/$(DSOLIBformsNAME)
-LIBRARIES = $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
+DSO = ../lib/$(DSOLIBformsNAME)
+DSONAME = $(DSOLIBformsNAME)$(DSOEXT)
+LIBRARIES = $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
@@ -59,13 +60,14 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
+$(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
 	@rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	mv $(DSONAME) $@
 
 DLLIMPORTLIBS = ../lib/$(LIBNAME).2.dll$(LIBEXT)
 DLLIMPORTNAME = $(LIBNAME)_forms.2.dll$(LIBEXT)
-$(DSONAME).2.dll: $(OBJECTS:.o=.shared.o)
+$(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 	@rm -f $@
 	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS) $(DLLIMPORTLIBS)
 	mv $@.import ../lib/$(DLLIMPORTNAME)
@@ -78,7 +80,7 @@ $(DEMOS): $(LIBRARIES)
 
 clean :
 	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) core *~ makedepend
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSONAME)$(DSOEXT); fi
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSO)$(DSOEXT); fi
 	@touch makedepend
 
 depend:
@@ -97,7 +99,7 @@ install: $(LIBRARIES)
 	@cp $(LIBRARY)$(LIBEXT) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)_forms$(LIBEXT) 
 	@if [ -n "$(DSOEXT)" ]; then \
-		cp $(DSONAME)$(DSOEXT) $(libdir); \
+		cp $(DSO)$(DSOEXT) $(libdir); \
 		chmod 755 $(libdir)/$(DSOLIBformsNAME)$(DSOEXT); \
 		if [ -n "$(DSOSHORTEXT)" ]; then \
 			ln -s $(DSOLIBformsNAME)$(DSOEXT) $(libdir)/$(DSOLIBformsNAME)$(DSOSHORTEXT); fi; \
@@ -105,5 +107,5 @@ install: $(LIBRARIES)
 	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
 
 #
-# End of "$Id: Makefile,v 1.9 2000/06/10 04:10:26 carl Exp $".
+# End of "$Id: Makefile,v 1.10 2000/06/12 09:01:42 carl Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.28 2000/06/11 07:30:56 bill Exp $"
+# "$Id: makeinclude.in,v 1.29 2000/06/12 09:01:28 carl Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -40,8 +40,8 @@ CC		=@CC@
 MAKEDEPEND	=@MAKEDEPEND@
 
 # flags for C++ compiler:
-CFLAGS		=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @CFLAGS@
-CXXFLAGS	=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @CXXFLAGS@ @X_CFLAGS@
+CFLAGS		=@DEBUGFLAG@ -I@srcdir@ @CFLAGS@
+CXXFLAGS	=@DEBUGFLAG@ -I@srcdir@ @CXXFLAGS@ @X_CFLAGS@
 DSOCFLAGS	=@DSOCFLAGS@
 DEBUGFLAGS	=@DEBUGFLAG@
 
@@ -60,31 +60,33 @@ DSOSHORTEXT	=@DSOSHORTEXT@
 DSOCOMMAND	=@DSOCOMMAND@
 THEMECOMMAND	=@THEMECOMMAND@
 
+LD		=@LD@
+EXEFLAGS	=@EXEFLAGS@
+
 # libraries to link with:
-LDLIBS		=@LDFLAGS@ -L../lib -lfltk @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+LDLIBS		=@LDFLAGS@ @FLLIB@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
 DSOLIBS		=@DSOLIBS@
 THEMELIBS	=@THEMELIBS@
-THEMEINCLUDE	=@THEMEINCLUDE@
-GLDLIBS		=@LDFLAGS@ -L../lib -lfltk_gl -lfltk @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-GLUTLIBS	=@LDFLAGS@ -L../lib -lfltk_glut -lfltk_gl -lfltk @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-FORMSLIBS	=@LDFLAGS@ -L../lib -lfltk_forms -lfltk @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-IMAGELIBS	=@LIBPNG@ @LIBJPEG@
+GLDLIBS		=@LDFLAGS@ @FLGLLIB@ @FLLIB@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+GLUTLIBS	=@LDFLAGS@ @FLGLUTLIB@ @FLGLLIB@ @FLLIB@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+FORMSLIBS	=@LDFLAGS@ @FLFORMSLIB@ @FLLIB@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+IMAGELIBS	=@FLIMAGESLIB@ @FLLIB@ @LIBPNG@ @LIBJPEG@
 THREADSLIBS	=@THREADSLIBS@
 
 # Build commands and filename extensions...
 .SUFFIXES:	.c .cxx .h .fl .o
 
 .c.o:
-	$(CC) -I.. $(CFLAGS) $< -c
+	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
 
 .cxx.o:
-	$(CXX) -I.. $(CXXFLAGS) $< -c
+	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
 %.shared.o : %.cxx
-	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
 %.shared.o : %.c
-	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 #
-# End of "$Id: makeinclude.in,v 1.28 2000/06/11 07:30:56 bill Exp $".
+# End of "$Id: makeinclude.in,v 1.29 2000/06/12 09:01:28 carl Exp $".
 #

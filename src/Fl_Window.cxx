@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.46 2000/06/12 06:35:38 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.47 2000/06/12 09:01:51 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -128,7 +128,7 @@ int Fl_Window::handle(int event) {
 #ifdef WIN32
     int showtype;
     if (parent())
-      swowtype = SW_RESTORE;
+      showtype = SW_RESTORE;
     // See if the window should be invisible initially:
     else if (fl_show_iconic || fl_modal_for && !fl_modal_for->visible())
       showtype = SW_SHOWMINNOACTIVE;
@@ -331,5 +331,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.46 2000/06/12 06:35:38 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.47 2000/06/12 09:01:51 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.3 2000/06/12 06:35:39 bill Exp $"
+// "$Id: fl_kde.cxx,v 1.4 2000/06/12 09:02:01 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -31,8 +31,8 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
+#include <FL/fl_config.H>
 #include <FL/fl_theme.H>
-#include <FL/conf.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -123,9 +123,10 @@ int fl_kde(int co) {
     snprintf(kderc_path, sizeof(kderc_path), "%s/.kderc", home);
     kde1 = 1;
   }
+  Fl_Config kderc(kderc_path);
 
   int motif_style = 0;
-  if (!getconf(kderc_path, "KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
+  if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
     motif_style = 1;
   if (!colors_only) {
     Fl::theme(motif_style ? "motif" : "windows");
@@ -133,42 +134,42 @@ int fl_kde(int co) {
   }
 
   Fl_Color foreground = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/foreground", s, sizeof(s)))
+  if (!kderc.get("General/foreground", s, sizeof(s)))
     foreground = fl_rgb(s);
 
   Fl_Color background = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/background", s, sizeof(s)))
+  if (!kderc.get("General/background", s, sizeof(s)))
     background = fl_rgb(s);
 
   Fl_Color select_foreground = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/selectForeground", s, sizeof(s)))
+  if (!kderc.get("General/selectForeground", s, sizeof(s)))
     select_foreground = fl_rgb(s);
 
   Fl_Color select_background = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/selectBackground", s, sizeof(s)))
+  if (!kderc.get("General/selectBackground", s, sizeof(s)))
     select_background = fl_rgb(s);
 
   // this one seems to do absolutely nothing
   Fl_Color window_foreground = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/windowForeground", s, sizeof(s)))
+  if (!kderc.get("General/windowForeground", s, sizeof(s)))
     window_foreground = fl_rgb(s);
 
   Fl_Color window_background = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/windowBackground", s, sizeof(s)))
+  if (!kderc.get("General/windowBackground", s, sizeof(s)))
     window_background = fl_rgb(s);
 
   Fl_Color button_foreground = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/buttonForeground", s, sizeof(s)))
+  if (!kderc.get("General/buttonForeground", s, sizeof(s)))
     button_foreground = fl_rgb(s);
 
   Fl_Color button_background = FL_NO_COLOR;
-  if (!getconf(kderc_path, "General/buttonBackground", s, sizeof(s)))
+  if (!kderc.get("General/buttonBackground", s, sizeof(s)))
     button_background = fl_rgb(s);
 
   Fl_Font font = 0;
   int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
-  if (!getconf(kderc_path, "General/font", s, sizeof(s))) {
+  if (!kderc.get("General/font", s, sizeof(s))) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
 
@@ -190,7 +191,7 @@ int fl_kde(int co) {
   Fl_Font menufont = 0;
   int menufontsize = FL_NORMAL_SIZE;
   static char menufontencoding[32] = "";
-  if (!getconf(kderc_path, "General/menuFont", s, sizeof(s))) {
+  if (!kderc.get("General/menuFont", s, sizeof(s))) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
 
@@ -363,5 +364,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.3 2000/06/12 06:35:39 bill Exp $".
+// End of "$Id: fl_kde.cxx,v 1.4 2000/06/12 09:02:01 carl Exp $".
 //
