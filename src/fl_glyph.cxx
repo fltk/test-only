@@ -1,7 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.38 2003/11/04 08:11:03 spitzak Exp $"
-//
-// Glyph drawing code for the Fast Light Tool Kit (FLTK).
+// "$Id: fl_glyph.cxx,v 1.39 2004/01/13 06:51:48 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -28,6 +26,20 @@
 #include <fltk/draw.h>
 using namespace fltk;
 
+/*! \typedef fltk::GlyphStyle
+
+  This type of function that is placed into Style::glyph().  A
+  Widget::draw() method would call this to draw various portions of
+  itself. A \ref themes(theme) can modify the glyph function to change
+  the appearance of those parts of the widget.
+
+  The arguments are exactly the same as for a Symbol, with an added
+  index number to say which glyph to draw. Ideally you should just
+  call the correct Symbol or Image with the same arguments.
+*/
+
+/*! This is the glyph() function put into the default_style. See
+  \ref Glyphs for what it does. */
 void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {
   Color bg, fg; style->boxcolors(flags, bg, fg);
@@ -105,5 +117,5 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.38 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.39 2004/01/13 06:51:48 spitzak Exp $".
 //

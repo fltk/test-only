@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.51 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.52 2004/01/13 06:51:48 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -570,9 +570,17 @@ bool fltk::reset_theme() {
 
 /*! \fn fltk::system_theme()
   Modify the current styles according to standard information read
-  from the operating system. On Windows this will match the settings
-  in the appearance tab of the display preferences. On X this will
-  read some color settings from the xrdb database.
+  from the operating system.
+
+  On Windows this will read colors and fonts using GetSysColor() and
+  SystemParametersInfo().
+
+  On X this used to read some colors such as "background",
+  "text.foreground", etc, from the XGetDefault database, which is
+  typically set by the xrdb program from the contents of
+  ~/.xdefaults. However no modern systems use this so the current
+  version on X does nothing.
+
 */
 
 ///////////////////////////////////////////////////////////////
@@ -606,5 +614,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.51 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.52 2004/01/13 06:51:48 spitzak Exp $".
 //

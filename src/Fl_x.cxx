@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.157 2003/12/16 18:27:18 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.158 2004/01/13 06:51:48 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -439,6 +439,7 @@ static int num_monitors=0;
 */
 int Monitor::list(const Monitor** p) {
   if (!num_monitors) {
+    open_display();
 #if USE_XINERAMA
 #if XINERAMA_VERSION > 1
     XRectangle* rects = 0; int count = 0;
@@ -1475,6 +1476,9 @@ void Window::make_current() const {
 ////////////////////////////////////////////////////////////////
 // fltk::system_theme() reads xrdb database for some colors.
 // Not clear if any modern systems use this.
+// I commented out the entire XRDB stuff, use this to get it back:
+
+#if USE_XRDB
 
 // Set this to 1 to get my attempt to improve XGetDefault:
 #define MY_GET_DEFAULT 0
@@ -1637,7 +1641,13 @@ bool fltk::system_theme() {
 
   return true;
 }
+#else
+
+// non-xrdb version of system_theme():
+bool fltk::system_theme() {return true;}
+
+#endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.157 2003/12/16 18:27:18 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.158 2004/01/13 06:51:48 spitzak Exp $".
 //

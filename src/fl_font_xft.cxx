@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.18 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.19 2004/01/13 06:51:48 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -172,10 +172,39 @@ FontSize::~FontSize() {
 XFontStruct* fltk::xfont() {
   if (!current->xfont) {
 #if defined(XFT_MAJOR) && XFT_MAJOR >= 2
-    // kludge!
-    static XFontStruct* some_font = 0;
-    if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
-    current->xfont = some_font;
+    // kludge! Select Xfonts for the fltk built-in ones, uses "variable"
+    // for everything else. Assummes the Xfont setup from RedHat 9:
+    const char *name = current_font_->name();
+    char *myname, xname[1024];
+    int slo = 0;
+    if (strncmp(name, "sans", 4)==0) {
+      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+    } else if (strncmp(name, "mono", 4)==0) {
+      myname = "-*-courier-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+    } else if (strncmp(name, "serif", 5)==0) {
+      myname = "-*-times-%s-%s-normal-*-%d-*-*-*-*-*-*-*"; slo = 2;
+    } else if (strncmp(name, "symbol", 6)==0) {
+      myname = "-*-symbol-%s-%s-*-*-%d-*-*-*-*-*-*-*";
+    } else if (strncmp(name, "screen", 6)==0) {
+      myname = "-*-clean-%s-%s-*-*-%d-*-*-*-*-*-*-*"; slo = 2;
+    } else if (strncmp(name, "dingbats", 8)==0) {
+      myname = "-*-*zapf dingbats-%s-%s-*-*-%d-*-*-*-*-*-*-*";
+    } else {
+      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+    }
+    static char *wghtLUT[] = { "medium", "bold" };
+    static char *slantLUT[] = { "r", "o", "r", "i" };
+    sprintf(xname, myname, 
+	    wghtLUT[(current_font_->attributes_&BOLD)!=0],
+	    slantLUT[slo+((current_font_->attributes_&ITALIC)!=0)],
+	    int(current_size_+0.5));
+    XFontStruct *myFont = XLoadQueryFont(xdisplay, xname);
+    if (!myFont) {
+      static XFontStruct* some_font = 0;
+      if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
+      myFont = some_font;
+    }
+    current->xfont = myFont;
 #else
     if (current->font->core) {
       current->xfont = current->font->u.core.font;
@@ -418,5 +447,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.18 2004/01/07 06:57:06 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.19 2004/01/13 06:51:48 spitzak Exp $"
 //

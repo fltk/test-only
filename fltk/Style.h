@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.12 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: Style.h,v 1.13 2004/01/13 06:51:48 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -108,15 +108,15 @@ typedef void (*GlyphStyle)(int number,
   of the fltk::Slider or for the checkmark drawn by fltk::CheckButton.
 */
 enum GlyphNumber {
-  GLYPH_BOX = 100,	//!< Draw an empty box
+  GLYPH_BOX = 100,	//!< Draw an empty buttonbox
   GLYPH_UP,		//!< draw an up arrow
   GLYPH_DOWN,		//!< draw a down arrow
   GLYPH_LEFT,		//!< draw a left arrow
   GLYPH_RIGHT,		//!< draw a right arrow
-  GLYPH_UP_BUTTON,	//!< draw an up arrow in a box
-  GLYPH_DOWN_BUTTON,	//!< draw a down arrow in a box
-  GLYPH_LEFT_BUTTON,	//!< draw a left arrow in a box
-  GLYPH_RIGHT_BUTTON	//!< draw a right arrow in a box
+  GLYPH_UP_BUTTON,	//!< draw an up arrow in a buttonbox
+  GLYPH_DOWN_BUTTON,	//!< draw a down arrow in a buttonbox
+  GLYPH_LEFT_BUTTON,	//!< draw a left arrow in a buttonbox
+  GLYPH_RIGHT_BUTTON	//!< draw a right arrow in a buttonbox
 };
 /*! \} */
 
@@ -237,5 +237,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.12 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: Style.h,v 1.13 2004/01/13 06:51:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Color.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $"
+// "$Id: Color.h,v 1.4 2004/01/13 06:51:48 spitzak Exp $"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
@@ -32,6 +32,9 @@
 #include "Flags.h"
 
 namespace fltk {
+
+/*! \addtogroup color
+  \{ */
 
 typedef unsigned Color;
 
@@ -104,10 +107,11 @@ FL_API Color get_color_index(Color index);
 FL_API void set_background(Color);
 FL_API Color nearest_index(Color);
 
+/* \} */
 }
 
 #endif
 
 //
-// End of "$Id: Color.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $".
+// End of "$Id: Color.h,v 1.4 2004/01/13 06:51:48 spitzak Exp $".
 //
