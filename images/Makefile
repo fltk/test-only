@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.25 2004/08/04 20:46:38 laza2000 Exp $"
+# "$Id: Makefile,v 1.26 2004/12/19 19:40:33 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -29,6 +29,11 @@
 
 include ../makeinclude
 
+# If ZLIBINC is set, we are using local ZLIB
+ifneq ( ,$(ZLIBINC))
+	CFLAGS += -I./zlib
+	CXXFLAGS += -I./zlib
+endif
 
 #
 # Files for this directory...
@@ -131,5 +136,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.25 2004/08/04 20:46:38 laza2000 Exp $".
+# End of "$Id: Makefile,v 1.26 2004/12/19 19:40:33 laza2000 Exp $".
 #
