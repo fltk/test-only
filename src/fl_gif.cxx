@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.15 2002/12/18 08:34:22 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -50,14 +50,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef unsigned char uchar;
-
 using namespace fltk;
 
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
-bool gifImage::test(const unsigned char *datas, size_t size)
+bool gifImage::test(const uchar *datas, unsigned size)
 {
   return !strncmp((char*) datas,"GIF", 3);
 }
@@ -420,5 +418,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.15 2002/12/18 08:34:22 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.77 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.78 2002/12/18 08:34:21 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1297,6 +1297,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 
   case PASTE: {
     const char* t = event_text();
+	if (!t) return 0;
     int n = event_length();
     // strip trailing nulls:
     while (n > 0 && !t[n-1]) n--;
@@ -1311,5 +1312,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.77 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.78 2002/12/18 08:34:21 spitzak Exp $".
 //

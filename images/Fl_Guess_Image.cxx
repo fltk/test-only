@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ static xbmImage nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
 class UnknownImage {
 public:
-  static bool test(const uchar*, size_t =0) { return 1; };
+  static bool test(const uchar*, unsigned =0) { return 1; };
   static fltk::SharedImage* get(const char*, const uchar* = 0) {
     return (fltk::SharedImage*) &nosuch_bitmap;
   };
@@ -64,7 +64,7 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
 {
   uchar* read_data = 0;
   const uchar* test_data = datas;
-  size_t size = 1024;
+  unsigned size = 1024;
   if (!datas) {
     FILE* fp = fopen(name, "rb");
     if (!fp)
@@ -83,5 +83,5 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
 //

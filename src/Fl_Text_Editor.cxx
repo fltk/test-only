@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.16 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.17 2002/12/18 08:34:22 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -484,6 +484,7 @@ int TextEditor::handle(int event) {
       return handle_key();
 
     case PASTE:
+	  if (!event_text()) break;
       buffer()->remove_selection();
       if (insert_mode()) insert(event_text());
       else overstrike(event_text());
@@ -502,5 +503,5 @@ int TextEditor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.16 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.17 2002/12/18 08:34:22 spitzak Exp $".
 //

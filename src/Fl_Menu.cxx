@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.134 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Menu.cxx,v 1.135 2002/12/18 08:34:22 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -375,7 +375,7 @@ int MWindow::find_selected(int mx, int my) {
       Widget* widget = get_widget(i);
       if (!widget->visible()) continue;
       x += widget->width()+10;
-      if (x > mx) return i;
+      if (x > mx) return widget->takesevents() ? i : -1;
     }
     return -1;
   } else {
@@ -774,5 +774,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.134 2002/12/10 02:00:43 easysw Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.135 2002/12/18 08:34:22 spitzak Exp $".
 //

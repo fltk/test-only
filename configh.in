@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.51 2002/12/13 04:54:05 easysw Exp $"
+ * "$Id: configh.in,v 1.52 2002/12/18 08:34:20 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -231,10 +231,10 @@
 
 /**** MRS: THESE TWO ARE GOING AWAY! ****/
 /* Enables fl_load_plugin() on Unix */
-/*#define HAVE_DLOPEN 0*/
+#define HAVE_DLOPEN 0
 
 /* Where, after ~/.fltk, to look for plugin files */
-/*#define CONFIGDIR "/usr/local/lib/fltk"*/
+#define CONFIGDIR "/usr/local/lib/fltk"
 
 /**** MRS: These should be run-time checks!!!! ****/
 /* The BoXX machines (and possibly other Linux machines) have bugs in
@@ -267,5 +267,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.51 2002/12/13 04:54:05 easysw Exp $".
+ * End of "$Id: configh.in,v 1.52 2002/12/18 08:34:20 spitzak Exp $".
  */

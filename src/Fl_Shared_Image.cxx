@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.27 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.28 2002/12/18 08:34:22 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,11 +41,11 @@ using namespace fltk;
 const char*	SharedImage::shared_image_root=0;
 SharedImage*	SharedImage::first_image = 0;
 int		SharedImage::image_used=0;
-size_t		SharedImage::mem_usage_limit=0;
-size_t		SharedImage::mem_used=0;
+unsigned	SharedImage::mem_usage_limit=0;
+unsigned	SharedImage::mem_used=0;
 int		SharedImage::forbid_delete = 1;
 
-// static size_t mem_used=0; (now moved to Fl.cxx !)
+// static unsigned mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache
 // WARNING : this is updated incrementally, so beware that it keeps balanced
 // when deleting or creating pixmaps !
@@ -58,7 +58,7 @@ SharedImage::~SharedImage()
   if(id) mem_used -= w*h;
 }
 
-void SharedImage::set_cache_size(size_t l)
+void SharedImage::set_cache_size(unsigned l)
 {
   mem_usage_limit = l;
 }
@@ -254,5 +254,5 @@ void SharedImage::draw(int X, int Y, int, int, Flags flags)
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.27 2002/12/10 02:00:51 easysw Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.28 2002/12/18 08:34:22 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.62 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.63 2002/12/18 08:34:22 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -155,6 +155,11 @@ int TabGroup::handle(int event) {
     default:
       if (focus() < 0) goto GOTO_TABS;
     GOTO_CONTENTS:
+      // find first visible if selected not picked:
+      if (!selected) for (i=0; i<children(); i++) {
+	Widget* o = child(i);
+	if (o->visible()) {selected = o; break;}
+      }
       // Try to give the contents the focus. Also preserve a return value
       // of 2 (which indicates the contents have a text field):
       if (selected) {
@@ -426,8 +431,9 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 {
   style(default_style);
   push_ = 0;
+  focus(0);
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.62 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.63 2002/12/18 08:34:22 spitzak Exp $".
 //

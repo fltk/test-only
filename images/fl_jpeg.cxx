@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.11 2002/12/10 02:00:37 easysw Exp $"
+// "$Id: fl_jpeg.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,7 @@ METHODDEF(boolean)
 fill_input_buffer (j_decompress_ptr cinfo)
 {
   my_src_ptr src = (my_src_ptr) cinfo->src;
-  size_t nbytes = INPUT_BUF_SIZE;
+  unsigned nbytes = INPUT_BUF_SIZE;
 
   memcpy(src->buffer, src->datas, INPUT_BUF_SIZE);
   src->datas += INPUT_BUF_SIZE;
@@ -145,8 +145,8 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
        * so suspension need not be handled.
        */
     }
-    src->pub.next_input_byte += (size_t) num_bytes;
-    src->pub.bytes_in_buffer -= (size_t) num_bytes;
+    src->pub.next_input_byte += (unsigned) num_bytes;
+    src->pub.bytes_in_buffer -= (unsigned) num_bytes;
   }
 }
 
@@ -366,7 +366,7 @@ void fltk::jpegImage::read()
 #endif
 }
 
-bool fltk::jpegImage::test(const uchar* datas, size_t size)
+bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 {
 #if !HAVE_JPEG
   return 0;
@@ -406,5 +406,5 @@ bool fltk::jpegImage::test(const uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.11 2002/12/10 02:00:37 easysw Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
 //
