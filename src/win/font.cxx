@@ -133,8 +133,8 @@ int fl_font_ = 0;
 int fl_size_ = 0;
 //static HDC font_gc;
 
-int Fl_Win_Display::size(){return fl_size_;}
-int Fl_Win_Display::font(){return fl_font_;}
+//int Fl_Win_Display::size(){return fl_size_;}
+//int Fl_Win_Display::font(){return fl_font_;}
 
 void Fl_Win_Display::font(int fnum, int size) {
   if (fnum == fl_font_ && size == fl_size_) return;
@@ -169,5 +169,5 @@ void Fl_Win_Display::draw(const char* str, int n, int x, int y) {
 
 
 //
-// End of "$Id: font.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: font.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
 //

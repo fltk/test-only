@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.2 2004/03/28 10:30:29 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.3 2004/03/29 21:22:34 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -29,11 +29,9 @@
 
 #include <FL/Enumerations.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Image.H>
 
-
-
-
+class Fl_Image;
+class Fl_RGB_Image;
 class Fl_Pixmap;
 class Fl_Bitmap;
 
@@ -43,7 +41,6 @@ typedef void (*Fl_Draw_Image_Cb)(void* ,int,int,int,uchar*);
 class Fl_Image_Cache;
 
 
-
 class FL_EXPORT Fl_Device{
 protected:
  int type_;
@@ -51,11 +48,7 @@ protected:
  friend class Fl_Image_Cache;
 
  Fl_Image_Cache * image_caches;
- Fl_Image_Cache * check_image_cache(Fl_Image * im){
-   if(!im->cache_) return 0;
-   if(this != im->cache_->device) im->uncache();
-   return im->cache_;
- };
+ Fl_Image_Cache * check_image_cache(Fl_Image * im);
  
 
 public:
@@ -234,5 +227,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.2 2004/03/28 10:30:29 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.3 2004/03/29 21:22:34 rokan Exp $".
 //

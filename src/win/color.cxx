@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,11 +82,11 @@ static void set_xmap(Fl_XMap& xmap, COLORREF c) {
 }
 
 Fl_Color fl_color_;
-
+/*
 Fl_Color Fl_Win_Display::color(){
   return fl_color_;
 };
-
+*/
 void Fl_Win_Display::color(Fl_Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
@@ -290,5 +290,5 @@ FL_EXPORT void pop_xmaps(){
 
 
 //
-// End of "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
 //

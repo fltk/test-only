@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Xlib_Display.H,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: Fl_Xlib_Display.H,v 1.1.2.2 2004/03/29 21:22:36 rokan Exp $"
 //
 // Xlib display class for the Fast Light Tool Kit (FLTK).
 //
@@ -30,19 +30,11 @@
 
 
 
-//#include <FL/Fl_Image.H>
-//#include <FL/Fl_Pixmap.H>
-//#include <FL/Fl_Bitmap.H>
-
-class Fl_Image;
-class Fl_RGB_Image;
-class Fl_Pixmap;
-class Fl_Bitmap;
-
-
-
 //typedef void (*Fl_Draw_Image_Cb)(void* ,int,int,int,uchar*);
 
+extern FL_EXPORT Fl_Color fl_color_;
+extern FL_EXPORT int fl_font_;
+extern FL_EXPORT int fl_size_;
 
 
 
@@ -137,5 +129,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Xlib_Display.H,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: Fl_Xlib_Display.H,v 1.1.2.2 2004/03/29 21:22:36 rokan Exp $".
 //

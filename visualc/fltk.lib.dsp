@@ -219,6 +219,10 @@ SOURCE=..\src\fl_curve.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Device.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Dial.cxx
 # End Source File
 # Begin Source File

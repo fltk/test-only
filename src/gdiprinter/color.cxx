@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
 //
 // Color implementation of WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,9 @@
 //
 
 #include <FL/Fl_GDI_Printer.H>
+#include <FL/Fl_Display.H>
 #include "../win/Fl_Win_Display.H"
+
 extern Fl_Win_Display fl_disp;
 
 void Fl_GDI_Printer::color(Fl_Color c) {
@@ -47,6 +49,6 @@ Fl_Color Fl_GDI_Printer::color(){
 
 
 //
-// End of "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
 //
 

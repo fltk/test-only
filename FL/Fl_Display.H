@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Display.H,v 1.1.2.1 2004/03/28 10:30:29 rokan Exp $"
+// "$Id: Fl_Display.H,v 1.1.2.2 2004/03/29 21:22:34 rokan Exp $"
 //
 // Fl_Display class for screen devices the Fast Light Tool Kit (FLTK).
 //
@@ -33,10 +33,11 @@
 // for now fl_Display do not implement anything, in the future it will be a base class 
 // which will also implement event delivery
 
+
 class FL_EXPORT Fl_Display: public Fl_Device{
 protected:
 #ifdef  WIN32
- friend class Fl_GDI_Printer; //for arc iand curve mplementation
+ friend class Fl_GDI_Printer; //for arc and curve mplementation
 #endif
  // common independent methods, can be overriden if better implementation are known
  void arc(double x, double y, double r, double start, double end);
@@ -50,5 +51,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 #endif
 
 //
-// "$Id: Fl_Display.H,v 1.1.2.1 2004/03/28 10:30:29 rokan Exp $"
+// "$Id: Fl_Display.H,v 1.1.2.2 2004/03/29 21:22:34 rokan Exp $"
 //

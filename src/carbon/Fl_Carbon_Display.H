@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Carbon_Display.H,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: Fl_Carbon_Display.H,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
 //
 // Carbon display class for the Fast Light Tool Kit (FLTK).
 //
@@ -30,21 +30,19 @@
 #include <FL/Enumerations.H>
 
 
-
-//#include <FL/Fl_Image.H>
-//#include <FL/Fl_Pixmap.H>
-//#include <FL/Fl_Bitmap.H>
-
 class Fl_Image;
 class Fl_RGB_Image;
 class Fl_Pixmap;
 class Fl_Bitmap;
 
+extern FL_EXPORT Fl_Color fl_color_;
+extern FL_EXPORT int fl_font_;
+extern FL_EXPORT int fl_size_;
+
+
 
 
 //typedef void (*Fl_Draw_Image_Cb)(void* ,int,int,int,uchar*);
-
-
 
 
 
@@ -110,7 +108,7 @@ protected:
      int font(){return fl_font_;};
      int size(){return fl_size_;};
      int height();
-     //double width(const char* s);
+
      double width(const char* s, int n);
      double width(unsigned c);
      int descent();
@@ -135,5 +133,5 @@ public:
 
 
 //
-// End of "$Id: Fl_Carbon_Display.H,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id: Fl_Carbon_Display.H,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
 //

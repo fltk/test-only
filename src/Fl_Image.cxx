@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.6 2004/03/28 10:30:30 rokan Exp $"
+// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.7 2004/03/29 21:22:35 rokan Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Image.H>
 #include "flstring.h"
+#include <FL/Fl_Device.H>
 
 
 // void fl_restore_clip(); // from fl_rect.cxx
@@ -37,8 +38,6 @@
 //
 // Base image class...
 //
-#include <FL/Fl_Device.H>
-
 
   
 Fl_Image_Cache::~Fl_Image_Cache(){
@@ -355,5 +354,5 @@ void Fl_RGB_Image::label(Fl_Menu_Item* m) {
 
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.6 2004/03/28 10:30:30 rokan Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.7 2004/03/29 21:22:35 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18.2.14.2.48.2.6 2004/03/28 10:30:30 rokan Exp $"
+# "$Id: Makefile,v 1.18.2.14.2.48.2.7 2004/03/29 21:22:35 rokan Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -40,6 +40,7 @@ CPPFILES = \
 	Fl_Color_Chooser.cxx \
 	Fl_Counter.cxx \
 	Fl_Dial.cxx \
+	Fl_Device.cxx\
 	Fl_Double_Window.cxx \
 	Fl_File_Browser.cxx \
 	Fl_File_Chooser.cxx \
@@ -374,6 +375,7 @@ fl_line_style.o: carbon/line_style.cxx win/line_style.cxx
 fl_rect.o:	carbon/rect.cxx win/rect.cxx
 fl_vertex.o:	carbon/vertex.cxx win/vertex.cxx
 Fl_visual.o:	carbon/visual.cxx win/visual.cxx
+Fl_Device.cxx:	carbon/Fl_Carbon_Display.H win/Fl_Win_Display.H
 
 
 
@@ -593,5 +595,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.18.2.14.2.48.2.6 2004/03/28 10:30:30 rokan Exp $".
+# End of "$Id: Makefile,v 1.18.2.14.2.48.2.7 2004/03/29 21:22:35 rokan Exp $".
 #

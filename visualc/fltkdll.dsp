@@ -592,6 +592,10 @@ DEP_CPP_FL_CUR=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Device.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Dial.cxx
 DEP_CPP_FL_DI=\
 	"..\fl\enumerations.h"\
