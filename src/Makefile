@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.119 2004/06/19 23:02:24 spitzak Exp $"
+# "$Id: Makefile,v 1.120 2004/07/06 13:22:51 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -158,6 +158,7 @@ CPPFILES = \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
+	fl_xpm.cxx \
 	fltk_theme.cxx
 
 CFILES	= \
@@ -285,5 +286,5 @@ uninstall:
 	$(RM) $(libdir)/$(DSOLINK)
 
 #
-# End of "$Id: Makefile,v 1.119 2004/06/19 23:02:24 spitzak Exp $".
+# End of "$Id: Makefile,v 1.120 2004/07/06 13:22:51 laza2000 Exp $".
 #
