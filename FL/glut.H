@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.10 1999/10/17 20:40:15 vincent Exp $"
+// "$Id: glut.H,v 1.11 1999/10/26 16:26:23 mike Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -426,7 +426,7 @@ int glutBitmapWidth(void *font, int character);
 // files in Glut remain as they currently are so that there are
 // not symbol conflicts with the above.
 
-extern FL_API "C" {
+extern "C" {
 
 extern FL_API int glutExtensionSupported(char *name);
 
@@ -467,5 +467,5 @@ extern FL_API void glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.10 1999/10/17 20:40:15 vincent Exp $".
+// End of "$Id: glut.H,v 1.11 1999/10/26 16:26:23 mike Exp $".
 //

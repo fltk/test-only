@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.12 1999/09/27 16:24:52 vincent Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.13 1999/10/26 16:26:24 mike Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 
-#include "config.h"
+#include <config.h>
 #include <FL/Fl_Plugins.H>
 
 #if defined(FLDLopen) && (!defined(WIN32) || defined(FL_DLL))
@@ -100,13 +100,17 @@ static void ReadPlugins(char* location)
   dirent **d = 0;
   int n = filename_list(location, &d);
 
-  for (int i = n; i > 0;) 
+  if (n <= 0)
+    return;
+
+  printf("ReadPlugins: n = %d\n", n);
+
+  for (int i = 0; i < n; i ++) 
   {
-    ReadPlugin(d[i-1]->d_name, location);
-    free((void*)(d[--i]));
+    ReadPlugin(d[i]->d_name, location);
+//    free((void*)(d[i]));
   }
   free((void*)d);
-
 }
 
 // Here, we create some useless object just to be sure that the whole 
@@ -139,5 +143,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.12 1999/09/27 16:24:52 vincent Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.13 1999/10/26 16:26:24 mike Exp $"
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.8 1999/10/17 20:40:13 vincent Exp $"
+   "$Id: conf.h,v 1.9 1999/10/26 16:26:23 mike Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -102,7 +102,7 @@
 #  define CONF_ERR_AGAIN	8		/* try operation again (lockfile existed?) */
 
 #  ifdef __cplusplus
-extern FL_API "C" {
+extern "C" {
 #  endif
 
   /* data types */
@@ -396,5 +396,5 @@ extern FL_API "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.8 1999/10/17 20:40:13 vincent Exp $".
+ * End of "$Id: conf.h,v 1.9 1999/10/26 16:26:23 mike Exp $".
  */

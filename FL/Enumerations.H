@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.31 1999/10/17 20:39:58 vincent Exp $"
+// "$Id: Enumerations.H,v 1.32 1999/10/26 16:26:22 mike Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -47,9 +47,9 @@
 // because the old "const double" definition would not allow for conditional
 // compilation...
 //
-// FL_VERSION is a double that describes the major and minor version numbers.
-// Version 1.1 is actually stored as 1.01 to allow for more than 9 minor
-// releases.
+// FL_VERSION is a double that describes the major, minor, and patch version
+// numbers.  Version 1.1 is actually stored as 1.01 to allow for more than 9
+// minor releases.  Similarly, version 1.0.5 is stored as 1.0005.
 //
 // The FL_MAJOR_VERSION, FL_MINOR_VERSION, and FL_PATCH_VERSION constants
 // give the integral values for the major, minor, and patch releases
@@ -60,7 +60,8 @@
 #define FL_MINOR_VERSION	0
 #define FL_PATCH_VERSION	0
 #define FL_VERSION		((double)FL_MAJOR_VERSION + \
-				 (double)FL_MINOR_VERSION * 0.01)
+				 (double)FL_MINOR_VERSION * 0.01 + \
+				 (double)FL_PATCH_VERSION * 0.0001)
 
 typedef unsigned char uchar;
 typedef unsigned long ulong;
@@ -207,5 +208,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.31 1999/10/17 20:39:58 vincent Exp $".
+// End of "$Id: Enumerations.H,v 1.32 1999/10/26 16:26:22 mike Exp $".
 //

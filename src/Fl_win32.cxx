@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.52 1999/10/24 19:47:42 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.53 1999/10/26 16:26:25 mike Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@
 #include <winsock.h>
 #include <ctype.h>
 
+
 //
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
 // VC++ 6.0.
@@ -49,6 +50,10 @@
 
 #ifndef WM_MOUSELEAVE
 #  define WM_MOUSELEAVE 0x02a3
+#endif
+
+#ifndef WM_MOUSEWHEEL
+#  define WM_MOUSEWHEEL 0x020a
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -515,6 +520,24 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
     break;
 
+  case WM_MOUSEWHEEL :
+    // This just maps the mouse wheel to the up/down arrow keys.  For lists
+    // and menus you'll be able to use it to scroll through things; it also
+    // will do navigation through widgets...
+    if (((short) HIWORD(wParam)) < 0)
+      Fl::e_keysym = FL_Down;
+    else
+      Fl::e_keysym = FL_Up;
+
+    buffer[0] = 0;
+
+    Fl::e_length = 0;
+    Fl::e_text   = buffer;
+
+    while (window->parent()) window = window->window();
+    if (Fl::handle(FL_KEYBOARD,window)) return 0;
+    break;
+
   case WM_GETMINMAXINFO:
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
     break;
@@ -822,5 +845,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.52 1999/10/24 19:47:42 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.53 1999/10/26 16:26:25 mike Exp $".
 //
