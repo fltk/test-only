@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.22 1999/08/23 16:43:09 vincent Exp $"
+// "$Id: fluid.cxx,v 1.23 1999/08/28 16:17:47 carl Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,6 @@ const char *copyright =
 #include <FL/fl_file_chooser.H>
 #include <FL/fl_message.H>
 #include <FL/filename.H>
-#include <FL/fl_draw_image_file.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -479,5 +478,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.22 1999/08/23 16:43:09 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.23 1999/08/28 16:17:47 carl Exp $".
 //
