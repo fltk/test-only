@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.9 1999/08/16 07:30:50 bill Exp $"
+// "$Id: Fl_Group.H,v 1.10 1999/08/26 19:13:08 gustavo Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,10 +30,14 @@
 #include "Fl_Widget.H"
 #endif
 
+class Fl_Layout;
+
 class Fl_Group : public Fl_Widget {
+  friend class Fl_Layout;
   int children_;
   Fl_Widget** array_;
   Fl_Widget* savedfocus_;
+  Fl_Layout* layout_;
   Fl_Widget* resizable_;
   int *sizes_; // remembered initial sizes of children
   int ox_,oy_,ow_,oh_; // old size, used by layout
@@ -51,13 +55,10 @@ protected:
   int oy() const {return oy_;}
   int ow() const {return ow_;}
   int oh() const {return oh_;}
-  int ox(Fl_Widget*) const;
-  int oy(Fl_Widget*) const;
-  int ow(Fl_Widget*) const;
-  int oh(Fl_Widget*) const;
   void set_old_size() {ox_=x();oy_=y();ow_=w();oh_=h();}
 
   void layout();
+  void classic_layout();
   void layout(Fl_Widget* o) {o->layout();}
 
 public:
@@ -90,6 +91,10 @@ public:
   void add_resizable(Fl_Widget& o) {resizable_ = &o; add(o);}
   void init_sizes();
 
+  bool has_layout() const {return (bool)layout_;}
+  void change_layout(Fl_Layout*);
+  void perform_layout();
+
   // back compatability function:
   void focus(Fl_Widget* o) {o->take_focus();}
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
@@ -106,5 +111,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.9 1999/08/16 07:30:50 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.10 1999/08/26 19:13:08 gustavo Exp $".
 //
