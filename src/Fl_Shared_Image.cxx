@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.18 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.19 2001/04/22 16:50:21 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -138,7 +138,11 @@ const char* Fl_Shared_Image::get_filename() {
 
 const char* Fl_Shared_Image::get_filename(const char* name)
 {
-  if (name[0] == '/' || !fl_shared_image_root || !*fl_shared_image_root)
+  if (name[0] == '/'
+#ifdef WIN32
+      || name[0] == '\\' || name[1] == ':'
+#endif
+      || !fl_shared_image_root || !*fl_shared_image_root)
     return name;
   int m = strlen(fl_shared_image_root);
   int n = strlen(name) + m + 2;
@@ -248,5 +252,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.18 2000/09/05 17:36:21 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.19 2001/04/22 16:50:21 spitzak Exp $"
 //

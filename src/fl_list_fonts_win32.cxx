@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.10 2001/03/10 20:38:22 clip Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.11 2001/04/22 16:50:21 spitzak Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -94,7 +94,8 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
 
-  const char *name = (const char*)(lpelf->elfFullName);
+//const char *name = (const char*) (lpelf->elfFullName);
+  const char *name = (const char*) (lpelf->elfLogFont.lfFaceName);
 
   Fl_Font_* base = make_a_font(' ', name);
   base->italic_ = make_a_font('I', name);
@@ -152,5 +153,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.10 2001/03/10 20:38:22 clip Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.11 2001/04/22 16:50:21 spitzak Exp $"
 //

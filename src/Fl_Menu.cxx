@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.107 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.108 2001/04/22 16:50:21 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -583,13 +583,15 @@ int Fl_Menu_::pulldown(
   ::style->color = text_background();
 
   // figure out where to pop up in screen coordinates:
+#if 0
   if (W) for (Fl_Widget* w = this; w; w = w->parent()) {
     X += w->x();
     Y += w->y();
   } else {
+#endif
     X += Fl::event_x_root()-Fl::event_x();
     Y += Fl::event_y_root()-Fl::event_y();
-  }
+    //  }
 
   MenuState p;
   p.nummenus = 1;
@@ -736,5 +738,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.107 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.108 2001/04/22 16:50:21 spitzak Exp $".
 //

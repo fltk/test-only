@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fullscreen.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -112,7 +112,7 @@ Fl_Window(x,y,w,h,l) {
 void shape_window::draw() {
   fl_color(0);
   fl_rectf(0,0,w(),h());
-  fl_font(0,20);
+  fl_font(FL_HELVETICA, 20);
   fl_color(7);
   fl_draw("This requires GL",0,0,w(),h(),FL_ALIGN_CENTER);
 }
@@ -226,5 +226,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fullscreen.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $".
 //
