@@ -221,18 +221,21 @@ void Valuator::handle_release() {
 /*!
   Format the passed value to show enough digits for the current
   step value. If the step has been set to zero then it does a %g
-  format. If step is greater or equal to 1 it does %d format. The
-  characters are written into the passed buffer (which must be long
-  enough, 40 characters is safe).
+  format. If step is an integer it does %d format. Otherwise it does a
+  %.nf format where n is enough digits to show the step, maximum of
+  8. The characters are written into the passed buffer (which must be
+  long enough, 40 characters is safe).
  */
 int Valuator::format(char* buffer) {
   double v = value();
-  if (step_ <= 0) return sprintf(buffer, "%g", v);
-  else if (rint(step_) == step_) return sprintf(buffer, "%ld", long(v));
-  int i, x;
-  int istep_ = int(1/(step_-floor(step_))+.5);
-  for (x = 10, i = 2; x < istep_; x *= 10) i++;
-  if (x == istep_) i--;
+  if (!step_) return sprintf(buffer, "%g", v);
+  double s = step_-floor(step_)+1e-9;
+  int i=0;
+  for (; i < 8; i++) {
+    if (s-floor(s)<1e-3) break;
+    s *= 10;
+  }
+  if (!i) return sprintf(buffer, "%ld", long(v));
   return sprintf(buffer, "%.*f", i, v);
 }
 
