@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: color_chooser.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include "list_visuals.cxx"
 #endif
 
@@ -116,7 +116,7 @@ int main(int argc, char ** argv) {
 	   " - : default visual\n"
 	   " r : call Fl::visual(FL_RGB)\n"
 	   " c : call Fl::own_colormap()\n",argv[0]);
-#ifndef WIN32
+#ifndef _WIN32
     printf(" # : use this visual with an empty colormap:\n");
     list_visuals();
 #endif
@@ -128,7 +128,7 @@ int main(int argc, char ** argv) {
   } else if (argv[i][0] == 'c') {
     Fl::own_colormap();
   } else if (argv[i][0] != '-') {
-#ifndef WIN32
+#ifndef _WIN32
     int visid = atoi(argv[i]);
     fl_open_display();
     XVisualInfo templt; int num;
@@ -147,5 +147,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: color_chooser.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -110,6 +110,7 @@ int main() {
   slider0.value(sides[0]);
   slider0.callback(slider_cb, 0);
   w1.end();
+  w01.resizable(w1);
   w01.end();
   Fl_Window w02(420,420,"Fl_Double_Window"); w02.box(FL_FLAT_BOX);
   double_blink_window w2(10,10,400,400,"Fl_Double_Window");
@@ -120,14 +121,13 @@ int main() {
   slider1.value(sides[0]);
   slider1.callback(slider_cb, 1);
   w2.end();
+  w02.resizable(w2);
   w02.end();
   w01.show();
-  w1.show();
   w02.show();
-  w2.show();
   return Fl::run();
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $".
 //

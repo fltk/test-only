@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: editor.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -195,7 +195,7 @@ void set_title(Fl_Window* w) {
   else {
     char *slash;
     slash = strrchr(filename, '/');
-#ifdef WIN32
+#ifdef _WIN32
     if (slash == NULL) slash = strrchr(filename, '\\');
 #endif
     if (slash != NULL) strcpy(title, slash + 1);
@@ -432,5 +432,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: editor.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $".
 //

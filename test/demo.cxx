@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: demo.cxx,v 1.16 2001/07/29 22:17:02 spitzak Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>
 #else
 #  include <unistd.h>
@@ -198,7 +198,7 @@ void dobut(Fl_Widget *, long arg)
     push_menu(menus[men].icommand[bn]);
   else {
 
-#ifdef WIN32
+#ifdef _WIN32
     STARTUPINFO		suInfo;		// Process startup information
     PROCESS_INFORMATION	prInfo;		// Process information
 
@@ -210,7 +210,7 @@ void dobut(Fl_Widget *, long arg)
     char* copy_of_icommand = new char[icommand_length+1];
     strcpy(copy_of_icommand,menus[men].icommand[bn]);
 
-    // On WIN32 the .exe suffix needs to be appended to the command
+    // On _WIN32 the .exe suffix needs to be appended to the command
     // whilst leaving any additional parameters unchanged - this
     // is required to handle the correct conversion of cases such as : 
     // `../fluid/fluid valuators.fl' to '../fluid/fluid.exe valuators.fl'.
@@ -250,7 +250,7 @@ void dobut(Fl_Widget *, long arg)
     delete command;
     delete copy_of_icommand;
 	
-#else // NON WIN32 systems.
+#else // NON _WIN32 systems.
 
     int icommand_length = strlen(menus[men].icommand[bn]);
     char* command = new char[icommand_length+5]; // 5 for extra './' and ' &\0' 
@@ -259,7 +259,7 @@ void dobut(Fl_Widget *, long arg)
     system(command);
 
     delete command;
-#endif // WIN32
+#endif // _WIN32
   }
 }
 
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: demo.cxx,v 1.16 2001/07/29 22:17:02 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: image.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -78,7 +78,7 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 #include <fltk/x.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include "list_visuals.cxx"
 #endif
 
@@ -95,7 +95,7 @@ int arg(int argc, char **argv, int &i) {
 
 int main(int argc, char **argv) {
 
-#ifndef WIN32
+#ifndef _WIN32
   int i = 1;
   if (Fl::args(argc,argv,i,arg) < argc) {
     fprintf(stderr," -v # : use visual\n%s\n",Fl::help);
@@ -150,5 +150,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $".
 //

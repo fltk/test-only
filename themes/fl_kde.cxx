@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.18 2001/07/24 16:25:09 clip Exp $"
+// "$Id: fl_kde.cxx,v 1.19 2001/07/29 22:19:30 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -49,7 +49,7 @@ static int colors_only = 0;
 //kdewin_menu_text_box("kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
 ////////////////////////////////////////////////////////////////
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #include <fltk/x.h>
 
@@ -358,7 +358,7 @@ int fl_kde(int co) {
     }
   }
 
-#ifndef WIN32
+#ifndef _WIN32
   add_event_handler();
 #endif
 
@@ -368,5 +368,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.18 2001/07/24 16:25:09 clip Exp $".
+// End of "$Id: fl_kde.cxx,v 1.19 2001/07/29 22:19:30 spitzak Exp $".
 //

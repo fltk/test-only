@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <config.h>
@@ -12,7 +12,7 @@
 #define PATH_MAX 128
 #endif
 
-#ifndef WIN32
+#ifndef _WIN32
 // Stolen from KDE!
 static int _getprop(Window w, Atom a, Atom type, long len, unsigned char **p){
   Atom real_type;
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     exit(3);
   }
 
-#ifndef WIN32
+#ifndef _WIN32
   // stolen from KDE!
   fl_open_display();
   int screen = DefaultScreen(fl_display);
