@@ -5,7 +5,7 @@
 # FLTK comes with:
 #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
 #
-default scheme = KDE1
+#default scheme = KDE1
 #
 #
 #

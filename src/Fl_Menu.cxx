@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.69 1999/11/22 09:00:18 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.70 1999/11/22 19:46:16 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -433,8 +433,8 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
     // arrow right for themes because leading() really screws things up
     // I changed this so the arrows are larger in the default setup:
     if (leading()>4) {
-      H -= leading()-4;
-      Y += (leading()-4)/2;
+      H -= leading();
+      Y += (leading())/2;
     }
     m->glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc, f, FL_NO_BOX);
   } else if (m->shortcut_) {
@@ -870,5 +870,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.69 1999/11/22 09:00:18 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.70 1999/11/22 19:46:16 carl Exp $".
 //

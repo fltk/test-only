@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.18 1999/11/22 09:00:23 bill Exp $"
+// "$Id: fl_windows.cxx,v 1.19 1999/11/22 19:46:17 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -71,10 +71,9 @@ static void
 inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 	    Fl_Flags f, Fl_Boxtype box, Fl_Glyph function)
 {
-  // active widgets draw normally:
-  if (!(f&FL_INACTIVE) ||
+
       // don't do anything to slider thumbs or check or radio buttons
-      t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
+  if (t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
       t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
       t == FL_GLYPH_CHECK || t == FL_GLYPH_RADIO)
   {
@@ -88,43 +87,51 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
     box->inset(x,y,w,h);
   }
 
+  // active widgets draw normally:
+  if (!(f&FL_INACTIVE)) {
+    function(t, x, y, w, h, bc, fc, f, FL_NO_BOX);
+    return;
+  }
+
   f &= ~FL_INACTIVE;
-  function(t, x-1, y-1, w, h, bc, FL_DARK3, f, FL_NO_BOX);
+  //function(t, x-1, y-1, w, h, bc, FL_DARK3, f, FL_NO_BOX); this is not done by Windows or KDE!
   function(t, x+1, y+1, w, h, bc, FL_LIGHT3, f, FL_NO_BOX);
-  function(t, x,   y,   w, h, bc, bc, f, FL_NO_BOX);
+  function(t, x,   y,   w, h, bc, fc, f, FL_NO_BOX);
 }
 
-static void windows_glyph(
-	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	Fl_Flags f, Fl_Boxtype box) {
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,fl_glyph);
-}
+static Fl_Glyph fltk_glyph = 0;
 
-static Fl_Glyph choice_glyph = 0;
-static void my_choice_glyph(
-	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	Fl_Flags f, Fl_Boxtype box) {
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,choice_glyph);
+static void
+windows_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+              Fl_Flags f, Fl_Boxtype box)
+{
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,fltk_glyph);
 }
 
 static Fl_Glyph return_glyph = 0;
-static void my_return_glyph(
-	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	Fl_Flags f, Fl_Boxtype box) {
+
+static void
+my_return_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+                Fl_Flags f, Fl_Boxtype box)
+{
   inset_glyph(t,x,y,w,h,bc,fc,f,box,return_glyph);
 }
 
 static Fl_Glyph adjuster_glyph = 0;
-static void my_adjuster_glyph(
-	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	Fl_Flags f, Fl_Boxtype box) {
+
+static void
+my_adjuster_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+                  Fl_Flags f, Fl_Boxtype box)
+{
   inset_glyph(t,x,y,w,h,bc,fc,f,box,adjuster_glyph);
 }
 
 static Fl_Glyph counter_glyph = 0;
-static void my_counter_glyph(
-	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	Fl_Flags f, Fl_Boxtype box) {
+
+static void
+my_counter_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+                 Fl_Flags f, Fl_Boxtype box)
+{
   inset_glyph(t,x,y,w,h,bc,fc,f,box,counter_glyph);
 }
 
@@ -148,6 +155,7 @@ int fl_windows() {
 
   if ((s = Fl_Style::find("menu title"))) {
     s->set_box(FL_HIGHLIGHT_BOX);
+    fltk_glyph = s->glyph;
     s->set_glyph_box(FL_NO_BOX);
     s->set_selection_color(FL_GRAY);
     s->set_selection_text_color(FL_BLACK);
@@ -155,6 +163,7 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("menu item"))) {
+    fltk_glyph = s->glyph;
     s->set_glyph(windows_glyph);
     s->set_glyph_box(FL_NO_BOX);
   }
@@ -178,6 +187,7 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
+    fltk_glyph = s->glyph;
     s->set_glyph(windows_glyph);
     s->set_glyph_box(&win98_menu_window_box);
     s->set_color(52);
@@ -198,12 +208,8 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("check button"))) {
+    fltk_glyph = s->glyph;
     s->set_glyph(windows_glyph);
-  }
-
-  if ((s = Fl_Style::find("choice"))) {
-    choice_glyph = s->glyph;
-    s->set_glyph(my_choice_glyph);
   }
 
   if ((s = Fl_Style::find("return button"))) {
@@ -231,5 +237,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.18 1999/11/22 09:00:23 bill Exp $".
+// End of "$Id: fl_windows.cxx,v 1.19 1999/11/22 19:46:17 carl Exp $".
 //
