@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.29 1999/11/21 06:23:30 carl Exp $"
+// "$Id: fl_options.cxx,v 1.30 1999/11/22 08:42:30 vincent Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -391,13 +391,13 @@ int fl_windows_colors() {
 // Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
 
   fl_background(background);
-  Fl_Widget::default_style.set_off_color(background);
+  Fl_Widget::default_style->set_off_color(background);
 
-  Fl_Widget::default_style.set_label_color(foreground);
-  Fl_Widget::default_style.set_highlight_label_color(foreground);
-  Fl_Widget::default_style.set_selection_text_color(foreground);
+  Fl_Widget::default_style->set_label_color(foreground);
+  Fl_Widget::default_style->set_highlight_label_color(foreground);
+  Fl_Widget::default_style->set_selection_text_color(foreground);
 
-  Fl_Widget::default_style.set_text_color(window_foreground);
+  Fl_Widget::default_style->set_text_color(window_foreground);
 
   Fl_Style* style;
   if ((style = Fl_Style::find("input"))) {
@@ -539,7 +539,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.29 1999/11/21 06:23:30 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.30 1999/11/22 08:42:30 vincent Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.25 1999/11/21 04:22:49 vincent Exp $"
+# "$Id: Makefile,v 1.26 1999/11/22 08:42:27 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,16 +46,16 @@ CPPFILES = \
 ################################################################
 
 OBJECTS = $(CPPFILES:.cxx=.o)
-OBJECTSDLL = $(CPPFILES:.cxx=.dllo)
+OBJECTSDLL = $(CPPFILES:.cxx=.dll.o)
 
 include ../makeinclude
 
-.SUFFIXES : .cxx .c .o .dllo
+.SUFFIXES : .cxx .c .o .dll.o
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 
-.cxx.dllo :
+%.dll.o : %.cxx
 	$(CXX) -DFL_DLL -I.. $(CXXFLAGS) -c $< -o $@
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
@@ -102,5 +102,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.25 1999/11/21 04:22:49 vincent Exp $".
+# End of "$Id: Makefile,v 1.26 1999/11/22 08:42:27 vincent Exp $".
 #

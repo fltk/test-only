@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.65 1999/11/19 03:59:11 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.66 1999/11/22 08:42:29 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -271,8 +271,10 @@ void Fl::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
+#ifndef __MINGW32__
+#define HAVE_TRACKMOUSEVENT
 // Borland 5 is too old to have this new (post Win95) stuff
-#ifdef BORLAND5
+#if defined(BORLAND5)
 #define TME_LEAVE 2
 typedef struct tagTRACKMOUSEEVENT {
   DWORD cbSize;
@@ -287,6 +289,7 @@ static TRACKMOUSEEVENT mouseevent = {
   sizeof(TRACKMOUSEEVENT),
   TME_LEAVE
 };
+#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -341,9 +344,11 @@ static int mouse_event(Fl_Window *window, int what, int button,
     pmx = Fl::e_x_root; pmy = Fl::e_y_root;
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
 
+#if HAVE_TRACKMOUSEEVENT
     // look for mouse leave events
     mouseevent.hwndTrack = fl_xid(window);
     TrackMouseEvent(&mouseevent);
+#endif
 
     return Fl::handle(FL_MOVE,window);
   }
@@ -896,5 +901,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.65 1999/11/19 03:59:11 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.66 1999/11/22 08:42:29 vincent Exp $".
 //
