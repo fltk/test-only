@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.38 2004/07/05 13:23:36 laza2000 Exp $"
+// "$Id: fl_color_win32.cxx,v 1.39 2004/07/05 14:37:02 laza2000 Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -117,10 +117,6 @@ static void load_dc_funcs()
 	if(hmod) {
 		__SetDCPenColor = (f_SetDCPenColor)GetProcAddress(hmod, "SetDCPenColor");
 		__SetDCBrushColor = (f_SetDCBrushColor)GetProcAddress(hmod, "SetDCBrushColor");
-
-		printf("__SetDCPenColor = %p\n", __SetDCPenColor);
-		printf("__SetDCBrushColor = %p\n", __SetDCBrushColor);
-
 		FreeLibrary(hmod);
 	}
 }
@@ -239,5 +235,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.38 2004/07/05 13:23:36 laza2000 Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.39 2004/07/05 14:37:02 laza2000 Exp $".
 //
