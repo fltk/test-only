@@ -113,6 +113,8 @@ public:
   Widget *header(int col) { if(col<0 || col>=nHeader) return 0; return header_[col]; }
   int nheader() const { return nHeader; }
 
+  int load(const char *filename);
+
 private:
 
   bool indented_;
