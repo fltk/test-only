@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.5 1999/10/26 15:43:11 mike Exp $"
+// "$Id: Fl_Threads.cxx,v 1.6 1999/10/26 23:02:03 mike Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -167,13 +167,13 @@ int Fl::awake(void* msg)
 
 static DWORD main_thread;
 
-// Initialise FLTK thread support (mainly, initialise Fl::main_mutex)
+// Initialise FLTK thread support (mainly, initialise Fl::main_lock)
 // Called automatically in Fl::create_thread too ...
 int Fl::init_threads_support()
 {
-  if (Fl::mutex == 0) {
-    Fl::mutex_init(Fl::mutex);
-    Fl::lock(Fl::mutex);
+  if (Fl::main_lock == 0) {
+    Fl::mutex_init(Fl::main_lock);
+    Fl::lock(Fl::main_lock);
     main_thread = GetCurrentThreadId();
   }
   return 0;
@@ -193,7 +193,7 @@ int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 // 1 for highest, 0 for lowest.
 int Fl::set_thread_priority(Fl_Thread t, float pri)
 {
-  return SetThreadPriority(t, int(THREAD_PRIORITY_LOWEST + 
+  return SetThreadPriority((HANDLE)t, int(THREAD_PRIORITY_LOWEST + 
 	(THREAD_PRIORITY_HIGHEST - THREAD_PRIORITY_LOWEST) * pri));
 }
 
@@ -296,5 +296,5 @@ int Fl::awake(void* msg)
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.5 1999/10/26 15:43:11 mike Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.6 1999/10/26 23:02:03 mike Exp $".
 //

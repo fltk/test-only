@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.53 1999/10/26 16:26:25 mike Exp $"
+// "$Id: Fl_win32.cxx,v 1.54 1999/10/26 23:02:03 mike Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -145,7 +145,7 @@ double fl_wait(int timeout_flag, double time) {
   // clear the thread message
   Fl::thread_message = 0;
 
-  if (Fl::mutex) Fl::unlock();
+  if (Fl::main_lock) Fl::unlock();
 
   if (nfds) {
     // For WIN32 we need to poll for socket input FIRST, since
@@ -201,7 +201,7 @@ double fl_wait(int timeout_flag, double time) {
     }
   }
 
-  if (Fl::mutex) Fl::lock();
+  if (Fl::main_lock) Fl::lock();
 
   // execute it, them execute any other messages that become ready during it:
   while (have_message) {
@@ -845,5 +845,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.53 1999/10/26 16:26:25 mike Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.54 1999/10/26 23:02:03 mike Exp $".
 //

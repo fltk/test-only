@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 fltkdlld.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
+# ADD LINK32 fltkdlld.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
