@@ -1,5 +1,5 @@
 //
-// "$Id: CubeView.cxx,v 1.4 1999/03/10 16:40:19 mike Exp $"
+// "$Id: CubeView.cxx,v 1.5 1999/06/20 14:25:21 mike Exp $"
 //
 // CubeView class implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ CubeView::CubeView(int x,int y,int w,int h,const char *l)
     label("OpenGL is required for this demo to operate.");
     align(FL_ALIGN_WRAP | FL_ALIGN_INSIDE);
 #endif /* !HAVE_GL */
-};
+}
 
 #if HAVE_GL
 void CubeView::drawCube() {
@@ -139,7 +139,7 @@ void CubeView::drawCube() {
       glVertex3fv(boxv3);
       glVertex3fv(boxv7);
     glEnd();
-};//drawCube
+}//drawCube
 
 void CubeView::draw() {
     if (!valid()) {
@@ -161,9 +161,9 @@ void CubeView::draw() {
     drawCube();
     
     glPopMatrix();
-};
+}
 #endif /* HAVE_GL */
 
 //
-// End of "$Id: CubeView.cxx,v 1.4 1999/03/10 16:40:19 mike Exp $".
+// End of "$Id: CubeView.cxx,v 1.5 1999/06/20 14:25:21 mike Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.37 1999/04/12 15:01:39 mike Exp $"
+dnl# "$Id: configure.in,v 1.38 1999/06/20 14:25:19 mike Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -76,20 +76,20 @@ if eval "test x$enable_shared = xyes"; then
   PICFLAG=1
   case $uname in
       SunOS* | UNIX_S*)
-          DSONAME="libfltk.so.1"
-	  DSOCOMMAND="\$(CXX) -Wl,-h,libfltk.so.1 \$(LDLIBS) -G $DEBUGFLAG -o"
+          DSONAME="libfltk.so.2"
+	  DSOCOMMAND="\$(CXX) -Wl,-h,libfltk.so.2 \$(LDLIBS) -G $DEBUGFLAG -o"
 	  ;;
       HP-UX*)
-          DSONAME="libfltk.sl.1"
-	  DSOCOMMAND="ld -b -z +h libfltk.sl.1 $DEBUGFLAG -o"
+          DSONAME="libfltk.sl.2"
+	  DSOCOMMAND="ld -b -z +h libfltk.sl.2 $DEBUGFLAG -o"
 	  ;;
       OSF1*)
-          DSONAME="libfltk.so.1"
-          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+          DSONAME="libfltk.so.2"
+          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	  ;;
       IRIX*)
-          DSONAME="libfltk.so.1"
-          DSOCOMMAND="\$(CXX) -soname libfltk.so.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+          DSONAME="libfltk.so.2"
+          DSOCOMMAND="\$(CXX) -soname libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	  ;;
       CYGWIN*)
           DSONAME="fltk.dll"
@@ -98,8 +98,8 @@ if eval "test x$enable_shared = xyes"; then
       *)
           echo "Warning: shared libraries may not be supported.  Trying -shared"
 	  echo "         option with compiler."
-          DSONAME="libfltk.so.1"
-          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+          DSONAME="libfltk.so.2"
+          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	  ;;
   esac
 fi])
@@ -261,5 +261,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.37 1999/04/12 15:01:39 mike Exp $".
+dnl# End of "$Id: configure.in,v 1.38 1999/06/20 14:25:19 mike Exp $".
 dnl#
