@@ -99,7 +99,8 @@ public:
 };
 
 // convert xid <-> Window:
-inline WindowPtr xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+//inline WindowPtr xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+WindowPtr xid(const Window*);
 Window* find(WindowPtr xid);
 
 extern CursHandle default_cursor;

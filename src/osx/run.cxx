@@ -1689,6 +1689,18 @@ bool fltk::dnd()
   return true;
 }
 
+/**
+ * Due to the lack of subwindows, finding the XID is a little bit more involved.
+ */
+WindowPtr fltk::xid(const Window*w) {
+  for (;;) {
+    Window *w1 = w->window();
+    if (!w1) break;
+    w = w1;
+  }
+  return CreatedWindow::find(w)->xid;
+}
+
 //
 // End of "$Id$".
 //

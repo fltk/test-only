@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.34 2005/01/26 22:35:25 matthiaswm Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -186,5 +186,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.34 2005/01/26 22:35:25 matthiaswm Exp $".
+// End of "$Id$".
 //
