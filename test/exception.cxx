@@ -1,11 +1,14 @@
-#include <exception>
 #include <fltk/run.h>
 #include <fltk/Button.h>
 #include <fltk/Window.h>
 #include <fltk/ask.h>
+#include <config.h>
 #include <stdio.h>
 using namespace fltk;
 
+#ifdef HAVE_EXCEPTIONS
+
+#include <exception>
 class my_exception : public std::exception {
 public:
   const char* what() const throw() {return "my exception";}
@@ -30,4 +33,23 @@ int main(int argc, char** argv) {
     }
   }
 }
+
+#else
+
+void quit(Widget *w, void*) {
+  w->window()->hide();
+}
+
+int main(int argc, char** argv) {
+  Window window(200,100);
+  window.begin();
+  Button button(25,25,150,50,"This demo needs exceptions!");
+  button.align(ALIGN_WRAP);
+  button.callback(quit);
+  window.end();
+  window.show(argc, argv);
+  return run();
+}
+
+#endif
 
