@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $"
+// "$Id: image.cxx,v 1.9 2000/03/19 01:38:32 bill Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,19 +55,26 @@ void make_image() {
 #include <FL/Fl_Toggle_Button.H>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb;
+Fl_Toggle_Button *tleftb,*trightb,*ttopb,*tbottomb;
 Fl_Button *b;
 Fl_Window *w;
 
 void button_cb(Fl_Widget *,void *) {
-    int i = 0;
-    if (leftb->value()) i |= FL_ALIGN_LEFT;
-    if (rightb->value()) i |= FL_ALIGN_RIGHT;
-    if (topb->value()) i |= FL_ALIGN_TOP;
-    if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
-    if (insideb->value()) i |= FL_ALIGN_INSIDE;
-	b->clear_flag(FL_ALIGN_MASK);
-    b->set_flag(i);
-    w->redraw();
+  int i = 0;
+  if (leftb->value()) i |= FL_ALIGN_LEFT;
+  if (rightb->value()) i |= FL_ALIGN_RIGHT;
+  if (topb->value()) i |= FL_ALIGN_TOP;
+  if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
+  if (insideb->value()) i |= FL_ALIGN_INSIDE;
+//   if (tleftb->value()) i |= FL_TEXT_ALIGN_LEFT;
+//   if (trightb->value()) i |= FL_TEXT_ALIGN_RIGHT;
+//   if (ttopb->value()) i |= FL_TEXT_ALIGN_TOP;
+//   if (tbottomb->value()) i |= FL_TEXT_ALIGN_BOTTOM;
+
+  b->clear_flag(FL_ALIGN_MASK);
+//   b->clear_flag(FL_TEXT_ALIGN_MASK);
+  b->set_flag(i);
+  w->redraw();
 }
 
 #include <FL/x.H>
@@ -127,6 +134,15 @@ int main(int argc, char **argv) {
   bottomb->callback(button_cb);
   insideb = new Fl_Toggle_Button(250,75,50,25,"inside");
   insideb->callback(button_cb);
+//   tleftb = new Fl_Toggle_Button(50,100,50,25,"text left");
+//   tleftb->callback(button_cb);
+//   trightb = new Fl_Toggle_Button(100,100,50,25,"text right");
+//   trightb->callback(button_cb);
+//   ttopb = new Fl_Toggle_Button(150,100,50,25,"text top");
+//   ttopb->callback(button_cb);
+//   tbottomb = new Fl_Toggle_Button(200,100,50,25,"text bottom");
+//   tbottomb->callback(button_cb);
+
   window.resizable(window);
   window.end();
   window.show(argc, argv);
@@ -134,5 +150,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $".
+// End of "$Id: image.cxx,v 1.9 2000/03/19 01:38:32 bill Exp $".
 //

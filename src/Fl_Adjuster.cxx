@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.26 2000/02/14 11:32:46 bill Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.27 2000/03/19 01:38:31 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,8 @@ static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_he
 #include "slowarrow.h"
 static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
+static Fl_Bitmap* arrows[3] = {&fastarrow,&mediumarrow,&slowarrow};
+
 enum {
   FL_GLYPH_FASTARROW,
   FL_GLYPH_MEDIUMARROW,
@@ -47,14 +49,8 @@ static void glyph(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
 {
   box->draw(x,y,w,h, bc, f);
   fl_color(fc);
-  switch (t) {
-    case FL_GLYPH_FASTARROW:
-      fastarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
-    case FL_GLYPH_MEDIUMARROW:
-      mediumarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
-    case FL_GLYPH_SLOWARROW:
-      slowarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
-  }
+  Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
+  b->draw(x,y,w,h, (b->w-w)/2, (b->h-h)/2);
 }
 
 // changing the value does not change the appearance:
@@ -173,5 +169,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.26 2000/02/14 11:32:46 bill Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.27 2000/03/19 01:38:31 bill Exp $".
 //

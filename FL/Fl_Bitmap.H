@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.H,v 1.9 1999/10/17 20:39:59 vincent Exp $"
+// "$Id: Fl_Bitmap.H,v 1.10 2000/03/19 01:38:29 bill Exp $"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,14 +38,10 @@ public:
   void draw(int, int, int, int, int cx, int cy);
 
   void draw(int X, int Y) {draw(X,Y,w,h,0,0);}
-
-  void draw(int X, int Y, int W, int H, Fl_Flags f=0) {
-    Fl_Image::draw(X,Y,W,H,f);
-  }
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Bitmap.H,v 1.9 1999/10/17 20:39:59 vincent Exp $".
+// End of "$Id: Fl_Bitmap.H,v 1.10 2000/03/19 01:38:29 bill Exp $".
 //

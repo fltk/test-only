@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.10 2000/02/14 11:32:34 bill Exp $"
+// "$Id: Fl_Image.H,v 1.11 2000/03/19 01:38:29 bill Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,6 @@ public:
 
   // the following draw methods will use the first defined virtual draw method
   // and do not need to be redefined in subclasses of Fl_Image
-  void draw(int X, int Y, int W, int H, Fl_Flags f=0);
   void draw(int X, int Y) { int w, h; measure(w, h); draw(X, Y, w, h, 0, 0); }
   void draw_tiled(int X, int Y, int W, int H, int cx=0, int cy=0);
 
@@ -55,5 +54,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.10 2000/02/14 11:32:34 bill Exp $".
+// End of "$Id: Fl_Image.H,v 1.11 2000/03/19 01:38:29 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.15 2000/02/14 11:32:58 bill Exp $"
+// "$Id: fl_labeltype.cxx,v 1.16 2000/03/19 01:38:31 bill Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -77,16 +77,56 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color c, Fl_Flags f) c
 {
   if (!active_r()) f |= FL_INACTIVE;
   if (image_) {
-    int w, h;
-    image_->measure(w, h);
+
+    int w, h; image_->measure(w, h);
+
+    // If all the flags are off, draw the image and label centered "nicely"
+    // by measuring their total size and centering that rectangle:
+    if (!(f & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_TOP|FL_ALIGN_BOTTOM|
+	       FL_ALIGN_TILED|FL_ALIGN_INSIDE)) && label_) {
+      if ((int)(h + label_size()) <= H) {
+	// put the image atop the text
+	int d = (H-(h+label_size()))/2;
+	Y += d; H -= d; f |= FL_ALIGN_TOP;
+      } else {
+	// put image to left
+	fl_font(label_font(), label_size());
+	int text_w = (f&FL_ALIGN_WRAP) ? W : 0;
+	int text_h; fl_measure(label_,text_w,text_h);
+	int d = (W-(h+text_w))/2;
+	if (d > 0) {X += d; W -= d;}
+	f |= FL_ALIGN_LEFT;
+      }
+    }
+
+    int cx,cy; // point in image to put at X,Y
+    if (f & FL_ALIGN_RIGHT) {
+      cx = w-W;
+      if (f & FL_ALIGN_LEFT && cx < 0) cx = 0;
+    }
+    else if (f & FL_ALIGN_LEFT) cx = 0;
+    else cx = w/2-W/2;
+    if (f & FL_ALIGN_BOTTOM) {
+      cy = h-H;
+      if (f & FL_ALIGN_TOP && cy < 0) cy = 0;
+    }
+    else if (f & FL_ALIGN_TOP) cy = 0;
+    else cy = h/2-H/2;
+
     fl_color((f&FL_INACTIVE) ? fl_inactive(c) : c);
-    image_->draw(X, Y, W, H, f);
-    if (f & FL_ALIGN_TOP) {Y += h; H -= h;}
-    else if (f & FL_ALIGN_BOTTOM) H -= h;
-    else if (f & FL_ALIGN_LEFT) {X += w; W -= w;}
+    if (f & FL_ALIGN_TILED)
+      image_->draw_tiled(X, Y, W, H, cx, cy);
+    else
+      image_->draw(X, Y, W, H, cx, cy);
+
+    // figure out the rectangle that remains for text:
+    if (f & FL_ALIGN_LEFT) {X += w; W -= w;}
     else if (f & FL_ALIGN_RIGHT) W -= w;
-    else {int d = (H+h)/2; Y += d; H -= d;}
+    else if (f & FL_ALIGN_TOP) {Y += h; H -= h;}
+    else if (f & FL_ALIGN_BOTTOM) H -= h;
+    else {Y += (h-cy); H -= (h-cy); /*f |= FL_ALIGN_TOP;*/}
   }
+
   if (label_ && *label_) {
     fl_font(label_font(), label_size());
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 1;
@@ -115,5 +155,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.15 2000/02/14 11:32:58 bill Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.16 2000/03/19 01:38:31 bill Exp $".
 //
