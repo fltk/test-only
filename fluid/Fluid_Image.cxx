@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.12 1999/08/26 07:58:14 bill Exp $"
+// "$Id: Fluid_Image.cxx,v 1.13 1999/08/27 17:45:23 vincent Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -227,6 +227,27 @@ bmp_image::~bmp_image() {
 }
 
 ////////////////////////////////////////////////////////////////
+
+class jpeg_image : public pixmap_image {
+public:
+  jpeg_image(const char *name);
+  ~jpeg_image();
+  static int test_file(char *buffer);
+};
+
+int jpeg_image::test_file(char *buffer) {
+  return fl_is_jpeg((uchar*)buffer, 1024);
+}
+
+jpeg_image::jpeg_image(const char *name) : pixmap_image(name) {
+  filetype = "JPEG";
+  p = new Fl_JPEG_Image((char*)name);
+}
+
+jpeg_image::~jpeg_image() {
+}
+
+////////////////////////////////////////////////////////////////
 #include <FL/Fl_Bitmap.H>
 
 class bitmap_image : public Fluid_Image {
@@ -385,6 +406,8 @@ Fluid_Image* Fluid_Image::find(const char *name) {
       ret = new png_image(name);
     } else if (bmp_image::test_file(buffer)) {
       ret = new bmp_image(name);
+    } else if (jpeg_image::test_file(buffer)) {
+      ret = new jpeg_image(name);
     } else if (gif_image::test_file(buffer)) {
       ret = new gif_image(name);
     } else if (bitmap_image::test_file(buffer)) {
@@ -443,7 +466,7 @@ Fluid_Image::~Fluid_Image() {
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
   goto_images_dir();
-  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp}",
+  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp|jpg|jpeg}",
 				     old ? old->name() : 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_images_dir();
@@ -478,5 +501,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.12 1999/08/26 07:58:14 bill Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.13 1999/08/27 17:45:23 vincent Exp $".
 //

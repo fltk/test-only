@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.7 1999/08/26 19:30:04 vincent Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.8 1999/08/27 17:45:23 vincent Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 #include "config.h"
 
-#if defined(HAVE_DLOPEN) || defined(WIN32)
+#ifdef FLDLopen
 
 #include <FL/dirent.h>
 #include <FL/Fl_Plugins.H>
@@ -136,5 +136,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.7 1999/08/26 19:30:04 vincent Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.8 1999/08/27 17:45:23 vincent Exp $"
 //

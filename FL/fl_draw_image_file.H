@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_file.H,v 1.5 1999/08/26 20:35:05 carl Exp $"
+// "$Id: fl_draw_image_file.H,v 1.6 1999/08/27 17:45:22 vincent Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -104,8 +104,12 @@ bool fl_is_bmp(unsigned char *datas=0, size_t size=0);
 int fl_measure_bmp(char *file,uchar* datas, int  &w, int &h);
 Fl_Offscreen fl_read_bmp(char *file, uchar* datas, Fl_Offscreen &mask);
 
+bool fl_is_jpeg(unsigned char *datas=0, size_t size=0);
+int fl_measure_jpeg(char *file,uchar* datas, int  &w, int &h);
+Fl_Offscreen fl_read_jpeg(char *file, uchar* datas, Fl_Offscreen &mask);
+
 #endif
 
 //
-// End of "$Id: fl_draw_image_file.H,v 1.5 1999/08/26 20:35:05 carl Exp $"
+// End of "$Id: fl_draw_image_file.H,v 1.6 1999/08/27 17:45:22 vincent Exp $"
 //

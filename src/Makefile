@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.29 1999/08/26 23:28:45 gustavo Exp $"
+# "$Id: Makefile,v 1.30 1999/08/27 17:45:25 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -148,8 +148,9 @@ CPPglFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
 
-CPPpngFILES = \
-	fl_png.cxx
+CPPimagesFILES = \
+	fl_png.cxx \
+	fl_jpeg.cxx
 
 CFILES = \
 	fl_call_main.c \
@@ -203,21 +204,21 @@ include ../makeinclude
 LIBRARY = ../lib/$(LIBNAME)
 DSONAME = $(DSOLIBNAME)$(DSOEXT)
 DSOglNAME = $(DSOLIBNAME)gl$(DSOEXT)
-DSOpngNAME = $(DSOLIBNAME)png$(DSOEXT)
+DSOimagesNAME = $(DSOLIBNAME)images$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 OBJECTSgl = $(CPPglFILES:.cxx=.o)
-OBJECTSpng = $(CPPpngFILES:.cxx=.o)
+OBJECTSimages = $(CPPimagesFILES:.cxx=.o)
 
 all:	$(LIBRARY) $(DSONAME)
 
-$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
+$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
 	@echo $(LIBCOMMAND) $@ ...
 	@/bin/rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
+	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
 	@$(RANLIB) $@
 
-libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOpngNAME)
+libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
@@ -225,9 +226,9 @@ libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSgl)
 
-libfltkpng.so.2 libfltkpng.sl.2: $(OBJECTSpng)
+libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
 	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTSpng)
+	@$(DSOCOMMAND) $@ $(OBJECTSimages)
 
 .SUFFIXES:	.cxx .h .o
 
@@ -237,11 +238,11 @@ libfltkpng.so.2 libfltkpng.sl.2: $(OBJECTSpng)
 	$(CC) -I.. $(CFLAGS) -c $<
 
 clean :
-	-@ rm -f *.o *.do $(DSONAME) $(DSOglNAME) $(DSOpngNAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@ rm -f *.o *.do $(DSONAME) $(DSOglNAME) $(DSOimagesNAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
 	@touch makedepend
 
 depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CPPglFILES) $(CPPpngFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CPPglFILES) $(CPPimagesFILES) $(CFILES) > makedepend
 include makedepend
 
 ################################################################
@@ -254,7 +255,7 @@ install: $(LIBRARY) $(DSONAME)
 	@-chmod 644 $(libdir)/$(LIBNAME)
 	@if test -n "$(DSONAME)"; then \
 		if test "$(DSONAME)" = libfltk.so.2; then ext=.so; else ext=.s1; fi; \
-		for lib in libfltk libfltkgl libfltkpng; do \
+		for lib in libfltk libfltkgl libfltkimages; do \
 			rm -f $(libdir)/$$lib$$ext.2;\
 			rm -f $(libdir)/$$lib$$ext;\
 			cp $$lib$$ext.2 $(libdir); \
@@ -275,5 +276,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.29 1999/08/26 23:28:45 gustavo Exp $".
+# End of "$Id: Makefile,v 1.30 1999/08/27 17:45:25 vincent Exp $".
 #

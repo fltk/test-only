@@ -13,32 +13,36 @@ Function {main()} {open return_type int
   code {fl_set_images_root_directory("images");} {}
   Fl_Window window {
     label {The background is a BMP file} open
-    xywh {292 517 420 370} resizable box NO_BOX visible
+    xywh {191 155 660 405} resizable box NO_BOX visible
   } {
     Fl_Box {} {
-      xywh {0 0 420 370} align 32 labelfont 1 labeltype SHADOW_LABEL image {ulon.bmp} labelcolor 3
+      xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image {ulon.bmp} labelcolor 3
     }
     Fl_Box {} {
       label {tiled GIF image loaded from disk}
-      xywh {15 160 380 180} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.gif} labelcolor 3
+      xywh {23 158 352 197} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.gif} labelcolor 3
     }
     Fl_Box {} {
       label {PNG image with datas included in code}
-      xywh {100 40 85 100} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {coucou.png} labelcolor 3
+      xywh {85 33 170 102} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {coucou.png} labelcolor 3
     }
     Fl_Box {} {
-      label {XPM image loaded from disk} selected
-      xywh {260 15 85 100} labelfont 1 labeltype SHADOW_LABEL image {../porsche.xpm} labelcolor 3
+      label {XPM image loaded from disk}
+      xywh {408 16 134 109} labelfont 1 labeltype SHADOW_LABEL image {../porsche.xpm} labelcolor 3
     }
     Fl_Value_Slider slider {
       label {Size of the image cache in kilo pixels (0 for unlimited)}
-      callback {fl_set_image_file_mem_usage_limit((int)o->value()*1024);}
-      xywh {40 185 330 20} type {Horz Knob} labelfont 1 labeltype SHADOW_LABEL labelcolor 3 maximum 100 step 1
+      callback {fl_set_image_file_mem_usage_limit((int)o->value()*1024);} selected
+      xywh {40 368 288 22} type {Horz Knob} labelfont 1 labeltype SHADOW_LABEL labelcolor 3 maximum 100 step 1
+    }
+    Fl_Box {} {
+      label {JPEG image stored in the executable}
+      xywh {395 195 230 150} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {testimg.jpg} labelcolor 3
     }
   }
   Fl_Window browser_window {
     label {Image in the cache} open
-    xywh {720 577 255 100} visible
+    xywh {724 601 255 100} visible
   } {
     Fl_Browser browser {
       xywh {0 0 255 65}
