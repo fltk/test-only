@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.20 2000/05/22 20:17:26 carl Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.21 2000/05/23 02:23:38 carl Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,7 @@ void Fl_Color_Chooser::rgb2hsv(
 enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
 
 int Flcc_Value_Input::format(char* buf) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent()->parent();
   if (c->mode() == M_HEX) return sprintf(buf,"0x%02X", int(value()));
   else return Fl_Valuator::format(buf);
 }
@@ -288,7 +288,7 @@ void Flcc_ValueBox::draw() {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Color_Chooser::rgb_cb(Fl_Widget* o, void*) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
+  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent()->parent());
   double r = c->rvalue.value();
   double g = c->gvalue.value();
   double b = c->bvalue.value();
@@ -305,7 +305,7 @@ void Fl_Color_Chooser::rgb_cb(Fl_Widget* o, void*) {
 }
 
 void Fl_Color_Chooser::mode_cb(Fl_Widget* o, void*) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
+  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent()->parent());
   // force them to redraw even if value is the same:
   c->rvalue.value(-1);
   c->gvalue.value(-1);
@@ -506,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.20 2000/05/22 20:17:26 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.21 2000/05/23 02:23:38 carl Exp $".
 //
