@@ -1,5 +1,5 @@
 /*
- * "$Id: config.cygnus,v 1.5 1999/03/31 14:52:34 mike Exp $"
+ * "$Id: config.cygnus,v 1.6 1999/04/05 15:28:59 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -133,6 +133,17 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 0
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+extern int snprintf(char* str, size_t size, const char* fmt, ...);
+extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 /*
  * HAVE_SYS_SELECT_H:
  *
@@ -150,5 +161,5 @@
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: config.cygnus,v 1.5 1999/03/31 14:52:34 mike Exp $".
+ * End of "$Id: config.cygnus,v 1.6 1999/04/05 15:28:59 carl Exp $".
  */
