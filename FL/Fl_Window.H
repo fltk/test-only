@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.23 1999/10/03 06:31:32 bill Exp $"
+// "$Id: Fl_Window.H,v 1.24 1999/10/12 22:22:51 vincent Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,6 +88,7 @@ public:
   virtual void layout();
   virtual void flush();
   virtual void draw();
+  virtual void draw_n_clip();
 
 protected:
 
@@ -118,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.23 1999/10/03 06:31:32 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.24 1999/10/12 22:22:51 vincent Exp $".
 //

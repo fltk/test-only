@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.15 1999/10/07 07:04:56 bill Exp $"
+// "$Id: Fl_Button.cxx,v 1.16 1999/10/12 22:22:53 vincent Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,14 @@ void Fl_Button::draw() {
   draw_label(lc);
 }
 
+// Call the draw method, handle the clip out
+void Fl_Button::draw_n_clip()
+{
+  if (type() != FL_HIDDEN_BUTTON && 
+      (box() != FL_NO_BOX || label() || image()))
+    Fl_Widget::draw_n_clip();
+}
+
 int Fl_Button::handle(int event) {
   static int oldval;
   int newval;
@@ -114,5 +122,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.15 1999/10/07 07:04:56 bill Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.16 1999/10/12 22:22:53 vincent Exp $".
 //

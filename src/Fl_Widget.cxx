@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.21 1999/10/09 15:32:16 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.22 1999/10/12 22:22:55 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -385,6 +385,21 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
   glyph()(T, X,Y,W,H, c, f);
 }
 
+// Call the draw method, handle the clip out
+#include <FL/fl_draw.H>
+void Fl_Widget::draw_n_clip()
+{
+  if (!box()->rectangular) {
+    fl_clip(x(), y(), w(), h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
+  clear_damage(FL_DAMAGE_ALL);
+  draw();
+  clear_damage();
+  fl_clip_out(x(), y(), w(), h());
+}
+
 ////////////////////////////////////////////////////////////////
 // Some widgets have imbedded text fields (such as Fl_Value_Slider).
 // This is to be discouraged because composite widgets (widgets with
@@ -416,5 +431,5 @@ Fl_Style Fl_Widget::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.21 1999/10/09 15:32:16 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.22 1999/10/12 22:22:55 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: shiny.cxx,v 1.6 1999/08/16 07:31:37 bill Exp $"
+// "$Id: shiny.cxx,v 1.7 1999/10/12 22:22:56 vincent Exp $"
 //
 // OpenGL "shiny buttons" test program for the Fast Light Tool Kit (FLTK).
 //
@@ -241,10 +241,10 @@ void shiny_down_draw(Fl_Boxtype, int x1, int y1, int w1, int h1, Fl_Color c, Fl_
 }
 
 const Fl_Boxtype_ shiny_down_box = {
-  shiny_down_draw, 0, &shiny_down_box, 3,3,6,6
+  shiny_down_draw, 0, &shiny_down_box, 3,3,6,6, true
 };
 const Fl_Boxtype_ shiny_up_box = {
-  shiny_up_draw, 0, &shiny_down_box, 3,3,6,6
+  shiny_up_draw, 0, &shiny_down_box, 3,3,6,6, true
 };
 
 // It looks interesting if you use this for the window's boxtype,
@@ -315,5 +315,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shiny.cxx,v 1.6 1999/08/16 07:31:37 bill Exp $".
+// End of "$Id: shiny.cxx,v 1.7 1999/10/12 22:22:56 vincent Exp $".
 //

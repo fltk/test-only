@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.H,v 1.8 1999/10/11 01:00:25 vincent Exp $"
+// "$Id: Fl_Box.H,v 1.9 1999/10/12 22:22:50 vincent Exp $"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,12 @@
 #include "Fl_Widget.H"
 #endif
 
+#define FL_BOX (FL_RESERVED_TYPE+3)
+
 class Fl_Box : public Fl_Widget {
 protected:
   FL_EXPORT void draw();
+  void draw_n_clip();
 public:
   FL_EXPORT Fl_Box(int x, int y, int w, int h, const char *l=0);
   Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *l)
@@ -42,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Box.H,v 1.8 1999/10/11 01:00:25 vincent Exp $".
+// End of "$Id: Fl_Box.H,v 1.9 1999/10/12 22:22:50 vincent Exp $".
 //

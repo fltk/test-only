@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.9 1999/09/27 17:43:34 vincent Exp $"
+// "$Id: Fl_Box.cxx,v 1.10 1999/10/12 22:22:53 vincent Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,13 @@ void Fl_Box::draw() {
   draw_label();
 }
 
+// Call the draw method, handle the clip out
+void Fl_Box::draw_n_clip()
+{
+  if (box() != FL_NO_BOX || label() || image())
+    Fl_Widget::draw_n_clip();
+}
+
 // this is private as there is no need for themes to alter this:
 static Fl_Style box_style = {
   FL_NO_BOX // box
@@ -42,9 +49,10 @@ Fl_Style_Definer fl_box_style_definer("box", box_style);
 Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
   : Fl_Widget(x,y,w,h,l)
 {
+  type(FL_BOX);
   style(box_style);
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.9 1999/09/27 17:43:34 vincent Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.10 1999/10/12 22:22:53 vincent Exp $".
 //

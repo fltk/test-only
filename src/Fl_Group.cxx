@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.31 1999/10/12 03:01:53 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.32 1999/10/12 22:22:54 vincent Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -458,6 +458,8 @@ void Fl_Group::layout() {
 }
 
 #include <FL/Fl_Tabs.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Button.H>
 
 // Draw the surrounding box of a group : if no box, draw parent's box
 void Fl_Group::draw_group_box() const {
@@ -470,24 +472,11 @@ void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
-    bool clipped = false;
+    fl_clip(Fl::x(), Fl::y(), Fl::w(), Fl::h());
     while (e > a) {
       Fl_Widget& w = **--e;
-      if (w.visible() && w.type() < FL_WINDOW /*&& w.box()->rectangular*/ &&
- 	  fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-	if (!clipped) {
-	  fl_clip(Fl::x(), Fl::y(), Fl::w(), Fl::h()); clipped = true;}
-	if (!w.box()->rectangular && w.type() < FL_GROUP) {
-	  fl_clip(w.x(), w.y(), w.w(), w.h());
-	  draw_group_box();
-	  fl_pop_clip();
-	}
-	w.clear_damage(FL_DAMAGE_ALL);
-	w.draw();
-	w.clear_damage();
-	if (w.type() != FL_TABS)
-	  fl_clip_out(w.x(), w.y(), w.w(), w.h());
-      }
+      if (w.visible() && fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
+	w.draw_n_clip();
     }
     if (parent() && parent()->type() == FL_TABS) {
       Fl_Tabs* t = (Fl_Tabs*)parent();
@@ -500,7 +489,7 @@ void Fl_Group::draw() {
     draw_group_box();
     fl_pop_clip();
     draw_label();
-    if (clipped) fl_pop_clip();
+    fl_pop_clip();
     e = a+children_;
     while (a < e) {
       Fl_Widget& w = **a++;
@@ -524,6 +513,15 @@ void Fl_Group::update_child(Fl_Widget& w) const {
     w.draw();	
     w.clear_damage();
   }
+}
+
+// Call the draw method, handle the clip out (nothing for groups)
+void Fl_Group::draw_n_clip()
+{
+  clear_damage(FL_DAMAGE_ALL);
+  draw();
+  clear_damage();
+  fl_clip_out(x(), y(), w(), h());
 }
 
 // Force a child to redraw:
@@ -571,5 +569,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.31 1999/10/12 03:01:53 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.32 1999/10/12 22:22:54 vincent Exp $".
 //
