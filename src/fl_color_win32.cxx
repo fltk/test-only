@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.37 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.38 2004/07/05 13:23:36 laza2000 Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,9 @@ static COLORREF	brush_for;
 static COLORREF	pen_for;
 static HBRUSH	current_brush;
 static HPEN	current_pen;
+
+#undef USE_STOCK_BRUSH
+#define USE_STOCK_BRUSH 1
 
 COLORREF fltk::xpixel(Color i) {
   int index = i;
@@ -84,16 +87,56 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 #if USE_STOCK_BRUSH
+
+/* Define these if not already done.*/
+#ifndef DC_BRUSH
+# define DC_BRUSH 18
+#endif
+#ifndef DC_PEN
+# define DC_PEN 19
+#endif
+
 static HPEN stockpen = (HPEN)GetStockObject(DC_PEN);
 static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
-#endif
+
+typedef COLORREF (*f_SetDCPenColor)(HDC hdc, COLORREF crColor);
+typedef COLORREF (*f_SetDCBrushColor)(HDC hdc, COLORREF crColor);
+
+static f_SetDCPenColor	 __SetDCPenColor = NULL;
+static f_SetDCBrushColor __SetDCBrushColor = NULL;
+static int dc_funcs_init = 0;
+
+static void load_dc_funcs()
+{
+	HINSTANCE hmod;
+
+	dc_funcs_init = 1;
+
+	hmod = LoadLibrary("Gdi32.dll");
+
+	if(hmod) {
+		__SetDCPenColor = (f_SetDCPenColor)GetProcAddress(hmod, "SetDCPenColor");
+		__SetDCBrushColor = (f_SetDCBrushColor)GetProcAddress(hmod, "SetDCBrushColor");
+
+		printf("__SetDCPenColor = %p\n", __SetDCPenColor);
+		printf("__SetDCBrushColor = %p\n", __SetDCBrushColor);
+
+		FreeLibrary(hmod);
+	}
+}
+
+#endif /* USE_STOCK_BRUSH */
 
 HPEN fltk::setpen() {
 #if USE_STOCK_BRUSH
   if (!lstyle && line_width <= 1) {
-    SelectObject(dc, stockpen);
-    SetDCPenColor(dc, current_xpixel);
-    return stockpen;
+		if(!dc_funcs_init) load_dc_funcs();
+		if(__SetDCPenColor) {
+			SelectObject(dc, stockpen);
+			(*__SetDCPenColor)(dc, current_xpixel);
+			current_pen = stockpen;
+			return stockpen;
+		}
   }
 #endif
   if (!current_pen) goto J1;
@@ -115,9 +158,15 @@ HPEN fltk::setpen() {
 
 HBRUSH fltk::setbrush() {
 #if USE_STOCK_BRUSH
-  SelectObject(dc, stockbrush);
-  SetDCBrushColor(dc, current_xpixel);
-#else
+	if(!dc_funcs_init) load_dc_funcs();
+	if(__SetDCBrushColor) {
+		SelectObject(dc, stockbrush);
+		(*__SetDCBrushColor)(dc, current_xpixel);
+		current_brush = stockbrush;
+		return current_brush;
+	}
+#endif
+	
   if (!current_brush) goto J1;
   if (brush_for != current_xpixel) {
     DeleteObject(current_brush);
@@ -126,13 +175,15 @@ HBRUSH fltk::setbrush() {
     brush_for = current_xpixel;
   }
   SelectObject(dc, current_brush);
-#endif
+
   return current_brush;
 }
 
 void fltk::setcolor(Color i) {
-  current_color_ = i;
-  current_xpixel = xpixel(i);
+	if(current_color_ != i) {
+		current_color_ = i;
+		current_xpixel = xpixel(i);
+	}
 }
 
 // Used by setcolor_index
@@ -188,5 +239,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.37 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.38 2004/07/05 13:23:36 laza2000 Exp $".
 //
