@@ -23,15 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/run.H>
-#include <fltk/Window.H>
-#include <fltk/Button.H>
-#include <fltk/xpmImage.H>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+#include <fltk/xpmImage.h>
 #include <stdio.h>
 
 #include "porsche.xpm"
 
-#include <fltk/ToggleButton.H>
+#include <fltk/ToggleButton.h>
 
 using namespace fltk;
 

@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/run.H>
-#include <fltk/Window.H>
-#include <fltk/Button.H>
-#include <fltk/xbmImage.H>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+#include <fltk/xbmImage.h>
 #include <stdio.h>
 
 #define sorceress_width 75
@@ -96,7 +96,7 @@ static uchar sorceress_bits[] = {
    0xff, 0xff, 0x40, 0xf0, 0xff, 0xff, 0xff, 0x07, 0xff, 0xff, 0xff, 0xff,
    0x41, 0xf0, 0xff, 0xff, 0xff, 0x07};
 
-#include <fltk/ToggleButton.H>
+#include <fltk/ToggleButton.h>
 
 using namespace fltk;
 
