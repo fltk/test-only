@@ -15,21 +15,22 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
       > test/demo
       
     Not all demo applications will be compiled. A few test will fail and abort.
-    
-    FLTK2 will work with Carbon and Quartz. I expect a useful version to be
-    finished by the middle of March 2005. Testing and bug fixing should 
-    be finished by the end of April.
-  
-    incomplete todo list:
-     o  image support
-     o  Window and Subwindow switching
-     o  clipping
-     o  TextEditor with floating point positioning
-     o  pie code does not draw pies (see 'valuator' test)
-     o  arc code draws additional lines (see 'boxtype')
-     o  UTF8 support
-     o  closing a single mennu widow closes all menu windows
-     o  menubar window size is calculated wrong
+   
+    Only a subset of FLTK2 is currently supported on Apple's OS X using 
+    Carbon and Quartz as the core libraries. We will improve the Mac support
+    as need, but we would also like to ask our users to contribute bug 
+    reports, bug fixes, and code improvements. 
+ 
+     - All standard widget types including GlWindow are supported. 
+     - Bitmap support is fully implemented, pixmap support is somewhat of a hack 
+       though and does not include grayed out images. 
+     - Image creation and drawing is very buggy an likely to crash.
+     - Menu bars render funny and unexpectedly close sub menus.
+     - Pie and Arc code draws additional lines.
+     - Text editor does not support fractional character lengths.
+     - UTF 8 is not supported.
+     - fltk::Window as a subwindow is not supported.
+ 
 
-    - Matthias Melcher
+    Matthias Melcher
     

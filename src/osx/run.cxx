@@ -1409,7 +1409,7 @@ void Window::label(const char *name, const char * iname) {
 
 const Window *Window::current_;
 static CGContextRef prev_gc = 0;
-static Window prev_window = 0;
+static WindowPtr prev_window = 0;
 
 // this call relates to fltk1 fl_begin_offscreen
 void fltk::draw_into(CGContextRef gc) {

@@ -246,7 +246,6 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   }
   d.data = data;
 
-#ifndef __APPLE__
   // build the mask bitmap used by xpmImage:
   if (mask_bitmap && transparent_index >= 0) {
     // search for usage of the transparent index, if none we act like
@@ -298,9 +297,117 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
     }
   }
  NO_MASK:
-
   drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, RGB, Rectangle(x, y, d.w, d.h), 4);
+  if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
+  return 1;
+}
+
+#ifdef __APPLE__
+// This code ist temporary until we can clean out issiues in 'run.cxx'
+// Quartz offscreen bitmaps are always 4 bytes per pixel, so it makes no sense to
+// separate RGB from a mask. The code below is mostly a copy of the previous
+// function, but streamlined into createing a Quartz CGContext.
+void *create_quartz_bitmap_from_xpm(char const* const* di) {
+  xpm_data d;
+  if (!measure_xpm(di, d.w, d.h)) return 0;
+  const uchar*const* data = (const uchar*const*)(di+1);
+  int transparent_index = -1;
+
+  if (ncolors < 0) {    // fltk (non standard) compressed colormap
+    ncolors = -ncolors;
+    const uchar *p = *data++;
+    // if first color is ' ' it is transparent (put it later to make
+    // it not be transparent):
+    if (*p == ' ') {
+      uchar* c = (uchar*)&d.colors[32];
+#ifdef U64
+      *(U64*)c = 0;
+#if WORDS_BIGENDIAN
+      c += 4;
+#endif
+#endif
+      transparent_index = ' ';
+      c[0] = c[1] = c[2] = c[3] = 0;
+      p += 4;
+      ncolors--;
+    }
+    // read all the rest of the colors:
+    for (int i=0; i < ncolors; i++) {
+      uchar* c = (uchar*)&d.colors[*p++];
+#ifdef U64
+      *(U64*)c = 0;
+#if WORDS_BIGENDIAN
+      c += 4;
+#endif
+#endif
+      *c++ = *p++;
+      *c++ = *p++;
+      *c++ = *p++;
+      *c = 0xff;
+    }
+  } else {      // normal XPM colormap with names
+    uchar f[3];
+    uchar b[3];
+    if (fg_kludge) {
+      split_color(fg_kludge, f[0], f[1], f[2]);
+      b[0] = b[1] = b[2] = b[3] = 0;
+    }
+    if (chars_per_pixel>1) memset(d.byte1, 0, sizeof(d.byte1));
+    for (int i=0; i<ncolors; i++) {
+      const uchar* p = *data++;
+      // the first 1 or 2 characters are the color index:
+      int index = *p++;
+      uchar* c;
+      if (chars_per_pixel>1) {
+#ifdef U64
+        U64* colors = d.byte1[index];
+        if (!colors) colors = d.byte1[index] = new U64[256];
 #else
+        U32* colors = d.byte1[index];
+        if (!colors) colors = d.byte1[index] = new U32[256];
+#endif
+        c = (uchar*)&colors[*p];
+        index = (index<<8)+*p++;
+      } else {
+        c = (uchar *)&d.colors[index];
+      }
+      // look for "c word", or last word if none:
+      const uchar *previous_word = p;
+      for (;;) {
+        while (*p && isspace(*p)) p++; uchar what = *p++;
+        while (*p && !isspace(*p)) p++;
+        while (*p && isspace(*p)) p++;
+        if (!*p) {p = previous_word; break;}
+        if (what == 'c') break;
+        previous_word = p;
+        while (*p && !isspace(*p)) p++;
+      }
+#ifdef U64
+      *(U64*)c = 0;
+#if WORDS_BIGENDIAN
+      c += 4;
+#endif
+#endif
+      Color C = color((const char*)p);
+      if (C) {
+        c[0] = uchar(C>>24);
+        c[1] = uchar(C>>16);
+        c[2] = uchar(C>>8);
+        if (fg_kludge) {
+          c[0] = (c[0]*b[0]+(255-c[0])*f[0])/255;
+          c[1] = (c[1]*b[1]+(255-c[1])*f[1])/255;
+          c[2] = (c[2]*b[2]+(255-c[2])*f[2])/255;
+        }
+        c[3] = 0xff;
+      } else { // assume "None" or "#transparent" for any errors
+        // this should be transparent...
+        transparent_index = index;
+        c[0] = c[1] = c[2] = c[3] = 0;
+      }
+    }
+  }
+  d.data = data;
+
   bool transparent = (transparent_index>=0);
   transparent = true;
   U32 *array = new U32[d.w * d.h], *q = array;
@@ -324,18 +431,11 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
         src, 0L, false, kCGRenderingIntentDefault);
   CGColorSpaceRelease(lut);
   CGDataProviderRelease(src);
-  CGRect rect = { x, y, d.w, d.h };
-  //Fl_X::q_begin_image(rect, x, y, d.w, d.h);
-  CGContextDrawImage(quartz_gc, rect, img);
-  //Fl_X::q_end_image();
-  CGContextFlush(quartz_gc);
-  CGImageRelease(img);
-  delete array;
-#endif
+  //delete array;
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
-  return 1;
+  return (void*)img;
 }
-
+#endif
 //
 // End of "$Id$".
 //
