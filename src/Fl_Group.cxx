@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.70 2000/05/17 07:08:08 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.71 2000/05/18 03:05:26 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -184,7 +184,7 @@ int Fl_Group::send(int event, Fl_Widget& to) {
 
   case FL_ENTER:
   case FL_MOVE:
-    if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
+//    if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
     // figure out correct type of event:
     event = (to.contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
     // These two do not require active so that tooltips work on inactive widgets.
@@ -202,16 +202,20 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   // We must adjust the xy of events sent to child windows so they
   // are relative to that window.  All other widgets use absolute
   // coordinates.
+  int ret;
   if (to.is_window()) {
     int save_x = Fl::e_x; Fl::e_x -= to.x();
     int save_y = Fl::e_y; Fl::e_y -= to.y();
-    int ret = to.handle(event);
+    ret = to.handle(event);
     Fl::e_y = save_y;
     Fl::e_x = save_x;
-    if (!ret) return 0;
   } else {
-    if (!to.handle(event)) return 0;
+    ret = to.handle(event);
   }
+  // must return 1 for FL_MOVE so belowmouse doesn't change because a widget
+  // doesn't handle it
+  if (event == FL_MOVE && to.contains(Fl::belowmouse())) return 1;
+  if (!ret) return 0;
 
   // Successful completion of some events must set some global values:
   switch (event) {
@@ -575,5 +579,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.70 2000/05/17 07:08:08 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.71 2000/05/18 03:05:26 carl Exp $".
 //
