@@ -60,4 +60,9 @@ struct Fl_XPM_Image : Fl_Image_File {
     Fl_Image_File(f, fl_measure_xpm, fl_read_xpm, datas) { }
 };
 
+struct Fl_BMP_Image : Fl_Image_File {
+  Fl_BMP_Image(char* f, unsigned char *datas=NULL) : 
+    Fl_Image_File(f, fl_measure_bmp, fl_read_bmp, datas) { }
+};
+
 #endif

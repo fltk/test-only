@@ -153,11 +153,11 @@ fl_image_file_struct* fl_get_image_file_struct(char* filename,
   return ifs;
 }
 
-void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H, 
-			int cx, int cy)
+// Ensure that the image and mask are decoded
+// Take care of the image cache state
+void fl_prepare_image_file(fl_image_file_struct *ifs)
 {
-  if(ifs->w==0) return;
-  if(!ifs->id) // Need to uncompress the image
+  if(!ifs->id && !ifs->mask) // Need to uncompress the image
   {
     ifs->id = ifs->read(convert(ifs->filename), ifs->datas, ifs->mask);
     if(!ifs->id) return; 
@@ -167,6 +167,13 @@ void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H,
   }
   else
     ifs->used=used++;
+}
+
+void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H, 
+			int cx, int cy)
+{
+  if(ifs->w==0) return;
+  fl_prepare_image_file(ifs);
 #ifdef WIN32
   if (ifs->mask) {
     HDC new_gc = CreateCompatibleDC(fl_gc);

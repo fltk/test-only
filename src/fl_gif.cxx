@@ -54,7 +54,7 @@ typedef unsigned char uchar;
 
 bool fl_is_gif(unsigned char *datas=0, size_t size=0)
 {
-  return !strncmp((char*) datas,"GIF",size);
+  return !strncmp((char*) datas,"GIF", size<3? size:3);
 }
 
 int fl_measure_gif(

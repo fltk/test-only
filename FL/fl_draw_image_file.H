@@ -50,6 +50,7 @@ struct fl_image_file_struct {
 fl_image_file_struct* fl_get_image_file_struct(char* filename,  
         Fl_Image_File_Measure_F *measure,  Fl_Image_File_Read_F *read,
 	unsigned char *datas=0);
+void fl_prepare_image_file(fl_image_file_struct *ifs);
 void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H, 
 			int cx, int cy);
 void fl_set_images_root_directory(char *d);
@@ -78,6 +79,10 @@ Fl_Offscreen fl_read_xpm(char *filename, uchar *pdatas, Fl_Offscreen &mask);
 bool fl_is_gif(unsigned char *datas=0, size_t size=0);
 int fl_measure_gif(char *file,uchar* datas, int  &w, int &h);
 Fl_Offscreen fl_read_gif(char *file, uchar* datas, Fl_Offscreen &mask);
+
+bool fl_is_bmp(unsigned char *datas=0, size_t size=0);
+int fl_measure_bmp(char *file,uchar* datas, int  &w, int &h);
+Fl_Offscreen fl_read_bmp(char *file, uchar* datas, Fl_Offscreen &mask);
 
 #endif
 

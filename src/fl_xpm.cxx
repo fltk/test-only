@@ -32,7 +32,6 @@
 #include <string.h>
 
 extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
-extern Fl_Color fl_transparent_color; // hack for WIN32
 
 
 #define MAXSIZE 1024

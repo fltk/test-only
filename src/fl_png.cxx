@@ -230,6 +230,7 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   fl_begin_offscreen(id);
   fl_draw_image(buffer, 0, 0, width, height, d);
   fl_end_offscreen();
+  mask = 0;
 
   free(buffer);
 
