@@ -368,6 +368,10 @@ SOURCE=..\..\src\Input.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\InputBrowser.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\InvisibleWidget.cxx
 # End Source File
 # Begin Source File
@@ -477,6 +481,10 @@ SOURCE=..\..\src\ProgressBar.cxx
 # Begin Source File
 
 SOURCE=..\..\src\RadioButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\readimage.cxx
 # End Source File
 # Begin Source File
 

@@ -529,8 +529,9 @@ SOURCE=..\..\src\colormap.h
 SOURCE=..\..\src\ComboBox.cxx
 DEP_CPP_COMBO=\
 	"..\..\fltk\box.h"\
-	"..\..\fltk\browser.h"\
+	"..\..\fltk\choice.h"\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\ComboBox.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
@@ -538,18 +539,12 @@ DEP_CPP_COMBO=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\input.h"\
-	"..\..\fltk\inputbrowser.h"\
 	"..\..\fltk\menu.h"\
-	"..\..\fltk\menuwindow.h"\
-	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\scrollbar.h"\
-	"..\..\fltk\slider.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
-	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
-	"..\..\fltk\window.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1343,6 +1338,34 @@ DEP_CPP_INPUT=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\InputBrowser.cxx
+DEP_CPP_INPUTB=\
+	"..\..\fltk\box.h"\
+	"..\..\fltk\browser.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\damage.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\events.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\group.h"\
+	"..\..\fltk\input.h"\
+	"..\..\fltk\inputbrowser.h"\
+	"..\..\fltk\menu.h"\
+	"..\..\fltk\menuwindow.h"\
+	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\scrollbar.h"\
+	"..\..\fltk\slider.h"\
+	"..\..\fltk\style.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\valuator.h"\
+	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\InvisibleWidget.cxx
 DEP_CPP_INVIS=\
 	"..\..\fltk\color.h"\
@@ -1439,6 +1462,9 @@ DEP_CPP_LIST_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\list_fonts.cxx"\
 	"..\..\src\win32\list_fonts.cxx"\
+	"..\..\src\x11\IFont.h"\
+	"..\..\src\x11\list_fonts.cxx"\
+	"..\..\src\x11\list_fonts_xlfd.cxx"\
 	".\config.h"\
 	".\fltk\string.h"\
 	{$(INCLUDE)}"X11\extensions\XI.h"\
@@ -1450,9 +1476,6 @@ DEP_CPP_LIST_=\
 	{$(INCLUDE)}"X11\Xmd.h"\
 	{$(INCLUDE)}"X11\Xosdefs.h"\
 	{$(INCLUDE)}"X11\Xutil.h"\
-	
-NODEP_CPP_LIST_=\
-	"..\..\src\x11\list_fonts.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -1871,6 +1894,34 @@ DEP_CPP_RADIO=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\readimage.cxx
+DEP_CPP_READI=\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
+	"..\..\src\osx\readimage.cxx"\
+	"..\..\src\win32\readimage.cxx"\
+	"..\..\src\x11\readimage.cxx"\
+	".\config.h"\
+	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\extensions\XI.h"\
+	{$(INCLUDE)}"X11\extensions\XInput.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\RepeatButton.cxx
 DEP_CPP_REPEA=\
 	"..\..\fltk\button.h"\
@@ -1996,9 +2047,9 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\run.cxx"\
-	"..\..\src\pktdef.h"\
+	"..\..\src\win32\pktdef.h"\
 	"..\..\src\win32\run.cxx"\
-	"..\..\src\wintab.h"\
+	"..\..\src\win32\wintab.h"\
 	"..\..\src\x11\run.cxx"\
 	"..\..\src\xutf8.cxx"\
 	".\config.h"\
