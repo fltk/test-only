@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.126 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.127 2003/09/27 23:57:12 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -293,41 +293,45 @@ int Group::handle(int event) {
 ////////////////////////////////////////////////////////////////
 // Layout
 
-// So that resizing a window and then returing it to it's original
-// size results in the original layout, the initial size and position
-// of all children are stored in the sizes() array.
-//
-// Though this makes sense it often results in unexpected behavior
-// when a program wants to rearrange the child widgets or change the
-// size of a group to surround a new arrangement of child widgets.
-//
-// The solution fltk provides is the init_sizes() method, which resets
-// thins so that the current state is considered the
-// "initial" state the next time layout() is called. Because resize()
-// does not directly call layout() you can use resize() on the group
-// and all children to get exactly the layout you want, and then call
-// init_sizes() to indicate that nothing should move when layout is
-// called.
-//
-// The sizes() array stores the initial positions of widgets as
-// left,right,top,bottom quads.  The first quad is the group, the
-// second is the resizable (clipped to the group), and the
-// rest are the children.  This is a convienent order for the
-// algorithim.  If you change this be sure to fix TiledGroup which
-// also uses this array!
-//
-// Calling init_sizes() "resets" the sizes array to the current group
-// and children positions.  Actually it just deletes the sizes array,
-// and it is not recreated until the next time layout is called. This
-// allows arbitrary layout changes to be made by the program until the
-// moment that the group is displayed to the user. This appears to be
-// the desired behavior.
+/** Indicate that all the remembered child sizes should be reinitialized.
 
+    The group remembers the initial size of itself and all it's children,
+    so that the layout can be restored even if the group is resized so
+    that some children go to zero or negative sizes. Normally these
+    sizes are calculated the first time layout() is called, though you
+    can do so by calling sizes() directly.
+
+    Though this makes sense it often results in unexpected behavior
+    when a program wants to rearrange the child widgets or change the
+    size of a group to surround a new arrangement of child widgets. The
+    widgets tend to snap back to a previous size.
+
+    Calling init_sizes() "resets" the sizes array to the current group
+    and children positions.  Actually it just deletes the sizes array,
+    and it is not recreated until the next time layout is called. Call
+    this if you manually adjust the sizes of the children, or attempt
+    to change the size of the group without wanting the children to scale.
+
+    This is automatically done when any child is added or removed.
+*/
 void Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
   relayout();
 }
 
+/** Returns array of initial sizes of the widget and it's children.
+
+    The sizes() array stores the initial positions of widgets as
+    left,right,top,bottom quads.  The first quad is the group, the
+    second is the resizable (clipped to the group), and the
+    rest are the children.  This is a convienent order for the
+    algorithim.
+
+    This array is not calculated until the first time sizes() is
+    called. It then returns the same array from then on. Calling
+    init_sizes() deletes the array so the next call of this creates
+    a new one.
+*/
 int* Group::sizes() {
   if (!sizes_) {
     int* p = sizes_ = new int[4*(children_+2)];
@@ -551,5 +555,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.126 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.127 2003/09/27 23:57:12 spitzak Exp $".
 //

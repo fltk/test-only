@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.167 2003/09/17 05:57:37 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.168 2003/09/27 23:57:12 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -268,17 +268,16 @@ int fltk::wait(float time_to_wait) {
   // functions:
   run_checks();
 
+  flush();
+
   if (first_timeout) {
+    elapse_timeouts();
     Timeout* t = first_timeout;
     if (t->time < time_to_wait) time_to_wait = t->time;
   }
 
   // run the system-specific part that waits for sockets & events:
-  if (time_to_wait <= 0 || idle && !in_idle) {
-    time_to_wait = 0;
-  } else {
-    flush();
-  }
+  if (time_to_wait <= 0 || idle && !in_idle) time_to_wait = 0;
   int ret = fl_wait(time_to_wait);
 
   if (first_timeout) {
@@ -305,7 +304,6 @@ int fltk::wait(float time_to_wait) {
 
   if (idle && !in_idle) {in_idle = true; idle(); in_idle = false;}
 
-  flush(); // is this needed?
   return ret;
 }
 
@@ -717,5 +715,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.167 2003/09/17 05:57:37 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.168 2003/09/27 23:57:12 spitzak Exp $".
 //
