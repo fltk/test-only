@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.19 2000/05/30 07:42:06 bill Exp $"
+// "$Id: file.cxx,v 1.20 2000/07/21 01:24:35 clip Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -317,7 +317,7 @@ extern int header_file_set;
 extern int code_file_set;
 extern const char* header_file_name;
 extern const char* code_file_name;
-extern char* theme;
+extern char* scheme;
 
 int write_file(const char *filename, int selected_only) {
   if (!open_write(filename)) return 0;
@@ -332,7 +332,7 @@ int write_file(const char *filename, int selected_only) {
     for (unsigned int i=0; i<sizeof(inttable)/sizeof(*inttable); i++)
       write_string("\n%s %d",inttable[i].name, *inttable[i].value);
   }
-  if (theme && *theme) { write_string("\ntheme "); write_word(theme); }
+  if (scheme && *scheme) { write_string("\nscheme "); write_word(scheme); }
   for (Fl_Type *p = Fl_Type::first; p;) {
     if (!selected_only || p->selected) {
       p->write();
@@ -416,9 +416,9 @@ static void read_children(Fl_Type *p, int paste) {
       goto CONTINUE;
     }
 
-    if (!strcmp(c, "scheme") || !strcmp(c, "theme")) {
-      if (theme) free(theme);
-      theme = strdup(read_word());
+    if (!strcmp(c, "scheme") || !strcmp(c, "scheme")) {
+      if (scheme) free(scheme);
+      scheme = strdup(read_word());
       goto CONTINUE;
     }
 
@@ -470,9 +470,9 @@ int read_file(const char *filename, int merge) {
   if (merge) deselect(); 
   else {
     delete_all();
-    if (theme) {
-      free(theme);
-      theme = 0;
+    if (scheme) {
+      free(scheme);
+      scheme = 0;
     }
   }
   read_children(Fl_Type::current, merge);
@@ -480,7 +480,7 @@ int read_file(const char *filename, int merge) {
   for (Fl_Type *o = Fl_Type::first; o; o = o->next)
     if (o->selected) {Fl_Type::current = o; break;}
   Fl_Style::start("style1");
-  Fl::theme(theme);
+  if (scheme) Fl::scheme(scheme);
   Fl_Style::start("fluid_style");
   return close_read();
 }
@@ -656,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.19 2000/05/30 07:42:06 bill Exp $".
+// End of "$Id: file.cxx,v 1.20 2000/07/21 01:24:35 clip Exp $".
 //

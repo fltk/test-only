@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.40 2000/06/12 15:07:38 vincent Exp $"
+// "$Id: fluid.cxx,v 1.41 2000/07/21 01:24:35 clip Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -332,18 +332,18 @@ void tt_cb(Fl_Widget *w, void *) {
 
 #include <string.h>
 #include <FL/fl_ask.H>
-char* theme;
-void theme_cb(Fl_Widget *, void *) {
-  const char* t = fl_input("Enter the name of a theme:", theme);
-  if (!t) return;
+char* scheme;
+void scheme_cb(Fl_Widget *, void *) {
+  const char* s = fl_input("Enter the name of a scheme:", scheme);
+  if (!s) return;
   // I copy this first so it is not in the same memory as old value so
   // that fltk's comparison works:
-  char* newtheme = *t ? strdup(t) : 0;
+  char* newscheme = *s ? strdup(s) : 0;
   Fl_Style::start("style1");
-  Fl::theme(newtheme);
+  Fl::scheme(newscheme);
   Fl_Style::start("fluid_style");
-  if (theme) free(theme);
-  theme = newtheme;
+  if (scheme) free(scheme);
+  scheme = newscheme;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -378,7 +378,7 @@ Fl_Menu_Item Main_Menu[] = {
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
   {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_ALT+'p',show_alignment_cb},
-  {"Theme", FL_ALT+'t', theme_cb},
+  {"Scheme", 0, scheme_cb},
   {"Set images root directory", FL_ALT+'d', set_images_dir_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
@@ -501,5 +501,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.40 2000/06/12 15:07:38 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.41 2000/07/21 01:24:35 clip Exp $".
 //
