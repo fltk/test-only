@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.11 1999/11/28 09:19:32 bill Exp $"
+// "$Id: classic.cxx,v 1.12 1999/11/28 18:44:47 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -41,8 +41,8 @@ extern "C" int fltk_theme(int, char**);
 int fltk_theme(int, char**) {
   Fl_Style::revert(); // revert to FLTK default styles
 
-  fl_up_box.data = "AAAAWUJJUTNN";
-  fl_down_box.data = "NNTUJJUWAAAA";
+  strcpy(fl_normal_up_box_data, "AAAAWUJJUTNN");
+  strcpy(fl_normal_down_box_data, "NNTUJJUWAAAA");
   Fl_Style* s;
   if ((s = Fl_Style::find("menu_item"))) {
     s->set_box(FL_FLAT_BOX);
@@ -78,5 +78,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.11 1999/11/28 09:19:32 bill Exp $".
+// End of "$Id: classic.cxx,v 1.12 1999/11/28 18:44:47 carl Exp $".
 //

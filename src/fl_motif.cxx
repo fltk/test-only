@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.15 1999/11/28 09:19:29 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.16 1999/11/28 18:44:45 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -44,10 +44,13 @@ static const Fl_Frame_Box
 thick_motif_down_box("motif thick down", "HHVVHHVVHHVV");
 
 static const Fl_Frame_Box
-thick_motif_up_box("motif thick up", "VVHHVVHHVVHH", &thick_motif_down_box);
+thick_motif_up_box("motif thick up", "VVHHVVHHVVHH");
+
+static const Fl_Frame_Box
+thick_motif_box("motif thick", &thick_motif_up_box, &thick_motif_down_box);
 
 static const Fl_Highlight_Box
-thick_motif_highlight_box("motif thick highlight", &thick_motif_up_box);
+thick_motif_highlight_box("motif thick highlight", &thick_motif_box);
 
 static const Fl_Highlight_Box
 thick_motif_menu_box("motif thick menu", &thick_motif_up_box);
@@ -56,16 +59,16 @@ static const Fl_Frame_Box
 thin_motif_down_box("motif down", "HHVVHHVV");
 
 static const Fl_Frame_Box
-thin_motif_up_box("motif up","VVHHVVHH",&thin_motif_down_box);
-
-static const Fl_Highlight_Box
-thin_motif_highlight_box("motif thin highlight", &thin_motif_up_box);
+thin_motif_up_box("motif up","VVHHVVHH");
 
 static const Fl_Frame_Box
-thin_motif_always_up_box("motif up","VVHHVVHH");
+thin_motif_box("motif", &thin_motif_up_box, &thin_motif_down_box);
 
 static const Fl_Highlight_Box
-thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
+thin_motif_highlight_box("motif thin highlight", &thin_motif_box);
+
+static const Fl_Highlight_Box
+thin_motif_menu_box("motif thin menu", &thin_motif_up_box);
 
 static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
                 Fl_Flags f, Fl_Boxtype box)
@@ -94,7 +97,7 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
     }
     case FL_GLYPH_CHECK:
       x += 2; y += 2; w -= 4; h -= 4; // fudge factor
-      thin_motif_up_box.draw(x, y, w, h, box == FL_NO_BOX ? bc : fc, f); // hack! for color
+      thin_motif_box.draw(x, y, w, h, box == FL_NO_BOX ? bc : fc, f); // hack! for color
       break;
     case FL_GLYPH_RIGHT:
     case FL_GLYPH_LEFT:
@@ -164,13 +167,13 @@ static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Colo
 int fl_motif() {
   Fl_Style::revert(); // revert to FLTK default styles
 
-  fl_up_box.data = thin_motif_up_box.data;
-  fl_down_box.data = thin_motif_down_box.data;
+  strcpy(fl_normal_up_box_data, thin_motif_up_box.data);
+  strcpy(fl_normal_down_box_data, thin_motif_down_box.data);
   Fl_Style::draw_boxes_inactive = 0;
 
-  Fl_Widget::default_style->set_box(&thin_motif_up_box);
+  Fl_Widget::default_style->set_box(&thin_motif_box);
   Fl_Widget::default_style->set_selection_color(FL_DARK1);
-  Fl_Widget::default_style->set_glyph_box(&thin_motif_up_box);
+  Fl_Widget::default_style->set_glyph_box(&thin_motif_box);
   Fl_Widget::default_style->set_highlight_color(0);
 
   Fl_Style* s;
@@ -266,5 +269,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.15 1999/11/28 09:19:29 bill Exp $".
+// End of "$Id: fl_motif.cxx,v 1.16 1999/11/28 18:44:45 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.53 1999/11/28 09:19:27 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.54 1999/11/28 18:44:44 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include "Fl_win32.cxx"
 #else
 
-#define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
+#define CONSOLIDATE_MOTION 1
 /**** Define this if your keyboard lacks a backspace key... ****/
 /* #define BACKSPACE_HACK 1 */
 
@@ -375,7 +375,12 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_from_system;
 
-unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
+#ifdef USE_VIEWCHANGE
+unsigned fl_mousewheel_b1 = 4, fl_mousewheel_b2 = 5;
+extern int fl_mousewheel_mode;
+extern float fl_mousewheel_sdelta;
+extern float* fl_mousewheel_delta;
+#endif
 
 int fl_handle(const XEvent& xevent)
 {
@@ -442,18 +447,24 @@ int fl_handle(const XEvent& xevent)
     return 1;
 
   case ButtonPress:
+#ifdef USE_VIEWCHANGE
+    if ((xevent.xbutton.button == fl_mousewheel_b1 ||
+         xevent.xbutton.button == fl_mousewheel_b2) &&
+         fl_mousewheel_mode)
+    {
+      int direction = (xevent.xbutton.button == fl_mousewheel_b1) ? -1 : 1;
+      Fl::e_x_delta = Fl::e_y_delta = Fl::e_z_delta = 0.0;
+      // the line below sets one of the above
+      *fl_mousewheel_delta = fl_mousewheel_sdelta*direction;
+      Fl::e_delta_mode = fl_mousewheel_mode;
+      event = FL_VIEWCHANGE;
+      break;
+    }
+#endif
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy(); checkdouble();
     Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
-    if (xevent.xbutton.button == fl_mousewheel_up) {
-      Fl::e_dy = -12;
-      event = FL_VIEWCHANGE;
-    } else if (xevent.xbutton.button == fl_mousewheel_down) {
-      Fl::e_dy = 12;
-      event = FL_VIEWCHANGE;
-    } else {
-      event = FL_PUSH;
-    }
+    event = FL_PUSH;
     break;
 
   case MotionNotify:
@@ -467,10 +478,16 @@ int fl_handle(const XEvent& xevent)
 #endif
 
   case ButtonRelease:
+#ifdef USE_VIEWCHANGE
+    if ((xevent.xbutton.button == fl_mousewheel_b1 ||
+         xevent.xbutton.button == fl_mousewheel_b2) &&
+         fl_mousewheel_mode)
+    {
+      break;
+    }
+#endif
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy();
-    if (xevent.xbutton.button == fl_mousewheel_up ||
-	xevent.xbutton.button == fl_mousewheel_down) break;
     Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
     event = FL_RELEASE;
     break;
@@ -857,5 +874,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.53 1999/11/28 09:19:27 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.54 1999/11/28 18:44:44 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.34 1999/11/28 09:19:23 bill Exp $"
+// "$Id: Fl.H,v 1.35 1999/11/28 18:44:36 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,15 +49,17 @@ public: // should be private!
   static int e_y;
   static int e_x_root;
   static int e_y_root;
-  static int e_dx;
-  static int e_dy;
-  static int e_dz;
   static int e_state;
   static int e_clicks;
   static int e_is_click;
   static int e_keysym;
   static int e_length;
-
+#ifdef USE_VIEWCHANGE
+  static int e_delta_mode;
+  static float e_x_delta;
+  static float e_y_delta;
+  static float e_z_delta;
+#endif
   static char* e_text;
   static const char* encoding;
   static Fl_Widget* belowmouse_;
@@ -120,10 +122,13 @@ public:
   static int event_y()		{return e_y;}
   static int event_x_root()	{return e_x_root;}
   static int event_y_root()	{return e_y_root;}
-  static int event_dx()		{return e_dx;}
-  static int event_dy()		{return e_dy;}
-  static int event_dz()		{return e_dz;}
   static void get_mouse(int &,int &);
+#ifdef USE_VIEWCHANGE
+  static void delta_x(int& mode, float& xdelta);
+  static void delta_y(int& mode, float& ydelta);
+  static void delta_z(int& mode, float& zdelta);
+  static void delta(int& mode, float& xdelta, float& ydelta, float& zdelta);
+#endif
   static int event_clicks()	{return e_clicks;}
   static void event_clicks(int i) {e_clicks = i;}
   static int event_is_click()	{return e_is_click;}
@@ -235,5 +240,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.34 1999/11/28 09:19:23 bill Exp $".
+// End of "$Id: Fl.H,v 1.35 1999/11/28 18:44:36 carl Exp $".
 //

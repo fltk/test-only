@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.76 1999/11/28 09:19:27 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.77 1999/11/28 18:44:43 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -420,6 +420,12 @@ extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 
 static Fl_Window* resize_from_system;
 
+#ifdef USE_VIEWCHANGE
+extern int fl_mousewheel_mode;
+extern float fl_mousewheel_sdelta;
+extern float* fl_mousewheel_delta;
+#endif
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   static char buffer[2];
@@ -436,6 +442,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   Fl_Window *window = fl_find(hWnd);
 
+ STUPID_MICROSOFT:
   if (window) switch (uMsg) {
 
   case WM_QUIT: // this should not happen?
@@ -518,8 +525,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       uMsg = fl_msg.message;
       wParam = fl_msg.wParam;
       lParam = fl_msg.lParam;
+      goto STUPID_MICROSOFT;
     }
-    // fall through to the character case:
+    // otherwise use it as a 0-character key...
   case WM_DEADCHAR:
   case WM_SYSDEADCHAR:
   case WM_CHAR:
@@ -553,12 +561,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     while (window->parent()) window = window->window();
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
     break;
-
-  case WM_MOUSEWHEEL: {
-    static int total;
-    Fl::e_dy = -(SHORT)(HIWORD(wParam))/10; // turns 120 into 12 pixels...
+#ifdef USE_VIEWCHANGE
+  case WM_MOUSEWHEEL:
+    if (!fl_mousewheel_mode) break;
+    Fl::e_x_delta = Fl::e_y_delta = Fl::e_z_delta = 0.0;
+    // the line below sets one of the above
+    *fl_mousewheel_delta = -1*(SHORT)(HIWORD(wParam))*fl_mousewheel_sdelta/120.0;
+    Fl::e_delta_mode = fl_mousewheel_mode;
     if (Fl::handle(FL_VIEWCHANGE, window)) return 0;
     break;
+#endif
 
   case WM_GETMINMAXINFO:
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
@@ -882,5 +894,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.76 1999/11/28 09:19:27 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.77 1999/11/28 18:44:43 carl Exp $".
 //

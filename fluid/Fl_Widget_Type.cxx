@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.54 1999/11/21 08:05:31 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.55 1999/11/28 18:44:39 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -346,8 +346,8 @@ int item_number(Fl_Menu_Item* m, const char* i) {
 Fl_Menu_Item boxmenu[] = {
 {"NO_BOX",		0,0, (void *)FL_NO_BOX},
 {"NORMAL_BOX",		0,0, (void *)FL_NORMAL_BOX},
-{"UP_BOX",		0,0, (void *)FL_UP_BOX},
-{"DOWN_BOX",		0,0, (void *)FL_DOWN_BOX},
+{"NORMAL_UP_BOX",	0,0, (void *)FL_NORMAL_UP_BOX},
+{"NORMAL_DOWN_BOX",	0,0, (void *)FL_NORMAL_DOWN_BOX},
 {"THIN_BOX",		0,0, (void *)FL_THIN_BOX},
 {"THIN_UP_BOX",		0,0, (void *)FL_THIN_UP_BOX},
 {"THIN_DOWN_BOX",	0,0, (void *)FL_THIN_DOWN_BOX},
@@ -2187,5 +2187,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.54 1999/11/21 08:05:31 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.55 1999/11/28 18:44:39 carl Exp $".
 //

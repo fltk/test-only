@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.48 1999/11/28 09:19:26 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.49 1999/11/28 18:44:43 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,6 @@ static int navkey() {
   case FL_Up:
     return FL_Up;
   case FL_Down:
-  case FL_Enter:
     return FL_Down;
   default:
     switch (Fl::event_text()[0]) {
@@ -109,6 +108,18 @@ int Fl_Group::handle(int event) {
 
   case FL_UNFOCUS:
     savedfocus_ = fl_oldfocus;
+    return 0;
+
+  case FL_KEYBOARD:
+    return navigation(navkey());
+
+  case FL_VIEWCHANGE:
+  case FL_SHORTCUT:
+    while (e > a) {
+      Fl_Widget* o = *--e;
+      if (o->takesevents() && send(o,event)) return 1;
+    }
+    if (Fl::event_key() == FL_Enter) return navigation(FL_Down);
     return 0;
 
   case FL_ENTER:
@@ -156,17 +167,6 @@ int Fl_Group::handle(int event) {
     return 1;
 
   default:
-    // includes FL_KEY, FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, all new events.
-    // See the handling of the same events in Fl.cxx, where it sends
-    // them first to the belowmouse() and then to each parent.  This
-    // sends to every child (including the one Fl.cxx tried already)
-    // and thus every visible widget in the window is tried.
-    while (e > a) {
-      Fl_Widget* o = *--e;
-      if (o->takesevents() && send(o,event)) return 1;
-    }
-    // navigation is lowest priority:
-    if (event == FL_SHORTCUT) return navigation(navkey());
     return 0;
 
   }
@@ -562,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.48 1999/11/28 09:19:26 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.49 1999/11/28 18:44:43 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.34 1999/11/28 09:19:26 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.35 1999/11/28 18:44:42 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -520,6 +520,19 @@ int Fl_Browser_::handle(int event) {
   static char whichway;
   static int py;
   switch (event) {
+#ifdef USE_VIEWCHANGE
+  case FL_VIEWCHANGE: {
+    int fh = full_height(), mode, pos;
+    float xdelta, ydelta, zdelta;
+    Fl::delta(mode, xdelta, ydelta, zdelta);
+    if (mode == 1) pos = (int)(position() + incr_height()*ydelta); // scroll by lines
+    else pos = (int)(position() + H*ydelta - incr_height()); // mode == 2, scroll by pages
+    if (pos > fh - H) pos = fh - H;
+    position(pos);
+    // should probably also do something with xdelta and zdelta...
+    return 1;
+  }
+#endif
   case FL_PUSH:
     if (!Fl::event_inside(X, Y, W, H)) return 0;
     if (type() == FL_SELECT_BROWSER) deselect();
@@ -542,26 +555,19 @@ int Fl_Browser_::handle(int event) {
       change = select_only(find_item(my), when() & FL_WHEN_CHANGED);
     }
     return 1;
-  case FL_VIEWCHANGE: {
-    int p = real_position_ + Fl::event_dy();
-    int h = full_height()-H; if (p > h) p = h;
-    if (p<0) p = 0;
-    position(p);
-    if (!Fl::pushed()) return 1;}
-    // otherwise fall through to drag case:
-  case FL_DRAG: {
+  case FL_DRAG:
     // do the scrolling first:
     my = Fl::event_y();
-    int p = real_position_;
-    if (my < Y && my < py) { // scroll off the top
-      p += my-Y;
-    } else if (my > (Y+H) && my > py) { // scroll off the bottom
-      p += my-(Y+H);
+    if (my < Y && my < py) {
+      int p = real_position_+my-Y;
+      if (p<0) p = 0;
+      position(p);
+    } else if (my > (Y+H) && my > py) {
+      int p = real_position_+my-(Y+H);
+      int h = full_height()-H; if (p > h) p = h;
+      if (p<0) p = 0;
+      position(p);
     }
-    int h = full_height()-H; if (p > h) p = h;
-    if (p<0) p = 0;
-    position(p);
-    // now figure out what item they are pointing at:
     if (type() == FL_NORMAL_BROWSER || !top_)
       ;
     else if (type() == FL_MULTI_BROWSER) {
@@ -586,7 +592,7 @@ int Fl_Browser_::handle(int event) {
       change = (l != l1);
     }
     py = my;
-    return 1;}
+    return 1;
   case FL_RELEASE:
     if (type() == FL_SELECT_BROWSER) {
       void* t = selection_; deselect(); selection_ = t;
@@ -665,5 +671,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.34 1999/11/28 09:19:26 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.35 1999/11/28 18:44:42 carl Exp $".
 //
