@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.40 2000/02/16 07:30:03 bill Exp $"
+// "$Id: Fl.H,v 1.41 2000/02/22 00:58:08 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -63,6 +63,7 @@ public: // should be private!
   static Fl_Widget* selection_owner_;
   static Fl_Window* modal_;
   static Fl_Window* grab_;
+  static int compose_state;
 
   static void damage(int x) {damage_ = x;}
 
@@ -132,6 +133,8 @@ public:
   static int get_key(int);
   static const char* event_text() {return e_text;}
   static int event_length() {return e_length;}
+  static int compose(int &del);
+  static void compose_reset() {compose_state = 0;}
   static int event_inside(int,int,int,int);
   static int event_inside(const Fl_Widget*);
 
@@ -222,5 +225,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.40 2000/02/16 07:30:03 bill Exp $".
+// End of "$Id: Fl.H,v 1.41 2000/02/22 00:58:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.29 2000/02/18 08:39:18 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.30 2000/02/22 00:58:10 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,9 +32,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Input.H>
 #include <FL/fl_draw.H>
-#include <math.h>
 #include <string.h>
-#include <ctype.h>
 
 void Fl_Input::draw() {
   if (damage() & FL_DAMAGE_ALL) draw_frame();
@@ -50,101 +48,6 @@ int Fl_Input::shift_up_down_position(int p) {
   return up_down_position(p, Fl::event_state(FL_SHIFT));
 }
 
-////////////////////////////////////////////////////////////////
-// Fltk "compose"
-//
-// This is a demonstration of a IMHO "correct" interface to compose
-// character sequences.  It does not have a "dead key" effect: the
-// user has feedback at all times, and sees exactly the symbol they
-// will get if they stop typing at that point.  Notice that I totally
-// ignore the horrid XIM extension!
-//
-// You only need to keep track of your normal text buffer and a
-// single integer "state".  Call fl_compose() for each character
-// keystroke.  The return value is the new "state" that must be passed
-// the next time you call fl_compose().  It also returns the number of
-// characters to delete to the left, a buffer of new characters, and
-// the number of characters in that buffer.  Obey these editing
-// instructions.  Reset the state to zero if the user types any
-// function keys or clicks the mouse.
-//
-// Fl_Input does not call fl_compose unless you hit the "compose" key
-// first.  It may be interesting and useful to always call it, though...
-
-// Although this simple code is only for ISO-8859-1 character
-// encodings, I think the interface can be expanded to UTF-8 (encoded
-// Unicode) someday.
-
-// This string lists a pair for each possible foreign letter in ISO-8859-1
-// starting at code 0xa0 (nbsp).  If the second character is a space then
-// only the first character needs to by typed:
-static const char* const compose_pairs =
-"  ! % # $ y=| & : c a <<~ - r _ * +-2 3 ' u p . , 1 o >>141234? "
-"A`A'A^A~A:A*AEC,E`E'E^E:I`I'I^I:D-N~O`O'O^O~O:x O/U`U'U^U:Y'THss"
-"a`a'a^a~a:a*aec,e`e'e^e:i`i'i^i:d-n~o`o'o^o~o:-:o/u`u'u^u:y'thy:";
-
-int fl_compose(int state, char c, int& del, char* buffer, int& ins) {
-  del = 0; ins = 1; buffer[0] = c;
-
-  if (c == '"') c = ':';
-
-  if (!state) {	// first character
-    if (c == ' ') {buffer[0]=char(0xA0);return 0x100;} // space turns into nbsp
-    // see if it is either character of any pair:
-    state = 0;
-    for (const char *p = compose_pairs; *p; p += 2) 
-      if (p[0] == c || p[1] == c) {
-	if (p[1] == ' ') buffer[0] = (p-compose_pairs)/2+0xA0;
-	state = c;
-      }
-    return state;
-
-  } else if (state == 0x100) { // third character
-    return 0;
-
-  } else { // second character
-    char c1 = char(state); // first character
-    // now search for the pair in either order:
-    for (const char *p = compose_pairs; *p; p += 2) {
-      if (p[0] == c && p[1] == c1 || p[1] == c && p[0] == c1) {
-	buffer[0] = (p-compose_pairs)/2+0xA0;
-	ins = del = 1;
-	return 0x100;
-      }
-    }
-    return 0;
-  }
-}
-
-#ifndef _WIN32 // X only
-// X dead-key lookup table.  This turns a dead-key keysym into the
-// first of two characters for one of the compose sequences.  These
-// keysyms start at 0xFE50.  (0 does nothing)
-static char dead_keys[] = {
-  '`', // XK_dead_grave
-  '\'',        // XK_dead_acute
-  '^', // XK_dead_circumflex
-  '~', // XK_dead_tilde
-  '_', // XK_dead_macron
-  0,   // XK_dead_breve
-  '.', // XK_dead_abovedot
-  ':', // XK_dead_diaeresis
-  '*', // XK_dead_abovering
-  0,   // XK_dead_doubleacute
-  'v', // XK_dead_caron
-  ','  // XK_dead_cedilla
-//   0,        // XK_dead_ogonek
-//   0,        // XK_dead_iota
-//   0,        // XK_dead_voiced_sound
-//   0,        // XK_dead_semivoiced_sound
-//   0 // XK_dead_belowdot
-};
-#endif
-
-////////////////////////////////////////////////////////////////
-
-static int compose; // compose state (# of characters so far + 1)
-
 // If you define this symbol as zero you will get the peculiar fltk
 // behavior where moving off the end of an input field will move the
 // cursor into the next field:
@@ -154,43 +57,29 @@ static int compose; // compose state (# of characters so far + 1)
 #define ctrl(x) (x^0x40)
 
 int Fl_Input::handle_key() {
-  int i;
 
-  int pcompose = compose; compose = 0;
   char ascii = Fl::event_text()[0];
 
-  if (pcompose && Fl::event_length()) {
-    char buf[20]; int ins; int del;
-    compose = fl_compose(pcompose-1, ascii, del, buf, ins);
-    if (compose) {
-      replace(position(), del ? position()-del : mark(), buf, ins);
-      compose++; // store value+1 so 1 can initialize compose state
-      return 1;
-    } else {
-      if (pcompose==1)	// compose also acts as quote-next:
-	return replace(position(),mark(),Fl::event_text(),Fl::event_length());
-    }
-  }
+  int del;
+  if (Fl::compose(del)) {
 
-#ifndef _WIN32 // X only
-  // detect and translate X dead keys by acting just like you typed
-  // compose and then the key:
-  i = Fl::event_key();
-  if (i >= 0xfe50 && i <= 0xfe5b) {
-    char buf[20]; int ins; int del;
-    compose = fl_compose(0, dead_keys[i-0xfe50], del, buf, ins);
-    if (compose) {
-      replace(position(), del ? position()-del : mark(), buf, ins);
-      compose++; // store value+1 so 1 can initialize compose state
+    // Insert characters into numeric fields after checking for legality:
+    if (type() == FL_FLOAT_INPUT || type() == FL_INT_INPUT) {
+      Fl::compose_reset(); // ignore any foreign letters...
+      // This is complex to allow "0xff12" hex to be typed:
+      if (!position() && (ascii == '+' || ascii == '-') ||
+	  (ascii >= '0' && ascii <= '9') ||
+	  (position()==1 && index(0)=='0' && (ascii=='x' || ascii == 'X')) ||
+	  (position()>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X')
+	   && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) ||
+	  type()==FL_FLOAT_INPUT && ascii && strchr(".eE+-", ascii))
+	replace(position(), mark(), &ascii, 1);
       return 1;
     }
-  }
-#endif
 
-  if (Fl::event_state(FL_ALT|FL_META)
-      && !(Fl::event_length() && (ascii&128))) { // reserved for shortcuts
-    compose = pcompose;
-    return 0;
+    replace(position(), del ? position()-del : mark(),
+	    Fl::event_text(), Fl::event_length());
+    return 1;
   }
 
   switch (Fl::event_key()) {
@@ -208,32 +97,30 @@ int Fl_Input::handle_key() {
     ascii = ctrl('A'); break;
   case FL_End:
     ascii = ctrl('E'); break;
-  case FL_Tab:
-    if (Fl::event_state(FL_CTRL) || type()!=FL_MULTILINE_INPUT) return 0;
-    break;
   case FL_Enter:
   case FL_KP_Enter:
     if (when() & FL_WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
       return 1;
-    } else if (type() == FL_MULTILINE_INPUT) {
+    } else if (type() == FL_MULTILINE_INPUT)
       return replace(position(), mark(), "\n", 1);
-    } else {
+    else 
       return 0;	// reserved for shortcuts
-    }
+  case FL_Tab:
+    if (Fl::event_state(FL_CTRL) || type()!=FL_MULTILINE_INPUT) return 0;
+    return replace(position(), mark(), &ascii, 1);
   case FL_Control_R:
   case 0xff20: // Multi-Key
     ascii = ctrl('Q'); break;
-  case FL_Escape:
-    return 0;	// reserved for shortcuts (Forms cleared field)
+  default:
+    if (!ascii) return 0; // don't reset compose on shift keys
   }
 
-  switch (ascii) {
+  Fl::compose_reset();
 
-  case 0:	// shift and other unused function keys
-    compose = pcompose;
-    return 0;
+  int i;
+  switch (ascii) {
   case ctrl('A'):
     if (type() == FL_MULTILINE_INPUT)
       for (i=position(); i && index(i-1)!='\n'; i--) ;
@@ -282,9 +169,6 @@ int Fl_Input::handle_key() {
     if (!i) return NORMAL_INPUT_MOVE;
     shift_up_down_position(i-1);
     return 1;
-  case ctrl('Q'):
-    compose = 1;
-    return 1;
   case ctrl('U'):
     return cut(0, size());
   case ctrl('V'):
@@ -299,23 +183,7 @@ int Fl_Input::handle_key() {
   case ctrl('_'):
     return undo();
   }
-
-  // skip all illegal characters
-  // this could be improved to make sure characters are inserted at
-  // legal positions...
-  if (type() == FL_FLOAT_INPUT) {
-    if (!strchr("0123456789.eE+-", ascii)) return 1;
-  } else if (type() == FL_INT_INPUT) {
-    if (!position() && (ascii == '+' || ascii == '-'));
-    else if (ascii >= '0' && ascii <= '9');
-    // we allow 0xabc style hex numbers to be typed:
-    else if (position()==1 && index(0)=='0' && (ascii == 'x' || ascii == 'X'));
-    else if (position()>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X')
-           && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f'));
-    else return 1;
-  }
-
-  return replace(position(), mark(), Fl::event_text(), Fl::event_length());
+  return 0;
 }
 
 int Fl_Input::handle(int event) {
@@ -343,7 +211,7 @@ int Fl_Input::handle(int event) {
     break;
 
   case FL_UNFOCUS:
-    compose = 0;
+    Fl::compose_reset();
     break;
 
   case FL_SHORTCUT:
@@ -364,7 +232,7 @@ int Fl_Input::handle(int event) {
         return 1;
       }
     }
-    compose = 0;
+    Fl::compose_reset();
     break;
 
   case FL_RELEASE:
@@ -389,5 +257,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.29 2000/02/18 08:39:18 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.30 2000/02/22 00:58:10 bill Exp $".
 //
