@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.38 2004/11/12 06:50:18 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.39 2004/11/17 17:32:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,7 +26,6 @@
 // mostly.  In most cases it is easier to get a multi-line message
 // by putting newlines in the message.
 
-#include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/ask.h>
 #include <fltk/Button.h>
@@ -148,7 +147,10 @@ static int innards(
   window.end();
   window.layout();
   setfont(message.labelfont(), message.labelsize());
-  int w = 800; int h; measure(message.label(), w, h, message.flags()); w+=6; h+=6;
+  int w = 800;
+  int h = 0;
+  measure(message.label(), w, h, message.flags());
+  w+=6; h+=6;
   w -= message.w(); if (w < 0) w = 0;
   h -= message.h(); if (h < 0) h = 0;
   window.size(window.w()+w, window.h()+h);
@@ -304,5 +306,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.38 2004/11/12 06:50:18 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.39 2004/11/17 17:32:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.63 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.64 2004/11/17 17:32:35 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -73,8 +73,7 @@ static TooltipBox *window = 0;
 
 void TooltipBox::layout() {
   setfont(textfont(), textsize());
-  int ww, hh;
-  ww = MAX_WIDTH;
+  int ww=MAX_WIDTH, hh=0;
   measure(label(), ww, hh, flags()|OUTPUT);
   ww += 7; hh += 6;
 
@@ -232,5 +231,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.63 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.64 2004/11/17 17:32:35 spitzak Exp $".
 //

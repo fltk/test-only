@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.49 2004/11/17 17:32:34 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,13 +39,13 @@
 #define MASKPAT         0x00E20746 /* dest = (src & pat) | (!src & dst) */
 #define COPYFG          0x00CA0749 /* dest = (pat & src) | (!pat & dst) */
 #define COPYBG          0x00AC0744 /* dest = (!pat & src) | (pat & dst) */
-#endif
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(__CYGWIN__)
 // MinGW headers does not declare AlphaBlend..
 extern "C" {
   WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
 }
+#endif
 #endif
 
 /*
@@ -584,5 +584,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.49 2004/11/17 17:32:34 spitzak Exp $".
 //

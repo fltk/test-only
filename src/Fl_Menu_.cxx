@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.58 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.59 2004/11/17 17:32:35 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -451,7 +451,7 @@ static Widget* shortcut_search(Group* g) {
   multiple copies of the item in, where only the first is visible.
 */
 int Menu::handle_shortcut() {
-  if (event_clicks()) return 0; // ignore repeating keys
+  //if (event_clicks()) return 0; // ignore repeating keys
   int children = this->children();
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
@@ -478,5 +478,5 @@ int Menu::handle_shortcut() {
 */
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.58 2004/11/12 06:50:16 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.59 2004/11/17 17:32:35 spitzak Exp $"
 //

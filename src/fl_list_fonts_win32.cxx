@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.32 2004/07/31 10:25:39 laza2000 Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.33 2004/11/17 17:32:54 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/utf.h>
 #include <fltk/x.h>
 #include <ctype.h>
+#include <wchar.h>
 #include <string.h>
 #include <stdlib.h>
 #include <config.h>
@@ -178,5 +179,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.32 2004/07/31 10:25:39 laza2000 Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.33 2004/11/17 17:32:54 spitzak Exp $"
 //

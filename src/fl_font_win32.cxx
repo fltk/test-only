@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.61 2004/10/30 05:13:27 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.62 2004/11/17 17:32:54 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -92,6 +92,7 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   int height = -size;
 
   LOGFONTW lf;
+  memset( &lf, 0, sizeof(lf) );
   lf.lfHeight         = height; // use "char size"
   lf.lfWidth          = 0L;
   lf.lfEscapement     = 0L;
@@ -283,5 +284,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.61 2004/10/30 05:13:27 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.62 2004/11/17 17:32:54 spitzak Exp $".
 //
