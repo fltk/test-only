@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.205 2004/05/09 08:22:48 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.206 2004/05/11 06:31:09 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -710,7 +710,8 @@ public:
       for ( i=0; i<nf; i++ ) nn += DragQueryFile( hdrop, i, 0, 0 );
       nn += nf;
       e_length = nn-1;
-      char *dst = e_text = (char*)malloc(nn+1);
+      char* buffer = (char*)malloc(nn+1);
+      char *dst = e_text = buffer;
       for ( i=0; i<nf; i++ ) {
 	n = DragQueryFile( hdrop, i, dst, nn );
 	dst += n;
@@ -718,7 +719,7 @@ public:
       }
       *dst = 0;
       target->handle(PASTE);
-      free( e_text );
+      free(buffer);
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
       return S_OK;
@@ -1650,5 +1651,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.205 2004/05/09 08:22:48 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.206 2004/05/11 06:31:09 spitzak Exp $".
 //
