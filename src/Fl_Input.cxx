@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.18 1999/09/25 22:27:07 vincent Exp $"
+// "$Id: Fl_Input.cxx,v 1.19 1999/10/15 09:03:28 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -277,6 +277,7 @@ int Fl_Input::handle_key() {
 }
 
 int Fl_Input::handle(int event) {
+  static bool first_click;
   switch (event) {
 
   case FL_ENTER: return 1; // For tooltips
@@ -310,20 +311,31 @@ int Fl_Input::handle(int event) {
 
   case FL_PUSH:
     compose = 0;
-    if (Fl::event_button() == 2) {
-      Fl::paste(*this);
-      if (Fl::focus()==this) return 1; // remove line for Motif behavior
-    }
+    first_click = 0;
     if (Fl::focus() != this) {
       Fl::focus(this);
-      handle(FL_FOCUS); // cause minimal update
+      handle(FL_FOCUS);
+      // Windoze-style: select everything on first click:
+      if (type() != FL_MULTILINE_INPUT) {
+        first_click = 1;
+        position(size(), 0); // select everything
+        Fl::event_is_click(0); // prevents next click from being a double click
+        return 1;
+      }
     }
+    // don't remove selection when pasting in a replacement:
+    if (Fl::event_button() == 2 && mark() != position()) return 1;
     break;
 
-  case FL_DRAG:
   case FL_RELEASE:
-    if (Fl::event_button() == 2) return 0;
-    break;
+    if (Fl::event_button() == 2) {
+      Fl::event_is_click(0); // stop double click from picking a word
+      Fl::paste(*this);
+    } else if (!first_click) {
+      copy();
+    }
+    return 1;
+
   }
   return Fl_Input_::handletext(event,
 			       x()+box()->dx(), y()+box()->dy(),
@@ -359,5 +371,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 Fl_Style_Definer fl_input_style_definer("input", Fl_Input::default_style);
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.18 1999/09/25 22:27:07 vincent Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.19 1999/10/15 09:03:28 bill Exp $".
 //
