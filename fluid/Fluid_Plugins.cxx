@@ -1,23 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <FL/Fl.H>
-#include <FL/dirent.h>
-#include <FL/Fl_Plugins.H>
 #include "Fluid_Plugins.h"
 
 Fluid_Plugin* plugins[MAXPLUGINS];
 int nbplugins;
-
-#ifndef FL_NO_PLUGINS
-static int nboptions;
-static int nbnew;
-#endif
 Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
+#include "config.h"
+
+#ifdef HAVE_DLOPEN
+
+#include <FL/dirent.h>
+#include <FL/Fl_Plugins.H>
+static int nboptions;
+static int nbnew;
+
 static void ReadPlugin(char* s, char* location)
 {
-#ifndef FL_NO_PLUGINS
   if(nbplugins >= MAXPLUGINS) return;
 
   FLDLhandle handle;
@@ -64,7 +65,6 @@ static void ReadPlugin(char* s, char* location)
       fprintf(stderr, "FLUID plugin error : %s\n", FLDLerror());
     }
   }
-#endif
 }
 
 static void ReadPlugins(char* location)
@@ -81,7 +81,6 @@ static void ReadPlugins(char* location)
 
 }
 
-#ifndef FL_NO_PLUGINS
 // Here, we create some useless object just to be sure that the whole 
 // FLTK library will be linked in fluid.
 // This function even do not need to be called ...
@@ -91,7 +90,6 @@ void link_whole_fltk()
   new Fl_Pixmap((const char**)0);
   // add some more if you get problems when reading your plugins ...
 }
-#endif
 
 void read_plugins()
 {
@@ -105,3 +103,9 @@ void read_plugins()
   ReadPlugins("/usr/local/lib/fltk/fluid/");
 #endif
 }
+
+#else
+
+void read_plugins() {}
+
+#endif

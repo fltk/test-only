@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.14 1999/08/16 07:31:26 bill Exp $"
+// "$Id: fl_color.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -90,7 +90,7 @@ static void figure_out_visual() {
 }
 
 static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.C":
+#include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
 ////////////////////////////////////////////////////////////////
@@ -319,5 +319,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.14 1999/08/16 07:31:26 bill Exp $".
+// End of "$Id: fl_color.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $".
 //

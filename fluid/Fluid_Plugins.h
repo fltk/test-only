@@ -2,7 +2,6 @@
 #define FLUID_PLUGINS_H
 
 #include <FL/Fl_Menu.H>
-#include <FL/Fl_DLL.H>
 #include "Fl_Type.h"
 
 #define PLUGINS_EXTENSION ".fluidplugin"

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.14 1999/01/13 15:56:23 mike Exp $"
+// "$Id: fl_color_win32.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -41,9 +41,11 @@ static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-// Translations to win32 data structures:
+// I keep track of 256 pens & brushes.  They are indexed by the closest
+// color from the fl_cmap into this table:
 Fl_XMap fl_xmap[256];
 
+// The current color:
 Fl_XMap* fl_current_xmap;
 
 HPALETTE fl_palette;
@@ -74,30 +76,35 @@ Fl_Color fl_color_;
 
 void fl_color(Fl_Color i) {
   fl_color_ = i;
-  Fl_XMap &xmap = fl_xmap[i];
-  if (!xmap.pen) {
-#if USE_COLORMAP
-    if (fl_palette) {
-      set_xmap(xmap, PALETTEINDEX(i));
-    } else {
-#endif
-      unsigned c = fl_cmap[i];
-      set_xmap(xmap, RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8)));
-#if USE_COLORMAP
+  int index;
+  COLORREF rgb;
+  if (i & 0xFFFFFF00) {
+    // translate rgb colors into color index
+    uchar r = i>>24;
+    uchar g = i>>16;
+    uchar b = i>> 8;
+    rgb = RGB(r,g,b);
+    if (r == g && r == b) { // get it out of gray ramp
+      index = fl_gray_ramp(r*FL_NUM_GRAY/256);
+    } else {		// get it out of color cube:
+      index =
+	fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
     }
+  } else {
+    // translate index into rgb:
+    index = i;
+    unsigned c = fl_cmap[i];
+    rgb = RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8));
+  }
+#if USE_COLORMAP
+  if (fl_palette) rgb = PALETTEINDEX(i);
 #endif
-  }
-  fl_current_xmap = &xmap;
-  SelectObject(fl_gc, (HGDIOBJ)(xmap.pen));
-}
-
-void fl_color(uchar r, uchar g, uchar b) {
-  static Fl_XMap xmap;
-  COLORREF c = RGB(r,g,b);
-  if (!xmap.pen || c != xmap.rgb) {
+  Fl_XMap &xmap = fl_xmap[index];
+  if (xmap.rgb != rgb) {
     clear_xmap(xmap);
-    set_xmap(xmap, c);
+    xmap.rgb = rgb;
   }
+  if (!xmap.pen) set_xmap(xmap, rgb);
   fl_current_xmap = &xmap;
   SelectObject(fl_gc, (HGDIOBJ)(xmap.pen));
 }
@@ -147,16 +154,8 @@ CREATE_BRUSH:
   return brushes[i].brush;
 }
 
-void Fl::free_color(Fl_Color i, int overlay) {
-  if (overlay) return; // do something about GL overlay?
+void fl_free_color(Fl_Color i) {
   clear_xmap(fl_xmap[i]);
-}
-
-void Fl::set_color(Fl_Color i, unsigned c) {
-  if (fl_cmap[i] != c) {
-    clear_xmap(fl_xmap[i]);
-    fl_cmap[i] = c;
-  }
 }
 
 #if USE_COLORMAP
@@ -206,5 +205,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.14 1999/01/13 15:56:23 mike Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $".
 //

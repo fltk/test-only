@@ -9,11 +9,11 @@ snap 3
 Function {main()} {open return_type int
 } {
   code {fl_set_images_root_directory("images");} {}
-  Fl_Window window {open selected
-    xywh {476 347 420 370} resizable box NO_BOX visible
+  Fl_Window window {open
+    xywh {474 257 420 370} resizable box NO_BOX visible
   } {
-    Fl_Box {} {
-      xywh {0 0 420 370} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.xpm} labelcolor 3
+    Fl_Box {} {selected
+      xywh {0 0 420 370} align 32 labelfont 1 labeltype SHADOW_LABEL image {coucou.xpm} labelcolor 3
     }
     Fl_Box {} {
       label {tiled GIF image loaded from disk}

@@ -3,9 +3,7 @@
 #ifndef FL_Plugins_H
 #define FL_Plugins_H
 
-#include <FL/config.h>
-
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <windows.h>
 #include <winbase.h>
@@ -25,7 +23,6 @@ typedef HINSTANCE FLDLhandle;
 # define FLDLE
 #endif
 
-
 #ifdef FL_OUTPLUGIN
 # define FLDLI __declspec( dllimport )
 #elif defined(INPLUGIN)
@@ -34,8 +31,7 @@ typedef HINSTANCE FLDLhandle;
 # define FLDLI
 #endif
 
-
-#elif defined(HAVE_DLOPEN)
+#else
 
 #include <dlfcn.h>
 typedef void* FLDLhandle;
@@ -48,10 +44,6 @@ typedef void* FLDLhandle;
 #define FLDLE
 #define FLDLI
 
-
-
-#else
-#define FL_NO_PLUGINS
 #endif
 
 #endif FL_Plugins_H
