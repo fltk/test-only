@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.130 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.131 2004/04/17 18:58:19 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -280,8 +280,10 @@ int Group::handle(int event) {
       Widget* f1 = 0; int ret = 0;
       for (i = 0; i < numchildren; ++i) {
 	Widget* w = child(i);
-	int n = w->handle(FOCUS);
-	if (n) {ret = n; f1 = w; if (n & 2) break;}
+	if (w->takesevents()) {
+	  int n = w->handle(FOCUS);
+	  if (n) {ret = n; f1 = w; if (n & 2) break;}
+	}
       }
       if (f1 && !f1->contains(fltk::focus())) focus(f1);
       return ret;}
@@ -425,6 +427,23 @@ int Group::handle(int event) {
 void Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
   relayout();
+}
+
+/** This non-virtual override is for programs that set up a group's
+    layout and then call resize() on it to set the correct size before
+    it is displayed. What it does is remember the current sizes (the
+    thing the init_sizes() method makes it forget) before calling the
+    normal widget resize().
+
+    This is a non-virtual override because in normal use fltk will call
+    layout() anyway before any use of the widget, and Group's layout()
+    initializes the sizes. This is only for programs that use resize()
+    directly.
+*/
+bool Group::resize(int x, int y, int w, int h) {
+  if (!sizes_ && resizable() && children_ && (w != this->w() || h != this->h()))
+    layout(); // this is needed to recursively get inner groups...
+  return Widget::resize(x,y,w,h);
 }
 
 /** Returns array of initial sizes of the widget and it's children.
@@ -663,5 +682,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.130 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.131 2004/04/17 18:58:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.87 2004/03/05 08:12:54 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.88 2004/04/17 18:58:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1039,44 +1039,44 @@ bool Input::key_is_shortcut() {
   losing the Emacs bindings. Keys are:
 
   - Shift: do not move the mark when moving the point
-  - LeftKey, ^B: move left one character
-  - Ctrl+LeftKey, Alt+^B: move left one word
-  - RightKey, ^F: move right one character
-  - Ctrl+RightKey, Alt+^F: move right one word
-  - ^A: go to start of line, if already there select all text
+  - LeftKey, Ctrl+B: move left one character
+  - Ctrl+LeftKey, Alt+B: move left one word
+  - RightKey, Ctrl+F: move right one character
+  - Ctrl+RightKey, Alt+F: move right one word
+  - Ctrl+A: go to start of line, if already there select all text
   - HomeKey: go to start of line
-  - EndKey, ^E: go to end of line
+  - EndKey, Ctrl+E: go to end of line
   - Ctrl+Insert: copy
   - Shift+Insert: paste
   - Shift+Delete: cut
-  - Delete, ^D: delete region or one character
-  - Ctrl+Delete, Alt+^D: delete region or one word
-  - BackSpace, ^H: delete region or left one character
-  - Ctrl+BackSpace, Alt+^H: delete region or left one word
+  - Delete, Ctrl+D: delete region or one character
+  - Ctrl+Delete, Alt+D: delete region or one word
+  - BackSpace, Ctrl+H: delete region or left one character
+  - Ctrl+BackSpace, Alt+H: delete region or left one word
   - Return, KeypadEnter: if when()&WHEN_ENTER_KEY, and no shift keys held
     down, this selects all and does the callback. Otherwise key is ignored.
-  - ^K: cuts from the position to the end of line
-  - ^C: copy
-  - ^T: swap the two characters around point. If point is at end swap the
+  - Ctrl+K: cuts from the position to the end of line
+  - Ctrl+C: copy
+  - Ctrl+T: swap the two characters around point. If point is at end swap the
     last two characters.
-  - ^U: delete all the text
-  - ^V: paste
-  - ^X, ^W: cut
-  - ^Y: redo
-  - ^Z, ^/: undo
+  - Ctrl+U: delete all the text
+  - Ctrl+V: paste
+  - Ctrl+X, Ctrl+W: cut
+  - Ctrl+Y: redo
+  - Ctrl+Z, Ctrl+/: undo
   - All printing characters are run through fltk::compose() and the result
     used to insert text.
 
   For the (obsolete) MULTILINE mode you can also do these:
 
-  - UpKey, ^P: move up one line (MULTILINE only)
-  - DownKey, ^N: move down one line (MULTILINE only)
+  - UpKey, Ctrl+P: move up one line (MULTILINE only)
+  - DownKey, Ctrl+N: move down one line (MULTILINE only)
   - PageUpKey: move up 1 line less than the vertical widget size
   - PageDownKey: move down 1 line less than the vertical widget size
-  - Ctrl+HomeKey, Alt+^A: got to start of text
-  - Ctrl+EndKey, Alt+^E: go to end of text
+  - Ctrl+HomeKey, Alt+A: got to start of text
+  - Ctrl+EndKey, Alt+E: go to end of text
   - Return, KeypadEnter: inserts a newline
-  - ^O: insert a newline and leave the cursor before it.
+  - Ctrl+O: insert a newline and leave the cursor before it.
 
 */
 bool Input::handle_key() {
@@ -1595,5 +1595,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.87 2004/03/05 08:12:54 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.88 2004/04/17 18:58:20 spitzak Exp $".
 //

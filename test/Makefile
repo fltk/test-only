@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.72 2004/02/17 07:46:11 spitzak Exp $"
+# "$Id: Makefile,v 1.73 2004/04/17 18:58:21 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -187,6 +187,10 @@ $(TARGETS):	../lib/$(LIBPREFIX)fltk$(LIBSUFFIX)
 # Other programs needing special "help"...
 #
 
+cairo$(EXEEXT): cairo.o
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -lcairo -o $@
+
 CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o \
@@ -249,5 +253,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.72 2004/02/17 07:46:11 spitzak Exp $".
+# End of "$Id: Makefile,v 1.73 2004/04/17 18:58:21 spitzak Exp $".
 #
