@@ -198,6 +198,12 @@ void Image::make_current() {
 
     rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
 #elif USE_QUARTZ
+#if 1
+    void *data = malloc(w_*h_*4);
+    CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
+    rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut, kCGImageAlphaNoneSkipLast);
+    CGColorSpaceRelease(lut);
+#else
     CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
     CGDataProviderRef src = CGDataProviderCreateWithData( 0L, 0, 0, 0L);
     rgb = CGImageCreate( w_, h_, 8, 32, 4*w_,
@@ -206,13 +212,14 @@ void Image::make_current() {
     CGColorSpaceRelease(lut);
     CGDataProviderRelease(src);
 #endif
+#endif
   }
 #if USE_X11
   draw_into((XWindow)rgb);
 #elif defined(_WIN32)
   draw_into((HBITMAP)rgb);
 #elif USE_QUARTZ
-  draw_into((CGImageRef)rgb);
+  draw_into((CGContextRef)rgb);
 #endif
 }
 
@@ -322,10 +329,8 @@ ImageDraw::ImageDraw(Image* image) {
   data[0] = (void*)dc;
   data[1] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
 #elif defined(__APPLE__)
-  GrafPtr prevPort; GDHandle prevGD;
-  GetGWorld(&prevPort, &prevGD);
-  data[0] = (void*)prevPort;
-  data[1] = (void*)prevGD;
+  data[0] = (void*)quartz_window;
+  data[1] = (void*)quartz_gc;
 #else
 # error
 #endif
@@ -340,13 +345,13 @@ ImageDraw::~ImageDraw() {
   dc = (HDC)(data[0]);
   DeleteDC(fl_bitmap_dc);
   fl_bitmap_dc = (HDC)(data[1]);
-#elif defined(__APPLE__)
-  SetGWorld((GrafPtr)(data[0]), (GDHandle)(data[1]));
-#else
-# error
 #endif
   pop_clip();
   pop_matrix();
+#ifdef __APPLE___
+  Window *win = (Window*)data[0];
+  win->make_current();
+#endif
 }
 
 void fl_restore_clip(); // in rect.C
@@ -490,6 +495,7 @@ void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
 # endif
 #elif defined(__APPLE__)
   // OSX version nyi
+  setcolor(BLACK); fill(r1, src_x, src_y); return;
 #else
 #error
 #endif
@@ -556,7 +562,12 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
 #elif defined(__APPLE__)
   CGRect rect = { R.x(), R.y(), R.w(), R.h() };
   fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
-  CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
+  if (rgb) {
+    // \todo Draw with the correct alpha mask!
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
+  } else {
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
+  }
   fltk::end_quartz_image();
 /*
   if (!alpha) create_alpha_bitmask(w(), h(), array);

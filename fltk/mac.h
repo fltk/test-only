@@ -64,7 +64,7 @@ extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
 
 extern FL_API void	clip_region(RgnHandle);
 extern FL_API RgnHandle	clip_region();
-extern FL_API void	draw_into(CGImageRef xid);
+extern FL_API void	draw_into(CGContextRef xid);
 extern FL_API void	stop_drawing(CGImageRef xid);
 extern FL_API ATSFontRef xfont();
 

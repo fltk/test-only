@@ -53,205 +53,80 @@ static void innards(const uchar *buf,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  if (!linedelta) linedelta = r.w()*delta;
-
-  // theoretically, if the current GPort permits, we could write
-  // directly into it, avoiding the temporary GWorld. For now I
-  // will go the safe way... .
-  char direct = 0;
-  GWorldPtr gw;
-  Rect bounds;
-  bounds.left=0; bounds.right=r.w(); bounds.top=0; bounds.bottom=r.h();
-  QDErr err = NewGWorld( &gw, 32, &bounds, 0L, 0L, useTempMem );
-  bool mono = (pixeltype==LUMINANCE);
-  if (err==noErr && gw) {
-    PixMapHandle pm = GetGWorldPixMap( gw );
-    if ( pm ) {
-      LockPixels( pm );
-      if ( *pm ) {
-        uchar *base = (uchar*)GetPixBaseAddr( pm );
-        if ( base ) {
-          PixMapPtr pmp = *pm;
-          // make absolutely sure that we can use a direct memory write to
-          // create the pixmap!
-          if ( pmp->pixelType == 16 || pmp->pixelSize == 32 || pmp->cmpCount == 3 || pmp->cmpSize == 8 ) {
-            int rowBytes = pmp->rowBytes & 0x3fff;
-            if ( cb )
-            {
-              uchar *tmpBuf = new uchar[ r.w()*delta ];
-              if ( mono ) delta -= 1; else delta -= 3; 
-              for ( int i=0; i<r.h(); i++ )
-              {
-                uchar *dst = base + i*rowBytes;
-                const uchar* src = cb( userdata, 0, i, r.w(), tmpBuf );
-                if ( mono ) {
-                  for ( int j=0; j<r.w(); j++ )
-                    { uchar c = *src++; *dst++ = 0; *dst++ = c; *dst++ = c; *dst++ = c; src += delta; }
-                } else {
-                  for ( int j=0; j<r.w(); j++ )
-                    { *dst++ = 0; *dst++ = *src++; *dst++ = *src++; *dst++ = *src++; src += delta; }
-                }
-              }
-              delete[] tmpBuf;
-            }
-            else
-            {
-              if ( mono ) delta -= 1; else delta -= 3; 
-              for ( int i=0; i<r.h(); i++ )
-              {
-                const uchar *src = buf+i*linedelta;
-                uchar *dst = base + i*rowBytes;
-                if ( mono ) {
-                  for ( int j=0; j<r.w(); j++ )
-                    { uchar c = *src++; *dst++ = 0; *dst++ = c; *dst++ = c; *dst++ = c; src += delta; }
-                } else {
-                  for ( int j=0; j<r.w(); j++ )
-                    { *dst++ = 0; *dst++ = *src++; *dst++ = *src++; *dst++ = *src++; src += delta; }
-                }
-              }
-            }
-#if 0
-	    // WHAT GOES HERE???
-//           copy_offscreen( X, Y, W, H, gw, 0, 0 );
-//	     direct = 1;
-#endif
-          }
-        }
-      }
-
-      UnlockPixels( pm );
+  int X = r.x(), Y = r.y(), W = r.w(), H = r.h();
+  const void *array = buf;
+  uchar *tmpBuf = 0;
+  if (cb) {
+    tmpBuf = new uchar[ H*W*delta ];
+    for (int i=0; i<H; i++) {
+      cb(userdata, 0, i, W, tmpBuf+i*W*delta);
     }
-
-    DisposeGWorld( gw );
+    array = (void*)tmpBuf;
+    linedelta = W;
   }
-
-  if ( direct )
-    return;
-
-  // following the very safe (and very slow) way to write the image into the give port
+  // create an image context
+  CGColorSpaceRef   lut = CGColorSpaceCreateDeviceRGB();
+  CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, linedelta*H*delta, 0L);
+  CGImageRef        img = CGImageCreate( W, H, 8, 8*delta, linedelta*delta,
+                            lut, delta&1?kCGImageAlphaNone:kCGImageAlphaNoneSkipLast,
+                            src, 0L, false, kCGRenderingIntentDefault);
+  // draw the image into the destination context
+  if (img) {
+    CGRect rect = { X, Y, W, H };
+    fltk::begin_quartz_image(rect, Rectangle(0, 0, W, H));
+    CGContextDrawImage(quartz_gc, rect, img);
+    fltk::end_quartz_image();
+    // release all allocated resources
+    CGImageRelease(img);
+  }
+  CGColorSpaceRelease(lut);
+  CGDataProviderRelease(src);
+  if (cb) {
+    delete[] tmpBuf;
+  }
+  if (img) return; // else fall through to slow mode
+  // following the very save (and very slow) way to write the image into the give port
+  CGContextSetShouldAntialias(quartz_gc, false);
   if ( cb )
   {
-    uchar *tmpBuf = new uchar[ r.w()*3 ];
-    for ( int i=0; i<r.h(); i++ )
+    uchar *tmpBuf = new uchar[ W*4 ];
+    for ( int i=0; i<H; i++ )
     {
-      const uchar* src = cb( userdata, 0, i, r.w(), tmpBuf );
-      for ( int j=0; j<r.w(); j++ )
+      uchar *src = tmpBuf;
+      cb( userdata, 0, i, W, tmpBuf );
+      for ( int j=0; j<W; j++ )
       {
-        if ( mono )          
-          { color( src[0], src[0], src[0] ); src++; }
+        if ( pixeltype==LUMINANCE )
+          { color( src[0], src[0], src[0] ); }
         else
-          { color( src[0], src[1], src[2] ); src+=3; }
-        MoveTo( r.x()+j, r.y()+i );
-        Line( 0, 0 );
+          { color( src[0], src[1], src[2] ); }
+        CGContextMoveToPoint(quartz_gc, X+j, Y+i);
+        CGContextAddLineToPoint(quartz_gc, X+j, Y+i);
+        CGContextStrokePath(quartz_gc);
+        src+=delta;
       }
     }
     delete[] tmpBuf;
   }
   else
   {
-    for ( int i=0; i<r.h(); i++ )
+    for ( int i=0; i<H; i++ )
     {
       const uchar *src = buf+i*linedelta;
-      for ( int j=0; j<r.w(); j++ )
+      for ( int j=0; j<W; j++ )
       {
-        if ( mono )          
+        if ( pixeltype==LUMINANCE )
           color( src[0], src[0], src[0] );
         else
           color( src[0], src[1], src[2] );
-        MoveTo( r.x()+j, r.y()+i );
-        Line( 0, 0 );
+        CGContextMoveToPoint(quartz_gc, X+j, Y+i);
+        CGContextAddLineToPoint(quartz_gc, X+j, Y+i);
+        CGContextStrokePath(quartz_gc);
         src += delta;
       }
     }
   }
-
-// \todo Mac : the above function does not support subregions yet
-#ifdef later_we_do_this
-// \todo Mac : the following code is taken from drawimage_win32 and needs to be modified for Mac Carbon
-//  if (!linedelta) linedelta = r.w()*delta;
-
-  int x, y, w, h;
-  clip_box(X,Y,W,H,x,y,w,h);
-  if (w<=0 || h<=0) return;
-  if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
-
-//  static U32 bmibuffer[256+12];
-//  BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
-//  if (!bmi.bmiHeader.biSize) {
-//    bmi.bmiHeader.biSize = sizeof(bmi)-4; // does it use this to determine type?
-//    bmi.bmiHeader.biPlanes = 1;
-//    bmi.bmiHeader.biCompression = BI_RGB;
-//    bmi.bmiHeader.biXPelsPerMeter = 0;
-//    bmi.bmiHeader.biYPelsPerMeter = 0;
-//    bmi.bmiHeader.biClrUsed = 0;
-//    bmi.bmiHeader.biClrImportant = 0;
-//  }
-//  if (mono) {
-//    for (int i=0; i<256; i++) {
-//      bmi.bmiColors[i].rgbBlue = i;
-//      bmi.bmiColors[i].rgbGreen = i;
-//      bmi.bmiColors[i].rgbRed = i;
-//      bmi.bmiColors[i].rgbReserved = i;
-//    }
-//  }
-//  bmi.bmiHeader.biWidth = w;
-//  bmi.bmiHeader.biBitCount = mono ? 8 : 24;
-  int pixelsize = mono ? 1 : 3;
-  int linesize = (pixelsize*w+3)&~3;
-  
-  static U32* buffer;
-  int blocking = h;
-  {int size = linesize*h;
-  if (size > MAXBUFFER) {
-    size = MAXBUFFER;
-    blocking = MAXBUFFER/linesize;
-  }
-  static long buffer_size;
-  if (size > buffer_size) {
-    delete[] buffer;
-    buffer_size = size;
-    buffer = new U32[(size+3)/4];
-  }}
-//  bmi.bmiHeader.biHeight = blocking;
-  static U32* line_buffer;
-  if (!buf) {
-    int size = W*delta;
-    static int line_buf_size;
-    if (size > line_buf_size) {
-      delete[] line_buffer;
-      line_buf_size = size;
-      line_buffer = new U32[(size+3)/4];
-    }
-  }
-  for (int j=0; j<h; ) {
-    int k;
-    for (k = 0; j<h && k<blocking; k++, j++) {
-      const uchar* from;
-      if (!buf) { // run the converter:
-	from = cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
-      } else {
-	from = buf;
-	buf += linedelta;
-      }
-      uchar *to = (uchar*)buffer+(blocking-k-1)*linesize;
-      if (mono) {
-	for (int i=w; i--; from += delta) *to++ = *from;
-      } else {
-	for (int i=w; i--; from += delta, to += 3) {
-	  uchar r = from[0];
-	  to[0] = from[2];
-	  to[1] = from[1];
-	  to[2] = r;
-        }
-      }
-    }
-//    SetDIBitsToDevice(gc, x, y+j-k, w, k, 0, 0, 0, k,
-//		      (LPSTR)((uchar*)buffer+(blocking-k)*linesize),
-//		      &bmi,
-//		      DIB_RGB_COLORS
-//		      );
-  }
-#endif
+  CGContextSetShouldAntialias(quartz_gc, true);
 }
 
 //

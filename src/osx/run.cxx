@@ -1408,21 +1408,12 @@ void Window::label(const char *name, const char * iname) {
 const Window *Window::current_;
 
 //+++ verify port to FLTK2
-void fltk::draw_into(CGImageRef gWorld) {
-/*
-  if ( gWorld ) {
-    SetGWorld( gWorld, 0 ); // sets the correct port
-    PixMapHandle pm = GetGWorldPixMap(gWorld);
-    Boolean ret = LockPixels(pm);
-    if ( ret == false ) {
-      Rect rect;
-      GetPortBounds( gWorld, &rect );
-      UpdateGWorld( &gWorld, 0, &rect, 0, 0, 0 );
-      pm = GetGWorldPixMap( gWorld );
-      LockPixels( pm );
-    }
-  }
-*/
+void fltk::draw_into(CGContextRef gc) {
+  release_quartz_context();
+  quartz_window = 0;
+  quartz_gc = gc;
+  CGContextSaveGState(quartz_gc);
+  fill_quartz_context();
 }
 
 //+++ verify port to FLTK2
