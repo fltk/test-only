@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.4 1999/09/19 04:58:53 vincent Exp $"
+// "$Id: Fl_Font.H,v 1.5 1999/10/17 20:40:03 vincent Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -31,7 +31,7 @@
 class Fl_FontSize; // secret internal data
 
 // This is a struct so I can init a table with constants:
-struct Fl_Font_ {
+struct FL_API Fl_Font_ {
   const char* name_;
   Fl_Font_* bold;
   Fl_Font_* italic;
@@ -42,11 +42,11 @@ struct Fl_Font_ {
   // return the system-specific name, different for each font:
   const char* system_name() const {return name_;}
   // return the "nice" name:
-  FL_EXPORT const char* name(int* = 0) const;
+  const char* name(int* = 0) const;
   // return array of sizes:
-  FL_EXPORT int sizes(int*& sizep) const;
+  int sizes(int*& sizep) const;
   // return array of encodings:
-  FL_EXPORT int encodings(const char**& sizep) const;
+  int encodings(const char**& sizep) const;
   // "measurement" is considered a drawing function, see fl_draw.h
 };
 
@@ -60,7 +60,7 @@ enum {
 typedef const Fl_Font_* Fl_Font;
 
 // Built-in fonts:
-FL_IMPORT extern FL_EXPORT Fl_Font_ fl_fonts[16];
+extern FL_API Fl_Font_ fl_fonts[16];
 #define FL_HELVETICA		(fl_fonts+0)
 #define FL_HELVETICA_BOLD	(fl_fonts+1)
 #define FL_HELVETICA_ITALIC	(fl_fonts+2)
@@ -82,11 +82,11 @@ FL_IMPORT extern FL_EXPORT Fl_Font_ fl_fonts[16];
 
 // Return a font by name + attributes.  On X this will open the display
 // and list all the fonts!
-FL_EXPORT Fl_Font fl_font(const char* name);
+Fl_Font fl_font(const char* name);
 
 // Find and return every font on the system.
 // The "everything" flag makes something for every font on an X system,
 // even if it does not have a well-formed font name.
-FL_EXPORT int fl_list_fonts(Fl_Font*& arrayp, int everything = 0);
+int fl_list_fonts(Fl_Font*& arrayp, int everything = 0);
 
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.8 1999/09/14 17:52:28 carl Exp $"
+// "$Id: Fl_Image.H,v 1.9 1999/10/17 20:40:05 vincent Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 class Fl_Widget;
 struct Fl_Menu_Item;
 
-FL_EXPORT class Fl_Image {
+class FL_API Fl_Image {
 protected:
   ulong id, mask;
   void _draw(int X, int Y, int W, int H, int cx, int cy);
@@ -57,5 +57,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.8 1999/09/14 17:52:28 carl Exp $".
+// End of "$Id: Fl_Image.H,v 1.9 1999/10/17 20:40:05 vincent Exp $".
 //

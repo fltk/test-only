@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.22 1999/10/03 06:31:32 bill Exp $"
+// "$Id: win32.H,v 1.23 1999/10/17 20:40:16 vincent Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -45,9 +45,9 @@
 // some random X equivalents
 typedef HWND Window;
 typedef POINT XPoint;
-struct XRectangle {int x, y, width, height;};
+struct FL_API XRectangle {int x, y, width, height;};
 typedef HRGN Region;
-FL_EXPORT void fl_clip_region(Region);
+void fl_clip_region(Region);
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
 }
@@ -67,7 +67,7 @@ inline void XClipBox(Region r,XRectangle* rect) {
 
 // this object contains all win32-specific stuff about a window:
 // Warning: this object is highly subject to change!
-class Fl_X {
+class FL_API Fl_X {
 public:
   Window xid;
   HBITMAP other_xid; // for double-buffered windows
@@ -78,40 +78,40 @@ public:
   HDC private_dc; // used for OpenGL
   HCURSOR cursor;
   inline void flush() {w->flush();}
-  FL_IMPORT static FL_EXPORT Fl_X* first;
-  FL_IMPORT static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
-  FL_IMPORT static FL_EXPORT int borders(const Fl_Window* w,
+  static Fl_X* first;
+  static Fl_X* i(const Fl_Window* w) {return w->i;}
+  static int borders(const Fl_Window* w,
 					 int& dx, int& dy, int& dw, int& dh);
-  FL_EXPORT void set_minmax(LPMINMAXINFO minmax);
-  FL_IMPORT static FL_EXPORT Fl_X* create(Fl_Window*);
+  void set_minmax(LPMINMAXINFO minmax);
+  static Fl_X* create(Fl_Window*);
 };
-FL_IMPORT extern FL_EXPORT HCURSOR fl_default_cursor;
+extern FL_API HCURSOR fl_default_cursor;
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
-FL_EXPORT Fl_Window* fl_find(Window xid);
-FL_IMPORT extern FL_EXPORT char fl_override_redirect; // hack into Fl_Window::make_xid()
+Fl_Window* fl_find(Window xid);
+extern FL_API char fl_override_redirect; // hack into Fl_Window::make_xid()
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
-FL_IMPORT extern FL_EXPORT struct Fl_XMap {
+extern FL_API struct FL_API Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
   int brush;	// ref to solid brush, 0 if none created yet
 } *fl_current_xmap;
 inline COLORREF fl_RGB() {return fl_current_xmap->rgb;}
 inline HPEN fl_pen() {return fl_current_xmap->pen;}
-FL_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
+HBRUSH fl_brush(); // allocates a brush if necessary
 
-FL_IMPORT extern FL_EXPORT HINSTANCE fl_display;
-FL_IMPORT extern FL_EXPORT Window fl_window;
-FL_IMPORT extern FL_EXPORT HDC fl_gc;
-FL_IMPORT extern FL_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
-FL_IMPORT extern FL_EXPORT HDC fl_GetDC(Window);
-FL_IMPORT extern FL_EXPORT MSG fl_msg;
+extern FL_API HINSTANCE fl_display;
+extern FL_API Window fl_window;
+extern FL_API HDC fl_gc;
+extern FL_API HPALETTE fl_palette; // non-zero only on 8-bit displays!
+extern FL_API HDC fl_GetDC(Window);
+extern FL_API MSG fl_msg;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
 #define Fl_Offscreen HBITMAP
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
-FL_IMPORT extern FL_EXPORT HDC fl_makeDC(HBITMAP);
+extern FL_API HDC fl_makeDC(HBITMAP);
 #define fl_begin_offscreen(b) \
   HDC _sgc=fl_gc; Window _sw=fl_window; \
   fl_gc=fl_makeDC(b); fl_window=(HWND)b; fl_push_no_clip()
@@ -119,16 +119,16 @@ FL_IMPORT extern FL_EXPORT HDC fl_makeDC(HBITMAP);
 #define fl_end_offscreen() \
   fl_pop_clip(); DeleteDC(fl_gc); fl_window=_sw; fl_gc = _sgc
 
-FL_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
+void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
 // binary images, created from in-memory data:
 // See Fl_Image::_draw() for code that uses these.
-FL_IMPORT extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
+extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
 
 #endif
 
 //
-// End of "$Id: win32.H,v 1.22 1999/10/03 06:31:32 bill Exp $".
+// End of "$Id: win32.H,v 1.23 1999/10/17 20:40:16 vincent Exp $".
 //

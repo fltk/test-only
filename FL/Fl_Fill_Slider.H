@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Fill_Slider.H,v 1.4 1999/01/07 19:16:53 mike Exp $"
+// "$Id: Fl_Fill_Slider.H,v 1.5 1999/10/17 20:40:02 vincent Exp $"
 //
 // Filled slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Slider.H"
 
-class Fl_Fill_Slider : public Fl_Slider {
+class FL_API Fl_Fill_Slider : public Fl_Slider {
 public:
     Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0)
 	: Fl_Slider(x,y,w,h,l) {type(FL_VERT_FILL_SLIDER);}
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Fill_Slider.H,v 1.4 1999/01/07 19:16:53 mike Exp $".
+// End of "$Id: Fl_Fill_Slider.H,v 1.5 1999/10/17 20:40:02 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Int_Input.H,v 1.4 1999/01/07 19:16:56 mike Exp $"
+// "$Id: Fl_Int_Input.H,v 1.5 1999/10/17 20:40:05 vincent Exp $"
 //
 // Integer input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Input.H"
 
-class Fl_Int_Input : public Fl_Input {
+class FL_API Fl_Int_Input : public Fl_Input {
 public:
     Fl_Int_Input(int x,int y,int w,int h,const char *l = 0)
 	: Fl_Input(x,y,w,h,l) {type(FL_INT_INPUT);}
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Int_Input.H,v 1.4 1999/01/07 19:16:56 mike Exp $".
+// End of "$Id: Fl_Int_Input.H,v 1.5 1999/10/17 20:40:05 vincent Exp $".
 //

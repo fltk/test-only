@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.H,v 1.11 1999/09/14 07:17:14 bill Exp $"
+// "$Id: Fl_Double_Window.H,v 1.12 1999/10/17 20:40:02 vincent Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Window.H"
 
-FL_EXPORT class Fl_Double_Window : public Fl_Window {
+class FL_API Fl_Double_Window : public Fl_Window {
 
 public:
 
@@ -54,5 +54,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H,v 1.11 1999/09/14 07:17:14 bill Exp $".
+// End of "$Id: Fl_Double_Window.H,v 1.12 1999/10/17 20:40:02 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.H,v 1.10 1999/09/19 04:58:55 vincent Exp $"
+// "$Id: Fl_Output.H,v 1.11 1999/10/17 20:40:08 vincent Exp $"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,11 +28,11 @@
 
 #include "Fl_Input_.H"
 
-class Fl_Output : public Fl_Input_ {
+class FL_API Fl_Output : public Fl_Input_ {
   friend class Fl_Value_Output;
 
 public:
-  FL_IMPORT static Fl_Style default_style;
+  static Fl_Style default_style;
   int handle(int);
   Fl_Output(int x, int y, int w, int h, const char *l = 0);
 
@@ -43,5 +43,5 @@ protected:
 #endif 
 
 //
-// End of "$Id: Fl_Output.H,v 1.10 1999/09/19 04:58:55 vincent Exp $".
+// End of "$Id: Fl_Output.H,v 1.11 1999/10/17 20:40:08 vincent Exp $".
 //

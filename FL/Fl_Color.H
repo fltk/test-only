@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.1 1999/08/16 07:30:49 bill Exp $"
+// "$Id: Fl_Color.H,v 1.2 1999/10/17 20:40:01 vincent Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #ifndef Fl_Color_h
 #define Fl_Color_h
 
-#include "Enumerations.H" // for FL_EXPORT and uchar
+#include "Enumerations.H" // for and uchar
 
 // I tried making this a class, so that constructors like Fl_Color(r,g,b)
 // could be used.  But gcc produced much worse code output, so I returned
@@ -75,20 +75,20 @@ inline Fl_Color fl_color_cube(int r, int g, int b) {
   return (Fl_Color)((b*FL_NUM_RED + r) * FL_NUM_GREEN + g + FL_COLOR_CUBE);}
 inline Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char b) {
   return Fl_Color((r<<24)+(g<<16)+(b<<8));}
-FL_EXPORT Fl_Color fl_rgb(const char*);
-FL_EXPORT Fl_Color fl_color_average(Fl_Color, Fl_Color, double weight);
-FL_EXPORT Fl_Color fl_inactive(Fl_Color c);
-FL_EXPORT Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
-FL_EXPORT Fl_Color fl_get_color(Fl_Color c);
-FL_EXPORT void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
-FL_EXPORT void fl_set_color(Fl_Color c, Fl_Color v);
-FL_EXPORT void fl_free_color(Fl_Color i);
-FL_EXPORT void fl_foreground(Fl_Color);
-FL_EXPORT void fl_background(Fl_Color);
-FL_EXPORT void fl_text_background(Fl_Color);
+Fl_Color fl_rgb(const char*);
+Fl_Color fl_color_average(Fl_Color, Fl_Color, double weight);
+Fl_Color fl_inactive(Fl_Color c);
+Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
+Fl_Color fl_get_color(Fl_Color c);
+void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
+void fl_set_color(Fl_Color c, Fl_Color v);
+void fl_free_color(Fl_Color i);
+void fl_foreground(Fl_Color);
+void fl_background(Fl_Color);
+void fl_text_background(Fl_Color);
 
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.1 1999/08/16 07:30:49 bill Exp $".
+// End of "$Id: Fl_Color.H,v 1.2 1999/10/17 20:40:01 vincent Exp $".
 //

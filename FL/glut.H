@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.9 1999/09/24 16:03:42 vincent Exp $"
+// "$Id: glut.H,v 1.10 1999/10/17 20:40:15 vincent Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,17 +54,17 @@
 #include "Fl.H"
 #include "Fl_Gl_Window.H"
 
-class Fl_Glut_Window : public Fl_Gl_Window {
-  FL_EXPORT void _init();
+class FL_API Fl_Glut_Window : public Fl_Gl_Window {
+  void _init();
   int mouse_down;
 protected:
-  FL_EXPORT void draw();
-  FL_EXPORT void draw_overlay();
-  FL_EXPORT int handle(int);
+  void draw();
+  void draw_overlay();
+  int handle(int);
 public: // so the inline functions work
   int number;
   int menu[3];
-  FL_EXPORT void make_current();
+  void make_current();
   void (*display)();
   void (*overlaydisplay)();
   void (*reshape)(int w, int h);
@@ -75,26 +75,26 @@ public: // so the inline functions work
   void (*entry)(int);
   void (*visibility)(int);
   void (*special)(int, int x, int y);
-  FL_EXPORT Fl_Glut_Window(int w, int h, const char *);
-  FL_EXPORT Fl_Glut_Window(int x, int y, int w, int h, const char *);
-  FL_EXPORT ~Fl_Glut_Window();
+  Fl_Glut_Window(int w, int h, const char *);
+  Fl_Glut_Window(int x, int y, int w, int h, const char *);
+  ~Fl_Glut_Window();
 };
 
-FL_IMPORT extern FL_EXPORT Fl_Glut_Window *glut_window;	// the current window
-FL_IMPORT extern FL_EXPORT int glut_menu;			// the current menu
+extern FL_API Fl_Glut_Window *glut_window;	// the current window
+extern FL_API int glut_menu;			// the current menu
 
 // function pointers that are not per-window:
-FL_IMPORT extern FL_EXPORT void (*glut_idle_function)();
-FL_IMPORT extern FL_EXPORT void (*glut_menustate_function)(int);
-FL_IMPORT extern FL_EXPORT void (*glut_menustatus_function)(int,int,int);
+extern FL_API void (*glut_idle_function)();
+extern FL_API void (*glut_menustate_function)(int);
+extern FL_API void (*glut_menustatus_function)(int,int,int);
 
 ////////////////////////////////////////////////////////////////
 
 //#define GLUT_API_VERSION This does not match any version of Glut exactly...
 
-FL_EXPORT void glutInit(int *argcp, char **argv); // creates first window
+void glutInit(int *argcp, char **argv); // creates first window
 
-FL_EXPORT void glutInitDisplayMode(unsigned int mode);
+void glutInitDisplayMode(unsigned int mode);
 // the FL_ symbols have the same value as the GLUT ones:
 #define GLUT_RGB	FL_RGB
 #define GLUT_RGBA	FL_RGB
@@ -109,25 +109,25 @@ FL_EXPORT void glutInitDisplayMode(unsigned int mode);
 // #define GLUT_STEREO			256
 // #define GLUT_LUMINANCE		512
 
-FL_EXPORT void glutInitWindowPosition(int x, int y);
+void glutInitWindowPosition(int x, int y);
 
-FL_EXPORT void glutInitWindowSize(int w, int h);
+void glutInitWindowSize(int w, int h);
 
-FL_EXPORT void glutMainLoop();
+void glutMainLoop();
 
-FL_EXPORT int glutCreateWindow(char *title);
+int glutCreateWindow(char *title);
 
-FL_EXPORT int glutCreateSubWindow(int win, int x, int y, int width, int height);
+int glutCreateSubWindow(int win, int x, int y, int width, int height);
 
-FL_EXPORT void glutDestroyWindow(int win);
+void glutDestroyWindow(int win);
 
 inline void glutPostRedisplay() {glut_window->redraw();}
 
-FL_EXPORT void glutSwapBuffers();
+void glutSwapBuffers();
 
 inline int glutGetWindow() {return glut_window->number;}
 
-FL_EXPORT void glutSetWindow(int win);
+void glutSetWindow(int win);
 
 inline void glutSetWindowTitle(char *t) {glut_window->label(t);}
 
@@ -191,23 +191,23 @@ inline void glutShowOverlay() {glut_window->redraw_overlay();}
 
 inline void glutHideOverlay() {glut_window->hide_overlay();}
 
-FL_EXPORT int glutCreateMenu(void (*)(int));
+int glutCreateMenu(void (*)(int));
 
-FL_EXPORT void glutDestroyMenu(int menu);
+void glutDestroyMenu(int menu);
 
 inline int glutGetMenu() {return glut_menu;}
 
 inline void glutSetMenu(int m) {glut_menu = m;}
 
-FL_EXPORT void glutAddMenuEntry(char *label, int value);
+void glutAddMenuEntry(char *label, int value);
 
-FL_EXPORT void glutAddSubMenu(char *label, int submenu);
+void glutAddSubMenu(char *label, int submenu);
 
-FL_EXPORT void glutChangeToMenuEntry(int item, char *label, int value);
+void glutChangeToMenuEntry(int item, char *label, int value);
 
-FL_EXPORT void glutChangeToSubMenu(int item, char *label, int submenu);
+void glutChangeToSubMenu(int item, char *label, int submenu);
 
-FL_EXPORT void glutRemoveMenuItem(int item);
+void glutRemoveMenuItem(int item);
 
 inline void glutAttachMenu(int b) {glut_window->menu[b] = glut_menu;}
 
@@ -405,7 +405,7 @@ int glutLayerGet(GLenum);
 // Emulated Glut drawing functions:
 
 // Font argument must be a void* for compatability, so...
-FL_IMPORT extern struct Glut_Bitmap_Font {Fl_Font font; int size;}
+extern FL_API struct FL_API Glut_Bitmap_Font {Fl_Font font; int size;}
   glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
   glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
   glutBitmapHelvetica18;
@@ -417,8 +417,8 @@ FL_IMPORT extern struct Glut_Bitmap_Font {Fl_Font font; int size;}
 #define GLUT_BITMAP_HELVETICA_12        (&glutBitmapHelvetica12)
 #define GLUT_BITMAP_HELVETICA_18        (&glutBitmapHelvetica18)
 
-FL_EXPORT void glutBitmapCharacter(void *font, int character);
-FL_EXPORT int glutBitmapWidth(void *font, int character);
+void glutBitmapCharacter(void *font, int character);
+int glutBitmapWidth(void *font, int character);
 
 ////////////////////////////////////////////////////////////////
 // Glut drawing functions.  These are NOT emulated but you can
@@ -426,46 +426,46 @@ FL_EXPORT int glutBitmapWidth(void *font, int character);
 // files in Glut remain as they currently are so that there are
 // not symbol conflicts with the above.
 
-FL_IMPORT extern "C" {
+extern FL_API "C" {
 
-FL_IMPORT extern int glutExtensionSupported(char *name);
+extern FL_API int glutExtensionSupported(char *name);
 
 /* Stroke font opaque addresses (use constants instead in source code). */
-FL_IMPORT extern void *glutStrokeRoman;
-FL_IMPORT extern void *glutStrokeMonoRoman;
+extern FL_API void *glutStrokeRoman;
+extern FL_API void *glutStrokeMonoRoman;
 
 /* Stroke font constants (use these in GLUT program). */
 #define GLUT_STROKE_ROMAN		(&glutStrokeRoman)
 #define GLUT_STROKE_MONO_ROMAN		(&glutStrokeMonoRoman)
 
 /* GLUT font sub-API */
-FL_IMPORT extern void glutStrokeCharacter(void *font, int character);
-FL_IMPORT extern int glutStrokeWidth(void *font, int character);
+extern FL_API void glutStrokeCharacter(void *font, int character);
+extern FL_API int glutStrokeWidth(void *font, int character);
 
 /* GLUT pre-built models sub-API */
-FL_IMPORT extern void glutWireSphere(GLdouble radius, GLint slices, GLint stacks);
-FL_IMPORT extern void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
-FL_IMPORT extern void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
-FL_IMPORT extern void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
-FL_IMPORT extern void glutWireCube(GLdouble size);
-FL_IMPORT extern void glutSolidCube(GLdouble size);
-FL_IMPORT extern void glutWireTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
-FL_IMPORT extern void glutSolidTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
-FL_IMPORT extern void glutWireDodecahedron();
-FL_IMPORT extern void glutSolidDodecahedron();
-FL_IMPORT extern void glutWireTeapot(GLdouble size);
-FL_IMPORT extern void glutSolidTeapot(GLdouble size);
-FL_IMPORT extern void glutWireOctahedron();
-FL_IMPORT extern void glutSolidOctahedron();
-FL_IMPORT extern void glutWireTetrahedron();
-FL_IMPORT extern void glutSolidTetrahedron();
-FL_IMPORT extern void glutWireIcosahedron();
-FL_IMPORT extern void glutSolidIcosahedron();
+extern FL_API void glutWireSphere(GLdouble radius, GLint slices, GLint stacks);
+extern FL_API void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
+extern FL_API void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+extern FL_API void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+extern FL_API void glutWireCube(GLdouble size);
+extern FL_API void glutSolidCube(GLdouble size);
+extern FL_API void glutWireTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
+extern FL_API void glutSolidTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
+extern FL_API void glutWireDodecahedron();
+extern FL_API void glutSolidDodecahedron();
+extern FL_API void glutWireTeapot(GLdouble size);
+extern FL_API void glutSolidTeapot(GLdouble size);
+extern FL_API void glutWireOctahedron();
+extern FL_API void glutSolidOctahedron();
+extern FL_API void glutWireTetrahedron();
+extern FL_API void glutSolidTetrahedron();
+extern FL_API void glutWireIcosahedron();
+extern FL_API void glutSolidIcosahedron();
 
 }
 
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.9 1999/09/24 16:03:42 vincent Exp $".
+// End of "$Id: glut.H,v 1.10 1999/10/17 20:40:15 vincent Exp $".
 //

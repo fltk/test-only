@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.H,v 1.6 1999/02/16 21:59:36 mike Exp $"
+// "$Id: Fl_Clock.H,v 1.7 1999/10/17 20:40:01 vincent Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,17 +38,17 @@
 
 // a Fl_Clock_Output can be used to display a program-supplied time:
 
-class Fl_Clock_Output : public Fl_Widget {
+class FL_API Fl_Clock_Output : public Fl_Widget {
   int hour_, minute_, second_;
   ulong value_;
-  FL_EXPORT void drawhands(Fl_Color,Fl_Color); // part of draw
+  void drawhands(Fl_Color,Fl_Color); // part of draw
 protected:
-  FL_EXPORT void draw(int, int, int, int);
-  FL_EXPORT void draw();
+  void draw(int, int, int, int);
+  void draw();
 public:
-  FL_EXPORT Fl_Clock_Output(int x,int y,int w,int h, const char *l = 0);
-  FL_EXPORT void value(ulong v);	// set to this Unix time
-  FL_EXPORT void value(int,int,int);	// set hour, minute, second
+  Fl_Clock_Output(int x,int y,int w,int h, const char *l = 0);
+  void value(ulong v);	// set to this Unix time
+  void value(int,int,int);	// set hour, minute, second
   ulong value() const {return value_;}
   int hour() const {return hour_;}
   int minute() const {return minute_;}
@@ -57,17 +57,17 @@ public:
 
 // a Fl_Clock displays the current time always by using a timeout:
 
-class Fl_Clock : public Fl_Clock_Output {
-  FL_EXPORT int handle(int);
+class FL_API Fl_Clock : public Fl_Clock_Output {
+  int handle(int);
 public:
-  FL_EXPORT void update();
-  FL_EXPORT Fl_Clock(int x,int y,int w,int h, const char *l = 0);
-  FL_EXPORT Fl_Clock(uchar t,int x,int y,int w,int h, const char *l);
-  FL_EXPORT ~Fl_Clock();
+  void update();
+  Fl_Clock(int x,int y,int w,int h, const char *l = 0);
+  Fl_Clock(uchar t,int x,int y,int w,int h, const char *l);
+  ~Fl_Clock();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Clock.H,v 1.6 1999/02/16 21:59:36 mike Exp $".
+// End of "$Id: Fl_Clock.H,v 1.7 1999/10/17 20:40:01 vincent Exp $".
 //

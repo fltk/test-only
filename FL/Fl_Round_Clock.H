@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Clock.H,v 1.4 1999/01/07 19:17:01 mike Exp $"
+// "$Id: Fl_Round_Clock.H,v 1.5 1999/10/17 20:40:10 vincent Exp $"
 //
 // Round clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Clock.H"
 
-class Fl_Round_Clock : public Fl_Clock {
+class FL_API Fl_Round_Clock : public Fl_Clock {
 public:
     Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)
 	: Fl_Clock(x,y,w,h,l) {type(FL_ROUND_CLOCK); box(FL_NO_BOX);}
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Round_Clock.H,v 1.4 1999/01/07 19:17:01 mike Exp $".
+// End of "$Id: Fl_Round_Clock.H,v 1.5 1999/10/17 20:40:10 vincent Exp $".
 //

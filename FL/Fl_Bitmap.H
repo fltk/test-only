@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.H,v 1.8 1999/08/30 09:36:05 vincent Exp $"
+// "$Id: Fl_Bitmap.H,v 1.9 1999/10/17 20:39:59 vincent Exp $"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Image.H"
 
-FL_EXPORT class Fl_Bitmap : public Fl_Image {
+class FL_API Fl_Bitmap : public Fl_Image {
 public:
   const uchar *array;
   Fl_Bitmap(const uchar *bits, int W, int H) : array(bits) {w = W; h = H;}
@@ -47,5 +47,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Bitmap.H,v 1.8 1999/08/30 09:36:05 vincent Exp $".
+// End of "$Id: Fl_Bitmap.H,v 1.9 1999/10/17 20:39:59 vincent Exp $".
 //

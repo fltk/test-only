@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Fly_Button.H,v 1.4 1999/08/16 07:30:50 bill Exp $"
+// "$Id: Fl_Fly_Button.H,v 1.5 1999/10/17 20:40:03 vincent Exp $"
 //
 // Fly button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #define Fl_Fly_Button_H
 #include "Fl_Button.H"
 
-class Fl_Fly_Button : public Fl_Button {
+class FL_API Fl_Fly_Button : public Fl_Button {
 public:
   Fl_Fly_Button(int x,int y,int w,int h,const char *l=0);
 };
@@ -35,5 +35,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Fly_Button.H,v 1.4 1999/08/16 07:30:50 bill Exp $".
+// End of "$Id: Fl_Fly_Button.H,v 1.5 1999/10/17 20:40:03 vincent Exp $".
 //

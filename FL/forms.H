@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.10 1999/09/19 04:58:58 vincent Exp $"
+// "$Id: forms.H,v 1.11 1999/10/17 20:40:15 vincent Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -166,7 +166,7 @@ typedef int FL_COLOR;
 // fltk interaction:
 
 #define FL_CMD_OPT void
-FL_IMPORT extern FL_EXPORT void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
+extern FL_API void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
 inline void fl_finish() {}
 
 typedef void (*FL_IO_CALLBACK) (int, void*);
@@ -183,8 +183,8 @@ inline void fl_remove_timeout(int) {}
 // type of callback is different!
 inline void fl_set_idle_callback(void (*cb)()) {Fl::set_idle(cb);}
 
-FL_EXPORT Fl_Widget* fl_do_forms(void);
-FL_EXPORT Fl_Widget* fl_check_forms();
+Fl_Widget* fl_do_forms(void);
+Fl_Widget* fl_check_forms();
 inline Fl_Widget* fl_do_only_forms(void) {return fl_do_forms();}
 inline Fl_Widget* fl_check_only_forms(void) {return fl_check_forms();}
 
@@ -209,7 +209,7 @@ inline void fl_reset_focus_object(Fl_Widget* o) {Fl::focus(o);}
 
 inline void fl_set_object_boxtype(Fl_Widget* o, Fl_Boxtype a) {o->box(a);}
 inline void fl_set_object_lsize(Fl_Widget* o,int s) {o->labelsize(s);}
-FL_EXPORT void fl_set_object_lstyle(Fl_Widget* o,int a);
+void fl_set_object_lstyle(Fl_Widget* o,int a);
 inline void fl_set_object_lcol(Fl_Widget* o, unsigned a) {o->labelcolor((Fl_Color)a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(Fl_Widget* o, Fl_Align a) {o->align(a);}
@@ -267,7 +267,7 @@ inline Fl_Window* fl_bgn_form(Fl_Boxtype b,int w,int h) {
   g->box(b);
   return g;
 }
-FL_EXPORT void fl_end_form();
+void fl_end_form();
 inline void fl_addto_form(Fl_Window* f) {f->begin();}
 inline Fl_Group* fl_bgn_group() {return new Fl_Group(0,0,0,0,0);}
 inline void fl_end_group() {Fl_Group::current()->forms_end();}
@@ -283,7 +283,7 @@ inline void fl_set_form_geometry(Fl_Window* f,int x,int y,int w,int h) {
 #define fl_set_initial_placement fl_set_form_geometry
 inline void fl_adjust_form_size(Fl_Window*) {}
 
-FL_EXPORT void fl_show_form(Fl_Window* f,int p,int b,const char* n);
+void fl_show_form(Fl_Window* f,int p,int b,const char* n);
 enum {	// "p" argument values:
   FL_PLACE_FREE = 0,	// make resizable
   FL_PLACE_MOUSE = 1,	// mouse centered on form
@@ -308,7 +308,7 @@ enum {	// "b" arguement values:
 };
 inline void fl_set_form_hotspot(Fl_Window* w,int x,int y) {w->hotspot(x,y);}
 inline void fl_set_form_hotobject(Fl_Window* w, Fl_Widget* o) {w->hotspot(o);}
-FL_IMPORT extern FL_EXPORT char fl_flip;	// in forms.C
+extern FL_API char fl_flip;	// in forms.C
 inline void fl_flip_yorigin() {fl_flip = 1;}
 
 #define fl_prepare_form_window fl_show_form
@@ -319,7 +319,7 @@ inline void fl_raise_form(Fl_Window* f) {f->show();}
 inline void fl_hide_form(Fl_Window* f) {f->hide();}
 inline void fl_pop_form(Fl_Window* f) {f->show();}
 
-FL_IMPORT extern FL_EXPORT char fl_modal_next; // in forms.C
+extern FL_API char fl_modal_next; // in forms.C
 inline void fl_activate_all_forms() {}
 inline void fl_deactivate_all_forms() {fl_modal_next = 1;}
 inline void fl_deactivate_form(Fl_Window*w) {w->deactivate();}
@@ -333,7 +333,7 @@ inline void fl_set_form_callback(Fl_Window* f,Forms_FormCB c) {f->callback(c);}
 #define fl_set_form_call_back fl_set_form_callback
 
 inline void fl_init() {}
-FL_EXPORT void fl_set_graphics_mode(int,int);
+void fl_set_graphics_mode(int,int);
 
 inline int fl_form_is_visible(Fl_Window* f) {return f->visible();}
 
@@ -482,7 +482,7 @@ inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
-FL_EXPORT Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
+Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(Fl_Widget* b) {return ((Fl_Button*)b)->value();}
 inline void fl_set_button(Fl_Widget* b, int v) {((Fl_Button*)b)->value(v);}
 inline int fl_get_button_numb(Fl_Widget*) {return Fl::event_button();}
@@ -649,12 +649,12 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
 #include "fl_show_colormap.H"
 
 inline int fl_show_question(const char* c, int = 0) {return fl_ask(c);}
-FL_EXPORT void fl_show_message(const char *,const char *,const char *);
-FL_EXPORT void fl_show_alert(const char *,const char *,const char *,int=0);
-FL_EXPORT int fl_show_question(const char *,const char *,const char *);
+void fl_show_message(const char *,const char *,const char *);
+void fl_show_alert(const char *,const char *,const char *,int=0);
+int fl_show_question(const char *,const char *,const char *);
 inline const char *fl_show_input(const char *l,const char*d=0) {return fl_input(l,d);}
-FL_EXPORT /*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
-FL_EXPORT int fl_show_choice(
+/*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
+int fl_show_choice(
     const char *m1,
     const char *m2,
     const char *m3,
@@ -675,11 +675,11 @@ inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
 inline int do_matching(char* a, const char* b) {return filename_match(a,b);}
 
 // Forms-compatable file chooser (implementation in fselect.C):
-FL_EXPORT char* fl_show_file_selector(const char* message,const char* dir,
+char* fl_show_file_selector(const char* message,const char* dir,
 			    const char* pat,const char* fname);
-FL_EXPORT char*	fl_get_directory();
-FL_EXPORT char*	fl_get_pattern();
-FL_EXPORT char*	fl_get_filename();
+char*	fl_get_directory();
+char*	fl_get_pattern();
+char*	fl_get_filename();
 
 #include "Fl_Input.H"
 forms_constructor(Fl_Input, fl_add_input)
@@ -811,9 +811,9 @@ inline void fl_set_slider_precision(Fl_Widget* o, int i) {
 
 // The forms text object was the same as an Fl_Box except it inverted the
 // meaning of FL_ALIGN_INSIDE.  Implementation in forms.C
-class Fl_FormsText : public Fl_Widget {
+class FL_API Fl_FormsText : public Fl_Widget {
 protected:
-    FL_EXPORT void draw();
+    void draw();
 public:
     Fl_FormsText(Fl_Boxtype b, int x, int y, int w, int h, const char* l=0)
 	: Fl_Widget(x,y,w,h,l) {box(b); align(FL_ALIGN_LEFT);}
@@ -841,5 +841,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.10 1999/09/19 04:58:58 vincent Exp $".
+// End of "$Id: forms.H,v 1.11 1999/10/17 20:40:15 vincent Exp $".
 //

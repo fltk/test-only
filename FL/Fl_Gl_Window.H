@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.12 1999/09/19 04:58:53 vincent Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.13 1999/10/17 20:40:04 vincent Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 
 class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
 
-FL_EXPORT class Fl_Gl_Window : public Fl_Window {
+class FL_API Fl_Gl_Window : public Fl_Window {
 
   int mode_;
   const int* alist;
@@ -43,7 +43,7 @@ FL_EXPORT class Fl_Gl_Window : public Fl_Window {
   void make_overlay();
   friend class _Fl_Gl_Overlay;
 
-  FL_IMPORT static int can_do(int, const int *);
+  static int can_do(int, const int *);
   int mode(int, const int *);
 
 protected:
@@ -61,8 +61,8 @@ public:
   void valid(char i) {valid_ = i;}
   void invalidate();
 
-  FL_IMPORT static int can_do(int i) {return can_do(i, 0);}
-  FL_IMPORT static int can_do(const int *i) {return can_do(0, i);}
+  static int can_do(int i) {return can_do(i, 0);}
+  static int can_do(const int *i) {return can_do(0, i);}
   int can_do() {return can_do(mode_, alist);}
   Fl_Mode mode() const {return (Fl_Mode)mode_;}
   int mode(int a) {return mode(a, 0);}
@@ -86,5 +86,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.12 1999/09/19 04:58:53 vincent Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.13 1999/10/17 20:40:04 vincent Exp $".
 //

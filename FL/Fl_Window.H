@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.24 1999/10/12 22:22:51 vincent Exp $"
+// "$Id: Fl_Window.H,v 1.25 1999/10/17 20:40:13 vincent Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,9 @@
 
 #define FL_WINDOW 0xF0	// all subclasses have type() >= this
 
-FL_EXPORT class Fl_Window : public Fl_Group {
+class FL_API Fl_Window : public Fl_Group {
 public:
-  FL_IMPORT static Fl_Style default_style;
+  static Fl_Style default_style;
 
   Fl_Window(int,int,int,int, const char* = 0);
   Fl_Window(int,int, const char* = 0);
@@ -79,11 +79,11 @@ public:
   int x_root() const ;
   int y_root() const ;
 
-  FL_IMPORT static Fl_Window *current() {return current_;}
+  static Fl_Window *current() {return current_;}
   void make_current();
 
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
-  FL_IMPORT static void default_callback(Fl_Window*, void* v);
+  static void default_callback(Fl_Window*, void* v);
 
   virtual void layout();
   virtual void flush();
@@ -112,12 +112,12 @@ private:
     FL_FORCE_POSITION	= 0x20000000,
     FL_NON_MODAL 	= 0x10000000
   };
-  FL_IMPORT static Fl_Window *current_;
+  static Fl_Window *current_;
   void _Fl_Window(); // constructor innards
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.24 1999/10/12 22:22:51 vincent Exp $".
+// End of "$Id: Fl_Window.H,v 1.25 1999/10/17 20:40:13 vincent Exp $".
 //

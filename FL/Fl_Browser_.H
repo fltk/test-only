@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.16 1999/10/16 22:54:32 vincent Exp $"
+// "$Id: Fl_Browser_.H,v 1.17 1999/10/17 20:40:00 vincent Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@
 #define FL_HOLD_BROWSER		2
 #define FL_MULTI_BROWSER	3
 
-class Fl_Browser_ : public Fl_Group {
+class FL_API Fl_Browser_ : public Fl_Group {
 public:
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
@@ -68,8 +68,8 @@ public:
     BOTH_ALWAYS = 7
   };
 
-  FL_IMPORT static void scrollbar_width(int b) {scrollbar_width_ = b;}
-  FL_IMPORT static int scrollbar_width() {return scrollbar_width_;}
+  static void scrollbar_width(int b) {scrollbar_width_ = b;}
+  static int scrollbar_width() {return scrollbar_width_;}
 
   // for back compatability:
   void scrollbar_right() {scrollbar.align(FL_ALIGN_RIGHT);}
@@ -126,7 +126,7 @@ private:
   int real_hposition_;	// the current horizontal scrolling position
   int offset_;		// how far down top_ item the real_position is
   int max_width;	// widest object seen so far
-  FL_IMPORT static int scrollbar_width_;
+  static int scrollbar_width_;
   uchar has_scrollbar_;	// which scrollbars are enabled
 
   void update_top();
@@ -135,5 +135,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.16 1999/10/16 22:54:32 vincent Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.17 1999/10/17 20:40:00 vincent Exp $".
 //

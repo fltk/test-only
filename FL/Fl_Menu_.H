@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.17 1999/09/19 04:58:54 vincent Exp $"
+// "$Id: Fl_Menu_.H,v 1.18 1999/10/17 20:40:06 vincent Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,9 +31,9 @@
 #endif
 #include "Fl_Menu_Item.H"
 
-FL_IMPORT extern int fl_old_shortcut(const char*);
+extern FL_API int fl_old_shortcut(const char*);
 
-class Fl_Menu_ : public Fl_Widget {
+class FL_API Fl_Menu_ : public Fl_Widget {
 public:
 
   Fl_Menu_(int,int,int,int,const char * =0);
@@ -88,5 +88,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.17 1999/09/19 04:58:54 vincent Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.18 1999/10/17 20:40:06 vincent Exp $".
 //

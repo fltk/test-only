@@ -1,5 +1,5 @@
 //
-// "$Id: filename.H,v 1.13 1999/10/11 01:00:25 vincent Exp $"
+// "$Id: filename.H,v 1.14 1999/10/17 20:40:14 vincent Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,44 +27,34 @@
 #define FL_FILENAME_H
 
 //
-// The following is only used when building DLLs under WIN32 with Visual C++...
+// The following is only used when building DLLs under WIN32
 //
 
-#if 0 && defined(FL_DLL) && defined(_MSC_VER)
+#if defined(WIN32) && defined(FL_DLL)
 #  ifdef FL_LIBRARY
-#    define FL_EXPORT	__declspec(dllexport)
+#    define FL_API	__declspec(dllexport)
 #  else
-#    define FL_EXPORT	__declspec(dllimport)
+#    define FL_API	__declspec(dllimport)
 #  endif /* FL_LIBRARY */
 #else
-#  define FL_EXPORT
-#endif /* FL_DLL && _MSC_VER */
-
-#if defined(FL_DLL)
-#  ifdef FL_LIBRARY
-#    define FL_IMPORT   __declspec(dllexport)
-#  else
-#    define FL_IMPORT	__declspec(dllimport)
-#  endif /* FL_LIBRARY */
-#else
-#  define FL_IMPORT
+#  define FL_API
 #endif /* FL_DLL */
 
 #define FL_PATH_MAX 256 // all buffers are this length
 
-FL_EXPORT const char *filename_name(const char *); // return pointer to name
-FL_EXPORT const char *filename_ext(const char *); // return pointer to .ext
-FL_EXPORT char *filename_setext(char *,const char *ext); // clobber .ext
-FL_EXPORT int filename_expand(char *, const char *from); // do $x and ~x
-FL_EXPORT int filename_absolute(char *, const char *from); // prepend getcwd()
-FL_EXPORT int filename_match(const char *, const char *pattern); // glob match
-FL_EXPORT int filename_isdir(const char*);
+const char *filename_name(const char *); // return pointer to name
+const char *filename_ext(const char *); // return pointer to .ext
+char *filename_setext(char *,const char *ext); // clobber .ext
+int filename_expand(char *, const char *from); // do $x and ~x
+int filename_absolute(char *, const char *from); // prepend getcwd()
+int filename_match(const char *, const char *pattern); // glob match
+int filename_isdir(const char*);
 
 // Portable "scandir" function.  Ugly but apparently necessary...
 
 #ifdef WIN32
 
-struct dirent {char d_name[1];};
+struct FL_API dirent {char d_name[1];};
 
 #else
 
@@ -81,10 +71,10 @@ struct dirent {char d_name[1];};
 
 #endif
 
-FL_EXPORT int filename_list(const char *d, struct dirent ***list);
+int filename_list(const char *d, struct dirent ***list);
 
 #endif
 
 //
-// End of "$Id: filename.H,v 1.13 1999/10/11 01:00:25 vincent Exp $".
+// End of "$Id: filename.H,v 1.14 1999/10/17 20:40:14 vincent Exp $".
 //

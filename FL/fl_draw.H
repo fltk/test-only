@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.15 1999/10/07 07:04:53 bill Exp $"
+// "$Id: fl_draw.H,v 1.16 1999/10/17 20:40:14 vincent Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,21 +31,21 @@
 #include "Fl_Font.H"
 
 // Colors:
-FL_EXPORT void fl_color(Fl_Color);
+void fl_color(Fl_Color);
 inline void fl_color(uchar r, uchar g, uchar b) {fl_color(fl_rgb(r,g,b));}
-FL_IMPORT extern FL_EXPORT Fl_Color fl_color_;
+extern FL_API Fl_Color fl_color_;
 inline Fl_Color fl_color() {return fl_color_;}
 
 // clip:
-FL_EXPORT void fl_clip(int x, int y, int w, int h);
-FL_EXPORT void fl_clip_out(int x, int y, int w, int h);
-FL_EXPORT void fl_push_no_clip();
-FL_EXPORT void fl_pop_clip();
-FL_EXPORT int fl_not_clipped(int x, int y, int w, int h);
-FL_EXPORT int fl_clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
+void fl_clip(int x, int y, int w, int h);
+void fl_clip_out(int x, int y, int w, int h);
+void fl_push_no_clip();
+void fl_pop_clip();
+int fl_not_clipped(int x, int y, int w, int h);
+int fl_clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
 
 // line type:
-FL_EXPORT void fl_line_style(int style, int width=0, char* dashes=0);
+void fl_line_style(int style, int width=0, char* dashes=0);
 enum {
   FL_SOLID	= 0,
   FL_DASH	= 1,
@@ -63,125 +63,125 @@ enum {
 };
 
 // points:
-FL_EXPORT void fl_point(int x, int y);
+void fl_point(int x, int y);
 
 // rectangles tweaked to exactly fill the pixel rectangle:
-FL_EXPORT void fl_rect(int x, int y, int w, int h);
-FL_EXPORT void fl_rectf(int x, int y, int w, int h);
+void fl_rect(int x, int y, int w, int h);
+void fl_rectf(int x, int y, int w, int h);
 
 // line segments:
-FL_EXPORT void fl_line(int,int, int,int);
-FL_EXPORT void fl_line(int,int, int,int, int,int);
+void fl_line(int,int, int,int);
+void fl_line(int,int, int,int, int,int);
 
 // closed line segments:
-FL_EXPORT void fl_loop(int,int, int,int, int,int);
-FL_EXPORT void fl_loop(int,int, int,int, int,int, int,int);
+void fl_loop(int,int, int,int, int,int);
+void fl_loop(int,int, int,int, int,int, int,int);
 
 // filled polygons
-FL_EXPORT void fl_polygon(int,int, int,int, int,int);
-FL_EXPORT void fl_polygon(int,int, int,int, int,int, int,int);
+void fl_polygon(int,int, int,int, int,int);
+void fl_polygon(int,int, int,int, int,int, int,int);
 
 // draw rectilinear lines, horizontal segment first:
-FL_EXPORT void fl_xyline(int x, int y, int x1);
-FL_EXPORT void fl_xyline(int x, int y, int x1, int y2);
-FL_EXPORT void fl_xyline(int x, int y, int x1, int y2, int x3);
+void fl_xyline(int x, int y, int x1);
+void fl_xyline(int x, int y, int x1, int y2);
+void fl_xyline(int x, int y, int x1, int y2, int x3);
 
 // draw rectilinear lines, vertical segment first:
-FL_EXPORT void fl_yxline(int x, int y, int y1);
-FL_EXPORT void fl_yxline(int x, int y, int y1, int x2);
-FL_EXPORT void fl_yxline(int x, int y, int y1, int x2, int y3);
+void fl_yxline(int x, int y, int y1);
+void fl_yxline(int x, int y, int y1, int x2);
+void fl_yxline(int x, int y, int y1, int x2, int y3);
 
 // circular lines and pie slices (code in fl_arci.C):
-FL_EXPORT void fl_arc(int x, int y, int w, int h, double a1, double a2);
-FL_EXPORT void fl_pie(int x, int y, int w, int h, double a1, double a2);
-FL_EXPORT void fl_chord(int x, int y, int w, int h, double a1, double a2); // nyi
+void fl_arc(int x, int y, int w, int h, double a1, double a2);
+void fl_pie(int x, int y, int w, int h, double a1, double a2);
+void fl_chord(int x, int y, int w, int h, double a1, double a2); // nyi
 
 // scalable drawing code (code in fl_vertex.C and fl_arc.C):
-FL_EXPORT void fl_push_matrix();
-FL_EXPORT void fl_pop_matrix();
-FL_EXPORT void fl_scale(double x, double y);
-FL_EXPORT void fl_scale(double x);
-FL_EXPORT void fl_translate(double x, double y);
-FL_EXPORT void fl_rotate(double d);
-FL_EXPORT void fl_mult_matrix(double a, double b, double c, double d, double x,double y);
-FL_EXPORT void fl_begin_points();
-FL_EXPORT void fl_begin_line();
-FL_EXPORT void fl_begin_loop();
-FL_EXPORT void fl_begin_polygon();
-FL_EXPORT void fl_vertex(double x, double y);
-FL_EXPORT void fl_curve(double, double, double, double, double, double, double, double);
-FL_EXPORT void fl_arc(double x, double y, double r, double start, double a);
-FL_EXPORT void fl_circle(double x, double y, double r);
-FL_EXPORT void fl_end_points();
-FL_EXPORT void fl_end_line();
-FL_EXPORT void fl_end_loop();
-FL_EXPORT void fl_end_polygon();
-FL_EXPORT void fl_begin_complex_polygon();
-FL_EXPORT void fl_gap();
-FL_EXPORT void fl_end_complex_polygon();
+void fl_push_matrix();
+void fl_pop_matrix();
+void fl_scale(double x, double y);
+void fl_scale(double x);
+void fl_translate(double x, double y);
+void fl_rotate(double d);
+void fl_mult_matrix(double a, double b, double c, double d, double x,double y);
+void fl_begin_points();
+void fl_begin_line();
+void fl_begin_loop();
+void fl_begin_polygon();
+void fl_vertex(double x, double y);
+void fl_curve(double, double, double, double, double, double, double, double);
+void fl_arc(double x, double y, double r, double start, double a);
+void fl_circle(double x, double y, double r);
+void fl_end_points();
+void fl_end_line();
+void fl_end_loop();
+void fl_end_polygon();
+void fl_begin_complex_polygon();
+void fl_gap();
+void fl_end_complex_polygon();
 // get and use transformed positions:
-FL_EXPORT double fl_transform_x(double x, double y);
-FL_EXPORT double fl_transform_y(double x, double y);
-FL_EXPORT double fl_transform_dx(double x, double y);
-FL_EXPORT double fl_transform_dy(double x, double y);
-FL_EXPORT void fl_transformed_vertex(double x, double y);
+double fl_transform_x(double x, double y);
+double fl_transform_y(double x, double y);
+double fl_transform_dx(double x, double y);
+double fl_transform_dy(double x, double y);
+void fl_transformed_vertex(double x, double y);
 
 // current font+size+encoding:
-FL_EXPORT FL_IMPORT extern const char* fl_encoding;
-FL_EXPORT void fl_font(const Fl_Font, unsigned size);
-FL_EXPORT void fl_font(const Fl_Font, unsigned size, const char* encoding);
-FL_EXPORT FL_IMPORT extern Fl_FontSize* fl_font_;
+extern FL_API const char* fl_encoding;
+void fl_font(const Fl_Font, unsigned size);
+void fl_font(const Fl_Font, unsigned size, const char* encoding);
+extern FL_API Fl_FontSize* fl_font_;
 inline Fl_FontSize* fl_font() {return fl_font_;}
-FL_EXPORT void fl_font(Fl_FontSize*);
+void fl_font(Fl_FontSize*);
 
 // information you can get about the current font+size+encoding:
-FL_EXPORT int   fl_height();	// using "size" should work ok
-FL_EXPORT int   fl_descent();
-FL_EXPORT double fl_width(const char*);
-FL_EXPORT double fl_width(const char*, int n);
-FL_EXPORT double fl_width(uchar);
+int   fl_height();	// using "size" should work ok
+int   fl_descent();
+double fl_width(const char*);
+double fl_width(const char*, int n);
+double fl_width(uchar);
 
 // draw using current font:
-FL_EXPORT void fl_draw(const char*, int x, int y);
-FL_EXPORT void fl_draw(const char*, int n, int x, int y);
-FL_EXPORT void fl_measure(const char*, int& x, int& y);
-FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Flags);
-FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Flags,
+void fl_draw(const char*, int x, int y);
+void fl_draw(const char*, int n, int x, int y);
+void fl_measure(const char*, int& x, int& y);
+void fl_draw(const char*, int,int,int,int, Fl_Flags);
+void fl_draw(const char*, int,int,int,int, Fl_Flags,
 	               void (*callthis)(const char *, int n, int x, int y));
 
 // images:
-FL_EXPORT void fl_draw_image(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
-FL_EXPORT void fl_draw_image_mono(const uchar*, int,int,int,int, int delta=1, int ld=0);
+void fl_draw_image(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
+void fl_draw_image_mono(const uchar*, int,int,int,int, int delta=1, int ld=0);
 typedef void (*Fl_Draw_Image_Cb)(void*,int,int,int,uchar*);
-FL_EXPORT void fl_draw_image(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=3);
-FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=1);
-FL_EXPORT void fl_rectf(int x, int y, int w, int h, Fl_Color);
+void fl_draw_image(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=3);
+void fl_draw_image_mono(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=1);
+void fl_rectf(int x, int y, int w, int h, Fl_Color);
 inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
   fl_rectf(x,y,w,h,fl_rgb(r,g,b));}
 
 // pixmaps:
-FL_EXPORT int fl_draw_pixmap(const char*const* data, int x,int y,Fl_Color=FL_GRAY);
-FL_EXPORT int fl_measure_pixmap(const char*const* data, int &w, int &h);
+int fl_draw_pixmap(const char*const* data, int x,int y,Fl_Color=FL_GRAY);
+int fl_measure_pixmap(const char*const* data, int &w, int &h);
 
 // other:
-FL_IMPORT extern FL_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
+extern FL_API void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 	                        void (*draw_area)(void*, int,int,int,int), void* data);
-FL_EXPORT const char* fl_shortcut_label(int);
-FL_EXPORT void fl_overlay_rect(int,int,int,int);
-FL_EXPORT void fl_overlay_clear();
-FL_EXPORT void fl_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
+const char* fl_shortcut_label(int);
+void fl_overlay_rect(int,int,int,int);
+void fl_overlay_clear();
+void fl_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
 
 // XForms symbols:
-FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
-FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
+int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
+int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
 
 // back compatability only:
-//FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
-//FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
+//void fl_frame(const char* s, int x, int y, int w, int h);
+//void fl_frame2(const char* s, int x, int y, int w, int h);
 #define fl_draw_box(b,x,y,w,h,c) ((b)->draw(x,y,w,h,c))
 
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.15 1999/10/07 07:04:53 bill Exp $".
+// End of "$Id: fl_draw.H,v 1.16 1999/10/17 20:40:14 vincent Exp $".
 //

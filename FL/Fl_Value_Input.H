@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.13 1999/09/19 04:58:56 vincent Exp $"
+// "$Id: Fl_Value_Input.H,v 1.14 1999/10/17 20:40:12 vincent Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include "Fl_Valuator.H"
 #include "Fl_Input.H"
 
-class Fl_Value_Input : public Fl_Valuator {
+class FL_API Fl_Value_Input : public Fl_Valuator {
 public:
   Fl_Input input;
 
@@ -46,12 +46,12 @@ protected:
 
 private:
   char soft_;
-  FL_IMPORT static void input_cb(Fl_Widget*,void*);
+  static void input_cb(Fl_Widget*,void*);
   virtual void value_damage(); // cause damage() due to value() changing
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.13 1999/09/19 04:58:56 vincent Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.14 1999/10/17 20:40:12 vincent Exp $".
 //

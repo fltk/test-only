@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-class Fl_FileChooser {
+class FL_API Fl_FileChooser {
 public:
   enum { SINGLE, MULTI, CREATE };
   Fl_FileChooser(const char *d, const char *p, int t, const char *title);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.28 1999/10/03 06:31:32 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.29 1999/10/17 20:40:07 vincent Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,12 +44,12 @@ enum { // values for flags:
   FL_MENU_STAYS_UP	= 0x200
 };
 
-FL_IMPORT extern FL_EXPORT int fl_old_shortcut(const char*);
+extern FL_API int fl_old_shortcut(const char*);
 
 class Fl_Menu_;
 class Fl_Image;
 
-struct Fl_Menu_Item {
+struct FL_API Fl_Menu_Item {
   const char *text;	// label()
   int shortcut_;
   Fl_Callback *callback_;
@@ -139,8 +139,8 @@ struct Fl_Menu_Item {
   void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
 
   int size() const ;
-  FL_IMPORT static Fl_Style default_style;
-  FL_IMPORT static Fl_Style title_style;
+  static Fl_Style default_style;
+  static Fl_Style title_style;
 
 #ifndef FLTK_2
   // This is temporary and bad.  Setting a style will create a new Fl_Style
@@ -247,5 +247,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.28 1999/10/03 06:31:32 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.29 1999/10/17 20:40:07 vincent Exp $".
 //

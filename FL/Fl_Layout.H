@@ -27,7 +27,7 @@
 #include <FL/Fl_Group.H>
 #endif
 
-class Fl_Align_Group : public Fl_Group {
+class FL_API Fl_Align_Group : public Fl_Group {
   int vertical_;
   uchar n_to_break_,dw_,dh_;
   Fl_Align align_;

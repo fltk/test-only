@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.H,v 1.1 1999/08/16 07:30:52 bill Exp $"
+// "$Id: Fl_RGB_Image.H,v 1.2 1999/10/17 20:40:09 vincent Exp $"
 //
 // RGB_Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Image.H"
 
-FL_EXPORT class Fl_RGB_Image : public Fl_Image {
+class FL_API Fl_RGB_Image : public Fl_Image {
   int depth;
   const uchar* data;
 public:
@@ -44,5 +44,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_RGB_Image.H,v 1.1 1999/08/16 07:30:52 bill Exp $".
+// End of "$Id: Fl_RGB_Image.H,v 1.2 1999/10/17 20:40:09 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.28 1999/10/12 22:22:51 vincent Exp $"
+// "$Id: Fl_Widget.H,v 1.29 1999/10/17 20:40:13 vincent Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
 typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
-class Fl_Widget {
+class FL_API Fl_Widget {
   friend class Fl_Group;
 
 public:
@@ -53,7 +53,7 @@ public:
   int style(Fl_Style* s, Fl_Style* p);
   int style(Fl_Style& s) {return style(&s);}
   int copy_style(const Fl_Style* s);
-  FL_IMPORT static Fl_Style default_style;
+  static Fl_Style default_style;
 
   Fl_Group* parent() const {return parent_;}
   Fl_Window* window() const ;
@@ -95,12 +95,12 @@ public:
   Fl_When when() const {return (Fl_When)when_;}
   void when(uchar i) {when_ = i;}
 
-  FL_IMPORT static void default_callback(Fl_Widget*, void*);
+  static void default_callback(Fl_Widget*, void*);
   void do_callback() {callback_(this,user_data_);}
   void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
   int test_shortcut();
-  FL_IMPORT static int test_shortcut(const char*);
+  static int test_shortcut(const char*);
   int contains(const Fl_Widget*) const ;
   int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
 
@@ -259,8 +259,8 @@ private:
   uchar when_;
 
   // "de-implement" the copy constructors:
-  Fl_Widget & operator=(const Fl_Widget &);
-  Fl_Widget(const Fl_Widget &);
+/*  Fl_Widget & operator=(const Fl_Widget &);
+  Fl_Widget(const Fl_Widget &);*/
 
 };
 
@@ -272,5 +272,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.28 1999/10/12 22:22:51 vincent Exp $".
+// End of "$Id: Fl_Widget.H,v 1.29 1999/10/17 20:40:13 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.17 1999/10/12 22:22:51 vincent Exp $"
+// "$Id: Fl_Group.H,v 1.18 1999/10/17 20:40:04 vincent Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 
 #define FL_GROUP 0xe0	// all subclasses have type() >= this
 
-class Fl_Group : public Fl_Widget {
+class FL_API Fl_Group : public Fl_Widget {
   friend class Fl_Tabs;
   int children_;
   Fl_Widget** array_;
@@ -42,7 +42,7 @@ class Fl_Group : public Fl_Widget {
   int ox_,oy_,ow_,oh_; // old size, used by layout
 
   int navigation(int);
-  FL_IMPORT static Fl_Group *current_;
+  static Fl_Group *current_;
 
 protected:
 
@@ -65,8 +65,8 @@ public:
   int handle(int);
   void begin() {current_ = this;}
   void end() {current_ = (Fl_Group*)parent();}
-  FL_IMPORT static Fl_Group *current() {return current_;}
-  FL_IMPORT static void current(Fl_Group *g) {current_ = g;}
+  static Fl_Group *current() {return current_;}
+  static void current(Fl_Group *g) {current_ = g;}
 
   void old_size(const Fl_Widget*,int*);
   int children() const {return children_;}
@@ -99,7 +99,7 @@ public:
 
 // dummy class used to end child groups in constructors for complex
 // subclasses of Fl_Group:
-class Fl_End {
+class FL_API Fl_End {
 public:
   Fl_End() {Fl_Group::current()->end();}
 };
@@ -107,5 +107,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.17 1999/10/12 22:22:51 vincent Exp $".
+// End of "$Id: Fl_Group.H,v 1.18 1999/10/17 20:40:04 vincent Exp $".
 //

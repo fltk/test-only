@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.H,v 1.11 1999/10/04 09:12:45 bill Exp $"
+// "$Id: Fl_Scrollbar.H,v 1.12 1999/10/17 20:40:10 vincent Exp $"
 //
 // Scroll bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Slider.H"
 
-FL_IMPORT class Fl_Scrollbar : public Fl_Slider {
+class FL_API Fl_Scrollbar : public Fl_Slider {
 
 public:
 
@@ -59,5 +59,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Scrollbar.H,v 1.11 1999/10/04 09:12:45 bill Exp $".
+// End of "$Id: Fl_Scrollbar.H,v 1.12 1999/10/17 20:40:10 vincent Exp $".
 //

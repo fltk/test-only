@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.H,v 1.9 1999/10/15 09:03:25 bill Exp $"
+// "$Id: Fl_Tabs.H,v 1.10 1999/10/17 20:40:11 vincent Exp $"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,26 +30,26 @@
 
 #define FL_TABS (FL_GROUP+1)
 
-class Fl_Tabs : public Fl_Group {
+class FL_API Fl_Tabs : public Fl_Group {
   friend class Fl_Group;
   Fl_Widget *push_;
-  FL_EXPORT void draw();
+  void draw();
   void draw_n_clip();
-  FL_EXPORT int tab_positions(int*, int*);
-  FL_EXPORT int tab_height();
-  FL_EXPORT void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
+  int tab_positions(int*, int*);
+  int tab_height();
+  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
 public:
-  FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Widget *value();
-  FL_EXPORT int value(Fl_Widget *);
+  int handle(int);
+  Fl_Widget *value();
+  int value(Fl_Widget *);
   Fl_Widget *push() const {return push_;}
-  FL_EXPORT int push(Fl_Widget *);
-  FL_EXPORT Fl_Tabs(int,int,int,int,const char * = 0);
-  FL_EXPORT Fl_Widget *which(int event_x, int event_y);
+  int push(Fl_Widget *);
+  Fl_Tabs(int,int,int,int,const char * = 0);
+  Fl_Widget *which(int event_x, int event_y);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tabs.H,v 1.9 1999/10/15 09:03:25 bill Exp $".
+// End of "$Id: Fl_Tabs.H,v 1.10 1999/10/17 20:40:11 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.14 1999/10/04 09:12:45 bill Exp $"
+// "$Id: Fl_Slider.H,v 1.15 1999/10/17 20:40:11 vincent Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@
 #define FL_VERT_NICE_SLIDER	4
 #define FL_HOR_NICE_SLIDER	5
 
-FL_IMPORT class Fl_Slider : public Fl_Valuator {
+class FL_API Fl_Slider : public Fl_Valuator {
 
 public:
 
@@ -75,5 +75,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.14 1999/10/04 09:12:45 bill Exp $".
+// End of "$Id: Fl_Slider.H,v 1.15 1999/10/17 20:40:11 vincent Exp $".
 //

@@ -6,7 +6,7 @@
 
 #include "Fl_Menu_Bar.H"
 
-struct MenuEntry {
+struct FL_API MenuEntry {
   const char *text;	/*initial character indicates "type", 0 = end of menu*/
   ulong bind;	/* key binding in forms format (#x, etc) */
   void (*cb)(Fl_Widget *,long);	/* callback */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Simple_Counter.H,v 1.4 1999/01/07 19:17:02 mike Exp $"
+// "$Id: Fl_Simple_Counter.H,v 1.5 1999/10/17 20:40:11 vincent Exp $"
 //
 // Simple counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Counter.H"
 
-class Fl_Simple_Counter : public Fl_Counter {
+class FL_API Fl_Simple_Counter : public Fl_Counter {
 public:
     Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0)
 	: Fl_Counter(x,y,w,h,l) {type(FL_SIMPLE_COUNTER);}
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Simple_Counter.H,v 1.4 1999/01/07 19:17:02 mike Exp $".
+// End of "$Id: Fl_Simple_Counter.H,v 1.5 1999/10/17 20:40:11 vincent Exp $".
 //

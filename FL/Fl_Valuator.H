@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.7 1999/10/04 09:12:45 bill Exp $"
+// "$Id: Fl_Valuator.H,v 1.8 1999/10/17 20:40:12 vincent Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #define FL_VERTICAL		0
 #define FL_HORIZONTAL		1
 
-FL_EXPORT class Fl_Valuator : public Fl_Widget {
+class FL_API Fl_Valuator : public Fl_Widget {
 
 public:
 
@@ -84,5 +84,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.7 1999/10/04 09:12:45 bill Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.8 1999/10/17 20:40:12 vincent Exp $".
 //

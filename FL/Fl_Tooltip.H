@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.8 1999/09/19 04:58:56 vincent Exp $"
+// "$Id: Fl_Tooltip.H,v 1.9 1999/10/17 20:40:12 vincent Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -29,48 +29,48 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 
-FL_EXPORT FL_IMPORT extern void (*fl_tooltip_enter)(Fl_Widget *);
-FL_EXPORT FL_IMPORT extern void (*fl_tooltip_exit)(Fl_Widget *);
+extern FL_API void (*fl_tooltip_enter)(Fl_Widget *);
+extern FL_API void (*fl_tooltip_exit)(Fl_Widget *);
 
-FL_EXPORT class Fl_Tooltip {
+class FL_API Fl_Tooltip {
 public:
-  FL_IMPORT static float delay() { return delay_; }
-  FL_IMPORT static void delay(float f) { delay_ = (f < 0.1) ? 0.1 : f; }
-  FL_IMPORT static int enabled() { return enabled_; }
-  FL_IMPORT static void enable(int b = 1) { enabled_ = b; }
-  FL_IMPORT static void disable() { enable(0); }
+  static float delay() { return delay_; }
+  static void delay(float f) { delay_ = (f < 0.1) ? 0.1 : f; }
+  static int enabled() { return enabled_; }
+  static void enable(int b = 1) { enabled_ = b; }
+  static void disable() { enable(0); }
 
   // This function is called by widgets
   // when the pointer enters them
-  FL_IMPORT static void enter(Fl_Widget *w) {fl_tooltip_enter(w);}
+  static void enter(Fl_Widget *w) {fl_tooltip_enter(w);}
 
   // This function must be called when
   // an event != FL_MOVE has occured in
   // the widget
-  FL_IMPORT static inline void exit(Fl_Widget *w) {fl_tooltip_exit(w);}
+  static inline void exit(Fl_Widget *w) {fl_tooltip_exit(w);}
 
-  FL_IMPORT static void tooltip_enter(Fl_Widget *);
-  FL_IMPORT static void tooltip_exit(Fl_Widget *);
+  static void tooltip_enter(Fl_Widget *);
+  static void tooltip_exit(Fl_Widget *);
 
-  FL_IMPORT static Fl_Style default_style;
-  FL_IMPORT static Fl_Font font() { return default_style.label_font; }
-  FL_IMPORT static unsigned size() { return default_style.label_size; }
-  FL_IMPORT static void font(Fl_Font i) { default_style.label_font = i; }
-  FL_IMPORT static void size(unsigned s) { default_style.label_size = s; }
-  FL_IMPORT static void color(Fl_Color c) { default_style.color = c; }
-  FL_IMPORT static Fl_Color color() { return default_style.color; }
-  FL_IMPORT static void textcolor(Fl_Color c) { default_style.label_color = c; }
-  FL_IMPORT static Fl_Color textcolor() { return default_style.label_color; }
-  FL_IMPORT static void boxtype(Fl_Boxtype b) { default_style.box = b; }
-  FL_IMPORT static Fl_Boxtype boxtype() { return default_style.box; }
+  static Fl_Style default_style;
+  static Fl_Font font() { return default_style.label_font; }
+  static unsigned size() { return default_style.label_size; }
+  static void font(Fl_Font i) { default_style.label_font = i; }
+  static void size(unsigned s) { default_style.label_size = s; }
+  static void color(Fl_Color c) { default_style.color = c; }
+  static Fl_Color color() { return default_style.color; }
+  static void textcolor(Fl_Color c) { default_style.label_color = c; }
+  static Fl_Color textcolor() { return default_style.label_color; }
+  static void boxtype(Fl_Boxtype b) { default_style.box = b; }
+  static Fl_Boxtype boxtype() { return default_style.box; }
 
 private:
-  FL_IMPORT static float delay_;
-  FL_IMPORT static int enabled_;
+  static float delay_;
+  static int enabled_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.8 1999/09/19 04:58:56 vincent Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.9 1999/10/17 20:40:12 vincent Exp $".
 //
