@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.58 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.59 2004/05/18 15:53:41 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,6 +134,7 @@ void Tooltip::enter(Widget* w) {
   Widget* tw = w;
   for (;;) {
     if (!tw) {exit(); return;}
+    if (tw == widget) return;
     if (tw->tooltip()) break;
     tw = tw->parent();
   }
@@ -186,7 +187,7 @@ void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
 {
   if (recursion) return;
   // act like exit() if nothing:
-  if (!enabled() || !wid || !gen && (!data || !*(char*)data)) {
+  if (!enabled() || !wid || !data || (!gen && !*(char*)data)) {
     exit(); return;
   }
   // do nothing if it is the same:
@@ -220,5 +221,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.58 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.59 2004/05/18 15:53:41 spitzak Exp $".
 //

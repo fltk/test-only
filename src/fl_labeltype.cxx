@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.46 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.47 2004/05/18 15:53:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -195,8 +195,6 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
     return;
   }
 
-  if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
-
   if (image_) {
 
     float fw = W;
@@ -205,10 +203,10 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
     int w = int(fw);
     int h = int(fh);
 
-    // If all the flags are off, draw the image and label centered "nicely"
-    // by measuring their total size and centering that rectangle:
-    if (!(flags & (ALIGN_LEFT|ALIGN_RIGHT|ALIGN_TOP|ALIGN_BOTTOM|
-		   ALIGN_INSIDE)) && label_) {
+    // If all flags including ALIGN_INSIDE are off it changes how
+    // label and image are printed so they are both centered "nicely"
+    // in the button:
+    if (label_ && !(flags&0x1f) && !(label_[0]=='@' && label_[1]==';')) {
       int d = (H-int(h+labelsize()+leading()+.5))>>1;
       if (d >= 0 || w >= W) {
 	// put the image atop the text
@@ -241,6 +239,7 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
     else if (flags & ALIGN_TOP) cy = 0;
     else cy = h/2-H/2;
 
+    if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
     image_->draw(X-cx, Y-cy, w, h, style, flags);
 
     // figure out the rectangle that remains for text:
@@ -251,7 +250,7 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
     else {Y += (h-cy); H -= (h-cy); /*flags |= ALIGN_TOP;*/}
   }
 
-  if (label_ && *label_) {
+  if (W>0 && label_ && *label_) {
     // add some interior border for the text:
     if (W > 6 && flags&ALIGN_LEFT) {
       if (W > 9) {X += 3; W -= 6;}
@@ -261,7 +260,10 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
       if (W > 9) W -= 6;
       else W = 6;
     }
+    if (!image_ && (flags & ALIGN_CLIP)) push_clip(X, Y, W, H);
     labeltype()->draw(label_, X, Y, W, H, style, flags);
+  } else {
+    if (!image_) return; // don't call pop_clip if push_clip was not called
   }
 
   if (flags & ALIGN_CLIP) pop_clip();
@@ -350,5 +352,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.46 2004/05/07 06:36:23 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.47 2004/05/18 15:53:41 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.9 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.10 2004/05/18 15:53:40 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,8 +30,8 @@
 using namespace fltk;
 
 static void revert(Style *s) {
-  //s->box = UP_BOX;
-  s->box_ = FLAT_BOX;
+  s->box_ = THIN_UP_BOX;
+  //s->box_ = FLAT_BOX;
   s->color_ = GRAY75;
   s->labelsize_ = 10;
 }
@@ -65,7 +65,6 @@ int BarGroup::handle(int event)
   switch (event) {
   case ENTER:
   case MOVE:
-  case LEAVE:
     if (highlight_color() && takesevents()) {
       glyph_box(x,y,w,h);
       bool hl = event_inside(x,y,w,h);
@@ -73,6 +72,12 @@ int BarGroup::handle(int event)
 	highlighted = hl;
 	redraw(DAMAGE_HIGHLIGHT);
       }
+    }
+    break;
+  case LEAVE:
+    if (highlighted) {
+      highlighted = false;
+      redraw(DAMAGE_HIGHLIGHT);
     }
     break;
   case PUSH:
@@ -136,7 +141,7 @@ void BarGroup::draw()
     if (pushed) f |= VALUE;
     if (highlighted) f |= HIGHLIGHT;
     int x,y,w,h; glyph_box(x,y,w,h);
-    draw_glyph((horizontal())?GLYPH_RIGHT_BUTTON:GLYPH_DOWN_BUTTON,
+    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON,
 	       x, y, w, h, f);
   }
 }

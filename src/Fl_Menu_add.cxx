@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.39 2004/05/18 15:53:41 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,11 @@ static Widget* append(
   o->set_flag((flags<<8)&(INACTIVE|VALUE|INVISIBLE));
   if (insert_here) g->insert(*o, insert_here-1);
   else g->add(o);
-  if (flags & MENU_DIVIDER) g->add(new Divider());
+  if (flags & MENU_DIVIDER) {
+    Widget* d = new Divider();
+    if (insert_here) g->insert(*d, insert_here);
+    else g->add(d);
+  }
   Group::current(saved);
   return o;
 }
@@ -79,6 +83,8 @@ static int compare(const char* a, const char* b) {
     if (n) {
       if (*a == '&') a++;
       else if (*b == '&') b++;
+      else if (a[0]=='@' && a[1]==';') a += 2;
+      else if (b[0]=='@' && b[1]==';') b += 2;
       else return n;
     } else if (*a) {
       a++; b++;
@@ -117,7 +123,7 @@ static Widget* innards(
     if (*label == '/') {item = label; break;}
 
     // leading underscore causes divider line:
-    if (*label == '_') {label++; flags1 = MENU_DIVIDER;}
+    if (*label=='_' || *label=='-') {label++; flags1 = MENU_DIVIDER;}
 
     // copy to buf, changing \x to x:
     char* q = buf;
@@ -155,10 +161,17 @@ static Widget* innards(
  BREAK1:
 
   Widget* o = 0;
-  // names ending in '/' create an empty menu ore return the menu title:
+  // names ending in '/' create an empty menu or return the menu title:
   if (!*item) {
     o = group;
     if (what & FIND) return o;
+    if (flags1 & MENU_DIVIDER) {
+      Group* saved = Group::current();
+      Group::current(0);
+      group->add(new Divider());
+      Group::current(saved);
+      return o;
+    }
     fl_menu_replaced = true;
     goto REPLACED;
   }
@@ -348,5 +361,5 @@ Widget* Menu::add(const char *str) {
 #endif
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.39 2004/05/18 15:53:41 spitzak Exp $".
 //

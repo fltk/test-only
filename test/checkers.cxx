@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.30 2004/05/15 20:52:47 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.31 2004/05/18 15:53:41 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -973,7 +973,7 @@ void Board::draw() {
     if (!((x^y)&1)) fltk::fillrect(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
 			     BOXSIZE-BORDER, BOXSIZE-BORDER);
   }
-  fltk::setcolor(fltk::GRAY33 /*fltk::GRAY20*/);
+  fltk::setcolor(fltk::GRAY20);
   for (x=0; x<9; x++) {
     fltk::fillrect(x*BOXSIZE,0,BORDER,h());
     fltk::fillrect(0,x*BOXSIZE,w(),BORDER);
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.30 2004/05/15 20:52:47 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.31 2004/05/18 15:53:41 spitzak Exp $".
 //

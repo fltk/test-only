@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.34 2004/01/27 06:32:37 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.35 2004/05/18 15:53:40 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -112,7 +112,9 @@ void Item::layout() {
   if (w() && h()) return; // already at the correct size
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(textfont(), textsize());
-  int w = 250, h = 250; measure(label(), w, h, flags());
+  int w = 250, h = 250;
+  measure(label(), w, h, flags());
+  if (w) {w += 6+int(textsize())/2;}
   if (type()) w += 15;
   if (image()) {
     float W, H;
@@ -120,8 +122,8 @@ void Item::layout() {
     if (H > h) h = int(H);
     w += int(W);
   }
-  this->w(w/*-dw*/+6);
-  this->h(h/*-dh*/);
+  this->w(w);
+  this->h(h);
   Widget::layout();
 }
 
@@ -178,15 +180,17 @@ void ItemGroup::layout() {
   if (w() && h()) return; // already at the correct size
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(textfont(), textsize());
-  int w = 250, h = 250; measure(label(), w, h, flags());
+  int w = 250, h = 250;
+  measure(label(), w, h, flags());
+  if (w) {w += 6+int(textsize())/2;}
   if (image()) {
     float W, H;
     image()->measure(W, H);
     if (H > h) h = int(H);
     w += int(W);
   }
-  this->w(w/*-dw*/+6);
-  this->h(h/*-dh*/);
+  this->w(w);
+  this->h(h);
   Widget::layout();
 }
 
