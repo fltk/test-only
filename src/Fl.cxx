@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.33 1999/08/16 07:31:11 bill Exp $"
+// "$Id: Fl.cxx,v 1.34 1999/08/23 09:41:48 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -112,17 +112,19 @@ void Fl::remove_timeout(void (*cb)(void *), void *v) {
   numtimeouts = j;
 }
 
-static void call_timeouts() {
+static int call_timeouts() {
+  int expired = 0;
   while (numtimeouts) {
     if (timeout[0].time > 0) break;
     // we must remove timeout from array before doing the callback:
     void (*cb)(void*) = timeout[0].cb;
     void *arg = timeout[0].arg;
-    numtimeouts--;
+    numtimeouts--; expired++;
     if (numtimeouts) memmove(timeout, timeout+1, numtimeouts*sizeof(Timeout));
     // now it is safe for the callback to do add_timeout:
     cb(arg);
   }
+  return expired;
 }
 
 void Fl::flush() {
@@ -206,14 +208,15 @@ static void callidle() {
 
 bool Fl::wait() {
   callidle();
-  if (numtimeouts) {fl_elapsed(); call_timeouts();}
+  int expired = 0;
+  if (numtimeouts) {fl_elapsed(); expired = call_timeouts();}
   flush();
   if (!Fl_X::first) return 0; // no windows
-  if (idle && !in_idle)
+  if ((idle && !in_idle) || expired) {
     fl_wait(1,0.0);
-  else if (numtimeouts)
+  } else if (numtimeouts) {
     fl_wait(1, timeout[0].time);
-  else {
+  } else {
     initclock = 0;
     fl_wait(0,0);
   }
@@ -222,9 +225,10 @@ bool Fl::wait() {
 
 double Fl::wait(double time) {
   callidle();
-  if (numtimeouts) {time -= fl_elapsed(); call_timeouts();}
+  int expired = 0;
+  if (numtimeouts) {time -= fl_elapsed(); expired = call_timeouts();}
   flush();
-  double wait_time = idle && !in_idle ? 0.0 : time;
+  double wait_time = (idle && !in_idle) || expired ? 0.0 : time;
   if (numtimeouts && timeout[0].time < wait_time) wait_time = timeout[0].time;
   fl_wait(1, wait_time);
   return time - fl_elapsed();
@@ -704,5 +708,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.33 1999/08/16 07:31:11 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.34 1999/08/23 09:41:48 bill Exp $".
 //
