@@ -104,7 +104,7 @@ void choice_cb(Fl_Widget* item, void* data) {
   w->redraw();
 }
 
-#if 0 //ndef _WIN32
+#ifndef _WIN32
 #include <fltk/x.h>
 #include "list_visuals.cxx"
 
@@ -122,7 +122,7 @@ int arg(int argc, char **argv, int &i) {
 
 int main(int argc, char **argv) {
 
-#if 0 //ndef _WIN32
+#ifndef _WIN32
   int i = 1;
   if (Fl::args(argc,argv,i,arg) < argc) {
     fprintf(stderr," -v # : use visual\n%s\n",Fl::help);
@@ -214,5 +214,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.12 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.13 2001/08/07 07:06:17 spitzak Exp $".
 //

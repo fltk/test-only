@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.37 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.38 2001/08/07 07:06:17 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -175,21 +175,25 @@ Fl_Widget* Fl_Menu_::get_item() {
 
 ////////////////////////////////////////////////////////////////
 
-// If an Fl_List is used, the search for shortcut keys will only search
-// the top level items, and children where a real Fl_Group with children
-// widgets is returned. That is, shortcuts on nested items will not be
-// found from Fl_List (except for ones that return real Fl_Groups, such
-// as by copying another Fl_Menu_).
-//
-// For most uses of Fl_List I think this is ok. It also avoids enumerating
-// all the items that an Fl_List can return.
+// Shortcuts only search the immediate children of an Fl_Menu_ that
+// uses an Fl_List. If the Fl_List returns an Fl_Group indicating
+// nested children, the actual children of that group are searched,
+// rather than asking the Fl_List to enumerate all of them. This is
+// necessary because some Fl_Lists are infinite in size, and usually
+// they don't have shortcuts anyway.
+
+// This will return invisible (but active) items, even
+// though it is impossible to select these items with the gui. This
+// is done so that more than one shortcut for an action may be given
+// by putting multiple copies of the item in, where only the first is
+// visible.
 
 // recursive innards of handle_shortcut:
 static Fl_Widget* shortcut_search(Fl_Group* g) {
   Fl_Widget* widget = 0;
   for (int i = 0; i < g->children(); i++) {
     Fl_Widget* item = g->child(i);
-    if (!item->takesevents()) continue;
+    if (!item->active()) continue;
     if (Fl::test_shortcut(item->shortcut())) {g->focus(i); return item;}
     if (!widget && item->is_group() /*&& IS_OPEN*/) {
       widget = shortcut_search((Fl_Group*)item);
@@ -215,5 +219,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.37 2001/08/05 10:48:38 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.38 2001/08/07 07:06:17 spitzak Exp $"
 //

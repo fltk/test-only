@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.6 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.7 2001/08/07 07:06:17 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -92,15 +92,15 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
   pData->rdh.nCount = pData->rdh.nRgnSize = 0;
   SetRect(&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
-  const int bpl = (bitmap->w + 7) / 8; // number of bytes per line of pixels
+  const int bpl = (bitmap->width()+7)/8; // number of bytes per line of pixels
   BYTE* p8 = (BYTE*)bitmap->array;
   BYTE* p;
-  for (int y = 0; y < bitmap->h; y++) {
+  for (int y = 0; y < bitmap->height(); y++) {
     /* Scan each bitmap row from left to right*/
-    for (int x = 0; x < bitmap->w; x++) {
+    for (int x = 0; x < bitmap->width(); x++) {
       /* Search for a continuous range of "non transparent pixels"*/
       int x0 = x;
-      while (x < bitmap->w) {
+      while (x < bitmap->width()) {
         p = p8 + x / 8;
         if (!((*p) & bit(x))) break; /* This pixel is "transparent"*/
         x++;
@@ -166,5 +166,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.6 2001/08/05 21:12:15 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.7 2001/08/07 07:06:17 spitzak Exp $"
 //
