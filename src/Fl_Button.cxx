@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.70 2004/08/03 07:26:34 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.71 2004/08/28 09:55:12 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -88,7 +88,6 @@ void Button::setonly() {
 static Button* pushed_button;
 static bool initial_value;
 
-#include <stdio.h>
 int Button::handle(int event) {
   switch (event) {
   case ENTER:
@@ -97,6 +96,7 @@ int Button::handle(int event) {
   case MOVE:
     return 1;
   case PUSH:
+    if (pushed_button == this) return 1; /* this is pushed already, don't change value */
     initial_value = value();
   case DRAG: {
     bool new_value;
@@ -274,5 +274,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 */
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.70 2004/08/03 07:26:34 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.71 2004/08/28 09:55:12 laza2000 Exp $".
 //
