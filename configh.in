@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.61 2004/07/06 05:49:30 spitzak Exp $"
+ * "$Id: configh.in,v 1.62 2004/07/31 10:11:25 laza2000 Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -313,6 +313,10 @@
 #undef HAVE_PTHREAD
 #undef HAVE_PTHREAD_H
 
+/*
+ * Do we use exceptions?
+ */
+#undef HAVE_EXCEPTIONS
 
 /**** MRS: THESE TWO ARE GOING AWAY! ****/
 /* Enables fl_load_plugin() on Unix */
@@ -352,5 +356,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.61 2004/07/06 05:49:30 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.62 2004/07/31 10:11:25 laza2000 Exp $".
  */
