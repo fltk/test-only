@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.20 2004/03/08 06:52:45 spitzak Exp $"
+# "$Id: Makefile,v 1.21 2004/08/04 18:13:50 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -109,16 +109,20 @@ include makedepend
 #
 
 install:
+        ifneq (,$(wildcard ../lib/$(LIBNAME)))
 	echo "Installing static OpenGL library in $(libdir)"
 	$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(LIBNAME)
 	$(CP) ../lib/$(LIBNAME) $(libdir)
+        endif
+        ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared OpenGL library in $(libdir)"
 	$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
 	$(CP) ../lib/$(DSONAME) $(libdir)
 	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
+        endif
 
 #
 # Uninstall the libraries...
@@ -133,5 +137,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.20 2004/03/08 06:52:45 spitzak Exp $".
+# End of "$Id: Makefile,v 1.21 2004/08/04 18:13:50 laza2000 Exp $".
 #
