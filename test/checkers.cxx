@@ -1,12 +1,12 @@
 //
-// "$Id: checkers.cxx,v 1.14 2000/01/16 07:44:39 robertk Exp $"
+// "$Id: checkers.cxx,v 1.15 2000/02/14 11:32:59 bill Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
 // Hours of fun: the FLTK checkers game!
 // Based on a very old algorithim, but it still works!
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2000 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,9 +28,9 @@
 
 const char* copyright = 
 "Checkers game\n"
-"Copyright (C) 1997 Bill Spitzak    spitzak@d2.com\n"
+"\xa9""2000 Bill Spitzak    spitzak@d2.com\n"
 "Original Pascal code:\n"
-"Copyright 1978, Oregon Minicomputer Software, Inc.\n"
+"\xa9""1978, Oregon Minicomputer Software, Inc.\n"
 "2340 SW Canyon Road, Portland, Oregon 97201\n"
 "Written by Steve Poulsen 18-Jan-79\n"
 "\n"
@@ -1096,16 +1096,12 @@ extern Fl_Menu_Item busymenu[];
 
 int Board::handle(int e) {
   if (busy) {
-    const Fl_Menu_Item* m;
     switch(e) {
     case FL_PUSH:
-      m = busymenu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
-      if (m) m->do_callback(this, (void*)m);
+      busymenu->popup(Fl::event_x(), Fl::event_y(), 0, this);
       return 1;
     case FL_SHORTCUT:
-      m = busymenu->test_shortcut();
-      if (m) {m->do_callback(this, (void*)m); return 1;}
-      return 0;
+      return busymenu->test_shortcut(this);
     default:
       return 0;
     }
@@ -1113,12 +1109,10 @@ int Board::handle(int e) {
   node *t, *n;
   static int deltax, deltay;
   int dist;
-  const Fl_Menu_Item* m;
   switch (e) {
   case FL_PUSH:
     if (Fl::event_button() > 1) {
-      m = menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
-      if (m) m->do_callback(this, (void*)m);
+      menu->popup(Fl::event_x(), Fl::event_y(), 0, this);
       return 1;
     }
     if (playing) {
@@ -1136,9 +1130,7 @@ int Board::handle(int e) {
     }
     return 0;
   case FL_SHORTCUT:
-    m = menu->test_shortcut();
-    if (m) {m->do_callback(this, (void*)m); return 1;}
-    return 0;
+    return menu->test_shortcut(this);
   case FL_DRAG:
     drag_piece(erase_this, Fl::event_x()-deltax, Fl::event_y()-deltay);
     return 1;
@@ -1174,7 +1166,7 @@ int FLTKmain(int argc, char** argv) {
   return Fl::run();
 } 
 
-void autoplay_cb(Fl_Widget*bp, void*) {
+void autoplay_cb(Fl_Widget*, void*bp) {
   if (autoplay) {autoplay = 0; return;}
   if (!playing) return;
   Board* b = (Board*)bp;
@@ -1186,7 +1178,7 @@ void autoplay_cb(Fl_Widget*bp, void*) {
 Fl_Window *copyright_window;
 void copyright_cb(Fl_Widget*, void*) {
   if (!copyright_window) {
-    copyright_window = new Fl_Window(400,270,"Copyright");
+    copyright_window = new Fl_Window(400,270,"About checkers");
     copyright_window->color(FL_WHITE);
     Fl_Box *b = new Fl_Box(20,0,380,270,copyright);
     b->label_size(10);
@@ -1199,51 +1191,47 @@ void copyright_cb(Fl_Widget*, void*) {
   copyright_window->show();
 }
 
-void debug_cb(Fl_Widget*, void*v) {
-  debug = !debug;
-  ((Fl_Menu_Item*)v)->flags_ =
-    debug ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
+void debug_cb(Fl_Widget*v, void*) {
+  debug = v->value();
 }
 
-void forced_cb(Fl_Widget*b, void*v) {
-  forcejumps = !forcejumps;
-  ((Fl_Menu_Item*)v)->flags_ =
-    forcejumps ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
+void forced_cb(Fl_Widget*v, void*b) {
+  forcejumps = v->value();
   killnode(root->son); root->son = 0;
-  if (showlegal) {expandnode(root); b->redraw();}
+  if (showlegal) {expandnode(root); ((Board*)b)->redraw();}
 }
 
-void move_cb(Fl_Widget*pb, void*) {
+void move_cb(Fl_Widget*, void*pb) {
   Board* b = (Board*)pb;
   if (playing) b->computer_move(1);
   if (playing) b->computer_move(0);
 }
 
-void newgame_cb(Fl_Widget*b, void*) {
+void newgame_cb(Fl_Widget*, void* b) {
   showlegal = 0;
   newgame();
-  b->redraw();
+  ((Board*)b)->redraw();
 }
 
-void legal_cb(Fl_Widget*pb, void*) {
+void legal_cb(Fl_Widget*, void* pb) {
   if (showlegal == 1) {showlegal = 0; ((Board*)pb)->redraw(); return;}
   if (!playing) return;
   expandnode(root);
   showlegal = 1; ((Board*)pb)->redraw();
 }
 
-void predict_cb(Fl_Widget*pb, void*) {
+void predict_cb(Fl_Widget*, void* pb) {
   if (showlegal == 2) {showlegal = 0; ((Board*)pb)->redraw(); return;}
   if (playing) expandnode(root);
   showlegal = 2; ((Board*)pb)->redraw();
 }
 
-void switch_cb(Fl_Widget*pb, void*) {
+void switch_cb(Fl_Widget*, void* pb) {
   user = !user;
   ((Board*)pb)->computer_move(0);
 }
 
-void undo_cb(Fl_Widget*pb, void*) {
+void undo_cb(Fl_Widget*, void* pb) {
   Board* b = (Board*)pb;
   b->animate(undomove(),1);
   b->animate(undomove(),1);
@@ -1297,7 +1285,7 @@ Fl_Menu_Item menu[] = {
   {"Forced jumps rule", 'f', forced_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Debug", 'd', debug_cb, 0, FL_MENU_TOGGLE},
   {"Intelligence...", 'i', intel_cb, 0, FL_MENU_DIVIDER},
-  {"Copyright", 'c', copyright_cb},
+  {"About...", 'c', copyright_cb},
   {"Quit", 'q', quit_cb},
   {(const char *)0}};
 
@@ -1366,5 +1354,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.14 2000/01/16 07:44:39 robertk Exp $".
+// End of "$Id: checkers.cxx,v 1.15 2000/02/14 11:32:59 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shortcut.cxx,v 1.8 1999/10/15 09:03:30 bill Exp $"
+// "$Id: fl_shortcut.cxx,v 1.9 2000/02/14 11:32:58 bill Exp $"
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@
 #include <FL/x.H>
 #endif
 
-int Fl::test_shortcut(int shortcut) {
+int Fl_Widget::test_shortcut(int shortcut) {
   if (!shortcut) return 0;
 
   int shift = Fl::event_state();
@@ -65,11 +65,11 @@ int Fl::test_shortcut(int shortcut) {
   if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return 1;
 
   // try matching ascii, ignore shift:
-  if (key == event_text()[0]) return 1;
+  if (key == Fl::event_text()[0]) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
   if ((shift&FL_CTRL) && key >= 0x3f && key <= 0x5F
-      && event_text()[0]==(key^0x40)) return 1;
+      && Fl::event_text()[0]==(key^0x40)) return 1;
   return 0;
 }
 
@@ -118,11 +118,12 @@ int Fl_Widget::test_shortcut(const char *label) {
   }
 }
 
-int Fl_Widget::test_shortcut() {
-  if (!(flags()&FL_SHORTCUT_LABEL)) return 0;
-  return test_shortcut(label());
+int Fl_Widget::test_shortcut() const {
+  if (test_shortcut(shortcut())) return 1;
+  if (!(flags()&FL_NO_SHORTCUT_LABEL) && test_shortcut(label())) return 2;
+  return 0;
 }
 
 //
-// End of "$Id: fl_shortcut.cxx,v 1.8 1999/10/15 09:03:30 bill Exp $".
+// End of "$Id: fl_shortcut.cxx,v 1.9 2000/02/14 11:32:58 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.23 2000/01/16 07:44:32 robertk Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.24 2000/02/14 11:32:47 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,17 +32,15 @@ void Fl_Check_Button::draw() {
   // Draw the outer box as though it was a button:
   Fl_Flags f = flags();
   Fl_Color c = color();
-  Fl_Color bc = off_color();
-  Fl_Color fc = selection_color();
   Fl_Color lc = label_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
-  } else if (Fl::belowmouse() == this && highlight_color()) {
+  } else if (belowmouse() && highlight_color()) {
     c = highlight_color();
     lc = highlight_label_color();
     f |= FL_HIGHLIGHT;
   }
-  if (Fl::focus() == this) f |= FL_FOCUSED;
+  if (focused()) f |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
   if (!(f&FL_FOCUSED) && box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
@@ -50,14 +48,15 @@ void Fl_Check_Button::draw() {
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  box()->draw(x(), y(), w(), h(), c,
-	      Fl::pushed()==this ? (f|FL_VALUE) : (f&~FL_VALUE));
+  box()->draw(x(), y(), w(), h(), c, pushed() ? (f|FL_VALUE) : (f&~FL_VALUE));
 
   // Draw the check box:
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
   glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
-	  x()+d, y()+d+1, W, W, bc, (f&FL_VALUE)?fc:bc, f, glyph_box());
+	  x()+d, y()+d+1, W, W,
+	  off_color(), (f&FL_VALUE) ? selection_color() : off_color(),
+	  f, glyph_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }

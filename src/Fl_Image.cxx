@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.10 2000/01/09 08:17:27 bill Exp $"
+// "$Id: Fl_Image.cxx,v 1.11 2000/02/14 11:32:49 bill Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -161,8 +161,7 @@ Fl_Image::~Fl_Image() {
 }
 
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-// these could probably be inline but they cause the above header
+// this could probably be inline but they cause the above header
 // files to be included by Fl_Image.H:
 
 void Fl_Image::label(Fl_Widget* o) {
@@ -170,11 +169,6 @@ void Fl_Image::label(Fl_Widget* o) {
   o->label(0);
 }
 
-void Fl_Image::label(Fl_Menu_Item* o) {
-  o->image(this);
-  o->label(0);
-}
-
 //
-// End of "$Id: Fl_Image.cxx,v 1.10 2000/01/09 08:17:27 bill Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.11 2000/02/14 11:32:49 bill Exp $".
 //

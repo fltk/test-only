@@ -13,10 +13,10 @@ void Fl_FileChooser::cb_window(Fl_Window* o, void* v) {
 }
 
 inline void Fl_FileChooser::cb_dirMenu_i(Fl_Choice*, void*) {
-  if (dirMenu->value())
-    directory(dirMenu->text(dirMenu->value()));
-  else
-    directory("");
+   if (dirMenu->value())
+     directory(dirMenu->text(dirMenu->value()));
+   else
+     directory("");
 }
 void Fl_FileChooser::cb_dirMenu(Fl_Choice* o, void* v) {
   ((Fl_FileChooser*)(o->parent()->user_data()))->cb_dirMenu_i(o,v);

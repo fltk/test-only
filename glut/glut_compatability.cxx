@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $"
+// "$Id: glut_compatability.cxx,v 1.4 2000/02/14 11:32:45 bill Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -245,103 +245,67 @@ void glutSetWindow(int win) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Menu_Item.H>
-
-struct menu {
-  void (*cb)(int);
-  Fl_Menu_Item *m;
-  int size;
-  int alloc;
-};
+#include <FL/Fl_Menu_.H>
+#include <FL/Fl_Item.H>
 
 #define MAXMENUS 32
-static menu menus[MAXMENUS+1];
+static Fl_Menu_* menus[MAXMENUS+1];
+
+static void menu_cb(Fl_Widget* w, void* v) {
+  ((void(*)(int))(w->user_data()))(int(v));
+}
 
 static void domenu(int n, int ex, int ey) {
   glut_menu = n;
-  menu *m = &menus[n];
   if (glut_menustate_function) glut_menustate_function(1);
   if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
-  const Fl_Menu_Item* g = m->m->popup(Fl::event_x(), Fl::event_y(), 0);
-  if (g && g->callback_) ((void (*)(int))(g->callback_))(int(g->argument()));
+  menus[n]->popup(Fl::event_x(), Fl::event_y(), 0);
   if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
   if (glut_menustate_function) glut_menustate_function(0);
 }
 
 int glutCreateMenu(void (*cb)(int)) {
+  Fl_Group::current(0); // don't add it to any window
   int i;
-  for (i=1; i<MAXMENUS; i++) if (!menus[i].cb) break;
-  menu *m = &menus[i];
-  m->cb = cb;
+  for (i=1; i<MAXMENUS; i++) if (!menus[i]) break;
+  Fl_Menu_* m = new Fl_Menu_(0,0,0,0);
+  m->callback(menu_cb, (void*)cb);
+  menus[i] = m;
   return glut_menu = i;
 }
 
 void glutDestroyMenu(int n) {
-  menu *m = &menus[n];
-  delete[] m->m;
-  m->m = 0;
-  m->cb = 0;
-  m->size = m->alloc = 0;
-}
-
-static Fl_Menu_Item* additem(menu *m) {
-  if (m->size+1 >= m->alloc) {
-    m->alloc = m->size*2+10;
-    Fl_Menu_Item* nm = new Fl_Menu_Item[m->alloc];
-    for (int i=0; i<m->size; i++) nm[i] = m->m[i];
-    delete[] m->m;
-    m->m = nm;
-  }
-  int n = m->size++;
-  m->m[n+1].text = 0;
-  Fl_Menu_Item* i = &(m->m[n]);
-  i->shortcut_ = 0;
-  i->flags_ = 0;
-  i->style_ = 0;
-  i->image_ = 0;
-  return i;
+  delete menus[n];
+  menus[n] = 0;
 }
 
 void glutAddMenuEntry(char *label, int value) {
-  menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = additem(m);
-  i->text = label;
-  i->callback_ = (Fl_Callback*)(m->cb);
-  i->user_data_ = (void *)value;
+  menus[glut_menu]->begin();
+  Fl_Item* m = new Fl_Item(label);
+  m->argument(value);
 }
 
 void glutAddSubMenu(char *label, int submenu) {
-  menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = additem(m);
-  i->text = label;
-  i->callback_ = 0;
-  i->user_data_ = (void *)(menus[submenu].m);
-  i->flags_ = FL_SUBMENU_POINTER;
+  menus[submenu]->label(label);
+  menus[glut_menu]->add(*menus[submenu]);
 }
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
-  menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = &m->m[item-1];
-  i->text = label;
-  i->callback_ = (Fl_Callback*)(m->cb);
-  i->user_data_ = (void *)value;
-  i->flags_ = 0;
+  Fl_Widget* m = menus[glut_menu]->child(item-1);
+  m->label(label);
+  m->argument(value);
 }
 
 void glutChangeToSubMenu(int item, char *label, int submenu) {
-  menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = &m->m[item-1];
-  i->text = label;
-  i->callback_ = 0;
-  i->user_data_ = (void *)(menus[submenu].m);
-  i->flags_ = FL_SUBMENU_POINTER;
+  glutRemoveMenuItem(item);
+  menus[submenu]->label(label);
+  menus[glut_menu]->insert(*menus[submenu], item-1);
 }
 
 void glutRemoveMenuItem(int item) {
-  menu *m = &menus[glut_menu];
-  if (item > m->size || item < 1) return;
-  for (int i = item-1; i <= m->size; i++) m->m[i] = m->m[i+1];
-  m->size--;
+  Fl_Menu_* m = menus[glut_menu];
+  if (item > m->children() || item < 1) return;
+  delete m->child(item-1);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -364,7 +328,7 @@ int glutGet(GLenum type) {
   case GLUT_SCREEN_HEIGHT: return Fl::h();
 //case GLUT_SCREEN_WIDTH_MM:
 //case GLUT_SCREEN_HEIGHT_MM:
-  case GLUT_MENU_NUM_ITEMS: return menus[glut_menu].size;
+  case GLUT_MENU_NUM_ITEMS: return menus[glut_menu]->children();
   case GLUT_DISPLAY_MODE_POSSIBLE: return Fl_Gl_Window::can_do(glut_mode);
   case GLUT_INIT_WINDOW_X: return initx;
   case GLUT_INIT_WINDOW_Y: return inity;
@@ -399,5 +363,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.4 2000/02/14 11:32:45 bill Exp $".
 //

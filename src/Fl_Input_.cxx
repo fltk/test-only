@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.38 2000/01/16 07:44:34 robertk Exp $"
+// "$Id: Fl_Input_.cxx,v 1.39 2000/02/14 11:32:51 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -152,7 +152,7 @@ void Fl_Input_::setfont() const {
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  if (Fl::focus()!=this && !size()) {
+  if (!focused() && !size()) {
     // we have to erase it if cursor was there
     fl_color(fl_inactive(color(), fl));
     fl_rectf(X, Y, W, H);
@@ -167,7 +167,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
   int selstart, selend;
-  if (Fl::focus()!=this && /*Fl::selection_owner()!=this &&*/ Fl::pushed()!=this)
+  if (!focused() && !pushed())
     selstart = selend = 0;
   else if (position() <= mark()) {
     selstart = position(); selend = mark();
@@ -192,7 +192,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
     e = expand(p, buf);
     if (position() >= p-value() && position() <= e-value()) {
       curx = expandpos(p, value()+position(), buf, 0);
-      if (Fl::focus()==this && !was_up_down) up_down_pos = curx;
+      if (focused() && !was_up_down) up_down_pos = curx;
       cury = lines*height;
       int newscroll = xscroll_;
       if (expandpos(p, e, buf, 0) < W-1) {
@@ -279,7 +279,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       }
     } else {
       // draw the cursor:
-      if (Fl::focus() == this && selstart == selend &&
+      if (focused() && selstart == selend &&
 	  position() >= p-value() && position() <= e-value()) {
 	fl_color(off_color());
 	fl_rectf(X+curx-xscroll_, Y+ypos, 2, height);
@@ -746,5 +746,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.38 2000/01/16 07:44:34 robertk Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.39 2000/02/14 11:32:51 bill Exp $".
 //

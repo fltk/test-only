@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.43 2000/01/10 06:31:04 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.44 2000/02/14 11:32:36 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,12 @@
 #define Fl_Widget_H
 
 #include "Fl_Style.H"
+
+enum { // Values for type():
+  FL_RESERVED_TYPE	= 0x64,
+  FL_GROUP		= 0xe0,
+  FL_WINDOW		= 0xF0
+};
 
 class Fl_Widget;
 class Fl_Window;
@@ -63,6 +69,8 @@ public:
 
   uchar	type() const		{return type_;}
   void	type(uchar t)		{type_ = t;}
+  int	is_group() const	{return type_ >= FL_GROUP;}
+  int	is_window() const	{return type_ >= FL_WINDOW;}
 
   int	x() const		{return x_;}
   void	x(int v)		{x_ = v;}
@@ -88,6 +96,9 @@ public:
   void	tooltip(const char *t)	{tooltip_ = t;}
   void	tooltip(const char *t, const char *loc);
 
+  int shortcut() const		{return shortcut_;}
+  void shortcut(int s)		{shortcut_ = s;}
+
   Fl_Callback_p callback() const {return callback_;}
   void	callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
   void	callback(Fl_Callback* c) {callback_=c;}
@@ -104,15 +115,20 @@ public:
   void	do_callback()		{callback_(this,user_data_);}
   void	do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void	do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
-  int	test_shortcut()		;
+  int	test_shortcut() const	;
   static int test_shortcut(const char*);
+  static int test_shortcut(int);
   int	contains(const Fl_Widget*) const;
   int	inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
+  int	pushed() const		;
+  int	focused() const		;
+  int	belowmouse() const	;
 
   Fl_Flags flags() const	{return flags_;}
   void	set_flag(int c)		{flags_ |= c;}
   void	clear_flag(int c)	{flags_ &= ~c;}
 
+  void	align(unsigned a)	{flags_ = flags_&~FL_ALIGN_MASK|a;}
   int	visible() const		{return !(flags_&FL_INVISIBLE);}
   int	visible_r() const	;
   void	show()			;
@@ -127,7 +143,7 @@ public:
   int	output() const		{return (flags_&FL_OUTPUT);}
   void	set_output()		{flags_ |= FL_OUTPUT;}
   void	clear_output()		{flags_ &= ~FL_OUTPUT;}
-  int	takesevents() const	{return (!output()&&active_r()&&visible_r());}
+  int	takesevents() const	{return !(flags_&(FL_OUTPUT|FL_INVISIBLE|FL_INACTIVE));}
   int	changed() const		{return flags_&FL_CHANGED;}
   void	set_changed()		{flags_ |= FL_CHANGED;}
   void	clear_changed()		{flags_ &= ~FL_CHANGED;}
@@ -199,7 +215,6 @@ public:
 #ifndef FLTK_2  // back-compatability section:
 
   Fl_Flags align() const	{return flags_;}
-  void	align(unsigned a)	{flags_ = flags_&~FL_ALIGN_MASK|a;}
 
   Fl_Boxtype	down_box()		const {return glyph_box();}
   Fl_Boxtype	slider()		const {return glyph_box();}
@@ -252,6 +267,7 @@ private:
   const char*		label_;
   Fl_Image*		image_;
   const char*		tooltip_;
+  int			shortcut_;
   unsigned		flags_;
   int			x_,y_,w_,h_;
   uchar			type_;
@@ -260,13 +276,8 @@ private:
 
 };
 
-// reserved type numbers (necessary for my cheapo RTTI) start here.
-// grep the header files for "RESERVED_TYPE" to find the next available
-// number.
-#define FL_RESERVED_TYPE 100
-
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.43 2000/01/10 06:31:04 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.44 2000/02/14 11:32:36 bill Exp $".
 //

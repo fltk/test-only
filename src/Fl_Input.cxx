@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.26 2000/01/08 21:16:24 mike Exp $"
+// "$Id: Fl_Input.cxx,v 1.27 2000/02/14 11:32:50 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -315,9 +315,8 @@ int Fl_Input::handle(int event) {
     return handle_key();
 
   case FL_PUSH:
-    if (Fl::focus() != this) {
-      Fl::focus(this);
-      handle(FL_FOCUS);
+    if (!focused()) {
+      take_focus();
       // Windoze-style: select everything on first click:
       if (type() != FL_MULTILINE_INPUT) {
         position(size(), 0); // select everything
@@ -349,5 +348,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.26 2000/01/08 21:16:24 mike Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.27 2000/02/14 11:32:50 bill Exp $".
 //

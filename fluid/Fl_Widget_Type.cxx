@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.61 2000/01/16 07:44:23 robertk Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.62 2000/02/14 11:32:40 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ const char* subclassname(Fl_Type* l) {
 Fl_Type *Fl_Widget_Type::make() {
   // Find the current widget, or widget to copy:
   Fl_Type *qq = Fl_Type::current;
-  while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
+  while (qq && !qq->is_widget()) qq = qq->parent;
   if (!qq) {
     fl_message("Please select a widget");
     return 0;
@@ -182,12 +182,10 @@ void Fl_Widget_Type::redraw() {
   if (is_menu_item()) {
     // find the menu button that parents this menu:
     do t = t->parent; while (t && t->is_menu_item());
-    // kludge to cause build_menu to be called again:
-    t->add_child(0,0);
   } else {
     while (t->parent && t->parent->is_widget()) t = t->parent;
-    ((Fl_Widget_Type*)t)->o->redraw();
   }
+  if (t) ((Fl_Widget_Type*)t)->o->redraw();
 }
 
 // the recursive part sorts all children, returns pointer to next:
@@ -548,15 +546,12 @@ void resizable_cb(Fl_Light_Button* i,void* v) {
 
 void hotspot_cb(Fl_Light_Button* i,void* v) {
   if (v == LOAD) {
-    if (numselected > 1) {i->hide(); return;}
-    if (current_widget->is_menu_item()) i->label("Divider");
-    else i->label("Hotspot");
+    if (numselected > 1 || current_widget->is_menu_item()) {i->hide(); return;}
     i->show();
     i->value(current_widget->hotspot());
   } else {
     modflag = 1;
     current_widget->hotspot(i->value());
-    if (current_widget->is_menu_item()) {current_widget->redraw(); return;}
     if (i->value()) {
       Fl_Type *p = current_widget->parent;
       if (!p || !p->is_widget()) return;
@@ -960,11 +955,6 @@ void highlight_label_color_cb(Fl_Light_Button* i, void *v) {
   i->redraw();
 }
 
-static Fl_Button* relative(Fl_Widget* o, int i) {
-  Fl_Group* g = (Fl_Group*)(o->parent());
-  return (Fl_Button*)(g->child(g->find(*o)+i));
-}
-
 static Fl_Menu_Item alignmenu[] = {
   {"FL_ALIGN_CENTER",0,0,(void*)(FL_ALIGN_CENTER)},
   {"FL_ALIGN_TOP",0,0,(void*)(FL_ALIGN_TOP)},
@@ -989,8 +979,6 @@ static Fl_Menu_Item alignmenu[] = {
 void align_cb(Fl_Button* i, void *v) {
   Fl_Flags b = Fl_Flags(i->argument());
   if (v == LOAD) {
-    if (current_widget->is_menu_item()) {i->hide(); return;}
-    i->show();
     i->value(current_widget->o->flags() & b);
     Fl_Flags tplate = ((Fl_Widget_Type*)(current_widget->factory))->o->flags();
     if (tplate & b) {
@@ -1003,27 +991,16 @@ void align_cb(Fl_Button* i, void *v) {
   } else {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
-        modflag = 1;
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-	int x = q->o->flags();
-      int y;
-      if (i->value()) {
-	y = x | b;
-	if (b == FL_ALIGN_LEFT || b == FL_ALIGN_TOP) {
-	  Fl_Button *b1 = relative(i,+1);
-	  b1->clear();
-	  y = y & ~(b1->argument());
+	int x = q->o->flags() & FL_ALIGN_MASK;
+	int y;
+	if (i->value()) {
+	  y = x | b;
+	} else {
+	  y = x & ~b;
 	}
-	if (b == FL_ALIGN_RIGHT || b == FL_ALIGN_BOTTOM) {
-	  Fl_Button *b1 = relative(i,-1);
-	  b1->clear();
-	  y = y & ~(b1->argument());
-	}
-      } else {
-	y = x & ~b;
+	if (x != y) {q->o->align(y); q->redraw(); modflag = 1;}
       }
-      if (x != y) {q->o->set_flag(y); q->redraw();}
-    }
   }
 }
 
@@ -1133,8 +1110,6 @@ void v_input_cb(Fl_Input* i, void* v) {
 
 void subclass_cb(Fl_Input* i, void* v) {
   if (v == LOAD) {
-    if (current_widget->is_menu_item()) {i->hide(); return;}
-    i->show();
     i->static_value(current_widget->subclass());
   } else {
     const char *c = i->value();
@@ -1534,9 +1509,9 @@ const char *array_name(Fl_Widget_Type *o) {
   int sawthis = 0;
   Fl_Type *t = o->prev;
   Fl_Type *tp = o;
-  const char *cn = o->class_name();
-  for (; t && t->class_name() == cn; tp = t, t = t->prev);
-  for (t = tp; t && t->class_name() == cn; t = t->next) {
+  const char *cn = o->class_name(1);
+  for (; t && t->class_name(1) == cn; tp = t, t = t->prev);
+  for (t = tp; t && t->class_name(1) == cn; t = t->next) {
     if (t == o) {sawthis=1; continue;}
     const char *e = t->name();
     if (!e) continue;
@@ -1570,7 +1545,7 @@ void Fl_Widget_Type::write_static() {
     ::write_declare("extern void %s(%s*, %s);", callback(), t,
 		    user_data_type() ? user_data_type() : "void*");
   const char* c = array_name(this);
-  const char* k = class_name();
+  const char* k = class_name(1);
   if (c && !k) {
     write_c("\n");
     if (!public_) write_c("static ");
@@ -1630,12 +1605,12 @@ void Fl_Widget_Type::write_code1() {
   const char* t = subclassname(this);
   const char *c = array_name(this);
   if (c) {
-    if (class_name()) {
+    if (class_name(1)) {
       write_public(public_);
       write_h("  %s *%s;\n", t, c);
     }
   }
-  if (class_name() && callback() && !is_name(callback())) {
+  if (class_name(1) && callback() && !is_name(callback())) {
     const char* cn = callback_name();
     const char* ut = user_data_type() ? user_data_type() : "void*";
     write_public(0);
@@ -1664,14 +1639,17 @@ void Fl_Widget_Type::write_code1() {
       write_c("new %s(%d, %d", t, o->w(), o->h());
     // prevent type() code from being emitted:
     ((Fl_Widget_Type*)factory)->o->type(o->type());
+  } else if (is_menu_item()) {
+    write_c("new %s(", t);
   } else {
     write_c("new %s(%d, %d, %d, %d", t, o->x(), o->y(), o->w(), o->h());
   }
   if (label() && *label()) {
-    write_c(", ");
+    if (!is_menu_item()) write_c(", ");
     write_cstring(label());
   }
-  write_c(");\n");
+  if (is_menu_button()) write_c("); o->begin();\n");
+  else write_c(");\n");
   indentation += 2;
   if (this == last_group) write_c("%sw = o;\n",indent());
   if (varused) write_widget_code();
@@ -1745,7 +1723,7 @@ void Fl_Widget_Type::write_widget_code() {
   }
 
   const char* ud = user_data();
-  if (class_name() && !parent->is_widget()) ud = "this";
+  if (class_name(1) && !parent->is_widget()) ud = "this";
   if (callback()) {
     write_c("%so->callback((Fl_Callback*)%s", indent(), callback_name());
     if (ud)
@@ -1757,8 +1735,7 @@ void Fl_Widget_Type::write_widget_code() {
   }
   if ((o->flags()&FL_ALIGN_MASK) != (tplate->flags()&FL_ALIGN_MASK)) {
     Fl_Flags i = o->flags() & FL_ALIGN_MASK;
-    write_c("%so->clear_flag(FL_ALIGN_MASK);\n", indent());
-    write_c("%so->set_flag(%s", indent(),
+    write_c("%so->align(%s", indent(),
            item_name(alignmenu, i & ~FL_ALIGN_INSIDE));
     if (i & FL_ALIGN_INSIDE) write_c("|FL_ALIGN_INSIDE");
     write_c(");\n");
@@ -1806,7 +1783,8 @@ void Fl_Widget_Type::write_properties() {
   Fl_Type::write_properties();
   write_indent(level+1);
   if (!public_) write_string("private");
-  write_string("xywh {%d %d %d %d}", o->x(), o->y(), o->w(), o->h());
+  if (!is_menu_item())
+    write_string("xywh {%d %d %d %d}", o->x(), o->y(), o->w(), o->h());
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
   if (o->type() != tplate->type()) {
     write_string("type");
@@ -1819,7 +1797,7 @@ void Fl_Widget_Type::write_properties() {
   if (!o->visible()) write_string("hide");
   if (!o->active()) write_string("deactivate");
   if (resizable()) write_string("resizable");
-  if (hotspot()) write_string(is_menu_item() ? "divider" : "hotspot");
+  if (hotspot()) write_string("hotspot");
 
   if (o->box() != tplate->box()) {
     write_string("box"); write_word(boxname(o->box()));}
@@ -1831,7 +1809,7 @@ void Fl_Widget_Type::write_properties() {
   if (o->text_font() != tplate->text_font())
     write_string("textfont %d", o->text_font()-fl_fonts);
   if (o->label_type() != tplate->label_type()) {
-    write_string("label_type");
+    write_string("labeltype");
     write_word(labeltypename(o->label_type()));
   }
   if (image) {
@@ -1908,9 +1886,7 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"type")) {
     o->type(item_number(subtypes(), read_word()));
   } else if (!strcmp(c,"align")) {
-    if (sscanf(read_word(),"%d",&x) == 1) {
-		o->clear_flag(FL_ALIGN_MASK); o->set_flag(x);
-	}
+    if (sscanf(read_word(),"%d",&x) == 1) {o->align(x);}
   } else if (!strcmp(c,"when")) {
     if (sscanf(read_word(),"%d",&x) == 1) o->when(x);
   } else if (!strcmp(c,"hide")) {
@@ -1919,8 +1895,9 @@ void Fl_Widget_Type::read_property(const char *c) {
     o->deactivate();
   } else if (!strcmp(c,"resizable")) {
     resizable(1);
-  } else if (!strcmp(c,"hotspot") || !strcmp(c, "divider")) {
+  } else if (!strcmp(c,"hotspot")) {
     hotspot(1);
+  //} else if (!strcmp(c, "divider")) { // do something here...
   } else if (!strcmp(c,"class")) {
     subclass(read_word());
   } else if (is_button() && !strcmp(c,"shortcut")) {
@@ -1954,7 +1931,7 @@ void Fl_Widget_Type::read_property(const char *c) {
       if (!strcmp(c,"image_file")) {
 	c = read_word();
 	if (i && c[0]=='d') i->inlined = 0;
-	if (c[1]=='t') o->set_flag(o->flags()|FL_ALIGN_TILED);
+	if (c[1]=='t') o->set_flag(FL_ALIGN_TILED);
       }
     } else {
       o->label_type((Fl_Labeltype)item_pointer(labeltypemenu,c));
@@ -2104,7 +2081,7 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
       default: return 0;
       }
     }
-    o->set_flag(v);
+    o->align(v);
   } else if (!strcmp(name,"resizebox")) {
     resizable(1);
   } else if (!strcmp(name,"colors")) {
@@ -2134,5 +2111,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.61 2000/01/16 07:44:23 robertk Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.62 2000/02/14 11:32:40 bill Exp $".
 //

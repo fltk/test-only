@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.20 1999/11/23 09:22:45 vincent Exp $"
+// "$Id: Fl_Type.h,v 1.21 2000/02/14 11:32:40 bill Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -140,7 +140,7 @@ public:
   virtual int is_value_slider() const;
 
 
-  const char* class_name() const;
+  const char* class_name(const int need_nest) const;
 };
 
 class FLUID_API Fl_Function_Type : public Fl_Type {
@@ -420,58 +420,33 @@ FLUID_API extern Fl_Menu_Item menu_item_type_menu[];
 class FLUID_API Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
   Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
-  const char* type_name() {return "menuitem";}
-  Fl_Type* make();
+  const char* type_name() {return "Fl_Item";}
   int is_menu_item() const {return 1;}
   int is_button() const {return 1;} // this gets shortcut to work
-  Fl_Widget* widget(int,int,int,int) {return 0;}
-  Fl_Widget_Type* _make() {return 0;}
-  const char* menu_name(int& i);
-  int flags();
-  void write_static();
-  void write_item();
-  void write_code1();
-  void write_code2();
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type *_make() {return new Fl_Menu_Item_Type();}
 };
 
-class FLUID_API Fl_Submenu_Type : public Fl_Menu_Item_Type {
+class FLUID_API Fl_Submenu_Type : public Fl_Group_Type {
 public:
   Fl_Menu_Item* subtypes() {return 0;}
-  const char* type_name() {return "submenu";}
-  int is_parent() const {return 1;}
-  int is_button() const {return 0;} // disable shortcut
-  Fl_Type* make();
-  // changes to submenu must propagate up so build_menu is called
-  // on the parent Fl_Menu_Type:
-  void add_child(Fl_Type*a, Fl_Type*b) {parent->add_child(a,b);}
-  void move_child(Fl_Type*a, Fl_Type*b) {parent->move_child(a,b);}
-  void remove_child(Fl_Type*a) {parent->remove_child(a);}
+  const char* type_name() {return "Fl_Item_Group";}
+  int is_menu_item() const {return 1;}
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type *_make() {return new Fl_Submenu_Type();}
 };
-
 
 #include <FL/Fl_Menu_.H>
 ////////////////////////////////////////////////////////////////
 // This is the base class for widgets that contain a menu (ie
-// subclasses of Fl_Menu_.
-// This is a parent widget and menu items can be added as
-// children.  An actual array of Fl_Menu_Items is kept parallel
-// with the child objects and updated as they change.
+// subclasses of Fl_Menu_).
 
-class FLUID_API Fl_Menu_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Menu_Type : public Fl_Group_Type {
 public:
   int is_menu_button() const {return 1;}
-  int is_parent() const {return 1;}
-  int menusize;
-  void build_menu();
-  Fl_Menu_Type() : Fl_Widget_Type() {menusize = 0;}
-  ~Fl_Menu_Type() {
-    if (menusize) delete[] (Fl_Menu_Item*)(((Fl_Menu_*)o)->menu());
-  }
-  void add_child(Fl_Type*, Fl_Type*) {build_menu();}
-  void move_child(Fl_Type*, Fl_Type*) {build_menu();}
-  void remove_child(Fl_Type*) {build_menu();}
+  Fl_Menu_Type() : Fl_Group_Type() {}
+  ~Fl_Menu_Type() {}
   Fl_Type* click_test(int x, int y);
-  void write_code2();
 };
 
 FLUID_API extern Fl_Menu_Item button_type_menu[];
@@ -486,8 +461,6 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
 };
 
-FLUID_API extern Fl_Menu_Item dummymenu[];
-
 #include <FL/Fl_Choice.H>
 class FLUID_API Fl_Choice_Type : public Fl_Menu_Type {
 public:
@@ -495,7 +468,6 @@ public:
   virtual const char *type_name() {return "Fl_Choice";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
-    o->menu(dummymenu);
     return o;
   }
   Fl_Widget_Type *_make() {return new Fl_Choice_Type();}
@@ -551,5 +523,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.20 1999/11/23 09:22:45 vincent Exp $".
+// End of "$Id: Fl_Type.h,v 1.21 2000/02/14 11:32:40 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.30 2000/01/23 01:38:20 bill Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.31 2000/02/14 11:32:53 bill Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,45 +34,38 @@ void Fl_Menu_Button::draw() {
   // draw the little mark at the right:
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
-  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, Fl::belowmouse()==this?FL_HIGHLIGHT:0);
+  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, belowmouse() ? FL_HIGHLIGHT : 0);
 }
 
 void Fl_Menu_Button::draw_n_clip() {
-  if (!type())
+  if (!(type()&7))
     Fl_Widget::draw_n_clip();
   else
     box(FL_NO_BOX); 
 }
 
 
-const Fl_Menu_Item* Fl_Menu_Button::popup() {
-  const Fl_Menu_Item* m;
-
-// back compatibility hack
-  if (box() == FL_NO_BOX) type(POPUP3);
-
-  if (type()) {
-    m = menu()->popup(Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
-  } else {
-    m = menu()->pulldown(x(), y(), w(), h(), 0, this);
-  }
-  picked(m);
-  return m;
+int Fl_Menu_Button::popup() {
+  if (box() == FL_NO_BOX) type(POPUP3); // back compatibility hack
+  if (type()&7)
+    return Fl_Menu_::popup(Fl::event_x(), Fl::event_y(), label());
+  else
+    return pulldown(x(), y(), w(), h());
 }
 
 int Fl_Menu_Button::handle(int e) {
-  if (!menu() || !menu()->text) return 0;
+  if (!children()) return 0;
   switch (e) {
 
   case FL_FOCUS:
   case FL_UNFOCUS:
-    if (type()) return 0;
+    if (type()&7) return 0;
     damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
 
   case FL_ENTER:
   case FL_LEAVE:
-    if (type()) return 0;
+    if (type()&7) return 0;
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
 
@@ -82,20 +75,22 @@ int Fl_Menu_Button::handle(int e) {
     // user must drag the mouse to select a different item.  Depending on
     // the size and usage of the menu, this may be more user-friendly:
     // Fl::event_is_click(0);
-    if (type()) {
+    if (type()&7) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
-    } else 
+    } else {
       take_focus();
+    }
   J1:
+    if (!(type()&7)) value(-1); // make it pull down below the button...
     popup();
     return 1;
 
   case FL_SHORTCUT:
-    if (Fl_Widget::test_shortcut()) {popup(); return 1;}
-    return test_shortcut() != 0;
+    if (Fl_Widget::test_shortcut()) goto J1;
+    return handle_shortcut();
 
   case FL_KEYBOARD:
-    if (!type() && Fl::event_key() == ' ') goto J1;
+    if (!(type()&7) && Fl::event_key() == ' ') goto J1;
     return 0;
 
   default:
@@ -113,8 +108,9 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
   : Fl_Menu_(X,Y,W,H,l)
 {
   style(::style);
+  align(FL_ALIGN_CENTER);
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.30 2000/01/23 01:38:20 bill Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.31 2000/02/14 11:32:53 bill Exp $".
 //

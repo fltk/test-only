@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.17 2000/01/23 01:38:21 bill Exp $"
+// "$Id: classic.cxx,v 1.18 2000/02/14 11:33:02 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,7 +27,6 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Input.H>
@@ -105,5 +104,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.17 2000/01/23 01:38:21 bill Exp $".
+// End of "$Id: classic.cxx,v 1.18 2000/02/14 11:33:02 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.13 1999/10/26 16:26:24 mike Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.14 2000/02/14 11:32:42 bill Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -73,13 +73,13 @@ static void ReadPlugin(char* s, char* location)
 	  if(d->options_menu) {
 	    Plugins_Options_Menu[nboptions].text = d->name;
 	    Plugins_Options_Menu[nboptions].user_data_ = d->options_menu;
-	    Plugins_Options_Menu[nboptions].flags_ = FL_SUBMENU_POINTER;
+	    Plugins_Options_Menu[nboptions].flags = FL_SUBMENU_POINTER;
 	    nboptions++;
 	  }
 	  if(d->new_menu) {
 	    Plugins_New_Menu[nbnew].text = d->name;
 	    Plugins_New_Menu[nbnew].user_data_ = d->new_menu;
-	    Plugins_New_Menu[nbnew].flags_ = FL_SUBMENU_POINTER;
+	    Plugins_New_Menu[nbnew].flags = FL_SUBMENU_POINTER;
 	    fill_in_New_Menu(d->new_menu);
 	    nbnew++;
 	  }
@@ -143,5 +143,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.13 1999/10/26 16:26:24 mike Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.14 2000/02/14 11:32:42 bill Exp $"
 //

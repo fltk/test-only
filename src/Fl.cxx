@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.79 2000/01/17 21:36:16 bill Exp $"
+// "$Id: Fl.cxx,v 1.80 2000/02/14 11:32:45 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -284,18 +284,12 @@ Fl_Window* Fl::next_window(const Fl_Window* w) {
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
-
 void Fl::focus(Fl_Widget *o) {
   if (grab()) return; // don't do anything while grab is on
   Fl_Widget *p = focus_;
   if (o != p) {
     focus_ = o;
-    fl_oldfocus = 0;
-    for (; p && !p->contains(o); p = p->parent()) {
-      p->handle(FL_UNFOCUS);
-      fl_oldfocus = p;
-    }
+    for (; p && !p->contains(o); p = p->parent()) p->handle(FL_UNFOCUS);
   }
 }
 
@@ -335,8 +329,13 @@ void fl_fix_focus() {
   if (w) {
     while (w->parent()) w = w->parent();
     if (Fl::modal()) w = Fl::modal();
-    if (!w->contains(Fl::focus()))
-      if (!w->take_focus()) Fl::focus(w);
+    if (!w->contains(Fl::focus())) {
+      if (w->takesevents() &&
+	  w->handle(FL_FOCUS) &&
+	  w->contains(Fl::focus()))
+	;
+      else Fl::focus(w); // give it focus even if it does not want it
+    }
   } else
     Fl::focus(0);
 
@@ -395,7 +394,7 @@ static int send(int event, Fl_Widget* to, Fl_Window* window) {
   int dx = window->x();
   int dy = window->y();
   for (const Fl_Widget* w = to; w; w = w->parent())
-    if (w->type()>=FL_WINDOW) {dx -= w->x(); dy -= w->y();}
+    if (w->is_window()) {dx -= w->x(); dy -= w->y();}
   int save_x = Fl::e_x; Fl::e_x += dx;
   int save_y = Fl::e_y; Fl::e_y += dy;
   int ret = to->handle(event);
@@ -708,7 +707,7 @@ int Fl_Window::handle(int event) {
   }
   if (Fl_Group::handle(event)) return 1;
   // Make the Escape key close windows:
-  if (event == FL_SHORTCUT && !parent() && Fl::event_key()==FL_Escape) {
+  if (event == FL_SHORTCUT && !parent() && test_shortcut()) {
     do_callback();
     return 1;
   }
@@ -731,23 +730,23 @@ void Fl_Widget::redraw() {
 }
 
 void Fl_Widget::damage(uchar flags) {
-  if (type() < FL_WINDOW) {
-    // damage only the rectangle covered by a child widget:
-    damage(flags, x(), y(), w(), h());
-  } else {
+  if (is_window()) {
     // damage entire window by deleting the region:
     Fl_X* i = Fl_X::i((Fl_Window*)this);
     if (!i) return; // window not mapped, so ignore it
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
     damage_ |= flags;
     Fl::damage(FL_DAMAGE_CHILD);
+  } else {
+    // damage only the rectangle covered by a child widget:
+    damage(flags, x(), y(), w(), h());
   }
 }
 
 void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
   Fl_Widget* window = this;
   // mark all parent widgets between this and window with FL_DAMAGE_CHILD:
-  while (window->type() < FL_WINDOW) {
+  while (!window->is_window()) {
     window->damage_ |= flags;
     window = window->parent();
     if (!window) return;
@@ -798,15 +797,6 @@ void Fl_Window::flush() {
   draw();
 }
 
-int fl_old_shortcut(const char* s) {
-  if (!s || !*s) return 0;
-  int n = 0;
-  if (*s == '#') {n |= FL_ALT; s++;}
-  if (*s == '+') {n |= FL_SHIFT; s++;}
-  if (*s == '^') {n |= FL_CTRL; s++;}
-  return n | *s;
-}
-
 //
-// End of "$Id: Fl.cxx,v 1.79 2000/01/17 21:36:16 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.80 2000/02/14 11:32:45 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.21 2000/01/10 06:31:32 bill Exp $"
+// "$Id: essai.cxx,v 1.22 2000/02/14 11:33:03 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -31,7 +31,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Input.H>
@@ -128,17 +127,16 @@ int fltk_theme(int, char**) {
   if ((s = Fl_Style::find("window"))) {
     s->box = flat1;
   }
-  if ((s = Fl_Style::find("menu item"))) {
+  if ((s = Fl_Style::find("menu"))) {
     s->selection_text_color = FL_BLACK;
-    s->box = flat2;
+    s->glyph_box = flat2;
   }
   if ((s = Fl_Style::find("menu bar"))) {
-    s->highlight_color = FL_GRAY; // required for highlighting
+    s->highlight_color = FL_GRAY;
+    s->highlight_label_color = FL_BLACK;
     s->box = flat2;
   }
   if ((s = Fl_Style::find("menu title"))) {
-    s->highlight_color = FL_GRAY; // required for highlighting
-    s->highlight_label_color = FL_BLACK;
     s->selection_text_color = FL_BLACK;
     s->box = flat2;
   }
@@ -158,5 +156,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.21 2000/01/10 06:31:32 bill Exp $".
+// End of "$Id: essai.cxx,v 1.22 2000/02/14 11:33:03 bill Exp $".
 //

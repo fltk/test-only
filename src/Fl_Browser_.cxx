@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.41 2000/01/23 01:38:19 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.42 2000/02/14 11:32:47 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -277,7 +277,7 @@ J1:
 
   fl_clip(X, Y, W, H);
   void* focus_line = 0;
-  if (Fl::focus() == this) {
+  if (focused()) {
     focus_line = selection_;
     if (!focus_line) focus_line = top_;
   }
@@ -713,5 +713,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.41 2000/01/23 01:38:19 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.42 2000/02/14 11:32:47 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.H,v 1.15 2000/01/10 06:31:03 bill Exp $"
+// "$Id: Fl_Return_Button.H,v 1.16 2000/02/14 11:32:36 bill Exp $"
 //
 // Return button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,6 @@
 
 class FL_API Fl_Return_Button : public Fl_Button {
 public:
-  int handle(int);
   Fl_Return_Button(int x,int y,int w,int h,const char *l=0);
 protected:
   void draw();
@@ -38,5 +37,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Return_Button.H,v 1.15 2000/01/10 06:31:03 bill Exp $".
+// End of "$Id: Fl_Return_Button.H,v 1.16 2000/02/14 11:32:36 bill Exp $".
 //

@@ -37,12 +37,13 @@ Fl_Window* make_images_dir_window() {
     }
     { Fl_Box* o = new Fl_Box(10, 40, 220, 20, "(relative to the location of the .fl file)");
       o->label_size(10);
-      o->set_flag(133|FL_ALIGN_INSIDE);
+      o->align(133|FL_ALIGN_INSIDE);
     }
     { Fl_Button* o = new Fl_Button(180, 70, 60, 20, "Cancel");
       o->callback((Fl_Callback*)cb_Cancel);
     }
     { Fl_Return_Button* o = new Fl_Return_Button(250, 70, 50, 20, "OK");
+      o->shortcut(0xff0d);
       o->callback((Fl_Callback*)cb_OK);
     }
     o->end();

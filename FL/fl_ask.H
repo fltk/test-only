@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.H,v 1.10 1999/10/17 22:27:07 vincent Exp $"
+// "$Id: fl_ask.H,v 1.11 2000/02/14 11:32:36 bill Exp $"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,11 +37,16 @@ FL_API int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,
 FL_API const char *fl_input(const char *label, const char *deflt = 0, ...);
 FL_API const char *fl_password(const char *label, const char *deflt = 0, ...);
 
+// You can modify this widget to change the icon in the popup panel:
 FL_API Fl_Widget *fl_message_icon();
-extern FL_API unsigned char fl_message_font_;
-extern FL_API unsigned char fl_message_size_;
-inline void fl_message_font(unsigned char f,unsigned char s) {
-  fl_message_font_ = f; fl_message_size_ = s;}
+
+#ifndef FLTK_2
+extern FL_API Fl_Named_Style* fl_message_style;
+inline void fl_message_font(Fl_Font f, unsigned s) {
+  fl_message_style->label_font = f;
+  fl_message_style->label_size = s;
+}
+#endif
 
 // pointers you can use to change FLTK to a foreign language:
 extern FL_API const char* fl_no;
@@ -52,5 +57,5 @@ extern FL_API const char* fl_cancel;
 #endif
 
 //
-// End of "$Id: fl_ask.H,v 1.10 1999/10/17 22:27:07 vincent Exp $".
+// End of "$Id: fl_ask.H,v 1.11 2000/02/14 11:32:36 bill Exp $".
 //

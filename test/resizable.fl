@@ -9,40 +9,50 @@ snap 3
 Function {} {open
 } {
   Fl_Window {} {open
-    xywh {94 297 560 470} resizable box NO_BOX visible
+    xywh {692 305 560 470} resizable box NO_BOX visible
   } {
     Fl_Menu_Bar {} {open
-      xywh {0 0 560 25}
+      tooltip {A right-justified help item can be made by making a second menubar and putting it to the right of the resizable().}
+      xywh {515 0 45 25}
     } {
-      menuitem {} {
-        label This
-        xywh {0 0 100 20}
-      }
-      menuitem {} {
-        label is
-        xywh {10 10 100 20}
-      }
-      menuitem {} {
-        label a
-        xywh {20 20 100 20}
-      }
-      menuitem {} {
-        label Menu
-        xywh {30 30 100 20}
-      }
-      menuitem {} {
-        label Bar
-        xywh {40 40 100 20}
+      Fl_Item_Group {} {
+        label Help open
+        } {
+        Fl_Item {} {
+          label {About...}
+          }
+        Fl_Item {} {
+          label {Chapter 1}
+          }
       }
     }
-    Fl_Button {} {
-      label These
-      xywh {0 25 95 25} color 47
+    Fl_Menu_Bar {} {open
+      xywh {0 0 515 25}
+    } {
+      Fl_Item {} {
+        label This
+        }
+      Fl_Item {} {
+        label is
+        }
+      Fl_Item {} {
+        label a
+        }
+      Fl_Item {} {
+        label Menu
+        }
+      Fl_Item {} {
+        label Bar
+        }
     }
     Fl_Box {} {
       label {
 This program demonstrates how you set the resizable() of a window to get things to resize the way you want.}
       xywh {95 25 465 419} align 209 box FLAT_BOX color 19 labelcolor 7
+    }
+    Fl_Button {} {
+      label These
+      xywh {0 25 95 25} color 47
     }
     Fl_Button {} {
       label {are some}
@@ -59,38 +69,6 @@ This program demonstrates how you set the resizable() of a window to get things 
     Fl_Button {} {
       label {to resize.}
       xywh {0 125 95 25} color 47
-    }
-    Fl_Button {} {
-      label nonscaling
-      xywh {0 419 95 25} color 47
-    }
-    Fl_Box {} {
-      label {This status message will resize horizontally only.}
-      xywh {0 444 460 25} align 20 box BORDER_BOX color 55
-    }
-    Fl_Button {} {
-      label {@>>}
-      xywh {535 444 25 26} labeltype SYMBOL_LABEL
-    }
-    Fl_Button {} {
-      label {@<<}
-      xywh {460 445 25 25} labeltype SYMBOL_LABEL
-    }
-    Fl_Button {} {
-      label {@<}
-      xywh {485 445 25 25} labeltype SYMBOL_LABEL
-    }
-    Fl_Button {} {
-      label {@>}
-      xywh {510 445 25 25} labeltype SYMBOL_LABEL
-    }
-    Fl_Box {} {
-      label {This is the resizable() of the window.
-It is normally invisible.}
-      tooltip {To make it invisible, use an Fl_Box with the default box(FL_NO_BOX) and no label.
-
-Fltk sets the window's minimum size such that this widget's minimum size is 100, unless it starts out smaller than that.  You can override this default by calling size_range() on the window.}
-      xywh {95 150 365 270} align 192 resizable box BORDER_BOX color 37 labelcolor 1
     }
     Fl_Button {} {
       label {Things that}
@@ -110,21 +88,53 @@ Fltk sets the window's minimum size such that this widget's minimum size is 100,
       xywh {0 225 95 190} align 18 box ENGRAVED_BOX labeltype ENGRAVED_LABEL labelcolor 49
     } {
       Fl_Button {} {
-        label {You can put} selected
+        label {You can put}
         xywh {5 230 85 25} color 47
       }
       Fl_Button {} {
-        label {them inside} selected
+        label {them inside}
         xywh {5 255 85 25} color 47
       }
       Fl_Button {} {
-        label {a group to} selected
+        label {a group to}
         xywh {5 280 85 25} color 47
       }
       Fl_Button {} {
-        label {stop scaling.} selected
+        label {stop scaling.}
         xywh {5 305 85 25} color 47
       }
+    }
+    Fl_Button {} {
+      label nonscaling
+      xywh {0 419 95 25} color 47
+    }
+    Fl_Box {} {
+      label {This status message will resize horizontally only.}
+      xywh {0 444 460 25} align 20 box BORDER_BOX color 55
+    }
+    Fl_Button {} {
+      label {@<<} selected
+      xywh {460 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@<} selected
+      xywh {485 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@>} selected
+      xywh {510 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@>>} selected
+      xywh {535 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Box {} {
+      label {This is the resizable() of the window.
+It is normally invisible.}
+      tooltip {To make it invisible, use an Fl_Box with the default box(FL_NO_BOX) and no label.
+
+Fltk sets the window's minimum size such that this widget's minimum size is 100, unless it starts out smaller than that.  You can override this default by calling size_range() on the window.}
+      xywh {95 150 365 270} align 192 resizable box BORDER_BOX color 37 labelcolor 1
     }
   }
   code {// w->size_range(w->w()-w->resizable()->w(), w->h()-w->resizable()->h());} {}

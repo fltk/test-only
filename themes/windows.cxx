@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
+// "$Id: windows.cxx,v 1.10 2000/02/14 11:33:03 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -29,7 +29,6 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Input.H>
@@ -64,7 +63,8 @@ void Win98_Label::draw(const char* label,
 		       int X, int Y, int W, int H,
 		       Fl_Color fill, Fl_Flags f) const
 {
-  if (f&FL_INACTIVE) Fl_Engraved_Label::draw(label, X, Y, W, H, fill, f);
+  if (f&FL_INACTIVE && fill != FL_WHITE)
+    Fl_Engraved_Label::draw(label, X, Y, W, H, fill, f);
   else Fl_Labeltype_::draw(label, X, Y, W, H, fill, f);
 }
 
@@ -80,7 +80,7 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 	    Fl_Flags f, Fl_Boxtype box, Fl_Glyph function)
 {
   // Draw active widgets, slider thumbs or check or radio buttons normally:
-  if (!(f & FL_INACTIVE) ||
+  if (!(f & FL_INACTIVE && fc != FL_WHITE) ||
       t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
       t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
       t == FL_GLYPH_CHECK || t == FL_GLYPH_RADIO)
@@ -100,13 +100,11 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
   function(t, x,   y,   w, h, bc, fl_inactive(fc), f, FL_NO_BOX);
 }
 
-static Fl_Glyph fltk_glyph = 0;
-
 static void
 windows_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
               Fl_Flags f, Fl_Boxtype box)
 {
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,fltk_glyph);
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,fl_glyph);
 }
 
 static Fl_Glyph return_glyph = 0;
@@ -152,22 +150,21 @@ extern "C" int fltk_theme(int, char**)
   Fl_Widget::default_style->label_type = &win98_label;
 
   Fl_Style* s;
-  if ((s = Fl_Style::find("menu window"))) {
+  if ((s = Fl_Style::find("menu"))) {
+    s->glyph = windows_glyph;
     s->box = &win98_menu_window_box;
     s->leading = 6;
   }
 
+#if 0 // this is no longer necessary, it is the default
   if ((s = Fl_Style::find("menu title"))) {
     s->box = FL_HIGHLIGHT_BOX;
-    fltk_glyph = s->glyph;
-    s->glyph_box = FL_NO_BOX;
-    s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_BLACK;
-    s->highlight_color = FL_GRAY;
+    s->selection_color = 0;
+    s->selection_text_color = 0;
   }
+#endif
 
-  if ((s = Fl_Style::find("menu item"))) {
-    fltk_glyph = s->glyph;
+  if ((s = Fl_Style::find("item"))) {
     s->glyph = windows_glyph;
     s->glyph_box = FL_NO_BOX;
   }
@@ -191,7 +188,6 @@ extern "C" int fltk_theme(int, char**)
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    fltk_glyph = s->glyph;
     s->glyph = windows_glyph;
     s->glyph_box = &win98_menu_window_box;
     s->color = 52;
@@ -212,7 +208,6 @@ extern "C" int fltk_theme(int, char**)
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    fltk_glyph = s->glyph;
     s->glyph = windows_glyph;
   }
 
@@ -239,5 +234,5 @@ extern "C" int fltk_theme(int, char**)
 }
 
 //
-// End of "$Id: windows.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
+// End of "$Id: windows.cxx,v 1.10 2000/02/14 11:33:03 bill Exp $"
 //

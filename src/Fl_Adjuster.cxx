@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.25 2000/01/16 07:44:30 robertk Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.26 2000/02/14 11:32:46 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -75,7 +75,7 @@ void Fl_Adjuster::draw() {
     f[i] = flags();
     if (drag == i) f[i] |= FL_VALUE;
     else if (highlight == i) f[i] |= FL_HIGHLIGHT;
-    if (Fl::focus() == this) f[i] |= FL_FOCUSED;
+    if (focused()) f[i] |= FL_FOCUSED;
   }
 
   if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
@@ -173,5 +173,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.25 2000/01/16 07:44:30 robertk Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.26 2000/02/14 11:32:46 bill Exp $".
 //

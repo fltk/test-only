@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.12 1999/09/20 01:51:17 vincent Exp $"
+// "$Id: factory.cxx,v 1.13 2000/02/14 11:32:42 bill Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -461,9 +461,9 @@ void fill_in_New_Menu(Fl_Menu_Item* menu) {
   int level = 0;
   for (unsigned i = 0; level || menu[i].user_data() || menu[i].text; i++) {
     Fl_Menu_Item *m = menu+i;
-    if (m->flags() & FL_SUBMENU) level++;
+    if (m->flags & FL_SUBMENU) level++;
     if (!m->text && !m->user_data()) level--;
-    if (m->user_data() && !m->flags() && !m->text) {
+    if (m->user_data() && !m->flags && !m->text) {
       const char *n = ((Fl_Type*)(m->user_data()))->type_name();
       if (!strncmp(n,"Fl_",3)) n += 3;
       m->text = n;
@@ -482,12 +482,14 @@ Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
   int level = 0;
   reading_file = 1; // makes labels be null
   Fl_Type *r = 0;
-  for (unsigned i = 0; level || menu[i].user_data() || menu[i].text; i++) {
+  if (!strcasecmp(tn, "submenu")) r = Fl_Submenu_type.make();
+  else if (!strcasecmp(tn, "menuitem")) r = Fl_Menu_Item_type.make();
+  else for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
     Fl_Menu_Item *m = menu+i;
-    if (m->flags() & FL_SUBMENU) level++;
+    if (m->flags & FL_SUBMENU) level++;
     if (!m->text && !m->user_data()) level--;
     if (!m->user_data()) continue;
-    if(m->flags() & FL_SUBMENU_POINTER) {
+    if(m->flags & FL_SUBMENU_POINTER) {
       if(r = Fl_Type_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
     } else {
       Fl_Type *t = (Fl_Type*)(m->user_data());
@@ -642,5 +644,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.12 1999/09/20 01:51:17 vincent Exp $".
+// End of "$Id: factory.cxx,v 1.13 2000/02/14 11:32:42 bill Exp $".
 //

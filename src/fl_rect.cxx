@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.11 1999/10/07 07:04:59 bill Exp $"
+// "$Id: fl_rect.cxx,v 1.12 2000/02/14 11:32:58 bill Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -353,6 +353,10 @@ void fl_pop_clip() {
 
 // does this rectangle intersect current clip?
 int fl_not_clipped(int x, int y, int w, int h) {
+  // first check against the window so we get rid of coordinates
+  // outside the 16-bit range the X/Win32 calls take:
+  if (x+w <= 0 || y+h <= 0 || x >= Fl_Window::current()->w()
+      || y >= Fl_Window::current()->h()) return 0;
   Region r = rstack[rstackptr];
 #ifndef WIN32
   return r ? XRectInRegion(r, x, y, w, h) : 1;
@@ -365,17 +369,27 @@ int fl_not_clipped(int x, int y, int w, int h) {
 }
 
 // return rectangle surrounding intersection of this rectangle and clip:
-int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
-  X = x; Y = y; W = w; H = h;
+int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
   Region r = rstack[rstackptr];
-  if (!r) return 0;
+  if (!r) {X = x; Y = y; W = w; H = h; return 0;}
+  // Test against the window to get 16-bit values (this is only done if
+  // a clip region exists as otherwise it breaks fl_push_no_clip()):
+  int ret = 0;
+  if (x < 0) {w += x; x = 0; ret = 1;}
+  if (y < 0) {h += y; y = 0; ret = 1;}
+  int t = Fl_Window::current()->w(); if (x+w > t) {w = t-x; ret = 1;}
+  t = Fl_Window::current()->h(); if (y+h > t) {h = t-y; ret = 1;}
+  X = x; Y = y;
+  // check for total clip (or for empty rectangle):
+  if (w <= 0 || h <= 0) {W = H = 0; return 2;}
 #ifndef WIN32
   switch (XRectInRegion(r, x, y, w, h)) {
   case 0: // completely outside
     W = H = 0;
     return 2;
   case 1: // completely inside:
-    return 0;
+    W = w; H = h;
+    return ret;
   default: // partial:
     break;
   }
@@ -393,14 +407,16 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
 // intersection, so we have to check for partial intersection ourselves.
 // However, given that the regions may be composite, we have to do
 // some voodoo stuff...
+// WAS: we may want to simlify this as no calls in fltk use the return
+// value anyways.
   Region rr = XRectangleRegion(x,y,w,h);
   Region temp = CreateRectRgn(0,0,0,0);
-  int ret;
   if (CombineRgn(temp, rr, r, RGN_AND) == NULLREGION) { // disjoint
     W = H = 0;
     ret = 2;
   } else if (EqualRgn(temp, rr)) { // complete
-    ret = 0;
+    W = w; H = h;
+    // ret = ret
   } else {	// parital intersection
     RECT rect;
     GetRgnBox(temp, &rect);
@@ -414,5 +430,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.11 1999/10/07 07:04:59 bill Exp $".
+// End of "$Id: fl_rect.cxx,v 1.12 2000/02/14 11:32:58 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.12 2000/01/16 07:44:36 robertk Exp $"
+// "$Id: fl_ask.cxx,v 1.13 2000/02/14 11:32:58 bill Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -43,33 +43,46 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Secret_Input.H>
-static Fl_Window *message_form;
+static Fl_Window *window;
 static Fl_Box *message;
 static Fl_Box *icon;
 static Fl_Button *button[3];
 static Fl_Input *input;
 static char *iconlabel = "?";
-uchar fl_message_font_ = 0;
-uchar fl_message_size_ = FL_NORMAL_SIZE;
+
+static void m_revert(Fl_Style* s) {
+  s->box = FL_NO_BOX;
+}
+
+Fl_Named_Style* fl_message_style =
+  new Fl_Named_Style("Message", m_revert, &fl_message_style);
+
+static void i_revert(Fl_Style* s) {
+  s->box = FL_THIN_UP_BOX;
+  s->label_font = FL_TIMES_BOLD;
+  s->label_size = 34;
+  s->color = FL_WHITE;
+  s->label_color = FL_BLUE;
+}
+
+static Fl_Named_Style* icon_style =
+  new Fl_Named_Style("Message_Icon", i_revert, &icon_style);
 
 static Fl_Window *makeform() {
-  if (message_form) return message_form;
-  Fl_Window *w = message_form = new Fl_Window(410,105);
+  if (window) return window;
+  Fl_Window *w = window = new Fl_Window(410,105);
   //w->clear_border();
   //w->box(FL_UP_BOX);
-  (message = new Fl_Box(60, 0, 340, 70))
-    ->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
-  (input = new Fl_Input(60,32,340,30))->hide();
-  {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
-  o->box(FL_THIN_UP_BOX);
-  o->label_font(FL_TIMES_BOLD);
-  o->label_size(34);
-  o->color(FL_WHITE);
-  o->label_color(FL_BLUE);
-  }
-  (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut("^[");
-  button[1] = new Fl_Return_Button(210, 70, 90, 25);
+  message = new Fl_Box(60, 0, 340, 70);
+  message->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+  message->style(fl_message_style);
+  input = new Fl_Input(60,32,340,30);
+  input->hide();
+  icon = new Fl_Box(10, 10, 50, 50);
+  icon->style(icon_style);
   button[2] = new Fl_Button(110, 70, 90, 25);
+  button[1] = new Fl_Return_Button(210, 70, 90, 25);
+  (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut(FL_Escape);
   w->end();
   w->set_modal();
   return w;
@@ -94,9 +107,6 @@ static int innards(const char* fmt, va_list ap,
     vsnprintf(buffer, 1024, fmt, ap);
     message->label(buffer);
   }
-  Fl_Font f = (Fl_Font)fl_message_font_;
-  message->label_font(f);
-  message->label_size(fl_message_size_);
   if (b0) {button[0]->show();button[0]->label(b0);button[1]->position(210,70);}
   else {button[0]->hide(); button[1]->position(310,70);}
   if (b1) {button[1]->show(); button[1]->label(b1);}
@@ -105,8 +115,9 @@ static int innards(const char* fmt, va_list ap,
   else button[2]->hide();
   const char* prev_icon_label = icon->label();
   if (!prev_icon_label) icon->label(iconlabel);
-  message_form->hotspot(button[0]);
-  message_form->show();
+  window->focus(input->visible() ? input : button[1]);
+  window->hotspot(button[0]);
+  window->show();
   int r;
   for (;;) {
     Fl_Widget *o = Fl::readqueue();
@@ -114,9 +125,9 @@ static int innards(const char* fmt, va_list ap,
     else if (o == button[0]) {r = 0; break;}
     else if (o == button[1]) {r = 1; break;}
     else if (o == button[2]) {r = 2; break;}
-    else if (o == message_form) {r = 0; break;}
+    else if (o == window) {r = 0; break;}
   }
-  message_form->hide();
+  window->hide();
   icon->label(prev_icon_label);
   return r;
 }
@@ -195,5 +206,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.12 2000/01/16 07:44:36 robertk Exp $".
+// End of "$Id: fl_ask.cxx,v 1.13 2000/02/14 11:32:58 bill Exp $".
 //

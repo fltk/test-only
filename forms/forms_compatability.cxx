@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.4 2000/01/16 07:44:27 robertk Exp $"
+// "$Id: forms_compatability.cxx,v 1.5 2000/02/14 11:32:44 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Forms library compatability functions.
+// Functions needed to emulate XForms/Forms using fltk.
 // Many more functions are defined as inlines in forms.h!
 
 #include <FL/forms.H>
@@ -46,6 +46,10 @@ void fl_set_object_lstyle(Fl_Widget* o,int a) {
     break;
   }
 }
+
+// Emulate old forms (not XForms) inverted coordinate system.  Like
+// XForms, this emulation is shut off if fl_initialize() is called
+// before the widgets are created:
 
 char fl_flip = 2;
 
@@ -82,9 +86,7 @@ void fl_end_group() {
     Fl_Widget*const* a = g->array();
     for (int i=g->children(); i--;) {
       Fl_Widget* o = *a++;
-//      o->y(Y-o->y()-o->h());
-      // I think this is equivalent?
-      o->position(o->x(), Y-o->y()-o->h());
+      o->y(Y-o->y()-o->h());
     }
     g->oy_ = Y-g->oy_-g->h();
   }
@@ -108,13 +110,14 @@ void fl_initialize(int *argc, char **argv, const char *, FL_CMD_OPT *, int) {
   if (fl_flip==2) fl_flip = 0;
 }
 
+// Emulate fl_show_form().  The "placement" bitflag causes all kinds of
+// different fltk functions to be called:
+
 char fl_modal_next; // set by fl_freeze_forms()
 
 void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
-#ifndef FLTK_2
-  Fl::enable_symbols();
-#endif
+  Fl_Widget::default_style->label_type = FL_SYMBOL_LABEL;
 
   f->label(n);
   if (!b) f->clear_border();
@@ -147,6 +150,11 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
   else f->show();
 }
 
+// Emulate the event-getting routines.  XForms does not return until
+// a widget without a callback is activated.  Fl::readqueue() is still
+// in the main fltk source, this is probably the largest XForms
+// compatability function that I could not remove:
+
 Fl_Widget *fl_do_forms(void) {
   Fl_Widget *obj;
   while (!(obj = Fl::readqueue())) if (!Fl::wait()) exit(0);
@@ -158,7 +166,8 @@ Fl_Widget *fl_check_forms() {
   return Fl::readqueue();
 }
 
-void fl_set_graphics_mode(int /*r*/,int /*d*/) {}
+// Subclass to simulate the XForms text object.  This is the same as
+// a Fl_Box except that the label is drawn inside it:
 
 void Fl_FormsText::draw() {
   draw_box();
@@ -166,7 +175,7 @@ void Fl_FormsText::draw() {
   draw_label();
 }
 
-// Create a forms button by selecting correct fltk subclass:
+// Create an XForms button by selecting correct fltk subclass:
 
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Repeat_Button.H>
@@ -202,6 +211,20 @@ Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   return b;
 }
 
+// Convert an XForms shortcut string name to an fltk integer shortcut:
+
+int fl_old_shortcut(const char* s) {
+  if (!s || !*s) return 0;
+  int n = 0;
+  if (*s == '#') {n |= FL_ALT; s++;}
+  if (*s == '+') {n |= FL_SHIFT; s++;}
+  if (*s == '^') {n |= FL_CTRL; s++;}
+  return n | *s;
+}
+
+// Wrappers for the popup message utilities to convert from the XForms
+// 3-argument versions to the sprintf versions used by fltk:
+
 void fl_show_message(const char *q1,const char *q2,const char *q3) {
   fl_message("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
 }
@@ -231,5 +254,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.4 2000/01/16 07:44:27 robertk Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.5 2000/02/14 11:32:44 bill Exp $".
 //

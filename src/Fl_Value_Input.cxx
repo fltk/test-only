@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.20 2000/01/16 07:44:36 robertk Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.21 2000/02/14 11:32:55 bill Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -109,7 +109,7 @@ int Fl_Value_Input::handle(int event) {
     }
     return 1;
   case FL_FOCUS:
-    return input.take_focus();
+    Fl::focus(&input);
   default:
   DEFAULT:
     input.type(step()>=1.0 ? FL_INT_INPUT : FL_FLOAT_INPUT);
@@ -137,5 +137,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.20 2000/01/16 07:44:36 robertk Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.21 2000/02/14 11:32:55 bill Exp $".
 //

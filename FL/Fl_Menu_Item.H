@@ -1,9 +1,11 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.41 2000/01/11 00:20:13 mike Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.42 2000/02/14 11:32:35 bill Exp $"
 //
-// Menu item header file for the Fast Light Tool Kit (FLTK).
+// Back-compatability menu items for FLTK.  The new Fl_Menu_ class
+// converts these tables into child Fl_Item and Fl_Group_Item widgets.
+// You should not use this for new programs.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2000 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,6 +25,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+#ifndef FLTK_2
 #ifndef Fl_Menu_Item_H
 #define Fl_Menu_Item_H
 
@@ -32,210 +35,114 @@
 #endif
 
 enum { // values for flags:
-  FL_MENU_INACTIVE	= 0x001,
-  FL_MENU_TOGGLE	= 0x002,
-  FL_MENU_VALUE		= 0x004,
-  FL_MENU_RADIO		= 0x008,
-  FL_MENU_INVISIBLE	= 0x010,
-  FL_SUBMENU_POINTER	= 0x020,
-  FL_SUBMENU		= 0x040,
-  FL_MENU_DIVIDER	= 0x080,
-  FL_MENU_HORIZONTAL	= 0x100,
-  FL_MENU_STAYS_UP	= 0x200
+  FL_MENU_INACTIVE = 1,
+  FL_MENU_TOGGLE= 2,
+  FL_MENU_VALUE = 4,
+  FL_MENU_RADIO = 8,
+  FL_MENU_INVISIBLE = 0x10,
+  FL_SUBMENU_POINTER = 0x20,
+  FL_SUBMENU = 0x40,
+  FL_MENU_DIVIDER = 0x80,
+  FL_MENU_HORIZONTAL = 0x100 // not used!
 };
 
-extern FL_API int fl_old_shortcut(const char*);
+//extern FL_EXPORT int fl_old_shortcut(const char*);
 
 class Fl_Menu_;
-class Fl_Image;
 
-struct FL_API Fl_Menu_Item {
-  const char *text;	// label()
+struct Fl_Menu_Item {
+  const char *text;
   int shortcut_;
   Fl_Callback *callback_;
   void *user_data_;
-  unsigned flags_;
+  int flags;
+  Fl_Labeltype labeltype_;
+  Fl_Font labelfont_;
+  unsigned labelsize_;
+  Fl_Color labelcolor_;
 
-#ifndef FLTK_2
-  // Fltk 1.0 had 4 extra fields here: labeltype, labelfont, labelsize,
-  // labelcolor.  These are no longer supported with the style code and
-  // must eventually be deleted from your initializers.
-  // The following are dummy variables to handle those 4 extra fields.
-  // They are not used-- you can't initialize style information with the
-  // initializers anymore.
-  uchar clobberMe1;
-  uchar clobberMe2;
-  uchar clobberMe3;
-  uchar clobberMe4;
-#endif
+  // popup menus without using an Fl_Menu_ widget:
+  // Warning: this is now quite expensive, as it creates a temporary
+  // Fl_Menu_ and child widgets!  These also do not match the fltk 1.0
+  // calls very much.  This does the callback directly, in fltk 1.0 the
+  // menu item was retruned and you had to do the callback yourself.
+  FL_EXPORT int popup(int X, int Y, const char *title=0, void* user_data = 0) const;
+  FL_EXPORT int test_shortcut(void* user_data = 0) const;
 
-  Fl_Image* image_;
-  const Fl_Style* style_;
+  // return offset of terminating null item:
+  FL_EXPORT int size() const ;
 
-#ifdef DONT_LEAK_MEMORY
-  ~Fl_Menu_Item() { if (style_->dynamic()) delete s; }
-#endif
-
-  // advance N items, skipping submenus:
-  const Fl_Menu_Item *next(int=1) const;
+  // advance a pointer by N items, skipping submenus:
+  FL_EXPORT const Fl_Menu_Item *next(int=1) const;
   Fl_Menu_Item *next(int i=1) {
     return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));}
 
-  // methods on menu items:
   const char* label() const {return text;}
-  void label(const char* a) {text=a;}
-  Fl_Image* image() const {return image_;}
-  void image(Fl_Image* a) {image_ = a;}
-  void image(Fl_Image& a) {image_ = &a;}
-
-  const Fl_Style* style() const;
-
+  Fl_Labeltype labeltype() const {return labeltype_;}
+  Fl_Color labelcolor() const {return labelcolor_;}
+  Fl_Font labelfont() const {return labelfont_;}
+  unsigned labelsize() const {return labelsize_;}
   Fl_Callback_p callback() const {return callback_;}
+  void* user_data() const {return user_data_;}
+  long argument() const {return (long)user_data_;}
+  int shortcut() const {return shortcut_;}
+  int submenu() const {return flags&(FL_SUBMENU|FL_SUBMENU_POINTER);}
+  int checkbox() const {return flags&FL_MENU_TOGGLE;}
+  int radio() const {return flags&FL_MENU_RADIO;}
+  int value() const {return flags&FL_MENU_VALUE;}
+  int visible() const {return !(flags&FL_MENU_INVISIBLE);}
+  int active() const {return !(flags&FL_MENU_INACTIVE);}
+  int activevisible() const {return !(flags&0x11);}
 
+#if 0
+  // The rest of these fltk 1.0 methods are not emulated currently.
+  // Since the menu items are copied to the Fl_Menu_ widgets these
+  // will only change the originals and will not produce the expected
+  // results:
+
+  void label(const char* a) {text=a;}
+  void label(Fl_Labeltype a,const char* b) {labeltype_ = a; text = b;}
+  void labeltype(Fl_Labeltype a) {labeltype_ = a;}
+  void labelcolor(uchar a) {labelcolor_ = a;}
+  void labelfont(uchar a) {labelfont_ = a;}
+  void labelsize(uchar a) {labelsize_ = a;}
   void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
   void callback(Fl_Callback* c) {callback_=c;}
   void callback(Fl_Callback0*c) {callback_=(Fl_Callback*)c;}
   void callback(Fl_Callback1*c, long p=0) {callback_=(Fl_Callback*)c; user_data_=(void*)p;}
-  void* user_data() const {return user_data_;}
   void user_data(void* v) {user_data_ = v;}
-  long argument() const {return (long)user_data_;}
   void argument(long v) {user_data_ = (void*)v;}
-  int shortcut() const {return shortcut_;}
   void shortcut(int s) {shortcut_ = s;}
-  int submenu() const {return flags_&(FL_SUBMENU|FL_SUBMENU_POINTER);}
-  int checkbox() const {return flags_&FL_MENU_TOGGLE;}
-  int radio() const {return flags_&FL_MENU_RADIO;}
-  int value() const {return flags_&FL_MENU_VALUE;}
-  void value(int b) { if (b) set(); else clear(); }
-  void set() {flags_ |= FL_MENU_VALUE;}
-  void clear() {flags_ &= ~FL_MENU_VALUE;}
-  void setonly();
-  int visible() const {return !(flags_&FL_MENU_INVISIBLE);}
-  void show() {flags_ &= ~FL_MENU_INVISIBLE;}
-  void hide() {flags_ |= FL_MENU_INVISIBLE;}
-  int active() const {return !(flags_&FL_MENU_INACTIVE);}
-  void activate() {flags_ &= ~FL_MENU_INACTIVE;}
-  void deactivate() {flags_ |= FL_MENU_INACTIVE;}
-  int activevisible() const {return !(flags_&(FL_MENU_INACTIVE|FL_MENU_INVISIBLE));}
-  Fl_Flags flags() const {return Fl_Flags(flags_);}
+  void set() {flags |= FL_MENU_VALUE;}
+  void clear() {flags &= ~FL_MENU_VALUE;}
+  FL_EXPORT void setonly();
+  void show() {flags &= ~FL_MENU_INVISIBLE;}
+  void hide() {flags |= FL_MENU_INVISIBLE;}
+  void activate() {flags &= ~FL_MENU_INACTIVE;}
+  void deactivate() {flags |= FL_MENU_INACTIVE;}
 
   // used by menubar:
-  int measure(int* h) const;
-  void draw(int x, int y, int w, int h, int selected=0) const;
+  FL_EXPORT int measure(int* h, const Fl_Menu_*) const;
+  FL_EXPORT void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
 
-  // popup menus without using an Fl_Menu_ widget: (highly depreciated!)
-  const Fl_Menu_Item* popup(
-    int X, int Y,
-    const char *title = 0,
-    const Fl_Menu_Item* picked=0,
-    Fl_Menu_* = 0) const;
-  const Fl_Menu_Item* pulldown(
-    int X, int Y, int W, int H,
-    const Fl_Menu_Item* picked = 0,
-    Fl_Menu_* = 0,
-    const Fl_Menu_Item* title = 0,
-    int menubar=0) const;
-  const Fl_Menu_Item* test_shortcut() const;
-  const Fl_Menu_Item* find_shortcut(int *ip=0) const;
+  FL_EXPORT const Fl_Menu_Item* find_shortcut(int *ip=0) const;
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
   void do_callback(Fl_Widget* o,void* arg) const {callback_(o, arg);}
   void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
 
-  int size() const ;
-  static Fl_Named_Style* default_style;
-  static Fl_Named_Style* title_style;
-
-  // This is temporary and bad.  Setting a style will create a new Fl_Style
-  // structure that is not deleted when the menu item is destroyed, because
-  // that adds a destructor that causes C++ to produce exit code for static
-  // menu item arrays.  Plan is to replace the whole Fl_Menu_Item design...
-
-  Fl_Boxtype	box()			const;
-  Fl_Boxtype	glyph_box()		const;
-  Fl_Glyph	glyph()			const;
-  Fl_Font	label_font()		const;
-  Fl_Font	text_font()		const;
-  Fl_Labeltype	label_type()		const;
-  Fl_Color	color()			const;
-  Fl_Color	label_color()		const;
-  Fl_Color	selection_color()	const;
-  Fl_Color	selection_text_color()	const;
-  Fl_Color	off_color()		const;
-  Fl_Color	highlight_color()	const;
-  Fl_Color	highlight_label_color()	const;
-  Fl_Color	text_color()		const;
-  unsigned	label_size()		const;
-  unsigned	text_size()		const;
-  unsigned	leading()		const;
-
-  void	box(Fl_Boxtype)		;
-  void	glyph_box(Fl_Boxtype)	;
-  void	glyph(Fl_Glyph)		;
-  void	label_font(Fl_Font)	;
-  void	text_font(Fl_Font)	;
-  void	label_type(Fl_Labeltype);
-  void	color(Fl_Color)		;
-  void	label_color(Fl_Color)	;
-  void	selection_color(Fl_Color);
-  void	selection_text_color(Fl_Color);
-  void	off_color(Fl_Color)	;
-  void	highlight_color(Fl_Color);
-  void	highlight_label_color(Fl_Color);
-  void	text_color(Fl_Color a)	;
-  void	label_size(unsigned a)	;
-  void	text_size(unsigned a)	;
-  void	leading(unsigned a)	;
-
-#ifndef FLTK_2  // back-compatability section:
-
-  Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
-  Fl_Boxtype fly_box()		const {return box();}
-  Fl_Color down_color()		const {return selection_color();}
-  Fl_Color color2()		const {return selection_color();}
-  Fl_Color light_color()	const {return selection_color();}
-  Fl_Labeltype labeltype()	const {return label_type();}
-  Fl_Color labelcolor()		const {return label_color();}
-  Fl_Color down_labelcolor()	const {return selection_text_color();}
-  Fl_Font labelfont()		const {return label_font();}
-  unsigned labelsize()		const {return label_size();}
-  Fl_Color fly_color()		const {return highlight_color();}
-  Fl_Font textfont()		const {return text_font();}
-  unsigned textsize()		const {return text_size();}
-  Fl_Color textcolor()		const {return text_color();}
-  Fl_Color selected_textcolor()	const {return selection_text_color();}
-
-  void down_box(Fl_Boxtype)	{}
-  void fly_box(Fl_Boxtype)	{}
-  void down_color(Fl_Color a)	{selection_color(a);}
-  void color2(Fl_Color a)	{selection_color(a);}
-  void light_color(Fl_Color a)	{selection_color(a);}
-  void labeltype(Fl_Labeltype a) {label_type(a);}
-  void labelcolor(Fl_Color a)	{label_color(a);}
-  void down_labelcolor(Fl_Color a) {selection_text_color(a);}
-  void labelfont(Fl_Font a)	{label_font(a);}
-  void labelfont(unsigned a)	{label_font(fl_fonts+a);}
-  void labelsize(unsigned a)	{label_size(a);}
-  void fly_color(Fl_Color a)	{highlight_color(a);}
-  void textfont(Fl_Font a)	{text_font(a);}
-  void textfont(unsigned a)	{text_font(fl_fonts+a);}
-  void textsize(unsigned a)	{text_size(a);}
-  void textcolor(Fl_Color a)	{text_color(a);}
-  void selected_textcolor(Fl_Color a) {selection_text_color(a);}
-
-#endif // !FLTK_2
-
-  int checked() const {return flags_&FL_MENU_VALUE;}
-  void check() {flags_ |= FL_MENU_VALUE;}
-  void uncheck() {flags_ &= ~FL_MENU_VALUE;}
-  int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
-  int add(const char*a, const char* b, Fl_Callback* c,void* d = 0,int e = 0) {
+  // back-compatability, do not use:
+  int checked() const {return flags&FL_MENU_VALUE;}
+  void check() {flags |= FL_MENU_VALUE;}
+  void uncheck() {flags &= ~FL_MENU_VALUE;}
+  FL_EXPORT int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
+  int add(const char*a, const char* b, Fl_Callback* c,
+	  void* d = 0, int e = 0) {
     return add(a,fl_old_shortcut(b),c,d,e);}
-
+#endif
 };
 
-#ifndef FLTK_2
-typedef Fl_Menu_Item Fl_Menu; // back compatability
+typedef Fl_Menu_Item Fl_Menu; // back compatability with fltk < 1.0
 
 enum {	// back-compatability enum:
   FL_PUP_NONE	= 0,
@@ -251,9 +158,8 @@ enum {	// back-compatability enum:
 };
 
 #endif
-
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.41 2000/01/11 00:20:13 mike Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.42 2000/02/14 11:32:35 bill Exp $".
 //

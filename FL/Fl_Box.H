@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.H,v 1.12 1999/11/10 12:21:39 bill Exp $"
+// "$Id: Fl_Box.H,v 1.13 2000/02/14 11:32:33 bill Exp $"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,6 @@
 #include "Fl_Widget.H"
 #endif
 
-#define FL_BOX (FL_RESERVED_TYPE+3)
-
 class FL_API Fl_Box : public Fl_Widget {
 protected:
   void draw();
@@ -45,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Box.H,v 1.12 1999/11/10 12:21:39 bill Exp $".
+// End of "$Id: Fl_Box.H,v 1.13 2000/02/14 11:32:33 bill Exp $".
 //

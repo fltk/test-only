@@ -1,9 +1,10 @@
 //
-// "$Id: Fl_Button.H,v 1.21 2000/02/14 11:32:33 bill Exp $"
+// "$Id: Fl_Item_Group.H,v 1.1 2000/02/14 11:32:35 bill Exp $"
 //
-// Button header file for the Fast Light Tool Kit (FLTK).
+// Widget designed to be a nested list in a menu or browser.
+// Code is in Fl_Item.cxx
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2000 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,30 +24,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Button_H
-#define Fl_Button_H
+#ifndef Fl_Item_Group_H
+#define Fl_Item_Group_H
 
-#ifndef Fl_Widget_H
-#include "Fl_Widget.H"
-#endif
-
-// values for type()
-#define FL_TOGGLE_BUTTON	(FL_RESERVED_TYPE+1)
-#define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2)
-#define FL_HIDDEN_BUTTON	3 // for Forms compatability
-
-class FL_API Fl_Button : public Fl_Widget {
-public:
-  virtual int handle(int);
-  Fl_Button(int,int,int,int,const char * = 0);
-
-protected:
-  virtual void draw();
-  void draw_n_clip();
-};
+#include "Fl_Menu_.H"
+typedef Fl_Menu_ Fl_Item_Group;
 
 #endif
-
-//
-// End of "$Id: Fl_Button.H,v 1.21 2000/02/14 11:32:33 bill Exp $".
-//

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.8 1999/08/16 07:31:02 bill Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.9 2000/02/14 11:32:39 bill Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -49,13 +49,19 @@ void fix_group_size(Fl_Type *t) {
   int Y = g->y();
   int R = X+g->w();
   int B = Y+g->h();
-  for (Fl_Type *nn = t->next; nn && nn->level > t->level; nn = nn->next) {
-    if (!nn->is_widget() || nn->is_menu_item()) continue;
+  for (Fl_Type *nn = t->next; nn && nn->level > t->level;) {
+    if (!nn->is_widget() || nn->is_menu_item()) {
+      Fl_Type* m = nn->next;
+      for (;m && m->level > nn->level; m = m->next) ;
+      nn = m;
+      continue;
+    }
     Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
     int x = n->o->x();	if (x < X) X = x;
     int y = n->o->y();	if (y < Y) Y = y;
     int r = x+n->o->w();if (r > R) R = r;
     int b = y+n->o->h();if (b > B) B = b;
+    nn = n->next;
   }
   g->resize(X,Y,R-X,B-Y);
   g->init_sizes();
@@ -223,5 +229,5 @@ const char tile_type_name[] = "Fl_Tile";
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.8 1999/08/16 07:31:02 bill Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.9 2000/02/14 11:32:39 bill Exp $".
 //

@@ -17,11 +17,11 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/default]
     highlight color = light1
 
-  [widgets/menu item]                             # menu item attributes
-    box = alternative menu                        # boxtype of menu items
+  [widgets/menu]				  # menu attributes
+    glyph box = alternative menu		  # boxtype of menu items
 
   [widgets/menu title]
-    box = alternative menu title                  # boxtype of menu titles
+    box = alternative menu title		  # boxtype of menu titles
 
   [widgets/browser]                               # browser attributes
     box = up                                      # boxtype of browser

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.9 1999/09/14 07:17:26 bill Exp $"
+// "$Id: fl_cursor.cxx,v 1.10 2000/02/14 11:32:58 bill Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -83,7 +83,7 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
 // I like the MSWindows resize cursors, so I duplicate them here:
 
 #define CURSORSIZE 16
-#define HOTXY 7
+#define HOTXY 8
 static struct TableEntry {
   uchar bits[CURSORSIZE*CURSORSIZE/8];
   uchar mask[CURSORSIZE*CURSORSIZE/8];
@@ -170,5 +170,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.9 1999/09/14 07:17:26 bill Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.10 2000/02/14 11:32:58 bill Exp $".
 //

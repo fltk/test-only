@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.33 2000/01/10 06:31:23 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.34 2000/02/14 11:32:53 bill Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,55 +25,80 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Bar.H>
+#include <FL/fl_draw.H>
+
+extern Fl_Named_Style* fl_title_style; // in Fl_Menu.cxx
 
 void Fl_Menu_Bar::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
-  if (!menu() || !menu()->text) { last_ = 0; return; }
-  const Fl_Menu_Item* m;
+  if (!children()) { last_ = -1; return; }
   int X = x()+3;
-  for (m=menu(); m->text; m = m->next()) {
-    int W = m->measure(0) + 16;
-    int selected = (m == highlight_) ? 3 : 4;
-    if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == m || highlight_ == m)
-      m->draw(X, y() + 3, W, h() - 6, selected);
+  for (int i = 0; i < children(); i++) {
+    Fl_Widget* o = child(i);
+    if (!o->visible()) continue;
+    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
+    int W = o->w() + 10;
+    if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == i || highlight_ == i) {
+      // If you change how the items are drawn, you probably need to
+      // change MenuTitle::draw and the functions find_selected and
+      // titlex in Fl_Menu.cxx.
+      Fl_Flags flags = (o->flags()&FL_INACTIVE);
+      Fl_Color bgcolor = color();
+      Fl_Color label_color = o->label_color();
+      if (i == highlight_ && highlight_color() && takesevents()) {
+	flags |= FL_HIGHLIGHT;
+	bgcolor = highlight_color();
+	Fl_Color c = highlight_label_color(); if (c) label_color = c;
+      }
+      fl_title_style->box->draw(X, y()+3, W, this->h()-6, bgcolor, flags);
+      o->x(X+5);
+      o->y(y()+(h()-o->h())/2);
+      int save_w = o->w(); o->w(W-10);
+      fl_color(label_color); o->draw();
+      o->w(save_w);
+    }
     X += W;
   }
   last_ = highlight_;
 }
 
 int Fl_Menu_Bar::handle(int event) {
-  const Fl_Menu_Item* v;
-  const Fl_Menu_Item* m;
+  if (!children()) return 0;
   int X = x()+3;
-  highlight_ = 0;
+  int i;
+  highlight_ = -1;
   // FL_LEAVE events don't get the right coordinates
-  if (event != FL_LEAVE) if (menu()) for (m=menu(); m->text; m = m->next()) {
-    int W = m->measure(0) + 16;
-    if (m->active() && Fl::event_inside(X, y() + 3, W, h() - 6)) {
-      highlight_ = m;
+  if (event != FL_LEAVE) for (i = 0; i < children(); ++i) {
+    Fl_Widget* m = child(i);
+    if (!m->visible()) continue;
+    if (!m->h() || m->damage() & FL_DAMAGE_LAYOUT) m->layout();
+    int W = m->w() + 10;
+    if (Fl::event_inside(X, y() + 3, W, h() - 6)) {
+      highlight_ = i;
       break;
     }
     X += W;
   }
-  if (menu() && menu()->text) switch (event) {
+  switch (event) {
   case FL_MOVE:
-    if (highlight_ == last_) return 1;
   case FL_ENTER:
   case FL_LEAVE:
+    if (highlight_ == last_) return 1;
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
-    if (!highlight_) return 0;
-    v = 0;
+    if (highlight_ < 0) return 0;
+    value(-1);
   J1:
-    highlight_ = 0; damage(FL_DAMAGE_HIGHLIGHT);
-    v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
-    picked(v);
+    highlight_ = -1; damage(FL_DAMAGE_HIGHLIGHT);
+    pulldown(x(), y(), w(), h(), 0, 1);
     return 1;
   case FL_SHORTCUT:
-    v = menu()->test_shortcut();
-    if (v) {picked(v); return 1;}
-    if (visible_r() && (v = menu()->find_shortcut())) goto J1;
+    if (handle_shortcut()) return 1;
+    for (i = 0; i < children(); i++) {
+      Fl_Widget* w = child(i);
+      if (w->active() && w->test_shortcut()) {value(i); goto J1;}
+    }
     return 0;
   case FL_KEYUP:
     if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
@@ -82,9 +107,11 @@ int Fl_Menu_Bar::handle(int event) {
       // keydown that preceeded it, so Alt was pressed & released without
       // any intermediate values.  On X it is false if Alt is held down
       // for a long time, too.
-      v = menu();
-      while (v && !v->activevisible()) v = v->next();
-      goto J1;
+      for (i = 0; i < children(); i++) {
+	Fl_Widget* w = child(i);
+	if (w->active()) {value(i); goto J1;}
+      }
+      return 0;
     }
   }
   return 0;
@@ -103,5 +130,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.33 2000/01/10 06:31:23 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.34 2000/02/14 11:32:53 bill Exp $".
 //

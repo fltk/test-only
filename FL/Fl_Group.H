@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.20 1999/12/20 08:33:07 bill Exp $"
+// "$Id: Fl_Group.H,v 1.21 2000/02/14 11:32:34 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,11 @@
 #include "Fl_Widget.H"
 #endif
 
-#define FL_GROUP 0xe0	// all subclasses have type() >= this
-
 class FL_API Fl_Group : public Fl_Widget {
   friend class Fl_Tabs;
   int children_;
+  int focus_;
   Fl_Widget** array_;
-  Fl_Widget* savedfocus_;
   Fl_Widget* resizable_;
   int *sizes_; // remembered initial sizes of children
   int ox_,oy_,ow_,oh_; // old size, used by layout
@@ -80,10 +78,13 @@ public:
   virtual ~Fl_Group();
   void add(Fl_Widget&);
   void add(Fl_Widget* o) {add(*o);}
-  void insert(Fl_Widget&, int i);
+  void insert(Fl_Widget&, int index);
   void insert(Fl_Widget& o, Fl_Widget* before) {insert(o,find(before));}
-  void remove(Fl_Widget&);
-  void remove(Fl_Widget* o) {remove(*o);}
+  void remove(int index);
+  void remove(Fl_Widget& o) {remove(find(o));}
+  void remove(Fl_Widget* o) {remove(find(*o));}
+  void replace(int index, Fl_Widget&);
+  void replace(Fl_Widget& old, Fl_Widget& o) {replace(find(old),o);}
   void clear();
 
   void resizable(Fl_Widget& o) {resizable_ = &o;}
@@ -92,8 +93,11 @@ public:
   void add_resizable(Fl_Widget& o) {resizable_ = &o; add(o);}
   void init_sizes();
 
+  void focus(int i) {focus_ = i;}
+  void focus(Fl_Widget* w) {focus(find(w));}
+  int focus() const {return focus_;}
+
   // back compatability function:
-  void focus(Fl_Widget* o) {o->take_focus();}
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
   friend void fl_end_group(); // forms emulation function
 };
@@ -108,5 +112,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.20 1999/12/20 08:33:07 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.21 2000/02/14 11:32:34 bill Exp $".
 //

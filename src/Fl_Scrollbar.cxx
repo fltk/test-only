@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.36 2000/01/10 06:31:23 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.37 2000/02/14 11:32:54 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,7 @@ int Fl_Scrollbar::handle(int event) {
   // which widget part is highlighted?
   int mx = Fl::event_x();
   int my = Fl::event_y();
-  if (Fl::pushed() == this) ; // don't change highlight
+  if (pushed()) ; // don't change highlight
   else if (!Fl::event_inside(SX, SY, SW, SH)) highlight_ = 0;
   else if (horizontal()) {
     if (mx < X) highlight_ = 1;
@@ -215,5 +215,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.36 2000/01/10 06:31:23 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.37 2000/02/14 11:32:54 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.87 2000/01/11 00:20:15 mike Exp $"
+// "$Id: Fl_win32.cxx,v 1.88 2000/02/14 11:32:56 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -412,6 +412,8 @@ static int mouse_event(Fl_Window *window, int what, int button,
     return Fl::handle(FL_PUSH,window);
 
   case 2: // release:
+    // WAS: this should turn off Fl::e_is_click if more than .2 second passed
+    // since the push event!
     if (!Fl::grab()) ReleaseCapture();
     Fl::e_keysym = FL_Button + button;
     return Fl::handle(FL_RELEASE,window);
@@ -818,7 +820,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
 
   int dx, dy, dw, dh;
   if (w->parent()) {
-    style = WS_CHILD;
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
     styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     parent = fl_xid(w->window());
     dx=dy=dw=dh=0;
@@ -1093,5 +1095,5 @@ int fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.87 2000/01/11 00:20:15 mike Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.88 2000/02/14 11:32:56 bill Exp $".
 //

@@ -26,8 +26,7 @@ Fl_Window* make_alignment_window() {
     w = o;
     { Fl_Group* o = new Fl_Group(10, 20, 190, 100, "Alignment:");
       o->box(FL_ENGRAVED_BOX);
-	  o->clear_flag(FL_ALIGN_MASK);
-      o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+      o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       { Fl_Input* o = horizontal_input = new Fl_Input(90, 30, 100, 20, "Horizontal:");
         o->type(2);
         o->callback((Fl_Callback*)alignment_cb, (void*)(1));
@@ -47,11 +46,10 @@ Fl_Window* make_alignment_window() {
     }
     { Fl_Group* o = new Fl_Group(10, 140, 190, 130, "Output File Names:");
       o->box(FL_ENGRAVED_BOX);
-	  o->clear_flag(FL_ALIGN_MASK);
-      o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+      o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       { Fl_Box* o = new Fl_Box(20, 150, 170, 30, "Use \"name.ext\" to set name or just \".ext\" to set only extension.");
         o->label_size(10);
-        o->set_flag(132|FL_ALIGN_INSIDE);
+        o->align(132|FL_ALIGN_INSIDE);
       }
       { Fl_Input* o = header_file_input = new Fl_Input(100, 180, 90, 20, "Header File:");
         o->callback((Fl_Callback*)header_input_cb, (void*)(1));

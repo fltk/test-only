@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.10 2000/01/19 09:41:50 bill Exp $"
+// "$Id: motif.cxx,v 1.11 2000/02/14 11:33:03 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -28,7 +28,6 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Input.H>
@@ -166,32 +165,31 @@ extern "C" int fltk_theme(int, char**)
   Fl_Style::draw_boxes_inactive = 0;
 
   Fl_Widget::default_style->box = &thin_motif_up_box;
-  Fl_Widget::default_style->selection_color = FL_DARK1;
+  //Fl_Widget::default_style->selection_color = FL_DARK1;
   Fl_Widget::default_style->glyph_box = &thin_motif_up_box;
   //Fl_Widget::default_style->highlight_color = 0;
 
   Fl_Style* s;
 
-  if ((s = Fl_Style::find("menu item"))) {
-    s->box = &thin_motif_menu_box;
+  if ((s = Fl_Style::find("menu"))) {
+    s->glyph_box = &thin_motif_menu_box;
+    s->selection_color = 0;
+    s->selection_text_color = 0;
     s->glyph = motif_glyph;
-    s->glyph_box = FL_NO_BOX;
-    s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_BLACK;
-    s->off_color = FL_GRAY;
+    s->leading = 0;
   }
 
-  if ((s = Fl_Style::find("menu window"))) {
-    s->leading = 0;
+  if ((s = Fl_Style::find("item"))) {
+    s->glyph = motif_glyph;
+    s->glyph_box = FL_NO_BOX;
+    s->selection_color = FL_DARK1;
+    s->off_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("menu title"))) {
     s->box = &thin_motif_menu_box;
-    s->glyph = motif_glyph;
-    s->glyph_box = FL_NO_BOX;
-    s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_BLACK;
-    s->off_color = FL_GRAY;
+    s->selection_color = 0;
+    s->selection_text_color = 0;
   }
 
   if ((s = Fl_Style::find("check button"))) {
@@ -262,5 +260,5 @@ extern "C" int fltk_theme(int, char**)
 }
 
 //
-// End of "$Id: motif.cxx,v 1.10 2000/01/19 09:41:50 bill Exp $"
+// End of "$Id: motif.cxx,v 1.11 2000/02/14 11:33:03 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.17 2000/01/16 07:44:32 robertk Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.18 2000/02/14 11:32:48 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Item.H>
 #include <FL/math.h>
 #include <stdio.h>
 
@@ -82,13 +83,6 @@ void Fl_Color_Chooser::rgb2hsv(
 }
 
 enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
-static Fl_Menu_Item mode_menu[] = {
-  {"rgb"},
-  {"byte"},
-  {"hex"},
-  {"hsv"},
-  {0}
-};
 
 int Flcc_Value_Input::format(char* buf) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
@@ -99,9 +93,9 @@ int Flcc_Value_Input::format(char* buf) {
 void Fl_Color_Chooser::set_valuators() {
   switch (mode()) {
   case M_RGB:
-    rvalue.range(0,1); rvalue.step(1/1000); rvalue.value(r_);
-    gvalue.range(0,1); gvalue.step(1/1000); gvalue.value(g_);
-    bvalue.range(0,1); bvalue.step(1/1000); bvalue.value(b_);
+    rvalue.range(0,1); rvalue.step(.001); rvalue.value(r_);
+    gvalue.range(0,1); gvalue.step(.001); gvalue.value(g_);
+    bvalue.range(0,1); bvalue.step(.001); bvalue.value(b_);
     break;
   case M_BYTE:
   case M_HEX:
@@ -110,9 +104,9 @@ void Fl_Color_Chooser::set_valuators() {
     bvalue.range(0,255); bvalue.step(1); bvalue.value(int(255*b_+.5));
     break;
   case M_HSV:
-    rvalue.range(0,6); rvalue.step(1/1000); rvalue.value(hue_);
-    gvalue.range(0,1); gvalue.step(1/1000); gvalue.value(saturation_);
-    bvalue.range(0,1); bvalue.step(1/1000); bvalue.value(value_);
+    rvalue.range(0,6); rvalue.step(.001); rvalue.value(hue_);
+    gvalue.range(0,1); gvalue.step(.001); gvalue.value(saturation_);
+    bvalue.range(0,1); bvalue.step(.001); bvalue.value(value_);
     break;
   }
 }
@@ -326,11 +320,17 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
     huebox(0,0,100,100),
     valuebox(100,0,20,100),
     choice(120,0,60,20),
-    rvalue(120,20,60,25),
-    gvalue(120,45,60,25),
-    bvalue(120,70,60,25),
+    rvalue(120,20,60,20),
+    gvalue(120,40,60,20),
+    bvalue(120,60,60,20),
     resize_box(0,95,100,5)
 {
+  choice.begin();
+  new Fl_Item("rgb");
+  new Fl_Item("byte");
+  new Fl_Item("hex");
+  new Fl_Item("hsv");
+  choice.end();
   end();
   resizable(resize_box);
   resize(X,Y,W,H);
@@ -341,7 +341,6 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   value_ = 0.0;
   huebox.box(FL_DOWN_BOX);
   valuebox.box(FL_DOWN_BOX);
-  choice.menu(mode_menu);
   set_valuators();
   rvalue.callback(rgb_cb);
   gvalue.callback(rgb_cb);
@@ -362,7 +361,6 @@ void Fl_Color_Chooser::value(Fl_Color c) {
 // fl_color_chooser():
 
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
 
 extern const char* fl_ok;
@@ -508,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.17 2000/01/16 07:44:32 robertk Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.18 2000/02/14 11:32:48 bill Exp $".
 //

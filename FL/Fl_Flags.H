@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.4 1999/11/10 19:27:28 carl Exp $"
+// "$Id: Fl_Flags.H,v 1.5 2000/02/14 11:32:33 bill Exp $"
 //
 // Unified flags set for fltk
 //
@@ -68,9 +68,8 @@ enum {
 
 // Values used to store widget state, == FL_MENU_x<<8
   FL_INACTIVE		= 0x00000100, // does not get events, gray it out
-  // FL_CHECKBOX	= 0x00000200, // has a checkbox
+  FL_MENU_STAYS_UP	= 0x00000200, // dont exit menu when picked
   FL_VALUE		= 0x00000400, // indicates true/down/on state
-  // FL_RADIO		= 0x00000800, // is a radio item
   FL_INVISIBLE		= 0x00001000, // does not get events, does not draw
   FL_OUTPUT		= 0x00002000, // does not get events
   FL_INACTIVE_MASK	= 0x00003000, // do not send events if true
@@ -81,7 +80,7 @@ enum {
   FL_FOCUSED		= 0x00010000, // draw with keyboard focus
   FL_HIGHLIGHT		= 0x00020000, // draw highlighted
   FL_FRAME_ONLY		= 0x00040000, // don't draw interior
-  FL_SHORTCUT_LABEL	= 0x00080000  // draw &x in label as underscore
+  FL_NO_SHORTCUT_LABEL	= 0x00080000, // don't draw &x in label as underscore
 
 };
 

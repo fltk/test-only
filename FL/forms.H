@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.15 2000/01/16 07:44:20 robertk Exp $"
+// "$Id: forms.H,v 1.16 2000/02/14 11:32:36 bill Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -334,7 +334,10 @@ inline void fl_set_form_callback(Fl_Window* f,Forms_FormCB c) {f->callback(c);}
 #define fl_set_form_call_back fl_set_form_callback
 
 inline void fl_init() {}
-void fl_set_graphics_mode(int,int);
+inline void fl_set_graphics_mode(int r, int /*d*/) {
+  Fl::visual(r ? FL_RGB : FL_INDEX);
+  // d should add FL_DOUBLE, but that always fails in fltk 2.0
+}
 
 inline int fl_form_is_visible(Fl_Window* f) {return f->visible();}
 
@@ -483,13 +486,15 @@ inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
+extern FL_API int fl_old_shortcut(const char*);
+
 Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(Fl_Widget* b) {return ((Fl_Button*)b)->value();}
 inline void fl_set_button(Fl_Widget* b, int v) {((Fl_Button*)b)->value(v);}
 inline int fl_get_button_numb(Fl_Widget*) {return Fl::event_button();}
-inline void fl_set_button_shortcut(Fl_Widget* b, const char* s,int=0) {
-    ((Fl_Button*)b)->shortcut(s);}
-//#define fl_set_object_shortcut(b,s) fl_set_button_shortcut(b,s)
+inline void fl_set_object_shortcut(Fl_Widget* b, const char* s, int=0) {
+  b->shortcut(fl_old_shortcut(s));}
+#define fl_set_button_shortcut fl_set_object_shortcut
 
 #include <FL/Fl_Light_Button.H>
 forms_constructor(Fl_Light_Button, fl_add_lightbutton)
@@ -666,7 +671,10 @@ int fl_show_choice(
     const char *b1,
     const char *b2);
 
-inline void fl_set_goodies_font(uchar a, uchar b) {fl_message_font(a,b);}
+inline void fl_set_goodies_font(int a, unsigned b) {
+  fl_message_style->label_font = fl_fonts+a;
+  fl_message_style->label_size = b;
+}
 #define fl_show_messages fl_message
 inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
 			   const char* b3, int) {
@@ -735,8 +743,8 @@ inline void fl_delete_menu_item(Fl_Widget* o, int i) {
     ((Fl_Menu_Button*)o)->remove(i-1);}
 inline void fl_set_menu_item_shortcut(Fl_Widget* o, int i, const char* s) {
     ((Fl_Menu_Button*)o)->shortcut(i-1,fl_old_shortcut(s));}
-inline void fl_set_menu_item_mode(Fl_Widget* o, int i, long x) {
-    ((Fl_Menu_Button*)o)->mode(i-1,x);}
+// inline void fl_set_menu_item_mode(Fl_Widget* o, int i, long x) {
+//     ((Fl_Menu_Button*)o)->mode(i-1,x);}
 inline void fl_show_menu_symbol(Fl_Widget*, int ) {
 /*    ((Fl_Menu_Button*)o)->show_menu_symbol(i); */}
 // inline void fl_set_menu_popup(Fl_Widget*, int);
@@ -810,9 +818,10 @@ inline void fl_set_slider_size(Fl_Widget* o, double v) {
 forms_constructor(Fl_Value_Slider, fl_add_valslider)
 
 inline void fl_set_slider_precision(Fl_Widget* o, int i) {
-//    ((Fl_Value_Slider*)o)->precision(i);}
-    ((Fl_Value_Slider*)o)->step(1 / (10^i));}
-// filter function!
+  double v = 1.0;
+  while (i--) v /= 10.0;
+  ((Fl_Value_Slider*)o)->step(v);
+}
 
 // The forms text object was the same as an Fl_Box except it inverted the
 // meaning of FL_ALIGN_INSIDE.  Implementation in forms.C
@@ -846,5 +855,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.15 2000/01/16 07:44:20 robertk Exp $".
+// End of "$Id: forms.H,v 1.16 2000/02/14 11:32:36 bill Exp $".
 //

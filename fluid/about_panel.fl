@@ -10,53 +10,57 @@ Function {make_about_panel(const char *copyright)} {open
 } {
   Fl_Window about_panel {
     label {about fluid} open
-    xywh {307 284 303 258} resizable hotspot box UP_BOX color 97 selection_color 47 non_modal visible
+    xywh {150 270 303 258} resizable hotspot color 97 selection_color 47 non_modal visible
   } {
     Fl_Group display_group {open
-      xywh {10 10 289 240}
+      xywh {5 5 295 245}
+      code0 {o->resizable(o);}
     } {
       Fl_Group {} {open
-        xywh {55 30 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
+        xywh {60 30 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
+        code0 {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {85 120 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {90 120 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
       }
-      Fl_Box {} {selected
-        xywh {50 10 90 40} box FLAT_BOX color 97 selection_color 47
+      Fl_Box {} {
+        xywh {45 5 90 40} box FLAT_BOX color 97 selection_color 47
       }
       Fl_Box {} {
-        xywh {60 50 50 65} box DOWN_BOX color 6 selection_color 47
+        xywh {65 50 50 65} box DOWN_BOX color 6 selection_color 47
       }
       Fl_Box {} {
-        xywh {45 30 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
+        xywh {50 30 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
       }
       Fl_Group {} {
         label fluid open
-        xywh {10 135 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
+        xywh {15 135 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
+        code0 {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {79 155 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {84 155 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
         Fl_Box {} {
           label {` }
-          xywh {70 140 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {75 140 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
       }
       Fl_Box {} {
-        xywh {57 135 56 2} box FLAT_BOX color 14 selection_color 47
+        xywh {62 135 56 2} box FLAT_BOX color 14 selection_color 47
       }
-      Fl_Group {} {open
-        xywh {145 23 149 122} box OFLAT_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 7 selection_color 47 labelsize 18
+      Fl_Group {} {open selected
+        xywh {150 23 149 122} box OFLAT_BOX labelfont 1 color 14 labelcolor 7 selection_color 47 labelsize 18
+        code0 {o->resizable(o);}
       } {
         Fl_Box {} {
           label {FLTK User
 Interface
 Designer
 Version 2.0}
-          xywh {150 27 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
+          xywh {155 27 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
         }
       }
       Fl_Button {} {
@@ -64,17 +68,17 @@ Version 2.0}
 Click here for more information}
         callback {display_group->hide();
 copyright_box->show();}
-        xywh {175 164 95 41} align 524416 box BORDER_BOX labelsize 10
+        xywh {180 164 95 41} align 524416 box BORDER_BOX labelsize 10
       }
     }
     Fl_Box copyright_box {
-      xywh {3 5 297 250} align 4244 hide labelcolor 6 labelsize 10
+      xywh {3 5 297 250} align 4244 hide resizable labelcolor 6 labelsize 10
       code0 {o->label(copyright);}
     }
     Fl_Return_Button {} {
       label OK
       callback {((Fl_Window*)(o->parent()))->hide();}
-      xywh {240 223 55 22} labelsize 10
+      xywh {240 223 55 22} labelsize 10 shortcut 0xff0d
     }
   }
 } 

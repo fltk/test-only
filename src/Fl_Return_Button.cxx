@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.19 2000/01/10 06:31:23 bill Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.20 2000/02/14 11:32:53 bill Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,18 +48,9 @@ void Fl_Return_Button::draw() {
   Fl_Color lc = draw_button();
   int W = h();
   if (w()/3 < W) W = w()/3;
-  draw_glyph(0, x()+w()-W-4, y(), W, h(),
-	     Fl::belowmouse()==this ? FL_HIGHLIGHT : 0);
+  glyph()(0, x()+w()-W-4, y(), W, h(), color(), lc,
+	  flags() | (active_r() ? 0 : FL_INACTIVE), glyph_box());
   draw_button_label(x(), y(), w()-W+4, h(), lc);
-}
-
-int Fl_Return_Button::handle(int event) {
-  if (event == FL_SHORTCUT &&
-      (Fl::event_key() == FL_Enter || Fl::event_key() == FL_KP_Enter)) {
-    do_callback();
-    return 1;
-  } else
-    return Fl_Button::handle(event);
 }
 
 static void revert(Fl_Style* s) {
@@ -73,8 +64,9 @@ Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
   : Fl_Button(x,y,w,h,l)
 {
   style(::style);
+  shortcut(FL_Enter);
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.19 2000/01/10 06:31:23 bill Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.20 2000/02/14 11:32:53 bill Exp $".
 //

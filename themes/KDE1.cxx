@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.6 2000/01/17 21:36:19 bill Exp $"
+// "$Id: KDE1.cxx,v 1.7 2000/02/14 11:33:02 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -125,14 +125,14 @@ extern "C" int fltk_theme(int argc, char**)
     window_background = fl_rgb(s);
 
   Fl_Font font = 0;
-  int fontsize = 0;
+  int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
   if (!kderc.get("General/font", s, sizeof(s))) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
 
     if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p);
+    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p)*5/4;
     strtok(NULL, ","); // I have no idea what this is
     if ( (p = strtok(NULL, ",")) ) {
       strncpy(fontencoding, p, sizeof(fontencoding));
@@ -190,16 +190,19 @@ extern "C" int fltk_theme(int argc, char**)
     if (window_background) style->off_color = window_background;
   }
 
-  if ((style = Fl_Style::find("menu item"))) {
+  if ((style = Fl_Style::find("menu"))) {
     if (select_background) style->selection_color = select_background;
     if (select_foreground) style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("menu title"))) {
-    if (select_background) style->highlight_color = background;
-    if (select_foreground) style->highlight_label_color = foreground;
     if (select_background) style->selection_color = background;
     if (select_foreground) style->selection_text_color = foreground;
+  }
+
+  if ((style = Fl_Style::find("menu bar"))) {
+    if (select_background) style->highlight_color = background;
+    if (select_foreground) style->highlight_label_color = foreground;
   }
 
 // Don't bother.  KDE gets it wrong.
@@ -231,17 +234,10 @@ extern "C" int fltk_theme(int argc, char**)
 
   if (!colors_only) {
 
-    // for title highlighting
-    if ((style = Fl_Style::find("menu bar"))) {
-      if (motif_style) style->highlight_color = 0;
-      else style->highlight_label_color = foreground;
-    }
-
     if (motif_style) {
 //    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
-      if ((style = Fl_Style::find("menu item"))) {
-	style->selection_color = background;
-	style->selection_text_color = foreground;
+      if ((style = Fl_Style::find("menu"))) {
+	style->leading = 4;
       }
       if ((style = Fl_Style::find("check button"))) {
 	style->selection_color = FL_DARK1;
@@ -250,17 +246,14 @@ extern "C" int fltk_theme(int argc, char**)
     } else {
       Fl_Style::inactive_color_weight = 0.15f;
 
-      if ((style = Fl_Style::find("menu window"))) {
+      if ((style = Fl_Style::find("menu"))) {
+	style->leading = 8;
 	style->box = &kdewin_menu_window_box;
       }
 
       if ((style = Fl_Style::find("scrollbar"))) {
 	style->glyph_box = &kdewin_menu_window_box;
       }
-    }
-
-    if ((style = Fl_Style::find("menu window"))) {
-      style->leading = motif_style ? 4 : 8;
     }
   }
 
@@ -272,5 +265,5 @@ extern "C" int fltk_theme(int argc, char**)
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.6 2000/01/17 21:36:19 bill Exp $".
+// End of "$Id: KDE1.cxx,v 1.7 2000/02/14 11:33:02 bill Exp $".
 //

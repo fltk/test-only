@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.59 2000/01/16 07:44:34 robertk Exp $"
+// "$Id: Fl_Group.cxx,v 1.60 2000/02/14 11:32:49 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,17 +39,15 @@ Fl_Group* Fl_Group::current_;
 
 int Fl_Group::find(const Fl_Widget* o) const {
   Fl_Widget*const* a = array();
-  int i; for (i=0; i < children_; i++) if (*a++ == o) break;
+  int i; for (i=0; i < children_; ++i) if (*a++ == o) break;
   return i;
 }
-
-extern Fl_Widget* fl_oldfocus; // set by Fl::focus
 
 // For back-compatability, we must adjust all events sent to child
 // windows so they are relative to that window.
 
 static int send(Fl_Widget* o, int event) {
-  if (o->type() < FL_WINDOW) return o->handle(event);
+  if (!o->is_window()) return o->handle(event);
   int save_x = Fl::e_x; Fl::e_x -= o->x();
   int save_y = Fl::e_y; Fl::e_y -= o->y();
   int ret = o->handle(event);
@@ -86,37 +84,47 @@ static int navkey() {
 
 int Fl_Group::handle(int event) {return handle_i(event, 0);}
 
+static int try_focus(Fl_Group* g, int i) {
+  if (i >= g->children()) return 0;
+  Fl_Widget* w = g->child(i);
+  if (!w->takesevents()) return 0;
+  if (!w->handle(FL_FOCUS)) return 0; // see if it wants it
+  g->focus(i);
+  if (w->contains(Fl::focus())) return 1; // it called Fl::focus for us
+  Fl::focus(w);
+  return 1;
+}
+
 // Fl_Tabs (and perhaps others) set the i_take_focus flag:
 int Fl_Group::handle_i(int event, int i_take_focus) {
-  Fl_Widget*const* a = array();
-  Fl_Widget*const* e = array()+children();
+  const int numchildren = children();
+  int i;
 
   switch (event) {
 
   case FL_FOCUS:
     switch (navkey()) {
     default:
-      if (savedfocus_ && savedfocus_->take_focus()) return 1;
+      if (focus_ >= 0 && try_focus(this, focus_)) return 1;
     case FL_Right:
     case FL_Down:
-      if (i_take_focus) {Fl::focus(this); return 1;}
-      while (a < e) if ((*a++)->take_focus()) return 1;
+      if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
+      for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
       return 0;
     case FL_Left:
     case FL_Up:
-      while (e > a) if ((*--e)->take_focus()) return 1;
-      if (i_take_focus) {Fl::focus(this); return 1;}
+      for (i = numchildren; i--;) if (try_focus(this, i)) return 1;
+      if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
       return 0;
     }
 
   case FL_UNFOCUS:
-    savedfocus_ = fl_oldfocus;
     return 0;
 
   case FL_ENTER:
   case FL_MOVE:
-    while (e > a) {
-      Fl_Widget* o = *--e;
+    for (i = numchildren; i--;) {
+      Fl_Widget* o = child(i);
       if (o->visible() && Fl::event_inside(o)) {
         if (o->contains(Fl::belowmouse())) {
 	  return send(o, FL_MOVE);
@@ -130,8 +138,8 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
     return 1;
 
   case FL_PUSH:
-    while (e > a) {
-      Fl_Widget* o = *--e;
+    for (i = numchildren; i--;) {
+      Fl_Widget* o = child(i);
       if (o->takesevents() && Fl::event_inside(o)) {
 	if (send(o,FL_PUSH)) {
 	  if (Fl::pushed() && !o->contains(Fl::pushed())) Fl::pushed(o);
@@ -150,16 +158,16 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
 
   case FL_DEACTIVATE:
   case FL_ACTIVATE:
-    while (a < e) {
-      Fl_Widget* o = *a++;
+    for (i = 0; i < numchildren; ++i) {
+      Fl_Widget* o = child(i);
       if (o->active()) o->handle(event);
     }
     return 1;
 
   case FL_SHOW:
   case FL_HIDE:
-    while (a < e) {
-      Fl_Widget* o = *a++;
+    for (i = 0; i < numchildren; ++i) {
+      Fl_Widget* o = child(i);
       if (o->visible()) o->handle(event);
     }
     return 1;
@@ -167,22 +175,22 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
   case FL_SHORTCUT: {
     int key = navkey();
     if (key) {
-      if (Fl::focus() == this) {
+      if (focused()) {
 	if (key == FL_Right || key == FL_Down)
-	  while (a < e) if ((*a++)->take_focus()) return 1;
+	  for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
 	return 0;
       }
-      int i;
-      for (i = 0; ; i++) {
-	if (i >= children()) return 0;
-	if (array_[i]->contains(Fl::focus())) break;
-      }
-      Fl_Widget *previous = array_[i];
+      i = focus_;
+      if (i < 0 || i >= numchildren) return 0;
+      int previous = i;
+      Fl_Widget* o = child(i);
+      int old_x = o->x();
+      int old_r = o->x()+o->w();
       for (;;) {
 	switch (key) {
 	case FL_Right:
 	case FL_Down:
-	  i++;
+	  ++i;
 	  if (i >= children_) {
 	    if (parent()) return 0;
 	    i = 0;
@@ -190,9 +198,9 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
 	  break;
 	case FL_Left:
 	case FL_Up:
-	  if (i) i--;
+	  if (i) --i;
 	  else {
-	    if (i_take_focus) {Fl::focus(this); return 1;}
+	    if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
 	    if (parent()) return 0;
 	    i = children_-1;
 	  }
@@ -200,27 +208,27 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
 	default:
 	  return 0;
 	}
-	Fl_Widget* o = array_[i];
-	if (o == previous) return 0;
+	if (i == previous) return 0;
 	switch (key) {
 	case FL_Down:
 	case FL_Up:
 	  // for up/down, the widgets have to overlap horizontally:
-	  if (o->x() >= previous->x()+previous->w() ||
-	      o->x()+o->w() <= previous->x()) continue;
+	  o = child(i);
+	  if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
 	}
-	if (o->take_focus()) return 1;
+	if (try_focus(this, i)) return 1;
       }
     }
-    while (a < e) {
-      Fl_Widget* o = *a++;
+    for (i = 0; i < numchildren; ++i) {
+      Fl_Widget* o = child(i);
       if (o->takesevents() && send(o,event)) return 1;
+      if (o->test_shortcut() && try_focus(this, i)) return 1;
     }
     return 0;}
 
   default:
-    while (e > a) {
-      Fl_Widget* o = *--e;
+    for (i = numchildren; i--;) {
+      Fl_Widget* o = child(i);
       if (o->takesevents() && send(o,event)) return 1;
     }
     return 0;
@@ -234,14 +242,14 @@ static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
 
-// this is unnamed as there is no need for themes to alter this:
+// This style is unnamed since there is no reason for themes to change it:
 static Fl_Named_Style* style = new Fl_Named_Style(0, revert, &style);
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
   children_(0),
+  focus_(-1),
   array_(0),
-  savedfocus_(0),
   resizable_(0), // fltk 1.0 used (this)
   sizes_(0), // this is allocated when the group is end()ed.
   ox_(X),
@@ -250,8 +258,7 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   oh_(H) {
   type(FL_GROUP);
   style(::style);
-  clear_flag(FL_ALIGN_MASK);
-  set_flag(FL_ALIGN_TOP);
+  align(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
   // But you must end() the object!
@@ -265,8 +272,8 @@ void Fl_Group::clear() {
     Fl_Widget*const* e = a+children_;
     // clear everything now, in case fl_fix_focus recursively calls us:
     children_ = 0;
-    savedfocus_ = 0;
-    resizable_ = this;
+    focus_ = 0;
+    if (resizable_) resizable_ = this;
     // okay, now it is safe to destroy the children:
     while (e > a) {
       Fl_Widget* o = *--e;
@@ -281,7 +288,7 @@ void Fl_Group::clear() {
 
 Fl_Group::~Fl_Group() {clear();}
 
-void Fl_Group::insert(Fl_Widget &o, int i) {
+void Fl_Group::insert(Fl_Widget &o, int index) {
   if (o.parent()) o.parent()->remove(o);
   o.parent(this);
   if (children_ == 0) {
@@ -292,8 +299,8 @@ void Fl_Group::insert(Fl_Widget &o, int i) {
     if (!(children_ & (children_-1))) // double number of children
       array_ = (Fl_Widget**)realloc((void*)array_,
 				    2*children_*sizeof(Fl_Widget*));
-    int j; for (j = children_; j > i; --j) array_[j] = array_[j-1];
-    array_[j] = &o;
+    for (int j = children_; j > index; --j) array_[j] = array_[j-1];
+    array_[index] = &o;
   }
   ++children_;
   init_sizes();
@@ -301,18 +308,29 @@ void Fl_Group::insert(Fl_Widget &o, int i) {
 
 void Fl_Group::add(Fl_Widget &o) {insert(o, children_);}
 
-void Fl_Group::remove(Fl_Widget &o) {
-  int i = find(o);
-  if (i >= children_) return;
-  if (o.visible_r()) {
+void Fl_Group::remove(int index) {
+  if (index >= children_) return;
+  Fl_Widget* o = array_[index];
+#if 0
+// WAS: I removed this to be consistent with others methods that don't
+// do redraw().  Not sure what may have relied on it:
+  if (o->visible_r()) {
     // we must redraw the enclosing group that has an opaque box:
     for (Fl_Group *p = this; p; p = p->parent())
       if (p->box() != FL_NO_BOX || !p->parent()) {p->redraw(); break;}
   }
-  if (&o == savedfocus_) savedfocus_ = 0;
-  o.parent(0);
+#endif
+  o->parent(0);
   children_--;
-  for (; i < children_; ++i) array_[i] = array_[i+1];
+  for (int i=index; i < children_; ++i) array_[i] = array_[i+1];
+  init_sizes();
+}
+
+void Fl_Group::replace(int index, Fl_Widget& o) {
+  if (index >= children_) {add(o); return;}
+  o.parent(this);
+  array_[index]->parent(0);
+  array_[index] = &o;
   init_sizes();
 }
 
@@ -337,7 +355,7 @@ int* Fl_Group::sizes() {
   if (!sizes_) {
     int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
-    if (type() < FL_WINDOW) {p[0] = ox(); p[2] = oy();} else {p[0] = p[2] = 0;}
+    if (!is_window()) {p[0] = ox(); p[2] = oy();} else {p[0] = p[2] = 0;}
     p[1] = p[0]+ow(); p[3] = p[2]+oh();
     // next is the resizable's size:
     p[4] = p[0]; // init to the group's size
@@ -414,7 +432,7 @@ void Fl_Group::layout() {
 
   // get changes from previous position:
   if (!resizable() || ow()==w() && oh()==h()) {
-    if (type() < FL_WINDOW) {
+    if (!is_window()) {
       int dx = x()-ox();
       int dy = y()-oy();
       Fl_Widget*const* a = array();
@@ -430,7 +448,7 @@ void Fl_Group::layout() {
     int* p = sizes();
     int dx = x()-p[0];
     int dy = y()-p[2];
-    if (type() >= FL_WINDOW) dx = dy = 0;
+    if (is_window()) dx = dy = 0;
     int dw = w()-(p[1]-p[0]);
     int dh = h()-(p[3]-p[2]);
     p+=4;
@@ -516,7 +534,7 @@ void Fl_Group::update_child(Fl_Widget& w) const {
     draw_outside_label(w);
     w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
   }
-  if (w.damage() && w.type() < FL_WINDOW &&
+  if (w.damage() && !w.is_window() &&
       fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
     w.draw();	
     w.clear_damage();
@@ -536,7 +554,7 @@ void Fl_Group::draw_n_clip()
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (!w.visible()) return;
   draw_outside_label(w);
-  if (w.type() < FL_WINDOW && fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+  if (!w.is_window() && fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
     w.clear_damage(FL_DAMAGE_ALL);
     w.draw();
     w.clear_damage();
@@ -575,5 +593,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.59 2000/01/16 07:44:34 robertk Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.60 2000/02/14 11:32:49 bill Exp $".
 //

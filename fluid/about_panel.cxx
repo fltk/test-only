@@ -21,46 +21,44 @@ Fl_Window* make_about_panel(const char *copyright) {
   Fl_Window* w;
   { Fl_Window* o = about_panel = new Fl_Window(303, 258, "about fluid");
     w = o;
-    o->box(FL_UP_BOX);
     o->color((Fl_Color)97);
     o->selection_color((Fl_Color)47);
-    w->hotspot(o);
-    { Fl_Group* o = display_group = new Fl_Group(10, 10, 289, 240);
-      { Fl_Group* o = new Fl_Group(55, 30, 60, 150);
+    ((Fl_Window*)(o))->hotspot(o);
+    { Fl_Group* o = display_group = new Fl_Group(5, 5, 295, 245);
+      { Fl_Group* o = new Fl_Group(60, 30, 60, 150);
         o->box(FL_UP_BOX);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
-        { Fl_Box* o = new Fl_Box(85, 120, 15, 15, "` ");
+        { Fl_Box* o = new Fl_Box(90, 120, 15, 15, "` ");
           o->box(FL_OVAL_BOX);
           o->color((Fl_Color)6);
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-		  o->clear_flag(FL_ALIGN_MASK);
-          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
+        o->resizable(o);
         o->end();
       }
-      { Fl_Box* o = new Fl_Box(50, 10, 90, 40);
+      { Fl_Box* o = new Fl_Box(45, 5, 90, 40);
         o->box(FL_FLAT_BOX);
         o->color((Fl_Color)97);
         o->selection_color((Fl_Color)47);
       }
-      { Fl_Box* o = new Fl_Box(60, 50, 50, 65);
+      { Fl_Box* o = new Fl_Box(65, 50, 50, 65);
         o->box(FL_DOWN_BOX);
         o->color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
       }
-      { Fl_Box* o = new Fl_Box(45, 30, 80, 25);
+      { Fl_Box* o = new Fl_Box(50, 30, 80, 25);
         o->box(FL_ROUND_UP_BOX);
         o->color((Fl_Color)6);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
-		o->clear_flag(FL_ALIGN_MASK);
-        o->set_flag(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+        o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
       }
-      { Fl_Group* o = new Fl_Group(10, 135, 150, 105, "fluid");
+      { Fl_Group* o = new Fl_Group(15, 135, 150, 105, "fluid");
         o->box(FL_ROUND_UP_BOX);
         o->label_font(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
@@ -68,42 +66,39 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
         o->label_size(40);
-		o->clear_flag(FL_ALIGN_MASK);
-        o->set_flag(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
-        { Fl_Box* o = new Fl_Box(79, 155, 15, 15, "` ");
+        o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+        { Fl_Box* o = new Fl_Box(84, 155, 15, 15, "` ");
           o->box(FL_OVAL_BOX);
           o->color((Fl_Color)6);
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-		  o->clear_flag(FL_ALIGN_MASK);
-          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
-        { Fl_Box* o = new Fl_Box(70, 140, 15, 15, "` ");
+        { Fl_Box* o = new Fl_Box(75, 140, 15, 15, "` ");
           o->box(FL_OVAL_BOX);
           o->color((Fl_Color)6);
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-		  o->clear_flag(FL_ALIGN_MASK);
-          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
+        o->resizable(o);
         o->end();
       }
-      { Fl_Box* o = new Fl_Box(57, 135, 56, 2);
+      { Fl_Box* o = new Fl_Box(62, 135, 56, 2);
         o->box(FL_FLAT_BOX);
         o->color((Fl_Color)14);
         o->selection_color((Fl_Color)47);
       }
-      { Fl_Group* o = new Fl_Group(145, 23, 149, 122);
+      { Fl_Group* o = new Fl_Group(150, 23, 149, 122);
         o->box(FL_OFLAT_BOX);
         o->label_font(fl_fonts+1);
-        o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)7);
         o->selection_color((Fl_Color)47);
         o->label_size(18);
-        { Fl_Box* o = new Fl_Box(150, 27, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
+        { Fl_Box* o = new Fl_Box(155, 27, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
           o->box(FL_OVAL_BOX);
           o->label_font(fl_fonts+1);
           o->label_type(FL_SHADOW_LABEL);
@@ -112,31 +107,33 @@ Fl_Window* make_about_panel(const char *copyright) {
           o->selection_color((Fl_Color)47);
           o->label_size(18);
         }
+        o->resizable(o);
         o->end();
       }
-      { Fl_Button* o = new Fl_Button(175, 164, 95, 41, "\251""1998-1999\nClick here for more information");
+      { Fl_Button* o = new Fl_Button(180, 164, 95, 41, "\251""1998-1999\nClick here for more information");
         o->box(FL_BORDER_BOX);
         o->label_size(10);
         o->callback((Fl_Callback*)cb_1998);
-		o->clear_flag(FL_ALIGN_MASK);
-        o->set_flag(FL_ALIGN_WRAP);
+        o->align(FL_ALIGN_WRAP);
       }
+      o->resizable(o);
       o->end();
     }
     { Fl_Box* o = copyright_box = new Fl_Box(3, 5, 297, 250);
       o->label_color((Fl_Color)6);
       o->label_size(10);
-      o->set_flag(132|FL_ALIGN_INSIDE);
+      o->align(132|FL_ALIGN_INSIDE);
       o->hide();
+      Fl_Group::current()->resizable(o);
       o->label(copyright);
     }
     { Fl_Return_Button* o = new Fl_Return_Button(240, 223, 55, 22, "OK");
       o->label_size(10);
+      o->shortcut(0xff0d);
       o->callback((Fl_Callback*)cb_OK);
     }
     o->set_non_modal();
     o->end();
-    o->resizable(o);
   }
   return w;
 }

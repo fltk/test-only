@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.35 2000/01/19 09:41:47 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.36 2000/02/14 11:32:55 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -177,10 +177,10 @@ int Fl_Tabs::handle(int event) {
     damage(FL_DAMAGE_EXPOSE);
   default:
   DEFAULT: {
-    int pf = (Fl::focus()==this);
+    int pf = focused();
     if (handle_i(event, 1)) {
       // we must redraw if we gained or lost the focus:
-      if ((Fl::focus()==this) != pf) damage(FL_DAMAGE_EXPOSE);
+      if (focused() != pf) damage(FL_DAMAGE_EXPOSE);
       return 1;
     }
     return 0;}
@@ -215,7 +215,7 @@ Fl_Widget* Fl_Tabs::value() {
 // Setting the value hides all other children, and makes this one
 // visible, iff it is really a child:
 int Fl_Tabs::value(Fl_Widget *newvalue) {
-  int setfocus = Fl::focus() != this && contains(Fl::focus());
+  int setfocus = !focused() && contains(Fl::focus());
   Fl_Widget*const* a = array();
   for (int i=children(); i--;) {
     Fl_Widget* o = *a++;
@@ -330,7 +330,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     fl_line(x1, y()+h()+H, x1+TABSLOPE, y()+h()-1);
   }
   if (W > TABSLOPE) {
-    if (sel && Fl::focus() == this) {
+    if (sel && focused()) {
       fl_color(FL_BLACK);
       fl_line_style(FL_DOT);
       fl_rect(x2-W+TABSLOPE,
@@ -359,5 +359,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.35 2000/01/19 09:41:47 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.36 2000/02/14 11:32:55 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.61 2000/01/23 01:57:26 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.62 2000/02/14 11:32:57 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -338,7 +338,7 @@ static void set_event_xy() {
 #endif
   // turn off is_click if enough time or mouse movement has passed:
   if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 
-      || fl_event_time >= ptime+1000)
+      || fl_event_time >= ptime+(Fl::pushed()?200:1000))
     Fl::e_is_click = 0;
 }
 
@@ -710,9 +710,10 @@ void Fl_X::create(Fl_Window* w,
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
 
     XWMHints hints;
-    hints.flags = 0;
+    hints.input = True;
+    hints.flags = InputHint;
     if (fl_show_iconic) {
-      hints.flags = StateHint;
+      hints.flags |= StateHint;
       hints.initial_state = IconicState;
       fl_show_iconic = 0;
     }
@@ -720,7 +721,7 @@ void Fl_X::create(Fl_Window* w,
       hints.icon_pixmap = (Pixmap)w->icon();
       hints.flags       |= IconPixmapHint;
     }
-    if (hints.flags) XSetWMHints(fl_display, x->xid, &hints);
+    XSetWMHints(fl_display, x->xid, &hints);
   }
 
   XMapWindow(fl_display, x->xid);
@@ -850,5 +851,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.61 2000/01/23 01:57:26 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.62 2000/02/14 11:32:57 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.9 1999/10/17 20:40:05 vincent Exp $"
+// "$Id: Fl_Image.H,v 1.10 2000/02/14 11:32:34 bill Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,6 @@
 #include "Fl_Flags.H"
 
 class Fl_Widget;
-struct Fl_Menu_Item;
 
 class FL_API Fl_Image {
 protected:
@@ -51,11 +50,10 @@ public:
 
   // back compatability:
   void label(Fl_Widget* o);
-  void label(Fl_Menu_Item* o);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.9 1999/10/17 20:40:05 vincent Exp $".
+// End of "$Id: Fl_Image.H,v 1.10 2000/02/14 11:32:34 bill Exp $".
 //

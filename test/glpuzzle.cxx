@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.11 1999/11/13 23:01:18 carl Exp $"
+// "$Id: glpuzzle.cxx,v 1.12 2000/02/14 11:33:00 bill Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 // This is rewritten to remove use of the Glut emulation so it can
@@ -1139,7 +1139,7 @@ solvePuzzle(void)
     freeSolutions();
     sprintf(buf, "I can't solve it! (%d positions examined)", i);
     puzzle_window->label(buf);
-    return 1;
+    return 0;
   }
   return 1;
 }
@@ -1498,7 +1498,7 @@ static int spinning;
 static float lastquat[4];
 static int sel_piece;
 
-#include <FL/Fl_Menu_Item.H>
+#include <FL/Fl_Menu_.H>
 
 void set_solving(int);
 
@@ -1527,7 +1527,9 @@ void reset_view_cb(Fl_Widget*, void*) {
   changeState();
 }
 
-Fl_Menu_Item menu[] = {
+Fl_Menu_* menu;
+
+Fl_Menu_Item menu_table[] = {
   {"solve it for me", 's', solve_cb},
   {"reset the puzzle", 'r', reset_cb},
   {"delete this piece", 'd', delete_cb},
@@ -1538,17 +1540,16 @@ Fl_Menu_Item menu[] = {
 void set_solving(int s) {
   if (s == solving) return;
   if (s) {
-    menu[0].text = "stop solving";
+    menu->child(0)->label("stop solving");
     puzzle_window->cursor(FL_CURSOR_WAIT);
     Fl::flush();
-    if (solvePuzzle()) solving = 1;
-  } else {
-    freeSolutions();
-    solving = 0;
-    menu[0].text = "solve it for me";
-    puzzle_window->cursor(FL_CURSOR_DEFAULT);
-    movingPiece = 0;
+    if (solvePuzzle()) {solving = 1; changeState(); return;}
   }
+  freeSolutions();
+  solving = 0;
+  menu->child(0)->label("solve it for me");
+  puzzle_window->cursor(FL_CURSOR_DEFAULT);
+  movingPiece = 0;
   changeState();
 }
 
@@ -1610,9 +1611,8 @@ int Puzzle_Window::handle(int event) {
       break;
     default:
       piece = selectPiece(x, y);
-      if (piece) menu[2].activate(); else menu[2].deactivate();
-      const Fl_Menu_Item* m = menu->popup(x, y);
-      if (m) m->do_callback(this);
+      if (piece) menu->child(2)->activate(); else menu->child(2)->deactivate();
+      menu->popup(x, y);
       return 1;
     }
     // fall through to drag handler:
@@ -1691,9 +1691,11 @@ main(int argc, char **argv)
   puzzle_window->show(argc, argv);
   trackball(curquat, 0.0, 0.0, 0.0, 0.0);
   srandom(time(NULL));
+  menu = new Fl_Menu_(0,0,0,0);
+  menu->add(menu_table);
   return Fl::run();
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.11 1999/11/13 23:01:18 carl Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.12 2000/02/14 11:33:00 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.23 2000/01/16 07:44:36 robertk Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.24 2000/02/14 11:32:55 bill Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@ void Fl_Value_Output::draw() {
   char buf[128];
   format(buf);
   fl_font(text_font(), text_size());
-  if (Fl::focus() == this) {
+  if (focused()) {
     fl_color(selection_color());
     int h = text_size()+leading();
     fl_rectf(X+3,Y+(H-h)/2,fl_width(buf),h);
@@ -98,5 +98,5 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.23 2000/01/16 07:44:36 robertk Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.24 2000/02/14 11:32:55 bill Exp $".
 //

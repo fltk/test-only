@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.27 2000/01/05 09:58:46 bill Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.28 2000/02/14 11:32:39 bill Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -237,7 +237,7 @@ void Fl_Function_Type::write_code1() {
       } else rtype = "void";
     }
 
-    const char* k = class_name();
+    const char* k = class_name(0);
     if (k) {
       write_public(public_);
       if (name()[0] == '~')
@@ -489,7 +489,7 @@ void Fl_Decl_Type::write_code1() {
   // lose all trailing semicolons so I can add one:
   const char* e = c+strlen(c);
   while (e>c && e[-1]==';') e--;
-  if (class_name()) {
+  if (class_name(1)) {
     write_public(public_);
     write_h("  %.*s;\n", e-c, c);
   } else {
@@ -575,13 +575,14 @@ void Fl_DeclBlock_Type::write_code2() {
 
 ////////////////////////////////////////////////////////////////
 
-const char* Fl_Type::class_name() const {
+const char* Fl_Type::class_name(const int need_nest) const {
   Fl_Type* p = parent;
   while (p) {
     if (p->is_class()) {
       // see if we are nested in another class, we must fully-qualify name:
       // this is lame but works...
-      const char* q = p->class_name();
+      const char* q = 0;
+      if(need_nest) q=p->class_name(need_nest);
       if (q) {
 	static char buffer[256];
 	if (q != buffer) strcpy(buffer, q);
@@ -685,5 +686,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.27 2000/01/05 09:58:46 bill Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.28 2000/02/14 11:32:39 bill Exp $".
 //

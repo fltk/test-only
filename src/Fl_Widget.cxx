@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.51 2000/01/10 06:31:25 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.52 2000/02/14 11:32:56 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,7 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   label_	= L;
   image_	= 0;
   tooltip_	= 0;
+  shortcut_	= 0;
   flags_	= 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
@@ -96,10 +97,18 @@ int Fl_Widget::resize(int X, int Y, int W, int H) {
 }
 
 int Fl_Widget::take_focus() {
-  if (!takesevents()) return 0;
-  if (!handle(FL_FOCUS)) return 0; // see if it wants it
-  if (contains(Fl::focus())) return 1; // it called Fl::focus for us
-  Fl::focus(this);
+  if (focused()) return 1;
+  // if (!takesevents()) return 0; // we can assumme this is true?
+  Fl_Widget* child = this;
+  for (Fl_Group* group = parent(); ; group = group->parent()) {
+    if (!group) break;
+    if (group->is_group()) group->focus(child);
+    if (!group->takesevents()) return 0;
+    child = group;
+  }
+  if (!Fl::focus()) return 0;
+  handle(FL_FOCUS);
+  if (!contains(Fl::focus())) Fl::focus(this);
   return 1;
 }
 
@@ -176,6 +185,12 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
   return 0;
 }
 
+int Fl_Widget::pushed() const {return this == Fl::pushed();}
+
+int Fl_Widget::focused() const {return this == Fl::focus();}
+
+int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
+
 // When a widget is destroyed it can destroy unique styles:
 
 Fl_Widget::~Fl_Widget() {
@@ -202,8 +217,9 @@ Fl_Widget::~Fl_Widget() {
 
 // Draw the surrounding box of a normal widget:
 void Fl_Widget::draw_box() const {
-  Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  box()->draw(x(), y(), w(), h(), color(), f);
+  Fl_Boxtype b = box();
+  if (b != FL_NO_BOX) // we can skip fl_no_box because focus is impossible
+    b->draw(x(),y(),w(),h(), color(), active_r() ? FL_NO_FLAGS : FL_INACTIVE);
 }
 
 // Draw the surrounding box but no interior:
@@ -220,7 +236,7 @@ Fl_Color Fl_Widget::draw_button() const {
   Fl_Color lc = label_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
-  } else if (Fl::belowmouse() == this) {
+  } else if (belowmouse()) {
     f |= FL_HIGHLIGHT;
     Fl_Color c1 = highlight_color();
     if (c1) {c = c1; c1 = highlight_label_color(); if (c1) lc = c1;}
@@ -229,7 +245,7 @@ Fl_Color Fl_Widget::draw_button() const {
     Fl_Color c1 = selection_color(); if (c1) c = c1;
     c1 = selection_text_color(); if (c1) lc = c1;
   }
-  if (Fl::focus() == this) f |= FL_FOCUSED;
+  if (focused()) f |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
   if (!(f&FL_FOCUSED) && box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
@@ -269,5 +285,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.51 2000/01/10 06:31:25 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.52 2000/02/14 11:32:56 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.24 2000/01/16 07:44:24 robertk Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.25 2000/02/14 11:32:41 bill Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -429,9 +429,7 @@ int Fl_Window_Type::handle(int event) {
     // test for popup menu:
     if (Fl::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
-      static const Fl_Menu_Item* prev;
-      const Fl_Menu_Item* m = New_Menu->popup(mx,my,"New",prev);
-      if (m && m->callback()) {prev = m; m->do_callback(this->o);}
+      New_Menu->popup(mx,my,"New");
       in_this_only = 0;
       return 1;
     }
@@ -573,10 +571,9 @@ int Fl_Window_Type::handle(int event) {
 
   case FL_SHORTCUT: {
     in_this_only = this; // modifies how some menu items work.
-    const Fl_Menu_Item* m = Main_Menu->test_shortcut();
-    if (m && m->callback()) m->do_callback(this->o);
+    int r = Main_Menu->test_shortcut();
     in_this_only = 0;
-    return (m != 0);}
+    return r;}
 
   default:
     return 0;
@@ -653,5 +650,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.24 2000/01/16 07:44:24 robertk Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.25 2000/02/14 11:32:41 bill Exp $".
 //

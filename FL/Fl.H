@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.38 2000/01/09 01:06:06 bill Exp $"
+// "$Id: Fl.H,v 1.39 2000/02/14 11:32:33 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -134,7 +134,6 @@ public:
   static int event_length() {return e_length;}
   static int event_inside(int,int,int,int);
   static int event_inside(const Fl_Widget*);
-  static int test_shortcut(int);
 
   // event destinations:
   static int handle(int, Fl_Window*);
@@ -223,5 +222,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.38 2000/01/09 01:06:06 bill Exp $".
+// End of "$Id: Fl.H,v 1.39 2000/02/14 11:32:33 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: message.cxx,v 1.6 1999/03/14 06:46:46 carl Exp $"
+// "$Id: message.cxx,v 1.7 2000/02/14 11:33:01 bill Exp $"
 //
 // Message test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,9 @@
 #include <FL/fl_ask.H>
 #include <stdio.h>
 
-int main(int, char **) {
+int main(int argc, char **argv) {
+
+  Fl::args(argc, argv);
 
   fl_message("Spelling check sucessfull, %d errors found with %g%% confidence",
 	     1002, 100*(15/77.0));
@@ -54,5 +56,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: message.cxx,v 1.6 1999/03/14 06:46:46 carl Exp $".
+// End of "$Id: message.cxx,v 1.7 2000/02/14 11:33:01 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.2 1999/11/27 15:45:03 carl Exp $"
+// "$Id: colbrowser.cxx,v 1.3 2000/02/14 11:32:43 bill Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -95,7 +95,7 @@ set_entry(int i)
     RGBdb *db = rgbdb + i;
 
     fl_freeze_form(cl);
-// unclear why demo is doing this.  This messes up FL:
+// unclear why demo is doing this.  This messes up fltk:
 //    fl_mapcolor(FL_FREE_COL4+i, db->r, db->g, db->b);
     fl_mapcolor(FL_FREE_COL4, db->r, db->g, db->b);
     fl_set_slider_value(rs, db->r);
@@ -340,5 +340,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.2 1999/11/27 15:45:03 carl Exp $".
+// End of "$Id: colbrowser.cxx,v 1.3 2000/02/14 11:32:43 bill Exp $".
 //

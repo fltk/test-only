@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.32 2000/01/10 06:31:04 bill Exp $"
+// "$Id: Fl_Window.H,v 1.33 2000/02/14 11:32:36 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,6 @@
 #define Fl_Window_H
 
 #include "Fl_Group.H"
-
-#define FL_WINDOW 0xF0	// all subclasses have type() >= this
 
 class FL_API Fl_Window : public Fl_Group {
 public:
@@ -118,5 +116,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.32 2000/01/10 06:31:04 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.33 2000/02/14 11:32:36 bill Exp $".
 //

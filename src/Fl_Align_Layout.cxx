@@ -29,7 +29,6 @@
 #include <FL/Fl_Flags.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Layout.H>
-#include <FL/Fl_Window.H> //just to get the FL_WINDOW constant!
 
 void Fl_Align_Group::layout() {
   Fl_Widget::layout();
@@ -65,7 +64,7 @@ void Fl_Align_Group::layout() {
   int W = (w() - (variable_is_y ? 0:total_label_space) - (nx + 1)*dw()) / nx;
   int H = (h() - (variable_is_y ? total_label_space:0) - (ny + 1)*dh()) / ny; 
   int cx = dw(), cy = dh();
-  if (type() < FL_WINDOW) {cx += x(); cy += y();}
+  if (!is_window()) {cx += x(); cy += y();}
   int icx = cx, icy = cy;
 
   a = array();

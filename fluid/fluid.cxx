@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.35 2000/01/19 09:41:44 bill Exp $"
+// "$Id: fluid.cxx,v 1.36 2000/02/14 11:32:42 bill Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -327,9 +327,7 @@ void about_cb(Fl_Widget *, void *) {
 }
 
 void tt_cb(Fl_Widget *w, void *) {
-  Fl_Menu_* mw = (Fl_Menu_*)w;
-  const Fl_Menu_Item* m = mw->mvalue();
-  Fl_Tooltip::enable(m->value());
+  Fl_Tooltip::enable(w->value());
 }
 
 #include <string.h>
@@ -395,7 +393,7 @@ Fl_Menu_Item Main_Menu[] = {
 #define BROWSERWIDTH 300
 #define BROWSERHEIGHT 500
 #define WINWIDTH 300
-#define MENUHEIGHT 30
+#define MENUHEIGHT 25
 #define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
 
 extern void fill_in_New_Menu();
@@ -411,9 +409,9 @@ void make_main_window() {
     // o->box(FL_FLAT_BOX);
     main_window->resizable(o);
     menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
+    fill_in_New_Menu();
     menubar->menu(Main_Menu);
     menubar->global();
-    fill_in_New_Menu();
     main_window->end();
   }
 }
@@ -502,5 +500,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.35 2000/01/19 09:41:44 bill Exp $".
+// End of "$Id: fluid.cxx,v 1.36 2000/02/14 11:32:42 bill Exp $".
 //
