@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.32 1999/10/26 16:26:22 mike Exp $"
+// "$Id: Enumerations.H,v 1.33 1999/10/27 01:21:06 vincent Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -205,8 +205,14 @@ enum Fl_Damage {
   FL_DAMAGE_ALL         = 0x80
 };
 
+enum Fl_Thread_Policy {
+  FL_NORMAL,
+  FL_RT_FIFO,	// real time, first in first out
+  FL_RT_RR	// real time, round robin
+};
+
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.32 1999/10/26 16:26:22 mike Exp $".
+// End of "$Id: Enumerations.H,v 1.33 1999/10/27 01:21:06 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.6 1999/10/26 23:02:03 mike Exp $"
+// "$Id: Fl_Threads.cxx,v 1.7 1999/10/27 01:21:10 vincent Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -63,10 +63,6 @@ int Fl::init_threads_support()
   if (Fl::main_lock == 0) {
     Fl::mutex_init(Fl::main_lock);
     Fl::lock(Fl::main_lock);
-#ifndef PRI_OTHER_MAX
-    PRI_OTHER_MIN = sched_get_priority_min(SCHED_OTHER);
-    PRI_OTHER_MAX = sched_get_priority_max(SCHED_OTHER);
-#endif
   }
   return 0;
 }
@@ -84,12 +80,20 @@ int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 // set the priority of a thread. default value 0.5 for normal priority, 
 // 1 for highest, 0 for lowest.
 
-int Fl::set_thread_priority(Fl_Thread t, float pri)
+int Fl::set_thread_priority(Fl_Thread t, float pri, Fl_Thread_Policy p)
 {
-#if HAVE_PTHREAD_GETSCHEDPARAM
+#if HAVE_PTHREAD_SETSCHEDPARAM
   struct sched_param sp;
   int policy;
-  if (pthread_getschedparam(t, &policy, &sp)) return -1;
+  switch (p) {
+    case FL_RT_FIFO: policy = SCHED_FIFO; break;
+    case FL_RT_RR:   policy = SCHED_RR;   break;
+    default:         policy = SCHED_OTHER;
+  }
+#ifndef PRI_OTHER_MAX
+  PRI_OTHER_MIN = sched_get_priority_min(policy);
+  PRI_OTHER_MAX = sched_get_priority_max(policy);
+#endif
   sp.sched_priority = int(PRI_OTHER_MIN + 
 			  (PRI_OTHER_MAX - PRI_OTHER_MIN) * pri);
   return pthread_setschedparam(t, policy, &sp);
@@ -191,7 +195,7 @@ int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 
 // set the priority of a thread. default value 0.5 for normal priority, 
 // 1 for highest, 0 for lowest.
-int Fl::set_thread_priority(Fl_Thread t, float pri)
+int Fl::set_thread_priority(Fl_Thread t, float pri, Fl_Thread_Policy)
 {
   return SetThreadPriority((HANDLE)t, int(THREAD_PRIORITY_LOWEST + 
 	(THREAD_PRIORITY_HIGHEST - THREAD_PRIORITY_LOWEST) * pri));
@@ -255,7 +259,7 @@ int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 
 // set the priority of a thread. default value 0.5 for normal priority, 
 // 1 for highest, 0 for lowest.
-int Fl::set_thread_priority(Fl_Thread, float )
+int Fl::set_thread_priority(Fl_Thread, float, Fl_Thread_Policy)
 {
   return -1;
 }
@@ -296,5 +300,5 @@ int Fl::awake(void* msg)
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.6 1999/10/26 23:02:03 mike Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.7 1999/10/27 01:21:10 vincent Exp $".
 //

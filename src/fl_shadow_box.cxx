@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.6 1999/10/27 01:21:11 vincent Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 static void shadow_draw(Fl_Boxtype, int x, int y, int w, int h,
 			Fl_Color c, Fl_Flags f)
 {
+  w-=BW; h-=BW;
   if (!(f & FL_FRAME_ONLY)) {
     fl_color(c);
     fl_rectf(x+1,y+1,w-2,h-2);
@@ -42,9 +43,9 @@ static void shadow_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_rect(x,y,w,h);
 }
 const Fl_Boxtype_ fl_shadow_box = {
-  shadow_draw, 0, 0, 1,1,2,2
+  shadow_draw, 0, 0, 1,1,2+BW,2+BW
 };
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.6 1999/10/27 01:21:11 vincent Exp $".
 //

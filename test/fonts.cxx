@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.10 1999/09/14 17:52:47 carl Exp $"
+// "$Id: fonts.cxx,v 1.11 1999/10/27 01:21:11 vincent Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,6 +43,7 @@ public:
     Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {
+  fl_clip(x(), y(), w(), h());
   draw_box();
   fl_font(font, size, encoding);
   fl_color(FL_BLACK);
@@ -53,6 +54,7 @@ void FontDisplay::draw() {
   }
   fl_font(FL_HELVETICA,10);
   fl_draw(font->system_name(), x()+3, y()+3, w()-6, h()-6, FL_ALIGN_BOTTOM_LEFT);
+  fl_pop_clip();
 }
 
 FontDisplay *textobj;
@@ -182,5 +184,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.10 1999/09/14 17:52:47 carl Exp $".
+// End of "$Id: fonts.cxx,v 1.11 1999/10/27 01:21:11 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.22 1999/10/26 00:56:54 vincent Exp $"
+// "$Id: Fl.H,v 1.23 1999/10/27 01:21:06 vincent Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -214,7 +214,7 @@ public:
 
   // set the priority of a thread. default value 0.5 for normal priority, 
   // 1 for highest, 0 for lowest.
-  static int set_thread_priority(Fl_Thread, float prio = 0.5);
+  static int set_thread_priority(Fl_Thread, float prio = 0.5, Fl_Thread_Policy p = FL_NORMAL);
 
   // sleep for 'a' seconds
   static void sleep(double a);
@@ -241,5 +241,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.22 1999/10/26 00:56:54 vincent Exp $".
+// End of "$Id: Fl.H,v 1.23 1999/10/27 01:21:06 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.10 1999/08/16 07:31:25 bill Exp $"
+// "$Id: fl_ask.cxx,v 1.11 1999/10/27 01:21:10 vincent Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ static Fl_Window *makeform() {
   Fl_Window *w = message_form = new Fl_Window(410,105);
   //w->clear_border();
   //w->box(FL_UP_BOX);
-  (message = new Fl_Box(60, 25, 340, 20))
+  (message = new Fl_Box(60, 0, 340, 70))
     ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
   (input = new Fl_Input(60,32,340,30))->hide();
   {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
@@ -168,13 +168,13 @@ Fl_Widget *fl_message_icon() {makeform(); return icon;}
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
   makeform();
-  message->position(60,10);
+  message->size(340, 40);
   input->type(type);
   input->show();
   input->value(defstr);
   int r = innards(fmt, ap, fl_cancel, fl_ok, 0);
   input->hide();
-  message->position(60,25);
+  message->size(340, 70);
   return r ? input->value() : 0;
 }
 
@@ -195,5 +195,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.10 1999/08/16 07:31:25 bill Exp $".
+// End of "$Id: fl_ask.cxx,v 1.11 1999/10/27 01:21:10 vincent Exp $".
 //
