@@ -79,6 +79,7 @@ void fltk::awake(void* msg) {
 #elif HAVE_PTHREAD
 #include <unistd.h>
 #include <fcntl.h>
+#define __USE_GNU // makes the RECURSIVE stuff appear on Linux
 #include <pthread.h>
 
 #ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
@@ -94,27 +95,37 @@ void fltk::unlock() {
   pthread_mutex_unlock(&fltk_mutex);
 }
 
-namespace fltk {
-// this is needed for the Mutex constructor:
-pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
-}
+//Possibly more portable to do this at startup:
+//static pthread_mutexattr_t attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
+//pthread_mutex_init(&fltk_mutex, &attrib);
 
 #else
 // Make a recursive lock out of the pthread mutex:
 
 static pthread_mutex_t fltk_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_t owner;
-static int counter;
+static pthread_t fltk_owner;
+static int fltk_counter;
 
 static void lock_function() {
-  if (!counter || owner != pthread_self()) {
-    pthread_mutex_lock(&fltk_mutex); owner = pthread_self();
+  pthread_t self = pthread_self();
+  if (!fltk_counter || !pthread_equal(fltk_owner,self)) {
+    pthread_mutex_lock(&fltk_mutex);
+    //assert(!fltk_owner);
+    fltk_owner = self;
+    fltk_counter = 1;
+  } else {
+    //assert(pthread_equal(fltk_owner,self));
+    ++fltk_counter;
   }
-  counter++;
 }
 
 void fltk::unlock() {
-  if (!--counter) pthread_mutex_unlock(&fltk_mutex);
+  //pthread_t self = pthread_self();
+  //assert(fltk_counter > 0 && pthread_equal(fltk_owner,self));
+  if (!--fltk_counter) {
+    //fltk_owner = 0;
+    pthread_mutex_unlock(&fltk_mutex);
+  }
 }
 
 #endif

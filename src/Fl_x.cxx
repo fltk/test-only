@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.148 2003/07/01 07:03:14 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.149 2003/08/03 16:55:13 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1259,7 +1259,8 @@ void Window::make_current() const {
 }
 
 ////////////////////////////////////////////////////////////////
-// Get the KDE colors that it writes to the xrdb database:
+// fltk::system_theme() reads xrdb database for some colors.
+// Not clear if any modern systems use this.
 
 // Set this to 1 to get my attempt to improve XGetDefault:
 #define MY_GET_DEFAULT 0
@@ -1424,5 +1425,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.148 2003/07/01 07:03:14 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.149 2003/08/03 16:55:13 spitzak Exp $".
 //

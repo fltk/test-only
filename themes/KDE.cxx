@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.14 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.15 2003/08/03 16:55:13 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -103,6 +103,8 @@ static void add_event_handler() {
 ////////////////////////////////////////////////////////////////
 
 extern "C" bool fltk_theme() {
+
+  fltk::reset_theme();
 
   char kderc[PATH_MAX], home[PATH_MAX] = "", s[80] = "";
   const char* p = getenv("HOME");
@@ -329,5 +331,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.14 2003/07/23 04:55:50 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.15 2003/08/03 16:55:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.17 2003/08/03 16:55:13 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -170,9 +170,9 @@ FontSize::~FontSize() {
 XFontStruct* fltk::xfont() {
 #if defined(XFT_MAJOR) && XFT_MAJOR >= 2
   // kludge!
-  static XFontStruct* fixed = 0;
-  if (!fixed) fixed = XLoadQueryFont(fl_display, "variable");
-  return fixed;
+  static XFontStruct* some_font = 0;
+  if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
+  return some_font;
 #else
   if (current->font->core) return current->font->u.core.font;
   static XftFont* xftfont;
@@ -409,5 +409,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.17 2003/08/03 16:55:13 spitzak Exp $"
 //

@@ -11,5 +11,6 @@
 */
 
 extern "C" bool fltk_theme() {
+  fltk::reset_theme();
   return fltk::system_theme();
 }

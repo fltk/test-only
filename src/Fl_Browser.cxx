@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.73 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.74 2003/08/03 16:55:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -327,8 +327,13 @@ static xbmImage browser_minus(browser_minus_bits, browser_minus_width, browser_m
 static void
 glyph(const Widget* widget, int glyph, int x,int y,int w,int h, Flags f)
 {
-  setcolor((f&SELECTED) ? widget->selection_textcolor()
-	    : inactive(widget->textcolor()));
+  if (f&SELECTED)
+    setcolor(widget->selection_textcolor());
+  else {
+    Color c = widget->textcolor();
+    if (c == BLACK) c = GRAY33;
+    setcolor(c);
+  }
   int lx = x+w/2;
   int ly = y+(h-1)/2;
   switch (glyph) {
@@ -1136,5 +1141,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.73 2003/07/23 04:55:50 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.74 2003/08/03 16:55:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.190 2003/07/23 05:21:55 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.191 2003/08/03 16:55:13 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1428,19 +1428,19 @@ bool fltk::system_theme() {
 
   Style* style;
 
-  if ((style = Style::find("scrollbar"))) {
+  if ((style = Style::find("ScrollBar"))) {
 //    style->color = lerp(slider_background, text_background, .5);
     style->color = lerp(background, text_background, .5);
   }
 
   if (menuitem_background != background || menuitem_foreground != foreground) {
-    if ((style = Style::find("menubar"))) {
+    if ((style = Style::find("MenuBar"))) {
       style->color = menuitem_background;
       style->textcolor = menuitem_foreground;
 //    style->selection_color = select_background;
 //    style->selection_textcolor = select_foreground;
     }
-    if ((style = Style::find("popupmenu"))) {
+    if ((style = Style::find("PopupMenu"))) {
       style->color = menuitem_background;
       style->textcolor = menuitem_foreground;
 //    style->selection_color = select_background;
@@ -1457,11 +1457,11 @@ bool fltk::system_theme() {
   }
 */
 
-  if ((style = Style::find("menu bar"))) {
+  if ((style = Style::find("MenuBar"))) {
     style->highlight_color = GRAY75; // enable title highlightig
   }
 
-  if ((style = Style::find("tooltip"))) {
+  if ((style = Style::find("Tooltip"))) {
     style->color = tooltip_background;
     style->textcolor = tooltip_foreground;
   }
@@ -1521,7 +1521,7 @@ bool fltk::system_theme() {
     style->textsize = size;
   }
 
-  if ((style = Style::find("tooltip"))) {
+  if ((style = Style::find("Tooltip"))) {
     // get font info for tooltips from LOGFONT structure
     font = fltk::font((const char*)ncm.lfStatusFont.lfFaceName,
 		      (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
@@ -1543,5 +1543,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.190 2003/07/23 05:21:55 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.191 2003/08/03 16:55:13 spitzak Exp $".
 //
