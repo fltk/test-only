@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.18 2004/06/06 21:08:32 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.19 2004/11/12 06:50:17 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -119,7 +119,7 @@ static const struct {unsigned short vk, fltk, ext;} vktab[] = {
 
 extern bool fl_last_was_extended;
 
-static int fltk2ms(int fltk) {
+static unsigned short fltk2ms(unsigned fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
@@ -135,11 +135,11 @@ static int fltk2ms(int fltk) {
   return 0;
 }
 
-bool fltk::event_key_state(int k) {
+bool fltk::event_key_state(unsigned k) {
   return (GetKeyState(fltk2ms(k))&~1) != 0;
 }
 
-bool fltk::get_key_state(int k) {
+bool fltk::get_key_state(unsigned k) {
   return (GetAsyncKeyState(fltk2ms(k))&~1) != 0;
 //    uchar foo[256];
 //    GetKeyboardState(foo);
@@ -147,5 +147,5 @@ bool fltk::get_key_state(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.18 2004/06/06 21:08:32 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.19 2004/11/12 06:50:17 spitzak Exp $".
 //

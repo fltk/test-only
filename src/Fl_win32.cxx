@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.236 2004/10/30 05:13:27 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.237 2004/11/12 06:50:17 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -326,6 +326,9 @@ MSG fltk::msg;
 
 UINT fl_wake_msg = 0;
 
+// in Fl_Window.cxx:
+extern void fl_do_deferred_calls();
+
 // Wait up to the given time for any events or sockets to become ready,
 // do the callbacks for the events and sockets.
 // It *should* return negative on error, 0 if nothing happens before
@@ -367,6 +370,7 @@ static inline int fl_wait(double time_to_wait) {
   }
 #endif // USE_ASYNC_SELECT
 
+  fl_do_deferred_calls();
   fl_unlock_function();
   if (time_to_wait < 2147483.648) {
     have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
@@ -412,6 +416,7 @@ static inline int fl_wait(double time_to_wait) {
     if (msg.message != WM_MAKEWAITRETURN) {
       TranslateMessage(&msg);
       __DispatchMessage(&msg);
+      fl_do_deferred_calls();
     }
     have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
   }
@@ -842,14 +847,23 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
   }
 }
 
+static char* previous_buffer = 0;
+static int previous_length = 0;
+
 /* Handle CF_TEXT paste */
 static void pasteA(Widget& receiver, char* txt) {
-  e_text = strdup(txt);
-  int len = strlen(e_text);
+  int len = strlen(txt);
+  if (len >= previous_length) {
+    delete[] previous_buffer;
+    previous_length = len+100;
+    previous_buffer = new char[previous_length];
+  }
+  strcpy(previous_buffer, txt);
+  e_text = previous_buffer;
   // strip the CRLF pairs: ($%$#@^)
-  char* a = e_text;
+  char* a = previous_buffer;
   char* b = a;
-  char* e = e_text+len;
+  char* e = a+len;
   while (a<e) {
     if (*a == '\r' && a[1] == '\n') a++;
     else *b++ = *a++;
@@ -857,26 +871,23 @@ static void pasteA(Widget& receiver, char* txt) {
   *b = 0;
   e_length = b - e_text;
   receiver.handle(PASTE);
-  free(e_text);
 }
 
 /* Handle CF_UNICODETEXT paste */
 static void pasteW(Widget& receiver, wchar_t* ucs) {
-  static char* previous_buffer = 0;
-  static int previous_length = 0;
   int ucslen = wcslen(ucs);
   int len = utf8fromwc(previous_buffer, previous_length, ucs, ucslen);
   if (len >= previous_length) {
     delete[] previous_buffer;
-    previous_length = len+1;
+    previous_length = len+100;
     previous_buffer = new char[previous_length];
     len = utf8fromwc(previous_buffer, previous_length, ucs, ucslen);
   }
   e_text = previous_buffer;
   // strip the CRLF pairs: ($%$#@^)
-  char* a = e_text;
+  char* a = previous_buffer;
   char* b = a;
-  char* e = e_text+len;
+  char* e = a+len;
   while (a<e) {
     if (*a == '\r' && a[1] == '\n') a++;
     else *b++ = *a++;
@@ -898,19 +909,13 @@ void fltk::paste(Widget &receiver, bool clipboard) {
   } else {
     if (!OpenClipboard(NULL)) return;
     HANDLE h;
-    h = GetClipboardData(CF_UNICODETEXT);
-    if (h) {
+    if ((h = GetClipboardData(CF_UNICODETEXT))) {
       pasteW(receiver, (wchar_t*)GlobalLock(h));
       GlobalUnlock(h);
-      goto DONEPASTE;
-    }
-    h = GetClipboardData(CF_TEXT);
-    if (h) {
+    } else if ((h = GetClipboardData(CF_TEXT))) {
       pasteA(receiver, (char*)GlobalLock(h));
       GlobalUnlock(h);
-      goto DONEPASTE;
     }
-DONEPASTE:
     CloseClipboard();
   }
 }
@@ -1128,7 +1133,8 @@ public:
       } else {
 	char* buffer = new char[nn+1];
 	e_length = nn;
-	char *dst = e_text = buffer;
+	char *dst = buffer;
+        e_text = buffer;
 	for ( i=0; i<nf; i++ ) {
 	  n = DragQueryFileA( hdrop, i, dst, nn );
 	  dst += n;
@@ -2351,5 +2357,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.236 2004/10/30 05:13:27 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.237 2004/11/12 06:50:17 spitzak Exp $".
 //

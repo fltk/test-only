@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.51 2004/10/01 07:07:53 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.52 2004/11/12 06:50:19 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -396,7 +396,7 @@ static float align(int first_segment,
   return my;
 }
 
-bool fl_hide_shortcut; // set by Choice
+bool fl_hide_underscore; // set by Choice
 
 static inline void setsa(int& spacing, int& ascent) {
   float H = getsize()+Widget::default_style->leading();
@@ -501,7 +501,7 @@ static void wrap(
     if (p >= end) break;
     width = 0;
     if (underscore) {
-      if (!fl_hide_shortcut) {
+      if (!fl_hide_underscore) {
 	const char* us = "_";
 	add(0, us, us+1, x, y+ascent, getsize(),getsize(), ascent, spacing);
       }
@@ -721,5 +721,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.51 2004/10/01 07:07:53 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.52 2004/11/12 06:50:19 spitzak Exp $".
 //

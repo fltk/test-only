@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.10 2004/06/04 08:58:03 spitzak Exp $"
+// "$Id: Menu.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -68,13 +68,14 @@ public:
   int children() const ;
   Widget* child(const int* indexes, int level) const ;
   Widget* child(int index) const ;
+
   Widget* item() const {return item_;}
   Widget* item(Widget* v) {return item_ = v;}
-  bool focus(const int* indexes, int level);
-  Widget* get_focus();
 
-  int value() const {return Group::focus();}
-  void value(int v) {Group::focus(v);}
+  bool set_item(const int* indexes, int level);
+  Widget* get_item();
+  int value() const {return Group::focus_index();}
+  bool value(int v);
   int  size() const {return children();}
 
   void layout_in(Widget*,const int* indexes, int level) const;
@@ -90,9 +91,9 @@ public:
 
   Widget* find(const char*) const;
   void remove(const char* l) { delete find(l); }
-  Widget* add(const char*, int shortcut, Callback*, void* = 0, int = 0);
-  Widget* replace(const char*, int scut, Callback*, void* = 0, int = 0);
-  Widget* insert(int n, const char*, int scut, Callback*, void* = 0, int = 0);
+  Widget* add(const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
+  Widget* replace(const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
+  Widget* insert(int n, const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
   Widget* add(const char*, void* = 0);
   Widget* replace(const char*, void* = 0);
   Widget* insert(int n, const char*, void* = 0);
@@ -115,15 +116,15 @@ public:
   void menu(const Fl_Menu_Item* m) {copy(m,0);}
   void replace(int n, const char* s) { child(n)->label(s); }
   void replace(const char* l, const char* s) { find(l)->label(s); }
-  void shortcut(const char* l, int s) { find(l)->shortcut(s); }
-  void shortcut(int s) {Widget::shortcut(s);}
-  int shortcut() const {return Widget::shortcut();}
-  void shortcut(int i, int s) { child(i)->shortcut(s); }
+  void shortcut(const char* l, unsigned s) { find(l)->shortcut(s); }
+  void shortcut(unsigned s) {Widget::shortcut(s);}
+  unsigned shortcut() const {return Widget::shortcut();}
+  void shortcut(int i, unsigned s) { child(i)->shortcut(s); }
 //int index(Fl_Menu_Item* m) const { return m - menu_; }
 //int index(const char* label) const;
 //void replace(Fl_Menu_Item* m, const char* s) { replace(index(m), s); }
 //void remove(Fl_Menu_Item* m) { remove(index(m)); }
-//void shortcut(Fl_Menu_Item* m, int s) {shortcut(index(m), s);}
+//void shortcut(Fl_Menu_Item* m, unsigned s) {shortcut(index(m), s);}
 //void mode(int i,int x);
 //void mode(Fl_Menu_Item* m, int x) {mode(index(m), x);}
 //void mode(const char* l, int x) {mode(index(l), x);}
@@ -152,5 +153,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.10 2004/06/04 08:58:03 spitzak Exp $".
+// End of "$Id: Menu.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.17 2004/10/09 07:33:35 spitzak Exp $"
+// "$Id: Style.h,v 1.18 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -146,7 +146,7 @@ class FL_API Style {
   unsigned char	scrollbar_width_;
   bool		dynamic_;
   // global settings:
-  static bool	hide_shortcut_;
+  static bool	hide_underscore_;
   static bool   draw_boxes_inactive_;
   static int	wheel_scroll_lines_;
 
@@ -172,7 +172,7 @@ class FL_API Style {
   unsigned char	scrollbar_align() const;
   unsigned char	scrollbar_width() const;
 
-  bool		hide_shortcut() const {return hide_shortcut_;}
+  bool		hide_underscore() const {return hide_underscore_;}
   bool		draw_boxes_inactive() const {return draw_boxes_inactive_;}
   int		wheel_scroll_lines() const {return wheel_scroll_lines_;}
 
@@ -200,7 +200,7 @@ class FL_API Style {
   void scrollbar_align	(unsigned char v) {scrollbar_align_ = v;}	
   void scrollbar_width	(unsigned char v) {scrollbar_width_ = v;}	
 
-  void hide_shortcut	(bool v)	{hide_shortcut_ = v;	}
+  void hide_underscore	(bool v)	{hide_underscore_ = v;	}
   void draw_boxes_inactive(bool v)	{draw_boxes_inactive_ = v;}
   void wheel_scroll_lines(int v)	{wheel_scroll_lines_ = v;}
 
@@ -241,5 +241,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.17 2004/10/09 07:33:35 spitzak Exp $".
+// End of "$Id: Style.h,v 1.18 2004/11/12 06:50:13 spitzak Exp $".
 //

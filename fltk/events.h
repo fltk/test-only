@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.10 2004/08/07 20:48:34 spitzak Exp $"
+// "$Id: events.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -64,7 +64,7 @@ enum {
 };
 
 /*! Values returned by event_key(), passed to event_key_state() and
-  get_key_state(), and used for the low 16 bits of Widget::shortcut().
+  get_key_state(), and used for the low 16 bits of add_shortcut().
 
   The actual values returned are based on X11 keysym values, though
   fltk always returns "unshifted" values much like Windows does. A
@@ -154,7 +154,7 @@ enum {
 };
 
 /*! Flags returned by event_state(), and used as the high 16 bits
-  of Widget::shortcut() values (the low 16 bits are all zero, so these
+  of Widget::add_shortcut() values (the low 16 bits are all zero, so these
   may be or'd with key values).
 
   The inline function BUTTON(n) will turn n (1-8) into the flag for a
@@ -202,12 +202,12 @@ extern FL_API int e_dx;
 extern FL_API int e_dy;
 extern FL_API int e_x_root;
 extern FL_API int e_y_root;
-extern FL_API int e_state;
+extern FL_API unsigned e_state;
 extern FL_API int e_clicks;
-extern FL_API int e_is_click;
-extern FL_API int e_keysym;
-extern FL_API int e_length;
-extern FL_API char* e_text;
+extern FL_API unsigned e_is_click;
+extern FL_API unsigned e_keysym;
+extern FL_API unsigned e_length;
+extern FL_API const char* e_text;
 extern FL_API float e_pressure;
 extern FL_API float e_x_tilt;
 extern FL_API float e_y_tilt;
@@ -237,13 +237,13 @@ inline int  event_clicks()		{return e_clicks;}
 inline void event_clicks(int i)		{e_clicks = i;}
 inline bool event_is_click()		{return e_is_click != 0;}
 inline void event_is_click(bool)	{e_is_click = 0;} // only false works!
-inline int  event_state()		{return e_state;}
-inline bool event_state(int i)		{return (e_state&i) != 0;}
-inline int  event_key()			{return e_keysym;}
-inline int  event_button()		{return e_keysym;}
-FL_API bool event_key_state(int);
+inline unsigned event_state()		{return e_state;}
+inline bool event_state(unsigned i)	{return (e_state&i) != 0;}
+inline unsigned event_key()		{return e_keysym;}
+inline unsigned event_button()		{return e_keysym;}
+FL_API bool event_key_state(unsigned);
 inline const char* event_text() 	{return e_text;}
-inline int  event_length() 		{return e_length;}
+inline unsigned event_length() 		{return e_length;}
 inline float event_pressure() 	{return e_pressure;}
 inline float event_x_tilt()     {return e_x_tilt;}
 inline float event_y_tilt()     {return e_y_tilt;}
@@ -251,13 +251,21 @@ inline int  event_device()      {return e_device;}
 
 // tests on current event:
 FL_API bool event_inside(int,int,int,int);
-FL_API bool test_shortcut(int shortcut);
-FL_API const char* key_name(int key);
 FL_API bool compose(int &del);
 inline void compose_reset()		{compose_state = 0;}
 
+// shortcuts:
+struct ShortcutAssignment {Widget* widget; unsigned key;};
+FL_API const ShortcutAssignment* list_shortcuts(unsigned key, unsigned& count);
+FL_API const ShortcutAssignment* list_shortcuts(const Widget*,unsigned& count);
+FL_API const ShortcutAssignment* list_shortcuts(unsigned& count);
+FL_API const ShortcutAssignment* list_matching_shortcuts(unsigned& count);
+FL_API bool try_shortcut();
+FL_API const char* key_name(unsigned key);
+FL_API unsigned key(const char* name);
+
 // get current information, not info from last event:
-FL_API bool get_key_state(int);
+FL_API bool get_key_state(unsigned);
 FL_API void get_mouse(int &,int &);
 
 // event destinations:

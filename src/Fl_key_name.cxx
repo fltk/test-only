@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.14 2004/11/12 06:50:17 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -27,8 +27,7 @@
 #include <fltk/events.h>
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
-#include <ctype.h>
-#include <string.h>
+#include <fltk/string.h>
 #if USE_X11
 #include <fltk/x.h>
 #endif
@@ -37,7 +36,7 @@ using namespace fltk;
 // This table must be in numeric order by fltk (X) keysym number.
 // On X the table is much shorter as it is only the names that
 // are not returned correctly by XKeysymToString().
-struct Keyname {int key; const char* name;};
+struct Keyname {unsigned key; const char* name;};
 static Keyname table[] = {
 #if !USE_X11
   {BackSpaceKey, "Backspace"},
@@ -75,29 +74,39 @@ static Keyname table[] = {
 #endif
 };
 
+// Secret control for fltk::key_name.
+// 0 = all letters are returned lower-case
+// 1 = all letters are returned upper-case (default)
+// 2 = letters are uppercase if SHIFT is on
+FL_API int fl_key_name_uppercase = 1;
+
 /*!
-  Unparse a key symbol such as fltk::SpaceKey optionally or'd with
-  shift flags such as fltk::SHIFT, into a human-readable string like
-  "Alt+N". If the shortcut is zero an empty string is returned. The
-  return value points at a static buffer that is overwritten with each
-  call.
+  Unparse a key such as a value returned by fltk::event_key(), or a
+  key or'd with shift flags (such as returned by fltk::event_state())
+  used as the value of fltk::Widget::hotkey(). Returns a pointer to a
+  human-readable string like "Alt+N". If the hotkey is zero an empty
+  string is returned. The return value points at a static buffer that
+  is overwritten with each call.
+
+  The opposite function is fltk::key().
 */
-const char* fltk::key_name(int shortcut) {
+const char* fltk::key_name(unsigned hotkey) {
   static char buf[20];
   char *p = buf;
-  if (!shortcut) {*p = 0; return buf;}
-  if (shortcut & META) {strcpy(p,"Meta+"); p += 5;}
-  if (shortcut & ALT) {strcpy(p,"Alt+"); p += 4;}
-  if (shortcut & SHIFT) {strcpy(p,"Shift+"); p += 6;}
-  if (shortcut & CTRL) {strcpy(p,"Ctrl+"); p += 5;}
-  int key = shortcut & 0xFFFF;
-
+  if (!hotkey) {*p = 0; return buf;}
+  if (hotkey & META) {strcpy(p,"Meta+"); p += 5;}
+  if (hotkey & ALT) {strcpy(p,"Alt+"); p += 4;}
+  if (hotkey & SHIFT) {strcpy(p,"Shift+"); p += 6;}
+  if (hotkey & CTRL) {strcpy(p,"Ctrl+"); p += 5;}
+  unsigned key = hotkey & 0xFFFF;
+  // Turn control characters into the key that would produce them:
+  if (key < 32 || key==127) key |= 0xff00;
   // binary search the table for a match:
-  int a = 0;
-  int b = sizeof(table)/sizeof(*table);
+  unsigned a = 0;
+  unsigned b = sizeof(table)/sizeof(*table);
   const char* q = 0;
   while (a < b) {
-    int c = (a+b)/2;
+    unsigned c = (a+b)/2;
     if (table[c].key == key) {q = table[c].name; break;}
     if (table[c].key < key) a = c+1;
     else b = c;
@@ -128,11 +137,63 @@ const char* fltk::key_name(int shortcut) {
     return buf;
   }
   // if all else fails use the keysym as a character:
-  *p++ = uchar(key);
-  *p = 0;
+  switch (fl_key_name_uppercase) {
+  case 0: *p = uchar(key); break;
+  case 2: if (!(hotkey&SHIFT)) {*p = uchar(key); break;}
+  default: *p = toupper(uchar(key)); break;
+  }
+  *++p = 0;
   return buf;
 }
 
+/*!
+  Turn a string into a fltk::event_key() value or'd with
+  fltk::event_shift() flags. The returned value can be used by by
+  fltk::Widget::add_shortcut().  Any error, or a null or zero-length
+  string, returns 0.
+
+  Currently this understands prefixes of "Alt+", "Shift+", and "Ctrl+"
+  to turn on fltk::ALT, fltk::SHIFT, and fltk::CTRL. Case is ignored
+  and the '+' can be a '-' instead and the prefixes can be in any
+  order.  You can also use '#' instead of "Alt+", '+' instead of
+  "Shift+", and '^' instead of Ctrl+.
+
+  After the shift prefixes there can either be a single ASCII letter,
+  "Fn" where n is a number to indicate a function key, or "0xnnnn"
+  to get an arbitrary fltk::event_key() enumeration value.
+
+  The inverse function to turn a number into a string is fltk::key_name().
+  Currently this function does not parse some strings fltk::key_name() can
+  return, such as the names of arrow keys!
+*/
+unsigned fltk::key(const char* name) {
+  if (!name || !*name) return 0;
+  // read all the shift prefixes:
+  int shifts = 0;
+  for (;;) {
+    if (*name == '#') {
+      shifts |= fltk::ALT; name++;
+    } else if (*name == '+') {
+      shifts |= fltk::SHIFT; name++;
+    } else if (*name == '^') {
+      shifts |= fltk::CTRL; name++;
+    } else if (!strncasecmp(name, "alt", 3)  && (name[3]=='-'||name[3]=='+')) {
+      shifts |= fltk::ALT; name += 4;
+    } else if (!strncasecmp(name, "shift",5) && (name[5]=='-'||name[5]=='+')) {
+      shifts |= fltk::SHIFT; name += 6;
+    } else if (!strncasecmp(name, "ctrl", 4) && (name[4]=='-'||name[4]=='+')) {
+      shifts |= fltk::CTRL; name += 5;
+    } else break;
+  }
+  if (!*name) return 0;
+  if (name[1]) {
+    if (name[0]=='F' || name[0]=='f')
+      return shifts | (fltk::F0Key+(int)strtol(name+1,0,0));
+    return shifts | (int)strtol(name,0,0); // allow 0xf00 to get any key
+  }
+  return shifts | *name;
+}
+
 //
-// End of "$Id: Fl_key_name.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.14 2004/11/12 06:50:17 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.112 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.113 2004/11/12 06:50:17 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -45,6 +45,9 @@ The window's callback is done if the user tries to close a window
 using the window manager and fltk::modal() is zero or equal to the
 window. Window has a default callback that calls Window::hide() and
 calls exit(0) if this is the last top-level window.
+
+You can set the shortcut() and then that key will call the callback.
+If you don't change it then that key will close the window.
 
 */
 
@@ -214,15 +217,77 @@ const char* Window::xclass_ = "fltk";
 bool fl_show_iconic; // set by iconize() or by -i arg switch
 
 #if defined(_WIN32)
-// activate some other window so the active app does not change!
-static void keep_app_active() {
-  if (grab()) return;
-  for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
-    if (!x->window->parent() && x->window->visible()) {
-      //BringWindowToTop(x->xid);
-      SetActiveWindow(x->xid);
+
+// Windows will directly call the WndProc inside of system calls that
+// manipulate windows. This causes all kinds of bugs because there is
+// lots of code that assummes any side effects of draw() or handle()
+// will not happen when they destroy or hide the window. To avoid this
+// all the calls are delayed by putting this in this queue and are
+// executed when fltk calls GetMessage next. This will delay the callback
+// to WndProc to the time programs expect it (inside fltk::wait()).
+
+enum DeferredCallType {
+  SHOW_WINDOW, KEEP_ACTIVE, OPEN_ICON, RAISE_WINDOW, DESTROY_WINDOW
+};
+struct DeferredCall {DeferredCallType what; HWND window; int argument;};
+static DeferredCall* deferred_queue;
+static int deferred_queue_size = 0;
+static int deferred_queue_alloc = 0;
+static void deferred_call(DeferredCallType what, HWND window, int arg=0) {
+  if (deferred_queue_size >= deferred_queue_alloc) {
+    deferred_queue_alloc = deferred_queue_alloc ? deferred_queue_alloc*2 : 32;
+    DeferredCall* newqueue = new DeferredCall[deferred_queue_alloc];
+    memcpy(newqueue, deferred_queue, deferred_queue_size*sizeof(DeferredCall));
+    delete[] deferred_queue;
+    deferred_queue = newqueue;
+  }
+  deferred_queue[deferred_queue_size].what = what;
+  deferred_queue[deferred_queue_size].window = window;
+  deferred_queue[deferred_queue_size].argument = arg;
+  ++deferred_queue_size;
+}
+
+// Programs that never call wait() (because they are using another GUI
+// toolkit along with fltk) may need to call this occasionally:
+void fl_do_deferred_calls() {
+  // Notice that WndProc may be called and put *more* things on the queue.
+  // Be sure to handle this. Yuck.
+  bool keep_active = false;
+  for (int n = 0; n < deferred_queue_size; n++) {
+    DeferredCall& c = deferred_queue[n];
+    switch (c.what) {
+    case SHOW_WINDOW:
+      ShowWindow(c.window, c.argument);
+      break;
+    case KEEP_ACTIVE:
+      keep_active = true;
+      break;
+    case OPEN_ICON:
+      OpenIcon(c.window);
+      break;
+    case RAISE_WINDOW:
+      BringWindowToTop(c.window);
+      break;
+    case DESTROY_WINDOW:
+      DestroyWindow(c.window);
       break;
     }
+  }
+  deferred_queue_size = 0;
+#if 0
+  // This attemts to fix a Windoze bug where dismissing the child-of
+  // a child-of window deactivates the app. This bug has been in every
+  // version of Windows for years and affects IE and other Microsoft
+  // programs:
+  if (keep_active && !grab()) {
+    for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
+      if (!x->window->parent() && x->window->visible()) {
+	//BringWindowToTop(x->xid);
+	SetActiveWindow(x->xid);
+	break;
+      }
+  }
+#endif
 }
 #endif
 
@@ -237,7 +302,7 @@ int Window::handle(int event) {
 #if USE_X11
     XMapWindow(xdisplay, i->xid);
 #elif defined(_WIN32)
-    ShowWindow(i->xid, SW_RESTORE);
+    deferred_call(SHOW_WINDOW, i->xid, SW_RESTORE);
 #elif defined(__APPLE__)
     if (parent()) ; // needs to update clip and redraw...
     else ShowWindow(i->xid);
@@ -251,16 +316,16 @@ int Window::handle(int event) {
 #if USE_X11
     if (i) XUnmapWindow(xdisplay, i->xid);
 #elif defined(_WIN32)
-    if (i) ShowWindow(i->xid, SW_HIDE);
+    if (i) {
+      deferred_call(SHOW_WINDOW, i->xid, SW_HIDE);
+      deferred_call(KEEP_ACTIVE, i->xid);
+    }
 #elif defined(__APPLE__)
     if (i) HideWindow(i->xid);
 #else
 #error
 #endif
 
-#if defined(_WIN32)
-    keep_app_active();
-#endif
     break;
 
   case PUSH:
@@ -289,7 +354,8 @@ int Window::handle(int event) {
     break;
 #if USE_X11
   case PUSH:
-    // unused clicks raise the window.
+    // Unused clicks should raise the window. Windows unfortunatly
+    // raises the window on *all* clicks so we don't bother except on X.
     if (shown()) XMapRaised(xdisplay, i->xid);
 #endif
   }
@@ -408,7 +474,7 @@ void Window::show() {
       showtype = SW_SHOWNOACTIVATE;
     else
       showtype = SW_SHOWNORMAL;
-    ShowWindow(i->xid, showtype);
+    deferred_call(SHOW_WINDOW, i->xid, showtype);
 #elif defined(__APPLE__)
     if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
@@ -430,8 +496,8 @@ void Window::show() {
 #if USE_X11
       XMapRaised(xdisplay, i->xid);
 #elif defined(_WIN32)
-      if (IsIconic(i->xid)) OpenIcon(i->xid);
-      if (!grab() && !override()) BringWindowToTop(i->xid);
+      if (IsIconic(i->xid)) deferred_call(OPEN_ICON, i->xid);
+      if (!grab() && !override()) deferred_call(RAISE_WINDOW, i->xid);
 #elif defined(__APPLE__)
       ShowWindow(i->xid); // does this de-iconize?
       if (!grab() && !override()) {
@@ -738,8 +804,8 @@ void Window::destroy() {
   XDestroyWindow(xdisplay, x->xid);
 #elif defined(_WIN32)
   if (x->region) DeleteObject(x->region);
-  DestroyWindow(x->xid);
-  keep_app_active();
+  deferred_call(DESTROY_WINDOW, x->xid);
+  deferred_call(KEEP_ACTIVE, x->xid);
 #elif defined(__APPLE__)
   if (x->region) DisposeRgn(x->region);
   DisposeWindow(x->xid);
@@ -758,5 +824,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.112 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.113 2004/11/12 06:50:17 spitzak Exp $".
 //

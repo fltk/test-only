@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.20 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -129,13 +129,7 @@ static void kill_selection(TextEditor* e) {
 int TextEditor::kf_default(int c, TextEditor* e) {
 
   // See if the key is a shortcut assigned to some other widget or menu item:
-  static bool recursion;
-  if (!recursion) {
-    recursion = true;
-    bool ret = fltk::handle(SHORTCUT, e->window()) != 0;
-    recursion = false;
-    if (ret) return 1;
-  }
+  if (try_shortcut()) return 1;
 
   // Emulate Emacs for a lot of keys:
   int key = 0;
@@ -532,5 +526,5 @@ int TextEditor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.20 2004/11/12 06:50:16 spitzak Exp $".
 //

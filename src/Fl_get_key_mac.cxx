@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_mac.cxx,v 1.7 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_get_key_mac.cxx,v 1.8 2004/11/12 06:50:17 spitzak Exp $"
 //
 // MacOS keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 58, LeftAltKey }, { 58, RightAltKey },
 };
 
-static int fltk2mac(int fltk) {
+static unsigned short fltk2mac(unsigned fltk) {
   if (fltk >= 'a' && fltk <= 'z') fltk-=('a'-'A');
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
@@ -82,14 +82,14 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-bool fltk::event_key_state(int k) {
+bool fltk::event_key_state(unsigned k) {
   return get_key_state(k);
 }
 
 //#include <stdio.h>
 
 //: returns true, if that key is pressed right now
-bool fltk::get_key_state(int k) {
+bool fltk::get_key_state(unsigned k) {
   KeyMap foo;
   GetKeys(foo);
 #ifdef MAC_TEST_FOR_KEYCODES
@@ -105,5 +105,5 @@ bool fltk::get_key_state(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_mac.cxx,v 1.7 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_get_key_mac.cxx,v 1.8 2004/11/12 06:50:17 spitzak Exp $".
 //

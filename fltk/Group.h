@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h,v 1.6 2004/06/04 08:58:03 spitzak Exp $"
+// "$Id: Group.h,v 1.7 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
@@ -72,9 +72,9 @@ public:
   void init_sizes();
   bool resize(int,int,int,int)	;
 
-  void focus(int i) {focus_ = i;}
-  void focus(Widget* w) {focus(find(w));}
-  int focus() const {return focus_;}
+  void focus_index(int v) {focus_index_ = v;}
+  void set_focus(Widget* w) {focus_index_ = find(w);}
+  int  focus_index() const {return focus_index_;}
   static int navigation_key();
 
   // back compatability function:
@@ -94,9 +94,8 @@ protected:
 private:
 
   int children_;
-  int focus_;
+  int focus_index_;
   Widget** array_;
-
   Widget* resizable_;
   Flags resize_align_;
   int *sizes_; // remembered initial sizes of children
@@ -110,5 +109,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h,v 1.6 2004/06/04 08:58:03 spitzak Exp $".
+// End of "$Id: Group.h,v 1.7 2004/11/12 06:50:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.37 2004/10/29 06:42:56 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.38 2004/11/12 06:50:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -128,7 +128,7 @@ static int innards(
     message.h(textfield->y());
     textfield->type(itype);
     textfield->value(istr);
-    window.focus(textfield);
+    window.set_focus(textfield);
   }
 
   window.resizable(message);
@@ -176,7 +176,7 @@ static int innards(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
 	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
       window.hotspot(button);
-      if (!istr) window.focus(button);
+      if (!istr) window.set_focus(button);
     } else {
       button = new Button(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
@@ -304,5 +304,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.37 2004/10/29 06:42:56 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.38 2004/11/12 06:50:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.11 2004/01/18 07:34:37 spitzak Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.12 2004/11/12 06:50:16 spitzak Exp $"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
@@ -121,6 +121,8 @@ Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
   return 0;
 }
 
+// Searches the array for a shortcut that matches the current event
+// and returns it:
 const Fl_Menu_Item*
 Fl_Menu_Item::test_shortcut() const
 {

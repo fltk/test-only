@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.39 2004/05/18 15:53:41 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.40 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -103,7 +103,7 @@ FL_API bool fl_menu_replaced; // hack so fluid can tell what replace() did
 static Widget* innards(
   Group* top,
   const char *label,
-  int shortcut,
+  unsigned shortcut,
   Callback *callback,	
   void *data,
   int flags,
@@ -237,7 +237,7 @@ static Widget* innards(
 */
 Widget* Menu::add(
   const char *label,
-  int shortcut,
+  unsigned shortcut,
   Callback *callback,	
   void *data,
   int flags
@@ -255,7 +255,7 @@ Widget* Menu::add(
 */
 Widget* Menu::replace(
   const char *label,
-  int shortcut,
+  unsigned shortcut,
   Callback *callback,
   void *data,
   int flags
@@ -273,7 +273,7 @@ Widget* Menu::replace(
 Widget* Menu::insert(
   int n,
   const char *label,
-  int shortcut,
+  unsigned shortcut,
   Callback *callback,
   void *data,
   int flags
@@ -341,7 +341,7 @@ Widget* Menu::add(const char *str) {
   Widget* r = 0;
   while (*str) {
     const char* start = str;
-    int shortcut = 0;
+    unsigned shortcut = 0;
     char *c;
     for (c = buf; *str && *str != '|'; str++) {
 //    if (*str == '\t') {*c++ = 0; shortcut = old_shortcut(str);}
@@ -361,5 +361,5 @@ Widget* Menu::add(const char *str) {
 #endif
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.39 2004/05/18 15:53:41 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.40 2004/11/12 06:50:16 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-// "$Id: Fl_Choice.cxx,v 1.78 2004/08/02 07:35:18 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.79 2004/11/12 06:50:14 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -39,10 +39,9 @@ by typing up and down arrow keys to cycle amoung the items.  Typing
 the fltk::Widget::shortcut() of any of the
 items will also change the value to that item.
 
-The menu will also pop up in response to shortcuts indicated by
-putting a '&' character in the label() or by setting the shortcut()
-of this widget. The user can then use arrow keys or the mouse to change
-the selected item.
+If you set a shortcut() on this widget itself or put &x in the label,
+that shortcut will pop up the menu. The user can then use arrow keys
+or the mouse to change the selected item.
 
 When the user changes the value() the callback is done.
 
@@ -69,7 +68,7 @@ using namespace fltk;
 // The dimensions for the glyph in this and the PopupMenu are exactly
 // the same, so that glyphs may be shared between them.
 
-extern bool fl_hide_shortcut;
+extern bool fl_hide_underscore;
 
 /*! You can change the icon drawn on the right edge by setting glyph()
   to your own function that draws whatever you want.
@@ -91,7 +90,7 @@ void Choice::draw() {
       setcolor(selection_color());
       fillrect(X+2, Y+2, W-w1-4, H-4);
     }
-    Widget* o = get_focus();
+    Widget* o = get_item();
     //if (!o && children()) o = child(0);
     if (o) {
       Item::set_style(this);
@@ -103,9 +102,9 @@ void Choice::draw() {
       push_matrix();
       translate(X, Y+((H-o->height())>>1));
       int save_w = o->w(); o->w(W-w1);
-      fl_hide_shortcut = true;
+      fl_hide_underscore = true;
       o->draw();
-      fl_hide_shortcut = false;
+      fl_hide_underscore = false;
       Item::clear_style();
       o->w(save_w);
       o->flags(saved);
@@ -115,42 +114,11 @@ void Choice::draw() {
   }
 }
 
-/*! Set the index of the item chosen. This causes it to redraw() to
-  show the new item. Otherwise it is identical to Menu::value().
-*/
-int Choice::value(int v) {
-  if (focus(&v, 0)) {redraw(DAMAGE_VALUE); return true;}
-  return false;
-}
-
-#if 0
-int Choice::focus(const int* indexes, int level) {
-  // rather annoying kludge to try to detect if the item from an List
-  // has changed by looking for the label and user data to change:
-  Widget* save_item = item();
-  const char* save_label = 0;
-  void* save_data = 0;
-  if (save_item) {
-    save_label = save_item->label();
-    save_data = save_item->user_data();
-  }
-  Menu::focus(indexes, level);
-  if (item() == save_item) {
-    if (!save_item) return 0;
-    if (save_label == save_item->label() && save_data==save_item->user_data())
-      return 0;
-  }
-  redraw();
-  return 1;
-}
-#endif
-
 static bool try_item(Choice* choice, int i) {
   Widget* w = choice->child(i);
   if (!w->takesevents()) return false;
   choice->value(i);
   choice->execute(w);
-  choice->redraw(DAMAGE_VALUE);
   return true;
 }  
 
@@ -267,5 +235,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.78 2004/08/02 07:35:18 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.79 2004/11/12 06:50:14 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.36 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.37 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -22,9 +22,8 @@
 //
 
 #include <fltk/Item.h>
-#include <fltk/Image.h>
+#include <fltk/Symbol.h>
 #include <fltk/CheckButton.h>
-#include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <string.h>
 
@@ -163,6 +162,8 @@ int Item::handle(int) {return 0;}
 ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
   style(Item::default_style);
   align(ALIGN_LEFT|ALIGN_INSIDE);
+  // Undo the Menu class changing default_callback:
+  callback(Widget::default_callback);
 }
 
 // implementation of draw & layout should be identical to Item type()==0

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.25 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.26 2004/11/12 06:50:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -325,6 +325,7 @@ bool fltk::compose(int& del) {
   else if (ascii == '_' || ascii == '=') ascii = '-';
 
   static int plen;
+  static char textbuffer[10];
 
   if (e_length > 1) return true; // probably indicates InputMethod was used
 
@@ -340,9 +341,10 @@ bool fltk::compose(int& del) {
 	if (p[1] == ' ') {
 	  int code = (p-compose_pairs)/2+0xA0;
 	  // convert code to utf8:
-	  e_text[0] = 0xc0 | code>>6;
-	  e_text[1] = 0x80 | (code & 0x3f);
-	  e_text[2] = 0;
+	  e_text = textbuffer;
+	  textbuffer[0] = 0xc0 | code>>6;
+	  textbuffer[1] = 0x80 | (code & 0x3f);
+	  textbuffer[2] = 0;
 	  plen = e_length = 2;
 	  return true;
 	}
@@ -365,9 +367,10 @@ bool fltk::compose(int& del) {
       if (p[0] == ascii && p[1] == c1 || p[1] == ascii && p[0] == c1) {
 	int code = (p-compose_pairs)/2+0xA0;
 	// convert code to utf8:
-	e_text[0] = 0xc0 | code>>6;
-	e_text[1] = 0x80 | (code & 0x3f);
-	e_text[2] = 0;
+	e_text = textbuffer;
+	textbuffer[0] = 0xc0 | code>>6;
+	textbuffer[1] = 0x80 | (code & 0x3f);
+	textbuffer[2] = 0;
 	e_length = 2;
 	del = plen; // delete the old character and insert new one
 	compose_state = 0;

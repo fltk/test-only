@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.183 2004/10/29 06:42:54 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.184 2004/11/12 06:50:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -97,16 +97,16 @@ int	  fltk::e_type,
 	  fltk::e_dy,
 	  fltk::e_x_root,
 	  fltk::e_y_root,
-	  fltk::e_state,
-	  fltk::e_clicks,
-	  fltk::e_is_click,
-	  fltk::e_keysym,
+  	  fltk::e_clicks,
 	  fltk::e_device = DEVICE_MOUSE;
+unsigned  fltk::e_state,
+	  fltk::e_keysym,
+	  fltk::e_is_click,
+	  fltk::e_length;
 float     fltk::e_pressure,
           fltk::e_x_tilt,
           fltk::e_y_tilt;
-char     *fltk::e_text = "";
-int	  fltk::e_length;
+const char *fltk::e_text = "";
 bool      fltk::grab_,
 	  fltk::exit_modal_;
 
@@ -747,7 +747,7 @@ void Widget::throw_focus() {
 #endif
   if (contains(fltk::belowmouse())) {belowmouse_ = 0; e_is_click = 0;}
   if (this == xmousewin) xmousewin = Window::first();
-  if (contains(focus())) focus_ = 0;
+  if (contains(focus_)) focus_ = 0;
   if (this == xfocus) xfocus = 0;
   if (this == Tooltip::current()) Tooltip::current(0);
   if (this == modal_) {modal_ = 0; exit_modal();}
@@ -921,7 +921,7 @@ static const handler_link *handlers = 0;
   Currently this is called for these reasons:
   - If there is a keystroke that no widgets are interested in, this is
     called with fltk::SHORTCUT. You can use this to implement global
-    shortcut keys.
+    hotkeys.
   - Unrecognized X events cause this to be called with NO_EVENT. The
     Window parameter is set if fltk can figure out the target window
     and it is an fltk one. You can then use system specific code to
@@ -946,8 +946,8 @@ void fltk::add_event_handler(int (*h)(int, Window*)) {
 
 bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
+// Set event_x() and event_y() correctly for target widget and send event:
 static bool send_from_root(Widget* widget, int event) {
-  // get the mouse coordinates relative to the parent of widget:
   e_x = e_x_root;
   e_y = e_y_root;
   for (Widget *t= widget->parent(); t; t = t->parent()) {
@@ -956,12 +956,8 @@ static bool send_from_root(Widget* widget, int event) {
   return widget->send(event) != 0;
 }
 
-extern int fl_pushed_dx, fl_pushed_dy;
-Window* fl_actual_window;
-
-/*! Return true if modal state is on, but w is not a child of modal.
-  Possible contains() should do this all the time.
-*/
+// Similar to !modal->contains(b) but it also follows the child_of
+// pointers to windows. Possibly this is what contains() should do always.
 static bool outside_modal(const Widget* b) {
   if (!modal()) return false;
   if (!b) return true;
@@ -974,6 +970,39 @@ static bool outside_modal(const Widget* b) {
     }
     b = c;
   }
+}
+
+
+extern int fl_pushed_dx, fl_pushed_dy;
+Window* fl_actual_window;
+
+/*!
+  Try sending the current KEY event as a SHORTCUT event.
+
+  Normally the focus() gets all keystrokes, and shortcuts are only
+  tested if that widget indicates it is uninterested by returning zero
+  from Widget::handle().  However in some cases the focus wants to use
+  the keystroke <i>only if it is not a shortcut</i>.  The most common
+  example is Emacs-style editing keystrokes in text editing widgets,
+  which conflict with Microsoft-compatable menu key bindings, but we
+  want the editing keys to work if there is no conflict.
+
+  This will send a SHORTCUT event just like the focus returned zero,
+  to every widget in the focus window, and to the add_handler() calls,
+  if any. It will return true if any widgets were found that were
+  interested in it. A handle() method can call this in a KEY event. If
+  it returns true, return 1 \e immediatly, as the shortcut will have
+  executed and may very well have destroyed your widget. If this
+  returns false, then do what you want the key to do.
+
+*/
+bool fltk::try_shortcut() {
+  static bool recursion;
+  if (recursion) return false;
+  recursion = true;
+  bool ret = handle(SHORTCUT, fl_actual_window) != 0;
+  recursion = false;
+  return ret;
 }
 
 /*! This is the function called from the system-specific code for all
@@ -1014,13 +1043,9 @@ bool fltk::handle(int event, Window* window)
   case MOVE:
   case DRAG: // does not happen from system code, but user code may send this
     if (pushed()) {
-      if (outside_modal(pushed())) {
-	return send_from_root(modal_, DRAG);
-      } else {
-	e_x = e_x_root+fl_pushed_dx;
-	e_y = e_y_root+fl_pushed_dy;
-	return pushed()->handle(DRAG) != 0;
-      }
+      e_x = e_x_root+fl_pushed_dx;
+      e_y = e_y_root+fl_pushed_dy;
+      return pushed()->handle(DRAG) != 0;
     }
     {Widget* pbm = belowmouse();
     if (outside_modal(to)) to = modal_;
@@ -1031,15 +1056,12 @@ bool fltk::handle(int event, Window* window)
   case RELEASE:
     to = pushed();
     if (!event_state(ANY_BUTTON)) pushed_=0;
-    if (outside_modal(to)) {
-      return send_from_root(modal_, RELEASE);
-    } else if (to) {
+    if (to) {
       e_x = e_x_root+fl_pushed_dx;
       e_y = e_y_root+fl_pushed_dy;
       return to->handle(RELEASE) != 0;
-    } else {
-      break;
     }
+    break;
 
   case LEAVE:
     if (!pushed_) {belowmouse(0); Tooltip::exit();}
@@ -1078,29 +1100,30 @@ bool fltk::handle(int event, Window* window)
     break;
 
   case KEYUP:
+    // Shift keys are sent to all widgets (they should use SHORTCUT for down):
+    if (event_key()>=0xffe1 && event_key()<0xfff0) break;
+    // others go to focus (should follow hotkeys, too...):
     to = focus();
-    // TEMPORARY FIX for making the underscores turn off in menubars:
-    if (!to || event_key()==LeftAltKey || event_key()==RightAltKey)
-      to = window;
     break;
 
+  case 0:
+    goto CALL_GLOBAL_HANDLERS;
 //default: break;
   }
 
   // restrict to modal widgets:
   if (outside_modal(to)) to = modal_;
-
-  bool ret = to && send_from_root(to,event);
-  if (!ret) {
-    // try the chain of global event handlers:
-    for (const handler_link *h = handlers; h; h = h->next)
-      if (h->handle(event, window)) {ret = true; break;}
-  }
+  if (to && send_from_root(to,event)) {dnd_flag = false; return true;}
   dnd_flag = false;
 
-  return ret;
+ CALL_GLOBAL_HANDLERS:
+  // try the chain of global event handlers:
+  for (const handler_link *h = handlers; h; h = h->next)
+    if (h->handle(event, window)) return true;
+
+  return false;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.183 2004/10/29 06:42:54 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.184 2004/11/12 06:50:14 spitzak Exp $".
 //

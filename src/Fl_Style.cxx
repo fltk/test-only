@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.60 2004/09/19 08:54:24 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.61 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -91,7 +91,7 @@ static void revert(Style* s) {
   s->scrollbar_align_	= ALIGN_RIGHT|ALIGN_BOTTOM;
 }
 
-bool Style::hide_shortcut_ = true;
+bool Style::hide_underscore_ = true;
 bool Style::draw_boxes_inactive_ = true;
 int Style::wheel_scroll_lines_ = 3;
 
@@ -227,10 +227,10 @@ int Style::wheel_scroll_lines_ = 3;
   The default is 15.
 */
 
-/*! \fn bool Style::hide_shortcut() const;
+/*! \fn bool Style::hide_underscore() const;
   If false, draw &x in labels as an underscore. If true (the default)
   then the underscores are not drawn. In this case you should limit
-  your &x shortcuts to menubar items, as shortcuts in buttons are not
+  your &x hotkeys to menubar items, as underscores in buttons are not
   visible. The menubar will show them when Alt is held down.
 */
 
@@ -613,5 +613,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.60 2004/09/19 08:54:24 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.61 2004/11/12 06:50:16 spitzak Exp $".
 //

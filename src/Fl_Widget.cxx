@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.115 2004/09/30 06:08:30 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.116 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,6 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) {
   label_	= L;
   image_	= 0;
   tooltip_	= 0;
-  shortcut_	= 0;
 #if CLICK_MOVES_FOCUS
   flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
 #else
@@ -86,6 +85,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) {
 */
 Widget::~Widget() {
   remove_timeout();
+  remove_shortcuts();
   if (parent_) parent_->remove(this);
   throw_focus();
   if (style_->dynamic()) {
@@ -162,29 +162,6 @@ void Widget::copy_label(const char* s) {
 
   Putting '@' commands in to bring up Symbol objects will allow a lot
   of interesting things to be put into the tooltip.
-*/
-
-/*! void Widget::shortcut(ulong key)
-
-  Set the shortcut() value. 
-  Buttons and menu items use the shortcut to identify a keystroke
-  that will activate them. The value is a bitwise OR of a key and a set
-  of shift flags, for example <CODE>fltk::ALT | 'a'</CODE> , <CODE>fltk::ALT |
-  (fltk::F1Key)</CODE>, or just <CODE>'a'</CODE>.  A value of 0 disables
-  the shortcut.
-
-  The key can be any value returned by fltk::event_key(), but will
-  usually be an ASCII letter. Use a lower-case letter unless you
-  require the shift key to be held down.
-
-  The shift flags can be any set of values accepted by
-  fltk::event_state(). If the bit is on that shift key must be pushed.
-  META, ALT, CTRL, and SHIFT must be off if they are not in the shift
-  flags (zero for the other bits indicates a "don't care" setting).
-
-  Shortcuts can also be done in the MS Windows way
-  by putting an '&amp;' in front of a letter in the label(). This is
-  equivalent to <tt>fltk::ALT</tt> and the letter.
 */
 
 /*! \fn void Widget::callback(fltk::Callback*, void*)
@@ -897,117 +874,6 @@ void Widget::remove_timeout() {
   fltk::remove_timeout(widget_timeout, this);
 }
 
-////////////////////////////////////////////////////////////////
-
-#include <ctype.h>
-
-/*! Test to see if the current KEY or SHORTCUT event matches a
-  shortcut() value.
-  A shortcut is a key number such as fltk::SpaceKey or'd with shift
-  flags such as fltk::SHIFT.
-
-  This returns true if event_state() and event_key() match this
-  value exactly.
-
-  This will also return true in some other cases designed to make
-  it easier to match what the user expects for shortcuts:
-  - Only META, ALT, SHIFT, and CTRL must be "off".  A zero in the
-    other shift flags indicates "dont care". For instance we normally
-    don't care is SCROLL_LOCK or BUTTON1 is on, but you can require
-    them to be on by adding them to the shortcut. But you cannot
-    require them to be off (you can test that before calling this,
-    though).
-  - If the key is an uppercase letter like 'A', it matches the letter
-    key whether or not SHIFT is held down. This is due to the common
-    standard of displaying uppercase letters in menu shortcuts. You
-    can explicitly require the SHIFT key to be held down by using
-    SHIFT+'A' or SHIFT+'a'.
-  - A lowercase letter means that SHIFT <i>must not be held down</i>.
-    This allows you to put both uppercase and lowercase shortcuts into
-    the same menu.
-  - If the key is an ASCII character it will ignore SHIFT and match
-    against fltk::event_text()[0]. This will allow you to put '#' or
-    SHIFT+'#' into the shortcut, rather than the SHIFT+'3' that would
-    normally be required. It also means that '3' will match both the
-    main keyboard and the keypad 3.
-  - The character '\\r' will match either Enter key on the keyboard,
-    this is the only way to match both of them. This does not match
-    the user typing CTRL+M.
-  - Control letters are matched by using CTRL+'A'. '\\1' will not
-    match it, because the CTRL key is held down. CTRL+'\\1' would
-    work, but there is no reason to do that.
-  - CTRL+'[' matches the user holding down CTRL and hitting '[', it
-    <i>does not</i> match the Esc key. There is no way to match both
-    methods of typing ^[ with one shortcut.
-
-*/
-bool fltk::test_shortcut(int shortcut) {
-  if (!shortcut) return false;
-
-  int shift = event_state();
-  // see if any required shift flags are off:
-  if ((shortcut&shift) != (shortcut&0x7fff0000)) return false;
-  // record shift flags that are wrong:
-  int mismatch = (shortcut^shift)&0x7fff0000;
-  // these three must always be correct:
-  if (mismatch&(META|ALT|CTRL)) return false;
-
-  int key = shortcut & 0xffff;
-  if (key < 0x7f) key = tolower(key);
-
-  // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(SHIFT)) && key == event_key()) return true;
-
-  // try matching typed punctuation marks and numbers no matter what
-  // key produces them:
-  if (key < 0x7f && !isalpha(key)) {
-    if (key == event_text()[0]) return true;
-    // If Ctrl is held down it can change event_text, change it back:
-    if ((shift&CTRL) && key >= 0x3f && key <= 0x5F
-      && event_text()[0]==(key^0x40)) return true;
-  }
-
-  return false;
-}
-
-/*! Test to see if the current KEY or SHORTCUT event matches a shortcut
-    specified with &x in the label.
-
-    This will match if the character after the first '&' matches the
-    event_text()[0]. Case is ignored. The caller may want to
-    check if ALT or some other shift key is held down before calling
-    this so that plain keys do not do anything.
-
-    This is ignored if flags() has RAW_LABEL turned on (which stops
-    the &x from printing as an underscore. The sequence "&&" is ignored
-    as well because that is used to print a plain '&' in the label.
-*/
-bool Widget::test_label_shortcut() const {
-
-  if (flags() & RAW_LABEL) return false;
-
-  char c = tolower(event_text()[0]);
-  const char* label = this->label();
-  if (!c || !label) return false;
-  for (;;) {
-    if (!*label) return false;
-    if (*label++ == '&') {
-      if (*label == '&') label++;
-      else return (tolower(*label) == c);
-    }
-  }
-}
-
-/*! Same as fltk::test_shortcut(shortcut()) || test_label_shortcut().
-
-    This can be used by simple button type widgets to trigger a callback
-    on a shortcut for either complex shortcut() values or for &x in
-    the label.
-*/
-bool Widget::test_shortcut() const {
-  return fltk::test_shortcut(shortcut()) || test_label_shortcut();
-}
-
 /*! \} */ // end of events chapter of documentation
 
 ////////////////////////////////////////////////////////////////
@@ -1173,5 +1039,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.115 2004/09/30 06:08:30 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.116 2004/11/12 06:50:16 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.157 2004/10/30 05:13:26 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.158 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -105,12 +105,12 @@ public:
   }
 };
 
-extern bool fl_hide_shortcut;
+extern bool fl_hide_underscore;
 
 void MenuTitle::draw() {
 
   const Style* style = menustate->widget->style();
-  if (style->hide_shortcut()) fl_hide_shortcut = true;
+  if (style->hide_underscore()) fl_hide_underscore = true;
   Box* box = style->buttonbox();
   // popup menus may have no box set:
   if (box == NO_BOX) box = Widget::default_style->buttonbox();
@@ -156,7 +156,7 @@ void MenuTitle::draw() {
     box->draw(0, 0, w(), h(), style, OUTPUT);
     draw_label(0, 0, w(), h(), style, OUTPUT);
   }
-  fl_hide_shortcut = false;
+  fl_hide_underscore = false;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -260,9 +260,12 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
     if (iw > W) W = iw;
     if (this->children(array,level+1)>=0) {
       if (16 > hotKeysW) hotKeysW = 16;
-    } else if (item->shortcut()) {
-      int w1 = int(getwidth(key_name(item->shortcut())) + 8.5);
-      if (w1 > hotKeysW) hotKeysW = w1;
+    } else {
+      unsigned hotkey = item->shortcut();
+      if (hotkey) {
+	int w1 = int(getwidth(key_name(hotkey)) + 8.5);
+	if (w1 > hotKeysW) hotKeysW = w1;
+      }
     }
   }
   Item::clear_style();
@@ -300,9 +303,9 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
   Item::set_style(widget);
-  if (widget->style()->hide_shortcut() &&
+  if (widget->style()->hide_underscore() &&
       !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
-    fl_hide_shortcut = true;
+    fl_hide_underscore = true;
 
   const bool horizontal = widget->horizontal();
   if (horizontal) x += leading;
@@ -367,11 +370,13 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 	// Use the item's fontsize for the size of the arrow, rather than h:
 	int nh = int(item->textsize());
 	draw_glyph(GLYPH_RIGHT, x+w-nh, y+((ih-nh)>>1), nh, nh, flags);
-      } else if (item->shortcut() && !widget->parent()) {
-	item->labeltype()->draw(key_name(item->shortcut()),
-				x, y, w-3, ih,
-				item->style(),
-				flags|ALIGN_RIGHT|OUTPUT);
+      } else if (!widget->parent()) {
+	unsigned hotkey = item->shortcut();
+	if (hotkey)
+	  item->labeltype()->draw(key_name(hotkey),
+				  x, y, w-3, ih,
+				  item->style(),
+				  flags|ALIGN_RIGHT|OUTPUT);
       }
       item->flags(save_flags);
       if (clipped) pop_clip();
@@ -380,7 +385,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     else y += ih;
   }
   Item::clear_style();
-  fl_hide_shortcut = false;
+  fl_hide_underscore = false;
 }
 
 /*! Return the index of the item that is under the location mx, my in
@@ -685,7 +690,7 @@ int MWindow::handle(int event) {
     switch (event_key()) {
     case LeftAltKey:
     case RightAltKey:
-      if (style()->hide_shortcut() && !event_clicks()) {
+      if (style()->hide_underscore() && !event_clicks()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
       }
@@ -730,11 +735,11 @@ int MWindow::handle(int event) {
       if (p.indexes[menu] < 0) lastkey = 0;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-	if (widget->active() && fltk::test_shortcut(widget->shortcut())) {
-	  setitem(p, menu, item);
-	  lastkey = 0;
-	  goto EXECUTE;
-	}
+//  	if (widget->active() && widget->test_shortcut(false)) {
+//  	  setitem(p, menu, item);
+//  	  lastkey = 0;
+//  	  goto EXECUTE;
+//  	}
 	// continue unless this item can be picked by the keystroke:
 	if (!widget->takesevents()) continue;
 	if (widget->test_label_shortcut()) {
@@ -766,14 +771,14 @@ int MWindow::handle(int event) {
 	exit_modal();
 	return 1;
       }
-      if (style()->hide_shortcut()) {
+      if (style()->hide_underscore()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
       }
     }
     return 0;
 
-  case ENTER: // this messes up menu bar pulldown shortcuts
+  case ENTER:
   case MOVE:
     if (!track_mouse) return 1;
   case PUSH:
@@ -822,7 +827,7 @@ int MWindow::handle(int event) {
       if (widget->takesevents()) {
 #if 0
 	if ((widget->flags() & MENU_STAYS_UP) && (!p.menubar || p.level)) {
-	  p.widget->focus(p.indexes, p.level);
+	  p.widget->set_item(p.indexes, p.level);
 	  p.widget->execute(widget);
 	  Window* mw = p.menus[p.level];
 	  if (widget->type() == Item::RADIO) mw->redraw();
@@ -897,9 +902,8 @@ Widget* Menu::try_popup(
       if (p.current_children() < 0) break;
       Widget* widget = p.current_widget();
       if (!widget->takesevents()) break;
-      //if (!widget->is_group()) break;
-      int item = ((Group*)widget)->focus();
-      if (item < 0) break;
+      Group* group = (Group*)widget;
+      int item = group->focus_index();
 
       MWindow* mw = p.menus[p.level];
       int nX = mw->x() + mw->w();
@@ -1013,7 +1017,7 @@ Widget* Menu::try_popup(
   if (p.state != DONE_STATE) return 0; // user did not pick anything
 
   // Execute whatever item the user picked:
-  focus(p.indexes, p.level);
+  set_item(p.indexes, p.level);
   if (menubar && !p.level && checkmark(item())) redraw();
   return item();
 }
@@ -1025,7 +1029,7 @@ Widget* Menu::try_popup(
   called for it and true is returned. False is returned if the user
   cancels the menu.
 
-  If there is a selected item in the menu (as determined by focus())
+  If there is a selected item in the menu (as determined by get_item())
   then submenus are opened and all of them are positioned intitially
   so the mouse cursor is pointing at the selected item. This is
   incredibly useful and one of the main features of fltk that is missing
@@ -1058,5 +1062,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.157 2004/10/30 05:13:26 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.158 2004/11/12 06:50:16 spitzak Exp $".
 //

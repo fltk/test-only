@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.4 2004/08/01 22:28:21 spitzak Exp $"
+// "$Id: CycleButton.cxx,v 1.5 2004/11/12 06:50:14 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -55,7 +55,7 @@ using namespace fltk;
 
 */
 
-extern bool fl_hide_shortcut;
+extern bool fl_hide_underscore;
 
 static CycleButton* held_down;
 
@@ -91,7 +91,7 @@ void CycleButton::draw() {
   box->inset(x,y,w,h);
 
   // This portion of the code is copied from Choice:
-  Widget* o = get_focus();
+  Widget* o = get_item();
   if (o) {
     Item::set_style(&style);
     Flags saved = o->flags();
@@ -101,9 +101,9 @@ void CycleButton::draw() {
     translate(x,y);
     int save_w = o->w(); o->w(w);
     int save_h = o->h(); o->h(h);
-    fl_hide_shortcut = true;
+    fl_hide_underscore = true;
     o->draw();
-    fl_hide_shortcut = false;
+    fl_hide_underscore = false;
     Item::clear_style();
     o->w(save_w);
     o->h(save_h);
@@ -115,23 +115,11 @@ void CycleButton::draw() {
   focusbox()->draw(x+1, y+1, w-2, h-2, &style, flags);
 }
 
-/*! \fn int CycleButton::value() const
-  Returns the index of the currently selected item.
-*/
-
-/*! Sets the index of the currently selected item and redraws the
-  widget to show it. */
-int CycleButton::value(int v) {
-  if (focus(&v, 0)) {redraw(DAMAGE_VALUE); return true;}
-  return false;
-}
-
 static bool try_item(CycleButton* choice, int i) {
   Widget* w = choice->child(i);
   if (!w->takesevents()) return false;
   choice->value(i);
   choice->execute(w);
-  choice->redraw(DAMAGE_VALUE);
   return true;
 }  
 
@@ -224,5 +212,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.4 2004/08/01 22:28:21 spitzak Exp $".
+// End of "$Id: CycleButton.cxx,v 1.5 2004/11/12 06:50:14 spitzak Exp $".
 //

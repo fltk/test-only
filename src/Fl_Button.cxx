@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.71 2004/08/28 09:55:12 laza2000 Exp $"
+// "$Id: Fl_Button.cxx,v 1.72 2004/11/12 06:50:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -127,7 +127,7 @@ int Button::handle(int event) {
   case FOCUS:
     redraw(1); // minimal redraw to just add the focus box
     // grab initial focus if we are an ReturnButton:
-    return shortcut()=='\r' ? 2 : 1;
+    return shortcut()==ReturnKey ? 2 : 1;
   case UNFOCUS:
     redraw(DAMAGE_HIGHLIGHT);
     return 1;
@@ -274,5 +274,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 */
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.71 2004/08/28 09:55:12 laza2000 Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.72 2004/11/12 06:50:14 spitzak Exp $".
 //

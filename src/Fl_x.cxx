@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.195 2004/10/25 05:29:10 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.196 2004/11/12 06:50:18 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1520,7 +1520,7 @@ bool fltk::handle()
     unsigned keycode = xevent.xkey.keycode;
     fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
     // Leave event_is_click() on only if this is the last key pressed:
-    if (e_is_click != int(keycode+100)) e_is_click = 0;
+    if (e_is_click != keycode+100) e_is_click = 0;
     event = KEYUP;
     goto GET_KEYSYM;}
 
@@ -1563,7 +1563,7 @@ bool fltk::handle()
 	  DownKey, PageUpKey, PageDownKey, EndKey,
 	  ClearKey, InsertKey, DeleteKey};
 	keysym = table[keysym-0xff95];
-	e_text[0] = 0;
+	*(char*)(e_text) = 0;
 	e_length = 0;
 	// This is what Windows does so if the user uses shift+keypad
 	// to get an arrow, the text editor does not think it is a
@@ -1660,7 +1660,7 @@ bool fltk::handle()
       read += count*format/8;
       if (!remaining) break;
     }
-    e_text = (char*)buffer;
+    e_text = buffer ? (char*)buffer : "";
     e_length = read;
     selection_requestor->handle(PASTE);
     // Detect if this paste is due to Xdnd by the property name (I use
@@ -2327,5 +2327,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.195 2004/10/25 05:29:10 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.196 2004/11/12 06:50:18 spitzak Exp $".
 //

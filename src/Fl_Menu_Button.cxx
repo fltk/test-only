@@ -1,4 +1,4 @@
-// "$Id: Fl_Menu_Button.cxx,v 1.62 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.63 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -68,6 +68,9 @@ void PopupMenu::draw() {
     fl_did_clipping = this;
     return;
   }
+  // set_item() does not cause a redraw:
+  if (damage() == DAMAGE_VALUE) return;
+
   Box* box /*= style()->box; if (!box) box*/ = this->buttonbox();
   // We need to erase the focus rectangle on DAMAGE_HIGHTLIGHT for
   // NO_BOX buttons such as checkmarks:
@@ -167,5 +170,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.62 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.63 2004/11/12 06:50:16 spitzak Exp $".
 //

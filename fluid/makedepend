@@ -133,12 +133,13 @@ Fl_Window_Type.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
 Fl_Window_Type.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Window_Type.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 Fl_Window_Type.o: ../fltk/ask.h ../fltk/draw.h ../fltk/Box.h ../fltk/Symbol.h
-Fl_Window_Type.o: FluidType.h ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-Fl_Window_Type.o: ../fltk/SharedImage.h ../fltk/Image.h alignment_panel.h
-Fl_Window_Type.o: ../fltk/Group.h ../fltk/Input.h ../fltk/CheckButton.h
-Fl_Window_Type.o: ../fltk/Button.h ../fltk/Button.h ../fltk/StyleSet.h
-Fl_Window_Type.o: widget_panel.h ../fltk/TabGroup.h ../fltk/Choice.h
-Fl_Window_Type.o: ../fltk/Menu.h ../fltk/ValueInput.h ../fltk/Valuator.h
+Fl_Window_Type.o: ../fltk/layout.h FluidType.h ../fltk/Widget.h
+Fl_Window_Type.o: Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h
+Fl_Window_Type.o: ../fltk/Image.h alignment_panel.h ../fltk/Group.h
+Fl_Window_Type.o: ../fltk/Input.h ../fltk/CheckButton.h ../fltk/Button.h
+Fl_Window_Type.o: ../fltk/Button.h ../fltk/StyleSet.h widget_panel.h
+Fl_Window_Type.o: ../fltk/TabGroup.h ../fltk/Choice.h ../fltk/Menu.h
+Fl_Window_Type.o: ../fltk/ValueInput.h ../fltk/Valuator.h
 Fl_Window_Type.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
 Fl_Window_Type.o: Shortcut_Button.h ../fltk/WordwrapInput.h
 Fl_Window_Type.o: ../fltk/LightButton.h ../fltk/CheckButton.h

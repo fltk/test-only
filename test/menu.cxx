@@ -26,7 +26,7 @@ using namespace fltk;
 
 void callback(Widget* w, void*) {
   Menu* menu = (Menu*)w;
-  Widget* item = menu->item();
+  Widget* item = menu->get_item();
   printf("Callback for %s, item is %s\n",
 	 menu->label() ? menu->label() : "menu bar",
 	 item->label() ? item->label() : "unnamed");

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.h,v 1.5 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: forms.h,v 1.6 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -484,14 +484,12 @@ inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
-extern FL_FORMS_API int fl_old_shortcut(const char*);
-
 FL_FORMS_API Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(Fl_Widget* b) {return ((Fl_Button*)b)->value();}
 inline void fl_set_button(Fl_Widget* b, int v) {((Fl_Button*)b)->value(v);}
 inline int fl_get_button_numb(Fl_Widget*) {return Fl::event_button();}
 inline void fl_set_object_shortcut(Fl_Widget* b, const char* s, int=0) {
-  b->shortcut(fl_old_shortcut(s));}
+  b->shortcut(fltk::key(s));}
 #define fl_set_button_shortcut fl_set_object_shortcut
 
 #include <fltk/Fl_Light_Button.h>
@@ -739,7 +737,7 @@ inline void fl_replace_menu_item(Fl_Widget* o, int i, const char* s) {
 inline void fl_delete_menu_item(Fl_Widget* o, int i) {
     ((Fl_Menu_Button*)o)->remove(i-1);}
 inline void fl_set_menu_item_shortcut(Fl_Widget* o, int i, const char* s) {
-    ((Fl_Menu_Button*)o)->shortcut(i-1,fl_old_shortcut(s));}
+    ((Fl_Menu_Button*)o)->shortcut(i-1,fltk::key(s));}
 // inline void fl_set_menu_item_mode(Fl_Widget* o, int i, long x) {
 //     ((Fl_Menu_Button*)o)->mode(i-1,x);}
 inline void fl_show_menu_symbol(Fl_Widget*, int ) {
@@ -852,5 +850,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.5 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: forms.h,v 1.6 2004/11/12 06:50:13 spitzak Exp $".
 //

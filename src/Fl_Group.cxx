@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.136 2004/09/30 06:08:28 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.137 2004/11/12 06:50:15 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ NamedStyle* group_style = &the_style;
 Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
 : Widget(X,Y,W,H,l),
   children_(0),
-  focus_(-1),
+  focus_index_(-1),
   array_(0),
   resizable_(0), // fltk 1.0 used (this)
   resize_align_(ALIGN_TOPLEFT|ALIGN_BOTTOMRIGHT),
@@ -105,7 +105,7 @@ void Group::clear() {
     Widget*const* e = a+children_;
     // clear everything now, in case fix_focus recursively calls us:
     children_ = 0;
-    focus_ = -1;
+    focus_index_ = -1;
     if (resizable_) resizable_ = this;
     // okay, now it is safe to destroy the children:
     while (e > a) {
@@ -236,10 +236,19 @@ int Group::find(const Widget* widget) const {
 ////////////////////////////////////////////////////////////////
 // Handle
 
-/*! \fn int Group::focus() const
+/*! \fn int Group::focus_index() const
+
   The index of the widget that contains the focus. You can initialize
   this before the group is displayed. Changing it while it is
-  displayed does not work, use widget->take_focus() instead.  */
+  displayed does not work, use widget->take_focus() instead.
+
+  For some subclasses such as fltk::TabGroup, a negative number indicates
+  that the group itself has the focus. In most cases any illegal value
+  means it will search for any widget that accepts focus.
+
+  This is also used by fltk::Menu to locate the item selected by
+  the user. See fltk::Menu::get_item().
+*/
 
 /*! Turn Tab into Right or Left for keyboard navigation */
 int Group::navigation_key() {
@@ -266,7 +275,7 @@ int Group::handle(int event) {
 
   case FOCUS_CHANGE:
     // The focus is being changed to some widget inside this.
-    focus_ = find(fltk::focus());
+    focus_index_ = find(fltk::focus());
     return true;
 
   case FOCUS:
@@ -274,20 +283,20 @@ int Group::handle(int event) {
     switch (navigation_key()) {
     default: {
       // try to give it to whatever child had focus last:
-      if (focus_ >= 0 && focus_ < numchildren)
-	if (child(focus_)->take_focus()) return true;
+      if (focus_index_ >= 0 && focus_index_ < numchildren)
+	if (child(focus_index_)->take_focus()) return true;
       // otherwise search for the widget that needs the focus. We
       // give it to the first one that returns 2, or the last one
       // that returns 1 if none return 2:
-      Widget* f1 = 0; int ret = 0;
+      int new_index = -1; int ret = 0;
       for (i = 0; i < numchildren; ++i) {
 	Widget* w = child(i);
 	if (w->takesevents() && w->tab_to_focus()) {
 	  int n = w->handle(FOCUS);
-	  if (n) {ret = n; f1 = w; if (n & 2) break;}
+	  if (n) {ret = n; new_index = i; if (n & 2) break;}
 	}
       }
-      if (f1 && !f1->contains(fltk::focus())) focus(f1);
+      focus_index_ = new_index;
       return ret;}
     case RightKey:
     case DownKey:
@@ -315,7 +324,7 @@ int Group::handle(int event) {
     if (numchildren < 2) break;
     int key = navigation_key();
     if (!key) break;
-    int previous = focus_;
+    int previous = focus_index_;
     if (previous < 0 || previous >= numchildren) previous = 0;
     for (i = previous;;) {
       if (key == LeftKey || key == UpKey) {
@@ -332,7 +341,9 @@ int Group::handle(int event) {
 	}
       }
       if (i == previous) {
-	focus(0);
+	// This appears to be for fixing bugs, where the focus gets lost.
+	// The child should already have focus.
+	focus_index_ = i;
 	return child(i)->tab_to_focus() && child(i)->take_focus();
       }
       if (key == DownKey || key == UpKey) {
@@ -368,10 +379,10 @@ int Group::handle(int event) {
 
   default:
     // Try to give any other event to the focus:
-    if (focus_ >= 0 && focus_ < numchildren)
-      if (child(focus_)->send(event)) return true;
+    if (focus_index_ >= 0 && focus_index_ < numchildren)
+      if (child(focus_index_)->send(event)) return true;
     // Then try all other children in top to bottom order:
-    for (i = numchildren; i--;) if (i != focus_)
+    for (i = numchildren; i--;) if (i != focus_index_)
       if (child(i)->send(event)) return true;
     break;
 
@@ -707,5 +718,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.136 2004/09/30 06:08:28 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.137 2004/11/12 06:50:15 spitzak Exp $".
 //

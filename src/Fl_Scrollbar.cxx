@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.72 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.73 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,10 +39,13 @@ using namespace fltk;
 
   The Scrollbar widget displays a slider with arrow buttons at the
   ends of the scrollbar. Clicking on the arrows move up/left and
-  down/right by linesize(). Scrollbars also accept fltk::SHORTCUT
-  events: the arrows move by linesize(), and vertical scrollbars take
-  Page Up/Down (they move by the page size minus linesize()) and
-  Home/End (they jump to the top or bottom).
+  down/right by linesize(). If the scrollbar has the keyboard focus
+  the arrows move by linesize(), and vertical scrollbars take Page
+  Up/Down (they move by the page size minus linesize()) and Home/End
+  (they jump to the top or bottom). Often a widget that takes focus
+  such as the browser will just send keystrokes to the scrollbar
+  directly to get it to move in response.
+
 */
 
 #define vertical() (!horizontal())
@@ -307,5 +310,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.72 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.73 2004/11/12 06:50:16 spitzak Exp $".
 //

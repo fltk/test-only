@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.40 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.41 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,9 +27,8 @@
 using namespace fltk;
 
 /*! \class fltk::ReturnButton
-  Same as a normal button except the shortcut() is preset to the Enter
-  and KeypadEnter keys (done by using shortcut('\\r')), and a glyph
-  is drawn to indicate this.
+  Same as a normal button except the shortcut() is preset to ReturnKey
+  and KeypadEnter, and a glyph is drawn to indicate this.
 
   \image html Fl_Return_Button.gif
 
@@ -86,9 +85,10 @@ ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
 {
   default_style->parent_ = style();
   style(default_style);
-  shortcut('\r');
+  shortcut(ReturnKey);
+  add_shortcut(KeypadEnter);
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.40 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.41 2004/11/12 06:50:16 spitzak Exp $".
 //

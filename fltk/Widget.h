@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.12 2004/09/30 06:08:28 spitzak Exp $"
+// "$Id: Widget.h,v 1.13 2004/11/12 06:50:13 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -102,8 +102,15 @@ public:
   const char *tooltip() const	{ return tooltip_; }
   void	tooltip(const char *t)	{ tooltip_ = t; }
 
-  int	shortcut() const	{ return shortcut_; }
-  void	shortcut(int s)		{ shortcut_ = s; }
+  unsigned shortcut() const	;
+  bool	shortcut(unsigned key)	;
+  bool	add_shortcut(unsigned key);
+  bool	remove_shortcut(unsigned key);
+  bool  remove_shortcuts()	;
+  unsigned label_shortcut() const;
+  bool	test_label_shortcut() const;
+  bool	test_shortcut() const	;
+  bool  test_shortcut(bool) const;
 
   Callback_p callback() const	{ return callback_; }
   void	callback(Callback* c, void* p) { callback_=c; user_data_=p; }
@@ -121,8 +128,6 @@ public:
   void	do_callback()		{ callback_(this,user_data_); }
   void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
   void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
-  bool	test_label_shortcut() const;
-  bool	test_shortcut() const	;
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;
@@ -284,7 +289,6 @@ private:
 
   const char*		label_;
   const Symbol*		image_;
-  int			shortcut_; // encode in the label?
   unsigned		flags_;
   const Style*		style_;
   Callback*		callback_;
@@ -315,5 +319,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.12 2004/09/30 06:08:28 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.13 2004/11/12 06:50:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Choice.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Choice.h,v 1.3 2004/11/12 06:50:13 spitzak Exp $"
 //
 // Popup list of items that the user can choose one of. Based on Motif
 // but modern equivalent is the OS/X popup choices.
@@ -39,8 +39,6 @@ public:
   int handle(int);
   Choice(int,int,int,int,const char * = 0);
   static NamedStyle* default_style;
-  int value(int v);
-  int value() const {return Menu::value();}
 protected:
   void draw();
 };
@@ -50,5 +48,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Choice.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Choice.h,v 1.3 2004/11/12 06:50:13 spitzak Exp $".
 //

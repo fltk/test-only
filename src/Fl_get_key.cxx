@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.22 2004/11/12 06:50:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -48,7 +48,7 @@ extern char fl_key_vector[32]; // in x.C
 
   On Win32 event_key_state(KeypadEnter) does not work.
 */
-bool fltk::event_key_state(int keysym) {
+bool fltk::event_key_state(unsigned keysym) {
   if (keysym > 0 && keysym <= 8)
     return event_state(BUTTON(keysym)) != 0;
   int keycode;
@@ -93,14 +93,14 @@ bool fltk::event_key_state(int keysym) {
 
   On Win32 fltk::get_key_state(fltk::KeypadEnter) does not work. 
 */
-bool fltk::get_key_state(int k) {
+bool fltk::get_key_state(unsigned key) {
   open_display();
   XQueryKeymap(xdisplay, fl_key_vector);
-  return event_key_state(k);
+  return event_key_state(key);
 }
 
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.22 2004/11/12 06:50:17 spitzak Exp $".
 //

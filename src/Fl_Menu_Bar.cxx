@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.78 2004/10/29 06:42:55 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.79 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,17 +35,18 @@
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
 using namespace fltk;
-extern bool fl_hide_shortcut;
 
 void MenuBar::draw() {
+  // set_item() does not cause a redraw:
+  if (damage() == DAMAGE_VALUE) return;
   Menu::draw_in(this, 0, 0, highlight_, last_);
   last_ = highlight_;
 }
 
 int MenuBar::handle(int event) {
-  int children = this->children();
+  unsigned children = this->children();
   if (!children) return 0;
-  int i;
+  unsigned i;
   switch (event) {
   case LEAVE:
     highlight_ = -1;
@@ -92,7 +93,7 @@ int MenuBar::handle(int event) {
       }
     }
     if (event_key()==LeftAltKey || event_key()==RightAltKey) {
-      if (style()->hide_shortcut() && !event_clicks()) redraw();
+      if (style()->hide_underscore() && !event_clicks()) redraw();
     }
     return 0;
   case KEYUP:
@@ -100,7 +101,7 @@ int MenuBar::handle(int event) {
     // only the Alt key does. Setting the shortcut to zero will disable
     // the alt key shortcut.
     if (event_key() != LeftAltKey && event_key() != RightAltKey) break;
-    if (style()->hide_shortcut()) redraw();
+    if (style()->hide_underscore()) redraw();
     if (shortcut() != LeftAltKey && shortcut() != RightAltKey) break;
     // checking for event_clicks insures that the keyup matches the
     // keydown that preceeded it, so Alt was pressed & released without
@@ -144,5 +145,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.78 2004/10/29 06:42:55 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.79 2004/11/12 06:50:16 spitzak Exp $".
 //

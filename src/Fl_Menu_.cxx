@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.57 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.58 2004/11/12 06:50:16 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -28,7 +28,7 @@
 
 #include <fltk/events.h>
 #include <fltk/Menu.h>
-
+#include <fltk/damage.h>
 #include <fltk/Item.h> // for TOGGLE, RADIO
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
@@ -149,7 +149,7 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
   Group* group = (Group*)menu;
   for (;;) {
     int i = *indexes++;
-    //if (i < 0 || i >= group->children()) return 0;
+    if (i < 0 || i >= group->children()) return 0;
     Widget* widget = group->child(i);
     if (!level--) return widget;
     if (!widget->is_group()) return 0;
@@ -301,16 +301,15 @@ Widget* Menu::child(int n) const {
   on. Otherwise you probably can't make any assumptions about it's
   value.
 
-  The Browser sets this to the widget when you call goto_index().
+  Browser::goto_index() sets this to the current item.
 
   Since this may be the result of calling child() the returned
   structure may be short-lived if an fltk::List is used.
 */
 
 /*! \fn Widget* Menu::item(Widget* v)
-  You can set the item with the second call, useful for outwitting the
-  callback. This does not change which item is selected, you should
-  use focus() or value() for that.
+  You can set item() with the second call, useful for outwitting the
+  callback. This does not produce any visible change for the user.
 */
 
 FL_API bool fl_dont_execute; // hack for fluid
@@ -330,15 +329,13 @@ void Menu::execute(Widget* widget) {
   if (widget) do_callback();
 }
 
-/*! The default callback for Menu calls item()->do_callback() if
-  item() is not null. However if item()->user_data() is null, the
-  callback is called with the user_data() from the Menu widget
-  instead.
+/*! The default callback for Menu calls item()->do_callback() but
+  if user_data() is not null it is used instead of the item's user_data().
 */
-void Menu::default_callback(Widget* widget, void*) {
+void Menu::default_callback(Widget* widget, void* data) {
   Widget* item = ((Menu*)widget)->item();
   if (item) item->do_callback(item,
-	   item->user_data() ? item->user_data() : widget->user_data());
+	item->user_data() ? item->user_data() : widget->user_data());
 }
 
 /*! Does nothing. This avoids wasting time measuring all the menu items. */
@@ -347,66 +344,67 @@ void Menu::layout() {}
 ////////////////////////////////////////////////////////////////
 
 /*!
-  The current item is remembered in the focus() of each parent at
-  each level.  This is used by popup menus to pop up at the same
-  item next time.
-
-  Storing it this way allows widgets to be inserted and deleted and
-  the currently selected item does not change (because Group updates
-  the focus index). But if an List is used and it does not return
-  a different Group for each level in the hierarchy, the focus
-  indexes will write over each other. Browser currently uses it's
-  own code (with the insert/delete broken) to get around this.
-
-  item() is set to the located widget.
-  True is returned if the indexes differ from last time.
+  Remembers a currently selected item in a hierarchy by setting the
+  focus_index() of each group to point to the next one. The widget
+  can then be recovered with get_item(). A redraw(DAMAGE_VALUE) is
+  done so pulldown menus redraw their display.
 */
-bool Menu::focus(const int* indexes, int level) {
+bool Menu::set_item(const int* indexes, int level) {
   int i = indexes[0];
   bool ret = false;
-  if (value() != i) {value(i); ret = true;}
-  if (i < 0 || i >= children()) {item(0); return ret;}
-  item(child(i));
-  int j = 1;
-  while (item() && item()->is_group()) {
-    Group* group = (Group*)item();
-    int i = (j > level) ? -1 : indexes[j++];
-    if (group->focus() != i) {group->focus(i); ret = true;}
-    if (i < 0 || i >= group->children()) break;
-    item(group->child(i));
+  if (focus_index() != i) {focus_index(i); ret = true;}
+  if (i < 0 || i >= children()) {
+    item(0);
+  } else {
+    item(child(i));
+    int j = 1;
+    while (item() && item()->is_group()) {
+      Group* group = (Group*)item();
+      int i = (j > level) ? -1 : indexes[j++];
+      if (group->focus_index() != i) {group->focus_index(i); ret = true;}
+      if (i < 0 || i >= group->children()) break;
+      item(group->child(i));
+    }
   }
+  if (ret) redraw(DAMAGE_VALUE);
   return ret;
 }
 
 /*!
-  Return the widget identified by the focus fields (or NULL if it is
-  illegal). This also sets item() to the same value.
+  Sets and returns item() based on the focus_index() in this and each
+  child group, thus restoring the value saved with set_item().
+
+  This either returns a non-group node, or child group that has an
+  illegal Group::focus_index(), or null if this focus_index() is
+  illegal.
+
+  If an fltk::List is used this will probably only go to the first
+  child and not descend any further.
 */
-Widget* Menu::get_focus() {
-  int i = value();
+Widget* Menu::get_item() {
+  int i = focus_index();
   if (i < 0 || i >= children()) {item(0); return 0;}
   item(child(i));
-  while (item() && item()->is_group()) {
+  while (item()->is_group()) {
     Group* group = (Group*)item();
-    int i = group->focus();
+    int i = group->focus_index();
     if (i < 0 || i >= group->children()) break;
     item(group->child(i));
   }
   return item();
 }
 
-/*! \fn void Menu::value(int v)
-
-  For a non-hierarchial menu this does the same thing as focus(), it
-  moves the selected item or keyboard focus to item n, starting at
-  zero. Asking for the value() returns the index of the current item.
-
-  Don't call this for hierarchial menus, it will screw up.
+/*!
+  Convienence function to do set_item() when there is only one level
+  of hierarchy. In this case you can consider the menu items to be
+  indexes starting at zero.
 */
-
-/*! \fn int Menu::size() const
-  Returns children() (for back compatability with older versions of fltk).
-*/
+bool Menu::value(int v) {
+  if (v == focus_index()) return false;
+  focus_index(v);
+  redraw(DAMAGE_VALUE);
+  return true;
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -418,14 +416,14 @@ static Widget* shortcut_search(Group* g) {
   for (int i = 0; i < g->children(); i++) {
     Widget* item = g->child(i);
     if (!item->active()) continue;
-    if (fltk::test_shortcut(item->shortcut())) {
-      g->focus(i);
+    if (item->test_shortcut(false)) {
+      g->focus_index(i);
       return item;
     }
     if (item->is_group()) {
       item = shortcut_search((Group*)item);
       if (item) {
-	g->focus(i);
+	g->focus_index(i);
 	return item;
       }
     }
@@ -458,7 +456,7 @@ int Menu::handle_shortcut() {
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
     if (!item->active()) continue;
-    if (fltk::test_shortcut(item->shortcut())) {
+    if (item->test_shortcut(false)) {
       value(i);
       execute(item);
       return 1;
@@ -475,6 +473,10 @@ int Menu::handle_shortcut() {
   return 0;
 }
 
+/*! \fn int Menu::size() const
+  Returns children() (for back compatability with older versions of fltk).
+*/
+
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.57 2004/05/15 20:52:45 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.58 2004/11/12 06:50:16 spitzak Exp $"
 //

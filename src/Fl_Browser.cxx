@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.101 2004/10/29 06:42:54 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.102 2004/11/12 06:50:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1303,7 +1303,7 @@ int Browser::handle(int event) {
     } else if (openclose_drag) return 1;
     if (event_clicks()) {
       // double clicks act like ReturnKey
-      e_keysym = ReturnKey;
+      //e_keysym = ReturnKey; // fltk1 did this
       clear_changed();
       execute(item());
       return 1;
@@ -1823,5 +1823,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.101 2004/10/29 06:42:54 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.102 2004/11/12 06:50:14 spitzak Exp $".
 //

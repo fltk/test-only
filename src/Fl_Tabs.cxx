@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.73 2004/08/27 02:10:04 leka Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.74 2004/11/12 06:50:16 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -188,8 +188,8 @@ int TabGroup::handle(int event) {
 
   case FOCUS_CHANGE:
     // this is called to indicate that some child got the focus
-    if (focus() < 0) redraw(DAMAGE_VALUE);
-    focus(fltk::focus() == this ? -1 : 0);
+    if (focus_index() < 0) redraw(DAMAGE_VALUE);
+    focus_index(fltk::focus() == this ? -1 : 0);
     return true;
 
   case FOCUS:
@@ -202,7 +202,7 @@ int TabGroup::handle(int event) {
     case DownKey:
       if (tab_height() < 0) goto GOTO_CONTENTS; else goto GOTO_TABS;
     default:
-      if (focus() < 0) goto GOTO_TABS;
+      if (focus_index() < 0) goto GOTO_TABS;
     GOTO_CONTENTS:
       // Try to give the contents the focus. Also preserve a return value
       // of 2 (which indicates the contents have a text field):
@@ -214,13 +214,13 @@ int TabGroup::handle(int event) {
 	}
       }
     GOTO_TABS:
-      focus(-1);
+      focus_index(-1);
       redraw(DAMAGE_VALUE);
       return true;
     }
 
   case UNFOCUS:
-    if (focus() < 0) redraw(DAMAGE_VALUE);
+    if (focus_index() < 0) redraw(DAMAGE_VALUE);
     return 1;
 
   // handle mouse events in the tabs:
@@ -272,32 +272,29 @@ int TabGroup::handle(int event) {
 	if (value(i)) do_callback();
 	return 1;
       }
-    }      
+    }
     switch (navigation_key()) {
     case RightKey:
     case DownKey:
       if (tab_height()<0) goto UP_CASE;
     DOWN_CASE:
-      if (focus() < 0 && selected) return selected->take_focus();
+      if (focus_index() < 0 && selected) return selected->take_focus();
       else return 0;
     case LeftKey:
     case UpKey:
       if (tab_height()<0) goto DOWN_CASE;
     UP_CASE:
-      if (focus() >= 0) {fltk::focus(this); return 1;}
+      if (focus_index() >= 0) {fltk::focus(this); return 1;}
       else return 0;
-    default:
-      return 0;
     }
-
-  // This makes ctrl+tab move between tabs when the focus is on a
-  // widget that is not inside the tabs:
+    // fall through to SHORTCUT case:
   case SHORTCUT:
     if (event_key() == TabKey && event_state(CTRL)) {
       backwards = event_state(SHIFT);
       goto MOVE;
     }
     break;
+
   }
 
   if (selected) return selected->send(event);
@@ -529,4 +526,4 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   focus(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.73 2004/08/27 02:10:04 leka Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.74 2004/11/12 06:50:16 spitzak Exp $".

@@ -1,5 +1,5 @@
 //
-// "$Id: Input.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Input.h,v 1.5 2004/11/12 06:50:13 spitzak Exp $"
 //
 // One-line text input field.
 //
@@ -108,7 +108,6 @@ private:
 
   void setfont() const;
 
-  bool key_is_shortcut();
   void shift_position(int p);
   void shift_up_down_position(int p);
 
@@ -119,5 +118,5 @@ private:
 #endif
 
 //
-// End of "$Id: Input.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Input.h,v 1.5 2004/11/12 06:50:13 spitzak Exp $".
 //

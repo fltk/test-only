@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.96 2004/09/30 06:08:29 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.97 2004/11/12 06:50:15 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1052,27 +1052,10 @@ void Input::shift_up_down_position(int p) {
   up_down_position(p, event_state(SHIFT));
 }
 
-// Due to MicroSoft-compatable programs assigning the Emacs control keys
-// to menu items, this is about the best design I could come up with that
-// allows Emacs bindings but allows people who want to reuse those keys
-// for shortcuts to assign them. Previous solutions were not local to
-// Input, which made it difficult to add or change the key assignments.
-// This has a recursion test as some programs will turn the shortcut back
-// into a keystroke and report it here...
-bool Input::key_is_shortcut() {
-  static bool recursion;
-  if (recursion) return false;
-  recursion = true;
-  bool ret = fltk::handle(SHORTCUT, window()) != 0;
-  recursion = false;
-  return ret;
-}
-
 /*! Handle KEY events. The handle() method calls this. This provides
-  an Emacs and Windows style of editing. Most Emacs keys are
-  checked to see if a shortcut has been assigned to them by another
-  widget so that porting Windows programs is possible without completely
-  losing the Emacs bindings. Keys are:
+  an Emacs and Windows style of editing. Most Emacs commands are first
+  run through fltk::try_shortcut() to test if they are menu items for
+  the program.
 
   - Shift: do not move the mark when moving the point
   - LeftKey, Ctrl+B: move left one character
@@ -1133,7 +1116,7 @@ bool Input::handle_key() {
   switch (event_key()) {
 
   case 'b':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case LeftKey:
     if (!shift && mark_<position_) i = mark_;
@@ -1145,7 +1128,7 @@ bool Input::handle_key() {
     return true;
 
   case 'f':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case RightKey:
     if (!shift && mark_>position_) i = mark_;
@@ -1157,7 +1140,7 @@ bool Input::handle_key() {
     return true;
 
   case 'p':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case UpKey:
     if (type() < MULTILINE) return false;
@@ -1168,7 +1151,7 @@ bool Input::handle_key() {
     return true;
 
   case 'n':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case DownKey:
     if (type() < MULTILINE) return false;
@@ -1203,14 +1186,14 @@ bool Input::handle_key() {
       else shift_position(i);
       return true;
     }
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case HomeKey:
     shift_position(ctrl ? 0 : line_start(position()));
     return true;
 
   case 'e':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case EndKey:
     shift_position(ctrl ? size() : line_end(position()));
@@ -1223,7 +1206,7 @@ bool Input::handle_key() {
     return true;
 
   case 'd':
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case DeleteKey:
     // I don't know what CUA does with ctrl+delete, I made it delete words
@@ -1236,7 +1219,7 @@ bool Input::handle_key() {
     return true;
 
   case 'h': // retro-Emacs, modern versions do "help"
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     ctrl = alt;
   case BackSpaceKey:
     // I don't know what CUA does with ctrl+backspace, I made it delete words
@@ -1249,7 +1232,7 @@ bool Input::handle_key() {
 
   case ReturnKey:
   case KeypadEnter:
-    // if (key_is_shortcut()) return true;
+    // if (try_shortcut()) return true;
     if (ctrl || shift) return false;
     if (when() & WHEN_ENTER_KEY) {
       position(size(), 0);
@@ -1264,7 +1247,7 @@ bool Input::handle_key() {
     //return replace(position(), mark(), event_text(), 1);
 
   case 'k': // Emacs clear-to-end-of-line
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     // alt should clear to end of paragraph, nyi
     i = line_end(position());
     if (i == position() && i < size()) i++;
@@ -1274,11 +1257,11 @@ bool Input::handle_key() {
     return true;
 
   case 'c':
-    if (!ctrl && key_is_shortcut()) return true;
+    if (!ctrl && try_shortcut()) return true;
     return copy();
 
   case 'o': // Emacs insert newline after cursor
-    if (type() < MULTILINE || key_is_shortcut()) return true;
+    if (type() < MULTILINE || try_shortcut()) return true;
     if (replace(position(),mark(),"\n",1)) {
       position(position()-1);
       return 1;
@@ -1286,7 +1269,7 @@ bool Input::handle_key() {
     return 0;
 
   case 't': // Emacs swap characters
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     if (size()<2) return 1;
     i = position();
     if (i <= 0 || value_[i-1]=='\n') i++;
@@ -1299,28 +1282,28 @@ bool Input::handle_key() {
     return 1;
 
   case 'u': // Clear the field
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     position(size(), 0);
     return cut();
 
   case 'v':
-    if (!ctrl && key_is_shortcut()) return true;
+    if (!ctrl && try_shortcut()) return true;
     paste(*this,true);
     return true;
 
   case 'w': // Emacs cut
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     copy();
     return cut();
 
   case 'x':
-    if (!ctrl && key_is_shortcut()) return true;
+    if (!ctrl && try_shortcut()) return true;
     copy();
     return cut();
 
   case 'y':
     // Check for more global redo action first:
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     return undo_is_redo && undo();
 #if 0
     // This is actually Emacs paste so do that if nothing else:
@@ -1329,7 +1312,7 @@ bool Input::handle_key() {
 #endif
 
   case '/': // Emacs undo
-    if (!ctrl || key_is_shortcut()) return true;
+    if (!ctrl || try_shortcut()) return true;
   case 'z':
     // For undo we undo local typing first. Only if this fails do
     // we run some appliation menu item for undo:
@@ -1352,7 +1335,7 @@ bool Input::handle_key() {
 
   // Insert any other keys (like ^J) into the text, if no shortcuts eat them:
   if (event_length()) {
-    if (key_is_shortcut()) return true;
+    if (try_shortcut()) return true;
     return replace(position(), mark(), event_text(), event_length());
   }
 
@@ -1463,7 +1446,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     // work as keys that did nothing still moved the focus.
     {static bool recursion;
     if (recursion) return 0;
-    recursion = true; bool r = key_is_shortcut(); recursion = false;
+    recursion = true; bool r = try_shortcut(); recursion = false;
     if (r) return 0;}
 # endif
     position(size());
@@ -1653,5 +1636,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.96 2004/09/30 06:08:29 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.97 2004/11/12 06:50:15 spitzak Exp $".
 //
