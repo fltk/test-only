@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.67 1999/11/21 09:57:51 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.68 1999/11/21 20:05:38 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -408,25 +408,25 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   y = ypos(i);
   h = itemheight;
 
-  m->draw(x, y, w, h, button, (i == selected));
+  int draw_selected = 0;
+  if (selected == i && (m->active() || Fl_Style::inactive_menu_hack))
+    draw_selected = 1;
 
-  Fl_Flags f = 0;
-  if (!m->active()) f = FL_INACTIVE;
+  m->draw(x, y, w, h, button, draw_selected);
+
+  Fl_Flags f = m->active() ? 0 : FL_INACTIVE;
 
   Fl_Color fc = m->label_color(), bc = color();
-  if (i == selected) {
+  if (draw_selected) {
     bc = m->selection_color();
-    if (m->active() || !Fl_Style::inactive_menu_hack)
-      fc = m->selection_text_color();
-    if (m->active()) f |= FL_VALUE;
+    // hack so that selected menu items aren't drawn inactive--
+    // just with inactive color
+    if (m->active()) { fc = m->selection_text_color(); f |= FL_VALUE; }
+    else { f = 0; fc = fl_inactive(fc); }
   }
 
-  // hack so that selected menu items aren't drawn inactive--
-  // just with inactive color
-  if (i == selected && !m->active() && Fl_Style::inactive_menu_hack)
-    { fc = fl_inactive(fc); f = 0; }
-  else fc = fl_inactive(fc, f);
   if (m->submenu()) {
+    fc = fl_inactive(fc, f);
     int X=x; int Y=y; int W=w; int H=h;
     m->box()->inset(X,Y,W,H);
     // we need the leading() part so that the height is based solely on the
@@ -868,5 +868,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.67 1999/11/21 09:57:51 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.68 1999/11/21 20:05:38 carl Exp $".
 //

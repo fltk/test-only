@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.16 1999/11/21 06:23:31 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.17 1999/11/21 20:05:39 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -65,7 +65,6 @@ static const Fl_Frame_Box
 win98_menu_window_box("win98 menu window", "2AARRMMUU", FL_DOWN_BOX);
 
 static Fl_Glyph glyph = 0;
-static Fl_Glyph choice_glyph = 0;
 static Fl_Glyph return_glyph = 0;
 static Fl_Glyph adjuster_glyph = 0;
 static Fl_Glyph counter_glyph = 0;
@@ -109,9 +108,6 @@ windows_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
     case FL_GLYPH_RETURN:
       if (return_glyph) return_glyph(t, x, y, w, h, bc, fc, f, box);
       break;
-    case FL_GLYPH_CHOICE:
-      if (choice_glyph) choice_glyph(t, x, y, w, h, bc, fc, f, box);
-      break;
     case FL_GLYPH_FASTARROW:
     case FL_GLYPH_MEDIUMARROW:
     case FL_GLYPH_SLOWARROW:
@@ -147,6 +143,7 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("menu title"))) {
+    s->set_box(FL_HIGHLIGHT_BOX);
     s->set_glyph_box(FL_NO_BOX);
     s->set_selection_color(FL_GRAY);
     s->set_selection_text_color(FL_BLACK);
@@ -203,11 +200,6 @@ int fl_windows() {
     s->set_glyph(windows_glyph);
   }
 
-  if ((s = Fl_Style::find("choice"))) {
-    choice_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
-    s->set_glyph(windows_glyph);
-  }
-
   if ((s = Fl_Style::find("return button"))) {
     return_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(windows_glyph);
@@ -234,5 +226,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.16 1999/11/21 06:23:31 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.17 1999/11/21 20:05:39 carl Exp $".
 //
