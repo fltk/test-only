@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.79 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.80 2001/12/06 18:23:43 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -422,6 +422,7 @@ Fl_Color Fl_Widget::get_glyph_color(Fl_Flags flags) const
 }
 
 // Return the color to draw the background of glyphs:
+// UNDOUCMENTED, probably can be removed, this is only used for Motif emul.
 Fl_Color Fl_Widget::get_glyph_background(Fl_Flags flags) const
 {
   return glyph_box() == FL_NO_BOX ? get_box_color(flags) : text_background();
@@ -484,5 +485,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.79 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.80 2001/12/06 18:23:43 spitzak Exp $".
 //

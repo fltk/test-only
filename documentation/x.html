@@ -1,6 +1,6 @@
 <html><head><title>FLTK X-Specific Interface</title></head><body bgcolor=white>
 
-<h1 align=right>G - X-Specific Interface</A></h1>
+<h1 align=right>G - X-Specific Interface</a></h1>
 
 <h1><tt>#include &lt;fltk/x.h&gt;</tt></h1>
 
@@ -9,7 +9,7 @@ Be warned that some of the structures and calls in it are subject to
 change in future version of FLTK.  Try to avoid doing this so your code 
 is portable. 
 
-<h4><A name=add_handler>void Fl::add_handler(int (*f)(int))</A></h4>
+<h4><a name=add_handler>void Fl::add_handler(int (*f)(int))</a></h4>
 
 Installs a function to parse unrecognized events.  If FLTK cannot
 figure out what to do with an event, it calls each of these functions
@@ -21,85 +21,85 @@ event number (like <tt>FL_PUSH</tt>).  For keystrokes it will be
 <p>Besides events that all widgets ignored, FLTK calls this for X
 events that it does not recognize, or that contain a window id that
 FLTK does not know about. In this case the argument is zero.  You can
-look at the X event with the <A href=#fl_xevent><TT>fl_xevent</TT></A>
+look at the X event with the <a href=#fl_xevent><tt>fl_xevent</tt></a>
 variable.
 
-<h4><A name=fl_xevent>extern XEvent* fl_xvent</A></h4>
+<h4><a name=fl_xevent>extern XEvent* fl_xvent</a></h4>
 
 The most recent X event. 
 
-<h4><A name=fl_event_time>extern ulong fl_event_time</A></h4>
+<h4><a name=fl_event_time>extern ulong fl_event_time</a></h4>
 
 This is the time stamp from the most recent X event that reported it 
 (not all do).  Many X calls (like cut and paste) need this value. 
 
-<h4><A name=fl_handle>int fl_handle(const XEvent &amp;)</A></h4>
+<h4><a name=fl_handle>int fl_handle(const XEvent &amp;)</a></h4>
 
 This allows you to "feed" X events to fltk, in cases where you cannot
 give fltk control over any file descriptors. Fltk will figure out what
 the event is and call widgets normally and also the
 <tt>Fl::add_handler()</tt> functions. The return value is true if a
-widget accepted the event or one of the <TT>add_handler()</TT>
+widget accepted the event or one of the <tt>add_handler()</tt>
 function returned true.
 
-<P>Besides feeding events your code should call <A href=functions.html#flush>
-<TT>Fl::flush()</TT></A> periodically so that FLTK redraws its
+<p>Besides feeding events your code should call <a href=Fl.html#flush>
+<tt>Fl::flush()</tt></a> periodically so that FLTK redraws its
 windows.
 
-<P>This function will call any widget callbacks from the widget code.
+<p>This function will call any widget callbacks from the widget code.
 It will not return until they complete, for instance if it pops up a
-modal window with <A href=utility.html#fl_ask><TT>fl_ask()</TT></A>,
+modal window with <a href=utility.html#fl_ask><tt>fl_ask()</tt></a>,
 it will not return until the user clicks yes or no.
 
-<h4><A name=display>int Fl::display(const char*)</A></h4>
+<h4><a name=display>int Fl::display(const char*)</a></h4>
 
-Set which X display to use.  This actually does <TT>
-putenv(&quot;DISPLAY=...&quot;)</TT> so that child programs will
-display on the same screen if called with <TT>exec()</TT>.  This must
+Set which X display to use.  This actually does <tt>
+putenv(&quot;DISPLAY=...&quot;)</tt> so that child programs will
+display on the same screen if called with <tt>exec()</tt>.  This must
 be done before <tt>fl_open_display</tt> is called.  This call is
 provided under WIN32 but it has no effect.
 
-<h4><A name=fl_open_display>void fl_open_display()</A></h4>
+<h4><a name=fl_open_display>void fl_open_display()</a></h4>
 
 Opens the display.  Does nothing if it is already open.  You should
 call this if you wish to do X calls and there is a chance that your
-code will be called before the first <TT>show()</TT> of a window.
+code will be called before the first <tt>show()</tt> of a window.
 This is called automatically <tt>by Fl_Window::show()</tt>.
 
-<P>This may call <TT>Fl::abort()</TT> if there is an error opening the 
+<p>This may call <tt>Fl::abort()</tt> if there is an error opening the 
 display.
 
-<h4>void fl_open_display(Display*)</A></h4>
+<h4>void fl_open_display(Display*)</a></h4>
 
 You can make fltk "open" a display that has already been opened,
 perhaps by another GUI library.  Calling this will set
 <tt>fl_display</tt> to the passed display and also read information
 fltk needs from it. <i>Don't call this if the display is already open!</i>
 
-<h4><A name=fl_display>extern Display* fl_display</A></h4>
+<h4><a name=fl_display>extern Display* fl_display</a></h4>
 
 The open X display.  This is needed as an argument to most Xlib calls. 
-Don't attempt to change it!  This is <TT>NULL</TT> before
+Don't attempt to change it!  This is <tt>NULL</tt> before
 <tt>fl_open_display</tt> is called.
 
-<h4><A name=fl_message_window>extern Window fl_message_window</A></h4>
+<h4><a name=fl_message_window>extern Window fl_message_window</a></h4>
 
 This dummy 1x1 window is created by <tt>fl_open_display()</tt> and is
 never destroyed.  You can use it to communicate with the window
 manager or other programs.
 
-<h4><A name=fl_screen>extern int fl_screen</A></h4>
+<h4><a name=fl_screen>extern int fl_screen</a></h4>
 
-Which screen number to use.  This is set by <TT>fl_open_display()</TT>
+Which screen number to use.  This is set by <tt>fl_open_display()</tt>
 to the default screen.  You can change it by setting this to a 
 different value immediately afterwards.
 
-<h4><A name=fl_visual>extern XVisualInfo* fl_visual</A>
-<br><A name=fl_colormap>extern Colormap fl_colormap</A></h4>
+<h4><a name=fl_visual>extern XVisualInfo* fl_visual</a>
+<br><a name=fl_colormap>extern Colormap fl_colormap</a></h4>
 
 The visual and colormap that FLTK will use for all windows.  These are 
-set by <TT>fl_open_display()</TT> to the default visual and colormap. 
-You can change them before calling <TT>show()</TT> on the first 
+set by <tt>fl_open_display()</tt> to the default visual and colormap. 
+You can change them before calling <tt>show()</tt> on the first 
 window.  Typical code for changing the default visual is: 
 
 <UL><PRE>Fl::args(argc, argv); // do this first so $DISPLAY is set
@@ -110,50 +110,50 @@ fl_colormap = make_a_colormap(fl_display, fl_visual-&gt;visual, fl_visual-&gt;de
 // it is now ok to show() windows:
 window-&gt;show(argc, argv);</PRE></UL>
 
-You may also want to call <A
-href=functions.html#visual>Fl::visual()</A>, which is a portable
+You may also want to call <a
+href=Fl.html#visual>Fl::visual()</a>, which is a portable
 interface to get a full color and/or double buffered visual.
 
-<h4><A name=fl_xid>Window fl_xid(const Fl_Window*)</A></h4>
+<h4><a name=fl_xid>Window fl_xid(const Fl_Window*)</a></h4>
 
-Returns the XID for a window, or zero if not <TT>shown()</TT>. 
+Returns the XID for a window, or zero if not <tt>shown()</tt>. 
 
-<h4><A name=fl_find>Fl_Window* fl_find(ulong xid)</A></h4>
+<h4><a name=fl_find>Fl_Window* fl_find(ulong xid)</a></h4>
 
-Returns the <TT>Fl_Window</TT> that corresponds to the given XID, or
-<TT>NULL</TT> if not found.  This uses a cache so it is slightly
+Returns the <tt>Fl_Window</tt> that corresponds to the given XID, or
+<tt>NULL</tt> if not found.  This uses a cache so it is slightly
 faster than iterating through the windows yourself.
 
 <h4><a name=fl_window>extern Window fl_window;
 <br><a name=fl_gc>extern GC fl_gc;</h4>
 
-These variables are set before <TT>Fl_Widget::draw()</TT>
-is called, or by <A href=Fl_Window.html#make_current><TT>
-Fl_Window::make_current()</TT></a>.  They are needed by most Xlib
+These variables are set before <tt>Fl_Widget::draw()</tt>
+is called, or by <a href=Fl_Window.html#make_current><tt>
+Fl_Window::make_current()</tt></a>.  They are needed by most Xlib
 drawing calls, a typical call is like this:
 
-<UL><PRE>XDrawSomething(fl_display, fl_window, fl_gc, ...);</PRE></UL>
+<ul><pre>XDrawSomething(fl_display, fl_window, fl_gc, ...);</pre></ul>
 
 <p>Notice that <tt>fl_window</tt> is the X window id number.  Other
 information such as the position or size of the X window can be found
-by looking at <A href=Fl_Window.html#make_current><TT>
-Fl_Window::current()</TT></A>, which returns a pointer to the <TT>
-Fl_Window</TT> being drawn.
+by looking at <a href=Fl_Window.html#make_current><tt>
+Fl_Window::current()</tt></a>, which returns a pointer to the <tt>
+Fl_Window</tt> being drawn.
 
 <h4><a name=fl_xpixel>unsigned long fl_xpixel(Fl_Color i)</a></h4>
 
 Returns the X pixel number used to draw the given FLTK color index or
-RGB color. This is the X pixel that <A
-href=drawing.html#fl_color><TT>fl_color(i)</TT> </A> would use.
+RGB color. This is the X pixel that <a
+href=drawing.html#fl_color><tt>fl_color(i)</tt> </a> would use.
 
-<h4><A name=fl_xfont>extern XFontStruct* fl_xfont</A></h4>
+<h4><a name=fl_xfont>extern XFontStruct* fl_xfont</a></h4>
 
-Points at the font selected by the most recent <A
-href=drawing.html#fl_font><TT>fl_font()</TT></A>.  This is not
-necessarily the current font of <TT>fl_gc</TT>, which is not set
-until <A href=drawing.html#fl_draw><TT>fl_draw()</TT></A> is called.
+Points at the font selected by the most recent <a
+href=drawing.html#fl_font><tt>fl_font()</tt></a>.  This is not
+necessarily the current font of <tt>fl_gc</tt>, which is not set
+until <a href=drawing.html#fl_draw><tt>fl_draw()</tt></a> is called.
 
-<h4><A name=fl_close_display>void fl_close_display()</A></h4>
+<h4><a name=fl_close_display>void fl_close_display()</a></h4>
 
 This closes the X connection.  You do <I>not</I> need to call this to 
 exit, and in fact it is faster to not do so!  It may be useful to call 
@@ -161,13 +161,13 @@ this if you want your program to continue without the X connection. You
 cannot open the display again, and probably cannot call any FLTK 
 functions. 
 
-<h4><A name=Fl_Window.xclass>static void Fl_Window::xclass(const char*)
-<br>static const char* Fl_Window::xclass() const</A></h4>
+<h4><a name=Fl_Window.xclass>static void Fl_Window::xclass(const char*)
+<br>static const char* Fl_Window::xclass() const</a></h4>
 
-This string is used to set the <TT>XA_WM_CLASS</TT> property of all
+This string is used to set the <tt>XA_WM_CLASS</tt> property of all
 the windows fltk creates.  The default value is "fltk".  Many window
 managers can use this string to select an icon.  <a
-href=functions.html#args><tt>Fl::args(...)</tt></a> will set this to
+href=Fl.html#args><tt>Fl::args(...)</tt></a> will set this to
 the name of the program.
 
 <p>This call is provided on WIN32 for compatability, but the value is
@@ -176,7 +176,7 @@ ignored.
 <h4><a name=icon>void Fl_Window::icon(char*)</h4>
 
 Sets the icon for the window to the passed pointer.  You will need to 
-cast the icon <TT>Pixmap</TT> to a <TT>char*</TT> when calling this 
+cast the icon <tt>Pixmap</tt> to a <tt>char*</tt> when calling this 
 method. To set the icon using a bitmap compiled with your application 
 use:
 
@@ -188,25 +188,70 @@ Pixmap p = XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),
 window-&gt;icon((char*)p);</PRE></UL>
 
 <p>This only works if called <i>before</i> it is shown using the
-<TT>Fl_Window::show()</TT> method.
+<tt>Fl_Window::show()</tt> method.
 
-<h3>Using a Subclass of Fl_Window for Special X Stuff</h3>
+<h3><a name=dnd>Drag & Drop information</a></h3>
+
+The <tt>fl_dnd_*</tt> variables allow your fltk program to use the
+Xdnd protocol to manipulate files and interact with file managers. You
+can ignore these if you just want to open the dropped file or insert
+the filename into the user's text. Notice I have little information on
+how to use these, I just tried to clean up the Xlib interface and
+present the variables nicely.
+
+<h4><a name=fl_dnd_action>Atom fl_dnd_action</a></h4>
+
+<p><tt>fl_dnd_action</tt> is set by the program to indicate what it
+will do to the object. You must do this before returning non-zero for
+an <a href=events.html#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> event (due
+to oddities in the Xdnd design, it must be set in resonse to
+<tt>FL_DND_DRAG</tt> rather than <tt>FL_DND_RELEASE</tt>). Fltk
+presets it to <tt>XdndActionCopy</tt> if you don't set it.
+
+<h4><a name=fl_dnd_source_action>Atom fl_dnd_source_action</a></h4>
+
+The action the source program wants to perform, copy this to
+<tt>fl_dnd_action</tt> if you agree (?). Due to oddities in the Xdnd
+design this variable is not set until the first <a
+href=events.html#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> event, and it
+may change for each drag event.
+
+<h4><a name=fl_dnd_source_window>Window fl_dnd_source_window</a></h4>
+
+The id of the window being dragged from. Perhaps this can be used to
+find out more information about the source program?
+
+<h4><a name=fl_dnd_source_types>Atom *fl_dnd_source_types</a></h4>
+
+Zero-terminated list of atoms describing the formats of the source
+data. Any value you put in <tt>fl_dnd_type</tt> must be one of these.
+
+<h4><a name=fl_dnd_type>Atom fl_dnd_type</a></h4>
+
+You can set this when responding to a <a
+href=events.html#FL_DND_RELEASE><tt>FL_DND_RELEASE</tt></a> event to
+indicate the translation wanted. In my opinion this is not needed as
+it appears that all modern drag & drop is of URL's, not data. Fltk
+defaults this to <tt>fl_dnd_source_types[0]</tt>, which seems to
+work...
+
+<h3><a name=windows>Using a Subclass of Fl_Window for Special X Stuff</h3>
 
 FLTK can manage an X window on a different screen, visual and/or 
 colormap, you just can't use FLTK's drawing routines to draw into it. 
-But you can write your own <TT>draw()</TT> method that uses Xlib 
+But you can write your own <tt>draw()</tt> method that uses Xlib 
 (and/or OpenGL) calls only. 
 
-<P>To do this, you need to make a subclass of <A href=Fl_Window.html#Fl_Window>
-<TT>Fl_Window</TT></A> and override some of these virtual functions: </P>
+<p>To do this, you need to make a subclass of <a href=Fl_Window.html#Fl_Window>
+<tt>Fl_Window</tt></a> and override some of these virtual functions: </P>
 
 <h4>virtual void Fl_Window::create()</h4>
 
 Creates the X window, and perhaps other data such as colormaps needed
 by this window.  To create the X window you must call
-<TT>Fl_X::create()</TT>.  Do not map the window, fltk does that for you.
+<tt>Fl_X::create()</tt>.  Do not map the window, fltk does that for you.
 
-<P>An example:
+<p>An example:
 
 <UL><PRE>void MyWindow::create() {
   fl_open_display();	// necessary if this is first window
@@ -230,67 +275,66 @@ by this window.  To create the X window you must call
 This function calls XCreateWindow and sets things up so that
 <tt>fl_xid(window)</tt> returns the created window id.  This also does
 a lot of other ugly X stuff, including setting the label, resize
-limitations, etc.  The
-background is a pixel to use for X's automatic fill color, use -1 to
-indicate that no background filling should be done.
+limitations, etc.  The background is a pixel to use for X's automatic
+fill color, use -1 to indicate that no background filling should be
+done.
 
 <h4>virtual void Fl_Window::flush()</h4>
 
-This virtual function is called by <TT>Fl::flush()</TT> to update the
+This virtual function is called by <tt>Fl::flush()</tt> to update the
 window. For FLTK's own windows it does this by setting the global
-variables <TT>fl_window</TT> and <TT>fl_gc</TT> and then calling the
-<TT>draw()</TT> method.  For your own windows you might just want to
+variables <tt>fl_window</tt> and <tt>fl_gc</tt> and then calling the
+<tt>draw()</tt> method.  For your own windows you might just want to
 put all the drawing code in here.
 
-<P>The X region that is a combination of all <TT>damage()</TT> calls
-done so far is in <TT>Fl_X::i(this)-&gt;region</TT>.  If <TT>NULL</TT>
+<p>The X region that is a combination of all <tt>damage()</tt> calls
+done so far is in <tt>Fl_X::i(this)-&gt;region</tt>.  If <tt>NULL</tt>
 then you should redraw the entire window.  The undocumented function
-<TT>fl_clip_region(XRegion)</TT> will initialize the FLTK clip stack
-with a region or <TT>NULL</TT> for no clipping.  You must set region
-to <TT>NULL</TT> afterwards as <TT>fl_clip_region()</TT> now owns it
+<tt>fl_clip_region(XRegion)</tt> will initialize the FLTK clip stack
+with a region or <tt>NULL</tt> for no clipping.  You must set region
+to <tt>NULL</tt> afterwards as <tt>fl_clip_region()</tt> now owns it
 and will delete it when done.
 
-<P>If <TT>damage() == FL_DAMAGE_EXPOSE</TT> then only X expose
+<p>If <tt>damage() == FL_DAMAGE_EXPOSE</tt> then only X expose
 events have happened.  This may be useful if you have an undamaged
 image (such as a backing buffer) around.
 
-<P>Here is a sample where an undamaged image is kept somewhere: </P>
+<p>Here is a sample where an undamaged image is kept somewhere: </P>
 
-<UL><PRE>void MyWindow::flush() {
+<ul><pre>void MyWindow::flush() {
   fl_clip_region(Fl_X::i(this)-&gt;region);
   Fl_X::i(this)-&gt;region = 0;
-  if (damage() != 2) {
+  if (damage() != FL_DAMAGE_EXPOSE) {
     fl_window = backing_store_pixmap;
     fl_gc = backing_store_gc;
     this->draw();
   }
   copy_image(backing_store_pixmap, fl_xid(this));
-}</PRE></UL>
+}</pre></ul>
 
 <h4>virtual void Fl_Window::destroy()</h4>
 
 Destroy the window server copy of the window.  Usually you will 
 destroy contexts, pixmaps, or other resources used by the window, and 
-then call <TT>Fl_Window::hide()</TT> to get rid of the main window 
-identified by <TT>xid()</TT>.  If you override this, you must also 
-override the destructor as shown: 
+then call <tt>Fl_Window::hide()</tt> to get rid of the main window 
+identified by <tt>xid()</tt>.
 
-<UL><PRE>void MyWindow::destroy() {
-  if (mypixmap) {
-    XFreePixmap(fl_display,mypixmap);
-    mypixmap = 0;
+<ul><pre>void MyWindow::destroy() {
+  if (backing_store_pixmap) {
+    XFreePixmap(fl_display, backing_store_pixmap);
+    backing_store_pixmap = 0;
   }
   Fl_Window::destroy(); // you must call this
-}</PRE></UL>
+}</pre></ul>
 
 <h4>virtual void Fl_Window::~Fl_Window()</h4>
 
-Because of the way C++ works, if you override <TT>destroy()</TT> you
+Because of the way C++ works, if you override <tt>destroy()</tt> you
 <I>must</I> override the destructor as well (otherwise only the base
-class <TT>destroy()</TT> is called):
+class <tt>destroy()</tt> is called):
 
-<UL><PRE>MyWindow::~MyWindow() {
+<ul><pre>MyWindow::~MyWindow() {
   destroy();
-}</PRE></UL>
+}</pre></ul>
 
 </body></html>

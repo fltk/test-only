@@ -292,19 +292,17 @@ can be useful if your widget wants to occupy an entire window, and can
 also be used to take advantage of system-provided clipping, or to work 
 with a library that expects a system window ID to indicate where to 
 draw. 
-<P>Subclassing <TT>Fl_Window </TT>is almost exactly like subclassing <TT>
-Fl_Widget</TT>, and in fact you can easily switch a subclass back and 
-forth.  Watch out for the following differences: </P>
-<OL>
-<LI><TT>Fl_Window</TT> is a subclass of <TT>Fl_Group</TT> so <I>make 
-sure your constructor calls <TT>end()</TT></I> (unless  you actually 
-want children added to your window). </LI>
-<LI>When handling events and drawing, the upper-left corner is  at 0,0, 
-not <TT>x(),y()</TT> as in other <TT>Fl_Widget</TT>'s.  For instance, to 
-draw a box around the widget, call <TT>draw_box(0, 0, w(), h())</TT>, 
-rather than <TT>draw_box(x(), y(), w(), h())</TT>. </LI>
-</OL>
- You may also want to subclass <TT>Fl_Window</TT> in order to get 
+
+<P>Subclassing <TT>Fl_Window </TT>is almost exactly like subclassing
+<TT> Fl_Widget</TT>, and in fact you can easily switch a subclass back
+and forth.  <i>Warning: <TT>Fl_Window</TT> is a subclass of
+<TT>Fl_Group</TT> so <I>make sure your constructor calls
+<TT>end()</TT></I> (unless you actually want children added to your
+window).</i>
+
+<p>You may also want to subclass <TT>Fl_Window</TT> in order to get
 access to different visuals or to change other attributes of the 
-windows.  See <A href=osissues.html#osissues>"Appendix F - Operating 
-System Issues"</A> for more information. </BODY></HTML>
+windows. See <a href=x.html#windows>the X-specific documentation</a>
+for more information.
+
+</body></html>

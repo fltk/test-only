@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.8 2001/11/28 17:35:53 spitzak Exp $"
+// "$Id: Fl.h,v 1.9 2001/12/06 18:23:43 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -125,8 +125,7 @@ public:
   static void remove_check(Fl_Timeout_Handler, void* = 0);
   static void add_fd(int fd, int when, void (*cb)(int,void*),void* =0);
   static void add_fd(int fd, void (*cb)(int, void*), void* = 0);
-  static void remove_fd(int, int when);
-  static void remove_fd(int);
+  static void remove_fd(int, int when = -1);
   static void set_idle(void (*cb)()) {idle = cb;}
   static void add_idle(void (*cb)(void*), void* = 0);
   static bool has_idle(void (*cb)(void*), void* = 0);
@@ -151,8 +150,6 @@ public:
   static int event_dy()		{return e_dy;}
   static int event_x_root()	{return e_x_root;}
   static int event_y_root()	{return e_y_root;}
-  static bool event_inside(int,int,int,int);
-  static void get_mouse(int &,int &);
   static int event_clicks()	{return e_clicks;}
   static void event_clicks(int i) {e_clicks = i;}
   static bool event_is_click()	{return e_is_click != 0;}
@@ -162,13 +159,17 @@ public:
   static bool event_state(int i) {return (e_state&i) != 0;}
   static int event_key()	{return e_keysym;}
   static bool event_key(int);
-  static bool get_key(int);
-  static const char* key_name(int key);
-  static bool test_shortcut(int shortcut);
   static const char* event_text() {return e_text;}
   static int event_length() {return e_length;}
+
+  static bool event_inside(int,int,int,int);
+  static bool test_shortcut(int shortcut);
+  static const char* key_name(int key);
   static bool compose(int &del);
   static void compose_reset() {compose_state = 0;}
+
+  static bool get_key(int);
+  static void get_mouse(int &,int &);
 
   // event destinations:
   static bool handle(int, Fl_Window*);
@@ -252,5 +253,5 @@ FL_API int fl_getconf(const char *key, char *value, int value_length);
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.8 2001/11/28 17:35:53 spitzak Exp $".
+// End of "$Id: Fl.h,v 1.9 2001/12/06 18:23:43 spitzak Exp $".
 //

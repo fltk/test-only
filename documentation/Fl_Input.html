@@ -396,7 +396,7 @@ assummed to be <TT>strlen(t)</TT>.
 Put the current selection between <TT>mark()</TT> and <TT>position()</TT>
 into the clipboard.  Does not replace the old clipboard contents if <TT>
 position()</TT> and <TT>mark()</TT> are equal. This calls <a
-href=functions.html#copy><tt>Fl::copy()</tt></a>.
+href=Fl.html#copy><tt>Fl::copy()</tt></a>.
 
 <p>If <i>clipboard</i> is true the text is put into the user-visible
 cut & paste clipboard (this is probably what you want). If false it is
@@ -404,9 +404,9 @@ put into the less-visible selection buffer that is used to do
 middle-mouse paste and drag & drop.
 
 <p>To paste the clipboard, call <a
-href=functions.html#paste><tt>Fl::paste(true)</tt></a> and fltk will
-send the widget a <tt>FL_PASTE</tt> event with the text, which will
-cause it to be inserted.
+href=Fl.html#paste><tt>Fl::paste(true)</tt></a> and fltk will send the
+widget a <tt>FL_PASTE</tt> event with the text, which will cause it to
+be inserted.
 
 <H4><A name=Fl_Input.undo>int Fl_Input::undo()</A></H4>
  Does undo of several previous calls to <TT>replace()</TT>.  Returns 

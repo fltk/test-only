@@ -39,7 +39,7 @@ double-buffering, overlay, menu, and OpenGL support.
 
 <P>The window's callback is done if the user tries to close a window
 using the window manager and <A
-href=functions.html#modal><TT>Fl::modal()</TT></A> is zero or equal to
+href=Fl.html#modal><TT>Fl::modal()</TT></A> is zero or equal to
 the window. <TT>Fl_Window</TT> has a default callback that calls
 <TT>Fl_Window::hide()</TT> and calls <TT>exit(0)</TT> if this is the
 last top-level window.
@@ -183,7 +183,7 @@ already shown then it is deiconized and raised to the top.
 <h4>int Fl_Window::show(int argc, char **argv, int i);</h4>
 
 This must be called after <a
-href=functions.html#args>Fl::args(argc,argv)</a> to show the "main"
+href=Fl.html#args>Fl::args(argc,argv)</a> to show the "main"
 window, this indicates which window should be affected by any
 <tt>-geometry</tt> switch.  In addition if Fl::args() has not been
 called yet this does so, this is a useful shortcut for the main window
@@ -212,7 +212,7 @@ windows will come out the same as other windows.
 <p>If you want a dialog that blocks interaction with the other windows
 of your application or with all other applications, you need to look
 at <a href=#exec>exec()</a> or possibly <a
-href=functions.html#modal><TT>Fl::modal()</TT></A>
+href=Fl.html#modal><TT>Fl::modal()</TT></A>
 
 <h4>int Fl_Window::show(const Fl_Window* parent);</h4>
 
@@ -228,12 +228,12 @@ During this time events to other windows in this application are
 either thrown away or redirected to this window.
 
 <p>This does <a href=#child_of><tt>child_of(parent)</tt></a> (using <a
-href=functions.html#first_window><tt>Fl::first_window()</tt></a> if
+href=Fl.html#first_window><tt>Fl::first_window()</tt></a> if
 <i>parent</i> is null. It then does <a href=#show><tt>show()</tt></a>
 to make the window visible and raise it. It then uses <a
-href=functions.html#modal><tt>Fl::modal(this,grab)</tt> to make all
+href=Fl.html#modal><tt>Fl::modal(this,grab)</tt> to make all
 events go to this window, and waits until <a
-href=functions.html#modal><tt>Fl::exit_modal()</tt></a> is called
+href=Fl.html#modal><tt>Fl::exit_modal()</tt></a> is called
 (typically by the window being hidden or destroyed).
 
 <p>The return value is <a
@@ -245,7 +245,7 @@ OK button with a callback that does this.
 the parent.  This is convenient for popups that appear in response to
 a mouse or key click.
 
-<p>See <a href=functions.html#modal><tt>Fl::modal()</tt></a> for what
+<p>See <a href=Fl.html#modal><tt>Fl::modal()</tt></a> for what
 <i>grab</i> does. This is useful for popup menus.
 
 <a name=show_inside><h4>bool Fl_Window::show_inside(const Fl_Window* frame);</h4>

@@ -29,7 +29,7 @@ control exactly when and how by changing the values for
 
 <P>Buttons can also generate callbacks in response to
 <TT>FL_SHORTCUT</TT> events.  The button can either have an explicit
-<A href=#shortcut> <TT>shortcut()</TT></A> value or a letter
+<A href=Fl_Widget.html#shortcut><TT>shortcut()</TT></A> value or a letter
 shortcut can be indicated in the <TT>label()</TT> with an '&amp;'
 character before it.  For the label shortcut it does not matter if
 <I>Alt</I> is held down, but if you have an input field in the same
@@ -58,7 +58,6 @@ the input field does not eat the event first as an
 </UL>
 </TD><TD align=left valign=top>
 <UL>
-<LI><A href=#shortcut>shortcut</A></LI>
 <LI><A href=#type>type</A></LI>
 </UL>
 </TD><TD align=left valign=top>
@@ -101,28 +100,6 @@ Same as <TT>value(1)</TT>.
 
 Turns on this button and turns off all other radio buttons in the 
 group (calling <TT>value(1)</TT> or <TT>set()</TT> does not do this). 
-
-<a name=shortcut><h4>ulong Fl_Button::shortcut() const
-<BR>void Fl_Button::shortcut(ulong key)</h4></a>
-
-The first form returns the current shortcut key for the button. 
-
-<P>The second form sets the shortcut key to <TT>key</TT>. Setting this
-overrides the use of '&amp;' in the <TT>label()</TT>.  The value is a
-bitwise OR of a key and a set of shift flags, for example <CODE>FL_ALT
-| 'a'</CODE> , <CODE>FL_ALT | (FL_F + 10)</CODE>, or just
-<CODE>'a'</CODE>.  A value of 0 disables the shortcut.
-
-<P>The key can be any value returned by <A href=functions.html#event_key>
-<TT>Fl::event_key()</TT></A>, but will usually be an ASCII letter.  Use 
-a lower-case letter unless you require the shift key to be held down.
-
-<P>The shift flags can be any set of values accepted by <A
-href=events.html#event_state> <TT>Fl::event_state()</TT></A>.  If the
-bit is on that shift key must be pushed.  <tt>FL_WIN, FL_ALT,
-FL_CTRL</tt>, and <tt>FL_SHIFT</tt> must be off if they are not in the
-shift flags (zero for the other bits indicates a "don't care"
-setting).
 
 <a name=type><h4>uchar Fl_Button::type() const
 <BR>void Fl_Button::type(uchar t)</h4></a>

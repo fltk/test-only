@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.117 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.118 2001/12/06 18:23:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -136,10 +136,6 @@ void Fl::remove_fd(int n, int events) {
   if (events & POLLERR) FD_CLR(n, &fdsets[2]);
   if (n == maxfd) maxfd--;
 #endif
-}
-
-void Fl::remove_fd(int n) {
-  remove_fd(n, -1);
 }
 
 #if CONSOLIDATE_MOTION
@@ -1303,5 +1299,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.117 2001/11/29 17:39:30 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.118 2001/12/06 18:23:43 spitzak Exp $".
 //

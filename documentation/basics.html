@@ -2,32 +2,8 @@
 
 <H1 ALIGN=RIGHT><A NAME=basics>2 - FLTK Basics</A></H1>
 
-This chapter will teach you the basics of compiling programs that use 
-FLTK. 
-
-<h2>Compiler Switches</h2>
-
-You will probably need to tell the compiler where to find the
-directory "FL" with all the header files. This is usually done using
-the <TT>-I</TT> option added to the compiler line:
-
-<UL><PRE>
-c++ -I/usr/local/include ...
-</PRE></UL>
-
-(In Visual C++ this can be done by selecting "Settings" from the
-"Project" menu and then changing the "Preprocessor" settings under the
-"C/C++" tab)
-
-<p>Similarly, when linking your application you will need to tell the 
-compiler to use the FLTK library and where to find it:
-
-<UL><PRE>
-c++ ... -L/usr/local/lib -lfltk -lXext -lX11 -lm
-</PRE></UL>
-
-(In Visual C++ you need to add the FLTK library to the "Link"
-settings).
+This chapter will show you how to write and compile a very simple FLTK
+program.
 
 <h2>A sample FLTK program</h2>
 
@@ -63,9 +39,6 @@ The proper way to include FLTK header files is:
 <UL><PRE>
 #include &lt;fltk/Fl_xyz.h&gt;
 </PRE></UL>
-
-Notice that the leading "FL" and the ".H" are capitalized. (perhaps
-this will be changed for 2.0?)
 
 <p>All programs must include the file <TT>&lt;fltk/Fl.h&gt;</TT>. In
 addition the program must include a header file for each FLTK class it
@@ -127,8 +100,8 @@ box-&gt;<A href=Fl_Widget.html#label_type>label_type</A>(FL_SHADOW_LABEL);
 changing it from the default of <tt>FL_NO_BOX</tt>, which means that
 no box is drawn. In our "Hello, World!" example we use <TT>
 FL_UP_BOX</TT>, which means that a raised button border will be drawn
-around the widget. (you can see the available boxtypes in <A
-href=common.html#boxtypes> Chapter 3</A>)
+around the widget.  You can see the available boxtypes in <A
+href=common.html#boxtypes> Chapter 3</A>
 
 <p>You can examine the boxtype in by doing
 <tt>box->box()</tt>.  Fltk uses method name overloading to make
@@ -154,12 +127,12 @@ window-&gt;<A href=Fl_Group.html#Fl_Group.end>end</A>();
 widgets automatically adds them as children of the most recent <a
 href=Fl_Group.html>Fl_Group</a> or <a
 href=Fl_Window.html>Fl_Window</a> that was created. Though convienent,
-this is also a big source of errors in FLTK programming. The method 
-<A href=Fl_Group.html#Fl_Group.end>Fl_Group::end()</A> restores the
+this is also a big source of errors in FLTK programming. The method <A
+href=Fl_Group.html#Fl_Group.end>Fl_Group::end()</A> restores the
 "current group" to the parent of itself, in this case it is set to
-null because the window has no parent. (you may also find it useful to
-call <a href=Fl_Group.html#Fl_Group.current>Fl_Group::current(0)</a> to turn this
-off completely.
+null because the window has no parent.  You may also find it useful to
+call <a href=Fl_Group.html#Fl_Group.current>Fl_Group::current(0)</a>
+to turn this off completely.
 
 <h3>Showing the Window</h3>
 
@@ -182,38 +155,59 @@ the window server).
 <h3>The Main Event Loop</h3>
 
 <UL><PRE>
-return <A href=functions.html#run>Fl::run</A>();
+return <A href=Fl.html#run>Fl::run</A>();
 </PRE></UL>
 
-FLTK was designed to not take over the main event loop. Instead a
-program can call <A href=functions.html#wait><TT>Fl::wait()</TT></A>,
-which will pause until "something happens" and then return. A program
-can call <tt>Fl::wait()</tt> repeatedly or mix it with other
-calculations.
-
-<p>For convienence with compilers that produce warnings when there are
-infinite loops in your code, FLTK provides the <A
-href=functions.html#run><TT>Fl:run()</TT></A> method. It is equivalent
-to:
-
-<UL><PRE>
-for (;;) Fl::wait();
-</PRE></UL>
+This will repeatedly wait for and then process events from the user.
+<TT>Fl::run()</TT> does not return until all of the windows under FLTK 
+control are closed (either by the user or your program).
 
 <p>When the user attempts to close the window, the <a
 href=Fl_Widget.html#callback>callback</a> for the window is
 called. If you don't change it, the callback will remove the window
-from the screen and if there are no windows left on the screen it will
-call <tt>exit(0)</tt>.
+from the screen.
 
 <p>You can replace this callback with your own code, so you can
 prevent the window from closing, or pop up a confirmation, or create
-another window, or close it and keep running with no windows (useful
-if you used <a href=functions.html#add_fd><TT>Fl::add_fd()</tt></a>),
-or you can make closing the "main" window exit even if other windows
-are open.
+another window, or you can call <tt>exit(0)</tt> if you want to exit
+when the user closes the "main" window even if other windows are still
+open.
 
-<TT>Fl::run()</TT> does not return until all of the windows under FLTK 
-control are closed (either by the user or your program).
+<p>FLTK was designed to not take over the main event loop. Instead a
+program can call <A href=Fl.html#wait><TT>Fl::wait()</TT></A>,
+which will pause until "something happens" and then return. A program
+can call <tt>Fl::wait()</tt> repeatedly or mix it with other
+calculations. You can do this if there are no windows displayed
+(useful if you used <a href=Fl.html#add_fd><TT>Fl::add_fd()</tt></a>).
+The <tt>Fl::run()</tt> method is equivalent to:
+
+<UL><PRE>
+while (Fl::first_window()) Fl::wait();
+return 0;
+</PRE></UL>
+
+<h2>Compiling your program</h2>
+
+You will probably need to tell the compiler where to find the
+directory "fltk" with all the header files. This is usually done using
+the <TT>-I</TT> option added to the compiler line:
+
+<UL><PRE>
+c++ -I/usr/local/include ...
+</PRE></UL>
+
+(In Visual C++ this can be done by selecting "Settings" from the
+"Project" menu and then changing the "Preprocessor" settings under the
+"C/C++" tab)
+
+<p>Similarly, when linking your application you will need to tell the 
+compiler to use the FLTK library and where to find it:
+
+<UL><PRE>
+c++ ... -L/usr/local/lib -lfltk -lXext -lX11 -lm
+</PRE></UL>
+
+(In Visual C++ you need to add the FLTK library to the "Link"
+settings).
 
 </body></html>

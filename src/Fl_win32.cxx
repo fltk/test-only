@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.158 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.159 2001/12/06 18:23:43 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -157,10 +157,6 @@ void Fl::remove_fd(int n, int events) {
 #endif // USE_ASYNC_SELECT
 }
 
-void Fl::remove_fd(int n) {
-  remove_fd(n, -1);
-}
-
 // these pointers are set by the Fl::lock() function:
 static void nothing() {}
 void (*fl_lock_function)() = nothing;
@@ -274,7 +270,6 @@ static int fl_ready() {
 ////////////////////////////////////////////////////////////////
 
 static bool reload_info = true;
-#include <stdio.h>
 
 const Fl_Screen_Info& Fl::info() {
   static Fl_Screen_Info info;
@@ -1294,5 +1289,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.158 2001/11/29 17:39:30 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.159 2001/12/06 18:23:43 spitzak Exp $".
 //
