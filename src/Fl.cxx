@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.159 2003/01/21 07:53:39 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.160 2003/01/22 06:21:51 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -598,9 +598,13 @@ bool fltk::handle(int event, Window* window)
   case MOVE:
 //case DRAG: // does not happen
     if (pushed()) {
-      e_x = e_x_root+fl_pushed_dx;
-      e_y = e_y_root+fl_pushed_dy;
-      return pushed()->handle(DRAG);
+      if (modal_ && !modal_->contains(pushed())) {
+	return send_from_root(modal_, DRAG);
+      } else {
+	e_x = e_x_root+fl_pushed_dx;
+	e_y = e_y_root+fl_pushed_dy;
+	return pushed()->handle(DRAG);
+      }
     }
     {Widget* pbm = belowmouse();
     if (modal_ && !modal_->contains(to)) to = modal_;
@@ -611,11 +615,15 @@ bool fltk::handle(int event, Window* window)
   case RELEASE:
     to = pushed();
     if (!event_state(ANY_BUTTON)) pushed_=0;
-    if (!to) return false;
-    e_x = e_x_root+fl_pushed_dx;
-    e_y = e_y_root+fl_pushed_dy;
-    return to->handle(RELEASE);
-    break;
+    if (modal_ && !modal_->contains(to)) {
+      return send_from_root(modal_, RELEASE);
+    } else if (to) {
+      e_x = e_x_root+fl_pushed_dx;
+      e_y = e_y_root+fl_pushed_dy;
+      return to->handle(RELEASE);
+    } else {
+      return false;
+    }
 
   case LEAVE:
     if (!pushed_) {belowmouse(0); Tooltip::exit();}
@@ -683,5 +691,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.159 2003/01/21 07:53:39 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.160 2003/01/22 06:21:51 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.40 2002/12/10 02:00:28 easysw Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.41 2003/01/22 06:21:50 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ using namespace fltk;
 #define COPY 3		// unchanged
 #define NODAMAGE 4	// unchanged even by X expose() events
 
-static char SWAP_TYPE; // 0 = determine it from environment variable
+static char SWAP_TYPE = 0; // 0 = determine it from environment variable
 
 ////////////////////////////////////////////////////////////////
 
@@ -320,5 +320,5 @@ void GlWindow::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.40 2002/12/10 02:00:28 easysw Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.41 2003/01/22 06:21:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.42 2002/12/22 05:30:22 easysw Exp $"
+// "$Id: Fl_Style.cxx,v 1.43 2003/01/22 06:21:51 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -316,15 +316,14 @@ const char* fltk::find_config_file(char* path, int size, const char* name)
 // at a straight line and GRAY is not between the two adjacent entries.
 
 void fltk::set_background(Color c) {
-  int r = (c>>24)&255;
+  uchar r, g, b;
+  split_color( c, r, g, b );
   double powr;
   if (r < 0x30 || r > 0xf0) powr = 1;
   else powr = log(r/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
-  int g = (c>>16)&255;
   double powg;
   if (g < 0x30 || g > 0xf0) powg = 1;
   else powg = log(g/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
-  int b = (c>>8)&255;
   double powb;
   if (b < 0x30 || b > 0xf0) powb = 1;
   else powb = log(b/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
@@ -339,5 +338,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.42 2002/12/22 05:30:22 easysw Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.43 2003/01/22 06:21:51 spitzak Exp $".
 //

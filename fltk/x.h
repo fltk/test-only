@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.17 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: x.h,v 1.18 2003/01/22 06:21:51 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -69,6 +69,12 @@
 #endif
 
 #undef Window
+
+#ifdef __APPLE__
+typedef unsigned long	ulong;
+typedef unsigned int	uint;
+typedef unsigned char	uchar;
+#endif
 
 extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
 
@@ -226,5 +232,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.17 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: x.h,v 1.18 2003/01/22 06:21:51 spitzak Exp $".
 //
