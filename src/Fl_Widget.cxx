@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.48 1999/12/15 18:58:41 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.49 1999/12/20 08:33:15 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -142,7 +142,6 @@ void Fl_Widget::show() {
     if (visible_r()) {
       damage(FL_DAMAGE_ALL|FL_DAMAGE_CHILD_LABEL);
       handle(FL_SHOW);
-      if (inside(Fl::focus())) Fl::focus()->take_focus();
     }
   }
 }
@@ -195,17 +194,17 @@ Fl_Widget::~Fl_Widget() {
 
 ////////////////////////////////////////////////////////////////
 
+#include <FL/fl_draw.H>
+
 // Draw the surrounding box of a normal widget:
 void Fl_Widget::draw_box() const {
   Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  if (Fl::focus() == this) f |= FL_FOCUSED;
   box()->draw(x(), y(), w(), h(), color(), f);
 }
 
 // Draw the surrounding box but no interior:
 void Fl_Widget::draw_frame() const {
   Fl_Flags f = active_r() ? FL_FRAME_ONLY : (FL_INACTIVE|FL_FRAME_ONLY);
-  if (Fl::focus() == this) f |= FL_FOCUSED;
   box()->draw(x(), y(), w(), h(), color(), f);
 }
 
@@ -228,6 +227,13 @@ Fl_Color Fl_Widget::draw_button() const {
     lc = highlight_label_color();
   }
   if (Fl::focus() == this) f |= FL_FOCUSED;
+  // We need to erase the focus rectangle for FL_NO_BOX buttons, such
+  // as checkmarks:
+  if (!(f&FL_FOCUSED) && box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
+    fl_clip(x(), y(), w(), h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
   box()->draw(x(), y(), w(), h(), c, f);
   return lc;
 }
@@ -235,10 +241,6 @@ Fl_Color Fl_Widget::draw_button() const {
 void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
   Fl_Color bc = off_color();
   Fl_Color fc = label_color();
-  if ((f&FL_VALUE) && selection_color()) {
-    bc = selection_color();
-    fc = selection_text_color();
-  }
   if (!active_r()) {
     f |= FL_INACTIVE;
     fc = fl_inactive(fc);
@@ -251,7 +253,6 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
 }
 
 // Call the draw method, handle the clip out
-#include <FL/fl_draw.H>
 void Fl_Widget::draw_n_clip()
 {
   if (!box()->fills_rectangle() && !(image() && (flags()&FL_ALIGN_TILED) &&
@@ -267,5 +268,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.48 1999/12/15 18:58:41 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.49 1999/12/20 08:33:15 bill Exp $".
 //

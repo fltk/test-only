@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.32 1999/11/22 09:00:16 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.33 1999/12/20 08:33:11 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -76,6 +76,17 @@ int Fl_Choice::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   const Fl_Menu_Item* v;
   switch (e) {
+
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+
+  case FL_ENTER:
+  case FL_LEAVE:
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+
   case FL_PUSH:
     //Fl::event_is_click(0);
   J1:
@@ -84,6 +95,7 @@ int Fl_Choice::handle(int e) {
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
+
   case FL_SHORTCUT:
     if (Fl_Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
@@ -91,10 +103,11 @@ int Fl_Choice::handle(int e) {
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
-    return 1;
+
+  case FL_KEYBOARD:
+    if (Fl::event_key() == ' ') goto J1;
+    return 0;
+
   default:
     return 0;
   }
@@ -109,5 +122,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Choice::default_style = new Fl_Named_Style("Choice", revert, &Fl_Choice::default_style);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.32 1999/11/22 09:00:16 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.33 1999/12/20 08:33:11 bill Exp $".
 //

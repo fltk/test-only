@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.24 1999/12/15 08:30:57 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.25 1999/12/20 08:33:12 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -124,7 +124,7 @@ static int compose; // compose state (# of characters so far + 1)
 // behavior where moving off the end of an input field will move the
 // cursor into the next field:
 // define it as 1 to prevent cursor movement from going to next field:
-#define NORMAL_INPUT_MOVE 1
+#define NORMAL_INPUT_MOVE 0
 
 #define ctrl(x) (x^0x40)
 
@@ -132,11 +132,11 @@ int Fl_Input::handle_key() {
   int i;
 
   int pcompose = compose; compose = 0;
-  char key = Fl::event_text()[0];
+  char ascii = Fl::event_text()[0];
 
   if (pcompose && Fl::event_length()) {
     char buf[20]; int ins; int del;
-    compose = fl_compose(pcompose-1, key, del, buf, ins);
+    compose = fl_compose(pcompose-1, ascii, del, buf, ins);
     if (compose) {
       replace(position(), del ? position()-del : mark(), buf, ins);
       compose++; // store value+1 so 1 can initialize compose state
@@ -154,47 +154,44 @@ int Fl_Input::handle_key() {
 
   switch (Fl::event_key()) {
   case FL_Left:
-    key = ctrl('B'); break;
+    ascii = ctrl('B'); break;
   case FL_Right:
-    key = ctrl('F'); break;
+    ascii = ctrl('F'); break;
   case FL_Up:
-    key = ctrl('P'); break;
+    ascii = ctrl('P'); break;
   case FL_Down:
-    key = ctrl('N'); break;
+    ascii = ctrl('N'); break;
   case FL_Delete:
-    key = ctrl('D'); break;
+    ascii = ctrl('D'); break;
   case FL_Home:
-    key = ctrl('A'); break;
+    ascii = ctrl('A'); break;
   case FL_End:
-    key = ctrl('E'); break;
-  case FL_BackSpace:
-    if (mark() != position()) cut();
-    else cut(-1);
-    return 1;
+    ascii = ctrl('E'); break;
+  case FL_Tab:
+    if (Fl::event_state(FL_CTRL) || type()!=FL_MULTILINE_INPUT) return 0;
+    break;
   case FL_Enter:
   case FL_KP_Enter:
     if (when() & FL_WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
       return 1;
-    } else if (type() == FL_MULTILINE_INPUT)
+    } else if (type() == FL_MULTILINE_INPUT) {
       return replace(position(), mark(), "\n", 1);
-    else 
+    } else {
       return 0;	// reserved for shortcuts
-  case FL_Tab:
-    if (Fl::event_state(FL_CTRL) || type()!=FL_MULTILINE_INPUT) return 0;
-    break;
-  case FL_Escape:
-    return 0;	// reserved for shortcuts (Forms cleared field)
+    }
   case FL_Control_R:
   case 0xff20: // Multi-Key
-    compose = 1;
-    return 1;
+    ascii = ctrl('Q'); break;
+  case FL_Escape:
+    return 0;	// reserved for shortcuts (Forms cleared field)
   }
 
-  switch(key) {
-  case 0:	// key did not translate to any text
-    compose = pcompose; // allow user to hit shift keys after ^Q
+  switch (ascii) {
+
+  case 0:	// shift and other unused function keys
+    compose = pcompose;
     return 0;
   case ctrl('A'):
     if (type() == FL_MULTILINE_INPUT)
@@ -217,6 +214,10 @@ int Fl_Input::handle_key() {
     return shift_position(i) + NORMAL_INPUT_MOVE;
   case ctrl('F'):
     return shift_position(position()+1) + NORMAL_INPUT_MOVE;
+  case ctrl('H'):
+    if (mark() != position()) cut();
+    else cut(-1);
+    return 1;
   case ctrl('K'):
     if (position()>=size()) return 0;
     if (type() == FL_MULTILINE_INPUT) {
@@ -262,14 +263,14 @@ int Fl_Input::handle_key() {
   // this could be improved to make sure characters are inserted at
   // legal positions...
   if (type() == FL_FLOAT_INPUT) {
-    if (!strchr("0123456789.eE+-", key)) return 0;
+    if (!strchr("0123456789.eE+-", ascii)) return 0;
   } else if (type() == FL_INT_INPUT) {
-    if (!position() && (key == '+' || key == '-'));
-    else if (key >= '0' && key <= '9');
+    if (!position() && (ascii == '+' || ascii == '-'));
+    else if (ascii >= '0' && ascii <= '9');
     // we allow 0xabc style hex numbers to be typed:
-    else if (position()==1 && index(0)=='0' && (key == 'x' || key == 'X'));
+    else if (position()==1 && index(0)=='0' && (ascii == 'x' || ascii == 'X'));
     else if (position()>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X')
-           && (key>='A'&& key<='F' || key>='a'&& key<='f'));
+           && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f'));
     else return 0;
   }
 
@@ -304,6 +305,12 @@ int Fl_Input::handle(int event) {
     compose = 0;
     break;
 
+  case FL_SHORTCUT:
+    // Typing any characters when no text field is selected causes 
+    // navigation to jump to the input field:
+    if (Fl::event_text()[0]<=' ') return 0;
+    position(size());
+    take_focus();
   case FL_KEYBOARD:
     return handle_key();
 
@@ -342,5 +349,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.24 1999/12/15 08:30:57 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.25 1999/12/20 08:33:12 bill Exp $".
 //

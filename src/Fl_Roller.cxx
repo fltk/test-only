@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.15 1999/12/15 08:30:59 bill Exp $"
+// "$Id: Fl_Roller.cxx,v 1.16 1999/12/20 08:33:13 bill Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@ int Fl_Roller::handle(int event) {
   int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
   switch (event) {
   case FL_PUSH:
+    take_focus();
     handle_push();
     ipos = newpos;
     return 1;
@@ -44,6 +45,26 @@ int Fl_Roller::handle(int event) {
   case FL_RELEASE:
     handle_release();
     return 1;
+  case FL_KEYBOARD: {
+    // Only arrows in the correct direction are used.  Also the up/down
+    // keystrokes are reversed from the default for Fl_Valuator.
+    // This is due to back-compatability with scrollbars.
+    int i = linesize();
+    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+    switch (Fl::event_key()) {
+    case FL_Down: if (!horizontal()) goto UP; else return 0;
+    case FL_Left: if (horizontal()) goto DOWN; else return 0;
+    case FL_Up: if (!horizontal()) goto DOWN; else return 0;
+    case FL_Right: if (horizontal()) goto UP; else return 0;
+    case FL_BackSpace:
+    DOWN:
+      i = -i;
+    case ' ':
+    UP:
+      handle_drag(clamp(increment(value(), i)));
+      return 1;
+    }}
+    // else fall through to the default case:
   default:
     return Fl_Valuator::handle(event);
   }
@@ -127,7 +148,7 @@ void Fl_Roller::draw() {
   }
   if (Fl::focus()==this) {
     fl_color(FL_BLACK);
-    fl_line_style(FL_DOT);
+    fl_line_style(FL_DASH);
     fl_rect(X-1,Y-1,W+2,H+2);
     fl_line_style(0);
   }
@@ -138,5 +159,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.15 1999/12/15 08:30:59 bill Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.16 1999/12/20 08:33:13 bill Exp $".
 //

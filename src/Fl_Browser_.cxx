@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.36 1999/11/29 08:47:01 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.37 1999/12/20 08:33:09 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -84,11 +84,19 @@ int Fl_Browser_::leftedge() const {
   return X;
 }
 
-// the scrollbars are resized & placed by draw(), since each one's size
+// The scrollbars may be moved again by draw(), since each one's size
 // depends on whether the other is visible or not.  This skips over
-// Fl_Group::layout since it moves the scrollbars uselessly.
+// Fl_Group::resize since it moves the scrollbars uselessly.
 void Fl_Browser_::layout() {
   Fl_Widget::layout();
+  // move the scrollbars so they can respond to events:
+  int X,Y,W,H; bbox(X,Y,W,H);
+  scrollbar.resize(
+	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
+	Y, scrollbar_width_, H);
+  hscrollbar.resize(
+	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
+	W, scrollbar_width_);
 }
 
 // Cause minimal update to redraw the given item:
@@ -224,9 +232,7 @@ void Fl_Browser_::display(void* x) {
 void Fl_Browser_::draw() {
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
-    fl_clip(x(), y(), w(), h());
-    draw_group_box();
-    fl_pop_clip();
+    draw_frame();
     drawsquare = 1;
   }
 
@@ -270,6 +276,11 @@ J1:
   bbox(X, Y, W, H);
 
   fl_clip(X, Y, W, H);
+  void* focus_line = 0;
+  if (Fl::focus() == this) {
+    focus_line = selection_;
+    if (!focus_line) focus_line = top_;
+  }
   // for each line, draw it if full redraw or scrolled.  Erase background
   // if not a full redraw or if it is selected:
   void* l = top();
@@ -281,13 +292,15 @@ J1:
       if (item_selected(l)) {
 	fl_color(selection_color());
 	fl_rectf(X, yy+Y, W, hh);
-      } else if (!(damage()&FL_DAMAGE_ALL)) {
+      } else {
 	fl_color(color());
 	fl_rectf(X, yy+Y, W, hh);
       }
-      if (type() == FL_MULTI_BROWSER && l == selection_) {
+      if (l == focus_line) {
 	fl_color(item_selected(l) ? selection_text_color() : text_color());
+	fl_line_style(FL_DOT);
 	fl_rect(X+1, yy+Y, W-2, hh);
+	fl_line_style(0);
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
       int w = item_width(l);
@@ -296,7 +309,7 @@ J1:
     yy += hh;
   }
   // erase the area below last line:
-  if (!(damage()&FL_DAMAGE_ALL) && yy < H) {
+  if (yy < H) {
     fl_color(color());
     fl_rectf(X, yy+Y, W, H-yy);
   }
@@ -467,61 +480,69 @@ int Fl_Browser_::select_only(void* l, int docallbacks) {
 }
 
 int Fl_Browser_::handle(int event) {
-  // must do shortcuts first or the scrollbar will get them...
-  if ((event == FL_SHORTCUT || event == FL_KEYBOARD)
-      && type() >= FL_HOLD_BROWSER) {
-    void* l1 = selection_;
-    void* l = l1; if (!l) l = top_; if (!l) l = item_first();
-    if (l) {
-      if (type()==FL_HOLD_BROWSER) switch (Fl::event_key()) {
-      case FL_Down:
-	while ((l = item_next(l)))
-	  if (item_height(l)>0) {select_only(l, 1); break;}
-	return 1;
-      case FL_Up:
-	while ((l = item_prev(l))) if (item_height(l)>0) {
-	  select_only(l, 1); break;}
-	return 1;
-      } else switch (Fl::event_key()) {
-      case FL_Enter:
-	select_only(l, 1);
-	return 1;
-      case ' ':
-	selection_ = l;
-	select(l, !item_selected(l), 1);
-	return 1;
-      case FL_Down:
-	while ((l = item_next(l))) {
-	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
-	    select(l, l1 ? item_selected(l1) : 1, 1);
-	  if (item_height(l)>0) goto J1;
-	}
-	return 1;
-      case FL_Up:
-	while ((l = item_prev(l))) {
-	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
-	    select(l, l1 ? item_selected(l1) : 1, 1);
-	  if (item_height(l)>0) goto J1;
-	}
-	return 1;
-      J1:
-	if (selection_) redraw_line(selection_);
-	selection_ = l; redraw_line(l);
-	display(l);
-	return 1;
-      }
-    }
-  }
-
-  if (Fl_Group::handle(event)) return 1;
   int X, Y, W, H; bbox(X, Y, W, H);
   int my;
   static char change;
   static char whichway;
   static int py;
+
+  // figure out the line that has keyboard focus:
+  void* l = selection_; if (!l) l = top_; if (!l) l = item_first();
+  void* l1 = l;
+
   switch (event) {
+
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    if (l) redraw_line(l);
+    return 1;
+
+  case FL_KEYBOARD:
+    if (type()==FL_HOLD_BROWSER) switch (Fl::event_key()) {
+    case FL_Down:
+      while ((l = item_next(l)))
+	if (item_height(l)>0) {select_only(l, 1); break;}
+      return 1;
+    case FL_Up:
+      while ((l = item_prev(l))) if (item_height(l)>0) {
+	select_only(l, 1); break;}
+      return 1;
+    } else switch (Fl::event_key()) {
+    case FL_Enter:
+      select_only(l, 1);
+      return 1;
+    case ' ':
+      selection_ = l;
+      select(l, !item_selected(l), 1);
+      return 1;
+    case FL_Down:
+      while ((l = item_next(l))) {
+	if (Fl::event_state(FL_SHIFT|FL_CTRL))
+	  select(l, l1 ? item_selected(l1) : 1, 1);
+	if (item_height(l)>0) goto J1;
+      }
+      return 1;
+    case FL_Up:
+      while ((l = item_prev(l))) {
+	if (Fl::event_state(FL_SHIFT|FL_CTRL))
+	  select(l, l1 ? item_selected(l1) : 1, 1);
+	if (item_height(l)>0) goto J1;
+      }
+      return 1;
+    J1:
+      if (l1) redraw_line(l1);
+      selection_ = l; redraw_line(l);
+      display(l);
+      return 1;
+    }
+    return 0;
+
+  case FL_SHORTCUT:
+    return handle_i(event,1);
+
   case FL_PUSH:
-    if (!Fl::event_inside(X, Y, W, H)) return 0;
+    if (!Fl::event_inside(X, Y, W, H)) return handle_i(event,1);
+    take_focus();
     if (type() == FL_SELECT_BROWSER) deselect();
     my = py = Fl::event_y();
     change = 0;
@@ -542,6 +563,7 @@ int Fl_Browser_::handle(int event) {
       change = select_only(find_item(my), when() & FL_WHEN_CHANGED);
     }
     return 1;
+
   case FL_VIEWCHANGE: {
     int p = real_position_ + Fl::event_dy();
     int h = full_height()-H; if (p > h) p = h;
@@ -587,6 +609,7 @@ int Fl_Browser_::handle(int event) {
     }
     py = my;
     return 1;}
+
   case FL_RELEASE:
     if (type() == FL_SELECT_BROWSER) {
       void* t = selection_; deselect(); selection_ = t;
@@ -665,5 +688,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.36 1999/11/29 08:47:01 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.37 1999/12/20 08:33:09 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.34 1999/12/15 08:30:59 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.35 1999/12/20 08:33:14 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -146,8 +146,8 @@ void Fl_Slider::draw() {
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
   case FL_PUSH:
+    take_focus();
     if (!Fl::event_inside(x, y, w, h)) return 0;
-    damage(FL_DAMAGE_EXPOSE);
     handle_push();
   case FL_DRAG: {
     int W = (horizontal() ? w : h);
@@ -197,20 +197,25 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     damage(FL_DAMAGE_EXPOSE);
     handle_release();
     return 1;
-  case FL_KEYBOARD:
-    if (!horizontal()) {
-      // Unfortunately the keystrokes are upside down for vertical ones.
-      // This is due to back-compatability with scrollbars.
-      int i = 1;
-      if (Fl::event_state()&FL_SHIFT) i = 10;
-      switch (Fl::event_key()) {
-      case FL_Up:
-	i = -i;
-      case FL_Down:
-	handle_drag(clamp(increment(value(),i)));
-	return 1;
-      }
-    }
+  case FL_KEYBOARD: {
+    // Only arrows in the correct direction are used.  Also the up/down
+    // keystrokes are reversed from the default for Fl_Valuator.
+    // This is due to back-compatability with scrollbars.
+    int i = linesize();
+    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+    switch (Fl::event_key()) {
+    case FL_Down: if (!horizontal()) goto UP; else return 0;
+    case FL_Left: if (horizontal()) goto DOWN; else return 0;
+    case FL_Up: if (!horizontal()) goto DOWN; else return 0;
+    case FL_Right: if (horizontal()) goto UP; else return 0;
+    case FL_BackSpace:
+    DOWN:
+      i = -i;
+    case ' ':
+    UP:
+      handle_drag(clamp(increment(value(), i)));
+      return 1;
+    }}
     // else fall through to the default case:
   default:
     return Fl_Valuator::handle(event);
@@ -231,5 +236,5 @@ static void revert(Fl_Style *s) {
 Fl_Style* Fl_Slider::default_style = new Fl_Named_Style("Slider", revert, &Fl_Slider::default_style);
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.34 1999/12/15 08:30:59 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.35 1999/12/20 08:33:14 bill Exp $".
 //

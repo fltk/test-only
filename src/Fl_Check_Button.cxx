@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.19 1999/12/16 03:14:01 vincent Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.20 1999/12/20 08:33:10 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,6 +25,8 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Check_Button.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Group.H>
 
 void Fl_Check_Button::draw() {
   // Draw the outer box as though it was a button:
@@ -43,6 +45,13 @@ void Fl_Check_Button::draw() {
     f |= FL_HIGHLIGHT;
   }
   if (Fl::focus() == this) f |= FL_FOCUSED;
+  // We need to erase the focus rectangle for FL_NO_BOX buttons, such
+  // as checkmarks:
+  if (!(f&FL_FOCUSED) && box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
+    fl_clip(x(), y(), w(), h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
   box()->draw(x(), y(), w(), h(), c,
 	      Fl::pushed()==this ? (f|FL_VALUE) : (f&~FL_VALUE));
 

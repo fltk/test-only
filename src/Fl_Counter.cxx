@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.26 1999/12/15 08:30:55 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.27 1999/12/20 08:33:11 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -73,11 +73,19 @@ void Fl_Counter::draw() {
   }
 
   Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  if (Fl::focus() == this) f |= FL_FOCUSED;
   box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
-  fl_font(textfont(), textsize());
-  fl_color(fl_inactive(textcolor(), f));
+
   char str[128]; format(str);
+  fl_font(textfont(), textsize());
+  if (Fl::focus() == this) {
+    fl_color(selection_color());
+    int h = textsize()+leading();
+    int w = fl_width(str);
+    fl_rectf(xx[0]+(ww[0]-w)/2,y()+(this->h()-h)/2,w,h);
+    fl_color(selection_text_color());
+  } else {
+    fl_color(fl_inactive(textcolor(), f));
+  }
   fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
 
   if (type() == FL_NORMAL_COUNTER &&
@@ -147,6 +155,7 @@ int Fl_Counter::handle(int event) {
     return 1;
 
   case FL_PUSH:
+    take_focus();
     handle_push();
   case FL_DRAG:
     if (highlight != mouseobj) {
@@ -183,10 +192,12 @@ static void revert(Fl_Style *s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_LIGHT2;
   s->glyph = glyph;
+  s->selection_color = FL_BLUE_SELECTION_COLOR;
+  s->selection_text_color = FL_WHITE;
 }
 
 Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.26 1999/12/15 08:30:55 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.27 1999/12/20 08:33:11 bill Exp $".
 //

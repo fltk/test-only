@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.54 1999/12/19 15:21:54 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.55 1999/12/20 08:33:11 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,6 +63,7 @@ static int send(Fl_Widget* o, int event) {
 static int navkey() {
   switch (Fl::event_key()) {
   case FL_Tab:
+    if (Fl::event_state(FL_CTRL)) return 0; // reserved for Fl_Tabs
     return Fl::event_state(FL_SHIFT) ? FL_Left : FL_Right;
   case FL_Right:
     return FL_Right;
@@ -71,7 +72,6 @@ static int navkey() {
   case FL_Up:
     return FL_Up;
   case FL_Down:
-  case FL_Enter:
     return FL_Down;
   default:
     switch (Fl::event_text()[0]) {
@@ -84,7 +84,10 @@ static int navkey() {
   return 0;
 }
 
-int Fl_Group::handle(int event) {
+int Fl_Group::handle(int event) {handle_i(event, 0);}
+
+// Fl_Tabs (and perhaps others) set the i_take_focus flag:
+int Fl_Group::handle_i(int event, int i_take_focus) {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = array()+children();
 
@@ -96,14 +99,15 @@ int Fl_Group::handle(int event) {
       if (savedfocus_ && savedfocus_->take_focus()) return 1;
     case FL_Right:
     case FL_Down:
+      if (i_take_focus) {Fl::focus(this); return 1;}
       while (a < e) if ((*a++)->take_focus()) return 1;
-      break;
+      return 0;
     case FL_Left:
     case FL_Up:
       while (e > a) if ((*--e)->take_focus()) return 1;
-      break;
+      if (i_take_focus) {Fl::focus(this); return 1;}
+      return 0;
     }
-    return 0;
 
   case FL_UNFOCUS:
     savedfocus_ = fl_oldfocus;
@@ -137,6 +141,13 @@ int Fl_Group::handle(int event) {
     }
     return 0;
 
+  case FL_DRAG:
+  case FL_RELEASE:
+  case FL_KEYBOARD:
+    // These are supposed to be sent directly to the pushed() widget, ignore
+    // them if sent here:
+    return 0;
+
   case FL_DEACTIVATE:
   case FL_ACTIVATE:
     while (a < e) {
@@ -153,58 +164,67 @@ int Fl_Group::handle(int event) {
     }
     return 1;
 
+  case FL_SHORTCUT: {
+    int key = navkey();
+    if (key) {
+      if (Fl::focus() == this) {
+	if (key == FL_Right || key == FL_Down)
+	  while (a < e) if ((*a++)->take_focus()) return 1;
+	return 0;
+      }
+      int i;
+      for (i = 0; ; i++) {
+	if (i >= children()) return 0;
+	if (array_[i]->contains(Fl::focus())) break;
+      }
+      Fl_Widget *previous = array_[i];
+      for (;;) {
+	switch (key) {
+	case FL_Right:
+	case FL_Down:
+	  i++;
+	  if (i >= children_) {
+	    if (parent()) return 0;
+	    i = 0;
+	  }
+	  break;
+	case FL_Left:
+	case FL_Up:
+	  if (i) i--;
+	  else {
+	    if (i_take_focus) {Fl::focus(this); return 1;}
+	    if (parent()) return 0;
+	    i = children_-1;
+	  }
+	  break;
+	default:
+	  return 0;
+	}
+	Fl_Widget* o = array_[i];
+	if (o == previous) return 0;
+	switch (key) {
+	case FL_Down:
+	case FL_Up:
+	  // for up/down, the widgets have to overlap horizontally:
+	  if (o->x() >= previous->x()+previous->w() ||
+	      o->x()+o->w() <= previous->x()) continue;
+	}
+	if (o->take_focus()) return 1;
+      }
+    }
+    while (e > a) {
+      Fl_Widget* o = *--e;
+      if (o->takesevents() && send(o,event)) return 1;
+    }
+    return 0;}
+
   default:
     while (e > a) {
       Fl_Widget* o = *--e;
       if (o->takesevents() && send(o,event)) return 1;
     }
-    if (event == FL_SHORTCUT) return navigation(navkey());
     return 0;
 
-  }
-}
-
-// try to move the focus in response to a keystroke:
-int Fl_Group::navigation(int key) {
-  if (children() <= 1) return 0;
-  int i;
-  for (i = 0; ; i++) {
-    if (i >= children_) return 0;
-    if (array_[i]->contains(Fl::focus())) break;
-  }
-  Fl_Widget *previous = array_[i];
-
-  for (;;) {
-    switch (key) {
-    case FL_Right:
-    case FL_Down:
-      i++;
-      if (i >= children_) {
-	if (parent()) return 0;
-	i = 0;
-      }
-      break;
-    case FL_Left:
-    case FL_Up:
-      if (i) i--;
-      else {
-	if (parent()) return 0;
-	i = children_-1;
-      }
-      break;
-    default:
-      return 0;
-    }
-    Fl_Widget* o = array_[i];
-    if (o == previous) return 0;
-    switch (key) {
-    case FL_Down:
-    case FL_Up:
-      // for up/down, the widgets have to overlap horizontally:
-      if (o->x() >= previous->x()+previous->w() ||
-	  o->x()+o->w() <= previous->x()) continue;
-    }
-    if (o->take_focus()) return 1;
   }
 }
 
@@ -554,5 +574,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.54 1999/12/19 15:21:54 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.55 1999/12/20 08:33:11 bill Exp $".
 //

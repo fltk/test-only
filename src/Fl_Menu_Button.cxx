@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.26 1999/11/22 09:00:19 bill Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.27 1999/12/20 08:33:13 bill Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -65,24 +65,36 @@ const Fl_Menu_Item* Fl_Menu_Button::popup() {
 int Fl_Menu_Button::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   switch (e) {
+
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    if (type()) return 0;
+    damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+
   case FL_ENTER:
   case FL_LEAVE:
-    if (box() && !type()) {
-      if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
-      return 1;
-    }
-    return 0;
+    if (type()) return 0;
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+
   case FL_PUSH:
-    if (box() == FL_NO_BOX) {
-      if (Fl::event_button() != 3) return 0;
-    } else if (type()) {
+    if (type()) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
-    }
+    } else 
+      take_focus();
+  J1:
     popup();
     return 1;
+
   case FL_SHORTCUT:
     if (Fl_Widget::test_shortcut()) {popup(); return 1;}
     return test_shortcut() != 0;
+
+  case FL_KEYBOARD:
+    if (!type() && Fl::event_key() == ' ') goto J1;
+    return 0;
+
   default:
     return 0;
   }
@@ -102,5 +114,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Menu_Button::default_style = new Fl_Named_Style("Menu_Button", revert, &Fl_Menu_Button::default_style);
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.26 1999/11/22 09:00:19 bill Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.27 1999/12/20 08:33:13 bill Exp $".
 //

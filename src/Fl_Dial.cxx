@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.27 1999/12/15 08:30:56 bill Exp $"
+// "$Id: Fl_Dial.cxx,v 1.28 1999/12/20 08:33:11 bill Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,67 +31,78 @@
 
 // All angles are measured with 0 to the right and counter-clockwise
 
-void Fl_Dial::draw(int x, int y, int w, int h) {
-  Fl_Flags f = active_r() ? 0 : FL_INACTIVE;
+void Fl_Dial::draw() {
+  int X = x(); int Y = y(); int W = w(); int H = h();
+  if (!(type() == FL_FILL_DIAL && box() == FL_OVAL_BOX)) {
+    if (damage()&FL_DAMAGE_ALL) draw_box();
+    box()->inset(X,Y,W,H);
+  }
+  Fl_Color fillcolor = selection_color();
+  Fl_Color linecolor = highlight_color();
+  if (!active_r()) {
+    fillcolor = fl_inactive(fillcolor);
+    linecolor = fl_inactive(linecolor);
+  }
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
-    //if (box() == FL_OVAL_BOX) {x--; y--; w+=2; h+=2;}
     fl_color(color());
-    fl_pie(x, y, w-1, h-1, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
-    fl_color(fl_inactive(selection_color(), f));
-    fl_pie(x, y, w-1, h-1, 270-angle, 270-a1);
-//     if (box() == FL_OVAL_BOX) {
-//       fl_color(off_color());
-//       fl_arc(x, y, w, h, 0, 360);
-//     }
-    return;
-  }
-  if (!(damage()&FL_DAMAGE_ALL)) {
-    fl_color(color());
-    fl_pie(x+1, y+1, w-2, h-2, 0, 360);
-  }
-  fl_push_matrix();
-  fl_translate(x+w/2-.5, y+h/2-.5);
-  fl_scale(w-1, h-1);
-  fl_rotate(45-angle);
-  fl_color(fl_inactive(selection_color(), f));
-  if (type()) { // FL_LINE_DIAL
-    fl_begin_polygon();
-    fl_vertex(0.0,   0.0);
-    fl_vertex(-0.04, 0.0);
-    fl_vertex(-0.25, 0.25);
-    fl_vertex(0.0,   0.04);
-    fl_end_polygon();
-    fl_color(fl_inactive(highlight_color(), f));
-    fl_begin_loop();
-    fl_vertex(0.0,   0.0);
-    fl_vertex(-0.04, 0.0);
-    fl_vertex(-0.25, 0.25);
-    fl_vertex(0.0,   0.04);
-    fl_end_loop();
+    fl_pie(X, Y, W-1, H-1, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    fl_color(fillcolor);
+    fl_pie(X, Y, W-1, H-1, 270-angle, 270-a1);
+    if (box() == FL_OVAL_BOX) {
+      fl_color(linecolor);
+      fl_arc(X, Y, W, H, 0, 360);
+    }
   } else {
-    fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    fl_color(fl_inactive(highlight_color(), f));
-    fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
+    if (!(damage()&FL_DAMAGE_ALL)) {
+      fl_color(color());
+      fl_pie(X+1, Y+1, W-2, H-2, 0, 360);
+    }
+    fl_push_matrix();
+    fl_translate(X+W/2-.5, Y+H/2-.5);
+    fl_scale(W-1, H-1);
+    fl_rotate(45-angle);
+    fl_color(fillcolor);
+    if (type()) { // FL_LINE_DIAL
+      fl_begin_polygon();
+      fl_vertex(0.0,   0.0);
+      fl_vertex(-0.04, 0.0);
+      fl_vertex(-0.25, 0.25);
+      fl_vertex(0.0,   0.04);
+      fl_end_polygon();
+      fl_color(linecolor);
+      fl_begin_loop();
+      fl_vertex(0.0,   0.0);
+      fl_vertex(-0.04, 0.0);
+      fl_vertex(-0.25, 0.25);
+      fl_vertex(0.0,   0.04);
+      fl_end_loop();
+    } else {
+      fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
+      fl_color(linecolor);
+      fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
+    }
+    fl_pop_matrix();
   }
-  fl_pop_matrix();
-}
-
-void Fl_Dial::draw() {
-  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) draw_box();
-  int X = x(); int Y = y(); int W = w(); int H = h();
-  box()->inset(X,Y,W,H);
-  draw(X,Y,W,H);
+  if (Fl::focus() == this) {
+    fl_color(linecolor);
+    fl_line_style(FL_DASH);
+    fl_arc(X+2, Y+2, W-4, H-4, 0, 360);
+    fl_line_style(0);
+  }
   draw_label();
 }
 
-int Fl_Dial::handle(int event, int x, int y, int w, int h) {
+int Fl_Dial::handle(int event) {
+  int X = x(); int Y = y(); int W = w(); int H = h();
+  box()->inset(X,Y,W,H);
   switch (event) {
   case FL_PUSH:
+    take_focus();
     handle_push();
   case FL_DRAG: {
-    int mx = Fl::event_x()-x-w/2;
-    int my = Fl::event_y()-y-h/2;
+    int mx = Fl::event_x()-X-W/2;
+    int my = Fl::event_y()-Y-H/2;
     if (!mx && !my) return 1;
     double angle = 270-atan2((float)-my, (float)mx)*180/M_PI;
     double oldangle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
@@ -115,12 +126,6 @@ int Fl_Dial::handle(int event, int x, int y, int w, int h) {
   }
 }
 
-int Fl_Dial::handle(int e) {
-  int X = x(); int Y = y(); int W = w(); int H = h();
-  box()->inset(X,Y,W,H);
-  return handle(e,X,Y,W,H);
-}
-
 static void revert(Fl_Style* s) {
   s->box = FL_OVAL_BOX;
   s->selection_color = FL_DARK2;
@@ -137,5 +142,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.27 1999/12/15 08:30:56 bill Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.28 1999/12/20 08:33:11 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.H,v 1.13 1999/11/20 04:42:28 vincent Exp $"
+// "$Id: Fl_Dial.H,v 1.14 1999/12/20 08:33:07 bill Exp $"
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,9 +49,6 @@ public:
 
 protected:
 
-  // these allow subclasses to put the dial in a smaller area:
-  void draw(int, int, int, int);
-  int handle(int, int, int, int, int);
   void draw();
 
 private:
@@ -64,5 +61,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Dial.H,v 1.13 1999/11/20 04:42:28 vincent Exp $".
+// End of "$Id: Fl_Dial.H,v 1.14 1999/12/20 08:33:07 bill Exp $".
 //

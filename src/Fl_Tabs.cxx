@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.31 1999/12/15 08:30:59 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.32 1999/12/20 08:33:14 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -127,6 +127,7 @@ int Fl_Tabs::handle(int event) {
 
   Fl_Widget *o;
   int i;
+  int backwards = 0;
 
   switch (event) {
 
@@ -148,36 +149,41 @@ int Fl_Tabs::handle(int event) {
     }
     return 1;
 
-  case FL_FOCUS:
-  case FL_UNFOCUS:
-    damage(FL_DAMAGE_EXPOSE);
-    return 1;
-
   case FL_KEYBOARD:
     switch (Fl::event_key()) {
     case ' ':
     case FL_Right:
-      for (i = children()-1; i--;) {
-	if (child(i)->visible()) {
-	  value(child(i+1)); do_callback();
-	  return 1;
-	}
-      }
-      return 1;
+      goto MOVE;
     case FL_BackSpace:
     case FL_Left:
-      for (i = 1; i < children(); i++) {
-	if (child(i)->visible()) {
-	  value(child(i-1)); do_callback();
-	  return 1;
-	}
-      }
-      return 1;
+      backwards = 1;
+      goto MOVE;
+    default:
+      return 0;
     }
 
+  case FL_SHORTCUT:
+    if (Fl::event_key()!=FL_Tab || !Fl::event_state(FL_CTRL)) goto DEFAULT;
+    backwards = Fl::event_state(FL_SHIFT);
+  MOVE:
+    for (i = children()-1; i>0; i--) if (child(i)->visible()) break;
+    if (backwards) {i = i ? i-1 : children()-1;}
+    else {i++; if (i >= children()) i = 0;}
+    value(child(i)); do_callback();
+    return 1;
+
+  case FL_UNFOCUS:
+    // this is an fltk bug?  Fl::focus() is already turned off...
+    damage(FL_DAMAGE_EXPOSE);
   default:
-  DEFAULT:
-    return Fl_Group::handle(event);
+  DEFAULT: {
+    int pf = (Fl::focus()==this);
+    if (handle_i(event, 1)) {
+      // we must redraw if we gained or lost the focus:
+      if ((Fl::focus()==this) != pf) damage(FL_DAMAGE_EXPOSE);
+      return 1;
+    }
+    return 0;}
 
   }
 }
@@ -209,12 +215,14 @@ Fl_Widget* Fl_Tabs::value() {
 // Setting the value hides all other children, and makes this one
 // visible, iff it is really a child:
 int Fl_Tabs::value(Fl_Widget *newvalue) {
+  int setfocus = Fl::focus() != this && contains(Fl::focus());
   Fl_Widget*const* a = array();
   for (int i=children(); i--;) {
     Fl_Widget* o = *a++;
     if (o == newvalue) {
       if (o->visible()) return 0; // no change
       o->show();
+      if (setfocus) o->take_focus();
     } else {
       o->hide();
     }
@@ -351,5 +359,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.31 1999/12/15 08:30:59 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.32 1999/12/20 08:33:14 bill Exp $".
 //

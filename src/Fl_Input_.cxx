@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.35 1999/12/17 20:18:11 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.36 1999/12/20 08:33:13 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -327,42 +327,55 @@ void Fl_Input_::handle_mouse(int X, int Y,
 			     int W, int /*H*/, int drag) {
   was_up_down = 0;
   if (!size()) return;
+
   setfont();
-
-  const char *p, *e;
-  char buf[MAXBUF];
-
-  int theline = (type()==FL_MULTILINE_INPUT) ?
-    (Fl::event_y()-Y+yscroll_)/(textsize()+leading()) : 0;
 
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
-  int newpos = 0;
+  // figure out what line we are pointing at:
+  int theline = 0;
+  if (type()==FL_MULTILINE_INPUT) {
+    theline = Fl::event_y()-Y+yscroll_;
+    if (theline > 0) theline /= (textsize()+leading());
+  }
+
+  int newpos;
+  if (theline < 0) {
+    newpos = 0;
+  } else {
 #ifdef WORDWRAP
-  if (type()==FL_MULTILINE_INPUT) wordwrap = W; else wordwrap = 0;
+    if (type()==FL_MULTILINE_INPUT) wordwrap = W; else wordwrap = 0;
 #endif
-  for (p=value();; ) {
-    e = expand(p, buf);
-    theline--; if (theline < 0) break;
-    if (*e == '\n' || *e == ' ') e++;
-    p = e;
-    if (e >= value_+size_) break;
+    // Step through all the lines until we reach the pointed-to line.
+    // Expand the lines to printed representation into the buffer:
+    const char *p, *e;
+    char buf[MAXBUF];
+    for (p=value();; ) {
+      e = expand(p, buf);
+      theline--; if (theline < 0) break;
+      if (*e == '\n' || *e == ' ') e++;
+      p = e;
+      if (e >= value_+size_) break;
+    }
+    // Do a binary search for the horizontal character position:
+    const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
+    for (l = p, r = e; l<r; ) {
+      t = l+(r-l+1)/2;
+      int f = X-xscroll_+expandpos(p, t, buf, 0);
+      if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
+      else r = t-1;
+    }
+    if (l < e) { // see if closer to character on right:
+      int f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
+      if (f1 < f0) l = l+1;
+    }
+    newpos = l-value();
   }
-  const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
-  for (l = p, r = e; l<r; ) {
-    t = l+(r-l+1)/2;
-    int f = X-xscroll_+expandpos(p, t, buf, 0);
-    if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
-    else r = t-1;
-  }
-  if (l < e) { // see if closer to character on right:
-    int f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
-    if (f1 < f0) l = l+1;
-  }
-  newpos = l-value();
 
   int newmark = drag ? mark() : newpos;
   if (Fl::event_clicks()) {
+    // Multiple clicks, expand the selection to word/line boundaries:
+    int savepos = newpos;
     if (newpos >= newmark) {
       if (newpos == newmark) {
 	if (newpos < size()) newpos++;
@@ -382,13 +395,13 @@ void Fl_Input_::handle_mouse(int X, int Y,
 	while (!wordboundary(newpos)) newpos--;
       }
     }
-     // if the multiple click does not increase the selection, revert
+    // If the multiple click does not increase the selection, revert
     // to single-click behavior:
     if (!drag && (mark() > position() ?
                   (newmark >= position() && newpos <= mark()) :
                   (newmark >= mark() && newpos <= position()))) {
       Fl::event_clicks(0);
-      newmark = newpos = l-value();
+      newmark = newpos = savepos;
     }
   }
   position(newpos, newmark);
@@ -403,18 +416,13 @@ int Fl_Input_::position(int p, int m) {
   if (p == position_ && m == mark_) return 0;
   //if (Fl::selection_owner() == this) Fl::selection_owner(0);
   if (p != m) {
+    // new position is a selection:
     if (p != position_) minimal_update(position_, p);
     if (m != mark_) minimal_update(mark_, m);
   } else {
-    // new position is a cursor
-    if (position_ == mark_) {
-      // old position was just a cursor
-      if (Fl::focus() == this && !(damage()&FL_DAMAGE_EXPOSE)) {
-	minimal_update(position_); erase_cursor_only = 1;
-      }
-    } else { // old position was a selection
-      minimal_update(position_, mark_);
-    }
+    // new position is a cursor:
+    if (position_ == mark_) erase_cursor_only = 1;
+    minimal_update(position_, mark_);
   }
   position_ = p;
   mark_ = m;
@@ -740,5 +748,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.35 1999/12/17 20:18:11 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.36 1999/12/20 08:33:13 bill Exp $".
 //
