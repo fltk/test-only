@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.29 2000/05/17 07:08:04 bill Exp $"
+// "$Id: win32.H,v 1.30 2000/05/27 01:17:24 carl Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -103,8 +103,7 @@ void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy)
 extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
 
-#ifdef Fl_Window_H // only include this if we are working with windows
-
+#include <FL/Fl_Window.H>
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
@@ -132,8 +131,7 @@ inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 Fl_Window* fl_find(Window xid);
 
 #endif
-#endif
 
 //
-// End of "$Id: win32.H,v 1.29 2000/05/17 07:08:04 bill Exp $".
+// End of "$Id: win32.H,v 1.30 2000/05/27 01:17:24 carl Exp $".
 //

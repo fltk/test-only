@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.3 2000/05/02 06:09:15 carl Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.4 2000/05/27 01:17:32 carl Exp $"
 //
 // Less-used font functions
 //
@@ -158,8 +158,8 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       if (j >= 16) { // create a new font
 	newfont = new Fl_Font_;
 	newfont->name_ = xlist[first_xlist];
-	newfont->bold = newfont;
-	newfont->italic = newfont;
+	newfont->bold_ = newfont;
+	newfont->italic_ = newfont;
 	newfont->first = 0;
 	newfont->xlist = xlist+first_xlist;
 	newfont->n = -(i-first_xlist);
@@ -180,10 +180,10 @@ int fl_list_fonts(Fl_Font*& arrayp) {
     int a = to_nice(newname, newfont->xlist[0]);
     if (a && !strcmp(newname, family_name)) {
       switch (a) {
-      case FL_BOLD: family->bold = newfont; break;
-      case FL_ITALIC: family->italic = newfont; break;
+      case FL_BOLD: family->bold_ = newfont; break;
+      case FL_ITALIC: family->italic_ = newfont; break;
       case FL_BOLD|FL_ITALIC:
-	family->bold->italic = family->italic->bold = newfont;
+	family->bold_->italic_ = family->italic_->bold_ = newfont;
 	break;
       }
     } else {
@@ -308,11 +308,11 @@ Fl_Font fl_font(const char* name) {
   }}
   return 0;
  GOTIT:
-  if (attrib & FL_BOLD) font = font->bold;
-  if (attrib & FL_ITALIC) font = font->italic;
+  if (attrib & FL_BOLD) font = font->bold_;
+  if (attrib & FL_ITALIC) font = font->italic_;
   return font;
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.3 2000/05/02 06:09:15 carl Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.4 2000/05/27 01:17:32 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.6 2000/04/24 08:31:22 bill Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 
 #if HAVE_GL_OVERLAY
 
-#ifndef _WIN32
+#ifndef WIN32
 
 // Methods on Fl_Gl_Window that create an overlay window.  Because
 // many programs don't need the overlay, this is seperated into this
@@ -95,7 +95,7 @@ int Fl_Gl_Window::can_do_overlay() {
   return fl_find_overlay_visual() != 0;
 }
 
-#else // _WIN32:
+#else // WIN32:
 
 int Fl_Gl_Window::can_do_overlay() {
   Fl_Gl_Choice* choice = Fl_Gl_Choice::find(0,0);
@@ -115,7 +115,7 @@ int Fl_Gl_Window::can_do_overlay() {return 0;}
 void Fl_Gl_Window::make_overlay() {
   if (!overlay) {
 #if HAVE_GL_OVERLAY
-#ifdef _WIN32
+#ifdef WIN32
     HDC hdc = fl_private_dc(this, g);
     GLXContext context = wglCreateLayerContext(hdc, 1);
     if (context) { // we found a usable overlay context
@@ -164,7 +164,7 @@ void Fl_Gl_Window::make_overlay() {
 void Fl_Gl_Window::redraw_overlay() {
   if (!shown()) return;
   make_overlay();
-#ifndef _WIN32
+#ifndef WIN32
   if (overlay != this)
     ((Fl_Gl_Window*)overlay)->redraw();
   else
@@ -176,7 +176,7 @@ void Fl_Gl_Window::make_overlay_current() {
   make_overlay();
 #if HAVE_GL_OVERLAY
   if (overlay != this) {
-#ifdef _WIN32
+#ifdef WIN32
     fl_set_gl_context(this, (GLXContext)overlay);
     if (fl_overlay_depth)
       wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
@@ -190,7 +190,7 @@ void Fl_Gl_Window::make_overlay_current() {
 
 void Fl_Gl_Window::hide_overlay() {
 #if HAVE_GL_OVERLAY
-#ifdef _WIN32
+#ifdef WIN32
   // nothing needs to be done?  Or should it be erased?
 #else
   if (overlay && overlay!=this) ((Fl_Gl_Window*)overlay)->hide();
@@ -201,5 +201,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.6 2000/04/24 08:31:22 bill Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $".
 //

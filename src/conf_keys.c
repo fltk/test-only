@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_keys.c,v 1.8 2000/03/02 20:47:17 carl Exp $"
+   "$Id: conf_keys.c,v 1.9 2000/05/27 01:17:30 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -67,7 +67,7 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
   if (strlen(sec) > (CONF_MAX_SECT_LEN - 1))                                    /* if section name too long */
     return CONF_ERR_ARGUMENT;                                                   /* bail out */
   strncpy(section, sec, sizeof(section));
-  trim(section);
+  conf_trim(section);
   if (*section && *(section + strlen(section) - 1) != conf_level_sep) {                                                               /* add trailing '/' to section name */
     *(section + strlen(section) + 1) = (char)0;
     *(section + strlen(section)) = conf_level_sep;
@@ -86,7 +86,7 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
       }
     }
 
-    trim(line);                                                                 /* remove unnecessary whitespace */
+    conf_trim(line);                                                            /* remove unnecessary whitespace */
     if (!(*line)) continue;                                                     /* this is a blank line, go to next line */
 
     if (*line == '[') {                                                         /* in new section */
@@ -109,7 +109,7 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
         int r;
 
         p = strtok(0, "");                                                      /* get the name of file to be included */
-        trim(p);                                                                /* kill unecessary whitespace */
+        conf_trim(p);                                                           /* kill unecessary whitespace */
         if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                 /* fully qualified path */
         else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);     /* figure out pathname */
         strncpy(s, section + strlen(current_section), sizeof(s));               /* section/key to look up in included file */
@@ -131,7 +131,7 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
     if (!in_correct_section) continue;                                          /* section not found yet, keep looking for it */
     section_found = 1;                                                          /* must be in right section */
 
-    trim(line);                                                                 /* kill unnecessary whitespace */
+    conf_trim(line);                                                            /* kill unnecessary whitespace */
 
     (*current) = (conf_entry *)malloc(sizeof(conf_entry));                      /* allocate memory for this entry */
     if (*current) (*current)->data = strdup(line);                              /* duplicate the key for this entry */
@@ -150,5 +150,5 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
 } /* getconf_keys() */
 
 /*
-    End of "$Id: conf_keys.c,v 1.8 2000/03/02 20:47:17 carl Exp $".
+    End of "$Id: conf_keys.c,v 1.9 2000/05/27 01:17:30 carl Exp $".
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.3 2000/04/03 17:09:24 bill Exp $"
+// "$Id: fl_kde1.cxx,v 1.4 2000/05/27 01:17:34 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -144,8 +144,8 @@ int fl_kde1(int co) {
     if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
     if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
     font = fl_font(fontname);
-    if (font && fontbold) font = font->bold;
-    if (font && fontitalic) font = font->italic;
+    if (font && fontbold) font = font->bold();
+    if (font && fontitalic) font = font->italic();
   }
 
   // turn off highlighting:
@@ -233,5 +233,5 @@ int fl_kde1(int co) {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.3 2000/04/03 17:09:24 bill Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.4 2000/05/27 01:17:34 carl Exp $".
 //

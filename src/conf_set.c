@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_set.c,v 1.11 2000/03/02 20:47:17 carl Exp $"
+   "$Id: conf_set.c,v 1.12 2000/05/27 01:17:32 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -29,6 +29,15 @@
 #define F_OK 0
 #endif
 
+/* this function returns the proper amount of leading indentation for a line */
+static const char* level_indent(int l) {
+  static char indent[CONF_MAX_LEVEL * CONF_INDENT + 1];
+  memset(indent, 0, sizeof(indent));
+  if (l <= CONF_MAX_LEVEL) memset(indent, ' ', l * CONF_INDENT);
+
+  return indent;
+}
+
 /*
         int setconf(const char *configfile, const char *key, const char *svalue)
 
@@ -48,9 +57,7 @@
                 Please excuse the ugliness of this function.  I will
                 rewrite it eventually, but it seems to work for now...
 */
-int
-setconf(const char *configfile, const char *k, const char *svalue)
-{
+int setconf(const char *configfile, const char *k, const char *svalue) {
         int             done_flag;                                              /* has entry already been written? */
         int             newsec_flag = 0;                                        /* are we in a new section? */
         char            configfile2[CONF_MAXPATHLEN + 6];                       /* file name for old config file */
@@ -67,7 +74,6 @@ setconf(const char *configfile, const char *k, const char *svalue)
         int             new_flag;                                               /* does the config file already exist? */
         int             section_flag = 1;                                       /* section given */
         int             i, level = 0, current_level = 0, last_level;
-        int             indent_kludge = 0;
 	char            *comment = 0;                                           /* the comment found on the line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
 
@@ -107,7 +113,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 strcpy(base_section[0], "");
                 section_flag = 0;
         }
-        bsl[0] = strcnt(base_section[0], conf_level_sep);
+        bsl[0] = conf_strcnt(base_section[0], conf_level_sep) + 1;
 
         last_level = 0;
         for (i = 1; i < CONF_MAX_LEVEL; i++)
@@ -118,7 +124,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         last_level = i;
                         *p = (char)0;
                         sprintf(base_section2[i], "[%s]", base_section[i]);
-                        bsl[i] = strcnt(base_section[i], conf_level_sep);
+                        bsl[i] = conf_strcnt(base_section[i], conf_level_sep) + 1;
                 }
                 else
                 {
@@ -128,7 +134,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 }
         }
 
-        if (strcnt(base_section[CONF_MAX_LEVEL - 1], conf_level_sep))
+        if (conf_strcnt(base_section[CONF_MAX_LEVEL - 1], conf_level_sep))
         {
                 unlink(configfile2);
                 return CONF_ERR_DEPTH;
@@ -153,8 +159,6 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
                 if (section_flag)
                 {
-                        indent_kludge = 1;
-
                         for (i = last_level; i >= 0; i--)
                         {
                                 fprintf(ifp2, "\n%s%s\n",
@@ -164,11 +168,11 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
                 if (svalue)
                         sprintf(line2, "%s%s %c %s\n",
-                                level_indent(bsl[0] + indent_kludge),
+                                level_indent(bsl[0]),
                                 key, conf_sep, svalue);                         /* create new entry */
                 else
                         sprintf(line2, "%s%s\n",
-                                level_indent(bsl[0] + indent_kludge),
+                                level_indent(bsl[0]),
                                 key);                                           /* create new entry */
 
                 fputs(line2, ifp2);
@@ -192,7 +196,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 				if ((p2 = strchr(line, conf_comment_sep)))      /* if comment found */
 					*p2 = (char)0;				/* kill it */
 
-                                if (!strcasecmp(trim(line), base_section2[i]))	/* if this is the section we are looking for */
+                                if (!strcasecmp(conf_trim(line), base_section2[i]))/* if this is the section we are looking for */
 					break;					/* stop looking */
 			}
                         if (p)							/* if we found the first parent section */
@@ -211,6 +215,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 *line = (char)0;
                 do
                 {
+printf("cl: %d\n", current_level);			
 			comment = 0;
 			
                         if (!fgets(line, sizeof(line), ifp))			/* if no more lines in config file */
@@ -223,27 +228,29 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			{
 				*p2 = (char)0;					/* kill the comment */
 				comment = ++p2;					/* but remember it */
-				endtrim(comment);
+				conf_endtrim(comment);
 			}
 			
-                        trim(line);						/* remove unnecessary whitespace */
+                        conf_trim(line);					/* remove unnecessary whitespace */
 			
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
-				if (comment)					/* line with only comment */
+printf("line with no key: %s\n", line);				
+				if (comment) {					/* line with only comment */
 	                                fprintf(ifp2, "%s%c%s\n",
     	                                	level_indent(current_level),
 						conf_comment_sep, comment);     /* put line in new config file */
+				}
 				continue;
 			}
 
                         if (*line == '[')
                         {
-                                indent_kludge = 1;
-                                current_level = strcnt(line, conf_level_sep);
+printf("line beginning section: %s\n", line);				
+                                current_level = conf_strcnt(line, conf_level_sep) + 1;
 				fprintf(ifp2, "\n");
                                 sprintf(lineout, "%s%s",
-                                        level_indent(current_level), line);
+                                        level_indent(current_level - 1), line);
 				if (comment)
 				{
 					char temp[CONF_MAX_LINE_LEN];
@@ -268,13 +275,15 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         }
                         else
                         {
+printf("c: %s\n", comment);				
                                 sprintf(lineout, "%s%s",
-                                    level_indent(current_level + indent_kludge),
+                                    level_indent(current_level),
                                     line);                                      /* write old lines to new config file */
 				
 				if (comment)
 				{
 					char temp[CONF_MAX_LINE_LEN];
+printf("4c: %s\n", comment);				
 					
 					if (strlen(lineout) < conf_comment_column)
 					{
@@ -313,10 +322,10 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			{
 				*p2 = (char)0;					/* kill the comment */
 				comment = ++p2;					/* but remember it */
-				endtrim(comment);
+				conf_endtrim(comment);
 			}
 			
-                        trim(line);						/* remove unnecessary whitespace */
+                        conf_trim(line);					/* remove unnecessary whitespace */
 			
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
@@ -329,11 +338,10 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
                         if (*line == '[')
                         {
-                                indent_kludge = 1;
-                                current_level = strcnt(line, conf_level_sep);
+                                current_level = conf_strcnt(line, conf_level_sep) + 1;
 				fprintf(ifp2, "\n");
                                 sprintf(lineout, "%s%s",
-                                        level_indent(current_level), line);
+                                        level_indent(current_level - 1), line);
 				if (comment)
 				{
 					char temp[CONF_MAX_LINE_LEN];
@@ -359,7 +367,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			else
                         {
                                 sprintf(lineout, "%s%s",
-                                    level_indent(current_level + indent_kludge),
+                                    level_indent(current_level),
                                     line);                                      /* write old lines to new config file */
 				
 				if (comment)
@@ -400,11 +408,11 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			{
 				*p2 = (char)0;					/* kill the comment */
 				comment = ++p2;					/* but remember it */
-				endtrim(comment);
+				conf_endtrim(comment);
 
 			}
 			
-                        trim(line);						/* remove unnecessary whitespace */
+                        conf_trim(line);					/* remove unnecessary whitespace */
 			
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
@@ -417,14 +425,13 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
                         if (*line == '[')
                         {
-                                indent_kludge = 1;
                                 newsec_flag = 1;
                                 break;
                         }
                         else
                         {
                                 sprintf(lineout, "%s%s",
-                                    level_indent(current_level + indent_kludge),
+                                    level_indent(current_level),
                                     line);                                      /* write old lines to new config file */
 				
 				if (comment)
@@ -458,9 +465,6 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         base_section2[i - 1]);
         }
 
-	if (level)
-		indent_kludge = 1;
-	
         current_level = bsl[0];
 
         done_flag = 0;
@@ -493,12 +497,12 @@ setconf(const char *configfile, const char *k, const char *svalue)
 		        {
 		                *p3 = (char)0;					/* kill the comment */
 			        comment = ++p2;					/* but remember it */
-			        endtrim(comment);
+			        conf_endtrim(comment);
 		                break;
 		        }
 		}
 			
-                trim(line);							/* remove unnecessary whitespace */
+                conf_trim(line);						/* remove unnecessary whitespace */
 			
                 if (!strcmp(line, ""))						/* if there is no key on this line */
 		{
@@ -514,7 +518,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			if (!done_flag)
 			{
                                 fprintf(ifp2, "%s%s",
-                                    level_indent(current_level + indent_kludge),
+                                    level_indent(current_level),
                                     key);
 
                                 if (svalue)
@@ -525,13 +529,11 @@ setconf(const char *configfile, const char *k, const char *svalue)
                                 done_flag = 1;                                  /* entry is written */
 			}
 			
-                        indent_kludge = 1;
-			
-                        current_level = strcnt(line, conf_level_sep);
+                        current_level = conf_strcnt(line, conf_level_sep) + 1;
 			
 			fprintf(ifp2, "\n");
                         sprintf(lineout, "%s%s",
-                                level_indent(current_level), line);
+                                level_indent(current_level - 1), line);
 			if (comment)
 			{
 				char temp[CONF_MAX_LINE_LEN];
@@ -560,7 +562,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 		if (done_flag)		
                 {
                         sprintf(lineout, "%s%s",
-            	                level_indent(current_level + indent_kludge),
+            	                level_indent(current_level),
                                 line);                                      /* write old lines to new config file */
 				
 			if (comment)
@@ -591,11 +593,11 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 strcpy(line2, line);
                 if ((p2 = strchr(line, conf_sep)))
                         *p2 = '\0';                                             /* line is now just key */
-                trim(line);                                                     /* remove unnecessary whitespace */
+                conf_trim(line);                                                /* remove unnecessary whitespace */
                 if (strcasecmp(line, key))                                      /* not the entry we want */
                 {
                         sprintf(lineout, "%s%s",
-            	                level_indent(current_level + indent_kludge),
+            	                level_indent(current_level),
                                 line2);                                      /* write old lines to new config file */
 				
 			if (comment)
@@ -625,7 +627,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 		
                 /* hmmm, this must be the right entry? */
                 sprintf(lineout, "%s%s",
-                        level_indent(current_level + indent_kludge),
+                        level_indent(current_level),
                         key);
 
                 if (svalue)
@@ -661,7 +663,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
         if (!done_flag)                                                         /* line hasn't been written yet */
         {
                 fprintf(ifp2, "%s%s",
-                        level_indent(current_level + indent_kludge),
+                        level_indent(current_level),
                         key);
 
                 if (svalue)
@@ -683,5 +685,5 @@ setconf(const char *configfile, const char *k, const char *svalue)
 } /* setconf() */
 
 /*
-    End of "$Id: conf_set.c,v 1.11 2000/03/02 20:47:17 carl Exp $".
+    End of "$Id: conf_set.c,v 1.12 2000/05/27 01:17:32 carl Exp $".
 */

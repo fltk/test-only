@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.11 2000/05/01 17:25:15 carl Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.12 2000/05/27 01:17:25 carl Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -70,8 +70,8 @@ void Fl_Gl_Window::create() {
     g = Fl_Gl_Choice::find(mode_, alist);
     if (!g) {Fl::error("Insufficient OpenGL"); return;}
   }
-#ifndef _WIN32
-  Fl_X::create(this, g->vis, g->colormap, -1);
+#ifndef WIN32
+  Fl_X::create  (this, g->vis, g->colormap, -1);
   //if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
 #else
   Fl_Window::create();
@@ -80,7 +80,7 @@ void Fl_Gl_Window::create() {
 
 void Fl_Gl_Window::invalidate() {
   valid(0);
-#ifndef _WIN32
+#ifndef WIN32
   if (overlay) ((Fl_Gl_Window*)overlay)->valid(0);
 #endif
 }
@@ -95,7 +95,7 @@ int Fl_Gl_Window::mode(int m, const int *a) {
 
 void Fl_Gl_Window::make_current() {
   if (!context) {
-#ifdef _WIN32
+#ifdef WIN32
     context = wglCreateContext(fl_private_dc(this, g));
     if (fl_first_context) wglShareLists(fl_first_context, (GLXContext)context);
     else fl_first_context = (GLXContext)context;
@@ -106,7 +106,7 @@ void Fl_Gl_Window::make_current() {
     valid(0);
   }
   fl_set_gl_context(this, (GLXContext)context);
-#if defined(_WIN32) && USE_COLORMAP
+#if defined(WIN32) && USE_COLORMAP
   if (fl_palette) {
     fl_window = fl_xid(this); fl_gc = GetDC(fl_window);
     SelectPalette(fl_gc, fl_palette, FALSE);
@@ -132,14 +132,14 @@ void Fl_Gl_Window::ortho() {
 }
 
 void Fl_Gl_Window::swap_buffers() {
-#ifdef _WIN32
+#ifdef WIN32
   SwapBuffers(Fl_X::i(this)->private_dc);
 #else
   glXSwapBuffers(fl_display, fl_xid(this));
 #endif
 }
 
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if HAVE_GL_OVERLAY && defined(WIN32)
 uchar fl_overlay; // changes how fl_color() works
 int fl_overlay_depth = 0;
 #endif
@@ -147,7 +147,7 @@ int fl_overlay_depth = 0;
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if HAVE_GL_OVERLAY && defined(WIN32)
   bool fixcursor = false;
   if (overlay && overlay != this &&
       ((damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE))
@@ -200,7 +200,7 @@ void Fl_Gl_Window::flush() {
       static GLXContext ortho_context = 0;
       static Fl_Gl_Window* ortho_window = 0;
       if (!ortho_context) {
-#ifdef _WIN32
+#ifdef WIN32
 	ortho_context = wglCreateContext(Fl_X::i(this)->private_dc);
 #else
 	ortho_context = glXCreateContext(fl_display,g->vis,fl_first_context,1);
@@ -250,7 +250,7 @@ void Fl_Gl_Window::flush() {
     draw();
     if (overlay == this) draw_overlay();
     glFlush();
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if HAVE_GL_OVERLAY && defined(WIN32)
     if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
 #endif
   }
@@ -267,7 +267,7 @@ void Fl_Gl_Window::destroy() {
   if (context) {
     fl_no_gl_context();
     if (context != fl_first_context) {
-#ifdef _WIN32
+#ifdef WIN32
       wglDeleteContext((GLXContext)context);
 #else
       glXDestroyContext(fl_display, (GLXContext)context);
@@ -278,7 +278,7 @@ void Fl_Gl_Window::destroy() {
 // #endif
     context = 0;
   }
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if HAVE_GL_OVERLAY && defined(WIN32)
   if (overlay && overlay != this && (GLXContext)overlay != fl_first_context) {
     wglDeleteContext((GLXContext)overlay);
     overlay = 0;
@@ -306,5 +306,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.11 2000/05/01 17:25:15 carl Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.12 2000/05/27 01:17:25 carl Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_util.c,v 1.4 2000/03/02 20:47:18 carl Exp $"
+   "$Id: conf_util.c,v 1.5 2000/05/27 01:17:32 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -25,7 +25,7 @@
 #include <FL/conf.h>
 
 /*
-        char *trim(char *s)
+        char *conf_trim(char *s)
 
         description:
                 removes leading and trailing whitespace from a string
@@ -36,7 +36,7 @@
                 returns s
 */
 char *
-trim(char *s)
+conf_trim(char *s)
 {
         int     i;                                                              /* temporary int */
         char    *p;                                                             /* temporary pointer */
@@ -90,5 +90,5 @@ const char *conf_dirname(char *fn)
 }
 
 /*
-    End of "$Id: conf_util.c,v 1.4 2000/03/02 20:47:18 carl Exp $".
+    End of "$Id: conf_util.c,v 1.5 2000/05/27 01:17:32 carl Exp $".
 */

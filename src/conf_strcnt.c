@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcnt.c,v 1.7 2000/03/02 20:47:18 carl Exp $"
+   "$Id: conf_strcnt.c,v 1.8 2000/05/27 01:17:32 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -25,7 +25,7 @@
 #include <FL/conf.h>
 
 /*
-        int *strcnt(const char *s, char c)
+        int *conf_strcnt(const char *s, char c)
 
         description:
                 counts the number of instances of char c in string s
@@ -36,7 +36,7 @@
                 returns the number of instances of c in s
 */
 int
-strcnt(const char *s, char c)
+conf_strcnt(const char *s, char c)
 {
         int count;
         const char *p;
@@ -48,5 +48,5 @@ strcnt(const char *s, char c)
 }
 
 /*
-    End of "$Id: conf_strcnt.c,v 1.7 2000/03/02 20:47:18 carl Exp $".
+    End of "$Id: conf_strcnt.c,v 1.8 2000/05/27 01:17:32 carl Exp $".
 */

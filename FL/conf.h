@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.13 2000/03/02 20:47:07 carl Exp $"
+   "$Id: conf.h,v 1.14 2000/05/27 01:17:23 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -322,7 +322,7 @@ extern "C" {
 
 
   /*
-        char *trim(char *s)
+        char *conf_trim(char *s)
 
         description:
                 removes leading and trailing whitespace from a string
@@ -332,12 +332,12 @@ extern "C" {
         return value:
                 returns s
   */
-  FL_API char *trim(char *s);
+  FL_API char *conf_trim(char *s);
 
 
 
   /*
-        char *endtrim(char *s)
+        char *conf_endtrim(char *s)
 
         description:
                 removes just trailing whitespace from a string
@@ -347,12 +347,12 @@ extern "C" {
         return value:
                 returns s
   */
-  FL_API char *endtrim(char *s);
+  FL_API char *conf_endtrim(char *s);
 
 
 
   /*
-        int *strcnt(const char *s, char c)
+        int *conf_strcnt(const char *s, char c)
 
         description:
                 counts the number of instances of char c in string s
@@ -362,7 +362,7 @@ extern "C" {
         return value:
                 returns the number of instances of c in s
   */
-  FL_API int strcnt(const char *s, char c);
+  FL_API int conf_strcnt(const char *s, char c);
 
 
 
@@ -396,7 +396,7 @@ extern "C" {
   FL_API int conf_strcasecmp(const char *s1, const char *s2);
   
 
-  const char *level_indent(int l);                                       /* returns right amount of leading whitespace */
+  FL_API int conf_is_path_rooted(const char *path);
 
 
 #  ifdef __cplusplus
@@ -406,5 +406,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.13 2000/03/02 20:47:07 carl Exp $".
+ * End of "$Id: conf.h,v 1.14 2000/05/27 01:17:23 carl Exp $".
  */

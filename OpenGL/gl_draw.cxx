@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.6 2000/04/24 08:31:23 bill Exp $"
+// "$Id: gl_draw.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,7 @@ extern int fl_overlay_depth; // WIN32 only
 
 void gl_color(Fl_Color i) {
 #if HAVE_GL_OVERLAY
-#ifdef _WIN32
+#ifdef WIN32
   if (fl_overlay && fl_overlay_depth) {
     i = fl_nearest_color(i); // convert to 8-bit color
     if (fl_overlay_depth < 8) {
@@ -156,5 +156,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.6 2000/04/24 08:31:23 bill Exp $".
+// End of "$Id: gl_draw.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.8 2000/04/11 08:16:41 bill Exp $"
+// "$Id: Fl_Font.H,v 1.9 2000/05/27 01:17:22 carl Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -33,8 +33,8 @@ class Fl_FontSize; // secret internal data
 // This is a struct so I can init a table with constants:
 struct FL_API Fl_Font_ {
   const char* name_;
-  Fl_Font_* bold;
-  Fl_Font_* italic;
+  Fl_Font_* bold_;
+  Fl_Font_* italic_;
   Fl_FontSize* first;
   char **xlist; // crap needed by X, should be put into Fl_FontSize
   int n;	// more crap needed by X
@@ -47,6 +47,8 @@ struct FL_API Fl_Font_ {
   int sizes(int*& sizep) const;
   // return array of encodings:
   int encodings(const char**& sizep) const;
+  Fl_Font_* bold() const { return bold_; }
+  Fl_Font_* italic() const { return italic_; }
   // "measurement" is considered a drawing function, see fl_draw.h
 };
 

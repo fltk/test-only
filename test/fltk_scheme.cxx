@@ -1,4 +1,4 @@
-#include <FL/conf.h>
+#include <FL/fl_config.H>
 #include <FL/x.H>
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,33 +52,18 @@ void usage() {
 int main(int argc, char* argv[]) {
   pname = argv[0];
   if (argc != 2) usage();
+
   char scheme[PATH_MAX];
   strncpy(scheme, argv[1], sizeof(scheme));
 
-  const char* home = getenv("HOME");
-  char temp[PATH_MAX];
-  if (home) snprintf(temp, sizeof(temp), "%s/.fltk/flconfig", home);
-  else {
-#ifndef WIN32
-    fprintf(stderr, "%s: Error- $HOME is not set!\n", pname);
-    exit(2);
-#else
-    char windir[PATH_MAX];
-    GetWindowsDirectoryA(windir, sizeof(windir));
-    snprintf(temp, sizeof(temp), "%s/fltk/flconfig", windir);
-#endif
-  }
-
-#ifdef HAVE_FL_CONFIG
-  Fl_Config flconfig(temp);
+  Fl_Config flconfig("flconfig");
   int r;
 
-  if ( (r = flconfig.set("default scheme", scheme)) ) {
+  if ( (r = flconfig.set("default/scheme", scheme)) ) {
     fprintf(stderr, "%s: Error- Cannot set default scheme.\n", pname);
     fprintf(stderr, "%s: Error- %s.\n", pname, flconfig.strerror());
     exit(3);
   }
-#endif
 
 #ifndef WIN32
   // stolen from KDE!

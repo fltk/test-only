@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_sections.c,v 1.7 2000/03/02 20:47:17 carl Exp $"
+   "$Id: conf_sections.c,v 1.8 2000/05/27 01:17:32 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -66,7 +66,7 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
   if (strlen(sec) > (CONF_MAX_SECT_LEN - 1))                                    /* if section name too long */
     return CONF_ERR_ARGUMENT;                                                   /* bail out */
   strncpy(section, sec, sizeof(section));
-  trim(section);
+  conf_trim(section);
   if (*section && *(section + strlen(section) - 1) != conf_level_sep) {                                                               /* add trailing '/' to section name */
     *(section + strlen(section) + 1) = (char)0;
     *(section + strlen(section)) = conf_level_sep;
@@ -76,7 +76,7 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
   while (fgets(line, sizeof(line), ifp)) {                                      /* while there are still lines in the section */
     if ( (p = strchr(line, conf_comment_sep)) ) *p = (char)0;                   /* kill comment */
 
-    trim(line);                                                                 /* remove unnecessary whitespace */
+    conf_trim(line);                                                            /* remove unnecessary whitespace */
     if (!(*line)) continue;                                                     /* this is a blank line, go to next line */
 
     if (*line == '[') {                                                         /* in new section */
@@ -112,7 +112,7 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
       int r;
 
       p = strtok(0, "");                                                        /* get the name of file to be included */
-      trim(p);                                                                  /* kill unecessary whitespace */
+      conf_trim(p);                                                             /* kill unecessary whitespace */
       if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                   /* fully qualified path */
       else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);       /* figure out pathname */
       strncpy(s, section + strlen(current_section), sizeof(s));                 /* section/key to look up in included file */
@@ -136,5 +136,5 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
 } /* getconf_keys() */
 
 /*
-    End of "$Id: conf_sections.c,v 1.7 2000/03/02 20:47:17 carl Exp $".
+    End of "$Id: conf_sections.c,v 1.8 2000/05/27 01:17:32 carl Exp $".
 */

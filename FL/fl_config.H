@@ -1,5 +1,5 @@
 //
-//  "$Id: fl_config.H,v 1.7 2000/03/02 20:47:07 carl Exp $"
+//  "$Id: fl_config.H,v 1.8 2000/05/27 01:17:23 carl Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <FL/Fl.H>
 #include <FL/Enumerations.H>
 #include <FL/conf.h>
 
@@ -56,7 +57,7 @@ class Fl_Config
     // get/set the name of the config file
     const char *config_file() { return _configFile; }
     void config_file(const char *configFile)
-        { _configFile = configFile ? strdup(configFile) : 0; }
+        { _configFile = configFile ? strdup(fl_find_config_file(configFile, 1)) : 0; }
     
     // get sections in configuration file
     int sections(const char *section)
@@ -133,5 +134,5 @@ class Fl_Config
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.7 2000/03/02 20:47:07 carl Exp $".
+// End of "$Id: fl_config.H,v 1.8 2000/05/27 01:17:23 carl Exp $".
 //

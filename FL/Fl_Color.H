@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.8 2000/01/16 07:44:20 robertk Exp $"
+// "$Id: Fl_Color.H,v 1.9 2000/05/27 01:17:22 carl Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -89,6 +89,10 @@ FL_API Fl_Color fl_color_average(Fl_Color, Fl_Color, double weight);
 FL_API Fl_Color fl_inactive(Fl_Color);
 FL_API Fl_Color fl_inactive(Fl_Color, Fl_Flags f);
 FL_API Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
+#ifndef FLTK_2
+#define contrast(a,b) fl_contrast(a,b)
+#define inactive(a) fl_inactive(a)
+#endif
 FL_API Fl_Color fl_get_color(Fl_Color c);
 FL_API void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
 FL_API void fl_set_color(Fl_Color c, Fl_Color);
@@ -99,5 +103,5 @@ FL_API Fl_Color fl_nearest_color(Fl_Color);
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.8 2000/01/16 07:44:20 robertk Exp $".
+// End of "$Id: Fl_Color.H,v 1.9 2000/05/27 01:17:22 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.18 2000/01/17 21:36:18 bill Exp $"
+// "$Id: fonts.cxx,v 1.19 2000/05/27 01:17:33 carl Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -71,19 +71,23 @@ int pickedsize = 14;
 
 void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
-  if (!fn) return;
-  fn--;
+printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
+
+// CET - FIXME - new browser code has value starting from 0!
+//  if (!fn) return;
+//  fn--;
 
   Fl_Font f = fonts[fn];
-  if (f->bold == f) bold_button->deactivate();
+  if (f->bold() == f) bold_button->deactivate();
   else bold_button->activate();
-  if (f->italic == f) italic_button->deactivate();
+  if (f->italic() == f) italic_button->deactivate();
   else italic_button->activate();
-  if (bold_button->value()) f = f->bold;
-  if (italic_button->value()) f = f->italic;
+  if (bold_button->value()) f = f->bold();
+  if (italic_button->value()) f = f->italic();
   textobj->font = f;
 
-  int pickedencoding = encobj->value()-1;
+// CET - FIXME - new browser code has value starting from 0!
+  int pickedencoding = encobj->value();
   encobj->clear();
   const char** encodings; int ne = f->encodings(encodings);
   if (!ne) {
@@ -95,7 +99,8 @@ void font_cb(Fl_Widget *, long) {
       if (!strcmp(encodings[i], fl_encoding)) pickedencoding = i;
     }
     textobj->encoding = encodings[pickedencoding];
-    encobj->value(pickedencoding+1);
+// CET - FIXME - new browser code has value starting from 0!
+    encobj->value(pickedencoding);
   }
 
   sizeobj->clear();
@@ -127,7 +132,9 @@ void font_cb(Fl_Widget *, long) {
     sizeobj->value(w+1);
     textobj->size = s[w];
   }
-
+  encobj->redraw();
+  sizeobj->goto_number(2); sizeobj->item_select();
+  sizeobj->redraw();
   textobj->redraw();
   id_box->label(textobj->font->system_name());
   id_box->redraw();
@@ -135,7 +142,8 @@ void font_cb(Fl_Widget *, long) {
 
 void encoding_cb(Fl_Widget *, long) {
   int i = encobj->value();
-  if (!i) return;
+// CET - FIXME - new browser code has value starting from 0!
+//  if (!i) return;
   textobj->encoding = encobj->text(i);
   textobj->redraw();
   id_box->redraw();
@@ -143,7 +151,8 @@ void encoding_cb(Fl_Widget *, long) {
 
 void size_cb(Fl_Widget *, long) {
   int i = sizeobj->value();
-  if (!i) return;
+// CET - FIXME - new browser code has value starting from 0!
+//  if (!i) return;
   const char *c = sizeobj->text(i);
   while (*c < '0' || *c > '9') c++;
   pickedsize = atoi(c);
@@ -182,12 +191,13 @@ int main(int argc, char **argv) {
   create_the_forms();
   int numfonts = fl_list_fonts(fonts); 
   for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
-  fontobj->value(1);
+// CET - FIXME - new browser code has value starting from 0!
+  fontobj->value(0);
   font_cb(fontobj,0);
   form->show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.18 2000/01/17 21:36:18 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.19 2000/05/27 01:17:33 carl Exp $".
 //

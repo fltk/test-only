@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.10 2000/03/02 20:47:16 carl Exp $"
+   "$Id: conf_get.c,v 1.11 2000/05/27 01:17:30 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -66,7 +66,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
     *section = (char)0;                                                         /* set toplevel section */
   }
 
-  trim(section); trim(key);
+  conf_trim(section); conf_trim(key);
 
   ifp = fopen(configfile, "r");
   if (!ifp) return CONF_ERR_FILE;                                               /* could not open config file */
@@ -87,7 +87,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
       }
     }
 
-    trim(line);                                                                 /* remove unnecessary whitespace */
+    conf_trim(line);                                                            /* remove unnecessary whitespace */
     if (!(*line)) continue;                                                     /* this is a blank line, go to next line */
 
     if (*line == '[') {                                                         /* in new section */
@@ -110,7 +110,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
         int r;
 
         p = strtok(0, "");                                                      /* get the name of file to be included */
-        trim(p);                                                                /* kill unecessary whitespace */
+        conf_trim(p);                                                           /* kill unecessary whitespace */
         if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                 /* fully qualified path */
         else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);     /* figure out pathname */
         snprintf(sk, sizeof(sk), "%s%s", section + strlen(current_section),     /* section/key to look up in included file */
@@ -129,7 +129,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
     if (!in_correct_section) continue;                                          /* section not found yet, keep looking for it */
     section_found = 1;                                                          /* must be in right section */
 
-    trim(line); trim(p);                                                        /* kill unnecessary whitespace */
+    conf_trim(line); conf_trim(p);                                              /* kill unnecessary whitespace */
 
     if (strcasecmp(line, key)) continue;                                        /* this isn't the entry we want- next line */
     key_found = 1;                                                              /* must be the right entry */
@@ -149,5 +149,5 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 } /* getconf() */
 
 /*
-    End of "$Id: conf_get.c,v 1.10 2000/03/02 20:47:16 carl Exp $".
+    End of "$Id: conf_get.c,v 1.11 2000/05/27 01:17:30 carl Exp $".
 */

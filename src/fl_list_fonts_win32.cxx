@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.5 2000/05/02 06:13:53 carl Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.6 2000/05/27 01:17:32 carl Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -76,8 +76,8 @@ static Fl_Font_* make_a_font(char attrib, const char* name) {
   n[0] = attrib;
   strcpy(n+1, name);
   newfont->name_ = n;
-  newfont->bold = newfont;
-  newfont->italic = newfont;
+  newfont->bold_ = newfont;
+  newfont->italic_ = newfont;
   newfont->first = 0;
   return newfont;
 }
@@ -97,10 +97,10 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf,
   const char *name = (const char*)(lpelf->elfFullName);
 
   Fl_Font_* base = make_a_font(' ', name);
-  base->italic = make_a_font('I', name);
+  base->italic_ = make_a_font('I', name);
   if (lpelf->elfLogFont.lfWeight <= 400) {
-    base->bold = make_a_font('B', name);
-    base->italic->bold = base->bold->italic = make_a_font('P', name);
+    base->bold_ = make_a_font('B', name);
+    base->italic_->bold_ = base->bold_->italic_ = make_a_font('P', name);
   }    
 
   if (num_fonts >= array_size) {
@@ -151,5 +151,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.5 2000/05/02 06:13:53 carl Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.6 2000/05/27 01:17:32 carl Exp $"
 //

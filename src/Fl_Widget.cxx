@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.61 2000/05/15 05:52:27 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.62 2000/05/27 01:17:28 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -302,8 +302,15 @@ int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 
 // Draw the surrounding box of a normal widget:
 void Fl_Widget::draw_box() const {
-  box()->draw(x(),y(),w(),h(), color(),
-	      active_r() ? FL_NO_FLAGS : FL_INACTIVE);
+  box()->draw(x(),y(),w(),h(), color(), active_r() ? FL_NO_FLAGS:FL_INACTIVE);
+}
+
+void  Fl_Widget::draw_box(Fl_Boxtype b, Fl_Color c) const {
+  b->draw(x(),y(),w(),h(), c, active_r() ? FL_NO_FLAGS : FL_INACTIVE);
+}
+
+void  Fl_Widget::draw_box(Fl_Boxtype b, int x, int y, int w, int h, Fl_Color c) const {
+  b->draw(x,y,w,h, c, active_r() ? FL_NO_FLAGS : FL_INACTIVE);
 }
 
 // Draw the surrounding box but no interior:
@@ -382,5 +389,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.61 2000/05/15 05:52:27 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.62 2000/05/27 01:17:28 carl Exp $".
 //

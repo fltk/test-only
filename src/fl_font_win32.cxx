@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.24 2000/05/02 06:09:15 carl Exp $"
+// "$Id: fl_font_win32.cxx,v 1.25 2000/05/27 01:17:32 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   default: name--;
   }
   fid = CreateFont(
-    -size, // negative makes it use "char size"
+    -size,          // use "char size"
     0,	            // logical average character width 
     0,	            // angle of escapement 
     0,	            // base-line orientation angle 
@@ -176,5 +176,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.24 2000/05/02 06:09:15 carl Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.25 2000/05/27 01:17:32 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.92 2000/05/18 23:25:53 carl Exp $"
+// "$Id: Fl.cxx,v 1.93 2000/05/27 01:17:28 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -75,7 +75,7 @@ static int initclock; // if false we didn't call fl_elapsed() last time
 
 void fl_fix_focus();
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "Fl_win32.cxx"
 #else
 #include "Fl_x.cxx"
@@ -408,6 +408,7 @@ void Fl::release() {
 // values to account for nested X windows. 'window' is the outermost
 // window the event was posted to by X:
 static int send(int event, Fl_Widget* to, Fl_Window* window) {
+  if (!to) return 0;
   int dx = window->x();
   int dy = window->y();
   for (const Fl_Widget* w = to; w; w = w->parent())
@@ -517,5 +518,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.92 2000/05/18 23:25:53 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.93 2000/05/27 01:17:28 carl Exp $".
 //

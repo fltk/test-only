@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.104 2000/05/17 07:08:10 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.105 2000/05/27 01:17:30 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -535,6 +535,7 @@ static int ms2fltk(int vk, int extended) {
 extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
+extern void fl_windows_colors();
 static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -745,7 +746,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #endif
 
   case WM_SYSCOLORCHANGE:
-    Fl::reloadtheme();
+  case WM_SETTINGCHANGE:
+    // reload windows colors only if we haven't forced a scheme
+    if (!Fl::scheme()) fl_windows_colors();
     break;
 
   default:
@@ -791,10 +794,8 @@ void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
   if (ow() == w() && oh() == h()) {
-    Fl_Widget*const* a = array();
-    Fl_Widget*const* e = a+children();
-    while (a < e) {
-      Fl_Widget* o = *a++;
+    for (int i = 0; i < children(); i++) {
+      Fl_Widget* o = child(i);
       if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
     }
     Fl_Widget::layout();
@@ -1032,6 +1033,13 @@ static Fl_Color win_color(int wincol) {
   return FL_BLACK;
 }
 
+static int win_fontsize(int winsize) {
+  if (winsize < 0) return -winsize; // -charsize: which is what FLTK uses
+  if (winsize == 0) return 12; // pick any good size.  12 is good!
+  return winsize*3/4; // cellsize: convert to charsize
+}
+
+
 void fl_windows_colors() {
   Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
@@ -1061,7 +1069,7 @@ void fl_windows_colors() {
     style->window_color = fl_color_average(background, window_background, .5);
   }
 
-  if ((style = Fl_Style::find("menu item"))) {
+  if ((style = Fl_Style::find("item"))) {
     style->color = menuitem_background;
     style->label_color = menuitem_foreground;
     style->selection_color = select_background;
@@ -1085,29 +1093,84 @@ void fl_windows_colors() {
     style->label_color = tooltip_foreground;
   }
 
-/* CET - FIXME - Font stuff not yet implemented
+  /*
+     Windows font stuff
 
-   This needs either a working
+     It looks Windows has just three separate fonts that it actually
+     uses for stuff replaced by FLTK.  But the "Display Properties"
+     dialog has a lot more fonts that you can set?  Wrong, look again.
+     Some of the fonts are duplicates and another doesn't do anything!
+     It has fonts for the titlebar and icons which we don't have to worry
+     about, a menu font which is used for menubars and menu items, a
+     status font which is for status bars and tooltips, and a message
+     box font which is used for everything else.  Except that it's not
+     used by everything else;  almost all non-menu widgets in every
+     application I tested did not respond to font changes.  The fonts
+     are apparently hard coded by the applications which seems to me to
+     bad programming considering that Windows has an adequate system for
+     allowing the user to specify font preferences.  This is especially
+     true of Microsoft applications and Windows itself!  We will allow
+     FLTK applications to automatically use the fonts specified by the
+     user.
 
-      Fl_Font fl_font(const char* fontname)
+     CET
+  */
 
-   or
+  NONCLIENTMETRICS ncm;
+  int sncm = sizeof(ncm);
+  ncm.cbSize = sncm;
+  SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
 
-      int fl_list_fonts(Fl_Font* fontlist)
+  Fl_Font font; int size;
 
-   Currently, the Windows code has neither.  :-(
+  // get font info for regular widgets from LOGFONT structure
+  font = fl_font((const char*)ncm.lfMessageFont.lfFaceName);
+  if (ncm.lfMessageFont.lfWeight >= 600) font = font->bold();
+  if (ncm.lfMessageFont.lfItalic) font = font->italic();
+  size = win_fontsize(ncm.lfMessageFont.lfHeight);
 
+  Fl_Widget::default_style->label_font = font;
+  Fl_Widget::default_style->text_font = font;
+  Fl_Widget::default_style->label_size = size;
+  Fl_Widget::default_style->text_size = size;
 
-  if (font) {
-    if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style->label_font = font;
-    Fl_Widget::default_style->text_font = font;
-    Fl_Widget::default_style->label_size = fontsize;
-    Fl_Widget::default_style->text_size = fontsize;
+  if ((style = Fl_Style::find("item"))) {
+  // get font info for menu items from LOGFONT structure
+    font = fl_font((const char*)ncm.lfMenuFont.lfFaceName);
+    if (ncm.lfMenuFont.lfWeight >= 600) font = font->bold();
+    if (ncm.lfMenuFont.lfItalic) font = font->italic();
+    size = win_fontsize(ncm.lfMenuFont.lfHeight);
+
+    style->label_font = style->text_font = font;
+    style->label_size = style->text_size = size;
+
+    if ((style = Fl_Style::find("menu bar"))) {
+      style->label_font = style->text_font = font;
+      style->label_size = style->text_size = size;
+    }
+
+    if ((style = Fl_Style::find("menu title"))) {
+      style->label_font = style->text_font = font;
+      style->label_size = style->text_size = size;
+    }
   }
-*/
+
+  if ((style = Fl_Style::find("tooltip"))) {
+  // get font info for tooltips from LOGFONT structure
+    font = fl_font((const char*)ncm.lfStatusFont.lfFaceName);
+    if (ncm.lfStatusFont.lfWeight >= 600) font = font->bold();
+    if (ncm.lfStatusFont.lfItalic) font = font->italic();
+    size = win_fontsize(ncm.lfStatusFont.lfHeight);
+
+    style->label_font = style->text_font = font;
+    style->label_size = style->text_size = size;
+  }
+
+  // CET - FIXME - do encoding stuff
+
+  Fl::redraw();
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.104 2000/05/17 07:08:10 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.105 2000/05/27 01:17:30 carl Exp $".
 //

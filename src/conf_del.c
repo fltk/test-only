@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.12 2000/03/02 20:47:16 carl Exp $"
+   "$Id: conf_del.c,v 1.13 2000/05/27 01:17:30 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -124,10 +124,10 @@ delconf(const char *configfile, const char *k)
 			{
 				*p2 = (char)0;
 				comment = ++p2;
-				endtrim(comment);
+				conf_endtrim(comment);
 			}
 			
-                        endtrim(line);
+                        conf_endtrim(line);
 
 			p2 = line + strspn(line, CONF_WHITESPACE);
 			
@@ -214,12 +214,12 @@ delconf(const char *configfile, const char *k)
 		        {
 		                *p = (char)0;					/* kill the comment */
 			        comment = ++p2;					/* but remember it */
-			        endtrim(comment);
+			        conf_endtrim(comment);
 		                break;
 		        }
 		}
 			
-                endtrim(line);							/* remove unnecessary whitespace */
+                conf_endtrim(line);							/* remove unnecessary whitespace */
 			
                 if (!strcmp(line, ""))						/* if there is no key on this line */
 		{
@@ -240,7 +240,7 @@ delconf(const char *configfile, const char *k)
                 if ((p = strchr(line, conf_sep)))                               /* if there is a seperator character */
                         *p = '\0';                                              /* line is now just key */
 
-                trim(line);                                                     /* remove unnecessary whitespace */
+                conf_trim(line);                                                     /* remove unnecessary whitespace */
 
                 if (strcasecmp(line, key) || done_flag)                         /* not the entry we want or already done */
                 {
@@ -290,5 +290,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.12 2000/03/02 20:47:16 carl Exp $".
+    End of "$Id: conf_del.c,v 1.13 2000/05/27 01:17:30 carl Exp $".
 */
