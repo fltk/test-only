@@ -1,5 +1,5 @@
 //
-// "$Id: font_x.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: font_x.cxx,v 1.1.2.2 2004/09/11 04:44:44 rokan Exp $"
 //
 // Xlib standard X11 font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -217,14 +217,17 @@ void Fl_Xlib_Display::font(int fnum, int size) {
 }
 
 int Fl_Xlib_Display::height() {
+  if (!fl_xfont) return -1;
   return (fl_xfont->ascent + fl_xfont->descent);
 }
 
 int Fl_Xlib_Display::descent() {
+  if (!fl_xfont) return -1;
   return fl_xfont->descent;
 }
 
 double Fl_Xlib_Display::width(const char* c, int n) {
+  if (!fl_xfont) return -1.0;
   XCharStruct* p = fl_xfont->per_char;
   if (!p) return n*fl_xfont->min_bounds.width;
   int a = fl_xfont->min_char_or_byte2;
@@ -239,6 +242,7 @@ double Fl_Xlib_Display::width(const char* c, int n) {
 }
 
 double Fl_Xlib_Display::width(unsigned c) {
+  if (!fl_xfont) return -1.0;
   XCharStruct* p = fl_xfont->per_char;
   if (p) {
     int a = fl_xfont->min_char_or_byte2;
@@ -259,5 +263,5 @@ void Fl_Xlib_Display::draw(const char* str, int n, int x, int y) {
 }
 
 //
-// End of "$Id: font_x.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: font_x.cxx,v 1.1.2.2 2004/09/11 04:44:44 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: font_xft.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: font_xft.cxx,v 1.1.2.2 2004/09/11 04:44:44 rokan Exp $"
 //
 // Xlib xft font code for the Fast Light Tool Kit (FLTK).
 //
@@ -163,16 +163,24 @@ Fl_FontSize::~Fl_FontSize() {
 //  XftFontClose(fl_display, font);
 }
 
-int fl_height() { return current_font->ascent + current_font->descent; }
-int fl_descent() { return current_font->descent; }
+int fl_height() {
+ if (!current_font) return -1;
+ return current_font->ascent + current_font->descent; 
+}
+int fl_descent() { 
+  if (!current_font) return -1;
+  return current_font->descent; 
+}
 
 double fl_width(const char *str, int n) {
+  if (!current_font) return -1.0;
   XGlyphInfo i;
   XftTextExtentsUtf8(fl_display, current_font, (XftChar8 *)str, n, &i);
   return i.xOff;
 }
 
 double fl_width(unsigned c) {
+  if (!current_font) return -1.0;
   XGlyphInfo i;
   XftTextExtents32(fl_display, current_font, (XftChar32 *)&c, 1, &i);
   return i.xOff;
@@ -259,5 +267,5 @@ void Fl_Xlib_Display::draw(const char *str, int n, int x, int y) {
 }
 
 //
-// End of "$Id: font_xft.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// End of "$Id: font_xft.cxx,v 1.1.2.2 2004/09/11 04:44:44 rokan Exp $"
 //

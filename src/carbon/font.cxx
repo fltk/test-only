@@ -1,5 +1,5 @@
 //
-// "$Id: font.cxx,v 1.1.2.2 2004/07/28 00:53:43 matthiaswm Exp $"
+// "$Id: font.cxx,v 1.1.2.3 2004/09/11 04:44:43 rokan Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -149,11 +149,16 @@ void Fl_Carbon_Display::font(int fnum, int size) {
 }
 
 int Fl_Carbon_Display::height() {
-  return fl_fontsize->ascent+fl_fontsize->descent;
+  if (fl_fontsize) 
+    return fl_fontsize->ascent+fl_fontsize->descent;
+  else return -1;
+  
 }
 
 int Fl_Carbon_Display::descent() {
-  return fl_fontsize->descent;
+  if (fl_fontsize) 
+    return fl_fontsize->descent;
+  else return -1;
 }
 
 double Fl_Carbon_Display::width(const char* c, int n) {
@@ -207,5 +212,5 @@ void Fl_Carbon_Display::draw(const char* str, int n, int x, int y) {
 
 
 //
-// End of "$Id: font.cxx,v 1.1.2.2 2004/07/28 00:53:43 matthiaswm Exp $".
+// End of "$Id: font.cxx,v 1.1.2.3 2004/09/11 04:44:43 rokan Exp $".
 //

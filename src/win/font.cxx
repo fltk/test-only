@@ -143,20 +143,26 @@ void Fl_Win_Display::font(int fnum, int size) {
 }
 
 int Fl_Win_Display::height() {
+if (fl_fontsize)
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
+else return -1;
 }
 
 int Fl_Win_Display::descent() {
+if (fl_fontsize)
   return fl_fontsize->metr.tmDescent;
+else return -1;
 }
 
 double Fl_Win_Display::width(const char* c, int n) {
+ if (!fl_fontsize) return -1.0;
   double w = 0.0;
   while (n--) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
 
 double Fl_Win_Display::width(unsigned c) {
+  if (!fl_fontsize) return -1.0;
   return fl_fontsize->width[c];
 }
 
@@ -169,5 +175,5 @@ void Fl_Win_Display::draw(const char* str, int n, int x, int y) {
 
 
 //
-// End of "$Id: font.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
+// End of "$Id: font.cxx,v 1.1.2.3 2004/09/11 04:44:43 rokan Exp $".
 //
