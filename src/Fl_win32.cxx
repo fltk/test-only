@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.107 2000/06/02 09:15:39 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.108 2000/06/03 00:06:07 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -905,9 +905,11 @@ Fl_X* Fl_X::create(Fl_Window* w) {
 
   // figure out where OS really put window
   RECT wr;
-  GetWindowRect(x->xid, &wr);
+  GetClientRect(x->xid, &wr);
+  POINT wul = { 0, 0 };
+  ClientToScreen(x->xid, &wul);
   // tell Fl_Window about it
-  w->resize(wr.left, wr.top, wr.right-wr.left+1, wr.bottom-wr.top+1);
+  w->resize(wul.x, wul.y, wr.right, wr.bottom);
 
   x->wait_for_expose = 1;
   x->next = Fl_X::first;
@@ -1181,5 +1183,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.107 2000/06/02 09:15:39 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.108 2000/06/03 00:06:07 carl Exp $".
 //
