@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.11 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.12 2001/03/28 19:53:45 robertk Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -399,6 +399,8 @@ Fl_FileChooser::rescan()
 
   // Build the file list...
   fileList->load(directory_);
+  fileList->value(0);
+  fileList->display(0);
   fileList->redraw();
 }
 
@@ -670,5 +672,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.11 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.12 2001/03/28 19:53:45 robertk Exp $".
 //

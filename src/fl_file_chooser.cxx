@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.24 2001/03/12 16:15:32 robertk Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.25 2001/03/28 19:53:45 robertk Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ void use_windows_stock_file_requester(int useit)
 	guse_windows_filereq = useit;
 }
 
-void init_wreq_struct(const char *message, const char *pat, const char *fname) 
+void init_wreq_struct(const char *message, const char *pat, const char *fname)
 {
 	memset(&wreq, 0, sizeof(wreq));
 	wreq.lStructSize = OPENFILENAME_SIZE_VERSION_400; // needed for Win < Win2k
@@ -75,13 +75,26 @@ void fl_file_chooser_callback(void (*cb)(const char*)) {
 
 char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 {
+	return fl_file_chooser(message, pat,fname, false);
+}
+char* fl_file_chooser(const char* message, const char* pat, const char* fname,
+					  int issave)
+{
 #ifdef WIN32
   if(guse_windows_filereq) {
     init_wreq_struct(message, pat, fname);
-	if(GetSaveFileName(&wreq))
-		return wreq.lpstrFile;
-	else
-		return NULL;
+	if(issave) {
+      if(GetSaveFileName(&wreq))
+	    return wreq.lpstrFile;
+	  else
+	    return NULL;
+	}
+	else { // open
+      if(GetOpenFileName(&wreq))
+	    return wreq.lpstrFile;
+	  else
+	    return NULL;
+	}
   }
 #endif
   if (!fc) fc = new Fl_FileChooser(fname, pat, Fl_FileChooser::CREATE, message);
@@ -95,5 +108,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.24 2001/03/12 16:15:32 robertk Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.25 2001/03/28 19:53:45 robertk Exp $".
 //
