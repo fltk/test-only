@@ -8,16 +8,16 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {112 467 360 335} align 536870913 resizable hotspot visible
+    xywh {351 297 360 335} resizable hotspot visible
   } {
-    Fl_Tabs {} {
-      callback propagate_tabs open
+    Fl_Tabs panel_tabs {
+      callback propagate_tabs open selected
       xywh {0 0 358 320} resizable
     } {
       Fl_Group {} {
         label GUI
         callback propagate_group open
-        xywh {0 0 358 295} align 4097 hide resizable
+        xywh {0 0 358 295} hide resizable
       } {
         Fl_Input {} {
           label {Label:}
@@ -155,7 +155,7 @@ application and will prevent events from going to other windows.}
         }
         Fl_Box {} {
           label resizable
-          xywh {80 185 270 80} align 4352 hide deactivate resizable
+          xywh {80 185 270 80} hide deactivate resizable
         }
         Fl_Value_Input {} {
           label {Size:}
@@ -299,13 +299,13 @@ application and will prevent events from going to other windows.}
         }
         Fl_Box {} {
           label resizable
-          xywh {20 200 290 30} align 4352 hide deactivate resizable
+          xywh {20 200 290 30} hide deactivate resizable
         }
       }
       Fl_Group {} {
         label {C++}
         callback propagate_group
-        xywh {0 0 358 295} align 4097 hide
+        xywh {0 0 358 295} hide
       } {
         Fl_Input {} {
           label {Name:}
@@ -381,7 +381,7 @@ application and will prevent events from going to other windows.}
         }
         Fl_Box {} {
           label resizable
-          xywh {80 165 175 65} align 4352 hide deactivate resizable
+          xywh {80 165 175 65} hide deactivate resizable
         }
         Fl_Input {} {
           label {Class:}
@@ -410,8 +410,8 @@ application and will prevent events from going to other windows.}
       }
       Fl_Button {} {
         label Cancel
-        callback cancel_cb selected
-        xywh {125 304 69 26} align 528384 hide
+        callback cancel_cb
+        xywh {125 304 69 26} hide
       }
       Fl_Return_Button {} {
         label Close

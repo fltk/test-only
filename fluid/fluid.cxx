@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.20 1999/08/16 07:31:08 bill Exp $"
+// "$Id: fluid.cxx,v 1.21 1999/08/22 06:14:37 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,7 @@ const char *copyright =
 
 #include "about_panel.h"
 
-#include "Fl_Type.h"
+#include "Fluid_Plugins.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -326,6 +326,7 @@ Fl_Menu_Item Main_Menu[] = {
   {"Preferences",FL_ALT+'p',show_alignment_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
+{"&Plugins", 0, 0, (void *)Plugins_Options_Menu, FL_SUBMENU_POINTER},
 {"&Help",0,0,0,FL_SUBMENU},
   {"About fluid",0,about_cb},
   {"Tooltips", 0, tt_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
@@ -417,6 +418,7 @@ int main(int argc,char **argv) {
   const char *c = argv[i];
   make_main_window();
   if (c) set_filename(c);
+  read_plugins();
   if (!compile_only) {
     Fl::visual((Fl_Mode)(FL_DOUBLE|FL_INDEX));
     main_window->callback(exit_cb);
@@ -438,5 +440,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.20 1999/08/16 07:31:08 bill Exp $".
+// End of "$Id: fluid.cxx,v 1.21 1999/08/22 06:14:37 vincent Exp $".
 //

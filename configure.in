@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.39 1999/06/20 15:24:23 mike Exp $"
+dnl# "$Id: configure.in,v 1.40 1999/08/22 06:14:35 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -258,8 +258,8 @@ else
     esac
 fi
 
-CFLAGS="$DEBUGFLAG $CFLAGS"
-CXXFLAGS="$DEBUGFLAG $CXXFLAGS"
+CFLAGS="$DEBUGFLAG $CFLAGS -D$uname"
+CXXFLAGS="$DEBUGFLAG $CXXFLAGS -D$uname"
 
 AC_SUBST(DSONAME)
 AC_SUBST(DSOCOMMAND)
@@ -270,5 +270,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.39 1999/06/20 15:24:23 mike Exp $".
+dnl# End of "$Id: configure.in,v 1.40 1999/08/22 06:14:35 vincent Exp $".
 dnl#

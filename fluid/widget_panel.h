@@ -6,6 +6,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Tabs.H>
 extern void propagate_tabs(Fl_Tabs*, void*);
+extern Fl_Tabs *panel_tabs;
 #include <FL/Fl_Group.H>
 extern void propagate_group(Fl_Group*, void*);
 #include <FL/Fl_Input.H>
@@ -72,6 +73,7 @@ extern void cancel_cb(Fl_Button*, void*);
 #include <FL/Fl_Return_Button.H>
 extern void ok_cb(Fl_Return_Button*, void*);
 Fl_Window* make_widget_panel();
+extern Fl_Tabs *panel_tabs;
 extern Fl_Box *image_label;
 extern Fl_Input *v_input[4];
 extern Fl_Box *callback_label;

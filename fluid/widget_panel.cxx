@@ -2,6 +2,8 @@
 
 #include "widget_panel.h"
 
+Fl_Tabs *panel_tabs=(Fl_Tabs *)0;
+
 Fl_Box *image_label=(Fl_Box *)0;
 
 Fl_Input *v_input[4]={(Fl_Input *)0};
@@ -15,7 +17,7 @@ Fl_Window* make_widget_panel() {
   { Fl_Window* o = new Fl_Window(360, 335);
     w = o;
     w->hotspot(o);
-    { Fl_Tabs* o = new Fl_Tabs(0, 0, 358, 320);
+    { Fl_Tabs* o = panel_tabs = new Fl_Tabs(0, 0, 358, 320);
       o->callback((Fl_Callback*)propagate_tabs);
       { Fl_Group* o = new Fl_Group(0, 0, 358, 295, "GUI");
         o->callback((Fl_Callback*)propagate_group);

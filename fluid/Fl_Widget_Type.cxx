@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.33 1999/08/20 17:58:32 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.34 1999/08/22 06:14:36 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
-#include "Fl_Type.h"
+#include "Fluid_Plugins.h"
 #include <FL/fl_message.H>
 #include <FL/Fl_Slider.H>
 #include <FL/Fl_Window.H>
@@ -1342,14 +1342,28 @@ void propagate_tabs(Fl_Tabs* g, void* v) {
   propagate_group(g, v);
 }
 
+inline Fluid_Plugin** next_panel(Fluid_Plugin** pp, Fluid_Plugin* &p)
+{
+  while(pp < plugins+nbplugins && !(*pp)->make_panel) pp++;
+  if(pp < plugins+nbplugins) p = *pp;
+  return pp;
+}
+#define for_all_plugins(p) for(Fluid_Plugin *p, **pp = next_panel(plugins, p); \
+pp-plugins<nbplugins; \
+pp = next_panel(pp+1, p) )
+
 void set_cb(Fl_Button*, void*) {
   haderror = 0;
   propagate_group(the_panel, 0);
+  for_all_plugins(p) propagate_group(p->panel, 0);
 }
 
 void ok_cb(Fl_Return_Button* o, void* v) {
   set_cb(o,v);
-  if (!haderror) the_panel->hide();
+  if (!haderror) {
+    the_panel->hide();
+    for_all_plugins(p) p->panel->hide();
+  }
 }
 
 static void load_panel();
@@ -1405,16 +1419,60 @@ static void load_panel() {
   }
   if (numselected) {
     propagate_group(the_panel, LOAD);
+    for_all_plugins(p) {
+      p->please_show_panel = 0;
+      if(panel_tabs->find(p->panel) == panel_tabs->children()) {
+	propagate_group(p->panel, LOAD);
+	if(p->please_show_panel) {
+	  panel_tabs->add(*p->panel);
+	  if(p->was_visible) panel_tabs->value(p->panel);
+	  the_panel->redraw();
+	  p->panel->redraw();
+	}
+      } else {
+	if(!p->please_show_panel) {
+	  if(panel_tabs->value() == p->panel) {
+	    panel_tabs->value(panel_tabs->child(0));
+	    p->was_visible = 1;
+	  } else
+	    p->was_visible = 0;
+	  panel_tabs->remove(*p->panel);
+	  the_panel->redraw();
+	}
+      }
+    }	
   } else {
     the_panel->hide();
+/*    for_all_plugins(p) {
+      if(panel_tabs->find(p->panel) < panel_tabs->children()) {
+	panel_tabs->remove(*p->panel);
+	the_panel->redraw();
+      }
+    }*/
   }
 }
 
 // This is called when user double-clicks an item, open or update the panel:
 void Fl_Widget_Type::open() {
-  if (!the_panel) the_panel = make_widget_panel();
+  if (!the_panel) {
+    the_panel = make_widget_panel();
+    for_all_plugins(p) {
+      p->make_panel();
+      p->panel->position(10, 10);
+      p->panel->label(p->name);
+    }
+  }
+
   load_panel();
-  if (numselected) the_panel->show();
+  if (numselected) {
+    the_panel->show();
+/*    for_all_plugins(p) {
+      if(p->please_show_panel)
+	panel_tabs->insert(*p->panel);
+      else
+ 	panel_tabs->remove(*p->panel);
+    } */
+  }
 }
 
 Fl_Type *Fl_Type::current;
@@ -2047,5 +2105,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.33 1999/08/20 17:58:32 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.34 1999/08/22 06:14:36 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $"
+// "$Id: factory.cxx,v 1.11 1999/08/22 06:14:37 vincent Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@
 #define strcasecmp stricmp
 #endif
 
-#include "Fl_Type.h"
+#include "Fluid_Plugins.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -453,32 +453,52 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Fl_Box_type},
   {0,0,cb,(void*)&Fl_Clock_type},
 {0},
+{"plugins",0,0,Plugins_New_Menu,FL_SUBMENU_POINTER},
 {0}};
 
-void fill_in_New_Menu() {
-  for (unsigned i = 0; i < sizeof(New_Menu)/sizeof(*New_Menu); i++) {
-    Fl_Menu_Item *m = New_Menu+i;
-    if (m->user_data() && !m->text) {
+void fill_in_New_Menu(Fl_Menu_Item* menu) {
+  int level = 0;
+  for (unsigned i = 0; level || menu[i].user_data() || menu[i].text; i++) {
+    Fl_Menu_Item *m = menu+i;
+    if (m->flags() & FL_SUBMENU) level++;
+    if (!m->text && !m->user_data()) level--;
+    if (m->user_data() && !m->flags() && !m->text) {
       const char *n = ((Fl_Type*)(m->user_data()))->type_name();
       if (!strncmp(n,"Fl_",3)) n += 3;
       m->text = n;
+      m->callback_ = cb;
     }
   }
 }
 
+void fill_in_New_Menu() {
+  fill_in_New_Menu(New_Menu);
+}
+
 // use keyword to pick the type, this is used to parse files:
 int reading_file;
-Fl_Type *Fl_Type_make(const char *tn) {
+Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
+  int level = 0;
   reading_file = 1; // makes labels be null
   Fl_Type *r = 0;
-  for (unsigned i = 0; i < sizeof(New_Menu)/sizeof(*New_Menu); i++) {
-    Fl_Menu_Item *m = New_Menu+i;
+  for (unsigned i = 0; level || menu[i].user_data() || menu[i].text; i++) {
+    Fl_Menu_Item *m = menu+i;
+    if (m->flags() & FL_SUBMENU) level++;
+    if (!m->text && !m->user_data()) level--;
     if (!m->user_data()) continue;
-    Fl_Type *t = (Fl_Type*)(m->user_data());
-    if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
+    if(m->flags() & FL_SUBMENU_POINTER) {
+      if(r = Fl_Type_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
+    } else {
+      Fl_Type *t = (Fl_Type*)(m->user_data());
+      if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
+    }
   }
   reading_file = 0;
   return r;
+}
+
+Fl_Type *Fl_Type_make(const char *tn) {
+  return Fl_Type_make(tn, New_Menu);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -621,5 +641,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $".
+// End of "$Id: factory.cxx,v 1.11 1999/08/22 06:14:37 vincent Exp $".
 //
