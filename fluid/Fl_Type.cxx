@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.30 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.31 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -61,6 +61,13 @@ const Enumeration* from_value(void* data, const Enumeration* table)
 {
   for (;table->menu_entry; table++)
     if (table->compiled == data) return table;
+  return 0;
+}
+
+const Enumeration* from_value(int data, const Enumeration* table)
+{
+  for (;table->menu_entry; table++)
+    if (int(table->compiled) == data) return table;
   return 0;
 }
 
@@ -637,5 +644,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.30 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.31 2002/01/25 10:10:00 spitzak Exp $".
 //

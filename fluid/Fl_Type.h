@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.31 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Type.h,v 1.32 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -161,6 +161,7 @@ void set_menu(Fl_Menu_*, const Enumeration*);
 
 // Converters from/to strings and values:
 const Enumeration* from_value(void* data, const Enumeration* table);
+const Enumeration* from_value(int data, const Enumeration* table);
 const Enumeration* from_text(const char* text, const Enumeration* table);
 const char* to_text(void* data, const Enumeration* table);
 int number_from_text(const char* text, const Enumeration* table);
@@ -344,5 +345,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.31 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Type.h,v 1.32 2002/01/25 10:10:00 spitzak Exp $".
 //

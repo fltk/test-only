@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.14 2002/01/16 14:14:07 easysw Exp $"
+# "$Id: Makefile,v 1.15 2002/01/25 10:09:59 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -43,72 +43,85 @@ MEDIA		=	--size universal
 # These are the HTML "source" files; the files are formatted in the
 # order listed...
 HTMLFILES	= \
-		preface.html \
-		intro.html \
-		basics.html \
-		common.html \
-		editor.html \
-		drawing.html \
-		events.html \
-		subclassing.html \
-		fluid.html \
-		opengl.html \
-		widgets.html \
-		Fl_Adjuster.html \
-		Fl_Box.html \
-		Fl_Browser.html \
-		Fl_Browser_.html \
-		Fl_Button.html \
-		Fl_Chart.html \
-		Fl_Check_Button.html \
-		Fl_Choice.html \
-		Fl_Clock.html \
-		Fl_Color_Chooser.html \
-		Fl_Counter.html \
-		Fl_Dial.html \
-		Fl_Double_Window.html \
-		Fl_End.html \
-		Fl_Float_Input.html \
-		Fl_Free.html \
-		Fl_Gl_Window.html \
-		Fl_Group.html \
-		Fl_Input.html \
-		Fl_Int_Input.html \
-		Fl_Light_Button.html \
-		Fl_Menu_.html \
-		Fl_Menu_Bar.html \
-		Fl_Menu_Button.html \
-		Fl_Menu_Item.html \
-		Fl_Menu_Window.html \
-		Fl_Multi_Browser.html \
-		Fl_Multiline_Input.html \
-		Fl_Multiline_Output.html \
-		Fl_Output.html \
-		Fl_Overlay_Window.html \
-		Fl_Pack.html \
-		Fl_Positioner.html \
-		Fl_Repeat_Button.html \
-		Fl_Return_Button.html \
-		Fl_Roller.html \
-		Fl_Round_Button.html \
-		Fl_Scroll.html \
-		Fl_Scrollbar.html \
-		Fl_Secret_Input.html \
-		Fl_Single_Window.html \
-		Fl_Slider.html \
-		Fl_Tabs.html \
-		Fl_Tile.html \
-		Fl_Timer.html \
-		Fl_Valuator.html \
-		Fl_Value_Input.html \
-		Fl_Value_Output.html \
-		Fl_Value_Slider.html \
-		Fl_Widget.html \
-		Fl_Window.html \
-		enumerations.html \
-		glut.html \
-		forms.html \
-		license.html
+	preface.html \
+	intro.html \
+	basics.html \
+	common.html \
+	editor.html \
+	fluid.html \
+	subclassing.html \
+	opengl.html \
+	widgets.html \
+	Fl_Adjuster.html \
+	Fl_Bar.html \
+	Fl_Box.html \
+	Fl_Boxtype.html \
+	Fl_Browser.html \
+	Fl_Button.html \
+	Fl_Chart.html \
+	Fl_Check_Button.html \
+	Fl_Choice.html \
+	Fl_Clock.html \
+	Fl_Color.html \
+	Fl_Color_Chooser.html \
+	Fl_Counter.html \
+	Fl_Dial.html \
+	Fl_Double_Window.html \
+	Fl_End.html \
+	Fl_Float_Input.html \
+	Fl_Font.html \
+	Fl_Gl_Window.html \
+	Fl_Group.html \
+	Fl_Image.html \
+	Fl_Input.html \
+	Fl_Int_Input.html \
+	Fl_Item.html \
+	Fl_Item_Group.html \
+	Fl_Labeltype.html \
+	Fl_Light_Button.html \
+	Fl_List.html \
+	Fl_Menu_.html \
+	Fl_Menu_Bar.html \
+	Fl_Menu_Button.html \
+	Fl_Menu_Item.html \
+	Fl_Menu_Window.html \
+	Fl_Multi_Browser.html \
+	Fl_Multiline_Input.html \
+	Fl_Multiline_Output.html \
+	Fl_Numeric_Input.html \
+	Fl_Output.html \
+	Fl_Overlay_Window.html \
+	Fl_Pack.html \
+	Fl_Positioner.html \
+	Fl_Repeat_Button.html \
+	Fl_Return_Button.html \
+	Fl_Roller.html \
+	Fl_Round_Button.html \
+	Fl_Scroll.html \
+	Fl_Scrollbar.html \
+	Fl_Secret_Input.html \
+	Fl_Single_Window.html \
+	Fl_Slider.html \
+	Fl_Style.html \
+	Fl_Tabs.html \
+	Fl_Tile.html \
+	Fl_Valuator.html \
+	Fl_Value_Input.html \
+	Fl_Value_Output.html \
+	Fl_Value_Slider.html \
+	Fl_Widget.html \
+	Fl_Window.html \
+	Fl_Wordwrap_Input.html \
+	Fl.html \
+	enumerations.html \
+	drawing.html \
+	events.html \
+	utility.html \
+	x.html \
+	win32.html \
+	forms.html \
+	glut.html \
+	license.html
 
 all:	fltk.ps fltk.pdf
 
@@ -158,5 +171,5 @@ fltk.pdf: $(HTMLFILES)
 	@$(HTMLDOC) -f fltk.pdf --jpeg --compression=9 --duplex --verbose --toclevels 2 --title FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.14 2002/01/16 14:14:07 easysw Exp $".
+# End of "$Id: Makefile,v 1.15 2002/01/25 10:09:59 spitzak Exp $".
 #

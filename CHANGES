@@ -1987,3 +1987,13 @@ Documentation fixes.
 
 Checked in 1/23/02
 ////////////////////////////////////////////////////////////////
+
+Fixed Fl_Browser::goto_index(int), it was going to item n+1
+
+Fixed Fl_Browser::goto_index so that you can go to invisible items.
+
+New Fl_Browser::make_item_visible(where) which does what you want(TM).
+The new browser is distinctly less painful to program than the older
+ones, please read the documentation!
+
+Fixes to documentation so it goes through htmldoc better.

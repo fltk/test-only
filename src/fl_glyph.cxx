@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.29 2002/01/23 08:46:01 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.30 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -67,6 +67,14 @@ void fl_glyph(const Fl_Widget* widget, int glyph,
   case FL_GLYPH_RIGHT:
     // these glyphs do not have a box
     break;
+
+  case FL_GLYPH_VSLIDER:
+  case FL_GLYPH_HSLIDER:
+  case FL_GLYPH_VNSLIDER:
+  case FL_GLYPH_HNSLIDER:
+    // match Windows, sliders do not draw pushed-in
+    flags &= ~FL_VALUE;
+    // fall through to default case:
 
   default: {
     Fl_Boxtype box = widget->button_box();
@@ -153,5 +161,5 @@ void fl_glyph(const Fl_Widget* widget, int glyph,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.29 2002/01/23 08:46:01 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.30 2002/01/25 10:10:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.31 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -139,7 +139,7 @@ Fl_Style::Fl_Style() {
 }
 
 #include <ctype.h>
-Fl_Named_Style* Fl_Style::find(const char* name) {
+Fl_Style* Fl_Style::find(const char* name) {
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
     const char* a = p->name;
     const char* b = name;
@@ -158,7 +158,6 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 bool Fl_Style::draw_boxes_inactive = true;
-bool Fl_Style::draw_sliders_pushed = false;
 unsigned Fl_Style::scrollbar_width = 15;
 Fl_Flags Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
 int Fl_Style::wheel_scroll_lines = 3;
@@ -166,7 +165,6 @@ int Fl_Style::wheel_scroll_lines = 3;
 void Fl_Style::revert() {
   fl_background((Fl_Color)0xc0c0c000);
   draw_boxes_inactive = 1;
-  draw_sliders_pushed = 0;
   scrollbar_width = 15;
   scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
@@ -205,5 +203,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.31 2002/01/25 10:10:00 spitzak Exp $".
 //

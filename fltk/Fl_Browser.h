@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.7 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -68,14 +68,18 @@ public:
   Fl_Widget* next();
   Fl_Widget* next_visible();
   Fl_Widget* previous_visible();
+  bool item_is_visible() const;
+  bool item_is_parent() const;
 
   bool set_focus();
-  void set_top() { set_position(TOP); }
-  void set_bottom() { set_position(BOTTOM); }
-  void set_middle() { set_position(MIDDLE); }
-  bool set_selected(bool value = true, int do_callback = 0);
+  bool set_item_selected(bool value = true, int do_callback = 0);
   bool select_only_this(int do_callback = 0);
   bool deselect(int do_callback = 0);
+  enum linepos { NOSCROLL, TOP, MIDDLE, BOTTOM };
+  bool make_item_visible(linepos = NOSCROLL);
+  void damage_item() {damage_item(HERE);}
+  bool set_item_opened(bool);
+  bool set_item_visible(bool);
 
   int current_level() const {return item_level[HERE];}
   const int* current_index() const {return item_index[HERE];}
@@ -93,15 +97,15 @@ public:
   const int *column_widths() const { return column_widths_; }
   void column_widths(const int *pWidths)  { column_widths_ = pWidths; }
 
-  // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.h)
+  // Convienence functions for flat browsers:
   bool select(int line, bool value = true);
   bool selected(int line);
-  void topline(int line) {goto_index(line); set_top();}
-  void bottomline(int line) {goto_index(line); set_bottom();}
-  void middleline(int line) {goto_index(line); set_middle();}
-  bool displayed(int line);
-  void display(int line, bool value = true);
   int topline() const {return item_index[FIRST_VISIBLE][0];}
+  void topline(int line) {goto_index(line); make_item_visible(TOP);}
+  void bottomline(int line) {goto_index(line); make_item_visible(BOTTOM);}
+  void middleline(int line) {goto_index(line); make_item_visible();}
+  bool displayed(int line);
+  bool display(int line, bool value = true);
 
 private:
 
@@ -140,12 +144,10 @@ private:
   void unset_mark(int mark);  // makes mark have illegal value
   bool is_set(int mark);  // false if unset_mark was called
   void damage_item(int mark); // make this item redraw
-  bool item_open(bool); // set open/close state of this item, if it is a parent
-  enum linepos { TOP, MIDDLE, BOTTOM };
-  void set_position(linepos);
 
   // For each mark:
-  int item_level[NUMMARKS]; // depth in hierarchy of the item
+  unsigned char item_level[NUMMARKS]; // depth in hierarchy of the item
+  unsigned char open_level[NUMMARKS]; // depth of highest closed parent
   int item_position[NUMMARKS]; // distance in pixels from top of browser
   int* item_index[NUMMARKS]; // indexes at each level of hierarchy
   int levels; // maximum depth of all items encountered so far
@@ -163,5 +165,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.7 2002/01/25 10:10:00 spitzak Exp $".
 //

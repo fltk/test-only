@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Style.h,v 1.5 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -38,8 +38,6 @@ typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
 			 int,int,int,int,
 			 Fl_Flags);
 
-struct FL_API Fl_Named_Style;
-
 struct FL_API Fl_Style {
   Fl_Boxtype    box;
   Fl_Boxtype    button_box;
@@ -59,9 +57,8 @@ struct FL_API Fl_Style {
   unsigned      text_size;
   unsigned      leading;
 
-  // various user preferences
+  // global settings:
   static bool   draw_boxes_inactive;
-  static bool   draw_sliders_pushed;
   static unsigned scrollbar_width;
   static Fl_Flags scrollbar_align;
   static int	wheel_scroll_lines;
@@ -73,11 +70,10 @@ struct FL_API Fl_Style {
 
   Fl_Style(); // creates a dynamic() style
 
+  // find a default style by its string ID
+  static Fl_Style* find(const char* name);
   static void revert();                 // use FLTK default style
   static void start(const char* name);	// start a new class of style or use a previously started one
-
-  // find a default style by its string ID
-  static Fl_Named_Style* find(const char* name);
 };
 
 FL_API void fl_glyph(const Fl_Widget*, int type,
@@ -117,5 +113,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Style.h,v 1.5 2002/01/25 10:10:00 spitzak Exp $".
 //

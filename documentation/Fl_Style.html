@@ -1,6 +1,6 @@
 <head><title>Fl_Style</title></head><body bgcolor=white>
 
-<h1>struct Fl_Style</h1>
+<h2>struct Fl_Style</h2>
 
 <p>Each widget has a pointer to an instance of Fl_Style.  Usually many
 widgets share pointers to the same Fl_Style.  All the Fl_Styles are
@@ -20,7 +20,7 @@ style, and set the box in that style.  This "unique" style is reused
 for any other changes to that widget and it is deleted when the widget
 is deleted.
 
-<h2>Member variables</h2>
+<h3>Member variables</h3>
 
 <h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
 
@@ -147,7 +147,7 @@ marks when they are off).
 The color to draw text atop the <code>selection_color</code>.  The
 default is <code>FL_WHITE</code>.
 
-<h2>Fl_Named_Style</h2>
+<h2>class Fl_Named_Style</h2>
 
 <h4><code>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</code></h4>
 
@@ -189,7 +189,7 @@ MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
   style(::style);
 }</code></pre></ul>
 
-<h2>Setting a Theme</h2>
+<h3>Setting a Theme</h3>
 
 To implement "themes" the theme code needs to write a number of static
 locations, primarily the default style of several classes.  If you

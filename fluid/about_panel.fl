@@ -10,7 +10,7 @@ Function {make_about_panel(const char *copyright)} {open
 } {
   Fl_Window about_panel {
     label {about fluid} open
-    xywh {150 270 303 258} resizable hotspot color 97 selection_color 47 non_modal visible
+    xywh {150 270 300 255} type Double resizable hotspot color 97 selection_color 47 non_modal visible
   } {
     Fl_Group display_group {open
       xywh {5 5 295 245} box NO_BOX
@@ -64,15 +64,15 @@ Version 2.0}
         }
       }
       Fl_Button {} {
-        label {©1998-2001
+        label {©1998-2002
 Click here for more information}
         callback {display_group->hide();
 copyright_box->show();} selected
-        xywh {175 159 95 41} align 524416 box BORDER_BOX color 136 label_color 6 label_size 10
+        xywh {175 159 95 41} align 128 box BORDER_BOX color 136 label_color 6 label_size 10
       }
     }
     Fl_Box copyright_box {
-      xywh {3 5 297 250} align 4244 hide resizable label_color 6 label_size 10
+      xywh {3 5 297 250} align 148 hide resizable label_color 6 label_size 10
       extra_code {o->label(copyright);}
     }
     Fl_Return_Button {} {

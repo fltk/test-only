@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.84 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.85 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,7 @@ const char* Fl_Widget_Type::subclass() const {
   // entry in the type table where the code starts with "Fl":
   const Enumeration* table = subtypes();
   if (table) {
-    const Enumeration* e = from_value((void*)(o->type()), table);
+    const Enumeration* e = from_value(o->type(), table);
     if (e && e->subclass) return e->subclass;
   }
   return type_name();
@@ -495,7 +495,7 @@ void when_cb(Fl_Choice* i, void *v) {
     set_menu(i, whenmenu);
     i->show();
     const Enumeration* e =
-      from_value((void*)(current_widget->o->when()), whenmenu);
+      from_value(current_widget->o->when(), whenmenu);
     i->value(e ? e-whenmenu : 0);
   } else {
     int m = i->value();
@@ -1231,7 +1231,7 @@ void subtype_cb(Fl_Choice* i, void* v) {
     if (!table) {i->hide(); return;}
     i->show();
     set_menu(i, table);
-    const Enumeration* e = from_value((void*)(current_widget->o->type()),table);
+    const Enumeration* e = from_value(current_widget->o->type(), table);
     i->value(e ? e-table : 0);
     i->redraw();
   } else {
@@ -1620,7 +1620,7 @@ void Fl_Widget_Type::write_widget_code() {
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
   if (o->type() != tplate->type()) {
     const Enumeration* e = subtypes();
-    if (e) e = from_value((void*)(o->type()), e);
+    if (e) e = from_value(o->type(), e);
     if (e && e->symbol)
       write_c("%so->type(%s::%s);\n", indent(), subclass(), e->symbol);
     else
@@ -2106,5 +2106,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.84 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.85 2002/01/25 10:10:00 spitzak Exp $".
 //

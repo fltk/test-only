@@ -2,7 +2,7 @@
 
 #include "about_panel.h"
 
-Fl_Window* about_panel;
+Fl_Double_Window* about_panel;
 
 Fl_Group* display_group;
 
@@ -17,10 +17,11 @@ static void cb_OK(Fl_Return_Button* o, void*) {
   ((Fl_Window*)(o->parent()))->hide();
 }
 
-Fl_Window* make_about_panel(const char *copyright) {
-  Fl_Window* w;
-   {Fl_Window* o = about_panel = new Fl_Window(303, 258, "about fluid");
+Fl_Double_Window* make_about_panel(const char *copyright) {
+  Fl_Double_Window* w;
+   {Fl_Double_Window* o = about_panel = new Fl_Double_Window(300, 255, "about fluid");
     w = o;
+    o->type(241);
     o->color((Fl_Color)97);
     o->selection_color((Fl_Color)47);
     ((Fl_Window*)(o))->hotspot(o);
@@ -111,7 +112,7 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->resizable(o);
         o->end();
       }
-       {Fl_Button* o = new Fl_Button(175, 159, 95, 41, "\251""1998-2001\nClick here for more information");
+       {Fl_Button* o = new Fl_Button(175, 159, 95, 41, "\251""1998-2002\nClick here for more information");
         o->box(FL_BORDER_BOX);
         o->color((Fl_Color)136);
         o->label_color((Fl_Color)6);

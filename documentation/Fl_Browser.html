@@ -97,47 +97,49 @@ the callback is also done if the user double-clicks a non-parent item.</li>
 
 <li><a href="#Fl_Browser">Fl_Browser</a></li>
 <li><a href="#~Fl_Browser">~Fl_Browser</a></li>
-<li><a href="#type">type</a></li>
-<li><a href="#width">width</a></li>
-<li><a href="#height">height</a></li>
-<li><a href="#box_width">box_width</a></li>
 <li><a href="#box_height">box_height</a></li>
-<li><a href="#xposition">xposition</a></li>
-<li><a href="#xposition">xposition</a></li>
-<li><a href="#yposition">yposition</a></li>
-</TD><TD align=left valign=top>
-<li><a href="#yposition">yposition</a></li>
-<li><a href="#indented">indented</a></li>
-<li><a href="#scrollbar">scrollbar</a></li>
-<li><a href="#hscrollbar">hscrollbar</a></li>
-<li><a href="#goto_top">goto_top</a></li>
+<li><a href="#box_width">box_width</a></li>
+<li><a href="#column_widths">column_widths</a></li>
+<li><a href="#current_index">current_index</a></li>
+<li><a href="#current_level">current_level</a></li>
+<li><a href="#current_position">current_position</a></li>
+<li><a href="#focus_index">focus_index</a></li>
+<li><a href="#focus_level">focus_level</a></li>
+<li><a href="#focus_position">focus_position</a></li>
+<li><a href="#format_char">format_char</a></li>
 <li><a href="#goto_focus">goto_focus</a></li>
-<li><a href="#goto_position">goto_position</a></li>
+
+</td><td align=left valign=top>
+
 <li><a href="#goto_index">goto_index</a></li>
+<li><a href="#goto_position">goto_position</a></li>
+<li><a href="#goto_top">goto_top</a></li>
+<li><a href="#height">height</a></li>
+<li><a href="#hscrollbar">hscrollbar</a></li>
+<li><a href="#indented">indented</a></li>
+<li><a href="#item_is_parent">item_is_parent</a></li>
+<li><a href="#item_is_visible">item_is_visible</a></li>
+<li><a href="#make_item_visible">make_item_visible</a></li>
 <li><a href="#next">next</a></li>
 <li><a href="#next_visible">next_visible</a></li>
-</TD><TD align=left valign=top>
 <li><a href="#previous_visible">previous_visible</a></li>
+<li><a href="#scrollbar">scrollbar</a></li>
+
+</td><td align=left valign=top>
+
 <li><a href="#set_focus">set_focus</a></li>
-<li><a href="#set_top">set_top</a></li>
-<li><a href="#set_bottom">set_bottom</a></li>
-<li><a href="#set_middle">set_middle</a></li>
-<li><a href="#current_level">current_level</a></li>
-<li><a href="#current_index">current_index</a></li>
-<li><a href="#current_position">current_position</a></li>
-<li><a href="#focus_level">focus_level</a></li>
-<li><a href="#focus_index">focus_index</a></li>
-</TD><TD align=left valign=top>
-<li><a href="#focus_position">focus_position</a></li>
+<li><a href="#set_item_opened">set_item_opened</a></li>
+<li><a href="#set_item_visible">set_item_visible</a></li>
+<li><a href="#topline">topline</a></li>
+<li><a href="#topline">topline</a></li>
+<li><a href="#type">type</a></li>
 <li><a href="#value">value</a></li>
 <li><a href="#value">value</a></li>
-<li><a href="#format_char">format_char</a></li>
-<li><a href="#column_widths">column_widths</a></li>
-<li><a href="#topline">topline</a></li>
-<li><a href="#bottomline">bottomline</a></li>
-<li><a href="#middleline">middleline</a></li>
-<li><a href="#displayed">displayed</a></li>
-<li><a href="#topline">topline</a></li>
+<li><a href="#width">width</a></li>
+<li><a href="#xposition">xposition</a></li>
+<li><a href="#xposition">xposition</a></li>
+<li><a href="#yposition">yposition</a></li>
+<li><a href="#yposition">yposition</a></li>
 
 </td></tr>
 </table>
@@ -267,9 +269,13 @@ item in the browser. Instead of passing an identifier to all the calls
 that can modify an item, the browser provides several calls to set the
 "current" item and then calls to modify the current item.
 
-<p>This call sets the current item to the very first item in the
-browser. It returns the widget for that item, or null if the browser
-is empty.
+<p>This call sets the current item to the very first <i>visible</i>
+item in the browser. It returns the widget for that item, or null if
+the browser is empty.
+
+<p>If you have invisible items in the browser you should use <a
+href="#goto_index"><tt>goto_index(0)</tt></a> if you want to go to the
+first item even if it is invisible.
 
 <a name=goto_focus><h4>Fl_Widget* goto_focus()</h4></a>
 
@@ -287,9 +293,8 @@ of the first item.
 <p>Go to a nested item. <i>indexes</i> must contain <i>level</i>+1
 index numbers. The first number indicates the top-level item number,
 the second indicates the child number of that parent, and so on. This
-sets the current item to the given item or the nearest closed parent
-(check <a href=#current_index><tt>current_index()</tt></a> to find
-out where it stopped).
+sets the current item to the given item. If the values are out of
+range then null is returned, otherwise the widget for that item.
 
 <h4>Fl_Widget* goto_index(int);
 <br>Fl_Widget* goto_index(int,int);
@@ -299,10 +304,29 @@ out where it stopped).
 
 These are the same as passing the number of arguments minus one as the
 <i>level</i> and the arguments as the index array to <a
-href=goto_index><tt>goto_index()</tt></a>. Passing a negative number
+href="#goto_index"><tt>goto_index()</tt></a>. Passing a negative number
 as the first argument will set it to a special "no item" state where
 <tt>select_only_this()</tt> will do <tt>deselect()</tt>
 
+<a name=item><h4>Fl_Widget* item();</h4></a>
+
+This is in fact a method on the base <a
+href="Fl_Menu_.html">Fl_Menu_</a> class. This returns the widget that
+was jumped to by the last <a href="#goto_index">goto_index()</a> or
+other similar call.
+
+<a name=item_is_visible><h4>bool item_is_visible() const;</h4></a>
+
+Return true if the item would be visible to the user if the browser
+was scrolled to the correct location. This means that the
+<tt>FL_INVISIBLE</tt> flag is not set on it, and all parents of it are
+open and visible as well.
+
+<a name=item_is_parent><h4>bool item_is_parent() const;</h4></a>
+
+Return true if the current item is a parent. Notice that it may have
+zero children.
+  
 <a name=next><h4>Fl_Widget* next();</h4></a>
 
 Move the current item to the next item. If if is a parent it moves to
@@ -327,26 +351,53 @@ href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
 <a name=set_focus><h4>bool set_focus();</h4></a>
 
 Change the focus (the selected item, or in an <a
-href=Fl_Multi_Browser.html>Fl_Multi_Browser</a> the item that has a
+href="Fl_Multi_Browser.html">Fl_Multi_Browser</a> the item that has a
 dotted box around it, and the current item selected with <a
-href=#goto_index><tt>goto_index()</tt></a>.
+href="#goto_index"><tt>goto_index()</tt></a>. This calls <a
+href="#make_item_visible">make_item_visible()</a>.
 
-<a name=set_top><h4>void set_top()</h4></a>
+<a name=make_item_visible><h4>void make_item_visible(enum = NOSCROLL)</h4></a>
 
-Set the <a href=yposition><tt>yposition()</tt></a> so the top of the
-current item is at the top of the browser.
+<p>This makes the current item visible to the user.
 
-<a name=set_bottom><h4>void set_bottom()</h4></a>
+<p>First it turns off the <tt>FL_INVISIBLE</tt> flag on the current
+item, and turns off the <tt>FL_INVISIBLE</tt> flag and opens (turning
+on the <tt>FL_VALUE</tt> flag) all parent items. These flag changes
+cause <a href="Fl_List.html#flags_changed">flags_changed()</a> to be
+called on any <a href="Fl_List.html">Fl_List</a> that you have
+assigned to the browser.
 
-Set the <a href=yposition><tt>yposition()</tt></a> so the bottom of
-the current item is at the bottom of the browser, if possible (it
-cannot scroll backwards past the top item).
+<p>The browser is then scrolled by calling <a
+href="#yposition"><tt>yposition()</tt></a> so the item is visible. The
+optional argument tells how to scroll. If not specified (or the
+default value of <tt>Fl_Browser::NOSCROLL</tt> is given) then the
+browser is scrolled as little as possible to show the item. If it is
+<tt>Fl_Browser::TOP</tt> then the item is put at the top of the
+browser. If it is <tt>Fl_Browser::MIDDLE</tt> then the item is
+centered vertically in the browser. If it is
+<tt>Fl_Browser::BOTTOM</tt> then the item is put at the bottom of the
+browser.
 
-<a name=set_middle><h4>void set_middle()</h4></a>
+<p>This does nothing if the current item is null.
 
-Set the <a href=yposition><tt>yposition()</tt></a> so the middle of
-the current item is in the bottom of the browser, if possible (it
-cannot scroll backwards past the top item).
+<a name=damage_item><h4>void damage_item();</h4></a>
+
+Tell the browser to redraw the current item. Do this if you know it
+has changed appearance. This is better than redrawing the entire
+browser because it will blink a lot less.
+
+<a name=set_item_opened><h4>bool set_item_opened(bool value);</h4></a>
+
+If the current item is a parent, set the open state (the
+<tt>FL_VALUE</tt> flags) to the given <i>value</i> and redraw the
+browser correctly. Returns true if the state was actually changed,
+returns false if it was already in that state.
+
+<a name=set_item_visible><h4>bool set_item_visible(bool value);</h4></a>
+
+Turn off or on the <tt>FL_INVISIBLE</tt> flag on the given item and
+redraw the browser if necessary. Returns true if the state was
+actually changed, returns false if it was already in that state.
 
 <a name=current_level><h4>int current_level() const;</h4></a>
 
@@ -384,7 +435,7 @@ Same as <tt><a href=#goto_index>goto_index(v)</a>;<a
 href=#set_focus>set_focus()</a>;</tt>, to change the current item in a
 non-hierarchial browser.
 
-<a name=value><h4>int value() const {return focus_index(0);}</h4></a>
+<a name=value><h4>int value() const;</h4></a>
 
 Returns <tt><a href=#focus_index>focus_index(v)</a>[0]</tt>, to
 get the current item in a non-hierarchial browser.
@@ -403,30 +454,16 @@ Sets the horizontal locations that each <tt>'\t'</tt> character in an
 item should start printing text at. These are measured from the left
 edge of the browser, including any area for the open/close + glyphs.
 
-<a name=topline><h4>void topline(int line)</h4></a>
-
-Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
-href=#set_top>set_top()</a>;</tt>.
-
-<a name=bottomline><h4>void bottomline(int line)</h4></a>
-
-Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
-href=#set_bottom>set_bottom()</a>;</tt>.
-
-<a name=middleline><h4>void middleline(int line)</h4></a>
-
-Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
-href=#set_middle>set_middle()</a>;</tt>.
-
-<a name=displayed><h4>bool displayed(int line);
-<br>void display(int line, bool value = true);</h4></a>
-
-Set/clear the <tt>FL_VISIBLE</tt> attribute of the nth item in a
-signle-level browser.
-
 <a name=topline><h4>int topline() const</h4></a>
 
 Return the index of the top-level item that is at the top of the browser.
+
+<a name=topline><h4>void topline(int line)</h4></a>
+
+Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
+href=#make_item_visible>make_item_visible(TOP)</a>;</tt>.
+
+<hr>
 
 <p>This is the description of '@' commands, it should be moved to the
 fl_draw() documentation:

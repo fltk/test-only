@@ -41,7 +41,7 @@ change what items are turned on.
 
 <ul>
 <li><a href="#Fl_Multi_Browser">Fl_Multi_Browser</a></li>
-<li><a href="#set_selected">set_selected</a></li>
+<li><a href="#set_item_selected">set_item_selected</a></li>
 <li><a href="#select_only_this">select_only_this</a></li>
 <li><a href="#deselect">deselect</a></li>
 <li><a href="#select">select</a></li>
@@ -52,7 +52,7 @@ change what items are turned on.
 
 Creates a new, empty <tt>Fl_Multi_Browser</tt>.
 
-<a name=set_selected><h4>bool set_selected(bool value = true, int do_callback = 0);</h4></a>
+<a name=set_item_selected><h4>bool set_item_selected(bool value = true, int do_callback = 0);</h4></a>
 
 Turn the <tt>FL_VALUE</tt> flag on or off in the current item (use <a
 href="Fl_Browser.html#goto_index"><tt>goto_index()</tt></a> to set the
@@ -82,7 +82,7 @@ for each item that changes selected state.
 <a name=select><h4>bool select(int line, bool value = true);</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>,<a
-href=#set_focus>set_selected(value)</a>;</tt>, to change the selected
+href=#set_focus>set_item_selected(value)</a>;</tt>, to change the selected
 state of an item in a non-hierarchial Fl_Multi_Browser. If <i>line</i>
 is negative nothing is selected.
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.85 2002/01/23 08:46:01 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.86 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -122,7 +122,7 @@ void Fl_Widget::relayout() {
 }
 
 void Fl_Widget::relayout(uchar flags) {
-  if (!(flags & ~layout_damage_)) return;
+  //if (!(flags & ~layout_damage_)) return;
   layout_damage_ |= flags;
   for (Fl_Widget* w = this->parent(); w; w = w->parent())
     w->layout_damage_ |= FL_LAYOUT_CHILD;
@@ -435,5 +435,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.85 2002/01/23 08:46:01 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.86 2002/01/25 10:10:00 spitzak Exp $".
 //

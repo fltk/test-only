@@ -1,0 +1,52 @@
+<html><head><title>Fl_Item</title></head><body bgcolor = white>
+
+<hr break>
+<h2><a name=Fl_Item>class Fl_Item</a></h2>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre>
+<a href="Fl_Widget.html">Fl_Widget</a>
+   |
+   +----<b>Fl_Item</b>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
+#include &lt;fltk/Fl_Item.h&gt;
+</pre></ul>
+
+<h3>Description</h3>
+
+This widget is designed to be put into <a
+href="Fl_Menu_.html">Fl_Menu</a> and <a
+href="Fl_Browser.html">Fl_Browser</a> widgets. It draws it's label()
+without erasing the background, if <tt>FL_SELECTED</tt> is set in the
+flags it draws the label with the selected label color so it contrasts
+with the background.
+
+<p>Currently you can set <a href="Fl_Widget.html#type">type()</a> to
+<tt>Fl_Item::TOGGLE</tt> to get a checkmark on the left and
+<tt>Fl_Item::RADIO</tt> to make it a radio button. This may change in
+future versions however and you may need a subclass for this.
+
+<p>In a multi-browser, the <a href="Fl_Widget.html#selected">selected()</a>
+indicates if the widget is currently selected.
+
+<h3>Methods</h3>
+
+<ul>
+<li><a href=#Fl_Item>Fl_Item</a></li>
+<li><a href=#~Fl_Item>~Fl_Item</a></li>
+</ul>
+
+<a name=Fl_Item><h4>Fl_Item::Fl_Item(const char * = 0)</h4></a>
+
+Unlike other widgets the constructor does not take any dimensions,
+since it is assummed the container widget will size this correctly.
+
+<h4><A name="~Fl_Item">Fl_Item::~Fl_Item(void)</a></h4>
+
+</body></html>

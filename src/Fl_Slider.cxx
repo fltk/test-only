@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.52 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.53 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,6 @@ int Fl_Slider::slider_position(int W, int S) {
 
 // Draw a normal rectangular slider in the passed region:
 void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
-  if (!Fl_Style::draw_sliders_pushed) f &= ~FL_VALUE;
 
   if (w <= 0 || h <= 0) return;
   int W = (vertical() ? h : w);
@@ -109,18 +108,12 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
   if (style()->selection_color && type()<VERTICAL_NICE) f |= FL_SELECTED;
 
   if (vertical()) {
-    int g;
-    if (type() == VERTICAL_NICE) g = FL_GLYPH_VNSLIDER;
-    else if (type() == VERTICAL_FILL) g = 0;
-    else g = FL_GLYPH_VSLIDER;
-    draw_glyph(g, x, y+X, w, S, f);
+    draw_glyph(type()==VERTICAL_NICE ? FL_GLYPH_VNSLIDER : FL_GLYPH_VSLIDER,
+	       x, y+X, w, S, f);
     draw_inside_label(x, y+X, w, S, f);
   } else {
-    int g;
-    if (type() == HORIZONTAL_NICE) g = FL_GLYPH_HNSLIDER;
-    else if (type() == HORIZONTAL_FILL) g = 0;
-    else g = FL_GLYPH_HSLIDER;
-    draw_glyph(g, x+X, y, S, h, f);
+    draw_glyph(type()==HORIZONTAL_NICE ? FL_GLYPH_HNSLIDER : FL_GLYPH_HSLIDER,
+	       x+X, y, S, h, f);
     draw_inside_label(x+X, y, S, h, f);
   }
 }
@@ -241,5 +234,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.52 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.53 2002/01/25 10:10:00 spitzak Exp $".
 //

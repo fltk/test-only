@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.8 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.9 2002/01/25 10:10:00 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -128,6 +128,7 @@ public:
   Fl_Flags clear_flag(int c)	{return flags_ &= ~c;}
   Fl_Flags invert_flag(int c)	{return flags_ ^= c;}
 
+  Fl_Flags align() const	{return flags_&FL_ALIGN_MASK;}
   void	align(unsigned a)	{flags_ = (flags_ & (~FL_ALIGN_MASK)) | a;}
   bool	visible() const		{return !(flags_&FL_INVISIBLE);}
   bool	visible_r() const	;
@@ -221,8 +222,6 @@ public:
 
 #ifndef FLTK_2  // back-compatability section:
 
-  Fl_Flags align() const	{return flags_&FL_ALIGN_MASK;}
-
   Fl_Boxtype	down_box()		const {return box();}
   Fl_Boxtype	slider()		const {return button_box();}
   Fl_Boxtype	box2()			const {return box();}
@@ -289,5 +288,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.8 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.9 2002/01/25 10:10:00 spitzak Exp $".
 //
