@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.33 2001/02/21 06:15:45 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -36,53 +36,27 @@ alt_thick_down_box(0, "NNUUJJXXAAAA");
 static const Fl_Frame_Box
 alt_thick_up_box(0, "AAAAXXJJUUNN", &alt_thick_down_box);
 
-// some old stuff for boxtype drawing
-enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
+enum {UPPER_LEFT, LOWER_RIGHT};
 
-static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
+static void lozenge(int which, int x,int y,int w,int h, Fl_Color color)
 {
-  if (inset*2 >= w) inset = (w-1)/2;
-  if (inset*2 >= h) inset = (h-1)/2;
-  x += inset;
-  y += inset;
-  w -= 2*inset;
-  h -= 2*inset;
+  w--; h--;
   int d = w <= h ? w : h;
   if (d <= 1) return;
   fl_color(color);
-
-  switch (which) {
-    case UPPER_LEFT :
-      fl_arc(x+w-d, y, d, d, 45, w<=h ? 180 : 90);
-      fl_arc(x, y+h-d, d, d, w<=h ? 180 : 90, 225);
-      break;
-    case LOWER_RIGHT :
-      fl_arc(x, y+h-d, d, d, 225, w<=h ? 360 : 270);
-      fl_arc(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45);
-      break;
-    case CLOSED :
-      fl_arc(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
-      fl_arc(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
-      break;
-    case FILL :
-      fl_pie(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
-      fl_pie(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
-      break;
+  if (which == UPPER_LEFT) {
+    fl_pie(x+w-d, y, d, d, 45, w<=h ? 180 : 90, FL_ARC);
+    fl_pie(x, y+h-d, d, d, w<=h ? 180 : 90, 225, FL_ARC);
+  } else { // LOWER_RIGHT
+    fl_pie(x, y+h-d, d, d, 225, w<=h ? 360 : 270, FL_ARC);
+    fl_pie(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45, FL_ARC);
   }
-
-  if (which == FILL) {
-    if (w < h)
-      fl_rectf(x, y+d/2, w, h-(d&-2));
-    else if (w > h)
-      fl_rectf(x+d/2, y, w-(d&-2), h);
-  } else {
-    if (w < h) {
-      if (which != UPPER_LEFT) fl_line(x+w-1, y+d/2, x+w-1, y+h-d/2);
-      if (which != LOWER_RIGHT) fl_line(x, y+d/2, x, y+h-d/2);
-    } else if (w > h) {
-      if (which != UPPER_LEFT) fl_line(x+d/2, y+h-1, x+w-d/2, y+h-1);
-      if (which != LOWER_RIGHT) fl_line(x+d/2, y, x+w-d/2, y);
-    }
+  if (w < h) {
+    if (which != UPPER_LEFT) fl_line(x+w, y+d/2, x+w, y+h-d/2);
+    if (which != LOWER_RIGHT) fl_line(x, y+d/2, x, y+h-d/2);
+  } else if (w > h) {
+    if (which != UPPER_LEFT) fl_line(x+d/2, y+h, x+w-d/2, y+h);
+    if (which != LOWER_RIGHT) fl_line(x+d/2, y, x+w-d/2, y);
   }
 }
 
@@ -98,11 +72,6 @@ alt_glyph(const Fl_Widget* widget, int t,
   Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
   switch (t) {
     case FL_GLYPH_CHECK: {
-//      if (widget->glyph_box() == FL_NO_BOX) {
-//        // detect Win32-style menu checkboxes in Fl_Item and draw normally
-//        fl_glyph(widget, t, x, y, w, h, f);
-//        break;
-//      }
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
@@ -112,48 +81,61 @@ alt_glyph(const Fl_Widget* widget, int t,
         /*bc = fl_inactive(bc); fc = fl_inactive(fc);*/
         light = fl_inactive(light); dark = fl_inactive(dark);
       }
-      fl_vertex(x+3, y1);
-      fl_vertex(x1, y+3);
-      fl_vertex(x+w-4, y1);
-      fl_vertex(x1, y+h-4);
+      fl_newpath();
+      fl_vertex(x+3, y1); fl_vertex(x1, y+3);
+      fl_vertex(x+w-4, y1); fl_vertex(x1, y+h-4);
       fl_color((f&FL_VALUE) ? fc : bc);
       fl_fill();
-      for (int n = 0; n < 4; n++) {
-	fl_color(n < 2 ? dark : light);
-	fl_vertex(x+n, y1);
-	fl_vertex(x1, y+n);
-	fl_vertex(x+w-n-1, y1);
-	fl_stroke();
-	fl_vertex(x+3-n, y1);
-	fl_vertex(x1, y+h-4+n);
-	fl_vertex(x+w-4+n, y1);
-	fl_stroke();
-      }
+
+      fl_color(dark);
+      fl_line(x,   y1, x1,  y);  fl_line(x1, y,   x+w-1, y1);
+      fl_line(x+1, y1, x1, y+1); fl_line(x1, y+1, x+w-2, y1);
+      fl_color(light);
+      fl_line(x+2, y1, x1, y+2); fl_line(x1, y+2, x+w-3, y1);
+      fl_line(x+3, y1, x1, y+3); fl_line(x1, y+3, x+w-4, y1);
+
+      fl_color(light);
+      fl_line(x,   y1, x1, y+h-1); fl_line(x1, y+h-1, x+w-1, y1);
+      fl_line(x+1, y1, x1, y+h-2); fl_line(x1, y+h-2, x+w-2, y1);
+      fl_color(dark);
+      fl_line(x+2, y1, x1, y+h-3); fl_line(x1, y+h-3, x+w-3, y1);
+      fl_line(x+3, y1, x1, y+h-4); fl_line(x1, y+h-4, x+w-4, y1);
+
       break;
     }
     case FL_GLYPH_ROUND: {
-//      if (widget->glyph_box() == FL_NO_BOX) {
-//        // detect Win32-style menu checkboxes in Fl_Item and draw normally
-//        fl_glyph(widget, t, x, y, w, h, f);
-//        break;
-//      }
       Fl_Color light = 54, dark = 32;
 
       if (f&FL_INACTIVE) {
-        /*fc = fl_inactive(fc);*/
         light = fl_inactive(light); dark = fl_inactive(dark);
       }
-      draw(FILL, x+2, y+2, w-4, h-4, 0, (f&FL_VALUE) ? fc : bc);
 
-//      draw(UPPER_LEFT, x+1, y, w-2, h, 0, dark);
-      draw(UPPER_LEFT, x, y, w, h, 0, dark);
-      draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, dark);
-      draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, light);
+        int d = w <= h ? w : h;
+//        d = (d - 1)|1;
+        d &= (~1);
 
-//      draw(LOWER_RIGHT, x+1, y, w-2, h, 0, light);
-      draw(LOWER_RIGHT, x, y, w, h, 0, light);
-      draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, light);
-      draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, dark);
+    fl_color((f&FL_VALUE) ? fc : bc);
+    fl_pie(x+2, y+2, d-4, d-4, 0, 360);
+
+    lozenge(UPPER_LEFT,  x+2, y+1, d-4, d-2, light);
+    lozenge(UPPER_LEFT,  x+1, y+2, d-2, d-4, light);
+    lozenge(UPPER_LEFT,  x+1, y+1, d-2, d-2, light);
+    lozenge(UPPER_LEFT,  x+2, y+2, d-4, d-4, light);
+
+    lozenge(LOWER_RIGHT, x+2, y+1, d-4, d-2, dark);
+    lozenge(LOWER_RIGHT, x+1, y+2, d-2, d-4, dark);
+    lozenge(LOWER_RIGHT, x+1, y+1, d-2, d-2, dark);
+    lozenge(LOWER_RIGHT, x+2, y+2, d-4, d-4, dark);
+
+    lozenge(LOWER_RIGHT, x+1, y,   d-2, d,   light);
+    lozenge(LOWER_RIGHT, x,   y+1, d,   d-2, light);
+    lozenge(LOWER_RIGHT, x,   y,   d,   d,   light);
+    lozenge(LOWER_RIGHT, x+1, y+1, d-2, d-2, light);
+
+    lozenge(UPPER_LEFT,  x+1, y,   d-2, d,   dark);
+    lozenge(UPPER_LEFT,  x,   y+1, d,   d-2, dark);
+    lozenge(UPPER_LEFT,  x,   y,   d,   d,   dark);
+    lozenge(UPPER_LEFT,  x+1, y+1, d-2, d-2, dark);
 
       break;
     }
@@ -210,40 +192,36 @@ alt_glyph(const Fl_Widget* widget, int t,
       bc = widget->get_box_color(f);
       if (t == FL_GLYPH_RIGHT) {
         fl_color(bc);
-	fl_vertex(x,y);
-	fl_vertex(x+w-1, y+h/2);
-	fl_vertex(x, y+h-1);
-	fl_fill();
+        fl_newpath();
+        fl_vertex(x,y); fl_vertex(x+w-1, y+h/2); fl_vertex(x, y+h-1);
+        fl_fill();
         fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1); fl_line(x+1,y+1, x+w-2,y+h/2);
         fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
         fl_color(l1); fl_line(x,y+h-1, x,y); fl_line(x,y, x+w-1,y+h/2);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
       } else if (t == FL_GLYPH_LEFT) {
         fl_color(bc);
-	fl_vertex(x+w-1,y);
-	fl_vertex(x+w-1,y+h-1);
-	fl_vertex(x,y+h/2);
-	fl_fill();
+        fl_newpath();
+        fl_vertex(x+w-1,y); fl_vertex(x+w-1,y+h-1); fl_vertex(x,y+h/2);
+        fl_fill();
         fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2); fl_line(x+w-2,y+h-2, x+1,y+h/2);
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
         fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1); fl_line(x+w-1,y+h-1, x,y+h/2);
         fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
       } else if (t == FL_GLYPH_DOWN) {
         fl_color(bc);
-	fl_vertex(x,y);
-	fl_vertex(x+w/2,y+h-1);
-	fl_vertex(x+w-1,y);
-	fl_fill();
+        fl_newpath();
+        fl_vertex(x,y); fl_vertex(x+w/2,y+h-1); fl_vertex(x+w-1,y);
+        fl_fill();
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1); fl_line(x+1,y+1, x+w/2,y+h-2);
         fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
         fl_color(l1); fl_line(x+w-1,y, x,y); fl_line(x,y, x+w/2,y+h-1);
         fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
       } else { // UP
         fl_color(bc);
-	fl_vertex(x,y+h-1);
-	fl_vertex(x+w-1,y+h-1);
-	fl_vertex(x+w/2,y);
-	fl_fill();
+        fl_newpath();
+        fl_vertex(x,y+h-1); fl_vertex(x+w-1,y+h-1); fl_vertex(x+w/2,y);
+        fl_fill();
         fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2); fl_line(x+w-2,y+h-2, x+w/2,y+1);
         fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1); fl_line(x+w-1,y+h-1, x+w/2,y);
@@ -312,7 +290,7 @@ static void return_glyph(const Fl_Widget*, int,
 }
 
 extern "C"
-int fltk_theme() {
+int fltk_plugin() {
   Fl_Style::draw_sliders_pushed = 1;
 
   Fl_Style* s;
@@ -358,9 +336,10 @@ int fltk_theme() {
   if ((s = Fl_Style::find("value slider"))) {
     s->glyph = alt_glyph;
   }
+
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.33 2001/02/21 06:15:45 clip Exp $".
 //

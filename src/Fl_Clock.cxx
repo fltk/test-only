@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.24 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.25 2001/02/21 06:15:44 clip Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -125,14 +125,14 @@ Fl_Clock::Fl_Clock(uchar t, int x, int y, int w, int h, const char *l)
 static void tick(void *v) {
 #ifdef WIN32
   ((Fl_Clock*)v)->value(time(0));
-  Fl::add_timeout(1.0, tick, v);
+  Fl::add_timeout(1.0, (Fl_Timeout_Handler)tick, v);
 #else
   struct timeval t;
   gettimeofday(&t, 0);
   ((Fl_Clock*)v)->value(t.tv_sec);
   double delay = 1.0-t.tv_usec*.000001;
   if (delay < .1 || delay > .9) delay = 1.0;
-  Fl::add_timeout(delay, tick, v);
+  Fl::add_timeout(delay, (Fl_Timeout_Handler)tick, v);
 #endif
 }
 
@@ -142,14 +142,14 @@ int Fl_Clock::handle(int event) {
     tick(this);
     break;
   case FL_HIDE:
-    Fl::remove_timeout(tick, this);
+    Fl::remove_timeout((Fl_Timeout_Handler)tick, this);
     break;
   }
   return Fl_Clock_Output::handle(event);
 }
-  
+
 Fl_Clock::~Fl_Clock() {
-  Fl::remove_timeout(tick, this);
+  Fl::remove_timeout((Fl_Timeout_Handler)tick, this);
 }
 
 static void revert(Fl_Style* s) {
@@ -172,5 +172,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.24 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.25 2001/02/21 06:15:44 clip Exp $".
 //

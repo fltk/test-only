@@ -1,5 +1,5 @@
 //
-// "$Id: fl_theme.H,v 1.5 2000/08/04 10:21:59 clip Exp $"
+// "$Id: fl_theme.H,v 1.6 2001/02/21 06:15:44 clip Exp $"
 //
 // Header for themes that also go into fltk_themes static library.
 // These are the important common ones such as Windows, Motif, KDE1 & GNOME.
@@ -37,11 +37,12 @@ int fl_windows();
 int fl_kde(int = 0);
 int fl_gnome();
 int fl_motif();
+int fl_xft();
 
 FL_API void fl_theme_handler(Fl_Theme_Handler);
 
 #endif
 
 //
-// End of "$Id: fl_theme.H,v 1.5 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: fl_theme.H,v 1.6 2001/02/21 06:15:44 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.25 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Style.cxx,v 1.26 2001/02/21 06:15:45 clip Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -49,7 +49,7 @@ static void revert(Fl_Style* s) {
   s->text_color            = FL_BLACK;
   s->label_size		   = 12;
   s->text_size             = 12;
-  s->leading		   = 2;
+  s->leading		   = 0;
   s->parent                = 0;	// this is the topmost style always
 }
 
@@ -209,5 +209,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.25 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.26 2001/02/21 06:15:45 clip Exp $".
 //

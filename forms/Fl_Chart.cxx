@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.11 2001/02/20 16:12:07 robertk Exp $"
+// "$Id: Fl_Chart.cxx,v 1.12 2001/02/21 06:15:44 clip Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -150,31 +150,26 @@ static void draw_linechart(int type, int x,int y,int w,int h,
       int y0 = i ? zeroh - int(entries[i-1].val*incr+.5) : 0;
       int y1 = zeroh - int(entries[i].val*incr+.5);
       if (type == FL_SPIKE_CHART) {
-	  fl_color((Fl_Color)entries[i].col);
-	  fl_line(x1, zeroh, x1, y1);
+          fl_color((Fl_Color)entries[i].col);
+          fl_line(x1, zeroh, x1, y1);
       } else if (type == FL_LINE_CHART && i != 0) {
-	  fl_color((Fl_Color)entries[i-1].col);
-	  fl_line(x0,y0,x1,y1);
+          fl_color((Fl_Color)entries[i-1].col);
+          fl_line(x0,y0,x1,y1);
       } else if (type == FL_FILLED_CHART && i != 0) {
-	  fl_color((Fl_Color)entries[i-1].col);
-	  if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
-	      double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
-	      int xt = x + int((i-.5+ttt)*bwidth+.5);
-	      //fl_polygon(x0,zeroh, x0,y0, xt,zeroh);
-		  fl_newpath(); fl_vertex(x0, zeroh); fl_vertex(x0, y0); 
-		  fl_vertex(xt, zeroh); fl_closepath(); fl_fill();
-	      //fl_polygon(xt,zeroh, x1,y1, x1,zeroh);
-		  fl_newpath(); fl_vertex(xt, zeroh); fl_vertex(x1, y1); 
-		  fl_vertex(x1, zeroh); fl_closepath(); fl_fill();
-		  //
-	  } else {
-	      //fl_polygon(x0,zeroh, x0,y0, x1,y1, x1,zeroh);
-		  fl_newpath(); fl_vertex(x0, zeroh); fl_vertex(x0, y0); 
-		  fl_vertex(x1, y1); fl_vertex(x1, zeroh); fl_closepath(); fl_fill();
-		  //
-	  }
-	  fl_color(textcolor);
-	  fl_line(x0,y0,x1,y1);
+          fl_color((Fl_Color)entries[i-1].col);
+          if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
+            double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
+            int xt = x + int((i-.5+ttt)*bwidth+.5);
+            fl_newpath(); fl_vertex(x0, zeroh); fl_vertex(x0, y0);
+            fl_vertex(xt, zeroh); fl_closepath(); fl_fill();
+            fl_newpath(); fl_vertex(xt, zeroh); fl_vertex(x1, y1);
+            fl_vertex(x1, zeroh); fl_closepath(); fl_fill();
+          } else {
+            fl_newpath(); fl_vertex(x0, zeroh); fl_vertex(x0, y0);
+            fl_vertex(x1, y1); fl_vertex(x1, zeroh); fl_closepath(); fl_fill();
+          }
+          fl_color(textcolor);
+          fl_line(x0,y0,x1,y1);
       }
   }
   /* Draw base line */
@@ -223,29 +218,21 @@ static void draw_piechart(int x,int y,int w,int h,
         tyc -= 0.3*rad*sin(ARCINC*(curang+0.5*incr*entries[i].val));
       }
       fl_color((Fl_Color)entries[i].col);
-      //fl_begin_polygon(); fl_vertex(txc,tyc);
-      //fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
-      //fl_end_polygon();
       fl_newpath(); fl_vertex(txc,tyc);
-      fl_arc(txc,tyc,rad,rad,curang, curang+incr*entries[i].val);
+      fl_arc(txc,tyc,rad*2,rad*2,curang, curang+incr*entries[i].val);
       fl_closepath(); fl_fill();
-	  //
       fl_color(textcolor);
-      //fl_begin_loop(); fl_vertex(txc,tyc);
-      //fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
-      //fl_end_loop();
       fl_newpath(); fl_vertex(txc,tyc);
-      fl_arc(txc,tyc,rad,rad, curang, curang+incr*entries[i].val);
+      fl_arc(txc,tyc,rad*2,rad*2, curang, curang+incr*entries[i].val);
       fl_closepath(); fl_stroke();
-	  //
       curang += 0.5 * incr * entries[i].val;
       /* draw the label */
       double xl = txc + 1.1*rad*cos(ARCINC*curang);
       fl_draw(entries[i].str,
-	      int(xl+.5),
-	      int(tyc - 1.1*rad*sin(ARCINC*curang)+.5),
-	      0, 0,
-	      xl<txc ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
+              int(xl+.5),
+              int(tyc - 1.1*rad*sin(ARCINC*curang)+.5),
+              0, 0,
+              xl<txc ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
       curang += 0.5 * incr * entries[i].val;
     }
 }
@@ -402,5 +389,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.11 2001/02/20 16:12:07 robertk Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.12 2001/02/21 06:15:44 clip Exp $".
 //

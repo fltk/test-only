@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.10 2000/06/27 02:55:29 easysw Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.11 2001/02/21 06:15:44 clip Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -87,7 +87,7 @@ Fl_FileBrowser::item_height(void *p) const	// I - List item data
 
 
   // Figure out the standard text height...
-  textheight = textsize()+leading();
+  textheight = fl_height(textfont(), textsize())+leading();
 
   // We always have at least 1 line...
   height = textheight;
@@ -443,5 +443,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.10 2000/06/27 02:55:29 easysw Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.11 2001/02/21 06:15:44 clip Exp $".
 //

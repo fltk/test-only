@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.39 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Counter.cxx,v 1.40 2001/02/21 06:15:44 clip Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -90,7 +90,7 @@ void Fl_Counter::draw() {
   fl_font(text_font(), text_size());
   if (focused()) {
     fl_color(selection_color());
-    int h = text_size()+leading();
+    int h = fl_height()+leading();
     int w = fl_width(str);
     fl_rectf(xx[0]+(ww[0]-w)/2, (this->h()-h)/2,w,h);
     fl_color(selection_text_color());
@@ -130,7 +130,7 @@ void Fl_Counter::increment_cb() {
 void Fl_Counter::repeat_callback(void* v) {
   Fl_Counter* b = (Fl_Counter*)v;
   if (b->mouseobj) {
-    Fl::add_timeout(REPEAT, repeat_callback, b);
+    Fl::add_timeout(REPEAT, (Fl_Timeout_Handler)repeat_callback, b);
     b->increment_cb();
   }
 }
@@ -157,7 +157,7 @@ int Fl_Counter::handle(int event) {
   case FL_RELEASE:
     if (Fl::pushed()) return 1;
     if (mouseobj) {
-      Fl::remove_timeout(repeat_callback, this);
+      Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
       mouseobj = 0;
       damage(FL_DAMAGE_EXPOSE);
     }
@@ -170,9 +170,9 @@ int Fl_Counter::handle(int event) {
   case FL_DRAG:
     highlight = calc_mouseobj();
     if (highlight != mouseobj) {
-      Fl::remove_timeout(repeat_callback, this);
+      Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
       mouseobj = highlight;
-      if (highlight) Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
+      if (highlight) Fl::add_timeout(INITIALREPEAT, (Fl_Timeout_Handler)repeat_callback, this);
       increment_cb();
     }
     return 1;
@@ -192,7 +192,7 @@ int Fl_Counter::handle(int event) {
 }
 
 Fl_Counter::~Fl_Counter() {
-  Fl::remove_timeout(repeat_callback, this);
+  Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
 }
 
 static void revert(Fl_Style* s) {
@@ -214,5 +214,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.39 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.40 2001/02/21 06:15:44 clip Exp $".
 //

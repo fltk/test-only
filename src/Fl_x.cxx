@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.102 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.103 2001/02/21 06:15:45 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -232,7 +232,7 @@ static int fl_ready() {
 
 ////////////////////////////////////////////////////////////////
 
-Display *fl_display;
+Display *fl_display = 0;
 Window fl_message_window;
 int fl_screen;
 XVisualInfo *fl_visual;
@@ -1271,5 +1271,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.102 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.103 2001/02/21 06:15:45 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.20 2001/02/20 19:58:49 robertk Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.21 2001/02/21 06:15:44 clip Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,15 +32,15 @@
 struct FL_IMAGES_API Fl_Image_Type;
 
 // Shared images class. 
-class FL_API Fl_Shared_Image : public Fl_Image {
+class Fl_Shared_Image : public Fl_Image {
 protected:
-  static const char* fl_shared_image_root;
+  FL_API static const char* fl_shared_image_root;
 
-  static int image_used;
-  static size_t mem_usage_limit;
+  FL_API static int image_used;
+  FL_API static size_t mem_usage_limit;
 
-  static size_t mem_used;
-  static int forbid_delete;
+  FL_API static size_t mem_used;
+  FL_API static int forbid_delete;
 
   Fl_Shared_Image* l1;    // Left leaf in the binary tree
   Fl_Shared_Image* l2;    // Right leaf in the binary tree
@@ -49,62 +49,62 @@ protected:
   unsigned int     used;  // Last time used, for cache handling purpose
   int              refcount; // Number of time this image has been get
 
-  Fl_Shared_Image() { };  // Constructor is private on purpose,
+  FL_API Fl_Shared_Image() { };  // Constructor is private on purpose,
                           // use the get function rather
-  ~Fl_Shared_Image();
+  FL_API ~Fl_Shared_Image();
 
-  void find_less_used();
-  static void check_mem_usage();
+  FL_API void find_less_used();
+  FL_API static void check_mem_usage();
 
-  const char* get_filename();// Return the filename obtained from the concatenation
+  FL_API const char* get_filename();// Return the filename obtained from the concatenation
                           // of the image root directory and this image name
-                          // WARNING : the returned pointer will be 
+                          // WARNING : the returned pointer will be
                           // available only until next call to get_filename
 
-  static const char* get_filename(const char*);
+  FL_API static const char* get_filename(const char*);
 
-  virtual void read() = 0;// decompress the image and create its pixmap
+  FL_API virtual void read() = 0;// decompress the image and create its pixmap
 
-  static void insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
-  static Fl_Shared_Image* find(Fl_Shared_Image* image, const char* name);
-  void remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image);
+  FL_API static void insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
+  FL_API static Fl_Shared_Image* find(Fl_Shared_Image* image, const char* name);
+  FL_API void remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image);
 
 
 public:
-  static Fl_Shared_Image  *first_image;
+  FL_API static Fl_Shared_Image  *first_image;
 
   // Return an Fl_Shared_Image, using the create function if an image with
   // the given name doesn't already exist. Use datas, or read from the
   // file with filename name if datas==0.
-  static Fl_Shared_Image* get(Fl_Shared_Image* (*create)(), 
+  FL_API static Fl_Shared_Image* get(Fl_Shared_Image* (*create)(),
 			      const char* name, const uchar* datas=0);
 
   // Reload the image, useful if it has changed on disk, or if the datas
   // in memory have changed (you can also give a new pointer on datas)
-  void reload(const uchar* datas=0);
-  static void reload(const char* name, const uchar* datas=0);
+  FL_API void reload(const uchar* datas=0);
+  FL_API static void reload(const char* name, const uchar* datas=0);
 
-  // Remove an image from the database and delete it if its refcount has 
+  // Remove an image from the database and delete it if its refcount has
   // fallen to zero
   // Each remove decrement the refcount, each get increment it
   // Return 1 if it has been really deleted.
-  int remove();
-  static int remove(const char* name);
+  FL_API int remove();
+  FL_API static int remove(const char* name);
 
   // Clear the cache for this image and all of its children in the binary tree
-  void clear_cache();
+  FL_API void clear_cache();
 
   // Try to guess the filetype
   // Beware that calling this force you to link in all image types !
-  static Fl_Image_Type* guess(const char* name, const uchar* datas=0);
+  FL_IMAGES_API static Fl_Image_Type* guess(const char* name, const uchar* datas=0);
 
   // Set the position where images are looked for on disk
-  static void set_root_directory(const char* d);
+  FL_API static void set_root_directory(const char* d);
 
   // Set the size of the cache (0 = unlimited is the default)
-  static void set_cache_size(size_t l);
+  FL_API static void set_cache_size(size_t l);
 
-  virtual void draw(int X, int Y, int W, int H, int cx, int cy);
+  FL_API virtual void draw(int X, int Y, int W, int H, int cx, int cy);
 };
 
 
@@ -114,7 +114,7 @@ struct FL_IMAGES_API Fl_Image_Type {
   // Name of the filetype as it appear in the source code (uppercase)
   const char* name;
   // Function to test the filetype
-  int (*test)(const uchar* datas, size_t size=0); 
+  int (*test)(const uchar* datas, size_t size=0);
   // Function to get/create an image of this type
   Fl_Shared_Image* (*get)(const char* name, const uchar* datas=0);
 };
@@ -191,13 +191,13 @@ extern FL_IMAGES_API Fl_Bitmap nosuch_bitmap;
 class FL_IMAGES_API Fl_UNKNOWN_Image {
 public:
   static int test(const uchar*, size_t =0) { return 1; };
-  static Fl_Shared_Image* get(const char*, const uchar* = 0) { 
-    return (Fl_Shared_Image*) &nosuch_bitmap; 
+  static Fl_Shared_Image* get(const char*, const uchar* = 0) {
+    return (Fl_Shared_Image*) &nosuch_bitmap;
   };
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.20 2001/02/20 19:58:49 robertk Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.21 2001/02/21 06:15:44 clip Exp $"
 //

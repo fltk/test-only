@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.46 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.47 2001/02/21 06:15:44 clip Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -145,6 +145,11 @@ void Fl_Input::draw() {
 
 void Fl_Input::draw(int X, int Y, int W, int H)
 {
+  // CET - FIXME - the minimal update stuff should be fixed and when
+  // text is drawn the background should always be cleared because
+  // antialiased font rendering will not look right if drawn more
+  // than once in the same area.
+  damage(FL_DAMAGE_ALL);
   Fl_Color background = text_background();
   if (!show_cursor() && !size()) {
     // we have to erase it if cursor was there
@@ -177,7 +182,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = text_size()+leading();
+  int height = fl_height(text_font(), text_size())+leading();
   int lines;
   int curx, cury;
   for (p=value(), curx=cury=lines=0; ;) {
@@ -367,7 +372,11 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
   if (type()>=FL_MULTILINE_INPUT) {
     theline = Fl::event_y()-Y+yscroll_;
     if (theline < 0) return 0;
-    theline /= (text_size()+leading());
+    // CET - FIXME - this widget should keep track of the line heights
+    // internally.  Using the style accessor functions is not guaranteed
+    // to give correct results for what is actually displayed!  They
+    // should _only_ be used in layout() and draw().
+    theline /= (fl_height(text_font(), text_size())+leading());
   }
 
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
@@ -620,7 +629,11 @@ void Fl_Input::show_cursor(char v) {
 
 ////////////////////////////////////////////////////////////////
 
-static Fl_Named_Style* style = new Fl_Named_Style("Input", 0, &style);
+static void revert(Fl_Style *s) {
+  s->leading = 2;
+}
+
+static Fl_Named_Style* style = new Fl_Named_Style("Input", revert, &style);
 
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   : Fl_Widget(x, y, w, h, l)
@@ -757,13 +770,23 @@ int Fl_Input::handle_key() {
   case FL_Page_Up: {
     if (type() < FL_MULTILINE_INPUT) return 0;
     i = line_start(position());
-    for (int n = h()/(text_size()+leading()); n--;) i = line_start(i-1);
+    // CET - FIXME - this widget should keep track of the line heights
+    // internally.  Using the style accessor functions is not guaranteed
+    // to give correct results for what is actually displayed!  They
+    // should _only_ be used in layout() and draw().
+    for (int n = h()/(fl_height(text_font(), text_size())+leading()); n--;)
+      i = line_start(i-1);
     shift_position(i);
     return 1;}
   case FL_Page_Down: {
     if (type() < FL_MULTILINE_INPUT) return 0;
     i = line_end(position());
-    for (int n = h()/(text_size()+leading()); n--;) i = line_end(i)+1;
+    // CET - FIXME - this widget should keep track of the line heights
+    // internally.  Using the style accessor functions is not guaranteed
+    // to give correct results for what is actually displayed!  They
+    // should _only_ be used in layout() and draw().
+    for (int n = h()/(fl_height(text_font(), text_size())+leading()); n--;)
+      i = line_end(i)+1;
     shift_position(i+1);
     return 1;}
   case FL_Home:
@@ -995,5 +1018,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.46 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.47 2001/02/21 06:15:44 clip Exp $".
 //

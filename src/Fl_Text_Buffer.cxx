@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.3 2001/02/21 06:15:45 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2253,7 +2253,38 @@ static int min( int i1, int i2 ) {
   return i1 <= i2 ? i1 : i2;
 }
 
+int
+Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
+  FILE *fp;
+  if (!(fp = fopen(file, "r"))) return 1;
+  char buffer[buflen]; int r;
+  for (; (r = fread(buffer, 1, buflen - 1, fp)) > 0; pos += r) {
+    buffer[r] = (char)0;
+    insert(pos, buffer);
+  }
+
+  int e = ferror(fp) ? 2 : 0;
+  fclose(fp);
+  return e;
+}
+
+int
+Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
+  FILE *fp;
+  if (!(fp = fopen(file, "w"))) return 1;
+  for (int n; (n = min(end - start, buflen)); start += n) {
+    const char *p = text_range(start, start + n);
+    int r = fwrite(p, 1, n, fp);
+    free((void *)p);
+    if (r != n) break;
+  }
+
+  int e = ferror(fp) ? 2 : 0;
+  fclose(fp);
+  return e;
+}
+
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.3 2001/02/21 06:15:45 clip Exp $".
 //

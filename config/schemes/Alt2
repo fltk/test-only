@@ -10,12 +10,17 @@ version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
 [general]
-  themes =  Alternative KDE_colors                # theme plugins to load for this scheme
+  #themes =  Alternative KDE_colors                # theme plugins to load for this scheme
+  themes =  Alternative syscolors
 
 [widgets]
 
   [widgets/default]
     highlight color = light1
+    label font = arial
+    label size = 14
+    text font = georgia
+    text size = 16
 
   [widgets/menu]                                  # menu attributes
     text box = alternative menu                   # boxtype of menu items

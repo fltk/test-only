@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.25 2000/09/27 16:25:52 spitzak Exp $"
+# "$Id: Makefile,v 1.26 2001/02/21 06:15:45 clip Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,10 +23,12 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-# essai.theme removed from default list because it requires -ljpeg
-# and breaks the build on some platforms
+# * essai.theme removed from default list because it requires -ljpeg
+#   and breaks the build on some platforms
+# * xft.plugin is not in default list because it requires XFree86 4,
+#   the "render" extension, the Xft library, and the freetype2 library.
 THEMES = motif.theme classic.theme windows.theme Alternative.theme \
-         KDE.theme KDE_colors.theme
+	KDE.theme KDE_colors.theme syscolors.theme
 SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 
 ################################################################
@@ -64,12 +66,22 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
+XFT_OBJ = xft.shared.o fl_xft.shared.o
+xft.plugin : $(XFT_OBJ)
+	$(THEMECOMMAND) $@ $(XFT_OBJ) $(DSOLIBS) -L/usr/X11R6/lib -lXft
+	cp $@ ../config/plugins
+	ar r $(LIBRARY).a fl_xft.shared.o
+
 ESSAI_OBJ = essai.shared.o
 essai.theme : $(ESSAI_OBJ)
-	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS)
+	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg -L../lib -lfltk_images $(DSOLIBS)
 	cp $@ ../config/themes
 	cp bg*.jpeg ../config/themes
 
+SYSCOLORS_OBJ = syscolors.shared.o
+syscolors.theme : $(SYSCOLORS_OBJ)
+	$(THEMECOMMAND) $@ $(SYSCOLORS_OBJ) $(DSOLIBS) $(THEMELIBS)
+	cp $@ ../config/themes
 
 MOTIF_OBJ = motif.shared.o fl_motif.shared.o
 motif.theme : $(MOTIF_OBJ)
@@ -102,7 +114,7 @@ KDE_colors.theme : $(KDEC_OBJ)
 	cp $@ ../config/themes
 
 clean :
-	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
+	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin ../config/themes/*.theme ../config/plugins/*.plugin core *~ makedepend
 	@touch makedepend
 
 install : install_static install_shared install_programs
@@ -118,8 +130,10 @@ install_shared:
 	@echo "Installing themes..."
 	@-mkdir -p $(libdir)/fltk/schemes
 	@-mkdir -p $(libdir)/fltk/themes
+	@-mkdir -p $(libdir)/fltk/plugins
 	@(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
-	@cp -f $(THEMES) $(libdir)/fltk/themes
+	@cp -f *.theme $(libdir)/fltk/themes
+	@cp -f *.plugin $(libdir)/fltk/plugins
 
 install_programs:
 
@@ -128,5 +142,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.25 2000/09/27 16:25:52 spitzak Exp $".
+# End of "$Id: Makefile,v 1.26 2001/02/21 06:15:45 clip Exp $".
 #

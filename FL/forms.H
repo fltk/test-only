@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.22 2001/02/20 16:12:07 robertk Exp $"
+// "$Id: forms.H,v 1.23 2001/02/21 06:15:44 clip Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -229,7 +229,7 @@ inline void fl_set_object_callback(Fl_Widget*o,Forms_CB c,long a) {o->callback(c
 inline void fl_call_object_callback(Fl_Widget* o) {o->do_callback();}
 inline void fl_trigger_object(Fl_Widget* o) {o->do_callback();}
 inline void fl_set_object_return(Fl_Widget* o, int v) {
-  o->when((v|FL_WHEN_RELEASE));}
+  o->when(v|FL_WHEN_RELEASE);}
 
 inline void fl_redraw_object(Fl_Widget* o) {o->redraw();}
 inline void fl_show_object(Fl_Widget* o) {o->show();}
@@ -590,7 +590,7 @@ inline void fl_set_counter_precision(Fl_Widget* o, int v) {
 //    ((Fl_Counter*)o)->precision(v);}
     ((Fl_Counter*)o)->step(1/(10^v));}
 inline void fl_set_counter_return(Fl_Widget* o, int v) {
-    ((Fl_Counter*)o)->when((v|FL_WHEN_RELEASE));}
+    ((Fl_Counter*)o)->when(v|FL_WHEN_RELEASE);}
 inline double fl_get_counter_value(Fl_Widget* o) {
     return ((Fl_Counter*)o)->value();}
 inline void fl_get_counter_bounds(Fl_Widget* o, float* a, float* b) {
@@ -621,7 +621,7 @@ inline void fl_get_dial_bounds(Fl_Widget* o, float* a, float* b) {
   *b = float(((Fl_Dial*)o)->maximum());
 }
 inline void fl_set_dial_return(Fl_Widget* o, int i) {
-  ((Fl_Dial*)o)->when((i|FL_WHEN_RELEASE));}
+  ((Fl_Dial*)o)->when(i|FL_WHEN_RELEASE);}
 inline void fl_set_dial_angles(Fl_Widget* o, int a, int b) {
   ((Fl_Dial*)o)->angles(a, b);}
 //inline void fl_set_dial_cross(Fl_Widget* o, int);
@@ -695,7 +695,7 @@ forms_constructor(Fl_Input, fl_add_input)
 inline void fl_set_input(Fl_Widget* o, const char* v) {
     ((Fl_Input*)o)->value(v);}
 inline void fl_set_input_return(Fl_Widget* o, int x) {
-    ((Fl_Input*)o)->when((x | FL_WHEN_RELEASE));}
+    ((Fl_Input*)o)->when(x | FL_WHEN_RELEASE);}
 inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned /*b*/) {
     ((Fl_Input*)o)->text_color((Fl_Color)a);
 //  ((Fl_Input*)o)->cursor_color((Fl_Color)b);
@@ -784,7 +784,7 @@ inline void fl_set_positioner_xstep(Fl_Widget* o, double v) {
 inline void fl_set_positioner_ystep(Fl_Widget* o, double v) {
     ((Fl_Positioner*)o)->ystep(v);}
 inline void fl_set_positioner_return(Fl_Widget* o, int v) {
-    ((Fl_Positioner*)o)->when((v|FL_WHEN_RELEASE));}
+    ((Fl_Positioner*)o)->when(v|FL_WHEN_RELEASE);}
 
 #include <FL/Fl_Slider.H>
 
@@ -804,7 +804,7 @@ inline void fl_get_slider_bounds(Fl_Widget* o, float* a, float* b) {
   *b = float(((Fl_Slider*)o)->maximum());
 }
 inline void fl_set_slider_return(Fl_Widget* o, int i) {
-    ((Fl_Slider*)o)->when((i|FL_WHEN_RELEASE));}
+    ((Fl_Slider*)o)->when(i|FL_WHEN_RELEASE);}
 inline void fl_set_slider_step(Fl_Widget* o, double v) {
     ((Fl_Slider*)o)->step(v);}
 // inline void fl_set_slider_increment(Fl_Widget* o, double v, double);
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.22 2001/02/20 16:12:07 robertk Exp $".
+// End of "$Id: forms.H,v 1.23 2001/02/21 06:15:44 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.102 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.103 2001/02/21 06:15:44 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -346,7 +346,7 @@ void MenuWindow::draw() {
 
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
-	int nh = widget->label_size()+2;
+	int nh = fl_height(widget->label_font(), widget->label_size())+2;
 	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
         Fl_Color c = widget->get_label_color(flags);
@@ -655,9 +655,9 @@ int Fl_Menu_::pulldown(
 
     MenuWindow* mw = p.menus[p.level];
     if (p.menus[p.level]->autoscroll(oldindex)) {
-      Fl::remove_timeout(autoscroll_timeout, &p);
+      Fl::remove_timeout((Fl_Timeout_Handler)autoscroll_timeout, &p);
       if (last_event == FL_DRAG || last_event == FL_MOVE)
-	Fl::add_timeout(.1,autoscroll_timeout, &p);
+	Fl::add_timeout(.1,(Fl_Timeout_Handler)autoscroll_timeout, &p);
     }
 
     Fl_Widget* widget = p.current_widget();
@@ -714,7 +714,7 @@ int Fl_Menu_::pulldown(
     }
   }
 
-  Fl::remove_timeout(autoscroll_timeout, &p);
+  Fl::remove_timeout((Fl_Timeout_Handler)autoscroll_timeout, &p);
   delete fakemenu;
   while (--p.nummenus) delete p.menus[p.nummenus];
   mw.hide();
@@ -732,5 +732,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.102 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.103 2001/02/21 06:15:44 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $"
+// "$Id: gl_draw.cxx,v 1.8 2001/02/21 06:15:44 clip Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -50,15 +50,17 @@ void gl_draw(const char* str, int n) {
 #ifdef WIN32
     int base = fl_fontsize->metr.tmFirstChar;
     int size = fl_fontsize->metr.tmLastChar-base+1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_fontsize->fid);
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, (HFONT)fl_fontsize->font);
     fl_fontsize->listbase = glGenLists(256);
     wglUseFontBitmaps(fl_gc, base, size, fl_fontsize->listbase+base); 
     SelectObject(fl_gc, oldFid);
 #else
-    int base = fl_xfont->min_char_or_byte2;
-    int size = fl_xfont->max_char_or_byte2-base+1;
+    // CET - FIXME - this won't work if not using the normal X font renderer--
+    // CET - FIXME - that is, if using the Xft library renderer plugin!
+    int base = ((XFontStruct*)fl_xfont)->min_char_or_byte2;
+    int size = ((XFontStruct*)fl_xfont)->max_char_or_byte2-base+1;
     fl_fontsize->listbase = glGenLists(256);
-    glXUseXFont(fl_xfont->fid, base, size, fl_fontsize->listbase+base);
+    glXUseXFont(((XFontStruct*)fl_xfont)->fid, base, size, fl_fontsize->listbase+base);
 #endif
   }
 
@@ -156,5 +158,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $".
+// End of "$Id: gl_draw.cxx,v 1.8 2001/02/21 06:15:44 clip Exp $".
 //

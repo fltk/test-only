@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.7 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.8 2001/02/21 06:15:45 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -31,6 +31,9 @@
 #include <string.h>
 #include <limits.h>
 #include <ctype.h>
+
+#undef min
+#undef max
 
 // Text area margins.  Left & right margins should be at least 3 so that
 // there is some room for the overhanging parts of the cursor!
@@ -68,7 +71,7 @@ static Fl_Named_Style *style = new Fl_Named_Style("text display", revert, &style
 Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
     : Fl_Group(X, Y, W, H, l) {
   style(::style);
-  mMaxsize = text_size();
+  mMaxsize = 0;
   damage_range1_start = damage_range1_end = -1;
   damage_range2_start = damage_range2_end = -1;
   dragPos = dragType = dragging = 0;
@@ -195,8 +198,8 @@ void Fl_Text_Display::layout() {
   int i;
 
   /* Find the new maximum font height for this text display */
-  for (i = 0, mMaxsize = text_size(); i < mNStyles; i++)
-    mMaxsize = max(mMaxsize, mStyleTable[i].size);
+  for (i = 0, mMaxsize = fl_height(text_font(), text_size())+leading(); i < mNStyles; i++)
+    mMaxsize = max(mMaxsize, fl_height(mStyleTable[i].font, mStyleTable[i].size)+leading());
 
   // did we have scrollbars initially?
   int hscrollbarvisible = mHScrollBar->visible();
@@ -1067,10 +1070,6 @@ void Fl_Text_Display::draw_string( int style, int X, int Y, int toX,
     background = text_background();
   }
 
-  /* Draw the string using gc and font set above */
-  //    XDrawImageString(XtDisplay(mW), XtWindow(mW), gc, x,
-  //                Y + mAscent, string, nChars);
-
   fl_color( background );
   fl_rectf( X, Y, toX - X, mMaxsize );
   fl_color( foreground );
@@ -1934,5 +1933,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.7 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.8 2001/02/21 06:15:45 clip Exp $".
 //

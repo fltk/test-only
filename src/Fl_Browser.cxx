@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.37 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.38 2001/02/21 06:15:44 clip Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -369,7 +369,7 @@ void Fl_Browser::draw_item() {
 #endif
   }
 
-  int arrow_size = text_size()|1;
+  int arrow_size = fl_height(text_font(), text_size())|1;
   int preview_open =
     (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? FL_OPEN : 0;
   widget->invert_flag(preview_open);
@@ -491,7 +491,7 @@ void Fl_Browser::layout() {
   int max_width = 0;
 
   // count all the items scrolled off the top:
-  int arrow_size = text_size()|1;
+  int arrow_size = fl_height(text_font(), text_size())|1;
   if (goto_top()) for (;;) {
     if (item_position[HERE]+item()->height() > yposition_) break;
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
@@ -558,12 +558,12 @@ void Fl_Browser::layout() {
   scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		   Y, scrollbar.w(), H);
   scrollbar.value(yposition_, H, 0, height);
-  scrollbar.linesize(text_size()+leading());
+  scrollbar.linesize(fl_height(text_font(), text_size())+leading());
   hscrollbar.resize(X,
 		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		    W, hscrollbar.h());
   hscrollbar.value(xposition_, W, 0, max_width);
-  hscrollbar.linesize(text_size());
+  hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
   damage(FL_DAMAGE_LAYOUT);
   focus(item_index[FOCUS][0]); // make value() work for top level
@@ -700,7 +700,7 @@ int Fl_Browser::handle(int event) {
     if (!goto_position(Fl::event_y()-Y+yposition_) && !item()) break;
 
     // see if they clicked the open/close box
-    int arrow_size = text_size()|1;
+    int arrow_size = fl_height(text_font(), text_size())|1;
     int xx = (item_level[HERE]+1)*arrow_size+X-xposition_-Fl::event_x();
     if ((event==FL_PUSH || openclose_drag) && xx > 0 && xx < arrow_size &&
 	item_is_parent()) {
@@ -932,5 +932,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.37 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.38 2001/02/21 06:15:44 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.1 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,10 +31,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-XFontStruct* fl_xfont;
+void* fl_xfont;
 static GC font_gc;
 
-static void set_current_fontsize(Fl_FontSize* f) {
+static void
+set_current_fontsize(Fl_FontSize* f) {
   if (f != fl_fontsize) {
     fl_fontsize = f;
     fl_xfont = f->font;
@@ -45,63 +46,97 @@ static void set_current_fontsize(Fl_FontSize* f) {
 ////////////////////////////////////////////////////////////////
 // Things you can do once the font+size has been selected:
 
-void fl_draw(const char* str, int n, int x, int y) {
+static void
+x11_font_draw(const char *str, int n, int x, int y) {
   if (font_gc != fl_gc) {
     // I removed this, the user MUST set the font before drawing: (was)
     // if (!fl_xfont) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
     font_gc = fl_gc;
-    XSetFont(fl_display, fl_gc, fl_xfont->fid);
+    XSetFont(fl_display, fl_gc, ((XFontStruct*)fl_xfont)->fid);
   }
   XDrawString(fl_display, fl_window, fl_gc, x+fl_x_, y+fl_y_, str, n);
 }
 
-void fl_draw(const char* str, int x, int y) {
-  fl_draw(str, strlen(str), x, y);
+void
+fl_draw(const char* str, int n, int x, int y) {
+  fl_font_renderer->draw(str, n, x, y);
 }
 
-int fl_height() {
-  return (fl_xfont->ascent + fl_xfont->descent);
+void
+fl_draw(const char* str, int x, int y) { fl_draw(str, strlen(str), x, y); }
+
+static int
+x11_font_height() {
+  return (((XFontStruct*)fl_xfont)->ascent + ((XFontStruct*)fl_xfont)->descent);
 }
 
-int fl_descent() {
-  return fl_xfont->descent;
+int
+fl_height() { return fl_font_renderer->height(); }
+
+static int
+x11_font_descent() { return ((XFontStruct*)fl_xfont)->descent; }
+
+int
+fl_descent() { return fl_font_renderer->descent(); }
+
+static int
+x11_font_width(const char *c, int n) {
+  return XTextWidth((XFontStruct*)fl_xfont, c, n);
 }
 
-int fl_width(const char* c) {
-  return XTextWidth(fl_xfont, c, strlen(c));
-}
+int
+fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
 
-int fl_width(const char* c, int n) {
-  return XTextWidth(fl_xfont, c, n);
-}
+int
+fl_width(const char* c) { return fl_width(c, strlen(c)); }
 
-int fl_width(uchar c) {
+#if 0
+// CET - why do it this way?
+static int
+x11_font_cwidth(uchar c) {
 #if 1
-  XCharStruct* p = fl_xfont->per_char;
+  XCharStruct* p = ((XFontStruct*)fl_xfont)->per_char;
   if (p) {
-    int a = fl_xfont->min_char_or_byte2;
-    int b = fl_xfont->max_char_or_byte2 - a;
+    int a = ((XFontStruct*)fl_xfont)->min_char_or_byte2;
+    int b = ((XFontStruct*)fl_xfont)->max_char_or_byte2 - a;
     int x = c-a;
     if (x >= 0 && x <= b) return p[x].width;
   }
-  return fl_xfont->min_bounds.width;
+  return ((XFontStruct*)fl_xfont)->min_bounds.width;
 #else
-  return XTextWidth(fl_xfont, &c, 1);
+  return XTextWidth((XFontStruct*)fl_xfont, &c, 1);
 #endif
 }
+#endif
+
+int
+fl_width(uchar c) { return fl_width((char *)&c, 1); }
+
+static void
+x11_font_clip(Region) {} // handled by X clipping region
 
 // return dash number N, or pointer to ending null if none:
-static const char* font_word(const char* p, int n) {
+static const char *
+font_word(const char* p, int n) {
   while (*p) {if (*p=='-') {if (!--n) break;} p++;}
   return p;
 }
 
-Fl_FontSize::Fl_FontSize(const char* name) {
-  font = XLoadQueryFont(fl_display, name);
+static void *
+x11_font_load(const char *name, const char */*encoding*/, int /*size*/) {
+  void* font = XLoadQueryFont(fl_display, name);
   if (!font) {
     Fl::warning("bad font: %s", name);
     font = XLoadQueryFont(fl_display, "fixed"); // if fixed fails we crash
   }
+  return font;
+}
+
+static void
+x11_font_unload(void *font) { XFreeFont(fl_display, (XFontStruct*)font); }
+
+Fl_FontSize::Fl_FontSize(const char* name) {
+  font = fl_font_renderer->load(name, fl_encoding_, fl_size_);
   encoding = 0;
 #if HAVE_GL
   listbase = 0;
@@ -109,6 +144,7 @@ Fl_FontSize::Fl_FontSize(const char* name) {
 }
 
 #if 0 // this is never called!
+
 Fl_FontSize::~Fl_FontSize() {
 // Delete list created by gl_draw().  This is not done by this code
 // as it will link in GL unnecessarily.  There should be some kind
@@ -120,7 +156,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  glDeleteLists(listbase+base,size);
 // }
   if (this == fl_fontsize) fl_fontsize = 0;
-  XFreeFont(fl_display, font);
+  fl_font_renderer->unload(font);
 }
 #endif
 
@@ -143,7 +179,8 @@ Fl_FontSize::~Fl_FontSize() {
 // Static variable for the default encoding:
 const char *fl_encoding_ = "iso8859-1";
 
-void fl_font(Fl_Font font, unsigned size) {
+void
+fl_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
       (!fl_fontsize->encoding || !strcmp(fl_fontsize->encoding, fl_encoding_)))
     return;
@@ -153,7 +190,7 @@ void fl_font(Fl_Font font, unsigned size) {
   // search the FontSize we have generated already:
   for (f = font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size
-	&& (!f->encoding || !strcmp(f->encoding, fl_encoding_))) {
+        && (!f->encoding || !strcmp(f->encoding, fl_encoding_))) {
       set_current_fontsize(f); return;
     }
 
@@ -210,8 +247,8 @@ void fl_font(Fl_Font font, unsigned size) {
       name = namebuffer;
       ptsize = size;
     } else if (!ptsize ||	// no fonts yet
-	       thissize < ptsize && ptsize > size || // current font too big
-	       thissize > ptsize && thissize <= size // current too small
+               thissize < ptsize && ptsize > size || // current font too big
+               thissize > ptsize && thissize <= size // current too small
       ) {
       name = thisname; ptsize = thissize;
       matchedlength = thislength;
@@ -251,7 +288,8 @@ void fl_encoding(const char* f) {
 ////////////////////////////////////////////////////////////////
 
 // The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_ fl_fonts[] = {
+Fl_Font_
+fl_fonts[] = {
 {"-*-helvetica-medium-r-normal--*",	fl_fonts+1, fl_fonts+2},
 {"-*-helvetica-bold-r-normal--*", 	fl_fonts+1, fl_fonts+3},
 {"-*-helvetica-medium-o-normal--*",	fl_fonts+3, fl_fonts+2},
@@ -270,6 +308,15 @@ Fl_Font_ fl_fonts[] = {
 {"-*-*zapf dingbats-*",			fl_fonts+15,fl_fonts+15},
 };
 
+static Fl_Font_Renderer
+x11_renderer = {
+  x11_font_load, x11_font_unload, x11_font_height,
+  x11_font_descent, x11_font_width, x11_font_draw,
+  x11_font_clip
+};
+
+Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
+
 //
-// End of "$Id: fl_font_x.cxx,v 1.1 2001/02/20 06:59:50 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ void Fl_Labeltype_::draw(const char* label,
   if (f & FL_ALIGN_CLIP) fl_push_clip(X, Y, W, H);
   if (f&FL_INACTIVE) {
     if (!(f&FL_SELECTED)) {
-      fl_color(FL_LIGHT3);
+      fl_color(FL_LIGHT2);
       fl_draw(label, X+1, Y+1, W, H, f);
     }
   }
@@ -93,6 +93,7 @@ void Fl_Widget::draw_inside_label(int X, int Y, int W, int H, Fl_Flags f) const
 // used by Fl_Group and Fl_Tabs to draw outside labels:
 void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 {
+  fl_font(label_font(), label_size());
   if (!active_r()) flags |= FL_INACTIVE;
   Fl_Color color = get_label_color(flags);
 
@@ -104,13 +105,12 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
     // by measuring their total size and centering that rectangle:
     if (!(flags & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_TOP|FL_ALIGN_BOTTOM|
 		   FL_ALIGN_TILED|FL_ALIGN_INSIDE)) && label_) {
-      if ((int)(h + label_size()) <= H) {
+      if ((int)(h + fl_height()) <= H) {
 	// put the image atop the text
-	int d = (H-(h+label_size()))/2;
+	int d = (H-(h+fl_height()))/2;
 	Y += d; H -= d; flags |= FL_ALIGN_TOP;
       } else {
 	// put image to left
-	fl_font(label_font(), label_size());
 	int text_w = (flags&FL_ALIGN_WRAP) ? W : 0;
 	int text_h; fl_measure(label_,text_w,text_h);
 	int d = (W-(h+text_w))/2;
@@ -148,7 +148,6 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
   }
 
   if (label_ && *label_) {
-    fl_font(label_font(), label_size());
     if (!(flags & FL_NO_SHORTCUT_LABEL) && !fl_draw_shortcut)
       fl_draw_shortcut = 1;
     label_type()->draw(label_, X, Y, W, H, color, flags);
@@ -172,5 +171,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.87 2001/01/28 07:07:49 spitzak Exp $"
+dnl# "$Id: configure.in,v 1.88 2001/02/21 06:15:44 clip Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -58,7 +58,7 @@ dnl# Clear debugging flags and only enable debugging if the user asks for
 dnl# it.
 
 LD="\${CXX}"
-LDLIBS="-lX11 -lXext"
+LDLIBS="-lX11 -lXext -lm"
 FLLIB="../lib/libfltk${LIBEXT}"
 FLGLLIB="../lib/libfltk_gl${LIBEXT}"
 FLGLUTLIB="../lib/libfltk_glut${LIBEXT}"
@@ -241,18 +241,16 @@ AC_SUBST(GLLIB)
 dnl# Test for libpng (and for libz by the way)
 dnl# We check for a 1.0 function so versions of libpng < 1.0 are not
 dnl# used...
-LIBPNG=
-  AC_CHECK_LIB(png, png_set_sig_bytes, \
+AC_CHECK_HEADER(png.h, AC_CHECK_LIB(png, png_set_sig_bytes, \
 	AC_DEFINE(HAVE_PNG) LIBPNG=" -lpng -lz"\ 
-        ,,$X_EXTRA_LIBS -lz -lm)
+        ,,$X_EXTRA_LIBS -lz -lm))
 AC_SUBST(LIBPNG)
  
 
 dnl# Test for libjpeg
-LIBJPEG=
-  AC_CHECK_LIB(jpeg, jpeg_stdio_src, \
+AC_CHECK_HEADER(jpeglib.h, AC_CHECK_LIB(jpeg, jpeg_stdio_src, \
 	AC_DEFINE(HAVE_JPEG) LIBJPEG=" -ljpeg"\ 
-        ,,)
+        ,,))
 AC_SUBST(LIBJPEG)
  
 AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
@@ -429,5 +427,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.87 2001/01/28 07:07:49 spitzak Exp $".
+dnl# End of "$Id: configure.in,v 1.88 2001/02/21 06:15:44 clip Exp $".
 dnl#

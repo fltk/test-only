@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.H,v 1.2 2000/08/08 21:32:59 clip Exp $"
+// "$Id: Fl_Text_Buffer.H,v 1.3 2001/02/21 06:15:44 clip Exp $"
 //
 // Header file for Fl_Text_Buffer class.
 //
@@ -81,6 +81,14 @@ class FL_API Fl_Text_Buffer {
     void remove(int start, int end);
     void replace(int start, int end, const char *text);
     void copy(Fl_Text_Buffer* fromBuf, int fromStart, int fromEnd, int toPos);
+    int insertfile(const char *file, int pos, int buflen = 128*1024);
+    int appendfile(const char *file, int buflen = 128*1024)
+      { return insertfile(file, length(), buflen); }
+    int loadfile(const char *file, int buflen = 128*1024)
+      { select(0, length()); remove_selection(); return appendfile(file, buflen); }
+    int outputfile(const char *file, int start, int end, int buflen = 128*1024);
+    int savefile(const char *file, int buflen = 128*1024)
+      { return outputfile(file, 0, length(), buflen); }
 
     void insert_column(int column, int startPos, const char* text,
                        int* charsInserted, int* charsDeleted);
@@ -97,6 +105,7 @@ class FL_API Fl_Text_Buffer {
     int tab_distance() { return mTabDist; }
     void tab_distance(int tabDist);
     void select(int start, int end);
+    int selected() { return mPrimary.selected(); }
     void unselect();
     void select_rectangular(int start, int end, int rectStart, int rectEnd);
     int selection_position(int* start, int* end);
@@ -109,7 +118,7 @@ class FL_API Fl_Text_Buffer {
     void replace_selection(const char* text);
     void secondary_select(int start, int end);
     void secondary_unselect();
-    
+
     void secondary_select_rectangular(int start, int end, int rectStart,
                                       int rectEnd);
 
@@ -228,5 +237,5 @@ class FL_API Fl_Text_Buffer {
 #endif
 
 //
-// End of "$Id: Fl_Text_Buffer.H,v 1.2 2000/08/08 21:32:59 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.H,v 1.3 2001/02/21 06:15:44 clip Exp $".
 //

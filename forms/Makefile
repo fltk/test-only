@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12 2000/09/27 16:25:50 spitzak Exp $"
+# "$Id: Makefile,v 1.13 2001/02/21 06:15:44 clip Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -98,7 +98,7 @@ $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 #	../fluid/fluid -c $<
 
 clean :
-	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
+	@rm -f *.o $(DEMOS) *.exe $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
 	       ../lib/$(DLLIMPORTNAME) core *~ makedepend
 	@touch makedepend
 
@@ -131,5 +131,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.12 2000/09/27 16:25:50 spitzak Exp $".
+# End of "$Id: Makefile,v 1.13 2001/02/21 06:15:44 clip Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.6 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.7 2001/02/21 06:15:45 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -49,6 +49,8 @@ Fl_Text_Editor::Fl_Text_Editor(int X, int Y, int W, int H,  const char* l)
 }
 
 Fl_Text_Editor::Key_Binding* Fl_Text_Editor::global_key_bindings = 0;
+
+static int ctrl_a(int, Fl_Text_Editor* e);
 
 // These are the default key bindings every widget should start with
 static struct {
@@ -100,6 +102,7 @@ static struct {
   { 'x',          FL_CTRL,                  Fl_Text_Editor::kf_cut        },
   { 'c',          FL_CTRL,                  Fl_Text_Editor::kf_copy       },
   { 'v',          FL_CTRL,                  Fl_Text_Editor::kf_paste      },
+  { 'a',          FL_CTRL,                  ctrl_a                        },
   { 0,            0,                        0                             }
 };
 
@@ -160,7 +163,7 @@ Fl_Text_Editor::add_key_binding(int key, int state, Key_Func function,
 #define NORMAL_INPUT_MOVE 0
 
 static void kill_selection(Fl_Text_Editor* e) {
-  if (e->buffer()->primary_selection()->selected()) {
+  if (e->buffer()->selected()) {
     e->insert_position(e->buffer()->primary_selection()->start());
     e->buffer()->remove_selection();
   }
@@ -182,7 +185,7 @@ int Fl_Text_Editor::kf_ignore(int, Fl_Text_Editor*) {
 }
 
 int Fl_Text_Editor::kf_backspace(int, Fl_Text_Editor* e) {
-  if (!e->buffer()->primary_selection()->selected() && e->move_left())
+  if (!e->buffer()->selected() && e->move_left())
     e->buffer()->select(e->insert_position(), e->insert_position()+1);
   kill_selection(e);
   e->show_insert_position();
@@ -200,17 +203,14 @@ extern void fl_text_drag_me(int pos, Fl_Text_Display* d);
 
 int Fl_Text_Editor::kf_move(int c, Fl_Text_Editor* e) {
   int i;
-  if (!e->buffer()->primary_selection()->selected())
+  int selected = e->buffer()->selected();
+  if (!selected)
     e->dragPos = e->insert_position();
   e->buffer()->unselect();
   switch (c) {
-  case FL_Home: {
-      // make two ^A's in a row do select-all:
-      int i = e->buffer()->line_start(e->insert_position());
-      if (i != e->insert_position())
-	e->insert_position(i);
-      else kf_select_all(0, e);
-      break;}
+  case FL_Home:
+      e->insert_position(e->buffer()->line_start(e->insert_position()));
+      break;
     case FL_End:
       e->insert_position(e->buffer()->line_end(e->insert_position()));
       break;
@@ -244,7 +244,7 @@ int Fl_Text_Editor::kf_shift_move(int c, Fl_Text_Editor* e) {
 }
 
 int Fl_Text_Editor::kf_ctrl_move(int c, Fl_Text_Editor* e) {
-  if (!e->buffer()->primary_selection()->selected())
+  if (!e->buffer()->selected())
     e->dragPos = e->insert_position();
   if (c != FL_Up && c != FL_Down) {
     e->buffer()->unselect();
@@ -285,8 +285,22 @@ int Fl_Text_Editor::kf_c_s_move(int c, Fl_Text_Editor* e) {
   return 1;
 }
 
+static int ctrl_a(int, Fl_Text_Editor* e) {
+  // make 2+ ^A's in a row toggle select-all:
+  int i = e->buffer()->line_start(e->insert_position());
+  if (i != e->insert_position())
+    return Fl_Text_Editor::kf_move(FL_Home, e);
+  else {
+    if (e->buffer()->selected())
+      e->buffer()->unselect();
+    else
+      Fl_Text_Editor::kf_select_all(0, e);
+  }
+  return 1;
+}
+
 int Fl_Text_Editor::kf_home(int, Fl_Text_Editor* e) {
-  return kf_move(FL_Home, e);
+    return kf_move(FL_Home, e);
 }
 
 int Fl_Text_Editor::kf_end(int, Fl_Text_Editor* e) {
@@ -324,7 +338,7 @@ int Fl_Text_Editor::kf_insert(int, Fl_Text_Editor* e) {
 }
 
 int Fl_Text_Editor::kf_delete(int, Fl_Text_Editor* e) {
-  if (!e->buffer()->primary_selection()->selected())
+  if (!e->buffer()->selected())
     e->buffer()->select(e->insert_position(), e->insert_position()+1);
   kill_selection(e);
   e->show_insert_position();
@@ -332,7 +346,7 @@ int Fl_Text_Editor::kf_delete(int, Fl_Text_Editor* e) {
 }
 
 int Fl_Text_Editor::kf_copy(int, Fl_Text_Editor* e) {
-  if (!e->buffer()->primary_selection()->selected()) return 1;
+  if (!e->buffer()->selected()) return 1;
   const char *copy = e->buffer()->selection_text();
   if (*copy) Fl::copy(copy, strlen(copy));
   free((void*)copy);
@@ -428,5 +442,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.6 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.7 2001/02/21 06:15:45 clip Exp $".
 //

@@ -1,10 +1,9 @@
 //
-// "$Id: Fl_Item_Group.H,v 1.4 2001/02/21 06:15:44 clip Exp $"
+// "$Id: syscolors.cxx,v 1.1 2001/02/21 06:15:45 clip Exp $"
 //
-// Widget designed to be a nested list in a menu or browser.
-// Code is in Fl_Item.cxx
+// Theme plugin file for FLTK
 //
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1999 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,16 +23,20 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Item_Group_H
-#define Fl_Item_Group_H
+// syscolors.cxx
 
-#include "Fl_Group.H"
+// This theme is designed to be used with other themes to allow them to
+// use the system colors.
 
-class FL_API Fl_Item_Group : public Fl_Group {
-public:
-  void draw();
-  void layout();
-  Fl_Item_Group(const char* label = 0);
-};
+#include <FL/Fl_Style.H>
 
-#endif
+extern "C"
+int fltk_plugin() {
+  fl_get_system_colors();
+
+  return 0;
+}
+
+//
+// End of "$Id: syscolors.cxx,v 1.1 2001/02/21 06:15:45 clip Exp $".
+//

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.73 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_options.cxx,v 1.74 2001/02/21 06:15:45 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -77,19 +77,24 @@ static int theme_handler(int e) {
 // this is necessary for future compatibility
 static const char* flconfig_section = "default";
 
-// Startup stuff.  OK to execute more than once.
-static char beenhere;
-void fl_startup() {
-  // do this only once
-  static int do_once = 0;
-  if (!do_once) {
-    do_once = 1;
+// This startup code is executed only once before main()
+static struct Startup {
+  Startup() {
     if (!flconfig) {
-      const char* p = fl_find_config_file("flconfig");
+      const char *p = fl_find_config_file("flconfig");
       if (p) flconfig = strdup(p);
     }
     Fl::add_handler(theme_handler);
+    char temp[PATH_MAX];
+
+    if (!fl_getconf("plugins", temp, sizeof(temp))) Fl::plugin(temp);
   }
+} startup;
+
+
+// Startup stuff.  OK to execute more than once.
+static char beenhere;
+void fl_startup() {
   beenhere = 1;
   conf_clear_cache(); // Force rereading of config files.
   char temp[PATH_MAX];
@@ -258,6 +263,10 @@ static int load_scheme(const char *s) {
       if (!getconf_list(key_list, "text size", valstr, sizeof(valstr)))
         style->text_size = (int)strtol(valstr,0,0);
 
+      // leading
+      if (!getconf_list(key_list, "leading", valstr, sizeof(valstr)))
+        style->leading = (int)strtol(valstr,0,0);
+
       conf_list_free(&key_list);
     }
     conf_list_free(&section_list);
@@ -297,9 +306,20 @@ static int load_theme(const char *t) {
 // a support headache.
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
-  if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
-    strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
+  if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
+    strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
   const char* tfile = access(temp, R_OK) ? 0 : temp;
+  if (!tfile) {
+    strncpy(temp, t, sizeof(temp));
+    if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
+      strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
+  }
+  if (!tfile && !conf_is_path_rooted(t)) {
+    snprintf(temp, sizeof(temp), "plugins/%s", t);
+    if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
+      strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
+    tfile = fl_find_config_file(temp);
+  }
   if (!tfile && !conf_is_path_rooted(t)) {
     snprintf(temp, sizeof(temp), "themes/%s", t);
     if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
@@ -307,19 +327,19 @@ static int load_theme(const char *t) {
     tfile = fl_find_config_file(temp);
   }
   if (!tfile) {
-    fprintf(stderr, "Cannot find theme \"%s\"\n", temp);
+    fprintf(stderr, "Cannot find plugin \"%s\"\n", t);
     return -1;
   }
 
   strncpy(temp, tfile, sizeof(temp));
-  Fl_Theme_Function f = (Fl_Theme_Function)fl_load_plugin(temp, "fltk_theme");
+  Fl_Theme_Function f = (Fl_Theme_Function)fl_load_plugin(temp, "fltk_plugin");
   if (!f) {
-    fprintf(stderr, "Cannot load theme \"%s\"\n", temp);
+    fprintf(stderr, "Cannot load plugin \"%s\"\n", temp);
     return -2;
   }
 
   if ( f() ) {
-    fprintf(stderr, "Cannot start theme \"%s\"\n", temp);
+    fprintf(stderr, "Cannot start plugin \"%s\"\n", temp);
     return -3;
   }
 
@@ -328,7 +348,7 @@ static int load_theme(const char *t) {
   return 0;
 }
 
-int Fl::theme(const char* t) {
+int Fl::plugin(const char* t) {
   if (!t) return 0;
   char temp[PATH_MAX], *p, *s;
   strncpy(temp, t, sizeof(temp));
@@ -386,7 +406,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.73 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_options.cxx,v 1.74 2001/02/21 06:15:45 clip Exp $".
 //
 
 

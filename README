@@ -164,16 +164,17 @@ TRADEMARKS
 
 COPYRIGHT
 
-    FLTK is copyright 1998-2000 by Bill Spitzak (spitzak@cinenet.net)
+    FLTK is copyright 1998-2001 by Bill Spitzak <spitzak@cinenet.net>
     and others, including:
 
-        Craig P. Earls (cpearls@mit.edu)
-	Curtis Edwards (curtise@fa.disney.com)
-	Gustavo Hime (hime@centroin.com.br)
-	Matthias Melcher (matthias@mediaone.net)
-	Vincent Penne (vincent.penne@wanadoo.fr)
-        Michael Sweet (mike@easysw.com)
-	Carl Thompson (cet@carlthompson.net)
+        Craig P. Earls <cpearls@mit.edu>
+	Curtis Edwards <curtise@fa.disney.com>
+	Gustavo Hime <hime@centroin.com.br>
+	Robert Kesterson <robertk@robertk.com>
+	Matthias Melcher <matthias@mediaone.net>
+	Vincent Penne <vincent.penne@wanadoo.fr>
+        Michael Sweet <mike@easysw.com>
+	Carl Thompson <cet@carlthompson.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public License

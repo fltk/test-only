@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.6 2001/02/20 16:12:07 robertk Exp $"
+// "$Id: gl_start.cxx,v 1.7 2001/02/21 06:15:44 clip Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -46,10 +46,9 @@
 
 extern GLXContext fl_first_context; // in Fl_Gl_Choice.C
 //extern FL_API int fl_clip_state_number; // in fl_rect.C
-FL_API int fl_clip_state_number; // or maybe not
 
 static GLXContext context;
-static int clip_state_number=-1;
+//static int clip_state_number=-1;
 static int pw, ph;
 
 #ifdef WIN32
@@ -89,8 +88,8 @@ void gl_start() {
     glOrtho(0, pw, 0, ph, -1, 1);
     glDrawBuffer(GL_FRONT);
   }
-  if (clip_state_number != fl_clip_state_number) {
-    clip_state_number = fl_clip_state_number;
+//  if (clip_state_number != fl_clip_state_number) {
+//    clip_state_number = fl_clip_state_number;
     int x, y, w, h;
     if (fl_clip_box(0, 0, Fl_Window::current()->w(), Fl_Window::current()->h(),
 		    x, y, w, h)) {
@@ -100,7 +99,7 @@ void gl_start() {
     } else {
       glDisable(GL_SCISSOR_TEST);
     }
-  }
+//  }
 }
 
 void gl_finish() {
@@ -126,5 +125,5 @@ int fl_gl_visual(int mode, int *alist) {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.6 2001/02/20 16:12:07 robertk Exp $".
+// End of "$Id: gl_start.cxx,v 1.7 2001/02/21 06:15:44 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.4 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.5 2001/02/21 06:15:45 clip Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -55,6 +55,7 @@ void fl_restore_clip() {
   if (r) XSetRegion(fl_display, fl_gc, r);
   else XSetClipMask(fl_display, fl_gc, 0);
 #endif
+  fl_font_renderer->clip(r);
 }
 
 // Replace the top of the clip stack:
@@ -234,5 +235,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.4 2001/02/20 06:59:50 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.5 2001/02/21 06:15:45 clip Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.30 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.31 2001/02/21 06:15:45 clip Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
+static void *
+win_font_load(const char *name, const char *encoding, int size) {
   int weight = FW_NORMAL;
   int italic = 0;
+  // may be efficient, but this is non-obvious
   switch (*name++) {
   case 'I': italic = 1; break;
   case 'P': italic = 1;
@@ -40,35 +42,48 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   case ' ': break;
   default: name--;
   }
-  fid = CreateFont(
+
+  HFONT font = CreateFont(
     -size,          // use "char size"
-    0,	            // logical average character width 
-    0,	            // angle of escapement 
-    0,	            // base-line orientation angle 
+    0,	            // logical average character width
+    0,	            // angle of escapement
+    0,	            // base-line orientation angle
     weight,
     italic,
-    FALSE,	        // underline attribute flag 
-    FALSE,	        // strikeout attribute flag 
-    charset,		// character set identifier
-    OUT_DEFAULT_PRECIS,	// output precision 
-    CLIP_DEFAULT_PRECIS,// clipping precision 
-    DEFAULT_QUALITY,	// output quality 
-    DEFAULT_PITCH,	// pitch and family 
-    name	        // pointer to typeface name string 
-    );
+    FALSE,	        // underline attribute flag
+    FALSE,	        // strikeout attribute flag
+    (int)encoding,	// character set identifier
+    OUT_DEFAULT_PRECIS,	// output precision
+    CLIP_DEFAULT_PRECIS,// clipping precision
+    DEFAULT_QUALITY,	// output quality
+    DEFAULT_PITCH,	// pitch and family
+    name	        // pointer to typeface name string
+  );
+
   HDC screen =  GetDC(0);
-  SelectObject(screen, fid);
-  GetTextMetrics(screen, &metr);
-//  BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
-// ...would be the right call, but is not implemented into Window95! (WinNT?)
-  GetCharWidth(screen, 0, 255, width);
+  SelectObject(screen, font);
+  GetTextMetrics(screen, &fl_fontsize->metr);
+  //BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
+  //...would be the right call, but is not implemented into Window95! (WinNT?)
+  GetCharWidth(screen, 0, 255, fl_fontsize->width);
+  ReleaseDC(0, screen);
+
+  return (void *)font;
+}
+
+
+Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
+  fl_fontsize = this;
+  font = fl_font_renderer->load(name, (char *)charset, size);
 #if HAVE_GL
   listbase = 0;
 #endif
   minsize = maxsize = size;
   encoding = charset;
-  ReleaseDC(0, screen);
 }
+
+static void
+win_font_unload(void *font) { DeleteObject((HFONT)font); }
 
 #if HAVE_GL
 Fl_FontSize::~Fl_FontSize() {
@@ -82,7 +97,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  glDeleteLists(listbase+base,size);
 // }
   if (this == fl_fontsize) fl_fontsize = 0;
-  DeleteObject(fid);
+  fl_font_renderer->unload(font);
 }
 #endif
 
@@ -111,7 +126,7 @@ Fl_Font_ fl_fonts[] = {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-HFONT fl_xfont;
+void *fl_xfont;
 
 // Static variable for the default encoding:
 const char *fl_encoding_ = (const char*)DEFAULT_CHARSET;
@@ -133,9 +148,20 @@ void fl_font(Fl_Font font, unsigned size) {
   }
   if (f != fl_fontsize) {
     fl_fontsize = f;
-    fl_xfont = f->fid;
+    fl_xfont = f->font;
   }
 }
+
+static int
+win_font_height() {
+  return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
+}
+
+int
+fl_height() { return fl_font_renderer->height(); }
+
+static int
+win_font_descent() { return fl_fontsize->metr.tmDescent; }
 
 // Change the encoding in use now. This runs the font search again with
 // the new encoding.
@@ -146,40 +172,55 @@ void fl_encoding(const char* f) {
   }
 }
 
-int fl_height() {
-  return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
-}
+int
+fl_descent() { return fl_font_renderer->descent(); }
 
-int fl_descent() {
-  return fl_fontsize->metr.tmDescent;
-}
+int
+fl_width(const char* c) { return fl_width(c, strlen(c)); }
 
-int fl_width(const char* c) {
-  int w = 0;
-  while (*c) w += fl_fontsize->width[uchar(*c++)];
-  return w;
-}
-
-int fl_width(const char* c, int n) {
+static int
+win_font_width(const char* c, int n) {
   int w = 0;
   while (n--) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
 
-int fl_width(uchar c) {
-  return fl_fontsize->width[c];
-}
+int
+fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
 
-void fl_draw(const char* str, int n, int x, int y) {
+int
+fl_width(uchar c) { return fl_width((char *)&c, 1); }
+
+static void
+win_font_draw(const char *str, int n, int x, int y) {
   SetTextColor(fl_gc, fl_colorref);
-  SelectObject(fl_gc, fl_fontsize->fid);
+  SelectObject(fl_gc, (HFONT)fl_fontsize->font);
   TextOut(fl_gc, x+fl_x_, y+fl_y_, str, n);
 }
+
+void
+fl_draw(const char* str, int n, int x, int y) {
+  fl_font_renderer->draw(str, n, x, y);
+}
+
+static void
+win_font_clip(Region) {} // handled by regular windows clipping
 
 void fl_draw(const char* str, int x, int y) {
   fl_draw(str, strlen(str), x, y);
 }
 
+static Fl_Font_Renderer
+win_renderer = {
+  win_font_load, win_font_unload, win_font_height,
+  win_font_descent, win_font_width, win_font_draw,
+  win_font_clip
+};
+
+Fl_Font_Renderer *fl_font_renderer = &win_renderer;
+
+
+
 //
-// End of "$Id: fl_font_win32.cxx,v 1.30 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.31 2001/02/21 06:15:45 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.7 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_FontSize.H,v 1.8 2001/02/21 06:15:44 clip Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -40,15 +40,14 @@
 class FL_API Fl_FontSize {
 public:
   Fl_FontSize *next;	// linked list for this Fl_Fontdesc
+  void *font;
 #ifdef WIN32
   int encoding;
-  HFONT fid;
   int width[256];
   TEXTMETRIC metr;
   Fl_FontSize(const char* fontname, int size, int encoding);
 #else
   const char* encoding;
-  XFontStruct* font;
   Fl_FontSize(const char* xfontname);
 #endif
   unsigned minsize;	// smallest point size that should use this
@@ -64,5 +63,5 @@ extern FL_API Fl_FontSize *fl_fontsize;
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.7 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.8 2001/02/21 06:15:44 clip Exp $".
 //

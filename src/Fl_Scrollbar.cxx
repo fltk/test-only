@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.49 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.50 2001/02/21 06:15:44 clip Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -64,7 +64,7 @@ void Fl_Scrollbar::increment_cb() {
 void Fl_Scrollbar::timeout_cb(void* v) {
   Fl_Scrollbar* s = (Fl_Scrollbar*)v;
   s->increment_cb();
-  Fl::add_timeout(REPEAT, timeout_cb, s);
+  Fl::add_timeout(REPEAT, (Fl_Timeout_Handler)timeout_cb, s);
 }
 
 int Fl_Scrollbar::handle(int event) {
@@ -110,7 +110,7 @@ int Fl_Scrollbar::handle(int event) {
     if (last_ != highlight_) damage(FL_DAMAGE_EXPOSE);
     return 1;
   case FL_RELEASE:
-    if (pushed_) Fl::remove_timeout(timeout_cb, this);
+    if (pushed_) Fl::remove_timeout((Fl_Timeout_Handler)timeout_cb, this);
     highlight_ = which_part;
     last_ = pushed_; // so that it will unpush without redrawing everything
     pushed_ = 0;
@@ -122,7 +122,7 @@ int Fl_Scrollbar::handle(int event) {
       pushed_ = which_part;
     if (pushed_ && pushed_ != 5) {
       handle_push();
-      Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
+      Fl::add_timeout(INITIALREPEAT, (Fl_Timeout_Handler)timeout_cb, this);
       increment_cb();
       damage(FL_DAMAGE_EXPOSE);
       return 1;
@@ -202,5 +202,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.49 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.50 2001/02/21 06:15:44 clip Exp $".
 //

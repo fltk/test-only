@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/fl_draw.H>
@@ -44,7 +44,9 @@ public:
 };
 void FontDisplay::draw() {
   draw_box();
-  int ix = x(), iy = y(), iw = w(), ih = h();
+// CET - FIXME - ??!?!  WTF?
+//  int ix = x(), iy = y(), iw = w(), ih = h();
+  int ix = 0, iy = 0, iw = w(), ih = h();
   box()->inset(ix, iy, iw, ih);
   fl_push_clip(ix, iy, iw, ih);
   fl_font(font, size); fl_encoding(encoding);
@@ -52,7 +54,8 @@ void FontDisplay::draw() {
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
     for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X);
-    fl_draw(buffer, 32, x()+3, y()+3+size*Y);
+//    fl_draw(buffer, 32, x()+3, y()+3+size*Y);
+    fl_draw(buffer, 32, 3, 3+fl_height()*Y);
   }
   fl_font(FL_HELVETICA,10);
   fl_pop_clip();
@@ -64,6 +67,7 @@ Fl_Hold_Browser *fontobj, *sizeobj, *encobj;
 
 Fl_Font* fonts; // list returned by fltk
 
+Fl_Group *button_group;
 Fl_Check_Button* bold_button, *italic_button;
 Fl_Box* id_box;
 
@@ -137,6 +141,7 @@ void font_cb(Fl_Widget *, long) {
   textobj->redraw();
   id_box->label(textobj->font->system_name());
   id_box->redraw();
+  button_group->redraw();
 }
 
 void encoding_cb(Fl_Widget *, long) {
@@ -161,7 +166,7 @@ void size_cb(Fl_Widget *, long) {
 }
 
 void create_the_forms() {
-  form = new Fl_Window(550,390);
+  form = new Fl_Double_Window(550,390);
 
   textobj = new FontDisplay(FL_ENGRAVED_BOX,10,10,530,160);
   textobj->clear_flag(FL_ALIGN_MASK);
@@ -170,16 +175,21 @@ void create_the_forms() {
   id_box->box(FL_ENGRAVED_BOX);
   id_box->label_size(10);
   id_box->set_flag(FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
-  bold_button = new Fl_Check_Button(10, 190, 70, 20, "Bold");
+  button_group = new Fl_Group(10, 190, 140, 20);
+  bold_button = new Fl_Check_Button(0, 0, 70, 20, "Bold");
   bold_button->callback(font_cb, 1);
-  italic_button = new Fl_Check_Button(80, 190, 70, 20, "Italic");
+  italic_button = new Fl_Check_Button(70, 0, 70, 20, "Italic");
   italic_button->callback(font_cb, 1);
+  button_group->end();
   fontobj = new Fl_Hold_Browser(10, 210, 280, 170);
+  fontobj->when(FL_WHEN_CHANGED);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
   encobj = new Fl_Hold_Browser(300, 210, 100, 170);
+  encobj->when(FL_WHEN_CHANGED);
   encobj->callback(encoding_cb, 1);
   sizeobj = new Fl_Hold_Browser(410, 210, 130, 170);
+  sizeobj->when(FL_WHEN_CHANGED);
   sizeobj->callback(size_cb);
   form->end();
 }
@@ -188,7 +198,7 @@ void create_the_forms() {
 
 int main(int argc, char **argv) {
   create_the_forms();
-  int numfonts = fl_list_fonts(fonts); 
+  int numfonts = fl_list_fonts(fonts);
   for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
 // CET - FIXME - new browser code has value starting from 0!
   fontobj->value(0);
@@ -198,5 +208,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $".
 //

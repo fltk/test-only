@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.36 2000/09/27 16:25:50 spitzak Exp $"
+# "$Id: Makefile,v 1.37 2001/02/21 06:15:44 clip Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -68,7 +68,7 @@ $(PROGRAM) : $(OBJECTS) $(FLLIB) $(FLIMAGESLIB)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(IMAGELIBS) $(LDLIBS) $(JPEGLIBS) $(PNGLIBS)
 
 clean :
-	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
+	-@ rm -f *.o $(PROGRAM) $(PROGRAM).exe $(CLEAN) core *~ makedepend
 	@touch makedepend
 
 depend:
@@ -108,5 +108,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.36 2000/09/27 16:25:50 spitzak Exp $".
+# End of "$Id: Makefile,v 1.37 2001/02/21 06:15:44 clip Exp $".
 #

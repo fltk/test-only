@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.41 2001/02/20 06:59:48 spitzak Exp $"
+ * "$Id: configh.in,v 1.42 2001/02/21 06:15:44 clip Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -168,6 +168,7 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
   
 #define HAVE_PNG 0
 
+
 /*
  * HAVE_JPEG
  *
@@ -214,5 +215,5 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
 #define CONF_CACHED
 
 /*
- * End of "$Id: configh.in,v 1.41 2001/02/20 06:59:48 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.42 2001/02/21 06:15:44 clip Exp $".
  */

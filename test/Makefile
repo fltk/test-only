@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.49 2000/07/14 08:35:01 clip Exp $"
+# "$Id: Makefile,v 1.50 2001/02/21 06:15:45 clip Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -111,7 +111,7 @@ depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) > makedepend
 
 clean:
-	-@ rm -f $(ALL) jpeg_image *.o core *~
+	-@ rm -f $(ALL) *.exe jpeg_image *.o core *~
 
 install:
 
@@ -122,5 +122,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.49 2000/07/14 08:35:01 clip Exp $".
+# End of "$Id: Makefile,v 1.50 2001/02/21 06:15:45 clip Exp $".
 #
