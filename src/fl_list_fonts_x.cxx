@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.11 2004/08/03 08:23:11 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -133,6 +133,8 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
 
   open_display();
   int xlistsize;
+  if (!current_font_)
+    setfont(HELVETICA, 14);
   char **xlist = XListFonts(xdisplay, "-*", 10000, &xlistsize);
   if (!xlist) return 0; // ???
   qsort(xlist, xlistsize, sizeof(*xlist), sort_function);
@@ -301,5 +303,5 @@ int fltk::Font::sizes(int*& sizep) {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.11 2004/08/03 08:23:11 spitzak Exp $"
 //
