@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.27 2004/05/05 07:11:23 spitzak Exp $"
+// "$Id: x.h,v 1.28 2004/05/05 07:18:53 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -53,12 +53,13 @@
 #ifndef DOXYGEN
 # define Window XWindow
 
-# if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
+// pragmas are to fix the broken SGI Irix Xlib header files:
+# if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
 #  pragma set woff 3322
 # endif
 # include <X11/Xlib.h>
 # include <X11/Xutil.h>
-# if defined(_ABIN32) || defined(_ABI64)
+# if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
 #  pragma reset woff 3322
 # endif
 
@@ -176,5 +177,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.27 2004/05/05 07:11:23 spitzak Exp $".
+// End of "$Id: x.h,v 1.28 2004/05/05 07:18:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.13 2004/05/05 07:19:10 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -165,7 +165,7 @@ XColorMap& fl_xmap(uchar index, uchar r, uchar g, uchar b)
   static int nc[2];
   int& numcolors = nc[fl_overlay];
 #else
-  Colormap colormap = colormap;
+  Colormap colormap = xcolormap;
   static XColor *allcolors;
   static int numcolors;
 #endif
@@ -367,5 +367,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.13 2004/05/05 07:19:10 spitzak Exp $"
 //

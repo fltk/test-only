@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.167 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.168 2004/05/05 07:19:08 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -37,6 +37,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <limits.h>
+#include <fltk/visual.h>
 
 using namespace fltk;
 
@@ -1803,5 +1804,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.167 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.168 2004/05/05 07:19:08 spitzak Exp $".
 //
