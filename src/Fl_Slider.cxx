@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.75 2004/08/07 20:48:35 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.76 2004/08/27 15:07:44 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -222,35 +222,43 @@ void Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
 
   if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
   // Figure out approximate size of min_spacing at zero:
-  double derivative;
+
+  double mul = 1; // how far apart tick marks are
+  double div = 1;
+  int smallmod = 5; // how many tick marks apart "larger" ones are
+  int nummod = 10; // how many tick marks apart numbers are
+  int powincr = 10000;
+
   if (!log()) {
-    derivative = (B-A)*min_spacing/w;
+    double derivative = (B-A)*min_spacing/w;
+    if (derivative < step()) derivative = step();
+    while (mul*5 <= derivative) mul *= 10;
+    while (mul > derivative*2*div) div *= 10;
+    if (derivative*div > mul*2) {mul *= 5; smallmod = 2;}
+    else if (derivative*div > mul) {mul *= 2; nummod = 5;}
   } else if (A > 0) {
     // log slider
-    derivative = A*exp(min_spacing*::log(B/A)/w*3);
+    while (mul*5 <= A) mul *= 10;
+    while (mul > A*2*div) div *= 10;
+    powincr = 10;
+    double d = exp(min_spacing*::log(B/A)/w*3);
+    if (d >= 5) {mul *= 10; smallmod = nummod = 1; powincr = 1;}
+    else if (d >= 2) {mul *= 5; smallmod = powincr = nummod = 2;}
   } else {
     // squared slider, derivative at edge is zero, use value at 1 pixel
-    derivative = B*min_spacing*min_spacing/(w*w);
+    double derivative = B*min_spacing*min_spacing/(w*w);
     if (A < 0) derivative *= 4;
+    if (derivative < step()) derivative = step();
+    while (mul < derivative) mul *= 10;
+    while (mul >= 10*derivative*div) div *= 10;
+    powincr = 10;
+    //if (derivative > num) {num *= 5; smallmod = powincr = nummod = 2;}
   }
-  if (derivative < step()) derivative = step();
-
-  // Find closest multiple of 10 larger than spacing:
-  double num = 1;
-  if (num < derivative) {
-    while (num*5 <= derivative) num *= 10;
-  } else {
-    while (num > derivative*2) num /= 10;
-  }
-  int smallmod = 5;
-  int nummod = 10;
-  if (derivative > num*2) {num *= 5; smallmod = 2;}
-  else if (derivative > num) {num *= 2; nummod = 5;}
 
   for (int n = 0; ; n++) {
     // every ten they get further apart for log slider:
-    if (log() && n > 10) {num *= 10; n = 2;}
-    double v = num*n;
+    if (n > powincr) {mul *= 10; n = (n-1)/10+1;}
+    double v = mul*n/div;
     if (v > fabs(A) && v > fabs(B)) break;
     int small = n%smallmod ? 3 : 0;
     if (v >= A && v <= B) {
@@ -590,5 +598,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.75 2004/08/07 20:48:35 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.76 2004/08/27 15:07:44 spitzak Exp $".
 //

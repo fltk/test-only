@@ -2,11 +2,46 @@
 // in the desired order, and to set the titles of them. It is named
 // 00.doc to force Doxygen to read it first.
 
+/*! \mainpage
+
+<center>
+<img src="fltk_shadow.png" alt = "FLTK">
+<br>Revision 15 by Bill Spitzak, Michael Sweet, Craig P. Earls, your_name_here<br>
+All contents &copy;1998-2004 by Bill Spitzak and others.
+<br>Contents may be reproduced provided this copyright notice is preserved.
+</center>
+
+A tutorial by examples and chapters describing functions by subject
+are listed under <a href="modules.html"><b>Modules</b></a>.
+
+Every function and class in FLTK is listed under the
+<a href="namespacefltk.html"><b>Namespace fltk</b></a>, with links to the
+pages describing them.
+
+A hierarchial list of all the classes (including the Widgets) is in <a
+href="hierarchy.html"><b>Class Hierarchy</b></a>.
+
+FLTK also provides a number of functions that are \e not in the
+fltk:: namespace, they are listed under \ref utilities. These
+include UTF-8 and filename manipulation functions that are not
+provided in a portable way by systems.
+
+\image html doxygen.png
+
+Produced from source file comments using <a
+href="http://www.doxygen.org">Doxygen (www.doxygen.org)</a>
+
+*/
+
+// This defines the chapters, which Doxygen insists on calling "modules"
+// and putting at the end of the index list. If anybody knows how to
+// get more control over the produced order, please tell me!
+
 // To put the text into a chapter you should use "\addtogroup name".
 // Any groups you add to that are not listed here are appended to the
 // end of the list in random order.
 
-/*! \defgroup example1 Example 1: A Simple FLTK Program */
+/*! \defgroup example1 Example 1: Basic FLTK Program */
 
 /*! \defgroup example2 Example 2: Using Callbacks */
 
@@ -14,7 +49,7 @@
 
 /*! \defgroup example4 Example 4: Drawing Things */
 
-/*! \defgroup editor Example 6: A Simple Text Editor */
+/*! \defgroup editor Example 6: A Text Editor */
 
 /*! \defgroup startup Initialization and Argument Parser */
 

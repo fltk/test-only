@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.16 2004/08/02 07:35:18 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.17 2004/08/27 15:07:44 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -121,7 +121,7 @@ static HRGN bitmap2region(xbmImage* bitmap) {
    * structure on entry. We will add rectangles by amount of
    * ALLOC_UNIT number in this structure.
    */
-  #define ALLOC_UNIT  100
+# define ALLOC_UNIT  100
   DWORD maxRects = ALLOC_UNIT;
 
   RGNDATA* pData = (RGNDATA*)malloc(sizeof(RGNDATAHEADER)+(sizeof(RECT)*maxRects));
@@ -204,5 +204,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.16 2004/08/02 07:35:18 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.17 2004/08/27 15:07:44 spitzak Exp $"
 //

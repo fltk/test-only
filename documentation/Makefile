@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.26 2004/03/08 06:52:45 spitzak Exp $"
+# "$Id: Makefile,v 1.27 2004/08/27 15:07:44 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -29,6 +29,7 @@ include ../makeinclude
 doxygen_output:
 	-rm -rf html
 	doxygen
+	cp tiny.gif fltk_shadow.png doxygen.png html
 
 #
 # What media size to use:
@@ -238,5 +239,5 @@ fltk.pdf: $(HTMLFILES)
 
 
 #
-# End of "$Id: Makefile,v 1.26 2004/03/08 06:52:45 spitzak Exp $".
+# End of "$Id: Makefile,v 1.27 2004/08/27 15:07:44 spitzak Exp $".
 #
