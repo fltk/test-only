@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.20 2000/06/10 04:10:22 carl Exp $"
+// "$Id: forms.H,v 1.21 2000/08/12 07:44:28 spitzak Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -349,10 +349,12 @@ inline int fl_mouse_button() {return Fl::event_button();}
 ////////////////////////////////////////////////////////////////
 // Drawing functions.  Only usable inside an Fl_Free object?
 
+#if 0
 inline void fl_drw_box(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
     b->draw(x,y,w,h,bgc);}
 inline void fl_drw_frame(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
     b->draw(x,y,w,h,bgc,FL_FRAME_ONLY);}
+#endif
 
 inline void fl_drw_text(Fl_Align align, int x, int y, int w, int h,
 		  Fl_Color fgcolor, int size, Fl_Font style,
@@ -850,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.20 2000/06/10 04:10:22 carl Exp $".
+// End of "$Id: forms.H,v 1.21 2000/08/12 07:44:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.23 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.24 2000/08/12 07:44:29 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -52,8 +52,8 @@ static void figure_out_visual() {
 #if USE_COLORMAP
     fl_redmask = 0;
     // make sure black & white are allocated:
-    fl_xpixel(FL_BLACK);
     fl_xpixel(FL_WHITE);
+    fl_xpixel(FL_BLACK);
     return;
 #else
     Fl::fatal("Requires TrueColor visual");
@@ -330,5 +330,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.23 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.24 2000/08/12 07:44:29 spitzak Exp $".
 //

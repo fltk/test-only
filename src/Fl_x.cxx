@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.91 2000/08/11 00:53:47 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.92 2000/08/12 07:44:29 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -747,10 +747,13 @@ int fl_handle(const XEvent& xevent)
   // artificial event with the correct position afterwards (and some
   // window managers do not send this fake event anyway)
   // So anyway, do a round trip to find the correct x,y:
+  // WAS: Actually, TWO round trips! Is X stoopid or what?
   case ConfigureNotify:
   case MapNotify: {
     window = fl_find(xevent.xmapping.window);
     if (!window) break;
+    if (window->parent()) break; // ignore child windows
+
     // figure out where OS really put window
     XWindowAttributes actual;
     XGetWindowAttributes(fl_display, fl_xid(window), &actual);
@@ -758,7 +761,7 @@ int fl_handle(const XEvent& xevent)
     XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
 
-    // tell Fl_Window about it
+    // tell Fl_Window about it and set flag to prevent echoing:
     if (window->resize(X, Y, W, H)) resize_from_system = window;
     return 1;
   }
@@ -1292,5 +1295,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.91 2000/08/11 00:53:47 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.92 2000/08/12 07:44:29 spitzak Exp $".
 //

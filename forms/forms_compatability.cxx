@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.8 2000/05/17 22:25:04 carl Exp $"
+// "$Id: forms_compatability.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -156,7 +156,14 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
 Fl_Widget *fl_do_forms(void) {
   Fl_Widget *obj;
-  while (!(obj = Fl::readqueue())) if (!Fl::wait()) exit(0);
+  while (!(obj = Fl::readqueue())) {
+    // exit if there are no windows visible:
+    for (Fl_Window* w = Fl::first_window(); ; w = Fl::next_window(w)) {
+      if (!w) exit(0);
+      if (w->visible() && !w->parent()) break;
+    }
+    Fl::wait();
+  }
   return obj;
 }
 
@@ -171,7 +178,7 @@ Fl_Widget *fl_check_forms() {
 void Fl_FormsText::draw() {
   draw_box();
   set_flag(flags()|FL_ALIGN_INSIDE); // questionable method of compatability
-  draw_label();
+  draw_inside_label();
 }
 
 // Create an XForms button by selecting correct fltk subclass:
@@ -255,5 +262,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.8 2000/05/17 22:25:04 carl Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $".
 //

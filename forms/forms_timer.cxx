@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.3 2000/01/16 07:44:27 robertk Exp $"
+// "$Id: forms_timer.cxx,v 1.4 2000/08/12 07:44:28 spitzak Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -57,15 +57,11 @@ void fl_gettime(long* sec, long* usec) {
 
 void Fl_Timer::draw() {
   int tt;
-  Fl_Color col;
   char str[32];
-  if (!on || delay>0.0)
-    col = color();
-  else if ((int) (delay / FL_TIMER_BLINKRATE) % 2)
-    col = color();
-  else
-    col = selection_color();
-  box()->draw(x(),y(),w(),h(),col);
+  Fl_Flags flags = this->flags();
+  if (on && delay<=0.0 && ((int) (delay / FL_TIMER_BLINKRATE) % 2))
+    flags |= FL_SELECTED;
+  draw_box(x(),y(),w(),h(),flags);
   if (type() == FL_VALUE_TIMER && delay>0.0) {
     double d = direction_ ? total-delay : delay;
     if (d < 60.0)
@@ -78,7 +74,7 @@ void Fl_Timer::draw() {
     fl_color(label_color());
     fl_draw(str, x(), y(), w(), h(), FL_ALIGN_CENTER);
   } else
-    draw_label();
+    draw_inside_label();
 }
 
 void Fl_Timer::stepcb(void* v) {
@@ -153,5 +149,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.3 2000/01/16 07:44:27 robertk Exp $".
+// End of "$Id: forms_timer.cxx,v 1.4 2000/08/12 07:44:28 spitzak Exp $".
 //

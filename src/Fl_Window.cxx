@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.53 2000/08/11 00:53:47 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.54 2000/08/12 07:44:29 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -144,16 +144,16 @@ int Fl_Window::handle(int event) {
     }
 
     case FL_HIDE: {
-      if (i) {
+      //if (modal()) destroy(); // needed so modal can change next time
+      if (!parent()) {
         // We have to destroy the window because at least on my X system
         // just unmapping it causes undesired events to be generated. For
         // example, moving the cursor over the area of an unmapped window
         // causes the window behind it to get a LeaveNotify event!?  Not
         // sure whether this is a bug in XFree86 4 or not...
         destroy();
-
-        //if (modal()) destroy(); // needed so modal can change next time
-        //else XUnmapWindow(fl_display, i->xid);
+      } else {
+        XUnmapWindow(fl_display, i->xid);
       }
       break;
     }
@@ -328,5 +328,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.53 2000/08/11 00:53:47 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.54 2000/08/12 07:44:29 spitzak Exp $".
 //

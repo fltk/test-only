@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.127 2000/08/11 00:53:47 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.128 2000/08/12 07:44:29 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -770,7 +770,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         POINT wul = { 0, 0 };
         ClientToScreen(fl_xid(window), &wul);
         // tell Fl_Window about it
-        window->resize(wul.x, wul.y, wr.right, wr.bottom);
+        if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
+	  resize_from_system = window;
 	// supposedly a Paint event will come in turn off iconize indicator
       } else
 	Fl_X::i(window)->wait_for_expose = 1;
@@ -1269,5 +1270,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.127 2000/08/11 00:53:47 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.128 2000/08/12 07:44:29 spitzak Exp $".
 //
