@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.78 2004/06/24 07:05:22 spitzak Exp $"
+# "$Id: Makefile,v 1.79 2004/07/24 12:24:10 laza2000 Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -143,12 +143,12 @@ TARGETS = \
 	tabs$(EXEEXT) \
 	tile$(EXEEXT) \
 	utf$(EXEEXT) \
+	fullscreen$(EXEEXT) \
 	valuators$(EXEEXT)
 
 # other programs that are minimally changed from fltk1.1:
 TARGETS += \
 	symbols$(EXEEXT) \
-	fullscreen$(EXEEXT) \
 	mandelbrot$(EXEEXT)
 
 #
@@ -261,5 +261,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.78 2004/06/24 07:05:22 spitzak Exp $".
+# End of "$Id: Makefile,v 1.79 2004/07/24 12:24:10 laza2000 Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.13 2004/07/24 12:20:25 laza2000 Exp $"
+// "$Id: fullscreen.cxx,v 1.14 2004/07/24 12:24:10 laza2000 Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -65,9 +65,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#undef HAVE_GL
-#define HAVE_GL 0
 
 #if HAVE_GL
 
@@ -167,15 +164,15 @@ void double_cb(fltk::Widget *o, void *p) {
   // cause it's "child_of()" GL window. 
   if (control_win) control_win->show(); 
 #else
-  if(d) sw->set_flag(fltk::Window::DOUBLE);
-  else  sw->clear_flag(fltk::Window::DOUBLE);
+  if(d) sw->set_double_buffer();
+  else  sw->clear_double_buffer();
 #endif
 }
 
 // This is useless in current FLTK2...
 void border_cb(fltk::Widget *o, void *p) {
-  fltk::Window *w = (fltk::Window *)p;
-  int d = ((fltk::Button *)o)->value();
+  //fltk::Window *w = (fltk::Window *)p;
+  //int d = ((fltk::Button *)o)->value();
   //w->setborder(d);
 }
 
@@ -284,5 +281,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.13 2004/07/24 12:20:25 laza2000 Exp $".
+// End of "$Id: fullscreen.cxx,v 1.14 2004/07/24 12:24:10 laza2000 Exp $".
 //
