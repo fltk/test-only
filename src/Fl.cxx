@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.91 2000/05/15 05:52:24 bill Exp $"
+// "$Id: Fl.cxx,v 1.92 2000/05/18 23:25:53 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -341,13 +341,18 @@ void Fl::selection_owner(Fl_Widget *owner) {
 ////////////////////////////////////////////////////////////////
 
 // "Grab" is done while menu systems are up.  This has two
-// effects: The window system is told to "grab" events and sed all of
+// effects: The window system is told to "grab" events and send all of
 // them to this application, and all events we get are sent to the
-// "grab handler" rather than to normal widgest.
+// "grab handler" rather than to normal widgets.
 
 // On both X and Win32 "this application" has to be identified by a
 // window, fltk just picks the top-most displayed window, which is not
 // necessarily where the events are really going!
+
+// CET - FIXME - Would someone look at this window grab stuff and see
+// whether this is done properly?
+static int window_grab(int e, void* w) { return ((Fl_Window*)w)->handle(e); }
+void Fl::grab(Fl_Window* w) { w->show(); grab(window_grab, w); }
 
 void Fl::grab(int (*cb)(int, void*), void* user_data) {
   grab_ = cb;
@@ -466,15 +471,17 @@ int Fl::handle(int event, Fl_Window* window)
     if (w) return send(event, w, window);
     return 0;
 
-  case FL_KEYBOARD:
+  // only send FL_KEYUP to focus widget since FL_KEY only goes there
+  case FL_KEYUP:
+    return send(FL_KEYUP, focus(), window);
 
+  case FL_KEY:
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
 
     // Try sending keystroke to the focus, if any:
     w = focus();
-    if (w && send(FL_KEYBOARD, w, window)) return 1;
-
+    if (w && send(FL_KEY, w, window)) return 1;
     // try flipping the case of letter shortcuts:
     if (isalpha(event_text()[0])) {
       if (handle(FL_SHORTCUT, window)) return 1;
@@ -510,5 +517,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.91 2000/05/15 05:52:24 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.92 2000/05/18 23:25:53 carl Exp $".
 //
