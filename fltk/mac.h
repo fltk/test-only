@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: mac.h,v 1.9 2003/11/11 09:40:40 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,9 @@
 #define fltk_mac_h
 
 // Standard MacOS Carbon API includes...
+#define Style XStyle
 #include <Carbon/Carbon.h>
+#undef Style
 
 // Now make some fixes to the headers...
 #undef check			// Dunno where this comes from...
@@ -169,6 +171,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: mac.h,v 1.9 2003/11/11 09:40:40 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.13 2003/11/04 08:10:58 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.14 2003/11/11 09:40:40 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ public:
     if (w <= 1 || h <= 1) return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
     setcolor(fg);
-#if !defined(_WIN32) && !defined(__APPLE__) || USE_X11
+#if USE_X11
     // X version uses stipple pattern because there seem to be too many
     // servers with bugs when drawing dotted lines:
     static const char pattern[] 
@@ -264,5 +264,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.13 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.14 2003/11/11 09:40:40 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.12 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.13 2003/11/11 09:40:40 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -911,7 +911,6 @@ const Monitor& Monitor::all() {
     monitor.depth_ = 32;
     monitor.dpi_x_ = 100;
     monitor.dpi_y_ = 100;
-    monitor.name_ = "carbon";
   }
   return monitor;
 }
@@ -1582,6 +1581,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.12 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.13 2003/11/11 09:40:40 spitzak Exp $".
 //
 
