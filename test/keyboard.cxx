@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $"
+// "$Id: keyboard.cxx,v 1.6 1999/04/01 21:26:25 carl Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -91,11 +91,11 @@ int main(int argc, char** argv) {
     for (int i = 0; i < window->children(); i++) {
       Fl_Widget* b = window->child(i);
       if (b->callback() == (Fl_Callback*)key_cb) {
-	int i = int(b->user_data());
+	int i = (int)(long)b->user_data();
 	if (!i) i = b->label()[0];
 	((Fl_Button*)b)->value(Fl::event_key(i));
       } else if (b->callback() == (Fl_Callback*)shift_cb) {
-	int i = int(b->user_data());
+	int i = (int)(long)b->user_data();
 	((Fl_Button*)b)->value(Fl::event_state(i));
       }
     }
@@ -127,5 +127,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $".
+// End of "$Id: keyboard.cxx,v 1.6 1999/04/01 21:26:25 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $"
+// "$Id: cursor.cxx,v 1.5 1999/04/01 21:26:25 carl Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 Fl_Hor_Value_Slider *cursor_slider;
 
 void choice_cb(Fl_Widget *, void *v) {
-  cursor = (Fl_Cursor)(int)v;
+  cursor = (Fl_Cursor)(long)v;
   cursor_slider->value(cursor);
   fl_cursor(cursor,fg,bg);
 }
@@ -159,5 +159,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $".
+// End of "$Id: cursor.cxx,v 1.5 1999/04/01 21:26:25 carl Exp $".
 //
