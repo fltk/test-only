@@ -1,5 +1,5 @@
 //
-// "$Id: ask.h,v 1.4 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: ask.h,v 1.5 2004/10/29 06:42:54 spitzak Exp $"
 //
 // Utility pop-up windows for fltk
 //
@@ -39,6 +39,8 @@ FL_API void alert(const char *, ...);
 FL_API int ask(const char *, ...);
 FL_API int choice(const char *q,
 		  const char *b0, const char *b1, const char *b2, ...);
+FL_API int choice_alert(const char *q,
+		  const char *b0, const char *b1, const char *b2, ...);
 FL_API const char *input(const char *label, const char *deflt = 0, ...);
 FL_API const char *password(const char *label, const char *deflt = 0, ...);
 
@@ -58,5 +60,5 @@ extern FL_API const char* cancel;
 #endif
 
 //
-// End of "$Id: ask.h,v 1.4 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: ask.h,v 1.5 2004/10/29 06:42:54 spitzak Exp $".
 //

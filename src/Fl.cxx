@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.182 2004/09/05 21:40:40 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.183 2004/10/29 06:42:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1079,6 +1079,9 @@ bool fltk::handle(int event, Window* window)
 
   case KEYUP:
     to = focus();
+    // TEMPORARY FIX for making the underscores turn off in menubars:
+    if (!to || event_key()==LeftAltKey || event_key()==RightAltKey)
+      to = window;
     break;
 
 //default: break;
@@ -1099,5 +1102,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.182 2004/09/05 21:40:40 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.183 2004/10/29 06:42:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.10 2003/12/31 16:30:58 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.11 2004/10/29 06:42:55 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -86,6 +86,7 @@ void NumericInput::value(int v) {
 }
 
 static int clickmouse;
+static bool dragvalue;
 
 /*! Does the up/down arrows and mouse wheel. Alt+drag also adjusts the
   value. All other points are sent to the Input base class. */
@@ -102,18 +103,26 @@ int NumericInput::handle(int event) {
   case MOUSEWHEEL:
     return handle_arrow(event_dy());
   case PUSH:
-	if (event_state(ALT)) clickmouse = event_x();
-	break;
+    if (event_state(ALT|META)) {
+      dragvalue=true;
+      clickmouse = event_x();
+    } else {
+      dragvalue = false; // in case it got stuck
+    }
+    break;
   case DRAG:
-	if (event_state(ALT)) {
-	  int dx = (event_x()-clickmouse)/5;
-	  if (dx<=-1 || dx>=1) {
-		clickmouse = event_x();
-		return handle_arrow(dx);
-	  }
-	  return 1;
-	}
-	break;
+    if (dragvalue) {
+      int dx = (event_x()-clickmouse)/5;
+      if (dx<=-1 || dx>=1) {
+	clickmouse = event_x();
+	return handle_arrow(dx);
+      }
+      return 1;
+    }
+    break;
+  case RELEASE:
+    if (dragvalue) {dragvalue = false; return false;}
+    break;
   }
   return Input::handle(event);
 }

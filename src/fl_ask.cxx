@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.36 2004/06/04 08:58:05 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.37 2004/10/29 06:42:56 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -249,14 +249,21 @@ int fltk::ask(const char *fmt, ...) {
   strings b0, b1, and b2. Returns 0, 1, or 2 depending on which button
   is hit. If one of the strings begins with the special character '*'
   then the associated button will be the default which is selected
-  when the enter key is pressed. ESC is a shortcut for button
-  0. Notice the buttons are positioned "backwards" You can hide
-  buttons by passing NULL as their labels.
+  when the enter key is pressed. ESC is a shortcut for b2.
 */
 int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   va_list ap;
   va_start(ap, b2);
   int r = innards("?", 0, 0, fmt, ap, b2, b1, b0);
+  va_end(ap);
+  return 2-r;
+}
+
+/*! Same as choice() except a "!" icon is used instead of a "?" */
+int fltk::choice_alert(const char*fmt,const char *b0,const char *b1,const char *b2,...){
+  va_list ap;
+  va_start(ap, b2);
+  int r = innards("!", 0, 0, fmt, ap, b2, b1, b0);
   va_end(ap);
   return 2-r;
 }
@@ -297,5 +304,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.36 2004/06/04 08:58:05 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.37 2004/10/29 06:42:56 spitzak Exp $".
 //

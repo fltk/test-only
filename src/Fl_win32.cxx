@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.234 2004/10/19 06:19:02 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.235 2004/10/29 06:42:55 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1884,34 +1884,42 @@ void CreatedWindow::create(Window* window) {
   int dx, dy, dw, dh;
 
   if (window->parent()) {
-    for (Widget* p=window->parent(); p && !p->is_window(); p=p->parent()) {
-      xp += p->x(); yp += p->y();
-    }
+
+    dx=dy=dw=dh=0;
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
-    parent = fltk::xid(window->window());
-    dx=dy=dw=dh=0;
-  } else {
-    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx,dy,dw,dh);
-    styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
-    // we don't want an entry in the task list for menuwindows or tooltips!
-    // This seems to have no effect on NT, maybe for Win2K?
-    if (window->override()) {
-      styleEx |= WS_EX_TOOLWINDOW;
-    } else if (!window->contains(modal())) {
-      style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    Widget* p = window->parent();
+    while (!p->is_window()) {
+      xp += p->x(); yp += p->y();
+      p=p->parent()) {
     }
+    parent = fltk::xid((Window*)p);
 
-    xp = window->x(); if (xp != USEDEFAULT) xp -= dx;
-    yp = window->y(); if (yp != USEDEFAULT) yp -= dy;
+  } else if (window->override()) {
 
+    // Ideally window should be above everything including taskbar, not
+    // raise anything, and not alter the keyboard focus!
+    dx=dy=dw=dh=0;
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_POPUP;
+    styleEx = WS_EX_LEFT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    parent = 0;
+
+  } else {
+
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx,dy,dw,dh);
+    if (!window->contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
+    if (xp != USEDEFAULT) xp -= dx;
+    if (yp != USEDEFAULT) yp -= dy;
     if (window->child_of() && window->child_of()->shown()) {
       parent = window->child_of()->i->xid;
     } else if (fl_mdi_window) {
       parent = fl_mdi_window->i->xid;
+      styleEx |= WS_EX_MDICHILD;
     } else {
       parent = 0;
     }
+
   }
 
   CreatedWindow* x = new CreatedWindow;
@@ -1949,9 +1957,16 @@ void CreatedWindow::create(Window* window) {
   RegisterDragDrop(x->xid, &flDropTarget);
 #endif
 
+#if 0
+  // WAS: I swear this breaks our programs! It causes the main window
+  // titlebar to lose focus highlight and often the program completely
+  // loses keyboard focus! This is on win2000. We cannot use this unless
+  // this problem is fixed. Also it does not appear to actually put the
+  // window atop the taskbar anyway...
   if (window->override())
     SetWindowPos(x->xid, HWND_TOPMOST, 0,0,0,0,
 		 SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOSENDCHANGING);
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2341,5 +2356,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.234 2004/10/19 06:19:02 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.235 2004/10/29 06:42:55 spitzak Exp $".
 //

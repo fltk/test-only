@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.155 2004/10/02 04:12:35 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.156 2004/10/29 06:42:55 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -191,6 +191,14 @@ Widget* MWindow::get_widget(int index) {
 }
 
 static const Monitor* monitor;
+#ifdef _WIN32
+// Until we can get the menus to appear above the toolbar (see Fl_win32.cxx)
+// we must make them scroll to miss them. Change this macro if this is
+// ever fixed to match the Unix version:
+#define MENUAREA (monitor->work)
+#else
+#define MENUAREA (*monitor)
+#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -513,8 +521,8 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   // (which indicates we are trying to line up with some widget):
   if (!Wp) {
     if (selected >= 0) X -= w()/2;
-    if (X < monitor->x()) X = monitor->x();
-    if (X > monitor->r()-w()) X = monitor->r()-w();
+    if (X < MENUAREA.x()) X = MENUAREA.x();
+    if (X > MENUAREA.r()-w()) X = MENUAREA.r()-w();
   }
 
   x(X);
@@ -595,12 +603,12 @@ int MWindow::autoscroll(int i) {
   // figure out where the item is on the screen:
   int Y = ypos(i);
   // figure out where new top of menu should be:
-  if (y()+Y <= monitor->y()) {
-    Y = monitor->y()-Y+BORDER;
+  if (y()+Y <= MENUAREA.y()) {
+    Y = MENUAREA.y()-Y+BORDER;
   } else {
     Widget* widget = get_widget(i);
     Y += widget->height()+menuleading(this);
-    if (y()+Y >= monitor->b()) Y = monitor->b()-Y-BORDER;
+    if (y()+Y >= MENUAREA.b()) Y = MENUAREA.b()-Y-BORDER;
     else return 0;
   }
   // move it to that new position:
@@ -1053,5 +1061,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.155 2004/10/02 04:12:35 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.156 2004/10/29 06:42:55 spitzak Exp $".
 //

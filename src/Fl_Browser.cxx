@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.100 2004/10/19 06:18:14 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.101 2004/10/29 06:42:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1152,7 +1152,7 @@ bool Browser::set_item_selected(bool value, int do_callback) {
   callback is done for each item that changes selected state.
 */
 bool Browser::deselect(int do_callback) {
-  unset_mark(HERE);
+  unset_mark(HERE); item(0);
   return select_only_this(do_callback);
 }
 
@@ -1823,5 +1823,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.100 2004/10/19 06:18:14 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.101 2004/10/29 06:42:54 spitzak Exp $".
 //
