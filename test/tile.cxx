@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.11 2002/12/10 02:01:06 easysw Exp $"
+// "$Id: tile.cxx,v 1.12 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/TiledGroup.h>
 #include <fltk/Button.h>
 
@@ -95,5 +95,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: tile.cxx,v 1.11 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id: tile.cxx,v 1.12 2004/05/04 07:30:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.13 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.14 2004/05/04 07:30:42 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,7 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 void fltk::pngImage::_measure(float &W, float &H) const
 {
 #if !HAVE_LIBPNG
-  const_cast<pngImage*>(this)->w_ = 0;
+  const_cast<pngImage*>(this)->setsize(0,0);
   W = H = 0;
 #else
   if (w() >= 0) { 
@@ -75,7 +75,7 @@ void fltk::pngImage::_measure(float &W, float &H) const
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
 
   if (png_ptr == NULL) {
-    const_cast<pngImage*>(this)->w_ = 0;
+    const_cast<pngImage*>(this)->setsize(0,0);
     W = H = 0;
     return;
   }
@@ -92,7 +92,7 @@ void fltk::pngImage::_measure(float &W, float &H) const
   if (info_ptr == NULL || (datas == NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    const_cast<pngImage*>(this)->w_ = 0;
+    const_cast<pngImage*>(this)->setsize(0,0);
     W = H = 0;
     return;
   }
@@ -121,8 +121,9 @@ void fltk::pngImage::_measure(float &W, float &H) const
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,&color_type,
 	       NULL,NULL,NULL);
 
-  W = const_cast<pngImage*>(this)->w_ = width;
-  H = const_cast<pngImage*>(this)->h_ = height;
+  const_cast<pngImage*>(this)->setsize(width, height);
+  W = width;
+  H = height;
 
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if(fp) fclose(fp);
@@ -131,7 +132,7 @@ void fltk::pngImage::_measure(float &W, float &H) const
  error:
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if(fp) fclose(fp);
-  const_cast<pngImage*>(this)->w_ = 0;
+  const_cast<pngImage*>(this)->setsize(0,0);
   W = H = 0;
   return;
 #endif
@@ -147,8 +148,6 @@ static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
 
 void fltk::pngImage::read()
 {
-  id = mask = 0;
-
 #if HAVE_LIBPNG
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
@@ -237,13 +236,10 @@ void fltk::pngImage::read()
     d=4; //    png_set_strip_alpha(png_ptr); 
   // png_set_strip_alpha doesn't seem to work ... too bad
  
-  { // We use a block because begin_offscreen creates a local
+  { // We use a block because ImageDraw creates a local
     // and we have 'goto error' before this point
-    Pixmap pixmap = fl_create_offscreen(width, height);
-    id = (void*)pixmap;
-    fl_begin_offscreen(pixmap);
+    ImageDraw idraw(this);
     drawimage(drawimage_cb, png_ptr, 0, 0, width, height, d);
-    fl_end_offscreen();
   }
 
   png_read_end(png_ptr, NULL);
@@ -256,5 +252,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.13 2004/03/25 18:13:17 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.14 2004/05/04 07:30:42 spitzak Exp $"
 //

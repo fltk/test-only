@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -186,7 +186,7 @@ void bmpImage::_measure(float &W, float &H) const
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
       {
 	SetError("Error while opening BMP texture file.");
-	W = const_cast<bmpImage*>(this)->w_ = 0;
+	const_cast<bmpImage*>(this)->setsize(0,0);
 	return;
       }
 
@@ -200,7 +200,7 @@ void bmpImage::_measure(float &W, float &H) const
     {
       if (!datas) fclose(bmpFile);
       SetError("Error reading BMP texture file, not a legitimate BMP file.");
-      W = const_cast<bmpImage*>(this)->w_ = 0;
+      const_cast<bmpImage*>(this)->setsize(0,0);
       return;
     }
 
@@ -211,8 +211,9 @@ void bmpImage::_measure(float &W, float &H) const
 
     // Read BMP info header structure
     /*infoHeader.headerSize =*/ ReadLittleEndianDWORD();
-    const_cast<bmpImage*>(this)->w_ = ReadLittleEndianDWORD();
-    const_cast<bmpImage*>(this)->h_ = ReadLittleEndianDWORD();
+    int w = ReadLittleEndianDWORD();
+    int h = ReadLittleEndianDWORD();
+    const_cast<bmpImage*>(this)->setsize(w,h);
   }
 
   if (!datas) fclose(bmpFile);
@@ -224,8 +225,6 @@ void bmpImage::_measure(float &W, float &H) const
 
 void bmpImage::read()
 {
-  id = mask = 0;
-
   bmpDatas = (uchar*)datas;
 
   BITMAP_FILE_HEADER fileHeader;
@@ -809,11 +808,8 @@ void bmpImage::read()
     
     if(!datas) fclose(bmpFile);
 
-    Pixmap pixmap = fl_create_offscreen(_width, _height);
-    fl_begin_offscreen(pixmap);
+    ImageDraw idraw(this);
     drawimage(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
-    fl_end_offscreen();
-    id = (void*)pixmap;
 
     delete []palette;
     delete []rgbBuf;
@@ -828,5 +824,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $"
 //

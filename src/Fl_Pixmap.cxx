@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.26 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,36 +36,37 @@
 using namespace fltk;
 
 void xpmImage::_measure(float& W, float& H) const {
-  if (w() < 0) measure_xpm(data,
-			   const_cast<xpmImage*>(this)->w_,
-			   const_cast<xpmImage*>(this)->h_);
-  W = w_; 
-  H = h_;
+  if (w() < 0) {
+    int w,h;
+    measure_xpm(data,w,h);
+    const_cast<xpmImage*>(this)->setsize(w,h);
+  }
+  W = w(); 
+  H = h();
 }
 
 void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (w_ < 0) measure_xpm(data,
-			   const_cast<xpmImage*>(this)->w_,
-			   const_cast<xpmImage*>(this)->h_);
-  if (!w_) return; // ignore empty or bad pixmap data
-  if (!id) {
-    Pixmap pixmap = fl_create_offscreen(w_, h_);
-    const_cast<xpmImage*>(this)->id = (void*)pixmap;
-    fl_begin_offscreen(pixmap);
+  if (!drawn()) {
+    if (this->w() < 0) {
+      int W,H;
+      measure_xpm(data,W,H);
+      const_cast<xpmImage*>(this)->setsize(W,H);
+    }
+    if (this->w() <= 0 || this->h() <= 0) return;
+    ImageDraw idraw(const_cast<xpmImage*>(this));
     uchar *bitmap = 0;
     set_mask_bitmap(&bitmap);
     draw_xpm(data, 0, 0, NO_COLOR);
     set_mask_bitmap(0);
     if (bitmap) {
-      (const_cast<xpmImage*>(this))->create_bitmap_mask(bitmap, w_, h_);
+      (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
       delete[] bitmap;
     }
-    fl_end_offscreen();
   }
-  draw_cache(x, y, w, h, style, flags);
+  Image::_draw(x, y, w, h, style, flags);
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.26 2004/05/04 07:30:43 spitzak Exp $".
 //

@@ -18,7 +18,6 @@
 #include <fltk/Window.h>
 #include <fltk/Input.h>
 #include <fltk/Output.h>
-#include <fltk/DoubleBufferWindow.h>
 #include <fltk/ThumbWheel.h>
 #include <fltk/ScrollGroup.h>
 #include <fltk/Slider.h>
@@ -49,7 +48,6 @@ int main() {
   printf("    sizeof(fltk::TextDisplay) = %lu\n", (unsigned long)sizeof(class fltk::TextDisplay));
   printf("      sizeof(fltk::TextEditor) = %lu\n", (unsigned long)sizeof(class fltk::TextEditor));
   printf("    sizeof(fltk::Window) = %lu\n", (unsigned long)sizeof(class fltk::Window));
-  printf("      sizeof(fltk::DoubleBufferWindow) = %lu\n", (unsigned long)sizeof(class fltk::DoubleBufferWindow));
   printf("  sizeof(fltk::Input) = %lu\n", (unsigned long)sizeof(class fltk::Input));
   printf("  sizeof(fltk::Output) = %lu\n", (unsigned long)sizeof(class fltk::Output));
   printf("  sizeof(fltk::Menu) = %lu\n", (unsigned long)sizeof(class fltk::Menu));

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.109 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.110 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -607,17 +607,74 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
   fltk::damage(1); // make flush() do something
 }
 
-void Window::flush() {
-  make_current();
-  unsigned char d = damage();
-  if (d & ~DAMAGE_EXPOSE) {
-    set_damage(d & ~DAMAGE_EXPOSE);
-    draw();
+/*! \fn bool Window::double_buffer() const
+  Returns true if set_double_buffer() was called, returns false if
+  clear_double_buffer() was called. If neither has been called this
+  returns a machine-dependent state (systems where double buffering
+  is efficient turn it on by default).
+*/
+
+/*! \fn void Window::set_double_buffer();
+  If the window is double-buffered, all drawing is done first to some
+  offscreen image, and then copied to the screen as a single block.
+  This eliminates blinking as the window is updated, and often the
+  application looks faster, even if it actually is slower.
+*/
+
+/*! \fn void Window::clear_double_buffer();
+  Turn off double buffering, so that drawing directly goes to the
+  visible image on the screen. Not all systems can do this, they
+  will remain double buffered even if this is off.
+*/
+
+/** A subclass of Window can define this method to draw an "overlay"
+  image that appears atop everything else in the window. This will
+  only be called if you call redraw_overlay() on the shown() window,
+  and it will stop being called if you call erase_overlay().
+
+  This is designed for a fast-changing graphic such as a selection
+  rectangle. The implementation is to put the window into
+  double_buffer() mode, and then set things so the on-screen image is
+  being drawn before this method is called. The previous overlay image
+  was erased before calling this by copying the back buffer to the
+  front. Notice that the overlay will blink as you redraw it, you must
+  trade off this annoyance against the slower update of the overlay
+  if you just draw it normally in the draw() method.
+
+  Some systems don't allow drawing in the front buffer. In this case
+  the entire back buffer is redrawn and the overlay drawn atop it.
+
+  The default version draws a red rectangle, so that mistaken calls
+  to redraw_overlay() are detectable.
+*/
+void Window::draw_overlay() {
+  setcolor(RED);
+  fillrect(0,0,w(),h());
+}
+
+/** Indicate that the image made by draw_overlay() has changed and must
+  be drawn or redrawn. If the image is blank you should call erase_overlay().
+
+  This does nothing if the window is not shown(), it is assummed that
+  overlays are only drawn in response to user input.
+*/
+void Window::redraw_overlay() {
+  if (i) {
+    i->overlay = true;
+    set_damage(damage()|DAMAGE_OVERLAY);
+    fltk::damage(1);
   }
-  if (i->region && !(d & DAMAGE_ALL)) {
-    clip_region(i->region); i->region = 0;
-    set_damage(DAMAGE_EXPOSE); draw();
-    clip_region(0);
+}
+
+/** Indicate that the overlay drawn with draw_overlay() is blank.
+  draw_overlay() will not be called until redraw_overlay() is
+  called again.
+*/
+void Window::erase_overlay() {
+  if (i && i->overlay) {
+    i->overlay = false;
+    set_damage(damage()|DAMAGE_OVERLAY);
+    fltk::damage(1);
   }
 }
 
@@ -631,6 +688,7 @@ void Window::flush() {
   Subclasses can override this, if you do this you must also override
   the destructor and make it call destroy().  */
 void Window::destroy() {
+  free_backbuffer();
   CreatedWindow* x = i;
   if (!x) return;
   i = 0;
@@ -656,7 +714,12 @@ void Window::destroy() {
   throw_focus();
   clear_visible();
 
-  x->free_gc();
+  // Destroy graphics contexts that point at window:
+  stop_drawing(x->xid);
+#ifdef _WIN32
+  DeleteDC(x->dc);
+#endif
+
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
   delete x;
@@ -676,5 +739,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.109 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.110 2004/05/04 07:30:43 spitzak Exp $".
 //

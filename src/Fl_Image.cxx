@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.36 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.37 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,129 +35,408 @@ using namespace fltk;
 /*! \class fltk::Image
 
   This subclass of Symbol draws a very common thing: a fixed-size
-  bitmapped 3-color rectangular image with optional alpha information.
+  "offscreen" image, possibly with alpha information.
 
-  The base class provides support for caching a rendered version of
-  the image, and a function to draw this cached version on the screen.
+  The base class lets the program draw into this offscreen image, and
+  then copy or composite the resulting image into the windows that are
+  visible to the user. There are also many subclasses that take
+  in-memory data such as a jpeg image, and in draw() they copy that
+  data to the offscreen image if it has not been done before, before
+  calling this base class to draw the image into the window.
 
-  The subclasses are required to provide a _draw() method that
-  fills in this cache if possible and then calls the base class
-  method to draw it. The subclasses are also required to either
-  fill in w_ and h_ in the constructor, or provide a _measure()
-  method that calculates them.
+  <i>If you are changing the image a lot (for instance a movie
+  playback or a painting program) you probably don't want to use
+  this.</i> Just call fltk::drawimage() directly with your image buffer.
 
+  Treatment of alpha is seriously primitive on X11 and GDI32. About
+  the only thing that works is fltk::drawimage() with a 4-channel
+  image (and even then it is reduced to a horrible "screen door"
+  alpha), and calling set_alpha_bitmap().
+
+  <i>There is no destructor</i> due to C++'s lame insistence
+  that it be called on static objects. An fltk program may contain
+  many static instances and this destruction is a waste of time on
+  program exit, plus work must be done to avoid losing the display
+  connection before the destruction. If you do want to destroy an
+  Image, you must call destroy_cache() before doing so.
 */
 
-void fl_restore_clip(); // in rect.C
-
-/** Draw the cached image after _draw() creates it.
-
-    _draw() methods should call this after they have filled in the
-    w_, h_, mask, and id fields.
+/*! \fn Image::Image()
+  The default constructor makes a zero-sized image. This will not
+  draw anything, you have to call setsize() on it. Most image
+  subclasses use this initial zero size as an indication that they
+  have not analyzed the data and figured out the size.
 */
-void Image::draw_cache(int Xi, int Yi, int Wi, int Hi, const Style* style, Flags flags) const
-{
 
-  // cx,cy = coordinate in image of upper-left pixel to draw
-  // X,Y,W,H = box to fill with the image
-  if (w()< Wi) Wi = w();
-  if (h()< Hi) Hi = h();
-  int X,Y,W,H; clip_box(Xi,Yi,Wi,Hi,X,Y,W,H);
-  int cx = X-Xi;
-  int cy = Y-Yi;
-  if (W <= 0 || H <= 0) return;
-  // convert to Xlib coordinates:
-  transform(X,Y);
+/*! \fn Image::Image(int w, int h)
+  This constructor sets the width and height. The initial
+  image is an opaque black rectangle of that size.
+*/
 
-  if (mask) {
-    if (id) {
-      // both color and mask:
+/*! \fn int Image::width() const
+  Return the width of the image in pixels. You can change this with
+  setsize().
+*/
+/*! \fn int Image::height() const
+  Return the height of the image in pixels. You can change this with
+  setsize().
+*/
+
+/*! Change the size of the stored image. If it is different then
+  destroy_cache() is called. */
+void Image::setsize(int w, int h) {
+  if (w == w_ && h == h_) return;
+  destroy_cache();
+  w_ = w;
+  h_ = h;
+}
+
+/*! Throw away any drawn data, restoring back to a transparent rectangle.
+  You must subsequently to make_current() to start drawing it again.
+*/
+void Image::destroy_cache() {
 #if USE_X11
-      // I can't figure out how to combine a mask with existing region,
-      // so the mask replaces the region instead. This can draw some of
-      // the image outside the current clip region if it is not rectangular.
-      XSetClipMask(xdisplay, gc, (Pixmap)mask);
-      int ox = X-cx; if (ox < 0) ox += w();
-      int oy = Y-cy; if (oy < 0) oy += h();
-      XSetClipOrigin(xdisplay, gc, X-cx, Y-cy);
-      fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
-      // put the old clip region back
-      XSetClipOrigin(xdisplay, gc, 0, 0);
-      fl_restore_clip();
+  stop_drawing((XWindow)rgb);
+  if (alpha) {XFreePixmap(xdisplay, (Pixmap)alpha); alpha = 0;}
+  if (rgb) {XFreePixmap(xdisplay, (Pixmap)rgb); rgb = 0;}
 #elif defined(_WIN32)
-# if 0
-      HDC new_gc = CreateCompatibleDC(gc);
-      SelectObject(new_gc, mask);
-      BitBlt(gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-      SelectObject(new_gc, id);
-      BitBlt(gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
-      DeleteDC(new_gc);
-# else
-      // VP : new code to draw masked image under windows. Maybe not optimal, but works for win2k/95 and probably 98
-      setcolor(0);
-      setbrush();
-      SetTextColor(gc, 0);
-      HDC new_gc = CreateCompatibleDC(gc);
-      HDC new_gc2 = CreateCompatibleDC(gc);
-      SelectObject(new_gc, mask);
-      SelectObject(new_gc2, id);
-      BitBlt(new_gc2, 0,0,w(),h(), new_gc, 0, 0, SRCAND); // This should be done only once for performance
-      // secret bitblt code found in old MSWindows reference manual:
-      BitBlt(gc, X, Y, W, H, new_gc, cx, cy, 0xE20746L);
-      BitBlt(gc, X, Y, W, H, new_gc2, cx, cy, SRCPAINT);
-      DeleteDC(new_gc);
-      DeleteDC(new_gc2);
-# endif
+  stop_drawing((HBITMAP)rgb);
+  if (alpha) {DeleteObject((HBITMAP)alpha); alpha = 0;}
+  if (rgb) {DeleteObject((HBITMAP)rgb); rgb = 0;}
 #elif defined(__APPLE__)
-      // OSX version nyi
+  stop_drawing((GWorldPtr)rgb);
+  if (alpha) {DisposeGWorld((GWorldPtr)alpha); alpha = 0;}
+  if (rgb) {DisposeGWorld((GWorldPtr)rgb); rgb = 0;}
 #else
 #error
 #endif
-    } else {
-      Color bg, fg; style->boxcolors(flags, bg, fg);
-      setcolor(fg);
-      fill(X, Y, W, H, cx, cy);
-    }
-  } else if (id) {
-    // pix only, no mask
-    fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
-  } // else { no mask or id, probably an error... }
 }
 
-/** Draw the cached alpha channel filled with a solid color.
-
-    This draws the cached mask image, filled with the current color.
-    It is clipped to the \a XYWH rectangle, and the pixel \a cx,cy
-    is placed in the upper-left corner of this rectangle.
-
-    This is used internally by the draw_cache method to draw
-    inactive images. It may also be used by subclasses such
-    as xbmImage to implement solid color fill.
+/*! \fn bool Image::drawn() const
+  Returns true if make_current() has been called since the Image
+  was constructed or since destroy_cache() was called. Subclasses
+  use this to decide if they can call the base class _draw() without
+  any more setup.
 */
-void Image::fill(int X, int Y, int W, int H, int cx, int cy) const
-{
+
+/*! Make all the \ref drawing functions draw into the offscreen image,
+  possibly creating the arrays used to store it.
+
+  This is designed to be called outside of drawing code, as it will
+  replace the current drawing state. To draw into an Image while you
+  are drawing a widget (or drawing another Image) you must use a
+  ImageDraw object to save the state.
+*/
+void Image::make_current() {
+  if (!rgb) {
+    open_display();
+    if (w_<1) w_ = 1;
+    if (h_<1) h_ = 1;
 #if USE_X11
-  XSetStipple(xdisplay, gc, (Pixmap)mask);
-  int ox = X-cx; if (ox < 0) ox += w();
-  int oy = Y-cy; if (oy < 0) oy += h();
+    rgb = (void*)(XCreatePixmap(xdisplay, xwindow, w_, h_, xvisual->depth));
+#elif defined(_WIN32)
+    rgb = (void*)(CreateCompatibleBitmap(getDC(), w_, h_));
+#elif defined(__APPLE__)
+    // ???
+#endif
+  }
+#if USE_X11
+  draw_into((XWindow)rgb);
+#elif defined(_WIN32)
+  draw_into((HBITMAP)rgb);
+#elif defined(__APPLE__)
+  draw_into((GWorldPtr)rgb);
+#endif
+}
+
+/** Set the alpha channel directly to a 1-bit alpha mask.
+
+    This method provides direct access to the primitive alpha channel
+    setting code that is on X11 and GDI32. Any existing alpha channel
+    is directly replaced with the 1-bit mask, and the image size is
+    set to w,h.
+
+    Each bit of the data is a pixel of alpha, where 1 indicates
+    opaque and 0 indicates clear. Each byte supplies 8 bits, the
+    high bit being the left-most one. Rows are padded out to the
+    next multiple of 8, so the left-most column of every row is
+    the high bit of the mask.
+
+    Subclasses can use this if they have a 1-bit mask:
+
+    \code
+    MyImage::draw(x,y,w,h,style,flags) {
+      if (!drawn()) {
+        ImageDraw(const_cast<Image*>(this));
+	draw_rgb_part();
+        uchar* data = generate_ae_bitmap();
+	const_cast<Image*>(this)->set_alpha_bitmap(bitmap, w, h);
+	free[] data;
+      }
+      Image::_draw(x,y,w,h,style,flags);
+    }
+    \endcode
+*/
+void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
+  if (!rgb) {w_ = w; h_ = h;}
+#if USE_X11
+  if (alpha) XFreePixmap(xdisplay, (Pixmap)alpha);
+  alpha = (void*)XCreateBitmapFromData(xdisplay, xwindow, (char*)bitmap, (w+7)&-8, h);
+#elif defined(_WIN32)
+  if (alpha) DeleteObject((HBITMAP)alpha);
+  // this won't work when the user changes display mode during run or
+  // has two screens with differnet depths
+  static uchar hiNibble[16] =
+  { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
+    0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
+  static uchar loNibble[16] =
+  { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
+    0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
+  int Bpr = (w+7)/8;			//: bytes per row
+  int pad = Bpr&1, w1 = (w+7)/8, shr = ((w-1)&7)+1;
+  uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray;
+  const uchar* src = bitmap;
+  for (int i=0; i<h; i++) {
+    //: this is slooow, but we do it only once per pixmap
+    for (int j=w1; j>0; j--) {
+      uchar b = *src++;
+      *dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
+    }
+    if (pad)
+      *dst++ = 0;
+  }
+  alpha = (void*)CreateBitmap(w, h, 1, 1, newarray);
+  delete[] newarray;
+#elif defined(__APPLE__)
+  // nyi this is expected to make a GWorld object...
+#else
+#endif
+}
+
+/*! \class ImageDraw
+  The constructor of this class saves enough information so that the
+  current location graphics are being drawn can be restored by the
+  destructor. It then does image->make_current(). Typical usage:
+
+  \code
+  if (!image.drawn()) {
+    ImageDraw x(image);
+    draw_graphics_for_image();
+    // destructor of the ImageDraw happens here
+  }
+  // we can now draw our image into the window:
+  image.draw(x,y,w,h);
+  \endcode
+*/
+
+#ifdef _WIN32
+extern bool keepgc;
+#endif
+
+ImageDraw::ImageDraw(Image* image) {
+  push_matrix();
+#if USE_X11
+  data[0] = (void*)(xwindow);
+#elif defined(_WIN32)
+  data[0] = (void*)(xwindow);
+  data[1] = (void*)(gc); gc = 0;
+  data[2] = (void*)(keepgc);
+#elif defined(__APPLE__)
+  GrafPtr prevPort; GDHandle prevGD;
+  GetGWorld(&prevPort, &prevGD);
+  data[0] = (void*)prevPort;
+  data[1] = (void*)prevGD;
+#else
+# error
+#endif
+  image->make_current();
+  push_no_clip();
+}
+
+ImageDraw::~ImageDraw() {
+#if USE_X11
+  xwindow = (XWindow)(data[0]);
+#elif defined(_WIN32)
+  DeleteDC(gc);
+  keepgc = (bool)(data[2]);
+  gc = (HDC)(data[1]);
+  xwindow = (HBITMAP)(data[0]);
+#elif defined(__APPLE__)
+  SetGWorld((GrafPtr)(data[0]), (GDHandle)(data[1]));
+#else
+# error
+#endif
+  pop_clip();
+  pop_matrix();
+}
+
+void fl_restore_clip(); // in rect.C
+
+// This macro modifies the XYWH and src_x,src_y to a region that is
+// visible and clipped to the size of the image. It will call return
+// if it is invisible.
+#define clip_code() \
+  int x,y,w,h; clip_box(X,Y,W,H,x,y,w,h); \
+  src_x += x-X; \
+  if (src_x < 0) {x -= src_x; w += src_x; src_x = 0;} \
+  if (src_x >= w_) return; \
+  if (src_x+w > w_) w = w_-src_x; \
+  if (w <= 0) return; \
+  src_y += y-Y; \
+  if (src_y < 0) {y -= src_y; h += src_y; src_y = 0;} \
+  if (src_y >= h_) return; \
+  if (src_y+h > h_) h = h_-src_y; \
+  if (h <= 0) return
+
+/*! Copy a rectangle of rgb from the cached image to the current output.
+  This is the same as over() except it pretends the alpha is all 1's.
+
+  The image is positioned so the pixel at src_x, src_y is placed at
+  x,y (or the equivalent if src_x,src_y are outside the image). The
+  part of the image that then intersects x,y,w,h is then drawn.
+*/
+void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
+  clip_code();
+  // handle undrawn images like the documentation says, as black:
+  if (!rgb) {setcolor(BLACK); fillrect(x,y,w,h); return;}
+  transform(x,y);
+#if USE_X11
+  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
+#elif defined(_WIN32)
+  HDC new_gc = CreateCompatibleDC(gc);
+  SelectObject(new_gc, (Pixmap)rgb);
+  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCCOPY);
+  DeleteDC(new_gc);
+#elif defined(__APPLE__)
+  // NYI!
+#else
+#error
+#endif
+}
+
+/*! Merge the image over whatever is in the current output. If this
+  image has no alpha this is the same as copy. If there is an alpha
+  channel then pixels are replaced as a "non premultiplied over"
+  operation. If A is the Image's pixel, a is the alpha normalized
+  to 0-1, and B is the pixel already in the output, the new output
+  pixel is A*a+B*(1-a).
+
+  The image is positioned so the pixel at src_x, src_y is placed at
+  x,y (or the equivalent if src_x,src_y are outside the image). The
+  part of the image that then intersects x,y,w,h is then drawn.
+*/
+void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
+  // Don't waste time for solid white alpha:
+  if (!alpha) {copy(X,Y,W,H,src_x,src_y); return;}
+  // Draw bitmaps as documented, the rgb pretends to be black:
+  if (!rgb) {setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return;}
+  // okay now we know we have rgb and alpha, draw it:
+  clip_code();
+  transform(x,y);
+#if USE_X11
+  // I can't figure out how to combine a mask with existing region,
+  // so the mask replaces the region instead. This can draw some of
+  // the image outside the current clip region if it is not rectangular.
+  XSetClipMask(xdisplay, gc, (Pixmap)alpha);
+  XSetClipOrigin(xdisplay, gc, x-src_x, y-src_y);
+  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
+  // put the old clip region back:
+  XSetClipOrigin(xdisplay, gc, 0, 0);
+  fl_restore_clip();
+#elif defined(_WIN32)
+# if 0
+  // Old version, are we sure this does not work?
+  HDC new_gc = CreateCompatibleDC(gc);
+  SelectObject(new_gc, (HBITMAP)alpha);
+  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCAND);
+  SelectObject(new_gc, (HBITMAP)rgb);
+  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCPAINT);
+  DeleteDC(new_gc);
+# else
+  // VP : new code to draw masked image under windows.
+  // Maybe not optimal, but works for win2k/95 and probably 98
+  // WAS: This can probably be fixed by having set_bitmap_alpha mangle
+  // the rgb buffer to do this "premultiply". However I really suspect
+  // there is a direct method of doing this...
+  setcolor(0);
+  setbrush();
+  SetTextColor(gc, 0);
+  HDC new_gc = CreateCompatibleDC(gc);
+  HDC new_gc2 = CreateCompatibleDC(gc);
+  SelectObject(new_gc, (HBITMAP)alpha);
+  SelectObject(new_gc2, (HBITMAP)rgb);
+  BitBlt(new_gc2, 0, 0, w_, h_, new_gc, 0, 0, SRCAND); // This should be done only once for performance
+  // secret bitblt code found in old MSWindows reference manual:
+  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, 0xE20746L);
+  BitBlt(gc, x, y, w, h, new_gc2, src_x, src_y, SRCPAINT);
+  DeleteDC(new_gc2);
+  DeleteDC(new_gc);
+# endif
+#elif defined(__APPLE__)
+  // OSX version nyi
+#else
+#error
+#endif
+}
+
+/** Draw the alpha channel filled with a solid color.
+
+  The image is positioned so the pixel at src_x, src_y is placed at
+  x,y (or the equivalent if src_x,src_y are outside the image). The
+  part of the image that then intersects x,y,w,h is then drawn.
+
+  This is used internally by the _draw method to draw
+  inactive images. It may also be used by subclasses such
+  as xbmImage to implement solid color fill. It could be used
+  to draw nice glyphs (just like antialised fonts) but the current
+  version is really lame and can only produce 1-bit alpha.
+  I am still looking into methods for doing this...
+*/
+void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
+{
+  clip_code();
+  if (!alpha) {fillrect(x,y,w,h); return;}
+  transform(x,y);
+#if USE_X11
+  XSetStipple(xdisplay, gc, (Pixmap)alpha);
+  int ox = x-src_x; if (ox < 0) ox += w_;
+  int oy = y-src_y; if (oy < 0) oy += h_;
   XSetTSOrigin(xdisplay, gc, ox, oy);
   XSetFillStyle(xdisplay, gc, FillStippled);
-  XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
+  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
   HDC tempdc = CreateCompatibleDC(gc);
-  SelectObject(tempdc, (HGDIOBJ)mask);
+  SelectObject(tempdc, (HGDIOBJ)alpha);
   SetTextColor(gc, 0); // VP : seems necessary at least under win95
   setbrush();
   //SelectObject(gc, brush);
   // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
+  BitBlt(gc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
   // OSX version nyi
 #else
 #error
 #endif
+}
+
+/** Virtual method from Symbol baseclass, draws the image.
+
+  If the INACTIVE flag is on, this tries to draw the image inactive
+  by calling fill() twice with gray colors. Otherwise it calls over().
+*/
+void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+{
+  if (flags & INACTIVE) {
+    Color bg, fg; style->boxcolors(flags, bg, fg);
+    setcolor(GRAY90);
+    fill(x+1,y+1,w-1,h-1,0,0);
+    setcolor(fg);
+    fill(x,y,w,h,0,0);
+  } else {
+    over(x,y,w,h,0,0);
+  }
 }
 
 /*! By default Image assummes the constructor set the w_ and h_
@@ -171,30 +450,6 @@ void Image::fill(int X, int Y, int W, int H, int cx, int cy) const
 */
 void Image::_measure(float& W, float& H) const { W=w(); H=h(); }
 
-/*! Get rid of the cached image (the mask and id objects) that
-  were created by _draw(). */
-void Image::destroy_cache() {
-#if USE_X11
-  if (mask) XFreePixmap(xdisplay, (Pixmap)mask);
-  if (id) fl_delete_offscreen((Pixmap)id);
-#elif defined(_WIN32)
-  if (mask) DeleteObject((Pixmap)mask);
-  if (id) fl_delete_offscreen((Pixmap)id);
-#elif defined(__APPLE__)
-  if (mask) DisposeGWorld((Pixmap)mask);
-  if (id) fl_delete_offscreen((Pixmap)id);
-#else
-#error
-#endif
-  mask = 0;
-  id = 0;
-}
-
-/*! The destructor calls destroy_cache(). */
-Image::~Image() {
-  destroy_cache();
-}
-
 #include <fltk/Widget.h>
 
 /*! This is a 1.1 back-compatability function. It is the same as
@@ -206,5 +461,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.36 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.37 2004/05/04 07:30:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -46,7 +46,6 @@ protected:
   static unsigned mem_usage_limit;
 
   static unsigned mem_used;
-  static int forbid_delete;
 
   SharedImage* l1;    // Left leaf in the binary tree
   SharedImage* l2;    // Right leaf in the binary tree
@@ -57,7 +56,7 @@ protected:
 
   SharedImage() { };  // Constructor is private on purpose,
                           // use the get function rather
-  ~SharedImage();
+  //~SharedImage();
 
   void find_less_used();
   static void check_mem_usage();
@@ -195,5 +194,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: Window.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -64,6 +64,15 @@ public:
   void set_modal()	{set_flag(MODAL);} // back compatability only!
   void set_non_modal()	{set_flag(NON_MODAL);} // back compatability only!
 
+  bool double_buffer() const {return flags()&DOUBLE;}
+  void set_double_buffer() {set_flag(DOUBLE);}
+  void clear_double_buffer() {clear_flag(DOUBLE);}
+  void free_backbuffer();
+
+  virtual void draw_overlay();
+  void redraw_overlay();
+  void erase_overlay();
+
   void hotspot(int x, int y, bool offscreen = false);
   void hotspot(const Widget*, bool offscreen = false);
   void hotspot(const Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
@@ -117,7 +126,8 @@ private:
     MODAL	= 0x80000000,
     NOBORDER 	= 0x40000000,
     OVERRIDE	= 0x20000000,
-    NON_MODAL	= 0x10000000
+    NON_MODAL	= 0x10000000,
+    DOUBLE	= 0x08000000
   };
   static const char* xclass_;
   void _Window(); // constructor innards
@@ -128,5 +138,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: Window.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $".
 //

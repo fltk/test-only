@@ -1,7 +1,7 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.20 2004/03/17 06:43:27 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.21 2004/05/04 07:30:43 spitzak Exp $"
 //
-// Copyright 2001 Bill Spitzak and others.
+// Copyright 2004 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,36 +19,17 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 // Draw fonts using Keith Packard's Xft and Xrender extension. Yow!
 // Many thanks to Carl for making the original version of this.
 //
-// This code is included in fltk if it is compiled with -DUSE_XFT=1
-// It should also be possible to compile this file as a seperate
-// shared library, and by using LD_PRELOAD you can insert it between
-// any fltk program and the fltk shared library.
-//
-// This plugin only requires libXft to work. Contrary to popular
-// belief there is no need to have freetype, or the Xrender extension
-// available to use this code. You will just get normal Xlib fonts
-// (Xft calls them "core" fonts) The Xft algorithims for choosing
-// these is about as good as the fltk ones (I hope to fix it so it is
-// exactly as good...), plus it can cache it's results and share them
-// between programs, so using this should be a win in all cases. Also
-// it should be obvious by comparing this file and font_x.cxx that
-// it is a lot easier to program to Xft than to Xlib.
-//
-// To actually get antialiasing you need the following:
-//
-// 1. You have XFree86 4
-// 2. You have the XRender extension
-// 3. Your X device driver supports the render extension
-// 4. You have libXft
-// 5. Your libXft has freetype2 support compiled in
-// 6. You have the freetype2 library
-//
-// Distributions that have XFree86 4.0.3 or later should have all of this...
+// In older versions Xft fell back on using X11 fonts if it could not
+// use the Xrender extension. Xft2 sends bitmaps, which actually works
+// acceptably even to a remote X server. Unfortunatly it lost the
+// ability to return a "similar" X11 font, which broke our code to
+// get matching fonts into OpenGL. It would probably be best to fix
+// this by having the OpenGL emulation access the bitmaps as well,
+// so there would be antialiasing there, too!
 //
 // Unlike some other Xft packages, I tried to keep this simple and not
 // to work around the current problems in Xft by making the "patterns"
@@ -247,40 +228,26 @@ extern Colormap fl_overlay_colormap;
 extern XVisualInfo* fl_overlay_visual;
 #endif
 
+static XftDraw* xft_gc = 0;
+static XWindow xftwindow;
 extern int fl_clip_state_number;
 static int clip_state_number = 0; // which clip we did last
-static XftDraw* clipped_draw = 0;  // the XftDraw we did it to
-
-void fltk::Drawable::free_gc() {
-  if (draw) {
-    XftDrawDestroy(draw);
-    draw = 0;
-    clipped_draw = 0;
-  }
-};
 
 void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
-  XftDraw* draw = drawable->draw;
-
-  if (!draw) {
-#if USE_OVERLAY
-    if (fl_overlay)
-      draw =
-	XftDrawCreate(xdisplay, drawable->xid,
-		      fl_overlay_visual->visual, fl_overlay_colormap);
-    else
-#endif
-    draw =
-      XftDrawCreate(xdisplay, drawable->xid,
-		    xvisual->visual, xcolormap);
+  if (!xft_gc) {
+  NEW_XFT_GC:
+    xft_gc =
+      XftDrawCreate(xdisplay, xwindow, xvisual->visual, xcolormap);
     Region region = clip_region();
-    if (region) XftDrawSetClip(draw, region);
+    if (region) XftDrawSetClip(xft_gc, region);
+    xftwindow = xwindow;
     clip_state_number = fl_clip_state_number;
-    clipped_draw = drawable->draw = draw;
-  } else if (clip_state_number!=fl_clip_state_number || draw!=clipped_draw) {
+  } else if (xwindow != xftwindow) {
+    XftDrawDestroy(xft_gc);
+    goto NEW_XFT_GC;
+  } else if (clip_state_number!=fl_clip_state_number) {
     clip_state_number = fl_clip_state_number;
-    clipped_draw = draw;
-    XftDrawSetClip(draw, clip_region());
+    XftDrawSetClip(xft_gc, clip_region());
   }
 
   // Use fltk's color allocator, copy the results to match what
@@ -293,9 +260,17 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  XftDrawString8(draw, &color, current->font,
+  XftDrawString8(xft_gc, &color, current->font,
 		 int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		 (XftChar8 *)str, n);
+}
+
+void fltk::stop_drawing(XWindow window) {
+  if (xwindow == window) xwindow = 0;
+  if (xftwindow == window && xft_gc) {
+    XftDrawDestroy(xft_gc);
+    xft_gc = 0;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -451,5 +426,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.20 2004/03/17 06:43:27 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.21 2004/05/04 07:30:43 spitzak Exp $"
 //

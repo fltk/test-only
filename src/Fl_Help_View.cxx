@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.5 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.6 2004/05/04 07:30:42 spitzak Exp $"
 //
 // HelpView widget routines.
 //
@@ -1953,7 +1953,6 @@ static SharedImage *sharedImageLoad() {
   return it->get( sharedImageName, 0 );
 }
 static SharedImage *sharedImageGet(const char *name, int w, int h) {
-  return 0;
   sharedImageName = name;
   SharedImage *img = SharedImage::get( sharedImageLoad, name, 0 );
   return img;
@@ -2593,5 +2592,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.5 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.6 2004/05/04 07:30:42 spitzak Exp $".
 //

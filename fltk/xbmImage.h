@@ -1,5 +1,5 @@
 //
-// "$Id: xbmImage.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: xbmImage.h,v 1.7 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Image subclass for in-memory xbm data (you #include the .xbm file
 // and then construct this).
@@ -34,10 +34,8 @@ namespace fltk {
 class FL_API xbmImage : public Image {
 public:
   const unsigned char *array;
-  xbmImage(const unsigned char *bits, int W, int H) :
-    array(bits) {w_ = W; h_ = H;}
-  xbmImage(const char *bits, int W, int H) :
-    array((const unsigned char *)bits) {w_ = W; h_ = H;}
+  xbmImage(const unsigned char *bits, int w,int h) : Image(w,h), array(bits) {}
+  xbmImage(const char *bits, int w, int h) : Image(w,h), array((const unsigned char *)bits) {}
   void draw(int, int) const;
   void _draw(int, int, int, int, const Style*, Flags = 0) const;
   void draw(int x, int y, int w, int h, const Style* s, Flags f = 0) const {_draw(x,y,w,h,s,f);}
@@ -48,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: xbmImage.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: xbmImage.h,v 1.7 2004/05/04 07:30:42 spitzak Exp $".
 //

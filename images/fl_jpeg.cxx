@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.16 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.17 2004/05/04 07:30:42 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -259,7 +259,7 @@ static void declare_now(void*) { }
 void fltk::jpegImage::_measure(float &W, float &H) const
 {
 #if !HAVE_LIBJPEG
-  const_cast<jpegImage*>(this)->w_ = 0;
+  const_cast<jpegImage*>(this)->setsize(0,0);
   W = H = 0;
 #else
   if (w() >= 0) { 
@@ -285,7 +285,7 @@ void fltk::jpegImage::_measure(float &W, float &H) const
      */
     jpeg_destroy_decompress(&cinfo);
     if (!infile) fclose(infile);
-    const_cast<jpegImage*>(this)->w_ = 0;
+    const_cast<jpegImage*>(this)->setsize(0,0);
     W = H = 0;
     return;
   }
@@ -296,7 +296,7 @@ void fltk::jpegImage::_measure(float &W, float &H) const
     jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
   } else {
     if ((infile = fopen(get_filename(), "rb")) == NULL) {
-      const_cast<jpegImage*>(this)->w_ = 0;
+      const_cast<jpegImage*>(this)->setsize(0,0);
       W = H = 0;
       return;
     }
@@ -305,8 +305,9 @@ void fltk::jpegImage::_measure(float &W, float &H) const
 
   jpeg_read_header(&cinfo, TRUE);
 
-  W = const_cast<jpegImage*>(this)->w_ = cinfo.image_width;
-  H = const_cast<jpegImage*>(this)->h_ = cinfo.image_height;
+  const_cast<jpegImage*>(this)->setsize(cinfo.image_width,cinfo.image_height);
+  W = w();
+  H = h();
 
   jpeg_destroy_decompress(&cinfo);
 
@@ -318,7 +319,6 @@ void fltk::jpegImage::_measure(float &W, float &H) const
 
 void fltk::jpegImage::read()
 {
-  id = mask = 0;
 #if HAVE_LIBJPEG
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
@@ -355,11 +355,8 @@ void fltk::jpegImage::read()
 
   jpeg_start_decompress(&cinfo);
 
-  Pixmap pixmap = fl_create_offscreen(cinfo.output_width, cinfo.output_height);
-  id = (void*)pixmap;
-  fl_begin_offscreen(pixmap);
+  ImageDraw idraw(this);
   drawimage(drawimage_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
-  fl_end_offscreen();
 
   jpeg_finish_decompress(&cinfo);
 
@@ -409,5 +406,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.16 2004/03/25 18:13:17 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.17 2004/05/04 07:30:42 spitzak Exp $"
 //

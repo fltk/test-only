@@ -1,5 +1,5 @@
 //
-// "$Id: overlay.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $"
+// "$Id: overlay.cxx,v 1.10 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Overlay window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,13 +25,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Overlay_Window.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/fl_draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Overlay_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/fl_draw.H>
 
-int width=10, height=10;
+int width=10,height=10;
 
 class overlay : public Fl_Overlay_Window {
 public:
@@ -40,7 +40,8 @@ public:
 };
 
 void overlay::draw_overlay() {
-  fl_color(FL_RED); fl_rect((w()-::width)/2,(h()-::height)/2,::width,::height);
+  fl_color(FL_RED);
+  fl_rect((w()-::width)/2,(h()-::height)/2,::width,::height);
 }
 
 overlay *ovl;
@@ -55,8 +56,8 @@ int arg(int, char **argv, int& i) {
   if (n<=0) return 0;
   i++;
   uchar r,g,b;
-  fl_get_color(n, r,g,b);
-  fl_set_color(FL_RED, fl_rgb(r,g,b));
+  Fl::get_color(n,r,g,b);
+  Fl::set_color(FL_RED,r,g,b);
   return i;
 }
 
@@ -80,5 +81,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: overlay.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id: overlay.cxx,v 1.10 2004/05/04 07:30:44 spitzak Exp $".
 //

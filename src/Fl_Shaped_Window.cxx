@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.14 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,7 +64,7 @@ void ShapedWindow::draw() {
 #endif
     changed = 0;
   }
-  DoubleBufferWindow::draw();
+  Window::draw();
 }
 
 // maybe one day we'll want to be able to resize the clip mask
@@ -175,5 +175,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.14 2004/05/04 07:30:43 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: Image.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -36,30 +36,35 @@ class FL_API Widget;
 
 class FL_API Image : public Symbol {
 
-protected:
-
   int w_, h_;
-  void* id, * mask; // the cache
-  void create_bitmap_mask(const uchar* bitmap, int w, int h);
-  void fill(int X, int Y, int W, int H, int cx, int cy) const;
-  void draw_cache(int, int, int, int, const Style*, Flags) const;
+  void* rgb; // system-specific thing holding rgb (and maybe alpha)
+  void* alpha; // system-specific thing holding alpha if necessary
 
 public:
 
-  Image() : Symbol(0), id(0), mask(0) {}
-
-  void _measure(float& W, float& H) const;
-
-  virtual ~Image();
-  void destroy_cache();
-
-  // for back compatability only:
-  void label(Widget* o);
+  Image() : Symbol(0), w_(-1), h_(-1), rgb(0), alpha(0) {}
+  Image(int w, int h) : Symbol(0), w_(w), h_(h), rgb(0), alpha(0) {}
 
   int w() const {return w_;}
   int width() const {return w_;}
   int h() const {return h_;}
   int height() const {return h_;}
+
+  void setsize(int w, int h);
+  bool drawn() const {return rgb || alpha;}
+  void make_current();
+  void set_alpha_bitmap(const uchar* bitmap, int w, int h);
+  void copy(int x, int y, int w, int h, int src_x, int src_y) const;
+  void over(int x, int y, int w, int h, int src_x, int src_y) const;
+  void fill(int x, int y, int w, int h, int src_x, int src_y) const;
+  void destroy_cache();
+
+  // implementation as Symbol subclass:
+  void _draw(int, int, int, int, const Style*, Flags) const;
+  void _measure(float& W, float& H) const;
+
+  // for back compatability with fltk1 only:
+  void label(Widget* o);
 
 #if 0 // FLTK 1.1 interface, we should emulate some of this!
   int w_, h_, d_, ld_, count_;
@@ -98,10 +103,17 @@ public:
 #endif // 0
 };
 
+class FL_API ImageDraw {
+  void* data[4]; // hopefully big enough for everybody...
+ public:
+  ImageDraw(Image* i);
+  ~ImageDraw();
+};
+
 }
 
 #endif
 
 //
-// End of "$Id: Image.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $".
+// End of "$Id: Image.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $".
 //

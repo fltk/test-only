@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.203 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.204 2004/05/04 07:30:43 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1272,12 +1272,14 @@ int CreatedWindow::borders(const Window* window,
 
 void Window::layout() {
   UINT flags;
-  if (layout_damage() & LAYOUT_WH)
+  if (layout_damage() & LAYOUT_WH) {
+    free_backbuffer();
     flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
-  else if (layout_damage() & LAYOUT_XY)
+  } else if (layout_damage() & LAYOUT_XY) {
     flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE;
-  else
+  } else {
     flags = 0;
+  }
   Group::layout();
   if (this == resize_from_system) {
     resize_from_system = 0;
@@ -1379,8 +1381,8 @@ void CreatedWindow::create(Window* window) {
   }
 
   CreatedWindow* x = new CreatedWindow;
-  x->backbuffer.xid = 0;
-  x->backbuffer.dc = 0;
+  x->backbuffer = 0;
+  x->overlay = false;
   x->window = window; window->i = x;
   x->region = 0;
   x->cursor = default_cursor;
@@ -1397,6 +1399,7 @@ void CreatedWindow::create(Window* window) {
   x->dc = GetDC(x->xid);
   SetTextAlign(x->dc, TA_BASELINE|TA_LEFT);
   SetBkMode(x->dc, TRANSPARENT);
+  x->bdc = 0;
 
 #if 0 // WAS: Doing this completely breaks NT, the title bar loses highlight:
   if (window->override()) {
@@ -1466,78 +1469,187 @@ void Window::label(const char *name,const char *iname) {
 
 ////////////////////////////////////////////////////////////////
 // Drawing context
+// This version keeps just one HDC object, it destroys the previous
+// one, then creates the new one, each time the window changes.
 
 const Window *Window::current_;
+HBITMAP fltk::xwindow; // This may be an HWND when drawing into window
 HDC fltk::gc;
+bool keepgc;
+
+void Window::make_current() const {
+//    if (this == in_wm_paint)
+//	xwindow = this->xid();
+//      gc = paint.hdc;
+//    else
+  if (xwindow == (HBITMAP)(i->xid)) return;
+  xwindow = (HBITMAP)(i->xid);
+  if (gc && !keepgc) DeleteDC(gc);
+  gc = i->dc; keepgc = true;
+  current_ = this;
+#if USE_COLORMAP
+  fl_select_palette();
+#endif // USE_COLORMAP
+  load_identity();
+}
+
+void fltk::draw_into(HBITMAP window) {
+  if (xwindow == window) return;
+  xwindow = window;
+  HDC dc = CreateCompatibleDC(getDC());
+  SelectObject(dc, window);
+  SetTextAlign(dc, TA_BASELINE|TA_LEFT);
+  SetBkMode(dc, TRANSPARENT);
+  if (gc && !keepgc) DeleteDC(gc);
+  gc = dc; keepgc = false;
+#if USE_COLORMAP
+  fl_select_palette();
+#endif // USE_COLORMAP
+  load_identity();
+}
+
+void fltk::stop_drawing(HWND window) {
+  stop_drawing((HBITMAP)window);
+}
+
+void fltk::stop_drawing(HBITMAP window) {
+  if (xwindow != window) return;
+  xwindow = 0;
+  if (gc) {if (!keepgc) DeleteDC(gc); gc = 0;}
+}
 
 static HDC screen_gc; // result from last getDC()
 
 /** Return an arbitrary HDC which you can use for Win32 functions that
     need one as an argument. The returned value is short-lived and may
-    be destroyed by the next call to this or to the next call to destroy
-    a window.
+    be destroyed the next time anything is drawn into a window!
 */
 HDC fltk::getDC() {
-  if (screen_gc) {
-    ReleaseDC(0, screen_gc);
-    screen_gc = 0;
-  }
+  if (screen_gc) {DeleteDC(screen_gc); screen_gc = 0;}
   if (gc) return gc;
+  if (CreatedWindow::first) return CreatedWindow::first->dc;
   screen_gc = GetDC(0);
   return screen_gc;
 }
 
-// make X drawing go into this window (called by subclass flush() impl.)
-void Window::make_current() const {
-//    if (this == in_wm_paint)
-//      gc = paint.hdc;
-//    else
-    i->make_current();
+////////////////////////////////////////////////////////////////
+// Window update, double buffering, and overlay:
+
+void Window::flush() {
+  unsigned char damage = this->damage();
+
+  if (this->double_buffer() || i->overlay) {
+    // double-buffer drawing
+
+    bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
+    if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
+
+    if (!i->backbuffer) { // we need to create back buffer
+      i->backbuffer = CreateCompatibleBitmap(i->dc, w(), h());
+      i->backbuffer_bad = true;
+      i->bdc = CreateCompatibleDC(i->dc);
+      SelectObject(i->bdc, i->backbuffer);
+      SetTextAlign(i->bdc, TA_BASELINE|TA_LEFT);
+      SetBkMode(i->bdc, TRANSPARENT);
+    }
+
+    if (gc && !keepgc) {DeleteDC(gc); gc = 0;}
+    current_ = this;
+
+    // draw the back buffer if it needs anything:
+    if (damage || i->backbuffer_bad) {
+      // set the graphics context to draw into back buffer:
+      gc = i->bdc; keepgc = true;
 #if USE_COLORMAP
-  // Windows maintains a hardware and software color palette; the
-  // SelectPalette() call updates the current soft->hard mapping
-  // for all drawing calls, so we must select it here before any
-  // code does any drawing...
-  fl_select_palette();
+      fl_select_palette();
 #endif // USE_COLORMAP
-  current_ = this;
+      load_identity();
+      xwindow = i->backbuffer;
+      if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
+	set_damage(DAMAGE_ALL);
+	draw();
+      } else {
+      // draw all the changed widgets:
+	if (damage & ~DAMAGE_EXPOSE) {
+	  set_damage(damage & ~DAMAGE_EXPOSE);
+	  draw();
+	}
+	// draw for any expose events (if Xdbe is not being used this will
+	// only happen for redraw(x,y,w,h) calls):
+	if (i->region) {
+	  clip_region(i->region); i->region = 0;
+	  set_damage(DAMAGE_EXPOSE); draw();
+	  clip_region(0);
+	}
+      }
+      //fl_restore_clip(); // duplicate region into new gc (there is none)
+    }
+
+    gc = i->dc; keepgc = true;
+    xwindow = (HBITMAP)(i->xid);
+
+    // Clip the copying of the pixmap to the damage area,
+    // this makes it faster, especially if the damage area is small:
+    if (!eraseoverlay) {
+      clip_region(i->region); i->region = 0;
+    }
+
+    // Must be an implementation problem in the server, but on Irix (at least)
+    // it is much faster if I clip the rectangle requested down:
+    int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
+
+    // Copy the backbuffer to the window:
+    BitBlt(gc, X, Y, W, H, i->bdc, X, Y, SRCCOPY);
+
+    if (i->overlay) draw_overlay();
+    clip_region(0);
+
+  }  else {
+
+    // Single buffer drawing
+    make_current();
+    if (damage & ~DAMAGE_EXPOSE) {
+      set_damage(damage & ~DAMAGE_EXPOSE);
+      draw();
+      i->backbuffer_bad = true;
+    }
+    if (i->region && !(damage & DAMAGE_ALL)) {
+      clip_region(i->region); i->region = 0;
+      set_damage(DAMAGE_EXPOSE); draw();
+      clip_region(0);
+    }
+  }  
 }
 
-// Code used to switch output to an off-screen window.  See macros in
-// win32.h which save the old state in local variables.
-
-HDC fltk::makeDC(HBITMAP bitmap) {
-  HDC new_gc = CreateCompatibleDC(gc);
-  SetTextAlign(new_gc, TA_BASELINE|TA_LEFT);
-  SetBkMode(new_gc, TRANSPARENT);
-#if USE_COLORMAP
-  if (xpalette) SelectPalette(new_gc, xpalette, FALSE);
-#endif
-  SelectObject(new_gc, bitmap);
-  return new_gc;
+/*! Get rid of extra storage created by drawing when double_buffer() was
+  turned on. */
+void Window::free_backbuffer() {
+  if (!i || !i->backbuffer) return;
+  stop_drawing(i->backbuffer);
+  DeleteDC(i->bdc);
+  DeleteObject(i->backbuffer);
+  i->backbuffer = 0;
+  i->bdc = 0;
 }
 
-void fltk::copy_offscreen(int x,int y,int w,int h,
-			  HBITMAP bitmap,int srcx,int srcy) {
-  HDC new_gc = CreateCompatibleDC(gc);
-  SelectObject(new_gc, bitmap);
-  BitBlt(gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
-  DeleteDC(new_gc);
-}
+////////////////////////////////////////////////////////////////
+// I believe newer w2k is fixed to allow programs to crash or abort
+// without wasting resources. However this code was apparently necessary
+// on Win98 and earler to free some large objects stored in shared
+// DLL's and in the OS itself:
+
+static struct Cleanup { ~Cleanup(); } cleanup;
 
 extern void fl_font_rid();
-
-// clean up after Windows
-static struct Cleanup { ~Cleanup(); } cleanup;
 
 Cleanup::~Cleanup() {
   // nasty but works (I think) - deallocates GDI resources in windows
   while (CreatedWindow* x = CreatedWindow::first) x->window->destroy();
-
+  if (screen_gc) ReleaseDC(0, screen_gc);
   // get rid of allocated font resources
   fl_font_rid();
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.203 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.204 2004/05/04 07:30:43 spitzak Exp $".
 //

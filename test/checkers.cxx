@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.28 2004/01/06 06:43:03 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.29 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -861,7 +861,7 @@ int VT100main() {
 
 #include <fltk/run.h>
 #include <fltk/events.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/xbmImage.h>
 #include <fltk/draw.h>
 #include <FL/Fl_Menu_Item.H>
@@ -940,7 +940,7 @@ void draw_piece(int which, int x, int y) {
 
 //----------------------------------------------------------------
 
-class Board : public fltk::DoubleBufferWindow {
+class Board : public fltk::Window {
   void draw();
   int handle(int);
 public:
@@ -948,7 +948,7 @@ public:
   void drop_piece(int);
   void animate(node* move, int backwards);
   void computer_move(int);
-  Board(int w, int h) : fltk::DoubleBufferWindow(w,h) {color(15);}
+  Board(int w, int h) : fltk::Window(w,h) {color(15); /*set_double_buffer();*/}
 };
 
 #define BOXSIZE 52
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.28 2004/01/06 06:43:03 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.29 2004/05/04 07:30:44 spitzak Exp $".
 //

@@ -118,13 +118,12 @@ void HelpDialog::cb_larger_ (Button * o, void *v)
 
 HelpDialog::HelpDialog ()
 {
-  DoubleBufferWindow *w;
 
   {
     DoubleBufferWindow *o = window_ =
       new DoubleBufferWindow (530, 385, "Help Dialog");
 	o->begin();
-    w = o;
+
     o->user_data ((void *) (this));
     {
       HelpView *o = view_ = new HelpView (10, 10, 510, 330);

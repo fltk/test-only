@@ -1,17 +1,13 @@
 //
-// "$Id: doublebuffer.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: doublebuffer.cxx,v 1.13 2004/05/04 07:30:44 spitzak Exp $"
 //
-// Double-buffering test program for the Fast Light Tool Kit (FLTK).
-//
+// Test of double_buffer and overlay of Windows.
 // This demo shows how double buffering helps, by drawing the
 // window in a particularily bad way.
 //
 // The single-buffered window will blink as it updates.  The
 // double buffered one will not.  It will take just as long
 // (or longer) to update, but often it will appear to be faster.
-//
-// This demo should work for both the GL and X versions of Fl,
-// even though the double buffering mechanism is totally different.
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -33,96 +29,140 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Single_Window.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Hor_Slider.h>
-#include <stdlib.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/draw.h>
+#include <fltk/HorizontalSlider.h>
+#include <fltk/CheckButton.h>
+#include <fltk/visual.h>
 #include <fltk/math.h>
 #include <stdio.h>
 
-int sides[2] = {20,20};
+using namespace fltk;
 
-void slider_cb(Fl_Widget* o, long v) {
-  sides[v] = int(((Fl_Slider*)o)->value());
-  o->parent()->redraw();
-}
+int sides = 20;
+int overlay_sides = 20;
 
-// A very blinky drawing function:
-void bad_draw(int w, int h, int n) {
-  fl_color(FL_BLACK);
-  fl_rectf(0,0,w,h);
-  fl_push_matrix();
-  fl_translate(w/2, h/2);
-  fl_scale(w/2, h/2);
-  for (int i = 0; i < n; i++) {
-    for (int j = i+1; j < n; j++) {
-      fl_color((i+j)%(5*8*5)+FL_COLOR_CUBE);
-      fl_vertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
-      fl_vertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
-      fl_vertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
-      fl_fill_stroke(FL_WHITE);
+class BlinkWindow : public Window {
+
+  void draw() {
+    setcolor(BLACK);
+    fillrect(0,0,w(),h());
+    push_matrix();
+    translate(w()/2, h()/2);
+    scale(w()/2, h()/2);
+    int n = sides;
+    for (int i = 0; i < n; i++) {
+      for (int j = i+1; j < n; j++) {
+	setcolor((i+j)%(5*8*5)+BLACK); // random color from cube
+	addvertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
+	addvertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
+	addvertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
+	fillstrokepath(WHITE);
+      }
     }
+    pop_matrix();
+    char buffer[128];
+    sprintf(buffer,"FLTK doublebuffer demo. This image has %d outlined triangles", n*(n-1)/2);
+    setfont(HELVETICA_BOLD_ITALIC, 24);
+    setcolor(BLACK);
+    drawtext(buffer,10,h()/2,w()-20,h()/2,ALIGN_WRAP|ALIGN_TOP);
   }
-  fl_pop_matrix();
+
+  void draw_overlay() {
+    setcolor(RED);
+    push_matrix();
+    translate(w()/2, h()/2);
+    scale(w()/2, h()/2);
+    int n = overlay_sides;
+    for (int i = 0; i < n; i++) {
+      for (int j = i+1; j < n; j++) {
+	addvertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
+	addvertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
+	addvertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
+	strokepath();
+      }
+    }
+    pop_matrix();
+  }
+
+public:
+  BlinkWindow(int x, int y, int w, int h) : Window(x,y,w,h) {}
+} *blinkwindow;
+
+void db_cb(Widget* o) {
+  if (o->value()) blinkwindow->set_double_buffer();
+  else blinkwindow->clear_double_buffer();
 }
 
-class single_blink_window : public Fl_Single_Window {
-  void draw() {
-    bad_draw(w(), h(), sides[0]);
-    // redraw the slider:
-    child(0)->set_damage(FL_DAMAGE_ALL);
-    update_child(*child(0));
-  }
-public:
-  single_blink_window(int x, int y,int w,int h,const char *l)
-    : Fl_Single_Window(x,y,w,h,l) {resizable(this);}
-};
+bool overlay = false;
 
-class double_blink_window : public Fl_Double_Window {
-  void draw() {
-    bad_draw(w(), h(), sides[1]);
-    // redraw the slider:
-    child(0)->set_damage(FL_DAMAGE_ALL);
-    update_child(*child(0));
-  }
-public:
-  double_blink_window(int x, int y, int w,int h,const char *l)
-    : Fl_Double_Window(x,y,w,h,l) {resizable(this);}
-};
+void ovl_cb(Widget* o) {
+  overlay = o->value();
+  if (overlay) blinkwindow->redraw_overlay();
+  else blinkwindow->erase_overlay();
+}
 
-int main() {
-  if (!Fl::visual(FL_DOUBLE))
+void slider_cb(Widget* o) {
+  sides = int(((Slider*)o)->value());
+  blinkwindow->redraw();
+}
+
+void oslider_cb(Widget* o) {
+  overlay_sides = int(((Slider*)o)->value());
+  if (overlay) blinkwindow->redraw_overlay();
+}
+
+int main(int argc, char** argv) {
+  if (!visual(DOUBLE_BUFFER))
     printf("Xdbe not supported, faking double buffer with pixmaps.\n");
-  Fl_Window w01(420,420,"Fl_Single_Window"); w01.box(FL_FLAT_BOX);
-  single_blink_window w1(10,10,400,400,"Fl_Single_Window");
-  w1.box(FL_FLAT_BOX); w1.color(FL_BLACK); //w1.position(100,200);
-  Fl_Hor_Slider slider0(20,370,360,25);
+  Window window(420,420+3*25);
+  window.begin();
+  blinkwindow = new BlinkWindow(10,10,400,400);
+  blinkwindow->tooltip("This graphic is designed to blink in a nasty way "
+		       "when redrawing. Try moving the sliders or resizing "
+		       "the window.\n\n"
+		       "Turn on the double buffer checkmark to hide the "
+		       "blinking.");
+  int y = 420;
+  HorizontalSlider slider0(60,y,340,22,"sides:");
+  slider0.tooltip("Redraw above graphic with this many slides");
+  slider0.align(ALIGN_LEFT);
+  slider0.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  slider0.callback(slider_cb);
+  y += 25;
+  HorizontalSlider slider1(60,y,340,22,"overlay:");
+  slider1.tooltip("Redraw red overlay if the overlay checkmark is turned on.");
+  slider1.callback(oslider_cb);
+  slider1.align(ALIGN_LEFT);
+  slider1.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  y += 25;
+  CheckButton b1(60,y,150,25,"double buffer");
+  b1.tooltip("Turns on double-buffer mode in the above window for smooth "
+	     "update. Notice that not only does it not blink, it also "
+	     "@i;looks@n; faster (even though it really is the same speed "
+	     "or slower)");
+  b1.callback(db_cb);
+  CheckButton b2(60+150,y,150,25,"overlay");
+  b2.tooltip("Turns on a red overlay in above window. This is redrawn "
+	     "without having to redraw the basic image, so changes to it "
+	     "will be faster (probably not noticable on modern computers).\n\n"
+	     "Notice that the overlay will blink if the window is resized "
+	     "or the graphic is complex. It is designed for simple temporary "
+	     "things like mouse selection rectangles.");
+  b2.callback(ovl_cb);
+  window.end();
+  window.resizable(blinkwindow);
   slider0.range(2,30);
   slider0.step(1);
-  slider0.value(sides[0]);
-  slider0.callback(slider_cb, 0);
-  w1.end();
-  w01.resizable(w1);
-  w01.end();
-  Fl_Window w02(420,420,"Fl_Double_Window"); w02.box(FL_FLAT_BOX);
-  double_blink_window w2(10,10,400,400,"Fl_Double_Window");
-  w2.box(FL_FLAT_BOX); w2.color(FL_BLACK); //w2.position(600,200);
-  Fl_Hor_Slider slider1(20,370,360,25);
+  slider0.value(sides);
   slider1.range(2,30);
   slider1.step(1);
-  slider1.value(sides[0]);
-  slider1.callback(slider_cb, 1);
-  w2.end();
-  w02.resizable(w2);
-  w02.end();
-  w01.show();
-  w02.show();
-  return Fl::run();
+  slider1.value(overlay_sides);
+  window.show(argc, argv);
+  return run();
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.13 2004/05/04 07:30:44 spitzak Exp $".
 //

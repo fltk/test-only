@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.16 2004/03/10 07:41:46 spitzak Exp $"
+// "$Id: arc.cxx,v 1.17 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/HorizontalValueSlider.h>
 #include <fltk/draw.h>
 
@@ -68,7 +68,8 @@ void slider_cb(fltk::Widget* o, void* v) {
 }
 
 int main(int argc, char** argv) {
-  fltk::DoubleBufferWindow window(300,500);
+  fltk::Window window(300,500);
+  window.set_double_buffer();
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
@@ -96,6 +97,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.16 2004/03/10 07:41:46 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.17 2004/05/04 07:30:44 spitzak Exp $".
 //
 

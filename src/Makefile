@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.117 2004/03/28 17:33:15 spitzak Exp $"
+# "$Id: Makefile,v 1.118 2004/05/04 07:30:43 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,7 +51,6 @@ CPPFILES = \
 	Fl_Color_Chooser.cxx \
 	CycleButton.cxx \
 	Fl_Dial.cxx \
-	Fl_Double_Window.cxx \
 	Fl_FileBrowser.cxx \
 	Fl_FileChooser.cxx \
 	Fl_FileChooser2.cxx \
@@ -78,7 +77,6 @@ CPPFILES = \
 	Fl_Multi_Image.cxx \
 	Fl_Numeric_Input.cxx \
 	Fl_Output.cxx \
-	Fl_Overlay_Window.cxx \
 	Fl_Pack.cxx \
 	Fl_Pixmap.cxx \
 	Fl_ProgressBar.cxx \
@@ -286,5 +284,5 @@ uninstall:
 	$(RM) $(libdir)/$(DSOLINK)
 
 #
-# End of "$Id: Makefile,v 1.117 2004/03/28 17:33:15 spitzak Exp $".
+# End of "$Id: Makefile,v 1.118 2004/05/04 07:30:43 spitzak Exp $".
 #

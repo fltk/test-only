@@ -1,29 +1,7 @@
-//
-// "$Id: DoubleBufferWindow.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $"
-//
-// Double-buffered window. Uses XDBE if possible on X. Uses offscreen
-// pixmap on Windows or on X if no XDBE.
-//
-// Copyright 2002 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-
+// This class is provided for back compatability only with some fltk2.0
+// versions. You can turn on double buffering on a normal window if
+// you want it.
+  
 #ifndef fltk_DoubleBufferWindow_h
 #define fltk_DoubleBufferWindow_h
 
@@ -33,33 +11,17 @@
 
 namespace fltk {
 
-class FL_API DoubleBufferWindow : public Window {
+class DoubleBufferWindow : public Window {
 
 public:
-
-  virtual void layout();
-  ~DoubleBufferWindow();
-  DoubleBufferWindow(int W, int H, const char *l = 0) : Window(W,H,l) {}
-  DoubleBufferWindow(int X, int Y, int W, int H, const char *l = 0, bool begin=false)
-    : Window(X,Y,W,H,l,begin) {}
-
-protected:
-
-  virtual void create();
-  virtual void flush();
-  void flush(bool eraseoverlay);
-  virtual void destroy();
-
-private:
-
-  void free_backbuffer();
+  DoubleBufferWindow(int x, int y, int w, int h, const char*l = 0)
+    : Window(x,y,w,h,l) {set_double_buffer();}
+    
+  DoubleBufferWindow(int x, int y, const char*l = 0)
+    : Window(x,y,l) {set_double_buffer();}
 
 };
 
 }
 
 #endif
-
-//
-// End of "$Id: DoubleBufferWindow.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $".
-//

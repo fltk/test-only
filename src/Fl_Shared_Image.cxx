@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.32 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.33 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,20 +43,11 @@ SharedImage*	SharedImage::first_image = 0;
 int		SharedImage::image_used=0;
 unsigned	SharedImage::mem_usage_limit=0;
 unsigned	SharedImage::mem_used=0;
-int		SharedImage::forbid_delete = 1;
 
 // static unsigned mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache
 // WARNING : this is updated incrementally, so beware that it keeps balanced
 // when deleting or creating pixmaps !
-
-SharedImage::~SharedImage()
-{
-  if(forbid_delete)
-    fprintf(stderr, 
-      "FLTK user error : deleting an SharedImage object is forbiden !\n");
-  if (id) mem_used -= w()*h();
-}
 
 void SharedImage::set_cache_size(unsigned l)
 {
@@ -67,7 +58,7 @@ static SharedImage *limage; // used to find the less used image
 void SharedImage::find_less_used() {
   if(l1) l1->find_less_used();
   if(l2) l2->find_less_used();
-  if(id && (limage->id == 0 || used<limage->used)) limage=this;
+  if(drawn() && (!limage->drawn() || used<limage->used)) limage=this;
 }
 void SharedImage::check_mem_usage()
 {
@@ -77,7 +68,7 @@ void SharedImage::check_mem_usage()
   do {
     limage=first_image;
     first_image->find_less_used();
-    if (limage->id) {
+    if (limage->drawn()) {
       mem_used -= limage->w() * limage->h();
       limage->destroy_cache();
     } else return;
@@ -98,7 +89,7 @@ shared_image_destructor_class shared_image_destructor;
 
 void SharedImage::clear_cache()
 {
-  if (id) {
+  if (drawn()) {
     mem_used -= w()*h();
     destroy_cache();
   }
@@ -159,9 +150,8 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
     image->refcount = 1;
     image->name = strdup(name);
     image->datas=datas;
-    image->w_ = -1; // We mark the fact the it has never been measured yet
+    image->setsize(-1,-1); // We mark the fact the it has never been measured yet
     image->l1 = image->l2 = 0;
-    image->id=image->mask=0;
     SharedImage::insert(first_image, image);
   } else {
     if(image->datas==NULL) image->datas=datas;
@@ -173,12 +163,11 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
 
 void SharedImage::reload(const uchar* pdatas)
 {
-  if (id) {
+  if (drawn()) {
     mem_used -= w()*h();
     destroy_cache();
   }
   if (pdatas) datas = pdatas;
-  float W=w_; float H=h_; measure(W,H);
 }
 void SharedImage::reload(const char* name, const uchar* pdatas)
 {
@@ -204,9 +193,7 @@ int SharedImage::remove()
 {
   if (--refcount) return 0;
   remove_from_tree(first_image, this);
-  forbid_delete = 0;
-  delete this;
-  forbid_delete = 1;
+  if (drawn()) mem_used -= w()*h();
   return 1;
 }
 int SharedImage::remove(const char* name)
@@ -218,25 +205,25 @@ int SharedImage::remove(const char* name)
 
 void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (w_ < 0) {float W=w; float H=h; measure(W,H);}
-  if (w_ == 0) return;
+  if (this->w() < 0) {float W=w; float H=h; measure(W,H);}
+  if (this->w() == 0) return;
   const_cast<SharedImage*>(this)->used =
     image_used++; // do this before check_mem_usage
-  if (!id) // Need to uncompress the image ?
+  if (!drawn()) // Need to uncompress the image ?
   {
-    mem_used += w_*h_;
+    mem_used += this->w()*this->h();
     check_mem_usage();
 
     const_cast<SharedImage*>(this)->read();
-    if (!id) { // could not read the image for some reason ?
-      mem_used -= w_*h_;
-      const_cast<SharedImage*>(this)->w_ = 0; // Will never try again ...
+    if (!drawn()) { // could not read the image for some reason ?
+      mem_used -= this->w()*this->h();
+      const_cast<SharedImage*>(this)->setsize(0,0); // Will never try again ...
       return; 
     }
   }
-  draw_cache(x,y,w,h,style,flags);
+  Image::_draw(x,y,w,h,style,flags);
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.32 2003/11/04 08:11:01 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.33 2004/05/04 07:30:43 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.19 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,14 +33,12 @@ using namespace fltk;
 
 void rgbImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (!id) {
-    Pixmap pixmap = fl_create_offscreen(w_, h_);
-    const_cast<rgbImage*>(this)->id = (void*)pixmap;
-    fl_begin_offscreen(pixmap);
-    drawimage(data, 0, 0, w_, h_, depth);
-    fl_end_offscreen();
+  if (!drawn()) {
+    ImageDraw idraw(const_cast<rgbImage*>(this));
+    drawimage(data, 0, 0, this->w(), this->h(), depth);
+    // do something about alpha?
   }
-  draw_cache(x, y, w, h, style, flags);
+  Image::_draw(x, y, w, h, style, flags);
 }
 
 #if WRITE_JPEG
@@ -116,5 +114,5 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 #endif // WRITE_JPEG
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.19 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $".
 //

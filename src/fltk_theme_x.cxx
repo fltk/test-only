@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_x.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: fltk_theme_x.cxx,v 1.2 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -56,7 +56,7 @@ using namespace fltk;
 // this function handles KDE style change messages:
 
 // I think these are for KDE1:
-static Atom ChangeGeneral, ChangeStyle, ChangePalette;
+static Atom ChangeGeneral, /*ChangeStyle,*/ ChangePalette;
 
 // For KDE2:
 static Atom KIPC;
@@ -96,7 +96,7 @@ static void add_event_handler() {
                     PropModeReplace, (unsigned char *)&data, 1);
 
     ChangeGeneral = XInternAtom(xdisplay, "KDEChangeGeneral", False);
-    ChangeStyle = XInternAtom(xdisplay, "KDEChangeStyle", False);
+    //ChangeStyle = XInternAtom(xdisplay, "KDEChangeStyle", False);
     ChangePalette = XInternAtom(xdisplay, "KDEChangePalette", False);
     KIPC = XInternAtom(xdisplay, "KIPC_COMM_ATOM", False);
     fltk::add_event_handler(x_event_handler);
@@ -312,13 +312,13 @@ extern "C" bool fltk_theme() {
   const char* home = getenv("HOME");
   if (!home) return false;
   char kderc[PATH_MAX];
-  int kde1 = 0;
+  //int kde1 = 0;
   snprintf(kderc, sizeof(kderc), "%s/.kde/share/config/kdeglobals", home);
 
   INIFile f;
   if (!f.load(kderc)) {
     snprintf(kderc, sizeof(kderc), "%s/.kderc", home);
-    kde1 = 1;
+    //kde1 = 1;
     f.load(kderc);
   }
   // skipt the rest if it looks like kde does not exist:
@@ -656,5 +656,5 @@ extern "C" bool fltk_theme() {
 #endif
 
 //
-// End of "$Id: fltk_theme_x.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: fltk_theme_x.cxx,v 1.2 2004/05/04 07:30:43 spitzak Exp $".
 //

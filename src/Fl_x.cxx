@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.166 2004/03/17 06:43:27 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.167 2004/05/04 07:30:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -515,18 +515,18 @@ int Monitor::list(const Monitor** p) {
   if (!num_monitors) {
     open_display();
 #if USE_XINERAMA
-#if XINERAMA_VERSION > 1
+# if XINERAMA_VERSION > 1
     XRectangle* rects = 0; int count = 0;
     int a=0; int b=0;
     if (XineramaQueryExtension(xdisplay,&a,&b) &&
 	XineramaIsActive(xdisplay, message_window))
       XineramaGetData(xdisplay, message_window, &rects, &count);
-#else
+# else
     XineramaScreenInfo* rects = 0; int count = 0;
     int a=0; int b=0;
     if (XineramaQueryExtension(xdisplay,&a,&b))
       rects = XineramaQueryScreens(xdisplay, &count);
-#endif
+# endif
     if (count > 1 && count < 100) {
       const Monitor& a = all();
       num_monitors = count;
@@ -534,13 +534,13 @@ int Monitor::list(const Monitor** p) {
       for (int i = 0; i < count; i++) {
 	Monitor& m = monitors[i];
 	m = a;
-#if XINERAMA_VERSION > 1
+# if XINERAMA_VERSION > 1
 	int x = rects[i].x;
 	int y = rects[i].y;
-#else
+# else
 	int x = rects[i].x_org;
 	int y = rects[i].y_org;
-#endif
+# endif
 	int r = x+rects[i].width;
 	int b = y+rects[i].height;
 	m.set(x, y, r-x, b-y);
@@ -569,8 +569,9 @@ int Monitor::list(const Monitor** p) {
       monitors[1].work.w_ -= monitors[0].work.w_;
       monitors[1].work.x_ = monitors[1].x_;
     }
-#endif
+#else
   DONE:;
+#endif
 //      printf("Got %d monitors:\n", num_monitors);
 //      for (int i=0; i < num_monitors; i++) {
 //        const Monitor& m = monitors[i];
@@ -1131,9 +1132,9 @@ bool fltk::handle()
       case 147: keysym = LeftMetaKey; break;
       case 148: keysym = RightMetaKey; break;
       case 149: keysym = MenuKey; break;
+      }
       if (fl_key_vector[18]&0x18) extra_state |= META;
       else extra_state &= ~META;
-      }
 #endif
     } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
       // Make all keypad keys act like NumLock is on all the time. This
@@ -1261,6 +1262,8 @@ bool fltk::handle()
  * the program.
  */
 void Window::layout() {
+  if (layout_damage() & LAYOUT_WH)
+    free_backbuffer();
   if (this == resize_from_system) {
     // Ignore changes that came from the system
     resize_from_system = 0;
@@ -1386,7 +1389,8 @@ void CreatedWindow::create(Window* window,
 			 visual->visual,
 			 mask, &attr);
 
-  x->backbuffer.xid = 0;
+  x->backbuffer = 0;
+  x->overlay = false;
   x->window = window; window->i = x;
   x->region = 0;
   x->wait_for_expose = true;
@@ -1468,7 +1472,7 @@ void CreatedWindow::create(Window* window,
 CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
   CreatedWindow* x = new CreatedWindow;
   x->xid = winxid;
-  x->backbuffer.xid = 0;
+  x->backbuffer = 0;
   x->window = window; window->i = x;
   x->region = 0;
   x->wait_for_expose = true;
@@ -1589,10 +1593,7 @@ void Window::label(const char *name, const char *iname) {
 ////////////////////////////////////////////////////////////////
 // Drawing context
 
-fltk::Drawable* fltk::drawable;
-XWindow fltk::xwindow;
 const Window *Window::current_;
-GC fltk::gc;
 
 /*! Sets things up so that the drawing functions in <fltk/draw.h> will
   go into this window. This is useful for incremental update of
@@ -1601,15 +1602,206 @@ GC fltk::gc;
   work for DoubleBufferWindow!</i> */
 void Window::make_current() const {
   current_ = this;
-  i->make_current();
-  static GC normalgc;	// the GC used by all X windows with the default visual
-  if (!normalgc) normalgc = XCreateGC(xdisplay, i->xid, 0, 0);
-  fltk::gc = normalgc;
+  draw_into(i->xid);
 }
 
 /*! \fn static Window* Window::current()
   Returns the last window make_current() was called on. */
 
+XWindow fltk::xwindow;
+GC fltk::gc;
+
+/*! Fltk can draw into any X window or pixmap that uses the fltk::xvisual.
+  Calling this will make all drawing functions go there. Before you destroy
+  the window or pixmap you must call fltk::stop_drawing() so that it can
+  destroy any temporary structures pointing to it.
+  This call also resets the transformation matrix to the identity, even
+  if this is the same drawable as before.
+*/
+void fltk::draw_into(XWindow window) {
+  xwindow = window;
+  // in X the gc structure can be reused for every window:
+  if (!fltk::gc) fltk::gc = XCreateGC(xdisplay, window, 0, 0);
+  // The XFT context is not changed here, to avoid wasting time
+  // if no text is drawn into this window. It is created when the
+  // xft text is drawn the first time.
+  load_identity();
+}
+
+/*! \fn void fltk::stop_drawing(XWindow window);
+  If you are destroying a window or pixmap that you (may have)
+  previous called draw_into() on, you should call this before
+  destroying it. This will destroy any temporary stuctures ("gc"s)
+  that fltk had to create to draw on it. This will do nothing if
+  you have not called draw_into() on this.
+*/
+#if !USE_XFT
+void fltk::stop_drawing(XWindow window) {
+  if (xwindow == window) xwindow = 0;
+}
+#endif
+
+////////////////////////////////////////////////////////////////
+// Window update, double buffering, and overlay:
+
+#if USE_XDBE
+#define Window XWindow
+#include <X11/extensions/Xdbe.h>
+#undef Window
+
+static bool use_xdbe; // true if we are using the XDBE extension
+
+static bool can_xdbe() { // figure out use_xdbe.
+  static bool tried;
+  if (!tried) {
+    tried = true;
+    int event_base, error_base;
+    if (!XdbeQueryExtension(xdisplay, &event_base, &error_base)) return false;
+    XWindow root = RootWindow(xdisplay, xscreen);
+    int numscreens = 1;
+    XdbeScreenVisualInfo *a = XdbeGetVisualInfo(xdisplay, &root, &numscreens);
+    if (!a) return false;
+    for (int j = 0; j < a->count; j++)
+      if (a->visinfo[j].visual == xvisual->visualid
+	  /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = true; break;}
+    XdbeFreeVisualInfo(a);
+  }
+  return use_xdbe;
+}
+
+#if 0
+// Useless attempt to stop it blinking on resizing. In fact the X design
+// just sucks, there is no way to do this when the window manager can
+// resize my windo at any time, like right in the middle of when I am drawing!
+extern "C" {
+  static Bool resize_test(Display*, XEvent* event, char* data) {
+    return
+      event->type == ConfigureNotify &&
+      event->xmapping.window == (XWindow)(data);
+  }
+}
+#endif
+
+#endif
+
+void Window::flush() {
+  unsigned char damage = this->damage();
+
+  if (this->double_buffer() || i->overlay) {
+    // double-buffer drawing
+
+    bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
+    if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
+
+    if (!i->backbuffer) { // we need to create back buffer
+#if USE_XDBE
+      if (can_xdbe())
+	i->backbuffer =
+	  XdbeAllocateBackBufferName(xdisplay, i->xid, XdbeUndefined);
+      else
+#endif
+	i->backbuffer = XCreatePixmap(xdisplay,xwindow,w(),h(),xvisual->depth);
+      i->backbuffer_bad = true;
+    }
+
+    current_ = this;
+
+    // draw the back buffer if it needs anything:
+    if (damage
+	|| i->backbuffer_bad
+#if USE_XDBE
+	//	|| (use_xdbe && i->region)
+#endif
+	) {
+      // set the graphics context to draw into back buffer:
+      draw_into(i->backbuffer);
+      if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
+	set_damage(DAMAGE_ALL);
+	draw();
+      } else {
+      // draw all the changed widgets:
+	if (damage & ~DAMAGE_EXPOSE) {
+	  set_damage(damage & ~DAMAGE_EXPOSE);
+	  draw();
+	}
+	// draw for any expose events (if Xdbe is not being used this will
+	// only happen for redraw(x,y,w,h) calls):
+	if (i->region) {
+	  clip_region(i->region); i->region = 0;
+	  set_damage(DAMAGE_EXPOSE); draw();
+	  // hack to only copy the damage region from back to front:
+	  if (!(damage & ~DAMAGE_EXPOSE) && !i->overlay) {
+	    draw_into(i->xid);
+	    goto ALREADY_CLIPPED;
+	  }
+	  clip_region(0);
+	}
+      }
+#if USE_XDBE
+# if 0 // useless attempt to make it not blink on resize
+      XSync(xdisplay, false);
+      XEvent temp;
+      if (XCheckIfEvent(xdisplay, &temp, resize_test, (char*)(i->xid)))
+	return;
+# endif
+      // use the faster Xdbe swap command for all normal redraw():
+      if (use_xdbe && !eraseoverlay && (damage&~DAMAGE_EXPOSE)) {
+	i->backbuffer_bad = true;
+	XdbeSwapInfo s;
+	s.swap_window = i->xid;
+	s.swap_action = XdbeUndefined;
+	XdbeSwapBuffers(xdisplay, &s, 1);
+	return;
+      }
+#endif
+    }
+
+    draw_into(i->xid);
+
+    // Clip the copying of the pixmap to the damage area,
+    // this makes it faster, especially if the damage area is small:
+    if (!eraseoverlay) {
+      clip_region(i->region); i->region = 0;
+    }
+
+  ALREADY_CLIPPED:
+    // Must be an implementation problem in the server, but on Irix (at least)
+    // it is much faster if I clip the rectangle requested down:
+    int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
+    // Copy the backbuffer to the window:
+    XCopyArea(xdisplay, i->backbuffer, xwindow, gc, X, Y, W, H, X, Y);
+    if (i->overlay) draw_overlay();
+    clip_region(0);
+
+  }  else {
+
+    // Single buffer drawing
+    make_current();
+    if (damage & ~DAMAGE_EXPOSE) {
+      set_damage(damage & ~DAMAGE_EXPOSE);
+      draw();
+      i->backbuffer_bad = true;
+    }
+    if (i->region && !(damage & DAMAGE_ALL)) {
+      clip_region(i->region); i->region = 0;
+      set_damage(DAMAGE_EXPOSE); draw();
+      clip_region(0);
+    }
+  }  
+}
+
+/*! Get rid of extra storage created by drawing when double_buffer() was
+  turned on. */
+void Window::free_backbuffer() {
+  if (!i || !i->backbuffer) return;
+  stop_drawing(i->backbuffer);
+#if USE_XDBE
+  if (use_xdbe) return;
+#endif
+  XFreePixmap(xdisplay, i->backbuffer);
+  i->backbuffer = 0;
+}
+
 //
-// End of "$Id: Fl_x.cxx,v 1.166 2004/03/17 06:43:27 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.167 2004/05/04 07:30:43 spitzak Exp $".
 //

@@ -86,7 +86,7 @@ rgbImage rgb_image(make_image(), WIDTH, HEIGHT);
 #include <fltk/Item.h>
 
 CheckButton *leftb,*rightb,*topb,*bottomb,*insideb,*tileb,
-  *clipb, *wrapb;
+  *clipb, *wrapb, *inactiveb;
 Button *b;
 Window *w;
 
@@ -101,6 +101,7 @@ void button_cb(Widget *,void *) {
   if (wrapb->value()) i |= ALIGN_WRAP;
   b->clear_flag(ALIGN_MASK);
   b->set_flag(i);
+  if (inactiveb->value()) b->deactivate(); else b->activate();
   w->redraw();
 }
 
@@ -204,6 +205,9 @@ int main(int argc, char **argv) {
   wrapb= new CheckButton(x, y, BWIDTH, BHEIGHT, "wrap"); x += BWIDTH;
   wrapb->callback(button_cb);
   wrapb->tooltip("ALIGN_WRAP");
+  inactiveb= new CheckButton(x, y, BWIDTH, BHEIGHT, "inactive"); x += BWIDTH;
+  inactiveb->callback(button_cb);
+  inactiveb->tooltip("deactivate()");
 
   controls.end();
 
@@ -216,5 +220,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.17 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: image.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: win32.h,v 1.22 2004/05/04 07:30:42 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -85,6 +85,7 @@ extern FL_API MSG msg;
 // drawing functions:
 
 extern FL_API HDC	gc;
+extern FL_API HBITMAP	xwindow;
 extern FL_API HDC	getDC();
 extern FL_API HFONT	xfont();
 extern FL_API TEXTMETRIC* textmetric();
@@ -95,64 +96,9 @@ extern FL_API HBRUSH	setbrush();
 extern FL_API void	clip_region(Region);
 extern FL_API Region	clip_region();
 
-////////////////////////////////////////////////////////////////
-// This class is an offscreen image that you plan to draw to repeatedly.
-// It contains "context" information that may be expensive or impossible
-// to recreate each time for drawing. On some systems this is a base
-// class for Fl_X, which describes a window. Because
-// of differences in how these things are created & destroyed, and
-// the desire to have the id have a longer lifetime than this object,
-// intelligent constructors and destructors are not implemented.
-
-FL_API HDC makeDC(HBITMAP);
-
-class FL_API Drawable {
- public:
-  HWND xid;
-  HDC dc;
-  Drawable() {}
-  Drawable(HBITMAP p) : xid((HWND)p), dc(makeDC(p)) {}
-  void create(int w, int h) {
-    HBITMAP bitmap = CreateCompatibleBitmap(gc, w, h);
-    xid = (HWND)bitmap;
-    dc = makeDC(bitmap);
-  }
-  void copy(int x, int y, int w, int h, int src_x, int src_y) {
-    BitBlt(gc, x, y, w, h, dc, src_x, src_y, SRCCOPY);
-  }
-  void free_gc() {
-    if (dc) {if (gc == dc) gc = 0; DeleteDC(dc); dc = 0;}
-  }
-  void destroy() {
-    if (xid) {free_gc(); DeleteObject((HBITMAP)xid); xid = 0;}
-  }
-  void make_current() {gc = dc; load_identity();}
-};
-
-////////////////////////////////////////////////////////////////
-// This is an offscreen image that is designed to be drawn into
-// exactly once and then repeatedly used as a source for copy. The
-// object is expected to fit into a void* space in the Fl_Image
-// structure. Drawing into them is surrounded by macros that save
-// the current graphics state in local variables and create a
-// temporary drawing context.
-
-#define fl_create_offscreen(w, h) CreateCompatibleBitmap(fltk::gc, w, h)
-
-#define fl_begin_offscreen(id) \
-  {fltk::push_matrix(); \
-  HDC _sdc = fltk::gc; \
-  fltk::Drawable _nd(id); \
-  _nd.make_current(); \
-  fltk::push_no_clip()
-
-#define fl_end_offscreen() \
-  _nd.free_gc(); fltk::gc = _sdc; fltk::pop_clip(); fltk::pop_matrix();}
-
-FL_API void copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy);
-#define fl_copy_offscreen fltk::copy_offscreen
-
-#define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
+extern FL_API void	draw_into(HBITMAP);
+extern FL_API void	stop_drawing(HBITMAP);
+extern FL_API void	stop_drawing(HWND);
 
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Fl_Window.h> was included
@@ -161,14 +107,19 @@ FL_API void copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy)
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
 
-class FL_API CreatedWindow : public Drawable {
+class FL_API CreatedWindow {
 public:
-  Drawable backbuffer;
+  HWND xid;
+  HDC dc;
+  HBITMAP backbuffer;
+  HDC bdc;
   Window* window;
   Region region;
   void expose(int x, int y, int w, int h);
   CreatedWindow* next;
   bool wait_for_expose;
+  bool backbuffer_bad; // used for XDBE
+  bool overlay; // true if redraw_overlay was called
   HCURSOR cursor;
   const Widget* cursor_for;
   static CreatedWindow* first;
@@ -192,5 +143,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: win32.h,v 1.22 2004/05/04 07:30:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.18 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,9 +109,6 @@ FontSize::~FontSize() {
 
 ////////////////////////////////////////////////////////////////
 // Things you can do once the font+size has been selected:
-
-// Placeholder function, Xft version needs to free something:
-void fltk::Drawable::free_gc() {draw = 0;}
 
 /*! Draw text starting at a point returned by fltk::transform(). This
   is needed for complex text layout when the current transform may
@@ -374,5 +371,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.18 2004/01/25 06:55:05 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
 //

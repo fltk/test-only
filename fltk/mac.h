@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.9 2003/11/11 09:40:40 spitzak Exp $"
+// "$Id: mac.h,v 1.10 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -78,57 +78,8 @@ extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
 
 extern FL_API void	clip_region(Region);
 extern FL_API Region	clip_region();
-
-////////////////////////////////////////////////////////////////
-// This class is an offscreen image that you plan to draw to repeatedly.
-// It contains "context" information that may be expensive or impossible
-// to recreate each time for drawing. On some systems this is a base
-// class for Fl_X, which describes a window. Because
-// of differences in how these things are created & destroyed, and
-// the desire to have the id have a longer lifetime than this object,
-// intelligent constructors and destructors are not implemented.
-
-FL_API GWorldPtr create_offscreen(int w, int h);
-FL_API void copy_offscreen(int x,int y,int w,int h, GWorldPtr, int srcx,int srcy);
-FL_API void make_current(GWorldPtr xid);
-
-class FL_API Drawable {
- public:
-  GWorldPtr xid;
-  Drawable() {}
-  Drawable(GWorldPtr p) : xid(p) {}
-  void create(int w, int h)  {xid = fltk::create_offscreen(w,h);}
-  void copy(int x, int y, int w, int h, int src_x, int src_y) {
-    fltk::copy_offscreen(x,y,w,h,xid,src_x,src_y);
-  }
-  void free_gc() {}
-  void destroy() {DisposeGWorld(xid);}
-  void make_current() {fltk::make_current(xid);}
-};
-
-////////////////////////////////////////////////////////////////
-// This is an offscreen image that is designed to be drawn into
-// exactly once and then repeatedly used as a source for copy. The
-// object is expected to fit into a void* space in the Fl_Image
-// structure. Drawing into them is surrounded by macros that save
-// the current graphics state in local variables and create a
-// temporary drawing context.
-
-#define fl_create_offscreen(w,h) fltk::create_offscreen(w,h)
-
-#define fl_begin_offscreen(id) \
-  {::fltk::push_matrix(); \
-  GrafPtr prevPort; GDHandle prevGD; GetGWorld(&prevPort, &prevGD); \
-  ::fltk::make_current(id); \
-  ::fltk::push_no_clip()
-
-#define fl_end_offscreen() \
-  SetGWorld(prevPort, prevGD); \
-  ::fltk::pop_clip(); ::fltk::pop_matrix();}
-
-#define fl_copy_offscreen fltk::copy_offscreen
-
-#define fl_delete_offscreen(id) DisposeGWorld(id);
+extern FL_API void	draw_into(GWorldPtr xid);
+extern FL_API void	stop_drawing(GWorldPtr xid);
 
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
@@ -139,8 +90,7 @@ class FL_API Drawable {
 
 class FL_API CreatedWindow {
 public:
-  XWindow xid; // used by main windows
-  Drawable backbuffer;
+  WindowPtr xid; // used by main windows
   Window* window;
   Region region; // damage region
   void expose(int x, int y, int w, int h);
@@ -149,6 +99,7 @@ public:
   CreatedWindow *children, *brother;
   bool wait_for_expose;
   bool need_new_subRegion;
+  bool overlay;
   static CreatedWindow* first;
   static CreatedWindow* find(const Window* window) {return window->i;}
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
@@ -171,6 +122,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.9 2003/11/11 09:40:40 spitzak Exp $".
+// End of "$Id: mac.h,v 1.10 2004/05/04 07:30:42 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.30 2003/07/01 07:03:15 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.31 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/Browser.h>
 #include <fltk/CheckButton.h>
 #include <fltk/draw.h>
@@ -156,7 +156,8 @@ void size_cb(fltk::Widget *, long) {
 }
 
 void create_the_forms() {
-  form = new fltk::DoubleBufferWindow(550,390);
+  form = new fltk::Window(550,390);
+  form->set_double_buffer();
   form->begin();
   id_box = new fltk::Widget(10, 172, 530, 15);
   id_box->box(fltk::ENGRAVED_BOX);
@@ -203,5 +204,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.30 2003/07/01 07:03:15 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.31 2004/05/04 07:30:44 spitzak Exp $".
 //

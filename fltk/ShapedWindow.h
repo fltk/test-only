@@ -1,5 +1,5 @@
 //
-// "$Id: ShapedWindow.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: ShapedWindow.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Window that can have a shape other than a rectangle. Right now the
 // shape is controlled by a bitmap, which matches X, but we really could
@@ -28,17 +28,17 @@
 #ifndef fltk_ShapedWindow_h
 #define fltk_ShapedWindow_h
 
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/xbmImage.h>
 
 namespace fltk {
 
-class FL_API ShapedWindow : public DoubleBufferWindow {
+class FL_API ShapedWindow : public Window {
   public:
     ShapedWindow(int W, int H, const char *l = 0)
-      : DoubleBufferWindow(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0; }
+      : Window(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0; set_double_buffer();}
     ShapedWindow(int X, int Y, int W, int H, const char *l = 0)
-      : DoubleBufferWindow(X,Y,W,H,l) { shape_ = 0; lw = lh = 0; }
+      : Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0; set_double_buffer();}
     void shape(xbmImage* b) { shape_ = b; changed = 1; }
     void shape(xbmImage& b) { shape(&b); }
 
@@ -53,5 +53,5 @@ class FL_API ShapedWindow : public DoubleBufferWindow {
 #endif
 
 //
-// End of "$Id: ShapedWindow.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// End of "$Id: ShapedWindow.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
 //

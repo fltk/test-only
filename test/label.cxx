@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.17 2004/03/17 06:43:27 spitzak Exp $"
+// "$Id: label.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 #include <FL/Fl_Menu_Item.H>
 #include <fltk/run.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
 #include <fltk/Box.h>
 #include <fltk/HorizontalValueSlider.h>
 #include <fltk/ToggleButton.h>
@@ -39,7 +39,7 @@ Widget *textbox;
 Input *input;
 HorizontalValueSlider *fontslider;
 HorizontalValueSlider *sizes;
-DoubleBufferWindow *window;
+Window *window;
 
 void button_cb(Widget *,void *) {
   int i = 0;
@@ -108,7 +108,8 @@ Fl_Menu_Item choices[] = {
   {0}};
 
 int main(int argc, char **argv) {
-  window = new DoubleBufferWindow(400,400);
+  window = new Window(400,400);
+  window->set_double_buffer();
   window->begin();
 
   input = new Input(50,375,350,25);
@@ -167,5 +168,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.17 2004/03/17 06:43:27 spitzak Exp $".
+// End of "$Id: label.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $".
 //

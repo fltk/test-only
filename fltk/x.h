@@ -1,9 +1,7 @@
 //
-// "$Id: x.h,v 1.25 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id: x.h,v 1.26 2004/05/04 07:30:42 spitzak Exp $"
 //
-// X11 header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,17 +19,19 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-// These are internal fltk symbols that are necessary or useful for
-// calling Xlib.  You should include this file if (and ONLY if) you
+// Declarations of internal fltk symbols that are useful for calling
+// Xlib functions. You should include this file if (and ONLY if) you
 // need to call Xlib directly.  You should avoid using this header
 // file in your software if at all possible.  NO FLTK HEADER FILE IS
 // ALLOWED TO INCLUDE THIS.
 //
-// Most of these symbols are replicated in header files
-// for other operating systems (win32.h, mac.h) but the definition of
-// the symbols is different, and usage may be somewhat different.
+// For historic reasons, this file will also include the correct
+// header file for other operating systems. As all three major systems
+// now have multiple drawing libraries (Linux has X11/Cairo, Windows
+// has GDI32/LongHorn/DirectX, and Mac has Carbon/Aqua/X11, and all
+// have OpenGL) not all the symbols in here may be usable with a given
+// compilation of fltk.
 
 #ifndef fltk_x_h
 #define fltk_x_h
@@ -120,10 +120,10 @@ extern FL_API Atom dnd_action;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-class Drawable;
+class Surface;
 
 extern FL_API GC	gc;
-extern FL_API Drawable* drawable;
+extern FL_API Surface*	surface;
 extern FL_API XWindow	xwindow;
 extern FL_API XFontStruct*	xfont();
 extern FL_API ulong	current_xpixel;
@@ -131,59 +131,8 @@ extern FL_API ulong	xpixel(Color i);
 extern FL_API void	clip_region(Region);
 extern FL_API Region	clip_region();
 
-////////////////////////////////////////////////////////////////
-// This class is an offscreen image that you plan to draw to repeatedly.
-// It contains "context" information that may be expensive or impossible
-// to recreate each time for drawing. On some systems this is a base
-// class for CreatedWindow, which describes a window. Because
-// of differences in how these things are created & destroyed, and
-// the desire to have the id have a longer lifetime than this object,
-// intelligent constructors and destructors are not implemented.
-
-class FL_API Drawable {
- public:
-  XWindow xid;
-  XftDraw* draw;
-  Drawable() : draw(0) {}
-  Drawable(Pixmap p) : xid(p), draw(0) {}
-  void create(int w, int h) {
-    xid = XCreatePixmap(xdisplay, xwindow, w, h, xvisual->depth);
-  }
-  void copy(int x, int y, int w, int h, int src_x, int src_y) {
-    XCopyArea(xdisplay, xid, xwindow, gc, src_x, src_y, w, h, x, y);
-  }
-  void free_gc();
-  void destroy() {
-    if (xid) {free_gc(); XFreePixmap(xdisplay, xid); xid = 0;}
-  }
-  void make_current() {drawable = this; xwindow=xid; load_identity();}
-};
-
-////////////////////////////////////////////////////////////////
-// This is an offscreen image that is designed to be drawn into
-// exactly once and then repeatedly used as a source for copy. The
-// object is expected to fit into a void* space in the Image
-// structure. Drawing into them is surrounded by macros that save
-// the current graphics state in local variables and create a
-// temporary drawing context.
-
-#define fl_create_offscreen(w,h) \
-  XCreatePixmap(::fltk::xdisplay,::fltk::xwindow, w, h,::fltk::xvisual->depth)
-
-#define fl_begin_offscreen(id) \
-  {::fltk::push_matrix(); \
-  ::fltk::Drawable* _sd = fltk::drawable; \
-  ::fltk::Drawable _nd(id); \
-  _nd.make_current(); \
-  ::fltk::push_no_clip()
-
-#define fl_end_offscreen() \
-  _nd.free_gc(); _sd->make_current();::fltk::pop_clip();::fltk::pop_matrix();}
-
-#define fl_copy_offscreen(x,y,w,h,id,srcx,srcy) \
-  XCopyArea(::fltk::xdisplay, id, ::fltk::xwindow, ::fltk::gc, srcx, srcy, w, h, x, y)
-
-#define fl_delete_offscreen(id) XFreePixmap(::fltk::xdisplay, id)
+extern FL_API void	draw_into(XWindow);
+extern FL_API void	stop_drawing(XWindow);
 
 ////////////////////////////////////////////////////////////////
 // only include this if <fltk/Window.h> was included:
@@ -193,15 +142,17 @@ class FL_API Drawable {
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that xid(Window) can be declared inline:
 
-class FL_API CreatedWindow : public Drawable {
+class FL_API CreatedWindow {
 public:
-  Drawable backbuffer;
+  XWindow xid;
+  XWindow backbuffer;
   Window *window;
   Region region;
   void expose(int x, int y, int w, int h);
   CreatedWindow *next;
   bool wait_for_expose;
   bool backbuffer_bad; // used for XDBE
+  bool overlay; // true if redraw_overlay was called
   ::Cursor cursor;
   const Widget* cursor_for;
   static CreatedWindow* first;
@@ -226,5 +177,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.25 2004/03/25 18:13:17 spitzak Exp $".
+// End of "$Id: x.h,v 1.26 2004/05/04 07:30:42 spitzak Exp $".
 //

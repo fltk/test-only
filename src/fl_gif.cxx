@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.18 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -80,30 +80,27 @@ void gifImage::_measure(float &W, float &H) const
   else
   {
     if ((GifFile=fopen(get_filename(), "rb"))==NULL) {
-      W = const_cast<gifImage*>(this)->w_ = 0;
+      const_cast<gifImage*>(this)->setsize(0,0);
       return;
     }
     if (fread(b,1,6,GifFile)<6) {
-      W = const_cast<gifImage*>(this)->w_ = 0;
+      const_cast<gifImage*>(this)->setsize(0,0);
       return; /* quit on eof */
     }
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-    W = const_cast<gifImage*>(this)->w_ = 0;
+    const_cast<gifImage*>(this)->setsize(0,0);
     return;
   }
 
-  GETSHORT(const_cast<gifImage*>(this)->w_);
-  GETSHORT(const_cast<gifImage*>(this)->h_);
-  W = w();
-  H = h();
+  int w,h; GETSHORT(w); GETSHORT(h);
+  const_cast<gifImage*>(this)->setsize(w,h);
+  W = w; H = h;
   if(!datas) fclose(GifFile);
 }
 
 void gifImage::read()
 {
-  id = mask = 0;
-
   int inumber=0;
   FILE *GifFile=0;
 
@@ -396,19 +393,15 @@ void gifImage::read()
 
   data[Height+2] = 0; // null to end string array
 
-  Pixmap pixmap = fl_create_offscreen(w(), h());
-  id = (void*)pixmap;
-  fl_begin_offscreen(pixmap);
-
+  ImageDraw idraw(this);
   uchar *bitmap = 0;
   set_mask_bitmap(&bitmap);
   draw_xpm(data, 0, 0, BLACK);
   set_mask_bitmap(0);
   if (bitmap) {
-    create_bitmap_mask(bitmap, w(), h());
+    set_alpha_bitmap(bitmap, w(), h());
     delete[] bitmap;
   }
-  fl_end_offscreen();
 
   delete[] Image;
   delete[] data[0];
@@ -419,5 +412,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.18 2004/03/25 18:13:18 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
 //

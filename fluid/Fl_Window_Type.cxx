@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.45 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.46 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 
 #include <fltk/events.h>
 #include <fltk/damage.h>
-#include <fltk/OverlayWindow.h>
+#include <fltk/Window.h>
 #include <fltk/ask.h>
 #include <fltk/draw.h>
 #include <fltk/Box.h>
@@ -97,13 +97,13 @@ bool overlays_invisible;
 // The following fltk::Widget is used to simulate the windows.  It has
 // an overlay for the fluid ui, and special-cases the fltk::NO_BOX.
 
-class Overlay_Window : public fltk::OverlayWindow {
+class Overlay_Window : public fltk::Window {
   void draw();
   void draw_overlay();
 public:
   WindowType *window;
   int handle(int);
-  Overlay_Window(int w,int h) : fltk::OverlayWindow(w,h) {fltk::Group::current(0);}
+  Overlay_Window(int w,int h) : fltk::Window(w,h) {fltk::Group::current(0);}
 };
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
@@ -118,9 +118,9 @@ void Overlay_Window::draw() {
       }
   }
 #ifdef _WIN32
-  OverlayWindow::draw();
+  Window::draw();
 #else
-  fltk::OverlayWindow::draw();
+  fltk::Window::draw();
 #endif
 }
 
@@ -618,9 +618,9 @@ int WindowType::handle(int event) {
 
   default:
 #ifdef _WIN32
-    return ((Overlay_Window *)o)->OverlayWindow::handle(event);
+    return ((Overlay_Window *)o)->Window::handle(event);
 #else
-    return ((Overlay_Window *)o)->fltk::OverlayWindow::handle(event);
+    return ((Overlay_Window *)o)->fltk::Window::handle(event);
 #endif
   }
 }
@@ -694,5 +694,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.45 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.46 2004/05/04 07:30:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.50 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.51 2004/05/04 07:30:42 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -179,6 +179,7 @@ static void revert(Style* s) {
   s->glyph_ = glyph;
 }
 static NamedStyle style("Adjuster", revert, &Adjuster::default_style);
+
 NamedStyle* Adjuster::default_style = &::style;
 
 Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) {
@@ -190,5 +191,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.50 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.51 2004/05/04 07:30:42 spitzak Exp $".
 //

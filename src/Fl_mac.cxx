@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.15 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.16 2004/05/04 07:30:43 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1401,7 +1401,7 @@ void Window::label(const char *name, const char * iname) {
 
 const Window *Window::current_;
 
-void fltk::make_current(GWorldPtr gWorld) {
+void fltk::draw_into(GWorldPtr gWorld) {
   if ( gWorld ) {
     SetGWorld( gWorld, 0 ); // sets the correct port
     PixMapHandle pm = GetGWorldPixMap(gWorld);
@@ -1462,6 +1462,29 @@ void Window::make_current() const
   }
   SetPortClipRegion( GetWindowPort(root->i->xid), i->subRegion );
 }
+
+////////////////////////////////////////////////////////////////
+// Window update, double buffering, and overlay:
+// Windows are effectively double-buffered at all times. So this
+// is much simpler than the X11 and Win32 implementations.
+
+void Window::flush() {
+  unsigned char damage = this->damage();
+  if (damage & REDRAW_OVERLAY) damage = DAMAGE_ALL;
+  make_current();
+  if (damage & ~DAMAGE_EXPOSE) {
+    set_damage(damage & ~DAMAGE_EXPOSE);
+    draw();
+    if (i->overlay) draw_overlay();
+  }
+  if (i->region && !(damage & DAMAGE_ALL)) {
+    clip_region(i->region); i->region = 0;
+    set_damage(DAMAGE_EXPOSE); draw();
+    clip_region(0);
+  }
+}
+
+void Window::free_backbuffer() {}
 
 ////////////////////////////////////////////////////////////////
 // Cut & paste.
@@ -1576,6 +1599,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.15 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.16 2004/05/04 07:30:43 spitzak Exp $".
 //
 
