@@ -248,10 +248,6 @@ SOURCE=..\..\src\drawtext.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\dump_compose.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\EngravedLabel.cxx
 # End Source File
 # Begin Source File
@@ -453,10 +449,6 @@ SOURCE=..\..\src\PackedGroup.cxx
 # Begin Source File
 
 SOURCE=..\..\src\path.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\pktdef.h
 # End Source File
 # Begin Source File
 
