@@ -1,7 +1,7 @@
 dnl 
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.117 2004/06/25 18:38:41 xpxqx Exp $"
+dnl "$Id: configure.in,v 1.118 2004/06/29 00:10:16 xpxqx Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -676,16 +676,9 @@ case $uname in
         AC_CHECK_LIB(X11, Xutf8LookupString,,[
             AC_CHECK_HEADERS([iconv.h],[
                 AC_DEFINE(_XOPEN_SOURCE, 1)
-                AC_CHECK_LIB(iconv, iconv_open,,[
-                    AC_CHECK_FUNC(iconv_open,,[
-                        AC_MSG_ERROR(Configure could not find required iconv_open function, aborting.)
-                    ])
-                ])
                 AC_CHECK_LIB(iconv, iconv,[
-                    LIBS="-liconv $LIBS"],[
-                    AC_CHECK_FUNC(iconv,,[
-                        AC_MSG_ERROR(Configure could not find required iconv function, aborting.)
-                    ])
+                    AC_DEFINE(HAVE_ICONV) LIBS="-liconv $LIBS"],[
+                    AC_CHECK_FUNC(iconv, AC_DEFINE(HAVE_ICONV))
                 ])
             ])
         ])
@@ -969,5 +962,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.117 2004/06/25 18:38:41 xpxqx Exp $".
+dnl End of "$Id: configure.in,v 1.118 2004/06/29 00:10:16 xpxqx Exp $".
 dnl

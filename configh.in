@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.59 2004/06/25 18:38:41 xpxqx Exp $"
+ * "$Id: configh.in,v 1.60 2004/06/29 00:10:16 xpxqx Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -173,6 +173,7 @@
  */
 
 #undef HAVE_ICONV_H
+#undef HAVE_ICONV
 
 
 /*
@@ -339,5 +340,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.59 2004/06/25 18:38:41 xpxqx Exp $".
+ * End of "$Id: configh.in,v 1.60 2004/06/29 00:10:16 xpxqx Exp $".
  */
