@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.221 2004/07/27 07:35:04 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.222 2004/07/27 10:29:02 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -595,6 +595,24 @@ void fltk::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
+#include <stdio.h>
+
+////////////////////////////////////////////////////////////////
+// Determite if windows has unicode capability
+
+int has_unicode() 
+{
+  static int has_unicode = -1;
+  if (has_unicode == -1) {
+    OSVERSIONINFOA os;
+    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+    GetVersionExA(&os);
+    has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);
+    printf("has_unicode = %d, GetACP() = %x\n", has_unicode, GetACP());
+  }
+  return has_unicode;
+}
+
 ////////////////////////////////////////////////////////////////
 // code used for selections:
 
@@ -620,13 +638,38 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
       EmptyClipboard();
       // We might want to use CF_TEXT if there are any illegal UTF-8
       // characters so the bytes are preserved?
-      SetClipboardData(CF_UNICODETEXT, NULL);
+      if (has_unicode()) {
+        // w2k/xp
+        SetClipboardData(CF_UNICODETEXT, NULL);
+      } else {
+        // w9x
+        SetClipboardData(CF_TEXT, NULL);
+      }
       CloseClipboard();
     }
     i_own_selection = true;
   }
 }
 
+/* Handle CF_TEXT paste */
+static void pasteA(Widget& receiver, char* txt) {
+  e_text = strdup(txt);
+  int len = strlen(e_text);
+  // strip the CRLF pairs: ($%$#@^)
+  char* a = e_text;
+  char* b = a;
+  char* e = e_text+len;
+  while (a<e) {
+    if (*a == '\r' && a[1] == '\n') a++;
+    else *b++ = *a++;
+  }
+  *b = 0;
+  e_length = b - e_text;
+  receiver.handle(PASTE);
+  free(e_text);
+}
+
+/* Handle CF_UNICODETEXT paste */
 static void pasteW(Widget& receiver, unsigned short* ucs) {
   static char* previous_buffer = 0;
   static int previous_length = 0;
@@ -663,11 +706,20 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     receiver.handle(PASTE);
   } else {
     if (!OpenClipboard(NULL)) return;
-    HANDLE h = GetClipboardData(CF_UNICODETEXT);
+    HANDLE h;
+    h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
       pasteW(receiver, (unsigned short*)GlobalLock(h));
       GlobalUnlock(h);
+      goto DONEPASTE;
     }
+    h = GetClipboardData(CF_TEXT);
+    if (h) {
+      pasteA(receiver, (char*)GlobalLock(h));
+      GlobalUnlock(h);
+      goto DONEPASTE;
+    }
+DONEPASTE:
     CloseClipboard();
   }
 }
@@ -676,6 +728,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 // copies the given selection to such a block and returns it. It appears
 // this block is usually handed to Windows and Windows deletes it.
 HANDLE fl_global_selection(int clipboard) {
+  //printf("fl_global_selection(%d)\n", clipboard);
   int n = utf8to16(selection_buffer[clipboard],
 		   selection_length[clipboard],
 		   0, 0);
@@ -691,28 +744,13 @@ HANDLE fl_global_selection(int clipboard) {
 // Same as fl_global_selection(), but for ASCII text.
 // Clipboard format: CF_TEXT
 HANDLE fl_global_selection_ansi(int clipboard) {
-  HANDLE h = GlobalAlloc(GHND, selection_length[clipboard]+1);
+  //printf("fl_global_selection_ansi(%d)\n", clipboard);
+  int n = utf8tomb(selection_buffer[clipboard], selection_length[clipboard], 0, 0);  
+  HANDLE h = GlobalAlloc(GHND, n+1);
   LPSTR p = (LPSTR)GlobalLock(h);
-	memcpy(p, selection_buffer[clipboard], selection_length[clipboard]);
-	p[selection_length[clipboard]] = 0;
+  utf8tomb(selection_buffer[clipboard], selection_length[clipboard], p, n+1);    
   GlobalUnlock(h);
   return h;
-}
-
-#include <stdio.h>
-
-// Determite if windows has unicode capability
-int has_unicode() 
-{
-  static int has_unicode = -1;
-  if (has_unicode == -1) {
-    OSVERSIONINFOA os;
-    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-    GetVersionExA(&os);
-    has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);
-    printf("has_unicode = %d, GetACP() = %x\n", has_unicode, GetACP());
-  }
-  return has_unicode;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1450,7 +1488,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     OpenClipboard(NULL);
     // fall through...
   case WM_RENDERFORMAT:
-    SetClipboardData(CF_UNICODETEXT, fl_global_selection(1));
+    if (wParam == CF_TEXT)
+      SetClipboardData(CF_TEXT, fl_global_selection_ansi(1));
+    else
+      SetClipboardData(CF_UNICODETEXT, fl_global_selection(1));
     // Windoze also seems unhappy if I don't do this. Documentation very
     // unclear on what is correct:
     if (msg.message == WM_RENDERALLFORMATS) CloseClipboard();
@@ -2078,5 +2119,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.221 2004/07/27 07:35:04 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.222 2004/07/27 10:29:02 laza2000 Exp $".
 //
