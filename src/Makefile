@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.25 1999/08/23 16:43:12 vincent Exp $"
+# "$Id: Makefile,v 1.26 1999/08/24 08:34:14 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -207,7 +207,7 @@ OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 OBJECTSgl = $(CPPglFILES:.cxx=.o)
 OBJECTSpng = $(CPPpngFILES:.cxx=.o)
 
-all:	$(LIBRARY) $(DSONAME) $(DSOglNAME) $(DSOpngNAME)
+all:	$(LIBRARY) $(DSONAME)
 
 $(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
 	@echo $(LIBCOMMAND) $@ ...
@@ -215,7 +215,7 @@ $(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
 	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
 	@$(RANLIB) $@
 
-libfltk.so.2 libfltk.sl.2: $(OBJECTS)
+libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOpngNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
@@ -273,5 +273,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.25 1999/08/23 16:43:12 vincent Exp $".
+# End of "$Id: Makefile,v 1.26 1999/08/24 08:34:14 vincent Exp $".
 #

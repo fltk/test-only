@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.16 1999/08/23 16:43:09 vincent Exp $"
+# "$Id: Makefile,v 1.17 1999/08/24 08:34:13 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -59,7 +59,7 @@ include ../makeinclude
 	$(CXX) -I.. $(CXXFLAGS) -o $@ $< -L../lib -lfltk $(LDLIBS)
 
 $(PROGRAM) : $(OBJECTS) ../lib/$(LIBNAME)
-	$(CXX) $(LD_FOR_DLL_FLAGS) $(LDFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltk $(LDLIBS) -ldl
+	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltk $(LDLIBS) $(LD_DLOPEN_FLAGS)
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
@@ -91,5 +91,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.16 1999/08/23 16:43:09 vincent Exp $".
+# End of "$Id: Makefile,v 1.17 1999/08/24 08:34:13 vincent Exp $".
 #

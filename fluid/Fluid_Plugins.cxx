@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <FL/Fl.H>
 #include <FL/dirent.h>
-#include <FL/Fl_DLL.H>
+#include <FL/Fl_Plugins.H>
 #include "Fluid_Plugins.h"
 
 Fluid_Plugin* plugins[MAXPLUGINS];
 int nbplugins;
 
-#ifndef FL_NO_DLL
+#ifndef FL_NO_PLUGINS
 static int nboptions;
 static int nbnew;
 #endif
@@ -17,11 +17,11 @@ Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 static void ReadPlugin(char* s, char* location)
 {
-#ifndef FL_NO_DLL
+#ifndef FL_NO_PLUGINS
   if(nbplugins >= MAXPLUGINS) return;
 
   FLDLhandle handle;
-  if(!strcmp(s+strlen(s)-sizeof(FLDLext)+1, FLDLext)) {
+  if(!strcmp(s+strlen(s)-sizeof(PLUGINS_EXTENSION)+1, PLUGINS_EXTENSION)) {
     char s2[256];
 
     sprintf(s2, "%s%s", location, s);
@@ -30,7 +30,7 @@ static void ReadPlugin(char* s, char* location)
     if(handle) {
 
       bool used = 0;
-      s[strlen(s)-strlen(FLDLext)] = 0;
+      s[strlen(s)-sizeof(PLUGINS_EXTENSION)+1] = 0;
 
       Fluid_Plugin *d = (Fluid_Plugin*) FLDLsym( handle, "fluid_plugin");
       if(d) {
@@ -80,6 +80,18 @@ static void ReadPlugins(char* location)
   free((void*)d);
 
 }
+
+#ifndef FL_NO_PLUGINS
+// Here, we create some useless object just to be sure that the whole 
+// FLTK library will be linked in fluid.
+// This function even do not need to be called ...
+#include <FL/Fl_Pixmap.H>
+void link_whole_fltk()
+{
+  new Fl_Pixmap((const char**)0);
+  // add some more if you get problems when reading your plugins ...
+}
+#endif
 
 void read_plugins()
 {

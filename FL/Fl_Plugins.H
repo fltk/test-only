@@ -1,8 +1,9 @@
-// DLL support for dlopen or WIN32
-// If the function dlopen exists on your system, you must define HAVE_DLOPEN
+// Plug-ins support for ELF and WIN32
 
-#ifndef FL_DLL_H
-#define FL_DLL_H
+#ifndef FL_Plugins_H
+#define FL_Plugins_H
+
+#include <FL/config.h>
 
 #ifdef WIN32
 
@@ -16,21 +17,21 @@ typedef HINSTANCE FLDLhandle;
 #define FLDLerror() GetLastError()
 #define FLDLext ".dll"
 
-#ifdef FL_INDLL
-#define FLDLE __declspec( dllimport )
-#elif defined(OUTDLL)
-#define FLDLE __declspec( dllexport )
+#ifdef FL_INPLUGIN
+# define FLDLE __declspec( dllimport )
+#elif defined(OUTPLUGIN)
+# define FLDLE __declspec( dllexport )
 #else
-#define FLDLE
+# define FLDLE
 #endif
 
 
-#ifdef FL_OUTDLL
-#define FLDLI __declspec( dllimport )
-#elif defined(INDLL)
-#define FLDLI __declspec( dllexport )
+#ifdef FL_OUTPLUGIN
+# define FLDLI __declspec( dllimport )
+#elif defined(INPLUGIN)
+# define FLDLI __declspec( dllexport )
 #else
-#define FLDLI
+# define FLDLI
 #endif
 
 
@@ -50,7 +51,7 @@ typedef void* FLDLhandle;
 
 
 #else
-#define FL_NO_DLL
+#define FL_NO_PLUGINS
 #endif
 
-#endif FL_DLL_H
+#endif FL_Plugins_H

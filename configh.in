@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.19 1999/08/23 16:43:04 vincent Exp $"
+ * "$Id: configh.in,v 1.20 1999/08/24 08:34:06 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -214,5 +214,15 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_PNG 0
 
 /*
- * End of "$Id: configh.in,v 1.19 1999/08/23 16:43:04 vincent Exp $".
+ * HAVE_DLOPEN
+ *
+ * Do we have ELF shared objects support ?
+ * (used in FL/Fl_DLL.H)
+ *
+ */
+  
+#define HAVE_DLOPEN 0
+
+/*
+ * End of "$Id: configh.in,v 1.20 1999/08/24 08:34:06 vincent Exp $".
  */

@@ -5,6 +5,8 @@
 #include <FL/Fl_DLL.H>
 #include "Fl_Type.h"
 
+#define PLUGINS_EXTENSION ".fluidplugin"
+
 struct Fluid_Plugin {
   // statically user filled informations
   char* 	name;
