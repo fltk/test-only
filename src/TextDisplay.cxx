@@ -940,7 +940,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
   const char *lineStr;
 
   /* If line is not displayed, skip it */
-  if ( visLineNum < 0 || visLineNum > mNVisibleLines ) return;
+  if ( visLineNum < 0 || visLineNum >= mNVisibleLines ) return;
 
   /* Calculate Y coordinate of the string to draw */
   fontHeight = mMaxsize;
