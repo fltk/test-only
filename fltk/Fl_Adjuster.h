@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Adjuster.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
-//
-// Adjuster widget header file for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Adjuster.h,v 1.2 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,6 +21,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+// Undocumented valuator provided for back-compatability.
+// This may be removed before the final version.
 // 3-button "slider", made for Nuke
 
 #ifndef Fl_Adjuster_H
@@ -53,5 +53,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Adjuster.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.h,v 1.2 2002/06/21 06:17:09 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.175 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.176 2002/06/21 06:17:09 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -505,18 +505,20 @@ public:
   HRESULT STDMETHODCALLTYPE Drop( IDataObject *data, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
     if ( !fl_dnd_target_window )
       return S_OK;
-    Fl_Window *target = fl_dnd_target_window;
+    Fl_Window *target_window = fl_dnd_target_window;
     fl_dnd_target_window = 0;
     Fl::e_x_root = pt.x; 
     Fl::e_y_root = pt.y;
-    if (target) {
-      Fl::e_x = Fl::e_x_root-target->x();
-      Fl::e_y = Fl::e_y_root-target->y();
+    if (target_window) {
+      Fl::e_x = Fl::e_x_root-target_window->x();
+      Fl::e_y = Fl::e_y_root-target_window->y();
     }
     // tell FLTK that the user released an object on this widget
-    if ( !Fl::handle( FL_DND_RELEASE, target ) )
+    if ( !Fl::handle( FL_DND_RELEASE, target_window ) )
       return S_OK;
-    
+
+    Fl_Widget* target = Fl::belowmouse();
+    if (!target) return S_OK;
     Fl_Widget *w = target;
     while (w->parent()) w = w->window();
     HWND hwnd = fl_xid( (Fl_Window*)w );
@@ -1573,5 +1575,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.175 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.176 2002/06/21 06:17:09 spitzak Exp $".
 //

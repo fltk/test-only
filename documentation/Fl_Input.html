@@ -60,8 +60,11 @@ or deletes a single \n character.  These deletions are all concatenated
 into the clipboard.</TD></TR>
 <TR><TD><B>^N or Down</B></TD><TD>Move down (for Fl_Multiline_Input 
 only, otherwise it moves to the next input field).</TD></TR>
+<TR><TD><B>^O</B></TD><TD>Insert a newline and put the cursor before it.</TD></TR>
 <TR><TD><B>^P or Up</B></TD><TD>Move up (for Fl_Multiline_Input only, 
 otherwise it moves to the previous input field).</TD></TR>
+<TR><TD><B>^T</B></TD><TD>Swap the two characters around the cursor,
+or the two characters before it if at the end of line.</TD></TR>
 <TR><TD><B>^U</B></TD><TD>Delete everything.</TD></TR>
 <TR><TD><B>^V or ^Y</B></TD><TD>Paste the clipboard</TD></TR>
 <TR><TD><B>^X or ^W</B></TD><TD>Copy the region to the clipboard and 
@@ -102,21 +105,21 @@ sequence.  The next one or two keys typed define the character to insert:
 	<td align=center><TT>'a</tt></td><td align=center>á</td>
 	<td align=center><TT>~n</tt></td><td align=center>ñ
 </tr><tr>
-	<td align=center><TT>%</tt></td><td align=center>¢</td>
+	<td align=center><TT>c|</tt></td><td align=center>¢</td>
 	<td align=center><TT>2</tt></td><td align=center>²</td>
 	<td align=center><TT>A^</tt></td><td align=center>Â</td>
 	<td align=center><TT>`O</tt></td><td align=center>Ò</td>
 	<td align=center><TT>^a</tt></td><td align=center>â</td>
 	<td align=center><TT>`o</tt></td><td align=center>ò
 </tr><tr>
-	<td align=center><TT>#</tt></td><td align=center>£</td>
+	<td align=center><TT>L-</tt></td><td align=center>£</td>
 	<td align=center><TT>3</tt></td><td align=center>³</td>
 	<td align=center><TT>~A</tt></td><td align=center>Ã</td>
 	<td align=center><TT>'O</tt></td><td align=center>Ó</td>
 	<td align=center><TT>~a</tt></td><td align=center>ã</td>
 	<td align=center><TT>'o</tt></td><td align=center>ó
 </tr><tr>
-	<td align=center><TT>$</tt></td><td align=center>¤</td>
+	<td align=center><TT>ox</tt></td><td align=center>¤</td>
 	<td align=center><TT>'</tt></td><td align=center>´</td>
 	<td align=center><TT>:A</tt></td><td align=center>Ä</td>
 	<td align=center><TT>^O</tt></td><td align=center>Ô</td>
@@ -173,21 +176,21 @@ sequence.  The next one or two keys typed define the character to insert:
 	<td align=center><TT>^u</tt></td><td align=center>û
 </tr><tr>
 	<td align=center><TT>~</tt></td><td align=center>¬</td>
-	<td align=center><TT>14</tt></td><td align=center>¼</td>
+	<td align=center><TT>14</tt></td><td align=center>1/4</td>
 	<td align=center><TT>`I</tt></td><td align=center>Ì</td>
 	<td align=center><TT>:U</tt></td><td align=center>Ü</td>
 	<td align=center><TT>`i</tt></td><td align=center>ì</td>
 	<td align=center><TT>:u</tt></td><td align=center>ü
 </tr><tr>
 	<td align=center><TT>-</tt></td><td align=center>­</td>
-	<td align=center><TT>12</tt></td><td align=center>½</td>
+	<td align=center><TT>12</tt></td><td align=center>1/2</td>
 	<td align=center><TT>'I</tt></td><td align=center>Í</td>
 	<td align=center><TT>'Y</tt></td><td align=center>Ý</td>
 	<td align=center><TT>'i</tt></td><td align=center>í</td>
 	<td align=center><TT>'y</tt></td><td align=center>ý
 </tr><tr>
 	<td align=center><TT>r</tt></td><td align=center>®</td>
-	<td align=center><TT>34</tt></td><td align=center>¾</td>
+	<td align=center><TT>34</tt></td><td align=center>3/4</td>
 	<td align=center><TT>^I</tt></td><td align=center>Î</td>
 	<td align=center><TT>TH</tt></td><td align=center>Þ</td>
 	<td align=center><TT>^i</tt></td><td align=center>î</td>

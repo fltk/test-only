@@ -19,16 +19,33 @@
 </UL>
 <H3>Description</H3>
 
-Though this is a subclass of <A
-href="Fl_Valuator.html">Fl_Valuator</A> it is better thought of as a
-subclass of <a href="Fl_Float_Input.html">Fl_Float_Input</a> (there is
-an internal Fl_Float_Input in there). The main difference is that
-value() returns a double instead of the text string.
+Controls a single floating point value through a combination of a <a
+href="Fl_Float_Input.html">Fl_Float_Input</a> and two buttons. Other
+toolkits call this a "Spin Box".
 
 <p><center><img src=Fl_Value_Input.gif></center>
 
-<p>If <a href="Fl_Valuator.html#step">step()</a> is greater than
-one an <a href="Fl_Int_Input.html">Fl_Int_Input</a> is used instead.
+<p>Clicking the buttons increments/decrements by the <a
+href="Fl_Valuator.html#linesize">linesize()</a>. Holding down shift
+(or ctrl or alt) and clicking increments/decrements by the <a
+href="Fl_Valuator.html#pagesize">pagesize()</a>.
+
+<p>If <a href="Fl_Valuator.html#step">step()</a> is greater or equal
+to 1.0 an <a href="Fl_Int_Input.html">Fl_Int_Input</a> is used
+instead. This prevents the user from typing anything other than
+digits. If step() is less than one then the user can type floating
+point values with decimal points and exponents.
+
+<p>If you change <a href="Fl_Widget.html#when">when()</a> to
+<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+hits the up/down arrow keys or when the user types the Enter key. This
+may be more useful than the default setting of
+<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+partially-edited numbers are in the field.
+
+<p>You can get at the input field by using the public "input" instance
+variable. For instance you can clobber the text to a word with
+<tt>value_input->input.static_value("word")</tt>.
 
 <H3>Methods</H3>
 <UL>

@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Counter.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
-//
-// Counter header file for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Counter.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,38 +21,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// A numerical value with up/down step buttons.  From Forms.
+// Back compatatility class, this is the same as Fl_Value_Input.
 
 #ifndef Fl_Counter_H
 #define Fl_Counter_H
 
-#include <fltk/Fl_Valuator.h>
+#include <fltk/Fl_Value_Input.h>
 
-class FL_API Fl_Counter : public Fl_Valuator {
-
+class FL_API Fl_Counter : public Fl_Value_Input {
 public:
   enum {NORMAL = 0, SIMPLE = 1};
-  int handle(int);
-  Fl_Counter(int,int,int,int,const char * = 0);
-  static Fl_Named_Style* default_style;
-  ~Fl_Counter();
+  Fl_Counter(int x,int y,int w,int h,const char *l = 0)
+    : Fl_Value_Input(x, y, w, h, l) {align(FL_ALIGN_BOTTOM);}
 #ifndef FLTK_2
   double step() const {return Fl_Valuator::step();}
-  void lstep(double a) {linesize(int(a/Fl_Valuator::step()));}
-  double lstep() const {return linesize()*step();}
-  void step(double a,double b) {Fl_Valuator::step(a); lstep(b);}
   void step(double a) {Fl_Valuator::step(a);}
+  void lstep(double a) {pagesize(int(a/step()));}
+  double lstep() const {return pagesize()*step();}
+  void step(double a,double b) {step(a); lstep(b);}
 #endif
-
-protected:
-  void draw();
-
-private:
-  uchar mouseobj, highlight, last;
-  static void repeat_callback(void *);
-  int calc_mouseobj();
-  void increment_cb();
-
 };
 
 #ifndef FLTK_2
@@ -65,5 +50,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Counter.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Counter.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $".
 //

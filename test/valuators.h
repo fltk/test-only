@@ -8,21 +8,15 @@
 #include <fltk/Fl_Box.h>
 #include <fltk/Fl_Slider.h>
 extern void callback(Fl_Slider*, void*);
-#include <fltk/Fl_Value_Slider.h>
-extern void callback(Fl_Value_Slider*, void*);
 #include <fltk/Fl_Value_Input.h>
 extern void callback(Fl_Value_Input*, void*);
-#include <fltk/Fl_Value_Output.h>
-extern void callback(Fl_Value_Output*, void*);
 #include <fltk/Fl_Scrollbar.h>
 extern void callback(Fl_Scrollbar*, void*);
-#include <fltk/Fl_Adjuster.h>
-extern void callback(Fl_Adjuster*, void*);
-#include <fltk/Fl_Counter.h>
-extern void callback(Fl_Counter*, void*);
+#include <fltk/Fl_Value_Slider.h>
+extern void callback(Fl_Value_Slider*, void*);
+#include <fltk/Fl_Roller.h>
+extern void callback(Fl_Roller*, void*);
 #include <fltk/Fl_Group.h>
 #include <fltk/Fl_Dial.h>
 extern void callback(Fl_Dial*, void*);
-#include <fltk/Fl_Roller.h>
-extern void callback(Fl_Roller*, void*);
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.12 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.13 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -188,7 +188,8 @@ bool Fl::compose(int& del) {
       }
     if (compose_state != 1) return true;
 
-    if (e_length) { // compose key also "quotes" control characters
+    // The right-hand ctrl and any letter "quotes" the control character:
+    if (e_length && Fl::event_key()<128) {
       compose_state = 0;
       return true;
     }

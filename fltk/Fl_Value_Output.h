@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Value_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
-//
-// Value output header file for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Value_Output.h,v 1.2 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,26 +21,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+// Back compatatility class, this is the same as Fl_Value_Input.
+
 #ifndef Fl_Value_Output_H
 #define Fl_Value_Output_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.h"
-#endif
+#include <fltk/Fl_Value_Input.h>
 
-class FL_API Fl_Value_Output : public Fl_Valuator {
-  uchar soft_;
+class FL_API Fl_Value_Output : public Fl_Value_Input {
 public:
-  int handle(int);
-  void draw();
-  Fl_Value_Output(int x,int y,int w,int h,const char *l=0);
-
-  void soft(uchar x) {soft_ = x;}
-  uchar soft() const {return soft_;}
+  Fl_Value_Output(int x,int y,int w,int h,const char *l = 0)
+    : Fl_Value_Input(x, y, w, h, l) {}
+  void soft(uchar x) {} // unimplemented, it acts like true allways
+  bool soft() const {return true;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Value_Output.h,v 1.2 2002/06/21 06:17:09 spitzak Exp $".
 //

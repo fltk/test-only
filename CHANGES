@@ -2320,3 +2320,8 @@ FL_DND_RELEASE to the inner widget instead of the group.
 
 Added ^o (insert newline after cursor) and ^t (swap characters) Emacs
 commands to Fl_Input.
+
+////////////////////////////////////////////////////////////////
+
+Fl_Value_Input rewritten to look like a MS "Spin Box". Deleted
+Fl_Counter and Fl_Value_Output and emulate them using Fl_Value_Input.

@@ -10,8 +10,8 @@
    |
    +----<B>Fl_Valuator</B>
            |
-           +----<A href=Fl_Adjuster.html>Fl_Adjuster</A>, <A href=Fl_Counter.html>Fl_Counter</A>, <A href=Fl_Dial.html>Fl_Dial</A>, <A href=Fl_Roller.html>Fl_Roller</A>,
-                <A href=Fl_Slider.html>Fl_Slider</A>, <A href=Fl_Value_Input.html>Fl_Value_Input</A>, <A href=Fl_Value_Output.html>Fl_Value_Output</A>,
+           +----<A href=Fl_Dial.html>Fl_Dial</A>, <A href=Fl_Roller.html>Fl_Roller</A>,
+                <A href=Fl_Slider.html>Fl_Slider</A>, <A href=Fl_Value_Input.html>Fl_Value_Input</A>
 </pre></ul>
 
 <h3>Include Files</h3>
@@ -129,28 +129,37 @@ widget after changing the range. </P>
 <h4><a name=step>double Fl_Valuator::step() const
 <BR> void Fl_Valuator::step(double)</a></h4>
 
-Get or set the step value.  As the user moves the mouse the value is 
+Get or set the step value.  As the user moves the mouse the value is
 rounded to the nearest multiple of the step value.  This is done <I>
-before</I> clamping it to the range.  For many widgets this is also
-the amount the widget changes when the user drags the mouse 1 pixel.
+before</I> clamping it to the range.  For some widgets like the roller
+this is also the amount the widget changes when the user drags the
+mouse 1 pixel.
 
-<p>For most widgets the default step is zero.  If the widget needs a
-non-zero value (for instance to calculate the linesize() or how far the
-mouse dragged the value) it acts as though step() is 1/100 the
-distance between the minimum and maximum.
+<p>The default of zero means that any floating point value is
+allowed. If the widget needs a non-zero value (for instance to
+calculate the linesize() or how far the mouse dragged the value) it
+acts as though step() is 1/100 the distance between the minimum and
+maximum.
+
+<p>To avoid floating point rounding errors this is stored as an
+integer. Because of this only values of <i>n</i> or 1/<i>n</i> (where
+<i>n</i> is a positive integer) work, all others are rounded to the
+nearest value. If you want other step sizes you may be able to get
+them by setting both this and <href=#linesize>linesize()</a>.
 
 <h4><a name=linesize>int Fl_Valuator::linesize() const
 <BR>void Fl_Valuator::linesize(int)</a></h4>
 
 The linesize is the number of <a href=#step>step()</a> that the
-valuator moves in response to an arrow key.  The default value is 1.
+valuator moves in response to an arrow key, or the user clicking an
+up/down button.  The default value is 1.
 
 <h4><a name=pagesize>int Fl_Valuator::pagesize() const
 <BR>void Fl_Valuator::pagesize(int)</a></h4>
 
 The pagesize is the number of <a href=#step>step()</a> that the
-valuator moves in response to a page up/down key, or shift-arrow key.
-The default value is 10.
+valuator moves in response to a page up/down key, or shift-arrow key,
+or shift+clicking an up/down button. The default value is 10.
 
 <h4><a name=format>int Fl_Valuator::format(char*)</a></h4>
 

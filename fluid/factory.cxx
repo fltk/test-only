@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.25 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: factory.cxx,v 1.26 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -133,25 +133,6 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Round_Button_Type();}
 };
 static Fl_Round_Button_Type Fl_Round_Button_type;
-
-////////////////////////////////////////////////////////////////
-
-#include <fltk/Fl_Counter.h>
-static const Enumeration counter_type_menu[] = {
-  {"Normal", "NORMAL", (void*)Fl_Counter::NORMAL},
-  {"Simple", "SIMPLE", (void*)Fl_Counter::SIMPLE},
-  {0}};
-class Fl_Counter_Type : public Fl_Widget_Type {
-  const Enumeration *subtypes() const {return counter_type_menu;}
-  int is_valuator() const {return 1;}
-  int is_counter() const {return 1;}
-public:
-  virtual const char *type_name() const {return "Fl_Counter";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Counter(x,y,w,h,"counter:");}
-  Fl_Widget_Type *_make() {return new Fl_Counter_Type();}
-};
-static Fl_Counter_Type Fl_Counter_type;
 
 ////////////////////////////////////////////////////////////////
 
@@ -332,22 +313,6 @@ static Fl_Value_Input_Type Fl_Value_Input_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Value_Output.h>
-class Fl_Value_Output_Type : public Fl_Widget_Type {
-public:
-  int is_value_output() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Value_Output";}
-  int is_valuator() const {return 1;}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Value_Output *o = new Fl_Value_Output(x,y,w,h,"value:");
-    return o;
-  }
-  Fl_Widget_Type *_make() {return new Fl_Value_Output_Type();}
-};
-static Fl_Value_Output_Type Fl_Value_Output_type;
-
-////////////////////////////////////////////////////////////////
-
 #include <fltk/Fl_Value_Slider.h>
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
 public:
@@ -419,14 +384,12 @@ Fl_Menu_Item New_Menu[] = {
 {0},
 {"valuators",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Slider_type},
-  {0,0,cb,(void*)&Fl_Scrollbar_type},
   {0,0,cb,(void*)&Fl_Value_Slider_type},
+  {0,0,cb,(void*)&Fl_Value_Input_type},
+  {0,0,cb,(void*)&Fl_Scrollbar_type},
   {0,0,cb,(void*)&Fl_Adjuster_type},
-  {0,0,cb,(void*)&Fl_Counter_type},
   {0,0,cb,(void*)&Fl_Dial_type},
   {0,0,cb,(void*)&Fl_Roller_type},
-  {0,0,cb,(void*)&Fl_Value_Input_type},
-  {0,0,cb,(void*)&Fl_Value_Output_type},
 {0},
 {"text",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Input_type},
@@ -474,8 +437,12 @@ Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
   int level = 0;
   reading_file = 1; // makes labels be null
   Fl_Type *r = 0;
+  // some back-compatability:
   if (!strcasecmp(tn, "submenu")) tn = "Fl_Item_Group";
   else if (!strcasecmp(tn, "menuitem")) tn = "Fl_Item";
+  else if (!strcasecmp(tn, "Fl_Counter")) tn = "Fl_Value_Input";
+  else if (!strcasecmp(tn, "Fl_Value_Output")) tn = "Fl_Value_Input";
+  //
   for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
     Fl_Menu_Item *m = menu+i;
     if (m->flags & FL_SUBMENU) level++;
@@ -619,7 +586,7 @@ static symbol table[] = {
   {"SELECT_BROWSER",	Fl_Browser::NORMAL},
   {"HOLD_BROWSER",	Fl_Browser::NORMAL},
   {"MULTI_BROWSER",	Fl_Browser::MULTI},
-  {"SIMPLE_COUNTER",	Fl_Counter::SIMPLE},
+  //  {"SIMPLE_COUNTER",	Fl_Counter::SIMPLE},
   {"LINE_DIAL",		Fl_Dial::LINE},
   {"FILL_DIAL",		Fl_Dial::FILL},
   {"VERT_SLIDER",	Fl_Slider::VERTICAL},
@@ -645,5 +612,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.25 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.26 2002/06/21 06:17:09 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.6 2002/04/02 08:33:31 spitzak Exp $"
+// "$Id: Fl_Input.h,v 1.7 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,8 +56,6 @@ public:
   const char* value() const {return value_;}
   char index(int i) const {return value_[i];}
   int size() const {return size_;}
-  int maximum_size() const {return maximum_size_;}
-  void maximum_size(int m) {maximum_size_ = m;}
 
   int position() const {return position_;}
   int mark() const {return mark_;}
@@ -95,7 +93,6 @@ private:
   int mark_;
   int xscroll_, yscroll_;
   int mu_p;
-  int maximum_size_;
   int label_width;
 
   const char* expand(const char*, char*, int) const;
@@ -124,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.6 2002/04/02 08:33:31 spitzak Exp $".
+// End of "$Id: Fl_Input.h,v 1.7 2002/06/21 06:17:09 spitzak Exp $".
 //

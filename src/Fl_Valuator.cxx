@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.23 2002/05/07 04:58:19 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.24 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -108,9 +108,9 @@ double Fl_Valuator::clamp(double v) const {
 double Fl_Valuator::softclamp(double v) const {
   int which = (minimum_ <= maximum_);
   double p = previous_value_;
-  if ((v<minimum_)==which && p!=minimum_ && (p<minimum_)!=which)
+  if ((v<minimum_)==which && (p<minimum_)!=which)
     return minimum_;
-  else if ((v>maximum_)==which && p!=maximum_ && (p>maximum_)!=which)
+  else if ((v>maximum_)==which && (p>maximum_)!=which)
     return maximum_;
   else
     return v;
@@ -177,9 +177,8 @@ int Fl_Valuator::handle(int event) {
       return 0;
     }
     case FL_MOUSEWHEEL: {
-      // Each click on mouse is 1 unit, not the line size.
-      // This is probably best for a valuator:
-      // See Fl_Scrollbar for an example that uses wheel_scroll_lines
+      // For normal valuators, each click is 1 unit, wheel_scroll_lines
+      // is ignored. However Fl_Scrollbar does use wheel_scroll_lines.
       handle_drag(clamp(increment(value(), Fl::event_dy()*linesize())));
       return 1;
     }
@@ -188,5 +187,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.23 2002/05/07 04:58:19 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.24 2002/06/21 06:17:09 spitzak Exp $".
 //

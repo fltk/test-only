@@ -23,6 +23,10 @@ that only allows the user to type decimal digits (or hex numbers of
 the form <tt>0xaef</tt>). Besides editing the text the user can use
 the up/down arrow keys to change the digits.
 
+<p>You may want a <a href="Fl_Value_Input.html">Fl_Value_Input</a>
+widget instead. It has value() methods that take and return double
+values rather than strings.
+
 <p>If you change <a href="Fl_Widget.html#when">when()</a> to
 <tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
 hits the up/down arrow keys or when the user types the Enter key. This

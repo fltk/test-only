@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.65 2002/06/19 08:27:16 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.66 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -157,9 +157,22 @@ void Fl_Input::setfont() const {
 }
 
 void Fl_Input::draw() {
+  if (damage() & FL_DAMAGE_ALL) draw_frame();
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  draw(X, Y, W, H);
+}
+
+#if 1
+#define line_height() fl_height()
+#define line_descent() (line_height()-fl_descent())
+#else
+#define line_height() (text_size()+leading())
+#define line_descent() (line_height()-fl_descent())
+#endif
+
+void Fl_Input::draw(int X, int Y, int W, int H)
+{
   if (damage() & FL_DAMAGE_ALL) {
-    draw_frame();
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&FL_ALIGN_INSIDE))) {
       fl_font(label_font(), label_size());
@@ -176,19 +189,7 @@ void Fl_Input::draw() {
       label_width = 0;
     }
   }
-  draw(X+label_width, Y, W-label_width, H);
-}
-
-#if 1
-#define line_height() fl_height()
-#define line_descent() (line_height()-fl_descent())
-#else
-#define line_height() (text_size()+leading())
-#define line_descent() (line_height()-fl_descent())
-#endif
-
-void Fl_Input::draw(int X, int Y, int W, int H)
-{
+  X += label_width; W -= label_width;
 
   Fl_Color background = color();
   bool erase_cursor_only =
@@ -567,10 +568,13 @@ bool Fl_Input::replace(int b, int e, const char* text, int ilen) {
   if (e>size_) e = size_;
   if (e<b) {int t=b; b=e; e=t;}
   if (e<=b && !ilen) return false; // don't clobber undo for a null operation
+#if 0
+  // this can be done by a subclass!
   if (size_+ilen-(e-b) > maximum_size_) {
     ilen = maximum_size_-size_+(e-b);
     if (ilen < 0) ilen = 0;
   }
+#endif
 
   put_in_buffer(size_+ilen);
 
@@ -704,7 +708,6 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   buffer  = 0;
   value_ = "";
   xscroll_ = yscroll_ = 0;
-  maximum_size_ = 32767;
   style(default_style);
   label_width = 0;
 }
@@ -831,16 +834,16 @@ bool Fl_Input::handle_key() {
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Left:
-    i = position_; if (!shift && mark_<i) i = mark_;
-    shift_position(ctrl ? word_start(i-1) : i-1);
+    i = position_-1; if (!shift && mark_<i) i = mark_;
+    shift_position(ctrl ? word_start(i) : i);
     return true;
 
   case 'f':
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Right:
-    i = position_; if (!shift && mark_>i) i = mark_;
-    shift_position(ctrl ? word_end(i+1) : i+1);
+    i = position_+1; if (!shift && mark_>i) i = mark_;
+    shift_position(ctrl ? word_end(i) : i);
     return true;
 
   case 'p':
@@ -1023,7 +1026,7 @@ bool Fl_Input::handle_key() {
 
 int Fl_Input::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  return handle(event, X+label_width, Y, W-label_width, H);
+  return handle(event, X, Y, W, H);
 }
 
 // Set this to 1 to get the ability to drag selected text out to other
@@ -1044,6 +1047,7 @@ static void dnd_timeout(void* p) {
 #endif
 
 int Fl_Input::handle(int event, int X, int Y, int W, int H) {
+  X += label_width; W -= label_width;
   int newpos, newmark;
 
   switch (event) {
@@ -1271,5 +1275,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.65 2002/06/19 08:27:16 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.66 2002/06/21 06:17:09 spitzak Exp $".
 //

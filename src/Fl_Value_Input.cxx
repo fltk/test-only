@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.31 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.32 2002/06/21 06:17:09 spitzak Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,18 +48,133 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
   }
 }
 
+// For the belowmouse() widget, which button is highlighted:
+static char which_highlight = 0;
+static char which_pushed = 0;
+
 void Fl_Value_Input::draw() {
-  if (damage()&~FL_DAMAGE_CHILD) input.set_damage(FL_DAMAGE_ALL);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  const int bw = H/2; W -= bw;
+  if (damage() & FL_DAMAGE_ALL) {
+    draw_frame();
+    input.set_damage(FL_DAMAGE_ALL);
+  }
+  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_HIGHLIGHT)) {
+    Fl_Flags f[2]; f[0] = f[1] = 0;
+    if (which_highlight && this==Fl::belowmouse())
+      f[which_highlight-1] = FL_HIGHLIGHT;
+    if (which_pushed && this==Fl::pushed())
+      f[which_pushed-1] = FL_VALUE | FL_HIGHLIGHT;
+    draw_glyph(FL_GLYPH_UP_BUTTON, X+W, Y, bw, bw, f[0]);
+    draw_glyph(FL_GLYPH_DOWN_BUTTON, X+W, Y+bw, bw, H-bw, f[1]);
+  }
   input.label(label());
   input.align(align());
-  input.copy_style(style()); // force it to use this style
-  input.draw();  input.set_damage(0);
+  input.copy_style(style());
+  input.draw(X, Y, W, H);
+  input.set_damage(0);
+}
+
+void Fl_Value_Input::increment_cb() {
+  int i = linesize();
+  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+  if (which_pushed == 2) i = -i;
+  handle_drag(softclamp(increment(value(), i)));
+}
+
+#define INITIALREPEAT .5
+#define REPEAT .1
+
+void Fl_Value_Input::repeat_callback(void* v) {
+  Fl_Value_Input* b = (Fl_Value_Input*)v;
+  if (which_pushed) {
+    Fl::add_timeout(REPEAT, repeat_callback, b);
+    b->increment_cb();
+  }
+}
+
+int Fl_Value_Input::handle(int event) {
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  const int bw = H/2; W -= bw;
+  int n;
+  switch (event) {
+  case FL_FOCUS:
+    Fl::focus(&input);
+    break;
+  case FL_ENTER:
+  case FL_MOVE:
+    if (!highlight_color()) return 1;
+    if (Fl::event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
+    else if (Fl::event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
+    else n = 0;
+    if (n != which_highlight) {
+      which_highlight = n;
+      redraw(FL_DAMAGE_HIGHLIGHT);
+    }
+    return 1;
+  case FL_LEAVE:
+    if (which_highlight) {
+      which_highlight = 0;
+      redraw(FL_DAMAGE_HIGHLIGHT);
+    }
+    return 1;
+  case FL_PUSH:
+  case FL_DRAG:
+    // figure out what button is pushed:
+    if (Fl::event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
+    else if (Fl::event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
+    else n = 0;
+    if (event == FL_PUSH) {
+      if (!n) break; // send mouse event to the input field
+      handle_push();
+    }
+    if (n != which_pushed) {
+      Fl::remove_timeout(repeat_callback, this);
+      which_highlight = which_pushed = n;
+      redraw(FL_DAMAGE_HIGHLIGHT);
+      if (n) {
+	Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
+	increment_cb();
+      }
+    }
+    return 1;
+  case FL_RELEASE:
+    if (Fl::pushed()) return 1; // ignore multiple buttons being released
+    if (which_pushed) {
+      Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
+      which_pushed = 0;
+      redraw(FL_DAMAGE_HIGHLIGHT);
+    }
+    handle_release();
+    return 1;
+  // make any drop replace all the text:
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+  case FL_DND_LEAVE:
+    // we return false if input has focus so drag-out works:
+    return (!input.focused());
+  case FL_DND_RELEASE:
+    take_focus();
+    return 1;
+  case FL_PASTE:
+    // dropped text produces this, replace all input text with it:
+    input.position(0, input.size());
+    break;
+  }
+  input.type(step()>=1.0 ? Fl_Float_Input::INT : Fl_Float_Input::FLOAT);
+  input.when(when());
+  int r = input.send(event);
+  if (!r) r = Fl_Valuator::handle(event);
+  return r;
 }
 
 void Fl_Value_Input::layout() {
   Fl_Valuator::layout();
+  // this is needed so events sent directly to the input get correct
+  // coordinates:
   input.resize(0, 0, w(), h());
   input.layout();
+  // I'm not sure why this is here, may be a mistake:
   value_damage();
 }
 
@@ -74,51 +189,7 @@ void Fl_Value_Input::value_damage() {
   char buf[128];
   format(buf);
   input.value(buf);
-  input.mark(input.position()); // turn off selection highlight
-}
-
-int Fl_Value_Input::handle(int event) {
-#if 0 // obsolete drag-adjust code, use Fl_Value_Output if you want this
-  double v;
-  int delta;
-  int mx = Fl::event_x()-Fl::event_y();
-  static int ix, drag;
-  switch (event) {
-  case FL_PUSH:
-    if (!step()) break;
-    ix = mx;
-    drag = Fl::event_button();
-    handle_push();
-    break;
-  case FL_DRAG:
-    if (!step()) break;
-    delta = mx-ix;
-    if (delta > 5) delta -= 5;
-    else if (delta < -5) delta += 5;
-    else delta = 0;
-    if (drag == 3) delta *= 100; else if (drag == 2) delta *= 10;
-    v = round(increment(previous_value(), delta));
-    handle_drag(soft()?softclamp(v):clamp(v));;
-    input.position(input.size(),0);
-    return 1;
-  case FL_RELEASE:
-    if (!step()) break;
-    if (value() != previous_value() || !Fl::event_is_click()) {
-      handle_release();
-      return 1;
-    }
-    break;
-  case FL_FOCUS:
-    Fl::focus(&input);
-    break;
-  }
-#else
-  if (event == FL_FOCUS) Fl::focus(&input);
-#endif
-  input.type(step()>=1.0 ? Fl_Float_Input::INT : Fl_Float_Input::FLOAT);
-  input.when(when());
-  if (input.handle(event)) return 1;
-  return Fl_Valuator::handle(event);
+  input.position(0, input.size()); // highlight it all
 }
 
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
@@ -138,5 +209,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.31 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.32 2002/06/21 06:17:09 spitzak Exp $".
 //
