@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_load_plugin.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
+ * "$Id: fl_load_plugin.cxx,v 1.22 2004/07/27 07:35:36 laza2000 Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
  * systems. load_plugin(file, symbol) will load the file as a
@@ -21,6 +21,7 @@
 #if defined(_WIN32)
 
 # include <fltk/x.h>
+# include <fltk/utf.h>
 # include <windows.h>
 # include <winbase.h>
 
@@ -86,5 +87,5 @@ void* load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.22 2004/07/27 07:35:36 laza2000 Exp $"
 //
