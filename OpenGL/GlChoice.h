@@ -54,20 +54,22 @@
 
 #include <config.h>
 #include <fltk/Window.h> // force CreatedWindow to be defined by x.h
-#include <fltk/x.h>
 
 // Warning: whatever GLContext is defined to must take exactly the same
 // space in a structure as a void*!!!
 #ifdef _WIN32
+# include <fltk/x.h>
 # include <fltk/gl.h>
 # define GLContext HGLRC
 #elif defined(__APPLE__)
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-#  include <OpenGL/gl.h>
-#  include <AGL/agl.h>
-#  define GLContext AGLContext
+# include <fltk/gl.h>
+# include <AGL/agl.h>
+# define GLContext AGLContext
+# include <fltk/x.h>
 #else
 # define Window XWindow
+# include <fltk/x.h>
 # include <GL/glx.h>
 # undef Window
 # define GLContext GLXContext

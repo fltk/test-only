@@ -71,18 +71,24 @@ void GlWindow::create() {
     gl_choice = GlChoice::find(mode_);
     if (!gl_choice) {error("Insufficient GL support"); return;}
   }
-#ifndef _WIN32
+#ifdef WIN32
+  Window::create();
+#elif defined(__APPLE__)
+  Window::create();
+#else
   CreatedWindow::create(this, gl_choice->vis, gl_choice->colormap, -1);
   //if (overlay && overlay != this) ((GlWindow*)overlay)->show();
   fltk::flush(); glXWaitGL(); glXWaitX();
-#else
-  Window::create();
 #endif
 }
 
 void GlWindow::invalidate() {
   valid(0);
-#ifndef _WIN32
+#ifdef WIN32
+  ;
+#elif defined(__APPLE__)
+  ;
+#else
   if (overlay) ((GlWindow*)overlay)->valid(0);
 #endif
 }
@@ -135,6 +141,8 @@ void GlWindow::swap_buffers() {
 #else
   SwapBuffers(CreatedWindow::find(this)->dc);
 #endif
+#elif defined(__APPLE__)
+  aglSwapBuffers((AGLContext)context_);
 #else
   glXSwapBuffers(xdisplay, xid(this));
 #endif

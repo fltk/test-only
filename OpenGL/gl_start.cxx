@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.16 2005/01/24 08:07:05 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -43,6 +43,10 @@ using namespace fltk;
 static GlChoice* gl_choice;
 #endif
 
+#ifdef __APPLE__
+static GlChoice *gl_choice;
+#endif
+
 /*! Use OpenGL and the glX library to choose the visual. This is a
   somewhat different algorithim from fltk::visual(). On some X servers
   OpenGL will crash if the visual is not selected with this.
@@ -52,6 +56,8 @@ bool fltk::glVisual(int mode) {
   GlChoice *c = GlChoice::find(mode);
   if (!c) return false;
 #ifdef _WIN32
+  gl_choice = c;
+#elif defined(__APPLE__)
   gl_choice = c;
 #else
   xvisual = c->vis;
@@ -71,12 +77,18 @@ void fltk::glstart() {
 #ifdef _WIN32
     if (!gl_choice) glVisual(0);
     context = create_gl_context(Window::current(), gl_choice);
+#elif defined(__APPLE__)
+    context = create_gl_context(Window::current(), gl_choice);
 #else
     context = create_gl_context(xvisual);
 #endif
   }
   set_gl_context(Window::current(), context);
-#ifndef _WIN32
+#ifdef _WIN32
+  ;
+#elif defined(__APPLE__)
+  ;
+#else
   glXWaitX();
 #endif
   if (pw != Window::current()->w() || ph != Window::current()->h()) {
@@ -100,7 +112,11 @@ void fltk::glstart() {
 
 void fltk::glfinish() {
   glFlush();
-#ifndef _WIN32
+#ifdef _WIN32
+  ;
+#elif defined(__APPLE__)
+  ;
+#else
   glXWaitGL();
 #endif
 }
@@ -108,5 +124,5 @@ void fltk::glfinish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.16 2005/01/24 08:07:05 spitzak Exp $".
+// End of "$Id$".
 //

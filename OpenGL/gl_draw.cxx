@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.31 2004/10/30 05:13:26 spitzak Exp $"
+// "$Id$"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,6 +41,8 @@ extern GLContext fl_current_glcontext;
 #if USE_X11
 #undef HFONT
 #define HFONT XFontStruct*
+#elif defined(__APPLE__)
+#define HFONT void*
 #endif
 
 // Binary tree of all the glListBase assignments we have made so far:
@@ -53,6 +55,7 @@ static FontSize* root, *current;
 static HFONT current_xfont;
 
 void fltk::glsetfont(fltk::Font* font, float size) {
+#ifndef __APPLE__
   setfont(font, size); // necessary so measure() works
   current_xfont = fltk::xfont();
   if (!fl_current_glcontext) return;
@@ -88,11 +91,13 @@ void fltk::glsetfont(fltk::Font* font, float size) {
   }
  GOTIT:
   glListBase(current->listbase);
+#endif
 }
 
 #define WCBUFLEN 256
 
 void fltk::gldrawtext(const char* text, int n) {
+#ifndef __APPLE__
   char localbuffer[WCBUFLEN];
   char* buffer = localbuffer;
   char* mallocbuffer = 0;
@@ -108,6 +113,7 @@ void fltk::gldrawtext(const char* text, int n) {
   }
   glCallLists(count, GL_UNSIGNED_BYTE, buffer);
   delete[] mallocbuffer;
+#endif
 }
 
 void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
@@ -201,5 +207,5 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.31 2004/10/30 05:13:26 spitzak Exp $".
+// End of "$Id$".
 //
