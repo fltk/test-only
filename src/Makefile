@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.107 2002/12/13 04:54:07 easysw Exp $"
+# "$Id: Makefile,v 1.108 2002/12/13 19:42:58 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -190,6 +190,7 @@ clean:
 	$(RM) $(LIBNAME)
 	$(RM) $(DSONAME)
 
+
 #
 # Make dependencies, excluding standard include directories...
 #
@@ -284,5 +285,5 @@ install_programs:
 
 
 #
-# End of "$Id: Makefile,v 1.107 2002/12/13 04:54:07 easysw Exp $".
+# End of "$Id: Makefile,v 1.108 2002/12/13 19:42:58 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.14 2002/12/13 04:54:06 easysw Exp $"
+# "$Id: Makefile,v 1.15 2002/12/13 19:42:56 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,6 +23,17 @@
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
+#
+# Include common definitions...
+#
+
+include ../makeinclude
+
+
+#
+# Files for this directory...
+#
+
 CPPFILES = \
 	Fl_Gl_Choice.cxx \
 	Fl_Gl_Overlay.cxx \
@@ -30,91 +41,95 @@ CPPFILES = \
 	gl_draw.cxx \
 	gl_start.cxx
 
+CFILES	=
 
-DEMOS = 
+LIBNAME	=	../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+DSONAME	=	../lib/$(DSOPREFIX)fltk_gl$(DSOSUFFIX)
+OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-################################################################
 
-include ../makeinclude
+#
+# Make everything...
+#
 
-DSOCFLAGS += -DFL_GL_LIBRARY
-DSOCXXFLAGS += -DFL_GL_LIBRARY
-LDLIBS = $(GLLIBS) $(LDLIBS)
+all:		$(LIBTARGET) $(DSOTARGET)
 
-LIBRARY = ../lib/$(LIBNAME)_gl
-DSO = ../lib/$(DSOLIBglNAME)
-DSONAME = $(DSOLIBglNAME)$(DSOEXT)
+static:		$(LIBNAME)
 
-OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
+shared:		$(DSONAME)
 
-all:	$(BUILDTARGETS)
 
-static:	$(LIBRARY)$(LIBEXT)
+#
+# Clean old files...
+#
 
-shared:	$(DSO)$(DSOEXT)
+clean:
+	$(RM) *.bck
+	$(RM) *.o
+	$(RM) core*
+	$(RM) $(LIBNAME)
+	$(RM) $(DSONAME)
 
-programs: demos
 
-demos: $(DEMOS)
+#
+# Make dependencies, excluding standard include directories...
+#
 
-$(DEMOS): $(FLGLLIB) $(FLLIB)
+depend:
+	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
 
-$(LIBRARY).a: $(OBJECTS)
-	@rm -f $@
-	$(LIBCOMMAND) $@ $(OBJECTS)
-	$(RANLIB) $@
 
-$(DSO).so.2 $(DSO).sl.2: $(OBJECTS)
-	@rm -f $@
-	$(DSOCOMMAND) $(DSONAME) $(OBJECTS) $(DSOLIBS)
-	mv $(DSONAME) $@
+#
+# Include automatically generated dependencies...
+#
 
-DLLIMPORTLIBS = ../lib/$(LIBNAME).2.dll$(LIBEXT)
-DLLIMPORTNAME = $(LIBNAME)_gl.2.dll$(LIBEXT)
-$(DSO).2.dll: $(OBJECTS)
-	@rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS) $(DSOLIBS) $(DLLIMPORTLIBS)
-	mv $@.import ../lib/$(DLLIMPORTNAME)
-
-#.fl.cxx .fl.h:
-#	echo Generating $@...
-#	../fluid/fluid -c $<
-
-clean :
-	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
-	       ../lib/$(DLLIMPORTNAME) core *~
-
-depend:	$(CPPFILES)
-	makedepend -Y -I.. -f makedepend $(CPPFILES)
-
-# Automatically generated dependencies...
 include makedepend
 
 
-################################################################
+#
+# Make static libraries...
+#
+
+$(LIBNAME):	$(OBJECTS)
+	$(RM) $@
+	echo $(LIBCOMMAND) $@ ...
+	$(LIBCOMMAND) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+../lib/libfltk_gl.so.2.0: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk_gl.so
+	$(LN) libfltk_gl.so.2.0 ../lib/libfltk_gl.so
+
+../lib/libfltk_gl.sl.2.0: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk_gl.sl
+	$(LN) libfltk_gl.sl.2.0 ../lib/libfltk_gl.sl
+
+../lib/libfltk_gl.2.0.dylib: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk_gl.dylib
+	$(LN) libfltk_gl.2.0.dylib ../lib/libfltk_gl.dylib
+
+../lib/libfltk_gl_s.a: $(OBJECTS)
+	echo $(DSOCOMMAND) ../lib/libfltk_gl_s.o ...
+	$(DSOCOMMAND) ../lib/libfltk_gl_s.o $(OBJECTS) $(IMAGELIBS)
+	echo $(LIBCOMMAND) ../lib/libfltk_gl_s.a ../lib/libfltk_gl_s.o
+	-$(RM) $@
+	$(LIBCOMMAND) ../lib/libfltk_gl_s.a ../lib/libfltk_gl_s.o
+	$(CHMOD) +x ../lib/libfltk_gl_s.a
+
+
+#
+# Install everything...
+#
 
 install: $(INSTALLTARGETS)
 
-install_static: static
-	@echo "Installing static libraries..."
-	@mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)_gl$(LIBEXT)
-	@cp $(LIBRARY)$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_gl$(LIBEXT) 
-
-install_shared: shared
-	@echo "Installing shared libraries..."
-	@rm -f $(libdir)/$(DLLIMPORTNAME)
-	@rm -f $(libdir)/$(DSOLIBglNAME)$(DSOEXT)
-	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBglNAME)$(DSOSHORTEXT); fi
-	@cp $(DSO)$(DSOEXT) $(libdir)
-	@chmod 755 $(libdir)/$(DSOLIBglNAME)$(DSOEXT)
-	@if [ "$(DSOSHORTEXT)" ]; then \
-		ln -s $(DSOLIBglNAME)$(DSOEXT) $(libdir)/$(DSOLIBglNAME)$(DSOSHORTEXT); fi
-	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
-
-install_programs:
 
 #
-# End of "$Id: Makefile,v 1.14 2002/12/13 04:54:06 easysw Exp $".
+# End of "$Id: Makefile,v 1.15 2002/12/13 19:42:56 easysw Exp $".
 #

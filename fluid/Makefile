@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.43 2002/12/13 04:54:06 easysw Exp $"
+# "$Id: Makefile,v 1.44 2002/12/13 19:42:57 easysw Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,74 +23,95 @@
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
-PROGRAM = fluid
-
-CPPFILES = \
-	Fl_Function_Type.cxx \
-	Fl_Menu_Type.cxx \
-	Fl_Group_Type.cxx \
-	Fl_Widget_Type.cxx \
-	Fl_Type.cxx \
-	Fl_Window_Type.cxx \
-	Fluid_Image.cxx \
-	Fluid_Plugins.cxx \
-	code.cxx \
-	factory.cxx \
-	file.cxx \
-	fluid.cxx \
-	about_panel.cxx \
-	widget_panel.cxx \
-	alignment_panel.cxx \
-	function_panel.cxx \
-	coding_style.cxx \
-	coding_style_func.cxx 
-
-################################################################
-
-OBJECTS = $(CPPFILES:.cxx=.o)
+#
+# Include common definitions...
+#
 
 include ../makeinclude
 
-all: $(BUILDTARGETS)
 
-static:
+#
+# Files for this directory...
+#
 
-shared:
+CPPFILES = \
+	about_panel.cxx \
+	alignment_panel.cxx \
+	code.cxx \
+	coding_style.cxx \
+	coding_style_func.cxx \
+	factory.cxx \
+	file.cxx \
+	Fl_Function_Type.cxx \
+	Fl_Group_Type.cxx \
+	Fl_Menu_Type.cxx \
+	Fl_Type.cxx \
+	fluid.cxx \
+	Fluid_Image.cxx \
+	Fluid_Plugins.cxx \
+	Fl_Widget_Type.cxx \
+	Fl_Window_Type.cxx \
+	function_panel.cxx \
+	widget_panel.cxx
 
-programs: $(PROGRAM)
+CFILES	=
 
-$(PROGRAM) : $(OBJECTS) $(FLLIB) $(FLIMAGESLIB)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) $(IMAGELIBS) $(LDLIBS) $(JPEGLIBS) $(PNGLIBS)
+OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.cxx=.o)
+TARGETS	= fluid$(EXEEXT)
 
-clean :
-	-@ rm -f *.o $(PROGRAM) $(PROGRAM).exe $(CLEAN) core *~
 
-depend:	$(CPPFILES)
-	makedepend -Y -I.. -f makedepend $(CPPFILES)
+#
+# Make everything...
+#
 
-# Automatically generated dependencies...
+all:		$(TARGETS)
+
+
+#
+# Clean old files...
+#
+
+clean:
+	$(RM) *.bck
+	$(RM) *.o
+	$(RM) core*
+	$(RM) $(TARGETS)
+
+
+#
+# Make dependencies, excluding standard include directories...
+#
+
+depend:
+	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+
+
+#
+# Include automatically generated dependencies...
+#
+
 include makedepend
 
-install: $(INSTALLTARGETS)
 
-install_static:
+#
+# Build FLUID...
+#
 
-install_shared:
+fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk$(LIBSUFFIX) \
+		../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKFLTKIMG) $(LDLIBS)
 
-install_programs: $(PROGRAM)
-	@echo "Installing FLUID..."
-	@-mkdir -p $(bindir)
-	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then \
-		cp $(PROGRAM) $(bindir)/; \
-		strip $(bindir)/$(PROGRAM); \
-		chmod 755 $(bindir)/$(PROGRAM); \
-	else \
-		cp $(PROGRAM).exe $(bindir)/; \
-		strip $(bindir)/$(PROGRAM).exe; \
-	fi
+
+#
+# Install everything...
+#
+
+install:
+
 
 uninstall:
-	-@ rm -f $(bindir)/$(PROGRAM)
+
 
 #
 # Note: The rebuild target can only be used if you have the original .fl
@@ -98,12 +119,13 @@ uninstall:
 #
 
 rebuild:
-	./fluid -c about_panel.fl
-	./fluid -c alignment_panel.fl
-	./fluid -c function_panel.fl
-	./fluid -c widget_panel.fl
-	./fluid -c coding_style.fl
+	./fluid$(EXEEXT) -c about_panel.fl
+	./fluid$(EXEEXT) -c alignment_panel.fl
+	./fluid$(EXEEXT) -c function_panel.fl
+	./fluid$(EXEEXT) -c widget_panel.fl
+	./fluid$(EXEEXT) -c coding_style.fl
+
 
 #
-# End of "$Id: Makefile,v 1.43 2002/12/13 04:54:06 easysw Exp $".
+# End of "$Id: Makefile,v 1.44 2002/12/13 19:42:57 easysw Exp $".
 #

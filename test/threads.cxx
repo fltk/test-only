@@ -1,5 +1,5 @@
 //
-// "$Id: threads.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $"
+// "$Id: threads.cxx,v 1.13 2002/12/13 19:42:59 easysw Exp $"
 //
 // Threading example program for the Fast Light Tool Kit (FLTK).
 //
@@ -119,7 +119,7 @@ int main()
   return 0;
 }
 #else
-#  include <FL/fltk::ask.H>
+#  include <fltk/ask.h>
 
 int main() {
   fltk::alert("Sorry, threading not supported on this platform!");
@@ -128,5 +128,5 @@ int main() {
 
 
 //
-// End of "$Id: threads.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $".
+// End of "$Id: threads.cxx,v 1.13 2002/12/13 19:42:59 easysw Exp $".
 //

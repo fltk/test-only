@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.40 2002/12/13 04:54:06 easysw Exp $"
+# "$Id: makeinclude.in,v 1.41 2002/12/13 19:42:55 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -75,7 +75,7 @@ DSOTARGET	= @DSOTARGET@
 LDLIBS		= @LDFLAGS@ @LIBS@
 GLDLIBS		= @LDFLAGS@ @GLLIB@ @LIBS@
 LINKFLTK	= -L../lib @LINKFLTK@
-LINKFLTKGL	= -L../lib @LINKFLTKGL@
+LINKFLTKGL	= -L../lib @LINKFLTKGL@ @LINKFLTK@
 LINKFLTKFORMS	= -L../lib -lfltk_forms @LINKFLTK@
 LINKFLTKIMG	= -L../lib -lfltk_images @LINKFLTK@ $(IMAGELIBS)
 LINKSHARED	= @LINKSHARED@ $(IMAGELIBS)
@@ -132,5 +132,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.40 2002/12/13 04:54:06 easysw Exp $".
+# End of "$Id: makeinclude.in,v 1.41 2002/12/13 19:42:55 easysw Exp $".
 #
