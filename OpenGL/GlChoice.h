@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.h,v 1.3 2001/09/10 01:16:16 spitzak Exp $"
+// "$Id: GlChoice.h,v 1.1 2002/12/09 16:33:18 spitzak Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -25,34 +25,34 @@
 
 // Internal interface to set up OpenGL.
 //
-// A "Fl_Gl_Choice" is created from an OpenGL mode and holds information
+// A "GlChoice" is created from an OpenGL mode and holds information
 // necessary to create a window (on X) and to create an OpenGL "context"
 // (on both X and Win32).
 //
-// fl_create_gl_context takes a window (necessary only on Win32) and an
-// Fl_Gl_Choice and returns a new OpenGL context. All contexts share
+// create_gl_context takes a window (necessary only on Win32) and an
+// GlChoice and returns a new OpenGL context. All contexts share
 // display lists with each other.
 //
-// On X another fl_create_gl_context is provided to create it for any
+// On X another create_gl_context is provided to create it for any
 // X visual.
 //
-// fl_set_gl_context makes the given OpenGL context current and makes
+// set_gl_context makes the given OpenGL context current and makes
 // it draw into the passed window. It tracks the current one context
 // to avoid calling the context switching code when the same context
 // is used, though it is a mystery to me why the GLX/WGL libraries
 // don't do this themselves...
 //
-// fl_no_gl_context clears that cache so the next fl_set_gl_context is
+// no_gl_context clears that cache so the next fl_set_gl_context is
 // guaranteed to work.
 //
-// fl_delete_gl_context destroys the context.
+// delete_gl_context destroys the context.
 //
-// This code is used by Fl_Gl_Window, gl_start(), and gl_visual()
+// This code is used by GlWindow, glStart(), and glVisual()
 
-#ifndef Fl_Gl_Choice_H
-#define Fl_Gl_Choice_H
+#ifndef fltk_GlChoice_h
+#define fltk_GlChoice_h
 
-#include <fltk/Fl_Window.h> // force Fl_X to be defined by x.h
+#include <fltk/Window.h> // force CreatedWindow to be defined by x.h
 #include <fltk/x.h>
 
 // Warning: whatever GLContext is defined to must take exactly the same
@@ -61,14 +61,18 @@
 # include <fltk/gl.h>
 # define GLContext HGLRC
 #else
+# define Window XWindow
 # include <GL/glx.h>
+# undef Window
 # define GLContext GLXContext
 #endif
 
+namespace fltk {
+
 // Describes crap needed to create a GLContext.
-class Fl_Gl_Choice {
+class GlChoice {
   int mode;
-  Fl_Gl_Choice *next;
+  GlChoice *next;
 public:
 #ifdef _WIN32
   int pixelFormat;	// the visual to use
@@ -78,32 +82,34 @@ public:
   Colormap colormap;	// a colormap for that visual
 #endif
   // Return one of these structures for a given gl mode, or null if impossible:
-  static Fl_Gl_Choice *find(int mode);
+  static GlChoice *find(int mode);
 };
 
-class Fl_Window;
+class Window;
 
 #ifdef _WIN32
 
-GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext create_gl_context(const Window*, const GlChoice*, int layer=0);
 
 #else
 
-GLContext fl_create_gl_context(XVisualInfo* vis);
+GLContext create_gl_context(XVisualInfo* vis);
 
 static inline
-GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice* g) {
-  return fl_create_gl_context(g->vis);
+GLContext create_gl_context(const Window*, const GlChoice* g) {
+  return create_gl_context(g->vis);
 }
 
 #endif
 
-void fl_set_gl_context(const Fl_Window*, GLContext);
-void fl_no_gl_context();
-void fl_delete_gl_context(GLContext);
+void set_gl_context(const Window*, GLContext);
+void no_gl_context();
+void delete_gl_context(GLContext);
+
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.h,v 1.3 2001/09/10 01:16:16 spitzak Exp $".
+// End of "$Id: GlChoice.h,v 1.1 2002/12/09 16:33:18 spitzak Exp $".
 //

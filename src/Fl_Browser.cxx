@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.66 2002/12/09 04:52:24 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.67 2002/12/09 16:36:18 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -892,7 +892,10 @@ int Browser::handle(int event) {
 	if (event_state(SHIFT)) set_item_selected(1,WHEN_CHANGED);
 	set_focus();
       } else {
-	select_only_this(WHEN_CHANGED);
+	bool did_callback = when()&WHEN_CHANGED;
+        select_only_this(WHEN_CHANGED);
+	// allow selection of item to destroy the browser:
+	if (did_callback) return 1;
       }
       goto RELEASE;
     case SpaceKey:
@@ -1084,5 +1087,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.66 2002/12/09 04:52:24 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.67 2002/12/09 16:36:18 spitzak Exp $".
 //
