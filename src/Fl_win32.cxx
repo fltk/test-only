@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.220 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.221 2004/07/27 07:35:04 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1905,6 +1905,7 @@ void Window::flush() {
 	  clip_region(0);
 	}
       }
+      i->backbuffer_bad = false;
       //fl_restore_clip(); // duplicate region into new dc (there is none)
     }
 
@@ -2077,5 +2078,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.220 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.221 2004/07/27 07:35:04 laza2000 Exp $".
 //
