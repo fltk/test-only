@@ -1,9 +1,9 @@
 //
-// "$Id: fluid.cxx,v 1.15.2.13.2.33.2.4 2003/12/02 02:51:45 easysw Exp $"
+// "$Id: fluid.cxx,v 1.15.2.13.2.33.2.5 2004/03/18 08:00:40 matthiaswm Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -886,5 +886,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.15.2.13.2.33.2.4 2003/12/02 02:51:45 easysw Exp $".
+// End of "$Id: fluid.cxx,v 1.15.2.13.2.33.2.5 2004/03/18 08:00:40 matthiaswm Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Browser_load.cxx,v 1.4.2.3.2.1.2.3 2003/12/02 02:51:46 easysw Exp $"
+// "$Id: Fl_Browser_load.cxx,v 1.4.2.3.2.1.2.4 2004/03/18 08:00:57 matthiaswm Exp $"
 //
 // File loading routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -51,5 +51,5 @@ int Fl_Browser::load(const char *filename) {
 }
 
 //
-// End of "$Id: Fl_Browser_load.cxx,v 1.4.2.3.2.1.2.3 2003/12/02 02:51:46 easysw Exp $".
+// End of "$Id: Fl_Browser_load.cxx,v 1.4.2.3.2.1.2.4 2004/03/18 08:00:57 matthiaswm Exp $".
 //

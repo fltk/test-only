@@ -1,9 +1,9 @@
 /*
- * "$Id: flstring.h,v 1.1.2.10.2.3 2003/12/02 02:51:49 easysw Exp $"
+ * "$Id: flstring.h,v 1.1.2.10.2.4 2004/03/18 08:01:06 matthiaswm Exp $"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2004 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -101,5 +101,5 @@ FL_EXPORT extern size_t fl_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: flstring.h,v 1.1.2.10.2.3 2003/12/02 02:51:49 easysw Exp $".
+ * End of "$Id: flstring.h,v 1.1.2.10.2.4 2004/03/18 08:01:06 matthiaswm Exp $".
  */

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.4 2004/03/11 05:22:22 easysw Exp $"
+// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.5 2004/03/18 08:00:35 matthiaswm Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
-// Copyright 2001-2003 by Bill Spitzak and others.
+// Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -339,5 +339,5 @@ class FL_EXPORT Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.4 2004/03/11 05:22:22 easysw Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.5 2004/03/18 08:00:35 matthiaswm Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.4 2003/12/02 02:51:47 easysw Exp $"
+// "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.5 2004/03/18 08:01:01 matthiaswm Exp $"
 //
 // Fl_PNM_Image routines.
 //
-// Copyright 1997-2003 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -176,5 +176,5 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
 
 
 //
-// End of "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.4 2003/12/02 02:51:47 easysw Exp $".
+// End of "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.5 2004/03/18 08:01:01 matthiaswm Exp $".
 //

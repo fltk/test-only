@@ -1,11 +1,11 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.8 2003/12/02 02:51:43 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.9 2004/03/18 08:00:27 matthiaswm Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
-dnl Copyright 1998-2003 by Bill Spitzak and others.
+dnl Copyright 1998-2004 by Bill Spitzak and others.
 dnl
 dnl This library is free software; you can redistribute it and/or
 dnl modify it under the terms of the GNU Library General Public
@@ -37,12 +37,14 @@ FL_MINOR_VERSION=2
 FL_PATCH_VERSION=0
 FL_RELEASE_VERSION=b1
 FL_API_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}
+FL_FULL_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}.${FL_PATCH_VERSION}${FL_RELEASE_VERSION}
 
 AC_SUBST(FL_MAJOR_VERSION)
 AC_SUBST(FL_MINOR_VERSION)
 AC_SUBST(FL_PATCH_VERSION)
 AC_SUBST(FL_RELEASE_VERSION)
 AC_SUBST(FL_API_VERSION)
+AC_SUBST(FL_FULL_VERSION)
 
 dnl Get the operating system and version number...
 uname=`uname`
@@ -863,5 +865,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.8 2003/12/02 02:51:43 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.9 2004/03/18 08:00:27 matthiaswm Exp $".
 dnl

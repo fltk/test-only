@@ -1,11 +1,11 @@
 //
-// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.3 2003/12/02 02:51:46 easysw Exp $"
+// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.4 2004/03/18 08:00:58 matthiaswm Exp $"
 //
 // Fl_File_Icon routines.
 //
 // KDE icon code donated by Maarten De Boer.
 //
-// Copyright 1999-2003 by Michael Sweet.
+// Copyright 1999-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -477,5 +477,5 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 
 
 //
-// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.3 2003/12/02 02:51:46 easysw Exp $".
+// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.4 2004/03/18 08:00:58 matthiaswm Exp $".
 //

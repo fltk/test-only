@@ -1,4 +1,8 @@
 CHANGES IN FLTK 1.2.0b1
 
+	- re-merged all documentation that was checked in in 22/11/03
+          with the current cvs version
+	- re-merged 16 to 32 bit coordintes changes that were lost in the 
+	  02/12/03 merge
 	- Starting to move documentation into doxygen format (5).
 	- Initial integration of Fl_Device and UTF-8 patches.

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Help_View.H,v 1.1.2.10.2.3 2003/12/02 02:51:44 easysw Exp $"
+// "$Id: Fl_Help_View.H,v 1.1.2.10.2.4 2004/03/18 08:00:34 matthiaswm Exp $"
 //
 // Help Viewer widget definitions.
 //
-// Copyright 1997-2003 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -229,5 +229,5 @@ class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widget
 #endif // !Fl_Help_View_H
 
 //
-// End of "$Id: Fl_Help_View.H,v 1.1.2.10.2.3 2003/12/02 02:51:44 easysw Exp $".
+// End of "$Id: Fl_Help_View.H,v 1.1.2.10.2.4 2004/03/18 08:00:34 matthiaswm Exp $".
 //

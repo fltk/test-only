@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.4 2003/12/02 02:51:43 easysw Exp $"
+// "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.5 2004/03/18 08:00:30 matthiaswm Exp $"
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -105,6 +105,6 @@ class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
 #endif // Fl_Check_Browser_H
 
 //
-// End of "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.4 2003/12/02 02:51:43 easysw Exp $".
+// End of "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.5 2004/03/18 08:00:30 matthiaswm Exp $".
 //
 

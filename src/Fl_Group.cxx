@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.5 2004/02/26 03:08:00 easysw Exp $"
+// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.6 2004/03/18 08:00:59 matthiaswm Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -408,9 +408,9 @@ void Fl_Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
 }
 
-short* Fl_Group::sizes() {
+int* Fl_Group::sizes() {
   if (!sizes_) {
-    short* p = sizes_ = new short[4*(children_+2)];
+    int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
     if (type() < FL_WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
     p[1] = p[0]+w(); p[3] = p[2]+h();
@@ -457,7 +457,7 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
 
   } else if (children_) {
 
-    short* p = sizes();
+    int* p = sizes();
 
     // get changes in size/position from the initial size:
     int dx = X - p[0];
@@ -586,5 +586,5 @@ void Fl_Group::draw_outside_label(const Fl_Widget& widget) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.5 2004/02/26 03:08:00 easysw Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.6 2004/03/18 08:00:59 matthiaswm Exp $".
 //

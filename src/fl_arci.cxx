@@ -1,9 +1,9 @@
 //
-// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.3 2003/12/02 02:51:48 easysw Exp $"
+// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.4 2004/03/18 08:01:04 matthiaswm Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -76,5 +76,5 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.3 2003/12/02 02:51:48 easysw Exp $".
+// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.4 2004/03/18 08:01:04 matthiaswm Exp $".
 //

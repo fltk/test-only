@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.5.2.3.2.8.2.2 2003/12/02 02:51:46 easysw Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.5.2.3.2.8.2.3 2004/03/18 08:00:56 matthiaswm Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -165,5 +165,5 @@ Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.5.2.3.2.8.2.2 2003/12/02 02:51:46 easysw Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.5.2.3.2.8.2.3 2004/03/18 08:00:56 matthiaswm Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.9.2.8.2.6 2003/12/02 02:51:47 easysw Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.9.2.8.2.7 2004/03/18 08:01:02 matthiaswm Exp $"
 //
-// Copyright 2001-2003 by Bill Spitzak and others.
+// Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -490,5 +490,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.9.2.8.2.6 2003/12/02 02:51:47 easysw Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.9.2.8.2.7 2004/03/18 08:01:02 matthiaswm Exp $".
 //

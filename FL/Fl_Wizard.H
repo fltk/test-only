@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Wizard.H,v 1.1.2.4.2.3 2003/12/02 02:51:44 easysw Exp $"
+// "$Id: Fl_Wizard.H,v 1.1.2.4.2.4 2004/03/18 08:00:36 matthiaswm Exp $"
 //
 // Fl_Wizard widget definitions.
 //
-// Copyright 1999-2003 by Easy Software Products.
+// Copyright 1999-2004 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -69,5 +69,5 @@ class FL_EXPORT Fl_Wizard : public Fl_Group
 #endif // !_Fl_Wizard_H_
 
 //
-// End of "$Id: Fl_Wizard.H,v 1.1.2.4.2.3 2003/12/02 02:51:44 easysw Exp $".
+// End of "$Id: Fl_Wizard.H,v 1.1.2.4.2.4 2004/03/18 08:00:36 matthiaswm Exp $".
 //

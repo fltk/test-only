@@ -1,9 +1,9 @@
 //
-// "$Id: fl_round_box.cxx,v 1.6.2.3.2.3.2.2 2003/12/02 02:51:48 easysw Exp $"
+// "$Id: fl_round_box.cxx,v 1.6.2.3.2.3.2.3 2004/03/18 08:01:06 matthiaswm Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -116,5 +116,5 @@ Fl_Boxtype fl_define_FL_ROUND_UP_BOX() {
 }
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.6.2.3.2.3.2.2 2003/12/02 02:51:48 easysw Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.6.2.3.2.3.2.3 2004/03/18 08:01:06 matthiaswm Exp $".
 //

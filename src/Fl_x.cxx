@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.5 2004/02/29 22:17:10 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.6 2004/03/18 08:01:03 matthiaswm Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -263,7 +263,7 @@ int fl_ready() {
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
-Window fl_message_window;
+Window fl_message_window = 0;
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
@@ -1514,5 +1514,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.5 2004/02/29 22:17:10 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.6 2004/03/18 08:01:03 matthiaswm Exp $".
 //

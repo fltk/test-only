@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.4 2003/12/02 02:51:46 easysw Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.5 2004/03/18 08:00:56 matthiaswm Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -474,5 +474,5 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.4 2003/12/02 02:51:46 easysw Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.5 2004/03/18 08:00:56 matthiaswm Exp $".
 //
