@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.20 1999/10/17 22:27:06 vincent Exp $"
+// "$Id: Fl.H,v 1.21 1999/10/20 23:22:19 vincent Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,9 @@
 
 class Fl_Widget;
 class Fl_Window;
+
+typedef unsigned long int Fl_Thread;
+typedef void* Fl_Mutex;
 
 class FL_API Fl {
   Fl() {}; // no constructor!
@@ -190,12 +193,48 @@ public:
   static int event_button1() {return e_state&FL_BUTTON1;}
   static int event_button2() {return e_state&FL_BUTTON2;}
   static int event_button3() {return e_state&FL_BUTTON3;}
+
 #endif
+
+  // Mutltithreading support
+  static int thread_filedes[2];
+  static void* thread_message;
+  static Fl_Mutex mutex;
+  
+  // create a new thread 
+  // 'a': where to put the handler of the new thread
+  // 'b': starting execution address
+  // 'c': one parameter to the function
+  static int create_thread(Fl_Thread&, void *(*__start_routine) (void *), void*);
+
+  // set the priority of a thread. default value 0.5 for normal priority, 
+  // 1 for highest, 0 for lowest.
+  static int set_thread_priority(Fl_Thread, float prio = 0.5);
+
+  // sleep for 'a' milliseconds
+  static void sleep(int a);
+
+  // create a mutex
+  static int mutex_init(Fl_Mutex&);
+
+  // destroy a mutex
+  static int mutex_destroy(Fl_Mutex);
+
+  // lock/unlock a mutex
+  // default is locking the whole fltk so that threads can update some widgets
+  static int lock(Fl_Mutex m = mutex);
+  static int unlock(Fl_Mutex m = mutex);
+
+  // make FLTK return from wait(), put message in Fl::thread_message
+  // This should be safe, i.e. if several threads called awake at the same
+  // time, then several call to wait() in the the main thread should
+  // let the user read each message ...
+  static int awake(void* message = 0);	
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.20 1999/10/17 22:27:06 vincent Exp $".
+// End of "$Id: Fl.H,v 1.21 1999/10/20 23:22:19 vincent Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.52 1999/10/09 15:32:13 vincent Exp $"
+dnl# "$Id: configure.in,v 1.53 1999/10/20 23:22:18 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -233,6 +233,20 @@ AC_SUBST(LD_DLOPEN_FLAGS)
 AC_SUBST(LD_DLL_FLAGS)
 
 
+have_pthread=no
+AC_CHECK_LIB(c, pthread_create, \
+     have_pthread=yes,
+     AC_CHECK_LIB(pthread, pthread_create, \
+      PTHREADLIBS=-lpthread have_pthread=yes,,),
+)
+
+if test $have_pthread = yes; then
+    LDLIBS="$LDLIBS $PTHREADLIBS"
+    LDDLLLIBS="$LDDLLLIBS $PTHREADLIBS"
+    GLDLIBS="$GLDLIBS $PTHREADLIBS"
+    AC_DEFINE(HAVE_PTHREAD)
+fi
+
 MAKEDEPEND="\$(CXX) -M"
 
 dnl# add warnings to compiler switches:
@@ -326,5 +340,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.52 1999/10/09 15:32:13 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.53 1999/10/20 23:22:18 vincent Exp $".
 dnl#

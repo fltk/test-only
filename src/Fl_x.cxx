@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.36 1999/10/18 06:11:08 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.37 1999/10/20 23:22:21 vincent Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,10 +174,13 @@ static void do_queued_events() {
 
 double fl_wait(int timeout_flag, double time) {
 
+  // clear the thread message
+  Fl::thread_message = 0;
+
   // OpenGL and other broken libraries call XEventsQueued
   // unnecessarily and thus cause the file descriptor to not be ready,
   // so we must check for already-read events:
-  if (XQLength(fl_display)) {do_queued_events(); return time;}
+  if (XQLength(fl_display)) {    do_queued_events();    return time;  }
 
 #if !HAVE_POLL
   fd_set fdt[3];
@@ -186,6 +189,8 @@ double fl_wait(int timeout_flag, double time) {
   fdt[2] = fdsets[2];
 #endif
   int n;
+
+  if (Fl::mutex) Fl::unlock();
 
   if (!timeout_flag) {
 #if HAVE_POLL
@@ -208,6 +213,9 @@ double fl_wait(int timeout_flag, double time) {
     n = ::select(maxfd+1,&fdt[0],&fdt[1],&fdt[2],&t);
 #endif
   }
+
+  if (Fl::mutex) Fl::lock();
+
   if (n > 0) {
     for (int i=0; i<nfds; i++) {
 #if HAVE_POLL
@@ -249,8 +257,17 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
+static void thread_awake_cb(int fd, void*)
+{
+  read(fd, &Fl::thread_message, sizeof(void*));
+}
+
 void fl_open_display() {
   if (fl_display) return;
+
+  // Init threads communication pipe to let threads awake FLTK from wait
+  pipe(Fl::thread_filedes);
+  Fl::add_fd(Fl::thread_filedes[0], FL_READ, thread_awake_cb);
 
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
@@ -803,5 +820,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.36 1999/10/18 06:11:08 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.37 1999/10/20 23:22:21 vincent Exp $".
 //
