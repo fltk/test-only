@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.5 1999/08/30 09:36:06 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.6 1999/09/01 00:23:21 vincent Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@ protected:
   char* 	   name;  // Used to indentify the image, and as filename
   unsigned char*   datas; // If non zero, pointers on inlined compressed datas
   unsigned int     used;  // Last time used, for cache handling purpose
+  int              refcount; // Number of time this image has been get
 
   Fl_Shared_Image() { };  // Constructor is private on purpose,
                           // use the get function rather
@@ -52,24 +53,37 @@ protected:
 
   virtual void read() = 0;// decompress the image and create its pixmap
 
-  static void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* ifs);
-  static Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* ifs, char* name);
+  static void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
+  static Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name);
+  void remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image);
 
 
 public:
-  // return an Fl_Shared_Image, using the create function if an image with
+  // Return an Fl_Shared_Image, using the create function if an image with
   // the given name doesn't already exist. Use datas, or read from the
   // file with filename name if datas==0.
   static Fl_Shared_Image* get(Fl_Shared_Image* (*create)(), 
 			      char* name, unsigned char *datas=0);
 
-  // try to guess the filetype
+  // Reload the image, useful if it has changed on disk, or if the datas
+  // in memory have changed (you can also give a new pointer on datas)
+  void reload(uchar* datas=0);
+  static void reload(char* name, uchar* datas=0);
+
+  // Remove an image from the database and delete it if its refcount has 
+  // falled to zero
+  // Each remove decrement the refcount, each get increment it
+  // Return 1 if it has been really deleted.
+  bool remove();
+  static bool remove(char* name);
+
+  // Try to guess the filetype
   static Fl_Image_Type* guess(char* name, unsigned char *datas=0);
 
-  // set the position where images are looked for on disk
+  // Set the position where images are looked for on disk
   static void set_root_directory(char *d);
 
-  // set the size of the cache (0 = unlimited is the default)
+  // Set the size of the cache (0 = unlimited is the default)
   static void set_cache_size(size_t l);
 
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
@@ -166,5 +180,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.5 1999/08/30 09:36:06 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.6 1999/09/01 00:23:21 vincent Exp $"
 //

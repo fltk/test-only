@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.4 1999/08/30 09:36:08 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.5 1999/09/01 00:23:22 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -64,15 +64,18 @@ static int image_used=0;
 static size_t mem_usage_limit=0;
 
 // This contains the total number of pixmap pixels in the cache
-// WARNING : this is updated incrementally, so beware that it keeps balanced !
+// WARNING : this is updated incrementally, so beware that it keeps balanced
+// when deleting or creating pixmaps !
 static size_t mem_used=0; 
-
+static bool forbid_delete = 1;
 
 
 Fl_Shared_Image::~Fl_Shared_Image()
 {
- fprintf(stderr, 
-   "FLTK user error : deleting an Fl_Shared_Image object is forbiden !\n");
+  if(forbid_delete)
+    fprintf(stderr, 
+      "FLTK user error : deleting an Fl_Shared_Image object is forbiden !\n");
+  if(id) mem_used -= w*h;
 }
 
 void Fl_Shared_Image::set_cache_size(size_t l)
@@ -140,6 +143,7 @@ Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name) {
 
 char* Fl_Shared_Image::get_filename()
 {
+  if (name[0] == '/') return name;
   static char *s;
 // warning : the returned pointer will be available only until next call to get_filename
   if(s) free(s);
@@ -157,19 +161,71 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if(!image)
   {
-    //    int dummy;
     image=create();
+    image->refcount = 1;
     image->name = strdup(name);
     image->datas=datas;
     image->w = -1; // We mark the fact the it has never been measured yet
-    //    image->measure(dummy, dummy);
     image->l1 = image->l2 = 0;
     image->id=image->mask=0;
     Fl_Shared_Image::insert(first_image, image);
   }
-  else if(image->datas==NULL) image->datas=datas;
+  else {
+    if(image->datas==NULL) image->datas=datas;
+    image->refcount++;
+  }
   image->used = image_used++;
   return image;
+}
+
+void Fl_Shared_Image::reload(uchar* datas)
+{
+  if (id) {
+    mem_used -= w*h;
+    fl_delete_offscreen(id);
+    id=0;
+    if (mask) {
+      fl_delete_bitmap(mask);
+      mask = 0;
+    }
+  }
+  if (datas) datas = datas;
+  measure(w, h);
+}
+void Fl_Shared_Image::reload(char* name, uchar* datas)
+{
+  Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
+  if (image) image->reload(datas);
+}
+
+void Fl_Shared_Image::remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
+  if (p) {
+    int c = strcmp(image->name, p->name);
+    if (c == 0) {
+      if (image->l1) {
+	p = image->l1;
+	if (image->l2) insert(first_image, image->l2);
+      } else
+	p = image->l2;
+    } else if (c<0) remove_from_tree(p->l1, image);
+    else remove_from_tree(p->l2, image);
+  }
+}
+
+bool Fl_Shared_Image::remove()
+{
+  if (--refcount) return 0;
+  remove_from_tree(first_image, this);
+  forbid_delete = 0;
+  delete this;
+  forbid_delete = 1;
+  return 1;
+}
+bool Fl_Shared_Image::remove(char* name)
+{
+  Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
+  if (image) return image->remove();
+  else return 0;
 }
 
 Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
@@ -179,15 +235,19 @@ Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
   if (!datas) {
     datas = new uchar[1025];
     datas[1024] = 0; // null-terminate so strstr() works
-    char *s;
-    if(!root) root=strdup("");
-    s = (char*) malloc(strlen(name)+strlen(root)+1);
-    strcpy(s, root);
-    strcat(s, name);
+    char s[1024];
+    if (name[0] == '/') strcpy(s, name);
+    else {
+      if(!root) root=strdup("");
+      strcpy(s, root);
+      strcat(s, name);
+    }
     FILE* fp = fopen(s, "rb");
+    if (!fp)
+      return fl_image_filetypes + 
+	sizeof(fl_image_filetypes)/sizeof(fl_image_filetypes[0]) - 1;
     size = fread(datas, 1, size, fp);
     fclose(fp);
-    free(s);
     loaded = 1;
   }
   Fl_Image_Type* ft;
@@ -202,14 +262,18 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 {
   if (w<0) measure(w, h);
   if (w==0) return;
-  if (!id && !mask) // Need to uncompress the image ?
+  if (!id) // Need to uncompress the image ?
   {
     used = image_used++; // do this before check_mem_usage
     mem_used += w*h;
     check_mem_usage();
 
     read();
-    if (!id && !mask) return; 
+    if (!id) { // could not read the image for some reason ?
+      mem_used -= w*h;
+      w = 0; // Will never try again ...
+      return; 
+    }
   }
   else
     used = image_used++;
@@ -217,5 +281,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.4 1999/08/30 09:36:08 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.5 1999/09/01 00:23:22 vincent Exp $"
 //
