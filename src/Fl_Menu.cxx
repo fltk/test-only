@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.108 2001/04/22 16:50:21 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.109 2001/06/07 13:44:27 robertk Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -603,8 +603,9 @@ int Fl_Menu_::pulldown(
   p.indexes[1] = -1;
   MenuWindow mw(&p, 0, X, Y, W, H, t);
   p.menus[0] = &mw;
-  Fl::local_grab(&mw); // use this if testing!
+  //Fl::local_grab(&mw); // use this if testing!
   //Fl::grab(::handle, &p);
+  Fl::grab(&mw);
 
   if (menubar) {
     if (focus() < 0)
@@ -738,5 +739,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.108 2001/04/22 16:50:21 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.109 2001/06/07 13:44:27 robertk Exp $".
 //
