@@ -5,18 +5,11 @@ code_name {.cxx}
 gridx 5 
 gridy 5 
 snap 3
-Function {callback(Fl_Valuator* o, void*)} {open private return_type void
-} {
-  code {printf("%g     \\r", o->value());
-fflush(stdout);} {selected
-  }
-} 
-
 Function {} {open
 } {
   Fl_Window {} {
     label {Valuator classes, showing values for type()} open
-    xywh {370 393 567 506} color 43 selection_color 43
+    xywh {414 83 567 506}
     code0 {\#include <stdio.h>} visible
   } {
     Fl_Box {} {
@@ -25,17 +18,20 @@ Function {} {open
     }
     Fl_Slider {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {30 45 20 145} selection_color 1 labelsize 8 align 1
     }
     Fl_Slider {} {
       label FL_VERT_FILL_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {70 55 20 145} type {Vert Fill} selection_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_VERT_NICE_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {105 45 20 145} type {Vert Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8 align 1
     }
     Fl_Box {} {
@@ -44,42 +40,50 @@ Function {} {open
     }
     Fl_Value_Slider {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {30 260 30 145} selection_color 1 labelsize 8 align 1
     }
     Fl_Value_Slider {} {
       label FL_VERT_FILL_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {70 275 30 140} type {Vert Fill} selection_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_VERT_NICE_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {110 260 20 145} type {Vert Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8 align 1
     }
     Fl_Slider {} {
       label FL_HORIZONTAL
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 80 130 20} type Horizontal selection_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_FILL_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 120 130 20} type {Horz Fill} selection_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_NICE_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 160 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 290 130 20} type Horizontal selection_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_FILL_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 330 130 20} type {Horz Fill} selection_color 1 labelsize 8
     }
     Fl_Box {} {
@@ -88,17 +92,20 @@ Function {} {open
     }
     Fl_Value_Slider {} {
       label FL_HOR_NICE_SLIDER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {140 370 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
     }
     Fl_Adjuster {} {
       label {w()>h()}
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {440 60 75 25} labelsize 8
     }
     Fl_Adjuster {} {
       label {w()<h()}
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {520 35 25 75} labelsize 8
     }
     Fl_Box {} {
@@ -107,12 +114,14 @@ Function {} {open
     }
     Fl_Counter {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {360 160 180 30} labelsize 8
     }
     Fl_Counter {} {
       label FL_SIMPLE_COUNTER
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {360 205 180 30} type Simple labelsize 8
     }
     Fl_Box {} {
@@ -121,20 +130,25 @@ Function {} {open
     }
     Fl_Dial {} {
       label 0
-      callback callback
-      xywh {315 280 65 65} color 10 selection_color 1 labelsize 8 value 0.5
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);} selected
+      xywh {315 280 65 65} color 10 selection_color 1 labelsize 8
       code0 {o->angles(0,315);}
     }
     Fl_Dial {} {
       label FL_LINE_DIAL
-      callback callback
-      xywh {395 280 65 65} type Line color 10 selection_color 1 labelsize 8 value 0.5
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
+      xywh {395 280 65 65} type Line color 10 selection_color 1 labelsize 8
+      code1 {o->value(0.5);}
     }
     Fl_Dial {} {
       label FL_FILL_DIAL
-      callback callback
-      xywh {475 280 65 65} type Fill color 10 selection_color 1 labelsize 8 value 1
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
+      xywh {475 280 65 65} type Fill color 10 selection_color 1 labelsize 8
       code0 {o->angles(0,360);}
+      code1 {o->value(1.0);}
     }
     Fl_Box {} {
       label Fl_Roller
@@ -142,12 +156,14 @@ Function {} {open
     }
     Fl_Roller {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {315 390 20 95} labelsize 8
     }
     Fl_Roller {} {
       label FL_HORIZONTAL
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {340 430 90 20} type Horizontal labelsize 8
     }
     Fl_Box {} {
@@ -164,12 +180,14 @@ Function {} {open
     }
     Fl_Value_Input {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {30 460 110 30} labelsize 8 maximum 100 step 0.1
     }
     Fl_Value_Output {} {
       label 0
-      callback callback
+      callback {printf("%g      \\r",o->value());
+fflush(stdout);}
       xywh {170 460 110 30} labelsize 8 maximum 100 step 0.1
     }
     Fl_Box {} {
@@ -178,12 +196,14 @@ Function {} {open
     }
     Fl_Scrollbar {} {
       label 0
-      callback callback
+      callback {printf("%d      \\r",o->value());
+fflush(stdout);}
       xywh {395 20 20 105} labelsize 8 align 1 maximum 100
     }
     Fl_Scrollbar {} {
       label FL_HORIZONTAL
-      callback callback
+      callback {printf("%d      \\r",o->value());
+fflush(stdout);}
       xywh {300 65 95 20} type Horizontal labelsize 8 maximum 100
     }
   }
