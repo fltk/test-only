@@ -9,8 +9,6 @@
 #include <dlfcn.h>
 typedef void* DLhandle;
 
-#include <unistd.h>
-
 #else
 
 // simulate posix on windows:
@@ -35,23 +33,15 @@ typedef int (*Function)(int, const char * const *);
 // returns -1 if plugin file not found
 // returns -2 if plugin file couldn't be opened
 // returns -3 if couldn't find func()
-// returns -4 if uid != euid (setuid program?)
 // otherwise, returns result of func() (should be 0)
-int fl_load_plugin(const char* name, const char* func, const char* arg) {
-#ifndef WIN32
-  if (getuid() != geteuid()) {
-    fprintf(stderr, "fl_load_plugin(): Plugin loading disabled for setuid programs.\n");
-    return -4;
-  }
-#endif
+int fl_load_plugin(const char* name, const char* function,
+		   int argc, const char * const * argv) {
   // open plugin, any errors will be printed
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (handle) {
-    Function f = (Function)dlsym(handle, func);
-    if (f) {
-      const char* argv[3] = { name, arg, 0 };
-      return f(arg ? 2 : 1, argv);
-    }
+    if (!function) return 0;
+    Function f = (Function)dlsym(handle, function);
+    if (f) return f(argc, argv);
   }
   fprintf(stderr, "fl_load_plugin(): %s\n", dlerror());
   if (handle) { dlclose(handle); return -3; }

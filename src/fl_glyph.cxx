@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.15 2000/01/09 01:06:13 bill Exp $"
+// "$Id: fl_glyph.cxx,v 1.16 2000/01/19 09:41:48 bill Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -74,15 +74,15 @@ void fl_glyph(int t, int x,int y,int w,int h,
       int w1 = (w-1)|1; // use odd sizes only
       int X1 = x+w1/2;
       int W1 = w1/3;
-      int Y1 = y+w1/2+W1/2;
-      fl_polygon(X1, Y1-W1, X1+W1, Y1, X1-W1, Y1);
+      int Y1 = y+(h-W1)/2;
+      fl_polygon(X1, Y1, X1+W1, Y1+W1, X1-W1, Y1+W1);
       break;
     }
     case FL_GLYPH_DOWN: {
       int w1 = (w-1)|1; // use odd sizes only
       int X1 = x+w1/2;
       int W1 = w1/3;
-      int Y1 = y+h-w1/2-W1/2-1;
+      int Y1 = y+(h-W1)/2;
       fl_polygon(X1, Y1+W1, X1-W1, Y1, X1+W1, Y1);
       break;
     }
@@ -90,15 +90,15 @@ void fl_glyph(int t, int x,int y,int w,int h,
       int w1 = (h-1)|1; // use odd sizes only
       int Y1 = y+w1/2;
       int W1 = w1/3;
-      int X1 = x+w1/2+W1/2;
-      fl_polygon(X1-W1, Y1, X1, Y1-W1, X1, Y1+W1);
+      int X1 = x+(w-W1)/2;
+      fl_polygon(X1, Y1, X1+W1, Y1-W1, X1+W1, Y1+W1);
       break;
     }
     case FL_GLYPH_RIGHT: {
       int w1 = (h-1)|1; // use odd sizes only
       int Y1 = y+w1/2;
       int W1 = w1/3;
-      int X1 = x+w-w1/2-W1/2-1;
+      int X1 = x+(w-W1)/2;
       fl_polygon(X1+W1, Y1, X1, Y1+W1, X1, Y1-W1);
       break;
     }
@@ -116,5 +116,5 @@ void fl_glyph(int t, int x,int y,int w,int h,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.15 2000/01/09 01:06:13 bill Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.16 2000/01/19 09:41:48 bill Exp $".
 //

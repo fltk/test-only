@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_theme.cxx,v 1.3 2000/01/09 01:06:12 bill Exp $"
+// "$Id: Fl_theme.cxx,v 1.4 2000/01/19 09:41:47 bill Exp $"
 //
 // Theme loading code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,7 @@
 #if defined(WIN32) || defined(__EMX__)
 #  include <windows.h>
 #  include <io.h>
-extern "C" int access(const char *, int);
+   extern "C" int access(const char *, int);
 #  define F_OK 0
 #else
 #  include <unistd.h>
@@ -71,8 +71,10 @@ fl_find_config_file(const char* fn, const char* prefix, const char* suffix)
 	  || fn[0] == '\\' || fn[1]==':'
 #endif
       ) {
-    if (!suffix) return access(fn, R_OK) ? 0 : fn;
-    snprintf(buffer, PATH_MAX, "%s%s", fn, suffix);
+    if (suffix) {
+      snprintf(buffer, PATH_MAX, "%s%s", fn, suffix);
+      fn = buffer;
+    }
   } else {
     if (!suffix) suffix = "";
     if (!prefix) prefix = "";
@@ -88,23 +90,34 @@ fl_find_config_file(const char* fn, const char* prefix, const char* suffix)
     GetWindowsDirectoryA(windir, sizeof(windir));
     snprintf(buffer, PATH_MAX, "%s/fltk/%s%s%s", windir,  prefix,fn,suffix);
 #endif
+    fn = buffer;
   }
 
-  return access(buffer, R_OK) ? 0 : buffer;
+  return access(fn, R_OK) ? 0 : fn;
 }
 
 int Fl::loadtheme(const char* theme, const char* scheme) {
+#ifndef WIN32
+  if (getuid() != geteuid()) {
+    if (theme != DEFAULT || scheme)
+      fprintf(stderr, "Theme loading disabled for setuid programs.\n");
+    return -4;
+  }
+#endif
 
   const char *tfile = fl_find_config_file(theme, "themes/", ".fltp");
   if (!tfile) {
-    if (strcmp(theme, DEFAULT) || scheme)
+    // try using the theme name as a scheme name:
+    if (theme != DEFAULT && !scheme)
+      return loadtheme(DEFAULT, theme);
+    // report errors only if user tried to set things:
+    if (theme != DEFAULT || scheme)
       fprintf(stderr, "Can't find theme \"%s\"\n", theme);
     return -1;
   }
 
-  return fl_load_plugin(tfile, "fltk_theme", scheme);
-
-  return 0;
+  const char* argv[3] = {tfile, scheme, 0 };
+  return fl_load_plugin(tfile, "fltk_theme", scheme ? 2 : 1, argv);
 }
 
 static int theme_loaded; // indicates that themes have been started
@@ -190,6 +203,6 @@ static void unloadtheme() {
 }
 
 //
-// End of "$Id: Fl_theme.cxx,v 1.3 2000/01/09 01:06:12 bill Exp $".
+// End of "$Id: Fl_theme.cxx,v 1.4 2000/01/19 09:41:47 bill Exp $".
 //
 

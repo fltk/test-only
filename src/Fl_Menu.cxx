@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.79 2000/01/16 07:44:34 robertk Exp $"
+// "$Id: Fl_Menu.cxx,v 1.80 2000/01/19 09:41:46 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -204,47 +204,43 @@ int Fl_Menu_Item::measure(int* hp) const {
 
 void Fl_Menu_Item::draw(int x, int y, int w, int h, int selected) const {
   Fl_Boxtype lbox = box();
-  Fl_Flags lflags = 0;
+  Fl_Flags lflags = FL_ALIGN_LEFT|FL_ALIGN_RIGHT;
   Fl_Color lcolor = color();
   Fl_Color llabel_color = label_color();
 
-  if (flags()&FL_MENU_INACTIVE) lflags = FL_INACTIVE;
+  Fl_Color c;
 
   switch (selected) {
   case 0: // unselected menu item
-    lflags |= FL_ALIGN_LEFT;
     break;
   case 1: // selected menu item
-    lflags |= (FL_VALUE|FL_ALIGN_LEFT);
-    lcolor = selection_color();
-    if (!(flags()&FL_MENU_INACTIVE) || !Fl_Style::inactive_menu_hack)
-      llabel_color = selection_text_color();
+    lflags = FL_VALUE|FL_ALIGN_LEFT|FL_ALIGN_RIGHT;
+    c = selection_color(); if (c) lcolor = c;
+    c = selection_text_color(); if (c) llabel_color = c;
     break;
   case 2: // title or menubar item when menu popped up
-    lflags |= (FL_VALUE|FL_ALIGN_CENTER);
+    lflags = FL_VALUE|FL_ALIGN_CENTER;
     lbox = title_style->box;
-    if (title_style->selection_color) 
-      lcolor = title_style->selection_color;
-    if (title_style->selection_text_color) 
-      llabel_color = title_style->selection_text_color;
+    c = title_style->selection_color; if (c) lcolor = c;
+    c = title_style->selection_text_color; if (c) llabel_color = c;
     break;
   case 3: // highlighted menubar item
-    lflags |= (FL_HIGHLIGHT|FL_ALIGN_CENTER);
+    lflags = FL_HIGHLIGHT|FL_ALIGN_CENTER;
     lbox = title_style->box;
-    if (title_style->highlight_color) 
-      lcolor = title_style->highlight_color;
-    if (title_style->highlight_label_color) 
-      llabel_color = title_style->highlight_label_color;
+    c = title_style->highlight_color; if (c) lcolor = c;
+    c = title_style->highlight_label_color; if (c) llabel_color = c;
     break;
   case 4: // plain menubar item
-    lflags |= FL_ALIGN_CENTER;
+    lflags = FL_ALIGN_CENTER;
     lbox = title_style->box;
     break;
   case 5: // draw the text in an Fl_Choice
-    lflags |= FL_ALIGN_LEFT | FL_ALIGN_RIGHT;
     lbox = FL_NO_BOX;
     break;
   }
+
+  if (flags()&FL_MENU_INACTIVE) lflags |= FL_INACTIVE;
+
   lbox->draw(x, y, w, h, lcolor, lflags);
 
   if (flags() & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
@@ -600,10 +596,9 @@ int menuwindow::handle(int e) {
 	setitem(p.menu_number-1, p.menus[p.menu_number-1]->selected);
       return 1;
     case ' ':
+    case FL_Enter:
       m = p.item();
       if (m && (m->flags_&(FL_MENU_TOGGLE|FL_MENU_RADIO))) goto TOGGLE;
-      break; // perhaps it should act like FL_Enter?
-    case FL_Enter:
       p.state = DONE_STATE;
       return 1;
     case FL_Escape:
@@ -836,8 +831,8 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	    // kludge so "menubar buttons" turn "on" by using menu title:
 	    p.menus[1] = fakemenu =
 	      new menuwindow(0,
-			     mw->x()+mw->titlex(p.item_number),
-			     mw->y()+1+mw->h(), 0, 0, 0, m, 0);
+			     mw->x() + mw->titlex(p.item_number),
+			     mw->y() + mw->h(), 0, 0, 0, m, 0);
 	    mw = fakemenu;
 	  SHOW_MENUBAR_TITLE:
 	    // fix the title box size to match menubar thickness:
@@ -895,5 +890,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.79 2000/01/16 07:44:34 robertk Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.80 2000/01/19 09:41:46 bill Exp $".
 //

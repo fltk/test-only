@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.15 2000/01/10 06:31:32 bill Exp $"
+// "$Id: classic.cxx,v 1.16 2000/01/19 09:41:49 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -36,18 +36,34 @@
 #include <stdio.h>
 #include <string.h>
 
+static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  int H = 7;
+  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, bc, f);
+}
+
+static Fl_Frame_Box always_up_box(0,FL_UP_BOX->data);
+
+static const Fl_Highlight_Box menu_title_box(0, &always_up_box);
+
 extern "C" int fltk_theme(int, char**);
 
 int fltk_theme(int, char**) {
 
-  fl_up_box.data = "AAAAWUJJUTNN";
+  fl_up_box.data = always_up_box.data = "AAAAWUJJUTNN";
   fl_down_box.data = "NNTUJJUWAAAA";
   Fl_Style* s;
   if ((s = Fl_Style::find("menu_item"))) {
     s->box = FL_FLAT_BOX;
-    s->highlight_color = FL_WHITE;
-    s->highlight_label_color = 0;
-    s->selection_color = FL_GRAY;
+    s->selection_color = FL_WHITE;
+    s->selection_text_color = 0;
+    s->off_color = FL_GRAY;
+  }
+  if ((s = Fl_Style::find("menu_title"))) {
+    s->box = &menu_title_box;
+    s->selection_color = 0;
+    s->selection_text_color = 0;
     s->off_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("check_button"))) {
@@ -55,6 +71,8 @@ int fltk_theme(int, char**) {
     s->off_color = FL_GRAY;
   }
   Fl_Widget::default_style->highlight_color = 0;
+  Fl_Widget::default_style->label_size = 15;
+  Fl_Widget::default_style->text_size = 15;
   if ((s = Fl_Style::find("scrollbar"))) {
     s->box = FL_FLAT_BOX;
   }
@@ -73,9 +91,14 @@ int fltk_theme(int, char**) {
     s->selection_color = FL_DARK2;
     s->selection_text_color = FL_BLACK;
   }
+  if ((s = Fl_Style::find("choice"))) {
+    s->box = FL_UP_BOX;
+    s->color = FL_GRAY;
+    s->glyph = choice_glyph;
+  }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.15 2000/01/10 06:31:32 bill Exp $".
+// End of "$Id: classic.cxx,v 1.16 2000/01/19 09:41:49 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
+// "$Id: motif.cxx,v 1.10 2000/01/19 09:41:50 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -97,6 +97,8 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN: {
+      if (h > w) {y += (h-w)/2; h = w;}
+      else if (w > h) {x += (w-h)/2; w = h;}
       if (box == FL_NO_BOX) { x += 4; y += 4; w -= 8; h -= 8; } // menu fudge factor
       Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
@@ -150,12 +152,11 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
   }
 }
 
-static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
+static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
 		  Fl_Flags f, Fl_Boxtype box)
 {
-  int H = h/2;
-  int Y = y + (h-H)/2;
-  box->draw(x,Y,w,H, bc, f);
+  int H = 7;
+  FL_UP_BOX->draw(x, y+(h-H)/2, w-4, H, bc, f);
 }
 
 extern "C" int fltk_theme(int, char**)
@@ -246,8 +247,9 @@ extern "C" int fltk_theme(int, char**)
   }
 
   if ((s = Fl_Style::find("choice"))) {
+    s->box = FL_UP_BOX;
     s->glyph = choice_glyph;
-    s->glyph_box = FL_UP_BOX;
+    s->color = 0;
   }
 
   if ((s = Fl_Style::find("browser"))) {
@@ -260,5 +262,5 @@ extern "C" int fltk_theme(int, char**)
 }
 
 //
-// End of "$Id: motif.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
+// End of "$Id: motif.cxx,v 1.10 2000/01/19 09:41:50 bill Exp $"
 //

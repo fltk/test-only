@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.36 2000/01/16 07:44:32 robertk Exp $"
+// "$Id: Fl_Choice.cxx,v 1.37 2000/01/19 09:41:46 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,37 +27,26 @@
 #include <FL/Fl_Choice.H>
 #include <FL/fl_draw.H>
 
-// This is almost exactly the same as an Fl_Menu_Button.  The only
-// difference is the appearance of the button: it draws the text of
-// the current pick and a motif-like box.
-
-static void glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
-		  Fl_Flags f, Fl_Boxtype box)
-{
-  int H = h/2;
-  int Y = y + (h-H)/2;
-  box->draw(x,Y,w,H, bc, f);
-}
-
 extern char fl_draw_shortcut;
 
+// The dimensions for the glyph in this and the Fl_Menu_Button are exactly
+// the same, so that glyphs may be shared between them.
+
 void Fl_Choice::draw() {
-  draw_button();
+  draw_box();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int w1 = H*4/5;
   if (mvalue()) {
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
-    fl_clip(X, Y, W-H-2, H);
+    fl_clip(X+2, Y, W-w1-2, H);
     fl_draw_shortcut = 2; // hack value to make '&' disappear
-    m.draw(X, Y, W-H-2, H, 5);
+    m.draw(X, Y+2, W-w1-2, H-4, Fl::focus()==this ? 1 : 5);
     fl_draw_shortcut = 0;
     fl_pop_clip();
   }
   // draw the little mark at the right:
-  H = H-4;
-  X = X+W-H-2;
-  Y = Y+2;
-  draw_glyph(FL_GLYPH_DOWN, X, Y, H, H, Fl::belowmouse()==this?FL_HIGHLIGHT:0);
+  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, Fl::belowmouse()==this?FL_HIGHLIGHT:0);
 }
 
 int Fl_Choice::value(int v) {
@@ -82,6 +71,8 @@ int Fl_Choice::handle(int e) {
     return 1;
 
   case FL_PUSH:
+    take_focus();
+    if (Fl::event_x() < x()+w()-h()*4/5) return 1;
     //Fl::event_is_click(0);
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
@@ -94,12 +85,23 @@ int Fl_Choice::handle(int e) {
     if (Fl_Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
+  J2:
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
 
   case FL_KEYBOARD:
     if (Fl::event_key() == ' ') goto J1;
+    if (Fl::event_key() == FL_Up) {
+      v = mvalue(); if (!v) v = menu()+size();
+      while (v > menu()) {v--; if (v->text && !v->submenu()) goto J2;}
+      return 1;
+    }
+    if (Fl::event_key() == FL_Down) {
+      v = mvalue(); if (!v) {v = menu(); goto J2;}
+      while (v->text) {v++; if (v->text && !v->submenu()) goto J2;}
+      return 1;
+    }
     return 0;
 
   default:
@@ -107,10 +109,10 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-
 static void revert(Fl_Style* s) {
-  //s->glyph_box = FL_FLAT_BOX;
-  s->glyph = glyph;
+  s->box = FL_DOWN_BOX;
+  s->color = FL_WHITE;
+  s->selection_color = FL_BLUE_SELECTION_COLOR;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
@@ -123,5 +125,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.36 2000/01/16 07:44:32 robertk Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.37 2000/01/19 09:41:46 bill Exp $".
 //
