@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.30 2004/07/11 12:07:41 laza2000 Exp $"
+// "$Id: x.h,v 1.31 2004/08/03 07:26:34 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -76,6 +76,9 @@
 # else
  typedef struct cairo cairo_t;
 # endif
+
+#include <X11/extensions/XInput.h>
+#include <X11/extensions/XI.h>
 
 # undef Window
 
@@ -182,5 +185,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.30 2004/07/11 12:07:41 laza2000 Exp $".
+// End of "$Id: x.h,v 1.31 2004/08/03 07:26:34 spitzak Exp $".
 //

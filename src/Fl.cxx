@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.179 2004/07/19 23:43:08 laza2000 Exp $"
+// "$Id: Fl.cxx,v 1.180 2004/08/03 07:26:34 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -86,25 +86,28 @@ float fltk::version() {return FL_VERSION;}
 // Globals...
 //
 
-Widget	*fltk::belowmouse_,
-	*fltk::pushed_,
-	*fltk::focus_,
-	*fltk::modal_;
-int	fltk::e_type,
-	fltk::e_x,
-	fltk::e_y,
-	fltk::e_dx,
-	fltk::e_dy,
-	fltk::e_x_root,
-	fltk::e_y_root,
-	fltk::e_state,
-	fltk::e_clicks,
-	fltk::e_is_click,
-	fltk::e_keysym;
-char	*fltk::e_text = "";
-int	fltk::e_length;
-bool	fltk::grab_,
-	fltk::exit_modal_;
+Widget *fltk::belowmouse_,
+	 *fltk::pushed_,
+	 *fltk::focus_,
+	 *fltk::modal_;
+int	  fltk::e_type,
+	  fltk::e_x,
+	  fltk::e_y,
+	  fltk::e_dx,
+	  fltk::e_dy,
+	  fltk::e_x_root,
+	  fltk::e_y_root,
+	  fltk::e_state,
+	  fltk::e_clicks,
+	  fltk::e_is_click,
+	  fltk::e_keysym;
+float fltk::e_pressure = 1.0f,
+      fltk::e_x_tilt = 0.0f,
+      fltk::e_y_tilt = 0.0f;
+char  *fltk::e_text = "";
+int	  fltk::e_length;
+bool  fltk::grab_,
+	  fltk::exit_modal_;
 
 static Window *xfocus;	// which window X thinks has focus
 static Window *xmousewin; // which window X thinks has ENTER
@@ -1102,5 +1105,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.179 2004/07/19 23:43:08 laza2000 Exp $".
+// End of "$Id: Fl.cxx,v 1.180 2004/08/03 07:26:34 spitzak Exp $".
 //

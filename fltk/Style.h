@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.15 2004/08/01 22:28:20 spitzak Exp $"
+// "$Id: Style.h,v 1.16 2004/08/03 07:26:32 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -124,7 +124,6 @@ class FL_API Style {
  public:
   // Everything is public for various back-compatability hacks:
   const Style* parent_;
-  void  (*revertfunc)(Style*);
   Box*		box_;
   Box*		buttonbox_;
   Box*		focusbox_;
@@ -145,6 +144,7 @@ class FL_API Style {
   float		leading_;
   unsigned char	scrollbar_align_;
   unsigned char	scrollbar_width_;
+  unsigned char dynamic_;
   // global settings:
   static bool	hide_shortcut_;
   static bool   draw_boxes_inactive_;
@@ -204,18 +204,19 @@ class FL_API Style {
   void draw_boxes_inactive(bool v)	{draw_boxes_inactive_ = v;}
   void wheel_scroll_lines(int v)	{wheel_scroll_lines_ = v;}
 
-  Style(); // creates a dynamic() style
-  bool dynamic() const {return !revertfunc;}
+  Style();
+  bool dynamic() const {return dynamic_;}
 
   static Style* find(const char* name);
 };
 
 struct FL_API NamedStyle : public Style {
   const char* name;
-  NamedStyle* next;
-  static NamedStyle* first;
+  void  (*revertfunc)(Style*);
   NamedStyle** back_pointer; // used by StyleSet
-  NamedStyle(const char* name, void (*revert)(Style*), NamedStyle**);
+  static NamedStyle* first;
+  NamedStyle* next;
+  NamedStyle(const char* name, void (*revert)(Style*), NamedStyle** backptr);
 };
 
 /*! \addtogroup themes
@@ -227,14 +228,18 @@ inline void theme(Theme f) {theme_ = f;}
 FL_API void load_theme();
 FL_API void reload_theme();
 FL_API bool reset_theme();
+/*! \} */ // Doxygen bug(?) requires this
 
+}
+
+/*! \addtogroup themes
+  \{ */
 extern "C" FL_API bool fltk_theme();
 /*! \} */
 
-}
 
 #endif
 
 //
-// End of "$Id: Style.h,v 1.15 2004/08/01 22:28:20 spitzak Exp $".
+// End of "$Id: Style.h,v 1.16 2004/08/03 07:26:32 spitzak Exp $".
 //

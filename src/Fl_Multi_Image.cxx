@@ -52,18 +52,17 @@ void MultiImage::_measure(float& w, float& h) const {
 const BoxInfo* MultiImage::boxinfo() const {return images[0]->boxinfo();}
 
 /*! Select one of the images and draw it. The last image with all the
-  flags specified for it turned on will be drawn, and the flags passed
-  to it will have those bits turned off. If none of them match
+  flags specified for it turned on will be drawn. If none of them match
   then Image0 is drawn.
 */
 void MultiImage::_draw(int x, int y, int w, int h, const Style* style, Flags f) const
 {
   int which = 0;
-  Flags passed_flags = f;
+  //Flags passed_flags = f;
   for (int i = 1; i < MAXIMAGES && images[i]; i++) {
-    if ((f & flags[i]) == flags[i]) {which = i; passed_flags = f&~flags[i];}
+    if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->draw(x,y,w,h,style,passed_flags);
+  images[which]->draw(x,y,w,h,style,f);
 }
 
 /*! Exactly the same but with float dimensions. */

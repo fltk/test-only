@@ -1,5 +1,4 @@
-//
-// "$Id: Fl_Pixmap.cxx,v 1.29 2004/08/01 22:28:22 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.30 2004/08/03 07:26:35 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 /*! \class fltk::xpmImage
 
@@ -104,5 +102,5 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.29 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.30 2004/08/03 07:26:35 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.228 2004/07/31 10:17:22 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.229 2004/08/03 07:26:35 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -593,6 +593,14 @@ void fltk::get_mouse(int &x, int &y) {
   GetCursorPos(&p);
   x = p.x;
   y = p.y;
+}
+
+////////////////////////////////////////////////////////////////
+// Tablet initialisation and event handling
+// (not supported on Windows yet)
+
+bool fltk::enable_tablet_events() {
+  return false;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2125,5 +2133,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.228 2004/07/31 10:17:22 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.229 2004/08/03 07:26:35 spitzak Exp $".
 //

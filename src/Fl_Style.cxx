@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.58 2004/08/02 05:11:58 laza2000 Exp $"
+// "$Id: Fl_Style.cxx,v 1.59 2004/08/03 07:26:35 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -271,7 +271,8 @@ bool Widget::copy_style(const Style* t) {
 
 static Style* unique_style(const Style* & pointer) {
   if (pointer->dynamic()) return (Style*)pointer;
-  Style* newstyle = new Style;
+  Style* newstyle = new Style();
+  newstyle->dynamic_ = true;
   newstyle->parent_ = (Style*)pointer;
   pointer = newstyle;
   return newstyle;
@@ -444,8 +445,10 @@ NamedStyle::NamedStyle(const char* n, void (*revert)(Style*), NamedStyle** pds) 
   name = n;
 }
 
-/*! This constructor is used to create dynamic() styles for widgets that
-  change their own attributes. */
+/*! The constructor clears the style to entirely zeros, including the
+  parent_ pointer. You probably want to set the parent to
+  Widget::default_style in order to inherit the global settings.
+*/
 Style::Style() {
   memset((void*)this, 0, sizeof(*this));
 }
@@ -569,10 +572,9 @@ bool fltk::reset_theme() {
   Style::draw_boxes_inactive_ = 1;
   for (NamedStyle* p = NamedStyle::first; p; p = p->next) {
     if (p->name) {
-      Style temp = *p;
+      const Style* savep = p->parent_;
       memset((void*)p, 0, sizeof(Style));
-      p->parent_ = temp.parent_;
-      p->revertfunc = temp.revertfunc;
+      p->parent_ = savep;
       p->revertfunc(p);
     }
   }
@@ -610,5 +612,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.58 2004/08/02 05:11:58 laza2000 Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.59 2004/08/03 07:26:35 spitzak Exp $".
 //

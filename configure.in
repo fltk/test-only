@@ -1,7 +1,7 @@
 dnl 
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.121 2004/07/31 10:11:25 laza2000 Exp $"
+dnl "$Id: configure.in,v 1.122 2004/08/03 07:26:29 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -578,7 +578,7 @@ case $uname in
 	    AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
 	fi
 
-	LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
+	LIBS="$LIBS -lXext $X_EXTRA_LIBS"
 	CFLAGS="$CFLAGS$X_CFLAGS"
 	CXXFLAGS="$CXXFLAGS$X_CFLAGS"
 	LDFLAGS="$X_LIBS $LDFLAGS"
@@ -659,6 +659,9 @@ case $uname in
 		LIBS="-lXinerama $LIBS",,
 	        [#include <X11/Xlib.h>])
 	fi
+
+	dnl Probably want a test for Xi here...
+	LIBS="-lXi $LIBS"
 
 	dnl Check for overlay visuals...
 	AC_CACHE_CHECK(for X overlay visuals, ac_cv_have_overlay,
@@ -967,5 +970,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.121 2004/07/31 10:11:25 laza2000 Exp $".
+dnl End of "$Id: configure.in,v 1.122 2004/08/03 07:26:29 spitzak Exp $".
 dnl

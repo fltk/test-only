@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.8 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: run.h,v 1.9 2004/08/03 07:26:34 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -41,6 +41,8 @@ FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);
 extern FL_API const char* const help;
 FL_API void args(int, char**);
+FL_API bool enable_tablet_events();
+
 /*! \} */
 
 /*! \addtogroup execution
@@ -94,5 +96,3 @@ FL_API void* thread_message();
 }
 
 #endif
-
-

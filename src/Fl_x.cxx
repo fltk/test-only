@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.189 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.190 2004/08/03 07:26:35 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -27,6 +27,7 @@
 #define CONSOLIDATE_MOTION 1 // this was 1 in fltk 1.0
 
 #define DEBUG_SELECTIONS 0
+#define DEBUG_TABLET 1
 
 #include <config.h>
 #include <fltk/x.h>
@@ -44,6 +45,9 @@
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
 #include <fltk/utf.h>
+
+#include <X11/extensions/XInput.h>
+#include <X11/extensions/XI.h>
 
 // Actually this file contains a keysym->utf8 function that is useful
 // when !USE_XIM, we should rearrange this so it can be used in that case:
@@ -873,6 +877,100 @@ void fltk::get_mouse(int &x, int &y) {
 }
 
 ////////////////////////////////////////////////////////////////
+// Tablet initialisation and event handling
+static XID stylus_device_id;
+static XDevice *stylus_device;
+static int stylus_event_type;
+static float pressure_add, pressure_mul;
+static float x_tilt_add, x_tilt_mul;
+static float y_tilt_add, y_tilt_mul;
+
+const int tablet_pressure_ix = 2;
+const int tablet_x_tilt_ix = 3;
+const int tablet_y_tilt_ix = 4;
+
+#define FLTK_T_MAX(a, b) ((a)>(b)?(a):(b))
+
+bool fltk::enable_tablet_events() {
+  e_pressure = 0.0f; // indicate uninitialised data
+  e_x_tilt = e_y_tilt = 0.0f;
+  open_display();
+  // check if there is an XInput extension on this machine
+  XExtensionVersion	*version;
+  version = XGetExtensionVersion(xdisplay, INAME);
+  if (!version || (version==(XExtensionVersion*)NoSuchExtension)) {
+#if DEBUG_TABLET
+    printf("fltk: no XInput extension found\n");
+#endif    
+    return false;
+  }
+  XFree(version);
+  // look out for the stylus device which supports most current tablets
+  int ndev, i, found = 0;
+  XDeviceInfo *list = XListInputDevices(xdisplay, &ndev);
+  for (i=0; i<ndev && !found; i++) {
+    if (strcmp(list[i].name, "stylus") == 0) { 
+      if (list[i].num_classes<=0) continue;
+      //+++ or 'eraser' or 'cursor'... or XI_TABLET on Mac OS X
+      stylus_device_id = list[i].id;
+      XAnyClassPtr any = (XAnyClassPtr)list[i].inputclassinfo;
+      int j; for (j=0; j<list[i].num_classes; j++) {
+        if (any->c_class == ValuatorClass) {
+          XValuatorInfoPtr v = (XValuatorInfoPtr)any;
+          XAxisInfoPtr a = (XAxisInfoPtr)((char *)v+sizeof(XValuatorInfo));
+          int k; for (k=0; k<v->num_axes; k++, a++) {
+            switch (k) {
+              case tablet_pressure_ix: // pressure
+                pressure_add = 0.0f;
+                pressure_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+                break;
+              case tablet_x_tilt_ix: // x-tilt
+                x_tilt_add = 0.0f;
+                x_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+                break;
+              case tablet_y_tilt_ix: // y-tilt
+                y_tilt_add = 0.0f;
+                y_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+                break;
+            }
+          }
+        }
+        any = XAnyClassPtr((char*)any + any->length);
+      }
+      found = true;
+      break;
+    }
+  }
+  XFreeDeviceList(list);
+  if (!found) {
+#if DEBUG_TABLET
+    printf("fltk: no stylus device found\n");
+#endif    
+    return false;
+  }
+  // now open the stylus device
+  stylus_device = XOpenDevice(xdisplay, stylus_device_id);
+  if ( !stylus_device ) {
+#if DEBUG_TABLET
+    printf("fltk: could not open stylus device\n");
+#endif    
+    return false;
+  }
+  // list and request events 
+  for (i=0; i<stylus_device->num_classes; i++) {
+    if (stylus_device->classes[i].input_class == ValuatorClass) {
+	  XEventClass xec = 0;
+	  DeviceMotionNotify(stylus_device, stylus_event_type, xec);
+	  XSelectExtensionEvent(xdisplay, RootWindow(xdisplay, 0), &xec, 1);
+    }
+  }
+  
+  return true;
+}
+
+#undef FLTK_T_MAX
+
+////////////////////////////////////////////////////////////////
 
 XWindow fltk::dnd_source_window;
 Atom *fltk::dnd_source_types; // null-terminated list of data types being supplied
@@ -1599,6 +1697,32 @@ bool fltk::handle()
     return true;
 
   }
+
+  if ( xevent.type == stylus_event_type ) {
+    //printf("stylus: ");
+    XDeviceMotionEvent *me = (XDeviceMotionEvent*)&xevent;
+    //int axis = me->first_axis;
+    if (   me->first_axis<=tablet_pressure_ix 
+        && me->first_axis+me->axes_count>=tablet_pressure_ix) {
+      float v = (float)me->axis_data[tablet_pressure_ix-me->first_axis];
+      e_pressure = (v+pressure_add)*pressure_mul;
+      //printf("pressure %6.4g  ", e_pressure); 
+    }
+    if (   me->first_axis<=tablet_x_tilt_ix 
+        && me->first_axis+me->axes_count>=tablet_x_tilt_ix) {
+      float v = (float)me->axis_data[tablet_x_tilt_ix-me->first_axis];
+      e_x_tilt = (v+x_tilt_add)*x_tilt_mul;
+      //printf("x %6.4g  ", e_x_tilt); 
+    }
+    if (   me->first_axis<=tablet_y_tilt_ix 
+        && me->first_axis+me->axes_count>=tablet_y_tilt_ix) {
+      float v = (float)me->axis_data[tablet_y_tilt_ix-me->first_axis];
+      e_y_tilt = (v+y_tilt_add)*y_tilt_mul;
+      //printf("y %6.4g  ", e_y_tilt); 
+    }
+    //printf("\n");
+  }
+  
   return handle(event, window);
 }
 
@@ -2176,5 +2300,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.189 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.190 2004/08/03 07:26:35 spitzak Exp $".
 //

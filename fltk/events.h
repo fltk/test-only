@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.8 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: events.h,v 1.9 2004/08/03 07:26:34 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -195,6 +195,9 @@ extern FL_API int e_is_click;
 extern FL_API int e_keysym;
 extern FL_API int e_length;
 extern FL_API char* e_text;
+extern FL_API float e_pressure;
+extern FL_API float e_x_tilt;
+extern FL_API float e_y_tilt;
 extern FL_API int compose_state;
 extern FL_API Widget* belowmouse_;
 extern FL_API Widget* pushed_;
@@ -227,6 +230,9 @@ inline int  event_button()		{return e_keysym;}
 FL_API bool event_key_state(int);
 inline const char* event_text() 	{return e_text;}
 inline int  event_length() 		{return e_length;}
+inline float event_pressure() 	{return e_pressure;}
+inline float event_x_tilt()     {return e_x_tilt;}
+inline float event_y_tilt()     {return e_y_tilt;}
 
 // tests on current event:
 FL_API bool event_inside(int,int,int,int);
@@ -269,5 +275,3 @@ inline bool exit_modal_flag()		{return exit_modal_;}
 }
 
 #endif
-
-
