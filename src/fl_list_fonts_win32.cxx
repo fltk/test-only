@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.27 2003/07/02 06:51:04 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.28 2004/06/24 07:05:22 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -24,6 +24,7 @@
 //
 
 #include <fltk/events.h>
+#include <fltk/utf.h>
 #include <fltk/x.h>
 #include <ctype.h>
 #include <string.h>
@@ -37,7 +38,7 @@ int Font::encodings(const char**& arrayp) {
   // WAS: we need some way to find out what charsets are supported
   // and turn these into ISO encoding names, and return this list.
   // This is a poor simulation:
-  static const char* simulation[] = {"iso8859-1", 0};
+  static const char* simulation[] = {"iso10646-1", 0};
   arrayp = simulation;
   return 1;
 }
@@ -106,8 +107,8 @@ static Font** font_array = 0;
 static int num_fonts = 0;
 static int array_size = 0;
 
-static int CALLBACK enumcb(CONST LOGFONT* lplf,
-                           CONST TEXTMETRIC* lpntm,
+static int CALLBACK enumcb(CONST LOGFONTW* lplf,
+                           CONST TEXTMETRICW* lpntm,
                            DWORD fontType,
                            LPARAM p)
 {
@@ -115,7 +116,7 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (lplf->lfCharSet != ANSI_CHARSET) return 1;
-  const char *name = (const char*)(lplf->lfFaceName);
+  const unsigned short *name = (const unsigned short*)(lplf->lfFaceName);
   //const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
 
   if (num_fonts >= array_size) {
@@ -125,7 +126,12 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
   int attrib = 0;
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
-  font_array[num_fonts++] = fl_make_font(name, attrib);
+  int n = wcslen(name), count;
+  char *buffer;
+  buffer = utf8from16(name, wcslen(name), &count);
+  buffer[count] = 0;
+  font_array[num_fonts++] = fl_make_font(buffer, attrib);
+  free(buffer);
   return 1;
 }
 
@@ -136,7 +142,7 @@ int fltk::list_fonts(Font**& arrayp) {
   //memset(&lf, 0, sizeof(lf));
   //lf.lfCharSet = ANSI_CHARSET;
   //EnumFontFamiliesEx(dc, &lf, (FONTENUMPROC)enumcb, 0, 0);
-  EnumFontFamiliesEx(dc, NULL, (FONTENUMPROC)enumcb, 0, 0);
+  EnumFontFamiliesExW(dc, NULL, (FONTENUMPROCW)enumcb, 0, 0);
   ReleaseDC(0, dc);
   qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
   arrayp = font_array;
@@ -144,5 +150,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.27 2003/07/02 06:51:04 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.28 2004/06/24 07:05:22 spitzak Exp $"
 //

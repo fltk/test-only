@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.28 2004/06/19 23:02:13 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.29 2004/06/24 07:05:16 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -577,7 +577,7 @@ int TextDisplay::position_to_xy( int pos, int* X, int* Y ) {
      to "pos" to calculate the X coordinate */
   xStep = text_area.x - mHorizOffset;
   outIndex = 0;
-  for ( charIndex = 0; charIndex < pos - lineStartPos; charIndex++ ) {
+  for ( charIndex = 0; charIndex < pos - lineStartPos; charIndex += charLen ) {
     charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
               mBuffer->tab_distance(), mBuffer->null_substitution_character() );
     if (charLen > 1) {
@@ -593,6 +593,8 @@ int TextDisplay::position_to_xy( int pos, int* X, int* Y ) {
                                 outIndex );
     xStep += string_width( expandedChar, charLen, charStyle );
     outIndex += charLen;
+	if (lineStr[ charIndex ] == '\t')
+	  charLen = 1;
   }
   *X = xStep;
   delete [] (char *)lineStr;
@@ -675,7 +677,7 @@ void TextDisplay::show_insert_position() {
 static void adjust_cursor_left( TextBuffer *CurBuffer, int *CursorPos )
 {
   int l, newPos = CurBuffer->line_start( *CursorPos );
-  while ( newPos + ( l = utf8len( CurBuffer->character( newPos ) ) ) < *CursorPos ) {
+  while ( newPos + ( l = utf8len( CurBuffer->character( newPos ) ) ) <= *CursorPos ) {
     newPos += l;
   }
   *CursorPos = newPos;
@@ -983,7 +985,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
      that character */
   X = text_area.x - mHorizOffset;
   outIndex = 0;
-  for ( charIndex = 0; ; charIndex++ ) {
+  for ( charIndex = 0; ; charIndex += charLen ) {
     charLen = charIndex >= lineLen ? 1 :
               TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
                                                 expandedChar, buf->tab_distance(), buf->null_substitution_character() );
@@ -1010,6 +1012,8 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     }
     X += charWidth;
     outIndex += charLen;
+    if (charIndex < lineLen && lineStr[ charIndex ] == '\t')
+	  charLen = 1;
   }
 
   /* Scan character positions from the beginning of the clipping range, and
@@ -1019,7 +1023,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
   outPtr = outStr;
   outIndex = outStartIndex;
   X = startX;
-  for ( charIndex = startIndex; charIndex < rightCharIndex; charIndex++ ) {
+  for ( charIndex = startIndex; charIndex < rightCharIndex; charIndex += charLen ) {
     if ( lineStartPos + charIndex == cursorPos ) {
       if ( charIndex < lineLen || ( charIndex == lineLen &&
                                     cursorPos >= buf->length() ) ) {
@@ -1036,38 +1040,44 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 				    buf->tab_distance(),
 				    buf->null_substitution_character());
 
-    if (charIndex < lineLen && charLen > 1) {
-      int i, ii = 0;;
-      i = utf8len(lineStr[ charIndex ]);
-      while (i > 1) {
-        i--;
-        ii++;
-        expandedChar[ii] = lineStr[ charIndex + ii];
-      }
-    }
+    if (charIndex < lineLen) {
+	  if (charLen > 1) {
+        int i, ii = 0;;
+        i = utf8len(lineStr[ charIndex ]);
+        while (i > 1) {
+          i--;
+          ii++;
+          expandedChar[ii] = lineStr[ charIndex + ii ];
+        }
+	  }
+    } else
+	  expandedChar[0] = ' ';
 
-    charStyle = position_style( lineStartPos, lineLen, charIndex,
-                                outIndex + dispIndexOffset );
-    for ( i = 0; i < charLen; i++ ) {
-      if ( i != 0 && charIndex < lineLen && lineStr[ charIndex ] == '\t' )
-        charStyle = position_style( lineStartPos, lineLen,
-                                    charIndex, outIndex + dispIndexOffset );
-      if ( charStyle != style ) {
-        draw_string( style, startX, Y, X, outStr, outPtr - outStr );
-        outPtr = outStr;
+    charStyle = position_style( lineStartPos, lineLen,
+                                charIndex, outIndex + dispIndexOffset );
+    if (charIndex < lineLen && lineStr[ charIndex ] == '\t'
+			|| charIndex >= lineLen ) {
+      charWidth = string_width( &expandedChar[ 0 ], 1, charStyle );
+      for ( i = 0; i < charLen; i++ ) {
+	    outPtr++;
+        outIndex++;
+	    X += charWidth;
+        draw_string( charStyle, startX, Y, X, &expandedChar[0], 1 );
         startX = X;
-        style = charStyle;
-      }
-      if ( charIndex < lineLen ) {
-        *outPtr = expandedChar[ i ];
-		int l = utf8len(*outPtr);
-        charWidth = string_width( &expandedChar[ i ], l, charStyle );
-      } else
-        charWidth = stdCharWidth;
-      outPtr++;
-      X += charWidth;
-      outIndex++;
-    }
+	  }
+      style = charStyle;
+	  charLen = 1;
+	} else {
+	  memcpy(outPtr, expandedChar, charLen);
+      charWidth = string_width( outPtr, charLen, charStyle );
+	  X += charWidth;
+      draw_string( charStyle, startX, Y, X, outPtr, charLen );
+	  outPtr += charLen;
+      outIndex += charLen;
+      startX = X;
+      style = charStyle;
+	}
+
     if ( outPtr - outStr + TextBuffer::MAX_EXP_CHAR_LEN >=
 	 MAX_DISP_LINE_LEN || X >= rightClip )
       break;
@@ -1372,7 +1382,7 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
      to find the character position corresponding to the X coordinate */
   xStep = text_area.x - mHorizOffset;
   outIndex = 0;
-  for ( charIndex = 0; charIndex < lineLen; charIndex++ ) {
+  for ( charIndex = 0; charIndex < lineLen; charIndex += charLen ) {
     charLen =
       TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
 				    expandedChar,
@@ -1395,6 +1405,8 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
     }
     xStep += charWidth;
     outIndex += charLen;
+    if (charIndex < lineLen && lineStr[ charIndex ] == '\t')
+	  charLen = 1;
   }
 
   /* If the X position was beyond the end of the line, return the position
@@ -1740,20 +1752,34 @@ int TextDisplay::measure_vline( int visLineNum ) {
   char expandedChar[ TextBuffer::MAX_EXP_CHAR_LEN ];
 
   if ( mStyleBuffer == NULL ) {
-    for ( i = 0; i < lineLen; i++ ) {
+    for ( i = 0; i < lineLen; i += len ) {
       len = mBuffer->expand_character( lineStartPos + i,
                                        charCount, expandedChar );
 
+      if (len > 1) {
+        int n = 0;
+        while (n++ < len) {
+          expandedChar[n] = mBuffer->character( lineStartPos + i + n );
+		}
+	  }
       setfont( textfont(), textsize() );
 
       width += int(getwidth(expandedChar, len));
 
       charCount += len;
+	  if (mBuffer->character( lineStartPos + i ) == '\t')
+	    len = 1;
     }
   } else {
-    for ( i = 0; i < lineLen; i++ ) {
+    for ( i = 0; i < lineLen; i += len ) {
       len = mBuffer->expand_character( lineStartPos + i,
                                        charCount, expandedChar );
+      if (len > 1) {
+        int n = 0;
+        while (n++ < len) {
+          expandedChar[n] = mBuffer->character( lineStartPos + i + n );
+		}
+	  }
       style = ( unsigned char ) mStyleBuffer->character(
                 lineStartPos + i ) - 'A';
 
@@ -1762,6 +1788,8 @@ int TextDisplay::measure_vline( int visLineNum ) {
       width += int(getwidth(expandedChar, len));
 
       charCount += len;
+	  if (mBuffer->character( lineStartPos + 1 ) == '\t')
+	    len = 1;
     }
   }
   return width;
@@ -2085,5 +2113,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.28 2004/06/19 23:02:13 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.29 2004/06/24 07:05:16 spitzak Exp $".
 //

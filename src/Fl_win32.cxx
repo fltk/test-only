@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.213 2004/06/22 08:28:57 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.214 2004/06/24 07:05:17 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1480,15 +1480,33 @@ void CreatedWindow::create(Window* window) {
   x->region = 0;
   x->cursor = default_cursor;
   x->cursor_for = 0;
-  x->xid = CreateWindowEx(
-    styleEx,
-    "fltk", window->label(), style,
-    xp, yp, window->w()+dw, window->h()+dh,
-    parent,
-    NULL, // menu
-    xdisplay,
-    NULL // creation parameters
-    );
+  const char *name = window->label();
+  int ucslen;
+  unsigned short* ucs =
+    name && *name ? utf8to16(name, strlen(name), &ucslen) : 0;
+  if (ucs) {
+    ucs[ucslen] = 0;
+    x->xid = CreateWindowExW(
+	styleEx,
+	L"fltk", ucs, style,
+	xp, yp, window->w()+dw, window->h()+dh,
+	parent,
+	NULL, // menu
+	xdisplay,
+	NULL // creation parameters
+	);
+    utf8free(ucs);
+  } else {
+    x->xid = CreateWindowEx(
+	styleEx,
+	"fltk", name, style,
+	xp, yp, window->w()+dw, window->h()+dh,
+	parent,
+	NULL, // menu
+	xdisplay,
+	NULL // creation parameters
+	);
+  }
   x->dc = GetDC(x->xid);
   SetTextAlign(x->dc, TA_BASELINE|TA_LEFT);
   SetBkMode(x->dc, TRANSPARENT);
@@ -1553,7 +1571,15 @@ void Window::label(const char *name,const char *iname) {
   iconlabel_ = iname;
   if (i && !parent()) {
     if (!name) name = "";
-    SetWindowText(i->xid, name);
+    int ucslen;
+    unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
+    if (ucs) {
+      ucs[ucslen] = 0;
+      SetWindowTextW(i->xid, ucs);
+      utf8free(ucs);
+    } else {
+      SetWindowText(i->xid, name);
+    }
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the taskbar icon
   }
@@ -1738,5 +1764,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.213 2004/06/22 08:28:57 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.214 2004/06/24 07:05:17 spitzak Exp $".
 //

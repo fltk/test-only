@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.14 2004/06/23 07:17:19 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.15 2004/06/24 07:05:21 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -22,6 +22,11 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+
+// If this is set true, try to emulate drop on old programs by doing
+// middle-mouse click. Unfortunatly lots of old programs do not work
+// with this, so the cursor is misleading.
+#define FAKE_DROP 0
 
 #include <fltk/Window.h>
 #include <fltk/run.h>
@@ -108,7 +113,7 @@ bool fltk::dnd() {
   // Remember any user presets for the action and types:
   Atom* types;
   Atom action;
-  Atom local_source_types[3] = {UTF8_STRING, textplainutf, 0};
+  Atom local_source_types[3] = {textplainutf, UTF8_STRING, 0};
   if (dnd_source_types == fl_incoming_dnd_source_types) {
     types = local_source_types;
     action = XdndActionCopy;
@@ -179,9 +184,11 @@ bool fltk::dnd() {
 			     0, (e_x_root<<16)|e_y_root, event_time,
 			     action);
     } else {
-      // Windows that don't support DnD are reported as ok because
-      // we are going to try the middle-mouse click on them:
-      drop_ok = types[0]==UTF8_STRING;
+#if FAKE_DROP
+      drop_ok = (types == local_source_types);
+#else
+      drop_ok = false;
+#endif
     }
     source_window->cursor(drop_ok ? &fl_drop_ok_cursor : CURSOR_NO);
     moved = false;
@@ -195,6 +202,7 @@ bool fltk::dnd() {
   } else if (version) {
     fl_sendClientMessage(target_window, XdndDrop, source_xwindow,
 			 0, event_time);
+#if FAKE_DROP
   } else if (target_window) {
     // fake a drop by clicking the middle mouse button:
     XButtonEvent msg;
@@ -214,6 +222,7 @@ bool fltk::dnd() {
     msg.state = 0x200;
     msg.type = ButtonRelease;
     XSendEvent(xdisplay, target_window, False, 0L, (XEvent*)&msg);
+#endif
   }
 
   fl_local_grab = 0;
@@ -227,5 +236,5 @@ bool fltk::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.14 2004/06/23 07:17:19 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.15 2004/06/24 07:05:21 spitzak Exp $".
 //

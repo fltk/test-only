@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.11 2004/06/19 23:02:13 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.12 2004/06/24 07:05:15 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -782,7 +782,7 @@ int TextBuffer::expand_character( char c, int indent, char *outStr, int tabDist,
   /* Convert control codes to readable character sequences */
   /*... is this safe with international character sets? */
   if ( ( ( unsigned char ) c ) <= 31 ) {
-    sprintf( outStr, "<%s>", ControlCodeTable[ c ] );
+    sprintf( outStr, "<%s>", ControlCodeTable[ (unsigned char)c ] );
     return strlen( outStr );
   } else if ( c == 127 ) {
     sprintf( outStr, "<del>" );
@@ -812,7 +812,7 @@ int TextBuffer::character_width( char c, int indent, int tabDist, char nullSubsC
   if ( c == '\t' )
     return tabDist - ( indent % tabDist );
   else if ( ( ( unsigned char ) c ) <= 31 )
-    return strlen( ControlCodeTable[ c ] ) + 2;
+    return strlen( ControlCodeTable[ (unsigned char)c ] ) + 2;
   else if ( c == 127 )
     return 5;
   else if ( c == nullSubsChar )
@@ -2269,9 +2269,20 @@ static int min( int i1, int i2 ) {
 }
 
 int
-TextBuffer::insertfile(const char *file, int pos, int buflen) {
+TextBuffer::insertfile(const char *name, int pos, int buflen) {
   FILE *fp;  int r;
-  if (!(fp = fopen(file, "r"))) return 1;
+#ifdef _WIN32
+  int ucslen;
+  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
+  if (ucs) {
+    ucs[ucslen] = 0;
+    fp = _wfopen(ucs, L"r");
+    utf8free(ucs);
+  } else
+#endif
+    fp = fopen(name, "r");
+
+  if (!fp) return 1;
   char *buffer = new char[buflen];
   for (; (r = fread(buffer, 1, buflen - 1, fp)) > 0; pos += r) {
     buffer[r] = (char)0;
@@ -2285,9 +2296,19 @@ TextBuffer::insertfile(const char *file, int pos, int buflen) {
 }
 
 int
-TextBuffer::outputfile(const char *file, int start, int end, int buflen) {
+TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
   FILE *fp;
-  if (!(fp = fopen(file, "w"))) return 1;
+#ifdef _WIN32
+  int ucslen;
+  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
+  if (ucs) {
+    ucs[ucslen] = 0;
+    fp = _wfopen(ucs, L"w");
+    utf8free(ucs);
+  } else
+#endif
+    fp = fopen(name, "w");
+  if (!fp) return 1;
   for (int n; (n = min(end - start, buflen)); start += n) {
     const char *p = text_range(start, start + n);
     int r = fwrite(p, 1, n, fp);
@@ -2302,5 +2323,5 @@ TextBuffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.11 2004/06/19 23:02:13 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.12 2004/06/24 07:05:15 spitzak Exp $".
 //

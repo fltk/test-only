@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.3 2004/06/23 07:17:20 spitzak Exp $"
+// "$Id: utf.c,v 1.4 2004/06/24 07:05:22 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -401,6 +401,22 @@ unsigned* utf8to32(const char* text, int n, int* charcount) {
     pairs" which take two words each. Codes greater than 0x10ffff are
     converted to 0xFFFD (REPLACEMENT CHARACTER). Because of this lossage
     we strongly recommend you do all your work in UTF-8.
+
+    Recommended code for calling a Windows inteface function:
+
+    \code
+#ifdef _WIN32
+  int ucslen;
+  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
+  if (ucs) {
+    ucs[ucslen] = 0;
+    fp = _wfopen(ucs, L"r");
+    utf8free(ucs);
+  } else
+#endif
+    fp = fopen(name, "r");
+    \endcode
+
 */
 unsigned short* utf8to16(const char* text, int n, int* charcount) {
   const char* p = text;

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.77 2004/06/19 23:02:26 spitzak Exp $"
+# "$Id: Makefile,v 1.78 2004/06/24 07:05:22 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -119,6 +119,7 @@ TARGETS = \
 	curve$(EXEEXT) \
 	demo$(EXEEXT) \
 	doublebuffer$(EXEEXT) \
+	editor$(EXEEXT) \
 	file_chooser$(EXEEXT) \
 	fonts$(EXEEXT) \
 	gl_overlay$(EXEEXT) \
@@ -260,5 +261,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.77 2004/06/19 23:02:26 spitzak Exp $".
+# End of "$Id: Makefile,v 1.78 2004/06/24 07:05:22 spitzak Exp $".
 #

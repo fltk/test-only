@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.54 2004/06/22 08:28:57 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.55 2004/06/24 07:05:22 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -83,23 +83,45 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   int weight = (attr&BOLD) ? FW_BOLD : FW_NORMAL;
   int italic = (attr&ITALIC) ? 1 : 0;
 
-  HFONT font = CreateFont(
-    -size,	    // use "char size"
-    0,		    // logical average character width
-    0,		    // angle of escapement
-    0,		    // base-line orientation angle
-    weight,
-    italic,
-    FALSE,		// underline attribute flag
-    FALSE,		// strikeout attribute flag
-    charset,		// character set identifier
-    OUT_DEFAULT_PRECIS, // output precision
-    CLIP_DEFAULT_PRECIS,// clipping precision
-    DEFAULT_QUALITY,	// output quality
-    DEFAULT_PITCH,	// pitch and family
-    name		// pointer to typeface name string
-  );
-
+  int ucslen;
+  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
+  if (ucs) {
+    ucs[ucslen] = 0;
+    font = CreateFontW(
+	-size,		// use "char size"
+	0,		// logical average character width
+	0,		// angle of escapement
+	0,		// base-line orientation angle
+	weight,
+	italic,
+	FALSE,		// underline attribute flag
+	FALSE,		// strikeout attribute flag
+	charset,	// character set identifier
+	OUT_DEFAULT_PRECIS, // output precision
+	CLIP_DEFAULT_PRECIS,// clipping precision
+	DEFAULT_QUALITY,// output quality
+	DEFAULT_PITCH,	// pitch and family
+	ucs		// pointer to typeface name string
+	);
+    utf8free(ucs);
+  } else {
+    font = CreateFont(
+	-size,		// use "char size"
+	0,		// logical average character width
+	0,		// angle of escapement
+	0,		// base-line orientation angle
+	weight,
+	italic,
+	FALSE,		// underline attribute flag
+	FALSE,		// strikeout attribute flag
+	charset,	// character set identifier
+	OUT_DEFAULT_PRECIS, // output precision
+	CLIP_DEFAULT_PRECIS,// clipping precision
+	DEFAULT_QUALITY,// output quality
+	DEFAULT_PITCH,	// pitch and family
+	name		// pointer to typeface name string
+	);
+  }
   HDC dc = getDC();
   SelectObject(dc, font);
   GetTextMetricsW(dc, &current->metr);
@@ -111,7 +133,6 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   //...would be the right call, but is not implemented into Window95! (WinNT?)
   //GetCharWidth(dc, 0, 255, current->width);
 
-  this->font = font;
   this->size = size;
   this->charset = charset;
   next_all = all_fonts;
@@ -265,5 +286,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.54 2004/06/22 08:28:57 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.55 2004/06/24 07:05:22 spitzak Exp $".
 //

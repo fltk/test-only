@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_win32.cxx,v 1.2 2004/03/09 08:28:43 spitzak Exp $"
+// "$Id: fltk_theme_win32.cxx,v 1.3 2004/06/24 07:05:22 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -30,6 +30,7 @@
 #include <fltk/events.h>
 #include <stdio.h>
 #include <fltk/string.h>
+#include <fltk/utf.h>
 #include <fltk/x.h>
 #include <limits.h>
 
@@ -147,17 +148,25 @@ extern "C" bool fltk_theme() {
      CET
   */
 
-  NONCLIENTMETRICS ncm;
+  NONCLIENTMETRICSW ncm;
   int sncm = sizeof(ncm);
   ncm.cbSize = sncm;
-  SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
+  SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
 
   Font* font; float size;
 
+  unsigned short *name;
+  char *buffer;
+  int count;
+
   // get font info for regular widgets from LOGFONT structure
-  font = fltk::font((const char*)ncm.lfMessageFont.lfFaceName,
+  name = ncm.lfMessageFont.lfFaceName;
+  buffer = utf8from16(name, wcslen(name), &count);
+  buffer[count] = 0;
+  font = fltk::font(buffer,
 		    (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
 		    (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
+  free(buffer);
   size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
 
   Widget::default_style->labelfont_ = font;
@@ -166,9 +175,13 @@ extern "C" bool fltk_theme() {
   Widget::default_style->textsize_ = size;
 
   // get font info for menu items from LOGFONT structure
-  font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
+  name = ncm.lfMenuFont.lfFaceName;
+  buffer = utf8from16(name, wcslen(name), &count);
+  buffer[count] = 0;
+  font = fltk::font(buffer,
 		    (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
 		    (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
+  free(buffer);
   size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
   if ((style = Style::find("MenuBar"))) {
     style->textfont_ = font;
@@ -180,10 +193,14 @@ extern "C" bool fltk_theme() {
   }
 
   if ((style = Style::find("Tooltip"))) {
+    name = ncm.lfStatusFont.lfFaceName;
+    buffer = utf8from16(name, wcslen(name), &count);
+    buffer[count] = 0;
     // get font info for tooltips from LOGFONT structure
-    font = fltk::font((const char*)ncm.lfStatusFont.lfFaceName,
+    font = fltk::font(buffer,
 		      (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
 		      (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
+	free(buffer);
     size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
     style->textfont_ = font;
@@ -201,5 +218,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: fltk_theme_win32.cxx,v 1.2 2004/03/09 08:28:43 spitzak Exp $".
+// End of "$Id: fltk_theme_win32.cxx,v 1.3 2004/06/24 07:05:22 spitzak Exp $".
 //

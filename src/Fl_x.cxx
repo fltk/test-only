@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.177 2004/06/23 07:17:18 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.178 2004/06/24 07:05:19 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -25,6 +25,8 @@
 //
 
 #define CONSOLIDATE_MOTION 1 // this was 1 in fltk 1.0
+
+#define DEBUG_SELECTIONS 0
 
 #include <config.h>
 #include <fltk/x.h>
@@ -1058,11 +1060,16 @@ bool fltk::handle()
       // to add to this list in the future, turn on the #if to print the
       // types if you get a drop that you think should work.
       dnd_type = textplain; // try this if no matches, it may work
+#if DEBUG_SELECTIONS
+      printf("dnd source types:\n");
+#endif
       for (int i = 0; ; i++) {
  	Atom type = dnd_source_types[i]; if (!type) break;
-// 	char* x = XGetAtomName(xdisplay, type);
-// 	printf("source type of %s\n",x);
-// 	XFree(x);
+#if DEBUG_SELECTIONS
+ 	char* x = XGetAtomName(xdisplay, type);
+ 	printf(" %s\n",x);
+ 	XFree(x);
+#endif
 	if (type == textplainutf ||
 	    type == textplain ||
 	    type == UTF8_STRING) {dnd_type = type; break;} // ok
@@ -1456,12 +1463,18 @@ bool fltk::handle()
       if (actual == TARGETS || actual == XA_ATOM) {
 	Atom type = XA_STRING;
 	// see if it offers a better type:
+#if DEBUG_SELECTIONS
+	printf("selection source types:\n");
 	for (unsigned i = 0; i<count; i++) {
-//   	  char* x = XGetAtomName(xdisplay, type);
-//   	  printf("source type of %s\n",x);
-//   	  XFree(x);
  	  Atom t = ((Atom*)portion)[i];
- 	  if (t == UTF8_STRING) {type = t; break;}
+   	  char* x = XGetAtomName(xdisplay, t);
+   	  printf(" %s\n",x);
+   	  XFree(x);
+	}
+#endif
+	for (unsigned i = 0; i<count; i++) {
+ 	  Atom t = ((Atom*)portion)[i];
+	  if (t == textplainutf || t == UTF8_STRING) {type = t; break;}
 	}
 	XFree(portion);
 	Atom property = xevent.xselection.property;
@@ -1470,6 +1483,11 @@ bool fltk::handle()
 			  event_time);
 	return true;
       }
+#if DEBUG_SELECTIONS
+      char* x = XGetAtomName(xdisplay, actual);
+      printf("selection notify of type %s\n",x);
+      XFree(x);
+#endif
       if (read) { // append to the accumulated buffer
 	buffer = (unsigned char*)realloc(buffer, read+count*format/8+remaining);
 	memcpy(buffer+read, portion, count*format/8);
@@ -1509,9 +1527,11 @@ bool fltk::handle()
     e.target = xevent.xselectionrequest.target;
     e.time = xevent.xselectionrequest.time;
     e.property = xevent.xselectionrequest.property;
-//     char* x = XGetAtomName(xdisplay,e.target);
-//     fprintf(stderr,"selection request of %s\n",x);
-//     XFree(x);
+#if DEBUG_SELECTIONS
+    char* x = XGetAtomName(xdisplay,e.target);
+    fprintf(stderr,"selection request for %s\n",x);
+    XFree(x);
+#endif
     if (e.target == TARGETS) {
       Atom a[3] = {XA_STRING, UTF8_STRING, XA_TEXT};
       XChangeProperty(xdisplay, e.requestor, e.property,
@@ -2108,5 +2128,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.177 2004/06/23 07:17:18 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.178 2004/06/24 07:05:19 spitzak Exp $".
 //
