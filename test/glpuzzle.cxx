@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.3 2003/12/02 02:51:49 easysw Exp $"
+// "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.4 2004/09/11 04:43:27 rokan Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 //
@@ -154,7 +154,7 @@ hash(Config config)
   value = 0;
   for (i = 0; i < HEIGHT; i++) {
     for (j = 0; j < WIDTH; j++) {
-      value = value + convert[config[i][j]];
+      value = value + convert[(unsigned char)config[i][j]];
       value *= 6;
     }
   }
@@ -521,8 +521,8 @@ addConfig(Config config, struct puzzle *back)
 
       for (i = 0; i < WIDTH; i++) {
         for (j = 0; j < HEIGHT; j++) {
-          if (convert[config[j][i]] !=
-            convert[newpiece->pieces[j][i]])
+          if (convert[(unsigned char)config[j][i]] !=
+            convert[(unsigned char)newpiece->pieces[j][i]])
             goto nomatch;
         }
       }
@@ -1484,5 +1484,5 @@ main(int argc, char **argv)
 #endif // added for fltk's distribution
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.3 2003/12/02 02:51:49 easysw Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.4 2004/09/11 04:43:27 rokan Exp $".
 //

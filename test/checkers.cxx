@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.9.2.7.2.3.2.3 2003/12/02 02:51:49 easysw Exp $"
+// "$Id: checkers.cxx,v 1.9.2.7.2.3.2.4 2004/09/11 04:43:27 rokan Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -221,7 +221,7 @@ void evaluateboard(node *n,int print) {
 
   if (!n->who) tb = b;	// move was black's
   else {
-    for (int i=0; i<45; i++) flipboard[44-i] = flip[b[i]];
+    for (int i=0; i<45; i++) flipboard[44-i] = flip[(unsigned char)b[i]];
     tb = flipboard;
   }
 
@@ -413,7 +413,7 @@ void movepiece(node* f, int i, node* jnode) {
   static char jumphappened;
 
   for (int k=0; k<4; k++) {
-    int direction = offset[b[i]][k];
+    int direction = offset[(unsigned char)b[i]][k];
     if (!direction) break;
     int j = i+direction;
     if (b[j] == EMPTY) {
@@ -1355,5 +1355,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.9.2.7.2.3.2.3 2003/12/02 02:51:49 easysw Exp $".
+// End of "$Id: checkers.cxx,v 1.9.2.7.2.3.2.4 2004/09/11 04:43:27 rokan Exp $".
 //
