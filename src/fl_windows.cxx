@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.2 1999/11/10 14:21:01 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.3 1999/11/10 15:11:28 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -60,6 +60,14 @@ int fl_windows() {
   }
 
   // highlighting must be on both the menu bar and menu title!
+  if ((s = Fl_Style::find("menu item"))) {
+    s->set_glyph_box(FL_NO_BOX);
+  }
+
+  if ((s = Fl_Style::find("menu title"))) {
+    s->set_glyph_box(FL_NO_BOX);
+  }
+
   if ((s = Fl_Style::find("menu bar"))) {
     s->set_highlight_color(FL_GRAY);
   }
@@ -102,5 +110,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.2 1999/11/10 14:21:01 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.3 1999/11/10 15:11:28 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.4 1999/11/10 12:21:56 bill Exp $"
+// "$Id: Alternative.cxx,v 1.5 1999/11/10 15:11:30 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -228,11 +228,20 @@ int fltk_theme(int, char** argv) {
   static Fl_Boxtype_Definer alt_menu("alternative menu", alt_menu_box);
   static Fl_Boxtype_Definer alt_menu_title("alternative menu title", alt_menu_title_box);
 
+  Fl_Style* s;
+  if ((s = Fl_Style::find("menu title"))) {
+    s->set_glyph_box(FL_NO_BOX);
+  }
+
+  if ((s = Fl_Style::find("menu item"))) {
+    s->set_glyph_box(FL_NO_BOX);
+  }
+
   Fl_Widget::default_style.set_glyph(alt_glyph);
 
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.4 1999/11/10 12:21:56 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.5 1999/11/10 15:11:30 carl Exp $".
 //

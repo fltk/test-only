@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.4 1999/11/10 14:21:00 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.5 1999/11/10 15:11:28 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -201,6 +201,7 @@ int fl_motif() {
 
   if ((s = Fl_Style::find("menu item"))) {
     s->set_box(&thin_motif_highlight_box);
+    s->set_glyph_box(FL_NO_BOX);
     s->set_highlight_color(FL_GRAY);
     s->set_highlight_label_color(FL_BLACK);
     s->set_on_color(FL_DARK1);
@@ -208,6 +209,7 @@ int fl_motif() {
   }
 
   if ((s = Fl_Style::find("menu title"))) {
+    s->set_glyph_box(FL_NO_BOX);
     s->set_box(&thin_motif_title_box);
     s->set_selection_color(FL_GRAY);
     s->set_selection_text_color(FL_BLACK);
@@ -282,5 +284,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.4 1999/11/10 14:21:00 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.5 1999/11/10 15:11:28 carl Exp $".
 //

@@ -55,7 +55,6 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/browser]                               # browser attributes
     selection color = puke green                  # color of selections in browser
     box = up                                      # boxtype of browser
-    text size = 14                                # size of browser text
     selection text color = white                  # color of selected browser text
 
   [widgets/chart]                                 # chart attributes
@@ -95,22 +94,25 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     color = scroll bar gray                       # color of scroll bar background area
     box = down                                    # boxtype of the scroll bar background area
 
-  [widgets/input]                                 # input and output widget attributes
-    box = down                                    # boxtype of the input / output area
-    text size = 14                                # size of input / output text
+  [widgets/input]                                 # input widget attributes
+    box = down                                    # boxtype of the input area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
     off color = black                             # cursor color
 
-  [widgets/output]                                # input and output widget attributes
-    box = down                                    # boxtype of the input / output area
-    text size = 14                                # size of input / output text
+  [widgets/output]                                # output widget attributes
+    color = light2                                # color of output area
+    box = down                                    # boxtype of the output area
     selection color = puke green                  # background color of selected text
+    selection text color = white                  # font color of selected text
+
+  [widgets/value output]                          # value output widget attributes
+    color = light2                                # color of output area
+    box = down                                    # boxtype of the output area
     selection text color = white                  # font color of selected text
 
   [widgets/counter]                               # counter attributes
     box = border                                  # boxtype of the counter's text area
-    text size = 14                                # font size of the counter's text
     selection color = puke green                  # background color of selected text
     selection text color = white                  # color of selected text
 
@@ -138,4 +140,5 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   puke green = 14
   white = 7
   light1 = 51
+  light2 = 53
   scroll bar gray = 46
