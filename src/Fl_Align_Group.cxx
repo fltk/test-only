@@ -29,7 +29,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Flags.H>
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Layout.H>
+#include <FL/Fl_Align_Group.H>
 
 void Fl_Align_Group::layout() {
   Fl_Widget::layout();
