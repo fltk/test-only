@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.17 2001/07/24 21:14:27 robertk Exp $"
+// "$Id: fl_draw.cxx,v 1.18 2001/07/29 21:38:00 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,11 +40,10 @@
 #include <fltk/fl_draw.h>
 #include <string.h>
 
-//#define MAXBUF 1024
+// Any string longer than this does not get &x underscore processing.
+#define MAX_LENGTH_FOR_UNDERSCORE 128
 
 const int* fl_column_widths_ = 0;
-static size_t working_buffer_size_ = 128;	// may grow as program runs
-static int MAXSEGMENTS = 50;				// this too
 
 // The implementation splits the text up into individual calls to fl_draw.
 // Each has an x/y position and a segment of text. Probably should be
@@ -57,10 +56,15 @@ struct Segment {
   int x,y;
 };
 
+// The results are put into this array of segments. This may increase
+// in size at any time:
+static Segment* segments;
+static int num_segments;
+
 static int max_x;
 
 // Create a new segment:
-static /*inline*/ void set(Segment* s,
+static /*inline*/ void set(int index,
 		  const char* start,
 		  const char* end,
 		  int width,
@@ -68,16 +72,25 @@ static /*inline*/ void set(Segment* s,
 		  Fl_Flags flags
 		  )
 {
-  s->start = start;
-  s->end = end;
+  // enlarge the array if necessary:
+  if (index >= num_segments) {
+    num_segments = index ? 2*index : 32;
+    Segment* new_array = new Segment[num_segments];
+    memcpy(new_array, segments, index*sizeof(Segment));
+    delete[] segments;
+    segments = new_array;
+  }
+  Segment& s = segments[index];
+  s.start = start;
+  s.end = end;
   if (x+width > max_x) max_x = x+width;
   if (flags & FL_ALIGN_RIGHT) {
-    s->x = x+w-width;
-    if (flags & FL_ALIGN_LEFT && s->x > x) s->x = x;
+    s.x = x+w-width;
+    if (flags & FL_ALIGN_LEFT && s.x > x) s.x = x;
   }
-  else if (flags & FL_ALIGN_LEFT) s->x = x;
-  else s->x = x+w/2-width/2;
-  s->y = y+fl_height()-fl_descent();
+  else if (flags & FL_ALIGN_LEFT) s.x = x;
+  else s.x = x+w/2-width/2;
+  s.y = y+fl_height()-fl_descent();
 }
 
 // word-wrap a section of text into one segment per line:
@@ -87,8 +100,7 @@ static int wrap(
   const char* end,
   int x, int y, int w,
   Fl_Flags flags,
-  Segment*& segment,
-  Segment* last_segment // prevent array overflow
+  int& index
   )
 {
   int width = 0;
@@ -101,9 +113,8 @@ static int wrap(
 	if (word_start < p) {
 	  int newwidth = width + fl_width(word_end, p-word_end);
 	  if (word_end > start && newwidth > w) { // break before this word
-	    set(segment++, start, word_end, width, x, y, w, flags);
+	    set(index++, start, word_end, width, x, y, w, flags);
 	    y += fl_height();
-	    if (segment >= last_segment) return y; // quit on array overflow
 	    start = word_end = p = word_start;
 	    width = 0;
 	    continue;
@@ -119,46 +130,20 @@ static int wrap(
   } else {
     width = fl_width(start, end-start);
   }
-  if (start < end) set(segment++, start, end, width, x, y, w, flags);
+  if (start < end) set(index++, start, end, width, x, y, w, flags);
   return y;
 }
 
 bool fl_hide_shortcut; // set by Fl_Choice
 
-static void set_max_segments(const char *str, Segment **segments) {
-	int max = 10;	// leave some extra room 
-	while(str && *str) {
-		if(*str == '\t' || *str == '\n')
-			++max;
-		++str;
-	}
-	if(MAXSEGMENTS < max)
-	{
-		if(*segments)
-			delete[] *segments;
-		*segments = new Segment[max];
-		MAXSEGMENTS = (*segments) ? max : 0;
-	}
-}
-
-static inline void set_working_buffer_size(const char *str, char **buffer) {
-	if(strlen(str) > working_buffer_size_ - 1)
-	{
-		if(*buffer)
-			delete[] buffer;
-		*buffer = new char[strlen(str) * 2];
-		working_buffer_size_ = (*buffer) ? strlen(str) * 2 : 0;
-	}
-}
-
 // Parses and lays out the text into segments. Return value is the
-// y height of the text. The width is stored in max_x.
+// y height of the text. The width is stored in max_x. The index is
+// set to be the number of segments.
 static int split(
     const char* str,
     int W, int /*H*/,
     Fl_Flags flags,
-    Segment*& segment,
-    Segment* last_segment,
+    int& index,
     char* tempbuf // for the underscore stuff...
     )
 {
@@ -190,7 +175,7 @@ static int split(
     // it's position later to underscore a letter. This is done by
     // copying the text to the tempbuf and then reusing that buffer
     // as the source for this text:
-    if (saw_underscore && p-str < 128) {
+    if (saw_underscore && p-str < MAX_LENGTH_FOR_UNDERSCORE) {
       look_for_underscore = false;
       char* a = tempbuf;
       const char* b = str;
@@ -203,20 +188,25 @@ static int split(
 	}
 	*a++ = *b++;
       }
-      Segment* s = segment;
-      newy = wrap(tempbuf, a, x, y, w, flags, segment, last_segment);
-      // add something to print the underscore:
-      if (underscore_at) for (; s < segment; s++) {
-	if (underscore_at >= s->start && underscore_at < s->end) {
-	  Segment* t = segment++;
-	  t->start = "_"; t->end = t->start+1;
-	  t->x = s->x+fl_width(s->start,underscore_at-s->start);
-	  t->y = s->y;
+      int i = index; // remember where it starts
+      // create segments for the text:
+      newy = wrap(tempbuf, a, x, y, w, flags, index);
+      // add a segment to print the underscore:
+      if (underscore_at) for (; i < index; i++) {
+	Segment& s = segments[i];
+	if (underscore_at >= s.start && underscore_at < s.end) {
+	  const char* text = "_";
+	  int save_y = s.y;
+	  set(index, text, text+1, 0,
+	      s.x+fl_width(s.start, underscore_at-s.start), y, 0,
+	      FL_ALIGN_LEFT);
+	  segments[index].y = save_y;
+	  index++;
 	  break;
 	}
       }
     } else {
-      newy = wrap(str, p, x, y, w, flags, segment, last_segment);
+      newy = wrap(str, p, x, y, w, flags, index);
     }
     if (newy > max_y) max_y = newy;
     if (!*p) {
@@ -236,12 +226,9 @@ void fl_draw(
     Fl_Flags flags
 ) {
   if (!str || !*str) return;
-  static Segment *segments = new Segment[MAXSEGMENTS];
-  static char *tempbuf = new char[working_buffer_size_];
-  set_max_segments(str, &segments);
-  set_working_buffer_size(str, &tempbuf);
-  Segment* segment = segments;
-  int h = split(str, W, H, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
+  char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
+  int index = 0;
+  int h = split(str, W, H, flags, index, tempbuf);
   int dy;
   if (flags & FL_ALIGN_BOTTOM) {
     dy = Y+H-h;
@@ -251,19 +238,17 @@ void fl_draw(
   } else {
     dy = Y+(H-h)/2;
   }
-  for (Segment* s = segments; s < segment; s++) {
-    fl_draw(s->start, s->end-s->start, s->x+X, s->y+dy);
+  for (int i = 0; i < index; i++) {
+    Segment& s = segments[i];
+    fl_draw(s.start, s.end-s.start, s.x+X, s.y+dy);
   }
 }
 
 void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
   if (!str || !*str) {w = 0; h = fl_height(); return;}
-  static Segment *segments = new Segment[MAXSEGMENTS];
-  static char *tempbuf = new char[working_buffer_size_];
-  set_max_segments(str, &segments);
-  set_working_buffer_size(str, &tempbuf);
-  Segment* segment = segments;
-  h = split(str, w, h, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
+  char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
+  int index = 0;
+  h = split(str, w, h, flags, index, tempbuf);
   w = max_x;
 }
 
@@ -273,5 +258,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.17 2001/07/24 21:14:27 robertk Exp $".
+// End of "$Id: fl_draw.cxx,v 1.18 2001/07/29 21:38:00 spitzak Exp $".
 //
