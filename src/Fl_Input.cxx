@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.83 2003/10/28 17:45:14 spitzak Exp $"
-//
-// Input widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Input.cxx,v 1.84 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,10 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Most useful changes of behavior can be accomplished by making a
-// subclass and replacing the replace(...) function, to make a version
-// that rejects changes you don't want to allow.
-
 #include <fltk/Input.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
@@ -39,14 +33,55 @@
 
 using namespace fltk;
 
+/*! \class fltk::Input
+
+  This is the FLTK text input widget. It displays a single line of
+  text and lets the user edit it. Normally it is drawn with an inset
+  box and a white background. The text may contain any characters
+  (even '\\0'). The characters 0..31 are displayed in ^X notation, the
+  appearance of other characters will depend on your operating system.
+
+  By default the callback() is done when the widget loses focus. This
+  is a useful value for text fields in a panel where doing the
+  callback on every change is wasteful. However the callback will also
+  happen if the mouse is moved out of the window, which means it
+  should not do anything visible (like pop up an error message). You
+  might do better setting when() to WHEN_NEVER, and scanning all the
+  items for changed() when the OK button on a panel is pressed. Other
+  value for when():
+
+  - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on. 
+  - fltk::WHEN_CHANGED: The callback is done each time the text is
+    changed by the user.
+  - fltk::WHEN_RELEASE: This is the default. The callback is done when
+    the widget loses focus (ie the user clicks somewhere else, the
+    window loses focus, or the widget is hidden or destroyed)
+  - fltk::WHEN_ENTER_KEY: If the user types the Enter key, the entire
+    text is selected, and if the value has changed, the callback is
+    done. Notice that this will block any widget that has Enter key as
+    a shortcut.
+  - fltk::WHEN_ENTER_KEY_ALWAYS: The Enter key will do the callback
+    even if the text has not changed. Useful for command fields.
+  - fltk::WHEN_ENTER_KEY_CHANGED: The Enter key will do the callback
+    even if the text has not changed, and the callback is done on each
+    change. Test fltk::event_key() to see why the callback was done.
+
+  Most useful changes of behavior (such as allowing numbers only) can
+  be accomplished by making a subclass and overriding the replace()
+  function, to make a version that rejects changes you don't want to
+  allow. If you don't like the keybindings you can override handle()
+  to change them.
+
+*/
+
 #define MAXBUF 1024
 
 ////////////////////////////////////////////////////////////////
 
-// Copy string p to the buffer, replacing control characters with ^X.
-// Stop at then end of the line, or truncate if necessary so the resulting
-// string and null terminator fits in a buffer of size MAXBUF.  Returns
-// pointer to the character after the last one copied.
+/*! Copy string p to the buffer, replacing control characters with ^X.
+  Stop at then end of the line, or truncate if necessary so the resulting
+  string and null terminator fits in a buffer of size MAXBUF.  Returns
+  pointer to the character after the last one copied. */
 const char* Input::expand(const char* p, char* buf,int wordwrap) const {
   char* o = buf;
   char* e = buf+(MAXBUF-4);
@@ -87,7 +122,7 @@ const char* Input::expand(const char* p, char* buf,int wordwrap) const {
   return p;
 }
 
-// After filling in such a buffer, find the width to e:
+/*! After filling in a buffer with expand(), find the width to e. */
 float Input::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
@@ -110,18 +145,17 @@ float Input::expandpos(
 }
 
 ////////////////////////////////////////////////////////////////
-
 // minimal update:
 
 // Characters from mu_p to end of widget are redrawn.
 // If this == erase_cursor_only, small part at mu_p is redrawn.
-
-// This is done with a clip region to work with xft. The purpose is to
-// avoid blinking, not to make draw() less expensive. A few minor attempts
-// to make draw() not think about clipped text are implemented, though.
-
 static Input* erase_cursor_only;
 
+/*! Indicate that the characters after position \a p must be redrawn.
+  This is done with a clip region to work with xft. The purpose is to
+  avoid blinking, not to make draw() less expensive. A few minor attempts
+  to make draw() not think about clipped text are implemented, though.
+*/
 void Input::minimal_update(int p) {
   if (erase_cursor_only == this) erase_cursor_only = 0;
   if (damage() & DAMAGE_ALL) return; // don't waste time if it won't be done
@@ -133,12 +167,14 @@ void Input::minimal_update(int p) {
   redraw(DAMAGE_VALUE);
 }
 
+/*! Indicate that the characters between positions \a p and \a q must be
+  redrawn. Currently this just does minimal_update(min(p,q)). */
 void Input::minimal_update(int p, int q) {
   if (q < p) p = q;
   minimal_update(p);
 }
 
-// Erase a cursor that was drawn at the given point and possibly draw new one:
+/*! Indicate that a cursor drawn a postion \a p must be redrawn. */
 void Input::erase_cursor_at(int p) {
   if (!damage()) {
     mu_p = p;
@@ -160,6 +196,9 @@ void Input::setfont() const {
   fltk::setfont(textfont(), textsize());
 }
 
+/*! The default version draws the box and calls draw(x,y,w,h) with
+  the area inside the box.
+*/
 void Input::draw() {
   if (damage() & DAMAGE_ALL) draw_frame();
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
@@ -173,6 +212,15 @@ static float line_ascent(float leading) {
   return (line_spacing(leading) + getascent() - getdescent()) / 2;
 }
 
+/*!
+  Draw the text, where the passed box is the area the text is to be
+  drawn into. This method is provided so a subclass can place the text
+  into a subrectangle.
+
+  If damage()&fltk::DAMAGE_ALL is true, this assummes the area has
+  already been erased to color(). Otherwise it does minimal update and
+  erases the area itself.
+*/
 void Input::draw(int X, int Y, int W, int H)
 {
   setfont();
@@ -391,6 +439,7 @@ static int isword(char c) {
   return (c&128 || isalnum(c) || strchr("#%&-/@\\_~", c));
 }
 
+/*! Returns the location of the next word boundary at or after position. */
 int Input::word_end(int i) const {
   if (type() == SECRET) return size();
   while (!i || !isword(index(i-1))) i++;
@@ -398,6 +447,7 @@ int Input::word_end(int i) const {
   return i;
 }
 
+/*! Returns the location of the first word boundary at or before position. */
 int Input::word_start(int i) const {
   if (type() == SECRET) return 0;
   while (!isword(index(i))) i--;
@@ -405,6 +455,8 @@ int Input::word_start(int i) const {
   return i;
 }
 
+/*! Returns the location of the next newline or wordwrap space at or
+  after position. */
 int Input::line_end(int i) const {
   if (type() >= WORDWRAP) {
     // go to the start of the paragraph:
@@ -427,6 +479,7 @@ int Input::line_end(int i) const {
   }
 }
 
+/*! Returns the location of the start of the line containing the position. */
 int Input::line_start(int i) const {
   if (type() < MULTILINE) return 0;
   int j = i;
@@ -445,6 +498,11 @@ int Input::line_start(int i) const {
   return j;
 }
 
+/*! Figure out what character the most recent mouse event would be pointing
+  at, assumming you drew the text by calling draw() with the same rectangle.
+  Returns 0 if the mouse is before the first character, and size() if it is
+  after the last one.
+*/
 int Input::mouse_position(int X, int Y, int W, int /*H*/) const
 {
   if (!size()) return 0;
@@ -496,26 +554,48 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
   return l-value();
 }
 
-void Input::position(int p, int m) {
+/*! \fn void Input::position(int n)
+  Same as position(n,n)
+*/
+
+/*! \fn void Input::mark(int n)
+  Same as position(position(),n)
+*/
+
+/*!
+  The input widget maintains two pointers into the string. The
+  "position" is where the cursor is. The "mark" is the other end of
+  the selected text. If they are equal then there is no
+  selection. Changing this does not affect the X selection, call
+  copy() if you want that.
+
+  Changing these values causes a redraw(). The new values are bounds
+  checked and limited to the size of the string.
+*/
+void Input::position(int new_position, int new_mark) {
   was_up_down = false;
-  if (p<0) p = 0;
-  if (p>size()) p = size();
-  if (m<0) m = 0;
-  if (m>size()) m = size();
-  if (p == position_ && m == mark_) return;
-  if (p != m) {
+  if (new_position<0) new_position = 0;
+  if (new_position>size()) new_position = size();
+  if (new_mark<0) new_mark = 0;
+  if (new_mark>size()) new_mark = size();
+  if (new_position == position_ && new_mark == mark_) return;
+  if (new_position != new_mark) {
     // new position is a selection:
-    if (p != position_) minimal_update(position_, p);
-    if (m != mark_) minimal_update(mark_, m);
+    if (new_position != position_) minimal_update(position_, new_position);
+    if (new_mark != mark_) minimal_update(mark_, new_mark);
   } else {
     // new position is a cursor:
     if (position_ == mark_) erase_cursor_at(position_);
     else minimal_update(position_, mark_);
   }
-  position_ = p;
-  mark_ = m;
+  position_ = new_position;
+  mark_ = new_mark;
 }
 
+/*! Do the correct thing for arrow keys. \a i must be the location of the
+  start of a line. Sets the position (and mark if \a keepmark is false) to
+  somewhere after \a i, such that pressing the arrows repeatedly will
+  cause the point to move up and down. */
 void Input::up_down_position(int i, bool keepmark) {
   // cursor must already be at start of line!
   setfont();
@@ -534,6 +614,20 @@ void Input::up_down_position(int i, bool keepmark) {
   was_up_down = true;
 }
 
+/*!
+  Put the current selection between mark() and position() into the
+  selection or clipboard by calling fltk::copy(). If position() and
+  mark() are equal this does nothing (ie it does not clear the clipboard).
+
+  If \a clipboard is true the text is put into the user-visible cut &
+  paste clipboard (this is probably what you want). If \a clipboard is
+  false it is put into the less-visible selection buffer that is used
+  to do middle-mouse paste and drag & drop.
+
+  To paste the clipboard, call fltk::paste(true) and fltk will send
+  the widget a fltk::PASTE event with the text, which will cause it to
+  be inserted.
+*/
 bool Input::copy(bool clipboard) {
   int b = position();
   int e = mark();
@@ -569,7 +663,29 @@ static void undobuffersize(int n) {
   }
 }
 
-// all changes go through here, delete characters b-e and insert text:
+/*!
+  This call does all editing of the text. It deletes the region
+  between \a b and \a e (either one may be less or equal to the other), and
+  then inserts \a ilen (which may be zero) characters from the string
+  \a text at that point and leaves the mark() and position() after the
+  insertion. If the text is changed this does the callback() if
+  when()&WHEN_CHANGED is true. The changes are also recorded so that
+  a call to undo() can undo them.
+
+  Subclasses of Input can override this method to control what
+  characters can be inserted into the text. A typical implementation
+  will check the characters in the insertion for legality and then
+  call Input::replace() only if they are all ok.
+
+  \a b and \a e are bounds checked so don't worry about sending values
+  outside the length of the string.
+
+  Subclasses should return true if the keystroke that produced this
+  call should be "eaten". If false is returned the keystroke is
+  allowed to be tested as a shortcut for other widgets. In our
+  experience it is best to return true even if you don't make
+  changes. The base class version returns true always.
+*/
 bool Input::replace(int b, int e, const char* text, int ilen) {
 
   was_up_down = false;
@@ -588,7 +704,7 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
   }
 #endif
 
-  put_in_buffer(size_+ilen);
+  reserve(size_+ilen);
 
   if (undo_is_redo) {undowidget = 0; undo_is_redo = false;}
 
@@ -654,6 +770,46 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
   return true;
 }
 
+/*! \fn bool Input::cut()
+  Wrapper around replace(), this deletes the region between the point
+  and the mark. It does nothing if they are equal.
+*/
+
+/*! \fn bool Input::cut(int n)
+  Wrapper around replace() this deletes up to \a n characters after the
+  point, or before the point if \a n is negative. N is bounds checked.
+*/
+
+/*! \fn bool Input::cut(int a, int b)
+  Wrapper around replace() this deletes the characters between \a a and
+  \a b. The values are clamped to the ends of the string, and \a b can be
+  less than \a a.
+*/
+
+/*!
+  Wrapper around replace(). This inserts the string at the point and
+  leaves the point after it.
+*/
+bool Input::insert(const char* text) {
+  if (!text) return 0;
+  return insert(text, strlen(text));
+}
+
+/*! \fn bool Input::insert(const char* text, int n)
+  Wrapper around replace(). This inserts \a n characters from the
+  \a text (including '\\0' characters!) at the point and
+  leaves the point after it.
+*/
+
+/*! \fn bool Input::replace(int a, int b, char c)
+  Wrapper around replace(). Deletes the characters between \a a and \a b
+  and then inserts the single byte \a c. */
+
+/*! If this is the most recent widget on which replace() was done on,
+  this will undo that replace() and probably several others (ie if the
+  user has typed a lot of text it will undo all of it even though that
+  was probably many calls to replace()). Returns true if any change
+  was made. */
 bool Input::undo() {
   if (undowidget != this || !undocut && !undoinsert) return false;
   was_up_down = false;
@@ -663,7 +819,7 @@ bool Input::undo() {
   int b = undoat-xlen;
   int b1 = b;
 
-  put_in_buffer(size_+ilen);
+  reserve(size_+ilen);
 
   if (ilen) {
     memmove(buffer+b+ilen, buffer+b, size_-b+1);
@@ -693,12 +849,16 @@ bool Input::undo() {
 }
 
 #if 0
+/*! Does Emacs-style yank of appended cuts by retrieving them from
+  the saved undo() information. */
 bool Input::yank() {
-  // fake yank by trying to get it out of undobuffer
   return yankcut && change(position(), position(), undobuffer, yankcut);
 }
 #endif
 
+/*!  Does the callback if changed() is true or if when()
+  fltk::WHEN_NOT_CHANGED is non-zero. You should call this at any
+  point you think you should generate a callback. */
 void Input::maybe_do_callback() {
   if (changed() || (when()&WHEN_NOT_CHANGED)) {
     clear_changed(); do_callback();}
@@ -712,6 +872,10 @@ static void revert(Style *s) {
 static NamedStyle style("Input", revert, &Input::default_style);
 NamedStyle* Input::default_style = &::style;
 
+/*! The constructor initializes:
+  - label alignment to ALIGN_LEFT (puts label to left)
+  - value to ""
+*/
 Input::Input(int x, int y, int w, int h, const char* l)
   : Widget(x, y, w, h, l)
 {
@@ -727,7 +891,25 @@ Input::Input(int x, int y, int w, int h, const char* l)
   label_width = 0;
 }
 
-void Input::put_in_buffer(int len) {
+/*! \fn const char* Input::value() const
+  The current value, which is a pointer to the internal buffer and <i>is
+  valid only until the next event is handled</i>. This is always a legal
+  value, if you set the string to NULL this will return a zero-length
+  string.
+*/
+
+/*! \fn char Input::index(int i) const
+  Same as value()[n], but may be faster in plausible
+  implementations. No bounds checking is done.
+*/
+
+/*! \fn int Input::size() const
+  Returns the number of characters in value(). This may be greater
+  than strlen(value()) if there are nul characters in it.
+*/
+
+/*! Make value() be a writable private buffer of at least \a len bytes. */
+void Input::reserve(int len) {
   if (value_ == buffer && bufsize > len) {
     buffer[size_] = 0;
     return;
@@ -753,6 +935,17 @@ void Input::put_in_buffer(int len) {
   value_ = buffer;
 }
 
+/*!  Change the text and set the mark and the point to the end of
+  it. The string is not copied. If the user edits the string it is
+  copied to the internal buffer then. This can save a great deal of
+  time and memory if your program is rapidly changing the values of
+  text fields, but this will only work if \a str remains
+  unchanged until either the fltk::Input is destroyed or value() is
+  called again.
+
+  If \a len is zero then \a str may be null and the pointer is not
+  saved.
+*/
 bool Input::static_value(const char* str, int len) {
   clear_changed();
   if (undowidget == this) undowidget = 0;
@@ -783,20 +976,28 @@ bool Input::static_value(const char* str, int len) {
   return true;
 }
 
+/*! Same as static_value(str, str ? strlen(str) : 0) */
 bool Input::static_value(const char* str) {
   return static_value(str, str ? strlen(str) : 0);
 }
 
+/*! Change the value() and set the mark and the point to the end of
+  it. If \a len is zero then the pointer is ignored (and thus may
+  be NULL). This returns true if the new value is different than
+  the current one.
+*/
 bool Input::value(const char* str, int len) {
   bool ret = static_value(str, len);
-  if (len) put_in_buffer(len);
+  if (len) reserve(len);
   return ret;
 }
 
+/*! Same as value(str, str ? strlen(str) : 0) */
 bool Input::value(const char* str) {
   return value(str, str ? strlen(str) : 0);
 }
 
+/*! The destructor destroys the memory used by value() */
 Input::~Input() {
   if (undowidget == this) undowidget = 0;
   if (bufsize) free((void*)buffer);
@@ -804,10 +1005,12 @@ Input::~Input() {
 
 ////////////////////////////////////////////////////////////////
 
-// Move the point, move the mark only if shift is not held down:
+/*! Move the point, move the mark only if shift is not held down. */
 void Input::shift_position(int p) {
   position(p, event_state(SHIFT) ? mark() : p);
 }
+
+/*! Move the point, move the mark only if shift is not held down. */
 void Input::shift_up_down_position(int p) {
   up_down_position(p, event_state(SHIFT));
 }
@@ -828,6 +1031,53 @@ bool Input::key_is_shortcut() {
   return ret;
 }
 
+/*! Handle KEY events. The handle() method calls this. This provides
+  an Emacs and Windows style of editing. Most Emacs keys are
+  checked to see if a shortcut has been assigned to them by another
+  widget so that porting Windows programs is possible without completely
+  losing the Emacs bindings. Keys are:
+
+  - Shift: do not move the mark when moving the point
+  - LeftKey, ^B: move left one character
+  - Ctrl+LeftKey, Alt+^B: move left one word
+  - RightKey, ^F: move right one character
+  - Ctrl+RightKey, Alt+^F: move right one word
+  - ^A: go to start of line, if already there select all text
+  - HomeKey: go to start of line
+  - EndKey, ^E: go to end of line
+  - Ctrl+Insert: copy
+  - Shift+Insert: paste
+  - Shift+Delete: cut
+  - Delete, ^D: delete region or one character
+  - Ctrl+Delete, Alt+^D: delete region or one word
+  - BackSpace, ^H: delete region or left one character
+  - Ctrl+BackSpace, Alt+^H: delete region or left one word
+  - Return, KeypadEnter: if when()&WHEN_ENTER_KEY, and no shift keys held
+    down, this selects all and does the callback. Otherwise key is ignored.
+  - ^K: cuts from the position to the end of line
+  - ^C: copy
+  - ^T: swap the two characters around point. If point is at end swap the
+    last two characters.
+  - ^U: delete all the text
+  - ^V: paste
+  - ^X, ^W: cut
+  - ^Y: redo
+  - ^Z, ^/: undo
+  - All printing characters are run through fltk::compose() and the result
+    used to insert text.
+
+  For the (obsolete) MULTILINE mode you can also do these:
+
+  - UpKey, ^P: move up one line (MULTILINE only)
+  - DownKey, ^N: move down one line (MULTILINE only)
+  - PageUpKey: move up 1 line less than the vertical widget size
+  - PageDownKey: move down 1 line less than the vertical widget size
+  - Ctrl+HomeKey, Alt+^A: got to start of text
+  - Ctrl+EndKey, Alt+^E: go to end of text
+  - Return, KeypadEnter: inserts a newline
+  - ^O: insert a newline and leave the cursor before it.
+
+*/
 bool Input::handle_key() {
 
   int i;
@@ -977,7 +1227,7 @@ bool Input::handle_key() {
     return copy();
 
   case 'o': // Emacs insert newline after cursor
-    if (key_is_shortcut()) return true;
+    if (type() < MULTILINE || key_is_shortcut()) return true;
     if (replace(position(),mark(),"\n",1)) {
       position(position()-1);
       return 1;
@@ -1056,6 +1306,7 @@ bool Input::handle_key() {
   return false;
 }
 
+/*! Calls handle(x,y,w,h) with the area inside the box(). */
 int Input::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   return handle(event, X, Y, W, H);
@@ -1070,6 +1321,21 @@ int Input::handle(int event) {
 static int drag_start;
 #endif
 
+/*!
+  Default handler for all event types, where the passed box is the
+  area the text is to be drawn into. This method is provided so
+  a subclass can place the text into a subrectangle.
+
+  - Handles FOCUS, UNFOCUS
+  - May do callback on HIDE
+  - Any keystrokes call handle_key()
+  - Handles PUSH, DRAG, RELEASE to select regions of text, move the
+    cursor, and start drag & drop. Double click selects words, triple
+    click selects lines (triple click is broken on Windows)
+  - Receives drag&drop and accepts.
+  - Handles PASTE events caused by accepting the drag&drop or by
+    calling fltk::paste() (which handle_key() does for ^V)
+*/
 int Input::handle(int event, int X, int Y, int W, int H) {
   X += label_width; W -= label_width;
   int newpos, newmark;
@@ -1328,5 +1594,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.83 2003/10/28 17:45:14 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.84 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.24 2003/04/02 18:38:39 spitzak Exp $"
+# "$Id: Makefile,v 1.25 2003/12/15 03:03:13 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,8 +23,10 @@
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
-# Include standard definitions...
-include ../makeinclude
+# The only target that probably works now is to run doxygen:
+doxygen_output:
+	-rm -rf html
+	doxygen
 
 #
 # What media size to use:
@@ -234,5 +236,5 @@ fltk.pdf: $(HTMLFILES)
 
 
 #
-# End of "$Id: Makefile,v 1.24 2003/04/02 18:38:39 spitzak Exp $".
+# End of "$Id: Makefile,v 1.25 2003/12/15 03:03:13 spitzak Exp $".
 #

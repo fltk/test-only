@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.cxx,v 1.12 2002/12/10 02:00:47 easysw Exp $"
-//
-// Repeat button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Repeat_Button.cxx,v 1.13 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,6 +24,12 @@
 #include <fltk/RepeatButton.h>
 #include <fltk/events.h>
 using namespace fltk;
+
+/*! \class fltk::RepeatButton
+  The callback is done when the user pushes the button down, and then
+  after .5 second it is repeated 10 times a second, as long as the
+  user is pointing at the button and holding it down.
+*/
 
 #define INITIALREPEAT .5f
 #define REPEAT .1f
@@ -60,5 +64,5 @@ int RepeatButton::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Repeat_Button.cxx,v 1.12 2002/12/10 02:00:47 easysw Exp $".
+// End of "$Id: Fl_Repeat_Button.cxx,v 1.13 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Input.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: Input.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $"
 //
 // One-line text input field.
 //
@@ -50,6 +50,7 @@ public:
   void draw(int, int, int, int);
   int handle(int);
   int handle(int event, int, int, int, int);
+  bool handle_key();
 
   bool value(const char*);
   bool value(const char*, int);
@@ -58,6 +59,7 @@ public:
   const char* value() const {return value_;}
   char index(int i) const {return value_[i];}
   int size() const {return size_;}
+  void reserve(int newsize);
 
   int position() const {return position_;}
   int mark() const {return mark_;}
@@ -70,7 +72,8 @@ public:
   bool cut() {return replace(position(), mark(), 0, 0);}
   bool cut(int n) {return replace(position(), position()+n, 0, 0);}
   bool cut(int a, int b) {return replace(a, b, 0, 0);}
-  bool insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
+  bool insert(const char* t);
+  bool insert(const char* t, int l){return replace(position_, mark_, t, l);}
   bool replace(int a, int b, char c) {return replace(a,b,&c,1);}
   bool copy(bool clipboard = true);
   bool undo();
@@ -102,11 +105,9 @@ private:
   void minimal_update(int, int);
   void minimal_update(int p);
   void erase_cursor_at(int p);
-  void put_in_buffer(int newsize);
 
   void setfont() const;
 
-  bool handle_key();
   bool key_is_shortcut();
   void shift_position(int p);
   void shift_up_down_position(int p);
@@ -118,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Input.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: Input.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $".
 //

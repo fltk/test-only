@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Highlight_Button.cxx,v 1.13 2003/11/04 08:10:59 spitzak Exp $"
-//
-// Highlight button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Highlight_Button.cxx,v 1.14 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -28,6 +26,12 @@
 
 using namespace fltk;
 
+/*! \class fltk::HighlightButton
+  Same as a normal button but the box() defaults to a style that draws
+  as a flat rectangle until the mouse points at it, then it draws as
+  a raised highlighted rectangle.
+*/
+
 static void revert(Style* s) {
   //s->color = GRAY75;
   s->box_ = HIGHLIGHT_UP_BOX;
@@ -43,5 +47,5 @@ HighlightButton::HighlightButton(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Highlight_Button.cxx,v 1.13 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Highlight_Button.cxx,v 1.14 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.49 2003/11/04 08:10:58 spitzak Exp $"
-//
-// Adjuster widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Adjuster.cxx,v 1.50 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,6 +29,18 @@
 #include <fltk/draw.h>
 #include <fltk/xbmImage.h>
 using namespace fltk;
+
+/*! \class fltk::Adjuster
+
+  Valuator widget that displays three buttons. The user pushes down
+  the button and drags left/right to adjust, or clicks the button to
+  step, or shift-clicks to step backwards. One button moves in the
+  step() values, the next in 10*step(), and the third in 100*step().
+  Holding down shift makes the buttons move in the opposite way.
+  Depreciated.
+
+  \image html adjuster1.gif
+*/
 
 #include "fastarrow.h"
 static xbmImage fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -180,5 +190,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.49 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.50 2003/12/15 03:03:13 spitzak Exp $".
 //

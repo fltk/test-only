@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.129 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.130 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -119,7 +119,7 @@ void Group::clear() {
 Group::~Group() {clear();}
 
 /*! \fn Widget * Group::child(int n) const
-  Returns a child, n >= 0 && n < children(). <i>No range checking is done!</i
+  Returns a child, n >= 0 && n < children(). <i>No range checking is done!</i>
 */
 
 /*! \fn int Group::children() const
@@ -663,5 +663,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.129 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.130 2003/12/15 03:03:13 spitzak Exp $".
 //

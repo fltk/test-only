@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.44 2003/11/04 08:10:58 spitzak Exp $"
-//
-// Check button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Check_Button.cxx,v 1.45 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,6 +27,19 @@
 #include <fltk/draw.h>
 
 using namespace fltk;
+
+/*! \class fltk::CheckButton
+  This button turns the value() on and off each release of a click
+  inside of it, and displays a checkmark to show the user this:
+
+  \image html Fl_Check_Button.gif
+
+  You can control the color of the checkbox with color() and the
+  color of the checkmark with textcolor(). You can make it draw
+  different colors when turned on by setting selection_color()
+  and selection_textcolor() on the widget (these are ignored if
+  set in an inherited style()).
+*/
 
 static void default_glyph(int glyph,
 			  int x,int y,int w,int h,

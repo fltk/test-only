@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.29 2003/08/25 15:28:47 spitzak Exp $"
-//
-// Double-buffered window code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Double_Window.cxx,v 1.30 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,6 +27,28 @@
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/x.h>
 #include <fltk/draw.h>
+
+/*! \class fltk::DoubleBufferWindow
+
+  Due to the design of modern windowing systems (OS/X and Longhorn) this
+  subclass is likely to be obsoleted. Double buffering will be a switch
+  on the basic Window class.
+
+  This subclass of Window does double-buffering. This means all drawing
+  is done to an off-screen copy, and then copied to the screen when the
+  drawing is done. This avoids "blinking" when the screen is updated,
+  which is probably more important for making an application looking
+  "slow" than actual slowness of drawing.
+
+  On X this uses the X double buffering extension (Xdbe), if possible.
+  On some (old) X servers this will not work for all visuals, the following
+  code will select a usable visual if possible:
+  
+\code
+  fltk::visual(fltk::DOUBLE|fltk::INDEX)
+\endcode
+
+*/
 
 #if defined(__APPLE__) && !USE_X11
 // On systems that support double buffering "naturally" the base
@@ -198,5 +218,5 @@ DoubleBufferWindow::~DoubleBufferWindow() {
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.29 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.30 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.39 2003/11/04 08:11:01 spitzak Exp $"
-//
-// Return button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Return_Button.cxx,v 1.40 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,6 +25,15 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 using namespace fltk;
+
+/*! \class fltk::ReturnButton
+  Same as a normal button except the shortcut() is preset to the Enter
+  and KeypadEnter keys (done by using shortcut('\\r')), and a glyph
+  is drawn to indicate this.
+
+  \image html Fl_Return_Button.gif
+
+*/
 
 // this is public so draw_symbol can call it:
 void fl_glyph_return(int, int x,int y,int w,int h, const Style* style, Flags)
@@ -83,5 +90,5 @@ ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.39 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.40 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: buttons.cxx,v 1.18 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: buttons.cxx,v 1.19 2003/12/15 03:03:13 spitzak Exp $"
 //
-// Another button test program for the Fast Light Tool Kit (FLTK).
+// Draws the image for the manual
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -25,42 +25,61 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Return_Button.h>
-#include <fltk/Fl_Repeat_Button.h>
-#include <fltk/Fl_Check_Button.h>
-#include <fltk/Fl_Radio_Button.h>
-#include <fltk/Fl_Light_Button.h>
-#include <fltk/Fl_Highlight_Button.h>
-#include <fltk/Fl_Style.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+#include <fltk/ToggleButton.h>
+#include <fltk/ReturnButton.h>
+#include <fltk/RepeatButton.h>
+#include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
+#include <fltk/LightButton.h>
+#include <fltk/HighlightButton.h>
 
-void rb_cb(Fl_Widget*, void*) {
+using namespace fltk;
+
+void rb_cb(Widget*, void*) {
 //  Fl::theme("essai");
-  Fl_Style::revert();
+  reset_theme();
+  redraw();
 }
 
+const int W = 130;
+const int H = 24;
+const int B = 10;
+const int X0 = B;
+const int X1 = (B+W+B);
+
 int main(int argc, char ** argv) {
-  Fl_Window *window = new Fl_Window(320,130);
-  (void) new Fl_Button(10, 10, 130, 24, "Fl_Button");
-  Fl_Return_Button* rb = new Fl_Return_Button(150, 10, 130, 24, "Fl_Return_Button");
+  Window window(X1+W+B, B+5*(H+B));
+  window.begin();
+
+  int Y = B;
+  (void) new Button(X0, Y, W, H, "Button");
+  ReturnButton* rb = new ReturnButton(X1, Y, W, H, "ReturnButton");
   rb->callback(rb_cb);
-  (void) new Fl_Repeat_Button(10,40,130,24,"Fl_Repeat_Button");
-  (void) new Fl_Radio_Button(150,40,130,24,"Fl_Radio_Button");
-  (void) new Fl_Radio_Button(150,70,130,24,"Fl_Radio_Button");
-  (void) new Fl_Light_Button(10,70,130,24,"Fl_Light_Button");
-  (void) new Fl_Check_Button(150,100,130,24,"Fl_Check_Button");
-  (void) new Fl_Highlight_Button(10,100,130,24,"Fl_Highlight_Button");
+  rb->tooltip("Push this to revert style to fltk defaults");
+  Y += H+B;
+  (void) new ToggleButton(X0, Y, W, H, "ToggleButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  Y += H+B;
+  (void) new RepeatButton(X0, Y, W, H, "RepeatButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  Y += H+B;
+  (void) new LightButton(X0, Y, W, H, "LightButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  Y += H+B;
+  (void) new HighlightButton(X0, Y, W, H, "HighlightButton");
+  (void) new CheckButton(X1, Y, W, H, "CheckButton");
   
-  window->resizable(window);
-  window->end();
-  window->show(argc,argv);
-  Fl_Button::default_style->box = FL_PLASTIC_BOX;
-  Fl_Button::default_style->color = 256-36;
-  return Fl::run();
+  window.resizable(window);
+  window.end();
+  window.show(argc,argv);
+  Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
+  Button::default_style->color_ = 256-36;
+  return run();
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.18 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: buttons.cxx,v 1.19 2003/12/15 03:03:13 spitzak Exp $".
 //

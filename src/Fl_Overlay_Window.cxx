@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.21 2002/12/10 02:00:45 easysw Exp $"
-//
-// Overlay window code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Overlay_Window.cxx,v 1.22 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,10 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// A window using double-buffering and able to draw an overlay
-// on top of that.  Uses the hardware to draw the overlay if
-// possible, otherwise it just draws in the front buffer.
-
 #include <fltk/OverlayWindow.h>
 #include <fltk/damage.h>
 #include <fltk/draw.h>
@@ -34,6 +28,27 @@
 #include <config.h>
 
 using namespace fltk;
+
+/*! \class fltk::OverlayWindow
+
+  Due to the design of modern windowing systems (OS/X and Longhorn) this
+  subclass is likely to be obsoleted. You will be able to redraw_overlay()
+  on the basic Window class, or perhaps on individual widgets.
+
+  This window provides double buffering and also the ability to draw
+  the "overlay" which is another picture placed on top of the main
+  image. The overlay is designed to be a rapidly-changing but simple
+  graphic such as a mouse selection box.
+
+  fltk::OverlayWindow uses the overlay planes provided by your
+  graphics hardware if they are available.  If no hardware support is
+  found (pretty much all modern windowing systems do not have such
+  hardware) the overlay is simulated by drawing directly into the
+  on-screen copy of the double-buffered window, and "erased" by
+  copying the backbuffer over it again. This means the overlay will
+  blink if you change the image in the window.
+
+*/
 
 void OverlayWindow::flush() {
 #if BOXX_OVERLAY_BUGS
@@ -62,13 +77,22 @@ void OverlayWindow::layout() {
 
 #if !USE_OVERLAY
 
+/*! Returns non-zero if there is real hardware support for the overlay. */
 int OverlayWindow::can_do_overlay() {return 0;}
 
+/*! Indicate that draw_overlay() should be called. */
 void OverlayWindow::redraw_overlay() {
   overlay_ = this;
   set_damage(damage()|DAMAGE_OVERLAY);
   redraw(DAMAGE_CHILD);
 }
+
+/*! \fn OverlayWindow::draw_overlay()
+  You must subclass fltk::OverlayWindow and provide this method. It is
+  just like a draw() method, except it draws the overlay. The overlay
+  will have already been "cleared" when this is called. You can use
+  any of the routines described in <fltk/draw.h>.
+*/
 
 #else
 
@@ -144,5 +168,5 @@ void OverlayWindow::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.21 2002/12/10 02:00:45 easysw Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.22 2003/12/15 03:03:13 spitzak Exp $".
 //

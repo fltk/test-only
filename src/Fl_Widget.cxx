@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.107 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -331,7 +331,7 @@ void Widget::copy_label(const char* s) {
   - fltk::ALIGN_INSIDE - 'or' this with other values to put label inside the widget.
 */
 
-/*! \fn uchar Widget::when() const
+/*! \fn void Widget::when(uchar)
 
   Flags indicating when to do the callback(). This field is in the
   base class so that you can scan a panel and do_callback() on all the
@@ -1091,5 +1091,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.107 2003/12/15 03:03:13 spitzak Exp $".
 //

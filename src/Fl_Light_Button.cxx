@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.37 2003/11/04 08:11:00 spitzak Exp $"
-//
-// Lighted button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Light_Button.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,14 +21,23 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// The LightButton draws the indicator as a rectangle in the
-// style of Flame.  This is done by replacing the glyph drawing function
-// in the default style.
-
 #include <fltk/LightButton.h>
 #include <fltk/Box.h>
 
 using namespace fltk;
+
+/*! \class fltk::LightButton
+
+  This button turns the value() on and off each release of a click
+  inside of it, and displays a light to show the user this. This style
+  was designed for the original Forms library and has been copied
+  into Discreet products and many other pieces of software that
+  originated with SGI machines:
+
+  \image html Fl_Light_Button.gif
+
+  When off the light is color(), when on the light is selection_color().
+*/
 
 static void glyph(int/*t*/,
 		  int x,int y,int w,int h, const Style* style, Flags f)
@@ -62,5 +69,5 @@ LightButton::LightButton(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.37 2003/11/04 08:11:00 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.66 2003/11/04 08:10:58 spitzak Exp $"
-//
-// Button widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Button.cxx,v 1.67 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,23 +28,55 @@
 #include <fltk/Box.h>
 using namespace fltk;
 
+/*! \class fltk::Button
+
+  Buttons generate callbacks when they are clicked by the user. You
+  control exactly when and how by changing the values for when():
+  - fltk::WHEN_NEVER: The callback is not done, instead changed() is turned on.
+  - fltk::WHEN_RELEASE: This is the default, the callback is done
+    after the user successfully clicks the button (i.e. they let it go
+    with the mouse still pointing at it), or when a shortcut is typed.
+  - fltk::WHEN_CHANGED : The callback is done each time the value()
+    changes (when the user pushes and releases the button, and as the
+    mouse is dragged around in and out of the button).
+
+  Buttons can also generate callbacks in response to fltk::SHORTCUT
+  events. The button can either have an explicit shortcut() value or a
+  letter shortcut can be indicated in the label() with an '&'
+  character before it. For the label shortcut it does not matter if
+  Alt is held down, but if you have an input field in the same window,
+  the user will have to hold down the Alt key so that the input field
+  does not eat the event first as an fltk::KEY event.
+
+  \image html buttons.gif
+
+*/
+
+/*! Same as value(1). */
 bool Button::set() {
   clear_changed();
   if (!value()) {set_value(); redraw(); return true;}
   return false;
 }
 
+/*! Same as value(0). */
 bool Button::clear() {
   clear_changed();
   if (value()) {clear_value(); redraw(); return true;}
   return false;
 }
 
+/*! The current value. True means it is pushed down, false means it is
+  not pushed down. Only with the ToggleButton subclass can the user change
+  this permanelty, but you can change it for any button. */
 bool Button::value(bool v) {
   return v ? set() : clear();
 }
 
-void Button::setonly() { // set this radio button on, turn others off
+/*!  Turns on this button and turns off all other RadioButton objects in the
+  parent Group (calling value(1) or set() does not do this).
+*/
+void Button::setonly() {
   set();
   for (int i = parent()->children(); i--;) {
     Widget* o = parent()->child(i);
@@ -127,8 +157,10 @@ int Button::handle(int event) {
 
 extern Widget* fl_did_clipping;
 
-// Draw button-like widgets with an optional glyph. The glyph is given
-// a size (negative to put it on the right)
+/*! Draw button-like widgets with an optional glyph. The glyph is given
+  a size (negative to put it on the right). Subclasses such as CheckButton
+  use this to draw the checkmark.
+*/
 void Button::draw(int glyph, int glyph_width) const
 {
   // For back-compatability, setting color() or box() directly on a plain
@@ -228,6 +260,16 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
   //set_click_to_focus();
 }
 
+////////////////////////////////////////////////////////////////
+
+/*! \class fltk::ToggleButton
+  This button turns the value() on and off each release of a click
+  inside of it.
+
+  You can also convert a regular button into this by doing
+  type(Button::TOGGLE) to it.
+*/
+
 //
-// End of "$Id: Fl_Button.cxx,v 1.66 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.67 2003/12/15 03:03:13 spitzak Exp $".
 //

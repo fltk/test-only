@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Menu_global.cxx,v 1.11 2002/12/10 02:00:44 easysw Exp $"
-//
-// Global menu shortcut code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Menu_global.cxx,v 1.12 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,13 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Make all the shortcuts in this menu global.
-
-// Currently only one menu at a time and you cannot destruct the menu,
-// is this sufficient?
-
-// This should probably also put the items on the the Mac menubar.
-
 #include <fltk/events.h>
 #include <fltk/Menu.h>
 #include <fltk/Window.h>
@@ -44,11 +35,24 @@ static int handler(int e, Window*) {
   return the_widget->handle_shortcut();
 }
 
+/*!
+  Make the shortcuts for this menu work no matter what window has the
+  focus when you type it (as long as fltk::modal() is off). This is
+  done by using fltk::add_handler(). This fltk::Menu widget does not
+  have to be visible (ie the window it is in can be hidden, or it does
+  not have to be put in a window at all).
+
+  Currently there can be only one global() menu. Setting a new one will
+  replace the old one. There is no way to remove the global() setting,
+  and you cannot destroy the Menu!
+
+  This should probably also put the items on the the Mac menubar.
+*/
 void Menu::global() {
   if (!the_widget) add_event_handler(handler);
   the_widget = this;
 }
 
 //
-// End of "$Id: Fl_Menu_global.cxx,v 1.11 2002/12/10 02:00:44 easysw Exp $".
+// End of "$Id: Fl_Menu_global.cxx,v 1.12 2003/12/15 03:03:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.14 2003/11/11 09:40:40 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.15 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -22,6 +22,13 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+
+/** \defgroup boxes FLTK Box Types
+    These variables point at static instances of several classes of
+    Box which can be put in as the box() attribute of widgets.
+
+    \image html boxtypes.gif
+*/
 
 // These are the most common, square box types, which are always
 // linked in because the default styles use them.
@@ -75,7 +82,9 @@ public:
 };
 static DottedFrame dottedFrame("dotted_frame");
 
-/** Used to draw the dotted focus rectangle around widgets. */
+/*! \ingroup boxes
+  Used to draw the dotted focus rectangle around widgets.
+*/
 Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
 ////////////////////////////////////////////////////////////////
@@ -87,15 +96,20 @@ public:
 };
 static NoBox noBox("none");
 
-/** Draws nothing.
-    Can be used as a box to make the background of a widget invisible.
-    Also some widgets check specifically for this and change their
-    behavior or drawing methods.
+/*! \ingroup boxes
+  Draws nothing.
+  Can be used as a box to make the background of a widget invisible.
+  Also some widgets check specifically for this and change their
+  behavior or drawing methods.
 */
 Box* const fltk::NO_BOX = &noBox;
 
 ////////////////////////////////////////////////////////////////
 
+/*! \class fltk::FlatBox
+  Draws a rectangle filled with style->color(). This is a useful
+  base class for some box types.
+*/
 void FlatBox::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
   if (!(flags & INVISIBLE) && h > 0 && w > 0) {
@@ -111,7 +125,9 @@ const BoxInfo* FlatBox::boxinfo() const {
 FlatBox::FlatBox(const char* name) : Box(name) {}
 static FlatBox flatBox("flat");
 
-/** Draws a flat rectangle of style->color(). */
+/*! \ingroup boxes
+  Draws a flat rectangle of style->color().
+*/
 Box* const fltk::FLAT_BOX = &flatBox;
 
 ////////////////////////////////////////////////////////////////
@@ -201,25 +217,46 @@ FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
 const BoxInfo* FrameBox::boxinfo() const {return &boxinfo_;}
 
 static FrameBox downBox("down", "WWMMPPAA");
+/*! \ingroup boxes
+  A pushed-down button in fltk's standard theme.
+*/
 Box* const fltk::DOWN_BOX = &downBox;
 
 static FrameBox upBox("up", "AAWWMMTT", &downBox);
+/*! \ingroup boxes
+  A up button in fltk's standard theme.
+*/
 Box* const fltk::UP_BOX = &upBox;
 
 static FrameBox thinDownBox("thin_down", "WWHH");
+/*! \ingroup boxes
+  1-pixel-thick inset box.
+*/
 Box* const fltk::THIN_DOWN_BOX = &thinDownBox;
 
 static FrameBox thinUpBox("thin_up", "HHWW", &thinDownBox);
+/*! \ingroup boxes
+  1-pixel-thick raised box.
+*/
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down" version:
 static FrameBox engravedBox("engraved", "2HHWWWWHH");
+/*! \ingroup boxes
+  2-pixel thick engraved line around edge.
+*/
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
 static FrameBox embossedBox("embossed", "2WWHHHHWW");
+/*! \ingroup boxes
+  2-pixel thick raised line around edge.
+*/
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
 static FrameBox borderBox("border", "HHHH");
+/*! \ingroup boxes
+  1-pixel thick gray line around rectangle.
+*/
 Box* const fltk::BORDER_BOX = &borderBox;
 
 ////////////////////////////////////////////////////////////////
@@ -238,11 +275,20 @@ public:
   }
 };
 static BorderFrame borderFrame("border_frame");
+/*! \ingroup boxes
+  Obsolete. Draws colored edge and draws nothing inside rectangle.
+*/
 Box* const fltk::BORDER_FRAME = &borderFrame;
 
 ////////////////////////////////////////////////////////////////
 // draw a box only when highlighted or selected:
 
+/*! \class fltk::HighlightBox
+  Draws as fltk::FLAT_BOX normally, this can draw as any other box
+  (passed to the constructor) when HIGHLIGHT or SELECTED or VALUE
+  is turned on in the flags. This can be used to make frames appear
+  when the mouse points at widgets or when the widget is turned on.
+*/
 void HighlightBox::_draw(
   int x, int y, int w, int h, const Style* style, Flags flags) const
 {
@@ -259,10 +305,18 @@ HighlightBox::HighlightBox(const char* n, const Box* b)
   : FlatBox(n), down(b) {}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
+/*! \ingroup boxes
+  Draws like FLAT_BOX normally, and as THIN_UP_BOX when the mouse
+  pointer points at it or the value of the widget is turned on.
+*/
 Box* const fltk::HIGHLIGHT_UP_BOX = &highlightUpBox;
 static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
+/*! \ingroup boxes
+  Draws like FLAT_BOX normally, and as THIN_DOWN_BOX when the mouse
+  pointer points at it or the value of the widget is turned on.
+*/
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.14 2003/11/11 09:40:40 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.15 2003/12/15 03:03:13 spitzak Exp $".
 //

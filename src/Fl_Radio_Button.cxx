@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.cxx,v 1.8 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.9 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Radio button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,25 @@
 #include <fltk/draw.h>
 #include <fltk/Box.h>
 using namespace fltk;
+
+/*! \class fltk::RadioButton
+
+  This button turns the value() on when clicked, and turns all other
+  RadioButton widgets in the same group off.  It displays a round dot
+  to show the user this:
+
+  \image html Fl_Round_Button.gif
+
+  You can control the color of the circle with color() and the color
+  of the dot with textcolor(). You can make it draw different colors
+  when turned on by setting selection_color() and
+  selection_textcolor() on the widget (these are ignored if set in an
+  inherited style()).
+
+  If you want you can make any other button act like a RadioButton
+  by doing type(Button::RADIO) to it. Be sure to lay out and decorate
+  your interface so it is clear to the user that they are radio buttons.
+*/
 
 static void default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {

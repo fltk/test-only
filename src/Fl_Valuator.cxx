@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.31 2003/11/04 08:11:02 spitzak Exp $"
-//
-// Valuator widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Valuator.cxx,v 1.32 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,8 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Base class for sliders and all other one-value "knobs"
-
 #include <fltk/Valuator.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
@@ -33,6 +29,48 @@
 #include <stdlib.h>
 using namespace fltk;
 
+/*! \class fltk::Valuator
+
+  Base class for sliders and all other one-value "knobs".The
+  fltk::Valuator class controls a single floating-point value and
+  provides a consistent interface to set the value(), range(), and
+  step(), and insures that callbacks are done the same for every
+  object.
+
+  Callbacks are done each time the user changes the value. So if they
+  drag a slider, the callback is done each time the slider handle
+  moves to a new pixel.
+
+  For most subclasses you can call when() to get some other callback
+  behaviors:
+  - fltk::WHEN_CHANGED: this is the default, callback is done on
+    any change.
+  - fltk::WHEN_RELEASE: it will only do the callback when the user
+    moves the slider and then lets it go on a different value than it
+    started.
+  - fltk::WHEN_RELEASE_ALWAYS: will do the callback when
+  the user lets go of the slider whether or not the value changed.
+  - fltk::WHEN_NEVER: do not do the callback, instead it will turn
+    on the changed() flag.
+
+  There are probably more of these classes in FLTK than any others: 
+
+  \image html valuators.gif
+
+  In the above diagram each box surrounds an actual subclass. These
+  are further differentiated by setting the type() of the widget to
+  the symbolic value labeling the widget. The ones labelled "0" are
+  the default versions with a type(0). For consistency the symbol
+  fltk::VERTICAL is defined as zero.
+
+*/
+
+/*! The constructor initializes:
+  - value(0.0)
+  - step(0)
+  - range(0,1)
+  - linesize(1)
+*/
 Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   : Widget(X,Y,W,H,L) {
   clear_flag(ALIGN_MASK);
@@ -45,10 +83,15 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   linesize_ = 1;
 }
 
-void Valuator::value_damage() {
-  redraw(DAMAGE_VALUE); // default version does partial-redraw
-}
+/*! \fn double Valuator::value() const
+  Returns the current value.
+*/
 
+/*!
+  Sets the current value, redrawing the widget if necessary by calling
+  value_damage(). <i>The new value is stored unchanged, even if it is
+  outside the range or not a multiple of step()</i>.
+*/
 int Valuator::value(double v) {
   clear_changed();
   if (v == value_) return 0;
@@ -57,10 +100,84 @@ int Valuator::value(double v) {
   return 1;
 }
 
+/*! \fn void Valuator::set_value(double)
+  Sets the current value but does not call value_damage().
+*/
+
+/*! \fn void Valuator::maximum(double)
+
+  Sets the maximum value for the valuator. For most subclasses the
+  user cannot move the value outside the minimum()..maximum() range if
+  it starts inside this range.
+
+  These values should be multiples of the step() to avoid ambiguity
+  and possible implementation changes.
+
+  For most subclasses, the minimum may be greater than the
+  maximum. This has the effect of "reversing" the object so the larger
+  values are in the opposite direction. This also switches which end
+  of the filled sliders is filled.
+
+  You probably need to redraw() the widget after changing the range.
+*/
+
+/*! \fn void Valuator::minimum(double)
+  Sets the minimum value for the valuator. See minimum().
+*/
+ 
+/*! \fn void Valuator::range(double min, double max)
+  Sets both the minimum() and maximum().
+*/
+
+/*! \fn void Valuator::step(double)
+
+  Set the step value. As the user moves the mouse the value is
+  rounded to a multiple of this. Values that are sufficently close
+  to 1/N (where N is an integer) are detected and assummed to be
+  exactly 1/N, so step(.00001) will work as wanted.
+
+  If this is zero (the default) then all rounding is disabled. This
+  results in the smoothest controller movement but this is not
+  recommended if you want to present the resulting numbers to the user
+  as text, because they will have useless extra digits of precision.
+
+  For some widgets like Roller this is also the distance the
+  value moves when the user drags the mouse 1 pixel. In these cases if
+  step() is zero then it acts like it is .01.
+
+  Negative values for step() produce undocumented results. 
+*/
+
+/*! \fn void Valuator::linesize(double)
+
+  The linesize is the amount the valuator moves in response to an
+  arrow key, or the user clicking an up/down button. The default value
+  is 1. Negative values and values that are not a multiple of step()
+  produce undocumented results.
+*/
+
+/*! Subclasses must implement this. It is called whenever the value()
+  changes. They must call redraw() if necessary. */
+void Valuator::value_damage() {
+  redraw(DAMAGE_VALUE); // default version does partial-redraw
+}
+
+/*! \fn double Valuator::previous_value() const
+  Value saved when handle_push() was last called.
+*/
 double Valuator::previous_value_;
 
-// inline void Valuator::handle_push() {previous_value_ = value_;}
+/*! \fn void Valuator::handle_push()
+  Subclasses should call this when the user starts to change the value. 
+*/
 
+/*!
+  Subclasses should call this as the user moves the value. The passed
+  number is an arbitrary-precision value you want to set it to, this
+  function clamps it to the range (if previous_value() is in range)
+  and rounds it to the nearest multiple of step(), and then stores
+  it into value(). It then does the callback() if necessary.
+*/
 void Valuator::handle_drag(double v) {
   // round to nearest multiple of step:
   if (step_ >= 1) {
@@ -87,6 +204,8 @@ void Valuator::handle_drag(double v) {
   }
 }
 
+/*!  Subclasses should call this when the user stops moving the
+  value. It may call the callback. */
 void Valuator::handle_release() {
   if (when()&WHEN_RELEASE && !pushed()) {
     // insure changed() is off even if no callback is done.  It may have
@@ -99,6 +218,13 @@ void Valuator::handle_release() {
   }
 }
 
+/*!
+  Format the passed value to show enough digits for the current
+  step value. If the step has been set to zero then it does a %g
+  format. If step is greater or equal to 1 it does %d format. The
+  characters are written into the passed buffer (which must be long
+  enough, 40 characters is safe).
+ */
 int Valuator::format(char* buffer) {
   double v = value();
   if (step_ <= 0) return sprintf(buffer, "%g", v);
@@ -110,6 +236,23 @@ int Valuator::format(char* buffer) {
   return sprintf(buffer, "%.*f", i, v);
 }
 
+/*!
+
+  The base class handle() accepts FOCUS and recognizes a number of
+  keystrokes that adjust the value. A subclass can call this to get
+  these keystrokes, it can also do it's own keystroke handling if it
+  wants.
+
+  - DownKey, LeftKey: move 1 linesize() toward minimum()
+  - (Ctrl|Shift|Alt|Meta)+DownKey, LeftKey: move 10 linesize() toward minimum()
+  - UpKey, RightKey: move 1 linesize() toward maximum()
+  - (Ctrl|Shift|Alt|Meta)+UpKey, RightKey: move 10 linesize() toward maximum()
+  - HomeKey: set to minimum()
+  - EndKey: set to maximum()
+  - Mousewheel: For normal valuators, each click is linesize(),
+    Style::wheel_scroll_lines is ignored. However Scrollbar does use
+    Style::wheel_scroll_lines.
+*/
 int Valuator::handle(int event) {
   switch(event) {
     case ENTER:
@@ -146,8 +289,6 @@ int Valuator::handle(int event) {
       return 0;
     }
     case MOUSEWHEEL: {
-      // For normal valuators, each click is linesize(), wheel_scroll_lines
-      // is ignored. However Scrollbar does use wheel_scroll_lines.
       handle_drag(value()+event_dy()*linesize());
       return 1;
     }
@@ -156,5 +297,5 @@ int Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.31 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.32 2003/12/15 03:03:13 spitzak Exp $".
 //

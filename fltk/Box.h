@@ -1,5 +1,5 @@
 //
-// "$Id: Box.h,v 1.3 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: Box.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Define your own values for box() on a widget by making one of these.
 //
@@ -34,8 +34,6 @@ namespace fltk {
 
 typedef Symbol Box;
 
-// draw a pattern of lines around a box, pattern is from the data string
-// in which 'A'=GRAY00, 'X'=GRAY99, other characters are gray levels:
 class FL_API FrameBox : public Box {
 protected:
   const char* data_;
@@ -48,7 +46,6 @@ public:
   FrameBox(const char* n, const char* c, const FrameBox* d=0);
 };
 
-// no border, tiling pattern is in absolute coordinates:
 class FL_API FlatBox : public Box {
 public:
   void _draw(int, int, int, int, const Style*, Flags) const;
@@ -56,7 +53,6 @@ public:
   FlatBox(const char* n);
 };
 
-// Combination of flat & any other boxtype when highlighted or pressed:
 class FL_API HighlightBox : public FlatBox {
   const Box* down;
 public:
@@ -70,5 +66,5 @@ public:
 #endif
 
 //
-// End of "$Id: Box.h,v 1.3 2003/11/04 08:10:56 spitzak Exp $".
+// End of "$Id: Box.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $".
 //

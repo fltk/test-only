@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.37 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -186,7 +186,7 @@ static Widget* innards(
   return o;
 }
 
-/** Split label at '/' characters and add a hierachial Item.
+/*! Split label at '/' characters and add a hierachial Item.
 
     Adds new items and hierarchy to a Menu or Browser.
 
@@ -211,18 +211,13 @@ static Widget* innards(
 
     \a data : second argument passed to the callback.
 
-    \a flags : useful flags are:<ul>
-
-    <tt>INACTIVE</tt> makes the item grayed out and unpickable
-
-    <tt>INVISIBLE</tt> makes it not visible to the user, as though it was
-    not there. This is most useful for making extra shortcuts that do
-    the same thing.
-
-    <tt>RAW_LABEL</tt> stops it from interpreting '&' and '@' characters
-    in the label.
-
-    </ul>
+    \a flags : useful flags are:
+    - INACTIVE makes the item grayed out and unpickable
+    - INVISIBLE makes it not visible to the user, as though it was
+      not there. This is most useful for making extra shortcuts that do
+      the same thing.
+    - RAW_LABEL stops it from interpreting '&' and '@' characters
+      in the label.
 
     Returns a pointer to the new Item. You can further modify it to
     get results that can't be gotten from these function arguments.
@@ -237,7 +232,7 @@ Widget* Menu::add(
   return ::innards(this,label,shortcut,callback,data,flags,0,0);
 }
 
-/** Split label at '/' characters and add or replace a hierachial Item.
+/*! Split label at '/' characters and add or replace a hierachial Item.
 
     This is what menu::add() did in fltk 1.
 
@@ -255,7 +250,7 @@ Widget* Menu::replace(
   return ::innards(this,label,shortcut,callback,data,flags,REPLACE,0);
 }
 
-/** Split label at '/' characters and add a hierachial Item.
+/*! Split label at '/' characters and add a hierachial Item.
 
     Same rules as add() except the item is inserted at index \a n
     of the final menu. Use 0 to put it at the start. Any number
@@ -273,7 +268,7 @@ Widget* Menu::insert(
   return ::innards(this,label,shortcut,callback,data,flags,0,n+1);
 }
 
-/** Return the item with the given label
+/*! Return the item with the given label
 
     This searches both the top level for an exact match, and splits
     the label at '/' to find an item in a hierarchy. Thus it matches
@@ -286,7 +281,7 @@ Widget* Menu::find(const char* label) const {
   return ::innards((Group*)this,label,0,0,0,0,FIND,0);
 }
 
-/** Create a new Item and add it to the top-level of the hierarchy.
+/*! Create a new Item and add it to the top-level of the hierarchy.
 
     This matches add() from the Browser in fltk1.
 
@@ -297,7 +292,7 @@ Widget* Menu::add(const char* label, void* data) {
   return ::innards(this,label,0,0,data,0,FLAT,0);
 }
 
-/** Create a new Item and add it to the top-level of the hierarchy.
+/*! Create a new Item and add it to the top-level of the hierarchy.
 
     This matches insert() from the Browser in fltk1, except the
     index is 1 less than before (first item is zero, not 1)
@@ -309,7 +304,7 @@ Widget* Menu::insert(int n, const char* label, void* data) {
   return ::innards(this,label,0,0,data,0,FLAT,n+1);
 }
 
-/** Create or replace an Item at the top-level of the hierarchy.
+/*! Create or replace an Item at the top-level of the hierarchy.
 
     The top level is searched for an item that matches the given
     label. If found it's data is changed to the passed data, if
@@ -319,10 +314,14 @@ Widget* Menu::replace(const char* label, void* data) {
   return ::innards(this,label,0,0,data,0,FLAT|REPLACE,0);
 }
 
+/*! \fn void Menu::remove(const char* l)
+  Does find(l) and then deletes that widget.
+*/
+
 #if 0
-// This is a Forms (and SGI GL library) compatable add function, it
-// adds many menu items, with '|' seperating the menu items, and tab
-// seperating the menu item names from an optional shortcut string.
+/*! This is a Forms (and SGI GL library) compatable add function, it
+  adds many menu items, with '|' seperating the menu items, and tab
+  seperating the menu item names from an optional shortcut string. */
 Widget* Menu::add(const char *str) {
   int bufsize = strlen(str)+1;
   ARRAY(char, buf, bufsize);
@@ -349,5 +348,5 @@ Widget* Menu::add(const char *str) {
 #endif
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.37 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $".
 //

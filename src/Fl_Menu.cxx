@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.147 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.148 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -658,6 +658,11 @@ int MWindow::handle(int event) {
   return MenuWindow::handle(event);
 }
 
+/*!
+  Exactly the same as popup() except the selected child widget is
+  returned, rather than execute() being called. This is probably
+  more useful in most cases...
+*/
 Widget* Menu::try_popup(
     int X, int Y, int W, int H,
     Widget* title,
@@ -835,6 +840,29 @@ Widget* Menu::try_popup(
   return item();
 }
 
+/*!
+  Create and display a pop-up menu (or hierarchy of menus) showing the
+  children of this Menu, then wait until the user picks an item or
+  dismisses the menu. If the user picks an item then execute() is
+  called for it and true is returned. False is returned if the user
+  cancels the menu.
+
+  If there is a selected item in the menu (as determined by focus())
+  then submenus are opened and all of them are positioned intitially
+  so the mouse cursor is pointing at the selected item. This is
+  incredibly useful and one of the main features of fltk that is missing
+  from other toolkits.
+
+  \a x,y,w,h describe a rectangle that the current menu item should be
+  centered over, and the menu is widened horizontally to \a w if it is
+  narrower. The coordinates are measured relative to the widget whose
+  handle() method is being executed now.
+
+  \a title is a widget (usually an fltk::Item) that is used to make a
+  title atop the menu, in the style of SGI's popup menus.
+
+  \a menubar is for internal use by menubars and should be left false.
+*/
 int Menu::popup(
     int X, int Y, int W, int H,
     Widget* title,
@@ -849,5 +877,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.147 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.148 2003/12/15 03:03:13 spitzak Exp $".
 //

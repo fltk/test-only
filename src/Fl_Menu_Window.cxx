@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.19 2002/12/10 02:00:44 easysw Exp $"
-//
-// Menu window code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Menu_Window.cxx,v 1.20 2003/12/15 03:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,12 +29,29 @@
 
 using namespace fltk;
 
-// This is the window type used by Menu to make the pop-ups, and for
-// tooltip popups.
-// 
-// It used to draw in the overlay planes if possible. Because xft does
-// not work in overlays this has been disabled except on Irix (where
-// overlays are still faster and save-under does not work):
+/*! \class fltk::MenuWindow
+
+  This is the window type used by Menu to make the pop-ups, and for
+  tooltip popups. It will send special information to the window server
+  to indicate that the windows are temporary, won't move, and should
+  not have any decorations.
+
+  On X this turns on override_redirect and save-under.
+
+  On older X servers this actually tried to draw into overlay hardware.
+  This behavior only remains when FLTK is compiled on Irix (where
+  overlays are still faster and save-under does not work):
+*/
+
+/*! \fn void MenuWindow::clear_overlay()
+  Tells FLTK to use normal drawing planes instead of overlay
+  planes. This is usually necessary if your menu contains multi-color
+  images. Does nothing except on Irix.
+*/
+
+/*! \fn void MenuWindow::set_overlay()
+  Undoes clear_overlay().
+*/
 
 #if USE_OVERLAY && !defined(__sgi)
 #undef USE_OVERLAY
@@ -103,5 +118,5 @@ MenuWindow::~MenuWindow() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.19 2002/12/10 02:00:44 easysw Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.20 2003/12/15 03:03:13 spitzak Exp $".
 //
