@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.33 1999/11/11 10:02:15 bill Exp $"
+# "$Id: Makefile,v 1.34 1999/11/18 04:33:24 carl Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -35,7 +35,7 @@ CPPFILES =\
 	pixmap_browser.cxx radio.cxx resizebox.cxx scroll.cxx shape.cxx \
 	subwindow.cxx symbols.cxx tabs.cxx tile.cxx valuators.cxx fast_slow.cxx \
 	resize.cxx pack.cxx inactive.cxx sizes.cxx image_file.cxx \
-	layout.cxx threads.cxx
+	layout.cxx threads.cxx fltk_scheme.cxx
 
 ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	clock color_chooser cube cursor curve demo doublebuffer \
@@ -44,7 +44,7 @@ ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	mandelbrot menubar message navigation output overlay pixmap \
 	pixmap_browser radio resizebox scroll shape subwindow \
 	symbols tabs tile valuators fast_slow resize pack inactive sizes \
-	image_file layout threads
+	image_file layout threads fltk_scheme
 
 all:	$(ALL)
 
@@ -106,5 +106,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.33 1999/11/11 10:02:15 bill Exp $".
+# End of "$Id: Makefile,v 1.34 1999/11/18 04:33:24 carl Exp $".
 #

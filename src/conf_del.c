@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.8 1999/11/10 04:48:52 carl Exp $"
+   "$Id: conf_del.c,v 1.9 1999/11/18 04:33:22 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -55,7 +55,7 @@ delconf(const char *configfile, const char *k)
         struct stat     stat_buf;                                               /* buffer for stat info */
         int             new_flag;                                               /* does the config file already exist? */
         int             i;                                                      /* generic integer */
-        char		*comment = "";                                          /* comment found on line */
+        char		*comment = 0;                                           /* comment found on line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
 
         if (!configfile || !k)
@@ -114,7 +114,7 @@ delconf(const char *configfile, const char *k)
                 {
 			strcpy(line2, line);
 			
-			comment = "";
+			comment = 0;
 			
 			
 			/* if a comment found */
@@ -139,14 +139,14 @@ delconf(const char *configfile, const char *k)
 
             		if (!strcmp(line, ""))						/* if there is no key on this line */
 			{
-				if (*comment)						/* line with only comment */
+				if (comment)						/* line with only comment */
 	                    		fprintf(ifp2, "%s", line2);
 				
 				continue;
 			}
 
                         sprintf(lineout, "%s", line);                              /* write old lines to new config file */
-			if (*comment)
+			if (comment)
 			{
 				char temp[CONF_MAX_LINE_LEN];
 					
@@ -172,7 +172,7 @@ delconf(const char *configfile, const char *k)
                 if (p)                                                          /* if section was found */
 		{
                         sprintf(lineout, "%s", line);                           /* put section header in new config file */
-			if (*comment)
+			if (comment)
 			{
 				char temp[CONF_MAX_LINE_LEN];
 					
@@ -200,7 +200,7 @@ delconf(const char *configfile, const char *k)
         {                                                                       /* (section must have been found) */
 		strcpy(line2, line);
 		
-		comment = "";
+		comment = 0;
 		
 		/* if a comment found */
                 /*
@@ -223,7 +223,7 @@ delconf(const char *configfile, const char *k)
 			
                 if (!strcmp(line, ""))						/* if there is no key on this line */
 		{
-			if (*comment)						/* line with only comment */
+			if (comment)						/* line with only comment */
 	                        fprintf(ifp2, "%s", line2);
 			continue;
 		}
@@ -246,7 +246,7 @@ delconf(const char *configfile, const char *k)
                 {
                         sprintf(lineout, "%s", line2);
 			
-			if (*comment)
+			if (comment)
 			{
 				char temp[CONF_MAX_LINE_LEN];
 					
@@ -290,5 +290,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.8 1999/11/10 04:48:52 carl Exp $".
+    End of "$Id: conf_del.c,v 1.9 1999/11/18 04:33:22 carl Exp $".
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.17 1999/11/14 08:42:41 bill Exp $"
+// "$Id: Fl_Style.H,v 1.18 1999/11/18 04:33:17 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -33,6 +33,7 @@
 #include "Fl_Font.H"
 
 typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
+typedef int (*Fl_Theme_Handler)(int);
 
 struct FL_API Fl_Style {
   Fl_Boxtype	box;
@@ -96,6 +97,9 @@ struct FL_API Fl_Style {
   static void revert(); // reverts the entire world of styles to defaults
 };
 
+FL_API void fl_theme_handler(Fl_Theme_Handler handler);
+FL_API Fl_Theme_Handler fl_theme_handler();
+
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
 enum Fl_Glyphtype {	// glyph types
@@ -122,5 +126,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.17 1999/11/14 08:42:41 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.18 1999/11/18 04:33:17 carl Exp $".
 //

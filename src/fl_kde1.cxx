@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.5 1999/11/15 04:02:44 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.6 1999/11/18 04:33:22 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -51,7 +51,46 @@ static Fl_Color parse_color(const char *instr) {
   return col;
 }
 
+#ifndef WIN32
+#include <FL/x.H>
+
+// this function handles KDE style change messages
+static int x_event_handler(int) {
+  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
+
+  Atom General = XInternAtom(fl_display, "KDEChangeGeneral", False);
+  Atom Style = XInternAtom(fl_display, "KDEChangeStyle", False);
+  Atom Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
+  if (cm->message_type != General && cm->message_type != Style &&
+      cm->message_type != Palette)
+    return 0; // not the message we want
+
+  fl_kde1();
+
+  return 1;
+}
+#endif
+
 int fl_kde1() {
+#ifndef WIN32
+  // create an X window to catch KDE style change messages
+  static int do_once = 0;
+  if (!do_once) {
+    do_once = 1;
+    if (!fl_display) fl_open_display();
+    Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
+    Window root = RootWindow(fl_display, fl_screen);
+    Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
+    long data = 1;
+    XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
+                    PropModeReplace, (unsigned char *)&data, 1);
+  }
+
+  // add handler to process KDE Change X events
+  fl_theme_handler(x_event_handler);
+#endif
+
   Fl::theme(0); Fl::scheme(0); // will not be using themes or schemes
 
   char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80];
@@ -71,8 +110,6 @@ int fl_kde1() {
   if (!kderc.get("General/background", s, sizeof(s)))
     background = parse_color(s);
 
-  Fl_Style::revert(); // revert to FLTK default styles
-
   if (motif_style) fl_motif();
   else fl_windows();
 
@@ -84,6 +121,7 @@ int fl_kde1() {
     if (motif_style) style->set_highlight_color(0);
     else style->set_highlight_label_color(foreground);
   }
+
   if (motif_style) {
 //    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
     if ((style = Fl_Style::find("menu item"))) {
@@ -95,6 +133,7 @@ int fl_kde1() {
       style->set_off_color(background);
     }
   }
+
   if ((style = Fl_Style::find("menu window"))) {
     style->set_leading(motif_style ? 4 : 8);
   }
@@ -105,5 +144,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.5 1999/11/15 04:02:44 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.6 1999/11/18 04:33:22 carl Exp $".
 //

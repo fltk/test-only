@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.8 1999/11/15 04:02:48 carl Exp $"
+// "$Id: Alternative.cxx,v 1.9 1999/11/18 04:33:26 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -228,6 +228,8 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
 extern "C" int fltk_theme(int, char**);
 
 int fltk_theme(int, char** argv) {
+  Fl_Style::revert();
+
   static Fl_Boxtype_Definer alt_down("alternative down", alt_down_box);
   static Fl_Boxtype_Definer alt_up("alternative up", alt_up_box);
   static Fl_Boxtype_Definer alt_menu("alternative menu", alt_menu_box);
@@ -248,5 +250,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.8 1999/11/15 04:02:48 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.9 1999/11/18 04:33:26 carl Exp $".
 //

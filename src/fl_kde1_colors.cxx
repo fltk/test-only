@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.4 1999/11/15 04:02:44 carl Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.5 1999/11/18 04:33:23 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -25,6 +25,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 #include <FL/fl_config.H>
 #include <FL/fl_draw.H>
 #include <string.h>
@@ -52,7 +53,43 @@ static Fl_Color parse_color(const char *instr) {
   return col;
 }
 
+#ifndef WIN32
+#include <FL/x.H>
+
+// this function handles KDE style change messages
+static int x_event_handler(int) {
+  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
+
+  Atom Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+  Atom General = XInternAtom(fl_display, "KDEChangeGeneral", False);
+  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
+  if (cm->message_type != Palette && cm->message_type != General) return 0; // not the message we want
+
+  fl_kde1_colors();
+
+  return 1;
+}
+#endif
+
 int fl_kde1_colors() {
+#ifndef WIN32
+  // create an X window to catch KDE style change messages
+  static int do_once = 0;
+  if (!do_once) {
+    do_once = 1;
+    if (!fl_display) fl_open_display();
+    Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
+    Window root = RootWindow(fl_display, fl_screen);
+    Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
+    long data = 1;
+    XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
+                    PropModeReplace, (unsigned char *)&data, 1);
+  }
+
+  // add handler to process KDE Change X events
+  fl_theme_handler(x_event_handler);
+#endif
+
   char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80];
   const char* p = getenv("HOME");
   if (p) strncpy(home, p, sizeof(home));
@@ -126,6 +163,8 @@ int fl_kde1_colors() {
     if (font && fontbold) font = font->bold;
     if (font && fontitalic) font = font->italic;
   }
+
+  Fl_Widget::default_style.set_highlight_color(0); // turn off widget highlighting
 
   Fl_Style* style;
   if (background) {
@@ -214,5 +253,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.4 1999/11/15 04:02:44 carl Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.5 1999/11/18 04:33:23 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.22 1999/11/14 08:42:51 bill Exp $"
+// "$Id: fl_options.cxx,v 1.23 1999/11/18 04:33:23 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,22 @@ const char* Fl::theme_ = 0;
 int Fl::use_themes = 1;
 
 int fl_scheme_loaded = 0;
+
+static int handler_added = 0;
+static Fl_Theme_Handler _theme_handler = 0;
+
+static int theme_handler(int e) {
+  if (_theme_handler) return _theme_handler(e);
+  return 0;
+}
+
+void fl_theme_handler(Fl_Theme_Handler handler) {
+  if (!handler_added) {
+    handler_added = 1;
+    Fl::add_handler(theme_handler);
+  }
+  _theme_handler = handler;
+}
 
 static int is_path_rooted(const char *fn) {
   // see if an absolute name was given:
@@ -131,7 +147,7 @@ int Fl::loadscheme(int b) {
     return -1;
   }
 
-  //Fl_Style::revert();
+  Fl_Style::revert();
 
   char sfile[PATH_MAX];
   strcpy(sfile, p);
@@ -340,23 +356,23 @@ const char* Fl::theme() {
 
 
 const char* fl_find_config_file(const char* fn) {
-  static char* path = new char[PATH_MAX];
+  char path[PATH_MAX];
 
   if (is_path_rooted(fn)) {
     strcpy(path, fn);
   } else {
     char *cptr = getenv("HOME");
     if (cptr) {
-      snprintf(path, PATH_MAX, "%s/.fltk/%s", cptr, fn);
+      snprintf(path, sizeof(path), "%s/.fltk/%s", cptr, fn);
       if (!access(path, R_OK)) return path;
     }
 
 #ifndef WIN32
-    snprintf(path, PATH_MAX, FLTK_LIBDIR "/lib/fltk/%s", fn);
+    snprintf(path, sizeof(path), FLTK_LIBDIR "/lib/fltk/%s", fn);
 #else
     char windir[PATH_MAX];
     GetWindowsDirectoryA(windir, sizeof(windir));
-    snprintf(path, PATH_MAX, "%s\\fltk\\%s", windir, fn);
+    snprintf(path, sizeof(path), "%s\\fltk\\%s", windir, fn);
 #endif
   }
 
@@ -394,6 +410,8 @@ static void style_clear(Fl_Style *s) {
 }
 
 void Fl_Style::revert() {
+  fl_theme_handler(0);
+
   fl_background((Fl_Color)0xc0c0c000);
 
   fl_up_box.data = "2AAUWMMTT";
@@ -415,7 +433,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.22 1999/11/14 08:42:51 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.23 1999/11/18 04:33:23 carl Exp $".
 //
 
 
