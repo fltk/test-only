@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.7 2004/04/04 02:11:17 rokan Exp $"
+// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.8 2004/05/12 22:13:38 rokan Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -84,8 +84,11 @@ class FL_EXPORT Fl_Image {
   protected:
   friend class Fl_Image_Cache;
   friend class Fl_Device;
-
-
+  
+    /** This protected method can be used for direct access of image cache by devices in certain situations  */
+  Fl_Image_Cache * cache() {return cache_;};
+    /** This protected method can be used for direct setting of image cache by some devices. */
+  void cache(Fl_Image_Cache * cache) {cache_ = cache;};
 
     /** This protected method sets the image width. */
   void w(int W) {w_ = W;}
@@ -199,5 +202,5 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 #endif // !Fl_Image_H
 
 //
-// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.7 2004/04/04 02:11:17 rokan Exp $".
+// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.8 2004/05/12 22:13:38 rokan Exp $".
 //

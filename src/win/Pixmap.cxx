@@ -1,5 +1,5 @@
 //
-// "$Id: Pixmap.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: Pixmap.cxx,v 1.1.2.2 2004/05/12 22:13:42 rokan Exp $"
 //
 // Gdi Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,12 +38,12 @@ extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 
 
 
-class Fl_Pixmap_Cache: public Fl_Image_Cache{
+class Fl_Win_Pixmap_Cache: public Fl_Image_Cache{
 public:
   void * id; // for internal use
   void * mask; // for internal use (mask bitmap)
-  Fl_Pixmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev),mask(0){};
-  ~Fl_Pixmap_Cache(){
+  Fl_Win_Pixmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev),mask(0){};
+  ~Fl_Win_Pixmap_Cache(){
      fl_delete_offscreen((Fl_Offscreen)id);
      if(mask) fl_delete_bitmask((Fl_Bitmask)mask);
 }
@@ -54,9 +54,9 @@ public:
 void Fl_Win_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx, int cy) {
 
 
-  Fl_Pixmap_Cache *cache = (Fl_Pixmap_Cache *) check_image_cache(img);
+  Fl_Win_Pixmap_Cache *cache = (Fl_Win_Pixmap_Cache *) check_image_cache(img);
   if (!cache){ // building one
-    cache = new Fl_Pixmap_Cache(img,this);
+    cache = new Fl_Win_Pixmap_Cache(img,this);
     cache->id = fl_create_offscreen(img->w(), img->h());
     fl_begin_offscreen((Fl_Offscreen)(cache->id));
     uchar *bitmap = 0;
@@ -85,5 +85,5 @@ void Fl_Win_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx, i
 
 
 //
-// End of "$Id: Pixmap.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: Pixmap.cxx,v 1.1.2.2 2004/05/12 22:13:42 rokan Exp $".
 //

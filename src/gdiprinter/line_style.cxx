@@ -1,5 +1,5 @@
 //
-// "$Id: line_style.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: line_style.cxx,v 1.1.2.2 2004/05/12 22:13:39 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ void Fl_GDI_Printer::sty(int style, int width, char *dashes, int vex){
       style |= FL_CAP_SQUARE | FL_JOIN_MITER; //adjustment for system drawings
   }
   if(!dashes || !(*dashes)){
-    if((style & 0xff) && ((style & 0xf00)==FL_CAP_SQUARE)) // square caps do not seem to work with dasges, not sure why
+    if((style & 0xff) && ((style & 0xf00)==FL_CAP_SQUARE)) // square caps do not seem to work with dashes, not sure why
       style = (style & ~0xf00)|FL_CAP_FLAT;
     fl_disp.line_style(style, width*vex);
   }else{
@@ -50,7 +50,7 @@ void Fl_GDI_Printer::sty(int style, int width, char *dashes, int vex){
     DWORD a[16]; int n = 0;
     s1 |= PS_USERSTYLE;
     for (n = 0; n < 16 && *dashes; n++) a[n] = vex * *dashes++;
-    if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
+    //if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
     LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
     HPEN newpen = ExtCreatePen(s1, vex * width, &penbrush, n, n ? a : 0);
     if (!newpen) {

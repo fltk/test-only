@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.3 2004/05/12 22:13:38 rokan Exp $"
 //
 // Device class for the Fast Light Tool Kit (FLTK).
 //
@@ -33,9 +33,13 @@ Fl_Device::~Fl_Device(){
 
 
 Fl_Image_Cache * Fl_Device::check_image_cache(Fl_Image * im){
-   if(!im->cache_) return 0;
-   if(this != im->cache_->device) im->uncache();
-   return im->cache_;
+  if(!im->cache_) return 0;
+  if(this != im->cache_->device) im->uncache();
+  return im->cache_;
+};
+
+Fl_Image_Cache * * Fl_Device::image_cache(Fl_Image * im){
+  return &(im->cache_);
 };
 
 Fl_Device * Fl_Device::set_current(){
@@ -87,6 +91,6 @@ Fl_Device * FL_DISPLAY::set_current(){
 
 
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.3 2004/05/12 22:13:38 rokan Exp $"
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Bitmap.cxx,v 1.1.2.2 2004/04/06 23:52:58 rokan Exp $"
+// "$Id: Bitmap.cxx,v 1.1.2.3 2004/05/12 22:13:42 rokan Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -120,20 +120,20 @@ void fl_delete_bitmask(Fl_Bitmask bm) {
 
 
 
-class Fl_Bitmap_Cache: public Fl_Image_Cache{
+class Fl_Win_Bitmap_Cache: public Fl_Image_Cache{
 public:
   void * id; // for internal use
-  Fl_Bitmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev){};
-  ~Fl_Bitmap_Cache(){fl_delete_bitmask((Fl_Offscreen)(id));}
+  Fl_Win_Bitmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev){};
+  ~Fl_Win_Bitmap_Cache(){fl_delete_bitmask((Fl_Offscreen)(id));}
 };
 
 
 
 void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, int cy) {
     
-  Fl_Bitmap_Cache *cache = (Fl_Bitmap_Cache *) check_image_cache(img);
+  Fl_Win_Bitmap_Cache *cache = (Fl_Win_Bitmap_Cache *) check_image_cache(img);
   if (!cache){ // building one
-    cache = new Fl_Bitmap_Cache(img,this);
+    cache = new Fl_Win_Bitmap_Cache(img,this);
     cache->id = fl_create_bitmap(img->w(), img->h(), img->array);
   }
   HDC tempdc = CreateCompatibleDC(fl_gc);
@@ -147,5 +147,5 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
 
 
 //
-// End of "$Id: Bitmap.cxx,v 1.1.2.2 2004/04/06 23:52:58 rokan Exp $".
+// End of "$Id: Bitmap.cxx,v 1.1.2.3 2004/05/12 22:13:42 rokan Exp $".
 //

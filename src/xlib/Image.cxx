@@ -1,5 +1,5 @@
 //
-// "$Id: Image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: Image.cxx,v 1.1.2.2 2004/05/12 22:13:43 rokan Exp $"
 //
 // Xlib image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,12 +31,12 @@
 
 void fl_restore_clip(); // from fl_rect.cxx
 
-class Fl_RGB_Cache: public Fl_Image_Cache{
+class Fl_Xlib_RGB_Cache: public Fl_Image_Cache{
 public:
   unsigned id; // for internal use
   unsigned mask; // for internal use (mask bitmap);
-  Fl_RGB_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev),id(0),mask(0){};
-  ~Fl_RGB_Cache(){
+  Fl_Xlib_RGB_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev),id(0),mask(0){};
+  ~Fl_Xlib_RGB_Cache(){
     fl_delete_offscreen((Fl_Offscreen)(id));
     if (mask) fl_delete_bitmask((Fl_Bitmask)(mask));
   }
@@ -44,9 +44,9 @@ public:
 
 
 void Fl_Xlib_Display::draw(Fl_RGB_Image * img, int X, int Y, int W, int H, int cx, int cy) {
-  Fl_RGB_Cache *cache = (Fl_RGB_Cache *) check_image_cache(img);
+  Fl_Xlib_RGB_Cache *cache = (Fl_Xlib_RGB_Cache *) check_image_cache(img);
   if (!cache) { //building one
-    cache = new Fl_RGB_Cache(img,this);
+    cache = new Fl_Xlib_RGB_Cache(img,this);
     cache->id = fl_create_offscreen(img->w(), img->h());
     fl_begin_offscreen((Fl_Offscreen)(cache->id));
     fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
@@ -80,5 +80,5 @@ void Fl_Xlib_Display::draw(Fl_RGB_Image * img, int X, int Y, int W, int H, int c
 
 
 //
-// End of "$Id: Image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: Image.cxx,v 1.1.2.2 2004/05/12 22:13:43 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Bitmap.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: Bitmap.cxx,v 1.1.2.2 2004/05/12 22:13:38 rokan Exp $"
 //
 // Carbon bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -197,11 +197,11 @@ Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) 
 
 
 
-class Fl_Bitmap_Cache: public Fl_Image_Cache{
+class Fl_Carbon_Bitmap_Cache: public Fl_Image_Cache{
 public:
   unsigned id; // for internal use
-  Fl_Bitmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev){};
-  ~Fl_Bitmap_Cache(){fl_delete_bitmask((Fl_Offscreen)(id));}
+  Fl_Carbon_Bitmap_Cache(Fl_Image * im, Fl_Device * dev):Fl_Image_Cache(im,dev){};
+  ~Fl_Carbon_Bitmap_Cache(){fl_delete_bitmask((Fl_Offscreen)(id));}
 };
 
 
@@ -209,9 +209,9 @@ public:
 
 void Fl_Carbon_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, int cy) {
 
-  Fl_Bitmap_Cache *cache = (Fl_Bitmap_Cache *) check_image_cache(img); 
+  Fl_Carbon_Bitmap_Cache *cache = (Fl_Carbon_Bitmap_Cache *) check_image_cache(img); 
   if (!cache){ // building one)
-    cache = new Fl_Bitmap_Cache(img,this);
+    cache = new Fl_Carbon_Bitmap_Cache(img,this);
     cache->id = fl_create_bitmask(img->w(), img->h(), img->array);
   }
 
@@ -234,5 +234,5 @@ void Fl_Carbon_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx
 
 
 //
-// End of "$Id: Bitmap.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id: Bitmap.cxx,v 1.1.2.2 2004/05/12 22:13:38 rokan Exp $".
 //

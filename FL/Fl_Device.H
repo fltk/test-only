@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.8 2004/04/04 02:11:17 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.9 2004/05/12 22:13:31 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,9 @@ class Fl_Image_Cache;
 */
 
 class FL_EXPORT Fl_Device{
+
+ Fl_Image_Cache * image_caches;
+
 #if !defined(WIN32) || !defined(FL_DLL)
 private:
 #else
@@ -68,8 +71,8 @@ protected:
  
  friend class Fl_Image_Cache;
 
- Fl_Image_Cache * image_caches;
  Fl_Image_Cache * check_image_cache(Fl_Image * im);
+ static Fl_Image_Cache * * image_cache(Fl_Image * im);   // sometimes the device might need direct access to the cache (ie Fl_GDI_Pinter)
  
 
 public:
@@ -80,7 +83,7 @@ public:
 protected: 
   // usesrs should not use drawing methods directly, but set the device as current
   // and use fl_* functions (as declared in fl_draw.H) instead.
-  // We rare friendly to them ...
+  // We are friendly to them ...
 
   friend   void fl_color(Fl_Color color);
   friend   void fl_color(uchar r, uchar g, uchar b) ;
@@ -232,8 +235,10 @@ public:
     /** Sets the device as current, all following drawings will be ditected to that device.
     * Returns previously active device. */
   virtual Fl_Device * set_current();
+  
     /** Returns currently active device */
   static Fl_Device * current();
+  
     /** Destructor also removes all image cashes (uncaches images) attached to it. */
   virtual   ~Fl_Device();
   Fl_Device():image_caches(0){};
@@ -247,5 +252,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.8 2004/04/04 02:11:17 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.9 2004/05/12 22:13:31 rokan Exp $".
 //

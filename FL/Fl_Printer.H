@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H,v 1.1.2.6 2004/04/06 22:37:22 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.7 2004/05/12 22:13:38 rokan Exp $"
 //
 // Fl_Printer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,10 +88,16 @@ protected:
   static const int page_formats[NO_PAGE_FORMATS][2];
 
 public:
+  
+  /** This method sets the information about the document when an instance of s Fl_Printer class is created. 
+  *
+  * The value is used for all Fl_Printer classes and should be set/changed before calling of the constructor
+  * of a Fl_Printer subclass. If not the default value is "FLTK Application" is used. For postscript printers
+  * %%Creator: DSC comment is generated. */
   static void doc_info(const char * info){ doc_info_ = info;};
+  
+  /** The method returns pointer to current docinfo string. */
   static const char * doc_info(){return doc_info_;};
-
-
   virtual void page(double pw, double ph, int media = 0)=0;
   virtual void page(int format)=0;
   virtual void orientation (int o){};
@@ -112,5 +118,5 @@ public:
 #endif
 
 //
-// "$Id: Fl_Printer.H,v 1.1.2.6 2004/04/06 22:37:22 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.7 2004/05/12 22:13:38 rokan Exp $"
 //

@@ -591,10 +591,6 @@ public:
 
 
 
-
-
-
-
 int main(int argc, char ** argv) {
 
     Fl::visual(FL_RGB);
