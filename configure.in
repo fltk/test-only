@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.3 2003/11/02 01:37:41 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.4 2003/11/02 01:51:10 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -37,12 +37,14 @@ FL_MINOR_VERSION=2
 FL_PATCH_VERSION=0
 FL_RELEASE_VERSION=a1
 FL_API_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}
+FL_FULL_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}.$(FL_PATCH_VERSION}${FL_RELEASE_VERSION}
 
 AC_SUBST(FL_MAJOR_VERSION)
 AC_SUBST(FL_MINOR_VERSION)
 AC_SUBST(FL_PATCH_VERSION)
 AC_SUBST(FL_RELEASE_VERSION)
 AC_SUBST(FL_API_VERSION)
+AC_SUBST(FL_FULL_VERSION)
 
 dnl Get the operating system and version number...
 uname=`uname`
@@ -857,11 +859,11 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config FL/Makefile)
+AC_OUTPUT(makeinclude fltk.list fltk-config FL/Makefile fluid/fluid.plist)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.3 2003/11/02 01:37:41 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.4 2003/11/02 01:51:10 easysw Exp $".
 dnl
