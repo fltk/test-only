@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.27 1999/11/21 09:57:51 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.28 1999/11/28 09:19:28 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,15 +109,11 @@ int Fl_Frame_Box::fills_rectangle() const {return true;}
 const char* fl_up_box_revert = "2AAUWMMTT";
 const char* fl_down_box_revert = "2UWMMPPAA";
 
-char fl_up_box_data[32], fl_down_box_data[32];
+      Fl_Frame_Box fl_down_box("down", fl_down_box_revert);
+      Fl_Frame_Box fl_up_box("up", fl_up_box_revert, &fl_down_box);
 
-const Fl_Frame_Box fl_up_box("up", fl_up_box_data);
-const Fl_Frame_Box fl_down_box("down", fl_down_box_data);
-const Fl_Frame_Box fl_normal_box("normal", &fl_up_box, &fl_down_box);
-
-const Fl_Frame_Box fl_thin_up_box("thin up", "2HHWW");
 const Fl_Frame_Box fl_thin_down_box("thin down", "2WWHH");
-const Fl_Frame_Box fl_thin_box("thin", &fl_thin_up_box, &fl_thin_down_box);
+const Fl_Frame_Box fl_thin_up_box("thin up", "2HHWW", &fl_thin_down_box);
 
 const Fl_Frame_Box fl_engraved_box("engraved", "HHWWWWHH");
 const Fl_Frame_Box fl_embossed_box("embossed", "WWHHHHWW");
@@ -159,7 +155,6 @@ int Fl_Highlight_Box::fills_rectangle() const {
 
 const Fl_Highlight_Box fl_highlight_up_box("highlight up", &fl_thin_up_box);
 const Fl_Highlight_Box fl_highlight_down_box("highlight down", &fl_thin_down_box);
-const Fl_Highlight_Box fl_highlight_box("highlight", &fl_thin_box);
 
 const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
   for (const Fl_Boxtype_* p = Fl_Boxtype_::first; p; p = p->next)
@@ -170,5 +165,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.27 1999/11/21 09:57:51 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.28 1999/11/28 09:19:28 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.67 1999/11/27 14:37:52 carl Exp $"
+// "$Id: Fl.cxx,v 1.68 1999/11/28 09:19:25 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,9 @@ Fl_Widget	*Fl::belowmouse_,
 int		Fl::damage_,
 		Fl::e_x,
 		Fl::e_y,
+		Fl::e_dx,
+		Fl::e_dy,
+		Fl::e_dz,
 		Fl::e_x_root,
 		Fl::e_y_root,
 		Fl::e_state,
@@ -52,32 +55,6 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
-int             Fl::e_delta_mode; // mode of delta (FL_VIEWCHANGE) event
-float           Fl::e_x_delta;    // current x delta in units
-float           Fl::e_y_delta;    // current y delta in units
-float           Fl::e_z_delta;    // current z delta in units
-
-// mousewheel specific stuff
-int      fl_mousewheel_mode = 1;               // 0: off  1: units = lines  2: units = pages
-float    fl_mousewheel_sdelta = 3.0;           // scroll this many units per (normal size) wheel notch
-float*   fl_mousewheel_delta = &Fl::e_y_delta; // which axis does wheel apply to?
-
-void Fl::delta_x(int& mode, float& xdelta) {
-  mode = e_delta_mode; xdelta = e_x_delta;
-}
-
-void Fl::delta_y(int& mode, float& ydelta) {
-  mode = e_delta_mode; ydelta = e_y_delta;
-}
-
-void Fl::delta_z(int& mode, float& zdelta) {
-  mode = e_delta_mode; zdelta = e_z_delta;
-}
-
-void Fl::delta(int& mode, float& xdelta, float& ydelta, float& zdelta) {
-  mode = e_delta_mode;
-  xdelta = e_x_delta; ydelta = e_y_delta; zdelta = e_z_delta;
-}
 
 static double fl_elapsed();
 
@@ -307,29 +284,6 @@ Fl_Window* Fl::next_window(const Fl_Window* w) {
   Fl_X* x = Fl_X::i(w)->next; return x ? x->w : 0;}
 
 ////////////////////////////////////////////////////////////////
-// Event handlers:
-
-struct handler_link {
-  int (*handle)(int);
-  const handler_link *next;
-};
-
-static const handler_link *handlers = 0;
-
-void Fl::add_handler(int (*h)(int)) {
-  handler_link *l = new handler_link;
-  l->handle = h;
-  l->next = handlers;
-  handlers = l;
-}
-
-static int send_handlers(int event) {
-  for (const handler_link *h = handlers; h; h = h->next)
-    if (h->handle(event)) return 1;
-  return 0;
-}
-
-////////////////////////////////////////////////////////////////
 
 Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
 
@@ -451,6 +405,20 @@ static int send(int event, Fl_Widget* to, Fl_Window* window) {
   return ret;
 }
 
+struct handler_link {
+  int (*handle)(int);
+  const handler_link *next;
+};
+
+static const handler_link *handlers = 0;
+
+void Fl::add_handler(int (*h)(int)) {
+  handler_link *l = new handler_link;
+  l->handle = h;
+  l->next = handlers;
+  handlers = l;
+}
+
 int Fl::handle(int event, Fl_Window* window)
 {
   Fl_Widget* w = window;
@@ -495,11 +463,11 @@ int Fl::handle(int event, Fl_Window* window)
 
       w = pushed();
       event = FL_DRAG;
-    } else if (modal() && w != modal()) {
-      w = 0;
+    } else if (modal() && w != modal() && !grab()) {
+      return 0;
     }
     if (grab()) w = grab();
-    break;
+    return send(event, w, window);
 
   case FL_RELEASE: {
     if (pushed()) {
@@ -519,44 +487,6 @@ int Fl::handle(int event, Fl_Window* window)
     fl_fix_focus();
     return 1;
 
-  case FL_KEYBOARD:
-
-    Fl_Tooltip::enter((Fl_Widget*)0);
-    fl_xfocus = window; // this should already be set, but just in case.
-
-    // Try it as keystroke, sending it to focus and all parents:
-    for (w = grab() ? grab() : focus(); w; w = w->parent())
-      if (send(FL_KEYBOARD, w, window)) return 1;
-
-    // recursive call to try shortcut:
-    if (handle(FL_SHORTCUT, window)) return 1;
-
-    // and then try a shortcut with the case of the text swapped, by
-    // changing the text and falling through to FL_SHORTCUT case:
-    if (!isalpha(event_text()[0])) return 0;
-    *(char*)(event_text()) ^= ('A'^'a');
-    event = FL_SHORTCUT;
-
-  case FL_SHORTCUT:
-
-    if (grab()) {w = grab(); break;} // send it to grab window
-
-    // Try it as shortcut, sending to mouse widget and all parents:
-    w = belowmouse(); if (!w) {w = modal(); if (!w) w = window;}
-    for (; w; w = w->parent()) if (send(FL_SHORTCUT, w, window)) return 1;
-
-    // try using add_handle() functions:
-    if (send_handlers(FL_SHORTCUT)) return 1;
-
-    // make Escape key close windows:
-    if (event_key()==FL_Escape) {
-      w = modal(); if (!w) w = window;
-      w->do_callback();
-      return 1;
-    }
-
-    return 0;
-
   case FL_ENTER:
     fl_xmousewin = window;
     fl_fix_focus();
@@ -566,11 +496,46 @@ int Fl::handle(int event, Fl_Window* window)
     if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus();}
     return 1;
 
+  case FL_KEYBOARD:
+
+    Fl_Tooltip::enter((Fl_Widget*)0);
+    fl_xfocus = window; // this should already be set, but just in case.
+
+    // Try sending keystroke to the focus, if any:
+    w = grab(); if (!w) w = focus();
+    if (w && send(FL_KEYBOARD, w, window)) return 1;
+
+    // recursive call to try shortcut:
+    if (handle(FL_SHORTCUT, window)) return 1;
+
+    // and then try a shortcut with the case of the text swapped, by
+    // changing the text and falling through to FL_SHORTCUT case:
+    if (!isalpha(event_text()[0])) return 0;
+    *(char*)(event_text()) ^= ('A'^'a');
+    event = FL_SHORTCUT;
+    // fall through to the default case to do this FL_SHORTCUT:
+
   default:
-    break;
+    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, and all new
+    // events that we may add.  Fltk does a search of every widget, starting
+    // with the one the mouse points at, and upwards.  Part of this search
+    // is done by Fl_Group::handle(), which sends the events to every
+    // child of the group.
+
+             w = grab();
+    if (!w) {w = belowmouse();
+    if (!w) {w = modal();
+    if (!w)  w = window;}}
+    for (; w; w = w->parent()) if (send(event, w, window)) return 1;
+    // otherwise fall through to the unknown case:
+
+  case 0:
+    // try the chain of global event handlers:
+    {for (const handler_link *h = handlers; h; h = h->next)
+      if (h->handle(event)) return 1;}
+    return 0;
+
   }
-  if (w && send(event, w, window)) return 1;
-  return send_handlers(event);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -644,53 +609,21 @@ Fl_Window::~Fl_Window() {
 
 extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 
-static int started;
-extern const char* fl_up_box_revert;
-extern const char* fl_down_box_revert;
-
-#ifndef WIN32
-extern int fl_mousewheel_b1;
-extern int fl_mousewheel_b2;
-#endif
-
-// one-time startup stuff
-static void startup() {
-  started = 1;
-  strcpy(fl_up_box_data, fl_up_box_revert);
-  strcpy(fl_down_box_data, fl_down_box_revert);
-  if (Fl::use_themes) Fl::loadtheme();
-  if (Fl::use_schemes) Fl::loadscheme();
-
-  char temp[80];
-  if (!Fl::getconf("mouse wheel/mode", temp, sizeof(temp)))
-    fl_mousewheel_mode = atoi(temp);
-  if (!Fl::getconf("mouse wheel/delta", temp, sizeof(temp)))
-    fl_mousewheel_sdelta = strtod(temp, 0);
-  if (!Fl::getconf("mouse wheel/axis", temp, sizeof(temp))) {
-    if (!strcasecmp(temp, "x")) fl_mousewheel_delta = &Fl::e_x_delta;
-    if (!strcasecmp(temp, "z")) fl_mousewheel_delta = &Fl::e_z_delta;
-  }
-#ifndef WIN32
-  if (!Fl::getconf("mouse wheel/button 1", temp, sizeof(temp)))
-    fl_mousewheel_b1 = atoi(temp);
-  if (!Fl::getconf("mouse wheel/button 2", temp, sizeof(temp)))
-    fl_mousewheel_b2 = atoi(temp);
-#endif
-}
-
 void Fl_Window::show() {
   if (parent()) {
     set_visible();
     handle(FL_SHOW);
   } else if (!i) {
+    static int started;
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
+    if (!started) {
+      started = 1;
 #ifndef WIN32
-    fl_open_display();
+      fl_open_display();
 #endif
-
-    // one-time startup stuff
-    if (!started) startup();
-
+      if (Fl::use_themes) Fl::loadtheme();
+      if (Fl::use_schemes) Fl::loadscheme();
+    }
     // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
       fl_modal_for = Fl::first_window();
@@ -769,7 +702,13 @@ int Fl_Window::handle(int event) {
     if (i && !visible()) XUnmapWindow(fl_display, i->xid);
     break;
   }
-  return Fl_Group::handle(event);
+  if (Fl_Group::handle(event)) return 1;
+  // Make the Escape key close windows:
+  if (event == FL_SHORTCUT && !parent() && Fl::event_key()==FL_Escape) {
+    do_callback();
+    return 1;
+  }
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -872,5 +811,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.67 1999/11/27 14:37:52 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.68 1999/11/28 09:19:25 bill Exp $".
 //

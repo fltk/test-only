@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.38 1999/11/27 00:58:25 carl Exp $"
+// "$Id: fl_options.cxx,v 1.39 1999/11/28 09:19:30 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -518,8 +518,8 @@ void Fl_Style::revert() {
   fl_theme_handler(0);
 
   fl_background((Fl_Color)0xc0c0c000);
-  strcpy(fl_up_box_data, fl_up_box_revert);
-  strcpy(fl_down_box_data, fl_down_box_revert);
+  fl_up_box.data = fl_up_box_revert;
+  fl_down_box.data = fl_down_box_revert;
   Fl_Style::draw_boxes_inactive = 1;
   Fl_Style::inactive_menu_hack = 0;
   Fl_Style::inactive_color_weight = 0.33f;
@@ -534,7 +534,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.38 1999/11/27 00:58:25 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.39 1999/11/28 09:19:30 bill Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.15 1999/11/21 06:23:15 carl Exp $"
+// "$Id: Fl_Boxtype.H,v 1.16 1999/11/28 09:19:24 bill Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -59,32 +59,25 @@ public:
   const Fl_Frame_Box* down;
   Fl_Frame_Box(const char* n, const char* c, const Fl_Frame_Box* d) :
     Fl_Boxtype_(n), data(c), down(d) {}
-  Fl_Frame_Box(const char* n,  const Fl_Frame_Box* u, const Fl_Frame_Box* d) :
-    Fl_Boxtype_(n), data(u->data), down(d) {}
   Fl_Frame_Box(const char* n, const char* c) :
     Fl_Boxtype_(n), data(c), down(this) {}
 };
-extern FL_API const Fl_Frame_Box fl_up_box;
+extern FL_API Fl_Frame_Box fl_up_box;
 #define FL_UP_BOX (&fl_up_box)
-extern FL_API const Fl_Frame_Box fl_down_box;
+#define FL_NORMAL_BOX (&fl_up_box)
+extern FL_API Fl_Frame_Box fl_down_box;
 #define FL_DOWN_BOX (&fl_down_box)
-extern FL_API const Fl_Frame_Box fl_normal_box;
-#define FL_NORMAL_BOX (&fl_normal_box)
 extern FL_API const Fl_Frame_Box fl_thin_up_box;
 #define FL_THIN_UP_BOX (&fl_thin_up_box)
+#define FL_THIN_BOX (&fl_thin_up_box)
 extern FL_API const Fl_Frame_Box fl_thin_down_box;
 #define FL_THIN_DOWN_BOX (&fl_thin_down_box)
-extern FL_API const Fl_Frame_Box fl_thin_box;
-#define FL_THIN_BOX (&fl_thin_box)
 extern FL_API const Fl_Frame_Box fl_engraved_box;
 #define FL_ENGRAVED_BOX (&fl_engraved_box)
 extern FL_API const Fl_Frame_Box fl_embossed_box;
 #define FL_EMBOSSED_BOX (&fl_embossed_box)
 extern FL_API const Fl_Frame_Box fl_border_box;
 #define FL_BORDER_BOX (&fl_border_box)
-
-extern FL_API char fl_up_box_data[];
-extern FL_API char fl_down_box_data[];
 
 class FL_API Fl_Flat_Box : public Fl_Boxtype_ {
 public:
@@ -109,11 +102,10 @@ public:
 extern FL_API const Fl_Highlight_Box fl_highlight_up_box;
 #define FL_HIGHLIGHT_UP_BOX (&fl_highlight_up_box)
 #define FL_FLAT_UP_BOX (&fl_highlight_up_box)
+#define FL_HIGHLIGHT_BOX (&fl_highlight_up_box)
 extern FL_API const Fl_Highlight_Box fl_highlight_down_box;
 #define FL_HIGHLIGHT_DOWN_BOX (&fl_highlight_down_box)
 #define FL_FLAT_DOWN_BOX (&fl_highlight_down_box)
-extern FL_API const Fl_Highlight_Box fl_highlight_box;
-#define FL_HIGHLIGHT_BOX (&fl_highlight_box)
 
 // Circle, pattern of edges is stolen from another Fl_Frame_Box
 class FL_API Fl_Round_Box : public Fl_Boxtype_ {
@@ -127,10 +119,9 @@ public:
 };
 extern FL_API const Fl_Round_Box fl_round_up_box;
 #define FL_ROUND_UP_BOX (&fl_round_up_box)
+#define FL_ROUND_BOX (&fl_round_up_box)
 extern FL_API const Fl_Round_Box fl_round_down_box;
 #define FL_ROUND_DOWN_BOX (&fl_round_down_box)
-extern FL_API const Fl_Round_Box fl_round_box;
-#define FL_ROUND_BOX (&fl_round_box)
 
 // Diamond, pattern of edges is stolen from another Fl_Frame_Box
 class FL_API Fl_Diamond_Box : public Fl_Boxtype_ {
@@ -144,10 +135,9 @@ public:
 };
 extern FL_API const Fl_Diamond_Box fl_diamond_up_box;
 #define FL_DIAMOND_UP_BOX (&fl_diamond_up_box)
+#define FL_DIAMOND_BOX (&fl_diamond_up_box)
 extern FL_API const Fl_Diamond_Box fl_diamond_down_box;
 #define FL_DIAMOND_DOWN_BOX (&fl_diamond_down_box)
-extern FL_API const Fl_Diamond_Box fl_diamond_box;
-#define FL_DIAMOND_BOX (&fl_diamond_box)
 
 // a bunch of "one-of" types:
 
@@ -258,5 +248,5 @@ extern FL_API const Fl_Border_Frame fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.15 1999/11/21 06:23:15 carl Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.16 1999/11/28 09:19:24 bill Exp $".
 //

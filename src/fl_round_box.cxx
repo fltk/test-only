@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.18 1999/11/23 07:28:34 vincent Exp $"
+// "$Id: fl_round_box.cxx,v 1.19 1999/11/28 09:19:30 bill Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -107,10 +107,9 @@ void Fl_Round_Box::inset(int& x,int& y,int& w,int& h) const {
 }
 int Fl_Round_Box::fills_rectangle() const {return false;}
 
-const Fl_Round_Box fl_round_up_box(0, FL_UP_BOX);
 const Fl_Round_Box fl_round_down_box(0, FL_DOWN_BOX);
-const Fl_Round_Box fl_round_box(0, FL_NORMAL_BOX);
+const Fl_Round_Box fl_round_up_box(0, FL_UP_BOX);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.18 1999/11/23 07:28:34 vincent Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.19 1999/11/28 09:19:30 bill Exp $".
 //

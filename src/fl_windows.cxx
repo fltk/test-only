@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.20 1999/11/23 11:28:05 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.21 1999/11/28 09:19:30 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -154,7 +154,7 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_box(FL_HIGHLIGHT_BOX);
+    s->set_box(FL_HIGHLIGHT_UP_BOX);
     fltk_glyph = s->glyph;
     s->set_glyph_box(FL_NO_BOX);
     s->set_selection_color(FL_GRAY);
@@ -239,5 +239,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.20 1999/11/23 11:28:05 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.21 1999/11/28 09:19:30 bill Exp $".
 //

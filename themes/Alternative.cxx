@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.14 1999/11/22 09:00:26 bill Exp $"
+// "$Id: Alternative.cxx,v 1.15 1999/11/28 09:19:32 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -34,10 +34,7 @@ static const Fl_Frame_Box
 alt_thick_down_box("alternative thick down", "NNUUJJXXAAAA");
 
 static const Fl_Frame_Box
-alt_thick_up_box("alternative thick up", "AAAAXXJJUUNN");
-
-static const Fl_Frame_Box
-alt_thick_box("alternative thick", &alt_thick_up_box, &alt_thick_down_box);
+alt_thick_up_box("alternative thick up", "AAAAXXJJUUNN", &alt_thick_down_box);
 
 // some old stuff for boxtype drawing
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -309,5 +306,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.14 1999/11/22 09:00:26 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.15 1999/11/28 09:19:32 bill Exp $".
 //

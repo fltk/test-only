@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.38 1999/11/27 14:37:51 carl Exp $"
+// "$Id: Enumerations.H,v 1.39 1999/11/28 09:19:23 bill Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -57,16 +57,22 @@ typedef unsigned long ulong;
 enum Fl_Event {	// events
   FL_NO_EVENT		= 0,
   FL_PUSH		= 1,
+  FL_BUTTON		= 1,
+  FL_BUTTONDOWN		= 1,
   FL_RELEASE		= 2,
+  FL_BUTTONUP		= 2,
   FL_ENTER		= 3,
   FL_LEAVE		= 4,
   FL_DRAG		= 5,
   FL_FOCUS		= 6,
   FL_UNFOCUS		= 7,
   FL_KEYBOARD		= 8,
+  FL_KEY		= 8,
+  FL_KEYDOWN		= 8,
   FL_CLOSE		= 9,
   FL_MOVE		= 10,
   FL_SHORTCUT		= 11,
+  FL_KEYUP		= 12,
   FL_DEACTIVATE		= 13,
   FL_ACTIVATE		= 14,
   FL_HIDE		= 15,
@@ -204,5 +210,5 @@ enum Fl_Thread_Policy {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.38 1999/11/27 14:37:51 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.39 1999/11/28 09:19:23 bill Exp $".
 //
