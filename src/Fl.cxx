@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.38 1999/09/14 17:52:36 carl Exp $"
+// "$Id: Fl.cxx,v 1.39 1999/09/17 16:23:56 vincent Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -78,6 +78,12 @@ static struct Timeout {
 } * timeout;
 static int numtimeouts;
 static int timeout_array_size;
+#ifdef WIN32
+// We have to keep track of whether we have captured the mouse, since
+// MSWindows shows little respect for this... Grep for fl_capture to
+// see where and how this is used.
+extern HWND fl_capture;
+#endif
 
 void Fl::add_timeout(double t, void (*cb)(void *), void *v) {
 
@@ -607,7 +613,7 @@ void Fl_Window::show() {
   if (parent()) {
     Fl_Widget::show();
   } else if (!i) {
-    fl_open_display();
+//    fl_open_display();
     if (non_modal() && !fl_modal_for) {
       // back compatability with older modal() and non_modal() flags:
       fl_modal_for = Fl::first_window();
@@ -770,5 +776,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.38 1999/09/14 17:52:36 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.39 1999/09/17 16:23:56 vincent Exp $".
 //

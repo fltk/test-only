@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.47 1999/09/14 17:52:41 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.48 1999/09/17 16:23:56 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -633,7 +633,7 @@ void Fl_Window::layout() {
     flags |= SWP_NOSIZE;
   } else {
     Fl_Group::layout();
-    if (i()) {redraw(); i->wait_for_expose = 1;}
+    if (i) {redraw(); i->wait_for_expose = 1;}
   }
   if (this == resize_from_system) {
     resize_from_system = 0;
@@ -755,7 +755,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     fl_display,
     NULL // creation parameters
     );
-  x->mapped = 1;
+//  x->mapped = 1;
   x->wait_for_expose = 1;
   x->next = Fl_X::first;
   Fl_X::first = x;
@@ -837,7 +837,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 //static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
 
 void Fl_Window::create() {
-  Fl_X::make(this);
+  Fl_X::create(this);
 }
 
 Fl_Window *Fl_Window::current_;
@@ -879,5 +879,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.47 1999/09/14 17:52:41 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.48 1999/09/17 16:23:56 vincent Exp $".
 //

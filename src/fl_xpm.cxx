@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.10 1999/09/14 17:52:46 carl Exp $"
+// "$Id: fl_xpm.cxx,v 1.11 1999/09/17 16:23:57 vincent Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -146,14 +146,14 @@ void Fl_XPM_Image::read()
   }
   int w, h;
   fl_measure_pixmap(ldatas, w, h);
-  id = fl_create_offscreen(w, h);
+  id = (ulong)fl_create_offscreen(w, h);
   fl_begin_offscreen((Fl_Offscreen)id);
   uchar *bitmap = 0;
   fl_mask_bitmap = &bitmap;
   fl_draw_pixmap(ldatas, 0, 0, FL_NO_COLOR);
   fl_mask_bitmap = 0;
   if (bitmap) {
-    mask = (Fl_Offscreen) fl_create_bitmap(bitmap, w, h);
+    mask = (ulong) fl_create_bitmap(bitmap, w, h);
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -166,5 +166,5 @@ void Fl_XPM_Image::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.10 1999/09/14 17:52:46 carl Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.11 1999/09/17 16:23:57 vincent Exp $"
 //

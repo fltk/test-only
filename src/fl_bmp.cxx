@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.6 1999/09/14 17:52:42 carl Exp $"
+// "$Id: fl_bmp.cxx,v 1.7 1999/09/17 16:23:57 vincent Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -805,8 +805,8 @@ void Fl_BMP_Image::read()
     
     if(!datas) fclose(bmpFile);
 
-    id = fl_create_offscreen(_width, _height);
-    fl_begin_offscreen(id);
+    id = (ulong) fl_create_offscreen(_width, _height);
+    fl_begin_offscreen((Fl_Offscreen)id);
     fl_draw_image(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
     fl_end_offscreen();
 
@@ -823,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.6 1999/09/14 17:52:42 carl Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.7 1999/09/17 16:23:57 vincent Exp $"
 //

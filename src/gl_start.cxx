@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.8 1999/09/14 07:17:27 bill Exp $"
+// "$Id: gl_start.cxx,v 1.9 1999/09/17 16:23:57 vincent Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -113,7 +113,7 @@ void gl_finish() {
 
 int Fl::gl_visual(int mode, int *alist) {
 #ifdef WIN32
-  default_mode = mode;
+//  default_mode = mode;
 #else
   Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
   if (!c) return 0;
@@ -126,5 +126,5 @@ int Fl::gl_visual(int mode, int *alist) {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.8 1999/09/14 07:17:27 bill Exp $".
+// End of "$Id: gl_start.cxx,v 1.9 1999/09/17 16:23:57 vincent Exp $".
 //

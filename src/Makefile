@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.32 1999/09/10 21:21:04 vincent Exp $"
+# "$Id: Makefile,v 1.33 1999/09/17 16:23:56 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -152,7 +152,6 @@ CPPimagesFILES = \
 	fl_png.cxx
 
 CFILES = \
-	fl_call_main.c \
 	scandir.c \
 	numericsort.c \
 	vsnprintf.c
@@ -211,23 +210,43 @@ OBJECTSimages = $(CPPimagesFILES:.cxx=.o)
 
 all:	$(LIBRARY) $(DSONAME)
 
-$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
+$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages) fl_call_main.o
 	@echo $(LIBCOMMAND) $@ ...
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
+	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages) fl_call_main.o
 	@$(RANLIB) $@
 
 libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
+libfltk.2.a: $(OBJECTS) # $(DSOglNAME) $(DSOimagesNAME)  $(OBJECTSimages)
+	@echo $(LIBCOMMAND) $@ ...
+	@rm -f $@
+	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSimages)
+	@$(RANLIB) $@
+
 libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSgl)
 
+libfltkgl.2.a: $(OBJECTSgl)
+	@echo $(LIBCOMMAND) $@ ...
+	@rm -f $@
+	@$(LIBCOMMAND) $@ $(OBJECTSgl)
+	@$(RANLIB) $@
+
 libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSimages)
+
+libfltkimages.2.a: $(OBJECTSimages)
+	@echo $(LIBCOMMAND) $@ ...
+	@rm -f $@
+	@$(LIBCOMMAND) $@ $(OBJECTSimages)
+	@$(RANLIB) $@
+
+include Makefile.Mingw32DLLs
 
 .SUFFIXES:	.cxx .h .o
 
@@ -275,5 +294,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.32 1999/09/10 21:21:04 vincent Exp $".
+# End of "$Id: Makefile,v 1.33 1999/09/17 16:23:56 vincent Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.19 1999/09/14 07:17:16 bill Exp $"
+// "$Id: win32.H,v 1.20 1999/09/17 16:23:54 vincent Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -77,6 +77,7 @@ public:
   int wait_for_expose;
   HDC private_dc; // used for OpenGL
   HCURSOR cursor;
+  inline void flush() {w->flush();}
   static FL_EXPORT Fl_X* first;
   static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
   static FL_EXPORT int fake_X_wm(const Fl_Window* w,int &X, int &Y,
@@ -129,5 +130,5 @@ extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.19 1999/09/14 07:17:16 bill Exp $".
+// End of "$Id: win32.H,v 1.20 1999/09/17 16:23:54 vincent Exp $".
 //
