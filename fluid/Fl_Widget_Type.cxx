@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.46 1999/09/20 01:51:14 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.47 1999/10/11 01:00:26 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -371,7 +371,7 @@ Fl_Menu_Item boxmenu[] = {
 
 const char *boxname(Fl_Boxtype i) {
   for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
-    if (boxmenu[j].user_data() == i) return boxmenu[j].label();
+    if (boxmenu[j].user_data() == (void*)i) return boxmenu[j].label();
   return 0;
 }
 
@@ -391,7 +391,7 @@ void box_cb(Fl_Choice* i, void *v) {
     i->show();
     Fl_Boxtype n = current_widget->o->box();
     for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
-      if (n == boxmenu[j].user_data()) {i->value(j); break;}
+      if ((void*)n == boxmenu[j].user_data()) {i->value(j); break;}
   } else {
     int m = i->value();
     Fl_Boxtype n = Fl_Boxtype(boxmenu[m].user_data());
@@ -734,7 +734,7 @@ Fl_Menu_Item labeltypemenu[] = {
 
 const char *labeltypename(Fl_Labeltype i) {
   for (int j = 0; j < int(sizeof(labeltypemenu)/sizeof(*labeltypemenu)); j++)
-    if (labeltypemenu[j].user_data() == i) return labeltypemenu[j].label();
+    if (labeltypemenu[j].user_data() == (void*)i) return labeltypemenu[j].label();
   return 0;
 }
 
@@ -743,7 +743,7 @@ void labeltype_cb(Fl_Choice* i, void *v) {
     Fl_Labeltype n = current_widget->o->labeltype();
     i->when(FL_WHEN_RELEASE);
     for (int j = 0; j < int(sizeof(labeltypemenu)/sizeof(*labeltypemenu)); j++)
-      if (labeltypemenu[j].user_data() == n) {i->value(j); break;}
+      if (labeltypemenu[j].user_data() == (void*)n) {i->value(j); break;}
   } else {
     int m = i->value();
     Fl_Labeltype n = Fl_Labeltype(labeltypemenu[m].user_data());
@@ -2132,5 +2132,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.46 1999/09/20 01:51:14 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.47 1999/10/11 01:00:26 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="fltk" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
@@ -22,11 +22,9 @@ CFG=fltk - Win32 Debug
 !MESSAGE 
 
 # Begin Project
-# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
-RSC=rc.exe
 
 !IF  "$(CFG)" == "fltk - Win32 Release"
 
@@ -40,10 +38,11 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /GX /Os /Ob2 /I "." /I ".." /D "_POSIX_" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MT /GX /Os /Ob2 /I "." /I ".." /D "_POSIX_" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -63,10 +62,11 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GX /Zi /Od /I "." /I ".." /D "_POSIX_" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
+RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
+# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MTd /GX /Zi /Od /I "." /I ".." /D "_POSIX_" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -80,74 +80,6 @@ LIB32=link.exe -lib
 
 # Name "fltk - Win32 Release"
 # Name "fltk - Win32 Debug"
-# Begin Source File
-
-SOURCE=..\src\conf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_atol.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_del.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_endtrim.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_error.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_get.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getboolean.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getlong.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_keys.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_level_indent.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_list_free.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_sections.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_set.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setboolean.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setlong.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_strcnt.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_trim.c
-# End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_absolute.cxx
@@ -194,10 +126,6 @@ SOURCE=..\src\Fl_Adjuster.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Adjuster_SW.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_arc.cxx
 # End Source File
 # Begin Source File
@@ -215,6 +143,10 @@ SOURCE=..\src\fl_ask.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Bitmap.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_bmp.cxx
 # End Source File
 # Begin Source File
 
@@ -238,15 +170,7 @@ SOURCE=..\src\Fl_Browser_load.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Browser_SW.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Button_SW.cxx
 # End Source File
 # Begin Source File
 
@@ -258,19 +182,11 @@ SOURCE=..\src\Fl_Chart.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Chart_SW.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Check_Button.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Choice.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Choice_SW.cxx
 # End Source File
 # Begin Source File
 
@@ -287,10 +203,6 @@ SOURCE=..\src\Fl_Color_Chooser.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Counter.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Counter_SW.cxx
 # End Source File
 # Begin Source File
 
@@ -334,14 +246,6 @@ SOURCE=..\src\fl_draw_pixmap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_draw_image_file.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\fl_draw_image_file.H
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_engraved_label.cxx
 # End Source File
 # Begin Source File
@@ -366,11 +270,11 @@ SOURCE=..\src\Fl_get_system_colors.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Gl_Choice.cxx
+SOURCE=..\src\fl_gif.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_gif.cxx
+SOURCE=..\src\Fl_Gl_Choice.cxx
 # End Source File
 # Begin Source File
 
@@ -382,11 +286,19 @@ SOURCE=..\src\Fl_Gl_Window.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_glyph.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_grab.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Group.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Guess_Image.cxx
 # End Source File
 # Begin Source File
 
@@ -402,11 +314,7 @@ SOURCE=..\src\Fl_Input_.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Input_SW.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Image_File.cxx
+SOURCE=..\src\fl_jpeg.cxx
 # End Source File
 # Begin Source File
 
@@ -438,31 +346,11 @@ SOURCE=..\src\Fl_Menu_Button.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Menu_Button_SW.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Menu_global.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Menu_Item_SW.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Menu_SW.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Menu_Window.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Multi_Label.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_options.cxx
 # End Source File
 # Begin Source File
 
@@ -498,11 +386,11 @@ SOURCE=..\src\Fl_Pixmap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Positioner.cxx
+SOURCE=..\src\fl_png.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_png.cxx
+SOURCE=..\src\Fl_Positioner.cxx
 # End Source File
 # Begin Source File
 
@@ -526,10 +414,6 @@ SOURCE=..\src\fl_round_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Round_Button.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_rounded_box.cxx
 # End Source File
 # Begin Source File
@@ -546,15 +430,11 @@ SOURCE=..\src\Fl_Scrollbar.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_set_font.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_set_fonts.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_shadow_box.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Shared_Image.cxx
 # End Source File
 # Begin Source File
 
@@ -574,7 +454,11 @@ SOURCE=..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Slider_SW.cxx
+SOURCE=..\src\Fl_Style_Plugins.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Style_Util.cxx
 # End Source File
 # Begin Source File
 
@@ -591,10 +475,6 @@ SOURCE=..\src\Fl_Tile.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Tooltip.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Tooltip_.cxx
 # End Source File
 # Begin Source File
 
@@ -623,10 +503,6 @@ SOURCE=..\src\Fl_visual.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Widget.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Widget_SW.cxx
 # End Source File
 # Begin Source File
 

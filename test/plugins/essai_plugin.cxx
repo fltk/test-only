@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <FL/Fl_Menu.H>
 #include <FL/Fl_Window.H>
 #include "Fluid_Plugins.h"
@@ -10,7 +11,7 @@
 
 // Description of the plugin : declared extern "C" to avoid C++ name encoding
 // (MS Visual C does encode C++ name of variables and not only functions !! Wonder why ...)
-extern "C" Fluid_Plugin fluid_plugin;
+extern "C" FLUID_EXPORT Fluid_Plugin fluid_plugin;
 
 
 void option_cb(Fl_Widget* o, void* p)

@@ -1,5 +1,5 @@
 //
-// "$Id: filename.H,v 1.12 1999/09/19 04:58:58 vincent Exp $"
+// "$Id: filename.H,v 1.13 1999/10/11 01:00:25 vincent Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 // The following is only used when building DLLs under WIN32 with Visual C++...
 //
 
-#if defined(FL_DLL) && defined(_MSC_VER)
+#if 0 && defined(FL_DLL) && defined(_MSC_VER)
 #  ifdef FL_LIBRARY
 #    define FL_EXPORT	__declspec(dllexport)
 #  else
@@ -42,7 +42,7 @@
 
 #if defined(FL_DLL)
 #  ifdef FL_LIBRARY
-#    define FL_IMPORT
+#    define FL_IMPORT   __declspec(dllexport)
 #  else
 #    define FL_IMPORT	__declspec(dllimport)
 #  endif /* FL_LIBRARY */
@@ -86,5 +86,5 @@ FL_EXPORT int filename_list(const char *d, struct dirent ***list);
 #endif
 
 //
-// End of "$Id: filename.H,v 1.12 1999/09/19 04:58:58 vincent Exp $".
+// End of "$Id: filename.H,v 1.13 1999/10/11 01:00:25 vincent Exp $".
 //

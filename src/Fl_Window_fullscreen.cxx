@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.7 1999/10/03 06:31:40 bill Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.8 1999/10/11 01:00:29 vincent Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 extern Atom fl_motif_wm_hints; // in Fl_x.cxx
 #endif
 
+#include <FL/Fl_Window.H>
 void Fl_Window::fullscreen() {
 #ifdef WIN32
   // something must be done so that the taskbar is hidden...
@@ -59,5 +60,5 @@ void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.7 1999/10/03 06:31:40 bill Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.8 1999/10/11 01:00:29 vincent Exp $".
 //

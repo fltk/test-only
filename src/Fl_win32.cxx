@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.49 1999/10/03 06:31:41 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.50 1999/10/11 01:00:29 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -617,6 +617,7 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create():
 
+#include <FL/Fl_Window.H>
 bool fl_show_iconic;		// true if called from iconize()
 int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
 const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
@@ -656,24 +657,25 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   int xp = w->x();
   int yp = w->y();
 
+  int dx, dy, dw, dh;
   if (w->parent()) {
     style = WS_CHILD;
     styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     parent = fl_xid(w->window());
+    dx=dy=dw=dh=0;
   } else {
-    int dx, dy, dw, dh;
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(w, dx, dy, dw, dh);
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     if (!(w->flags() & Fl_Window::FL_FORCE_POSITION)) {
       xp = yp = CW_USEDEFAULT;
     } else {
-      xp = x()-dx;
-      yp = y()-dy;
+      xp = w->x()-dx;
+      yp = w->y()-dy;
     }
     if (fl_modal_for && !fl_disable_transient_for) {
       parent = fl_modal_for->i->xid;
     } else {
-      parent = fl_mdi_window ? fl_mdi_window->i->xid : 0
+      parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
       if (w->border()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
     }
   }
@@ -687,7 +689,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   x->xid = CreateWindowEx(
     styleEx,
     class_name, w->label(), style,
-    xp, yp, w->w(), w->h(),
+    xp, yp, w->w()+dw, w->h()+dh,
     parent,
     NULL, // menu
     fl_display,
@@ -812,5 +814,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.49 1999/10/03 06:31:41 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.50 1999/10/11 01:00:29 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.8 1999/09/20 01:51:16 vincent Exp $"
+// "$Id: Fluid_Plugins.h,v 1.9 1999/10/11 01:00:27 vincent Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 #ifndef FLUID_PLUGINS_H
 #define FLUID_PLUGINS_H
 
-class Fl_Menu_Item;
+struct Fl_Menu_Item;
 class Fl_Window;
 
 #define PLUGINS_EXTENSION ".fluidplugin"
@@ -60,11 +60,17 @@ void fill_in_New_Menu(Fl_Menu_Item* menu);
 
 void read_plugins();
 
-// Need to FLUID_EXPORT the fluid_plugin symbol in each plugins
-// FLUID_IMPORT is for symbols in fluid that the plugin want to access
-#if defined(WIN32) && defined(FLUID_PLUGIN)
-# define FLUID_EXPORT __declspec( dllexport )
-# define FLUID_IMPORT __declspec( dllimport )
+// The naming concention for IMPORT and EXPORT is to be understood from the point of view
+// of the plugin :
+// - need to FLUID_EXPORT the "fluid_plugin" symbol in each plugins
+// - FLUID_IMPORT is for symbols in fluid that the plugin want to reference
+#if defined(WIN32)
+# if defined(FLUID_PLUGIN)
+#  define FLUID_EXPORT __declspec( dllexport )
+#  define FLUID_IMPORT __declspec( dllimport )
+# else
+#  define FLUID_IMPORT __declspec( dllexport )
+# endif
 #else
 # define FLUID_EXPORT
 # define FLUID_IMPORT
@@ -73,5 +79,5 @@ void read_plugins();
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.8 1999/09/20 01:51:16 vincent Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.9 1999/10/11 01:00:27 vincent Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.10 1999/08/23 16:43:09 vincent Exp $"
+// "$Id: file.cxx,v 1.11 1999/10/11 01:00:27 vincent Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,9 @@
 #include <stdarg.h>
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
+#include <FL/Fl.H>
+#include "Fl_Type.h"
+
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -300,9 +303,6 @@ const char *read_word(int wantbrace) {
 }
 
 ////////////////////////////////////////////////////////////////
-
-#include <FL/Fl.H>
-#include "Fl_Type.h"
 
 // global int variables:
 extern int gridx, gridy, snap;
@@ -599,5 +599,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.10 1999/08/23 16:43:09 vincent Exp $".
+// End of "$Id: file.cxx,v 1.11 1999/10/11 01:00:27 vincent Exp $".
 //
