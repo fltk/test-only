@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.13 1999/03/18 22:59:04 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.14 1999/03/31 02:53:03 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -82,12 +82,14 @@ void Fl_Choice::draw() {
   int H = labelsize()/2+1;
   draw_box(FL_THIN_UP_BOX,x()+w()-3*H,y()+(h()-H)/2,2*H,H,col);
   if (mvalue()) {
+    // Shouldn't do this, but we can handle it
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
     fl_draw_shortcut = 2; // hack value to make '&' disappear
     int BW = Fl::box_dx(box());
     m.draw( x()+BW+3, y(), w()-2*BW-2-3*H, h(), this);
     fl_draw_shortcut = 0;
+    m._style = 0; // so that the real menu item's style doesn't get deallocated
   }
   draw_label();
 }
@@ -159,5 +161,5 @@ Fl_Color Fl_Choice::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.13 1999/03/18 22:59:04 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.14 1999/03/31 02:53:03 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.13 1999/03/18 22:58:58 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.14 1999/03/31 02:53:00 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,10 @@ public:
   virtual void loadstyle() const;
 
   // These next few functions are mainly used for FLUID
-  
+
+  // returns pointer to the style structure
+  const Style* style() const { if (_style) return _style; return default_style(); }
+
   // use the default style instead of any forced attributes
   void use_default_style() { 
     if (_style && !_style->not_dynamic) delete _style;
@@ -216,7 +219,6 @@ protected:
   Fl_Widget(int,int,int,int,const char* =0);
 
   virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  Style* style() const { if (_style) return _style; return default_style(); }
   virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   void x(int v) {x_ = v;}
@@ -260,5 +262,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.13 1999/03/18 22:58:58 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.14 1999/03/31 02:53:00 carl Exp $".
 //

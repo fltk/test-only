@@ -44,6 +44,7 @@ int Fl::s_counter = 0;
 int Fl::s_roller = 0;
 int Fl::s_tooltip = 0;
 int Fl::s_background = 0;
+int Fl::s_mi_button = 0;
 
 void Fl::load_styles(int b) {
   s_menu_item =
@@ -70,6 +71,7 @@ void Fl::load_styles(int b) {
   s_roller =
   s_tooltip =
   s_background =
+  s_mi_button =
   b ? 0 : 1;
   
   if (b) Fl::redraw();

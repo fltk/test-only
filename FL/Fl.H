@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.9 1999/03/14 06:46:12 carl Exp $"
+// "$Id: Fl.H,v 1.10 1999/03/31 02:53:00 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -248,6 +248,7 @@ public:
   static FL_EXPORT int s_roller;
   static FL_EXPORT int s_tooltip;
   static FL_EXPORT int s_background;
+  static FL_EXPORT int s_mi_button; // hack for FLUID
 
   // force reloading of styles from config file
   static FL_EXPORT void load_styles(int);
@@ -274,5 +275,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.9 1999/03/14 06:46:12 carl Exp $".
+// End of "$Id: Fl.H,v 1.10 1999/03/31 02:53:00 carl Exp $".
 //

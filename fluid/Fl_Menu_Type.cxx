@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.18 1999/03/18 05:33:22 carl Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.19 1999/03/31 02:53:02 carl Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -81,6 +81,58 @@ extern int force_parent;
 
 static char submenuflag;
 
+// Have to subclass & hack Fl_Button to get menu item styles right
+class Fl_Menu_Item_Button : public Fl_Button {
+public:
+  Fl_Menu_Item_Button(int x,int y,int w,int h,const char *l=0);
+  virtual void loadstyle() const;
+protected:
+  struct Style : public Fl_Button::Style {
+    Style();
+  };
+  static Fl_Widget::Style* _default_style;
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
+};
+
+#define DEFAULT_MIB_STYLE ((Style*)default_style())
+
+Fl_Widget::Style* Fl_Menu_Item_Button::_default_style = 0;
+
+Fl_Menu_Item_Button::Fl_Menu_Item_Button(int x,int y,int w,int h,const char *l) :
+    Fl_Button(x,y,w,h,l) {}
+
+Fl_Menu_Item_Button::Style::Style() : Fl_Button::Style() {
+  widget(LABELCOLOR) = FL_BLACK;
+  widget(LABELSIZE) = FL_NORMAL_SIZE;
+  widget(LABELFONT) = FL_HELVETICA;
+  widget(LABELTYPE) = FL_NORMAL_LABEL;
+  widget(COLOR2) = FL_WHITE;
+  button(DOWN_LABELCOLOR) = FL_BLACK;
+  button(DOWN_BOX) = FL_MEDIUM_UP_BOX;
+}
+
+void Fl_Menu_Item_Button::loadstyle() const {
+  if (!Fl::s_mi_button) {
+    Fl::s_mi_button = 1;
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "down color", COLOR2 },
+      { 0 }
+    };
+    Fl::load_attributes("menu item", DEFAULT_MIB_STYLE->widget_, widget_attributes);
+    static Fl::Attribute button_attributes[] = {
+      { "down box", DOWN_BOX },
+      { "down label color", DOWN_LABELCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("menu item", DEFAULT_MIB_STYLE->button_, button_attributes);
+  }
+}
+
 Fl_Type *Fl_Menu_Item_Type::make() {
   // Find the current menu item:
   Fl_Type* q = Fl_Type::current;
@@ -94,11 +146,12 @@ Fl_Type *Fl_Menu_Item_Type::make() {
     return 0;
   }
   if (!o) {
-    o = new Fl_Button(0,0,100,20); // create template widget
+    o = new Fl_Menu_Item_Button(0,0,100,20); // create template widget
   }
 
   Fl_Menu_Item_Type* t = submenuflag ? new Fl_Submenu_Type() : new Fl_Menu_Item_Type();
-  t->o = new Fl_Button(0,0,100,20);
+  t->o = new Fl_Menu_Item_Button(0,0,100,20);
+
   t->factory = this;
   t->add(p);
   if (!reading_file) t->label(submenuflag ? "submenu" : "item");
@@ -406,6 +459,7 @@ void Fl_Menu_Type::build_menu() {
     int lvl = level+1;
     for (q = next; q && q->level > level; q = q->next) {
       Fl_Menu_Item_Type* i = (Fl_Menu_Item_Type*)q;
+      memset(m, 0, sizeof(Fl_Menu_Item));
       m->label(i->o->label());
       m->shortcut(((Fl_Button*)(i->o))->shortcut());
       m->callback(0,(void*)i);
@@ -551,5 +605,5 @@ int Shortcut_Button::handle(int e) {
 }
   
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.18 1999/03/18 05:33:22 carl Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.19 1999/03/31 02:53:02 carl Exp $".
 //

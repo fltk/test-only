@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.7 1999/03/18 22:59:02 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.8 1999/03/31 02:53:03 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,6 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
 }
 
 void Fl_Button::draw() {
-  loadstyle();
   if (type() == FL_HIDDEN_BUTTON) return;
   Fl_Color col = value() ? selection_color() : color();
   Fl_Boxtype bt = value() ? (down_box()?down_box():down(box())) : box();
@@ -168,6 +167,7 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 Fl_Boxtype Fl_Button::fly_box() const {
+  loadstyle();
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
   if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
@@ -176,18 +176,21 @@ Fl_Boxtype Fl_Button::fly_box() const {
 }
 
 Fl_Color Fl_Button::fly_color() const {
+  loadstyle();
   if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->button(FLY_COLOR);
   return (Fl_Color)BUTTON_STYLE->button(FLY_COLOR);
 }
 
 Fl_Boxtype Fl_Button::down_box() const {
+  loadstyle();
   if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->button(DOWN_BOX);
   return (Fl_Boxtype)BUTTON_STYLE->button(DOWN_BOX);
 }
 
 Fl_Color Fl_Button::down_labelcolor() const {
+  loadstyle();
   if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_LABELCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->button(DOWN_LABELCOLOR);
   return (Fl_Color)BUTTON_STYLE->button(DOWN_LABELCOLOR);
@@ -196,5 +199,5 @@ Fl_Color Fl_Button::down_labelcolor() const {
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.7 1999/03/18 22:59:02 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.8 1999/03/31 02:53:03 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.8 1999/03/18 22:59:10 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.9 1999/03/31 02:53:04 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -231,7 +231,6 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
 }
 
 void Fl_Widget::measure_label(int& x, int& y) {
-  loadstyle();
   Fl_Label l1;
   l1.value = label();
   l1.type = labeltype();
@@ -242,48 +241,56 @@ void Fl_Widget::measure_label(int& x, int& y) {
 }
 
 Fl_Boxtype Fl_Widget::box() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->widget(BOX);
   return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
 }
 
 Fl_Color Fl_Widget::color() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR);
 }
 
 Fl_Color Fl_Widget::selection_color() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR2)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR2);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR2);
 }
 
 Fl_Color Fl_Widget::color3() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR3)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR3);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR3);
 }
 
 Fl_Labeltype Fl_Widget::labeltype() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(LABELTYPE)))
     return (Fl_Labeltype)DEFAULT_STYLE->widget(LABELTYPE);
   return (Fl_Labeltype)WIDGET_STYLE->widget(LABELTYPE);
 }
 
 Fl_Color Fl_Widget::labelcolor() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(LABELCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->widget(LABELCOLOR);
   return (Fl_Color)WIDGET_STYLE->widget(LABELCOLOR);
 }
 
 Fl_Font Fl_Widget::labelfont() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(LABELFONT)))
     return (Fl_Font)DEFAULT_STYLE->widget(LABELFONT);
   return (Fl_Font)WIDGET_STYLE->widget(LABELFONT);
 }
 
 uchar Fl_Widget::labelsize() const {
+  loadstyle();
   if (!_style || !(WIDGET_STYLE->sbf & bf(LABELSIZE)))
     return DEFAULT_STYLE->widget(LABELSIZE);
   return WIDGET_STYLE->widget(LABELSIZE);
@@ -292,5 +299,5 @@ uchar Fl_Widget::labelsize() const {
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.8 1999/03/18 22:59:10 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.9 1999/03/31 02:53:04 carl Exp $".
 //
