@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.4 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.5 2004/03/30 19:45:58 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -43,10 +43,19 @@ class Fl_Image_Cache;
 /**
 * A base class for all output devices.
 *
-* Device classes should not be a direct subclasses of Fl_Device but rather of Fl_Display or Fl_Printer
+* A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or Fl_Printer
 */
 
 class FL_EXPORT Fl_Device{
+#if !defined(WIN32) || !defined(FL_DLL)
+private:
+#else
+protected:
+#endif
+  Fl_Device & operator=(const Fl_Device &) { return *this; }
+  Fl_Device(const Fl_Device &) {};
+
+
 protected:
  int type_;
  
@@ -57,9 +66,8 @@ protected:
  
 
 public:
-  /** An RTTI emulation of device classes.
-  *
-  * @return returns type < 256 if the device is a screen device - subcalls of Fl_Display. */
+  /** An RTTI emulation of device classes. It returns values < 256 if the device is a screen device 
+  * - a subcalls of Fl_Display. */
   int type(){return type_;}; // <256 for screen devices
   
 protected: 
@@ -219,7 +227,7 @@ public:
   virtual Fl_Device * set_current();
   /** Returns currently active device */
   static Fl_Device * current();
-  
+  /** Destructor also removes all image cashes (uncaches images) attached to it. */
   virtual   ~Fl_Device();
   Fl_Device():image_caches(0){};
 
@@ -232,5 +240,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.4 2004/03/29 22:41:11 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.5 2004/03/30 19:45:58 rokan Exp $".
 //

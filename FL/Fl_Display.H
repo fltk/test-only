@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Display.H,v 1.1.2.2 2004/03/29 21:22:34 rokan Exp $"
+// "$Id: Fl_Display.H,v 1.1.2.3 2004/03/30 19:45:58 rokan Exp $"
 //
 // Fl_Display class for screen devices the Fast Light Tool Kit (FLTK).
 //
@@ -30,26 +30,26 @@
 #include <FL/Fl_Device.H>
 
 
-// for now fl_Display do not implement anything, in the future it will be a base class 
-// which will also implement event delivery
-
+/**
+* Fl_Display is a base class for all screen devices.
+* In the future it will also define methods for access of keyboard, mouse
+* and window damage events to encapsulate all interaction with the user
+* and forming a "virtual terminal".
+*/
 
 class FL_EXPORT Fl_Display: public Fl_Device{
 protected:
 #ifdef  WIN32
  friend class Fl_GDI_Printer; //for arc and curve mplementation
 #endif
- // common independent methods, can be overriden if better implementation are known
+ // common independent methods, can be overriden if better implementations are known
  void arc(double x, double y, double r, double start, double end);
  void curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
 }; 
 
 
-extern FL_EXPORT Fl_Device * fl_device;
-
-
 #endif
 
 //
-// "$Id: Fl_Display.H,v 1.1.2.2 2004/03/29 21:22:34 rokan Exp $"
+// "$Id: Fl_Display.H,v 1.1.2.3 2004/03/30 19:45:58 rokan Exp $"
 //
