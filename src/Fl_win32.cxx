@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.244 2005/01/27 08:50:22 spitzak Exp $"
+// "$Id$"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1509,7 +1509,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSDEADCHAR:
   case WM_CHAR:
   case WM_SYSCHAR: {
-    static int lastkeysym;
+    static unsigned lastkeysym;
     unsigned long state = e_state & 0xff000000; // keep the mouse button state
     // if GetKeyState is expensive we might want to comment some of these out:
     if (GetKeyState(VK_SHIFT)&~1) state |= SHIFT;
@@ -2377,5 +2377,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.244 2005/01/27 08:50:22 spitzak Exp $".
+// End of "$Id$".
 //

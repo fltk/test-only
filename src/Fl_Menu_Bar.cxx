@@ -139,7 +139,13 @@ J1:
     break;
   case KEY:
     switch (event_key()) {
+    case DownKey:
     case RightKey:
+      if ((event_key()==RightKey && vertical()) ||
+          (event_key()==DownKey && !vertical())) {
+        /* Popup menu */
+        goto J1;
+      }
       i=value()+1;
 J3:
       for (; i < children; i++) {
@@ -152,7 +158,12 @@ J3:
       }
       i = 0;
       goto J3;
+    case UpKey:
     case LeftKey:
+      if ((event_key()==LeftKey && vertical()) ||
+          (event_key()==UpKey && !vertical())) {        
+        break;
+      }
       i=value()-1;
 J4:
       for (; i >= 0; i--) {
@@ -165,9 +176,6 @@ J4:
       }
       i = children-1;
       goto J4;
-    case DownKey:
-      /* Popup menu */
-      goto J1;
     default:
       break;
     }

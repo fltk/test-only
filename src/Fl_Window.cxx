@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.124 2005/01/26 22:35:27 matthiaswm Exp $"
+// "$Id$"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -275,6 +275,7 @@ void fl_do_deferred_calls() {
     case DESTROY_WINDOW:
       DestroyWindow(c.window);
       break;
+    case NOTHING: break; /* Make GCC happy; Eliminate warning */
     }
   }
   deferred_queue_size = 0;
@@ -834,5 +835,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.124 2005/01/26 22:35:27 matthiaswm Exp $".
+// End of "$Id$".
 //

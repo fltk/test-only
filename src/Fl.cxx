@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.191 2005/01/26 22:35:25 matthiaswm Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -691,7 +691,7 @@ void fltk::flush() {
     difference in sizes is odd, it always rounds up and left.
     Default value for \a flags is to center in both directions.
  */
-Rectangle::Rectangle(const Rectangle& r, int w, int h, int flags) {
+fltk::Rectangle::Rectangle(const Rectangle& r, int w, int h, int flags) {
   if (flags & ALIGN_LEFT) {
     if (flags & ALIGN_RIGHT &&  w > r.w()) x_ = r.r()-w;
     else x_ = r.x();
@@ -1206,5 +1206,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.191 2005/01/26 22:35:25 matthiaswm Exp $".
+// End of "$Id$".
 //
