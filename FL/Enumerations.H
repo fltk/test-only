@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.37 1999/11/24 16:43:22 carl Exp $"
+// "$Id: Enumerations.H,v 1.38 1999/11/27 14:37:51 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ enum Fl_Event {	// events
   FL_SHOW		= 16,
   FL_PASTE		= 17,
   FL_SELECTIONCLEAR	= 18,
-  FL_MOUSEWHEEL         = 19
+  FL_VIEWCHANGE         = 19
 };
 
 enum Fl_When { // Fl_Widget::when():
@@ -204,5 +204,5 @@ enum Fl_Thread_Policy {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.37 1999/11/24 16:43:22 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.38 1999/11/27 14:37:51 carl Exp $".
 //

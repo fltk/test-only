@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.32 1999/11/24 00:57:56 carl Exp $"
+// "$Id: Fl.H,v 1.33 1999/11/27 14:37:51 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,10 @@ public: // should be private!
   static int e_is_click;
   static int e_keysym;
   static int e_length;
-  static float e_mousewheel;
+  static int e_delta_mode;
+  static float e_x_delta;
+  static float e_y_delta;
+  static float e_z_delta;
 
   static char* e_text;
   static const char* encoding;
@@ -119,12 +122,10 @@ public:
   static int event_x_root()	{return e_x_root;}
   static int event_y_root()	{return e_y_root;}
   static void get_mouse(int &,int &);
-  static void get_mousewheel(int& mode, float& cdelta);
-  static int mousewheel_mode();
-  static void mousewheel_mode(int);
-  static float mousewheel_sdelta();
-  static void mousewheel_sdelta(float);
-  static void set_mousewheel(int mode, float sdelta);
+  static void delta_x(int& mode, float& xdelta);
+  static void delta_y(int& mode, float& ydelta);
+  static void delta_z(int& mode, float& zdelta);
+  static void delta(int& mode, float& xdelta, float& ydelta, float& zdelta);
   static int event_clicks()	{return e_clicks;}
   static void event_clicks(int i) {e_clicks = i;}
   static int event_is_click()	{return e_is_click;}
@@ -236,5 +237,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.32 1999/11/24 00:57:56 carl Exp $".
+// End of "$Id: Fl.H,v 1.33 1999/11/27 14:37:51 carl Exp $".
 //

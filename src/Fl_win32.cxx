@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.73 1999/11/24 16:43:25 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.74 1999/11/27 14:37:54 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -424,6 +424,10 @@ extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 
 static Fl_Window* resize_from_system;
 
+extern int fl_mousewheel_mode;
+extern float fl_mousewheel_sdelta;
+extern float* fl_mousewheel_delta;
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   static char buffer[2];
@@ -561,9 +565,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_MOUSEWHEEL:
-    if (!Fl::mousewheel_mode()) break;
-    Fl::e_mousewheel = -1*(SHORT)(HIWORD(wParam))*Fl::mousewheel_sdelta()/120.0;
-    if (Fl::handle(FL_MOUSEWHEEL, window)) return 0;
+    if (!fl_mousewheel_mode) break;
+    Fl::e_x_delta = Fl::e_y_delta = Fl::e_z_delta = 0.0;
+    // the line below sets one of the above
+    *fl_mousewheel_delta = -1*(SHORT)(HIWORD(wParam))*fl_mousewheel_sdelta/120.0;
+    Fl::e_delta_mode = fl_mousewheel_mode;
+    if (Fl::handle(FL_VIEWCHANGE, window)) return 0;
     break;
 
   case WM_GETMINMAXINFO:
@@ -888,5 +895,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.73 1999/11/24 16:43:25 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.74 1999/11/27 14:37:54 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.46 1999/11/24 16:43:25 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.47 1999/11/27 14:37:53 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -113,7 +113,7 @@ int Fl_Group::handle(int event) {
   case FL_KEYBOARD:
     return navigation(navkey());
 
-  case FL_MOUSEWHEEL:
+  case FL_VIEWCHANGE:
   case FL_SHORTCUT:
     while (e > a) {
       Fl_Widget* o = *--e;
@@ -562,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.46 1999/11/24 16:43:25 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.47 1999/11/27 14:37:53 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.32 1999/11/24 16:43:24 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.33 1999/11/27 14:37:53 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -520,14 +520,15 @@ int Fl_Browser_::handle(int event) {
   static char whichway;
   static int py;
   switch (event) {
-  case FL_MOUSEWHEEL: {
+  case FL_VIEWCHANGE: {
     int fh = full_height(), mode, pos;
-    float delta;
-    Fl::get_mousewheel(mode, delta);
-    if (mode == 1) pos = (int)(position() + incr_height()*delta); // scroll by lines
-    else pos = (int)(position() + H*delta - incr_height()); // mode == 2, scroll by pages
+    float xdelta, ydelta, zdelta;
+    Fl::delta(mode, xdelta, ydelta, zdelta);
+    if (mode == 1) pos = (int)(position() + incr_height()*ydelta); // scroll by lines
+    else pos = (int)(position() + H*ydelta - incr_height()); // mode == 2, scroll by pages
     if (pos > fh - H) pos = fh - H;
     position(pos);
+    // should probably also do something with xdelta and zdelta...
     return 1;
   }
   case FL_PUSH:
@@ -668,5 +669,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.32 1999/11/24 16:43:24 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.33 1999/11/27 14:37:53 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.51 1999/11/24 16:43:26 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.52 1999/11/27 14:37:54 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -375,7 +375,10 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_from_system;
 
-unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
+unsigned fl_mousewheel_b1 = 4, fl_mousewheel_b2 = 5;
+extern int fl_mousewheel_mode;
+extern float fl_mousewheel_sdelta;
+extern float* fl_mousewheel_delta;
 
 int fl_handle(const XEvent& xevent)
 {
@@ -442,13 +445,16 @@ int fl_handle(const XEvent& xevent)
     return 1;
 
   case ButtonPress:
-    if ((xevent.xbutton.button == fl_mousewheel_up ||
-         xevent.xbutton.button == fl_mousewheel_down) &&
-         Fl::mousewheel_mode())
+    if ((xevent.xbutton.button == fl_mousewheel_b1 ||
+         xevent.xbutton.button == fl_mousewheel_b2) &&
+         fl_mousewheel_mode)
     {
-      int direction = (xevent.xbutton.button == fl_mousewheel_up) ? -1 : 1;
-      Fl::e_mousewheel = Fl::mousewheel_sdelta()*direction;
-      event = FL_MOUSEWHEEL;
+      int direction = (xevent.xbutton.button == fl_mousewheel_b1) ? -1 : 1;
+      Fl::e_x_delta = Fl::e_y_delta = Fl::e_z_delta = 0.0;
+      // the line below sets one of the above
+      *fl_mousewheel_delta = fl_mousewheel_sdelta*direction;
+      Fl::e_delta_mode = fl_mousewheel_mode;
+      event = FL_VIEWCHANGE;
       break;
     }
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
@@ -468,9 +474,9 @@ int fl_handle(const XEvent& xevent)
 #endif
 
   case ButtonRelease:
-    if ((xevent.xbutton.button == fl_mousewheel_up ||
-         xevent.xbutton.button == fl_mousewheel_down) &&
-         Fl::mousewheel_mode())
+    if ((xevent.xbutton.button == fl_mousewheel_b1 ||
+         xevent.xbutton.button == fl_mousewheel_b2) &&
+         fl_mousewheel_mode)
     {
       break;
     }
@@ -862,5 +868,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.51 1999/11/24 16:43:26 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.52 1999/11/27 14:37:54 carl Exp $".
 //

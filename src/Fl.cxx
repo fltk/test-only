@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.66 1999/11/24 16:43:24 carl Exp $"
+// "$Id: Fl.cxx,v 1.67 1999/11/27 14:37:52 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,20 +52,32 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
-float           Fl::e_mousewheel; // current mousewheel delta in units
+int             Fl::e_delta_mode; // mode of delta (FL_VIEWCHANGE) event
+float           Fl::e_x_delta;    // current x delta in units
+float           Fl::e_y_delta;    // current y delta in units
+float           Fl::e_z_delta;    // current z delta in units
 
-static int      mousewheel_mode = 1; // 0: off  1: units = lines  2: units = pages
-static float    mousewheel_delta = 3.0; // scroll this many units per (normal size) wheel notch
+// mousewheel specific stuff
+int      fl_mousewheel_mode = 1;               // 0: off  1: units = lines  2: units = pages
+float    fl_mousewheel_sdelta = 3.0;           // scroll this many units per (normal size) wheel notch
+float*   fl_mousewheel_delta = &Fl::e_y_delta; // which axis does wheel apply to?
 
-void Fl::get_mousewheel(int& mode, float& cdelta) {
-  mode = ::mousewheel_mode;
-  cdelta = Fl::e_mousewheel;
+void Fl::delta_x(int& mode, float& xdelta) {
+  mode = e_delta_mode; xdelta = e_x_delta;
 }
 
-int Fl::mousewheel_mode() { return ::mousewheel_mode; }
-void Fl::mousewheel_mode(int mode) { ::mousewheel_mode = mode; }
-float Fl::mousewheel_sdelta() { return ::mousewheel_delta; }
-void Fl::mousewheel_sdelta(float sdelta) { ::mousewheel_delta = sdelta; }
+void Fl::delta_y(int& mode, float& ydelta) {
+  mode = e_delta_mode; ydelta = e_y_delta;
+}
+
+void Fl::delta_z(int& mode, float& zdelta) {
+  mode = e_delta_mode; zdelta = e_z_delta;
+}
+
+void Fl::delta(int& mode, float& xdelta, float& ydelta, float& zdelta) {
+  mode = e_delta_mode;
+  xdelta = e_x_delta; ydelta = e_y_delta; zdelta = e_z_delta;
+}
 
 static double fl_elapsed();
 
@@ -637,8 +649,8 @@ extern const char* fl_up_box_revert;
 extern const char* fl_down_box_revert;
 
 #ifndef WIN32
-extern int fl_mousewheel_up;
-extern int fl_mousewheel_down;
+extern int fl_mousewheel_b1;
+extern int fl_mousewheel_b2;
 #endif
 
 // one-time startup stuff
@@ -651,14 +663,18 @@ static void startup() {
 
   char temp[80];
   if (!Fl::getconf("mouse wheel/mode", temp, sizeof(temp)))
-    Fl::mousewheel_mode(atoi(temp));
+    fl_mousewheel_mode = atoi(temp);
   if (!Fl::getconf("mouse wheel/delta", temp, sizeof(temp)))
-    Fl::mousewheel_sdelta(strtod(temp, 0));
+    fl_mousewheel_sdelta = strtod(temp, 0);
+  if (!Fl::getconf("mouse wheel/axis", temp, sizeof(temp))) {
+    if (!strcasecmp(temp, "x")) fl_mousewheel_delta = &Fl::e_x_delta;
+    if (!strcasecmp(temp, "z")) fl_mousewheel_delta = &Fl::e_z_delta;
+  }
 #ifndef WIN32
-  if (!Fl::getconf("mouse wheel/up button", temp, sizeof(temp)))
-    fl_mousewheel_up = atoi(temp);
-  if (!Fl::getconf("mouse wheel/down button", temp, sizeof(temp)))
-    fl_mousewheel_down = atoi(temp);
+  if (!Fl::getconf("mouse wheel/button 1", temp, sizeof(temp)))
+    fl_mousewheel_b1 = atoi(temp);
+  if (!Fl::getconf("mouse wheel/button 2", temp, sizeof(temp)))
+    fl_mousewheel_b2 = atoi(temp);
 #endif
 }
 
@@ -856,5 +872,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.66 1999/11/24 16:43:24 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.67 1999/11/27 14:37:52 carl Exp $".
 //
