@@ -1,3 +1,6 @@
+// scandir.c
+// Implementation of Posix scandir() command on systems that do not have it.
+
 /* Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 This file is part of the GNU C Library.
 
@@ -25,10 +28,9 @@ linking) can be used on all such machines.
 
 #include <config.h>
 #if ! HAVE_SCANDIR
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#include "scandir_win32.c"
-#else
+# if defined(_WIN32) && !defined(__CYGWIN__)
+#  include "win32/scandir.c"
+# else
 
 #include <ctype.h>
 #include <stdlib.h>

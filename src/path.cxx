@@ -29,8 +29,8 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <fltk/x.h>
-#include <stdlib.h>
 #include <fltk/string.h>
+#include <stdlib.h>
 using namespace fltk;
 
 /** \addtogroup drawing

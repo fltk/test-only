@@ -28,14 +28,13 @@
 
 #if USE_QUARTZ
 # include "osx/clip.cxx"
-# include <string.h>
 #else
 
 #include <fltk/Window.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <stdlib.h>
 #include <fltk/string.h>
+#include <stdlib.h>
 using namespace fltk;
 
 /*! \defgroup clipping Clipping
