@@ -1,5 +1,5 @@
 //
-// "$Id: font.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: font.cxx,v 1.1.2.2 2004/07/28 00:53:43 matthiaswm Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -106,7 +106,8 @@ static Fl_Fontdesc built_in_table[] = {
 
 Fl_Fontdesc* fl_fonts = built_in_table;
 
-void Fl_Carbon_Display::font(Fl_FontSize* s) {
+//void Fl_Carbon_Display::font(Fl_FontSize* s) {
+void fl_font(Fl_FontSize *s) {
   fl_fontsize = s;
   if (fl_window) SetPort( GetWindowPort(fl_window) );
   TextFont(fl_fontsize->font);	//: select font into current QuickDraw GC
@@ -206,5 +207,5 @@ void Fl_Carbon_Display::draw(const char* str, int n, int x, int y) {
 
 
 //
-// End of "$Id: font.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id: font.cxx,v 1.1.2.2 2004/07/28 00:53:43 matthiaswm Exp $".
 //

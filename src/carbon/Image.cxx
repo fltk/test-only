@@ -1,5 +1,5 @@
 //
-// "$Id: Image.cxx,v 1.1.2.2 2004/05/12 22:13:38 rokan Exp $"
+// "$Id: Image.cxx,v 1.1.2.3 2004/07/28 00:53:43 matthiaswm Exp $"
 //
 // Carbon image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -56,10 +56,10 @@ void Fl_Carbon_Display::draw(Fl_RGB_Image * img, int X, int Y, int W, int H, int
   
   if (cache->mask) {
     Rect src, dst;
-    src.left = 0; src.right = w();
-    src.top = 0; src.bottom = h();
-    dst.left = X; dst.right = X+w();
-    dst.top = Y; dst.bottom = Y+h();
+    src.left = 0; src.right = W;
+    src.top = 0; src.bottom = H;
+    dst.left = X; dst.right = X+W;
+    dst.top = Y; dst.bottom = Y+H;
     RGBColor img;
     img.red = 0xffff; img.green = 0xffff; img.blue = 0xffff;
     RGBBackColor(&img);
@@ -89,5 +89,5 @@ void Fl_Carbon_Display::draw(Fl_RGB_Image * img, int X, int Y, int W, int H, int
 
 
 //
-// End of "$Id: Image.cxx,v 1.1.2.2 2004/05/12 22:13:38 rokan Exp $".
+// End of "$Id: Image.cxx,v 1.1.2.3 2004/07/28 00:53:43 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.6 2004/03/28 10:30:30 rokan Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.7 2004/07/28 00:53:43 matthiaswm Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@
 //      for line with //COPYDEEPMASK in mac/quickdraw subdirectory.  Also see Fl_Image.cxx for a similar check...
 
 
-#if 1 || !defined(__APPLE__)
+#if 1 && !defined(__APPLE__)
 
 // Create a 1-bit mask used for alpha blending
 Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) {
@@ -239,5 +239,5 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.6 2004/03/28 10:30:30 rokan Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.7 2004/07/28 00:53:43 matthiaswm Exp $".
 //
