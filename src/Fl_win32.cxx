@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.222 2004/07/27 10:29:02 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.223 2004/07/27 12:29:15 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -2020,9 +2020,11 @@ extern "C" {
 // src length is determited with wcslen
 static inline void CVT2ANSI(LPCWSTR src, char dst[], int dstlen) {
   // WAS: Should this use GetACP() instead of CP_ACP?
+  // ML: I think it does same thing internally?
+  int len = 0;
   if (src && *src)
-    WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
-  else dst[0] = 0;
+    len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
+  dst[len] = 0;
 }
 
 HWND WINAPI ansi_CreateWindowExW(DWORD dwExStyle,
@@ -2119,5 +2121,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.222 2004/07/27 10:29:02 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.223 2004/07/27 12:29:15 laza2000 Exp $".
 //
