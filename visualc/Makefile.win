@@ -1,0 +1,417 @@
+# Project: fltkdll
+# Makefile created by Dev-C++ 4.9.8.5
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = 
+OBJ  = ../src/filename_absolute.o ../src/filename_expand.o ../src/filename_ext.o ../src/filename_isdir.o ../src/filename_list.o ../src/filename_match.o ../src/filename_setext.o ../src/Fl.o ../src/Fl_abort.o ../src/Fl_add_idle.o ../src/Fl_Adjuster.o ../src/Fl_Align_Group.o ../src/fl_arc.o ../src/fl_arci.o ../src/Fl_arg.o ../src/fl_ask.o ../src/Fl_Bar.o ../src/Fl_Bitmap.o ../src/Fl_Box.o ../src/fl_boxtype.o ../src/Fl_Browser.o ../src/Fl_Button.o ../src/fl_call_main.o ../src/Fl_Check_Button.o ../src/Fl_Choice.o ../src/fl_clip.o ../src/Fl_Clock.o ../src/fl_color.o ../src/Fl_Color_Chooser.o ../src/Fl_compose.o ../src/fl_cursor.o ../src/fl_curve.o ../src/Fl_Dial.o ../src/fl_diamond_box.o ../src/Fl_display.o ../src/fl_dnd.o ../src/Fl_Double_Window.o ../src/fl_draw.o ../src/fl_draw_image.o ../src/fl_draw_pixmap.o ../src/fl_engraved_label.o ../src/fl_file_chooser.o ../src/Fl_FileBrowser.o ../src/Fl_FileChooser.o ../src/Fl_FileChooser2.o ../src/Fl_FileIcon.o ../src/Fl_FileIcon2.o ../src/Fl_FileInput.o ../src/Fl_Float_Input.o ../src/fl_font.o ../src/Fl_get_key.o ../OpenGL/Fl_Gl_Choice.o ../OpenGL/Fl_Gl_Overlay.o ../OpenGL/Fl_Gl_Window.o ../src/fl_glyph.o ../src/Fl_Group.o ../src/Fl_Highlight_Button.o ../src/Fl_Image.o ../src/Fl_Input.o ../src/Fl_Input_Browser.o ../src/Fl_Item.o ../src/Fl_key_name.o ../src/fl_labeltype.o ../src/Fl_Light_Button.o ../src/fl_list_fonts.o ../src/fl_load_plugin.o ../src/Fl_lock.o ../src/Fl_Menu.o ../src/Fl_Menu_.o ../src/Fl_Menu_add.o ../src/Fl_Menu_Bar.o ../src/Fl_Menu_Button.o ../src/Fl_Menu_global.o ../src/Fl_Menu_Item.o ../src/Fl_Menu_Window.o ../src/Fl_Numeric_Input.o ../src/Fl_Output.o ../src/fl_oval_box.o ../src/fl_overlay.o ../src/fl_overlay_visual.o ../src/Fl_Overlay_Window.o ../src/Fl_own_colormap.o ../src/Fl_Pack.o ../src/Fl_Pixmap.o ../src/fl_plastic_box.o ../src/Fl_ProgressBar.o ../src/Fl_Radio_Button.o ../src/fl_rect.o ../src/Fl_Repeat_Button.o ../src/Fl_Return_Button.o ../src/fl_rgb.o ../src/Fl_RGB_Image.o ../src/Fl_Roller.o ../src/fl_round_box.o ../src/fl_rounded_box.o ../src/Fl_Scroll.o ../src/fl_scroll_area.o ../src/Fl_Scrollbar.o ../src/fl_shadow_box.o ../src/Fl_Shaped_Window.o ../src/fl_show_colormap.o ../src/Fl_Slider.o ../src/Fl_String_List.o ../src/Fl_Style.o ../src/Fl_Style_Set.o ../src/fl_symbols.o ../src/Fl_Tabs.o ../src/Fl_Text_Buffer.o ../src/Fl_Text_Display.o ../src/Fl_Text_Editor.o ../src/Fl_Tile.o ../src/Fl_Tiled_Image.o ../src/Fl_Tooltip.o ../src/Fl_Valuator.o ../src/Fl_Value_Input.o ../src/Fl_Value_Slider.o ../src/fl_vertex.o ../src/Fl_visual.o ../src/Fl_Widget.o ../src/Fl_Window.o ../src/Fl_Window_fullscreen.o ../src/Fl_Window_hotspot.o ../src/Fl_Window_iconize.o ../src/fltk_theme.o ../OpenGL/gl_draw.o ../OpenGL/gl_start.o ../src/scandir.o ../glut/trackball.o ../src/ValueOutput.o $(RES)
+LINKOBJ  = ../src/filename_absolute.o ../src/filename_expand.o ../src/filename_ext.o ../src/filename_isdir.o ../src/filename_list.o ../src/filename_match.o ../src/filename_setext.o ../src/Fl.o ../src/Fl_abort.o ../src/Fl_add_idle.o ../src/Fl_Adjuster.o ../src/Fl_Align_Group.o ../src/fl_arc.o ../src/fl_arci.o ../src/Fl_arg.o ../src/fl_ask.o ../src/Fl_Bar.o ../src/Fl_Bitmap.o ../src/Fl_Box.o ../src/fl_boxtype.o ../src/Fl_Browser.o ../src/Fl_Button.o ../src/fl_call_main.o ../src/Fl_Check_Button.o ../src/Fl_Choice.o ../src/fl_clip.o ../src/Fl_Clock.o ../src/fl_color.o ../src/Fl_Color_Chooser.o ../src/Fl_compose.o ../src/fl_cursor.o ../src/fl_curve.o ../src/Fl_Dial.o ../src/fl_diamond_box.o ../src/Fl_display.o ../src/fl_dnd.o ../src/Fl_Double_Window.o ../src/fl_draw.o ../src/fl_draw_image.o ../src/fl_draw_pixmap.o ../src/fl_engraved_label.o ../src/fl_file_chooser.o ../src/Fl_FileBrowser.o ../src/Fl_FileChooser.o ../src/Fl_FileChooser2.o ../src/Fl_FileIcon.o ../src/Fl_FileIcon2.o ../src/Fl_FileInput.o ../src/Fl_Float_Input.o ../src/fl_font.o ../src/Fl_get_key.o ../OpenGL/Fl_Gl_Choice.o ../OpenGL/Fl_Gl_Overlay.o ../OpenGL/Fl_Gl_Window.o ../src/fl_glyph.o ../src/Fl_Group.o ../src/Fl_Highlight_Button.o ../src/Fl_Image.o ../src/Fl_Input.o ../src/Fl_Input_Browser.o ../src/Fl_Item.o ../src/Fl_key_name.o ../src/fl_labeltype.o ../src/Fl_Light_Button.o ../src/fl_list_fonts.o ../src/fl_load_plugin.o ../src/Fl_lock.o ../src/Fl_Menu.o ../src/Fl_Menu_.o ../src/Fl_Menu_add.o ../src/Fl_Menu_Bar.o ../src/Fl_Menu_Button.o ../src/Fl_Menu_global.o ../src/Fl_Menu_Item.o ../src/Fl_Menu_Window.o ../src/Fl_Numeric_Input.o ../src/Fl_Output.o ../src/fl_oval_box.o ../src/fl_overlay.o ../src/fl_overlay_visual.o ../src/Fl_Overlay_Window.o ../src/Fl_own_colormap.o ../src/Fl_Pack.o ../src/Fl_Pixmap.o ../src/fl_plastic_box.o ../src/Fl_ProgressBar.o ../src/Fl_Radio_Button.o ../src/fl_rect.o ../src/Fl_Repeat_Button.o ../src/Fl_Return_Button.o ../src/fl_rgb.o ../src/Fl_RGB_Image.o ../src/Fl_Roller.o ../src/fl_round_box.o ../src/fl_rounded_box.o ../src/Fl_Scroll.o ../src/fl_scroll_area.o ../src/Fl_Scrollbar.o ../src/fl_shadow_box.o ../src/Fl_Shaped_Window.o ../src/fl_show_colormap.o ../src/Fl_Slider.o ../src/Fl_String_List.o ../src/Fl_Style.o ../src/Fl_Style_Set.o ../src/fl_symbols.o ../src/Fl_Tabs.o ../src/Fl_Text_Buffer.o ../src/Fl_Text_Display.o ../src/Fl_Text_Editor.o ../src/Fl_Tile.o ../src/Fl_Tiled_Image.o ../src/Fl_Tooltip.o ../src/Fl_Valuator.o ../src/Fl_Value_Input.o ../src/Fl_Value_Slider.o ../src/fl_vertex.o ../src/Fl_visual.o ../src/Fl_Widget.o ../src/Fl_Window.o ../src/Fl_Window_fullscreen.o ../src/Fl_Window_hotspot.o ../src/Fl_Window_iconize.o ../src/fltk_theme.o ../OpenGL/gl_draw.o ../OpenGL/gl_start.o ../src/scandir.o ../glut/trackball.o ../src/ValueOutput.o $(RES)
+LIBS =  -L"C:/MinGW/lib" -lopengl32 -lwsock32 -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid --implib "../lib/fltkdll.lib"  -lgmon -pg
+INCS =  -I"C:/MinGW/include"  -I".." 
+CXXINCS =  -I"C:/MinGW/include/c++"  -I"C:/MinGW/include/c++/mingw32"  -I"C:/MinGW/include/c++/backward"  -I"C:/MinGW/include"  -I".." 
+BIN  = fltkdll.dll
+CXXFLAGS = $(CXXINCS)-D__GNUWIN32__ -W -fexceptions -finline-functions -DNDEBUG -DFL_SHARED -DFL_DLL -DFL_LIBRARY -DFL_GL_LIBRARY -DFL_GLUT_LIBRARY -D_MSC_DLL -DWIN32 -D_WINDOWS -DWIN32_LEAN_AND_MEAN -DVC_EXTRA_LEAN -DWIN32_EXTRA_LEAN -DUSE_CONF   -w -fsave-memoized -fverbose-asm -pg -g3 -fmessage-length=0
+CFLAGS = $(INCS)-D__GNUWIN32__ -W -fexceptions -finline-functions -DNDEBUG -DFL_SHARED -DFL_DLL -DFL_LIBRARY -DFL_GL_LIBRARY -DFL_GLUT_LIBRARY -D_MSC_DLL -DWIN32 -D_WINDOWS -DWIN32_LEAN_AND_MEAN -DVC_EXTRA_LEAN -DWIN32_EXTRA_LEAN -DUSE_CONF   -w -fsave-memoized -fverbose-asm -pg -g3 -fmessage-length=0
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before fltkdll.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=libfltkdll.def
+STATICLIB=libfltkdll.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --driver-name c++ --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+../src/filename_absolute.o: ../src/filename_absolute.cxx
+	$(CPP) -c ../src/filename_absolute.cxx -o ../src/filename_absolute.o $(CXXFLAGS)
+
+../src/filename_expand.o: ../src/filename_expand.cxx
+	$(CPP) -c ../src/filename_expand.cxx -o ../src/filename_expand.o $(CXXFLAGS)
+
+../src/filename_ext.o: ../src/filename_ext.cxx
+	$(CPP) -c ../src/filename_ext.cxx -o ../src/filename_ext.o $(CXXFLAGS)
+
+../src/filename_isdir.o: ../src/filename_isdir.cxx
+	$(CPP) -c ../src/filename_isdir.cxx -o ../src/filename_isdir.o $(CXXFLAGS)
+
+../src/filename_list.o: ../src/filename_list.cxx
+	$(CPP) -c ../src/filename_list.cxx -o ../src/filename_list.o $(CXXFLAGS)
+
+../src/filename_match.o: ../src/filename_match.cxx
+	$(CPP) -c ../src/filename_match.cxx -o ../src/filename_match.o $(CXXFLAGS)
+
+../src/filename_setext.o: ../src/filename_setext.cxx
+	$(CPP) -c ../src/filename_setext.cxx -o ../src/filename_setext.o $(CXXFLAGS)
+
+../src/Fl.o: ../src/Fl.cxx
+	$(CPP) -c ../src/Fl.cxx -o ../src/Fl.o $(CXXFLAGS)
+
+../src/Fl_abort.o: ../src/Fl_abort.cxx
+	$(CPP) -c ../src/Fl_abort.cxx -o ../src/Fl_abort.o $(CXXFLAGS)
+
+../src/Fl_add_idle.o: ../src/Fl_add_idle.cxx
+	$(CPP) -c ../src/Fl_add_idle.cxx -o ../src/Fl_add_idle.o $(CXXFLAGS)
+
+../src/Fl_Adjuster.o: ../src/Fl_Adjuster.cxx
+	$(CPP) -c ../src/Fl_Adjuster.cxx -o ../src/Fl_Adjuster.o $(CXXFLAGS)
+
+../src/Fl_Align_Group.o: ../src/Fl_Align_Group.cxx
+	$(CPP) -c ../src/Fl_Align_Group.cxx -o ../src/Fl_Align_Group.o $(CXXFLAGS)
+
+../src/fl_arc.o: ../src/fl_arc.cxx
+	$(CPP) -c ../src/fl_arc.cxx -o ../src/fl_arc.o $(CXXFLAGS)
+
+../src/fl_arci.o: ../src/fl_arci.cxx
+	$(CPP) -c ../src/fl_arci.cxx -o ../src/fl_arci.o $(CXXFLAGS)
+
+../src/Fl_arg.o: ../src/Fl_arg.cxx
+	$(CPP) -c ../src/Fl_arg.cxx -o ../src/Fl_arg.o $(CXXFLAGS)
+
+../src/fl_ask.o: ../src/fl_ask.cxx
+	$(CPP) -c ../src/fl_ask.cxx -o ../src/fl_ask.o $(CXXFLAGS)
+
+../src/Fl_Bar.o: ../src/Fl_Bar.cxx
+	$(CPP) -c ../src/Fl_Bar.cxx -o ../src/Fl_Bar.o $(CXXFLAGS)
+
+../src/Fl_Bitmap.o: ../src/Fl_Bitmap.cxx
+	$(CPP) -c ../src/Fl_Bitmap.cxx -o ../src/Fl_Bitmap.o $(CXXFLAGS)
+
+../src/Fl_Box.o: ../src/Fl_Box.cxx
+	$(CPP) -c ../src/Fl_Box.cxx -o ../src/Fl_Box.o $(CXXFLAGS)
+
+../src/fl_boxtype.o: ../src/fl_boxtype.cxx
+	$(CPP) -c ../src/fl_boxtype.cxx -o ../src/fl_boxtype.o $(CXXFLAGS)
+
+../src/Fl_Browser.o: ../src/Fl_Browser.cxx
+	$(CPP) -c ../src/Fl_Browser.cxx -o ../src/Fl_Browser.o $(CXXFLAGS)
+
+../src/Fl_Button.o: ../src/Fl_Button.cxx
+	$(CPP) -c ../src/Fl_Button.cxx -o ../src/Fl_Button.o $(CXXFLAGS)
+
+../src/fl_call_main.o: ../src/fl_call_main.c
+	$(CC) -c ../src/fl_call_main.c -o ../src/fl_call_main.o $(CFLAGS)
+
+../src/Fl_Check_Button.o: ../src/Fl_Check_Button.cxx
+	$(CPP) -c ../src/Fl_Check_Button.cxx -o ../src/Fl_Check_Button.o $(CXXFLAGS)
+
+../src/Fl_Choice.o: ../src/Fl_Choice.cxx
+	$(CPP) -c ../src/Fl_Choice.cxx -o ../src/Fl_Choice.o $(CXXFLAGS)
+
+../src/fl_clip.o: ../src/fl_clip.cxx
+	$(CPP) -c ../src/fl_clip.cxx -o ../src/fl_clip.o $(CXXFLAGS)
+
+../src/Fl_Clock.o: ../src/Fl_Clock.cxx
+	$(CPP) -c ../src/Fl_Clock.cxx -o ../src/Fl_Clock.o $(CXXFLAGS)
+
+../src/fl_color.o: ../src/fl_color.cxx
+	$(CPP) -c ../src/fl_color.cxx -o ../src/fl_color.o $(CXXFLAGS)
+
+../src/Fl_Color_Chooser.o: ../src/Fl_Color_Chooser.cxx
+	$(CPP) -c ../src/Fl_Color_Chooser.cxx -o ../src/Fl_Color_Chooser.o $(CXXFLAGS)
+
+../src/Fl_compose.o: ../src/Fl_compose.cxx
+	$(CPP) -c ../src/Fl_compose.cxx -o ../src/Fl_compose.o $(CXXFLAGS)
+
+../src/fl_cursor.o: ../src/fl_cursor.cxx
+	$(CPP) -c ../src/fl_cursor.cxx -o ../src/fl_cursor.o $(CXXFLAGS)
+
+../src/fl_curve.o: ../src/fl_curve.cxx
+	$(CPP) -c ../src/fl_curve.cxx -o ../src/fl_curve.o $(CXXFLAGS)
+
+../src/Fl_Dial.o: ../src/Fl_Dial.cxx
+	$(CPP) -c ../src/Fl_Dial.cxx -o ../src/Fl_Dial.o $(CXXFLAGS)
+
+../src/fl_diamond_box.o: ../src/fl_diamond_box.cxx
+	$(CPP) -c ../src/fl_diamond_box.cxx -o ../src/fl_diamond_box.o $(CXXFLAGS)
+
+../src/Fl_display.o: ../src/Fl_display.cxx
+	$(CPP) -c ../src/Fl_display.cxx -o ../src/Fl_display.o $(CXXFLAGS)
+
+../src/fl_dnd.o: ../src/fl_dnd.cxx
+	$(CPP) -c ../src/fl_dnd.cxx -o ../src/fl_dnd.o $(CXXFLAGS)
+
+../src/Fl_Double_Window.o: ../src/Fl_Double_Window.cxx
+	$(CPP) -c ../src/Fl_Double_Window.cxx -o ../src/Fl_Double_Window.o $(CXXFLAGS)
+
+../src/fl_draw.o: ../src/fl_draw.cxx
+	$(CPP) -c ../src/fl_draw.cxx -o ../src/fl_draw.o $(CXXFLAGS)
+
+../src/fl_draw_image.o: ../src/fl_draw_image.cxx
+	$(CPP) -c ../src/fl_draw_image.cxx -o ../src/fl_draw_image.o $(CXXFLAGS)
+
+../src/fl_draw_pixmap.o: ../src/fl_draw_pixmap.cxx
+	$(CPP) -c ../src/fl_draw_pixmap.cxx -o ../src/fl_draw_pixmap.o $(CXXFLAGS)
+
+../src/fl_engraved_label.o: ../src/fl_engraved_label.cxx
+	$(CPP) -c ../src/fl_engraved_label.cxx -o ../src/fl_engraved_label.o $(CXXFLAGS)
+
+../src/fl_file_chooser.o: ../src/fl_file_chooser.cxx
+	$(CPP) -c ../src/fl_file_chooser.cxx -o ../src/fl_file_chooser.o $(CXXFLAGS)
+
+../src/Fl_FileBrowser.o: ../src/Fl_FileBrowser.cxx
+	$(CPP) -c ../src/Fl_FileBrowser.cxx -o ../src/Fl_FileBrowser.o $(CXXFLAGS)
+
+../src/Fl_FileChooser.o: ../src/Fl_FileChooser.cxx
+	$(CPP) -c ../src/Fl_FileChooser.cxx -o ../src/Fl_FileChooser.o $(CXXFLAGS)
+
+../src/Fl_FileChooser2.o: ../src/Fl_FileChooser2.cxx
+	$(CPP) -c ../src/Fl_FileChooser2.cxx -o ../src/Fl_FileChooser2.o $(CXXFLAGS)
+
+../src/Fl_FileIcon.o: ../src/Fl_FileIcon.cxx
+	$(CPP) -c ../src/Fl_FileIcon.cxx -o ../src/Fl_FileIcon.o $(CXXFLAGS)
+
+../src/Fl_FileIcon2.o: ../src/Fl_FileIcon2.cxx
+	$(CPP) -c ../src/Fl_FileIcon2.cxx -o ../src/Fl_FileIcon2.o $(CXXFLAGS)
+
+../src/Fl_FileInput.o: ../src/Fl_FileInput.cxx
+	$(CPP) -c ../src/Fl_FileInput.cxx -o ../src/Fl_FileInput.o $(CXXFLAGS)
+
+../src/Fl_Float_Input.o: ../src/Fl_Float_Input.cxx
+	$(CPP) -c ../src/Fl_Float_Input.cxx -o ../src/Fl_Float_Input.o $(CXXFLAGS)
+
+../src/fl_font.o: ../src/fl_font.cxx
+	$(CPP) -c ../src/fl_font.cxx -o ../src/fl_font.o $(CXXFLAGS)
+
+../src/Fl_get_key.o: ../src/Fl_get_key.cxx
+	$(CPP) -c ../src/Fl_get_key.cxx -o ../src/Fl_get_key.o $(CXXFLAGS)
+
+../OpenGL/Fl_Gl_Choice.o: ../OpenGL/Fl_Gl_Choice.cxx
+	$(CPP) -c ../OpenGL/Fl_Gl_Choice.cxx -o ../OpenGL/Fl_Gl_Choice.o $(CXXFLAGS)
+
+../OpenGL/Fl_Gl_Overlay.o: ../OpenGL/Fl_Gl_Overlay.cxx
+	$(CPP) -c ../OpenGL/Fl_Gl_Overlay.cxx -o ../OpenGL/Fl_Gl_Overlay.o $(CXXFLAGS)
+
+../OpenGL/Fl_Gl_Window.o: ../OpenGL/Fl_Gl_Window.cxx
+	$(CPP) -c ../OpenGL/Fl_Gl_Window.cxx -o ../OpenGL/Fl_Gl_Window.o $(CXXFLAGS)
+
+../src/fl_glyph.o: ../src/fl_glyph.cxx
+	$(CPP) -c ../src/fl_glyph.cxx -o ../src/fl_glyph.o $(CXXFLAGS)
+
+../src/Fl_Group.o: ../src/Fl_Group.cxx
+	$(CPP) -c ../src/Fl_Group.cxx -o ../src/Fl_Group.o $(CXXFLAGS)
+
+../src/Fl_Highlight_Button.o: ../src/Fl_Highlight_Button.cxx
+	$(CPP) -c ../src/Fl_Highlight_Button.cxx -o ../src/Fl_Highlight_Button.o $(CXXFLAGS)
+
+../src/Fl_Image.o: ../src/Fl_Image.cxx
+	$(CPP) -c ../src/Fl_Image.cxx -o ../src/Fl_Image.o $(CXXFLAGS)
+
+../src/Fl_Input.o: ../src/Fl_Input.cxx
+	$(CPP) -c ../src/Fl_Input.cxx -o ../src/Fl_Input.o $(CXXFLAGS)
+
+../src/Fl_Input_Browser.o: ../src/Fl_Input_Browser.cxx
+	$(CPP) -c ../src/Fl_Input_Browser.cxx -o ../src/Fl_Input_Browser.o $(CXXFLAGS)
+
+../src/Fl_Item.o: ../src/Fl_Item.cxx
+	$(CPP) -c ../src/Fl_Item.cxx -o ../src/Fl_Item.o $(CXXFLAGS)
+
+../src/Fl_key_name.o: ../src/Fl_key_name.cxx
+	$(CPP) -c ../src/Fl_key_name.cxx -o ../src/Fl_key_name.o $(CXXFLAGS)
+
+../src/fl_labeltype.o: ../src/fl_labeltype.cxx
+	$(CPP) -c ../src/fl_labeltype.cxx -o ../src/fl_labeltype.o $(CXXFLAGS)
+
+../src/Fl_Light_Button.o: ../src/Fl_Light_Button.cxx
+	$(CPP) -c ../src/Fl_Light_Button.cxx -o ../src/Fl_Light_Button.o $(CXXFLAGS)
+
+../src/fl_list_fonts.o: ../src/fl_list_fonts.cxx
+	$(CPP) -c ../src/fl_list_fonts.cxx -o ../src/fl_list_fonts.o $(CXXFLAGS)
+
+../src/fl_load_plugin.o: ../src/fl_load_plugin.cxx
+	$(CPP) -c ../src/fl_load_plugin.cxx -o ../src/fl_load_plugin.o $(CXXFLAGS)
+
+../src/Fl_lock.o: ../src/Fl_lock.cxx
+	$(CPP) -c ../src/Fl_lock.cxx -o ../src/Fl_lock.o $(CXXFLAGS)
+
+../src/Fl_Menu.o: ../src/Fl_Menu.cxx
+	$(CPP) -c ../src/Fl_Menu.cxx -o ../src/Fl_Menu.o $(CXXFLAGS)
+
+../src/Fl_Menu_.o: ../src/Fl_Menu_.cxx
+	$(CPP) -c ../src/Fl_Menu_.cxx -o ../src/Fl_Menu_.o $(CXXFLAGS)
+
+../src/Fl_Menu_add.o: ../src/Fl_Menu_add.cxx
+	$(CPP) -c ../src/Fl_Menu_add.cxx -o ../src/Fl_Menu_add.o $(CXXFLAGS)
+
+../src/Fl_Menu_Bar.o: ../src/Fl_Menu_Bar.cxx
+	$(CPP) -c ../src/Fl_Menu_Bar.cxx -o ../src/Fl_Menu_Bar.o $(CXXFLAGS)
+
+../src/Fl_Menu_Button.o: ../src/Fl_Menu_Button.cxx
+	$(CPP) -c ../src/Fl_Menu_Button.cxx -o ../src/Fl_Menu_Button.o $(CXXFLAGS)
+
+../src/Fl_Menu_global.o: ../src/Fl_Menu_global.cxx
+	$(CPP) -c ../src/Fl_Menu_global.cxx -o ../src/Fl_Menu_global.o $(CXXFLAGS)
+
+../src/Fl_Menu_Item.o: ../src/Fl_Menu_Item.cxx
+	$(CPP) -c ../src/Fl_Menu_Item.cxx -o ../src/Fl_Menu_Item.o $(CXXFLAGS)
+
+../src/Fl_Menu_Window.o: ../src/Fl_Menu_Window.cxx
+	$(CPP) -c ../src/Fl_Menu_Window.cxx -o ../src/Fl_Menu_Window.o $(CXXFLAGS)
+
+../src/Fl_Numeric_Input.o: ../src/Fl_Numeric_Input.cxx
+	$(CPP) -c ../src/Fl_Numeric_Input.cxx -o ../src/Fl_Numeric_Input.o $(CXXFLAGS)
+
+../src/Fl_Output.o: ../src/Fl_Output.cxx
+	$(CPP) -c ../src/Fl_Output.cxx -o ../src/Fl_Output.o $(CXXFLAGS)
+
+../src/fl_oval_box.o: ../src/fl_oval_box.cxx
+	$(CPP) -c ../src/fl_oval_box.cxx -o ../src/fl_oval_box.o $(CXXFLAGS)
+
+../src/fl_overlay.o: ../src/fl_overlay.cxx
+	$(CPP) -c ../src/fl_overlay.cxx -o ../src/fl_overlay.o $(CXXFLAGS)
+
+../src/fl_overlay_visual.o: ../src/fl_overlay_visual.cxx
+	$(CPP) -c ../src/fl_overlay_visual.cxx -o ../src/fl_overlay_visual.o $(CXXFLAGS)
+
+../src/Fl_Overlay_Window.o: ../src/Fl_Overlay_Window.cxx
+	$(CPP) -c ../src/Fl_Overlay_Window.cxx -o ../src/Fl_Overlay_Window.o $(CXXFLAGS)
+
+../src/Fl_own_colormap.o: ../src/Fl_own_colormap.cxx
+	$(CPP) -c ../src/Fl_own_colormap.cxx -o ../src/Fl_own_colormap.o $(CXXFLAGS)
+
+../src/Fl_Pack.o: ../src/Fl_Pack.cxx
+	$(CPP) -c ../src/Fl_Pack.cxx -o ../src/Fl_Pack.o $(CXXFLAGS)
+
+../src/Fl_Pixmap.o: ../src/Fl_Pixmap.cxx
+	$(CPP) -c ../src/Fl_Pixmap.cxx -o ../src/Fl_Pixmap.o $(CXXFLAGS)
+
+../src/fl_plastic_box.o: ../src/fl_plastic_box.cxx
+	$(CPP) -c ../src/fl_plastic_box.cxx -o ../src/fl_plastic_box.o $(CXXFLAGS)
+
+../src/Fl_ProgressBar.o: ../src/Fl_ProgressBar.cxx
+	$(CPP) -c ../src/Fl_ProgressBar.cxx -o ../src/Fl_ProgressBar.o $(CXXFLAGS)
+
+../src/Fl_Radio_Button.o: ../src/Fl_Radio_Button.cxx
+	$(CPP) -c ../src/Fl_Radio_Button.cxx -o ../src/Fl_Radio_Button.o $(CXXFLAGS)
+
+../src/fl_rect.o: ../src/fl_rect.cxx
+	$(CPP) -c ../src/fl_rect.cxx -o ../src/fl_rect.o $(CXXFLAGS)
+
+../src/Fl_Repeat_Button.o: ../src/Fl_Repeat_Button.cxx
+	$(CPP) -c ../src/Fl_Repeat_Button.cxx -o ../src/Fl_Repeat_Button.o $(CXXFLAGS)
+
+../src/Fl_Return_Button.o: ../src/Fl_Return_Button.cxx
+	$(CPP) -c ../src/Fl_Return_Button.cxx -o ../src/Fl_Return_Button.o $(CXXFLAGS)
+
+../src/fl_rgb.o: ../src/fl_rgb.cxx
+	$(CPP) -c ../src/fl_rgb.cxx -o ../src/fl_rgb.o $(CXXFLAGS)
+
+../src/Fl_RGB_Image.o: ../src/Fl_RGB_Image.cxx
+	$(CPP) -c ../src/Fl_RGB_Image.cxx -o ../src/Fl_RGB_Image.o $(CXXFLAGS)
+
+../src/Fl_Roller.o: ../src/Fl_Roller.cxx
+	$(CPP) -c ../src/Fl_Roller.cxx -o ../src/Fl_Roller.o $(CXXFLAGS)
+
+../src/fl_round_box.o: ../src/fl_round_box.cxx
+	$(CPP) -c ../src/fl_round_box.cxx -o ../src/fl_round_box.o $(CXXFLAGS)
+
+../src/fl_rounded_box.o: ../src/fl_rounded_box.cxx
+	$(CPP) -c ../src/fl_rounded_box.cxx -o ../src/fl_rounded_box.o $(CXXFLAGS)
+
+../src/Fl_Scroll.o: ../src/Fl_Scroll.cxx
+	$(CPP) -c ../src/Fl_Scroll.cxx -o ../src/Fl_Scroll.o $(CXXFLAGS)
+
+../src/fl_scroll_area.o: ../src/fl_scroll_area.cxx
+	$(CPP) -c ../src/fl_scroll_area.cxx -o ../src/fl_scroll_area.o $(CXXFLAGS)
+
+../src/Fl_Scrollbar.o: ../src/Fl_Scrollbar.cxx
+	$(CPP) -c ../src/Fl_Scrollbar.cxx -o ../src/Fl_Scrollbar.o $(CXXFLAGS)
+
+../src/fl_shadow_box.o: ../src/fl_shadow_box.cxx
+	$(CPP) -c ../src/fl_shadow_box.cxx -o ../src/fl_shadow_box.o $(CXXFLAGS)
+
+../src/Fl_Shaped_Window.o: ../src/Fl_Shaped_Window.cxx
+	$(CPP) -c ../src/Fl_Shaped_Window.cxx -o ../src/Fl_Shaped_Window.o $(CXXFLAGS)
+
+../src/fl_show_colormap.o: ../src/fl_show_colormap.cxx
+	$(CPP) -c ../src/fl_show_colormap.cxx -o ../src/fl_show_colormap.o $(CXXFLAGS)
+
+../src/Fl_Slider.o: ../src/Fl_Slider.cxx
+	$(CPP) -c ../src/Fl_Slider.cxx -o ../src/Fl_Slider.o $(CXXFLAGS)
+
+../src/Fl_String_List.o: ../src/Fl_String_List.cxx
+	$(CPP) -c ../src/Fl_String_List.cxx -o ../src/Fl_String_List.o $(CXXFLAGS)
+
+../src/Fl_Style.o: ../src/Fl_Style.cxx
+	$(CPP) -c ../src/Fl_Style.cxx -o ../src/Fl_Style.o $(CXXFLAGS)
+
+../src/Fl_Style_Set.o: ../src/Fl_Style_Set.cxx
+	$(CPP) -c ../src/Fl_Style_Set.cxx -o ../src/Fl_Style_Set.o $(CXXFLAGS)
+
+../src/fl_symbols.o: ../src/fl_symbols.cxx
+	$(CPP) -c ../src/fl_symbols.cxx -o ../src/fl_symbols.o $(CXXFLAGS)
+
+../src/Fl_Tabs.o: ../src/Fl_Tabs.cxx
+	$(CPP) -c ../src/Fl_Tabs.cxx -o ../src/Fl_Tabs.o $(CXXFLAGS)
+
+../src/Fl_Text_Buffer.o: ../src/Fl_Text_Buffer.cxx
+	$(CPP) -c ../src/Fl_Text_Buffer.cxx -o ../src/Fl_Text_Buffer.o $(CXXFLAGS)
+
+../src/Fl_Text_Display.o: ../src/Fl_Text_Display.cxx
+	$(CPP) -c ../src/Fl_Text_Display.cxx -o ../src/Fl_Text_Display.o $(CXXFLAGS)
+
+../src/Fl_Text_Editor.o: ../src/Fl_Text_Editor.cxx
+	$(CPP) -c ../src/Fl_Text_Editor.cxx -o ../src/Fl_Text_Editor.o $(CXXFLAGS)
+
+../src/Fl_Tile.o: ../src/Fl_Tile.cxx
+	$(CPP) -c ../src/Fl_Tile.cxx -o ../src/Fl_Tile.o $(CXXFLAGS)
+
+../src/Fl_Tiled_Image.o: ../src/Fl_Tiled_Image.cxx
+	$(CPP) -c ../src/Fl_Tiled_Image.cxx -o ../src/Fl_Tiled_Image.o $(CXXFLAGS)
+
+../src/Fl_Tooltip.o: ../src/Fl_Tooltip.cxx
+	$(CPP) -c ../src/Fl_Tooltip.cxx -o ../src/Fl_Tooltip.o $(CXXFLAGS)
+
+../src/Fl_Valuator.o: ../src/Fl_Valuator.cxx
+	$(CPP) -c ../src/Fl_Valuator.cxx -o ../src/Fl_Valuator.o $(CXXFLAGS)
+
+../src/Fl_Value_Input.o: ../src/Fl_Value_Input.cxx
+	$(CPP) -c ../src/Fl_Value_Input.cxx -o ../src/Fl_Value_Input.o $(CXXFLAGS)
+
+../src/Fl_Value_Slider.o: ../src/Fl_Value_Slider.cxx
+	$(CPP) -c ../src/Fl_Value_Slider.cxx -o ../src/Fl_Value_Slider.o $(CXXFLAGS)
+
+../src/fl_vertex.o: ../src/fl_vertex.cxx
+	$(CPP) -c ../src/fl_vertex.cxx -o ../src/fl_vertex.o $(CXXFLAGS)
+
+../src/Fl_visual.o: ../src/Fl_visual.cxx
+	$(CPP) -c ../src/Fl_visual.cxx -o ../src/Fl_visual.o $(CXXFLAGS)
+
+../src/Fl_Widget.o: ../src/Fl_Widget.cxx
+	$(CPP) -c ../src/Fl_Widget.cxx -o ../src/Fl_Widget.o $(CXXFLAGS)
+
+../src/Fl_Window.o: ../src/Fl_Window.cxx
+	$(CPP) -c ../src/Fl_Window.cxx -o ../src/Fl_Window.o $(CXXFLAGS)
+
+../src/Fl_Window_fullscreen.o: ../src/Fl_Window_fullscreen.cxx
+	$(CPP) -c ../src/Fl_Window_fullscreen.cxx -o ../src/Fl_Window_fullscreen.o $(CXXFLAGS)
+
+../src/Fl_Window_hotspot.o: ../src/Fl_Window_hotspot.cxx
+	$(CPP) -c ../src/Fl_Window_hotspot.cxx -o ../src/Fl_Window_hotspot.o $(CXXFLAGS)
+
+../src/Fl_Window_iconize.o: ../src/Fl_Window_iconize.cxx
+	$(CPP) -c ../src/Fl_Window_iconize.cxx -o ../src/Fl_Window_iconize.o $(CXXFLAGS)
+
+../src/fltk_theme.o: ../src/fltk_theme.cxx
+	$(CPP) -c ../src/fltk_theme.cxx -o ../src/fltk_theme.o $(CXXFLAGS)
+
+../OpenGL/gl_draw.o: ../OpenGL/gl_draw.cxx
+	$(CPP) -c ../OpenGL/gl_draw.cxx -o ../OpenGL/gl_draw.o $(CXXFLAGS)
+
+../OpenGL/gl_start.o: ../OpenGL/gl_start.cxx
+	$(CPP) -c ../OpenGL/gl_start.cxx -o ../OpenGL/gl_start.o $(CXXFLAGS)
+
+../src/scandir.o: ../src/scandir.c
+	$(CC) -c ../src/scandir.c -o ../src/scandir.o $(CFLAGS)
+
+../glut/trackball.o: ../glut/trackball.c
+	$(CC) -c ../glut/trackball.c -o ../glut/trackball.o $(CFLAGS)
+
+../src/ValueOutput.o: ../src/ValueOutput.cxx
+	$(CPP) -c ../src/ValueOutput.cxx -o ../src/ValueOutput.o $(CXXFLAGS)
