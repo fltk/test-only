@@ -1,38 +1,62 @@
 /*! \defgroup multithreading Multithreaded FLTK Applications
 
-   I would prefer that fltk contain the minimal amount of extra stuff
-   for doing threads.  There are other portable thread wrapper libraries
-   out there and fltk should not be providing another. Fltk provides
-   the minimum amount of locking needed so that several threads can
-   call it.
+  Fltk has no multithreaded support unless the main thread calls
+  fltk::lock().
 
-   You must have a "master" thread. Only this thread is allowed to
-   wait for events by calling fltk::wait() or fltk::run() or any
-   similar call.
+  You must have a "master" thread. Only this thread is allowed to wait
+  for events by calling fltk::wait() or fltk::run() or any similar
+  call.  From then on fltk will be locked except when the main thread
+  is actually waiting for events from the user. Other threads must
+  call fltk::lock() and fltk::unlock() to surround \e all calls
+  to fltk (such as to change widgets or redraw them).
 
-   You must call fltk::lock() and fltk::unlock() around \e all calls
-   to fltk. You do not need to do it every call, just around whole
-   blocks of calls.
+  FLTK provides the file <fltk/Thread.h> which defines some
+  convenience portability wrappers around the native threads
+  system. It provides a Thread type and the classes Mutex and
+  SignalMutex. <i>This file is optional</i>. Fltk does not use it (it
+  has an internal mutex implementation). The header file's only
+  purpose is so we can write portable demo programs. It may be useful
+  or an inspiration to people who want to try writing multithreaded
+  programs themselves, however you can instead use pthreads or any
+  other library that is compatable with your system.
 
-   When the wait() method is waiting for input or timeouts, child
-   threads are given access to FLTK. Similarly, when the main thread
-   receives events and needs to do processing, it will wait until all
-   child threads have called unlock() before processing the events and
-   doing callbacks.
+  \code
+  main() {
+    fltk::lock(); // ALWAYS call before any fltk calls
+    create_widgets();
+    Thread t1; create_thread(t1, func, data1);
+    Thread t2; create_thread(t2, func, data2);
+    for (;;) {
+      fltk::wait();
+      check_what_threads_are_up_to();
+    }
+  }
 
-   See the file <fltk/Threads.h> for a simple portable recursive lock
-   object you can use in your own code for locking other
-   objects. However there is no requirement that you use this, you can
-   use pthreads or any other library that is compatable with your
-   system.
+  fltk::Mutex mutex;
+
+  func1(void* data) {
+    mutex.lock();
+    do_something();
+    mutex.unlock();
+    fltk::lock();
+    widget->value(foo);
+    widget->redraw();
+    fltk::awake(); // Without this it may not redraw until next event!
+    fltk::unlock();
+  }
+  \endcode
+
+  Warning: on Windows including <fltk/Thread.h> will cause the
+  <windows.h> header file to be included. This nasty file defines
+  no end of macros and other things designed to screw up your programs.
 
 */
 
 /*! \fn void fltk::lock()
 
-  The main thread must call this before the first call to wait()/run()
-  to initialize the thread system.  The lock is locked all the time
-  except when wait() is waiting for events.
+  The main thread must call this before the first call to wait() or
+  run() to initialize the thread system.  The lock is locked all the
+  time except when wait() is waiting for events.
 
   Child threads should call this method prior to making any fltk
   calls.  Blocks the current thread until it can safely access FLTK

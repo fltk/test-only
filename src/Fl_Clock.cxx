@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.36 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.37 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,32 @@
 #endif /* !_WIN32 */
 using namespace fltk;
 
-// Original clock display written by Paul Haeberli at SGI.
-// Modifications by Mark Overmars for Forms
-// Further changes by Bill Spitzak for fltk
+/*! \class fltk::ClockOutput
+  Base class of Clock, this one does not move, it just displays whatever
+  time  you set into it. The include file is <fltk/Clock.h>
+
+  type() may be set to SQUARE, ROUND, or DIGITAL (nyi).
+*/
+
+/*! \class fltk::Clock
+  This widget provides a round analog clock display and is provided
+  for Forms compatibility. It installs a 1-second timeout callback
+  using fltk::add_timeout().
+
+  The color() fills the background. The selectioncolor() (which defaults
+  to GRAY85) fills the hands. The textcolor() is used to color in the
+  tick marks and outline the hands.
+
+  type() may be set to SQUARE, ROUND, or DIGITAL (nyi).  See the base
+  class ClockOutput for some other methods.
+
+  \image html clock.gif
+
+  Design credits:
+  Original clock display written by Paul Haeberli at SGI.
+  Modifications by Mark Overmars for Forms
+  Further changes by Bill Spitzak for fltk
+*/
 
 const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
@@ -101,6 +124,17 @@ void ClockOutput::draw() {
   draw(0, 0, w(), h());
 }
 
+/*! \fn int ClockOutput::hour() const
+  Return the hour sent to the last call to value(). */
+/*! \fn int ClockOutput::minute() const
+  Return the minute sent to the last call to value(). */
+/*! \fn int ClockOutput::second() const
+  Return the second sent to the last call to value(). */
+
+/*! Set the hour, minute, and second to display. The hour is effectively
+  taken modulus 12 and the minute and second modulus 60 to figure out
+  where to place the hands. Redraw happens only if different.
+*/
 void ClockOutput::value(int h, int m, int s) {
   if (h!=hour_ || m!=minute_ || s!=second_) {
     hour_ = h; minute_ = m; second_ = s;
@@ -108,6 +142,9 @@ void ClockOutput::value(int h, int m, int s) {
   }
 }
 
+/*! Set the clock to a Unix timestamp. The value is passed through
+  the localtime() library function and used to get the hour, minute,
+  and second */
 void ClockOutput::value(unsigned long v) {
   struct tm *timeofday;
   timeofday = localtime((const time_t *)&v);
@@ -162,5 +199,5 @@ ClockOutput::ClockOutput(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.36 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.37 2004/01/21 09:18:10 spitzak Exp $".
 //

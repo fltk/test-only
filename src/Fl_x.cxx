@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.161 2004/01/20 08:24:16 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.162 2004/01/21 09:18:10 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -375,9 +375,50 @@ void fltk::close_display() {
 
 ////////////////////////////////////////////////////////////////
 
+/*! \class fltk::Rectangle
+  Class proposed for replacing all the x,y,w,h sets being passed
+  to most fltk functions. This may make a lot of calls easier to
+  read.
+
+  Negative w() or h() is supposed to mean an empty and thus
+  invisible rectangle, but some code will treat the rectangle as
+  reflected about x or y. Set the size to zero to make sure you
+  have an empty one.
+*/
+
+/*! \fn Rectangle::Rectangle()
+  The default constructor does not put anything into the fields!
+  You can either call set() or just modify the x_, y_, w_, and h_
+  variables directly.
+*/
+
+/*! \fn Rectangle::Rectangle(int x, int y, int w, int h)
+  Constructor that initializes all the fields. You can also use
+  the copy constructor to make a new rectangle equal to an old one.
+*/
+
+/*! \fn void Rectangle::set(int x, int y, int w, int h)
+  Set all 4 fields at once.
+*/
+
+/*! \fn int Rectangle::x() const
+  Return the left edge of the rectangle. */
+/*! \fn int Rectangle::y() const
+  Return the top edge of the rectangle. */
+/*! \fn int Rectangle::w() const
+  Return the width of the rectangle. */
+/*! \fn int Rectangle::h() const
+  Return the height of the rectangle. */
+/*! \fn int Rectangle::r() const
+  Return x()+w(), the right edge of the rectangle. */
+/*! \fn int Rectangle::b() const
+  Return y()+h(), the bottom edge of the rectangle. */
+
+////////////////////////////////////////////////////////////////
+
 static bool reload_info = true;
 
-/** \class fltk::Monitor
+/*! \class fltk::Monitor
     Structure describing a monitor (screen).
     Structure describing one of the monitors (screens) connected to
     the system. You can ask for one by position with find(), ask for
@@ -386,7 +427,13 @@ static bool reload_info = true;
     like the size and bit depth.
 */
 
-/** Return a "monitor" that surrounds all the monitors.
+/*! \var Monitor::work
+  The rectangle of the monitor not covered by tool or menu bars. This
+  is not a method because it looks clearer to write "monitor.work.x()"
+  than "monitor.work().x()".
+*/
+
+/*! Return a "monitor" that surrounds all the monitors.
     If you have a single monitor, this returns a monitor structure that
     defines it. If you have multiple monitors this returns a fake monitor
     that surrounds all of them.
@@ -455,7 +502,7 @@ extern "C" {
 static Monitor* monitors = 0;
 static int num_monitors=0;
 
-/** Return an array of all Monitors.
+/*! Return an array of all Monitors.
     p is set to point to a static array of Monitor structures describing
     all monitors connected to the system. If there is a "primary" monitor,
     it will be first in the list.
@@ -536,7 +583,7 @@ int Monitor::list(const Monitor** p) {
   return num_monitors;
 }
 
-/** Return a pointer to a Monitor structure describing the monitor
+/*! Return a pointer to a Monitor structure describing the monitor
     that contains or is closest to the given x,y, position.
 */
 const Monitor& Monitor::find(int x, int y) {
@@ -1748,5 +1795,5 @@ bool fltk::system_theme() {return true;}
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.161 2004/01/20 08:24:16 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.162 2004/01/21 09:18:10 spitzak Exp $".
 //

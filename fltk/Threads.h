@@ -1,17 +1,5 @@
 // Inline classes to provide portable support for threads and mutexes.
 //
-// Fltk does not use this (it has an internal mutex implementation
-// that is used if Fl::lock() is called). This header file's only
-// purpose is so we can write portable demo programs. It may be useful
-// or an inspiration to people who want to try writing multithreaded
-// programs themselves.
-//
-// Fltk has no multithreaded support unless the main thread calls Fl::lock().
-// This main thread is the only thread allowed to call Fl::run or Fl::wait.
-// From then on fltk will be locked except when the main thread is actually
-// waiting for events from the user. Other threads must call Fl::lock() and
-// Fl::unlock() to surround calls to fltk (such as to change widgets or
-// redraw them).
 
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
@@ -22,16 +10,22 @@
 #include <pthread.h>
 
 namespace fltk {
+/*! \addtogroup multithreading
+  \{ */
 
+/*! Hides whatever the system uses to identify a thread. Used so
+  the "toy" interface is portable. */
 typedef pthread_t Thread;
 
-static int create_thread(Thread& t, void *(*f) (void *), void* p)
+/*! Fork a new thread and make it run \a f(p). Returns negative number
+  on error, otherwise \a t is set to the new thread. */
+int create_thread(Thread& t, void *(*f) (void *), void* p)
 {
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
 // Linux supports recursive locks, use them directly, with some cheating:
-#ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
+#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) && !defined(DOXYGEN)
 
 extern pthread_mutexattr_t Mutex_attrib;
 
@@ -57,6 +51,13 @@ public:
 
 #else // standard pthread mutexes need a bit of work to be recursive:
 
+/*!
+  Simple wrapper for the locking provided by the operating system
+  so you can write portable toy or demo programs. This is a "recursive
+  lock". Calling lock() will wait until nobody else has the lock and then
+  will take it. Calling lock() N times means you must call unlock()
+  N times before another thread can get it.
+*/
 class Mutex {
   friend class SignalMutex;
   pthread_mutex_t mutex;
@@ -76,6 +77,22 @@ public:
   ~Mutex() {pthread_mutex_destroy(&mutex);}
 };
 
+/*!
+  Proper semaphore with good behavior, useful for portable toy or
+  demo programs. Besides a lock, this has a method of pausing until
+  another thread completes an action. You \e must lock() this before
+  you call wait(). wait() will unlock it, wait for a signal() from
+  another thread, and then lock() it again. You must unlock() it
+  some time after wait() returns. You can call signal() at any time,
+  though usually you will have called lock() and then unlock() this
+  afterwards.
+
+  Warning: wait() may return even if nobody else did signal()! This is
+  unavoidable. In particular, the WIN32 api is severely broken and
+  cannot correctly implement this.  It can easily lock up and never
+  return, so this always puts a timeout of .5 second to get around
+  this.
+*/
 class SignalMutex : public Mutex {
   pthread_cond_t cond;
 public:
@@ -102,7 +119,7 @@ namespace fltk {
 
 typedef unsigned long Thread;
 
-static int create_thread(Thread& t, void *(*f) (void *), void* p) {
+int create_thread(Thread& t, void *(*f) (void *), void* p) {
   return t = (Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
@@ -127,11 +144,13 @@ public:
     // int save_counter = cs.count; cs.count = 1;
     // the following three calls should be atomic, sigh...
     LeaveCriticalSection(&cs);
-    WaitForSingleObject(event, INFINITE);
+    WaitForSingleObject(event, 500 /*INFINITE*/);
     EnterCriticalSection(&cs);
     // cs.count = save_counter;
   }
 };
+
+/*! \} */
 
 }
 

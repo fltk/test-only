@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.25 2004/01/20 07:27:29 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.26 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -270,12 +270,12 @@ void fltk::transform_distance(int& x, int& y) {
 
   These functions let you draw arbitrary shapes with 2-D linear
   transformations. The functionality matches that found in Adobe®
-  PostScript<super>TM</super>. On both X and WIN32 the transformed vertices are
+  PostScript<sup>TM</sup>. On both X and WIN32 the transformed vertices are
   rounded to integers before drawing the line segments, this severely
   limits the accuracy of these functions for complex graphics, so use
   OpenGL when greater accuracy and/or performance is required.
 
-  Unlike PostScript<super>TM</super> the path is cleared after you
+  Unlike PostScript<sup>TM</sup> the path is cleared after you
   draw it. Instead fltk provides operators that do multiple operations
   on the same path, such as fillstrokepath().
 
@@ -735,5 +735,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.25 2004/01/20 07:27:29 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.26 2004/01/21 09:18:10 spitzak Exp $".
 //

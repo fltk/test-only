@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.39 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.40 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,8 +32,6 @@
 using namespace fltk;
 
 /*! \class fltk::Symbol
-
-    \brief A small named graphic
 
     All small reusable graphics drawn by fltk are based on this class.
     This includes bitmapped images, the boxes drawn around widgets,
@@ -681,5 +679,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.39 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.40 2004/01/21 09:18:10 spitzak Exp $".
 //

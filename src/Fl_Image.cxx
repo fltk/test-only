@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,12 +33,11 @@ using namespace fltk;
 
 /*! \class fltk::Image
 
-  \brief Cached constant image with optional alpha
-
   This subclass of Symbol draws a very common thing: a fixed-size
-  bitmapped color image with alpha information. The base class
-  provides support for caching a rendered version of the image,
-  and a function to draw this cached version on the screen.
+  bitmapped 3-color rectangular image with optional alpha information.
+
+  The base class provides support for caching a rendered version of
+  the image, and a function to draw this cached version on the screen.
 
   The subclasses are required to provide a _draw() method that
   fills in this cache if possible and then calls the base class
@@ -206,5 +205,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $".
 //

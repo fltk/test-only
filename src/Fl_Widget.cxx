@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.109 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.110 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -425,16 +425,18 @@ bool Widget::resize(int X, int Y, int W, int H) {
   Same as resize(x(),y(),w,h)
 */
 
-/* Cause layout() to be called later. Turns on the LAYOUT_DAMAGE flag
-   in layout_damage().
+/*! Same as relayout(LAYOUT_DAMAGE), indicates that data inside the
+  widget may have changed, but the size did not change. This flag is
+  also on when the widget is initially created.
 */
 void Widget::relayout() {
   relayout(LAYOUT_DAMAGE);
 }
 
-/* Cause layout() to be called later. Turns on the specified flags
-   in layout_damage(). \a flags cannot be zero, the maaning of the flags
-   is listed under \ref layout.
+/* Cause layout() to be called later. Turns on the specified flags in
+   layout_damage(), and turns on LAYOUT_CHILD in all parents of this
+   widget. \a flags cannot be zero, the maaning of the flags is listed
+   under \ref layout.
 */
 void Widget::relayout(uchar flags) {
   //if (!(flags & ~layout_damage_)) return;
@@ -629,19 +631,20 @@ void Widget::redraw_highlight() {
 // the widget.
 extern Widget* fl_did_clipping;
 
-/* Fltk calls this virtual function to draw the widget, after setting
-   up the graphics (current window, xy translation, etc) so that any
-   drawing functions will go into this widget.
+/*!
+  Fltk calls this virtual function to draw the widget, after setting
+  up the graphics (current window, xy translation, etc) so that any
+  drawing functions will go into this widget.
 
-   User code should not call this! You probably want to call redraw().
+  User code should not call this! You probably want to call redraw().
 
-   The default version calls draw_box() and draw_label(), thus drawing
-   the box() to fill the widget and putting the label() and image()
-   inside it to fill it, unless the align() flags are set to put it
-   outside.
+  The default version calls draw_box() and draw_label(), thus drawing
+  the box() to fill the widget and putting the label() and image()
+  inside it to fill it, unless the align() flags are set to put it
+  outside.
 
-   Information on how to write your own version is <a
-   href=subclassing.html#draw>here</a>.
+  Information on how to write your own version is <a
+  href=subclassing.html#draw>here</a>.
 */
 void Widget::draw()
 {
@@ -1108,5 +1111,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.109 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.110 2004/01/21 09:18:10 spitzak Exp $".
 //

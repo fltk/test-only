@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.172 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.173 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -46,6 +46,24 @@
 #include <fltk/Monitor.h>
 
 using namespace fltk;
+
+/*! \namespace fltk
+
+  \brief All classes and interface functions for fltk are in the fltk:: namespace.  This is a complete list of them, with links to the pages they are described on.
+
+  Put "using namespace fltk;" and you will not need to put the "fltk::" in
+  front of everything.
+
+  Fltk also provides some \ref utilities that are \e not in the fltk
+  namespace, as they are provided to make up for missing functions
+  that should be in standard libraries.
+
+  Fltk1.1 emulation is mostly achieved by aliasing the old class name
+  "Fl" to this namespace so that the static methods in Fltk1.1 will
+  work, and by typedefs from the new fltk::Widget class names to the
+  older Fl_Widget class names.
+
+*/
 
 /*!
   Returns the version number of fltk. This can be compared to the
@@ -1043,5 +1061,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.172 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.173 2004/01/21 09:18:10 spitzak Exp $".
 //

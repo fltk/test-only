@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_abort.cxx,v 1.17 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_abort.cxx,v 1.18 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
@@ -77,14 +77,18 @@ static void error(const char *format, ...) {
 
 #endif
 
-/*! fltk will call this when it wants to report a recoverable problem.
+// Doxygen seems to have some trouble with these unless the comments
+// are put first like this:
+
+/*! \var void (*fltk::warning)(const char* format, ...)
+  fltk will call this when it wants to report a recoverable problem.
   The display may be messed up but the user can probably keep
   working. (all X protocol errors call this). The default version on
   Unix prints a message to stderr, on Windows it pops up a MessageBox.
 */
-void (*fltk::warning)(const char* format, ...) = ::warning;
 
-/*! fltk will call this when it wants to report a recoverable problem.
+/*! \var void (*fltk::error)(const char* format, ...)
+  fltk will call this when it wants to report a recoverable problem.
   but in this case the display is so messed up it is unlikely the user
   can continue. Very little calls this now. The default version on
   Unix prints a message to stderr, on Windows it pops up a MessageBox,
@@ -93,14 +97,17 @@ void (*fltk::warning)(const char* format, ...) = ::warning;
   You may be able to use longjmp or an exception to get back to your
   own code.
 */
-void (*fltk::error)(const char* format, ...) = ::error;
 
-/*! fltk will call this when it wants to report a problem that it cannot
+/*! \var void (*fltk::fatal)(const char* format, ...)
+  fltk will call this when it wants to report a problem that it cannot
   recover from. You must not make any fltk calls again. The default
   version is the same function as error().
 */
+
+void (*fltk::warning)(const char* format, ...) = ::warning;
+void (*fltk::error)(const char* format, ...) = ::error;
 void (*fltk::fatal)(const char* format, ...) = ::error;
 
 //
-// End of "$Id: Fl_abort.cxx,v 1.17 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_abort.cxx,v 1.18 2004/01/21 09:18:10 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.34 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -453,9 +453,9 @@ static float split(
   labels in fltk. The string is formatted and aligned inside the
   passed box (only the x/y are transformed, the width and height are
   in device units). This also:
-  - Splits it at every \t tab character and uses column_widths() to
+  - Splits it at every \\t tab character and uses column_widths() to
     set each section into a column.
-  - Breaks the text into lines at \n characters. Word-wraps (if
+  - Breaks the text into lines at \\n characters. Word-wraps (if
     flags has fltk::ALIGN_WRAP set) so the words fit in the
     columns.
   - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
@@ -531,5 +531,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.34 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $".
 //
