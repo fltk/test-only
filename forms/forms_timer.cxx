@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: forms_timer.cxx,v 1.8 2001/07/29 22:25:25 spitzak Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Timer.h>
 #include <fltk/fl_draw.h>
-#ifdef WIN32
+#ifdef _WIN32
 # include <sys/types.h> 
 # include <sys/timeb.h>
 #else
@@ -41,7 +41,7 @@
 #define FL_TIMER_BLINKRATE	0.2
 
 void fl_gettime(long* sec, long* usec) {
-#ifdef WIN32
+#ifdef _WIN32
   struct timeb tp;
   ftime(&tp);
   *sec = tp.time;
@@ -151,5 +151,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: forms_timer.cxx,v 1.8 2001/07/29 22:25:25 spitzak Exp $".
 //

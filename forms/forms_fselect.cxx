@@ -1,5 +1,5 @@
 //
-// "$Id: forms_fselect.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: forms_fselect.cxx,v 1.4 2001/07/29 22:25:25 spitzak Exp $"
 //
 // Forms file selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@ char* fl_show_file_selector(const char *message,const char *dir,
   if (fname && fname[0]) strncpy(fl_filename,fname,255);
   char *p = fl_directory+strlen(fl_directory);
   if (p > fl_directory && *(p-1)!='/'
-#ifdef WIN32
+#ifdef _WIN32
       && *(p-1)!='\\' && *(p-1)!=':'
 #endif
       ) *p++ = '/';
@@ -61,5 +61,5 @@ char*	fl_get_pattern() {return (char *)fl_pattern;}
 char*	fl_get_filename() {return fl_filename;}
 
 //
-// End of "$Id: forms_fselect.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: forms_fselect.cxx,v 1.4 2001/07/29 22:25:25 spitzak Exp $".
 //
