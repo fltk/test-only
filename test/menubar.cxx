@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.19 1999/11/15 09:02:22 bill Exp $"
+// "$Id: menubar.cxx,v 1.20 1999/11/18 13:49:34 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -182,7 +182,7 @@ int main(int argc, char **argv) {
   }
   
   window = new Fl_Window(WIDTH,400);
-  Fl_Menu_Bar menubar(0,0,WIDTH,25); menubar.menu(menutable);
+  Fl_Menu_Bar menubar(0,0,WIDTH,30); menubar.menu(menutable);
   menubar.find("&Font/Normal")->labelfont(FL_HELVETICA);
   menubar.find("&Font/Bold")->labelfont(FL_BOLD);
   menubar.find("&Font/Italic")->labelfont(FL_ITALIC);
@@ -205,7 +205,7 @@ int main(int argc, char **argv) {
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
-  Fl_Box box(0,25,WIDTH,375, "Press right button\nfor a pop-up menu");
+  Fl_Box box(0,30,WIDTH,370, "Press right button\nfor a pop-up menu");
   box.copy_style(&Fl_Output::default_style);
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
@@ -228,5 +228,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.19 1999/11/15 09:02:22 bill Exp $".
+// End of "$Id: menubar.cxx,v 1.20 1999/11/18 13:49:34 carl Exp $".
 //
