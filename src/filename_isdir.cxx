@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -18,8 +17,11 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// I would like to make this file PUBLIC DOMAIN. However I am not the
+// original author. If the original contributor agrees, simply change this
+// comment to match the filename_ext.cxx one.
 //
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 #include <config.h>
 #include <fltk/filename.h>

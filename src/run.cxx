@@ -134,15 +134,18 @@ static void fix_focus() {
 // This function is here because Window::label() uses it:
 /**
   Equivalent to strdup() except the C++ new[] operator is used. A
-  block of memory sizeof(from)+1 is allocated and the \a from
+  block of memory strlen(from)+1 is allocated and the \a from
   string is copied to it. Notice that you must use delete[] to
   destroy the returned value.
+
+  If NULL is passed, a NULL is returned.
 
   It is a good idea to use this instead of strdup() if you want a
   replacement new-handler to work. FLTK uses this for all strings
   that it copies internally.
 */
 FL_API const char* newstring(const char *from) {
+  if (!from) return 0;
   unsigned n = strlen(from)+1;
   char* ret = new char[n];
   strcpy(ret, from);
@@ -866,7 +869,7 @@ void Widget::throw_focus() {
   if (this == xmousewin) xmousewin = Window::first();
   if (contains(focus_)) focus_ = 0;
   if (this == xfocus) xfocus = 0;
-  if (this == Tooltip::current()) Tooltip::current(0);
+  if (this == Tooltip::current_widget()) Tooltip::current(0);
   if (this == modal_) {modal_ = 0; exit_modal();}
 }
 

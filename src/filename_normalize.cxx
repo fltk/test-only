@@ -1,25 +1,21 @@
-//
 // "$Id$"
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/* Copyright 1998-2005 by Bill Spitzak and others.
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ * Please report all bugs and problems to "fltk-bugs@fltk.org".
+ */
 
 /** \addtogroup utilities
 
@@ -28,6 +24,11 @@
   \e not in the fltk:: namespace and do not have "fl_" in their names,
   because in theory they should not be part of fltk, but instead
   provided by the system.
+
+  Note to money-grubbing capitalists: the source code for the
+  utility functions is PUBLIC DOMAIN and may be reused for any purpose
+  whatsoever (such as, I hope, putting them in your system's libraries!)
+
 */
 
 #include <fltk/filename.h>
@@ -54,12 +55,12 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
   by prepending the current directory or by prepending the "home"
   directory if it starts with '~'.
   - \a output is a pointer to a buffer that \a may be used to write
-    the result to. It may also return a pointer into \a from.
-  - \a length is the size of \a output. No more than n-1 characters
-  are written, plus a trailing nul.
+    the result to.
+  - \a length is the size of \a output. No more than \a length-1 characters
+    are written, plus a trailing nul.
   - \a input is the initial filename.
   - \a directory is the directory that filename is relative to. If
-  this is NULL thne the current directory is gotten from the OS.
+    this is NULL then the current directory is gotten from the OS.
 
   If there is no change \a input is returned. Otherwise perhaps the
   suffix of \a input is returned, or the result is copied to \a output

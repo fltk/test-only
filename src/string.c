@@ -1,21 +1,19 @@
-/* "$Id: string.c,v 1.7 2004/12/12 22:23:26 spitzak Exp $"
+/* "$Id$"
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+ * strcasecmp() Copyright (c) 2005 Bill Spitzak
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- * USA.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
@@ -26,29 +24,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#if !HAVE_STRDUP || defined(DOXYGEN)
-/*! Duplicate a string.
-  malloc() a strlen(s)+1 block of memory and copy the string to it,
-  returning a pointer to the new string. Use free((void*)x) to delete
-  the returned value.
-
-  FLTK provides this function on systems that don't have it. Use
-  the <fltk/string.h> header to call this portably.
-*/
-char 	*			/* O - New string pointer */
-strdup(const char *s)		/* I - String to duplicate */
-{
-  char	*t;			/* New string pointer */
-  int n;			/* size to allocate */
-  if (!s) return 0;
-  n = strlen(s)+1;
-  t = (char*)malloc(n);
-  if (t) memcpy(t, s, n);
-  return t;
-}
-#endif
-
 
 #if !HAVE_STRCASECMP || defined(DOXYGEN)
 /*! Do a case-insensitive string comparison. Return less than zero if
@@ -191,5 +166,5 @@ strlcpy(char *dst,		/* I - Destination buffer */
 #endif
 
 /*
- * End of "$Id: string.c,v 1.7 2004/12/12 22:23:26 spitzak Exp $".
+ * End of "$Id$".
  */
