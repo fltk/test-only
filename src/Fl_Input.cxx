@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.95 2004/07/15 16:27:26 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.96 2004/09/30 06:08:29 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -59,8 +59,8 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
   - fltk::WHEN_CHANGED: The callback is done each time the text is
     changed by the user.
   - fltk::WHEN_RELEASE: This is the default. The callback is done when
-    the widget loses focus (ie the user clicks somewhere else, the
-    window loses focus, or the widget is hidden or destroyed)
+    the widget loses focus to another widget in the same window, or
+    the window is hidden.
   - fltk::WHEN_ENTER_KEY: If the user types the Enter key, the entire
     text is selected, and if the value has changed, the callback is
     done. Notice that this will block any widget that has Enter key as
@@ -1436,14 +1436,18 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     return 2; // returns 2 to make Group think it really important
 
   case UNFOCUS:
-	// disable input method
-	fl_set_spot(NULL, this, 0, 0);
+    // disable input method
+    fl_set_spot(NULL, this, 0, 0);
     // redraw the highlight area:
     if (mark_ != position_) minimal_update(mark_, position_);
     // else make the cursor disappear:
     else erase_cursor_at(position_);
+    if ((when()&WHEN_RELEASE) && ((Widget*)window())->contains(fltk::focus()))
+      maybe_do_callback();
+    return 1;
+
   case HIDE:
-    if (when() & WHEN_RELEASE) maybe_do_callback();
+    if (when()&WHEN_RELEASE) maybe_do_callback();
     return 1;
 
 #if 0
@@ -1649,5 +1653,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.95 2004/07/15 16:27:26 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.96 2004/09/30 06:08:29 spitzak Exp $".
 //

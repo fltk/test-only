@@ -1,5 +1,5 @@
 //
-// "$Id: FL_API.h,v 1.3 2004/09/29 16:11:25 leka Exp $"
+// "$Id: FL_API.h,v 1.4 2004/09/30 06:08:28 spitzak Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -75,5 +75,5 @@ typedef unsigned char uchar;
 #endif
 
 //
-// End of "$Id: FL_API.h,v 1.3 2004/09/29 16:11:25 leka Exp $".
+// End of "$Id: FL_API.h,v 1.4 2004/09/30 06:08:28 spitzak Exp $".
 //

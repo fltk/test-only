@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.7 2004/09/29 16:31:46 leka Exp $"
+// "$Id: Flags.h,v 1.8 2004/09/30 06:08:28 spitzak Exp $"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -90,7 +90,8 @@ enum {
   COPIED_LABEL		= 0x00008000, //!< copy_label() was called
   RAW_LABEL		= 0x00010000, //!< don't interpret & or @ in label
   LAYOUT_VERTICAL	= 0x00020000, //!< fltk::Pack puts this widget vertical
-  CLICK_TO_FOCUS	= 0x00040000, //!< Set true if clicking this widget causes it to take focus
+  TAB_TO_FOCUS		= 0x00040000, //!< Widget::tab_to_focus();
+  CLICK_TO_FOCUS	= 0x00080000, //!< Widget::click_to_focus()
   FOCUSED		= 0x00040000, //!< draw with keyboard focus
   PUSHED		= 0x00080000  //!< draw pushed-in
 };
@@ -101,5 +102,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Flags.h,v 1.7 2004/09/29 16:31:46 leka Exp $".
+// End of "$Id: Flags.h,v 1.8 2004/09/30 06:08:28 spitzak Exp $".
 //

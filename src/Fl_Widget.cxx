@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.114 2004/09/19 08:54:24 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.115 2004/09/30 06:08:30 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -69,9 +69,9 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) {
   tooltip_	= 0;
   shortcut_	= 0;
 #if CLICK_MOVES_FOCUS
-  flags_	= CLICK_TO_FOCUS;
+  flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
 #else
-  flags_	= 0;
+  flags_	= TAB_TO_FOCUS;
 #endif
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
@@ -1108,12 +1108,28 @@ void Widget::hide() {
 */
 
 /*! bool Widget::click_to_focus() const
-  If this flag is set then if this widget returns true for an
-  fltk::PUSH event then fltk will attempt to give it the focus (by
-  calling take_focus(), so it will work if this widget also returns
-  true for fltk::FOCUS events). By default fltk only turns this on on
-  certain widgets such as fltk::Input. Turning this on on all widgets
-  will make the user interface match Windows more closely.
+  If true then clicking on this widget will give it the focus (the
+  handle() method must also return non-zero for fltk::PUSH and for
+  fltk::FOCUS events).
+
+  By default fltk only turns this on on certain widgets such as
+  fltk::Input. Turning this on on all widgets will make the user
+  interface match Windows more closely.
+*/
+
+/*! bool Widget::tab_to_focus() const
+  If true then this widget can be given focus by keyboard navigation.
+  (the handle() method must also return non-zero for fltk::FOCUS events).
+
+  Turning this off with clear_tab_to_focus() will also turn off
+  the click_to_focus() flag. This is for compatability in case we
+  change the default to a more Windows-like style where all widgets
+  get the focus on clicks.
+
+  For historical reasons this flag is true on many more widgets than
+  it should be, and FLTK relies on handle() returing 0 for
+  FOCUS. This may change in the future so that more widgets have
+  this flag off.
 */
 
 /*! bool Widget::changed() const
@@ -1157,5 +1173,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.114 2004/09/19 08:54:24 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.115 2004/09/30 06:08:30 spitzak Exp $".
 //

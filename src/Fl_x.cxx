@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.192 2004/09/09 06:03:56 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.193 2004/09/30 06:08:30 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <limits.h>
-#include <locale.h>
+//#include <locale.h>
 #include <fltk/visual.h>
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
@@ -535,7 +535,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
 void fltk::open_display() {
   if (xdisplay) return;
 
-  setlocale(LC_ALL, "");
+  //setlocale(LC_ALL, "");
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
 
@@ -2333,5 +2333,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.192 2004/09/09 06:03:56 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.193 2004/09/30 06:08:30 spitzak Exp $".
 //

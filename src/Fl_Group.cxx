@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.135 2004/07/10 23:17:57 laza2000 Exp $"
+// "$Id: Fl_Group.cxx,v 1.136 2004/09/30 06:08:28 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -282,7 +282,7 @@ int Group::handle(int event) {
       Widget* f1 = 0; int ret = 0;
       for (i = 0; i < numchildren; ++i) {
 	Widget* w = child(i);
-	if (w->takesevents()) {
+	if (w->takesevents() && w->tab_to_focus()) {
 	  int n = w->handle(FOCUS);
 	  if (n) {ret = n; f1 = w; if (n & 2) break;}
 	}
@@ -292,12 +292,12 @@ int Group::handle(int event) {
     case RightKey:
     case DownKey:
       for (i=0; i < numchildren; ++i)
-	if (child(i)->take_focus()) return true;
+	if (child(i)->tab_to_focus() && child(i)->take_focus()) return true;
       return false;
     case LeftKey:
     case UpKey:
       for (i = numchildren; i--;)
-	if (child(i)->take_focus()) return true;
+	if (child(i)->tab_to_focus() && child(i)->take_focus()) return true;
       return false;
     }
 
@@ -333,7 +333,7 @@ int Group::handle(int event) {
       }
       if (i == previous) {
 	focus(0);
-	return child(i)->take_focus();
+	return child(i)->tab_to_focus() && child(i)->take_focus();
       }
       if (key == DownKey || key == UpKey) {
 	// for up/down, the widgets have to overlap horizontally:
@@ -341,7 +341,7 @@ int Group::handle(int event) {
 	Widget* p = child(previous);
 	if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
       }
-      if (child(i)->take_focus()) return true;
+      if (child(i)->tab_to_focus() && child(i)->take_focus()) return true;
     }}
 
   case PUSH:
@@ -707,5 +707,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.135 2004/07/10 23:17:57 laza2000 Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.136 2004/09/30 06:08:28 spitzak Exp $".
 //
