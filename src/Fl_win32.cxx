@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.154 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.155 2001/08/21 14:23:07 robertk Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -807,6 +807,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_RENDERALLFORMATS:
+	if(!Fl::first_window()) return 0;
     if (!OpenClipboard(fl_xid(Fl::first_window()))) return 0;
     EmptyClipboard();
     // fall through...
@@ -1272,5 +1273,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.154 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.155 2001/08/21 14:23:07 robertk Exp $".
 //

@@ -744,10 +744,6 @@ SOURCE=..\src\mediumarrow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\numericsort.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\scandir.c
 # End Source File
 # Begin Source File

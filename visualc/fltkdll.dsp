@@ -315,7 +315,6 @@ DEP_CPP_FILENAME=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
-	"..\fltk\vsnprintf.h"\
 	".\config.h"\
 	
 # End Source File
@@ -2850,16 +2849,6 @@ DEP_CPP_GLUT_F=\
 # Begin Source File
 
 SOURCE=..\src\mediumarrow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\numericsort.c
-DEP_CPP_NUMER=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	".\config.h"\
-	
 # End Source File
 # Begin Source File
 
