@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.16 1999/11/20 04:42:39 vincent Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.17 1999/11/21 06:23:23 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,20 +27,22 @@
 #include <FL/Fl_Check_Button.H>
 
 void Fl_Check_Button::draw() {
-
   // Draw the outer box as though it was a button:
   Fl_Flags f = flags();
   Fl_Color c = color();
   Fl_Color bc = off_color();
+  Fl_Color fc = on_color();
   Fl_Color lc = label_color();
   if (!active_r()) {
     bc = fl_inactive(bc);
+    fc = fl_inactive(fc);
     f |= FL_INACTIVE;
   } else if (Fl::belowmouse() == this && highlight_color()) {
     c = highlight_color();
     lc = highlight_label_color();
     f |= FL_HIGHLIGHT;
   }
+  if (!(f&FL_VALUE)) fc = bc;
   box()->draw(x(), y(), w(), h(), c,
 	      Fl::pushed()==this ? (f|FL_VALUE) : (f&~FL_VALUE));
 
@@ -48,8 +50,7 @@ void Fl_Check_Button::draw() {
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
   glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
-	  x()+d, y()+d+1, W, W, bc, (f&FL_VALUE) ? on_color() : bc,
-	  f, glyph_box());
+	  x()+d, y()+d+1, W, W, bc, fc, f, glyph_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }
@@ -64,6 +65,7 @@ static void revert(Fl_Style* s) {
   s->glyph_box = FL_DOWN_BOX;
   s->selection_color = FL_BLACK;
   s->off_color = FL_WHITE;
+  s->glyph = fl_glyph;
 }
 
 Fl_Style* Fl_Check_Button::default_style = new Fl_Named_Style("Check_Button", revert, &Fl_Check_Button::default_style);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.29 1999/11/20 04:42:40 vincent Exp $"
+// "$Id: Fl_Choice.cxx,v 1.30 1999/11/21 06:23:24 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 // as an Fl_Menu_Button.  The only difference is the appearance of the
 // button: it draws the text of the current pick and a down-arrow.
 
+
 extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
@@ -39,7 +40,7 @@ void Fl_Choice::draw() {
   box()->inset(ix, iy, iw, ih);
   // draw the tick mark:
   int H = ih - 4;
-  int X = ix + iw - H - 2;
+  int X = ix + iw - H - 5;
   int Y = y()+(h()-H)/2;
   Fl_Flags f = active_r() ? Fl::belowmouse() == this ? FL_HIGHLIGHT : 0
                             : FL_INACTIVE;
@@ -96,8 +97,14 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-Fl_Style* Fl_Choice::default_style = new Fl_Named_Style("Choice", 0, &Fl_Choice::default_style);
+
+static void revert(Fl_Style* s) {
+  s->glyph_box = FL_FLAT_BOX;
+  s->glyph = fl_glyph_choice;
+}
+
+Fl_Style* Fl_Choice::default_style = new Fl_Named_Style("Choice", revert, &Fl_Choice::default_style);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.29 1999/11/20 04:42:40 vincent Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.30 1999/11/21 06:23:24 carl Exp $".
 //

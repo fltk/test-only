@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.25 1999/11/20 04:42:41 vincent Exp $"
+// "$Id: Fl_Dial.cxx,v 1.26 1999/11/21 06:23:24 carl Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,12 +32,13 @@
 // All angles are measured with 0 to the right and counter-clockwise
 
 void Fl_Dial::draw(int x, int y, int w, int h) {
+  Fl_Flags f = active_r() ? 0 : FL_INACTIVE;
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
     if (box() == FL_OVAL_BOX) {x--; y--; w+=2; h+=2;}
     fl_color(color());
     fl_pie(x, y, w-1, h-1, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
-    fl_color(selection_color());
+    fl_color(fl_inactive(selection_color(), f));
     fl_pie(x, y, w-1, h-1, 270-angle, 270-a1);
     if (box() == FL_OVAL_BOX) {
       fl_color(off_color());
@@ -53,7 +54,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
   fl_translate(x+w/2-.5, y+h/2-.5);
   fl_scale(w-1, h-1);
   fl_rotate(45-angle);
-  fl_color(selection_color());
+  fl_color(fl_inactive(selection_color(), f));
   if (type()) { // FL_LINE_DIAL
     fl_begin_polygon();
     fl_vertex(0.0,   0.0);
@@ -61,7 +62,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
     fl_vertex(-0.25, 0.25);
     fl_vertex(0.0,   0.04);
     fl_end_polygon();
-    fl_color(highlight_color());
+    fl_color(fl_inactive(highlight_color(), f));
     fl_begin_loop();
     fl_vertex(0.0,   0.0);
     fl_vertex(-0.04, 0.0);
@@ -70,7 +71,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
     fl_end_loop();
   } else {
     fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    fl_color(highlight_color());
+    fl_color(fl_inactive(highlight_color(), f));
     fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
   }
   fl_pop_matrix();
@@ -137,5 +138,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.25 1999/11/20 04:42:41 vincent Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.26 1999/11/21 06:23:24 carl Exp $".
 //

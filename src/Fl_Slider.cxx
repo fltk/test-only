@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.31 1999/11/20 04:42:44 vincent Exp $"
+// "$Id: Fl_Slider.cxx,v 1.32 1999/11/21 06:23:26 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -45,13 +45,13 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
-void Fl_Slider::draw_bg(int x, int y, int w, int h) {
+void Fl_Slider::draw_bg(int x, int y, int w, int h, Fl_Flags f) {
   fl_color(color());
   fl_rectf(x, y, w, h);
   if (type() == FL_VERT_NICE_SLIDER) {
-    FL_THIN_DOWN_BOX->draw(x+w/2-2, y, 4, h, FL_BLACK, 0);
+    FL_THIN_DOWN_BOX->draw(x+w/2-2, y, 4, h, fl_inactive(FL_BLACK, f), f);
   } else if (type() == FL_HOR_NICE_SLIDER) {
-    FL_THIN_DOWN_BOX->draw(x, y+h/2-2, w, 4, FL_BLACK, 0);
+    FL_THIN_DOWN_BOX->draw(x, y+h/2-2, w, 4, fl_inactive(FL_BLACK, f), f);
   }
 }
 
@@ -93,12 +93,12 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
 
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
     if (X > 0) {
-      if (horizontal()) draw_bg(x, y, X, h);
-      else draw_bg(x, y, w, X);
+      if (horizontal()) draw_bg(x, y, X, h, f);
+      else draw_bg(x, y, w, X, f);
     }
     if (X+S < W) {
-      if (horizontal()) draw_bg(x+X+S, y, w-X-S, h);
-        else draw_bg(x, y+X+S, w, h-X-S);
+      if (horizontal()) draw_bg(x+X+S, y, w-X-S, h, f);
+        else draw_bg(x, y+X+S, w, h-X-S, f);
     }
   }
 
@@ -199,10 +199,11 @@ int Fl_Slider::handle(int event) {
 static void revert(Fl_Style *s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_DARK2;
+  s->glyph = fl_glyph;
 }
 
 Fl_Style* Fl_Slider::default_style = new Fl_Named_Style("Slider", revert, &Fl_Slider::default_style);
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.31 1999/11/20 04:42:44 vincent Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.32 1999/11/21 06:23:26 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.12 1999/11/20 04:42:51 vincent Exp $"
+// "$Id: essai.cxx,v 1.13 1999/11/21 06:23:36 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -46,6 +46,7 @@
 #include <FL/Fl_Shared_Image.H>
 
 class Fl_Image_Box : public Fl_Boxtype_ {
+  Fl_Flags mask;
   void inset(int& x,int& y,int& w,int& h) const {fl_up_box.inset(x,y,w,h);}
   int fills_rectangle() const {return true;}
 public:
@@ -53,7 +54,7 @@ public:
   Fl_Shared_Image* normal_img;
   Fl_Shared_Image* down_img;
   Fl_Shared_Image* highlight_img;
-  Fl_Image_Box(char*, char*, char*);
+  Fl_Image_Box(char*, char*, char*, Fl_Flags = 0);
 };
 
 void Fl_Image_Box::draw(int x, int y, int w, int h,
@@ -65,15 +66,15 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   else if (flags&FL_HIGHLIGHT) img = highlight_img;
   else img = normal_img;
 
-  fl_up_box.draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
+  fl_normal_box.draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~mask));
   if (!(flags&FL_FRAME_ONLY)) {
-    fl_up_box.inset(x,y,w,h);
+    fl_normal_box.inset(x,y,w,h);
     img->draw_tiled(x,y,w,h, -w/2, -h/2);
   }
 }
 
-Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b) :
-Fl_Boxtype_(0) {
+Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b, Fl_Flags m) :
+Fl_Boxtype_(0), mask(m) {
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
   down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
   highlight_img = Fl_JPEG_Image::get(fl_find_config_file(highlight_b));
@@ -82,7 +83,7 @@ Fl_Boxtype_(0) {
 class Fl_Image_NoBorderBox : public Fl_Image_Box {
   void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
 public:
-  Fl_Image_NoBorderBox(char*a, char*b, char*c) : Fl_Image_Box(a,b,c) {}
+  Fl_Image_NoBorderBox(char*a, char*b, char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {}
 };
 
 void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
@@ -105,12 +106,13 @@ int fltk_theme(int, char** argv) {
 
   fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
-  Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
+  Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
   Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
+  Fl_Boxtype box3 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
   Fl_Widget::default_style->set_box(box1);
   Fl_Widget::default_style->set_glyph_box(box1);
-  Fl_Widget::default_style->set_highlight_color(FL_GRAY);
+  Fl_Widget::default_style->set_highlight_color(FL_LIGHT2);
   Fl_Style* s;
   if ((s = Fl_Style::find("window"))) {
     s->set_box(flat1);
@@ -138,9 +140,12 @@ int fltk_theme(int, char** argv) {
   if ((s = Fl_Style::find("tabs"))) {
     s->set_box(box1);
   }
+  if ((s = Fl_Style::find("light button"))) {
+    s->set_box(box3);
+  }
   return 0;
 }
 
 //
-// End of "$Id: essai.cxx,v 1.12 1999/11/20 04:42:51 vincent Exp $".
+// End of "$Id: essai.cxx,v 1.13 1999/11/21 06:23:36 carl Exp $".
 //

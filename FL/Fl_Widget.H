@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.38 1999/11/20 04:42:31 vincent Exp $"
+// "$Id: Fl_Widget.H,v 1.39 1999/11/21 06:23:16 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -170,7 +170,6 @@ public:
 
   void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
   void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
-  void box2(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
   void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (const void*)a);}
   void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
   void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
@@ -281,5 +280,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.38 1999/11/20 04:42:31 vincent Exp $".
+// End of "$Id: Fl_Widget.H,v 1.39 1999/11/21 06:23:16 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.62 1999/11/16 07:36:07 bill Exp $"
+// "$Id: Fl.cxx,v 1.63 1999/11/21 06:23:22 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -620,6 +620,9 @@ extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 
 extern int fl_scheme_loaded;
 
+extern const char* fl_up_box_revert;
+extern const char* fl_down_box_revert;
+
 void Fl_Window::show() {
   if (parent()) {
     set_visible();
@@ -631,6 +634,8 @@ void Fl_Window::show() {
 #endif
     if (!fl_scheme_loaded) {
       fl_scheme_loaded = 1;
+      strcpy(fl_up_box_data, fl_up_box_revert);
+      strcpy(fl_down_box_data, fl_down_box_revert);
       if (Fl::use_themes) Fl::loadtheme();
       if (Fl::use_schemes) Fl::loadscheme();
     }
@@ -815,5 +820,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.62 1999/11/16 07:36:07 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.63 1999/11/21 06:23:22 carl Exp $".
 //

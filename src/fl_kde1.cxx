@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.10 1999/11/19 10:06:52 bill Exp $"
+// "$Id: fl_kde1.cxx,v 1.11 1999/11/21 06:23:29 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -117,8 +117,8 @@ int fl_kde1() {
     }
   } else {
     Fl_Style::inactive_color_weight = 0.15f;
-    fl_up_box.data = "2AAXXIIUU";
-    fl_down_box.data = "2XXIIUUAA";
+    strcpy(fl_up_box_data, "2AAXXIIUU");
+    strcpy(fl_down_box_data, "2XXIIUUAA");
 
     if ((style = Fl_Style::find("menu window"))) {
       style->set_box(&kdewin_menu_window_box);
@@ -161,5 +161,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.10 1999/11/19 10:06:52 bill Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.11 1999/11/21 06:23:29 carl Exp $".
 //

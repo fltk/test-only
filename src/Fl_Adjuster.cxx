@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.19 1999/11/20 04:42:37 vincent Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.20 1999/11/21 06:23:23 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,16 +26,6 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Adjuster.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Bitmap.H>
-
-#include "fastarrow.h"
-static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
-#include "mediumarrow.h"
-static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
-#include "slowarrow.h"
-static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
-
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
 
@@ -50,31 +40,20 @@ void Fl_Adjuster::draw() {
   }
 
   Fl_Flags f[4];
-  Fl_Color fc[4];
   for (int i = 1; i < 4; i++) {
     f[i] = flags();
-    fc[i] = label_color();
-    if (!active_r()) { f[i] |= FL_INACTIVE; fc[i] = fl_inactive(fc[i]); }
-    else if (drag == i) { f[i] |= FL_VALUE; fc[i] = selection_text_color(); }
-    else if (highlight == i && highlight_color())
-      { f[i] |= FL_HIGHLIGHT; fc[i] = highlight_label_color(); }
+    if (!active_r()) f[i] |= FL_INACTIVE;
+    else if (drag == i) f[i] |= FL_VALUE;
+    else if (highlight == i && highlight_color()) f[i] |= FL_HIGHLIGHT;
   }
 
-  if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1) {
-    draw_glyph(0, x(), y()+2*dy, W, H, f[1]);
-    fl_color(fc[1]);
-    fastarrow.draw(x(), y()+2*dy, W, H, FL_ALIGN_CENTER);
-  }
-  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2) {
-    draw_glyph(0, x()+dx, y()+dy, W, H, f[2]);
-    fl_color(fc[2]);
-    mediumarrow.draw(x()+dx, y()+dy, W, H, FL_ALIGN_CENTER);
-  }
-  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3) {
-    draw_glyph(0, x()+2*dx, y(), W, H, f[3]);
-    fl_color(fc[3]);
-    slowarrow.draw(x()+2*dx, y(), W, H, FL_ALIGN_CENTER);
-  }
+  if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
+    draw_glyph(FL_GLYPH_FASTARROW, x(), y()+2*dy, W, H, f[1]);
+  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
+    draw_glyph(FL_GLYPH_MEDIUMARROW, x()+dx, y()+dy, W, H, f[2]);
+  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
+    draw_glyph(FL_GLYPH_SLOWARROW, x()+2*dx, y(), W, H, f[3]);
+
   last = highlight;
 }
 
@@ -158,8 +137,12 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   soft_ = 1;
 }
 
-Fl_Style* Fl_Adjuster::default_style = new Fl_Named_Style("Adjuster", 0, &Fl_Adjuster::default_style);
+static void revert(Fl_Style* s) {
+  s->glyph = fl_glyph_adjuster;
+}
+
+Fl_Style* Fl_Adjuster::default_style = new Fl_Named_Style("Adjuster", revert, &Fl_Adjuster::default_style);
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.19 1999/11/20 04:42:37 vincent Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.20 1999/11/21 06:23:23 carl Exp $".
 //

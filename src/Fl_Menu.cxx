@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.65 1999/11/20 04:42:43 vincent Exp $"
+// "$Id: Fl_Menu.cxx,v 1.66 1999/11/21 06:23:25 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -77,6 +77,7 @@ static Fl_Style* menuwindow_default_style = new Fl_Named_Style("Menu_Window", mw
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
   s->glyph_box = FL_DOWN_BOX;
+  s->glyph = fl_glyph;
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
@@ -89,7 +90,8 @@ Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_rever
 // only the box, selection, and highlight colors are used):
 
 static void mt_revert(Fl_Style* s) {
-  s->box = FL_HIGHLIGHT_UP_BOX;
+  s->glyph = fl_glyph;
+  s->box = FL_HIGHLIGHT_BOX;
 // all other colors are zero
 //   s->selection_color = FL_BLUE_SELECTION_COLOR;
 //   s->selection_text_color = FL_WHITE;
@@ -205,7 +207,8 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
   case 1: // selected menu item
     lflags |= (FL_VALUE|FL_ALIGN_LEFT);
     lcolor = selection_color();
-    if (!(flags()&FL_MENU_INACTIVE)) llabel_color = selection_text_color();
+    if (!(flags()&FL_MENU_INACTIVE) || !Fl_Style::inactive_menu_hack)
+      llabel_color = selection_text_color();
     break;
   case 2: // title or menubar item when menu popped up
     lflags |= (FL_VALUE|FL_ALIGN_CENTER);
@@ -261,7 +264,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
   fl_font(label_font(), label_size());
   // hack so that selected menu items aren't drawn inactive--
   // just with inactive color
-  if (selected == 1 && lflags&FL_INACTIVE)
+  if (selected == 1 && lflags&FL_INACTIVE && Fl_Style::inactive_menu_hack)
     { llabel_color = fl_inactive(llabel_color); lflags &= (~FL_INACTIVE); }
   label_type()->draw(label(), x+3, y, w>6 ? w-6 : 0, h, llabel_color, lflags);
   fl_draw_shortcut = 0;
@@ -403,27 +406,33 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
 
   m->draw(x, y, w, h, button, (i == selected));
 
-  Fl_Color fc = m->label_color(), bc = color();
   Fl_Flags f = 0;
-  if (m->active()) {
-    if (i == selected) {
-      bc = m->selection_color();
+  if (!m->active()) f = FL_INACTIVE;
+
+  Fl_Color fc = m->label_color(), bc = color();
+  if (i == selected) {
+    bc = m->selection_color();
+    if (m->active() || !Fl_Style::inactive_menu_hack)
       fc = m->selection_text_color();
-      f = FL_VALUE;
-    }
-  } else {
-    f = FL_INACTIVE;
+    if (m->active()) f |= FL_VALUE;
   }
 
+  // hack so that selected menu items aren't drawn inactive--
+  // just with inactive color
+  if (i == selected && !m->active() && Fl_Style::inactive_menu_hack)
+    { fc = fl_inactive(fc); f = 0; }
   if (m->submenu()) {
     int X=x; int Y=y; int W=w; int H=h;
     m->box()->inset(X,Y,W,H);
-    glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc,f, FL_NO_BOX);
+    // we need the leading() part so that the height is based solely on the
+    // itemheight and not on leading().  Necessary to get the size of the
+    // arrow right for themes because leading() really screws things up
+    H -= leading();
+    Y += leading()/2;
+    fc = fl_inactive(fc, f);
+    m->glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
-    // hack so that selected menu items aren't drawn inactive--
-    // just with inactive color
-    if (i == selected && !m->active()) { fc = fl_inactive(fc); f = 0; }
     m->label_type()->draw(fl_shortcut_label(m->shortcut_), x, y, w-3, h,
                           fc, f|FL_ALIGN_RIGHT);
   }
@@ -855,5 +864,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.65 1999/11/20 04:42:43 vincent Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.66 1999/11/21 06:23:25 carl Exp $".
 //

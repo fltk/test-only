@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.23 1999/11/20 04:42:41 vincent Exp $"
+// "$Id: Fl_Counter.cxx,v 1.24 1999/11/21 06:23:24 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,19 +25,16 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Counter.H>
-#include <FL/fl_draw.H>
 #include <FL/Fl_Output.H>
+#include <FL/fl_draw.H>
 
 void Fl_Counter::draw() {
   Fl_Flags fl[5];
-  Fl_Color fc[5];
   for (int i = 1; i < 5; i++) {
     fl[i] = flags();
-    fc[i] = label_color();
-    if (!active_r()) { fl[i] |= FL_INACTIVE; fc[i] = fl_inactive(fc[i]); }
-    else if (mouseobj == i) { fl[i] |= FL_VALUE; fc[i] = selection_text_color(); }
-    else if (highlight == i && highlight_color())
-      { fl[i] |= FL_HIGHLIGHT; fc[i] = highlight_label_color(); }
+    if (!active_r()) fl[i] |= FL_INACTIVE;
+    else if (mouseobj == i) fl[i] |= FL_VALUE;
+    else if (highlight == i && highlight_color()) fl[i] |= FL_HIGHLIGHT;
   }
 
   int xx[5], ww[5];
@@ -66,24 +63,14 @@ void Fl_Counter::draw() {
 
   if (type() == FL_NORMAL_COUNTER &&
       (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1))
-  {
-    draw_glyph(0, xx[1], y(), ww[1], h(), fl[1]);
-    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), fc[1]);
-  }
-  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2) {
-    draw_glyph(0, xx[2], y(), ww[2], h(), fl[2]);
-    fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), fc[2]);
-  }
-  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3) {
-    draw_glyph(0, xx[3], y(), ww[3], h(), fl[3]);
-    fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), fc[3]);
-  }
+    draw_glyph(FL_GLYPH_2LEFTARROW, xx[1], y(), ww[1], h(), fl[1]);
+  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
+    draw_glyph(FL_GLYPH_LEFTARROW, xx[2], y(), ww[2], h(), fl[2]);
+  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
+    draw_glyph(FL_GLYPH_RIGHTARROW, xx[3], y(), ww[3], h(), fl[3]);
   if (type() == FL_NORMAL_COUNTER &&
       (damage()&FL_DAMAGE_ALL || last == 4 || highlight == 4))
-  {
-    draw_glyph(0, xx[4], y(), ww[4], h(), fl[4]);
-    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), fc[4]);
-  }
+    draw_glyph(FL_GLYPH_2RIGHTARROW, xx[4], y(), ww[4], h(), fl[4]);
   last = highlight;
 }
 
@@ -176,10 +163,11 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 static void revert(Fl_Style *s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_LIGHT2;
+  s->glyph = fl_glyph_arrow;
 }
 
 Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.23 1999/11/20 04:42:41 vincent Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.24 1999/11/21 06:23:24 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.8 1999/11/05 21:43:57 carl Exp $"
+// "$Id: buttons.cxx,v 1.9 1999/11/21 06:23:32 carl Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Radio_Button.H>
 #include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Fly_Button.H>
+#include <FL/Fl_Highlight_Button.H>
 #include <FL/Fl_Style.H>
 
 void rb_cb(Fl_Widget*, void*) {
@@ -51,7 +51,7 @@ int main(int argc, char ** argv) {
   (void) new Fl_Radio_Button(150,90,160,30,"Fl_Radio_Button");
   (void) new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
   (void) new Fl_Check_Button(150,130,160,30,"Fl_Check_Button");
-  (void) new Fl_Fly_Button(10,130,130,30,"Fl_Fly_Button");
+  (void) new Fl_Highlight_Button(10,130,130,30,"Fl_Highlight_Button");
   
   window->resizable(window);
   window->end();
@@ -60,5 +60,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.8 1999/11/05 21:43:57 carl Exp $".
+// End of "$Id: buttons.cxx,v 1.9 1999/11/21 06:23:32 carl Exp $".
 //

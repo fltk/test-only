@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Fly_Button.H,v 1.9 1999/11/20 04:42:28 vincent Exp $"
+// "$Id: Fl_Highlight_Button.H,v 1.1 1999/11/21 06:23:16 carl Exp $"
 //
-// Fly button header file for the Fast Light Tool Kit (FLTK).
+// Highlight button header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,18 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Fly_Button_H
-#define Fl_Fly_Button_H
+#ifndef Fl_Highlight_Button_H
+#define Fl_Highlight_Button_H
 #include "Fl_Button.H"
 
-class FL_API Fl_Fly_Button : public Fl_Button {
+class FL_API Fl_Highlight_Button : public Fl_Button {
   static Fl_Style* default_style;
 public:
-  Fl_Fly_Button(int x,int y,int w,int h,const char *l=0);
+  Fl_Highlight_Button(int x,int y,int w,int h,const char *l=0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Fly_Button.H,v 1.9 1999/11/20 04:42:28 vincent Exp $".
+// End of "$Id: Fl_Highlight_Button.H,v 1.1 1999/11/21 06:23:16 carl Exp $".
 //

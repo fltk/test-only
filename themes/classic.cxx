@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.9 1999/11/20 04:42:51 vincent Exp $"
+// "$Id: classic.cxx,v 1.10 1999/11/21 06:23:36 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -41,8 +41,8 @@ extern "C" int fltk_theme(int, char**);
 int fltk_theme(int, char**) {
   Fl_Style::revert(); // revert to FLTK default styles
 
-  fl_up_box.data = "AAAAWUJJUTNN";
-  fl_down_box.data = "NNTUJJUWAAAA";
+  strcpy(fl_up_box_data, "AAAAWUJJUTNN");
+  strcpy(fl_down_box_data, "NNTUJJUWAAAA");
   Fl_Style* s;
   if ((s = Fl_Style::find("menu_item"))) {
     s->set_box(FL_FLAT_BOX);
@@ -52,11 +52,10 @@ int fltk_theme(int, char**) {
     s->set_off_color(FL_GRAY);
   }
   if ((s = Fl_Style::find("check_button"))) {
-    s->set_on_color(FL_GRAY);
+    s->set_on_color(FL_BLACK);
     s->set_off_color(FL_GRAY);
   }
   Fl_Widget::default_style->set_highlight_color(0);
-  Fl_Widget::default_style->set_glyph(fl_glyph);
   if ((s = Fl_Style::find("scrollbar"))) {
     s->set_box(FL_FLAT_BOX);
   }
@@ -79,5 +78,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.9 1999/11/20 04:42:51 vincent Exp $".
+// End of "$Id: classic.cxx,v 1.10 1999/11/21 06:23:36 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.28 1999/11/21 04:23:04 vincent Exp $"
+// "$Id: fl_options.cxx,v 1.29 1999/11/21 06:23:30 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -96,7 +96,6 @@ static Fl_Color grok_color(const char* cf, const char *colstr) {
   return fl_rgb(p);
 }
 
-
 static Fl_Font grok_font(const char* cf, const char* fontstr) {
   char key[80], val[80];
   const char *p = fontstr;
@@ -132,120 +131,6 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   return 0;
 }
 
-#ifdef WIN32
-static Fl_Color win_color(int wincol) {
-  int R = wincol&0xff;
-  int G = (wincol >> 8)&0xff;
-  int B = (wincol >> 16)&0xff;
-  Fl_Color col = fl_rgb(R, G, B);
-  if (col) return col;
-  return FL_BLACK;
-}
-
-static void windows_colors() {
-  Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
-  Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
-  Fl_Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
-  Fl_Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
-  Fl_Color window_background = win_color(GetSysColor(COLOR_WINDOW));
-  Fl_Color window_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
-  Fl_Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
-  Fl_Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
-  Fl_Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
-  Fl_Color tooltip_foreground = win_color(GetSysColor(COLOR_INFOTEXT));
-// Windows doesn't seem to honor this one
-// Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
-
-  fl_background(background);
-  Fl_Widget::default_style.set_off_color(background);
-
-  Fl_Widget::default_style.set_label_color(foreground);
-  Fl_Widget::default_style.set_highlight_label_color(foreground);
-  Fl_Widget::default_style.set_selection_text_color(foreground);
-
-  Fl_Widget::default_style.set_text_color(window_foreground);
-
-  Fl_Style* style;
-  if ((style = Fl_Style::find("input"))) {
-    style->set_off_color(foreground); // cursor
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("output"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("counter"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-  }
-
-  if ((style = Fl_Style::find("browser"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("check button"))) {
-    style->set_selection_color(window_foreground);
-    style->set_off_color(window_background);
-  }
-
-  if ((style = Fl_Style::find("scrollbar"))) {
-//    style->set_color(fl_color_average(slider_background, window_background, .5));
-    style->set_color(fl_color_average(background, window_background, .5));
-  }
-
-  if ((style = Fl_Style::find("menu item"))) {
-    style->set_color(menuitem_background);
-    style->set_label_color(menuitem_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("menu title"))) {
-    style->set_highlight_color(background);
-    style->set_highlight_label_color(foreground);
-    style->set_selection_color(background);
-    style->set_selection_text_color(foreground);
-  }
-
-  if ((style = Fl_Style::find("tooltip"))) {
-    style->set_color(tooltip_background);
-    style->set_label_color(tooltip_foreground);
-  }
-
-/* CET - FIXME - Font stuff not yet implemented
-
-   This needs either a working
-
-      Fl_Font fl_font(const char* fontname)
-
-   or
-
-      int fl_list_fonts(Fl_Font* fontlist)
-
-   Currently, the Windows code has neither.  :-(
-
-
-  if (font) {
-    if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style.set_label_font(font);
-    Fl_Widget::default_style.set_text_font(font);
-    Fl_Widget::default_style.set_label_size(fontsize);
-    Fl_Widget::default_style.set_text_size(fontsize);
-  }
-*/
-}
-#endif
-
 int Fl::loadscheme(int b) {
   use_schemes = b;
   if (!b) return 0;
@@ -262,7 +147,7 @@ int Fl::loadscheme(int b) {
     return -1;
 #else
   // use the real Windows colors
-  windows_colors();
+  fl_windows_colors();
   return 0;
 #endif
   }
@@ -429,16 +314,19 @@ int Fl::loadtheme(int b) {
   use_themes = b;
   if (!b) return 0;
 
-  char temp[PATH_MAX+5];
+  char temp[PATH_MAX];
   if (is_path_rooted(theme())) strncpy(temp, theme(), sizeof(temp));
   else snprintf(temp, sizeof(temp), "themes/%s", theme());
 
-  strcat(temp, ".fltp");
   const char *tfile = fl_find_config_file(temp);
   if (!tfile) {
-    if (strcasecmp(temp, "themes/default.fltp"))
-      fprintf(stderr, "Cannot load theme: %s\n", temp);
-    return -1;
+    strncat(temp, ".fltp", sizeof(temp)-strlen(temp)-1);
+    tfile = fl_find_config_file(temp);
+    if (!tfile) {
+      if (strcasecmp(temp, "themes/default.fltp"))
+        fprintf(stderr, "Cannot load theme: %s\n", temp);
+      return -1;
+    }
   }
 
   use_schemes = 1;
@@ -475,6 +363,123 @@ const char* Fl::theme() {
   return t;
 }
 
+
+#ifdef WIN32
+static Fl_Color win_color(int wincol) {
+  int R = wincol&0xff;
+  int G = (wincol >> 8)&0xff;
+  int B = (wincol >> 16)&0xff;
+  Fl_Color col = fl_rgb(R, G, B);
+  if (col) return col;
+  return FL_BLACK;
+}
+#endif
+
+int fl_windows_colors() {
+#ifdef WIN32
+  Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
+  Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
+  Fl_Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
+  Fl_Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
+  Fl_Color window_background = win_color(GetSysColor(COLOR_WINDOW));
+  Fl_Color window_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
+  Fl_Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
+  Fl_Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
+  Fl_Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
+  Fl_Color tooltip_foreground = win_color(GetSysColor(COLOR_INFOTEXT));
+// Windows doesn't seem to honor this one
+// Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
+
+  fl_background(background);
+  Fl_Widget::default_style.set_off_color(background);
+
+  Fl_Widget::default_style.set_label_color(foreground);
+  Fl_Widget::default_style.set_highlight_label_color(foreground);
+  Fl_Widget::default_style.set_selection_text_color(foreground);
+
+  Fl_Widget::default_style.set_text_color(window_foreground);
+
+  Fl_Style* style;
+  if ((style = Fl_Style::find("input"))) {
+    style->set_off_color(foreground); // cursor
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("output"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("counter"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+  }
+
+  if ((style = Fl_Style::find("browser"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("check button"))) {
+    style->set_selection_color(window_foreground);
+    style->set_off_color(window_background);
+  }
+
+  if ((style = Fl_Style::find("scrollbar"))) {
+//    style->set_color(fl_color_average(slider_background, window_background, .5));
+    style->set_color(fl_color_average(background, window_background, .5));
+  }
+
+  if ((style = Fl_Style::find("menu item"))) {
+    style->set_color(menuitem_background);
+    style->set_label_color(menuitem_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("menu title"))) {
+    style->set_highlight_color(background);
+    style->set_highlight_label_color(foreground);
+    style->set_selection_color(background);
+    style->set_selection_text_color(foreground);
+  }
+
+  if ((style = Fl_Style::find("tooltip"))) {
+    style->set_color(tooltip_background);
+    style->set_label_color(tooltip_foreground);
+  }
+
+/* CET - FIXME - Font stuff not yet implemented
+
+   This needs either a working
+
+      Fl_Font fl_font(const char* fontname)
+
+   or
+
+      int fl_list_fonts(Fl_Font* fontlist)
+
+   Currently, the Windows code has neither.  :-(
+
+
+  if (font) {
+    if (*fontencoding) fl_encoding = fontencoding;
+    Fl_Widget::default_style.set_label_font(font);
+    Fl_Widget::default_style.set_text_font(font);
+    Fl_Widget::default_style.set_label_size(fontsize);
+    Fl_Widget::default_style.set_text_size(fontsize);
+  }
+*/
+#endif
+  return 0;
+}
 
 const char* fl_find_config_file(const char* fn) {
   static char path[PATH_MAX];
@@ -518,9 +523,10 @@ void Fl_Style::revert() {
   fl_theme_handler(0);
 
   fl_background((Fl_Color)0xc0c0c000);
-  fl_up_box.data = fl_up_box_revert;
-  fl_down_box.data = fl_down_box_revert;
+  strcpy(fl_up_box_data, fl_up_box_revert);
+  strcpy(fl_down_box_data, fl_down_box_revert);
   Fl_Style::draw_boxes_inactive = 1;
+  Fl_Style::inactive_menu_hack = 0;
   Fl_Style::inactive_color_weight = 0.33f;
 
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
@@ -533,7 +539,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.28 1999/11/21 04:23:04 vincent Exp $".
+// End of "$Id: fl_options.cxx,v 1.29 1999/11/21 06:23:30 carl Exp $".
 //
 
 

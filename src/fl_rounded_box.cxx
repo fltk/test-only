@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.10 1999/11/19 10:06:54 bill Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.11 1999/11/21 06:23:31 carl Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ const Fl_RFlat_Box fl_rflat_box(0);
 void Fl_Rounded_Box::draw(int x, int y, int w, int h,
 			  Fl_Color c, Fl_Flags f) const {
   fl_color(c); rbox(1, x, y, w, h);
-  fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
+  fl_color(fl_inactive(FL_BLACK, f));
   rbox(0, x, y, w, h);
 }
 void Fl_Rounded_Box::inset(int& x,int& y,int& w,int& h) const {
@@ -91,5 +91,5 @@ int Fl_RShadow_Box::fills_rectangle() const {return false;}
 const Fl_RShadow_Box fl_rshadow_box(0);
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.10 1999/11/19 10:06:54 bill Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.11 1999/11/21 06:23:31 carl Exp $".
 //

@@ -24,7 +24,11 @@ FLTK version = 2.0.0
   [widgets/default]
     box = motif thick
     label font = courier
+    text font = courier
     label size = 12
+
+  [widgets/light button]
+    box = motif thick up
 
   [widgets/window]
     box = motif thick
@@ -42,10 +46,10 @@ FLTK version = 2.0.0
     box = motif thick
 
   [widgets/menu item]
-    box = motif thick title
+    box = motif thick menu
 
   [widgets/menu title]
-    box = motif thick title
+    box = motif thick menu
 
 #  [widgets/scrollbar]
 #    box = motif thick down

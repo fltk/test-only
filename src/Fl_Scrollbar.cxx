@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.32 1999/11/20 04:42:44 vincent Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.33 1999/11/21 06:23:26 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -239,6 +239,7 @@ void Fl_Scrollbar::draw() {
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
   s->color = FL_DARK2;
+  s->glyph = fl_glyph;
 }
 
 Fl_Style* Fl_Scrollbar::default_style = new Fl_Named_Style("Scrollbar", revert, &Fl_Scrollbar::default_style);
@@ -254,5 +255,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.32 1999/11/20 04:42:44 vincent Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.33 1999/11/21 06:23:26 carl Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Fly_Button.cxx,v 1.10 1999/11/20 04:42:41 vincent Exp $"
+// "$Id: fl_glyph_arrow.cxx,v 1.1 1999/11/21 06:23:28 carl Exp $"
 //
-// Fly button widget for the Fast Light Tool Kit (FLTK).
+// Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,22 +24,22 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/Fl_Fly_Button.H>
+#include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
-Fl_Fly_Button::Fl_Fly_Button(int x,int y,int w,int h,const char *l)
-  : Fl_Button(x,y,w,h,l)
+void fl_glyph_arrow(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
+                      Fl_Flags f, Fl_Boxtype box)
 {
-  style(default_style);
-}
+  box->draw(x,y,w,h, bc, f);
 
-static void revert(Fl_Style* s) {
-  s->box = FL_HIGHLIGHT_BOX;
-  s->highlight_color = FL_LIGHT1;
+  switch (t) {
+    case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x, y, w, h, fc); break;
+    case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x, y, w, h, fc); break;
+    case FL_GLYPH_RIGHTARROW: fl_draw_symbol("@-4>",  x, y, w, h, fc); break;
+    case FL_GLYPH_2RIGHTARROW: fl_draw_symbol("@-4>>", x, y, w, h, fc); break;
+  }
 }
-
-Fl_Style* Fl_Fly_Button::default_style = new Fl_Named_Style("Fly_Button", revert, &Fl_Fly_Button::default_style);
 
 //
-// End of "$Id: Fl_Fly_Button.cxx,v 1.10 1999/11/20 04:42:41 vincent Exp $".
+// End of "$Id: fl_glyph_arrow.cxx,v 1.1 1999/11/21 06:23:28 carl Exp $".
 //

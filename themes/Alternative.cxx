@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.11 1999/11/20 04:42:51 vincent Exp $"
+// "$Id: Alternative.cxx,v 1.12 1999/11/21 06:23:35 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -30,11 +30,14 @@
 #include <FL/fl_draw.H>
 
 // a couple of of new boxtypes (look familiar?)
-static const Fl_Frame_Box alt_down_box("alternative down", "NNUUJJXXAAAA");
+static const Fl_Frame_Box
+alt_thick_down_box("alternative thick down", "NNUUJJXXAAAA");
 
-static const Fl_Frame_Box alt_up_box("alternative up", "AAAAXXJJUUNN");
+static const Fl_Frame_Box
+alt_thick_up_box("alternative thick up", "AAAAXXJJUUNN");
 
-static const Fl_Highlight_Box alt_menu_box("alternative menu",FL_THIN_DOWN_BOX);
+static const Fl_Frame_Box
+alt_thick_box("alternative thick", &alt_thick_up_box, &alt_thick_down_box);
 
 // some old stuff for boxtype drawing
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -86,9 +89,12 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
   }
 }
 
+static Fl_Glyph check_glyph = 0;
+
 // a new glyph function
-static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-                Fl_Flags f, Fl_Boxtype box)
+static void
+alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+          Fl_Flags f, Fl_Boxtype box)
 {
   switch (t) {
     case FL_GLYPH_LIGHT:
@@ -96,7 +102,8 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
       FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f);
       break;
     case FL_GLYPH_CHECK: {
-      if (box == FL_NO_BOX) { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+      if (box == FL_NO_BOX)
+        { if (check_glyph) check_glyph(t, x, y, w, h, bc, fc, f, box); break; }
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
@@ -106,38 +113,46 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
         { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
       fl_color((f&FL_VALUE) ? fc : bc); fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
 
-      fl_color(dark); fl_line(x, y1, x1, y, x+w-1, y1);
-      fl_color(dark); fl_line(x+1, y1, x1, y+1, x+w-2, y1);
-      fl_color(light); fl_line(x+2, y1, x1, y+2, x+w-3, y1);
+      fl_color(dark);
+      fl_line(x,   y1, x1, y,   x+w-1, y1);
+      fl_line(x+1, y1, x1, y+1, x+w-2, y1);
+      fl_color(light);
+      fl_line(x+2, y1, x1, y+2, x+w-3, y1);
+      fl_line(x+3, y1, x1, y+3, x+w-4, y1);
 
-      fl_color(light); fl_line(x, y1, x1, y+h-1, x+w-1, y1);
-      fl_color(light); fl_line(x+1, y1, x1, y+h-2, x+w-2, y1);
-      fl_color(dark); fl_line(x+2, y1, x1, y+h-3, x+w-3, y1);
+      fl_color(light);
+      fl_line(x,   y1, x1, y+h-1, x+w-1, y1);
+      fl_line(x+1, y1, x1, y+h-2, x+w-2, y1);
+      fl_color(dark);
+      fl_line(x+2, y1, x1, y+h-3, x+w-3, y1);
+      fl_line(x+3, y1, x1, y+h-4, x+w-4, y1);
       break;
     }
     case FL_GLYPH_RADIO: {
-      if (box == FL_NO_BOX) { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+      if (box == FL_NO_BOX)
+        { if (check_glyph) check_glyph(t, x, y, w, h, bc, fc, f, box); break; }
       Fl_Color light = 54, dark = 32;
 
       if (f&FL_INACTIVE)
         { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
       draw(FILL, x+2, y+2, w-4, h-4, 0, (f&FL_VALUE) ? fc : bc);
 
-      draw(UPPER_LEFT, x+1, y, w-2, h, 0, dark);
+//      draw(UPPER_LEFT, x+1, y, w-2, h, 0, dark);
       draw(UPPER_LEFT, x, y, w, h, 0, dark);
       draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, dark);
       draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, light);
 
-      draw(LOWER_RIGHT, x+1, y, w-2, h, 0, light);
+//      draw(LOWER_RIGHT, x+1, y, w-2, h, 0, light);
       draw(LOWER_RIGHT, x, y, w, h, 0, light);
       draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, light);
       draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, dark);
+
       break;
     }
     case FL_GLYPH_HSLIDER: {
       box->draw(x,y,w,h, bc, f);
       box->inset(x,y,w,h);
-      FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, fc, f);
+      if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, fc, f);
       if (w>18) {
         FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, fc, f);
         FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, fc, f);
@@ -147,7 +162,7 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
     case FL_GLYPH_VSLIDER: {
       box->draw(x,y,w,h, bc, f);
       box->inset(x,y,w,h);
-      FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, fc, f);
+      if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, fc, f);
       if (h>18) {
         FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, fc, f);
         FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, fc, f);
@@ -158,12 +173,12 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN: {
-      if (box == FL_NO_BOX) { x += 4; y += 4; w -= 8; h -= 8; } // menu fudge factor
+      if (box == FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // menu fudge factor
       Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
-        d1 = FL_WHITE; d2 = FL_LIGHT2; l1 = FL_BLACK; l2 = FL_DARK2;
+        d1 = FL_LIGHT3; d2 = FL_LIGHT1; l1 = FL_BLACK; l2 = FL_DARK2;
       } else{
-        l1 = FL_WHITE; l2 = FL_LIGHT2; d1 = FL_BLACK; d2 = FL_DARK2;
+        l1 = FL_LIGHT3; l2 = FL_LIGHT1; d1 = FL_BLACK; d2 = FL_DARK2;
       }
 
       if (f&FL_INACTIVE) {
@@ -198,11 +213,44 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
       }
       break;
     }
+    case FL_GLYPH_VNSLIDER: {
+      box->draw(x,y,w,h, bc, f);
+      int d = (h-4)/2;
+      FL_THIN_UP_BOX->draw(x+2, y+d, w-4, h-2*d, fc);
+      break;
+    }
+    case FL_GLYPH_HNSLIDER: {
+      box->draw(x,y,w,h, bc, f);
+      int d = (w-4)/2;
+      FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
+      break;
+    }
+    case FL_GLYPH_CHOICE: {
+      int H = h/3;
+      int Y = y + (h-H)/2;
+      box->draw(x,Y,w,H, bc, f);
+      break;
+    }
+    case FL_GLYPH_RETURN: {
+      int size = w; if (h<size) size = h;
+      int d = (size+2)/4; if (d<3) d = 3;
+      int t = (size+9)/12; if (t<1) t = 1;
+      int x0 = x+(w-2*d-2*t-1)/2;
+      int x1 = x0+d;
+      int y0 = y+h/2;
+      fl_color(fl_inactive(FL_DARK3, f));
+      fl_line(x0, y0, x1, y0+d);
+      fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
+      fl_yxline(x1, y0-t, y0-d);
+      fl_color(fl_inactive(FL_LIGHT2, f));
+      fl_line(x0, y0, x1, y0-d);
+      fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
+      break;
+    }
     default:
-      fl_glyph(t, x, y, w, h, bc, fc, f, box);
+      box->draw(x,y,w,h, bc, f);
   }
 }
-
 extern "C" int fltk_theme(int, char**);
 
 int fltk_theme(int, char** argv) {
@@ -210,18 +258,52 @@ int fltk_theme(int, char** argv) {
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu title"))) {
+    s->set_glyph(alt_glyph);
     s->set_glyph_box(FL_NO_BOX);
   }
 
   if ((s = Fl_Style::find("menu item"))) {
+    check_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
+    s->set_glyph(alt_glyph);
     s->set_glyph_box(FL_NO_BOX);
   }
 
-  Fl_Widget::default_style->set_glyph(alt_glyph);
+  if ((s = Fl_Style::find("menu button"))) {
+    s->set_glyph(alt_glyph);
+  }
 
+  if ((s = Fl_Style::find("choice"))) {
+    s->set_glyph(alt_glyph);
+    s->set_glyph_box(FL_UP_BOX);
+  }
+
+  if ((s = Fl_Style::find("check button"))) {
+    check_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
+    s->set_glyph(alt_glyph);
+  }
+
+  if ((s = Fl_Style::find("return button"))) {
+    s->set_glyph(alt_glyph);
+  }
+
+  if ((s = Fl_Style::find("light button"))) {
+    s->set_glyph(alt_glyph);
+  }
+
+  if ((s = Fl_Style::find("scrollbar"))) {
+    s->set_glyph(alt_glyph);
+  }
+
+  if ((s = Fl_Style::find("slider"))) {
+    s->set_glyph(alt_glyph);
+  }
+
+  if ((s = Fl_Style::find("value slider"))) {
+    s->set_glyph(alt_glyph);
+  }
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.11 1999/11/20 04:42:51 vincent Exp $".
+// End of "$Id: Alternative.cxx,v 1.12 1999/11/21 06:23:35 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.14 1999/11/20 04:42:48 vincent Exp $"
+// "$Id: input.cxx,v 1.15 1999/11/21 06:23:33 carl Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -110,15 +110,11 @@ int main(int argc, char **argv) {
   b->callback(button_cb);
 
   b = new Fl_Button(220,y1,100,25,"color"); y1 += 25;
-  b->fly_box(FL_NO_BOX);
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
   b->labelcolor(fl_contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"selection_color"); y1 += 25;
-  b->fly_box(FL_NO_BOX);
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
   b->labelcolor(fl_contrast(FL_BLACK,b->color()));
-  b = new Fl_Button(220,y1,100,25,"textcolor"); y1 += 25;
-  b->fly_box(FL_NO_BOX);
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
   b->labelcolor(fl_contrast(FL_BLACK,b->color()));
 
@@ -130,5 +126,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.14 1999/11/20 04:42:48 vincent Exp $".
+// End of "$Id: input.cxx,v 1.15 1999/11/21 06:23:33 carl Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.10 1999/11/21 06:23:31 carl Exp $"
+// "$Id: fl_glyph_return.cxx,v 1.1 1999/11/21 06:23:29 carl Exp $"
 //
-// Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
+// Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,30 +23,26 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Boxtype.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
-#define BW 3
+void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
+                     Fl_Flags f, Fl_Boxtype box)
+{
+  int size = w; if (h<size) size = h;
+  int d = (size+2)/4; if (d<3) d = 3;
+  int t = (size+9)/12; if (t<1) t = 1;
+  int x0 = x+(w-2*d-2*t-1)/2;
+  int x1 = x0+d;
+  int y0 = y+h/2;
+  fl_color(fl_inactive(fc, f));
 
-void Fl_Shadow_Box::draw(int x, int y, int w, int h,
-			 Fl_Color c, Fl_Flags f) const {
-  w-=BW; h-=BW;
-  if (!(f & FL_FRAME_ONLY)) {
-    fl_color(c);
-    fl_rectf(x+1,y+1,w-2,h-2);
-  }
-  fl_color(FL_DARK3);
-  fl_rectf(x+BW, y+h,  w, BW);
-  fl_rectf(x+w,  y+BW, BW,  h);
-  fl_color(fl_inactive(FL_BLACK, f));
-  fl_rect(x,y,w,h);
+  fl_polygon(x0,y0, x1,y0+d, x1, y0-d);
+  fl_polygon(x1,y0+t, x1+d,y0+t, x1+d,y0-t, x1,y0-t);
+  fl_polygon(x1+d,y0-d, x1+d+2*t,y0-d, x1+d+2*t,y0+t, x1+d,y0+t);
 }
-void Fl_Shadow_Box::inset(int& x,int& y,int& w,int& h) const {
-  x++; y++; w-=2+BW; h-=2+BW;
-}
-int Fl_Shadow_Box::fills_rectangle() const {return false;} // unfortunate...
-const Fl_Shadow_Box fl_shadow_box(0);
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.10 1999/11/21 06:23:31 carl Exp $".
+// End of "$Id: fl_glyph_return.cxx,v 1.1 1999/11/21 06:23:29 carl Exp $".
 //

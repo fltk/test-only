@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.20 1999/11/20 04:42:31 vincent Exp $"
+// "$Id: Fl_Style.H,v 1.21 1999/11/21 06:23:16 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -93,6 +93,7 @@ struct FL_API Fl_Style {
   static void revert(); // reverts the entire world of styles to defaults
 
   static int draw_boxes_inactive; // should boxes ever be drawn inactive?
+  static int inactive_menu_hack; // Microsoft sucks
   static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
 
   static void start(char* name);	// start a new class of style or use a previously started one
@@ -104,7 +105,17 @@ struct FL_API Fl_Style {
 FL_API void fl_theme_handler(Fl_Theme_Handler handler);
 FL_API Fl_Theme_Handler fl_theme_handler();
 
-FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
+FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_default(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_adjuster(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_check(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_choice(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_arrow(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_light(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_return(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_slider(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph_menu(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+
 
 enum Fl_Glyphtype {	// glyph types
   // zero is reserved to draw an empty box
@@ -119,13 +130,22 @@ enum Fl_Glyphtype {	// glyph types
   FL_GLYPH_HSLIDER,
   FL_GLYPH_VNSLIDER,
   FL_GLYPH_HNSLIDER,
-  FL_GLYPH_CHOICE
+  FL_GLYPH_CHOICE,
+  FL_GLYPH_FASTARROW,
+  FL_GLYPH_MEDIUMARROW,
+  FL_GLYPH_SLOWARROW,
+  FL_GLYPH_LEFTARROW,
+  FL_GLYPH_RIGHTARROW,
+  FL_GLYPH_2LEFTARROW,
+  FL_GLYPH_2RIGHTARROW,
+  FL_GLYPH_RETURN
 };
 
 FL_API int fl_kde1();
 FL_API int fl_kde1_colors();
 FL_API int fl_motif();
 FL_API int fl_windows();
+FL_API int fl_windows_colors();
 
 struct FL_API Fl_Named_Style : public Fl_Style {
   const char* name;
@@ -140,5 +160,5 @@ struct FL_API Fl_Named_Style : public Fl_Style {
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.20 1999/11/20 04:42:31 vincent Exp $".
+// End of "$Id: Fl_Style.H,v 1.21 1999/11/21 06:23:16 carl Exp $".
 //
