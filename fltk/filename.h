@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.14 2004/10/15 06:00:20 spitzak Exp $"
+// "$Id$"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,17 +32,15 @@
 
 /*! \addtogroup utilities
   \{ */
-#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
 
-FL_API const char *filename_name(const char *); // return pointer to name
-FL_API const char *filename_ext(const char *); // return pointer to .ext
-FL_API char *filename_setext(char *,const char *ext); // clobber .ext
-FL_API bool filename_expand(char *, const char *from); // do $x and ~x
-FL_API bool filename_absolute(char *, const char *from, const char* pwd=0);  // prepend pwd or getcwd()
+FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory);
+FL_API const char *filename_name(const char *);
+FL_API const char *filename_ext(const char *);
 FL_API bool filename_match(const char *, const char *pattern); // glob match
 FL_API bool filename_isdir(const char*);
 FL_API double filename_size(const char *); // return size of file
 FL_API long int filename_mtime(const char *); // return modification time
+
 /*! \} */
 
 ////////////////////////////////////////////////////////////////
@@ -94,5 +92,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.14 2004/10/15 06:00:20 spitzak Exp $".
+// End of "$Id$".
 //
