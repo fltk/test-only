@@ -7,7 +7,7 @@ CXX="g++ -mno-cygwin"
 export CC CXX
 
 # In order to find DLLs
-PATH=$PATH:`pwd`/lib
+PATH=`pwd`/lib:$PATH
 export PATH
 
 ./configure $*
