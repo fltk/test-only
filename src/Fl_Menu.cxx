@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.141 2003/07/22 00:09:00 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.142 2003/07/22 01:29:10 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -517,7 +517,7 @@ int MWindow::handle(int event) {
     switch (event_key()) {
     case LeftAltKey:
     case RightAltKey:
-      if (Style::hide_shortcut) {
+      if (Style::hide_shortcut && !event_clicks()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
       }
@@ -840,5 +840,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.141 2003/07/22 00:09:00 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.142 2003/07/22 01:29:10 spitzak Exp $".
 //
