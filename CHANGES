@@ -2518,3 +2518,8 @@ Cause SharedImage was declared as FL_API, linker assumes that all SharedImage
 functions are implemented in libfltk. So I moved SharedImage::guess out of the class
 and made it FL_IMAGES_API.
 
+////////////////////////////////////////////////////////////////
+
+fl_color_win32.cxx loads SetDCPenColor and SetDCBrushColor functions dynamically.
+Uses alternative (old) method, if those functions cannot be loaded (older windows)
+from gdi32.dll
