@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.154 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.155 2003/11/05 08:09:10 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -629,7 +629,7 @@ ulong fltk::event_time; // the last timestamp from an x event
 
 char fl_key_vector[32]; // used by get_key()
 
-// Record event mouse position and state from an XEvent:
+// Record event mouse position and state from an XEvent.
 
 static void set_event_xy(bool push) {
 #if CONSOLIDATE_MOTION
@@ -678,7 +678,6 @@ bool fltk::handle()
 {
   Window* window = find(xevent.xany.window);
   int event = 0;
-  static unsigned lastkeycode;
 
   switch (xevent.type) {
 
@@ -954,19 +953,17 @@ bool fltk::handle()
 
   case KeyPress:
   KEYPRESS: {
+    set_event_xy(true);
     //if (grab_) XAllowEvents(xdisplay, SyncKeyboard, CurrentTime);
     unsigned keycode = xevent.xkey.keycode;
     // Make repeating keys increment the click counter:
     if (fl_key_vector[keycode/8]&(1<<(keycode%8))) {
-      //printf("Repeating key %x\n", keycode);
       e_clicks++;
       e_is_click = 0;
     } else {
-      //printf("Non-repeating key %x\n", keycode);
       e_clicks = 0;
-      e_is_click = 1;
+      e_is_click = keycode+100;
     }
-    lastkeycode = keycode;
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
     static char buffer[21];
     KeySym keysym;
@@ -991,13 +988,11 @@ bool fltk::handle()
       xevent = temp;
       goto KEYPRESS;
     }
+    set_event_xy(false);
     unsigned keycode = xevent.xkey.keycode;
     fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
-    // event_is_click is left on if they press & release the key quickly:
-    //printf("Keyup %x\n", keycode);
-    e_is_click = (keycode == lastkeycode);
-    // make next keypress not be a repeating one:
-    lastkeycode = 0;
+    // Leave event_is_click() on only if this is the last key pressed:
+    if (e_is_click != int(keycode+100)) e_is_click = 0;
     event = KEYUP;
     goto GET_KEYSYM;}
 
@@ -1039,7 +1034,6 @@ bool fltk::handle()
 //    keysym = RightMetaKey;
     }
     e_keysym = int(keysym);
-    set_event_xy(true);
     break;}
 
   case SelectionNotify: {
@@ -1618,5 +1612,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.154 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.155 2003/11/05 08:09:10 spitzak Exp $".
 //
