@@ -51,16 +51,16 @@
 @main:Fluid\n(UI design tool):../fluid/fluid valuators.fl
 
 @main:Cool\nDemos:@e
-	@e:X Color\nBrowser:colbrowser
+	@e:X Color\nBrowser:../forms/colbrowser
 	@e:Mandelbrot:mandelbrot
-	@e:Fractals:fractals
+	@e:Fractals:../glut/fractals
 	@e:Puzzle:glpuzzle
 	@e:Checkers:checkers
 
 @main:Other\nTests:@o
 	@o:color choosers:color_chooser r
 	@o:file chooser:file_chooser
-	@o:XForms Emulation:forms
+	@o:XForms Emulation:../forms/forms
 
 @main:Tutorial\nfrom\nManual:@j
 	@j:ask\n(modified):ask

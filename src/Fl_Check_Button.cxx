@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.22 2000/01/10 06:31:18 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.23 2000/01/16 07:44:32 robertk Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -82,5 +82,6 @@ Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
 {
   style(::style);
   type(FL_TOGGLE_BUTTON);
+  clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.39 2000/01/10 06:31:17 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.40 2000/01/16 07:44:31 robertk Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -69,12 +69,12 @@ void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar_width_;
-    if (scrollbar.align() & FL_ALIGN_LEFT) X += scrollbar_width_;
+    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar_width_;
   }
   if (W < 0) W = 0;
   if (hscrollbar.visible()) {
     H -= scrollbar_width_;
-    if (scrollbar.align() & FL_ALIGN_TOP) Y += scrollbar_width_;
+    if (scrollbar.flags() & FL_ALIGN_TOP) Y += scrollbar_width_;
   }
   if (H < 0) H = 0;
 }
@@ -92,10 +92,10 @@ void Fl_Browser_::layout() {
   // move the scrollbars so they can respond to events:
   int X,Y,W,H; bbox(X,Y,W,H);
   scrollbar.resize(
-	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
+	scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
 	Y, scrollbar_width_, H);
   hscrollbar.resize(
-	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
+	X, scrollbar.flags()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
 	W, scrollbar_width_);
 }
 
@@ -340,7 +340,7 @@ J1:
   int dy = top_ ? item_quick_height(top_) : 0; if (dy < 10) dy = 10;
   if (scrollbar.visible()) {
     scrollbar.resize(
-	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
+	scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
 	Y, scrollbar_width_, H);
     scrollbar.value(position_, H, 0, full_height_);
     scrollbar.linesize(dy);
@@ -349,7 +349,7 @@ J1:
   }
   if (hscrollbar.visible()) {
     hscrollbar.resize(
-	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
+	X, scrollbar.flags()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
 	W, scrollbar_width_);
     hscrollbar.value(hposition_, W, 0, full_width_);
     hscrollbar.linesize(dy);
@@ -669,7 +669,8 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
     hscrollbar(0, 0, 0, 0, 0)
 {
   style(::style);
-  align(FL_ALIGN_BOTTOM);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
   offset_ = 0;
@@ -688,5 +689,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.39 2000/01/10 06:31:17 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.40 2000/01/16 07:44:31 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.19 2000/01/10 06:31:30 bill Exp $"
+// "$Id: Alternative.cxx,v 1.20 2000/01/16 07:44:47 robertk Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -232,7 +232,7 @@ static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Colo
 static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
 		  Fl_Flags f, Fl_Boxtype)
 {
-  FL_DOWN_FRAME->draw(x, y, w, h, fc, f & ~FL_VALUE);
+  FL_DOWN_BOX->draw(x, y, w, h, fc, f & ~FL_VALUE);
   FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f & ~FL_VALUE);
 }
 
@@ -305,5 +305,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.19 2000/01/10 06:31:30 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.20 2000/01/16 07:44:47 robertk Exp $".
 //

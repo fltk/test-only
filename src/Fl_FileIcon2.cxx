@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.4 2000/01/10 06:31:20 bill Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.5 2000/01/16 07:44:34 robertk Exp $"
 //
 // Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -241,7 +241,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
       if (strcmp(params, "iconcolor") == 0)
         data_[outline] = 256;
       else if (strcmp(params, "shadowcolor") == 0)
-        data_[outline] = FL_DARK3;
+		data_[outline] = FL_DARK3;
       else if (strcmp(params, "outlinecolor") == 0)
         data_[outline] = FL_BLACK;
       else
@@ -808,5 +808,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.4 2000/01/10 06:31:20 bill Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.5 2000/01/16 07:44:34 robertk Exp $".
 //

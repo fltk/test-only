@@ -1,5 +1,5 @@
 //
-// "$Id: overlay.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $"
+// "$Id: overlay.cxx,v 1.5 2000/01/16 07:44:44 robertk Exp $"
 //
 // Overlay window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,8 +55,8 @@ int arg(int, char **argv, int& i) {
   if (n<=0) return 0;
   i++;
   uchar r,g,b;
-  Fl::get_color(n,r,g,b);
-  Fl::set_color(FL_RED,r,g,b);
+  fl_get_color(n, r,g,b);
+  fl_set_color(FL_RED, fl_rgb(r,g,b));
   return i;
 }
 
@@ -80,5 +80,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: overlay.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $".
+// End of "$Id: overlay.cxx,v 1.5 2000/01/16 07:44:44 robertk Exp $".
 //

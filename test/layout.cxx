@@ -35,7 +35,7 @@ void align_cb(Fl_Choice* c,long w) {
     case 0: lower_half->vertical(!c->value()); break;
     case 1: 
     case 2: {
-      Fl_Align new_align = lower_half->align();
+      Fl_Align new_align = lower_half->flags();
       new_align &= (w == 1) ?
                    (FL_ALIGN_TOP | FL_ALIGN_BOTTOM) :
                    (FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
@@ -43,7 +43,7 @@ void align_cb(Fl_Choice* c,long w) {
       if (w == 1 && c->value() == 1) new_align |= FL_ALIGN_RIGHT;
       if (w == 2 && c->value() == 0) new_align |= FL_ALIGN_TOP;
       if (w == 2 && c->value() == 1) new_align |= FL_ALIGN_BOTTOM;
-      lower_half->align(new_align);
+      lower_half->set_flag(new_align);
     }
     default: break;
   }
@@ -58,7 +58,7 @@ int main(int argc, char ** argv) {
   // type, since you no longer can change it on a window:
   Fl_Align_Group main_group(0,0,600,400,0,2,1,0,5,5);
 
-  Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,0,2,0,FL_ALIGN_TOP_LEFT);
+  Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,0,2,0,FL_ALIGN_TOP | FL_ALIGN_LEFT);
   {
     Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,"Tiled Buttons",
 					   3,0,0,10,10);

@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.13 1999/08/25 16:31:42 carl Exp $"
+// "$Id: checkers.cxx,v 1.14 2000/01/16 07:44:39 robertk Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1189,8 +1189,9 @@ void copyright_cb(Fl_Widget*, void*) {
     copyright_window = new Fl_Window(400,270,"Copyright");
     copyright_window->color(FL_WHITE);
     Fl_Box *b = new Fl_Box(20,0,380,270,copyright);
-    b->labelsize(10);
-    b->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+    b->label_size(10);
+	b->clear_flag(FL_ALIGN_MASK);
+    b->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
     copyright_window->end();
   }
   copyright_window->hotspot(copyright_window);
@@ -1365,5 +1366,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.13 1999/08/25 16:31:42 carl Exp $".
+// End of "$Id: checkers.cxx,v 1.14 2000/01/16 07:44:39 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.13 2000/01/09 08:17:30 bill Exp $"
+// "$Id: fl_labeltype.cxx,v 1.14 2000/01/16 07:44:36 robertk Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ void Fl_Widget::draw_label(Fl_Color c) const {
   }
 }
 
-void Fl_Widget::draw_label() const {draw_label(labelcolor());}
+void Fl_Widget::draw_label() const {draw_label(label_color());}
 
 // draws a label on a button, you can reposition it to position it
 // around other stuff drawn on the button.  The color should be the
@@ -96,7 +96,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color c, Fl_Flags f) c
 }
 
 void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags f) const {
-  draw_label(X,Y,W,H, labelcolor(), f);
+  draw_label(X,Y,W,H, label_color(), f);
 }
 
 void Fl_Widget::measure_label(int& w, int& h) const {
@@ -115,5 +115,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.13 2000/01/09 08:17:30 bill Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.14 2000/01/16 07:44:36 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.cxx,v 1.2 1999/11/27 15:45:03 carl Exp $"
+// "$Id: forms.cxx,v 1.3 2000/01/16 07:44:26 robertk Exp $"
 //
 // Another forms demo for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@ static VN_struct btypes[]=
    {FL_BORDER_BOX,"border box"},
    {FL_SHADOW_BOX,"shadow box"},
    {FL_FLAT_BOX,"flat box"},
-   {FL_FRAME_BOX,"frame box"},
+   {FL_ENGRAVED_BOX,"frame box"},
    {FL_EMBOSSED_BOX,"embossed box"},
    {FL_ROUNDED_BOX,"rounded box"},
    {FL_RFLAT_BOX,"rflat box"},
@@ -230,5 +230,5 @@ main (int argc, char *argv[])
 }
 
 //
-// End of "$Id: forms.cxx,v 1.2 1999/11/27 15:45:03 carl Exp $".
+// End of "$Id: forms.cxx,v 1.3 2000/01/16 07:44:26 robertk Exp $".
 //

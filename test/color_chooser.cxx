@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.7 1999/08/16 07:31:34 bill Exp $"
+// "$Id: color_chooser.cxx,v 1.8 2000/01/16 07:44:40 robertk Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -83,17 +83,18 @@ void cb1(Fl_Widget *, void *v) {
 
 void cb2(Fl_Widget *, void *v) {
   uchar r,g,b;
-  Fl::get_color(c,r,g,b);
+//  Fl::get_color(c,r,g,b);
+  fl_get_color(c,r,g,b);
   if (!fl_color_chooser("New color:",r,g,b)) return;
   c = fullcolor_cell;
-  Fl::set_color(fullcolor_cell,r,g,b);
+  fl_set_color(fullcolor_cell, fl_rgb(r,g,b));
   Fl_Box* bx = (Fl_Box*)v;
   bx->color(fullcolor_cell);
   bx->parent()->redraw();
 }
 
 int main(int argc, char ** argv) {
-  Fl::set_color(fullcolor_cell,145,159,170);
+  fl_set_color(fullcolor_cell, fl_rgb(145,159,170));
   Fl_Window window(400,400);
   Fl_Box box(50,50,300,300);
   box.box(FL_THIN_DOWN_BOX);
@@ -108,7 +109,7 @@ int main(int argc, char ** argv) {
   (new Fl_RGB_Image(image, width, height))->label(&image_box);
   Fl_Box b(140,320,120,0,"Example of fl_draw_image()");
   Pens p(80,200,3*8,120,"lines");
-  p.align(FL_ALIGN_TOP);
+  p.set_flag(FL_ALIGN_TOP);
   int i = 1;
   if (!Fl::args(argc,argv,i) || i != argc-1) {
     printf("usage: %s <switches> visual-number\n"
@@ -146,5 +147,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.7 1999/08/16 07:31:34 bill Exp $".
+// End of "$Id: color_chooser.cxx,v 1.8 2000/01/16 07:44:40 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.6 1999/08/16 07:31:34 bill Exp $"
+// "$Id: cursor.cxx,v 1.7 2000/01/16 07:44:40 robertk Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -110,28 +110,37 @@ int main(int argc, char **argv) {
 
   Fl_Hor_Value_Slider slider1(80,180,310,30,"Cursor:");
   cursor_slider = &slider1;
-  slider1.align(FL_ALIGN_LEFT);
+  slider1.clear_flag(FL_ALIGN_MASK);
+  slider1.set_flag(FL_ALIGN_LEFT);
   slider1.step(1);
+#ifndef FLTK_2
   slider1.precision(0);
-  slider1.bounds(0,100);
+#endif
+  slider1.range(0,100);
   slider1.value(0);
   slider1.callback(setcursor);
   slider1.value(cursor);
 
   Fl_Hor_Value_Slider slider2(80,220,310,30,"fgcolor:");
-  slider2.align(FL_ALIGN_LEFT);
+  slider2.clear_flag(FL_ALIGN_MASK);
+  slider2.set_flag(FL_ALIGN_LEFT);
   slider2.step(1);
+#ifndef FLTK_2
   slider2.precision(0);
-  slider2.bounds(0,255);
+#endif
+  slider2.range(0,255);
   slider2.value(0);
   slider2.callback(setfg);
   slider2.value(fg);
 
   Fl_Hor_Value_Slider slider3(80,260,310,30,"bgcolor:");
-  slider3.align(FL_ALIGN_LEFT);
+  slider3.clear_flag(FL_ALIGN_MASK);
+  slider3.set_flag(FL_ALIGN_LEFT);
   slider3.step(1);
+#ifndef FLTK_2
   slider3.precision(0);
-  slider3.bounds(0,255);
+#endif
+  slider3.range(0,255);
   slider3.value(0);
   slider3.callback(setbg);
   slider3.value(bg);
@@ -143,7 +152,8 @@ int main(int argc, char **argv) {
   char buf[100]; char *p = buf;
   for (Fl_Menu_Item* m = choices; m->label(); m++) {
     Fl_Box* b = new Fl_Box(35,y,150,25,m->label());
-    b->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+	b->clear_flag(FL_ALIGN_MASK);
+    b->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     int n = (int)(m->argument());
     if (n == FL_CURSOR_NONE) break;
     if (n == FL_CURSOR_DEFAULT) n = FL_CURSOR_ARROW;
@@ -161,5 +171,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.6 1999/08/16 07:31:34 bill Exp $".
+// End of "$Id: cursor.cxx,v 1.7 2000/01/16 07:44:40 robertk Exp $".
 //

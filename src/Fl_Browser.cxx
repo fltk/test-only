@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.16 1999/11/19 10:06:44 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.17 2000/01/16 07:44:31 robertk Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -212,14 +212,14 @@ int Fl_Browser::item_height(void* lv) const {
 
   if (!l->txt[0]) {
     // For blank lines set the height to exactly 1 line!
-    int h = textsize();
+    int h = text_size();
     if (h > hmax) hmax = h;
   }
   else {
     // do each column separately as they may all set different fonts:
     for (char* str = l->txt; *str; str++) {
-      Fl_Font font = textfont(); // default font
-      int size = textsize(); // default size
+	  Fl_Font font = text_font(); // default font
+      int size = text_size(); // default size
       while (*str==format_char()) {
 	str++;
 	switch (*str++) {
@@ -264,8 +264,8 @@ int Fl_Browser::item_width(void* v) const {
   }
 
   // OK, we gotta parse the string and find the string width...
-  int size = textsize();
-  Fl_Font font = textfont();
+  int size = text_size();
+  Fl_Font font = text_font();
   int done = 0;
 
   // MRS - might this cause problems on some platforms - order of operations?
@@ -303,7 +303,7 @@ int Fl_Browser::full_height() const {
 }
 
 int Fl_Browser::incr_height() const {
-  return textsize()+2;
+	return text_size()+2;
 }
 
 void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
@@ -489,5 +489,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.16 1999/11/19 10:06:44 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.17 2000/01/16 07:44:31 robertk Exp $".
 //

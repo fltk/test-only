@@ -30,24 +30,27 @@ Fl_Window* make_widget_panel() {
           o->tooltip("Text displayed on or next to the widget");
         }
         { Fl_Box* o = image_label = new Fl_Box(19, 70, 71, 20, "Image:");
-          o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
         { Fl_Button* o = new Fl_Button(90, 70, 180, 20, "Image name");
           o->box(FL_THIN_DOWN_BOX);
           o->color((Fl_Color)55);
           o->callback((Fl_Callback*)image_cb);
-          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->tooltip("Select an image to label the widget");
         }
         { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(270, 70, 90, 20, "image inlined");
           o->label_size(10);
           o->callback((Fl_Callback*)image_inlined_cb);
-          o->align(132|FL_ALIGN_INSIDE);
+          o->set_flag(132|FL_ALIGN_INSIDE);
           o->tooltip("Include the datas of the image inlined in \nthe code or keep it in an externa\
 l file");
         }
         { Fl_Box* o = new Fl_Box(20, 100, 70, 20, "Alignment:");
-          o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+          o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
         { Fl_Button* o = new Fl_Button(90, 100, 45, 20, "tiled");
           o->type(1);
@@ -120,14 +123,16 @@ vents from going to other windows.");
         { Fl_Value_Input* o = new Fl_Value_Input(90, 135, 55, 20, "Value:");
           o->label_size(10);
           o->callback((Fl_Callback*)value_cb);
-          o->align(FL_ALIGN_TOP_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The initial value (integer) of this widget");
         }
         { Fl_Value_Input* o = new Fl_Value_Input(145, 135, 55, 20, "Minimum:");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
-          o->align(FL_ALIGN_TOP_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The minimum value for this valuator");
         }
@@ -135,27 +140,31 @@ vents from going to other windows.");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
-          o->align(FL_ALIGN_TOP_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The maximum value for this valuator");
         }
         { Fl_Value_Input* o = new Fl_Value_Input(255, 135, 55, 20, "Size:");
           o->label_size(10);
           o->callback((Fl_Callback*)slider_size_cb);
-          o->align(FL_ALIGN_TOP_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The size of the scroller");
         }
         { Fl_Value_Input* o = new Fl_Value_Input(310, 135, 50, 20, "Step:");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
-          o->align(FL_ALIGN_TOP_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("Amount to change this valuator when mouse moves 1 pixel");
         }
         { Fl_Group* o = new Fl_Group(90, 155, 270, 25, "Attributes:");
           o->callback((Fl_Callback*)propagate_group);
-          o->align(FL_ALIGN_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           { Fl_Light_Button* o = new Fl_Light_Button(90, 160, 70, 20, "Visible");
             o->label_size(10);
             o->callback((Fl_Callback*)visible_cb);
@@ -189,7 +198,8 @@ ow() is called.");
           o->color((Fl_Color)7);
           o->selection_color((Fl_Color)7);
           o->callback((Fl_Callback*)shortcut_in_cb);
-          o->align(FL_ALIGN_LEFT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_LEFT);
           o->tooltip("To set a shortcut click here, then type the key combination you want.  To del\
 ete the shortcut type backspace.  To stop setting the shortcut click the mouse\
  on some other field.");
@@ -275,7 +285,8 @@ ft of the color chooser disables highlighting");
           o->type(0);
         }
         { Fl_Box* o = new Fl_Box(30, 220, 65, 20, "Colors:");
-          o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
         { Fl_Light_Button* o = new Fl_Light_Button(95, 230, 130, 25, "Selection Color");
           o->label_size(10);
@@ -354,7 +365,8 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("Extra code to be exectuted when the widget is created");
         }
         { Fl_Box* o = callback_label = new Fl_Box(20, 180, 70, 20, "Callback:");
-          o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+  		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
         { Fl_Input* o = new Fl_Input(90, 180, 270, 95);
           o->type(4);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.22 2000/01/10 06:30:59 bill Exp $"
+// "$Id: Fl_Browser_.H,v 1.23 2000/01/16 07:44:19 robertk Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -72,8 +72,8 @@ public:
   static int scrollbar_width() {return scrollbar_width_;}
 
   // for back compatability:
-  void scrollbar_right() {scrollbar.align(FL_ALIGN_RIGHT);}
-  void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
+  void scrollbar_right() { scrollbar.clear_flag(FL_ALIGN_MASK); scrollbar.set_flag(FL_ALIGN_RIGHT);}
+  void scrollbar_left() { scrollbar.clear_flag(FL_ALIGN_MASK); scrollbar.set_flag(FL_ALIGN_LEFT);}
 
 protected:
 
@@ -135,5 +135,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.22 2000/01/10 06:30:59 bill Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.23 2000/01/16 07:44:19 robertk Exp $".
 //

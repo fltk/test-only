@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.2 1999/11/27 15:45:10 carl Exp $"
+// "$Id: glut_compatability.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -316,7 +316,7 @@ void glutAddSubMenu(char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags_ = FL_PUP_SUBMENU;
+  i->flags_ = FL_SUBMENU_POINTER;
 }
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
@@ -334,7 +334,7 @@ void glutChangeToSubMenu(int item, char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags_ = FL_PUP_SUBMENU;
+  i->flags_ = FL_SUBMENU_POINTER;
 }
 
 void glutRemoveMenuItem(int item) {
@@ -399,5 +399,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.2 1999/11/27 15:45:10 carl Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $".
 //

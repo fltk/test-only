@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.11 1999/10/27 01:21:10 vincent Exp $"
+// "$Id: fl_ask.cxx,v 1.12 2000/01/16 07:44:36 robertk Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -58,14 +58,14 @@ static Fl_Window *makeform() {
   //w->clear_border();
   //w->box(FL_UP_BOX);
   (message = new Fl_Box(60, 0, 340, 70))
-    ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+    ->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
   (input = new Fl_Input(60,32,340,30))->hide();
   {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
   o->box(FL_THIN_UP_BOX);
-  o->labelfont(FL_TIMES_BOLD);
-  o->labelsize(34);
+  o->label_font(FL_TIMES_BOLD);
+  o->label_size(34);
   o->color(FL_WHITE);
-  o->labelcolor(FL_BLUE);
+  o->label_color(FL_BLUE);
   }
   (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut("^[");
   button[1] = new Fl_Return_Button(210, 70, 90, 25);
@@ -95,8 +95,8 @@ static int innards(const char* fmt, va_list ap,
     message->label(buffer);
   }
   Fl_Font f = (Fl_Font)fl_message_font_;
-  message->labelfont(f);
-  message->labelsize(fl_message_size_);
+  message->label_font(f);
+  message->label_size(fl_message_size_);
   if (b0) {button[0]->show();button[0]->label(b0);button[1]->position(210,70);}
   else {button[0]->hide(); button[1]->position(310,70);}
   if (b1) {button[1]->show(); button[1]->label(b1);}
@@ -195,5 +195,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.11 1999/10/27 01:21:10 vincent Exp $".
+// End of "$Id: fl_ask.cxx,v 1.12 2000/01/16 07:44:36 robertk Exp $".
 //

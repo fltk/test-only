@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.7 2000/01/10 06:31:00 bill Exp $"
+// "$Id: Fl_Color.H,v 1.8 2000/01/16 07:44:20 robertk Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,18 @@ enum {
 #endif
 };
 
+#ifdef FLTK_2
+#define FL_GRAY0        FL_BLACK
+#define FL_DARK3	FL_GRAY_RAMP
+#define FL_DARK2	FL_GRAY
+#define FL_DARK1	FL_GRAY
+#define FL_LIGHT1	FL_GRAY
+#define FL_LIGHT2	FL_WHITE
+#define FL_LIGHT3	FL_WHITE
+#define FL_SELECTION_COLOR  FL_GRAY
+#define FL_FREE_COLOR   FL_WHITE
+#endif  
+
 #define FL_NUM_GRAY	24
 inline Fl_Color fl_gray_ramp(int i) {return (Fl_Color)(i+FL_GRAY_RAMP);}
 
@@ -87,5 +99,5 @@ FL_API Fl_Color fl_nearest_color(Fl_Color);
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.7 2000/01/10 06:31:00 bill Exp $".
+// End of "$Id: Fl_Color.H,v 1.8 2000/01/16 07:44:20 robertk Exp $".
 //

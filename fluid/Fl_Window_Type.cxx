@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.23 2000/01/10 06:31:09 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.24 2000/01/16 07:44:24 robertk Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -240,8 +240,8 @@ void xclass_cb(Fl_Input* i, void* v) {
   }
   Fl_Color tc = FL_BLACK;
   if (i->value() && *i->value()) tc = FL_RED;
-  if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage_label(); }
+  if (i->label_color() != tc)
+    { i->label_color(tc); i->damage_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -653,5 +653,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.23 2000/01/10 06:31:09 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.24 2000/01/16 07:44:24 robertk Exp $".
 //

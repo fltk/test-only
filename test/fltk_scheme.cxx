@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
 #endif
   }
 
+#ifdef HAVE_FL_CONFIG
   Fl_Config flconfig(temp);
   int r;
 
@@ -77,6 +78,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "%s: Error- %s.\n", pname, flconfig.strerror());
     exit(3);
   }
+#endif
 
 #ifndef WIN32
   // stolen from KDE!

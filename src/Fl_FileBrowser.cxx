@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.8 2000/01/09 15:42:00 mike Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.9 2000/01/16 07:44:33 robertk Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -129,7 +129,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
 
 
   // Set the font and size...
-  fl_font(textfont(), textsize());
+  fl_font(text_font(), text_size());
 
   // Scan for newlines...
   line = (FL_BLINE *)p;
@@ -220,12 +220,11 @@ Fl_FileBrowser::item_draw(void *p,	// I - List item data
   // Draw the list item text...
   line = (FL_BLINE *)p;
 
-  fl_font(textfont(), textsize());
-
+  fl_font(text_font(), text_size());
   if (line->flags & SELECTED)
-    c = fl_contrast(textcolor(), selection_color());
+    c = fl_contrast(text_color(), selection_color());
   else
-    c = textcolor();
+    c = text_color();
 
   if (active_r())
     fl_color(c);
@@ -443,5 +442,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.8 2000/01/09 15:42:00 mike Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.9 2000/01/16 07:44:33 robertk Exp $".
 //

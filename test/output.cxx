@@ -1,5 +1,5 @@
 //
-// "$Id: output.cxx,v 1.6 1999/11/07 08:11:55 bill Exp $"
+// "$Id: output.cxx,v 1.7 2000/01/16 07:44:43 robertk Exp $"
 //
 // Output test program for the Fast Light Tool Kit (FLTK).
 //
@@ -42,16 +42,16 @@ Fl_Value_Slider *sizes;
 Fl_Window *window;
 
 void font_cb(Fl_Widget *,void *) {
-  text->textfont(int(fonts->value()));
+  text->text_font(fl_fonts + int(fonts->value()));
   text->redraw();
-  text2->textfont(int(fonts->value()));
+  text2->text_font(fl_fonts + int(fonts->value()));
   text2->redraw();
 }
 
 void size_cb(Fl_Widget *,void *) {
-  text->textsize(int(sizes->value()));
+  text->text_size(int(sizes->value()));
   text->redraw();
-  text2->textsize(int(sizes->value()));
+  text2->text_size(int(sizes->value()));
   text2->redraw();
 }
 
@@ -68,23 +68,27 @@ int main(int argc, char **argv) {
 
   text = new Fl_Output(100,90,200,30,"Fl_Output");
   text->value(initial_value);
-  text->align(FL_ALIGN_BOTTOM);
+  text->clear_flag(FL_ALIGN_MASK);
+  text->set_flag(FL_ALIGN_BOTTOM);
 
   text2 = new Fl_Multiline_Output(100,150,200,100,"Fl_Multiline_Output");
   text2->value(initial_value);
-  text2->align(FL_ALIGN_BOTTOM);
+  text2->clear_flag(FL_ALIGN_MASK);
+  text2->set_flag(FL_ALIGN_BOTTOM);
   window->resizable(text2);
 
   fonts = new Fl_Hor_Value_Slider(50,325,350,25,"Font");
-  fonts->align(FL_ALIGN_LEFT);
-  fonts->bounds(0,15);
+  fonts->clear_flag(FL_ALIGN_MASK);
+  fonts->set_flag(FL_ALIGN_LEFT);
+  fonts->range(0,15);
   fonts->step(1);
   fonts->value(0);
   fonts->callback(font_cb);
 
   sizes = new Fl_Hor_Value_Slider(50,350,350,25,"Size");
-  sizes->align(FL_ALIGN_LEFT);
-  sizes->bounds(1,64);
+  sizes->clear_flag(FL_ALIGN_MASK);
+  sizes->set_flag(FL_ALIGN_LEFT);
+  sizes->range(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
@@ -100,5 +104,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: output.cxx,v 1.6 1999/11/07 08:11:55 bill Exp $".
+// End of "$Id: output.cxx,v 1.7 2000/01/16 07:44:43 robertk Exp $".
 //

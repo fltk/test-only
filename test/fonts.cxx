@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.16 2000/01/09 01:06:14 bill Exp $"
+// "$Id: fonts.cxx,v 1.17 2000/01/16 07:44:41 robertk Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -155,12 +155,13 @@ void size_cb(Fl_Widget *, long) {
 void create_the_forms() {
   form = new Fl_Window(550,390);
 
-  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160);
-  textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+  textobj = new FontDisplay(FL_ENGRAVED_BOX,10,10,530,160);
+  textobj->clear_flag(FL_ALIGN_MASK);
+  textobj->set_flag(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
   id_box = new Fl_Box(10, 172, 530, 15);
-  id_box->box(FL_FRAME_BOX);
-  id_box->labelsize(10);
-  id_box->align(FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+  id_box->box(FL_ENGRAVED_BOX);
+  id_box->label_size(10);
+  id_box->set_flag(FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
   bold_button = new Fl_Check_Button(10, 190, 70, 20, "Bold");
   bold_button->callback(font_cb, 1);
   italic_button = new Fl_Check_Button(80, 190, 70, 20, "Italic");
@@ -190,5 +191,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.16 2000/01/09 01:06:14 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.17 2000/01/16 07:44:41 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.9 1999/12/15 08:31:00 bill Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.10 2000/01/16 07:44:35 robertk Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,8 @@
 
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   : Fl_Widget(X,Y,W,H,L) {
-  align(FL_ALIGN_BOTTOM);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   value_ = 0.0;
   step_ = 0.0;
@@ -42,11 +43,13 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   pagesize_ = 10;
 }
 
+#ifndef FLTK_2
 void Fl_Valuator::precision(int p) {
   double B = 1.0;
   for (int i=0; i<p; i++) B *= 10;
   step_ = 1.0/B;
 }
+#endif
 
 void Fl_Valuator::value_damage() {
   damage(FL_DAMAGE_EXPOSE); // default version does partial-redraw
@@ -158,5 +161,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.9 1999/12/15 08:31:00 bill Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.10 2000/01/16 07:44:35 robertk Exp $".
 //

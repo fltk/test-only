@@ -47,9 +47,9 @@ d->new_display();}
         callback {d->brightness = int(o->value());
 d->new_display();}
         xywh {80 50 160 15} type Horizontal align 4 step 1 slider_size 0.1
-        code0 {o->bounds(0,d->MAX_BRIGHTNESS);}
+        code0 {o->range(0,d->MAX_BRIGHTNESS);}
         code2 {o->value(d->DEFAULT_BRIGHTNESS);}
-        code3 {o->slider(FL_UP_BOX);}
+        code3 {o->glyph_box(FL_UP_BOX);}
       }
       Fl_Box {} {
         label {left: click = zoom out, drag = zoom in
@@ -61,9 +61,9 @@ right click: Julia set}
         callback {d->iterations = 1<<int(o->value());
 d->new_display();}
         xywh {80 65 160 15} type Horizontal align 4 step 1 slider_size 0.1
-        code0 {o->bounds(1,d->MAX_ITERATIONS);}
+        code0 {o->range(1,d->MAX_ITERATIONS);}
         code2 {o->value(d->DEFAULT_ITERATIONS);}
-        code3 {o->slider(FL_UP_BOX);}
+        code3 {o->glyph_box(FL_UP_BOX);}
       }
     }
   }

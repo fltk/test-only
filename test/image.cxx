@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $"
+// "$Id: image.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,8 @@ void button_cb(Fl_Widget *,void *) {
     if (topb->value()) i |= FL_ALIGN_TOP;
     if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
     if (insideb->value()) i |= FL_ALIGN_INSIDE;
-    b->align(i);
+	b->clear_flag(FL_ALIGN_MASK);
+    b->set_flag(i);
     w->redraw();
 }
 
@@ -133,5 +134,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $".
+// End of "$Id: image.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $".
 //

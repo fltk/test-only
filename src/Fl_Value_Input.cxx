@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.19 1999/12/15 08:31:00 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.20 2000/01/16 07:44:36 robertk Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -127,7 +127,8 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
   input.parent((Fl_Group*)this); // kludge!
   input.callback(input_cb, this);
   input.when(FL_WHEN_CHANGED);
-  align(FL_ALIGN_LEFT);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_LEFT);
 }
 
 Fl_Value_Input::~Fl_Value_Input() {
@@ -136,5 +137,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.19 1999/12/15 08:31:00 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.20 2000/01/16 07:44:36 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.78 2000/01/11 00:20:14 mike Exp $"
+// "$Id: Fl_Menu.cxx,v 1.79 2000/01/16 07:44:34 robertk Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -68,8 +68,8 @@ const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
 
 // this style structure is only used for the frames of menuwindows:
 static void mw_revert(Fl_Style* s) {
-  s->box = FL_UP_BOX;
-  s->leading = 4;
+	  s->box = FL_UP_BOX;
+	  s->leading = 4;
 }
 
 static Fl_Named_Style* menuwindow_default_style =
@@ -895,5 +895,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.78 2000/01/11 00:20:14 mike Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.79 2000/01/16 07:44:34 robertk Exp $".
 //

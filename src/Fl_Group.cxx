@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.58 2000/01/10 06:31:21 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.59 2000/01/16 07:44:34 robertk Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -250,7 +250,8 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   oh_(H) {
   type(FL_GROUP);
   style(::style);
-  align(FL_ALIGN_TOP);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
   // But you must end() the object!
@@ -546,7 +547,7 @@ void Fl_Group::draw_child(Fl_Widget& w) const {
 void Fl_Group::draw_outside_label(Fl_Widget& w) const {
   if (!w.visible()) return;
   // skip any labels that are inside the widget:
-  if (!(w.align()&15) || (w.align() & FL_ALIGN_INSIDE)) return;
+  if (!(w.flags()&15) || (w.flags() & FL_ALIGN_INSIDE)) return;
   // invent a box that is outside the widget:
   unsigned align = w.flags();
   int X = w.x();
@@ -574,5 +575,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.58 2000/01/10 06:31:21 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.59 2000/01/16 07:44:34 robertk Exp $".
 //

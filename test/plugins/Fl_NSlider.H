@@ -72,7 +72,7 @@ public:
   float      majorTick() {return _majorTick; }              //return major tick dividers
   void       value_damage();
   void       ramp(uchar nr1, uchar ng1, uchar nb1, uchar nr2, uchar ng2, uchar nb2) {_r1=nr1; _r2=nr2; _g1=ng1; _g2=ng2; _b1=nb1; _b2=nb2;}
-  void       ramp(int ramp1, int ramp2) {Fl::get_color((Fl_Color)ramp1, _r1, _g1, _b1);  Fl::get_color((Fl_Color)ramp2, _r2, _g2, _b2);}
+  void       ramp(int ramp1, int ramp2) {fl_get_color((Fl_Color)ramp1, _r1, _g1, _b1);  fl_get_color((Fl_Color)ramp2, _r2, _g2, _b2);}
   void       draw();
   void       drawTicks();
   void       drawRamp();

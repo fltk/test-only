@@ -1,5 +1,5 @@
 //
-// "$Id: boxtype.cxx,v 1.7 1999/11/05 21:43:57 carl Exp $"
+// "$Id: boxtype.cxx,v 1.8 2000/01/16 07:44:39 robertk Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,8 +43,11 @@ void bt(const char *name, Fl_Boxtype type, int square=0) {
   x = x*W+10;
   y = y*H+10;
   Fl_Box *b = new Fl_Box(type,x,y,square ? H-20 : W-20,H-20,name);
-  b->labelsize(11);
-  if (square) b->align(FL_ALIGN_RIGHT);
+  b->label_size(11);
+  if (square) {
+	  b->clear_flag(FL_ALIGN_MASK);
+	  b->set_flag(FL_ALIGN_RIGHT);
+  }
 }
 
 int main(int argc, char ** argv) {
@@ -89,5 +92,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.7 1999/11/05 21:43:57 carl Exp $".
+// End of "$Id: boxtype.cxx,v 1.8 2000/01/16 07:44:39 robertk Exp $".
 //

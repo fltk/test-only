@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.5 1999/10/03 06:31:45 bill Exp $"
+// "$Id: fullscreen.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -197,11 +197,12 @@ int main(int argc, char **argv) {
 
   int y = window.h()-30*NUMB-5;
   Fl_Hor_Slider slider(50,y,window.w()-60,30,"Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.clear_flag(FL_ALIGN_MASK);
+  slider.set_flag(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
-  slider.bounds(3,40);
+  slider.range(3,40);
   y+=30;
 
   Fl_Toggle_Light_Button b1(50,y,window.w()-60,30,"Double Buffered");
@@ -225,5 +226,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.5 1999/10/03 06:31:45 bill Exp $".
+// End of "$Id: fullscreen.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.17 2000/01/10 06:31:29 bill Exp $"
+// "$Id: input.cxx,v 1.18 2000/01/16 07:44:42 robertk Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -74,7 +74,7 @@ void color_cb(Fl_Widget* button, void* v) {
   }
   s.selection_text_color = fl_contrast(s.text_color, s.selection_color);
   button->color(c);
-  button->labelcolor(fl_contrast(FL_BLACK,(Fl_Color)c));
+  button->label_color(fl_contrast(FL_BLACK,(Fl_Color)c));
   Fl::redraw();
 }
 
@@ -111,13 +111,13 @@ int main(int argc, char **argv) {
 
   b = new Fl_Button(220,y1,100,25,"color"); y1 += 25;
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
-  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
+  b->label_color(fl_contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"selection_color"); y1 += 25;
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
-  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
+  b->label_color(fl_contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"text_color"); y1 += 25;
   b->color(input[0]->text_color()); b->callback(color_cb, (void*)2);
-  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
+  b->label_color(fl_contrast(FL_BLACK,b->color()));
 
   window->resizable(window);
   window->end();
@@ -127,5 +127,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.17 2000/01/10 06:31:29 bill Exp $".
+// End of "$Id: input.cxx,v 1.18 2000/01/16 07:44:42 robertk Exp $".
 //

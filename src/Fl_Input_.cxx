@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.37 2000/01/10 06:31:21 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.38 2000/01/16 07:44:34 robertk Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -146,7 +146,7 @@ static double up_down_pos;
 static int was_up_down;
 
 void Fl_Input_::setfont() const {
- fl_font(textfont(), textsize());
+	fl_font(text_font(), text_size());
 }
 
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
@@ -185,7 +185,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = textsize()+leading();
+  int height = text_size()+leading();
   int lines;
   int curx, cury;
   for (p=value(), curx=cury=lines=0; ;) {
@@ -281,7 +281,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       // draw the cursor:
       if (Fl::focus() == this && selstart == selend &&
 	  position() >= p-value() && position() <= e-value()) {
-	fl_color(cursor_color());
+	fl_color(off_color());
 	fl_rectf(X+curx-xscroll_, Y+ypos, 2, height);
       }
       fl_color(textcolor);
@@ -333,7 +333,7 @@ void Fl_Input_::handle_mouse(int X, int Y,
   int theline = 0;
   if (type()==FL_MULTILINE_INPUT) {
     theline = Fl::event_y()-Y+yscroll_;
-    if (theline > 0) theline /= (textsize()+leading());
+    if (theline > 0) theline /= (text_size()+leading());
   }
 
   int newpos;
@@ -651,7 +651,8 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l)
   : Fl_Widget(x, y, w, h, l)
 {
-  align(FL_ALIGN_LEFT);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_LEFT);
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;
@@ -745,5 +746,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.37 2000/01/10 06:31:21 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.38 2000/01/16 07:44:34 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.15 1999/11/22 09:00:14 bill Exp $"
+// "$Id: Fl_Type.cxx,v 1.16 2000/01/16 07:44:21 robertk Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -113,10 +113,10 @@ int Widget_Browser::item_selected(void *l) const {return ((Fl_Type*)l)->new_sele
 void Widget_Browser::item_select(void *l,int v) {((Fl_Type*)l)->new_selected = v;}
 
 int Widget_Browser::item_height(void *l) const {
-  return ((Fl_Type *)l)->visible ? textsize()+leading() : 0;
+  return ((Fl_Type *)l)->visible ? text_size()+leading() : 0;
 }
 
-int Widget_Browser::incr_height() const {return textsize() + leading();}
+int Widget_Browser::incr_height() const {return text_size() + leading();}
 
 static Fl_Type* pushedtitle;
 
@@ -131,7 +131,7 @@ extern const char* subclassname(Fl_Type*);
 void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
   Fl_Type *l = (Fl_Type *)v;
   x += 3 + l->level * 10;
-  fl_color(item_selected(v) ? selection_text_color() : textcolor());
+  fl_color(item_selected(v) ? selection_text_color() : text_color());
   if (l->is_parent()) {
     int dy = (h-11)/2;
     if (!l->next || l->next->level <= l->level) {
@@ -152,12 +152,12 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
   if (l->is_widget() || l->is_class()) {
     const char* c = subclassname(l);
     if (!strncmp(c,"Fl_",3)) c += 3;
-    fl_font(textfont(), textsize());
+    fl_font(text_font(), text_size());
     fl_draw(c, x, y+h-fl_descent());
     x += int(fl_width(c)+fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()->bold, textsize());
+      fl_font(text_font()->bold, text_size());
       fl_draw(c, x, y+h-fl_descent());
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -181,7 +181,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
     fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
-	     ? textfont() : textfont()->bold, textsize());
+	     ? text_font() : text_font()->bold, text_size());
     fl_draw(buf, x, y+h-fl_descent());
   }
 }
@@ -197,11 +197,11 @@ int Widget_Browser::item_width(void *v) const {
   if (l->is_widget() || l->is_class()) {
     const char* c = l->type_name();
     if (!strncmp(c,"Fl_",3)) c += 3;
-    fl_font(textfont(), textsize());
+    fl_font(text_font(), text_size());
     w += int(fl_width(c) + fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()->bold, textsize());
+      fl_font(text_font()->bold, text_size());
       w += int(fl_width(c));
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -225,7 +225,7 @@ int Widget_Browser::item_width(void *v) const {
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
     fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
-	    ? textfont() : textfont()->bold, textsize());
+	    ? text_font() : text_font()->bold, text_size());
     w += int(fl_width(buf));
   }
 
@@ -679,5 +679,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.15 1999/11/22 09:00:14 bill Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.16 2000/01/16 07:44:21 robertk Exp $".
 //

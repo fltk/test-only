@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.16 1999/12/15 08:30:55 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.17 2000/01/16 07:44:32 robertk Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -99,9 +99,9 @@ int Flcc_Value_Input::format(char* buf) {
 void Fl_Color_Chooser::set_valuators() {
   switch (mode()) {
   case M_RGB:
-    rvalue.range(0,1); rvalue.step(1,1000); rvalue.value(r_);
-    gvalue.range(0,1); gvalue.step(1,1000); gvalue.value(g_);
-    bvalue.range(0,1); bvalue.step(1,1000); bvalue.value(b_);
+    rvalue.range(0,1); rvalue.step(1/1000); rvalue.value(r_);
+    gvalue.range(0,1); gvalue.step(1/1000); gvalue.value(g_);
+    bvalue.range(0,1); bvalue.step(1/1000); bvalue.value(b_);
     break;
   case M_BYTE:
   case M_HEX:
@@ -110,9 +110,9 @@ void Fl_Color_Chooser::set_valuators() {
     bvalue.range(0,255); bvalue.step(1); bvalue.value(int(255*b_+.5));
     break;
   case M_HSV:
-    rvalue.range(0,6); rvalue.step(1,1000); rvalue.value(hue_);
-    gvalue.range(0,1); gvalue.step(1,1000); gvalue.value(saturation_);
-    bvalue.range(0,1); bvalue.step(1,1000); bvalue.value(value_);
+    rvalue.range(0,6); rvalue.step(1/1000); rvalue.value(hue_);
+    gvalue.range(0,1); gvalue.step(1/1000); gvalue.value(saturation_);
+    bvalue.range(0,1); bvalue.step(1/1000); bvalue.value(value_);
     break;
   }
 }
@@ -339,8 +339,8 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   hue_ = 0.0;
   saturation_ = 0.0;
   value_ = 0.0;
-  huebox.box(FL_DOWN_FRAME);
-  valuebox.box(FL_DOWN_FRAME);
+  huebox.box(FL_DOWN_BOX);
+  valuebox.box(FL_DOWN_BOX);
   choice.menu(mode_menu);
   set_valuators();
   rvalue.callback(rgb_cb);
@@ -508,5 +508,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.16 1999/12/15 08:30:55 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.17 2000/01/16 07:44:32 robertk Exp $".
 //

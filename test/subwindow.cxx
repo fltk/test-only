@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.7 1999/06/15 17:02:34 gustavo Exp $"
+// "$Id: subwindow.cxx,v 1.8 2000/01/16 07:44:44 robertk Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -162,7 +162,7 @@ int main(int, char **) {
 	     "that needs a different visual.  There are bugs with the "
 	     "origins being different between drawing and events, "
 	     "which I hope I have solved."
-	     )) -> align(FL_ALIGN_WRAP);
+	     )) -> set_flag(FL_ALIGN_WRAP);
   popup = new Fl_Menu_Button(0,0,400,400);
   popup->type(Fl_Menu_Button::POPUP3);
   popup->add("This|is|a popup|menu");
@@ -172,5 +172,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.7 1999/06/15 17:02:34 gustavo Exp $".
+// End of "$Id: subwindow.cxx,v 1.8 2000/01/16 07:44:44 robertk Exp $".
 //

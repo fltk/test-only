@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.5 1999/03/14 06:46:44 carl Exp $"
+// "$Id: cube.cxx,v 1.6 2000/01/16 07:44:40 robertk Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -125,8 +125,8 @@ cube_box *cube, *cube2;
 
 void makeform(const char *name) {
   form = new Fl_Window(510+390,390,name);
-  (void) new Fl_Box(FL_DOWN_FRAME,20,20,350,350,"");
-  (void) new Fl_Box(FL_DOWN_FRAME,510,20,350,350,"");
+  (void) new Fl_Box(FL_DOWN_BOX,20,20,350,350,"");
+  (void) new Fl_Box(FL_DOWN_BOX,510,20,350,350,"");
   speed = new Fl_Slider(FL_VERT_SLIDER,390,90,40,220,"Speed");
   size = new Fl_Slider(FL_VERT_SLIDER,450,90,40,220,"Size");
   wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
@@ -143,9 +143,9 @@ void makeform(const char *name) {
 
 main(int argc, char **argv) {
   makeform(argv[0]);
-  speed->bounds(4,0);
+  speed->range(4,0);
   speed->value(cube->speed = cube2->speed = 1.0);
-  size->bounds(4,0.01);
+  size->range(4,0.01);
   size->value(cube->size = cube2->size = 1.0);
   flat->value(1); cube->wire = 0; cube2->wire = 1;
   form->label("cube");
@@ -169,5 +169,5 @@ main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cube.cxx,v 1.5 1999/03/14 06:46:44 carl Exp $".
+// End of "$Id: cube.cxx,v 1.6 2000/01/16 07:44:40 robertk Exp $".
 //

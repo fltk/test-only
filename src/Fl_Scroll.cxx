@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.16 1999/11/22 09:09:54 vincent Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.17 2000/01/16 07:44:35 robertk Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -75,11 +75,11 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
   X = x(); Y = y(); W = w(); H = h(); box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
-    if (scrollbar.align() & FL_ALIGN_LEFT) X += scrollbar.w();
+    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
   }
   if (hscrollbar.visible()) {
     H -= hscrollbar.h();
-    if (scrollbar.align() & FL_ALIGN_TOP) Y += hscrollbar.h();
+    if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
   }
 }
 
@@ -129,7 +129,7 @@ void Fl_Scroll::draw() {
       if (scrollbar.visible()) {
 	scrollbar.clear_visible();
 	draw_clip(this,
-		  scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
+		  scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		  Y, scrollbar.w(), H);
 	W += scrollbar.w();
 	d = FL_DAMAGE_ALL;
@@ -145,7 +145,7 @@ void Fl_Scroll::draw() {
       if (hscrollbar.visible()) {
 	hscrollbar.clear_visible();
 	draw_clip(this, X,
-		  scrollbar.align()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
+		  scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		  W, hscrollbar.h());
 	H += hscrollbar.h();
 	d = FL_DAMAGE_ALL;
@@ -153,12 +153,12 @@ void Fl_Scroll::draw() {
     }
   }
 
-  scrollbar.resize(scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
+  scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		   Y, scrollbar.w(), H);
   scrollbar.value(oldy = yposition_ = (Y-t), H, 0, b-t);
 
   hscrollbar.resize(X,
-		    scrollbar.align()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
+		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		    W, hscrollbar.h());
   hscrollbar.value(oldx = xposition_ = (X-l), W, 0, r-l);
 
@@ -236,5 +236,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.16 1999/11/22 09:09:54 vincent Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.17 2000/01/16 07:44:35 robertk Exp $".
 //

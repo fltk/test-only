@@ -1,5 +1,5 @@
 //
-// "$Id: bitmap.cxx,v 1.5 1999/08/16 07:31:32 bill Exp $"
+// "$Id: bitmap.cxx,v 1.6 2000/01/16 07:44:38 robertk Exp $"
 //
 // Bitmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -111,7 +111,8 @@ void button_cb(Fl_Widget *,void *) {
   if (topb->value()) i |= FL_ALIGN_TOP;
   if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
   if (insideb->value()) i |= FL_ALIGN_INSIDE;
-  b->align(i);
+  b->clear_flag(FL_ALIGN_MASK);
+  b->set_flag(i);
   w->redraw();
 }
 
@@ -137,5 +138,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: bitmap.cxx,v 1.5 1999/08/16 07:31:32 bill Exp $".
+// End of "$Id: bitmap.cxx,v 1.6 2000/01/16 07:44:38 robertk Exp $".
 //

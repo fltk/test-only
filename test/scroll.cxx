@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.10 2000/01/10 06:31:29 bill Exp $"
+// "$Id: scroll.cxx,v 1.11 2000/01/16 07:44:44 robertk Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,8 @@ class Drawing : public Fl_Widget {
   void draw();
 public:
   Drawing(int X,int Y,int W,int H,const char* L) : Fl_Widget(X,Y,W,H,L) {
-    align(FL_ALIGN_TOP);
+	clear_flag(FL_ALIGN_MASK);
+    set_flag(FL_ALIGN_TOP);
     box(FL_FLAT_BOX);
     color(FL_WHITE);
   }
@@ -64,7 +65,7 @@ void Drawing::draw() {
 Fl_Scroll* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
-  thescroll->box(((Fl_Button*)o)->value() ? (Fl_Boxtype)FL_DOWN_FRAME : FL_NO_BOX);
+  thescroll->box(((Fl_Button*)o)->value() ? (Fl_Boxtype)FL_DOWN_BOX : FL_NO_BOX);
   thescroll->redraw();
 }
 
@@ -85,7 +86,8 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  thescroll->scrollbar.align((long)v);
+  thescroll->scrollbar.clear_flag(FL_ALIGN_MASK);
+  thescroll->scrollbar.set_flag((long)v);
   thescroll->redraw();
 }
 
@@ -110,8 +112,8 @@ int main(int argc, char** argv) {
     Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25,strdup(buf));
     b->color(n);
     b->selection_color(n);
-    b->labelcolor(FL_WHITE);
-    b->down_labelcolor(FL_WHITE);
+    b->label_color(FL_WHITE);
+    b->selection_text_color(FL_WHITE);
   }
   g.end();
   Drawing drawing(0,8*25,5*75,5*75,0);
@@ -142,5 +144,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.10 2000/01/10 06:31:29 bill Exp $".
+// End of "$Id: scroll.cxx,v 1.11 2000/01/16 07:44:44 robertk Exp $".
 //

@@ -36,7 +36,13 @@ else
   directory("");} open selected
         tooltip {Click to access directory tree.}
         private xywh {65 10 210 25}
-        code0 {o->align(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);}
+        code0 {
+#ifdef FLTK_2        
+        o->set_flag(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+#else
+        o->align(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+#endif        
+        }
       } {}
       Fl_Button upButton {
         callback {up();} selected
@@ -154,11 +160,23 @@ fileList->deselect();} {}
   }
   Function {textcolor(Fl_Color c)} {return_type void
   } {
-    code {fileList->textcolor(c);} {}
+    code {
+#ifdef FLTK_2    
+    fileList->textcolor(c);
+#else
+    fileList->text_color(c);
+#endif    
+    } {}
   }
   Function {textcolor()} {return_type Fl_Color
   } {
-    code {return (fileList->textcolor());} {}
+    code {
+#ifdef FLTK_2    
+    return (fileList->textcolor());
+#else    
+    return (fileList->textcolor());
+#endif    
+    } {}
   }
   Function {textfont(Fl_Font f)} {return_type void
   } {
@@ -166,7 +184,13 @@ fileList->deselect();} {}
   }
   Function {textfont()} {return_type Fl_Font
   } {
-    code {return (fileList->textfont());} {}
+    code {
+#ifdef FLTK_2    
+    return (fileList->text_font());
+#else
+    return (fileList->textfont());
+#endif    
+    } {}
   }
   Function {textsize(uchar s)} {return_type void
   } {

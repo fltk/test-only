@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.2 1999/01/07 19:17:53 mike Exp $"
+// "$Id: editor.cxx,v 1.3 2000/01/16 07:44:41 robertk Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -354,17 +354,19 @@ int main(int argc, char **argv) {
     input = new Fl_Multiline_Input(0, 30, 640, 450);
     input->callback((Fl_Callback *)changed_cb);
     input->when(FL_WHEN_CHANGED);
-    input->textfont(FL_COURIER);
+    input->text_font(FL_COURIER);
   window->end();
   window->resizable(input);
   window->callback((Fl_Callback *)quit_cb);
 
   replace_dlg = new Fl_Window(300, 105, "Replace");
     replace_find = new Fl_Input(70, 10, 210, 25, "Find:");
-    replace_find->align(FL_ALIGN_LEFT);
+	replace_find->clear_flag(FL_ALIGN_MASK);
+    replace_find->set_flag(FL_ALIGN_LEFT);
 
     replace_with = new Fl_Input(70, 40, 210, 25, "Replace:");
-    replace_with->align(FL_ALIGN_LEFT);
+	replace_with->clear_flag(FL_ALIGN_MASK);
+    replace_with->set_flag(FL_ALIGN_LEFT);
 
     replace_all = new Fl_Button(10, 70, 90, 25, "Replace All");
     replace_all->callback((Fl_Callback *)replall_cb);
@@ -385,5 +387,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.2 1999/01/07 19:17:53 mike Exp $".
+// End of "$Id: editor.cxx,v 1.3 2000/01/16 07:44:41 robertk Exp $".
 //

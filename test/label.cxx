@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.7 1999/11/07 08:11:55 bill Exp $"
+// "$Id: label.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -48,17 +48,17 @@ void button_cb(Fl_Widget *,void *) {
   if (insideb->value()) i |= FL_ALIGN_INSIDE;
   if (clipb->value()) i |= FL_ALIGN_CLIP;
   if (wrapb->value()) i |= FL_ALIGN_WRAP;
-  text->align(i);
+  text->set_flag(i);
   window->redraw();
 }
 
 void font_cb(Fl_Widget *,void *) {
-  text->labelfont(int(fonts->value()));
+  text->label_font(fl_fonts +  int(fonts->value()));
   window->redraw();
 }
 
 void size_cb(Fl_Widget *,void *) {
-  text->labelsize(int(sizes->value()));
+  text->label_size(int(sizes->value()));
   window->redraw();
 }
 
@@ -68,12 +68,12 @@ void input_cb(Fl_Widget *,void *) {
 }
 
 void normal_cb(Fl_Widget *,void *) {
-  text->labeltype(FL_NORMAL_LABEL);
+  text->label_type(FL_NORMAL_LABEL);
   window->redraw();
 }
 
 void symbol_cb(Fl_Widget *,void *) {
-  text->labeltype(FL_SYMBOL_LABEL);
+  text->label_type(FL_SYMBOL_LABEL);
   if (input->value()[0] != '@') {
     input->static_value("@->");
     text->label("@->");
@@ -82,17 +82,17 @@ void symbol_cb(Fl_Widget *,void *) {
 }
 
 void shadow_cb(Fl_Widget *,void *) {
-  text->labeltype(FL_SHADOW_LABEL);
+  text->label_type(FL_SHADOW_LABEL);
   window->redraw();
 }
 
 void embossed_cb(Fl_Widget *,void *) {
-  text->labeltype(FL_EMBOSSED_LABEL);
+  text->label_type(FL_EMBOSSED_LABEL);
   window->redraw();
 }
 
 void engraved_cb(Fl_Widget *,void *) {
-  text->labeltype(FL_ENGRAVED_LABEL);
+  text->label_type(FL_ENGRAVED_LABEL);
   window->redraw();
 }
 
@@ -113,15 +113,17 @@ int main(int argc, char **argv) {
   input->callback(input_cb);
 
   sizes= new Fl_Hor_Value_Slider(50,350,350,25,"Size:");
-  sizes->align(FL_ALIGN_LEFT);
-  sizes->bounds(1,64);
+  sizes->clear_flag(FL_ALIGN_MASK);
+  sizes->set_flag(FL_ALIGN_LEFT);
+  sizes->range(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 
   fonts=new Fl_Hor_Value_Slider(50,325,350,25,"Font:");
-  fonts->align(FL_ALIGN_LEFT);
-  fonts->bounds(0,15);
+  fonts->clear_flag(FL_ALIGN_MASK);
+  fonts->set_flag(FL_ALIGN_LEFT);
+  fonts->range(0,15);
   fonts->step(1);
   fonts->value(0);
   fonts->callback(font_cb);
@@ -146,8 +148,9 @@ int main(int argc, char **argv) {
   Fl_Choice *c = new Fl_Choice(50,275,200,25);
   c->menu(choices);
 
-  text= new Fl_Box(FL_FRAME_BOX,100,75,200,100,input->value());
-  text->align(FL_ALIGN_CENTER);
+  text= new Fl_Box(FL_ENGRAVED_BOX,100,75,200,100,input->value());
+  text->clear_flag(FL_ALIGN_MASK);
+  text->set_flag(FL_ALIGN_CENTER);
   window->resizable(text);
   window->end();
   window->show(argc,argv);
@@ -155,5 +158,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.7 1999/11/07 08:11:55 bill Exp $".
+// End of "$Id: label.cxx,v 1.8 2000/01/16 07:44:42 robertk Exp $".
 //

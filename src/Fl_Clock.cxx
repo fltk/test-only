@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.18 2000/01/10 06:31:19 bill Exp $"
+// "$Id: Fl_Clock.cxx,v 1.19 2000/01/16 07:44:32 robertk Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -170,7 +170,8 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 //   box(FL_UP_BOX);
 //   selection_color(fl_gray_ramp(5));
   style(::style);
-  align(FL_ALIGN_BOTTOM);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;
   second_ = 0;
@@ -178,5 +179,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.18 2000/01/10 06:31:19 bill Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.19 2000/01/16 07:44:32 robertk Exp $".
 //

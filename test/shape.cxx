@@ -1,5 +1,5 @@
 //
-// "$Id: shape.cxx,v 1.5 1999/01/13 15:45:50 mike Exp $"
+// "$Id: shape.cxx,v 1.6 2000/01/16 07:44:44 robertk Exp $"
 //
 // Tiny OpenGL demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -98,11 +98,12 @@ int main(int argc, char **argv) {
   //  window.size_range(300,330,0,0,1,1,1);
 // add a knob to control it:
   Fl_Hor_Slider slider(50, 295, window.w()-60, 30, "Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.clear_flag(FL_ALIGN_MASK);
+  slider.set_flag(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
-  slider.bounds(3,40);
+  slider.range(3,40);
 
   window.end();
   window.show(argc,argv);
@@ -111,5 +112,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shape.cxx,v 1.5 1999/01/13 15:45:50 mike Exp $".
+// End of "$Id: shape.cxx,v 1.6 2000/01/16 07:44:44 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.5 1999/09/14 07:17:28 bill Exp $"
+// "$Id: gl_overlay.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -125,20 +125,22 @@ int main(int argc, char **argv) {
   window.resizable(&sw);
 
   Fl_Hor_Slider slider(60, 5, window.w()-70, 30, "Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.clear_flag(FL_ALIGN_MASK);
+  slider.set_flag(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
-  slider.bounds(3,40);
+  slider.range(3,40);
 
   Fl_Hor_Slider oslider(60, 40, window.w()-70, 30, "Overlay:");
-  oslider.align(FL_ALIGN_LEFT);
+  oslider.clear_flag(FL_ALIGN_MASK);
+  oslider.set_flag(FL_ALIGN_LEFT);
 #if HAVE_GL
   oslider.callback(overlay_sides_cb,&sw);
   oslider.value(sw.overlay_sides);
 #endif
   oslider.step(1);
-  oslider.bounds(3,40);
+  oslider.range(3,40);
 
   window.end();
   window.show(argc,argv);
@@ -154,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.5 1999/09/14 07:17:28 bill Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $".
 //

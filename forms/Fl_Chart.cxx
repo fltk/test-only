@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.6 2000/01/10 06:31:13 bill Exp $"
+// "$Id: Fl_Chart.cxx,v 1.7 2000/01/16 07:44:26 robertk Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -251,26 +251,26 @@ void Fl_Chart::draw() {
     }
 
     draw_box();
-    fl_font(textfont(),textsize());
+    fl_font(text_font(),text_size());
 
     switch (type()) {
     case FL_BAR_CHART:
 	draw_barchart(xx,yy,ww,hh, numb, entries, min, max,
-			autosize(), maxnumb, textcolor());
+			autosize(), maxnumb, text_color());
 	break;
     case FL_HORBAR_CHART:
 	draw_horbarchart(xx,yy,ww,hh, numb, entries, min, max,
-			autosize(), maxnumb, textcolor());
+			autosize(), maxnumb, text_color());
 	break;
     case FL_PIE_CHART:
-	draw_piechart(xx,yy,ww,hh,numb,entries,0, textcolor());
+	draw_piechart(xx,yy,ww,hh,numb,entries,0, text_color());
 	break;
     case FL_SPECIALPIE_CHART:
-	draw_piechart(xx,yy,ww,hh,numb,entries,1,textcolor());
+	draw_piechart(xx,yy,ww,hh,numb,entries,1,text_color());
 	break;
     default:
 	draw_linechart(type(),xx,yy,ww,hh, numb, entries, min, max,
-			autosize(), maxnumb, textcolor());
+			autosize(), maxnumb, text_color());
 	break;
     }
     draw_label();
@@ -290,7 +290,8 @@ static Fl_Named_Style* style = new Fl_Named_Style("Chart", 0, &style);
 Fl_Chart::Fl_Chart(int x,int y,int w,int h,const char *l) :
 Fl_Widget(x,y,w,h,l) {
   style(::style);
-  align(FL_ALIGN_BOTTOM);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
   sizenumb   = FL_CHART_MAX;
@@ -384,5 +385,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.6 2000/01/10 06:31:13 bill Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.7 2000/01/16 07:44:26 robertk Exp $".
 //

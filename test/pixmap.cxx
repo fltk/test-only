@@ -1,5 +1,5 @@
 //
-// "$Id: pixmap.cxx,v 1.6 2000/01/09 08:17:33 bill Exp $"
+// "$Id: pixmap.cxx,v 1.7 2000/01/16 07:44:44 robertk Exp $"
 //
 // Pixmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,8 @@ void button_cb(Fl_Widget *,void *) {
   if (topb->value()) i |= FL_ALIGN_TOP;
   if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
   if (insideb->value()) i |= FL_ALIGN_INSIDE;
-  b->align(i);
+  b->clear_flag(FL_ALIGN_MASK);
+  b->set_flag(i);
   w->redraw();
 }
 
@@ -61,8 +62,8 @@ int main(int argc, char **argv) {
 
   Fl_Window window(400,400); ::w = &window;
   Fl_Button b(140,160,120,120,"World's fastest toolkit"); ::b = &b;
-  b.align(FL_ALIGN_WRAP);
-  b.labelsize(10);
+  b.set_flag(FL_ALIGN_WRAP);
+  b.label_size(10);
   b.image(new Fl_Pixmap(porsche_xpm));
   leftb = new Fl_Toggle_Button(50,75,50,25,"left");
   leftb->callback(button_cb);
@@ -82,5 +83,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pixmap.cxx,v 1.6 2000/01/09 08:17:33 bill Exp $".
+// End of "$Id: pixmap.cxx,v 1.7 2000/01/16 07:44:44 robertk Exp $".
 //

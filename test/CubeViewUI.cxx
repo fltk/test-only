@@ -55,7 +55,7 @@ CubeViewUI::CubeViewUI() {
           o->maximum(180);
           o->step(1);
           o->callback((Fl_Callback*)cb_vrot);
-          o->align(FL_ALIGN_WRAP);
+          o->set_flag(FL_ALIGN_WRAP);
         }
         { Fl_Slider* o = ypan = new Fl_Slider(25, 100, 17, 186);
           o->type(4);
@@ -65,7 +65,8 @@ CubeViewUI::CubeViewUI() {
           o->maximum(25);
           o->step(0.1);
           o->callback((Fl_Callback*)cb_ypan);
-          o->align(FL_ALIGN_CENTER);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_CENTER);
         }
         o->end();
       }
@@ -78,7 +79,8 @@ CubeViewUI::CubeViewUI() {
           o->maximum(-25);
           o->step(0.1);
           o->callback((Fl_Callback*)cb_xpan);
-          o->align(FL_ALIGN_CENTER);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_CENTER);
         }
         { Fl_Roller* o = hrot = new Fl_Roller(122, 383, 186, 17, "H Rotation");
           o->type(1);
@@ -87,7 +89,8 @@ CubeViewUI::CubeViewUI() {
           o->maximum(180);
           o->step(1);
           o->callback((Fl_Callback*)cb_hrot);
-          o->align(FL_ALIGN_RIGHT);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_RIGHT);
         }
         o->end();
       }
@@ -102,14 +105,15 @@ CubeViewUI::CubeViewUI() {
       }
       { Fl_Value_Slider* o = zoom = new Fl_Value_Slider(106, 3, 227, 19, "Zoom");
         o->type(5);
-        o->labelfont(fl_fonts+1);
+        o->label_font(fl_fonts+1);
         o->label_color((Fl_Color)136);
         o->minimum(1);
         o->maximum(50);
         o->step(0.1);
         o->value(10);
         o->callback((Fl_Callback*)cb_zoom);
-        o->align(FL_ALIGN_LEFT);
+		o->clear_flag(FL_ALIGN_MASK);
+        o->set_flag(FL_ALIGN_LEFT);
       }
       o->end();
     }

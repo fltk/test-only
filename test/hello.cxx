@@ -1,5 +1,5 @@
 //
-// "$Id: hello.cxx,v 1.4 1999/01/07 19:17:55 mike Exp $"
+// "$Id: hello.cxx,v 1.5 2000/01/16 07:44:42 robertk Exp $"
 //
 // Hello, World! program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,14 @@
 int main(int argc, char **argv) {
   Fl_Window *window = new Fl_Window(300,180);
   Fl_Box *box = new Fl_Box(FL_UP_BOX,20,40,260,100,"Hello, World!");
-  box->labelfont(FL_BOLD+FL_ITALIC);
-  box->labelsize(36);
-  box->labeltype(FL_SHADOW_LABEL);
+  box->label_font(FL_HELVETICA_BOLD_ITALIC);
+  box->label_size(36);
+  box->label_type(FL_SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: hello.cxx,v 1.4 1999/01/07 19:17:55 mike Exp $".
+// End of "$Id: hello.cxx,v 1.5 2000/01/16 07:44:42 robertk Exp $".
 //

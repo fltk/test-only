@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.2 1999/11/27 15:45:08 carl Exp $"
+// "$Id: fractals.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -746,7 +746,8 @@ int main(int argc, char** argv)
 
   // create a bunch of buttons:
   Fl_Group *g = new Fl_Group(110,50,400-110,30,"Level:");
-  g->align(FL_ALIGN_LEFT);
+  g->clear_flag(FL_ALIGN_MASK);
+  g->set_flag(FL_ALIGN_LEFT);
   g->begin();
   Fl_Button *b;
   b = new Fl_Button(110,50,30,30,"0"); b->callback(setlevel,(void*)0);
@@ -795,5 +796,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.2 1999/11/27 15:45:08 carl Exp $".
+// End of "$Id: fractals.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: curve.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $"
+// "$Id: curve.cxx,v 1.5 2000/01/16 07:44:40 robertk Exp $"
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
@@ -97,7 +97,8 @@ int main(int argc, char** argv) {
     if (n == 8) s->maximum(360);
     s->step(1);
     s->value(args[n]);
-    s->align(FL_ALIGN_LEFT);
+	s->clear_flag(FL_ALIGN_MASK);
+    s->set_flag(FL_ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
   }
   Fl_Toggle_Button but(50,y,50,25,"points");
@@ -109,5 +110,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: curve.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $".
+// End of "$Id: curve.cxx,v 1.5 2000/01/16 07:44:40 robertk Exp $".
 //

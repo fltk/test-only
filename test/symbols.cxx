@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.4 1999/01/07 19:18:01 mike Exp $"
+// "$Id: symbols.cxx,v 1.5 2000/01/16 07:44:45 robertk Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -45,11 +45,12 @@ void bt(const char *name) {
   x = x*W+10;
   y = y*H+10;
   Fl_Box *a = new Fl_Box(FL_NO_BOX,x,y,W-20,H-20,name);
-  a->align(FL_ALIGN_BOTTOM);
-  a->labelsize(11);
+  a->clear_flag(FL_ALIGN_MASK);
+  a->set_flag(FL_ALIGN_BOTTOM);
+  a->label_size(11);
   Fl_Box *b = new Fl_Box(FL_UP_BOX,x,y,W-20,H-20,name);
-  b->labeltype(FL_SYMBOL_LABEL);
-  b->labelcolor(FL_DARK3);
+  b->label_type(FL_SYMBOL_LABEL);
+  b->label_color(FL_DARK3);
 }
 
 int main(int argc, char ** argv) {
@@ -85,5 +86,5 @@ bt("@DnArrow");
 }
 
 //
-// End of "$Id: symbols.cxx,v 1.4 1999/01/07 19:18:01 mike Exp $".
+// End of "$Id: symbols.cxx,v 1.5 2000/01/16 07:44:45 robertk Exp $".
 //

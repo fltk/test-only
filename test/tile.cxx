@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.5 1999/11/10 16:39:33 vincent Exp $"
+// "$Id: tile.cxx,v 1.6 2000/01/16 07:44:45 robertk Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
   Fl_Group box0(0,0,150,150,"0");
   box0.box(FL_DOWN_BOX);
   box0.color(9);
-  box0.labelsize(36);
-  box0.align(FL_ALIGN_CLIP);
+  box0.label_size(36);
+  box0.set_flag(FL_ALIGN_CLIP);
 
   Fl_Button but(20, 20, 100, 30, "Button");
   box0.end();
@@ -48,8 +48,8 @@ int main(int argc, char** argv) {
   Fl_Box box1(0,0,150,150,"1\nThis is a\nchild\nX window");
   box1.box(FL_DOWN_BOX);
   box1.color(19);
-  box1.labelsize(18);
-  box1.align(FL_ALIGN_CLIP);
+  box1.label_size(18);
+  box1.set_flag(FL_ALIGN_CLIP);
   w1.resizable(box1);
   w1.end();
 
@@ -57,26 +57,26 @@ int main(int argc, char** argv) {
   Fl_Box box2a(0,150,70,150,"2a");
   box2a.box(FL_DOWN_BOX);
   box2a.color(12);
-  box2a.labelsize(36);
-  box2a.align(FL_ALIGN_CLIP);
+  box2a.label_size(36);
+  box2a.set_flag(FL_ALIGN_CLIP);
   Fl_Box box2b(70,150,80,150,"2b");
   box2b.box(FL_DOWN_BOX);
   box2b.color(13);
-  box2b.labelsize(36);
-  box2b.align(FL_ALIGN_CLIP);
+  box2b.label_size(36);
+  box2b.set_flag(FL_ALIGN_CLIP);
   //tile2.end();
 
   //Fl_Tile tile3(150,150,150,150);
   Fl_Box box3a(150,150,150,70,"3a");
   box3a.box(FL_DOWN_BOX);
   box3a.color(12);
-  box3a.labelsize(36);
-  box3a.align(FL_ALIGN_CLIP);
+  box3a.label_size(36);
+  box3a.set_flag(FL_ALIGN_CLIP);
   Fl_Box box3b(150,150+70,150,80,"3b");
   box3b.box(FL_DOWN_BOX);
   box3b.color(13);
-  box3b.labelsize(36);
-  box3b.align(FL_ALIGN_CLIP);
+  box3b.label_size(36);
+  box3b.set_flag(FL_ALIGN_CLIP);
   //tile3.end();
   
   Fl_Box r(10,0,300-10,300-10);
@@ -91,5 +91,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: tile.cxx,v 1.5 1999/11/10 16:39:33 vincent Exp $".
+// End of "$Id: tile.cxx,v 1.6 2000/01/16 07:44:45 robertk Exp $".
 //

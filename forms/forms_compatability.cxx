@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.3 1999/11/27 15:45:04 carl Exp $"
+// "$Id: forms_compatability.cxx,v 1.4 2000/01/16 07:44:27 robertk Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,19 +30,19 @@
 #include <stdlib.h>
 
 void fl_set_object_lstyle(Fl_Widget* o,int a) {
-  o->labelfont(fl_fonts+(a&15));
+  o->label_font(fl_fonts+(a&15));
   switch (a >> 8) {
   case 0:
-    o->labeltype(FL_NORMAL_LABEL);
+    o->label_type(FL_NORMAL_LABEL);
     break;
   case 1:
-    o->labeltype(FL_SHADOW_LABEL);
+    o->label_type(FL_SHADOW_LABEL);
     break;
   case 2:
-    o->labeltype(FL_ENGRAVED_LABEL);
+    o->label_type(FL_ENGRAVED_LABEL);
     break;
   case 3:
-    o->labeltype(FL_EMBOSSED_LABEL);
+    o->label_type(FL_EMBOSSED_LABEL);
     break;
   }
 }
@@ -112,7 +112,9 @@ char fl_modal_next; // set by fl_freeze_forms()
 
 void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
+#ifndef FLTK_2
   Fl::enable_symbols();
+#endif
 
   f->label(n);
   if (!b) f->clear_border();
@@ -160,7 +162,7 @@ void fl_set_graphics_mode(int /*r*/,int /*d*/) {}
 
 void Fl_FormsText::draw() {
   draw_box();
-  align(align()|FL_ALIGN_INSIDE); // questionable method of compatability
+  set_flag(flags()|FL_ALIGN_INSIDE); // questionable method of compatability
   draw_label();
 }
 
@@ -229,5 +231,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.3 1999/11/27 15:45:04 carl Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.4 2000/01/16 07:44:27 robertk Exp $".
 //

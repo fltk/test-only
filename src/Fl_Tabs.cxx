@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.33 2000/01/10 06:31:24 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.34 2000/01/16 07:44:35 robertk Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -275,7 +275,7 @@ void Fl_Tabs::draw() {
     } else {
       // draw the edge when no selection:
       fl_color(H >= 0 ? FL_LIGHT3 : FL_DARK3);
-      fl_xyline(x(), H >= 0 ? y()+H : y()+h()+H, x()+this->w());
+	  fl_xyline(x(), H >= 0 ? y()+H : y()+h()+H, x()+this->w());
     }
 
   }
@@ -315,12 +315,12 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
       if (x1>x()) fl_xyline(x(), y()+H, x1);
       if (x2+TABSLOPE < x()+w()-1) fl_xyline(x2+TABSLOPE, y()+H, x()+w()-1);
     }
-    fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
+    fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
     fl_line(x2, y(), x2+TABSLOPE, y()+H);
   } else {
     fl_polygon(x1, y()+h()+H-sel, x1+TABSLOPE, y()+h(), x2, y()+h(),
 	       x2+TABSLOPE, y()+h()+H-sel);
-    fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
+    fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
     fl_line(x1+TABSLOPE, y()+h()-1, x2, y()+h()-1, x2+TABSLOPE, y()+h()+H);
     if (sel) {
       if (x1>x()) fl_xyline(x(), y()+h()+H, x1);
@@ -359,5 +359,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.33 2000/01/10 06:31:24 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.34 2000/01/16 07:44:35 robertk Exp $".
 //

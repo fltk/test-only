@@ -67,19 +67,19 @@ void Fl_NSlider::draw() {
   isHoz = horizontal();
   if( isHoz ) { 
      pxSlider = (int)(w()*slider_size_);
-     px_x     = x() + Fl::box_dx(box()) + (pxSlider/2);  //starting point
-     px_y     = y() + Fl::box_dy(box());                 //y of widget
-     px_w     = w() - pxSlider - Fl::box_dw(box());      //w of widget
-     px_h     = h() - Fl::box_dh(box());                 //h of widget
+     px_x     = x() + box()->dx() + (pxSlider/2);  //starting point
+     px_y     = y() + box()->dy();                 //y of widget
+     px_w     = w() - pxSlider - box()->dw();      //w of widget
+     px_h     = h() - box()->dh();                 //h of widget
      if(tk_range == 0) px_steps=0;
      else  px_steps = px_w / tk_range;                   //pixel steps(divider)
   }
   else {   //vertical      
      pxSlider = (int)(h()*slider_size_);
-     px_x     = x() + Fl::box_dx(box());                 
-     px_y     = y() + Fl::box_dy(box()) + (pxSlider/2); 
-     px_w     = w() - Fl::box_dw(box());                            
-     px_h     = h() - pxSlider -Fl::box_dh(box());          
+     px_x     = x() + box()->dx();                 
+     px_y     = y() + box()->dy() + (pxSlider/2); 
+     px_w     = w() - box()->dw();                            
+     px_h     = h() - pxSlider -box()->dh();          
      if(tk_range == 0) px_steps=0;
      else  px_steps = px_h / tk_range;                   //pixel steps(divider)
   }
@@ -122,12 +122,12 @@ void Fl_NSlider::calcButton(int &knob_x, int &knob_y, int &knob_w , int &knob_h,
  switch(type()) {
         case FL_VERT_FILL_SLIDER:
              knob_x = px_x;
-	     knob_y = y()+Fl::box_dy(box());
+	     knob_y = y()+box()->dy();
 	     knob_w = px_w;
              knob_h = tk_button_incr-y();
 	      break;
         case FL_HOR_FILL_SLIDER	:
-             knob_x = x()+Fl::box_dx(box());
+             knob_x = x()+box()->dx();
 	     knob_y = px_y;
 	     knob_w = tk_button_incr-x();
              knob_h = px_h;
@@ -192,10 +192,10 @@ int  Fl_NSlider::handle(int event)
   case FL_DRAG:
         oldval=value();
 	if( horizontal() ) {
-	    val = ((newpos-x()-Fl::box_dw(box()) - ( (w()*slider_size_)/2))/ px_steps)+minimum();
+	    val = ((newpos-x()-box()->dw() - ( (w()*slider_size_)/2))/ px_steps)+minimum();
 	}
 	else{  //vertical
-	    val = ((newpos-y()-Fl::box_dh(box()) - ( (h()*slider_size_)/2) )/ px_steps)+minimum();
+	    val = ((newpos-y()-box()->dh() - ( (h()*slider_size_)/2) )/ px_steps)+minimum();
         }
         val = clamp(val);
         val = round(val);
@@ -222,7 +222,7 @@ void   Fl_NSlider::drawTicks()
  int    minorLnStart  ;
  int    majorFntStart ;
  
- Fl::get_color( selection_color(), sr1, sg1, sb1);  //get color for ticks
+ fl_get_color( selection_color(), sr1, sg1, sb1);  //get color for ticks
 
  fl_font( (Fl_Font)_tick_font,_tick_fontSize);
  
@@ -327,15 +327,15 @@ void   Fl_NSlider::drawTicks()
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) 
 {
  Fl_NSlider* v = (Fl_NSlider*)vv;
- char r= r1+Y*(r2-r1)/( v->h()-Fl::box_dh(v->box()) );   //VERTICAL
- char g= g1+Y*(g2-g1)/( v->h()-Fl::box_dh(v->box()) );
- char b= b1+Y*(b2-b1)/( v->h()-Fl::box_dh(v->box()) );
+ char r= r1+Y*(r2-r1)/( v->h()-(v->box()->dh()) );   //VERTICAL
+ char g= g1+Y*(g2-g1)/( v->h()-(v->box()->dh()) );
+ char b= b1+Y*(b2-b1)/( v->h()-(v->box()->dh()) );
 
  for (int x = X; x < X+W; x++) {
     if( isHoz ){   
-        r= r1+x*(r2-r1)/( v->w()-Fl::box_dw(v->box()) );  //HORIZONTAL
-        g= g1+x*(g2-g1)/( v->w()-Fl::box_dw(v->box()) );
-        b= b1+x*(b2-b1)/( v->w()-Fl::box_dw(v->box()) );
+        r= r1+x*(r2-r1)/( v->w()-(v->box()->dw()) );  //HORIZONTAL
+        g= g1+x*(g2-g1)/( v->w()-(v->box()->dw()) );
+        b= b1+x*(b2-b1)/( v->w()-(v->box()->dw()) );
     }
     *buf++ = r;
     *buf++ = g;
@@ -346,10 +346,10 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf)
 void   Fl_NSlider::drawRamp()
 {
   if( (_r1+_r2+_g1+_g2+_b1+_b2) == 0) return;   //if black dont do it
-  int x1 = x()+Fl::box_dx(box());
-  int y1 = y()+Fl::box_dy(box());
-  int w1 = w()-Fl::box_dw(box());
-  int h1 = h()-Fl::box_dh(box());
+  int x1 = x()+box()->dx();
+  int y1 = y()+box()->dy();
+  int w1 = w()-box()->dw();
+  int h1 = h()-box()->dh();
   r1=_r1; g1=_g1; b1=_b1;	    //for color ramp
   r2=_r2; g2=_g2; b2=_b2;
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
@@ -366,7 +366,7 @@ void Fl_NSlider::slider_size(float v) {
 ////////////////set the bounds (from old slider)
 void Fl_NSlider::bounds(float a, float b) {
   if (minimum() != a || maximum() != b) {
-    Fl_Valuator::bounds(a, b); 
+    Fl_Valuator::range(a, b); 
     damage(FL_DAMAGE_EXPOSE);
   }
 }

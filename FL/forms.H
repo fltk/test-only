@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.14 1999/11/27 15:44:48 carl Exp $"
+// "$Id: forms.H,v 1.15 2000/01/16 07:44:20 robertk Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -209,11 +209,11 @@ inline void fl_reset_focus_object(Fl_Widget* o) {Fl::focus(o);}
 // Fl_Widget:
 
 inline void fl_set_object_boxtype(Fl_Widget* o, Fl_Boxtype a) {o->box(a);}
-inline void fl_set_object_lsize(Fl_Widget* o,int s) {o->labelsize(s);}
+inline void fl_set_object_lsize(Fl_Widget* o,int s) {o->label_size(s);}
 void fl_set_object_lstyle(Fl_Widget* o,int a);
-inline void fl_set_object_lcol(Fl_Widget* o, unsigned a) {o->labelcolor((Fl_Color)a);}
+inline void fl_set_object_lcol(Fl_Widget* o, unsigned a) {o->label_color((Fl_Color)a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
-inline void fl_set_object_lalign(Fl_Widget* o, Fl_Align a) {o->align(a);}
+inline void fl_set_object_lalign(Fl_Widget* o, Fl_Align a) { o->clear_flag(FL_ALIGN_MASK); o->set_flag(a);}
 #define fl_set_object_align fl_set_object_lalign
 inline void fl_set_object_color(Fl_Widget* o,unsigned a,unsigned b) {o->color((Fl_Color)a); o->selection_color((Fl_Color)b);}
 inline void fl_set_object_label(Fl_Widget* o, const char* a) {o->label(a); o->redraw();}
@@ -408,7 +408,7 @@ inline void fl_set_pixmap_data(Fl_Widget* o, char*const* b) {
     ((Fl_FormsPixmap*)o)->set(b);
 }
 //inline void fl_set_pixmap_file(Fl_Widget*, const char*);
-inline void fl_set_pixmap_align(Fl_Widget* o,Fl_Align a,int,int) {o->align(a);}
+inline void fl_set_pixmap_align(Fl_Widget* o,Fl_Align a,int,int) { o->clear_flag(FL_ALIGN_MASK); o->set_flag(a);}
 //inline void fl_set_pixmap_colorcloseness(int, int, int);
 
 #include <FL/Fl_Box.H>
@@ -453,9 +453,9 @@ inline int fl_get_browser_maxline(Fl_Widget* o) {
 inline void fl_set_browser_topline(Fl_Widget* o, int n) {
     ((Fl_Browser*)o)->topline(n);}
 inline void fl_set_browser_fontsize(Fl_Widget* o, int s) {
-    ((Fl_Browser*)o)->textsize(s);}
+    ((Fl_Browser*)o)->text_size(s);}
 inline void fl_set_browser_fontstyle(Fl_Widget* o, int s) {
-    ((Fl_Browser*)o)->textfont(fl_fonts+s);}
+    ((Fl_Browser*)o)->text_font(fl_fonts+s);}
 inline void fl_set_browser_specialkey(Fl_Widget* o, char c) {
     ((Fl_Browser*)o)->format_char(c);}
 //inline void fl_set_browser_vscrollbar(Fl_Widget*, int);
@@ -529,11 +529,11 @@ inline void fl_set_chart_maxnumb(Fl_Widget* o, int v) {
 inline void fl_set_chart_autosize(Fl_Widget* o, int v) {
   ((Fl_Chart*)o)->autosize(v);}
 inline void fl_set_chart_lstyle(Fl_Widget* o, Fl_Font v) {
-  ((Fl_Chart*)o)->textfont(v);}
+  ((Fl_Chart*)o)->text_font(v);}
 inline void fl_set_chart_lsize(Fl_Widget* o, int v) {
-  ((Fl_Chart*)o)->textsize(v);}
+  ((Fl_Chart*)o)->text_size(v);}
 inline void fl_set_chart_lcolor(Fl_Widget* o, unsigned v) {
-  ((Fl_Chart*)o)->textcolor((Fl_Color)v);}
+  ((Fl_Chart*)o)->text_color((Fl_Color)v);}
 #define fl_set_chart_lcol   fl_set_chart_lcolor
 
 #include <FL/Fl_Choice.H>
@@ -561,9 +561,9 @@ inline int fl_get_choice(Fl_Widget* o) {
 inline const char* fl_get_choice_text(Fl_Widget* o) {
     return ((Fl_Choice*)o)->text();}
 inline void fl_set_choice_fontsize(Fl_Widget* o, int x) {
-    ((Fl_Choice*)o)->textsize(x);}
+    ((Fl_Choice*)o)->text_size(x);}
 inline void fl_set_choice_fontstyle(Fl_Widget* o, Fl_Font x) {
-    ((Fl_Choice*)o)->textfont(x);}
+    ((Fl_Choice*)o)->text_font(x);}
 // inline void fl_set_choice_item_mode(Fl_Widget*, int, unsigned);
 // inline void fl_set_choice_item_shortcut(Fl_Widget*, int, const char*);
 
@@ -580,11 +580,12 @@ forms_constructor(Fl_Counter, fl_add_counter)
 inline void fl_set_counter_value(Fl_Widget* o, double v) {
     ((Fl_Counter*)o)->value(v);}
 inline void fl_set_counter_bounds(Fl_Widget* o, double a, double b) {
-    ((Fl_Counter*)o)->bounds(a,b);}
+    ((Fl_Counter*)o)->range(a,b);}
 inline void fl_set_counter_step(Fl_Widget* o, double a, double b) {
-    ((Fl_Counter*)o)->step(a,b);}
+    ((Fl_Counter*)o)->step(a / b);}
 inline void fl_set_counter_precision(Fl_Widget* o, int v) {
-    ((Fl_Counter*)o)->precision(v);}
+//    ((Fl_Counter*)o)->precision(v);}
+    ((Fl_Counter*)o)->step(1/(10^v));}
 inline void fl_set_counter_return(Fl_Widget* o, int v) {
     ((Fl_Counter*)o)->when((Fl_When)(v|FL_WHEN_RELEASE));}
 inline double fl_get_counter_value(Fl_Widget* o) {
@@ -611,7 +612,7 @@ inline void fl_set_dial_value(Fl_Widget* o, double v) {
 inline double fl_get_dial_value(Fl_Widget* o) {
   return ((Fl_Dial*)o)->value();}
 inline void fl_set_dial_bounds(Fl_Widget* o, double a, double b) {
-  ((Fl_Dial*)o)->bounds(a, b);}
+  ((Fl_Dial*)o)->range(a, b);}
 inline void fl_get_dial_bounds(Fl_Widget* o, float* a, float* b) {
   *a = float(((Fl_Dial*)o)->minimum());
   *b = float(((Fl_Dial*)o)->maximum());
@@ -634,7 +635,8 @@ inline Fl_Widget* fl_add_frame(Fl_Boxtype i,int x,int y,int w,int h,const char* 
 // labelframe nyi
 inline Fl_Widget* fl_add_labelframe(Fl_Boxtype i,int x,int y,int w,int h,const char* l) {
   Fl_Widget* o = fl_add_box(i,x-3,y-3,w+6,h+6,l);
-  o->align(FL_ALIGN_TOP_LEFT);
+  o->clear_flag(FL_ALIGN_MASK); 
+  o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
   return o;
 }
 
@@ -689,8 +691,9 @@ inline void fl_set_input(Fl_Widget* o, const char* v) {
 inline void fl_set_input_return(Fl_Widget* o, int x) {
     ((Fl_Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
 inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned b) {
-    ((Fl_Input*)o)->textcolor((Fl_Color)a);
-    ((Fl_Input*)o)->cursor_color((Fl_Color)b);
+    ((Fl_Input*)o)->text_color((Fl_Color)a);
+//    ((Fl_Input*)o)->cursor_color((Fl_Color)b);
+    ((Fl_Input*)o)->off_color((Fl_Color)b);
 }
 // inline void fl_set_input_scroll(Fl_Widget*, int);
 inline void fl_set_input_cursorpos(Fl_Widget* o, int x, int /*y*/) {
@@ -790,7 +793,7 @@ inline void fl_set_slider_value(Fl_Widget* o, double v) {
 inline double fl_get_slider_value(Fl_Widget* o) {
     return ((Fl_Slider*)o)->value();}
 inline void fl_set_slider_bounds(Fl_Widget* o, double a, double b) {
-    ((Fl_Slider*)o)->bounds(a, b);}
+    ((Fl_Slider*)o)->range(a, b);}
 inline void fl_get_slider_bounds(Fl_Widget* o, float* a, float* b) {
   *a = float(((Fl_Slider*)o)->minimum());
   *b = float(((Fl_Slider*)o)->maximum());
@@ -807,7 +810,8 @@ inline void fl_set_slider_size(Fl_Widget* o, double v) {
 forms_constructor(Fl_Value_Slider, fl_add_valslider)
 
 inline void fl_set_slider_precision(Fl_Widget* o, int i) {
-    ((Fl_Value_Slider*)o)->precision(i);}
+//    ((Fl_Value_Slider*)o)->precision(i);}
+    ((Fl_Value_Slider*)o)->step(1 / (10^i));}
 // filter function!
 
 // The forms text object was the same as an Fl_Box except it inverted the
@@ -817,7 +821,7 @@ protected:
     void draw();
 public:
     Fl_FormsText(Fl_Boxtype b, int x, int y, int w, int h, const char* l=0)
-	: Fl_Widget(x,y,w,h,l) {box(b); align(FL_ALIGN_LEFT);}
+	: Fl_Widget(x,y,w,h,l) {box(b); clear_flag(FL_ALIGN_MASK); set_flag(FL_ALIGN_LEFT);}
 };
 #define FL_NORMAL_TEXT FL_NO_BOX
 forms_constructorb(Fl_FormsText, fl_add_text)
@@ -842,5 +846,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.14 1999/11/27 15:44:48 carl Exp $".
+// End of "$Id: forms.H,v 1.15 2000/01/16 07:44:20 robertk Exp $".
 //

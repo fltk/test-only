@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $"
+// "$Id: arc.cxx,v 1.5 2000/01/16 07:44:38 robertk Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,8 @@ int main(int argc, char** argv) {
     else {s->minimum(-360); s->maximum(360);}
     s->step(1);
     s->value(args[n]);
-    s->align(FL_ALIGN_LEFT);
+	s->clear_flag(FL_ALIGN_MASK);
+    s->set_flag(FL_ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
   }
 
@@ -92,6 +93,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $".
+// End of "$Id: arc.cxx,v 1.5 2000/01/16 07:44:38 robertk Exp $".
 //
 

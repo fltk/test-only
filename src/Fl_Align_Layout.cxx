@@ -52,7 +52,7 @@ void Fl_Align_Group::layout() {
     for (i = children(); i--;) {
       Fl_Widget* o = *a++;
       int w=0,h;
-      fl_font(o->labelfont(),o->labelsize());
+      fl_font(o->label_font(),o->label_size());
       fl_measure(o->label(),w,h);
       if (variable_is_y) w = h;
       int which = (variable_is_y == vertical()) ? u : v; 
@@ -95,7 +95,7 @@ void Fl_Align_Group::layout() {
         if (!variable_is_y) cx += label_space[which];
       }
     }
-    o->align(align());
+	o->set_flag(align());
     o->layout();
   }
   init_sizes();

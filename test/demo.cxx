@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.11 2000/01/09 08:17:32 bill Exp $"
+// "$Id: demo.cxx,v 1.12 2000/01/16 07:44:40 robertk Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -50,12 +50,12 @@ Fl_Button *but[9];
 void create_the_forms() {
   Fl_Widget *obj;
   form = new Fl_Window(370, 450);
-  obj = new Fl_Box(FL_FRAME_BOX,20,20,330,40,"FLTK Demonstration");
+  obj = new Fl_Box(FL_ENGRAVED_BOX,20,20,330,40,"FLTK Demonstration");
   obj->color(FL_GRAY-4);
-  obj->labelsize(24);
-  obj->labelfont(FL_BOLD);
-  obj->labeltype(FL_ENGRAVED_LABEL);
-  obj = new Fl_Box(FL_FRAME_BOX,20,70,330,330,0);
+  obj->label_size(24);
+  obj->label_font(FL_HELVETICA_BOLD);
+  obj->label_type(FL_ENGRAVED_LABEL);
+  obj = new Fl_Box(FL_ENGRAVED_BOX,20,70,330,330,0);
   obj->color(FL_GRAY-6);
   obj = new Fl_Button(20,20,330,380); obj->type(FL_HIDDEN_BUTTON);
   obj->callback(doback);
@@ -69,7 +69,7 @@ void create_the_forms() {
   obj = but[7] = new Fl_Button(140,290,90,90);
   obj = but[8] = new Fl_Button(240,290,90,90);
   for (int i=0; i<9; i++) {
-    but[i]->align(FL_ALIGN_WRAP);
+    but[i]->set_flag(FL_ALIGN_WRAP);
     but[i]->callback(dobut, i);
   }
   obj = new Fl_Button(130,410,110,30,"Exit");
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.11 2000/01/09 08:17:32 bill Exp $".
+// End of "$Id: demo.cxx,v 1.12 2000/01/16 07:44:40 robertk Exp $".
 //
 

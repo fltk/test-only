@@ -37,7 +37,8 @@ Fl_Window* make_about_panel(const char *copyright) {
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
         o->end();
       }
@@ -56,24 +57,27 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->color((Fl_Color)6);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
-        o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+		o->clear_flag(FL_ALIGN_MASK);
+        o->set_flag(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
       }
       { Fl_Group* o = new Fl_Group(10, 135, 150, 105, "fluid");
         o->box(FL_ROUND_UP_BOX);
-        o->labelfont(fl_fonts+1);
+        o->label_font(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
         o->label_size(40);
-        o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+		o->clear_flag(FL_ALIGN_MASK);
+        o->set_flag(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
         { Fl_Box* o = new Fl_Box(79, 155, 15, 15, "` ");
           o->box(FL_OVAL_BOX);
           o->color((Fl_Color)6);
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
         { Fl_Box* o = new Fl_Box(70, 140, 15, 15, "` ");
           o->box(FL_OVAL_BOX);
@@ -81,7 +85,8 @@ Fl_Window* make_about_panel(const char *copyright) {
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)47);
           o->label_size(20);
-          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+		  o->clear_flag(FL_ALIGN_MASK);
+          o->set_flag(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
         }
         o->end();
       }
@@ -92,7 +97,7 @@ Fl_Window* make_about_panel(const char *copyright) {
       }
       { Fl_Group* o = new Fl_Group(145, 23, 149, 122);
         o->box(FL_OFLAT_BOX);
-        o->labelfont(fl_fonts+1);
+        o->label_font(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)7);
@@ -100,7 +105,7 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->label_size(18);
         { Fl_Box* o = new Fl_Box(150, 27, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
           o->box(FL_OVAL_BOX);
-          o->labelfont(fl_fonts+1);
+          o->label_font(fl_fonts+1);
           o->label_type(FL_SHADOW_LABEL);
           o->color((Fl_Color)12);
           o->label_color((Fl_Color)7);
@@ -113,14 +118,15 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->box(FL_BORDER_BOX);
         o->label_size(10);
         o->callback((Fl_Callback*)cb_1998);
-        o->align(FL_ALIGN_WRAP);
+		o->clear_flag(FL_ALIGN_MASK);
+        o->set_flag(FL_ALIGN_WRAP);
       }
       o->end();
     }
     { Fl_Box* o = copyright_box = new Fl_Box(3, 5, 297, 250);
       o->label_color((Fl_Color)6);
       o->label_size(10);
-      o->align(132|FL_ALIGN_INSIDE);
+      o->set_flag(132|FL_ALIGN_INSIDE);
       o->hide();
       o->label(copyright);
     }

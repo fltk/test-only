@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.29 2000/01/10 06:31:19 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.30 2000/01/16 07:44:32 robertk Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -76,15 +76,15 @@ void Fl_Counter::draw() {
   box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
 
   char str[128]; format(str);
-  fl_font(textfont(), textsize());
+  fl_font(text_font(), text_size());
   if (Fl::focus() == this) {
     fl_color(selection_color());
-    int h = textsize()+leading();
+    int h = text_size()+leading();
     int w = fl_width(str);
     fl_rectf(xx[0]+(ww[0]-w)/2,y()+(this->h()-h)/2,w,h);
     fl_color(selection_text_color());
   } else {
-    fl_color(fl_inactive(textcolor(), f));
+	  fl_color(fl_inactive(text_color(), f));
   }
   fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
 
@@ -191,13 +191,14 @@ static Fl_Named_Style* style = new Fl_Named_Style("counter", revert, &style);
 
 Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(x, y, w, h, l) {
   style(::style);
-  align(FL_ALIGN_BOTTOM);
-  bounds(-1000000.0, 1000000.0);
+  clear_flag(FL_ALIGN_MASK);
+  set_flag(FL_ALIGN_BOTTOM);
+  range(-1000000.0, 1000000.0);
   Fl_Valuator::step(.1);
   linesize(10);
   mouseobj = highlight = last = 0;
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.29 2000/01/10 06:31:19 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.30 2000/01/16 07:44:32 robertk Exp $".
 //
