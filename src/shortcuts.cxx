@@ -1,5 +1,5 @@
 //
-// "$Id: shortcuts.cxx,v 1.3 2004/11/21 07:44:58 spitzak Exp $"
+// "$Id: shortcuts.cxx,v 1.4 2004/12/12 22:23:26 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -41,6 +41,7 @@
 #include <fltk/events.h>
 #include <fltk/Widget.h>
 #include <fltk/string.h>
+#include <ctype.h>
 
 using namespace fltk;
 
@@ -447,6 +448,6 @@ bool Widget::test_shortcut(bool test_label) const {
   return false;
 }
 
-// End of $Id: shortcuts.cxx,v 1.3 2004/11/21 07:44:58 spitzak Exp $
+// End of $Id: shortcuts.cxx,v 1.4 2004/12/12 22:23:26 spitzak Exp $
 
 

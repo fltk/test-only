@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.16 2004/12/05 19:28:50 spitzak Exp $"
+// "$Id: utf.c,v 1.17 2004/12/12 22:23:26 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -156,9 +156,9 @@ int utf8len(char cc) {
   else return 1;
 }
 
-/*! Move \a p forward until it points to the start of a utf-8
+/*! Move \a p forward until it points to the start of a UTF-8
   character. If it already points at the start of one then it
-  is returned unchanged. Any utf-8 errors are treated as though each
+  is returned unchanged. Any UTF-8 errors are treated as though each
   byte of the error is an individual character.
 
   \e start is the start of the string and is used to limit the
@@ -192,9 +192,9 @@ const char* utf8fwd(const char* p, const char* start, const char* end)
   return p;
 }
 
-/*! Move \a p backward until it points to the start of a utf-8
+/*! Move \a p backward until it points to the start of a UTF-8
   character. If it already points at the start of one then it
-  is returned unchanged. Any utf-8 errors are treated as though each
+  is returned unchanged. Any UTF-8 errors are treated as though each
   byte of the error is an individual character.
 
   \e start is the start of the string and is used to limit the

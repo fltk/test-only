@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.198 2004/12/05 20:20:59 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.199 2004/12/12 22:23:25 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1559,10 +1559,10 @@ bool fltk::handle()
 	// numlock has changed it into a Keypad+n key
 	keysym = fl_actual_keysym;
       } else {
-#if 0 // turn them always into numeric keys (my preference):
+#if IGNORE_NUMLOCK // turn them always into numeric keys (my preference):
 	keysym = Keypad+"7486293150."[keysym-0xff95];
-	e_text[0] = char(keysym) & 0x7F;
-	e_text[1] = 0;
+	*(char*)(e_text) = char(keysym) & 0x7F;
+	*(char*)(e_text+1) = 0;
 	e_length = 1;
 #else // turn them into function keys indistinguisable from the normal
       // function keys. This matches Windows and was voted on as the
@@ -2336,5 +2336,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.198 2004/12/05 20:20:59 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.199 2004/12/12 22:23:25 spitzak Exp $".
 //

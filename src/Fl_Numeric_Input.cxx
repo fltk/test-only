@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.11 2004/10/29 06:42:55 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.12 2004/12/12 22:23:23 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -61,7 +61,7 @@ using namespace fltk;
   (310)314-2800 FAX(310)314-2888</i>
 */
 
-/*!  Does a %g sprintf of the value and uses the result to set the
+/*!  Does a %%g sprintf of the value and uses the result to set the
   string value. Notice that there is no inverse function, you will
   have to call strtod(widget->value(),0,0) yourself.  */
 void NumericInput::value(double v) {
@@ -76,7 +76,7 @@ void NumericInput::value(double v) {
   Input::value(buf);
 }
 
-/*!  Does a %d sprintf of the value and uses the result to set the
+/*!  Does a %%d sprintf of the value and uses the result to set the
   string value. Notice that there is no inverse function, you will
   have to call strtol(widget->value(),0,0) yourself.  */
 void NumericInput::value(int v) {

@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_x.cxx,v 1.2 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: fltk_theme_x.cxx,v 1.3 2004/12/12 22:23:26 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -38,8 +38,10 @@
 #include <fltk/draw.h>
 #include <fltk/Monitor.h>
 #include <fltk/events.h>
-#include <stdio.h>
 #include <fltk/string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 #if USE_X11
 # include <fltk/x.h>
 #endif
@@ -656,5 +658,5 @@ extern "C" bool fltk_theme() {
 #endif
 
 //
-// End of "$Id: fltk_theme_x.cxx,v 1.2 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: fltk_theme_x.cxx,v 1.3 2004/12/12 22:23:26 spitzak Exp $".
 //

@@ -1,23 +1,6 @@
-/*
- * "$Id: vsnprintf.c,v 1.14 2003/04/20 03:17:51 easysw Exp $"
+/* "$Id: vsnprintf.c,v 1.15 2004/12/12 22:23:26 spitzak Exp $"
  *
- * vsnprintf() function for the Fast Light Tool Kit (FLTK).
- *
- * Emulates this call on systems that lack it (pretty much everything
- * except glibc systems).
- *
- * KNOWN BUGS:
- *
- * Field width & Precision is ignored for %%, %c, and %s.
- *
- * A malicious user who manages to create a %-fmt string that prints
- * more than 99 characters can still overflow the temporary buffer.
- * For instance %110f will overflow.
- *
- * Only handles formats that are both documented in the glibc man page
- * for printf and also handled by your system's sprintf().
- *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2004 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,24 +20,63 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include <config.h>
 #include <fltk/string.h>
-
-
-#ifdef HAVE_SYS_STDTYPES_H
-#  include <sys/stdtypes.h>
-#endif /* HAVE_SYS_STDTYPES_H */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if !HAVE_VSNPRINTF
+#if !HAVE_SNPRINTF || defined(DOXYGEN)
 
-int fltk_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
+/*!
+  printf a string and set of arguments into an output buffer. At
+  most size-1 bytes will be written, and a NUL terminator is
+  \e always added. The return value is the number of bytes that
+  \e would be written if the string was correctly formatted, if
+  this is greater than \a size then you need to reallocate a
+  buffer of retval+1 size to get the full result.
+
+  FLTK provides an implementation of this function on the (few)
+  systems that don't provide it. Include the <fltk/string.h> header to
+  call this portably. FLTK's emulation is rather poor and has the
+  following bugs:
+  - Field width & Precision is ignored for %%%, %%c, and %%s.
+  - A malicious user who manages to create a %%-fmt string that prints
+    more than 99 characters can still overflow the temporary buffer.
+    For instance %%110f will overflow.
+  - Only handles formats that are both documented in the glibc man page
+    for printf and also handled by your system's sprintf().
+  - Return value is not correct. If the buffer overflows a value
+    greater or equal to \a size is returned, but it is only a guess
+    about the actual length.
+
+  Windows, Linux, and BSD all have this function so FLTK's emulation
+  is not used. Warning: some systems do not return the correct value
+  when the buffer overflows. A common alternative is to return -1 or
+  \a size.
+*/
+int snprintf(char* str, size_t size, const char* fmt, ...) {
+  int ret;
+  va_list ap;
+  va_start(ap, fmt);
+  ret = vsnprintf(str, size, fmt, ap);
+  va_end(ap);
+  return ret;
+}
+
+#endif
+
+#if !HAVE_VSNPRINTF || defined(DOXYGEN)
+
+/*! See snprintf(). This version takes a va_list so it can be called
+  from another function that has a variable argument list.
+
+  FLTK provides an implementation of this function on the (few)
+  systems that don't provide it. Include the <fltk/string.h> header to
+  call this portably. See snprintf() for bugs with this emulation.
+*/
+int vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
   const char* e = str+size-1;
   char* p = str;
   char copy[20];
@@ -114,21 +136,7 @@ int fltk_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
   CONTINUE:;
   }
   *p = 0;
-  if (*fmt) return -1;
-  return p-str;
-}
-
-#endif
-
-#if !HAVE_SNPRINTF
-
-int fltk_snprintf(char* str, size_t size, const char* fmt, ...) {
-  int ret;
-  va_list ap;
-  va_start(ap, fmt);
-  ret = vsnprintf(str, size, fmt, ap);
-  va_end(ap);
-  return ret;
+  return p-str+strlen(fmt);
 }
 
 #endif
@@ -138,6 +146,6 @@ int fltk_snprintf(char* str, size_t size, const char* fmt, ...) {
 #endif
 
 /*
- * End of "$Id: vsnprintf.c,v 1.14 2003/04/20 03:17:51 easysw Exp $".
+ * End of "$Id: vsnprintf.c,v 1.15 2004/12/12 22:23:26 spitzak Exp $".
  */
 

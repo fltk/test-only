@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.73 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.74 2004/12/12 22:23:23 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -67,13 +67,13 @@ using namespace fltk;
 /*! Set the current position, the range, the pagesize, and the
   slider_size() all at once in a useful way.
 
-  /a p = the position in the data of the first pixel in the window
+  \a p = the position in the data of the first pixel in the window
 
-  /a w = the size of the window
+  \a w = the size of the window
 
-  /a t = the position of the top of your data (typically zero)
+  \a t = the position of the top of your data (typically zero)
 
-  /a l = the total size of your data.
+  \a l = the total size of your data.
 
 */
 int Scrollbar::value(int p, int w, int t, int l) {
@@ -310,5 +310,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.73 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.74 2004/12/12 22:23:23 spitzak Exp $".
 //

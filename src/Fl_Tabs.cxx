@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.74 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.75 2004/12/12 22:23:24 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -523,7 +523,7 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   : Group(X,Y,W,H,l)
 {
   style(default_style);
-  focus(0);
+  focus_index(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.74 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.75 2004/12/12 22:23:24 spitzak Exp $".

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.187 2004/12/05 20:00:23 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.188 2004/12/12 22:23:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -414,16 +414,9 @@ static void run_checks() {
   user or any fltk::add_fd() callbacks. It then handles the events and
   calls the callbacks and then returns.
 
-  The return value is non-zero if there are any visible windows (this
-  may change in future versions of fltk).
-
-  The return value is whatever the select() system call returned. This
-  will be negative if there was an error (this will happen on Unix if
-  a signal happens), zero if the timeout occurred, and positive if any
-  events or fd's came in.
-
-  On Win32 the return value is zero if nothing happened and time is
-  0.0. Otherwise 1 is returned.
+  The return value is zero if nothing happened before the passed
+  \a time_to_wait expired. It is non-zero if any events or timeouts
+  came in.
 */
 int fltk::wait(float time_to_wait) {
 
@@ -1147,5 +1140,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.187 2004/12/05 20:00:23 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.188 2004/12/12 22:23:23 spitzak Exp $".
 //

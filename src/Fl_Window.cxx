@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.114 2004/12/05 19:28:49 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.115 2004/12/12 22:23:24 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -801,10 +801,12 @@ void Window::destroy() {
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
 #elif defined(_WIN32)
-  stop_drawing(x->xid);
+  if (x->xid) { // it is set to zero by DESTROY message from Windows
+    stop_drawing(x->xid);
+    deferred_call(DESTROY_WINDOW, x->xid);
+    deferred_call(KEEP_ACTIVE, x->xid);
+  }
   if (x->region) DeleteObject(x->region);
-  deferred_call(DESTROY_WINDOW, x->xid);
-  deferred_call(KEEP_ACTIVE, x->xid);
 #elif defined(__APPLE__)
   if (x->region) DisposeRgn(x->region);
   DisposeWindow(x->xid);
@@ -823,5 +825,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.114 2004/12/05 19:28:49 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.115 2004/12/12 22:23:24 spitzak Exp $".
 //

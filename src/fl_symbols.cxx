@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.46 2004/08/25 17:10:37 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.47 2004/12/12 22:23:25 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -186,11 +186,11 @@ const Symbol* Symbol::find(const char* name) {
 }
 
 /** Locate a symbol by the substring after an '@' sign as used by
-    fltk::drawtext(). \a name points at the start of the name, \a end
+    drawtext(). \a name points at the start of the name, \a end
     points to the character after the end (this allows the name to be
     extracted from a longer string without having to copy it).
 
-    fltk::drawtext() can pass "arguments" to symbols as extra text
+    drawtext() can pass "arguments" to symbols as extra text
     before and after the actual name. This function strips off likely
     arguments: it removes a leading '#', then it will remove a leading
     +/- sign and integer, and any number of trailing comma-seperated
@@ -200,7 +200,7 @@ const Symbol* Symbol::find(const char* name) {
     When the symbol's draw() function is called, text() will have been
     set to point at \a name, so the arguments can be read by the
     symbol method. If draw() is called by something other than
-    fltk::drawtext() then text() will be a zero-length string.
+    drawtext() then text() will be a zero-length string.
 
 */
 const Symbol* Symbol::find(const char* name, const char* end) {
@@ -302,8 +302,8 @@ void Symbol::_measure(float& w, float& h) const {}
 
     \a xywh is the bounding box (in the current coordinate system)
     that the symbol should be fit into. If you can't do anything
-    else you should center your image and use fltk::push_clip() and
-    fltk::pop_clip() to limit your drawing to this area.
+    else you should center your image and use push_clip() and
+    pop_clip() to limit your drawing to this area.
 
     The \a Style can be used to color in your symbol. The main fields
     you want from it is color() for blank areas and textcolor() for
@@ -324,11 +324,11 @@ void Symbol::_measure(float& w, float& h) const {}
     - FOCUSED: Indicates that the current object has keyboard focus.
 
     If your symbol is designed to be imbedded with an @-command into
-    fltk::drawtext() then you can examine the current color with
-    fltk::getcolor() and the current font with fltk::getfont() and
-    fltk::getsize(). If you want to draw letters that line up with
+    drawtext() then you can examine the current color with
+    getcolor() and the current font with getfont() and
+    getsize(). If you want to draw letters that line up with
     other text in a label you should place the baseline at
-    y+(H+fltk::getascent()-fltk::getdescent())/2) where H is the
+    y+(H+getascent()-getdescent())/2) where H is the
     height that your measure() function returns.
 
     The default implementation calls the integer version of _draw()
@@ -521,7 +521,7 @@ void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags
 /** \defgroup symbols @-commands
     When calling drawtext() (or assigning labels or tooltips or any
     other strings that call drawtext()) you can imbed @-commands
-    into the text. These actually look up instances of fltk::Symbol
+    into the text. These actually look up instances of Symbol
     which then can modify the drawing.
 
     \image html symbols.gif
@@ -703,5 +703,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.46 2004/08/25 17:10:37 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.47 2004/12/12 22:23:25 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.63 2004/08/04 20:48:03 laza2000 Exp $"
+ * "$Id: configh.in,v 1.64 2004/12/12 22:23:21 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -247,12 +247,11 @@
  * instead of <string.h> to call these.
  */
 
-#undef HAVE_VSNPRINTF
-#undef HAVE_SNPRINTF
-
 #undef HAVE_STRING_H
 #undef HAVE_STRINGS_H
 
+#undef HAVE_VSNPRINTF
+#undef HAVE_SNPRINTF
 #undef HAVE_STRCASECMP
 #undef HAVE_STRDUP
 #undef HAVE_STRLCAT
@@ -362,7 +361,16 @@
 */
 /*#define ALT_GOES_TO_MENUBAR 0*/
 
+/* If set, keyboard events are reported so that the keypad
+   is always fltk::KEYPAD0..fltk::KEYPAD9, ignoring the setting of
+   the NumLock key. This is incredibly useful if you want your program
+   to actually use the keypad, and is recommended.
+
+   If this is not defined or defined to 0, then if NumLock is off
+   keypad events are translated to fltk::LEFT_KEY, etc.
+*/
+#define IGNORE_NUMLOCK 1
 
 /*
- * End of "$Id: configh.in,v 1.63 2004/08/04 20:48:03 laza2000 Exp $".
+ * End of "$Id: configh.in,v 1.64 2004/12/12 22:23:21 spitzak Exp $".
  */

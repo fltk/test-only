@@ -1,7 +1,7 @@
 dnl 
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.123 2004/08/04 20:48:03 laza2000 Exp $"
+dnl "$Id: configure.in,v 1.124 2004/12/12 22:23:22 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -314,45 +314,32 @@ AC_CHECK_FUNC(scandir,[
     fi])
 
 dnl String headers and functions...
-AC_CHECK_HEADER(string.h,[
-    AC_DEFINE(HAVE_STRING_H)
-    FLTK_STRING_H=1],
-    FLTK_STRING_H=0)
-AC_CHECK_HEADER(strings.h,[
-    AC_DEFINE(HAVE_STRINGS_H)
-    FLTK_STRINGS_H=1],
-    FLTK_STRINGS_H=0)
+AC_CHECK_HEADER(string.h,AC_DEFINE(HAVE_STRING_H))
+AC_CHECK_HEADER(strings.h,AC_DEFINE(HAVE_STRINGS_H))
 
 AC_CHECK_FUNC(snprintf,[
     case $uname in
     	HP-UX*)
 	    if test "$uversion" = "1020"; then
 	        AC_MSG_WARN(Not using built-in snprintf function because you are running HP-UX 10.20.)
-	    else
-		FLTK_SNPRINTF=1
 	    fi
 	    ;;
 
     	OSF1*)
 	    if test "$uversion" = "40"; then
                 AC_MSG_WARN(Not using built-in snprintf function because you are running Tru64 4.0.)
-	    else
-		FLTK_SNPRINTF=1
 	    fi
 	    ;;
 
         *)
             AC_DEFINE(HAVE_SNPRINTF)
-	    FLTK_SNPRINTF=0
 	    ;;
     esac],[
     case $uname in
         CYGWIN* | MINGW*)
 	    AC_DEFINE(HAVE_SNPRINTF)
-	    FLTK_SNPRINTF=0
 	    ;;
 	*)
-	    FLTK_SNPRINTF=1
 	    ;;
     esac])
 
@@ -361,80 +348,46 @@ AC_CHECK_FUNC(vsnprintf,[
     	HP-UX*)
 	    if test "$uversion" = "1020"; then
 	        AC_MSG_WARN(Not using built-in vsnprintf function because you are running HP-UX 10.20.)
-	    else
-		FLTK_VSNPRINTF=1
 	    fi
 	    ;;
 
     	OSF1*)
 	    if test "$uversion" = "40"; then
                 AC_MSG_WARN(Not using built-in vsnprintf function because you are running Tru64 4.0.)
-	    else
-		FLTK_VSNPRINTF=1
 	    fi
 	    ;;
 
         *)
             AC_DEFINE(HAVE_VSNPRINTF)
-	    FLTK_VSNPRINTF=0
 	    ;;
     esac],[
     case $uname in
         CYGWIN* | MINGW*)
 	    AC_DEFINE(HAVE_VSNPRINTF)
-	    FLTK_VSNPRINTF=0
 	    ;;
 	*)
-	    FLTK_VSNPRINTF=1
 	    ;;
     esac])
 
-AC_CHECK_FUNC(strcasecmp,[
-    AC_DEFINE(HAVE_STRCASECMP)
-    FLTK_STRCASECMP=0],[
+AC_CHECK_FUNC(strcasecmp,AC_DEFINE(HAVE_STRCASECMP),[
     case $uname in
         CYGWIN* | MINGW*)
             AC_DEFINE(HAVE_STRCASECMP)
-            FLTK_STRCASECMP=0
 	    ;;
 	*)
-            FLTK_STRCASECMP=1
 	    ;;
     esac])
-AC_CHECK_FUNC(strdup,[
-    AC_DEFINE(HAVE_STRDUP)
-    FLTK_STRDUP=0],
-    FLTK_STRDUP=1)
-AC_CHECK_FUNC(strncasecmp,[
-    AC_DEFINE(HAVE_STRNCASECMP)
-    FLTK_STRNCASECMP=0],[
+AC_CHECK_FUNC(strdup,AC_DEFINE(HAVE_STRDUP))
+AC_CHECK_FUNC(strncasecmp,AC_DEFINE(HAVE_STRNCASECMP),[
     case $uname in
         CYGWIN* | MINGW*)
             AC_DEFINE(HAVE_STRNCASECMP)
-            FLTK_STRNCASECMP=0
 	    ;;
 	*)
-            FLTK_STRNCASECMP=1
 	    ;;
     esac])
-AC_CHECK_FUNC(strlcat,[
-    AC_DEFINE(HAVE_STRLCAT)
-    FLTK_STRLCAT=0],
-    FLTK_STRLCAT=1)
-AC_CHECK_FUNC(strlcpy,[
-    AC_DEFINE(HAVE_STRLCPY)
-    FLTK_STRLCPY=0],
-    FLTK_STRLCPY=1)
-
-AC_SUBST(FLTK_SNPRINTF)
-AC_SUBST(FLTK_STRCASECMP)
-AC_SUBST(FLTK_STRDUP)
-AC_SUBST(FLTK_STRING_H)
-AC_SUBST(FLTK_STRINGS_H)
-AC_SUBST(FLTK_STRLCAT)
-AC_SUBST(FLTK_STRLCPY)
-AC_SUBST(FLTK_STRNCASECMP)
-AC_SUBST(FLTK_VSNPRINTF)
+AC_CHECK_FUNC(strlcat,AC_DEFINE(HAVE_STRLCAT))
+AC_CHECK_FUNC(strlcpy,AC_DEFINE(HAVE_STRLCPY))
 
 dnl FLTK library uses math library functions...
 AC_SEARCH_LIBS(pow, m)
@@ -1020,7 +973,8 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config fltk/string.h)
+dnl AC_CONFIG_HEADER(fltk/string.h)
+AC_OUTPUT(makeinclude fltk.list fltk-config)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
@@ -1035,5 +989,5 @@ echo Build targets: $LIBTARGET $DSOTARGET
 echo
 
 dnl
-dnl End of "$Id: configure.in,v 1.123 2004/08/04 20:48:03 laza2000 Exp $".
+dnl End of "$Id: configure.in,v 1.124 2004/12/12 22:23:22 spitzak Exp $".
 dnl

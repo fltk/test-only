@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.62 2004/12/05 19:28:48 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.63 2004/12/12 22:23:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -481,9 +481,8 @@ Style* Style::find(const char* name) {
 /*! \typedef Theme
 
   A Theme is a function called by fltk just before it shows the first
-  window, or by load_theme() or reload_theme(), and also whenever it
-  receives a signal from the operating system that the user's
-  preferences have changed.
+  window, and also whenever it receives a signal from the operating
+  system that the user's preferences have changed.
 
   The Theme's job is to set all the NamedStyle structures to the
   correct values for the appearance selected by the user and
@@ -508,14 +507,8 @@ Style* Style::find(const char* name) {
 /*! \fn fltk::theme(Theme)
 
   Change what function fltk should call to set the appearance. If you
-  change this while windows are displayed you should call
-  reload_theme() to get it called.
-
-  You can also statically set the theme at compile time. The default
-  value is a function called fltk_theme() (not in the fltk namespace).
-  You may be able to link your program so your own fltk_theme()
-  replaces this. For instance building the fltk library with the
-  KDE.cxx file will make it always load KDE color and font settings.
+  change this after any windows may have been shown, you should call
+  reload_theme().
 */
 
 Theme fltk::theme_ = fltk_theme;
@@ -524,12 +517,11 @@ Color fl_bg_switch = 0; // set by -bg in arg.cxx
 
 static char theme_loaded;
 
-/*! Force the theme to be loaded. If this has already been called, it
-  does nothing (call reload_theme() if you want to make a change to
-  theme() take effect). Normally fltk calls this just before the first
-  Window::show() is done. You can call this earlier to make sure all
-  the styles are correct, for instance if you want to measure the size
-  of labels, which depends on the font selected.
+/*!
+  Call the theme() function if it has not already been called.
+  Normally FLTK calls this just before the first
+  Window::show() is done. You need to call this earlier to
+  execute code such as measuring labels that may depend on the theme.
 */
 void fltk::load_theme() {
   if (theme_loaded) return;
@@ -539,20 +531,16 @@ void fltk::load_theme() {
   theme_loaded = 1;
 }
 
-/*! If load_theme() has been called, this will call the theme()
-  function again and then call redraw(). If the theme function is
-  written correctly, this should change the display to the new theme.
-  You should call this if you change the theme() or if external
-  information changes such that the result of your theme() function
-  changes.
+/*!
+  Does nothing if load_theme() has not been called yet. If
+  load_theme() has been called, this calls the theme() function again
+  and then call redraw(). If the theme function is written correctly,
+  this should change the display to the new theme.  You should call
+  this if you change the theme() or if external information changes
+  such that the result of your theme() function changes.
 
-  If load_theme() has \e not been called, this does nothing. This
-  means you can call it before the first window is displayed.
-
-  On Windows this is automatically called when a message comes from
-  the OS indicating the user's preferences have changed. The KDE.cxx
-  code also sets things up so KDE change messages cause this to be
-  called.
+  FLTK will call this automatically when it gets a message from the
+  system indicating the user's preferences have changed.
 */
 void fltk::reload_theme() {
   if (theme_loaded != 1) return;
@@ -562,9 +550,8 @@ void fltk::reload_theme() {
 }
 
 /*! Change the theme to the compiled-in default by calling the revert
-  function of all NamedStyle structures. If your theme() function
-  modifies a large or varied set of settings it may be easiest to
-  call this first to clear the previous settings.
+  function of all NamedStyle structures. A theme() function may want
+  to call this to clear the previous settings.
 */
 bool fltk::reset_theme() {
   // Don't waste time if the themes are just starting up:
@@ -615,5 +602,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.62 2004/12/05 19:28:48 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.63 2004/12/12 22:23:23 spitzak Exp $".
 //

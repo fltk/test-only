@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.239 2004/12/05 19:28:49 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.240 2004/12/12 22:23:25 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1267,6 +1267,19 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_CAPITAL,	CapsLockKey},
   {VK_ESCAPE,	EscapeKey},
   {VK_SPACE,	SpaceKey},
+#if IGNORE_NUMLOCK
+  {VK_PRIOR,	Keypad9,	PageUpKey},
+  {VK_NEXT,	Keypad3,	PageDownKey},
+  {VK_END,	Keypad1,	EndKey},
+  {VK_HOME,	Keypad7,	HomeKey},
+  {VK_LEFT,	Keypad4,	LeftKey},
+  {VK_UP,	Keypad8,	UpKey},
+  {VK_RIGHT,	Keypad6,	RightKey},
+  {VK_DOWN,	Keypad2,	DownKey},
+  {VK_SNAPSHOT, PrintKey},	// does not work on NT
+  {VK_INSERT,	Keypad0,	InsertKey},
+  {VK_DELETE,	DecimalKey,	DeleteKey},
+#else
   {VK_PRIOR,	PageUpKey},
   {VK_NEXT,	PageDownKey},
   {VK_END,	EndKey},
@@ -1278,6 +1291,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_SNAPSHOT, PrintKey},	// does not work on NT
   {VK_INSERT,	InsertKey},
   {VK_DELETE,	DeleteKey},
+#endif
   {VK_LWIN,	LeftMetaKey},
   {VK_RWIN,	RightMetaKey},
   {VK_APPS,	MenuKey},
@@ -1388,6 +1402,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_DESTROY:
     tablet_close(hWnd);
+    if (window) {
+      CreatedWindow *i = CreatedWindow::find(window);
+      i->xid = 0;
+      window->destroy();
+    }
     break;
 
   case WM_ACTIVATE:
@@ -2358,5 +2377,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.239 2004/12/05 19:28:49 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.240 2004/12/12 22:23:25 spitzak Exp $".
 //

@@ -1,9 +1,6 @@
-/*
- * "$Id: string.c,v 1.6 2004/08/06 16:43:49 laza2000 Exp $"
+/* "$Id: string.c,v 1.7 2004/12/12 22:23:26 spitzak Exp $"
  *
- * BSD string functions for the Fast Light Tool Kit (FLTK).
- *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2004 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,17 +20,24 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <config.h>
 #include <fltk/string.h>
 
-/*
- * 'fltk_strdup()' - Duplicate a string.
- */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#ifndef HAVE_STRDUP
+#if !HAVE_STRDUP || defined(DOXYGEN)
+/*! Duplicate a string.
+  malloc() a strlen(s)+1 block of memory and copy the string to it,
+  returning a pointer to the new string. Use free((void*)x) to delete
+  the returned value.
+
+  FLTK provides this function on systems that don't have it. Use
+  the <fltk/string.h> header to call this portably.
+*/
 char 	*			/* O - New string pointer */
-fltk_strdup(const char *s)	/* I - String to duplicate */
+strdup(const char *s)		/* I - String to duplicate */
 {
   char	*t;			/* New string pointer */
   int n;			/* size to allocate */
@@ -43,17 +47,21 @@ fltk_strdup(const char *s)	/* I - String to duplicate */
   if (t) memcpy(t, s, n);
   return t;
 }
-#endif /* !HAVE_STRDUP */
+#endif
 
 
-/*
- * 'fltk_strcasecmp()' - Do a case-insensitive comparison.
- */
+#if !HAVE_STRCASECMP || defined(DOXYGEN)
+/*! Do a case-insensitive string comparison. Return less than zero if
+  \a s is before \a t in alphabetical order, zero if they are equal,
+  and greater than zero if \a s is after \a t.
+  Only ASCII strings are correctly compared. What this does with UTF-8
+  or ISO-8859-1 is undefined!
 
-#ifndef HAVE_STRCASECMP
-int				/* O - Result of comparison (<0, 0, or >0) */
-fltk_strcasecmp(const char *s,	/* I - First string */
-                const char *t)	/* I - Second string */
+  FLTK provides this function on systems that don't have it. Use
+  the <fltk/string.h> header to call this portably.
+*/
+int strcasecmp(const char *s,	/* I - First string */
+	       const char *t)	/* I - Second string */
 {
   for (;;)
   {
@@ -64,17 +72,21 @@ fltk_strcasecmp(const char *s,	/* I - First string */
     t ++;
   }
 }
-#endif /* !HAVE_STRCASECMP */
+#endif
 
-/*
- * 'fltk_strncasecmp()' - Do a case-insensitive comparison on up to N chars.
- */
 
-#ifndef HAVE_STRNCASECMP
+#if !HAVE_STRNCASECMP || defined(DOXYGEN)
+/*! Do a case-insensitive comparison of up to the first \a n characters
+  of the strings.
+  \see strcasecmp()
+
+  FLTK provides this function on systems that don't have it. Use
+  the <fltk/string.h> header file to call this.
+*/
 int				/* O - Result of comparison (<0, 0, or >0) */
-fltk_strncasecmp(const char *s,	/* I - First string */
-                 const char *t,	/* I - Second string */
-		 size_t     n)	/* I - Maximum number of characters to compare */
+strncasecmp(const char *s,	/* I - First string */
+	    const char *t,	/* I - Second string */
+	    size_t     n)	/* I - Maximum number of characters to compare */
 {
   while (n--)
   {
@@ -86,21 +98,26 @@ fltk_strncasecmp(const char *s,	/* I - First string */
   }
   return 0;
 }
-#endif /* !HAVE_STRNCASECMP */
+#endif
 
 
-#if !HAVE_STRLCAT
+#if !HAVE_STRLCAT || defined(DOXYGEN)
 /*!
-  Appends src to string dst of size siz (unlike strncat, siz is the
-  full size of dst, not space left).  At most siz-1 characters
-  will be copied.  Always NUL terminates (unless siz == 0).
+  Appends \a src to string \a dst of size \a siz (unlike strncat(),
+  \a siz is the full size of \a dst, not space left).  At most siz-1
+  characters will be copied.  Always NUL terminates (unless siz == 0).
   Returns strlen(initial dst) + strlen(src); if retval >= siz,
-  truncation occurred.
+  truncation occurred and
+  you may want to allocate a new longer buffer for \a dst of size
+  retval+1.
+
+  FLTK provides this function on systems that don't have it. Use
+  the <fltk/string.h> header to call this portably.
 */
 size_t				/* O - strlen(dst)+strlen(src) */
-fltk_strlcat(char *dst,		/* I - Destination buffer */
-	     const char *src,	/* I - String to append to dst */
-	     size_t siz)	/* I - sizeof(dst) */
+strlcat(char *dst,		/* I - Destination buffer */
+	const char *src,	/* I - String to append to dst */
+	size_t siz)		/* I - sizeof(dst) */
 {
   char *d = dst;
   const char *s = src;
@@ -126,18 +143,24 @@ fltk_strlcat(char *dst,		/* I - Destination buffer */
 
   return(dlen + (s - src));	/* count does not include NUL */
 }
-#endif /* !HAVE_STRLCAT */
+#endif
 
-#if !HAVE_STRLCPY
+
+#if !HAVE_STRLCPY || defined(DOXYGEN)
 /*!
-  Copy src to string dst of size siz.  At most siz-1 characters
+  Copy \a src to string \a dst of size \a siz.  At most siz-1 characters
   will be copied.  Always NUL terminates (unless siz == 0).
-  Returns strlen(src); if retval >= siz, truncation occurred.
+  Returns strlen(src); if retval >= siz, truncation occurred and
+  you may want to allocate a new longer buffer for \a dst of
+  size retval+1.
+
+  FLTK provides this function on systems that don't have it. Use
+  the <fltk/string.h> header to call this portably.
 */
 size_t				/* O - strlen(src) */
-fltk_strlcpy(char *dst,		/* I - Destination buffer */
-	     const char *src,	/* I - String to put in dst */
-	     size_t siz)	/* I - sizeof(dst) */
+strlcpy(char *dst,		/* I - Destination buffer */
+	const char *src,	/* I - String to put in dst */
+	size_t siz)		/* I - sizeof(dst) */
 {
   char *d = dst;
   const char *s = src;
@@ -163,7 +186,10 @@ fltk_strlcpy(char *dst,		/* I - Destination buffer */
 }
 #endif /* !HAVE_STRLCPY */
 
+#ifdef __cplusplus
+}
+#endif
 
 /*
- * End of "$Id: string.c,v 1.6 2004/08/06 16:43:49 laza2000 Exp $".
+ * End of "$Id: string.c,v 1.7 2004/12/12 22:23:26 spitzak Exp $".
  */

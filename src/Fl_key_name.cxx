@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.16 2004/11/21 07:44:58 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.17 2004/12/12 22:23:25 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -28,6 +28,8 @@
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
 #include <fltk/string.h>
+#include <ctype.h>
+#include <stdlib.h>
 #if USE_X11
 #include <fltk/x.h>
 #endif
@@ -194,5 +196,5 @@ unsigned fltk::key(const char* name) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.16 2004/11/21 07:44:58 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.17 2004/12/12 22:23:25 spitzak Exp $"
 //

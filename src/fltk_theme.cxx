@@ -2,7 +2,9 @@
 
 #include <config.h>
 
-/*! This is the default value of fltk::theme().
+/*! \fn bool fltk_theme();
+
+  This is the default value of fltk::theme().
 
   This is declared as a "C" function to allow it to be replaced with
   a function from a loaded plugin. If you are statically linking fltk
@@ -22,10 +24,10 @@
   <b>Windows:</b>
 
   On Windows it will read colors and fonts using GetSysColor() and
-  SystemParametersInfo(). Unlike X, Windows FLTK always calls
-  fltk::reload_theme() when a WM_SYSCOLORCHANGE, WM_DISPLAYCHANGE, or
-  WM_SETTINGCHANGE event happens, even if you replace fltk_theme(), so
-  your replacement should be prepared for this.
+  SystemParametersInfo(). FLTK will call fltk::reload_theme() when a
+  WM_SYSCOLORCHANGE, WM_DISPLAYCHANGE, or WM_SETTINGCHANGE event
+  happens, even if you replace fltk_theme(), so your replacement
+  should be prepared for this.
 
 */
 
