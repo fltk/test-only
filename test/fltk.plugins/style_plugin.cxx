@@ -24,7 +24,7 @@ static void image_box_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
 		      Fl_Color fill, Fl_Flags flags)
 {
   if (!(flags&FL_FRAME_ONLY))
-    ((Fl_Image_Box*)bt)->img->draw_tiled(x, y, w, h, -w/2, -h/2);
+    ((Fl_Image_Box*)bt)->img->draw_tiled(x+bt->dx_, y+bt->dy_, w-bt->dw_, h-bt->dh_, -w/2, -h/2);
   FL_NORMAL_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
 }
 

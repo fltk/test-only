@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.30 1999/10/09 18:34:56 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.31 1999/10/12 03:01:53 vincent Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -240,6 +240,7 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   oy_(Y),
   ow_(W),
   oh_(H) {
+  type(FL_GROUP);
   style(group_style);
   align(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
@@ -457,6 +458,14 @@ void Fl_Group::layout() {
 }
 
 #include <FL/Fl_Tabs.H>
+
+// Draw the surrounding box of a group : if no box, draw parent's box
+void Fl_Group::draw_group_box() const {
+  if (!box()->rectangular)
+    if (parent()) parent()->draw_group_box();
+  draw_box();
+}
+
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
@@ -464,14 +473,19 @@ void Fl_Group::draw() {
     bool clipped = false;
     while (e > a) {
       Fl_Widget& w = **--e;
-      if (w.visible() && w.type() < FL_WINDOW && w.box()->rectangular &&
+      if (w.visible() && w.type() < FL_WINDOW /*&& w.box()->rectangular*/ &&
  	  fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-	if (w.box() != FL_NO_BOX && !clipped) {
+	if (!clipped) {
 	  fl_clip(Fl::x(), Fl::y(), Fl::w(), Fl::h()); clipped = true;}
+	if (!w.box()->rectangular && w.type() < FL_GROUP) {
+	  fl_clip(w.x(), w.y(), w.w(), w.h());
+	  draw_group_box();
+	  fl_pop_clip();
+	}
 	w.clear_damage(FL_DAMAGE_ALL);
 	w.draw();
 	w.clear_damage();
-	if (w.box() != FL_NO_BOX && w.type() != FL_TABS)
+	if (w.type() != FL_TABS)
 	  fl_clip_out(w.x(), w.y(), w.w(), w.h());
       }
     }
@@ -482,21 +496,16 @@ void Fl_Group::draw() {
       t->draw_box();
       fl_pop_clip();
     }
-    draw_box();
+    fl_clip(x(), y(), w(), h());
+    draw_group_box();
+    fl_pop_clip();
     draw_label();
     if (clipped) fl_pop_clip();
     e = a+children_;
     while (a < e) {
       Fl_Widget& w = **a++;
-      if (w.visible()) {
+      if (w.visible())
 	draw_outside_label(w);
-	if (w.type() < FL_WINDOW && !w.box()->rectangular &&
-	    fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-	  w.clear_damage(FL_DAMAGE_ALL);
-	  w.draw();
-	  w.clear_damage();
-	}
-      }
     }
   } else {	// only redraw the children that need it:
     while (a < e) update_child(**a++);
@@ -562,5 +571,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.30 1999/10/09 18:34:56 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.31 1999/10/12 03:01:53 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.H,v 1.6 1999/10/09 18:34:55 vincent Exp $"
+// "$Id: Fl_Tabs.H,v 1.7 1999/10/12 03:01:51 vincent Exp $"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Group.H"
 
-#define FL_TABS (FL_RESERVED_TYPE+3)
+#define FL_TABS (FL_GROUP+1)
 
 class Fl_Tabs : public Fl_Group {
   friend class Fl_Group;
@@ -51,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Tabs.H,v 1.6 1999/10/09 18:34:55 vincent Exp $".
+// End of "$Id: Fl_Tabs.H,v 1.7 1999/10/12 03:01:51 vincent Exp $".
 //

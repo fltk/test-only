@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.cxx,v 1.5 1999/10/11 01:00:29 vincent Exp $"
+// "$Id: Fl_Style_Util.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -72,11 +72,11 @@ bool fl_add_style_def(char* name, Fl_Style* style)
 
 Fl_Style* fl_search_style(char* name)
 {
-  static bool sorted = 0;
+/*  static bool sorted = 0;
   if (!sorted) {
     qsort(styles, nb_styles, sizeof(Fl_Style_D), compare_style);
     sorted = 1;
-  }
+  }*/
   Fl_Style_D key = { name, 0 }, *def;
   def = (Fl_Style_D*)bsearch(&key, styles, nb_styles, sizeof(Fl_Style_D), compare_style);
   return def? def->style : 0;
@@ -140,5 +140,5 @@ bool fl_parse_style_entry(char* name, Fl_Style& style, char* s)
 }
 
 //
-// End of "$Id: Fl_Style_Util.cxx,v 1.5 1999/10/11 01:00:29 vincent Exp $".
+// End of "$Id: Fl_Style_Util.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $".
 //

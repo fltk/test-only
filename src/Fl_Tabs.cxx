@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.16 1999/10/09 18:34:56 vincent Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.17 1999/10/12 03:01:53 vincent Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -214,7 +214,7 @@ void Fl_Tabs::draw() {
     int i;
 
     // draw the parent's box under the tabs
-    fl_clip(x(), y()+(H>=0?0:h()+H-1), p[children()-1]+w[children()-1]+TABSLOPE, 1+(H>=0?H:-H));
+    fl_clip(x(), y()+(H>=0?0:h()+H), p[children()-1]+w[children()-1]+TABSLOPE, (H>=0?H:-H));
     parent()->draw_box();
     fl_pop_clip();
 
@@ -228,8 +228,8 @@ void Fl_Tabs::draw() {
 
     // The tabs widget build itself the clip_out region with a special shape
     if (damage()&FL_DAMAGE_ALL) {
-      fl_clip_out(x(), y()+(H>=0?0:h()+H-1), p[children()-1]+w[children()-1]+TABSLOPE, 1+(H>=0?H:-H));
-      fl_clip_out(x(), y()+(H>0?H:0), this->w(), h()-(H>=0?H:-H));
+      fl_clip_out(x(), y()+(H>=0?0:h()+H), p[children()-1]+w[children()-1]+TABSLOPE, (H>=0?H:-H));
+      fl_clip_out(x(), y()+(H>0?H:0), this->w(), h()-(H>=0?H:-H-1));
     }
   }
 }
@@ -292,5 +292,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.16 1999/10/09 18:34:56 vincent Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.17 1999/10/12 03:01:53 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.13 1999/08/16 07:31:27 bill Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.14 1999/10/12 03:01:53 vincent Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -569,10 +569,13 @@ FCW::FCW() : Fl_Window(WIDTH_BOX, HEIGHT_BOX),
   obj->callback(files_cb, this);
   but_y += HEIGHT_BUT;
 
-  resizable(new Fl_Box(browser.x(), but_y,
-		       cancel_button->x()-browser.x(),
+  resizable(obj = new Fl_Box(browser.x(), but_y,
+		       ok_button->x()-browser.x(),
 		       browser.y()+browser.h()-but_y));
+  insert(*obj, 0); // We move it so that it doesn't hide other widgets
+
   // add(input); // put last for better draw() speed
+
   end();
   set_modal();
 }
@@ -620,5 +623,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.13 1999/08/16 07:31:27 bill Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.14 1999/10/12 03:01:53 vincent Exp $".
 //

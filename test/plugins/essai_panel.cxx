@@ -2,13 +2,13 @@
 
 #include "essai_panel.h"
 
-Fl_Window *Essai=(Fl_Window *)0;
+Fl_Group *Essai=(Fl_Group *)0;
 
-Fl_Window* make_window() {
-  Fl_Window* w;
-  { Fl_Window* o = Essai = new Fl_Window(293, 219);
+Fl_Group* make_window() {
+  Fl_Group* w;
+  { Fl_Group* o = Essai = new Fl_Group(0, 0, 258, 74);
     w = o;
-    { Fl_Slider* o = new Fl_Slider(25, 10, 225, 20, "Major tick precision");
+    { Fl_Slider* o = new Fl_Slider(20, 20, 225, 20, "Major tick precision");
       o->type(5);
       o->maximum(6);
       o->step(1);
