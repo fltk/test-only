@@ -1,5 +1,5 @@
 /*
- * "$Id: string.h,v 1.1 2004/09/01 22:06:43 leka Exp $"
+ * "$Id: string.h,v 1.2 2004/12/13 20:13:11 leka Exp $"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
@@ -47,11 +47,17 @@
  * functions, but not all linkers add the leading underscore when
  * linking, thus the definition.
  */
-
-#  define strcasecmp(s,t)	stricmp((s), (t))
-#  define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
-#  define vsnprintf		_vsnprintf
-#  define snprintf		_snprintf
+#  if (_MSC_VER > 1200)
+#    define strcasecmp(s,t)     stricmp(s, t)
+#    define strncasecmp(s,t,n)  strnicmp(s, t, n)
+#    define vsnprintf	        _vsnprintf
+#    define snprintf            _snprintf
+#  else
+#    define strcasecmp(s,t)     stricmp((s), (t))
+#    define strncasecmp(s,t,n)  strnicmp((s), (t), (n))
+#    define vsnprintf	        _vsnprintf
+#    define snprintf            _snprintf
+#  endif
 
 #  ifdef __cplusplus
 extern "C" {
@@ -76,5 +82,5 @@ FL_API extern size_t fltk_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: string.h,v 1.1 2004/09/01 22:06:43 leka Exp $".
+ * End of "$Id: string.h,v 1.2 2004/12/13 20:13:11 leka Exp $".
  */
