@@ -149,9 +149,7 @@ DEP_CPP_FL_GU=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GU=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -217,13 +215,14 @@ DEP_CPP_FL_JP=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
+	{$(INCLUDE)}"jconfig.h"\
+	{$(INCLUDE)}"jmorecfg.h"\
+	{$(INCLUDE)}"jpeglib.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 NODEP_CPP_FL_JP=\
 	"..\..\..\..\Program Files\DevStudio\VC\INCLUDE\jerror.h"\
 	"..\..\..\..\Program Files\DevStudio\VC\INCLUDE\jpegint.h"\
-	".\morecfg.h"\
-	".\peglib.h"\
-	".\ys\types.h"\
 	
 
 !ENDIF 
@@ -292,10 +291,8 @@ DEP_CPP_FL_GL=\
 	"..\FL\x.H"\
 	"..\src\fl_gl_choice.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GL=\
-	".\L\gl.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -327,10 +324,8 @@ DEP_CPP_FL_GL_=\
 	"..\FL\x.H"\
 	"..\src\fl_gl_choice.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GL_=\
-	".\L\gl.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -362,10 +357,8 @@ DEP_CPP_FL_GL_W=\
 	"..\FL\x.H"\
 	"..\src\fl_gl_choice.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GL_W=\
-	".\L\gl.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -409,10 +402,8 @@ DEP_CPP_GL_DR=\
 	"..\src\fl_fontsize.h"\
 	"..\src\fl_gl_choice.h"\
 	".\config.h"\
-	
-NODEP_CPP_GL_DR=\
-	".\L\gl.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -448,10 +439,8 @@ DEP_CPP_GL_ST=\
 	"..\FL\x.H"\
 	"..\src\fl_gl_choice.h"\
 	".\config.h"\
-	
-NODEP_CPP_GL_ST=\
-	".\L\gl.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -528,9 +517,7 @@ DEP_CPP_FORMS=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\forms.H"\
-	
-NODEP_CPP_FORMS=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -593,9 +580,7 @@ DEP_CPP_FORMS_=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\forms.H"\
-	
-NODEP_CPP_FORMS_=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -680,9 +665,7 @@ DEP_CPP_FORMS_FS=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\forms.H"\
-	
-NODEP_CPP_FORMS_FS=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -743,9 +726,7 @@ DEP_CPP_FORMS_P=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\forms.H"\
-	
-NODEP_CPP_FORMS_P=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -771,10 +752,8 @@ DEP_CPP_FORMS_T=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Timer.H"\
 	"..\FL\Fl_Widget.H"\
-	
-NODEP_CPP_FORMS_T=\
-	".\ys\timeb.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\timeb.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -813,11 +792,9 @@ DEP_CPP_GLUT_=\
 	"..\FL\gl.h"\
 	"..\FL\glut.H"\
 	".\config.h"\
-	
-NODEP_CPP_GLUT_=\
-	".\L\gl.h"\
-	".\L\glu.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"GL\glu.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -847,11 +824,9 @@ DEP_CPP_GLUT_F=\
 	"..\FL\gl.h"\
 	"..\FL\glut.H"\
 	".\config.h"\
-	
-NODEP_CPP_GLUT_F=\
-	".\L\gl.h"\
-	".\L\glu.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"GL\gl.h"\
+	{$(INCLUDE)}"GL\glu.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -887,9 +862,7 @@ SOURCE=..\src\filename_absolute.cxx
 
 DEP_CPP_FILEN=\
 	"..\FL\filename.H"\
-	
-NODEP_CPP_FILEN=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -905,9 +878,7 @@ SOURCE=..\src\filename_expand.cxx
 
 DEP_CPP_FILENA=\
 	"..\FL\filename.H"\
-	
-NODEP_CPP_FILENA=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -923,9 +894,7 @@ SOURCE=..\src\filename_ext.cxx
 
 DEP_CPP_FILENAM=\
 	"..\FL\filename.H"\
-	
-NODEP_CPP_FILENAM=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -942,10 +911,8 @@ SOURCE=..\src\filename_isdir.cxx
 DEP_CPP_FILENAME=\
 	"..\FL\filename.H"\
 	".\config.h"\
-	
-NODEP_CPP_FILENAME=\
-	".\ys\stat.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\stat.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -962,9 +929,7 @@ SOURCE=..\src\filename_list.cxx
 DEP_CPP_FILENAME_=\
 	"..\FL\filename.H"\
 	".\config.h"\
-	
-NODEP_CPP_FILENAME_=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -980,9 +945,7 @@ SOURCE=..\src\filename_match.cxx
 
 DEP_CPP_FILENAME_M=\
 	"..\FL\filename.H"\
-	
-NODEP_CPP_FILENAME_M=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -998,9 +961,7 @@ SOURCE=..\src\filename_setext.cxx
 
 DEP_CPP_FILENAME_S=\
 	"..\FL\filename.H"\
-	
-NODEP_CPP_FILENAME_S=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1055,9 +1016,7 @@ DEP_CPP_FL_AB=\
 	"..\FL\Fl_Color.H"\
 	"..\FL\Fl_Flags.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_AB=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1190,9 +1149,7 @@ DEP_CPP_FL_ARG=\
 	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
-	
-NODEP_CPP_FL_ARG=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1226,9 +1183,7 @@ DEP_CPP_FL_AS=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_AS=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1315,9 +1270,7 @@ DEP_CPP_FL_BOX=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_BOX=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1603,9 +1556,7 @@ DEP_CPP_FL_CO=\
 	"..\src\fl_color_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_CO=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1863,9 +1814,7 @@ DEP_CPP_FL_DO=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_DO=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1924,9 +1873,7 @@ DEP_CPP_FL_DRA=\
 	"..\src\fl_draw_image_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_DRA=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -1947,9 +1894,7 @@ DEP_CPP_FL_DRAW=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_DRAW=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2013,9 +1958,7 @@ DEP_CPP_FL_FI=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_FI=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2053,9 +1996,7 @@ DEP_CPP_FL_FIL=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
-	
-NODEP_CPP_FL_FIL=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2152,10 +2093,8 @@ DEP_CPP_FL_FILEC=\
 	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
-	
-NODEP_CPP_FL_FILEC=\
-	".\ys\stat.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\stat.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2182,10 +2121,8 @@ DEP_CPP_FL_FILEI=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
-	
-NODEP_CPP_FL_FILEI=\
-	".\ys\stat.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\stat.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2297,9 +2234,7 @@ DEP_CPP_FL_FO=\
 	"..\src\fl_font_win32.cxx"\
 	"..\src\fl_fontsize.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_FO=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2366,9 +2301,7 @@ DEP_CPP_FL_GET=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GET=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2449,9 +2382,7 @@ DEP_CPP_FL_GR=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_GR=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2853,9 +2784,7 @@ DEP_CPP_FL_MENU_W=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_MENU_W=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -2994,9 +2923,7 @@ DEP_CPP_FL_OVER=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OVER=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3028,9 +2955,7 @@ DEP_CPP_FL_OVERL=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OVERL=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3063,9 +2988,7 @@ DEP_CPP_FL_OW=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OW=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3165,9 +3088,7 @@ DEP_CPP_FL_PN=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_PN=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3525,9 +3446,7 @@ DEP_CPP_FL_SHA=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_SHA=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3589,9 +3508,7 @@ DEP_CPP_FL_SHOW=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_SHOW=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -3695,9 +3612,7 @@ DEP_CPP_FL_ST=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Style_Util.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_ST=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4043,9 +3958,7 @@ DEP_CPP_FL_VI=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_VI=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4105,10 +4018,8 @@ DEP_CPP_FL_WIN=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	
-NODEP_CPP_FL_WIN=\
-	".\ys\stat.h"\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\stat.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4222,9 +4133,7 @@ DEP_CPP_FL_X_=\
 	"..\FL\x.H"\
 	"..\src\fl_win32.cxx"\
 	".\config.h"\
-	
-NODEP_CPP_FL_X_=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4249,9 +4158,7 @@ SOURCE=..\src\numericsort.c
 DEP_CPP_NUMER=\
 	"..\FL\filename.H"\
 	".\config.h"\
-	
-NODEP_CPP_NUMER=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4268,9 +4175,7 @@ SOURCE=..\src\scandir.c
 DEP_CPP_SCAND=\
 	"..\src\scandir_win32.c"\
 	".\config.h"\
-	
-NODEP_CPP_SCAND=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
@@ -4286,9 +4191,7 @@ SOURCE=..\src\vsnprintf.c
 
 DEP_CPP_VSNPR=\
 	".\config.h"\
-	
-NODEP_CPP_VSNPR=\
-	".\ys\types.h"\
+	{$(INCLUDE)}"sys\types.h"\
 	
 
 !ENDIF 
