@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.9 2004/07/04 20:14:16 laza2000 Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.10 2004/08/01 22:28:23 spitzak Exp $"
 //
-// Tiled image code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2001 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,17 +21,26 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+/*! \class fltk::TiledImage
+
+  Draws the image supplied to it's constructor repeatedly to cover
+  the area provided to draw(). Clips the images as necessary to
+  fit them in the rectangle.
+*/
+
 #include <fltk/TiledImage.h>
 #include <fltk/draw.h>
 using namespace fltk;
 
-// A tiled image "resizes" to completely fill any passed bounding box,
-// so this can just return the values unchanged. This maximizes the
-// values with the image size, though, because that allows the align
-// code to change the part of the image seen when the image is bigger
-// than the are to tile, and to fix old code that did not initialize
-// the w & h, or code that assummes this always returns values greater
-// than zero.
+/*! \fn TiledImage::TiledImage(Symbol*)
+
+  A pointer to the image must be provided to the constructor. If it
+  is null then the TiledImage draws nothing.
+*/
+
+/*! Returns the maximum of the passed size and the size of the image.
+  This makes the alignment code center the tiled image if desired.
+*/
 void TiledImage::_measure(float& w, float& h) const {
   if (!image_) return;
   float iw = w;
@@ -43,7 +50,10 @@ void TiledImage::_measure(float& w, float& h) const {
   if (ih > h) h = ih;
 }
 
-// Tiled image with minimal redraw
+/*! Repeatedly draws the image to fill the area, putting the top-left
+  corner at \a x,y. This checks the current clip region and does
+  minimal drawing of only the visible portions of the image.
+*/
 void TiledImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
   if (!image_) return;
@@ -85,5 +95,5 @@ const BoxInfo* TiledImage::boxinfo() const {
 }
 
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.9 2004/07/04 20:14:16 laza2000 Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.10 2004/08/01 22:28:23 spitzak Exp $".
 //

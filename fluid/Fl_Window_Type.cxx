@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.47 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.48 2004/08/01 22:28:21 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 #include <fltk/ask.h>
 #include <fltk/draw.h>
 #include <fltk/Box.h>
+#include <fltk/layout.h>
 #include "FluidType.h"
 #include <math.h>
 #include <stdlib.h>
@@ -98,6 +99,7 @@ bool overlays_invisible;
 // an overlay for the fluid ui, and special-cases the fltk::NO_BOX.
 
 class Overlay_Window : public fltk::Window {
+  void layout();
   void draw();
   void draw_overlay();
 public:
@@ -105,6 +107,11 @@ public:
   int handle(int);
   Overlay_Window(int w,int h) : fltk::Window(w,h) {fltk::Group::current(0);}
 };
+void Overlay_Window::layout() {
+  // Don't rearrange children unless use is resizing the window itself:
+  if (!(layout_damage()&fltk::LAYOUT_XYWH)) init_sizes();
+  Window::layout();
+}
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
@@ -117,10 +124,10 @@ void Overlay_Window::draw() {
 	fltk::fillrect(x,y,CHECKSIZE,CHECKSIZE);
       }
   }
-#ifdef _WIN32
-  Window::draw();
-#else
+#ifdef __sgi
   fltk::Window::draw();
+#else
+  Window::draw();
 #endif
 }
 
@@ -417,7 +424,7 @@ void WindowType::moveallchildren()
     fix_group_size(i);
   o->redraw();
   recalc = 1;
-  ((Overlay_Window *)(this->o))->redraw_overlay();
+  ((Overlay_Window *)(this->o))->init_sizes();
   modflag = 1;
   dx = dy = 0;
 }
@@ -700,5 +707,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.47 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.48 2004/08/01 22:28:21 spitzak Exp $".
 //

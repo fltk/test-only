@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.47 2004/04/17 18:58:19 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -46,21 +46,23 @@ static void default_glyph(int glyph,
 			  const Style* style, Flags flags)
 {
   Box* box = style->box();
+  // Use the white rather than the gray color:
+  flags = flags&~(SELECTED|HIGHLIGHT)|OUTPUT;
   // for back compatability with some programs that changed the
   // square into a diamond or circle, where the checkmark does
   // not look too good. Draw the box colored in with the
   // selected color instead:
   if (!box->fills_rectangle()) {
-    if (flags & VALUE) flags |= SELECTED;
-    box->draw(x, y, w, h, style, flags|OUTPUT);
+    if (flags&VALUE) flags |= SELECTED;
+    box->draw(x, y, w, h, style, flags);
     return;
   }
   // Otherwise draw the box with normal colors and then draw checkmark
   // inside it:
-  box->draw(x, y, w, h, style, flags|OUTPUT);
-  if (flags & VALUE) {
+  box->draw(x, y, w, h, style, flags);
+  if (flags&VALUE) {
     box->inset(x, y, w, h);
-    Color bg, fg; style->boxcolors(flags|OUTPUT, bg, fg);
+    Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(fg);
     if (h < 4) {fillrect(x+w/2-1,y+h/2-1,2,2); return;}
     x += 1;

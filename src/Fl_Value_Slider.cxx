@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.54 2004/06/11 08:07:19 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.55 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -71,9 +71,10 @@ void ValueSlider::draw() {
     if (ix) {tx = ix; tw = iw;} // if box has border, center text
   }
 
-  Flags f2 = current_flags_highlight();
-  Flags flags = f2 & ~HIGHLIGHT;
-  if (pushed()) f2 |= VALUE;
+  Flags flags = current_flags_highlight();
+  Flags f2 = flags & ~FOCUSED;
+  if (pushed()) f2 |= VALUE|PUSHED;
+  flags &= ~HIGHLIGHT;
 
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
@@ -87,9 +88,7 @@ void ValueSlider::draw() {
     box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
 
     // draw the focus indicator inside the box:
-    if (focused()) {
-      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
-    }
+    focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
 
     if (type() & TICK_BOTH) {
       if (horizontal()) {
@@ -125,9 +124,7 @@ void ValueSlider::draw() {
     if (!(damage()&DAMAGE_ALL)) {
       if (!box->fills_rectangle()) draw_background();
       box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
-      if (focused()) {
-	focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
-      }
+      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
     }
     // now draw the text:
     char buf[128];
@@ -170,5 +167,5 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.54 2004/06/11 08:07:19 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.55 2004/08/01 22:28:23 spitzak Exp $".
 //

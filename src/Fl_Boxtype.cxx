@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.20 2004/07/15 16:27:26 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.21 2004/08/01 22:28:21 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,6 +48,7 @@ using namespace fltk;
 class FL_API DottedFrame : public Box {
 public:
   void _draw(int x, int y, int w, int h,const Style* s, Flags flags) const {
+    if (!(flags & FOCUSED)) return;
     if (w <= 1 || h <= 1) return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
     setcolor(fg);
@@ -103,7 +104,8 @@ public:
 static DottedFrame dottedFrame("dotted_frame");
 
 /*! \ingroup boxes
-  Used to draw the dotted focus rectangle around widgets.
+  Used to draw the dotted focus rectangle around widgets. This only
+  draws something if the FOCUSED flag paseed to draw() is true.
 */
 Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
@@ -306,14 +308,14 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
 
 /*! \class fltk::HighlightBox
   Draws as fltk::FLAT_BOX normally, this can draw as any other box
-  (passed to the constructor) when HIGHLIGHT or SELECTED or VALUE
+  (passed to the constructor) when HIGHLIGHT, SELECTED, VALUE, or PUSHED
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
 void HighlightBox::_draw(
   int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (flags & (HIGHLIGHT|SELECTED|VALUE)) {
+  if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) {
     down->draw(x,y,w,h,style,flags);
   } else {
     FlatBox::_draw(x,y,w,h,style,flags);
@@ -339,5 +341,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.20 2004/07/15 16:27:26 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.21 2004/08/01 22:28:21 spitzak Exp $".
 //

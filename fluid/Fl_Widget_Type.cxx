@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.99 2004/07/29 06:54:32 laza2000 Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.100 2004/08/01 22:28:20 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -329,7 +329,7 @@ void x_cb(fltk::ValueInput* i, void *v) {
       q->redraw();      
     }
   } else {
-	  x = current_widget ? current_widget->o->x() : 0;
+    x = current_widget ? current_widget->o->x() : 0;
   }
   i->value(x);
 }
@@ -345,7 +345,7 @@ void y_cb(fltk::ValueInput* i, void *v) {
       q->redraw();
     }
   } else {
-	  y = current_widget ? current_widget->o->y() : 0;    
+    y = current_widget ? current_widget->o->y() : 0;    
   }
   i->value (y);
 }
@@ -361,7 +361,7 @@ void width_cb(fltk::ValueInput* i, void *v) {
       q->redraw();
     }
   } else {
-	  width = current_widget ? current_widget->o->w() : 0;
+    width = current_widget ? current_widget->o->w() : 0;
   }
   i->value (width);
 }
@@ -377,7 +377,7 @@ void height_cb(fltk::ValueInput* i, void *v) {
       q->redraw();
     }  
   } else {
-	  height = current_widget ? current_widget->o->h() : 0;  
+    height = current_widget ? current_widget->o->h() : 0;  
   }
   i->value (height);
 }
@@ -2170,5 +2170,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.99 2004/07/29 06:54:32 laza2000 Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.100 2004/08/01 22:28:20 spitzak Exp $".
 //

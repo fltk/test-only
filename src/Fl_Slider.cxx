@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.73 2004/06/11 08:07:19 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.74 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -300,9 +300,10 @@ void Slider::draw()
     }
   }
 
-  Flags f2 = current_flags_highlight();
-  Flags flags = f2 & ~HIGHLIGHT;
-  if (pushed()) f2 |= VALUE;
+  Flags flags = current_flags_highlight();
+  Flags f2 = flags & ~FOCUSED;
+  if (pushed()) f2 |= VALUE|PUSHED;
+  flags &= ~HIGHLIGHT;
 
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
@@ -316,9 +317,7 @@ void Slider::draw()
     box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
 
     // draw the focus indicator inside the box:
-    if (focused()) {
-      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
-    }
+    focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
 
     if (type() & TICK_BOTH) {
       if (horizontal()) {
@@ -587,5 +586,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.73 2004/06/11 08:07:19 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.74 2004/08/01 22:28:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.39 2004/08/01 22:28:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -44,12 +44,12 @@ static void glyph(int/*t*/,
 {
   int ww = w/2+1;
   if (f & VALUE) {
-    f = f&INACTIVE | SELECTED;
+    f |= SELECTED;
   } else if (style->color_) {
     // if user set the color of the button draw that color
-    f = f&INACTIVE | OUTPUT;
+    f |= OUTPUT;
   } else {
-    f = f&INACTIVE | INVISIBLE; // draw frame only
+    f |= INVISIBLE; // draw frame only
   }
   THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, style, f);
 }
@@ -69,5 +69,5 @@ LightButton::LightButton(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.38 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.39 2004/08/01 22:28:22 spitzak Exp $".
 //

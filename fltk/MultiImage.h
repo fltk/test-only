@@ -1,5 +1,5 @@
 //
-// "$Id: MultiImage.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: MultiImage.h,v 1.9 2004/08/01 22:28:20 spitzak Exp $"
 //
 // Image type that draws a different image depending on the flags,
 // for instace VALUE or SELECTED or HIGHLIGHT.
@@ -27,48 +27,50 @@
 #ifndef fltk_MultiImage_h
 #define fltk_MultiImage_h
 
-#include "Image.h"
+#include "Symbol.h"
 
 namespace fltk {
 
-class FL_API MultiImage : public Image
+class FL_API MultiImage : public Symbol
 {
   enum {MAXIMAGES = 8};
-  Image* images[MAXIMAGES];
+  Symbol* images[MAXIMAGES];
   Flags flags[MAXIMAGES];
 public:
   void _measure(float&, float&) const;
   void _draw(int, int, int, int, const Style*, Flags) const;
+  void _draw(float,float,float,float, const Style*, Flags) const;
+  const BoxInfo* boxinfo() const;
 
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     images[2] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
     images[3] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2,
-		Flags flags3, Image& image3) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2,
+		Flags flags3, Symbol& image3) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
     flags[3] = flags3; images[3] = &image3;
     images[4] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2,
-		Flags flags3, Image& image3,
-		Flags flags4, Image& image4) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2,
+		Flags flags3, Symbol& image3,
+		Flags flags4, Symbol& image4) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
@@ -76,12 +78,12 @@ public:
     flags[4] = flags4; images[4] = &image4;
     images[5] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2,
-		Flags flags3, Image& image3,
-		Flags flags4, Image& image4,
-		Flags flags5, Image& image5) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2,
+		Flags flags3, Symbol& image3,
+		Flags flags4, Symbol& image4,
+		Flags flags5, Symbol& image5) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
@@ -90,13 +92,13 @@ public:
     flags[5] = flags5; images[5] = &image5;
     images[6] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2,
-		Flags flags3, Image& image3,
-		Flags flags4, Image& image4,
-		Flags flags5, Image& image5,
-		Flags flags6, Image& image6) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2,
+		Flags flags3, Symbol& image3,
+		Flags flags4, Symbol& image4,
+		Flags flags5, Symbol& image5,
+		Flags flags6, Symbol& image6) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
@@ -106,14 +108,14 @@ public:
     flags[6] = flags6; images[6] = &image6;
     images[7] = 0;
   }
-  MultiImage(Image& image0,
-		Flags flags1, Image& image1,
-		Flags flags2, Image& image2,
-		Flags flags3, Image& image3,
-		Flags flags4, Image& image4,
-		Flags flags5, Image& image5,
-		Flags flags6, Image& image6,
-		Flags flags7, Image& image7) {
+  MultiImage(Symbol& image0,
+		Flags flags1, Symbol& image1,
+		Flags flags2, Symbol& image2,
+		Flags flags3, Symbol& image3,
+		Flags flags4, Symbol& image4,
+		Flags flags5, Symbol& image5,
+		Flags flags6, Symbol& image6,
+		Flags flags7, Symbol& image7) {
     images[0] = &image0;
     flags[1] = flags1; images[1] = &image1;
     flags[2] = flags2; images[2] = &image2;
@@ -130,5 +132,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiImage.h,v 1.8 2003/11/04 08:10:56 spitzak Exp $".
+// End of "$Id: MultiImage.h,v 1.9 2004/08/01 22:28:20 spitzak Exp $".
 //

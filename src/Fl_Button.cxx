@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.68 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.69 2004/08/01 22:28:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -36,9 +36,9 @@ using namespace fltk;
   - fltk::WHEN_RELEASE: This is the default, the callback is done
     after the user successfully clicks the button (i.e. they let it go
     with the mouse still pointing at it), or when a shortcut is typed.
-  - fltk::WHEN_CHANGED : The callback is done each time the value()
-    changes (when the user pushes and releases the button, and as the
-    mouse is dragged around in and out of the button).
+  - fltk::WHEN_CHANGED : The callback is done each time the button
+    is pushed and released. value() is changed to reflect whether
+    it is pushed in or not (do not use with ToggleButton).
 
   Buttons can also generate callbacks in response to fltk::SHORTCUT
   events. The button can either have an explicit shortcut() value or a
@@ -85,12 +85,10 @@ void Button::setonly() {
   }
 }
 
-static Button* held_down;
+static Button* pushed_button;
 
 #include <stdio.h>
 int Button::handle(int event) {
-  static bool oldval;
-  bool newval;
   switch (event) {
   case ENTER:
   case LEAVE:
@@ -98,31 +96,39 @@ int Button::handle(int event) {
   case MOVE:
     return 1;
   case PUSH:
-    oldval = value();
   case DRAG:
     if (event_inside(0,0,w(),h())) {
-      held_down = this;
-      if (type() == RADIO) newval = 1;
-      else newval = !oldval;
+      if (pushed_button != this) {
+	redraw(DAMAGE_VALUE);
+	if (when()&WHEN_CHANGED) {
+	  // temporarily toggle the value so the callback sees the right thing:
+	  bool v = value();
+	  value(!v);
+	  do_callback();
+	  value(v);
+	}
+	pushed_button = this;
+      }
     } else {
-      held_down = 0;
-      newval = oldval;
+      if (pushed_button == this) {
+	redraw(DAMAGE_VALUE);
+	pushed_button = 0;
+	if (when()&WHEN_CHANGED) do_callback();
+      }
     }
-    if (value(newval) && when()&WHEN_CHANGED) do_callback();
     return 1;
   case RELEASE:
-    redraw(DAMAGE_VALUE);
-    held_down = 0;
-    if (value() == oldval) return 1;
-    if (type() == RADIO)
-      setonly();
-    else if (type()) // TOGGLE
-      ; // leave it as set
-    else {
-      value(oldval);
-      if (when() & WHEN_CHANGED) do_callback();
+    if (pushed_button == this) {
+      redraw(DAMAGE_VALUE);
+      pushed_button = 0;
+      if (type() == RADIO) {
+	setonly();
+      } else if (type()) {// TOGGLE
+	value(!value());
+	set_changed();
+      }
+      if (when() & (WHEN_RELEASE|WHEN_CHANGED)) do_callback();
     }
-    if (when() & WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   case FOCUS:
     redraw(1); // minimal redraw to just add the focus box
@@ -177,30 +183,27 @@ void Button::draw(int glyph, int glyph_width) const
     style = &localstyle;
   }
 
-  Flags flags = current_flags_highlight();
+  Box* box = style->buttonbox();
 
-  Flags glyph_flags = flags & ~(SELECTED|HIGHLIGHT); // flags to pass to draw_glyph
+  Flags box_flags = current_flags_highlight();
+  Flags glyph_flags = box_flags;
+  if (this == pushed_button) box_flags |= VALUE|PUSHED;
   if (value()) {
-    glyph_flags |= VALUE;
-    // Use the pushed-in color if the user has explicitly set it
-    // on this widget:
-    if (style->selection_color_) glyph_flags |= SELECTED;
+    glyph_flags ^= VALUE;
+    if (!glyph_width) box_flags ^= VALUE;
   }
-  if (glyph_width) {
-    if (this == held_down) flags |= VALUE; // outer box shows pushed-down state
-  } else if (value()) {
-    flags |= glyph_flags;
-  }
+  // back-compatability with user-set selection color on Toggle button:
+  if (box_flags&VALUE && !glyph_width && style->selection_color_)
+    box_flags |= SELECTED;
 
   // only draw "inside" labels:
   bool draw_label = true;
   int x = 0, y = 0, w = this->w(), h = this->h();
 
-  Box* box = style->buttonbox();
-
   if (box == NO_BOX) {
+    glyph_flags ^= box_flags&(VALUE|PUSHED);
     Color bg;
-    if (flags & HIGHLIGHT && (bg = style->highlight_color())) {
+    if (box_flags & HIGHLIGHT && (bg = style->highlight_color())) {
       setcolor(bg);
       fillrect(0, 0, w, h);
     } else if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
@@ -222,7 +225,7 @@ void Button::draw(int glyph, int glyph_width) const
       draw_background();
     }
     // Draw the box:
-    box->draw(0, 0, w, h, style, flags);
+    box->draw(0, 0, w, h, style, box_flags);
     box->inset(x,y,w,h);
   }
 
@@ -237,10 +240,9 @@ void Button::draw(int glyph, int glyph_width) const
     lx = x+g+3; lw = w-g-3;
   }
 
-  if (draw_label) this->draw_label(lx, y, lw, h, style, flags);
+  if (draw_label) this->draw_label(lx, y, lw, h, style, box_flags);
 
-  if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, style, flags|INVISIBLE);
+  focusbox()->draw(x+1, y+1, w-2, h-2, style, box_flags);
 }
 
 void Button::draw() {
@@ -272,5 +274,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 */
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.68 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.69 2004/08/01 22:28:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.51 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.52 2004/08/01 22:28:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -78,10 +78,11 @@ void Adjuster::draw() {
     dy = H = h()/3;
   }
 
+  Flags flags = current_flags();
   Flags f[4];
   for (int i = 1; i < 4; i++) {
-    f[i] = flags();
-    if (drag == i) f[i] |= VALUE;
+    f[i] = flags;
+    if (drag == i) f[i] |= VALUE|PUSHED;
     else if (highlight == i) f[i] |= HIGHLIGHT;
   }
 
@@ -91,13 +92,6 @@ void Adjuster::draw() {
     draw_glyph(GLYPH_MEDIUMARROW, dx, dy, W, H, f[2]);
   if (damage()&DAMAGE_ALL || last == 3 || highlight == 3)
     draw_glyph(GLYPH_SLOWARROW, 2*dx, 0, W, H, f[3]);
-
-  if (focused()) {
-    Box* box = buttonbox();
-    focusbox()->draw(box->dx()+1, box->dy()+1,
-		      w()-box->dw()-2, h()-box->dh()-2,
-		      style(), INVISIBLE);
-  }
 
   last = highlight;
 }
@@ -191,5 +185,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.51 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.52 2004/08/01 22:28:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.5 2004/05/15 20:52:43 spitzak Exp $"
+// "$Id: Flags.h,v 1.6 2004/08/01 22:28:20 spitzak Exp $"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -81,20 +81,20 @@ enum {
   ALIGN_MASK		= 0x000000FF, //!< Used to split align() from flags()
 
   INACTIVE		= 0x00000100, //!< does not get events, gray it out
-  OUTPUT		= 0x00000200, //!< does not get events
-  VALUE			= 0x00000400, //!< indicates true/down/on state
-  SELECTED		= 0x00000800, //!< draw using selection colors
+  OUTPUT		= 0x00000200, //!< does not get events, draw text colors
+  VALUE			= 0x00000400, //!< true/on state
+  SELECTED		= 0x00000800, //!< chosen in browser/menu, draw selected colors
   INVISIBLE		= 0x00001000, //!< !visible(), draw empty
   HIGHLIGHT		= 0x00002000, //!< draw highlighted
   CHANGED		= 0x00004000, //!< value() changed since last callback
   COPIED_LABEL		= 0x00008000, //!< copy_label() was called
   RAW_LABEL		= 0x00010000, //!< don't interpret & or @ in label
   LAYOUT_VERTICAL	= 0x00020000, //!< fltk::Pack puts this widget vertical
-  CLICK_TO_FOCUS	= 0x00040000  //!< Set true if clicking this widget causes it to take focus
-
-/*! \} */
-
+  CLICK_TO_FOCUS	= 0x00040000, //!< Set true if clicking this widget causes it to take focus
+  FOCUSED		= 0x00040000, //!< draw with keyboard focus
+  PUSHED		= 0x00080000  //!< draw pushed-in
 };
+/*! \} */
 
 }
 

@@ -20,7 +20,7 @@
 
 /*! \defgroup themes Themes */
 
-/*! \defgroup execution */
+/*! \defgroup execution Execution Functions */
 
 /*! \defgroup dialogs Popup Dialog Services */
 

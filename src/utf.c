@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.12 2004/07/29 09:07:55 spitzak Exp $"
+// "$Id: utf.c,v 1.13 2004/08/01 22:28:24 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -159,7 +159,7 @@ unsigned utf8decode(const char* p, const char* end, int* len)
 /*! Return the length of a legal UTF-8 encoding that starts with
     this byte. Returns 1 for illegal bytes (0xc0, 0xc1, 0xf5 to 0xff).
 
-    <i>This function is depreciated. If the following bytes are
+    <i>This function is depreciated</i>. If the following bytes are
     not legal UTF-8 then using this to step forward to the next
     character will produce different positions than utf8decode()
     will produce.

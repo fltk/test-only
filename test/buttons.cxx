@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.19 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: buttons.cxx,v 1.20 2004/08/01 22:28:24 spitzak Exp $"
 //
 // Draws the image for the manual
 //
@@ -77,9 +77,10 @@ int main(int argc, char ** argv) {
   window.show(argc,argv);
   Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
   Button::default_style->color_ = 256-36;
+  Widget::default_style->highlight_color(3);
   return run();
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.19 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: buttons.cxx,v 1.20 2004/08/01 22:28:24 spitzak Exp $".
 //

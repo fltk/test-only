@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.188 2004/08/01 07:58:29 laza2000 Exp $"
+// "$Id: Fl_x.cxx,v 1.189 2004/08/01 22:28:23 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -653,7 +653,6 @@ void fltk::close_display() {
 static bool reload_info = true;
 
 /*! \class fltk::Monitor
-    Structure describing a monitor (screen).
     Structure describing one of the monitors (screens) connected to
     the system. You can ask for one by position with find(), ask for
     all of them with list(), and ask for a fake one that surrounds all
@@ -2177,5 +2176,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.188 2004/08/01 07:58:29 laza2000 Exp $".
+// End of "$Id: Fl_x.cxx,v 1.189 2004/08/01 22:28:23 spitzak Exp $".
 //

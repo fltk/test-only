@@ -15,7 +15,7 @@ buttons the user pushing them.
 
 For the Window, the "interesting" thing it does is the user trying to
 close it by pressing the close box. By default this closes the
-window. Lets change the callback in the \ref hello "hello" program so
+window. Lets change the callback in the \ref example1 "hello" program so
 this does something different:
 
 \include helloask.cxx

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.41 2004/01/19 21:38:42 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.42 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -43,6 +43,7 @@ using namespace fltk;
 void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {
   Color bg, fg; style->boxcolors(flags, bg, fg);
+  Box* box = 0;
 
   // handle special glyphs that don't draw the box:
   switch (glyph) {
@@ -53,7 +54,7 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
     // these glyphs do not have a box
     break;
   default: {
-    Box* box = style->buttonbox();
+    box = style->buttonbox();
     box->draw(x,y,w,h, style, flags);
     box->inset(x,y,w,h);
     }
@@ -118,8 +119,9 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 
     }
   }
+  if (box) style->focusbox()->draw(x,y,w,h, style, flags);
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.41 2004/01/19 21:38:42 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.42 2004/08/01 22:28:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.47 2004/05/18 15:53:41 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.48 2004/08/01 22:28:24 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -133,13 +133,16 @@ void Widget::draw_frame() const {
 
     This differs from the value of flags() in these ways:
 
-    VALUE,INACTIVE,HIGHLIGHT are turned off
+    VALUE, PUSHED, and HIGHLIGHT are turned off
 
-    INACTIVE is turned on if active_r() is false.
+    INACTIVE is set to !active_r().
+
+    FOCUSED is set to focused().
 */
 Flags Widget::current_flags() const {
-  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT);
+  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT|FOCUSED);
   if (!active_r()) f |= INACTIVE;
+  if (focused()) f |= FOCUSED;
   return f;
 }
 
@@ -149,9 +152,10 @@ Flags Widget::current_flags() const {
     widget is active and belowmouse() is true.
 */
 Flags Widget::current_flags_highlight() const {
-  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT);
+  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT|FOCUSED);
   if (!active_r()) f |= INACTIVE;
   else if (takesevents() && belowmouse()) f |= HIGHLIGHT;
+  if (focused()) f |= FOCUSED;
   return f;
 }
 
@@ -352,5 +356,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.47 2004/05/18 15:53:41 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.48 2004/08/01 22:28:24 spitzak Exp $".
 //

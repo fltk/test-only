@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.89 2004/08/01 02:49:02 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.90 2004/08/01 22:28:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -619,7 +619,7 @@ void Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    focusbox()->draw(x, y, widget->width(), h, style(), flags|(INVISIBLE|OUTPUT));
+    focusbox()->draw(x, y, widget->width(), h, style(), flags|(FOCUSED|OUTPUT));
   }
 
   push_matrix();
@@ -1703,5 +1703,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.89 2004/08/01 02:49:02 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.90 2004/08/01 22:28:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.37 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.38 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -163,7 +163,7 @@ void ThumbWheel::draw() {
     }
   }
   if (focused()) {
-    focusbox()->draw(0,0,w(),h(), style(), INVISIBLE);
+    focusbox()->draw(0,0,w(),h(), style(), FOCUSED);
   }
 }
 
@@ -174,5 +174,5 @@ ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.37 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.38 2004/08/01 22:28:23 spitzak Exp $".
 //

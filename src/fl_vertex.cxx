@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.30 2004/06/19 23:02:25 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.31 2004/08/01 22:28:24 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -32,7 +32,7 @@
 #include <stdlib.h>
 using namespace fltk;
 
-/** \defgroup drawing Drawing Functions
+/** \addtogroup drawing
 
   There are only certain places you can execute drawing code in
   FLTK. Calling these functions at other places will result in
@@ -808,5 +808,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.30 2004/06/19 23:02:25 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.31 2004/08/01 22:28:24 spitzak Exp $".
 //

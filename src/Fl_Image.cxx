@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.47 2004/07/31 10:25:39 laza2000 Exp $"
+// "$Id: Fl_Image.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -100,16 +100,22 @@ using namespace fltk;
   Image, you must call destroy_cache() before doing so.
 */
 
-/*! \fn Image::Image()
+/*! \fn Image::Image(const char* name)
   The default constructor makes a zero-sized image. This will not
   draw anything, you have to call setsize() on it. Most image
   subclasses use this initial zero size as an indication that they
   have not analyzed the data and figured out the size.
+
+  The optional name is passed to the Symbol constructor and allows
+  the image to be drawn by puttin "@name;" into a label.
 */
 
-/*! \fn Image::Image(int w, int h)
+/*! \fn Image::Image(int w, int h, const char* name)
   This constructor sets the width and height. The initial
   image is an opaque black rectangle of that size.
+
+  The optional name is passed to the Symbol constructor and allows
+  the image to be drawn by puttin "@name;" into a label.
 */
 
 /*! \fn int Image::width() const
@@ -269,7 +275,7 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
 #endif
 }
 
-/*! \class ImageDraw
+/*! \class fltk::ImageDraw
   The constructor of this class saves enough information so that the
   current location graphics are being drawn can be restored by the
   destructor. It then does image->make_current(). Typical usage:
@@ -578,5 +584,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.47 2004/07/31 10:25:39 laza2000 Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $".
 //

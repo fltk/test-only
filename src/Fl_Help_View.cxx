@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.8 2004/07/04 17:46:07 laza2000 Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.9 2004/08/01 22:28:22 spitzak Exp $"
 //
-// HelpView widget routines.
-//
-// Copyright 1997-2003 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -22,9 +20,9 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-// Contents:
-//
+
+/*! \class fltk::HelpView */
+
 //   HelpView::add_block()       - Add a text block to the list.
 //   HelpView::add_link()        - Add a new link to the list.
 //   HelpView::add_target()      - Add a new target to the list.
@@ -2592,5 +2590,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.8 2004/07/04 17:46:07 laza2000 Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.9 2004/08/01 22:28:22 spitzak Exp $".
 //

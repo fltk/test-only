@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.76 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.77 2004/08/01 22:28:22 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ void Choice::draw() {
   // draw the little mark at the right:
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
     Flags flags = current_flags_highlight();
-    draw_glyph(GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags);
+    draw_glyph(GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags & ~FOCUSED);
   }
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
     setcolor(color());
@@ -223,5 +223,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.76 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.77 2004/08/01 22:28:22 spitzak Exp $".
 //

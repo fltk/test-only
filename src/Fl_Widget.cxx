@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.112 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.113 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -477,7 +477,7 @@ MyClass::layout() {
   Same as !horizontal().
 */
 
-/*! \fn void Widget::set_vertical() const
+/*! \fn void Widget::set_vertical()
   Makes vertical() return true. This will affect how a surrounding
   fltk::Pack (or similar group) will place the widget, but you must
   call relayout() to indicate that this must be recalculated.
@@ -486,7 +486,7 @@ MyClass::layout() {
   differently if this is turned on, in a vertical arrangement.
 */
 
-/*! \fn void Widget::set_horizontal() const
+/*! \fn void Widget::set_horizontal()
   Undoes set_vertical() and makes horizontal() return true. This will
   affect how a surrounding fltk::Pack (or similar group) will place
   the widget, but you must call relayout() to indicate that this must
@@ -1141,5 +1141,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.112 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.113 2004/08/01 22:28:23 spitzak Exp $".
 //

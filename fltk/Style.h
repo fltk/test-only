@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.14 2004/03/07 20:40:30 spitzak Exp $"
+// "$Id: Style.h,v 1.15 2004/08/01 22:28:20 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -228,13 +228,13 @@ FL_API void load_theme();
 FL_API void reload_theme();
 FL_API bool reset_theme();
 
-}
-
 extern "C" FL_API bool fltk_theme();
 /*! \} */
+
+}
 
 #endif
 
 //
-// End of "$Id: Style.h,v 1.14 2004/03/07 20:40:30 spitzak Exp $".
+// End of "$Id: Style.h,v 1.15 2004/08/01 22:28:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.3 2004/07/04 17:15:18 laza2000 Exp $"
+// "$Id: CycleButton.cxx,v 1.4 2004/08/01 22:28:21 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -65,7 +65,7 @@ void CycleButton::draw() {
   // back-compatability and the glyphs are eliminated:
 
   Flags flags = current_flags_highlight();
-  if (this == held_down) flags |= VALUE;
+  if (this == held_down) flags |= VALUE|PUSHED;
 
   Style style = *(this->style());
   if (!style.color_) style.color_ = buttoncolor();
@@ -112,8 +112,7 @@ void CycleButton::draw() {
     pop_clip();
   }
 
-  if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, &style, flags|INVISIBLE);
+  focusbox()->draw(x+1, y+1, w-2, h-2, &style, flags);
 }
 
 /*! \fn int CycleButton::value() const
@@ -225,5 +224,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.3 2004/07/04 17:15:18 laza2000 Exp $".
+// End of "$Id: CycleButton.cxx,v 1.4 2004/08/01 22:28:21 spitzak Exp $".
 //

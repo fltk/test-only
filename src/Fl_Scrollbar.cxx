@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.71 2004/06/24 21:22:30 xpxqx Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.72 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,12 +46,6 @@ using namespace fltk;
 */
 
 #define vertical() (!horizontal())
-
-/*! \fn void Scrollbar::linesize(int)
- This number controls how big the steps are that the arrow keys do. In
- addition page up/down move by the size last sent to value() minus one
- linesize(). The default is 16.
-*/
 
 /*! \fn void Scrollbar::pagesize(int)
   How much the pageup/down keys and clicking in the empty area move by.
@@ -313,5 +307,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.71 2004/06/24 21:22:30 xpxqx Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.72 2004/08/01 22:28:23 spitzak Exp $".
 //

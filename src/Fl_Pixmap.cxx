@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.29 2004/08/01 22:28:22 spitzak Exp $"
 //
-// Pixmap drawing code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,7 +21,21 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// An Image that draws inline XPM data.
+/*! \class fltk::xpmImage
+
+  Draws inline XPM data. This is a text-based 256-color image format
+  designed for X11 and still very useful for making small icons, since
+  the data can be easily inserted into your source code.
+
+  Currently fltk has a huge kludge to recognize "monochrome" XPM files
+  and assume they are b&w "glyphs" that can be drawn in any
+  color. This is detected by the first line reading " \tc #FFFFFF", ie
+  the first color is space and is defined as white. White will be
+  transparent, black opaque, and gray partially transparent.  You
+  should only use gray shades in the rest of the image. Such b&w
+  glyphs are very useful for making modern user interfaces.
+
+*/
 
 // See draw_pixmap.C for code used to get the actual data into pixmap.
 // Implemented without using the xpm library (which I can't use because
@@ -92,5 +104,5 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.29 2004/08/01 22:28:22 spitzak Exp $".
 //

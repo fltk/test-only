@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.70 2004/07/19 22:23:31 laza2000 Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.71 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -421,8 +421,7 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
       h = H-1;
     }
     o->draw_label(x, y, w, h, o->style(), ALIGN_CENTER);
-    if (sel && focused())
-      focusbox()->draw(x, y, w, h, style(), INVISIBLE);
+    if (sel && focused()) focusbox()->draw(x, y, w, h, style(), FOCUSED);
   }
 }
 
@@ -442,5 +441,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.70 2004/07/19 22:23:31 laza2000 Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.71 2004/08/01 22:28:23 spitzak Exp $".
 //

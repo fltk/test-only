@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.56 2004/03/14 07:29:41 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.57 2004/08/01 22:28:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -107,10 +107,15 @@ int Style::wheel_scroll_lines_ = 3;
 */
 
 /*! \fn Box* Style::focusbox() const
-  Type of box to draw to indicate focus. This is always called with
-  the fltk::INVISIBLE flag as only the border should be drawn. The
-  default is fltk::DOTTED_FRAME. (Warning: this may go away and we
-  may require the basic boxes to draw this).
+
+  This box is drawn atop all calls to buttonbox() after any labels and
+  glyphs are drawn in it. The Browser also calls this to draw atop the
+  item that has keyboard focus.  If you have good alpha compositing
+  graphics (newer Windows and XRender on X) this can be used to draw
+  highlighting over the label.
+
+  The default draws a dotted frame if the FOCUSED is true, and draws
+  nothing otherwise.
 */
 
 /*! \fn GlyphStyle Style::glyph() const;
@@ -222,20 +227,20 @@ int Style::wheel_scroll_lines_ = 3;
   The default is 15.
 */
 
-/*! \fn bool hide_shortcut() const;
+/*! \fn bool Style::hide_shortcut() const;
   If false, draw &x in labels as an underscore. If true (the default)
   then the underscores are not drawn. In this case you should limit
   your &x shortcuts to menubar items, as shortcuts in buttons are not
   visible. The menubar will show them when Alt is held down.
 */
 
-/*! \fn bool draw_boxes_inactive() const
+/*! \fn bool Style::draw_boxes_inactive() const
   If false then most of the built-in box types draw the same even if
   fltk::INACTIVE is passed to them. This repliates Windows appearance.
   If true (the default) then the boxes themselves gray out.
 */
 
-/*! \fn int wheel_scroll_lines() const
+/*! \fn int Style::wheel_scroll_lines() const
   How many lines to move for one click of a mouse wheel. The default
   is 3.
 */
@@ -605,5 +610,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.56 2004/03/14 07:29:41 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.57 2004/08/01 22:28:23 spitzak Exp $".
 //
