@@ -437,22 +437,22 @@ extern Fl_Menu_Item New_Menu[];
 // find the innermost item clicked on:
 WidgetType* WindowType::clicked_widget() {
   WidgetType* selection = this;
-  int x = 0; int y = 0;
+  int x = fltk::event_x(); int y = fltk::event_y();
   for (;;) {
     WidgetType* inner_selection = 0;
     for (FluidType* i = selection->first_child; i; i = i->next_brother) {
       if (i->is_widget() && !i->is_menu_item()) {
 	WidgetType* o = (WidgetType*)i;
 	fltk::Widget* w = o->o;
-	if (w->visible_r() && fltk::event_inside(*w))
+	if (w->visible_r() && w->Rectangle::contains(x,y))
 	  inner_selection = o;
       }
     }
     if (inner_selection) {
       selection = inner_selection;
       fltk::Widget* w = inner_selection->o;
-      x += w->x();
-      y += w->y();
+      x -= w->x();
+      y -= w->y();
     } else {
       break;
     }
