@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.19 1999/10/17 20:39:59 vincent Exp $"
+// "$Id: Fl.H,v 1.20 1999/10/17 22:27:06 vincent Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,10 @@ class FL_API Fl {
 
 public: // should be private!
 
-  static int e_x,e_y,e_x_root,e_y_root;
+  static int e_x;
+  static int e_y;
+  static int e_x_root;
+  static int e_y_root;
   static int e_state;
   static int e_clicks;
   static int e_is_click;
@@ -194,5 +197,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.19 1999/10/17 20:39:59 vincent Exp $".
+// End of "$Id: Fl.H,v 1.20 1999/10/17 22:27:06 vincent Exp $".
 //

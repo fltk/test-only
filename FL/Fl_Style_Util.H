@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.H,v 1.4 1999/10/09 15:32:14 vincent Exp $"
+// "$Id: Fl_Style_Util.H,v 1.5 1999/10/17 22:27:07 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -26,6 +26,8 @@
 #ifndef Fl_Style_Description_h
 #define Fl_Style_Description_h
 
+#include <FL/Enumerations.H>
+
 #define STYLE_EXTENSION ".fltk-style-plugin"
 #define STYLE_FUNCTION "style_plugin"
 #define THEME_EXTENSION ".fltk-theme-plugin"
@@ -51,24 +53,24 @@ typedef void (Fl_Style_Plugin_Entry)();
 
 // Call this at any moment to make fltk read all styles and themes plugins.
 // They will be first searched in 'location'.
-void fl_read_style_plugins(const char* location);
+FL_API void fl_read_style_plugins(const char* location);
 
-void fl_default_style_def();
+FL_API void fl_default_style_def();
 
 // Function for plugins
-bool fl_add_style_def(char* name, Fl_Style* style);
-Fl_Style* fl_search_style(char* name);
-void fl_add_style_entry_def(char* name, Fl_Style_Entry_Parser parser);
-bool fl_parse_style_entry(char* name, Fl_Style& style, char* s);
-char* fl_parse_word(char*&s);
+FL_API bool fl_add_style_def(char* name, Fl_Style* style);
+FL_API Fl_Style* fl_search_style(char* name);
+FL_API void fl_add_style_entry_def(char* name, Fl_Style_Entry_Parser parser);
+FL_API bool fl_parse_style_entry(char* name, Fl_Style& style, char* s);
+FL_API char* fl_parse_word(char*&s);
 //#include <FL/Fl_Color.H>
 typedef unsigned int Fl_Color;
-Fl_Color fl_parse_color(char*&s);
+FL_API Fl_Color fl_parse_color(char*&s);
 
 extern const char* fl_plugins_user_location;
 
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.H,v 1.4 1999/10/09 15:32:14 vincent Exp $".
+// End of "$Id: Fl_Style_Util.H,v 1.5 1999/10/17 22:27:07 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.7 1999/10/17 22:27:09 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -48,7 +48,6 @@ static void ReadPlugin(char* s, const char* location, char* ext, char* func)
 
   if(!strcmp(s+strlen(s)-strlen(ext), ext)) {
     char s2[256];
-
     snprintf(s2, 256, "%s%s", location, s);
     handle = FLDLopen(s2 );
 
@@ -206,5 +205,5 @@ Fl_Color fl_parse_color(char*&s)
 void fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.7 1999/10/17 22:27:09 vincent Exp $".
 //
