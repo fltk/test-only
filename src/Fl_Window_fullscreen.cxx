@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.23 2004/07/24 12:18:59 laza2000 Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,14 @@
 #include <fltk/events.h>
 #include <fltk/x.h>
 using namespace fltk;
+
+#ifdef _WIN32_WCE
+// Windows CE taskbar
+# define TASKBAR_CLASS TEXT("HHTaskBar")
+#elif _WIN32
+// Desktop windows taskbar
+# define TASKBAR_CLASS TEXT("Shell_TrayWnd")
+#endif
 
 #if 0
 #ifdef _WIN32
@@ -106,7 +114,23 @@ static void fsonoff(XWindow xwindow, bool onoff) {
 void Window::fullscreen() {
   const Monitor& monitor = Monitor::find(x()+w()/2, y()+h()/2);
 #ifdef _WIN32
+  // Disable caption & borders
+  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
+  flags &= ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME);
+  SetWindowLong(xid(this), GWL_STYLE, flags);
+
+# if 1
+  // Find taskbar and hide it
+  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
+  if (taskbar) ShowWindow(taskbar, SW_HIDE);
+# else
+  // Make window topmost, so it goes top of taskbar
+  // This will still keep modal and child_of windows top of this.
+  SetWindowPos(xid(this), HWND_TOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
+# endif
+  clear_border(); // Necessary to make CreatedWindow::borders return dx,dy,dw,dh 0
   resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
+
   // Still missing: we need to tell Windows that this window can go atop
   // the taskbar.
 #elif (defined(__APPLE__) && !USE_X11)
@@ -130,6 +154,21 @@ void Window::fullscreen() {
 void Window::fullscreen_off(int X,int Y,int W,int H) {
   // This function must exactly undo whatever fullscreen() did
 #ifdef _WIN32
+  // Restore window flags
+  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
+  flags |= (WS_BORDER | WS_CAPTION | WS_THICKFRAME);
+  SetWindowLong(xid(this), GWL_STYLE, flags);
+
+# if 1
+  // Find taskbar and show it again
+  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
+  if (taskbar) ShowWindow(taskbar, SW_RESTORE);
+# else
+  // We are not topmost anymore
+  SetWindowPos(xid(this), HWND_NOTOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
+# endif
+
+  clear_flag(Window::NOBORDER); //Borders are back
   resize(X, Y, W, H);
 #elif (defined(__APPLE__) && !USE_X11)
   resize(X, Y, W, H);
@@ -171,5 +210,5 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   Returns true if set_override() has been called. */
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.23 2004/07/24 12:18:59 laza2000 Exp $".
 //
