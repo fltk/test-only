@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.10.2.5.2.11.2.5 2004/03/18 08:00:57 matthiaswm Exp $"
+// "$Id: Fl_Choice.cxx,v 1.10.2.5.2.11.2.6 2004/04/29 02:48:53 easysw Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -106,6 +106,13 @@ Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *l)
   color(FL_BACKGROUND2_COLOR);
 }
 
+int Fl_Choice::value(const Fl_Menu_Item *v) {
+  if (!v) return 0;
+  if (!Fl_Menu_::value(v)) return 0;
+  redraw();
+  return 1;
+}
+
 int Fl_Choice::value(int v) {
   if (v < 0 || v >= (size() - 1)) return 0;
   if (!Fl_Menu_::value(v)) return 0;
@@ -152,5 +159,5 @@ int Fl_Choice::handle(int e) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.10.2.5.2.11.2.5 2004/03/18 08:00:57 matthiaswm Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.10.2.5.2.11.2.6 2004/04/29 02:48:53 easysw Exp $".
 //

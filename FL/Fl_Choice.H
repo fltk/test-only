@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.5.2.3.2.2.2.4 2004/03/18 08:00:30 matthiaswm Exp $"
+// "$Id: Fl_Choice.H,v 1.5.2.3.2.2.2.5 2004/04/29 02:48:53 easysw Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,12 @@ public:
      * old one. Changing it causes a redraw(). */
   int value(int index);
     /** The value is the index into the Fl_Menu array of the last item
+     * chosen by the user. It is zero initially. You can set it as an
+     * integer, or set it with a pointer to a menu item. The set 
+     * routines return non-zero if the new value is different than the 
+     * old one. Changing it causes a redraw(). */
+  int value(const Fl_Menu_Item *item);
+    /** The value is the index into the Fl_Menu array of the last item
      * chosen by the user. */
   int value() const {return Fl_Menu_::value();}
 };
@@ -80,5 +86,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.5.2.3.2.2.2.4 2004/03/18 08:00:30 matthiaswm Exp $".
+// End of "$Id: Fl_Choice.H,v 1.5.2.3.2.2.2.5 2004/04/29 02:48:53 easysw Exp $".
 //
