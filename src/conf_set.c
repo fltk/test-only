@@ -1,7 +1,7 @@
-// CET - FIXME - This function is currently semi-broken :-(
+/* CET - FIXME - This function is currently semi-broken :-( */
 
 /*
-   "$Id: conf_set.c,v 1.14 2000/08/20 04:31:39 spitzak Exp $"
+   "$Id: conf_set.c,v 1.15 2000/08/22 16:38:11 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -692,5 +692,5 @@ printf("4c: %s\n", comment);
 
 
 /*
-    End of "$Id: conf_set.c,v 1.14 2000/08/20 04:31:39 spitzak Exp $".
+    End of "$Id: conf_set.c,v 1.15 2000/08/22 16:38:11 spitzak Exp $".
 */
