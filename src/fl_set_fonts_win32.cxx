@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts_win32.cxx,v 1.6 1999/08/16 07:31:29 bill Exp $"
+// "$Id: fl_set_fonts_win32.cxx,v 1.7 1999/08/27 13:34:05 carl Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+int Fl_Font_::encodings(const char**& arrayp) const {
+  // CET - FIXME - What about this encoding stuff?
+  return 0;
+}
+
 // turn a stored font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
-  const char* p = fl_fonts[fnum].name;
+const char* Fl_Font_::name(int* ap) const {
+  const char* p = name_;
   if (!p || !*p) {if (ap) *ap = 0; return "";}
   int type;
   switch (*p) {
@@ -53,6 +58,22 @@ const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
   if (type & FL_ITALIC) strcat(buffer, " italic");
   return buffer;
 }
+
+int Fl_Font_::sizes(int*& sizep) const {
+  // pretend all fonts are scalable (most are and I don't know how
+  // to tell anyways)
+  static int array[1];
+  sizep = array;
+  return 1;
+}
+
+int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
+  #warning "fl_list_fonts() not implemented under Windows yet! - CET"
+  arrayp = 0;
+  return 0;
+}
+
+/* CET - FIXME
 
 static int fl_free_font = FL_FREE_FONT;
 
@@ -78,14 +99,8 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
   return (Fl_Font)fl_free_font;
 }
 
-int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
-  // pretend all fonts are scalable (most are and I don't know how
-  // to tell anyways)
-  static int array[1];
-  sizep = array;
-  return 1;
-}
+CET - FIXME */
 
 //
-// End of "$Id: fl_set_fonts_win32.cxx,v 1.6 1999/08/16 07:31:29 bill Exp $".
+// End of "$Id: fl_set_fonts_win32.cxx,v 1.7 1999/08/27 13:34:05 carl Exp $".
 //

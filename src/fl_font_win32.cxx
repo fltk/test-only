@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.11 1999/08/16 07:31:28 bill Exp $"
+// "$Id: fl_font_win32.cxx,v 1.12 1999/08/27 13:34:04 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -74,8 +74,6 @@ Fl_FontSize::Fl_FontSize(const char* name, int size) {
   minsize = maxsize = size;
 }
 
-Fl_FontSize* fl_fontsize;
-
 Fl_FontSize::~Fl_FontSize() {
 #if HAVE_GL
 // Delete list created by gl_draw().  This is not done by this code
@@ -88,14 +86,14 @@ Fl_FontSize::~Fl_FontSize() {
 //  glDeleteLists(listbase+base,size);
 // }
 #endif
-  if (this == fl_fontsize) fl_fontsize = 0;
+  if (this == fl_font_) fl_font_ = 0;
   DeleteObject(fid);
 }
 
 ////////////////////////////////////////////////////////////////
 
 // The predefined fonts that fltk has:  bold:       italic:
-static Fl_Fontdesc built_in_table[] = {
+Fl_Font_ fl_fonts[] = {
 {" Arial",				fl_fonts+1, fl_fonts+2},
 {"BArial", 				fl_fonts+1, fl_fonts+3},
 {"IArial",				fl_fonts+3, fl_fonts+2},
@@ -114,15 +112,13 @@ static Fl_Fontdesc built_in_table[] = {
 {" Wingdings",				fl_fonts+15,fl_fonts+15},
 };
 
-Fl_Fontdesc* fl_fonts = built_in_table;
-
-static Fl_FontSize* find(int fnum, int size) {
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use 0 if fnum undefined
+static Fl_FontSize* find(Fl_Font font, unsigned size) {
+  Fl_Font_* s = (Fl_Font_*)font;
+  if (!s->name_) s = fl_fonts; // use 0 if fnum undefined
   Fl_FontSize* f;
   for (f = s->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size) return f;
-  f = new Fl_FontSize(s->name, size);
+  f = new Fl_FontSize(s->name_, size);
   f->next = s->first;
   s->first = f;
   return f;
@@ -131,43 +127,71 @@ static Fl_FontSize* find(int fnum, int size) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-int fl_font_;
-int fl_size_;
+Fl_FontSize* fl_font_;
 //static HDC font_gc;
 
-void fl_font(int fnum, int size) {
-  if (fnum == fl_font_ && size == fl_size_) return;
-  fl_font_ = fnum; fl_size_ = size;
-  fl_fontsize = find(fnum, size);
+void fl_font(Fl_FontSize* s) {
+  if (s != fl_font_) {
+    fl_font_ = s;
+/* CET - FIXME
+    fl_xfont = s->font;
+    font_gc = 0;
+*/
+  }
+}
+
+void fl_font(Fl_Font s, unsigned size) {
+  static Fl_Font curfont;
+  if (s == curfont) { // see if it is the current font...
+      Fl_FontSize* f = fl_font_;
+      if (f->minsize <= size && f->maxsize >= size) return;
+  }
+  curfont = s;
+
+  Fl_FontSize* f;
+  // search the fonts we have generated already:
+  for (f = s->first; f; f = f->next)
+    if (f->minsize <= size && f->maxsize >= size) {
+      fl_font(f); return;
+    }
+
+  fl_font_ = find(s, size);
+}
+
+const char *fl_encoding = "Windows";  // CET - FIXME
+
+void fl_font(Fl_Font s, unsigned size, const char *encoding) {
+// CET - FIXME - Are we doing this encoding stuff on Windoze?
+  fl_font(s, size);
 }
 
 int fl_height() {
-  return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
+  return (fl_font_->metr.tmAscent + fl_font_->metr.tmDescent);
 }
 
 int fl_descent() {
-  return fl_fontsize->metr.tmDescent;
+  return fl_font_->metr.tmDescent;
 }
 
 double fl_width(const char* c) {
   double w = 0.0;
-  while (*c) w += fl_fontsize->width[uchar(*c++)];
+  while (*c) w += fl_font_->width[uchar(*c++)];
   return w;
 }
 
 double fl_width(const char* c, int n) {
   double w = 0.0;
-  while (n--) w += fl_fontsize->width[uchar(*c++)];
+  while (n--) w += fl_font_->width[uchar(*c++)];
   return w;
 }
 
 double fl_width(uchar c) {
-  return fl_fontsize->width[c];
+  return fl_font_->width[c];
 }
 
 void fl_draw(const char* str, int n, int x, int y) {
   SetTextColor(fl_gc, fl_RGB());
-  SelectObject(fl_gc, fl_fontsize->fid);
+  SelectObject(fl_gc, fl_font_->fid);
   TextOut(fl_gc, x, y, str, n);
 }
 
@@ -176,5 +200,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.11 1999/08/16 07:31:28 bill Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.12 1999/08/27 13:34:04 carl Exp $".
 //

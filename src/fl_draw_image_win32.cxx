@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.4 1999/01/07 19:17:38 mike Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.5 1999/08/27 13:34:04 carl Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -243,20 +243,20 @@ void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+void fl_rectf(int x, int y, int w, int h, Fl_Color col) {
 #if USE_COLORMAP
   // use the error diffusion dithering code to produce a much nicer block:
   if (fl_palette) {
     uchar c[3];
-    c[0] = r; c[1] = g; c[2] = b;
+    fl_get_color(col, c[0], c[1], c[2]);
     innards(c,x,y,w,h,0,0,0,0,0);
     return;
   }
 #endif
-  fl_color(r,g,b);
+  fl_color(col);
   fl_rectf(x,y,w,h);
 }
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.4 1999/01/07 19:17:38 mike Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.5 1999/08/27 13:34:04 carl Exp $".
 //
