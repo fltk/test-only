@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.19 2000/05/17 22:24:30 carl Exp $"
+// "$Id: fl_rect.cxx,v 1.20 2000/05/17 23:34:13 carl Exp $"
 //
 // These routines from fl_draw.H are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -75,7 +75,6 @@ void fl_xyline(int x, int y, int x1, int y2) {
 #endif
 }
 
-#if 0
 void fl_xyline(int x, int y, int x1, int y2, int x3) {
 #ifdef WIN32
   if(x3 < x1) x3--;
@@ -92,7 +91,6 @@ void fl_xyline(int x, int y, int x1, int y2, int x3) {
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
 }
-#endif
 
 void fl_yxline(int x, int y, int y1) {
 #ifdef WIN32
@@ -119,7 +117,6 @@ void fl_yxline(int x, int y, int y1, int x2) {
 #endif
 }
 
-#if 0
 void fl_yxline(int x, int y, int y1, int x2, int y3) {
 #ifdef WIN32
   if(y3<y1) y3--;
@@ -136,7 +133,6 @@ void fl_yxline(int x, int y, int y1, int x2, int y3) {
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
 }
-#endif
 
 void fl_line(int x, int y, int x1, int y1) {
 #ifdef WIN32
@@ -167,7 +163,6 @@ void fl_line(int x, int y, int x1, int y1, int x2, int y2) {
 #endif
 }
 
-#if 0
 void fl_loop(int x, int y, int x1, int y1, int x2, int y2) {
 #ifdef WIN32
   MoveToEx(fl_gc, x, y, 0L); 
@@ -201,7 +196,6 @@ void fl_loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   XDrawLines(fl_display, fl_window, fl_gc, p, 5, 0);
 #endif
 }
-#endif
 
 void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {
   XPoint p[4];
@@ -243,5 +237,5 @@ void fl_point(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.19 2000/05/17 22:24:30 carl Exp $".
+// End of "$Id: fl_rect.cxx,v 1.20 2000/05/17 23:34:13 carl Exp $".
 //
