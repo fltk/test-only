@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.32 1999/08/16 07:31:04 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.33 1999/08/20 17:58:32 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1636,9 +1636,9 @@ void Fl_Widget_Type::write_widget_code() {
 //   if (o->glyph() != tplate->glyph())
 //     write_c("%so->box(FL_%s);\n", indent(), boxname(o->glyph()));
   if (o->label_font() != tplate->label_font())
-    write_c("%so->labelfont(%d);\n", indent(), o->label_font()-fl_fonts);
+    write_c("%so->labelfont(fl_fonts+%d);\n", indent(), o->label_font()-fl_fonts);
   if (o->text_font() != tplate->text_font())
-    write_c("%so->textfont(%d);\n", indent(), o->text_font()-fl_fonts);
+    write_c("%so->textfont(fl_fonts+%d);\n", indent(), o->text_font()-fl_fonts);
   if (o->label_type() != tplate->label_type())
     write_c("%so->label_type(FL_%s);\n", indent(),
 	    labeltypename(o->labeltype()));
@@ -2047,5 +2047,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.32 1999/08/16 07:31:04 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.33 1999/08/20 17:58:32 carl Exp $".
 //
