@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileInput.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_FileInput.cxx,v 1.5 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Fl_FileInput routines for the Fast Light Tool Kit (FLTK).
 //
@@ -51,7 +51,7 @@
 int				// O - 1 if we handled the event
 Fl_FileInput::handle(int event)	// I - Event to handle
 {
-  if (event == FL_KEYBOARD && Fl::event_key() == FL_Tab &&
+  if (event == FL_KEY && Fl::event_key() == FL_Tab &&
       mark() != position())
   {
     // Set the current cursor position to the end of the selection...
@@ -71,5 +71,5 @@ Fl_FileInput::handle(int event)	// I - Event to handle
 
 
 //
-// End of "$Id: Fl_FileInput.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_FileInput.cxx,v 1.5 2002/01/28 08:02:59 spitzak Exp $".
 //

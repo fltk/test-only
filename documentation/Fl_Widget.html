@@ -453,7 +453,7 @@ arbitrary arguments.
 
 Tests the value of <tt>shortcut()</tt> and the value of
 <tt>label()</tt> (if <tt>FL_NO_SHORTCUT_LABEL</tt> is not set) against
-the current event (which must be a <TT>FL_SHORTCUT</TT> or <TT>FL_KEYBOARD</TT>
+the current event (which must be a <TT>FL_SHORTCUT</TT> or <TT>FL_KEY</TT>
 event). Returns 1 if it matches shortcut(), returns 2 if it matches
 the label(), and returns 0 if there is no match.
 
@@ -480,7 +480,7 @@ need to include the <tt>&lt;fltk/Fl.h&gt;</tt> header file.
 Returns true if this is equal to <a
 href=Fl.html#focus><tt>Fl::focus()</tt></a>, meaning it has the
 keyboard focus and <a
-href=events.html#FL_KEYBOARD><tt>FL_KEYBOARD</tt></a> events will be
+href=events.html#FL_KEY><tt>FL_KEY</tt></a> events will be
 sent to this widget. Using this function avoids the need to include
 the <tt>&lt;fltk/Fl.h&gt;</tt> header file.
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.30 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.31 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,55 +27,17 @@
 #include <fltk/Fl_Style.h>
 #include <fltk/fl_draw.h>
 
-void fl_glyph(const Fl_Widget* widget, int glyph,
-	      int x,int y,int w,int h, Fl_Flags flags)
+void Fl_Widget::default_glyph(const Fl_Widget* widget, int glyph,
+			      int x,int y,int w,int h, Fl_Flags flags)
 {
   // handle special glyphs that don't draw the box:
   switch (glyph) {
-
-  case FL_GLYPH_CHECK: {
-    Fl_Boxtype box = widget->button_box();
-    box->draw(x, y, w, h, widget->color(), flags&FL_INACTIVE|FL_VALUE);
-    box->inset(x, y, w, h);
-    if (flags & FL_VALUE) {
-      fl_color(fl_inactive(widget->text_color(),flags));
-      x += 1;
-      w = h - 2;
-      int d1 = w/3;
-      int d2 = w-d1;
-      y += (h+d2)/2-d1-2;
-      for (int n = 0; n < 3; n++, y++) {
-	fl_line(x, y, x+d1, y+d1);
-	fl_line(x+d1, y+d1, x+w-1, y+d1-d2+1);
-      }
-    }}
-    return;
-
-  case FL_GLYPH_ROUND:
-    h = (h+1)&(~1); // even only
-    FL_ROUND_DOWN_BOX->draw(x, y, w, h, widget->color(), flags&FL_INACTIVE);
-    if (flags & FL_VALUE) {
-      int d = h/4;
-      fl_ellipse(x+d, y+d, h-d-d-1, h-d-d-1);
-      fl_color(fl_inactive(widget->text_color(),flags)); fl_fill();
-    }
-    return;
-
   case FL_GLYPH_UP:
   case FL_GLYPH_DOWN:
   case FL_GLYPH_LEFT:
   case FL_GLYPH_RIGHT:
     // these glyphs do not have a box
     break;
-
-  case FL_GLYPH_VSLIDER:
-  case FL_GLYPH_HSLIDER:
-  case FL_GLYPH_VNSLIDER:
-  case FL_GLYPH_HNSLIDER:
-    // match Windows, sliders do not draw pushed-in
-    flags &= ~FL_VALUE;
-    // fall through to default case:
-
   default: {
     Fl_Boxtype box = widget->button_box();
     if (box != FL_NO_BOX) {
@@ -147,19 +109,10 @@ void fl_glyph(const Fl_Widget* widget, int glyph,
       fl_fill_stroke(fl_color());
       break;
 
-    case FL_GLYPH_VNSLIDER:
-      y1 = (h-4)/2;
-      FL_THIN_DOWN_BOX->draw(x, y+y1, w, h-2*y1, widget->selection_color());
-      break;
-
-    case FL_GLYPH_HNSLIDER:
-      x1 = (w-4)/2;
-      FL_THIN_DOWN_BOX->draw(x+x1, y, w-2*x1, h, widget->selection_color());
-      break;
     }
   }
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.30 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.31 2002/01/28 08:03:00 spitzak Exp $".
 //

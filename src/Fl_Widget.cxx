@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.86 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.87 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -366,50 +366,6 @@ void Fl_Widget::draw_box() const {
   box->draw(0, 0, w(), h(), color(), flags);
 }
 
-extern void fl_dotted_box(int,int,int,int);
-
-// Draw the widget as though it was a button.
-//
-// The passed flags can make it use the selection color, and draw as
-// inactive or pushed in.
-//
-// The return value is the setting of flags that should be passed to
-// draw_inside_label() and the xywh are set to the box interior.
-
-Fl_Flags Fl_Widget::draw_as_button(Fl_Flags flags, int&x, int&y, int& w, int& h) const {
-
-  Fl_Boxtype box = this->box();
-  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
-  // FL_NO_BOX buttons such as checkmarks:
-  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
-      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
-    fl_push_clip(0, 0, this->w(), this->h());
-    parent()->draw_group_box();
-    fl_pop_clip();
-  }
-
-  if (!active_r())
-    flags |= FL_INACTIVE;
-  else if (belowmouse() && !(flags&FL_SELECTED))
-    flags |= FL_HIGHLIGHT;
-
-  Fl_Color color;
-  if (flags & FL_SELECTED)
-    color = selection_color();
-  else if (flags & FL_HIGHLIGHT && (color = highlight_color()))
-    ;
-  else
-    color = this->color();
-
-  box->draw(0, 0, this->w(), this->h(), color, flags);
-  x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
-  if (focused()) {
-    fl_color(text_color());
-    fl_dotted_box(x+1, y+1, w-2, h-2);
-  }
-  return flags;
-}
-
 // Set up for incremental redraw:
 void Fl_Widget::make_current() const {
   int x = 0;
@@ -435,5 +391,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.86 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.87 2002/01/28 08:03:00 spitzak Exp $".
 //

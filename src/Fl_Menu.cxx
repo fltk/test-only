@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.120 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.121 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -182,6 +182,7 @@ public:
 static void revert(Fl_Style *s) {
   s->box = FL_UP_BOX;
   s->button_box = FL_FLAT_BOX;
+  s->leading = 4;
 }
 static Fl_Named_Style style("Menu", revert, &MenuWindow::default_style);
 Fl_Named_Style* MenuWindow::default_style = &::style;
@@ -221,7 +222,7 @@ MenuWindow::MenuWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Fl_Wid
     return;
   }
 
-  int leading = menustate->widget->leading(); // +2 ?
+  int leading = this->leading(); // +2 ?
 
   int Wtitle = 0;
   int Htitle = 0;
@@ -289,7 +290,7 @@ void MenuWindow::position(int X, int Y) {
 // return the top edge of item:
 int MenuWindow::ypos(int index) {
   int x=0; int y=0; int w=0; int h=0; box()->inset(x,y,w,h);
-  int leading = menustate->widget->leading(); // +2 ?
+  int leading = this->leading(); // +2 ?
   for (int i = 0; i < index; i++) {
     Fl_Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -302,7 +303,7 @@ void MenuWindow::draw() {
   if (damage() != FL_DAMAGE_CHILD) box()->draw(0, 0, w(), h(), color(), 0);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
-  int leading = menustate->widget->leading(); // +2 ?
+  int leading = this->leading(); // +2 ?
   for (int i = 0; ; i++) {
     Fl_Widget* widget = get_widget(i);
     if (!widget) break;
@@ -376,7 +377,7 @@ int MenuWindow::find_selected(int mx, int my) {
       if (x > mx) return i;
     }
   } else {
-    int leading = menustate->widget->leading(); // +2 ?
+    int leading = this->leading(); // +2 ?
     int x=0; int y=0; int w=this->w(); int h=this->h(); box()->inset(x,y,w,h);
     if (mx < x || mx >= w) return -1;
     for (int i = 0; ; i++) {
@@ -416,7 +417,7 @@ int MenuWindow::autoscroll(int i) {
     Y = Fl::y()-Y+10;
   } else {
     Fl_Widget* widget = get_widget(i);
-    Y = Y+widget->height()+menustate->widget->leading()-Fl::h()-Fl::y();
+    Y = Y+widget->height()+leading()-Fl::h()-Fl::y();
     if (Y < 0) return 0;
     Y = -Y-10;
   }
@@ -490,7 +491,7 @@ int MenuWindow::handle(int event) {
   Fl_Widget* widget = 0;
   switch (event) {
 
-  case FL_KEYBOARD:
+  case FL_KEY:
   case FL_SHORTCUT:
     switch (Fl::event_key()) {
     case FL_Up:
@@ -769,5 +770,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.120 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.121 2002/01/28 08:02:59 spitzak Exp $".
 //

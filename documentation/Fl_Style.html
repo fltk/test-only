@@ -34,45 +34,36 @@ The type of box to draw buttons internal the widget (notice that <a
 href="Fl_Button.html">Fl_Button</a> uses <tt>box</tt>, however). The
 default is <code>FL_UP_BOX</code>.
 
-<h4>void (*glyph)(int type, int x,int y,int w,int h, <a
-href=Fl_Color.html>Fl_Color</a> bg, Fl_Color fg, Fl_Flags, Fl_Boxtype);</h4>
+<h4>void (*glyph)(const <a href="Fl_Widget.html">Fl_Widget</a>*, int glyph, int x, int y, int w, int h, Fl_Flags);</h4>
 
-Draw a widget part, called a "glyph", such as a checkbox or arrow
-button.  You should use the <code>FL_VALUE</code> of the flags to
-determine if the glyph is pushed in or turned on.  If you write your
-own function call the default of fl_glyph() for any symbols you don't
-recognize.  Currently defined glyphs:
+Draw part of a widget, called a "glyph". Examples are the up and down
+arrows on sliders, the slider itself, and check boxes. The base class
+draws arrow buttons (because they are so commonly used), but most
+widgets that use this define their own function to call. A theme can
+make these functions point at it's own code and thus customize the
+appearance of widgets quite a bit.
+
+<p>The default glyph function can draw these values for <i>glyph</i>:
 
 <p><ul>
 
 <li>Zero is reserved to draw an empty box
-
-<li><code>FL_GLYPH_CHECK</code> - draw a checkbox indicator
-
-<li><code>FL_GLYPH_RADIO</code> - draw a radio button indicator
-
-<li><code>FL_GLYPH_UP</code> - draw an up arrow at the top of a scrollbar
-
-<li><code>FL_GLYPH_DOWN</code> - draw a down arrow at the botom of a scrollbar
-
-<li><code>FL_GLYPH_LEFT</code> - draw a left arrow at the left of a scrollbar
-
-<li><code>FL_GLYPH_RIGHT</code> - draw a right arrow at the right of a
+<li><code>FL_GLYPH_UP</code> - draw an up arrow
+<li><code>FL_GLYPH_UP_BUTTON</code> - draw an up arrow in a box
+<li><code>FL_GLYPH_DOWN</code> - draw a down arrow
+<li><code>FL_GLYPH_DOWN_BUTTON</code> - draw a down arrow in a box
+<li><code>FL_GLYPH_LEFT</code> - draw a left arrow
+<li><code>FL_GLYPH_LEFT_BUTTON</code> - draw a left arrow in a box
+<li><code>FL_GLYPH_RIGHT</code> - draw a right arrow
+<li><code>FL_GLYPH_RIGHT_BUTTON</code> - draw a right arrow in a box
 scrollbar
-
-<li><code>FL_GLYPH_VSLIDER</code> - draw a vertical slider/scrollbar handle
-
-<li><code>FL_GLYPH_HSLIDER</code> - draw a horizontal slider/scrollbar handle
-
 <li>All other values draw an empty box.
 
 </ul>
 
-<p>These glyphs all have values starting at 100 or more.  Many widget
-subclasses define a private glyph function to draw parts of
-themselves, using local glyphs whose values start at 1.  A "theme"
-may want to replace these functions, you should examine the fltk
-source code to find out what the codes for the glyphs are.
+<p>If you wish to write your own glyph function you should examine the
+ones in the fltk source code and in the sample theme plugins to see
+how the arguments are interpreted.
 
 <h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
 
@@ -88,12 +79,13 @@ Provides a font for text displays.  Default is <code>FL_HELVETICA</code>.
 
 <h4>unsigned int text_size;</h4>
 
-Size of <code>text_font</code>.  Default is 12.
+Size of <code>text_font</code>.  Checkboxes and some other widgets use
+this to control the size of the glyph. Default is 12.
 
 <h4>unsigned int leading;</h4>
 
 Extra spacing added between text lines or other things that are
-stacked vertically.  The default is 2.
+stacked vertically.  The default is 0 (menus have a default of 4).
 
 <h4><a href=Fl_Labeltype.html>Fl_Labeltype</a> label_type;</h4>
 
@@ -102,9 +94,15 @@ the symbols.  <code>FL_NORMAL_LABEL</code>.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> color;</h4>
 
-Color passed to <code>box</code>.  Default is <code>FL_GRAY</code>.
-If you wish to change the general color of fltk you probably want to
-call <a href=Fl_Color#fl_background><code>fl_background(color)</code></a>
+Color of the widgets. The default is <code>FL_WHITE</code>. This color
+is inherited by text displays and browsers, most of the "gray" you see
+is due to widgets like Fl_Group that default the color to gray, and
+the fact that many parts of the interface are drawn with the
+button_color described below.
+
+<p>If you want to change the overall color of all the gray parts of
+the interface you want to call <a
+href=Fl_Color#fl_background><code>fl_background(color)</code></a>
 instead, as this will set the entry for <code>FL_GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
@@ -116,7 +114,7 @@ Color used to draw labels and glyphs.  Default
 <h4><a href=Fl_Color.html>Fl_Color</a> highlight_color;</h4>
 
 The color to draw the widget when the mouse is over it (for scrollbars
-and sliders this is used to color the moving parts).  The default of
+and sliders this is used to color the buttons).  The default of
 zero disables highlighting.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> highlight_label_color;</h4>
@@ -127,51 +125,76 @@ default of zero leaves the <code>label_color</code> unchanged.
 <h4><a href=Fl_Color.html>Fl_Color</a> button_color;</h4>
 
 Color used when drawing internal buttons. Default is <code>FL_GRAY</code>.
+Check and radio buttons use this to color in the glyph.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
 
-Color to draw text inside the widget.  Default is black.
+Color to draw text inside the widget.  Default is black. Check and
+radio buttons use this to control the color of the checkmark.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> selection_color;</h4>
 
-Color drawn behind selected text or browser or menu items.  The
-default is Windows 95 blue.
-
-<p>Check buttons, radio buttons, menu items, and light buttons use
-this to color in the glyph that indicates check/radio state when the
-button is turned on (<code>button_color</code> is used for the check
-marks when they are off).
+Color drawn behind selected text in inputs, or selected browser or
+menu items, or lit light buttons.  The default is Windows 95 blue.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
 
 The color to draw text atop the <code>selection_color</code>.  The
 default is <code>FL_WHITE</code>.
 
+<h4>Fl_Named_Style* Fl_Style::find(const char* name);</h4>
+
+<p>This is a <i>static</i> method on Fl_Style. It returns the first
+style found that matches the name.  Case is ignored and spaces and
+underscores are considered equivalent. If nothing matches
+<tt>NULL</tt> is returned.
+
+<p>Theme-setting code uses this to locate the styles it has to
+modify. Using a string to locate the styles serves several
+purposes:
+
+<ul>
+
+<li>It allows a theme plugin to locate and modify styles that are in
+your program as well as in the fltk library.
+
+<li>It allows a theme plugin to read a text database and not have to
+implement a translation from names to styles.
+
+<li>If you static-link your fltk program and include a theme function,
+it won't link in all the classes that you are not using but it tries
+to modify.
+
+<li>On machines that allow a plugin to be loaded into a static-linked
+program (some Unix systems, Linux if you use -shared) it means the
+plugin can work even if it wants to modify some fltk classes that were
+not linked in.
+
+</ul>
+
 <h2>class Fl_Named_Style</h2>
 
-<h4><code>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</code></h4>
+<h4>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</h4>
 
-If you define your own widget class you may want to allow text-based
-theme systems (such as fltk's built-in "conf" file reader) to modify
-your widget's style. To do this it must be provided with a name and a
-method to restore the style to it's default.
+This subclass creates a style that can be returned by <a
+href="#find">Fl_Style::find()</a>. It also provides a "revert" method
+that is used to restore the initial state so that themes can be switched.
 
 <p><i>name</i> is the name you want themes to use to look up the
-style. If you don't care if the themes can see your widget class you
-can just use null for the name (you must still provide the <i>pointer</i>, as
-multiple themes have to be able make duplicates of your style with
-different "parent" pointers).
+style. If you don't care if themes can modify your class you can just
+use <tt>NULL</tt> for the name.
 
 <p><i>revert</i> is a function that initializes the style to it's
 default value. The style is cleared to zero (meaning inherit from the
 default style) before revert is called. If revert is NULL then
 all-zeros is the default.
 
-<p><i>pointer</i> is a pointer to the pointer to the
-style. This allows multiple themes to exist at once, because instead
-of the theme changing any already-used styles, it replaces the pointer
-with a new style. This can be used by programs that let the user
-design or test themes. If you don't plan to use your widget in such a
+<p><i>pointer</i> is a back-pointer to the pointer to the
+style. This allows multiple themes to exist at once, if an application
+wants it (for instance a theme-editor application would like
+this). The application can change this pointer to point at different
+style structures and then all widgets that are constructed after that
+get the new style. If you don't plan to use your widget in such a
 program you can make a static instance of your style (rather than
 using new) and pass null as this pointer.
 
@@ -200,15 +223,6 @@ cause everything to redraw.
 theme.  All widgets inherit from the default style anything that they
 don't set themselves.
 
-<h4><code>Fl_Named_Style* Fl_Style::find(const char* name);</code></h4>
-
-<p>To locate a style to modify by name, use this static Fl_Style
-method.  By using this function for anything other than default_style
-it allows you to test if a style is actually linked into the program,
-so that you can make a theme plugin that changes any style.
-
-<p>Case is ignored and spaces and underscores are considered equivalent.
-
 <h4>Fl_Widget::default_style</h4>
 
 Provides all the defaults described above.  This is the only style
@@ -229,7 +243,7 @@ interactivity is indicated by color.
 
 <h4>Fl_Style::find("Check_Button")</h4>
 
-Styles usually need to mess with the window color and glyph function
+Styles usually need to mess with the button_color and glyph function
 here to get check marks correct.
 
 <h4>Fl_Style::find("menu")</h4>
@@ -244,22 +258,17 @@ Menu items.  If you use checkmarks in menus you will have to make
 similar fixes to this as to check_button.  Notice that the box drawn
 around each item is chosen by "menu", not by this.
 
-<h4>Fl_Style::find("menu_title")</h4>
-
-How to draw the titles in menu bars.  The <code>box</code> is drawn
-around each of them.
-
 <h4>Fl_Style::find("Scrollbar")</h4>
 
-Styles usually need to mess with the window color and glyph function
-to get these to appear correctly.
+Styles usually need to mess with the box, button_box, button_color,
+and glyph function to get these to appear correctly.
 
 <h4>Fl_Tooltip::default_style</h4>
 
 The box and color of this controls the appearance of the tooltips.
 This is always linked in, so you don't need find().  Tooltips also
 have some other static fields to set the timeout and position, see the
-Fl_Tooltip documentation.
+<a href="Fl_Tooltip.html">Fl_Tooltip</a> documentation.
 
 </body></html>
 

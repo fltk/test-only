@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Light_Button.h,v 1.2 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,11 @@ class FL_API Fl_Light_Button : public Fl_Check_Button {
 public:
   Fl_Light_Button(int x,int y,int w,int h,const char *l = 0);
   static Fl_Named_Style* default_style;
+  static void default_glyph(const Fl_Widget*,int,int,int,int,int,Fl_Flags);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.h,v 1.2 2002/01/28 08:02:59 spitzak Exp $".
 //

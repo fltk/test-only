@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.37 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.38 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -548,7 +548,7 @@ int Fl_Window_Type::handle(int event) {
   case FL_UNFOCUS:
     return 1;
 
-  case FL_KEYBOARD: {
+  case FL_KEY: {
 
     switch (Fl::event_key()) {
 
@@ -682,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.37 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.38 2002/01/28 08:02:59 spitzak Exp $".
 //

@@ -30,7 +30,8 @@ understand) occurred (0).</LI>
  pressed. </LI>
 <LI><TT>FL_FOCUS</TT> - A widget should receive keyboard focus. </LI>
 <LI><TT>FL_UNFOCUS</TT> - A widget loses keyboard focus. </LI>
-<LI><TT>FL_KEYBOARD</TT> - A key was pressed. </LI>
+<LI><TT>FL_KEY</TT> - A key was pressed. </LI>
+<LI><TT>FL_KEYUP</TT> - A key was released. </LI>
 <LI><TT>FL_CLOSE</TT> - A window was closed. </LI>
 <LI><TT>FL_MOVE</TT> - The mouse pointer was moved with no buttons 
  pressed. </LI>
@@ -63,7 +64,7 @@ is released and the value changes. </LI>
 </UL>
 <H2><A NAME="key_values">Fl::event_key() Values</A></H2>
  The following constants define the non-ASCII keys on the keyboard for <TT>
-FL_KEYBOARD</TT> and <TT>FL_SHORTCUT</TT> events: 
+FL_KEY</TT>, <tt>FL_KEYUP</tt>, and <TT>FL_SHORTCUT</TT> events: 
 <UL>
 <LI><TT>FL_Button</TT> - A mouse button; use <TT>Fl_Button +  n</TT>
  for mouse button <TT>n</TT>. </LI>

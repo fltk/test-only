@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.50 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.51 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -134,7 +134,6 @@ static void revert(Fl_Style* s) {
   // Windows98 style:
   s->button_box = FL_HIGHLIGHT_BOX;
 #endif
-  s->leading = 4;
 }
 static Fl_Named_Style style("Menu_Bar", revert, &Fl_Menu_Bar::default_style);
 Fl_Named_Style* Fl_Menu_Bar::default_style = &::style;
@@ -146,5 +145,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.50 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.51 2002/01/28 08:03:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.53 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.54 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -108,13 +108,19 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
   if (style()->selection_color && type()<VERTICAL_NICE) f |= FL_SELECTED;
 
   if (vertical()) {
-    draw_glyph(type()==VERTICAL_NICE ? FL_GLYPH_VNSLIDER : FL_GLYPH_VSLIDER,
-	       x, y+X, w, S, f);
+    draw_glyph(0, x, y+X, w, S, f);
     draw_inside_label(x, y+X, w, S, f);
+    if (type()==VERTICAL_NICE) {
+      int y1 = (S-4)/2;
+      FL_THIN_DOWN_BOX->draw(x+1, y+X+y1, w-2, S-2*y1, selection_color());
+    }
   } else {
-    draw_glyph(type()==HORIZONTAL_NICE ? FL_GLYPH_HNSLIDER : FL_GLYPH_HSLIDER,
-	       x+X, y, S, h, f);
+    draw_glyph(0, x+X, y, S, h, f);
     draw_inside_label(x+X, y, S, h, f);
+    if (type()==HORIZONTAL_NICE) {
+      int x1 = (S-4)/2;
+      FL_THIN_DOWN_BOX->draw(x+X+x1, y+1, S-2*x1, h-2, selection_color());
+    }
   }
 }
 
@@ -125,8 +131,8 @@ void Fl_Slider::draw() {
   if (!active_r()) {
     f |= FL_INACTIVE;
   } else {
-    if (Fl::pushed() == this) f |= FL_VALUE;
-    else if (belowmouse()) f |= FL_HIGHLIGHT;
+    //if (Fl::pushed() == this) f |= FL_VALUE;
+    if (belowmouse()) f |= FL_HIGHLIGHT;
   }
   draw(X,Y,W,H, f);
 }
@@ -186,7 +192,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     redraw(FL_DAMAGE_VALUE);
     handle_release();
     return 1;
-  case FL_KEYBOARD:
+  case FL_KEY:
     // Only arrows in the correct direction are used.  This allows the
     // opposite arrows to be used to navigate between a set of parellel
     // sliders.
@@ -212,8 +218,20 @@ int Fl_Slider::handle(int event) {
   return handle(event,X,Y,W,H);
 }
 
+/*
+// The only difference in the glyph is that we turn of FL_VALUE for the
+// central box, so it does not draw pushed in:
+static void glyph(const Fl_Widget* widget, int glyph,
+		  int x,int y,int w,int h, Fl_Flags flags)
+{
+  if (!glyph) flags &= ~FL_VALUE;
+  Fl_Widget::default_glyph(widget, glyph, x, y, w, h, flags);
+}
+*/
+
 static void revert(Fl_Style *s) {
   s->color = FL_DARK2;
+  //  s->glyph = ::glyph;
 }
 static Fl_Named_Style style("Slider", revert, &Fl_Slider::default_style);
 Fl_Named_Style* Fl_Slider::default_style = &::style;
@@ -234,5 +252,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.53 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.54 2002/01/28 08:03:00 spitzak Exp $".
 //

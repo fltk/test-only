@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.14 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: glpuzzle.cxx,v 1.15 2002/01/28 08:03:00 spitzak Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 // This is rewritten to remove use of the Glut emulation so it can
@@ -1557,7 +1557,7 @@ int Puzzle_Window::handle(int event) {
   int x = Fl::event_x();
   int y = Fl::event_y();
   switch (event) {
-  case FL_KEYBOARD:
+  case FL_KEY:
     switch (Fl::event_key()) {
     case FL_Escape:
     case 'Q':
@@ -1697,5 +1697,5 @@ main(int argc, char **argv)
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.14 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.15 2002/01/28 08:03:00 spitzak Exp $".
 //

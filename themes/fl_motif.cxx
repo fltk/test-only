@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.18 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: fl_motif.cxx,v 1.19 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,39 +64,42 @@ thin_motif_always_up_box("motif up","VVHHVVHH");
 static const Fl_Highlight_Box
 thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
 
-static void motif_glyph(const Fl_Widget* widget, int t,
+static void motif_check_glyph(const Fl_Widget* widget, int t,
 			int x, int y, int w, int h, Fl_Flags f)
 {
   Fl_Color fc = fl_inactive(widget->text_color(), f);
+  Fl_Color bc = widget->color();
+  if (widget->type()==Fl_Button::RADIO) {
+    w = (w-1)|1; h = (h-1)|1;
+    int x1 = x+w/2;
+    int y1 = y+h/2;
+    Fl_Color light = FL_LIGHT2, dark = FL_DARK3;
+    if (f&FL_VALUE) { light = FL_DARK3; dark = FL_LIGHT2; }
+//  if (f&FL_INACTIVE)
+//    { light = fl_inactive(light); dark = fl_inactive(dark); }
+    fl_color((f & FL_VALUE) ? fc : bc);
+    fl_vertex(x+3,y1); fl_vertex(x1+1,y+2); fl_vertex(x+w-3,y1); fl_vertex(x1,y+h-4);
+    fl_fill();
+
+    fl_color(light); fl_line(x, y1, x1, y); fl_line(x1, y, x+w-1, y1);
+    fl_color(light); fl_line(x+1, y1, x1, y+1); fl_line(x1, y+1, x+w-2, y1);
+    fl_color(light); fl_line(x+2, y1, x1, y+2); fl_line(x1, y+2, x+w-3, y1);
+
+    fl_color(dark); fl_line(x, y1, x1, y+h-1); fl_line(x1, y+h-1, x+w-1, y1);
+    fl_color(dark); fl_line(x+1, y1, x1, y+h-2); fl_line(x1, y+h-2, x+w-2, y1);
+    fl_color(dark); fl_line(x+2, y1, x1, y+h-3); fl_line(x1, y+h-3, x+w-3, y1);
+  } else {
+    x += 2; y += 2; w -= 4; h -= 4; // fudge factor
+    thin_motif_up_box.draw(x, y, w, h,
+			   (f & FL_VALUE) ? fc : bc, f);
+  }
+}
+
+static void motif_glyph(const Fl_Widget* widget, int t,
+			int x, int y, int w, int h, Fl_Flags f)
+{
   Fl_Color bc = widget->button_color();
   switch (t) {
-    case FL_GLYPH_ROUND: {
-      w = (w-1)|1; h = (h-1)|1;
-      int x1 = x+w/2;
-      int y1 = y+h/2;
-      Fl_Color light = FL_LIGHT2, dark = FL_DARK3;
-      if (f&FL_VALUE) { light = FL_DARK3; dark = FL_LIGHT2; }
-
-//       if (f&FL_INACTIVE)
-//         { light = fl_inactive(light); dark = fl_inactive(dark); }
-      fl_color((f & FL_VALUE) ? fc : bc);
-      fl_vertex(x+3,y1); fl_vertex(x1+1,y+2); fl_vertex(x+w-3,y1); fl_vertex(x1,y+h-4);
-      fl_fill();
-
-      fl_color(light); fl_line(x, y1, x1, y); fl_line(x1, y, x+w-1, y1);
-      fl_color(light); fl_line(x+1, y1, x1, y+1); fl_line(x1, y+1, x+w-2, y1);
-      fl_color(light); fl_line(x+2, y1, x1, y+2); fl_line(x1, y+2, x+w-3, y1);
-
-      fl_color(dark); fl_line(x, y1, x1, y+h-1); fl_line(x1, y+h-1, x+w-1, y1);
-      fl_color(dark); fl_line(x+1, y1, x1, y+h-2); fl_line(x1, y+h-2, x+w-2, y1);
-      fl_color(dark); fl_line(x+2, y1, x1, y+h-3); fl_line(x1, y+h-3, x+w-3, y1);
-      break;
-    }
-    case FL_GLYPH_CHECK:
-      x += 2; y += 2; w -= 4; h -= 4; // fudge factor
-      thin_motif_up_box.draw(x, y, w, h,
-			     (f & FL_VALUE) ? fc : bc, f);
-      break;
     case FL_GLYPH_RIGHT_BUTTON:
     case FL_GLYPH_LEFT_BUTTON:
     case FL_GLYPH_UP_BUTTON:
@@ -177,7 +180,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
       break;
     }
     default:
-      fl_glyph(widget, t, x,y,w,h, f);
+      Fl_Widget::default_glyph(widget, t, x,y,w,h, f);
   }
 }
 
@@ -238,7 +241,7 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->box = &thin_motif_menu_box;
+    s->button_box = &thin_motif_menu_box;
   }
 
   if ((s = Fl_Style::find("choice"))) {
@@ -266,6 +269,7 @@ int fl_motif()
 
   if ((s = Fl_Style::find("check button"))) {
     s->button_color = FL_DARK1;
+    s->glyph = motif_check_glyph;
   }
 
   if ((s = Fl_Style::find("radio button"))) {
@@ -276,5 +280,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.18 2002/01/23 08:46:02 spitzak Exp $"
+// End of "$Id: fl_motif.cxx,v 1.19 2002/01/28 08:03:00 spitzak Exp $"
 //

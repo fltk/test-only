@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.11 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: keyboard.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
       if (b->callback() == (Fl_Callback*)key_cb) {
 	int i = (int)(long)b->user_data();
 	if (!i) i = tolower(b->label()[0]);
-	((Fl_Button*)b)->value(Fl::event_key(i));
+	((Fl_Button*)b)->value(Fl::event_key_state(i));
 	if (i == Fl::event_key()) ((Fl_Button*)b)->take_focus();
       } else if (b->callback() == (Fl_Callback*)shift_cb) {
 	int i = (int)(long)b->user_data();
@@ -132,5 +132,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.11 2001/11/29 17:39:30 spitzak Exp $".
+// End of "$Id: keyboard.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.11 2002/01/20 10:12:48 spitzak Exp $"
+// "$Id: fl_windows.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -60,7 +60,7 @@ int fl_windows() {
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
-//    s->box = &win98_menu_window_box;
+//    s->button_box = &win98_menu_window_box;
     s->leading = 6;
   }
 
@@ -71,10 +71,6 @@ int fl_windows() {
   if ((s = Fl_Style::find("menu bar"))) {
     s->highlight_color = FL_GRAY; // needed for title highlighting
   }
-
-  // The default is white, but setting this will overwrite any
-  // value read from Windows, so I leave it as the slight gray we default to:
-  //Fl_Widget::default_style->window_color = FL_WHITE;
 
   if ((s = Fl_Style::find("scrollbar"))) {
 //    s->box = &win98_menu_window_box;
@@ -89,5 +85,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.11 2002/01/20 10:12:48 spitzak Exp $"
+// End of "$Id: fl_windows.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $"
 //

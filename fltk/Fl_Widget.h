@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.9 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -61,6 +61,7 @@ public:
   void	style(const Fl_Style& s) {style_ = &s;}
   bool	copy_style(const Fl_Style* s);
   static Fl_Named_Style* default_style;
+  static void default_glyph(const Fl_Widget*,int,int,int,int,int,Fl_Flags);
 
   Fl_Group* parent() const	{return parent_;}
   void	parent(Fl_Group* w)	{parent_ = w;}
@@ -176,10 +177,8 @@ public:
   void  draw_box() const	;
   void  draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
     { glyph()(this,t,x,y,w,h,f); }
-  Fl_Flags draw_as_button(Fl_Flags,int&,int&,int&,int&) const;
-
-  void  draw_label(int x,int y,int w,int h, Fl_Flags f) const ;
-  void  draw_inside_label(int x,int y,int w,int h, Fl_Flags f) const ;
+  void  draw_label(int x,int y,int w,int h, Fl_Flags) const ;
+  void  draw_inside_label(int x,int y,int w,int h, Fl_Flags) const ;
   void	draw_inside_label() const;
 
   void	measure_label(int&, int&) const ;
@@ -288,5 +287,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.9 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $".
 //

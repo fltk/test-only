@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Button.h,v 1.5 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ public:
 
 protected:
   virtual void draw();
-  Fl_Flags draw_box(Fl_Flags);
+  void draw(int glyph, int glyph_width) const;
 };
 
 #ifndef FLTK_2 // for back compatability:
@@ -61,5 +61,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Button.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Button.h,v 1.5 2002/01/28 08:02:59 spitzak Exp $".
 //

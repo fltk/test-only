@@ -2014,3 +2014,14 @@ implementation of this cleaned up and removed from Fl.cxx.
 
 Checked in 1/26/02
 ////////////////////////////////////////////////////////////////
+
+Renamed Fl::event_key(int) to Fl::event_key_state(int) to avoid
+conflict with any future function that sets Fl::event_key(). Renamed
+Fl::get_key(int) to Fl::get_key_state(int) to match.
+
+Check, radio, return, and light buttons use the text_size() to
+determine the size of the glyph (rather than the size of the widget),
+matces fltk1.1. Cleanup of the code to draw them.
+
+Checked in 1/27/02
+////////////////////////////////////////////////////////////////

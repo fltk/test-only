@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.162 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.163 2002/01/28 08:03:00 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -736,7 +736,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl::e_text = buffer;
     // for (int i = lParam&0xff; i--;)
     if (window) while (window->parent()) window = window->window();
-    if (Fl::handle(FL_KEYBOARD,window)) return 0;
+    if (Fl::handle(FL_KEY,window)) return 0;
     break;}
 
   case WM_MOUSEWHEEL: {
@@ -1314,5 +1314,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.162 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.163 2002/01/28 08:03:00 spitzak Exp $".
 //

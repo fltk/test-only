@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.56 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -143,7 +143,7 @@ int Fl_Scrollbar::handle(int event) {
     handle_drag(clamp(increment(value(), n * sign)));
     return 1;
   }
-  case FL_KEYBOARD:
+  case FL_KEY:
     if (vertical()) switch(Fl::event_key()) {
     case FL_Home: handle_drag(maximum()); return 1;
     case FL_End:  handle_drag(minimum()); return 1;
@@ -175,8 +175,8 @@ void Fl_Scrollbar::draw() {
     else if (highlight_ == 1) f1 = FL_HIGHLIGHT;
     if (pushed_ == 2) f2 = FL_VALUE;
     else if (highlight_ == 2) f2 = FL_HIGHLIGHT;
-    if (pushed_ == 5) f5 = FL_VALUE;
-    else if (highlight_ == 5) f5 = FL_HIGHLIGHT;
+    //if (pushed_ == 5) f5 = FL_VALUE;
+    if (highlight_ == 5) f5 = FL_HIGHLIGHT;
   }
   if (vertical()) {
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
@@ -214,5 +214,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.56 2002/01/28 08:03:00 spitzak Exp $".
 //

@@ -55,7 +55,7 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#first_window_a">first_window_a</a></li>
 <li><a href="#flush">flush</a></li>
 <li><a href="#focus">focus</a></li>
-<li><a href="#get_key">get_key</a></li>
+<li><a href="#get_key_state">get_key_state</a></li>
 <li><a href="#get_mouse">get_mouse</a></li>
 <li><a href="#gl_visual">gl_visual</a></li>
 <li><a href="#has_check">has_check</a></li>
@@ -607,7 +607,7 @@ the visible windows.
 <a name="event"><h4>int Fl::event()</h4></a>
 
 Returns the most recent event handled, such as <tt>FL_PUSH</tt> or
-<tt>FL_KEYBOARD</tt>. This is useful so callbacks can find out why
+<tt>FL_KEY</tt>. This is useful so callbacks can find out why
 they were called.
 
 <h4><a name="event_x">int Fl::event_x()</a>
@@ -746,19 +746,19 @@ value.
 
 </ul>
 
-<a name="event_key2"><h4>int Fl::event_key(int key)</h4></a>
+<a name="event_key_state"><h4>bool Fl::event_key_state(int key)</h4></a>
 
-<p><tt>Fl::event_key(int)</tt> returns true if the given key was held 
-down (or pressed) <I>during</I> the last event.  This is constant until 
-the next event is read from the server. The possible values for the
-key are listed above.
+<p>Returns true if the given key was held down (or pressed)
+<I>during</I> the last event.  This is constant until the next event
+is read from the server. The possible values for the key are listed
+above.
 
-<p>On Win32 <tt>Fl::event_key(FL_KP_Enter)</tt> does not work.
+<p>On Win32 <tt>Fl::event_key_state(FL_KP_Enter)</tt> does not work.
 
 <a name="event_text"><h4>char *Fl::event_text()</h4></a>
 
 Returns the ASCII text (in the future this may be UTF-8) produced by 
-the last <tt>FL_KEYBOARD</tt> or <tt>FL_PASTE</tt> or possibly other 
+the last <tt>FL_KEY</tt> or <tt>FL_PASTE</tt> or possibly other 
 event.  A zero-length string is returned for any keyboard function keys 
 that do not produce text. This pointer points at a static buffer and is 
 only valid until the next event is processed. 
@@ -783,7 +783,7 @@ doing your own comparison so you are consistent about edge effects.
 
 <a name="test_shortcut"><h4>int Fl::test_shortcut(int shortcut)</h4></a>
 
-Test the current event, which must be an <tt>FL_KEYBOARD</tt> or <tt>
+Test the current event, which must be an <tt>FL_KEY</tt> or <tt>
 FL_SHORTCUT</tt>, against a shortcut value (described in <a
 href="Fl_Button.html#shortcut"><tt>Fl_Button</tt></a>).
 Returns non-zero if there is a match.  Not to be confused with <a
@@ -802,7 +802,7 @@ points at a static buffer that is overwritten with each call.</i>
 <a name="compose"><h4>int Fl::compose(int&amp; del)</h4></a>
 
 <p>Use of this function is very simple.  Any text editing widget should
-call this for each <tt>FL_KEYBOARD</tt> event.
+call this for each <tt>FL_KEY</tt> event.
 
 <p>If <tt>true</tt> is returned, then it has modified the <a
 href="#event_text"><tt>Fl::event_text()</tt></a> and <a
@@ -830,13 +830,13 @@ The next call to Fl::compose() will start out in an initial state.  In
 particular it will not set "del" to non-zero.  This call is very fast
 so it is ok to call it many times and in many places.
 
-<a name="get_key"><h4>int Fl::get_key(int)</h4></a>
+<a name="get_key_state"><h4>int Fl::get_key_state(int)</h4></a>
 
 <p>Returns true if the given key is held down <I> now</I>.  Under X
 this requires a round-trip to the server and is <I> much</I> slower
-than <a href="#event_key2"><tt>Fl::event_key(int)</tt></a>.</p>
+than <a href="#event_key_state"><tt>Fl::event_key_state(int)</tt></a>.</p>
 
-<p>On Win32 <tt>Fl::get_key(FL_KP_Enter)</tt> does not work.
+<p>On Win32 <tt>Fl::get_key_state(FL_KP_Enter)</tt> does not work.
 
 <a name="get_mouse"><h4>void Fl::get_mouse(int &amp;x, int &amp;y)</h4></a>
 
@@ -907,7 +907,7 @@ mouse (by it returning non-zero from <tt> handle()</tt>).</p>
 
 <a name="focus"><h4>Fl_Widget* Fl::focus() const;</h4></a>
 
-Returns the widgets that will receive <tt>FL_KEYBOARD</tt>
+Returns the widgets that will receive <tt>FL_KEY</tt>
 events. This is NULL if the application does not have focus now, or if
 no widgets accepted focus.
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.38 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.39 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,6 +27,7 @@
 #include <fltk/Fl_Boxtype.h>
 #include <fltk/Fl_Style.h>
 #include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Button.h>
 #include <fltk/fl_draw.h>
 
 // a couple of of new boxtypes (look familiar?)
@@ -62,11 +63,10 @@ static void lozenge(int which, int x,int y,int w,int h, Fl_Color color)
 
 static Fl_Style* scrollbarstyle;
 
-// a new glyph function
+// Replace the glyph functions on several widget types:
 static void
-alt_glyph(const Fl_Widget* widget, int t,
-          int x, int y, int w, int h,
-          Fl_Flags f)
+check_glyph(const Fl_Widget* widget, int t,
+		int x, int y, int w, int h, Fl_Flags f)
 {
   Fl_Color gbc = widget->color();
   Fl_Color gfc = fl_inactive(widget->text_color(), f);
@@ -75,49 +75,15 @@ alt_glyph(const Fl_Widget* widget, int t,
   else if (f & FL_HIGHLIGHT && (bc = widget->highlight_color())) ;
   else bc = widget->button_color();
 
-  switch (t) {
-    case FL_GLYPH_CHECK: {
-      w = (w-1)|1; h = (h-1)|1;
-      int x1 = x+w/2;
-      int y1 = y+h/2;
-      Fl_Color light = 54, dark = 32;
+  if (widget->type() == Fl_Button::RADIO) {
 
-      if (f&FL_INACTIVE) {
-        /*bc = fl_inactive(bc); fc = fl_inactive(fc);*/
-        light = fl_inactive(light); dark = fl_inactive(dark);
-      }
-      fl_newpath();
-      fl_vertex(x+3, y1); fl_vertex(x1, y+3);
-      fl_vertex(x+w-4, y1); fl_vertex(x1, y+h-4);
-      fl_color((f&FL_VALUE) ? gfc : gbc);
-      fl_fill();
-
-      fl_color(dark);
-      fl_line(x,   y1, x1,  y);  fl_line(x1, y,   x+w-1, y1);
-      fl_line(x+1, y1, x1, y+1); fl_line(x1, y+1, x+w-2, y1);
-      fl_color(light);
-      fl_line(x+2, y1, x1, y+2); fl_line(x1, y+2, x+w-3, y1);
-      fl_line(x+3, y1, x1, y+3); fl_line(x1, y+3, x+w-4, y1);
-
-      fl_color(light);
-      fl_line(x,   y1, x1, y+h-1); fl_line(x1, y+h-1, x+w-1, y1);
-      fl_line(x+1, y1, x1, y+h-2); fl_line(x1, y+h-2, x+w-2, y1);
-      fl_color(dark);
-      fl_line(x+2, y1, x1, y+h-3); fl_line(x1, y+h-3, x+w-3, y1);
-      fl_line(x+3, y1, x1, y+h-4); fl_line(x1, y+h-4, x+w-4, y1);
-
-      break;
+    Fl_Color light = 54, dark = 32;
+    if (f&FL_INACTIVE) {
+      light = fl_inactive(light); dark = fl_inactive(dark);
     }
-    case FL_GLYPH_ROUND: {
-      Fl_Color light = 54, dark = 32;
-
-      if (f&FL_INACTIVE) {
-        light = fl_inactive(light); dark = fl_inactive(dark);
-      }
-
-        int d = w <= h ? w : h;
-//        d = (d - 1)|1;
-        d &= (~1);
+    int d = w <= h ? w : h;
+//  d = (d - 1)|1;
+    d &= (~1);
 
     fl_color((f&FL_VALUE) ? gfc : gbc);
     fl_pie(x+2, y+2, d-4, d-4, 0, 360);
@@ -142,28 +108,50 @@ alt_glyph(const Fl_Widget* widget, int t,
     lozenge(UPPER_LEFT,  x,   y,   d,   d,   dark);
     lozenge(UPPER_LEFT,  x+1, y+1, d-2, d-2, dark);
 
-      break;
+  } else { // check button:
+
+    w = (w-1)|1; h = (h-1)|1;
+    int x1 = x+w/2;
+    int y1 = y+h/2;
+    Fl_Color light = 54, dark = 32;
+
+    if (f&FL_INACTIVE) {
+      /*bc = fl_inactive(bc); fc = fl_inactive(fc);*/
+      light = fl_inactive(light); dark = fl_inactive(dark);
     }
-    case FL_GLYPH_HSLIDER: {
-      widget->box()->draw(x,y,w,h, bc, f);
-      widget->box()->inset(x,y,w,h);
-      if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, bc, f);
-      if (w>18) {
-        FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, bc, f);
-        FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, bc, f);
-      }
-      break;
-    }
-    case FL_GLYPH_VSLIDER: {
-      widget->box()->draw(x,y,w,h, bc, f);
-      widget->box()->inset(x,y,w,h);
-      if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, bc, f);
-      if (h>18) {
-        FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, bc, f);
-        FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, bc, f);
-      }
-      break;
-    }
+    fl_newpath();
+    fl_vertex(x+3, y1); fl_vertex(x1, y+3);
+    fl_vertex(x+w-4, y1); fl_vertex(x1, y+h-4);
+    fl_color((f&FL_VALUE) ? gfc : gbc);
+    fl_fill();
+
+    fl_color(dark);
+    fl_line(x,   y1, x1,  y);  fl_line(x1, y,   x+w-1, y1);
+    fl_line(x+1, y1, x1, y+1); fl_line(x1, y+1, x+w-2, y1);
+    fl_color(light);
+    fl_line(x+2, y1, x1, y+2); fl_line(x1, y+2, x+w-3, y1);
+    fl_line(x+3, y1, x1, y+3); fl_line(x1, y+3, x+w-4, y1);
+
+    fl_color(light);
+    fl_line(x,   y1, x1, y+h-1); fl_line(x1, y+h-1, x+w-1, y1);
+    fl_line(x+1, y1, x1, y+h-2); fl_line(x1, y+h-2, x+w-2, y1);
+    fl_color(dark);
+    fl_line(x+2, y1, x1, y+h-3); fl_line(x1, y+h-3, x+w-3, y1);
+    fl_line(x+3, y1, x1, y+h-4); fl_line(x1, y+h-4, x+w-4, y1);
+  }
+}
+
+// The main glyph function draws all the arrows:
+static void
+alt_glyph(const Fl_Widget* widget, int t,
+          int x, int y, int w, int h, Fl_Flags f)
+{
+  Fl_Color bc;
+  if (f & FL_SELECTED) bc = widget->selection_color();
+  else if (f & FL_HIGHLIGHT && (bc = widget->highlight_color())) ;
+  else bc = widget->button_color();
+
+  switch (t) {
     case FL_GLYPH_RIGHT_BUTTON:
     case FL_GLYPH_LEFT_BUTTON:
     case FL_GLYPH_UP_BUTTON:
@@ -230,44 +218,63 @@ alt_glyph(const Fl_Widget* widget, int t,
       }
       break;
     }
-    case FL_GLYPH_VNSLIDER: {
-      widget->box()->draw(x,y,w,h, bc, f);
-      int d = (h-4)/2;
-      FL_THIN_UP_BOX->draw(x+2, y+d, w-4, h-2*d, bc);
-      break;
-    }
-    case FL_GLYPH_HNSLIDER: {
-      widget->box()->draw(x,y,w,h, bc, f);
-      int d = (w-4)/2;
-      FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, bc);
-      break;
-    }
     default:
-      widget->box()->draw(x,y,w,h, bc, f);
+      widget->button_box()->draw(x,y,w,h, bc, f);
+  }
+}
+
+// Sliders. You need to look at the type of widget to figure out if
+// it is horizontal or vertical.
+static void
+slider_glyph(const Fl_Widget* widget, int t,
+          int x, int y, int w, int h, Fl_Flags f)
+{
+  // draw the up/down arrows using the main glyph function:
+  if (t) {
+    alt_glyph(widget, t, x, y, w, h, f);
+    return;
+  }
+  Fl_Color bc;
+  if (f & FL_SELECTED) bc = widget->selection_color();
+  else if (f & FL_HIGHLIGHT && (bc = widget->highlight_color())) ;
+  else bc = widget->button_color();
+  if (widget->type() & 1) { // horizontal
+    widget->button_box()->draw(x,y,w,h, bc, f);
+    widget->button_box()->inset(x,y,w,h);
+    if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, bc, f);
+    if (w>18) {
+      FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, bc, f);
+      FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, bc, f);
+    }
+  } else {
+    widget->button_box()->draw(x,y,w,h, bc, f);
+    widget->button_box()->inset(x,y,w,h);
+    if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, bc, f);
+    if (h>18) {
+      FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, bc, f);
+      FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, bc, f);
+    }
   }
 }
 
 static void
-alt_glyph2(const Fl_Widget* widget, int t,
-          int x, int y, int w, int h,
-          Fl_Flags f)
+square_alt_glyph(const Fl_Widget* widget, int t,
+          int x, int y, int w, int h, Fl_Flags f)
 {
   alt_glyph(widget, t, x, y+(h-w)/2, w, w, f);
 }
 
 static void choice_glyph(const Fl_Widget* widget, int,
-                         int x,int y,int w, int h,
-                         Fl_Flags f)
+                         int x,int y,int w, int h, Fl_Flags f)
 {
   FL_FLAT_BOX->draw(x,y,w,h,widget->color(),f);
   int H = h/3;
   int Y = y + (h-H)/2;
-  widget->box()->draw(x,Y,w,H,widget->button_color(),f);
+  widget->button_box()->draw(x,Y,w,H,widget->button_color(),f);
 }
 
 static void light_glyph(const Fl_Widget* widget, int,
-                        int x,int y,int w, int h,
-                        Fl_Flags f)
+                        int x,int y,int w, int h, Fl_Flags f)
 {
   Fl_Color fc = fl_inactive(widget->text_color(), f);
   Fl_Color bc = widget->color();
@@ -276,8 +283,7 @@ static void light_glyph(const Fl_Widget* widget, int,
 }
 
 static void return_glyph(const Fl_Widget*, int,
-                         int x,int y,int w,int h,
-                         Fl_Flags f)
+                         int x,int y,int w,int h, Fl_Flags f)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -300,24 +306,23 @@ static void return_glyph(const Fl_Widget*, int,
 
 extern "C"
 int fltk_plugin() {
-  Fl_Style::draw_sliders_pushed = 1;
+  //Fl_Style::draw_sliders_pushed = 1;
+
+  Fl_Widget::default_style->glyph = alt_glyph;
 
   Fl_Style* s;
-  if ((s = Fl_Style::find("menu"))) {
-    s->glyph = alt_glyph;
-  }
 
   if ((s = Fl_Style::find("menu bar"))) {
     s->button_box = FL_HIGHLIGHT_BOX;
   }
 
   if ((s = Fl_Style::find("item"))) {
-    s->glyph = alt_glyph;
+    s->glyph = check_glyph;
     s->button_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->glyph = alt_glyph2;
+    s->glyph = square_alt_glyph;
   }
 
   if ((s = Fl_Style::find("choice"))) {
@@ -326,7 +331,7 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    s->glyph = alt_glyph;
+    s->glyph = check_glyph;
   }
 
   if ((s = Fl_Style::find("return button"))) {
@@ -339,24 +344,24 @@ int fltk_plugin() {
 
   if ((s = Fl_Style::find("scrollbar"))) {
     scrollbarstyle = s;
-    s->glyph = alt_glyph;
+    s->glyph = slider_glyph;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->glyph = alt_glyph;
+    s->glyph = slider_glyph;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->glyph = alt_glyph;
+    s->glyph = slider_glyph;
   }
 
   if ((s = Fl_Style::find("input browser"))) {
-    s->glyph = alt_glyph2;
+    s->glyph = square_alt_glyph;
   }
 
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.38 2002/01/23 08:46:02 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.39 2002/01/28 08:03:00 spitzak Exp $".
 //

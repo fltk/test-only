@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.10 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.11 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 
 extern char fl_key_vector[32]; // in Fl_x.C
 
-bool Fl::event_key(int keysym) {
+bool Fl::event_key_state(int keysym) {
   if (keysym > FL_Button(0) && keysym <= FL_Button(8))
     return Fl::event_state(FL_BUTTON(keysym-FL_Button(0))) != 0;
   int keycode = XKeysymToKeycode(fl_display, keysym);
@@ -53,14 +53,14 @@ bool Fl::event_key(int keysym) {
   return (fl_key_vector[keycode/8] & (1 << (keycode%8))) != 0;
 }
 
-bool Fl::get_key(int k) {
+bool Fl::get_key_state(int k) {
   fl_open_display();
   XQueryKeymap(fl_display, fl_key_vector);
-  return event_key(k);
+  return event_key_state(k);
 }
 
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.10 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.11 2002/01/28 08:03:00 spitzak Exp $".
 //

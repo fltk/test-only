@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.46 2002/01/23 08:46:01 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.47 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,18 +31,46 @@
 #include <config.h>
 
 extern Fl_Widget* fl_did_clipping;
+extern void fl_dotted_box(int,int,int,int);
 
 void Fl_Menu_Button::draw() {
   if (type()&7) { // draw nothing for the popup types
     fl_did_clipping = this;
     return;
   }
-  // else do nothing for POPUP types
-  int X,Y,W,H; Fl_Flags flags = draw_as_button(0,X,Y,W,H);
-  draw_inside_label(X,Y,W,H,flags);
+  Fl_Boxtype box = this->box();
+  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
+  // FL_NO_BOX buttons such as checkmarks:
+  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
+      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
+    fl_push_clip(0, 0, this->w(), this->h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
+  Fl_Flags flags;
+  Fl_Color color;
+  if (!active_r()) {
+    flags = FL_INACTIVE;
+    color = this->color();
+  } else if (belowmouse()) {
+    flags = FL_HIGHLIGHT;
+    color = highlight_color();
+    if (!color) color = this->color();
+  } else {
+    flags = 0;
+    color = this->color();
+  }
+  box->draw(0, 0, this->w(), this->h(), color, flags);
+  int x,y,w,h;
+  x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
+  draw_inside_label(x,y,w,h,flags);
+  if (focused()) {
+    fl_color(text_color());
+    fl_dotted_box(x+1, y+1, w-2, h-2);
+  }
   // draw the little mark at the right:
-  int w1 = H*4/5;
-  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, flags);
+  int w1 = text_size();
+  draw_glyph(FL_GLYPH_DOWN, x+w-w1, y, w1, h, flags);
 }
 
 int Fl_Menu_Button::popup() {
@@ -98,7 +126,7 @@ int Fl_Menu_Button::handle(int e) {
     if (test_shortcut()) goto EXECUTE;
     return handle_shortcut();
 
-  case FL_KEYBOARD:
+  case FL_KEY:
     if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
     return 0;
 
@@ -110,7 +138,6 @@ int Fl_Menu_Button::handle(int e) {
 static void revert(Fl_Style* s) {
   s->color = FL_GRAY;
   s->box = FL_UP_BOX;
-  s->leading = 4;
 }
 static Fl_Named_Style style("Menu_Button", revert, &Fl_Menu_Button::default_style);
 Fl_Named_Style* Fl_Menu_Button::default_style = &::style;
@@ -123,5 +150,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.46 2002/01/23 08:46:01 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.47 2002/01/28 08:03:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.12 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -465,7 +465,7 @@ int Fl_Text_Editor::handle(int event) {
       show_cursor(mCursorOn); // redraws the cursor
       return 1;
 
-    case FL_KEYBOARD:
+    case FL_KEY:
       return handle_key();
 
     case FL_PASTE:
@@ -487,5 +487,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.12 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $".
 //

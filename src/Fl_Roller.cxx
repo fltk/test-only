@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.25 2002/01/23 08:46:01 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.26 2002/01/28 08:03:00 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ int Fl_Roller::handle(int event) {
   case FL_RELEASE:
     handle_release();
     return 1;
-  case FL_KEYBOARD:
+  case FL_KEY:
     // Only arrows in the correct direction are used.  This allows the
     // opposite arrows to be used to navigate between a set of parellel
     // rollers.
@@ -166,5 +166,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.25 2002/01/23 08:46:01 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.26 2002/01/28 08:03:00 spitzak Exp $".
 //

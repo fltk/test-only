@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.15 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.16 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -26,6 +26,7 @@
 #include <fltk/Fl_Item.h>
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Image.h>
+#include <fltk/Fl_Check_Button.h>
 #include <string.h>
 
 // Style used to draw menu items.  This controls the font and label color,
@@ -37,6 +38,11 @@
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
+  s->color = FL_GRAY;
+  s->button_box = FL_DOWN_BOX;
+  // s->button_box = FL_NO_BOX; // makes it look more like Windows
+  s->button_color = FL_WHITE;
+  s->glyph = Fl_Check_Button::default_glyph;
 }
 static Fl_Named_Style style("Item", revert, &Fl_Item::default_style);
 Fl_Named_Style* Fl_Item::default_style = &::style;
@@ -59,9 +65,9 @@ void Fl_Item::draw() {
       if (type() != RADIO) lflags ^= FL_VALUE;
       else lflags |= FL_VALUE;
     }
-    draw_glyph(type() == RADIO ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
-	       x+3, y+(h-13)/2, 13, 13, lflags);
-    x += 15; w -= 15;
+    int gw = text_size()+2;
+    draw_glyph(0, x+3, y+(h-gw)/2, gw, gw, lflags);
+    x += gw+3; w -= gw+3;
   }
   draw_label(x+3, y, w-6, h, flags());
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Round_Button.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Radio_Round_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Radio round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -23,19 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Radio_Round_Button_H
-#define Fl_Radio_Round_Button_H
-
-#include "Fl_Round_Button.h"
-
-class FL_API Fl_Radio_Round_Button : public Fl_Round_Button {
-public:
-    Fl_Radio_Round_Button(int x,int y,int w,int h,const char *l=0)
-	: Fl_Round_Button(x,y,w,h,l) {type(RADIO);}
-};
-
+#ifndef Fl_Radio_Round_Button
+#include "Fl_Radio_Button.h"
+#define Fl_Radio_Round_Button Fl_Radio_Button
 #endif
 
 //
-// End of "$Id: Fl_Radio_Round_Button.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Radio_Round_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $".
 //

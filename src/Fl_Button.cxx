@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.45 2002/01/28 08:02:59 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,26 +54,6 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
   }
 }
 
-extern Fl_Widget* fl_did_clipping;
-
-void Fl_Button::draw() {
-  if (type() == HIDDEN) {
-    fl_did_clipping = this;
-    return;
-  }
-  Fl_Flags f;
-  if (value()) {
-    // only use the pushed-in color if the user has explicitly set it
-    // on this widget:
-    if (style()->selection_color) f = FL_VALUE|FL_SELECTED;
-    else f = FL_VALUE;
-  } else {
-    f = 0;
-  }
-  int x,y,w,h; f = draw_as_button(f,x,y,w,h);
-  draw_inside_label(x,y,w,h,f);
-}
-
 int Fl_Button::handle(int event) {
   static int oldval;
   int newval;
@@ -115,7 +95,7 @@ int Fl_Button::handle(int event) {
     redraw(FL_DAMAGE_HIGHLIGHT);
     // grab initial focus if we are an Fl_Return_Button:
     return shortcut()==FL_Enter ? 2 : 1;
-  case FL_KEYBOARD:
+  case FL_KEY:
     if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
     return 0;
   case FL_SHORTCUT:
@@ -135,6 +115,87 @@ int Fl_Button::handle(int event) {
   }
 }
 
+////////////////////////////////////////////////////////////////
+
+#include <fltk/fl_draw.h>
+
+extern Fl_Widget* fl_did_clipping;
+
+extern void fl_dotted_box(int,int,int,int);
+
+// Draw button-like widgets with an optional glyph. The glyph is given
+// a size (negative to put it on the right)
+void Fl_Button::draw(int glyph, int glyph_width) const
+{
+  Fl_Boxtype box = this->box();
+  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
+  // FL_NO_BOX buttons such as checkmarks:
+  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
+      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
+    fl_push_clip(0, 0, this->w(), this->h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
+
+  Fl_Flags flags;
+  Fl_Color color;
+  if (!active_r()) {
+    flags = FL_INACTIVE;
+    color = this->color();
+  } else if (belowmouse()) {
+    flags = FL_HIGHLIGHT;
+    color = highlight_color();
+    if (!color) color = this->color();
+  } else {
+    flags = 0;
+    color = this->color();
+  }
+  Fl_Flags glyph_flags = flags;
+  if (glyph_width) {
+    if (pushed()) flags |= FL_VALUE;
+    if (value()) glyph_flags |= FL_VALUE;
+  } else if (value()) {
+    flags |= FL_VALUE;
+    // Use the pushed-in color if the user has explicitly set it
+    // on this widget:
+    if (style()->selection_color) {
+      color = style()->selection_color;
+      flags |= FL_SELECTED; // this makes label use selected_text_color()
+    }
+  }
+
+  box->draw(0,0, this->w(), this->h(), color, flags);
+  int x,y,w,h;
+  x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
+
+  if (glyph_width < 0) {
+    int g = -glyph_width;
+    draw_glyph(glyph, x+w-g-3, y+(h-g)/2, g, g, glyph_flags);
+    draw_inside_label(x, y, w-g-3, h, flags);
+  } else if (glyph_width > 0) {
+    int g = glyph_width;
+    draw_glyph(glyph, x+3, y+(h-g)/2, g, g, glyph_flags);
+    draw_inside_label(x+g+3, y, w-g-3, h, flags);
+  } else {
+    draw_inside_label(x, y, w, h, flags);
+  }
+
+  if (focused()) {
+    fl_color(text_color());
+    fl_dotted_box(x+1, y+1, w-2, h-2);
+  }
+}
+
+void Fl_Button::draw() {
+  if (type() == HIDDEN) {
+    fl_did_clipping = this;
+    return;
+  }
+  draw(0,0);
+}
+
+////////////////////////////////////////////////////////////////
+
 static void revert(Fl_Style* s) {
   s->color = FL_GRAY;
   s->box = FL_UP_BOX;
@@ -148,5 +209,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.45 2002/01/28 08:02:59 spitzak Exp $".
 //
