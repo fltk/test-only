@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=fltkdll - Win32 Debug
+CFG=fltkdll - Win32 Debug MinSize
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,14 @@ CFG=fltkdll - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fltkdll.mak" CFG="fltkdll - Win32 Debug"
+!MESSAGE NMAKE /f "fltkdll.mak" CFG="fltkdll - Win32 Debug MinSize"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fltkdll - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "fltkdll - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll - Win32 Debug MinSize" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll - Win32 Release MinSize" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -83,12 +85,72 @@ LINK32=link.exe
 # ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../lib/fltkdlld.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "fltkdll___Win32_Debug_MinSize"
+# PROP BASE Intermediate_Dir "fltkdll___Win32_Debug_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "fltkdll___Win32_Debug_MinSize"
+# PROP Intermediate_Dir "fltkdll___Win32_Debug_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
+# ADD CPP /nologo /MDd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /YX /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../lib/fltkdlld.dll" /pdbtype:sept
+# SUBTRACT BASE LINK32 /pdb:none
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../lib/fltkdlld.dll" /implib:"../lib/fltkdlld.lib" /pdbtype:sept
+# SUBTRACT LINK32 /pdb:none
+
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "fltkdll___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "fltkdll___Win32_Release_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "fltkdll___Win32_Release_MinSize"
+# PROP Intermediate_Dir "fltkdll___Win32_Release_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
+# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /YX /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386
+# SUBTRACT BASE LINK32 /pdb:none
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"../lib/fltkdll.dll" /implib:"../lib/fltkdll.lib"
+# SUBTRACT LINK32 /pdb:none
+
 !ENDIF 
 
 # Begin Target
 
 # Name "fltkdll - Win32 Release"
 # Name "fltkdll - Win32 Debug"
+# Name "fltkdll - Win32 Debug MinSize"
+# Name "fltkdll - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\src\conf.c
@@ -390,6 +452,8 @@ DEP_CPP_FL_AL=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -403,6 +467,8 @@ DEP_CPP_FL_AR=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\math.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -453,6 +519,7 @@ DEP_CPP_FL_AS=\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Button.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
@@ -464,6 +531,8 @@ DEP_CPP_FL_AS=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -537,6 +606,8 @@ DEP_CPP_FL_BOX=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -562,6 +633,8 @@ DEP_CPP_FL_BR=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -572,12 +645,14 @@ DEP_CPP_FL_BU=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Check_Button.H"\
 	"..\FL\Fl_Color.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
+	"..\fl\fl_round_button.h"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	
@@ -604,6 +679,8 @@ DEP_CPP_FL_CH=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -625,6 +702,8 @@ DEP_CPP_FL_CHO=\
 	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -663,6 +742,8 @@ DEP_CPP_FL_CLO=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -718,6 +799,8 @@ DEP_CPP_FL_COL=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -754,6 +837,8 @@ DEP_CPP_FL_COU=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -787,6 +872,8 @@ DEP_CPP_FL_CUR=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -807,6 +894,8 @@ DEP_CPP_FL_DI=\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\math.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -823,6 +912,8 @@ DEP_CPP_FL_DIA=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -838,6 +929,28 @@ DEP_CPP_FL_DIS=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_dnd.cxx
+DEP_CPP_FL_DN=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\fl_dnd_win32.cxx"\
+	"..\src\fl_dnd_x.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -873,6 +986,8 @@ DEP_CPP_FL_DR=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -907,6 +1022,8 @@ DEP_CPP_FL_DRAW=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -924,6 +1041,8 @@ DEP_CPP_FL_EN=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -986,6 +1105,8 @@ DEP_CPP_FL_FIL=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -1081,6 +1202,8 @@ DEP_CPP_FL_FILEI=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1290,6 +1413,8 @@ DEP_CPP_FL_GLY=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1310,6 +1435,8 @@ DEP_CPP_FL_GR=\
 	"..\FL\Fl_Tooltip.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1366,6 +1493,39 @@ DEP_CPP_FL_IN=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Input_Browser.cxx
+DEP_CPP_FL_INP=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\fl\fl_input_browser.h"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Menu_Window.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1549,6 +1709,8 @@ DEP_CPP_FL_ME=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1611,6 +1773,8 @@ DEP_CPP_FL_MENU_=\
 	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1632,6 +1796,8 @@ DEP_CPP_FL_MENU_B=\
 	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1736,6 +1902,8 @@ DEP_CPP_FL_OU=\
 	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1752,6 +1920,8 @@ DEP_CPP_FL_OV=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1845,6 +2015,8 @@ DEP_CPP_FL_PA=\
 	"..\FL\Fl_Pack.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1916,6 +2088,8 @@ DEP_CPP_FL_RET=\
 	"..\FL\Fl_Return_Button.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1967,6 +2141,8 @@ DEP_CPP_FL_RO=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1983,6 +2159,8 @@ DEP_CPP_FL_ROU=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1999,6 +2177,8 @@ DEP_CPP_FL_ROUN=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2021,6 +2201,8 @@ DEP_CPP_FL_SC=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2055,6 +2237,8 @@ DEP_CPP_FL_SCRO=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2071,6 +2255,8 @@ DEP_CPP_FL_SH=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2137,6 +2323,8 @@ DEP_CPP_FL_SHO=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -2175,6 +2363,8 @@ DEP_CPP_FL_SL=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2246,6 +2436,27 @@ DEP_CPP_FL_SY=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_sysinfo.cxx
+DEP_CPP_FL_SYS=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\fl_sysinfo_win32.cxx"\
+	"..\src\fl_sysinfo_x.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -2265,6 +2476,8 @@ DEP_CPP_FL_TA=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Tabs.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2296,6 +2509,8 @@ DEP_CPP_FL_TEX=\
 	"..\FL\Fl_Text_Display.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2320,6 +2535,8 @@ DEP_CPP_FL_TEXT=\
 	"..\FL\Fl_Text_Editor.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2361,6 +2578,8 @@ DEP_CPP_FL_TO=\
 	"..\FL\Fl_Tooltip.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2421,6 +2640,8 @@ DEP_CPP_FL_VALU=\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Value_Output.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2443,6 +2664,8 @@ DEP_CPP_FL_VALUE=\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Value_Slider.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File

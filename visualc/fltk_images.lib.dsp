@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=fltk_images - Win32 Debug
+CFG=fltk_images - Win32 Debug MinSize
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,14 @@ CFG=fltk_images - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fltk_images.lib.mak" CFG="fltk_images - Win32 Debug"
+!MESSAGE NMAKE /f "fltk_images.lib.mak" CFG="fltk_images - Win32 Debug MinSize"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fltk_images - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "fltk_images - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "fltk_images - Win32 Debug MinSize" (based on "Win32 (x86) Static Library")
+!MESSAGE "fltk_images - Win32 Release MinSize" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -74,12 +76,60 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\fltk_imagesd.lib"
 
+!ELSEIF  "$(CFG)" == "fltk_images - Win32 Debug MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "fltk_images___Win32_Debug_MinSize"
+# PROP BASE Intermediate_Dir "fltk_images___Win32_Debug_MinSize"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "fltk_images___Win32_Debug_MinSize"
+# PROP Intermediate_Dir "fltk_images___Win32_Debug_MinSize"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_POSIX_" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_POSIX_" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /FR /YX /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\fltk_imagesd.lib"
+# ADD LIB32 /nologo /out:"..\lib\fltk_imagesd.lib"
+
+!ELSEIF  "$(CFG)" == "fltk_images - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "fltk_images___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "fltk_images___Win32_Release_MinSize"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "fltk_images___Win32_Release_MinSize"
+# PROP Intermediate_Dir "fltk_images___Win32_Release_MinSize"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /GX /Os /Ob2 /I "." /I ".." /D "_POSIX_" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD CPP /nologo /MD /GX /Os /Ob2 /I "." /I ".." /D "_POSIX_" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /YX /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\fltk_images.lib"
+# ADD LIB32 /nologo /out:"..\lib\fltk_images.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "fltk_images - Win32 Release"
 # Name "fltk_images - Win32 Debug"
+# Name "fltk_images - Win32 Debug MinSize"
+# Name "fltk_images - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\images\Fl_Guess_Image.cxx

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.142 2001/03/08 07:39:06 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.143 2001/03/08 23:49:29 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -61,6 +61,10 @@
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
+#endif
+
+#ifndef WHEEL_DELTA
+#	define WHEEL_DELTA 120	// according to MSDN.
 #endif
 
 //
@@ -1262,5 +1266,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.142 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.143 2001/03/08 23:49:29 robertk Exp $".
 //

@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=fluid - Win32 Debug
+CFG=fluid - Win32 Debug MinSize
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,14 @@ CFG=fluid - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fluid.mak" CFG="fluid - Win32 Debug"
+!MESSAGE NMAKE /f "fluid.mak" CFG="fluid - Win32 Debug MinSize"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fluid - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "fluid - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "fluid - Win32 Debug MinSize" (based on "Win32 (x86) Application")
+!MESSAGE "fluid - Win32 Release MinSize" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -53,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 fltk.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluid.exe" /libpath:"..\lib" /ref:"../lib/fluidd.ref" /lib:"../lib/fluidd.lib"
+# ADD LINK32 fltkdll.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluid.exe" /libpath:"..\lib" /ref:"../lib/fluidd.ref" /lib:"../lib/fluidd.lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fluid - Win32 Debug"
@@ -81,7 +83,67 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 fltkd.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
+# ADD LINK32 fltkdll.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
+# SUBTRACT LINK32 /pdb:none
+
+!ELSEIF  "$(CFG)" == "fluid - Win32 Debug MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "fluid___Win32_Debug_MinSize"
+# PROP BASE Intermediate_Dir "fluid___Win32_Debug_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "fluid___Win32_Debug_MinSize"
+# PROP Intermediate_Dir "fluid___Win32_Debug_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /GX /ZI /Od /I ".." /I "../visualc" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MDd /GX /ZI /Od /I ".." /I "../visualc" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_SHARED" /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 fltkd.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
+# SUBTRACT BASE LINK32 /pdb:none
+# ADD LINK32 fltkdlld.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluidd.exe" /implib:"../lib/fluidd.lib" /pdbtype:sept /libpath:"..\lib"
+# SUBTRACT LINK32 /pdb:none
+
+!ELSEIF  "$(CFG)" == "fluid - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "fluid___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "fluid___Win32_Release_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "fluid___Win32_Release_MinSize"
+# PROP Intermediate_Dir "fluid___Win32_Release_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /GX /Os /Ob2 /I ".." /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD CPP /nologo /MD /GX /Os /Ob2 /I ".." /D "NDEBUG" /D "FL_SHARED" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 fltk.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluid.exe" /libpath:"..\lib" /ref:"../lib/fluidd.ref" /lib:"../lib/fluidd.lib"
+# SUBTRACT BASE LINK32 /pdb:none
+# ADD LINK32 fltkdll.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../fluid/fluid.exe" /libpath:"..\lib" /ref:"../lib/fluidd.ref" /lib:"../lib/fluidd.lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -90,6 +152,8 @@ LINK32=link.exe
 
 # Name "fluid - Win32 Release"
 # Name "fluid - Win32 Debug"
+# Name "fluid - Win32 Debug MinSize"
+# Name "fluid - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\fluid\about_panel.cxx
@@ -101,6 +165,14 @@ SOURCE=..\fluid\alignment_panel.cxx
 # Begin Source File
 
 SOURCE=..\fluid\code.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\fluid\coding_style.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\fluid\coding_style_func.cxx
 # End Source File
 # Begin Source File
 

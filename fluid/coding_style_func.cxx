@@ -3,6 +3,11 @@
 #include <string.h>
 #include <FL/Fl_Window.H>
 #include "Fl_Type.h"	// for indent() prototype
+#if defined(WIN32) && !defined (__GNUC__)
+#	define strcasecmp  stricmp
+#else
+#	include "../config.h" // for strcasecmp
+#endif
 
 // these two are in the FLUID output from coding_style.fl									  
 extern Fl_Window *make_codingstyle_window();

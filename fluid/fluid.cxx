@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.47 2001/03/07 23:07:39 robertk Exp $"
+// "$Id: fluid.cxx,v 1.48 2001/03/08 23:49:29 robertk Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -112,7 +112,8 @@ void goto_images_dir() {
   if (in_source_dir) return;
   if (!filename || !*filename) return;
   const char *p = filename_name(filename);
-  char buffer[1024];
+  // This is static since Fl_Shared_Image::set_root_directory just copies the pointer
+  static char buffer[1024];
   if (p <= filename)
     strcpy(buffer, images_dir);
   else
@@ -513,5 +514,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.47 2001/03/07 23:07:39 robertk Exp $".
+// End of "$Id: fluid.cxx,v 1.48 2001/03/08 23:49:29 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.8 1999/11/27 15:45:17 carl Exp $"
+ * "$Id: fl_call_main.c,v 1.9 2001/03/08 23:49:29 robertk Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -44,7 +44,7 @@
  * Microsoft(r) Windows(r) that allows for it.
  */
 
-#if defined(WIN32) && !defined(FL_LIBRARY) && !defined (__GNUC__)
+#if defined(WIN32) && !defined(FL_LIBRARY) && !defined (__GNUC__) 
 
 #include <windows.h>
 #include <stdio.h>
@@ -54,8 +54,14 @@ extern int main(int, char *[]);
 #define __argc _argc
 #define __argv _argv
 #endif
-extern int  __argc;
-extern char **__argv;
+#if defined(_MSC_VER) && defined(_MSC_DLL)
+	int __argc = 1;
+	static char *args[2] = { "", NULL };
+	char **__argv = &args[0];
+#else
+	extern int  __argc;
+	extern char **__argv;
+#endif
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                              LPSTR lpCmdLine, int nCmdShow) {
@@ -81,6 +87,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif /* WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.8 1999/11/27 15:45:17 carl Exp $".
+ * End of "$Id: fl_call_main.c,v 1.9 2001/03/08 23:49:29 robertk Exp $".
  */
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.122 2001/02/28 21:19:49 clip Exp $"
+// "$Id: Fl.cxx,v 1.123 2001/03/08 23:49:29 robertk Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -288,7 +288,10 @@ int Fl::wait() {
 }
 
 int Fl::run() {
-  for (;;) wait(FOREVER);
+	while(Fl_X::first)
+		wait(0);
+	return(0);
+//  for (;;) wait(FOREVER);
 }
 
 extern int fl_ready();
@@ -680,5 +683,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.122 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: Fl.cxx,v 1.123 2001/03/08 23:49:29 robertk Exp $".
 //

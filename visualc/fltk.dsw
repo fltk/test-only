@@ -395,9 +395,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name fltkdll_images
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -423,10 +420,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltkdll
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltkdll_images
     End Project Dependency
 }}}
 
