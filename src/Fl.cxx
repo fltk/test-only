@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.51 1999/11/01 22:51:37 carl Exp $"
+// "$Id: Fl.cxx,v 1.52 1999/11/02 20:55:38 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,8 +52,6 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
-
-char *fl_theme, *fl_style;
 
 static double fl_elapsed();
 
@@ -618,13 +616,23 @@ Fl_Window::~Fl_Window() {
 
 extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 
+extern int fl_scheme_loaded;
+
 void Fl_Window::show() {
+  if (!fl_scheme_loaded) {
+    fl_scheme_loaded = 1;
+    Fl::loadtheme();
+    Fl::loadscheme();
+  }
+
   if (parent()) {
     set_visible();
     handle(FL_SHOW);
   } else if (!i) {
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
+#ifndef WIN32
     fl_open_display();
+#endif
     // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
       fl_modal_for = Fl::first_window();
@@ -812,5 +820,5 @@ Fl_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.51 1999/11/01 22:51:37 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.52 1999/11/02 20:55:38 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.14 1999/11/01 02:21:36 carl Exp $"
+// "$Id: Fl_arg.cxx,v 1.15 1999/11/02 20:55:39 carl Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -63,8 +63,6 @@ static const char* geometry;
 static const char* fg = 0;
 static const char* bg = 0;
 static const char* bg2 = 0;
-
-extern char *fl_style, *fl_theme;
 
 #ifndef WIN32
 #define COLOR_WINDOW 0
@@ -140,10 +138,10 @@ int Fl::arg(int argc, char **argv, int &i) {
     fg = v;
 
   } else if (match(s, "theme")) {
-    fl_theme = (char*)v;
+    Fl::theme_ = strdup(v);
 
-  } else if (match(s, "style")) {
-    fl_style = (char*)v;
+  } else if (match(s, "scheme")) {
+    Fl::scheme_ = strdup(v);
 
   } else return 0; // unrecognized
 
@@ -231,7 +229,7 @@ static const char * const helpmsg =
 "options are:\n"
 " -d[isplay] host:n.n\n"
 " -g[eometry] WxH+X+Y\n"
-" -s[tyle] style\n"
+" -s[cheme] scheme\n"
 " -t[heme] theme\n"
 " -n[ame] windowname\n"
 " -i[conic]\n"
@@ -384,5 +382,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.14 1999/11/01 02:21:36 carl Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.15 1999/11/02 20:55:39 carl Exp $".
 //

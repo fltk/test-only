@@ -1,7 +1,7 @@
 //
-// "$Id: fl_options.cxx,v 1.12 1999/11/01 03:59:12 carl Exp $"
+// "$Id: fl_options.cxx,v 1.13 1999/11/02 20:55:41 carl Exp $"
 //
-// Style option handling code for the Fast Light Tool Kit (FLTK).
+// Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -48,11 +48,13 @@
 #define PATH_MAX 128
 #endif
 
-const char* Fl::style_ = 0;
-int Fl::use_styles = 1;
+const char* Fl::scheme_ = 0;
+int Fl::use_schemes = 1;
 
 const char* Fl::theme_ = 0;
 int Fl::use_themes = 1;
+
+int fl_scheme_loaded = 0;
 
 static int is_path_rooted(const char *fn) {
   // see if an absolute name was given:
@@ -112,16 +114,20 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   return 0;
 }
 
-int Fl::loadstyle(int b) {
-  use_styles = b;
+int Fl::loadscheme(int b) {
+  use_schemes = b;
   if (!b) return 0;
 
   char temp[PATH_MAX];
-  if (is_path_rooted(style())) strncpy(temp, style(), sizeof(temp));
-  else snprintf(temp, sizeof(temp), "styles/%s", style());
+  if (is_path_rooted(scheme())) strncpy(temp, scheme(), sizeof(temp));
+  else snprintf(temp, sizeof(temp), "schemes/%s", scheme());
 
   const char *p = fl_find_config_file(temp);
-  if (!p) { fprintf(stderr, "Cannot find style file: %s\n", temp); return -1; }
+  if (!p) {
+    if (strcasecmp(temp, "schemes/default"))
+      fprintf(stderr, "Cannot load scheme: %s\n", temp);
+    return -1;
+  }
 
   char sfile[PATH_MAX];
   strcpy(sfile, p);
@@ -260,24 +266,24 @@ int Fl::loadstyle(int b) {
   return 0;
 }
 
-int Fl::style(const char *s) {
-  if (style_) free((void*)style_);
+int Fl::scheme(const char *s) {
+  if (scheme_) free((void*)scheme_);
   if (s) {
-    style_ = strdup(s);
-    return loadstyle(1);
+    scheme_ = strdup(s);
+    return loadscheme(1);
   }
 
-  style_ = 0;
-  return loadstyle(0);
+  scheme_ = 0;
+  return loadscheme(0);
 }
 
-const char* Fl::style() {
+const char* Fl::scheme() {
   static char* s = new char[PATH_MAX];
 
-  if (!use_styles) return 0;
-  if (!style_) style_ = strdup("default");
-  strncpy(s, style_, PATH_MAX);
-  if (!strcasecmp(s, "default")) getconf("default style", s, PATH_MAX);
+  if (!use_schemes) return 0;
+  if (!scheme_) scheme_ = strdup("default");
+  strncpy(s, scheme_, PATH_MAX);
+  if (!strcasecmp(s, "default")) getconf("default scheme", s, PATH_MAX);
 
   return s;
 }
@@ -292,8 +298,11 @@ int Fl::loadtheme(int b) {
   else snprintf(temp, sizeof(temp), "themes/%s", theme());
 
   const char *tfile = fl_find_config_file(temp);
-  if (!tfile)
-    { fprintf(stderr, "Cannot find theme file: %s\n", temp); return -1; }
+  if (!tfile) {
+    if (strcasecmp(temp, "themes/default"))
+      fprintf(stderr, "Cannot load theme: %s\n", temp);
+    return -1;
+  }
 
   int r;
   if ( (r = fl_load_plugin(tfile, "fltk_theme")) ) {

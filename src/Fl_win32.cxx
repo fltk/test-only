@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.56 1999/11/01 22:51:39 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.57 1999/11/02 20:55:40 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -859,22 +859,6 @@ void Fl_Window::make_current() {
   fl_clip_region(0);
 }
 
-extern char *fl_style, *fl_theme;
-
-void fl_open_display() {
-  static int opened = 0;
-  if (opened) return;
-  opened = 1;
-
-  // Load the theme plugin and style:
-  // THIS CODE MUST BE DUPLICATED FOR WIN32:
-  char temp[PATH_MAX];
-  if (fl_theme) Fl::theme(fl_theme);
-  else if (!Fl::getconf("default theme", temp, sizeof(temp))) Fl::theme(temp);
-  if (fl_style) Fl::style(fl_style);
-  else if (!Fl::getconf("default style", temp, sizeof(temp))) Fl::style(temp);
-}
-
 //
-// End of "$Id: Fl_win32.cxx,v 1.56 1999/11/01 22:51:39 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.57 1999/11/02 20:55:40 carl Exp $".
 //

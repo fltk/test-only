@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.25 1999/11/01 02:21:11 carl Exp $"
+// "$Id: Fl.H,v 1.26 1999/11/02 20:55:32 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -52,12 +52,6 @@ public: // should be private!
   static int e_is_click;
   static int e_keysym;
   static int e_length;
-
-  // style & theme stuff
-  static int use_styles;
-  static int use_themes;
-  static const char* style_;
-  static const char* theme_;
 
   static char* e_text;
   static const char* encoding;
@@ -248,10 +242,15 @@ public:
   static int awake(void* message = 0);	
 #endif
 
-  // style & theme stuff
-  static int style(const char*);
-  static const char* style();
-  static int loadstyle(int = 1);
+  // scheme & theme stuff
+  static int use_schemes;
+  static int use_themes;
+  static const char* scheme_;
+  static const char* theme_;
+
+  static int scheme(const char*);
+  static const char* scheme();
+  static int loadscheme(int = 1);
 
   static int theme(const char*);
   static const char* theme();
@@ -266,5 +265,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.25 1999/11/01 02:21:11 carl Exp $".
+// End of "$Id: Fl.H,v 1.26 1999/11/02 20:55:32 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.42 1999/11/01 22:51:40 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.43 1999/11/02 20:55:41 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -251,9 +251,6 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
-extern char *fl_style, *fl_theme;
-#include <FL/fl_load_plugin.H>
-
 void fl_open_display() {
   if (fl_display) return;
 
@@ -276,14 +273,6 @@ void fl_open_display() {
   templt.visualid = XVisualIDFromVisual(DefaultVisual(fl_display,fl_screen));
   fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
   fl_colormap = DefaultColormap(fl_display,fl_screen);
-
-  // Load the theme plugin and style:
-  // THIS CODE MUST BE DUPLICATED FOR WIN32:
-  char temp[PATH_MAX];
-  if (fl_theme) Fl::theme(fl_theme);
-  else if (!Fl::getconf("default theme", temp, sizeof(temp))) Fl::theme(temp);
-  if (fl_style) Fl::style(fl_style);
-  else if (!Fl::getconf("default style", temp, sizeof(temp))) Fl::style(temp);
 }
 
 void fl_close_display() {
@@ -816,5 +805,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.42 1999/11/01 22:51:40 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.43 1999/11/02 20:55:41 carl Exp $".
 //

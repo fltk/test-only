@@ -1,5 +1,6 @@
-# What Style file should we use?
-default style = Demo
+# What scheme file should we use?
+#default scheme = Demo
 
 # What theme file should we use?
 # default theme = Demo
+# default theme = essai
