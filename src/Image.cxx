@@ -275,7 +275,20 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   alpha = (void*)CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
 #elif defined(__APPLE__)
-  // nyi this is expected to make a GWorld object...
+  // 1 bit mask code:
+  static uchar reverse[16] = /* Bit reversal lookup table */
+    { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
+      0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
+  int rowBytes = (w+7)>>3 ;
+  uchar *bmask = (uchar*)malloc(rowBytes*h), *dst = bmask;
+  const uchar *src = bitmap;
+  for ( int i=rowBytes*h; i>0; i--,src++ ) {
+    *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
+  }
+  CGDataProviderRef srcp = CGDataProviderCreateWithData( 0L, bmask, rowBytes*h, 0L);
+  CGImageRef id = CGImageMaskCreate( w, h, 1, 1, rowBytes, srcp, 0L, false);
+  CGDataProviderRelease(srcp);
+  alpha = (void*)id;
 #else
 #endif
 }
@@ -541,7 +554,18 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
   }
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
-  // OSX version nyi
+  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
+  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
+  CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
+  fltk::end_quartz_image();
+/*
+  if (!alpha) create_alpha_bitmask(w(), h(), array);
+  if (alpha && fl_gc) {
+    CGRect rect = { X, Y, W, H };
+    fltk::begin_quartz_image(rect, cx, cy, w(), h());
+    CGContextDrawImage(fl_gc, rect, (CGImageRef)id);
+    fltk::end_quartz_image();
+  }*/
 #else
 # error
 #endif

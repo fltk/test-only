@@ -819,7 +819,7 @@ void Window::destroy() {
   if (x->region) DeleteObject(x->region);
 #elif USE_QUARTZ
   //+++Q: this should probably call 'stop_drawing' as well...
-  CreatedWindow::release_quartz_context(x);
+  fltk::release_quartz_context(x);
   if (x->region) DisposeRgn(x->region);
   DisposeWindow(x->xid);
 #endif

@@ -250,14 +250,23 @@ GLContext fl_current_glcontext;
 static const Window* cached_window;
 
 void fltk::set_gl_context(const Window* w, GLContext context) {
-  if (context != fl_current_glcontext || w != cached_window) {
+#ifdef __APPLE__
+  static int px=0, py=0, pw=0, ph=0;
+#endif
+  if (context != fl_current_glcontext || w != cached_window
+#ifdef __APPLE__
+     || w->w()!=pw || w->h()!=ph || w->x()!=px || w->y()!=py
+#endif
+     ) {
     fl_current_glcontext = context;
     cached_window = w;
 #ifdef _WIN32
     wglMakeCurrent(CreatedWindow::find(w)->dc, context);
 #elif defined(__APPLE__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+  px = w->x(); py = w->y(); ph = w->h(); pw = w->w();
   if ( w->parent() ) { //: resize our GL buffer rectangle
+    //++ this gets called a lot if we have more than one GL buffer... .
     Rect wrect; GetWindowPortBounds( xid(w), &wrect );
     GLint rect[] = { w->x(), wrect.bottom-w->h()-w->y(), w->w(), w->h() };
     aglSetInteger( context, AGL_BUFFER_RECT, rect );

@@ -1427,7 +1427,7 @@ void fltk::draw_into(CGImageRef gWorld) {
 
 //+++ verify port to FLTK2
 void fltk::stop_drawing(CGImageRef) {
-  CreatedWindow::release_quartz_context();
+  release_quartz_context();
 }
 
 /**
@@ -1436,7 +1436,7 @@ void fltk::stop_drawing(CGImageRef) {
 //+++ verify port to FLTK2
 void Window::make_current() const
 {
-  CreatedWindow::release_quartz_context();
+  release_quartz_context();
   current_ = this;
   // Find the root window and our position in it:
   int X = 0;
@@ -1481,7 +1481,7 @@ void Window::make_current() const
   QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
   quartz_gc = root->i->gc = i->gc;
   CGContextSaveGState(quartz_gc);
-  CreatedWindow::fill_quartz_context();
+  fill_quartz_context();
 }
 
 // helper function to manage the current CGContext fl_gc
@@ -1491,7 +1491,7 @@ namespace fltk {
 
 // FLTK has only one global graphics state. This function copies the FLTK 
 // state into the current Quartz context
-void CreatedWindow::fill_quartz_context() {
+void fltk::fill_quartz_context() {
   if (!quartz_gc) return;
   int hgt = 0;
   if (quartz_window) {
@@ -1512,14 +1512,14 @@ void CreatedWindow::fill_quartz_context() {
 
 // The only way to reset clipping to its original state is to pop the 
 // current graphics state and restore the global state.
-void CreatedWindow::clear_quartz_clipping() {
+void fltk::clear_quartz_clipping() {
   if (!quartz_gc) return;
   CGContextRestoreGState(quartz_gc);
   CGContextSaveGState(quartz_gc);
 }
 
 // Give the Quartz context back to the system
-void CreatedWindow::release_quartz_context(CreatedWindow *x) {
+void fltk::release_quartz_context(CreatedWindow *x) {
   if (x && x->gc!=quartz_gc) return;
   if (!quartz_gc) return;
   CGContextRestoreGState(quartz_gc);
@@ -1527,7 +1527,7 @@ void CreatedWindow::release_quartz_context(CreatedWindow *x) {
   quartz_gc = 0;
 }
 
-void CreatedWindow::begin_quartz_image(CGRect &rect, const Rectangle &c) {
+void fltk::begin_quartz_image(CGRect &rect, const Rectangle &c) {
   CGContextSaveGState(quartz_gc);
   CGAffineTransform mx = CGContextGetCTM(quartz_gc);
   CGRect r2 = rect;
@@ -1542,7 +1542,7 @@ void CreatedWindow::begin_quartz_image(CGRect &rect, const Rectangle &c) {
   rect.size.height = c.h();
 }
 
-void CreatedWindow::end_quartz_image() {
+void fltk::end_quartz_image() {
   CGContextRestoreGState(quartz_gc);
 }
 

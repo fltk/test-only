@@ -68,6 +68,10 @@ extern FL_API void	draw_into(CGImageRef xid);
 extern FL_API void	stop_drawing(CGImageRef xid);
 extern FL_API ATSFontRef xfont();
 
+extern FL_API void clear_quartz_clipping();
+extern FL_API void begin_quartz_image(CGRect&, const Rectangle&);
+extern FL_API void end_quartz_image();
+
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
 
@@ -92,12 +96,10 @@ public:
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
   // Quartz additions:
   CGContextRef gc;
-  static void fill_quartz_context(); 
-  static void clear_quartz_clipping();
-  static void release_quartz_context(CreatedWindow *x=0);
-  static void begin_quartz_image(CGRect&, const Rectangle&);
-  static void end_quartz_image();
 };
+
+extern FL_API void fill_quartz_context();
+extern FL_API void release_quartz_context(CreatedWindow *x=0);
 
 // convert xid <-> Window:
 //inline WindowPtr xid(const Window*w) {return CreatedWindow::find(w)->xid;}

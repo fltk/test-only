@@ -96,6 +96,10 @@ void fltk::scrollrect(const Rectangle& r, int dx, int dy,
 		       void (*draw_area)(void*, const Rectangle&), void* data)
 {
   if (!dx && !dy) return;
+#ifdef USE_QUARTZ
+  draw_area(data, r);
+  return;
+#endif
   if (dx <= -r.w() || dx >= r.w() || dy <= -r.h() || dy >= r.h()) {
     // no intersection of old an new scroll
     draw_area(data, r);
@@ -157,16 +161,7 @@ void fltk::scrollrect(const Rectangle& r, int dx, int dy,
 #elif USE_QUARTZ
   //+++ Quartz can not scroll an area! You must redraw from scratch or 
   //+++ store the content inside an image!
-  Rect src = { src_y, src_x, src_y+src_h, src_x+src_w };
-  Rect dst = { dest_y, dest_x, dest_y+src_h, dest_x+src_w };
-  static RGBColor bg = { 0xffff, 0xffff, 0xffff }; RGBBackColor( &bg );
-  static RGBColor fg = { 0x0000, 0x0000, 0x0000 }; RGBForeColor( &fg );
-  GrafPtr port; GetPort( &port );
-  CopyBits( GetPortBitMapForCopyBits(port),
-	    GetPortBitMapForCopyBits(port),
-	    &src, &dst, srcCopy, 0L);
-  // NYI: need to redraw areas that the source of BitBlt was bad due to
-  // overlapped windows, somehow similar to what X does.
+  ;
 #else
 #endif
   if (dx) draw_area(data, Rectangle(clip_x, dest_y, clip_w, src_h));

@@ -1,7 +1,7 @@
 
 BUILDING AND INSTALLING FLTK UNDER APPLE OS X
 
-    The support for OS X on FLTK2 at this time is spotty at best. FLTK1.1.6
+    The support for OS X on FLTK2 at this time is in alpha stage. FLTK1.1.6
     offers full support for OS X based on Carbon and QuickDraw. There is also
     a flag to compile a somewhat experimental Carbon/Quartz version of 
     FLTK1.1.6.
@@ -10,7 +10,7 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     Quartz by running the following commands from a shell window:
     
       > autoconf
-      > ./configure --enable-debug --disable-gl
+      > ./configure --enable-debug
       > make
       > test/demo
       
@@ -21,14 +21,15 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     be finished by the end of April.
   
     incomplete todo list:
-     o image support
-     o OpenGL
-     o Window and Subwindow switching
-     o clipping
-     o TextEditor with floating point positioning
-     o text conversion to utf8
-     o pie code does not draw pies (see 'valuator' test)
-     o arc code draws additional lines (see 'boxtype')
+     o  image support
+     o  Window and Subwindow switching
+     o  clipping
+     o  TextEditor with floating point positioning
+     o  pie code does not draw pies (see 'valuator' test)
+     o  arc code draws additional lines (see 'boxtype')
+     o  UTF8 support
+     o  closing a single mennu widow closes all menu windows
+     o  menubar window size is calculated wrong
 
     - Matthias Melcher
     

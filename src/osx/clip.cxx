@@ -75,9 +75,9 @@ void fl_restore_clip() {
       if ( r )
         SectRgn( portClip, r, portClip );
       Rect portRect; GetPortBounds(port, &portRect);
-      CreatedWindow::clear_quartz_clipping();
+      fltk::clear_quartz_clipping();
       ClipCGContextToRegion(quartz_gc, &portRect, portClip );
-      CreatedWindow::fill_quartz_context();
+      fltk::fill_quartz_context();
       DisposeRgn( portClip );
     }
   }
