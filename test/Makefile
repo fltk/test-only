@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.71 2004/02/05 08:05:36 spitzak Exp $"
+# "$Id: Makefile,v 1.72 2004/02/17 07:46:11 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -52,6 +52,7 @@ CPPFILES = \
 	browser.cxx \
 	button.cxx \
 	buttons.cxx \
+	callbacks.cxx \
 	checkers.cxx \
 	clock.cxx \
 	color_chooser.cxx \
@@ -60,6 +61,7 @@ CPPFILES = \
 	curve.cxx \
 	demo.cxx \
 	doublebuffer.cxx \
+	drawing.cxx \
 	editor.cxx \
 	file_chooser.cxx \
 	fonts.cxx \
@@ -67,6 +69,7 @@ CPPFILES = \
 	glpuzzle.cxx \
 	gl_overlay.cxx \
 	hello.cxx \
+	helloask.cxx \
 	iconize.cxx \
 	image.cxx \
 	input.cxx \
@@ -246,5 +249,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.71 2004/02/05 08:05:36 spitzak Exp $".
+# End of "$Id: Makefile,v 1.72 2004/02/17 07:46:11 spitzak Exp $".
 #

@@ -3,7 +3,6 @@
 #include <fltk/Window.h>
 #include <fltk/Widget.h>
 #include <fltk/run.h>
-
 using namespace fltk;
 
 /*! \addtogroup example2
@@ -19,10 +18,7 @@ close it by pressing the close box. By default this closes the
 window. Lets change the callback in the \ref hello "hello" program so
 this does something different:
 
-\dontinclude helloask.cxx
-\skip include
-\until run()
-\line }
+\include helloask.cxx
 
 The window is exactly the same, but when you press the close box it
 will display this question box:
@@ -83,13 +79,23 @@ window->callback(window_callback);
 
 After the window is created this line sets the callback function.
 
-\section buttons Button Callbacks
+\section buttons Making Widgets talk to each other
 
-This sample program does a different callback for different widgets:
+Here is a more realistic example where there are several widgets and
+they communicate with each other:
 
-\dontinclude button.cxx
-\skip include
-\until run()
-\line }
+\include callbacks.cxx
+
+Running this gives you a window containing a text input field, a
+slider, and several buttons:
+
+\image html callbacks.gif
+
+At the top of the program are several callback functions. These update
+the text field through the static pointer <tt>intinput</tt> and update
+the slider by using the user_data pointer to point to it (except for
+the slider_callback itself, which uses the Widget argument). See the
+next chapter for how to use classes to avoid such kludges to keep
+track of the pointers.
 
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.37 2004/02/05 07:21:21 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.38 2004/02/17 07:46:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -466,26 +466,7 @@ static float split(
   }
 }
 
-/*! \addtogroup font
-  \{ */
-
-/*!
-  This is the fancy string-drawing function that is used to draw all
-  labels in fltk. The string is formatted and aligned inside the
-  passed box (only the x/y are transformed, the width and height are
-  in device units). This also:
-  - Splits it at every \\t tab character and uses column_widths() to
-    set each section into a column.
-  - Breaks the text into lines at \\n characters. Word-wraps (if
-    flags has fltk::ALIGN_WRAP set) so the words fit in the
-    columns.
-  - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
-    prints that symbol instead. This is skipped if the flags has
-    fltk::RAW_LABEL set.
-  - Parses "&x" combinations to produce Microsoft style underscores,
-    unless RAW_LABEL flag is set.
-*/
-void fltk::drawtext(
+static void _drawtext(
     const char* str,	// the (multi-line) string
     int X, int Y, int W, int H,	// bounding box
     Flags flags
@@ -494,7 +475,6 @@ void fltk::drawtext(
   bgboxcolor = 0;
   normal_color = getcolor();
   int h = int(split(str, W, H, flags)+.5);
-  transform(X,Y);
   int dy;
   if (flags & ALIGN_BOTTOM) {
     dy = Y+H-h;
@@ -537,6 +517,52 @@ void fltk::drawtext(
   setcolor(normal_color);
 }
 
+/*! \addtogroup font
+  \{ */
+
+/*!
+  This is the fancy string-drawing function that is used to draw all
+  labels in fltk. The string is formatted and aligned inside the
+  passed box. Only X and Y are transformed, W and H are assummed to
+  be in the space used to select the font (the float version of this
+  function transforms all 4 coordinates). This also:
+  - Splits it at every \\t tab character and uses column_widths() to
+    set each section into a column.
+  - Breaks the text into lines at \\n characters. Word-wraps (if
+    flags has fltk::ALIGN_WRAP set) so the words fit in the
+    columns.
+  - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
+    prints that symbol instead. This is skipped if the flags has
+    fltk::RAW_LABEL set.
+  - Parses "&x" combinations to produce Microsoft style underscores,
+    unless RAW_LABEL flag is set.
+*/
+void fltk::drawtext(
+    const char* str,	// the (multi-line) string
+    int X, int Y, int W, int H,	// bounding box
+    Flags flags
+) {
+  if (!str || !*str) return; // speeds up very common widgets
+  transform(X,Y);
+  _drawtext(str, X,Y,W,H, flags);
+}
+
+/*! Format text into a box in the current coordinate space.
+  Warning: unpredictable effects if the current coordianates are
+  rotated from the ones in use when the font was chosen.
+*/
+void fltk::drawtext(
+    const char* str,
+    float X, float Y, float W, float H,
+    Flags flags
+) {
+  transform(X,Y);
+  transform_distance(W,H);
+  _drawtext(str,
+	    int(floorf(X)+.5), int(floorf(Y)+.5), int(W+.5), int(H+.5),
+	    flags);
+}
+
 /*!
   Measure the size of box necessary for drawtext() to draw the
   given string inside of it. \a w must be preset to the width
@@ -551,5 +577,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.37 2004/02/05 07:21:21 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.38 2004/02/17 07:46:02 spitzak Exp $".
 //

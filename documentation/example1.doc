@@ -10,10 +10,7 @@ using namespace fltk;
 
 Here is a very short fltk program:
 
-\dontinclude hello.cxx
-\skip include
-\until run
-\until }
+\include hello.cxx
 
 The resulting program will display the window below. You can quit the
 program by closing the window or pressing the ESCape key.

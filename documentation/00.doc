@@ -6,6 +6,10 @@
 
 /*! \defgroup example2 Example 2: Using Callbacks */
 
+/*! \defgroup example3 Example 3: Using Classes */
+
+/*! \defgroup example4 Example 4: Drawing Things */
+
 /*! \defgroup startup Functions to Call Before Showing a Window */
 
 /*! \defgroup execution */

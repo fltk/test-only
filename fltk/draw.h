@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.8 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: draw.h,v 1.9 2004/02/17 07:46:02 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -157,6 +157,7 @@ FL_API void drawtext(const char*, int n, float x, float y);
 // the label text formatter:
 FL_API void measure(const char*, int& w, int& h, Flags = 0);
 FL_API void drawtext(const char*, int,int,int,int, Flags);
+FL_API void drawtext(const char*, float,float,float,float, Flags);
 // set where \t characters go in label text formatter:
 extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
@@ -189,5 +190,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.8 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: draw.h,v 1.9 2004/02/17 07:46:02 spitzak Exp $".
 //
