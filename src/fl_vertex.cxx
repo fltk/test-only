@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.36 2005/01/26 22:35:28 matthiaswm Exp $"
+// "$Id: fl_vertex.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -259,18 +259,33 @@ void fltk::transform(int& x, int& y) {
 }
 
 /*! Replace the rectangle with a transformed version. Device-specific
-  code can use this to get a rectangle that matches the current
-  fltk transform. This only works correctly for 90 degree rotations,
-  for other transforms this will produce the bounding box of
-  the transformed rectangle. This is about the best that can be
-  done for device functions that don't handle rotation.
+  code can use this to get a rectangle that matches the current fltk
+  transform. This only works correctly for 90 degree rotations, for
+  other transforms this will produce an axis-aligned rectangle with
+  the same area (this is useful for inscribing circles, and is about
+  the best that can be done for device functions that don't handle
+  rotation.
 */
 void fltk::transform(Rectangle& R) {
-  if (m.trivial) {
+  if (m.trivial || R.empty()) {
     R.move(m.ix, m.iy);
     return;
   }
-  // maybe it should do the radius calculation addellipse() does?
+#if 1 // area+center-preserving transform:
+
+  float x = R.x()+R.w()*.5f;
+  float y = R.y()+R.h()*.5f;
+  transform(x,y);
+  float d1x,d1y; d1x = R.w(); d1y = 0; transform_distance(d1x, d1y);
+  float d2x,d2y; d2x = 0; d2y = R.h(); transform_distance(d2x, d2y);
+  float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
+  x = floorf(x - (w+1)/2);
+  float h = rintf(sqrtf(d1y*d1y+d2y*d2y));
+  y = floorf(y - (h+1)/2);
+  R.set(int(x),int(y),int(w),int(h));
+
+#else // return bounding box of transformed rectangle
+
   int x,r,t;
   t = int(rintf(R.x()*m.a + R.y()*m.c));
   x = r = t;
@@ -290,6 +305,8 @@ void fltk::transform(Rectangle& R) {
   t = int(rintf(R.r()*m.b + R.b()*m.d));
   if (t < y) y = t; else if (t > b) b = t;
   R.set(x,y,r-x,b-y);
+
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -313,7 +330,7 @@ void fltk::transform(Rectangle& R) {
 
 #if USE_CAIRO
 // Cairo has its own coordinate stack
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
 // Quartz has its own coordinate stack
 static bool first_point = true;
 namespace fltk { 
@@ -328,7 +345,9 @@ namespace fltk {
   }
 }
 #else
-// fltk point and line coordinte stack management
+// We have to store the path ourselves on X11 and Win32. Path is stored
+// as transformed points plus lengths of "loops".
+
 // typedef what the x,y fields in a point are:
 #if USE_X11
 typedef short COORD_T;
@@ -354,7 +373,13 @@ static void add_n_points(int n) {
   if (numpoints+n >= point_array_size) point_array_size = n;
   xpoint = (XPoint*)realloc((void*)xpoint,(point_array_size+1)*sizeof(XPoint));
 }
-#endif // coordinate stack management
+
+// The path also contins one dummy pie/chord piece:
+static Rectangle circle;
+static float circle_start, circle_end;
+enum {NONE=0, PIE, CHORD} circle_type;
+
+#endif // local path storage
 
 /*!
   Add a single vertex to the current path. (If you are familiar
@@ -365,7 +390,7 @@ void fltk::addvertex(float X, float Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -393,7 +418,7 @@ void fltk::addvertex(int X, int Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -427,7 +452,7 @@ void fltk::addvertices(int n, const float array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -475,7 +500,7 @@ void fltk::addvertices(int n, const int array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   const int* a = array[0];
   const int* e = a+2*n;
   for (; a < e; a += 2) {
@@ -524,7 +549,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
   for (; a < e; a += 2) {
     cairo_line_to(cc,a[0],a[1]);
   }
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -560,7 +585,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 void fltk::closepath() {
 #if USE_CAIRO
   cairo_close_path(cc);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   CGContextClosePath(quartz_gc);
 #else
   if (numpoints > loop_start+2) {
@@ -589,90 +614,70 @@ void fltk::closepath() {
 //
 // We keep track of exactly one "nice" circle:
 
-#if !USE_CAIRO && !USE_QUARTZ
-static int circle_x, circle_y, circle_w, circle_h;
-#endif
-
-/*!
-  Add a circle to the path. It is always a circle, irregardless of the
-  transform. The center is at x,y and the radius is r (r is not transformed
-  by the current transformation).
+/**
+  Add a pie-shaped closed piece to the path, inscribed in the
+  rectangle so if it is stroked with the default line width it exactly
+  fills the rectangle (this is slightly smaller than addarc() will
+  draw). If you want a full circle use addchord().
 
   This tries to take advantage of the primitive calls provided by
-  Xlib and GDI32. Currently you can only draw one circle per path.
+  Xlib and GDI32. Limitations are that you can only draw one per
+  path, that rotated coordinates don't work, and doing anything other
+  than fillpath() will produce unpredictable results.
+
+  \see addchord()
 */
-void fltk::addcircle(float x, float y, float r) {
-#if USE_CAIRO
+void fltk::addpie(const Rectangle& r, float start, float end) {
+#if USE_CAIRO || defined(__APPLE__) && !USE_X11
   closepath();
-  cairo_arc(cc,x,y,r,0,M_PI*2);
-  closepath();
-#elif USE_QUARTZ
-  closepath();
-  //+++ CGContextAddArc(quartz_gc, x, y, r, 0.0, 2*M_PI, 1);
-  addarc(x, y, r, r, 0, 360);
+  addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
+  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
   closepath();
 #else
-  transform(x,y);
-  float rt = r * sqrtf(fabsf(m.a*m.d-m.b*m.c));
-  circle_w = circle_h = int(rt*2 + .5);
-  circle_x = int(floorf(x - circle_w*.5f + .5f));
-  circle_y = int(floorf(y - circle_h*.5f + .5f));
+  circle = r; transform(circle);
+  circle_start = start;
+  circle_end = end;
+  circle_type = PIE;
 #endif
 }
 
-/*!
-  Add a closed ellipse to the path, inscribed in the x,y,w,h rectangle.
+/**
+  Add an isolated circular arc to the path. It is inscribed in the
+  rectangle so if it is stroked with the default line width it exactly
+  fills the rectangle (this is slightly smaller than addarc() will
+  draw). If the angles are 0 and 360 a closed circle is added.
 
   This tries to take advantage of the primitive calls provided by
-  Xlib and GDI32. Currently you can only draw one ellipse per path,
-  and if \a w and \a h are unequal it only draws the correct thing
-  for 90 degree rotations and reflections.
+  Xlib and GDI32. Limitations are that you can only draw one,
+  a rotated current transform does not work, and whether stroke
+  of a closed version draws the straight edge is indeterminate.
 */
-void fltk::addellipse(float x, float y, float w, float h) {
-#if USE_CAIRO
+void fltk::addchord(const Rectangle& r, float start, float end) {
+#if USE_CAIRO || defined(__APPLE__) && !USE_X11
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
   closepath();
-  addarc(x, y, w, h, 0, 360);
-  closepath();
-#elif USE_QUARTZ
-  /* //+++
-  closepath();
-  CGContextSaveGState(quartz_gc);
-  CGContextTranslateCTM(quartz_gc, x, y);
-  CGContextScaleCTM(quartz_gc, w-1.0f, h-1.0f);
-  CGContextAddArc(quartz_gc, 0, 0, 0.5, 0.0, 2*M_PI, 1);
-  CGContextRestoreGState(quartz_gc);
-  closepath();
-  */
-  addarc(x, y, w, h, 0, 360);
+  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
 #else
-  // Use X/Win32 drawing functions as best we can. Only works for 90
-  // degree rotations:
-  x += w/2;
-  y += h/2;
-  transform(x,y);
-  float d1x,d1y; d1x = w; d1y = 0; transform_distance(d1x, d1y);
-  float d2x,d2y; d2x = 0; d2y = h; transform_distance(d2x, d2y);
-  float rx = sqrtf(d1x*d1x+d2x*d2x)/2;
-  float ry = sqrtf(d1y*d1y+d2y*d2y)/2;
-  circle_w = int(rx*2 + .5f);
-  circle_x = int(floorf(x - circle_w*.5f + .5f));
-  circle_h = int(ry*2 + .5f);
-  circle_y = int(floorf(y - circle_h*.5f + .5f));
+  circle = r; transform(circle);
+  circle_start = start;
+  circle_end = end;
+  circle_type = CHORD;
 #endif
 }
 
 static inline void inline_newpath() {
 #if USE_CAIRO
   cairo_new_path(cc);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   first_point = true;
   CGContextBeginPath(quartz_gc);
 #else
-  numpoints = loop_start = loops = circle_w = 0;
+  numpoints = loop_start = loops = 0;
+  circle_type = NONE;
 #endif
 }
+
 /*! Clear the current "path". This is normally done by fltk::fillpath() or
   any other drawing command. */
 void fltk::newpath() {inline_newpath();}
@@ -687,7 +692,7 @@ void fltk::newpath() {inline_newpath();}
 void fltk::drawpoints() {
 #if USE_CAIRO
   // Not implemented!
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   // Not implemented!
 #elif USE_X11
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
@@ -706,13 +711,20 @@ void fltk::drawpoints() {
 void fltk::strokepath() {
 #if USE_CAIRO
   cairo_stroke(cc);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   CGContextStrokePath(quartz_gc);
-  first_point = true;
 #elif USE_X11
-  if (circle_w > 0)
-    XDrawArc(xdisplay, xwindow, gc,
-	     circle_x, circle_y, circle_w, circle_h, 0, 360*64);
+  if (circle_type) {
+    int A = int(circle_start*64);
+    int B = int(circle_end*64)-A;
+    const Rectangle& r = circle;
+    if (r.w() < 2 || r.h() < 2) {
+      if (!r.empty())
+	XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
+    } else {
+      XDrawArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
+    }
+  }
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
@@ -724,9 +736,18 @@ void fltk::strokepath() {
     XDrawLines(xdisplay, xwindow, gc, xpoint+loop_start, loop_size, 0);
 #elif defined(_WIN32)
   setpen();
-  if (circle_w > 0)
-    Arc(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
-	0,0, 0,0);
+  if (circle_type && circle_start != circle_end) {
+    float a1 = circle_start;
+    float a2 = circle_end;
+    const Rectangle& r = circle;
+    if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
+    if (a2 >= a1+360) a1 = a2 = 0;
+    int xa = r.center_x()+int(r.w()*cosf(a1*float(M_PI/180.0)));
+    int ya = r.center_y()-int(r.h()*sinf(a1*float(M_PI/180.0)));
+    int xb = r.center_x()+int(r.w()*cosf(a2*float(M_PI/180.0)));
+    int yb = r.center_y()-int(r.h()*sinf(a2*float(M_PI/180.0)));
+    Arc(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+  }
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
@@ -757,13 +778,22 @@ void fltk::strokepath() {
 void fltk::fillpath() {
 #if USE_CAIRO
   cairo_fill(cc);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   CGContextFillPath(quartz_gc);
-  first_point = true;
 #elif USE_X11
-  if (circle_w > 0)
-    XFillArc(xdisplay, xwindow, gc,
-	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
+  if (circle_type) {
+    int A = int(circle_start*64);
+    int B = int(circle_end*64)-A;
+    const Rectangle& r = circle;
+    XSetArcMode(xdisplay, gc, circle_type == PIE ? ArcPieSlice : ArcChord);
+    if (r.w() < 2 || r.h() < 2) {
+      if (!r.empty())
+	XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
+    } else {
+      XFillArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
+      XDrawArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
+    }
+  }
   if (loops) closepath();
   if (numpoints > 2) {
     if (loops > 2) {
@@ -781,9 +811,21 @@ void fltk::fillpath() {
 #elif defined(_WIN32)
   setbrush();
   setpen();
-  if (circle_w > 0)
-    Chord(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
-	  0,0, 0,0);
+  if (circle_type && circle_start != circle_end) {
+    float a1 = circle_start;
+    float a2 = circle_end;
+    const Rectangle& r = circle;
+    if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
+    if (a2 >= a1+360) a1 = a2 = 0;
+    int xa = r.center_x()+int(r.w()*cosf(a1*float(M_PI/180.0)));
+    int ya = r.center_y()-int(r.h()*sinf(a1*float(M_PI/180.0)));
+    int xb = r.center_x()+int(r.w()*cosf(a2*float(M_PI/180.0)));
+    int yb = r.center_y()-int(r.h()*sinf(a2*float(M_PI/180.0)));
+    if (circle_type == PIE)
+      Pie(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+    else
+      Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+  }
   if (loops) {
     closepath();
     PolyPolygon(dc, xpoint, loop, loops);
@@ -809,18 +851,27 @@ void fltk::fillstrokepath(Color color) {
   cairo_restore(cc);
   setcolor(color);
   cairo_stroke(cc);
-#elif USE_QUARTZ
+#elif defined(__APPLE__)
   closepath();
   uchar r, g, b; 
   split_color(color, r, g, b);
   CGContextSetRGBStrokeColor(quartz_gc, r/255.0f, g/255.0f, b/255.0f, 1.0);
   CGContextDrawPath(quartz_gc, kCGPathFillStroke);
   setcolor(color);
-  first_point = true;
+  inline_newpath();
 #elif USE_X11
-  if (circle_w > 0)
-    XFillArc(xdisplay, xwindow, gc,
-	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
+  if (circle_type && circle.w()>1 && circle.h()>1) {
+    int A = int(circle_start*64);
+    int B = int(circle_end*64)-A;
+    const Rectangle& r = circle;
+    XSetArcMode(xdisplay, gc, circle_type == PIE ? ArcPieSlice : ArcChord);
+    if (r.w() < 2 || r.h() < 2) {
+      if (!r.empty())
+	XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
+    } else {
+      XFillArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
+    }
+  }
   closepath();
   if (numpoints > 2) {
     int saved_points = numpoints;
@@ -843,9 +894,21 @@ void fltk::fillstrokepath(Color color) {
   setbrush();
   setcolor(color);
   setpen();
-  if (circle_w > 0)
-    Chord(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
-	  0,0, 0,0);
+  if (circle_type && circle_start != circle_end) {
+    float a1 = circle_start;
+    float a2 = circle_end;
+    const Rectangle& r = circle;
+    if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
+    if (a2 >= a1+360) a1 = a2 = 0;
+    int xa = r.center_x()+int(r.w()*cosf(a1*float(M_PI/180.0)));
+    int ya = r.center_y()-int(r.h()*sinf(a1*float(M_PI/180.0)));
+    int xb = r.center_x()+int(r.w()*cosf(a2*float(M_PI/180.0)));
+    int yb = r.center_y()-int(r.h()*sinf(a2*float(M_PI/180.0)));
+    if (circle_type == PIE)
+      Pie(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+    else
+      Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+  }
   if (loops) {
     closepath();
     PolyPolygon(dc, xpoint, loop, loops);
@@ -859,5 +922,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.36 2005/01/26 22:35:28 matthiaswm Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $".
 //

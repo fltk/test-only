@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.48 2005/01/25 09:49:11 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.49 2005/01/27 08:50:22 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -79,31 +79,38 @@ void Dial::draw() {
   if (type() == FILL) {
     if (damage()&DAMAGE_EXPOSE && box() == OVAL_BOX) draw_background();
     setcolor(color());
-    fillpie(r, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    addpie(r, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    fillpath();
     setcolor(fillcolor);
-    fillpie(r, 270-angle, 270-a1);
+    addpie(r, 270-angle, 270-a1);
+    fillpath();
     if (box() == OVAL_BOX) {
       setcolor(linecolor);
-      strokearc(r, 0, 360);
+      addchord(r, 0, 360);
+      strokepath();
     }
   } else {
     if (!(damage()&DAMAGE_ALL)) {
       // erase interior without erasing any box edge:
       Rectangle r1(r); r1.inset(1);
       setcolor(color());
-      fillarc(r1, 0, 360);
+      addchord(r1, 0, 360);
+      fillpath();
     }
     push_matrix();
     translate(r.center_x()-.5f, r.center_y()-.5f);
     scale(r.w()-1, r.h()-1);
     rotate(45-angle);
+    setcolor(fillcolor);
     if (type() == LINE) {
       static float v[4][2] = {{0,0}, {-0.04f,0}, {-0.25f,0.25f}, {0,0.04f}};
       addvertices(4,v);
     } else {
-      addcircle(-0.20f, 0.20f, 0.075f);
+      // get the nice circle code:
+      translate(-0.20f, 0.20f);
+      scale(.075f);
+      addchord(Rectangle(-1,-1,2,2),0,360);
     }
-    setcolor(fillcolor);
     fillstrokepath(linecolor);
     pop_matrix();
   }
@@ -111,7 +118,8 @@ void Dial::draw() {
     r.inset(2);
     setcolor(linecolor);
     line_style(DASH);
-    strokearc(r,0,360);
+    addchord(r,0,360);
+    strokepath();
     line_style(0);
   }
 }
@@ -166,5 +174,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.48 2005/01/25 09:49:11 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.49 2005/01/27 08:50:22 spitzak Exp $".
 //

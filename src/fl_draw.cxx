@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.53 2005/01/24 08:07:53 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.54 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -366,7 +366,7 @@ static float max_y;
 static float align(int first_segment,
 		   float x, float y, float w, float r) {
   if (r > max_x) max_x = r;
-  float dx; 
+  float dx;
   if (flags & ALIGN_RIGHT) {
     dx = w-(r-x);
     if ((flags & ALIGN_LEFT) && dx > 0) dx = 0;
@@ -396,8 +396,9 @@ static float align(int first_segment,
 
 bool fl_hide_underscore; // set by Choice
 
+// The amount returned here should exactly match the ascent returned by setsa:
 int Rectangle::baseline_y() const {
-  return y_+int(h_+getascent()-getdescent()+1)>>1;
+  return y_+(int(h_+getascent()-getdescent()+1)>>1);
 }
 
 static inline void setsa(int& spacing, int& ascent) {
@@ -420,7 +421,7 @@ static void wrap(
   float x = ix; // accumulated position if we don't wrap
   const char* word_end = start; // where to end it if we wrap
   const char* word_start = start; // where to start new segment
-  float width = 0; 		// width of current text
+  float width = 0;		// width of current text
   // start..p indicates current text segment being built
   int first_segment = segment_count;
 
@@ -575,7 +576,7 @@ static float split(
     if (!*p) {
       return max_y;
     } else if (*p == '\n') {
-      x = 0; y = max_y; 
+      x = 0; y = max_y;
       column = column_widths_;
       current_column = 0;
       ::flags = flags;
@@ -695,5 +696,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.53 2005/01/24 08:07:53 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.54 2005/01/27 08:50:40 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.20 2005/01/25 09:49:13 spitzak Exp $"
+// "$Id: arc.cxx,v 1.21 2005/01/27 08:50:41 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -45,18 +45,21 @@ class Drawing : public fltk::Widget {
     fltk::addarc(args[0],args[1],args[2],args[3],args[4],args[5]);
     fltk::closepath();
     fltk::addarc(120,120,40,40,0,-360);
-    fltk::addellipse(20,20,args[2],args[3]); // hardware circle
     fltk::setcolor(fltk::GRAY33);
     fltk::fillstrokepath(fltk::WHITE);
+    // draw a hardware circle to see how well rotations match:
+    fltk::setcolor(fltk::GRAY33);
+    fltk::addchord(Rectangle(20,20,args[2]+1,args[3]+1),args[4],args[5]);
+    fltk::fillstrokepath(fltk::WHITE);
+    // now draw non-rotated hardware circle to check if it inscribes:
     fltk::pop_matrix();
     fltk::setcolor(fltk::GRAY40);
     fltk::fillrect(fltk::Rectangle(10,270-args[3],args[2],args[3]));
     fltk::setcolor(fltk::GRAY90);
     fltk::strokerect(fltk::Rectangle(10,270-args[3],args[2],args[3]));
     fltk::setcolor(fltk::GRAY10);
-    fltk::fillarc(fltk::Rectangle(10,270-args[3],args[2],args[3]),args[4],args[5]);
-    fltk::setcolor(fltk::GRAY90);
-    fltk::strokearc(fltk::Rectangle(10,270-args[3],args[2],args[3]),args[4],args[5]);
+    fltk::addchord(fltk::Rectangle(10,270-args[3],args[2],args[3]),args[4],args[5]);
+    fltk::fillstrokepath(fltk::GRAY90);
     fltk::pop_clip();
   }
 public:
@@ -100,5 +103,5 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.20 2005/01/25 09:49:13 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.21 2005/01/27 08:50:41 spitzak Exp $".
 //

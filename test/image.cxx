@@ -35,7 +35,6 @@
 #include <fltk/draw.h>
 
 #include <config.h>
-#define USE_X11 0
 #if USE_X11
 #include "list_visuals.cxx"
 #include <fltk/visual.h>
@@ -276,5 +275,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.26 2005/01/25 09:49:13 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.27 2005/01/27 08:50:42 spitzak Exp $".
 //

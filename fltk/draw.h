@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.14 2005/01/25 09:49:10 spitzak Exp $"
+// "$Id: draw.h,v 1.15 2005/01/27 08:50:21 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -99,8 +99,8 @@ FL_API void addvertices(int n, const int v[][2]);
 FL_API void addvertices_transformed(int n, const float v[][2]);
 FL_API void addcurve(float,float, float,float, float,float, float,float);
 FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
-FL_API void addcircle(float x, float y, float r);
-FL_API void addellipse(float x, float y, float w, float h);
+FL_API void addpie(const Rectangle& r, float a, float a2);
+FL_API void addchord(const Rectangle& r,float a,float a2);
 FL_API void closepath();
 
 FL_API void drawpoints();
@@ -117,12 +117,6 @@ FL_API void drawpoint(int x, int y);
 FL_API void drawpoint(float x, float y);
 FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
-FL_API void arci(const Rectangle&, float, float, int what, Color=0);
-enum {FILLPIE, FILLARC, STROKEARC, FILLSTROKEARC};
-inline void fillpie(const Rectangle& r, float a, float a2) {arci(r,a,a2,FILLPIE);}
-inline void fillarc(const Rectangle& r,float a,float a2) {arci(r,a,a2,FILLARC);}
-inline void strokearc(const Rectangle& r,float a,float a2) {arci(r,a,a2,STROKEARC);}
-inline void fillstrokearc(const Rectangle& r, float a, float a2, Color c) {arci(r,a,a2,FILLSTROKEARC,c);}
 /*! \} */
 
 /*! \addtogroup font
@@ -207,5 +201,5 @@ FL_API void overlay_clear();
 #endif
 
 //
-// End of "$Id: draw.h,v 1.14 2005/01/25 09:49:10 spitzak Exp $".
+// End of "$Id: draw.h,v 1.15 2005/01/27 08:50:21 spitzak Exp $".
 //

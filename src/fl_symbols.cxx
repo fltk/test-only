@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.49 2005/01/24 08:07:56 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.50 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -539,9 +539,9 @@ static void draw_bararrow(Color col)
   BP; vv(-0.8f,1.0f); vv(-0.3f,1.0f); vv(-0.3f,-1.0f); vv(-0.8f,-1.0f); EF(col);
 }
 
-static void draw_doublebar(Color col) { 
+static void draw_doublebar(Color col) {
   rectangle(-0.6f, -1.0f, -0.1f, 1.0f,col);
-  rectangle(0.1f, -1.0f, 0.6f, 1.0f,col); 
+  rectangle(0.1f, -1.0f, 0.6f, 1.0f,col);
 }
 
 static void draw_arrow01(Color col)
@@ -591,7 +591,9 @@ static void draw_arrow1bar(Color col)
 }
 
 static void draw_circle(Color col) {
-  BP; addellipse(-1,-1,2,2); EF(col);
+  setcolor(col);
+  addchord(Rectangle(-1,-1,2,2),0,360);
+  fillpath();
 }
 
 static void draw_line(Color col)
@@ -657,5 +659,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.49 2005/01/24 08:07:56 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.50 2005/01/27 08:50:40 spitzak Exp $".
 //

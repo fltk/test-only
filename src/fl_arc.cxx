@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.16 2005/01/25 20:11:45 matthiaswm Exp $"
+// "$Id: fl_arc.cxx,v 1.17 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -62,13 +62,22 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
   float X = w/2*cosf(angle);
   float Y = -h/2*sinf(angle);
 
+  if (!w || !h) {
+    float a2 = end*float(M_PI/180);
+    float X2 = w/2*cosf(a2);
+    float Y2 = -h/2*sinf(a2);
+    addvertex(x+X,y+Y);
+    addvertex(x+X2,y+Y2);
+    return;
+  }
+
 #define MAXPOINTS 100
   float points[MAXPOINTS][2];
   float* p = points[0];
   *p++ = float(x+X); *p++ = float(y+Y);
 
   // Maximum arc length to approximate with chord with error <= 0.125
-  
+
   float epsilon; {
     // calculate area of parallelogram defined by diameters
     float dx1,dy1; dx1=w; dy1=0; transform_distance(dx1,dy1);
@@ -97,7 +106,7 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
     const float m10 = -sin_e*h/w;
     do {
       float Xnew = m00*X + m01*Y;
-                Y = m10*X + m11*Y;
+		Y = m10*X + m11*Y;
 		X = Xnew;
       *p++ = x + X;
       *p++ = y + Y;
@@ -114,5 +123,5 @@ void fltk::addcircle(float x,float y,float r) {
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.16 2005/01/25 20:11:45 matthiaswm Exp $".
+// End of "$Id: fl_arc.cxx,v 1.17 2005/01/27 08:50:40 spitzak Exp $".
 //

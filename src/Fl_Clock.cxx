@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.38 2004/07/04 17:28:31 laza2000 Exp $"
+// "$Id: Fl_Clock.cxx,v 1.39 2005/01/27 08:50:21 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -91,13 +91,14 @@ static void rect(float x, float y, float w, float h) {
 }
 
 void ClockOutput::draw(int x, int y, int w, int h) {
+  if (type() == ROUND) {
+    addchord(Rectangle(x,y,w,h),0,360);
+    setcolor(color());
+    fillstrokepath(BLACK);
+  }
   push_matrix();
   translate(x+w/2.0f-.5f, y+h/2.0f-.5f);
   scale((w-1)/28.0f, (h-1)/28.0f);
-  if (type() == ROUND) {
-    addcircle(0,0,14);
-    setcolor(color()); fillstrokepath(BLACK);
-  }
   // draw the shadows:
   push_matrix();
   translate(0.60f, 0.60f);
@@ -199,5 +200,5 @@ ClockOutput::ClockOutput(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.38 2004/07/04 17:28:31 laza2000 Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.39 2005/01/27 08:50:21 spitzak Exp $".
 //

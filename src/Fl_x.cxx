@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.204 2005/01/24 08:34:33 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.205 2005/01/27 08:50:22 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -759,14 +759,16 @@ int Monitor::list(const Monitor** p) {
 #if !USE_XINERAMA
     // Guess for dual monitors placed next to each other:
     if (monitors->w() > 2*monitors->h()) {
+      int w = monitors[0].w()/2;
       num_monitors = 2;
       monitors = new Monitor[2];
       monitors[0] = monitors[1] = all();
-      monitors[0].w_ = monitors[1].x_ = monitors[0].w_/2;
-      monitors[1].w_ -= monitors[1].x_;
-      monitors[0].work.w_ = monitors[0].w_-monitors[0].work.x_;
-      monitors[1].work.w_ -= monitors[0].work.w_;
-      monitors[1].work.x_ = monitors[1].x_;
+      monitors[0].w(w);
+      monitors[1].x(w);
+      monitors[1].move_r(-w);
+      monitors[0].work.w(w-monitors[0].work.x());
+      monitors[1].work.x(w);
+      monitors[1].work.move_r(-monitors[0].work.w());
     }
 #else
   DONE:;
@@ -2313,5 +2315,5 @@ void Window::layout() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.204 2005/01/24 08:34:33 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.205 2005/01/27 08:50:22 spitzak Exp $".
 //

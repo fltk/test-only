@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.36 2005/01/25 09:49:13 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -52,19 +52,27 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
   int d = w <= h ? w : h;
   if (d <= 1) return;
   setcolor(color);
-  int what = (which==FILL ? FILLPIE : STROKEARC);
+
   Rectangle r1(x+w-d, y, d, d);
+  if (which >= CLOSED) {
+    addpie(r1, w<=h ? 0 : -90, w<=h ? 180 : 90);
+  } else if (which == UPPER_LEFT) {
+    addpie(r1, 45, w<=h ? 180 : 90);
+  } else { // LOWER_RIGHT
+    addpie(r1, w<=h ? 360 : 270, 360+45);
+  }
+  which==FILL ? fillpath() : strokepath();
+
   Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
-    arci(r1, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
-    arci(r2, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
+    addpie(r2, w<=h ? 180 : 90, w<=h ? 360 : 270);
   } else if (which == UPPER_LEFT) {
-    arci(r1, 45, w<=h ? 180 : 90, what);
-    arci(r2, w<=h ? 180 : 90, 225, what);
+    addpie(r2, w<=h ? 180 : 90, 225);
   } else { // LOWER_RIGHT
-    arci(r1, w<=h ? 360 : 270, 360+45, what);
-    arci(r2, 225, w<=h ? 360 : 270, what);
+    addpie(r2, 225, w<=h ? 360 : 270);
   }
+  which==FILL ? fillpath() : strokepath();
+
   if (which == FILL) {
     if (w < h)
       fillrect(Rectangle(x, y+d/2, w, h-(d&-2)));
@@ -125,5 +133,5 @@ static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.36 2005/01/25 09:49:13 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $".
 //

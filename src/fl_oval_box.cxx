@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.27 2005/01/25 09:49:13 spitzak Exp $"
+// "$Id: fl_oval_box.cxx,v 1.28 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,8 @@ public:
   void _draw(const Rectangle& r, const Style* style, Flags f) const {
     Color bg, fg; style->boxcolors(f,bg,fg);
     setcolor(bg);
-    fillstrokearc(r, 0, 360, fg);
+    addchord(r, 0, 360);
+    fillstrokepath(fg);
   }
   const BoxInfo* boxinfo() const {
     static BoxInfo b = {1,1,2,2,0};
@@ -56,11 +57,13 @@ public:
   void _draw(const Rectangle& r, const Style* style, Flags f) const {
     Rectangle r1(r); r1.move_x(3); r1.move_y(3);
     setcolor(GRAY33);
-    fillarc(r, 0, 360);
+    addchord(r, 0, 360);
+    fillpath();
     r1.move(-3,-3);
     Color bg, fg; style->boxcolors(f,bg,fg);
     setcolor(bg);
-    fillstrokearc(r, 0, 360, fg);
+    addchord(r, 0, 360);
+    fillstrokepath(fg);
   }
   const BoxInfo* boxinfo() const {
     static BoxInfo b = {1,1,5,5,0};
@@ -79,7 +82,8 @@ public:
   void _draw(const Rectangle& r, const Style* style, Flags f) const {
     Color bg, fg; style->boxcolors(f,bg,fg);
     setcolor(bg);
-    fillarc(r, 0, 360);
+    addchord(r, 0, 360);
+    fillpath();
   }
   OvalFlatBox(const char* n) : Box(n) {}
 };
@@ -91,5 +95,5 @@ Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.27 2005/01/25 09:49:13 spitzak Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.28 2005/01/27 08:50:40 spitzak Exp $".
 //

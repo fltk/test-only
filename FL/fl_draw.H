@@ -119,10 +119,9 @@ inline void fl_yxline(int x, int y, int y1, int x2, int y3) {
   fltk::strokepath();
 }
 
-// circular lines and pie slices (code in fl_arci.C):
-inline void fl_arc(int x,int y,int w,int h,float a,float a2) {fltk::fillarc(fltk::Rectangle(x,y,w,h),a,a2);}
-#define fl_pie		fltk::fillpie
-#define fl_chord	fltk::fillarc
+inline void fl_arc(int x,int y,int w,int h,float a,float a2) {fltk::addchord(fltk::Rectangle(x,y,w,h),a,a2); fltk::strokepath();}
+inline void fl_pie(int x,int y,int w,int h,float a,float a2) {fltk::addpie(fltk::Rectangle(x,y,w,h),a,a2); fltk::fillpath();}
+inline void fl_chord(int x,int y,int w,int h,float a,float a2) {fltk::addchord(fltk::Rectangle(x,y,w,h),a,a2); fltk::fillpath();}
 
 // scalable drawing code (code in fl_vertex.C and fl_arc.C):
 #define fl_push_matrix	fltk::push_matrix
@@ -201,5 +200,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.37 2005/01/24 08:06:49 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.38 2005/01/27 08:50:20 spitzak Exp $".
 //

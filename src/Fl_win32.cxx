@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.243 2005/01/25 09:49:12 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.244 2005/01/27 08:50:22 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -548,8 +548,8 @@ int Monitor::list(const Monitor** p) {
       monitors[1].x(w);
       monitors[1].move_r(-w);
       monitors[0].work.w(w-monitors[0].work.x());
-      monitors[1].work.move_w(-monitors[0].work.w());
       monitors[1].work.x(w);
+      monitors[1].work.move_r(-monitors[0].work.w());
     }
 #endif
 //      printf("Got %d monitors:\n", num_monitors);
@@ -2377,5 +2377,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.243 2005/01/25 09:49:12 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.244 2005/01/27 08:50:22 spitzak Exp $".
 //

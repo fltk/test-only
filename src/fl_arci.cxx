@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.25 2005/01/26 22:35:27 matthiaswm Exp $"
+// "$Id: fl_arci.cxx,v 1.26 2005/01/27 08:50:40 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -21,6 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#if 0 // THIS FILE IS NO LONGER USED BY FLTK!
 #include <config.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
@@ -170,6 +171,8 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
   so this saves time.
 */
 
+#endif
+
 //
-// End of "$Id: fl_arci.cxx,v 1.25 2005/01/26 22:35:27 matthiaswm Exp $".
+// End of "$Id: fl_arci.cxx,v 1.26 2005/01/27 08:50:40 spitzak Exp $".
 //
