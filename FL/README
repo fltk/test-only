@@ -1,0 +1,7 @@
+These header files are for back-compatability with fltk1.x.
+
+Most fltk1.x programs should compile with no changes by using these
+header files and linking with the fltk2.0 library.
+
+Do not use these header files in new programs. Use the ones in the
+fltk directory.
