@@ -149,7 +149,7 @@ static int CALLBACK enumcbA(CONST LOGFONT* lplf,
   // we need to do something about different encodings of the same font
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
-  if (lplf->lfCharSet != ANSI_CHARSET) return 1;
+  //if (lplf->lfCharSet != ANSI_CHARSET) return 1;
   const char *name = lplf->lfFaceName;
   if (num_fonts >= array_size) {
     array_size = array_size ? 2*array_size : 128;
@@ -170,6 +170,7 @@ int fltk::list_fonts(Font**& arrayp) {
   } else {
     LOGFONT lf;
     memset(&lf, 0, sizeof(lf));
+    lf.lfCharSet = DEFAULT_CHARSET;
     EnumFontFamiliesExA(dc, &lf, (FONTENUMPROCA)enumcbA, 0, 0);
   }
   ReleaseDC(0, dc);
