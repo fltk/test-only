@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.14 1999/04/01 01:23:29 carl Exp $"
+# "$Id: Makefile,v 1.15 1999/09/25 18:29:02 vincent Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,7 +25,7 @@
 
 SHELL=/bin/sh
 
-DIRS	=	src fluid test
+DIRS	=	src fluid test test/plugins test/fltk.plugins
 
 all: makeinclude
 	@for dir in $(DIRS); do\
@@ -72,5 +72,5 @@ configure: configure.in
 
 
 #
-# End of "$Id: Makefile,v 1.14 1999/04/01 01:23:29 carl Exp $".
+# End of "$Id: Makefile,v 1.15 1999/09/25 18:29:02 vincent Exp $".
 #

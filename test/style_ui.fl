@@ -9,7 +9,7 @@ snap 3
 Function {make_window()} {open
 } {
   Fl_Window {} {open
-    xywh {404 540 530 405} visible
+    xywh {393 299 530 405} visible
   } {
     Fl_Menu_Bar {} {open
       xywh {0 0 535 30}
@@ -145,7 +145,7 @@ if (f) browser->load(f);}
       code0 {o->value("This is an output text field");}
     }
     Fl_Check_Button check1 {
-      label check1 selected
+      label check1
       xywh {390 35 85 25}
     }
     Fl_Check_Button {} {
@@ -192,6 +192,13 @@ if (f) browser->load(f);}
     Fl_Button cancel_button {
       label cancel
       xywh {400 350 120 30}
+    }
+    Fl_Button {} {
+      label {Load style plugins}
+      callback {fl_read_style_plugins();
+Fl::redraw();} selected
+      xywh {400 250 120 25}
+      code0 {\#include <FL/Fl_Style_Util.H>}
     }
   }
 } 

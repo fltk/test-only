@@ -1,7 +1,7 @@
 #
-# "$Id: Makefile,v 1.9 1999/09/25 18:29:10 vincent Exp $"
+# "$Id: Makefile,v 1.1 1999/09/25 18:29:09 vincent Exp $"
 #
-# Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
+# FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
 # Copyright 1998-1999 by Bill Spitzak and others.
 #
@@ -23,29 +23,40 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-PROGRAM = essai.fluidplugin
+all : essai.fltk-style-plugin essai.fltk-theme-plugin
+
+PROGRAM = essai.fltk-style-plugin
+PROGRAM2 = essai.fltk-theme-plugin
 
 CPPFILES = \
-	essai_plugin.cxx
+	style_plugin.cxx
+
+CPPFILES2 = \
+	theme_plugin.cxx
 
 ################################################################
 
 OBJECTS = $(CPPFILES:.cxx=.o)
+OBJECTS2 = $(CPPFILES2:.cxx=.o)
 
-INCLUDES = -I../../fluid -I../..
+INCLUDES = -I../..
 
 include ../../makeinclude
 
 .SUFFIXES : .cxx .c .o
 
 .cxx.o :
-	$(CXX) -DFL_DLL -DFLUID_PLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
+	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
 	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
 
-win32 : $(OBJECTS) ../../lib/$(LIBNAME)
-	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 -lfluid $(GLDLIBS) --output-def essai_plugin.def
+$(PROGRAM2) : $(OBJECTS2) ../../lib/$(LIBNAME)
+	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2)
+
+win32 : $(OBJECTS) $(OBJECTS2) ../../lib/$(LIBNAME)
+	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 $(GLDLIBS)
+	dllwrap $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2) -L../../lib -lfltkdll.2 $(GLDLIBS)
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
@@ -56,5 +67,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.9 1999/09/25 18:29:10 vincent Exp $".
+# End of "$Id: Makefile,v 1.1 1999/09/25 18:29:09 vincent Exp $".
 #

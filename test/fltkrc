@@ -1,0 +1,13 @@
+#
+# config file for the minimalistic fltk conf reader plugin
+#
+
+[window]
+box		= imagebox images/coucou.png	# This is an example 
+						# of boxtype plugin
+
+[global]
+box		= thin_up_box			# Normal box
+color		= #80c0c0			# Color in hex
+highlight_color	= #80c0c0
+label_color	= 255, 255, 255			# Color in r, g, b

@@ -16,6 +16,7 @@ extern Fl_Browser *browser;
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Button.H>
 extern Fl_Button *cancel_button;
+#include <FL/Fl_Style_Util.H>
 Fl_Window* make_window();
 extern Fl_Menu_Item menu_[];
 #endif

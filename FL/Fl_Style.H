@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.2 1999/09/18 22:55:31 vincent Exp $"
+// "$Id: Fl_Style.H,v 1.3 1999/09/25 18:29:03 vincent Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -57,7 +57,7 @@ FL_EXPORT struct Fl_Style {
   Fl_Style*	child;
   Fl_Style*	next;
   Fl_Style**	previous;
-  int		mbf;		// Which entries are different from the parent's ones
+  int		mbf;	// Which entries are different from the parent's ones
 
   void setp(const void**, const void*);
   void setp(const void**, const void*, int mask);
@@ -100,3 +100,7 @@ enum {	// glyph types
 };
 
 #endif
+
+//
+// End of "$Id: Fl_Style.H,v 1.3 1999/09/25 18:29:03 vincent Exp $".
+//

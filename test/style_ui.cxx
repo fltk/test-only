@@ -68,6 +68,11 @@ static void cb_OK(Fl_Return_Button*, void*) {
 
 Fl_Button *cancel_button=(Fl_Button *)0;
 
+static void cb_Load(Fl_Button*, void*) {
+  fl_read_style_plugins();
+Fl::redraw();
+}
+
 Fl_Window* make_window() {
   Fl_Window* w;
   { Fl_Window* o = new Fl_Window(530, 405);
@@ -106,6 +111,9 @@ Fl_Window* make_window() {
       o->callback((Fl_Callback*)cb_OK);
     }
     cancel_button = new Fl_Button(400, 350, 120, 30, "cancel");
+    { Fl_Button* o = new Fl_Button(400, 250, 120, 25, "Load style plugins");
+      o->callback((Fl_Callback*)cb_Load);
+    }
     o->end();
   }
   return w;

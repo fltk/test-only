@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.3 1999/09/24 16:03:41 vincent Exp $"
+// "$Id: Fl_Boxtype.H,v 1.4 1999/09/25 18:29:03 vincent Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -115,3 +115,7 @@ FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_border_frame;
 #endif
 
 #endif
+
+//
+// End of "$Id: Fl_Boxtype.H,v 1.4 1999/09/25 18:29:03 vincent Exp $".
+//
