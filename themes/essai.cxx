@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.6 1999/11/08 22:22:03 carl Exp $"
+// "$Id: essai.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -106,7 +106,8 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* normal_b, char* down_b,
   dx_=dy_=0; dw_=dh_=0;
 }
 
-extern "C" fltk_theme(int, char**);
+extern "C" int fltk_theme(int, char**);
+
 int fltk_theme(int, char** argv) {
   Fl_Style::revert(); // revert to FLTK default styles
   fl_background(0xD0D0E000); // it would be nice to figure out color from image
@@ -122,7 +123,12 @@ int fltk_theme(int, char** argv) {
     s->set_highlight_label_color(FL_BLACK);
     s->set_box(flat2);
   }
+  if ((s = Fl_Style::find("menu bar"))) {
+    s->set_highlight_color(FL_GRAY); // required for highlighting
+    s->set_box(flat2);
+  }
   if ((s = Fl_Style::find("menu title"))) {
+    s->set_highlight_color(FL_GRAY); // required for highlighting
     s->set_highlight_label_color(FL_BLACK);
     s->set_selection_text_color(FL_BLACK);
     s->set_box(flat2);
@@ -140,5 +146,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.6 1999/11/08 22:22:03 carl Exp $".
+// End of "$Id: essai.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $".
 //

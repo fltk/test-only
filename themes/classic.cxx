@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.5 1999/11/08 22:22:03 carl Exp $"
+// "$Id: classic.cxx,v 1.6 1999/11/10 04:49:00 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -36,7 +36,8 @@
 #include <stdio.h>
 #include <string.h>
 
-extern "C" fltk_theme(int, char**);
+extern "C" int fltk_theme(int, char**);
+
 int fltk_theme(int, char**) {
   Fl_Style::revert(); // revert to FLTK default styles
 
@@ -79,5 +80,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.5 1999/11/08 22:22:03 carl Exp $".
+// End of "$Id: classic.cxx,v 1.6 1999/11/10 04:49:00 carl Exp $".
 //

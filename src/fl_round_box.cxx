@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.12 1999/11/01 02:21:39 carl Exp $"
+// "$Id: fl_round_box.cxx,v 1.13 1999/11/10 04:48:56 carl Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -73,10 +73,6 @@ static void draw(int which, int x,int y,int w,int h, Fl_Color color)
   }
 }
 
-FL_EXPORT extern uchar fl_active_ramp[24];
-FL_EXPORT extern uchar fl_inactive_ramp[24];
-FL_EXPORT void fl_to_inactive(const char* s, char* to);
-
 static void round_draw(Fl_Boxtype b, int x, int y, int w, int h,
 		       Fl_Color c, Fl_Flags f)
 {
@@ -88,12 +84,11 @@ static void round_draw(Fl_Boxtype b, int x, int y, int w, int h,
     if (w > 2*d && h > 2*(d-1)) draw(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
   }
   const char* s = (const char*)(b->data);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
-    Fl_Color c1 = *s + (FL_GRAY_RAMP-'A'); s += 4;
-    Fl_Color c2 = *t + (FL_GRAY_RAMP-'A'); t += 4;
+    Fl_Color c1 = fl_inactive(*s + (FL_GRAY_RAMP-'A'), f); s += 4;
+    Fl_Color c2 = fl_inactive(*t + (FL_GRAY_RAMP-'A'), f); t += 4;
     draw(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
     draw(UPPER_LEFT,  x,   y,   w,   h, c1);
     draw(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
@@ -117,5 +112,5 @@ const Fl_Boxtype_ fl_round_down_box = {
 };
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.12 1999/11/01 02:21:39 carl Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.13 1999/11/10 04:48:56 carl Exp $".
 //

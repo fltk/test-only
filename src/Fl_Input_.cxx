@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.31 1999/11/03 09:18:31 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.32 1999/11/10 04:48:50 carl Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -151,16 +151,17 @@ void Fl_Input_::setfont() const {
 
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
+Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   if (Fl::focus()!=this && !size()) {
     // we have to erase it if cursor was there
-    fl_color(color());
+    fl_color(fl_inactive(color(), fl));
     fl_rectf(X, Y, W, H);
     return;
   }
 
   if (damage() & FL_DAMAGE_ALL) {
     // erase background
-    fl_color(color());
+    fl_color(fl_inactive(color(), fl));
     fl_rectf(X, Y, W, H);
   }
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
@@ -226,7 +227,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   fl_clip(X, Y, W, H);
-  Fl_Color textcolor = active_r() ? text_color() : fl_inactive(text_color());
+  Fl_Color textcolor = fl_inactive(text_color(), fl);
 
   p = value();
   // visit each line and draw it:
@@ -246,7 +247,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       int x1 = -xscroll_;
       if (p < pp) x1 += int(expandpos(p, pp, buf, 0));
       // erase it:
-      fl_color(color());
+      fl_color(fl_inactive(color(), fl));
       fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
@@ -301,7 +302,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   if (!(damage()&FL_DAMAGE_ALL) && type()==FL_MULTILINE_INPUT && ypos<H
       && (!erase_cursor_only || p <= value()+mu_p)) {
     if (ypos < 0) ypos = 0;
-    fl_color(color());
+    fl_color(fl_inactive(color(), fl));
     fl_rectf(X, Y+ypos, W, H-ypos);
   }
 
@@ -741,5 +742,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.31 1999/11/03 09:18:31 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.32 1999/11/10 04:48:50 carl Exp $".
 //

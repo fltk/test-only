@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.10 1999/11/08 22:21:44 carl Exp $"
+// "$Id: Fl_Style.H,v 1.11 1999/11/10 04:48:43 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -128,11 +128,12 @@ enum Fl_Glyphtype {	// glyph types
 };
 
 FL_API int fl_kde1();
+FL_API int fl_kde1_colors();
 FL_API int fl_motif();
 FL_API int fl_windows();
 
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.10 1999/11/08 22:21:44 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.11 1999/11/10 04:48:43 carl Exp $".
 //

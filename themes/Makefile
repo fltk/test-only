@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.7 1999/11/08 22:22:03 carl Exp $"
+# "$Id: Makefile,v 1.8 1999/11/10 04:49:00 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,8 +23,8 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai motif classic windows Alternative KDE1
-STYLES=Alternative
+THEMES=essai motif classic windows Alternative KDE1 KDE1_colors
+SCHEMES=Alternative KDE1 Classic Motif OldMotif Windows Essai
 
 all : $(THEMES)
 
@@ -45,23 +45,23 @@ include ../makeinclude
 essai : essai.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -ljpeg
 
-motif.o : ../src/fl_motif.cxx
-motif : motif.o ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+motif : motif.o fl_motif.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_motif.po
 
 classic : classic.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
-windows.o : ../src/fl_windows.cxx
-windows : windows.o ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+windows : windows.o fl_windows.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_windows.po
 
 Alternative : Alternative.o ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< 
 
-KDE1.o : ../src/fl_kde1.cxx 
-KDE1 : KDE1.o fl_set_fonts.po fl_motif.po fl_windows.po ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_set_fonts.po fl_motif.po fl_windows.po
+KDE1 : KDE1.o fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po
+
+KDE1_colors : KDE1_colors.o fl_kde1_colors.po fl_set_fonts.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1_colors.po fl_set_fonts.po
 
 win32 : $(OBJECTS) $(OBJECTS2) ../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltkdll.2 $(GLDLIBS)
@@ -77,7 +77,7 @@ install :
 	@-mkdir -p $(libdir)/fltk
 	@-mkdir -p $(libdir)/fltk/schemes
 	@-mkdir -p $(libdir)/fltk/themes
-	(cd ../config/schemes; cp -f $(STYLES) $(libdir)/fltk/schemes)
+	(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
 	cp -f $(THEMES) $(libdir)/fltk/themes
 
 #depend:
@@ -85,5 +85,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.7 1999/11/08 22:22:03 carl Exp $".
+# End of "$Id: Makefile,v 1.8 1999/11/10 04:49:00 carl Exp $".
 #

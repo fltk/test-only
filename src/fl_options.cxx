@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.16 1999/11/08 22:21:57 carl Exp $"
+// "$Id: fl_options.cxx,v 1.17 1999/11/10 04:48:55 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -378,26 +378,24 @@ static void style_clear(Fl_Style *s) {
   s->parent = p;
 }
 
-extern Fl_Boxtype fl_popup_box;
 extern int fl_extra_menu_spacing;
 
 void Fl_Style::revert() {
   fl_background((Fl_Color)0xc0c0c000);
 
-  fl_popup_box = FL_UP_BOX;
   fl_extra_menu_spacing = 0;
 
-  fl_normal_box.data = "2AAXXHHTT";
+  fl_normal_box.data = "2AAXXIIUU";
   fl_normal_box.dx_ = 2;
   fl_normal_box.dy_ = 2;
   fl_normal_box.dw_ = 4;
   fl_normal_box.dh_ = 4;
-  fl_up_box.data = "2AAXXHHTT";
+  fl_up_box.data = "2AAXXIIUU";
   fl_up_box.dx_ = 2;
   fl_up_box.dy_ = 2;
   fl_up_box.dw_ = 4;
   fl_up_box.dh_ = 4;
-  fl_down_box.data = "2XXHHTTAA";
+  fl_down_box.data = "2XXIIUUAA";
   fl_down_box.dx_ = 2;
   fl_down_box.dy_ = 2;
   fl_down_box.dw_ = 4;
@@ -418,7 +416,7 @@ Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.16 1999/11/08 22:21:57 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.17 1999/11/10 04:48:55 carl Exp $".
 //
 
 

@@ -1,9 +1,23 @@
+# FLTK toolkit configuration file
+
 # Which scheme should we use?
-# default scheme = Alternative
+
+ default scheme = Alternative
+# default scheme = Alt2
+# default scheme = Classic
+# default scheme = Essai
+# default scheme = KDE1
+# default scheme = Motif
+# default scheme = OldMotif
+# default scheme = Windows
+
 
 # Which theme should we use?
-# default theme = Alternative # loaded by Alternative scheme automatically
+# They are loaded by the schemes automatically
+
+# default theme = Alternative
 # default theme = KDE1
+# default theme = KDE1_colors
 # default theme = classic
 # default theme = essai
 # default theme = motif

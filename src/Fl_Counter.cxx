@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.18 1999/11/05 21:43:50 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.19 1999/11/10 04:48:49 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,9 +54,10 @@ void Fl_Counter::draw() {
   }
 
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    box()->draw(xx[0], y(), ww[0], h(), color(), 0);
+    Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
+    box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
     fl_font(textfont(), textsize());
-    fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
+    fl_color(fl_inactive(textcolor(), f));
     char str[128]; format(str);
     fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
   }
@@ -181,5 +182,5 @@ static void revert(Fl_Style *s) {
 static Fl_Style_Definer x("counter", Fl_Counter::default_style, revert);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.18 1999/11/05 21:43:50 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.19 1999/11/10 04:48:49 carl Exp $".
 //

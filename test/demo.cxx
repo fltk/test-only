@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.9 1999/11/07 08:11:53 bill Exp $"
+// "$Id: demo.cxx,v 1.10 1999/11/10 04:48:57 carl Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ void create_the_forms() {
   obj->labelfont(FL_BOLD);
   obj->labeltype(FL_ENGRAVED_LABEL);
   obj = new Fl_Box(FL_FRAME_BOX,20,70,330,330,0);
-  obj->color(FL_GRAY-8);
+  obj->color(FL_GRAY-6);
   obj = new Fl_Button(130,410,110,30,"Exit");
   obj->callback(doexit);
   obj = new Fl_Button(20,20,330,380); obj->type(FL_HIDDEN_BUTTON);
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.9 1999/11/07 08:11:53 bill Exp $".
+// End of "$Id: demo.cxx,v 1.10 1999/11/10 04:48:57 carl Exp $".
 //
 

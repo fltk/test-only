@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.22 1999/11/08 22:21:54 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.23 1999/11/10 04:48:51 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -78,11 +78,11 @@ int Fl_Menu_Bar::handle(int event) {
 Fl_Style Fl_Menu_Bar::default_style;
 
 static void revert(Fl_Style* s) {
-  s->box = FL_FLAT_UP_BOX;
+  s->box = FL_FLAT_BOX;
 }
 
 static Fl_Style_Definer x("menu bar", Fl_Menu_Bar::default_style, revert);
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.22 1999/11/08 22:21:54 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.23 1999/11/10 04:48:51 carl Exp $".
 //

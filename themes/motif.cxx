@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.6 1999/11/08 22:22:04 carl Exp $"
+// "$Id: motif.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -25,13 +25,14 @@
 
 // motif.cxx
 
-// fltk plugin for Motif appearance, including ugly blue color!
+// fltk plugin for Motif appearance
 
-#include "../src/fl_motif.cxx"
+#include <FL/Fl_Style.H>
 
-extern "C" fltk_theme(int, char**);
+extern "C" int fltk_theme(int, char**);
+
 int fltk_theme(int, char**) { return fl_motif(); }
 
 //
-// End of "$Id: motif.cxx,v 1.6 1999/11/08 22:22:04 carl Exp $".
+// End of "$Id: motif.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $".
 //

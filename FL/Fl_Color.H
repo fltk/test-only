@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.4 1999/10/24 19:47:40 vincent Exp $"
+// "$Id: Fl_Color.H,v 1.5 1999/11/10 04:48:42 carl Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #define Fl_Color_h
 
 #include "Enumerations.H" // for FL_API and uchar
+#include "Fl_Flags.H" // for Fl_Flags & FL_INACTIVE
 
 // I tried making this a class, so that constructors like Fl_Color(r,g,b)
 // could be used.  But gcc produced much worse code output, so I returned
@@ -77,7 +78,7 @@ inline Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char b) {
   return Fl_Color((r<<24)+(g<<16)+(b<<8));}
 FL_API Fl_Color fl_rgb(const char*);
 FL_API Fl_Color fl_color_average(Fl_Color, Fl_Color, double weight);
-FL_API Fl_Color fl_inactive(Fl_Color c);
+FL_API Fl_Color fl_inactive(Fl_Color c, Fl_Flags f = FL_INACTIVE);
 FL_API Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
 FL_API Fl_Color fl_get_color(Fl_Color c);
 FL_API void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
@@ -90,5 +91,5 @@ FL_API void fl_text_background(Fl_Color);
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.4 1999/10/24 19:47:40 vincent Exp $".
+// End of "$Id: Fl_Color.H,v 1.5 1999/11/10 04:48:42 carl Exp $".
 //

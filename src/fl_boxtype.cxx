@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.16 1999/11/08 22:21:56 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.17 1999/11/10 04:48:54 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -56,12 +56,6 @@ static Fl_Boxtype_Definer flat("flat", fl_flat_box);
 
 ////////////////////////////////////////////////////////////////
 
-FL_EXPORT void fl_to_inactive(const char* s, char* to) {
-  if (*s == '2') *to++ = *s++;
-  while (*s) *to++ = 'R'+(*s++ - 'R')*10/17;
-  *to = 0;
-}
-
 FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 			Fl_Color c, Fl_Flags f)
 {
@@ -71,26 +65,30 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
     { b->highlight->draw(x, y, w, h, c, f&~FL_HIGHLIGHT); return; }
 
   const char* s = (const char*)(b->data);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   if (h > 0 && w > 0) {
+    Fl_Color col;
     if (*s == '2') {s++; goto HACK;}
     for (;;) {
       // draw top line:
-      fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+      col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+      fl_color(col);
       fl_xyline(x, y, x+w-1);
       y++; if (--h <= 0) break;
       // draw left line:
-      fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+      col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+      fl_color(col);
       fl_yxline(x, y+h-1, y);
       x++; if (--w <= 0) break;
       if (!*s) break;
     HACK:
       // draw bottom line:
-      fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+      col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+      fl_color(col);
       fl_xyline(x, y+h-1, x+w-1);
       if (--h <= 0) break;
       // draw right line:
-      fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+      col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+      fl_color(col);
       fl_yxline(x+w-1, y+h-1, y);
       if (--w <= 0) break;
       if (!*s) break;
@@ -103,37 +101,37 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 Fl_Boxtype_ fl_normal_box = {
-  fl_frame, "2AAXXHHTT", &fl_down_box, &fl_normal_box, 2,2,4,4, true
+  fl_frame, "2AAXXIIUU", &fl_down_box, &fl_normal_box, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer normal("normal", fl_normal_box);
 
 Fl_Boxtype_ fl_down_box = {
-  fl_frame, "2XXHHTTAA", &fl_down_box, &fl_down_box, 2,2,4,4, true
+  fl_frame, "2XXIIUUAA", &fl_down_box, &fl_down_box, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer down("down", fl_down_box);
 
 Fl_Boxtype_ fl_up_box = {
-  fl_frame, "2AAXXHHTT", &fl_up_box, &fl_up_box, 2,2,4,4, true
+  fl_frame, "2AAXXIIUU", &fl_up_box, &fl_up_box, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer up("up", fl_down_box);
 
 const Fl_Boxtype_ fl_thin_box = {
-  fl_frame, "2HHWW", &fl_thin_down_box, &fl_thin_box, 1,1,2,2,true
+  fl_frame, "2HHVV", &fl_thin_down_box, &fl_thin_box, 1,1,2,2,true
 };
 static Fl_Boxtype_Definer thin("thin", fl_thin_box);
 
 const Fl_Boxtype_ fl_thin_down_box = {
-  fl_frame, "2WWHH", &fl_thin_down_box, &fl_thin_down_box, 1,1,2,2,true
+  fl_frame, "2VVHH", &fl_thin_down_box, &fl_thin_down_box, 1,1,2,2,true
 };
 static Fl_Boxtype_Definer thindown("thin down", fl_thin_down_box);
 
 const Fl_Boxtype_ fl_engraved_box = {
-  fl_frame, "HHWWWWHH", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
+  fl_frame, "HHVVVVHH", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
 };
 static Fl_Boxtype_Definer engraved("engraved", fl_engraved_box);
 
 const Fl_Boxtype_ fl_embossed_box = {
-  fl_frame, "WWHHHHWW", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
+  fl_frame, "VVHHHHVV", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
 };
 static Fl_Boxtype_Definer embossed("embossed", fl_embossed_box);
 
@@ -212,5 +210,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.16 1999/11/08 22:21:56 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.17 1999/11/10 04:48:54 carl Exp $".
 //

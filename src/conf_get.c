@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.6 1999/08/11 10:20:28 carl Exp $"
+   "$Id: conf_get.c,v 1.7 1999/11/10 04:48:53 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -93,10 +93,19 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 
         while (fgets(line, sizeof(line), ifp))                                  /* while there are still lines in the file */
         {
-		if ((p = strchr(line, conf_comment_sep)) &&
-		    (p == line + strspn(line, CONF_WHITESPACE) ||
-		     strchr(CONF_WHITESPACE, *(p + 1))))
-			*p = (char)0;
+                /*
+                   hack so that comment seperator can occur in value
+                   if not immediately followed by a whitespace
+                */
+		for (p2 = line; (p = strchr(p2, conf_comment_sep)); p2 = p + 1)
+		{
+		        if (strchr(CONF_WHITESPACE, *(p + 1)) ||
+		            line + strspn(line, CONF_WHITESPACE) == p)
+		        {
+		                *p = (char)0;
+		                break;
+		        }
+		}
 		
                 trim(line);                                                     /* remove unnecessary whitespace */
 		    
@@ -131,5 +140,5 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 } /* getconf() */
 
 /*
-    End of "$Id: conf_get.c,v 1.6 1999/08/11 10:20:28 carl Exp $".
+    End of "$Id: conf_get.c,v 1.7 1999/11/10 04:48:53 carl Exp $".
 */

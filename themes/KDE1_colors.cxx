@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.6 1999/11/10 04:49:00 carl Exp $"
+// "$Id: KDE1_colors.cxx,v 1.1 1999/11/10 04:48:59 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,14 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// fltk plugin for Windows appearance
+// Just colors and fonts for KDE1 -- no boxtypes
+
+// fltk plugin for Motif appearance
 
 #include <FL/Fl_Style.H>
 
 extern "C" int fltk_theme(int, char**);
 
-int fltk_theme(int, char**) { return fl_windows(); }
+int fltk_theme(int, char**) { return fl_kde1_colors(); }
 
 //
-// End of "$Id: windows.cxx,v 1.6 1999/11/10 04:49:00 carl Exp $".
+// End of "$Id: KDE1_colors.cxx,v 1.1 1999/11/10 04:48:59 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.8 1999/11/01 02:21:37 carl Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.9 1999/11/10 04:48:54 carl Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,10 +31,6 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
-FL_EXPORT extern uchar fl_active_ramp[24];
-FL_EXPORT extern uchar fl_inactive_ramp[24];
-FL_EXPORT void fl_to_inactive(const char* s, char* to);
-
 static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
 			 Fl_Color c, Fl_Flags f)
 {
@@ -53,22 +49,26 @@ static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
     }
   }
   const char* s = (const char*)(b->data);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
+  Fl_Color col;
   while (*s && *t && w > 0 && h > 0) {
     // draw upper-right line:
-    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+    col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+    fl_color(col);
     fl_line(x+w, y1, x1, y);
     // draw upper-left line:
-    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+    col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+    fl_color(col);
     fl_line(x1, y, x, y1);
     s += 2;
     // draw lower-left line:
-    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
+    col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+    fl_color(col);
     fl_line(x, y1, x1, y+h);
     // draw lower-right line:
-    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
+    col = fl_inactive(*s++ + (FL_GRAY_RAMP-'A'), f);
+    fl_color(col);
     fl_line(x1, y+h, x+w, y1);
     t += 2;
     x++; y++; w -= 2; h -= 2;
@@ -90,5 +90,5 @@ const Fl_Boxtype_ fl_diamond_down_box = {
 };
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.8 1999/11/01 02:21:37 carl Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.9 1999/11/10 04:48:54 carl Exp $".
 //

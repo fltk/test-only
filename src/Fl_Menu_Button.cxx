@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.17 1999/11/08 22:21:54 carl Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.18 1999/11/10 04:48:51 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,13 +36,10 @@ void Fl_Menu_Button::draw() {
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
 // CET - FIXME
-  if (active_r()) {
-    fl_color(FL_DARK3); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-    fl_color(FL_LIGHT3); fl_line(X+H, Y, X+H/2, Y+H);
-  } else {
-    fl_color((Fl_Color)44); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-    fl_color((Fl_Color)52); fl_line(X+H, Y, X+H/2, Y+H);
-  }
+  Fl_Color dark = FL_DARK3, light = FL_LIGHT2;
+  if (!active_r()) { dark = fl_inactive(dark); light = fl_inactive(light); }
+  fl_color(dark); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
+  fl_color(light); fl_line(X+H, Y, X+H/2, Y+H);
 }
 
 void Fl_Menu_Button::draw_n_clip() {
@@ -53,16 +50,11 @@ void Fl_Menu_Button::draw_n_clip() {
 }
 
 
-extern Fl_Boxtype fl_popup_box;
-
 const Fl_Menu_Item* Fl_Menu_Button::popup() {
   const Fl_Menu_Item* m;
 
 // back compatibility hack
-  if (box() == FL_NO_BOX) {
-    box(fl_popup_box);
-    type(POPUP3);
-  }
+  if (box() == FL_NO_BOX) type(POPUP3);
 
   if (type()) {
     m = menu()->popup(Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
@@ -106,13 +98,8 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 Fl_Style Fl_Menu_Button::default_style;
-
-static void revert(Fl_Style* s) {
-  s->box = FL_UP_BOX;
-}
-
-static Fl_Style_Definer x("menu button", Fl_Menu_Button::default_style, revert);
+static Fl_Style_Definer x("menu button", Fl_Menu_Button::default_style);
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.17 1999/11/08 22:21:54 carl Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.18 1999/11/10 04:48:51 carl Exp $".
 //

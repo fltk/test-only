@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.1 1999/11/08 22:21:56 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.2 1999/11/10 04:48:55 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -26,7 +26,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_config.H>
-#include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -74,128 +73,27 @@ int fl_kde1() {
   if (!kderc.get("General/background", s, sizeof(s)))
     background = parse_color(s);
 
-  Fl_Color select_foreground = FL_NO_COLOR;
-  if (!kderc.get("General/selectForeground", s, sizeof(s)))
-    select_foreground = parse_color(s);
-
-  Fl_Color select_background = FL_NO_COLOR;
-  if (!kderc.get("General/selectBackground", s, sizeof(s)))
-    select_background = parse_color(s);
-
-  // this one seems to do absolutely nothing
-  Fl_Color window_foreground = FL_NO_COLOR;
-  if (!kderc.get("General/windowForeground", s, sizeof(s)))
-    window_foreground = parse_color(s);
-
-  Fl_Color window_background = FL_NO_COLOR;
-  if (!kderc.get("General/windowBackground", s, sizeof(s)))
-    window_background = parse_color(s);
-
-  Fl_Font font = 0;
-  int fontsize = 0;
-  static char fontencoding[32] = "";
-  if (!kderc.get("General/font", s, sizeof(s))) {
-    char fontname[64] = "";
-    int fontbold = 0, fontitalic = 0;
-
-    if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p);
-    strtok(NULL, ","); // I have no idea what this is
-    if ( (p = strtok(NULL, ",")) ) {
-      strncpy(fontencoding, p, sizeof(fontencoding));
-      if (!strncasecmp(fontencoding, "iso-", 4))
-        memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1); // hack!
-    }
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
-
-/* CET - FIXME - When this method exists this will be a lot easier!
-
-    font = fl_font(fontname);
-*/
-    // doing these three manually saves startup time-- fl_list_fonts()
-    // is _very_ slow
-    if (!strcasecmp(fontname, "helvetica")) {
-      font = FL_HELVETICA;
-    } else if (!strcasecmp(fontname, "times")) {
-      font = FL_TIMES;
-    } else if (!strcasecmp(fontname, "courier")) {
-      font = FL_COURIER;
-    } else {
-      Fl_Font* fontlist;
-      int i, numfonts;
-      for (i = 0, numfonts = fl_list_fonts(fontlist); i < numfonts; i++)
-        if (!strcasecmp(fontlist[i]->name(), fontname)) break;
-
-      if (i != numfonts) font = fontlist[i];
-    }
-    if (font && fontbold) font = font->bold;
-    if (font && fontitalic) font = font->italic;
-  }
-
   Fl_Style::revert(); // revert to FLTK default styles
+
+  if (motif_style) fl_motif();
+  else fl_windows();
+
+  fl_kde1_colors(); // figure out the colors and fonts for KDE1
 
   Fl_Style* style;
   if (motif_style) {
-    fl_motif();
-    Fl_Widget::default_style.set_selection_color(0xa7a3a700);
-    if ((style = Fl_Style::find("scroll bar"))) {
-      style->set_color((Fl_Color)0xa7a3a700);
-      style->set_selection_color((Fl_Color)0xa7a3a700);
+//    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dar backgrounds
+    if ((style = Fl_Style::find("menu item"))) {
+      if (background) style->set_highlight_color(background);
+      style->set_highlight_label_color(foreground);
     }
-  } else fl_windows();
-
-  fl_extra_menu_spacing = 8;
-
-  if (background) fl_background(background);
-
-  if (foreground) {
-    Fl_Widget::default_style.set_label_color(foreground);
-    Fl_Widget::default_style.set_highlight_label_color(foreground);
-    Fl_Widget::default_style.set_text_color(foreground);
-    Fl_Widget::default_style.set_selection_text_color(foreground);
-  }
-
-  if ((style = Fl_Style::find("input"))) {
-    if (foreground) style->set_off_color(foreground);
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("output"))) {
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("browser"))) {
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("check button"))) {
-    // this should be only on round and not check...
-    if (foreground) style->set_selection_color(foreground);
-    if (window_background) style->set_off_color(window_background);
-  }
-
-  if ((style = Fl_Style::find("menu item"))) {
-    if (select_background && !motif_style) style->set_highlight_color(select_background);
-    if (select_foreground && !motif_style) style->set_highlight_label_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("menu title"))) {
-    if (foreground) style->set_selection_text_color(foreground);
-  }
-
-  if (font) {
-    if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style.set_label_font(font);
-    Fl_Widget::default_style.set_text_font(font);
-    Fl_Widget::default_style.set_label_size(fontsize);
-    Fl_Widget::default_style.set_text_size(fontsize);
+    if ((style = Fl_Style::find("check button"))) {
+      style->set_selection_color(FL_DARK1);
+      if (background) style->set_off_color(background);
+    }
+    fl_extra_menu_spacing = 2; // seemed like this was much more under KDE yesterday...
+  } else {
+    fl_extra_menu_spacing = 5; // seemed like this was much more under KDE yesterday...
   }
 
   Fl::redraw();
@@ -204,5 +102,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.1 1999/11/08 22:21:56 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.2 1999/11/10 04:48:55 carl Exp $".
 //
