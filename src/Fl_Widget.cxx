@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.9 1999/03/31 02:53:04 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.10 1999/04/10 14:13:50 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Tooltip.H>
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
@@ -154,6 +155,7 @@ extern void fl_throw_focus(Fl_Widget*); // in Fl_x.C
 Fl_Widget::~Fl_Widget() {
   if (_style && !_style->not_dynamic) delete _style;
   parent_ = 0; // kludge to prevent ~Fl_Group from destroying again
+  Fl_Tooltip::exit(this);
   fl_throw_focus(this);
 }
 
@@ -299,5 +301,5 @@ uchar Fl_Widget::labelsize() const {
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.9 1999/03/31 02:53:04 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.10 1999/04/10 14:13:50 carl Exp $".
 //

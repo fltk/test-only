@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.11 1999/03/31 19:14:20 carl Exp $"
+// "$Id: Fl_Type.cxx,v 1.12 1999/04/10 14:13:45 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -308,6 +308,7 @@ Fl_Type::Fl_Type() {
   visible = 0;
   name_ = 0;
   label_ = 0;
+  tooltip_ = 0;
   user_data_ = 0;
   user_data_type_ = 0;
   callback_ = 0;
@@ -444,6 +445,10 @@ void Fl_Type::label(const char *n) {
     setlabel(label_);
     if (visible && !name_) widget_browser->redraw();
   }
+}
+
+void Fl_Type::tooltip(const char *n) {
+  storestring(n,tooltip_,1);
 }
 
 void Fl_Type::callback(const char *n) {
@@ -638,11 +643,18 @@ void Fl_Type::write_properties() {
   }
   if (is_parent() && open_) write_word("open");
   if (selected) write_word("selected");
+  if (tooltip()) {
+    write_indent(level+1);
+    write_word("tooltip");
+    write_word(tooltip());
+  }
 }
 
 void Fl_Type::read_property(const char *c) {
   if (!strcmp(c,"label"))
     label(read_word());
+  else if (!strcmp(c,"tooltip"))
+    tooltip(read_word());
   else if (!strcmp(c,"user_data"))
     user_data(read_word());
   else if (!strcmp(c,"user_data_type"))
@@ -660,5 +672,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.11 1999/03/31 19:14:20 carl Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.12 1999/04/10 14:13:45 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.2 1999/03/31 14:52:24 mike Exp $"
+// "$Id: Fl_Tooltip.H,v 1.3 1999/04/10 14:13:44 carl Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,8 @@ public:
 
   friend class Fl_TooltipBox;
   friend class Fl_Widget;
+  friend class Fl_Group;
+  friend class Fl;
 
   struct Style {
     float delay_;
@@ -92,5 +94,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.2 1999/03/31 14:52:24 mike Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.3 1999/04/10 14:13:44 carl Exp $".
 //

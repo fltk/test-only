@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.9 1999/03/19 23:39:39 carl Exp $"
+// "$Id: menubar.cxx,v 1.10 1999/04/10 14:13:51 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,10 +30,11 @@
 #include <FL/Fl_Toggle_Button.H>
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Tooltip.H>
+#include <FL/fl_draw.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/fl_draw.H>
 
 Fl_Window *window;
 
@@ -199,12 +200,15 @@ int main(int argc, char **argv) {
   menubar.find("&Radio/Black")->down_labelcolor(FL_BLACK);
   menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
+  menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
+  mb1.tooltip("This is a menu button");
   menus[1] = &mb1;
   Fl_Choice ch(300,100,90,25,"&choice:"); ch.menu(pulldown);
   ch.callback(test_cb);
+  ch.tooltip("This is a choice");
   menus[2] = &ch;
   Fl_Menu_Button mb(0,30,WIDTH,370,"&popup");
   mb.type(Fl_Menu_Button::POPUP3);
@@ -220,5 +224,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.9 1999/03/19 23:39:39 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.10 1999/04/10 14:13:51 carl Exp $".
 //

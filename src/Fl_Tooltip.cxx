@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.2 1999/03/31 14:52:46 mike Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.3 1999/04/10 14:13:49 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ public:
   ~Fl_TooltipBox() { }
 
   void draw() {
-    color(Fl_Tooltip::default_style.color_);
+            color(Fl_Tooltip::default_style.color_);
     labeltype(FL_NORMAL_LABEL);
     labelfont(Fl_Tooltip::default_style.textfont_);
     labelsize(Fl_Tooltip::default_style.textsize_);
@@ -68,7 +68,10 @@ public:
   }
 
   int handle(int event) {
-    if (event == FL_LEAVE) {hide(); return 1;}
+    if (event == FL_LEAVE) {
+      Fl_Tooltip::exit(Fl_Tooltip::widget);
+      return 1;
+    }
     return Fl_Menu_Window::handle(event);
   }
 
@@ -102,8 +105,8 @@ Fl_Tooltip::tooltip_timeout(Fl_Widget *v) {
   if (ox+ww > Fl::w()) ox = Fl::w() - ww;
   if (ox < 0) ox = 0;
 
-  int oy = widgetWindow->y_root() + v->y() + v->h() - 6;
-  if (oy+hh > Fl::h()) oy = widgetWindow->y_root() + v->y() - hh - 6;
+  int oy = widgetWindow->y_root() + v->y() + v->h() + 4;
+  if (oy+hh > Fl::h()) oy = widgetWindow->y_root() + v->y() - hh - 4;
   if (oy < 0) oy = 0;
 
   window->resize(ox, oy, ww, hh);
@@ -133,8 +136,8 @@ Fl_Tooltip::loadstyle() {
 void
 Fl_Tooltip::tooltip_enter(Fl_Widget* w) {
   loadstyle();
-  if (!w || !w->tooltip()) return;
   if (widget && w != widget) tooltip_exit(widget);
+  if (!w || !w->tooltip()) return;
   widget = w;
 
   Fl::add_timeout(default_style.delay_, (void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
@@ -151,7 +154,9 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
     // try to not make window disappear if user moves mouse into it.
     // Unfortunately fl_xmousewin is set to zero first, then to the
     // window, so I have to guess that this is happening:
-    if (!fl_xmousewin || fl_xmousewin == window) return;
+
+    // This is done in Fl::belowmouse() now - CET
+    //if (!fl_xmousewin || fl_xmousewin == window) return;
     window->hide();
   }
 }
@@ -169,5 +174,5 @@ void Fl_Widget::tooltip(const char *t) {
 }
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.2 1999/03/31 14:52:46 mike Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.3 1999/04/10 14:13:49 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.26 1999/03/31 19:14:20 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.27 1999/04/10 14:13:46 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -341,6 +341,29 @@ void label_cb(Fl_Input* i, void *v) {
   }
   Fl_Color tc = FL_BLACK;
   if (current_widget->label() && *(current_widget->label())) tc = FL_RED;
+  if (i->labelcolor() != tc)
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+}
+
+static char* oldtooltip;
+static unsigned oldtooltiplen;
+static Fl_Input *tooltip_input;
+
+void tooltip_cb(Fl_Input* i, void *v) {
+  if (v == LOAD) {
+    tooltip_input = i;
+    i->static_value(current_widget->tooltip());
+    if (strlen(i->value()) >= oldtooltiplen) {
+      oldtooltiplen = strlen(i->value())+128;
+      oldtooltip = (char*)realloc(oldtooltip,oldtooltiplen);
+    }
+    strcpy(oldtooltip,i->value());
+  } else {
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) o->tooltip(i->value());
+  }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->tooltip() && *(current_widget->tooltip())) tc = FL_RED;
   if (i->labelcolor() != tc)
     { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
@@ -1967,6 +1990,8 @@ void Fl_Widget_Type::write_widget_code() {
     write_c("%sFl_Group::current()->resizable(o);\n",indent());
   if (hotspot())
     write_c("%sw->hotspot(o);\n", indent());
+  if (tooltip())
+    write_c("%so->tooltip(\"%s\");\n", indent(), tooltip());
 }
 
 void Fl_Widget_Type::write_code2() {
@@ -2473,5 +2498,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.26 1999/03/31 19:14:20 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.27 1999/04/10 14:13:46 carl Exp $".
 //

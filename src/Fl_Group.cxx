@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.13 1999/03/23 17:09:07 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.14 1999/04/10 14:13:49 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,6 @@
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
-
 #include <FL/Fl_Tooltip.H>
 
 Fl_Group* Fl_Group::current_;
@@ -92,6 +91,9 @@ static int navkey() {
   return 0;
 }
 
+// FIXME
+extern Fl_Window *fl_xmousewin; // which window X thinks has FL_ENTER
+
 int Fl_Group::handle(int event) {
 
   Fl_Widget*const* a = array();
@@ -139,7 +141,6 @@ int Fl_Group::handle(int event) {
     return 0;
 
   case FL_ENTER:
-    Fl_Tooltip::enter(this);
   case FL_MOVE:
     for (i = children(); i--;) {
       o = a[i];
@@ -160,6 +161,7 @@ int Fl_Group::handle(int event) {
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && Fl::event_inside(o)) {
+        Fl_Tooltip::exit(o);
 	if (send(o,FL_PUSH)) {
 	  if (Fl::pushed() && !o->contains(Fl::pushed())) Fl::pushed(o);
 	  return 1;
@@ -183,9 +185,6 @@ int Fl_Group::handle(int event) {
       if (o->visible()) o->handle(event);
     }
     return 1;
-
-  case FL_LEAVE:
-    Fl_Tooltip::exit(this);
 
   default:
     return 0;
@@ -499,5 +498,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.13 1999/03/23 17:09:07 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.14 1999/04/10 14:13:49 carl Exp $".
 //

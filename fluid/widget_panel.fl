@@ -8,7 +8,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open selected
-    xywh {122 42 387 448} resizable hotspot visible
+    xywh {233 316 387 470} resizable hotspot visible
   } {
     Fl_Input {} {
       label {name:}
@@ -92,96 +92,96 @@ Function {make_widget_panel()} {open
     Fl_Value_Input {} {
       label {size:}
       callback slider_size_cb
-      xywh {20 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {20 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {minimum:}
       callback min_cb
-      xywh {90 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {90 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {maximum:}
       callback max_cb
-      xywh {160 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
+      xywh {160 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
     }
     Fl_Value_Input {} {
       label {step:}
       callback step_cb
-      xywh {230 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {230 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {value:}
       callback value_cb
-      xywh {300 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {300 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Group {} {
       callback propagate_load open
-      xywh {20 165 350 25} align 5
+      xywh {20 190 350 25} align 5
     } {
       Fl_Light_Button {} {
         label {non modal}
         callback non_modal_cb
-        xywh {20 165 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {20 190 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label visible
         callback visible_cb
-        xywh {90 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {90 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label modal
         callback modal_cb
-        xywh {90 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {90 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label active
         callback active_cb
-        xywh {160 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {160 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label border
         callback border_cb
-        xywh {160 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {160 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label resizable
         callback resizable_cb
-        xywh {230 165 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {230 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label hotspot
         callback hotspot_cb
-        xywh {300 165 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {300 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
     }
     Fl_Input {v_input[0]} {
       label {extra code:}
       user_data 0
       callback v_input_cb
-      xywh {90 195 280 20} box THIN_DOWN_BOX
+      xywh {90 220 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[1]} {
       user_data 1
       callback v_input_cb
-      xywh {90 215 280 20} box THIN_DOWN_BOX
+      xywh {90 240 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[2]} {
       user_data 2
       callback v_input_cb
-      xywh {90 235 280 20} box THIN_DOWN_BOX
+      xywh {90 260 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[3]} {
       user_data 3
       callback v_input_cb
-      xywh {90 255 280 20} box THIN_DOWN_BOX
+      xywh {90 280 280 20} box THIN_DOWN_BOX
     }
     Fl_Box callback_label {
       label {callback:}
-      xywh {0 285 90 20} align 24
+      xywh {0 310 90 20} align 24
     }
     Fl_Input {} {
       callback callback_cb
-      xywh {90 285 280 50} type Multiline box THIN_DOWN_BOX
+      xywh {90 310 280 50} type Multiline box THIN_DOWN_BOX
     }
     Fl_Box {} {
       label label
@@ -190,48 +190,53 @@ Function {make_widget_panel()} {open
     Fl_Input {} {
       label {user data:}
       callback user_data_cb
-      xywh {90 345 170 20} box THIN_DOWN_BOX
+      xywh {90 370 170 20} box THIN_DOWN_BOX
     }
     Fl_Input {} {
       label {type:}
       callback user_data_type_cb
-      xywh {90 365 170 20} box THIN_DOWN_BOX
+      xywh {90 390 170 20} box THIN_DOWN_BOX
     }
     Fl_Choice {} {
       label {when:}
       callback when_cb
-      xywh {270 345 100 20} align 5 when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {270 370 100 20} align 5 when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item whenmenu[];}
       code1 {o->menu(whenmenu);}
     } {}
     Fl_Light_Button {} {
       label {no change}
       callback when_button_cb
-      xywh {270 365 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {270 390 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
     }
     Fl_Group {} {open
-      xywh {20 400 350 35}
+      xywh {20 425 350 35}
     } {
       Fl_Button {} {
         label {&Overlay}
         callback overlay_cb
-        xywh {20 400 90 35} labelcolor 1
+        xywh {20 425 90 35} labelcolor 1
       }
       Fl_Button {} {
         label Cancel
         callback cancel_cb
-        xywh {190 430 90 5} hide
+        xywh {190 455 90 5} hide
       }
       Fl_Return_Button {} {
         label Close
         callback ok_cb
-        xywh {280 400 90 35}
+        xywh {280 425 90 35}
       }
       Fl_Button {} {
         label Style
         callback style_cb
-        xywh {120 400 90 35}
+        xywh {120 425 90 35}
       }
+    }
+    Fl_Input {} {
+      label {tooltip:}
+      callback tooltip_cb
+      xywh {90 130 280 20} box THIN_DOWN_BOX
     }
   }
 } 
@@ -239,7 +244,7 @@ Function {make_widget_panel()} {open
 Function {make_style_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {87 95 330 279} visible
+    xywh {895 599 330 279} visible
   } {
     Fl_Choice {} {
       label {label type:}

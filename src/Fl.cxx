@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.27 1999/04/04 03:39:29 gustavo Exp $"
+// "$Id: Fl.cxx,v 1.28 1999/04/10 14:13:48 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
+#include <FL/Fl_Tooltip.H>
 #include <ctype.h>
 
 //
@@ -313,6 +314,7 @@ void Fl::belowmouse(Fl_Widget *o) {
   if (grab()) return; // don't do anything while grab is on
   Fl_Widget *p = belowmouse_;
   if (o != p) {
+    Fl_Tooltip::enter(o);
     event_is_click(0);
     belowmouse_ = o;
     for (; p && !p->contains(o); p = p->parent()) p->handle(FL_LEAVE);
@@ -689,5 +691,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.27 1999/04/04 03:39:29 gustavo Exp $".
+// End of "$Id: Fl.cxx,v 1.28 1999/04/10 14:13:48 carl Exp $".
 //

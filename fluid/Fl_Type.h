@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.9 1999/03/31 19:14:20 carl Exp $"
+// "$Id: Fl_Type.h,v 1.10 1999/04/10 14:13:45 carl Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,6 +48,7 @@ protected:
 
   const char *name_;
   const char *label_;
+  const char *tooltip_;
   const char *callback_;
   const char *user_data_;
   const char *user_data_type_;
@@ -84,6 +85,8 @@ public:
   void name(const char *);
   const char *label() const {return label_;}
   void label(const char *);
+  const char *tooltip() const {return tooltip_;}
+  void tooltip(const char *);
   const char *callback() const {return callback_;}
   void callback(const char *);
   const char *user_data() const {return user_data_;}
@@ -546,5 +549,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.9 1999/03/31 19:14:20 carl Exp $".
+// End of "$Id: Fl_Type.h,v 1.10 1999/04/10 14:13:45 carl Exp $".
 //

@@ -58,6 +58,7 @@ extern void subtype_cb(Fl_Choice*, void*);
 extern void textcolor_cb(Fl_Light_Button*, void*);
 extern void textfont_cb(Fl_Choice*, void*);
 extern void textsize_cb(Fl_Value_Input*, void*);
+extern void tooltip_cb(Fl_Input*, void*);
 extern void user_data_cb(Fl_Input*, void*);
 extern void user_data_type_cb(Fl_Input*, void*);
 extern void v_input_cb(Fl_Input*, void*);
