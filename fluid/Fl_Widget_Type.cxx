@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.55 1999/11/28 18:44:39 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.56 1999/12/02 09:53:39 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -345,26 +345,19 @@ int item_number(Fl_Menu_Item* m, const char* i) {
 
 Fl_Menu_Item boxmenu[] = {
 {"NO_BOX",		0,0, (void *)FL_NO_BOX},
-{"NORMAL_BOX",		0,0, (void *)FL_NORMAL_BOX},
-{"NORMAL_UP_BOX",	0,0, (void *)FL_NORMAL_UP_BOX},
-{"NORMAL_DOWN_BOX",	0,0, (void *)FL_NORMAL_DOWN_BOX},
-{"THIN_BOX",		0,0, (void *)FL_THIN_BOX},
+{"UP_BOX",		0,0, (void *)FL_UP_BOX},
+{"DOWN_BOX",		0,0, (void *)FL_DOWN_BOX},
 {"THIN_UP_BOX",		0,0, (void *)FL_THIN_UP_BOX},
 {"THIN_DOWN_BOX",	0,0, (void *)FL_THIN_DOWN_BOX},
 {"FLAT_BOX",		0,0, (void *)FL_FLAT_BOX},
-{"FLAT_UP_BOX",		0,0, (void *)FL_FLAT_UP_BOX},
-{"FLAT_DOWN_BOX",	0,0, (void *)FL_FLAT_DOWN_BOX},
 {"BORDER_BOX",		0,0, (void *)FL_BORDER_BOX},
 {"BORDER_FRAME",	0,0, (void *)FL_BORDER_FRAME},
 {"ENGRAVED_BOX",	0,0, (void *)FL_ENGRAVED_BOX},
 {"EMBOSSED_BOX",	0,0, (void *)FL_EMBOSSED_BOX},
-{"HIGHLIGHT_BOX",	0,0, (void *)FL_HIGHLIGHT_BOX},
 {"HIGHLIGHT_UP_BOX",	0,0, (void *)FL_HIGHLIGHT_UP_BOX},
 {"HIGHLIGHT_DOWN_BOX",	0,0, (void *)FL_HIGHLIGHT_DOWN_BOX},
-{"ROUND_BOX",	        0,0, (void *)FL_ROUND_BOX},
 {"ROUND_UP_BOX",	0,0, (void *)FL_ROUND_UP_BOX},
 {"ROUND_DOWN_BOX",	0,0, (void *)FL_ROUND_DOWN_BOX},
-{"DIAMOND_BOX",	        0,0, (void *)FL_DIAMOND_BOX},
 {"DIAMOND_UP_BOX",	0,0, (void *)FL_DIAMOND_UP_BOX},
 {"DIAMOND_DOWN_BOX",	0,0, (void *)FL_DIAMOND_DOWN_BOX},
 {"SHADOW_BOX",		0,0, (void *)FL_SHADOW_BOX},
@@ -2187,5 +2180,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.55 1999/11/28 18:44:39 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.56 1999/12/02 09:53:39 bill Exp $".
 //

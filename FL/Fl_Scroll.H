@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.H,v 1.9 1999/10/17 20:40:10 vincent Exp $"
+// "$Id: Fl_Scroll.H,v 1.10 1999/12/02 09:53:37 bill Exp $"
 //
 // Scroll header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,6 @@ class FL_API Fl_Scroll : public Fl_Group {
   static void scrollbar_cb(Fl_Widget*, void*);
   void fix_scrollbar_order();
   static void draw_clip(void*,int,int,int,int);
-  void bbox(int&,int&,int&,int&);
 
 protected:
 
@@ -47,6 +46,7 @@ protected:
 
 public:
 
+  void bbox(int&,int&,int&,int&);
   Fl_Scrollbar scrollbar;
   Fl_Scrollbar hscrollbar;
 
@@ -72,5 +72,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Scroll.H,v 1.9 1999/10/17 20:40:10 vincent Exp $".
+// End of "$Id: Fl_Scroll.H,v 1.10 1999/12/02 09:53:37 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.70 1999/11/29 08:47:00 bill Exp $"
+// "$Id: Fl.cxx,v 1.71 1999/12/02 09:53:43 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -504,25 +504,25 @@ int Fl::handle(int event, Fl_Window* window)
     w = grab(); if (!w) w = focus();
     if (w && send(FL_KEYBOARD, w, window)) return 1;
 
-    // recursive call to try shortcut:
-    if (handle(FL_SHORTCUT, window)) return 1;
+    // try flipping the case of letter shortcuts:
+    if (isalpha(event_text()[0])) {
+      if (handle(FL_SHORTCUT, window)) return 1;
+      *(char*)(event_text()) ^= ('A'^'a');
+    }
 
-    // and then try a shortcut with the case of the text swapped, by
-    // changing the text and falling through to FL_SHORTCUT case:
-    if (!isalpha(event_text()[0])) return 0;
-    *(char*)(event_text()) ^= ('A'^'a');
     event = FL_SHORTCUT;
-    // fall through to the default case to do this FL_SHORTCUT:
+    // fall through to the shortcut handling case:
 
   default:
     // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, and all new
-    // events that we may add.  Fltk does a search of every widget, starting
-    // with the one the mouse points at, and upwards.  Part of this search
+    // events that we may add.  Fltk tries the focus first (fltk 1.0
+    // tried the belowmouse first), then tries each nested widget around
+    // the it until something takes it.  Part of this search
     // is done by Fl_Group::handle(), which sends the events to every
-    // child of the group.
+    // child of the group, thus causing every widget to be tried.
 
              w = grab();
-    if (!w) {w = belowmouse();
+    if (!w) {w = focus();
     if (!w) {w = modal();
     if (!w)  w = window;}}
     for (; w; w = w->parent()) if (send(event, w, window)) return 1;
@@ -810,5 +810,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.70 1999/11/29 08:47:00 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.71 1999/12/02 09:53:43 bill Exp $".
 //
