@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.60 2000/01/10 06:31:26 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.61 2000/01/23 01:57:26 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -275,8 +275,11 @@ void fl_open_display() {
   // Carl inserted something much like the KDE plugin does to register
   // a style client message.  I would prefer to either leave this up
   // to the plugin, or use the SAME atoms as KDE (to avoid even more
-  // namespace pollution).  It can respond by unload/load of the theme.
-  // See the kde plugin for sample code.
+  // namespace pollution).  See the kde plugin for sample code.
+
+#if !USE_COLORMAP
+  Fl::visual(FL_RGB);
+#endif
 }
 
 void fl_close_display() {
@@ -847,5 +850,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.60 2000/01/10 06:31:26 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.61 2000/01/23 01:57:26 bill Exp $".
 //
