@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.180 2004/06/27 01:25:03 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.181 2004/06/28 15:45:49 xpxqx Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -89,7 +89,7 @@ int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
 //   printf("mb:");
 //   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
 
-  char* inbuf = mb_buffer;
+  const char* inbuf = mb_buffer;
   size_t inbytesleft = mb_buffer_len;
   char* outbuf = buffer;
   size_t outbytesleft = buffer_len;
@@ -2191,5 +2191,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.180 2004/06/27 01:25:03 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.181 2004/06/28 15:45:49 xpxqx Exp $".
 //
