@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.35 2002/03/10 23:19:20 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.36 2002/04/11 07:47:46 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -243,8 +243,8 @@ Fl_Theme Fl_Style::load_theme(const char* name) {
 
 #else
 
-#ifndef PATH_MAX
-# define PATH_MAX 256
+#ifndef FILENAME_MAX
+# define FILENAME_MAX 1024
 #endif
 
 Fl_Theme Fl_Style::load_theme(const char* name) {
@@ -252,16 +252,16 @@ Fl_Theme Fl_Style::load_theme(const char* name) {
   if (!name || !*name) return fltk_theme;
 
   // add ".theme" if it is not there:
-  char name_buf[PATH_MAX];
+  char name_buf[FILENAME_MAX];
   int n = strlen(name);
   if (n < 6 || strcasecmp(name+n-6, ".theme")) {
-    snprintf(name_buf, PATH_MAX, "%s.theme", name);
+    snprintf(name_buf, FILENAME_MAX, "%s.theme", name);
     name = name_buf;
   }
 
   // search for the file:
-  char path_buf[PATH_MAX];
-  const char *path = fl_find_config_file(path_buf, PATH_MAX, name);
+  char path_buf[FILENAME_MAX];
+  const char *path = fl_find_config_file(path_buf, FILENAME_MAX, name);
 
   if (!path) {
     // If they said "default" it is ok if the plugin is not found:
@@ -333,5 +333,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.35 2002/03/10 23:19:20 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.36 2002/04/11 07:47:46 spitzak Exp $".
 //

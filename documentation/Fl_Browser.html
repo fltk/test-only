@@ -1,7 +1,7 @@
 <html><head><title>Fl_Browser</title></head><body bgcolor = white>
 
 <hr break>
-<a name=Fl_Browser><h2>class Fl_Browser</h2></a>
+<h2>class Fl_Browser</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -196,7 +196,7 @@ correct.
 
 Current horizontal scrolling pozition. Normally zero.
 
-<a name=xposition><h4>void xposition(int);</h4></a>
+<h4>void xposition(int);</h4>
 
 Set the horizontal scrolling to a certain value.
 
@@ -206,7 +206,7 @@ Current vertical scrolling position. This is the location, in pixels,
 of the top of the visible display, relative to the pixel position of
 the top of the first item.
 
-<a name=yposition><h4>void yposition(int);</h4></a>
+<h4>void yposition(int);</h4>
 
 Set the vertical scrolling to a certain value.
 
@@ -362,14 +362,14 @@ Turn off or on the <tt>FL_INVISIBLE</tt> flag on the given item and
 redraw the browser if necessary. Returns true if the state was
 actually changed, returns false if it was already in that state.
 
-<a name=current_level><h4>int current_level() const;</h4></a>
+<a name="current_level"><h4>int current_level() const;</h4></a>
 
 Return the nesting level of the current item (how many parents it has).
 
 <a name=current_index><h4>const int& current_index() const;</h4></a>
 
 Return an array of <tt><a
-href=current_level>current_level()</a>+1</tt> indexes saying which
+href="#current_level">current_level()</a>+1</tt> indexes saying which
 child at each level includes the current item.
 
 <a name=current_position><h4>int current_position() const</h4></a>
@@ -377,16 +377,15 @@ child at each level includes the current item.
 Return the y position, in pixels, of the top edge of the current
 item. You may also want the height, which is in <tt>item()->height()</tt>.
 
-<a name=focus_level><h4>int focus_level() const</h4></a>
+<a name="focus_level"><h4>int focus_level() const</h4></a>
 
 Return the nesting level of the focus (how many parents it has). The
 focus is the selected item the user sees.
 
 <a name=focus_index><h4>const int& focus_index() const</h4></a>
 
-Return an array of <tt><a
-href=focus_level>focus_level()</a>+1</tt> indexes saying which
-child at each level includes the focus.
+Return an array of <tt><a href="#focus_level">focus_level()</a>+1</tt>
+indexes saying which child at each level includes the focus.
 
 <a name=focus_position><h4>int focus_position() const</h4></a>
 
@@ -398,7 +397,7 @@ Same as <tt><a href=#goto_index>goto_index(v)</a>;<a
 href=#set_focus>set_focus()</a>;</tt>, to change the current item in a
 non-hierarchial browser.
 
-<a name=value><h4>int value() const;</h4></a>
+<h4>int value() const;</h4>
 
 Returns <tt><a href=#focus_index>focus_index(v)</a>[0]</tt>, to
 get the current item in a non-hierarchial browser.
@@ -421,7 +420,7 @@ edge of the browser, including any area for the open/close + glyphs.
 
 Return the index of the top-level item that is at the top of the browser.
 
-<a name=topline><h4>void topline(int line)</h4></a>
+<h4>void topline(int line)</h4>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
 href=#make_item_visible>make_item_visible(TOP)</a>;</tt>.

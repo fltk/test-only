@@ -120,7 +120,7 @@ reduces code size and execution time.  The only common exception is
 Then we indicate we are done adding widgets to the window:
 
 <UL><PRE>
-window-&gt;<A href=Fl_Group.html#Fl_Group.end>end</A>();
+window-&gt;<A href=Fl_Group.html#end>end</A>();
 </PRE></UL>
 
 <p>To simplify the code you have to write, the constructor for all
@@ -128,10 +128,10 @@ widgets automatically adds them as children of the most recent <a
 href=Fl_Group.html>Fl_Group</a> or <a
 href=Fl_Window.html>Fl_Window</a> that was created. Though convienent,
 this is also a big source of errors in FLTK programming. The method <A
-href=Fl_Group.html#Fl_Group.end>Fl_Group::end()</A> restores the
+href=Fl_Group.html#end>Fl_Group::end()</A> restores the
 "current group" to the parent of itself, in this case it is set to
 null because the window has no parent.  You may also find it useful to
-call <a href=Fl_Group.html#Fl_Group.current>Fl_Group::current(0)</a>
+call <a href=Fl_Group.html#current>Fl_Group::current(0)</a>
 to turn this off completely.
 
 <h3>Showing the Window</h3>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.60 2002/04/02 08:33:32 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.61 2002/04/11 07:47:46 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1004,9 +1004,10 @@ int Fl_Input::handle(int event) {
 }
 
 // set this to 1 to get the ability to drag selected text out to other
-// widgets, like some IDEs do. This appears to mostly be a pain because
-// you cannot select a region inside the current region.
-#define DND_OUT 1
+// widgets, like some IDEs do, and KDE does, and apparently WinXP does.
+// This appears to mostly be a pain because you cannot select a region
+// inside the current region.
+#define DND_OUT 0
 
 int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 #if DND_OUT
@@ -1065,18 +1066,15 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
 
-#if 0
   case FL_SHORTCUT:
     // If the user types text to a widget that does not want it, it will
     // call here eventually. Take the focus on the assumption they are
     // trying to type into this text field:
-    // This is removed as it prevents single-key shortcuts from being
-    // accepted by other widgets.
     if (Fl::event_text()[0]<=' ') return 0;
     if (Fl::event_state(FL_ALT|FL_WIN)) return 0;
+    //if (key_is_shortcut()) return 0; // did not work, needs recursion test
     position(size());
     take_focus();
-#endif
   case FL_KEYBOARD:
     return handle_key();
 
@@ -1190,11 +1188,10 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     return 1;}
 
   case FL_DND_LEAVE:
-#if DND_OUT
-    if (dnd_target != this) {minimal_update(0); return 0;}
-#endif
-    erase_cursor_at(dnd_target_position);
-    dnd_target = 0;
+    if (dnd_target == this) {
+      dnd_target = 0;
+      erase_cursor_at(dnd_target_position);
+    }
     return 1;
 
   case FL_DND_RELEASE:
@@ -1222,5 +1219,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.60 2002/04/02 08:33:32 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.61 2002/04/11 07:47:46 spitzak Exp $".
 //

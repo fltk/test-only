@@ -1,7 +1,7 @@
 <html><head><title>Fl_Widget</title></head><body bgcolor = white>
 
 <hr break>
-<a name=Fl_Widget><h2>class Fl_Widget</h2></a>
+<h2>class Fl_Widget</h2>
 <hr>
 <h3>Class Hierarchy</h3>
 
@@ -759,7 +759,7 @@ be redrawn (non-group widgets can use this bit for their own purposes).</li>
 needs to be redrawn. This is handled (and this bit is cleared) by the
 parent group.</li>
 <li><tt>FL_DAMAGE_EXPOSE</tt> - Damage caused by <a
-href=Fl_Widget.html#expose><tt>expose()</tt></a> or by expose events
+href=Fl_Widget.html#damage><tt>damage()</tt></a> or by expose events
 from the operating system. If this and <tt>FL_DAMAGE_ALL</tt> is on
 the widget should draw every pixel inside it's region.
 <li><tt>FL_DAMAGE_ALL</tt> - This bit is set by <a

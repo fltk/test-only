@@ -1,6 +1,6 @@
 <HTML><BODY>
 <HR break>
-<H2><A name=Fl_Overlay_Window>class Fl_Overlay_Window</A></H2>
+<H2>class Fl_Overlay_Window</H2>
 <HR>
 <H3>Class Hierarchy</H3>
 <UL>
@@ -28,29 +28,34 @@ directly into the on-screen copy of the double-buffered window, and
 overlay will blink if you change the image in the window. </P>
 <H3>Methods</H3>
 <UL>
-<LI><A href=#Fl_Overlay_Window.Fl_Overlay_Window>Fl_Overlay_Window</A></LI>
-<LI><A href=#Fl_Overlay_Window.~Fl_Overlay_Window>~Fl_Overlay_Window</A></LI>
-<LI><A href=#Fl_Overlay_Window.draw_overlay>draw_overlay</A></LI>
-<LI><A href=#Fl_Overlay_Window.redraw_overlay>redraw_overlay</A></LI>
+<LI><A href=#Fl_Overlay_Window>Fl_Overlay_Window</A></LI>
+<LI><A href=#~Fl_Overlay_Window>~Fl_Overlay_Window</A></LI>
+<LI><A href=#draw_overlay>draw_overlay</A></LI>
+<LI><A href=#redraw_overlay>redraw_overlay</A></LI>
 </UL>
-<H4><A name=Fl_Overlay_Window.Fl_Overlay_Window>
-Fl_Overlay_Window::Fl_Overlay_Window(int x, int y, int w, int h, const 
-char *label = 0)</A></H4>
- Creates a new <TT>Fl_Overlay_Window</TT> widget using the given 
-position, size, and label (title) string. 
-<H4><A name=Fl_Overlay_Window.~Fl_Overlay_Window>virtual 
-Fl_Overlay_Window::~Fl_Overlay_Window()</A></H4>
- Destroys the window and all child widgets. 
-<H4><A name=Fl_Overlay_Window.>virtual void 
-Fl_Overlay_Window::draw_overlay() = 0</A></H4>
- You must subclass <TT>Fl_Overlay_Window</TT> and provide this method. 
- It is just like a <TT>draw()</TT> method, except it draws the overlay. 
- The overlay will have already been &quot;cleared&quot; when this is called.  You 
-can use any of the routines described in <A href=drawing.html#Drawing>
-&lt;fltk/fl_draw.h&gt;</A>. 
-<H4><A name=Fl_Overlay_Window.>void Fl_Overlay_Window::redraw_overlay()</A>
-</H4>
- Call this to indicate that the overlay data has changed and needs to 
+
+<a name=Fl_Overlay_Window><h4>Fl_Overlay_Window::Fl_Overlay_Window(int x, int y, int w, int h, const char *label = 0)</h4></a>
+
+Creates a new <TT>Fl_Overlay_Window</TT> widget using the given
+position, size, and label (title) string.
+
+<a name=~Fl_Overlay_Window><h4>virtual Fl_Overlay_Window::~Fl_Overlay_Window()</h4></a>
+
+Destroys the window and all child widgets. 
+
+<a name=draw_overlay><h4>virtual void Fl_Overlay_Window::draw_overlay() = 0</h4></a>
+
+You must subclass <TT>Fl_Overlay_Window</TT> and provide this method.
+It is just like a <TT>draw()</TT> method, except it draws the overlay.
+The overlay will have already been &quot;cleared&quot; when this is
+called.  You can use any of the routines described in <A
+href=drawing.html>&lt;fltk/fl_draw.h&gt;</A>.
+
+<a name=redraw_overlay><h4>void Fl_Overlay_Window::redraw_overlay()</h4></a>
+
+Call this to indicate that the overlay data has changed and needs to 
 be redrawn.  The overlay will be clear until the first time this is 
 called, so if you want an initial display you must call this after 
-calling <TT>show()</TT>. </BODY></HTML>
+calling <TT>show()</TT>.
+
+</body></html>

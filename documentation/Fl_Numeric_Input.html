@@ -1,7 +1,7 @@
 <html><head><title>Fl_Numeric_Input</title></head><body bgcolor = white>
 
 <hr break>
-<a name=Fl_Numeric_Input><h2>class Fl_Numeric_Input</h2></a>
+<h2>class Fl_Numeric_Input</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -90,14 +90,14 @@ Does a %g sprintf of the value and uses the result to set the string
 value. Notice that there is no inverse function, you will have to call
 <tt>strtod(widget->value(),0,0)</tt> yourself.
 
-<a name="value"><h4>void value(int);</h4></a>
+<h4>void value(int);</h4>
 
 Does a %d sprintf of the value and uses the result to set the string
 value. Notice that there is no inverse function, you will have to call
 <tt>strtol(widget->value(),0,0)</tt> yourself.
 
-<a name="value"><h4>void value(const char* s);
-<br>const char* value() const;</h4></a>
+<h4>void value(const char* s);
+<br>const char* value() const;</h4>
 
 Same as the methods from Fl_Input, these let you set or get the string
 value in the widget. You may also want <a

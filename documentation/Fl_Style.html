@@ -110,7 +110,7 @@ button_color described below.
 
 <p>If you want to change the overall color of all the gray parts of
 the interface you want to call <a
-href=Fl_Color#fl_background><code>fl_background(color)</code></a>
+href="Fl_Color.html#fl_background"><tt>fl_background(color)</tt></a>
 instead, as this will set the entry for <code>FL_GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
@@ -243,7 +243,7 @@ definition by linking a object file that defines fltk_theme().
 directly.
 
 <p>If fltk is dynamically linked and <a
-href="Fl.html@args">Fl::args()</a> is used, the theme may be loaded by
+href="Fl.html#args">Fl::args()</a> is used, the theme may be loaded by
 name by the -theme switch. This calls
 Fl_Style::theme(Fl_Style::load_theme(name)).
 
@@ -267,7 +267,7 @@ Get or set the function that will be called when the theme is loaded.
 Fltk also keeps track of a single string pointer that can be used as
 an "argument" to the theme function, perhaps to identify a file it
 should read. The default value is null. If you use <a
-href="Fl.html@args">Fl::args()</a> then the "-scheme" switch sets
+href="Fl.html#args">Fl::args()</a> then the "-scheme" switch sets
 this.
 
 <a name=load_theme><h4>static Fl_Theme Fl_Style::load_theme(const char* name);</h4></a>
@@ -369,6 +369,23 @@ first one found is returned:
 by a configuration option when fltk is compiled)
 
 </ul>
+
+<a name=fl_load_plugin><h4>void* fl_load_plugin(const char* name, const char* symbol);</h4></a>
+
+Loads a shared object (DLL) in a portable way. <i>name</i> is a
+complete filename (such as one located by <a
+href=#fl_find_config_file><tt>fl_find_config_file()</tt></a>) and
+<i>symbol</i> is the name of some object in the plugin.
+
+<p>If the plugin file successfully loads (or has already been loaded)
+then a pointer to the given symbol is returned. If the plugin is not
+found or the symbol is not in it then an appropriate error message is
+printed on stderr and null is returned.
+
+<p>You can pass <tt>NULL</tt> as the <i>symbol</i> to indicate that
+you just want to load the plugin. In this case a non-zero value is
+returned if the plugin successfully loads, but you cannot use this
+value for anything other than to test for success.
 
 <h4>Fl_Widget::default_style</h4>
 

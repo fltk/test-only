@@ -24,7 +24,7 @@ can call <tt>_draw()</tt> to draw them, and all subsequent calls they
 can just call <tt>_draw()</tt>. To test if this is the first call to
 <tt>draw()</tt> a subclass can check if <tt>id</tt> is zero.
 
-<h4>virtual void Fl_Image::measure(int& w, int& h);</h4>
+<a name=measure><h4>virtual void Fl_Image::measure(int& w, int& h);</h4></a>
 
 The two parameters are set to the size the image will occupy when
 drawn. For image types that can scale these are also input parameters:
@@ -33,7 +33,7 @@ they must be preset to the rectangle the caller intends to pass to
 the "natural" size of a scaling image, preset w and h to zero before
 calling this.
 
-<h4>virtual void Fl_Image::draw(int x,int y,int w,int h, Fl_Flags);</h4>
+<a name=draw><h4>virtual void Fl_Image::draw(int x,int y,int w,int h, Fl_Flags);</h4></a>
 
 Draw the image with the upper-left corner at <i>x,y</i>. If the image
 can scale or tile or otherwise uses a size, the <i>w,h</i> describe

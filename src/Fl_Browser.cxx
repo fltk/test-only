@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.60 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.61 2002/04/11 07:47:45 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -643,12 +643,14 @@ void Fl_Browser::yposition(int Y) {
 
 // Set the focus (the one with the box around it):
 bool Fl_Browser::set_focus() {
-  if (at_mark(FOCUS)) return false; // current item already focused
-  damage_item(HERE); // so will draw focus box around item
-  damage_item(FOCUS); // so focus box around old focus item will be removed
-  set_mark(FOCUS, HERE); // current item is new focus item
+  bool ret = !at_mark(FOCUS);
+  if (ret) {
+    damage_item(HERE); // so will draw focus box around item
+    damage_item(FOCUS); // so focus box around old focus item will be removed
+    set_mark(FOCUS, HERE); // current item is new focus item
+  }
   make_item_visible();
-  return true;
+  return ret;
 }
 
 // Force the item to appear by turning off invisible flag and opening
@@ -1059,5 +1061,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.60 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.61 2002/04/11 07:47:45 spitzak Exp $".
 //

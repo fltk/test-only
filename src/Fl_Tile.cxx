@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.18 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.19 2002/04/11 07:47:46 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -64,9 +64,9 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
 
 // resizing is equivalent to moving  the lower-right corner (sort of):
 void Fl_Tile::layout() {
+  int* p = sizes(); // remember the initial positions on first call here
   if (layout_damage() & FL_LAYOUT_WH) {
     layout_damage(layout_damage() & ~FL_LAYOUT_WH);
-    int* p = sizes();
     // drag the corner of the group to the new position:
     position(p[1], p[3], w(), h());
     // drag the corner of the resizable() to the new position:
@@ -178,5 +178,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.18 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.19 2002/04/11 07:47:46 spitzak Exp $".
 //

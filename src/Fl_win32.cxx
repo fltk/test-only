@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.168 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.169 2002/04/11 07:47:46 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -640,7 +640,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #else
     // But it appears that Windows is just not happy unless you do a
     // draw right now. It holds it's breath and turns blue if you try
-    // to disobey. So instead I replicate that part of Fl::flush here:
+    // to disobey. This is rather a pain, I have to throw away Window's
+    // setting of the region and recreate it later:
+    SelectClipRgn(i->dc, 0);
     window->flush();
     window->set_damage(0);
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
@@ -681,14 +683,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (window == xmousewin) {xmousewin = 0; Fl::handle(FL_LEAVE, window);}
     break;
 
-  case WM_SETFOCUS:
-    xfocus = window;
-    fl_fix_focus();
-    break;
-
   case WM_KILLFOCUS:
-    if (window == xfocus) {
-      xfocus = 0;
+    window = 0;
+  case WM_SETFOCUS:
+    if (xfocus != window) {
+      xfocus = window;
       fl_fix_focus();
       // this is necessary so the fltk main loop gets called, otherwise
       // Windows never returns from GetMessage! :-(
@@ -1333,5 +1332,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.168 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.169 2002/04/11 07:47:46 spitzak Exp $".
 //

@@ -2172,3 +2172,17 @@ outside (the types and action are set). You can preset the types and
 action before calling fl_dnd() to allow drag-out of other data
 (changing the data based on the requested type is not supported,
 however).
+
+////////////////////////////////////////////////////////////////
+
+NT version left clip region set after getting an WM_PAINT message,
+which caused drawing outside the region, such as due to redraw()
+calls, to be thrown away.
+
+Cleaned up the button drawing code a little more.
+
+////////////////////////////////////////////////////////////////
+
+Fl::add_timeout caused Fl::wait to return 0
+
+Numerous typos in documentation reported by Alexander Mai fixed.

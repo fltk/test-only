@@ -1,7 +1,7 @@
 <html><head><title>Fl_Menu_</title></head><body bgcolor = white>
 
 <hr break>
-<a name=Fl_Menu_><h2>class Fl_Menu_</h2></a>
+<h2>class Fl_Menu_</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -118,7 +118,7 @@ parent is "open", which means the FL_OPEN flag was set in it, so if it
 is expensive to calculate the number an Fl_List can return 1 for any
 closed parent.
 
-<a name=children><h4>int Fl_Menu_::children() const</h4></a>
+<h4>int Fl_Menu_::children() const</h4>
 
 Returns the number of children at the top level. Same as
 <tt>children(0,0)</tt>.
@@ -139,7 +139,7 @@ out of range or the level goes below a non-parent.
 structure and may be overwritten by another call to <tt>child()</tt>
 in this <i>or any other</i> <tt>Fl_Menu_</tt>.
 
-<a name=child><h4>Fl_Widget* Fl_Menu_::child(int index) const</h4></a>
+<h4>Fl_Widget* Fl_Menu_::child(int index) const</h4>
 
 Returns the given top-level child. Same as <tt>child(&amp;index,0)</tt>.
 
@@ -284,7 +284,7 @@ these new values. This is what add() on menus did in fltk 1.0.
 <a name="find"><h4>Fl_Widget* Fl_Menu_::find(const char* label) const;</h4></a>
 
 Does the same search as <a href=#add><tt>add()</tt></a> or <a
-href=#replace<tt>replace()</tt></a> for an item with that name
+href="#replace"><tt>replace()</tt></a> for an item with that name
 (including using '/' for submenus) and returns that item if it exists,
 or <tt>NULL</tt> if it does not.
 

@@ -131,7 +131,7 @@ loading functions by doing: </P>
 </PRE>
 </UL>
 Your main program can now create one of your windows by doing <TT>new 
-MyWindow(...)</TT>.  You can also use <A href=FLUID.html#FLUID>FLUID</A>
+MyWindow(...)</TT>.  You can also use <A href=fluid.html>FLUID</A>
 by: 
 <OL>
 <LI>Putting your class definition in a <tt>MyWindow.H</tt> file. </LI>
@@ -150,7 +150,7 @@ or other places with some care.
 <P>Most importantly, before you show <I>any</I> windows (including those 
 that don't have OpenGL drawing) you <B>must</B> initialize FLTK so that it 
 knows it is going to use OpenGL.  You may use any of the symbols 
-described for <A href=Fl_Gl_Window.html#Fl_Gl_Window.mode><TT>
+described for <A href=Fl_Gl_Window.html#mode><TT>
 Fl_Gl_Window::mode()</TT></A> to describe how you intend to use OpenGL: </P>
 <UL>
 <PRE>
@@ -201,7 +201,7 @@ uses the default colormap!</I>
 <H4>void gl_rect(int x, int y, int w, int h)
 <BR> void gl_rectf(int x, int y, int w, int h)</H4>
 Outline or fill a rectangle with the current color.  If
-<A HREF="Fl_Gl_Window.html#Fl_Gl_Window.ortho"><TT>Fl_Gl_Window::ortho()</TT></A>
+<A HREF="Fl_Gl_Window.html#ortho"><TT>Fl_Gl_Window::ortho()</TT></A>
 has been called, then the rectangle will exactly fill the pixel 
 rectangle passed. 
 <H4>void gl_font(Fl_Font fontid, int size)</H4>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.138 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.139 2002/04/11 07:47:45 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -216,25 +216,7 @@ extern int fl_wait(double time); // in Fl_x.cxx or Fl_win32.cxx
 static char in_idle;
 
 int Fl::wait(double time_to_wait) {
-  if (first_timeout) {
-    elapse_timeouts();
-    Timeout *t;
-    while ((t = first_timeout)) {
-      if (t->time > 0) break;
-      // The first timeout in the array has expired.
-      missed_timeout_by = t->time;
-      // We must remove timeout from array before doing the callback:
-      void (*cb)(void*) = t->cb;
-      void *arg = t->arg;
-      first_timeout = t->next;
-      t->next = free_timeout;
-      free_timeout = t;
-      // Now it is safe for the callback to do add_timeout:
-      cb(arg);
-    }
-  } else {
-    reset_clock = 1; // we are not going to check the clock
-  }
+  int ret = 0;
   // checks are a bit messy so that add/remove and wait may be called
   // from inside them without causing an infinite loop:
   if (next_check == first_check) {
@@ -248,20 +230,40 @@ int Fl::wait(double time_to_wait) {
   if (idle) {
     if (!in_idle) {in_idle = 1; idle(); in_idle = 0;}
     // the idle function may turn off idle, we can then wait:
-    if (idle) time_to_wait = 0.0;
+    if (idle && time_to_wait > 0) {time_to_wait = 0.0; ret = 1;}
   }
-  if (first_timeout && first_timeout->time < time_to_wait)
-    time_to_wait = first_timeout->time;
+  if (first_timeout) {
+    elapse_timeouts();
+    Timeout *t;
+    while ((t = first_timeout)) {
+      if (t->time > 0) {
+	if (t->time < time_to_wait) {time_to_wait = t->time; ret = 1;}
+	break;
+      }
+      // The first timeout in the array has expired.
+      missed_timeout_by = t->time;
+      // We must remove timeout from array before doing the callback:
+      void (*cb)(void*) = t->cb;
+      void *arg = t->arg;
+      first_timeout = t->next;
+      t->next = free_timeout;
+      free_timeout = t;
+      // Now it is safe for the callback to do add_timeout:
+      cb(arg);
+    }
+  } else {
+    reset_clock = 1; // remember that elapse_timeouts was not called
+  }
   if (time_to_wait <= 0.0) {
-    // do flush second so that the results of timeouts are visible:
-    int ret = fl_wait(0.0);
+    // do flush second so that the results of callbacks are visible:
+    if (fl_wait(0.0)) ret = 1;
     flush();
-    return ret;
   } else {
     // do flush first so that user sees the display:
     flush();
-    return fl_wait(time_to_wait);
+    if (fl_wait(time_to_wait)) ret = 1;
   }
+  return ret;
 }
 
 int Fl::check() {
@@ -661,5 +663,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.138 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.139 2002/04/11 07:47:45 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.50 2002/04/02 08:33:31 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.51 2002/04/11 07:47:45 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -159,55 +159,50 @@ void Fl_Button::draw(int glyph, int glyph_width) const
     }
   }
 
+  bool draw_label = true;
+  int x = 0, y = 0, w = this->w(), h = this->h();
   Fl_Boxtype box = this->box();
 
-  // FL_NO_BOX does not need to draw anything other than the glyph
-  // unless this is a regular draw or the focus is going away. This
-  // avoids blinking and avoids double-drawing the label (which makes
-  // it bold if antialiasing is on):
-  if (box == FL_NO_BOX && !(damage()&FL_DAMAGE_EXPOSE) &&
-      !(damage()&FL_DAMAGE_HIGHLIGHT && !focused())) {
-    if (glyph_width < 0) {
-      int g = -glyph_width;
-      draw_glyph(glyph, w()-g-3, (h()-g)/2, g, g, glyph_flags);
-    } else if (glyph_width > 0) {
-      int g = glyph_width;
-      draw_glyph(glyph, 3, (h()-g)/2, g, g, glyph_flags);
+  if (box == FL_NO_BOX) {
+    // If the box is FL_NO_BOX we need to avoid drawing the label so
+    // that it does not blink and does not draw multiple times (which
+    // will make it look bold if antialiasing is on).
+    if ((damage()&FL_DAMAGE_EXPOSE) ||
+	(damage()&FL_DAMAGE_HIGHLIGHT) && !focused()) {
+      // erase the background:
+      fl_push_clip(0, 0, w, h);
+      parent()->draw_group_box();
+      fl_pop_clip();
+    } else {
+      draw_label = false;
     }
-    if (focused()) {
-      focus_box()->draw(1, 1, w()-2, h()-2, text_color(), FL_INVISIBLE);
+  } else {
+    if ((damage()&FL_DAMAGE_EXPOSE) && !box->fills_rectangle()) {
+      // Erase the area behind non-square boxes
+      fl_push_clip(0, 0, w, h);
+      parent()->draw_group_box();
+      fl_pop_clip();
     }
-    return;
+    // Draw the box:
+    box->draw(0, 0, w, h, color, flags);
+    box->inset(x,y,w,h);
   }
-
-  // Erase the area around non-square boxes, or the entire background
-  // for a no-box widget:
-  if (box==FL_NO_BOX || damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()) {
-    fl_push_clip(0, 0, this->w(), this->h());
-    parent()->draw_group_box();
-    fl_pop_clip();
-  }
-
-  // Draw the box:
-  box->draw(0,0, this->w(), this->h(), color, flags);
-  int x,y,w,h;
-  x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
 
   if (glyph_width < 0) {
     int g = -glyph_width;
     draw_glyph(glyph, x+w-g-3, y+(h-g)/2, g, g, glyph_flags);
-    draw_inside_label(x, y, w-g-3, h, flags);
+    if (draw_label) draw_inside_label(x, y, w-g-3, h, flags);
   } else if (glyph_width > 0) {
     int g = glyph_width;
     draw_glyph(glyph, x+3, y+(h-g)/2, g, g, glyph_flags);
-    draw_inside_label(x+g+3, y, w-g-3, h, flags);
+    if (draw_label) draw_inside_label(x+g+3, y, w-g-3, h, flags);
   } else {
-    draw_inside_label(x, y, w, h, flags);
+    if (draw_label) draw_inside_label(x, y, w, h, flags);
   }
 
   if (focused()) {
     focus_box()->draw(x+1, y+1, w-2, h-2,
-		      flags&FL_SELECTED ? selection_text_color():text_color(),
+		      flags&FL_SELECTED ? selection_text_color():label_color(),
 		      FL_INVISIBLE);
   }
 }
@@ -235,5 +230,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.50 2002/04/02 08:33:31 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.51 2002/04/11 07:47:45 spitzak Exp $".
 //
