@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.2 1999/09/27 17:43:35 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.3 1999/09/27 18:28:09 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -33,13 +33,16 @@
 
 #include <FL/dirent.h>
 
+static bool theme = 0, loaded = 0;
+
 static void ReadPlugin(char* s, char* location, char* ext, char* func)
 {
   FLDLhandle handle;
+  loaded = 0;
   if(!strcmp(s+strlen(s)-strlen(ext), ext)) {
     char s2[256];
 
-    sprintf(s2, "%s%s", location, s);
+    snprintf(s2, 256, "%s%s", location, s);
     handle = FLDLopen(s2 );
 
     if(handle) {
@@ -50,6 +53,7 @@ static void ReadPlugin(char* s, char* location, char* ext, char* func)
       Fl_Style_Plugin_Entry* e = (Fl_Style_Plugin_Entry*) FLDLsym( handle, func);
       if(e) {
 	used = 1;
+	loaded = 1;
 	e();
       }
 
@@ -68,7 +72,7 @@ static void ReadPlugins(char* location, char* ext, char* func)
 
   for (int i = n; i > 0;) 
   {
-    ReadPlugin(d[i-1]->d_name, location, ext, func);
+    if (!theme || !loaded) ReadPlugin(d[i-1]->d_name, location, ext, func);
     free((void*)(d[--i]));
   }
   free((void*)d);
@@ -78,19 +82,24 @@ static void ReadPlugins(char* location, char* ext, char* func)
 void fl_read_style_plugins()
 {
   fl_default_style_def();
+  theme = 0;
   // Priority order in case of duplicate plugin name is from the most local to the most global
   ReadPlugins("./", STYLE_EXTENSION, STYLE_FUNCTION);
   ReadPlugins("fltk.plugins/", STYLE_EXTENSION, STYLE_FUNCTION);
 #ifndef WIN32
   char s[256];
-  sprintf(s, "%s/.fltk/plugins/", getenv("HOME"));
+  snprintf(s, 256, "%s/.fltk/plugins/", getenv("HOME"));
   ReadPlugins(s, STYLE_EXTENSION, STYLE_FUNCTION);
 #endif
 
+  theme = 1;
+  loaded = 0;
   ReadPlugins("fltk.plugins/", THEME_EXTENSION, THEME_FUNCTION);
+  if (loaded) return;
   ReadPlugins("./", THEME_EXTENSION, THEME_FUNCTION);
 #ifndef WIN32
-  sprintf(s, "%s/.fltk/plugins/", getenv("HOME"));
+  if (loaded) return;
+  snprintf(s, 256, "%s/.fltk/plugins/", getenv("HOME"));
   ReadPlugins(s, THEME_EXTENSION, THEME_FUNCTION);
 #endif
 
@@ -180,11 +189,13 @@ static bool parse_text_color(Fl_Style& style, char* s) {
 
 
 #include <FL/Fl_Boxtype.H>
-static struct fl_box {
+struct fl_box {
   char* name;
   Fl_Boxtype_ bt;
-} boxtypes[] = {
-{"no_box", 0},
+};
+
+static fl_box  boxtypes[] = {
+{"no_box", fl_no_box},
 {"flat_box", fl_flat_box},
 {"flat_up_box", fl_flat_up_box},
 {"flat_down_box", fl_flat_down_box},
@@ -206,6 +217,7 @@ static struct fl_box {
 {"oval_box", fl_oval_box},
 {"oval_shadow_box", fl_oval_shadow_box},
 {"oval_flat_box", fl_oval_flat_box},
+{"border_frame", fl_border_frame },
 {0,0}
 };
 
@@ -238,5 +250,5 @@ void fl_default_style_def()
 }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.2 1999/09/27 17:43:35 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.3 1999/09/27 18:28:09 vincent Exp $".
 //

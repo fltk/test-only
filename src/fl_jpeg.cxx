@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.7 1999/09/14 17:52:44 carl Exp $"
+// "$Id: fl_jpeg.cxx,v 1.8 1999/09/27 18:28:10 vincent Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -252,6 +252,8 @@ static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
 
 #endif
 
+void declare_now(void*) { }
+
 void Fl_JPEG_Image::measure(int &W, int &H)
 {
 #if !HAVE_JPEG
@@ -265,6 +267,7 @@ void Fl_JPEG_Image::measure(int &W, int &H)
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile = 0;
+  declare_now(&infile);
 
   INPUT_BUF_SIZE = 4096;
 
@@ -315,6 +318,7 @@ void Fl_JPEG_Image::read()
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile = 0;
+  declare_now(&infile);
 
   INPUT_BUF_SIZE = 4096;
 
@@ -399,5 +403,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.7 1999/09/14 17:52:44 carl Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.8 1999/09/27 18:28:10 vincent Exp $"
 //
