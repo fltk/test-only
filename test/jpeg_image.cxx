@@ -1,5 +1,5 @@
 //
-// "$Id: jpeg_image.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $"
+// "$Id: jpeg_image.cxx,v 1.6 2000/07/07 08:40:31 spitzak Exp $"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -65,9 +65,9 @@ public:
 
 void image_window::draw() {
   if (mono)
-    fl_draw_image_mono(ibuffer+1,0,0,width,height,depth,linedelta);
+    fl_draw_image_mono(ibuffer+1,0,0,::width,::height,depth,linedelta);
   else
-    fl_draw_image(ibuffer,0,0,width,height,depth,linedelta);
+    fl_draw_image(ibuffer,0,0,::width,::height,depth,linedelta);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -198,5 +198,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: jpeg_image.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $".
+// End of "$Id: jpeg_image.cxx,v 1.6 2000/07/07 08:40:31 spitzak Exp $".
 //

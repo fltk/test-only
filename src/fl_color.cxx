@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.21 2000/06/27 23:32:53 easysw Exp $"
+// "$Id: fl_color.cxx,v 1.22 2000/07/07 08:40:31 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -285,7 +285,7 @@ Fl_Color fl_nearest_color(Fl_Color i) {
   uchar r = i>>24;
   uchar g = i>>16;
   uchar b = i>> 8;
-  if (r == g && r == b) return fl_gray_ramp(r*FL_NUM_GRAY/256);
+  //if (r == g && r == b) return fl_gray_ramp(r*FL_NUM_GRAY/256);
   return fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
 }
 
@@ -320,5 +320,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.21 2000/06/27 23:32:53 easysw Exp $".
+// End of "$Id: fl_color.cxx,v 1.22 2000/07/07 08:40:31 spitzak Exp $".
 //
