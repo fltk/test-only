@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.31 1999/11/05 21:43:55 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.32 1999/11/06 02:02:02 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -190,6 +190,8 @@ Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
   return newstyle;
 }
 
+// this should only be used in constructors to set the default for a class.
+// for general use, use copy_style()
 void Fl_Widget::style(Fl_Style* s) {
   s->parent = &Fl_Widget::default_style;
 
@@ -207,8 +209,10 @@ void Fl_Widget::style(Fl_Style* s) {
 int Fl_Widget::copy_style(const Fl_Style* t) {
   if (!t->dynamic) {style_ = t; return 0;}
   Fl_Style* s = new Fl_Style;
-  *s = *t;
+  memset(s, 0, sizeof(*s));
+  s->parent = (Fl_Style*)t;
   s->dynamic = 1;
+  if (style_ && style_->dynamic) delete style_;
   style_ = s;
   return 1;
 }
@@ -365,5 +369,5 @@ Fl_Style_Definer* Fl_Style_Definer::first = 0;
 static Fl_Style_Definer x("default", Fl_Widget::default_style, revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.31 1999/11/05 21:43:55 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.32 1999/11/06 02:02:02 carl Exp $".
 //
