@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+version 2.0000
 images_dir images 
 header_name {.h} 
 code_name {.cxx} 
@@ -86,7 +86,7 @@ browser_window->show();
 class image : public Fl_Shared_Image {
 public:
 	ulong get_id() { return id; }
-	char* get_filename() { return name; }
+	char* get_filename() { return (char *)name; }
 	static void check() { check_mem_usage(); }
 };
 
