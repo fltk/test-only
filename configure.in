@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.60 1999/11/10 16:39:27 vincent Exp $"
+dnl# "$Id: configure.in,v 1.61 1999/11/10 18:21:47 carl Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -262,8 +262,8 @@ if test -n "$GXX"; then
     CFLAGS="-Wall $CFLAGS"
     CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
-        CFLAGS="-O2 $CFLAGS"
-        CXXFLAGS="-O2 $CXXFLAGS"
+        CFLAGS="-O2 -fomit-frame-pointer $CFLAGS"
+        CXXFLAGS="-O2 -fno-rtti -fno-exceptions -fomit-frame-pointer $CXXFLAGS"
     fi
     if test $PICFLAG = 1; then
     	CFLAGS="-fPIC $CFLAGS"
@@ -349,5 +349,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.60 1999/11/10 16:39:27 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.61 1999/11/10 18:21:47 carl Exp $".
 dnl#
