@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.16 2004/07/11 18:15:31 laza2000 Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.17 2004/07/11 20:06:25 laza2000 Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -48,19 +48,26 @@ extern "C" {
 
 #endif /* SYSRGN */
 
-extern int has_unicode();
-
 // Return true if rect is completely visible on screen.
 // If other window is overlapping rect, return false.
 static bool is_visible(int x, int y, int w, int h) 
 {
+  static int is_w9x = -1;
   // Get visible region of window
   HRGN rgn0 = CreateRectRgn (0, 0, 0, 0);
 
   // Copy system clipping region from fltk::dc
   GetRandomRgn (fltk::dc, rgn0, SYSRGN);
 
-  if(has_unicode()) {
+  if(is_w9x==-1) {
+    // Figure out OS
+    OSVERSIONINFOA os;
+    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+    GetVersionExA(&os);
+    is_w9x = (os.dwPlatformId!=VER_PLATFORM_WIN32_NT);
+  }
+
+  if(!is_w9x) {
     // Windows 9x operating systems the region is returned in window coordinates, 
     // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
     POINT pt = { 0, 0 };
@@ -171,5 +178,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.16 2004/07/11 18:15:31 laza2000 Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.17 2004/07/11 20:06:25 laza2000 Exp $".
 //
