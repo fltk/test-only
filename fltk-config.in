@@ -4,7 +4,7 @@
 #
 # original version by James Dean Palmer, adapted by Vincent Penne
 #
-# "$Id: fltk-config.in,v 1.7 1999/12/08 10:53:00 vincent Exp $"
+# "$Id: fltk-config.in,v 1.8 1999/12/09 03:28:19 carl Exp $"
 #
 
 MAJOR_VERSION=2
@@ -32,7 +32,7 @@ CC="@CC@"
 
 # flags for C++ compiler:
 CFLAGS="@CFLAGS@"
-CXXFLAGS="@CXXFLAGS@"
+CXXFLAGS="@CXXFLAGS@ @X_CFLAGS@"
 
 # program to make the archive:
 LIBNAME="@LIBNAME@"
@@ -167,13 +167,13 @@ fi
 if test "$echo_cflags" = "yes"; then
       includes=-I`echo "$0" | sed 's/\/bin\/fltk-config/\/include/
 s/\/fltk-config//'`
-      echo $includes $FLTK_CFLAGS
+      echo $includes $CFLAGS
 fi
 
 if test "$echo_cxxflags" = "yes"; then
       includes=-I`echo "$0" | sed 's/\/bin\/fltk-config/\/include/
 s/\/fltk-config//'`
-      echo $includes $FLTK_CXXFLAGS
+      echo $includes $CXXFLAGS
 fi
 
 # Calculate libraries needed in funcion
