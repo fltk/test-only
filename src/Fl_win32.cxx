@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.93 2000/03/17 09:50:09 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.94 2000/03/20 08:40:25 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -776,8 +776,7 @@ int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
 
 void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
-  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
-  else flags |= SWP_NOMOVE;
+  if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
   if (ow() == w() && oh() == h()) {
     Fl_Widget*const* a = array();
     Fl_Widget*const* e = a+children();
@@ -858,12 +857,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     // we don't want an entry in the task list for menuwindows or tooltips!
     if (style&WS_POPUP) styleEx |= WS_EX_TOOLWINDOW;
-    if (!(w->flags() & Fl_Window::FL_FORCE_POSITION)) {
-      xp = yp = CW_USEDEFAULT;
-    } else {
-      xp = w->x()-dx;
-      yp = w->y()-dy;
-    }
+    xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
+    yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
     if (fl_modal_for && !fl_disable_transient_for) {
       parent = fl_modal_for->i->xid;
     } else {
@@ -1126,5 +1121,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.93 2000/03/17 09:50:09 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.94 2000/03/20 08:40:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.52 2000/02/14 11:32:56 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.53 2000/03/20 08:40:24 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -77,7 +77,7 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   flags_	= 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
-  damage_	= 0;
+  damage_	= FL_DAMAGE_LAYOUT|FL_DAMAGE_ALL;
   when_		= FL_WHEN_RELEASE;
   if (Fl_Group::current()) Fl_Group::current()->add(this);
 }
@@ -272,18 +272,17 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
 // Call the draw method, handle the clip out
 void Fl_Widget::draw_n_clip()
 {
-  if (!box()->fills_rectangle() && !(image() && (flags()&FL_ALIGN_TILED) &&
-		(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
+  if (!(box()->fills_rectangle() ||
+	image() && (flags()&FL_ALIGN_TILED) &&
+	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
     fl_clip(x(), y(), w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  clear_damage(FL_DAMAGE_ALL);
   draw();
-  clear_damage();
   fl_clip_out(x(), y(), w(), h());
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.52 2000/02/14 11:32:56 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.53 2000/03/20 08:40:24 bill Exp $".
 //

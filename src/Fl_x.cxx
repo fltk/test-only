@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.66 2000/03/02 20:47:15 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.67 2000/03/20 08:40:25 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -610,7 +610,6 @@ int fl_handle(const XEvent& xevent)
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
-  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
   if (ow() == w() && oh() == h()) {
     if (this == resize_from_system) resize_from_system = 0;
     else if (i && (ox() != x() || oy() != y()))
@@ -684,13 +683,8 @@ void Fl_X::create(Fl_Window* w,
   if (W <= 0) W = 1; // X don't like zero...
   int H = w->h();
   if (H <= 0) H = 1; // X don't like zero...
-  // center windows in case window manager does not do anything:
-  if (!(w->flags() & Fl_Window::FL_FORCE_POSITION) && !w->parent()) {
-    w->x((Fl::w()-W)/2);
-    w->y((Fl::h()-H)/2);
-  }
-  int X = w->x();
-  int Y = w->y();
+  int X = w->x(); if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
+  int Y = w->y(); if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
 
   Fl_X* x = new Fl_X;
   x->xid = XCreateWindow(fl_display,
@@ -802,7 +796,7 @@ void Fl_X::sendxjunk() {
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
-  if (w->flags() & Fl_Window::FL_FORCE_POSITION) {
+  if (w->x() != FL_USEDEFAULT || w->y() != FL_USEDEFAULT) {
     hints.flags |= USPosition;
     hints.x = w->x();
     hints.y = w->y();
@@ -865,5 +859,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: Fl_x.cxx,v 1.66 2000/03/02 20:47:15 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.67 2000/03/20 08:40:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.33 2000/02/14 11:32:36 bill Exp $"
+// "$Id: Fl_Window.H,v 1.34 2000/03/20 08:40:21 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,9 @@
 
 #include "Fl_Group.H"
 
+// value for x,y to indicate window system places window
+#define  FL_USEDEFAULT ((int)0x80000000) // same as Win32 value
+
 class FL_API Fl_Window : public Fl_Group {
 public:
 
@@ -48,7 +51,6 @@ public:
   void hotspot(int x, int y, int offscreen = 0);
   void hotspot(const Fl_Widget*, int offscreen = 0);
   void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
-  void free_position()	{clear_flag(FL_FORCE_POSITION);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
     { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
 
@@ -106,7 +108,6 @@ private:
   enum {
     FL_MODAL		= 0x80000000,
     FL_NOBORDER 	= 0x40000000,
-    FL_FORCE_POSITION	= 0x20000000,
     FL_NON_MODAL 	= 0x10000000
   };
   static Fl_Window *current_;
@@ -116,5 +117,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.33 2000/02/14 11:32:36 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.34 2000/03/20 08:40:21 bill Exp $".
 //

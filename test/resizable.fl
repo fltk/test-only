@@ -8,8 +8,8 @@ gridy 5
 snap 3
 Function {} {open
 } {
-  Fl_Window {} {open
-    xywh {692 305 560 470} resizable box NO_BOX visible
+  Fl_Window {} {open selected
+    xywh {692 305 560 470} resizable visible
   } {
     Fl_Menu_Bar {} {open
       tooltip {A right-justified help item can be made by making a second menubar and putting it to the right of the resizable().}
@@ -113,19 +113,19 @@ This program demonstrates how you set the resizable() of a window to get things 
       xywh {0 444 460 25} align 20 box BORDER_BOX color 55
     }
     Fl_Button {} {
-      label {@<<} selected
+      label {@<<}
       xywh {460 445 25 25} labeltype SYMBOL_LABEL
     }
     Fl_Button {} {
-      label {@<} selected
+      label {@<}
       xywh {485 445 25 25} labeltype SYMBOL_LABEL
     }
     Fl_Button {} {
-      label {@>} selected
+      label {@>}
       xywh {510 445 25 25} labeltype SYMBOL_LABEL
     }
     Fl_Button {} {
-      label {@>>} selected
+      label {@>>}
       xywh {535 445 25 25} labeltype SYMBOL_LABEL
     }
     Fl_Box {} {

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.42 2000/02/14 11:32:47 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.43 2000/03/20 08:40:23 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -344,8 +344,8 @@ J1:
 	Y, scrollbar_width_, H);
     scrollbar.value(position_, H, 0, full_height_);
     scrollbar.linesize(dy);
-    if (drawsquare) draw_child(scrollbar);
-    else update_child(scrollbar);
+    if (drawsquare) scrollbar.clear_damage(FL_DAMAGE_ALL);
+    update_child(scrollbar);
   }
   if (hscrollbar.visible()) {
     hscrollbar.resize(
@@ -353,8 +353,8 @@ J1:
 	W, scrollbar_width_);
     hscrollbar.value(hposition_, W, 0, full_width_);
     hscrollbar.linesize(dy);
-    if (drawsquare) draw_child(hscrollbar);
-    else update_child(hscrollbar);
+    if (drawsquare) hscrollbar.clear_damage(FL_DAMAGE_ALL);
+    update_child(hscrollbar);
   }
 
   // draw that little square between the scrollbars:
@@ -713,5 +713,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.42 2000/02/14 11:32:47 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.43 2000/03/20 08:40:23 bill Exp $".
 //

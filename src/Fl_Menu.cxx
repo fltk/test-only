@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.81 2000/02/14 11:32:52 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.82 2000/03/20 08:40:23 bill Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -174,7 +174,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   if (t) {
     if (!t->h() || t->damage() & FL_DAMAGE_LAYOUT) t->layout();
     Wtitle = t->w()+10;
-    Htitle = t->h()-dh;
+    Htitle = t->h()+real_leading;
   }
 
   int W = 0;
@@ -805,5 +805,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.81 2000/02/14 11:32:52 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.82 2000/03/20 08:40:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.61 2000/02/18 08:39:17 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.62 2000/03/20 08:40:23 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -387,48 +387,6 @@ int* Fl_Group::sizes() {
   return sizes_;
 }
 
-#if 0
-// A child widget can use this inside layout() to figure out their
-// previous size and position.  This does not seem to be working
-// correctly, I removed the only call to it.  To fix this we need to
-// duplicate exactly the code in layout()...
-void Fl_Group::old_size(const Fl_Widget* o,int* r) {
-
-  // get changes in size from the initial size:
-  int* p = sizes();
-  int dw = w()-(p[1]-p[0]);
-  int dh = h()-(p[3]-p[2]);
-  p+=4;
- 
-  // get initial size of resizable():
-  int IX = *p++;
-  int IR = *p++;
-  int IY = *p++;
-  int IB = *p++;
-
-  // find the widget's current size:
-  Fl_Widget*const* a = array();
-  Fl_Widget*const* e = a+children_;
-  while (a < e) {if (o == *a++) break; p+=4;}
-
-  int X = *p++;
-  if (X >= IR) X += dw;
-  else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
-  int R = *p++;
-  if (R >= IR) R += dw;
-  else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
-
-  int Y = *p++;
-  if (Y >= IB) Y += dh;
-  else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
-  int B = *p++;
-  if (B >= IB) B += dh;
-  else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
-
-  r[0]=X; r[1]=R-X; r[2]=Y; r[3]=B-Y;
-}
-#endif
-
 
 void Fl_Group::layout() {
 
@@ -492,73 +450,69 @@ void Fl_Group::layout() {
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 
-// Draw the surrounding box of a group ; if non rectangular box, 
-// draw parent's box behind
-void Fl_Group::draw_group_box() const {
-  if (!box()->fills_rectangle() && !(image() && (flags()&FL_ALIGN_TILED) && 
-		(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
-    if (parent())
-      parent()->draw_group_box();
-    else if (!(image() && (flags()&FL_ALIGN_TILED)))
-      FL_FLAT_BOX->draw(x(), y(), w(), h(), color(), 0);
-  }
-  draw_box();
-  draw_label();
-}
-
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
   if (damage() == FL_DAMAGE_CHILD) {
-    // only some child widget has been damaged, draw it
-    while (a < e) update_child(**a++);
-  } else {
-    fl_clip(x(), y(), w(), h());
-    while (e > a) {
-      Fl_Widget& w = **--e;
-      if (w.visible() && fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
-	w.draw_n_clip();
-    }
-    draw_group_box();
-    fl_pop_clip();
-    e = a+children_;
+    // only some child widget has been damaged, draw them without
+    // doing any clipping.  This is for maximum speed, even though
+    // the 
     while (a < e) {
       Fl_Widget& w = **a++;
-      if (w.visible()) draw_outside_label(w);
+      if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
+	draw_outside_label(w);
+	w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
+      }
+      update_child(w);
     }
+  } else {
+    // Full redraw of the group:
+    fl_clip(x(), y(), w(), h());
+    while (e > a) draw_child(**--e);
+    draw_group_box();
+    fl_pop_clip(); // this is here for back compatability?
+    e = a+children_;
+    while (a < e) draw_outside_label(**a++);
+    // perhaps fl_pop_clip() should be here?
   }
 }
 
-// Draw a child only if it needs it:
-void Fl_Group::update_child(Fl_Widget& w) const {
-  if (!w.visible()) return;
-  if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
-    draw_outside_label(w);
-    w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
-  }
-  if (w.damage() && !w.is_window() &&
+// Draw and then clip the rectangle:
+void Fl_Group::draw_n_clip()
+{
+  draw();
+  fl_clip_out(x(), y(), w(), h());
+}
+
+// Pieces of draw() that subclasses may want to use:
+
+// Draw the box and possibly some of the parent's box so that this
+// fills a rectangle:
+void Fl_Group::draw_group_box() const {
+  if (!is_window() && !(box()->fills_rectangle() ||
+			image() && (flags()&FL_ALIGN_TILED) &&
+			(!(flags()&15) || (flags() & FL_ALIGN_INSIDE))))
+    parent()->draw_group_box();
+  draw_box();
+  draw_label();
+}
+
+// Force a child to redraw and remove the rectangle it used from the clip
+// region:
+void Fl_Group::draw_child(Fl_Widget& w) const {
+  if (w.visible() && !w.is_window() &&
       fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-    w.draw();	
+    w.clear_damage(FL_DAMAGE_ALL);
+    w.draw_n_clip();
     w.clear_damage();
   }
 }
 
-// Call the draw method, handle the clip out
-void Fl_Group::draw_n_clip()
-{
-  clear_damage(FL_DAMAGE_ALL);
-  draw();
-  clear_damage();
-  fl_clip_out(x(), y(), w(), h());
-}
-
-// Force a child to redraw:
-void Fl_Group::draw_child(Fl_Widget& w) const {
-  if (!w.visible()) return;
-  draw_outside_label(w);
-  if (!w.is_window() && fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-    w.clear_damage(FL_DAMAGE_ALL);
-    w.draw();
+// Redraw a single child in response to it's damage:
+void Fl_Group::update_child(Fl_Widget& w) const {
+  if (w.damage() && w.visible() && !w.is_window() &&
+      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+    w.draw();	
     w.clear_damage();
   }
 }
@@ -595,5 +549,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.61 2000/02/18 08:39:17 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.62 2000/03/20 08:40:23 bill Exp $".
 //
