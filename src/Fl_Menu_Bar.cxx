@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.25 1999/11/10 18:06:04 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.26 1999/11/12 19:22:24 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,12 @@ void Fl_Menu_Bar::draw() {
   const Fl_Menu_Item* m;
   int X = x()+3;
   for (m=menu(); m->text; m = m->next()) {
-    int W =m->measure(0, this, 1) + 16;
+    int H; int W = m->measure(&H, this, 1) + 16;
+    int ddh = m->box()->down->dh(); int hdh = m->box()->highlight->dh();
+    H += (ddh > hdh) ? ddh : hdh;  if (H > h() - box()->dh()) H = h() - box()->dh();
     int selected = (m == highlight_ && m->highlight_color()) ? 3 : 1;
     if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == m || highlight_ == m)
-      m->draw(X, y() + 3, W, h() - 6, this, 2, selected);
+      m->draw(X, y() + (h()-H)/2, W, H, this, 2, selected);
     X += W;
   }
   last_ = highlight_;
@@ -48,8 +50,13 @@ int Fl_Menu_Bar::handle(int event) {
   highlight_ = 0;
   // FL_LEAVE events don't get the right coordinates
   if (event != FL_LEAVE) for (m=menu(); m->text; m = m->next()) {
-    int W = m->measure(0, this, 1) + 16;
-    if (Fl::event_inside(X, y() + 3, W, h() -6)) { highlight_ = m; break; }
+    int H; int W = m->measure(&H, this, 1) + 16;
+    int ddh = m->box()->down->dh(); int hdh = m->box()->highlight->dh();
+    H += (ddh > hdh) ? ddh : hdh; if (H > h() - box()->dh()) H = h() - box()->dh();
+    if (m->active() && Fl::event_inside(X, y() + (h()-H)/2, W, H)) {
+      highlight_ = m;
+      break;
+    }
     X += W;
   }
   if (menu() && menu()->text) switch (event) {
@@ -60,6 +67,7 @@ int Fl_Menu_Bar::handle(int event) {
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
+    if (!highlight_) return 1;
     v = 0;
   J1:
     highlight_ = 0; damage(FL_DAMAGE_HIGHLIGHT);
@@ -82,5 +90,5 @@ static void revert(Fl_Style* s) {
 Fl_Style Fl_Menu_Bar::default_style("Menu_Bar", revert);
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.25 1999/11/10 18:06:04 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.26 1999/11/12 19:22:24 carl Exp $".
 //
