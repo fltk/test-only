@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.96 2004/08/06 09:01:57 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.97 2004/08/07 06:19:54 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -511,8 +511,8 @@ enum {
 
 #define BOXSIZE 9
 
-static void
-glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
+void
+browser_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
 {
   Color bg, fg; style->boxcolors(f|OUTPUT, bg, fg);
   //if (fg == BLACK) fg = GRAY33;
@@ -1723,7 +1723,7 @@ bool Browser::display(int line, bool value) {
 #define SLIDER_WIDTH 16
 
 static void revert(Style* s) {
-  s->glyph_ = ::glyph;
+  s->glyph_ = ::browser_glyph;
 }
 static NamedStyle style("Browser", revert, &Browser::default_style);
 /*! This style mostly serves to set the parenting back to
@@ -1805,5 +1805,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.96 2004/08/06 09:01:57 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.97 2004/08/07 06:19:54 laza2000 Exp $".
 //

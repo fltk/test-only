@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.24 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.25 2004/08/07 06:19:54 laza2000 Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,8 @@
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 
+#include <stdio.h>
+
 using namespace fltk;
 
 static NamedStyle style("InputBrowser", 0, &InputBrowser::default_style);
@@ -58,7 +60,7 @@ static Browser *b;
 class ComboWindow : public MenuWindow {
   public:
     int handle(int);
-    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) {}
+    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
 };
 
 int
@@ -74,10 +76,29 @@ ComboWindow::handle(int event) {
 
 class ComboBrowser : public Browser {
   public:
+    static NamedStyle *default_style;
+
     int handle(int);
-    ComboBrowser(int x, int y, int w, int h)
-      : Browser(x, y, w, h, 0) {}
+    ComboBrowser(int x, int y, int w, int h);
 };
+
+extern void browser_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f);
+static void revert_combostyle(Style *s) {
+  s->box_ = BORDER_BOX;
+  s->glyph_ = browser_glyph;
+}
+
+static NamedStyle combostyle("InputBrowserPopup", revert_combostyle, &Browser::default_style);
+NamedStyle* ComboBrowser::default_style = &::combostyle;
+
+ComboBrowser::ComboBrowser(int x, int y, int w, int h)
+: Browser(x, y, w, h, 0) 
+{
+  style(default_style);
+}
+
+extern int fl_pushed_dx;
+extern int fl_pushed_dy;
 
 int
 ComboBrowser::handle(int event) {
@@ -99,7 +120,12 @@ ComboBrowser::handle(int event) {
   case RELEASE:
   case DRAG:
     // this causes a drag-in to the widget to work:
-    if (event_inside(0, 0, w(), h())) fltk::pushed(this);
+    if (event_inside(0, 0, w(), h())) {
+      fltk::pushed(this);
+      // remember the mouse offset so we can send DRAG/RELEASE directly:
+      fl_pushed_dx = e_x-e_x_root;
+      fl_pushed_dy = e_y-e_y_root;
+    }
     else return 0;
   }
 #if 0
@@ -179,7 +205,6 @@ InputBrowser::handle(int e) {
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
       b->indented((type()&INDENTED) != 0);
-      b->box(BORDER_BOX);
       share_list.other = this;
       b->list(&share_list);
       b->when(WHEN_RELEASE_ALWAYS);
@@ -264,5 +289,5 @@ InputBrowser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.24 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.25 2004/08/07 06:19:54 laza2000 Exp $".
 //
