@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.24 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.25 2003/09/03 06:08:07 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1080,7 +1080,7 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
     if ( foreground == background )   /* B&W kludge */
       foreground = color();
   } else if ( style & HIGHLIGHT_MASK ) {
-    foreground = highlight_labelcolor();
+    foreground = highlight_textcolor();
     background = highlight_color();
   } else if ( style & PRIMARY_MASK ) {
     foreground = selection_textcolor();
@@ -2008,5 +2008,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.24 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.25 2003/09/03 06:08:07 spitzak Exp $".
 //

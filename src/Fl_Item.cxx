@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.29 2003/08/11 00:42:43 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.30 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -96,10 +96,9 @@ void Item::draw() {
     draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
-  Color color = 0;
-  if (flags() & SELECTED) color = selection_textcolor();
-  if (!color) color = textcolor();
-  draw_label(x, y, w, h, color, flags()|OUTPUT);
+  draw_label(x, y, w, h,
+	flags() & SELECTED ? selection_textcolor() : textcolor(),
+	flags()|OUTPUT);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -139,10 +138,9 @@ void ItemGroup::draw() {
   //if (box() != NO_BOX) draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   //box()->inset(x,y,w,h);
-  Color color = 0;
-  if (flags() & SELECTED) color = selection_textcolor();
-  if (!color) color = textcolor();
-  draw_label(x, y, w, h, color, flags()|OUTPUT);
+  draw_label(x, y, w, h,
+	flags() & SELECTED ? selection_textcolor() : textcolor(),
+	flags()|OUTPUT);
 }
 
 void ItemGroup::layout() {

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.125 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.126 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -223,7 +223,7 @@ int Group::handle(int event) {
 
   case KEY: {
     // keyboard navigation
-    if (!numchildren) break;
+    if (numchildren < 2) break;
     int key = navigation_key();
     if (!key) break;
     int previous = focus_;
@@ -551,5 +551,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.125 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.126 2003/09/03 06:08:06 spitzak Exp $".
 //

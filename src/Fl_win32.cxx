@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.193 2003/08/26 16:14:27 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.194 2003/09/03 06:08:07 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1434,7 +1434,7 @@ bool fltk::system_theme() {
 
   fltk::set_background(background);
   Widget::default_style->labelcolor = foreground;
-  Widget::default_style->highlight_labelcolor = foreground;
+  Widget::default_style->highlight_textcolor = foreground;
   Widget::default_style->color = text_background;
   Widget::default_style->textcolor = text_foreground;
   Widget::default_style->selection_color = select_background;
@@ -1465,7 +1465,7 @@ bool fltk::system_theme() {
 /* This is the same as the defaults:
   if ((style = Style::find("menu title"))) {
     style->highlight_color = GRAY75;
-    style->highlight_labelcolor = foreground;
+    style->highlight_textcolor = foreground;
     style->selection_color = GRAY75;
     style->selection_textcolor = foreground;
   }
@@ -1557,5 +1557,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.193 2003/08/26 16:14:27 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.194 2003/09/03 06:08:07 spitzak Exp $".
 //

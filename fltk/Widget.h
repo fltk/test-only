@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Widget.h,v 1.9 2003/09/03 06:08:06 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -211,7 +211,7 @@ public:
   Color	buttoncolor()		const;
   Color	labelcolor()		const;
   Color	highlight_color()	const;
-  Color	highlight_labelcolor()	const;
+  Color	highlight_textcolor()	const;
   float labelsize()		const;
   float textsize()		const;
   float leading()		const;
@@ -232,7 +232,7 @@ public:
   void buttoncolor(Color)	;
   void labelcolor(Color)	;
   void highlight_color(Color)	;
-  void highlight_labelcolor(Color);
+  void highlight_textcolor(Color);
   void labelsize(float a)	;
   void textsize(float a)	;
   void leading(float a)		;
@@ -302,5 +302,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.9 2003/09/03 06:08:06 spitzak Exp $".
 //

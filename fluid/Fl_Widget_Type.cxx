@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.95 2003/02/03 02:33:57 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.96 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -930,7 +930,7 @@ void highlight_label_color_cb(fltk::LightButton* i, void *v) {
   fltk::Color c = fltk::BLACK;
   if (v == LOAD) {
     i->label("Highlight Label Color");
-    c = current_widget->o->highlight_labelcolor();
+    c = current_widget->o->highlight_textcolor();
     if (!c) c = current_widget->o->labelcolor();
     i->show();
   } else {
@@ -939,12 +939,12 @@ void highlight_label_color_cb(fltk::LightButton* i, void *v) {
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
-      q->o->highlight_labelcolor(c); q->redraw();
+      q->o->highlight_textcolor(c); q->redraw();
     }
   }
   i->color(c);
   i->selection_color(c);
-  i->labelcolor(NOT_DEFAULT(current_widget, highlight_labelcolor) ? fltk::RED : fltk::BLACK);
+  i->labelcolor(NOT_DEFAULT(current_widget, highlight_textcolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
 }
 
@@ -1679,8 +1679,8 @@ void WidgetType::write_widget_code() {
     write_color("labelcolor", o->labelcolor());
   if (o->highlight_color() != tplate->highlight_color())
     write_color("highlightcolor", o->highlight_color());
-  if (o->highlight_labelcolor() != tplate->highlight_labelcolor())
-    write_color("highlight_labelcolor", o->highlight_labelcolor());
+  if (o->highlight_textcolor() != tplate->highlight_textcolor())
+    write_color("highlight_textcolor", o->highlight_textcolor());
   if (o->labelsize() != tplate->labelsize())
     write_c("%so->labelsize(%g);\n", indent(), o->labelsize());
   if (o->textsize() != tplate->textsize())
@@ -1836,8 +1836,8 @@ void WidgetType::write_properties() {
     save_color("labelcolor", o->labelcolor());
   if (o->highlight_color() != tplate->highlight_color())
     save_color("highlight_color", o->highlight_color());
-  if (o->highlight_labelcolor() != tplate->highlight_labelcolor())
-    save_color("highlight_labelcolor", o->highlight_labelcolor());
+  if (o->highlight_textcolor() != tplate->highlight_textcolor())
+    save_color("highlight_textcolor", o->highlight_textcolor());
   if (o->labelsize() != tplate->labelsize())
     write_string("labelsize %g", o->labelsize());
   if (o->textsize() != tplate->textsize())
@@ -1983,9 +1983,10 @@ void WidgetType::read_property(const char *c) {
     o->buttoncolor((fltk::Color)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"highlight_color")) {
     o->highlight_color((fltk::Color)strtoul(read_word(),0,0));
-  } else if (!strcmp(c,"highlight_labelcolor") ||
+  } else if (!strcmp(c,"highlight_textcolor") ||
+	     !strcmp(c,"highlight_labelcolor") ||
 	     !strcmp(c,"highlight_label_color")) {
-    o->highlight_labelcolor((fltk::Color)strtoul(read_word(),0,0));
+    o->highlight_textcolor((fltk::Color)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"textcolor") || !strcmp(c,"text_color")) {
     o->textcolor((fltk::Color)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"labelsize") || !strcmp(c,"label_size")) {
@@ -2145,5 +2146,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.95 2003/02/03 02:33:57 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.96 2003/09/03 06:08:06 spitzak Exp $".
 //

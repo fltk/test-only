@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.29 2003/08/04 14:49:41 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.30 2003/09/03 06:08:07 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -439,6 +439,9 @@ static float split(
     } else { // tab
       x += w;
     }
+    // add symbol to reset fonts to normal:
+    //float a,b; normalsymbol.measure(a,b);
+    //add(segment_count, &normalsymbol, 0, 0, 0, 0);
     str = ++p;
   }
 }
@@ -503,5 +506,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.29 2003/08/04 14:49:41 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.30 2003/09/03 06:08:07 spitzak Exp $".
 //

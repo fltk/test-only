@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.47 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -60,7 +60,7 @@ static void revert(Style* s) {
   s->buttoncolor	= GRAY75;
   s->labelcolor		= BLACK;
   s->highlight_color	= NO_COLOR;
-  s->highlight_labelcolor= NO_COLOR;
+  s->highlight_textcolor= NO_COLOR;
   s->labelsize		= 12;
   s->textsize		= 12;
   s->leading		= 2;
@@ -121,16 +121,68 @@ style_functions(LabelType*,	labeltype	)
 style_functions(Color,		color		)
 style_functions(Color,		textcolor	)
 style_functions(Color,		selection_color	)
-style_functions(Color,		selection_textcolor)
+//style_functions(Color,	selection_textcolor)
 style_functions(Color,		buttoncolor	)
 style_functions(Color,		labelcolor	)
 style_functions(Color,		highlight_color	)
-style_functions(Color,		highlight_labelcolor)
+//style_functions(Color,	highlight_textcolor)
 style_functions(float,		labelsize	)
 style_functions(float,		textsize	)
 style_functions(float,		leading		)
 style_functions(unsigned char,	scrollbar_align	)
 style_functions(unsigned char,	scrollbar_width	)
+
+/** Color to draw text atop the selection_color.
+
+    This searches the styles for the first one that has selection_textcolor,
+    textcolor, or selection_color set. If selection_textcolor is set it is
+    returned.
+    Otherwise if textcolor() is considered to "contrast" with
+    selection_color() then return that.
+    Otherwise return white or black, chosen to contrast with
+    selection_color().
+*/
+Color Widget::selection_textcolor() const
+{
+  for (const Style* s = style_;;) {
+    if (s->selection_textcolor) return s->selection_textcolor;
+    if (s->textcolor) return contrast(s->textcolor, selection_color());
+    if (s->selection_color) return contrast(textcolor(), s->selection_color);
+    s = s->parent;
+    if (!s) return 0;
+  }
+}
+/** Set the value returned selection_textcolor(). This will create a
+    new style() if necessary and set the field there.
+*/
+void Widget::selection_textcolor(Color v) {
+  unique_style(style_)->selection_textcolor = v;
+}
+
+/** Color to draw text atop the highlight_color.
+
+    This searches the styles for the first one that has highlight_textcolor
+    or highlight_color set. If hightlight_textcolor is set it is returned.
+    Otherwise if textcolor() is considered to "contrast" with
+    highlight_color() then return that.
+    Otherwise return white or black, chosen to contrast with
+    highlight_color().
+*/
+Color Widget::highlight_textcolor() const
+{
+  for (const Style* s = style_;;) {
+    if (s->highlight_textcolor) return s->highlight_textcolor;
+    if (s->highlight_color) return contrast(textcolor(), s->highlight_color);
+    s = s->parent;
+    if (!s) return textcolor();
+  }
+}
+/** Set the value returned highlight_textcolor(). This will create a
+    new style() if necessary and set the field there.
+*/
+void Widget::highlight_textcolor(Color v) {
+  unique_style(style_)->highlight_textcolor = v;
+}
 
 /*! \class NamedStyle
 
@@ -329,5 +381,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.47 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $".
 //

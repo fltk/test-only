@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.149 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.150 2003/09/03 06:08:07 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1370,7 +1370,7 @@ bool fltk::system_theme() {
   color = to_color(get_default("foreground"));
   if (color) {
     Widget::default_style->labelcolor = color;
-    Widget::default_style->highlight_labelcolor = color;
+    Widget::default_style->highlight_textcolor = color;
   }
 
 #if MY_GET_DEFAULT
@@ -1425,5 +1425,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.149 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.150 2003/09/03 06:08:07 spitzak Exp $".
 //

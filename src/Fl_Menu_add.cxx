@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.36 2003/04/27 01:54:53 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.37 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 // Methods to create/destroy the items in an Menu widget.  Used to
 // emulate XForms and to provide convienence functions for building
-// menus.
+// menus and browsers.
 
 // These functions are provided for fltk 1.0 compatability and probably
 // should be avoided in new programs. For new programs either create the
@@ -45,13 +45,11 @@ using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
-// Return a new menu item:
-static int insert_here;
-
 static Widget* append(
   Group* g,
-  const char *text,
-  int flags
+  const char *label,
+  int flags,
+  int insert_here
 ) {
   Group* saved = Group::current();
   Group::current(0);
@@ -61,13 +59,13 @@ static Widget* append(
   } else {
     o = new Item();
   }
-  o->copy_label(text);
+  o->copy_label(label);
   if (flags & MENU_RADIO) o->type(Item::RADIO);
   else if (flags & MENU_TOGGLE) o->type(Item::TOGGLE);
   // these flags have been cleverly assigned so this shift and mask
   // converts from the old values to the new ones:
   o->set_flag((flags<<8)&(INACTIVE|VALUE|INVISIBLE));
-  if (insert_here) {g->insert(*o, insert_here-1); insert_here = 0;}
+  if (insert_here) g->insert(*o, insert_here-1);
   else g->add(o);
   if (flags & MENU_DIVIDER) g->add(new Divider());
   Group::current(saved);
@@ -90,58 +88,60 @@ static int compare(const char* a, const char* b) {
   }
 }
 
-static bool find_flag; // lame-o attempt to reuse the code
-static bool replace_flag;
-FL_API bool fl_menu_replaced; // hack so program can tell what replace() does
+// flags to determine what _add() does:
+enum {FIND=1, REPLACE=2, FLAT=4};
 
-// Add an item.  The text is split at '/' characters to automatically
-// produce submenus (actually a totally unnecessary feature as you can
-// now add submenu titles directly by setting SUBMENU in the flags).
-// The replace flag allows the item to be replaced if it already exists.
-// Backslashes in the string "quote" the next character, which allows
-// you to put forward slashes into a menu item.
+FL_API bool fl_menu_replaced; // hack so fluid can tell what replace() did
 
-Widget* Menu::add(
-  const char *text,
+// Innards of Menu::add() and Menu::replace() methods:
+static Widget* innards(
+  Group* top,
+  const char *label,
   int shortcut,
-  Callback *cb,	
+  Callback *callback,	
   void *data,
-  int flags
+  int flags,
+  int what,
+  int insert_here
 ) {
-  Group* group = this;
-
-  int bufsize = strlen(text)+1;
+  Group* group = top;
+  int bufsize = strlen(label)+1;
   ARRAY(char, buf, bufsize);
 
   int flags1 = 0;
   const char* item;
-  if (flags & RAW_LABEL) item = text;
+  if (what & FLAT) item = label;
   else for (;;) {    /* do all the supermenus: */
 
     // leading slash makes us assumme it is a filename:
-    if (*text == '/') {item = text; break;}
+    if (*label == '/') {item = label; break;}
 
     // leading underscore causes divider line:
-    if (*text == '_') {text++; flags1 = MENU_DIVIDER;}
+    if (*label == '_') {label++; flags1 = MENU_DIVIDER;}
 
     // copy to buf, changing \x to x:
     char* q = buf;
     const char* p;
-    for (p=text; *p && *p != '/'; *q++ = *p++) if (p[0]=='\\' && p[1]) p++;
+    for (p=label; *p && *p != '/'; *q++ = *p++) if (p[0]=='\\' && p[1]) p++;
     *q = 0;
     item = buf;
 
     // if not followed by slash it is not a menu title:
     if (*p != '/') break;
 
-    // point at the next text:
-    text = p+1;
+    // point at the next label:
+    label = p+1;
 
     // find a matching menu title:
     for (int n = group->children();;) {
       if (!n) { // create a new menu
-	if (find_flag) return 0;
-	group = (Group*)append(group, item, SUBMENU|flags1);
+	if (what & FIND) {
+	  // give up on hierarchy search and find flat item:
+	  item = label;
+	  group = top;
+	  goto BREAK1;
+	}
+	group = (Group*)append(group, item, SUBMENU|flags1, 0);
 	break;
       }
       Widget* w = group->child(--n);
@@ -152,74 +152,174 @@ Widget* Menu::add(
     }
     flags1 = 0;
   }
+ BREAK1:
 
   Widget* o = 0;
   // names ending in '/' create an empty menu ore return the menu title:
   if (!*item) {
     o = group;
-    if (find_flag) return o;
+    if (what & FIND) return o;
     fl_menu_replaced = true;
     goto REPLACED;
   }
 
   // find a matching menu item:
-  if (replace_flag | find_flag) for (int n = group->children(); n--;) {
+  if (what & (REPLACE|FIND)) for (int n = group->children(); n--;) {
     Widget* w = group->child(n);
     if (w->label() && !compare(w->label(), item) && !w->is_group()) {
       o = w;
-      if (find_flag) return o;
+      if (what & FIND) return o;
       fl_menu_replaced = true;
       goto REPLACED;
     }
   }
-  if (find_flag) return 0;
-  o = append(group, item, flags|flags1);
+  if (what & FIND) return 0;
+  o = append(group, item, flags|flags1, insert_here);
   fl_menu_replaced = false;
 
  REPLACED:
   /* fill it in */
   o->shortcut(shortcut);
-  if (cb) o->callback(cb);
+  if (callback) o->callback(callback);
   o->user_data(data);
-  relayout();
+  top->relayout();
   return o;
 }
 
-// This is what menu::add() did in fltk 1.0, matching items were changed
-// to the new value. Browser::add() always added new items.
-Widget* Menu::replace(
-  const char *text,
+/** Split label at '/' characters and add a hierachial Item.
+
+    Adds new items and hierarchy to a Menu or Browser.
+
+    \a label :
+    The label is split at '/' characters to automatically
+    produce submenus. The submenus are created if they do not
+    exist yet, and a new Item widget is added to the end of it.
+
+    A trailing '/' can be used to create an empty submenu (useful for
+    forcing a certain ordering of menus before you know what items are
+    in them).
+
+    Backslashes in the string "quote" the next character, which allows
+    you to put forward slashes into a menu item. Notice that in C++
+    you must type "\\/" for a forward slash, and "\\\\" for a backward
+    slash.
+
+    \a shortcut : 0 for no shortcut, fltk::CTRL|'a' for ctrl-a, etc.
+
+    \a callback : function to call when item picked. If null, the callback
+    for the Menu widget itself is called.
+
+    \a data : second argument passed to the callback.
+
+    \a flags : useful flags are:<ul>
+
+    <tt>INACTIVE</tt> makes the item grayed out and unpickable
+
+    <tt>INVISIBLE</tt> makes it not visible to the user, as though it was
+    not there. This is most useful for making extra shortcuts that do
+    the same thing.
+
+    <tt>RAW_LABEL</tt> stops it from interpreting '&' and '@' characters
+    in the label.
+
+    </ul>
+
+    Returns a pointer to the new Item. You can further modify it to
+    get results that can't be gotten from these function arguments.
+*/
+Widget* Menu::add(
+  const char *label,
   int shortcut,
-  Callback *cb,	
+  Callback *callback,	
   void *data,
   int flags
 ) {
-  replace_flag = true;
-  Widget* ret = add(text, shortcut, cb, data, flags);
-  replace_flag = false;
-  return ret;
+  return ::innards(this,label,shortcut,callback,data,flags,0,0);
 }
 
-// This is a method from the old Browser:
-Widget* Menu::add(const char* text, void* data) {
-  return add(text, 0, 0, data, 0);
+/** Split label at '/' characters and add or replace a hierachial Item.
+
+    This is what menu::add() did in fltk 1.
+
+    Same rules as add() except if the item already exists it is changed
+    to this new data, instead of a second item with the same label being
+    created.
+*/
+Widget* Menu::replace(
+  const char *label,
+  int shortcut,
+  Callback *callback,
+  void *data,
+  int flags
+) {
+  return ::innards(this,label,shortcut,callback,data,flags,REPLACE,0);
 }
 
-// This is a method from the old Browser:
-Widget* Menu::insert(int n, const char* text, void* data) {
-  insert_here = n+1;
-  return add(text, 0, 0, data, 0);
+/** Split label at '/' characters and add a hierachial Item.
+
+    Same rules as add() except the item is inserted at index \a n
+    of the final menu. Use 0 to put it at the start. Any number
+    larger or equal to the current item count adds the new item
+    to the end.
+*/
+Widget* Menu::insert(
+  int n,
+  const char *label,
+  int shortcut,
+  Callback *callback,
+  void *data,
+  int flags
+) {
+  return ::innards(this,label,shortcut,callback,data,flags,0,n+1);
 }
 
-// Does the exact same parsing as add() and return a pointer to the item,
-// or return null if none:
+/** Return the item with the given label
+
+    This searches both the top level for an exact match, and splits
+    the label at '/' to find an item in a hierarchy. Thus it matches
+    the strings passed to both the long and short forms of add().
+
+    If the item is found a pointer to it is returned, otherwise NULL
+    is returned.
+*/
 Widget* Menu::find(const char* label) const {
-  find_flag = true;
-  Widget* r = ((Menu*)this)->add(label,0,0,0,0);
-  find_flag = false;
-  return r;
+  return ::innards((Group*)this,label,0,0,0,0,FIND,0);
 }
 
+/** Create a new Item and add it to the top-level of the hierarchy.
+
+    This matches add() from the Browser in fltk1.
+
+    Unlike the add() with more arguments, this one does *not* split
+    the label at '/' characters. The label is used unchanged.
+*/
+Widget* Menu::add(const char* label, void* data) {
+  return ::innards(this,label,0,0,data,0,FLAT,0);
+}
+
+/** Create a new Item and add it to the top-level of the hierarchy.
+
+    This matches insert() from the Browser in fltk1, except the
+    index is 1 less than before (first item is zero, not 1)
+
+    Unlike the insert() with more arguments, this one does *not* split
+    the label at '/' characters. The label is used unchanged.
+*/
+Widget* Menu::insert(int n, const char* label, void* data) {
+  return ::innards(this,label,0,0,data,0,FLAT,n+1);
+}
+
+/** Create or replace an Item at the top-level of the hierarchy.
+
+    The top level is searched for an item that matches the given
+    label. If found it's data is changed to the passed data, if
+    not found a new Item is created and added at the end.
+*/
+Widget* Menu::replace(const char* label, void* data) {
+  return ::innards(this,label,0,0,data,0,FLAT|REPLACE,0);
+}
+
+#if 0
 // This is a Forms (and SGI GL library) compatable add function, it
 // adds many menu items, with '|' seperating the menu items, and tab
 // seperating the menu item names from an optional shortcut string.
@@ -246,7 +346,8 @@ Widget* Menu::add(const char *str) {
   }
   return r;
 }
+#endif
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.36 2003/04/27 01:54:53 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.37 2003/09/03 06:08:06 spitzak Exp $".
 //

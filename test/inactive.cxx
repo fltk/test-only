@@ -29,31 +29,31 @@ int main (int argc, char **argv) {
         o->begin();
          {fltk::CheckButton* o = new fltk::CheckButton(0, 0, 105, 25, "red");
           o->type(fltk::CheckButton::RADIO);
-          o->labelcolor((fltk::Color)1);
           o->selection_color((fltk::Color)1);
           o->selection_textcolor((fltk::Color)1);
-          o->highlight_labelcolor((fltk::Color)1);
+          o->labelcolor((fltk::Color)1);
+          o->highlight_textcolor((fltk::Color)1);
         }
          {fltk::CheckButton* o = new fltk::CheckButton(0, 25, 105, 25, "green");
           o->type(fltk::CheckButton::RADIO);
-          o->labelcolor((fltk::Color)2);
           o->selection_color((fltk::Color)2);
           o->selection_textcolor((fltk::Color)2);
-          o->highlight_labelcolor((fltk::Color)2);
+          o->labelcolor((fltk::Color)2);
+          o->highlight_textcolor((fltk::Color)2);
         }
          {fltk::CheckButton* o = new fltk::CheckButton(0, 50, 105, 25, "blue");
           o->type(fltk::CheckButton::RADIO);
-          o->labelcolor((fltk::Color)4);
           o->selection_color((fltk::Color)4);
           o->selection_textcolor((fltk::Color)4);
-          o->highlight_labelcolor((fltk::Color)4);
+          o->labelcolor((fltk::Color)4);
+          o->highlight_textcolor((fltk::Color)4);
         }
          {fltk::CheckButton* o = new fltk::CheckButton(0, 75, 105, 25, "white");
           o->type(fltk::CheckButton::RADIO);
-          o->labelcolor((fltk::Color)7);
           o->selection_color((fltk::Color)7);
           o->selection_textcolor((fltk::Color)55);
-          o->highlight_labelcolor((fltk::Color)55);
+          o->labelcolor((fltk::Color)7);
+          o->highlight_textcolor((fltk::Color)55);
         }
         o->end();
       }
@@ -80,6 +80,7 @@ int main (int argc, char **argv) {
        {fltk::ValueInput* o = new fltk::ValueInput(230, 93, 135, 33, "value:");
         o->textfont(fltk::COURIER_BOLD);
         o->textcolor((fltk::Color)4);
+        o->highlight_textcolor((fltk::Color)4);
         o->textsize(24);
         o->maximum(10000);
         o->step(1);

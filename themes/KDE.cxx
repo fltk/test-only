@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.15 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.16 2003/09/03 06:08:07 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -250,7 +250,7 @@ extern "C" bool fltk_theme() {
 
   // turn off highlighting:
   style->highlight_color = NO_COLOR;
-  style->highlight_labelcolor = NO_COLOR;
+  style->highlight_textcolor = NO_COLOR;
 
   if (background)
     fltk::set_background(background);
@@ -331,5 +331,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.15 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.16 2003/09/03 06:08:07 spitzak Exp $".
 //

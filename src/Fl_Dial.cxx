@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.43 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Dial.cxx,v 1.44 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ void Dial::draw() {
     box()->inset(X,Y,W,H);
   }
   Color fillcolor = selection_color();
-  Color linecolor = highlight_color();
+  Color linecolor = textcolor();
   if (!active_r()) {
     fillcolor = inactive(fillcolor);
     linecolor = inactive(linecolor);
@@ -138,5 +138,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.43 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.44 2003/09/03 06:08:06 spitzak Exp $".
 //

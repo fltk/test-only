@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.64 2003/08/11 00:42:43 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.65 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -94,10 +94,12 @@ int Button::handle(int event) {
     if (when() & WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   case FOCUS:
-  case UNFOCUS:
-    redraw(DAMAGE_HIGHLIGHT);
+    redraw(1); // minimal redraw to just add the focus box
     // grab initial focus if we are an ReturnButton:
     return shortcut()=='\r' ? 2 : 1;
+  case UNFOCUS:
+    redraw(DAMAGE_HIGHLIGHT);
+    return 1;
   case KEY:
     if (event_key() == ' ' || event_key() == ReturnKey
 	|| event_key() == KeypadEnter) goto EXECUTE;
@@ -131,10 +133,16 @@ void Button::draw(int glyph, int glyph_width) const
 {
   // For back-compatability color() is used if it is directly set
   // and there is no glyph:
-  Color color = style()->color;
-  if (!color || glyph_width) color = this->buttoncolor();
+  Color bg;
+  if (!glyph_width && style()->color) bg = style()->color;
+  else bg = this->buttoncolor();
 
-  Color labelcolor = this->labelcolor();
+  Color fg = this->labelcolor();
+
+  // For back-compatability box() is used if it is directly set and
+  // there is no glyph:
+  Box* box = style()->box;
+  if (!box || glyph_width) box = this->buttonbox();
 
   Flags flags = this->flags(); // flags to pass to draw_label
   if (!active_r()) {
@@ -142,9 +150,11 @@ void Button::draw(int glyph, int glyph_width) const
   } else if (belowmouse()) {
     flags |= HIGHLIGHT;
     Color h = highlight_color();
-    if (h) color = h;
-    h = highlight_labelcolor();
-    if (h) labelcolor = h;
+    if (h) {
+      bg = h;
+      fg = highlight_textcolor();
+      if (box == NO_BOX) box = FLAT_BOX;
+    }
   }
 
   Flags glyph_flags = flags; // flags to pass to draw_glyph
@@ -156,8 +166,9 @@ void Button::draw(int glyph, int glyph_width) const
     // Use the pushed-in color if the user has explicitly set it
     // on this widget:
     if (style()->selection_color) {
-      color = style()->selection_color;
-      labelcolor = selection_textcolor();
+      bg = style()->selection_color;
+      fg = selection_textcolor();
+      if (box == NO_BOX) box = FLAT_BOX;
     }
   }
 
@@ -165,17 +176,11 @@ void Button::draw(int glyph, int glyph_width) const
   bool draw_label = true;
   int x = 0, y = 0, w = this->w(), h = this->h();
 
-  // For back-compatability box() is used if it is directly set and
-  // there is no glyph:
-  Box* box = style()->box;
-  if (!box || glyph_width) box = this->buttonbox();
-
   if (box == NO_BOX) {
     // If the box is noBox we need to avoid drawing the label so
     // that it does not blink and does not draw multiple times (which
     // will make it look bold if antialiasing is on).
-    if ((damage()&DAMAGE_EXPOSE) ||
-	(damage()&DAMAGE_HIGHLIGHT) && !focused()) {
+    if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
       // erase the background behind where the label will draw:
       draw_background();
     } else if (!label()) {
@@ -187,14 +192,14 @@ void Button::draw(int glyph, int glyph_width) const
       draw_label = false;
     }
     // this allows these buttons to be put into browser/menus:
-    //labelcolor = fl_item_labelcolor(this);
+    //fg = fl_item_labelcolor(this);
   } else {
     if ((damage()&DAMAGE_EXPOSE) && !box->fills_rectangle()) {
       // Erase the area behind non-square boxes
       draw_background();
     }
     // Draw the box:
-    box->draw(0, 0, w, h, color, flags);
+    box->draw(0, 0, w, h, bg, flags);
     box->inset(x,y,w,h);
   }
 
@@ -212,11 +217,11 @@ void Button::draw(int glyph, int glyph_width) const
   if (draw_label) {
     // turn on this flag that makes some images draw differently:
     if (focused()) flags |= SELECTED;
-    this->draw_label(lx, y, lw, h, labelcolor, flags);
+    this->draw_label(lx, y, lw, h, fg, flags);
   }
 
   if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, labelcolor, INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2, fg, INVISIBLE);
 }
 
 void Button::draw() {
@@ -229,12 +234,7 @@ void Button::draw() {
 
 ////////////////////////////////////////////////////////////////
 
-static void revert(Style* s) {
-//    s->color = GRAY75;
-//    s->box = UP_BOX;
-}
-
-static NamedStyle style("Button", revert, &Button::default_style);
+static NamedStyle style("Button", 0, &Button::default_style);
 NamedStyle* Button::default_style = &::style;
 
 Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
@@ -243,5 +243,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.64 2003/08/11 00:42:43 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.65 2003/09/03 06:08:06 spitzak Exp $".
 //

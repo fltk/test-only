@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.65 2002/12/10 02:00:50 easysw Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.66 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -252,7 +252,6 @@ static void glyph(const Widget* widget, int glyph,
 }
 
 static void revert(Style* s) {
-  //s->highlight_color = WHITE;
   s->box = FLAT_BOX;
   s->color = GRAY60;
   s->glyph = ::glyph;
@@ -269,5 +268,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.65 2002/12/10 02:00:50 easysw Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.66 2003/09/03 06:08:06 spitzak Exp $".
 //

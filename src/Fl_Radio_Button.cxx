@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.cxx,v 1.6 2003/07/22 21:43:29 spitzak Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.7 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Radio button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,9 +36,7 @@ static void default_glyph(const Widget* widget, int glyph,
   box->draw(x, y, w, h, widget->color(), flags);
   box->inset(x, y, w, h);
   if (flags & VALUE) {
-    Color color = (box == NO_BOX && (flags&SELECTED)) ?
-      widget->selection_textcolor() : widget->textcolor();
-    setcolor(inactive(color, flags));
+    setcolor(inactive(widget->textcolor(), flags));
     if (h < 5) {
       int d = (h-4-1)>>1;
       addellipse(x+d, y+d, 4, 4);

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.36 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.37 2003/09/03 06:08:07 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,17 @@ using namespace fltk;
 void Widget::default_glyph(const Widget* widget, int glyph,
 			   int x,int y,int w,int h, Flags flags)
 {
+  Color bg, fg;
+  if ((flags & HIGHLIGHT) && (bg = widget->highlight_color())) {
+    fg = widget->highlight_textcolor();
+  } else if (flags & SELECTED) {
+    bg = widget->selection_color();
+    fg = widget->selection_textcolor();
+  } else {
+    bg = widget->buttoncolor();
+    fg = widget->textcolor();
+  }
+
   // handle special glyphs that don't draw the box:
   switch (glyph) {
   case GLYPH_UP:
@@ -41,31 +52,20 @@ void Widget::default_glyph(const Widget* widget, int glyph,
     break;
   default: {
     Box* box = widget->buttonbox();
-    if (box != NO_BOX) {
-      Color color;
-      if (flags & SELECTED) color = widget->selection_color();
-      else if (flags & HIGHLIGHT && (color = widget->highlight_color())) ;
-      else color = widget->buttoncolor();
-      box->draw(x,y,w,h, color, flags);
-      box->inset(x,y,w,h);
-    }}
+    box->draw(x,y,w,h, bg, flags);
+    box->inset(x,y,w,h);
+    }
   }
 
-  Color color;
-  if (flags & SELECTED)
-    color = widget->selection_textcolor();
-  else if (flags&HIGHLIGHT && (color = widget->highlight_labelcolor()))
-    ;
-  else
-    color = widget->textcolor(); // was labelcolor();
   // to draw the shape inactive, draw it twice to get the engraved look:
   int i = 0;
   if (flags & INACTIVE) {
     i = 1;
-    color = inactive(color);
+    fg = inactive(fg);
   }
   for ( /*i*/ ; i >= 0; i--) {
-    setcolor(i ? Color(GRAY99) : color);
+    Color color = i ? Color(GRAY99) : fg;
+    setcolor(color);
 
     int w1 = (w+2)/3; int x1,y1;
     switch(glyph) {
@@ -77,7 +77,7 @@ void Widget::default_glyph(const Widget* widget, int glyph,
       addvertex(x1, y1+w1);
       addvertex(x1+2*w1, y1+w1);
       addvertex(x1+w1, y1);
-      fillstrokepath(getcolor());
+      fillstrokepath(color);
       break;
 
     case GLYPH_DOWN_BUTTON:
@@ -87,7 +87,7 @@ void Widget::default_glyph(const Widget* widget, int glyph,
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1+2*w1, y1);
-      fillstrokepath(getcolor());
+      fillstrokepath(color);
       break;
 
     case GLYPH_LEFT_BUTTON:
@@ -97,7 +97,7 @@ void Widget::default_glyph(const Widget* widget, int glyph,
       addvertex(x1, y1+w1);
       addvertex(x1+w1, y1+2*w1);
       addvertex(x1+w1, y1);
-      fillstrokepath(getcolor());
+      fillstrokepath(color);
       break;
 
     case GLYPH_RIGHT_BUTTON:
@@ -107,7 +107,7 @@ void Widget::default_glyph(const Widget* widget, int glyph,
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1, y1+2*w1);
-      fillstrokepath(getcolor());
+      fillstrokepath(color);
       break;
 
     }
@@ -115,5 +115,5 @@ void Widget::default_glyph(const Widget* widget, int glyph,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.36 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.37 2003/09/03 06:08:07 spitzak Exp $".
 //

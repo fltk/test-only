@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.4 2003/08/05 08:09:53 spitzak Exp $"
+// "$Id: Menu.h,v 1.5 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -80,13 +80,14 @@ public:
   void execute(Widget*);
   void global();
 
-  Widget* find(const char* label) const;
+  Widget* find(const char*) const;
+  void remove(const char* l) { delete find(l); }
   Widget* add(const char*, int shortcut, Callback*, void* = 0, int = 0);
   Widget* replace(const char*, int scut, Callback*, void* = 0, int = 0);
-  Widget* add(const char*, void*);
-  Widget* add(const char*);
-  Widget* insert(int n, const char* s, void* data = 0);
-  void remove(const char* l) { delete find(l); }
+  Widget* insert(int n, const char*, int scut, Callback*, void* = 0, int = 0);
+  Widget* add(const char*, void* = 0);
+  Widget* replace(const char*, void* = 0);
+  Widget* insert(int n, const char*, void* = 0);
 
   // Undo the overrides of stuff from Group:
   void add(Widget& o) {Group::add(o);}
@@ -140,5 +141,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.4 2003/08/05 08:09:53 spitzak Exp $".
+// End of "$Id: Menu.h,v 1.5 2003/09/03 06:08:06 spitzak Exp $".
 //

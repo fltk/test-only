@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.47 2003/02/02 10:39:22 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -50,15 +50,16 @@ enum {
 static void glyph(const Widget* widget, int t,
 		  int x,int y,int w,int h, Flags flags)
 {
-  Color color;
+  Color bg, fg;
 
-  if (flags & HIGHLIGHT && (color = widget->highlight_color())) ;
-  else color = widget->buttoncolor();
-  widget->buttonbox()->draw(x,y,w,h, color, flags);
-
-  if (flags&HIGHLIGHT && (color = widget->highlight_labelcolor()));
-  else color = inactive(widget->labelcolor(),flags);
-  setcolor(color);
+  if ((flags & HIGHLIGHT) && (bg = widget->highlight_color())) {
+    fg = widget->highlight_textcolor();
+  } else {
+    bg = widget->buttoncolor();
+    fg = inactive(widget->textcolor(),flags);
+  }
+  widget->buttonbox()->draw(x,y,w,h, bg, flags);
+  setcolor(fg);
   xbmImage* b = arrows[t-GLYPH_FASTARROW];
   b->draw(x+((w-b->width())>>1), y+((h-b->height())>>1));
 }
@@ -173,8 +174,6 @@ int Adjuster::handle(int event) {
 }
 
 static void revert(Style* s) {
-//    s->selection_color = GRAY75;
-//    s->selection_textcolor = BLACK;
   s->box = NO_BOX; // for compatability if in the future it draws the box
   s->glyph = glyph;
 }
@@ -190,5 +189,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.47 2003/02/02 10:39:22 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $".
 //
