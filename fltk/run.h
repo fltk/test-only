@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.9 2004/08/03 07:26:34 spitzak Exp $"
+// "$Id: run.h,v 1.10 2004/12/05 19:28:47 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -58,6 +58,7 @@ extern FL_API int damage_;
 inline void damage(int d) {damage_ = d;}
 inline int damage() {return damage_;}
 
+/*! Type of function passed to add_timeout(), add_check(), and add_idle() */
 typedef void (*TimeoutHandler)(void*);
 
 FL_API void add_timeout(float t, TimeoutHandler, void* v = 0);
@@ -77,7 +78,8 @@ FL_API void remove_idle(TimeoutHandler, void* = 0);
 extern FL_API void (*idle)();
 inline void set_idle(void (*cb)()) {idle = cb;}
 
-typedef void (*FileHandler)(int, void*);
+/*! Type of function passed to add_fd() */
+typedef void (*FileHandler)(int fd, void*);
 enum {READ = 1, WRITE = 4, EXCEPT = 8};
 FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);

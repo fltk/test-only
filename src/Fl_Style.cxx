@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.61 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.62 2004/12/05 19:28:48 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -280,6 +280,7 @@ static Style* unique_style(const Style* & pointer) {
 
 // Retrieve/set values from a style, using parent's value if not in child:
 
+#ifndef DOXYGEN
 #define style_functions(TYPE,FIELD)	\
 TYPE Widget::FIELD() const {return style()->FIELD();} \
 TYPE Style::FIELD() const {		\
@@ -313,6 +314,7 @@ style_functions(float,		textsize	)
 style_functions(float,		leading		)
 style_functions(unsigned char,	scrollbar_align	)
 style_functions(unsigned char,	scrollbar_width	)
+#endif // !DOXYGEN
 
 #if 0
 /** Color to draw text atop the selection_color.
@@ -613,5 +615,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.61 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.62 2004/12/05 19:28:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.113 2004/11/12 06:50:17 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.114 2004/12/05 19:28:49 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -796,13 +796,12 @@ void Window::destroy() {
   throw_focus();
   clear_visible();
 
-  // Destroy graphics contexts that point at window:
-  stop_drawing(x->xid);
-
 #if USE_X11
+  stop_drawing(x->xid);
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
 #elif defined(_WIN32)
+  stop_drawing(x->xid);
   if (x->region) DeleteObject(x->region);
   deferred_call(DESTROY_WINDOW, x->xid);
   deferred_call(KEEP_ACTIVE, x->xid);
@@ -824,5 +823,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.113 2004/11/12 06:50:17 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.114 2004/12/05 19:28:49 spitzak Exp $".
 //

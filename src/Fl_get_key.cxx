@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.22 2004/11/12 06:50:17 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.23 2004/12/05 19:28:49 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,6 +21,26 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+/*! \fn bool fltk::event_key_state(unsigned key);
+
+  Returns true if the given key was held down (or pressed) <i>during the
+  last event</i>. This is constant until the next event is read from the
+  server. The possible values for the key are listed under fltk::SpaceKey.
+
+  On Win32 event_key_state(KeypadEnter) does not work.
+*/
+
+/*! \fn bool fltk::get_key_state(unsigned key);
+
+  Returns true if the given key is held down \e now. This is different
+  than event_key_state() as that returns how the key was during the
+  last event. This can also be slower as it requires a round-trip
+  query to the window server. The values to pass are described
+  under fltk::SpaceKey.
+
+  On Win32 fltk::get_key_state(fltk::KeypadEnter) does not work. 
+*/
+
 #include <config.h>
 #if !USE_X11
 # ifdef _WIN32
@@ -41,13 +61,6 @@
 
 extern char fl_key_vector[32]; // in x.C
 
-/*! 
-  Returns true if the given key was held down (or pressed) during the
-  last event. This is constant until the next event is read from the
-  server. The possible values for the key are listed under fltk::SpaceKey.
-
-  On Win32 event_key_state(KeypadEnter) does not work.
-*/
 bool fltk::event_key_state(unsigned keysym) {
   if (keysym > 0 && keysym <= 8)
     return event_state(BUTTON(keysym)) != 0;
@@ -85,14 +98,6 @@ bool fltk::event_key_state(unsigned keysym) {
   return (fl_key_vector[keycode/8] & (1 << (keycode%8))) != 0;
 }
 
-/*!
-  Returns true if the given key is held down now. Under X this
-  requires a round-trip to the server and is much slower than
-  fltk::event_key_state(int). The values to pass are described
-  under fltk::SpaceKey.
-
-  On Win32 fltk::get_key_state(fltk::KeypadEnter) does not work. 
-*/
 bool fltk::get_key_state(unsigned key) {
   open_display();
   XQueryKeymap(xdisplay, fl_key_vector);
@@ -102,5 +107,5 @@ bool fltk::get_key_state(unsigned key) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.22 2004/11/12 06:50:17 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.23 2004/12/05 19:28:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.116 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.117 2004/12/05 19:28:48 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -311,7 +311,7 @@ void Widget::copy_label(const char* s) {
 
 ////////////////////////////////////////////////////////////////
 
-/*! \defgroup layout
+/*! \defgroup layout Layout and Resizing
 
   When a widget resized or moved (or when it is initially created),
   flags are set in it to indicate the layout is damaged. This will
@@ -474,7 +474,7 @@ MyClass::layout() {
 
 ////////////////////////////////////////////////////////////////
 
-/*! \defgroup damage
+/*! \defgroup damage Damage and Redrawing
 
   When redrawing your widgets you should look at the damage bits to
   see what parts of your widget need redrawing. The handle() method
@@ -1039,5 +1039,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.116 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.117 2004/12/05 19:28:48 spitzak Exp $".
 //

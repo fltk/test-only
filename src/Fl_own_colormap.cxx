@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.12 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.13 2004/12/05 19:28:49 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -25,6 +25,18 @@
 #include <fltk/visual.h>
 #include <fltk/x.h>
 
+/*! \fn void fltk::own_colormap();
+
+  Makes FLTK use its own X colormap. This may make FLTK display
+  better and will reduce conflicts with other programs that want lots
+  of colors. However the colors may flash as you move the cursor
+  between windows. This function is a no-op on non-X systems or
+  if the visual is not colormapped (which means it probably does
+  nothing on any modern system).
+
+  Use fltk::visual() to set the visual first.
+*/
+
 #if !USE_X11
 
 // There is probably something relevant to do on MSWindows 8-bit displays
@@ -33,22 +45,6 @@ void fltk::own_colormap() {}
 
 #else
 
-/*!
-  Makes FLTK use its own colormap. This may make FLTK display
-  better and will reduce conflicts with other programs that want lots
-  of colors. However the colors may flash as you move the cursor
-  between windows.
-
-  The new colormap has the first 16 entries copied from the default
-  one, in an attempt to reduce colormap flashing when you change
-  programs.
-
-  This does nothing if the current visual is not colormapped, or
-  if the system is not X based. This means this probably does nothing
-  on any modern system.
-
-  Use fltk::visual() to set the visual first.
-*/
 void fltk::own_colormap() {
   open_display();
 #if USE_COLORMAP
@@ -78,5 +74,5 @@ void fltk::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.12 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.13 2004/12/05 19:28:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.24 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.25 2004/12/05 19:28:50 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 /*! Donated code that selects from an alternative font if the character
   cannot be printed in the current font. Did not work very well for me
   and it slows down normal printing a lot. */
-#define X_UTF8_FONT 1
+#define X_UTF8_FONT 0
 
 #include <fltk/draw.h>
 #include <fltk/error.h>
@@ -756,5 +756,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.24 2004/07/29 09:07:54 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.25 2004/12/05 19:28:50 spitzak Exp $"
 //

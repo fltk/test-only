@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.24 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: fl_cursor.cxx,v 1.25 2004/12/05 19:28:49 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -281,7 +281,7 @@ struct fltk::Cursor {
 
 fltk::Cursor *fltk::cursor(void *raw) {
   fltk::Cursor *c = new fltk::Cursor;
-  c->cursor = (::Cursor)raw;
+  c->cursor = (::Cursor*)raw;
   c->resource = 0;
   return c;
 }
@@ -427,5 +427,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.24 2004/07/19 23:33:05 laza2000 Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.25 2004/12/05 19:28:49 spitzak Exp $".
 //

@@ -197,7 +197,7 @@ EXTRACT_STATIC         = NO
 # defined locally in source files will be included in the documentation. 
 # If set to NO only classes defined in header files are included.
 
-EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_LOCAL_CLASSES  = NO
 
 # If the HIDE_UNDOC_MEMBERS tag is set to YES, Doxygen will hide all 
 # undocumented members of documented classes, files or namespaces. 
@@ -213,7 +213,7 @@ HIDE_UNDOC_MEMBERS     = NO
 # overviews. This option has no effect if EXTRACT_ALL is enabled.
 
 # This will be set to YES for the final version of fltk documentation!
-HIDE_UNDOC_CLASSES     = YES
+HIDE_UNDOC_CLASSES     = NO
 
 # If the HIDE_FRIEND_COMPOUNDS tag is set to YES, Doxygen will hide all 
 # friend (class|struct|union) declarations. 
@@ -248,7 +248,7 @@ CASE_SENSE_NAMES       = YES
 # will show members with their full class and namespace scopes in the 
 # documentation. If set to YES the scope will be hidden.
 
-HIDE_SCOPE_NAMES       = NO
+HIDE_SCOPE_NAMES       = YES
 
 # If the SHOW_INCLUDE_FILES tag is set to YES (the default) then Doxygen 
 # will put a list of the files that are included by a file in the documentation 
@@ -363,7 +363,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = . ../fltk \
+INPUT                  = . \
+		         ../fltk \
                          ../src \
                          ../images \
                          ../OpenGL
@@ -376,21 +377,27 @@ INPUT                  = . ../fltk \
 FILE_PATTERNS          = *.cxx \
                          *.h \
                          *.c \
-                         *.H \
-                         *.C \
 			 *.doc
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
 # If left blank NO is used.
 
-RECURSIVE              = YES
+RECURSIVE              = NO
 
 # The EXCLUDE tag can be used to specify files and/or directories that should 
 # excluded from the INPUT source files. This way you can easily exclude a 
-# subdirectory from a directory tree whose root is specified with the INPUT tag.
+# subdirectory from a directory tree whose root is specified with the
+# INPUT tag.
+# Unfortunatly this picks up a lot of internal fltk .h files and the
+# only way I found to remove them is to list them all here:
 
-EXCLUDE                = 
+EXCLUDE                = \
+../src/ARRAY.h      ../src/IFont.h        ../src/wintab.h \
+../src/fastarrow.h  ../src/mediumarrow.h  ../src/wintabx.h \
+../src/fl_cmap.h    ../src/pktdef.h       ../src/XColorMap.h \
+../src/Fl_XColor.h  ../src/slowarrow.h \
+../OpenGL/Fl_Gl_Choice.h  ../OpenGL/GlChoice.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or directories 
 # that are symbolic links (a Unix filesystem feature) are excluded from the input.

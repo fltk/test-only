@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.185 2004/11/13 07:25:16 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.186 2004/12/05 19:28:47 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -342,7 +342,15 @@ void fltk::remove_check(TimeoutHandler cb, void *arg) {
   }
 }
 
-// has_check is apparently not written!
+/*!
+  Return true if add_check() has been done with this \a cb and \a arg,
+  and remove_check() has not been done.
+*/
+bool fltk::has_check(TimeoutHandler cb, void *arg) {
+  for (Check* t = first_check; t; t = t->next)
+    if (t->cb == cb && t->arg == arg) return true;
+  return false;
+}
 
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
@@ -476,16 +484,14 @@ int fltk::check() {
   return wait(0.0);
 }
 
-/*
-  This is similar to fltk::check() except this does not call
-  fltk::flush() and thus does not draw anything, and does not read any
-  events or call any callbacks. This returns true if fltk::check()
-  would do anything (it will continue to return true until you call
-  fltk::check() or fltk::wait()).
-
-  This is useful if your program is in a state where such callbacks
-  are illegal, or because the expense of redrawing the screen is much
-  greater than the expense of your calculation.
+/*!
+  Test to see if any events or callbacks are pending. This will
+  return true if fltk::check() would do anything other than update
+  the screen. Since this will not draw anything or call any code,
+  it is safe to call this if your program is in an inconsistent
+  state. This is also useful if your calculation is updating widgets but
+  you do not want or need the overhead of the screen updating every time
+  you check for events.
 \code
 while (!calculation_done()) {
   calculate();
@@ -576,15 +582,6 @@ void Window::first(Window* window) {
   fltk::find(xid(window));
 }
 
-/*!
-  Redraws all widgets. This is a good idea if you have made global
-  changes to the styles.
-*/
-void fltk::redraw() {
-  for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
-    x->window->redraw();
-}
-
 int fltk::damage_;
 
 /*! \fn int fltk::damage()
@@ -600,16 +597,35 @@ int fltk::damage_;
 */
 
 /*!
-  Causes all the windows that damage to be redrawn.
-  This is done by calling layout() and flush() (which calls draw())
-  on them as necessary. This will also flush the X i/o buffer,
-  set the cursor, and do other operations to get the display
+  Redraws all widgets. This is a good idea if you have made global
+  changes to the styles.
+*/
+void fltk::redraw() {
+  for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
+    x->window->redraw();
+}
+
+#if !USE_X11 && defined(_WIN32)
+extern void fl_do_deferred_calls(); // in Fl_Window.cxx:
+#endif
+
+/*!
+  Get the display up to date. This is done by calling layout() on
+  all Window objects with layout_damage() and then calling draw()
+  on all Window objects with damage(). (actually it calls Window::flush()
+  and that calls draw(), but normally you can ignore this). This
+  will also flush the X i/o buffer, update the cursor shape, update
+  Windows window sizes, and other operations to get the display
   up to date.
 
   wait() calls this before it waits for events.
 */
 void fltk::flush() {
+#if USE_X11
   if (!xdisplay) return; // ignore if no windows created yet
+#elif defined(_WIN32)
+  fl_do_deferred_calls();
+#endif
   if (damage_) {
     damage_ = false; // turn it off so Window::flush() can turn it back on
     for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
@@ -1126,5 +1142,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.185 2004/11/13 07:25:16 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.186 2004/12/05 19:28:47 spitzak Exp $".
 //

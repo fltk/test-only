@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id: events.h,v 1.12 2004/12/05 19:28:47 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -174,7 +174,6 @@ enum {
   ANY_BUTTON	= 0x7f000000	/*!< Any mouse button (up to 8) */
 };
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
-/*! \} */
 
 /*! Device identifier returned by event_device(). This enumeration
   is useful to get the device type that caused a PUSH, RELEASE,
@@ -185,9 +184,11 @@ enum {
   DEVICE_STYLUS   = 1, /*!< Event triggered by a pen on a tablet, givin pressure and tilt information */
   DEVICE_ERASER   = 2, /*!< Event triggered by an eraser on a tablet, givin pressure and tilt information */
   DEVICE_CURSOR   = 3, /*!< Event triggered by a puck style device on a tablet */
-  DEVICE_AIRBRUSH = 4, /*!< Event triggered by an airbrush on a tablet, givin pressure and tilt information */
+  DEVICE_AIRBRUSH = 4, /*!< Event triggered by an airbrush on a tablet, giving pressure and tilt information */
   DEVICE_TOUCH    = 5  /*!< Event triggered by touch a touch screen device */
 };
+
+/*! \} */
 
 class Widget;
 class Window;
@@ -255,6 +256,7 @@ FL_API bool compose(int &del);
 inline void compose_reset()		{compose_state = 0;}
 
 // shortcuts:
+/*! Structure created by Widget::add_shortcut() and returned by list_shortcuts(). */
 struct ShortcutAssignment {Widget* widget; unsigned key;};
 FL_API const ShortcutAssignment* list_shortcuts(unsigned key, unsigned& count);
 FL_API const ShortcutAssignment* list_shortcuts(const Widget*,unsigned& count);

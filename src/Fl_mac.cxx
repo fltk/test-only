@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.18 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.19 2004/12/05 19:28:49 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -853,6 +853,10 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   }
 }
 
+// Text editors tell the system where the insertion point is by using
+// this function, so the system can move any Input Method widgets to
+// that position:
+void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
 
 /**
  * initialize the Mac toolboxes and set the default menubar
@@ -1147,22 +1151,21 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
     return userCanceledErr;
   
   e_length = size + nItem - 1;
-  char *dst = e_text = (char*)malloc( size+nItem );;
-  
-  for ( i = 1; i <= nItem; i++ )
-  {
+  char* buffer = (char*)malloc( size+nItem );;
+  e_text = buffer;
+
+  char *dst = buffer;
+  for ( i = 1; i <= nItem; i++ ) {
     GetDragItemReferenceNumber( dragRef, i, &itemRef );
     ret = GetFlavorFlags( dragRef, itemRef, 'TEXT', &flags );
-    if ( ret == noErr )
-    {
+    if ( ret == noErr ) {
       GetFlavorDataSize( dragRef, itemRef, 'TEXT', &itemSize );
       GetFlavorData( dragRef, itemRef, 'TEXT', dst, &itemSize, 0L );
       dst += itemSize;
       *dst++ = '\n'; // add our element seperator
     }
     ret = GetFlavorFlags( dragRef, itemRef, 'hfs ', &flags );
-    if ( ret == noErr )
-    {
+    if ( ret == noErr ) {
       HFSFlavor hfs; itemSize = sizeof( hfs );
       GetFlavorData( dragRef, itemRef, 'hfs ', &hfs, &itemSize, 0L );
       itemSize = FSSpec2UnixPath( &hfs.fileSpec, dst );
@@ -1177,7 +1180,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
 //  if ( e_text[e_length-1]==0 ) e_length--; // modify, if trailing 0 is part of string
   e_length = dst - e_text - 1;
   target->handle(PASTE);
-  free( e_text );
+  free(buffer);
   
   dnd_target_window = 0L;
   breakMacEventLoop();
@@ -1219,12 +1222,12 @@ void Window::create()
   // Create structure to hold the rectangle, initialize the parts that
   // are the same for outer and child windows:
   CreatedWindow* x = new CreatedWindow;
-  x->backbuffer.xid = 0;
   x->window = this; i = x;
   x->region = 0;
   x->subRegion = 0;
   x->need_new_subRegion = true;
   x->children = x->brother = 0;
+  x->overlay = 0;
 
   if (parent()) {
     // Apparently Mac does not have child windows, this shows that there
@@ -1416,6 +1419,10 @@ void fltk::draw_into(GWorldPtr gWorld) {
   }
 }
 
+void fltk::stop_drawing(GWorldPtr gWorld) {
+  // ?
+}
+
 /**
  * make all drawing go into this window (called by subclass flush() impl.)
  */
@@ -1470,9 +1477,9 @@ void Window::make_current() const
 
 void Window::flush() {
   unsigned char damage = this->damage();
-  if (damage & REDRAW_OVERLAY) damage = DAMAGE_ALL;
   make_current();
   if (damage & ~DAMAGE_EXPOSE) {
+    if (damage & DAMAGE_OVERLAY) damage = DAMAGE_ALL;
     set_damage(damage & ~DAMAGE_EXPOSE);
     draw();
     if (i->overlay) draw_overlay();
@@ -1599,6 +1606,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.18 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.19 2004/12/05 19:28:49 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.238 2004/11/17 17:32:50 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.239 2004/12/05 19:28:49 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -327,9 +327,6 @@ MSG fltk::msg;
 
 UINT fl_wake_msg = 0;
 
-// in Fl_Window.cxx:
-extern void fl_do_deferred_calls();
-
 // Wait up to the given time for any events or sockets to become ready,
 // do the callbacks for the events and sockets.
 // It *should* return negative on error, 0 if nothing happens before
@@ -371,7 +368,6 @@ static inline int fl_wait(double time_to_wait) {
   }
 #endif // USE_ASYNC_SELECT
 
-  fl_do_deferred_calls();
   fl_unlock_function();
   if (time_to_wait < 2147483.648) {
     have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
@@ -417,7 +413,6 @@ static inline int fl_wait(double time_to_wait) {
     if (msg.message != WM_MAKEWAITRETURN) {
       TranslateMessage(&msg);
       __DispatchMessage(&msg);
-      fl_do_deferred_calls();
     }
     have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
   }
@@ -756,10 +751,15 @@ void tablet_close(HWND hWnd) {
   }
 }
 
-// enable tablet usage. This shoudl be completely transparent to regular
-// fltk developers. Howeve if a tablet is detected, fltk::event_pressure()
-// will return the pen pressure as a float value between 0 and 1. Some
-// tablets also support event_x_tilt() and event_y_tilt().
+/*! Call this to indicate that you are interested in getting more
+  information from a pen tablet device. It does some necessary overhead
+  to enable tablets on X and Windows. In the future FLTK may do this
+  automatically without you calling this.
+
+  If a tablet is detected, fltk::event_pressure()
+  will return the pen pressure as a float value between 0 and 1. Some
+  tablets also support event_x_tilt() and event_y_tilt().
+*/
 bool fltk::enable_tablet_events() {
   if (wintab_dll) return true;
   open_display();
@@ -2358,5 +2358,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.238 2004/11/17 17:32:50 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.239 2004/12/05 19:28:49 spitzak Exp $".
 //

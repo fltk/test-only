@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx,v 1.5 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: fl_font_mac.cxx,v 1.6 2004/12/05 19:28:50 spitzak Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/Font.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <fltk/utf.h>
 #include <fltk/math.h>
 #include <fltk/string.h>
 
@@ -209,15 +210,36 @@ void fltk::setfont(Font* font, float psize) {
 float fltk::getascent()  { return current->fi.ascent; }
 float fltk::getdescent() { return current->fi.descent; }
 
-float fltk::getwidth(const char* c, int n) {
-  return float(TextWidth( c, 0, n ));
+#define WCBUFLEN 256
+
+float fltk::getwidth(const char* text, int n) {
+  char localbuffer[WCBUFLEN];
+  char* buffer = localbuffer;
+  char* mallocbuffer = 0;
+  int count = utf8toa(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new char[count+1];
+    count = utf8toa(text, n, buffer, count+1);
+  }
+  float r = float(TextWidth( buffer, 0, count ));
+  delete[] mallocbuffer;
+  return r;
 }
 
-void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
+  char localbuffer[WCBUFLEN];
+  char* buffer = localbuffer;
+  char* mallocbuffer = 0;
+  int count = utf8toa(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new char[count+1];
+    count = utf8toa(text, n, buffer, count+1);
+  }
   MoveTo(int(floorf(x+.5f)), int(floorf(y+.5f)));
-  DrawText(str, 0, n);
+  DrawText(buffer, 0, count);
+  delete[] mallocbuffer;
 }
 
 //
-// End of "$Id: fl_font_mac.cxx,v 1.5 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_font_mac.cxx,v 1.6 2004/12/05 19:28:50 spitzak Exp $".
 //

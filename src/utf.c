@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.15 2004/08/06 16:43:49 laza2000 Exp $"
+// "$Id: utf.c,v 1.16 2004/12/05 19:28:50 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -11,13 +11,7 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
@@ -54,35 +48,24 @@ static unsigned short cp1252[32] = {
     ISO-8859-1 or CP1252 text that has been mistakenly placed where
     UTF-8 is expected, and has proven very useful.
 
-    To distinguish the error result from the legal 1-byte UTF-8
-    encodings you must also check *p&0x80.
-
-    Calling code can be speeded up by checking the high bit and
-    directly treating the common 1-byte case:
+    If you want errors to be converted to error characters (as the
+    standards recommend), adding a test to see if the length is
+    unexpectedly 1 will work:
 
 \code
-    if (!(*p&0x80)) {
+    if (*p & 0x80) { // what should be a multibyte encoding
+      code = utf8decode(p,end,&len);
+      if (len<2) code = 0xFFFD; // Turn errors into REPLACEMENT CHARACTER
+    } else { // handle the 1-byte utf8 encoding:
       code = *p;
       len = 1;
-    } else {
-      code = utf8decode(p,end,&len);
     }
 \endcode
 
-    If you want to test if \a p points at the start of a legal utf-8
-    character, the following code will work:
-
-\code
-    if (!(*p&0x80)) {
-      legal = true;
-    } else {
-      int len; utf8decode(p,end,&len);
-      legal = len > 1;
-    }
-\endcode
-
-    It is also useful to know that this will always set \a len to 1
-    if *p is not in the range 0xc2 through 0xf4.
+    Direct testing for the 1-byte case (as shown above) will also
+    speed up the scanning of strings where the majority of characters
+    are ASCII. If you don't care for the CP1252 translation you
+    should use *p if it is not in the range 0xc2 through 0xf4.
 */
 unsigned utf8decode(const char* p, const char* end, int* len)
 {
@@ -136,7 +119,7 @@ unsigned utf8decode(const char* p, const char* end, int* len)
     if (p+3 >= end || (p[2]&0xc0) != 0x80 || (p[3]&0xc0) != 0x80) goto FAIL;
     *len = 4;
 #if 0
-    // All codes ending in fffe or ffff are illegal:
+    // RFC 3629 says all codes ending in fffe or ffff are illegal:
     if ((p[1]&0xf)==0xf &&
 	((unsigned char*)p)[2] == 0xbf &&
 	((unsigned char*)p)[3] >= 0xbe) goto FAIL;
@@ -173,33 +156,23 @@ int utf8len(char cc) {
   else return 1;
 }
 
-/*! If p points into (not at) a utf-8 character, return
-  a pointer to after the character. Otherwise return p. This will
-  move p to a point that is at the start of a glyph.
-
-  \e end is the end of the string and is assummed to be a break
-  between characters. It is assummed to be greater than p.
+/*! Move \a p forward until it points to the start of a utf-8
+  character. If it already points at the start of one then it
+  is returned unchanged. Any utf-8 errors are treated as though each
+  byte of the error is an individual character.
 
   \e start is the start of the string and is used to limit the
   backwards search for the start of a utf8 character.
 
-  If you wish to increment a random pointer into a utf8 string, pass
-  p+1 to this. If you wish to step through a string starting at a
-  known legal starting point you can do this somewhat faster code:
+  \e end is the end of the string and is assummed to be a break
+  between characters. It is assummed to be greater than p.
 
-  \code
-  for (const char* p = start; p < end;) {
-    if (*(unsigned char*)p < 0xc2) {
-      // fast handler for single-byte utf-8 character, or an error byte
-      thecode = *(unsigned char*)p;
-      ++p;
-    } else {
-      int len;
-      thecode = utf8decode(p, end, &len);
-      p += len;
-    }
-  }
-  \endcode
+  This function is for moving a pointer that was jumped to the
+  middle of a string, such as when doing a binary search for
+  a position. You should use either this or utf8back() depending
+  on which direction your algorithim can handle the pointer
+  moving. Do not use this to scan strings, use utf8decode()
+  instead.
 */
 const char* utf8fwd(const char* p, const char* start, const char* end)
 {
@@ -219,17 +192,18 @@ const char* utf8fwd(const char* p, const char* start, const char* end)
   return p;
 }
 
-/*! If p points into (not at) a legal UTF-8 character, return a
-  pointer to the character (a value less than p). Otherwise return
-  p. This will move p to a point that is the start of a character.
+/*! Move \a p backward until it points to the start of a utf-8
+  character. If it already points at the start of one then it
+  is returned unchanged. Any utf-8 errors are treated as though each
+  byte of the error is an individual character.
 
-  If you wish to decrement a UTF-8 pointer, pass p-1 to this.
+  \e start is the start of the string and is used to limit the
+  backwards search for the start of a UTF-8 character.
 
   \e end is the end of the string and is assummed to be a break
   between characters. It is assummed to be greater than p.
 
-  \e start is the start of the string and is used to limit the
-  backwards search for the start of a UTF-8 character.
+  If you wish to decrement a UTF-8 pointer, pass p-1 to this.
 */
 const char* utf8back(const char* p, const char* start, const char* end)
 {
@@ -249,7 +223,7 @@ const char* utf8back(const char* p, const char* start, const char* end)
 }
 
 /*! Returns number of bytes that utf8encode() will use to encode the
-  Unicode point \a ucs. */
+  character \a ucs. */
 int utf8bytes(unsigned ucs) {
   if (ucs < 0x000080U) {
     return 1;
@@ -274,10 +248,11 @@ int utf8bytes(unsigned ucs) {
     according to RFC 3629. These are converted as though they are
     0xFFFD (REPLACEMENT CHARACTER).
 
-    \a ucs in the range 0xd800 to 0xdfff, or ending with 0xfffe or
-    0xffff are also illegal according to RFC 3629. However I encode
-    these as though they are legal, so that utf8encode/utf8decode will
-    be the identity for all codes between 0 and 0x10ffff.
+    RFC 3629 also says many other values for \a ucs are illegal (in
+    the range 0xd800 to 0xdfff, or ending with 0xfffe or
+    0xffff). However I encode these as though they are legal, so that
+    utf8encode/utf8decode will be the identity for all codes between 0
+    and 0x10ffff.
 */
 int utf8encode(unsigned ucs, char* buf) {
   if (ucs < 0x000080U) {
@@ -307,7 +282,7 @@ int utf8encode(unsigned ucs, char* buf) {
   }
 }
 
-/*! Convert a UTF-8 sequence into an array of "wide characters", which
+/*! Convert a UTF-8 sequence into an array of wchar_t. These
     are used by some system calls, especially on Windows.
 
     \a src points at the UTF-8, and \a srclen is the number of bytes to
@@ -331,14 +306,13 @@ int utf8encode(unsigned ucs, char* buf) {
     ISO-8859-1 text mistakenly identified as UTF-8 to be printed
     correctly.
 
-    On Unix one Unicode character is put into each location in the
-    output array. On Windows, where wchar_t is 16 bits, Unicode
-    characers in the range 0x10000 to 0x10ffff are converted to
+    Notice that sizeof(wchar_t) is 2 on Windows and is 4 on Linux
+    and most other systems. Where wchar_t is 16 bits, Unicode
+    characters in the range 0x10000 to 0x10ffff are converted to
     "surrogate pairs" which take two words each (this is called UTF-16
-    encodign). Because of this incompatability it is strongly
-    recommended you use wchar_t only when absolutely necessary for
-    passing values to the operating system. Store internal values in
-    UTF-8.  */
+    encoding). If wchar_t is 32 bits this rather nasty problem is
+    avoided.
+*/
 unsigned utf8towc(const char* src, unsigned srclen,
 		  wchar_t* dst, unsigned dstlen)
 {		  
