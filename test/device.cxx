@@ -131,7 +131,7 @@ protected:
 
   }
 public:
-    MyWidget(int x, int y):Fl_Box(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer my \nrender very thin lines\nsurrounding \"X\""){
+    MyWidget(int x, int y):Fl_Box(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer may \nrender very thin lines\nsurrounding \"X\""){
       align(FL_ALIGN_TOP);
       labelsize(10);
     };
@@ -506,7 +506,7 @@ protected:
 
   };
 public:
-  MyWidget5(int x, int y):Fl_Box(x,y,230,250, "Complex (double) drawings:\nBlue ellipse my not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
+  MyWidget5(int x, int y):Fl_Box(x,y,230,250, "Complex (double) drawings:\nBlue ellipse may not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
       labelsize(10);
       align(FL_ALIGN_TOP);
     };
