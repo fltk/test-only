@@ -1,5 +1,5 @@
 //
-// "$Id: ColorChooser.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: ColorChooser.h,v 1.4 2004/08/07 20:48:34 spitzak Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,8 +31,6 @@
 #define fltk_ColorChooser_h
 
 #include <fltk/Group.h>
-#include <fltk/Choice.h>
-#include <fltk/ValueInput.h>
 
 namespace fltk {
 
@@ -48,6 +46,7 @@ public:
 
 class FL_API ccValueBox : public Widget {
   int py;
+  bool is_alpha() const;
 protected:
   void draw();
 public:
@@ -56,50 +55,56 @@ public:
   py = 0;}
 };
 
-class FL_API ccValueInput : public ValueInput {
+class FL_API ccCellBox : public Widget {
 public:
-  int format(char*);
-  ccValueInput(int X, int Y, int W, int H) : ValueInput(X,Y,W,H) {}
+  ccCellBox(int X, int Y, int W, int H) : Widget(X,Y,W,H) {}
+  void draw();
+  int handle(int);
 };
 
 class FL_API ColorChooser : public Group {
+  friend class ccHueBox;
+  friend class ccValueBox;
   ccHueBox huebox;
   ccValueBox valuebox;
-  Group nrgroup; // no resize group
-  Choice choice;
-  ccValueInput rvalue;
-  ccValueInput gvalue;
-  ccValueInput bvalue;
+  ccValueBox alphabox;
+  ccCellBox cellbox;
   float hue_, saturation_, value_;
-  float r_, g_, b_;
-  void set_valuators();
-  static void rgb_cb(Widget*, void*);
-  static void mode_cb(Widget*, void*);
+  float r_, g_, b_, a_;
 public:
-  int mode() {return choice.value();}
   float h() const {return hue_;}
   float s() const {return saturation_;}
   float v() const {return value_;}
   float r() const {return r_;}
   float g() const {return g_;}
   float b() const {return b_;}
+  float a() const {return a_;}
   Color value() const;
-  void value(Color);
-  int hsv(float,float,float);
-  int rgb(float,float,float);
+  bool value(Color);
+  bool hsv(float,float,float);
+  bool rgb(float,float,float);
+  bool a(float);
+  void hide_a();
   static void hsv2rgb(float, float, float,float&,float&,float&);
   static void rgb2hsv(float, float, float,float&,float&,float&);
   ColorChooser(int,int,int,int,const char* = 0);
+  void layout();
+  float setcell(int,float,float,float,float);
+  float getcell(int,float,float,float,float);
 };
 
-FL_API int color_chooser(const char* name, float& r, float& g, float& b);
-FL_API int color_chooser(const char* name, uchar& r, uchar& g, uchar& b);
-FL_API int color_chooser(const char* name, Color& c);
+// Convience functions to pop-up a control panel:
+
+FL_API bool color_chooser(const char* name, float& r, float& g, float& b);
+FL_API bool color_chooser(const char* name, float& r, float& g, float& b, float& a);
+FL_API bool color_chooser(const char* name, uchar& r, uchar& g, uchar& b);
+FL_API bool color_chooser(const char* name, uchar& r, uchar& g, uchar& b, uchar& a);
+FL_API bool color_chooser(const char* name, Color& c);
 
 }
 
 #endif
 
 //
-// End of "$Id: ColorChooser.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: ColorChooser.h,v 1.4 2004/08/07 20:48:34 spitzak Exp $".
 //

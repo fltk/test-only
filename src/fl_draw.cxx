@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.47 2004/07/29 08:24:24 laza2000 Exp $"
+// "$Id: fl_draw.cxx,v 1.48 2004/08/07 20:48:35 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -636,7 +636,7 @@ static void _drawtext(
       }
       if (s.symbol) {
         Symbol::text(s.start);
-        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
+        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
       } else {
         drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
       }
@@ -647,7 +647,7 @@ static void _drawtext(
       Segment& s = segments[h];
       if (s.symbol) {
         Symbol::text(s.start);
-        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
+        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
       } else {
         drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
       }
@@ -720,5 +720,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.47 2004/07/29 08:24:24 laza2000 Exp $".
+// End of "$Id: fl_draw.cxx,v 1.48 2004/08/07 20:48:35 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.190 2004/08/03 07:26:35 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.191 2004/08/07 20:48:35 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -27,7 +27,7 @@
 #define CONSOLIDATE_MOTION 1 // this was 1 in fltk 1.0
 
 #define DEBUG_SELECTIONS 0
-#define DEBUG_TABLET 1
+#define DEBUG_TABLET 0
 
 #include <config.h>
 #include <fltk/x.h>
@@ -878,10 +878,12 @@ void fltk::get_mouse(int &x, int &y) {
 
 ////////////////////////////////////////////////////////////////
 // Tablet initialisation and event handling
-static XID stylus_device_id;
-static XDevice *stylus_device;
-static int stylus_event_type;
-static float pressure_add, pressure_mul;
+const int n_stylus_device = 2;
+static XID stylus_device_id[n_stylus_device] = { 0, 0 };
+static XDevice *stylus_device[n_stylus_device] = { 0, 0 };
+static int stylus_motion_event, 
+           stylus_proximity_in_event, stylus_proximity_out_event;
+static float pressure_mul[n_stylus_device];
 static float x_tilt_add, x_tilt_mul;
 static float y_tilt_add, y_tilt_mul;
 
@@ -890,6 +892,59 @@ const int tablet_x_tilt_ix = 3;
 const int tablet_y_tilt_ix = 4;
 
 #define FLTK_T_MAX(a, b) ((a)>(b)?(a):(b))
+
+static bool open_stylus_device(XDeviceInfo *list, int i, int n) {
+  if (list[i].num_classes<=0) return false;
+  stylus_device_id[n] = list[i].id;
+  XAnyClassPtr any = (XAnyClassPtr)list[i].inputclassinfo;
+  int j; for (j=0; j<list[i].num_classes; j++) {
+    if (any->c_class == ValuatorClass) {
+      XValuatorInfoPtr v = (XValuatorInfoPtr)any;
+      XAxisInfoPtr a = (XAxisInfoPtr)((char *)v+sizeof(XValuatorInfo));
+      int k; for (k=0; k<v->num_axes; k++, a++) {
+        switch (k) {
+          case tablet_pressure_ix: // pressure
+            pressure_mul[n] = 1.0f/a->max_value;
+            break;
+          case tablet_x_tilt_ix: // x-tilt
+            x_tilt_add = 0.0f;
+            x_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+            break;
+          case tablet_y_tilt_ix: // y-tilt
+            y_tilt_add = 0.0f;
+            y_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+            break;
+        }
+      }
+    }
+    any = XAnyClassPtr((char*)any + any->length);
+  }
+  // now open the stylus device
+  stylus_device[n] = XOpenDevice(xdisplay, stylus_device_id[n]);
+  if ( !stylus_device[n] ) {
+#if DEBUG_TABLET
+    printf("fltk: could not open stylus device %d\n", n);
+#endif    
+    return false;
+  }
+  // list and request events 
+  XEventClass xec[20];
+  int nxec = 0;
+  for (i=0; i<stylus_device[n]->num_classes; i++) {
+    if (stylus_device[n]->classes[i].input_class == ProximityClass) {
+	  ProximityIn(stylus_device[n], stylus_proximity_in_event, xec[nxec]); 
+      nxec++;
+	  ProximityOut(stylus_device[n], stylus_proximity_out_event, xec[nxec]);
+      nxec++;
+    }
+    if (stylus_device[n]->classes[i].input_class == ValuatorClass) {
+	  DeviceMotionNotify(stylus_device[n], stylus_motion_event, xec[nxec]);
+      nxec++;
+    }
+  }
+  if (nxec) XSelectExtensionEvent(xdisplay, RootWindow(xdisplay, 0), xec, nxec);
+  return true;
+}
 
 bool fltk::enable_tablet_events() {
   e_pressure = 0.0f; // indicate uninitialised data
@@ -907,65 +962,17 @@ bool fltk::enable_tablet_events() {
   XFree(version);
   // look out for the stylus device which supports most current tablets
   int ndev, i, found = 0;
+  bool ret = false;
   XDeviceInfo *list = XListInputDevices(xdisplay, &ndev);
   for (i=0; i<ndev && !found; i++) {
-    if (strcmp(list[i].name, "stylus") == 0) { 
-      if (list[i].num_classes<=0) continue;
-      //+++ or 'eraser' or 'cursor'... or XI_TABLET on Mac OS X
-      stylus_device_id = list[i].id;
-      XAnyClassPtr any = (XAnyClassPtr)list[i].inputclassinfo;
-      int j; for (j=0; j<list[i].num_classes; j++) {
-        if (any->c_class == ValuatorClass) {
-          XValuatorInfoPtr v = (XValuatorInfoPtr)any;
-          XAxisInfoPtr a = (XAxisInfoPtr)((char *)v+sizeof(XValuatorInfo));
-          int k; for (k=0; k<v->num_axes; k++, a++) {
-            switch (k) {
-              case tablet_pressure_ix: // pressure
-                pressure_add = 0.0f;
-                pressure_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
-                break;
-              case tablet_x_tilt_ix: // x-tilt
-                x_tilt_add = 0.0f;
-                x_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
-                break;
-              case tablet_y_tilt_ix: // y-tilt
-                y_tilt_add = 0.0f;
-                y_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
-                break;
-            }
-          }
-        }
-        any = XAnyClassPtr((char*)any + any->length);
-      }
-      found = true;
-      break;
+    if (!strcmp(list[i].name, "stylus") && !stylus_device[0]) {
+      if (open_stylus_device(list, i, 0)) ret = true;
+    } else if (!strcmp(list[i].name, "eraser") && !stylus_device[1]) {
+      if (open_stylus_device(list, i, 1)) ret = true;
     }
   }
   XFreeDeviceList(list);
-  if (!found) {
-#if DEBUG_TABLET
-    printf("fltk: no stylus device found\n");
-#endif    
-    return false;
-  }
-  // now open the stylus device
-  stylus_device = XOpenDevice(xdisplay, stylus_device_id);
-  if ( !stylus_device ) {
-#if DEBUG_TABLET
-    printf("fltk: could not open stylus device\n");
-#endif    
-    return false;
-  }
-  // list and request events 
-  for (i=0; i<stylus_device->num_classes; i++) {
-    if (stylus_device->classes[i].input_class == ValuatorClass) {
-	  XEventClass xec = 0;
-	  DeviceMotionNotify(stylus_device, stylus_event_type, xec);
-	  XSelectExtensionEvent(xdisplay, RootWindow(xdisplay, 0), &xec, 1);
-    }
-  }
-  
-  return true;
+  return ret;
 }
 
 #undef FLTK_T_MAX
@@ -1124,6 +1131,16 @@ extern "C" {
       event->type == KeyPress &&
       event->xkey.keycode == ((XKeyEvent*)previous)->keycode &&
       event->xkey.time == ((XKeyEvent*)previous)->time;
+  }
+}
+
+// this little function makes sure that the styleus related event data
+// is useful, even if no tablet was discovered, or the mouse was used to 
+// generate a PUSH, RELEASE, MOVE or DRAG event
+static void set_stylus_data() {
+  if (e_device==0) {
+    e_pressure = e_state&BUTTON(1) ? 1.0f : 0.0f;
+    e_x_tilt = e_y_tilt = 0.0f;
   }
 }
 
@@ -1348,10 +1365,12 @@ bool fltk::handle()
       e_state |= BUTTON(n);
       event = PUSH;
     }}
+    set_stylus_data();
     goto J1;
 
   case MotionNotify:
     set_event_xy(false);
+    set_stylus_data();
 #if CONSOLIDATE_MOTION
     send_motion = xmousewin = window;
     in_a_window = true;
@@ -1368,6 +1387,7 @@ bool fltk::handle()
     //if (n == wheel_up_button || n == wheel_down_button) break;
     e_state &= ~BUTTON(n);
     event = RELEASE;}
+    set_stylus_data();
     goto J1;
 
   case EnterNotify:
@@ -1698,31 +1718,46 @@ bool fltk::handle()
 
   }
 
-  if ( xevent.type == stylus_event_type ) {
-    //printf("stylus: ");
+  // handle stylus events
+  if (   xevent.type == stylus_motion_event
+      || xevent.type == stylus_proximity_in_event
+      || xevent.type == stylus_proximity_out_event) {
     XDeviceMotionEvent *me = (XDeviceMotionEvent*)&xevent;
-    //int axis = me->first_axis;
-    if (   me->first_axis<=tablet_pressure_ix 
-        && me->first_axis+me->axes_count>=tablet_pressure_ix) {
-      float v = (float)me->axis_data[tablet_pressure_ix-me->first_axis];
-      e_pressure = (v+pressure_add)*pressure_mul;
-      //printf("pressure %6.4g  ", e_pressure); 
+    int n, axis; 
+    // find the device that sent this event (pen or eraser)
+    for (n = 0; n < n_stylus_device; n++) 
+      if (me->deviceid == stylus_device_id[n]) break;
+    if (n == n_stylus_device) goto unknown_device;
+    // if the stylus gets into proximity, set the new device
+    if (xevent.type == stylus_proximity_in_event) {
+      e_pressure = e_x_tilt = e_y_tilt = 0.0f;
+      e_device = n+1;
+      return true;
     }
-    if (   me->first_axis<=tablet_x_tilt_ix 
-        && me->first_axis+me->axes_count>=tablet_x_tilt_ix) {
+    // if the stylus leaves proximity, all motion events are coused by the mouse
+    if (xevent.type == stylus_proximity_out_event) {
+      e_device = 0;
+      return true;
+    }
+    // get pressure and tilt data
+    axis = me->first_axis;
+    if (axis <= tablet_pressure_ix && axis+me->axes_count >= tablet_pressure_ix) {
+      float v = (float)me->axis_data[tablet_pressure_ix-me->first_axis];
+      e_pressure = v*pressure_mul[n];
+    }
+    if (axis <= tablet_x_tilt_ix && axis+me->axes_count >= tablet_x_tilt_ix) {
       float v = (float)me->axis_data[tablet_x_tilt_ix-me->first_axis];
       e_x_tilt = (v+x_tilt_add)*x_tilt_mul;
-      //printf("x %6.4g  ", e_x_tilt); 
     }
-    if (   me->first_axis<=tablet_y_tilt_ix 
-        && me->first_axis+me->axes_count>=tablet_y_tilt_ix) {
+    if (axis <= tablet_y_tilt_ix && axis+me->axes_count >= tablet_y_tilt_ix) {
       float v = (float)me->axis_data[tablet_y_tilt_ix-me->first_axis];
       e_y_tilt = (v+y_tilt_add)*y_tilt_mul;
-      //printf("y %6.4g  ", e_y_tilt); 
     }
-    //printf("\n");
+    return true;
+    // should we send some kind of PEN_DOWN/ERASER_DOWN events?
   }
-  
+ unknown_device:
+
   return handle(event, window);
 }
 
@@ -2300,5 +2335,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.190 2004/08/03 07:26:35 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.191 2004/08/07 20:48:35 spitzak Exp $".
 //

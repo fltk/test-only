@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.180 2004/08/03 07:26:34 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.181 2004/08/07 20:48:35 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -100,13 +100,14 @@ int	  fltk::e_type,
 	  fltk::e_state,
 	  fltk::e_clicks,
 	  fltk::e_is_click,
-	  fltk::e_keysym;
-float fltk::e_pressure = 1.0f,
-      fltk::e_x_tilt = 0.0f,
-      fltk::e_y_tilt = 0.0f;
-char  *fltk::e_text = "";
+	  fltk::e_keysym,
+	  fltk::e_device = DEVICE_MOUSE;
+float     fltk::e_pressure,
+          fltk::e_x_tilt,
+          fltk::e_y_tilt;
+char     *fltk::e_text = "";
 int	  fltk::e_length;
-bool  fltk::grab_,
+bool      fltk::grab_,
 	  fltk::exit_modal_;
 
 static Window *xfocus;	// which window X thinks has focus
@@ -419,7 +420,6 @@ int fltk::wait(float time_to_wait) {
   // check functions must be run first so they can install idle or timeout
   // functions:
   run_checks();
-
   flush();
 
   if (first_timeout) {
@@ -1105,5 +1105,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.180 2004/08/03 07:26:34 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.181 2004/08/07 20:48:35 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.37 2004/07/04 17:28:31 laza2000 Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.38 2004/08/07 20:48:35 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,11 @@
 #include <fltk/draw.h>
 #include <fltk/Item.h>
 #include <fltk/math.h>
+#include <fltk/PopupMenu.h>
+#include <fltk/ValueInput.h>
+#include <fltk/layout.h>
 #include <stdio.h>
+
 using namespace fltk;
 
 // Besides being a useful object on it's own, the ColorChooser was
@@ -85,60 +89,33 @@ void ColorChooser::rgb2hsv(
   }
 }
 
-enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
-
-int ccValueInput::format(char* buf) {
-  ColorChooser* c = (ColorChooser*)parent()->parent();
-  if (c->mode() == M_HEX) return sprintf(buf,"0x%02X", int(value()));
-  else return Valuator::format(buf);
-}
-
-void ColorChooser::set_valuators() {
-  switch (mode()) {
-  case M_RGB:
-    rvalue.range(0,1); rvalue.step(.001); rvalue.value(r_);
-    gvalue.range(0,1); gvalue.step(.001); gvalue.value(g_);
-    bvalue.range(0,1); bvalue.step(.001); bvalue.value(b_);
-    break;
-  case M_BYTE:
-  case M_HEX:
-    rvalue.range(0,255); rvalue.step(1); rvalue.value(int(255*r_+.5f));
-    gvalue.range(0,255); gvalue.step(1); gvalue.value(int(255*g_+.5f));
-    bvalue.range(0,255); bvalue.step(1); bvalue.value(int(255*b_+.5f));
-    break;
-  case M_HSV:
-    rvalue.range(0,6); rvalue.step(.001); rvalue.value(hue_);
-    gvalue.range(0,1); gvalue.step(.001); gvalue.value(saturation_);
-    bvalue.range(0,1); bvalue.step(.001); bvalue.value(value_);
-    break;
-  }
-}
-
-int ColorChooser::rgb(float r, float g, float b) {
-  if (r == r_ && g == g_ && b == b_) return 0;
+bool ColorChooser::rgb(float r, float g, float b) {
+  if (r == r_ && g == g_ && b == b_) return false;
   r_ = r; g_ = g; b_ = b;
   float ph = hue_;
   float ps = saturation_;
   float pv = value_;
   rgb2hsv(r,g,b,hue_,saturation_,value_);
-  set_valuators();
   if (value_ != pv) {
 #ifdef UPDATE_HUE_BOX
     huebox.redraw(DAMAGE_CONTENTS);
 #endif
-    valuebox.redraw(DAMAGE_VALUE);}
+    valuebox.redraw(DAMAGE_VALUE);
+    alphabox.redraw(DAMAGE_CONTENTS);
+  }
   if (hue_ != ph || saturation_ != ps) {
     huebox.redraw(DAMAGE_VALUE); 
     valuebox.redraw(DAMAGE_CONTENTS);
+    alphabox.redraw(DAMAGE_CONTENTS);
   }
-  return 1;
+  return true;
 }
 
-int ColorChooser::hsv(float h, float s, float v) {
+bool ColorChooser::hsv(float h, float s, float v) {
   h = fmodf(h,6.0f); if (h < 0) h += 6;
   if (s < 0) s = 0; else if (s > 1) s = 1;
   if (v < 0) v = 0; else if (v > 1) v = 1;
-  if (h == hue_ && s == saturation_ && v == value_) return 0;
+  if (h == hue_ && s == saturation_ && v == value_) return false;
   float ph = hue_;
   float ps = saturation_;
   float pv = value_;
@@ -147,14 +124,28 @@ int ColorChooser::hsv(float h, float s, float v) {
 #ifdef UPDATE_HUE_BOX
     huebox.redraw(DAMAGE_CONTENTS);
 #endif
-    valuebox.redraw(DAMAGE_VALUE);}
+    valuebox.redraw(DAMAGE_VALUE);
+    alphabox.redraw(DAMAGE_CONTENTS);
+  }
   if (hue_ != ph || saturation_ != ps) {
     huebox.redraw(DAMAGE_VALUE); 
     valuebox.redraw(DAMAGE_CONTENTS);
+    alphabox.redraw(DAMAGE_CONTENTS);
   }
   hsv2rgb(h,s,v,r_,g_,b_);
-  set_valuators();
   return 1;
+}
+
+bool ColorChooser::a(float a) {
+  alphabox.show();
+  if (a == a_) return false;
+  a_ = a;
+  alphabox.redraw(DAMAGE_VALUE);
+  return true;
+}
+
+void ColorChooser::hide_a() {
+  alphabox.hide();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -187,11 +178,11 @@ int ccHueBox::handle(int e) {
     tohs(Xf, Yf, H, S);
     if (fabsf(H-ih) < 3*6.0f/w()) H = (float)ih;
     if (fabsf(S-is) < 3*1.0f/h()) S = (float)is;
-    if (event_state(CTRL)) H = (float)ih;
+    if (event_state(CTRL)) H = c->h();
     if (c->hsv(H, S, c->v())) c->do_callback();
     } return 1;
   default:
-    return 0;
+    return Widget::handle(e);
   }
 }
 
@@ -240,148 +231,92 @@ void ccHueBox::draw() {
 
 ////////////////////////////////////////////////////////////////
 
+bool ccValueBox::is_alpha() const {
+  ColorChooser* c = (ColorChooser*)parent();
+  return this == &(c->alphabox);
+}
+
 int ccValueBox::handle(int e) {
   static float iv;
   ColorChooser* c = (ColorChooser*)parent();
   switch (e) {
   case PUSH:
-    iv = c->v();
+    iv = is_alpha() ? c->a() : c->v();
   case DRAG: {
     float Yf;
     int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
     box()->inset(x1,y1,w1,h1);
     Yf = 1-(event_y()-y1)/float(h1);
     if (fabsf(Yf-iv)<(3*1.0f/h())) Yf = iv;
-    if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
-    } return 1;
+    if (is_alpha()) {
+      if (c->a(Yf)) c->do_callback();
+    } else {
+      if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
+    }} return 1;
   default:
-    return 0;
+    return Widget::handle(e);
   }
 }
 
-static float tr, tg, tb;
+struct Idata {
+  float r, g, b;
+  int w, h;
+  bool aimage;
+};
+
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
-  ccValueBox* v = (ccValueBox*)vv;
-  int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
-  v->box()->inset(x1,y1,w1,h1);
-  float Yf = 255*(1-float(Y)/h1);
-  uchar r = uchar(tr*Yf+.5f);
-  uchar g = uchar(tg*Yf+.5f);
-  uchar b = uchar(tb*Yf+.5f);
-  for (int x = X; x < X+W; x++) {
-    *buf++ = r; *buf++ = g; *buf++ = b;
+  const Idata& i = *((Idata*)vv);
+  float yy = 255*(float(Y-3)/(i.h-6));
+  if (yy<0) yy = 0; else if (yy > 255) yy = 255;
+  float Yf = 255-yy;
+  uchar r = uchar(i.r*Yf+.5f);
+  uchar g = uchar(i.g*Yf+.5f);
+  uchar b = uchar(i.b*Yf+.5f);
+  if (i.aimage) {
+    uchar r1 = uchar(r+yy);
+    uchar g1 = uchar(g+yy);
+    uchar b1 = uchar(b+yy);
+    int xr = Y&8;
+    for (int x = X; x < X+W; x++) {
+      if ((x^xr)&8) {
+	*buf++ = r1; *buf++ = g1; *buf++ = b1;
+      } else {
+	*buf++ = r; *buf++ = g; *buf++ = b;
+      }
+    }	
+  } else {
+    for (int x = X; x < X+W; x++) {
+      *buf++ = r; *buf++ = g; *buf++ = b;
+    }
   }
 }
 
 void ccValueBox::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
   ColorChooser* c = (ColorChooser*)parent();
-  c->hsv2rgb(c->h(),c->s(),1.0f,tr,tg,tb);
-  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-  box()->inset(x1,y1,w1,h1);
-  if (damage() == DAMAGE_VALUE) push_clip(x1,y1+py,w1,6);
-  drawimage(generate_vimage, this, x1, y1, w1, h1);
+  Idata i;
+  int x1 = 0; int y1 = 0; i.w = w(); i.h = h();
+  box()->inset(x1,y1,i.w,i.h);
+  float v;
+  if (is_alpha()) {
+    i.r = c->r(); i.g = c->g(); i.b = c->b();
+    v = c->a();
+    i.aimage = true;
+  } else {
+    c->hsv2rgb(c->h(),c->s(),1.0f,i.r,i.g,i.b);
+    v = c->v();
+    i.aimage = false;
+  }
+  if (damage() == DAMAGE_VALUE) push_clip(x1,y1+py,i.w,6);
+  drawimage(generate_vimage, &i, x1, y1, i.w, i.h);
   if (damage() == DAMAGE_VALUE) pop_clip();
-  int Y = int((1-c->v()) * (h1-6));
-  if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  buttonbox()->draw(x1, y1+Y, w1, 6, style(), 0);
+  int Y = int((1-v) * (i.h-6));
+  if (Y < 0) Y = 0; else if (Y > i.h-6) Y = i.h-6;
+  buttonbox()->draw(x1, y1+Y, i.w, 6, style(), 0);
   py = Y;
 }
 
 ////////////////////////////////////////////////////////////////
-
-void ColorChooser::rgb_cb(Widget* o, void*) {
-  ColorChooser* c = (ColorChooser*)(o->parent()->parent());
-  float r = float(c->rvalue.value());
-  float g = float(c->gvalue.value());
-  float b = float(c->bvalue.value());
-  if (c->mode() == M_HSV) {
-    if (c->hsv(r,g,b)) c->do_callback();
-    return;
-  }
-  if (c->mode() != M_RGB) {
-    r = r/255;
-    g = g/255;
-    b = b/255;
-  }
-  if (c->rgb(r,g,b)) c->do_callback();
-}
-
-void ColorChooser::mode_cb(Widget* o, void*) {
-  ColorChooser* c = (ColorChooser*)(o->parent()->parent());
-  // force them to redraw even if value is the same:
-  c->rvalue.value(-1);
-  c->gvalue.value(-1);
-  c->bvalue.value(-1);
-  c->set_valuators();
-}
-
-////////////////////////////////////////////////////////////////
-
-ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
-  : Group(0,0,180,100,L,true),
-    huebox(0,0,100,100),
-    valuebox(100,0,20,100),
-    nrgroup(120,0, 60, 100, 0, true),
-    choice(0,0,60,21),
-    rvalue(0,22,60,21),
-    gvalue(0,44,60,21),
-    bvalue(0,66,60,21)
-{
-  nrgroup.end();
-  choice.begin();
-  new Item("rgb");
-  new Item("byte");
-  new Item("hex");
-  new Item("hsv");
-  choice.end();
-  end();
-  resizable(huebox);
-  sizes();
-  resize(X,Y,W,H);
-  r_ = g_ = b_ = 0;
-  hue_ = 0.0;
-  saturation_ = 0.0;
-  value_ = 0.0;
-  set_valuators();
-  rvalue.callback(rgb_cb);
-  gvalue.callback(rgb_cb);
-  bvalue.callback(rgb_cb);
-  choice.callback(mode_cb);
-}
-
-Color ColorChooser::value() const {
-  Color ret =
-    fltk::color(uchar(255*r()+.5f), uchar(255*g()+.5f), uchar(255*b()+.5f));
-  return ret ? ret : BLACK;
-}
-
-void ColorChooser::value(Color c) {
-  uchar r,g,b; split_color(c,r,g,b);
-  rgb(r/255.0f, g/255.0f, b/255.0f);
-}
-
-////////////////////////////////////////////////////////////////
-// color_chooser():
-
-#include <fltk/Window.h>
-#include <fltk/ReturnButton.h>
-#include <fltk/ask.h>
-
-static Window* window;
-static ColorChooser* chooser;
-static Widget* ok_color;
-static Button* ok_button;
-static Widget* cancel_color;
-static Button* cancel_button;
-
-// this location is used to preserve index Color values:
-static Color picked_color;
-
-static void chooser_cb(Widget*, void*) {
-  ok_color->color(picked_color = chooser->value());
-  ok_color->redraw();
-}
 
 #define ROWS 4
 #define COLS 16
@@ -395,14 +330,7 @@ FL_API Color fl_color_cells[ROWS*COLS] = {
 // repeat it twice:
 32,32,32,37,37,39,39,43,43,47,47,49,49,55,55,55};
 
-class CellBox : public Widget {
-public:
-  CellBox(int X, int Y, int W, int H) : Widget(X,Y,W,H) {}
-  void draw();
-  int handle(int);
-};
-
-void CellBox::draw() {
+void ccCellBox::draw() {
   for (int Y = 0; Y < ROWS; Y++) {
     int yy = Y*h()/ROWS;
     int hh = (Y+1)*h()/ROWS - yy;
@@ -416,7 +344,7 @@ void CellBox::draw() {
   }
 }
 
-int CellBox::handle(int e) {
+int ccCellBox::handle(int e) {
   switch (e) {
   case PUSH: return 1;
   case DRAG: return 1;
@@ -426,17 +354,182 @@ int CellBox::handle(int e) {
     int Y = event_y()*ROWS/h();
     if (Y < 0 || Y >= ROWS) return 1;
     X = X+Y*COLS;
+    ColorChooser* c = (ColorChooser*)parent();
     if (event_button() > 1) {
-      fl_color_cells[X] = picked_color;
+      fl_color_cells[X] = c->value();
       redraw();
     } else {
-      chooser->value(picked_color = fl_color_cells[X]);
-      ok_color->color(picked_color);
-      ok_color->redraw();
+      if (c->value(fl_color_cells[X])) c->do_callback();
     }
     return 1;}
   }
   return Widget::handle(e);
+}
+
+////////////////////////////////////////////////////////////////
+
+void ColorChooser::layout() {
+  if (layout_damage()&(LAYOUT_WH|LAYOUT_DAMAGE)) {
+    int h = Widget::h();
+    int ch = w()*ROWS/COLS;
+    if (ch > h/3) ch = h/3;
+    cellbox.resize(0,h-ch,w(),ch);
+    h = h-ch;
+    int ww = w()*20/140;
+    int maxw = 24+valuebox.box()->dw();
+    if (ww>maxw) ww = maxw;
+    int xx = w()-ww;
+    if (alphabox.visible()) {
+      alphabox.resize(xx,0,ww,h);
+      xx -= ww;
+    }
+    valuebox.resize(xx,0,ww,h);
+    huebox.resize(0,0,xx,h);
+  }
+  Widget::layout();
+}
+
+ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
+  : Group(0,0,140,180,L,true),
+    huebox(0,0,100,100),
+    valuebox(100,0,20,100),
+    alphabox(120,0,20,100),
+    cellbox(0,100,140,80)
+{
+  alphabox.hide();
+  huebox.tooltip("Drag to change hue & saturation\n"
+		 "Ctrl+drag to change saturation only");
+  valuebox.tooltip("Drag to change value (brightness)");
+  alphabox.tooltip("Drag to change alpha");
+  cellbox.tooltip("Left-click to select color from cell.\n"
+		  "Right-click to put current color into cell.");
+  end();
+//    resizable(huebox);
+//    sizes();
+  resize(X,Y,W,H);
+  r_ = g_ = b_ = 0;
+  a_ = 1.0;
+  hue_ = 0.0;
+  saturation_ = 0.0;
+  value_ = 0.0;
+}
+
+Color ColorChooser::value() const {
+  Color ret =
+    fltk::color(uchar(255*r()+.5f), uchar(255*g()+.5f), uchar(255*b()+.5f));
+  return ret ? ret : BLACK;
+}
+
+bool ColorChooser::value(Color c) {
+  uchar r,g,b; split_color(c,r,g,b);
+  return rgb(r/255.0f, g/255.0f, b/255.0f);
+}
+
+////////////////////////////////////////////////////////////////
+// color_chooser():
+
+#include <fltk/Window.h>
+#include <fltk/ReturnButton.h>
+#include <fltk/ask.h>
+
+class FL_API ccValueInput : public ValueInput {
+public:
+  int format(char*);
+  ccValueInput(int X, int Y, int W, int H) : ValueInput(X,Y,W,H) {}
+};
+
+enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
+static int mode = M_RGB;
+static bool recursion;
+
+int ccValueInput::format(char* buf) {
+  if (mode == M_HEX) return sprintf(buf,"0x%02X", int(value()));
+  else return Valuator::format(buf);
+}
+
+static ccValueInput* rvalue, *gvalue, *bvalue, *avalue;
+
+static void setstep(float step) {
+  if (mode != M_HSV) {rvalue->step(step); rvalue->linesize(step);}
+  gvalue->step(step); gvalue->linesize(step);
+  bvalue->step(step); bvalue->linesize(step);
+  avalue->step(step); avalue->linesize(step);
+}
+
+static void set_valuators(ColorChooser* c) {
+  if (recursion) return;
+  switch (mode) {
+  case M_RGB:
+    setstep(.001);
+    rvalue->range(0,1); rvalue->value(c->r());
+    gvalue->range(0,1); gvalue->value(c->g());
+    bvalue->range(0,1); bvalue->value(c->b());
+    avalue->range(0,1); avalue->value(c->a());
+    break;
+  case M_BYTE:
+  case M_HEX:
+    setstep(1);
+    rvalue->range(0,255); rvalue->value(int(255*c->r()+.5f));
+    gvalue->range(0,255); gvalue->value(int(255*c->g()+.5f));
+    bvalue->range(0,255); bvalue->value(int(255*c->b()+.5f));
+    avalue->range(0,255); avalue->value(int(255*c->a()+.5f));
+    break;
+  case M_HSV:
+    setstep(.001);
+    rvalue->range(0,360); rvalue->step(1); rvalue->linesize(1); rvalue->value(c->h()*60);
+    gvalue->range(0,1); gvalue->value(c->s());
+    bvalue->range(0,1); bvalue->value(c->v());
+    avalue->range(0,1); avalue->value(c->a());
+    break;
+  }
+}
+
+static Window* window;
+static ColorChooser* chooser;
+static Widget* ok_color;
+static Button* ok_button;
+static Widget* cancel_color;
+static Button* cancel_button;
+
+static void input_cb(Widget* o, void*) {
+  float r = float(rvalue->value());
+  float g = float(gvalue->value());
+  float b = float(bvalue->value());
+  float a = float(avalue->value());
+  recursion = true;
+  if (mode == M_HSV) {
+    if (chooser->hsv(r/60,g,b)) chooser->do_callback();
+  } else {
+    if (mode != M_RGB) {
+      r = r/255;
+      g = g/255;
+      b = b/255;
+    }
+    if (chooser->rgb(r,g,b)) chooser->do_callback();
+  }
+  if (avalue->visible()) {
+    if (chooser->a(a)) chooser->do_callback();
+  }
+  recursion = false;
+}
+
+static void mode_cb(Widget* o, long int v) {
+  mode = int(v);
+  // force them to redraw even if value is the same:
+  rvalue->value(-2);
+  gvalue->value(-2);
+  bvalue->value(-2);
+  avalue->value(-2);
+  set_valuators(chooser);
+}
+
+// this location is used to preserve index Color values:
+static Color picked_color;
+
+static void chooser_cb(Widget*, void*) {
+  ok_color->color(picked_color = chooser->value());
+  ok_color->redraw();
+  set_valuators(chooser);
 }
 
 static void ok_cb(Widget* w, void*) {
@@ -448,28 +541,52 @@ static void cancel_cb(Widget* w, void*) {
   w->window()->hide();
 }
 
-static void make_it() {
-  if (window) return;
-  window = new Window(210,212);
-  window->begin();
-  chooser = new ColorChooser(5, 5, 200, 100);
-  chooser->callback(chooser_cb);
-  new CellBox(5,110,200,52);
-  ok_color = new Widget(5, 165, 95, 21);
-  ok_color->box(ENGRAVED_BOX);
-  ok_button = new ReturnButton(5, 186, 95, 21, ok);
-  ok_button->callback(ok_cb);
-  cancel_color = new Widget(110, 165, 95, 21);
-  cancel_color->box(ENGRAVED_BOX);
-  cancel_button = new Button(110, 186, 95, 21, cancel);
-  cancel_button->callback(cancel_cb);
-  // window->size_range(210, 240); // minimum usable size?
-  window->resizable(chooser);
-  window->end();
-}
-
-static int run_it(const char* name) {
+static int run_it(const char* name, bool alpha,
+		  float r, float g, float b, float a)
+{
+  if (!window) {
+    window = new Window(210, 160+5+26+21+21+5);
+    window->begin();
+    chooser = new ColorChooser(5, 5, 200, 155);
+    chooser->callback(chooser_cb);
+    int y = 165;
+    int x = 5;
+    rvalue = new ccValueInput(x,y,50,21); x += 50;
+    rvalue->callback(input_cb);
+    gvalue = new ccValueInput(x,y,50,21); x += 50;
+    gvalue->callback(input_cb);
+    bvalue = new ccValueInput(x,y,50,21); x += 50;
+    bvalue->callback(input_cb);
+    avalue = new ccValueInput(x,y,50,21); x += 50;
+    avalue->callback(input_cb);
+    PopupMenu* choice = new PopupMenu(5,y,200,21); x+=40;
+    choice->type(PopupMenu::POPUP3);
+    choice->begin();
+    (new Item("rgb"))->callback(mode_cb,M_RGB);
+    (new Item("byte"))->callback(mode_cb,M_BYTE);
+    (new Item("hex"))->callback(mode_cb,M_HEX);
+    (new Item("hsv"))->callback(mode_cb,M_HSV);
+    choice->end();
+    choice->value(0);
+    choice->tooltip("Right-click to change type of data entered here");
+    y += 26;
+    ok_color = new Widget(5, y, 95, 21);
+    ok_color->box(ENGRAVED_BOX);
+    ok_button = new ReturnButton(5, y+21, 95, 21, ok);
+    ok_button->callback(ok_cb);
+    cancel_color = new Widget(110, y, 95, 21);
+    cancel_color->box(ENGRAVED_BOX);
+    cancel_button = new Button(110, y+21, 95, 21, cancel);
+    cancel_button->callback(cancel_cb);
+    // window->size_range(210, 240); // minimum usable size?
+    window->resizable(chooser);
+    window->end();
+  }
   window->label(name);
+  chooser->rgb(r,g,b);
+  if (alpha) {avalue->show(); chooser->a(a);}
+  else {chooser->hide_a(); avalue->hide();}
+  set_valuators(chooser);
   ok_color->color(chooser->value());
   cancel_color->color(chooser->value());
   window->hotspot(window);
@@ -501,39 +618,55 @@ static int run_it(const char* name) {
   There is also a class fltk::ColorChooser which you can use to imbed
   a color chooser into another control panel.
 */
-int fltk::color_chooser(const char* name, float& r, float& g, float& b) {
-  make_it();
-  chooser->rgb(r,g,b);
-  if (!run_it(name)) return 0;
+bool fltk::color_chooser(const char* name, float& r, float& g, float& b) {
+  if (!run_it(name, false, r,g,b,1)) return false;
   r = chooser->r();
   g = chooser->g();
   b = chooser->b();
-  return 1;
+  return true;
+}
+
+/*! Same but user can also select an alpha value. Currently the color
+  chips do not remember or set the alpha! */
+bool fltk::color_chooser(const char* name, float&r, float&g, float&b, float&a) {
+  if (!run_it(name, true, r,g,b,a)) return false;
+  r = chooser->r();
+  g = chooser->g();
+  b = chooser->b();
+  a = chooser->a();
+  return true;
 }
 
 /*! Same but it takes and returns 8-bit numbers for the rgb arguments. */
-int fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
-  make_it();
-  chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
-  if (!run_it(name)) return 0;
+bool fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
+  if (!run_it(name,false,r/255.0f, g/255.0f, b/255.0f, 1)) return false;
   r = uchar(255*chooser->r()+.5f);
   g = uchar(255*chooser->g()+.5f);
   b = uchar(255*chooser->b()+.5f);
-  return 1;
+  return true;
 }
 
-/*! Same but it takes and returns an fltk::Color number. */
-int fltk::color_chooser(const char* name, Color& c) {
-  make_it();
-  chooser->value(c);
+/*! Same but with 8-bit alpha chosen by the user. */
+bool fltk::color_chooser(const char* name, uchar&r, uchar&g, uchar&b, uchar&a) {
+  if (!run_it(name,true,r/255.0f, g/255.0f, b/255.0f, a/255.0f)) return false;
+  r = uchar(255*chooser->r()+.5f);
+  g = uchar(255*chooser->g()+.5f);
+  b = uchar(255*chooser->b()+.5f);
+  a = uchar(255*chooser->a()+.5f);
+  return true;
+}
+
+/*! Same but it takes and returns an fltk::Color number. No alpha. */
+bool fltk::color_chooser(const char* name, Color& c) {
   picked_color = c;
-  if (!run_it(name)) return 0;
+  uchar r,g,b; split_color(c,r,g,b);
+  if (!run_it(name,false,r/255.0f, g/255.0f, b/255.0f,1)) return false;
   c = picked_color;
-  return 1;
+  return true;
 }
 
 /*! \} */
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.37 2004/07/04 17:28:31 laza2000 Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.38 2004/08/07 20:48:35 spitzak Exp $".
 //

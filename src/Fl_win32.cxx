@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.230 2004/08/06 20:44:03 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.231 2004/08/07 20:48:35 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -43,8 +43,14 @@
 #include <winsock.h>
 #include <commctrl.h>
 #include <ctype.h>
+#include <math.h>
 
 using namespace fltk;
+
+#define DEBUG_TABLET 0
+#if DEBUG_TABLET
+#include <stdio.h>
+#endif
 
 //
 // USE_ASYNC_SELECT - define it if you have WSAAsyncSelect()...
@@ -597,10 +603,183 @@ void fltk::get_mouse(int &x, int &y) {
 
 ////////////////////////////////////////////////////////////////
 // Tablet initialisation and event handling
-// (not supported on Windows yet)
+#include "wintab.h"
+#define PACKETDATA (PK_NORMAL_PRESSURE|PK_ORIENTATION|PK_CURSOR)
+#define PACKETMODE 0
+#include "pktdef.h"
 
+typedef UINT (API *WTINFO)(UINT, UINT, LPVOID);
+static WTINFO wtInfo = 0;
+typedef HCTX (API *WTOPEN)(HWND, LPLOGCONTEXTA, BOOL);
+static WTOPEN wtOpen = 0;
+typedef BOOL (API *WTCLOSE)(HCTX);
+static WTCLOSE wtClose = 0;
+typedef BOOL (API *WTPACKET)(HCTX, UINT, LPVOID);
+static WTPACKET wtPacket = 0;
+typedef int (API *WTPACKETSGET)(HCTX, int, LPVOID);
+static WTPACKETSGET wtPacketsGet = 0;
+typedef BOOL (API *WTOVERLAP)(HCTX, BOOL);
+static WTOVERLAP wtOverlap = 0;
+typedef BOOL (API *WTENABLE)(HCTX, BOOL);
+static WTENABLE wtEnable = 0;
+
+static HMODULE wintab_dll = 0;
+static HWND wintab_hwnd = 0;
+static HCTX wintab_ctx = 0;
+
+static bool stylus_data_valid = false;
+static float pressure_add, pressure_mul;
+
+// this class makes sure that the tablet resources are relesed, even 
+// if the application crashes!
+class Wintab32MustUnload {
+public:
+  Wintab32MustUnload() {}
+  ~Wintab32MustUnload() {
+    if (wintab_ctx) {
+      wtClose(wintab_ctx);   // it is: close the device driver
+      wintab_ctx = 0;
+      wintab_hwnd = 0;
+    }
+    if (wintab_dll) {
+      FreeLibrary(wintab_dll);
+      wintab_dll = 0;
+    }
+  }
+};
+Wintab32MustUnload wintab32MustUnload;
+
+// this function is used to behave gracefully in respect to the WT
+// tablet driver by grabbing and releasing tablet devices as needed
+void tablet_raise(bool raise) {
+  if (!wintab_dll) return;
+  if (!wintab_ctx) return;
+  wtEnable(wintab_ctx, raise);
+  if (raise) wtOverlap(wintab_ctx, TRUE);
+}
+
+// if the tablet device driver is not open yet, then create a driver and
+// associate it with the first window that is NOT equal to hWnd
+void tablet_open(HWND hWnd, HWND avoidWnd) {
+  if (!wintab_dll) return; // we don't do any tablet stuff
+  if (wintab_ctx) return; // we already have on open tabled driver
+  // find a worthy window handle
+  if (!hWnd) {
+    Window *w = Window::first();
+    while (w && xid(w)==hWnd) w = w->next();
+    if (!w) return; // no window found. The next window will open a driver automatically.
+    // hWnd will now contain a good window handle
+    hWnd = xid(w);
+  }
+
+  LOGCONTEXT lcMine;           /* The context of the tablet */
+  AXIS TabletX, TabletY; /* The maximum tablet size */
+
+  UINT n1, n2;
+  wtInfo(WTI_INTERFACE, IFC_NCONTEXTS, &n1);
+  wtInfo(WTI_STATUS, STA_CONTEXTS, &n2);
+  if (n2>=n1) {
+#if DEBUG_TABLET
+    printf("'Wintab32.dll' is out of device space (%d/%d). Some application did not clean up.\n", n2, n1);
+#endif
+    return;
+  }
+#if DEBUG_TABLET
+  printf("%d of %d wintab devices used\n", n2, n1);
+#endif
+
+  /* get default region */
+  int ret = wtInfo(WTI_DEFCONTEXT, 0, &lcMine);
+  if (ret==0) {
+#if DEBUG_TABLET
+    printf("Error getting table info\n");
+#endif
+    return;
+  }
+  /* modify the digitizing region */
+  strcpy(lcMine.lcName, "NUKE");
+  lcMine.lcOptions |= CXO_MESSAGES|CXO_SYSTEM;
+  lcMine.lcPktData =  PACKETDATA;
+  lcMine.lcPktMode =  PACKETMODE;
+  lcMine.lcMoveMask = PACKETDATA;
+  lcMine.lcBtnUpMask = lcMine.lcBtnDnMask;
+  /* Set the entire tablet as active */
+  wtInfo(WTI_DEVICES,DVC_X,&TabletX);
+  wtInfo(WTI_DEVICES,DVC_Y,&TabletY);
+  lcMine.lcInOrgX = 0;
+  lcMine.lcInOrgY = 0;
+  lcMine.lcInExtX = TabletX.axMax;
+  lcMine.lcInExtY = TabletY.axMax;
+
+  /* output the data in screen coords */
+  lcMine.lcOutOrgX = lcMine.lcOutOrgY = 0;
+  lcMine.lcOutExtX = GetSystemMetrics(SM_CXSCREEN);
+  /* move origin to upper left */
+  lcMine.lcOutExtY = -GetSystemMetrics(SM_CYSCREEN);
+  /* open the region */
+  wintab_ctx = wtOpen(hWnd, &lcMine, TRUE);
+  if (!wintab_ctx) {
+#if DEBUG_TABLET
+      printf("wtOpen FAILED\n");
+#endif
+      return;
+  }
+  if (wintab_ctx) wintab_hwnd = hWnd;
+}
+
+// if the window that manages the WT driver is beeing destroyed, we
+// must close the driver and reopen it on a differnt window
+void tablet_close(HWND hWnd) {
+  if (!wintab_dll) return; // we don't do any tablet stuff
+  if (!wintab_ctx) return; // there's no tablet device to close
+  if (wintab_hwnd==hWnd) { // is this device assigned to this window?
+    wtClose(wintab_ctx);   // it is: close the device driver
+#if DEBUG_TABLET
+      printf("WinTab close\n");
+#endif
+    wintab_ctx = 0;
+    wintab_hwnd = 0;
+    tablet_open(0, hWnd);  // try to reopen the driver on another window (but not this one!)
+  }
+}
+
+// enable tablet usage. This shoudl be completely transparent to regular
+// fltk developers. Howeve if a tablet is detected, fltk::event_pressure()
+// will return the pen pressure as a float value between 0 and 1. Some
+// tablets also support event_x_tilt() and event_y_tilt().
 bool fltk::enable_tablet_events() {
-  return false;
+  if (wintab_dll) return true;
+  open_display();
+  // dynamically load the Windows Tablet driver DLL
+  wintab_dll = LoadLibrary("Wintab32.dll");
+  if (!wintab_dll) {
+#if DEBUG_TABLET
+    printf("'Wintab32.dll' not found. There seems to be no tablet installed on this machine\n");
+#endif
+    return false;
+  }
+  wtInfo = (WTINFO)GetProcAddress(wintab_dll, "WTInfoA");
+  wtOpen = (WTOPEN)GetProcAddress(wintab_dll, "WTOpenA");
+  wtClose = (WTCLOSE)GetProcAddress(wintab_dll, "WTClose");
+  wtPacket = (WTPACKET)GetProcAddress(wintab_dll, "WTPacket");
+  wtEnable = (WTENABLE)GetProcAddress(wintab_dll, "WTEnable");
+  wtOverlap = (WTOVERLAP)GetProcAddress(wintab_dll, "WTOverlap");
+  wtPacketsGet = (WTPACKETSGET)GetProcAddress(wintab_dll, "WTPacketsGet");
+  if (!wtInfo || !wtOpen || !wtClose || !wtPacket || !wtPacketsGet || !wtOverlap) {
+#if DEBUG_TABLET
+    printf("'Wintab32.dll' is missing some required functions.\n");
+#endif
+    FreeLibrary(wintab_dll);
+    wintab_dll = 0;
+    return false;
+  }
+  AXIS pressure;
+  wtInfo(WTI_DEVICES, DVC_NPRESSURE, &pressure);
+  pressure_add = 0.0f;
+  pressure_mul = 1.0f/pressure.axMax;
+  //++ get information about the availability of tilt data
+  tablet_open(0, 0);
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1018,6 +1197,13 @@ static bool mouse_event(Window *window, int what, int button,
   if (wParam & MK_RBUTTON) state |= BUTTON3;
   e_state = state;
 
+  // make the stylus data produce something useful if there's no pen
+  if (!stylus_data_valid) { 
+    e_pressure = e_state&BUTTON(1) ? 1.0f : 0.0f;
+    e_x_tilt = e_y_tilt = 0.0f;
+    e_device = DEVICE_MOUSE;
+  }
+
   switch (what) {
   case 1: // double-click
     // This is not detecting triple-clicks, does anybody know how to fix?
@@ -1185,6 +1371,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (!window) break;
     if (!modal_ || window == modal_) window->do_callback();
     return 1;
+
+  case WM_DESTROY:
+    tablet_close(hWnd);
+    break;
+
+  case WM_ACTIVATE:
+    tablet_raise(LOWORD(wParam)!=WA_INACTIVE);
+    break;
 
   case WM_PAINT: {
     if (!window) break;
@@ -1455,16 +1649,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (fl_select_palette()) UpdateColors(dc);
     }
     break;
+#endif
 
+  case WM_CREATE :
+    tablet_open(hWnd, 0);
+#if USE_COLORMAP
 #if 0
     // This seems to be called directly by CreateWindowEx so I can't
     // have stored the windowid yet and thus cannot find the Window!
-  case WM_CREATE :
     window->make_current();
     fl_select_palette();
+#endif
+#endif
     break;
-#endif
-#endif
 
   case WM_DISPLAYCHANGE:
   case WM_SETTINGCHANGE:
@@ -1500,6 +1697,25 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // Windoze also seems unhappy if I don't do this. Documentation very
     // unclear on what is correct:
     if (msg.message == WM_RENDERALLFORMATS) CloseClipboard();
+    return 1;
+
+  case WT_PACKET: { // stylus motion/pressure packet
+    static PACKET pkt;
+    //if (wtPacket((HCTX)lParam, wParam, &pkt)) {
+    if (wtPacket(wintab_ctx, wParam, &pkt)) {
+      e_pressure = (((float)pkt.pkNormalPressure)+pressure_add)*pressure_mul;
+      float a = pkt.pkOrientation.orAzimuth / 1800.0f * 3.141592654f;
+      float b = (900-pkt.pkOrientation.orAltitude) / 900.0f;
+      e_x_tilt = sinf(a) * b;
+      e_y_tilt = cosf(a) * b;
+      //++ incidently, the device numbers are correct for pen and eraser on Wacom
+      //++ however, this code must be updated for other devices to function properly
+      e_device = pkt.pkCursor; 
+    } }
+    return 1;
+
+  case WT_PROXIMITY: // stylus proximity packet
+    stylus_data_valid = LOWORD(lParam);
     return 1;
 
   default:
@@ -1749,17 +1965,17 @@ extern "C" {
   BOOL WINAPI ansi_GetTextMetricsW(HDC, LPTEXTMETRICW);
 };
 
-pfCreateWindowExW       __CreateWindowExW;
-pfLoadLibraryW		__LoadLibraryW;
-pfSetWindowTextW	__SetWindowTextW;
-pfPeekMessage		__PeekMessage;
-pfGetMessage		__GetMessage;
-pfDispatchMessage       __DispatchMessage;
-pfPostMessage		__PostMessage;
-pfDefWindowProc		__DefWindowProc;
-pfMessageBoxW		__MessageBoxW;
-pfCreateFontIndirectW	__CreateFontIndirectW;
-pfGetTextMetricsW	__GetTextMetricsW;
+pfCreateWindowExW       __CreateWindowExW	= CreateWindowExW;
+pfLoadLibraryW		__LoadLibraryW		= LoadLibraryW;
+pfSetWindowTextW	__SetWindowTextW	= SetWindowTextW;
+pfPeekMessage		__PeekMessage		= PeekMessageW;
+pfGetMessage		__GetMessage		= GetMessageW;
+pfDispatchMessage       __DispatchMessage	= DispatchMessageW;
+pfPostMessage		__PostMessage		= PostMessageW;
+pfDefWindowProc		__DefWindowProc		= DefWindowProcW;
+pfMessageBoxW		__MessageBoxW		= MessageBoxW;
+pfCreateFontIndirectW	__CreateFontIndirectW	= CreateFontIndirectW;
+pfGetTextMetricsW	__GetTextMetricsW	= GetTextMetricsW;
 
 void fltk::open_display() {
   static int been_here=0;
@@ -1769,17 +1985,6 @@ void fltk::open_display() {
   if(has_unicode()) {
     // Setup our function pointers to "W" functions
     fltk::xdisplay              = GetModuleHandleW(NULL);
-    __CreateWindowExW           = CreateWindowExW;
-    __LoadLibraryW		= LoadLibraryW;
-    __SetWindowTextW	        = SetWindowTextW;
-    __PeekMessage		= PeekMessageW;
-    __GetMessage		= GetMessageW;
-    __DispatchMessage	        = DispatchMessageW;
-    __PostMessage		= PostMessageW;
-    __DefWindowProc		= DefWindowProcW;
-    __MessageBoxW		= MessageBoxW;
-    __CreateFontIndirectW       = CreateFontIndirectW;
-    __GetTextMetricsW           = GetTextMetricsW;
   } else {
     // Setup our function pointers to "A" and emulation functions
     fltk::xdisplay              = GetModuleHandleA(NULL);
@@ -2134,5 +2339,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.230 2004/08/06 20:44:03 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.231 2004/08/07 20:48:35 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.74 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.75 2004/08/07 20:48:35 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -220,56 +220,60 @@ void Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
   double B = maximum();
   if (A > B) {A = B; B = minimum();}
 
+  if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
   // Figure out approximate size of min_spacing at zero:
   double derivative;
   if (!log()) {
-    derivative = (B-A)/w;
+    derivative = (B-A)*min_spacing/w;
   } else if (A > 0) {
     // log slider
-    derivative = A/w*20;
+    derivative = A*exp(min_spacing*::log(B/A)/w*3);
   } else {
     // squared slider, derivative at edge is zero, use value at 1 pixel
-    derivative = B/(w*w)*30;
+    derivative = B*min_spacing*min_spacing/(w*w);
     if (A < 0) derivative *= 4;
   }
-  if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
-  derivative *= min_spacing;
   if (derivative < step()) derivative = step();
 
   // Find closest multiple of 10 larger than spacing:
-  int num = 1;
-  while (num < derivative) num *= 10;
-  int denom = 10;
-  while (num >= derivative*denom) denom *= 10;
-  denom /= 10;
+  double num = 1;
+  if (num < derivative) {
+    while (num*5 <= derivative) num *= 10;
+  } else {
+    while (num > derivative*2) num /= 10;
+  }
+  int smallmod = 5;
+  int nummod = 10;
+  if (derivative > num*2) {num *= 5; smallmod = 2;}
+  else if (derivative > num) {num *= 2; nummod = 5;}
 
   for (int n = 0; ; n++) {
     // every ten they get further apart for log slider:
-    if (log() && n > 10) {n = 2; num *= 10;}
-    double v = double(num*n)/denom;
+    if (log() && n > 10) {num *= 10; n = 2;}
+    double v = num*n;
     if (v > fabs(A) && v > fabs(B)) break;
-    int small = n%5 ? 2 : 0;
+    int small = n%smallmod ? 3 : 0;
     if (v >= A && v <= B) {
       int t = slider_position(v, w);
       drawline(x1+dx*t+dy*small, y1+dy*t+dx*small, x2+dx*t, y2+dy*t);
-      if (n%10 == 0) {
+      if (n%nummod == 0) {
 	char buffer[20]; sprintf(buffer,"%g",v);
 	char* p = buffer;
 	while (p[0]=='0' && p[1]) p++;
 	setfont(textfont(), textsize());
-	drawtext(p, x1+dx*t+1, y1+dy*t+getsize()-getdescent());
+	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
       }
     }
     if (v && -v >= A && -v <= B) {
       int t = slider_position(-v, w);
       drawline(x1+dx*t+dy*small, y1+dy*t+dx*small, x2+dx*t, y2+dy*t);
-      if (n%10 == 0) {
+      if (n%nummod == 0) {
 	char buffer[20]; sprintf(buffer+1,"%g",v);
 	char* p = buffer+1;
 	while (p[0]=='0' && p[1]) p++;
 	p--; p[0] = '-';
 	setfont(textfont(), textsize());
-	drawtext(p, x1+dx*t+1, y1+dy*t+getsize()-getdescent());
+	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
       }
     }
   }
@@ -586,5 +590,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.74 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.75 2004/08/07 20:48:35 spitzak Exp $".
 //

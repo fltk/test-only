@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.9 2004/08/03 07:26:34 spitzak Exp $"
+// "$Id: events.h,v 1.10 2004/08/07 20:48:34 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -176,6 +176,19 @@ enum {
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
 /*! \} */
 
+/*! Device identifier returned by event_device(). This enumeration
+  is useful to get the device type that caused a PUSH, RELEASE,
+  DRAG or MOVE event 
+*/
+enum {
+  DEVICE_MOUSE    = 0, /*!< Event triggered by the system mouse */
+  DEVICE_STYLUS   = 1, /*!< Event triggered by a pen on a tablet, givin pressure and tilt information */
+  DEVICE_ERASER   = 2, /*!< Event triggered by an eraser on a tablet, givin pressure and tilt information */
+  DEVICE_CURSOR   = 3, /*!< Event triggered by a puck style device on a tablet */
+  DEVICE_AIRBRUSH = 4, /*!< Event triggered by an airbrush on a tablet, givin pressure and tilt information */
+  DEVICE_TOUCH    = 5  /*!< Event triggered by touch a touch screen device */
+};
+
 class Widget;
 class Window;
 
@@ -198,6 +211,7 @@ extern FL_API char* e_text;
 extern FL_API float e_pressure;
 extern FL_API float e_x_tilt;
 extern FL_API float e_y_tilt;
+extern FL_API int e_device;
 extern FL_API int compose_state;
 extern FL_API Widget* belowmouse_;
 extern FL_API Widget* pushed_;
@@ -233,6 +247,7 @@ inline int  event_length() 		{return e_length;}
 inline float event_pressure() 	{return e_pressure;}
 inline float event_x_tilt()     {return e_x_tilt;}
 inline float event_y_tilt()     {return e_y_tilt;}
+inline int  event_device()      {return e_device;}
 
 // tests on current event:
 FL_API bool event_inside(int,int,int,int);
