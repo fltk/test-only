@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.106 2001/03/08 07:39:06 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.107 2001/03/09 02:40:10 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -964,8 +964,6 @@ void Fl_X::create(Fl_Window* w,
     XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
 		    (unsigned char *)w->xclass(), strlen(w->xclass()));
 
-    XSetTransientForHint(fl_display, x->xid, RootWindow(fl_display, fl_screen));
-
     // Set the label:
     w->label(w->label(), w->iconlabel());
     // Makes the close button produce an event:
@@ -1162,5 +1160,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.106 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.107 2001/03/09 02:40:10 clip Exp $".
 //
