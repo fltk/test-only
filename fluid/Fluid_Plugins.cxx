@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.18 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.19 2001/02/16 22:55:45 robertk Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,11 @@ Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 
-#include <config.h>
+#if defined(WIN32) && defined(_MSC_VER)
+#	include "../visualc/config.h"
+#else
+#include <config.h> // for strcasecmp
+#endif
 #include <FL/Fl_Plugins.H>
 
 #if defined(FLDLopen) && (!defined(WIN32) || defined(FL_SHARED))
@@ -144,5 +148,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.18 2000/08/20 04:31:38 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.19 2001/02/16 22:55:45 robertk Exp $"
 //

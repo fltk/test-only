@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.25 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.26 2001/02/16 22:55:45 robertk Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 // Static variables containing the currently selected font & size:
 Fl_Font fl_font_;
 unsigned fl_size_;
-Fl_FontSize* fl_fontsize;
+FL_API Fl_FontSize* fl_fontsize;
 
 #ifdef WIN32
 #include "fl_font_win32.cxx"
@@ -281,5 +281,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.25 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.26 2001/02/16 22:55:45 robertk Exp $".
 //

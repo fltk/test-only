@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "FL_GLUT_LIBRARY" /D "FL_FORMS_LIBRARY" /D "FL_GL_LIBRARY" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "FL_GLUT_LIBRARY" /D "FL_FORMS_LIBRARY" /D "FL_GL_LIBRARY" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../lib/fltkdlld.dll" /pdbtype:sept
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../lib/fltkdlld.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -91,30 +91,174 @@ LINK32=link.exe
 # Name "fltkdll - Win32 Debug"
 # Begin Source File
 
+SOURCE=..\src\conf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_del.c
+DEP_CPP_CONF_=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_endtrim.c
+DEP_CPP_CONF_E=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_error.c
+DEP_CPP_CONF_ER=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_get.c
+DEP_CPP_CONF_G=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_getboolean.c
+DEP_CPP_CONF_GE=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_getlong.c
+DEP_CPP_CONF_GET=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_keys.c
+DEP_CPP_CONF_K=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_list_free.c
+DEP_CPP_CONF_L=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_sections.c
+DEP_CPP_CONF_S=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_set.c
+DEP_CPP_CONF_SE=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_setboolean.c
+DEP_CPP_CONF_SET=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_setlong.c
+DEP_CPP_CONF_SETL=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_strcasecmp.c
+DEP_CPP_CONF_ST=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_strcnt.c
+DEP_CPP_CONF_STR=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_util.c
+DEP_CPP_CONF_U=\
+	"..\FL\conf.h"\
+	"..\fl\fl_export.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fastarrow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\filename_absolute.cxx
 DEP_CPP_FILEN=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_expand.cxx
 DEP_CPP_FILENA=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_ext.cxx
 DEP_CPP_FILENAM=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_isdir.cxx
 DEP_CPP_FILENAME=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	".\config.h"\
 	
 # End Source File
@@ -122,7 +266,9 @@ DEP_CPP_FILENAME=\
 
 SOURCE=..\src\filename_list.cxx
 DEP_CPP_FILENAME_=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	".\config.h"\
 	
 # End Source File
@@ -130,14 +276,18 @@ DEP_CPP_FILENAME_=\
 
 SOURCE=..\src\filename_match.cxx
 DEP_CPP_FILENAME_M=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_setext.cxx
 DEP_CPP_FILENAME_S=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	
 # End Source File
 # Begin Source File
@@ -145,21 +295,25 @@ DEP_CPP_FILENAME_S=\
 SOURCE=..\src\Fl.cxx
 DEP_CPP_FL_CX=\
 	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Tooltip.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
+	"..\src\fl_win32.cxx"\
+	"..\src\Fl_x.cxx"\
 	".\config.h"\
 	
 # End Source File
@@ -213,6 +367,8 @@ DEP_CPP_FL_ADJ=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\fastarrow.h"\
 	"..\src\mediumarrow.h"\
 	"..\src\slowarrow.h"\
@@ -220,9 +376,10 @@ DEP_CPP_FL_ADJ=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Align_Layout.cxx
+SOURCE=..\src\Fl_Align_Group.cxx
 DEP_CPP_FL_AL=\
 	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Align_Group.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
@@ -231,10 +388,8 @@ DEP_CPP_FL_AL=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\Fl\Fl_Layout.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	
 # End Source File
 # Begin Source File
@@ -255,17 +410,11 @@ DEP_CPP_FL_AR=\
 SOURCE=..\src\fl_arci.cxx
 DEP_CPP_FL_ARC=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
@@ -309,7 +458,6 @@ DEP_CPP_FL_AS=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Return_Button.H"\
 	"..\FL\Fl_Secret_Input.H"\
@@ -317,17 +465,6 @@ DEP_CPP_FL_AS=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_background.cxx
-DEP_CPP_FL_BA=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -343,12 +480,9 @@ DEP_CPP_FL_BI=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -365,13 +499,10 @@ DEP_CPP_FL_BM=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -405,6 +536,7 @@ DEP_CPP_FL_BOX=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	".\config.h"\
 	
 # End Source File
@@ -416,7 +548,6 @@ DEP_CPP_FL_BR=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
@@ -424,51 +555,8 @@ DEP_CPP_FL_BR=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Scrollbar.H"\
-	"..\FL\Fl_Slider.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Valuator.H"\
-	"..\FL\Fl_Widget.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Browser_.cxx
-DEP_CPP_FL_BRO=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Scrollbar.H"\
-	"..\FL\Fl_Slider.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Valuator.H"\
-	"..\FL\Fl_Widget.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Browser_load.cxx
-DEP_CPP_FL_BROW=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
@@ -500,8 +588,29 @@ SOURCE=..\src\fl_call_main.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Check_Button.cxx
+SOURCE=..\forms\Fl_Chart.cxx
 DEP_CPP_FL_CH=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\math.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Check_Button.cxx
+DEP_CPP_FL_CHE=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -531,6 +640,7 @@ DEP_CPP_FL_CHO=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -540,8 +650,28 @@ DEP_CPP_FL_CHO=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Clock.cxx
+SOURCE=..\src\fl_clip.cxx
 DEP_CPP_FL_CL=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Clock.cxx
+DEP_CPP_FL_CLO=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -558,6 +688,10 @@ DEP_CPP_FL_CL=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_cmap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_color.cxx
 DEP_CPP_FL_CO=\
 	"..\FL\Enumerations.H"\
@@ -568,11 +702,8 @@ DEP_CPP_FL_CO=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	"..\src\fl_cmap.h"\
@@ -596,10 +727,11 @@ DEP_CPP_FL_COL=\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Float_Input.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Item.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -610,6 +742,21 @@ DEP_CPP_FL_COL=\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_compose.cxx
+DEP_CPP_FL_COM=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
 	
 # End Source File
 # Begin Source File
@@ -625,7 +772,7 @@ DEP_CPP_FL_COU=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Input.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Style.H"\
@@ -668,27 +815,6 @@ DEP_CPP_FL_CUR=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_cutpaste.cxx
-DEP_CPP_FL_CUT=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	"..\src\fl_cutpaste_win32.cxx"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Dial.cxx
 DEP_CPP_FL_DI=\
 	"..\FL\Enumerations.H"\
@@ -720,6 +846,7 @@ DEP_CPP_FL_DIA=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -784,11 +911,8 @@ DEP_CPP_FL_DRA=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	"..\src\fl_draw_image_win32.cxx"\
@@ -814,12 +938,15 @@ DEP_CPP_FL_DRAW=\
 SOURCE=..\src\fl_engraved_label.cxx
 DEP_CPP_FL_EN=\
 	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -831,7 +958,6 @@ DEP_CPP_FL_FI=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
 	"..\FL\Fl_Button.H"\
 	"..\FL\Fl_Choice.H"\
 	"..\FL\Fl_Color.H"\
@@ -845,7 +971,6 @@ DEP_CPP_FL_FI=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -868,7 +993,6 @@ DEP_CPP_FL_FIL=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
@@ -878,6 +1002,8 @@ DEP_CPP_FL_FIL=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
@@ -896,7 +1022,6 @@ DEP_CPP_FL_FILE=\
 	"..\FL\Fl_Bitmap.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
 	"..\FL\Fl_Button.H"\
 	"..\FL\Fl_Choice.H"\
 	"..\FL\Fl_Color.H"\
@@ -910,7 +1035,6 @@ DEP_CPP_FL_FILE=\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -921,6 +1045,8 @@ DEP_CPP_FL_FILE=\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -934,7 +1060,6 @@ DEP_CPP_FL_FILEC=\
 	"..\FL\fl_ask.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
-	"..\FL\Fl_Browser_.H"\
 	"..\FL\Fl_Button.H"\
 	"..\FL\Fl_Choice.H"\
 	"..\FL\Fl_Color.H"\
@@ -947,7 +1072,6 @@ DEP_CPP_FL_FILEC=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -997,6 +1121,7 @@ DEP_CPP_FL_FILEIC=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1012,7 +1137,24 @@ DEP_CPP_FL_FILEIN=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Float_Input.cxx
+DEP_CPP_FL_FL=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Float_Input.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
@@ -1023,23 +1165,25 @@ DEP_CPP_FL_FILEIN=\
 SOURCE=..\src\fl_font.cxx
 DEP_CPP_FL_FO=\
 	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	"..\src\fl_font_win32.cxx"\
 	"..\src\fl_fontsize.h"\
 	".\config.h"\
 	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_fontsize.h
 # End Source File
 # Begin Source File
 
@@ -1052,11 +1196,8 @@ DEP_CPP_FL_GE=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	"..\src\fl_get_key_win32.cxx"\
@@ -1074,36 +1215,18 @@ DEP_CPP_FL_GI=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_glyph.cxx
+SOURCE=..\OpenGL\Fl_Gl_Choice.cxx
 DEP_CPP_FL_GL=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_grab.cxx
-DEP_CPP_FL_GR=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -1116,20 +1239,88 @@ DEP_CPP_FL_GR=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
+	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Group.cxx
-DEP_CPP_FL_GRO=\
+SOURCE=..\OpenGL\Fl_Gl_Choice.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Overlay.cxx
+DEP_CPP_FL_GL_=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
-	"..\FL\Fl_Box.H"\
 	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\OpenGL\Fl_Gl_Choice.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Window.cxx
+DEP_CPP_FL_GL_W=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\OpenGL\Fl_Gl_Choice.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_glyph.cxx
+DEP_CPP_FL_GLY=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Group.cxx
+DEP_CPP_FL_GR=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
@@ -1138,10 +1329,31 @@ DEP_CPP_FL_GRO=\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Tabs.H"\
 	"..\FL\Fl_Tooltip.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\images\Fl_Guess_Image.cxx
+DEP_CPP_FL_GU=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1174,13 +1386,10 @@ DEP_CPP_FL_IM=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1198,7 +1407,6 @@ DEP_CPP_FL_IN=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
@@ -1206,8 +1414,31 @@ DEP_CPP_FL_IN=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Input_.cxx
-DEP_CPP_FL_INP=\
+SOURCE=..\src\Fl_Item.cxx
+DEP_CPP_FL_IT=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Divider.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Item.H"\
+	"..\FL\Fl_Item_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\images\fl_jpeg.cxx
+DEP_CPP_FL_JP=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -1216,29 +1447,32 @@ DEP_CPP_FL_INP=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Input_Style.cxx
-DEP_CPP_FL_INPU=\
+SOURCE=..\src\Fl_key_name.cxx
+DEP_CPP_FL_KE=\
 	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -1256,6 +1490,8 @@ DEP_CPP_FL_LA=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -1283,25 +1519,63 @@ DEP_CPP_FL_LI=\
 SOURCE=..\src\fl_line_style.cxx
 DEP_CPP_FL_LIN=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_load_plugin.cxx
+SOURCE=..\src\fl_list_fonts.cxx
+DEP_CPP_FL_LIS=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\fl_fontsize.h"\
+	"..\src\fl_list_fonts_win32.cxx"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\fl_load_browser.cxx
 DEP_CPP_FL_LO=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_load_plugin.cxx
+DEP_CPP_FL_LOA=\
+	"..\FL\conf.h"\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -1344,7 +1618,7 @@ DEP_CPP_FL_ME=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Item.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -1366,6 +1640,8 @@ DEP_CPP_FL_MEN=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Item.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -1380,9 +1656,13 @@ DEP_CPP_FL_MENU=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Divider.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Item.H"\
+	"..\FL\Fl_Item_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
@@ -1398,9 +1678,11 @@ DEP_CPP_FL_MENU_=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Bar.H"\
@@ -1441,8 +1723,31 @@ DEP_CPP_FL_MENU_G=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Menu_Item.cxx
+DEP_CPP_FL_MENU_I=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Divider.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Item.H"\
+	"..\FL\Fl_Item_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
 	"..\FL\Fl_Menu_Item.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
@@ -1474,6 +1779,26 @@ DEP_CPP_FL_MENU_W=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_options.cxx
+DEP_CPP_FL_OP=\
+	"..\FL\conf.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\fl\fl_load_plugin.h"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\fl_theme.H"\
+	"..\FL\Fl_Widget.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Output.cxx
 DEP_CPP_FL_OU=\
 	"..\FL\Enumerations.H"\
@@ -1485,7 +1810,6 @@ DEP_CPP_FL_OU=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Style.H"\
@@ -1503,6 +1827,9 @@ DEP_CPP_FL_OV=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -1510,17 +1837,11 @@ DEP_CPP_FL_OV=\
 SOURCE=..\src\fl_overlay.cxx
 DEP_CPP_FL_OVE=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1536,11 +1857,8 @@ DEP_CPP_FL_OVER=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
@@ -1581,11 +1899,8 @@ DEP_CPP_FL_OW=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
@@ -1622,15 +1937,52 @@ DEP_CPP_FL_PI=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Pixmap.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\images\fl_png.cxx
+DEP_CPP_FL_PN=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\Fl_Positioner.cxx
+DEP_CPP_FL_PO=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -1638,17 +1990,11 @@ DEP_CPP_FL_PI=\
 SOURCE=..\src\fl_rect.cxx
 DEP_CPP_FL_RE=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1695,16 +2041,9 @@ DEP_CPP_FL_RET=\
 SOURCE=..\src\fl_rgb.cxx
 DEP_CPP_FL_RG=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1721,13 +2060,10 @@ DEP_CPP_FL_RGB=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\Fl\Fl_RGB_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1764,6 +2100,7 @@ DEP_CPP_FL_ROU=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -1777,6 +2114,9 @@ DEP_CPP_FL_ROUN=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -1806,16 +2146,11 @@ DEP_CPP_FL_SC=\
 SOURCE=..\src\fl_scroll_area.cxx
 DEP_CPP_FL_SCR=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
@@ -1851,12 +2186,38 @@ DEP_CPP_FL_SH=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Shaped_Window.cxx
+DEP_CPP_FL_SHA=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Double_Window.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shaped_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Shared_Image.cxx
-DEP_CPP_FL_SHA=\
+DEP_CPP_FL_SHAR=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Bitmap.H"\
@@ -1866,13 +2227,10 @@ DEP_CPP_FL_SHA=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
@@ -1880,29 +2238,8 @@ DEP_CPP_FL_SHA=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_shortcut.cxx
-DEP_CPP_FL_SHO=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_show_colormap.cxx
-DEP_CPP_FL_SHOW=\
+DEP_CPP_FL_SHO=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -1960,8 +2297,28 @@ DEP_CPP_FL_SL=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Style.cxx
+SOURCE=..\src\Fl_String_List.cxx
 DEP_CPP_FL_ST=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Item.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_String_List.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Style.cxx
+DEP_CPP_FL_STY=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -1971,13 +2328,15 @@ DEP_CPP_FL_ST=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
+	"..\FL\fl_theme.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\math.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Style_start.cxx
-DEP_CPP_FL_STY=\
+DEP_CPP_FL_STYL=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -2028,19 +2387,57 @@ DEP_CPP_FL_TA=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_theme.cxx
-DEP_CPP_FL_TH=\
+SOURCE=..\src\Fl_Text_Buffer.cxx
+DEP_CPP_FL_TE=\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Text_Buffer.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Text_Display.cxx
+DEP_CPP_FL_TEX=\
 	"..\FL\Enumerations.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\fl\fl_load_plugin.h"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
-	".\config.h"\
+	"..\FL\Fl_Text_Buffer.H"\
+	"..\FL\Fl_Text_Display.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Text_Editor.cxx
+DEP_CPP_FL_TEXT=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Text_Buffer.H"\
+	"..\FL\Fl_Text_Display.H"\
+	"..\FL\Fl_Text_Editor.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
 # End Source File
 # Begin Source File
@@ -2112,10 +2509,10 @@ DEP_CPP_FL_VAL=\
 	"..\FL\Fl_Color.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Float_Input.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
@@ -2135,7 +2532,7 @@ DEP_CPP_FL_VALU=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Input.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Style.H"\
@@ -2156,7 +2553,7 @@ DEP_CPP_FL_VALUE=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Input.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Slider.H"\
@@ -2171,17 +2568,11 @@ DEP_CPP_FL_VALUE=\
 SOURCE=..\src\fl_vertex.cxx
 DEP_CPP_FL_VE=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
@@ -2198,11 +2589,8 @@ DEP_CPP_FL_VI=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
@@ -2224,6 +2612,9 @@ DEP_CPP_FL_WI=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2242,6 +2633,8 @@ DEP_CPP_FL_WIN=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
 	
 # End Source File
@@ -2305,26 +2698,7 @@ DEP_CPP_FL_WINDOW=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_x.cxx
-DEP_CPP_FL_X_=\
-	"..\FL\Enumerations.H"\
-	"..\FL\filename.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	"..\src\fl_win32.cxx"\
-	".\config.h"\
-	
+SOURCE=..\src\Fl_XColor.H
 # End Source File
 # Begin Source File
 
@@ -2338,22 +2712,416 @@ DEP_CPP_FL_XP=\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
 
+SOURCE=..\forms\forms.cxx
+DEP_CPP_FORMS=\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\forms\srs.xbm"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_bitmap.cxx
+DEP_CPP_FORMS_=\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_compatability.cxx
+DEP_CPP_FORMS_C=\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Repeat_Button.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_free.cxx
+DEP_CPP_FORMS_F=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_fselect.cxx
+DEP_CPP_FORMS_FS=\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_pixmap.cxx
+DEP_CPP_FORMS_P=\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_timer.cxx
+DEP_CPP_FORMS_T=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Widget.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\gl_draw.cxx
+DEP_CPP_GL_DR=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\gl.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\fl_fontsize.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\gl_start.cxx
+DEP_CPP_GL_ST=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\OpenGL\Fl_Gl_Choice.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\glut_compatability.cxx
+DEP_CPP_GLUT_=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Item.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
+	"..\FL\glut.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\glut_font.cxx
+DEP_CPP_GLUT_F=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\gl.h"\
+	"..\FL\glut.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\mediumarrow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\numericsort.c
 DEP_CPP_NUMER=\
+	"..\FL\Enumerations.H"\
 	"..\FL\filename.H"\
+	"..\fl\fl_export.h"\
 	".\config.h"\
 	
 # End Source File
@@ -2367,35 +3135,18 @@ DEP_CPP_SCAND=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\vsnprintf.c
-DEP_CPP_VSNPR=\
-	".\config.h"\
+SOURCE=..\src\slowarrow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\trackball.c
+DEP_CPP_TRACK=\
+	"..\glut\trackball.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\themes\windows.cxx
-DEP_CPP_WINDO=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Button.H"\
-	"..\FL\Fl_Check_Button.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Input.H"\
-	"..\FL\Fl_Input_.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Menu_Item.H"\
-	"..\FL\Fl_Output.H"\
-	"..\FL\Fl_Scrollbar.H"\
-	"..\FL\Fl_Slider.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Valuator.H"\
-	"..\FL\Fl_Widget.H"\
-	
+SOURCE=..\glut\trackball.h
 # End Source File
 # End Target
 # End Project

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.1 2000/06/03 05:32:19 carl Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.2 2001/02/16 22:55:45 robertk Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,11 @@
 #include <FL/Fl_Shaped_Window.H>
 #include <FL/x.H>
 
-#ifndef WIN32
-#include <X11/extensions/shape.h>
-#else
+#ifdef WIN32
 #include <malloc.h>
 static HRGN bitmap2region(Fl_Bitmap*);
+#else
+#include <X11/extensions/shape.h>
 #endif
 
 // maybe one day we'll want to be able to resize the clip mask
@@ -162,5 +162,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.1 2000/06/03 05:32:19 carl Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.2 2001/02/16 22:55:45 robertk Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.27 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: x.H,v 1.28 2001/02/16 22:55:45 robertk Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -125,10 +125,10 @@ public:
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 Fl_Window* fl_find(Window xid);
 
-#endif
-#endif
-#endif
+#endif	//Fl_Window_H
+#endif	// not WIN32
+#endif	//Fl_X_H
 
 //
-// End of "$Id: x.H,v 1.27 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: x.H,v 1.28 2001/02/16 22:55:45 robertk Exp $".
 //

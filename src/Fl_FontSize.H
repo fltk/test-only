@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.6 2000/06/10 04:10:30 carl Exp $"
+// "$Id: Fl_FontSize.H,v 1.7 2001/02/16 22:55:45 robertk Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 #include <FL/Fl_Font.H>
 #include <FL/x.H>
 
-FL_API class Fl_FontSize {
+class FL_API Fl_FontSize {
 public:
   Fl_FontSize *next;	// linked list for this Fl_Fontdesc
 #ifdef WIN32
@@ -64,5 +64,5 @@ extern FL_API Fl_FontSize *fl_fontsize;
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.6 2000/06/10 04:10:30 carl Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.7 2001/02/16 22:55:45 robertk Exp $".
 //

@@ -146,6 +146,10 @@ SOURCE=..\src\conf_util.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fastarrow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\filename_absolute.cxx
 # End Source File
 # Begin Source File
@@ -238,6 +242,10 @@ SOURCE=..\src\fl_call_main.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\forms\Fl_Chart.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Check_Button.cxx
 # End Source File
 # Begin Source File
@@ -251,6 +259,10 @@ SOURCE=..\src\fl_clip.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Clock.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_cmap.h
 # End Source File
 # Begin Source File
 
@@ -346,11 +358,31 @@ SOURCE=..\src\fl_font.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_fontsize.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_get_key.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_gif.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Choice.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Choice.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Overlay.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\Fl_Gl_Window.cxx
 # End Source File
 # Begin Source File
 
@@ -382,15 +414,15 @@ SOURCE=..\src\Fl_Item.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_labeltype.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\images\fl_jpeg.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_key_name.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_labeltype.cxx
 # End Source File
 # Begin Source File
 
@@ -403,6 +435,10 @@ SOURCE=..\src\fl_line_style.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_list_fonts.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\fl_load_browser.cxx
 # End Source File
 # Begin Source File
 
@@ -486,6 +522,10 @@ SOURCE=..\images\fl_png.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\forms\Fl_Positioner.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_rect.cxx
 # End Source File
 # Begin Source File
@@ -534,6 +574,10 @@ SOURCE=..\src\fl_shadow_box.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Shaped_Window.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Shared_Image.cxx
 # End Source File
 # Begin Source File
@@ -550,6 +594,10 @@ SOURCE=..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_String_List.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Style.cxx
 # End Source File
 # Begin Source File
@@ -563,6 +611,18 @@ SOURCE=..\src\fl_symbols.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Tabs.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Text_Buffer.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Text_Display.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Text_Editor.cxx
 # End Source File
 # Begin Source File
 
@@ -618,7 +678,59 @@ SOURCE=..\src\Fl_Window_iconize.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_XColor.H
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_xpm.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_bitmap.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_compatability.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_free.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_fselect.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_pixmap.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\forms\forms_timer.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\gl_draw.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\OpenGL\gl_start.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\glut_compatability.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\glut_font.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\mediumarrow.h
 # End Source File
 # Begin Source File
 
@@ -630,7 +742,15 @@ SOURCE=..\src\scandir.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\vsnprintf.c
+SOURCE=..\src\slowarrow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\trackball.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\glut\trackball.h
 # End Source File
 # End Target
 # End Project

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.27 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_font_win32.cxx,v 1.28 2001/02/16 22:55:45 robertk Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/win32.H>
+#include <FL/x.H>
 #include "Fl_FontSize.h"
 
 #include <ctype.h>
@@ -176,5 +176,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.27 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.28 2001/02/16 22:55:45 robertk Exp $".
 //

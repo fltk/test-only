@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.12 2000/07/14 08:34:59 clip Exp $"
+// "$Id: Fl_Font.H,v 1.13 2001/02/16 22:55:45 robertk Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -30,12 +30,13 @@
 
 class FL_API Fl_FontSize; // secret internal data
 
-class FL_API Fl_Font_;
+//class FL_API Fl_Font_;
+struct FL_API Fl_Font_;
 typedef const Fl_Font_* Fl_Font;
 
 // This is a struct so I can init a table with constants:
 struct FL_API Fl_Font_ {
-  friend int fl_list_fonts(Fl_Font*& arrayp);
+  friend FL_API int fl_list_fonts(Fl_Font*& arrayp);
   static Fl_Font* array;
   static int num_fonts;
 

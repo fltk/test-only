@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.134 2001/01/28 07:07:49 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.135 2001/02/16 22:55:45 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -878,7 +878,7 @@ void Fl_Window::layout() {
     x += p->x(); y += p->y();
   }
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
-  if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
+  if (ox() == this->x() && oy() == this->y()) flags |= SWP_NOMOVE;
   if (ow() == w() && oh() == h()) {
     for (int i = 0; i < children(); i++) {
       Fl_Widget* o = child(i);
@@ -1260,5 +1260,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.134 2001/01/28 07:07:49 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.135 2001/02/16 22:55:45 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.43 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_boxtype.cxx,v 1.44 2001/02/16 22:55:45 robertk Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -123,6 +123,10 @@ void Fl_Frame_Box::draw(const Fl_Widget* widget,
 			int x, int y, int w, int h, Fl_Flags f) const {
   draw(x,y,w,h, widget->get_box_color(f), f);
 }
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4355) // quiet warning about using this as base class init
+#endif
 Fl_Frame_Box::Fl_Frame_Box(const char* n, const char* s, const Fl_Frame_Box* d)
   : Fl_Boxtype_(n), data_(s), down(d ? d : this)
 {
@@ -194,5 +198,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.43 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.44 2001/02/16 22:55:45 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.37 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.38 2001/02/16 22:55:45 robertk Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,7 @@ static Fl_Menu_Item button_type_menu[] = {
   {"popup123",0,0,(void*)Fl_Menu_Button::POPUP123},
   {0}};
 
-FLUID_API extern Fl_Menu_Item button_type_menu[];
+//FLUID_API extern Fl_Menu_Item button_type_menu[];
 
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
   Fl_Menu_Item *subtypes() {return button_type_menu;}
@@ -230,5 +230,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.37 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.38 2001/02/16 22:55:45 robertk Exp $".
 //

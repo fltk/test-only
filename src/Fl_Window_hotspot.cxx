@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.10 1999/11/10 19:27:32 carl Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.11 2001/02/16 22:55:45 robertk Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -26,7 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 
-#ifdef WIN32
+#if defined(WIN32)
 #include <FL/win32.H>
 #endif
 
@@ -71,5 +71,5 @@ void Fl_Window::hotspot(const Fl_Widget *o, int offscreen) {
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.10 1999/11/10 19:27:32 carl Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.11 2001/02/16 22:55:45 robertk Exp $".
 //
