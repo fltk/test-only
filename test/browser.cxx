@@ -22,9 +22,11 @@ Fl_Pixmap* fileSmall;
 
 void
 cb_test(Fl_Widget* browser, void*) {
-  if (Fl::event_clicks()) printf("Double ");
   Fl_Widget* w = ((Fl_Browser*)browser)->item();
-  printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
+  printf("Callback, browser->item() = '%s'",
+	 w && w->label() ? w->label() : "null");
+  if (Fl::event_clicks()) printf(", Double Click");
+  printf("\n");
 }
 
 void
@@ -44,7 +46,7 @@ cb_remove(Fl_Widget*, void* ptr) {
       }
     }
   } else {
-    Fl_Widget* w = tree->item();
+    Fl_Widget* w = tree->goto_mark(Fl_Browser::FOCUS);
     if (w) {
       Fl_Group* g = w->parent();
       g->remove(w);
@@ -59,13 +61,6 @@ cb_multi(Fl_Widget* w, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
   tree->type(w->value() ? FL_MULTI_BROWSER : FL_NORMAL_BROWSER);
   tree->relayout();
-}
-
-void
-cb_colors(Fl_Widget* w, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*) ptr;
-  tree->color(w->value() ? Fl_Color(FL_LIGHT2) : tree->text_background());
-  tree->redraw();
 }
 
 static Fl_Group* current_group(Fl_Browser* tree) {
@@ -106,13 +101,28 @@ cb_add_paper(Fl_Widget*, void* ptr) {
   add_paper(current_group(tree), "New paper", 0, fileSmall);
 }
 
-void cb_sort(Fl_Widget*, void* ) {
+void cb_when_changed(Fl_Widget* b, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*)ptr;
+  if (b->value())
+    tree->when(tree->when()|FL_WHEN_CHANGED);
+  else
+    tree->when(tree->when()&~FL_WHEN_CHANGED);
 }
 
-void cb_sort_reverse(Fl_Widget*, void*) {
+void cb_when_release(Fl_Widget* b, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*)ptr;
+  if (b->value())
+    tree->when(tree->when()|FL_WHEN_RELEASE);
+  else
+    tree->when(tree->when()&~FL_WHEN_RELEASE);
 }
 
-void cb_sort_random(Fl_Widget*, void*) {
+void cb_when_not_changed(Fl_Widget* b, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*)ptr;
+  if (b->value())
+    tree->when(tree->when()|FL_WHEN_NOT_CHANGED);
+  else
+    tree->when(tree->when()&~FL_WHEN_NOT_CHANGED);
 }
 
 #define USE_STRING_LIST 0
@@ -125,32 +135,35 @@ const char* const strings[] = {
 #endif
 
 int main(int argc,char** argv) {
+
   Fl_Window win(240, 304, "Browser Example");
+
   Fl_Browser tree(10, 10, 220, 180);
   tree.indented(1);
-  win.resizable(tree);
-  Fl_Button remove_button(10, 200, 100, 22, "Remove");
-  Fl_Button add_paper_button(10, 224, 100, 22, "Add Paper");
-  Fl_Button add_folder_button(10, 248, 100, 22, "Add Folder");
-  Fl_Button sort_button(10, 272, 100, 22, "Sort");
-  Fl_Check_Button multi_button(130, 200, 100, 22, "MultiBrowser");
-  Fl_Button sort_button_rev(130, 224, 100, 22, "Reverse Sort");
-  Fl_Button sort_button_rnd(130, 248, 100, 22, "Randomize");
-  Fl_Check_Button colors_button(130, 272, 100, 22, "Colors");
-  win.end();
-
-  // Add callbacks to the widgets
-
-  remove_button.callback((Fl_Callback*)cb_remove, (void *)&tree);
-  add_paper_button.callback((Fl_Callback*)cb_add_paper, (void *)&tree);
-  add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
-  sort_button.callback((Fl_Callback*)cb_sort, (void *)&tree);
-  sort_button_rnd.callback((Fl_Callback*)cb_sort_random, (void *)&tree);
-  sort_button_rev.callback((Fl_Callback*)cb_sort_reverse, (void *)&tree);
-  multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
-  colors_button.callback((Fl_Callback*)cb_colors, (void *)&tree);
-  colors_button.set();
   tree.callback(cb_test);
+
+  Fl_Button remove_button(5, 200, 70, 22, "Remove");
+  remove_button.callback((Fl_Callback*)cb_remove, (void *)&tree);
+
+  Fl_Button add_paper_button(5, 224, 70, 22, "Add Paper");
+  add_paper_button.callback((Fl_Callback*)cb_add_paper, (void *)&tree);
+
+  Fl_Button add_folder_button(5, 248, 70, 22, "Add Folder");
+  add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
+
+  Fl_Check_Button multi_button(80, 200, 160, 22, "FL_MULTI_BROWSER");
+  multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
+
+  Fl_Check_Button when_changed_button(80, 224, 160, 22, "FL_WHEN_CHANGED");
+  when_changed_button.callback(cb_when_changed, (void *)&tree);
+  Fl_Check_Button when_not_changed_button(80, 248, 160, 22, "FL_WHEN_NOT_CHANGED");
+  when_not_changed_button.callback(cb_when_not_changed, (void *)&tree);
+  Fl_Check_Button when_release_button(80, 272, 160, 22, "FL_WHEN_RELEASE");
+  when_release_button.callback(cb_when_release, (void *)&tree);
+  when_release_button.set_value();
+
+  win.resizable(tree);
+  win.end();
 
   folderSmall = new Fl_Pixmap(folder_small);
   fileSmall = new Fl_Pixmap(file_small);

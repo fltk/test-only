@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.44 2001/07/24 16:05:15 robertk Exp $"
+// "$Id: Fl_Browser.cxx,v 1.45 2001/07/29 21:41:39 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -440,8 +440,6 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   fl_pop_clip();
 }
 
-//#include <stdio.h>
-
 void Fl_Browser::draw() {
 	const int *last_columns = fl_column_widths();
 	fl_column_widths(column_widths_);
@@ -620,7 +618,7 @@ bool Fl_Browser::set_focus() {
 }
 
 // force current item to a state and do callback for multibrowser:
-bool Fl_Browser::item_select(bool value, bool do_callback) {
+bool Fl_Browser::item_select(bool value, int do_callback) {
   if (!multi()) {
     if (value) return (item_select_only(do_callback));
     else return deselect(do_callback);
@@ -635,7 +633,7 @@ bool Fl_Browser::item_select(bool value, bool do_callback) {
   }
   list()->flags_changed(this, item());
   damage_item(HERE);
-  if (when() && do_callback) {
+  if (when() & do_callback) {
     clear_changed();
     execute(item());
   } else if (do_callback) {
@@ -645,13 +643,13 @@ bool Fl_Browser::item_select(bool value, bool do_callback) {
 }
 
 // Turn off all lines in the browser:
-bool Fl_Browser::deselect(bool do_callback) {
+bool Fl_Browser::deselect(int do_callback) {
   unset_mark(HERE);
   return item_select_only(do_callback);
 }
 
 // Set both the single and multi-browser to only this item:
-bool Fl_Browser::item_select_only(bool do_callback) {
+bool Fl_Browser::item_select_only(int do_callback) {
   if (multi()) {
     set_focus();
     bool ret = false;
@@ -663,7 +661,7 @@ bool Fl_Browser::item_select_only(bool do_callback) {
     return ret;
   } else {
     if (!set_focus()) return false;
-    if (when() && do_callback) {
+    if (when() & do_callback) {
       clear_changed();
       execute(item());
     } else if (do_callback) {
@@ -749,23 +747,37 @@ int Fl_Browser::handle(int event) {
     return 1;}
 
   case FL_RELEASE:
-    if (openclose_drag) {
-      if (openclose_drag == 1) {
 	goto_mark(FOCUS);
-	goto TOGGLE_OPEN;
+    if (openclose_drag) {
+      if (openclose_drag == 1) goto TOGGLE_OPEN;
+      // otherwise they dragged off the glyph so do nothing...
+      return 1;
+    } else if (Fl::event_clicks()) {
+      if (item_is_parent()) goto TOGGLE_OPEN;
+      // double clicks always cause the callback unless when() is zero
+      if (when()) {
+	clear_changed();
+	execute(item());
       }
-    } else if (when() && Fl::event_clicks())
-      goto DO_CALLBACK;
+      return 1;
+      }
+    Fl::event_clicks(0); // make program not think it is a double-click
     goto RELEASE;
 
   case FL_KEYBOARD:
+    Fl::event_clicks(0); // make program not think it is a double-click
     switch (Fl::event_key()) {
     case FL_Up:
     case FL_Down:
       if (!goto_visible_focus()) {
 	if (!goto_top()) break;
-      } else
-	if (!(Fl::event_key() == FL_Up ? previous_visible() : next_visible())) return 1;
+      } else {
+	if (Fl::event_key() == FL_Up) {
+	  if (!previous_visible()) return 1;
+	} else {
+	  if (!next_visible()) return 1;
+	}
+      }
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
 	if (Fl::event_state(FL_SHIFT)) item_select(1,FL_WHEN_CHANGED);
 	set_focus();
@@ -781,22 +793,23 @@ int Fl_Browser::handle(int event) {
 	item()->invert_flag(FL_OPEN);
 	list()->flags_changed(this, item());
 	relayout();
+	Fl::event_is_click(0); // make next click not be double
 	goto RELEASE;
       } else if (when()) {
 	Fl::event_clicks(1); // make program think it was a double-click
-	goto DO_CALLBACK;
+	clear_changed();
+	execute(item());
+	return 1;
       }
     case ' ':
       if (!goto_visible_focus()) break;
       if (multi()) item_select(!item()->value(), FL_WHEN_CHANGED);
     RELEASE:
-      Fl::event_clicks(0); // make program not think it is a double-click
-      if (!(when()&FL_WHEN_RELEASE)) return 1;
-      if (!changed() && !(when()&FL_WHEN_NOT_CHANGED)) return 1;
-    DO_CALLBACK:
+      if ((when()&FL_WHEN_RELEASE) &&
+	  (changed() || (when()&FL_WHEN_NOT_CHANGED))) {
       clear_changed();
-      goto_mark(FOCUS);
       execute(item());
+      }
       return 1;
     default:
       if (send(event,scrollbar)) return 1;
@@ -948,5 +961,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.44 2001/07/24 16:05:15 robertk Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.45 2001/07/29 21:41:39 spitzak Exp $".
 //
