@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.14 1999/08/23 16:43:08 vincent Exp $"
+// "$Id: Fl_Type.h,v 1.15 1999/09/10 16:48:22 bill Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -386,6 +386,7 @@ class Fl_Window_Type : public Fl_Widget_Type {
   Fl_Widget_Type *_make() {return 0;} // we don't call this
   Fl_Widget *widget(int,int,int,int) {return 0;}
   int recalc;		// set by fix_overlay()
+  void moveallchildren();
 
 public:
 
@@ -547,5 +548,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.14 1999/08/23 16:43:08 vincent Exp $".
+// End of "$Id: Fl_Type.h,v 1.15 1999/09/10 16:48:22 bill Exp $".
 //
