@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.2 1999/09/19 04:58:52 vincent Exp $"
+// "$Id: Fl_Boxtype.H,v 1.3 1999/09/24 16:03:41 vincent Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -29,7 +29,7 @@
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
 
-// struct rather than class to allow FL_IMPORT static constants:
+// struct rather than class to allow static constants:
 struct Fl_Boxtype_ {
   void (*draw_)(const Fl_Boxtype_*,
 	       int,int,int,int, Fl_Color fill, Fl_Flags);

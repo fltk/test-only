@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.26 1999/09/20 04:33:43 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.27 1999/09/24 16:03:42 vincent Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,7 @@ struct Fl_Menu_Item {
   // style code and must eventually be deleted from your initializers.
 
 #ifndef FLTK_2
-  // Dummy variables to handle FL_IMPORT static initializers (see above).  These are
+  // Dummy variables to handle static initializers (see above).  These are
   // not used-- you can't initialize style information with the initializers
   // anymore.
   uchar clobberMe1;
@@ -248,5 +248,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.26 1999/09/20 04:33:43 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.27 1999/09/24 16:03:42 vincent Exp $".
 //

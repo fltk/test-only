@@ -125,7 +125,8 @@ Fl_Menu_Item new_menu[] = {
 
 // Callback for the panel settings
 // fluid set the user_data parameter to let us know if we have to set or load the settings
-void major_tick_precision_cb(Fl_Widget* o, void* v)
+class Fl_Slider;
+void major_tick_precision_cb(Fl_Slider* o, void* v)
 {
   Fl_Valuator* i = (Fl_Valuator*) o;
   if (v == LOAD) { // Case LOAD

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.2 1999/09/19 04:58:54 vincent Exp $"
+// "$Id: Fl_Labeltype.H,v 1.3 1999/09/24 16:03:42 vincent Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -29,7 +29,7 @@
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
 
-// struct rather than class to allow FL_IMPORT static constants:
+// struct rather than class to allow static constants:
 struct Fl_Labeltype_ {
   void (*draw_)(const Fl_Labeltype_*, const char*,
 	       int,int,int,int, Fl_Color fill, Fl_Flags);
