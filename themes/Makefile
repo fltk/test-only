@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.3 1999/11/01 02:21:45 carl Exp $"
+# "$Id: Makefile,v 1.4 1999/11/01 02:59:06 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -24,6 +24,7 @@
 #
 
 THEMES=essai motif classic windows Demo
+STYLES=Demo
 
 all : $(THEMES)
 
@@ -65,10 +66,18 @@ clean :
 	-@ rm -f *.o *.po $(THEMES) core *~ makedepend
 	@touch makedepend
 
+install :
+	@echo "Installing themes..."
+	@-mkdir -p $(libdir)/fltk
+	@-mkdir -p $(libdir)/fltk/styles
+	@-mkdir -p $(libdir)/fltk/themes
+	(cd ../config/styles; cp -f $(STYLES) $(libdir)/fltk/styles)
+	cp -f $(THEMES) $(libdir)/fltk/themes
+
 #depend:
 #	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.3 1999/11/01 02:21:45 carl Exp $".
+# End of "$Id: Makefile,v 1.4 1999/11/01 02:59:06 carl Exp $".
 #
