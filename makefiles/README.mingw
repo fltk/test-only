@@ -1,0 +1,17 @@
+Mingw makefiles in this directory are OBSOLETE and are not longer maintained.
+
+To compile FLTK using "mingw", you have to install also "msys" library from mingw
+project. Assuming you have properly installed mingw and msys you can compile and
+install FLTK from parent directory using standard Makefiles and configure script:
+
+  sh configure --prefix=C:/FLTK
+  make
+  make install
+  
+  
+
+  
+
+ 
+
+
