@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.12 1999/01/25 20:43:05 mike Exp $"
+// "$Id: fl_color.cxx,v 1.13 1999/04/09 16:12:11 carl Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -89,6 +89,10 @@ static void figure_out_visual() {
 
 }
 
+static unsigned fl_cmap[256] = {
+#include "fl_cmap.h" // this is a file produced by "cmap.C":
+};
+
 ////////////////////////////////////////////////////////////////
 // Get an rgb color.  This is easy for a truecolor visual.  For
 // colormapped it picks the closest color out of the fltk colormap
@@ -124,10 +128,6 @@ void fl_color(uchar r,uchar g,uchar b) {
 // visuals this is easy.  For colormap this actually tries to allocate
 // an X color, and does a least-squares match to find the closest
 // color if X cannot allocate that color.
-
-static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.C":
-};
 
 #if HAVE_OVERLAY
 Fl_XColor fl_xmap[2][256];
@@ -320,6 +320,9 @@ Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) {
   Fl_Color avg;
   unsigned rgb1 = fl_cmap[color1];
   unsigned rgb2 = fl_cmap[color2];
+
+  if (rgb1 == rgb2) return color1;
+
   uchar r, g, b;
 
   r = (uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb2>>24))*(1-weight));
@@ -351,5 +354,5 @@ Fl_Color contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.12 1999/01/25 20:43:05 mike Exp $".
+// End of "$Id: fl_color.cxx,v 1.13 1999/04/09 16:12:11 carl Exp $".
 //
