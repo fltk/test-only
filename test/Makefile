@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.62 2002/12/13 19:42:59 easysw Exp $"
+# "$Id: Makefile,v 1.63 2002/12/15 10:42:54 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -125,6 +125,7 @@ TARGETS = \
 	tile$(EXEEXT) \
 	inactive$(EXEEXT) \
 	sizes$(EXEEXT) \
+	pack$(EXEEXT) \
 	threads$(EXEEXT) \
 	valuators$(EXEEXT)
 
@@ -160,7 +161,7 @@ clean:
 #
 
 depend:
-	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
 
 
 #
@@ -232,5 +233,5 @@ install:
 
 
 #
-# End of "$Id: Makefile,v 1.62 2002/12/13 19:42:59 easysw Exp $".
+# End of "$Id: Makefile,v 1.63 2002/12/15 10:42:54 spitzak Exp $".
 #

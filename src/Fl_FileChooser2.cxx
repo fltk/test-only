@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.18 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.19 2002/12/15 10:42:53 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -49,14 +49,15 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #if defined(_WIN32)
-#  include <direct.h>
-#  include <io.h>
+# include <direct.h>
+# include <io.h>
+# define access(a,b) _access(a,b)
+# define R_OK 4
 #else
-#  include <unistd.h>
-#  include <pwd.h>
-#endif /* _WIN32 */
+# include <unistd.h>
+# include <pwd.h>
+#endif
 
 using namespace fltk;
 
@@ -537,7 +538,7 @@ FileChooser::fileNameCB()
     // Enter pressed - select or change directory...
     if (filename_isdir(pathname))
       directory(pathname);
-    else if (type_ == CREATE || access(pathname, 0) == 0)
+    else //if (type_ == CREATE || access(pathname, R_OK) == 0)
     {
       // New file or file exists...  If we are in multiple selection mode,
       // switch to single selection mode...
@@ -547,11 +548,11 @@ FileChooser::fileNameCB()
       // Hide the window to signal things are done...
       window->hide();
     }
-    else
-    {
-      // File doesn't exist, so alert the user...
-      alert("Please choose an existing file!");
-    }
+//  else
+//  {
+//    // File doesn't exist, so alert the user...
+//    alert("Please choose an existing file!");
+//   }
   }
   else if (event_key() != DeleteKey)
   {
@@ -658,14 +659,14 @@ FileChooser::fileNameCB()
     // See if we need to enable the OK button...
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, fileName->value());
 
-    if (type_ == CREATE || access(pathname, 0) == 0)
-      okButton->activate();
-    else
-      okButton->deactivate();
+//  if (type_ == CREATE || access(pathname, R_OK) == 0)
+//    okButton->activate();
+//  else
+//    okButton->deactivate();
   }
 }
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.18 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.19 2002/12/15 10:42:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.92 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.93 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -515,14 +515,14 @@ void when_cb(fltk::Choice* i, void *v) {
 
 void when_button_cb(fltk::CheckButton*, void *) {} // delete this!
 
-uchar WidgetType::resizable() const {
+bool WidgetType::resizable() const {
   if (is_group()) if (!((fltk::Group*)o)->resizable()) return false;
   fltk::Group* group = o->parent();
   if (group && group->resizable() != o) return false;
   return true;
 }
 
-void WidgetType::resizable(uchar value) {
+void WidgetType::resizable(bool value) {
   if (value) {
     fltk::Widget* child = o;
     fltk::Group* group = is_group() ? (fltk::Group*)o : o->parent();
@@ -960,7 +960,7 @@ static const Enumeration alignmenu[] = {
 void align_cb(fltk::Button* i, void *v) {
   fltk::Flags b = fltk::Flags(i->argument());
   if (v == LOAD) {
-    i->value(current_widget->o->flags() & b);
+    i->value((current_widget->o->flags() & b) != 0);
     fltk::Flags tplate = ((WidgetType*)(current_widget->factory))->o->flags();
     fltk::Color c = fltk::BLACK;
     fltk::Color d = fltk::RED;
@@ -1916,7 +1916,7 @@ void WidgetType::read_property(const char *c) {
     ((fltk::Button*)o)->shortcut(strtol(read_word(),0,0));
   } else if (is_button() && !strcmp(c,"value")) {
     const char* value = read_word();
-    ((fltk::Button*)o)->value(atoi(value));
+    ((fltk::Button*)o)->value(value[0]!=0 && value[0]!='0');
 
   } else if (!strcmp(c,"box") || !strcmp(c,"text_box") || !strcmp(c, "window_box")) {
     const char* value = read_word();
@@ -2143,5 +2143,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.92 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.93 2002/12/15 10:42:50 spitzak Exp $".
 //

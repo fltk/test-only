@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.41 2002/12/10 02:00:49 easysw Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.42 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -239,30 +239,28 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
 int ScrollGroup::handle(int event) {
   switch (event) {
 
-  case FOCUS:
-    if (contains(fltk::focus())) {
-      // The event indicates that the focus changed to a different child,
-      // auto-scroll to show it:
-      Widget* w = fltk::focus();
-      int x = w->x();
-      int y = w->y();
-      for (Group* p = w->parent(); p != this; p = p->parent()) {
-	// if (!p) return 0; // this should never happen
-	x += p->x();
-	y += p->y();
-      }
-      int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
-      int r = x+w->w();
-      int dx = 0;
-      if (x < X) {dx = X-x; if (r+dx > R) {dx = R-r; if (dx < 0) dx = 0;}}
-      else if (r > R) {dx = R-r; if (x+dx < X) {dx = X-x; if (dx > 0) dx = 0;}}
-      int b = y+w->h();
-      int dy = 0;
-      if (y < Y) {dy = Y-y; if (b+dy > B) {dy = B-b; if (dy < 0) dy = 0;}}
-      else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
-      position(xposition_-dx, yposition_-dy);
+  case FOCUS_CHANGE: {
+    // The event indicates that the focus changed to a different child,
+    // auto-scroll to show it:
+    Widget* w = fltk::focus();
+    int x = w->x();
+    int y = w->y();
+    for (Group* p = w->parent(); p != this; p = p->parent()) {
+      // if (!p) return 0; // this should never happen
+      x += p->x();
+      y += p->y();
     }
-    break;
+    int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
+    int r = x+w->w();
+    int dx = 0;
+    if (x < X) {dx = X-x; if (r+dx > R) {dx = R-r; if (dx < 0) dx = 0;}}
+    else if (r > R) {dx = R-r; if (x+dx < X) {dx = X-x; if (dx > 0) dx = 0;}}
+    int b = y+w->h();
+    int dy = 0;
+    if (y < Y) {dy = Y-y; if (b+dy > B) {dy = B-b; if (dy < 0) dy = 0;}}
+    else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
+    position(xposition_-dx, yposition_-dy);
+    break;}
 
   case PUSH:
   case ENTER:
@@ -296,5 +294,5 @@ int ScrollGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.41 2002/12/10 02:00:49 easysw Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.42 2002/12/15 10:42:53 spitzak Exp $".
 //

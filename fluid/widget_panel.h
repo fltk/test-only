@@ -75,7 +75,7 @@ extern void callback_cb(fltk::MultiLineInput*, void*);
 extern void user_data_cb(fltk::Input*, void*);
 extern void when_cb(fltk::Choice*, void*);
 extern void user_data_type_cb(fltk::Input*, void*);
-extern int overlays_invisible;
+extern bool overlays_invisible;
 extern void overlay_cb(fltk::CheckButton*, void*);
 extern fltk::CheckButton* overlaybutton;
 #include <fltk/ReturnButton.h>

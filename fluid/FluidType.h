@@ -1,5 +1,5 @@
 //
-// "$Id: FluidType.h,v 1.3 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: FluidType.h,v 1.4 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -176,7 +176,7 @@ class FLUID_API WidgetType : public FluidType {
 
   const char *extra_code_;
   const char *user_class_;
-  uchar hotspot_;
+  bool hotspot_;
 
 protected:
 
@@ -189,9 +189,9 @@ protected:
 
 public:
 
-  char set_xy;
+  bool set_xy;
   fltk::Widget *o;
-  int public_;
+  bool public_;
   
   Fluid_Image* image;
   void setimage(Fluid_Image*);
@@ -204,10 +204,10 @@ public:
   void extra_code(const char *);
   const char *user_class() const {return user_class_;}
   void user_class(const char *);
-  uchar hotspot() const {return hotspot_;}
-  void hotspot(uchar v) {hotspot_ = v;}
-  uchar resizable() const;
-  void resizable(uchar v);
+  bool hotspot() const {return hotspot_;}
+  void hotspot(bool v) {hotspot_ = v;}
+  bool resizable() const;
+  void resizable(bool v);
 
   virtual const Enumeration* subtypes() const;
 
@@ -277,7 +277,7 @@ class FLUID_API WindowType : public GroupType {
 
 public:
 
-  uchar modal, non_modal, border;
+  bool modal, non_modal, border;
 
   FluidType *make();
   virtual const char *type_name() const;
@@ -344,8 +344,8 @@ FLUID_API const char *c_check(const char *c, int type = 0);
 // replace a string pointer with new value, strips leading/trailing blanks:
 FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 
-FLUID_API extern int include_H_from_C;
+FLUID_API extern bool include_H_from_C;
 
 //
-// End of "$Id: FluidType.h,v 1.3 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: FluidType.h,v 1.4 2002/12/15 10:42:50 spitzak Exp $".
 //

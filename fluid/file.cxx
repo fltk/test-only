@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.30 2002/12/10 02:00:34 easysw Exp $"
+// "$Id: file.cxx,v 1.31 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -550,65 +550,9 @@ static const char *class_matcher[] = {
 "24","fltk::ValueSlider",
 0};
 
-void read_fdesign() {
-  fdesign_magic = atoi(read_word());
-  fdesign_flip = (fdesign_magic < 13000);
-  WidgetType *window = 0;
-  WidgetType *group = 0;
-  WidgetType *widget = 0;
-  if (!FluidType::current) {
-    FluidType *t = FluidType_make("Function");
-    t->name("create_the_forms()");
-    FluidType::current = t;
-  }
-  for (;;) {
-    const char *name;
-    const char *value;
-    if (!read_fdesign_line(name, value)) break;
-
-    if (!strcmp(name,"Name")) {
-
-      window = (WidgetType*)FluidType_make("fltk::Window");
-      window->name(value);
-      window->label(value);
-      FluidType::current = widget = window;
-
-    } else if (!strcmp(name,"class")) {
-
-      if (!strcmp(value,"fltk::BEGIN_GROUP")) {
-	group = widget = (WidgetType*)FluidType_make("fltk::Group");
-	FluidType::current = group;
-      } else if (!strcmp(value,"fltk::END_GROUP")) {
-	if (group) {
-	  fltk::Group* g = (fltk::Group*)(group->o);
-	  g->begin();
-	  // g->forms_end();
-	  fltk::end_group(); // how 'bout this instead?
-	  fltk::Group::current(0);
-	}
-	group = widget = 0;
-	FluidType::current = window;
-      } else {
-	for (int i = 0; class_matcher[i]; i += 2)
-	  if (!strcmp(value,class_matcher[i])) {
-	    value = class_matcher[i+1]; break;}
-	widget = (WidgetType*)FluidType_make(value);
-	if (!widget) {
-	  printf("class %s not found, using fltk::Button\n", value);
-	  widget = (WidgetType*)FluidType_make("fltk::Button");
-	}
-      }
-
-    } else if (widget) {
-      if (!widget->read_fdesign(name, value))
-	printf("Ignoring \"%s: %s\"\n", name, value);
-    }
-  }
-}
-
 // This is copied from forms_compatability.cxx:
 
-void fltk::end_group() {
+static void fl_end_group() {
   fltk::Group* g = fltk::Group::current();
   // set the dimensions of a group to surround contents
   if (g->children() && !g->w()) {
@@ -645,6 +589,62 @@ void fltk::end_group() {
   g->end();
 }
 
+void read_fdesign() {
+  fdesign_magic = atoi(read_word());
+  fdesign_flip = (fdesign_magic < 13000);
+  WidgetType *window = 0;
+  WidgetType *group = 0;
+  WidgetType *widget = 0;
+  if (!FluidType::current) {
+    FluidType *t = FluidType_make("Function");
+    t->name("create_the_forms()");
+    FluidType::current = t;
+  }
+  for (;;) {
+    const char *name;
+    const char *value;
+    if (!read_fdesign_line(name, value)) break;
+
+    if (!strcmp(name,"Name")) {
+
+      window = (WidgetType*)FluidType_make("fltk::Window");
+      window->name(value);
+      window->label(value);
+      FluidType::current = widget = window;
+
+    } else if (!strcmp(name,"class")) {
+
+      if (!strcmp(value,"fltk::BEGIN_GROUP")) {
+	group = widget = (WidgetType*)FluidType_make("fltk::Group");
+	FluidType::current = group;
+      } else if (!strcmp(value,"fltk::END_GROUP")) {
+	if (group) {
+	  fltk::Group* g = (fltk::Group*)(group->o);
+	  g->begin();
+	  // g->forms_end();
+	  fl_end_group(); // how 'bout this instead?
+	  fltk::Group::current(0);
+	}
+	group = widget = 0;
+	FluidType::current = window;
+      } else {
+	for (int i = 0; class_matcher[i]; i += 2)
+	  if (!strcmp(value,class_matcher[i])) {
+	    value = class_matcher[i+1]; break;}
+	widget = (WidgetType*)FluidType_make(value);
+	if (!widget) {
+	  printf("class %s not found, using fltk::Button\n", value);
+	  widget = (WidgetType*)FluidType_make("fltk::Button");
+	}
+      }
+
+    } else if (widget) {
+      if (!widget->read_fdesign(name, value))
+	printf("Ignoring \"%s: %s\"\n", name, value);
+    }
+  }
+}
+
 //
-// End of "$Id: file.cxx,v 1.30 2002/12/10 02:00:34 easysw Exp $".
+// End of "$Id: file.cxx,v 1.31 2002/12/15 10:42:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.69 2002/12/10 02:00:39 easysw Exp $"
+// "$Id: Fl_Browser.cxx,v 1.70 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -632,7 +632,10 @@ void Browser::layout() {
   hscrollbar.value(xposition_, W, 0, width_);
   hscrollbar.linesize(scrollbar.linesize());
 
-  goto_mark(FOCUS); make_item_visible(MIDDLE);
+  layout_damage(0); // resize of scrollbars may have turned this on
+
+  // Now that we got the sizes of everything, scroll to show current item:
+  goto_mark(FOCUS); make_item_visible(NOSCROLL);
 
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
 }
@@ -1087,5 +1090,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.69 2002/12/10 02:00:39 easysw Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.70 2002/12/15 10:42:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.76 2002/12/10 02:00:42 easysw Exp $"
+// "$Id: Fl_Input.cxx,v 1.77 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1135,12 +1135,12 @@ int Input::handle(int event, int X, int Y, int W, int H) {
   case PUSH:
     newpos = mouse_position(X, Y, W, H);
 #if DND_OUT
-    // detect if the user tries to grab the selected text:
+    // See if they clicked in the selected test, if so we start a timeout
+    // to see if they hold it long enough to start dragging:
     if (focused() && type()!=SECRET &&
 	(newpos >= mark() && newpos < position() ||
 	newpos >= position() && newpos < mark())) {
       drag_start = newpos;
-      // Wait to see if they move the mouse much before dragging:
       add_timeout(.25);
       return 1;
     }
@@ -1152,6 +1152,8 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 
 #if DND_OUT
   case TIMEOUT:
+    // This is called if they hold the mouse still long enough to indicate
+    // that a drag is being started.
     if (drag_start >= 0) {
       drag_start = -1;
       copy(false);
@@ -1162,9 +1164,11 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 
   case DRAG:
 #if DND_OUT
-    if (drag_start >= 0) { // if they started inside the selection
+    // If it has been long enough that we think the user is dragging the
+    // mouse, but not long enough for the above timeout to happen, then
+    // the user is probably selecting text and is not doing dnd.
+    if (drag_start >= 0) {
       if (event_is_click()) return 1; // wait until debounce is done
-      // give up on DnD and start the selection:
       remove_timeout();
       newmark = event_state(SHIFT) ? mark() : drag_start;
       drag_start = -1;
@@ -1173,8 +1177,8 @@ int Input::handle(int event, int X, int Y, int W, int H) {
       newmark = mark();
     newpos = mouse_position(X, Y, W, H);
   HANDLE_MOUSE:
+    // Move the mark & point to word/line ends depending on mouse click count:
     if (event_clicks()) {
-      // Multiple clicks, expand the selection to word/line boundaries:
       int savepos = newpos;
       if (newpos >= newmark) {
 	if (newpos == newmark) {
@@ -1197,11 +1201,11 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 	  newmark = word_end(newmark);
 	}
       }
-      // If the multiple click does not increase the selection, revert
-      // to single-click behavior:
-      if (event != DRAG && (mark() > position() ?
-		    (newmark >= position() && newpos <= mark()) :
-		    (newmark >= mark() && newpos <= position()))) {
+      // If the new click did not increase the selection then cycle
+      // back to single-click behavior:
+      if (event == PUSH && (mark() > position() ?
+		(newmark >= position() && newpos <= mark()) :
+		(newmark >= mark() && newpos <= position()))) {
 	event_clicks(0);
 	newmark = newpos = savepos;
       }
@@ -1211,7 +1215,8 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 
   case RELEASE:
 #if DND_OUT
-    // if they just clicked in the middle of selection, move cursor there:
+    // If we are still waiting to see if they are doing dnd or selection,
+    // act like a single click at that point:
     if (drag_start >= 0) {
       newpos = newmark = drag_start; drag_start = -1;
       remove_timeout();
@@ -1219,10 +1224,12 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     }
 #endif
     if (event_button() == 2) {
+      // If user selects with button 2 then it replaces the selected
+      // text with the clipboard:
       event_is_click(0); // stop double-click from picking a word
       paste(*this,false);
     } else if (position_ != mark_) {
-      // copy drag-selected text for middle-mouse click:
+      // copy to clipboard if the selection is non-zero
       copy(false);
     }
     return 1;
@@ -1304,5 +1311,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.76 2002/12/10 02:00:42 easysw Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.77 2002/12/15 10:42:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.10 2002/12/10 02:00:37 easysw Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,14 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Draw an image that is stored compressed in a file or in memory. 
-// Keep uncompressed images in memory for later use. 
-
 #include <config.h>
 #include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 #include <fltk/xbmImage.h>
-//#include <fltk/xpmImage.h>
 #include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +41,15 @@ static unsigned char nosuch_bits[] = {
    0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
    0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
 
-FL_IMAGES_API xbmImage nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+static xbmImage nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+
+class UnknownImage {
+public:
+  static bool test(const uchar*, size_t =0) { return 1; };
+  static fltk::SharedImage* get(const char*, const uchar* = 0) {
+    return (fltk::SharedImage*) &nosuch_bitmap;
+  };
+};
 
 ImageType fltk::image_filetypes[] = {
   //  { "xpm", xpmImage::test, xpmImage::get},
@@ -53,7 +57,7 @@ ImageType fltk::image_filetypes[] = {
   { "png", pngImage::test, pngImage::get},
   { "bmp", bmpImage::test, bmpImage::get},
   { "jpeg",jpegImage::test, jpegImage::get},
-  { 0, 0, 0}
+  { 0, UnknownImage::test, UnknownImage::get }
 };
 
 FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas)
@@ -62,7 +66,7 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
   const uchar* test_data = datas;
   size_t size = 1024;
   if (!datas) {
-    FILE* fp = fopen(get_filename(name), "rb");
+    FILE* fp = fopen(name, "rb");
     if (!fp)
       return image_filetypes + 
 	sizeof(image_filetypes)/sizeof(image_filetypes[0]) - 1;
@@ -79,5 +83,5 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.10 2002/12/10 02:00:37 easysw Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $"
 //

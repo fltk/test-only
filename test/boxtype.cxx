@@ -1,9 +1,9 @@
 //
-// "$Id: boxtype.cxx,v 1.13 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: boxtype.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-1999 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
 #include <stdlib.h>
@@ -33,7 +33,7 @@ int N = 0;
 #define H 50
 #define ROWS 6
 
-void bt(const char *name, fltk::Box* type, int square=0) {
+fltk::Widget* bt(const char *name, fltk::Box* type, int square=0) {
   int x = N%4;
   int y = N/4;
   N++;
@@ -46,6 +46,7 @@ void bt(const char *name, fltk::Box* type, int square=0) {
 	  b->clear_flag(fltk::ALIGN_MASK);
 	  b->set_flag(fltk::ALIGN_RIGHT);
   }
+  return b;
 }
 
 int main(int argc, char ** argv) {
@@ -87,6 +88,8 @@ int main(int argc, char ** argv) {
 //    bt("fltk::PLASTIC_DOWN_BOX", fltk::PLASTIC_DOWN_BOX);
   bt("fltk::DOTTED_FRAME", fltk::DOTTED_FRAME);
   bt("fltk::BORDER_FRAME", fltk::BORDER_FRAME);
+  bt("fltk::PLASTIC_UP_BOX", fltk::PLASTIC_UP_BOX)->color(12);
+  bt("fltk::PLASTIC_DOWN_BOX", fltk::PLASTIC_DOWN_BOX)->color(12);
   window.resizable(window);
   window.end();
   window.show(argc,argv);
@@ -94,5 +97,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.13 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: boxtype.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $".
 //

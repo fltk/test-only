@@ -20,10 +20,10 @@
 #if defined(__GNUC__) || defined(__sgi) && _COMPILER_VERSION<730
 # define ARRAY(type, name, size) type name[size]
 
-// Win32 named alloca "_alloca":
-#elif defined(_WIN32)
-# include <malloc.h>
-# define ARRAY(type, name, size) type*const name = (type*)_alloca(size*sizeof(type))
+// Win32 named alloca "_alloca" but it does not work when multithreaded:
+//#elif defined(_WIN32)
+//# include <malloc.h>
+//# define ARRAY(type, name, size) type*const name = (type*)_alloca(size*sizeof(type))
 
 // Systems with alloca():
 #elif defined(__DECCXX) || defined(__sgi)

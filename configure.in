@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.100 2002/12/13 04:54:05 easysw Exp $"
+dnl "$Id: configure.in,v 1.101 2002/12/15 10:42:48 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -535,9 +535,9 @@ case $uname in
 	fi
 
 	dnl Check for the Xdbe extension unless disabled...
-        AC_ARG_ENABLE(xdbe, [  --enable-xdbe           turn on Xdbe support [default=no]])
+        AC_ARG_ENABLE(xdbe, [  --enable-xdbe           turn on Xdbe support [default=yes]])
 
-	if test x$enable_xdbe = xyes; then
+	if test x$enable_xdbe != xno; then
 	    AC_CHECK_HEADER(X11/extensions/Xdbe.h, AC_DEFINE(HAVE_XDBE),,
 	        [#include <X11/Xlib.h>])
 	fi
@@ -832,5 +832,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.100 2002/12/13 04:54:05 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.101 2002/12/15 10:42:48 spitzak Exp $".
 dnl

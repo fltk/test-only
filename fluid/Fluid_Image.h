@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.h,v 1.16 2002/12/10 02:00:31 easysw Exp $"
+// "$Id: Fluid_Image.h,v 1.17 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Pixmap image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@ protected:
   Fluid_Image(const char *name); // no public constructor
   virtual ~Fluid_Image(); // no public destructor
 public:
-  int inlined;
+  bool inlined;
   int written;
   static Fluid_Image* find(const char *);
   void decrement(); // reference counting & automatic free
@@ -62,5 +62,5 @@ FLUID_API extern const char *images_dir;
 #endif
 
 //
-// End of "$Id: Fluid_Image.h,v 1.16 2002/12/10 02:00:31 easysw Exp $".
+// End of "$Id: Fluid_Image.h,v 1.17 2002/12/15 10:42:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.119 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Group.cxx,v 1.120 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -169,20 +169,21 @@ int Group::handle(int event) {
 
   switch (event) {
 
+  case FOCUS_CHANGE:
+    // The focus is being changed to some widget inside this.
+    focus_ = find(fltk::focus());
+    return true;
+
   case FOCUS:
-    if (contains(fltk::focus())) {
-      // The focus is being changed to some widget inside this.
-      focus_ = find(fltk::focus());
-      return true;
-    }
-    // otherwise it indicates an attempt to give this widget focus:
+    // an attempt to give this widget focus:
     switch (navigation_key()) {
     default: {
       // try to give it to whatever child had focus last:
       if (focus_ >= 0 && focus_ < numchildren)
 	if (child(focus_)->take_focus()) return true;
-      // otherwise search for the widget that needs the focus, but
-      // prefer a widget that returns 2:
+      // otherwise search for the widget that needs the focus. We
+      // give it to the first one that returns 2, or the last one
+      // that returns 1 if none return 2:
       Widget* f1 = 0; int ret = 0;
       for (i = 0; i < numchildren; ++i) {
 	Widget* w = child(i);
@@ -572,5 +573,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.119 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.120 2002/12/15 10:42:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -59,7 +59,7 @@ using namespace fltk;
 
 bool gifImage::test(const unsigned char *datas, size_t size)
 {
-  return !strncmp((char*) datas,"GIF", size<3? size:3);
+  return !strncmp((char*) datas,"GIF", 3);
 }
 
 void gifImage::measure(int  &W, int &H)
@@ -420,5 +420,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.14 2002/12/15 10:42:54 spitzak Exp $"
 //

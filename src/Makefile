@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.108 2002/12/13 19:42:58 easysw Exp $"
+# "$Id: Makefile,v 1.109 2002/12/15 10:42:54 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -102,6 +102,7 @@ CPPFILES = \
 	Fl_Tooltip.cxx  \
 	Fl_Valuator.cxx \
 	Fl_Value_Input.cxx \
+	ValueOutput.cxx \
 	Fl_Value_Slider.cxx \
 	Fl_Widget.cxx \
 	Fl_Window.cxx \
@@ -147,6 +148,7 @@ CPPFILES = \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
 	fl_overlay_visual.cxx \
+	fl_plastic_box.cxx \
 	fl_rect.cxx \
 	fl_round_box.cxx \
 	fl_rounded_box.cxx \
@@ -196,7 +198,7 @@ clean:
 #
 
 depend:
-	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
 
 
 #
@@ -285,5 +287,5 @@ install_programs:
 
 
 #
-# End of "$Id: Makefile,v 1.108 2002/12/13 19:42:58 easysw Exp $".
+# End of "$Id: Makefile,v 1.109 2002/12/15 10:42:54 spitzak Exp $".
 #

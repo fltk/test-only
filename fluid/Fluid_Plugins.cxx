@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.27 2002/12/10 02:00:31 easysw Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.28 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+# define strcasecmp(a,b) stricmp(a,b)
+# define strncasecmp(a,b,c) strnicmp(a,b,c)
+#endif
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include "Fluid_Plugins.h"
 #include <FL/Fl_Menu_Item.h>
 #include <fltk/load_plugin.h>
-#include <config.h> // for strcasecmp
 
 Fluid_Plugin* plugins[MAXPLUGINS];
 int nbplugins;
@@ -133,5 +136,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.27 2002/12/10 02:00:31 easysw Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.28 2002/12/15 10:42:50 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_plastic_box.cxx,v 1.2 2002/12/09 04:52:30 spitzak Exp $"
+// "$Id: fl_plastic_box.cxx,v 1.3 2002/12/15 10:42:54 spitzak Exp $"
 //
 // "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,8 +26,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// This has been removed from the namespace version of fltk. It should
-// be put into a theme.
+// Aqua-like boxes. This needs some significant rewrite so they are faster.
+// I also think they should be put into the themes, but it looks like too
+// many fltk 1.1 programs use them.
 
 #include <fltk/Box.h>
 #include <fltk/Style.h>
@@ -38,7 +39,7 @@ using namespace fltk;
 extern void fl_to_inactive(const char* s, char* to);
 
 static inline Color shade_color(uchar gc, Color bc) {
-  return lerp(gc+(BLACK-'A'), bc, 0.75f);
+  return lerp(gc+(GRAY00-'A'), bc, 0.25f);
 }
 
 #if 0 // this code is not used in fltk 2.0
@@ -91,16 +92,16 @@ void PlasticBox::draw(int x, int y, int w, int h, Color bc, Flags f) const
       drawline(x + 1, y + i, x + w - 1, y + i);
 
       setcolor(shade_color(c[i] - 2, bc));
-      draw_point(x, y + i + 1);
-      draw_point(x + w - 1, y + i + 1);
+      drawpoint(x, y + i + 1);
+      drawpoint(x + w - 1, y + i + 1);
 
       // Draw the bottom line and points...
       setcolor(shade_color(c[clen - i], bc));
       drawline(x + 1, y + h - 1 - i, x + w - 1, y + h - 1 - i);
 
       setcolor(shade_color(c[clen - i] - 2, bc));
-      draw_point(x, y + h - i);
-      draw_point(x + w - 1, y + h - i);
+      drawpoint(x, y + h - i);
+      drawpoint(x + w - 1, y + h - i);
     }
 
     // Draw the interior and sides...
@@ -122,16 +123,16 @@ void PlasticBox::draw(int x, int y, int w, int h, Color bc, Flags f) const
       drawline(x + i, y + 1, x + i, y + h - 1);
 
       setcolor(shade_color(c[i] - 2, bc));
-      draw_point(x + i + 1, y);
-      draw_point(x + i + 1, y + h - 1);
+      drawpoint(x + i + 1, y);
+      drawpoint(x + i + 1, y + h - 1);
 
       // Draw the right line and points...
       setcolor(shade_color(c[clen - i], bc));
       drawline(x + w - 1 - i, y + 1, x + w - 1 - i, y + h - 1);
 
       setcolor(shade_color(c[clen - i] - 2, bc));
-      draw_point(x + w - 1 - i, y);
-      draw_point(x + w - 1 - i, y + h - 1);
+      drawpoint(x + w - 1 - i, y);
+      drawpoint(x + w - 1 - i, y + h - 1);
     }
 
     // Draw the interior, top, and bottom...
@@ -147,13 +148,13 @@ void PlasticBox::draw(int x, int y, int w, int h, Color bc, Flags f) const
 }
 
 static PlasticBox plasticDownBox(0, "STUVWWWVT");
-Box* const fl_PLASTIC_DOWN_BOX = &plasticDownBox;
+Box* const fltk::PLASTIC_DOWN_BOX = &plasticDownBox;
 static PlasticBox plasticUpBox(0, "TXSPPQQRSSTTUVS", &plasticDownBox);
-Box* const fl_PLASTIC_UP_BOX = &plasticUpBox;
+Box* const fltk::PLASTIC_UP_BOX = &plasticUpBox;
 
 // up_frame =  "MNFKKLNO"
 // down_frame = "LLRRTTLL"
 
 //
-// End of "$Id: fl_plastic_box.cxx,v 1.2 2002/12/09 04:52:30 spitzak Exp $".
+// End of "$Id: fl_plastic_box.cxx,v 1.3 2002/12/15 10:42:54 spitzak Exp $".
 //

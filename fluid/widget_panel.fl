@@ -428,7 +428,7 @@ To get out of shortcut-setting mode:
         callback overlay_cb
         tooltip {Turns the overlays (red outlines) off so you can see the edges better.}
         xywh {0 0 120 22} resizable
-        extra_code {extern int overlays_invisible;
+        extra_code {extern bool overlays_invisible;
 o->value(!overlays_invisible);}
       }
       {fltk::ReturnButton} {} {

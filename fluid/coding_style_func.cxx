@@ -4,10 +4,9 @@
 #include <ctype.h>
 #include <fltk/Window.h>
 #include "FluidType.h"	// for indent() prototype
-#if defined(_WIN32) && !defined (__GNUC__)
-#	define strcasecmp  stricmp
-#else
-#	include "../config.h" // for strcasecmp
+#ifdef _WIN32
+# define strcasecmp(a,b) stricmp(a,b)
+# define strncasecmp(a,b,c) strnicmp(a,b,c)
 #endif
 
 // these two are in the FLUID output from coding_style.fl									  

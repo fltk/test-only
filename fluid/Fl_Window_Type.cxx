@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.43 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.44 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ int gridx = 5;
 int gridy = 5;
 int snap = 3;
 
-int include_H_from_C = 1;
+bool include_H_from_C = true;
 
 void alignment_cb(fltk::Input *i, long v) {
   int n = (int)strtol(i->value(),0,0);
@@ -92,7 +92,7 @@ static const Enumeration window_type_menu[] = {
 
 const Enumeration* WindowType::subtypes() const {return window_type_menu;}
 
-int overlays_invisible;
+bool overlays_invisible;
 
 // The following fltk::Widget is used to simulate the windows.  It has
 // an overlay for the fluid ui, and special-cases the fltk::NO_BOX.
@@ -117,7 +117,11 @@ void Overlay_Window::draw() {
 	fltk::fillrect(x,y,CHECKSIZE,CHECKSIZE);
       }
   }
+#ifdef _WIN32
+  OverlayWindow::draw();
+#else
   fltk::OverlayWindow::draw();
+#endif
 }
 
 void Overlay_Window::draw_overlay() {
@@ -613,7 +617,11 @@ int WindowType::handle(int event) {
     return r != 0;}
 
   default:
+#ifdef _WIN32
+    return ((Overlay_Window *)o)->OverlayWindow::handle(event);
+#else
     return ((Overlay_Window *)o)->fltk::OverlayWindow::handle(event);
+#endif
   }
 }
 
@@ -676,7 +684,7 @@ int WindowType::read_fdesign(const char* name, const char* value) {
   } else if (!strcmp(name,"NumberofWidgets")) {
     return 1; // we can figure out count from file
   } else if (!strcmp(name,"border")) {
-    if (sscanf(value,"%d",&x) == 1) border = x;
+    if (sscanf(value,"%d",&x) == 1) border = x!=0;
   } else if (!strcmp(name,"title")) {
     label(value);
   } else {
@@ -686,5 +694,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.43 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.44 2002/12/15 10:42:50 spitzak Exp $".
 //

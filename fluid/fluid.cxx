@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.62 2002/12/10 02:00:34 easysw Exp $"
+// "$Id: fluid.cxx,v 1.63 2002/12/15 10:42:50 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -96,6 +96,7 @@ int modflag;
 static char* pwd;
 static char in_source_dir;
 void goto_source_dir() {
+#if 0
   if (in_source_dir) return;
   if (!filename || !*filename) return;
   const char *p = filename_name(filename);
@@ -111,10 +112,12 @@ void goto_source_dir() {
 				buffer, strerror(errno)); return;}
   in_source_dir = 1;
   fltk::SharedImage::set_root_directory(buffer);
+#endif
 }
 
 #include "Fluid_Image.h"
 void goto_images_dir() {
+#if 0
   if (in_source_dir) return;
   if (!filename || !*filename) return;
   const char *p = filename_name(filename);
@@ -152,13 +155,16 @@ void goto_images_dir() {
   }
 #endif
   fltk::SharedImage::set_root_directory(buffer);
+#endif
 }
 
 void leave_source_dir() {
+#if 0
   if (!in_source_dir) return;
   if (chdir(pwd)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
 			     pwd, strerror(errno));}
   in_source_dir = 0;
+#endif
 }
   
 fltk::Window *main_window;
@@ -554,5 +560,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.62 2002/12/10 02:00:34 easysw Exp $".
+// End of "$Id: fluid.cxx,v 1.63 2002/12/15 10:42:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.29 2002/12/10 02:00:33 easysw Exp $"
+// "$Id: factory.cxx,v 1.30 2002/12/15 10:42:50 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,11 @@
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include <string.h>
+#ifdef _WIN32
+# define strcasecmp(a,b) stricmp(a,b)
+# define strncasecmp(a,b,c) strnicmp(a,b,c)
+#endif
 #include <stdio.h>
-#include <config.h> // for strcasecmp
 
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
@@ -48,6 +51,18 @@ fltk::Widget *WidgetType::widget(int x,int y,int w, int h) {
 }
 WidgetType *WidgetType::_make() {return new WidgetType();}
 static WidgetType Widgettype;
+
+////////////////////////////////////////////////////////////////
+
+#include <fltk/InvisibleBox.h>
+class InvisibleBoxType : public WidgetType {
+public:
+  virtual const char *type_name() const {return "fltk::InvisibleBox";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::InvisibleBox(x,y,w,h,0);}
+  WidgetType *_make() {return new InvisibleBoxType();}
+};
+static InvisibleBoxType InvisibleBoxtype;
 
 ////////////////////////////////////////////////////////////////
 
@@ -311,6 +326,20 @@ static ValueInputType ValueInputtype;
 
 ////////////////////////////////////////////////////////////////
 
+#include <fltk/ValueOutput.h>
+class ValueOutputType : public WidgetType {
+public:
+  virtual const char *type_name() const {return "fltk::ValueOutput";}
+  int is_valuator() const {return 1;}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::ValueOutput(x,y,w,h,"value:");
+  }
+  WidgetType *_make() {return new ValueOutputType();}
+};
+static ValueOutputType ValueOutputtype;
+
+////////////////////////////////////////////////////////////////
+
 #include <fltk/ValueSlider.h>
 class ValueSliderType : public SliderType {
 public:
@@ -384,6 +413,7 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Slidertype},
   {0,0,cb,(void*)&ValueSlidertype},
   {0,0,cb,(void*)&ValueInputtype},
+  {0,0,cb,(void*)&ValueOutputtype},
   {0,0,cb,(void*)&Scrollbartype},
   {0,0,cb,(void*)&Adjustertype},
   {0,0,cb,(void*)&Dialtype},
@@ -405,6 +435,7 @@ Fl_Menu_Item New_Menu[] = {
 {0},
 {"other",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Widgettype},
+  {0,0,cb,(void*)&InvisibleBoxtype},
   {0,0,cb,(void*)&Clocktype},
 {0},
 {"plugins",0,0,Plugins_New_Menu,FL_SUBMENU_POINTER},
@@ -456,12 +487,10 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"submenu",		"fltk::ItemGroup"},
   {"menuitem",		"fltk::Item"},
   {"Fl_Counter",	"fltk::ValueInput"},
-  {"Fl_ValueOutput",	"fltk::ValueInput"},
-  {"Fl_Value_Output",	"fltk::ValueInput"},
   {"Fl_Tabs",		"fltk::TabGroup"},
   {"Fl_Return_Button",	"fltk::ReturnButton"},
   {"fltk::EnterButton",	"fltk::ReturnButton"},
-  {"Fl_Box",		"fltk::Widget"},
+  {"Fl_Box",		"fltk::InvisibleBox"},
   {"Fl_Round_Button",	"fltk::RadioButton"},
   {"Fl_Pack",		"fltk::PackedGroup"},
   {"Fl_Tabs",		"fltk::TabGroup"},
@@ -640,5 +669,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.29 2002/12/10 02:00:33 easysw Exp $".
+// End of "$Id: factory.cxx,v 1.30 2002/12/15 10:42:50 spitzak Exp $".
 //

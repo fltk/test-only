@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.15 2002/12/13 19:42:56 easysw Exp $"
+# "$Id: Makefile,v 1.16 2002/12/15 10:42:48 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -76,7 +76,7 @@ clean:
 #
 
 depend:
-	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
 
 
 #
@@ -131,5 +131,5 @@ install: $(INSTALLTARGETS)
 
 
 #
-# End of "$Id: Makefile,v 1.15 2002/12/13 19:42:56 easysw Exp $".
+# End of "$Id: Makefile,v 1.16 2002/12/15 10:42:48 spitzak Exp $".
 #

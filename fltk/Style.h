@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Style.h,v 1.3 2002/12/15 10:42:49 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -57,6 +57,8 @@ extern FL_API Box* const OSHADOW_BOX;
 extern FL_API Box* const OFLAT_BOX;
 extern FL_API Box* const BORDER_FRAME;
 extern FL_API Box* const DOTTED_FRAME;
+extern FL_API Box* const PLASTIC_UP_BOX;
+extern FL_API Box* const PLASTIC_DOWN_BOX;
 
 struct Font;
 FL_API Font* font(const char* name, int attrib = 0);
@@ -176,5 +178,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Style.h,v 1.3 2002/12/15 10:42:49 spitzak Exp $".
 //

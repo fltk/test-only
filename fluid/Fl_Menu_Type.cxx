@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.51 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.52 2002/12/15 10:42:49 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,13 +54,13 @@ public:
   WidgetType *_make() {return new ItemType();}
 };
 
-class Dividertype : public WidgetType {
+class DividerType : public WidgetType {
 public:
   const Enumeration* subtypes() const {return 0;}
   const char* type_name() const {return "fltk::Divider";}
   int is_menu_item() const {return 1;}
   fltk::Widget *widget(int x,int y,int w,int h) { return new fltk::Divider; }
-  WidgetType *_make() {return new Dividertype();}
+  WidgetType *_make() {return new DividerType();}
 };
 
 class SubmenuType : public GroupType {
@@ -85,7 +85,7 @@ fltk::Widget *SubmenuType::widget(int,int,int,int) {
 }
 
 ItemType Itemtype;
-Dividertype Dividertype;
+DividerType Dividertype;
 SubmenuType Submenutype;
 
 ////////////////////////////////////////////////////////////////
@@ -220,7 +220,11 @@ BrowserType Browsertype;
 
 void Shortcut_Button::draw() {
   label(fltk::key_name(svalue));
+#ifdef _WIN32
+  Button::draw();
+#else
   fltk::Button::draw();
+#endif
 }
 
 int Shortcut_Button::handle(int e) {
@@ -242,7 +246,11 @@ int Shortcut_Button::handle(int e) {
   } else if (e == fltk::FOCUS) {
     return value();
   } else {
+#ifdef _WIN32
+    int r = Button::handle(e);
+#else
     int r = fltk::Button::handle(e);
+#endif
     if (e == fltk::RELEASE && value() && fltk::focus() != this) take_focus();
     return r;
   }
@@ -272,5 +280,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.51 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.52 2002/12/15 10:42:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.44 2002/12/13 19:42:57 easysw Exp $"
+# "$Id: Makefile,v 1.45 2002/12/15 10:42:50 spitzak Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -83,7 +83,7 @@ clean:
 #
 
 depend:
-	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
 
 
 #
@@ -127,5 +127,5 @@ rebuild:
 
 
 #
-# End of "$Id: Makefile,v 1.44 2002/12/13 19:42:57 easysw Exp $".
+# End of "$Id: Makefile,v 1.45 2002/12/15 10:42:50 spitzak Exp $".
 #

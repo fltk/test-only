@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.61 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.62 2002/12/15 10:42:53 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -137,14 +137,14 @@ int TabGroup::handle(int event) {
 
   switch (event) {
 
+  case FOCUS_CHANGE:
+    // this is called to indicate that some child got the focus
+    if (focus() < 0) redraw(DAMAGE_VALUE);
+    focus(fltk::focus() == this ? -1 : 0);
+    return true;
+
   case FOCUS:
-    if (contains(fltk::focus())) {
-      // this is called to indicate that some child got the focus
-      /*if (focus() == this || focus() < 0)*/ redraw(DAMAGE_VALUE);
-      focus(fltk::focus() == this ? -1 : 0);
-      return true;
-    }
-    // otherwise this indicates that somebody is trying to give focus to this
+    if (fltk::focus() == this) goto GOTO_TABS;
     switch (navigation_key()) {
     case LeftKey:
     case UpKey:
@@ -153,6 +153,7 @@ int TabGroup::handle(int event) {
     case DownKey:
       if (tab_height() < 0) goto GOTO_CONTENTS; else goto GOTO_TABS;
     default:
+      if (focus() < 0) goto GOTO_TABS;
     GOTO_CONTENTS:
       // Try to give the contents the focus. Also preserve a return value
       // of 2 (which indicates the contents have a text field):
@@ -165,6 +166,7 @@ int TabGroup::handle(int event) {
       }
     GOTO_TABS:
       focus(-1);
+      redraw(DAMAGE_VALUE);
       return true;
     }
 
@@ -234,7 +236,7 @@ int TabGroup::handle(int event) {
     case UpKey:
       if (tab_height()<0) goto DOWN_CASE;
     UP_CASE:
-      if (focus() >= 0) {focus(this); return 1;}
+      if (focus() >= 0) {fltk::focus(this); return 1;}
       else return 0;
     default:
       return 0;
@@ -427,5 +429,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.61 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.62 2002/12/15 10:42:53 spitzak Exp $".
 //

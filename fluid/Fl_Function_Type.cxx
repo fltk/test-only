@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.44 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.45 2002/12/15 10:42:49 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -153,7 +153,7 @@ const char *c_check(const char *c, int type) {
 class FunctionType : public FluidType {
   const char* return_type;
   const char* attributes;
-  char public_, cdecl_, constructor, havewidgets;
+  bool public_, cdecl_, constructor, havewidgets;
 public:
   FluidType *make();
   void write_code();
@@ -178,8 +178,8 @@ FluidType *FunctionType::make() {
   o->return_type = 0;
   o->add(p);
   o->factory = this;
-  o->public_ = 1;
-  o->cdecl_ = 0;
+  o->public_ = true;
+  o->cdecl_ = false;
   return o;
 }
 
@@ -201,7 +201,7 @@ void FunctionType::read_property(const char *c) {
   if (!strcmp(c,"private")) {
     public_ = 0;
   } else if (!strcmp(c,"C")) {
-    cdecl_ = 1;
+    cdecl_ = true;
   } else if (!strcmp(c,"return_type")) {
     storestring(read_word(),return_type);
   } else if (!strcmp(c,"attributes")) {
@@ -524,7 +524,7 @@ void CodeBlockType::write_code() {
 ////////////////////////////////////////////////////////////////
 
 class DeclType : public FluidType {
-  char public_;
+  bool public_;
 public:
   FluidType *make();
   void write_code();
@@ -701,7 +701,7 @@ void DeclBlockType::write_code() {
 
 class ClassType : public FluidType {
   const char* subclass_of;
-  char public_;
+  bool public_;
 public:
   // state variables for output:
   char write_public_state; // true when public: has been printed
@@ -748,7 +748,7 @@ FluidType *ClassType::make() {
   ClassType *o = new ClassType();
   o->name("UserInterface");
   o->subclass_of = 0;
-  o->public_ = 1;
+  o->public_ = true;
   o->add(p);
   o->factory = this;
   return o;
@@ -765,7 +765,7 @@ void ClassType::write_properties() {
 
 void ClassType::read_property(const char *c) {
   if (!strcmp(c,"private")) {
-    public_ = 0;
+    public_ = false;
   } else if (!strcmp(c,":")) {
     storestring(read_word(), subclass_of);
   } else {
@@ -828,5 +828,5 @@ void ClassType::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.44 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.45 2002/12/15 10:42:49 spitzak Exp $".
 //

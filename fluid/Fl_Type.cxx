@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.35 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: Fl_Type.cxx,v 1.36 2002/12/15 10:42:49 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,8 +48,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+# define strcasecmp(a,b) stricmp(a,b)
+# define strncasecmp(a,b,c) strnicmp(a,b,c)
+#endif
 #include <stdio.h>
-#include <config.h> // for strcasecmp
 
 #include "FluidType.h"
 #include "Fluid_Image.h"
@@ -643,5 +646,5 @@ void FluidType::read_property(const char *c) {
 int FluidType::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.35 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.36 2002/12/15 10:42:49 spitzak Exp $".
 //
