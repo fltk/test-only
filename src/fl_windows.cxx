@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.17 1999/11/21 20:05:39 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.18 1999/11/22 09:00:23 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,64 +64,68 @@ static const Win98_Label win98_label("windows", engraved_data);
 static const Fl_Frame_Box
 win98_menu_window_box("win98 menu window", "2AARRMMUU", FL_DOWN_BOX);
 
-static Fl_Glyph glyph = 0;
-static Fl_Glyph return_glyph = 0;
-static Fl_Glyph adjuster_glyph = 0;
-static Fl_Glyph counter_glyph = 0;
-
 // This glyph function just makes the inactive engraved look.
 // Pretty nasty, but it works (I think?).  Can anyone think of
 // a better way without reimplementing all the drawing code here?
 static void
-windows_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-              Fl_Flags f, Fl_Boxtype box)
+inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	    Fl_Flags f, Fl_Boxtype box, Fl_Glyph function)
 {
-  // don't do anything to slider thumbs or check or radio buttons
-  if (t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
+  // active widgets draw normally:
+  if (!(f&FL_INACTIVE) ||
+      // don't do anything to slider thumbs or check or radio buttons
+      t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
       t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
       t == FL_GLYPH_CHECK || t == FL_GLYPH_RADIO)
   {
-    if (glyph) glyph(t, x, y, w, h, bc, fc, f, box);
+    function(t, x, y, w, h, bc, fc, f, box);
     return;
   }
 
-  // is there a box?
-  int bf = (box != FL_NO_BOX);
-
-  // draw the box once
-  box->draw(x,y,w,h, bc, f);
-  box = FL_NO_BOX;
-
-  // make the engraved look for inactive widgets
-  if (f&FL_INACTIVE)
-    windows_glyph(t,x+1,y+1,w,h,bc,FL_LIGHT3,f&(~FL_INACTIVE),FL_NO_BOX);
-
-  // send the draw where it belongs
-  switch (t) {
-    case FL_GLYPH_RIGHT:
-    case FL_GLYPH_LEFT:
-    case FL_GLYPH_UP:
-    case FL_GLYPH_DOWN:
-      if (bf) { x += 2; y += 2; w -= 4; h -= 4; }
-      if (glyph) glyph(t, x, y, w, h, bc, fc, f, FL_NO_BOX);
-      break;
-    case FL_GLYPH_RETURN:
-      if (return_glyph) return_glyph(t, x, y, w, h, bc, fc, f, box);
-      break;
-    case FL_GLYPH_FASTARROW:
-    case FL_GLYPH_MEDIUMARROW:
-    case FL_GLYPH_SLOWARROW:
-      if (adjuster_glyph) adjuster_glyph(t, x, y, w, h, bc, fc, f, box);
-      break;
-    case FL_GLYPH_LEFTARROW:
-    case FL_GLYPH_2LEFTARROW:
-    case FL_GLYPH_RIGHTARROW:
-    case FL_GLYPH_2RIGHTARROW:
-      if (counter_glyph) counter_glyph(t, x, y, w, h, bc, fc, f, box);
-      break;
-    default:
-      box->draw(x,y,w,h, bc, f);
+  // draw the box once:
+  if (box != FL_NO_BOX) {
+    box->draw(x,y,w,h,bc,f);
+    box->inset(x,y,w,h);
   }
+
+  f &= ~FL_INACTIVE;
+  function(t, x-1, y-1, w, h, bc, FL_DARK3, f, FL_NO_BOX);
+  function(t, x+1, y+1, w, h, bc, FL_LIGHT3, f, FL_NO_BOX);
+  function(t, x,   y,   w, h, bc, bc, f, FL_NO_BOX);
+}
+
+static void windows_glyph(
+	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	Fl_Flags f, Fl_Boxtype box) {
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,fl_glyph);
+}
+
+static Fl_Glyph choice_glyph = 0;
+static void my_choice_glyph(
+	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	Fl_Flags f, Fl_Boxtype box) {
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,choice_glyph);
+}
+
+static Fl_Glyph return_glyph = 0;
+static void my_return_glyph(
+	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	Fl_Flags f, Fl_Boxtype box) {
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,return_glyph);
+}
+
+static Fl_Glyph adjuster_glyph = 0;
+static void my_adjuster_glyph(
+	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	Fl_Flags f, Fl_Boxtype box) {
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,adjuster_glyph);
+}
+
+static Fl_Glyph counter_glyph = 0;
+static void my_counter_glyph(
+	int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+	Fl_Flags f, Fl_Boxtype box) {
+  inset_glyph(t,x,y,w,h,bc,fc,f,box,counter_glyph);
 }
 
 int fl_windows() {
@@ -151,7 +155,6 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("menu item"))) {
-    glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(windows_glyph);
     s->set_glyph_box(FL_NO_BOX);
   }
@@ -175,7 +178,6 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(windows_glyph);
     s->set_glyph_box(&win98_menu_window_box);
     s->set_color(52);
@@ -196,28 +198,31 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(windows_glyph);
+  }
+
+  if ((s = Fl_Style::find("choice"))) {
+    choice_glyph = s->glyph;
+    s->set_glyph(my_choice_glyph);
   }
 
   if ((s = Fl_Style::find("return button"))) {
-    return_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
-    s->set_glyph(windows_glyph);
+    return_glyph = s->glyph;
+    s->set_glyph(my_return_glyph);
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(windows_glyph);
   }
 
   if ((s = Fl_Style::find("adjuster"))) {
-    adjuster_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
-    s->set_glyph(windows_glyph);
+    adjuster_glyph = s->glyph;
+    s->set_glyph(my_adjuster_glyph);
   }
 
   if ((s = Fl_Style::find("counter"))) {
-    counter_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
-    s->set_glyph(windows_glyph);
+    counter_glyph = s->glyph;
+    s->set_glyph(my_counter_glyph);
   }
 
   Fl::redraw();
@@ -226,5 +231,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.17 1999/11/21 20:05:39 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.18 1999/11/22 09:00:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.13 1999/11/21 20:05:41 carl Exp $"
+// "$Id: Alternative.cxx,v 1.14 1999/11/22 09:00:26 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -89,21 +89,15 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
   }
 }
 
-static Fl_Glyph check_glyph = 0;
-
 // a new glyph function
 static void
 alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
           Fl_Flags f, Fl_Boxtype box)
 {
   switch (t) {
-    case FL_GLYPH_LIGHT:
-      FL_DOWN_FRAME->draw(x, y, w, h, fc, f);
-      FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f);
-      break;
     case FL_GLYPH_CHECK: {
-      if (box == FL_NO_BOX)
-        { if (check_glyph) check_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+      if (box == FL_NO_BOX) {
+        fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
@@ -130,7 +124,7 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
     }
     case FL_GLYPH_RADIO: {
       if (box == FL_NO_BOX)
-        { if (check_glyph) check_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+        { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
       Fl_Color light = 54, dark = 32;
 
       if (f&FL_INACTIVE)
@@ -225,35 +219,46 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
       FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
       break;
     }
-    case FL_GLYPH_CHOICE: {
-      int H = h/3;
-      int Y = y + (h-H)/2;
-      box->draw(x,Y,w,H, bc, f);
-      break;
-    }
-    case FL_GLYPH_RETURN: {
-      int size = w; if (h<size) size = h;
-      int d = (size+2)/4; if (d<3) d = 3;
-      int t = (size+9)/12; if (t<1) t = 1;
-      int x0 = x+(w-2*d-2*t-1)/2;
-      int x1 = x0+d;
-      int y0 = y+h/2;
-      fl_color(fl_inactive(FL_DARK3, f));
-      fl_line(x0, y0, x1, y0+d);
-      fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
-      fl_yxline(x1, y0-t, y0-d);
-      fl_color(fl_inactive(FL_LIGHT2, f));
-      fl_line(x0, y0, x1, y0-d);
-      fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
-      break;
-    }
     default:
       box->draw(x,y,w,h, bc, f);
   }
 }
-extern "C" int fltk_theme(int, char**);
 
-int fltk_theme(int, char** argv) {
+static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  int H = h/3;
+  int Y = y + (h-H)/2;
+  box->draw(x,Y,w,H, bc, f);
+}
+
+static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
+		  Fl_Flags f, Fl_Boxtype)
+{
+  FL_DOWN_FRAME->draw(x, y, w, h, fc, f);
+  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f);
+}
+
+static void return_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color,
+		  Fl_Flags f, Fl_Boxtype)
+{
+  int size = w; if (h<size) size = h;
+  int d = (size+2)/4; if (d<3) d = 3;
+  int t = (size+9)/12; if (t<1) t = 1;
+  int x0 = x+(w-2*d-2*t-1)/2;
+  int x1 = x0+d;
+  int y0 = y+h/2;
+  fl_color(fl_inactive(FL_DARK3, f));
+  fl_line(x0, y0, x1, y0+d);
+  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
+  fl_yxline(x1, y0-t, y0-d);
+  fl_color(fl_inactive(FL_LIGHT2, f));
+  fl_line(x0, y0, x1, y0-d);
+  fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
+}
+
+extern "C"
+int fltk_theme(int, char**) {
   Fl_Style::revert();
 
   Fl_Style* s;
@@ -264,7 +269,6 @@ int fltk_theme(int, char** argv) {
   }
 
   if ((s = Fl_Style::find("menu item"))) {
-    check_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(alt_glyph);
     s->set_glyph_box(FL_NO_BOX);
   }
@@ -274,21 +278,20 @@ int fltk_theme(int, char** argv) {
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->set_glyph(alt_glyph);
+    s->set_glyph(choice_glyph);
     s->set_glyph_box(FL_UP_BOX);
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    check_glyph = s->glyph; // hack to get the old function so I don't need to link it all in
     s->set_glyph(alt_glyph);
   }
 
   if ((s = Fl_Style::find("return button"))) {
-    s->set_glyph(alt_glyph);
+    s->set_glyph(return_glyph);
   }
 
   if ((s = Fl_Style::find("light button"))) {
-    s->set_glyph(alt_glyph);
+    s->set_glyph(light_glyph);
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
@@ -306,5 +309,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.13 1999/11/21 20:05:41 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.14 1999/11/22 09:00:26 bill Exp $".
 //

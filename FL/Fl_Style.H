@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.21 1999/11/21 06:23:16 carl Exp $"
+// "$Id: Fl_Style.H,v 1.22 1999/11/22 09:00:12 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -106,22 +106,11 @@ FL_API void fl_theme_handler(Fl_Theme_Handler handler);
 FL_API Fl_Theme_Handler fl_theme_handler();
 
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_default(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_adjuster(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_check(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_choice(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_arrow(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_light(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_return(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_slider(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
-FL_API void fl_glyph_menu(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
 
-
-enum Fl_Glyphtype {	// glyph types
-  // zero is reserved to draw an empty box
-  FL_GLYPH_CHECK = 1,
+enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
+  // the numbers 0-99 are reserved for private glyph functions
+  FL_GLYPH_CHECK = 100,
   FL_GLYPH_RADIO,
-  FL_GLYPH_LIGHT,
   FL_GLYPH_UP,
   FL_GLYPH_DOWN,
   FL_GLYPH_LEFT,
@@ -129,16 +118,7 @@ enum Fl_Glyphtype {	// glyph types
   FL_GLYPH_VSLIDER,
   FL_GLYPH_HSLIDER,
   FL_GLYPH_VNSLIDER,
-  FL_GLYPH_HNSLIDER,
-  FL_GLYPH_CHOICE,
-  FL_GLYPH_FASTARROW,
-  FL_GLYPH_MEDIUMARROW,
-  FL_GLYPH_SLOWARROW,
-  FL_GLYPH_LEFTARROW,
-  FL_GLYPH_RIGHTARROW,
-  FL_GLYPH_2LEFTARROW,
-  FL_GLYPH_2RIGHTARROW,
-  FL_GLYPH_RETURN
+  FL_GLYPH_HNSLIDER
 };
 
 FL_API int fl_kde1();
@@ -160,5 +140,5 @@ struct FL_API Fl_Named_Style : public Fl_Style {
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.21 1999/11/21 06:23:16 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.22 1999/11/22 09:00:12 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.44 1999/11/21 06:23:27 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.45 1999/11/22 09:00:20 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -213,6 +213,10 @@ Fl_Color Fl_Widget::draw_button() const {
   Fl_Flags f = flags();
   Fl_Color c = color();
   Fl_Color lc = label_color();
+  if ((f&FL_VALUE) && selection_color()) {
+    c = selection_color();
+    lc = selection_text_color();
+  }
   if (!active_r()) {
     f |= FL_INACTIVE;
     // lc = fl_inactive(lc); don't do this, draw_button_label() will do it
@@ -221,29 +225,26 @@ Fl_Color Fl_Widget::draw_button() const {
     c = highlight_color();
     lc = highlight_label_color();
   }
-  if (f & FL_VALUE) {
-    c = selection_color();
-    lc = selection_text_color();
-  }
-
   box()->draw(x(), y(), w(), h(), c, f);
   return lc;
 }
 
-void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f, Fl_Boxtype b) const {
-  if (!b) b = glyph_box();
-  Fl_Color bc = off_color(), fc = label_color();
-  if (f&FL_VALUE) {
+void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
+  Fl_Color bc = off_color();
+  Fl_Color fc = label_color();
+  if ((f&FL_VALUE) && selection_color()) {
     bc = selection_color();
     fc = selection_text_color();
   }
-  if ((f&FL_HIGHLIGHT) && !(f&FL_INACTIVE) && highlight_color()) {
+  if (!active_r()) {
+    f |= FL_INACTIVE;
+    fc = fl_inactive(fc);
+    // bc = fl_inactive(bc); // are you sure you want this?
+  } else if ((f&FL_HIGHLIGHT) && highlight_color()) {
     fc = highlight_label_color();
     bc = highlight_color();
   }
-  fc = fl_inactive(fc, f);
-  bc = fl_inactive(bc, f);
-  glyph()(T, X,Y,W,H, bc, fc, f, b);
+  glyph()(T, X,Y,W,H, bc, fc, f, glyph_box());
 }
 
 // Call the draw method, handle the clip out
@@ -262,12 +263,6 @@ void Fl_Widget::draw_n_clip()
   fl_clip_out(x(), y(), w(), h());
 }
 
-void fl_glyph_default(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
-                     Fl_Flags f, Fl_Boxtype box)
-{
-  box->draw(x,y,w,h, bc, f);
-}
-
 //
-// End of "$Id: Fl_Widget.cxx,v 1.44 1999/11/21 06:23:27 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.45 1999/11/22 09:00:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.4 1999/11/21 06:23:27 carl Exp $"
+// "$Id: Fl_Style.cxx,v 1.5 1999/11/22 09:00:20 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -34,16 +34,16 @@ Fl_Named_Style* Fl_Named_Style::first;
 static void revert(Fl_Style* s) {
   s->box                   = FL_NORMAL_BOX;
   s->glyph_box             = FL_NORMAL_BOX;
-  s->glyph                 = fl_glyph_default;
+  s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
   s->label_type            = FL_NORMAL_LABEL;
   s->color                 = FL_GRAY;
   s->label_color           = FL_BLACK;
-  s->selection_color       = FL_LIGHT1;
+  s->selection_color       = FL_NO_COLOR;
   s->selection_text_color  = FL_BLACK;
   s->off_color             = FL_GRAY;
-  s->highlight_color       = FL_LIGHT1;//FL_NO_COLOR;
+  s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_BLACK;
   s->text_color            = FL_BLACK;
   s->label_size		   = FL_NORMAL_SIZE;
@@ -56,8 +56,7 @@ Fl_Style* Fl_Widget::default_style;
 
 // Copying a style pointer from another widget is not safe if that
 // style is dynamic() because it may change or be deleted.  This makes
-// another dynamic() copy if necessary.  Returns true if this new copy
-// is made (no code uses this return value right now).
+// another dynamic() copy if necessary.
 
 int Fl_Widget::copy_style(const Fl_Style* t) {
   if (style_ == t) return 0;
@@ -162,5 +161,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.4 1999/11/21 06:23:27 carl Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.5 1999/11/22 09:00:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.31 1999/11/21 09:57:49 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.32 1999/11/22 09:00:16 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,10 +27,17 @@
 #include <FL/Fl_Choice.H>
 #include <FL/fl_draw.H>
 
-// Emulates the Forms choice widget.  This is almost exactly the same
-// as an Fl_Menu_Button.  The only difference is the appearance of the
-// button: it draws the text of the current pick and a down-arrow.
+// This is almost exactly the same as an Fl_Menu_Button.  The only
+// difference is the appearance of the button: it draws the text of
+// the current pick and a motif-like box.
 
+static void glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  int H = h/2;
+  int Y = y + (h-H)/2;
+  box->draw(x,Y,w,H, bc, f);
+}
 
 extern char fl_draw_shortcut;
 
@@ -38,11 +45,10 @@ void Fl_Choice::draw() {
   draw_button();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   if (mvalue()) {
-    // Shouldn't do this, but we can handle it
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
-    fl_draw_shortcut = 2; // hack value to make '&' disappear
     fl_clip(X, Y, W-H-2, H);
+    fl_draw_shortcut = 2; // hack value to make '&' disappear
     m.draw(X, Y, W-H-2, H, this, 5);
     fl_draw_shortcut = 0;
     fl_pop_clip();
@@ -51,9 +57,7 @@ void Fl_Choice::draw() {
   H = H-4;
   X = X+W-H-2;
   Y = Y+2;
-  Fl_Flags f = active_r() ? Fl::belowmouse() == this ? FL_HIGHLIGHT : 0
-                            : FL_INACTIVE;
-  draw_glyph(FL_GLYPH_CHOICE, X, Y, H, H, f);
+  draw_glyph(FL_GLYPH_DOWN, X, Y, H, H, Fl::belowmouse()==this?FL_HIGHLIGHT:0);
 }
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
@@ -99,11 +103,11 @@ int Fl_Choice::handle(int e) {
 
 static void revert(Fl_Style* s) {
   //s->glyph_box = FL_FLAT_BOX;
-  s->glyph = fl_glyph_choice;
+  s->glyph = glyph;
 }
 
 Fl_Style* Fl_Choice::default_style = new Fl_Named_Style("Choice", revert, &Fl_Choice::default_style);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.31 1999/11/21 09:57:49 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.32 1999/11/22 09:00:16 bill Exp $".
 //

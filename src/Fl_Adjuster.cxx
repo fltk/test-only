@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.20 1999/11/21 06:23:23 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.21 1999/11/22 09:00:16 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,37 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Adjuster.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Bitmap.H>
+
+#include "fastarrow.h"
+static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
+#include "mediumarrow.h"
+static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
+#include "slowarrow.h"
+static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
+
+enum {
+  FL_GLYPH_FASTARROW,
+  FL_GLYPH_MEDIUMARROW,
+  FL_GLYPH_SLOWARROW
+};
+
+static void glyph(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  box->draw(x,y,w,h, bc, f);
+  fl_color(fc);
+  switch (t) {
+    case FL_GLYPH_FASTARROW:
+      fastarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
+    case FL_GLYPH_MEDIUMARROW:
+      mediumarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
+    case FL_GLYPH_SLOWARROW:
+      slowarrow.draw(x, y, w, h, FL_ALIGN_CENTER); break;
+  }
+}
+
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
 
@@ -42,9 +73,8 @@ void Fl_Adjuster::draw() {
   Fl_Flags f[4];
   for (int i = 1; i < 4; i++) {
     f[i] = flags();
-    if (!active_r()) f[i] |= FL_INACTIVE;
-    else if (drag == i) f[i] |= FL_VALUE;
-    else if (highlight == i && highlight_color()) f[i] |= FL_HIGHLIGHT;
+    if (drag == i) f[i] |= FL_VALUE;
+    else if (highlight == i) f[i] |= FL_HIGHLIGHT;
   }
 
   if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
@@ -138,11 +168,11 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 static void revert(Fl_Style* s) {
-  s->glyph = fl_glyph_adjuster;
+  s->glyph = glyph;
 }
 
 Fl_Style* Fl_Adjuster::default_style = new Fl_Named_Style("Adjuster", revert, &Fl_Adjuster::default_style);
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.20 1999/11/21 06:23:23 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.21 1999/11/22 09:00:16 bill Exp $".
 //

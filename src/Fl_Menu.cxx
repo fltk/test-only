@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.68 1999/11/21 20:05:38 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.69 1999/11/22 09:00:18 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -337,7 +337,6 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   }
 
   itemheight += leading();
-  //W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
@@ -432,8 +431,11 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
     // we need the leading() part so that the height is based solely on the
     // itemheight and not on leading().  Necessary to get the size of the
     // arrow right for themes because leading() really screws things up
-    H -= leading();
-    Y += leading()/2;
+    // I changed this so the arrows are larger in the default setup:
+    if (leading()>4) {
+      H -= leading()-4;
+      Y += (leading()-4)/2;
+    }
     m->glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc, f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
@@ -868,5 +870,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.68 1999/11/21 20:05:38 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.69 1999/11/22 09:00:18 bill Exp $".
 //

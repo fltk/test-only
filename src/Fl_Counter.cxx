@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.24 1999/11/21 06:23:24 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.25 1999/11/22 09:00:17 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,26 @@
 #include <FL/Fl_Counter.H>
 #include <FL/Fl_Output.H>
 #include <FL/fl_draw.H>
+
+enum {
+  FL_GLYPH_LEFTARROW,
+  FL_GLYPH_RIGHTARROW,
+  FL_GLYPH_2LEFTARROW,
+  FL_GLYPH_2RIGHTARROW
+};
+
+static void glyph(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  box->draw(x,y,w,h, bc, f);
+
+  switch (t) {
+    case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x, y, w, h, fc); break;
+    case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x, y, w, h, fc); break;
+    case FL_GLYPH_RIGHTARROW: fl_draw_symbol("@-4>",  x, y, w, h, fc); break;
+    case FL_GLYPH_2RIGHTARROW: fl_draw_symbol("@-4>>", x, y, w, h, fc); break;
+  }
+}
 
 void Fl_Counter::draw() {
   Fl_Flags fl[5];
@@ -163,11 +183,11 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 static void revert(Fl_Style *s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_LIGHT2;
-  s->glyph = fl_glyph_arrow;
+  s->glyph = glyph;
 }
 
 Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.24 1999/11/21 06:23:24 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.25 1999/11/22 09:00:17 bill Exp $".
 //

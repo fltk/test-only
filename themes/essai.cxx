@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.13 1999/11/21 06:23:36 carl Exp $"
+// "$Id: essai.cxx,v 1.14 1999/11/22 09:00:27 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -99,16 +99,15 @@ void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
     img->draw_tiled(x, y, w, h, -w/2, -h/2);
 }
 
-extern "C" int fltk_theme(int, char**);
-
-int fltk_theme(int, char** argv) {
+extern "C"
+int fltk_theme(int, char**) {
   Fl_Style::revert();
 
   fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
   Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
-  Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
+  //Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
   Fl_Boxtype box3 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
   Fl_Widget::default_style->set_box(box1);
   Fl_Widget::default_style->set_glyph_box(box1);
@@ -147,5 +146,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.13 1999/11/21 06:23:36 carl Exp $".
+// End of "$Id: essai.cxx,v 1.14 1999/11/22 09:00:27 bill Exp $".
 //

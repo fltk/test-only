@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.33 1999/11/21 06:23:26 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.34 1999/11/22 09:00:20 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -199,24 +199,17 @@ void Fl_Scrollbar::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_box();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
 
-  Fl_Flags f1 = 0, f2 = 0;
-  if (!active_r()) {
-    f1 = f2 = FL_INACTIVE;
-  } else {
-    if (pushed_ == 1)
-      f1 |= FL_VALUE;
-    else if (highlight_ == 1 && highlight_color())
-      f1 |= FL_HIGHLIGHT;
-    if (pushed_ == 2)
-      f2 |= FL_VALUE;
-    else if (highlight_ == 2 && highlight_color())
-      f2 |= FL_HIGHLIGHT;
-  }
-
-  Fl_Flags f;
-  if (!active_r()) f = FL_INACTIVE;
-  else if (highlight_ == 5 && highlight_color()) f = FL_HIGHLIGHT;
-  else f = 0;
+  Fl_Flags f1 = 0;
+  if (pushed_ == 1)
+    f1 = FL_VALUE;
+  else if (highlight_ == 1)
+    f1 = FL_HIGHLIGHT;
+  Fl_Flags f2 = 0;
+  if (pushed_ == 2)
+    f2 = FL_VALUE;
+  else if (highlight_ == 2)
+    f2 = FL_HIGHLIGHT;
+  Fl_Flags f = (highlight_ == 5) ? FL_HIGHLIGHT : 0;
 
   if (horizontal()) {
     if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
@@ -255,5 +248,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.33 1999/11/21 06:23:26 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.34 1999/11/22 09:00:20 bill Exp $".
 //

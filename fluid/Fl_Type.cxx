@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.14 1999/08/23 16:43:07 vincent Exp $"
+// "$Id: Fl_Type.cxx,v 1.15 1999/11/22 09:00:14 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -113,10 +113,10 @@ int Widget_Browser::item_selected(void *l) const {return ((Fl_Type*)l)->new_sele
 void Widget_Browser::item_select(void *l,int v) {((Fl_Type*)l)->new_selected = v;}
 
 int Widget_Browser::item_height(void *l) const {
-  return ((Fl_Type *)l)->visible ? textsize()+2 : 0;
+  return ((Fl_Type *)l)->visible ? textsize()+leading() : 0;
 }
 
-int Widget_Browser::incr_height() const {return textsize() + 2;}
+int Widget_Browser::incr_height() const {return textsize() + leading();}
 
 static Fl_Type* pushedtitle;
 
@@ -133,17 +133,18 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
   x += 3 + l->level * 10;
   fl_color(item_selected(v) ? selection_text_color() : textcolor());
   if (l->is_parent()) {
+    int dy = (h-11)/2;
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
-	fl_loop(x,y+7,x+5,y+12,x+10,y+7);
+	fl_loop(x,y+dy+5,x+5,y+dy+10,x+10,y+dy+5);
       } else {
-	fl_loop(x+2,y+2,x+7,y+7,x+2,y+12);
+	fl_loop(x+2,y+dy,x+7,y+dy+5,x+2,y+dy+10);
       }
     } else {
       if (l->open_!=(l==pushedtitle)) {
-	fl_polygon(x,y+7,x+5,y+12,x+10,y+7);
+	fl_polygon(x,y+dy+5,x+5,y+dy+10,x+10,y+dy+5);
       } else {
-	fl_polygon(x+2,y+2,x+7,y+7,x+2,y+12);
+	fl_polygon(x+2,y+dy,x+7,y+dy+5,x+2,y+dy+10);
       }
     }
     x += 10;
@@ -152,12 +153,12 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
     const char* c = subclassname(l);
     if (!strncmp(c,"Fl_",3)) c += 3;
     fl_font(textfont(), textsize());
-    fl_draw(c, x, y+h*3/4);
+    fl_draw(c, x, y+h-fl_descent());
     x += int(fl_width(c)+fl_width('n'));
     c = l->name();
     if (c) {
       fl_font(textfont()->bold, textsize());
-      fl_draw(c, x, y+h*3/4);
+      fl_draw(c, x, y+h-fl_descent());
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
       *p++ = '"';
@@ -168,7 +169,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
       if (*c) {strcpy(p,"..."); p+=3;}
       *p++ = '"';
       *p = 0;
-      fl_draw(buf, x, y+h*3/4);
+      fl_draw(buf, x, y+h-fl_descent());
     }
   } else {
     const char* c = l->title();
@@ -181,7 +182,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
     *p = 0;
     fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
 	     ? textfont() : textfont()->bold, textsize());
-    fl_draw(buf, x, y+h*3/4);
+    fl_draw(buf, x, y+h-fl_descent());
   }
 }
 
@@ -678,5 +679,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.14 1999/08/23 16:43:07 vincent Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.15 1999/11/22 09:00:14 bill Exp $".
 //

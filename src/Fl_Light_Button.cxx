@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.18 1999/11/21 09:57:50 bill Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.19 1999/11/22 09:00:17 bill Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Light_Button.H>
 
+static void glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  box->draw(x,y,w,h, fc, f); // notice it passes foreground color!
+}
+
 void Fl_Light_Button::draw() {
 
   // Draw the outer box as though it was a button:
@@ -56,7 +62,7 @@ void Fl_Light_Button::draw() {
   int ww = hh/2+1;
   int xx = d*2;
   if (w()<ww+2*xx) xx = (w()-ww)/2;
-  glyph()(FL_GLYPH_LIGHT,x()+xx, y()+d, ww, hh,
+  glyph()(0, x()+xx, y()+d, ww, hh,
           off_color(), (f&FL_VALUE) ? on_color() : off_color(),
           active_r() ? 0 : FL_INACTIVE, glyph_box());
 
@@ -70,8 +76,8 @@ int Fl_Light_Button::handle(int event) {
 
 static void revert(Fl_Style* s) {
   s->box = FL_NORMAL_BOX;
+  s->glyph = glyph;
   s->glyph_box = FL_THIN_DOWN_BOX;
-  s->glyph = fl_glyph_light;
   s->selection_color = FL_YELLOW;
 }
 
@@ -86,5 +92,5 @@ Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.18 1999/11/21 09:57:50 bill Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.19 1999/11/22 09:00:17 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.13 1999/11/21 06:23:30 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.14 1999/11/22 09:00:23 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -74,9 +74,6 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
                 Fl_Flags f, Fl_Boxtype box)
 {
   switch (t) {
-    case FL_GLYPH_LIGHT:
-      thin_motif_down_box.draw(x, y, w, h, fc, f);
-      break;
     case FL_GLYPH_RADIO: {
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
@@ -154,15 +151,17 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
       }
       break;
     }
-    case FL_GLYPH_CHOICE: {
-      int H = h/3;
-      int Y = y + (h-H)/2;
-      box->draw(x,Y,w,H, bc, f);
-      break;
-    }
     default:
       box->draw(x,y,w,h, bc, f);
   }
+}
+
+static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
+		  Fl_Flags f, Fl_Boxtype box)
+{
+  int H = h/2;
+  int Y = y + (h-H)/2;
+  box->draw(x,Y,w,H, bc, f);
 }
 
 int fl_motif() {
@@ -254,7 +253,7 @@ int fl_motif() {
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->set_glyph(motif_glyph);
+    s->set_glyph(choice_glyph);
     s->set_glyph_box(FL_UP_BOX);
   }
 
@@ -270,5 +269,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.13 1999/11/21 06:23:30 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.14 1999/11/22 09:00:23 bill Exp $".
 //
