@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.32 2003/01/24 08:11:26 spitzak Exp $"
+# "$Id: Makefile,v 1.33 2004/08/04 20:49:17 laza2000 Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,7 +25,7 @@
 
 include makeinclude
 
-DIRS	=	src images OpenGL fluid test
+DIRS = src $(LOCALIMAGES) images OpenGL fluid test
 
 all: makeinclude
 	for dir in $(DIRS); do\
@@ -92,5 +92,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.32 2003/01/24 08:11:26 spitzak Exp $".
+# End of "$Id: Makefile,v 1.33 2004/08/04 20:49:17 laza2000 Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.16 2004/07/19 23:47:19 laza2000 Exp $"
+// "$Id: fl_png.cxx,v 1.17 2004/08/04 20:46:38 laza2000 Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,14 @@
 
 #if HAVE_LIBPNG
 
+# ifdef HAVE_LOCAL_PNG_H
+# include "libpng/png.h"
+#elif defined(HAVE_PNG_H)
 # include <png.h>
+#elif defined(HAVE_LIBPNG_PNG_H)
+# include <libpng/png.h>
+#endif
+
 # include <stdlib.h>
 
 static png_bytep cur_datas;
@@ -257,5 +264,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.16 2004/07/19 23:47:19 laza2000 Exp $"
+// End of "$Id: fl_png.cxx,v 1.17 2004/08/04 20:46:38 laza2000 Exp $"
 //

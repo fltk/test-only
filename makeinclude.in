@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.47 2004/03/10 07:41:45 spitzak Exp $"
+# "$Id: makeinclude.in,v 1.48 2004/08/04 20:48:03 laza2000 Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -72,13 +72,17 @@ DSOSUFFIX	= @DSOSUFFIX@
 DSOSYMLINK	= @DSOSYMLINK@
 DSOTARGET	= @DSOTARGET@
 
+# local image targets
+LOCALIMAGES	= @LOCAL_IMAGETARGETS@
+ZLIBINC		= @ZLIBINC@
+
 # libraries to link with:
 LDLIBS		= @LDFLAGS@ @LIBS@
 GLDLIBS		= @LDFLAGS@ @GLLIB@ @LIBS@
 LINKFLTK	= -L../lib @LINKFLTK@
 LINKFLTKGL	= -L../lib @LINKFLTKGL@ @LINKFLTK@
 LINKFLTKFORMS	= -L../lib -lfltk_forms @LINKFLTK@
-LINKFLTKIMG	= -L../lib -lfltk_images @LINKFLTK@ $(IMAGELIBS)
+LINKFLTKIMG	= -L../lib -lfltk_images @LINKFLTK@ @LOCAL_IMAGELIBS@ $(IMAGELIBS)
 LINKSHARED	= @DSOLINK@ @LINKSHARED@ $(IMAGELIBS)
 IMAGELIBS	= @IMAGELIBS@
 
@@ -141,5 +145,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.47 2004/03/10 07:41:45 spitzak Exp $".
+# End of "$Id: makeinclude.in,v 1.48 2004/08/04 20:48:03 laza2000 Exp $".
 #

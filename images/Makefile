@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.24 2004/08/04 18:13:50 laza2000 Exp $"
+# "$Id: Makefile,v 1.25 2004/08/04 20:46:38 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -55,7 +55,6 @@ all:		$(LIBTARGET) $(DSOTARGET)
 static:		../lib/$(LIBNAME)
 
 shared:		../lib/$(DSONAME)
-
 
 #
 # Clean old files...
@@ -132,5 +131,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.24 2004/08/04 18:13:50 laza2000 Exp $".
+# End of "$Id: Makefile,v 1.25 2004/08/04 20:46:38 laza2000 Exp $".
 #

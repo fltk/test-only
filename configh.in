@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.62 2004/07/31 10:11:25 laza2000 Exp $"
+ * "$Id: configh.in,v 1.63 2004/08/04 20:48:03 laza2000 Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -294,8 +294,16 @@
  * Which header file do we include for libpng?
  */
 
+#undef HAVE_LOCAL_PNG_H
 #undef HAVE_PNG_H
 #undef HAVE_LIBPNG_PNG_H
+
+
+/*
+ * Which header file do we include for libjpeg?
+ */
+
+#undef HAVE_LOCAL_JPEG_H
 
 
 /*
@@ -356,5 +364,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.62 2004/07/31 10:11:25 laza2000 Exp $".
+ * End of "$Id: configh.in,v 1.63 2004/08/04 20:48:03 laza2000 Exp $".
  */

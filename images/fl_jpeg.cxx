@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.17 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.18 2004/08/04 20:46:38 laza2000 Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,11 @@
 #if HAVE_LIBJPEG
 #include <stdio.h>
 extern "C" {
-#include <jpeglib.h>
+# ifdef HAVE_LOCAL_JPEG_H
+#  include "libjpeg/jpeglib.h"
+# else
+#  include <jpeglib.h>
+# endif
 }
 #include <setjmp.h>
 #include <string.h>
@@ -406,5 +410,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.17 2004/05/04 07:30:42 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.18 2004/08/04 20:46:38 laza2000 Exp $"
 //
