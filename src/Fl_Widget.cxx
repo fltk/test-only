@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.71 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.72 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -369,7 +369,7 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
   else if (box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
-    fl_clip(0, 0, w(), h());
+    fl_push_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
@@ -471,7 +471,7 @@ void Fl_Widget::draw_n_clip()
   if (!(box()->fills_rectangle() ||
 	image() && (flags()&FL_ALIGN_TILED) &&
 	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
-    fl_clip(0, 0, w(), h());
+    fl_push_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
@@ -480,5 +480,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.71 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.72 2001/02/20 06:59:50 spitzak Exp $".
 //

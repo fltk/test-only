@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.33 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -50,38 +50,34 @@ void Fl_Dial::draw() {
     fl_color(fillcolor);
     fl_pie(X, Y, W-1, H-1, 270-angle, 270-a1);
     if (box() == FL_OVAL_BOX) {
-      fl_color(linecolor);
-      fl_arc(X, Y, W, H, 0, 360);
+      fl_ellipse(X, Y, W-1, H-1);
+      fl_color(linecolor); fl_stroke();
     }
   } else {
     if (!(damage()&FL_DAMAGE_ALL)) {
-      fl_color(color());
-      fl_pie(X+1, Y+1, W-2, H-2, 0, 360);
+      fl_ellipse(X+1, Y+1, W-2, H-2);
+      fl_color(color()); fl_fill();
     }
     fl_push_matrix();
     fl_translate(X+W/2-.5, Y+H/2-.5);
     fl_scale(W-1, H-1);
     fl_rotate(45-angle);
-    fl_color(fillcolor);
     if (type()) { // FL_LINE_DIAL
-      fl_begin_polygon();
       fl_vertex(0.0,   0.0);
       fl_vertex(-0.04, 0.0);
       fl_vertex(-0.25, 0.25);
       fl_vertex(0.0,   0.04);
-      fl_end_polygon();
-      fl_color(linecolor);
-      fl_end_loop();
     } else {
-      fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-      fl_color(linecolor); fl_end_loop();
+      fl_circle(-0.20, 0.20, 0.07);
     }
+    fl_color(fillcolor); fl_fill_stroke(linecolor);
     fl_pop_matrix();
   }
   if (focused()) {
+    fl_ellipse(X+2, Y+2, W-5, H-5);
     fl_color(linecolor);
     fl_line_style(FL_DASH);
-    fl_arc(X+2, Y+2, W-4, H-4, 0, 360);
+    fl_stroke();
     fl_line_style(0);
   }
 }
@@ -135,5 +131,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.33 2001/02/20 06:59:49 spitzak Exp $".
 //

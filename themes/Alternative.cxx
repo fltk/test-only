@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.31 2001/01/02 04:50:37 clip Exp $"
+// "$Id: Alternative.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -77,11 +77,11 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
       fl_rectf(x+d/2, y, w-(d&-2), h);
   } else {
     if (w < h) {
-      if (which != UPPER_LEFT) fl_yxline(x+w-1, y+d/2, y+h-d/2);
-      if (which != LOWER_RIGHT) fl_yxline(x, y+d/2, y+h-d/2);
+      if (which != UPPER_LEFT) fl_line(x+w-1, y+d/2, x+w-1, y+h-d/2);
+      if (which != LOWER_RIGHT) fl_line(x, y+d/2, x, y+h-d/2);
     } else if (w > h) {
-      if (which != UPPER_LEFT) fl_xyline(x+d/2, y+h-1, x+w-d/2);
-      if (which != LOWER_RIGHT) fl_xyline(x+d/2, y, x+w-d/2);
+      if (which != UPPER_LEFT) fl_line(x+d/2, y+h-1, x+w-d/2, y+h-1);
+      if (which != LOWER_RIGHT) fl_line(x+d/2, y, x+w-d/2, y);
     }
   }
 }
@@ -112,21 +112,23 @@ alt_glyph(const Fl_Widget* widget, int t,
         /*bc = fl_inactive(bc); fc = fl_inactive(fc);*/
         light = fl_inactive(light); dark = fl_inactive(dark);
       }
-      fl_color((f&FL_VALUE) ? fc : bc); fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
-
-      fl_color(dark);
-      fl_line(x,   y1, x1, y,   x+w-1, y1);
-      fl_line(x+1, y1, x1, y+1, x+w-2, y1);
-      fl_color(light);
-      fl_line(x+2, y1, x1, y+2, x+w-3, y1);
-      fl_line(x+3, y1, x1, y+3, x+w-4, y1);
-
-      fl_color(light);
-      fl_line(x,   y1, x1, y+h-1, x+w-1, y1);
-      fl_line(x+1, y1, x1, y+h-2, x+w-2, y1);
-      fl_color(dark);
-      fl_line(x+2, y1, x1, y+h-3, x+w-3, y1);
-      fl_line(x+3, y1, x1, y+h-4, x+w-4, y1);
+      fl_vertex(x+3, y1);
+      fl_vertex(x1, y+3);
+      fl_vertex(x+w-4, y1);
+      fl_vertex(x1, y+h-4);
+      fl_color((f&FL_VALUE) ? fc : bc);
+      fl_fill();
+      for (int n = 0; n < 4; n++) {
+	fl_color(n < 2 ? dark : light);
+	fl_vertex(x+n, y1);
+	fl_vertex(x1, y+n);
+	fl_vertex(x+w-n-1, y1);
+	fl_stroke();
+	fl_vertex(x+3-n, y1);
+	fl_vertex(x1, y+h-4+n);
+	fl_vertex(x+w-4+n, y1);
+	fl_stroke();
+      }
       break;
     }
     case FL_GLYPH_ROUND: {
@@ -207,28 +209,44 @@ alt_glyph(const Fl_Widget* widget, int t,
 
       bc = widget->get_box_color(f);
       if (t == FL_GLYPH_RIGHT) {
-        fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
-        fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
+        fl_color(bc);
+	fl_vertex(x,y);
+	fl_vertex(x+w-1, y+h/2);
+	fl_vertex(x, y+h-1);
+	fl_fill();
+        fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1); fl_line(x+1,y+1, x+w-2,y+h/2);
         fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
-        fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
+        fl_color(l1); fl_line(x,y+h-1, x,y); fl_line(x,y, x+w-1,y+h/2);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
       } else if (t == FL_GLYPH_LEFT) {
-        fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
-        fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2, x+1,y+h/2);
+        fl_color(bc);
+	fl_vertex(x+w-1,y);
+	fl_vertex(x+w-1,y+h-1);
+	fl_vertex(x,y+h/2);
+	fl_fill();
+        fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2); fl_line(x+w-2,y+h-2, x+1,y+h/2);
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
-        fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1); fl_line(x+w-1,y+h-1, x,y+h/2);
         fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
       } else if (t == FL_GLYPH_DOWN) {
-        fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
-        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1, x+w/2,y+h-2);
+        fl_color(bc);
+	fl_vertex(x,y);
+	fl_vertex(x+w/2,y+h-1);
+	fl_vertex(x+w-1,y);
+	fl_fill();
+        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1); fl_line(x+1,y+1, x+w/2,y+h-2);
         fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
-        fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
+        fl_color(l1); fl_line(x+w-1,y, x,y); fl_line(x,y, x+w/2,y+h-1);
         fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
       } else { // UP
-        fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
-        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2, x+w/2,y+1);
+        fl_color(bc);
+	fl_vertex(x,y+h-1);
+	fl_vertex(x+w-1,y+h-1);
+	fl_vertex(x+w/2,y);
+	fl_fill();
+        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2); fl_line(x+w-2,y+h-2, x+w/2,y+1);
         fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
-        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1); fl_line(x+w-1,y+h-1, x+w/2,y);
         fl_color(l1); fl_line(x,y+h-1, x+w/2,y);
       }
       break;
@@ -282,11 +300,15 @@ static void return_glyph(const Fl_Widget*, int,
   int y0 = y+h/2;
   fl_color(fl_inactive(FL_DARK3, f));
   fl_line(x0, y0, x1, y0+d);
-  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
-  fl_yxline(x1, y0-t, y0-d);
+  fl_line(x1, y0+d, x1, y0+t);
+  fl_line(x1, y0+t, x1+d+2*t, y0+t);
+  fl_line(x1+d+2*t, y0+t, x1+d+2*t, y0-d);
+  fl_line(x1, y0-t, x1, y0-d);
   fl_color(fl_inactive(FL_LIGHT2, f));
   fl_line(x0, y0, x1, y0-d);
-  fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
+  fl_line(x1+1, y0-t, x1+d, y0-t);
+  fl_line(x1+d, y0-t, x1+d, y0-d);
+  fl_line(x1+d, y0-d, x1+d+2*t, y0-d);
 }
 
 extern "C"
@@ -340,5 +362,5 @@ int fltk_theme() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.31 2001/01/02 04:50:37 clip Exp $".
+// End of "$Id: Alternative.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $".
 //

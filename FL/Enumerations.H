@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.51 2001/01/23 18:47:53 spitzak Exp $"
+// "$Id: Enumerations.H,v 1.52 2001/02/20 06:59:48 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@
 typedef unsigned char uchar;
 typedef unsigned long ulong;
 
-enum Fl_Event {	// events
+enum {	// events
   FL_NO_EVENT		= 0,
   FL_PUSH		= 1,
   FL_RELEASE		= 2,
@@ -80,7 +80,7 @@ enum Fl_Event {	// events
   FL_KEYBOARD		= FL_KEY
 };
 
-enum Fl_When { // Fl_Widget::when():
+enum { // Fl_Widget::when():
   FL_WHEN_NEVER		= 0,
   FL_WHEN_CHANGED	= 1,
   FL_WHEN_RELEASE	= 4,
@@ -179,7 +179,7 @@ enum { // values for "when" passed to Fl::add_fd()
   FL_EXCEPT = 8
 };
 
-enum Fl_Mode { // visual types and Fl_Gl_Window::mode() (values match Glut)
+enum { // Values for Fl::visual(), Fl::gl_visual(), Fl_Gl_Window::mode()
   FL_RGB	= 0,
   FL_INDEX	= 1,
   FL_SINGLE	= 0,
@@ -189,12 +189,12 @@ enum Fl_Mode { // visual types and Fl_Gl_Window::mode() (values match Glut)
   FL_DEPTH	= 16,
   FL_STENCIL	= 32,
   FL_RGB8	= 64,
-  FL_MULTISAMPLE= 128
+  FL_MULTISAMPLE= 128,
+  FL_STEREO	= 256
 };
 
 // damage masks
-
-enum Fl_Damage {
+enum {
 // Your widget may use the first 5 for any purpose, these are only
 // suggested meanings:
   FL_DAMAGE_CHILD       = 0x01,
@@ -211,5 +211,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.51 2001/01/23 18:47:53 spitzak Exp $".
+// End of "$Id: Enumerations.H,v 1.52 2001/02/20 06:59:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $"
+// "$Id: menubar.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@ void test_cb(Fl_Widget* w, void*) {
   if (!m)
     printf("NULL\n");
   else if (m->shortcut())
-    printf("%s - %s\n", m->label(), fl_shortcut_label(m->shortcut()));
+    printf("%s - %s\n", m->label(), Fl::key_name(m->shortcut()));
   else
     printf("%s\n", m->label());
   if (!strcmp("item 77", m->label())) {
@@ -233,5 +233,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: menubar.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $".
 //

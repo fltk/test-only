@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.45 2001/01/28 07:07:49 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.46 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -220,7 +220,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     yscroll_ = -(H-height)/2;
   }
 
-  fl_clip(X, Y, W, H);
+  fl_push_clip(X, Y, W, H);
   Fl_Color textcolor = text_color();
   if (!active_r()) textcolor = fl_inactive(text_color());
 
@@ -995,5 +995,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.45 2001/01/28 07:07:49 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.46 2001/02/20 06:59:49 spitzak Exp $".
 //

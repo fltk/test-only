@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $"
+// "$Id: fullscreen.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -129,7 +129,7 @@ void sides_cb(Fl_Widget *o, void *p) {
 void double_cb(Fl_Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   int d = ((Fl_Button *)o)->value();
-  sw->mode(d ? Fl_Mode(FL_DOUBLE|FL_RGB) : FL_RGB);
+  sw->mode(d ? FL_DOUBLE|FL_RGB : FL_RGB);
 }
 #else
 void double_cb(Fl_Widget *, void *) {}
@@ -226,5 +226,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $".
+// End of "$Id: fullscreen.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $".
 //

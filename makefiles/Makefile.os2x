@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile.os2x,v 1.9 2000/08/22 16:38:11 spitzak Exp $"
+# "$Id: Makefile.os2x,v 1.10 2001/02/20 06:59:49 spitzak Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -29,6 +29,9 @@ all: makeinclude config.h
 	echo "=== making src ==="
 	touch src/makedepend
 	cd src & $(MAKE)
+	echo "=== making images ==="
+	touch images/makedepend
+	cd images & $(MAKE)
 	echo "=== making fluid ==="
 	touch fluid/makedepend
 	cd fluid & $(MAKE)
@@ -48,6 +51,9 @@ depend:
 	echo "=== making src dependencies ==="
 	touch src/makedepend
 	cd src & $(MAKE) depend
+	echo "=== making images dependencies ==="
+	touch images/makedepend
+	cd images & $(MAKE) depend
 	echo "=== making fluid dependencies ==="
 	touch fluid/makedepend
 	cd fluid & $(MAKE) depend
@@ -60,6 +66,9 @@ clean:
 	echo "=== cleaning src ==="
 	touch src/makedepend
 	cd src & $(MAKE) clean
+	echo "=== cleaning images ==="
+	touch images/makedepend
+	cd images & $(MAKE) clean
 	echo "=== cleaning fluid ==="
 	touch fluid/makedepend
 	cd fluid & $(MAKE) clean
@@ -74,5 +83,5 @@ makeinclude: makefiles/makeinclude.os2x
 	cp $< $@
 
 #
-# End of "$Id: Makefile.os2x,v 1.9 2000/08/22 16:38:11 spitzak Exp $".
+# End of "$Id: Makefile.os2x,v 1.10 2001/02/20 06:59:49 spitzak Exp $".
 #

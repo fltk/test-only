@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.17 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.18 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -986,11 +986,10 @@ void Board::draw() {
       fl_line(x1,y1,x2,y2);
       fl_push_matrix();
       fl_mult_matrix(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
-      fl_begin_polygon();
       fl_vertex(0,0);
       fl_vertex(-.3, .1);
       fl_vertex(-.3, -.1);
-      fl_end_polygon();
+      fl_fill();
       fl_pop_matrix();
     }
     int num = 1;
@@ -1360,5 +1359,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.17 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.18 2001/02/20 06:59:50 spitzak Exp $".
 //

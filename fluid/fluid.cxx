@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.44 2001/02/01 17:20:54 easysw Exp $"
+// "$Id: fluid.cxx,v 1.45 2001/02/20 06:59:49 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -488,7 +488,7 @@ int main(int argc,char **argv) {
   make_main_window();
   if (c) set_filename(c);
   if (!compile_only) {
-    Fl::visual((Fl_Mode)(FL_DOUBLE|FL_INDEX));
+    Fl::visual(FL_DOUBLE|FL_INDEX);
     Fl_FileIcon::load_system_icons();
     main_window->callback(exit_cb);
     main_window->show(argc,argv);
@@ -510,5 +510,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.44 2001/02/01 17:20:54 easysw Exp $".
+// End of "$Id: fluid.cxx,v 1.45 2001/02/20 06:59:49 spitzak Exp $".
 //

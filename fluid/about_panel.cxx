@@ -25,6 +25,7 @@ Fl_Window* make_about_panel(const char *copyright) {
     o->selection_color((Fl_Color)47);
     ((Fl_Window*)(o))->hotspot(o);
     { Fl_Group* o = display_group = new Fl_Group(5, 5, 295, 245);
+      o->box(FL_NO_BOX);
       { Fl_Group* o = new Fl_Group(55, 25, 60, 150);
         o->box(FL_UP_BOX);
         o->color((Fl_Color)14);
@@ -110,8 +111,10 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->resizable(o);
         o->end();
       }
-      { Fl_Button* o = new Fl_Button(175, 159, 95, 41, "\251""1998-1999\nClick here for more information");
+      { Fl_Button* o = new Fl_Button(175, 159, 95, 41, "\251""1998-2001\nClick here for more information");
         o->box(FL_BORDER_BOX);
+        o->color((Fl_Color)136);
+        o->label_color((Fl_Color)6);
         o->label_size(10);
         o->callback((Fl_Callback*)cb_1998);
         o->align(FL_ALIGN_WRAP);

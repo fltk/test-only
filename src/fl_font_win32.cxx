@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.29 2001/02/18 07:17:09 robertk Exp $"
+// "$Id: fl_font_win32.cxx,v 1.30 2001/02/20 06:59:50 spitzak Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -114,30 +114,35 @@ Fl_Font_ fl_fonts[] = {
 HFONT fl_xfont;
 
 // Static variable for the default encoding:
-const char *fl_encoding = (const char*)DEFAULT_CHARSET;
+const char *fl_encoding_ = (const char*)DEFAULT_CHARSET;
 
 void fl_font(Fl_Font font, unsigned size) {
-  fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
-}
-
-void fl_font(Fl_Font font, unsigned size, const char* encoding) {
   if (font == fl_font_ && size == fl_size_ &&
-      fl_fontsize->encoding == (int)encoding) return;
+      fl_fontsize->encoding == (int)fl_encoding_) return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
   for (f = font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size &&
-	f->encoding == (int)encoding) break;
+	f->encoding == (int)fl_encoding_) break;
   if (!f) {
-    f = new Fl_FontSize(font->name_, size, (int)encoding);
+    f = new Fl_FontSize(font->name_, size, (int)fl_encoding_);
     f->next = font->first;
     ((Fl_Font_*)font)->first = f;
   }
   if (f != fl_fontsize) {
     fl_fontsize = f;
     fl_xfont = f->fid;
+  }
+}
+
+// Change the encoding in use now. This runs the font search again with
+// the new encoding.
+void fl_encoding(const char* f) {
+  if (f != fl_encoding_) {
+    fl_encoding_ = f;
+    if (fl_font_) fl_font(fl_font_, fl_size_);
   }
 }
 
@@ -176,5 +181,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.29 2001/02/18 07:17:09 robertk Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.30 2001/02/20 06:59:50 spitzak Exp $".
 //

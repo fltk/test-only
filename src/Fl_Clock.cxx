@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.23 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.24 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,10 +44,8 @@ static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
 {
   fl_push_matrix();
   fl_rotate(ang);
-  fl_color(fill); fl_begin_polygon();
-  int i; for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]); fl_end_polygon();
-  fl_color(line); fl_begin_loop();
-  for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]); fl_end_loop();
+  int i; for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]);
+  fl_color(fill); fl_fill_stroke(line);
   fl_pop_matrix();
 }
 
@@ -60,12 +58,11 @@ void Fl_Clock_Output::drawhands(Fl_Color fill, Fl_Color line) {
 static void rect(double x, double y, double w, double h) {
   double r = x+w;
   double t = y+h;
-  fl_begin_polygon();
   fl_vertex(x, y);
   fl_vertex(r, y);
   fl_vertex(r, t);
   fl_vertex(x, t);
-  fl_end_polygon();
+  fl_fill();
 }
 
 void Fl_Clock_Output::draw(int x, int y, int w, int h) {
@@ -73,10 +70,8 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   fl_translate(x+w/2.0-.5, y+h/2.0-.5);
   fl_scale((w-1)/28.0, (h-1)/28.0);
   if (type() == FL_ROUND_CLOCK) {
-    fl_color(color());
-    fl_begin_polygon(); fl_circle(0,0,14); fl_end_polygon();
-    fl_color(FL_NO_COLOR);
-    fl_begin_loop(); fl_circle(0,0,14); fl_end_loop();
+    fl_circle(0,0,14);
+    fl_color(color()); fl_fill_stroke(FL_BLACK);
   }
   // draw the shadows:
   fl_push_matrix();
@@ -177,5 +172,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.23 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.24 2001/02/20 06:59:49 spitzak Exp $".
 //

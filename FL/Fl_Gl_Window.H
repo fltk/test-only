@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.14 2000/06/10 04:10:18 carl Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.15 2001/02/20 06:59:48 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,11 @@
 
 #include "Fl_Window.H"
 
+enum { // extra values for mode():
+  FL_NO_AUTO_SWAP = 0x4000,
+  FL_NO_ERASE_OVERLAY = 0x8000
+};
+
 class FL_GL_API Fl_Gl_Choice; // structure to hold result of glXChooseVisual
 
 class FL_GL_API Fl_Gl_Window : public Fl_Window {
@@ -38,6 +43,7 @@ class FL_GL_API Fl_Gl_Window : public Fl_Window {
   char valid_;
   char damage1_; // damage() of back buffer
   void init();
+  void draw_swap();
 
   void *overlay;
   void make_overlay();
@@ -64,7 +70,7 @@ public:
   static int can_do(int i) {return can_do(i, 0);}
   static int can_do(const int *i) {return can_do(0, i);}
   int can_do() {return can_do(mode_, alist);}
-  Fl_Mode mode() const {return (Fl_Mode)mode_;}
+  int mode() const {return mode_;}
   int mode(int a) {return mode(a, 0);}
   int mode(const int *a) {return mode(0, a);}
 
@@ -75,6 +81,7 @@ public:
   void make_current();
   void make_overlay_current();
   void swap_buffers();
+  void erase_overlay();
   void ortho();
 
   ~Fl_Gl_Window();
@@ -88,5 +95,5 @@ FL_GL_API int fl_gl_visual(int, int *alist=0);
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.14 2000/06/10 04:10:18 carl Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.15 2001/02/20 06:59:48 spitzak Exp $".
 //

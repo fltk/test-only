@@ -33,12 +33,11 @@ void test_box::draw() {
     (int)(sliders[3]->value()),
     buf);
   fl_rect(10,10,w()-20,h()-20);
-  fl_begin_line();
   fl_vertex(35, 35);
   fl_vertex(w()-35, h()-35);
   fl_vertex(w()-40, 35);
   fl_vertex(35, h()/2);
-  fl_end_line();
+  fl_stroke();
   // you must reset the line type when done:
   fl_line_style(FL_SOLID);
 }

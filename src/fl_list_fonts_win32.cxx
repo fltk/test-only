@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.7 2000/07/21 00:31:52 clip Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ static Fl_Font_* make_a_font(char attrib, const char* name) {
   return newfont;
 }
 
-static Fl_Font* array = 0;
+static Fl_Font* font_array = 0;
 static int num_fonts = 0;
 static int array_size = 0;
 
@@ -105,9 +105,9 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
 
   if (num_fonts >= array_size) {
     array_size = 2*array_size+128;
-    array = (Fl_Font*)realloc(array, array_size*sizeof(Fl_Font));
+    font_array = (Fl_Font*)realloc(font_array, array_size*sizeof(Fl_Font));
   }
-  array[num_fonts++] = base;
+  font_array[num_fonts++] = base;
 
   return 1;
 }
@@ -122,34 +122,35 @@ static int sort_function(const void *aa, const void *bb) {
 }
 
 int fl_list_fonts(Fl_Font*& arrayp) {
-  if (array) {arrayp = array; return num_fonts;}
+  if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = GetDC(0);
   EnumFontFamilies(dc, NULL, (FONTENUMPROC)enumcb, 0);
   ReleaseDC(0, dc);
-  qsort(array, num_fonts, sizeof(*array), sort_function);
-  arrayp = array;
-
+  qsort(font_array, num_fonts, sizeof(Fl_Font), sort_function);
+  arrayp = font_array;
   return num_fonts;
 }
 
 // deallocate Win32 fonts
 void fl_font_rid() {
-  Fl_FontSize* fs;
-  int i;
-  for (i = 0; i < 16; i++) {
-    while ( (fs = fl_fonts[i].first) ) {
-      fl_fonts[i].first = fs->next;
+  for (int i = 0; i < 16; i++) {
+    for (Fl_FontSize* fs = fl_fonts[i].first; fs;) {
+      Fl_FontSize* next = fs->next;
       delete fs;
+      fs = next;
     }
+    fl_fonts[i].first = 0;
   }
   for (int j = 0; j < num_fonts; j++) {
-    while ( (fs = array[j]->first) ) {
-      ((Fl_Font_*)(array[j]))->first = fs->next;
+    for (Fl_FontSize* fs = font_array[j].first; fs;) {
+      Fl_FontSize* next = fs->next;
       delete fs;
+      fs = next;
     }
+    font_array[j].first = 0;
   }
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.7 2000/07/21 00:31:52 clip Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
 //

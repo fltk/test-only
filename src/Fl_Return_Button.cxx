@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.28 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.29 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,13 +39,22 @@ void fl_glyph_return(const Fl_Widget*, int,
   int y0 = y+h/2;
 #if 1
   fl_color(FL_LIGHT3);
-  fl_line(x0, y0, x1, y0+d);
-  fl_yxline(x1, y0+d, y0+t); fl_xyline(x1, y0+t, x1+d+2*t, y0-d);
-  fl_yxline(x1, y0-t, y0-d);
+  fl_newpath();
+  fl_vertex(x0, y0);
+  fl_vertex(x1, y0+d);
+  fl_vertex(x1, y0+t);
+  fl_vertex(x1+d+2*t, y0+t);
+  fl_vertex(x1+d+2*t, y0-d);
+  fl_stroke();
+  fl_line(x1, y0-t, x1, y0-d);
   fl_color(fl_gray_ramp(0));
   fl_line(x0, y0, x1, y0-d);
-  fl_color(FL_DARK3);
-  fl_xyline(x1+1, y0-t, x1+d); fl_yxline(x1+d, y0-t, y0-d, x1+d+2*t);
+  fl_newpath();
+  fl_vertex(x1+1, y0-t);
+  fl_vertex(x1+d, y0-t);
+  fl_vertex(x1+d, y0-d);
+  fl_vertex(x1+d+2*t, y0-d);
+  fl_color(FL_DARK3); fl_stroke();
 #else // solid arrow written by Carl
   fl_color(fl_inactive(fc, f));
   fl_polygon(x0,y0, x1,y0+d, x1, y0-d);
@@ -78,5 +87,5 @@ Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.28 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.29 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.8 2001/01/23 21:28:27 clip Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.9 2001/02/20 06:59:49 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -62,6 +62,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
     if ((mode & FL_ALPHA) && !pfd.cAlphaBits) continue;
     if ((mode & FL_ACCUM) && !pfd.cAccumBits) continue;
     if ((!(mode & FL_DOUBLE)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
+    if ((!(mode & FL_STEREO)) != (!(pfd.dwFlags & PFD_STEREO))) continue;
     if ((mode & FL_DEPTH) && !pfd.cDepthBits) continue;
     if ((mode & FL_STENCIL) && !pfd.cStencilBits) continue;
     // see if better than the one we have already:
@@ -112,6 +113,9 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
     }
     if (mode & FL_STENCIL) {
       list[n++] = GLX_STENCIL_SIZE; list[n++] = 1;
+    }
+    if (mode & FL_STEREO) {
+      list[n++] = GLX_STEREO;
     }
 #if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
     if (mode & FL_MULTISAMPLE) {
@@ -193,17 +197,19 @@ void fl_set_gl_context(const Fl_Window* w, GLXContext c) {
 }
 
 void fl_no_gl_context() {
+  if (cached_context) {
+#ifdef WIN32
+    wglMakeCurrent(0, 0);
+#else
+    glXMakeCurrent(fl_display, 0, 0);
+#endif
+  }
   cached_context = 0;
   cached_window = 0;
-#ifdef WIN32
-  wglMakeCurrent(0, 0);
-#else
-  glXMakeCurrent(fl_display, 0, 0);
-#endif
 }
 
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.8 2001/01/23 21:28:27 clip Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.9 2001/02/20 06:59:49 spitzak Exp $".
 //

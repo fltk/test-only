@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.72 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_options.cxx,v 1.73 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,14 +37,14 @@
 #include <FL/Fl_Widget.H>
 #include <FL/fl_theme.H>
 #include <config.h>
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
 #  include <windows.h>
 #  include <io.h>
 extern "C" int access(const char *, int);
 #  define F_OK 0
 #else
 #  include <unistd.h>
-#endif /* WIN32 || __EMX__ */
+#endif /* WIN32 */
 
 #ifndef R_OK
 #define R_OK 4
@@ -127,7 +127,7 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   long l = strtoul(p, &q, 0);
   if (!*q) return fl_fonts+l;
 
-  return fl_font(p);
+  return fl_find_font(p);
 }
 
 static int load_scheme(const char *s) {
@@ -386,7 +386,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.72 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.73 2001/02/20 06:59:50 spitzak Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.20 2000/12/12 09:02:53 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.21 2001/02/20 06:59:49 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -142,6 +142,11 @@ void Fl_Gl_Window::swap_buffers() {
 #endif
 }
 
+void Fl_Gl_Window::draw_swap() {
+  draw();
+  if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
+}
+
 #if HAVE_GL_OVERLAY && defined(WIN32)
 uchar fl_overlay; // changes how fl_color() works
 int fl_overlay_depth = 0;
@@ -164,7 +169,7 @@ void Fl_Gl_Window::flush() {
     if (fl_overlay_depth)
       wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
     glDisable(GL_SCISSOR_TEST);
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (!(mode_ & FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
     fl_overlay = 1;
     draw_overlay();
     fl_overlay = 0;
@@ -194,14 +199,17 @@ void Fl_Gl_Window::flush() {
 
       // don't draw if only overlay damage or expose events:
       if ((damage()&~(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE)) || !save_valid)
-	draw();
-      swap_buffers();
+	draw_swap();
+      else
+	swap_buffers();
 
     } else if (SWAP_TYPE == COPY) {
 
       // don't draw if only the overlay is damaged:
-      if (damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
-      swap_buffers();
+      if (damage() != FL_DAMAGE_OVERLAY || !save_valid)
+	draw_swap();
+      else
+	swap_buffers();
 
     } else { // SWAP_TYPE == UNDEFINED
 
@@ -240,8 +248,7 @@ void Fl_Gl_Window::flush() {
       } else {
 
 	damage1_ = damage();
-	set_damage(~0); draw();
-	swap_buffers();
+	set_damage(~0); draw_swap();
 
       }
 
@@ -321,5 +328,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.20 2000/12/12 09:02:53 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.21 2001/02/20 06:59:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.60 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.61 2001/02/20 06:59:48 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -109,7 +109,7 @@ public:
   void	user_data(void* v)	{user_data_ = v;}
   long	argument() const	{return (long)user_data_;}
   void	argument(long v)	{user_data_ = (void*)v;}
-  Fl_When when() const		{return (Fl_When)when_;}
+  uchar when() const		{return when_;}
   void	when(uchar i)		{when_ = i;}
 
   static void default_callback(Fl_Widget*, void*);
@@ -310,5 +310,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.60 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.61 2001/02/20 06:59:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.20 2000/05/30 07:42:19 bill Exp $"
+// "$Id: fonts.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -46,8 +46,8 @@ void FontDisplay::draw() {
   draw_box();
   int ix = x(), iy = y(), iw = w(), ih = h();
   box()->inset(ix, iy, iw, ih);
-  fl_clip(ix, iy, iw, ih);
-  fl_font(font, size, encoding);
+  fl_push_clip(ix, iy, iw, ih);
+  fl_font(font, size); fl_encoding(encoding);
   fl_color(FL_BLACK);
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
@@ -91,12 +91,12 @@ void font_cb(Fl_Widget *, long) {
   encobj->clear();
   const char** encodings; int ne = f->encodings(encodings);
   if (!ne) {
-    textobj->encoding = fl_encoding;
+    textobj->encoding = fl_encoding();
   } else {
     pickedencoding = 0;
     for (int i = 0; i < ne; i++) {
       encobj->add(encodings[i]);
-      if (!strcmp(encodings[i], fl_encoding)) pickedencoding = i;
+      if (!strcmp(encodings[i], fl_encoding())) pickedencoding = i;
     }
     textobj->encoding = encodings[pickedencoding];
 // CET - FIXME - new browser code has value starting from 0!
@@ -198,5 +198,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.20 2000/05/30 07:42:19 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
 //

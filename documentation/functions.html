@@ -249,6 +249,26 @@ the environment variable $DISPLAY to the passed string, so this only
 works before you show() the first window or otherwise open the display,
 and does nothing useful under WIN32. 
 
+<h3><A name=event>int Fl::event()</a></h3>
+
+Returns the most recent event handled, such as <tt>FL_PUSH</tt> or
+<tt>FL_KEYBOARD</tt>. This is useful so callbacks can find out why
+they were called.
+
+<h3><A name=event_x>int Fl::event_x()</a>
+<BR><A name=event_y>int Fl::event_y()</A></h3>
+
+Returns the mouse position of the event relative to the <tt>Fl_Window</tt>
+it was passed to. 
+
+<h3><A name=event_x_root>int Fl::event_x_root()
+<BR><A name=event_y_root>int Fl::event_y_root()</A></A></h3>
+
+Returns the mouse position on the screen of the event.  To find the 
+absolute position of an <tt>Fl_Window</tt> on the screen, use the 
+difference between <tt>event_x_root(),event_y_root()</tt> and <tt>
+event_x(),event_y()</tt>. 
+
 <h3><A name=event_button>int Fl::event_button()</A></h3>
 
 Returns which mouse button was pressed.  This returns garbage if the 
@@ -419,20 +439,6 @@ The next call to Fl::compose() will start out in an initial state.  In
 particular it will not set "del" to non-zero.  This call is very fast
 so it is ok to call it many times and in many places.
 
-<h3><A name=event_x>int Fl::event_x()
-<BR><A name=event_y>int Fl::event_y()</A></A></h3>
-
-Returns the mouse position of the event relative to the <tt>Fl_Window</tt>
-it was passed to. 
-
-<h3><A name=event_x_root>int Fl::event_x_root()
-<BR><A name=event_y_root>int Fl::event_y_root()</A></A></h3>
-
-Returns the mouse position on the screen of the event.  To find the 
-absolute position of an <tt>Fl_Window</tt> on the screen, use the 
-difference between <tt>event_x_root(),event_y_root()</tt> and <tt>
-event_x(),event_y()</tt>. 
-
 <h3><A name=first_window>Fl_Window *Fl::first_window()</A></h3>
 
 Returns the first visible() top-level window. This is the
@@ -486,20 +492,6 @@ Fl::event_y_root()</tt> if possible, but this is necessary if you are
 not sure if a mouse event has been processed recently (such as to 
 position your first window).  If the display is not open, this will 
 open it. 
-
-<h3><A name=gl_visual>int Fl::gl_visual(int)</A></h3>
-
-This does the same thing as <A
-href=#visual><tt>Fl::visual(int)</tt></A> but also requires OpenGL
-drawing to work.  This <I>must</I> be done if you want to draw in
-normal windows with OpenGL with <A href=opengl.html#gl_start>
-<tt>gl_start()</tt></A> and <tt>gl_end()</tt>.  It may be useful to
-call this so your X windows use the same visual as an <A
-href=Fl_Gl_Window.html#Fl_Gl_Window> <tt>Fl_Gl_Window</tt></A>, which
-on some servers will reduce colormap flashing.
-
-<p>See <A href=Fl_Gl_Window.html#Fl_Gl_Window.mode><tt>Fl_Gl_Window</tt></A>
-for a list of additional values for the argument.</p>
 
 <h3><A name=grab>void grab(int (*)(int, void*), void*);
 <BR>void release();
@@ -670,39 +662,44 @@ points at a static buffer that is overwritten with each call.</i>
 
 <h3><A name=visual>int Fl::visual(int)</A></h3>
 
-Selects a visual so that your graphics are drawn correctly.  This is
-only allowed before you call show() on any windows.  This does nothing
-if the default visual satisfies the capabilities, or if no visual
-satisfies the capabilities, or on systems that don't have such
-brain-dead notions.
+This call may be useful on multi-visual X servers to change from the
+default to a more useful color mode. You must call this before you
+show() any windows. The integer argument is an 'or' of the following:
 
-<p>Only the following combinations do anything useful:</p>
+<ul>
 
-<UL>
-<LI><tt>Fl::visual(FL_RGB)</tt>
-<BR>Full/true color (if there are several depths FLTK chooses  the 
-largest).  Do this if you use <A href=#fl_draw_image><tt>fl_draw_image</tt>
-</A> for much better (non-dithered)  output. 
-<BR>&nbsp;</LI>
-<LI><tt>Fl::visual(FL_RGB8)</tt>
-<BR>Full color with at least 24 bits of color. <tt>FL_RGB</tt> will 
-always  pick this if available, but if not it will happily return a 
- less-than-24 bit deep visual.  This call fails if 24 bits are not 
- available. 
-<BR>&nbsp;</LI>
-<LI><tt>Fl::visual(FL_DOUBLE|FL_INDEX)</tt>
-<BR>Hardware double buffering.  Call this if you are going to use <A href=Fl_Double_Window.html#Fl_Double_Window>
-<tt>Fl_Double_Window</tt></A>. 
-<BR>&nbsp;</LI>
-<LI><tt>Fl::visual(FL_DOUBLE|FL_RGB)</tt></LI>
-<LI><tt>Fl::visual(FL_DOUBLE|FL_RGB8)</tt>
-<BR>Hardware double buffering and full color. 
-<BR>&nbsp;</LI>
-</UL>
+<li><tt>FL_INDEX</tt> indicates that a colormapped visual is ok. This
+call will normally fail if a TrueColor visual cannot be found.
+
+<li><tt>FL_RGB</tt> this value is zero and may be passed to indicate
+that <tt>FL_INDEX</tt> is not wanted.
+
+<li><tt>FL_RGB8</tt> indicates that the TrueColor visual must have at
+least 8 bits of red, green, and blue (Windows calls this "millions of
+colors").
+
+<li><tt>FL_DOUBLE</tt> indicates that hardware accelerated double
+buffering is wanted. This will make <a
+href=Fl_Double_Window.html>Fl_Double_Window</a> work better.
+
+</ul>
 
 This returns true if the system has the capabilities by default or 
 FLTK suceeded in turing them on.  Your program will still work even if 
-this returns false (it just won't look as good). 
+this returns false (it just won't look as good). On non-X systems
+this just returns true or false indicating if the system supports the
+passed values.
+
+<h3><A name=gl_visual>int Fl::gl_visual(int)</A></h3>
+
+This does the same thing as <A
+href=#visual><tt>Fl::visual(int)</tt></A> but also requires OpenGL
+drawing to work. Doing this on X will reduce colormap flashing at the
+edges of <A href=Fl_Gl_Window.html><tt>Fl_Gl_Window</tt></A>s when
+they are inside regular windows.
+
+<p>See <A href=Fl_Gl_Window.html#Fl_Gl_Window.mode><tt>Fl_Gl_Window</tt></A>
+for a list of additional values for the argument.</p>
 
 <h3><A name=w>int Fl::w()</A></h3>
 

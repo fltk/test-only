@@ -1,5 +1,5 @@
 //
-// "$Id: curve.cxx,v 1.7 2001/01/28 07:07:49 spitzak Exp $"
+// "$Id: curve.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ int points;
 
 class Drawing : public Fl_Widget {
   void draw() {
-    fl_clip(0,0,w(),h());
+    fl_push_clip(0,0,w(),h());
     fl_color(FL_DARK3);
     fl_rectf(0,0,w(),h());
     fl_push_matrix();
@@ -50,23 +50,19 @@ class Drawing : public Fl_Widget {
     }
 
     fl_color(FL_BLACK);
-    fl_begin();
     fl_vertex(args[0],args[1]);
     fl_vertex(args[2],args[3]);
     fl_vertex(args[4],args[5]);
     fl_vertex(args[6],args[7]);
-    fl_end_line();
+    fl_stroke();
 
-    fl_begin();
     fl_curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
     if (points) {
       fl_color(FL_WHITE);
-      fl_end_points();
+      fl_points();
     } else {
       fl_color(FL_WHITE);
-      fl_end_complex_polygon();
-      fl_color(FL_RED);
-      fl_end_line();
+      fl_fill_stroke(FL_RED);
     }
 
     fl_pop_matrix();
@@ -114,5 +110,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: curve.cxx,v 1.7 2001/01/28 07:07:49 spitzak Exp $".
+// End of "$Id: curve.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
 //

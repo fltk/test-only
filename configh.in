@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.40 2000/07/20 05:28:31 clip Exp $"
+ * "$Id: configh.in,v 1.41 2001/02/20 06:59:48 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -132,7 +132,9 @@
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
-#  include <FL/conf.h>
+/* Please fix: most machines have stricmp instead, AIX has this in a
+   different header file. We don't need our own version... */
+FL_API int conf_strcasecmp(const char *s1, const char *s2);
 #  define strcasecmp(a,b) conf_strcasecmp(a,b)
 #endif
 
@@ -212,5 +214,5 @@
 #define CONF_CACHED
 
 /*
- * End of "$Id: configh.in,v 1.40 2000/07/20 05:28:31 clip Exp $".
+ * End of "$Id: configh.in,v 1.41 2001/02/20 06:59:48 spitzak Exp $".
  */

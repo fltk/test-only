@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,18 +34,13 @@
 // defeat some of the shortcuts in translating the image for X.
 
 // Unbelievably (since it conflicts with how most PC software works)
-// Micro$oft picked a bottom-up and BGR storage format for their
+// MicroSoft picked a bottom-up and BGR storage format for their
 // DIB images.  I'm pretty certain there is a way around this, but
 // I can't find any other than the brute-force method of drawing
 // each line as a seperate image.  This may also need to be done
 // if the delta is any amount other than 1, 3, or 4.
 
 ////////////////////////////////////////////////////////////////
-
-#include <config.h>
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
 
 #define MAXBUFFER 0x40000 // 256k
 
@@ -67,7 +62,7 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
     d = delta;
     td = 1;
   }
-  for (; w--; from += d, to += td) {
+  for (;; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     int rr = r*FL_NUM_RED/256;
     r -= rr*255/(FL_NUM_RED-1);
@@ -78,6 +73,7 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
     int bb = b*FL_NUM_BLUE/256;
     b -= bb*255/(FL_NUM_BLUE-1);
     *to = uchar(FL_COLOR_CUBE+(bb*FL_NUM_RED+rr)*FL_NUM_GREEN+gg);
+    if (!--w) break;
   }
   ri = r; gi = g; bi = b;
 }
@@ -98,11 +94,12 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
     d = delta;
     td = 1;
   }
-  for (; w--; from += d, to += td) {
+  for (;; from += d, to += td) {
     r += *from; if (r < 0) r = 0; else if (r>255) r = 255;
     int rr = r*FL_NUM_GRAY/256;
     r -= rr*255/(FL_NUM_GRAY-1);
     *to = uchar(FL_GRAY_RAMP+rr);
+    if (!--w) break;
   }
   ri = r;
 }
@@ -230,35 +227,12 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   }
 }
 
-void fl_draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
-}
-void fl_draw_image(Fl_Draw_Image_Cb cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
-}
-void fl_draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,1,0,0);
-}
-void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,1,cb,data);
-}
-
-void fl_rectf(int x, int y, int w, int h, Fl_Color col) {
 #if USE_COLORMAP
-  // use the error diffusion dithering code to produce a much nicer block:
-  if (fl_palette) {
-    uchar c[3];
-    fl_get_color(col, c[0], c[1], c[2]);
-    innards(c,x,y,w,h,0,0,0,0,0);
-    return;
-  }
+#define DITHER_RECTF fl_palette
+#else
+#define DITHER_RECTF false
 #endif
-  fl_color(col);
-  fl_rectf(x,y,w,h);
-}
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
 //

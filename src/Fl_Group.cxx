@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.90 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Group.cxx,v 1.91 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -390,14 +390,22 @@ int* Fl_Group::sizes() {
 }
 
 void Fl_Group::layout() {
-  // get changes from previous position:
   if (!resizable() || ow()==w() && oh()==h()) {
-    if (!is_window()) {
-      Fl_Widget*const* a = array_;
-      Fl_Widget*const* e = a+children_;
-      while (a < e) (*a++)->layout();
+    // If the size did not change or there is no resizable, everything
+    // stays the same distance from the upper-left corner. If this is an
+    // Fl_Window, the system (both X and Win32) will have moved all the
+    // child windows itself, but this is not a window or (perhaps on the
+    // Mac?) the system does not do that, we must call layout() so the
+    // movement is sent.
+    Fl_Widget*const* a = array_;
+    Fl_Widget*const* e = a+children_;
+    while (a < e) {
+      Fl_Widget* o = *a++;
+      if (o->damage()&FL_DAMAGE_LAYOUT || !is_window()) o->layout();
     }
   } else if (children_) {
+    // Calculate a new size & position for every child widget:
+
     // get changes in size from the initial size:
     int* p = sizes();
     int dw = w()-(p[1]-p[0]);
@@ -443,10 +451,9 @@ void Fl_Group::draw() {
   int numchildren = children();
   if (damage() & ~FL_DAMAGE_CHILD) {
     // Redraw the box and all the children
-    fl_clip(0, 0, w(), h());
+    fl_push_clip(0, 0, w(), h());
     int n; for (n = numchildren; n;) draw_child(*child(--n));
-    draw_box();
-    draw_inside_label();
+    draw_group_box();
     fl_pop_clip();
     // labels are drawn without the clip for back compatability so they
     // can draw atop sibling widgets:
@@ -581,5 +588,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.90 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.91 2001/02/20 06:59:49 spitzak Exp $".
 //

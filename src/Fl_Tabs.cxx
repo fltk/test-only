@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.44 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -272,7 +272,7 @@ void Fl_Tabs::draw() {
 
   H = tab_height();
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-    fl_clip(0, 0, w(), h());
+    fl_push_clip(0, 0, w(), h());
     if (v) draw_child(*v);
     parent()->draw_group_box();
 /*    fl_color(color());
@@ -298,7 +298,8 @@ void Fl_Tabs::draw() {
     } else {
       // draw the edge when no selection:
       fl_color(H >= 0 ? FL_LIGHT3 : FL_DARK3);
-	  fl_xyline(0, H >= 0 ? H : h()+H, this->w());
+      int b = H >= 0 ? H : h()+H;
+      fl_line(0, b, this->w(), b);
     }
 
   }
@@ -328,22 +329,37 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
   int sel = (what == SELECTED);
   fl_color(o->color());
   if (H >= 0) {
-    fl_polygon(x1, H+sel, x1+TABSLOPE, 0, x2, 0, x2+TABSLOPE, H+sel);
+    fl_newpath();
+    fl_vertex(x1, H+sel);
+    fl_vertex(x1+TABSLOPE, 0);
+    fl_vertex(x2, 0);
+    fl_vertex(x2+TABSLOPE, H+sel);
+    fl_fill();
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
-    fl_line(x1, H, x1+TABSLOPE, 0, x2, 0);
+    fl_line(x1, H, x1+TABSLOPE, 0);
+    fl_line(x1+TABSLOPE, 0, x2, 0);
     if (sel) {
-      if (x1>0) fl_xyline(0, H, x1);
-      if (x2+TABSLOPE < w()-1) fl_xyline(x2+TABSLOPE, H, w()-1);
+      if (x1>0) fl_line(0, H, x1, H);
+      if (x2+TABSLOPE < w()-1) fl_line(x2+TABSLOPE, H, w()-1, H);
     }
     fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
     fl_line(x2, 0, x2+TABSLOPE, H);
   } else {
-    fl_polygon(x1, h()+H-sel, x1+TABSLOPE, h(), x2, h(), x2+TABSLOPE, h()+H-sel);
+    fl_newpath();
+    fl_vertex(x1, h()+H-sel);
+    fl_vertex(x1+TABSLOPE, h());
+    fl_vertex(x2, h());
+    fl_vertex(x2+TABSLOPE, h()+H-sel);
+    fl_fill();
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
-    fl_line(x1+TABSLOPE, h()-1, x2, h()-1, x2+TABSLOPE, h()+H);
+    fl_newpath();
+    fl_vertex(x1+TABSLOPE, h()-1);
+    fl_vertex(x2, h()-1);
+    fl_vertex(x2+TABSLOPE, h()+H);
+    fl_stroke();
     if (sel) {
-      if (x1>0) fl_xyline(0, h()+H, x1);
-      if (x2+TABSLOPE < w()-1) fl_xyline(x2+TABSLOPE, h()+H, w()-1);
+      if (x1>0) fl_line(0, h()+H, x1, h()+H);
+      if (x2+TABSLOPE < w()-1) fl_line(x2+TABSLOPE, h()+H, w()-1, h()+H);
     }
     fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
     fl_line(x1, h()+H, x1+TABSLOPE, h()-1);
@@ -378,5 +394,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.44 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $".
 //

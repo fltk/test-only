@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.119 2001/01/28 07:08:53 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.120 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,6 +45,7 @@ int		(*Fl::grab_)(int, void*);
 static void* grab_data;
 Fl_Window	*Fl::modal_;	// topmost modal() window
 int		Fl::damage_,
+		Fl::e_type,
 		Fl::e_x,
 		Fl::e_y,
 		Fl::e_dx,
@@ -57,9 +58,6 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
-
-Fl_Font* Fl_Font_::array = 0;
-int Fl_Font_::num_fonts = 0;
 
 const char *Fl_Shared_Image::fl_shared_image_root=0;
 
@@ -564,6 +562,7 @@ static bool alternate_key() {
 
 int Fl::handle(int event, Fl_Window* window)
 {
+  e_type = event;
   if (grab_) {
     if (grab_(event, grab_data)) return true;
     if (event == FL_KEY && alternate_key()) return grab_(event, grab_data);
@@ -677,5 +676,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.119 2001/01/28 07:08:53 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.120 2001/02/20 06:59:49 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-<head><title>Fl_Image</title></head><body>
+<head><title>Fl_Image</title></head><body bgcolor=white>
 
 <h1>class Fl_Image</h1>
 
@@ -52,7 +52,7 @@ with a bounding box.
 The destructor throws away any server-cached information, but in most
 cases does not destroy the local data passed to a constructor.
 
-<H3><A name=Fl_Bitmap>class Fl_Bitmap : public Fl_Image</A></H3>
+<H2><A name=Fl_Bitmap>class Fl_Bitmap : public Fl_Image</A></H2>
  This object encapsulates the width, height, and bits of an X bitmap 
 (XBM), and allows you to make an <TT>Fl_Widget</TT> use a bitmap as a 
 label, or to just draw the bitmap directly.
@@ -114,7 +114,7 @@ will get dithered colors on an 8 bit screen. </P>
  Draws the image with the upper-left corner at <TT>x,y</TT>.  This is 
 the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>.
 
-<H3><A name=Fl_RGB_Image>class Fl_RGB_Image</A></H3>
+<H2><A name=Fl_RGB_Image>class Fl_RGB_Image</A></H2>
 
 This object encapsulates a full-color RGB image, and allows you to 
 make an <TT>Fl_Widget</TT> use an image as a label, or to just draw the 

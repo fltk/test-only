@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.63 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl.H,v 1.64 2001/02/20 06:59:48 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ class FL_API Fl {
 public: // should be private!
 
   static int damage_;
-
+  static int e_type;
   static int e_x;
   static int e_y;
   static int e_dx;
@@ -121,6 +121,7 @@ public:
   static void release();
 
   // event information:
+  static int event()		{return e_type;}
   static int event_x()		{return e_x;}
   static int event_y()		{return e_y;}
   static int event_dx()		{return e_dx;}
@@ -236,5 +237,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.63 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.64 2001/02/20 06:59:48 spitzak Exp $".
 //

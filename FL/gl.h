@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.12 2000/11/28 16:19:41 spitzak Exp $"
+// "$Id: gl.h,v 1.13 2001/02/20 06:59:49 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,6 @@ FL_GL_API void gl_start();
 FL_GL_API void gl_finish();
 
 FL_GL_API void gl_color(Fl_Color);
-inline void gl_color(int c) {gl_color((Fl_Color)c);} // back compatability
 
 FL_GL_API void gl_rect(int x,int y,int w,int h);
 inline void gl_rectf(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
@@ -79,5 +78,5 @@ FL_GL_API void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, in
 #endif
 
 //
-// End of "$Id: gl.h,v 1.12 2000/11/28 16:19:41 spitzak Exp $".
+// End of "$Id: gl.h,v 1.13 2001/02/20 06:59:49 spitzak Exp $".
 //

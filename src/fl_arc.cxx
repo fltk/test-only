@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $"
+// "$Id: fl_arc.cxx,v 1.5 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,48 +30,42 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
-void fl_arc(double x, double y, double r, double start, double end) {
+void fl_arc(double l, double b, double w, double h, double start, double end) {
+
+  const double x = l+w/2;
+  const double y = b+h/2;
+  const double A = start*(M_PI/180);
+  const double E = end*(M_PI/180);
 
   // draw start point accurately:
-  double A = start*(M_PI/180);
-  double X = r*cos(A);
-  double Y = -r*sin(A);
+  double X = w/2*cos(A);
+  double Y = -h/2*sin(A);
   fl_vertex(x+X,y+Y);
 
   // number of segments per radian:
-  int n; {
-    double x1 = fl_transform_dx(r,0);
-    double y1 = fl_transform_dy(r,0);
-    double r1 = x1*x1+y1*y1;
-    x1 = fl_transform_dx(0,r);
-    y1 = fl_transform_dy(0,r);
-    double r2 = x1*x1+y1*y1;
-    if (r2 < r1) r1 = r2;
-    n = int(sqrt(r1)*.841471);
-    if (n < 2) n = 2;
-  }
-  double epsilon = 1.0/n;
-  double E = end*(M_PI/180);
+  double x1 = fl_transform_dx(w,0);
+  double y1 = fl_transform_dy(w,0);
+  double x2 = fl_transform_dx(0,h);
+  double y2 = fl_transform_dy(0,h);
+  int n = int(sqrt(fabs(x1*y2-x2*y1))*(.5 * .841471));
+
   int i = int((E-A)*n);
-  if (i < 0) {i = -i; epsilon = -epsilon;}
-  double epsilon2 = epsilon/2;
-  for (; i>1; i--) {
-    X += epsilon*Y;
-    Y -= epsilon2*X;
-    fl_vertex(x+X,y+Y);
-    Y -= epsilon2*X;
+  if (i) {
+    if (i < 0) {i = -i; n = -n;}
+    const double epsilon = w/h/n;
+    const double epsilon2 = h/w/n/2;
+    while (--i) {
+      X += epsilon*Y;
+      Y -= epsilon2*X;
+      fl_vertex(x+X,y+Y);
+      Y -= epsilon2*X;
+    }
   }
 
   // draw the end point accurately:
-  fl_vertex(x+r*cos(E), y-r*sin(E));
+  fl_vertex(x+w/2*cos(E), y-h/2*sin(E));
 }
-
-#if 0 // portable version.  X-specific one in fl_vertex.C
-void fl_circle(double x,double y,double r) {
-  _fl_arc(x, y, r, r, 0, 360);
-}
-#endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $".
+// End of "$Id: fl_arc.cxx,v 1.5 2001/02/20 06:59:50 spitzak Exp $".
 //

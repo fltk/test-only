@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.3 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.4 2001/02/20 06:59:50 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -31,7 +31,6 @@
 #define STACK_MAX (STACK_SIZE - 2)
 static Region rstack[STACK_SIZE];
 static int rstackptr=0;
-FL_API int fl_clip_state_number=0; // used by gl_begin.C to update GL clip
 
 #ifndef WIN32
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
@@ -49,7 +48,6 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 // be used after changing the stack, or to undo any clobbering of clip
 // done by your program:
 void fl_restore_clip() {
-  fl_clip_state_number++;
   Region r = rstack[rstackptr];
 #ifdef WIN32
   SelectClipRgn(fl_gc, r); //if r is NULL, clip is automatically cleared
@@ -68,7 +66,7 @@ void fl_clip_region(Region r) {
 }
 
 // Intersect & push a new clip rectangle:
-void fl_clip(int x, int y, int w, int h) {
+void fl_push_clip(int x, int y, int w, int h) {
   Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x+fl_x_, y+fl_y_, w, h);
@@ -236,5 +234,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.3 2001/01/23 18:47:55 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.4 2001/02/20 06:59:50 spitzak Exp $"
 //

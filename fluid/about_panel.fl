@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0000 
+version 2.0001 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -13,46 +13,46 @@ Function {make_about_panel(const char *copyright)} {open
     xywh {150 270 303 258} resizable hotspot color 97 selection_color 47 non_modal visible
   } {
     Fl_Group display_group {open
-      xywh {5 5 295 245}
+      xywh {5 5 295 245} box NO_BOX
       code0 {o->resizable(o);}
     } {
       Fl_Group {} {open
-        xywh {60 30 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
+        xywh {55 25 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
         code0 {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {90 120 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {30 90 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
       }
       Fl_Box {} {
-        xywh {45 5 90 40} box FLAT_BOX color 97 selection_color 47
+        xywh {40 0 90 40} box FLAT_BOX color 97 selection_color 47
       }
       Fl_Box {} {
-        xywh {65 50 50 65} box DOWN_BOX color 6 selection_color 47
+        xywh {60 45 50 65} box DOWN_BOX color 6 selection_color 47
       }
       Fl_Box {} {
-        xywh {50 30 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
+        xywh {45 25 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
       }
       Fl_Group {} {
         label fluid open
-        xywh {15 135 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
+        xywh {10 130 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
         code0 {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {84 155 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {69 20 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
         Fl_Box {} {
           label {` }
-          xywh {75 140 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {60 5 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
       }
       Fl_Box {} {
-        xywh {62 135 56 2} box FLAT_BOX color 14 selection_color 47
+        xywh {57 130 56 2} box FLAT_BOX color 14 selection_color 47
       }
-      Fl_Group {} {open selected
-        xywh {150 23 149 122} box OFLAT_BOX labelfont 1 color 14 labelcolor 7 selection_color 47 labelsize 18
+      Fl_Group {} {open
+        xywh {145 18 149 122} box OFLAT_BOX labelfont 1 color 14 labelcolor 7 selection_color 47 labelsize 18
         code0 {o->resizable(o);}
       } {
         Fl_Box {} {
@@ -60,15 +60,15 @@ Function {make_about_panel(const char *copyright)} {open
 Interface
 Designer
 Version 2.0}
-          xywh {155 27 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
+          xywh {5 4 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
         }
       }
       Fl_Button {} {
-        label {©1998-1999
+        label {©1998-2001
 Click here for more information}
         callback {display_group->hide();
-copyright_box->show();}
-        xywh {180 164 95 41} align 524416 box BORDER_BOX labelsize 10
+copyright_box->show();} selected
+        xywh {175 159 95 41} align 524416 box BORDER_BOX color 136 labelcolor 6 labelsize 10
       }
     }
     Fl_Box copyright_box {

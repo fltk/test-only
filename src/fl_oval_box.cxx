@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.16 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_oval_box.cxx,v 1.17 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,9 @@
 void Fl_Oval_Flat_Box::draw(const Fl_Widget* widget,
 			    int x, int y, int w, int h, Fl_Flags f) const
 {
+  fl_ellipse(x, y, w, h);
   fl_color(widget->get_box_color(f));
-  fl_pie(x, y, w, h, 0, 360);
+  fl_fill();
 }
 Fl_Oval_Flat_Box::Fl_Oval_Flat_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = dw_ = dh_ = 0;
@@ -46,10 +47,9 @@ const Fl_Oval_Flat_Box fl_oval_flat_box(0);
 void Fl_Oval_Box::draw(const Fl_Widget* widget,
 		       int x, int y, int w, int h, Fl_Flags f) const
 {
+  fl_ellipse(x, y, w-1, h-1);
   fl_color(widget->get_box_color(f));
-  fl_pie(x, y, w-1, h-1, 0, 360);
-  fl_color(widget->get_glyph_color(f));
-  fl_arc(x, y, w, h, 0, 360);
+  fl_fill_stroke(widget->get_glyph_color(f));
 }
 Fl_Oval_Box::Fl_Oval_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 1; dw_ = dh_ = 2;
@@ -61,8 +61,8 @@ void Fl_Oval_Shadow_Box::draw(const Fl_Widget* widget,
 			      int x, int y, int w, int h, Fl_Flags f) const
 {
   w-=3; h-=3;
+  fl_ellipse(x+3, y+3, w, h);
   fl_color(FL_DARK3);
-  fl_pie(x+3, y+3, w, h, 0, 360);
   fl_oval_box.draw(widget, x, y, w, h, f);
 }
 Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
@@ -72,5 +72,5 @@ Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
 const Fl_Oval_Shadow_Box fl_oval_shadow_box(0);
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.16 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.17 2001/02/20 06:59:50 spitzak Exp $".
 //

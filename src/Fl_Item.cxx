@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.12 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -121,9 +121,9 @@ Fl_Divider::Fl_Divider() : Fl_Widget(0,0,0,0) {
 
 void Fl_Divider::draw() {
   fl_color(FL_DARK3);
-  fl_xyline(0, 0, w());
+  fl_line(0, 0, w(), 0);
   fl_color(FL_LIGHT3);
-  fl_xyline(0, 1, w());
+  fl_line(0, 1, w(), 1);
 }
 
 void Fl_Divider::layout() {

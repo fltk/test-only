@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.10 2000/09/27 16:25:48 spitzak Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.11 2001/02/20 06:59:49 spitzak Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -73,8 +73,9 @@ public:
 
 void _Fl_Gl_Overlay::draw() {
   if (!valid_) glClearIndex((GLfloat)fl_transparent_pixel);
-  if (damage() != FL_DAMAGE_EXPOSE) glClear(GL_COLOR_BUFFER_BIT);
   Fl_Gl_Window *w = (Fl_Gl_Window *)parent();
+  if (damage() != FL_DAMAGE_EXPOSE && !(w->mode() & FL_NO_ERASE_OVERLAY))
+    glClear(GL_COLOR_BUFFER_BIT);
   uchar save_valid = w->valid_;
   w->valid_ = valid_;
   fl_overlay = 1;
@@ -201,5 +202,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.10 2000/09/27 16:25:48 spitzak Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.11 2001/02/20 06:59:49 spitzak Exp $".
 //

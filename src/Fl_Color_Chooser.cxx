@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.26 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.27 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -217,7 +217,7 @@ void Flcc_HueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
+  if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
@@ -276,7 +276,7 @@ void Flcc_ValueBox::draw() {
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,y1+py,w1,6);
+  if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->v()) * (h1-6));
@@ -500,5 +500,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.26 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.27 2001/02/20 06:59:49 spitzak Exp $".
 //

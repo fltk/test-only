@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0000 
+version 2.0001 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -89,19 +89,19 @@ This program demonstrates how you set the resizable() of a window to get things 
     } {
       Fl_Button {} {
         label {You can put}
-        xywh {5 230 85 25} color 47
+        xywh {5 5 85 25} color 47
       }
       Fl_Button {} {
         label {them inside}
-        xywh {5 255 85 25} color 47
+        xywh {5 30 85 25} color 47
       }
       Fl_Button {} {
         label {a group to}
-        xywh {5 280 85 25} color 47
+        xywh {5 55 85 25} color 47
       }
       Fl_Button {} {
         label {stop scaling.}
-        xywh {5 305 85 25} color 47
+        xywh {5 80 85 25} color 47
       }
     }
     Fl_Button {} {

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.37 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -287,23 +287,24 @@ glyph(const Fl_Widget* widget, int glyph, int x,int y,int w,int h, Fl_Flags f)
   case NONE:
     break;
   case BAR:
-    fl_yxline(lx, y, y+h-1);
+    fl_line(lx, y, lx, y+h-1);
     break;
   case ELL:
-    fl_yxline(lx, y, ly, x+w);
+    fl_line(lx, y, lx, ly);
+    fl_line(lx, ly, x+w, ly);
     break;
   case TEE:
-    fl_yxline(lx, y, y+h-1);
-    fl_xyline(lx, ly, x+w);
+    fl_line(lx, y, lx, y+h-1);
+    fl_line(lx, ly, x+w, ly);
     break;
 #if TRIANGLE_GLYPH
   case CLOSED_TEE:
   case OPEN_TEE:
-    fl_yxline(lx, y, y+h-1);
+    fl_line(lx, y, lx, y+h-1);
     goto J1;
   case CLOSED_ELL:
   case OPEN_ELL:
-    fl_yxline(lx, y, ly);
+    fl_yxline(lx, y, lx, ly);
   J1:
     fl_glyph(widget, glyph < OPEN_ELL ? FL_GLYPH_RIGHT : FL_GLYPH_DOWN,
 	     x, y, w, h, f);
@@ -312,12 +313,12 @@ glyph(const Fl_Widget* widget, int glyph, int x,int y,int w,int h, Fl_Flags f)
   default: {
     int boxsize = w/3;
     fl_rect(lx-boxsize, ly-boxsize, 2*boxsize+1, 2*boxsize+1);
-    fl_yxline(lx, y, ly-boxsize);
-    if (glyph&1) fl_yxline(lx, ly+boxsize, y+h-1);
-    fl_xyline(lx+boxsize, ly, x+w);
-    fl_xyline(lx-boxsize+2, ly, lx+boxsize-2);
+    fl_line(lx, y, lx, ly-boxsize);
+    if (glyph&1) fl_line(lx, ly+boxsize, lx, y+h-1);
+    fl_line(lx+boxsize, ly, x+w, ly);
+    fl_line(lx-boxsize+2, ly, lx+boxsize-2, ly);
     if (glyph < OPEN_ELL)
-      fl_yxline(lx,ly-boxsize+2,ly+boxsize-2);
+      fl_line(lx, ly-boxsize+2, lx, ly+boxsize-2);
     }
 #endif
   }
@@ -396,8 +397,9 @@ void Fl_Browser::draw_item() {
     int w = widget->width();
     if (x + w > X+W) {
       // X bug?  clipped dashed rectangles don't draw exactly correct...
-      fl_xyline(x, y, X+W);
-      fl_yxline(x, y, y+h-1, X+W);
+      fl_line(x, y, X+W, y);
+      fl_line(x, y, x, y+h-1);
+      fl_line(x, y+h-1, X+W, y+h-1);
     } else {
       fl_rect(x, y, w, h);
     }
@@ -419,7 +421,7 @@ void Fl_Browser::draw_clip_cb(void* v,int X, int Y, int W, int H) {
 }
 
 void Fl_Browser::draw_clip(int x, int y, int w, int h) {
-  fl_clip(x,y,w,h);
+  fl_push_clip(x,y,w,h);
 
   int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
@@ -457,7 +459,7 @@ void Fl_Browser::draw() {
     int clipped = 0;
     for (int n = REDRAW_0; n <= REDRAW_1; n++) {
       if (goto_mark(n)) {
-	if (!clipped) {fl_clip(X,Y,W,H); clipped = 1;}
+	if (!clipped) {fl_push_clip(X,Y,W,H); clipped = 1;}
 	draw_item();
       }
     }
@@ -930,5 +932,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.37 2001/02/20 06:59:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.6 2000/01/08 22:29:51 vincent Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.7 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,13 +41,13 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
 #  include <io.h>
 extern "C" int access(const char *, int);
 #  define F_OK 0
 #else
 #  include <unistd.h>
-#endif /* WIN32 || __EMX__ */
+#endif /* WIN32 */
 
 #include <FL/Fl_FileIcon.H>
 #include <FL/Fl_Widget.H>
@@ -265,47 +265,23 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
           switch (*prim)
 	  {
 	    case LINE :
-		fl_end_line();
+		fl_stroke();
 		break;
 
 	    case CLOSEDLINE :
-		fl_end_loop();
+		fl_closepath();
+		fl_stroke();
 		break;
 
 	    case POLYGON :
-		fl_end_polygon();
+		fl_fill();
 		break;
 
-	    case OUTLINEPOLYGON :
-		fl_end_polygon();
-
-                if (active)
-		{
-                  if (prim[1] == 256)
-		    fl_color(ic);
-		  else
-		    fl_color((Fl_Color)prim[1]);
-		}
-		else
-		{
-                  if (prim[1] == 256)
-		    fl_color(fl_inactive(ic));
-		  else
-		    fl_color(fl_inactive((Fl_Color)prim[1]));
-		}
-
-		fl_begin_loop();
-
-		prim += 2;
-		while (*prim == VERTEX)
-		{
-		  fl_vertex(prim[1] * 0.0001, prim[2] * 0.0001);
-		  prim += 3;
-		}
-
-        	fl_end_loop();
-		fl_color(c);
-		break;
+	    case OUTLINEPOLYGON : {
+		Fl_Color color = prim[1]==256 ? ic : (Fl_Color)prim[1];
+		if (!active) color = fl_inactive(color);
+		fl_fill_stroke(color);
+		break;}
 	  }
 
           prim = NULL;
@@ -326,27 +302,15 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 	  break;
 
       case LINE :
-          prim = d;
-	  d ++;
-	  fl_begin_line();
-	  break;
-
       case CLOSEDLINE :
-          prim = d;
-	  d ++;
-	  fl_begin_loop();
-	  break;
-
       case POLYGON :
           prim = d;
 	  d ++;
-	  fl_begin_polygon();
 	  break;
 
       case OUTLINEPOLYGON :
           prim = d;
 	  d += 2;
-	  fl_begin_polygon();
 	  break;
 
       case VERTEX :
@@ -356,59 +320,11 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 	  break;
     }
 
-  // If we still have an open primitive, close it...
-  if (prim)
-    switch (*prim)
-    {
-      case LINE :
-	  fl_end_line();
-	  break;
-
-      case CLOSEDLINE :
-	  fl_end_loop();
-	  break;
-
-      case POLYGON :
-	  fl_end_polygon();
-	  break;
-
-      case OUTLINEPOLYGON :
-	  fl_end_polygon();
-
-          if (active)
-	  {
-            if (prim[1] == 256)
-	      fl_color(ic);
-	    else
-	      fl_color((Fl_Color)prim[1]);
-	  }
-	  else
-	  {
-            if (prim[1] == 256)
-	      fl_color(fl_inactive(ic));
-	    else
-	      fl_color(fl_inactive((Fl_Color)prim[1]));
-	  }
-
-	  fl_begin_loop();
-
-	  prim += 2;
-	  while (*prim == VERTEX)
-	  {
-	    fl_vertex(prim[1] * 0.0001, prim[2] * 0.0001);
-	    prim += 3;
-	  }
-
-          fl_end_loop();
-	  fl_color(c);
-	  break;
-    }
-
   // Restore the transform matrix
   fl_pop_matrix();
 }
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.6 2000/01/08 22:29:51 vincent Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.7 2001/02/20 06:59:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: arc.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,29 +28,26 @@
 #include <FL/Fl_Hor_Value_Slider.H>
 #include <FL/fl_draw.H>
 
-double args[6] = {140, 140, 50, 0, 360, 0};
-const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
+double args[7] = {90, 90, 100, 100, 0, 360, 0};
+const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
 class Drawing : public Fl_Widget {
   void draw() {
-    fl_clip(0, 0, w(), h());
+    fl_push_clip(0, 0, w(), h());
     fl_color(FL_DARK3);
     fl_rectf(0, 0, w(), h());
     fl_push_matrix();
-    if (args[5]) {
+    if (args[6]) {
       fl_translate(w()/2.0, h()/2.0);
-      fl_rotate(args[5]);
+      fl_rotate(args[6]);
       fl_translate(-w()/2.0, -h()/2.0);
     }
-    fl_begin();
-    fl_arc(args[0],args[1],args[2],args[3],args[4]);
-    fl_gap();
-    fl_arc(140,140,20,0,-360);
-    fl_circle(40,40,args[2]); // hardware circle
+    fl_arc(args[0],args[1],args[2],args[3],args[4],args[5]);
+    fl_closepath();
+    fl_arc(120,120,40,40,0,-360);
+    fl_ellipse(20,20,args[2],args[3]); // hardware circle
     fl_color(FL_WHITE);
-    fl_end_complex_polygon();
-    fl_color(FL_RED);
-    fl_end_line();
+    fl_fill_stroke(FL_RED);
     fl_pop_matrix();
     fl_pop_clip();
   }
@@ -72,10 +69,10 @@ int main(int argc, char** argv) {
   d = &drawing;
 
   int y = 300;
-  for (int n = 0; n<6; n++) {
+  for (int n = 0; n<7; n++) {
     Fl_Slider* s = new Fl_Hor_Value_Slider(50,y,240,25,name[n]); y += 25;
-    if (n<3) {s->minimum(0); s->maximum(300);}
-    else if (n==5) {s->minimum(0); s->maximum(360);}
+    if (n<4) {s->minimum(0); s->maximum(300);}
+    else if (n==6) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
     s->step(1);
     s->value(args[n]);
@@ -91,6 +88,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
 //
 

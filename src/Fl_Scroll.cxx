@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.27 2001/02/02 18:04:08 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.28 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <FL/fl_draw.H>
 
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
-  fl_clip(X,Y,W,H);
+  fl_push_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
   // draw all the children, clipping them out of the region:
   int numchildren = s->children(); int i;
@@ -78,7 +78,7 @@ void Fl_Scroll::draw() {
       fl_scroll(X, Y, W, H, scrolldx, scrolldy, draw_clip, this);
     }
     if (d & FL_DAMAGE_CHILD) { // draw damaged children
-      fl_clip(X, Y, W, H);
+      fl_push_clip(X, Y, W, H);
       for (int i = children(); i--;) {
 	Fl_Widget& w = *child(i);
 	if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
@@ -285,5 +285,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.27 2001/02/02 18:04:08 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.28 2001/02/20 06:59:50 spitzak Exp $".
 //

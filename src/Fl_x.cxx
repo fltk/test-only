@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.101 2001/02/18 07:17:09 robertk Exp $"
+// "$Id: Fl_x.cxx,v 1.102 2001/02/20 06:59:50 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -979,32 +979,25 @@ int fl_handle(const XEvent& xevent)
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
-  int x = this->x(); int y = this->y();
-  for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-    x += p->x(); y += p->y();
-  }
-  if (ow() == w() && oh() == h()) {
-    if (this == resize_from_system) resize_from_system = 0;
-//    else if (i && (ox() != this->x() || oy() != this->y()))
-    else if (i && (ox() != x || oy() != y))
-      XMoveWindow(fl_display, i->xid, x, y);
-    for (int n = children(); n--;) {
-      Fl_Widget* o = child(n);
-      if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
+  if (this == resize_from_system) {
+    // prevent echoing changes back to the server
+    resize_from_system = 0;
+  } else if (i) { // only for shown windows
+    // figure out where the window should be in it's parent:
+    int x = this->x(); int y = this->y();
+    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+      x += p->x(); y += p->y();
     }
-    Fl_Widget::layout();
-    set_old_size();
-  } else {
-    if (this == resize_from_system) resize_from_system = 0;
-    else if (i) {
+    if (ow() == w() && oh() == h()) {
+      XMoveWindow(fl_display, i->xid, x, y);
+    } else {
       //if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      i->wait_for_expose = 1; // (breaks menus somehow...)
-      // redraw(); // 
+      i->wait_for_expose = 1;
     }
-    Fl_Group::layout();
   }
+  Fl_Group::layout();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1278,5 +1271,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.101 2001/02/18 07:17:09 robertk Exp $".
+// End of "$Id: Fl_x.cxx,v 1.102 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -94,21 +94,23 @@ void Fl_Roller::draw() {
 	   y += delta) {
 	int y1 = int((sin(y)/sin(ARC)+1)*W/2);
 	if (y1 <= 0) continue; else if (y1 >= W-1) break;
-	fl_color(FL_DARK3); fl_yxline(X+y1,Y+1,Y+H-1);
+	fl_color(FL_DARK3); fl_line(X+y1,Y+1,X+y1,Y+H-1);
 	if (y < 0) y1--; else y1++;
-	fl_color(FL_LIGHT1);fl_yxline(X+y1,Y+1,Y+H-1);
+	fl_color(FL_LIGHT1);fl_line(X+y1,Y+1,X+y1,Y+H-1);
       }
       // draw edges:
       h1 = W/8+1; // distance from end the color inverts
       fl_color(FL_DARK2);
-      fl_xyline(X+h1,Y+H-1,X+W-h1);
+      fl_line(X+h1,Y+H-1,X+W-h1,Y+H-1);
       fl_color(FL_DARK3);
-      fl_yxline(X,Y+H,Y,X+h1);
-      fl_xyline(X+W-h1,Y,X+W);
+      fl_line(X,Y+H,X,Y);
+      fl_line(X,Y,X+h1,Y);
+      fl_line(X+W-h1,Y,X+W,Y);
       fl_color(FL_LIGHT2);
-      fl_xyline(X+h1,Y-1,X+W-h1);
-      fl_yxline(X+W,Y,Y+H,X+W-h1);
-      fl_xyline(X+h1,Y+H,X);
+      fl_line(X+h1,Y-1,X+W-h1,Y-1);
+      fl_line(X+W,Y,X+W,Y+H);
+      fl_line(X+W,Y+H,X+W-h1,Y+H);
+      fl_line(X+h1,Y+H,X,Y+H);
     }
   } else { // vertical one
     offset = (1-offset);
@@ -129,21 +131,23 @@ void Fl_Roller::draw() {
 	   ; y += delta) {
 	int y1 = int((sin(y)/sin(ARC)+1)*H/2);
 	if (y1 <= 0) continue; else if (y1 >= H-1) break;
-	fl_color(FL_DARK3); fl_xyline(X+1,Y+y1,X+W-1);
+	fl_color(FL_DARK3); fl_line(X+1,Y+y1,X+W-1,Y+y1);
 	if (y < 0) y1--; else y1++;
-	fl_color(FL_LIGHT1);fl_xyline(X+1,Y+y1,X+W-1);
+	fl_color(FL_LIGHT1);fl_line(X+1,Y+y1,X+W-1,Y+y1);
       }
       // draw edges:
       h1 = H/8+1; // distance from end the color inverts
       fl_color(FL_DARK2);
-      fl_yxline(X+W-1,Y+h1,Y+H-h1);
+      fl_line(X+W-1,Y+h1,X+W-1,Y+H-h1);
       fl_color(FL_DARK3);
-      fl_xyline(X+W,Y,X,Y+h1);
-      fl_yxline(X,Y+H-h1,Y+H);
+      fl_line(X+W,Y,X,Y);
+      fl_line(X,Y,X,Y+h1);
+      fl_line(X,Y+H-h1,X,Y+H);
       fl_color(FL_LIGHT2);
-      fl_yxline(X,Y+h1,Y+H-h1);
-      fl_xyline(X,Y+H,X+W,Y+H-h1);
-      fl_yxline(X+W,Y+h1,Y);
+      fl_line(X,Y+h1,X,Y+H-h1);
+      fl_line(X,Y+H,X+W,Y+H);
+      fl_line(X+W,Y+H,X+W,Y+H-h1);
+      fl_line(X+W,Y+h1,X+W,Y);
     }
   }
   if (focused()) {
@@ -159,5 +163,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
 //

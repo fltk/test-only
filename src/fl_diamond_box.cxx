@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.19 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.20 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -51,8 +51,12 @@ void Fl_Diamond_Box::draw(int x, int y, int w, int h,
     // as the normal square box:
     int d = strlen(s)/4;
     if (w > 2*d && h > 2*d) {
-      fl_color(c);
-      fl_polygon(x+d, y1, x1,y+d, x+w-d,y1, x1,y+h-d);
+      fl_newpath();
+      fl_vertex(x+d, y1);
+      fl_vertex(x1, y+d);
+      fl_vertex(x+w-d,y1);
+      fl_vertex(x1,y+h-d);
+      fl_color(c); fl_fill();
     }
   }
   const char* t;
@@ -91,5 +95,5 @@ const Fl_Diamond_Box fl_diamond_up_box(0, "2WWMMPPAA", &fl_diamond_down_box);
 const Fl_Diamond_Box fl_diamond_down_box(0, "2AAWWMMTT", &fl_diamond_up_box);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.19 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.20 2001/02/20 06:59:50 spitzak Exp $".
 //

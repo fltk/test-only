@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.20 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -151,22 +151,18 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
 
 /* Some help stuff */
 
-#define BP fl_begin_polygon()
-#define EP fl_end_polygon()
-#define BL fl_begin_line()
-#define EL fl_end_line()
-#define BC fl_begin_loop()
-#define EC fl_end_loop()
+#define BP
+#define EP fl_fill()
+#define BL
+#define EL fl_stroke()
+#define BC
+#define EC fl_closepath();fl_stroke()
+#define EF(c) fl_fill_stroke(c)
 #define vv(x,y) fl_vertex(x,y)
-
-// for the outline color (removed in fltk 2.0):
-#define set_outline_color(c)
 
 static void rectangle(double x,double y,double x2,double y2,Fl_Color col) {
   fl_color(col);
-  BP; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EP;
-  set_outline_color(col);
-  BC; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EC;
+  BP; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EF(col);
 }
 
 /* The drawing routines */
@@ -176,7 +172,6 @@ static void draw_arrow1(Fl_Color col)
   fl_color(col);
   BP; vv(-0.8,-0.4); vv(-0.8,0.4); vv(0.0,0.4); vv(0.0,-0.4); EP;
   BP; vv(0.0,0.8); vv(0.8,0.0); vv(0.0,-0.8); vv(0.0,-0.4); vv(0.0,0.4); EP;
-  set_outline_color(col);
   BC; vv(-0.8,-0.4); vv(-0.8,0.4); vv(0.0,0.4); vv(0.0,0.8); vv(0.8,0.0);
       vv(0.0,-0.8); vv(0.0,-0.4); EC;
 }
@@ -190,49 +185,35 @@ static void draw_arrow1bar(Fl_Color col)
 static void draw_arrow2(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(-0.3,0.8); vv(0.50,0.0); vv(-0.3,-0.8); EP;
-  set_outline_color(col);
-  BC; vv(-0.3,0.8); vv(0.50,0.0); vv(-0.3,-0.8); EC;
+  BP; vv(-0.3,0.8); vv(0.50,0.0); vv(-0.3,-0.8); EF(col);
 }
 
 static void draw_arrow3(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EP;
-  BP; vv(-0.7,0.8); vv(0.1,0.0); vv(-0.7,-0.8); EP;
-  set_outline_color(col);
-  BC; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EC;
-  BC; vv(-0.7,0.8); vv(0.1,0.0); vv(-0.7,-0.8); EC;
+  BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EF(col);
+  BP; vv(-0.7,0.8); vv(0.1,0.0); vv(-0.7,-0.8); EF(col);
 }
 
 static void draw_arrowbar(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EP;
-  BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EP;
-  set_outline_color(col);
-  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EC;
-  BC; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EC;
+  BP; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EF(col);
+  BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EF(col);
 }
 
 static void draw_arrowbox(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EP;
-  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EC;
-  set_outline_color(col);
-  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EC;
-  BC; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EC;
+  BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EF(col);
+  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EF(col);
 }
 
 static void draw_bararrow(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EP;
-  BP; vv(-0.5,0.8); vv(-0.1,0.8); vv(-0.1,-0.8); vv(-0.5,-0.8); EP;
-  set_outline_color(col);
-  BC; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EC;
-  BC; vv(-0.5,0.8); vv(-0.1,0.8); vv(-0.1,-0.8); vv(-0.5,-0.8); EC;
+  BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EF(col);
+  BP; vv(-0.5,0.8); vv(-0.1,0.8); vv(-0.1,-0.8); vv(-0.5,-0.8); EF(col);
 }
 
 static void draw_doublebar(Fl_Color col) { 
@@ -264,7 +245,7 @@ static void draw_doublearrow(Fl_Color col)
   BP; vv(-0.35,-0.4); vv(-0.35,0.4); vv(0.35,0.4); vv(0.35,-0.4); EP;
   BP; vv(0.15,0.8); vv(0.95,0.0); vv(0.15,-0.8); EP;
   BP; vv(-0.15,0.8); vv(-0.95,0.0); vv(-0.15,-0.8); EP;
-  set_outline_color(col);
+
   BC; vv(-0.15,0.4); vv(0.15,0.4); vv(0.15,0.8); vv(0.95,0.0);
       vv(0.15,-0.8); vv(0.15,-0.4); vv(-0.15,-0.4); vv(-0.15,-0.8);
       vv(-0.95,0.0); vv(-0.15,0.8); EC;
@@ -273,20 +254,15 @@ static void draw_doublearrow(Fl_Color col)
 static void draw_arrow(Fl_Color col)
 {
   fl_color(col);
-  BP; vv(0.65,0.1); vv(1.0,0.0); vv(0.65,-0.1); EP;
+  BP; vv(0.65,0.1); vv(1.0,0.0); vv(0.65,-0.1); EF(col);
   BL; vv(-1.0,0.0); vv(0.65,0.0); EL;
-  set_outline_color(col);
-  BL; vv(-1.0,0.0); vv(0.65,0.0); EL;
-  BC; vv(0.65,0.1); vv(1.0,0.0); vv(0.65,-0.1); EC;
 }
 
 static void draw_square(Fl_Color col)
   { rectangle(-1,-1,1,1,col); }
 
 static void draw_circle(Fl_Color col) {
-  fl_color(col); BP; fl_circle(0,0,1); EP;
-  set_outline_color(col);
-  BC; fl_circle(0,0,1); EC;
+  fl_color(col); BP; fl_circle(0,0,1); EF(col);
 }
 
 static void draw_line(Fl_Color col)
@@ -297,7 +273,7 @@ static void draw_plus(Fl_Color col)
   fl_color(col);
   BP; vv(-0.9,-0.15); vv(-0.9,0.15); vv(0.9,0.15); vv(0.9,-0.15); EP;
   BP; vv(-0.15,-0.9); vv(-0.15,0.9); vv(0.15,0.9); vv(0.15,-0.9); EP;
-  set_outline_color(col);
+
   BC;
   vv(-0.9,-0.15); vv(-0.9,0.15); vv(-0.15,0.15); vv(-0.15,0.9);
   vv(0.15,0.9); vv(0.15,0.15); vv(0.9,0.15); vv(0.9,-0.15);
@@ -307,16 +283,16 @@ static void draw_plus(Fl_Color col)
 
 static void draw_uparrow(Fl_Color) {
   fl_color(FL_LIGHT3);
-  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0); EL;
+  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
   fl_color(FL_DARK3);
-  BL; vv(-.8,.8); vv(.8, 0); EL;
+  BL; vv(-.8,.8); vv(.8, 0.0); EL;
 }
 
 static void draw_downarrow(Fl_Color) {
   fl_color(FL_DARK3);
-  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0); EL;
+  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
   fl_color(FL_LIGHT3);
-  BL; vv(-.8,.8); vv(.8, 0); EL;
+  BL; vv(-.8,.8); vv(.8, 0.0); EL;
 }
 
 static void draw_menu(Fl_Color col)
@@ -400,5 +376,5 @@ void Fl::enable_symbols() {
 #endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.20 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -47,16 +47,16 @@ drawing functions:
 <LI><A href=#clipping>Clipping</A></LI>
 <LI><A href=#colors>Colors</A></LI>
 <LI><A href=#lines>Line dashes and thickness</A></LI>
-<LI><A href=#fast>Fast Shapes</A></LI>
-<LI><A href=#complex>Complex Shapes</A></LI>
+<LI><A href=#path>Path construction and drawing</A></LI>
+<LI><A href=#fast>Drawing that bypasses the path stuff</A></LI>
 <LI><A href=#text>Text</A></LI>
 <LI><A href=#images>Images</A></LI>
-<LI><A href=#overlay>Overlay</A></LI>
 </UL>
-<H3><A name=clipping>Clipping</A></H3>
+
+<h2><A name=clipping>Clipping</A></h2>
 
 You can limit all your drawing to a region by calling <TT>
-fl_clip</TT>, and put the drawings back by using <TT>fl_pop_clip</TT>.
+fl_push_clip</TT>, and put the drawings back by using <TT>fl_pop_clip</TT>.
 Fltk may also set up clipping before draw() is called to limit the
 drawing to the region of the window that is damaged.
 
@@ -68,32 +68,32 @@ up your program's redisplay.
 <p>The clip region is measured in pixels (it is unaffected by the current 
 transformation matrix). 
 
-<H4>void fl_clip(int x, int y, int w, int h)</H4>
+<H4><a name=fl_push_clip>void fl_push_clip(int x, int y, int w, int h)</H4>
 
 Pushes the <i>intersection</i> of the current region and this
 rectangle onto the clip stack.
 
-<H4>void fl_clip_out(int x, int y, int w, int h)</H4>
+<H4><a name=fl_clip_out>void fl_clip_out(int x, int y, int w, int h)</H4>
 
 Remove the rectangle from the current clip region, thus making it a
 more complex shape.  This does not push the stack, it just replaces
 the top of it.  <i>This does not work on X or Win32 unless
 <tt>fl_clip()</tt> has been called at least once.</i>
 
-<H4>void fl_push_no_clip()</H4>
+<H4><a name=fl_push_no_clip>void fl_push_no_clip()</H4>
 
 Pushes an empty clip region on the stack so nothing will be clipped.
 This lets you draw outside the current clip region.  <i>You should not
 use this :-)</i>
 
-<H4>void fl_pop_clip()</H4>
+<H4><a name=fl_pop_clip>void fl_pop_clip()</H4>
 
 Restore the previous clip region. <I>You must call
 <TT>fl_pop_clip()</TT> exactly once for every time you call
 <TT>fl_clip()</TT>.  If you return to FLTK with the clip stack not
 empty unpredictable results occur.</I>
 
-<H4>int fl_not_clipped(int x, int y, int w, int h)</H4>
+<H4><a name=fl_not_clipped>int fl_not_clipped(int x, int y, int w, int h)</H4>
 
 Return non-zero if the intersection of the rectangle and the current
 clip region is non-zero.  If this returns zero you don't have to draw
@@ -101,7 +101,7 @@ anything in that rectangle.  <I>Under X this returns 1 if the
 interesection is equal to the rectangle, and 2 if the intersection is
 only part of the rectangle.</i>
 
-<H4>int fl_clip_box(int x, int y, int w, int h, int &amp;X, int
+<H4><a name=fl_clip_box>int fl_clip_box(int x, int y, int w, int h, int &amp;X, int
 &amp;Y, int &amp;W, int &amp;H)</H4>
 
 Find the smallest rectangle that surrounds the intersection of the
@@ -113,34 +113,29 @@ intersection is empty then <TT>W</TT> and <TT>H</TT> are set to zero.
 <p>This can be used to limit complex pixel operations (like drawing
 images) to the smallest rectangle needed to update the visible area.
 
-<H3><A name=colors>Colors</A></H3>
+<h2><A name=colors>Colors</A></h2>
 
 <H4><a name=fl_color>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</H4>
 
 Set the color for all subsequent drawing operations. <TT><a
 href=Fl_Color.html>Fl_Color</a></TT> is a typedef for a 32-bit integer
 containing r,g,b bytes and an "index" byte.  The index is used if
-r,g,b is zero.
+r,g,b is zero. For instance <tt>0xFF008000</tt> is 255 red, zero
+green, and 128 blue.
 
-<P>For 8-bit X colormapped displays, a color cell will be allocated
-out of <TT> fl_colormap</TT> the first time you use an "indexed"
-color. If the colormap fills up then a least-squares algorithm is used
-to find the closest color.  RGB colors are found by using the closest
-entry in the color cube, which may not be all that close.  (On Windows
+<p>(On non-TrueColor X displays fltk rounds the desired color to the
+nearest color in a small (200) set of colors and allocates that from X
+to avoid consuming the entire colormap. On Windows colormapped displays
 the system dithering is used for all colors, which looks lousy, but
 Windows does not have the defective X behavior and thus you usually
-are not forced to set the screen to 8-bit mode).
+are not forced to set the screen to 8-bit mode)
 
 <H4><a href=Fl_Color.html>Fl_Color</a> fl_color()</H4>
 
 Returns the last <TT>fl_color()</TT> that was set.  This can be used 
 for state save/restore.
 
-<H4>void fl_color(uchar r, uchar g, uchar b)</H4>
-
-Same as <tt>fl_color(fl_rgb(r,g,b))</tt>.
-
-<h3><A name=lines>Line dashes and thickness</a></h3>
+<h2><A name=lines>Line dashes and thickness</a></h2>
 
 <h4><a name=fl_line_style>
 void fl_line_style(int style, int width=0, char* dashes=0)</h4>
@@ -176,20 +171,154 @@ somewhat different and nicer than 1.
 pixels.  The first location is how long to draw a solid portion, the
 next is how long to draw the gap, then the solid, etc.  It is
 terminated with a zero-length entry.  A null pointer or a zero-length
-array results in a solid line.  Odd array sizes are not supported and
+array results in a solid line. Odd array sizes are not supported and
 result in undefined behavior.  <i>The dashes array does not work on
 Windows 95/98, use the dash styles instead.</i>
 
-<H3><A name=fast>Fast Shapes</A></H3>
- These are used to draw almost all the FLTK widgets.  They draw on 
-exact pixel boundaries and are as fast as possible, and their behavior 
-will be duplicated exactly on any platform FLTK is ported to.  It is 
-undefined whether these are affected by the <A href=#complex_shapes>
-transformation matrix</A>, so you should only call these while it is 
-the identity. 
+<h2><a name=transformation>Current Transformation</a></h2>
+
+Path construction may be done with an arbitrary 2-D linear
+transformation. <i>Many drawing operations ignore the
+transformation except for the integer translation, which ones do this
+may change in the future and on different platforms</i>.
+
+<H4><a name=fl_push_matrix>void fl_push_matrix()
+<BR><a name=fl_pop_matrix>void fl_pop_matrix()</H4>
+
+Save and restore the current transformation.  The maximum depth of the 
+stack is 10.
+
+<H4><a name=fl_scale>void fl_scale(float x, float y)
+<BR>void fl_scale(float x)
+<BR><a name=fl_translate>void fl_translate(float x, float y)
+<BR><a name=fl_rotate>void fl_rotate(float d)
+<BR><a name=fl_mult_matrix>void fl_mult_matrix(float a,  float b,  float c,  float d,  float 
+x,  float y)</H4>
+
+Concatenate another transformation onto the current one.  The rotation 
+angle is in degrees (not radians) and is counter-clockwise. 
+
+<h4><a name=fl_transform_x>double fl_transform_x(double x, double y)
+<br><a name=fl_transform_y>double fl_transform_y(double x, double y)</h4>
+
+Return the actual x (or y) coordinate after x,y is transformed by the
+current transform. This value may be passed to
+<tt>fl_transformed_vertex</tt> or to the functions that dont do
+transforms yet, like <tt><a href=#fl_draw>fl_draw</a></tt> (but be warned that these may
+change in future versions).
+
+<h4><a name=fl_transform_dx>double fl_transform_dx(double x, double y)
+<br><a name=fl_transform_dy>double fl_transform_dy(double x, double y)</h4>
+
+Similar, but the translation is ignored, so this transforms a distance
+vector, instead of an actual point.
+
+<h2><a name=path>Path construction and drawing</a></h2>
+
+These functions let you draw arbitrary shapes with 2-D linear
+transformations.  The functionality matches that found in Adobe&reg;
+PostScript<SUP>TM</SUP>. On both X and WIN32 the transformed vertices are
+rounded to integers before drawing the line segments: this severely
+limits the accuracy of these functions for complex graphics, so use
+OpenGL when greater accuracy and/or performance is required.
+
+<h4><a name=fl_newpath>void fl_newpath()</h4>
+
+Clear the current "path". This is normally done by fl_fill() or any
+other drawing command.
+
+<H4><a name=fl_vertex>void fl_vertex(float x, float y)</H4>
+
+Add a single vertex to the current path. (If you are familiar with
+PostScript, this does a "moveto" if the path is clear or fl_closepath
+was done last, otherwise it does a "lineto").
+
+<H4>void fl_vertex(int x, int y)</H4>
+
+Add a single vertex to the current path. <i>The current
+transformation, other than integer translation, may be ignored on some
+platforms, in order to make this faster! Use the double version if you
+want the transform to work.</i>
+
+<H4><a name=fl_transformed_vertex>void fl_transformed_vertex(float x, float y)</H4>
+
+Add a single vertex to the current path. The passed values are not
+transformed and may be based on values returned by
+<tt>fl_transform_x()</tt>, <tt>fl_transform_y()</tt>, or
+<tt>fl_transform_dx()</tt> or <tt>fl_transform_dy()</tt>.
+
+<h4><a name=fl_closepath>void fl_closepath();</h4>
+
+Similar to drawing another vertex back at the starting point, but fltk
+knows the path is closed. The next <tt>fl_vertex</tt> will start a new
+disconnected part of the shape.
+
+<p>It is harmless to call <tt>fl_closepath()</tt> several times in a
+row, or to call it before the first point. Sections with less than 3
+points in them will not draw anything when filled.
+
+<h4><a name=fl_curve>void fl_curve(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3)</H4>
+
+Add a series of points on a Bezier curve to the path.  The curve ends 
+(and two of the points) are at <TT>x,y</TT> and <TT>x3,y3</TT>. 
+
+<H4><a name=fl_arc>void fl_arc(float x, float y, float w, float h, float start, float end)</H4>
+
+Add a series of points to the current path on the arc of an
+ellipse. The ellipse in inscribed in the <tt>x,y,w,h</tt> rectangle,
+and the <TT>start</TT> and <TT>end</TT> angles are measured in degrees
+counter-clockwise from 3 o'clock, 45 points at the upper-right corner
+of the rectangle.  If <TT> end</TT> is less than <TT>start</TT> then
+it draws the arc in a clockwise direction.
+
+<H4><a name=fl_ellipse>void fl_ellipse(float x, float y, float w, float h)</H4>
+
+Does closepath() and then adds a series of points on the edge of an
+ellipse inscribed in the given rectangle, then another closepath().
+
+<p>This tries to take advantage of the primitive drawing provided by X
+and Win32, which means it only draws the right thing if the rotation
+is a multiple of 90 degrees, or if the shape is a circle. Currently
+there can only be one ellipse or circle in a path.
+
+<H4><a name=fl_circle>void fl_circle(float x, float y, float r)</H4>
+
+<TT>fl_circle()</TT> draws a circle of radius r centered on the point
+x,y. The result is always a circle, irregardless of scale. This also
+tries to take advantage of the X/Win32 graphics primitives like fl_ellipse.
+
+<h4><a name=fl_points> void fl_points()</h4>
+
+Draw a point (one pixel) for every vertex in the path, then clear the path.
+
+<h4><a name=fl_stroke> void fl_stroke()</h4>
+
+Draw a line between all the points in the path (see fl_line_type() for
+ways to set the thicknesss and dot pattern of the line).
+
+<h4><a name=fl_fill>void fl_fill()</h4>
+
+Does <tt>fl_closepath()</tt> and then fill with the current color.
+
+<p>For portability, you should only draw polygons that appear the same
+whether &quot;even/odd&quot; or &quot;non-zero&quot; winding rules are
+used to fill them.  This mostly means that holes should be drawn in
+the opposite direction of the outside.
+
+<h4><a name=fl_fill_stroke>void fl_fill_stroke(Fl_Color linecolor)</h4>
+
+Does <tt>fl_fill()</tt>, then sets the current color to
+<i>linecolor</i> and does <tt>fl_stroke</tt> with the same closed path.
+
+<h2><A name=fast>Drawing that bypasses the path mechanism</A></h2>
+
+For speed and convienence, and to get some necessary graphics on the
+rather primitive interface provided by X and Win32, fltk has some
+calls that could be done with paths but are provided directly.
 
 <H4><a name=fl_rectf>void fl_rectf(int x, int y, int w, int h)</H4>
- Color a rectangle that exactly fills the given bounding box. 
+
+Color a rectangle that exactly fills the given bounding box.
 
 <H4>void fl_rectf(int x, int y, int w, int h, <a
 href=Fl_Color.html>Fl_Color</a>)</h4>
@@ -200,181 +329,108 @@ drawing a solid-colored block using <A
 href=#fl_draw_image><TT>fl_draw_image()</TT> </A> so that dithering is
 produced.
 
-<H4>void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar
-b)</H4>
+<H4><a name=fl_rect>void fl_rect(int x, int y, int w, int h)</H4>
 
-Same as <tt>fl_rectf(x,y,w,h,fl_rgb(r,g,b))</tt>.
+Draw a line <I>inside</I> this bounding box (currently correct only
+for 0-thickness lines).
 
-<H4>void fl_rect(int x, int y, int w, int h)</H4>
- Draw a 1-pixel border <I>inside</I> this bounding box. 
-<H4>void fl_line(int x, int y, int x1, int y1)
-<BR> void fl_line(int x, int y, int x1, int y1, int x2, int y2)</H4>
- Draw one or two 1-pixel thick lines between the given points. 
-<H4>void fl_loop(int x, int y, int x1, int y1, int x2, int y2)
-<BR> void fl_loop(int x, int y, int x1, int y1, int x2, int y2, int x3, 
-int y3)</H4>
- Outline a 3 or 4-sided polygon with 1-pixel thick lines. 
-<H4>void fl_polygon(int x, int y, int x1, int y1, int x2, int y2)
-<BR> void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int 
-x3, int y3)</H4>
- Fill a 3 or 4-sided polygon.  The polygon must be convex. 
-<H4>void fl_xyline(int x, int y, int x1, int y1)
-<BR> void fl_xyline(int x, int y, int x1, int y1, int x2)
-<BR> void fl_xyline(int x, int y, int x1, int y1, int x2, int y3)</H4>
- Draw 1-pixel wide horizontal and vertical lines.  A horizontal line is 
-drawn first, then a vertical, then a horizontal. 
-<H4>void fl_yxline(int x, int y, int y1)
-<BR> void fl_yxline(int x, int y, int y1, int x2)
-<BR> void fl_yxline(int x, int y, int y1, int x2, int y3)</H4>
- Draw 1-pixel wide vertical and horizontal lines.  A vertical line is 
-drawn first, then a horizontal, then a vertical. 
-<H4>void fl_arc(int x, int y, int w, int h, double a1, double a2)
-<BR> void fl_pie(int x, int y, int w, int h, double a1, double a2)</H4>
- High-speed ellipse sections.  These functions match the rather limited 
-circle drawing code provided by X and WIN32.  The advantage over 
-using <A href=#fl_arc><TT>fl_arc</TT></A> is that they are faster 
-because they often use the hardware, and they draw much nicer small 
-circles, since the small sizes are often hard-coded bitmaps. 
-<P>If a complete circle is drawn it will fit inside the passed bounding 
-box.  The two angles are measured in degrees counterclockwise from 
-3'oclock and are the starting and ending angle of the arc, <TT>a2</TT>
- must be greater or equal to <TT>a1</TT>. </P>
-<P><TT>fl_arc()</TT> draws a 1-pixel thick line (notice this has a 
-different number of arguments than the <A href=#fl_arc><TT>fl_arc()</TT></A>
- described below. </P>
-<P><TT>fl_pie()</TT> draws a filled-in pie slice.  This slice may 
-extend outside the line drawn by <TT>fl_arc</TT>, to avoid this use <TT>
-w - 1</TT> and <TT>h - 1</TT>. </P>
-<H3><A name=complex>Complex Shapes</A></H3>
- These functions let you draw arbitrary shapes with 2-D linear 
-transformations.  The functionality matches that found in Adobe&reg; 
-PostScript<SUP>TM</SUP>.  The exact pixels that are filled is less defined 
-than for the previous calls so that FLTK can take advantage of drawing 
-hardware.  On both X and WIN32 the transformed vertices are rounded to integers before 
-drawing the line segments: this severely limits the accuracy of these 
-functions for complex graphics, so use OpenGL when greater accuracy 
-and/or performance is required. 
-<H4>void fl_push_matrix()
-<BR> void fl_pop_matrix()</H4>
- Save and restore the current transformation.  The maximum depth of the 
-stack is 4. 
-<H4>void fl_scale(float x, float y)
-<BR> void fl_scale(float x)
-<BR> void fl_translate(float x, float y)
-<BR> void fl_rotate(float d)
-<BR> void fl_mult_matrix(float a,  float b,  float c,  float d,  float 
-x,  float y)</H4>
- Concatenate another transformation onto the current one.  The rotation 
-angle is in degrees (not radians) and is counter-clockwise. 
+<H4><a name=fl_line>void fl_line(int x, int y, int x1, int y1)</h4>
 
-<h4>void fl_begin()</h4>
+Draw a straight line between the two points.
 
-Clear the current "path" and start a new one.
+<h4><a name=fl_pie>void fl_pie(int x, int y, int w, int h, double start, double end, int
+what=FL_PIE);</h4>
 
-<H4>void fl_vertex(float x, float y)</H4>
+These functions match the rather limited circle drawing code provided
+by X and WIN32.  The advantage over using <A
+href=#fl_arc><TT>fl_arc</TT></A> is that they are faster because they
+often use the hardware, and they draw much nicer small circles, since
+the small sizes are often hard-coded bitmaps. Only the integer
+translation of the current transformation is obeyed on most systems.
 
-Add a single vertex to the current path. 
+<p>The allowed types are:
 
-<h4>void fl_curve(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3)</H4>
+<ul>
 
-Add a series of points on a Bezier curve to the path.  The curve ends 
-(and two of the points) are at <TT>x,y</TT> and <TT>x3,y3</TT>. 
+<li><tt>FL_PIE</tt> fills a pie-slice shape
+<li><tt>FL_CHORD</tt> join the ends of the arc with a straight line
+and fill.
+<li><tt>FL_ARC</tt> stroke the arc.
 
-<H4>void fl_arc(float x, float y, float r, float start, float end)</H4>
+</ul>
 
-Add a series of points to the current path on the arc of a circle (you 
-can get elliptical paths by using scale and rotate before calling 
-this). <TT>x,y</TT> are the center of the circle, and <TT>r</TT> is its 
-radius. <TT>fl_arc()</TT> takes <TT>start</TT> and <TT>end</TT> angles 
-that are measured in degrees counter-clockwise from 3 o'clock.  If <TT>
-end</TT> is less than <TT>start</TT> then it draws the arc in a 
-clockwise direction. 
+<h2><a name=text>Text</a></h2>
 
-<H4>void fl_circle(float x, float y, float r)</H4>
-
-<TT>fl_circle()</TT> is equivalent to <TT>fl_arc(...,0,360)</TT> but
-may be faster.  It must be the <I>only</I> thing in the path: if you
-want a circle as part of a complex polygon you must use
-<TT>fl_arc()</TT>. <I>This draws incorrectly if the transformation is
-both rotated and non-square scaled.</I>
-
-<h4>void fl_gap()</h4>
-
-Closes the current loop of the path by adding a segment to the first
-point. Then this sets things up so the next point starts a new line
-segment or loop. It is unnecessary but harmless to call
-<TT>fl_gap()</TT> before the first vertex, after the last one, or
-multiple times in a row.
-
-<h4> void fl_end_points()</h4>
-
-Draw each point in the current path as a dot.
-
-<h4> void fl_end_line()</h4>
-
-Draw the path as a line (see fl_line_type() for ways to set the
-thicknesss and dot pattern of the line).
-
-<h4>void fl_end_loop()</h4>
-
-Draw a closed path with a line, by adding a segment back to the first
-point and doing fl_end_line().
-
-<h4>void fl_end_polygon()</h4>
-
-Close the path and then fill with the current color.
-
-<h4>void fl_end_complex_polygon()</h4>
-
-Close the path and then fill with the current color. This invokes
-extra logic so that non-convex polygons can be drawn correctly
-(otherwise only convex polygons (all interior angles less or equal to
-180 degrees) will draw correctly.
-
-For portability, you should only draw polygons that appear the same
-whether &quot;even/odd&quot; or &quot;non-zero&quot; winding rules are
-used to fill them.  This mostly means that holes should be drawn in
-the opposite direction of the outside.
-
-<H3><A name=text>Text</A></H3>
+See <a href=Fl_Font.html>Fl_Font</a> for a description of what can be
+passed as a font. For most uses one of the built-in constant fonts
+like <tt>FL_HELVETICA</tt> can be used.
 
 <H4><A name=fl_font>
 void fl_font(<a href=Fl_Font.html>Fl_Font</a>, unsigned size)</h4>
 
 Set the current font.  It is scaled so that the point size is
-<i>size</i> pixels tall (other transformations are not yet supported).
-It is undefined if the font selection is affected by the current
-transformation, so keep it the identity.
+<i>size</i> pixels tall.  The font size is unaffected by the current
+transformation.
 
-<h4>void fl_font(<a href=Fl_Font.html>Fl_Font</a>, unsigned size, const char* encoding)</h4>
+<H4><A name=fl_font>
+void fl_font(const char* name, unsigned size);<br>
+void fl_font(const char* name, int attributes, unsigned size);</h4>
 
-<p>Select a font and name the encoding you would prefer to get.  If
-the encoding cannot be found, one of the existing encodings is picked
-at random.  The only way to find out what encodings are going to work
-is to call <a href=Fl_Font.html>Fl_Font::encodings()</a>.
+Set the current font by name. Exactly what names work depend on your
+system, it is best to use <a
+href=Fl_Font.html#fl_list_fonts><tt>fl_list_fonts</tt></a> to see what
+is provided. See <a
+href=Fl_Font.html#fl_find_font><tt>fl_find_font</tt></a> for how the
+name and attributes are interpreted.
 
-<p>This call is provided to handle some of the evils of present day
-internationalization.  In the future I hope that UTF-8 encoding will
-be supported by the window system and thus by fltk, avoiding the need
-for this (and for "wide" characters which fltk does not and will never
-support!).
+<h4><a name=fl_encoding>void fl_encoding(const char*);</h4>
 
-<h4>extern const char* fl_encoding;</h4>
+The encoding determines how the bytes sent to <a
+href=#fl_draw>fl_draw</a> are turned into glyphs. Unlike most toolkits
+there are no errors, if you pick an encoding that does not exist for
+this font, you will get some default encoding (for instance the Symbol
+font always works without having to set the encoding).  The only way
+to find out what encodings are going to work is to call <a
+href=Fl_Font.html>Fl_Font::encodings()</a>.
 
-The default encoding to use, calling <tt>fl_font(f,s)</tt> is the same
-as calling <tt>fl_font(f,s,fl_encoding)</tt>.  The default value of
-this is "iso8859-1".
+<p>Notice that only 8-bit encodings are supported. In the future we
+plan to support UTF-8 which is called "iso10646", at that time support
+for 8-bit encodings may be dropped anyway. Notice that fltk will
+<i>never</i> support "wide" encodings, as I consider them evil.
+
+<p>Currently the default is "iso8859-1"
 
 <h4>Fl_Font fl_font()</h4>
 
 Returns the current font.
 
-<h4>unsigned fl_size()</h4>
+<h4><a name=fl_size>unsigned fl_size()</h4>
 
 Returns the current font size.
 
-<h4><a name=fl_draw>void fl_draw(const char*, float x, float y)
-<br>void fl_draw(const char*, int n, float x, float y)</h4>
+<h4>const char* fl_encoding();</h4>
+
+Returns the current encoding.
+
+<H4><a name=fl_height>int fl_height()</H4>
+
+Returns the vertical size of the font according to the system.  It is
+highly recommended that you use <tt>fl_size()</tt> instead for
+portability and because many X fonts return erroneous values for this.
+
+<H4><a name=fl_descent>int fl_descent()</H4>
+Recommended distance above the bottom of a <TT>fl_height()</TT> tall 
+box to draw the text at so it looks centered vertically in that box. 
+
+<H4><a name=fl_width>int fl_width(const char*)
+<BR>int fl_width(const char*, int n)
+<BR>int fl_width(uchar)</H4>
+
+Return the pixel width of a nul-terminated string, a sequence of
+<TT>n</TT> characters, or a single character in the current font.
+
+<h4><a name=fl_draw>void fl_draw(const char*, int x, int y)
+<br>void fl_draw(const char*, int n, int x, int y)</h4>
 
 Draw a nul-terminated string or an array of <TT>n</TT> characters 
 starting at the given location. 
@@ -388,110 +444,85 @@ href=Fl_Labeltype.html> <TT>Fl_Labeltype_::draw()</TT></A> for values
 for the flags.  The value <TT>FL_ALIGN_INSIDE</TT> is ignored, as this
 function always prints inside the box.
 
-<H4>int fl_height()</H4>
+<H4><a name=fl_measure>void fl_measure(const char*, int &amp;w, int &amp;h)</H4>
 
-Returns the vertical size of the font according to the system.  It is
-highly recommended that you use <tt>fl_size()</tt> instead for
-portability and because many X fonts return erroneous values for this.
-
-<H4>int fl_descent()</H4>
-Recommended distance above the bottom of a <TT>fl_height()</TT> tall 
-box to draw the text at so it looks centered vertically in that box. 
-
-<H4>float fl_width(const char*)
-<BR> float fl_width(const char*, int n)
-<BR> float fl_width(uchar)</H4>
- Return the pixel width of a nul-terminated string, a sequence of <TT>n</TT>
- characters, or a single character in the current font. 
-<H4>void fl_measure(const char*, int &amp;w, int &amp;h)</H4>
- Measure how wide and tall the string will be when printed by the <TT>
-fl_draw(...align)</TT> function.  If the incoming <TT>w</TT> is 
-non-zero it will wrap to that width. 
-
-<H3><A name=overlay>Overlays</A></H3>
-<H4>void fl_overlay_rect(int x, int y, int w, int h)
-<BR> void fl_overlay_clear()</H4>
- These functions allow you to draw interactive selection rectangles 
-without using the overlay hardware.  FLTK will XOR a single rectangle 
-outline over a window. Calling this will erase any previous rectangle 
-(by XOR'ing it), and then draw the new one.  Calling <TT>
-fl_overlay_clear()</TT> will erase the rectangle without drawing a new 
-one. 
-<P>Using this is tricky. You should make a widget with both a <TT>
-handle()</TT> and <TT>draw()</TT> method. <TT>draw()</TT> should call <TT>
-fl_overlay_clear()</TT> before doing anything else.  Your <TT>handle()</TT>
- method should call <TT>window()-&gt;make_current()</TT> and then <TT>
-fl_overlay_rect()</TT> after <TT>FL_DRAG</TT> events, and should call <TT>
-fl_overlay_clear()</TT> after a <TT>FL_RELEASE</TT> event. </P>
+Measure how wide and tall the string will be when printed by the
+<TT>fl_draw(...align)</TT> function.  If the incoming <i>w</i> is
+non-zero it will wrap to that width.
 
 <H2><A name=images>Images</A></H2>
 
-To draw images, you can either do it directly from data in your
-memory, or you can create an <a
+If you plan to draw the same image many times, you may want an <a
 href=Fl_Image.html><tt>Fl_Image</tt></a> subclass such as <A
 href=Fl_Image.html#Fl_Bitmap><TT>Fl_Bitmap</TT></A>, <A
 href=Fl_Image.html#Fl_RGB_Image> <TT>Fl_RGB_Image</TT></A>, or <A
 href=Fl_Image.html#Fl_Pixmap><TT>Fl_Pixmap</TT></A> and call <a
-href=Fl_Image.html#draw><tt>draw()</tt></a> on them.  The advantage of
-drawing directly is that it is more intuitive, and it is faster if the
-image data changes more often than it is redrawn.  The advantage of
+href=Fl_Image.html#draw><tt>draw()</tt></a> on them. The advantage of
 using the object is that FLTK will cache translated forms of the image
 (on X it uses a server pixmap) and thus redrawing is <I>much</I>
 faster.  In addition, on current systems, <tt>Fl_Image</tt> is the
 only way to get transparency or to draw 1-bit bitmaps.
 
-<H3>Direct Image Drawing</H3>
- It is undefined whether the location or drawing of the image is 
-affected by the current transformation, so you should only call these 
-when it is the identity. 
-<H4>void fl_draw_image(const uchar*, int X, int Y, int W, int H, int D 
+<p>The advantage of drawing directly is that it is more intuitive, and
+it is faster if the image data changes more often than it is redrawn.
+
+<p>Currently the image is only affected by the integer portion of the
+current transformation. This may change in future versions!
+
+<H4><a name=fl_draw_image>void fl_draw_image(const uchar*, int X, int Y, int W, int H, int D 
 = 3, int LD = 0)
-<BR> void fl_draw_image_mono(const uchar*, int X, int Y, int W, int H, 
+<BR>void fl_draw_image_mono(const uchar*, int X, int Y, int W, int H, 
 int D = 1, int LD = 0)</H4>
- Draw an 8-bit per color RGB or luminance image.  The pointer points at 
-the &quot;r&quot; data of the top-left pixel.  Data must be in <TT>r,g,b</TT>
- order. <TT>X,Y</TT> are where to put the top-left corner. <TT>W</TT>
- and <TT>H</TT> define the size of the image. <TT>D</TT> is the delta 
-to add to the pointer between pixels, it may be any value greater or 
-equal to <TT>3</TT>, or it can be negative to flip the image 
-horizontally. <TT>LD</TT> is the delta to add to the pointer between 
-lines (if 0 is passed it uses <TT>W * D</TT>), and may be larger than <TT>
-W * D</TT> to crop data, or negative to flip the image vertically. 
+
+Draw an 8-bit per color RGB or luminance image.  The pointer points at
+the &quot;r&quot; data of the top-left pixel.  Data must be in
+<TT>r,g,b</TT> order. <TT>X,Y</TT> are where to put the top-left
+corner. <TT>W</TT> and <TT>H</TT> define the size of the
+image. <TT>D</TT> is the delta to add to the pointer between pixels,
+it may be any value greater or equal to <TT>3</TT>, or it can be
+negative to flip the image horizontally. <TT>LD</TT> is the delta to
+add to the pointer between lines (if 0 is passed it uses <TT>W *
+D</TT>), and may be larger than <TT>W * D</TT> to crop data, or
+negative to flip the image vertically.
+
 <P>It is highly recommended that you put the following code before the 
 first <TT>show()</TT> of <I>any</I> window in your program to get rid 
-of the dithering if possible: </P>
-<UL>
-<PRE>
-Fl::visual(FL_RGB);
-</PRE>
-</UL>
- Gray scale (1-channel) images may be drawn.  This is done if <TT>abs(D)</TT>
- is less than 3, or by calling <TT>fl_draw_image_mono()</TT>.  Only one 
+of the dithering if possible:
+
+<a name=functions.html#visual><ul><pre>Fl::visual(FL_RGB);</pre></ul>
+
+Gray scale (1-channel) images may be drawn.  This is done if <TT>abs(D)</TT>
+is less than 3, or by calling <TT>fl_draw_image_mono()</TT>.  Only one 
 8-bit sample is used for each pixel, and on screens with different 
 numbers of bits for red, green, and blue only gray colors are used. 
- Setting <TT>D</TT> greater than 1 will let you display one channel of 
-a color image. 
+Setting <TT>D</TT> greater than 1 will let you display one channel of 
+a color image.
+
 <P><I>The X version does not support all possible visuals.</I> If FLTK 
 cannot draw the image in the current visual it will abort.  FLTK 
 supports any visual of 8 bits or less, and all common TrueColor visuals 
-up to 32 bits. </P>
+up to 32 bits.
+
 <H4>typedef void (*fl_draw_image_cb)(void*, int x, int y, int w, uchar 
 *)
-<BR> void fl_draw_image(fl_draw_image_cb, void*, int X, int Y, int W, 
+<BR>void fl_draw_image(fl_draw_image_cb, void*, int X, int Y, int W, 
 int H, int D = 3)
-<BR> void fl_draw_image_mono(fl_draw_image_cb, void*, int X, int Y, 
+<BR>void fl_draw_image_mono(fl_draw_image_cb, void*, int X, int Y, 
 int W, int H, int D = 1)</H4>
- Call the passed function to provide each scan line of the image.  This 
+
+Call the passed function to provide each scan line of the image.  This 
 lets you generate the image as it is being drawn, or do arbitrary 
 decompression of stored data (provided it can be decompressed to 
 individual scan lines easily). 
+
 <P>The callback is called with the <TT>void*</TT> user data pointer 
 (this can be used to point at a structure of information about the 
 image), and the <TT>x</TT>, <TT>y</TT>, and <TT>w</TT> of the scan line 
 desired from the image.  0,0 is the upper-left corner (<I>not <TT>X,Y</TT>
 </I>).  A pointer to a buffer to put the data into is passed.  You must 
 copy <TT>w</TT> pixels from scanline <TT>y</TT>, starting at pixel <TT>x</TT>
-, to this buffer. </P>
+, to this buffer.
+
 <P>Due to cropping, less than the whole image may be requested.  So <TT>
 x</TT> may be greater than zero, the first <TT>y</TT> may be greater 
 than zero, and <TT>w</TT> may be less than <TT>W</TT>.  The buffer is 
@@ -499,33 +530,12 @@ long enough to store the entire <TT>W * D</TT> pixels, this is for
 convienence with some decompression schemes where you must decompress 
 the entire line at once: decompress it into the buffer, and then if <TT>
 x</TT> is not zero, copy the data over so the <TT>x</TT>'th pixel is at 
-the start of the buffer. </P>
-<P>You can assume the <TT>y</TT>'s will be consecutive, except the 
-first one may be greater than zero. </P>
-<P>If <TT>D</TT> is 4 or more, you must fill in the unused bytes with 
-zero. </P>
-<H4>int fl_draw_pixmap(char** data, int X, int Y, <a href=Fl_Color.html>Fl_Color</a> = FL_GRAY)</H4>
-Draws XPM image data, with the top-left corner at the given position. 
-The image is dithered on 8-bit displays so you won't lose color space 
-for programs displaying both images and pixmaps.  This function returns 
-zero if there was any error decoding the XPM data. 
-<P>To use an XPM, do: </P>
-<UL>
-<PRE>
-#include &quot;foo.xpm&quot;
-...
-fl_draw_pixmap(foo, X, Y);
-</PRE>
-</UL>
- In the current version the XPM data is converted to 24-bit RGB color 
-and passed through <TT>fl_draw_image()</TT>.  This is obviously not the 
-most efficient way to do it, and has the same visual limitations as 
-listed above for <TT>fl_draw_image()</TT>.  Transparent colors are 
-replaced by the optional <TT><a href=Fl_Color.html>Fl_Color</a></TT> argument (this may change in 
-the future). 
-<H4>int fl_measure_pixmap(char** data, int &amp;w, int &amp;h)</H4>
- An XPM image contains the dimensions in its data.  This function finds 
-and returns the width and height.  The return value is non-zero if it 
-parsed the dimensions ok, and zero if there is any problem. 
+the start of the buffer.
 
-</BODY></HTML>
+<P>You can assume the <TT>y</TT>'s will be consecutive, except the 
+first one may be greater than zero.
+
+<P>If <TT>D</TT> is 4 or more, you must fill in the unused bytes with 
+zero.
+
+</body></html>

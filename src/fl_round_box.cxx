@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.24 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_round_box.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,32 +33,28 @@
 #include <FL/Fl_Widget.H>
 #include <string.h>
 
-// A compiler from a certain very large software company will not compile
-// the function pointer assignment due to the name conflict with fl_arc.
-// This function is to fix that:
-// SGI's compiler is broken too
-void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
-  fl_arc(x,y,w,h,a1,a2);
-}
-
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
-static void arc(int which, int x,int y,int w,int h, Fl_Color color)
+// Draw the oval shape. This is ugly because I need to cut the path
+// up into individual arcs so the drawing library uses the server
+// arc code.
+
+static void lozenge(int which, int x,int y,int w,int h, Fl_Color color)
 {
+  w--; h--;
   int d = w <= h ? w : h;
   if (d <= 1) return;
   fl_color((Fl_Color)color);
-  void (*f)(int,int,int,int,double,double);
-  f = (which==FILL) ? fl_pie : fl_arc_i;
+  int what = (which==FILL ? FL_PIE : FL_ARC);
   if (which >= CLOSED) {
-    f(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
-    f(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
+    fl_pie(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
+    fl_pie(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
   } else if (which == UPPER_LEFT) {
-    f(x+w-d, y, d, d, 45, w<=h ? 180 : 90);
-    f(x, y+h-d, d, d, w<=h ? 180 : 90, 225);
+    fl_pie(x+w-d, y, d, d, 45, w<=h ? 180 : 90, what);
+    fl_pie(x, y+h-d, d, d, w<=h ? 180 : 90, 225, what);
   } else { // LOWER_RIGHT
-    f(x, y+h-d, d, d, 225, w<=h ? 360 : 270);
-    f(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45);
+    fl_pie(x, y+h-d, d, d, 225, w<=h ? 360 : 270, what);
+    fl_pie(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45, what);
   }
   if (which == FILL) {
     if (w < h)
@@ -67,11 +63,11 @@ static void arc(int which, int x,int y,int w,int h, Fl_Color color)
       fl_rectf(x+d/2, y, w-(d&-2), h);
   } else {
     if (w < h) {
-      if (which != UPPER_LEFT) fl_yxline(x+w-1, y+d/2, y+h-d/2);
-      if (which != LOWER_RIGHT) fl_yxline(x, y+d/2, y+h-d/2);
+      if (which != UPPER_LEFT) fl_line(x+w, y+d/2, x+w, y+h-d/2);
+      if (which != LOWER_RIGHT) fl_line(x, y+d/2, x, y+h-d/2);
     } else if (w > h) {
-      if (which != UPPER_LEFT) fl_xyline(x+d/2, y+h-1, x+w-d/2);
-      if (which != LOWER_RIGHT) fl_xyline(x+d/2, y, x+w-d/2);
+      if (which != UPPER_LEFT) fl_line(x+d/2, y+h, x+w-d/2, y+h);
+      if (which != LOWER_RIGHT) fl_line(x+d/2, y, x+w-d/2, y);
     }
   }
 }
@@ -89,9 +85,9 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
     // as the normal square box:
     int d = strlen(s)/4;
     if (w > 2*d && h > 2*(d-1)) {
-      arc(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
+      lozenge(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
       if ((f & FL_FOCUSED) && w > 2*d+4 && h > 2*d+4) {
-	arc(CLOSED, x+d+2, y+d+1, w-2*d-4, h-2*(d-1)-4, FL_INACTIVE_COLOR);
+	lozenge(CLOSED, x+d+2, y+d+1, w-2*d-4, h-2*(d-1)-4, FL_INACTIVE_COLOR);
       }
     }
   }
@@ -100,10 +96,10 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
   while (*s && *t && w > 0 && h > 0) {
     Fl_Color c1 = *s + (FL_GRAY_RAMP-'A'); s += 4;
     Fl_Color c2 = *t + (FL_GRAY_RAMP-'A'); t += 4;
-    arc(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
-    arc(UPPER_LEFT,  x,   y,   w,   h, c1);
-    arc(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
-    arc(LOWER_RIGHT, x,   y,   w,   h, c2);
+    lozenge(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
+    lozenge(UPPER_LEFT,  x,   y,   w,   h, c1);
+    lozenge(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
+    lozenge(LOWER_RIGHT, x,   y,   w,   h, c2);
     x++; y++; w -= 2; h -= 2;
   }
 }
@@ -123,5 +119,5 @@ const Fl_Round_Box fl_round_up_box(0, "2AAWWMMTT", &fl_round_down_box);
 const Fl_Round_Box fl_round_down_box(0, "2WWMMPPAA", &fl_round_up_box);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.24 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.44 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: fl_boxtype.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -93,21 +93,21 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
     for (;;) {
       // draw top line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_xyline(x, y, x+w-1);
+      fl_line(x, y, x+w-1, y);
       y++; if (--h <= 0) break;
       // draw left line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_yxline(x, y+h-1, y);
+      fl_line(x, y+h-1, x, y);
       x++; if (--w <= 0) break;
       if (!*s) break;
     HACK:
       // draw bottom line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_xyline(x, y+h-1, x+w-1);
+      fl_line(x, y+h-1, x+w-1, y+h-1);
       if (--h <= 0) break;
       // draw right line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_yxline(x+w-1, y+h-1, y);
+      fl_line(x+w-1, y+h-1, x+w-1, y);
       if (--w <= 0) break;
       if (!*s) break;
     }
@@ -198,5 +198,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.44 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.17 2001/01/02 00:20:28 clip Exp $"
+   "$Id: conf.h,v 1.18 2001/02/20 06:59:49 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -72,11 +72,11 @@
 #  include <ctype.h>
 #  include <errno.h>
 #  include <limits.h>
-#  if defined(WIN32) || defined(__EMX__)
+#  if defined(WIN32)
 #    include <io.h>
 #  else
 #    include <unistd.h>
-#  endif /* WIN32 || __EMX__ */
+#  endif /* WIN32 */
 
 #include <FL/Fl_Export.H>
 
@@ -477,5 +477,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.17 2001/01/02 00:20:28 clip Exp $".
+ * End of "$Id: conf.h,v 1.18 2001/02/20 06:59:49 spitzak Exp $".
  */

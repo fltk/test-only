@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.16 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.17 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -118,7 +118,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
       HDC tempdc = CreateCompatibleDC(fl_gc);
       SelectObject(tempdc, (HGDIOBJ)mask);
       SetTextColor(fl_gc, 0); // VP : seems necessary at least under win95
-      SelectObject(fl_gc, fl_brush);
+      //SelectObject(fl_gc, fl_brush);
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
       DeleteDC(tempdc);
@@ -164,5 +164,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.16 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.17 2001/02/20 06:59:49 spitzak Exp $".
 //

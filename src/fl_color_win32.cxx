@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.24 2000/08/04 10:22:01 clip Exp $"
+// "$Id: fl_color_win32.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,30 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The fltk "colormap".  This allows ui colors to be stored in 8-bit
-// locations, and provides a level of indirection so that global color
-// changes can be made.  Not to be confused with the X colormap, which
-// I try to hide completely.
-
-// SGI compiler seems to have problems with unsigned char arguments
-// being used to index arrays.  So I always copy them to an integer
-// before use.
+// This file does not compile independently, it is included by fl_color.cxx
 
 #include <config.h>
-#include <stdio.h>
-#include <FL/Fl.H>
 #include <FL/win32.H>
-#include <FL/fl_draw.H>
-
-static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.cxx":
-};
+#include <stdio.h>
 
 // The current color:
 Fl_Color	fl_color_;
 COLORREF	fl_colorref;
-FL_API HPEN	fl_pen;
-FL_API HBRUSH	fl_brush;
+HBRUSH		fl_brush;
+HPEN		fl_pen;
 HPALETTE	fl_palette;
 
 COLORREF fl_wincolor(Fl_Color i) {
@@ -73,31 +60,67 @@ COLORREF fl_wincolor(Fl_Color i) {
   return rgb;
 }
 
+static int line_style = 0;
+static DWORD dash_pattern[16];
+static int dash_pattern_size = 0;
+static int line_width = 0;
+
+void fl_line_style(int style, int width, char* dashes) {
+  static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
+  static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
+  line_style = PS_GEOMETRIC | Cap[(style>>8)&3] | Join[(style>>12)&3];
+  if (dashes && dashes[0]) {
+    line_style |= PS_USERSTYLE;
+    int n; for (n = 0; n < 16 && *dashes;) dash_pattern[n++] = *dashes++;
+    dash_pattern_size = n;
+  } else {
+    dash_pattern_size = 0;
+    line_style |= style & 0xff; // allow them to pass any low 8 bits for style
+  }
+  line_width = width;
+  // fix cards that ignore dash pattern for zero width:
+  if (!width && (line_style || dash_pattern_size)) line_width = 1;
+  HPEN newpen = fl_pen = fl_create_pen();
+  if (newpen) {
+    HPEN oldpen = fl_pen = (HPEN)SelectObject(fl_gc, newpen);
+    if (oldpen) DeleteObject(oldpen);
+  } else {
+    // CET - FIXME - remove this debug fprintf()?
+    fprintf(stderr, "fl_line_style(): Could not create GDI pen object.\n");
+  }
+}
+
+HPEN fl_create_pen() {
+  if (line_style || line_width || dash_pattern_size) {
+    LOGBRUSH penbrush = {BS_SOLID, fl_colorref, 0}; // can this be fl_brush?
+    return ExtCreatePen(line_style, line_width, &penbrush,
+			dash_pattern_size, dash_pattern_size?dash_patern:0);
+  } else {
+    return CreatePen(PS_SOLID, 1, fl_colorref);
+  }
+}
+
 void fl_color(Fl_Color i) {
   fl_color_ = i;
-  COLORREF rgb = fl_wincolor(i);
+  fl_colorref = fl_wincolor(i);
 
-  HPEN newpen = CreatePen(PS_SOLID, 1, rgb);
-  if (!newpen) {
-    // CET - FIXME - remove this debug fprintf()?
-    fprintf(stderr, "fl_color(): Could not create GDI pen object.\n");
-    return;
-  }
-  HBRUSH newbrush = CreateSolidBrush(rgb);
-  if (!newbrush) {
+  HBRUSH newbrush = CreateSolidBrush(fl_colorref);
+  if (newbrush) {
+    fl_brush = newbrush;
+    HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush);
+    if (oldbrush) DeleteObject(oldbrush);
+  } else {
     // CET - FIXME - remove this debug fprintf()?
     fprintf(stderr, "fl_color(): Could not create GDI brush object.\n");
-    DeleteObject(newpen);
-    return;
   }
-  HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen); // this returns the old pen
-  if (oldpen) DeleteObject(oldpen);
-  HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush); // this returns the old brush
-  if (oldbrush) DeleteObject(oldbrush);
-
-  fl_colorref = rgb;
-  fl_pen = newpen;
-  fl_brush = newbrush;
+  HPEN newpen = fl_pen = fl_create_pen();
+  if (newpen) {
+    HPEN oldpen = fl_pen = (HPEN)SelectObject(fl_gc, newpen);
+    if (oldpen) DeleteObject(oldpen);
+  } else {
+    // CET - FIXME - remove this debug fprintf()?
+    fprintf(stderr, "fl_color(): Could not create GDI pen object.\n");
+  }
 }
 
 void fl_free_color(Fl_Color) {
@@ -152,5 +175,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.24 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
 //

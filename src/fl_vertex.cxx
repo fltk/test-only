@@ -1,9 +1,11 @@
 //
-// "$Id: fl_vertex.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $"
 //
-// Portable drawing routines for the Fast Light Tool Kit (FLTK).
+// Path construction and filling. I think this file is always linked
+// into any fltk program, so try to keep it reasonably small.
+// Also see fl_arc.cxx and fl_curve.cxx
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2001 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,33 +25,47 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Portable drawing code for drawing arbitrary shapes with
-// simple 2D transformations.  See also fl_arc.C
-
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 #include <FL/math.h>
 #include <stdlib.h>
 
-struct matrix {double a, b, c, d, x, y;};
+////////////////////////////////////////////////////////////////
+// Transformation:
 
-static matrix m = {1, 0, 0, 1, 0, 0};
+struct Matrix {double a, b, c, d, x, y;};
 
-static matrix stack[10];
+static Matrix m = {1, 0, 0, 1, 0, 0};
+
+struct Matrixi {Matrix m; int x, y;};
+
+static Matrixi stack[10];
 static int sptr = 0;
 
-void fl_push_matrix() {stack[sptr++] = m;}
+void fl_push_matrix() {
+  stack[sptr].m = m;
+  stack[sptr].x = fl_x_;
+  stack[sptr].y = fl_y_;
+  sptr++;
+}
 
-void fl_pop_matrix() {m = stack[--sptr];}
+void fl_pop_matrix() {
+  sptr--;
+  m = stack[sptr].m;
+  fl_x_ = stack[sptr].x;
+  fl_y_ = stack[sptr].y;
+}
 
 void fl_mult_matrix(double a, double b, double c, double d, double x, double y) {
-  matrix o;
+  Matrix o;
   o.a = a*m.a + b*m.c;
   o.b = a*m.b + b*m.d;
   o.c = c*m.a + d*m.c;
   o.d = c*m.b + d*m.d;
   o.x = x*m.a + y*m.c + m.x;
+  {double t = rint(o.x); o.x = o.x-t; fl_x_ += int(t);}
   o.y = x*m.b + y*m.d + m.y;
+  {double t = rint(o.y); o.y = o.y-t; fl_y_ += int(t);}
   m = o;
 }
 
@@ -71,13 +87,16 @@ void fl_rotate(double d) {
   }
 }
 
-double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x + fl_x_;}
+double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
 
-double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y + fl_y_;}
+double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
 
 double fl_transform_dx(double x, double y) {return x*m.a + y*m.c;}
 
 double fl_transform_dy(double x, double y) {return x*m.b + y*m.d;}
+
+////////////////////////////////////////////////////////////////
+// Path construction:
 
 // typedef what the x,y fields in a point are:
 #ifdef WIN32
@@ -97,13 +116,24 @@ static int loop_array_size;
 // We also keep track of one circle:
 static int circle_x, circle_y, circle_w, circle_h;
 
-void fl_begin() {points = loop_start = loops = circle_w = 0;}
+static inline void inline_newpath() {
+  points = loop_start = loops = circle_w = 0;
+}
+void fl_newpath() {inline_newpath();}
 
-static void transformed_vertex(COORD_T x, COORD_T y) {
+void fl_vertex(double x,double y) {
+  fl_vertex(int(x*m.a + y*m.c + m.x + .5),
+	    int(x*m.b + y*m.d + m.y + .5));
+}
+
+void fl_vertex(int X, int Y) {
+  COORD_T x = COORD_T(X+fl_x_);
+  COORD_T y = COORD_T(Y+fl_y_);
   if (!points || x != point[points-1].x || y != point[points-1].y) {
     if (points >= point_array_size) {
       point_array_size = point_array_size ? 2*point_array_size : 16;
-      point = (XPoint*)realloc((void*)point, point_array_size*sizeof(XPoint*));
+      point = (XPoint*)realloc((void*)point,
+			       (point_array_size+1)*sizeof(XPoint*));
     }
     point[points].x = x;
     point[points].y = y;
@@ -112,18 +142,16 @@ static void transformed_vertex(COORD_T x, COORD_T y) {
 }
 
 void fl_transformed_vertex(double xf, double yf) {
-  transformed_vertex(COORD_T(xf+.5), COORD_T(yf+.5));
+  fl_vertex(int(xf+.5), int(yf+.5));
 }
 
-void fl_vertex(double x,double y) {
-  transformed_vertex(COORD_T(x*m.a + y*m.c + m.x + .5)+fl_x_,
-		     COORD_T(x*m.b + y*m.d + m.y + .5)+fl_y_);
-}
-
-void fl_gap() {
+void fl_closepath() {
   if (points > loop_start+2) {
     // close the shape by duplicating first point:
-    transformed_vertex(point[loop_start].x, point[loop_start].y);
+    // the array always has one extra point so we don't need to check
+    XPoint& p = point[points-1];
+    XPoint& q = point[loop_start];
+    if (p.x != q.x || p.y != q.y) point[points++] = q;
     if (loops >= loop_array_size) {
       loop_array_size = loop_array_size ? 2*loop_array_size : 16;
       loop = (int*)realloc((void*)loop, loop_array_size*sizeof(int));
@@ -135,102 +163,144 @@ void fl_gap() {
   }
 }
 
-// Shortcut closed circles so they use XDrawArc.
-// Only 1 circle per path, ellipses do not work in rotated
-// coordinate systems, not connected with any other parts of path.
-// If this is a problem use fl_arc() for a correct but slower version.
-
-void fl_circle(double x, double y,double r) {
-  fl_gap(); // maybe it should do this?
+// Add a circle to the path. It is always a circle, irregardless of
+// the transform. Currently only one per path is supported, this uses
+// commands on the server to draw a nicer circle than the path mechanism
+// can make.
+void fl_circle(double x, double y, double r) {
   double xt = fl_transform_x(x,y);
   double yt = fl_transform_y(x,y);
-  double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
-  double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
-  circle_w = int(xt+rx+.5)-(circle_x = int(xt-rx+.5));
-  circle_h = int(yt+ry+.5)-(circle_y = int(yt-ry+.5));
+  double rt = r * sqrt(fabs(m.a*m.d-m.b*m.c));
+  circle_x = int(xt-rt+.5)+fl_x_;
+  circle_w = int(xt+rt+.5)+fl_x_-circle_x;
+  circle_y = int(yt-rt+.5)+fl_y_;
+  circle_h = int(yt+rt+.5)+fl_y_-circle_y;
 }
 
-void fl_end_points() {
+// Add an ellipse to the path. Very lame, only works right for orthogonal
+// transformations.
+void fl_ellipse(double x, double y, double w, double h) {
+  x += w/2;
+  y += h/2;
+  double cx = fl_transform_x(x,y);
+  double cy = fl_transform_y(x,y);
+  double d1 = fl_transform_dx(w,0);
+  double d2 = fl_transform_dx(0,h);
+  double rx = sqrt(d1*d1+d2*d2)/2;
+  d1 = fl_transform_dy(w,0);
+  d2 = fl_transform_dy(0,h);
+  double ry = sqrt(d1*d1+d2*d2)/2;
+  circle_x = int(cx-rx+.5)+fl_x_;
+  circle_w = int(cx+rx+.5)+fl_x_-circle_x;
+  circle_y = int(cy-ry+.5)+fl_y_;
+  circle_h = int(cy+ry+.5)+fl_y_-circle_y;
+// this would work if fl_arc drew nicely:
+// fl_closepath();
+// fl_arc(x, y, w, h, 0, 360);
+// fl_closepath();
+}
+
+////////////////////////////////////////////////////////////////
+// Draw the path:
+
+void fl_points() {
 #ifdef WIN32
   for (int i=0; i<points; i++)
     SetPixel(fl_gc, point[i].x, point[i].y, fl_colorref);
 #else
   if (points > 0) XDrawPoints(fl_display, fl_window, fl_gc, point, points, 0);
 #endif
+  inline_newpath();
 }
 
-void fl_end_line() {
-  if (circle_w > 0) {
+void fl_stroke() {
 #ifdef WIN32
-    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h, 0,0, 0,0); 
-#else
-    XDrawArc(fl_display, fl_window, fl_gc, circle_x, circle_y, circle_w, circle_h, 0, 360*64);
-#endif
-  }
+  if (circle_w > 0)
+    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+	0,0, 0,0);
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
-#ifdef WIN32
     Polyline(fl_gc, point+loop_start, loop_size);
-#else
-    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
-#endif
     loop_start += loop_size;
   }
   int loop_size = points-loop_start;
-#ifdef WIN32
-  if (loop_size > 1) Polyline(fl_gc, point+loop_start, loop_size);
+  if (loop_size > 1)
+    Polyline(fl_gc, point+loop_start, loop_size);
 #else
-  if (loop_size > 1) XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
-#endif
-}
-
-void fl_end_loop() {
-  // close the shape by duplicating first point:
-  if (points > loop_start+2)
-    transformed_vertex(point[loop_start].x, point[loop_start].y);
-  fl_end_line();
-}
-
-void fl_end_polygon() {
-  if (circle_w > 0) {
-#ifdef WIN32
-    SelectObject(fl_gc, fl_brush);
-    Pie(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h, 0, 0, 0,0); 
-#else
-    XFillArc(fl_display, fl_window, fl_gc, circle_x, circle_y, circle_w, circle_h, 0, 360*64);
-#endif
+  if (circle_w > 0)
+    XDrawArc(fl_display, fl_window, fl_gc,
+	     circle_x, circle_y, circle_w, circle_h, 0, 360*64);
+  int loop_start = 0;
+  for (int n = 0; n < loops; n++) {
+    int loop_size = loop[n];
+    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+    loop_start += loop_size;
   }
-  if (loops) {
-    fl_gap();
+  int loop_size = points-loop_start;
+  if (loop_size > 1)
+    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+#endif
+  inline_newpath();
+}
+
+// Warning: result is different on X and Win32! Use fl_fill_stroke().
+// There may be a way to tell Win32 to do what X does, perhaps by making
+// the current pen invisible?
+void fl_fill() {
 #ifdef WIN32
-    SelectObject(fl_gc, fl_brush);
+  if (circle_w > 0)
+    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+	  0,0, 0,0);
+  if (loops) {
+    fl_closepath();
     PolyPolygon(fl_gc, point, loop, loops);
+  } else if (points > 2) {
+    Polygon(fl_gc, point, points);
+  }
 #else
+  if (circle_w > 0)
+    XFillArc(fl_display, fl_window, fl_gc,
+	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
+  if (loops) fl_closepath();
+  if (points > 2)
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
 #endif
-  } else if (points > 2) {
-#ifdef WIN32
-    SelectObject(fl_gc, fl_brush);
-    Polygon(fl_gc, point, points);
-#else
-    XFillPolygon(fl_display, fl_window, fl_gc, point, points, Convex, 0);
-#endif
-  }
+  inline_newpath();
 }
 
-void fl_end_complex_polygon() {
-#ifndef WIN32
-  // For X this stops it from sending the Convex signal:
-  if (!loops) {
-    if (points > 2)
-      XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
-    return;
+// This seems to produce very similar results on X and Win32. Also
+// should be faster than seperate fill & stroke on Win32 and on
+// PostScript/PDF style systems.
+void fl_fill_stroke(Fl_Color color) {
+#ifdef WIN32
+  HPEN newpen = fl_create_pen();
+  HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
+  if (circle_w > 0)
+    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+	  0,0, 0,0);
+  if (loops) {
+    fl_closepath();
+    PolyPolygon(fl_gc, point, loop, loops);
+  } else if (points > 2) {
+    Polygon(fl_gc, point, points);
   }
+  SelectObject(fl_gc, oldpen);
+  DeleteObject(newpen);
+  inline_newpath();
+#else
+  if (circle_w > 0)
+    XFillArc(fl_display, fl_window, fl_gc,
+	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
+  if (loops) fl_closepath();
+  if (points > 2)
+    XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+  Fl_Color saved = fl_color();
+  fl_color(color); fl_stroke();
+  fl_color(saved);
 #endif
-  fl_end_polygon();
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ void Fl_Labeltype_::draw(const char* label,
 			 int X, int Y, int W, int H,
 			 Fl_Color c, Fl_Flags f) const
 {
-  if (f & FL_ALIGN_CLIP) fl_clip(X, Y, W, H);
+  if (f & FL_ALIGN_CLIP) fl_push_clip(X, Y, W, H);
   if (f&FL_INACTIVE) {
     if (!(f&FL_SELECTED)) {
       fl_color(FL_LIGHT3);
@@ -172,5 +172,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
 //

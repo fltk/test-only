@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.136 2001/02/18 07:17:09 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.137 2001/02/20 06:59:50 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -873,30 +873,19 @@ int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
-  int x = this->x(); int y = this->y();
-  for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-	x += p->x(); y += p->y();
-  }
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
-  if (ox() == this->x() && oy() == this->y()) flags |= SWP_NOMOVE;
-  if (ow() == w() && oh() == h()) {
-    for (int k = 0; k < children(); k++) {
-      Fl_Widget* o = child(k);
-      if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    }
-    Fl_Widget::layout();
-	set_old_size();
-    if (flags & SWP_NOMOVE) return;
-    flags |= SWP_NOSIZE;
-    } else {
-    Fl_Group::layout();
-    if (i) {redraw(); /*i->wait_for_expose = 1;*/}
-  }
+  if (ow() == w() && oh() == h()) flags |= SWP_NOSIZE;
+  Fl_Group::layout();
   if (this == resize_from_system) {
     resize_from_system = 0;
   } else if (i) {
+    int x = this->x(); int y = this->y();
+    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+      x += p->x(); y += p->y();
+    }
     int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
     SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
+    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
   }
 }
 
@@ -1263,5 +1252,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.136 2001/02/18 07:17:09 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.137 2001/02/20 06:59:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// "integer" circle drawing functions.  These draw the limited
+// Draw pie slices, chord shapes, and curved lines, using the facilities
+// of X or Windows instead of the line segment drawing that fl_arc(...)
+// uses.  These draw the limited
 // circle types provided by X and NT graphics.  The advantage of
 // these is that small ones draw quite nicely (probably due to stored
 // hand-drawn bitmaps of small circles!) and may be implemented by
 // hardware and thus are fast.
-
-// Probably should add fl_chord.
-
-// 3/10/98: created
+// This is merged into a single function to make writing a dispatch
+// table easier.
 
 #include <FL/fl_draw.H>
 #include <FL/x.H>
@@ -39,44 +39,46 @@
 #include <FL/math.h>
 #endif
 
-void fl_arc(int x,int y,int w,int h,double a1,double a2) {
+void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
   if (w <= 0 || h <= 0) return;
-#ifdef WIN32
   x += fl_x_; y += fl_y_;
-  int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
-  int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
-  int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
-  int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
-  Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
-#else
-  int A = int(a1*64);
-  int B = int(a2*64)-A;
-  XDrawArc(fl_display, fl_window, fl_gc,
-	   x+fl_x_, y+fl_y_, w-1, h-1,
-	   A, B);
-#endif
-}
-
-void fl_pie(int x,int y,int w,int h,double a1,double a2) {
-  if (w <= 0 || h <= 0) return;
 #ifdef WIN32
   if (a1 == a2) return;
-  x += fl_x_; y += fl_y_;
+  w++; h++; // is this needed to match X?
   int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
   int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
   int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
   int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
-  SelectObject(fl_gc, fl_brush);
-  Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+  switch (what) {
+  case FL_PIE:
+    Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    break;
+  case FL_CHORD:
+    Chord(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    break;
+  case FL_ARC:
+    Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    break;
+  }
 #else
   int A = int(a1*64);
   int B = int(a2*64)-A;
-  XFillArc(fl_display, fl_window, fl_gc,
-	   x+fl_x_, y+fl_y_, w-1, h-1,
-	   A, B);
+  switch(what) {
+  case FL_PIE:
+    XSetArcMode(fl_display, fl_gc, ArcPieSlice);
+    goto J1;
+  case FL_CHORD:
+    XSetArcMode(fl_display, fl_gc, ArcChord);
+  J1:
+    XFillArc(fl_display, fl_window, fl_gc, x, y, w, h, A, B);
+    break;
+  case FL_ARC:
+    XDrawArc(fl_display, fl_window, fl_gc, x, y, w, h, A, B);
+    break;
+  }
 #endif
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $".
 //

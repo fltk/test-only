@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.101 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.102 2001/02/20 06:59:49 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -330,7 +330,7 @@ void MenuWindow::draw() {
 	// erase the background if only doing partial update. This uses
 	// clipping so background pixmaps will work:
 	if (damage() == FL_DAMAGE_CHILD) {
-	  fl_clip(x,y,w,ih);
+	  fl_push_clip(x,y,w,ih);
 	  box()->draw(this,0,0,this->w(),this->h(),0);
 	  fl_pop_clip();
 	}
@@ -732,5 +732,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.101 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.102 2001/02/20 06:59:49 spitzak Exp $".
 //

@@ -10,7 +10,7 @@ parts of fltk is a typedef for a ponter to the structure
 <p>The following Fl_Font values are predefined:</p>
 
 <ul>
-<li><tt>FL_HELVETICA</tt>
+<li><tt>FL_HELVETICA</tt> (Ariel on Win32)
 <li><tt>FL_HELVETICA_BOLD</tt>
 <li><tt>FL_HELVETICA_ITALIC</tt>
 <li><tt>FL_HELVETICA_BOLD_ITALIC</tt>
@@ -23,15 +23,15 @@ parts of fltk is a typedef for a ponter to the structure
 <li><tt>FL_TIMES_ITALIC</tt>
 <li><tt>FL_TIMES_BOLD_ITALIC</tt>
 <li><tt>FL_SYMBOL</tt>
-<li><tt>FL_SCREEN</tt>
+<li><tt>FL_SCREEN</tt> (Terminal style font)
 <li><tt>FL_SCREEN_BOLD</tt>
 <li><tt>FL_ZAPF_DINGBATS</tt> (Wingdings font on Win32!)
 </ul>
 
 <h2>Methods</h2>
 
-<h4>Fl_Font_* Fl_Font_::bold;
-<br>Fl_Font_* Fl_Font_::italic;</h4>
+<h4>Fl_Font_* Fl_Font_::bold();
+<br>Fl_Font_* Fl_Font_::italic();</h4>
 
 Pointers to the bold and italic versions of this font.  If this font
 has no bold or italic version (usually because it aready is bold or
@@ -64,10 +64,8 @@ value is the length of this array.  Each string identifies an
 "encoding" that is supported by this font.  These strings may be
 passed to the <a href=drawing.html#fl_font><TT>fl_font()</TT></a> to
 select what characters the first 256 codes print.  If fltk cannot
-figure out the encodings it returns a zero-length array, in which case
-you should only pass <tt>fl_encoding</tt> to <tt>fl_font()</tt>.  The
-returned array points at a static buffer that is overwritten each
-call, so you want to copy it if you plan to keep it.
+figure out the encodings it returns a zero-length array and setting
+the encoding will have no effect on what is drawn with this font.
 
 <h4>int Fl_Font_::sizes(int *&amp;array) const;</h4>
 
@@ -82,7 +80,7 @@ that work &quot;better&quot; than others.  The returned array points
 at a static buffer that is overwritten each call, so you want to copy
 it if you plan to keep it.
 
-<h4>Fl_Font fl_font(const char* name, int attributes = 0);</h4>
+<h4><a name=fl_find_font>Fl_Font fl_find_font(const char* name, int attributes = 0);</h4>
 
 Find a font with the given "nice" name.  You can get bold and italic
 by either putting "Bold" or "Italic" in the name, or by passing them
@@ -93,7 +91,7 @@ variations in the font name.
 does a binary search for the font in it.  This can make the first call
 pretty slow, especially on X.
 
-<h4>int fl_list_fonts(Fl_Font*& arrayp);</h4>
+<h4><a name=fl_list_fonts>int fl_list_fonts(Fl_Font*& arrayp);</h4>
 
 This allocates and fills in an array containing every font on the
 server.  The location <i>arrayp</i> is set to a pointer to this array,

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.13 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Font.H,v 1.14 2001/02/20 06:59:48 spitzak Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -28,7 +28,7 @@
 
 #include <FL/Enumerations.H> // for FL_API
 
-class FL_API Fl_FontSize; // secret internal data
+class FL_API Fl_FontSize;
 
 //class FL_API Fl_Font_;
 struct FL_API Fl_Font_;
@@ -36,28 +36,27 @@ typedef const Fl_Font_* Fl_Font;
 
 // This is a struct so I can init a table with constants:
 struct FL_API Fl_Font_ {
-  friend FL_API int fl_list_fonts(Fl_Font*& arrayp);
-  static Fl_Font* array;
-  static int num_fonts;
-
   const char* name_;
   Fl_Font_* bold_;
   Fl_Font_* italic_;
+// list of sizes (used by X and Win32 GDI):
   Fl_FontSize* first;
-  char **xlist; // crap needed by X, should be put into Fl_FontSize
-  int n;	// more crap needed by X
+// crap needed by X:
+  char **xlist;
+  int n;
 //public:
   // return the system-specific name, different for each font:
   const char* system_name() const {return name_;}
-  // return the "nice" name:
+  // return the "nice" name, and the attributes:
   const char* name(int* = 0) const;
   // return array of sizes:
-  int sizes(int*& sizep) const;
+  int sizes(int*&) const;
   // return array of encodings:
-  int encodings(const char**& sizep) const;
+  int encodings(const char**&) const;
   Fl_Font_* bold() const { return bold_; }
   Fl_Font_* italic() const { return italic_; }
   // "measurement" is considered a drawing function, see fl_draw.h
+
 };
 
 // values for attributes:
@@ -86,13 +85,14 @@ extern FL_API Fl_Font_ fl_fonts[16];
 #define FL_SCREEN_BOLD		(fl_fonts+14)
 #define FL_ZAPF_DINGBATS	(fl_fonts+15)
 
-#define FL_NORMAL_SIZE	Fl_Widget::default_style->label_size
-
-// Return a font by name + attributes.  On X this will open the display
-// and list all the fonts!
-FL_API Fl_Font fl_font(const char* name);
+// Find a font by name + attributes:
+FL_API Fl_Font fl_find_font(const char* name, int attrib = 0);
 
 // Find and return every font on the system.
 FL_API int fl_list_fonts(Fl_Font*& arrayp);
+
+#ifndef FLTK_2
+#define FL_NORMAL_SIZE	Fl_Widget::default_style->label_size
+#endif
 
 #endif

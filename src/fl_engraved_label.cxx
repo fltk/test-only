@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.9 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ void Fl_Engraved_Label::draw(const char* label,
 {
   Fl_Flags a1 = f;
   if (a1 & FL_ALIGN_CLIP) {
-    fl_clip(X, Y, W, H);
+    fl_push_clip(X, Y, W, H);
     a1 = (Fl_Flags)(a1&~FL_ALIGN_CLIP);
   }
   for (const int *data = this->data; ; data += 3) {
@@ -65,5 +65,5 @@ static const int embossed_data[7][3] = {
 const Fl_Engraved_Label fl_embossed_label("embossed", embossed_data);
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.9 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $".
 //
