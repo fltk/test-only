@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.224 2004/07/27 12:34:03 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.225 2004/07/28 19:06:05 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1907,7 +1907,12 @@ void Window::flush() {
   if (this->double_buffer() || i->overlay) {
     // double-buffer drawing
 
-    bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
+    // ML: Set eraseoverlay=true only if flush is caused by Window::redraw_overlay()
+    //     Otherwise (flush from wm) set it to false, and set clip region correctly
+    //     so drawing is lot faster.
+    //bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
+    bool eraseoverlay = i->overlay && (damage&DAMAGE_OVERLAY);
+
     if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
 
     if (!i->backbuffer) { // we need to create back buffer
@@ -1933,7 +1938,7 @@ void Window::flush() {
 	set_damage(DAMAGE_ALL);
 	draw();
       } else {
-      // draw all the changed widgets:
+        // draw all the changed widgets:
 	if (damage & ~DAMAGE_EXPOSE) {
 	  set_damage(damage & ~DAMAGE_EXPOSE);
 	  draw();
@@ -1965,7 +1970,7 @@ void Window::flush() {
     // Copy the backbuffer to the window:
     BitBlt(dc, X, Y, W, H, i->bdc, X, Y, SRCCOPY);
 
-    if (i->overlay) draw_overlay();
+    if (i->overlay) draw_overlay();    
     clip_region(0);
 
   }  else {
@@ -2121,5 +2126,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.224 2004/07/27 12:34:03 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.225 2004/07/28 19:06:05 laza2000 Exp $".
 //
