@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,22 @@
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 #include "Fl_Win_Display.H"
+
+
+
+
+#define FL_N_PEN 32 // number of non-stock pens
+
+/*
+struct Fl_SMap : public Fl_XMap{
+  int lstyle;
+  int width;
+};
+
+static Fl_SMap pens[Fl_N_PEN];
+*/
+
+  
 
 
 // Translations to win32 data structures:
@@ -290,5 +306,5 @@ FL_EXPORT void pop_xmaps(){
 
 
 //
-// End of "$Id: color.cxx,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
+// End of "$Id: color.cxx,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Win_Display.H,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $"
+// "$Id: Fl_Win_Display.H,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $"
 //
 // Win32 display class for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 #define Fl_Win_Display_H
 #include <FL/Fl_Display.H>
 #include <FL/Enumerations.H>
+#include <FL/x.H>
 
 
 
@@ -38,10 +39,20 @@ extern FL_EXPORT int fl_font_;
 extern FL_EXPORT int fl_size_;
 
 
+struct pen_cache: public Fl_XMap{
+  int style;
+  int width;
+  int next;
+  pen_cache():style(0), width(0), next(0){};
+};
 
 class FL_EXPORT Fl_Win_Display: public Fl_Display{
      friend class Fl_PS_Printer; //RK: temporary hack for font sizes
      friend class Fl_GDI_Printer;
+     void setpen();
+     
+     
+
 protected:
 
 
@@ -130,7 +141,7 @@ public:
 
 
 //
-// End of "$Id: Fl_Win_Display.H,v 1.1.2.2 2004/03/29 21:22:35 rokan Exp $".
+// End of "$Id: Fl_Win_Display.H,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $".
 //
 
 
