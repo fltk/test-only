@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.93 2004/07/11 12:17:36 laza2000 Exp $"
+// "$Id: Fl_Input.cxx,v 1.94 2004/07/11 17:49:35 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -171,8 +171,8 @@ static Input* erase_cursor_only;
 void Input::minimal_update(int p) {
   if (erase_cursor_only == this) erase_cursor_only = 0;
   // Sometimes DAMAGE_ALL is set, but widget not redrawed because it's out of clip region.
-	// So widget remains undrawed before next full redraw (window resize)
-	//if (damage() & DAMAGE_ALL) return; // don't waste time if it won't be done
+  // So widget remains undrawed before next full redraw (window resize)
+  //if (damage() & DAMAGE_ALL) return; // don't waste time if it won't be done
   if (damage() & DAMAGE_VALUE) {
     if (p < mu_p) mu_p = p;
   } else {
@@ -1648,5 +1648,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.93 2004/07/11 12:17:36 laza2000 Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.94 2004/07/11 17:49:35 laza2000 Exp $".
 //
