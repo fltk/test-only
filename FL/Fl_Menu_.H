@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.6 2004/03/18 08:00:34 matthiaswm Exp $"
+// "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.7 2004/04/06 19:19:57 easysw Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,14 +53,20 @@ protected:
   unsigned textcolor_;
 
 public:
-  int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const;
-  const Fl_Menu_Item* picked(const Fl_Menu_Item*);
-
     /** Creates a new Fl_Menu_ widget using the given position, size, and
      * label string. menu() is initialized to \c NULL. */
   Fl_Menu_(int x,int y,int w,int h,const char *label =0);
     /** If the menu array is private the memory it uses is freed. */
   ~Fl_Menu_();
+
+    /** Return the full pathname for the given menu item. */
+  int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const;
+
+    /** Return the last item that was picked. */
+  const Fl_Menu_Item* picked(const Fl_Menu_Item*);
+
+    /** Find the named item. */
+  const Fl_Menu_Item* find_item(const char *name);
 
     /** Only call this in response to FL_SHORTCUT events. If the event
      * matches an entry in the menu that entry is selected and the callback
@@ -193,5 +199,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.6 2004/03/18 08:00:34 matthiaswm Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.7 2004/04/06 19:19:57 easysw Exp $".
 //
