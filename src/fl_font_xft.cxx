@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.27 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -219,7 +219,7 @@ float fltk::getdescent() { return current->font->descent; }
 
 float fltk::getwidth(const char *str, int n) {
   XGlyphInfo i;
-#if 1
+#if 0
   XftTextExtentsUtf8(xdisplay, current->font, (XftChar8*)str, n, &i);
 #else
   wchar_t buffer[1024];
@@ -271,7 +271,7 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-#if 1
+#if 0
   XftDrawStringUtf8(xft_gc, &color, current->font,
 		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		    (XftChar8*)str, n);
@@ -450,5 +450,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.27 2004/07/29 09:07:54 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
 //

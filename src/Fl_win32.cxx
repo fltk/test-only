@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.226 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.227 2004/07/30 04:51:15 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -595,8 +595,6 @@ void fltk::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
-#include <stdio.h>
-
 ////////////////////////////////////////////////////////////////
 // Determite if windows has unicode capability
 
@@ -608,7 +606,6 @@ int has_unicode()
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     GetVersionExA(&os);
     has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);
-    printf("has_unicode = %d, GetACP() = %x\n", has_unicode, GetACP());
   }
   return has_unicode;
 }
@@ -2128,5 +2125,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.226 2004/07/29 09:07:53 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.227 2004/07/30 04:51:15 spitzak Exp $".
 //

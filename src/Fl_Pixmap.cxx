@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.27 2004/06/04 08:31:26 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,7 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
   if (!strcmp(data[1]," \tc #FFFFFF")) {
     // it is monochrome...
     style->boxcolors(flags, bg, fg);
+    flags &= ~INACTIVE;
     bg = get_color_index(bg); if (!bg) bg = BLACK;
     fg = get_color_index(fg); if (!fg) fg = BLACK;
     if (fg != this->fg || bg != this->bg) {
@@ -91,5 +92,5 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.27 2004/06/04 08:31:26 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $".
 //
