@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.19 2001/07/29 22:19:30 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.20 2001/10/22 05:22:32 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,8 +64,8 @@ enum KIPCMessage {
 
 // this function handles KDE style change messages
 static int x_event_handler(int) {
-  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
-  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
+  if (fl_xevent.type != ClientMessage) return 0; // not a Client message
+  XClientMessageEvent* cm = (XClientMessageEvent*)&fl_xevent;
   if (cm->message_type != General && cm->message_type != Palette
       && cm->message_type != KIPC && cm->message_type != Style)
     return 0; // not the message we want
@@ -368,5 +368,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.19 2001/07/29 22:19:30 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.20 2001/10/22 05:22:32 spitzak Exp $".
 //
