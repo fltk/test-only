@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.33 2004/07/15 16:21:17 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.34 2004/07/21 07:16:00 laza2000 Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -600,7 +600,7 @@ int TextDisplay::position_to_xy( int pos, int* X, int* Y ) {
 	  charLen = 1;
   }
   *X = xStep;
-  delete [] (char *)lineStr;
+  free((char*)lineStr);
   return 1;
 }
 
@@ -972,7 +972,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
   stdCharWidth = TMPFONTWIDTH;   //mFontStruct->max_bounds.width;
   if ( stdCharWidth <= 0 ) {
     fprintf( stderr, "Internal Error, bad font measurement\n" );
-    delete [] (char *)lineStr;
+    free((char*)lineStr);
     return;
   }
 
@@ -1112,7 +1112,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     }
   */
   if ( lineStr != NULL )
-    delete [] (char *)lineStr;
+    free((char*)lineStr);
 }
 
 /*
@@ -1406,7 +1406,7 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
     charStyle = position_style( lineStart, lineLen, charIndex, outIndex );
     charWidth = string_width( expandedChar, charLen, charStyle );
     if ( X < xStep + ( posType == CURSOR_POS ? charWidth / 2 : charWidth ) ) {
-      delete [] (char *)lineStr;
+      free((char*)lineStr);
       return lineStart + charIndex;
     }
     xStep += charWidth;
@@ -1417,7 +1417,7 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
 
   /* If the X position was beyond the end of the line, return the position
      of the newline at the end of the line */
-  delete [] (char *)lineStr;
+  free((char*)lineStr);
   return lineStart + lineLen;
 }
 
@@ -2124,5 +2124,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.33 2004/07/15 16:21:17 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.34 2004/07/21 07:16:00 laza2000 Exp $".
 //

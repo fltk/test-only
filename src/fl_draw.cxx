@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.44 2004/07/04 17:28:31 laza2000 Exp $"
+// "$Id: fl_draw.cxx,v 1.45 2004/07/21 07:16:01 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -427,7 +427,7 @@ static void wrap(
       if (*q == '@') q++;
       else if (*q == ';') end = p;
       else {
-	while (q<end && *q && !isspace(*q) && *q!='@' && *q!=';') q++;
+	while (q<end && *q && !isspace((uchar)*q) && *q!='@' && *q!=';') q++;
 	symbol = Symbol::find(p+1,q);
 	if (!symbol) {++p; goto SKIP_LETTERS;}
       }
@@ -698,5 +698,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.44 2004/07/04 17:28:31 laza2000 Exp $".
+// End of "$Id: fl_draw.cxx,v 1.45 2004/07/21 07:16:01 laza2000 Exp $".
 //

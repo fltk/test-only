@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.25 2004/07/18 03:23:27 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.26 2004/07/21 07:16:00 laza2000 Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -433,7 +433,7 @@ FileChooser::fileListCB()
 
 #if defined(_WIN32) || defined(__EMX__)
   if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
-      !(isalpha(filename[0]) && filename[1] == ':'))
+      !(isalpha((uchar)filename[0]) && filename[1] == ':'))
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
@@ -499,7 +499,7 @@ FileChooser::fileNameCB()
 
 #if defined(_WIN32) || defined(__EMX__)
   if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
-      !(isalpha(filename[0]) && filename[1] == ':'))
+      !(isalpha((uchar)filename[0]) && filename[1] == ':'))
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
@@ -674,14 +674,14 @@ FileChooser::fileNameCB()
     // See if we need to enable the OK button...
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, fileName->value());
 
-//  if (type_ == CREATE || access(pathname, R_OK) == 0)
-//    okButton->activate();
-//  else
-//    okButton->deactivate();
+    if (type_ == CREATE || access(pathname, R_OK) == 0)
+      okButton->activate();
+    else
+      okButton->deactivate();
   }
 }
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.25 2004/07/18 03:23:27 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.26 2004/07/21 07:16:00 laza2000 Exp $".
 //

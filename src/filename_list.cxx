@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $"
+// "$Id: filename_list.cxx,v 1.22 2004/07/21 07:16:01 laza2000 Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -39,20 +39,20 @@ numericsort(dirent **A, dirent **B)
   const char* b = (*B)->d_name;
   int ret = 0;
   for (;;) {
-    if (isdigit((unsigned)*a) && isdigit((unsigned)*b)) {
+    if (isdigit((uchar)*a) && isdigit((uchar)*b)) {
       int diff,magdiff;
       while (*a == '0') a++;
       while (*b == '0') b++;
-      while (isdigit((unsigned)*a) && *a == *b) {a++; b++;}
-      diff = (isdigit((unsigned)*a) && isdigit((unsigned)*b)) ? *a - *b : 0;
+      while (isdigit((uchar)*a) && *a == *b) {a++; b++;}
+      diff = (isdigit((uchar)*a) && isdigit((uchar)*b)) ? *a - *b : 0;
       magdiff = 0;
-      while (isdigit((unsigned)*a)) {magdiff++; a++;}
-      while (isdigit((unsigned)*b)) {magdiff--; b++;}
+      while (isdigit((uchar)*a)) {magdiff++; a++;}
+      while (isdigit((uchar)*b)) {magdiff--; b++;}
       if (magdiff) {ret = magdiff; break;} /* compare # of significant digits*/
       if (diff) {ret = diff; break;}	/* compare first non-zero digit */
     } else {
       // compare case-insensitive:
-      int t = tolower((unsigned)*a)-tolower((unsigned)*b);
+      int t = tolower((uchar)*a)-tolower((uchar)*b);
       if (t) {ret = t; break;}
       // see if we reached the end:
       if (!*a) break;
@@ -95,5 +95,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $".
+// End of "$Id: filename_list.cxx,v 1.22 2004/07/21 07:16:01 laza2000 Exp $".
 //
