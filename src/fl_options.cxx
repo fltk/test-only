@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.5 1999/03/31 14:52:47 mike Exp $"
+// "$Id: fl_options.cxx,v 1.6 1999/03/31 19:28:03 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,10 +33,6 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-
-#if !HAVE_SNPRINTF
-extern "C" int snprintf(char* str, size_t size, const char* fmt, ...);
-#endif /* !HAVE_SNPRINTF */
 
 const char* Fl::_style = "default";
 
@@ -244,5 +240,5 @@ int Fl::find_boolean(const char *key, int &bvalue, int sf)
 */
 
 //
-// End of "$Id: fl_options.cxx,v 1.5 1999/03/31 14:52:47 mike Exp $".
+// End of "$Id: fl_options.cxx,v 1.6 1999/03/31 19:28:03 carl Exp $".
 //
