@@ -25,18 +25,31 @@ public:
 
 Drawing *drawing;
 
+// Return color to draw behind given code
+Color code_color(unsigned ucs) {
+  if (ucs < 32 || ucs==127 // ascii control characters
+      // || ucs >= 0x80 && ucs <= 0x9f // C1 control characters
+      || ucs >= 0xd800 && ucs <= 0xdfff // surrogate pairs
+      || ucs >= 0xfffe // illegal characters and outside assigned unicode
+      ) return GRAY50;
+  if (ucs & 0x100) return GRAY80;
+  return WHITE;
+}
+
 void Drawing::draw() {
   push_clip(x(),y(),w(),h());
   unsigned scroll = unsigned(scrollbar->value());
   unsigned itemh = unsigned(textsize()+8);
-  unsigned base = scroll/itemh*16;
-  int y = -(scroll%itemh);
+  unsigned base = scroll*16;
+  int y = 0;
   Symbol* box = this->box();
+  Style style = *(this->style());
   for (; y < h(); y+=itemh, base+=16) {
     char buf[20];
     sprintf(buf, "U+%03Xx", base>>4);
     int x1 = 0; int x2 = w()*2/18;
-    box->draw(x1,y,x2-x1,itemh,style(),OUTPUT);
+    style.color_ = (base&0x100) ? GRAY80 : WHITE;
+    box->draw(x1,y,x2-x1,itemh,&style,OUTPUT);
     setcolor(labelcolor());
     setfont(labelfont(),labelsize());
     drawtext(buf,x1,y,x2-x1,itemh,0);
@@ -46,7 +59,8 @@ void Drawing::draw() {
       char* p = buf;
       p += utf8encode(base+z,p);
       *p = 0;
-      box->draw(x1,y,x2-x1,itemh,style(),OUTPUT);
+      style.color_ = code_color(base+z);
+      box->draw(x1,y,x2-x1,itemh,&style,OUTPUT);
       setcolor(labelcolor());
       drawtext(buf,x1,y,x2-x1,itemh,0);
     }
@@ -57,8 +71,8 @@ void Drawing::draw() {
 void Drawing::layout() {
   unsigned itemh = unsigned(textsize()+8);
   //actually the height should be 0x11000*itemh to get all Unicode:
-  scrollbar->value(scrollbar->value(),h(),0,0x1000*itemh);
-  scrollbar->linesize(itemh);
+  scrollbar->value(scrollbar->value(),h()/itemh,0,0x1000);
+  scrollbar->linesize(1);
   Widget::layout();
 }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.42 2004/07/04 17:30:29 laza2000 Exp $"
+// "$Id: Fl_Image.cxx,v 1.43 2004/07/06 05:49:30 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -401,6 +401,15 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
  */
 // #define USE_ALPHABLEND 1
 
+// WAS: The code is wrong. I suspect the new code is supposed to go
+// into the "over" method. The fill() method should not be using the
+// rgb data for anything. What it is supposed to do, if C is the
+// current color set with fltk::setcolor(), A is the alpha, and the
+// current display is B, is replace each pixel with B*(1-A)+A*C.
+// Another way of looking at it is that this does "over" with a
+// non-premultiplied image that is a solid rectangle of the current
+// color, but with the current alpha channel.
+
 // Link against msimg32 lib
 #if defined (USE_ALPHABLEND) && defined(_MSC_VER)
 	#pragma comment(lib, "msimg32.lib")
@@ -423,9 +432,9 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
 {
   clip_code();
-#ifndef USE_ALPHABLEND
+  // If there is no alpha channel then act like it is all white
+  // and thus a rectangle should be drawn:
   if (!alpha) {fillrect(x,y,w,h); return;}	
-#endif
 
   transform(x,y);
 #if USE_X11
@@ -439,44 +448,41 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
 #elif defined(_WIN32)
   HDC tempdc = CreateCompatibleDC(dc);
 #ifdef USE_ALPHABLEND
-
-	if(rgb) {
-		if(alpha) {
-			SelectObject(tempdc, (HGDIOBJ)alpha);	
-			SetTextColor(dc, 0); // VP : seems necessary at least under win95
-			setbrush();
-			// secret bitblt code found in old MSWindows reference manual:
-			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
-			SelectObject(tempdc, (HGDIOBJ)rgb);	
-			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, SRCPAINT);
-
-		} else {
-			
-			fillrect(X,Y,w,h);
-
-			SelectObject(tempdc, (HGDIOBJ)rgb);	
-			BLENDFUNCTION m_bf;
-			m_bf.BlendOp = AC_SRC_OVER;
-			m_bf.BlendFlags = 0;
-			m_bf.SourceConstantAlpha = 100;
-			m_bf.AlphaFormat = 0;
-			AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
-		}
-	} else 
+  // This code is probably wrong! It is irrelevant if rgb is here, this
+  // code probably belongs in the "over" method...
+  if (rgb) {
+    if (alpha) {
+      SelectObject(tempdc, (HGDIOBJ)alpha);	
+      SetTextColor(dc, 0); // VP : seems necessary at least under win95
+      setbrush();
+      // secret bitblt code found in old MSWindows reference manual:
+      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+      SelectObject(tempdc, (HGDIOBJ)rgb);	
+      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, SRCPAINT);
+    } else {
+      fillrect(X,Y,w,h);
+      SelectObject(tempdc, (HGDIOBJ)rgb);	
+      BLENDFUNCTION m_bf;
+      m_bf.BlendOp = AC_SRC_OVER;
+      m_bf.BlendFlags = 0;
+      m_bf.SourceConstantAlpha = 100;
+      m_bf.AlphaFormat = 0;
+      AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
+    }
+  } else 
 #endif
-	{
-			SelectObject(tempdc, (HGDIOBJ)alpha);	
-			SetTextColor(dc, 0); // VP : seems necessary at least under win95
-			setbrush();
-			// secret bitblt code found in old MSWindows reference manual:
-			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
-	}
-
+    {
+      SelectObject(tempdc, (HGDIOBJ)alpha);	
+      SetTextColor(dc, 0); // VP : seems necessary at least under win95
+      setbrush();
+      // secret bitblt code found in old MSWindows reference manual:
+      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+    }
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
   // OSX version nyi
 #else
-#error
+# error
 #endif
 }
 
@@ -489,9 +495,9 @@ void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) c
 {
   if (flags & INACTIVE) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
-    setcolor(GRAY90);		
+    setcolor(GRAY90);
     fill(x+1,y+1,w-1,h-1,0,0);
-    setcolor(fg);		
+    setcolor(fg);
     fill(x,y,w,h,0,0);
   } else {
     over(x,y,w,h,0,0);
@@ -529,5 +535,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.42 2004/07/04 17:30:29 laza2000 Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.43 2004/07/06 05:49:30 spitzak Exp $".
 //

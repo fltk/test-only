@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.18 2004/06/04 08:31:26 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -148,7 +148,7 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
     // if first color is ' ' it is transparent (put it later to make
     // it not be transparent):
     if (*p == ' ') {
-      uchar* c = (uchar*)&d.colors[' '];
+      uchar* c = (uchar*)&d.colors[32];
 #ifdef U64
       *(U64*)c = 0;
 #if WORDS_BIGENDIAN
@@ -295,5 +295,5 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.18 2004/06/04 08:31:26 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $".
 //

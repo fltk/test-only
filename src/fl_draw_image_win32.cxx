@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.18 2004/07/04 17:25:12 laza2000 Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -276,18 +276,18 @@ fkjlkasdjf
           }
         }
     }
-		head.bV5Height = -k;
-		head.bV5SizeImage = k*linesize;
-		ypos -= k;
+    head.bV5Height = -k;
+    head.bV5SizeImage = k*linesize;
+    ypos -= k;
 #if 1
-		SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
+    SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 		      (LPSTR)buffer,
 		      (BITMAPINFO*)&head,
-#if USE_COLORMAP
+# if USE_COLORMAP
 		      indexed ? DIB_PAL_COLORS : DIB_RGB_COLORS
-#else
+# else
 		      DIB_RGB_COLORS
-#endif
+# endif
 		      );
 #else
     // We have to do all this conversion stuff because SetDIBitsToDevice does 
@@ -331,5 +331,5 @@ fkjlkasdjf
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.18 2004/07/04 17:25:12 laza2000 Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $".
 //

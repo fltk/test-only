@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.21 2004/07/04 17:23:21 laza2000 Exp $"
+// "$Id: fl_bmp.cxx,v 1.22 2004/07/06 05:49:31 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -579,14 +579,10 @@ void bmpImage::read()
 		      
 		      index = GETC();			  
 		      
-		      *pRgbBuf = palette[index].r;
-		      pRgbBuf++;
-		      *pRgbBuf = palette[index].g;
-		      pRgbBuf++;
-		      *pRgbBuf = palette[index].b;
-		      pRgbBuf++;
-		      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-		      pRgbBuf++;
+		      *pRgbBuf++ = palette[index].r;
+		      *pRgbBuf++ = palette[index].g;
+		      *pRgbBuf++ = palette[index].b;
+		      *pRgbBuf++ = IMG_NON_TRANSPARENT; // alpha
 		      
 		      // Absolute mode runs are word (4 byte) aligned
 		      linePad = (index % 4) ? 4 - (index % 4) : 0;
@@ -609,14 +605,10 @@ void bmpImage::read()
 	      
 	      while (first--)
 	      {
-		*pRgbBuf = palette[second].r;
-		pRgbBuf++;
-		*pRgbBuf = palette[second].g;
-		pRgbBuf++;
-		*pRgbBuf = palette[second].b;
-		pRgbBuf++;
-		*pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-		pRgbBuf++;
+		*pRgbBuf++ = palette[second].r;
+		*pRgbBuf++ = palette[second].g;
+		*pRgbBuf++ = palette[second].b;
+		*pRgbBuf++ = IMG_NON_TRANSPARENT; // alpha
 	      }
 	      // Skip padding bytes in file
 	      while (linePad--)
@@ -798,5 +790,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.21 2004/07/04 17:23:21 laza2000 Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.22 2004/07/06 05:49:31 spitzak Exp $"
 //

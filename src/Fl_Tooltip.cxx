@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.60 2004/07/04 17:21:45 laza2000 Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.61 2004/07/06 05:49:31 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,13 +52,13 @@ public:
   // You have to destroy the window or it will not raise next time:
   void hide() {destroy();}
 #endif
-	int handle(int ev) {
-		if(ev==ENTER) {
-			recent_tooltip = 0;
-			Tooltip::exit();
-		}
-		return MenuWindow::handle(ev);
-	}
+  int handle(int ev) {
+    if (ev==ENTER) {
+      recent_tooltip = 0;
+      Tooltip::exit();
+    }
+    return MenuWindow::handle(ev);
+  }
 };
 
 static Tooltip::Generator generator;
@@ -228,5 +228,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.60 2004/07/04 17:21:45 laza2000 Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.61 2004/07/06 05:49:31 spitzak Exp $".
 //

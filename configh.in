@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.60 2004/06/29 00:10:16 xpxqx Exp $"
+ * "$Id: configh.in,v 1.61 2004/07/06 05:49:30 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -166,10 +166,22 @@
 
 #define USE_STOCK_BRUSH		1
 
+/*
+ * Use "X Input Method" for i18n text input. Most familiar as the
+ * "dead key prefix" code. But Japanese users use this to run far more
+ * complex programs for selecting glyphs. You can turn it off on the
+ * (rare) systems that produce an "encoding" that fltk does not
+ * understand, you will still be able to type many Latin characters
+ * with fltk's right-Ctrl+letters input method.
+ * (this value may also disable Windows Input method in the future)
+ */
+#define USE_XIM			1
 
 /*
- * Do we have iconv (needed by non-XFree86 X impl. for UTF-8 transcoding)
- * (only used with X11)
+ * Do we have a working iconv program?
+ * (only used with X11 with USE_XIM when the XFree86 Xutf8LookupString
+ * function is not available). If this is not available than XIM will
+ * probably not work.
  */
 
 #undef HAVE_ICONV_H
@@ -340,5 +352,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.60 2004/06/29 00:10:16 xpxqx Exp $".
+ * End of "$Id: configh.in,v 1.61 2004/07/06 05:49:30 spitzak Exp $".
  */

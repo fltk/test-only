@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.215 2004/07/02 05:40:58 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.216 2004/07/06 05:49:31 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1587,15 +1587,6 @@ void CreatedWindow::create(Window* window) {
   SetBkMode(x->dc, TRANSPARENT);
   x->bdc = 0;
 
-#if 0 // WAS: Doing this completely breaks NT, the title bar loses highlight:
-  if (window->override()) {
-    UINT posflags = SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING;
-    if(style & WS_POPUP)
-      posflags |= SWP_NOACTIVATE;
-    SetWindowPos(x->xid, HWND_TOPMOST, 0, 0, 0, 0, posflags);
-  }
-#endif
-
   x->wait_for_expose = true;
   x->next = CreatedWindow::first;
   CreatedWindow::first = x;
@@ -1603,6 +1594,10 @@ void CreatedWindow::create(Window* window) {
 #if USE_DRAGDROP
   RegisterDragDrop(x->xid, &flDropTarget);
 #endif
+
+  if (window->override())
+    SetWindowPos(x->xid, HWND_TOPMOST, 0,0,0,0,
+		 SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOSENDCHANGING);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1839,5 +1834,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.215 2004/07/02 05:40:58 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.216 2004/07/06 05:49:31 spitzak Exp $".
 //

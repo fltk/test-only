@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.183 2004/07/02 05:40:58 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.184 2004/07/06 05:49:31 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -45,7 +45,9 @@
 #include <fltk/Browser.h>
 #include <fltk/utf.h>
 
-#if !defined(X_HAVE_UTF8_STRING)
+// Actually this file contains a keysym->utf8 function that is useful
+// when !USE_XIM, we should rearrange this so it can be used in that case:
+#if USE_XIM && !defined(X_HAVE_UTF8_STRING)
 # include "xutf8.cxx"
 #endif
 
@@ -87,13 +89,16 @@ static struct FD {
   void* arg;
 } *fd = 0;
 
-XIM fl_xim_im = 0;
-XIC fl_xim_ic = 0;
-XFontSet fl_xim_fs = NULL;
-char fl_is_over_the_spot = 0;
+////////////////////////////////////////////////////////////////
+#if USE_XIM
+
+static XIM fl_xim_im = 0;
+static XIC fl_xim_ic = 0;
+static XFontSet fl_xim_fs = NULL;
+static char fl_is_over_the_spot = 0;
 static XRectangle status_area;
 
-void fl_new_ic()
+static void fl_new_ic()
 {
   XVaNestedList preedit_attr;
   XVaNestedList status_attr;
@@ -170,7 +175,7 @@ void fl_new_ic()
   }
 }
 
-void fl_init_xim()
+static void fl_init_xim()
 {	
   XIMStyles *xim_styles;
   if (!xdisplay) return;
@@ -275,6 +280,12 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     XUnsetICFocus(fl_xim_ic);
   }
 }
+
+static XWindow xim_win = 0; // which window we set xim to last
+
+#else // !USE_XIM
+void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
+#endif
 
 /*!
 
@@ -571,7 +582,9 @@ void fltk::open_display(Display* d) {
   templt.visualid = XVisualIDFromVisual(DefaultVisual(d, xscreen));
   xvisual = XGetVisualInfo(d, VisualIDMask, &templt, &num);
   xcolormap = DefaultColormap(d, xscreen);
+#if USE_XIM
   fl_init_xim();
+#endif
 
 #if !USE_COLORMAP
   visual(RGB);
@@ -1008,7 +1021,6 @@ bool fltk::handle()
 {
   Window* window = find(xevent.xany.window);
   int event = 0;
-  static XWindow xim_win = 0;
 
  KEYPRESS:
   if (XFilterEvent((XEvent *)&xevent, 0)) return 1;
@@ -1182,12 +1194,14 @@ bool fltk::handle()
   }
 
   case UnmapNotify:
+#if USE_XIM
     if (xim_win) {
 	  xim_win = 0;
 	  if (fl_xim_ic)
 	    XDestroyIC(fl_xim_ic);
 	  fl_xim_ic = NULL;
     }
+#endif
     window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
@@ -1289,6 +1303,7 @@ bool fltk::handle()
     return false;
 
   case FocusIn:
+#if USE_XIM
     if (xim_win != xevent.xclient.window) {
       xim_win = xevent.xclient.window;
       if (fl_xim_ic)
@@ -1301,12 +1316,15 @@ bool fltk::handle()
 		     NULL);
     }
     if (fl_xim_ic) XSetICFocus(fl_xim_ic);
+#endif
     xfocus = window;
     if (window) {fix_focus(); return true;}
     break;
 
   case FocusOut:
+#if USE_XIM
     if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
+#endif
     if (window && window == xfocus) {xfocus = 0; fix_focus(); return true;}
     break;
 
@@ -1328,6 +1346,7 @@ bool fltk::handle()
     if (!buffer) buffer = (char*) malloc(buffer_len = 20);
     int len;
     KeySym keysym;
+#if USE_XIM
     if (fl_xim_ic) {
       Status status;
     RETRY:
@@ -1349,10 +1368,13 @@ bool fltk::handle()
       }
     } else {
     NO_XIM:
+#endif
       len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
       // Make ctrl+dash produce ^_ like it used to:
       if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
+#if USE_XIM
     }
+#endif
     buffer[len] = 0;
     e_text = buffer;
     e_length = len;
@@ -2140,5 +2162,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.183 2004/07/02 05:40:58 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.184 2004/07/06 05:49:31 spitzak Exp $".
 //

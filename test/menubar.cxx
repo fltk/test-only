@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.39 2004/07/04 17:46:48 laza2000 Exp $"
+// "$Id: menubar.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 // Use compat header for Fl_Menu_Item
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 
 #include <fltk/run.h>
 #include <fltk/events.h>
@@ -84,7 +84,7 @@ Fl_Menu_Item menutable[] = {
     {"shortcut",fltk::ALT+fltk::SHIFT+'a'},
     {"shortcut",fltk::ALT+fltk::CTRL+'a'},
     {"shortcut",fltk::ALT+fltk::SHIFT+fltk::CTRL+'a', 0,0, fltk::MENU_DIVIDER},
-	{"shortcut",'\r'/*fltk::Enter*/},
+	{"shortcut",fltk::ReturnKey},
 	{"shortcut",fltk::CTRL+fltk::ReturnKey, 0,0, fltk::MENU_DIVIDER},
 	{"shortcut",fltk::F1Key},
     {"shortcut",fltk::SHIFT+fltk::F1Key},
@@ -250,5 +250,5 @@ int main(int argc, char **argv)
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.39 2004/07/04 17:46:48 laza2000 Exp $".
+// End of "$Id: menubar.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $".
 //
