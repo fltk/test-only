@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.cxx,v 1.2 1999/09/25 22:27:09 vincent Exp $"
+// "$Id: Fl_Style_Util.cxx,v 1.3 1999/09/27 11:55:27 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -144,7 +144,7 @@ bool fl_parse_style_entry(char* name, Fl_Style& style, char* s)
 // Default parsing functions
 //
 
-inline is(char* sep, char c)
+inline bool is(char* sep, char c)
 {
   while(*sep) if (c == *sep) return 1; else sep++;
   return 0;
@@ -349,5 +349,5 @@ void fl_read_style_plugins() {}
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.cxx,v 1.2 1999/09/25 22:27:09 vincent Exp $".
+// End of "$Id: Fl_Style_Util.cxx,v 1.3 1999/09/27 11:55:27 vincent Exp $".
 //
