@@ -5,11 +5,8 @@
 
   include wheel.conf
 
+  # Which scheme should we use?  (Loads the themes too)
+  # FLTK comes with:
+  #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
 
-  [default/scheme]
-    # Which scheme should we use?  (Loads the themes too)
-    # FLTK comes with:
-    #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
-    # (scheme info can be put directly in this file instead of using include)
-
-    include schemes/Alternative
+  scheme = Alternative
