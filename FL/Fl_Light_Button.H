@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.H,v 1.6 1999/03/14 06:46:15 carl Exp $"
+// "$Id: Fl_Light_Button.H,v 1.7 1999/03/15 18:19:01 carl Exp $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,12 +42,12 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
   virtual void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.H,v 1.6 1999/03/14 06:46:15 carl Exp $".
+// End of "$Id: Fl_Light_Button.H,v 1.7 1999/03/15 18:19:01 carl Exp $".
 //

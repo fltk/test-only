@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.8 1999/03/15 18:19:10 carl Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -113,9 +113,9 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
   value_damage();
 
   output.wstyle();
-  style = output.style;
+  style(output.style());
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.8 1999/03/15 18:19:10 carl Exp $".
 //

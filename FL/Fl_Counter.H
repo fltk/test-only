@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.6 1999/03/14 06:46:14 carl Exp $"
+// "$Id: Fl_Counter.H,v 1.7 1999/03/15 18:19:00 carl Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 #include "Fl_Valuator.H"
 #endif
 
-#define COUNTER_STYLE ((Fl_Counter::Style*)style)
+#define COUNTER_STYLE ((Fl_Counter::Style*)_style)
 
 // values for type():
 #define FL_NORMAL_COUNTER	0
@@ -89,7 +89,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   void draw();
 
@@ -104,5 +104,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.6 1999/03/14 06:46:14 carl Exp $".
+// End of "$Id: Fl_Counter.H,v 1.7 1999/03/15 18:19:00 carl Exp $".
 //

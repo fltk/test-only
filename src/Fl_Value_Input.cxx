@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.7 1999/03/14 06:46:35 carl Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.8 1999/03/15 18:19:09 carl Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -114,7 +114,7 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
   soft_ = 0;
   input.wstyle();
-  style = input.style;
+  style(input.style());
 
   if (input.parent())  // defeat automatic-add
     ((Fl_Group*)input.parent())->remove(input);
@@ -126,5 +126,5 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.7 1999/03/14 06:46:35 carl Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.8 1999/03/15 18:19:09 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.6 1999/03/14 06:46:17 carl Exp $"
+// "$Id: Fl_Slider.H,v 1.7 1999/03/15 18:19:03 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Valuator.H"
 #endif
 
-#define SLIDER_STYLE ((Fl_Slider::Style*)style)
+#define SLIDER_STYLE ((Fl_Slider::Style*)_style)
 
 // values for type(), lowest bit indicate horizontal:
 #define FL_VERT_SLIDER		0
@@ -78,7 +78,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   // these allow subclasses to put the slider in a smaller area:
   void draw(int, int, int, int);
@@ -93,5 +93,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.6 1999/03/14 06:46:17 carl Exp $".
+// End of "$Id: Fl_Slider.H,v 1.7 1999/03/15 18:19:03 carl Exp $".
 //

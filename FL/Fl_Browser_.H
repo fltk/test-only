@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.7 1999/03/14 06:46:13 carl Exp $"
+// "$Id: Fl_Browser_.H,v 1.8 1999/03/15 18:18:58 carl Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@
 #endif
 #include "Fl_Scrollbar.H"
 
-#define BROWSER_STYLE ((Fl_Browser_::Style*)style)
+#define BROWSER_STYLE ((Fl_Browser_::Style*)_style)
 
 #define FL_NORMAL_BROWSER	0
 #define FL_SELECT_BROWSER	1
@@ -129,7 +129,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   // All of the following must be supplied by the subclass:
   virtual void *item_first() const = 0;
@@ -171,5 +171,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.7 1999/03/14 06:46:13 carl Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.8 1999/03/15 18:18:58 carl Exp $".
 //

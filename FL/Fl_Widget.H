@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.8 1999/03/15 05:55:00 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.9 1999/03/15 18:19:04 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Enumerations.H"
 
-#define WIDGET_STYLE ((Fl_Widget::Style*)style)
+#define WIDGET_STYLE ((Fl_Widget::Style*)_style)
 
 class Fl_Widget;
 class Fl_Window;
@@ -68,7 +68,7 @@ public:
     uchar sbf;
     
     // This is just a kludge used for one particular situation--
-    // generally determined by whether Fl_Widget::style == 0
+    // generally determined by whether Fl_Widget::_style == 0
     uchar not_dynamic;
 
     Style();
@@ -81,8 +81,15 @@ public:
 
   virtual void loadstyle();
 
-  void modify_default_style()
-    {if (style) delete style; style = default_style(); style->not_dynamic = 1;}
+  Style* style() { return _style; }
+  void style(Style* s)
+    { if (_style && !_style->not_dynamic) delete _style; _style = s; }
+
+  void modify_default_style() {
+    if (_style && !_style->not_dynamic) delete _style;
+    _style = default_style();
+    _style->not_dynamic = 1;
+  }
 
   const char *tooltip() const { return tooltip_; }
   void tooltip(const char *t);
@@ -188,12 +195,12 @@ public:
 
 protected:
   static Style _default_style;
-  Style* style;
+  Style* _style;
 
   Fl_Widget(int,int,int,int,const char* =0);
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   void x(int v) {x_ = v;}
   void y(int v) {y_ = v;}
@@ -236,5 +243,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.8 1999/03/15 05:55:00 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.9 1999/03/15 18:19:04 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.6 1999/03/14 06:46:18 carl Exp $"
+// "$Id: Fl_Value_Input.H,v 1.7 1999/03/15 18:19:03 carl Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ public:
   void draw();
   void resize(int,int,int,int);
   Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
-  ~Fl_Value_Input() { style = 0; } // so that it doesn't get free()ed twice!
+  ~Fl_Value_Input() { _style = 0; } // so that it doesn't get free()ed twice!
 
   void soft(char x) {soft_ = x;}
   char soft() const {return soft_;}
@@ -64,5 +64,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.6 1999/03/14 06:46:18 carl Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.7 1999/03/15 18:19:03 carl Exp $".
 //

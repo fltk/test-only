@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H,v 1.6 1999/03/14 06:46:13 carl Exp $"
+// "$Id: Fl_Button.H,v 1.7 1999/03/15 18:18:59 carl Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Widget.H"
 #endif
 
-#define BUTTON_STYLE ((Fl_Button::Style*)style)
+#define BUTTON_STYLE ((Fl_Button::Style*)_style)
 
 // values for type()
 #define FL_TOGGLE_BUTTON	1
@@ -90,7 +90,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
   virtual void draw();
 
 private:
@@ -102,5 +102,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Button.H,v 1.6 1999/03/14 06:46:13 carl Exp $".
+// End of "$Id: Fl_Button.H,v 1.7 1999/03/15 18:18:59 carl Exp $".
 //

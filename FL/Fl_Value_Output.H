@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.H,v 1.6 1999/03/14 06:46:18 carl Exp $"
+// "$Id: Fl_Value_Output.H,v 1.7 1999/03/15 18:19:04 carl Exp $"
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ public:
   int handle(int);
   void draw();
   Fl_Value_Output(int x,int y,int w,int h,const char *l=0);
-  ~Fl_Value_Output() { style = 0; } // So that it doesn't get free()ed twice!
+  ~Fl_Value_Output() { _style = 0; } // So that it doesn't get free()ed twice!
 
   void soft(uchar x) {soft_ = x;}
   uchar soft() const {return soft_;}
@@ -63,5 +63,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Value_Output.H,v 1.6 1999/03/14 06:46:18 carl Exp $".
+// End of "$Id: Fl_Value_Output.H,v 1.7 1999/03/15 18:19:04 carl Exp $".
 //

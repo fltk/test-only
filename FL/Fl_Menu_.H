@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.8 1999/03/14 06:46:15 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.9 1999/03/15 18:19:01 carl Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #endif
 #include "Fl_Menu_Item.H"
 
-#define MENU_STYLE ((Fl_Menu_::Style*)style)
+#define MENU_STYLE ((Fl_Menu_::Style*)_style)
 
 class Fl_Menu_ : public Fl_Widget {
 public:
@@ -102,7 +102,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   const Fl_Menu_Item* picked(const Fl_Menu_Item*);
 
@@ -114,5 +114,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.8 1999/03/14 06:46:15 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.9 1999/03/15 18:19:01 carl Exp $".
 //

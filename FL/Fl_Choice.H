@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.6 1999/03/14 06:46:14 carl Exp $"
+// "$Id: Fl_Choice.H,v 1.7 1999/03/15 18:19:00 carl Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Menu_.H"
 
-#define CHOICE_STYLE ((Fl_Choice::Style*)style)
+#define CHOICE_STYLE ((Fl_Choice::Style*)_style)
 
 class Fl_Choice : public Fl_Menu_ {
 public:
@@ -63,7 +63,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   void draw();
 };
@@ -71,5 +71,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.6 1999/03/14 06:46:14 carl Exp $".
+// End of "$Id: Fl_Choice.H,v 1.7 1999/03/15 18:19:00 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.8 1999/03/15 05:55:00 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.9 1999/03/15 18:19:02 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include "Fl_Widget.H"
 #endif
 
-#define MENU_ITEM_STYLE ((Fl_Menu_Item::Style*)style)
+#define MENU_ITEM_STYLE ((Fl_Menu_Item::Style*)_style)
 
 enum { // values for flags:
   FL_MENU_INACTIVE = 1,
@@ -91,7 +91,7 @@ struct Fl_Menu_Item {
   uchar clobberMe3;
   uchar clobberMe4;
 
-  Style* style;
+  Style* _style;
 
   ~Fl_Menu_Item();
 
@@ -183,8 +183,16 @@ struct Fl_Menu_Item {
     return add(a,fl_old_shortcut(b),c,d,e);}
   int size() const ;
 
-  void modify_default_style() { if (style) delete style; style = &default_style; }
-  void wstyle() { if (!style) style = new Style; }
+  Style* style() { return _style; }
+  void style(Style* s)
+    { if (_style && _style != &default_style) delete _style; _style = s; }
+
+  void modify_default_style() {
+    if (_style && _style != &default_style) delete _style;
+    _style = &default_style;
+  }
+
+  void wstyle() { if (!_style) _style = new Style; }
 };
 
 typedef Fl_Menu_Item Fl_Menu; // back compatability
@@ -205,5 +213,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.8 1999/03/15 05:55:00 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.9 1999/03/15 18:19:02 carl Exp $".
 //

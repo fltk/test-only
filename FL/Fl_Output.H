@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.H,v 1.6 1999/03/14 06:46:16 carl Exp $"
+// "$Id: Fl_Output.H,v 1.7 1999/03/15 18:19:02 carl Exp $"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ public:
   Fl_Output(int x, int y, int w, int h, const char *l = 0) : Fl_Input_(x, y, w, h, l) {}
 
 protected:
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   void draw();
 };
@@ -52,5 +52,5 @@ protected:
 #endif 
 
 //
-// End of "$Id: Fl_Output.H,v 1.6 1999/03/14 06:46:16 carl Exp $".
+// End of "$Id: Fl_Output.H,v 1.7 1999/03/15 18:19:02 carl Exp $".
 //

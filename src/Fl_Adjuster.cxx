@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.6 1999/03/14 06:46:25 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.7 1999/03/15 18:19:05 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -179,19 +179,19 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 Fl_Color Fl_Adjuster::fly_color() const {
-  if (!style || !(ADJUSTER_STYLE->sbf & bf(FLY_COLOR)))
+  if (!_style || !(ADJUSTER_STYLE->sbf & bf(FLY_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->adjuster(FLY_COLOR);
   return (Fl_Color)ADJUSTER_STYLE->adjuster(FLY_COLOR);
 }
 
 Fl_Boxtype Fl_Adjuster::fly_box() const {
-  if (style && (WIDGET_STYLE->sbf & bf(BOX)) && !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
+  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!style || !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
+  if (!_style || !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->adjuster(FLY_BOX);
   return (Fl_Boxtype)ADJUSTER_STYLE->adjuster(FLY_BOX);
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.6 1999/03/14 06:46:25 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.7 1999/03/15 18:19:05 carl Exp $".
 //

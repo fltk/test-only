@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.9 1999/03/14 06:46:34 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.10 1999/03/15 18:19:09 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -220,20 +220,20 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
       int Y1 = ysl + Fl::box_dy(box1);
       int Y2 = ysl + hsl - Fl::box_dy(box1) - 1;
       fl_clip(X1, Y1, X2 - X1 + 1, Y2 - Y1 + 1);
-      if (type() == FL_HOR_SLIDER) {
+      if (type() == FL_HOR_SLIDER && wsl > 24) {
         int XM = xsl + wsl/2;
-        int XF = (wsl > 24) ? XM - 4 : XM;
-        int XL = (wsl > 24) ? XM + 4 : XM;
+        int XF = XM - 4;
+        int XL = XM + 4;
         for (int X = XF; X <= XL; X += 4) {
           fl_color(active_r() ? FL_LIGHT3 : inactive(FL_LIGHT3));
           fl_yxline(X - 1, Y1, Y2);
           fl_color(active_r() ? FL_BLACK : inactive(FL_BLACK));
           fl_yxline(X, Y1, Y2);
         }
-      } else if(type() == FL_VERT_SLIDER) {
+      } else if(type() == FL_VERT_SLIDER && hsl > 24) {
         int YM = ysl + hsl/2;
-        int YF = (hsl > 24) ? YM - 4 : YM;
-        int YL = (hsl > 24) ? YM + 4 : YM;
+        int YF = YM - 4;
+        int YL = YM + 4;
         for (int Y = YF; Y <= YL; Y += 4) {
           fl_color(active_r() ? FL_LIGHT3 : inactive(FL_LIGHT3));
           fl_xyline(X1, Y - 1, X2);
@@ -318,17 +318,17 @@ int Fl_Slider::handle(int event) {
 }
 
 Fl_Boxtype Fl_Slider::slider() const {
-  if (!style || !(SLIDER_STYLE->sbf & bf(SLIDER_BOX)))
+  if (!_style || !(SLIDER_STYLE->sbf & bf(SLIDER_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->slider(SLIDER_BOX);
   return (Fl_Boxtype)SLIDER_STYLE->slider(SLIDER_BOX);
 }
 
 Fl_Color Fl_Slider::fly_color() const {
-  if (!style || !(SLIDER_STYLE->sbf & bf(FLY_COLOR)))
+  if (!_style || !(SLIDER_STYLE->sbf & bf(FLY_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->slider(FLY_COLOR);
   return (Fl_Color)SLIDER_STYLE->slider(FLY_COLOR);
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.9 1999/03/14 06:46:34 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.10 1999/03/15 18:19:09 carl Exp $".
 //

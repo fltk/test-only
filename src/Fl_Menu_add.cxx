@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.10 1999/03/14 06:46:32 carl Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.11 1999/03/15 18:19:09 carl Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ static Fl_Menu_Item* insert(
   m->callback_ = 0;
   m->user_data_ = 0;
   m->flags = flags;
-  m->style = 0;
+  m->_style = 0;
   return array;
 }
 
@@ -198,5 +198,5 @@ void Fl_Menu_::remove(int i) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.10 1999/03/14 06:46:32 carl Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.11 1999/03/15 18:19:09 carl Exp $".
 //

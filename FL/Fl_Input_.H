@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.7 1999/03/14 06:46:15 carl Exp $"
+// "$Id: Fl_Input_.H,v 1.8 1999/03/15 18:19:00 carl Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Widget.H"
 #endif
 
-#define INPUT_STYLE ((Fl_Input_::Style*)style)
+#define INPUT_STYLE ((Fl_Input_::Style*)_style)
 
 #define FL_NORMAL_INPUT		0
 #define FL_FLOAT_INPUT		1
@@ -108,7 +108,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   int wordboundary(int i) const;
   int lineboundary(int i) const;
@@ -146,5 +146,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.7 1999/03/14 06:46:15 carl Exp $".
+// End of "$Id: Fl_Input_.H,v 1.8 1999/03/15 18:19:00 carl Exp $".
 //

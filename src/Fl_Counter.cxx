@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.9 1999/03/14 06:46:29 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.10 1999/03/15 18:19:07 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -218,43 +218,43 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 Fl_Font Fl_Counter::textfont() const {
-  if (!style || !(COUNTER_STYLE->sbf & bf(TEXTFONT)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTFONT)))
     return (Fl_Font)DEFAULT_STYLE->counter(TEXTFONT);
   return (Fl_Font)COUNTER_STYLE->counter(TEXTFONT);
 }
 
 uchar Fl_Counter::textsize() const {
-  if (!style || !(COUNTER_STYLE->sbf & bf(TEXTSIZE)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTSIZE)))
     return DEFAULT_STYLE->counter(TEXTSIZE);
   return COUNTER_STYLE->counter(TEXTSIZE);
 }
 
 Fl_Color Fl_Counter::textcolor() const {
-  if (!style || !(COUNTER_STYLE->sbf & bf(TEXTCOLOR)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->counter(TEXTCOLOR);
   return (Fl_Color)COUNTER_STYLE->counter(TEXTCOLOR);
 }
 
 Fl_Boxtype Fl_Counter::down_box() const {
-  if (!style || !(COUNTER_STYLE->sbf & bf(DOWN_BOX)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(DOWN_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->counter(DOWN_BOX);
   return (Fl_Boxtype)COUNTER_STYLE->counter(DOWN_BOX);
 }
 
 Fl_Boxtype Fl_Counter::fly_box() const {
-  if (style && (WIDGET_STYLE->sbf & bf(BOX)) && !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
+  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!style || !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->counter(FLY_BOX);
   return (Fl_Boxtype)COUNTER_STYLE->counter(FLY_BOX);
 }
 
 Fl_Color Fl_Counter::fly_color() const {
-  if (!style || !(COUNTER_STYLE->sbf & bf(FLY_COLOR)))
+  if (!_style || !(COUNTER_STYLE->sbf & bf(FLY_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->counter(FLY_COLOR);
   return (Fl_Color)COUNTER_STYLE->counter(FLY_COLOR);
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.9 1999/03/14 06:46:29 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.10 1999/03/15 18:19:07 carl Exp $".
 //

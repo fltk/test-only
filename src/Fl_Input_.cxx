@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.22 1999/03/14 06:46:30 carl Exp $"
+// "$Id: Fl_Input_.cxx,v 1.23 1999/03/15 18:19:07 carl Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -778,35 +778,35 @@ Fl_Input_::~Fl_Input_() {
 }
 
 Fl_Font Fl_Input_::textfont() const {
-  if (!style || !(INPUT_STYLE->sbf & bf(TEXTFONT)))
+  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTFONT)))
     return (Fl_Font)DEFAULT_STYLE->input(TEXTFONT);
   return (Fl_Font)INPUT_STYLE->input(TEXTFONT);
 }
 
 uchar Fl_Input_::textsize() const {
-  if (!style || !(INPUT_STYLE->sbf & bf(TEXTSIZE)))
+  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTSIZE)))
     return DEFAULT_STYLE->input(TEXTSIZE);
   return INPUT_STYLE->input(TEXTSIZE);
 }
 
 Fl_Color Fl_Input_::textcolor() const {
-  if (!style || !(INPUT_STYLE->sbf & bf(TEXTCOLOR)))
+  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->input(TEXTCOLOR);
   return (Fl_Color)INPUT_STYLE->input(TEXTCOLOR);
 }
 
 Fl_Color Fl_Input_::cursor_color() const {
-  if (!style || !(INPUT_STYLE->sbf & bf(CURSOR_COLOR)))
+  if (!_style || !(INPUT_STYLE->sbf & bf(CURSOR_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->input(CURSOR_COLOR);
   return (Fl_Color)INPUT_STYLE->input(CURSOR_COLOR);
 }
 
 Fl_Color Fl_Input_::selected_textcolor() const {
-  if (!style || !(INPUT_STYLE->sbf & bf(SELECTED_TEXTCOLOR)))
+  if (!_style || !(INPUT_STYLE->sbf & bf(SELECTED_TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->input(SELECTED_TEXTCOLOR);
   return (Fl_Color)INPUT_STYLE->input(SELECTED_TEXTCOLOR);
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.22 1999/03/14 06:46:30 carl Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.23 1999/03/15 18:19:07 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.8 1999/03/14 06:46:31 carl Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.9 1999/03/15 18:19:08 carl Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -170,25 +170,25 @@ void Fl_Menu_::menu(const Fl_Menu_Item* m) {
 }
 
 Fl_Font Fl_Menu_::textfont() const {
-  if (!style || !(MENU_STYLE->sbf & bf(TEXTFONT)))
+  if (!_style || !(MENU_STYLE->sbf & bf(TEXTFONT)))
     return (Fl_Font)DEFAULT_STYLE->menu(TEXTFONT);
   return (Fl_Font)MENU_STYLE->menu(TEXTFONT);
 }
 
 uchar Fl_Menu_::textsize() const {
-  if (!style || !(MENU_STYLE->sbf & bf(TEXTSIZE)))
+  if (!_style || !(MENU_STYLE->sbf & bf(TEXTSIZE)))
     return DEFAULT_STYLE->menu(TEXTSIZE);
   return MENU_STYLE->menu(TEXTSIZE);
 }
 
 Fl_Color Fl_Menu_::textcolor() const {
-  if (!style || !(MENU_STYLE->sbf & bf(TEXTCOLOR)))
+  if (!_style || !(MENU_STYLE->sbf & bf(TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->menu(TEXTCOLOR);
   return (Fl_Color)MENU_STYLE->menu(TEXTCOLOR);
 }
 
 Fl_Boxtype Fl_Menu_::down_box() const {
-  if (!style || !(MENU_STYLE->sbf & bf(DOWN_BOX)))
+  if (!_style || !(MENU_STYLE->sbf & bf(DOWN_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->menu(DOWN_BOX);
   return (Fl_Boxtype)MENU_STYLE->menu(DOWN_BOX);
 }
@@ -223,5 +223,5 @@ void Fl_Menu_::clear() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.8 1999/03/14 06:46:31 carl Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.9 1999/03/15 18:19:08 carl Exp $".
 //

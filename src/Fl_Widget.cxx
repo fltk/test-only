@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.6 1999/03/14 06:46:36 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.7 1999/03/15 18:19:10 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,7 @@ void Fl_Widget::loadstyle() {
 }
 
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
-  style = 0;
+  _style = 0;
 
   x_ = X; y_ = Y; w_ = W; h_ = H;
 
@@ -152,7 +152,7 @@ extern void fl_throw_focus(Fl_Widget*); // in Fl_x.C
 // However, it is only legal to destroy a "root" such as an Fl_Window,
 // and automatic destructors may be called.
 Fl_Widget::~Fl_Widget() {
-  if (style && !style->not_dynamic) delete style;
+  if (_style && !_style->not_dynamic) delete _style;
   parent_ = 0; // kludge to prevent ~Fl_Group from destroying again
   fl_throw_focus(this);
 }
@@ -242,49 +242,49 @@ void Fl_Widget::measure_label(int& x, int& y) {
 }
 
 Fl_Boxtype Fl_Widget::box() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(BOX)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->widget(BOX);
   return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
 }
 
 Fl_Color Fl_Widget::color() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR);
 }
 
 Fl_Color Fl_Widget::selection_color() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR2)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR2)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR2);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR2);
 }
 
 Fl_Color Fl_Widget::color3() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR3)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR3)))
     return (Fl_Color)DEFAULT_STYLE->widget(COLOR3);
   return (Fl_Color)WIDGET_STYLE->widget(COLOR3);
 }
 
 Fl_Labeltype Fl_Widget::labeltype() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(LABELTYPE)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELTYPE)))
     return (Fl_Labeltype)DEFAULT_STYLE->widget(LABELTYPE);
   return (Fl_Labeltype)WIDGET_STYLE->widget(LABELTYPE);
 }
 
 Fl_Color Fl_Widget::labelcolor() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(LABELCOLOR)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->widget(LABELCOLOR);
   return (Fl_Color)WIDGET_STYLE->widget(LABELCOLOR);
 }
 
 Fl_Font Fl_Widget::labelfont() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(LABELFONT)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELFONT)))
     return (Fl_Font)DEFAULT_STYLE->widget(LABELFONT);
   return (Fl_Font)WIDGET_STYLE->widget(LABELFONT);
 }
 
 uchar Fl_Widget::labelsize() const {
-  if (!style || !(WIDGET_STYLE->sbf & bf(LABELSIZE)))
+  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELSIZE)))
     return DEFAULT_STYLE->widget(LABELSIZE);
   return WIDGET_STYLE->widget(LABELSIZE);
 }
@@ -292,5 +292,5 @@ uchar Fl_Widget::labelsize() const {
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.6 1999/03/14 06:46:36 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.7 1999/03/15 18:19:10 carl Exp $".
 //

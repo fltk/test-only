@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.11 1999/03/14 06:46:26 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.12 1999/03/15 18:19:06 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -674,28 +674,28 @@ void Fl_Browser_::item_select(void*, int) {}
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
 Fl_Font Fl_Browser_::textfont() const {
-  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTFONT)))
+  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTFONT)))
     return (Fl_Font)DEFAULT_STYLE->browser(TEXTFONT);
   return (Fl_Font)BROWSER_STYLE->browser(TEXTFONT);
 }
 
 uchar Fl_Browser_::textsize() const {
-  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTSIZE)))
+  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTSIZE)))
     return DEFAULT_STYLE->browser(TEXTSIZE);
   return BROWSER_STYLE->browser(TEXTSIZE);
 }
 
 Fl_Color Fl_Browser_::textcolor() const {
-  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
+  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->browser(TEXTCOLOR);
   return (Fl_Color)BROWSER_STYLE->browser(TEXTCOLOR);
 }
 
 Fl_Color Fl_Browser_::selected_textcolor() const {
-  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
+  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->browser(SELECTED_TEXTCOLOR);
   return (Fl_Color)BROWSER_STYLE->browser(SELECTED_TEXTCOLOR);
 }
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.11 1999/03/14 06:46:26 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.12 1999/03/15 18:19:06 carl Exp $".
 //

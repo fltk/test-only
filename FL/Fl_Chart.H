@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.7 1999/03/14 06:46:13 carl Exp $"
+// "$Id: Fl_Chart.H,v 1.8 1999/03/15 18:18:59 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Widget.H"
 #endif
 
-#define CHART_STYLE ((Fl_Chart::Style*)style)
+#define CHART_STYLE ((Fl_Chart::Style*)_style)
 
 // values for type()
 #define FL_BAR_CHART		0
@@ -98,7 +98,7 @@ protected:
   static Style _default_style;
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!style) style = new Style; }
+  virtual void wstyle() { if (!_style) _style = new Style; }
 
   void draw();
 
@@ -114,5 +114,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.7 1999/03/14 06:46:13 carl Exp $".
+// End of "$Id: Fl_Chart.H,v 1.8 1999/03/15 18:18:59 carl Exp $".
 //

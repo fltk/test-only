@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.5 1999/03/14 06:46:27 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.6 1999/03/15 18:19:06 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -168,27 +168,27 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 Fl_Boxtype Fl_Button::fly_box() const {
-  if (style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
+  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!style || !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
+  if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->button(FLY_BOX);
   return (Fl_Boxtype)BUTTON_STYLE->button(FLY_BOX);
 }
 
 Fl_Color Fl_Button::fly_color() const {
-  if (!style || !(BUTTON_STYLE->sbf & bf(FLY_COLOR)))
+  if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_COLOR)))
     return (Fl_Color)DEFAULT_STYLE->button(FLY_COLOR);
   return (Fl_Color)BUTTON_STYLE->button(FLY_COLOR);
 }
 
 Fl_Boxtype Fl_Button::down_box() const {
-  if (!style || !(BUTTON_STYLE->sbf & bf(DOWN_BOX)))
+  if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_BOX)))
     return (Fl_Boxtype)DEFAULT_STYLE->button(DOWN_BOX);
   return (Fl_Boxtype)BUTTON_STYLE->button(DOWN_BOX);
 }
 
 Fl_Color Fl_Button::down_labelcolor() const {
-  if (!style || !(BUTTON_STYLE->sbf & bf(DOWN_LABELCOLOR)))
+  if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_LABELCOLOR)))
     return (Fl_Color)DEFAULT_STYLE->button(DOWN_LABELCOLOR);
   return (Fl_Color)BUTTON_STYLE->button(DOWN_LABELCOLOR);
 }
@@ -196,5 +196,5 @@ Fl_Color Fl_Button::down_labelcolor() const {
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.5 1999/03/14 06:46:27 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.6 1999/03/15 18:19:06 carl Exp $".
 //
