@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.24 2000/06/03 08:49:15 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.25 2000/06/06 05:03:21 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -126,10 +126,16 @@ int Fl_Browser::marks_equal(int mark1, int mark2) {
 // function... :-P
 int Fl_Browser::compare_mark_locations(int mark1, int mark2) {
   int L1 = item_level[mark1], L2 = item_level[mark2];
-  int L = 0;
-  for (; L < L1 && L < L2 && data[L].index[mark1] == data[L].index[mark2]; L++) ;
-  if (L > item_level[mark1] && L > item_level[mark2]) return 0; // must be equal?
-  return data[L].index[mark1] - data[L].index[mark2];
+  for (int L = 0; ; L++) {
+    if (L > L1) {
+      if (L > L2) return 0;
+      return -1; // mark1 is on a parent of mark2
+    } else if (L > L2) {
+      return +1; // mark2 is on a parent of mark1
+    }
+    int n = data[L].index[mark1] - data[L].index[mark2];
+    if (n) return n;
+  }
 }
 
 // unsets this mark in toplevel
@@ -483,8 +489,8 @@ void Fl_Browser::layout() {
   int max_width = 0;
 
   // save current item
-  copy_mark(USER_0, HERE);
-  Fl_Widget* saved = widget;
+  //copy_mark(USER_0, HERE);
+  // Fl_Widget* saved = widget; unfortunately does not work with Fl_List
 
   // count all the items scrolled off the top:
   int arrow_size = text_size()|1;
@@ -507,8 +513,8 @@ void Fl_Browser::layout() {
   int height = item_position[HERE];
 
   // restore current item
-  copy_mark(HERE, USER_0);
-  widget = saved;
+  //copy_mark(HERE, USER_0);
+  //widget = saved;
 
   // figure out the visible area:
 
@@ -903,5 +909,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.24 2000/06/03 08:49:15 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.25 2000/06/06 05:03:21 bill Exp $".
 //
