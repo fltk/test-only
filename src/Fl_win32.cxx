@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.68 1999/11/23 06:10:52 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.69 1999/11/23 06:11:39 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -343,7 +343,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
     pmx = Fl::e_x_root; pmy = Fl::e_y_root;
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
 
-#ifdef HAVE_TRACKMOUSEEVENT
+#if HAVE_TRACKMOUSEEVENT
     // look for mouse leave events
     mouseevent.hwndTrack = fl_xid(window);
     TrackMouseEvent(&mouseevent);
@@ -900,5 +900,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.68 1999/11/23 06:10:52 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.69 1999/11/23 06:11:39 vincent Exp $".
 //
