@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.7 2004/07/27 16:04:26 easysw Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.8 2004/08/09 03:16:58 easysw Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -96,6 +96,7 @@ Fl_Menu_::find_item(const char *name)
 	// END OF SUBMENU? Pop back one level.
 	char *ss = strrchr(menupath, '/');
 	if ( ss ) *ss = 0;
+	else menupath[0] = '\0';
 	continue;
       }
 
@@ -224,5 +225,5 @@ void Fl_Menu_::clear() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.7 2004/07/27 16:04:26 easysw Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.8 2004/08/09 03:16:58 easysw Exp $".
 //
