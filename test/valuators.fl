@@ -16,7 +16,7 @@ Function {} {open
 } {
   Fl_Window {} {
     label {Valuator classes, showing values for the type()} open
-    xywh {611 95 567 506} resizable label_size 10
+    xywh {611 95 565 505} resizable label_size 10
     extra_code {\#include <stdio.h>} visible
   } {
     Fl_Box {} {
@@ -26,32 +26,37 @@ Function {} {open
     Fl_Slider {} {
       label VERTICAL
       callback callback
-      xywh {30 45 20 145} align 1 color 10 selection_color 1 label_size 8
+      xywh {25 45 20 145} align 1 color 10 selection_color 1 label_size 8
     }
     Fl_Slider {} {
-      label VERTICAL_FILL
+      label {VERTICAL|TICK_LEFT}
       callback callback
-      xywh {70 55 20 145} type VERTICAL_FILL color 10 selection_color 1 label_size 8
+      xywh {60 65 20 145} type {VERTICAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8
     }
     Fl_Slider {} {
-      label VERTICAL_NICE
+      label {VERTICAL|TICK_RIGHT}
       callback callback
-      xywh {105 45 20 145} type VERTICAL_NICE align 1 box FLAT_BOX color 10 selection_color 1 label_size 8
+      xywh {100 45 20 145} type {VERTICAL|Fl_Slider::TICK_BELOW} align 1 color 10 selection_color 1 label_size 8
     }
     Fl_Slider {} {
       label HORIZONTAL
       callback callback
-      xywh {140 80 130 20} type HORIZONTAL color 10 selection_color 1 label_size 8
+      xywh {140 50 130 15} type HORIZONTAL color 10 selection_color 1 label_size 8
     }
     Fl_Slider {} {
-      label HORIZONTAL_FILL
+      label {HORIZONTAL|TICK_ABOVE}
       callback callback
-      xywh {140 120 130 20} type HORIZONTAL_FILL color 10 selection_color 1 label_size 8
+      xywh {140 75 130 20} type {HORIZONTAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8
     }
     Fl_Slider {} {
-      label HORIZONTAL_NICE
+      label {HORIZONTAL|TICK_ABOVE,box}
       callback callback
-      xywh {140 160 130 20} type HORIZONTAL_NICE box FLAT_BOX color 10 selection_color 1 label_size 8
+      xywh {140 110 130 20} type {HORIZONTAL|Fl_Slider::TICK_ABOVE} box DOWN_BOX color 10 selection_color 1 label_size 8
+    }
+    Fl_Slider {} {
+      label {HORIZONTAL|TICK_BELOW}
+      callback callback
+      xywh {140 145 130 20} type {HORIZONTAL|Fl_Slider::TICK_BELOW} color 10 selection_color 1 label_size 8
     }
     Fl_Box {} {
       label Fl_Value_Slider
@@ -60,32 +65,32 @@ Function {} {open
     Fl_Value_Slider {} {
       label VERTICAL
       callback callback
-      xywh {30 260 30 145} align 1 color 10 selection_color 1 label_size 8 text_size 10
+      xywh {25 255 30 145} align 1 color 10 selection_color 1 label_size 8 text_size 10
     }
     Fl_Value_Slider {} {
-      label VERTICAL_FILL
+      label {VERTICAL|TICK_LEFT}
       callback callback
-      xywh {70 275 30 140} type VERTICAL_FILL color 10 selection_color 1 label_size 8 text_size 10
+      xywh {65 285 30 140} type {VERTICAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8 text_size 10
     }
     Fl_Value_Slider {} {
-      label VERTICAL_NICE
-      callback callback
-      xywh {110 260 25 145} type VERTICAL_NICE align 1 box FLAT_BOX color 10 selection_color 1 label_size 8 text_size 10
+      label {VERTICAL|TICK_LEFT,box}
+      callback callback selected
+      xywh {105 260 35 145} type {VERTICAL|Fl_Slider::TICK_ABOVE} align 1 box DOWN_BOX color 10 selection_color 1 label_size 8 text_size 10
     }
     Fl_Value_Slider {} {
       label HORIZONTAL
       callback callback
-      xywh {140 290 130 20} type HORIZONTAL color 10 selection_color 1 label_size 8
+      xywh {145 270 130 20} type HORIZONTAL color 10 selection_color 1 label_size 8
     }
     Fl_Value_Slider {} {
-      label HORIZONTAL_FILL
+      label {HORIZONTAL|TICK_BELOW,box}
       callback callback
-      xywh {140 330 130 20} type HORIZONTAL_FILL color 10 selection_color 1 label_size 8
+      xywh {145 350 130 20} type {HORIZONTAL|Fl_Slider::TICK_BELOW} box DOWN_BOX color 10 selection_color 1 label_size 8
     }
     Fl_Value_Slider {} {
-      label HORIZONTAL_NICE
+      label {HORIZONTAL|TICK_BOTH}
       callback callback
-      xywh {140 370 130 20} type HORIZONTAL_NICE box FLAT_BOX color 10 selection_color 1 label_size 8
+      xywh {145 390 130 30} type {HORIZONTAL|Fl_Slider::TICK_BOTH} color 10 selection_color 1 label_size 8
     }
     Fl_Box {} {
       label Fl_Value_Input
@@ -114,7 +119,7 @@ Function {} {open
     }
     Fl_Scrollbar {} {
       label HORIZONTAL
-      callback callback selected
+      callback callback
       xywh {300 65 95 20} type HORIZONTAL color 10 selection_color 1 label_size 8 maximum 100
     }
     Fl_Box {} {
@@ -184,6 +189,16 @@ Function {} {open
     Fl_Box {} {
       label {All widgets have color(green) and selection_color(red) to show the areas these colors affect.}
       xywh {445 370 110 125} align 128 box ENGRAVED_BOX label_size 10
+    }
+    Fl_Slider {} {
+      label {HORIZONTAL|TICK_BOTH}
+      callback callback
+      xywh {140 185 130 20} type {HORIZONTAL|Fl_Slider::TICK_BOTH} color 10 selection_color 1 label_size 8
+    }
+    Fl_Value_Slider {} {
+      label {HORIZONTAL|TICK_BELOW}
+      callback callback
+      xywh {145 310 130 20} type {HORIZONTAL|Fl_Slider::TICK_BELOW} color 10 selection_color 1 label_size 8
     }
   }
 } 

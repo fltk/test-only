@@ -2066,3 +2066,19 @@ this by setting the GL_SWAP_TYPE environment variable.
 Fl_Group does not pass FL_DRAG, FL_KEY, FL_KEYUP, and FL_LEAVE events
 to children, so it can be used as a base class for something that does
 handle these events.
+
+////////////////////////////////////////////////////////////////
+
+Win32 version messed up the clipboard for the entire system if you
+closed the window that owned the clipboard.
+
+New sliders with slot and tick marks, design copied from Qt. New
+functions added to base class to make it easier to subclass sliders to
+draw differently. Documentation for these, too.
+
+Fixed drawing of Fl_Light_Button and Fl_Return_Button when you drag
+off and then release the mouse.
+
+Crash in the menus reported by Joe Perkins fixed, I think.
+
+Checked in 2/25/02

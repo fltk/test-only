@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.121 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.122 2002/02/25 09:00:21 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -549,27 +549,22 @@ int MenuWindow::handle(int event) {
   case FL_DRAG: {
     int mx = Fl::event_x_root();
     int my = Fl::event_y_root();
-    int item=0; int menu;
-    // find the menu and item they are pointing at:
+    int item, menu;
+    // search the visible menus from top down for item being pointed at:
     for (menu = p.nummenus-1; ; menu--) {
-      item = p.menus[menu]->find_selected(mx, my);
-      if (item >= 0) break;
-      if (menu <= 0) {
-	// drags to nothing do not change the first pulldown in menubar:
-	if (event != FL_PUSH && p.menubar && p.nummenus<2) return 1;
-	// otherwise point at the parent of lowest visible menu:
+      if (menu < 0) { // not pointing at anything:
+	// quit if they clicked off the menus:
+	if (event == FL_PUSH) {Fl::exit_modal(); return 0;}
+	// keep the lowest-visible menu visible but with nothing selected:
 	menu = p.nummenus-1;
 	item = -1;
 	break;
       }
+      item = p.menus[menu]->find_selected(mx, my);
+      if (item >= 0) break;
     }
     if (event == FL_PUSH) {
       p.state = PUSH_STATE;
-      // quit if they clicked off the menus:
-      if (item < 0) {Fl::exit_modal(); return 0;}
-      if (p.menus[menu]->is_parent(item) // this is a submenu title
-	  && item != p.indexes[menu]) // and it is not already on
-	p.state = INITIAL_STATE;
       // redraw checkboxes so they preview the state they will be in:
       Fl_Widget* widget = p.menus[menu]->get_widget(item);
       if (checkmark(widget)) p.menus[menu]->redraw(FL_DAMAGE_CHILD);
@@ -580,14 +575,12 @@ int MenuWindow::handle(int event) {
   case FL_RELEASE:
     Fl::pushed_ = 0;
     // Allow menus to be "clicked-up".  Without this a single click will
-    // pick whatever item the mouse is pointing at:
+    // pick whatever item the mouse is pointing at in a pop-up menu:
     if (p.state == INITIAL_STATE && Fl::event_is_click()) {
-      // redraw checkboxes so they preview the state they will be in:
-      if (p.indexes[p.level] >= 0) {
-	widget = p.current_widget();
-	if (checkmark(widget)) p.menus[p.level]->redraw(FL_DAMAGE_CHILD);
-      }
-      return 1;
+      // don't do this for checkboxes as it is confusing to the user
+      // as to whether or not they turned it on.
+      widget = p.current_widget();
+      if (!widget || !checkmark(widget)) return 1;
     }
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
@@ -606,8 +599,8 @@ int MenuWindow::handle(int event) {
     }
 #endif
     // ignore clicks on menu titles unless it they have a callback:
-    if (widget->callback() == Fl_Widget::default_callback &&
-	p.current_children() >= 0) return 1;
+//  if (widget->callback() == Fl_Widget::default_callback &&
+//	p.current_children() >= 0) return 1;
     p.state = DONE_STATE;
     Fl::exit_modal();
     return 1;
@@ -697,6 +690,7 @@ int Fl_Menu_::popup(
   }
 
   Fl_Widget* saved_modal = Fl::modal(); bool saved_grab = Fl::grab();
+  p.state = INITIAL_STATE;
 
   for (Fl::modal(&toplevel, true); !Fl::exit_modal_flag(); Fl::wait()) {
 
@@ -770,5 +764,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.121 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.122 2002/02/25 09:00:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.46 2002/01/29 08:05:56 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.47 2002/02/25 09:00:21 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,8 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
   }
 }
 
+static Fl_Button* held_down;
+
 int Fl_Button::handle(int event) {
   static int oldval;
   int newval;
@@ -70,25 +72,28 @@ int Fl_Button::handle(int event) {
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(0,0,w(),h())) {
+      held_down = this;
       if (type() == RADIO) newval = 1;
       else newval = !oldval;
-    } else
+    } else {
+      held_down = 0;
       newval = oldval;
+    }
     if (value(newval) && when()&FL_WHEN_CHANGED) do_callback();
     return 1;
   case FL_RELEASE:
-    if (!Fl::pushed()) {
-      if (value() == oldval) return 1;
-      if (type() == RADIO)
-	setonly();
-      else if (type()) // TOGGLE
-	  ; // leave it as set
-      else {
-	value(oldval);
-	if (when() & FL_WHEN_CHANGED) do_callback();
-      }
-      if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
+    redraw(FL_DAMAGE_VALUE);
+    held_down = 0;
+    if (value() == oldval) return 1;
+    if (type() == RADIO)
+      setonly();
+    else if (type()) // TOGGLE
+      ; // leave it as set
+    else {
+      value(oldval);
+      if (when() & FL_WHEN_CHANGED) do_callback();
     }
+    if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   case FL_FOCUS:
   case FL_UNFOCUS:
@@ -144,7 +149,7 @@ void Fl_Button::draw(int glyph, int glyph_width) const
   }
   Fl_Flags glyph_flags = flags;
   if (glyph_width) {
-    if (pushed()) flags |= FL_VALUE;
+    if (this == held_down) flags |= FL_VALUE;
     if (value()) glyph_flags |= FL_VALUE;
   } else if (value()) {
     flags |= FL_VALUE;
@@ -232,5 +237,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.46 2002/01/29 08:05:56 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.47 2002/02/25 09:00:21 spitzak Exp $".
 //

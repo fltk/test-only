@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.30 2002/02/25 09:00:21 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -117,11 +117,6 @@ void Fl_Clock_Output::value(ulong v) {
 Fl_Clock::Fl_Clock(int x, int y, int w, int h, const char *l)
   : Fl_Clock_Output(x, y, w, h, l) {}
 
-Fl_Clock::Fl_Clock(uchar t, int x, int y, int w, int h, const char *l)
-  : Fl_Clock_Output(x, y, w, h, l) {
-  type(t);
-}
-
 static void tick(void *v) {
 #ifdef _WIN32
   ((Fl_Clock*)v)->value(time(0));
@@ -172,5 +167,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.30 2002/02/25 09:00:21 spitzak Exp $".
 //

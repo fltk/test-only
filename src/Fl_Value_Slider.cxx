@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.38 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.39 2002/02/25 09:00:22 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,83 +27,113 @@
 #include <fltk/Fl_Value_Slider.h>
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Output.h>
+#include <fltk/Fl_Group.h>
 #include <config.h>
 
-#define vertical() (!(type()&1))
+extern void fl_dotted_box(int,int,int,int);
 
 void Fl_Value_Slider::draw() {
-  int sx = 0, sy = 0, sw = w(), sh = h();
+  // figure out region of box, leaving room for tick marks:
   int bx = 0, by = 0, bw = w(), bh = h();
-  if (vertical()) {
-    sy += 25; bh = 25; sh -= 25;
+  int tick_size = 0;
+  if (horizontal()) {
+    switch (type()&TICK_BOTH) {
+    case TICK_BOTH: by = tick_size = h()/4; bh -= 2*tick_size; break;
+    case TICK_ABOVE: by = tick_size = h()/3; bh -= tick_size; break;
+    case TICK_BELOW: tick_size = h()/3; bh -= tick_size; break;
+    }
   } else {
-    bw = 35; sx += 35; sw -= 35;
+    switch (type()&TICK_BOTH) {
+    case TICK_BOTH: bx = tick_size = w()/4; bw -= 2*tick_size; break;
+    case TICK_ABOVE: bx = tick_size = w()/3; bw -= tick_size; break;
+    case TICK_BELOW: tick_size = w()/3; bw -= tick_size; break;
+    }
   }
-  Fl_Flags flags = this->flags();
-  if (!active_r()) flags |= FL_INACTIVE;
 
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    // copy the box & color from the default style:
-    Fl_Color bg = Fl_Output::default_style->color;
-    if (!bg) bg = Fl_Widget::default_style->color;
-    Fl_Boxtype valuebox = Fl_Output::default_style->box;
-    if (!valuebox) valuebox = Fl_Widget::default_style->box;
-    // draw the edge of the box around text:
-    if (damage()&FL_DAMAGE_ALL)
-      valuebox->draw(bx, by, bw, bh, bg, flags|FL_INVISIBLE);
-    // erase the interior of the box:
-    valuebox->inset(bx, by, bw, bh);
-    fl_color(bg);
-    fl_rectf(bx, by, bw, bh);
-    // now draw the text:
-    char buf[128];
-    format(buf);
-    fl_push_clip(bx, by, bw, bh);
-    fl_font(text_font(), text_size());
-    fl_color(fl_inactive(text_color(),flags));
-    fl_draw(buf, bx, by, bw, bh, 0);
+  // figure out the inner size of the slider and text areas:
+  Fl_Boxtype box = this->box();
+  int ix = bx, iy = by, iw = bw, ih = bh;
+  box->inset(ix,iy,iw,ih);
+  int tx = ix, ty = iy, tw = iw, th = ih;
+  if (horizontal()) {
+    tw = 35; ix += tw; iw -= tw;
+  } else {
+    th = text_size(); ih -= th; ty += ih;
+  }
+
+  Fl_Flags flags = 0;
+  if (!active_r()) {
+    flags |= FL_INACTIVE;
+  } else {
+    //if (Fl::pushed() == this) f |= FL_VALUE;
+    if (belowmouse()) flags |= FL_HIGHLIGHT;
+  }
+
+  // minimal-update the slider, if it indicates the background needs
+  // to be drawn, draw that:
+  if (Fl_Slider::draw(ix, iy, iw, ih, flags, iy==by)) {
+    // draw the box or the visible parts of the window
+    if (!box->fills_rectangle()) parent()->draw_group_box();
+    box->draw(bx, by, bw, bh, color(), flags);
+
+    // draw the focus indicator inside the box:
+    if (focused()) {
+      fl_color(text_color());
+      fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
+    }
+
+    if (tick_size && (damage() & FL_DAMAGE_ALL)) {
+      // first clip to the background area and erase it with draw_group_box:
+      fl_clip_out(bx, by, bw, bh);
+      if (box->fills_rectangle()) parent()->draw_group_box();
+      // now draw the ticks into the clipped area:
+      if (horizontal()) draw_ticks(ix, 0, iw, h());
+      else draw_ticks(0, iy, w(), ih);
+    }
+
     fl_pop_clip();
   }
 
-  // draw the edge of the slider:
-  if (damage()&FL_DAMAGE_ALL)
-    box()->draw(sx, sy, sw, sh, color(), flags|FL_INVISIBLE);
-  // draw the slider itself:
-  if (!(flags & FL_INACTIVE)) {
-    //if (Fl::pushed() == this) flags |= FL_VALUE;
-    if (belowmouse()) flags |= FL_HIGHLIGHT;
+  // draw the text:
+  if (damage() & (FL_DAMAGE_ALL|FL_DAMAGE_VALUE)) {
+    fl_push_clip(tx, ty, tw, th);
+    // erase the background if not already done:
+    if (!(damage()&FL_DAMAGE_ALL)) {
+      if (!box->fills_rectangle()) parent()->draw_group_box();
+      box->draw(bx, by, bw, bh, color(), flags);
+    }
+    // now draw the text:
+    char buf[128];
+    format(buf);
+    fl_font(text_font(), text_size());
+    fl_color(fl_inactive(text_color(),flags));
+    fl_draw(buf, tx, ty, tw, th, 0);
+    fl_pop_clip();
   }
-  box()->inset(sx, sy, sw, sh);
-  Fl_Slider::draw(sx, sy, sw, sh, flags);
+
 }
 
 int Fl_Value_Slider::handle(int event) {
-  int sx = 0, sy = 0, sw = w(), sh = h();
-  if (vertical()) {
-    sy += 25; sh -= 25;
+  // figure out the inner size of the slider and text areas:
+  Fl_Boxtype box = this->box();
+  int ix = 0, iy = 0, iw = w(), ih = h();
+  box->inset(ix,iy,iw,ih);
+  if (horizontal()) {
+    int tw = 35; ix += tw; iw -= tw;
   } else {
-    sx += 35; sw -= 35;
+    int th = text_size(); ih -= th;
   }
-  box()->inset(sx, sy, sw, sh);
 #if CLICK_MOVES_FOCUS
   if (event == FL_PUSH) take_focus();
 #endif
-  return Fl_Slider::handle(event, sx, sy, sw, sh);
+  return Fl_Slider::handle(event, ix, iy, iw, ih);
 }
-
-static void revert(Fl_Style* s) {
-  s->color = FL_DARK2;
-//s->text_size = 10;
-}
-
-static Fl_Named_Style* style = new Fl_Named_Style("Value Slider", revert, &style);
 
 Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 : Fl_Slider(x, y, w, h, l) {
-  style(::style);
   step(.01);
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.38 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.39 2002/02/25 09:00:22 spitzak Exp $".
 //

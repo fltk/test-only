@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.18 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.19 2002/02/25 09:00:22 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   set_flag(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   value_ = 0.0;
-  step_ = 0.0;
+  istep = 0;
   minimum_ = 0.0;
   maximum_ = 1.0;
   linesize_ = 1;
@@ -46,9 +46,9 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 
 #ifndef FLTK_2
 void Fl_Valuator::precision(int p) {
-  double B = 1.0;
+  int B = 1;
   for (int i=0; i<p; i++) B *= 10;
-  step_ = 1.0/B;
+  istep = B;
 }
 #endif
 
@@ -90,7 +90,8 @@ void Fl_Valuator::handle_release() {
 }
 
 double Fl_Valuator::round(double v) const {
-  return step_ ? rint(v/step_)*step_ : v;
+  if (!istep) return v;
+  return rint(v*istep)/istep;
 }
 
 double Fl_Valuator::clamp(double v) const {
@@ -111,20 +112,24 @@ double Fl_Valuator::softclamp(double v) const {
 }
 
 double Fl_Valuator::increment(double v, int n) const {
-  double s = step_;
-  if (!s) s = (maximum_-minimum_)/100;
-  else if (minimum_ > maximum_) n = -n;
-  return rint(v/s+n)*s;
+  double is;
+  if (!istep) {
+    is = rint(100/(maximum_-minimum_));
+    if (!is) is = maximum_>minimum_ ? 1 : -1;
+  } else {
+    is = istep;
+    if (minimum_ > maximum_) is = -is;
+  }
+  return rint(v*is+n)/is;
 }
 
 int Fl_Valuator::format(char* buffer) {
   double v = value();
-  if (!step_) return sprintf(buffer, "%g", v);
-  if (step_ == int(step_)) return sprintf(buffer, "%ld", long(v));
+  if (!istep) return sprintf(buffer, "%g", v);
+  if (istep == 1) return sprintf(buffer, "%ld", long(v));
   int i, x;
-  double b = rint(1.0/step_);
-  for (x = 10, i = 2; x < b; x *= 10) i++;
-  if (x == b) i--;
+  for (x = 10, i = 2; x < istep; x *= 10) i++;
+  if (x == istep) i--;
   return sprintf(buffer, "%.*f", i, v);
 }
 
@@ -176,5 +181,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.18 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.19 2002/02/25 09:00:22 spitzak Exp $".
 //

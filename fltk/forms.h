@@ -1,5 +1,5 @@
 //
-// "$Id: forms.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: forms.h,v 1.2 2002/02/25 09:00:20 spitzak Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -571,7 +571,7 @@ inline void fl_set_choice_fontstyle(Fl_Widget* o, Fl_Font x) {
 // inline void fl_set_choice_item_shortcut(Fl_Widget*, int, const char*);
 
 #include <fltk/Fl_Clock.h>
-forms_constructort(Fl_Clock, fl_add_clock)
+forms_constructor(Fl_Clock, fl_add_clock)
 inline void fl_get_clock(Fl_Widget* o, int* h, int* m, int* s) {
     *h = ((Fl_Clock*)o)->hour();
     *m = ((Fl_Clock*)o)->minute();
@@ -791,7 +791,7 @@ inline void fl_set_positioner_return(Fl_Widget* o, int v) {
 #define FL_HOR_BROWSER_SLIDER FL_HOR_SLIDER
 #define FL_VERT_BROWSER_SLIDER FL_VERT_SLIDER
 
-forms_constructort(Fl_Slider, fl_add_slider)
+forms_constructor(Fl_Slider, fl_add_slider)
 #define FL_SLIDER_COL1 FL_GRAY
 inline void fl_set_slider_value(Fl_Widget* o, double v) {
     ((Fl_Slider*)o)->value(v);}
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: forms.h,v 1.2 2002/02/25 09:00:20 spitzak Exp $".
 //

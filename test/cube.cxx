@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: cube.cxx,v 1.14 2002/02/25 09:00:22 spitzak Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -129,8 +129,8 @@ void makeform(const char *name) {
   form = new Fl_Window(510+390,390,name);
   (void) new Fl_Box(FL_DOWN_BOX,20,20,350,350,"");
   (void) new Fl_Box(FL_DOWN_BOX,510,20,350,350,"");
-  speed = new Fl_Slider(FL_VERT_SLIDER,390,90,40,220,"Speed");
-  size = new Fl_Slider(FL_VERT_SLIDER,450,90,40,220,"Size");
+  speed = new Fl_Slider(390,90,40,220,"Speed");
+  size = new Fl_Slider(450,90,40,220,"Size");
   wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
   flat = new Fl_Radio_Light_Button(390,50,100,30,"Flat");
   button = new Fl_Button(390,340,100,30,"Exit");
@@ -174,5 +174,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cube.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: cube.cxx,v 1.14 2002/02/25 09:00:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.23 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: factory.cxx,v 1.24 2002/02/25 09:00:20 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -246,11 +246,13 @@ static Fl_Roller_Type Fl_Roller_type;
 #include <fltk/Fl_Scrollbar.h>
 static const Enumeration slider_type_menu[] = {
   {"Vertical",	"VERTICAL",	(void*)Fl_Slider::VERTICAL},
+  {"Vert TickA","VERTICAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_ABOVE)},
+  {"Vert TickB","VERTICAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BELOW)},
+  {"Vert TickC","VERTICAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BOTH)},
   {"Horizontal","HORIZONTAL",	(void*)Fl_Slider::HORIZONTAL},
-  {"Vert Fill", "VERTICAL_FILL",(void*)Fl_Slider::VERTICAL_FILL},
-  {"Horz Fill", "HORIZONTAL_FILL",(void*)Fl_Slider::HORIZONTAL_FILL},
-  {"Vert Knob", "VERTICAL_NICE",(void*)Fl_Slider::VERTICAL_NICE},
-  {"Horz Knob",	"HORIZONTAL_NICE",(void*)Fl_Slider::HORIZONTAL_NICE},
+  {"Horz TickA","HORIZONTAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE)},
+  {"Horz TickB","HORIZONTAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW)},
+  {"Horz TickC","HORIZONTAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH)},
   {0}};
 class Fl_Slider_Type : public Fl_Widget_Type {
   const Enumeration *subtypes() const {return slider_type_menu;}
@@ -610,10 +612,10 @@ static symbol table[] = {
   {"FILL_DIAL",		Fl_Dial::FILL},
   {"VERT_SLIDER",	Fl_Slider::VERTICAL},
   {"HOR_SLIDER",	Fl_Slider::HORIZONTAL},
-  {"VERT_FILL_SLIDER",	Fl_Slider::VERTICAL_FILL},
-  {"HOR_FILL_SLIDER",	Fl_Slider::HORIZONTAL_FILL},
-  {"VERT_NICE_SLIDER",	Fl_Slider::VERTICAL_NICE},
-  {"HOR_NICE_SLIDER",	Fl_Slider::HORIZONTAL_NICE},
+  {"VERT_FILL_SLIDER",	Fl_Slider::VERTICAL},
+  {"HOR_FILL_SLIDER",	Fl_Slider::HORIZONTAL},
+  {"VERT_NICE_SLIDER",	Fl_Slider::VERTICAL},
+  {"HOR_NICE_SLIDER",	Fl_Slider::HORIZONTAL},
 };
 
 #include <stdlib.h>
@@ -631,5 +633,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.23 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.24 2002/02/25 09:00:20 spitzak Exp $".
 //

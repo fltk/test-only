@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.56 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.57 2002/02/25 09:00:22 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -90,22 +90,24 @@ int Fl_Scrollbar::handle(int event) {
     if (my < Y) which_part = 1;
     else if (my >= Y+H) which_part = 2;
     else {
-      int slidery = slider_position(H, slider_size(H, W));
+      int slidery = slider_position(value(), H);
       if (my < Y+slidery) which_part = 3;
-      else if (my >= Y+slidery+slider_size(H, W)) which_part = 4;
+      else if (my >= Y+slidery+slider_size()) which_part = 4;
       else which_part = 5;
     }
   } else { // horizontal
     if (mx < X) which_part = 1;
     else if (mx >= X+W) which_part = 2;
     else {
-      int sliderx = slider_position(W, slider_size(W, H));
+      int sliderx = slider_position(value(), W);
       if (mx < X+sliderx) which_part = 3;
-      else if (mx >= X+sliderx+slider_size(W, H)) which_part = 4;
+      else if (mx >= X+sliderx+slider_size()) which_part = 4;
       else which_part = 5;
     }
   }
   switch (event) {
+  case FL_FOCUS:
+    return 0;
   case FL_LEAVE:
   case FL_ENTER:
   case FL_MOVE:
@@ -153,18 +155,11 @@ int Fl_Scrollbar::handle(int event) {
   }
 }
 
-// Fltk 2.0 is incompatable with the use of color:
-// color area:                                  1.0:            2.0:
-// background behind scrollbar                  color           color
-// scrollbar slider & buttons                   FL_GRAY         button_color
-// scrollbar slider & buttons when selected     FL_GRAY         selection_color
-// scrollbar button symbols                     selection_color text_color
-// scrollbar button symbols when selected       selection_color selection_text_color
-
 void Fl_Scrollbar::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_frame();
 
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int ix = X; int iy = Y; int iw = W; int ih = H;
 
   // 1 = left/top   2 = right/bottom   5 = slider button
   Fl_Flags f1 = 0, f2 = 0, f5 = 0;
@@ -178,22 +173,30 @@ void Fl_Scrollbar::draw() {
     //if (pushed_ == 5) f5 = FL_VALUE;
     if (highlight_ == 5) f5 = FL_HIGHLIGHT;
   }
-  if (vertical()) {
-    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
-    Fl_Slider::draw(X,Y+W,W,H-2*W,f5);
+
+  if (vertical() && H >= 3*W) {
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_UP_BUTTON, X, Y, W, W, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
-  } else { // horizontal:
-    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
-    Fl_Slider::draw(X+H,Y,W-2*H,H,f5);
+    iy += W; ih -= 2*W;
+
+  } else if (W >= 3*H) { // horizontal:
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
+    ix += H; iw -= 2*H;
   }
+
   last_ = highlight_;
+
+  if (Fl_Slider::draw(ix, iy, iw, ih, f5, false)) {
+    fl_color(color());
+    fl_rectf(ix, iy, iw, ih);
+    fl_pop_clip();
+  }
+
 }
 
 static void revert(Fl_Style* s) {
@@ -214,5 +217,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.56 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.57 2002/02/25 09:00:22 spitzak Exp $".
 //

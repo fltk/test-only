@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Slider.h,v 1.3 2002/02/25 09:00:19 spitzak Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,57 +32,64 @@
 
 class FL_API Fl_Slider : public Fl_Valuator {
 
+  unsigned short slider_size_;
+  unsigned short old_position;
+
 public:
 
-  enum { // values for type(), odd numbers are vertical
+  enum { // bit flags for type():
     VERTICAL		= 0,
     HORIZONTAL		= 1,
-    VERTICAL_FILL	= 2,
-    HORIZONTAL_FILL	= 3,
-    VERTICAL_NICE	= 4,
-    HORIZONTAL_NICE	= 5
+    TICK_ABOVE		= 2,
+    TICK_LEFT		= TICK_ABOVE,
+    TICK_BELOW		= 4,
+    TICK_RIGHT		= TICK_BELOW,
+    TICK_BOTH		= TICK_ABOVE|TICK_BELOW,
+    LOG			= 8
   };
+  bool horizontal() const {return type()&HORIZONTAL;}
+  bool log() const {return type()&LOG;}
 
   void draw();
   int handle(int);
 
   Fl_Slider(int x,int y,int w,int h, const char *l = 0);
-  Fl_Slider(uchar t,int x,int y,int w,int h, const char *l);
   static Fl_Named_Style* default_style;
 
-  int slider_size() const {return slider_size_;}
-  void slider_size(int n) {slider_size_ = n;}
+  unsigned short slider_size() const {return slider_size_;}
+  void slider_size(int n) {slider_size_ = (unsigned short)n;}
+  
 #ifndef FLTK_2
   // back comptability:
-  Fl_Boxtype slider() const {return box();}
-  void slider(Fl_Boxtype b) {box(b);}
+  Fl_Boxtype slider() const {return button_box();}
+  void slider(Fl_Boxtype b) {button_box(b);}
   void slider_size(double v) {slider_size(int(v*w()));}
 #endif
 
 protected:
 
-  int slider_size(int W, int H); // return clamped slider_size()
-  int slider_position(int W, int S);
-  void draw(int, int, int, int, Fl_Flags); // draw plain slider in this box
-  int handle(int, int, int, int, int); // handle slider in this box
-
-private:
-
-  int slider_size_;
-  void draw_bg(int, int, int, int, Fl_Flags);
+  int slider_position(double value, int w);
+  double position_value(int x, int w);
+  int handle(int event, int, int, int, int);
+  void draw_ticks(int,int,int,int);
+  bool draw(int, int, int, int, Fl_Flags flags, bool slot);
 };
 
 #ifndef FLTK_2
 #define FL_VERT_SLIDER		Fl_Slider::VERTICAL
 #define FL_HOR_SLIDER		Fl_Slider::HORIZONTAL
-#define FL_VERT_FILL_SLIDER	Fl_Slider::VERTICAL_FILL
-#define FL_HOR_FILL_SLIDER	Fl_Slider::HORIZONTAL_FILL
-#define FL_VERT_NICE_SLIDER	Fl_Slider::VERTICAL_NICE
-#define FL_HOR_NICE_SLIDER	Fl_Slider::HORIZONTAL_NICE
+#define FL_VERT_FILL_SLIDER	Fl_Slider::VERTICAL
+#define FL_HOR_FILL_SLIDER	Fl_Slider::HORIZONTAL
+#define FL_VERT_NICE_SLIDER	Fl_Slider::VERTICAL
+#define FL_HOR_NICE_SLIDER	Fl_Slider::HORIZONTAL
+#define HORIZONTAL_FILL HORIZONTAL
+#define VERTICAL_FILL VERTICAL
+#define HORIZONTAL_NICE HORIZONTAL
+#define VERTICAL_NICE VERTICAL
 #endif
 
 #endif
 
 //
-// End of "$Id: Fl_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Slider.h,v 1.3 2002/02/25 09:00:19 spitzak Exp $".
 //

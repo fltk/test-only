@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.165 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.166 2002/02/25 09:00:22 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -325,6 +325,7 @@ void Fl::copy(const char *stuff, int len, bool clipboard) {
   selection_buffer[clipboard][len] = 0; // needed for direct paste
   selection_length[clipboard] = len;
   if (clipboard) {
+    // set up for "delayed rendering":
     if (OpenClipboard(fl_xid(Fl::first_window()))) {
       EmptyClipboard();
       SetClipboardData(CF_TEXT, NULL);
@@ -837,8 +838,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_RENDERALLFORMATS:
-    if (!OpenClipboard(NULL)) return 0;
-    EmptyClipboard();
+    i_own_selection = false;
+    // Windoze seems unhappy unless I do these two steps. Documentation
+    // seems to vary on whether opening the clipboard is necessary or
+    // is in fact wrong:
+    CloseClipboard();
+    OpenClipboard(NULL);
     // fall through...
   case WM_RENDERFORMAT: {
     HANDLE h = GlobalAlloc(GHND, selection_length[1]+1);
@@ -849,8 +854,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       GlobalUnlock(h);
       SetClipboardData(CF_TEXT, h);
     }
-    if (fl_msg.message == WM_RENDERALLFORMATS)
-      CloseClipboard();
+    // Windoze also seems unhappy if I don't do this. Documentation very
+    // unclear on what is correct:
+    if (fl_msg.message == WM_RENDERALLFORMATS) CloseClipboard();
     return 1;}
 
   default:
@@ -1314,5 +1320,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.165 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.166 2002/02/25 09:00:22 spitzak Exp $".
 //

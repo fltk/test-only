@@ -10,7 +10,7 @@ static void callback(Fl_Widget* o, void*) {
 int main (int argc, char **argv) {
 
   Fl_Window* w;
-   {Fl_Window* o = new Fl_Window(567, 506, "Valuator classes, showing values for the type()");
+   {Fl_Window* o = new Fl_Window(565, 505, "Valuator classes, showing values for the type()");
     w = o;
     o->label_size(10);
      {Fl_Box* o = new Fl_Box(10, 10, 280, 215, "Fl_Slider");
@@ -18,46 +18,52 @@ int main (int argc, char **argv) {
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {Fl_Slider* o = new Fl_Slider(30, 45, 20, 145, "VERTICAL");
+     {Fl_Slider* o = new Fl_Slider(25, 45, 20, 145, "VERTICAL");
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {Fl_Slider* o = new Fl_Slider(70, 55, 20, 145, "VERTICAL_FILL");
-      o->type(Fl_Slider::VERTICAL_FILL);
+     {Fl_Slider* o = new Fl_Slider(60, 65, 20, 145, "VERTICAL|TICK_LEFT");
+      o->type(Fl_Slider::VERTICAL|Fl_Slider::TICK_ABOVE);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Slider* o = new Fl_Slider(105, 45, 20, 145, "VERTICAL_NICE");
-      o->type(Fl_Slider::VERTICAL_NICE);
-      o->box(FL_FLAT_BOX);
+     {Fl_Slider* o = new Fl_Slider(100, 45, 20, 145, "VERTICAL|TICK_RIGHT");
+      o->type(Fl_Slider::VERTICAL|Fl_Slider::TICK_BELOW);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {Fl_Slider* o = new Fl_Slider(140, 80, 130, 20, "HORIZONTAL");
+     {Fl_Slider* o = new Fl_Slider(140, 50, 130, 15, "HORIZONTAL");
       o->type(Fl_Slider::HORIZONTAL);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Slider* o = new Fl_Slider(140, 120, 130, 20, "HORIZONTAL_FILL");
-      o->type(Fl_Slider::HORIZONTAL_FILL);
+     {Fl_Slider* o = new Fl_Slider(140, 75, 130, 20, "HORIZONTAL|TICK_ABOVE");
+      o->type(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Slider* o = new Fl_Slider(140, 160, 130, 20, "HORIZONTAL_NICE");
-      o->type(Fl_Slider::HORIZONTAL_NICE);
-      o->box(FL_FLAT_BOX);
+     {Fl_Slider* o = new Fl_Slider(140, 110, 130, 20, "HORIZONTAL|TICK_ABOVE,box");
+      o->type(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE);
+      o->box(FL_DOWN_BOX);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Slider* o = new Fl_Slider(140, 145, 130, 20, "HORIZONTAL|TICK_BELOW");
+      o->type(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
@@ -68,7 +74,7 @@ int main (int argc, char **argv) {
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(30, 260, 30, 145, "VERTICAL");
+     {Fl_Value_Slider* o = new Fl_Value_Slider(25, 255, 30, 145, "VERTICAL");
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
@@ -76,17 +82,17 @@ int main (int argc, char **argv) {
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(70, 275, 30, 140, "VERTICAL_FILL");
-      o->type(Fl_Value_Slider::VERTICAL_FILL);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(65, 285, 30, 140, "VERTICAL|TICK_LEFT");
+      o->type(Fl_Value_Slider::VERTICAL|Fl_Slider::TICK_ABOVE);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->text_size(10);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(110, 260, 25, 145, "VERTICAL_NICE");
-      o->type(Fl_Value_Slider::VERTICAL_NICE);
-      o->box(FL_FLAT_BOX);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(105, 260, 35, 145, "VERTICAL|TICK_LEFT,box");
+      o->type(Fl_Value_Slider::VERTICAL|Fl_Slider::TICK_ABOVE);
+      o->box(FL_DOWN_BOX);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
@@ -94,23 +100,23 @@ int main (int argc, char **argv) {
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 290, 130, 20, "HORIZONTAL");
+     {Fl_Value_Slider* o = new Fl_Value_Slider(145, 270, 130, 20, "HORIZONTAL");
       o->type(Fl_Value_Slider::HORIZONTAL);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 330, 130, 20, "HORIZONTAL_FILL");
-      o->type(Fl_Value_Slider::HORIZONTAL_FILL);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(145, 350, 130, 20, "HORIZONTAL|TICK_BELOW,box");
+      o->type(Fl_Value_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW);
+      o->box(FL_DOWN_BOX);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 370, 130, 20, "HORIZONTAL_NICE");
-      o->type(Fl_Value_Slider::HORIZONTAL_NICE);
-      o->box(FL_FLAT_BOX);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(145, 390, 130, 30, "HORIZONTAL|TICK_BOTH");
+      o->type(Fl_Value_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH);
       o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
       o->label_size(8);
@@ -251,6 +257,20 @@ e colors affect.");
       o->box(FL_ENGRAVED_BOX);
       o->label_size(10);
       o->align(FL_ALIGN_WRAP);
+    }
+     {Fl_Slider* o = new Fl_Slider(140, 185, 130, 20, "HORIZONTAL|TICK_BOTH");
+      o->type(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Value_Slider* o = new Fl_Value_Slider(145, 310, 130, 20, "HORIZONTAL|TICK_BELOW");
+      o->type(Fl_Value_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
     }
     o->end();
     o->resizable(o);
