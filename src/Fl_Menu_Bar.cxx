@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.68 2003/11/04 08:11:00 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.69 2004/03/05 08:13:41 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,8 @@ void MenuBar::draw() {
       else
 	widget->clear_flag(HIGHLIGHT);
       widget->clear_flag(SELECTED);
-      buttonbox()->draw(X, y1+1, W, h1-2, style(), widget->flags()&~VALUE);
+      buttonbox()->draw(X, y1+1, W, h1-2, style(),
+			(widget->flags()&~VALUE)|OUTPUT);
       int save_w = widget->w(); widget->w(W-10);
       int save_h = widget->h(); widget->h(h1-2);
       push_matrix();
@@ -173,5 +174,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.68 2003/11/04 08:11:00 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.69 2004/03/05 08:13:41 spitzak Exp $".
 //
