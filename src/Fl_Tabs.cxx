@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.9 1999/04/08 21:29:03 carl Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.10 1999/04/10 19:29:48 gustavo Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -190,8 +190,8 @@ void Fl_Tabs::draw() {
   Fl_Widget *v = value();
 
   // Make sure the tab's label isn't drawn normally
-  const char* l = v->label();
-  v->label(0);
+  const char* l=0;
+  if (v) {l=v->label();v->label(0);}
 
   int H = tab_height();
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
@@ -204,7 +204,7 @@ void Fl_Tabs::draw() {
   }
 
   // restore the tab's label
-  v->label(l);
+  if (v) v->label(l);
 
   if (!v) return;
 
@@ -270,5 +270,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.9 1999/04/08 21:29:03 carl Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.10 1999/04/10 19:29:48 gustavo Exp $".
 //
