@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.32 2003/07/03 06:51:43 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.33 2003/08/02 21:35:07 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -100,25 +100,30 @@ const Symbol* Symbol::find(const char* name, const char* end) {
   init_symbols();
   // for back-compatability a leading # is ignored:
   if (*name == '#') name++;
-  // strip off trailing digits:
+  // if last character is a digit, strip off all trailing digits or hex:
   const char* e = end;
-  for (;; e--) {
-    if (e <= name) break;
-    char c = *(e-1);
-    if (isxdigit(c) || c=='x' || c=='X'	|| c == '+' || c == '-' || c=='.')
-      continue;
-    else
-      break;
+  if (e > name && isxdigit(*(e-1))) {
+    for (e--; ;e--) {
+      if (e <= name) break;
+      char c = *(e-1);
+      if (isxdigit(c) || c=='x' || c=='X' || c == '+' || c == '-' || c=='.')
+	continue;
+      else
+	break;
+    }
+    // Above ate hex letters at start, skip past them:
+    while (e < end && isalpha(*e)) e++;
   }
-  // skip past any leading hex digits:
-  while (e < end && isalpha(*e)) e++;
-  // if there is just numbers, use entire number as symbol:
-  if (e <= name) e = end;
-  // go to start of non-digits:
-  const char* p = e-1;
-  for (;; p--) {
-    if (p <= name) break;
-    if (isdigit(*(p-1))) break;
+  const char* p;
+  if (e <= name) {
+    // if there is just numbers, use entire number as symbol:
+    p = name; e = end;
+  } else {
+    // go to start of non-digits:
+    for (p = e-1;; p--) {
+      if (p <= name) break;
+      if (isdigit(*(p-1))) break;
+    }
   }
   // now look it up:
   int pos = hashindex(p, e-p);
@@ -387,7 +392,7 @@ static void init_symbols(void) {
   add_symbol("<|",		draw_0bararrow,		1);
   add_symbol("<->",		draw_doublearrow,	1);
   add_symbol("-->",		draw_arrow,		1);
-  //add_symbol("+",		draw_plus,		1);
+  add_symbol("+",		draw_plus,		1);
   add_symbol("->|",		draw_arrow1bar,		1);
   add_symbol("[]",		draw_box,		1);
   add_symbol("arrow",		draw_arrow,		1);
@@ -403,5 +408,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.32 2003/07/03 06:51:43 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.33 2003/08/02 21:35:07 spitzak Exp $".
 //

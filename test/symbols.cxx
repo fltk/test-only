@@ -1,9 +1,9 @@
 //
-// "$Id: symbols.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $"
+// "$Id: symbols.cxx,v 1.10 2003/08/02 21:35:07 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,15 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Single_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Value_Slider.h>
-#include <fltk/fl_draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Single_Window.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Value_Slider.H>
+#include <FL/fl_draw.H>
 
 int N = 0;
 #define W 70
@@ -41,7 +41,7 @@ int N = 0;
 
 Fl_Window *window;
 
-void slider_cb(Fl_Widget *w, void *data) {
+void slider_cb(Fl_Widget *w, void *) {
   static char buf[80];
   int val = (int)(((Fl_Value_Slider*)w)->value());
   Fl_Window *win = (Fl_Window*)w->parent();       // get parent window
@@ -69,16 +69,16 @@ void slider_cb(Fl_Widget *w, void *data) {
 void bt(const char *name) {
   int x = N%COLS;
   int y = N/COLS;
+  char buf[255];
   N++;
   x = x*W+10;
   y = y*H+10;
-  Fl_Box *a = new Fl_Box(FL_NO_BOX,x,y,W-20,H-20,strdup(name));
-  a->clear_flag(FL_ALIGN_MASK);
-  a->set_flag(FL_ALIGN_BOTTOM);
-  a->label_size(11);
+  sprintf(buf, "@%s", name);
+  Fl_Box *a = new Fl_Box(FL_NO_BOX,x,y,W-20,H-20,strdup(buf));
+  a->align(FL_ALIGN_BOTTOM);
+  a->labelsize(11);
   Fl_Box *b = new Fl_Box(FL_UP_BOX,x,y,W-20,H-20,strdup(name));
-  b->label_type(FL_SYMBOL_LABEL);
-  b->label_color(FL_DARK3);
+  b->labelcolor(FL_DARK3);
 }
 
 int main(int argc, char ** argv) {
@@ -114,7 +114,7 @@ bt("@DnArrow");
                          (int)(window->w()*.80+.5),
                          16,
                          "Orientation");
-  slider.type(Fl_Slider::HORIZONTAL);
+  slider.type(FL_HORIZONTAL);
   slider.range(0.0, 9.0);
   slider.value(0.0);
   slider.step(1);
@@ -126,5 +126,5 @@ bt("@DnArrow");
 }
 
 //
-// End of "$Id: symbols.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id: symbols.cxx,v 1.10 2003/08/02 21:35:07 spitzak Exp $".
 //

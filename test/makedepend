@@ -4,15 +4,20 @@ CubeMain.o: ../config.h CubeViewUI.h CubeView.h ../fltk/gl.h ../fltk/Color.h
 CubeMain.o: ../fltk/FL_API.h ../fltk/Flags.h
 CubeView.o: CubeView.h ../config.h ../fltk/gl.h ../fltk/Color.h
 CubeView.o: ../fltk/FL_API.h ../fltk/Flags.h
+arc.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/DoubleBufferWindow.h
+arc.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
+arc.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/HorizontalValueSlider.h
+arc.o: ../fltk/ValueSlider.h ../fltk/Slider.h ../fltk/Valuator.h
+arc.o: ../fltk/draw.h
 boxtype.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
 boxtype.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 browser.o: ../fltk/Browser.h ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h
 browser.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 browser.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
-browser.o: ../fltk/Window.h ../fltk/Button.h ../fltk/run.h ../fltk/events.h
+browser.o: ../fltk/Window.h ../fltk/Button.h ../fltk/CheckButton.h
+browser.o: ../fltk/Button.h ../fltk/Input.h ../fltk/run.h ../fltk/events.h
 browser.o: ../fltk/xpmImage.h ../fltk/Image.h ../fltk/Item.h
-browser.o: ../fltk/ItemGroup.h ../fltk/CheckButton.h ../fltk/Button.h
-browser.o: folder_small.xpm file_small.xpm
+browser.o: ../fltk/ItemGroup.h folder_small.xpm file_small.xpm
 checkers.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/events.h
 checkers.o: ../fltk/DoubleBufferWindow.h ../fltk/Window.h ../fltk/Group.h
 checkers.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
@@ -34,7 +39,8 @@ color_chooser.o: ../fltk/ColorChooser.h ../fltk/Group.h ../fltk/Choice.h
 color_chooser.o: ../fltk/Menu.h ../fltk/ValueInput.h ../fltk/Valuator.h
 color_chooser.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
 color_chooser.o: ../fltk/rgbImage.h ../fltk/Image.h ../fltk/x.h
-color_chooser.o: ../fltk/error.h ../fltk/draw.h list_visuals.cxx ../config.h
+color_chooser.o: ../fltk/draw.h ../fltk/error.h ../fltk/draw.h
+color_chooser.o: list_visuals.cxx ../config.h
 cube.o: ../config.h ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h
 cube.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 cube.o: ../fltk/Flags.h ../fltk/Box.h ../fltk/Button.h
@@ -73,8 +79,8 @@ hello.o: ../fltk/run.h
 image.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
 image.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 image.o: ../fltk/Button.h list_visuals.cxx ../config.h ../fltk/x.h
-image.o: ../fltk/visual.h ../fltk/xbmImage.h ../fltk/Image.h escherknot.xbm
-image.o: ../fltk/xpmImage.h porsche.xpm ../fltk/rgbImage.h
+image.o: ../fltk/draw.h ../fltk/visual.h ../fltk/xbmImage.h ../fltk/Image.h
+image.o: escherknot.xbm ../fltk/xpmImage.h porsche.xpm ../fltk/rgbImage.h
 image.o: ../fltk/ToggleButton.h ../fltk/Button.h ../fltk/CheckButton.h
 image.o: ../fltk/Choice.h ../fltk/Menu.h ../fltk/Item.h
 input.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
@@ -94,8 +100,8 @@ label.o: ../fltk/Box.h ../fltk/HorizontalValueSlider.h ../fltk/ValueSlider.h
 label.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/ToggleButton.h
 label.o: ../fltk/Button.h ../fltk/Input.h ../fltk/Choice.h ../fltk/Menu.h
 label.o: ../fltk/draw.h
-list_visuals.o: ../config.h ../fltk/x.h ../fltk/Color.h ../fltk/FL_API.h
-list_visuals.o: ../fltk/Flags.h ../fltk/run.h
+list_visuals.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
+list_visuals.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/run.h
 mandelbrot.o: mandelbrot_ui.cxx mandelbrot_ui.h mandelbrot.h
 menu.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Item.h ../fltk/ItemGroup.h
 menu.o: ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
@@ -106,7 +112,11 @@ menu.o: ../fltk/Choice.h ../fltk/Button.h ../fltk/draw.h
 menu.o: ../fltk/HorizontalSlider.h ../fltk/Slider.h ../fltk/Valuator.h
 menu.o: ../fltk/StringList.h ../fltk/ScreenInfo.h ../fltk/events.h
 radio.o: radio.h
-resizable.o: resizable.h
+resizable.o: resizable.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
+resizable.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
+resizable.o: ../fltk/MenuBar.h ../fltk/Menu.h ../fltk/ItemGroup.h
+resizable.o: ../fltk/Item.h ../fltk/InvisibleBox.h ../fltk/Widget.h
+resizable.o: ../fltk/Button.h ../fltk/Group.h ../fltk/run.h
 scroll.o: ../fltk/math.h
 shape.o: ../config.h ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h
 shape.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
@@ -155,6 +165,12 @@ sizes.o: ../fltk/Box.h
 image_file.o: image_file.h
 threads.o: ../config.h ../fltk/ask.h ../fltk/FL_API.h ../fltk/Style.h
 threads.o: ../fltk/Color.h ../fltk/Flags.h
+line_style.o: ../FL/Fl_Menu_Item.H ../fltk/Widget.h ../fltk/run.h
+line_style.o: ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
+line_style.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
+line_style.o: ../fltk/Flags.h ../fltk/ValueSlider.h ../fltk/Slider.h
+line_style.o: ../fltk/Valuator.h ../fltk/draw.h ../fltk/Choice.h
+line_style.o: ../fltk/Menu.h
 valuators.o: valuators.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 valuators.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 valuators.o: ../fltk/Widget.h ../fltk/Slider.h ../fltk/Valuator.h

@@ -9,7 +9,9 @@ typedef fltk::Slider Fl_Slider;
 
 enum {
   FL_VERT_SLIDER	= fltk::Slider::VERTICAL,
+  FL_VERTICAL		= fltk::Slider::VERTICAL,
   FL_HOR_SLIDER		= fltk::Slider::HORIZONTAL,
+  FL_HORIZONTAL		= fltk::Slider::HORIZONTAL,
   FL_VERT_FILL_SLIDER	= fltk::Slider::VERTICAL+fltk::Slider::FILL,
   FL_HOR_FILL_SLIDER	= fltk::Slider::HORIZONTAL+fltk::Slider::FILL,
   FL_VERT_NICE_SLIDER	= fltk::Slider::VERTICAL,
