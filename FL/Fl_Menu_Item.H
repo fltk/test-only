@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.16 1999/04/01 21:32:39 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.17 1999/04/10 19:29:18 gustavo Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -172,13 +172,13 @@ struct Fl_Menu_Item {
     int X, int Y,
     const char *title = 0,
     const Fl_Menu_Item* picked=0,
-    const Fl_Menu_* = 0);
+    const Fl_Menu_* = 0) const;
   const Fl_Menu_Item* pulldown(
     int X, int Y, int W, int H,
     const Fl_Menu_Item* picked = 0,
     const Fl_Menu_* = 0,
     const Fl_Menu_Item* title = 0,
-    int menubar=0);
+    int menubar=0) const;
   const Fl_Menu_Item* test_shortcut() const;
   const Fl_Menu_Item* find_shortcut(int *ip=0) const;
 
@@ -227,5 +227,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.16 1999/04/01 21:32:39 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.17 1999/04/10 19:29:18 gustavo Exp $".
 //

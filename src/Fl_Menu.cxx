@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.27 1999/04/04 03:45:25 gustavo Exp $"
+// "$Id: Fl_Menu.cxx,v 1.28 1999/04/10 19:29:19 gustavo Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -635,7 +635,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
     const Fl_Menu_Item* initial_item,
     const Fl_Menu_* pbutton,
     const Fl_Menu_Item* t,
-    int menubar)
+    int menubar) const
 {
   Fl_Group::current(0); // fix possible user error...
 
@@ -780,7 +780,7 @@ Fl_Menu_Item::popup(
   const char* title,
   const Fl_Menu_Item* picked,
   const Fl_Menu_* button
-  )
+  ) const
 {
   static Fl_Menu_Item dummy; // static so it is all zeros
   dummy.text = title;
@@ -873,5 +873,5 @@ Fl_Color Fl_Menu_Item::down_labelcolor() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.27 1999/04/04 03:45:25 gustavo Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.28 1999/04/10 19:29:19 gustavo Exp $".
 //
