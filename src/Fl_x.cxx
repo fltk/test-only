@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.55 1999/11/29 08:47:03 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.56 1999/12/15 08:31:02 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,6 @@
 #else
 
 #define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
-/**** Define this if your keyboard lacks a backspace key... ****/
-/* #define BACKSPACE_HACK 1 */
 
 #include <config.h>
 #include <FL/Fl.H>
@@ -499,16 +497,17 @@ int fl_handle(const XEvent& xevent)
 #ifdef __sgi
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
-    if (!keysym) switch(keycode) {
+    else if (!keysym) switch(keycode) {
     case 147: keysym = FL_Meta_L; break;
     case 148: keysym = FL_Meta_R; break;
     case 149: keysym = FL_Menu; break;
     }
 #endif
-#if BACKSPACE_HACK
+#if 0
     // Attempt to fix keyboards that send "delete" for the key in the
     // upper-right corner of the main keyboard.  But it appears that
-    // very few of these remain?
+    // very few of these remain?  A better test would be to look at the
+    // keymap and see if any key turns into FL_BackSpace.
     static int got_backspace;
     if (!got_backspace) {
       if (keysym == FL_Delete) keysym = FL_BackSpace;
@@ -518,7 +517,7 @@ int fl_handle(const XEvent& xevent)
     // We have to get rid of the XK_KP_function keys, because they are
     // not produced on Windows and thus case statements tend not to check
     // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
-    if (keysym >= 0xff91 && keysym <= 0xff9f) {
+    else if (keysym >= 0xff91 && keysym <= 0xff9f) {
       // Try to make them turn into FL_KP+'c' so that NumLock is
       // irrelevant, by looking at the shifted code.  This matches the
       // behavior of the translator in Fl_win32.C, and IMHO is the
@@ -526,8 +525,7 @@ int fl_handle(const XEvent& xevent)
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
       if (keysym1 <= 0x7f || keysym1 > 0xff9f && keysym1 <= FL_KP_Last) {
 	keysym = keysym1 | FL_KP;
-	buffer[0] = char(keysym1) & 0x7F;
-	len = 1;
+	buffer[0] = char(keysym1) & 0x7F; len = 1;
       } else {
 	// If that failed to work, just translate them to the matching
 	// normal function keys:
@@ -538,6 +536,12 @@ int fl_handle(const XEvent& xevent)
 	  0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
 	keysym = table[keysym-0xff91];
       }
+    }
+    // We also need to get rid of Left_Tab, again to match Win32 and to
+    // make each key on the keyboard send a single keysym:
+    else if (keysym == 0xfe20) {
+      keysym = FL_Tab;
+      Fl::e_state |= FL_SHIFT;
     }
     buffer[len] = 0;
     Fl::e_keysym = int(keysym);
@@ -857,5 +861,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.55 1999/11/29 08:47:03 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.56 1999/12/15 08:31:02 bill Exp $".
 //

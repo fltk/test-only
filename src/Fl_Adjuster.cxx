@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.21 1999/11/22 09:00:16 bill Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.22 1999/12/15 08:30:54 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -75,6 +75,7 @@ void Fl_Adjuster::draw() {
     f[i] = flags();
     if (drag == i) f[i] |= FL_VALUE;
     else if (highlight == i) f[i] |= FL_HIGHLIGHT;
+    if (Fl::focus() == this) f[i] |= FL_FOCUSED;
   }
 
   if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
@@ -100,14 +101,14 @@ int Fl_Adjuster::handle(int event) {
   } else highlight = 0;
 
   switch (event) {
+
   case FL_PUSH:
+    handle_push();
     ix = mx;
-    if (!drag) {
-      drag = highlight;
-      handle_push();
-      redraw();
-    }
+    drag = highlight;
+    redraw();
     return 1;
+
   case FL_DRAG:
     if (w() >= h()) {
       delta = x()+(drag-1)*w()/3;	// left edge of button
@@ -125,39 +126,36 @@ int Fl_Adjuster::handle(int event) {
       else
 	delta = 0;
     }
-    switch (drag) {
-    case 3: v = increment(previous_value(), delta); break;
-    case 2: v = increment(previous_value(), delta*10); break;
-    default:v = increment(previous_value(), delta*100); break;
-    }
+    if (drag == 1) delta *= 100; else if (drag == 2) delta *= 10;
+    v = increment(previous_value(), delta);
     handle_drag(soft() ? softclamp(v) : clamp(v));
     return 1;
+
   case FL_RELEASE:
+    if (Fl::pushed()) return 1;
     if (Fl::event_is_click()) { // detect click but no drag
-      if (Fl::event_state()& (FL_SHIFT|FL_CAPS_LOCK|FL_CTRL|FL_ALT) ) 
-	delta = -10;
-	else delta = 10;
-      switch (drag) {
-      case 3: v = increment(previous_value(), delta); break;
-      case 2: v = increment(previous_value(), delta*10); break;
-      default:v = increment(previous_value(), delta*100); break;
-      }
+      if (drag == 1) delta = 1000; else if (drag == 2) delta = 100;
+      else delta = 10;
+      if (Fl::event_state()& (FL_SHIFT|FL_CAPS_LOCK|FL_CTRL|FL_ALT)) 
+	delta = -delta;
+      v = increment(value(), delta);
       handle_drag(soft() ? softclamp(v) : clamp(v));
     }
-    if (!Fl::pushed()) {
-      drag = 0;
-      redraw();
-      handle_release();
-    }
+    drag = 0;
+    redraw();
+    handle_release();
     return 1;
+
   case FL_MOVE:
-    if (last == highlight) return 1;
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (last != highlight) redraw();
     return 1;
+
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    redraw();
+  default:
+    return Fl_Valuator::handle(event);
   }
-  return 0;
 }
 
 Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,y,w,h,l) {
@@ -174,5 +172,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Adjuster::default_style = new Fl_Named_Style("Adjuster", revert, &Fl_Adjuster::default_style);
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.21 1999/11/22 09:00:16 bill Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.22 1999/12/15 08:30:54 bill Exp $".
 //

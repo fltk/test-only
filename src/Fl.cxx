@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.71 1999/12/02 09:53:43 bill Exp $"
+// "$Id: Fl.cxx,v 1.72 1999/12/15 08:30:54 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -514,17 +514,19 @@ int Fl::handle(int event, Fl_Window* window)
     // fall through to the shortcut handling case:
 
   default:
-    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, and all new
-    // events that we may add.  Fltk tries the focus first (fltk 1.0
-    // tried the belowmouse first), then tries each nested widget around
-    // the it until something takes it.  Part of this search
-    // is done by Fl_Group::handle(), which sends the events to every
-    // child of the group, thus causing every widget to be tried.
+    // All other events (including FL_SHORTCUT, FL_MOUSEWHEEL,
+    // FL_KEYUP, and all new events that we may add) are sent first to
+    // the focus, and then to each window around the focus and
+    // up, until something accepts it.  Part of this search is done by
+    // Fl_Group::handle(), which sends the events to every child.  This
+    // causes every widget in the window to be tried eventually, so
+    // if something is interested in the event it should see it.
 
-             w = grab();
-    if (!w) {w = focus();
+    if (grab()) return send(event, grab(), window);
+
+    w = focus();
     if (!w) {w = modal();
-    if (!w)  w = window;}}
+    if (!w) {w = window;}}
     for (; w; w = w->parent()) if (send(event, w, window)) return 1;
     // otherwise fall through to the unknown case:
 
@@ -810,5 +812,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.71 1999/12/02 09:53:43 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.72 1999/12/15 08:30:54 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.50 1999/12/02 09:53:44 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.51 1999/12/15 08:30:56 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,9 +63,7 @@ static int send(Fl_Widget* o, int event) {
 static int navkey() {
   switch (Fl::event_key()) {
   case FL_Tab:
-    if (!Fl::event_state(FL_SHIFT)) return FL_Right;
-  case 0xfe20: // XK_ISO_Left_Tab
-    return FL_Left;
+    return Fl::event_state(FL_SHIFT) ? FL_Left : FL_Right;
   case FL_Right:
     return FL_Right;
   case FL_Left:
@@ -109,15 +107,6 @@ int Fl_Group::handle(int event) {
 
   case FL_UNFOCUS:
     savedfocus_ = fl_oldfocus;
-    return 0;
-
-  case FL_VIEWCHANGE:
-  case FL_SHORTCUT:
-    while (e > a) {
-      Fl_Widget* o = *--e;
-      if (o->takesevents() && send(o,event)) return 1;
-    }
-    if (event == FL_SHORTCUT) return navigation(navkey());
     return 0;
 
   case FL_ENTER:
@@ -165,6 +154,11 @@ int Fl_Group::handle(int event) {
     return 1;
 
   default:
+    while (e > a) {
+      Fl_Widget* o = *--e;
+      if (o->takesevents() && send(o,event)) return 1;
+    }
+    if (event == FL_SHORTCUT) return navigation(navkey());
     return 0;
 
   }
@@ -218,7 +212,7 @@ int Fl_Group::navigation(int key) {
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
-};
+}
 
 // this is private as there is no need for themes to alter this:
 static Fl_Named_Style group_style(0, revert);
@@ -485,12 +479,12 @@ void Fl_Group::draw() {
 	w.draw_n_clip();
     }
     draw_group_box();
+    fl_pop_clip();
     e = a+children_;
     while (a < e) {
       Fl_Widget& w = **a++;
       if (w.visible()) draw_outside_label(w);
     }
-    fl_pop_clip();
   }
 }
 
@@ -560,5 +554,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.50 1999/12/02 09:53:44 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.51 1999/12/15 08:30:56 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.34 1999/11/22 09:00:20 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.35 1999/12/15 08:30:59 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
   if (S != slider_size() || t != minimum() || b != maximum()) {
     slider_size(S); minimum(t); maximum(b); redraw();
   }
-  pagesize_ = w-1; if (pagesize_ <= 0) pagesize_ = 1;
+  pagesize(w-1); if (pagesize() <= 0) pagesize(1);
   return Fl_Slider::value(p);
 }
 
@@ -52,13 +52,12 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
 void Fl_Scrollbar::increment_cb() {
   int i;
   switch (pushed_) {
-  case 1: i = -linesize_; break;
-  default:i =  linesize_; break;
-  case 3: i = -pagesize_; break;
-  case 4: i =  pagesize_; break;
+  case 1: i = -linesize(); break;
+  default:i =  linesize(); break;
+  case 3: i = -pagesize(); break;
+  case 4: i =  pagesize(); break;
   }
-  if (maximum() < minimum()) i = -i;
-  handle_drag(clamp(value() + i));
+  handle_drag(clamp(increment(value(),i)));
 }
 
 void Fl_Scrollbar::timeout_cb(void* v) {
@@ -115,11 +114,6 @@ int Fl_Scrollbar::handle(int event) {
   switch (event) {
   case FL_MOVE:
     if (last_ == highlight_) return 1;
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents())
-      damage(FL_DAMAGE_HIGHLIGHT);
-    return 1;
   case FL_RELEASE:
       damage(FL_DAMAGE_EXPOSE);
     if (pushed_) {
@@ -142,57 +136,32 @@ int Fl_Scrollbar::handle(int event) {
   case FL_DRAG:
     if (pushed_) return 1;
     return Fl_Slider::handle(event, X,Y,W,H);
+  case FL_FOCUS:
+    return 0; // Stop keyboard navigation from going to the scrollbars.
   case FL_SHORTCUT: {
-    int v = value();
-    int ls = maximum()>=minimum() ? linesize_ : -linesize_;
+    int i = 0;
     if (horizontal()) {
       switch (Fl::event_key()) {
-      case FL_Left:
-	v -= ls;
-	break;
-      case FL_Right:
-	v += ls;
-	break;
-      default:
-	return 0;
+      case FL_Left: i = -linesize(); break;
+      case FL_Right: i = linesize(); break;
+      default: return 0;
       }
     } else { // vertical
       switch (Fl::event_key()) {
-      case FL_Up:
-	v -= ls;
-	break;
-      case FL_Down:
-	v += ls;
-	break;
-      case FL_Page_Up:
-	if (slider_size() >= 1.0) return 0;
-	v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
-	v += ls;
-	break;
-      case FL_Page_Down:
-	if (slider_size() >= 1.0) return 0;
-	v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
-	v -= ls;
-	break;
-      case FL_Home:
-	v = int(minimum());
-	break;
-      case FL_End:
-	v = int(maximum());
-	break;
-      default:
-	return 0;
+      case FL_Up: i = -linesize(); break;
+      case FL_Down: i = linesize(); break;
+      case FL_Page_Up: i = -pagesize(); break;
+      case FL_Page_Down: i = pagesize(); break;
+      case FL_Home: handle_drag(minimum()); return 1;
+      case FL_End: handle_drag(maximum()); return 1;
+      default: return 0;
       }
     }
-    v = int(clamp(v));
-    if (v != value()) {
-      Fl_Slider::value(v);
-      value_damage();
-      do_callback();
-    }
+    handle_drag(clamp(increment(value(),i)));
     return 1;}
+  default:
+    return Fl_Valuator::handle(event);
   }
-  return 0;
 }
 
 void Fl_Scrollbar::draw() {
@@ -241,12 +210,10 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
   : Fl_Slider(X, Y, W, H, L)
 {
   style(default_style);
-  linesize_ = 16;
-  pagesize_ = 100;
   pushed_ = highlight_ = 0;
   step(1);
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.34 1999/11/22 09:00:20 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.35 1999/12/15 08:30:59 bill Exp $".
 //

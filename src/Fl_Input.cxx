@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.23 1999/11/20 04:42:42 vincent Exp $"
+// "$Id: Fl_Input.cxx,v 1.24 1999/12/15 08:30:57 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -124,7 +124,7 @@ static int compose; // compose state (# of characters so far + 1)
 // behavior where moving off the end of an input field will move the
 // cursor into the next field:
 // define it as 1 to prevent cursor movement from going to next field:
-#define NORMAL_INPUT_MOVE 0
+#define NORMAL_INPUT_MOVE 1
 
 #define ctrl(x) (x^0x40)
 
@@ -295,7 +295,6 @@ int Fl_Input::handle(int event) {
       up_down_position(size());
       break;
     case FL_Tab:
-    case 0xfe20: // XK_ISO_Left_Tab
       position(size(),0);
       break;
     }
@@ -343,5 +342,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.23 1999/11/20 04:42:42 vincent Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.24 1999/12/15 08:30:57 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.14 1999/11/19 10:06:49 bill Exp $"
+// "$Id: Fl_Roller.cxx,v 1.15 1999/12/15 08:30:59 bill Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,6 @@ int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
   switch (event) {
-  case FL_ENTER: return 1; // For tooltips
   case FL_PUSH:
     handle_push();
     ipos = newpos;
@@ -46,12 +45,12 @@ int Fl_Roller::handle(int event) {
     handle_release();
     return 1;
   default:
-    return 0;
+    return Fl_Valuator::handle(event);
   }
 }
 
 void Fl_Roller::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
+  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) draw_box();
   int X=x(); int Y=y(); int W=w()-1; int H=h()-1; box()->inset(X,Y,W,H);
   if (W<=0 || H<=0) return;
   int offset = step() ? int(value()/step()) : 0;
@@ -126,6 +125,12 @@ void Fl_Roller::draw() {
       fl_yxline(X+W,Y+h1,Y);
     }
   }
+  if (Fl::focus()==this) {
+    fl_color(FL_BLACK);
+    fl_line_style(FL_DOT);
+    fl_rect(X-1,Y-1,W+2,H+2);
+    fl_line_style(0);
+  }
 }
 
 Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,H,L) {
@@ -133,5 +138,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.14 1999/11/19 10:06:49 bill Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.15 1999/12/15 08:30:59 bill Exp $".
 //

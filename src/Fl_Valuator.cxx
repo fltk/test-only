@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.8 1999/11/10 19:27:31 carl Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.9 1999/12/15 08:31:00 bill Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,8 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   step_ = 0.0;
   minimum_ = 0.0;
   maximum_ = 1.0;
+  linesize_ = 1;
+  pagesize_ = 10;
 }
 
 void Fl_Valuator::precision(int p) {
@@ -58,16 +60,7 @@ int Fl_Valuator::value(double v) {
   return 1;
 }
 
-double Fl_Valuator::softclamp(double v) {
-  int which = (minimum_ <= maximum_);
-  double p = previous_value_;
-  if ((v<minimum_)==which && p!=minimum_ && (p<minimum_)!=which)
-    return minimum_;
-  else if ((v>maximum_)==which && p!=maximum_ && (p>maximum_)!=which)
-    return maximum_;
-  else
-    return v;
-}
+double Fl_Valuator::previous_value_;
 
 // inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
 
@@ -75,7 +68,7 @@ void Fl_Valuator::handle_drag(double v) {
   if (v != value_) {
     value_ = v;
     value_damage();
-    if (when() & FL_WHEN_CHANGED) do_callback();
+    if (when() & FL_WHEN_CHANGED || !Fl::pushed()) do_callback();
     else set_changed();
   }
 }
@@ -92,23 +85,32 @@ void Fl_Valuator::handle_release() {
   }
 }
 
-double Fl_Valuator::round(double v) {
-  if (!step_) return v;
-  // this is necessary so that rounding errors do not cause steps like .1
-  // to produce inaccurate results when v is very large:
-  return rint(v*rint(1.0/step_))*step_;
+double Fl_Valuator::round(double v) const {
+  return step_ ? rint(v/step_)*step_ : v;
 }
 
-double Fl_Valuator::clamp(double v) {
+double Fl_Valuator::clamp(double v) const {
   if ((v<minimum_) == (minimum_<=maximum_)) return minimum_;
   else if ((v>maximum_) == (minimum_<=maximum_)) return maximum_;
   else return v;
 }
 
-double Fl_Valuator::increment(double v, int n) {
-  if (!step_) return v+n*(maximum_-minimum_)/100;
-  if (minimum_ > maximum_) n = -n;
-  return rint(v*rint(1.0/step_)+n)*step_;
+double Fl_Valuator::softclamp(double v) const {
+  int which = (minimum_ <= maximum_);
+  double p = previous_value_;
+  if ((v<minimum_)==which && p!=minimum_ && (p<minimum_)!=which)
+    return minimum_;
+  else if ((v>maximum_)==which && p!=maximum_ && (p>maximum_)!=which)
+    return maximum_;
+  else
+    return v;
+}
+
+double Fl_Valuator::increment(double v, int n) const {
+  double s = step_;
+  if (!s) s = (maximum_-minimum_)/100;
+  else if (minimum_ > maximum_) n = -n;
+  return rint(v/s+n)*s;
 }
 
 int Fl_Valuator::format(char* buffer) {
@@ -121,6 +123,40 @@ int Fl_Valuator::format(char* buffer) {
   return sprintf(buffer, "%.*f", i, v);
 }
 
+int Fl_Valuator::handle(int event) {
+  switch(event) {
+  case FL_ENTER:
+  case FL_LEAVE:
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    damage(FL_DAMAGE_HIGHLIGHT);
+    return 1;
+  case FL_KEYBOARD: {
+    int i = linesize();
+    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+    switch (Fl::event_key()) {
+    case FL_Down:
+    case FL_Left:
+    case FL_BackSpace:
+      i = -i;
+    case FL_Up:
+    case FL_Right:
+    case ' ':
+      handle_drag(clamp(increment(value(), i)));
+      return 1;
+    case FL_Home:
+      handle_drag(minimum());
+      return 1;
+    case FL_End:
+      handle_drag(maximum());
+      return 1;
+    }}
+  }
+  return 0;
+}
+
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.8 1999/11/10 19:27:31 carl Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.9 1999/12/15 08:31:00 bill Exp $".
 //

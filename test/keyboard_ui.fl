@@ -1,5 +1,5 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -11,6 +11,14 @@ Function {make_window()} {open
   Fl_Window {} {open
     xywh {118 466 494 193} visible
   } {
+    Fl_Output key_output {
+      label {Fl::event_key():}
+      xywh {15 15 170 30} align 5 labelsize 8
+    }
+    Fl_Output text_output {
+      label {Fl::event_text():}
+      xywh {195 15 190 30} align 5 labelsize 8
+    }
     Fl_Button {} {
       label {Esc }
       user_data FL_Escape user_data_type {void*}
@@ -283,12 +291,11 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label {]}
-      callback key_cb
+      callback key_cb selected
       xywh {262 100 20 20} labelsize 10
     }
     Fl_Button {} {
       label {\\}
-      user_data {'|'}
       callback key_cb
       xywh {282 100 28 20} align 524308 labelsize 10
     }
@@ -485,7 +492,7 @@ Function {make_window()} {open
       label {@8->}
       user_data FL_Up user_data_type {void*}
       callback key_cb
-      xywh {345 140 20 20} labeltype SYMBOL_LABEL labelcolor 47 labelsize 10
+      xywh {345 140 20 20} labeltype SYMBOL_LABEL labelsize 10
     }
     Fl_Button {} {
       label 1
@@ -561,19 +568,19 @@ Function {make_window()} {open
       label {@4->}
       user_data FL_Left user_data_type {void*}
       callback key_cb
-      xywh {325 160 20 20} labeltype SYMBOL_LABEL labelcolor 47 labelsize 10
+      xywh {325 160 20 20} labeltype SYMBOL_LABEL labelsize 10
     }
     Fl_Button {} {
       label {@2->}
       user_data FL_Down user_data_type {void*}
       callback key_cb
-      xywh {345 160 20 20} labeltype SYMBOL_LABEL labelcolor 47 labelsize 10
+      xywh {345 160 20 20} labeltype SYMBOL_LABEL labelsize 10
     }
     Fl_Button {} {
       label {@6->}
       user_data FL_Right user_data_type {void*}
       callback key_cb
-      xywh {365 160 20 20} labeltype SYMBOL_LABEL labelcolor 47 labelsize 10
+      xywh {365 160 20 20} labeltype SYMBOL_LABEL labelsize 10
     }
     Fl_Button {} {
       label 0
@@ -588,112 +595,104 @@ Function {make_window()} {open
       xywh {440 160 20 20} labelsize 10
     }
     Fl_Box {} {
-      label {Fl::event_state():} selected
+      label {Fl::event_state():}
       xywh {395 15 85 40} align 5 labelsize 8
     }
     Fl_Button {} {
       label {shift }
       user_data FL_SHIFT user_data_type {void*}
       callback shift_cb
-      xywh {400 15 20 10} color 47 selection_color 3 labelsize 8
+      xywh {400 15 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {lock }
       user_data FL_CAPS_LOCK user_data_type {void*}
       callback shift_cb
-      xywh {420 15 20 10} color 47 selection_color 3 labelsize 8
+      xywh {420 15 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label ctrl
       user_data FL_CTRL user_data_type {void*}
       callback shift_cb
-      xywh {440 15 20 10} color 47 selection_color 3 labelsize 8
+      xywh {440 15 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label alt
       user_data FL_ALT user_data_type {void*}
       callback shift_cb
-      xywh {460 15 20 10} color 47 selection_color 3 labelsize 8
+      xywh {460 15 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label num
       user_data FL_NUM_LOCK user_data_type {void*}
       callback shift_cb
-      xywh {400 25 20 10} color 47 selection_color 3 labelsize 8
+      xywh {400 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x20 user_data_type {void*}
       callback shift_cb
-      xywh {420 25 20 10} color 47 selection_color 3 labelsize 8
+      xywh {420 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {meta }
       user_data FL_META user_data_type {void*}
       callback shift_cb
-      xywh {440 25 20 10} color 47 selection_color 3 labelsize 8
+      xywh {440 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label sclk
       user_data FL_SCROLL_LOCK user_data_type {void*}
       callback shift_cb
-      xywh {460 25 20 10} color 47 selection_color 3 labelsize 8
+      xywh {460 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label b1
       user_data FL_BUTTON1 user_data_type {void*}
       callback shift_cb
-      xywh {400 35 20 10} color 47 selection_color 3 labelsize 8
+      xywh {400 35 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label b2
       user_data FL_BUTTON2 user_data_type {void*}
       callback shift_cb
-      xywh {420 35 20 10} color 47 selection_color 3 labelsize 8
+      xywh {420 35 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label b3
       user_data FL_BUTTON3 user_data_type {void*}
       callback shift_cb
-      xywh {440 35 20 10} color 47 selection_color 3 labelsize 8
+      xywh {440 35 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x800 user_data_type {void*}
       callback shift_cb
-      xywh {460 35 20 10} color 47 selection_color 3 labelsize 8
+      xywh {460 35 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x1000 user_data_type {void*}
       callback shift_cb
-      xywh {400 45 20 10} color 47 selection_color 3 labelsize 8
+      xywh {400 45 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x2000 user_data_type {void*}
       callback shift_cb
-      xywh {420 45 20 10} color 47 selection_color 3 labelsize 8
+      xywh {420 45 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x4000 user_data_type {void*}
       callback shift_cb
-      xywh {440 45 20 10} color 47 selection_color 3 labelsize 8
+      xywh {440 45 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
       label {?}
       user_data 0x8000 user_data_type {void*}
       callback shift_cb
-      xywh {460 45 20 10} color 47 selection_color 3 labelsize 8
-    }
-    Fl_Output key_output {
-      label {Fl::event_key():}
-      xywh {15 15 170 30} align 5 labelsize 8
-    }
-    Fl_Output text_output {
-      label {Fl::event_text():}
-      xywh {195 15 190 30} align 5 labelsize 8
+      xywh {460 45 20 10} selection_color 3 labelsize 8
     }
   }
 } 

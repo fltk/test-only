@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.33 1999/11/22 09:00:20 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.34 1999/12/15 08:30:59 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -53,6 +53,12 @@ void Fl_Slider::draw_bg(int x, int y, int w, int h, Fl_Flags f) {
   } else if (type() == FL_HOR_NICE_SLIDER) {
     FL_THIN_DOWN_BOX->draw(x, y+h/2-2, w, 4, fl_inactive(FL_BLACK, f), f);
   }
+  if (Fl::focus() == this) {
+    fl_color(FL_BLACK);
+    fl_line_style(FL_DOT);
+    fl_rect(x+1,y+1,w-2,h-2);
+    fl_line_style(0);
+  }
 }
 
 // Return how big the slider should be if area is of size WxH:
@@ -91,23 +97,33 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     X = slider_position(W, S);
   }
 
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    if (!active_r()) f |= FL_INACTIVE;
-    if (X > 0) {
-      if (horizontal()) draw_bg(x, y, X, h, f);
-      else draw_bg(x, y, w, X, f);
-    }
-    if (X+S < W) {
-      if (horizontal()) draw_bg(x+X+S, y, w-X-S, h, f);
-        else draw_bg(x, y+X+S, w, h-X-S, f);
-    }
+  if (!active_r()) f |= FL_INACTIVE;
+  if (X > 0) {
+    if (horizontal()) draw_bg(x, y, X, h, f);
+    else draw_bg(x, y, w, X, f);
+  }
+  if (X+S < W) {
+    if (horizontal()) draw_bg(x+X+S, y, w-X-S, h, f);
+    else draw_bg(x, y+X+S, w, h-X-S, f);
   }
 
-  if (type() == FL_VERT_NICE_SLIDER)
-    draw_glyph(FL_GLYPH_VNSLIDER, x, y+X, w, S, f);
-  else if (type() == FL_HOR_NICE_SLIDER)
-    draw_glyph(FL_GLYPH_HNSLIDER, x+X, y, S, h, f);
-  else if (horizontal()) {
+  if (type() == FL_VERT_NICE_SLIDER || type() == FL_HOR_NICE_SLIDER) {
+    // we can't use normal draw_glyph because that uses the labelcolor
+    // to fill in the slider, for back compatability we must use color2
+    // (which is selection_color()).  Sigh.
+    Fl_Color bc = off_color();
+    Fl_Color fc = selection_color();
+    if (!active_r()) {
+      f |= FL_INACTIVE;
+      fc = fl_inactive(fc);
+    } else if ((f&FL_HIGHLIGHT) && highlight_color()) {
+      bc = highlight_color();
+    }
+    if (type() == FL_VERT_NICE_SLIDER)
+      glyph()(FL_GLYPH_VNSLIDER, x, y+X, w, S, bc, fc, f, glyph_box());
+    else
+      glyph()(FL_GLYPH_HNSLIDER, x+X, y, S, h, bc, fc, f, glyph_box());
+  } else if (horizontal()) {
     draw_glyph(type() == FL_HOR_FILL_SLIDER ? 0 : FL_GLYPH_HSLIDER,
 	       x+X, y, S, h, f);
     draw_button_label(x+X, y, S, h, label_color());
@@ -121,16 +137,14 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
 void Fl_Slider::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_frame();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  draw(X,Y,W,H, Fl::belowmouse()==this ? FL_HIGHLIGHT : 0);
+  Fl_Flags f = 0;
+  if (Fl::belowmouse()==this) f = FL_HIGHLIGHT;
+  draw(X,Y,W,H, f);
   if (damage()&FL_DAMAGE_ALL) draw_label();
 }
 
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
-    return 1;
   case FL_PUSH:
     if (!Fl::event_inside(x, y, w, h)) return 0;
     damage(FL_DAMAGE_EXPOSE);
@@ -183,8 +197,23 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     damage(FL_DAMAGE_EXPOSE);
     handle_release();
     return 1;
+  case FL_KEYBOARD:
+    if (!horizontal()) {
+      // Unfortunately the keystrokes are upside down for vertical ones.
+      // This is due to back-compatability with scrollbars.
+      int i = 1;
+      if (Fl::event_state()&FL_SHIFT) i = 10;
+      switch (Fl::event_key()) {
+      case FL_Up:
+	i = -i;
+      case FL_Down:
+	handle_drag(clamp(increment(value(),i)));
+	return 1;
+      }
+    }
+    // else fall through to the default case:
   default:
-    return 0;
+    return Fl_Valuator::handle(event);
   }
 }
 
@@ -202,5 +231,5 @@ static void revert(Fl_Style *s) {
 Fl_Style* Fl_Slider::default_style = new Fl_Named_Style("Slider", revert, &Fl_Slider::default_style);
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.33 1999/11/22 09:00:20 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.34 1999/12/15 08:30:59 bill Exp $".
 //

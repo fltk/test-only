@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.25 1999/11/22 09:00:17 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.26 1999/12/15 08:30:55 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -72,14 +72,13 @@ void Fl_Counter::draw() {
     xx[3] = x()+w()-1*W; ww[3] = W;
   }
 
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-    box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
-    fl_font(textfont(), textsize());
-    fl_color(fl_inactive(textcolor(), f));
-    char str[128]; format(str);
-    fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
-  }
+  Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
+  if (Fl::focus() == this) f |= FL_FOCUSED;
+  box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
+  fl_font(textfont(), textsize());
+  fl_color(fl_inactive(textcolor(), f));
+  char str[128]; format(str);
+  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
 
   if (type() == FL_NORMAL_COUNTER &&
       (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1))
@@ -96,14 +95,14 @@ void Fl_Counter::draw() {
 
 void Fl_Counter::increment_cb() {
   if (!mouseobj) return;
-  double v = value();
+  int delta = 0;
   switch (mouseobj) {
-  case 1: v -= lstep_; break;
-  case 2: v = increment(v, -1); break;
-  case 3: v = increment(v, 1); break;
-  case 4: v += lstep_; break;
+  case 1: delta = -linesize(); break;
+  case 2: delta = -1; break;
+  case 3: delta =  1; break;
+  case 4: delta = linesize(); break;
   }
-  handle_drag(clamp(round(v)));
+  handle_drag(clamp(increment(value(), delta)));
 }
 
 #define INITIALREPEAT .5
@@ -136,16 +135,17 @@ int Fl_Counter::handle(int event) {
   highlight = calc_mouseobj();
 
   switch (event) {
+
   case FL_RELEASE:
-    if (!Fl::pushed()) {
-      if (mouseobj) {
-        Fl::remove_timeout(repeat_callback, this);
-        mouseobj = 0;
-        damage(FL_DAMAGE_EXPOSE);
-      }
+    if (Fl::pushed()) return 1;
+    if (mouseobj) {
+      Fl::remove_timeout(repeat_callback, this);
+      mouseobj = 0;
+      damage(FL_DAMAGE_EXPOSE);
     }
     handle_release();
     return 1;
+
   case FL_PUSH:
     handle_push();
   case FL_DRAG:
@@ -156,14 +156,13 @@ int Fl_Counter::handle(int event) {
       increment_cb();
     }
     return 1;
+
   case FL_MOVE:
-    if (last == highlight) return 1;
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (last != highlight) redraw();
     return 1;
+
   default:
-    return 0;
+    return Fl_Valuator::handle(event);
   }
 }
 
@@ -175,8 +174,8 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
   style(default_style);
   align(FL_ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
-  Fl_Valuator::step(1, 10);
-  lstep_ = 1.0;
+  Fl_Valuator::step(.1);
+  linesize(10);
   mouseobj = highlight = last = 0;
 }
 
@@ -189,5 +188,5 @@ static void revert(Fl_Style *s) {
 Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.25 1999/11/22 09:00:17 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.26 1999/12/15 08:30:55 bill Exp $".
 //

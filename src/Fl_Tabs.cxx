@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.30 1999/12/02 18:57:28 vincent Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.31 1999/12/15 08:30:59 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -126,6 +126,7 @@ Fl_Widget *Fl_Tabs::which(int event_x, int event_y) {
 int Fl_Tabs::handle(int event) {
 
   Fl_Widget *o;
+  int i;
 
   switch (event) {
 
@@ -146,6 +147,33 @@ int Fl_Tabs::handle(int event) {
       push(o);
     }
     return 1;
+
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    damage(FL_DAMAGE_EXPOSE);
+    return 1;
+
+  case FL_KEYBOARD:
+    switch (Fl::event_key()) {
+    case ' ':
+    case FL_Right:
+      for (i = children()-1; i--;) {
+	if (child(i)->visible()) {
+	  value(child(i+1)); do_callback();
+	  return 1;
+	}
+      }
+      return 1;
+    case FL_BackSpace:
+    case FL_Left:
+      for (i = 1; i < children(); i++) {
+	if (child(i)->visible()) {
+	  value(child(i-1)); do_callback();
+	  return 1;
+	}
+      }
+      return 1;
+    }
 
   default:
   DEFAULT:
@@ -293,10 +321,19 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
     fl_line(x1, y()+h()+H, x1+TABSLOPE, y()+h()-1);
   }
-  if (W > TABSLOPE)
+  if (W > TABSLOPE) {
+    if (sel && Fl::focus() == this) {
+      fl_color(FL_BLACK);
+      fl_line_style(FL_DOT);
+      fl_rect(x2-W+TABSLOPE,
+	      y()+(H<0?h()+H-3:0)+1, W-TABSLOPE,
+	      (H<0?-H:H)+1);
+      fl_line_style(0);
+    }
     o->draw_label(what==LEFT ? x1+TABSLOPE : x2-W+TABSLOPE,
 		  y()+(H<0?h()+H-3:0), W-TABSLOPE,
 		  (H<0?-H:H)+3, FL_ALIGN_CENTER);
+  }
 }
 
 static void revert(Fl_Style* s) {
@@ -314,5 +351,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.30 1999/12/02 18:57:28 vincent Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.31 1999/12/15 08:30:59 bill Exp $".
 //

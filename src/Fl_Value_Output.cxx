@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.20 1999/11/19 10:06:51 bill Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.21 1999/12/15 08:31:00 bill Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,11 +32,13 @@
 #include <FL/fl_draw.H>
 
 void Fl_Value_Output::draw() {
-  if (damage()&~FL_DAMAGE_CHILD) draw_frame();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  fl_color(fl_inactive(color(), f));
-  fl_rectf(X, Y, W, H);
+  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) {
+    draw_box();
+  } else {
+    fl_color(color());
+    fl_rectf(X+2, Y+2, W-4, H-4);
+  }
   char buf[128];
   format(buf);
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
@@ -51,7 +53,6 @@ int Fl_Value_Output::handle(int event) {
   int mx = Fl::event_x();
   static int ix, drag;
   switch (event) {
-  case FL_ENTER: return 1; // For tooltips
   case FL_PUSH:
     ix = mx;
     drag = Fl::event_button();
@@ -74,7 +75,7 @@ int Fl_Value_Output::handle(int event) {
     handle_release();
     return 1;
   default:
-    return 0;
+    return Fl_Valuator::handle(event);
   }
 }
 
@@ -88,5 +89,5 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.20 1999/11/19 10:06:51 bill Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.21 1999/12/15 08:31:00 bill Exp $".
 //

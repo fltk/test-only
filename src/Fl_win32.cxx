@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.80 1999/12/06 21:08:56 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.81 1999/12/15 08:31:01 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@
 #include <FL/win32.H>
 #include <FL/Fl_Window.H>
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <limits.H>
@@ -155,9 +154,9 @@ void Fl::remove_fd(int n, int events) {
     j++;
   }
   nfds = j;
-  if (events & POLLIN) FD_CLR(n, &fdsets[0]);
-  if (events & POLLOUT) FD_CLR(n, &fdsets[1]);
-  if (events & POLLERR) FD_CLR(n, &fdsets[2]);
+  if (events & POLLIN) FD_CLR(unsigned(n), &fdsets[0]);
+  if (events & POLLOUT) FD_CLR(unsigned(n), &fdsets[1]);
+  if (events & POLLERR) FD_CLR(unsigned(n), &fdsets[2]);
 }
 
 void Fl::remove_fd(int n) {
@@ -241,6 +240,7 @@ double fl_wait(int timeout_flag, double time) {
       have_message = GetMessage(&fl_msg, NULL, 0, 0) >= 0;
     }
   } else {
+    TranslateMessage(&fl_msg);
     // Perform the requested timeout...
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
     if (!have_message && time > 0.0) {
@@ -533,16 +533,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_KEYDOWN:
   case WM_SYSKEYDOWN:
-    // save the keysym until we figure out the characters:
-    Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
   case WM_KEYUP:
   case WM_SYSKEYUP:
-    TranslateMessage(&fl_msg); // always returns 1!!!
-    // TranslateMessage is supposed to return true only if it turns
-    // into another message, but it seems to always return 1 on my
-    // NT machine.  So I will instead peek to see if there is a
-    // character message in the queue, I hope this can only happen
-    // if the translation worked:
+    // save the keysym until we figure out the characters:
+    Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
+    // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
       uMsg = fl_msg.message;
       wParam = fl_msg.wParam;
@@ -563,7 +558,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if ((lParam&(1<<29)) //same as GetKeyState(VK_MENU)
 	&& uMsg != WM_CHAR) state |= FL_ALT;
       if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
-      if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) state |= FL_META;
+      if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
+	// WIN32 bug?  GetKeyState returns garbage if the user hit the
+	// meta key to pop up start menu.  Sigh.
+	if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
+	  state |= FL_META;
+      }
       if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
       Fl::e_state = state;}
     if (lParam & (1<<31)) goto DEFAULT; // ignore up events after fixing shift
@@ -914,5 +914,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.80 1999/12/06 21:08:56 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.81 1999/12/15 08:31:01 bill Exp $".
 //

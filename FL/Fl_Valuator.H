@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.9 1999/11/10 19:27:28 carl Exp $"
+// "$Id: Fl_Valuator.H,v 1.10 1999/12/15 08:30:51 bill Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,16 +42,24 @@ public:
 
   double step() const {return step_;}
   void step(double a) {step_ = a;}
+
   double minimum() const {return minimum_;}
   void minimum(double a) {minimum_ = a;}
+
   double maximum() const {return maximum_;}
   void maximum(double a) {maximum_ = a;}
+
   void range(double a, double b) {minimum_ = a; maximum_ = b;}
 
+  int linesize() const {return linesize_;}
+  void linesize(int i) {linesize_ = i;}
+
+  int pagesize() const {return pagesize_;}
+  void pagesize(int i) {pagesize_ = i;}
+
   virtual int format(char*);
-  double round(double); // round to nearest n*step
-  double clamp(double); // clamp to min..max
-  double increment(double v, int n); // return v+n*step
+
+  int handle(int);
 
 #ifndef FLTK_2
   void step(double a, int b) {step(a/b);}
@@ -62,27 +70,33 @@ public:
 protected:
 
   Fl_Valuator(int X, int Y, int W, int H, const char* L);
-
   int horizontal() const {return type()&1;}
   double previous_value() const {return previous_value_;}
-  double softclamp(double value); // clamps if previous value was in range
   void handle_push() {previous_value_ = value_;}
   void handle_drag(double newvalue);
   void handle_release();
+
+  double increment(double v, int steps) const;
+  double clamp(double) const;
+  double round(double) const;
+  double softclamp(double) const;
+
   virtual void value_damage(); // callback whenever value changes
 
 private:
 
   double value_;
-  double previous_value_;
+  static double previous_value_;
   double step_;
   double minimum_;
   double maximum_;
+  int linesize_;
+  int pagesize_;
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.9 1999/11/10 19:27:28 carl Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.10 1999/12/15 08:30:51 bill Exp $".
 //

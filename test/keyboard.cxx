@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.6 1999/04/01 21:26:25 carl Exp $"
+// "$Id: keyboard.cxx,v 1.7 1999/12/15 08:31:04 bill Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@
 
 #include "keyboard_ui.cxx"
 #include <stdio.h>
+#include <ctype.h>
 
 // these are used to identify which buttons are which:
 void key_cb(Fl_Button*, void*) {}
@@ -92,8 +93,9 @@ int main(int argc, char** argv) {
       Fl_Widget* b = window->child(i);
       if (b->callback() == (Fl_Callback*)key_cb) {
 	int i = (int)(long)b->user_data();
-	if (!i) i = b->label()[0];
+	if (!i) i = tolower(b->label()[0]);
 	((Fl_Button*)b)->value(Fl::event_key(i));
+	if (i == Fl::event_key()) ((Fl_Button*)b)->take_focus();
       } else if (b->callback() == (Fl_Callback*)shift_cb) {
 	int i = (int)(long)b->user_data();
 	((Fl_Button*)b)->value(Fl::event_state(i));
@@ -127,5 +129,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.6 1999/04/01 21:26:25 carl Exp $".
+// End of "$Id: keyboard.cxx,v 1.7 1999/12/15 08:31:04 bill Exp $".
 //

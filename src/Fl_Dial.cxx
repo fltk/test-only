@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.26 1999/11/21 06:23:24 carl Exp $"
+// "$Id: Fl_Dial.cxx,v 1.27 1999/12/15 08:30:56 bill Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,15 +35,15 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
   Fl_Flags f = active_r() ? 0 : FL_INACTIVE;
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
-    if (box() == FL_OVAL_BOX) {x--; y--; w+=2; h+=2;}
+    //if (box() == FL_OVAL_BOX) {x--; y--; w+=2; h+=2;}
     fl_color(color());
     fl_pie(x, y, w-1, h-1, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
     fl_color(fl_inactive(selection_color(), f));
     fl_pie(x, y, w-1, h-1, 270-angle, 270-a1);
-    if (box() == FL_OVAL_BOX) {
-      fl_color(off_color());
-      fl_arc(x, y, w, h, 0, 360);
-    }
+//     if (box() == FL_OVAL_BOX) {
+//       fl_color(off_color());
+//       fl_arc(x, y, w, h, 0, 360);
+//     }
     return;
   }
   if (!(damage()&FL_DAMAGE_ALL)) {
@@ -78,7 +78,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
 }
 
 void Fl_Dial::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
+  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) draw_box();
   int X = x(); int Y = y(); int W = w(); int H = h();
   box()->inset(X,Y,W,H);
   draw(X,Y,W,H);
@@ -87,7 +87,6 @@ void Fl_Dial::draw() {
 
 int Fl_Dial::handle(int event, int x, int y, int w, int h) {
   switch (event) {
-  case FL_ENTER: return 1; // for tooltips
   case FL_PUSH:
     handle_push();
   case FL_DRAG: {
@@ -112,7 +111,7 @@ int Fl_Dial::handle(int event, int x, int y, int w, int h) {
     if (!Fl::pushed()) handle_release();
     return 1;
   default:
-    return 0;
+    return Fl_Valuator::handle(event);
   }
 }
 
@@ -138,5 +137,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.26 1999/11/21 06:23:24 carl Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.27 1999/12/15 08:30:56 bill Exp $".
 //

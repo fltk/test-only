@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.8 1999/08/26 20:41:27 carl Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.9 1999/12/15 08:30:55 bill Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,10 +36,10 @@ ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
   // has two screens with differnet depths
   static uchar hiNibble[16] =
   { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
-    0x10, 0x90, 0x50, 0xd0, 0x20, 0xb0, 0x70, 0xf0 };
+    0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
   static uchar loNibble[16] =
   { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
-    0x01, 0x09, 0x05, 0x0d, 0x02, 0x0b, 0x07, 0x0f };
+    0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
   int np  = GetDeviceCaps(fl_gc, PLANES);//: was always one on sample machines
   int bpp = GetDeviceCaps(fl_gc, BITSPIXEL);//: 1,4,8,16,24,32 and more?
   int Bpr = (bpp*w+7)/8;			//: bytes per row
@@ -90,5 +90,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.8 1999/08/26 20:41:27 carl Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.9 1999/12/15 08:30:55 bill Exp $".
 //

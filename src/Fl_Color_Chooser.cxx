@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.15 1999/11/19 10:06:46 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.16 1999/12/15 08:30:55 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -176,11 +176,10 @@ static void tohs(double x, double y, double& h, double& s) {
 }
 
 int Flcc_HueBox::handle(int e) {
-  static double ih, is;
+  static double is;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case FL_PUSH:
-    ih = c->h();
     is = c->s();
   case FL_DRAG: {
     double Xf, Yf, H, S;
@@ -421,8 +420,6 @@ void CellBox::draw() {
   }
 }
 
-static CellBox* cellbox;
-
 int CellBox::handle(int e) {
   switch (e) {
   case FL_PUSH: return 1;
@@ -457,7 +454,7 @@ static void make_it() {
   cancel_color = new Fl_Box(110, 105, 95, 30);
   cancel_color->box(FL_ENGRAVED_BOX);
   cancel_button = new Fl_Button(110, 135, 95, 25, fl_cancel);
-  cellbox = new CellBox(5,165,200,60);
+  new CellBox(5,165,200,60);
   window->resizable(chooser);
   window->end();
   window->set_modal();
@@ -511,5 +508,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.15 1999/11/19 10:06:46 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.16 1999/12/15 08:30:55 bill Exp $".
 //
