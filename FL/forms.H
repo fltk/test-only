@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.23 2001/02/21 06:15:44 clip Exp $"
+// "$Id: forms.H,v 1.24 2001/02/22 21:00:48 clip Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -175,7 +175,7 @@ inline void fl_remove_io_callback(int fd, short, FL_IO_CALLBACK) {
 
 // type of callback is different and no "id" number is returned:
 inline void fl_add_timeout(long msec, void (*cb)(void*), void* v) {
-  Fl::add_timeout(msec*.001, cb, v);}
+  Fl::add_timeout(msec*.001, (Fl_Timeout_Handler)cb, v);}
 inline void fl_remove_timeout(int) {}
 
 // type of callback is different!
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.23 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: forms.H,v 1.24 2001/02/22 21:00:48 clip Exp $".
 //

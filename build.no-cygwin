@@ -3,8 +3,10 @@
 autoconf
 
 # remove the "-mwin32" option if your version of gcc is earlier than 2.95.2-7
-CC="gcc -mno-cygwin -mwin32"
-CXX="g++ -mno-cygwin -mwin32"
+#CC="gcc -mno-cygwin -mwin32"
+#CXX="g++ -mno-cygwin -mwin32"
+CC="gcc -mno-cygwin"
+CXX="g++ -mno-cygwin"
 export CC CXX
 
 # In order to find DLLs

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.5 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: forms_timer.cxx,v 1.6 2001/02/22 21:00:49 clip Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -93,12 +93,12 @@ void Fl_Timer::step() {
       delay = 0;
     } else {
       redraw();
-      Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+      Fl::add_timeout(FL_TIMER_BLINKRATE, (Fl_Timeout_Handler)stepcb, this);
     }
     do_callback();
   } else {
     if (type() == FL_VALUE_TIMER) redraw();
-    Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+    Fl::add_timeout(FL_TIMER_BLINKRATE, (Fl_Timeout_Handler)stepcb, this);
   }
 }
 
@@ -108,7 +108,7 @@ int Fl_Timer::handle(int event) {
 }
 
 Fl_Timer::~Fl_Timer() {
-  Fl::remove_timeout(stepcb, this);
+  Fl::remove_timeout((Fl_Timeout_Handler)stepcb, this);
 }
 
 Fl_Timer::Fl_Timer(uchar t, int x, int y, int w, int h, const char* l)
@@ -131,8 +131,8 @@ void Fl_Timer::value(double d) {
   on = (d > 0.0);
   fl_gettime(&(lastsec), &(lastusec));
   if (type() != FL_HIDDEN_TIMER) redraw();
-  Fl::remove_timeout(stepcb, this);
-  if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+  Fl::remove_timeout((Fl_Timeout_Handler)stepcb, this);
+  if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, (Fl_Timeout_Handler)stepcb, this);
 }
 
 void Fl_Timer::suspended(char d) {
@@ -140,14 +140,14 @@ void Fl_Timer::suspended(char d) {
     if (on) return;
     on = (delay > 0.0);
     fl_gettime(&(lastsec), &(lastusec));
-    if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+    if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, (Fl_Timeout_Handler)stepcb, this);
   } else {
     if (!on) return;
     on = 0;
-    Fl::remove_timeout(stepcb, this);
+    Fl::remove_timeout((Fl_Timeout_Handler)stepcb, this);
   }
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.5 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: forms_timer.cxx,v 1.6 2001/02/22 21:00:49 clip Exp $".
 //
