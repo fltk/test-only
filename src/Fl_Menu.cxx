@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.52 1999/11/10 18:06:04 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.53 1999/11/11 18:13:32 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,16 +34,6 @@
 #include <FL/Fl_Menu_Window.H>
 #include <FL/Fl_Menu_.H>
 #include <FL/fl_draw.H>
-
-#ifdef DONT_LEAK_MEMORY
-Fl_Menu_Item::~Fl_Menu_Item() {
-  if (style_ && style_->child == style_) {
-    Fl_Style* s = (Fl_Style*)style_; // cast away const
-    *(s->previous) = s->next;
-    delete s;
-  }
-}
-#endif
 
 int Fl_Menu_Item::size() const {
   const Fl_Menu_Item* m = this;
@@ -849,5 +839,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.52 1999/11/10 18:06:04 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.53 1999/11/11 18:13:32 carl Exp $".
 //
