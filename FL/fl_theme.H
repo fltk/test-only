@@ -1,9 +1,10 @@
 //
-// "$Id: KDE1.cxx,v 1.9 2000/03/03 18:59:11 carl Exp $"
+// "$Id: fl_theme.H,v 1.1 2000/03/03 18:59:06 carl Exp $"
 //
-// Theme plugin file for FLTK
+// Header for themes that also go into fltk_themes static library.
+// These are the important common ones such as Windows, Motif, KDE1 & GNOME.
 //
-// Copyright 1999 Bill Spitzak and others.
+// Copyright 1998-1999 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,16 +21,21 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_theme.H>
+#ifndef fl_theme_H
+#define fl_theme_H
 
-extern "C" int fltk_theme(int, char**) {
-  return fl_kde1();
-}
+#include <FL/Enumerations.H>
+
+FL_API int fl_windows();
+FL_API int fl_kde1(int = 0);
+FL_API int fl_gnome();
+FL_API int fl_motif();
+
+#endif
 
 //
-// End of "$Id: KDE1.cxx,v 1.9 2000/03/03 18:59:11 carl Exp $".
+// End of "$Id: fl_theme.H,v 1.1 2000/03/03 18:59:06 carl Exp $".
 //

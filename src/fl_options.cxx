@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.43 2000/03/02 20:47:18 carl Exp $"
+// "$Id: fl_options.cxx,v 1.44 2000/03/03 18:59:10 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -142,11 +142,9 @@ void fl_startup() {
 
 }
 
-typedef int (*Theme_Handler)(int);
+static Fl_Theme_Handler _theme_handler = 0;
 
-static Theme_Handler _theme_handler = 0;
-
-void fl_theme_handler(Theme_Handler handler) {
+void Fl::theme_handler(Fl_Theme_Handler handler) {
   _theme_handler = handler;
 }
 
@@ -370,7 +368,6 @@ int Fl::scheme(const char *s) {
 static int loadtheme(int b) {
   use_themes = b;
   if (!b || !Fl::theme()) return 0;
-
   char temp[PATH_MAX];
   if (conf_is_path_rooted(Fl::theme())) strncpy(temp, Fl::theme(), sizeof(temp));
   else snprintf(temp, sizeof(temp), "themes/%s", Fl::theme());
@@ -426,7 +423,7 @@ const char* fl_find_config_file(const char* fn) {
     }
 
 #ifndef WIN32
-    snprintf(path, sizeof(path), CONFIGDIR "/lib/fltk/%s", fn);
+    snprintf(path, sizeof(path), CONFIGDIR "/%s", fn);
 #else
     char windir[PATH_MAX], user[80] = "Default User";
     GetWindowsDirectory(windir, sizeof(windir));
@@ -467,7 +464,7 @@ extern const char* fl_up_box_revert;
 extern const char* fl_down_box_revert;
 
 static void revert_styles() {
-  fl_theme_handler(0);
+  Fl::theme_handler(0);
 
   fl_background((Fl_Color)0xc0c0c000);
   fl_up_box.data = fl_up_box_revert;
@@ -510,7 +507,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.43 2000/03/02 20:47:18 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.44 2000/03/03 18:59:10 carl Exp $".
 //
 
 

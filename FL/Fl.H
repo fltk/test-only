@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.43 2000/03/03 02:45:51 carl Exp $"
+// "$Id: Fl.H,v 1.44 2000/03/03 18:59:05 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,7 @@ class Fl_Widget;
 class Fl_Window;
 
 typedef void (*Fl_Timeout_Handler)(void*);
+typedef int (*Fl_Theme_Handler)(int);
 
 class FL_API Fl {
   Fl() {}; // no constructor!
@@ -213,6 +214,7 @@ public:
   static const char* theme_;
   static int theme(const char*);
   static int reloadtheme() { return theme(theme()); }
+  static void theme_handler(Fl_Theme_Handler);
   static int scheme(const char*);
   static int reloadscheme() { return scheme(scheme()); }
   static const char* scheme() {return scheme_;}
@@ -223,5 +225,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.43 2000/03/03 02:45:51 carl Exp $".
+// End of "$Id: Fl.H,v 1.44 2000/03/03 18:59:05 carl Exp $".
 //
