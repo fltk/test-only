@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.20 2004/06/22 08:28:56 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.21 2004/06/23 07:17:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -197,8 +197,6 @@ bool fltk::compose(int& del) {
   else if (ascii == '_' || ascii == '=') ascii = '-';
 
   static int plen;
-
-  if (e_length > 1) return true; // probably indicates InputMethod was used
 
   if (compose_state == 1) { // after the compose key
 

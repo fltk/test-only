@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.39 2004/06/11 08:07:20 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.40 2004/06/23 07:17:19 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -115,7 +115,7 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   MoveTo(x, y); 
   LineTo(x1, y1);
 #else
-#error
+# error
 #endif
 }
 
@@ -140,7 +140,7 @@ void fltk::drawline(float X, float Y, float X1, float Y1) {
   MoveTo(x, y); 
   LineTo(x1, y1);
 #else
-#error
+# error
 #endif
 }
 
@@ -158,7 +158,7 @@ void fltk::drawpoint(int x, int y) {
 #elif defined(__APPLE__)
   MoveTo(x, y); Line(0, 0);
 #else
-#error
+# error
 #endif
 }
 
@@ -176,12 +176,12 @@ void fltk::drawpoint(float X, float Y) {
 #elif defined(__APPLE__)
   MoveTo(x, y); Line(0, 0);
 #else
-#error
+# error
 #endif
 }
 
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.39 2004/06/11 08:07:20 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.40 2004/06/23 07:17:19 spitzak Exp $".
 //

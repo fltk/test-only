@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.30 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: input.cxx,v 1.31 2004/06/23 07:17:20 spitzak Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,7 @@ using namespace fltk;
 
 void cb(Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((Input*)ob)->value());
+  ob->window()->label(((Input*)ob)->value());
 }
 
 int when = 0;
@@ -141,5 +142,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.30 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: input.cxx,v 1.31 2004/06/23 07:17:20 spitzak Exp $".
 //

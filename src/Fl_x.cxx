@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.176 2004/06/22 08:28:57 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.177 2004/06/23 07:17:18 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -41,6 +41,7 @@
 #include <fltk/visual.h>
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
+#include <fltk/utf.h>
 
 using namespace fltk;
 
@@ -465,12 +466,16 @@ Atom XdndDrop;
 Atom XdndStatus;
 Atom XdndActionCopy;
 Atom XdndFinished;
+Atom textplainutf;
 Atom textplain;
-Atom textplain2;
+static Atom XA_TEXT;
 Atom texturilist;
 //Atom XdndProxy;
+static Atom _NET_WM_NAME;
+static Atom _NET_WM_ICON_NAME;
 static Atom _NET_WORKAREA;
 static Atom _NET_CURRENT_DESKTOP;
+Atom UTF8_STRING;
 
 extern "C" {
 static int io_error_handler(Display*) {fatal("X I/O error"); return 0;}
@@ -523,12 +528,16 @@ void fltk::open_display(Display* d) {
   atom(	XdndStatus		, "XdndStatus");
   atom(	XdndActionCopy		, "XdndActionCopy");
   atom(	XdndFinished		, "XdndFinished");
+  atom(	textplainutf		, "text/plain;charset=UTF-8");
   atom(	textplain		, "text/plain");
-  atom(	textplain2		, "TEXT");
+  atom(	XA_TEXT			, "TEXT");
   atom(	texturilist		, "text/uri-list");
   //atom(XdndProxy		, "XdndProxy");
+  atom( _NET_WM_NAME		, "_NET_WM_NAME");
+  atom( _NET_WM_ICON_NAME	, "_NET_WM_ICON_NAME");
   atom(	_NET_WORKAREA		, "_NET_WORKAREA");
   atom(	_NET_CURRENT_DESKTOP	, "_NET_CURRENT_DESKTOP");
+  atom( UTF8_STRING		, "UTF8_STRING");
 #undef atom
   Atom atoms[MAX_ATOMS];
   XInternAtoms(d, names, i, 0, atoms);
@@ -923,7 +932,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
   // otherwise get the window server to return it:
   selection_requestor = &receiver;
   Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
-  XConvertSelection(xdisplay, property, XA_STRING, property,
+  XConvertSelection(xdisplay, property, TARGETS, property,
 		    xid(Window::first()), event_time);
 }
 
@@ -985,6 +994,7 @@ bool fltk::handle()
   int event = 0;
   static XWindow xim_win = 0;
 
+ KEYPRESS:
   if (XFilterEvent((XEvent *)&xevent, 0)) return 1;
 
   switch (xevent.type) {
@@ -1049,16 +1059,15 @@ bool fltk::handle()
       // types if you get a drop that you think should work.
       dnd_type = textplain; // try this if no matches, it may work
       for (int i = 0; ; i++) {
-	Atom type = dnd_source_types[i]; if (!type) break;
-#if 0 // print what types are being pasted:
-	char* x = XGetAtomName(xdisplay, type);
-	printf("source type of %s\n",x);
-	XFree(x);
-#else
-	if (type == textplain) {dnd_type = type; break;} // our favorite
-	if (type == textplain2) {dnd_type = type; break;} // ok
-	if (type == texturilist) dnd_type = type; // ok
-#endif
+ 	Atom type = dnd_source_types[i]; if (!type) break;
+// 	char* x = XGetAtomName(xdisplay, type);
+// 	printf("source type of %s\n",x);
+// 	XFree(x);
+	if (type == textplainutf ||
+	    type == textplain ||
+	    type == UTF8_STRING) {dnd_type = type; break;} // ok
+	if (type == XA_TEXT) {dnd_type = UTF8_STRING; break;}
+	if (type == texturilist) dnd_type = type; // only used if no text
       }
       event = DND_ENTER;
       break;
@@ -1280,35 +1289,7 @@ bool fltk::handle()
     if (window && window == xfocus) {xfocus = 0; fix_focus(); return true;}
     break;
 
-  case KeyPress:
-    if (fl_xim_ic) {
-      static char* buffer = 0;
-      static int buffer_len;
-      if (!buffer) buffer = (char*) malloc(buffer_len = 128);
-      Status status;
-      KeySym keysym;
-      int len;
-    RETRY:
-      buffer[0] = 0;
-      keysym = 0;
-      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-			      buffer, buffer_len, &keysym, &status);
-      switch (status) {
-      case XBufferOverflow:
-	buffer_len = len;
-	buffer = (char*)realloc(buffer, buffer_len);
-	goto RETRY;
-      case XLookupChars:
-      case XLookupKeySym:
-      case XLookupBoth:
-	set_event_xy(true);
-	e_text = buffer;
-	e_length = len;
-	e_keysym = keysym;
-	return handle(KEY,window);
-      }
-    }
-  KEYPRESS: {
+  case KeyPress: {
     set_event_xy(true);
     //if (grab_) XAllowEvents(xdisplay, SyncKeyboard, CurrentTime);
     unsigned keycode = xevent.xkey.keycode;
@@ -1321,20 +1302,43 @@ bool fltk::handle()
       e_is_click = keycode+100;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char buffer[20];
-    const int buffer_len=20;
+    static char* buffer = 0;
+    static int buffer_len;
+    if (!buffer) buffer = (char*) malloc(buffer_len = 20);
+    int len;
     KeySym keysym;
-    int len = 0;
-    len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
-    fl_actual_keysym = int(keysym);
-    // Make ctrl+dash produce ^_ like it used to:
-    if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
-    // Any keys producing foreign letters produces the bottom 8 bits:
-    if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
+    if (fl_xim_ic) {
+      Status status;
+    RETRY:
+      buffer[0] = 0;
+      keysym = 0;
+      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			      buffer, buffer_len-1, &keysym, &status);
+      switch (status) {
+      case XBufferOverflow:
+	buffer_len = len+1;
+	buffer = (char*)realloc(buffer, buffer_len);
+	goto RETRY;
+      case XLookupChars:
+      case XLookupKeySym:
+      case XLookupBoth:
+	break;
+      default:
+	goto NO_XIM;
+      }
+    } else {
+    NO_XIM:
+      len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
+      // Make ctrl+dash produce ^_ like it used to:
+      if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
+      // Any keys producing foreign letters produces the bottom 8 bits:
+      if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
+    }
     buffer[len] = 0;
     e_text = buffer;
     e_length = len;
     event = KEY;
+    fl_actual_keysym = int(keysym);
     goto GET_KEYSYM;}
 
   case KeyRelease: {
@@ -1366,7 +1370,7 @@ bool fltk::handle()
       // X did not map this key, return keycode with 0x8000:
       keysym = keycode|0x8000;
 #ifdef __sgi
-      // You can plug a microsoft keyboard into an Irix box but these
+      // You can plug a Microsoft keyboard into an Irix box but these
       // keys are not translated.  Make them translate like XFree86 does:
       switch (keycode) {
       case 147: keysym = LeftMetaKey; break;
@@ -1449,6 +1453,23 @@ bool fltk::handle()
 			     read/4, 65536, 1, 0,
 			     &actual, &format, &count, &remaining,
 			     &portion)) break; // quit on error
+      if (actual == TARGETS || actual == XA_ATOM) {
+	Atom type = XA_STRING;
+	// see if it offers a better type:
+	for (unsigned i = 0; i<count; i++) {
+//   	  char* x = XGetAtomName(xdisplay, type);
+//   	  printf("source type of %s\n",x);
+//   	  XFree(x);
+ 	  Atom t = ((Atom*)portion)[i];
+ 	  if (t == UTF8_STRING) {type = t; break;}
+	}
+	XFree(portion);
+	Atom property = xevent.xselection.property;
+	XConvertSelection(xdisplay, property, type, property,
+			  xid(Window::first()),
+			  event_time);
+	return true;
+      }
       if (read) { // append to the accumulated buffer
 	buffer = (unsigned char*)realloc(buffer, read+count*format/8+remaining);
 	memcpy(buffer+read, portion, count*format/8);
@@ -1488,20 +1509,21 @@ bool fltk::handle()
     e.target = xevent.xselectionrequest.target;
     e.time = xevent.xselectionrequest.time;
     e.property = xevent.xselectionrequest.property;
+//     char* x = XGetAtomName(xdisplay,e.target);
+//     fprintf(stderr,"selection request of %s\n",x);
+//     XFree(x);
     if (e.target == TARGETS) {
-      Atom a = XA_STRING;
+      Atom a[3] = {XA_STRING, UTF8_STRING, XA_TEXT};
       XChangeProperty(xdisplay, e.requestor, e.property,
-		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
-		      sizeof(Atom));
-    } else if (/*e.target == XA_STRING &&*/ selection_length[clipboard]) {
+		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)a,
+		      3);
+    } else if (selection_length[clipboard]) {
+      if (e.target == XA_TEXT) e.target = UTF8_STRING;
       XChangeProperty(xdisplay, e.requestor, e.property,
 		      e.target, 8, 0,
 		      (unsigned char *)selection_buffer[clipboard],
 		      selection_length[clipboard]);
     } else {
-//    char* x = XGetAtomName(xdisplay,e.target);
-//    fprintf(stderr,"selection request of %s\n",x);
-//    XFree(x);
       e.property = 0;
     }
     XSendEvent(xdisplay, e.requestor, 0, 0, (XEvent *)&e);}
@@ -1840,11 +1862,19 @@ void Window::label(const char *name, const char *iname) {
   iconlabel_ = iname;
   if (i && !parent()) {
     if (!name) name = "";
+    int l = strlen(name);
+    //if (is_utf8(name,name+l)>=0)
+      XChangeProperty(xdisplay, i->xid, _NET_WM_NAME,
+		      UTF8_STRING, 8, 0, (uchar*)name, l);
     XChangeProperty(xdisplay, i->xid, XA_WM_NAME,
-		    XA_STRING, 8, 0, (uchar*)name, strlen(name));
+		    XA_STRING, 8, 0, (uchar*)name, l);
     if (!iname) iname = filename_name(name);
+    l = strlen(iname);
+    //if (is_utf8(iname,iname+l)>=0)
+      XChangeProperty(xdisplay, i->xid, _NET_WM_ICON_NAME,
+		      UTF8_STRING, 8, 0, (uchar*)iname, l);
     XChangeProperty(xdisplay, i->xid, XA_WM_ICON_NAME, 
-		    XA_STRING, 8, 0, (uchar*)iname, strlen(iname));
+		    XA_STRING, 8, 0, (uchar*)iname, l);
   }
 }
 
@@ -2078,5 +2108,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.176 2004/06/22 08:28:57 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.177 2004/06/23 07:17:18 spitzak Exp $".
 //

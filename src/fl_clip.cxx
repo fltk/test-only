@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.24 2004/06/11 08:07:20 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.25 2004/06/23 07:17:19 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -167,15 +167,18 @@ void fltk::push_clip(int x, int y, int w, int h) {
     SetRectRgn(r, x, y, x+w, y+h);
     if (current) SectRgn(r, current, r); 
 #else
+# error
 #endif
   } else { // make empty clip region:
-#ifdef _WIN32
+#if USE_X11
+    r = XCreateRegion();
+#elif defined(_WIN32)
     r = CreateRectRgn(0,0,0,0);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
     r = NewRgn(); 
     SetEmptyRgn(r);
 #else
-    r = XCreateRegion();
+# error
 #endif
   }
   pushregion(r);
@@ -386,5 +389,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.24 2004/06/11 08:07:20 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.25 2004/06/23 07:17:19 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.2 2004/06/22 08:28:58 spitzak Exp $"
+// "$Id: utf.c,v 1.3 2004/06/23 07:17:20 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -144,16 +144,53 @@ int utf8valid(const char* p, const char* end) {
   return len;
 }
 
+/*! Return non-zero if the characters between \a p and \a end
+    appear to be UTF-8 encoded. This will return non-zero if
+    at least one legal UTF-8 encoded character is found.
+
+    If at least one legal UTF-8 character is found, but also
+    some errorneous UTF-8 is found, this will return a negative
+    number. So is_utf8()>0 will return true for legal-only UTF-8.
+
+    Most of FLTK will work with strings no matter what this returns,
+    treating illegal UTF-8 sequences as individual bytes of ISO-8859-1
+    encoded text. However it may be useful to use this test before
+    passing a string to a system interface that either barfs on
+    illegal UTF-8 or is is much slower than the byte interface.
+*/
+int is_utf8(const char* p, const char* end) {
+  int ret = 0;
+  int err = 0;
+  while (p < end) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0x80) {
+      p++;
+    } else if (c < 0xC2) { // error byte
+      p++;
+      err = 1;
+    } else {
+      int len = utf8valid(p,end);
+      if (len > 1) {
+	ret = len;
+	p += len;
+      } else if (len) {
+	p++;
+      } else {
+	err = 1;
+	p++;
+      }
+    }
+  }
+  return err ? -ret : ret;
+}
+
 /*! Return the length of a legal UTF-8 encoding that starts with
     this byte. Returns 1 for illegal bytes (anthing less than 0xc2
     and 0xfe and 0xff).
 
-    <i>Danger Will Robinson: this is not going to safely decode UTF-8
-    unless you already know the string contains no errors. To actually
-    detect errors you must examine all the bytes in the character.
-    This function is provided for use in code that only has access
-    to the first character (i.e. rewrites of ctype.h calls), calling
-    this function is an indication that something in wrong!</i>
+    <i>This function is depreciated. You should examine all the bytes
+    in the UTF-8 character for legality, so that raw ISO-8859-1
+    characters are less likely to be confused with UTF-8.</i>
 */
 int utf8len(char c) {
   if ((unsigned char)c < 0xc2) return 1;

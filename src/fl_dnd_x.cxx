@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.13 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.14 2004/06/23 07:17:19 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,8 @@ extern Atom XdndDrop;
 extern Atom XdndStatus;
 extern Atom XdndActionCopy;
 extern Atom XdndFinished;
-extern Atom textplain;
+extern Atom textplainutf;
+extern Atom UTF8_STRING;
 //extern Atom XdndProxy;
 extern Atom *fl_incoming_dnd_source_types;
 
@@ -107,7 +108,7 @@ bool fltk::dnd() {
   // Remember any user presets for the action and types:
   Atom* types;
   Atom action;
-  Atom local_source_types[2] = {textplain, 0};
+  Atom local_source_types[3] = {UTF8_STRING, textplainutf, 0};
   if (dnd_source_types == fl_incoming_dnd_source_types) {
     types = local_source_types;
     action = XdndActionCopy;
@@ -159,7 +160,7 @@ bool fltk::dnd() {
       if (local_window) {
 	dnd_source_window = source_xwindow;
 	dnd_source_types = types;
-	dnd_type = textplain;
+	dnd_type = UTF8_STRING;
 	local_handle(DND_ENTER, local_window);
       } else if (version) {
 	fl_sendClientMessage(target_window, XdndEnter, source_xwindow,
@@ -180,7 +181,7 @@ bool fltk::dnd() {
     } else {
       // Windows that don't support DnD are reported as ok because
       // we are going to try the middle-mouse click on them:
-      drop_ok = types[0]==textplain;
+      drop_ok = types[0]==UTF8_STRING;
     }
     source_window->cursor(drop_ok ? &fl_drop_ok_cursor : CURSOR_NO);
     moved = false;
@@ -226,5 +227,5 @@ bool fltk::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.13 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.14 2004/06/23 07:17:19 spitzak Exp $".
 //
