@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.5 2000/05/30 07:42:07 bill Exp $"
+// "$Id: colbrowser.cxx,v 1.6 2001/04/26 07:29:17 spitzak Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,7 @@ static int load_browser(char *);
   static const char *rgbfile = "SYS$MANAGER:DECW$RGB.DAT";
 #else
 #ifdef __EMX__   /* OS2 */
+#include <X11/XlibInt.h>
   static const char *rgbfile = "/XFree86/lib/X11/rgb.txt";
 #else
 #ifdef __FreeBSD__
@@ -340,5 +341,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.5 2000/05/30 07:42:07 bill Exp $".
+// End of "$Id: colbrowser.cxx,v 1.6 2001/04/26 07:29:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.12 2001/04/26 07:29:17 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -157,7 +157,7 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
 Fl_Widget *fl_do_forms(void) {
   Fl::wait();	
-  return 0;
+  return Fl::first_window();
 }
 
 Fl_Widget *fl_check_forms() {
@@ -255,5 +255,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.12 2001/04/26 07:29:17 spitzak Exp $".
 //
