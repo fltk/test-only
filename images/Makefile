@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.22 2003/01/15 02:27:19 easysw Exp $"
+# "$Id: Makefile,v 1.23 2004/03/08 06:52:46 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -41,8 +41,9 @@ CPPFILES = \
 
 CFILES	=
 
-LIBNAME	=	../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+LIBNAME	=	$(LIBPREFIX)fltk_images$(LIBSUFFIX)
 DSONAME	=	$(DSOPREFIX)fltk_images$(DSOSUFFIX)
+DSOLINK = 	$(DSOPREFIX)fltk_images$(DSOSYMLINK)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 #
@@ -51,9 +52,9 @@ OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 all:		$(LIBTARGET) $(DSOTARGET)
 
-static:		$(LIBNAME)
+static:		../lib/$(LIBNAME)
 
-shared:		$(DSONAME)
+shared:		../lib/$(DSONAME)
 
 
 #
@@ -64,8 +65,8 @@ clean:
 	$(RM) *.bck
 	$(RM) *.o
 	$(RM) core*
-	$(RM) $(LIBNAME)
-	$(RM) $(DSONAME)
+	$(RM) ../lib/$(LIBNAME)
+	$(RM) ../lib/$(DSONAME)
 
 
 #
@@ -87,114 +88,46 @@ include makedepend
 # Make static libraries...
 #
 
-$(LIBNAME):	$(OBJECTS)
+../lib/$(LIBNAME): $(OBJECTS)
 	$(RM) $@
 	echo $(LIBCOMMAND) $@ ...
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-libfltk_images.so.2.0: $(OBJECTS)
+../lib/$(DSONAME): $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk_images.so
-	$(LN) libfltk_images.so.2.0 libfltk_images.so
-
-libfltk_images.sl.2.0: $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk_images.sl
-	$(LN) libfltk_images.sl.2.0 libfltk_images.sl
-
-libfltk_images.2.0.dylib: $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk_images.dylib
-	$(LN) libfltk_images.2.0.dylib libfltk_images.dylib
-
-libfltk_images_s.a: $(OBJECTS)
-	echo $(DSOCOMMAND) libfltk_images_s.o ...
-	$(DSOCOMMAND) libfltk_images_s.o $(OBJECTS) $(IMAGELIBS)
-	echo $(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
-	$(RM) $@
-	$(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
-	$(CHMOD) +x libfltk_images_s.a
-
+	$(RM) ../lib/$(DSOLINK)
+	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
 #
 # Install everything...
 #
 
-install: install-lib install-lib$(DSOSUFFIX)
-
-install-lib:
+install:
 	echo "Installing static images library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
-	$(CP) ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX) $(libdir)
-	$(RANLIB) $(libdir)/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
-
-install-lib.so.2:
+	$(RM) $(libdir)/$(LIBNAME)
+	$(CP) ../lib/$(LIBNAME) $(libdir)
 	echo "Installing shared images library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_images.so.2
-	$(CP) ../lib/libfltk_images.so.2 $(libdir)
-	$(RM) $(libdir)/libfltk_images.so
-	$(LN) libfltk_images.so.2 $(libdir)/libfltk_images.so
-
-install-lib.sl.2:
-	echo "Installing shared images library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_images.sl.2
-	$(CP) ../lib/libfltk_images.sl.2 $(libdir)
-	$(RM) $(libdir)/libfltk_images.sl
-	$(LN) libfltk_images.sl.2 $(libdir)/libfltk_images.sl
-
-install-lib.2.dylib:
-	echo "Installing shared images library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_images.2.dylib
-	$(CP) ../lib/libfltk_images.2.dylib $(libdir)
-	$(RM) $(libdir)/libfltk_images.dylib
-	$(LN) libfltk_images.2.dylib $(libdir)/libfltk_images.dylib
-
-install-lib_s.a:
-	echo "Installing shared images library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_images_s.a
-	$(CP) ../lib/libfltk_images_s.a $(libdir)
-	$(CHMOD) 755 $(libdir)/libfltk_images_s.a
-
+	$(RM) $(libdir)/$(DSONAME)
+	$(RM) $(libdir)/$(DSOLINK)
+	$(CP) ../lib/$(DSONAME) $(libdir)
+	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
 
 #
 # Uninstall the libraries...
 #
 
-uninstall:	uninstall-lib uninstall-lib$(DSOSUFFIX)
-
-uninstall-lib:
+uninstall:
 	echo "Removing static images library from $(libdir)"
-	$(RM) $(libdir)/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
-
-uninstall-lib.so.2:
+	$(RM) $(libdir)/$(LIBNAME)
 	echo "Removing shared images library from $(libdir)"
-	$(RM) $(libdir)/libfltk_images.so.2
-	$(RM) $(libdir)/libfltk_images.so
-
-uninstall-lib.sl.2:
-	echo "Removing shared images library from $(libdir)"
-	$(RM) $(libdir)/libfltk_images.sl.2
-	$(RM) $(libdir)/libfltk_images.sl
-
-uninstall-lib.2.dylib:
-	echo "Removing shared images library from $(libdir)"
-	$(RM) $(libdir)/libfltk_images.2.dylib
-	$(RM) $(libdir)/libfltk_images.dylib
-
-uninstall-lib_s.a:
-	echo "Removing shared images library from $(libdir)"
-	$(RM) $(libdir)/libfltk_images_s.a
+	$(RM) $(libdir)/$(DSONAME)
+	$(RM) $(libdir)/$(DSOLINK)
 
 
 #
-# End of "$Id: Makefile,v 1.22 2003/01/15 02:27:19 easysw Exp $".
+# End of "$Id: Makefile,v 1.23 2004/03/08 06:52:46 spitzak Exp $".
 #

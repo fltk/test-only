@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.25 2003/12/15 03:03:13 spitzak Exp $"
+# "$Id: Makefile,v 1.26 2004/03/08 06:52:45 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -22,6 +22,8 @@
 #
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
+
+include ../makeinclude
 
 # The only target that probably works now is to run doxygen:
 doxygen_output:
@@ -174,10 +176,10 @@ depend:
 #
 
 install:
-	echo "Installing HTML documentation in $(docdir)"
-	-$(MKDIR) -p $(docdir)
-	$(CP) $(HTMLFILES) *.gif *.jpg index.html $(docdir)
-	$(CHMOD) 644 $(docdir)/*
+# 	echo "Installing HTML documentation in $(docdir)"
+# 	-$(MKDIR) -p $(docdir)
+# 	$(CP) $(HTMLFILES) *.gif *.jpg index.html $(docdir)
+# 	$(CHMOD) 644 $(docdir)/*
 	echo "Installing man pages in $(mandir)"
 	-$(MKDIR) -p $(mandir)/man1
 	for file in $(MAN1FILES); do \
@@ -194,8 +196,8 @@ install:
 #
 
 uninstall:
-	echo "Removing HTML documentation from $(docdir)"
-	$(RM) -r $(docdir)
+# 	echo "Removing HTML documentation from $(docdir)"
+# 	$(RM) -r $(docdir)
 	echo "Removing man pages from $(mandir)"
 	for file in $(MAN1FILES); do \
 		$(RM) $(mandir)/man1/`basename $$file .man`.1; \
@@ -236,5 +238,5 @@ fltk.pdf: $(HTMLFILES)
 
 
 #
-# End of "$Id: Makefile,v 1.25 2003/12/15 03:03:13 spitzak Exp $".
+# End of "$Id: Makefile,v 1.26 2004/03/08 06:52:45 spitzak Exp $".
 #
