@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.101 2004/08/25 17:10:36 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.102 2004/09/05 19:13:55 leka Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -430,6 +430,8 @@ static const Enumeration boxmenu[] = {
 {"Oval",	"OVAL_BOX",	(void *)fltk::OVAL_BOX},
 {"Oval Shadow",	"OSHADOW_BOX",	(void *)fltk::OSHADOW_BOX},
 {"Oval Flat",	"OFLAT_BOX",	(void *)fltk::OFLAT_BOX},
+{"Plastic Up",	"PLASTIC_UP_BOX",	(void *)fltk::PLASTIC_UP_BOX},
+{"Plastic Down",	"PLASTIC_DOWN_BOX",	(void *)fltk::PLASTIC_DOWN_BOX},
 {0}};
 
 #define NOT_DEFAULT(W, what) (W->o->what() != ((WidgetType*)(W->factory))->o->what())
@@ -2170,5 +2172,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.101 2004/08/25 17:10:36 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.102 2004/09/05 19:13:55 leka Exp $".
 //
