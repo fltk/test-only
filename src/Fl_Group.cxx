@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.32 1999/10/12 22:22:54 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.33 1999/10/13 08:34:09 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -471,11 +471,15 @@ void Fl_Group::draw_group_box() const {
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
-  if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
-    fl_clip(Fl::x(), Fl::y(), Fl::w(), Fl::h());
+  if (damage() == FL_DAMAGE_CHILD) {
+    // only some child widget has been damaged, draw it
+    while (a < e) update_child(**a++);
+  } else {
+    fl_clip(x(), y(), w(), h());
     while (e > a) {
       Fl_Widget& w = **--e;
-      if (w.visible() && fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
+      if (w.visible() && w.type() < FL_WINDOW &&
+	  fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
 	w.draw_n_clip();
     }
     if (parent() && parent()->type() == FL_TABS) {
@@ -485,19 +489,14 @@ void Fl_Group::draw() {
       t->draw_box();
       fl_pop_clip();
     }
-    fl_clip(x(), y(), w(), h());
     draw_group_box();
-    fl_pop_clip();
     draw_label();
-    fl_pop_clip();
     e = a+children_;
     while (a < e) {
       Fl_Widget& w = **a++;
-      if (w.visible())
-	draw_outside_label(w);
+      if (w.visible()) draw_outside_label(w);
     }
-  } else {	// only redraw the children that need it:
-    while (a < e) update_child(**a++);
+    fl_pop_clip();
   }
 }
 
@@ -569,5 +568,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.32 1999/10/12 22:22:54 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.33 1999/10/13 08:34:09 bill Exp $".
 //
