@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.5 1999/11/01 02:21:14 carl Exp $"
+// "$Id: Fl_Labeltype.H,v 1.6 1999/11/18 16:42:23 carl Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -57,16 +57,16 @@ public:
 };
 
 extern FL_API Fl_Labeltype_ fl_no_label;
-#define FL_NO_LABEL &fl_no_label
+#define FL_NO_LABEL (&fl_no_label)
 extern FL_API Fl_Labeltype_ fl_normal_label;
-#define FL_NORMAL_LABEL &fl_normal_label
+#define FL_NORMAL_LABEL (&fl_normal_label)
 extern FL_API const Fl_Labeltype_ fl_symbol_label;
-#define FL_SYMBOL_LABEL &fl_symbol_label
+#define FL_SYMBOL_LABEL (&fl_symbol_label)
 extern FL_API const Fl_Labeltype_ fl_shadow_label;
-#define FL_SHADOW_LABEL &fl_shadow_label
+#define FL_SHADOW_LABEL (&fl_shadow_label)
 extern FL_API const Fl_Labeltype_ fl_engraved_label;
-#define FL_ENGRAVED_LABEL &fl_engraved_label
+#define FL_ENGRAVED_LABEL (&fl_engraved_label)
 extern FL_API const Fl_Labeltype_ fl_embossed_label;
-#define FL_EMBOSSED_LABEL &fl_embossed_label
+#define FL_EMBOSSED_LABEL (&fl_embossed_label)
 
 #endif
