@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.11 2005/01/24 17:25:17 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.12 2005/01/25 17:48:53 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,8 +36,7 @@ using namespace fltk;
  * draw an image based on the input parameters
  *
  * buf:       image source data
- * X, Y:      position (in buffer?!)
- * W, H:      size of picture (in pixel?)
+ * r:         x,y is upper left to put picture, w,h gives size of data
  * delta:     distance from pixel to pixel in buf in bytes
  * linedelta: distance from line to line in buf in bytes
  * mono:      if set, pixel is one byte - if zero, pixel is 3 byte
@@ -50,7 +49,7 @@ using namespace fltk;
  */
 static void innards(const uchar *buf,
 		    fltk::PixelType pixeltype,
-		    const fltk::Rectangle &rect,
+		    const fltk::Rectangle &r,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
@@ -256,5 +255,5 @@ static void innards(const uchar *buf,
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.11 2005/01/24 17:25:17 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.12 2005/01/25 17:48:53 spitzak Exp $".
 //
