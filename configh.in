@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.15 1999/03/31 19:28:02 carl Exp $"
+ * "$Id: configh.in,v 1.16 1999/03/31 21:47:02 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -23,6 +23,9 @@
  *
  * Please report all bugs and problems to "FLTK-bugs@easysw.com".
  */
+
+#include <stdarg.h>
+#include <sys/types.h>
 
 /*
  * BORDER_WIDTH:
@@ -134,13 +137,21 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 0
 
-#if !HAVE_SNPRINTF
-extern "C" int snprintf(char* str, size_t size, const char* fmt, ...);
-#endif /* !HAVE_SNPRINTF */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-#if !HAVE_VSNPRINTF
-extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
-#endif /* !HAVE_VSNPRINTF */
+#  if !HAVE_SNPRINTF
+extern int snprintf(char* str, size_t size, const char* fmt, ...);
+#  endif /* !HAVE_SNPRINTF */
+
+#  if !HAVE_VSNPRINTF
+extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+#  endif /* !HAVE_VSNPRINTF */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 /* possibly missing other functions */
 #define HAVE_ATOL 0
@@ -172,5 +183,5 @@ extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.15 1999/03/31 19:28:02 carl Exp $".
+ * End of "$Id: configh.in,v 1.16 1999/03/31 21:47:02 mike Exp $".
  */
