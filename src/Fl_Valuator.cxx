@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.6 1999/04/04 03:45:26 gustavo Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.7 1999/10/04 09:12:48 bill Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,43 +34,39 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   : Fl_Widget(X,Y,W,H,L) {
   align(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
-  value_ = 0;
-  min = 0;
-  max = 1;
-  A = 0.0;
-  B = 1;
-}
-
-const double epsilon = 1e-12 ;
-
-void Fl_Valuator::step(double s) {
-  if (s < 0) s = -s;
-  A = rint(s);
-  B = 1;
-  while (fabs(s-A/B) > epsilon) {B *= 10; A = rint(s*B);}
+  value_ = 0.0;
+  step_ = 0.0;
+  minimum_ = 0.0;
+  maximum_ = 1.0;
 }
 
 void Fl_Valuator::precision(int p) {
-  A = 1.0;
-  for (B = 1; p--;) B *= 10;
+  double B = 1.0;
+  for (int i=0; i<p; i++) B *= 10;
+  step_ = 1.0/B;
 }
 
-void Fl_Valuator::value_damage() {damage(FL_DAMAGE_EXPOSE);} // by default do partial-redraw
+void Fl_Valuator::value_damage() {
+  damage(FL_DAMAGE_EXPOSE); // default version does partial-redraw
+}
 
-int Fl_Valuator::value(double v) {
+bool Fl_Valuator::value(double v) {
   clear_changed();
-  if (v == value_) return 0;
+  if (v == value_) return false;
   value_ = v;
   value_damage();
-  return 1;
+  return true;
 }
 
 double Fl_Valuator::softclamp(double v) {
-  int which = (min<=max);
+  int which = (minimum_ <= maximum_);
   double p = previous_value_;
-  if ((v<min)==which && p!=min && (p<min)!=which) return min;
-  else if ((v>max)==which && p!=max && (p>max)!=which) return max;
-  else return v;
+  if ((v<minimum_)==which && p!=minimum_ && (p<minimum_)!=which)
+    return minimum_;
+  else if ((v>maximum_)==which && p!=maximum_ && (p>maximum_)!=which)
+    return maximum_;
+  else
+    return v;
 }
 
 // inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
@@ -97,31 +93,34 @@ void Fl_Valuator::handle_release() {
 }
 
 double Fl_Valuator::round(double v) {
-  if (A) return rint(v*B/A)*A/B;
-  else return v;
+  if (!step_) return v;
+  // this is necessary so that rounding errors do not cause steps like .1
+  // to produce inaccurate results when v is very large:
+  return rint(v*rint(1.0/step_))*step_;
 }
 
 double Fl_Valuator::clamp(double v) {
-  if ((v<min)==(min<=max)) return min;
-  else if ((v>max)==(min<=max)) return max;
+  if ((v<minimum_) == (minimum_<=maximum_)) return minimum_;
+  else if ((v>maximum_) == (minimum_<=maximum_)) return maximum_;
   else return v;
 }
 
 double Fl_Valuator::increment(double v, int n) {
-  if (!A) return v+n*(max-min)/100;
-  if (min > max) n = -n;
-  return (rint(v*B/A)+n)*A/B;
+  if (!step_) return v+n*(maximum_-minimum_)/100;
+  if (minimum_ > maximum_) n = -n;
+  return rint(v*rint(1.0/step_)+n)*step_;
 }
 
 int Fl_Valuator::format(char* buffer) {
   double v = value();
-  if (!A || B==1) return sprintf(buffer, "%g", v);
+  if (!step_) return sprintf(buffer, "%g", v);
   int i, x;
-  for (x = 10, i = 2; x < B; x *= 10) i++;
-  if (x == B) i--;
+  double b = rint(1.0/step_);
+  for (x = 10, i = 2; x < b; x *= 10) i++;
+  if (x == b) i--;
   return sprintf(buffer, "%.*f", i, v);
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.6 1999/04/04 03:45:26 gustavo Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.7 1999/10/04 09:12:48 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.13 1999/09/19 04:58:53 vincent Exp $"
+// "$Id: Fl_Group.H,v 1.14 1999/10/04 09:12:44 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -66,10 +66,10 @@ public:
 
   void old_size(const Fl_Widget*,int*);
   int children() const {return children_;}
-  Fl_Widget* child(int n) const {return array()[n];}
+  Fl_Widget* child(int n) const {return array_[n];}
   int find(const Fl_Widget*) const;
   int find(const Fl_Widget& o) const {return find(&o);}
-  Fl_Widget* const* array() const;
+  Fl_Widget* const* array() const {return array_;}
 
   Fl_Group(int,int,int,int, const char * = 0);
   virtual ~Fl_Group();
@@ -103,5 +103,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.13 1999/09/19 04:58:53 vincent Exp $".
+// End of "$Id: Fl_Group.H,v 1.14 1999/10/04 09:12:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.6 1999/03/14 06:46:18 carl Exp $"
+// "$Id: Fl_Valuator.H,v 1.7 1999/10/04 09:12:45 bill Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,53 +30,59 @@
 #include "Fl_Widget.H"
 #endif
 
-// shared type() values for classes that work in both directions:
 #define FL_VERTICAL		0
 #define FL_HORIZONTAL		1
 
-class Fl_Valuator : public Fl_Widget {
+FL_EXPORT class Fl_Valuator : public Fl_Widget {
 
-  double value_;
-  double previous_value_;
-  double min, max; // truncates to this range *after* rounding
-  double A; int B; // rounds to multiples of A/B, or no rounding if A is zero
+public:
+
+  double value() const {return value_;}
+  bool value(double);
+
+  double step() const {return step_;}
+  void step(double a) {step_ = a;}
+  double minimum() const {return minimum_;}
+  void minimum(double a) {minimum_ = a;}
+  double maximum() const {return maximum_;}
+  void maximum(double a) {maximum_ = a;}
+  void range(double a, double b) {minimum_ = a; maximum_ = b;}
+
+  virtual int format(char*);
+  double round(double); // round to nearest n*step
+  double clamp(double); // clamp to min..max
+  double increment(double v, int n); // return v+n*step
+
+#ifndef FLTK_2
+  void step(double a, int b) {step(a/b);}
+  void bounds(double a, double b) {minimum_=a; maximum_=b;}
+  void precision(int);
+#endif
 
 protected:
 
-  int horizontal() const {return type()&1;}
-  FL_EXPORT Fl_Valuator(int X, int Y, int W, int H, const char* L);
+  Fl_Valuator(int X, int Y, int W, int H, const char* L);
 
+  bool horizontal() const {return type()&1;}
   double previous_value() const {return previous_value_;}
+  double softclamp(double value); // clamps if previous value was in range
   void handle_push() {previous_value_ = value_;}
-  FL_EXPORT double softclamp(double);
-  FL_EXPORT void handle_drag(double newvalue);
-  FL_EXPORT void handle_release(); // use drag() value
-  virtual FL_EXPORT void value_damage(); // cause damage() due to value() changing
+  void handle_drag(double newvalue);
+  void handle_release();
+  virtual void value_damage(); // callback whenever value changes
 
-public:
-  void bounds(double a, double b) {min=a; max=b;}
-  double minimum() const {return min;}
-  void minimum(double a) {min = a;}
-  double maximum() const {return max;}
-  void maximum(double a) {max = a;}
-  void range(double a, double b) {min = a; max = b;}
-  void step(int a) {A = a; B = 1;}
-  void step(double a, int b) {A = a; B = b;}
-  FL_EXPORT void step(double s);
-  double step() const {return A/B;}
-  FL_EXPORT void precision(int);
+private:
 
-  double value() const {return value_;}
-  FL_EXPORT int value(double);
+  double value_;
+  double previous_value_;
+  double step_;
+  double minimum_;
+  double maximum_;
 
-  virtual int format(char*);
-  FL_EXPORT double round(double); // round to nearest multiple of step
-  FL_EXPORT double clamp(double); // keep in range
-  FL_EXPORT double increment(double, int); // add n*step to value
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.6 1999/03/14 06:46:18 carl Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.7 1999/10/04 09:12:45 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.27 1999/09/27 17:43:34 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.28 1999/10/04 09:12:47 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,12 +36,6 @@
 #include <FL/Fl_Tooltip.H>
 
 Fl_Group* Fl_Group::current_;
-
-// Hack: A single child is stored in the pointer to the array, while
-// multiple children are stored in an allocated array:
-Fl_Widget*const* Fl_Group::array() const {
-  return children_ <= 1 ? (Fl_Widget**)(&array_) : array_;
-}
 
 int Fl_Group::find(const Fl_Widget* o) const {
   Fl_Widget*const* a = array();
@@ -94,8 +88,7 @@ static int navkey() {
 int Fl_Group::handle(int event) {
 
   Fl_Widget*const* a = array();
-  int i;
-  Fl_Widget* o;
+  Fl_Widget*const* e = array()+children();
 
   switch (event) {
 
@@ -105,11 +98,11 @@ int Fl_Group::handle(int event) {
       if (savedfocus_ && savedfocus_->take_focus()) return 1;
     case FL_Right:
     case FL_Down:
-      for (i = children(); i--;) if ((*a++)->take_focus()) return 1;
+      while (a < e) if ((*a++)->take_focus()) return 1;
       break;
     case FL_Left:
     case FL_Up:
-      for (i = children(); i--;) if (a[i]->take_focus()) return 1;
+      while (e > a) if ((*--e)->take_focus()) return 1;
       break;
     }
     return 0;
@@ -124,27 +117,21 @@ int Fl_Group::handle(int event) {
 
   case FL_SHORTCUT:
     Fl_Tooltip::exit(this);
-    for (i = children(); i--;) {
-      o = a[i];
-      if (o->takesevents() && Fl::event_inside(o) && send(o,FL_SHORTCUT))
-	return 1;
-    }
-    for (i = children(); i--;) {
-      o = a[i];
-      if (o->takesevents() && !Fl::event_inside(o) && send(o,FL_SHORTCUT))
-	return 1;
+    while (e > a) {
+      Fl_Widget* o = *--e;
+      if (o->takesevents() && send(o,FL_SHORTCUT)) return 1;
     }
     if (Fl::event_key() == FL_Enter) return navigation(FL_Down);
     return 0;
 
   case FL_ENTER:
   case FL_MOVE:
-    for (i = children(); i--;) {
-      o = a[i];
+    while (e > a) {
+      Fl_Widget* o = *--e;
       if (o->takesevents() && Fl::event_inside(o)) {
         if (o->contains(Fl::belowmouse())) {
-	  return send(o,FL_MOVE);
-        } else if (send(o,FL_ENTER)) {
+	  return send(o, FL_MOVE);
+        } else if (send(o, FL_ENTER)) {
 	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
 	  return 1;
         }
@@ -155,8 +142,8 @@ int Fl_Group::handle(int event) {
 
   case FL_PUSH:
     Fl_Tooltip::enter(0);
-    for (i = children(); i--;) {
-      o = a[i];
+    while (e > a) {
+      Fl_Widget* o = *--e;
       if (o->takesevents() && Fl::event_inside(o)) {
 	if (send(o,FL_PUSH)) {
 	  if (Fl::pushed() && !o->contains(Fl::pushed())) Fl::pushed(o);
@@ -168,16 +155,16 @@ int Fl_Group::handle(int event) {
 
   case FL_DEACTIVATE:
   case FL_ACTIVATE:
-    for (i = children(); i--;) {
-      o = *a++;
+    while (a < e) {
+      Fl_Widget* o = *a++;
       if (o->active()) o->handle(event);
     }
     return 1;
 
   case FL_SHOW:
   case FL_HIDE:
-    for (i = children(); i--;) {
-      o = *a++;
+    while (a < e) {
+      Fl_Widget* o = *a++;
       if (o->visible()) o->handle(event);
     }
     return 1;
@@ -187,16 +174,6 @@ int Fl_Group::handle(int event) {
 
   }
 }
-
-//void Fl_Group::focus(Fl_Widget *o) {Fl::focus(o); o->handle(FL_FOCUS);}
-
-#if 0
-const char *nameof(Fl_Widget *o) {
-  if (!o) return "NULL";
-  if (!o->label()) return "<no label>";
-  return o->label();
-}
-#endif
 
 // try to move the focus in response to a keystroke:
 int Fl_Group::navigation(int key) {
@@ -272,24 +249,24 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 }
 
 void Fl_Group::clear() {
-  Fl_Widget*const* old_array = array();
-  int old_children = children();
-  // clear everything now, in case fl_fix_focus recursively calls us:
-  children_ = 0;
-  // array_ = 0; dont do this, it will clobber old_array if only one child
-  savedfocus_ = 0;
-  resizable_ = this;
   init_sizes();
-  // okay, now it is safe to destroy the children:
-  Fl_Widget*const* a = old_array;
-  for (int i=old_children; i--;) {
-    Fl_Widget* o = *a++;
-    // This test is to detect if ~Fl_Widget was already called on the
-    // child (it set parent to zero).  This is a hack but it makes
-    // destruction of composite objects faster:
-    if (o->parent() == this) delete o;
+  if (children_) {
+    Fl_Widget*const* a = array_;
+    Fl_Widget*const* e = a+children_;
+    // clear everything now, in case fl_fix_focus recursively calls us:
+    children_ = 0;
+    savedfocus_ = 0;
+    resizable_ = this;
+    // okay, now it is safe to destroy the children:
+    while (e > a) {
+      Fl_Widget* o = *--e;
+      // This test is to detect if ~Fl_Widget was already called on the
+      // child (it set parent to zero).  This is a hack but it makes
+      // destruction of composite objects faster:
+      if (o->parent() == this) delete o;
+    }
+    free((void*)a);
   }
-  if (old_children > 1) free((void*)old_array);
 }
 
 Fl_Group::~Fl_Group() {clear();}
@@ -297,21 +274,18 @@ Fl_Group::~Fl_Group() {clear();}
 void Fl_Group::insert(Fl_Widget &o, int i) {
   if (o.parent()) o.parent()->remove(o);
   o.parent_ = this;
-  if (children_ == 0) { // use array pointer to point at single child
-    array_ = (Fl_Widget**)&o;
-  } else if (children_ == 1) { // go from 1 to 2 children
-    Fl_Widget* t = (Fl_Widget*)array_;
-    array_ = (Fl_Widget**)malloc(2*sizeof(Fl_Widget*));
-    if (i) {array_[0] = t; array_[1] = &o;}
-    else {array_[0] = &o; array_[1] = t;}
+  if (children_ == 0) {
+    // allocate for 1 child
+    array_ = (Fl_Widget**)malloc(sizeof(Fl_Widget));
+    array_[0] = &o;
   } else {
     if (!(children_ & (children_-1))) // double number of children
       array_ = (Fl_Widget**)realloc((void*)array_,
 				    2*children_*sizeof(Fl_Widget*));
-    int j; for (j = children_; j > i; j--) array_[j] = array_[j-1];
+    int j; for (j = children_; j > i; --j) array_[j] = array_[j-1];
     array_[j] = &o;
   }
-  children_++;
+  ++children_;
   init_sizes();
 }
 
@@ -328,13 +302,7 @@ void Fl_Group::remove(Fl_Widget &o) {
   if (&o == savedfocus_) savedfocus_ = 0;
   o.parent_ = 0;
   children_--;
-  if (children_ == 1) { // go from 2 to 1 child
-    Fl_Widget *t = array_[!i];
-    free((void*)array_);
-    array_ = (Fl_Widget**)t;
-  } else if (children_ > 1) { // delete from array
-    for (; i < children_; i++) array_[i] = array_[i+1];
-  }
+  for (; i < children_; ++i) array_[i] = array_[i+1];
   init_sizes();
 }
 
@@ -377,7 +345,8 @@ int* Fl_Group::sizes() {
     // next is all the children's sizes:
     p += 8;
     Fl_Widget*const* a = array();
-    for (int i=children_; i--;) {
+    Fl_Widget*const* e = a+children_;
+    while (a < e) {
       Fl_Widget* o = *a++;
       *p++ = o->x();
       *p++ = o->x()+o->w();
@@ -407,11 +376,10 @@ void Fl_Group::old_size(const Fl_Widget* o,int* r) {
   int IB = *p++;
 
   // find the widget's current size:
-  Fl_Widget*const* a=array();
-  for (int i=children_; i--;) {
-    if (o == *a++) break;
-    p+=4;
-  }
+  Fl_Widget*const* a = array();
+  Fl_Widget*const* e = a+children_;
+  while (a < e) {if (o == *a++) break; p+=4;}
+
   int X = *p++;
   if (X >= IR) X += dw;
   else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
@@ -426,7 +394,7 @@ void Fl_Group::old_size(const Fl_Widget* o,int* r) {
   if (B >= IB) B += dh;
   else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
 
-  r[0]=X;r[1]=R-X;r[2]=Y;r[3]=B-Y;
+  r[0]=X; r[1]=R-X; r[2]=Y; r[3]=B-Y;
 }
 #endif
 
@@ -439,7 +407,8 @@ void Fl_Group::layout() {
       int dx = x()-ox();
       int dy = y()-oy();
       Fl_Widget*const* a = array();
-      for (int i=children_; i--;) {
+      Fl_Widget*const* e = a+children_;
+      while (a < e) {
 	Fl_Widget* o = *a++;
 	o->resize(o->x()+dx, o->y()+dy, o->w(), o->h());
 	o->layout();
@@ -462,7 +431,8 @@ void Fl_Group::layout() {
     int IB = *p++;
 
     Fl_Widget*const* a = array();
-    for (int i=children_; i--;) {
+    Fl_Widget*const* e = a+children_;
+    while (a < e) {
       Fl_Widget* o = *a++;
 
       int X = *p++;
@@ -488,15 +458,13 @@ void Fl_Group::layout() {
 
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
+  Fl_Widget*const* e = a+children_;
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
     draw_box();
     draw_label();
-    for (int i=children_; i--;) {
-      Fl_Widget& o = **a++;
-      draw_child(o);
-    }
+    while (a < e) draw_child(**a++);
   } else {	// only redraw the children that need it:
-    for (int i=children_; i--;) update_child(**a++);
+    while (a < e) update_child(**a++);
   }
 }
 
@@ -558,5 +526,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.27 1999/09/27 17:43:34 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.28 1999/10/04 09:12:47 bill Exp $".
 //

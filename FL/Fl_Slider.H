@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.13 1999/09/19 04:58:56 vincent Exp $"
+// "$Id: Fl_Slider.H,v 1.14 1999/10/04 09:12:45 bill Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,31 +38,36 @@
 #define FL_VERT_NICE_SLIDER	4
 #define FL_HOR_NICE_SLIDER	5
 
-class Fl_Slider : public Fl_Valuator {
+FL_IMPORT class Fl_Slider : public Fl_Valuator {
+
 public:
-  FL_IMPORT static Fl_Style default_style;
+
+  static Fl_Style default_style;
   void draw();
   int handle(int);
   Fl_Slider(int x,int y,int w,int h, const char *l = 0);
   Fl_Slider(uchar t,int x,int y,int w,int h, const char *l);
 
-  int scrollvalue(int windowtop,int windowsize,int first,int totalsize);
-  void bounds(double a, double b);
-  float slider_size() const {return slider_size_;}
-  void slider_size(double v);
+  int slider_size() const {return slider_size_;}
+  void slider_size(int n) {slider_size_ = n;}
 
+#ifndef FLTK_2
   // back comptability:
   Fl_Boxtype slider() const {return FL_UP_BOX;}
   void slider(Fl_Boxtype) {}
+  void slider_size(double v) {slider_size(int(v*w()));}
+#endif
 
 protected:
-  // these allow subclasses to put the slider in a smaller area:
-  void draw(int, int, int, int);
-  int handle(int, int, int, int, int);
+
+  int slider_size(int W, int H); // return clamped slider_size()
+  int slider_position(int W, int S);
+  void draw(int, int, int, int); // draw plain slider in this box
+  int handle(int, int, int, int, int); // handle slider in this box
 
 private:
-  float slider_size_;
-  void _Fl_Slider();
+
+  int slider_size_;
   void draw_bg(int, int, int, int);
 
 };
@@ -70,5 +75,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.13 1999/09/19 04:58:56 vincent Exp $".
+// End of "$Id: Fl_Slider.H,v 1.14 1999/10/04 09:12:45 bill Exp $".
 //

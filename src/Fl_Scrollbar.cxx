@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.17 1999/09/25 22:27:08 vincent Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.18 1999/10/04 09:12:48 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,37 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
+bool Fl_Scrollbar::value(int p, int w, int t, int l) {
+//	p = position, first line displayed
+//	w = window, number of lines displayed
+//	t = top, number of first line
+//	l = length, total number of lines
+  if (p+w > t+l) l = p+w-t;
+  int b = l-w+t;
+  int W = this->w()-box()->dw();
+  int H = h()-box()->dh();
+  if (!horizontal()) {int T = W; W = H; H = T;}
+  if (W >= 3*H) W -= 2*H;
+  int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
+  if (S != slider_size() || t != minimum() || b != maximum()) {
+    slider_size(S); minimum(t); maximum(b); redraw();
+  }
+  return Fl_Slider::value(p);
+}
+
 #define INITIALREPEAT .5
 #define REPEAT .05
 
 void Fl_Scrollbar::increment_cb() {
-  handle_drag(clamp(value() + (
-	((pushed_>1) == (maximum()>=minimum())) ? linesize_ : -linesize_)));
+  int i;
+  switch (pushed_) {
+  case 1: i = -linesize_; break;
+  default:i =  linesize_; break;
+  case 3: i = -pagesize_; break;
+  case 4: i =  pagesize_; break;
+  }
+  if (maximum() < minimum()) i = -i;
+  handle_drag(clamp(value() + i));
 }
 
 void Fl_Scrollbar::timeout_cb(void* v) {
@@ -43,15 +68,19 @@ void Fl_Scrollbar::timeout_cb(void* v) {
 }
 
 int Fl_Scrollbar::handle(int event) {
-  if (!pushed_) {
-    if (horizontal()) {
-      if (w() < 3*h()) return Fl_Slider::handle(event);
-      if (Fl_Slider::handle(event, x()+h(), y(), w()-2*h(), h())) return 1;
-    } else {
-      if (h() < 3*w()) return Fl_Slider::handle(event);
-      if (Fl_Slider::handle(event, x(), y()+w(), w(), h()-2*w())) return 1;
-    }
+  // area of slider:
+  int X = x()+box()->dx();
+  int Y = y()+box()->dy();
+  int W = w()-box()->dw();
+  int H = h()-box()->dh();
+
+  // adjust slider area to be inside the arrow buttons:
+  if (horizontal()) {
+    if (W >= 3*H) {X += H; W -= 2*H;}
+  } else {
+    if (H >= 3*W) {Y += W; H -= 2*W;}
   }
+
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
@@ -66,22 +95,37 @@ int Fl_Scrollbar::handle(int event) {
     handle_release();
     return 1;
   case FL_PUSH:
+    if (pushed_) return 1;
     if (horizontal()) {
-      if (Fl::event_inside(x(), y(), h(), h())) pushed_ = 1;
-      if (Fl::event_inside(x()+w()-h(), y(), h(), h())) pushed_ = 2;
+      int mx = Fl::event_x();
+      if (mx < X) pushed_ = 1;
+      else if (mx >= X+W) pushed_ = 2;
+      else {
+	int sliderx = slider_position(W, slider_size());
+	if (mx < X+sliderx) pushed_ = 3;
+	else if (mx >= X+sliderx+slider_size()) pushed_ = 4;
+      }
     } else {
-      if (Fl::event_inside(x(), y(), w(), w())) pushed_ = 1;
-      if (Fl::event_inside(x(), y()+h()-w(), w(), w())) pushed_ = 2;
+      int my = Fl::event_y();
+      if (my < Y) pushed_ = 1;
+      else if (my >= Y+H) pushed_ = 2;
+      else {
+	int slidery = slider_position(H, slider_size());
+	if (my < Y+slidery) pushed_ = 3;
+	else if (my >= Y+slidery+slider_size()) pushed_ = 4;
+      }
     }
     if (pushed_) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
       increment_cb();
       redraw();
+      return 1;
     }
-    return 1;
+    return Fl_Slider::handle(event, X,Y,W,H);
   case FL_DRAG:
-    return pushed_;
+    if (pushed_) return 1;
+    return Fl_Slider::handle(event, X,Y,W,H);
   case FL_SHORTCUT: {
     int v = value();
     int ls = maximum()>=minimum() ? linesize_ : -linesize_;
@@ -153,15 +197,15 @@ void Fl_Scrollbar::draw() {
     if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); return;}
     Fl_Slider::draw(X+H,Y,W-2*H,H);
     if (damage()&FL_DAMAGE_ALL) {
-      glyph()(FL_GLYPH_LEFT, X, Y, H, H, c, f|((pushed_&1)?FL_VALUE:0));
-      glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, c, f|((pushed_&2)?FL_VALUE:0));
+      glyph()(FL_GLYPH_LEFT, X, Y, H, H, c, f|((pushed_==1)?FL_VALUE:0));
+      glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, c, f|((pushed_==2)?FL_VALUE:0));
     }
   } else { // vertical
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); return;}
     Fl_Slider::draw(X,Y+W,W,H-2*W);
     if (damage()&FL_DAMAGE_ALL) {
-      glyph()(FL_GLYPH_UP, X, Y, W, W, c, f|((pushed_&1)?FL_VALUE :0));
-      glyph()(FL_GLYPH_DOWN, X, Y+H-W, W, W, c, f|((pushed_&2)?FL_VALUE:0));
+      glyph()(FL_GLYPH_UP, X, Y, W, W, c, f|((pushed_==1)?FL_VALUE :0));
+      glyph()(FL_GLYPH_DOWN, X, Y+H-W, W, W, c, f|((pushed_==2)?FL_VALUE:0));
     }
   }
 }
@@ -185,10 +229,11 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 {
   style(default_style);
   linesize_ = 16;
+  pagesize_ = 100;
   pushed_ = 0;
   step(1);
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.17 1999/09/25 22:27:08 vincent Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.18 1999/10/04 09:12:48 bill Exp $".
 //
