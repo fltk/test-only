@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.12 1999/03/31 21:47:03 mike Exp $"
+// "$Id: Fl_Window.cxx,v 1.13 1999/03/31 23:03:02 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,6 @@ Fl_Window::Style::Style() : Fl_Widget::Style() {
 static void stylechange(int) {
   if (Fl::style()) Fl::load_styles(1);
 }
-static const struct sigaction sa = { 0, (void (*)(...))stylechange, 0, 0 };
 #endif
 
 void Fl_Window::loadstyle() const {
@@ -90,6 +89,9 @@ void Fl_Window::loadstyle() const {
   }
   // CET - for testing only-- will be removed
 #ifndef WIN32
+  struct sigaction sa;
+  memset(&sa, 0, sizeof(sa));
+  sa.sa_handler = stylechange;
   sigaction(SIGUSR1, &sa, 0);
 #endif
 }
@@ -164,5 +166,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.12 1999/03/31 21:47:03 mike Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.13 1999/03/31 23:03:02 carl Exp $".
 //
