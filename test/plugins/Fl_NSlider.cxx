@@ -121,41 +121,41 @@ void Fl_NSlider::calcButton(int &knob_x, int &knob_y, int &knob_w , int &knob_h,
  }
  switch(type()) {
         case FL_VERT_FILL_SLIDER:
-             knob_x = px_x;
+             knob_x = (int)px_x;
 	     knob_y = y()+box()->dy();
-	     knob_w = px_w;
-             knob_h = tk_button_incr-y();
+	     knob_w = (int)px_w;
+             knob_h = (int)(tk_button_incr-y());
 	      break;
         case FL_HOR_FILL_SLIDER	:
              knob_x = x()+box()->dx();
-	     knob_y = px_y;
-	     knob_w = tk_button_incr-x();
-             knob_h = px_h;
+	     knob_y = (int)px_y;
+	     knob_w = (int)(tk_button_incr-x());
+             knob_h = (int)px_h;
 	     break;
         case FL_VERT_HALF_SLIDER:
-             knob_x = px_x;
-	     knob_y = tk_button_incr-(pxSlider/2);
-	     knob_w = px_w/ 2;
+             knob_x = (int)px_x;
+	     knob_y = (int)(tk_button_incr-(pxSlider/2));
+	     knob_w = (int)(px_w/2);
              knob_h = pxSlider;
  	     break;
         case FL_HOR_HALF_SLIDER	:
-             knob_x = tk_button_incr-(pxSlider/2);;
-	     knob_y = px_y;
+             knob_x = (int)(tk_button_incr-(pxSlider/2));
+	     knob_y = (int)px_y;
 	     knob_w = pxSlider;
-             knob_h = px_h/2;
+             knob_h = (int)(px_h/2);
              break;
         case FL_HOR_NICE_SLIDER	:
         case FL_HOR_SLIDER:
-             knob_x = tk_button_incr-(pxSlider/2);
-	     knob_y = px_y;
+             knob_x = (int)(tk_button_incr-(pxSlider/2));
+	     knob_y = (int)px_y;
 	     knob_w = pxSlider;
-             knob_h = px_h;
+             knob_h = (int)px_h;
 	     break;
         case FL_VERT_NICE_SLIDER	:
         case FL_VERT_SLIDER:
-             knob_x = px_x;
-             knob_y = tk_button_incr-(pxSlider/2);
-	     knob_w = px_w;
+             knob_x = (int)px_x;
+             knob_y = (int)(tk_button_incr-(pxSlider/2));
+	     knob_w = (int)px_w;
              knob_h = pxSlider;
 	     break;
      }
@@ -247,7 +247,7 @@ void   Fl_NSlider::drawTicks()
 	   case FL_ALIGN_BOTTOM:
                 minorLnStart += (int) px_h - minorLnLen;
                 majorLnStart += (int) px_h - majorLnLen;
-                majorFntStart = px_y+majorLnLen-(fh/4);                     
+                majorFntStart = (int)(px_y+majorLnLen-(fh/4));
 	        break;
        }
        if( majorTick() ) {   
