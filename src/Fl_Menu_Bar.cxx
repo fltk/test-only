@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.76 2004/07/11 19:58:06 laza2000 Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.77 2004/07/15 16:19:51 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -42,10 +42,6 @@ void MenuBar::draw() {
   last_ = highlight_;
 }
 
-// This is the focused widget before user hit ALT
-// MenuBar returns focus to this after menu is hidden
-static Widget *saved_focus = 0;
-
 int MenuBar::handle(int event) {
   int children = this->children();
   if (!children) return 0;
@@ -60,13 +56,13 @@ int MenuBar::handle(int event) {
     if (highlight_ >= 0) {
       const char* c = child(highlight_)->tooltip();
       if (c) {
-        int x,y,w,h; Menu::get_location(this,0,0,highlight_,x,y,w,h);
-        Tooltip::enter(this, x,y,w,h, c);
+	int x,y,w,h; Menu::get_location(this,0,0,highlight_,x,y,w,h);
+	Tooltip::enter(this, x,y,w,h, c);
       } else {
-        // If last item had tolltip, exit from it
-        if (last_>-1 && child(last_)->tooltip()) Tooltip::exit();
-        // If MenuBar has tooltip, enter it
-        if (tooltip()) Tooltip::enter(this);        
+	// If last item had tooltip, exit from it
+	if (last_ >= 0 && child(last_)->tooltip()) Tooltip::exit();
+	// If MenuBar has tooltip, enter it
+	if (tooltip()) Tooltip::enter(this);        
       }
     } else {
       Tooltip::exit();
@@ -75,7 +71,6 @@ int MenuBar::handle(int event) {
     if (highlight_ == last_) return 1;
     redraw(DAMAGE_CHILD);
     return 1;
-  
   case PUSH:
     if (highlight_ < 0) return 0;
     value(-1);
@@ -83,7 +78,6 @@ int MenuBar::handle(int event) {
     highlight_ = -1; redraw(DAMAGE_CHILD);
     popup(0, 0, w(), h(), 0, true);
     return 1;
-
   case SHORTCUT:
     // Test against the shortcut() of any item in any submenu:
     if (handle_shortcut()) return 1;
@@ -91,17 +85,16 @@ int MenuBar::handle(int event) {
     if (event_state(ALT|META)) for (i = 0; i < children; i++) {
       Widget* w = child(i);
       if (w->active() && w->test_label_shortcut()) {
-        if (w->is_group()) {value(i); goto J1;} // menu title
-        execute(w); // button in the menu bar
+	if (w->is_group()) {value(i); goto J1;} // menu title
+  	execute(w); // button in the menu bar
 //  	if (checkmark(w)) redraw();
-        return 1;
+  	return 1;
       }
     }
     if (style()->hide_shortcut() &&
-        !event_clicks() &&
-        (event_key() == LeftAltKey || event_key() == RightAltKey)) redraw();
-      return 0;
-		
+	!event_clicks() &&
+	(event_key() == LeftAltKey || event_key() == RightAltKey)) redraw();
+    return 0;
   case KEYUP:
     // In the future maybe any shortcut() will work, but for now
     // only the Alt key does. Setting the shortcut to zero will disable
@@ -115,49 +108,10 @@ int MenuBar::handle(int event) {
     // for a long time, too:
     if (!event_is_click()) break;
     // okay we got the shortcut, find first menu and pop it up:
-    //for (i = 0; i < children; i++) {
-    //  Widget* w = child(i);
-    //  if (w->active()) {value(i); goto J1;}
-    //}
-
-    if (focused() && saved_focus) {
-      saved_focus->take_focus();
-      saved_focus = 0;
-    } else if (!focused()) {
-      saved_focus = fltk::focus();
-      take_focus();				
+    for (i = 0; i < children; i++) {
+      Widget* w = child(i);
+      if (w->active()) {value(i); goto J1;}
     }
-    fltk::event_is_click(0);
-    return 1;		
-    //break;
-		
-  // Need keyboard focus
-  case FOCUS: return 1;
-
-  case KEY:
-    if (focused()) {
-      // Popup first menu, if some navigation key pressed
-      if (event_key()==RightKey || event_key()==LeftKey ||
-          event_key()==UpKey || event_key()==DownKey) 
-      {
-        // okay we got the shortcut, find first menu and pop it up:
-        for (i = 0; i < children; i++) {
-          Widget* w = child(i);
-          if (w->active()) {
-            value(i); 
-            highlight_ = -1; 
-            redraw(DAMAGE_CHILD);
-            if(!popup(0, 0, this->w(), this->h(), 0, true)) {
-              // Return focus, if we didn't execute anything
-              if (saved_focus) saved_focus->take_focus();								
-	    }
-            return 0;
-	  }
-	}
-      }
-      return 1;
-    }
-    break;
   }
   return 0;
 }
@@ -190,5 +144,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.76 2004/07/11 19:58:06 laza2000 Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.77 2004/07/15 16:19:51 spitzak Exp $".
 //
