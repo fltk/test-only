@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.26 1999/11/02 20:55:32 carl Exp $"
+// "$Id: Fl.H,v 1.27 1999/11/05 00:35:44 vincent Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -198,9 +198,10 @@ public:
 
   // Mutltithreading support
 #if 1 // Bill Spitzak's simpler version in Fl_lock.cxx
+  static void* thread_message;
   static void lock();
   static void unlock();
-  static void awake();
+  static void awake(void* message = 0);
 #else
   static int thread_filedes[2];
   static void* thread_message;
@@ -265,5 +266,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.26 1999/11/02 20:55:32 carl Exp $".
+// End of "$Id: Fl.H,v 1.27 1999/11/05 00:35:44 vincent Exp $".
 //

@@ -101,9 +101,6 @@ int fltk_theme(int, char** argv) {
     s->set_selection_text_color(FL_BLACK);
     s->set_box(flat2);
   }
-  if ((s = Fl_Style::find("box"))) {
-    s->set_box(flat1);
-  }
   if ((s = Fl_Style::find("highlight button"))) {
     s->set_box(flat1);
   }

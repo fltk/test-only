@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.29 1999/11/04 20:44:17 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.30 1999/11/05 00:35:48 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -405,18 +405,6 @@ void Fl_Widget::draw_n_clip()
   fl_clip_out(x(), y(), w(), h());
 }
 
-////////////////////////////////////////////////////////////////
-// Some widgets have imbedded text fields (such as Fl_Value_Slider).
-// This is to be discouraged because composite widgets (widgets with
-// child widgets) is a better design.  But for back compatability
-// they cross reference the Fl_Input/Fl_Output widget styles.  This
-// caused problems if Fl_Input/Fl_Output were not intantiated, so I fix
-// this by declaring their styles here, already set up as though the
-// inheritance tree was built:
-
-/*#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>*/
-
 Fl_Style Fl_Widget::default_style = {
   FL_NORMAL_BOX,// box
   FL_NORMAL_BOX,// glyph_box - for light buttons & sliders
@@ -441,5 +429,5 @@ Fl_Style_Definer* Fl_Style_Definer::first = 0;
 static Fl_Style_Definer x("default", Fl_Widget::default_style);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.29 1999/11/04 20:44:17 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.30 1999/11/05 00:35:48 vincent Exp $".
 //

@@ -2,5 +2,5 @@
 #default scheme = Demo
 
 # What theme file should we use?
-# default theme = Demo
-# default theme = essai
+#default theme = Demo
+#default theme = essai

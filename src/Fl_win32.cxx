@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.57 1999/11/02 20:55:40 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.58 1999/11/05 00:35:49 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -153,11 +153,8 @@ double fl_wait(int timeout_flag, double time) {
   int have_message = 0;
   int timerid;
 
-// Bill removed this stuff?
-#if 0
   // clear the thread message
   Fl::thread_message = 0;
-#endif
   fl_unlock_function();
 
   if (nfds) {
@@ -217,12 +214,9 @@ double fl_wait(int timeout_flag, double time) {
 
   // execute it, them execute any other messages that become ready during it:
   while (have_message) {
-// Bill removed this stuff?
-#if 0
     if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
       Fl::thread_message = (void*)fl_msg.wParam;
     else
-#endif
       DispatchMessage(&fl_msg);
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
   }
@@ -860,5 +854,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.57 1999/11/02 20:55:40 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.58 1999/11/05 00:35:49 vincent Exp $".
 //

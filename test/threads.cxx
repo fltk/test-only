@@ -1,6 +1,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Browser.H>
+#include <FL/Fl_Threads.H>
 #include <stdio.h>
 
 Fl_Thread prime_thread;
@@ -21,7 +22,7 @@ void* prime_func(void* p)
       Fl::lock();
       browser->add(s);
       Fl::unlock();
-      Fl::awake();	// Cause the browser to redraw ...
+      Fl::awake((void*) (browser == browser1? p:0));	// Cause the browser to redraw ...
     }
   }
   return 0;
@@ -42,18 +43,19 @@ int main()
   browser2->add("Prime numbers :");
 
   // One thread displaying in one browser
-  Fl::create_thread(prime_thread, prime_func, browser1);
+  fl_create_thread(prime_thread, prime_func, browser1);
   // Several threads displaying in another browser
-  Fl::create_thread(prime_thread, prime_func, browser2);
-  Fl::create_thread(prime_thread, prime_func, browser2);
-  Fl::create_thread(prime_thread, prime_func, browser2);
-  Fl::create_thread(prime_thread, prime_func, browser2);
-  Fl::create_thread(prime_thread, prime_func, browser2);
-  Fl::create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
 
-  printf("%d\n", Fl::set_thread_priority(prime_thread, 1));
-
-  Fl::run();
+  //  Fl::run();
+  while (Fl::wait()) {
+    if (Fl::thread_message) printf("Recieved message : %d\n", int(Fl::thread_message));
+  }
 
   return 0;
 }

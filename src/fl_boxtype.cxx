@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.14 1999/11/01 02:21:37 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.15 1999/11/05 00:35:49 vincent Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -158,7 +158,7 @@ static void bf_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color(c); fl_rect(x, y, w, h);
 }
 const Fl_Boxtype_ fl_border_frame = {
-  bf_draw, 0, &fl_border_frame, &fl_border_frame, 1,1,2,2,true
+  bf_draw, 0, &fl_border_frame, &fl_border_frame, 1,1,2,2,false
 };
 static Fl_Boxtype_Definer borderframe("border frame", fl_border_frame);
 
@@ -207,5 +207,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.14 1999/11/01 02:21:37 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.15 1999/11/05 00:35:49 vincent Exp $".
 //

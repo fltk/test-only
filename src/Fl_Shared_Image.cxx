@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.11 1999/11/01 02:21:35 carl Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.12 1999/11/05 00:35:47 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -150,8 +150,7 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
     image->l1 = image->l2 = 0;
     image->id=image->mask=0;
     Fl_Shared_Image::insert(first_image, image);
-  }
-  else {
+  } else {
     if(image->datas==NULL) image->datas=datas;
     image->refcount++;
   }
@@ -233,5 +232,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.11 1999/11/01 02:21:35 carl Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.12 1999/11/05 00:35:47 vincent Exp $"
 //
