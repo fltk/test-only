@@ -12,7 +12,4 @@ extern Fl_Group *display_group;
 extern Fl_Box *copyright_box;
 #include <FL/Fl_Return_Button.H>
 Fl_Window* make_about_panel(const char *copyright);
-extern Fl_Window *about_panel;
-extern Fl_Group *display_group;
-extern Fl_Box *copyright_box;
 #endif

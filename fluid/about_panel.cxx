@@ -26,11 +26,20 @@ Fl_Window* make_about_panel(const char *copyright) {
     o->selection_color((Fl_Color)47);
     w->hotspot(o);
     { Fl_Group* o = display_group = new Fl_Group(10, 10, 289, 240);
-      { Fl_Box* o = new Fl_Box(55, 30, 60, 150);
+      { Fl_Group* o = new Fl_Group(55, 30, 60, 150);
         o->box(FL_UP_BOX);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
+        { Fl_Box* o = new Fl_Box(85, 120, 15, 15, "` ");
+          o->box(FL_OVAL_BOX);
+          o->color((Fl_Color)6);
+          o->label_color((Fl_Color)7);
+          o->selection_color((Fl_Color)47);
+          o->label_size(20);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+        }
+        o->end();
       }
       { Fl_Box* o = new Fl_Box(50, 10, 90, 40);
         o->box(FL_FLAT_BOX);
@@ -49,61 +58,56 @@ Fl_Window* make_about_panel(const char *copyright) {
         o->selection_color((Fl_Color)47);
         o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
       }
-      { Fl_Box* o = new Fl_Box(10, 135, 150, 105, "fluid");
+      { Fl_Group* o = new Fl_Group(10, 135, 150, 105, "fluid");
         o->box(FL_ROUND_UP_BOX);
-        o->labelfont(1);
+        o->labelfont(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)6);
         o->selection_color((Fl_Color)47);
         o->label_size(40);
+        o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+        { Fl_Box* o = new Fl_Box(79, 155, 15, 15, "` ");
+          o->box(FL_OVAL_BOX);
+          o->color((Fl_Color)6);
+          o->label_color((Fl_Color)7);
+          o->selection_color((Fl_Color)47);
+          o->label_size(20);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+        }
+        { Fl_Box* o = new Fl_Box(70, 140, 15, 15, "` ");
+          o->box(FL_OVAL_BOX);
+          o->color((Fl_Color)6);
+          o->label_color((Fl_Color)7);
+          o->selection_color((Fl_Color)47);
+          o->label_size(20);
+          o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
+        }
+        o->end();
       }
-      { Fl_Box* o = new Fl_Box(55, 135, 60, 10);
+      { Fl_Box* o = new Fl_Box(57, 135, 56, 4);
         o->box(FL_FLAT_BOX);
         o->color((Fl_Color)14);
         o->selection_color((Fl_Color)47);
       }
-      { Fl_Box* o = new Fl_Box(79, 155, 15, 15, "` ");
-        o->box(FL_OVAL_BOX);
-        o->color((Fl_Color)6);
-        o->label_color((Fl_Color)7);
-        o->selection_color((Fl_Color)47);
-        o->label_size(20);
-        o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
-      }
-      { Fl_Box* o = new Fl_Box(70, 140, 15, 15, "` ");
-        o->box(FL_OVAL_BOX);
-        o->color((Fl_Color)6);
-        o->label_color((Fl_Color)7);
-        o->selection_color((Fl_Color)47);
-        o->label_size(20);
-        o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
-      }
-      { Fl_Box* o = new Fl_Box(84, 120, 15, 15, "` ");
-        o->box(FL_OVAL_BOX);
-        o->color((Fl_Color)6);
-        o->label_color((Fl_Color)7);
-        o->selection_color((Fl_Color)47);
-        o->label_size(20);
-        o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
-      }
-      { Fl_Box* o = new Fl_Box(145, 23, 149, 122);
+      { Fl_Group* o = new Fl_Group(145, 23, 149, 122);
         o->box(FL_OFLAT_BOX);
-        o->labelfont(1);
+        o->labelfont(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)7);
         o->selection_color((Fl_Color)47);
         o->label_size(18);
-      }
-      { Fl_Box* o = new Fl_Box(150, 28, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
-        o->box(FL_OVAL_BOX);
-        o->labelfont(1);
-        o->label_type(FL_SHADOW_LABEL);
-        o->color((Fl_Color)12);
-        o->label_color((Fl_Color)7);
-        o->selection_color((Fl_Color)47);
-        o->label_size(18);
+        { Fl_Box* o = new Fl_Box(150, 27, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
+          o->box(FL_OVAL_BOX);
+          o->labelfont(fl_fonts+1);
+          o->label_type(FL_SHADOW_LABEL);
+          o->color((Fl_Color)12);
+          o->label_color((Fl_Color)7);
+          o->selection_color((Fl_Color)47);
+          o->label_size(18);
+        }
+        o->end();
       }
       { Fl_Button* o = new Fl_Button(175, 164, 95, 41, "\251""1998-1999\nClick here for more information");
         o->box(FL_BORDER_FRAME);
