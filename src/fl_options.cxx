@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.45 2000/03/03 21:21:44 carl Exp $"
+// "$Id: fl_options.cxx,v 1.46 2000/03/08 04:12:19 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -102,7 +102,10 @@ void fl_startup() {
   static int started = 0;
   if (started) return;
   started = 1;
-  if (!flconfig) flconfig = strdup(fl_find_config_file("flconfig"));
+  if (!flconfig) {
+    const char* p = fl_find_config_file("flconfig");
+    flconfig = p ? strdup(p) : ".flconfig";
+  }
 
   if (!Fl::scheme_) Fl::scheme_ = flconfig;
 
@@ -510,7 +513,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.45 2000/03/03 21:21:44 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.46 2000/03/08 04:12:19 carl Exp $".
 //
 
 
