@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Bitmap.h,v 1.2 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,14 +34,13 @@ public:
   Fl_Bitmap(const uchar *bits, int W, int H) : array(bits) {w = W; h = H;}
   Fl_Bitmap(const char *bits, int W, int H) :
     array((const uchar *)bits) {w = W; h = H;}
-
-  void draw(int, int, int, int, int cx, int cy);
-
-  void draw(int X, int Y) {draw(X,Y,w,h,0,0);}
+  void draw(int, int, Fl_Flags = 0);
+  int width() const {return w;}
+  int height() const {return h;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Bitmap.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.h,v 1.2 2001/08/05 21:12:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.2 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,8 +91,8 @@ public:
   void	copy_label(const char* a);
 
   Fl_Image* image() const	{return image_;}
-  void	image(Fl_Image* a);
-  void	image(Fl_Image& a);
+  void	image(Fl_Image* a)	{image_ = a;}
+  void	image(Fl_Image& a)	{image_ = &a;}
 
   const char *tooltip() const	{return tooltip_; }
   void	tooltip(const char *t);
@@ -166,9 +166,7 @@ public:
   void	make_current() const	;
 
   Fl_Flags draw_box() const	;
-  Fl_Flags draw_button() const	;
   Fl_Flags draw_button(Fl_Flags) const;
-
   Fl_Flags draw_text_frame() const ;
   Fl_Flags draw_text_frame(int,int,int,int) const ;
   Fl_Flags draw_text_box() const ;
@@ -179,7 +177,6 @@ public:
 
   void  draw_label(int x,int y,int w,int h, Fl_Flags f) const ;
   void  draw_inside_label(int x,int y,int w,int h, Fl_Flags f) const ;
-  void  draw_inside_label(int x,int y,int w,int h) const ;
   void	draw_inside_label() const;
 
   void	measure_label(int&, int&) const ;
@@ -308,5 +305,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.2 2001/08/05 21:12:15 spitzak Exp $".
 //

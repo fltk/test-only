@@ -32,12 +32,10 @@
 	@w:resize:resize
 
 @main:Drawing\nTests:@d
-	@d:Fl_Bitmap:bitmap
-	@d:Fl_Pixmap:pixmap
-	@d:Fl_Image:image
+	@d:text labels:label
+	@d:Fl_Image\nlabels:image
 	@d:pixmap\nbrowser:pixmap_browser
 	@d:cursor:cursor
-	@d:labels:label
 	@d:fl_arc:arc
 	@d:fl_curve:curve
 	@d:fl_line_style:line_style

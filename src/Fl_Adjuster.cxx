@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.34 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.35 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -51,7 +51,7 @@ static void glyph(const Fl_Widget* widget, int t,
   widget->box()->draw(x,y,w,h,widget->get_box_color(f),f);
   fl_color(widget->get_glyph_color(f));
   Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
-  b->draw(x,y,w,h, (b->w-w)/2, (b->h-h)/2);
+  b->draw(x+(w-b->width())/2, y+(h-b->height())/2);
 }
 
 // changing the value does not change the appearance:
@@ -187,5 +187,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.34 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.35 2001/08/05 21:12:15 spitzak Exp $".
 //

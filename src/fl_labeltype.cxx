@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.24 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.25 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -34,13 +34,6 @@
 #include <string.h>
 #include <config.h>
 
-// Don't link in image code!
-static void nothing(Fl_Image *, int, int, int, int, int, int) {}
-static void nothing2(Fl_Image *, int &, int &) {}
-FL_API void (*fl_image_draw)(Fl_Image *, int, int, int, int, int, int) = nothing;
-FL_API void (*fl_image_draw_tiled)(Fl_Image *, int, int, int, int, int, int) = nothing;
-FL_API void (*fl_image_measure)(Fl_Image *, int &, int &) = nothing2;
-
 void Fl_No_Label::draw(const char*, int, int, int, int, Fl_Color, Fl_Flags)
 const {}
 Fl_No_Label fl_no_label("none");
@@ -49,7 +42,6 @@ void Fl_Labeltype_::draw(const char* label,
 			 int X, int Y, int W, int H,
 			 Fl_Color c, Fl_Flags f) const
 {
-  if (f & FL_ALIGN_CLIP) fl_push_clip(X, Y, W, H);
   if (f&FL_INACTIVE) {
     if (!(f&FL_SELECTED)) {
       fl_color(FL_LIGHT2);
@@ -58,14 +50,13 @@ void Fl_Labeltype_::draw(const char* label,
   }
   fl_color(c);
   fl_draw(label, X, Y, W, H, f);
-  if (f & FL_ALIGN_CLIP) fl_pop_clip();
 }
 Fl_Labeltype_ fl_normal_label("normal");
 
 ////////////////////////////////////////////////////////////////
 
-// The normal call for a draw() method, this draws inside labels but
-// skips outside labels:
+// The normal call for a draw() method. Draws the label inside the
+// widget's box, if the align is set to draw an inside label.
 void Fl_Widget::draw_inside_label() const {
   if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) {
     int X=0; int Y=0; int W=w_; int H=h_; box()->inset(X,Y,W,H);
@@ -74,18 +65,8 @@ void Fl_Widget::draw_inside_label() const {
   }
 }
 
-// Widgets can select to draw their inside labels anywhere, this also
-// does not draw outside labels:
-void Fl_Widget::draw_inside_label(int X, int Y, int W, int H) const
-{
-  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) {
-    if (W > 11 && flags()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
-    draw_label(X, Y, W, H, flags());
-  }
-}
-
-// This version allows the return value of draw_button() to change how
-// the label draws without moving it around:
+// Draws only inside labels, but allows the caller to specify the box.
+// Also allows the caller to turn on some extra flags.
 void Fl_Widget::draw_inside_label(int X, int Y, int W, int H, Fl_Flags f) const
 {
   if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) {
@@ -102,9 +83,11 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
   if (!active_r()) flags |= FL_INACTIVE;
   Fl_Color color = get_label_color(flags);
 
+  if (flags & FL_ALIGN_CLIP) fl_push_clip(X, Y, W, H);
+
   if (image_) {
 
-    int w, h; fl_image_measure(image_, w, h);
+    int w, h; image_->measure(w, h);
 
     // If all the flags are off, draw the image and label centered "nicely"
     // by measuring their total size and centering that rectangle:
@@ -140,9 +123,9 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 
     fl_color((flags&FL_INACTIVE) ? fl_inactive(color) : color);
     if (flags & FL_ALIGN_TILED)
-      fl_image_draw_tiled(image_, X, Y, W, H, cx, cy);
+      image_->draw_tiled(X, Y, W, H, cx, cy);
     else
-      fl_image_draw(image_, X, Y, W, H, cx, cy);
+      image_->draw(X-cx, Y-cy, flags);
 
     // figure out the rectangle that remains for text:
     if (flags & FL_ALIGN_LEFT) {X += w; W -= w;}
@@ -155,6 +138,8 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
   if (label_ && *label_) {
     label_type()->draw(label_, X, Y, W, H, color, flags);
   }
+
+  if (flags & FL_ALIGN_CLIP) fl_pop_clip();
 }
 
 void Fl_Widget::measure_label(int& w, int& h) const {
@@ -172,5 +157,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.24 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.25 2001/08/05 21:12:15 spitzak Exp $".
 //

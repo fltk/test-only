@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.52 2001/07/23 09:50:05 spitzak Exp $"
+# "$Id: Makefile,v 1.53 2001/08/05 21:12:15 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,23 +25,23 @@
 
 CPPFILES =\
 	CubeMain.cxx CubeView.cxx \
-	adjuster.cxx arc.cxx ask.cxx bitmap.cxx boxtype.cxx browser.cxx button.cxx \
+	adjuster.cxx arc.cxx ask.cxx boxtype.cxx browser.cxx button.cxx \
 	buttons.cxx checkers.cxx clock.cxx color_chooser.cxx \
 	cube.cxx cursor.cxx curve.cxx demo.cxx doublebuffer.cxx editor.cxx \
 	file_chooser.cxx fonts.cxx fullscreen.cxx glpuzzle.cxx \
 	gl_overlay.cxx hello.cxx iconize.cxx image.cxx input.cxx \
 	keyboard.cxx label.cxx list_visuals.cxx mandelbrot.cxx menu.cxx \
-	message.cxx navigation.cxx output.cxx overlay.cxx pixmap.cxx \
+	message.cxx navigation.cxx output.cxx overlay.cxx \
 	pixmap_browser.cxx radio.cxx resizable.cxx scroll.cxx shape.cxx \
 	subwindow.cxx symbols.cxx tabs.cxx tile.cxx fast_slow.cxx \
 	resize.cxx pack.cxx inactive.cxx sizes.cxx image_file.cxx progress.cxx \
 	layout.cxx threads.cxx menubar.cxx line_style.cxx valuators.cxx
 
-ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
+ALL =	CubeView adjuster arc ask boxtype browser button buttons checkers \
 	clock color_chooser cube cursor curve demo doublebuffer \
 	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
 	hello iconize image input keyboard label list_visuals \
-	mandelbrot menu message navigation output overlay pixmap \
+	mandelbrot menu message navigation output overlay \
 	pixmap_browser radio resizable scroll shape subwindow \
 	symbols tabs tile fast_slow resize pack inactive sizes progress \
 	image_file layout threads menubar line_style valuators
@@ -122,5 +122,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.52 2001/07/23 09:50:05 spitzak Exp $".
+# End of "$Id: Makefile,v 1.53 2001/08/05 21:12:15 spitzak Exp $".
 #

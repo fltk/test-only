@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.57 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.58 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ extern bool fl_hide_shortcut;
 void Fl_Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
 #if MOTIF_STYLE
-  draw_button();
+  draw_button(flags());
   box()->inset(X,Y,W,H);
   int w1 = H*4/5;
 #else
@@ -211,5 +211,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.57 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.58 2001/08/05 21:12:15 spitzak Exp $".
 //

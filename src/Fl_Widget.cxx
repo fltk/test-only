@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.74 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.75 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -348,15 +348,11 @@ Fl_Flags Fl_Widget::draw_box() const {
   return f;
 }
 
-// Draw the box and label as for an Fl_Button, return flags to pass to
-// draw_label:
-Fl_Flags Fl_Widget::draw_button() const {
-  return draw_button(flags());
-}
-
 extern void fl_dotted_box(int,int,int,int);
 
-// This version is used to override the setting of FL_VALUE:
+// Draw the widget as though it was a button and the flags were set to
+// the given flags. The return value is the setting of flags that should
+// be passed to draw_label() or draw_inside_label().
 Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
   // only use the pushed-in color if the user has explicitly set it
   // on this widget:
@@ -364,7 +360,7 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
     flags |= FL_SELECTED;
   if (!active_r())
     flags |= FL_INACTIVE;
-  else if (belowmouse() && !(flags&FL_SELECTED)) // don't highlight selected buttons
+  else if (belowmouse() && !(flags&FL_SELECTED))
     flags |= FL_HIGHLIGHT;
   Fl_Boxtype box = this->box();
   box->draw(0, 0, w(), h(), get_box_color(flags), flags);
@@ -484,5 +480,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.74 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.75 2001/08/05 21:12:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.20 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.21 2001/08/05 21:12:15 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,33 +29,11 @@
 #include <fltk/Fl_Image.h>
 #include <fltk/Fl_Widget.h>
 
-extern FL_API void (*fl_image_draw)(Fl_Image *, int, int, int, int, int, int);
-extern FL_API void (*fl_image_draw_tiled)(Fl_Image *, int, int, int, int, int, int);
-extern FL_API void (*fl_image_measure)(Fl_Image *, int &, int &);
-
-static void i_draw(Fl_Image *i, int x, int y, int w, int h, int cx, int cy) {
-  i->draw(x, y, w, h, cx, cy);
-}
-
-static void i_draw_tiled(Fl_Image *i, int x, int y, int w, int h, int cx, int cy) {
-  i->draw_tiled(x, y, w, h, cx, cy);
-}
-
-static void i_measure(Fl_Image *i, int &w, int &h) {
-  i->measure(w, h);
-}
-
-void Fl_Widget::image(Fl_Image *i) {
-  static int do_once = 0;
-  if (!do_once) {
-    fl_image_draw = i_draw;
-    fl_image_draw_tiled = i_draw_tiled;
-    fl_image_measure = i_measure;
-  }
-  image_ = i;
-}
-
-void Fl_Widget::image(Fl_Image &i) { image(&i); }
+// WAS: I took out the indirection pointers as that will not work, because
+// it bypasses the virtual draw function on Fl_Image. We either need to
+// make the _draw() function able to print a pixmap+bitmap onto another
+// device, or we need each Fl_Image subclass to be able to print onto
+// a device.
 
 // tiled image with minimal redraw
 void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
@@ -65,6 +43,7 @@ void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
   int X,Y,W,H; fl_clip_box(x, y, pw, ph, X, Y, W, H);
   if (W <= 0 || H <= 0) return;
   cx += X-x; cy += Y-y;
+  fl_push_clip(X, Y, W, H);
 
   int temp = -cx % w;
   cx = (temp>0 ? w : 0) - temp;
@@ -74,29 +53,33 @@ void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
   int ccx=cx;
   while (-cy < H) {
     while (-cx < W) {
-      draw(X, Y, W, H, cx, cy);
+      draw(X-cx, Y-cy, 0);
       cx -= w;
     }
     cy -= h;
     cx = ccx;
   }
+  fl_pop_clip();
 }
-
-// Most subclasses have draw() create the "mask" and "id" and then
-// call this method:
 
 void fl_restore_clip(); // in fl_rect.C
 
-void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
+// Most subclasses have draw() create the "mask" and "id" the first time
+// they are called and then call this method to quickly get them onto the
+// screen:
+
+void Fl_Image::_draw(int XP, int YP, Fl_Flags)
 {
-  // cut the destination rectangle down to current clip region:
-  int X,Y,W,H; fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
-  cx += X-XP; cy += Y-YP;
+  // Calculate X,Y,W,H which is the box we are going to fill, and
+  // calculate cx, cy which is the coordinate in the image of X,Y:
+  int X,Y,W,H; fl_clip_box(XP,YP,w,h,X,Y,W,H);
+  int cx = X-XP;
+  int cy = Y-YP;
   // clip the box down to the size of image, quit if empty:
-  if (cx < 0) {W += cx; X -= cx; cx = 0;}
+  //if (cx < 0) {W += cx; X -= cx; cx = 0;}
   if (cx+W > w) W = w-cx;
   if (W <= 0) return;
-  if (cy < 0) {H += cy; Y -= cy; cy = 0;}
+  //if (cy < 0) {H += cy; Y -= cy; cy = 0;}
   if (cy+H > h) H = h-cy;
   if (H <= 0) return;
   // convert to Xlib coordinates:
@@ -167,16 +150,9 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
   } // else { no mask or id, probably an error... }
 }
 
-// give the measure of the image
+// The default version of measure returns constants from the structure
+// that should have been set by a subclasses' constructor:
 void Fl_Image::measure(int& W, int& H) { W=w; H=h; }
-
-// old code from Fl_Image that created the pixmap with fl_draw_image:
-//   if (!id) {
-//     id = (ulong)fl_create_offscreen(w, h);
-//     fl_begin_offscreen(id);
-//     fl_draw_image(array, 0, 0, w, h, d, ld);
-//     fl_end_offscreen();
-//   }
 
 Fl_Image::~Fl_Image() {
   if (mask) fl_delete_bitmap(mask);
@@ -193,5 +169,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.20 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.21 2001/08/05 21:12:15 spitzak Exp $".
 //

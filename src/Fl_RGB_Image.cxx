@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.4 2001/08/05 21:12:15 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 
-void Fl_RGB_Image::draw(int X, int Y, int W, int H, int cx, int cy)
+void Fl_RGB_Image::draw(int x, int y, Fl_Flags flags)
 {
   if (!id) {
     id = fl_create_offscreen(w, h);
@@ -38,9 +38,9 @@ void Fl_RGB_Image::draw(int X, int Y, int W, int H, int cx, int cy)
     fl_draw_image(data, 0, 0, w, h, depth);
     fl_end_offscreen();
   }
-  _draw(X, Y, W, H, cx, cy);
+  _draw(x, y, flags);
 }
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.4 2001/08/05 21:12:15 spitzak Exp $".
 //
