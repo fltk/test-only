@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.2 1999/10/24 14:30:41 mike Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -282,7 +282,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     //
 
     num_files = 0;
-    icon      = Fl_FileIcon::find("any", Fl_FileIcon::DEVICE);
+    icon      = Fl_FileIcon::find("any", Fl_FileIcon::DIRECTORY);
 
 #if defined(WIN32) || defined(__EMX__)
     DWORD	drives;		// Drive available bits
@@ -401,5 +401,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.2 1999/10/24 14:30:41 mike Exp $".
 //

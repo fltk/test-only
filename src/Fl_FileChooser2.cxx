@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.2 1999/10/24 14:30:41 mike Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -382,12 +382,16 @@ Fl_FileChooser::rescan()
 void
 Fl_FileChooser::fileListCB()
 {
-  char	*filename,		// New filename
+  char	filename[1024],		// New filename
 	pathname[1024];		// Full pathname to file
 
 
-  filename = (char *)fileList->text(fileList->value());
-  if (directory_[0] != '\0')
+  strncpy(filename, fileList->text(fileList->value()), sizeof(filename) - 1);
+  filename[sizeof(filename) - 1] = '\0';
+
+  if (strcmp(directory_, "/") == 0)
+    sprintf(pathname, "/%s", filename);
+  else if (directory_[0] != '\0')
     sprintf(pathname, "%s/%s", directory_, filename);
   else
     strcpy(pathname, filename);
@@ -608,5 +612,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.2 1999/10/24 14:30:41 mike Exp $".
 //

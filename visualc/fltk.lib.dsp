@@ -497,6 +497,10 @@ SOURCE=..\FL\Fl_Input_.H
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Input_Style.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\Fl\Fl_Int_Input.H
 # End Source File
 # Begin Source File

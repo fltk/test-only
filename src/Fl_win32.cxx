@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.50 1999/10/11 01:00:29 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.51 1999/10/24 14:30:42 mike Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -172,14 +172,13 @@ double fl_wait(int timeout_flag, double time) {
       if (!have_message) {
 	// If not then set a 1ms timer...
 	timerid = SetTimer(NULL, 0, 1, NULL);
-	GetMessage(&fl_msg, NULL, 0, 0);
+	have_message = GetMessage(&fl_msg, NULL, 0, 0) >= 0;
 	KillTimer(NULL, timerid);
       }
     } else {
       // Wait for a message...
-      GetMessage(&fl_msg, NULL, 0, 0);
+      have_message = GetMessage(&fl_msg, NULL, 0, 0) >= 0;
     }
-    have_message = 1;
   } else {
     // Perform the requested timeout...
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
@@ -187,9 +186,8 @@ double fl_wait(int timeout_flag, double time) {
       int t = (int)(time * 1000.0);
       if (t <= 0) t = 1;
       timerid = SetTimer(NULL, 0, t, NULL);
-      GetMessage(&fl_msg, NULL, 0, 0);
+      have_message = GetMessage(&fl_msg, NULL, 0, 0) >= 0;
       KillTimer(NULL, timerid);
-      have_message = 1;
     }
   }
 
@@ -814,5 +812,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.50 1999/10/11 01:00:29 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.51 1999/10/24 14:30:42 mike Exp $".
 //
