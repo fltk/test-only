@@ -1,4 +1,4 @@
-/* "$Id: string.h.in,v 1.8 2004/12/14 11:01:59 spitzak Exp $"
+/* "$Id$"
  *
  * Copyright 1998-2004 by Bill Spitzak and others.
  *
@@ -35,7 +35,6 @@
 #undef HAVE_VSNPRINTF
 #undef HAVE_SNPRINTF
 #undef HAVE_STRCASECMP
-#undef HAVE_STRDUP
 #undef HAVE_STRLCAT
 #undef HAVE_STRLCPY
 #undef HAVE_STRNCASECMP
@@ -95,16 +94,14 @@
 extern "C" {
 #endif
 
+FL_API extern const char* newstring(const char *);
+
 #if defined(DOXYGEN) || !defined(HAVE_STRCASECMP)
 FL_API extern int strcasecmp(const char *, const char *);
 #endif
 
 #if defined(DOXYGEN) || !defined(HAVE_STRNCASECMP)
 FL_API extern int strncasecmp(const char *, const char *, size_t);
-#endif
-
-#if defined(DOXYGEN) || !defined(HAVE_STRDUP)
-FL_API extern char *strdup(const char *);
 #endif
 
 #if defined(DOXYGEN) || !defined(HAVE_SNPRINTF)
@@ -132,5 +129,5 @@ FL_API extern size_t strlcpy(char *, const char *, size_t);
 #endif
 
 /*
- * End of "$Id: string.h.in,v 1.8 2004/12/14 11:01:59 spitzak Exp $".
+ * End of "$Id$".
  */

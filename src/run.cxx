@@ -133,6 +133,24 @@ static void fix_focus() {
 
 // This function is here because Window::label() uses it:
 /**
+  Equivalent to strdup() except the C++ new[] operator is used. A
+  block of memory sizeof(from)+1 is allocated and the \a from
+  string is copied to it. Notice that you must use delete[] to
+  destroy the returned value.
+
+  It is a good idea to use this instead of strdup() if you want a
+  replacement new-handler to work. FLTK uses this for all strings
+  that it copies internally.
+*/
+FL_API const char* newstring(const char *from) {
+  unsigned n = strlen(from)+1;
+  char* ret = new char[n];
+  strcpy(ret, from);
+  return ret;
+}
+
+// This function is here because Window::label() uses it:
+/**
   Returns a pointer to after the last slash in \a name. If the name
   ends with a slash then this returns a pointer to the NUL. If there
   is no slash this returns a pointer to the start of \a name.

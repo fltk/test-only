@@ -12,7 +12,7 @@
 
 #define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
 inline char *fl_filename_setext(char * name, const char *ext) {
-  strcpy(filename_ext(name), ext ? ext : "");
+  strcpy((char*)filename_ext(name), ext ? ext : "");
   return name;
 }
 FL_API bool fl_filename_expand(char *, const char *from);

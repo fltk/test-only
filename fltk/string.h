@@ -1,4 +1,4 @@
-/* "$Id: string.h,v 1.3 2005/01/24 17:25:04 spitzak Exp $"
+/* "$Id$"
  *
  * Copyright 1998-2004 by Bill Spitzak and others.
  *
@@ -89,16 +89,14 @@ extern "C" {
 
 #include "FL_API.h"
 
+FL_API extern const char* newstring(const char *);
+
 #if defined(DOXYGEN) || defined(__MWERKS__)
 FL_API extern int strcasecmp(const char *, const char *);
 #endif
 
 #if defined(DOXYGEN) || defined(__MWERKS__)
 FL_API extern int strncasecmp(const char *, const char *, size_t);
-#endif
-
-#if defined(DOXYGEN) || defined(__MWERKS__)
-FL_API extern char *strdup(const char *);
 #endif
 
 #if defined(DOXYGEN)
@@ -126,5 +124,5 @@ FL_API extern size_t strlcpy(char *, const char *, size_t);
 #endif
 
 /*
- * End of "$Id: string.h,v 1.3 2005/01/24 17:25:04 spitzak Exp $".
+ * End of "$Id$".
  */

@@ -321,7 +321,7 @@ int main(int argc, char **argv) {
   char buf[256];
   if (argv[0] && *argv[0]) strcpy(buf, argv[0]);
   else                     strcpy(buf, "demo");
-  filename_setext(buf,".menu");
+  strcpy((char*)filename_ext(buf),".menu");
   const char *fname = buf;
   int i = 0;
   if (!fltk::args(argc,argv,i) || i < argc-1)

@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.68 2004/08/06 09:54:19 laza2000 Exp $"
+// "$Id$"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -234,13 +234,13 @@ void write_cb(fltk::Widget *, void *) {
   char hname[1024];
   if (code_file_name[0] == '.' && isalpha(code_file_name[1])) {
     strcpy(cname,filename_name(filename));
-    filename_setext(cname, code_file_name);
+    strcpy((char*)filename_ext(cname), code_file_name);
   } else {
     strcpy(cname, code_file_name);
   }
   if (header_file_name[0] == '.' && isalpha(header_file_name[1])) {
     strcpy(hname,filename_name(filename));
-    filename_setext(hname, header_file_name);
+    strcpy((char*)filename_ext(cname), header_file_name);
   } else {
     strcpy(hname, header_file_name);
   }
@@ -290,9 +290,8 @@ static char* cutfname() {
 
   return name;
 #else
-  static char name[256] = "~/.fluid_cut_buffer";
-  static char beenhere;
-  if (!beenhere) {beenhere = 1; filename_expand(name,name);}
+  static char name[1024] = "";
+  if (!name[0]) filename_normalize(name, 1024, "~/.fluid_cut_buffer", 0);
   return name;
 #endif
 }
@@ -575,5 +574,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.68 2004/08/06 09:54:19 laza2000 Exp $".
+// End of "$Id$".
 //
