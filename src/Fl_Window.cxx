@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.52 2000/08/10 02:26:36 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.53 2000/08/11 00:53:47 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -117,7 +117,6 @@ extern void fl_fix_focus();
 
 char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 
-#include <stdio.h>
 int Fl_Window::handle(int event) {
   switch (event) {
     case FL_SHOW: {
@@ -146,8 +145,15 @@ int Fl_Window::handle(int event) {
 
     case FL_HIDE: {
       if (i) {
-        if (modal()) destroy(); // needed so modal can change next time
-        else XUnmapWindow(fl_display, i->xid);
+        // We have to destroy the window because at least on my X system
+        // just unmapping it causes undesired events to be generated. For
+        // example, moving the cursor over the area of an unmapped window
+        // causes the window behind it to get a LeaveNotify event!?  Not
+        // sure whether this is a bug in XFree86 4 or not...
+        destroy();
+
+        //if (modal()) destroy(); // needed so modal can change next time
+        //else XUnmapWindow(fl_display, i->xid);
       }
       break;
     }
@@ -169,10 +175,10 @@ int Fl_Window::handle(int event) {
   return 0;
 }
 
-const Fl_Window* Fl_Window::modal_for() const {
+const void* Fl_Window::sys_modal_for() const {
   const Fl_Window* w = modal_for_;
   while (w && w->parent()) w = w->window();
-  if (w && w->shown()) return w;
+  if (w && w->shown()) return (void*)w->i->xid;
   return 0;
 }
 
@@ -322,5 +328,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.52 2000/08/10 02:26:36 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.53 2000/08/11 00:53:47 clip Exp $".
 //

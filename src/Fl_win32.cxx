@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.126 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.127 2000/08/11 00:53:47 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -979,8 +979,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     // back compatability with older modal() and non_modal() flags:
     HWND modal_for = 0;
     if (w->modal() || w->non_modal()) {
-      if (w->modal_for()) modal_for = w->modal_for()->i->xid;
-      else modal_for = Fl::first_window()->i->xid;
+      modal_for = (HWND)w->sys_modal_for();
+      if (!modal_for) modal_for = Fl::first_window()->i->xid;
     }
 
     if (modal_for) {
@@ -1269,5 +1269,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.126 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.127 2000/08/11 00:53:47 clip Exp $".
 //

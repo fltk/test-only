@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.90 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.91 2000/08/11 00:53:47 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -740,6 +740,29 @@ int fl_handle(const XEvent& xevent)
     }
     break;}
 
+  // We cannot rely on the x,y position in the configure notify event.
+  // I now think this is an unavoidable problem with X: it is impossible
+  // for a window manager to prevent the "real" notify event from being
+  // sent when it resizes the contents, even though it can send an
+  // artificial event with the correct position afterwards (and some
+  // window managers do not send this fake event anyway)
+  // So anyway, do a round trip to find the correct x,y:
+  case ConfigureNotify:
+  case MapNotify: {
+    window = fl_find(xevent.xmapping.window);
+    if (!window) break;
+    // figure out where OS really put window
+    XWindowAttributes actual;
+    XGetWindowAttributes(fl_display, fl_xid(window), &actual);
+    Window cr; int X, Y, W = actual.width, H = actual.height;
+    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
+                          0, 0, &X, &Y, &cr);
+
+    // tell Fl_Window about it
+    if (window->resize(X, Y, W, H)) resize_from_system = window;
+    return 1;
+  }
+
   case UnmapNotify:
     window = fl_find(xevent.xmapping.window);
     if (window) {Fl_X::i(window)->wait_for_expose = 1; return 1;}
@@ -892,50 +915,6 @@ int fl_handle(const XEvent& xevent)
     if (window != xmousewin) xmousewin = 0;
     event = FL_LEAVE;
     break;
-
-#if 0
-    // This appears to break tooltips though I can't figure out why.
-    // My reading of X documentation is that ConfigureNotify should be
-    // used instead and that window managers that don't send it are
-    // broken.
-  case MapNotify: {
-    window = fl_find(xevent.xmapping.window);
-    if (!window) break;
-    int X,Y,W,H;
-    // figure out where OS really put window
-    XWindowAttributes actual;
-    XGetWindowAttributes(fl_display, fl_xid(window), &actual);
-    W = actual.width, H = actual.height;
-    Window crap;
-    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
-                          0, 0, &X, &Y, &crap);
-    // tell Fl_Window about it
-    if (window->resize(X,Y,W,H)) resize_from_system = window;
-    break;
-  }
-#endif
-
-  case ConfigureNotify: {
-    // Based on code from Carl, I don't rely on anything being correct
-    // in the events, instead the new window shape and position is
-    // queried from the server.  Being X they of course require *2*
-    // round trips for something that should require none!
-    window = fl_find(xevent.xconfigure.window); // same location for MapNotify
-    if (!window) break;
-    int X,Y,W,H;
-    W = xevent.xconfigure.width; H = xevent.xconfigure.height;
-#if 1
-    Window crap;
-    XTranslateCoordinates(fl_display, fl_xid(window),
-			  RootWindow(fl_display, fl_screen),
-                          0, 0, &X, &Y, &crap);
-#else
-    Window r, c; int wX, wY; unsigned int m;
-    XQueryPointer(fl_display, fl_xid(window), &r, &c, &X, &Y, &wX, &wY, &m);
-    X -= wX; Y -= wY;
-#endif
-    if (window->resize(X,Y,W,H)) resize_from_system = window;
-    return 1;}
 
   case SelectionNotify: {
     if (!fl_selection_requestor) return 0;
@@ -1134,8 +1113,8 @@ void Fl_X::create(Fl_Window* w,
     // back compatability with older modal() and non_modal() flags:
     Window modal_for;
     if (w->modal() || w->non_modal()) {
-      if (w->modal_for()) modal_for = w->modal_for()->i->xid;
-      else modal_for = top->i->xid;
+      modal_for = (Window)w->sys_modal_for();
+      if (!modal_for) modal_for = top->i->xid;
       XSetTransientForHint(fl_display, x->xid, modal_for);
     }
 
@@ -1313,5 +1292,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.90 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.91 2000/08/11 00:53:47 clip Exp $".
 //

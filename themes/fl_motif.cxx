@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.9 2000/08/10 09:24:33 spitzak Exp $"
+// "$Id: fl_motif.cxx,v 1.10 2000/08/11 00:53:48 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,7 +64,7 @@ thin_motif_always_up_box("motif up","VVHHVVHH");
 static const Fl_Highlight_Box
 thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
 
-static void motif_glyph(Fl_Widget* widget, int t,
+static void motif_glyph(const Fl_Widget* widget, int t,
 			int x, int y, int w, int h, Fl_Flags f)
 {
   Fl_Color fc = widget->glyph_color(f);
@@ -273,5 +273,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.9 2000/08/10 09:24:33 spitzak Exp $"
+// End of "$Id: fl_motif.cxx,v 1.10 2000/08/11 00:53:48 clip Exp $"
 //

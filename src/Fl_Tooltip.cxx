@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.24 2000/08/11 00:53:47 clip Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,17 +36,50 @@ class Fl_TooltipBox : public Fl_Menu_Window {
 public:
   Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {
     style(Fl_Tooltip::style());}
-  void draw() {
-    draw_box(0,0,w(),h(),0);
-    draw_label(3, 3, w()-6, h()-6,
-	       Fl_Flags(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
-  }
+  void draw();
+  void layout();
 };
 
-static Fl_TooltipBox *window = 0;
-static Fl_Widget* widget;
-static int x,y,w,h;
 static const char* tip;
+static Fl_Widget* widget;
+static Fl_TooltipBox *window = 0;
+static int X,Y,W,H;
+
+void Fl_TooltipBox::layout() {
+  fl_font(label_font(), label_size());
+  int ww, hh;
+  ww = MAX_WIDTH;
+  fl_measure(tip, ww, hh);
+  ww += 6; hh += 6;
+
+  // find position on the screen of the widget:
+  int ox = Fl::event_x_root()+5;
+  //int ox = X+W/2;
+  int oy = Y + H+2;
+  for (Fl_Window* p = widget->window(); p; p = p->window()) {
+    //ox += p->x();
+    oy += p->y();
+  }
+  if (ox+ww > Fl::w()) ox = Fl::w() - ww;
+  if (ox < 0) ox = 0;
+  if (H > 30) {
+    oy = Fl::event_y_root()+13;
+    if (oy+hh > Fl::h()) oy -= 23+hh;
+  } else {
+    if (oy+hh > Fl::h()) oy -= (4+hh+H);
+  }
+  if (oy < 0) oy = 0;
+
+  resize(ox, oy, ww, hh);
+  Fl_Menu_Window::layout();
+}
+
+void Fl_TooltipBox::draw() {
+  draw_box(0,0,w(),h(),0);
+  draw_label(3, 3, w()-6, h()-6,
+             Fl_Flags(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
+}
+
 
 static void tooltip_timeout(void*) {
   if (Fl::grab()) return;
@@ -62,33 +95,7 @@ static void tooltip_timeout(void*) {
 
   // this cast bypasses the normal Fl_Window label() code:
   ((Fl_Widget*)window)->label(tip);
-
-  fl_font(window->label_font(), window->label_size());
-  int ww, hh;
-  ww = MAX_WIDTH;
-  fl_measure(tip, ww, hh);
-  ww += 6; hh += 6;
-
-  // find position on the screen of the widget:
-  int ox = Fl::event_x_root()+5;
-  //int ox = x+w/2;
-  int oy = y + h+2;
-  for (Fl_Window* p = widget->window(); p; p = p->window()) {
-    //ox += p->x();
-    oy += p->y();
-  }
-  if (ox+ww > Fl::w()) ox = Fl::w() - ww;
-  if (ox < 0) ox = 0;
-  if (h > 30) {
-    oy = Fl::event_y_root()+13;
-    if (oy+hh > Fl::h()) oy -= 23+hh;
-  } else {
-    if (oy+hh > Fl::h()) oy -= (4+hh+h);
-  }
-  if (oy < 0) oy = 0;
-
-  window->resize(ox, oy, ww, hh);
-
+  window->relayout();
   window->show();
 }
 
@@ -96,17 +103,18 @@ static int cheesy_flag = 0;
 
 void
 Fl_Tooltip::enter(Fl_Widget* w) {
-  if (cheesy_flag || w == window || w == widget) return;
-  if (!w) {exit(widget); widget = 0; return;}
+  if (cheesy_flag  || w == widget) return;
+  if (!w || w == window) { exit(widget); widget = 0; return; }
   enter(w, w->x(), w->y(), w->w(), w->h(), w->tooltip());
 }
 
 void
 Fl_Tooltip::enter(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
   if (cheesy_flag) return;
-  if (w == widget && X == x && Y == y && W ==::w && H == h && t == tip) return;
+  if (w == widget && X == ::X && Y == ::Y && W == ::W && H == ::H && t == tip)
+    return;
   exit(widget);
-  widget = w; x = X; y = Y; ::w = W; h = H; tip = t;
+  widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
   if (!t || !enabled_) return;
   float d = Fl_Tooltip::delay();
   if (d < .01) d = .01;
@@ -120,7 +128,7 @@ Fl_Tooltip::exit(Fl_Widget *w) {
   Fl::remove_timeout(tooltip_timeout);
   if (window) {
     // This flag makes sure that tootip_enter() isn't executed because of
-    // this hide() which could cause unwanted recursion in tooltip_enter
+    // this hide() which could cause unwanted recursion in tooltip_enter()
     cheesy_flag = 1;
     window->hide();
     cheesy_flag = 0;
@@ -137,5 +145,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.24 2000/08/11 00:53:47 clip Exp $".
 //
