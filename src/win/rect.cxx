@@ -1,5 +1,5 @@
 //
-// "$Id: rect.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
+// "$Id: rect.cxx,v 1.1.2.3 2004/11/25 23:02:26 rokan Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,27 @@
 void Fl_Win_Display::rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
   fl_pen();
+
+/*
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
   LineTo(fl_gc, x+w-1, y+h-1);
   LineTo(fl_gc, x, y+h-1);
   LineTo(fl_gc, x, y);
+*/
+
+  POINT p[5];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x+w-1;
+  p[1].y = y;
+  p[2].x = x+w-1;
+  p[2].y = y+h-1;
+  p[3].x = x;
+  p[3].y = y+h-1;
+  p[4].x = x;
+  p[4].y = y;
+  Polyline(fl_gc, p, 5);
 }
 
 void Fl_Win_Display::rectf(int x, int y, int w, int h) {
@@ -53,89 +69,185 @@ void Fl_Win_Display::rectf(int x, int y, int w, int h) {
 }
 
 void Fl_Win_Display::xyline(int x, int y, int x1) {
+  
+  if (x1>x) x1++; else x++;
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x1+1, y);
+  MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x1, y);
 }
 
 void Fl_Win_Display::xyline(int x, int y, int x1, int y2) {
-  if (y2 < y) y2--;
-  else y2++;
+
+  if(x>x1) x++;
+  if(y2>y) y2++;
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y);
-  LineTo(fl_gc, x1, y2);
+
+  
+  POINT p[3];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x1;
+  p[1].y = y;
+  p[2].x = x1;
+  p[2].y = y2;
+  Polyline(fl_gc, p, 3);
+
+  
+
 }
 
 void Fl_Win_Display::xyline(int x, int y, int x1, int y2, int x3) {
-  if(x3 < x1) x3--;
-  else x3++;
+
+  if(x>x1) x++;
+  if(x3>x1) x3++;
+
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y);
-  LineTo(fl_gc, x1, y2);
-  LineTo(fl_gc, x3, y2);
+
+  POINT p[4];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x1;
+  p[1].y = y;
+  p[2].x = x1;
+  p[2].y = y2;
+  p[3].x = x3;
+  p[3].y = y2;
+  Polyline(fl_gc, p, 4);
+
+
 }
 
 void Fl_Win_Display::yxline(int x, int y, int y1) {
-  if (y1 < y) y1--;
-  else y1++;
+  //if (y1 < y) y1--;
+  //else y1++;
   fl_pen();
+  if(y1>y) y1++; else y++;
   MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x, y1);
 }
 
 void Fl_Win_Display::yxline(int x, int y, int y1, int x2) {
-  if (x2 > x) x2++;
-  else x2--;
+  if(y>y1) y++;
+  if(x2>x) x2++;
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x, y1);
-  LineTo(fl_gc, x2, y1);
+
+
+  POINT p[3];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x;
+  p[1].y = y1;
+  p[2].x = x2;
+  p[2].y = y1;
+  Polyline(fl_gc, p, 3);
+
+
 }
 
 void Fl_Win_Display::yxline(int x, int y, int y1, int x2, int y3) {
-  if(y3<y1) y3--;
-  else y3++;
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x, y1);
-  LineTo(fl_gc, x2, y1);
-  LineTo(fl_gc, x2, y3);
+  if(y>y1) y++;
+  if(y3>y1) y3++;
+  
+  // PS_SOLID if used as a logical brush lives a gap in the joint between two patrs using LineTo in a sequence!!!!
+  // Have to use Polyline instead...
+
+  POINT p[4];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x;
+  p[1].y = y1;
+  p[2].x = x2;
+  p[2].y = y1;
+  p[3].x = x2;
+  p[3].y = y3;
+  Polyline(fl_gc, p, 4);
+
+
 }
 
 void Fl_Win_Display::line(int x, int y, int x1, int y1) {
   fl_pen();
+
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
   SetPixel(fl_gc, x1, y1, fl_RGB());
+  SetPixel(fl_gc, x, y, fl_RGB()); // has to do also
 }
 
 void Fl_Win_Display::line(int x, int y, int x1, int y1, int x2, int y2) {
+
+
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
-  LineTo(fl_gc, x2, y2);
-  // Draw the last point *again* because the GDI line drawing
-  // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x2, y2, fl_RGB());
+
+  
+// PS_SOLID if used as a logical brush lives a gap in the joint between two patrs using LineTo in a sequence!!!!
+// Have to use Polyline instead...
+
+  POINT p[3];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x1;
+  p[1].y = y1;
+  p[2].x = x2;
+  p[2].y = y2;
+  Polyline(fl_gc, p, 3);
+
+
 }
 
 void Fl_Win_Display::loop(int x, int y, int x1, int y1, int x2, int y2) {
   fl_pen();
+  
+
+  // PS_SOLID if used as a logical brush lives a gap in the joint between two patrs using LineTo in a sequence!!!!
+  // Have to use Polyline instead...
+
+  POINT p[4];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x1;
+  p[1].y = y1;
+  p[2].x = x2;
+  p[2].y = y2;
+  p[3].x = x;
+  p[3].y = y;
+  Polyline(fl_gc, p, 4);
+  /*
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   LineTo(fl_gc, x2, y2);
   LineTo(fl_gc, x, y);
+  */
 }
 
 void Fl_Win_Display::loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
+
+
   fl_pen();
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
-  LineTo(fl_gc, x2, y2);
-  LineTo(fl_gc, x3, y3);
-  LineTo(fl_gc, x, y);
+
+    // PS_SOLID if used as a logical brush lives a gap in the joint between two patrs using LineTo in a sequence!!!!
+  // Have to use Polyline instead...
+
+  POINT p[5];
+  p[0].x = x;
+  p[0].y = y;
+  p[1].x = x1;
+  p[1].y = y1;
+  p[2].x = x2;
+  p[2].y = y2;
+  p[3].x = x3;
+  p[3].y = y3;
+  p[4].x = x;
+  p[4].y = y;
+  Polyline(fl_gc, p, 5);
+
 }
 
 void Fl_Win_Display::polygon(int x, int y, int x1, int y1, int x2, int y2) {
@@ -269,5 +381,5 @@ int Fl_Win_Display::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W,
 }
 
 //
-// End of "$Id: rect.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $".
+// End of "$Id: rect.cxx,v 1.1.2.3 2004/11/25 23:02:26 rokan Exp $".
 //

@@ -155,6 +155,13 @@ protected:
      fl_line(x()+52,d,x()+92,d-40);
    }
    fl_pop_clip();
+
+
+
+
+
+
+
     
     fl_line_style(FL_DASH);
     fl_xyline(x()+5,y()+55,x()+48);
@@ -166,8 +173,15 @@ protected:
     fl_xyline(x()+5,y()+64,x()+48);
     fl_line_style(0,0,"\7\3\7\2");
     fl_xyline(x()+5,y()+67,x()+48);
+
+
+
+
+
       
     fl_line_style(0);
+
+
 
 
     fl_line(x()+5,y()+72,x()+25,y()+95);
@@ -178,20 +192,23 @@ protected:
     fl_color(FL_RED);
     fl_loop(x()+11, y()+72,x()+27,y()+91,x()+29,y()+72);
 
+	fl_color(FL_BLUE); ////
+	fl_line_style(FL_SOLID, 6);
+    fl_loop(x()+31, y()+12,x()+47,y()+31,x()+49,y()+12);
+	fl_line_style(0);
+
+
     fl_color(200,0,200);
     fl_polygon(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
     fl_color(FL_GREEN);
     fl_loop(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
 
-    fl_color(FL_BLACK);
+ 
 
-    fl_xyline(x()+55,y()+55,x()+75,y()+75);
-    fl_color(FL_RED);
-    fl_yxline(x()+55,y()+56,y()+75,x()+74);
-    fl_color(FL_GREEN);
-    fl_xyline(x()+56,y()+56,x()+74,y()+74,x()+56);
-    fl_color(FL_BLUE);    
-    fl_yxline(x()+56,y()+57,y()+73,x()+73,y()+57);
+	fl_color(FL_BLUE);    
+    fl_yxline(x()+65,y()+63,y()+66);
+	fl_color(FL_GREEN);    
+    fl_yxline(x()+66,y()+66,y()+63);
 
     fl_color(FL_BLUE);
     fl_rect(x()+80,y()+55,5,5);
@@ -208,6 +225,45 @@ protected:
     fl_arc(x()+57, y()+80, 22 ,15 ,40, 270);
     fl_color(FL_YELLOW);
     fl_pie(x()+58, y()+81, 20 ,13 ,40, 270);
+
+
+
+
+	fl_line_style(0);
+
+
+	fl_color(FL_BLACK);
+  fl_point(x()+58,y()+58);
+	fl_color(FL_RED);
+	fl_yxline(x()+59,y()+58,y()+59);
+  fl_color(FL_GREEN);
+	fl_yxline(x()+60,y()+59,y()+58);
+  fl_color(FL_BLACK);
+	fl_xyline(x()+61,y()+58,x()+62);
+  fl_color(FL_RED);
+	fl_xyline(x()+62,y()+59,x()+61);
+
+  fl_color(FL_GREEN);
+  fl_yxline(x()+57,y()+58,y()+59,x()+58);
+  fl_color(FL_BLUE);
+  fl_xyline(x()+58,y()+60,x()+56,y()+58);
+  fl_color(FL_RED);
+  fl_xyline(x()+58,y()+61,x()+56,y()+63);
+  fl_color(FL_GREEN);
+  fl_yxline(x()+57,y()+63,y()+62,x()+58);
+
+  fl_color(FL_BLUE);
+  fl_line(x()+58,y()+63, x()+60, y()+65);
+  fl_color(FL_BLACK);
+  fl_line(x()+61,y()+65, x()+59, y()+63);
+
+
+
+
+
+
+
+
 
     fl_color(FL_BLACK);
   };
@@ -597,8 +653,9 @@ int main(int argc, char ** argv) {
  
 
   Fl_Window * w2 = new Fl_Window(500,560,"Graphics test");
-  Fl_Group *c2 =new Fl_Group(3, 43, 494, 514 );
 
+
+  Fl_Group *c2 =new Fl_Group(3, 43, 494, 514 );
 
   new MyWidget(10,140);
   new MyWidget2(110,80);
@@ -660,7 +717,7 @@ int main(int argc, char ** argv) {
 
 
   c2->end();
-  Fl_Button *b4 = new Fl_Button(5,5, 150, 25, "Print to PostScript file");
+  Fl_Button *b4 = new Fl_Button(10,5, 150, 25, "Print to PostScript file");
   b4->callback(print,c2);
   Fl_Button *b5 = new Fl_Button(165,5, 90, 25, "Print");
   b5->callback(print2,c2);

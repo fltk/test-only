@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.5 2004/11/24 16:38:16 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.6 2004/11/25 23:02:26 rokan Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,7 @@
 
 
 
+
 // New color and line_style code.
 // Stock pen is used for 1 (0) width  solid lines
 // Other lines are use pens from pen_cache
@@ -50,6 +51,7 @@
 #ifndef DC_PEN
 # define DC_PEN 19
 #endif
+
 
 typedef COLORREF (WINAPI *pfSetDCPenColor)(HDC hdc, COLORREF crColor);
 typedef COLORREF (WINAPI *pfSetDCBrushColor)(HDC hdc, COLORREF crColor);
@@ -192,7 +194,7 @@ FL_EXPORT HPEN fl_pen(){
 #if HAVE_DCBRUSH
   static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
 #else
-  static HBRUSH stockbrush = 0
+  static HBRUSH stockbrush = 0;
 #endif
 
 static HBRUSH current_brush = 0;
@@ -588,5 +590,5 @@ FL_EXPORT void pop_xmaps(){
 
 
 //
-// End of "$Id: color.cxx,v 1.1.2.5 2004/11/24 16:38:16 rokan Exp $".
+// End of "$Id: color.cxx,v 1.1.2.6 2004/11/25 23:02:26 rokan Exp $".
 //
