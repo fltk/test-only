@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: x.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -68,11 +68,11 @@ ulong fl_xpixel(Fl_Color i);
 void fl_clip_region(Region);
 Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 
-// feed events into fltk:
-int fl_handle(const XEvent&);
+// feed events into fltk by setting fl_xevent and calling fl_handle:
+extern FL_API XEvent fl_xevent;
+bool fl_handle();
 
-// you can use these in Fl::add_handler() to look at events:
-extern FL_API const XEvent* fl_xevent;
+// set by last fl_xevent with a timestamp:
 extern FL_API ulong fl_event_time;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window:
@@ -131,5 +131,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: x.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
 //

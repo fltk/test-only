@@ -447,19 +447,20 @@ so it is ok to call it many times and in many places.
 
 <h3><A name=first_window>Fl_Window *Fl::first_window()</A></h3>
 
-Returns the first visible() top-level window. This is the
-<a href=#modal>modal()</a> window if it exists, if there are no
-modal windows it is the most recent window to get an event. Returns
-NULL if no windows are visible.
+Returns the id of some visible() window. If there is more than one,
+the last one to receive an event is returned. This is useful for
+setting the <a href=Fl_Window.html#child_of>Fl_Window::child_of()</a>
+for dialog boxes that are used in multiple places in your program, and
+is used by <a href=Fl_Window.html#exec>Fl_Window::exec()</a> if no
+other parent is specified.
 
 <h3><A name=first_window_a>void Fl::first_window(Fl_Window*)</A></h3>
 
-Since <a href=#first_window>first_window()</a> is used by default as
-the "parent" of modal windows, changing it is useful.  This removes
-<i>window</i> from wherever it is in the list and inserts it at the
-top, as though it received an event. Code that then shows a modal
-window or calls <a href=Fl_Window.html#exec>Fl_Window::exec()</a>
-will make this window the "parent".
+If this window is visible, this removes it from wherever it is in the
+list and inserts it at the top, as though it received an event. This
+can be used to change the parent of dialog boxes run by <a
+href=Fl_Window.html#exec>Fl_Window::exec()</a> or <a
+href=utility.html#fl_ask>fl_ask()</a>.
 
 <h3><A name=next_window>Fl_Window *Fl::next_window(Fl_Window *)</A></h3>
 
@@ -499,35 +500,6 @@ not sure if a mouse event has been processed recently (such as to
 position your first window).  If the display is not open, this will 
 open it. 
 
-<h3><a name=grab><a name=local_grab><a name=release>void Fl::grab(Fl_Widget*);
-<br>void Fl::local_grab(Fl_Widget *w);
-<br>Fl_Widget* Fl::grab();
-<br>void Fl::release();</h3>
-
-This is used when pop-up menu systems are active.
-
-<p>When a "grab" is done all events are passed to the widget given to
-<tt>Fl::grab(Fl_Widget*)</tt>. The results of <tt>Fl::pushed</tt>,
-<tt>Fl::focus</tt>, and other such methods are ignored unless they
-refer to this widget or a child of this widget. This enables a click
-anywhere on the screen to dismiss the menu.
-
-<p>This messes with the window system so you get the events no matter
-where the cursor is on the screen.  <i>Under both X and WIN32 some
-window must be mapped because the system interface needs a window id.
-Be careful that your program does not enter an infinite loop 
-while <tt>grab()</tt> is on.  On X this will lock up your screen!</i>
-
-<p>The function <tt>Fl::local_grab(Fl_Widget *w)</tt> does a grab
-without messing with the window system. This means that only events
-that would go to the program (ie clicks in other windows it owns) are
-redirected to the grab widget.
-
-<p>To turn off grabbing do <tt>Fl::release()</tt>.
-
-<p><tt>Fl::grab()</tt> returns the current grab widget, or null if
-release was called. This is useful for checking if a grab is active.
-
 <h3><A name=h>int Fl::h()</A></h3>
 
 Returns the height of the screen in pixels. 
@@ -542,16 +514,53 @@ widget uses the event.
 This is the usage string that is displayed if <tt>Fl::args()</tt>
 detects an invalid argument on the command-line. 
 
-<h3><A name=modal>Fl_Window *Fl::modal()</A></h3>
+<h3><A name=modal>void Fl::modal(Fl_Widget*, bool grab=false);
+<br>Fl_Widget* Fl::modal();
+<br>bool Fl::grab();
+<br>void Fl::exit_modal();
+<br>bool Fl::exit_modal_flag();
+</a></h3>
 
-Returns the top-most <tt>modal()</tt> window currently shown.  This is
-the most recently <tt>shown()</tt> window with <A
-href=Fl_Window.html#modal><tt>modal()</tt></A> true, or
-<tt>NULL</tt> if there are no <tt>modal()</tt> windows
-<tt>shown()</tt>.  The <tt>modal()</tt> window has its
-<tt>handle()</tt> method called for all events, and no other windows
-will have <tt>handle()</tt> called (<A href=#grab><tt>grab()</tt></A>
-overrides this).
+First thing: much of the time <a
+href=Fl_Window.html#exec><tt>Fl_Window::exec()</tt></a> will do what
+you want, so try using that.
+
+<p>This function sets the passed widget as the "modal widget". All
+user events are directed to it or a child of it, preventing the user
+from messing with other widgets. The modal widget does not have to be
+visible or even a child of an Fl_Window for this to work (but if it
+not visible, Fl::event_x() and Fl::event_y() are meaningless, use
+Fl::event_x_root() and Fl::event_y_root()).
+
+<p><tt>Fl::exit_modal()</tt> sets the
+<tt>Fl::exit_modal_flag()</tt>. This may be used by user callbacks to
+cancel modal state. The flag is also set by the destruction or hiding
+of the modal widget, and on Windows by other applications taking the
+focus when <i>grab</i> is on.
+
+<p>The calling code then loops calling <a
+href=#wait><tt>Fl::wait()</tt></a> until Fl::exit_modal_flag() is set
+or you otherwise decide to get out of the modal state. It is the
+calling code's responsibility to monitor this flag and restore the
+modal widget to it's previous value when it turns on.
+
+<p><tt>Fl::modal()</tt> returns the current modal widget, or null if
+there isn't one, and <tt>Fl::grab()</tt> returns the current value of
+grab (this is always false if the modal widget is null). It is useful
+to test these in timeouts and file descriptor callbacks in order to
+block actions that should not happen while the modal window is up. You
+also need these in order to save and restore the modal state.
+
+<p><i>grab</i> indicates that the modal widget should get events from
+anywhere on the screen. This is done by messing with the window
+system.  If <tt>Fl::exit_modal()</tt> is called in response to an
+FL_PUSH event (rather than waiting for the drag or release event) fltk
+will "repost" the event so that it is handled after modal state is
+exited. This may also be done for keystrokes in the future.
+On both X and WIN32 <i>grab</i> will not work unless you have some
+visible window because the system interface needs a visible window id.
+On X be careful that your program does not enter an infinite loop 
+while <tt>grab()</tt> is on, it will lock up your screen!</i>
 
 <h3><A name=own_colormap>void Fl::own_colormap()</A></h3>
 

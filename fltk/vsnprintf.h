@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+ * "$Id: vsnprintf.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -42,15 +42,15 @@
 #define fl_vsnprintf_h
 
 #include <stdio.h>
+#include <stdarg.h>
 
 #ifdef _WIN32
+
 # define vsnprintf _vsnprintf
 # define snprintf _snprintf
 
 #elif defined(__linux)
-/* linux manages to somehow define vsnprintf without defining va_list, so
-   include that here to match most other systems: */
-#include <stdarg.h>
+/* linux has vsnprintf */
 
 #elif _COMPILER_VERSION>=730
 /* newer SGI compilers have vsnprintf */
@@ -62,7 +62,6 @@
 # ifdef __cplusplus
    extern "C" {
 # endif
-# include <stdarg.h>
 # include <sys/types.h>
 # define vsnprintf fl_vsnprintf
   int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
@@ -76,6 +75,6 @@
 
 #endif
 /*
- * End of "$Id: vsnprintf.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+ * End of "$Id: vsnprintf.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
  */
 

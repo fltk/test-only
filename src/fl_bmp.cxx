@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.13 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -805,10 +805,11 @@ void Fl_BMP_Image::read()
     
     if(!datas) fclose(bmpFile);
 
-    id = fl_create_offscreen(_width, _height);
-    fl_begin_offscreen(id);
+    Pixmap pixmap = fl_create_offscreen(_width, _height);
+    fl_begin_offscreen(pixmap);
     fl_draw_image(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
     fl_end_offscreen();
+    id = (void*)pixmap;
 
     delete []palette;
     delete []rgbBuf;
@@ -823,5 +824,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.13 2001/09/10 01:16:17 spitzak Exp $"
 //

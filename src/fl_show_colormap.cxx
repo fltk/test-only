@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.20 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -36,21 +36,18 @@
 #define BORDER 4
 
 class ColorMenu : public Fl_Window {
+public:
   Fl_Color initial, which, previous;
-  int done;
   void drawbox(Fl_Color);
   void draw();
-public:
   int handle(int);
   ColorMenu(Fl_Color oldcol);
-  Fl_Color run();
 };
 
 ColorMenu::ColorMenu(Fl_Color oldcol)
   : Fl_Window(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER)
 {
   set_override();
-  set_modal();
   initial = which = oldcol;
   style(Fl_Widget::default_style);
 }
@@ -90,7 +87,7 @@ int ColorMenu::handle(int e) {
       c = initial;
     } break;
   case FL_RELEASE:
-    if (!(Fl::event_pushed())) done = 1;
+    if (!(Fl::event_pushed())) Fl::exit_modal();
     return 1;
   case FL_KEYBOARD:
     switch (Fl::event_key()) {
@@ -98,15 +95,15 @@ int ColorMenu::handle(int e) {
     case FL_Down: if (c < 256-8) c += 8; break;
     case FL_Left: if (c > 0) c--; break;
     case FL_Right: if (c < 255) c++; break;
-    case FL_Escape: which = initial; done = 1; return 1;
-    case FL_Enter: done = 1; return 1;
+    case FL_Escape: which = initial; Fl::exit_modal(); return 1;
+    case FL_Enter: Fl::exit_modal(); return 1;
     default: return 0;
     }
     break;
   default:
     return Fl_Window::handle(e);
   }
-  if (!done && c != which) {
+  if (c != which) {
     which = (Fl_Color)c; damage(FL_DAMAGE_CHILD);
     int bx = (c%8)*BOXSIZE+BORDER;
     int by = (c/8)*BOXSIZE+BORDER;
@@ -121,29 +118,18 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
-#ifdef _MSC_VER
-#pragma optimize("a",off) // needed to get the done check to work
-#endif
-Fl_Color ColorMenu::run() {
-  if (which > 255) {
-    position(Fl::event_x_root()+5, Fl::event_y_root()-h()/2);
-  } else {
-    position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
-	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
-  }
-  Fl::grab(this);
-  show();
-  done = 0;
-  while (!done) Fl::wait();
-  Fl::release();
-  return which;
-}
-
 Fl_Color fl_show_colormap(Fl_Color oldcol) {
   ColorMenu m(oldcol);
-  return m.run();
+  if (m.which > 255) {
+    m.position(Fl::event_x_root()+5, Fl::event_y_root()-m.h()/2);
+  } else {
+    m.position(Fl::event_x_root()-(oldcol%8)*BOXSIZE-BOXSIZE/2-BORDER,
+	       Fl::event_y_root()-(oldcol/8)*BOXSIZE-BOXSIZE/2-BORDER);
+  }
+  m.exec(0, true);
+  return m.which;
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.20 2001/09/10 01:16:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.15 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,14 +45,15 @@ void Fl_Pixmap::draw(int X, int Y, Fl_Flags flags)
   if (w < 0) fl_measure_pixmap(data, w, h);
   if (!w) return; // ignore empty or bad pixmap data
   if (!id) {
-    id = fl_create_offscreen(w, h);
-    fl_begin_offscreen(id);
+    Pixmap pixmap = fl_create_offscreen(w, h);
+    id = (void*)pixmap;
+    fl_begin_offscreen(pixmap);
     uchar *bitmap = 0;
     fl_set_mask_bitmap(&bitmap);
     fl_draw_pixmap(data, 0, 0, FL_NO_COLOR);
     fl_set_mask_bitmap(0);
     if (bitmap) {
-      mask = fl_create_bitmap(bitmap, w, h);
+      mask = (void*)fl_create_bitmap(bitmap, w, h);
       delete[] bitmap;
     }
     fl_end_offscreen();
@@ -61,5 +62,5 @@ void Fl_Pixmap::draw(int X, int Y, Fl_Flags flags)
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.15 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Float_Input.cxx,v 1.4 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,12 +39,12 @@ int Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
 	(b+n>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X')
 	 && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) ||
 	type()==FL_FLOAT_INPUT && ascii && strchr(".eE+-", ascii))
-      ; // it's ok;
-    else return 1; // return zero for the key to be tried elsewhere
+      continue; // it's ok;
+    return Fl::focus()==this; // return zero for the key to be tried elsewhere
   }
   return Fl_Input::replace(b,e,text,ilen);
 }
 
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.4 2001/09/10 01:16:17 spitzak Exp $"
 //

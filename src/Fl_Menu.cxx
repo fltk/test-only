@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.112 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.113 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -67,6 +67,7 @@ struct MenuState {
   MenuWindow* menus[MAX_LEVELS]; // windows that have been created
   int nummenus; // number of windows (may be level+1 or level+2)
   bool menubar; // if true menus[0] is a menubar
+  bool changed;	// did the menu items change
   int state; // one of the enumeration below
   Fl_Menu_* widget; // widget that is making this menu
   // return the widget being pointed at:
@@ -80,6 +81,7 @@ struct MenuState {
   int current_children() {
     return widget->children(indexes, level+1);
   }
+  MenuWindow* fakemenu;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -96,7 +98,6 @@ MenuTitle::MenuTitle(MenuState* m, int X, int Y, int W, int H, Fl_Widget* L)
   : Fl_Menu_Window(X, Y, W, H, 0), menustate(m)
 {
   end();
-  set_modal();
   set_override();
   widget = L;
   // can't use sgi overlay for images:
@@ -200,7 +201,6 @@ MenuWindow::MenuWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Fl_Wid
   : Fl_Menu_Window(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
   end();
-  set_modal();
   set_override();
   style(default_style);
 
@@ -279,23 +279,6 @@ void MenuWindow::position(int X, int Y) {
   // x(X); y(Y); // don't wait for response from X
 }
 
-// scroll so item i is visible on screen, return true if it moves
-int MenuWindow::autoscroll(int i) {
-  if (is_menubar) return 0;
-  int Y = y()+ypos(i);
-  if (Y <= Fl::y()) Y = Fl::y()-Y+10;
-  else if (i <= 0) return 0;
-  else {
-    Fl_Widget* widget = get_widget(i-1);
-    Y = Y+widget->height()-Fl::h()-Fl::y();
-    if (Y < 0) return 0;
-    Y = -Y-10;
-  }
-  Fl_Menu_Window::position(x(), y()+Y);
-  // y(y()+Y); // don't wait for response from X
-  return 1;
-}
-
 // return the top edge of item:
 int MenuWindow::ypos(int index) {
   int x=0; int y=0; int w=0; int h=0; box()->inset(x,y,w,h);
@@ -319,7 +302,7 @@ void MenuWindow::draw() {
     if (!widget->visible()) continue;
     int ih = widget->height() + leading;
     // for minimal update, only draw the items that changed selection:
-    if (damage() != FL_DAMAGE_CHILD || i == selected || i == drawn_selected) {
+    if (damage() != FL_DAMAGE_CHILD || i==selected || i==drawn_selected) {
 
       Fl_Flags flags = widget->flags()&~(FL_VALUE|FL_SELECTED|FL_ALIGN_MASK);
       if (i == selected && !(flags & FL_OUTPUT)) {
@@ -406,18 +389,63 @@ int MenuWindow::titlex(int index) {
 
 enum {INITIAL_STATE = 0,// no mouse up or down since popup() called
 	PUSH_STATE,	// mouse has been pushed on a normal item
-	DONE_STATE,	// all done, execute the item
-	ABORT_STATE};	// all done, don't execute anything
+      DONE_STATE	// execute the selected item
+};
 
-static inline void setitem(MenuState& p, int m, int n) {
-  p.level = m;
-  if (p.indexes[m] != n) {
-    p.indexes[m] = n;
-    p.menus[m]->damage(FL_DAMAGE_CHILD);
+// scroll so item i is visible on screen, return true if it moves
+int MenuWindow::autoscroll(int i) {
+  if (is_menubar || i < 0) return 0;
+  int Y = y()+ypos(i);
+  if (Y <= Fl::y()) {
+    Y = Fl::y()-Y+10;
+  } else {
+    Fl_Widget* widget = get_widget(i);
+    Y = Y+widget->height()+menustate->widget->leading()-Fl::h()-Fl::y();
+    if (Y < 0) return 0;
+    Y = -Y-10;
   }
-  if (m+1 < p.nummenus && p.indexes[m+1] >= 0)
-    p.menus[m+1]->damage(FL_DAMAGE_CHILD);
-  p.indexes[m+1] = -1;
+  Fl_Menu_Window::position(x(), y()+Y);
+  // y(y()+Y); // don't wait for response from X
+  return 1;
+}
+
+static void autoscroll_timeout(void*) {
+  // this will call MenuWindow::handle(FL_MOVE) but also set Fl::event()
+  // so that the timeout gets repeated.
+  Fl::handle(FL_MOVE, 0);
+}
+
+static inline void setitem(MenuState& p, int level, int index) {
+
+  if (p.level == level && p.indexes[level] == index) return;
+
+  if (level < p.nummenus && p.indexes[level] != index)
+    p.menus[level]->damage(FL_DAMAGE_CHILD);
+  if (level+1 < p.nummenus && p.indexes[level+1] >= 0)
+    p.menus[level+1]->damage(FL_DAMAGE_CHILD);
+
+  delete p.fakemenu; p.fakemenu = 0; // turn off "menubar button"
+
+  // delete all the submenus that we are no longer in:
+  if (index >= 0) {
+    while (p.nummenus > level+2) delete p.menus[--p.nummenus];
+    // delete the next menu only if we are pointing at a different item:
+    if (p.nummenus > level+1 && p.indexes[level] != index)
+      delete p.menus[--p.nummenus];
+  }
+
+  p.level = level;
+  p.indexes[level] = index;
+  p.indexes[level+1] = -1;
+
+  // set flag so new menus are created by the main idle loop:
+  p.changed = true;
+
+  // If we scroll to show this item and the user dragged to it, we should
+  // continue scrolling after a timeout:
+  Fl::remove_timeout(autoscroll_timeout, &p);
+  if (p.menus[level]->autoscroll(index))
+    Fl::repeat_timeout(.05, autoscroll_timeout, &p);
 }
 
 static int forward(MenuState& p, int menu) {
@@ -441,12 +469,9 @@ static int backward(MenuState& p, int menu) {
   return 0;
 }
 
-static int last_event;
-
 int MenuWindow::handle(int event) {
   MenuState &p = *menustate;
   Fl_Widget* widget = 0;
-  last_event = event;
   switch (event) {
 
   case FL_KEYBOARD:
@@ -475,7 +500,7 @@ int MenuWindow::handle(int event) {
     case FL_Enter:
       goto EXECUTE;
     case FL_Escape:
-      p.state = ABORT_STATE;
+      Fl::exit_modal();
       return 1;
     }
     for (int menu = p.nummenus; menu--;) {
@@ -496,7 +521,7 @@ int MenuWindow::handle(int event) {
       // checking for event_clicks insures that the keyup matches the
       // keydown that preceeded it, so Alt was pressed & released without
       // any intermediate values.
-      p.state = ABORT_STATE;
+      Fl::exit_modal();
       return 1;
     } else
       return 0;
@@ -510,18 +535,12 @@ int MenuWindow::handle(int event) {
     for (menu = p.nummenus-1; ; menu--) {
       item = p.menus[menu]->find_selected(mx, my);
       if (item >= 0) break;
-      if (menu <= 0) {
-        if (event == FL_PUSH) {
-          Fl::pushed_ = 0;
-          p.state = ABORT_STATE;
-          return 1;
-        }
-        menu = p.nummenus-1; item = -1; break;
+      if (menu <= 0) {menu = p.nummenus-1; item = -1; break;}
       }
-    }
     if (event == FL_PUSH) {
       p.state = PUSH_STATE;
-      if (item >= 0) {
+      // quit if they clicked off the menus:
+      if (item < 0) {Fl::exit_modal(); return 0;}
   	if (p.menus[menu]->is_parent(item) // this is a submenu title
   	    && item != p.indexes[menu]) // and it is not already on
   	  p.state = INITIAL_STATE;
@@ -530,7 +549,6 @@ int MenuWindow::handle(int event) {
 	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
 	  p.menus[menu]->damage(FL_DAMAGE_CHILD);
       }
-    }
     setitem(p, menu, item);
     return 1;}
 
@@ -550,7 +568,7 @@ int MenuWindow::handle(int event) {
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
     widget = p.current_widget();
-    if (!widget) {p.state = ABORT_STATE; return 1;}
+    if (!widget) {Fl::exit_modal(); return 1;}
     // ignore clicks on inactive items:
     if (!widget->takesevents()) return 1;
     if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.level)) {
@@ -564,15 +582,11 @@ int MenuWindow::handle(int event) {
       if (widget->callback() == Fl_Widget::default_callback &&
 	  p.current_children() >= 0) return 1;
       p.state = DONE_STATE;
+      Fl::exit_modal();
     }
     return 1;
   }
   return Fl_Menu_Window::handle(event);
-}
-
-static void autoscroll_timeout(void* data) {
-  if (last_event == FL_DRAG || last_event == FL_MOVE)
-    ((MenuState*)data)->menus[0]->handle(FL_MOVE);
 }
 
 int Fl_Menu_::popup(
@@ -603,14 +617,15 @@ int Fl_Menu_::popup(
   p.level = 0;
   p.indexes[0] = focus();
   p.indexes[1] = -1;
-  MenuWindow mw(&p, 0, X, Y, W, H, title);
-  p.menus[0] = &mw;
-  //Fl::local_grab(&mw); // use this if testing!
-  Fl::grab(&mw);
+  MenuWindow toplevel(&p, 0, X, Y, W, H, title);
+  toplevel.child_of(Fl::first_window());
+  p.menus[0] = &toplevel;
+  p.fakemenu = 0;
 
   if (menubar) {
     if (focus() < 0)
-      mw.handle(FL_PUSH); // get menu mouse points at to appear
+      toplevel.handle(FL_PUSH); // get menu mouse points at to appear
+    p.changed = true; // make it create the pulldown menu
   } else {
     // create submenus until we locate the one with selected item
     // in it, positioning them so that one is selected:
@@ -644,102 +659,87 @@ int Fl_Menu_::popup(
     // show all the menus:
     for (int menu = 0; menu <= p.level; menu++) {
       MenuWindow* mw = p.menus[menu];
-      if (mw->title) mw->title->show();
+      if (mw->title) mw->title->show(mw->child_of());
       mw->show();
     }
+    p.changed = false;
   }
 
-  int oldlevel = 0;
-  int oldindex = -1;
+  Fl_Widget* saved_modal = Fl::modal(); bool saved_grab = Fl::grab();
 
-  MenuWindow* fakemenu = 0;
+  for (Fl::modal(&toplevel, true); !Fl::exit_modal_flag(); Fl::wait()) {
 
-  for (; p.state < DONE_STATE; Fl::wait()) {
-    if (p.level == oldlevel && p.indexes[p.level] == oldindex) continue;
-    oldlevel = p.level;
-    oldindex = p.indexes[p.level];
-    delete fakemenu; fakemenu = 0; // turn off "menubar button"
-    if (oldindex < 0) continue;
+    if (!p.changed) continue;
 
-    MenuWindow* mw = p.menus[p.level];
-    if (p.menus[p.level]->autoscroll(oldindex)) {
-      Fl::remove_timeout((Fl_Timeout_Handler)autoscroll_timeout, &p);
-      if (last_event == FL_DRAG || last_event == FL_MOVE)
-	Fl::add_timeout(.1,(Fl_Timeout_Handler)autoscroll_timeout, &p);
-    }
+    // Create windows for submenus. Since this is expensive we don't
+    // do this when the item changes, instead we wait until there are no
+    // events (after Fl::wait() returns) to create menus. This means that
+    // intermediate windows are not created when the user moves the mouse
+    // quickly.
+    p.changed = false;
+
+    int index = p.indexes[p.level];
+    if (index < 0) continue;	// no item selected, so no submenu changes
+    if (p.level < p.nummenus-1) continue; // submenu already up
 
     Fl_Widget* widget = p.current_widget();
 
-    if (widget && widget->takesevents() && p.current_children()>=0) {
-      // a submenu title has been selected
-      if (p.nummenus > p.level+1) {
-	// there are already submenus up:
-	// delete all menus greater than 2 below current:
-	while (p.nummenus > p.level+2) delete p.menus[--p.nummenus];
-	// see if this is the same submenu as before:
-	MenuWindow* oldmenu = p.menus[p.level+1];
-	// otherwise delete the previous submenu:
-	delete oldmenu;
-	p.nummenus--;
-      }
-      // figure out where new menu goes:
-      int nX, nY;
-      Fl_Widget* title;
-      if (!p.level && p.menubar) { // menu off a menubar:
-	nX = mw->x() + mw->titlex(oldindex);
-	nY = mw->y() + mw->h();
-	title = widget;
+    if (!widget) continue; // this should not happen
+
+    MenuWindow* mw = p.menus[p.level];
+
+    if (p.menubar && !p.level) {
+      // create a submenu off a menubar with a title box:
+      int nX = mw->x() + mw->titlex(index);
+      int nY = mw->y() + mw->h();
+      mw = new MenuWindow(&p, 1, nX, nY, 0, 0, widget);
+      // fix the title box to match menubar thickness:
+      int dx=0; int y1=p.menus[0]->y(); int dw=0; int h1=p.widget->h();
+      p.widget->box()->inset(dx,y1,dw,h1);
+      mw->title->y(y1+1);
+      mw->title->h(h1-2);
+      mw->title->show(p.menus[0]->child_of());
+      if (widget->takesevents() && p.current_children()>=0) {
+	// if it is a real menu we add it to the list of displayed menus
+	p.menus[p.nummenus++] = mw;
+	mw->show(p.menus[0]->child_of());
       } else {
-	nX = mw->x() + mw->w();
-	nY = mw->y() + mw->ypos(oldindex)-mw->ypos(0);
-	title = 0;
+	// Non-submenus in the menubar produce "buttons" which I "highlight"
+	// my making a fake submenu with only the title box displayed.
+	p.fakemenu = mw;
       }
-      mw = new MenuWindow(&p, p.nummenus, nX, nY, 0, 0, title);
+
+    } else if (widget->takesevents() && p.current_children()>=0) {
+      // Create a normal submenu:
+      int nX = mw->x() + mw->w();
+      int nY = mw->y() + mw->ypos(index) - mw->ypos(0);
+      mw = new MenuWindow(&p, p.nummenus, nX, nY, 0, 0, 0);
       p.menus[p.nummenus++] = mw;
-      if (title) goto SHOW_MENUBAR_TITLE;
-      mw->show();
+      mw->show(p.menus[0]->child_of());
 
-    } else {
-      // a normal item (not a submenu title) is selected
-      // delete all the submenus:
-      while (p.nummenus > p.level+1) delete p.menus[--p.nummenus];
-
-      // make a fake menu to display buttons in menubars correctly:
-      if (!p.level && p.menubar) {
-	fakemenu = new MenuWindow(&p, 1,
-			mw->x() + mw->titlex(oldindex),
-			mw->y() + mw->h(), 0, 0, widget);
-	mw = fakemenu;
-      SHOW_MENUBAR_TITLE:
-	// fix the title box size to match menubar thickness:
-	int dx=0; int y1=Y; int dw=0; int h1=this->h();
-	box()->inset(dx,y1,dw,h1);
-	mw->title->y(y1+1);
-	mw->title->h(h1-2);
-	mw->title->show();
-	if (mw != fakemenu) mw->show();
-      }
     }
   }
 
-  Fl::remove_timeout((Fl_Timeout_Handler)autoscroll_timeout, &p);
-  delete fakemenu;
+  Fl::modal(saved_modal, saved_grab);
+
+  Fl::remove_timeout(autoscroll_timeout, &p);
+
+  // destroy all the submenus we created:
+  delete p.fakemenu;
   while (--p.nummenus) delete p.menus[p.nummenus];
-  mw.hide();
-  Fl::release();
-  // If the menu was aborted by the user clicking outside of the menuwindow
-  // find the appropriate window to send a replacement button press event
-  if (p.state == DONE_STATE) {
-    goto_item(p.indexes, p.level);
-    if (menubar && !p.level &&
-	(item()->type()==FL_RADIO_ITEM || item()->type()==FL_TOGGLE_ITEM))
-      redraw();
-    execute(item());
-    return 1;
-  }
-  return 0;
+  toplevel.hide();
+
+  if (p.state != DONE_STATE) return 0; // user did not pick anything
+
+  // Execute whatever item the user picked:
+  goto_item(p.indexes, p.level);
+  if (menubar && !p.level &&
+      (item()->type()==FL_RADIO_ITEM || item()->type()==FL_TOGGLE_ITEM))
+    redraw();
+  execute(item());
+  return 1;
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.112 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.113 2001/09/10 01:16:17 spitzak Exp $".
 //

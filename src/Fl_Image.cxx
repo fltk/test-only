@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.21 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.22 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -91,9 +91,9 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
 #ifdef _WIN32
 # if 0
       HDC new_gc = CreateCompatibleDC(fl_gc);
-      SelectObject(new_gc, (void*)mask);
+      SelectObject(new_gc, mask);
       BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-      SelectObject(new_gc, (void*)id);
+      SelectObject(new_gc, id);
       BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
       DeleteDC(new_gc);
 # else
@@ -102,8 +102,8 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
       SetTextColor(fl_gc, 0);
       HDC new_gc = CreateCompatibleDC(fl_gc);
       HDC new_gc2 = CreateCompatibleDC(fl_gc);
-      SelectObject(new_gc, (void*)mask);
-      SelectObject(new_gc2, (void*)id);
+      SelectObject(new_gc, mask);
+      SelectObject(new_gc2, id);
       BitBlt(new_gc2, 0, 0, w, h, new_gc, 0, 0, SRCAND); // This should be done only once for performance
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, 0xE20746L);
@@ -115,11 +115,11 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
       // I can't figure out how to combine a mask with existing region,
       // so the mask replaces the region instead. This can draw some of
       // the image outside the current clip region if it is not rectangular.
-      XSetClipMask(fl_display, fl_gc, mask);
+      XSetClipMask(fl_display, fl_gc, (Pixmap)mask);
       int ox = X-cx; if (ox < 0) ox += w;
       int oy = Y-cy; if (oy < 0) oy += h;
       XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-      fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+      fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
       // put the old clip region back
       XSetClipOrigin(fl_display, fl_gc, 0, 0);
       fl_restore_clip();
@@ -135,7 +135,7 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
       BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
       DeleteDC(tempdc);
 #else
-      XSetStipple(fl_display, fl_gc, mask);
+      XSetStipple(fl_display, fl_gc, (Pixmap)mask);
       int ox = X-cx; if (ox < 0) ox += w;
       int oy = Y-cy; if (oy < 0) oy += h;
       XSetTSOrigin(fl_display, fl_gc, ox, oy);
@@ -146,7 +146,7 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
     }
   } else if (id) {
     // pix only, no mask
-    fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
   } // else { no mask or id, probably an error... }
 }
 
@@ -155,8 +155,8 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
 void Fl_Image::measure(int& W, int& H) { W=w; H=h; }
 
 Fl_Image::~Fl_Image() {
-  if (mask) fl_delete_bitmap(mask);
-  if (id) fl_delete_offscreen(id);
+  if (mask) fl_delete_bitmap((Pixmap)mask);
+  if (id) fl_delete_offscreen((Pixmap)id);
 }
 
 #include <fltk/Fl_Widget.h>
@@ -169,5 +169,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.21 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.22 2001/09/10 01:16:17 spitzak Exp $".
 //

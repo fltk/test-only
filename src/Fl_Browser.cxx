@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.45 2001/07/29 21:41:39 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -764,7 +764,7 @@ int Fl_Browser::handle(int event) {
     Fl::event_clicks(0); // make program not think it is a double-click
     goto RELEASE;
 
-  case FL_KEYBOARD:
+  case FL_KEY:
     Fl::event_clicks(0); // make program not think it is a double-click
     switch (Fl::event_key()) {
     case FL_Up:
@@ -961,5 +961,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.45 2001/07/29 21:41:39 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $".
 //

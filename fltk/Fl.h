@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.5 2001/07/24 21:14:27 robertk Exp $"
+// "$Id: Fl.h,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -65,16 +65,17 @@ public: // should be private!
   static int e_keysym;
   static int e_length;
   static char* e_text;
+  static int compose_state;
   static Fl_Widget* belowmouse_;
   static Fl_Widget* pushed_;
   static Fl_Widget* focus_;
-  static Fl_Window* modal_;
-  static int compose_state;
+  static Fl_Widget* modal_;
+  static bool grab_;
+  static bool exit_modal_;
 
   static void damage(int x) {damage_ = x;}
 
   static void (*idle)();
-  static Fl_Widget *grab_;
 
   static const char* scheme_;
 
@@ -106,6 +107,13 @@ public:
   static int check();
   static int ready();
   static int run();
+
+  static void modal(Fl_Widget*, bool grab = false);
+  static Fl_Widget* modal() {return modal_;}
+  static bool grab() {return grab_;}
+  static void exit_modal() {exit_modal_ = true;}
+  static bool exit_modal_flag() {return exit_modal_;}
+
   static void add_timeout(double t,Fl_Timeout_Handler,void* v = 0);
   static void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);
   static bool has_timeout(Fl_Timeout_Handler, void* = 0);
@@ -127,14 +135,11 @@ public:
   static void (*warning)(const char*, ...);
   static void (*error)(const char*, ...);
   static void (*fatal)(const char*, ...);
+
+  // list of top-level shown() windows:
   static Fl_Window* first_window();
   static void first_window(Fl_Window*);
   static Fl_Window* next_window(const Fl_Window*);
-  static Fl_Window* modal() {return modal_;}
-  static void grab(Fl_Widget *w);
-  static void local_grab(Fl_Widget *w) { grab_ = w; }
-  static Fl_Widget *grab() { return grab_; }
-  static void release();
 
   // event information:
   static int event()		{return e_type;}
@@ -246,5 +251,5 @@ FL_API int fl_getconf(const char *key, char *value, int value_length);
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.5 2001/07/24 21:14:27 robertk Exp $".
+// End of "$Id: Fl.h,v 1.6 2001/09/10 01:16:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.37 2001/08/01 14:08:48 robertk Exp $"
+// "$Id: fl_font_win32.cxx,v 1.38 2001/09/10 01:16:17 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -187,7 +187,7 @@ win_font_draw(const char *str, int n, int x, int y) {
 }
 
 static void
-win_font_clip(Region) {} // handled by regular windows clipping
+win_font_clip(void*) {} // handled by regular windows clipping
 
 static Fl_Font_Renderer
 win_renderer = {
@@ -198,5 +198,5 @@ win_renderer = {
 Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.37 2001/08/01 14:08:48 robertk Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.38 2001/09/10 01:16:17 spitzak Exp $".
 //

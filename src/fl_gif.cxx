@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.12 2001/09/10 01:16:17 spitzak Exp $"
 //
 // fl_gif.cxx
 //
@@ -397,15 +397,16 @@ void Fl_GIF_Image::read()
 
   data[Height+2] = 0; // null to end string array
 
-  id = fl_create_offscreen(w, h);
-  fl_begin_offscreen(id);
+  Pixmap pixmap = fl_create_offscreen(w, h);
+  id = (void*)pixmap;
+  fl_begin_offscreen(pixmap);
 
   uchar *bitmap = 0;
   fl_set_mask_bitmap(&bitmap);
   fl_draw_pixmap(data, 0, 0, FL_BLACK);
   fl_set_mask_bitmap(0);
   if (bitmap) {
-    mask = fl_create_bitmap(bitmap, w, h);
+    mask = (void*)fl_create_bitmap(bitmap, w, h);
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -419,5 +420,5 @@ void Fl_GIF_Image::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.12 2001/09/10 01:16:17 spitzak Exp $"
 //

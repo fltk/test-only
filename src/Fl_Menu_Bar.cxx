@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.45 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,10 +40,11 @@ void Fl_Menu_Bar::draw() {
       // If you change how the items are drawn, you probably need to
       // change MenuTitle::draw and the functions find_selected and
       // titlex in Fl_Menu.cxx.
-      if (i == highlight_ && highlight_color() && takesevents() && widget->active_r())
+      if (i == highlight_ && takesevents() && widget->active_r())
 	widget->set_flag(FL_HIGHLIGHT);
       else
 	widget->clear_flag(FL_HIGHLIGHT);
+      widget->clear_flag(FL_SELECTED);
       int x1 = X; int y1 = 0; int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
       text_box()->draw(X, y1+1, W, h1-2, text_background(), widget->flags()&~FL_VALUE);
@@ -81,7 +82,7 @@ int Fl_Menu_Bar::handle(int event) {
   case FL_ENTER:
   case FL_LEAVE:
     if (highlight_ == last_) return 1;
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
     if (highlight_ < 0) return 0;
@@ -119,7 +120,8 @@ int Fl_Menu_Bar::handle(int event) {
 }
 
 // The default style for menu bars.  The text_box() is used to draw
-// the boxes around the popup titles, this is done by Fl_Menu.cxx.
+// the boxes around the popup titles, this is done by Fl_Menu.cxx, and
+// done here for highlight boxes.
 
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
@@ -143,5 +145,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.45 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $".
 //

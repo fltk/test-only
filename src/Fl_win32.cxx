@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.155 2001/08/21 14:23:07 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.156 2001/09/10 01:16:17 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -349,7 +349,7 @@ void Fl::paste(Fl_Widget &receiver, bool clipboard) {
     Fl::e_length = selection_length[clipboard];
     receiver.handle(FL_PASTE);
   } else {
-    if (!OpenClipboard(fl_xid(Fl::first_window()))) return;
+    if (!OpenClipboard(NULL)) return;
     HANDLE h = GetClipboardData(CF_TEXT);
     if (h) {
       Fl::e_text = (LPSTR)GlobalLock(h);
@@ -461,16 +461,20 @@ static bool mouse_event(Fl_Window *window, int what, int button,
   case 0: // single-click
     Fl::e_clicks = 0;
   J1:
-    if (!Fl::grab()) SetCapture(fl_xid(window));
+    if (!Fl::grab_) SetCapture(fl_xid(window));
     Fl::e_keysym = FL_Button + button;
     Fl::e_is_click = 1;
     px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
-    return Fl::handle(FL_PUSH,window);
+    if (Fl::handle(FL_PUSH, window)) return true;
+    // If modal is on and 0 is returned, we should turn off modal and
+    // pass the event on to other widgets. The pass-on part is nyi!
+    if (Fl::grab_) {Fl::exit_modal(); /* NYI */ }
+    return false;
 
   case 2: // release:
     // WAS: this should turn off Fl::e_is_click if more than .2 second passed
     // since the push event!
-    if (!Fl::grab()) ReleaseCapture();
+    if (!Fl::grab_) ReleaseCapture();
     Fl::e_keysym = FL_Button + button;
     return Fl::handle(FL_RELEASE,window);
 
@@ -570,33 +574,50 @@ static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-
-  // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
-  // events in a row are a signal to redraw the entire window.
-  static int cnt=0;
-  if (uMsg == WM_SYNCPAINT) {
-    if(cnt) {
-      InvalidateRect(fl_window,0,FALSE);
-      cnt = 0;
-    } else cnt = 1;
-  } else if (uMsg == WM_PAINT) cnt = 0;
-
   fl_msg.message = uMsg;
+  static int syncpaint_count;
 
   Fl_Window *window = fl_find(hWnd);
 
   switch (uMsg) {
 
+  case WM_SYNCPAINT:
+  // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
+  // events in a row are a signal to redraw the entire window.
+    if (syncpaint_count) {
+      InvalidateRect(fl_window,0,FALSE);
+      syncpaint_count = 0;
+    } else {
+      syncpaint_count = 1;
+    }
+    break;
+
+  case WM_CAPTURECHANGED:
+    if (Fl::grab_) Fl::exit_modal();
+    // this is necessary so the fltk main loop gets called, otherwise
+    // Windows never returns from GetMessage! :-(
+    PostMessage(hWnd, WM_USER, 0, 0);
+    break;
+
+#if 0
+  case WM_NCACTIVATE:
+    // This prevents the title bar highlighting from turning off while a
+    // modal window is running. This is certainly necessary for menus
+    // but they do the grab which seems to make this not happen.
+    if (Fl::modal_) wParam = 1;
+    break;
+#endif
+
   case WM_QUIT: // this should not happen?
     Fl::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    if ((Fl::grab() || Fl::modal()) && window != Fl::modal())
-      return 0;
-    if (window) {window->do_callback(); return 1;}
-    break;
+    if (!window) break;
+    if (!Fl::modal_ || window == Fl::modal_) window->do_callback();
+    return 1;
 
   case WM_PAINT: {
+    syncpaint_count = 0;
     if (!window) break;
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = false;
@@ -647,8 +668,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_KILLFOCUS:
-    if (window == xfocus) {xfocus = 0; fl_fix_focus();}
-    Fl::flush(); // it never returns to main loop when deactivated...
+    if (window == xfocus) {
+      xfocus = 0;
+      fl_fix_focus();
+      // this is necessary so the fltk main loop gets called, otherwise
+      // Windows never returns from GetMessage! :-(
+      PostMessage(hWnd, WM_USER, 0, 0);
+    }
     break;
 
   case WM_KEYDOWN:
@@ -807,8 +833,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_RENDERALLFORMATS:
-	if(!Fl::first_window()) return 0;
-    if (!OpenClipboard(fl_xid(Fl::first_window()))) return 0;
+    if (!OpenClipboard(NULL)) return 0;
     EmptyClipboard();
     // fall through...
   case WM_RENDERFORMAT: {
@@ -936,29 +961,25 @@ Fl_X* Fl_X::create(Fl_Window* window) {
     parent = fl_xid(window->window());
     dx=dy=dw=dh=0;
   } else {
-    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx, dy, dw, dh);
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx,dy,dw,dh);
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     // we don't want an entry in the task list for menuwindows or tooltips!
     // This seems to have no effect on NT, maybe for Win2K?
-    //if (style&WS_POPUP && window->override()) styleEx |= WS_EX_TOOLWINDOW;
+    if (window->override())
+      styleEx |= WS_EX_TOOLWINDOW;
+    else if (!window->contains(Fl::modal()))
+      style |= WS_SYSMENU | WS_MINIMIZEBOX;
+
     xp = window->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = window->y(); if (yp != FL_USEDEFAULT) yp -= dy;
 
-    // Send child window information:
-    if (window->modal_for()) {
-      const Fl_Window* modal_for = window->modal_for();
-      while (modal_for && modal_for->parent()) modal_for = modal_for->window();
-      if (modal_for && modal_for->shown())
-	parent = modal_for->i->xid;
-      else
-	parent = 0;
+    if (window->child_of() && window->child_of()->shown()) {
+      parent = window->child_of()->i->xid;
     } else if (fl_mdi_window) {
       parent = fl_mdi_window->i->xid;
     } else {
       parent = 0;
     }
-
-    if (!window->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
   }
 
   Fl_X* x = new Fl_X;
@@ -976,6 +997,7 @@ Fl_X* Fl_X::create(Fl_Window* window) {
     fl_display,
     NULL // creation parameters
     );
+
 #if 0 // WAS: Doing this completely breaks NT, the title bar loses highlight:
   if (window->override()) {
     UINT posflags = SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING;
@@ -1273,5 +1295,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.155 2001/08/21 14:23:07 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.156 2001/09/10 01:16:17 spitzak Exp $".
 //

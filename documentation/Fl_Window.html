@@ -53,40 +53,38 @@ last top-level window.
 <LI><A href=#Fl_Window>Fl_Window</A></LI>
 <LI><A href=#~Fl_Window>~Fl_Window</A></LI>
 <LI><A href=#border>border</A></LI>
+<LI><A href=#child_of>child_of</A></LI>
 <LI><A href=#clear_border>clear_border</A></LI>
 <LI><A href=#current>current</A></LI>
-<LI><A href=#cursor>cursor</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
+<LI><A href=#cursor>cursor</A></LI>
 <LI><A href=#destroy>destroy</A></LI>
 <LI><A href=#exec>exec</A></LI>
 <LI><A href=#first_window>first_window</A></LI>
 <LI><A href=#free_position>free_position</A></LI>
 <LI><A href=#fullscreen>fullscreen</A></LI>
-<LI><A href=#fullscreen_off>fullscreen_off</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
+<LI><A href=#fullscreen_off>fullscreen_off</A></LI>
 <LI><A href=#hide>hide</A></LI>
 <LI><A href=#hotspot>hotspot</A></LI>
 <LI><A href=#iconic>iconic</A></LI>
 <LI><A href=#iconize>iconize</A></LI>
 <LI><A href=#iconlabel>iconlabel</A></LI>
-<LI><A href=#label>label</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
+<LI><A href=#label>label</A></LI>
 <LI><A href=#make_current>make_current</A></LI>
-<LI><A href=#modal>modal</A></LI>
-<LI><A href=#modal_for>modal_for</A></LI>
 <LI><A href=#next_window>next_window</A></LI>
 <LI><A href=#override>override</A></LI>
 <LI><A href=#resize>resize</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
-<LI><A href=#set_modal>set_modal</A></LI>
 <LI><A href=#set_override>set_override</A></LI>
 <LI><A href=#show>show</A></LI>
 <LI><A href=#show_inside>show_inside</A></LI>
@@ -99,13 +97,14 @@ last top-level window.
 
 <A name=Fl_Window><h4>Fl_Window::Fl_Window(int w, int h, const char *title = 0)</h4>
 
-The first form of the constructor should be used for a "top-level" window
-(that is, one that is not inside another window).  It correctly sets
-<tt>visible()</tt> to false and <tt>parent()</tt> to <tt>NULL</tt>.
-By not specifying the position of the window, the window system will pick a
-place to show the window or allow the user to pick a location.  If you want to
-force a position you should call <tt>position(x,y)</tt> or <tt>hotspot()</tt>
-before calling <tt>show()</tt>.
+The first form of the constructor should be used for a "top-level"
+window (that is, one that is not inside another window).  It correctly
+sets <tt>visible()</tt> to false and <tt>parent()</tt> to
+<tt>NULL</tt>.  By not specifying the position of the window, the
+window system will pick a place to show the window (some older X
+window managers will allow the user to place the window by hand). If
+you want to force a position you should call <tt>position(x,y)</tt> or
+<tt>hotspot()</tt> before calling <tt>show()</tt>.
 
 <P><TT>Fl_Widget::box()</TT> is set to <TT>FL_FLAT_BOX</TT>.  If you
 plan to completely fill the window with children widgets you should
@@ -173,7 +172,7 @@ also the maximum size (so the window cannot resize in  that direction). </LI>
 
 </UL>
 
-<A name=show><h4>void Fl_Window::show()</h4>
+<a name=show><h4>void Fl_Window::show()</h4>
 
 Put the window on the screen.  Usually this has the side effect of 
 opening the display.
@@ -190,60 +189,64 @@ window, this indicates which window should be affected by any
 called yet this does so, this is a useful shortcut for the main window
 in a small program.
 
-<h4>void Fl_Window::modal_for(const Fl_Window* parent);
-<br>const Fl_Window* modal_for() const;</h4>
+<a name=child_of><h4>void Fl_Window::child_of(const Fl_Window* parent);
+<br>const Fl_Window* child_of() const;</h4>
 
 Tell the system that this window will not have an icon, it will
 dissappear and reappear when the parent window is iconized or shown,
 and it is forced to always be above the parent window.  On X this is
-called a "Transient" window, and Windows sometimes calls this a
-"overlapping child" window. This value is not to be confused with <a
+called a "Transient window", and Windows calls this a "overlapping
+child". This value is different than the <a
 href=Fl_Widget.html#parent>Fl_Widget::parent()</a>, which must be
 zero).
 
 <p>On both X and win32 changing this value causes the window to be
 removed from the screen.
 
-<p>On X this requires the window manager to support
-"TransisentForHint", not all do, in which case the window will appear
-normally.
-
 <p>Win32 and some X window managers have an annoying bug where calling
 show() on this window will also raise the parent window to right below
-this. This makes this ability far less useful than it could be...
+this, making many useful user interface designs impossible! On X some
+old window managers may ignore the "TransisentForHint" and these
+windows will come out the same as other windows.
+
+<p>If you want a dialog that blocks interaction with the other windows
+of your application or with all other applications, you need to look
+at <a href=#exec>exec()</a> or possibly <a
+href=functions.html#modal><TT>Fl::modal()</TT></A>
 
 <h4>int Fl_Window::show(const Fl_Window* parent);</h4>
 
-Same as <tt>modal_for(parent); show();</tt>.
+Same as <tt>child_of(parent),show()</tt>.
 
-<a name=modal><A name=set_modal><h4>void Fl_Window::set_modal()
-<br>bool Fl_Window::modal() const;</H4>
+<a name=exec><h4>bool Fl_Window::exec(const Fl_Window* parent = 0,
+bool grab = false);</h4>
 
-Marks the window so that when <tt>show(parent)</tt> is called this
-window will remain on top and block events to other windows in this
-application. While the window is up the function <A
-href=functions.html#modal><TT>Fl::modal()</TT></A> returns true.
+Simple description: the window is popped up and this function waits
+until the user closes it, this then returns a true if the user hit ok,
+false if the user cancelled or closed the window in some other way.
+During this time events to other windows in this application are
+either thrown away or redirected to this window.
 
-<p>You probably want to use <a href=#exec>exec()</a>, unless you wish to
-put up a modal window but retain control of the program loop.
+<p>This does <a href=#child_of><tt>child_of(parent)</tt></a> (using <a
+href=functions.html#first_window><tt>Fl::first_window()</tt></a> if
+<i>parent</i> is null. It then does <a href=#show><tt>show()</tt></a>
+to make the window visible and raise it. It then uses <a
+href=functions.html#modal><tt>Fl::modal(this,grab)</tt> to make all
+events go to this window, and waits until <a
+href=functions.html#modal><tt>Fl::exit_modal()</tt></a> is called
+(typically by the window being hidden or destroyed).
 
-<p>Notice that there is no way to turn off the modal() setting.
-
-<a name=exec><h4>bool Fl_Window::exec(const Fl_Window* parent = 0);</h4>
-
-Does <tt>set_modal(); show(parent);</tt> then enters a loop of
-handling events until the window is hidden again by the program
-(usually by the user closing it, or from a callback from some widget
-inside the window, such as an OK button).  During this time events to
-other windows in this application are either thrown away or redirected
-to this window.
-
-<p>The return value is true only if some callback does window->set().
-To use this, make an OK button with a callback that does this.
+<p>The return value is <a
+href=Fl_Widget.html#value><tt>value()</tt></a> of the window, which is
+true only if some callback does <tt>window->set()</tt>. To use this, make an
+OK button with a callback that does this.
 
 <p>If <i>parent</i> is null the window that last received an event is used as
 the parent.  This is convenient for popups that appear in response to
 a mouse or key click.
+
+<p>See <a href=functions.html#modal><tt>Fl::modal()</tt></a> for what
+<i>grab</i> does. This is useful for popup menus.
 
 <a name=show_inside><h4>bool Fl_Window::show_inside(const Fl_Window* frame);</h4>
 
@@ -302,23 +305,6 @@ href=win32.html#icon>Win32</a> system-specific
 ways to control what is drawn in the icon.  You should not rely on 
 window managers displaying the icons.
 
-<A name=first_window><h4>Fl_Window *Fl::first_window()</H4>
-
-Returns the first <TT>shown()</TT> window in the widget hierarchy. If 
-no windows are displayed <TT>first_window</TT> returns <TT>NULL</TT>. 
-
-<h4>void *Fl::first_window(Fl_Window*)</H4>
-
-Change which window is returned by <tt>Fl::first_window()</tt>. This
-window must have shown() true. This is useful for making an <a
-href=#exec>exec(0)</a> inside some inner code make the window a child
-of the correct window.
-
-<A name=next_window><h4>Fl_Window *Fl::next_window(const Fl_Window*)</H4>
-
-Returns the next <TT>shown()</TT> window in the hierarchy.  You can 
-use this call to iterate through all the windows that are shown(). 
-
 <A name=resize><h4>void Fl_Window::resize(int,int,int,int)</H4>
 
 Change the size and position of the window.  If <TT>shown()</TT> is 
@@ -337,21 +323,26 @@ indicate that the system should choose the window's position.
 
 <A name=hotspot><h4>void Fl_Window::hotspot(int x, int y, int 
 offscreen = 0)
-<BR> void Fl_Window::hotspot(const Fl_Widget*, int offscreen = 0)
-<BR> void Fl_Window::hotspot(const Fl_Widgetp, int offscreen = 0)</h4>
+<BR> void Fl_Window::hotspot(const Fl_Widget*, bool offscreen = false)
+<BR> void Fl_Window::hotspot(const Fl_Widgetp, bool offscreen = false)</h4>
 
-<TT>position()</TT> the window so that the mouse is pointing at the 
-given position, or at the center of the given widget, which may be the 
-window itself.  If the optional <TT>offscreen</TT> parameter is 
-non-zero, then the window is allowed to extend off the screen (this 
-does not work with some X window managers). 
+<TT>position()</TT> the window so that the mouse is pointing at the
+given position, or at the center of the given widget, which may be the
+window itself.  If <TT>offscreen</TT> is true then the window is
+allowed to extend off the screen (some X window managers do not allow this).
 
 <A name=fullscreen><h4>void Fl_Window::fullscreen()</H4>
 
-Makes the window completely fill the screen, without any window 
-manager border visible.  You must use <TT>fullscreen_off()</TT> to undo 
-this. This may not work with all X window managers (and currently it
-is not successful at hiding the Windows taskbar).
+Makes the window completely fill the screen, without any window
+manager border or taskbar or anything else visible (at least that is
+the intention, it is currenty not well implemented, only older X
+window managers work. The Windows and Gnome and KDE taskbars remain
+visible. Anybody who knows how to get this to work reliably is welcome
+to contribute code to do so).
+
+<p>You must use <TT>fullscreen_off()</TT> to undo this. This may not
+work with all X window managers (and currently it is not successful at
+hiding the Windows taskbar).
 
 <A name=fullscreen_off><h4>int Fl_Window::fullscreen_off(int x, int y, int w, int h)</H4>
 
@@ -361,22 +352,20 @@ resize(x,y,w,h)</TT>.
 <A name=clear_border><h4>void Fl_Window::clear_border()</H4>
 
 You may turn off the window manager border before calling show() on
-the window the first time.  This will also mean the user cannot move,
-iconize, or resize the window (unless your program or the window
-manager does it).
+the window the first time. On most window managers this means the user
+cannot move, iconize, or resize the window (unless your program does it).
 
 <A name=border><h4>bool Fl_Window::border() const</h4>
 
 Returns false if clear_border() has been called.
 
 <A name=set_override><h4>bool Fl_Window::set_override()</h4>
-Windows with this property set will use the exact position and size set
-by the programmer (will not be handled by the window manager) and will
-not have an entry in the task list.  This will also clear the window's
-border like clear_border() above.  This should probably only be used
-for windows that will be used in conjunction with Fl::grab().
 
-This is used by the fltk menus and tooltips.
+Windows with this property set will use the exact position and size
+set by the programmer (will not be handled by the window manager) and
+will not have an entry in the task list.  This will also clear the
+window's border like clear_border() above. This is used by the fltk
+menus and tooltips.
 
 <p>On X this causes "override redirect".  This is only good for
 short-lived windows as it can confuse X window managers, however this

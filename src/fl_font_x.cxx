@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.5 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,7 @@ x11_font_width(const char *c, int n) {
 }
 
 static void
-x11_font_clip(Region) {} // handled by X clipping region
+x11_font_clip(void*) {} // handled by X clipping region
 
 // return dash number N, or pointer to ending null if none:
 static const char *
@@ -279,5 +279,5 @@ x11_renderer = {
 Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.5 2001/07/24 07:48:23 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.h,v 1.2 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: Fl_Window.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -39,23 +39,6 @@ public:
   static Fl_Named_Style* default_style;
   virtual ~Fl_Window();
 
-  virtual int handle(int);
-
-  void clear_border()	{set_flag(FL_NOBORDER);}
-  bool border() const	{return !(flags() & FL_NOBORDER);}
-  void set_override()	{set_flag(FL_NOBORDER|FL_OVERRIDE);}
-  bool override() const {return (flags()&FL_OVERRIDE)!=0; }
-  void set_modal()	{set_flag(FL_MODAL);}
-  bool modal() const	{return (flags()&FL_MODAL) != 0;}
-  void set_non_modal()	{set_flag(FL_NON_MODAL);} // back compatability only!
-
-  void move(int x, int y);
-  void hotspot(int x, int y, bool offscreen = false);
-  void hotspot(const Fl_Widget*, bool offscreen = false);
-  void hotspot(const Fl_Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
-  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
-    { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
-
   const char* label() const	{return Fl_Widget::label();}
   const char* iconlabel() const	{return iconlabel_;}
   void label(const char*);
@@ -66,11 +49,26 @@ public:
   static const char* xclass()	{return xclass_;}
   static void xclass(const char* v) {xclass_ = v;}
 
+  void clear_border()	{set_flag(FL_NOBORDER);}
+  bool border() const	{return !(flags() & FL_NOBORDER);}
+  void set_override()	{set_flag(FL_NOBORDER|FL_OVERRIDE);}
+  bool override() const {return (flags()&FL_OVERRIDE)!=0; }
+  const Fl_Window* child_of() const {return child_of_;}
+  void child_of(const Fl_Window* w);
+  void set_modal()	{set_flag(FL_MODAL);} // back compatability only!
+  void set_non_modal()	{set_flag(FL_NON_MODAL);} // back compatability only!
+
+  void hotspot(int x, int y, bool offscreen = false);
+  void hotspot(const Fl_Widget*, bool offscreen = false);
+  void hotspot(const Fl_Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
+  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
+    { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
+
   bool shown() const {return i != 0;}
   void show();
   void show(int, char**);
   void show(const Fl_Window* parent);
-  bool exec(const Fl_Window* parent = 0);
+  bool exec(const Fl_Window* parent = 0, bool grab = false);
   void show_inside(const Fl_Window* parent);
   void iconize();
   bool iconic() const;
@@ -79,18 +77,13 @@ public:
   void fullscreen();
   void fullscreen_off(int,int,int,int);
 
-  int x_root() const ;
-  int y_root() const ;
-
   static const Fl_Window *current() {return current_;}
   void make_current() const;
 
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
 
-  const Fl_Window* modal_for() const {return modal_for_;}
-  void modal_for(const Fl_Window* w);
-
+  virtual int handle(int);
   virtual void layout();
   virtual void flush();
   virtual void draw();
@@ -103,7 +96,7 @@ protected:
 private:
 
   friend class Fl_X; Fl_X *i; // points at the system-specific stuff
-  const Fl_Window* modal_for_;
+  const Fl_Window* child_of_;
   const char* iconlabel_;
   const void* icon_;
   // size_range stuff:
@@ -115,7 +108,7 @@ private:
     FL_MODAL		= 0x80000000,
     FL_NOBORDER 	= 0x40000000,
     FL_OVERRIDE         = 0x20000000,
-    FL_NON_MODAL 	= 0x10000000
+    FL_NON_MODAL	= 0x10000000
   };
   static const char* xclass_;
   void _Fl_Window(); // constructor innards
@@ -124,5 +117,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.h,v 1.2 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: Fl_Window.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
 //

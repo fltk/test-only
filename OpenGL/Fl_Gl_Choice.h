@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.h,v 1.2 2001/07/24 21:14:27 robertk Exp $"
+// "$Id: Fl_Gl_Choice.h,v 1.3 2001/09/10 01:16:16 spitzak Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -52,9 +52,12 @@
 #ifndef Fl_Gl_Choice_H
 #define Fl_Gl_Choice_H
 
+#include <fltk/Fl_Window.h> // force Fl_X to be defined by x.h
+#include <fltk/x.h>
+
 // Warning: whatever GLContext is defined to must take exactly the same
 // space in a structure as a void*!!!
-#ifdef WIN32
+#ifdef _WIN32
 # include <fltk/gl.h>
 # define GLContext HGLRC
 #else
@@ -67,7 +70,7 @@ class Fl_Gl_Choice {
   int mode;
   Fl_Gl_Choice *next;
 public:
-#ifdef WIN32
+#ifdef _WIN32
   int pixelFormat;	// the visual to use
   PIXELFORMATDESCRIPTOR pfd; // some wgl calls need this thing
 #else
@@ -80,7 +83,7 @@ public:
 
 class Fl_Window;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice*, int layer=0);
 
@@ -89,7 +92,7 @@ GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice*, int layer=
 GLContext fl_create_gl_context(XVisualInfo* vis);
 
 static inline
-GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice* g) {
+GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice* g) {
   return fl_create_gl_context(g->vis);
 }
 
@@ -102,5 +105,5 @@ void fl_delete_gl_context(GLContext);
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.h,v 1.2 2001/07/24 21:14:27 robertk Exp $".
+// End of "$Id: Fl_Gl_Choice.h,v 1.3 2001/09/10 01:16:16 spitzak Exp $".
 //

@@ -65,7 +65,6 @@ Fl_Window* make_alignment_window() {
     { Fl_Button* o = new Fl_Button(140, 280, 60, 20, "Close");
       o->callback((Fl_Callback*)cb_Close);
     }
-    o->set_modal();
     o->end();
   }
   return w;

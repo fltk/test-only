@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: fl_draw.h,v 1.2 2001/09/10 01:16:17 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -29,7 +29,6 @@
 #include "Fl_Flags.h" // for alignment values
 #include "Fl_Color.h"
 #include "Fl_Font.h"
-#include <fltk/x.h>
 
 // current transformation:
 extern FL_API int fl_x_;
@@ -130,7 +129,7 @@ typedef int (*Fl_Font_HeightFunc)();
 typedef int (*Fl_Font_DescentFunc)();
 typedef int (*Fl_Font_WidthFunc)(const char *, int);
 typedef void (*Fl_Font_DrawFunc)(const char *, int, int, int);
-typedef void (*Fl_Font_ClipFunc)(Region);
+typedef void (*Fl_Font_ClipFunc)(void* /*Region*/);
 typedef int (*Fl_Font_ListFunc)(Fl_Font *&);
 //typedef void * (*Fl_Font_FindFunc)(const char *, const char *);
 //typedef int (*Fl_Font_StrlenFunc)(const char *);
@@ -238,5 +237,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: fl_draw.h,v 1.2 2001/09/10 01:16:17 spitzak Exp $".
 //

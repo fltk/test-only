@@ -9,7 +9,7 @@
 #include <fltk/Fl_Menu_Button.h>
 #include <fltk/Fl_Input_Browser.h>
 #include <fltk/Fl_Choice.h>
-#include <fltk/Fl_Tooltip.h>
+#include <fltk/Fl_Button.h>
 #include <fltk/fl_draw.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -131,6 +131,8 @@ int main(int argc, char **argv) {
   build_hierarchy();
   ib.end();
   ib.tooltip("This is an Fl_Input_Browser");
+
+  Fl_Button button(100,100,100,30,"button");
 
   window.resizable(box);
   window.size_range(300,20);

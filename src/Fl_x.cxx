@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.113 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.114 2001/09/10 01:16:17 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -146,11 +146,10 @@ void Fl::remove_fd(int n) {
 static Fl_Window* send_motion;
 extern Fl_Window* fl_xmousewin;
 #endif
-static void do_queued_events() {
-  while (XEventsQueued(fl_display,QueuedAfterReading)) {
-    XEvent xevent;
-    XNextEvent(fl_display, &xevent);
-    fl_handle(xevent);
+static void do_queued_events(int, void*) {
+  while (!Fl::exit_modal_ && XEventsQueued(fl_display,QueuedAfterReading)) {
+    XNextEvent(fl_display, &fl_xevent);
+    fl_handle();
   }
 #if CONSOLIDATE_MOTION
   if (send_motion && send_motion == fl_xmousewin) {
@@ -167,10 +166,10 @@ void (*fl_unlock_function)() = nothing;
 
 static int fl_wait(double time_to_wait) {
 
-  // OpenGL and other broken libraries call XEventsQueued
-  // unnecessarily and thus cause the file descriptor to not be ready,
+  // OpenGL and other broken libraries call XEventsQueued()
+  // and thus cause the file descriptor to not be ready,
   // so we must check for already-read events:
-  if (fl_display && XQLength(fl_display)) {do_queued_events(); return 1;}
+  if (fl_display && XQLength(fl_display)) {do_queued_events(0,0); return 1;}
 
 #if !USE_POLL
   fd_set fdt[3];
@@ -256,8 +255,6 @@ Atom fl_XdndActionCopy;
 Atom fl_XdndFinished;
 //Atom fl_XdndProxy;
 
-static void fd_callback(int,void *) {do_queued_events();}
-
 extern "C" {
 static int io_error_handler(Display*) {Fl::fatal("X I/O error"); return 0;}
 
@@ -285,7 +282,7 @@ void fl_open_display() {
 
 void fl_open_display(Display* d) {
   fl_display = d;
-  Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
+  Fl::add_fd(ConnectionNumber(d), POLLIN, do_queued_events);
 
   WM_DELETE_WINDOW      = XInternAtom(d, "WM_DELETE_WINDOW",	0);
   WM_PROTOCOLS          = XInternAtom(d, "WM_PROTOCOLS",	0);
@@ -469,7 +466,7 @@ void Fl::copy(const char *stuff, int len, bool clipboard) {
 
 ////////////////////////////////////////////////////////////////
 
-const XEvent* fl_xevent; // the current x event
+XEvent fl_xevent; // the current x event
 ulong fl_event_time; // the last timestamp from an x event
 
 char fl_key_vector[32]; // used by Fl::get_key()
@@ -483,12 +480,12 @@ static void set_event_xy() {
 #if CONSOLIDATE_MOTION
   send_motion = 0;
 #endif
-  Fl::e_x_root = fl_xevent->xbutton.x_root;
-  Fl::e_x = fl_xevent->xbutton.x;
-  Fl::e_y_root = fl_xevent->xbutton.y_root;
-  Fl::e_y = fl_xevent->xbutton.y;
-  Fl::e_state = fl_xevent->xbutton.state << 16;
-  fl_event_time = fl_xevent->xbutton.time;
+  Fl::e_x_root = fl_xevent.xbutton.x_root;
+  Fl::e_x = fl_xevent.xbutton.x;
+  Fl::e_y_root = fl_xevent.xbutton.y_root;
+  Fl::e_y = fl_xevent.xbutton.y;
+  Fl::e_state = fl_xevent.xbutton.state << 16;
+  fl_event_time = fl_xevent.xbutton.time;
 #ifdef __sgi
   // get the meta key off PC keyboards:
   if (fl_key_vector[18]&0x18) Fl::e_state |= FL_META;
@@ -519,34 +516,33 @@ static Fl_Window* resize_from_system;
 static unsigned wheel_up_button = 4;
 static unsigned wheel_down_button = 5;
 
-int fl_handle(const XEvent& xevent)
+bool fl_handle()
 {
-  fl_xevent = &xevent;
-  Fl_Window* window = fl_find(xevent.xany.window);
+  Fl_Window* window = fl_find(fl_xevent.xany.window);
   int event = 0;
 
-  switch (xevent.type) {
+  switch (fl_xevent.type) {
 
   case KeymapNotify:
-    memcpy(fl_key_vector, xevent.xkeymap.key_vector, 32);
+    memcpy(fl_key_vector, fl_xevent.xkeymap.key_vector, 32);
     break;
 
   case MappingNotify:
-    XRefreshKeyboardMapping((XMappingEvent*)&xevent.xmapping);
+    XRefreshKeyboardMapping((XMappingEvent*)&fl_xevent.xmapping);
     break;
 
   case ClientMessage: {
-    Atom message = fl_xevent->xclient.message_type;
-    const long* data = fl_xevent->xclient.data.l;
+    Atom message = fl_xevent.xclient.message_type;
+    const long* data = fl_xevent.xclient.data.l;
 
     if (window && (Atom)(data[0]) == WM_DELETE_WINDOW) {
       if (!Fl::grab() && !(Fl::modal() && window != Fl::modal()))
 	window->do_callback();
-      return 1;
+      return true;
 
     } else if (message == FLTKChangeScheme) {
       Fl::reload_scheme();
-      return 1;
+      return true;
 
     } else if (message == fl_XdndEnter) {
       fl_dnd_source_window = data[0];
@@ -591,12 +587,12 @@ int fl_handle(const XEvent& xevent)
       fl_dnd_action = fl_XdndActionCopy;
       int accept = Fl::handle(FL_DND_DRAG, window);
       fl_sendClientMessage(data[0], fl_XdndStatus,
-                           fl_xevent->xclient.window,
+                           fl_xevent.xclient.window,
                            accept ? 1 : 0,
                            0, // used for xy rectangle to not send position inside
                            0, // used for width+height of rectangle
                            accept ? fl_dnd_action : None);
-      return 1;
+      return true;
 
     } else if (message == fl_XdndLeave) {
       fl_dnd_source_window = 0; // don't send a finished message to it
@@ -606,7 +602,7 @@ int fl_handle(const XEvent& xevent)
     } else if (message == fl_XdndDrop) {
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
-      Window to_window = fl_xevent->xclient.window;
+      Window to_window = fl_xevent.xclient.window;
       if (Fl::handle(FL_DND_RELEASE, window)) {
 	fl_selection_requestor = Fl::belowmouse();
 	XConvertSelection(fl_display, fl_XdndSelection,
@@ -620,7 +616,7 @@ int fl_handle(const XEvent& xevent)
 	fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished, to_window);
 	fl_dnd_source_window = 0;
       }
-      return 1;
+      return true;
 
     }
     break;}
@@ -635,7 +631,7 @@ int fl_handle(const XEvent& xevent)
   // WAS: Actually, TWO round trips! Is X stoopid or what?
   case ConfigureNotify:
   case MapNotify: {
-    window = fl_find(xevent.xmapping.window);
+    window = fl_find(fl_xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
 
@@ -648,24 +644,24 @@ int fl_handle(const XEvent& xevent)
 
     // tell Fl_Window about it and set flag to prevent echoing:
     if (window->resize(X, Y, W, H)) resize_from_system = window;
-    return 1;
+    return true;
   }
 
   case UnmapNotify:
-    window = fl_find(xevent.xmapping.window);
-    if (window) {Fl_X::i(window)->wait_for_expose = true; return 1;}
+    window = fl_find(fl_xevent.xmapping.window);
+    if (window) {Fl_X::i(window)->wait_for_expose = true; return true;}
     break;
 
   case Expose:
   case GraphicsExpose:
     if (!window) break;
     Fl_X::i(window)->wait_for_expose = false;
-    window->damage(FL_DAMAGE_EXPOSE, xevent.xexpose.x, xevent.xexpose.y,
-		   xevent.xexpose.width, xevent.xexpose.height);
-    return 1;
+    window->damage(FL_DAMAGE_EXPOSE, fl_xevent.xexpose.x, fl_xevent.xexpose.y,
+		   fl_xevent.xexpose.width, fl_xevent.xexpose.height);
+    return true;
 
   case ButtonPress: {
-    unsigned n = xevent.xbutton.button;
+    unsigned n = fl_xevent.xbutton.button;
     Fl::e_keysym = FL_Button + n;
     set_event_xy(); checkdouble();
     if (n == wheel_up_button) {
@@ -678,45 +674,73 @@ int fl_handle(const XEvent& xevent)
       Fl::e_state |= (FL_BUTTON1 << (n-1));
       event = FL_PUSH;
     }}
-    break;
+    goto J1;
 
   case MotionNotify:
     set_event_xy();
 #if CONSOLIDATE_MOTION
     send_motion = fl_xmousewin = window;
-    return 0;
+    return false;
 #else
     event = FL_MOVE;
-    break;
+    goto J1;
 #endif
 
   case ButtonRelease: {
-    unsigned n = xevent.xbutton.button;
+    unsigned n = fl_xevent.xbutton.button;
     Fl::e_keysym = FL_Button + n;
     set_event_xy();
-    if (n == wheel_up_button || n == wheel_down_button) break;
+    //if (n == wheel_up_button || n == wheel_down_button) break;
     Fl::e_state &= ~(FL_BUTTON1 << (n-1));
-    event = FL_RELEASE;
-    break;}
+    event = FL_RELEASE;}
+    goto J1;
+
+  case EnterNotify:
+    if (fl_xevent.xcrossing.detail == NotifyInferior) break;
+    // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
+    set_event_xy();
+    Fl::e_state = fl_xevent.xcrossing.state << 16;
+    xmousewin = window;
+    event = FL_ENTER;
+    goto J1;
+
+  case LeaveNotify:
+    if (fl_xevent.xcrossing.detail == NotifyInferior) break;
+    set_event_xy();
+    Fl::e_state = fl_xevent.xcrossing.state << 16;
+    if (window != xmousewin) xmousewin = 0;
+    event = FL_LEAVE;
+    goto J1;
+
+  J1:
+    // send a mouse event, with cruft so the grab around modal things works:
+    if (Fl::grab_) {
+      Fl::handle(event, window);
+      if (Fl::grab_ && !Fl::exit_modal_)
+	XAllowEvents(fl_display, SyncPointer, CurrentTime);
+      return true;
+    }
+    break;
 
   case FocusIn:
     xfocus = window;
-    if (window) {fl_fix_focus(); return 1;}
+    if (window) {fl_fix_focus(); return true;}
     break;
 
   case FocusOut:
-    if (window && window == xfocus) {xfocus = 0; fl_fix_focus(); return 1;}
+    if (window && window == xfocus) {xfocus = 0; fl_fix_focus(); return true;}
     break;
 
   case KeyPress:
   case KeyRelease: {
-    int keycode = xevent.xkey.keycode;
+    //if (Fl::grab_) XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
+    int keycode = fl_xevent.xkey.keycode;
     KeySym keysym;
-    if (xevent.type == KeyPress) {
+    if (fl_xevent.type == KeyPress) {
       event = FL_KEYBOARD;
       fl_key_vector[keycode/8] |= (1 << (keycode%8));
       static char buffer[21];
-      int len = XLookupString((XKeyEvent*)&(xevent.xkey), buffer, 20, &keysym, 0);
+      int len = XLookupString((XKeyEvent*)&(fl_xevent.xkey), buffer, 20, &keysym, 0);
       if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
 	// force it to type a character (not sure if this ever is needed):
 	if (!len) {buffer[0] = char(keysym); len = 1;}
@@ -724,7 +748,7 @@ int fl_handle(const XEvent& xevent)
 	// easier to program shortcuts and is Windows-compatable:
 	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
       }
-      if (fl_xevent->xbutton.state&4 && keysym == '-') buffer[0] = 0x1f; // ^_
+      if (fl_xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
       Fl::e_text = buffer;
       Fl::e_length = len;
@@ -763,7 +787,7 @@ int fl_handle(const XEvent& xevent)
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
       if (keysym1 <= 0x7f || keysym1 > 0xff9f && keysym1 <= FL_KP_Last) {
 	keysym = keysym1 | FL_KP;
-	if (xevent.type == KeyPress) {
+	if (fl_xevent.type == KeyPress) {
 	  Fl::e_text[0] = char(keysym1) & 0x7F;
 	  Fl::e_text[1] = 0;
 	  Fl::e_length = 1;
@@ -788,37 +812,20 @@ int fl_handle(const XEvent& xevent)
     set_event_xy(); checkdouble();
     break;}
 
-  case EnterNotify:
-    if (xevent.xcrossing.detail == NotifyInferior) break;
-    // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
-    set_event_xy();
-    Fl::e_state = xevent.xcrossing.state << 16;
-    xmousewin = window;
-    event = FL_ENTER;
-    break;
-
-  case LeaveNotify:
-    if (xevent.xcrossing.detail == NotifyInferior) break;
-    set_event_xy();
-    Fl::e_state = xevent.xcrossing.state << 16;
-    if (window != xmousewin) xmousewin = 0;
-    event = FL_LEAVE;
-    break;
-
   case SelectionNotify: {
-    if (!fl_selection_requestor) return 0;
+    if (!fl_selection_requestor) return false;
     static unsigned char* buffer;
     if (buffer) {XFree(buffer); buffer = 0;}
     long read = 0;
-    if (fl_xevent->xselection.property) for (;;) {
+    if (fl_xevent.xselection.property) for (;;) {
       // The Xdnd code pastes 64K chunks together, possibly to avoid
       // bugs in X servers, or maybe to avoid an extra round-trip to
       // get the property length.  I copy this here:
       Atom actual; int format; unsigned long count, remaining;
       unsigned char* portion;
       if (XGetWindowProperty(fl_display,
-			     fl_xevent->xselection.requestor,
-			     fl_xevent->xselection.property,
+			     fl_xevent.xselection.requestor,
+			     fl_xevent.xselection.property,
 			     read/4, 65536, 1, 0,
 			     &actual, &format, &count, &remaining,
 			     &portion)) break; // quit on error
@@ -839,29 +846,29 @@ int fl_handle(const XEvent& xevent)
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
     // immediatly after calling XConvertSelection.
-    if (fl_xevent->xselection.property == XA_SECONDARY &&
+    if (fl_xevent.xselection.property == XA_SECONDARY &&
 	fl_dnd_source_window) {
       fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished,
-                           fl_xevent->xselection.requestor);
+                           fl_xevent.xselection.requestor);
       fl_dnd_source_window = 0; // don't send a second time
     }
-    return 1;}
+    return true;}
 
   case SelectionClear: {
-    bool clipboard = fl_xevent->xselectionclear.selection == CLIPBOARD;
+    bool clipboard = fl_xevent.xselectionclear.selection == CLIPBOARD;
     fl_i_own_selection[clipboard] = false;
-    return 1;}
+    return true;}
 
   case SelectionRequest: {
     XSelectionEvent e;
     e.type = SelectionNotify;
     e.display = fl_display;
-    e.requestor = fl_xevent->xselectionrequest.requestor;
-    e.selection = fl_xevent->xselectionrequest.selection;
+    e.requestor = fl_xevent.xselectionrequest.requestor;
+    e.selection = fl_xevent.xselectionrequest.selection;
     bool clipboard = e.selection == CLIPBOARD;
-    e.target = fl_xevent->xselectionrequest.target;
-    e.time = fl_xevent->xselectionrequest.time;
-    e.property = fl_xevent->xselectionrequest.property;
+    e.target = fl_xevent.xselectionrequest.target;
+    e.time = fl_xevent.xselectionrequest.time;
+    e.property = fl_xevent.xselectionrequest.property;
     if (e.target == TARGETS) {
       Atom a = XA_STRING;
       XChangeProperty(fl_display, e.requestor, e.property,
@@ -879,7 +886,7 @@ int fl_handle(const XEvent& xevent)
       e.property = 0;
     }
     XSendEvent(fl_display, e.requestor, 0, 0, (XEvent *)&e);}
-    return 1;
+    return true;
 
   }
 
@@ -940,6 +947,7 @@ void Fl_X::create(Fl_Window* window,
       | EnterWindowMask | LeaveWindowMask
       | PointerMotionMask;
     if (window->override()) {
+      Fl::flush(); // make sure save_under does not undo any drawing!
       attr.override_redirect = 1;
       attr.save_under = 1;
       mask |= CWOverrideRedirect | CWSaveUnder;
@@ -997,12 +1005,8 @@ void Fl_X::create(Fl_Window* window,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // Send child window information:
-    if (window->modal_for()) {
-      const Fl_Window* modal_for = window->modal_for();
-      while (modal_for && modal_for->parent()) modal_for = modal_for->window();
-      if (modal_for && modal_for->shown())
-	XSetTransientForHint(fl_display, x->xid, modal_for->i->xid);
-    }
+    if (window->child_of() && window->child_of()->shown())
+      XSetTransientForHint(fl_display, x->xid, window->child_of()->i->xid);
 
     // Set up the icon and initial icon state:
     XWMHints hints;
@@ -1300,41 +1304,6 @@ void fl_get_system_colors() {
 
 }
 
-#if 0
-// WAS: I turned this off, we should do this when grab() is released,
-// rather than in the menu code. The proper thing to do is XAllowEvents.
-
-// Bounce an X button press event back to a (possibly) different application
-// window.  This is used when the pointer is grabbed but the user clicks
-// outside of the grabbed window to abort.  This function sends a click
-// event to the window that would have gotten it if the pointer had not
-// been grabbed.  There's got to be an easier way, but I don't know it.
-// WARNING - the last event received from X must have been a button press
-// event or strange and not so wonderful things will happen to you.
-FL_API void fl_bounce_button_press() {
-  // CET - FIXME - There has got to be an easier way to figure out which
-  // window the mouse pointer is in...
-  XEvent xe = *fl_xevent;
-  Window root = RootWindow(fl_display, fl_screen), child, current;
-  int root_x, root_y, win_x, win_y;
-  unsigned int mask;
-  // Start at root window and walk down the children containing pointer
-  for (current = root; ; current = child) {
-    XQueryPointer(fl_display, current, &root,
-                  &child, &root_x, &root_y, &win_x, &win_y, &mask);
-    if (!child) break;
-  }
-  xe.xbutton.window = current; // Substitute the new destination window
-  xe.xbutton.subwindow = None; // No subwindow
-  // Translate event's window coordinates to new destination window
-  XTranslateCoordinates(fl_display, root, current,
-                        xe.xbutton.x_root, xe.xbutton.y_root,
-                        &xe.xbutton.x, &xe.xbutton.y, &child);
-  // Send replacement button press event to new destination window
-  XSendEvent(fl_display, current, False, NoEventMask, &xe);
-}
-#endif
-
 //
-// End of "$Id: Fl_x.cxx,v 1.113 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.114 2001/09/10 01:16:17 spitzak Exp $".
 //

@@ -49,7 +49,7 @@ static Fl_Bitmap bitmap_new(bits_new, 16, 16);
 
 inline void Fl_FileChooser::cb__i(Fl_Button*, void*) {
   fileList->filter("*");;
-rescan();
+  rescan();
 }
 void Fl_FileChooser::cb_(Fl_Button* o, void* v) {
   ((Fl_FileChooser*)(o->parent()->user_data()))->cb__i(o,v);
@@ -76,21 +76,22 @@ void Fl_FileChooser::cb_fileName(Fl_FileInput* o, void* v) {
 inline void Fl_FileChooser::cb_okButton_i(Fl_Return_Button*, void*) {
   char pathname[1024];
 
-snprintf(pathname, sizeof(pathname), "%s/%s",
+  snprintf(pathname, sizeof(pathname), "%s/%s",
                fileList->directory(), fileName->value());
-if (filename_isdir(pathname))
+  if (filename_isdir(pathname))
   directory(pathname);
-else
+  else
   window->hide();
 }
+
 void Fl_FileChooser::cb_okButton(Fl_Return_Button* o, void* v) {
   ((Fl_FileChooser*)(o->parent()->user_data()))->cb_okButton_i(o,v);
 }
 
 inline void Fl_FileChooser::cb_Cancel_i(Fl_Button*, void*) {
   fileList->deselect();
-fileName->value("");
-window->hide();
+  fileName->value("");
+  window->hide();
 }
 void Fl_FileChooser::cb_Cancel(Fl_Button* o, void* v) {
   ((Fl_FileChooser*)(o->parent()->user_data()))->cb_Cancel_i(o,v);
@@ -147,13 +148,12 @@ Fl_FileChooser::Fl_FileChooser(const char *d, const char *p, int t, const char *
       o->callback((Fl_Callback*)cb_Cancel);
     }
     if (title) window->label(title);
-    o->set_modal();
     o->end();
   }
   window->size_range(345, 270, 345);
-fileList->filter(p);
-type(t);
-value(d);
+  fileList->filter(p);
+  type(t);
+  value(d);
 }
 
 void Fl_FileChooser::color(Fl_Color c) {
@@ -170,7 +170,7 @@ char * Fl_FileChooser::directory() {
 
 void Fl_FileChooser::filter(const char *p) {
   fileList->filter(p);
-rescan();
+  rescan();
 }
 
 const char * Fl_FileChooser::filter() {
@@ -199,7 +199,7 @@ const char * Fl_FileChooser::label() {
 
 void Fl_FileChooser::exec() {
   window->exec();
-fileList->deselect();
+  fileList->deselect();
 }
 
 void Fl_FileChooser::textcolor(Fl_Color c) {
@@ -229,13 +229,13 @@ uchar Fl_FileChooser::textsize() {
 
 void Fl_FileChooser::type(int t) {
   type_ = t;
-if (t == MULTI)
+  if (t == MULTI)
   fileList->type(FL_MULTI_BROWSER);
-else
+  else
   fileList->type(FL_HOLD_BROWSER);
-if (t != CREATE)
+  if (t != CREATE)
   newButton->deactivate();
-else
+  else
   newButton->activate();
 }
 

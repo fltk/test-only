@@ -49,7 +49,6 @@ Fl_Window* make_function_panel() {
     { Fl_Button* o = f_panel_cancel = new Fl_Button(200, 185, 80, 25, "Cancel");
       o->shortcut(0xff1b);
     }
-    o->set_modal();
     o->end();
   }
   return w;
@@ -80,7 +79,6 @@ Fl_Window* make_code_panel() {
     { Fl_Button* o = code_panel_cancel = new Fl_Button(205, 145, 80, 25, "Cancel");
       o->shortcut(0xff1b);
     }
-    o->set_modal();
     o->end();
   }
   return w;
@@ -119,7 +117,6 @@ Fl_Window* make_codeblock_panel() {
     { Fl_Button* o = codeblock_panel_cancel = new Fl_Button(205, 100, 80, 25, "Cancel");
       o->shortcut(0xff1b);
     }
-    o->set_modal();
     o->end();
   }
   return w;
@@ -158,7 +155,6 @@ Fl_Window* make_declblock_panel() {
     { Fl_Button* o = declblock_panel_cancel = new Fl_Button(210, 105, 80, 25, "Cancel");
       o->shortcut(0xff1b);
     }
-    o->set_modal();
     o->end();
   }
   return w;
@@ -237,7 +233,6 @@ Fl_Window* make_class_panel() {
     { Fl_Button* o = c_panel_cancel = new Fl_Button(200, 135, 80, 25, "Cancel");
       o->shortcut(0xff1b);
     }
-    o->set_modal();
     o->end();
   }
   return w;

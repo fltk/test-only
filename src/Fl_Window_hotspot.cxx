@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.15 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -30,36 +30,6 @@
 #include <fltk/win32.h>
 #endif
 
-void Fl_Window::move(int X, int Y) {
-#ifdef _WIN32
-  int dx, dy, dr, db;
-  Fl_X::borders(this, dx, dy, dr, db); dr -= dx; db -= dy;
-#else
-  // guess very thin borders for X (most X window managers will further
-  // move the window to be on-screen)
-  const int dx = 1;
-  const int dy = 20;
-  const int dr = 1;
-  const int db = 1;
-#endif
-  int W = Fl::w();
-  if (X+w()+dr > W) X = W-dr-w();
-  if (X < dx) X = dx;
-  if (X+w() > W) X = W-w();
-  if (X < 0) X = 0;
-  int H = Fl::h();
-  if (Y+h()+db > H) Y = H-db-h();
-  if (Y < dy) Y = dy;
-  if (Y+h() > H) Y = H-h();
-  if (Y < 0) Y = 0;
-  position(X,Y);
-}
-
-void Fl_Window::hotspot(int X, int Y, bool offscreen) {
-  int mx,my; Fl::get_mouse(mx,my); mx -= X; my -= Y;
-  if (offscreen) position(mx, my); else move(mx, my);
-}
-
 void Fl_Window::hotspot(const Fl_Widget *o, bool offscreen) {
   int X = o->w()/2;
   int Y = o->h()/2;
@@ -70,6 +40,36 @@ void Fl_Window::hotspot(const Fl_Widget *o, bool offscreen) {
   hotspot(X, Y, offscreen);
 }
 
+void Fl_Window::hotspot(int cx, int cy, bool offscreen) {
+  int X,Y; Fl::get_mouse(X,Y); X -= cx; Y -= cy;
+  if (!offscreen) {
+#ifdef _WIN32
+    int dx, dy, dr, db;
+    Fl_X::borders(this, dx, dy, dr, db); dr -= dx; db -= dy;
+#else
+    // We have to guess as to the thickness of the X window manager
+    // borders. This can be determined by querying the server for the
+    // parent window, but I don't bother as most window managers will
+    // force the window onscreen anyway.
+    const int dx = 1;
+    const int dy = 20;
+    const int dr = 1;
+    const int db = 1;
+#endif
+    int W = Fl::w();
+    if (X+w()+dr > W) X = W-dr-w();
+    if (X < dx) X = dx;
+    if (X+w() > W) X = W-w();
+    if (X < 0) X = 0;
+    int H = Fl::h();
+    if (Y+h()+db > H) Y = H-db-h();
+    if (Y < dy) Y = dy;
+    if (Y+h() > H) Y = H-h();
+    if (Y < 0) Y = 0;
+  }
+  position(X,Y);
+}
+
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.15 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $".
 //

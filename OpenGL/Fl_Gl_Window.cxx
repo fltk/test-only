@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.31 2001/07/30 14:49:28 robertk Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.32 2001/09/10 01:16:16 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,6 @@
 #if HAVE_GL
 
 #include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/x.h>
 #include "Fl_Gl_Choice.h"
 #include <fltk/Fl_Gl_Window.h>
 #include <stdlib.h>
@@ -36,26 +34,25 @@
 
 ////////////////////////////////////////////////////////////////
 
-// The symbol SWAP_TYPE defines what is in the back buffer after doing
-// a glXSwapBuffers().
+// The environment variable $GL_SWAP_TYPE defines what is in the back
+// buffer after doing a glXSwapBuffers().
 
 // The OpenGl documentation says that the contents of the backbuffer
 // are "undefined" after glXSwapBuffers().  However, if we know what
-// is in the backbuffers then we can save a good deal of time.  For
-// this reason you can define some symbols to describe what is left in
-// the back buffer.
+// is in the backbuffers then we can save a good deal of time!
 
-// Having not found any way to determine this from glx (or wgl) I have
-// resorted to letting the user specify it with an environment variable,
-// GL_SWAP_TYPE, it should be equal to one of these symbols:
+// $GL_SWAP_TYPE should be one of these keywords (ie "setenv
+// GL_SWAP_TYPE COPY"). If not set UNDEFINED is used.
 
-// contents of back buffer after glXSwapBuffers():
-#define UNDEFINED 1 	// anything
-#define SWAP 2		// former front buffer (same as unknown)
-#define COPY 3		// unchanged
-#define NODAMAGE 4	// unchanged even by X expose() events
+enum {
+  GET_FROM_ENV_VARIABLE = 0,
+  UNDEFINED, 	// anything
+  SWAP,		// former front buffer (same as UNDEFINED)
+  COPY,		// unchanged
+  NODAMAGE	// unchanged even by X expose() events
+};
 
-static char SWAP_TYPE; // 0 = determine it from environment variable
+static char SWAP_TYPE = GET_FROM_ENV_VARIABLE;
 
 ////////////////////////////////////////////////////////////////
 
@@ -153,8 +150,6 @@ int fl_overlay_depth = 0;
 bool fl_overlay;
 #endif
 
-#define SGI320_BUG 1
-
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
@@ -230,7 +225,7 @@ void Fl_Gl_Window::flush() {
       // If we are faking the overlay, use CopyPixels to act like
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
       if (overlay == this) {
-	// don't draw if only the overlay is damaged:
+	// update the back buffer if it is wrong:
 	if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
 	// we use a seperate context for the copy because rasterpos must be 0
 	// and depth test needs to be off:
@@ -253,11 +248,11 @@ void Fl_Gl_Window::flush() {
 	}
 	glCopyPixels(0,0,w(),h(),GL_COLOR);
 	make_current(); // set current context back to draw overlay
-	damage1_ = 0;
+	damage1_ = 0; // remember that back buffer is now undamaged
 
       } else {
 
-	damage1_ = damage();
+	damage1_ = damage(); // remember that backbuffer is damaged
 	set_damage(~0); draw_swap();
 
       }
@@ -331,5 +326,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.31 2001/07/30 14:49:28 robertk Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.32 2001/09/10 01:16:16 spitzak Exp $".
 //

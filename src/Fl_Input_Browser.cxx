@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.10 2001/07/24 04:44:26 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.11 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -57,21 +57,15 @@ class ComboWindow : public Fl_Menu_Window {
     ComboWindow(int x, int y, int w, int h) : Fl_Menu_Window(x, y, w, h) {}
 };
 
-static int button_abort;
-
 int
-ComboWindow::handle(int e) {
-  if ((!Fl::event_inside(0, 0, w(), h()) && e == FL_PUSH) ||
-      (e == FL_SHORTCUT && Fl::event_key() == FL_Escape))
-  {
-    button_abort = (e == FL_PUSH);
-    hide();
-    return 1;
+ComboWindow::handle(int event) {
+  switch (event) {
+  case FL_MOVE:
+  case FL_DRAG:
+  case FL_RELEASE:
+    return b->handle(event);
   }
-
-  if (e == FL_DRAG && Fl::event_inside(0, 0, w(), h())) Fl::pushed(b);
-
-  return Fl_Menu_Window::handle(e);
+  return Fl_Menu_Window::handle(event);
 }
 
 class ComboBrowser : public Fl_Browser {
@@ -82,7 +76,29 @@ class ComboBrowser : public Fl_Browser {
 };
 
 int
-ComboBrowser::handle(int e) {
+ComboBrowser::handle(int event) {
+  switch (event) {
+  case FL_SHORTCUT:
+    if (Fl::event_key() == FL_Escape) {
+      Fl::exit_modal();
+      return 1;
+    }
+    break;
+  case FL_PUSH:
+    if (!Fl::event_inside(0, 0, w(), h())) {
+      Fl::exit_modal();
+      return 0;
+    }
+    break;
+  case FL_MOVE:
+    event = FL_DRAG;
+  case FL_RELEASE:
+  case FL_DRAG:
+    // this causes a drag-in to the widget to work:
+    if (Fl::event_inside(0, 0, w(), h())) Fl::pushed(this);
+    else return 0;
+  }
+#if 0
   // vertical scrollbar event
   int vse = scrollbar.visible() && Fl::event_inside(scrollbar.x(),
             scrollbar.y(), scrollbar.w(), h());
@@ -95,12 +111,12 @@ ComboBrowser::handle(int e) {
 //  if (!Fl::event_inside(X, Y, W, H)) return 0;
   if (!Fl::event_inside(0, 0, w(), h())) return 0;
 
-  if (e == FL_MOVE && !vse && !hse) e = FL_DRAG;
-
-  return Fl_Browser::handle(e);
+  if (event == FL_MOVE && !vse && !hse) event = FL_DRAG;
+#endif
+  return Fl_Browser::handle(event);
 }
 
-static void ComboBrowser_cb(Fl_Widget *w, void *v) {
+static void ComboBrowser_cb(Fl_Widget*, void*) {
   // we get callbacks for all keys?
   if (Fl::event() != FL_KEY && Fl::event() != FL_RELEASE) return;
   if (Fl::event() == FL_KEY && Fl::event_key() != FL_Enter
@@ -111,7 +127,6 @@ static void ComboBrowser_cb(Fl_Widget *w, void *v) {
   ib->item(item);
   ib->value(item->label());
   ib->damage(FL_DAMAGE_CHILD);
-  button_abort = 0;
   mw->hide();
 }
 
@@ -130,8 +145,6 @@ public:
     other->list()->flags_changed(other,widget);
   }
 } share_list; // only one instance of this.
-
-extern FL_API void fl_bounce_button_press();
 
 int
 Fl_Input_Browser::handle(int e) {
@@ -156,7 +169,6 @@ Fl_Input_Browser::handle(int e) {
 
   switch (e) {
     case FL_PUSH: {
-      Fl::pushed(this);
       damage(FL_DAMAGE_SCROLL);
       if (!children()) return 1;
       ib = this;
@@ -165,7 +177,6 @@ Fl_Input_Browser::handle(int e) {
       mw = new ComboWindow(Fl::event_x_root()-Fl::event_x(),
                            Fl::event_y_root()-Fl::event_y()+h(),
                            200,400);
-      mw->set_modal();
       mw->set_override();
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
@@ -176,7 +187,6 @@ Fl_Input_Browser::handle(int e) {
       b->when(FL_WHEN_RELEASE_ALWAYS);
       b->callback(ComboBrowser_cb);
       mw->end();
-      Fl::grab(mw);
       b->layout();// shouldn't call this directly
       int W = b->last_max_width+b->scrollbar.w()+b->text_box()->dw();
       int H = b->last_height+b->text_box()->dh();
@@ -207,15 +217,15 @@ Fl_Input_Browser::handle(int e) {
       b->goto_number(item() ? b->Fl_Group::find(item()) : 0);
       b->item_select();
       b->set_middle();
-      Fl::focus(b); // CET - FIXME - why isn't this working?
-      mw->exec();
-      Fl::release();
-// CET - FIXME      if (button_abort) fl_bounce_button_press();
+
+      mw->exec(0, true);
+
       delete mw;
       if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
       else Fl::focus(input);
-      Fl::handle(FL_MOVE, Fl::first_window());//force extra move event
-      Fl::pushed(0); damage(FL_DAMAGE_SCROLL);
+
+      ib = 0;
+      damage(FL_DAMAGE_SCROLL);
       return 1;
     }
 
@@ -250,7 +260,7 @@ Fl_Input_Browser::draw() {
     input->clear_damage();
   }
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_SCROLL|FL_DAMAGE_HIGHLIGHT)) {
-    if  (Fl::pushed() == this) f |= (FL_VALUE/*|FL_SELECTED*/);
+    if  (ib == this) f |= (FL_VALUE/*|FL_SELECTED*/);
     if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
     box()->draw(X, Y, W, H, get_box_color(f), f);
@@ -261,5 +271,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.10 2001/07/24 04:44:26 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.11 2001/09/10 01:16:17 spitzak Exp $".
 //

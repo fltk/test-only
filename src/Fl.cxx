@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.128 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.129 2001/09/10 01:16:17 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,7 @@
 Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
 		*Fl::focus_,
-		*Fl::grab_;
-Fl_Window	*Fl::modal_;	// topmost modal() window
+		*Fl::modal_;
 int		Fl::damage_,
 		Fl::e_type,
 		Fl::e_x,
@@ -57,6 +56,8 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
+bool		Fl::grab_,
+		Fl::exit_modal_;
 
 static Fl_Window *xfocus;	// which window X thinks has focus
 static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
@@ -304,9 +305,8 @@ Fl_Window* fl_find(Window xid) {
   Fl_X *x;
   for (Fl_X **pp = &Fl_X::first; (x = *pp); pp = &x->next)
     if (x->xid == xid) {
-      if (x != Fl_X::first && !Fl::modal()) {
+      if (x != Fl_X::first) {
 	// make this window be first to speed up searches
-	// this is not done if modal is true to avoid messing up modal stack
 	*pp = x->next;
 	x->next = Fl_X::first;
 	Fl_X::first = x;
@@ -320,7 +320,8 @@ Fl_Window* Fl::first_window() {
   for (Fl_X* x = Fl_X::first;; x = x->next) {
     if (!x) return 0;
     Fl_Window* window = x->window;
-    if (window->visible() && !window->parent()) return window;
+    if (window->visible() && !window->parent() && !window->override())
+      return window;
   }
 }
 
@@ -328,7 +329,8 @@ Fl_Window* Fl::next_window(const Fl_Window* w) {
   for (Fl_X* x = Fl_X::i(w)->next;; x = x->next) {
     if (!x) return 0;
     Fl_Window* window = x->window;
-    if (window->visible() && !window->parent()) return window;
+    if (window->visible() && !window->parent() && !window->override())
+      return window;
   }
 }
 
@@ -396,26 +398,17 @@ void Fl::pushed(Fl_Widget *o) {
   pushed_ = o;
 }
 
-// Update focus() in response to anything that might change it.  We
-// need to keep the focus pointing at modal windows, even if the window
-// system thinks otherwise...
-
+// Update focus() in response to anything that might change it.
 // This is called whenever a window is added or hidden, and whenever
 // X says the focus window has changed.
 
 void fl_fix_focus() {
-
-  if (Fl::grab()) return; // don't do anything while grab is on.
-
   Fl_Widget* w = xfocus;
-
+  // Modal overrides whatever the system says the focus is:
+  if (Fl::grab_ || w && Fl::modal_) w = Fl::modal_;
   if (w) {
-    Fl::e_keysym = 0; // make sure widgets don't think a keystroke moved focus
-    // System says this program has focus.
-    // Modal overrides anything the system says:
-    if (Fl::modal()) w = Fl::modal();
-    // Move to outermost window (WAS: system code should do this)
-    // while (w->parent()) w = w->parent();
+    if (w->contains(Fl::focus())) return; // already has it
+    Fl::e_keysym = 0; // make widgets not think a keystroke moved focus
     if (w->take_focus()) return;
   }
   // give nothing the focus:
@@ -440,76 +433,86 @@ void Fl_Widget::throw_focus() {
   if (this == xfocus) xfocus = 0;
   if (this == xmousewin) xmousewin = 0;
   Fl_Tooltip::exit(this);
-  fl_fix_focus();
+  if (this == Fl::modal_) {Fl::modal_ = 0; Fl::exit_modal();}
 }
 
 ////////////////////////////////////////////////////////////////
 
-// local_grab() causes all windows to be frozen (as though a modal window
-// was up) and all events are passed to the provided grab function.
-// Use release() to undo this. You can also temporarily undo it by
-// setting the function to zero.
+void Fl::modal(Fl_Widget* widget, bool grab) {
 
-//void Fl::local_grab(Fl_Widget*) inline
-
-// grab() does the same thing but also messes with the window system
-// in an attempt to get events from the entire screen. This is used
-// when menus are up so they can be dismissed with a click anywhere.
-// Use release() to undo this.
-
-// On X this is dangerous if your program goes into an infinite loop
-// because the server will be locked up!
-
-// On both X and Win32 "this application" has to be identified by a
-// window, fltk just picks the top-most displayed window, which is not
-// necessarily where the events are really going!
-
-void Fl::grab(Fl_Widget* widget) {
-  grab_ = widget;
+  // release the old grab:
+  if (grab_) {
+    grab_ = false;
 #ifdef _WIN32
-  HWND w = fl_xid(first_window());
-  SetActiveWindow(w); // is this necessary?
-  SetCapture(w);
+    ReleaseCapture();
+    // if (event() == FL_PUSH) repost_the_push_event(); NYI
 #else
-  Window w = fl_xid(first_window());
-  XGrabPointer(fl_display,
-	       w,
-	       1,
-	       ButtonPressMask|ButtonReleaseMask|
-	       ButtonMotionMask|PointerMotionMask,
-	       GrabModeAsync,
-	       GrabModeAsync,
-	       None,
-	       0,
-	       fl_event_time);
-  XGrabKeyboard(fl_display,
-		w,
-		1,
-		GrabModeAsync,
-		GrabModeAsync,
-		fl_event_time);
+    XUngrabKeyboard(fl_display, fl_event_time);
+    Fl::event_is_click(0); // avoid double click
+    XAllowEvents(fl_display, event()==FL_PUSH ? ReplayPointer : AsyncPointer, CurrentTime);
+    XUngrabPointer(fl_display, fl_event_time); // Qt did not do this...
+    XFlush(fl_display); // make sure we are out of danger before continuing...
 #endif
-}
+  }
 
-void Fl::release() {
-  grab_ = 0;
+  // start the new grab:
+  // Both X and Win32 have the annoying requirement that a visible window
+  // be used as a target for the events, and it cannot disappear while the
+  // grab is running. I just grab fltk's first window:
+  if (grab && widget) {
 #ifdef _WIN32
-  ReleaseCapture();
+    Fl_Window* window = first_window();
+    if (window) {
+      SetActiveWindow(fl_xid(window));
+      SetCapture(fl_xid(window));
+      grab_ = true;
+    }
 #else
+    Fl_Window* window = first_window();
+    if (window &&
+	XGrabKeyboard(fl_display,
+		      fl_xid(window),
+		      true, // owner_events
+		      GrabModeAsync, // pointer_mode
+		      GrabModeAsync, // keyboard_mode
+		      fl_event_time) == GrabSuccess) {
+      //XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
+      if (XGrabPointer(fl_display,
+		       fl_xid(window),
+		       true, // owner_events
+		       ButtonPressMask|ButtonReleaseMask|
+		       ButtonMotionMask|PointerMotionMask,
+		       GrabModeSync, // pointer_mode
+		       GrabModeAsync, // keyboard_mode
+		       None, // confine_to
+		       None, // cursor
+		       fl_event_time) == GrabSuccess) {
+	grab_ = true;
+	XAllowEvents(fl_display, SyncPointer, CurrentTime);
+      } else {
+	//printf("XGrabPointer failed\n");
   XUngrabKeyboard(fl_display, fl_event_time);
-  XUngrabPointer(fl_display, fl_event_time);
-  // this flush is done in case the picked menu item goes into
-  // an infinite loop, so we don't leave the X server locked up:
-  XFlush(fl_display);
+      }
+    } else {
+      //printf("XGrabKeyboard failed\n");
+    }
 #endif
+  }
+
+  if (widget != modal_) {
+    modal_ = widget;
+    pushed_ = belowmouse_ = 0;
+    fl_fix_focus();
+    // generate a dummy move event so the highlights are correct for
+    // the new modal widget:
   if (xmousewin) {
-    // send a FL_MOVE event so the enter/leave state is up to date
     Fl::e_x = Fl::e_x_root-xmousewin->x();
     Fl::e_y = Fl::e_y_root-xmousewin->y();
-    xmousewin->handle(FL_MOVE);
-  } else {
-    Fl::belowmouse(0);
+      Fl::handle(FL_MOVE, xmousewin);
+    }
   }
+
+  exit_modal_ = false;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -615,15 +618,11 @@ bool Fl::handle(int event, Fl_Window* window)
     break;
   }
 
-  // restrict to grab and modal widgets:
-  if (grab_) {
-    if (!grab_->contains(to)) to = grab_;
-  } else if (modal_) {
-    if (!modal_->contains(to)) to = modal_;
-  }
+  // restrict to modal widgets:
+  if (modal_ && !modal_->contains(to)) to = modal_;
 
   bool ret = false;
-  if (to && window) {
+  if (to) {
     int wx = 0, wy = 0;
     for (Fl_Widget *w = to; w; w = w->parent())
       { wx += w->x(); wy += w->y(); }
@@ -648,7 +647,7 @@ bool Fl::handle(int event, Fl_Window* window)
     case FL_DND_DRAG:
     case FL_ENTER:
     case FL_MOVE:
-      if (!grab_) belowmouse(window);
+      if (!modal_) belowmouse(window);
       break;
     }
 
@@ -667,5 +666,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.128 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.129 2001/09/10 01:16:17 spitzak Exp $".
 //
