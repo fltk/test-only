@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_display.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $"
-//
-// Display function for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_display.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,19 +21,23 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Startup method to set what display to use.  Using setenv makes
-// programs that are exec'd use the same display.
-
-// This sets the environment variable on non-X systems, in case they
-// can pay attention to it. Unfortunatly it also does some
-// uglification that X needs: it adds the "0.0" to the end if it
-// appears to be a machine name. It also appears that putenv is
-// missing on some versions of Windows so I commented it all out. Sigh.
-
 #include <fltk/run.h>
 #include <stdlib.h>
 #include <string.h>
 
+/*! Startup method to set what X display to use. This uses setenv()
+  to change the $DISPLAY environment variable, so it will affect
+  programs that are exec'd by this one.
+
+  This does some "uglification" required by X. If there is no colon
+  in the string it appends ":0.0" to it. Thus a plain machine name
+  may be used.
+
+  On non-X systems this sets the environment variable anyway, even
+  though it probably will not affect the display used. It
+  appears that putenv is missing on some versions of Windows so I
+  commented it all out there, sigh.
+*/
 void fltk::display(const char *d) {
 #ifndef _WIN32
   char *e = new char[strlen(d)+13];
@@ -47,5 +49,5 @@ void fltk::display(const char *d) {
 }
 
 //
-// End of "$Id: Fl_display.cxx,v 1.11 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_display.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $".
 //

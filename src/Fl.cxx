@@ -1,7 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.171 2003/11/11 07:36:31 spitzak Exp $"
-//
-// Main event handling code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl.cxx,v 1.172 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -49,6 +47,19 @@
 
 using namespace fltk;
 
+/*!
+  Returns the version number of fltk. This can be compared to the
+  value of the fltk::VERSION macro to see if the shared library of
+  fltk your program linked with is up to date.
+
+  The FLTK version number is stored in a number of compile-time constants: 
+  - fltk::MAJOR_VERSION - The major release number, currently 2.
+  - fltk::MINOR_VERSION - The minor release number, currently 0.
+  - fltk::PATCH_VERSION - The patch release number, currently 1.
+  - fltk::VERSION - A combined floating-point version number of the
+    form M.mmpp where M is the major number, mm is the minor number,
+    and pp is the patch number, currently 2.0001.
+*/
 float fltk::version() {return FL_VERSION;}
 
 //
@@ -152,11 +163,43 @@ static void elapse_timeouts() {
 // time interval:
 static float missed_timeout_by;
 
+/*!
+  Add a one-shot timeout callback. The function will be called by
+  fltk::wait() at t seconds after this function is called. The
+  optional void* argument is passed to the callback.
+*/
 void fltk::add_timeout(float time, TimeoutHandler cb, void *arg) {
   elapse_timeouts();
   repeat_timeout(time, cb, arg);
 }
 
+/*!
+
+  Inside a timeout callback you can call this to add another
+  timeout. Rather than the time being measured from "now", it is
+  measured from when the system call elapsed that caused this timeout
+  to be called. This will result in far more accurate spacing of the
+  timeout callbacks, it also has slightly less system call
+  overhead. (It will also use all your machine time if your timeout
+  code and fltk's overhead take more than t seconds, as the real
+  timeout will be reduced to zero).
+
+  Outside a timeout callback this acts like add_timeout().
+
+  This code will print "TICK" each second on stdout, with a fair
+  degree of accuracy:
+\code
+void callback(void*) {
+  printf("TICK\n");
+  fltk::repeat_timeout(1.0,callback);
+}
+
+main() {
+  fltk::add_timeout(1.0,callback);
+  for (;;) fltk::wait();
+}
+\endcode 
+*/
 void fltk::repeat_timeout(float time, TimeoutHandler cb, void *arg) {
   time += missed_timeout_by; if (time < -.05f) time = 0;
   Timeout* t = free_timeout;
@@ -172,15 +215,21 @@ void fltk::repeat_timeout(float time, TimeoutHandler cb, void *arg) {
   *p = t;
 }
 
+/*!
+ Returns true if the timeout exists and has not been called yet.
+*/
 bool fltk::has_timeout(TimeoutHandler cb, void *arg) {
   for (Timeout* t = first_timeout; t; t = t->next)
     if (t->cb == cb && t->arg == arg) return true;
   return false;
 }
 
+/*!
+  Removes all pending timeout callbacks that match the function and arg.
+  Does nothing if there are no matching ones that have not been
+  called yet.
+*/
 void fltk::remove_timeout(TimeoutHandler cb, void *arg) {
-  // This version removes all matching timeouts, not just the first one.
-  // This may change in the future.
   for (Timeout** p = &first_timeout; *p;) {
     Timeout* t = *p;
     if (t->cb == cb && t->arg == arg) {
@@ -208,6 +257,36 @@ struct Check {
 };
 static Check* first_check, *next_check, *free_check;
 
+/*!
+
+  Fltk will call this callback just before it flushes the display and
+  waits for events. This is different than add_idle() because it
+  is only called once, then fltk calls the system and tells it not to
+  return until an event happens. If several checks have been added fltk
+  calls them all, the most recently added one first.
+
+  This can be used by code that wants to monitor the application's
+  state, such as to keep a display up to date. The advantage of using
+  a check callback is that it is called only when no events are
+  pending. If events are coming in quickly, whole blocks of them will
+  be processed before this is called once. This can save significant
+  time and avoid the application falling behind the events:
+\code
+bool state_changed; // anything that changes the display turns this on
+
+void check(void*) {
+  if (!state_changed) return;
+  state_changed = false;
+  do_expensive_calculation();
+  widget->redraw();
+}
+
+main() {
+  fltk::add_check(1.0,check);
+  return fltk::run();
+}
+\endcode
+*/
 void fltk::add_check(TimeoutHandler cb, void *arg) {
   Check* t = free_check;
   if (t) free_check = t->next;
@@ -219,6 +298,10 @@ void fltk::add_check(TimeoutHandler cb, void *arg) {
   first_check = t;
 }
 
+/*!
+  Remove all matching check callback, if any exists. You can call this
+  from inside the check callback if you want.
+*/
 void fltk::remove_check(TimeoutHandler cb, void *arg) {
   for (Check** p = &first_check; *p;) {
     Check* t = *p;
@@ -233,6 +316,8 @@ void fltk::remove_check(TimeoutHandler cb, void *arg) {
   }
 }
 
+// has_check is apparently not written!
+
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
 
@@ -242,6 +327,14 @@ static bool in_idle;
 
 #define FOREVER 1e20f
 
+/*!
+  Calls fltk::wait() as long as any windows are not closed. When
+  all the windows are hidden or destroyed (checked by seeing if
+  Window::first() is null) this will return with zero. A program can
+  also exit by having a callback call exit() or abort().
+
+  Most fltk programs will end main() with return fltk::run();.
+*/
 int fltk::run() {
   while (Window::first()) wait(FOREVER);
   return(0);
@@ -250,6 +343,11 @@ int fltk::run() {
 //  for (;;) wait(FOREVER);
 }
 
+/*!
+  Same as fltk::wait(infinity). Call this repeatedly to "run" your
+  program. You can also check what happened each time after this
+  returns, which is quite useful for managing program state.
+*/
 int fltk::wait() {
   return wait(FOREVER);
 }
@@ -268,6 +366,29 @@ static void run_checks() {
   }
 }
 
+/*!
+  Waits until "something happens", or the given time interval
+  passes. It can return much sooner than the time if something
+  happens.
+
+  What this really does is call all idle callbacks, all elapsed
+  timeouts, call fltk::flush() to get the screen to update, and then
+  wait some time (zero if there are idle callbacks, the shortest of
+  all pending timeouts, or the given time), for any events from the
+  user or any fltk::add_fd() callbacks. It then handles the events and
+  calls the callbacks and then returns.
+
+  The return value is non-zero if there are any visible windows (this
+  may change in future versions of fltk).
+
+  The return value is whatever the select() system call returned. This
+  will be negative if there was an error (this will happen on Unix if
+  a signal happens), zero if the timeout occurred, and positive if any
+  events or fd's came in.
+
+  On Win32 the return value is zero if nothing happened and time is
+  0.0. Otherwise 1 is returned.
+*/
 int fltk::wait(float time_to_wait) {
 
   // check functions must be run first so they can install idle or timeout
@@ -315,10 +436,42 @@ int fltk::wait(float time_to_wait) {
   return ret;
 }
 
+/*!
+  Same as fltk::wait(0). Calling this during a big calculation will
+  keep the screen up to date and the interface responsive:
+\code
+while (!calculation_done()) {
+  calculate();
+  fltk::check();
+  if (user_hit_abort_button()) break;
+}
+\endcode 
+*/
 int fltk::check() {
   return wait(0.0);
 }
 
+/*
+  This is similar to fltk::check() except this does not call
+  fltk::flush() and thus does not draw anything, and does not read any
+  events or call any callbacks. This returns true if fltk::check()
+  would do anything (it will continue to return true until you call
+  fltk::check() or fltk::wait()).
+
+  This is useful if your program is in a state where such callbacks
+  are illegal, or because the expense of redrawing the screen is much
+  greater than the expense of your calculation.
+\code
+while (!calculation_done()) {
+  calculate();
+  if (fltk::ready()) {
+    do_expensive_cleanup();
+    fltk::check();
+    if (user_hit_abort_button()) break;
+  }
+}
+\endcode 
+*/
 int fltk::ready() {
   if (first_timeout) {
     elapse_timeouts();
@@ -350,6 +503,13 @@ Window* fltk::find(XWindow xid) {
   return 0;
 }
 
+/*!
+  Returns the id of some visible() window. If there is more than
+  one, the last one to receive an event is returned. This is useful
+  as a default value for fltk::Window::child_of().
+  fltk::Window::exec() uses it for this if no other parent is specified.
+  This is also used by fltk::run() to see if any windows still exist.
+*/
 Window* Window::first() {
   for (CreatedWindow* x = CreatedWindow::first;; x = x->next) {
     if (!x) return 0;
@@ -359,6 +519,11 @@ Window* Window::first() {
   }
 }
 
+/*!
+  Returns the next visible() top-level window, returns NULL after
+  the last one. You can use this and first() to iterate through
+  all the visible windows.
+*/
 Window* Window::next() {
   for (CreatedWindow* x = CreatedWindow::find(this)->next;; x = x->next) {
     if (!x) return 0;
@@ -368,11 +533,21 @@ Window* Window::next() {
   }
 }
 
+/*!
+  If this window is visible, this removes it from wherever it is in
+  the list and inserts it at the top, as though it received an
+  event. This can be used to change the parent of dialog boxes run by
+  fltk::Window::exec() or fltk::ask().
+*/
 void Window::first(Window* window) {
   if (!window || !window->shown()) return;
   fltk::find(xid(window));
 }
 
+/*!
+  Redraws all widgets. This is a good idea if you have made global
+  changes to the styles.
+*/
 void fltk::redraw() {
   for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
     x->window->redraw();
@@ -380,20 +555,27 @@ void fltk::redraw() {
 
 int fltk::damage_;
 
-/** \fn int fltk::damage()
-    If non-zero this indicates there is damage to some window and that
-    fltk must call flush() on all windows. This is done when fltk::flush()
-    is called. If this is zero then it does not have to call flush() on
-    all windows, which is slightly faster.
+/*! \fn int fltk::damage()
 
-    Currently the meaning of any bits are undefined.
+  True if any Widget::redraw() calls have been done since the
+  last fltk::flush(). This indicates that flush() will do something.
+  Currently the meaning of any bits are undefined.
 
-    Window flush() routines can set this to indicate that flush() should
-    be called again after waiting for more events. This is useful in
-    some instances such as X windows that are waiting for a mapping
-    event before being drawn.
+  Window flush() routines can set this to indicate that flush() should
+  be called again after waiting for more events. This is useful in
+  some instances such as X windows that are waiting for a mapping
+  event before being drawn.
 */
 
+/*!
+  Causes all the windows that damage to be redrawn.
+  This is done by calling layout() and flush() (which calls draw())
+  on them as necessary. This will also flush the X i/o buffer,
+  set the cursor, and do other operations to get the display
+  up to date.
+
+  wait() calls this before it waits for events.
+*/
 void fltk::flush() {
   if (damage_) {
     damage_ = false; // turn it off so Window::flush() can turn it back on
@@ -430,12 +612,33 @@ void fltk::flush() {
 ////////////////////////////////////////////////////////////////
 // Event handling:
 
+/*!
+  Returns true if the current fltk::event_x() and fltk::event_y()
+  put it inside the passed box. You should always call this rather
+  than doing your own comparison so you are consistent about edge
+  effects.
+*/
 bool fltk::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = e_x - x;
   int my = e_y - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
 }
 
+/*! \fn Widget* fltk::focus()
+  Returns the widgets that will receive fltk::KEY events. This is NULL
+  if the application does not have focus now, or if no widgets
+  accepted focus.
+*/
+/*!
+  Change fltk::focus() to the given widget, the previous widget and
+  all parents (that don't contain the new widget) are sent
+  fltk::UNFOCUS events, the new widget is sent an fltk::FOCUS
+  event, and all parents of it get fltk::FOCUS_CHANGE events.
+
+  fltk::focus() is set whether or not the applicaton has the focus or
+  if the widgets accept the focus. You may want to use
+  fltk::Widget::take_focus() instead, it will test first.
+*/
 void fltk::focus(Widget *o) {
   Widget *p = focus_;
   if (o != p) {
@@ -451,6 +654,22 @@ void fltk::focus(Widget *o) {
 
 static bool dnd_flag; // makes belowmouse send DND_LEAVE instead of LEAVE
 
+/*! \fn Widget* fltk::belowmouse()
+  Get the widget that is below the mouse. This is the last widget to
+  respond to an fltk::ENTER event as long as the mouse is still
+  pointing at it. This is for highlighting buttons and bringing up
+  tooltips. It is not used to send fltk::PUSH or fltk::MOVE directly,
+  for several obscure reasons, but those events typically go to this
+  widget.
+*/
+
+/*!
+  Change the fltk::belowmouse() widget, the previous one and all
+  parents (that don't contain the new widget) are sent fltk::LEAVE
+  events. Changing this does not send fltk::ENTER to this or any
+  widget, because sending fltk::ENTER is supposed to test if the
+  widget wants the mouse (by it returning non-zero from handle()).
+*/
 void fltk::belowmouse(Widget *o) {
   Widget *p = belowmouse_;
   if (o != p) {
@@ -460,6 +679,15 @@ void fltk::belowmouse(Widget *o) {
   }
 }
 
+/*! \fn Widget* fltk::pushed()
+  Get the widget that is being pushed. fltk::DRAG or fltk::RELEASE
+  (and any more fltk::PUSH) events will be sent to this widget. This
+  is null if no mouse button is being held down, or if no widget
+  responded to the fltk::PUSH event.
+*/
+/*!
+  Change the fltk::pushed() widget. This sends no events.
+*/
 void fltk::pushed(Widget *o) {
   pushed_ = o;
 }
@@ -486,6 +714,37 @@ void Widget::throw_focus() {
 
 ////////////////////////////////////////////////////////////////
 
+/*! Restricts events to a certain widget.
+
+ First thing: much of the time fltk::Window::exec() will do what you
+ want, so try using that.
+
+ This function sets the passed widget as the "modal widget". All user
+ events are directed to it or a child of it, preventing the user from
+ messing with other widgets. The modal widget does not have to be
+ visible or even a child of an fltk::Window for this to work (but if
+ it not visible, fltk::event_x() and fltk::event_y() are meaningless,
+ use fltk::event_x_root() and fltk::event_y_root()).
+
+ The calling code is responsible for saving the current value of
+ modal() and grab() and restoring them by calling this after it is
+ done. The code calling this should then loop calling fltk::wait()
+ until fltk::exit_modal_flag() is set or you otherwise decide to get
+ out of the modal state. It is the calling code's responsibility to
+ monitor this flag and restore the modal widget to it's previous value
+ when it turns on.
+
+ \a grab indicates that the modal widget should get events from
+ anywhere on the screen. This is done by messing with the window
+ system. If fltk::exit_modal() is called in response to an fltk::PUSH
+ event (rather than waiting for the drag or release event) fltk will
+ "repost" the event so that it is handled after modal state is
+ exited. This may also be done for keystrokes in the future. On both X
+ and WIN32 grab will not work unless you have some visible window
+ because the system interface needs a visible window id. On X be
+ careful that your program does not enter an infinite loop while
+ grab() is on, it will lock up your screen!
+*/
 void fltk::modal(Widget* widget, bool grab) {
 
   // release the old grab:
@@ -575,6 +834,30 @@ void fltk::modal(Widget* widget, bool grab) {
   exit_modal_ = false;
 }
 
+/*! \fn Widget* fltk::modal()
+  Returns the current modal widget, or null if there isn't one.  It is
+  useful to test these in timeouts and file descriptor callbacks in
+  order to block actions that should not happen while the modal window
+  is up. You also need these in order to save and restore the modal
+  state.
+*/
+
+/*! \fn bool fltk::grab()
+  returns the current value of grab (this is always false if modal()
+  is null).
+*/
+
+/*! \fn void fltk::exit_modal()
+  Turns on exit_modal_flag(). This may be used by user callbacks to
+  cancel modal state.
+*/
+
+/*! \fn bool fltk::exit_modal_flag()
+  True if exit_modal() has been called. The flag is also set by the
+  destruction or hiding of the modal widget, and on Windows by other
+  applications taking the focus when grab is on.
+*/
+
 ////////////////////////////////////////////////////////////////
 
 struct handler_link {
@@ -584,6 +867,31 @@ struct handler_link {
 
 static const handler_link *handlers = 0;
 
+/*!
+  Install a function to parse unrecognized events. If FLTK cannot
+  figure out what to do with an event, it calls each of these
+  functions (most recent first) until one of them returns non-zero. If
+  none of them returns non zero then the event is ignored.
+
+  Currently this is called for these reasons:
+  - If there is a keystroke that no widgets are interested in, this is
+    called with fltk::SHORTCUT. You can use this to implement global
+    shortcut keys.
+  - Unrecognized X events cause this to be called with NO_EVENT. The
+    Window parameter is set if fltk can figure out the target window
+    and it is an fltk one. You can then use system specific code to
+    access the event data and figure out what to do. This is not done
+    on Windows due to the \e enormous number of garbage messages a
+    program gets, you should instead use Windows pre-filtering
+    functions to look at these.
+  - Events it gets with a window id it does not recognize cause this
+    to be called, with the Window parameter set to null. This can only
+    happen on X, on Windows any unknown windows should have their
+    own message handling function that does not call fltk.
+  - This may be called with other event types when the widget fltk
+    wants to send it to returns zero. However the exact rules when
+    this happens may change in future versions.
+*/
 void fltk::add_event_handler(int (*h)(int, Window*)) {
   handler_link *l = new handler_link;
   l->handle = h;
@@ -606,6 +914,21 @@ static bool send_from_root(Widget* widget, int event) {
 extern int fl_pushed_dx, fl_pushed_dy;
 Window* fl_actual_window;
 
+/*! This is the function called from the system-specific code for all
+  events that can be passed to Widget::handle().
+
+  You can call it directly to fake events happening to your
+  widgets. Currently data other than the event number can only be
+  faked by writing to the undocumented fltk::e_* variables, for
+  instance to make event_x() return 5, you should do fltk::e_x =
+  5. This may change in future versions.
+
+  This will redirect events to the modal(), pushed(), belowmouse(), or
+  focus() widget depending on those settings and the event type. It
+  will turn MOVE into DRAG if any buttons are down. If the resulting
+  widget returns 0 (or the window or widget is null) then the functions
+  pointed to by add_event_handler() are called.
+*/
 bool fltk::handle(int event, Window* window)
 {
   e_type = event;
@@ -627,7 +950,7 @@ bool fltk::handle(int event, Window* window)
     // widget to change before the release event happens.
     if (to->contains(belowmouse())) return 0;
   case MOVE:
-//case DRAG: // does not happen
+  case DRAG: // does not happen from system code, but user code may send this
     if (pushed()) {
       if (modal_ && !modal_->contains(pushed())) {
 	return send_from_root(modal_, DRAG);
@@ -694,9 +1017,7 @@ bool fltk::handle(int event, Window* window)
 //    }
     return false;
 
-  case 0: // events from system that fltk does not understand
-    to = 0;
-    break;
+//default: break;
   }
 
   // restrict to modal widgets:
@@ -722,5 +1043,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.171 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.172 2004/01/19 21:38:41 spitzak Exp $".
 //

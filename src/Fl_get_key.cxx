@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.17 2003/09/06 22:37:36 spitzak Exp $"
-//
-// Keyboard state routines for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_get_key.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -38,6 +36,13 @@
 
 extern char fl_key_vector[32]; // in x.C
 
+/*! 
+  Returns true if the given key was held down (or pressed) during the
+  last event. This is constant until the next event is read from the
+  server. The possible values for the key are listed under fltk::SpaceKey.
+
+  On Win32 event_key_state(KeypadEnter) does not work.
+*/
 bool fltk::event_key_state(int keysym) {
   if (keysym > 0 && keysym <= 8)
     return event_state(BUTTON(keysym)) != 0;
@@ -66,6 +71,14 @@ bool fltk::event_key_state(int keysym) {
   return (fl_key_vector[keycode/8] & (1 << (keycode%8))) != 0;
 }
 
+/*!
+  Returns true if the given key is held down now. Under X this
+  requires a round-trip to the server and is much slower than
+  fltk::event_key_state(int). The values to pass are described
+  under fltk::SpaceKey.
+
+  On Win32 fltk::get_key_state(fltk::KeypadEnter) does not work. 
+*/
 bool fltk::get_key_state(int k) {
   open_display();
   XQueryKeymap(xdisplay, fl_key_vector);
@@ -75,5 +88,5 @@ bool fltk::get_key_state(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.17 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $".
 //

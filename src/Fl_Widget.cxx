@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.108 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.109 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -333,28 +333,45 @@ void Widget::copy_label(const char* s) {
 */
 
 ////////////////////////////////////////////////////////////////
-// layout damage:
 
-/*! Respond to a change in size or position. You should not call this!
-  Calling relayout() or resize() with a different size will cause this
-  to be called later (after all pending events are handled and just
-  before draw is called).
+/*! \defgroup layout
 
-  This is useful for widget that need to do expensive calculations to
-  arrange the display in response to changes of the size or contents
-  of the widget. By using this you can defer these calculations until
-  fltk is ready to draw, rather than doing them on every change to the
-  widget.
+  When a widget resized or moved (or when it is initially created),
+  flags are set in it to indicate the layout is damaged. This will
+  cause the virtual functionlayout() to be called later on, just
+  before fltk attempts to draw the windows on the screen.
 
-  For more elaborate automatic layout, a widget is allowed to
-  alter it's own size in a layout() method. A parent widget is then
-  expected to rearrange itself to accomodate the new size (notice that
-  the basic Group does not do this). Any widget that does this must
-  return the same size if called again when no other changes have happened.
+  This is useful because often calculating the new layout is quite
+  expensive, this expense is thus deferred until the user will
+  actually see the new size.
+
+  Some Group widgets such as fltk::PackedGroup will also use the
+  virtual layout() function to find out how big a widget should be.
+  Widgets are allowed to change their own dimensions in layout().  The
+  only rule is that if nothing except the x/y position is changed and
+  layout() is called a second time, they must not change size again.
+  Usually a widget will alter only one of w() or h(), and usually it
+  will only make itself larger, not smaller. Most widgets only set
+  w() or h() if one or both of them are zero.
+
+  \{
+*/
+
+/*! Virtual function to respond to layout_damage(), it should
+  calculate the correct size of this widget and all it's children.
+  This function is called by fltk or by the layout() method in other
+  widgets. User programs should not call it.
+
+  A widget is allowed to alter it's own size in a layout() method, to
+  indicate a size that the data will fit in. A parent widget is then
+  expected to rearrange itself to accomodate the new size. This may
+  mean it will move the widget and thus layout() will be called again.
 
   You can look at layout_damage() to find out why this is being called.
 
-  If you subclass this, you must call the base class version!  */
+  If you subclass this, you must call the base class version! The base
+  class version sets layout_damage() to zero.
+*/
 void Widget::layout() {
   layout_damage_ = 0;
 }
@@ -416,7 +433,8 @@ void Widget::relayout() {
 }
 
 /* Cause layout() to be called later. Turns on the specified flags
-   in layout_damage(). \a flags cannot be zero.
+   in layout_damage(). \a flags cannot be zero, the maaning of the flags
+   is listed under \ref layout.
 */
 void Widget::relayout(uchar flags) {
   //if (!(flags & ~layout_damage_)) return;
@@ -447,18 +465,11 @@ MyClass::layout() {
 /*! \fn void Widget::layout_damage(uchar c)
   Directly change the value returned by layout_damage(). */
 
+/* \} */ // end of layout section of documentation
+
 ////////////////////////////////////////////////////////////////
-// damage:
 
-/*! \fn uchar Widget::damage() const
-
-  The 'or' of all the calls to redraw() done since the last
-  draw(). Cleared to zero after draw() is called.
-
-  See \ref damage for more information.
-*/
-
-/*! \addtogroup damage
+/*! \defgroup damage
 
   When redrawing your widgets you should look at the damage bits to
   see what parts of your widget need redrawing. The handle() method
@@ -486,6 +497,8 @@ MyClass::draw() {
   Except for DAMAGE_ALL, each widget is allowed to assign any meaning
   to any of the bits it wants. The enumerations are just to provide
   suggested meanings.
+
+  \{
 */
 
 /*! \var fltk::DAMAGE_CHILD
@@ -523,6 +536,12 @@ MyClass::draw() {
 /*! \var fltk::DAMAGE_CONTENTS
   Same as fltk::DAMAGE_EXPOSE but if fltk::DAMAGE_ALL is off a widget can
   use this for it's own purposes. */
+
+/*! \fn uchar Widget::damage() const
+
+  The 'or' of all the calls to redraw() done since the last
+  draw(). Cleared to zero after draw() is called.
+*/
 
 /*! \fn void Widget::set_damage(uchar c)
 
@@ -605,8 +624,51 @@ void Widget::redraw_highlight() {
     redraw(DAMAGE_HIGHLIGHT);
 }
 
+// If a draw() method sets this then the calling group assummes it
+// modified the current clip region to clip out the area covered by
+// the widget.
+extern Widget* fl_did_clipping;
+
+/* Fltk calls this virtual function to draw the widget, after setting
+   up the graphics (current window, xy translation, etc) so that any
+   drawing functions will go into this widget.
+
+   User code should not call this! You probably want to call redraw().
+
+   The default version calls draw_box() and draw_label(), thus drawing
+   the box() to fill the widget and putting the label() and image()
+   inside it to fill it, unless the align() flags are set to put it
+   outside.
+
+   Information on how to write your own version is <a
+   href=subclassing.html#draw>here</a>.
+*/
+void Widget::draw()
+{
+  if (box() == NO_BOX) {
+    // check for completely blank widgets. We must not clip to their
+    // area because it will break lots of programs that assumme these
+    // can overlap any other widgets:
+    if (!image() && (!label() ||
+		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
+      fl_did_clipping = this;
+      return;
+    }
+    // draw the background behind the invisible widget:
+    draw_background();
+  } else {
+    draw_box();
+  }
+  draw_label();
+}
+
+/* \} */ // end of damage section of documentation
+
 ////////////////////////////////////////////////////////////////
-// Events:
+
+/*! \addtogroup events
+  \{
+*/
 
 /*! Handle an \ref events(event). Returns non-zero if the
   widget understood and used the event.
@@ -650,22 +712,18 @@ int fl_pushed_dy;
 
 /*! Wrapper for handle(). This should be called to send
   events. It does a few things:
-
   - It adjusts event_x/y to be relative to the widget
-  (It is the caller's responsibility to see if the
-  mouse is pointing at the widget).
-
+    (It is the caller's responsibility to see if the
+    mouse is pointing at the widget).
   - It makes sure the widget is active and/or visible if the event
-  requres this.
-
+    requres this.
   - If this is not the fltk::belowmouse() widget then it changes
-  fltk::MOVE into fltk::ENTER and turns fltk::DND_DRAG into
-  fltk::DND_ENTER. If this \e is the fltk::belowmouse() widget then
-  the opposite conversion is done.
-
+    fltk::MOVE into fltk::ENTER and turns fltk::DND_DRAG into
+    fltk::DND_ENTER. If this \e is the fltk::belowmouse() widget then
+    the opposite conversion is done.
   - For move, focus, and push events if handle() returns true it sets
-  the fltk::belowmouse() or fltk::focus() or fltk::pushed() widget to
-  reflect this.
+    the fltk::belowmouse() or fltk::focus() or fltk::pushed() widget to
+    reflect this.
 */
 int Widget::send(int event) {
 
@@ -770,6 +828,143 @@ bool Widget::take_focus() {
   if (!contains(fltk::focus())) fltk::focus(this);
   return true;
 }
+
+static void widget_timeout(void* data) {
+  ((Widget*)data)->handle(TIMEOUT);
+}
+
+/*! Call handle(TIMEOUT) at the given time in the future. This will
+  happen exactly once. To make it happen repeatedly, call repeat_timeout()
+  from inside handle(TIMEOUT).
+*/
+void Widget::add_timeout(float time) {
+  fltk::add_timeout(time, widget_timeout, this);
+}
+/*! Call handle(TIMEOUT) at the given time interval since the last timeout.
+  This will produce much more accurate time intervals than add_timeout().
+*/
+void Widget::repeat_timeout(float time) {
+  fltk::repeat_timeout(time, widget_timeout, this);
+}
+/*! Cancel any and all pending handle(TIMEOUT) callbacks. */
+void Widget::remove_timeout() {
+  fltk::remove_timeout(widget_timeout, this);
+}
+
+////////////////////////////////////////////////////////////////
+
+#include <ctype.h>
+
+/*! Test to see if the current KEY or SHORTCUT event matches a
+  shortcut() value.
+  A shortcut is a key number such as fltk::SpaceKey or'd with shift
+  flags such as fltk::SHIFT.
+
+  This returns true if event_state() and event_key() match this
+  value exactly.
+
+  This will also return true in some other cases designed to make
+  it easier to match what the user expects for shortcuts:
+  - Only META, ALT, SHIFT, and CTRL must be "off".  A zero in the
+    other shift flags indicates "dont care". For instance we normally
+    don't care is SCROLL_LOCK or BUTTON1 is on, but you can require
+    them to be on by adding them to the shortcut. But you cannot
+    require them to be off (you can test that before calling this,
+    though).
+  - If the key is an uppercase letter like 'A', it matches the letter
+    key whether or not SHIFT is held down. This is due to the common
+    standard of displaying uppercase letters in menu shortcuts. You
+    can explicitly require the SHIFT key to be held down by using
+    SHIFT+'A' or SHIFT+'a'.
+  - A lowercase letter means that SHIFT <i>must not be held down</i>.
+    This allows you to put both uppercase and lowercase shortcuts into
+    the same menu.
+  - If the key is an ASCII character it will ignore SHIFT and match
+    against fltk::event_text()[0]. This will allow you to put '#' or
+    SHIFT+'#' into the shortcut, rather than the SHIFT+'3' that would
+    normally be required. It also means that '3' will match both the
+    main keyboard and the keypad 3.
+  - The character '\\r' will match either Enter key on the keyboard,
+    this is the only way to match both of them. This does not match
+    the user typing CTRL+M.
+  - Control letters are matched by using CTRL+'A'. '\\1' will not
+    match it, because the CTRL key is held down. CTRL+'\\1' would
+    work, but there is no reason to do that.
+  - CTRL+'[' matches the user holding down CTRL and hitting '[', it
+    <i>does not</i> match the Esc key. There is no way to match both
+    methods of typing ^[ with one shortcut.
+
+*/
+bool fltk::test_shortcut(int shortcut) {
+  if (!shortcut) return false;
+
+  int shift = event_state();
+  // see if any required shift flags are off:
+  if ((shortcut&shift) != (shortcut&0x7fff0000)) return false;
+  // record shift flags that are wrong:
+  int mismatch = (shortcut^shift)&0x7fff0000;
+  // these three must always be correct:
+  if (mismatch&(META|ALT|CTRL)) return false;
+
+  int key = shortcut & 0xffff;
+  if (key < 0x7f) key = tolower(key);
+
+  // if shift is also correct, check for exactly equal keysyms:
+  if (!(mismatch&(SHIFT)) && key == event_key()) return true;
+
+  // try matching typed punctuation marks and numbers no matter what
+  // key produces them:
+  if (key < 0x7f && !isalpha(key)) {
+    if (key == event_text()[0]) return true;
+    // If Ctrl is held down it can change event_text, change it back:
+    if ((shift&CTRL) && key >= 0x3f && key <= 0x5F
+      && event_text()[0]==(key^0x40)) return true;
+  }
+
+  return false;
+}
+
+/*! Test to see if the current KEY or SHORTCUT event matches a shortcut
+    specified with &x in the label.
+
+    This will match if the character after the first '&' matches the
+    event_text()[0]. Case is ignored. The caller may want to
+    check if ALT or some other shift key is held down before calling
+    this so that plain keys do not do anything.
+
+    This is ignored if flags() has RAW_LABEL turned on (which stops
+    the &x from printing as an underscore. The sequence "&&" is ignored
+    as well because that is used to print a plain '&' in the label.
+*/
+bool Widget::test_label_shortcut() const {
+
+  if (flags() & RAW_LABEL) return false;
+
+  char c = tolower(event_text()[0]);
+  const char* label = this->label();
+  if (!c || !label) return false;
+  for (;;) {
+    if (!*label) return false;
+    if (*label++ == '&') {
+      if (*label == '&') label++;
+      else return (tolower(*label) == c);
+    }
+  }
+}
+
+/*! Same as fltk::test_shortcut(shortcut()) || test_label_shortcut().
+
+    This can be used by simple button type widgets to trigger a callback
+    on a shortcut for either complex shortcut() values or for &x in
+    the label.
+*/
+bool Widget::test_shortcut() const {
+  return fltk::test_shortcut(shortcut()) || test_label_shortcut();
+}
+
+/*! \} */ // end of events chapter of documentation
+
+////////////////////////////////////////////////////////////////
 
 /*! \fn bool Widget::active() const
   Returns the active state of this widget. The widget is only really
@@ -912,156 +1107,6 @@ bool Widget::focused() const {return this == fltk::focus();}
   the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
-static void widget_timeout(void* data) {
-  ((Widget*)data)->handle(TIMEOUT);
-}
-
-void Widget::add_timeout(float time) {
-  fltk::add_timeout(time, widget_timeout, this);
-}
-void Widget::repeat_timeout(float time) {
-  fltk::repeat_timeout(time, widget_timeout, this);
-}
-void Widget::remove_timeout() {
-  fltk::remove_timeout(widget_timeout, this);
-}
-
-////////////////////////////////////////////////////////////////
-
-#include <ctype.h>
-
-/*! Test to see if the current KEY or SHORTCUT event matches a
-  shortcut() value.
-
-  A shortcut is a key number (as returned by event_key()) or'd
-  with shift flags (as returned by event_state()). Basically
-  a shortcut is matched if the shift state is exactly as
-  given and the given key is pressed.
-
-  To make it easier to match some things it is more complex:
-
-  Only META, ALT, SHIFT, and CTRL must be "off".  A zero in the
-  other shift flags indicates "dont care". For instance we normally
-  don't care is SCROLL_LOCK or BUTTON1 is on, but you can require them
-  to be on by adding them to the shortcut.
-  
-  The letter keys are officially named by their lower-case names,
-  however there is a tendency to put the upper-case name into the
-  shortcut. So if the shortcut is ALT+'A' it is treated as ALT+'a'.
-  If you want the user to purposly type an upper-case 'A' you \e must
-  specify SHIFT+'A' (this was not true in fltk1 but too many people
-  put in upper-case even when they explicitly did \e not want shift
-  held down...)
-
-  For non-letters it ignores SHIFT being held down unnecessarily and
-  matches against event_text()[0]. This will allow a shortcut like '#'
-  or SHIFT+'#' to work (rather than requiring SHIFT+'3' which is what
-  would be consistent with the letters). Also this allows '3' to match
-  Keypad3.
-
-*/
-bool fltk::test_shortcut(int shortcut) {
-  if (!shortcut) return false;
-
-  int shift = event_state();
-  // see if any required shift flags are off:
-  if ((shortcut&shift) != (shortcut&0x7fff0000)) return false;
-  // record shift flags that are wrong:
-  int mismatch = (shortcut^shift)&0x7fff0000;
-  // these three must always be correct:
-  if (mismatch&(META|ALT|CTRL)) return false;
-
-  int key = shortcut & 0xffff;
-  if (key < 0x7f) key = tolower(key);
-
-  // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(SHIFT)) && key == event_key()) return true;
-
-  // try matching typed punctuation marks and numbers no matter what
-  // key produces them:
-  if (key < 0x7f && !isalpha(key)) {
-    if (key == event_text()[0]) return true;
-    // If Ctrl is held down it can change event_text, change it back:
-    if ((shift&CTRL) && key >= 0x3f && key <= 0x5F
-      && event_text()[0]==(key^0x40)) return true;
-  }
-
-  return false;
-}
-
-/*! Test to see if the current KEY or SHORTCUT event matches a shortcut
-    specified with &x in the label.
-
-    This will match if the character after the first '&' matches the
-    event_text()[0].  Case is ignored. The caller may want to
-    check if ALT or some other shift key is held down before calling
-    this so that plain keys do not do anything.
-
-    This is ignored if flags() has RAW_LABEL turned on (which stops
-    the &x from printing as an underscore. The sequence "&&" is ignored
-    as well because that is used to print a plain '&' in the label.
-*/
-bool Widget::test_label_shortcut() const {
-
-  if (flags() & RAW_LABEL) return false;
-
-  char c = tolower(event_text()[0]);
-  const char* label = this->label();
-  if (!c || !label) return false;
-  for (;;) {
-    if (!*label) return false;
-    if (*label++ == '&') {
-      if (*label == '&') label++;
-      else return (tolower(*label) == c);
-    }
-  }
-}
-
-/*! Same as fltk::test_shortcut(shortcut()) || test_label_shortcut().
-
-    This can be used by simple button type widgets to trigger a callback
-    on a shortcut for either complex shortcut() values or for &x in
-    the label.
-*/
-bool Widget::test_shortcut() const {
-  return fltk::test_shortcut(shortcut()) || test_label_shortcut();
-}
-
-////////////////////////////////////////////////////////////////
-
-extern Widget* fl_did_clipping;
-
-/* Draw the widget. Do not call this directly! You probably want to
-   call redraw() instead. This is called by fltk and by the parent()
-   group after the fltk drawing context is set up.
-
-   The default version calls draw_box() and draw_label(), thus drawing
-   the box() to fill the widget and putting the label() and image()
-   inside it to fill it, unless the align() flags are set to put it
-   outside.
-
-   Information on how to write your own version is <a
-   href=subclassing.html#draw>here</a>.
-*/
-void Widget::draw()
-{
-  if (box() == NO_BOX) {
-    // check for completely blank widgets. We must not clip to their
-    // area because it will break lots of programs that assumme these
-    // can overlap any other widgets:
-    if (!image() && (!label() ||
-		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
-      fl_did_clipping = this;
-      return;
-    }
-    // draw the background behind the invisible widget:
-    draw_background();
-  } else {
-    draw_box();
-  }
-  draw_label();
-}
-
 //
-// End of "$Id: Fl_Widget.cxx,v 1.108 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.109 2004/01/19 21:38:41 spitzak Exp $".
 //

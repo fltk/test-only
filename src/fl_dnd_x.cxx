@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.12 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.13 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -95,6 +95,14 @@ static bool local_handle(int event, Window* window) {
 
 extern fltk::Cursor fl_drop_ok_cursor;
 
+/*!
+  Drag and drop the data set by the most recent fltk::copy() (with the
+  clipboard argument false). Returns true if the data was dropped on
+  something that accepted it.
+
+  By default only blocks of text are dragged. You can use
+  system-specific variables to change the type of data.
+*/
 bool fltk::dnd() {
   // Remember any user presets for the action and types:
   Atom* types;
@@ -218,5 +226,5 @@ bool fltk::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.12 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.13 2004/01/19 21:38:41 spitzak Exp $".
 //

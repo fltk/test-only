@@ -1,7 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.13 2002/12/10 02:00:29 easysw Exp $"
-//
-// OpenGL context routines for the Fast Light Tool Kit (FLTK).
+// "$Id: gl_start.cxx,v 1.14 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -22,10 +20,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
-// You MUST use gl_visual() to select the default visual before doing
-// show() of any windows.  Mesa will crash if you try to use a visual
-// not returned by glxChooseVisual.
 
 // This does not work with DoubleBufferWindow!  It will try to draw
 // into the front buffer.  Depending on the system this will either
@@ -48,6 +42,11 @@ using namespace fltk;
 #ifdef _WIN32
 static GlChoice* gl_choice;
 #endif
+
+/*! Use OpenGL and the glX library to choose the visual. This is a
+  somewhat different algorithim from fltk::visual(). On some X servers
+  OpenGL will crash if the visual is not selected with this.
+*/
 
 bool fltk::glVisual(int mode) {
   GlChoice *c = GlChoice::find(mode);
@@ -112,5 +111,5 @@ void fltk::glfinish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.13 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: gl_start.cxx,v 1.14 2004/01/19 21:38:41 spitzak Exp $".
 //

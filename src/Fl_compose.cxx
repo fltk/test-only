@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_compose.cxx,v 1.16 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.17 2004/01/19 21:38:41 spitzak Exp $"
 //
-// Character compose processing for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -165,6 +163,28 @@ static const char dead_keys[] = {
 
 int fltk::compose_state;
 
+/*!
+
+  Use of this function is very simple. Any text editing widget should
+  call this for each fltk::KEY event.
+
+  If true is returned, then it has modified the fltk::event_text() and
+  fltk::event_length() to a set of bytes to insert (it may be of zero
+  length!). It will also set the \a del parameter to the number of bytes
+  to the left of the cursor to delete, this is used to delete the
+  results of the previous call to fltk::compose(). Compose may consume
+  the key, which is indicated by returning true, but both the length
+  and del are set to zero.
+
+  Compose returns false if it thinks the key is a function key that
+  the widget should handle itself, and not an attempt by the user to
+  insert text.
+
+  Though the current implementation returns immediately, future
+  versions may take quite awhile, as they may pop up a window or do
+  other user-interface things to allow international characters to be
+  selected.
+*/
 bool fltk::compose(int& del) {
 
   del = 0;
@@ -242,3 +262,12 @@ bool fltk::compose(int& del) {
   return false;
 }
 
+/*! \fn void fltk::compose_reset()
+  If the user moves the cursor, be sure to call
+  fltk::compose_reset(). The next call to fltk::compose() will start
+  out in an initial state. In particular it will not set "del" to
+  non-zero. This call is very fast so it is ok to call it many times
+  and in many places.
+*/
+
+// end of Fl_compose.cxx

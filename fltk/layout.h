@@ -6,9 +6,6 @@
 namespace fltk {
 
 /*! \addtogroup layout
-  When the Widget::layout() method is called,
-  Widget::layout_damage() contains bitflags indicating what has
-  changed since it was last called.
   \{ */
 
 enum {

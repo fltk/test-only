@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.10 2003/02/21 18:16:43 spitzak Exp $"
-//
-// Private colormap support for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_own_colormap.cxx,v 1.11 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,19 +21,11 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Using the default system colormap can be a bad idea on PseudoColor
-// visuals, since typically every application uses the default colormap and
-// you can run out of colormap entries easily.
-//
-// The solution is to always create a new colormap on PseudoColor displays
-// and copy the first 16 colors from the default colormap so that we won't
-// get huge color changes when switching windows.
-
 #include <fltk/visual.h>
 #include <fltk/x.h>
 #include <config.h>
 
-#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
+#if !USE_X11
 
 // There is probably something relevant to do on MSWindows 8-bit displays
 // but I don't know what it is
@@ -43,8 +33,22 @@ void fltk::own_colormap() {}
 
 #else
 
-// X version
+/*!
+  Makes FLTK use its own colormap. This may make FLTK display
+  better and will reduce conflicts with other programs that want lots
+  of colors. However the colors may flash as you move the cursor
+  between windows.
 
+  The new colormap has the first 16 entries copied from the default
+  one, in an attempt to reduce colormap flashing when you change
+  programs.
+
+  This does nothing if the current visual is not colormapped, or
+  if the system is not X based. This means this probably does nothing
+  on any modern system.
+
+  Use fltk::visual() to set the visual first.
+*/
 void fltk::own_colormap() {
   open_display();
 #if USE_COLORMAP
@@ -74,5 +78,5 @@ void fltk::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.10 2003/02/21 18:16:43 spitzak Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.11 2004/01/19 21:38:41 spitzak Exp $".
 //

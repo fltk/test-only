@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.40 2004/01/18 05:25:33 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.41 2004/01/19 21:38:42 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -39,7 +39,7 @@ using namespace fltk;
 */
 
 /*! This is the glyph() function put into the default_style. See
-  \ref Glyphs for what it does. */
+  \ref glyphs for what it does. */
 void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {
   Color bg, fg; style->boxcolors(flags, bg, fg);
@@ -121,5 +121,5 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.40 2004/01/18 05:25:33 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.41 2004/01/19 21:38:42 spitzak Exp $".
 //

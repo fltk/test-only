@@ -73,10 +73,11 @@ REPEAT_BRIEF           = YES
 
 ALWAYS_DETAILED_SEC    = NO
 
-# If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all inherited 
-# members of a class in the documentation of that class as if those members were 
-# ordinary class members. Constructors, destructors and assignment operators of 
-# the base classes will not be shown.
+# If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show
+# all inherited members of a class in the documentation of that class
+# as if those members were ordinary class members. Constructors,
+# destructors and assignment operators of the base classes will not be
+# shown.
 
 INLINE_INHERITED_MEMB  = NO
 

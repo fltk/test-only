@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.17 2003/02/21 18:16:44 spitzak Exp $"
-//
-// Visual support for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_visual.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -28,6 +26,34 @@
 #include <fltk/visual.h>
 #include <fltk/x.h>
 #include <config.h>
+
+/*! \fn bool fltk::visual(int);
+
+  X-specific crap to allow you to force the "visual" used by
+  fltk to one you like, rather than the "default visual" which
+  in many cases has less capabilities than your machine really
+  has! For instance fltk::visual(fltk::RGB_COLOR) will get you a full
+  color display instead of an 8-bit colormap, if possible.
+
+  You must call this before you show() any windows. The integer
+  argument is an 'or' of the following:
+  - fltk::INDEX indicates that a colormapped visual is ok. This call
+    will normally fail if a TrueColor visual cannot be found.
+  - fltk::RGB this value is zero and may be passed to indicate that
+    fltk::INDEX is not wanted.
+  - fltk::RGB8 indicates that the TrueColor visual must have at least
+    8 bits of red, green, and blue (Windows calls this "millions of
+    colors").
+  - fltk::DOUBLE indicates that hardware accelerated double buffering
+    is wanted. This will make fltk::DoubleBufferWindow work better.
+
+  This returns true if the system has the capabilities by default or
+  FLTK suceeded in turing them on. Your program will still work even
+  if this returns false (it just won't look as good).
+
+  On non-X systems this just returns true or false indicating if the
+  system supports the passed values.
+*/
 
 #ifdef _WIN32
 bool fltk::visual(int flags) {
@@ -120,5 +146,5 @@ bool fltk::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.17 2003/02/21 18:16:44 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-// "$Id: visual.h,v 1.4 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: visual.h,v 1.5 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,12 +27,7 @@
 
 namespace fltk {
 
-/*! \addtogroup visual
-  X-specific crap to allow you to force the "visual" used by
-  fltk to one you like. Does nothing on other systems, and probably
-  does nothing on modern X systems. In any case, call this first,
-  for instance fltk::visual(fltk::RGB_COLOR) will get you a full
-  color display instead of an 8-bit colormap, if possible.
+/*! \addtogroup startup
   \{
 */
 
@@ -50,14 +45,13 @@ enum {
   STEREO	= 256
 };
 
-/*! Make it capable of displaying the given attributes. */
 extern FL_API bool visual(int);
 
-/*! Use OpenGL to choose the visual. */
 extern FL_API bool glVisual(int);
 
-/*! Make it use it's own colormap. */
 extern FL_API void own_colormap();
+
+/*! \} */
 
 }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: run.h,v 1.8 2004/01/19 21:38:41 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -33,15 +33,14 @@
 
 namespace fltk {
 
-FL_API float version();
-
-/*! \addtogroup environment
+/*! \addtogroup startup
   \{ */
+FL_API float version();
+FL_API void display(const char*);
 FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);
 extern FL_API const char* const help;
 FL_API void args(int, char**);
-FL_API void display(const char*);
 /*! \} */
 
 /*! \addtogroup execution
@@ -71,6 +70,7 @@ FL_API void remove_check(TimeoutHandler, void* = 0);
 FL_API void add_idle(TimeoutHandler, void* = 0);
 FL_API bool has_idle(TimeoutHandler, void* = 0);
 FL_API void remove_idle(TimeoutHandler, void* = 0);
+
 // For back-compatability only:
 extern FL_API void (*idle)();
 inline void set_idle(void (*cb)()) {idle = cb;}
@@ -80,6 +80,7 @@ enum {READ = 1, WRITE = 4, EXCEPT = 8};
 FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);
 FL_API void remove_fd(int, int when = -1);
+
 /*! \} */
 
 /*! \addtogroup multithreading

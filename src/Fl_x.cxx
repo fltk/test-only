@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.158 2004/01/13 06:51:48 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.159 2004/01/19 21:38:41 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -76,6 +76,25 @@ static struct FD {
   void* arg;
 } *fd = 0;
 
+/*!
+
+  Add file descriptor fd to listen to. When the fd becomes ready for
+  reading fltk::wait() will call the callback function and then
+  return. The callback is passed the fd and the arbitrary void*
+  argument.
+
+  The second argument is a bitfield to indicate when the callback
+  should be done. You can or these together to make the callback be
+  called for multiple conditions:
+  - fltk::READ - Call the callback when there is data to be read.
+  - fltk::WRITE - Call the callback when data can be written without blocking.
+  - fltk::EXCEPT - Call the callback if an exception occurs on the file.
+
+  Under UNIX any file descriptor can be monitored (files, devices,
+  pipes, sockets, etc.) Due to limitations in Microsoft Windows, WIN32
+  applications can only monitor sockets (? and is the when value
+  ignored?)
+*/
 void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   remove_fd(n,events);
   int i = nfds++;
@@ -101,10 +120,18 @@ void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
 #endif
 }
 
+/*! Same as add_fd(fd, READ, cb, v); */
 void fltk::add_fd(int fd, FileHandler cb, void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
+/*!
+  Remove all the callbacks (ie for all different when values) for the
+  given file descriptor. It is harmless to call this if there are no
+  callbacks for the file descriptor. If when is given then those bits
+  are removed from each callback for the file descriptor, and the
+  callback removed only if all of the bits turn off.
+*/
 void fltk::remove_fd(int n, int events) {
   int i,j;
   for (i=j=0; i<nfds; i++) {
@@ -545,6 +572,14 @@ const Monitor& Monitor::find(int x, int y) {
 
 ////////////////////////////////////////////////////////////////
 
+/*!
+  Return where the mouse is on the screen by doing a round-trip query
+  to the server. You should use fltk::event_x_root() and
+  fltk::event_y_root() if possible, but this is necessary if you are
+  not sure if a mouse event has been processed recently (such as to
+  position your first window). If the display is not open, this will
+  open it.
+*/
 void fltk::get_mouse(int &x, int &y) {
   open_display();
   XWindow root = RootWindow(xdisplay, xscreen);
@@ -592,6 +627,22 @@ static int selection_length[2];
 static int selection_buffer_length[2];
 bool fl_i_own_selection[2];
 
+/*!
+  Change the current selection. The block of text is copied to an
+  internal buffer by FLTK (be careful if doing this in response to an
+  fltk::PASTE as this may be the same buffer returned by
+  event_text()).
+
+  The block of text may be retrieved (from this program or whatever
+  program last set it) with fltk::paste().
+
+  There are actually two buffers. If \a clipboard is true then the text
+  goes into the user-visible selection that is moved around with
+  cut/copy/paste commands (on X this is the CLIPBOARD selection). If
+  \a clipboard is false then the text goes into a less-visible buffer
+  used for temporarily selecting text with the mouse and for drag &
+  drop (on X this is the XA_PRIMARY selection).
+*/
 void fltk::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
   if (len+1 > selection_buffer_length[clipboard]) {
@@ -607,7 +658,25 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
   XSetSelectionOwner(xdisplay, property, message_window, event_time);
 }
 
-// Call this when a "paste" operation happens:
+/*!
+  This is what a widget does when a "paste" command (like Ctrl+V or
+  the middle mouse click) is done to it. Cause an fltk::PASTE event to
+  be sent to the receiver with the contents of the current selection
+  in the fltk::event_text(). The selection can be set by fltk::copy().
+
+  There are actually two buffers. If \a clipboard is true then the text
+  is from the user-visible selection that is moved around with
+  cut/copy/paste commands (on X this is the CLIPBOARD selection). If
+  \a clipboard is false then the text is from a less-visible buffer
+  used for temporarily selecting text with the mouse and for drag &
+  drop (on X this is the XA_PRIMARY selection).
+
+  The reciever should be prepared to be called \e directly by this, or
+  for it to happen later, or possibly not at all. This allows the
+  window system to take as long as necessary to retrieve the paste
+  buffer (or even to screw up completely) without complex and
+  error-prone synchronization code most toolkits require.
+*/
 void fltk::paste(Widget &receiver, bool clipboard) {
   if (fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
@@ -1470,14 +1539,24 @@ void Window::make_current() const {
   fltk::gc = normalgc;
 }
 
-/*! static Window* Window::current()
+/*! \fn static Window* Window::current()
   Returns the last window make_current() was called on. */
 
 ////////////////////////////////////////////////////////////////
-// fltk::system_theme() reads xrdb database for some colors.
-// Not clear if any modern systems use this.
-// I commented out the entire XRDB stuff, use this to get it back:
 
+/*! \fn fltk::system_theme()
+  Sets all the NamedStyle structures to correct values for information
+  read from the operating system.
+
+  On X this used to read the xrdb database for colors like "background".
+  As it appears nobody is using this, this is disabled and the current
+  version does nothing.
+
+  On Windows it uses GetSysColor and SystemParametersInfo to set many
+  colors and fonts.
+*/
+
+// I commented out the entire XRDB stuff, use this to get it back:
 #if USE_XRDB
 
 // Set this to 1 to get my attempt to improve XGetDefault:
@@ -1649,5 +1728,5 @@ bool fltk::system_theme() {return true;}
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.158 2004/01/13 06:51:48 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.159 2004/01/19 21:38:41 spitzak Exp $".
 //

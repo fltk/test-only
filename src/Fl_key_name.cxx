@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.11 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -78,6 +78,13 @@ static Keyname table[] = {
 #endif
 };
 
+/*!
+  Unparse a key symbol such as fltk::SpaceKey optionally or'd with
+  shift flags such as fltk::SHIFT, into a human-readable string like
+  "Alt+N". If the shortcut is zero an empty string is returned. The
+  return value points at a static buffer that is overwritten with each
+  call.
+*/
 const char* fltk::key_name(int shortcut) {
   static char buf[20];
   char *p = buf;
@@ -130,5 +137,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.11 2003/09/06 22:37:36 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $"
 //

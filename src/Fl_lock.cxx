@@ -1,27 +1,78 @@
-/* Lock.cxx
+/*! \defgroup multithreading
 
    I would prefer that fltk contain the minimal amount of extra stuff
    for doing threads.  There are other portable thread wrapper libraries
-   out there and fltk should not be providing another.  This file
-   is an attempt to make minimal additions and make them self-contained
-   in this source file.
+   out there and fltk should not be providing another. Fltk provides
+   the minimum amount of locking needed so that several threads can
+   call it.
 
-   lock() - recursive lock.  Plus you must call this before the
-   first call to wait()/run() to initialize the thread system.
-   The lock is locked all the time except when wait() is waiting
-   for events.
+   You must have a "master" thread. Only this thread is allowed to
+   wait for events by calling fltk::wait() or fltk::run() or any
+   similar call.
 
-   unlock() - release the recursive lock.
+   You must call fltk::lock() and fltk::unlock() around \e all calls
+   to fltk. You do not need to do it every call, just around whole
+   blocks of calls.
 
-   awake(void*) - Causes wait() to return (with the lock locked)
-   even if there are no events ready.
+   When the wait() method is waiting for input or timeouts, child
+   threads are given access to FLTK. Similarly, when the main thread
+   receives events and needs to do processing, it will wait until all
+   child threads have called unlock() before processing the events and
+   doing callbacks.
 
-   thread_message() - returns an argument sent to an awake call,
-   or returns null if none.  Warning: the current implementation only
-   has a one-entry queue and only returns the most recent value!
+   See the file <fltk/Threads.h> for a simple portable recursive lock
+   object you can use in your own code for locking other
+   objects. However there is no requirement that you use this, you can
+   use pthreads or any other library that is compatable with your
+   system.
 
-   See also the Threads.h header file, which provides convienence
-   functions so you can create your own threads and mutexes.
+*/
+
+/*! \fn void fltk::lock()
+
+  The main thread must call this before the first call to wait()/run()
+  to initialize the thread system.  The lock is locked all the time
+  except when wait() is waiting for events.
+
+  Child threads should call this method prior to making any fltk
+  calls.  Blocks the current thread until it can safely access FLTK
+  widgets and data.  Child threads must call fltk::unlock() when they
+  are done accessing FLTK. They may want to call fltk::awake() first
+  if the display needs to change.
+
+  This is a "recursive lock". If you call fltk::lock() more than once,
+  the subsequent calls return immediately. But you must call
+  fltk::unlock() the same number of times as you called fltk::lock()
+  before the lock is released.
+*/
+
+/*! \fn void fltk::unlock()
+  Releases the lock that was set using the fltk::lock() method. Child
+  threads should call this method as soon as they are finished
+  accessing FLTK. If some other thread is waiting for fltk::lock() to
+  return, it will get control.
+*/
+
+/*! \fn void fltk::awake(void* message)
+
+  A child thread can call this to cause the main thread's call to
+  wait() to return (with the lock locked) even if there are no events
+  ready. The main purpose of this is to get the main thread to redraw
+  the screen, but it will also cause fltk::wait() to return so the
+  program's code can do something.
+
+  You should call this immediately before fltk::unlock() for best
+  performance.
+
+  The message argument can be retrieved by the other thread using
+  fltk::thread_message().
+*/
+
+/*! \fn void* fltk::thread_message()
+
+  Returns an argument sent to an awake call, or returns null if none.
+  Warning: the current implementation only has a one-entry queue and
+  only returns the most recent value!
 */
 
 #include <fltk/run.h>
