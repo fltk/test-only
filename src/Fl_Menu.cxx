@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.58 1999/11/15 04:02:41 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.59 1999/11/15 06:13:01 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -328,7 +328,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     if (m->image_) clear_overlay();
   }
 
-  itemheight += (itemheight/8 + leading());
+  itemheight += leading();
   W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
@@ -415,9 +415,9 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    int dx = m->box()->down->dx() + leading()/2;
-    int dy = m->box()->down->dy() + leading()/2;
-    int dh = m->box()->down->dh() + leading();
+    int dx = m->box()->down->dx();
+    int dy = m->box()->down->dy();
+    int dh = m->box()->down->dh();
     glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
@@ -851,5 +851,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.58 1999/11/15 04:02:41 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.59 1999/11/15 06:13:01 bill Exp $".
 //

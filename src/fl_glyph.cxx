@@ -51,7 +51,8 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_UP: {
     box->draw(x,y,w,h, bc, f);
-    x += 3; y += 3; w -= 6; h -= 6; // this matches Windows & KDE
+#define INSET 2 // sety this to 3 to match Windows & KDE
+    x += INSET; y += INSET; w -= 2*INSET; h -= 2*INSET;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -61,7 +62,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_DOWN: {
     box->draw(x,y,w,h, bc, f);
-    x += 3; y += 3; w -= 6; h -= 6; // this matches Windows & KDE
+    x += INSET; y += INSET; w -= 2*INSET; h -= 2*INSET;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -71,7 +72,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_LEFT: {
     box->draw(x,y,w,h, bc, f);
-    x += 3; y += 3; w -= 6; h -= 6; // this matches Windows & KDE
+    x += INSET; y += INSET; w -= 2*INSET; h -= 2*INSET;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
@@ -81,7 +82,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_RIGHT: {
     box->draw(x,y,w,h, bc, f);
-    x += 3; y += 3; w -= 6; h -= 6; // this matches Windows & KDE
+    x += INSET; y += INSET; w -= 2*INSET; h -= 2*INSET;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
