@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.5 1999/03/14 06:46:45 carl Exp $"
+// "$Id: label.cxx,v 1.6 1999/10/31 02:54:44 bill Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
   wrapb->callback(button_cb);
   clipb = new Fl_Toggle_Button(350,75,50,25,"clip");
   clipb->callback(button_cb);
-  g->resizable(insideb);
+  //g->resizable(insideb);
   g->forms_end();
 
   Fl_Choice *c = new Fl_Choice(50,100,200,25);
@@ -156,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.5 1999/03/14 06:46:45 carl Exp $".
+// End of "$Id: label.cxx,v 1.6 1999/10/31 02:54:44 bill Exp $".
 //

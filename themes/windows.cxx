@@ -16,7 +16,8 @@ static Fl_Style* find_style(const char* name) {
   return 0;
 }
 
-int main(int, char**) {
+extern "C"
+bool fltk_theme(const char*) {
   fl_background(0xC0C0C000);
   fl_normal_box.data = "2AAUWMMTT";
   fl_normal_box.dx_ = 2;
@@ -53,5 +54,5 @@ int main(int, char**) {
   if ((s = find_style("output"))) {
     s->set_color(FL_WHITE);
   }
-  return 0;
+  return true;
 }

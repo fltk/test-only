@@ -74,9 +74,10 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* f)
   rectangular = 1;
 }
 
-int main(int, char** argv) {
+extern "C"
+bool fltk_theme(const char* filename) {
   char dir[1024];
-  strncpy(dir, argv[0], 1024-256);
+  strncpy(dir, filename, 1024-256);
   char* c = dir;
   for (char* p = dir; *p;) if (*p++ == '/') c = p;
   dirname = dir; end_of_dir = c;
@@ -92,5 +93,5 @@ int main(int, char** argv) {
   if ((s = find_style("tabs"))) {
     s->set_box(box);
   }
-  return 0;
+  return true;
 }

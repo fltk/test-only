@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $"
+// "$Id: fl_symbols.cxx,v 1.10 1999/10/31 02:54:41 bill Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -366,7 +366,20 @@ static void fl_symbol_label_draw(Fl_Labeltype, const char* label,
 				 Fl_Color fill, Fl_Flags align)
 {
   if (align & FL_INACTIVE) fill = fl_inactive(fill);
-  if (!fl_draw_symbol(label, X, Y, W, H, fill)) {
+  int x1 = X;
+  int y1 = Y;
+  int w1 = W;
+  int h1 = H;
+  if (align & 15) {
+    if (w1 < h1) h1 = w1; else w1 = h1;
+    if (align & FL_ALIGN_LEFT) ;
+    else if (align & FL_ALIGN_RIGHT) x1 = X+W-w1;
+    else x1 = X+(W-w1)/2;
+    if (align & FL_ALIGN_TOP) ;
+    else if (align & FL_ALIGN_BOTTOM) y1 = Y+H-h1;
+    else y1 = Y+(H-h1)/2;
+  }
+  if (!fl_draw_symbol(label, x1, y1, w1, h1, fill)) {
     fl_color(fill);
     fl_draw(label, X, Y, W, H, align);
   }
@@ -381,5 +394,5 @@ void Fl::enable_symbols() {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.10 1999/10/31 02:54:41 bill Exp $".
 //

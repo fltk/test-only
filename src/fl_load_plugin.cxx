@@ -29,9 +29,9 @@ typedef HINSTANCE DLhandle;
 #include <stdlib.h>
 #include <errno.h>
 
-typedef int (*Main)(int, const char * const *);
+typedef bool (*Function)(const char *);
 
-bool fl_load_plugin(const char* name, const char* type) {
+bool fl_load_plugin(const char* name, const char* type, const char* func) {
   char s[1024];
 
   // see if an absolute name was given:
@@ -71,11 +71,8 @@ bool fl_load_plugin(const char* name, const char* type) {
   // now open it, any further errors will be printed:
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (handle) {
-    Main f = (Main)dlsym(handle, "main");
-    if (f) {
-      const char* argv[2]; argv[0] = name; argv[1] = 0;
-      return !f(1, argv);
-    }
+    Function f = (Function)dlsym(handle, func);
+    if (f) return f(name);
   }
   fprintf(stderr, "%s\n", dlerror());
   if (handle) dlclose(handle);

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $"
+// "$Id: forms_compatability.cxx,v 1.7 1999/10/31 02:54:42 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -51,6 +51,7 @@ char fl_flip = 2;
 void fl_end_form() {
   while (Fl_Group::current()) Fl_Group::current()->forms_end();
 }
+
 void Fl_Group::forms_end() {
   // set the dimensions of a group to surround contents
   if (children() && !w()) {
@@ -67,10 +68,10 @@ void Fl_Group::forms_end() {
       if (o->x()+o->w() > rw) rw = o->x()+o->w();
       if (o->y()+o->h() > rh) rh = o->y()+o->h();
     }
-    x(rx);
-    y(ry);
-    w(rw-rx);
-    h(rh-ry);
+    x(ox_ = rx);
+    y(oy_ = ry);
+    w(ow_ = rw-rx);
+    h(oh_ = rh-ry);
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
@@ -79,9 +80,9 @@ void Fl_Group::forms_end() {
     Fl_Widget*const* a = array();
     for (int i=children(); i--;) {
       Fl_Widget* o = *a++;
-      int newy = Y-o->y()-o->h();
-      o->y(newy);
+      o->y(Y-o->y()-o->h());
     }
+    oy_ = Y-oy_-h();
   }
   end();
 }
@@ -224,5 +225,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.7 1999/10/31 02:54:42 bill Exp $".
 //

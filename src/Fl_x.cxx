@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.39 1999/10/27 08:41:02 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.40 1999/10/31 02:54:41 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -278,8 +278,9 @@ void fl_open_display() {
 
 // Load the theme plugin:
 // THIS CODE MUST BE DUPLICATED FOR WIN32:
-  if (!fl_load_plugin(fl_theme ? fl_theme : "default", "fltk/themes")) {
-    if (fl_theme) Fl::fatal("Can't load theme \"%s\"", fl_theme);
+  const char* t = fl_theme; if (!t) t = "default";
+  if (!fl_load_plugin(t, "fltk/themes", "fltk_theme")) {
+    if (fl_theme) Fl::fatal("Can't load theme \"%s\"", t);
   }
 
 }
@@ -814,5 +815,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.39 1999/10/27 08:41:02 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.40 1999/10/31 02:54:41 bill Exp $".
 //

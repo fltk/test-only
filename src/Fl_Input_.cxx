@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.29 1999/10/15 09:03:29 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.30 1999/10/31 02:54:39 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -357,7 +357,7 @@ void Fl_Input_::handle_mouse(int X, int Y,
     p = e;
     if (e >= value_+size_) break;
   }
-  const char *l, *r, *t; double f0 = 0;
+  const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
   for (l = p, r = e; l<r; ) {
     double f;
     t = l+(r-l+1)/2;
@@ -391,6 +391,14 @@ void Fl_Input_::handle_mouse(int X, int Y,
       } else {
 	while (!wordboundary(newpos)) newpos--;
       }
+    }
+     // if the multiple click does not increase the selection, revert
+    // to single-click behavior:
+    if (!drag && (mark() > position() ?
+                  (newmark >= position() && newpos <= mark()) :
+                  (newmark >= mark() && newpos <= position()))) {
+      Fl::event_clicks(0);
+      newmark = newpos = l-value();
     }
   }
   position(newpos, newmark);
@@ -742,5 +750,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.29 1999/10/15 09:03:29 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.30 1999/10/31 02:54:39 bill Exp $".
 //

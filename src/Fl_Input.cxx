@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.20 1999/10/22 03:11:20 vincent Exp $"
+// "$Id: Fl_Input.cxx,v 1.21 1999/10/31 02:54:39 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -277,7 +277,6 @@ int Fl_Input::handle_key() {
 }
 
 int Fl_Input::handle(int event) {
-  static bool first_click;
   switch (event) {
 
   case FL_ENTER: return 1; // For tooltips
@@ -310,28 +309,24 @@ int Fl_Input::handle(int event) {
     return handle_key();
 
   case FL_PUSH:
-    compose = 0;
-    first_click = 0;
     if (Fl::focus() != this) {
       Fl::focus(this);
       handle(FL_FOCUS);
       // Windoze-style: select everything on first click:
       if (type() != FL_MULTILINE_INPUT) {
-        first_click = 1;
         position(size(), 0); // select everything
-        Fl::event_is_click(0); // prevents next click from being a double click
         return 1;
       }
     }
-    // don't remove selection when pasting in a replacement:
-    if (Fl::event_button() == 2 && mark() != position()) return 1;
+    compose = 0;
     break;
 
   case FL_RELEASE:
     if (Fl::event_button() == 2) {
       Fl::event_is_click(0); // stop double click from picking a word
       Fl::paste(*this);
-    } else if (!first_click) {
+    } else if (!Fl::event_is_click()) {
+      // copy drag-selected text to the clipboard.
       copy();
     }
     return 1;
@@ -349,5 +344,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.20 1999/10/22 03:11:20 vincent Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.21 1999/10/31 02:54:39 bill Exp $".
 //

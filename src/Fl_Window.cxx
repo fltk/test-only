@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.25 1999/10/27 08:41:00 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.26 1999/10/31 02:54:40 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -91,8 +91,7 @@ void Fl_Window::draw() {
   x(savex);
 }
 
-void Fl_Window::draw_n_clip() {
-}
+void Fl_Window::draw_n_clip() {} // does nothing
 
 void Fl_Window::label(const char *name) {label(name, iconlabel());}
 
@@ -104,5 +103,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.25 1999/10/27 08:41:00 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.26 1999/10/31 02:54:40 bill Exp $".
 //

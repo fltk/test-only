@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.36 1999/10/27 08:40:55 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.37 1999/10/31 02:54:38 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -362,6 +362,7 @@ int* Fl_Group::sizes() {
 // correctly, I removed the only call to it.  To fix this we need to
 // duplicate exactly the code in layout()...
 void Fl_Group::old_size(const Fl_Widget* o,int* r) {
+
   // get changes in size from the initial size:
   int* p = sizes();
   int dw = w()-(p[1]-p[0]);
@@ -483,8 +484,7 @@ void Fl_Group::draw() {
     fl_clip(x(), y(), w(), h());
     while (e > a) {
       Fl_Widget& w = **--e;
-      if (w.visible() && w.type() < FL_WINDOW &&
-	  fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
+      if (w.visible() && fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
 	w.draw_n_clip();
     }
     draw_group_box();
@@ -565,5 +565,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.36 1999/10/27 08:40:55 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.37 1999/10/31 02:54:38 bill Exp $".
 //
