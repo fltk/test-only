@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.18 1999/11/29 08:47:10 bill Exp $"
+// "$Id: essai.cxx,v 1.19 1999/12/16 03:14:05 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -70,6 +70,12 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   if (!(flags&FL_FRAME_ONLY)) {
     fl_up_box.inset(x,y,w,h);
     img->draw_tiled(x,y,w,h, -w/2, -h/2);
+    if ((flags & FL_FOCUSED) && h > 4 && w > 4) {
+      fl_color(FL_BLACK);
+      fl_line_style(FL_DOT);
+      fl_rect(x+1,y+1,w-2,h-2);
+      fl_line_style(0);
+    }
   }
 }
 
@@ -95,8 +101,15 @@ void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
   }
   Fl_Shared_Image* img;
   img = normal_img;
-  if (!(flags&FL_FRAME_ONLY))
+  if (!(flags&FL_FRAME_ONLY)) {
     img->draw_tiled(x, y, w, h, -w/2, -h/2);
+    if ((flags & FL_FOCUSED) && h > 4 && w > 4) {
+      fl_color(FL_BLACK);
+      fl_line_style(FL_DOT);
+      fl_rect(x+1,y+1,w-2,h-2);
+      fl_line_style(0);
+    }
+  }
 }
 
 extern "C"
@@ -146,5 +159,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.18 1999/11/29 08:47:10 bill Exp $".
+// End of "$Id: essai.cxx,v 1.19 1999/12/16 03:14:05 vincent Exp $".
 //
