@@ -1,5 +1,5 @@
 //
-// "$Id: rect.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
+// "$Id: rect.cxx,v 1.1.2.3 2004/11/24 16:38:16 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -56,26 +56,31 @@ void Fl_GDI_Printer::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b
 };
 
 void Fl_GDI_Printer::point(int x, int y){
+  fl_brush();
   rectf(x,y,1,1);
 };
 
 
 
 void Fl_GDI_Printer::xyline(int x,int y, int x1){
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); LineTo(fl_gc, x1, y);
 }
 
 void Fl_GDI_Printer::yxline(int x, int y, int y1){
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); LineTo(fl_gc, x, y1);
 }
 
 void Fl_GDI_Printer::xyline(int x, int y, int x1, int y2) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); 
   LineTo(fl_gc, x1, y);
   LineTo(fl_gc, x1, y2);
 }
 
 void Fl_GDI_Printer::xyline(int x, int y, int x1, int y2, int x3) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); 
   LineTo(fl_gc, x1, y);
   LineTo(fl_gc, x1, y2);
@@ -83,12 +88,14 @@ void Fl_GDI_Printer::xyline(int x, int y, int x1, int y2, int x3) {
 };
 
 void Fl_GDI_Printer::yxline(int x, int y, int y1, int x2) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); 
   LineTo(fl_gc, x, y1);
   LineTo(fl_gc, x2, y1);
 }
 
 void Fl_GDI_Printer::yxline(int x, int y, int y1, int x2, int y3) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0); 
   LineTo(fl_gc, x, y1);
   LineTo(fl_gc, x2, y1);
@@ -97,12 +104,14 @@ void Fl_GDI_Printer::yxline(int x, int y, int y1, int x2, int y3) {
 
 
 void Fl_GDI_Printer::line(int x, int y, int x1, int y1) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
 };
 
 
 void Fl_GDI_Printer::line(int x, int y, int x1, int y1, int x2, int y2) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   LineTo(fl_gc, x2, y2);

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.15.2.3.2.9.2.5 2004/10/25 20:08:31 rokan Exp $"
+// "$Id: win32.H,v 1.15.2.3.2.9.2.6 2004/11/24 16:38:13 rokan Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -100,13 +100,20 @@ extern FL_EXPORT char fl_override_redirect; // hack into Fl_Window::make_xid()
 extern FL_EXPORT int fl_background_pixel;  // hack into Fl_Window::make_xid()
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
+
+/*
 extern FL_EXPORT struct Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
   int brush;	// ref to solid brush, 0 if none created yet
 } *fl_current_xmap;
-inline COLORREF fl_RGB() {return fl_current_xmap->rgb;}
-inline HPEN fl_pen() {return fl_current_xmap->pen;}
+
+*/
+extern FL_EXPORT COLORREF for_color;
+inline COLORREF fl_RGB() {return for_color;}
+//inline HPEN fl_pen() {return fl_current_xmap->pen;} //now implementation in win/color.cxx
+extern FL_EXPORT HPEN fl_pen();
+
 FL_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
 
 extern FL_EXPORT HINSTANCE fl_display;
@@ -144,5 +151,5 @@ inline void fl_open_callback(void (*)(const char *)) {}
 extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 
 //
-// End of "$Id: win32.H,v 1.15.2.3.2.9.2.5 2004/10/25 20:08:31 rokan Exp $".
+// End of "$Id: win32.H,v 1.15.2.3.2.9.2.6 2004/11/24 16:38:13 rokan Exp $".
 //

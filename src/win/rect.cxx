@@ -1,5 +1,5 @@
 //
-// "$Id: rect.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: rect.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@
 
 void Fl_Win_Display::rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
   LineTo(fl_gc, x+w-1, y+h-1);
@@ -47,16 +48,19 @@ void Fl_Win_Display::rectf(int x, int y, int w, int h) {
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
+  fl_brush();
   FillRect(fl_gc, &rect, fl_brush());
 }
 
 void Fl_Win_Display::xyline(int x, int y, int x1) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x1+1, y);
 }
 
 void Fl_Win_Display::xyline(int x, int y, int x1, int y2) {
   if (y2 < y) y2--;
   else y2++;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y);
   LineTo(fl_gc, x1, y2);
@@ -65,6 +69,7 @@ void Fl_Win_Display::xyline(int x, int y, int x1, int y2) {
 void Fl_Win_Display::xyline(int x, int y, int x1, int y2, int x3) {
   if(x3 < x1) x3--;
   else x3++;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y);
   LineTo(fl_gc, x1, y2);
@@ -74,12 +79,14 @@ void Fl_Win_Display::xyline(int x, int y, int x1, int y2, int x3) {
 void Fl_Win_Display::yxline(int x, int y, int y1) {
   if (y1 < y) y1--;
   else y1++;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x, y1);
 }
 
 void Fl_Win_Display::yxline(int x, int y, int y1, int x2) {
   if (x2 > x) x2++;
   else x2--;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x, y1);
   LineTo(fl_gc, x2, y1);
@@ -88,6 +95,7 @@ void Fl_Win_Display::yxline(int x, int y, int y1, int x2) {
 void Fl_Win_Display::yxline(int x, int y, int y1, int x2, int y3) {
   if(y3<y1) y3--;
   else y3++;
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x, y1);
   LineTo(fl_gc, x2, y1);
@@ -95,6 +103,7 @@ void Fl_Win_Display::yxline(int x, int y, int y1, int x2, int y3) {
 }
 
 void Fl_Win_Display::line(int x, int y, int x1, int y1) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
@@ -103,6 +112,7 @@ void Fl_Win_Display::line(int x, int y, int x1, int y1) {
 }
 
 void Fl_Win_Display::line(int x, int y, int x1, int y1, int x2, int y2) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   LineTo(fl_gc, x2, y2);
@@ -112,6 +122,7 @@ void Fl_Win_Display::line(int x, int y, int x1, int y1, int x2, int y2) {
 }
 
 void Fl_Win_Display::loop(int x, int y, int x1, int y1, int x2, int y2) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   LineTo(fl_gc, x2, y2);
@@ -119,6 +130,7 @@ void Fl_Win_Display::loop(int x, int y, int x1, int y1, int x2, int y2) {
 }
 
 void Fl_Win_Display::loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
+  fl_pen();
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x1, y1);
   LineTo(fl_gc, x2, y2);
@@ -257,5 +269,5 @@ int Fl_Win_Display::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W,
 }
 
 //
-// End of "$Id: rect.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: rect.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $".
 //

@@ -30,7 +30,7 @@ extern FL_EXPORT Fl_Color fl_color_;
 extern FL_EXPORT int fl_size_;
 extern FL_EXPORT int fl_font_;
 extern FL_EXPORT HDC fl_gc;
-
+/*
 
 struct FL_EXPORT Fl_Brush {
     HBRUSH brush;
@@ -38,16 +38,18 @@ struct FL_EXPORT Fl_Brush {
     Fl_XMap* backref;
 };
 
+*/
+
 #define FL_N_BRUSH 16 
 class FL_EXPORT Fl_GDI_Printer: public Fl_Printer{
 
-  HPEN tmppen;
-  HBRUSH tmpbrush;
-  HPEN savepen;
+  //HPEN tmppen;
+  //HBRUSH tmpbrush;
+  //HPEN savepen;
 
-  Fl_Brush brushes[FL_N_BRUSH];
-  Fl_XMap fl_xmap[256];
-  Fl_XMap xmap;
+  //Fl_Brush brushes[FL_N_BRUSH];
+  //Fl_XMap fl_xmap[256];
+  //Fl_XMap xmap;
   
   HDC gc_;
   DEVMODE * mode_;

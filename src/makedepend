@@ -73,7 +73,8 @@ Fl_Dial.o: ../FL/Fl_Valuator.H ../FL/Fl_Widget.H ../FL/fl_draw.H
 Fl_Dial.o: ../FL/Fl_Device.H ../FL/Enumerations.H ../FL/Fl_Widget.H
 Fl_Dial.o: ../FL/math.h
 Fl_Device.o: ../FL/Fl_Device.H ../FL/Fl_Image.H ../FL/Enumerations.H
-Fl_Device.o: ../FL/Fl_Export.H xlib/Fl_Xlib_Display.H ../FL/Fl_Display.H
+Fl_Device.o: ../FL/Fl_Export.H ../FL/Fl.H xlib/Fl_Xlib_Display.H
+Fl_Device.o: ../FL/Fl_Display.H
 Fl_Double_Window.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H
 Fl_Double_Window.o: ../FL/Fl_Export.H ../FL/Fl_Double_Window.H
 Fl_Double_Window.o: ../FL/Fl_Window.H ../FL/x.H ../FL/fl_draw.H
@@ -206,7 +207,7 @@ Fl_Preferences.o: ../FL/Fl_Preferences.H ../FL/filename.H flstring.h
 Fl_Preferences.o: ../FL/Fl_Export.H ../config.h
 Fl_Printer.o: ../FL/Fl_Printer.H ../FL/Fl_Device.H ../FL/fl_draw.H
 Fl_Printer.o: ../FL/Enumerations.H ../FL/Fl_Export.H ../FL/Fl_Device.H
-Fl_Printer.o: ../FL/Enumerations.H ../FL/Fl_Widget.H
+Fl_Printer.o: ../FL/Enumerations.H ../FL/Fl_Widget.H ../FL/Fl.H
 Fl_Progress.o: ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 Fl_Progress.o: ../FL/Fl_Progress.H ../FL/Fl_Widget.H ../FL/fl_draw.H
 Fl_Progress.o: ../FL/Fl_Device.H ../FL/Enumerations.H ../FL/Fl_Widget.H

@@ -1,5 +1,5 @@
 //
-// "$Id: line_style.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: line_style.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
 //
 // Line style code for the Fast Light Tool Kit (FLTK).
 //
@@ -22,7 +22,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
+/*
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
@@ -58,7 +58,7 @@ void Fl_Win_Display::line_style(int style, int width, char* dashes) {
 
 }
 
-
+*/
 //
-// End of "$Id: line_style.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: line_style.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $".
 //

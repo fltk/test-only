@@ -1,5 +1,5 @@
 //
-// "$Id: vertex.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: vertex.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,10 @@ void Fl_Win_Display::end_line() {
     Fl_Win_Display::end_points();
     return;
   }
-  if (n>1) Polyline(fl_gc, p, n);
+  if (n>1) {
+    fl_pen();
+    Polyline(fl_gc, p, n);
+  };
 }
 
 static void fixloop() {  // remove equal points from closed path
@@ -103,7 +106,8 @@ void Fl_Win_Display::end_polygon() {
   }
 
   if (n>2) {
-    SelectObject(fl_gc, fl_brush());
+    fl_brush();
+    //SelectObject(fl_gc, fl_brush());
     Polygon(fl_gc, p, n);
   }
 }
@@ -139,7 +143,8 @@ void Fl_Win_Display::end_complex_polygon() {
   }
 
   if (n>2) {
-    SelectObject(fl_gc, fl_brush());
+    //SelectObject(fl_gc, fl_brush());
+    fl_brush();
     PolyPolygon(fl_gc, p, counts, numcount);
   }
 
@@ -160,12 +165,15 @@ void Fl_Win_Display::circle(double x, double y,double r) {
   int h = (int)rint(yt+ry)-lly;
 
   if (fl_what_loop==POLYGON) {
-    SelectObject(fl_gc, fl_brush());
+    fl_brush();
+    //SelectObject(fl_gc, fl_brush());
     Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
-  } else
+  } else{
+    fl_pen();
     Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+  };
 }
 
 //
-// End of "$Id: vertex.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: vertex.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $".
 //

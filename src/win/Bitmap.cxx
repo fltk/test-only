@@ -1,5 +1,5 @@
 //
-// "$Id: Bitmap.cxx,v 1.1.2.4 2004/10/03 22:48:39 rokan Exp $"
+// "$Id: Bitmap.cxx,v 1.1.2.5 2004/11/24 16:38:16 rokan Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -139,7 +139,8 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
 
   HDC tempdc = CreateCompatibleDC(fl_gc);
   SelectObject(tempdc, (HGDIOBJ)(cache->id));
-  SelectObject(fl_gc, fl_brush());
+  //SelectObject(fl_gc, fl_brush());
+  fl_brush();
   // secret bitblt code found in old MSWindows reference manual:
   BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
   DeleteDC(tempdc);
@@ -148,5 +149,5 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
 
 
 //
-// End of "$Id: Bitmap.cxx,v 1.1.2.4 2004/10/03 22:48:39 rokan Exp $".
+// End of "$Id: Bitmap.cxx,v 1.1.2.5 2004/11/24 16:38:16 rokan Exp $".
 //

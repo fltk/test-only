@@ -3,50 +3,49 @@
 Fl_GDI_Printer.o: ../../FL/Fl.H ../../FL/Enumerations.H ../../FL/Fl_Export.H
 Fl_GDI_Printer.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H
 Fl_GDI_Printer.o: ../../FL/Fl_Device.H ../../FL/Enumerations.H
-Fl_GDI_Printer.o: ../../FL/Fl_Widget.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
+Fl_GDI_Printer.o: ../../FL/Fl_Widget.H ../../FL/fl_draw.H
 Fl_GDI_Printer.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-Fl_GDI_Printer.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+Fl_GDI_Printer.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H
+Fl_GDI_Printer.o: ../../FL/Fl_Display.H
 arci.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 arci.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-arci.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-arci.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-arci.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+arci.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+arci.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+arci.o: ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 color.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 color.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-color.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-color.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-color.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+color.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+color.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+color.o: ../../FL/Fl_Display.H ../win/Fl_Win_Display.H
 draw.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 draw.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-draw.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-draw.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-draw.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+draw.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+draw.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+draw.o: ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 font.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 font.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-font.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-font.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-font.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+font.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+font.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+font.o: ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 image.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 image.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-image.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-image.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-image.o: ../../FL/Fl_Group.H ../../FL/Fl_Bitmap.H ../../FL/Fl_Image.H
-image.o: ../../FL/Fl_Pixmap.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+image.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+image.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+image.o: ../../FL/Fl_Bitmap.H ../../FL/Fl_Image.H ../../FL/Fl_Pixmap.H
+image.o: ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 line_style.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H
 line_style.o: ../../FL/Fl_Device.H ../../FL/Enumerations.H
 line_style.o: ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-line_style.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-line_style.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-line_style.o: ../../FL/Fl_Group.H ../../FL/Fl.H ../win/Fl_Win_Display.H
-line_style.o: ../../FL/Fl_Display.H
+line_style.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+line_style.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+line_style.o: ../../FL/Fl.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 rect.o: ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H ../../FL/Fl_Device.H
 rect.o: ../../FL/Enumerations.H ../../FL/Fl_Widget.H ../../FL/Enumerations.H
-rect.o: ../../FL/Fl_Export.H ../../FL/Fl_Image.H ../../FL/fl_draw.H
-rect.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
-rect.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
+rect.o: ../../FL/Fl_Export.H ../../FL/fl_draw.H ../../FL/Fl_Device.H
+rect.o: ../../FL/x.H ../../FL/Fl_Window.H ../../FL/Fl_Group.H
+rect.o: ../win/Fl_Win_Display.H ../../FL/Fl_Display.H
 vertex.o: ../../FL/math.h ../../FL/Fl_GDI_Printer.H ../../FL/Fl_Printer.H
 vertex.o: ../../FL/Fl_Device.H ../../FL/Enumerations.H ../../FL/Fl_Widget.H
-vertex.o: ../../FL/Enumerations.H ../../FL/Fl_Export.H ../../FL/Fl_Image.H
-vertex.o: ../../FL/fl_draw.H ../../FL/Fl_Device.H ../../FL/x.H
-vertex.o: ../../FL/Fl_Window.H ../../FL/Fl_Group.H ../win/Fl_Win_Display.H
-vertex.o: ../../FL/Fl_Display.H
+vertex.o: ../../FL/Enumerations.H ../../FL/Fl_Export.H ../../FL/fl_draw.H
+vertex.o: ../../FL/Fl_Device.H ../../FL/x.H ../../FL/Fl_Window.H
+vertex.o: ../../FL/Fl_Group.H ../win/Fl_Win_Display.H ../../FL/Fl_Display.H

@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.5.2.5.2.9.2.4 2004/11/10 20:09:49 rokan Exp $"
+ * "$Id: config.h,v 1.5.2.5.2.9.2.5 2004/11/24 16:38:16 rokan Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
@@ -196,9 +196,9 @@
  * Do we have direct colors for brushes?  Set this if you complile for platforms >= win2k
  */
 
-#define HAVE_DCBRUSH    0
+#define HAVE_DCBRUSH    1
 
 
 /*
- * End of "$Id: config.h,v 1.5.2.5.2.9.2.4 2004/11/10 20:09:49 rokan Exp $".
+ * End of "$Id: config.h,v 1.5.2.5.2.9.2.5 2004/11/24 16:38:16 rokan Exp $".
  */

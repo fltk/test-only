@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
+// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.3 2004/11/24 16:38:15 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,8 @@
 
 
 
-extern FL_EXPORT void set_xmaps(HPEN tmppen_, HBRUSH tmpbrush_, HPEN savepen_, Fl_Brush *brushes_, Fl_XMap * fl_xmap_, Fl_XMap xmap_);
-extern FL_EXPORT void pop_xmaps();
+//extern FL_EXPORT void set_xmaps(HPEN tmppen_, HBRUSH tmpbrush_, HPEN savepen_, Fl_Brush *brushes_, Fl_XMap * fl_xmap_, Fl_XMap xmap_);
+//extern FL_EXPORT void pop_xmaps();
 extern FL_EXPORT void push_xmaps();
 
 
@@ -55,6 +55,7 @@ Fl_GDI_Printer::~Fl_GDI_Printer(){
   EndDoc(gc_);
 
   // cleaning pens&brushes...
+  /*
   if(xmap.pen)
     DeleteObject((HGDIOBJ)(xmap.pen));
   int i;
@@ -65,6 +66,7 @@ Fl_GDI_Printer::~Fl_GDI_Printer(){
   for(i=0; i<FL_N_BRUSH; i++)
   if(brushes[i].brush)
     DeleteObject(brushes[i].brush);
+  */
   //end clean
   
   DeleteDC(gc_);
@@ -82,7 +84,7 @@ Fl_Device * Fl_GDI_Printer::set_current(){
     Fl::flush();
     push_xmaps();
   }
-  set_xmaps(tmppen, tmpbrush, savepen, brushes, fl_xmap, xmap);
+  //set_xmaps(tmppen, tmpbrush, savepen, brushes, fl_xmap, xmap);
   fl_device = this;
   fl_gc = gc_;
   fl_clip_region(0);
@@ -196,6 +198,8 @@ Fl_GDI_Printer::Fl_GDI_Printer(HDC gc, DEVMODE * mode ):Fl_Printer(),/*delete_mo
 
   nPages = 0;
 
+  /*
+
   int i;
   // Unlike for static vars, here I have to zero the memory
   for(i=0;i<FL_N_BRUSH;i++){
@@ -214,6 +218,7 @@ Fl_GDI_Printer::Fl_GDI_Printer(HDC gc, DEVMODE * mode ):Fl_Printer(),/*delete_mo
   xmap.rgb=0;
   xmap.brush =0;
   xmap.pen = 0;
+  */
   type_ = 0x200;
 }
 
@@ -322,11 +327,11 @@ void Fl_GDI_Printer::set_subpixel(){
 void Fl_GDI_Printer::set_normal(){
   SetWindowExtEx(gc_, WEx, WEy, 0);
   SetWindowOrgEx(gc_, WOx, WOy,0);
-  sty(style_, width_, dashes_);
+  sty(style_, width_, dashes_, 1);
 };
 
 //
-// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
+// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.3 2004/11/24 16:38:15 rokan Exp $"
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: vertex.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: vertex.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
 //
 // Path drawings for WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -97,6 +97,7 @@ void Fl_GDI_Printer::circle(double x, double y, double r){
 	  SetWindowOrgEx(gc_, WOx, WOy,0);
   }else{
     sty(style_, width_, dashes_, max_res_);
+    fl_pen();
     Arc(fl_gc, (int)rint((max_res_)*llx), (int)rint((max_res_)*lly), (int)rint((max_res_)*(llx+w)), (int)rint((max_res_)*(lly+h)), 0, 0, 0, 0);
 	  SetWindowExtEx(gc_, WEx, WEy, 0);
 	  SetWindowOrgEx(gc_, WOx, WOy,0);
@@ -172,7 +173,7 @@ void Fl_GDI_Printer::end_complex_polygon(){
 
 
 //
-// End of "$Id: vertex.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: vertex.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $"
 //
 
 

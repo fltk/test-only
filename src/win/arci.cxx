@@ -40,11 +40,13 @@
 
 
 void Fl_Win_Display::arc(int x,int y,int w,int h,double a1,double a2) {
+
   if (w <= 0 || h <= 0) return;
   int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
   int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
   int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
   int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
+  fl_pen();
   Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
 }
 
@@ -55,10 +57,11 @@ void Fl_Win_Display::pie(int x,int y,int w,int h,double a1,double a2) {
   int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
   int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
   int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
-  SelectObject(fl_gc, fl_brush());
+  fl_brush();
+  //SelectObject(fl_gc, fl_brush());
   Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
 }
 
 //
-// End of "$Id: arci.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: arci.cxx,v 1.1.2.2 2004/11/24 16:38:16 rokan Exp $".
 //

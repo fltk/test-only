@@ -1,5 +1,5 @@
 //
-// "$Id: line_style.cxx,v 1.1.2.2 2004/05/12 22:13:39 rokan Exp $"
+// "$Id: line_style.cxx,v 1.1.2.3 2004/11/24 16:38:16 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,12 @@
 #include "../win/Fl_Win_Display.H"
 extern Fl_Win_Display fl_disp;
 
+extern FL_EXPORT  DWORD _for_dashes[]; 
+
 void Fl_GDI_Printer::sty(int style, int width, char *dashes, int vex){
+
+
+
   if(!(width)){
     width=1;
     if(!style && !dashes)
@@ -39,18 +44,30 @@ void Fl_GDI_Printer::sty(int style, int width, char *dashes, int vex){
     if((style & 0xff) && ((style & 0xf00)==FL_CAP_SQUARE)) // square caps do not seem to work with dashes, not sure why
       style = (style & ~0xf00)|FL_CAP_FLAT;
     fl_disp.line_style(style, width*vex);
-  }else{
+  }
+
+  //fl_disp.line_style(style,width*vex, dashes);
+  
+  
+  else{
+	fl_disp.line_style(style, width * vex, dashes);
+	for (int n = 0; n < 16; n++) _for_dashes[n] *= vex ;
+  
+
+
 
     // Following is shameless copy from original fl_line_style with modifications.
     // Has to be changed to avoid code redundance...
-
+/*
     static DWORD Cap[4]= {PS_ENDCAP_FLAT, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
     static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
     int s1 = PS_GEOMETRIC | Cap[(style>>8)&3] | Join[(style>>12)&3];
-    DWORD a[16]; int n = 0;
+    //DWORD a[16]; 
+	int n = 0;
     s1 |= PS_USERSTYLE;
-    for (n = 0; n < 16 && *dashes; n++) a[n] = vex * *dashes++;
+    for (n = 0; n < 16 && *dashes; n++) if(!(for_dashes[n] = vex * *dashes++));
     //if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
+	for_style = s1;
     LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
     HPEN newpen = ExtCreatePen(s1, vex * width, &penbrush, n, n ? a : 0);
     if (!newpen) {
@@ -59,8 +76,11 @@ void Fl_GDI_Printer::sty(int style, int width, char *dashes, int vex){
     }
     HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
     DeleteObject(oldpen);
-    fl_current_xmap->pen = newpen;
+	*/
+	
+    //fl_current_xmap->pen = newpen;
   }
+
 }
 
 
