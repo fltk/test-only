@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.1 2000/01/12 05:58:09 bill Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -37,18 +37,17 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 
 // turn a stored font name into a pretty name:
 const char* Fl_Font_::name(int* ap) const {
-  const char* p = name_;
-  if (!p || !*p) {if (ap) *ap = 0; return "";}
   int type;
-  switch (*p) {
+  switch (name_[0]) {
   case 'B': type = FL_BOLD; break;
   case 'I': type = FL_ITALIC; break;
   case 'P': type = FL_BOLD | FL_ITALIC; break;
   default:  type = 0; break;
   }
-  if (!type) return p+1;
+  if (ap) {*ap = type; return name_+1;}
+  if (!type) {return name_+1;}
   static char *buffer; if (!buffer) buffer = new char[128];
-  strcpy(buffer, p+1);
+  strcpy(buffer, name_+1);
   if (type & FL_BOLD) strcat(buffer, " bold");
   if (type & FL_ITALIC) strcat(buffer, " italic");
   return buffer;
@@ -86,12 +85,12 @@ static int num_fonts = 0;
 static int array_size = 0;
 
 static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf,
-  NEWTEXTMETRIC FAR *lpntm, int FontType, LPARAM everything)
+  NEWTEXTMETRIC FAR *lpntm, int FontType, LPARAM)
 {
   // we need to do something about different encodings of the same font
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
-  if (!everything && lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
+  if (lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
 
   const char *name = (const char*)(lpelf->elfFullName);
 
@@ -109,14 +108,23 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf,
   array[num_fonts++] = base;
 }
 
-int fl_list_fonts(Fl_Font*& arrayp, int everything) {
+// Sort fonts by their "nice" name (it is possible Win32 always returns
+// them in this order, but I'm not sure):
+static int sort_function(const void *aa, const void *bb) {
+  const char* name_a = (*(Fl_Font_**)aa)->name_;
+  const char* name_b = (*(Fl_Font_**)bb)->name_;
+  int ret = stricmp(name_a+1, name_b+1); if (ret) return ret;
+  return name_a[0]-name_b[0]; // sort by attribute
+}
+
+int fl_list_fonts(Fl_Font*& arrayp) {
   if (array) {arrayp = array; return num_fonts;}
-  EnumFontFamilies(fl_gc, NULL, (FONTENUMPROC)enumcb, everything);
-  // maybe sort them into stricasecmp order?  Or are they already sorted?
+  EnumFontFamilies(fl_gc, NULL, (FONTENUMPROC)enumcb, 0);
+  qsort(array, num_fonts, sizeof(*array), sort_function);
   arrayp = array; return num_fonts;
 }
 
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.1 2000/01/12 05:58:09 bill Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.21 2000/01/10 06:31:27 bill Exp $"
+// "$Id: fl_font.cxx,v 1.22 2000/01/17 21:36:17 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -106,7 +106,7 @@ int fl_width(uchar c) {
 }
 
 // return dash number N, or pointer to ending null if none:
-const char* fl_font_word(const char* p, int n) {
+static const char* font_word(const char* p, int n) {
   while (*p) {if (*p=='-') {if (!--n) break;} p++;}
   return p;
 }
@@ -117,11 +117,9 @@ Fl_FontSize::Fl_FontSize(const char* name) {
 //    Fl::warning("bad font: %s", name);
     font = XLoadQueryFont(fl_display, "fixed"); // if fixed fails we crash
   }
-  encoding = 0;
-  if (*name == '-') {
-    const char* c = fl_font_word(name, 13);
-    if (*c++) encoding = c;
-  }
+  const char* c = font_word(name, 13);
+  if (*c++) encoding = c;
+  else encoding = 0;
 #if HAVE_GL
   listbase = 0;
 #endif
@@ -152,26 +150,12 @@ Fl_FontSize::~Fl_FontSize() {
 //	pixelsize == 0 (which indicates a scalable font)
 //	the largest pixelsize < size
 //	the smallest pixelsize > size
-// Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
-// Also I have not been able to find any other method than a search
+// I have not been able to find any other method than a search
 // that will reliably return a bitmap version of the font if one is
 // available at the correct size.  This is because X will not return
 // it unless you fill in all the garbage fields (swidth, etc)
 // correctly.  What a pita!
-
-// return a pointer to a number we think is "point size":
-char* fl_find_fontsize(char* name) {
-  char* c = name;
-  // for standard x font names, try after 7th dash:
-  if (*c == '-') {
-    c = (char*)fl_font_word(c,7);
-    if (*c++ && isdigit(*c)) return c;
-  }
-  char* r = 0;
-  // find last set of digits:
-  for (c++;* c; c++) if (isdigit(*c) && !isdigit(*(c-1))) r = c;
-  return r;
-}
+// Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
 
 void fl_font(Fl_Font font, unsigned size) {
   fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
@@ -195,36 +179,35 @@ void fl_font(Fl_Font font, unsigned size, const char* encoding) {
   if (!font->xlist) {
     Fl_Font_* t = (Fl_Font_*)font; // cast away const
     t->xlist = XListFonts(fl_display, t->name_, 100, &(t->n));
-    if (!t->xlist) {	// use fixed if no matching font...
-      t->first = f = new Fl_FontSize("fixed");
+    if (!t->xlist) {	// use variable if no matching font...
+      t->first = f = new Fl_FontSize("variable");
       f->minsize = 0;
       f->maxsize = 32767;
       set_current_fontsize(f); return;
     }
   }
-  // search for largest <= font size:
+
   char* name = font->xlist[0];
   unsigned ptsize = 0;	// best one found so far
   unsigned matchedlength = 32767;
   char namebuffer[1024];	// holds scalable font name
   int found_encoding = 0;
   int m = font->n; if (m<0) m = -m;
+
   for (int n=0; n < m; n++) {
 
     char* thisname = font->xlist[n];
-    if (*thisname == '-') {
-      // check for matching encoding
-      const char* c = fl_font_word(thisname, 13);
-      if (*c++ && !strcmp(c, encoding)) {
-	// yes, encoding matches
-	if (!found_encoding) ptsize = 0; // force it to choose this
-	found_encoding = 1;
-      } else {
-	if (found_encoding) continue;
-      }
+    // check for matching encoding
+    const char* c = font_word(thisname, 13);
+    if (*c++ && !strcmp(c, encoding)) {
+      // yes, encoding matches
+      if (!found_encoding) ptsize = 0; // force it to choose this
+      found_encoding = 1;
+    } else {
+      if (found_encoding) continue;
     }
-    char* c = fl_find_fontsize(thisname);
-    unsigned thissize = c ? atoi(c) : 32767;
+    c = font_word(thisname,7);
+    unsigned thissize = *c ? atoi(++c) : 32767;
     unsigned thislength = strlen(thisname);
     if (thissize == size && thislength < matchedlength) {
       // exact match, use it:
@@ -297,5 +280,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.21 2000/01/10 06:31:27 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.22 2000/01/17 21:36:17 bill Exp $".
 //

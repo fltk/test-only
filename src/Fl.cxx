@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.78 2000/01/10 06:31:16 bill Exp $"
+// "$Id: Fl.cxx,v 1.79 2000/01/17 21:36:16 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -574,7 +574,11 @@ void Fl_Window::destroy() {
 
 #ifdef WIN32
   if (x->private_dc) ReleaseDC(x->xid,x->private_dc);
-  if (x->xid == fl_window) fl_GetDC(0); // releases dc belonging to window
+  if (x->xid == fl_window && fl_gc) {
+    ReleaseDC(fl_window, fl_gc);
+    fl_window = (HWND)-1;
+    fl_gc = 0;
+  }
 #else
   if (x->region) XDestroyRegion(x->region);
 #endif
@@ -804,5 +808,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.78 2000/01/10 06:31:16 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.79 2000/01/17 21:36:16 bill Exp $".
 //

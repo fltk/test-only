@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.5 2000/01/10 06:31:31 bill Exp $"
+// "$Id: KDE1.cxx,v 1.6 2000/01/17 21:36:19 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -142,26 +142,6 @@ extern "C" int fltk_theme(int argc, char**)
     if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
     if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
     font = fl_font(fontname);
-
-#if 0
-    // when this method exists this will be a lot easier!
-#else
-    // doing these three manually saves startup time-- fl_list_fonts()
-    // is _very_ slow
-    if (!strcasecmp(fontname, "helvetica")) {
-      font = FL_HELVETICA;
-    } else if (!strcasecmp(fontname, "times")) {
-      font = FL_TIMES;
-    } else if (!strcasecmp(fontname, "courier")) {
-      font = FL_COURIER;
-    } else {
-      Fl_Font* fontlist;
-      int i, numfonts;
-      for (i = 0, numfonts = fl_list_fonts(fontlist); i < numfonts; i++)
-        if (!strcasecmp(fontlist[i]->name(), fontname)) break;
-      if (i != numfonts) font = fontlist[i];
-    }
-#endif
     if (font && fontbold) font = font->bold;
     if (font && fontitalic) font = font->italic;
   }
@@ -292,5 +272,5 @@ extern "C" int fltk_theme(int argc, char**)
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.5 2000/01/10 06:31:31 bill Exp $".
+// End of "$Id: KDE1.cxx,v 1.6 2000/01/17 21:36:19 bill Exp $".
 //

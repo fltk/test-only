@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.3 2000/01/10 06:31:21 bill Exp $"
+// "$Id: Fl_FontSize.H,v 1.4 2000/01/17 21:36:17 bill Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Two internal fltk data structures:
-//
-// Fl_Fontdesc: an entry into the fl_font() table.  There is one of these
-// for each fltk font number.
-//
-// Fl_FontSize: a structure for an actual system font, with junk to
-// help choose it and info on character sizes.  Each Fl_Fontdesc has a
-// linked list of these.  These are created the first time each system
-// font/size combination is used.
+// An Fl_FontSize is a structure describing an actual system font.  On
+// both X and Win32 this is a combination of an Fl_Font and a specific
+// point size and a specific encoding.  These are created the first
+// time each combination is used.
 
 #ifndef FL_FONT_
 #define FL_FONT_
@@ -60,16 +55,10 @@ public:
   FL_EXPORT ~Fl_FontSize();
 };
 
-#ifndef WIN32
-// functions for parsing X font names:
-FL_EXPORT const char* fl_font_word(const char *p, int n);
-FL_EXPORT char *fl_find_fontsize(char *name);
-#endif
-
 extern Fl_FontSize *fl_fontsize;
 
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.3 2000/01/10 06:31:21 bill Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.4 2000/01/17 21:36:17 bill Exp $".
 //

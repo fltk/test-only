@@ -25,7 +25,7 @@ parts of fltk is a typedef for a ponter to the structure
 <li><tt>FL_SYMBOL</tt>
 <li><tt>FL_SCREEN</tt>
 <li><tt>FL_SCREEN_BOLD</tt>
-<li><tt>FL_ZAPF_DINGBATS</tt> (different between X and Windows!)
+<li><tt>FL_ZAPF_DINGBATS</tt> (Wingdings font on Win32!)
 </ul>
 
 <h2>Methods</h2>
@@ -40,22 +40,22 @@ server), then these are circular pointers to this.
 
 <h4>const char* Fl_Font_::system_name()</h4>
 
-Returns a string that identifies the font in a system-specific manner.
-This string is guaranteed to be different for each font but it is not
-portable.  Under X this value is passed to XListFonts to get all the
-sizes of this font.
+Returns a string that identifies the font in a system-specific
+manner.  About all that can be said about it is that it is different
+for every font (two different fonts may return the same name()).  This
+string is not portable, even between different machines running the
+same operating system.
 
 <h4>const char* Fl_Font_::name(int* attributes = 0)</h4>
 
-Returns a "nice" name for the font.  This is useful if you are
-presenting a choice to the user.  There is no guarantee that each face
-has a different name.  The return value points to a static buffer that
-is overwritten each call.
+Returns the name of the font.  The return value points to a static
+buffer that is overwritten each call (so copy the string if you want
+to keep it).
 
-<P>The integer pointed to by <TT>attributes</TT> is set to zero,
-<TT>FL_BOLD</TT> or <TT>FL_ITALIC</TT> or <TT> FL_BOLD |
-FL_ITALIC</TT>.  If this pointer is zero then the attributes are
-indicated by adding "Bold" or "Italic" to the name.
+<P>The integer pointed to by <tt>attributes</tt> is set to zero,
+<tt>FL_BOLD</tt> or <tt>FL_ITALIC</tt> or <tt>FL_BOLD|FL_ITALIC</tt>.
+If this pointer is null then the attributes are indicated by adding
+"bold" or "italic" to the name.
 
 <h4>int Fl_Font_::encodings(const char** &amp;array) const;</h4>
 
@@ -87,23 +87,23 @@ it if you plan to keep it.
 Find a font with the given "nice" name.  You can get bold and italic
 by either putting "Bold" or "Italic" in the name, or by passing them
 as the attributes.  Case is ignored and fltk will accept some
-variations in the font name.  Not yet implemented...
+variations in the font name.
 
-<h4>int fl_list_fonts(Fl_Font*& arrayp, bool everything = false);</h4>
+<p>The current implementation calls <tt>fl_list_fonts()</tt> and then
+does a binary search for the font in it.  This can make the first call
+pretty slow, especially on X.
 
-Open the display and find every font on the server.  It creates an
-array of these and returns that array in <i>arrayp</i>, and the length
-as the return value.  Each entry is a "base" font, you can get the
-bold, italic, and bold+italic version of each font by following the
-<code>bold</code> or <code>italic</code> pointers in them.
+<h4>int fl_list_fonts(Fl_Font*& arrayp);</h4>
 
-<P>The optional argument <i>everything</i> will cause fltk to list
-every single font on an X server.  Normally it ignores fonts whose X
-names don't start with '-'.  This can be used to get the bitmap fonts
-that are useful for terminal emulators.  This flag does nothing on
-Windows.
+This allocates and fills in an array containing every font on the
+server.  The location <i>arrayp</i> is set to a pointer to this array,
+and the length of the array is the return value.  Each entry is a
+"base" font, there may be bold, italic, and bold+italic version of
+each font pointed to by the <code>bold</code> or <code>italic</code>
+pointers in them.
 
-<p>Subsequent calls always return the same array, and the value for
-<i>everything</i> is ignored.
+<p>Subsequent calls to this function returns the same array again.
+Currently there is no way to update the list from any changes to the
+set of fonts on the server.
 
 </body></html>

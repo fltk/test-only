@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.16 1999/08/16 07:31:19 bill Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.17 2000/01/17 21:36:17 bill Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -222,10 +222,17 @@ void Fl_Menu_::remove(int i) {
   int n = size();
   if (i<0 || i>=n) return;
   if (!alloc) copy(menu_);
-  if (alloc > 1) free((void *)menu_[i].text);
-  memmove(&menu_[i],&menu_[i+1],(n-i)*sizeof(Fl_Menu_Item));
+  // find the next item, skipping submenus:
+  Fl_Menu_Item* item = menu_+i;
+  const Fl_Menu_Item* next_item = item->next();
+  // delete the text only if all items were created with add():
+  if (alloc > 1) {
+    for (Fl_Menu_Item* m = item; m < next_item; m++)
+      if (m->text) free((void*)(m->text));
+  }
+  memmove(item, next_item, ((menu_+n+1)-next_item)*sizeof(Fl_Menu_Item));
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.16 1999/08/16 07:31:19 bill Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.17 2000/01/17 21:36:17 bill Exp $".
 //

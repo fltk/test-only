@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.6 1999/11/15 09:02:16 bill Exp $"
+// "$Id: Fl_Font.H,v 1.7 2000/01/17 21:36:13 bill Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -85,8 +85,6 @@ extern FL_API Fl_Font_ fl_fonts[16];
 Fl_Font fl_font(const char* name);
 
 // Find and return every font on the system.
-// The "everything" flag makes something for every font on an X system,
-// even if it does not have a well-formed font name.
-int fl_list_fonts(Fl_Font*& arrayp, int everything = 0);
+int fl_list_fonts(Fl_Font*& arrayp);
 
 #endif
