@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.4 2004/03/18 08:01:06 matthiaswm Exp $"
+// "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.5 2004/07/27 16:04:26 easysw Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -111,6 +111,7 @@ void Fl_Timer::step() {
       redraw();
       Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
     }
+    set_changed();
     do_callback();
   } else {
     if (type() == FL_VALUE_TIMER) redraw();
@@ -162,5 +163,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.4 2004/03/18 08:01:06 matthiaswm Exp $".
+// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.5 2004/07/27 16:04:26 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.6 2004/04/06 19:19:58 easysw Exp $"
+// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.7 2004/07/27 16:04:25 easysw Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -365,9 +365,9 @@ public:
      * You may want to call this from your own callback. */
   static void default_callback(Fl_Widget *w, void *user_data);
     /** Causes a widget to invoke its callback function, optionally with arbitrary arguments. */
-  void do_callback() {callback_(this,user_data_);}
-  void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
-  void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
+  void do_callback() {callback_(this,user_data_); if (callback_ != default_callback) clear_changed();}
+  void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg); if (callback_ != default_callback) clear_changed();}
+  void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg); if (callback_ != default_callback) clear_changed();}
   int test_shortcut();
   static int test_shortcut(const char*);
     /** Returns 1 if \a b is a child of this widget, or is equal to 
@@ -414,5 +414,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.6 2004/04/06 19:19:58 easysw Exp $".
+// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.7 2004/07/27 16:04:25 easysw Exp $".
 //
