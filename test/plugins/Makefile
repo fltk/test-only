@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.13 1999/11/21 04:23:07 vincent Exp $"
+# "$Id: Makefile,v 1.14 1999/11/21 10:53:18 vincent Exp $"
 #
 # Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,7 +23,7 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-PROGRAM = essai.fluidplugin
+PROGRAM = essai.flpl
 
 CPPFILES = \
 	essai_plugin.cxx
@@ -61,5 +61,5 @@ install:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.13 1999/11/21 04:23:07 vincent Exp $".
+# End of "$Id: Makefile,v 1.14 1999/11/21 10:53:18 vincent Exp $".
 #

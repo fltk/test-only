@@ -144,7 +144,7 @@ if test "$echo_cxxflags" = "yes"; then
           fi
         done
       fi
-      echo $includes $FLTK_CXXFLAGS
+      echo $includes -I$prefix $FLTK_CXXFLAGS
 fi
 
 LDLIBS=""

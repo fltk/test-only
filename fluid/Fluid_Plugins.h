@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.12 1999/11/12 20:34:57 vincent Exp $"
+// "$Id: Fluid_Plugins.h,v 1.13 1999/11/21 10:53:17 vincent Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 struct Fl_Menu_Item;
 class Fl_Group;
 
-#define PLUGINS_EXTENSION ".fluidplugin"
+#define PLUGINS_EXTENSION ".flpl"
 
 struct Fluid_Plugin {
   // statically user filled informations
@@ -75,5 +75,5 @@ void read_plugins();
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.12 1999/11/12 20:34:57 vincent Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.13 1999/11/21 10:53:17 vincent Exp $"
 //
