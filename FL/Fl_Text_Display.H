@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.3 2003/12/02 02:51:44 easysw Exp $"
+// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.4 2004/03/11 05:22:22 easysw Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -121,6 +121,10 @@ class FL_EXPORT Fl_Text_Display: public Fl_Group {
     void show_cursor(int b = 1);
       /** Hides the text cursor. */
     void hide_cursor() { show_cursor(0); }
+      /** Gets the text cursor color. */
+    Fl_Color cursor_color() const {return mCursor_color;}
+      /** Sets the text cursor color. */
+    void cursor_color(Fl_Color n) {mCursor_color = n;}
       /** Sets the text cursor style to one of the following:
        * \arg \c Fl_Text_Display::NORMAL_CURSOR - Shows an I beam.
        * \arg \c Fl_Text_Display::CARET_CURSOR - Shows a caret under the text.
@@ -335,5 +339,5 @@ class FL_EXPORT Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.3 2003/12/02 02:51:44 easysw Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.4 2004/03/11 05:22:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.2 2003/12/02 02:51:47 easysw Exp $"
+// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.3 2004/03/11 05:22:22 easysw Exp $"
 //
 // MacOS system menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,8 @@
  * Many other calls of the parent class don't work.
  * Changing the menu items has no effect on the menu bar.
  */
+
+#if defined(__APPLE__)
 
 #include <FL/X.H>
 #include <FL/Fl.H>
@@ -315,6 +317,8 @@ int Fl_Menu_Bar::handle(int event) {
 }
 */
 
+#endif /* __APPLE__ */
+
 //
-// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.2 2003/12/02 02:51:47 easysw Exp $".
+// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.3 2004/03/11 05:22:22 easysw Exp $".
 //
