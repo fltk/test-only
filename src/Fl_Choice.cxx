@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.48 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.49 2000/08/21 03:56:24 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ void Fl_Choice::draw() {
   draw_button();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
-  Fl_Widget* o = children() ? item() : 0;
+  Fl_Widget* o = item();
 
 // CET - this would look great for a combo box but not for a choice
 //  Fl_Color label_color = o ? o->label_color() : lc;
@@ -72,7 +72,8 @@ void Fl_Choice::draw() {
 // }
 
 int Fl_Choice::handle(int e) {
-  if (!children()) return 0;
+  int children = this->children(0,0);
+  if (!children) return 0;
   switch (e) {
 
   case FL_FOCUS:
@@ -110,16 +111,17 @@ int Fl_Choice::handle(int e) {
       goto EXECUTE;
 
     case FL_Up: {
-      int i = value(); if (i < 0) i = children();
+      int i = value(); if (i < 0) i = children;
       while (i > 0) {
-	Fl_Widget* w = child(--i);
+	--i;
+	Fl_Widget* w = child(&i,0);
 	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
       }
       return 1;}
     case FL_Down: {
       int i = value();
-      while (++i < children()) {
-	Fl_Widget* w = child(i);
+      while (++i < children) {
+	Fl_Widget* w = child(&i,0);
 	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
       }
       return 1;}
@@ -149,5 +151,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.48 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.49 2000/08/21 03:56:24 spitzak Exp $".
 //

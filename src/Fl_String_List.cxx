@@ -1,18 +1,28 @@
 #include <FL/Fl_String_List.H>
 #include <FL/Fl_Item.H>
 
-int Fl_String_List::children(const Fl_Group* group) {
-  return children_ + Fl_List::children(group);
+int Fl_String_List::children(const Fl_Group* group, int* indexes, int level) {
+  int n = Fl_List::children(group, 0,0);
+  if (!level) {
+    return children_ + n;
+  } else if (*indexes < n) {
+    return Fl_List::children(group, indexes, level);
+  } else {
+    return -1;
+  }
 }
 
-Fl_Widget* Fl_String_List::child(const Fl_Group* group, int i) {
-  if (i >= children_) return Fl_List::child(group, i-children_);
+Fl_Widget* Fl_String_List::child(const Fl_Group* group, int* indexes, int level) {
+  int n = *indexes - Fl_List::children(group, 0,0);
+  if (n < 0) return Fl_List::child(group, indexes, level);
+  if (n >= children_) return 0;
   static Fl_Widget* widget;
   if (!widget) {
     Fl_Group::current(0);
     widget = new Fl_Item();
   }
-  widget->label(array[i]);
+  widget->type(n==1 ? FL_GROUP: 0);
+  widget->label(array[n]);
   widget->clear_value();
   widget->w(0);
   return widget;

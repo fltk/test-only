@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item_Group.H,v 1.1 2000/02/14 11:32:35 bill Exp $"
+// "$Id: Fl_Item_Group.H,v 1.2 2000/08/21 03:56:23 spitzak Exp $"
 //
 // Widget designed to be a nested list in a menu or browser.
 // Code is in Fl_Item.cxx
@@ -28,6 +28,7 @@
 #define Fl_Item_Group_H
 
 #include "Fl_Menu_.H"
+
 typedef Fl_Menu_ Fl_Item_Group;
 
 #endif

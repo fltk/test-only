@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.82 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.83 2000/08/21 03:56:24 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,26 +35,57 @@
 #include <stdlib.h>
 #include <FL/Fl_Tooltip.H>
 
+// The base Fl_List class just returns the widget from the Fl_Group's
+// children.  All groups share a single instance of this list by default,
+// so for normal groups the child hierarchy of widgets is used.
+// Subclasses of Fl_List may want to call the base class to allow
+// normal widgets to be prepended to whatever they return.
+
+int Fl_List::children(const Fl_Group* group, int* indexes, int level) {
+  if (!level) return group->children_;
+  int i = *indexes;
+  if (i < 0 || i >= group->children_) return -1;
+  Fl_Widget* widget = group->array_[i];
+  if (!widget->is_group()) return -1;
+  return ((Fl_Group*)widget)->children(indexes+1, level-1);
+}
+
+Fl_Widget* Fl_List::child(const Fl_Group* group, int* indexes, int level) {
+  int i = *indexes;
+  if (i < 0 || i >= group->children_) return 0;
+  Fl_Widget* widget = group->array_[i];
+  if (!level) return widget;
+  if (!widget->is_group()) return 0;
+  return ((Fl_Group*)widget)->child(indexes+1, level-1);
+}
+
+void Fl_List::value_changed(const Fl_Group*, Fl_Widget*) {}
+
+static Fl_List default_list;
+
+int Fl_Group::children(int* indexes, int level) const {
+  return list_->children(this, indexes, level);
+}
+
+int Fl_Group::children() const {
+  return list_->children(this, 0, 0);
+}
+
+Fl_Widget* Fl_Group::child(int* indexes, int level) const {
+  return list_->child(this, indexes, level);
+}
+
+Fl_Widget* Fl_Group::child(int n) const {
+  return list_->child(this, &n, 0);
+}
+
+////////////////////////////////////////////////////////////////
+
 Fl_Group* Fl_Group::current_;
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
-
-// The default list returns the storage of the Fl_Group:
-inline int Fl_List::children(const Fl_Group* group) {
-  return group->children_;
-}
-
-inline Fl_Widget* Fl_List::child(const Fl_Group* group, int n) {
-  return group->array_[n];
-}
-
-int Fl_Group::children() const {return list_->children(this);}
-
-Fl_Widget* Fl_Group::child(int n) const {return list_->child(this,n);}
-
-static Fl_List default_list;
 
 // This style is unnamed since there is no reason for themes to change it:
 static Fl_Named_Style* style = new Fl_Named_Style(0, revert, &style);
@@ -366,7 +397,6 @@ int Fl_Group::handle(int event) {
 
 ////////////////////////////////////////////////////////////////
 // Layout
-// Only real child widgets are handled, stuff in the Fl_List is ignored.
 
 // sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
@@ -578,5 +608,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.82 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.83 2000/08/21 03:56:24 spitzak Exp $".
 //

@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <FL/Fl_Hor_Slider.H>
+#include <FL/Fl_String_List.H>
 
 #define WIDTH 600
 #define HEIGHT 23
@@ -21,6 +22,11 @@
 void callback(Fl_Widget* w, void*) {
   printf("Callback for %s\n", w->label());
 }
+
+const char* const strings[] = {
+  "This","is","a","test","of","a","menu","defined","as a","Fl_String_List"
+};
+Fl_String_List thelist(strings, sizeof(strings)/sizeof(*strings));
 
 void build_hierarchy() {
   Fl_Item_Group* g = new Fl_Item_Group("submenu&1");
@@ -45,6 +51,7 @@ void build_hierarchy() {
   new Fl_Item("Program");
   g2->end();
   g1->end();
+  (new Fl_Item_Group("List"))->list(&thelist);
   g->end();
 }
 
@@ -71,7 +78,7 @@ int main(int argc, char **argv) {
   (new Fl_Item("Paste"))->shortcut(FL_ALT+'v');
   build_hierarchy();
   edit.end();
-  edit.deactivate();
+  //edit.deactivate();
   Fl_Item_Group options("&Options");
   o = new Fl_Item("Red"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
   o = new Fl_Item("Green"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
@@ -83,6 +90,9 @@ int main(int argc, char **argv) {
   o = new Fl_Item("Toggle 4"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
   options.end();
   Fl_Item item("&Item"); item.type(FL_TOGGLE_ITEM);
+  Fl_Item_Group list("&List");
+  list.end();
+  list.list(&thelist);
   menubar.end();
   menubar.tooltip("This is a menu bar");
 

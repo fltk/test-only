@@ -22,6 +22,7 @@ Fl_Pixmap* fileSmall;
 
 void
 cb_test(Fl_Widget*, void* u) {
+  if (Fl::event_clicks()) printf("Double ");
   Fl_Widget* w = (Fl_Widget*)u;
   printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
 }
@@ -114,7 +115,7 @@ void cb_sort_reverse(Fl_Widget*, void*) {
 void cb_sort_random(Fl_Widget*, void*) {
 }
 
-#if 0
+#if 1
 #include <FL/Fl_String_List.H>
 
 const char* const strings[] = {
@@ -124,6 +125,9 @@ const char* const strings[] = {
 
 int main(int argc,char** argv) {
   Fl_Window win(240, 304, "Browser Example");
+  Fl_Browser tree(10, 10, 220, 180);
+  tree.indented(1);
+  win.resizable(tree);
   Fl_Button remove_button(10, 200, 100, 22, "Remove");
   Fl_Button add_paper_button(10, 224, 100, 22, "Add Paper");
   Fl_Button add_folder_button(10, 248, 100, 22, "Add Folder");
@@ -132,9 +136,6 @@ int main(int argc,char** argv) {
   Fl_Button sort_button_rev(130, 224, 100, 22, "Reverse Sort");
   Fl_Button sort_button_rnd(130, 248, 100, 22, "Randomize");
   Fl_Check_Button colors_button(130, 272, 100, 22, "Colors");
-  Fl_Browser tree(10, 10, 220, 180);
-  tree.indented(1);
-  win.resizable(tree);
   win.end();
 
   // Add callbacks to the widgets
@@ -153,7 +154,7 @@ int main(int argc,char** argv) {
   folderSmall = new Fl_Pixmap(folder_small);
   fileSmall = new Fl_Pixmap(file_small);
 
-#if 0
+#if 1
   //tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
   tree.list(new Fl_String_List(strings, sizeof(strings)/sizeof(*strings)));
   //tree.list(new Fl_String_List(strings));

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.6 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.7 2000/08/21 03:56:24 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -90,10 +90,11 @@ void Fl_Item::layout() {
   Fl_Widget::layout();
 }
 
-// Fl_Menu_ and Fl_Item_Group have identical draw/layout methods.  I'm
+////////////////////////////////////////////////////////////////
+// Fl_Item_Group has identical draw/layout methods.  I'm
 // not sure if the casts used here are legal C++.
 
-#include <FL/Fl_Menu_.H>
+#include <FL/Fl_Item_Group.H>
 
 Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l) {
@@ -116,8 +117,8 @@ void Fl_Menu_::layout() {
   ((Fl_Item*)this)->Fl_Item::layout();
 }
 
-// Fl_Divider
-// Does not share any code, but related:
+////////////////////////////////////////////////////////////////
+// Fl_Divider, does not share any code, but closely related:
 
 #include <FL/Fl_Divider.H>
 

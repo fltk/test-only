@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.18 2000/06/03 08:49:09 bill Exp $"
+// "$Id: Fl_Browser.H,v 1.19 2000/08/21 03:56:23 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -36,8 +36,8 @@ class FL_API Fl_Browser : public Fl_Menu_ {
 public:
 
   // marks keep track of various items in the browser?
-  enum { // predefined marks - (there are no non-predefined marks, right?)
-    HERE = 0, // current item?
+  enum { // predefined marks - (there are no non-predefined marks, right? yes)
+    HERE = 0, // current item, the one moved by all the calls
     FOCUS,
     FIRST_VISIBLE,
     REDRAW_0,
@@ -145,11 +145,10 @@ private:
 
   // Mark and current item storage:
   Fl_Widget* widget;
-  struct Data;
-  Data* data;
   int item_level[NUMMARKS]; // mark item's nesting depth in group hierarchy?
   int item_position[NUMMARKS]; // distance in pixels from top of browser?
   int item_number[NUMMARKS];
+  int* item_index[NUMMARKS];
   int levels;
   void set_level(int);
 
@@ -166,5 +165,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.18 2000/06/03 08:49:09 bill Exp $".
+// End of "$Id: Fl_Browser.H,v 1.19 2000/08/21 03:56:23 spitzak Exp $".
 //

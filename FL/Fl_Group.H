@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.25 2000/06/12 02:05:58 bill Exp $"
+// "$Id: Fl_Group.H,v 1.26 2000/08/21 03:56:23 spitzak Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,17 +30,26 @@
 #include "Fl_Widget.H"
 #endif
 
-class FL_API Fl_Group;
+class Fl_Group;
 
 class FL_API Fl_List {
 public:
-  virtual int children(const Fl_Group*);
-  virtual Fl_Widget* child(const Fl_Group*, int n);
+  virtual int children(const Fl_Group*, int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Group*, int* indexes, int level);
+  virtual void value_changed(const Fl_Group*, Fl_Widget*);
 };
 
 class FL_API Fl_Group : public Fl_Widget {
-
+  friend class Fl_List;
 public:
+
+  Fl_List* list() const {return list_;}
+  void list(Fl_List* l) {list_ = l;}
+
+  int children(int* indexes, int level) const ;
+  Fl_Widget* child(int* indexes, int level) const ;
+  int children() const;
+  Fl_Widget* child(int n) const;
 
   void draw();
   void draw_n_clip();
@@ -52,11 +61,6 @@ public:
   void end() {current_ = (Fl_Group*)parent();}
   static Fl_Group *current() {return current_;}
   static void current(Fl_Group *g) {current_ = g;}
-
-  int children() const;
-  Fl_Widget* child(int n) const;
-  Fl_List* list() const {return list_;}
-  void list(Fl_List* l) {list_ = l;}
 
   int find(const Fl_Widget*) const;
   int find(const Fl_Widget& o) const {return find(&o);}
@@ -104,7 +108,6 @@ protected:
 
 private:
 
-  friend class Fl_List;
   Fl_List* list_;
   int children_;
   int focus_;
@@ -129,5 +132,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.25 2000/06/12 02:05:58 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.26 2000/08/21 03:56:23 spitzak Exp $".
 //
