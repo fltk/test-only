@@ -21,6 +21,15 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+/** \addtogroup utilities
+
+  FLTK provides some functions that it uses internally that are
+  necessary for portablity, or convienent for writing code.  These are
+  \e not in the fltk:: namespace and do not have "fl_" in their names,
+  because in theory they should not be part of fltk, but instead
+  provided by the system.
+*/
+
 #include <fltk/filename.h>
 #include <fltk/string.h>
 #include <stdlib.h>
@@ -40,55 +49,52 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #define isdirsep(c) ((c)=='/')
 #endif
 
-/*!
-  Return the filename \a from with but expanded to a full path name
+/**
+  Return the filename \a from expanded to a full "absolute" path name
   by prepending the current directory or by prepending the "home"
-  directory if the string starts with '~'.
+  directory if it starts with '~'.
+  - \a output is a pointer to a buffer that \a may be used to write
+    the result to. It may also return a pointer into \a from.
+  - \a length is the size of \a output. No more than n-1 characters
+  are written, plus a trailing nul.
+  - \a input is the initial filename.
+  - \a directory is the directory that filename is relative to. If
+  this is NULL thne the current directory is gotten from the OS.
 
-  If there is no change \a from is returned. Otherwise perhaps the
-  suffix of \a from is returned, or the result is copied to the \a
-  buffer and a pointer to that is returned. \a len is the size of the
-  buffer, the string is truncated to use at most len-1 characters and
-  a null is always added. \a from and \a buffer must not be the same
-  memory!
+  If there is no change \a input is returned. Otherwise perhaps the
+  suffix of \a input is returned, or the result is copied to \a output
+  and a pointer to that is returned.
 
-  On Unix only strings that start with a '/' are returned unchanged.
-  On Windows any string starting with '/', '\\', or "x:" is returned
-  unchanged.
-
-  Leading "./" sequences are removed, and "../" sequences are removed
-  as well as the matching trailing part of the prefixed directory.
-  Technically this is incorrect if symbolic links are used but this
-  matches the behavior of many programs.
+  Leading "./" sequences in \a input are removed, and "../" sequences
+  are removed as well as the matching trailing part of the prefixed
+  directory.  Technically this is incorrect if symbolic links are used
+  but this matches the behavior of most programs.
 
   To expand a filename starting with ~ in the current directory
   you must start it with "./~".
-
-  The optional \a pwd is a value to use for the current directory.
-  If provided it is used and no ~ expansion is done.
 */
 const char*
-filename_normalize(const char* from, char* buffer, int length, const char* pwd)
+filename_normalize(char* output, int length, const char* input, const char* pwd)
 {
   const char* prefix = 0;
   int prefixlen = 0;
-  if (!pwd && from[0] == '~') {
+  if (!pwd && input[0] == '~') {
     prefix = getenv("HOME");
     if (prefix && *prefix) {
       prefixlen = strlen(prefix);
-      from++;
-      if (isdirsep(*from)) {
-	from++;
-      } else if (*from) {
+      input++;
+      if (isdirsep(*input)) {
+	input++;
+      } else if (*input) {
 	// another user. Fake it for now by assumming it is at the same
 	// level as the current user and has that user's name. The real
 	// real way is to call getpwnam(name):
 	while (prefixlen > 0 && !isdirsep(prefix[--prefixlen]));
       }
     }
-  } else if (isdirsep(from[0]) /*|| from[0] == '|' // for tcl pipes? */
+  } else if (isdirsep(input[0]) /*|| input[0] == '|' // for tcl pipes? */
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-	     || from[0] && from[1]==':'
+	     || input[0] && input[1]==':'
 #endif
 	     ) {
     ;
@@ -96,42 +102,58 @@ filename_normalize(const char* from, char* buffer, int length, const char* pwd)
     // current directory
     if (pwd) prefix = pwd;
     else if ((prefix = getenv("PWD")));
-    else prefix = getcwd(buffer, length);
+    else prefix = getcwd(output, length);
     if (prefix) prefixlen = strlen(prefix);
   }
-  while (*from == '.') {
-    if (isdirsep(from[1])) {
-      from += 2;
-    } else if (from[1] == '.' && isdirsep(from[2])) {
+  while (*input == '.') {
+    if (isdirsep(input[1])) {
+      input += 2;
+    } else if (input[1] == '.' && isdirsep(input[2])) {
       if (!prefixlen) break;
       while (prefixlen > 0 && !isdirsep(prefix[--prefixlen]));
-      from += 3;
+      input += 3;
     } else break;
   }
-  if (!prefix) return from;
+  if (!prefix) return input;
   if (prefixlen > length-2) prefixlen = length-2;
-  if (prefix != buffer) memcpy(buffer, prefix, prefixlen);
-  if (!prefixlen || !isdirsep(prefix[prefixlen-1])) buffer[prefixlen++] = '/';
-  strlcpy(buffer+prefixlen, from, length-prefixlen);
-  return buffer;
+  if (prefix != output) memcpy(output, prefix, prefixlen);
+  if (!prefixlen || !isdirsep(prefix[prefixlen-1])) output[prefixlen++] = '/';
+  strlcpy(output+prefixlen, input, length-prefixlen);
+  return output;
 }
 
-/*! Back-compatability version of filename_normalize().
+// Back-compatability with fltk1 functions:
+
+#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
+
+/**
+  Back-compatability version of filename_normalize().
   This did not let you specify the size of the buffer, it did a useless
   copy in the common case that there was no change in the name.
   It also did not do the home-directory prefix.
 */
-bool filename_absolute(char *to, const char *from, const char* pwd) {
+bool fl_filename_absolute(char *output, const char *input, const char* pwd) {
   char temp[FL_PATH_MAX];
-  if (from == to) {strlcpy(temp, from, FL_PATH_MAX); from = temp;}
-  const char* t = filename_normalize(from, to, FL_PATH_MAX, pwd);
-  if (t != to) {
-    strlcpy(to, from, FL_PATH_MAX);
+  if (input == output) {strlcpy(temp, input, FL_PATH_MAX); input = temp;}
+  const char* t = filename_normalize(output, FL_PATH_MAX, input, pwd);
+  if (t != output) {
+    strlcpy(output, input, FL_PATH_MAX);
     return false;
   }
   return true;
 }
-  
+
+/**
+  Back-compatability function. Expands home directories (the old one
+  would also expand $environment variables, but that is no longer
+  supported).
+*/
+bool fl_filename_expand(char *output, const char *input) {
+  if (*input == '~') return fl_filename_absolute(output, input, 0);
+  if (output != input) strlcpy(output, input, FL_PATH_MAX);
+  return false;
+}
+
 //
 // End of "$Id$".
 //

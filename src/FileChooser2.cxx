@@ -92,7 +92,7 @@ FileChooser::directory(const char *d)	// I - Directory to change to
 #else
     if (d[0] != '/' && d[0] != '\\')
 #endif /* _WIN32 || __EMX__ */
-      filename_absolute(directory_, d);
+      filename_normalize(directory_, sizeof(directory_), d, 0);
     else
     {
       strncpy(directory_, d, sizeof(directory_) - 1);

@@ -1376,15 +1376,6 @@ bool Window::iconic() const {
 ////////////////////////////////////////////////////////////////
 
 /**
- * returns pointer to the filename, or "" if name ends with '/'
- */
-const char *filename_name(const char *name) {
-  const char *p,*q;
-  for (p=q=name; *p;) if (*p++ == '/') q = p;
-  return q;
-}
-
-/**
  * set the window title bar
  * \todo make the dock icon work!
  */

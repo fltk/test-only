@@ -217,17 +217,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {
 #endif
 }
 
-/**
- * returns pointer to the filename, or "" if name ends with '/' or ':'
- */
-const char *filename_name(const char *name) {
-  const char *p,*q;
-  q = name;
-  if (q[0] && q[1]==':') q += 2; // skip leading drive letter
-  for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
-  return q;
-}
-
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
 

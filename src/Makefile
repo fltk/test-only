@@ -137,13 +137,11 @@ CPPFILES = \
 	error.cxx \
 	event_key_state.cxx \
 	file_chooser.cxx \
-	filename_expand.cxx \
 	filename_ext.cxx \
 	filename_isdir.cxx \
 	filename_list.cxx \
 	filename_match.cxx \
 	filename_normalize.cxx \
-	filename_setext.cxx \
 	fillrect.cxx \
 	fltk_theme.cxx \
 	gifImage.cxx \

@@ -2007,16 +2007,6 @@ bool Window::iconic() const {
 
 ////////////////////////////////////////////////////////////////
 
-/*!
-  Returns a pointer to after the last slash. If there is no slash
-  this returns a pointer to the start of the name.
-*/
-const char *filename_name(const char *name) {
-  const char *p,*q;
-  for (p=q=name; *p;) if (*p++ == '/') q = p;
-  return q;
-}
-
 /*! Sets both the label() and the iconlabel() */
 void Window::label(const char *name, const char *iname) {
   Widget::label(name);

@@ -394,7 +394,7 @@ FileBrowser::load(const char *directory)// I - Directory to load
       if (strcmp(files[i]->d_name, ".") != 0 &&
           strcmp(files[i]->d_name, "..") != 0)
       {
-        char namebuf[FL_PATH_MAX];
+        char namebuf[1024];
         memset(namebuf, 0, sizeof(namebuf));
         utf8frommb(namebuf, sizeof(namebuf), files[i]->d_name, strlen(files[i]->d_name));
 	snprintf(filename, sizeof(filename), "%s/%s", directory_, namebuf);
@@ -409,7 +409,7 @@ FileBrowser::load(const char *directory)// I - Directory to load
       if (strcmp(files[i]->d_name, ".") != 0 &&
           strcmp(files[i]->d_name, "..") != 0)
       {
-        char namebuf[FL_PATH_MAX];
+        char namebuf[1024];
         memset(namebuf, 0, sizeof(namebuf));
         utf8frommb(namebuf, sizeof(namebuf), files[i]->d_name, strlen(files[i]->d_name));
 	snprintf(filename, sizeof(filename), "%s/%s", directory_, namebuf);
