@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.156 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.157 2003/12/16 18:27:18 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1328,6 +1328,21 @@ void CreatedWindow::create(Window* window,
   }
 }
 
+/*! Make an fltk::Window draw into an existing X Window */
+CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
+  CreatedWindow* x = new CreatedWindow;
+  x->xid = winxid;
+  x->backbuffer.xid = 0;
+  x->window = window; window->i = x;
+  x->region = 0;
+  x->wait_for_expose = true;
+  x->cursor = None;
+  x->cursor_for = 0;
+  x->next = CreatedWindow::first;
+  CreatedWindow::first = x;
+  return x;
+}
+
 ////////////////////////////////////////////////////////////////
 // Send X window stuff that can be changed over time:
 
@@ -1624,5 +1639,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.156 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.157 2003/12/16 18:27:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: x.h,v 1.22 2003/12/16 18:27:18 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -208,6 +208,7 @@ public:
   static void create(Window*,
 		     XVisualInfo*, Colormap,
 		     int background = -1);
+  static CreatedWindow* set_xid(Window*, XWindow);
 };
 
 // convert xid <-> Window:
@@ -223,5 +224,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: x.h,v 1.22 2003/12/16 18:27:18 spitzak Exp $".
 //

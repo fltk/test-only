@@ -1,6 +1,7 @@
 #ifndef fl_draw_H
 #define fl_draw_H
 
+#include "Enumerations.H"
 #include <fltk/draw.h>
 
 inline void fl_color(fltk::Color c) {fltk::setcolor(c);}
@@ -192,5 +193,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.33 2003/11/04 08:10:56 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.34 2003/12/16 18:27:18 spitzak Exp $".
 //
