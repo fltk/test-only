@@ -34,7 +34,7 @@ extern void min_cb(Fl_Value_Input*, void*);
 extern void max_cb(Fl_Value_Input*, void*);
 extern void step_cb(Fl_Value_Input*, void*);
 extern void value_cb(Fl_Value_Input*, void*);
-extern void include_image_cb(Fl_Light_Button*, void*);
+extern void image_inlined_cb(Fl_Light_Button*, void*);
 extern Fl_Light_Button *include_image_button;
 #include <FL/Fl_Choice.H>
 extern Fl_Menu_Item labeltypemenu[];

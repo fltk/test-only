@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.37 1999/08/24 08:34:11 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.38 1999/08/25 09:24:03 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -714,7 +714,7 @@ void image_cb(Fl_Button *a, void *v) {
 	Fl_Widget_Type* p = (Fl_Widget_Type*)o;
 	p->setimage(i);
       }
-    include_image_cb(include_image_button, LOAD); // update the button state
+    image_inlined_cb(include_image_button, LOAD); // update the button state
   }
   const char* s = current_widget->image ? current_widget->image->name() : 0;
   if (s != a->label()) {a->label(s); a->redraw();}
@@ -1008,6 +1008,8 @@ static Fl_Menu_Item alignmenu[] = {
   {"FL_ALIGN_RIGHT_TOP",0,0,(void*)(FL_ALIGN_RIGHT_TOP)},
   {"FL_ALIGN_LEFT_BOTTOM",0,0,(void*)(FL_ALIGN_LEFT_BOTTOM)},
   {"FL_ALIGN_RIGHT_BOTTOM",0,0,(void*)(FL_ALIGN_RIGHT_BOTTOM)},
+
+  {"FL_ALIGN_TILED",0,0,(void*)(FL_ALIGN_TILED)},
 {0}};
 
 void align_cb(Fl_Button* i, void *v) {
@@ -1051,10 +1053,10 @@ void align_cb(Fl_Button* i, void *v) {
   }
 }
 
-void include_image_cb(Fl_Light_Button* i, void *v) {
+void image_inlined_cb(Fl_Light_Button* i, void *v) {
   if (v==LOAD) {
     if(current_widget->image) {
-      i->value(current_widget->image->include_datas);
+      i->value(current_widget->image->inlined);
       i->activate();
     } else {
       i->value(0);
@@ -1064,7 +1066,7 @@ void include_image_cb(Fl_Light_Button* i, void *v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-	if(q->image) q->image->include_datas = i->value();
+	if(q->image) q->image->inlined = i->value();
       }
   }
 }
@@ -1838,6 +1840,7 @@ void Fl_Widget_Type::write_properties() {
   }
   if (image) {
     write_string("image");
+    if (image->inlined) write_string("inlined");
     write_word(image->name());
   }
   if (o->color() != tplate->color())
@@ -1948,8 +1951,14 @@ void Fl_Widget_Type::read_property(const char *c) {
       o->labeltype((Fl_Labeltype)item_pointer(labeltypemenu,c));
     }
   } else if (!strcmp(c, "image")) {
+    bool inlined = 0;
     c = read_word();
+    if(!strcmp(c, "inlined")) {
+      inlined = 1;
+      c = read_word();
+    }
     Fluid_Image *i = Fluid_Image::find(c);
+    if(inlined) i->inlined = 1;
     if (!i) read_error("Image file '%s' not found", c);
     setimage(i);
   } else if (!strcmp(c,"color")) {
@@ -2115,5 +2124,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.37 1999/08/24 08:34:11 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.38 1999/08/25 09:24:03 vincent Exp $".
 //

@@ -198,10 +198,10 @@ application and will prevent events from going to other windows.");
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TILED));
           o->tooltip("Draw the image tiled");
         }
-        { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(5, 60, 90, 20, "include in code");
+        { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(10, 60, 80, 20, "image inlined");
           o->box(FL_THIN_UP_BOX);
           o->label_size(10);
-          o->callback((Fl_Callback*)include_image_cb);
+          o->callback((Fl_Callback*)image_inlined_cb);
           o->align(132|FL_ALIGN_INSIDE);
           o->tooltip("Include the datas of the image inlined in 
 the code or keep it in an external file");

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.9 1999/08/23 16:43:08 vincent Exp $"
+// "$Id: Fluid_Image.cxx,v 1.10 1999/08/25 09:24:04 vincent Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -67,6 +67,7 @@ static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
 ////////////////////////////////////////////////////////////////
 #include <FL/Fl_Image_File.H>
 
+static char xpm_filetype[] = "XPM";
 class pixmap_image : public Fluid_Image {
 protected:
   Fl_Image_File *p;
@@ -91,6 +92,7 @@ void pixmap_image::label(Fl_Widget *o) {
 
 static int image_file_header_written;
 
+#define MAX_CLINESIZE 256
 void pixmap_image::write_static() {
   uchar* d=0;
   if (!p) return;
@@ -99,15 +101,30 @@ void pixmap_image::write_static() {
     write_c("#include <FL/Fl_Image_File.H>\n");
     image_file_header_written = write_number;
   }
-  if (include_datas) {
+  if (inlined) {
     size_t l=0;
     goto_images_dir();
-    d = fl_store_datas_from_file(name(), l);
-    if(d) {
-      write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
-      write_carray((const char*)d, l);
-      write_c("};\n");
-      free(d);
+    if (filetype == xpm_filetype) {
+      write_c("static char *%s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
+      FILE* fp = fopen(name(), "rb");
+      if(fp) {
+	char s[MAX_CLINESIZE+1];
+	do {
+	  fgets(s, MAX_CLINESIZE+1, fp);
+	} while (!feof(fp) && !strchr(s, '{'));
+	while (!feof(fp) && fgets(s, MAX_CLINESIZE+1, fp)) {
+	  write_c(s);
+	}
+	fclose(fp);
+      }
+    } else {
+      d = fl_store_datas_from_file(name(), l);
+      if(d) {
+	write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
+	write_carray((const char*)d, l);
+	write_c("};\n");
+	free(d);
+      }
     }
     leave_images_dir();
   }
@@ -121,15 +138,16 @@ void pixmap_image::write_code() {
 	  unique_id(this, "image", filename_name(name()), 0),
 	  unique_id(this, "image", filename_name(name()), 0),
 	  filetype, name());
-  if (include_datas)
-    write_c(", %s", unique_id(this, "datas", filename_name(name()), 0));
+  if (inlined)
+    write_c(", %s%s", filetype==xpm_filetype? "(uchar*)" : "",
+	    unique_id(this, "datas", filename_name(name()), 0));
   write_c(");\n%so->image(%s);\n", indent(), 
 	  unique_id(this, "image", filename_name(name()), 0));
 }
 
 pixmap_image::pixmap_image(const char *name, bool subclass) : Fluid_Image(name) {
   if(!subclass) {
-    filetype = "XPM";
+    filetype = xpm_filetype;
     p = new Fl_XPM_Image((char*) name);
   }
 }
@@ -366,7 +384,7 @@ Fluid_Image::Fluid_Image(const char *name) {
   name_ = strdup(name);
   written = 0;
   refcount = 0;
-  include_datas=0;
+  inlined=0;
 }
 
 void Fluid_Image::increment() {
@@ -430,5 +448,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.9 1999/08/23 16:43:08 vincent Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.10 1999/08/25 09:24:04 vincent Exp $".
 //
