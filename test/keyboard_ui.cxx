@@ -396,9 +396,9 @@ Fl_Window* make_window() {
       o->callback((Fl_Callback*)key_cb, (void*)(FL_Control_L));
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-     {    Fl_Button* o = new Fl_Button(45, 160, 30, 20, "Super");
+     {    Fl_Button* o = new Fl_Button(45, 160, 30, 20, "Win");
       o->label_size(8);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_Super_L));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_Win_L));
     }
      {    Fl_Button* o = new Fl_Button(75, 160, 30, 20, "Alt ");
       o->label_size(8);
@@ -412,9 +412,9 @@ Fl_Window* make_window() {
       o->label_size(8);
       o->callback((Fl_Callback*)key_cb, (void*)(FL_Alt_R));
     }
-     {    Fl_Button* o = new Fl_Button(220, 160, 30, 20, "Super");
+     {    Fl_Button* o = new Fl_Button(220, 160, 30, 20, "Win");
       o->label_size(8);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_Super_R));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_Win_R));
     }
      {    Fl_Button* o = new Fl_Button(250, 160, 30, 20, "Menu ");
       o->label_size(8);
@@ -483,10 +483,10 @@ Fl_Window* make_window() {
       o->label_size(8);
       o->callback((Fl_Callback*)shift_cb, (void*)(0x20));
     }
-     {    Fl_Button* o = new Fl_Button(440, 25, 20, 10, "super");
+     {    Fl_Button* o = new Fl_Button(440, 25, 20, 10, "win");
       o->selection_color((Fl_Color)3);
       o->label_size(8);
-      o->callback((Fl_Callback*)shift_cb, (void*)(FL_SUPER));
+      o->callback((Fl_Callback*)shift_cb, (void*)(FL_WIN));
     }
      {    Fl_Button* o = new Fl_Button(460, 25, 20, 10, "sclk");
       o->selection_color((Fl_Color)3);

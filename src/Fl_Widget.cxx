@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.78 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.79 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -290,7 +290,7 @@ bool Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 //
 // To make it easier to match some things it is more complex:
 //
-// Only FL_SUPER, FL_ALT, FL_SHIFT, and FL_CTRL must be "off".  A
+// Only FL_WIN, FL_ALT, FL_SHIFT, and FL_CTRL must be "off".  A
 // zero in the other shift flags indicates "dont care".
 //
 // It also checks against the first character of Fl::event_text(),
@@ -308,7 +308,7 @@ bool Fl::test_shortcut(int shortcut) {
   // record shift flags that are wrong:
   int mismatch = (shortcut^shift)&0x7fff0000;
   // these three must always be correct:
-  if (mismatch&(FL_SUPER|FL_ALT|FL_CTRL)) return false;
+  if (mismatch&(FL_WIN|FL_ALT|FL_CTRL)) return false;
 
   int key = shortcut & 0xffff;
 
@@ -484,5 +484,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.78 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.79 2001/11/29 17:39:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.18 2001/11/28 17:35:53 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.19 2001/11/29 17:39:30 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -58,12 +58,13 @@ int Fl_Font_::encodings(const char**& arrayp) const {
   return 1;
 }
 
-#if 1
-// untested code donated by Sebastien Recio <recio@besancon.sema.slb.com>
+////////////////////////////////////////////////////////////////
+// List sizes:
 
 static int nbSize;
-static int cyPerInch;
-static int sizes[128];
+//static int cyPerInch;
+#define MAX_SIZES 16
+static int sizes[MAX_SIZES];
 
 static int CALLBACK EnumSizeCb(CONST LOGFONT* lpelf,
 			       CONST TEXTMETRIC* lpntm,
@@ -78,7 +79,7 @@ static int CALLBACK EnumSizeCb(CONST LOGFONT* lpelf,
   }
 
   int add = lpntm->tmHeight - lpntm->tmInternalLeading;
-  add = MulDiv(add, 72, cyPerInch);
+  //add = MulDiv(add, 72, cyPerInch); // seems to be correct before this
 
   int start = 0;
   while ((start < nbSize) && (sizes[start] < add)) start++;
@@ -91,29 +92,20 @@ static int CALLBACK EnumSizeCb(CONST LOGFONT* lpelf,
   nbSize++;
 
   // Stop enum if buffer overflow
-  return (nbSize < 128);
+  return (nbSize < MAX_SIZES);
 }
 
 int Fl_Font_::sizes(int*& sizep) const {
   nbSize = 0;
   if (!fl_gc) fl_GetDC(0);
-  cyPerInch = GetDeviceCaps(fl_gc, LOGPIXELSY);
-  if (cyPerInch < 1) cyPerInch = 1;
-  EnumFontFamilies(fl_gc, name+1, EnumSizeCb, 0);
-  sizep = sizes;
+  //cyPerInch = GetDeviceCaps(fl_gc, LOGPIXELSY);
+  //if (cyPerInch < 1) cyPerInch = 1;
+  EnumFontFamilies(fl_gc, name_+1, EnumSizeCb, 0);
+  sizep = ::sizes;
   return nbSize;
 }
 
-#else
-int Fl_Font_::sizes(int*& sizep) const {
-  // pretend all fonts are scalable (most are and I don't know how
-  // to tell anyways)
-  static int array[1];
-  sizep = array;
-  return 1;
-}
-#endif
-
+////////////////////////////////////////////////////////////////
 // list fonts:
 
 static char *attr_names[] = { " Bold-Italic", " Bold Italic", " Italic", " Bold", NULL};
@@ -149,14 +141,14 @@ static Fl_Font* font_array = 0;
 static int num_fonts = 0;
 static int array_size = 0;
 
-#if 0
-// Suggested by Sebastien Recio <recio@besancon.sema.slb.com> that
-// correct function prototype is this (untested)
 static int CALLBACK enumcb(CONST LOGFONT* lplf,
                            CONST TEXTMETRIC* lpntm,
                            DWORD fontType,
                            LPARAM p)
 {
+  // we need to do something about different encodings of the same font
+  // in order to match X!  I can't tell if each different encoding is
+  // returned sepeartely or not.  This is what fltk 1.0 did:
   if (!p && lplf->lfCharSet != ANSI_CHARSET) return 1;
   const char *name = (const char*)(lplf->lfFullName);
 
@@ -178,35 +170,6 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
 
   return 1;
 }
-#else
-static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
-			   int, LPARAM)
-{
-  // we need to do something about different encodings of the same font
-  // in order to match X!  I can't tell if each different encoding is
-  // returned sepeartely or not.  This is what fltk 1.0 did:
-  if (lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
-  const char *name = (const char*)(lpelf->elfFullName);
-
-  bool bNeedBold = (lpelf->elfLogFont.lfWeight <= 400);
-  if(strstr(name, " Bold") == name + strlen(name) - 5)
-	  bNeedBold = true;
-  Fl_Font_* base = make_a_font(' ', name);
-  base->italic_ = make_a_font('I', name);
-  if (bNeedBold) {
-    base->bold_ = make_a_font('B', name);
-    base->italic_->bold_ = base->bold_->italic_ = make_a_font('P', name);
-  }
-
-  if (num_fonts >= array_size) {
-    array_size = 2*array_size+128;
-    font_array = (Fl_Font*)realloc(font_array, array_size*sizeof(Fl_Font));
-  }
-  font_array[num_fonts++] = base;
-
-  return 1;
-}
-#endif
 
 // Sort fonts by their "nice" name (it is possible Win32 always returns
 // them in this order, but I'm not sure):
@@ -232,5 +195,5 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.18 2001/11/28 17:35:53 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.19 2001/11/29 17:39:30 spitzak Exp $"
 //

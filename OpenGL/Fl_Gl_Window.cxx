@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.32 2001/09/10 01:16:16 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.33 2001/11/29 17:39:28 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -129,7 +129,7 @@ void Fl_Gl_Window::ortho() {
 
 void Fl_Gl_Window::swap_buffers() {
 #ifdef _WIN32
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
   // Do not swap the overlay, to match GLX:
   wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_MAIN_PLANE);
 #else
@@ -145,7 +145,7 @@ void Fl_Gl_Window::draw_swap() {
   if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
 }
 
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if USE_GL_OVERLAY && defined(_WIN32)
 int fl_overlay_depth = 0;
 bool fl_overlay;
 #endif
@@ -153,7 +153,7 @@ bool fl_overlay;
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
-#if HAVE_GL_OVERLAY && defined(_WIN32)
+#if USE_GL_OVERLAY && defined(_WIN32)
 
 #if SGI320_BUG
   bool fixcursor = false; // for fixing the SGI 320 bug
@@ -273,7 +273,7 @@ void Fl_Gl_Window::flush() {
     glFlush();
   }
 
-#if HAVE_GL_OVERLAY && defined(_WIN32) && SGI320_BUG
+#if USE_GL_OVERLAY && defined(_WIN32) && SGI320_BUG
   if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
 #endif
   valid(1);
@@ -297,7 +297,7 @@ void Fl_Gl_Window::context(void* v, bool destroy_flag) {
 
 void Fl_Gl_Window::destroy() {
   context(0);
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
   if (overlay && overlay != this) {
 #ifdef _WIN32
     fl_delete_gl_context((GLContext)overlay);
@@ -326,5 +326,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.32 2001/09/10 01:16:16 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.33 2001/11/29 17:39:28 spitzak Exp $".
 //

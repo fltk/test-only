@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.13 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,8 +36,8 @@
 #include <fltk/fl_draw.h>
 #include <config.h>
 
-// _WIN32 note: HAVE_OVERLAY is false
-#if HAVE_OVERLAY
+// _WIN32 note: USE_OVERLAY is false
+#if USE_OVERLAY
 extern XVisualInfo *fl_find_overlay_visual();
 extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
@@ -47,7 +47,7 @@ extern uchar fl_overlay; // changes how fl_color(x) works
 #endif
 
 void Fl_Menu_Window::create() {
-#if HAVE_OVERLAY
+#if USE_OVERLAY
   if (overlay() && fl_find_overlay_visual()) {
     XInstallColormap(fl_display, fl_overlay_colormap);
     Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
@@ -57,7 +57,7 @@ void Fl_Menu_Window::create() {
 }
 
 void Fl_Menu_Window::flush() {
-#if HAVE_OVERLAY
+#if USE_OVERLAY
   if (!fl_overlay_visual || !overlay()) {Fl_Single_Window::flush(); return;}
   Fl_X *i = Fl_X::i(this);
   fl_window = i->xid;
@@ -73,7 +73,7 @@ void Fl_Menu_Window::flush() {
 }
 
 void Fl_Menu_Window::erase() {
-#if HAVE_OVERLAY
+#if USE_OVERLAY
   if (!gc || !shown()) return;
 //XSetForeground(fl_display, gc, 0);
 //XFillRectangle(fl_display, fl_xid(this), gc, 0, 0, w(), h());
@@ -93,5 +93,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.13 2001/11/29 17:39:29 spitzak Exp $".
 //

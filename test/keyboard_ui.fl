@@ -524,8 +524,8 @@ Function {make_window()} {open
       xywh {15 160 30 20} align 524308 labelsize 8
     }
     Fl_Button {} {
-      label {Super}
-      user_data FL_Super_L user_data_type {void*}
+      label {Win}
+      user_data FL_Win_L user_data_type {void*}
       callback key_cb
       xywh {45 160 30 20} labelsize 8
     }
@@ -547,8 +547,8 @@ Function {make_window()} {open
       xywh {190 160 30 20} labelsize 8
     }
     Fl_Button {} {
-      label {Super}
-      user_data FL_Super_R user_data_type {void*}
+      label {Win}
+      user_data FL_Win_R user_data_type {void*}
       callback key_cb
       xywh {220 160 30 20} labelsize 8
     }
@@ -635,8 +635,8 @@ Function {make_window()} {open
       xywh {420 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
-      label {super}
-      user_data FL_SUPER user_data_type {void*}
+      label {win}
+      user_data FL_WIN user_data_type {void*}
       callback shift_cb
       xywh {440 25 20 10} selection_color 3 labelsize 8
     }

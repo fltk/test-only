@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.52 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.53 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -143,9 +143,13 @@ void Fl_Input::draw() {
   draw(X,Y,W,H);
 }
 
-//#define line_height() (fl_height(text_font(), text_size())+leading())
+#if 1
+#define line_height() fl_height()
+#define line_descent() (line_height()-fl_descent())
+#else
 #define line_height() (text_size()+leading())
-#define line_descent() (text_size()+leading()-fl_descent())
+#define line_descent() (line_height()-fl_descent())
+#endif
 
 void Fl_Input::draw(int X, int Y, int W, int H)
 {
@@ -388,6 +392,8 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
 {
   if (!size()) return 0;
 
+  setfont();
+
   // figure out what line we are pointing at:
   int theline = 0;
   if (type()>=FL_MULTILINE_INPUT) {
@@ -402,7 +408,6 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     theline /= line_height();
   }
 
-  setfont();
   int wordwrap = (type()>FL_MULTILINE_INPUT) ? W-8 : 0;
 
   // Step through all the lines until we reach the pointed-to line.
@@ -800,6 +805,7 @@ int Fl_Input::handle_key() {
     // internally.  Using the style accessor functions is not guaranteed
     // to give correct results for what is actually displayed!  They
     // should _only_ be used in layout() and draw().
+    setfont();
     for (int n = h()/line_height(); n--;)
       i = line_start(i-1);
     shift_position(i);
@@ -811,6 +817,7 @@ int Fl_Input::handle_key() {
     // internally.  Using the style accessor functions is not guaranteed
     // to give correct results for what is actually displayed!  They
     // should _only_ be used in layout() and draw().
+    setfont();
     for (int n = h()/line_height(); n--;)
       i = line_end(i)+1;
     shift_position(i+1);
@@ -939,7 +946,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     // This is removed as it prevents single-key shortcuts from being
     // accepted by other widgets.
     if (Fl::event_text()[0]<=' ') return 0;
-    if (Fl::event_state(FL_ALT|FL_SUPER)) return 0;
+    if (Fl::event_state(FL_ALT|FL_WIN)) return 0;
     position(size());
     take_focus();
 #endif
@@ -1073,5 +1080,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.52 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.53 2001/11/29 17:39:29 spitzak Exp $".
 //

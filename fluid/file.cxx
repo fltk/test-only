@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.23 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: file.cxx,v 1.24 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -641,7 +641,7 @@ void fl_end_group() {
   }
   // flip all the children's coordinate systems:
   //if (fl_flip) {
-    Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
+    Fl_Widget* o = g->is_window() ? g : g->window();
     int Y = o->h();
     for (int i=g->children(); i--;) {
       Fl_Widget* o = g->child(i);
@@ -656,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.23 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.24 2001/11/29 17:39:29 spitzak Exp $".
 //

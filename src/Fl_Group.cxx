@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.97 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.98 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -62,7 +62,7 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   ow_(W),
   oh_(H)
 {
-  type(FL_GROUP);
+  type(FL_GROUP_TYPE);
   style(::group_style);
   align(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
@@ -629,5 +629,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.97 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.98 2001/11/29 17:39:29 spitzak Exp $".
 //

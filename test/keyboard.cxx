@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: keyboard.cxx,v 1.11 2001/11/29 17:39:30 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -76,8 +76,8 @@ struct {int n; const char* text;} table[] = {
   {FL_Caps_Lock, "FL_Caps_Lock"},
   {FL_Alt_L, "FL_Alt_L"},
   {FL_Alt_R, "FL_Alt_R"},
-  {FL_Super_L, "FL_Super_L"},
-  {FL_Super_R, "FL_Super_R"},
+  {FL_Win_L, "FL_Win_L"},
+  {FL_Win_R, "FL_Win_R"},
   {FL_Menu, "FL_Menu"},
   {FL_Num_Lock, "FL_Num_Lock"},
   {FL_KP_Enter, "FL_KP_Enter"}
@@ -132,5 +132,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: keyboard.cxx,v 1.11 2001/11/29 17:39:30 spitzak Exp $".
 //

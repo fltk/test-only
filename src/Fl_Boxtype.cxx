@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.2 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.3 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,16 @@
 void fl_dotted_box(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   fl_line_style(FL_DOT);
+#ifdef _WIN32
   fl_rect(x, y, w, h);
+#else
+  // Seems that lots of X servers have bugs in the drivers and can't draw
+  // the lines backwards or up:
+  fl_line(x, y, x+w-1, y);
+  fl_line(x+w-1, y, x+w-1, y+h-1);
+  fl_line(x, y, x, y+h-1);
+  fl_line(x, y+h-1, x+w-1, y+h-1);
+#endif
   fl_line_style(0);
 }
 
@@ -91,7 +100,7 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
       y++; if (--h <= 0) break;
       // draw left line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_line(x, y+h-1, x, y);
+      fl_line(x, y, x, y+h-1);
       x++; if (--w <= 0) break;
       if (!*s) break;
     HACK:
@@ -101,7 +110,7 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
       if (--h <= 0) break;
       // draw right line:
       fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-      fl_line(x+w-1, y+h-1, x+w-1, y);
+      fl_line(x+w-1, y, x+w-1, y+h-1);
       if (--w <= 0) break;
       if (!*s) break;
     }
@@ -186,5 +195,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.2 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.3 2001/11/29 17:39:29 spitzak Exp $".
 //

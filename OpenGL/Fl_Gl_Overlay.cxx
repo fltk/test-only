@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.17 2001/11/29 17:39:28 spitzak Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <fltk/Fl_Gl_Window.h>
 #include <stdlib.h>
 
-#if !HAVE_GL_OVERLAY
+#if !USE_GL_OVERLAY
 
 bool Fl_Gl_Window::can_do_overlay() {return 0;}
 
@@ -207,7 +207,7 @@ void Fl_Gl_Window::redraw_overlay() {
 
 void Fl_Gl_Window::make_overlay_current() {
   make_overlay();
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
   if (overlay != this) {
 #ifdef _WIN32
     fl_set_gl_context(this, (GLContext)overlay);
@@ -220,7 +220,7 @@ void Fl_Gl_Window::make_overlay_current() {
 }
 
 void Fl_Gl_Window::hide_overlay() {
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
 #ifdef _WIN32
   // nothing needs to be done?  Or should it be erased?
 #else
@@ -232,5 +232,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.17 2001/11/29 17:39:28 spitzak Exp $".
 //

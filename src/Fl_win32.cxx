@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.157 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.158 2001/11/29 17:39:30 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -527,8 +527,8 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_SNAPSHOT, FL_Print},	// does not work on NT
   {VK_INSERT,	FL_KP('0'),	FL_Insert},
   {VK_DELETE,	FL_KP('.'),	FL_Delete},
-  {VK_LWIN,	FL_Meta_L},
-  {VK_RWIN,	FL_Meta_R},
+  {VK_LWIN,	FL_Win_L},
+  {VK_RWIN,	FL_Win_R},
   {VK_APPS,	FL_Menu},
   {VK_MULTIPLY, FL_KP('*')},
   {VK_ADD,	FL_KP('+')},
@@ -709,7 +709,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       // _WIN32 bug?  GetKeyState returns garbage if the user hit the
       // WIndows key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	state |= FL_SUPER;
+	state |= FL_WIN;
     }
     if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
     Fl::e_state = state;
@@ -1294,5 +1294,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.157 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.158 2001/11/29 17:39:30 spitzak Exp $".
 //

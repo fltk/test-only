@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.46 2001/11/08 08:13:48 spitzak Exp $"
+ * "$Id: configh.in,v 1.47 2001/11/29 17:39:27 spitzak Exp $"
  *
  * This file is used to compile fltk. It should not be necessary for
  * programs that use fltk to refer to this file, and this file is not
@@ -45,17 +45,37 @@
 */
 #define USE_XDBE 0
 
-/* Use the X overlay extension?  FLTK will try to use an overlay
-   visual for Fl_Overlay_Window, the Gl_Window overlay, and for the
-   menus.  Setting this to zero will remove a substantial amount of
-   code from FLTK.  Overlays have only been tested on Irix!
+/* Did we detect the X overlay extension? This enables code to locate
+   the overlay visual for use by Fl_Overlay_Window and Fl_Gl_Window.
 */
 #define HAVE_OVERLAY 0
 
-/* It is possible your GL has an overlay even if X does not.  If so,
-   set this to 1.
+/* Use the X overlay extension?  FLTK will try to use an overlay
+   visual for Fl_Overlay_Window and for Fl_Menu_Window (ie the menus
+   and tooltips). This also adds a substantial amount of code to FLTK
+   so that it can manage an extra visual. Tested on IRIX and
+   XFree86. Does not work with current versions of Xft because Xft
+   cannot handle the colormapped visuals that overlays normally use.
+*/
+#if USE_XFT
+#define USE_OVERLAY 0
+#else
+#define USE_OVERLAY HAVE_OVERLAY
+#endif
+
+/* Does OpenGL have the ability to draw into the overlay? Currently
+   this uses the same code as X for finding the overlay visual,
+   however it is possible that future versions of GLX will use
+   other methods.
 */
 #define HAVE_GL_OVERLAY HAVE_OVERLAY
+
+/* Use the OpenGL overlay for Gl_Window::draw_overlay(). There is
+   probably no reason to turn this off if overlays are possible.
+   Fonts work even if Xft is used because OpenGL bypasses the Xft
+   font mechanism.
+*/
+#define USE_GL_OVERLAY HAVE_GL_OVERLAY
 
 /* Byte order of your machine: 1 = big-endian, 0 = little-endian.
 */
@@ -166,5 +186,5 @@
 #define ALT_GOES_TO_MENUBAR 0
 
 /*
- * End of "$Id: configh.in,v 1.46 2001/11/08 08:13:48 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.47 2001/11/29 17:39:27 spitzak Exp $".
  */

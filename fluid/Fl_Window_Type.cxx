@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.34 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -83,8 +83,8 @@ void include_H_from_C_button_cb(Fl_Light_Button* b, void*) {
 ////////////////////////////////////////////////////////////////
 
 Fl_Menu_Item window_type_menu[] = {
-  {"Single",0,0,(void*)FL_WINDOW},
-  {"Double",0,0,(void*)(FL_WINDOW+1)},
+  {"Single",0,0,(void*)FL_WINDOW_TYPE},
+  {"Double",0,0,(void*)(FL_WINDOW_TYPE+1)},
   {0}};
 
 int overlays_invisible;
@@ -682,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.34 2001/11/29 17:39:29 spitzak Exp $".
 //

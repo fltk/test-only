@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.5 2001/11/29 17:39:30 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -32,14 +32,18 @@
 #include <fltk/x.h>
 #endif
 
-#ifdef _WIN32 // if not X
-// This table must be in numeric order by fltk (X) keysym number:
+// This table must be in numeric order by fltk (X) keysym number.
+// On X the table is much shorter as it is only the names that
+// are not returned correctly by XKeysymToString().
 struct Keyname {int key; const char* name;};
 static Keyname table[] = {
+#ifdef _WIN32 // if not X
   {FL_BackSpace, "Backspace"},
   {FL_Tab,	"Tab"},
   {FL_Clear,	"Clear"},
-  {FL_Enter,	"Enter"}, // X says "Enter"
+#endif
+  {FL_Enter,	"Enter"}, // X says "Return"
+#ifdef _WIN32 // if not X
   {FL_Pause,	"Pause"},
   {FL_Scroll_Lock, "Scroll_Lock"},
   {FL_Escape,	"Escape"},
@@ -48,8 +52,10 @@ static Keyname table[] = {
   {FL_Up,	"Up"},
   {FL_Right,	"Right"},
   {FL_Down,	"Down"},
+#endif
   {FL_Page_Up,	"Page_Up"}, // X says "Prior"
   {FL_Page_Down,"Page_Down"}, // X says "Next"
+#ifdef _WIN32 // if not X
   {FL_End,	"End"},
   {FL_Print,	"Print"},
   {FL_Insert,	"Insert"},
@@ -63,60 +69,65 @@ static Keyname table[] = {
   {FL_Caps_Lock,"Caps_Lock"},
   {FL_Alt_L,	"Alt_L"},
   {FL_Alt_R,	"Alt_R"},
-  {FL_Super_L,	"Super_L"},
-  {FL_Super_R,	"Super_R"},
-  {FL_Delete,	"Delete"}
-};
 #endif
+  {FL_Win_L,	"Win_L"}, // X says "Super_L"
+  {FL_Win_R,	"Win_R"}, // X says "Super_R"
+#ifdef _WIN32 // if not X
+  {FL_Delete,	"Delete"}
+#endif
+};
 
 const char* Fl::key_name(int shortcut) {
   static char buf[20];
   char *p = buf;
   if (!shortcut) {*p = 0; return buf;}
-  if (shortcut & FL_SUPER) {strcpy(p,"Super+"); p += 5;}
+  if (shortcut & FL_WIN) {strcpy(p,"Win+"); p += 5;}
   if (shortcut & FL_ALT) {strcpy(p,"Alt+"); p += 4;}
   if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;}
   if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
   int key = shortcut & 0xFFFF;
-#ifdef _WIN32 // if not X
-  if (key >= FL_F(0) && key <= FL_F_Last) {
-    *p++ = 'F';
-    if (key > FL_F(9)) *p++ = (key-FL_F(0))/10+'0';
-    *p++ = (key-FL_F(0))%10 + '0';
-  } else {
+
     // binary search the table for a match:
     int a = 0;
     int b = sizeof(table)/sizeof(*table);
+  const char* q = 0;
     while (a < b) {
       int c = (a+b)/2;
-      if (table[c].key == key) {
-	if (p > buf) {strcpy(p,table[c].name); return buf;}
-	return table[c].name;
-      }
+    if (table[c].key == key) {q = table[c].name; break;}
       if (table[c].key < key) a = c+1;
       else b = c;
+    }
+  if (!q) {
+#ifdef _WIN32 // if not X
+    if (key >= FL_F(0) && key <= FL_F_Last) {
+      *p++ = 'F';
+      if (key > FL_F(9)) *p++ = (key-FL_F(0))/10+'0';
+      *p++ = (key-FL_F(0))%10 + '0';
+      *p = 0;
+      return buf;
     }
     if (key >= FL_KP(0) && key <= FL_KP_Last) {
       // mark keypad keys with KP_ prefix
       strcpy(p,"KP_"); p += 3;
       *p++ = uchar(key & 127);
-    } else {
-      // if none found, use the keystroke as a match:
-      *p++ = uchar(key);
-    }
-  }
   *p = 0;
   return buf;
+    }
 #else
-  const char* q;
-  if (key == FL_Enter || key == '\r') q="Enter";  // don't use Xlib's "Return":
-  else if (key > 32 && key < 0x100) q = 0;
-  else q = XKeysymToString(key);
-  if (!q) {*p++ = uchar(key); *p = 0; return buf;}
-  if (p > buf) {strcpy(p,q); return buf;} else return q;
+    if (key <= 32 || key >= 0x100) q = XKeysymToString(key);
 #endif
+  }
+  if (q) {
+    if (p == buf) return q;
+    strcpy(p, q);
+    return buf;
+  }
+  // if all else fails use the keysym as a character:
+  *p++ = uchar(key);
+  *p = 0;
+  return buf;
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.5 2001/11/29 17:39:30 spitzak Exp $"
 //

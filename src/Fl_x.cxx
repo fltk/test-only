@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.116 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.117 2001/11/29 17:39:30 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -430,20 +430,17 @@ void fl_sendClientMessage(Window window, Atom message,
                                  unsigned long d3=0,
                                  unsigned long d4=0)
 {
-  XClientMessageEvent e;
-  e.type = ClientMessage;
-  e.serial = 0;
-  e.send_event = 0;
-  e.display = fl_display;
-  e.window = window;
-  e.message_type = message;
-  e.format = 32;
-  e.data.l[0] = (long)d0;
-  e.data.l[1] = (long)d1;
-  e.data.l[2] = (long)d2;
-  e.data.l[3] = (long)d3;
-  e.data.l[4] = (long)d4;
-  XSendEvent(fl_display, window, 0, 0, (XEvent*)&e);
+  XEvent e;
+  e.xany.type = ClientMessage;
+  e.xany.window = window;
+  e.xclient.message_type = message;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = (long)d0;
+  e.xclient.data.l[1] = (long)d1;
+  e.xclient.data.l[2] = (long)d2;
+  e.xclient.data.l[3] = (long)d3;
+  e.xclient.data.l[4] = (long)d4;
+  XSendEvent(fl_display, window, 0, 0, &e);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -487,8 +484,8 @@ static void set_event_xy() {
   Fl::e_state = fl_xevent.xbutton.state << 16;
   fl_event_time = fl_xevent.xbutton.time;
 #ifdef __sgi
-  // get the Super key off PC keyboards:
-  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_SUPER;
+  // get the Win key off PC keyboards:
+  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_WIN;
 #endif
   // turn off is_click if enough time or mouse movement has passed:
   if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 
@@ -783,17 +780,17 @@ bool fl_handle()
       Fl::e_length = 1;
     } else if (keysym == 0xffe7) { // XK_Meta_L
       // old versions of XFree86 used XK_Meta for the "windows" key
-      keysym = FL_Super_L;
+      keysym = FL_Win_L;
     } else if (keysym == 0xffe8) { // XK_Meta_R
-      keysym = FL_Super_R;
+      keysym = FL_Win_R;
     } else if (!keysym) { // X did not map this key
       keysym = keycode|0x8000;
 #ifdef __sgi
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
       switch(keycode) {
-      case 147: keysym = FL_Super_L; break;
-      case 148: keysym = FL_Super_R; break;
+      case 147: keysym = FL_Win_L; break;
+      case 148: keysym = FL_Win_R; break;
     case 149: keysym = FL_Menu; break;
     }
 #endif
@@ -852,7 +849,6 @@ bool fl_handle()
   case SelectionRequest: {
     XSelectionEvent e;
     e.type = SelectionNotify;
-    e.display = fl_display;
     e.requestor = fl_xevent.xselectionrequest.requestor;
     e.selection = fl_xevent.xselectionrequest.selection;
     bool clipboard = e.selection == CLIPBOARD;
@@ -899,10 +895,12 @@ void Fl_Window::layout() {
       if (parent() || x != ox() || y != oy())
       XMoveWindow(fl_display, i->xid, x, y);
     } else {
-      //if (!resizable()) size_range(w(), h(), w(), h());
+      // Some window managers refuse to allow resizes unless the resize
+      // information allows it:
+      if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      // Unfortunately X does not always produce expose event
+      // Wait for echo (relies on window having StaticGravity!!!)
       i->wait_for_expose = true;
     }
   }
@@ -1305,5 +1303,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.116 2001/11/14 09:21:42 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.117 2001/11/29 17:39:30 spitzak Exp $".
 //

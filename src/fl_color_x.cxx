@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.6 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.7 2001/11/29 17:39:30 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -98,7 +98,7 @@ static void figure_out_visual() {
 
 #if USE_COLORMAP
 Fl_XColor fl_xmap[256];
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
 bool fl_overlay = false;
 Fl_XColor fl_overlay_xmap[256];
 Colormap fl_overlay_colormap;
@@ -111,7 +111,7 @@ ulong fl_xpixel(Fl_Color i) {
   if (!beenhere) figure_out_visual();
 
 #if USE_COLORMAP
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
   if (fl_redmask && !fl_overlay)
 #else
   if (fl_redmask)
@@ -135,7 +135,7 @@ ulong fl_xpixel(Fl_Color i) {
   int index = fl_nearest_color(i);
 
   // see if we have already allocated it:
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
   Fl_XColor &xmap = fl_overlay ? fl_overlay_xmap[index] : fl_xmap[index];
 #else
   Fl_XColor &xmap = fl_xmap[index];
@@ -155,7 +155,7 @@ ulong fl_xpixel(Fl_Color i) {
 // Create an X colormap entry and place it in the given xmap entry:
 void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
 {
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
   Colormap colormap = fl_overlay ? fl_overlay_colormap : fl_colormap;
   static XColor* ac[2];
   XColor*& allcolors = ac[fl_overlay];
@@ -189,7 +189,7 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
     // I only read the colormap once.  Again this is due to the slowness
     // of round-trips to the X server, even though other programs may alter
     // the colormap after this and make decisions here wrong:
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
     if (fl_overlay) numcolors = fl_overlay_visual->colormap_size; else
 #endif
       numcolors = fl_visual->colormap_size;
@@ -202,7 +202,7 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
   int mindist = 0x7FFFFFFF;
   unsigned int bestmatch = 0;
   for (unsigned int n = numcolors; n--;) {
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
     if (fl_overlay && n == fl_transparent_pixel) continue;
 #endif
     XColor &a = allcolors[n];
@@ -252,7 +252,7 @@ void fl_free_color(Fl_Color i) {
       XFreeColors(fl_display, fl_colormap, &(fl_xmap[i].pixel), 1, 0);
     fl_xmap[i].mapped = 0;
   }
-#if HAVE_OVERLAY
+#if USE_OVERLAY | USE_GL_OVERLAY
   if (fl_overlay_xmap[i].mapped) {
     if (fl_overlay_xmap[i].mapped == 1)
       XFreeColors(fl_display, fl_overlay_colormap, &(fl_overlay_xmap[i].pixel),1,0);
@@ -314,5 +314,5 @@ void fl_line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.6 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.7 2001/11/29 17:39:30 spitzak Exp $"
 //

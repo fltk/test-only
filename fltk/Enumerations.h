@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.3 2001/11/20 20:23:39 robertk Exp $"
+// "$Id: Enumerations.h,v 1.4 2001/11/29 17:39:28 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ enum { // Fl_Widget::when():
 };
 
 // Fl::event_key() and Fl::get_key(n) (use ascii letters for all other keys):
-#define FL_Button(n)	(0xfee8+(n))	// use Fl_Button+FL_*_MOUSE
+#define FL_Button(n)	(0xfee8+(n))	// use Fl_Button(FL_*_MOUSE)
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
 #define FL_Clear	0xff0b // '5' key on windows, ^K
@@ -124,10 +124,10 @@ enum { // Fl_Widget::when():
 #define FL_Caps_Lock	0xffe5
 #define FL_Alt_L	0xffe9
 #define FL_Alt_R	0xffea
-#define FL_Meta_L	0xffeb // the left MSWindows key on XFree86
-#define FL_Meta_R	0xffec // the right MSWindows key on XFree86
-#define FL_Super_L	FL_Meta_L	// for back compatibility
-#define FL_Super_R	FL_Meta_R	// for back compatibility
+#define FL_Win_L	0xffeb // equals the keysym XK_Super_L
+#define FL_Win_R	0xffec // equals the keysym XK_Super_L
+#define FL_Meta_L	FL_Win_L	// for back compatibility
+#define FL_Meta_R	FL_Win_R	// for back compatibility
 #define FL_Delete	0xffff
 
 // Fl::event_button():
@@ -140,10 +140,12 @@ enum { // Fl_Widget::when():
 #define FL_CAPS_LOCK	0x00020000
 #define FL_CTRL		0x00040000
 #define FL_ALT		0x00080000
-#define FL_NUM_LOCK	0x00100000 // most X servers do this?
-#define FL_SUPER	0x00400000 // correct for XFree86
-#define FL_META		FL_SUPER // for back compatability only
-#define FL_SCROLL_LOCK	0x00800000 // correct for XFree86
+// Not all X servers agree on these assignments but XFree86 uses them:
+#define FL_NUM_LOCK	0x00100000
+#define FL_WIN		0x00400000
+#define FL_META		FL_WIN	   // for back compatability
+#define FL_SCROLL_LOCK	0x00800000
+
 #define FL_BUTTON1	0x01000000
 #define FL_BUTTON2	0x02000000
 #define FL_BUTTON3	0x04000000
@@ -216,5 +218,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.3 2001/11/20 20:23:39 robertk Exp $".
+// End of "$Id: Enumerations.h,v 1.4 2001/11/29 17:39:28 spitzak Exp $".
 //

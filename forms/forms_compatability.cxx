@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.15 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.16 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -80,7 +80,7 @@ void fl_end_group() {
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
-    Fl_Widget* o = (group->type()>=FL_WINDOW) ? group : group->window();
+    Fl_Widget* o = group->is_window() ? group : group->window();
     int Y = o->h();
     for (int i = 0; i < group->children(); i++) {
       Fl_Widget* o = group->child(i);
@@ -259,5 +259,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.15 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.16 2001/11/29 17:39:29 spitzak Exp $".
 //

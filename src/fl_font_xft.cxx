@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.2 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.3 2001/11/29 17:39:30 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -162,12 +162,31 @@ int fl_width(const char *str, int n) {
   return i.xOff;
 }
 
+#if USE_OVERLAY
+// Currently Xft does not work with colormapped visuals, so this probably
+// does not work unless you have a true-color overlay.
+extern bool fl_overlay;
+extern Colormap fl_overlay_colormap;
+extern XVisualInfo* fl_overlay_visual;
+#endif
+
 void fl_draw(const char *str, int n, int x, int y) {
+#if USE_OVERLAY
+  static XftDraw* draw_main, * draw_overlay;
+  XftDraw*& draw = fl_overlay ? draw_overlay : draw_main;
+  if (!draw)
+    draw = XftDrawCreate(fl_display, fl_window,
+			 (fl_overlay?fl_overlay_visual:fl_visual)->visual,
+			 fl_overlay ? fl_overlay_colormap : fl_colormap);
+  else
+    XftDrawChange(draw, fl_window);
+#else
   static XftDraw *draw = 0;
   if (!draw)
     draw = XftDrawCreate(fl_display, fl_window, fl_visual->visual, fl_colormap);
   else
     XftDrawChange(draw, fl_window);
+#endif
   Region region = fl_region();
   if (region) {
     if (XEmptyRegion(region)) return;
@@ -349,5 +368,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.2 2001/11/14 09:21:42 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.3 2001/11/29 17:39:30 spitzak Exp $"
 //

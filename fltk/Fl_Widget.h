@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.4 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.5 2001/11/29 17:39:28 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,8 @@
 
 enum { // Values for type():
   FL_RESERVED_TYPE	= 0x64,
-  FL_GROUP		= 0xe0,
-  FL_WINDOW		= 0xF0
+  FL_GROUP_TYPE		= 0xe0,
+  FL_WINDOW_TYPE	= 0xF0
 };
 
 class FL_API Fl_Widget;
@@ -69,8 +69,8 @@ public:
 
   uchar	type() const		{return type_;}
   void	type(uchar t)		{type_ = t;}
-  bool	is_group() const	{return type_ >= FL_GROUP;}
-  bool	is_window() const	{return type_ >= FL_WINDOW;}
+  bool	is_group() const	{return type_ >= FL_GROUP_TYPE;}
+  bool	is_window() const	{return type_ >= FL_WINDOW_TYPE;}
 
   int	x() const		{return x_;}
   void	x(int v)		{x_ = v;}
@@ -305,5 +305,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.4 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.5 2001/11/29 17:39:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.18 2001/11/29 17:39:28 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -143,7 +143,7 @@ void gl_rect(int x, int y, int w, int h) {
   glEnd();
 }
 
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
 extern bool fl_overlay;
 #ifdef _WIN32
 extern int fl_overlay_depth;
@@ -151,7 +151,7 @@ extern int fl_overlay_depth;
 #endif
 
 void gl_color(Fl_Color i) {
-#if HAVE_GL_OVERLAY
+#if USE_GL_OVERLAY
 #ifndef _WIN32
   if (fl_overlay) {glIndexi(int(fl_xpixel(i))); return;}
 #else
@@ -185,5 +185,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.18 2001/11/29 17:39:28 spitzak Exp $".
 //

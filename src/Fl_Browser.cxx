@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.49 2001/11/20 20:23:39 robertk Exp $"
+// "$Id: Fl_Browser.cxx,v 1.50 2001/11/29 17:39:29 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -425,7 +425,7 @@ void Fl_Browser::draw_clip_cb(void* v,int X, int Y, int W, int H) {
 void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   fl_push_clip(x,y,w,h);
 
-  int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT);
+  int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
     int item_y = Y+item_position[HERE]-yposition_;
     if (item_y >= y+h) break;
@@ -450,7 +450,7 @@ void Fl_Browser::draw() {
     //printf("full redraw damage %x\n", d);
     draw_text_frame();
     draw_clip(X, Y, W, H);
-  } else if (d & (FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT)) { // redraw contents
+  } else if (d & FL_DAMAGE_EXPOSE) { // redraw contents
     //printf("contents redraw damage %x\n", d);
     draw_clip(X, Y, W, H);
   } else { // minimal update
@@ -571,7 +571,7 @@ void Fl_Browser::layout() {
   hscrollbar.value(xposition_, W, 0, last_max_width);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
-  // damage(FL_DAMAGE_LAYOUT); WHAT IS THIS HERE FOR?
+  damage(FL_DAMAGE_EXPOSE); // assumme we need to redraw
   focus(item_index[FOCUS][0]); // make value() work for top level
 }
 
@@ -806,8 +806,8 @@ int Fl_Browser::handle(int event) {
 	item()->invert_flag(FL_OPEN);
 	list()->flags_changed(this, item());
 	relayout();
+	//damage(FL_DAMAGE_EXPOSE, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
 	Fl::event_is_click(0); // make next click not be double
-	damage(FL_DAMAGE_EXPOSE, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
 	goto RELEASE;
       } else if (when()) {
 	Fl::event_clicks(1); // make program think it was a double-click
@@ -975,5 +975,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.49 2001/11/20 20:23:39 robertk Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.50 2001/11/29 17:39:29 spitzak Exp $".
 //

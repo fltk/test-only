@@ -365,7 +365,7 @@ FL_Print<br> FL_Scroll_Lock<br> FL_Pause<br> FL_Insert<br> FL_Home<br>
 FL_Page_Up<br> FL_Delete<br> FL_End<br> FL_Page_Down<br> FL_Left<br>
 FL_Up<br> FL_Right<br> FL_Down<br> FL_Shift_L<br> FL_Shift_R<br>
 FL_Control_L<br> FL_Control_R<br> FL_Caps_Lock<br> FL_Alt_L<br>
-FL_Alt_R<br> FL_Meta_L<br> FL_Meta_R<br> FL_Menu<br> FL_Num_Lock<br>
+FL_Alt_R<br> FL_Win_L<br> FL_Win_R<br> FL_Menu<br> FL_Num_Lock<br>
 FL_KP_Enter</tt></ul>
 
 <li>On X systems any unrecognized keys are reported as their X keysym
@@ -399,15 +399,15 @@ bits are:
 <LI><tt>FL_CTRL</tt></LI>
 <LI><tt>FL_ALT</tt></LI>
 <LI><tt>FL_NUM_LOCK</tt></LI>
-<LI><tt>FL_META</tt></LI>
+<LI><tt>FL_WIN</tt></LI>
 <LI><tt>FL_SCROLL_LOCK</tt></LI>
 <LI><tt>FL_BUTTON1</tt></LI>
 <LI><tt>FL_BUTTON2</tt></LI>
 <LI><tt>FL_BUTTON3</tt></LI>
 </UL>
 
-X servers do not agree on shift states, and FL_NUM_LOCK, FL_META, and 
-FL_SCROLL_LOCK may not work.  The values were selected to match the 
+X servers do not agree on shift states, and <tt>FL_NUM_LOCK, FL_WIN</tt>, and 
+<tt>FL_SCROLL_LOCK</tt> may not work.  The values were selected to match the 
 XFree86 server on Linux.  In addition there is a bug in the way X works 
 so that the shift state is not correctly reported until the first event <I>
 after</I> the shift key is pressed or released. 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay_visual.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_overlay_visual.cxx,v 1.6 2001/11/29 17:39:30 spitzak Exp $"
 //
 // X overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 // purified with great difficulty from XLayerUtil.C:
 
 #include <config.h>
-#if HAVE_OVERLAY
+#if !defined(_WIN32) && (USE_OVERLAY || USE_GL_OVERLAY)
 #include <fltk/Fl.h>
 #include <fltk/x.h>
 
@@ -99,5 +99,5 @@ XVisualInfo *fl_find_overlay_visual() {
 #endif
 
 //
-// End of "$Id: fl_overlay_visual.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_overlay_visual.cxx,v 1.6 2001/11/29 17:39:30 spitzak Exp $".
 //
