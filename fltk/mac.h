@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: mac.h,v 1.6 2003/07/01 07:03:14 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -86,8 +86,6 @@ extern FL_API Region	clip_region();
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
 
-FL_API void load_identity();
-FL_API void push_no_clip();
 FL_API GWorldPtr create_offscreen(int w, int h);
 FL_API void copy_offscreen(int x,int y,int w,int h, GWorldPtr, int srcx,int srcy);
 FL_API void make_current(GWorldPtr xid);
@@ -179,6 +177,6 @@ extern CursHandle default_cursor;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.5 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: mac.h,v 1.6 2003/07/01 07:03:14 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.21 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.22 2003/07/01 07:03:15 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -149,6 +149,14 @@ void fltk::transform(int& x, int& y) {
   } else {
     x += m.ix;
     y += m.iy;
+  }
+}
+
+void fltk::transform_distance(int& x, int& y) {
+  if (!m.trivial) {
+    int t = int(floorf(x*m.a + y*m.c + .5f));
+    y = int(floorf(x*m.b + y*m.d + .5f));
+    x = t;
   }
 }
 
@@ -478,5 +486,5 @@ void fltk::fillstrokepath(Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.21 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.22 2003/07/01 07:03:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.29 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: fonts.cxx,v 1.30 2003/07/01 07:03:15 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -112,7 +112,7 @@ void font_cb(fltk::Widget *, long) {
     int j = 1;
     for (int i = 1; i<64 || i<s[n-1]; i++) {
       char buf[20];
-      if (j < n && i==s[j]) {sprintf(buf,"@b%d",i); j++;}
+      if (j < n && i==s[j]) {sprintf(buf,"@b;%d",i); j++;}
       else sprintf(buf,"%d",i);
       sizeobj->add(buf);
     }
@@ -124,7 +124,7 @@ void font_cb(fltk::Widget *, long) {
     for (int i = 0; i < n; i++) {
       if (s[i]<=pickedsize) w = i;
       char buf[20];
-      sprintf(buf,"@b%d",s[i]);
+      sprintf(buf,"@b;%d",s[i]);
       sizeobj->add(buf);
     }
     sizeobj->value(w);
@@ -203,5 +203,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.29 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: fonts.cxx,v 1.30 2003/07/01 07:03:15 spitzak Exp $".
 //

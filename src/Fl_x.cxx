@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.147 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.148 2003/07/01 07:03:14 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1192,10 +1192,10 @@ void CreatedWindow::sendxjunk() {
     hints.y = window->y();
   }
 
- if (!window->border()) {
-   prop[0] |= 2; // MWM_HINTS_DECORATIONS
-   prop[2] = 0; // no decorations
- }
+  if (!window->border()) {
+    prop[0] |= 2; // MWM_HINTS_DECORATIONS
+    prop[2] = 0; // no decorations
+  }
 
   XSetWMNormalHints(xdisplay, xid, &hints);
   XChangeProperty(xdisplay, xid,
@@ -1424,5 +1424,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.147 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.148 2003/07/01 07:03:14 spitzak Exp $".
 //

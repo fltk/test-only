@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: draw.h,v 1.5 2003/07/01 07:03:14 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -42,16 +42,19 @@ FL_API void translate(float x, float y);
 FL_API void translate(int x, int y);
 FL_API void rotate(float d);
 FL_API void concat(float, float, float, float, float, float);
+FL_API void load_identity();
 
 // get and use transformed positions:
 FL_API void transform(float& x, float& y);
 FL_API void transform(int& x, int& y);
 FL_API void transform_distance(float& x, float& y);
+FL_API void transform_distance(int& x, int& y);
 
 // clip:
 FL_API void push_clip(int x, int y, int w, int h);
 FL_API void clip_out(int x, int y, int w, int h);
 FL_API void pop_clip();
+FL_API void push_no_clip();
 FL_API int not_clipped(int x, int y, int w, int h);
 FL_API int clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
 
@@ -100,7 +103,9 @@ FL_API void fillstrokepath(Color);
 // drawing that bypasses the path mechanism:
 FL_API void strokerect(int x, int y, int w, int h);
 FL_API void fillrect(int x, int y, int w, int h);
+FL_API void drawpoint(float x, float y);
 FL_API void drawpoint(int x, int y);
+FL_API void drawline(float,float, float,float);
 FL_API void drawline(int,int, int,int);
 enum {FILLPIE, FILLARC, STROKEPIE, STROKEARC};
 FL_API void fillpie(int x,int y,int w,int h,float a,float a2,int what=FILLPIE);
@@ -138,16 +143,14 @@ FL_API void drawtext_transformed(const char*, int n, float x, float y);
 FL_API void drawtext(const char*, float x, float y);
 FL_API void drawtext(const char*, int n, float x, float y);
 
-// the "fancy" label text formatter:
+// the label text formatter:
 FL_API void measure(const char*, int& w, int& h, Flags = 0);
 FL_API void drawtext(const char*, int,int,int,int, Flags);
-
-// "fancy" modifications, these may change!
-FL_API int add_symbol(const char* name, void (*drawit)(Color), int scalable);
-FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
+// set where \t characters go in label text formatter:
 extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
 inline void column_widths(const int* i) {column_widths_ = i;}
+// see also Symbol.h for @-sign commands
 
 // images:
 FL_API void drawimage(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
@@ -165,11 +168,12 @@ FL_API void scrollrect(int X, int Y, int W, int H, int dx, int dy,
 		       void (*draw_area)(void*, int,int,int,int), void*);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
+FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 
 }
 
 #endif
 
 //
-// End of "$Id: draw.h,v 1.4 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: draw.h,v 1.5 2003/07/01 07:03:14 spitzak Exp $".
 //

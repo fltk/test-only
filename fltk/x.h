@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.18 2003/01/22 06:21:51 spitzak Exp $"
+// "$Id: x.h,v 1.19 2003/07/01 07:03:14 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #ifndef fltk_x_h
 #define fltk_x_h
 
-#include "Color.h"
+#include "draw.h"
 
 #ifdef _WIN32
 # include "win32.h"
@@ -132,9 +132,6 @@ extern FL_API Region	clip_region();
 // of differences in how these things are created & destroyed, and
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
-
-FL_API void load_identity();
-FL_API void push_no_clip();
 
 class FL_API Drawable {
  public:
@@ -232,5 +229,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.18 2003/01/22 06:21:51 spitzak Exp $".
+// End of "$Id: x.h,v 1.19 2003/07/01 07:03:14 spitzak Exp $".
 //

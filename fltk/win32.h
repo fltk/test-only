@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.15 2003/06/24 07:10:47 spitzak Exp $"
+// "$Id: win32.h,v 1.16 2003/07/01 07:03:14 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -105,8 +105,6 @@ extern FL_API Region	clip_region();
 // intelligent constructors and destructors are not implemented.
 
 FL_API HDC makeDC(HBITMAP);
-FL_API void load_identity();
-FL_API void push_no_clip();
 
 class FL_API Drawable {
  public:
@@ -201,5 +199,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.15 2003/06/24 07:10:47 spitzak Exp $".
+// End of "$Id: win32.h,v 1.16 2003/07/01 07:03:14 spitzak Exp $".
 //

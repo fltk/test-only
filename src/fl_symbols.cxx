@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.30 2003/06/30 07:55:17 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.31 2003/07/01 07:03:15 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,128 +32,192 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <fltk/Style.h>
 #include <fltk/draw.h>
-#include <fltk/events.h>
+#include <fltk/Symbol.h>
+#include <fltk/math.h>
 #include <string.h>
+#include <ctype.h>
 using namespace fltk;
-
-typedef struct {
-  const char *name;
-  void (*drawit)(Color);
-  char scalable;
-  char notempty;
-} SYMBOL;
 
 #define MAXSYMBOL       211
    /* Maximal number of symbols in table. Only half of them are
       used. Should be prime. */
+static Symbol* symbols[MAXSYMBOL];      /* The symbols */
+static int symbnumb = 0;              /* Their number */
 
-static SYMBOL symbols[MAXSYMBOL];      /* The symbols */
-static int symbnumb = -1;              /* Their number */
-
-static int find(const char *name) {
 // returns hash entry if it exists, or first empty slot:
-  int pos = name[0] ? (
-    name[1] ? (
-      name[2] ? 71*name[0]+31*name[1]+name[2] : 31*name[0]+name[1]
+static int hashindex(const char *name, int n) {
+  int pos = n ? (
+    n > 1 ? (
+      n > 2 ? 71*name[0]+31*name[1]+name[2] : 31*name[0]+name[1]
     ) :
       name[0]
   ) : 0;
   pos %= MAXSYMBOL;
-  int hh2 = name[0] ? (
-    (name[1]) ? 51*name[0]+3*name[1] : 3*name[0]
-    ) : 1;
+  int hh2 = n ? (
+    (n>1) ? 51*name[0]+3*name[1] : 3*name[0]
+    )+n : 1;
   hh2 %= MAXSYMBOL; if (!hh2) hh2 = 1;
   for (;;) {
-    if (!symbols[pos].notempty) return pos;
-    if (!strcmp(symbols[pos].name,name)) return pos;
+    if (!symbols[pos]) return pos;
+    if (!strncmp(symbols[pos]->name(), name, n) && !symbols[pos]->name()[n]) return pos;
     pos = (pos + hh2) % MAXSYMBOL;
   }
 }
 
 static void init_symbols(void);
 
-/**************** The routines seen by the user *************************/
+/** The constructor for a Symbol adds it's name to a hash table that
+    is looked up in when "@" signs are found in a label. See find()
+    for details.
 
-int fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
-/* Adds a symbol to the system. Returns whether correct. */
-{
-  init_symbols();
-  int pos;
-  if (symbnumb > MAXSYMBOL / 2) return 0;	// table is full
-  pos = find(name);
-  symbols[pos].name = name;
-  symbols[pos].drawit = drawit;
-  symbols[pos].notempty = 1;
-  symbols[pos].scalable = scalable;
+    Pass null for the name if you are making some internal symbol that
+    cannot be called from a label.
+*/
+Symbol::Symbol(const char* name) : name_(name) {
+  if (!name) return; // ignore internal ones
+  if (symbnumb > MAXSYMBOL / 2) return;	// table is full
+  int pos = hashindex(name, strlen(name));
+  symbols[pos] = this;
   symbnumb++;
-  return 1;
 }
 
-// this function is in ReturnButton.cxx:
-void fl_glyph_return(const Widget*, int,
-		     int x,int y,int w,int h, Flags);
+/** Locate a symbol by the name used to construct it. \a name points
+    at the start of the name, \a end points to the character after
+    the end (this allows the name to be extracted from a longer string
+    without having to copy it).
 
-// provided for back compatability:
-int fltk::draw_symbol(const char *label,int x,int y,int w,int h,Color col) {
-  const char *p = label;
-  if (*p == '@') p++;
+    To allow symbols to read "arguments" from the text, only the last
+    block of non-digits is used to look up the symbol. The symbol
+    itself can read all the leading and trailing digits and characters
+    to control it's own behavior. For instance "a23bz98+90sym900" will
+    look up "sym".
+
+    Trailing uppercase hex digits and the letter 'x' are also skipped
+    to allow arguments to be typed in hex.
+*/
+const Symbol* Symbol::find(const char* name, const char* end) {
   init_symbols();
-  bool equalscale = false;
-  if (*p == '#') {
-    equalscale = true;
-    p++;
-  } else {
-    // if it is nearly square, make it square:
-    if (w < h) {if (w*3 > h*2) equalscale = true;}
-    else {if (h*3 > w*2) equalscale = true;}
+  // strip off trailing digits:
+  const char* e = end;
+  for (;; e--) {
+    if (e <= name) break;
+    char c = *(e-1);
+    if (isxdigit(c) || c=='x' || c=='X'	|| c == '+' || c == '-' || c=='.')
+      continue;
+    else
+      break;
   }
-  if (*p == '-' && p[1]>='1' && p[1]<='9') {
+  // skip past any leading hex digits:
+  while (e < end && isalpha(*e)) e++;
+  // if there is just numbers, use entire number as symbol:
+  if (e <= name) e = end;
+  // go to start of non-digits:
+  const char* p = e-1;
+  for (;; p--) {
+    if (p <= name) break;
+    if (isdigit(*(p-1))) break;
+  }
+  // now look it up:
+  int pos = hashindex(p, e-p);
+  return symbols[pos];
+}
+
+/**************** The routines seen by the user *************************/
+
+// Internal class to define scalable square symbols:
+class SymbolSymbol : public Symbol {
+  void (*drawit)(Color);
+public:
+  SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
+  void draw(const char* start, const char* end, float x, float y) const;
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = h = int(getsize()+.5);
+  }
+};
+
+/** Define a (hidden) subclass of Symbol that will draw a square icon.
+    All the predefined displaying symbols in fltk use this.
+
+    This is called by "@name;" in a label. By default the square is
+    the current font size. The name may be prefixed with some extra
+    characters:
+
+    "+digit" will enlarge the square by 1/12 of a point
+    size, "-digit" will shrink it. For instance "@+2square;" will
+    make a larger than default square.
+
+    Any digits after that are taken as an angle to rotate. A single
+    digit is a "keypad rotation" where the x axis points
+    at the given number on a keypad, for instance '9' it 45 degrees up,
+    and '4' is upside-down. '5' and '6' cause no rotation. For instance
+    "@4>" will make a triangle pointing left. "@+14>" is a bigger triangle
+    pointing left.
+
+    Multiple digits are a rotation in degrees. To do a rotation less than
+    10 degrees use a leading zero. For instance "@25->" is an arrow pointing
+    25 degrees up. "@-125->" is a slightly smaller arrow pointing 25
+    degrees up.
+
+    The \a drawit function should draw the required image inside the
+    -1,-1 to 1,1 square. The current transformation will already be
+    set to place this in the right place. The current color is passed
+    as an argument, you do not have to use this, but if you change the
+    color you are expected to set it back.
+
+    The \a scalable argument is for back-compatability and is ignored.
+    Pass 1 for compatability. If you want to make a non-scalable symbol
+    you should define your own subclass of Symbol.
+*/
+void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
+/* Adds a symbol to the system. Returns whether correct. */
+{
+  new SymbolSymbol(name,drawit);
+}
+
+void SymbolSymbol::draw(const char* p, const char* end, float x, float y) const
+{
+  if (*p == '#') p++; // ignore equalscale indicator from fltk1.1
+  float w,h; w = h = getsize();
+  // move x,y to center of square:
+  x += w/2;
+  y -= (getascent()-getdescent())/2;
+  // adjust the scale
+  if (*p == '-' && isdigit(p[1])) {
     int n = p[1]-'0';
-    x += n; y += n; w -= 2*n; h -= 2*n;
+    w *= 12.0f/(12+n);
+    h *= 12.0f/(12+n);
     p += 2;
-  } else if (*p == '+' && p[1]>='1' && p[1]<='9') {
+  } else if (*p == '+' && isdigit(p[1])) {
     int n = p[1]-'0';
-    x -= n; y -= n; w += 2*n; h += 2*n;
+    w *= (12+n)/12.0f;
+    h *= (12+n)/12.0f;
     p += 2;
   }
-  if (w < 10) {x -= (10-w)/2; w = 10;}
-  if (h < 10) {y -= (10-h)/2; h = 10;}
-  w = (w-1)|1; h = (h-1)|1; // odd sizes so arrow points are centered
-  int rotangle;
-  switch (*p++) {
-  case '0':
-    rotangle = 1000*(p[1]-'0') + 100*(p[2]-'0') + 10*(p[3]-'0');
-    p += 4;
-    break;
-  case '1': rotangle = 2250; break;
-  case '2': rotangle = 2700; break;
-  case '3': rotangle = 3150; break;
-  case '4': rotangle = 1800; break;
-  case '5':
-  case '6': rotangle = 0; break;
-  case '7': rotangle = 1350; break;
-  case '8': rotangle =  900; break;
-  case '9': rotangle =  450; break;
-  default: rotangle = 0; p--; break;
-  }
-  int pos = find(p);
-  if (!symbols[pos].notempty) return 0;
-  if (symbols[pos].scalable == 3) { // kludge to detect return arrow
-    fl_glyph_return(0,0, x,y,w,h, 0);
-    return 1;
+  if (w < 2 || h < 2) {drawpoint(x,y); return;} // too small
+  // read rotation in degrees. One digit does "numeric pad" orientation,
+  // for back compatability, start degrees with a '0' to avoid this.
+  bool firstzero = *p=='0';
+  int rotangle = 0;
+  while (isdigit(*p)) rotangle = 10*rotangle+(*p++ - '0');
+  if (rotangle < 10 && !firstzero) switch(rotangle) {
+  case 1: rotangle = 225; break;
+  case 2: rotangle = 270; break;
+  case 3: rotangle = 315; break;
+  case 4: rotangle = 180; break;
+  case 5:
+  case 6: rotangle = 0; break;
+  case 7: rotangle = 135; break;
+  case 8: rotangle =  90; break;
+  case 9: rotangle =  45; break;
   }
   push_matrix();
-  translate(x+w/2,y+h/2);
-  if (symbols[pos].scalable) {
-    if (equalscale) {if (w<h) h = w; else w = h;}
-    scale(0.5f*w, 0.5f*h);
-    rotate(rotangle/10.0f);
-  }
-  (symbols[pos].drawit)(col);
+  // use integer translate & scale to avoid crooked shapes:
+  translate(int(floorf(x)), int(floorf(y)));
+  scale(int(w+.5)/2, int(h+.5)/2); // note that w,h are integers!
+  rotate(rotangle);
+  drawit(getcolor());
   pop_matrix();
-  return 1;
 }
 
 /******************** THE DEFAULT SYMBOLS ****************************/
@@ -165,12 +229,11 @@ int fltk::draw_symbol(const char *label,int x,int y,int w,int h,Color col) {
 #define BL
 #define EL strokepath()
 #define BC
-#define EC closepath(); setcolor(BLACK); strokepath()
-#define EF(c) fillstrokepath(BLACK)
+#define EC closepath(); strokepath()
+#define EF(c) fillstrokepath(c)
 #define vv(x,y) addvertex(x,y)
 
 static void rectangle(float x,float y,float x2,float y2,Color col) {
-  setcolor(col);
   BP; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EF(col);
 }
 
@@ -178,50 +241,42 @@ static void rectangle(float x,float y,float x2,float y2,Color col) {
 
 static void draw_arrow1(Color col)
 {
-  setcolor(col);
-  BP; vv(-0.8f,-0.4f); vv(-0.8f,0.4f); vv(0.0f,0.4f); vv(0.0f,-0.4f); EP;
-  BP; vv(0.0f,0.8f); vv(0.8f,0.0f); vv(0.0f,-0.8f); vv(0.0f,-0.4f); vv(0.0f,0.4f); EP;
-  BC; vv(-0.8f,-0.4f); vv(-0.8f,0.4f); vv(0.0f,0.4f); vv(0.0f,0.8f); vv(0.8f,0.0f);
-      vv(0.0f,-0.8f); vv(0.0f,-0.4f); EC;
+  BC; vv(0.0f,1.0f); vv(1.0f,0.0f); vv(0.0f,-1.0f); EF(col);
+  rectangle(-1.0,-0.4f,0.1f,0.4f,col);
 }
 
 static void draw_arrow2(Color col)
 {
-  setcolor(col);
-  BP; vv(-0.3f,0.8f); vv(0.50f,0.0f); vv(-0.3f,-0.8f); EF(col);
+  BP; vv(-0.4f,1.0f); vv(0.6f,0.0f); vv(-0.4f,-1.0f); EF(col);
 }
 
 static void draw_arrow3(Color col)
 {
-  setcolor(col);
-  BP; vv(0.1f,0.8f); vv(0.9f,0.0f); vv(0.1f,-0.8f); EF(col);
-  BP; vv(-0.7f,0.8f); vv(0.1f,0.0f); vv(-0.7f,-0.8f); EF(col);
+  BP; vv(0.0f,1.0f); vv(1.0f,0.0f); vv(0.0f,-1.0f); EF(col);
+  BP; vv(-1.0f,1.0f); vv(0.0f,0.0f); vv(-1.0f,-1.0f); EF(col);
 }
 
 static void draw_arrowbar(Color col)
 {
-  setcolor(col);
-  BP; vv(0.2f,0.8f); vv(0.6f,0.8f); vv(0.6f,-0.8f); vv(0.2f,-0.8f); EF(col);
-  BP; vv(-0.6f,0.8f); vv(0.2f,0.0f); vv(-0.6f,-0.8f); EF(col);
+  BP; vv(0.2f,1.0f); vv(0.7f,1.0f); vv(0.7f,-1.0f); vv(0.2f,-1.0f); EF(col);
+  BP; vv(-0.8f,1.0f); vv(0.2f,0.0f); vv(-0.8f,-1.0f); EF(col);
 }
 
 static void draw_arrowbox(Color col)
 {
-  setcolor(col);
-  BP; vv(-0.6f,0.8f); vv(0.2f,0.0f); vv(-0.6f,-0.8f); EF(col);
-  BC; vv(0.2f,0.8f); vv(0.6f,0.8f); vv(0.6f,-0.8f); vv(0.2f,-0.8f); EC;
+  BP; vv(-0.8f,1.0f); vv(0.2f,0.0f); vv(-0.8f,-1.0f); EF(col);
+  BP; vv(0.2f,1.0f); vv(0.7f,1.0f); vv(0.7f,-1.0f); vv(0.2f,-1.0f); EC;
 }
 
 static void draw_bararrow(Color col)
 {
-  setcolor(col);
-  BP; vv(0.1f,0.8f); vv(0.9f,0.0f); vv(0.1f,-0.8f); EF(col);
-  BP; vv(-0.5f,0.8f); vv(-0.1f,0.8f); vv(-0.1f,-0.8f); vv(-0.5f,-0.8f); EF(col);
+  BP; vv(0.0f,1.0f); vv(1.0f,0.0f); vv(0.0f,-1.0f); EF(col);
+  BP; vv(-0.8f,1.0f); vv(-0.3f,1.0f); vv(-0.3f,-1.0f); vv(-0.8f,-1.0f); EF(col);
 }
 
 static void draw_doublebar(Color col) { 
-  rectangle(-0.6f,-0.8f,-.1f,.8f,col);
-  rectangle(.1f,-0.8f,.6f,.8f,col); 
+  rectangle(-0.6f, -1.0f, -0.1f, 1.0f,col);
+  rectangle(0.1f, -1.0f, 0.6f, 1.0f,col); 
 }
 
 static void draw_arrow01(Color col)
@@ -245,63 +300,63 @@ static void draw_0bararrow(Color col)
 static void draw_square(Color col)
   { rectangle(-1,-1,1,1,col); }
 
-static void draw_uparrow(Color) {
+static void draw_box(Color col)
+  { BC; vv(-1,-1); vv(1,-1); vv(1,1); vv(-1,1); EC; }
+
+static void draw_uparrow(Color col) {
   setcolor(GRAY99);
-  BL; vv(-.8f,.8f); vv(-.8f,-.8f); vv(.8f,0.0f); EL;
+  BL; vv(-1.0f,1.0f); vv(-1.0f,-1.0f); vv(1.0f,0.0f); EL;
   setcolor(GRAY33);
-  BL; vv(-.8f,.8f); vv(.8f, 0.0f); EL;
+  drawline(-1.0f,1.0f,1.0f, 0.0f);
+  setcolor(col);
 }
 
-static void draw_downarrow(Color) {
+static void draw_downarrow(Color col) {
   setcolor(GRAY33);
-  BL; vv(-.8f,.8f); vv(-.8f,-.8f); vv(.8f,0.0f); EL;
+  BL; vv(-1.0f,1.0f); vv(-1.0f,-1.0f); vv(1.0f,0.0f); EL;
   setcolor(GRAY99);
-  BL; vv(-.8f,.8f); vv(.8f, 0.0f); EL;
+  drawline(-1.0f,1.0f,1.0f, 0.0f);
+  setcolor(col);
 }
 
 static void draw_arrow1bar(Color col)
 {
   draw_arrow1(col);
-  rectangle(.6f,-.8f,.9f,.8f, col);
+  rectangle(.7f,-1.0f,1.0f,1.0f, col);
 }
 
 static void draw_doublearrow(Color col)
 {
-  setcolor(col);
-  BP; vv(-0.35f,-0.4f); vv(-0.35f,0.4f); vv(0.35f,0.4f); vv(0.35f,-0.4f); EP;
-  BP; vv(0.15f,0.8f); vv(0.95f,0.0f); vv(0.15f,-0.8f); EP;
-  BP; vv(-0.15f,0.8f); vv(-0.95f,0.0f); vv(-0.15f,-0.8f); EP;
-
-  BC; vv(-0.15f,0.4f); vv(0.15f,0.4f); vv(0.15f,0.8f); vv(0.95f,0.0f);
-      vv(0.15f,-0.8f); vv(0.15f,-0.4f); vv(-0.15f,-0.4f); vv(-0.15f,-0.8f);
-      vv(-0.95f,0.0f); vv(-0.15f,0.8f); EC;
-}
-
-static void draw_arrow(Color col)
-{
-  setcolor(col);
-  BP; vv(0.65f,0.1f); vv(1.0f,0.0f); vv(0.65f,-0.1f); EF(col);
-  BL; vv(-1.0f,0.0f); vv(0.65f,0.0f); EL;
+  BP; vv(-0.2f,-.8f); vv(-1.0f,0.0f); vv(-0.2f,.8f); EF(col);
+  BP; vv(0.2f,-.8f); vv(1.0f,0.0f); vv(0.2f,.8f); EF(col);
+  rectangle(-0.3f,-.4f, 0.3f, .4f, col);
 }
 
 static void draw_circle(Color col) {
-  setcolor(col); BP; addellipse(-1,-1,2,2); EF(col);
+  BP; addellipse(-1,-1,2,2); EF(col);
 }
 
 static void draw_line(Color col)
-  { setcolor(col); BL; vv(-1.0f,0.0f); vv(1.0f,0.0f); EL; }
+  { drawline(-1.0f,0.0f,1.0f,0.0f); }
 
 static void draw_plus(Color col)
 {
-  setcolor(col);
-  BP; vv(-0.9f,-0.15f); vv(-0.9f,0.15f); vv(0.9f,0.15f); vv(0.9f,-0.15f); EP;
-  BP; vv(-0.15f,-0.9f); vv(-0.15f,0.9f); vv(0.15f,0.9f); vv(0.15f,-0.9f); EP;
-
+  BP; vv(-1.0f,-0.2f); vv(-1.0f,0.2f); vv(1.0f,0.2f); vv(1.0f,-0.2f); EF(col);
+  BP; vv(-0.2f,-1.0f); vv(-0.2f,1.0f); vv(0.2f,1.0f); vv(0.2f,-1.0f); EF(col);
+#if 0
   BC;
-  vv(-0.9f,-0.15f); vv(-0.9f,0.15f); vv(-0.15f,0.15f); vv(-0.15f,0.9f);
-  vv(0.15f,0.9f); vv(0.15f,0.15f); vv(0.9f,0.15f); vv(0.9f,-0.15f);
-  vv(0.15f,-0.15f); vv(0.15f,-0.9f); vv(-0.15f,-0.9f); vv(-0.15f,-0.15f);
+  vv(-1.0f,-0.2f); vv(-1.0f,0.2f); vv(-0.2f,0.2f); vv(-0.2f,1.0f);
+  vv(0.2f,1.0f); vv(0.2f,0.2f); vv(1.0f,0.2f); vv(1.0f,-0.2f);
+  vv(0.2f,-0.2f); vv(0.2f,-1.0f); vv(-0.2f,-1.0f); vv(-0.2f,-0.2f);
   EC;
+#endif
+}
+
+// These last two are probably obsolete:
+static void draw_arrow(Color col)
+{
+  BP; vv(0.6f,0.2f); vv(1.0f,0.0f); vv(0.6f,-0.2f); EF(col);
+  drawline(-1.0f,0.0f,0.65f,0.0f);
 }
 
 static void draw_menu(Color col)
@@ -311,12 +366,11 @@ static void draw_menu(Color col)
 }
 
 static void init_symbols(void) {
-  static char beenhere;
+  static bool beenhere;
   if (beenhere) return;
-  beenhere = 1;
-  symbnumb = 0;
+  beenhere = true;
 
-  add_symbol("",		draw_arrow1,		1);
+  //add_symbol("",		draw_arrow1,		1);
   add_symbol("->",		draw_arrow1,		1);
   add_symbol(">",		draw_arrow2,		1);
   add_symbol(">>",		draw_arrow3,		1);
@@ -331,20 +385,21 @@ static void init_symbols(void) {
   add_symbol("<|",		draw_0bararrow,		1);
   add_symbol("<->",		draw_doublearrow,	1);
   add_symbol("-->",		draw_arrow,		1);
-  add_symbol("+",		draw_plus,		1);
+  //add_symbol("+",		draw_plus,		1);
   add_symbol("->|",		draw_arrow1bar,		1);
-  add_symbol("arrow",	draw_arrow,		1);
-  add_symbol("returnarrow",	0,			3);
-  add_symbol("square",	draw_square,		1);
-  add_symbol("circle",	draw_circle,		1);
+  add_symbol("[]",		draw_box,		1);
+  add_symbol("arrow",		draw_arrow,		1);
+  //add_symbol("returnarrow",	0,			3);
+  add_symbol("square",		draw_square,		1);
+  add_symbol("circle",		draw_circle,		1);
   add_symbol("line",		draw_line,		1);
   add_symbol("plus",		draw_plus,		1);
   add_symbol("menu",		draw_menu,		1);
-  add_symbol("UpArrow",	draw_uparrow,		1);
-  add_symbol("DnArrow",	draw_downarrow,		1);
+  add_symbol("UpArrow",		draw_uparrow,		1);
+  add_symbol("DnArrow",		draw_downarrow,		1);
   add_symbol("||",		draw_doublebar,		1);
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.30 2003/06/30 07:55:17 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.31 2003/07/01 07:03:15 spitzak Exp $".
 //

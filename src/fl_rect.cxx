@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.33 2003/07/01 07:03:15 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -26,10 +26,11 @@
 
 #include <fltk/draw.h>
 #include <fltk/x.h>
+#include <fltk/math.h>
 using namespace fltk;
 
 void fltk::strokerect(int x, int y, int w, int h) {
-  if (w<=0 || h<=0) return;
+  if (w <= 0 || h <= 0) return;
   transform(x,y);
 #ifdef _WIN32
   setpen();
@@ -44,19 +45,14 @@ void fltk::strokerect(int x, int y, int w, int h) {
 }
 
 void fltk::fillrect(int x, int y, int w, int h) {
-  if (w<=0 || h<=0) return;
+  if (w <= 0 || h <= 0) return;
   transform(x,y);
 #ifdef _WIN32
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-# if 1
-  // From the MFC CDC class, apparently this is faster:
   SetBkColor(gc, current_xpixel);
   ExtTextOut(gc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
-# else
-  FillRect(gc, &rect, setbrush());
-# endif
 #else
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #endif
@@ -71,6 +67,23 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   LineTo(gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
+  // fltk is supposed to act like there is a 1-pixel pen.
+  SetPixel(gc, x1, y1, current_xpixel);
+#else
+  XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
+#endif
+}
+
+void fltk::drawline(float X, float Y, float X1, float Y1) {
+  transform(X,Y); int x = int(floorf(X)+.5); int y = int(floorf(Y)+.5);
+  transform(X1,Y1);int x1 = int(floorf(X1)+.5); int y1 = int(floorf(Y1)+.5);
+#ifdef _WIN32
+  setpen();
+  MoveToEx(gc, x, y, 0L); 
+  LineTo(gc, x1, y1);
+  // Draw the last point *again* because the GDI line drawing
+  // functions will not draw the last point ("it's a feature!"...)
+  // fltk is supposed to act like there is a 1-pixel pen.
   SetPixel(gc, x1, y1, current_xpixel);
 #else
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
@@ -86,6 +99,15 @@ void fltk::drawpoint(int x, int y) {
 #endif
 }
 
+void fltk::drawpoint(float X, float Y) {
+  transform(X,Y); int x = int(floorf(X)); int y = int(floorf(Y));
+#ifdef _WIN32
+  SetPixel(gc, x, y, current_xpixel);
+#else
+  XDrawPoint(xdisplay, xwindow, gc, x, y);
+#endif
+}
+
 //
-// End of "$Id: fl_rect.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.33 2003/07/01 07:03:15 spitzak Exp $".
 //

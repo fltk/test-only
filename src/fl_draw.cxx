@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.26 2003/06/30 07:55:17 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.27 2003/07/01 07:03:14 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,9 @@
 
 #include <fltk/draw.h>
 #include <fltk/math.h>
+#include <fltk/Font.h>
 #include <string.h>
+#include <stdlib.h>
 #include <ctype.h>
 using namespace fltk;
 
@@ -47,24 +49,213 @@ using namespace fltk;
 #include <fltk/Widget.h>
 #include <fltk/Style.h>
 
-static int line_spacing() {
-  return int(getsize() + Widget::default_style->leading + .5);
-}
-static float line_ascent() {
-  return (line_spacing() + getascent() - getdescent()) / 2;
-}
+////////////////////////////////////////////////////////////////
+// @-sign commands
 
-namespace fltk {
-class Symbol {
-  public:
-    virtual void draw(const char* start,
-		      const char* end,
-		      float x, float y) const = 0;
-    virtual void measure(const char* start,
-		      const char* end,
-		      float& w, float& h) const = 0;
+#include <fltk/Symbol.h>
+
+// Sequences of characters that are not interpreted are turned into
+// this "symbol" which draws the text in the current font:
+class PlainText : public Symbol {
+public:
+  PlainText() : Symbol(0) {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    drawtext_transformed(start, end-start, x, y);
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = getwidth(start, end-start);
+    h = getsize();
+  }
 };
-}
+static const PlainText plaintext;
+
+static Font* normal_font;
+static float normal_size;
+static Color normal_color;
+static int line_spacing;
+static float line_ascent;
+static float dx, dy;
+bool fl_drawing_shadow; // true for engraved labels
+
+/** "@n" in a label resets the font, color, and postioning offset to
+    the settings they were when the label started. */
+class NormalSymbol : public Symbol {
+public:
+  NormalSymbol() : Symbol("n") {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    setcolor(normal_color);
+    setfont(normal_font, normal_size);
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    setfont(normal_font, normal_size);
+    dx = dy = 0;
+    w = h = 0;
+  }
+};
+static const NormalSymbol normalsymbol;
+
+/** "@b" in a label changes the font to bold. */
+class BoldSymbol : public Symbol {
+public:
+  BoldSymbol() : Symbol("b") {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    setfont(getfont()->bold(), getsize());
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    draw(0,0,0,0);
+    w = h = 0;
+  }
+};
+static const BoldSymbol boldsymbol;
+
+/** "@i" in a label changes the font to italic. */
+class ItalicSymbol : public Symbol {
+public:
+  ItalicSymbol() : Symbol("i") {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    setfont(getfont()->italic(), getsize());
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    draw(0,0,0,0);
+    w = h = 0;
+  }
+};
+static const ItalicSymbol italicsymbol;
+
+/** "@f" or "@t" in a label changes the font to fixed fltk::COURIER */
+class FixedSymbol : public Symbol {
+public:
+  FixedSymbol(const char* n) : Symbol(n) {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    setfont(fltk::COURIER, getsize());
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    draw(0,0,0,0);
+    w = h = 0;
+  }
+};
+static const FixedSymbol fixedsymbolf("f");
+static const FixedSymbol fixedsymbolt("t");
+
+/** "@Cxyz" will change the color to xyz, which is a color number. It
+    is easiest to specify it in hex, such as 0xff000000 for red. */
+class ColorSymbol : public Symbol {
+public:
+  ColorSymbol() : Symbol("C") {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    if (!fl_drawing_shadow) setcolor((Color)strtoul(start+1,0,0));
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = h = 0;
+  }
+};
+static const ColorSymbol colorsymbol;
+
+/** "@snumber" will set the font size directly to the number.
+    "@s+number" will set it to (12+n)/12 times the current size.
+    "@s-number" will set it to 12/(12+n) times the current size.
+    "@s0" will restore the initial size.
+    Capital S works as well for back-compatability.
+*/
+class SizeSymbol : public Symbol {
+public:
+  SizeSymbol(const char* n) : Symbol(n) {}
+  void draw(const char* start, const char* end, float x, float y) const {
+    float n = float(strtod(start+1,0));
+    if (n < 0) n = getsize()*12/(12-n);
+    else if (*(start+1)=='+') n = getsize()*(12+n)/12;
+    else if (n <= 0) n = normal_size;
+    setfont(getfont(), n);
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    draw(start,end,0,0);
+    w = h = 0;
+  }
+};
+static const SizeSymbol sizesymbols("s");
+static const SizeSymbol sizesymbolS("S");
+
+/** "@." does nothing. This is for back-compatability with fltk1.1,
+    but in that it caused all further @-commands to be ignored. This
+    is not implemented, all @-commands are interpreted unless you
+    set RAW_LABEL in the flags pased to fltk::draw().
+*/
+class NothingSymbol : public Symbol {
+public:
+  NothingSymbol() : Symbol(".") {}
+  void draw(const char* start, const char* end, float x, float y) const {}
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = h = 0;
+  }
+};
+static const NothingSymbol nothingsymbol;
+
+/** "@xnumber" will move the x origin to the right by
+    n*(fontsize/12) pixels.
+    This is ignored in width calculations, but can be used to adjust
+    the position of a label to line up exactly. You should start
+    positive numbers with '+' for compatability with possible
+    future versions of fltk.
+*/
+class DxSymbol : public Symbol {
+public:
+  DxSymbol() : Symbol("x") {}
+  void draw(const char* start, const char* end, float x, float y) const {}
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    dx += strtod(start+1,0)*getsize()/12;
+    w = h = 0;
+  }
+};
+static const DxSymbol dxsymbol;
+
+/** "@ynumber" will move the y origin \e up (not down) by
+    n*(fontsize/12) pixels.
+    This is ignored in width calculations, but can be used to adjust
+    the position of a label to line up exactly. You should start
+    positive numbers with '+' for compatability with possible
+    future versions of fltk.
+*/
+class DySymbol : public Symbol {
+public:
+  DySymbol() : Symbol("y") {}
+  void draw(const char* start, const char* end, float x, float y) const {}
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    dy -= strtod(start+1,0)*getsize()/12;
+    w = h = 0;
+  }
+};
+static const DySymbol dysymbol;
+
+static Color bgboxcolor;
+
+/** "@Bcolor" draws a solid box of the given color behind the text. Not
+    sure if this is compatable with fltk1.1. */
+class BgBox : public Symbol {
+public:
+  BgBox() : Symbol("B") {}
+  void draw(const char* start, const char* end, float x, float y) const {}
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    bgboxcolor = (Color)strtoul(start+1,0,0);
+    if (!bgboxcolor) bgboxcolor = BLACK;
+    w = h = 0;
+  }
+};
+static const BgBox bgbox;
+
+/* Other symbols supported in fltk1.1:
+
+   @l = set size to 24
+   @m = set size to 18
+   @s = set size to 11 // could be emulated when no number
+   @c = center
+   @r = right-justify
+   @Fnumber = set to fltk font n
+   @N = set to grayed-out color
+   @- = draw an inset divider line
+   @u or @_ = underscore rest of text
+
+*/
+////////////////////////////////////////////////////////////////
 
 const int* fltk::column_widths_ = 0;
 
@@ -76,42 +267,8 @@ struct Segment {
   const Symbol* symbol;
   const char* start;
   const char* end; // points after last character
-  float x,y;
+  float x,y; // Postion of left end of baseline
 };
-
-// Sequences of characters that are not interpreted are turned into
-// this "symbol" which draws the text in the current font:
-class PlainText : public Symbol {
-public:
-  void draw(const char* start, const char* end, float x, float y) const {
-    drawtext_transformed(start, end-start, x, y+line_ascent());
-  }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    w = getwidth(start, end-start);
-    h = getsize();
-  }
-};
-static const PlainText plaintext;
-
-namespace fltk {void load_identity();}
-
-// Dummy standin for symbols:
-class SymbolSymbol : public Symbol {
-public:
-  void draw(const char* start, const char* end, float x, float y) const {
-    // copy the name to zero-terminate it:
-    char buf[10];
-    int i = 0;
-    for (const char* q = start; q < end && i < 9;) buf[i++] = *q++;
-    buf[i] = 0;
-    int n = line_spacing();
-    draw_symbol(buf, int(x), int(y), n, n, getcolor());
-  }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    w = h = line_spacing();
-  }
-};
-static const SymbolSymbol symbol;
 
 // The current set of segments. Call add() to add a new one:
 static Segment* segments;
@@ -142,8 +299,8 @@ static /*inline*/ void add(int index,
   s.symbol = symbol;
   s.start = start;
   s.end = end;
-  s.x = x;
-  s.y = y;
+  s.x = x+dx;
+  s.y = y+dy;
 }
 
 bool fl_hide_shortcut; // set by Choice
@@ -164,70 +321,90 @@ static float wrap(
   )
 {
   float x = ix; // accumulated position if we don't wrap
-
   const char* word_end = start; // where to end it if we wrap
   const char* word_start = start; // where to start new segment
   float width = 0; 		// width of current text
   // start..p indicates current text segment being built
 
-  for (const char* p = start; ;p++) {
-    if ((flags & ALIGN_WRAP) && (p >= end || *p == ' ')) {
-      if (word_start < p) {
-	float newwidth = width + getwidth(word_end, p-word_end);
-	if ((flags & ALIGN_WRAP) && word_end > start && x+newwidth > ix+w) {
-	  // break before thsi word
-	  add(segment_count, &plaintext, start, word_end, x, y);
+  for (const char* p = start; ;) {
+    float guesswidth = 0;
+    // stop only on "interesting" characters:
+    if (p >= end) ;
+    else if ((flags&ALIGN_WRAP) && *p == ' ') {
+      // don't split in the middle of sequential spaces:
+      if (word_start >= p) {word_start = ++p; continue;}
+    } else if (!(flags&RAW_LABEL) && (*p=='@' || *p=='&')) {
+      guesswidth=getsize();
+    } else {++p; continue;}
+
+    // see if we want to split the previous text between words:
+    if (flags & ALIGN_WRAP) {
+      float newwidth = width + getwidth(word_end, p-word_end);
+      if (x+newwidth+guesswidth > ix+w && word_start > start) {
+	// break before this word
+	if (word_end > start) {
+	  add(segment_count, &plaintext, start, word_end, x, y+line_ascent);
 	  if (x+width > max_x+ix) max_x = x+width-ix;
-	  y += line_spacing();
-	  start = word_end = p = word_start;
-	  x = ix;
-	  width = 0;
-	  continue;
-	} else {
-	  width = newwidth;
-	  word_end = p;
 	}
+	y += line_spacing;
+	x = ix;
+	width = 0;
+	start = word_end = word_start;
+	// back up and start formatting from start of new line:
+	if (word_start < p) {p = word_start+1; continue;}
+      } else {
+	width = newwidth;
+	word_end = p;
       }
-      word_start = p+1;
     }
-    if (p < end && ((flags & RAW_LABEL) || (*p != '&' && *p != '@'))) continue;
+    if (*p == ' ') {word_start = ++p; continue;}
     if (start < p) {
       // add text before this next object
       width += getwidth(word_end, p-word_end);
-      add(segment_count, &plaintext, start, p, x, y);
+      add(segment_count, &plaintext, start, p, x, y+line_ascent);
       x += width;
       if (x > max_x+ix) max_x = x-ix;
     }
-    for (;;) {
-      if (p >= end) return y;
+    if (p >= end) break;
+    width = 0;
+    if (*p == '&') {
+      p++;
       if (*p == '&') {
-	p++;
-	if (*p == '&') break;
-	// add an underscore under next letter:
-	if (!fl_hide_shortcut) {
-	  const char* us = "_";
-	  add(segment_count, &plaintext, us, us+1, x, y);
-	}
-      } else if (*p == '@') {
-	p++;
-	if (*p == '@') break;
-	// parse out an @-command:
-	const char* q = p;
-	if (*q == '#') q++; // optional leading '#'
-	if (*q == '+' || *q == '-') q++;
-	while (isdigit(*q)) q++; // leading numbers
-	while (q < end && !isdigit(*q) && *q != '@' && *q != ' ') q++;
-	while (isdigit(*q)) q++; // trailing numbers
-	add(segment_count, &symbol, p, q, x, y);
-	float W,H; symbol.measure(p,q,W,H); x += W;
-	if (x > max_x+ix) max_x = x-ix;
-	p = q;
-	if (p < end && *p == ' ') p++; // ignore trailing space
-      } else break;
+	word_start = word_end = start = p; p++; continue;
+      }
+      // add an underscore under next letter:
+      if (!fl_hide_shortcut) {
+	const char* us = "_";
+	add(segment_count, &plaintext, us, us+1, x, y+line_ascent);
+      }
+    } else if (*p == '@') {
+      p++;
+      if (*p == '@') {
+	word_start = word_end = start = p; p++; continue;
+      }
+      // parse out an @-command:
+      const char* q = p;
+      while (*q && !isspace(*q) && *q != '@' && *q != ';') q++;
+      const Symbol* s = Symbol::find(p,q);
+      if (!s) {
+	// try a 1-character symbol for back-compatability
+	//q = p+1; s = Symbol::find(p,p+1);
+	//if (!s) {
+	  // try to ignore non-matching symbols
+	  word_start = word_end = start = p-1; continue;
+	  //}
+      }
+      add(segment_count, s, p, q, x, y+line_ascent);
+      float W,H; s->measure(p,q,W,H); x += W;
+      if (x > max_x+ix) max_x = x-ix;
+      p = q;
+      // skip the terminating space or semicolon:
+      if (isspace(*p) || *p==';') p++;
     }
     // start the next block of text:
-    word_start = word_end = start = p; width = 0;
+    word_start = word_end = start = p;
   }
+  return y;
 }
 
 // Split at newlines and tabs into sections and then call wrap on them
@@ -239,6 +416,11 @@ static float split(
     Flags flags
     )
 {
+  normal_font = getfont();
+  normal_size = getsize();
+  line_spacing = int(getsize() + Widget::default_style->leading + .5);
+  line_ascent = (line_spacing + getascent() - getdescent()) / 2;
+  dx = dy = 0;
   const int* column = column_widths_;
 
   segment_count = 0;
@@ -263,9 +445,9 @@ static float split(
     newy = wrap(str, p, x, y, w, flags);
     if (newy > max_y) max_y = newy;
     if (!*p) {
-      return max_y+line_spacing();
+      return max_y+line_spacing;
     } else if (*p == '\n') {
-      x = 0; y = max_y+line_spacing(); max_y = y; column = column_widths_;
+      x = 0; y = max_y+line_spacing; max_y = y; column = column_widths_;
     } else { // tab
       x += w;
     }
@@ -279,6 +461,8 @@ void fltk::drawtext(
     Flags flags
 ) {
   if (!str || !*str) return;
+  bgboxcolor = 0;
+  normal_color = getcolor();
   int h = int(split(str, W, H, flags)+.5);
   transform(X,Y);
   int dx, dy;
@@ -298,21 +482,32 @@ void fltk::drawtext(
   } else {
     dx = X+((W-int(max_x+.5))>>1);
   }
+  setfont(normal_font, normal_size);
   push_matrix();
   load_identity();
-  for (int i = 0; i < segment_count; i++) {
-    Segment& s = segments[i];
+  if (bgboxcolor) {
+    if (!fl_drawing_shadow) setcolor(bgboxcolor);
+    fillrect(int(dx), int(dy), int(max_x+.5), h);
+    if (fl_drawing_shadow) goto DONE;
+    setcolor(normal_color);
+  }
+  for (h = 0; h < segment_count; h++) {
+    Segment& s = segments[h];
     s.symbol->draw(s.start, s.end, s.x+dx, s.y+dy);
   }
+ DONE:
   pop_matrix();
+  setfont(normal_font, normal_size);
+  setcolor(normal_color);
 }
 
 void fltk::measure(const char* str, int& w, int& h, Flags flags) {
   if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
   h = int(split(str, w, h, flags)+.5);
   w = int(max_x+.5);
+  setfont(normal_font, normal_size);
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.26 2003/06/30 07:55:17 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.27 2003/07/01 07:03:14 spitzak Exp $".
 //
