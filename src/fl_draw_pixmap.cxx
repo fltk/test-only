@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.20 2004/07/19 23:43:08 laza2000 Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -110,18 +110,33 @@ struct xpm_data {
 static void cb1(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+x;
-  U32* q = (U32*)buf;
-  for (int X=w; X--;) *q++ = d.colors[*p++];
+  /*U32* q = (U32*)buf;
+  for (int X=w; X--;) *q++ = d.colors[*p++];*/
+  uchar* q = (uchar*)buf;
+  for (int X=w; X--;) {
+    q[0] = d.colors[*p];
+    q[1] = d.colors[*p]>>8;
+    q[2] = d.colors[*p++]>>16;
+    q+=3;
+  }
 }
 
 // callback for 2 bytes per pixel:
 static void cb2(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+2*x;
-  U32* q = (U32*)buf;
+  /*U32* q = (U32*)buf;
   for (int X=w; X--;) {
     U32* colors = d.byte1[*p++];
     *q++ = colors[*p++];
+  }*/
+  uchar* q = (uchar*)buf;
+  for (int X=w; X--;) {
+    U32* colors = d.byte1[*p++];
+    q[0] = colors[*p];
+    q[1] = colors[*p]>>8;
+    q[2] = colors[*p++]>>16;
+    q+=3;
   }
 }
 
@@ -237,6 +252,33 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   }
   d.data = data;
 
+#if 0
+  {
+    // Make every non-trasnparent pixel to be fully opaque
+    int y;
+    for (y = 0; y < d.h; y++) {
+      const uchar* p = data[y];
+      if (chars_per_pixel <= 1) {
+        for (int x = 0; x < d.w; x++) {
+          if (*p != transparent_index)
+            d.colors[*p] |= (0xFF<<24);
+          p++;
+        }
+      } else {
+	for (int x = 0; x < d.w; x++) {
+	  int index = *p;
+          U32* colors = d.byte1[*p++];
+	  index = (index<<8) | (*p);
+          int c = *p++;
+          if (index != transparent_index) {            
+            colors[c] |= (0xFF<<24);
+          }
+	}
+      }
+    }
+  }
+#endif
+
   // build the mask bitmap used by xpmImage:
   if (mask_bitmap && transparent_index >= 0) {
     // search for usage of the transparent index, if none we act like
@@ -289,11 +331,11 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   }
  NO_MASK:
 
-  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 3);
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.20 2004/07/19 23:43:08 laza2000 Exp $".
 //

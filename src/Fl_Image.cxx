@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.44 2004/07/15 16:14:15 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.45 2004/07/19 23:43:08 laza2000 Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,13 @@
 #define MASKPAT         0x00E20746 /* dest = (src & pat) | (!src & dst) */
 #define COPYFG          0x00CA0749 /* dest = (pat & src) | (!pat & dst) */
 #define COPYBG          0x00AC0744 /* dest = (!pat & src) | (pat & dst) */
+#endif
+
+#ifdef __MINGW32__
+// MinGW headers does not declare AlphaBlend..
+extern "C" {
+  WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
+}
 #endif
 
 /*
@@ -167,7 +174,24 @@ void Image::make_current() {
 #if USE_X11
     rgb = (void*)(XCreatePixmap(xdisplay, xwindow, w_, h_, xvisual->depth));
 #elif defined(_WIN32)
-    rgb = (void*)(CreateCompatibleBitmap(getDC(), w_, h_));
+    //rgb = (void*)(CreateCompatibleBitmap(getDC(), w_, h_));
+
+    // Use CreateDIBSection instead, it seems to be only reliable way to
+    // make AlphaBlend function working correctly always..
+
+    BITMAPINFO bmi;
+    // zero the memory for the bitmap info
+    memset(&bmi, 0, sizeof(BITMAPINFO));
+    // setup bitmap info 
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = w_;
+    bmi.bmiHeader.biHeight = h_;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;         // four 8-bit components
+    bmi.bmiHeader.biCompression = BI_RGB;
+    bmi.bmiHeader.biSizeImage = w_ * h_ * 4;
+
+    rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
 #elif defined(__APPLE__)
     // ???
 #endif
@@ -357,10 +381,12 @@ void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
   part of the image that then intersects x,y,w,h is then drawn.
 */
 void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
-  // Don't waste time for solid white alpha:
-  if (!alpha) {copy(X,Y,W,H,src_x,src_y); return;}
   // Draw bitmaps as documented, the rgb pretends to be black:
-  if (!rgb) {setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return;}
+  if (!rgb && alpha) { setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return; }
+
+  // Don't waste time for solid white alpha:  
+  if (!alpha && rgb!=alpha) { copy(X,Y,W,H,src_x,src_y); return; }
+
   // okay now we know we have rgb and alpha, draw it:
   clip_code();
   transform(x,y);
@@ -375,10 +401,23 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   XSetClipOrigin(xdisplay, gc, 0, 0);
   fl_restore_clip();
 #elif defined(_WIN32)
+  if(alpha == rgb) 
+  {
+    HDC new_dc = CreateCompatibleDC(dc);
+    SelectObject(new_dc, (HGDIOBJ)rgb);	
+    BLENDFUNCTION m_bf;
+    m_bf.BlendOp = AC_SRC_OVER;
+    m_bf.BlendFlags = 0;
+    m_bf.AlphaFormat = 0x1;
+    m_bf.SourceConstantAlpha = 0xFF;
+    AlphaBlend(dc, x,y,w,h, new_dc, src_x,src_y,w, h,m_bf);   
+    DeleteDC(new_dc);
+    return;
+  }
 # if 1
+  HDC new_dc = CreateCompatibleDC(dc);
   // Old version, are we sure this does not work?
   SetTextColor(dc, 0);
-  HDC new_dc = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)alpha);
   BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, NOTSRCAND);
   SelectObject(new_dc, (HBITMAP)rgb);
@@ -430,7 +469,7 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
  *
  * - ML
  */
-// #define USE_ALPHABLEND 1
+#define USE_ALPHABLEND 1
 
 // WAS: The code is wrong. I suspect the new code is supposed to go
 // into the "over" method. The fill() method should not be using the
@@ -443,7 +482,7 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 
 // Link against msimg32 lib
 #if defined (USE_ALPHABLEND) && defined(_MSC_VER)
-	#pragma comment(lib, "msimg32.lib")
+# pragma comment(lib, "msimg32.lib")
 #endif
 
 
@@ -465,7 +504,7 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   clip_code();
   // If there is no alpha channel then act like it is all white
   // and thus a rectangle should be drawn:
-  if (!alpha) {fillrect(x,y,w,h); return;}	
+  //if (!alpha) {fillrect(x,y,w,h); return;}	
 
   transform(x,y);
 #if USE_X11
@@ -478,14 +517,19 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
 #ifdef USE_ALPHABLEND
-  if (alpha == rgb) {
+  if (alpha == rgb) 
+  {
+    // This is still not correct.. According to:
+    //   "if C is the current color set with fltk::setcolor(), A is the alpha, and the
+    //   current display is B, is replace each pixel with B*(1-A)+A*C."
+    fillrect(X,Y,w,h);
     HDC tempdc = CreateCompatibleDC(dc);
     SelectObject(tempdc, (HGDIOBJ)rgb);	
     BLENDFUNCTION m_bf;
     m_bf.BlendOp = AC_SRC_OVER;
     m_bf.BlendFlags = 0;
-    m_bf.SourceConstantAlpha = 100;
-    m_bf.AlphaFormat = 0;
+    m_bf.AlphaFormat = 0x1;
+    m_bf.SourceConstantAlpha = 50;
     AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
     DeleteDC(tempdc);
     return;
@@ -522,7 +566,7 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   by calling fill() twice with gray colors. Otherwise it calls over().
 */
 void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
-{
+{  
   if (flags & INACTIVE) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(GRAY90);
@@ -565,5 +609,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.44 2004/07/15 16:14:15 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.45 2004/07/19 23:43:08 laza2000 Exp $".
 //

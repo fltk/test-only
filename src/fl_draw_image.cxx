@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.22 2004/06/04 08:34:25 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,10 +24,6 @@
 //
 
 #include <config.h>
-#if defined(_WIN32) && WINVER<0x0500
-# undef WINVER
-# define WINVER 0x0500
-#endif
 #include <fltk/x.h>
 #include <fltk/events.h>
 #include <fltk/draw.h>
@@ -168,5 +164,5 @@ void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.22 2004/06/04 08:34:25 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.23 2004/07/19 23:43:08 laza2000 Exp $".
 //

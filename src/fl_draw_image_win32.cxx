@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.20 2004/07/15 16:27:27 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.21 2004/07/19 23:43:08 laza2000 Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -118,53 +118,6 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
-// compatabilty stuff copied from wingdi.h. This is done so that win32 
-// compilers without a modern SDK can still compile this stuff
-#if 0 //(WINVER < 0x0500)
-typedef struct {
-        DWORD        bV5Size;
-        LONG         bV5Width;
-        LONG         bV5Height;
-        WORD         bV5Planes;
-        WORD         bV5BitCount;
-        DWORD        bV5Compression;
-        DWORD        bV5SizeImage;
-        LONG         bV5XPelsPerMeter;
-        LONG         bV5YPelsPerMeter;
-        DWORD        bV5ClrUsed;
-        DWORD        bV5ClrImportant;
-        DWORD        bV5RedMask;
-        DWORD        bV5GreenMask;
-        DWORD        bV5BlueMask;
-        DWORD        bV5AlphaMask;
-        DWORD        bV5CSType;
-        CIEXYZTRIPLE bV5Endpoints;
-        DWORD        bV5GammaRed;
-        DWORD        bV5GammaGreen;
-        DWORD        bV5GammaBlue;
-        DWORD        bV5Intent;
-        DWORD        bV5ProfileData;
-        DWORD        bV5ProfileSize;
-        DWORD        bV5Reserved;
-} BITMAPV5HEADER, FAR *LPBITMAPV5HEADER, *PBITMAPV5HEADER;
-
-// Values for bV5CSType
-#define PROFILE_LINKED          'LINK'
-#define PROFILE_EMBEDDED        'MBED'
-#endif
-
-
-inline int getOSVersion() {
-  static int osVersion = 0;
-  if (osVersion == 0) {
-    OSVERSIONINFO os;
-    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx(&os);
-    osVersion = os.dwMajorVersion;
-  }
-  return osVersion;
-}
-
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
 		    DrawImageCallback cb, void* userdata)
@@ -183,40 +136,25 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   transform(X,Y);
 
 #if USE_COLORMAP
-fkjlkasdjf
   int pixelsize = mono|indexed ? 1 : 4;
 #else
   int pixelsize = mono ? 1 : 4;
 #endif
+
   int linesize = pixelsize * w;
   if ((linesize % 4) != 0) {
     linesize += 4 - (linesize % 4);
   }
-  int oldlinesize = (pixelsize*(w+1))&~pixelsize;
 
-  BITMAPV5HEADER head;
+  BITMAPINFOHEADER head;
 
-  // we adjust the size of the bitmap header to account for different abilities in the windows version.
-//    if (getOSVersion() <= 3)
-//      head.bV5Size = sizeof(BITMAPINFOHEADER);
-//    else if (getOSVersion() == 4)
-//      head.bV5Size = sizeof(BITMAPV4HEADER);
-//    else
-  head.bV5Size = sizeof(BITMAPV5HEADER);
-  head.bV5Width = w;
-  //head.bV5Height = h;
-  head.bV5Planes = 1;
-  head.bV5BitCount = pixelsize*8;
-  head.bV5Compression = BI_BITFIELDS;
-  //head.bV5SizeImage = w*h*pixelsize;
-  head.bV5XPelsPerMeter = 72;
-  head.bV5YPelsPerMeter = 72;
-  head.bV5ClrUsed = 0;
-  head.bV5ClrImportant = 0;
-  head.bV5RedMask   = 0x000000FF;
-  head.bV5GreenMask = 0x0000FF00;
-  head.bV5BlueMask  = 0x00FF0000;
-  head.bV5AlphaMask = 0xFF000000;
+  head.biSize = sizeof(BITMAPINFOHEADER);
+  head.biWidth = w;
+  head.biPlanes = 1;
+  head.biBitCount = pixelsize*8;
+  head.biCompression = BI_RGB;
+  head.biClrUsed = 0;
+  head.biClrImportant = 0;
 
   static U32* buffer;
   int blocking = h;
@@ -269,15 +207,25 @@ fkjlkasdjf
           for (int i=w; i--; from += delta) *to++ = *from;
         } else {
           for (int i=w; i--; from += delta, to += pixelsize) {
-	    to[0] = from[0];
-	    to[1] = from[1];
-	    to[2] = from[2];
-	    to[3] = from[3];
+            if(delta == 4) {
+              // Premultiply for AlphaBlend
+              int a = from[3];
+              float afactor = (float)a / (float)0xff;
+              to[0] = (from[2] * afactor);
+	      to[1] = (from[1] * afactor);
+	      to[2] = (from[0] * afactor);
+	      to[3] = a;
+            } else {
+	      to[0] = from[2];
+	      to[1] = from[1];
+	      to[2] = from[0];
+              to[3] = 0xFF; // alpha channel is totally opaque
+            }
           }
         }
     }
-    head.bV5Height = -k;
-    head.bV5SizeImage = k*linesize;
+    head.biHeight = -k;
+    head.biSizeImage = k*linesize;
 #if 1
     SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 		      (LPSTR)buffer,
@@ -331,5 +279,5 @@ fkjlkasdjf
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.20 2004/07/15 16:27:27 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.21 2004/07/19 23:43:08 laza2000 Exp $".
 //

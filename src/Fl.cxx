@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.178 2004/07/02 05:40:57 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.179 2004/07/19 23:43:08 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -32,9 +32,11 @@
 #include <fltk/Tooltip.h>
 
 #if defined(_WIN32) && USE_MULTIMONITOR && WINVER<0x0500
+// Why??
 # undef WINVER
 # define WINVER 0x0500
 #endif
+
 #include <fltk/x.h>
 
 #include <ctype.h>
@@ -1100,5 +1102,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.178 2004/07/02 05:40:57 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.179 2004/07/19 23:43:08 laza2000 Exp $".
 //
