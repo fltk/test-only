@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.107 2003/01/14 06:51:01 spitzak Exp $"
+dnl "$Id: configure.in,v 1.108 2003/01/14 17:13:06 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -306,15 +306,13 @@ AC_CHECK_HEADER(strings.h,[
     FLTK_STRINGS_H=1],
     FLTK_STRINGS_H=0)
 
-FLTK_SNPRINTF=1
 AC_CHECK_FUNC(snprintf,[
     case $uname in
     	HP-UX*)
 	    if test "$uversion" = "1020"; then
 	        AC_MSG_WARN(Not using built-in snprintf function because you are running HP-UX 10.20.)
 	    else
-        	AC_DEFINE(HAVE_SNPRINTF)
-		FLTK_SNPRINTF=0
+		FLTK_SNPRINTF=1
 	    fi
 	    ;;
 
@@ -322,8 +320,7 @@ AC_CHECK_FUNC(snprintf,[
 	    if test "$uversion" = "40"; then
                 AC_MSG_WARN(Not using built-in snprintf function because you are running Tru64 4.0.)
 	    else
-        	AC_DEFINE(HAVE_SNPRINTF)
-		FLTK_SNPRINTF=0
+		FLTK_SNPRINTF=1
 	    fi
 	    ;;
 
@@ -331,17 +328,24 @@ AC_CHECK_FUNC(snprintf,[
             AC_DEFINE(HAVE_SNPRINTF)
 	    FLTK_SNPRINTF=0
 	    ;;
+    esac],[
+    case $uname in
+        CYGWIN* | MINGW*)
+	    AC_DEFINE(HAVE_SNPRINTF)
+	    FLTK_SNPRINTF=0
+	    ;;
+	*)
+	    FLTK_SNPRINTF=1
+	    ;;
     esac])
 
-FLTK_VSNPRINTF=1
 AC_CHECK_FUNC(vsnprintf,[
     case $uname in
     	HP-UX*)
 	    if test "$uversion" = "1020"; then
 	        AC_MSG_WARN(Not using built-in vsnprintf function because you are running HP-UX 10.20.)
 	    else
-        	AC_DEFINE(HAVE_VSNPRINTF)
-		FLTK_VSNPRINTF=0
+		FLTK_VSNPRINTF=1
 	    fi
 	    ;;
 
@@ -349,14 +353,22 @@ AC_CHECK_FUNC(vsnprintf,[
 	    if test "$uversion" = "40"; then
                 AC_MSG_WARN(Not using built-in vsnprintf function because you are running Tru64 4.0.)
 	    else
-        	AC_DEFINE(HAVE_VSNPRINTF)
-		FLTK_VSNPRINTF=0
+		FLTK_VSNPRINTF=1
 	    fi
 	    ;;
 
         *)
             AC_DEFINE(HAVE_VSNPRINTF)
 	    FLTK_VSNPRINTF=0
+	    ;;
+    esac],[
+    case $uname in
+        CYGWIN* | MINGW*)
+	    AC_DEFINE(HAVE_VSNPRINTF)
+	    FLTK_VSNPRINTF=0
+	    ;;
+	*)
+	    FLTK_VSNPRINTF=1
 	    ;;
     esac])
 
@@ -903,5 +915,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.107 2003/01/14 06:51:01 spitzak Exp $".
+dnl End of "$Id: configure.in,v 1.108 2003/01/14 17:13:06 spitzak Exp $".
 dnl

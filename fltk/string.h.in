@@ -1,5 +1,5 @@
 /*
- * "$Id: string.h.in,v 1.1 2002/12/22 05:30:22 easysw Exp $"
+ * "$Id: string.h.in,v 1.2 2003/01/14 17:13:21 spitzak Exp $"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
@@ -32,8 +32,7 @@
 #  include <stdarg.h>
 #  if @FLTK_STRING_H@
 #    include <string.h>
-#  endif
-#  if @FLTK_STRINGS_H@
+#  elif @FLTK_STRINGS_H@
 #    include <strings.h>
 #  endif
 #  include <ctype.h>
@@ -48,12 +47,11 @@
 #    undef index
 #  endif /* index */
 
-#  if defined(WIN32) && !defined(__CYGWIN__)
+#  if defined(WIN32) && !defined(__CYGWIN__) || defined(__EMX__)
 #    define strcasecmp(s,t)	stricmp((s), (t))
 #    define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
-#  elif defined(__EMX__)
-#    define strcasecmp(s,t)	stricmp((s), (t))
-#    define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
+#    define vsnprintf		_vsnprintf
+#    define snprintf		_snprintf
 #  endif /* WIN32 */
 
 #  ifdef __cplusplus
@@ -117,5 +115,5 @@ FL_API extern size_t fltk_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: string.h.in,v 1.1 2002/12/22 05:30:22 easysw Exp $".
+ * End of "$Id: string.h.in,v 1.2 2003/01/14 17:13:21 spitzak Exp $".
  */
