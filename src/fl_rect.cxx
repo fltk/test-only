@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.18 2000/05/17 07:08:11 bill Exp $"
+// "$Id: fl_rect.cxx,v 1.19 2000/05/17 22:24:30 carl Exp $"
 //
 // These routines from fl_draw.H are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -218,7 +218,6 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {
 #endif
 }
 
-#if 0
 void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   XPoint p[5];
   p[0].x = x;  p[0].y = y;
@@ -234,7 +233,6 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   XDrawLines(fl_display, fl_window, fl_gc, p, 5, 0);
 #endif
 }
-#endif
 
 void fl_point(int x, int y) {
 #ifdef WIN32
@@ -245,5 +243,5 @@ void fl_point(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.18 2000/05/17 07:08:11 bill Exp $".
+// End of "$Id: fl_rect.cxx,v 1.19 2000/05/17 22:24:30 carl Exp $".
 //
