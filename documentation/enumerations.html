@@ -216,6 +216,7 @@ cursors.</P>
 <LI><TT>FL_CURSOR_NESW</TT> - diagonal arrow </LI>
 <LI><TT>FL_CURSOR_NONE</TT> - invisible </LI>
 </UL>
+
 <H2>FD &quot;When&quot; Conditions</H2>
 <UL>
 <LI><TT>FL_READ</TT> - Call the callback when there is data to be 
@@ -225,15 +226,61 @@ cursors.</P>
 <LI><TT>FL_EXCEPT</TT> - Call the callback if an exception occurs on 
  the file. </LI>
 </UL>
-<H2><a name=damage>Damage Masks</H2>
- The following damage mask bits are used by the standard FLTK widgets: 
+
+<H2><a name=damage>Bits for damage()</H2>
+
+The following damage mask bits are used by the standard FLTK
+widgets. The ones marked "for internal use by widgets" can be used by
+widget subclasses for any purpose they want.
+
 <UL>
-<LI><TT>FL_DAMAGE_CHILD</TT> - A child needs to be redrawn. </LI>
-<LI><TT>FL_DAMAGE_EXPOSE</TT> - The window was exposed. </LI>
-<LI><TT>FL_DAMAGE_SCROLL</TT> - The <TT>Fl_Scroll</TT> widget was 
- scrolled. </LI>
-<LI><TT>FL_DAMAGE_OVERLAY</TT> - The overlay planes need to be redrawn. </LI>
-<LI><TT>FL_DAMAGE_ALL</TT> - Everything needs to be redrawn. </LI>
+<li><tt>FL_DAMAGE_VALUE</tt> - For internal use by widgets, widget
+should redraw to show a change in it's value</li>
+<li><tt>FL_DAMAGE_PUSHED</tt> - For internal use by widgets, widget
+should redraw to show a change from the user pushing or releasing the
+mouse.</li>
+<li><tt>FL_DAMAGE_SCROLL</tt> - For internal use by widgets, widget
+should scroll it's display (it will need to track the amount to scroll
+in some other instance variables)</li>
+<li><tt>FL_DAMAGE_OVERLAY</tt> - Fl_Overlay_Window and Fl_Gl_Window
+use this to indicate that a fake (non-hardware) overlay needs to be
+redrawn. Same value as <tt>FL_DAMAGE_SCROLL</tt>.
+<li><tt>FL_DAMAGE_HIGHLIGHT</tt> - For internal use by widgets, widget
+should redraw to show a change in highlighting due to mouse movement.</li>
+<li><tt>FL_DAMAGE_CHILD</tt> - A child of this group widget needs to
+be redrawn (non-group widgets can use this bit for their own purposes).</li>
+<li><tt>FL_DAMAGE_CHILD_LABEL</tt> - An outside label of this widget
+needs to be redrawn. This is handled (and this bit is cleared) by the
+parent group.</li>
+<li><tt>FL_DAMAGE_EXPOSE</tt> - Damage caused by <a
+href=Fl_Widget.html#expose><tt>expose()</tt></a> or by expose events
+from the operating system. If this and <tt>FL_DAMAGE_ALL</tt> is on
+the widget should draw every pixel inside it's region.
+<li><tt>FL_DAMAGE_CONTENTS</tt> - For internal use by widgets,
+indicates that the changing display part but not the border needs to
+be redrawn.</li>
+<li><tt>FL_DAMAGE_ALL</tt> - This bit is set by <a
+href=Fl_Widget.html#redraw><tt>redraw()</tt></a> and indicates that
+all of the widget (but not "holes" where the background shows through)
+needs to be redraw.</li>
 </UL>
-</LI>
+
+<h2><a name=layout>Bits for layout_damage()</h2>
+
+Indicates why <a href=Fl_Widget.html#layout>layout()</a> is being
+called on a widget.
+
+<ul>
+<li><tt>FL_LAYOUT_X</tt> - x() changed by resize()</li>
+<li><tt>FL_LAYOUT_Y</tt> - y() changed by resize()</li>
+<li><tt>FL_LAYOUT_XY</tt> - same as <tt>FL_LAYOUT_X|FL_LAYOUT_Y</tt></li>
+<li><tt>FL_LAYOUT_W</tt> - w() changed by resize()</li>
+<li><tt>FL_LAYOUT_H</tt> - h() changed by resize()</li>
+<li><tt>FL_LAYOUT_WH</tt> - same as <tt>FL_LAYOUT_W|FL_LAYOUT_H</tt></li>
+<li><tt>FL_LAYOUT_XYWH</tt> - same as <tt>FL_LAYOUT_XY|FL_LAYOUT_WH</tt></li>
+<li><tt>FL_LAYOUT_CHILD</tt> - layout() needs to be called on a child
+of this group widget.</li>
+<li><tt>FL_LAYOUT_DAMAGE</tt> - relayout() was called.</li>
+</ul>
+
 </BODY></HTML>

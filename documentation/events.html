@@ -1,6 +1,6 @@
 <html><head><title>FLTK Events</title></head><body bgcolor = white>
 
-<h1 align=right><a name=events>E - Handling Events</a></h1>
+<a name=events><h1 align=right>E - Handling Events</h1></a>
 
 FLTK Events are identified by the integer argument passed to the <a
 href="subclassing.html#handle"><tt>Fl_Widget::handle()</tt></a> virtual
@@ -89,7 +89,7 @@ versions.
 
 <H2>Mouse Events</H2>
 
-<a name="FL_PUSH"><h3>FL_PUSH</h3>
+<a name="FL_PUSH"><h4>FL_PUSH</h4></a>
 
 <p>A mouse button has gone down with the mouse pointing at this widget.
 You can find out what button by calling <a
@@ -108,7 +108,7 @@ widget (this is done by the enclosing group widget) and will get <a
 href=#FL_DRAG><tt>FL_DRAG</tt></a> and the matching <a
 href=#FL_RELEASE><tt>FL_RELEASE</tt></a> events.</p>
 
-<a name="FL_DRAG"><h3>FL_DRAG</h3>
+<a name="FL_DRAG"><h4>FL_DRAG</h4></a>
 
 The mouse has moved with a button held down. The current button state
 is in <a
@@ -120,7 +120,7 @@ href="Fl.html#event_y"><tt>Fl::event_y()</tt></a>.
 <P>To receive <tt>FL_DRAG</tt> events you must return non-zero when
 passed a <a href=#FL_PUSH><tt>FL_PUSH</tt></a> event.
 
-<a name="FL_RELEASE"><h3>FL_RELEASE</h3>
+<a name="FL_RELEASE"><h4>FL_RELEASE</h4></a>
 
 A mouse button has been released.  You can find out what button by 
 calling <a href="Fl.html#event_button"><tt>Fl::event_button()</tt></a>. 
@@ -128,7 +128,7 @@ calling <a href="Fl.html#event_button"><tt>Fl::event_button()</tt></a>.
 <P>To receive <tt>FL_RELEASE</tt> events you must return non-zero when
 passed a <a href=#FL_PUSH><tt>FL_PUSH</tt></a> event.
 
-<a name="FL_ENTER"><h3>FL_ENTER</h3>
+<a name="FL_ENTER"><h4>FL_ENTER</h4></a>
 
 The mouse has been moved to point at this widget.  This can be used
 for highlighting feedback.  If a widget wants to highlight or
@@ -139,18 +139,18 @@ method. It then becomes the <a href="Fl.html#belowmouse">
 href=#FL_MOVE><tt>FL_MOVE</tt></a> and <a
 href=#FL_LEAVE><tt>FL_LEAVE</tt></a> events.
 
-<a name="FL_MOVE"><h3>FL_MOVE</h3>
+<a name="FL_MOVE"><h4>FL_MOVE</h4></a>
 
 The mouse has moved without any mouse buttons held down.  This event
 is sent to the <a
 href="Fl.html#belowmouse"><tt>Fl::belowmouse()</tt></a> widget.
 
-<a name="FL_LEAVE"><h3>FL_LEAVE</h3>
+<a name="FL_LEAVE"><h4>FL_LEAVE</h4></a>
 
 The mouse has moved out of the widget. To get this event you must
 return 1 in response to a <tt>FL_ENTER</tt> event.
 
-<a name="FL_MOUSEWHEEL"><h3>FL_MOUSEWHEEL</h3>
+<a name="FL_MOUSEWHEEL"><h4>FL_MOUSEWHEEL</h4></a>
 
 The wheel was moved on the mouse. <a
 href="Fl.html#event_dy"><tt>Fl::event_dy()</tt></a> contains
@@ -163,7 +163,7 @@ href="Fl.html#focus"><tt>Fl::focus()</tt></a> widget (?).
 
 <H2>Keyboard Events</H2>
 
-<a name="FL_FOCUS"><h3>FL_FOCUS</h3>
+<a name="FL_FOCUS"><h4>FL_FOCUS</h4></a>
 
 This indicates an <I>attempt</I> to give a widget the keyboard focus.
 
@@ -182,12 +182,12 @@ href=Fl.html#event_key><tt>Fl::event_key()</tt></a> to figure
 out why it moved, for navigation it will be the key pressed and for
 switching windows it will be zero.
 
-<a name="FL_UNFOCUS"><h3>FL_UNFOCUS</h3>
+<a name="FL_UNFOCUS"><h4>FL_UNFOCUS</h4></a>
 
 Sent to the previous <a href=Fl.html#focus><tt>Fl::focus()</tt></a>
 widget when another widget gets the focus. 
 
-<a name="FL_KEY"><h3>FL_KEY</h3>
+<a name="FL_KEY"><h4>FL_KEY</h4></a>
 
 A key press event. Fltk sends these directly to the <a
 href=Fl.html#focus><tt>Fl::focus()</tt></a> widget. If it
@@ -206,7 +206,7 @@ href=Fl.html#event_length><tt>Fl::event_length()</tt></a>.
 href="Fl.html#compose"><tt>Fl::compose()</tt></a> to process the
 individual keystrokes into I18N characters.
 
-<a name="FL_KEYUP"><h3>FL_KEYUP</h3>
+<a name="FL_KEYUP"><h4>FL_KEYUP</h4></a>
 
 Sent to the <a href=Fl.html#focus><tt>Fl::focus()</tt></a>
 widget. The key that was released can be found in <a
@@ -214,7 +214,7 @@ href="Fl.html#event_key"><tt>Fl::event_key()</tt></a> (<a
 href="Fl.html#event_text"><tt>Fl::event_text()</tt></a> is
 <i>not</i> set).
 
-<a name="FL_SHORTCUT"><h3>FL_SHORTCUT</h3>
+<a name="FL_SHORTCUT"><h4>FL_SHORTCUT</h4></a>
 
 If the <a href=Fl.html#focus><tt>Fl::focus()</tt></a> widget is
 zero or it returns zero for an <a href=#FL_KEY><tt>FL_KEY</tt></a>
@@ -232,7 +232,7 @@ which one has the focus.
 
 <H2>Widget Events</H2>
 
-<a name="FL_DEACTIVATE"><h3>FL_DEACTIVATE</h3>
+<a name="FL_DEACTIVATE"><h4>FL_DEACTIVATE</h4></a>
 
 The method <a
 href="Fl_Widget.html#deactivate"><tt>deactivate()</tt></a> has been
@@ -240,7 +240,7 @@ called on this widget or one of its parents. The function <a
 href="Fl_Widget.html#active_r"><tt>active_r()</tt></a> will now return
 <tt>false</tt>.
 
-<a name="FL_ACTIVATE"><h3>FL_ACTIVATE</h3>
+<a name="FL_ACTIVATE"><h4>FL_ACTIVATE</h4></a>
 
 The method <a
 href="Fl_Widget.html#activate"><tt>activate()</tt></a> has been
@@ -248,7 +248,7 @@ called on this widget or one of its parents. The function <a
 href="Fl_Widget.html#active_r"><tt>active_r()</tt></a> will now return
 <tt>true</tt>.
 
-<a name="FL_HIDE"><h3>FL_HIDE</h3>
+<a name="FL_HIDE"><h4>FL_HIDE</h4></a>
 
 This widget is no longer visible, due to <a
 href=Fl_Widget.html#hide><tt>hide()</tt></a> being called on it or one
@@ -260,7 +260,7 @@ will now return <tt>false</tt>.
 class with this same event. Fltk relies on this to communicate the
 visiblilty of widgets that are windows to the system.
 
-<a name="FL_SHOW"><h3>FL_SHOW</h3>
+<a name="FL_SHOW"><h4>FL_SHOW</h4></a>
 
 This widget is visible, due to <a
 href=Fl_Widget.html#hide><tt>show()</tt></a> being called on it or one
@@ -275,7 +275,7 @@ visiblilty of widgets that are windows to the system.
 
 <H2>Clipboard Events</H2>
 
-<a name="FL_PASTE"><h3>FL_PASTE</h3>
+<a name="FL_PASTE"><h4>FL_PASTE</h4></a>
 
 You should get this event some time after you call <a
 href=Fl.html#paste><tt>Fl::paste()</tt></a> or you return true
@@ -284,7 +284,7 @@ for <a href=#FL_DND_RELEASE><tt>FL_DND_RELEASE</tt></a>.  The contents of
 the text to insert and the number of characters is in <a
 href="Fl.html#event_length"><tt>Fl::event_length()</tt></a>.
 
-<a name="FL_DND_ENTER"><h3>FL_DND_ENTER</h3>
+<a name="FL_DND_ENTER"><h4>FL_DND_ENTER</h4></a>
 
 The user is dragging something over your widget. Return 1 if you are
 intersted in getting <a href=#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> and
@@ -297,16 +297,16 @@ done, but unless you are making a file-management application that
 wants to delete or rename the source files, you should not need this
 information.
 
-<a name="FL_DND_DRAG"><h3>FL_DND_DRAG</h3>
+<a name="FL_DND_DRAG"><h4>FL_DND_DRAG</h4></a>
 
 The user moved the mouse some more while dragging something. You might
 use this to move around a cursor indicating where the insertion will go.
 
-<a name="FL_DND_LEAVE"><h3>FL_DND_LEAVE</h3>
+<a name="FL_DND_LEAVE"><h4>FL_DND_LEAVE</h4></a>
 
 The user moved out of the widget without releasing the dragged object.
 
-<a name="FL_DND_RELEASE"><h3>FL_DND_RELEASE</h3>
+<a name="FL_DND_RELEASE"><h4>FL_DND_RELEASE</h4></a>
 
 The user let go of the mouse and dropped something on your
 widget. Return 1 if you are interested in getting this data. In this

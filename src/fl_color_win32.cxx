@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.28 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -80,14 +80,9 @@ void fl_line_style(int style, int width, char* dashes) {
   line_width = width;
   // fix cards that ignore dash pattern for zero width:
   if (!width && (line_style || dash_pattern_size)) line_width = 1;
-  HPEN newpen = fl_pen = fl_create_pen();
-  if (newpen) {
-    HPEN oldpen = fl_pen = (HPEN)SelectObject(fl_gc, newpen);
+  fl_pen = fl_create_pen();
+  HPEN oldpen = (HPEN)SelectObject(fl_gc, fl_pen);
     if (oldpen) DeleteObject(oldpen);
-  } else {
-    // CET - FIXME - remove this debug fprintf()?
-    fprintf(stderr, "fl_line_style(): Could not create GDI pen object.\n");
-  }
 }
 
 HPEN fl_create_pen() {
@@ -104,23 +99,13 @@ void fl_color(Fl_Color i) {
   fl_color_ = i;
   fl_colorref = fl_wincolor(i);
 
-  HBRUSH newbrush = CreateSolidBrush(fl_colorref);
-  if (newbrush) {
-    fl_brush = newbrush;
-    HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush);
+  fl_brush = CreateSolidBrush(fl_colorref);
+  HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, fl_brush);
     if (oldbrush) DeleteObject(oldbrush);
-  } else {
-    // CET - FIXME - remove this debug fprintf()?
-    fprintf(stderr, "fl_color(): Could not create GDI brush object.\n");
-  }
-  HPEN newpen = fl_pen = fl_create_pen();
-  if (newpen) {
-    HPEN oldpen = fl_pen = (HPEN)SelectObject(fl_gc, newpen);
+
+  fl_pen = fl_create_pen();
+  HPEN oldpen = (HPEN)SelectObject(fl_gc, fl_pen);
     if (oldpen) DeleteObject(oldpen);
-  } else {
-    // CET - FIXME - remove this debug fprintf()?
-    fprintf(stderr, "fl_color(): Could not create GDI pen object.\n");
-  }
 }
 
 void fl_free_color(Fl_Color) {
@@ -175,5 +160,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.28 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Double_Window.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,17 +42,17 @@ protected:
 
   virtual void create();
   virtual void flush();
-  void flush(int eraseoverlay);
+  void flush(bool eraseoverlay);
   virtual void destroy();
 
 private:
 
-  void maybe_free_backbuffer(int,int);
+  void free_backbuffer();
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $".
 //

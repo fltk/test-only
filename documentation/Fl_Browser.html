@@ -1,7 +1,7 @@
 <html><head><title>Fl_Browser</title></head><body bgcolor = white>
 
 <hr break>
-<h2><a name=Fl_Browser>class Fl_Browser</a></h2>
+<a name=Fl_Browser><h2>class Fl_Browser</h2></a>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -111,16 +111,16 @@ lets the user select more than one item at the same time.
 </table>
 </center>
 
-<h4><a name=Fl_Browser>Fl_Browser::Fl_Browser(int, int, int, int, const char * = 0)</A></h4>
+<a name=Fl_Browser><h4>Fl_Browser::Fl_Browser(int, int, int, int, const char * = 0)</h4></a>
 
 The constructor makes an empty browser. 
 
-<h4><a name=~Fl_Browser>Fl_Browser::~Fl_Browser(void)</A></h4>
+<a name=~Fl_Browser><h4>Fl_Browser::~Fl_Browser(void)</h4></a>
 
 The destructor deletes all the list items (because they are child
 Fl_Widgets of an Fl_Group) and destroys the browser. 
 
-<h4><a name=type>void Fl_Browser::type(char);</a></h4>
+<a name=type><h4>void Fl_Browser::type(char);</h4></a>
 
 The bits of the type() are used to control what scrollbars are allowed
 to be visible and is also used by subclasses to change
@@ -158,14 +158,14 @@ for it to work correctly.
 
 </ul>
 
-<h4><a name=width>int width() const</a></h4>
+<a name=width><h4>int width() const</h4></a>
 
 The width of the longest item in the browser, measured in pixels. If
 this is changed (by adding or deleting items or opening or closing a
 parent item) then <a href=Fl_Widget.html#layout>layout()</a> must be
 called before this is correct.
 
-<h4><a name=height>int height() const</a></h4>
+<a name=height><h4>int height() const</h4></a>
 
 The height of all the visible items in the browser, measured in
 pixels. If this is changed (by adding or deleting items or opening or
@@ -173,7 +173,7 @@ closing a parent item) then <a
 href=Fl_Widget.html#layout><tt>layout()</tt></a> must be called before
 this is correct.
 
-<h4><a name=box_width>int box_width() const</a></h4>
+<a name=box_width><h4>int box_width() const</h4></a>
 
 The width of the display area of the browser in pixels, this is <a
 href=Fl_Widget.html#w><tt>w()</tt></a> minus the edges of the <a
@@ -184,7 +184,7 @@ item such that the scrollbar visibility changes) then <a
 href=Fl_Widget.html#layout>layout()</a> must be called before this is
 correct.
 
-<h4><a name=box_height>int box_height() const</a></h4>
+<a name=box_height><h4>int box_height() const</h4></a>
 
 The height of the display area of the browser in pixels, this is <a
 href=Fl_Widget.html#h><tt>h()</tt></a> minus the edges of the <a
@@ -195,26 +195,26 @@ item such that the scrollbar visibility changes) then <a
 href=Fl_Widget.html#layout>layout()</a> must be called before this is
 correct.
 
-<h4><a name=xposition>int xposition() const</a></h4>
+<a name=xposition><h4>int xposition() const</h4></a>
 
 Current horizontal scrolling pozition. Normally zero.
 
-<h4><a name=xposition>void xposition(int);</a></h4>
+<a name=xposition><h4>void xposition(int);</h4></a>
 
 Set the horizontal scrolling to a certain value.
 
-<h4><a name=yposition>int yposition() const</a></h4>
+<a name=yposition><h4>int yposition() const</h4></a>
 
 Current vertical scrolling position. This is the location, in pixels,
 of the top of the visible display, relative to the pixel position of
 the top of the first item.
 
-<h4><a name=yposition>void yposition(int);</a></h4>
+<a name=yposition><h4>void yposition(int);</h4></a>
 
 Set the vertical scrolling to a certain value.
 
-<h4><a name=indented>bool indented() const
-<br>void indented(bool v)</a></h4>
+<a name=indented><h4>bool indented() const
+<br>void indented(bool v)</h4></a>
 
 This is turned on by <tt>layout()</tt> if there are any parent items
 in the browser, to indicate that space must be reserved on the left
@@ -227,7 +227,7 @@ space even if there are no parent items.
 The scrollbars are accessable as instance variables. You can alter
 their width or other attributes to customize the browser to your liking.
 
-<h4><a name=goto_top>Fl_Widget* goto_top();</a></h4>
+<a name=goto_top><h4>Fl_Widget* goto_top();</h4></a>
 
 Because of the hierarchial structure it is difficult to identify an
 item in the browser. Instead of passing an identifier to all the calls
@@ -238,18 +238,18 @@ that can modify an item, the browser provides several calls to set the
 browser. It returns the widget for that item, or null if the browser
 is empty.
 
-<h4><a name=goto_focus>Fl_Widget* goto_focus()</a></h4>
+<a name=goto_focus><h4>Fl_Widget* goto_focus()</h4></a>
 
 <p>Set the current item to the "focus" (the item with the dotted square
 in an <tt>Fl_Multi_Browser</tt>, and the selected item in a normal
 <tt>Fl_Browser</tt>.
 
-<h4><a name=goto_position>Fl_Widget* goto_position(int y);</a></h4>
+<a name=goto_position><h4>Fl_Widget* goto_position(int y);</h4></a>
 
 <p>Set the current item to one at or before <i>y</i> pixels from top
 of the first item.
 
-<h4><a name=goto_index>Fl_Widget* goto_index(const int* indexes, int level);</a></h4>
+<a name=goto_index><h4>Fl_Widget* goto_index(const int* indexes, int level);</h4></a>
 
 <p>Go to a nested item. <i>indexes</i> must contain <i>level</i>+1
 index numbers. The first number indicates the top-level item number,
@@ -270,7 +270,7 @@ href=goto_index><tt>goto_index()</tt></a>. Passing a negative number
 as the first argument will set it to a special "no item" state where
 <tt>select_only_this()</tt> will do <tt>deselect()</tt>
 
-<h4><a name=next>Fl_Widget* next();</a></h4>
+<a name=next><h4>Fl_Widget* next();</h4></a>
 
 Move the current item to the next item. If if is a parent it moves to
 the first child. If not a parent, it moves to the next child of it's
@@ -279,122 +279,119 @@ brother. Repeatedly calling this will visit every child of the browser.
 This returns the widget. If the current widget is the last one this
 returns null, but the current widget remains on the last one.
 
-<h4><a name=next_visible>Fl_Widget* next_visible();</a></h4>
+<a name=next_visible><h4>Fl_Widget* next_visible();</h4></a>
 
 Move the current item to the next visible item. Invisible items are
 either hidden because their parent is closed or because they had <a
 href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
 
-<h4><a name=previous_visible>Fl_Widget* previous_visible();</a></h4>
+<a name=previous_visible><h4>Fl_Widget* previous_visible();</h4></a>
 
 Move the current item to the previous visible item. Invisible items are
 either hidden because their parent is closed or because they had <a
 href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
 
-<h4><a name=set_focus>bool set_focus();</a></h4>
+<a name=set_focus><h4>bool set_focus();</h4></a>
 
 Change the focus (the selected item, or in an <a
 href=Fl_Multi_Browser.html>Fl_Multi_Browser</a> the item that has a
 dotted box around it, and the current item selected with <a
 href=#goto_index><tt>goto_index()</tt></a>.
 
-<h4><a name=set_top>void set_top()</a></h4>
+<a name=set_top><h4>void set_top()</h4></a>
 
 Set the <a href=yposition><tt>yposition()</tt></a> so the top of the
 current item is at the top of the browser.
 
-<h4><a name=set_bottom>void set_bottom()</a></h4>
+<a name=set_bottom><h4>void set_bottom()</h4></a>
 
 Set the <a href=yposition><tt>yposition()</tt></a> so the bottom of
 the current item is at the bottom of the browser, if possible (it
 cannot scroll backwards past the top item).
 
-<h4><a name=set_middle>void set_middle() { set_position(MIDDLE);
-}</a></h4>
+<a name=set_middle><h4>void set_middle()</h4></a>
 
 Set the <a href=yposition><tt>yposition()</tt></a> so the middle of
 the current item is in the bottom of the browser, if possible (it
 cannot scroll backwards past the top item).
 
-<h4><a name=current_level>int current_level() const;</a></h4>
+<a name=current_level><h4>int current_level() const;</h4></a>
 
 Return the nesting level of the current item (how many parents it has).
 
-<h4><a name=current_index>const int& current_index() const;</a></h4>
+<a name=current_index><h4>const int& current_index() const;</h4></a>
 
 Return an array of <tt><a
 href=current_level>current_level()</a>+1</tt> indexes saying which
 child at each level includes the current item.
 
-<h4><a name=current_position>int current_position() const</a></h4>
+<a name=current_position><h4>int current_position() const</h4></a>
 
 Return the y position, in pixels, of the top edge of the current
 item. You may also want the height, which is in <tt>item()->height()</tt>.
 
-<h4><a name=focus_level>int focus_level() const</a></h4>
+<a name=focus_level><h4>int focus_level() const</h4></a>
 
 Return the nesting level of the focus (how many parents it has). The
 focus is the selected item the user sees.
 
-<h4><a name=focus_index>const int& focus_index() const</a></h4>
+<a name=focus_index><h4>const int& focus_index() const</h4></a>
 
 Return an array of <tt><a
 href=focus_level>focus_level()</a>+1</tt> indexes saying which
 child at each level includes the focus.
 
-<h4><a name=focus_position>int focus_position() const</a></h4>
+<a name=focus_position><h4>int focus_position() const</h4></a>
 
 Return the y position, in pixels, of the top edge of the focus item.
 
-<h4><a name=value>void value(int v)</a></h4>
+<a name=value><h4>void value(int v)</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(v)</a>;<a
 href=#set_focus>set_focus()</a>;</tt>, to change the current item in a
 non-hierarchial browser.
 
-<h4><a name=value>int value() const {return focus_index(0);}</a></h4>
+<a name=value><h4>int value() const {return focus_index(0);}</h4></a>
 
 Returns <tt><a href=#focus_index>focus_index(v)</a>[0]</tt>, to
 get the current item in a non-hierarchial browser.
 
-<h4><a name=format_char>char format_char() const;
-<br>void format_char(char c);</a></h4>
+<a name=format_char><h4>char format_char() const;
+<br>void format_char(char c);</h4></a>
 
 Sent to the <a href=drawing.html><tt>fl_draw()</tt></a> function to
 control the interpretation of leading symbol characters. This defaults
 to <tt>'@'</tt>.
 
-<h4><a name=column_widths>const int *column_widths() const;
-<br>void column_widths(const int *pWidths)</a></h4>
+<a name=column_widths><h4>const int *column_widths() const;
+<br>void column_widths(const int *pWidths)</h4></a>
 
 Sets the horizontal locations that each <tt>'\t'</tt> character in an
 item should start printing text at. These are measured from the left
 edge of the browser, including any area for the open/close + glyphs.
 
-<h4><a name=topline>void topline(int line)</a></h4>
+<a name=topline><h4>void topline(int line)</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
 href=#set_top>set_top()</a>;</tt>.
 
-<h4><a name=bottomline>void bottomline(int line) {goto_index(line);
-set_bottom();}</a></h4>
+<a name=bottomline><h4>void bottomline(int line)</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
 href=#set_bottom>set_bottom()</a>;</tt>.
 
-<h4><a name=middleline>void middleline(int line) {goto_index(line);
-set_middle();}</a></h4>
+<a name=middleline><h4>void middleline(int line)</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
 href=#set_middle>set_middle()</a>;</tt>.
 
-<h4><a name=displayed>bool displayed(int line);
-<br>void display(int line, bool value = true);</a></h4>
+<a name=displayed><h4>bool displayed(int line);
+<br>void display(int line, bool value = true);</h4></a>
 
 Set/clear the <tt>FL_VISIBLE</tt> attribute of the nth item in a
 signle-level browser.
 
-<h4><a name=topline>int topline() const</a></h4>
+<a name=topline><h4>int topline() const</h4></a>
 
 Return the index of the top-level item that is at the top of the browser.
 

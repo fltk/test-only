@@ -1,101 +1,101 @@
 <html><head><title>Fl_Window</title></head><body bgcolor = white>
 
 <hr break>
-<h2><a name=Fl_Window>class Fl_Window</a></h2>
+<a name=Fl_Window><h2>class Fl_Window</h2></a>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<UL><PRE>
-<A href=Fl_Group.html#Fl_Group>Fl_Group</A>
+<ul><pre>
+<a href=Fl_Group.html#Fl_Group>Fl_Group</A>
    |
-   +----<B>Fl_Window</B>
+   +----<b>Fl_Window</b>
            |
-           +----<A href=Fl_Double_Window.html#Fl_Double_Window>Fl_Double_Window</A>, <A href=Fl_Gl_Window.html#Fl_Gl_Window>Fl_Gl_Window</A>,
-                <A href=Fl_Overlay_Window.html#Fl_Overlay_Window>Fl_Overlay_Window</A>, <A href=Fl_Single_Window.html#Fl_Single_Window>Fl_Single_Window</A>
-</PRE></UL>
+           +----<a href=Fl_Double_Window.html>Fl_Double_Window</A>, <a href=Fl_Gl_Window.html>Fl_Gl_Window</A>,
+                <a href=Fl_Overlay_Window.html>Fl_Overlay_Window</A>, <a href=Fl_Single_Window.html>Fl_Single_Window</A>
+</pre></ul>
 
 <h3>Include Files</h3>
 
-<UL><PRE>
+<ul><pre>
 #include &lt;fltk/Fl_Window.h&gt;
-</PRE></UL>
+</pre></ul>
 
-<H3>Description</H3>
+<h3>Description</h3>
 
 This widget produces an actual window.  This can either be a main
 window, with a border and title and all the window management
 controls, or a "subwindow" inside a window.  This is controlled by
-whether or not the window has a <TT>parent()</TT>.
+whether or not the window has a <tt>parent()</tt>.
 
-<P>Once you create a window, you usually add children
-<TT>Fl_Widget</TT>'s to it by using <TT>window-&gt;add(child)</TT> for
-each new widget.  See <A
-href=Fl_Group.html><TT>Fl_Group</TT></A> for more information
+<p>Once you create a window, you usually add children
+<tt>Fl_Widget</tt>'s to it by using <tt>window-&gt;add(child)</tt> for
+each new widget.  See <a
+href=Fl_Group.html><tt>Fl_Group</tt></A> for more information
 on how to add and remove children.
 
-<P>There are several subclasses of <TT>Fl_Window</TT> that provide
+<p>There are several subclasses of <tt>Fl_Window</tt> that provide
 double-buffering, overlay, menu, and OpenGL support.
 
-<P>The window's callback is done if the user tries to close a window
-using the window manager and <A
-href=Fl.html#modal><TT>Fl::modal()</TT></A> is zero or equal to
-the window. <TT>Fl_Window</TT> has a default callback that calls
-<TT>Fl_Window::hide()</TT> and calls <TT>exit(0)</TT> if this is the
+<p>The window's callback is done if the user tries to close a window
+using the window manager and <a
+href=Fl.html#modal><tt>Fl::modal()</tt></A> is zero or equal to
+the window. <tt>Fl_Window</tt> has a default callback that calls
+<tt>Fl_Window::hide()</tt> and calls <tt>exit(0)</tt> if this is the
 last top-level window.
 
 <H3>Methods</H3>
 
-<CENTER>
-<TABLE width=90%>
-<TR><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Window>Fl_Window</A></LI>
-<LI><A href=#~Fl_Window>~Fl_Window</A></LI>
-<LI><A href=#border>border</A></LI>
-<LI><A href=#child_of>child_of</A></LI>
-<LI><A href=#clear_border>clear_border</A></LI>
-<LI><A href=#current>current</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#cursor>cursor</A></LI>
-<LI><A href=#destroy>destroy</A></LI>
-<LI><A href=#exec>exec</A></LI>
-<LI><A href=#first_window>first_window</A></LI>
-<LI><A href=#free_position>free_position</A></LI>
-<LI><A href=#fullscreen>fullscreen</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#fullscreen_off>fullscreen_off</A></LI>
-<LI><A href=#hide>hide</A></LI>
-<LI><A href=#hotspot>hotspot</A></LI>
-<LI><A href=#iconic>iconic</A></LI>
-<LI><A href=#iconize>iconize</A></LI>
-<LI><A href=#iconlabel>iconlabel</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#label>label</A></LI>
-<LI><A href=#make_current>make_current</A></LI>
-<LI><A href=#next_window>next_window</A></LI>
-<LI><A href=#override>override</A></LI>
-<LI><A href=#resize>resize</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#set_override>set_override</A></LI>
-<LI><A href=#show>show</A></LI>
-<LI><A href=#show_inside>show_inside</A></LI>
-<LI><A href=#shown>shown</A></LI>
-<LI><A href=#size_range>size_range</A></LI>
-</UL>
-</TD></TR>
-</TABLE>
-</CENTER>
+<center>
+<table width=90%>
+<tr><td align=left valign=top>
+<ul>
+<li><a href=#Fl_Window>Fl_Window</A></li>
+<li><a href=#~Fl_Window>~Fl_Window</A></li>
+<li><a href=#border>border</A></li>
+<li><a href=#child_of>child_of</A></li>
+<li><a href=#clear_border>clear_border</A></li>
+<li><a href=#current>current</A></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href=#cursor>cursor</A></li>
+<li><a href=#destroy>destroy</A></li>
+<li><a href=#exec>exec</A></li>
+<li><a href=#first_window>first_window</A></li>
+<li><a href=#free_position>free_position</A></li>
+<li><a href=#fullscreen>fullscreen</A></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href=#fullscreen_off>fullscreen_off</A></li>
+<li><a href=#hide>hide</A></li>
+<li><a href=#hotspot>hotspot</A></li>
+<li><a href=#iconic>iconic</A></li>
+<li><a href=#iconize>iconize</A></li>
+<li><a href=#iconlabel>iconlabel</A></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href=#label>label</A></li>
+<li><a href=#make_current>make_current</A></li>
+<li><a href=#next_window>next_window</A></li>
+<li><a href=#override>override</A></li>
+<li><a href=#resize>resize</A></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href=#set_override>set_override</A></li>
+<li><a href=#show>show</A></li>
+<li><a href=#show_inside>show_inside</A></li>
+<li><a href=#shown>shown</A></li>
+<li><a href=#size_range>size_range</A></li>
+</ul>
+</td></tr>
+</table>
+</center>
 
-<A name=Fl_Window><h4>Fl_Window::Fl_Window(int w, int h, const char *title = 0)</h4>
+<a name=Fl_Window><h4>Fl_Window::Fl_Window(int w, int h, const char *title = 0)</h4></a>
 
 The first form of the constructor should be used for a "top-level"
 window (that is, one that is not inside another window).  It correctly
@@ -106,17 +106,17 @@ window managers will allow the user to place the window by hand). If
 you want to force a position you should call <tt>position(x,y)</tt> or
 <tt>hotspot()</tt> before calling <tt>show()</tt>.
 
-<P><TT>Fl_Widget::box()</TT> is set to <TT>FL_FLAT_BOX</TT>.  If you
+<p><tt>Fl_Widget::box()</tt> is set to <tt>FL_FLAT_BOX</tt>.  If you
 plan to completely fill the window with children widgets you should
-change this to <TT>FL_NO_BOX</TT>. If you turn the window border off 
-you may want to change this to <TT>FL_UP_BOX</TT>.
+change this to <tt>FL_NO_BOX</tt>. If you turn the window border off 
+you may want to change this to <tt>FL_UP_BOX</tt>.
 
-<h4>Fl_Window::Fl_Window(int x, int y, int w, int h, const char *title = 0)</A></h4>
+<h4>Fl_Window::Fl_Window(int x, int y, int w, int h, const char *title = 0)</h4>
 
-<P>The second form of the constructor is for creating child windows.  It
+<p>The second form of the constructor is for creating child windows.  It
 leaves <tt>visible()</tt> set to true.
 
-<a name=~Fl_Window><h4>virtual Fl_Window::~Fl_Window()</h4>
+<a name=~Fl_Window><h4>virtual Fl_Window::~Fl_Window()</h4></a>
 
 Calls destroy().  The destructor <i>also deletes all the
 children</i>. This allows a whole tree to be deleted at once, without
@@ -125,59 +125,58 @@ kludge has been done so the <tt>Fl_Window</tt> and all of it's
 children can be automatic (local) variables, but you must declare the
 <tt>Fl_Window</tt> <i>first</i> so that it is destroyed last.
 
-<a name=size_range><h4>void Fl_Window::size_range(int minw, 
-int minh, int maxw=0, int maxh=0, int dw=0, int dh=0, int aspect=0)</h4>
+<a name=size_range><h4>void Fl_Window::size_range(int minw, int minh, int maxw=0, int maxh=0, int dw=0, int dh=0, int aspect=0)</h4></a>
 
 Set the allowable range the user can resize this window to.  This only 
 works for top-level windows. 
 
 <UL>
 
-<LI><TT>minw</TT> and <TT>minh</TT> are the smallest the window  can 
-be. </LI>
+<li><tt>minw</tt> and <tt>minh</tt> are the smallest the window  can 
+be. </li>
 
-<LI><TT>maxw</TT> and <TT>maxh</TT> are the largest the window  can be.
+<li><tt>maxw</tt> and <tt>maxh</tt> are the largest the window  can be.
  If either is <I>equal</I> to the minimum then you  cannot resize in 
 that direction.  If either is zero  then FLTK picks a maximum size in 
-that direction such that the  window will fill the screen. </LI>
+that direction such that the  window will fill the screen. </li>
 
-<LI><TT>dw</TT> and <TT>dh</TT> are size increments.  The  window will 
-be constrained to widths of <TT>minw + N * dw</TT>,  where <TT>N</TT>
+<li><tt>dw</tt> and <tt>dh</tt> are size increments.  The  window will 
+be constrained to widths of <tt>minw + N * dw</tt>,  where <tt>N</tt>
  is any non-negative integer.  If these are  less or equal to 1 they 
-are ignored.  (this is ignored on WIN32)</LI>
+are ignored.  (this is ignored on WIN32)</li>
 
-<LI><TT>aspect</TT> is a flag that indicates that the window should 
+<li><tt>aspect</tt> is a flag that indicates that the window should 
 preserve it's aspect ratio.  This is ignored by WIN32 and by most X
 window managers (in addition X does not describe what to do if the
 minimum and maximum sizes have different aspect ratios...)
 </UL>
 
 It is undefined what happens if the current size does not fit in the 
-constraints passed to <TT>size_range()</TT>.
+constraints passed to <tt>size_range()</tt>.
 
 <p>If this function is not called, FLTK tries to figure out the range 
-from the setting of <A href=#Fl_Group.resizable><TT>resizeable()</TT></A>: 
+from the setting of <a href=#Fl_Group.resizable><tt>resizeable()</tt></A>: 
 
 <UL>
 
-<LI>If <TT>resizeable()</TT> is <TT>NULL</TT> (this is the  default) 
-then the window cannot be resized. </LI>
+<li>If <tt>resizeable()</tt> is <tt>NULL</tt> (this is the  default) 
+then the window cannot be resized. </li>
 
-<LI>If either dimension of <TT>resizeable()</TT> is less than  100, 
-then that is considered the minimum size.  Otherwise the <TT>
-resizeable()</TT> has a minimum size of 100. </LI>
+<li>If either dimension of <tt>resizeable()</tt> is less than  100, 
+then that is considered the minimum size.  Otherwise the <tt>
+resizeable()</tt> has a minimum size of 100. </li>
 
-<LI>If either dimension of <TT>resizeable()</TT> is zero, then  that is 
-also the maximum size (so the window cannot resize in  that direction). </LI>
+<li>If either dimension of <tt>resizeable()</tt> is zero, then  that is 
+also the maximum size (so the window cannot resize in  that direction). </li>
 
 </UL>
 
-<a name=show><h4>void Fl_Window::show()</h4>
+<a name=show><h4>void Fl_Window::show()</h4></a>
 
 Put the window on the screen.  Usually this has the side effect of 
 opening the display.
 
-<P>It is harmless to call show() multiple times.  If the window is
+<p>It is harmless to call show() multiple times.  If the window is
 already shown then it is deiconized and raised to the top.
 
 <h4>int Fl_Window::show(int argc, char **argv, int i);</h4>
@@ -190,7 +189,7 @@ called yet this does so, this is a useful shortcut for the main window
 in a small program.
 
 <a name=child_of><h4>void Fl_Window::child_of(const Fl_Window* parent);
-<br>const Fl_Window* child_of() const;</h4>
+<br>const Fl_Window* child_of() const;</h4></a>
 
 Tell the system that this window will not have an icon, it will
 dissappear and reappear when the parent window is iconized or shown,
@@ -212,14 +211,13 @@ windows will come out the same as other windows.
 <p>If you want a dialog that blocks interaction with the other windows
 of your application or with all other applications, you need to look
 at <a href=#exec>exec()</a> or possibly <a
-href=Fl.html#modal><TT>Fl::modal()</TT></A>
+href=Fl.html#modal><tt>Fl::modal()</tt></A>
 
 <h4>int Fl_Window::show(const Fl_Window* parent);</h4>
 
 Same as <tt>child_of(parent),show()</tt>.
 
-<a name=exec><h4>bool Fl_Window::exec(const Fl_Window* parent = 0,
-bool grab = false);</h4>
+<a name=exec><h4>bool Fl_Window::exec(const Fl_Window* parent = 0, bool grab = false);</h4></a>
 
 Simple description: the window is popped up and this function waits
 until the user closes it, this then returns a true if the user hit ok,
@@ -248,7 +246,7 @@ a mouse or key click.
 <p>See <a href=Fl.html#modal><tt>Fl::modal()</tt></a> for what
 <i>grab</i> does. This is useful for popup menus.
 
-<a name=show_inside><h4>bool Fl_Window::show_inside(const Fl_Window* frame);</h4>
+<a name=show_inside><h4>bool Fl_Window::show_inside(const Fl_Window* frame);</h4></a>
 
 Make the window with a normal system border and behavior, but place it
 inside the <i>frame</i> as though that was the desktop.  This is what
@@ -265,12 +263,12 @@ the system is managing the window.
 is tied to remain atop and iconize with the frame window (IMHO this is
 a great improvement over MDI!).
 
-<A name=hide><h4>virtual void Fl_Window::hide()</h4>
+<a name=hide><h4>virtual void Fl_Window::hide()</h4></a>
 
 Remove the window from the screen.  If the window is already hidden or 
 has not been shown then this does nothing and is harmless.
 
-<a name=destroy><h4>virtual void Fl_Window::destroy();</h4>
+<a name=destroy><h4>virtual void Fl_Window::destroy();</h4></a>
 
 Hides the window and also deletes all window system information about
 the window, and thus returns if back to the state it was in before the
@@ -280,58 +278,58 @@ destroyed.
 <p>Subclasses can override this, if you do this you must also override
 the destructor and make it call destroy().
 
-<A name=shown><h4>int Fl_Window::shown() const</H4>
+<a name=shown><h4>int Fl_Window::shown() const</h4></a>
 
-Returns non-zero if <TT>show()</TT> has been called, but
-<TT>destroy()</TT> has not been called.
+Returns non-zero if <tt>show()</tt> has been called, but
+<tt>destroy()</tt> has not been called.
 
-<A name=iconic><h4>int Fl_Window::iconic() const</H4>
+<a name=iconic><h4>int Fl_Window::iconic() const</h4></a>
 
 Returns true if the window is currently displayed as an icon.  Returns
 false if the window is not shown() or hide() has been called.  <i>On X
 this will return true for a short time after show() is called the
 first time.</i>
 
-<A name=iconize><h4>void Fl_Window::iconize()</H4>
+<a name=iconize><h4>void Fl_Window::iconize()</h4></a>
 
- Iconifies the window.  If you call this when <TT>shown()</TT> is false 
-it will <TT>show()</TT> it as an icon.  If the window is already 
+ Iconifies the window.  If you call this when <tt>shown()</tt> is false 
+it will <tt>show()</tt> it as an icon.  If the window is already 
 iconified this does nothing. 
 
-<P>Call <TT>show()</TT> to restore the window.
+<p>Call <tt>show()</tt> to restore the window.
 
 <p>Currently there are only <a href=x.html#icon>X</a> and <a
 href=win32.html#icon>Win32</a> system-specific
 ways to control what is drawn in the icon.  You should not rely on 
 window managers displaying the icons.
 
-<A name=resize><h4>void Fl_Window::resize(int,int,int,int)</H4>
+<a name=resize><h4>void Fl_Window::resize(int,int,int,int)</h4></a>
 
-Change the size and position of the window.  If <TT>shown()</TT> is 
+Change the size and position of the window.  If <tt>shown()</tt> is 
 true, these changes are communicated to the window server (which may 
-refuse that size and cause a further resize).  If <TT>shown()</TT> is 
-false, the size and position are used when <TT>show()</TT> is called. 
-See <A href=Fl_Group.html#Fl_Group><TT>Fl_Group</TT></A> for the effect 
+refuse that size and cause a further resize).  If <tt>shown()</tt> is 
+false, the size and position are used when <tt>show()</tt> is called. 
+See <a href=Fl_Group.html#Fl_Group><tt>Fl_Group</tt></A> for the effect 
 of resizing on the child widgets. 
 
-<P>You can also call the <TT>Fl_Widget</TT> methods <TT>size(x,y)</TT>
-and <TT>position(w,h)</TT>, which are inline wrappers for this virtual 
+<p>You can also call the <tt>Fl_Widget</tt> methods <tt>size(x,y)</tt>
+and <tt>position(w,h)</tt>, which are inline wrappers for this virtual 
 function.
 
 <p>The special value <tt>FL_USEDEFAULT</tt> may be used for x and y
 indicate that the system should choose the window's position.
 
-<A name=hotspot><h4>void Fl_Window::hotspot(int x, int y, int 
+<a name=hotspot><h4>void Fl_Window::hotspot(int x, int y, int 
 offscreen = 0)
-<BR> void Fl_Window::hotspot(const Fl_Widget*, bool offscreen = false)
-<BR> void Fl_Window::hotspot(const Fl_Widgetp, bool offscreen = false)</h4>
+<br> void Fl_Window::hotspot(const Fl_Widget*, bool offscreen = false)
+<br> void Fl_Window::hotspot(const Fl_Widgetp, bool offscreen = false)</h4></a>
 
-<TT>position()</TT> the window so that the mouse is pointing at the
-given position, or at the center of the given widget, which may be the
-window itself.  If <TT>offscreen</TT> is true then the window is
+<tt>position()</tt> the window so that the mouse is pointing at the 
+given position, or at the center of the given widget, which may be the 
+window itself.  If <tt>offscreen</tt> is true then the window is
 allowed to extend off the screen (some X window managers do not allow this).
 
-<A name=fullscreen><h4>void Fl_Window::fullscreen()</H4>
+<a name=fullscreen><h4>void Fl_Window::fullscreen()</h4></a>
 
 Makes the window completely fill the screen, without any window
 manager border or taskbar or anything else visible (at least that is
@@ -340,26 +338,26 @@ window managers work. The Windows and Gnome and KDE taskbars remain
 visible. Anybody who knows how to get this to work reliably is welcome
 to contribute code to do so).
 
-<p>You must use <TT>fullscreen_off()</TT> to undo this. This may not
+<p>You must use <tt>fullscreen_off()</tt> to undo this. This may not
 work with all X window managers (and currently it is not successful at
 hiding the Windows taskbar).
 
-<A name=fullscreen_off><h4>int Fl_Window::fullscreen_off(int x, int y, int w, int h)</H4>
+<a name=fullscreen_off><h4>int Fl_Window::fullscreen_off(int x, int y, int w, int h)</h4></a>
 
-Turns off any side effects of <TT>fullscreen()</TT> and does <TT>
-resize(x,y,w,h)</TT>. 
+Turns off any side effects of <tt>fullscreen()</tt> and does <tt>
+resize(x,y,w,h)</tt>. 
 
-<A name=clear_border><h4>void Fl_Window::clear_border()</H4>
+<a name=clear_border><h4>void Fl_Window::clear_border()</h4></a>
 
 You may turn off the window manager border before calling show() on
 the window the first time. On most window managers this means the user
 cannot move, iconize, or resize the window (unless your program does it).
 
-<A name=border><h4>bool Fl_Window::border() const</h4>
+<a name=border><h4>bool Fl_Window::border() const</h4></a>
 
 Returns false if clear_border() has been called.
 
-<A name=set_override><h4>bool Fl_Window::set_override()</h4>
+<a name=set_override><h4>bool Fl_Window::set_override()</h4></a>
 
 Windows with this property set will use the exact position and size
 set by the programmer (will not be handled by the window manager) and
@@ -373,43 +371,43 @@ is the only reliable and fast way to do it.  This also turns on "save
 under" which on many X servers (like XFree86) can make the window
 disappear much faster.
 
-<A name=override><h4>bool Fl_Window::override() const</h4>
+<a name=override><h4>bool Fl_Window::override() const</h4></a>
 
 Returns true if set_override() has been called.
 
-<A name=label><h4>void Fl_Window::label(const char*)
-<BR>const char* Fl_Window::label() const</H4>
+<a name=label><h4>void Fl_Window::label(const char*)
+<br>const char* Fl_Window::label() const</h4></a>
 
 Gets or sets the window title bar label.
 
-<A name=iconlabel><h4>void Fl_Window::iconlabel(const char*)
-<BR>const char* Fl_Window::iconlabel() const</H4>
+<a name=iconlabel><h4>void Fl_Window::iconlabel(const char*)
+<br>const char* Fl_Window::iconlabel() const</h4></a>
 
 Gets or sets the icon label.
 
-<A name=make_current><h4>void Fl_Window::make_current()</H4>
+<a name=make_current><h4>void Fl_Window::make_current()</h4></a>
 
-<TT>make_current()</TT> sets things up so that the drawing functions in <A
-href=drawing.html><TT>&lt;fltk/fl_draw.h&gt;</TT></A> will go into this
+<tt>make_current()</tt> sets things up so that the drawing functions in <a
+href=drawing.html><tt>&lt;fltk/fl_draw.h&gt;</tt></A> will go into this
 window. This is useful for incremental update of windows, such as in an
 idle callback, which will make your program behave much better if it
 draws a slow graphic.  <i>This call does not work for Fl_Double_Window!</i>.
 
-<A name=current><h4>static Fl_Window* Fl_Window::current()</h4>
+<a name=current><h4>static Fl_Window* Fl_Window::current()</h4></a>
 
 Returns the last window that was made current.
 
-<A name=cursor><h4>void Fl_Window::cursor(Fl_Cursor, Fl_Color = FL_WHITE, Fl_Color = FL_BLACK)</h4>
+<a name=cursor><h4>void Fl_Window::cursor(Fl_Cursor, Fl_Color = FL_WHITE, Fl_Color = FL_BLACK)</h4></a>
 
 Change the cursor for this window.  This always calls the system, if
 you are changing the cursor a lot you may want to keep track of how
 you set it in a static varaible and call this only if the new cursor
 is different.
 
-<P>The type <TT>Fl_Cursor</TT> is an enumeration defined in <A
-href=enumerations.html#cursor> <TT>&lt;Enumerations.H&gt;</TT></A>.
-(Under X you can get any XC_cursor value by passing <TT>
-Fl_Cursor((XC_foo/2)+1)</TT>).  The colors only work on X, they are
+<p>The type <tt>Fl_Cursor</tt> is an enumeration defined in <a
+href=enumerations.html#cursor> <tt>&lt;Enumerations.H&gt;</tt></A>.
+(Under X you can get any XC_cursor value by passing <tt>
+Fl_Cursor((XC_foo/2)+1)</tt>).  The colors only work on X, they are
 not implemented on WIN32.
 
 </body></html>

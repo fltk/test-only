@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -121,12 +121,12 @@ int Fl_Color_Chooser::rgb(double r, double g, double b) {
   set_valuators();
   if (value_ != pv) {
 #ifdef UPDATE_HUE_BOX
-    huebox.damage(FL_DAMAGE_SCROLL);
+    huebox.redraw(FL_DAMAGE_CONTENTS);
 #endif
-    valuebox.damage(FL_DAMAGE_EXPOSE);}
+    valuebox.redraw(FL_DAMAGE_VALUE);}
   if (hue_ != ph || saturation_ != ps) {
-    huebox.damage(FL_DAMAGE_EXPOSE); 
-    valuebox.damage(FL_DAMAGE_SCROLL);
+    huebox.redraw(FL_DAMAGE_VALUE); 
+    valuebox.redraw(FL_DAMAGE_CONTENTS);
   }
   return 1;
 }
@@ -142,12 +142,12 @@ int Fl_Color_Chooser::hsv(double h, double s, double v) {
   hue_ = h; saturation_ = s; value_ = v;
   if (value_ != pv) {
 #ifdef UPDATE_HUE_BOX
-    huebox.damage(FL_DAMAGE_SCROLL);
+    huebox.redraw(FL_DAMAGE_CONTENTS);
 #endif
-    valuebox.damage(FL_DAMAGE_EXPOSE);}
+    valuebox.redraw(FL_DAMAGE_VALUE);}
   if (hue_ != ph || saturation_ != ps) {
-    huebox.damage(FL_DAMAGE_EXPOSE); 
-    valuebox.damage(FL_DAMAGE_SCROLL);
+    huebox.redraw(FL_DAMAGE_VALUE); 
+    valuebox.redraw(FL_DAMAGE_CONTENTS);
   }
   hsv2rgb(h,s,v,r_,g_,b_);
   set_valuators();
@@ -217,9 +217,9 @@ void Flcc_HueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   text_box()->inset(x1,y1,w1,h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1+px,y1+py,6,6);
+  if (damage() == FL_DAMAGE_VALUE) fl_push_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
+  if (damage() == FL_DAMAGE_VALUE) fl_pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 #ifdef CIRCLE
   int X = int(.5*(cos(c->h()*(M_PI/3.0))*c->s()+1) * (w1-6));
@@ -276,9 +276,9 @@ void Flcc_ValueBox::draw() {
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   text_box()->inset(x1,y1,w1,h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1,y1+py,w1,6);
+  if (damage() == FL_DAMAGE_VALUE) fl_push_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
+  if (damage() == FL_DAMAGE_VALUE) fl_pop_clip();
   int Y = int((1-c->v()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   box()->draw(x1, y1+Y, w1, 6, color(), 0);
@@ -502,5 +502,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,21 +43,6 @@
 #include <fltk/math.h>
 #include <stdio.h>
 
-// this purposely draws each line 10 times to be slow:
-void star(int w, int h, int n) {
-  fl_push_matrix();
-  fl_translate(w/2, h/2);
-  fl_scale(w/2, h/2);
-  for (int i = 0; i < n; i++) {
-    for (int j = i+1; j < n; j++)/* for (int k=0; k<10; k++)*/ {
-      fl_vertex(cos(2*M_PI*i/n+.1), sin(2*M_PI*i/n+.1));
-      fl_vertex(cos(2*M_PI*j/n+.1), sin(2*M_PI*j/n+.1));
-      fl_stroke();
-    }
-  }
-  fl_pop_matrix();
-}
-
 int sides[2] = {20,20};
 
 void slider_cb(Fl_Widget* o, long v) {
@@ -65,20 +50,29 @@ void slider_cb(Fl_Widget* o, long v) {
   o->parent()->redraw();
 }
 
-void bad_draw(int w,int h,int which) {
-//   for (int i=0; i<10; i++) {
-//     fl_color(7); fl_rectf(0,0,w,h); fl_color(0); star(w,h);
-//     fl_color(0); fl_rectf(0,0,w,h); fl_color(7); star(w,h);
-//   }
-  fl_color(FL_BLACK); fl_rectf(0,0,w,h);
-  fl_color(FL_WHITE); star(w,h,sides[which]);
-  //  for (int x=0; x<sides[which]; x++) for (int y=0; y<sides[which]; y++)
-  //fl_draw_box(FL_UP_BOX, 10*x, 10*y, 25,25, FL_GRAY);
+// A very blinky drawing function:
+void bad_draw(int w, int h, int n) {
+  fl_color(FL_BLACK);
+  fl_rectf(0,0,w,h);
+  fl_push_matrix();
+  fl_translate(w/2, h/2);
+  fl_scale(w/2, h/2);
+  for (int i = 0; i < n; i++) {
+    for (int j = i+1; j < n; j++) {
+      fl_color((i+j)%(5*8*5)+FL_COLOR_CUBE);
+      fl_vertex(cos(2*M_PI*(j-1)/n+.1), sin(2*M_PI*(j-1)/n+.1));
+      fl_vertex(cos(2*M_PI*i/n+.1), sin(2*M_PI*i/n+.1));
+      fl_vertex(cos(2*M_PI*j/n+.1), sin(2*M_PI*j/n+.1));
+      fl_fill_stroke(FL_WHITE);
+    }
+  }
+  fl_pop_matrix();
 }
 
 class single_blink_window : public Fl_Single_Window {
   void draw() {
-    bad_draw(w(),h(),0);
+    bad_draw(w(), h(), sides[0]);
+    // redraw the slider:
     child(0)->set_damage(FL_DAMAGE_ALL);
     update_child(*child(0));
   }
@@ -89,7 +83,8 @@ public:
 
 class double_blink_window : public Fl_Double_Window {
   void draw() {
-    bad_draw(w(),h(),1);
+    bad_draw(w(), h(), sides[1]);
+    // redraw the slider:
     child(0)->set_damage(FL_DAMAGE_ALL);
     update_child(*child(0));
   }
@@ -129,5 +124,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.53 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -108,7 +108,7 @@ int Fl_Scrollbar::handle(int event) {
   case FL_ENTER:
   case FL_MOVE:
     if (Fl::pushed() != this) highlight_ = which_part;
-    if (last_ != highlight_) damage(FL_DAMAGE_EXPOSE);
+    if (last_ != highlight_) redraw(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
     if (pushed_) return 1;
@@ -117,7 +117,7 @@ int Fl_Scrollbar::handle(int event) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, (Fl_Timeout_Handler)timeout_cb, this);
       increment_cb();
-      damage(FL_DAMAGE_EXPOSE);
+      redraw(FL_DAMAGE_HIGHLIGHT);
       return 1;
     }
     return Fl_Slider::handle(event, X,Y,W,H);
@@ -129,7 +129,7 @@ int Fl_Scrollbar::handle(int event) {
     highlight_ = which_part;
     last_ = pushed_; // so that it will unpush without redrawing everything
     pushed_ = 0;
-    damage(FL_DAMAGE_EXPOSE);
+    redraw(FL_DAMAGE_HIGHLIGHT);
     handle_release();
     return 1;
   case FL_MOUSEWHEEL: {
@@ -212,5 +212,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.53 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.42 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,8 +54,13 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
   }
 }
 
+extern Fl_Widget* fl_did_clipping;
+
 void Fl_Button::draw() {
-  if (type() == FL_HIDDEN_BUTTON) {box(FL_NO_BOX); return;}
+  if (type() == FL_HIDDEN_BUTTON) {
+    fl_did_clipping = this;
+    return;
+  }
   Fl_Flags f;
   if (value()) {
     // only use the pushed-in color if the user has explicitly set it
@@ -70,19 +75,13 @@ void Fl_Button::draw() {
   draw_inside_label(box->dx(), box->dy(), w()-box->dw(), h()-box->dh(), f);
 }
 
-// Call the draw method, handle the clip out
-void Fl_Button::draw_n_clip()
-{
-  if (type() != FL_HIDDEN_BUTTON) Fl_Widget::draw_n_clip();
-}
-
 int Fl_Button::handle(int event) {
   static int oldval;
   int newval;
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
   case FL_MOVE:
     return 1;
   case FL_PUSH:
@@ -114,7 +113,7 @@ int Fl_Button::handle(int event) {
     return 1;
   case FL_FOCUS:
   case FL_UNFOCUS:
-    damage(FL_DAMAGE_HIGHLIGHT);
+    redraw(FL_DAMAGE_HIGHLIGHT);
     // grab initial focus if we are an Fl_Return_Button:
     return shortcut()==FL_Enter ? 2 : 1;
   case FL_KEYBOARD:
@@ -154,5 +153,5 @@ Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.42 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $".
 //

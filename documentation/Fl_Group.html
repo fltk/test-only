@@ -1,17 +1,20 @@
 <html><head><title>Fl_Group</title></head><body bgcolor = white>
 
 <hr break>
-<h2><A name=Fl_Group>class Fl_Group</a></h2>
+<A name="Fl_Group"><h2>class Fl_Group</h2></a>
 <hr>
 
 <h3>Class Hierarchy</h3>
 <ul>
 <pre>
-<a href=Fl_Widget.html#Fl_Widget>Fl_Widget</a>
+<a href="Fl_Widget.html">Fl_Widget</a>
    |
-   +----<B>Fl_Group</B>
+   +----<b>Fl_Group</b>
            |
-           +----<A href=Fl_Pack.html#Fl_Pack>Fl_Pack</a>, <A href=Fl_Scroll.html#Fl_Scroll>Fl_Scroll</a>, <A href=Fl_Tabs.html#Fl_Tabs>Fl_Tabs</a>, <A href=Fl_Tile.html#Fl_Tile>Fl_Tile</a>, <A href=Fl_Window.html#Fl_Window>Fl_Window</a>
+           +----<A href="Fl_Pack.html">Fl_Pack</a>, <A
+   href="Fl_Scroll.html">Fl_Scroll</a>, <A
+   href="Fl_Tabs.html">Fl_Tabs</a>, <A
+   href="Fl_Tile.html">Fl_Tile</a>, <A href="Fl_Window.html">Fl_Window</a>
 </pre></ul>
 
 <h3>Include Files</h3>
@@ -26,9 +29,9 @@ The <tt>Fl_Group</tt> class is the FLTK container widget. It maintains
 an array of child widgets. These children can themselves be any widget
 including <tt>Fl_Group</tt>. The most-used subclass of
 <tt>Fl_Group</tt> is <a
-href=Fl_Window.html#Fl_Window><tt>Fl_Window</tt></a>, however nested
-groups can also be used to control radio buttons or to enforce resize
-behavior. Also <a href=#Fl_Menu_.html>Fl_Menu_</a> is a subclass and
+href="Fl_Window.html#Fl_Window"><tt>Fl_Window</tt></a>, however nested
+groups can also be used to control radio buttons or to enforce resize 
+behavior. Also <a href="#Fl_Menu_.html">Fl_Menu_</a> is a subclass and
 thus all menus and browsers are groups and the items in them are
 widgets.
 
@@ -38,47 +41,43 @@ widgets.
 <table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href=#Fl_Group>Fl_Group</a></li>
-<li><a href=#~Fl_Group>~Fl_Group</a></li>
-<li><a href=#add>add</a></li>
-<li><a href=#add_resizable>add_resizable</a></li>
-</ul>
-</td><td align=left valign=top>
-<UL>
-<li><a href=#begin>begin</a></li>
-<li><a href=#child>child</a></li>
-<li><a href=#clear>clear</a></li>
-<li><a href=#children>children</a></li>
+<li><a href="#Fl_Group">Fl_Group</a></li>
+<li><a href="#~Fl_Group">~Fl_Group</a></li>
+<li><a href="#add">add</a></li>
+<li><a href="#add_resizable">add_resizable</a></li>
+<li><a href="#begin">begin</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#current>current</a></li>
-<li><a href=#end>end</a></li>
-<li><a href=#focus>focus</a></li>
+<li><a href="#child">child</a></li>
+<li><a href="#clear">clear</a></li>
+<li><a href="#children">children</a></li>
+<li><a href="#current">current</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#find>find</a></li>
-<li><a href=#init_sizes>init_sizes</a></li>
-<li><a href=#insert>insert</a></li>
+<li><a href="#end">end</a></li>
+<li><a href="#focus">focus</a></li>
+<li><a href="#find">find</a></li>
+<li><a href="#init_sizes">init_sizes</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#remove>remove</a></li>
-<li><a href=#replace>replace</a></li>
-<li><a href=#resizeable>resizable</a></li>
+<li><a href="#insert">insert</a></li>
+<li><a href="#remove">remove</a></li>
+<li><a href="#replace">replace</a></li>
+<li><a href="#resizeable">resizable</a></li>
 </ul>
 </td></tr>
 </table>
 </center>
 
-<h4><a name=Fl_Group>Fl_Group::Fl_Group(int x, int y, int w, 
-int h, const char *label = 0)</a></h4>
+<a name="Fl_Group"><h4>Fl_Group::Fl_Group(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
 Creates a new <tt>Fl_Group</tt> widget using the given position, size, 
 and label string. The default boxtype is <tt>FL_NO_BOX</tt>. 
 
-<h4><a name=~Fl_Group>virtual Fl_Group::~Fl_Group()</a></h4>
+<a name="~Fl_Group"><h4>virtual Fl_Group::~Fl_Group()</h4></a>
 
 The destructor <I>also deletes all the children</I>. This allows a 
 whole tree to be deleted at once, without having to keep a pointer to 
@@ -87,13 +86,13 @@ Fl_Group</tt> and all of it's children can be automatic (local)
 variables, but you must declare the <tt>Fl_Group</tt> <I>first</I>, so 
 that it is destroyed last. 
 
-<h4><a name=add>void Fl_Group::add(Fl_Widget &amp;w)
-<BR>void Fl_Group::add(Fl_Widget *w)</a></h4>
+<a name="add"><h4>void Fl_Group::add(Fl_Widget &amp;w)
+<br>void Fl_Group::add(Fl_Widget *w)</h4></a>
 
 The widget is removed from it's current group (if any) and then added
 to the end of this group.
 
-<h4><a name=insert>void Fl_Group::insert(Fl_Widget &amp;w, int n)</a></h4>
+<a name="insert"><h4>void Fl_Group::insert(Fl_Widget &amp;w, int n)</h4></a>
 
 The widget is removed from it's current group (if any) and then
 inserted into this group. It is put at index <tt>n</tt> (or at the end
@@ -105,16 +104,16 @@ the windgets inside a group.
 This does <tt>insert(w, find(beforethis))</tt>.  This will append the
 widget if <tt>beforethis</tt> is not in the group.
 
-<h4><a name=remove>void Fl_Group::remove(int index)</a></h4>
+<a name="remove"><h4>void Fl_Group::remove(int index)</h4></a>
 
 Remove the indexed widget from the group.
 
-<h4>void Fl_Group::remove(Fl_Widget &amp;w)</a></h4>
+<h4>void Fl_Group::remove(Fl_Widget &amp;w)</h4>
 
 Removes a widget from the group. This does nothing if the widget is 
 not currently a child of this group. 
 
-<h4><a name=replace>void Fl_Group::replace(int index, Fl_Widget&amp;)</a></h4>
+<a name="replace"><h4>void Fl_Group::replace(int index, Fl_Widget&amp;)</h4></a>
 
 Remove the indexed widget and insert the passed widget in it's place.
 
@@ -124,19 +123,19 @@ Find the old widget and remove it and insert the new one. If the
 widget is not a child, the new widget is appended to the end of the
 list.
 
-<h4><a name=clear>void clear();</a></h4>
+<a name="clear"><h4>void clear();</h4></a>
 
 <i>Deletes</i> all children from the group and makes it empty.
 
-<h4><a name=current>static Fl_Group *Fl_Group::current()
-<BR>static void Fl_Group::current(Fl_Group *w)</a></h4>
+<a name="current"><h4>static Fl_Group *Fl_Group::current()
+<br>static void Fl_Group::current(Fl_Group *w)</h4></a>
 
 <tt>current()</tt> returns the currently active group.  The Fl_Widget
 constructor automatically does <tt>current()->add(widget)</tt> if this
 is not null.  To prevent new widgets from being added to a group, call
 <tt>Fl_Group::current(0)</tt>.
 
-<h4><a name=begin>void Fl_Group::begin()</a></h4>
+<a name="begin"><h4>void Fl_Group::begin()</h4></a>
 
 <tt>begin()</tt> sets the current group so you can build the widget
 tree by just constructing the widgets. <tt>begin()</tt> is
@@ -146,48 +145,48 @@ Fl_Window as well). <tt>begin()</tt> <i>is exactly the same as</i>
 
 <P><I>Don't forget to <tt>end()</tt> the group or window!</I>
 
-<h4><a name=end>void Fl_Group::end()</a></h4>
+<a name="end"><h4>void Fl_Group::end()</h4></a>
 
 <tt>end()</tt> <i>is exactly the same as</i>
 <tt>current(this-&gt;parent())</tt>. Any new widgets added to the
 widget tree will be added to the parent of the group.
 
-<h4><a name=init_sizes>void Fl_Group::init_sizes() const</a></h4>
+<a name="init_sizes"><h4>void Fl_Group::init_sizes() const</h4></a>
 
 If you call this immediately after a resize() it disables any
 automatic repositioning or resizing of the children (it acts as though
 resizable() is null). This is useful when the program wants to resize
 things.
 
-<h4><a name=focus>void Fl_Group::focus(int i);
+<a name="focus"><h4>void Fl_Group::focus(int i);
 <br>void Fl_Group::focus(Fl_Widget*);
-<br>int Fl_Group::focus() const;</a></h4>
+<br>int Fl_Group::focus() const;</h4></a>
 
 The index of the widget that contains the focus. You can initialize
 this before the group is displayed. Changing it while it is displayed
 does not work, use <a
-href=Fl_Widget.html#take_focus>widget->take_focus()</a> instead.
+href="Fl_Widget.html#take_focus">widget->take_focus()</a> instead.
 
-<h4><a name=child>Fl_Widget *Fl_Group::child(int n) const</a></h4>
+<a name="child"><h4>Fl_Widget *Fl_Group::child(int n) const</h4></a>
 
 Returns a child, <tt>n >= 0 && n < children()</tt>. <i>No range
 checking is done!</i>
 
-<h4><a name=children>int Fl_Group::children() const</a></h4>
+<a name="children"><h4>int Fl_Group::children() const</h4></a>
 
 Returns how many child widgets the group has. 
 
-<h4><a name=find>int Fl_Group::find(const Fl_Widget *w) const
-<BR> int Fl_Group::find(const Fl_Widget &amp;w) const</a></h4>
+<a name="find"><h4>int Fl_Group::find(const Fl_Widget *w) const
+<br>int Fl_Group::find(const Fl_Widget &amp;w) const</h4></a>
 
 Searches the children for <i>w</i>, returns the index of <i>w</i> or
 of a parent of <i>w</i> that is a child of this. Returns <a
-href=#children><tt>children()</tt></a> if the widget is <tt>
+href="#children"><tt>children()</tt></a> if the widget is <tt>
 NULL</tt> or not found. 
 
-<h4><a name=resizeable>void Fl_Group::resizable(Fl_Widget *box)
-<BR>void Fl_Group::resizable(Fl_Widget &amp;box)
-<BR>Fl_Widget *Fl_Group::resizable() const</a></h4>
+<a name="resizeable"><h4>void Fl_Group::resizable(Fl_Widget *box)
+<br>void Fl_Group::resizable(Fl_Widget &amp;box)
+<br>Fl_Widget *Fl_Group::resizable() const</h4></a>
 
 The resizable widget defines the resizing box for the group. When the 
 group is resized it calculates a new size and position for all of its 
@@ -210,8 +209,7 @@ and distance from the top-left corner.
 invisible <tt>Fl_Box</tt> as the resizable and/or by using a hierarchy 
 of child <tt>Fl_Group</tt>'s. 
 
-<h4><a name=add_resizable>Fl_Group 
-&amp;Fl_Group::add_resizable(Fl_Widget &amp;box)</a></h4>
+<a name="add_resizable"><h4>Fl_Group&amp; Fl_Group::add_resizable(Fl_Widget &amp;box)</h4></a>
 
 Adds a widget to the group and makes it the resizable widget. 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.5 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,8 +51,7 @@ class FL_API Fl_Widget {
 
 public:
 
-  virtual void draw() = 0;
-  virtual void draw_n_clip();
+  virtual void draw();
   virtual int handle(int);
   virtual void layout();
   virtual ~Fl_Widget();
@@ -156,13 +155,17 @@ public:
   void	throw_focus()		;
 
   void	redraw()		;
-  void  relayout()		;
+  void	redraw(uchar c)		;
+  void	redraw_label()		;
+  void	redraw(int,int,int,int);
   uchar	damage() const		{return damage_;}
-  void	set_damage(uchar c)	{damage_ = c;}
-  void  clear_damage()		{damage_ = 0;}
-  void	damage(uchar c)		;
-  void	damage(uchar c,int,int,int,int);
-  void	damage_label()		;
+  void	set_damage(uchar c)	{damage_ = c;} // should be called damage(c)
+
+  void  relayout()		;
+  void	relayout(uchar damage)	;
+  uchar layout_damage() const	{return layout_damage_;}
+  void	layout_damage(uchar c)	{layout_damage_ = c;}
+
   void	make_current() const	;
 
   Fl_Flags draw_box() const	;
@@ -283,14 +286,11 @@ protected:
 
 private:
 
-  // potential Fl_Item base structure:
   const char*		label_;
   Fl_Image*		image_;
   int			shortcut_; // encode in the label?
   unsigned		flags_;
   const Fl_Style*	style_;
-
-  // Fl_Widget:
   Fl_Callback*		callback_;
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
@@ -298,6 +298,7 @@ private:
   int			x_,y_,w_,h_;
   uchar			type_;
   uchar			damage_;
+  uchar			layout_damage_;
   uchar			when_;
 
 };
@@ -305,5 +306,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.5 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $".
 //

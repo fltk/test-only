@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.53 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,9 +39,10 @@
 
 ////////////////////////////////////////////////////////////////
 
-// Copy string p..e to the buffer, replacing characters with ^X and \nnn
-// as necessary.  Truncate if necessary so the resulting string and
-// null terminator fits in a buffer of size n.  Return new end pointer.
+// Copy string p to the buffer, replacing control characters with ^X.
+// Stop at then end of the line, or truncate if necessary so the resulting
+// string and null terminator fits in a buffer of size MAXBUF.  Returns
+// pointer to the character after the last one copied.
 const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
   char* o = buf;
   char* e = buf+(MAXBUF-4);
@@ -114,12 +115,12 @@ int Fl_Input::expandpos(
 
 void Fl_Input::minimal_update(int p) {
   if (damage() & FL_DAMAGE_ALL) return; // don't waste time if it won't be done
-  if (damage() & FL_DAMAGE_EXPOSE) {
+  if (damage() & FL_DAMAGE_VALUE) {
     if (p < mu_p) mu_p = p;
   } else {
     mu_p = p;
   }
-  damage(FL_DAMAGE_EXPOSE);
+  redraw(FL_DAMAGE_VALUE);
   erase_cursor_only = 0;
 }
 
@@ -264,7 +265,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       // clip to and erase it:
       fl_color(background);
       fl_rectf(x, Y+ypos, r-x, height);
-      fl_clip(x, Y+ypos, r-x, height);
+      fl_push_clip(x, Y+ypos, r-x, height);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
       // that is nyi.
@@ -652,7 +653,7 @@ void Fl_Input::show_cursor(char v) {
   } else if (v) {
     // cause it to draw the cursor next time
     minimal_update(size()+1);
-  } else if (!(damage()&FL_DAMAGE_EXPOSE)) {
+  } else if (!(damage()&FL_DAMAGE_VALUE)) {
     // cause next draw to do minimal erase of cursor, if no other damage:
     minimal_update(position_); erase_cursor_only = 1;
   }
@@ -1080,5 +1081,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.53 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $".
 //

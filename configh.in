@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.48 2001/12/06 18:23:40 spitzak Exp $"
+ * "$Id: configh.in,v 1.49 2001/12/16 22:32:02 spitzak Exp $"
  *
  * This file is used to compile fltk. It should not be necessary for
  * programs that use fltk to refer to this file, and this file is not
@@ -39,11 +39,11 @@
 #define HAVE_XDBE 0
 
 /* Actually try to use the double-buffer extension? Fl_Double_Window
-   was intended to use this, however we have found most (all?) X
-   implementations to be broken (or I don't understand the
-   documentation)
+   and Fl_Overlay_Window will use this. The new version limits itself
+   to doing swap without clipping turned on and should work on more
+   X servers than the fltk1 version.
 */
-#define USE_XDBE 0
+#define USE_XDBE HAVE_XDBE
 
 /* Did we detect the X overlay extension? This enables code to locate
    the overlay visual for use by Fl_Overlay_Window and Fl_Gl_Window.
@@ -190,5 +190,5 @@
 #define ALT_GOES_TO_MENUBAR 0
 
 /*
- * End of "$Id: configh.in,v 1.48 2001/12/06 18:23:40 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.49 2001/12/16 22:32:02 spitzak Exp $".
  */

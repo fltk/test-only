@@ -1,39 +1,54 @@
-<HTML><BODY>
-<HR break>
-<H2><A name=Fl_Box>class Fl_Box</A></H2>
-<HR>
-<H3>Class Hierarchy</H3>
-<UL>
-<PRE>
-<A href=Fl_Widget.html#Fl_Widget>Fl_Widget</A>
+<html><head><title>Fl_Box</title></head><body bgcolor = white>
+
+<hr break>
+<h2><a name=Fl_Box>class Fl_Box</a></h2>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre>
+<a href=Fl_Widget.html#Fl_Widget>Fl_Widget</a>
    |
-   +----<B>Fl_Box</B>
-</PRE>
-</UL>
-<H3>Include Files</H3>
-<UL>
-<PRE>
+   +----<b>Fl_Box</b>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
 #include &lt;fltk/Fl_Box.h&gt;
-</PRE>
-</UL>
-<H3>Description</H3>
- This widget simply draws its box, and possibly it's label.  Putting it 
-before some other widgets and making it big enough to surround them 
-will let you draw a frame around them. 
-<H3>Methods</H3>
-<UL>
-<LI><A href=#Fl_Box.Fl_Box>Fl_Box</A></LI>
-<LI><A href=#Fl_Box.~Fl_Box>~Fl_Box</A></LI>
-</UL>
-<H4><A name=Fl_Box.Fl_Box>Fl_Box::Fl_Box(int x, int y, int w, int h, 
-const char * = 0)
-<BR> Fl_Box::Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const 
-char *)</A></H4>
- The first constructor sets <TT>box()</TT> to <TT>FL_NO_BOX</TT>, which 
+</pre></ul>
+
+<h3>Description</h3>
+
+This widget is the same as an plain <a
+href=Fl_Widget.html>Fl_Widget</a> except if the box is set to
+<tt>FL_NO_BOX</tt> it is completely invisible and attemps to draw it
+do absolutely nothing. This can be used as the <a
+href="Fl_Group.html#resizable">resizable()</a> of a group or window to
+get more complex resize effects.
+
+<p>You can also set the box to provide decorations, but you can use
+the plain <a href=Fl_Widget.html>Fl_Widget</a> for that, too.
+
+<h3>Methods</h3>
+
+<ul>
+<li><a href=#Fl_Box>Fl_Box</a></li>
+<li><a href=#~Fl_Box>~Fl_Box</a></li>
+</ul>
+
+<A name=Fl_Box><h4>Fl_Box::Fl_Box(int x, int y, int w, int h, const char * = 0)
+<br> Fl_Box::Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *)</h4></a>
+
+The first constructor sets <tt>box()</tt> to <tt>FL_NO_BOX</tt>, which 
 means it is invisible. However such widgets are useful as placeholders 
-or <A href=#Fl_Group.resizable"><TT>Fl_Group::resizable()</TT></A>
- values.  To change the box to something visible, use <TT>box(n)</TT>. 
-<P>The second form of the constructor sets the box to the specified box 
-type. </P>
-<H4><A name=Fl_Box.~Fl_Box>Fl_Box::~Fl_Box(void)</A></H4>
+or <a href="Fl_Group.html#resizable"><tt>Fl_Group::resizable()</tt></a>
+values.  To change the box to something visible, use <TT>box(n)</TT>. 
+
+<p>The second form of the constructor sets the box to the specified box 
+type. </p>
+
+<h4><A name="~Fl_Box">Fl_Box::~Fl_Box(void)</a></h4>
+
+</body></html>
  The destructor removes the box. </BODY></HTML>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.76 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.77 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -40,15 +40,7 @@ Fl_Window *Fl_Widget::window() const {
   return 0;
 }
 
-void Fl_Window::draw() {
-  int savex = x(); x(0); 
-  int savey = y(); y(0); 
-  Fl_Group::draw();
-  y(savey);
-  x(savex);
-}
-
-void Fl_Window::draw_n_clip() {} // does nothing
+void Fl_Window::draw() {Fl_Group::draw();}
 
 void Fl_Window::label(const char *name) {label(name, iconlabel());}
 
@@ -247,12 +239,71 @@ void Fl_Window::show_inside(const Fl_Window* w) {
 }
 #endif
 
-void Fl_Window::flush() {
-//if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
-  make_current();
-  fl_clip_region(i->region); i->region = 0;
-  draw();
+////////////////////////////////////////////////////////////////
+
+void Fl_Widget::redraw(int X, int Y, int W, int H) {
+  // go up to the window, clipping to each widget's area, quit if empty:
+  Fl_Widget* window = this;
+  for (;;) {
+    if (X < 0) {W += X; X = 0;}
+    if (Y < 0) {H += Y; Y = 0;}
+    if (W > window->w()-X) W = window->w()-X;
+    if (H > window->h()-Y) H = window->h()-Y;
+    if (W <= 0 || H <= 0) return;
+    if (window->is_window()) break;
+    X += window->x();
+    Y += window->y();
+    window = window->parent();
+    if (!window) return;
+  }
+  Fl_X* i = Fl_X::i((Fl_Window*)window);
+  if (!i) return; // window not mapped, so ignore it
+  window->damage_ |= FL_DAMAGE_EXPOSE;
+  i->expose(X, Y, W, H);
 }
+
+// Merge a rectangle into a window's expose region. If the entire
+// window is damaged we switch to a FL_DAMAGE_ALL mode which will
+// avoid drawing it twice:
+void Fl_X::expose(int X, int Y, int W, int H) {
+  // Ignore if window already marked as completely damaged:
+  if (window->damage() & FL_DAMAGE_ALL) ;
+  // Detect expose events that cover the entire window:
+  else if (X<=0 && Y<=0 && W>=window->w() && H>=window->h()) {
+    window->set_damage(FL_DAMAGE_ALL);
+  } else if (!region) {
+    // create a new region:
+    region = XRectangleRegion(X,Y,W,H);
+  } else {
+    // merge with the region:
+#ifndef _WIN32
+    XRectangle R;
+    R.x = X; R.y = Y; R.width = W; R.height = H;
+    XUnionRectWithRegion(&R, region, region);
+#else
+    Region R = XRectangleRegion(X, Y, W, H);
+    CombineRgn(region, region, R, RGN_OR);
+    XDestroyRegion(R);
+#endif
+  }
+  // make Fl::flush() search for this window:
+  Fl::damage(FL_DAMAGE_EXPOSE);
+}
+
+void Fl_Window::flush() {
+  make_current();
+  if (damage() & ~FL_DAMAGE_EXPOSE) {
+    set_damage(damage() & ~FL_DAMAGE_EXPOSE);
+    draw();
+  }
+  if (i->region && !(damage() & FL_DAMAGE_ALL)) {
+    fl_clip_region(i->region); i->region = 0;
+    set_damage(FL_DAMAGE_EXPOSE); draw();
+    fl_clip_region(0);
+  }
+}
+
+////////////////////////////////////////////////////////////////
 
 void Fl_Window::destroy() {
   Fl_X* x = i;
@@ -288,14 +339,11 @@ void Fl_Window::destroy() {
   HBRUSH oldbrush = (HBRUSH)SelectObject(dc, newbrush); // this returns the old brush
   if (oldbrush) DeleteObject(oldbrush);
   ReleaseDC(x->xid, dc); // not useful?
-  if (x->xid == fl_window) {
-    fl_window = 0;
-    fl_gc = 0;
-  }
-  DestroyWindow(x->xid);
-  if (x->region) XDestroyRegion(x->region);
   DeleteObject(newpen);
   DeleteObject(newbrush);
+  if (x->xid == fl_window) {fl_window = 0; fl_gc = 0;} // not necessary?
+  if (x->region) XDestroyRegion(x->region);
+  DestroyWindow(x->xid);
 #else
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(fl_display, x->xid);
@@ -308,5 +356,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.76 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.77 2001/12/16 22:32:03 spitzak Exp $".
 //

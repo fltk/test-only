@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.81 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.82 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,6 @@
 #include <fltk/Fl_Widget.h>
 #include <fltk/Fl_Window.h>
 #include <fltk/fl_draw.h>
-#include <fltk/x.h>
 #include <string.h> // for strdup
 #include <stdlib.h> // free
 
@@ -45,7 +44,8 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   flags_	= 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
-  damage_	= FL_DAMAGE_LAYOUT|FL_DAMAGE_ALL;
+  damage_	= FL_DAMAGE_ALL;
+  layout_damage_= FL_LAYOUT_DAMAGE;
   when_		= FL_WHEN_RELEASE;
   if (Fl_Group::current()) Fl_Group::current()->add(this);
 }
@@ -80,10 +80,10 @@ void Fl_Widget::copy_label(const char* s) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Damage:
+// layout damage:
 
 void Fl_Widget::layout() {
-  damage_ &= ~FL_DAMAGE_LAYOUT;
+  layout_damage_ = 0;
 }
 
 int Fl_Widget::height() {
@@ -97,92 +97,84 @@ int Fl_Widget::width() {
 }
 
 bool Fl_Widget::resize(int X, int Y, int W, int H) {
-  if (x_ == X && y_ == Y && w_ == W && h_ == H) return false;
+  uchar flags = 0;
+  if (X != x_) flags = FL_LAYOUT_X;
+  if (Y != y_) flags |= FL_LAYOUT_Y;
+  if (W != w_) flags |= FL_LAYOUT_W;
+  if (H != h_) flags |= FL_LAYOUT_H;
+  if (flags) {
   x_ = X; y_ = Y; w_ = W; h_ = H;
-  relayout();
+    relayout(flags);
   return true;
+  } else {
+    return false;
+  }
 }
 
 void Fl_Widget::relayout() {
-  damage_ |= FL_DAMAGE_LAYOUT;
-  for (Fl_Widget* w = this->parent(); w; w = w->parent())
-    w->damage_ |= FL_DAMAGE_LAYOUT;
-  Fl::damage(FL_DAMAGE_LAYOUT);
+  relayout(FL_LAYOUT_DAMAGE);
 }
 
-void Fl_Widget::damage_label() {
+void Fl_Widget::relayout(uchar flags) {
+  if (!(flags & ~layout_damage_)) return;
+  layout_damage_ |= flags;
+  for (Fl_Widget* w = this->parent(); w; w = w->parent())
+    w->layout_damage_ |= FL_LAYOUT_CHILD;
+  Fl::damage(FL_LAYOUT_DAMAGE); // make Fl::flush() do something
+}
+
+////////////////////////////////////////////////////////////////
+// damage:
+
+/*
+
+New scheme to reduce the expense of calling redraw() on widgets.
+The loss here is that if a widget is changed and also gets exposed, it
+will be drawn twice. The gain is that region calculations are not done
+on every redraw(), restoring the speed we had in earlier fltk.
+
+I renamed damage(n) to redraw(n) to match fltk method style. damage(n)
+is reserved for directly manipulating the damage flags but is
+undefined (if -DFLTK2 is given) to force all old software to be
+rewritten to call redraw(n).
+
+"Exposure" turns on FL_DAMAGE_EXPOSE on a window and accumulates a
+region that merges all the exposures. All other redraw() calls set
+bits on the widget and all it's parents but don't touch the region.
+
+Fl_Window::flush() saves and clears the FL_DAMAGE_EXPOSE flag and then
+calls draw() (if any other damage flags are on) to update all the widgets
+that called redraw(). It then restores the FL_DAMAGE_EXPOSE flag and if
+non-zero it sets the region and calls draw() again, this time the draw
+must propagate the FL_DAMAGE_EXPOSE to all children in the clip region
+and draw them.
+
+Since an expose that covers the entire window, and a redraw() on the
+window itself, are common events, this is detected and the window is
+only drawn once with both the FL_DAMAGE_ALL and FL_DAMAGE_EXPOSE bits on.
+
+*/
+
+void Fl_Widget::redraw_label() {
   if (!label() && !image()) return;
-  // ignore inside label:
+  // ignore inside label (not sure why this does not cause a redraw()):
   if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
   // outside label requires a marker flag and damage to parent:
-  damage_ |= FL_DAMAGE_CHILD_LABEL;
-  if (parent()) parent()->damage(FL_DAMAGE_CHILD);
+  redraw(FL_DAMAGE_CHILD_LABEL);
 }
 
 void Fl_Widget::redraw() {
-  damage(FL_DAMAGE_ALL);
+  redraw(FL_DAMAGE_ALL);
 }
 
-void Fl_Widget::damage(uchar flags) {
-  if (is_window()) {
-    // damage entire window by deleting the region:
-    Fl_X* i = Fl_X::i((Fl_Window*)this);
-    if (!i) return; // window not mapped, so ignore it
-    if (i->region) {XDestroyRegion(i->region); i->region = 0;}
+void Fl_Widget::redraw(uchar flags) {
+  if (!(flags & ~damage_)) return;
     damage_ |= flags;
-    Fl::damage(FL_DAMAGE_CHILD);
-  } else {
-    // damage only the rectangle covered by a child widget:
-    damage(flags, 0, 0, w(), h());
+  if (!is_window())
+    for (Fl_Widget* widget = parent(); widget; widget = widget->parent()) {
+      widget->damage_ |= FL_DAMAGE_CHILD;
+      if (widget->is_window()) break;
   }
-}
-
-void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
-  Fl_Widget* window = this;
-  // mark all parent widgets between this and window with FL_DAMAGE_CHILD:
-  while (!window->is_window()) {
-    X += window->x();
-    Y += window->y();
-    window->damage_ |= flags;
-    window = window->parent();
-    if (!window) return;
-    flags = FL_DAMAGE_CHILD;
-  }
-  Fl_X* i = Fl_X::i((Fl_Window*)window);
-  if (!i) return; // window not mapped, so ignore it
-
-  if (X<=0 && Y<=0 && W>=window->w() && H>=window->h()) {
-    // if damage covers entire window delete region:
-    window->damage(flags);
-    return;
-  }
-
-  // clip the damage to the window and quit if none:
-  if (X < 0) {W += X; X = 0;}
-  if (Y < 0) {H += Y; Y = 0;}
-  if (W > window->w()-X) W = window->w()-X;
-  if (H > window->h()-Y) H = window->h()-Y;
-  if (W <= 0 || H <= 0) return;
-
-  if (window->damage() & ~FL_DAMAGE_LAYOUT) {
-    // if we already have damage we must merge with existing region:
-    if (i->region) {
-#ifndef _WIN32
-      XRectangle R;
-      R.x = X; R.y = Y; R.width = W; R.height = H;
-      XUnionRectWithRegion(&R, i->region, i->region);
-#else
-      Region R = XRectangleRegion(X, Y, W, H);
-      CombineRgn(i->region, i->region, R, RGN_OR);
-      XDestroyRegion(R);
-#endif
-    }
-  } else {
-    // create a new region:
-    if (i->region) XDestroyRegion(i->region);
-    i->region = XRectangleRegion(X,Y,W,H);
-  }
-  window->damage_ |= flags;
   Fl::damage(FL_DAMAGE_CHILD);
 }
 
@@ -214,7 +206,7 @@ void Fl_Widget::activate() {
   if (!active()) {
     clear_flag(FL_INACTIVE);
     if (active_r()) {
-      damage_label(); redraw();
+      redraw_label(); redraw();
       handle(FL_ACTIVATE);
       if (inside(Fl::focus())) Fl::focus()->take_focus();
     }
@@ -224,7 +216,7 @@ void Fl_Widget::activate() {
 void Fl_Widget::deactivate() {
   if (active_r()) {
     set_flag(FL_INACTIVE);
-    damage_label(); redraw();
+    redraw_label(); redraw();
     handle(FL_DEACTIVATE);
     throw_focus();
   } else {
@@ -242,7 +234,7 @@ void Fl_Widget::show() {
   if (!visible()) {
     clear_flag(FL_INVISIBLE);
     if (visible_r()) {
-      damage_label(); redraw();
+      redraw_label(); redraw();
       handle(FL_SHOW);
     }
   }
@@ -350,6 +342,11 @@ int Fl_Widget::test_shortcut() const {
 
 // Draw the surrounding box of a normal widget:
 Fl_Flags Fl_Widget::draw_box() const {
+  if (damage()&FL_DAMAGE_EXPOSE && !box()->fills_rectangle() && parent()) {
+    fl_push_clip(0, 0, w(), h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
   box()->draw(0, 0, w(), h(), get_box_color(f), f);
@@ -367,16 +364,18 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
   else if (belowmouse() && !(flags&FL_SELECTED))
     flags |= FL_HIGHLIGHT;
   Fl_Boxtype box = this->box();
+  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
+  // FL_NO_BOX buttons such as checkmarks:
+  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
+      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
+    fl_push_clip(0, 0, w(), h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
   box->draw(0, 0, w(), h(), get_box_color(flags), flags);
   if (focused()) {
     fl_color(get_glyph_color());
     fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
-  } else if (box==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
-    // We need to erase the focus rectangle for FL_NO_BOX buttons, such
-    // as checkmarks:
-    fl_push_clip(0, 0, w(), h());
-    parent()->draw_group_box();
-    fl_pop_clip();
   }
   return flags;
 }
@@ -470,18 +469,15 @@ void Fl_Widget::make_current() const {
   fl_y_ = y;
 }
 
-// Call the draw method, handle the clip out
-void Fl_Widget::draw_n_clip()
+////////////////////////////////////////////////////////////////
+
+// This should eventually do all of the button->draw stuff:
+void Fl_Widget::draw()
 {
-  if (!box()->fills_rectangle()) {
-    fl_push_clip(0, 0, w(), h());
-    parent()->draw_group_box();
-    fl_pop_clip();
-  }
-  draw();
-  fl_clip_out(0, 0, w(), h());
+  draw_box();
+  draw_inside_label();
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.81 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.82 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.8 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -34,7 +34,7 @@ static int rstackptr=0;
 
 // Return the current region (for Xft and Xrender use), return null if
 // no clipping.
-Region fl_region() {
+Region fl_clip_region() {
   return rstack[rstackptr];
 }
 
@@ -240,5 +240,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.8 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
 //

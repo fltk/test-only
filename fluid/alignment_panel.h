@@ -16,9 +16,9 @@ extern void header_input_cb(Fl_Input*, void*);
 extern Fl_Input *header_file_input;
 extern void code_input_cb(Fl_Input*, void*);
 extern Fl_Input *code_file_input;
-#include <fltk/Fl_Light_Button.h>
-extern void include_H_from_C_button_cb(Fl_Light_Button*, void*);
-extern Fl_Light_Button *include_H_from_C_button;
+#include <fltk/Fl_Check_Button.h>
+extern void include_H_from_C_button_cb(Fl_Check_Button*, void*);
+extern Fl_Check_Button *include_H_from_C_button;
 #include <fltk/Fl_Button.h>
 Fl_Window* make_alignment_window();
 #endif

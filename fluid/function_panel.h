@@ -5,9 +5,9 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
 extern Fl_Window *function_panel;
-#include <fltk/Fl_Light_Button.h>
-extern Fl_Light_Button *f_public_button;
-extern Fl_Light_Button *f_c_button;
+#include <fltk/Fl_Check_Button.h>
+extern Fl_Check_Button *f_public_button;
+extern Fl_Check_Button *f_c_button;
 #include <fltk/Fl_Input.h>
 extern Fl_Input *f_name_input;
 extern Fl_Input *f_attributes_input;
@@ -36,13 +36,13 @@ extern Fl_Return_Button *declblock_panel_ok;
 extern Fl_Button *declblock_panel_cancel;
 Fl_Window* make_declblock_panel();
 extern Fl_Window *decl_panel;
-extern Fl_Light_Button *decl_public_button;
+extern Fl_Check_Button *decl_public_button;
 extern Fl_Input *decl_input;
 extern Fl_Return_Button *decl_panel_ok;
 extern Fl_Button *decl_panel_cancel;
 Fl_Window* make_decl_panel();
 extern Fl_Window *class_panel;
-extern Fl_Light_Button *c_public_button;
+extern Fl_Check_Button *c_public_button;
 extern Fl_Input *c_name_input;
 extern Fl_Input *c_subclass_input;
 extern Fl_Return_Button *c_panel_ok;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.34 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.35 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -76,7 +76,7 @@ void code_input_cb(Fl_Input* i, void*) {
   code_file_name = i->value();
 }
 
-void include_H_from_C_button_cb(Fl_Light_Button* b, void*) {
+void include_H_from_C_button_cb(Fl_Check_Button* b, void*) {
   include_H_from_C = b->value();
 }
 
@@ -194,7 +194,7 @@ void Fl_Window_Type::open() {
 // control panel items:
 #include "widget_panel.h"
 
-void modal_cb(Fl_Light_Button* i, void* v) {
+void modal_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -204,7 +204,7 @@ void modal_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void non_modal_cb(Fl_Light_Button* i, void* v) {
+void non_modal_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -214,7 +214,7 @@ void non_modal_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void border_cb(Fl_Light_Button* i, void* v) {
+void border_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -682,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.34 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.35 2001/12/16 22:32:02 spitzak Exp $".
 //

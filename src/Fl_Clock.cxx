@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.27 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.28 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -102,7 +102,7 @@ void Fl_Clock_Output::draw() {
 void Fl_Clock_Output::value(int h, int m, int s) {
   if (h!=hour_ || m!=minute_ || s!=second_) {
     hour_ = h; minute_ = m; second_ = s;
-    damage(FL_DAMAGE_CHILD);
+    redraw(FL_DAMAGE_CHILD);
   }
 }
 
@@ -172,5 +172,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.27 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.28 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.12 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -126,7 +126,7 @@ static void ComboBrowser_cb(Fl_Widget*, void*) {
   if (item->is_group()) return; // can't select a group!
   ib->item(item);
   ib->value(item->label());
-  ib->damage(FL_DAMAGE_CHILD);
+  ib->redraw(FL_DAMAGE_VALUE);
   mw->hide();
 }
 
@@ -158,7 +158,7 @@ Fl_Input_Browser::handle(int e) {
     over_now = 1;
   else
     over_now = 0;
-  if (over_now != over_last) damage(FL_DAMAGE_HIGHLIGHT);
+  if (over_now != over_last) redraw(FL_DAMAGE_HIGHLIGHT);
 
   if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
     && !(type()&FL_NONEDITABLE_INPUT_BROWSER) && Fl::pushed() != this)
@@ -169,7 +169,7 @@ Fl_Input_Browser::handle(int e) {
 
   switch (e) {
     case FL_PUSH: {
-      damage(FL_DAMAGE_SCROLL);
+      redraw(FL_DAMAGE_VALUE);
       if (!children()) return 1;
       ib = this;
       // dummy W,H used -- will be replaced.
@@ -224,7 +224,7 @@ Fl_Input_Browser::handle(int e) {
       else Fl::focus(input);
 
       ib = 0;
-      damage(FL_DAMAGE_SCROLL);
+      redraw(FL_DAMAGE_VALUE);
       return 1;
     }
 
@@ -256,9 +256,9 @@ Fl_Input_Browser::draw() {
     fl_x_ += X; fl_y_ += Y;
     input->draw();
     fl_x_ -= X; fl_y_ -= Y;
-    input->clear_damage();
+    input->set_damage(0);
   }
-  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_SCROLL|FL_DAMAGE_HIGHLIGHT)) {
+  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_VALUE|FL_DAMAGE_HIGHLIGHT)) {
     if  (ib == this) f |= (FL_VALUE/*|FL_SELECTED*/);
     if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
@@ -270,5 +270,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.12 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $".
 //

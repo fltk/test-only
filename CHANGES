@@ -1868,3 +1868,40 @@ resize to fill an area. Removed FL_ALIGN_TILED in favor of the fltk.1.1
 Fl_Tiled_Image, which I added.
 
 Checked in 12/9/01
+////////////////////////////////////////////////////////////////
+
+relayout() and resize() now set their own field called layout_damage()
+in Fl_Widget. The bits are FL_LAYOUT_X,Y,W,H, and
+FL_LAYOUT_DAMAGE. Now layout() can find out exactly why it is
+called. Made several layout() methods take advantage of this.
+
+Rewrite of how damage() is done to speed up common usage. It no longer
+creates or uses clipping regions for simple redraw() calls on
+widgets, which should get rid of some of the slowdown we have seen.
+
+Renamge damage(n) to redraw(n) and damage(n,x,y,w,h) replaced with
+redraw(x,y,w,h) (because the first argument is ignored in this new
+system). This allows damage(n) to be reserved to do what set_damage(n)
+does now, to match the rest of fltk.
+
+Removed draw_n_clip, instead draw() is expected to fill all pixels if
+FL_DAMAGE_EXPOSE is on, and the caller does the clipping. This appears
+to be how all the widgets were implemented anyway. An internal hack is
+in there for Fl_Tabs and invisible widgets to work like vefore.
+
+Fl_Double_Window cleaned up and the ability to use XDBE restored. XDBE
+tested on Linux and Irix. The code is much simpler and I hope should
+work on Solaris and other XDBE implementations but I can't test that.
+
+Rearranged the fluid widget panel some and added support for multiline
+Fl_Input.
+
+Checked in 12/16/01
+////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+

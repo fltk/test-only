@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.159 2001/12/06 18:23:43 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.160 2001/12/16 22:32:03 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -616,29 +616,27 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (!window) break;
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = false;
-    // We need to merge this damage into fltk's damage.  I do this in
-    // reverse, telling Win32 about fltk's damage and then reading back
-    // the new accumulated region.
-    if (window->damage()) {
-      // If there is no region the entire window is damaged
-      if (i->region) {
-	InvalidateRgn(hWnd,i->region,FALSE);
-	GetUpdateRgn(hWnd,i->region,0);
-      }
-    } else {
-      if (!i->region) i->region = CreateRectRgn(0,0,0,0);
-      GetUpdateRgn(hWnd,i->region,0);
-    }
-    window->set_damage(window->damage()|FL_DAMAGE_EXPOSE);
-    // These next two statements should not be here, so that all update
-    // is deferred until Fl::flush() is called during idle.  However Win32
-    // apparently is very unhappy if we don't obey it and draw right now.
-    // Very annoying!
+    // Merge the region into whatever is accumulated by fltk. I do this
+    // by invalidating the fltk region and reading the resulting region
+    // back:
+    if (i->region) InvalidateRgn(hWnd, i->region, FALSE);
+    else i->region = CreateRectRgn(0,0,0,0);
+    GetUpdateRgn(hWnd, i->region, 0);
+#if 0
+    // Ideally we should wait on redrawing until Fl::flush() is called
+    // by turning this flag on:
+    Fl::damage(FL_DAMAGE_EXPOSE);
+#else
+    // But it appears that Windows is just not happy unless you do a
+    // draw right now. It holds it's breath and turns blue if you try
+    // to disobey. So instead I replicate that part of Fl::flush here:
     window->flush();
-    window->clear_damage();
+    window->set_damage(0);
+    if (i->region) {XDestroyRegion(i->region); i->region = 0;}
+#endif
     // This convinces MSWindows we have painted whatever they wanted
     // us to paint, and stops it from sending WM_PAINT messages:
-    ValidateRgn(hWnd,NULL);
+    ValidateRgn(hWnd, NULL);
     } break;
 
   case WM_LBUTTONDOWN:	mouse_event(window, 0, 1, wParam, lParam); return 0;
@@ -883,11 +881,13 @@ int Fl_X::borders(const Fl_Window* window, int& dx,int& dy,int& dw,int& dh) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
-  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
-  if (ow() == w() && oh() == h()) {
-    flags |= SWP_NOSIZE;
-    if (ox() == x() && oy() == y()) flags = 0;
-  }
+  UINT flags;
+  if (layout_damage() & FL_LAYOUT_WH)
+    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
+  else if (layout_damage() & FL_LAYOUT_XY)
+    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE;
+  else
+    flags = 0;
   Fl_Group::layout();
   if (this == resize_from_system) {
     resize_from_system = 0;
@@ -1111,9 +1111,29 @@ void Fl_Window::make_current() const {
   fl_select_palette();
 #endif // USE_COLORMAP
 
-  current_ = this;
-  fl_clip_region(0);
   fl_x_ = fl_y_ = 0;
+  current_ = this;
+}
+
+// Code used to switch output to an off-screen window.  See macros in
+// win32.h which save the old state in local variables.
+
+HDC fl_makeDC(HBITMAP bitmap) {
+  HDC new_gc = CreateCompatibleDC(fl_gc);
+  SetTextAlign(new_gc, TA_BASELINE|TA_LEFT);
+  SetBkMode(new_gc, TRANSPARENT);
+#if USE_COLORMAP
+  if (fl_palette) SelectPalette(new_gc, fl_palette, FALSE);
+#endif
+  SelectObject(new_gc, bitmap);
+  return new_gc;
+}
+
+void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
+  HDC new_gc = CreateCompatibleDC(fl_gc);
+  SelectObject(new_gc, bitmap);
+  BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
+  DeleteDC(new_gc);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1281,13 +1301,6 @@ void fl_get_system_colors() {
   // CET - FIXME - do encoding stuff
 }
 
-void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
-	if(savex)  *savex = fl_x_;
-	if(savey)  *savey = fl_y_;
-	fl_y_ = newy;
-	fl_x_ = newx;
-}
-
 //
-// End of "$Id: Fl_win32.cxx,v 1.159 2001/12/06 18:23:43 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.160 2001/12/16 22:32:03 spitzak Exp $".
 //

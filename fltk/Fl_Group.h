@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.h,v 1.2 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Group.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,6 @@ public:
   Fl_Widget* child(int n) const {return array_[n];}
 
   void draw();
-  void draw_n_clip();
   void draw_group_box() const;
   void layout();
   int handle(int);
@@ -116,5 +115,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.h,v 1.2 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Group.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cmap.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: cmap.cxx,v 1.8 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Colormap generation program for the Fast Light Tool Kit (FLTK).
 //
@@ -165,6 +165,8 @@ int main() {
 	cmap[i][2] = b*255/4;
 	i++;
       }
+  // modify entry used for tooltip colors to match Win32:
+  cmap[215][2] = 0xe1;
 
   for (i=0; i<256; i++) {
     printf("\t0x%02x%02x%02x00",cmap[i][0],cmap[i][1],cmap[i][2]);
@@ -175,5 +177,5 @@ int main() {
 }
 
 //
-// End of "$Id: cmap.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: cmap.cxx,v 1.8 2001/12/16 22:32:03 spitzak Exp $".
 //

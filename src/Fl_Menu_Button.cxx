@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.43 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.44 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,18 +30,20 @@
 #include <fltk/Fl_Item.h>
 #include <config.h>
 
+extern Fl_Widget* fl_did_clipping;
+
 void Fl_Menu_Button::draw() {
+  if (type()&7) { // draw nothing for the popup types
+    fl_did_clipping = this;
+    return;
+  }
+  // else do nothing for POPUP types
   Fl_Flags flags = draw_button(0);
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   draw_inside_label(X,Y,W,H,flags);
   // draw the little mark at the right:
   int w1 = H*4/5;
   draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, flags);
-}
-
-void Fl_Menu_Button::draw_n_clip() {
-  if (!(type()&7)) Fl_Widget::draw_n_clip();
-  // else do nothing for POPUP types
 }
 
 int Fl_Menu_Button::popup() {
@@ -65,13 +67,13 @@ int Fl_Menu_Button::handle(int e) {
   case FL_FOCUS:
   case FL_UNFOCUS:
     if (type()&7) return 0;
-    damage(FL_DAMAGE_HIGHLIGHT);
+    redraw(FL_DAMAGE_HIGHLIGHT);
     return 1;
 
   case FL_ENTER:
   case FL_LEAVE:
     if (type()&7) return 0;
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
   case FL_MOVE:
     return 1;
 
@@ -122,5 +124,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.43 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.44 2001/12/16 22:32:03 spitzak Exp $".
 //

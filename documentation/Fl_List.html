@@ -1,7 +1,8 @@
 <html><head><title>Fl_List</title></head><body bgcolor = white>
-<HR break>
+
+<hr break>
 <h2>class Fl_List</h2>
-<HR>
+<hr>
 
 <h3>Include Files</h3>
 
@@ -36,21 +37,21 @@ and must implement the flags_changed() method.
 your data to store the state of the FL_VALUE flag on each item, and
 must implement the flags_changed() method.
 
-<H3>Methods</H3>
+<h3>Methods</h3>
 
-<CENTER>
-<TABLE width=90%>
-<TR><TD align=left valign=top>
-<UL>
+<center>
+<table width=90%>
+<tr><td align=left valign=top>
+<ul>
 <li><a href=#children>children</a></li>
 <li><a href=#child>child</a></li>
 <li><a href=#flags_changed>flags_changed</a></li>
 </ul>
-</TD></TR>
-</TABLE>
+</td></tr>
+</table>
 </center>
 
-<a name=children><h4>virtual int children(const Fl_Menu_* group, const int* indexes, int level);</h4>
+<a name=children><h4>virtual int children(const Fl_Menu_* group, const int* indexes, int level);</h4></a>
 
 Return how many children are under a given item. If <i>level</i> is
 zero, this should return how many items are at the top
@@ -79,7 +80,7 @@ int My_Fl_List::children(const Fl_Menu_*, const int* indexes, int level) {
 }
 </ul></pre>
 
-<a name=child><h4>virtual Fl_Widget* child(const Fl_Menu_* group, const int* indexes, int level);</h4>
+<a name=child><h4>virtual Fl_Widget* child(const Fl_Menu_* group, const int* indexes, int level);</h4></a>
 
 Return a given child as a widget. draw() and measure() will be called
 on this widget to figure out where to place it and to draw it.
@@ -114,8 +115,7 @@ Fl_Widget* My_Fl_List::child(const Fl_Menu_*, const int* indexes, int level) {
 }
 </pre></ul>
 
-<a name=flags_changed><h4>virtual void flags_changed(const Fl_Menu_* group, Fl_Widget* widget);</h4>
-
+<a name=flags_changed><h4>virtual void flags_changed(const Fl_Menu_* group, Fl_Widget* widget);</h4></a>
 
 This is called if the browser changes any flags on a widget, so that
 you can copy the values to permanent storage, and perhaps change other

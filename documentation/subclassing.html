@@ -58,7 +58,8 @@ tooltip(0);
 shortcut(0);
 flags(0); // active, visible, FL_ALIGN_CENTER
 type(0);
-damage(FL_DAMAGE_LAYOUT|FL_DAMAGE_ALL);
+set_damage(FL_DAMAGE_ALL);
+layout_damage(FL_LAYOUT_DAMAGE);
 when(FL_WHEN_RELEASE);
 </PRE>
 </UL>
@@ -75,8 +76,8 @@ to handle each event passed to the widget. It can:
 <LI>Call <A href=Fl_Widget.html#redraw><TT>Fl_Widget::redraw()</TT>
 </A> if the widget needs to be redisplayed.
 
-<LI>Call <A href=Fl_Widget.html#damage><TT>
-Fl_Widget::damage(n)</TT></A> if the widget needs a partial-update
+<LI>Call <A href=Fl_Widget.html#redraw><TT>
+Fl_Widget::redraw(n)</TT></A> if the widget needs a partial-update
 (assumming you provide support for this in your
 <TT>Fl_Widget::draw()</TT> method).
 
@@ -141,21 +142,26 @@ try sending the event to another widget.
 
 The <TT>draw()</TT> virtual method is called when FLTK wants you to 
 redraw your widget.  It will be called if and only if <TT>damage()</TT>
- is non-zero, and <TT>damage()</TT> will be cleared to zero after it 
+is non-zero, and <TT>damage()</TT> will be cleared to zero after it 
 returns. <TT>draw()</TT> should be declared protected, so that it can't 
 be called from non-drawing code. 
 
 <P><TT>damage()</TT> contains the bitwise-OR of all the
-<TT>damage(n)</TT> calls to this widget since it was last drawn.  This
+<TT>redraw(n)</TT> calls to this widget since it was last drawn.  This
 can be used for minimal update, by only redrawing the parts whose bits
-are set.  FLTK will turn on the <TT>FL_DAMAGE_ALL</TT> bit if it
-thinks the entire widget must be redrawn (e.g. for an expose event).
+are set.  If the flag <tt>FL_DAMAGE_EXPOSE</tt> is on in
+<tt>damage()</tt> then the widget is expected to draw every pixel
+inside it's bounding box. If you wish to simulate a non-square widget,
+you should call <a
+href=Fl_Group.html#draw_group_box><tt>Fl_Group::draw_group_box()</tt></a>
+with appropriate <a href=drawing.html#clipping>clipping</a>.
 
-<P>Expose events (and the above <TT>damage(b,x,y,w,h)</TT>) will cause
-<TT> draw()</TT> to be called with FLTK's <A
-href=drawing.html#clipping> clipping</A> turned on.  You can greatly
+<P>Expose events (and the method <TT>expose(x,y,w,h)</TT>) will cause
+<TT>draw()</TT> to be called with FLTK's <A
+href=drawing.html#clipping>clipping</A> turned on.  You can greatly
 speed up redrawing in some cases by testing
-<TT>fl_not_clipped(x,y,w,h)</TT> or <TT>fl_clip_box(...)</TT> and
+<a href=drawing.html#fl_not_clipped><TT>fl_not_clipped(x,y,w,h)</TT></a>
+or <a href=drawing.html#fl_clip_box><TT>fl_clip_box(...)</TT></a> and
 skipping invisible parts. </P>
 
 <P>FLTK provides a <a href=drawing.html>large number of basic drawing
@@ -167,13 +173,21 @@ href=Fl_Widget.html#draw_box>drawing methods</a>.
 The <TT>layout()</TT> method is called after the widget is resized or
 moved or if <tt>relayout()</tt> has been called.
 
-<p>You must call the base class implementation to get the damage bit
-turned off.
+<p><tt>layout_damage()</tt> will have the reason that
+<tt>layout()</tt> is being called. This can be <tt>FL_LAYOUT_X,
+FL_LAYOUT_Y, FL_LAYOUT_W, FL_LAYOUT_H</tt> or
+<tt>FL_LAYOUT_DAMAGE</tt> if <tt>relayout()</tt> was called, or any
+combination of these.
 
-<p>For composite widgets this will be called if any child widgets have
-had relayout() called. It should resize and call layout on all the
-children. You may resize them repeatedly until you get the layout you
-want.
+<p>You <i>must</i> call the base class implementation to get the
+<tt>layout_damage()</tt> bits turned off.
+
+<p>For composite widgets the bit <tt>FL_LAYOUT_CHILD</tt> will be
+turned on to indicate that a child widget needs to have
+<tt>layout()</tt> called. Your implementation must call this.
+
+<p><tt>layout()</tt> should call <tt>redraw()</tt> if it determines
+that the display needs to be redrawn.
 
 <H2>Making a Composite Widget</H2>
 

@@ -27,7 +27,6 @@ decl {extern int galways_return_parens;} {public
 decl {extern int gindent_code;} {public
 } 
 
-
 decl {extern void save_coding_style();} {public
 } 
 
@@ -72,14 +71,14 @@ galways_return_parens = always_return_parens;} {}
 
 Function {make_codingstyle_window()} {} {
   Fl_Window {} {open
-    xywh {7 78 310 255} visible
+    xywh {188 283 310 255} visible
   } {
     Fl_Tabs {} {open
-      xywh {0 0 303 218} box EMBOSSED_BOX
+      xywh {0 0 303 220} box EMBOSSED_BOX
     } {
       Fl_Group {} {
-        label {Brace Style} open selected
-        xywh {0 25 303 193}
+        label {Brace Style} open
+        xywh {0 25 303 195} hide
       } {
         Fl_Group {} {
           label {Brace Style} open
@@ -151,17 +150,17 @@ Function {make_codingstyle_window()} {} {
         Fl_Check_Button pNoSpaceParens {
           label {No space before parentheses}
           callback {no_space_parens = o->value();;}
-          private xywh {14 147 193 25}
+          private xywh {15 147 195 22}
         }
         Fl_Check_Button pBraceFuncs {
           label {Apply to function braces}
           callback {brace_functions = o->value();}
-          private xywh {14 168 175 25} value 1
+          private xywh {15 170 174 22} value 1
         }
       }
       Fl_Group {} {
         label Other open
-        xywh {0 25 303 183} hide
+        xywh {0 25 303 183}
       } {
         Fl_Group {} {
           label Indentation open
@@ -170,7 +169,7 @@ Function {make_codingstyle_window()} {} {
           Fl_Value_Input pTabSize {
             label {Tab size for indents}
             callback {tab_size = (int)o->value();}
-            private xywh {129 33 31 25} maximum 12 value 2
+            private xywh {129 33 31 22} maximum 12 value 2
           }
           Fl_Check_Button pIndentTabs {
             label {Indent with tabs}
@@ -179,18 +178,18 @@ if(o->value())
     pTabSize->hide();
 else
    pTabSize->show();}
-            private xywh {13 7 114 25}
+            private xywh {13 7 114 22}
           }
           Fl_Check_Button pIndentCode {
             label {Indent code blocks}
             callback {indent_code = o->value();}
-            private xywh {14 58 151 25}
+            private xywh {14 58 151 22}
           }
         }
         Fl_Check_Button pReturnParens {
           label {Always use parentheses on return}
-          callback {always_return_parens = o->value();}
-          private xywh {9 120 221 25}
+          callback {always_return_parens = o->value();} selected
+          private xywh {10 120 220 22}
         }
       }
     }
@@ -236,6 +235,5 @@ if(gindent_tabs)
    pTabSize->hide();
 else
    pTabSize->show();
-pIndentCode->value(gindent_code);
-   } {}
+pIndentCode->value(gindent_code);} {}
 } 

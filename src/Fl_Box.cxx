@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.22 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.23 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,20 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+// In fltk2 the only difference between Fl_Box and Fl_Widget is that
+// the box type defaults to FL_NO_BOX and there is a constructor that
+// sets the box type. Also the drawing function does a special hack
+// to do nothing if the widget is invisible, to avoid breaking old
+// programs (they should hide() the widget instead!)
+
 #include <fltk/Fl_Widget.h>
 #include <fltk/Fl_Box.h>
-
-void Fl_Box::draw() {
-  draw_box();
-  draw_inside_label();
-}
-
-// Since FL_NO_BOX boxes are often used as invisible resizeboxes, I
-// check for this and avoid unnecessary clipping.
-void Fl_Box::draw_n_clip() {
-  if (box() != FL_NO_BOX || label() || image())
-    Fl_Widget::draw_n_clip();
-}
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
@@ -51,6 +45,21 @@ Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
   style(default_style);
 }
 
+extern Fl_Widget* fl_did_clipping;
+
+void Fl_Box::draw() {
+  // check for completely blank widgets. We must not clip to their
+  // area because it will break lots of programs that assumme these
+  // can overlap any other widgets:
+  if (box()==FL_NO_BOX && 
+    (!label() && !image() ||
+     align() != FL_ALIGN_CENTER && !(align()&FL_ALIGN_INSIDE))) {
+    fl_did_clipping = this;
+    return;
+  }
+  Fl_Widget::draw();
+}
+
 //
-// End of "$Id: Fl_Box.cxx,v 1.22 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.23 2001/12/16 22:32:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -169,7 +169,7 @@ Fl_Text_Display::highlight_data(Fl_Text_Buffer *styleBuffer,
   mUnfinishedHighlightCB = unfinishedHighlightCB;
   mHighlightCBArg = cbArg;
 
-  damage(FL_DAMAGE_EXPOSE);
+  redraw(FL_DAMAGE_VALUE);
 }
 
 int Fl_Text_Display::longest_vline() {
@@ -311,10 +311,10 @@ void Fl_Text_Display::layout() {
 
   update_v_scrollbar();
   update_h_scrollbar();
-  damage(FL_DAMAGE_CHILD);
+  redraw(FL_DAMAGE_CHILD);
 
   // clear the layout flag
-  damage(damage()&(~FL_DAMAGE_LAYOUT));
+  Fl_Widget::layout();
 }
 
 /*
@@ -353,7 +353,7 @@ void Fl_Text_Display::redisplay_range(int start, int end) {
     damage_range2_start = min(damage_range2_start, start);
     damage_range2_end = max(damage_range2_end, end);
   }
-  damage(FL_DAMAGE_SCROLL);
+  redraw(FL_DAMAGE_SCROLL);
 }
 /*
 ** Refresh all of the text between buffer positions "start" and "end"
@@ -787,7 +787,7 @@ void Fl_Text_Display::buffer_modified_cb( int pos, int nInserted, int nDeleted,
 
   /* If the changes caused scrolling, re-paint everything and we're done. */
   if ( scrolled ) {
-    textD->damage(FL_DAMAGE_EXPOSE);
+    textD->redraw(FL_DAMAGE_VALUE);
     if ( textD->mStyleBuffer )   /* See comments in extendRangeForStyleMods */
       textD->mStyleBuffer->primary_selection()->selected(0);
     return;
@@ -1574,7 +1574,7 @@ void Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
   mHorizOffset = horizOffset;
 
   // redraw all text
-  damage(FL_DAMAGE_EXPOSE);
+  redraw(FL_DAMAGE_SCROLL);
 }
 
 /*
@@ -1766,7 +1766,7 @@ void Fl_Text_Display::draw(void) {
 
     // blank the previous cursor protrusions
   }
-  else if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_EXPOSE)) {
+  else if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_VALUE)) {
     //printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
     // CET - FIXME - save old cursor position instead and just draw side needed?
     fl_push_clip(text_area.x-LEFT_MARGIN,
@@ -1782,14 +1782,14 @@ void Fl_Text_Display::draw(void) {
 
   // draw the scrollbars
   if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_CHILD)) {
-    mVScrollBar->damage(FL_DAMAGE_ALL);
-    mHScrollBar->damage(FL_DAMAGE_ALL);
+    mVScrollBar->set_damage(FL_DAMAGE_ALL);
+    mHScrollBar->set_damage(FL_DAMAGE_ALL);
   }
   update_child(*mVScrollBar);
   update_child(*mHScrollBar);
 
   // draw all of the text
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_EXPOSE)) {
+  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_VALUE)) {
     //printf("drawing all text\n");
     int X, Y, W, H;
     fl_clip_box(text_area.x, text_area.y,
@@ -1814,7 +1814,7 @@ void Fl_Text_Display::draw(void) {
   }
 
   // draw the text cursor
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_SCROLL | FL_DAMAGE_EXPOSE)
+  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_SCROLL | FL_DAMAGE_VALUE)
       && !buffer()->primary_selection()->selected() &&
       mCursorOn && Fl::focus() == this ) {
     fl_push_clip(text_area.x-LEFT_MARGIN,
@@ -1943,5 +1943,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $".
 //

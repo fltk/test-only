@@ -5,23 +5,27 @@ Fl_Window *images_dir_window=(Fl_Window *)0;
 
 static void cb_images_dir_window(Fl_Window*, void*) {
   images_dir_window->hide();
-modal=0;
+  modal=0;
+
 }
 
 Fl_Input *images_dir_input=(Fl_Input *)0;
 
 static void cb_Browse(Fl_Button*, void*) {
   browse_dir_cb();
-}
 
-static void cb_Cancel(Fl_Button*, void*) {
-  images_dir_window->hide();
-modal=0; cancel=1;
 }
 
 static void cb_OK(Fl_Return_Button*, void*) {
   images_dir_window->hide();
-modal=0;
+  modal=0;
+
+}
+
+static void cb_Cancel(Fl_Button*, void*) {
+  images_dir_window->hide();
+  modal=0; cancel=1;
+
 }
 
 Fl_Window* make_images_dir_window() {
@@ -29,22 +33,22 @@ Fl_Window* make_images_dir_window() {
   { Fl_Window* o = images_dir_window = new Fl_Window(310, 100, "Images root directory");
     w = o;
     o->callback((Fl_Callback*)cb_images_dir_window);
-    { Fl_Input* o = images_dir_input = new Fl_Input(10, 15, 220, 20);
+     {    Fl_Input* o = images_dir_input = new Fl_Input(10, 22, 220, 22);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-    { Fl_Button* o = new Fl_Button(230, 15, 70, 20, "Browse ...");
+     {    Fl_Button* o = new Fl_Button(230, 22, 70, 22, "Browse ...");
       o->callback((Fl_Callback*)cb_Browse);
     }
-    { Fl_Box* o = new Fl_Box(10, 40, 220, 20, "(relative to the location of the .fl file)");
+     {    Fl_Box* o = new Fl_Box(10, 44, 220, 16, "(relative to the location of the .fl file)");
       o->label_size(10);
       o->align(133|FL_ALIGN_INSIDE);
     }
-    { Fl_Button* o = new Fl_Button(180, 70, 60, 20, "Cancel");
-      o->callback((Fl_Callback*)cb_Cancel);
-    }
-    { Fl_Return_Button* o = new Fl_Return_Button(250, 70, 50, 20, "OK");
+     {    Fl_Return_Button* o = new Fl_Return_Button(150, 66, 70, 22, "OK");
       o->shortcut(0xff0d);
       o->callback((Fl_Callback*)cb_OK);
+    }
+     {    Fl_Button* o = new Fl_Button(230, 66, 70, 22, "Cancel");
+      o->callback((Fl_Callback*)cb_Cancel);
     }
     o->end();
   }

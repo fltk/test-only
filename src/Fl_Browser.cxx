@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.51 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.52 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -230,8 +230,7 @@ Fl_Widget* Fl_Browser::next() {
 // set current item to one at or before Y pixels from top of browser
 Fl_Widget* Fl_Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
-  if (damage()&FL_DAMAGE_LAYOUT ||
-      Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
+  if (layout_damage() || Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
@@ -258,10 +257,10 @@ void Fl_Browser::damage_item(int mark) {
   if (is_set(m)) {
     m = REDRAW_1;
     // if both marks are used we give up and damage the whole thing:
-    if (is_set(m)) {damage(FL_DAMAGE_EXPOSE); return;}
+    if (is_set(m)) {redraw(FL_DAMAGE_CONTENTS); return;}
   }
   set_mark(m, mark);
-  damage(FL_DAMAGE_SCROLL);
+  redraw(FL_DAMAGE_VALUE);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -425,7 +424,7 @@ void Fl_Browser::draw_clip_cb(void* v,int X, int Y, int W, int H) {
 void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   fl_push_clip(x,y,w,h);
 
-  int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
+  int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_CONTENTS);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
     int item_y = Y+item_position[HERE]-yposition_;
     if (item_y >= y+h) break;
@@ -450,7 +449,7 @@ void Fl_Browser::draw() {
     //printf("full redraw damage %x\n", d);
     draw_text_frame();
     draw_clip(X, Y, W, H);
-  } else if (d & FL_DAMAGE_EXPOSE) { // redraw contents
+  } else if (d & FL_DAMAGE_CONTENTS) { // redraw contents
     //printf("contents redraw damage %x\n", d);
     draw_clip(X, Y, W, H);
   } else { // minimal update
@@ -539,26 +538,26 @@ void Fl_Browser::layout() {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
 	W -= scrollbar.w();
-	damage(FL_DAMAGE_ALL);
+	redraw(FL_DAMAGE_ALL);
       }
     } else {
       if (scrollbar.visible()) {
 	scrollbar.clear_visible();
 	W += scrollbar.w();
-	damage(FL_DAMAGE_ALL);
+	redraw(FL_DAMAGE_ALL);
       }
     }
     if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || width_ > W || xposition_)) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
 	H -= hscrollbar.h();
-	damage(FL_DAMAGE_ALL);
+	redraw(FL_DAMAGE_ALL);
       }
     } else {
       if (hscrollbar.visible()) {
 	hscrollbar.clear_visible();
 	H += hscrollbar.h();
-	damage(FL_DAMAGE_ALL);
+	redraw(FL_DAMAGE_ALL);
       }
     }
   }
@@ -573,7 +572,7 @@ void Fl_Browser::layout() {
   hscrollbar.value(xposition_, W, 0, width_);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
-  damage(FL_DAMAGE_EXPOSE); // assumme we need to redraw
+  redraw(FL_DAMAGE_CONTENTS); // assumme we need to redraw
 }
 
 void Fl_Browser::hscrollbar_cb(Fl_Widget* o, void*) {
@@ -582,7 +581,7 @@ void Fl_Browser::hscrollbar_cb(Fl_Widget* o, void*) {
 
 void Fl_Browser::xposition(int X) {
   int dx = xposition_-X;
-  if (dx) {xposition_ = X; scrolldx += dx; damage(FL_DAMAGE_SCROLL);}
+  if (dx) {xposition_ = X; scrolldx += dx; redraw(FL_DAMAGE_VALUE);}
 }
 
 void Fl_Browser::scrollbar_cb(Fl_Widget* o, void*) {
@@ -594,7 +593,7 @@ void Fl_Browser::yposition(int Y) {
   ((Fl_Slider*)(&scrollbar))->value(Y);
   goto_position(Y);
   set_mark(FIRST_VISIBLE, HERE);
-  scrolldy += (yposition_-Y); damage(FL_DAMAGE_SCROLL);
+  scrolldy += (yposition_-Y); redraw(FL_DAMAGE_VALUE);
   yposition_ = Y;
 }
 
@@ -607,7 +606,7 @@ bool Fl_Browser::set_focus() {
   damage_item(HERE); // so will draw focus box around item?
   damage_item(FOCUS); // so focus box around old focus item will be removed?
   set_mark(FOCUS, HERE); // current item is new focus item
-  if (damage()&FL_DAMAGE_LAYOUT) {
+  if (layout_damage()) {
     // center the focus
     int y = item_position[FOCUS]-h()/2;
     if (y < 0) y = 0;
@@ -804,7 +803,7 @@ int Fl_Browser::handle(int event) {
 	item()->invert_flag(FL_OPEN);
 	list()->flags_changed(this, item());
 	relayout();
-	//damage(FL_DAMAGE_EXPOSE, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
+	//damage(FL_DAMAGE_CONTENTS, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
 	Fl::event_is_click(0); // make next click not be double
 	goto RELEASE;
       } else if (when()) {
@@ -868,7 +867,7 @@ Fl_Widget* Fl_Browser::goto_index(const int* indexes, int level) {
     return 0;
   }
   // start at the old focus:
-  if (damage() & FL_DAMAGE_LAYOUT || !goto_mark(FOCUS))
+  if (layout_damage() || !goto_mark(FOCUS))
     if (!goto_top()) return 0;
   // move until we are before it:
   while (::compare_marks(item_index[HERE],item_level[HERE],indexes,level) > 0)
@@ -921,7 +920,7 @@ bool Fl_Browser::selected(int line) {
 void Fl_Browser::set_position(linepos lpos) {
 /*
   set_mark(FIRST_VISIBLE, HERE);
-  scrolldy += (yposition_-item_position[HERE]); damage(FL_DAMAGE_SCROLL);
+  scrolldy += (yposition_-item_position[HERE]); redraw(FL_DAMAGE_VALUE);
   yposition_ = item_position[HERE];
   ((Fl_Slider*)&scrollbar)->value(yposition_);
 */
@@ -995,5 +994,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.51 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.52 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.21 2001/07/29 21:40:34 spitzak Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,11 @@ int nbplugins;
 Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
-#if defined(_WIN32) && defined(_MSC_VER)
-# include "../visualc/config.h"
-#else
+//  #if defined(_WIN32) && defined(_MSC_VER)
+//  # include "../visualc/config.h"
+//  #else
 # include <config.h> // for strcasecmp
-#endif
+//  #endif
 
 #if USE_PLUGINS
 
@@ -135,5 +135,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.21 2001/07/29 21:40:34 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $"
 //

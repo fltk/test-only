@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.44 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.45 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -273,9 +273,9 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, shortcut)) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.44 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.45 2001/12/16 22:32:02 spitzak Exp $".
 //

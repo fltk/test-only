@@ -1,6 +1,6 @@
 <html><head><title>FLTK Win32-Specific Interface</title></head><body bgcolor=white>
 
-<h1 align=right>H - WIN32-Specific Interface</a></h1>
+<h1 align=right>H - WIN32-Specific Interface</h1>
 
 <h1><tt>#include &lt;fltk/x.h&gt;</tt></h1>
 
@@ -29,7 +29,7 @@ href=Fl.html#flush><tt>Fl::flush()</tt></a> to be called
 regularily so that widgets are updated. Timeouts, the idle function,
 and file descriptor callbacks will not work in this case.
 
-<h4><a name=add_handler>void Fl::add_handler(int (*f)(int))</a></h4>
+<a name=add_handler><h4>void Fl::add_handler(int (*f)(int))</h4></a>
 
 Install a function to parse unrecognized messages sent to FLTK 
 windows.  If FLTK cannot figure out what to do with a message, it calls 
@@ -37,7 +37,7 @@ each of these functions (most recent first) until one of them returns
 non-zero.  The argument passed to the fuctions is zero.  If all the 
 handlers return zero then FLTK calls <tt>DefWindowProc()</tt>. 
 
-<h4><a name=fl_msg>extern MSG fl_msg</a></h4>
+<a name=fl_msg><h4>extern MSG fl_msg</h4></a>
 
 The most recent message read by <tt>GetMessage</tt> (which is called 
 by <a href=Fl.html#wait><tt>Fl::wait()</tt></a>.  This may not 
@@ -45,24 +45,24 @@ be the most recent message sent to an FLTK window (because our
 fun-loving friends at MicroSoft decided that calling the handle
 procedures directly would be a good idea sometimes...)
 
-<h4><a name=WIN32.fl_xid>HWND fl_xid(const Fl_Window*)</a></h4>
+<a name=WIN32.fl_xid><h4>HWND fl_xid(const Fl_Window*)</h4></a>
 
 Returns the window handle for a <tt>Fl_Window</tt>, or zero if not
 <tt>shown()</tt>.
 
-<h4><a name=WIN32.fl_find>Fl_Window* fl_find(HWND xid)</a></h4>
+<a name=WIN32.fl_find><h4>Fl_Window* fl_find(HWND xid)</h4></a>
 
 Return the <tt>Fl_Window</tt> that corresponds to the given window 
 handle, or <tt>NULL</tt> if not found.  This uses a cache so it is 
 slightly faster than iterating through the windows yourself. 
 
-<h4><a name=fl_display>extern HINSTANCE fl_display;</h4>
+<a name=fl_display><h4>extern HINSTANCE fl_display;</h4></a>
 
 This is set on program initialization to <tt>GetModuleHandle(0)</tt>
 and can be used to identify this application.
 
-<h4><a name=fl_window>extern HWND fl_window;
-<br><a name=fl_gc>extern HDC fl_gc;</h4>
+<h4><a name=fl_window>extern HWND fl_window;</a>
+<br><a name=fl_gc>extern HDC fl_gc;</a></h4>
 
 These are set before <tt>draw()</tt> is called, or by <a
 href=Fl_Window.html#make_current><tt>Fl_Window::make_current()</tt></a>,
@@ -74,7 +74,7 @@ by looking at <a href=Fl_Window.html#make_current><tt>
 Fl_Window::current()</tt></a>, which returns a pointer to the <tt>
 Fl_Window</tt> being drawn.
 
-<h4><a name=fl_wincolor>COLORREF fl_wincolor(Fl_Color i);</h4>
+<a name=fl_wincolor><h4>COLORREF fl_wincolor(Fl_Color i);</h4></a>
 
 Returns the <tt>COLORREF</tt> fltk will use for the given fltk color,
 typically this is <tt>RGB(r,g,b)</tt> of the color, or
@@ -89,14 +89,25 @@ and by <a href=drawing.html#fl_line_style><tt>fl_line_style()</tt></a>,
 by using these in your drawing calls you can provide the illusion that
 GDI has a color in it's graphics state.
 
-<h4><a name=fl_palette>extern HPALETTE fl_palette;</h4>
+<a name=fl_palette><h4>extern HPALETTE fl_palette;</h4></a>
 
 If non-zero this is the palette alloced by fltk on an 8-bit
 screen. Hopefully you can ignore this, they managed to find a way to
 make it <i>more</i> ugly than the X system, which is truly a triumph
 of software engineering!
 
-<h4><a name=icon>void Fl_Window::icon(char*)</h4>
+<a name=fl_clip_region><h4>HRGN fl_clip_region();</h4></a>
+
+Return the current clip region, or <tt>NULL</tt> if we are currently
+clipping to the entire window. Notice that this will be destroyed by
+the next change to the clipping, copy it if you want to keep it.
+
+<h4>void fl_clip_region(HRGN);</h4>
+
+Replace the current clip region with this one, or make there be no
+clipping if <tt>NULL</tt> is passed. The old clip region is destroyed.
+
+<a name=icon><h4>void Fl_Window::icon(char*)</h4></a>
 
 Sets the icon for the window to the passed pointer.  You will need to 
 cast the <tt>HICON</tt> handle to a <tt>char*</tt> when calling this 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.79 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.80 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -243,14 +243,14 @@ void name_cb(Fl_Input* o, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->name() && *(current_widget->name())) tc = FL_RED;
   if (o->label_color() != tc)
-    { o->label_color(tc); o->damage_label(); }
+    { o->label_color(tc); o->redraw_label(); }
 }
 
 #define for_all_selected_widgets() \
 for (Fl_Type *o = Fl_Type::first; o; o = o->walk()) \
   if (o->selected && o->is_widget())
 
-void name_public_cb(Fl_Light_Button* i, void* v) {
+void name_public_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->public_);
   } else {
@@ -281,7 +281,7 @@ void label_cb(Fl_Input* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->label() && *(current_widget->label())) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 static char* oldtooltip;
@@ -303,7 +303,7 @@ void tooltip_cb(Fl_Input* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->tooltip() && *(current_widget->tooltip())) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void x_cb(Fl_Value_Input* i, void *v) {
@@ -370,7 +370,7 @@ void height_cb(Fl_Value_Input* i, void *v) {
   i->value (height);
 }
 
-void set_xy_cb(Fl_Light_Button* i, void *v) {
+void set_xy_cb(Fl_Check_Button* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_window())
       i->show();
@@ -488,7 +488,7 @@ void box_cb(Fl_Choice* i, void *v) {
   if (NOT_DEFAULT(current_widget, box)) tc = FL_RED;
   if (i->label_color() != tc) {
     i->label_color(tc);
-    i->damage_label();
+    i->redraw_label();
   }
 }
 
@@ -513,7 +513,7 @@ void text_box_cb(Fl_Choice* i, void *v) {
   if (NOT_DEFAULT(current_widget, text_box)) tc = FL_RED;
   if (i->label_color() != tc) {
     i->label_color(tc);
-    i->damage_label();
+    i->redraw_label();
   }
 }
 
@@ -560,7 +560,7 @@ void when_cb(Fl_Choice* i, void *v) {
   i->redraw();
 }
 
-void when_button_cb(Fl_Light_Button* i, void *v) {
+void when_button_cb(Fl_Check_Button* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->hide(); return;}
     i->show();
@@ -606,7 +606,7 @@ void Fl_Widget_Type::resizable(uchar v) {
   }
 }
 
-void resizable_cb(Fl_Light_Button* i,void* v) {
+void resizable_cb(Fl_Check_Button* i,void* v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->hide(); return;}
     if (numselected > 1) {i->hide(); return;}
@@ -621,7 +621,7 @@ void resizable_cb(Fl_Light_Button* i,void* v) {
   i->redraw();
 }
 
-void hotspot_cb(Fl_Light_Button* i,void* v) {
+void hotspot_cb(Fl_Check_Button* i,void* v) {
   if (v == LOAD) {
     if (numselected > 1 || current_widget->is_menu_item()) {i->hide(); return;}
     i->show();
@@ -644,7 +644,7 @@ void hotspot_cb(Fl_Light_Button* i,void* v) {
   i->redraw();
 }
 
-void visible_cb(Fl_Light_Button* i, void* v) {
+void visible_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->o->visible());
   } else {
@@ -661,7 +661,7 @@ void visible_cb(Fl_Light_Button* i, void* v) {
   i->redraw();
 }
 
-void active_cb(Fl_Light_Button* i, void* v) {
+void active_cb(Fl_Check_Button* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->o->active());
   } else {
@@ -716,7 +716,7 @@ void labelfont_cb(Fl_Choice* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, label_font)) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void labelsize_cb(Fl_Value_Input* i, void *v) {
@@ -793,7 +793,7 @@ void labeltype_cb(Fl_Choice* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, label_type)) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -902,7 +902,7 @@ void textfont_cb(Fl_Choice* i, void* v) {
   tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, text_font)) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void textsize_cb(Fl_Value_Input* i, void* v) {
@@ -1061,7 +1061,7 @@ void align_cb(Fl_Button* i, void *v) {
   }
 }
 
-void image_inlined_cb(Fl_Light_Button* i, void *v) {
+void image_inlined_cb(Fl_Check_Button* i, void *v) {
   if (v==LOAD) {
     if(current_widget->image) {
       i->value(current_widget->image->inlined);
@@ -1093,7 +1093,7 @@ void callback_cb(Fl_Input* i, void *v) {
   if (current_widget->callback()) tc = FL_RED;
   if (callback_label->label_color() != tc) {
     callback_label->label_color(tc);
-    callback_label->damage_label();
+    callback_label->redraw_label();
   }
 }
 
@@ -1109,7 +1109,7 @@ void user_data_cb(Fl_Input *i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->user_data()) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void user_data_type_cb(Fl_Input *i, void *v) {
@@ -1133,7 +1133,7 @@ void user_data_type_cb(Fl_Input *i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (strcmp(i->value(), "void*")) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 // "v_attributes" let user type in random code for attribute settings:
@@ -1154,7 +1154,7 @@ void v_input_cb(Fl_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() && *i->value()) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void subclass_cb(Fl_Input* i, void* v) {
@@ -1170,7 +1170,7 @@ void subclass_cb(Fl_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->subclass() && *(current_widget->subclass())) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1213,7 +1213,7 @@ void min_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void max_cb(Fl_Value_Input* i, void* v) {
@@ -1235,7 +1235,7 @@ void max_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 1.0) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void step_cb(Fl_Value_Input* i, void* v) {
@@ -1257,7 +1257,7 @@ void step_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 void value_cb(Fl_Value_Input* i, void* v) {
@@ -1286,7 +1286,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+    { i->label_color(tc); i->redraw_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1408,7 +1408,7 @@ void cancel_cb(Fl_Button* o, void* v) {
 }
 
 void toggle_overlays(Fl_Widget *,void *); // in Fl_Window_Type.C
-void overlay_cb(Fl_Light_Button*o,void *v) {
+void overlay_cb(Fl_Check_Button*o,void *v) {
   toggle_overlays(o,v);
 }
 
@@ -2163,5 +2163,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.79 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.80 2001/12/16 22:32:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.21 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: factory.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,11 @@
 #include <fltk/Fl_Menu_Item.h>
 #include <string.h>
 #include <stdio.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#	include "../visualc/config.h"
-#else
+//  #if defined(_WIN32) && defined(_MSC_VER)
+//  #	include "../visualc/config.h"
+//  #else
 #include <config.h> // for strcasecmp
-#endif
+//  #endif
 
 #include "Fluid_Plugins.h"
 #include "Fl_Type.h"
@@ -167,6 +167,7 @@ static Fl_Counter_Type Fl_Counter_type;
 static Fl_Menu_Item input_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
+  {"Wordwrap",0,0,(void*)FL_WORDWRAP_INPUT},
   {"Secret",0,0,(void*)FL_SECRET_INPUT},
 #if 0 // WAS: This needs to be fixed for back compatability!
   {"Int",0,0,(void*)FL_INT_INPUT},
@@ -294,6 +295,7 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 static Fl_Menu_Item output_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
+  {"Wordwrap",0,0,(void*)FL_WORDWRAP_INPUT},
   {0}};
 class Fl_Output_Type : public Fl_Input_Type {
   Fl_Menu_Item *subtypes() {return output_type_menu;}
@@ -634,5 +636,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.21 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $".
 //

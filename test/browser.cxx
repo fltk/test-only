@@ -76,7 +76,6 @@ static Fl_Group* add_folder(Fl_Group* parent,
   Fl_Item_Group* o = new Fl_Item_Group(name);
   o->image(image);
   if (open) o->set_flag(FL_OPEN);
-  parent->relayout();
   return o;
 }
 
@@ -85,7 +84,6 @@ static Fl_Widget* add_paper(Fl_Group* parent,
   parent->begin();
   Fl_Item* o = new Fl_Item(name);
   o->image(image);
-  parent->relayout();
   return o;
 }
 
@@ -93,12 +91,14 @@ void
 cb_add_folder(Fl_Widget*, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
   add_folder(current_group(tree), "Added folder", 1, folderSmall);
+  tree->relayout();
 }
 
 void
 cb_add_paper(Fl_Widget*, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
   add_paper(current_group(tree), "New paper", 0, fileSmall);
+  tree->relayout();
 }
 
 void cb_when_changed(Fl_Widget* b, void* ptr) {

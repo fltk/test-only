@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.48 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.49 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -135,7 +135,7 @@ int Fl_Tabs::handle(int event) {
   case FL_FOCUS:
     if (contains(Fl::focus())) {
       // this is called to indicate that some child got the focus
-      /*if (Fl::focus() == this || focus() < 0)*/ damage(FL_DAMAGE_EXPOSE);
+      /*if (Fl::focus() == this || focus() < 0)*/ redraw(FL_DAMAGE_VALUE);
       focus(Fl::focus() == this ? -1 : 0);
       return 1;
     }
@@ -161,7 +161,7 @@ int Fl_Tabs::handle(int event) {
     } return 1;
 
   case FL_UNFOCUS:
-    if (focus() < 0) damage(FL_DAMAGE_EXPOSE);
+    if (focus() < 0) redraw(FL_DAMAGE_VALUE);
     return 1;
 
   // handle mouse events in the tabs:
@@ -231,7 +231,7 @@ int Fl_Tabs::handle(int event) {
 int Fl_Tabs::push(Fl_Widget *o) {
   if (push_ == o) return 0;
   if (push_ && !push_->visible() || o && !o->visible())
-    damage(FL_DAMAGE_EXPOSE);
+    redraw(FL_DAMAGE_VALUE);
   push_ = o;
   return 1;
 }
@@ -272,6 +272,8 @@ int Fl_Tabs::value(Fl_Widget *newvalue) {
 
 enum {LEFT, RIGHT, SELECTED};
 
+extern Fl_Widget* fl_did_clipping;
+
 static int H;
 static int p[128];
 void Fl_Tabs::draw() {
@@ -290,7 +292,7 @@ void Fl_Tabs::draw() {
   }
 
   // draw the tabs if needed:
-  if (damage() & (FL_DAMAGE_EXPOSE|FL_DAMAGE_ALL)) {
+  if (damage() & (FL_DAMAGE_VALUE|FL_DAMAGE_ALL)) {
     int w[128];
     int selected = tab_positions(p,w);
     int i;
@@ -310,16 +312,10 @@ void Fl_Tabs::draw() {
     }
 
   }
-}
-
-// Call the draw method, handle the clip out
-void Fl_Tabs::draw_n_clip()
-{
-  draw();
-  // The tabs widget build itself the clip_out region with a special shape
-  if (damage()&FL_DAMAGE_ALL) {
+  if (damage() & FL_DAMAGE_EXPOSE) {
     fl_clip_out(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
     fl_clip_out(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
+    fl_did_clipping = this;
   }
 }
 
@@ -408,5 +404,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.48 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.49 2001/12/16 22:32:03 spitzak Exp $".
 //

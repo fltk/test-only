@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.100 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.101 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -430,7 +430,7 @@ int* Fl_Group::sizes() {
 }
 
 void Fl_Group::layout() {
-  if (resizable() && children_) {
+  if (resizable() && children_ && (!sizes_ || layout_damage()&FL_LAYOUT_WH)) {
 
     // get changes in size from the initial size:
     // If this is the first call assumme this is the initial size.
@@ -478,11 +478,20 @@ void Fl_Group::layout() {
     // still need to call inner things that need layout:
     Fl_Widget*const* a = array_;
     Fl_Widget*const* e = a+children_;
+    if ((layout_damage() & FL_LAYOUT_XY) && !is_window()) {
     while (a < e) {
       Fl_Widget* widget = *a++;
-      if (widget->damage()&FL_DAMAGE_LAYOUT || !is_window()) widget->layout();
+	widget->layout_damage(widget->layout_damage()|FL_LAYOUT_XY);
+	widget->layout();
+    }
+    } else {
+      while (a < e) {
+	Fl_Widget* widget = *a++;
+	if (widget->layout_damage()) widget->layout();
+  }
     }
   }
+  if (layout_damage() & FL_LAYOUT_WH) redraw();
   Fl_Widget::layout();
   set_old_size();
 }
@@ -493,11 +502,27 @@ void Fl_Group::layout() {
 void Fl_Group::draw() {
   int numchildren = children();
   if (damage() & ~FL_DAMAGE_CHILD) {
-    // Redraw the box and all the children
+#if 0
+    // blinky-draw:
+    draw_box();
+    draw_inside_label();
+    int n; for (n = 0; n < numchildren; n++) {
+      Fl_Widget& w = *child(n);
+      w.set_damage(FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
+      update_child(w);
+    }
+#else
+    // Non-blinky draw, draw the inside widgets first, clip their areas
+    // out, and then draw the background:
     fl_push_clip(0, 0, w(), h());
-    int n; for (n = numchildren; n;) draw_child(*child(--n));
-    draw_group_box();
+    int n; for (n = numchildren; n--;) draw_child(*child(n));
+    if (!box()->fills_rectangle()) {
+      if (parent()) parent()->draw_group_box();
+    }
+    draw_box();
+    draw_inside_label();
     fl_pop_clip();
+#endif
     // labels are drawn without the clip for back compatability so they
     // can draw atop sibling widgets:
     for (n = 0; n < numchildren; n++) draw_outside_label(*child(n));
@@ -517,18 +542,12 @@ void Fl_Group::draw() {
   }
 }
 
-// Draw and then clip the rectangle:
-void Fl_Group::draw_n_clip()
-{
-  draw();
-  fl_clip_out(0, 0, w(), h());
-}
-
 // Pieces of draw() that subclasses may want to use:
 
-// Draw the background, this is used by draw_n_clip for widgets with
-// non-square area to fill in a rectangular area that they clip out.
-// Recursively calls the parent for 
+// Draw the background. If FL_DAMAGE_EXPOSE is on, widgets are expected
+// to completely fill their rectangle. To allow non-rectangular widgets
+// to appear to work, a widget can call this (with the clip region set)
+// to draw the area of it's parent that is visible behind it.
 void Fl_Group::draw_group_box() const {
 // So that this may be called from any child's draw context, I need to
 // figure out the correct origin:
@@ -562,28 +581,39 @@ void Fl_Group::draw_group_box() const {
   fl_x_ = save_x;
 }
 
+// Widgets that want to outwit the clip-out can set this when they are
+// drawn to indicate that they did the clip-out. Only Fl_Tabs really uses
+// this (and I'm not certain it has to), plus a bunch of back-compatability
+// widgets that want to be "invisible" (they turn this on but don't draw
+// anything). This is a pointer so if it is left on by a child widget
+// it does not fool this into thinking the clipping is done.
+Fl_Widget* fl_did_clipping;
+
 // Force a child to redraw and remove the rectangle it used from the clip
 // region.
 void Fl_Group::draw_child(Fl_Widget& w) const {
-  if (!w.visible() || w.is_window()) return;
+  if (w.visible() && !w.is_window()) {
   if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
   int save_x = fl_x_; fl_x_ += w.x();
   int save_y = fl_y_; fl_y_ += w.y();
-  w.set_damage(FL_DAMAGE_ALL);
-  w.draw_n_clip();
-  w.clear_damage();
+    fl_did_clipping = 0;
+    w.set_damage(FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
+    w.draw();
+    w.set_damage(0);
+    if (fl_did_clipping != &w) fl_clip_out(0,0,w.w(),w.h());
   fl_y_ = save_y;
   fl_x_ = save_x;
+  }
 }
 
 // Redraw a single child in response to it's damage:
 void Fl_Group::update_child(Fl_Widget& w) const {
-  if (w.damage() && w.visible() && !w.is_window() &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+  if (w.damage() && w.visible() && !w.is_window()) {
+    if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
     int save_x = fl_x_; fl_x_ += w.x();
     int save_y = fl_y_; fl_y_ += w.y();
     w.draw();	
-    w.clear_damage();
+    w.set_damage(0);
     fl_y_ = save_y;
     fl_x_ = save_x;
   }
@@ -630,5 +660,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.100 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.101 2001/12/16 22:32:03 spitzak Exp $".
 //

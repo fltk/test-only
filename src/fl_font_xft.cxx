@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.3 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.4 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -187,7 +187,7 @@ void fl_draw(const char *str, int n, int x, int y) {
   else
     XftDrawChange(draw, fl_window);
 #endif
-  Region region = fl_region();
+  Region region = fl_clip_region();
   if (region) {
     if (XEmptyRegion(region)) return;
     XftDrawSetClip(draw, region);
@@ -368,5 +368,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.3 2001/11/29 17:39:30 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.4 2001/12/16 22:32:03 spitzak Exp $"
 //

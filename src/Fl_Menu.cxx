@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.115 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.116 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -421,9 +421,9 @@ static inline void setitem(MenuState& p, int level, int index) {
   if (p.level == level && p.indexes[level] == index) return;
 
   if (level < p.nummenus && p.indexes[level] != index)
-    p.menus[level]->damage(FL_DAMAGE_CHILD);
+    p.menus[level]->redraw(FL_DAMAGE_CHILD);
   if (level+1 < p.nummenus && p.indexes[level+1] >= 0)
-    p.menus[level+1]->damage(FL_DAMAGE_CHILD);
+    p.menus[level+1]->redraw(FL_DAMAGE_CHILD);
 
   delete p.fakemenu; p.fakemenu = 0; // turn off "menubar button"
 
@@ -548,7 +548,7 @@ int MenuWindow::handle(int event) {
 	// redraw checkboxes so they preview the state they will be in:
 	Fl_Widget* widget = p.menus[menu]->get_widget(item);
 	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
-	  p.menus[menu]->damage(FL_DAMAGE_CHILD);
+	  p.menus[menu]->redraw(FL_DAMAGE_CHILD);
       }
     setitem(p, menu, item);
     return 1;}
@@ -562,7 +562,7 @@ int MenuWindow::handle(int event) {
       if (p.indexes[p.level] >= 0) {
 	widget = p.current_widget();
 	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
-	  p.menus[p.level]->damage(FL_DAMAGE_CHILD);
+	  p.menus[p.level]->redraw(FL_DAMAGE_CHILD);
       }
       return 1;
     }
@@ -577,7 +577,7 @@ int MenuWindow::handle(int event) {
       p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.level];
       if (widget->type() == FL_RADIO_ITEM) mw->redraw();
-      else if (widget->type() == FL_TOGGLE_ITEM) mw->damage(FL_DAMAGE_CHILD);
+      else if (widget->type() == FL_TOGGLE_ITEM) mw->redraw(FL_DAMAGE_CHILD);
     } else {
       // ignore clicks on menu titles unless it they have a callback:
       if (widget->callback() == Fl_Widget::default_callback &&
@@ -742,5 +742,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.115 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.116 2001/12/16 22:32:03 spitzak Exp $".
 //

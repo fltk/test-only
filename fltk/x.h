@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: x.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ extern FL_API XFontStruct* fl_xfont();
 extern FL_API ulong fl_pixel; // ==fl_xpixel(fl_color())
 ulong fl_xpixel(Fl_Color i);
 void fl_clip_region(Region);
-Region fl_region();
+Region fl_clip_region();
 Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 
 // feed events into fltk by setting fl_xevent and calling fl_handle:
@@ -112,6 +112,7 @@ public:
   Window other_xid;
   Fl_Window *window;
   Region region;
+  void expose(int x, int y, int w, int h);
   Fl_X *next;
   bool wait_for_expose;
   bool backbuffer_bad; // used for XDBE
@@ -133,5 +134,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: x.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0000 
+version 2.0001 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -20,21 +20,21 @@ Function {make_alignment_window()} {open
         label {Horizontal:}
         user_data 1 user_data_type long
         callback alignment_cb
-        xywh {90 30 100 20} type Int
+        xywh {80 10 100 22}
         code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
       Fl_Input vertical_input {
         label {Vertical:}
         user_data 2 user_data_type long
         callback alignment_cb
-        xywh {90 60 100 20} type Int
+        xywh {80 40 100 22}
         code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
       Fl_Input snap_input {
         label {Snap:}
         user_data 3 user_data_type long
         callback alignment_cb
-        xywh {90 90 100 20} type Int
+        xywh {80 70 100 22}
         code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
     }
@@ -44,30 +44,30 @@ Function {make_alignment_window()} {open
     } {
       Fl_Box {} {
         label {Use "name.ext" to set name or just ".ext" to set only extension.}
-        xywh {20 150 170 30} align 148 labelsize 10
+        xywh {10 10 170 30} align 148 labelsize 10
       }
       Fl_Input header_file_input {
         label {Header File:}
         user_data 1 user_data_type {void*}
         callback header_input_cb
-        xywh {100 180 90 20} when 1
+        xywh {90 40 90 22} when 1
       }
       Fl_Input code_file_input {
         label {Code File:}
         user_data 1 user_data_type {void*}
         callback code_input_cb
-        xywh {100 210 90 20} when 1
+        xywh {90 70 90 22} when 1
       }
-      Fl_Light_Button include_H_from_C_button {
-        label {Include Header from Code}
-        callback include_H_from_C_button_cb
-        xywh {20 240 170 20} value 1
+      Fl_Check_Button include_H_from_C_button {
+        label {\#include "header" in code}
+        callback include_H_from_C_button_cb selected
+        xywh {10 98 170 22} value 1
       }
     }
     Fl_Button {} {
       label Close
-      callback {alignment_window->hide();} selected
-      xywh {140 280 60 20}
+      callback {alignment_window->hide();}
+      xywh {140 280 60 22}
     }
   }
 } 

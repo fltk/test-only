@@ -14,10 +14,11 @@ Fl_Input *header_file_input=(Fl_Input *)0;
 
 Fl_Input *code_file_input=(Fl_Input *)0;
 
-Fl_Light_Button *include_H_from_C_button=(Fl_Light_Button *)0;
+Fl_Check_Button *include_H_from_C_button=(Fl_Check_Button *)0;
 
 static void cb_Close(Fl_Button*, void*) {
   alignment_window->hide();
+
 }
 
 Fl_Window* make_alignment_window() {
@@ -27,15 +28,15 @@ Fl_Window* make_alignment_window() {
     { Fl_Group* o = new Fl_Group(10, 20, 190, 100, "Alignment:");
       o->box(FL_ENGRAVED_BOX);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-      { Fl_Input* o = horizontal_input = new Fl_Input(80, 10, 100, 20, "Horizontal:");
+       {      Fl_Input* o = horizontal_input = new Fl_Input(80, 10, 100, 22, "Horizontal:");
         o->callback((Fl_Callback*)alignment_cb, (void*)(1));
         o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);
       }
-      { Fl_Input* o = vertical_input = new Fl_Input(80, 40, 100, 20, "Vertical:");
+       {      Fl_Input* o = vertical_input = new Fl_Input(80, 40, 100, 22, "Vertical:");
         o->callback((Fl_Callback*)alignment_cb, (void*)(2));
         o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);
       }
-      { Fl_Input* o = snap_input = new Fl_Input(80, 70, 100, 20, "Snap:");
+       {      Fl_Input* o = snap_input = new Fl_Input(80, 70, 100, 22, "Snap:");
         o->callback((Fl_Callback*)alignment_cb, (void*)(3));
         o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);
       }
@@ -48,23 +49,24 @@ Fl_Window* make_alignment_window() {
         o->label_size(10);
         o->align(132|FL_ALIGN_INSIDE);
       }
-      { Fl_Input* o = header_file_input = new Fl_Input(90, 40, 90, 20, "Header File:");
+       {      Fl_Input* o = header_file_input = new Fl_Input(90, 40, 90, 22, "Header File:");
         o->callback((Fl_Callback*)header_input_cb, (void*)(1));
         o->when(FL_WHEN_CHANGED);
       }
-      { Fl_Input* o = code_file_input = new Fl_Input(90, 70, 90, 20, "Code File:");
+       {      Fl_Input* o = code_file_input = new Fl_Input(90, 70, 90, 22, "Code File:");
         o->callback((Fl_Callback*)code_input_cb, (void*)(1));
         o->when(FL_WHEN_CHANGED);
       }
-      { Fl_Light_Button* o = include_H_from_C_button = new Fl_Light_Button(10, 100, 170, 20, "Include Header from Code");
+       {      Fl_Check_Button* o = include_H_from_C_button = new Fl_Check_Button(10, 98, 170, 22, "#include \"header\" in code");
         o->value(1);
         o->callback((Fl_Callback*)include_H_from_C_button_cb);
       }
       o->end();
     }
-    { Fl_Button* o = new Fl_Button(140, 280, 60, 20, "Close");
+     {    Fl_Button* o = new Fl_Button(140, 280, 60, 22, "Close");
       o->callback((Fl_Callback*)cb_Close);
     }
+    o->set_modal();
     o->end();
   }
   return w;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,7 @@ void Fl_Valuator::precision(int p) {
 #endif
 
 void Fl_Valuator::value_damage() {
-  damage(FL_DAMAGE_EXPOSE); // default version does partial-redraw
+  redraw(FL_DAMAGE_VALUE); // default version does partial-redraw
 }
 
 int Fl_Valuator::value(double v) {
@@ -132,12 +132,12 @@ int Fl_Valuator::handle(int event) {
   switch(event) {
     case FL_ENTER:
     case FL_LEAVE:
-      if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+      if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
     case FL_MOVE:
       return 1;
     case FL_FOCUS:
     case FL_UNFOCUS:
-      damage(FL_DAMAGE_HIGHLIGHT);
+      redraw(FL_DAMAGE_HIGHLIGHT);
       return 1;
     case FL_KEYBOARD: {
       int i = linesize();
@@ -176,5 +176,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $".
 //

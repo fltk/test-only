@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.5 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: win32.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,7 @@ typedef HBITMAP Pixmap;
 FL_API COLORREF fl_wincolor(Fl_Color i);
 
 FL_API void fl_clip_region(Region);
-FL_API Region fl_region();
+FL_API Region fl_clip_region();
 
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
@@ -88,17 +88,18 @@ extern FL_API MSG fl_msg;
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
 extern FL_API HDC fl_makeDC(HBITMAP);
-extern FL_API void swap_fl_coordinates(int, int, int*, int*);
+
 #define fl_begin_offscreen(b) \
   Window _sw = fl_window; fl_window = (HWND)(b); \
-  int _sx, _sy; \
-  swap_fl_coordinates(0, 0, &_sx, &_sy); \
+  int _sx = fl_x_; int _sy = fl_y_; fl_x_ = fl_y_ = 0; \
   HDC _sgc = fl_gc; fl_gc = fl_makeDC(b); fl_push_no_clip()
 
 #define fl_end_offscreen() \
-  fl_pop_clip(); DeleteDC(fl_gc); \
-  swap_fl_coordinates(_sx, _sy, 0, 0); \
-  fl_window=_sw; fl_gc = _sgc
+  DeleteDC(fl_gc); \
+  DeleteObject(fl_pen); \
+  DeleteObject(fl_brush); \
+  fl_gc = _sgc; \
+  fl_pop_clip(); fl_y_ = _sy; fl_x_ = _sx; fl_window = _sw;
 
 FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
@@ -122,6 +123,7 @@ public:
   HBITMAP other_xid; // for double-buffered windows
   Fl_Window* window;
   Region region;
+  void expose(int x, int y, int w, int h);
   Fl_X *next;
   bool wait_for_expose;
   HDC private_dc; // used for OpenGL
@@ -140,5 +142,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.h,v 1.5 2001/11/14 09:21:42 spitzak Exp $".
+// End of "$Id: win32.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.42 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Counter.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -160,7 +160,7 @@ int Fl_Counter::handle(int event) {
     if (mouseobj) {
       Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
       mouseobj = 0;
-      damage(FL_DAMAGE_EXPOSE);
+      redraw(FL_DAMAGE_VALUE);
     }
     handle_release();
     return 1;
@@ -217,5 +217,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.42 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $".
 //

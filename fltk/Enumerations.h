@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.4 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -200,23 +200,35 @@ enum { // Values for Fl::visual(), Fl::gl_visual(), Fl_Gl_Window::mode()
   FL_STEREO	= 256
 };
 
-// damage masks
+// damage
 enum {
-// Your widget may use the first 5 for any purpose, these are only
-// suggested meanings:
-  FL_DAMAGE_CHILD       = 0x01,
-  FL_DAMAGE_EXPOSE      = 0x02,
+  FL_DAMAGE_VALUE	= 0x01,
+  FL_DAMAGE_PUSHED	= 0x02,
   FL_DAMAGE_SCROLL      = 0x04,
-  FL_DAMAGE_OVERLAY     = 0x08,
-  FL_DAMAGE_HIGHLIGHT   = 0x10,
-// These bits do have meaning for fltk:
+  FL_DAMAGE_OVERLAY	= 0x04, // reused value
+  FL_DAMAGE_HIGHLIGHT   = 0x08,
+  FL_DAMAGE_CHILD       = 0x10,
   FL_DAMAGE_CHILD_LABEL = 0x20,
-  FL_DAMAGE_LAYOUT	= 0x40,
+  FL_DAMAGE_EXPOSE      = 0x40,
+  FL_DAMAGE_CONTENTS	= 0x40, // reused value
   FL_DAMAGE_ALL         = 0x80
+};
+
+// layout damage
+enum {
+  FL_LAYOUT_X		= 0x01,
+  FL_LAYOUT_Y		= 0x02,
+  FL_LAYOUT_XY		= 0x03,
+  FL_LAYOUT_W		= 0x04,
+  FL_LAYOUT_H		= 0x08,
+  FL_LAYOUT_WH		= 0x0C,
+  FL_LAYOUT_XYWH	= 0x0F,
+  FL_LAYOUT_CHILD	= 0x10,
+  FL_LAYOUT_DAMAGE	= 0x80
 };
 
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.4 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $".
 //

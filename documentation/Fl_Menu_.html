@@ -1,7 +1,7 @@
 <html><head><title>Fl_Menu_</title></head><body bgcolor = white>
 
 <hr break>
-<h2><a name=Fl_Menu_>class Fl_Menu_</a></h2>
+<a name=Fl_Menu_><h2>class Fl_Menu_</h2></a>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -11,7 +11,7 @@
    |
    +----<a href=Fl_Group.html>Fl_Group</a>
            |
-           +----<B>Fl_Menu_</B>
+           +----<b>Fl_Menu_</b>
                    |
                    +----<a href=Fl_Browser.html>Fl_Browser</a>, <a href=Fl_Choice.html>Fl_Choice</a>, <a href=Fl_Menu_Bar.html>Fl_Menu_Bar</a>, <a href=Fl_Menu_Button.html>Fl_Menu_Button</a>
 </pre></ul>
@@ -50,55 +50,61 @@ and <a href=Fl_Item_Group.html>Fl_Item_Group</a> widgets.
 <table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href="Fl_Menu_">Fl_Menu_</a></li>
-<li><a href="~Fl_Menu_">~Fl_Menu_</a></li>
-<li><a href="list">list</a></li>
-<li><a href="children">children</a></li>
-<li><a href="children">children</a></li>
-<li><a href="child">child</a></li>
-</ul></td><td align=left valign=top><ul>
-<li><a href="child">child</a></li>
-<li><a href="item">item</a></li>
-<li><a href="focus">focus</a></li>
-<li><a href="get_focus">get_focus</a></li>
-<li><a href="value">value</a></li>
-</ul></td><td align=left valign=top><ul>
-<li><a href="size">size</a></li>
-<li><a href="popup">popup</a></li>
-<li><a href="handle_shortcut">handle_shortcut</a></li>
-<li><a href="execute">execute</a></li>
-<li><a href="global">global</a></li>
-</ul></td><td align=left valign=top><ul>
-<li><a href="add">add</a></li>
-<li><a href="replace">replace</a></li>
-<li><a href="find">find</a></li>
-<li><a href="insert">insert</a></li>
-<li><a href="remove">remove</a></li>
+<li><a href="#Fl_Menu_">Fl_Menu_</a></li>
+<li><a href="#~Fl_Menu_">~Fl_Menu_</a></li>
+<li><a href="#list">list</a></li>
+<li><a href="#children">children</a></li>
+<li><a href="#children">children</a></li>
+<li><a href="#child">child</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href="#child">child</a></li>
+<li><a href="#item">item</a></li>
+<li><a href="#focus">focus</a></li>
+<li><a href="#get_focus">get_focus</a></li>
+<li><a href="#value">value</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href="#size">size</a></li>
+<li><a href="#popup">popup</a></li>
+<li><a href="#handle_shortcut">handle_shortcut</a></li>
+<li><a href="#execute">execute</a></li>
+<li><a href="#global">global</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
+<li><a href="#add">add</a></li>
+<li><a href="#replace">replace</a></li>
+<li><a href="#find">find</a></li>
+<li><a href="#insert">insert</a></li>
+<li><a href="#remove">remove</a></li>
 </ul>
 </td></tr>
 </table>
 </center>
 
-<h4><a name=Fl_Menu_>Fl_Menu_::Fl_Menu_(int x, int y, int w, int h, const char *label = 0)</a></h4>
+<a name=Fl_Menu_><h4>Fl_Menu_::Fl_Menu_(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
 Creates a new <tt>Fl_Menu_</tt> widget using the given position, size,
 and label string. It is created with no child items.
 
-<h4><a name=~Fl_Menu_>Fl_Menu_::~Fl_Menu_()</a></h4>
+<a name=~Fl_Menu_><h4>Fl_Menu_::~Fl_Menu_()</h4></a>
 
 Like all groups, the child widgets are deleted. <i>Any Fl_List is not
 deleted</i>.
 
-<h4><a name=list><a href=Fl_List.html>Fl_List</a>* Fl_Menu_::list() const;
+<a name=list><h4><a href=Fl_List.html>Fl_List</a>* Fl_Menu_::list() const;
 <br>void Fl_Menu_::list(<a href=Fl_List.html>Fl_List</a>*
-list)</a></h4>
+list)</h4></a>
 
 Get or set the <a href=Fl_List.html>Fl_List</a> that generates widgets
 for the menu. If this is set it hides any child widgets (though an
 Fl_List implementation may retrieve them in order to combine them with
 it's own widgets).
 
-<h4><a name=children>int Fl_Menu_::children(const int* indexes, int level) const</a></h4>
+<a name=children><h4>int Fl_Menu_::children(const int* indexes, int level) const</h4></a>
 
 Return how many children are under a given item. If <i>level</i> is
 zero, this returns how many items are at the top
@@ -112,7 +118,7 @@ parent is "open", which means the FL_OPEN flag was set in it, so if it
 is expensive to calculate the number an Fl_List can return 1 for any
 closed parent.
 
-<h4><a name=children>int Fl_Menu_::children() const</a></h4>
+<a name=children><h4>int Fl_Menu_::children() const</h4></a>
 
 Returns the number of children at the top level. Same as
 <tt>children(0,0)</tt>.
@@ -122,7 +128,7 @@ is so that an Fl_List can be used. However if no Fl_List is specified
 the action is identical to <a
 href=Fl_Group.html#children><tt>Fl_Group::children()</tt></a>.
 
-<h4><a name=child>Fl_Widget* Fl_Menu_::child(const int* indexes, int level) const</a></h4>
+<a name=child><h4>Fl_Widget* Fl_Menu_::child(const int* indexes, int level) const</h4></a>
 
 Return a given child from somewhere in the hierarchy. <i>indexes</i>
 is an array of indexes into each parent and contains <i>level</i>+1
@@ -133,7 +139,7 @@ out of range or the level goes below a non-parent.
 structure and may be overwritten by another call to <tt>child()</tt>
 in this <i>or any other</i> <tt>Fl_Menu_</tt>.
 
-<h4><a name=child>Fl_Widget* Fl_Menu_::child(int index) const</a></h4>
+<a name=child><h4>Fl_Widget* Fl_Menu_::child(int index) const</h4></a>
 
 Returns the given top-level child. Same as <tt>child(&amp;index,0)</tt>.
 
@@ -142,8 +148,8 @@ is so that an Fl_List can be used. However if no Fl_List is specified
 the action is identical to <a
 href=Fl_Group.html#child><tt>Fl_Group::child(index)</tt></a>.
 
-<h4><a name=item>Fl_Widget* Fl_Menu_::item() const
-<br>void Fl_Menu_::item(Fl_Widget*)</a></h4>
+<a name=item><h4>Fl_Widget* Fl_Menu_::item() const
+<br>void Fl_Menu_::item(Fl_Widget*)</h4></a>
 
 The "current item". In callbacks this is the item the user clicked
 on. Otherwise you probably can't make any assumptions about it's value.
@@ -159,8 +165,7 @@ short-lived if an Fl_List is used.
 <p>You can set the item with the second call, useful for outwitting
 the callback.
 
-<h4><a name=focus>bool Fl_Menu_::focus(const int* indexes, int
-level);</a></h4>
+<a name=focus><h4>bool Fl_Menu_::focus(const int* indexes, int level);</h4></a>
 
 The current item is remembered in the <a
 href=Fl_Group.html#focus><tt>focus()</tt></a> of each parent at each
@@ -177,25 +182,24 @@ own code (with the insert/delete broken) to get around this.
 <p><a href=#item><tt>item()</tt></a> is set to the located widget.
 True is returned if the indexes differ from last time.
 
-<h4><a name=get_focus>Fl_Widget* Fl_Menu_::get_focus()</a></h4>
+<a name=get_focus><h4>Fl_Widget* Fl_Menu_::get_focus()</h4></a>
 
 Return the widget identified by the focus fields (or NULL if it is
 illegal). This also sets <a href=#item><tt>item()</tt></a> to the same
 value.
 
-<h4><a name="value">int Fl_Menu_::value() const
-<br>void Fl_Menu_::value(int v)</a></h4>
+<a name="value"><h4>int Fl_Menu_::value() const
+<br>void Fl_Menu_::value(int v)</h4></a>
 
 For a non-hierarchial menu this does the same thing as <a
 href=#focus><tt>focus()</tt></a>. The items are numbered from zero.
 
-<h4><a name="size">int Fl_Menu_::size() const</a></h4>
+<a name="size"><h4>int Fl_Menu_::size() const</h4></a>
 
 Returns <a href=#children>children()</a> (for back compatability with
 older versions of fltk).
 
-<h4><a name=popup>int Fl_Menu_::popup(int x,int y,int w=0,int
-h=0,Fl_Widget* title=0,bool menubar=false);</a></h4>
+<a name=popup><h4>int Fl_Menu_::popup(int x,int y,int w=0,int h=0,Fl_Widget* title=0,bool menubar=false);</h4></a>
 
 Create and display a pop-up menu (or hierarchy of menus) showing the
 children widgets, and waits until the user picks an item or dismisses
@@ -215,7 +219,7 @@ menu, in the style of SGI's popup menus.
 <p><i>menubar</i> is for internal use by menubars and should be left
 false.
 
-<h4><a name="handle_shortcut">int Fl_Menu_::handle_shortcut();</a></h4>
+<a name="handle_shortcut"><h4>int Fl_Menu_::handle_shortcut();</h4></a>
 
 Respond to the current <tt>FL_SHORTCUT</tt> or <tt>FL_KEY</tt> event
 by finding a menu item it matches and calling <a
@@ -224,7 +228,7 @@ found, false if none. Items are searched for a matching <a
 href=Fl_Widget.html#shortcut><tt>shortcut()</tt></a> or for '&amp;'
 characters in the label.
 
-<h4><a name="execute">void Fl_Menu_::execute(Fl_Widget*);</a></h4>
+<a name="execute"><h4>void Fl_Menu_::execute(Fl_Widget*);</h4></a>
 
 Standard action when the user picks an item. <a
 href=#item><tt>item()</tt></a> is set to it (so the callback can find
@@ -235,7 +239,7 @@ so by default the callback for each menu item is done.
 <p>This function also handles toggle/radio menu items, but that might
 change in the future.
 
-<h4><a name="global">void Fl_Menu_::global();</a></h4>
+<a name="global"><h4>void Fl_Menu_::global();</h4></a>
 
 Make the shortcuts for this menu work no matter what window has the
 focus when you type it (as long as <a
@@ -249,8 +253,8 @@ all).
 one will replace the old one.  There is no way to remove the <tt>
 global()</tt> setting (so don't destroy the widget!)</P>
 
-<h4><a name="add">Fl_Widget* Fl_Menu_::add(const char* label, int shortcut, Fl_Callback*, void* user_data = 0, int flags = 0);
-<br>Fl_Widget* Fl_Menu_::add(const char* label, void* user_data);</a></h4>
+<a name="add"><h4>Fl_Widget* Fl_Menu_::add(const char* label, int shortcut, Fl_Callback*, void* user_data = 0, int flags = 0);
+<br>Fl_Widget* Fl_Menu_::add(const char* label, void* user_data);</h4></a>
 
 Convienece function for populating your menu. This creates a new <a
 href=Fl_Item.html>Fl_Item</a> with the given fields filled in. The
@@ -271,27 +275,27 @@ instance <tt>menu->add("red|green|blue")</tt> will add three
 items. This is compatable with XForms and many other GL-based
 programs.
 
-<h4><a name="replace">Fl_Widget* Fl_Menu_::replace(const char* label, int shortcut, Fl_Callback*, void* user_data = 0, int flags = 0);</a></h4>
+<a name="replace"><h4>Fl_Widget* Fl_Menu_::replace(const char* label, int shortcut, Fl_Callback*, void* user_data = 0, int flags = 0);</h4></a>
 
 Same as <a href=#add><tt>add()</tt></a> but if an item with that name
 (and in the same submenu) already exists, that widget is altered to
 these new values. This is what add() on menus did in fltk 1.0.
 
-<h4><a name="find">Fl_Widget* Fl_Menu_::find(const char* label) const;</a></h4>
+<a name="find"><h4>Fl_Widget* Fl_Menu_::find(const char* label) const;</h4></a>
 
 Does the same search as <a href=#add><tt>add()</tt></a> or <a
 href=#replace<tt>replace()</tt></a> for an item with that name
 (including using '/' for submenus) and returns that item if it exists,
 or <tt>NULL</tt> if it does not.
 
-<h4><a name="insert">Fl_Widget* Fl_Menu_::insert(int n, const char* insert, void* user_data = 0);</a></h4>
+<a name="insert"><h4>Fl_Widget* Fl_Menu_::insert(int n, const char* insert, void* user_data = 0);</h4></a>
 
 Same as <a href=#add><tt>add()</tt></a> but the new item is inserted
 before item <i>n</i> in the top level. If this is a new submenu the
 whole submenu is inserted before that item. However if this is an
 existing submenu the item is added to it and it is not moved.
 
-<h4><a name="remove">void Fl_Menu_::remove(const char* label)</a></h4>
+<a name="remove"><h4>void Fl_Menu_::remove(const char* label)</h4></a>
 
 Does <tt>delete find(label)</tt>, thus destroying the matching item,
 if it exists.

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.118 2001/12/06 18:23:43 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.119 2001/12/16 22:32:03 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -644,7 +644,7 @@ bool fl_handle()
 	if (!w) break;
       }
     }
-    window->damage(FL_DAMAGE_EXPOSE, fl_xevent.xexpose.x, fl_xevent.xexpose.y,
+    Fl_X::i(window)->expose(fl_xevent.xexpose.x, fl_xevent.xexpose.y,
 		   fl_xevent.xexpose.width, fl_xevent.xexpose.height);
     return true;
 
@@ -881,16 +881,13 @@ void Fl_Window::layout() {
   if (this == resize_from_system) {
     // prevent echoing changes back to the server
     resize_from_system = 0;
-  } else if (i) { // only for shown windows
+  } else if ((layout_damage()&FL_LAYOUT_XYWH) && i) { // only for shown windows
     // figure out where the window should be in it's parent:
     int x = this->x(); int y = this->y();
     for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
       x += p->x(); y += p->y();
     }
-    if (ow() == w() && oh() == h()) {
-      if (parent() || x != ox() || y != oy())
-      XMoveWindow(fl_display, i->xid, x, y);
-    } else {
+    if (layout_damage() & FL_LAYOUT_WH) {
       // Some window managers refuse to allow resizes unless the resize
       // information allows it:
       if (!resizable()) size_range(w(), h(), w(), h());
@@ -898,6 +895,8 @@ void Fl_Window::layout() {
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
       // Wait for echo (relies on window having StaticGravity!!!)
       i->wait_for_expose = true;
+    } else {
+      XMoveWindow(fl_display, i->xid, x, y);
     }
   }
   Fl_Group::layout();
@@ -1129,9 +1128,8 @@ void Fl_Window::make_current() const {
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_window = i->xid;
   fl_gc = gc;
-  current_ = this;
-  fl_clip_region(0);
   fl_x_ = fl_y_ = 0;
+  current_ = this;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1299,5 +1297,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.118 2001/12/06 18:23:43 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.119 2001/12/16 22:32:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.20 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -911,9 +911,11 @@ void make_bitmaps() {
 
 // Unfortunately, this is necessary on Windows 'cause GDI resources aren't
 // automatically released at program exit
-void destroy_bitmaps() {
-  for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) delete bm[i][j];
-}
+// WAS: no, fltk should do this! I guess when a bitmap is drawn the resulting
+// image should be put in a list for deletiong on exit.
+// void destroy_bitmaps() {
+//   for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) delete bm[i][j];
+// }
 
 #define ISIZE black_1_width
 
@@ -1018,8 +1020,8 @@ void Board::drag_piece(int i, int dx, int dy) {
     dragging = b[i];
   }
   if (dx != dragx || dy != dragy) {
-    damage(FL_DAMAGE_ALL, dragx, dragy, ISIZE, ISIZE);
-    damage(FL_DAMAGE_ALL, dx, dy, ISIZE, ISIZE);
+    redraw(dragx, dragy, ISIZE, ISIZE);
+    redraw(dx, dy, ISIZE, ISIZE);
   }
   dragx = dx;
   dragy = dy;
@@ -1033,10 +1035,12 @@ void Board::drop_piece(int i) {
   int x = squarex(i);
   int y = squarey(i);
   if (x != dragx || y != dragy) {
-    damage(4, dragx, dragy, ISIZE, ISIZE);
-    damage(4, x, y, ISIZE, ISIZE);
+    redraw(dragx, dragy, ISIZE, ISIZE);
+    redraw(x, y, ISIZE, ISIZE);
   }
 }
+
+//#include <unistd.h>
 
 // show move (call this *before* the move, *after* undo):
 void Board::animate(node* move, int backwards) {
@@ -1055,6 +1059,7 @@ void Board::animate(node* move, int backwards) {
     int y = y1+(y2-y1)*i/STEPS;
     drag_piece(move->from,x,y);
     Fl::flush();
+    //usleep(50);
   }
   drop_piece(t);
   if (move->jump) redraw();
@@ -1163,7 +1168,7 @@ int Board::handle(int e) {
   }
 }
 
-void quit_cb(Fl_Widget*, void*) { destroy_bitmaps(); exit(0); }
+void quit_cb(Fl_Widget*, void*) { exit(0); }
 
 int FLTKmain(int argc, char** argv) {
   Fl::visual(FL_DOUBLE|FL_INDEX);
@@ -1358,5 +1363,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.20 2001/12/16 22:32:03 spitzak Exp $".
 //

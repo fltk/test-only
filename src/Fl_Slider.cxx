@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.50 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.51 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,7 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
 }
 
 void Fl_Slider::draw() {
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_text_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
   if (!active_r()) {
@@ -139,7 +139,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
   case FL_PUSH:
     handle_push();
-    damage(FL_DAMAGE_HIGHLIGHT);
+    redraw(FL_DAMAGE_VALUE);
   case FL_DRAG: {
     int W = (horizontal() ? w : h);
     int H = (horizontal() ? h : w);
@@ -187,7 +187,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     handle_drag(clamp(v));
     } return 1;
   case FL_RELEASE:
-    damage(FL_DAMAGE_EXPOSE);
+    redraw(FL_DAMAGE_VALUE);
     handle_release();
     return 1;
   case FL_KEYBOARD:
@@ -238,5 +238,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.50 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.51 2001/12/16 22:32:03 spitzak Exp $".
 //

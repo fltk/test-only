@@ -1,7 +1,7 @@
 <html><head><title>Fl_Multi_Browser</title></head><body bgcolor = white>
 
 <hr break>
-<h2><a name=Fl_Multi_Browser>class Fl_Multi_Browser</a></h2>
+<a name=Fl_Multi_Browser><h2>class Fl_Multi_Browser</h2></a>
 <hr>
 
 <h3>Class Hierarchy</h3>
@@ -48,11 +48,11 @@ change what items are turned on.
 <li><a href="#selected">selected</a></li>
 </ul>
 
-<h4><a name=Fl_Multi_Browser>Fl_Multi_Browser::Fl_Multi_Browser(int x, int y, int w, int h, const char *label = 0)</a></h4>
+<a name=Fl_Multi_Browser><h4>Fl_Multi_Browser::Fl_Multi_Browser(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
 Creates a new, empty <tt>Fl_Multi_Browser</tt>.
 
-<h4><a name=set_selected>bool set_selected(bool value = true, int do_callback = 0);</a></h4>
+<a name=set_selected><h4>bool set_selected(bool value = true, int do_callback = 0);</h4></a>
 
 Turn the <tt>FL_VALUE</tt> flag on or off in the current item (use <a
 href="Fl_Browser.html#goto_index"><tt>goto_index()</tt></a> to set the
@@ -62,7 +62,7 @@ current item before calling this).
 href=Fl_Widget.html#when><tt>when()</tt></a> then the callback is done
 for each item that changes selected state.
 
-<h4><a name=select_only_this>bool select_only_this(int do_callback = 0);</a></h4>
+<a name=select_only_this><h4>bool select_only_this(int do_callback = 0);</h4></a>
 
 Make the current item be the only selected one.  If <i>do_callback</i>
 has some bits that are also in <a
@@ -72,21 +72,21 @@ for each item that changes selected state.
 <p>If you did <tt>goto_index(-1)</tt> before this it does <a
 href=#deselect><tt>deselect()</tt></a>.
 
-<h4><a name=deselect>bool deselect(int do_callback = 0);</a></h4>
+<a name=deselect><h4>bool deselect(int do_callback = 0);</h4></a>
 
 Make no items be selected.  If <i>do_callback</i>
 has some bits that are also in <a
 href=Fl_Widget.html#when><tt>when()</tt></a> then the callback is done
 for each item that changes selected state.
 
-<h4><a name=select>bool select(int line, bool value = true);</a></h4>
+<a name=select><h4>bool select(int line, bool value = true);</h4></a>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>;<a
 href=#set_focus>set_selected(value)</a>;</tt>, to change the selected
 state of an item in a non-hierarchial Fl_Multi_Browser. If <i>line</i>
 is negative nothing is selected.
 
-<h4><a name=selected>bool selected(int line);</a></h4>
+<a name=selected><h4>bool selected(int line);</h4></a>
 
 Returns the value of the <tt><a href=#goto_index>goto_index(v
 line)</a></tt> item.

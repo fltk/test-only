@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.59 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.60 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -144,12 +144,12 @@ int Fl_Choice::handle(int e) {
 
   case FL_FOCUS:
   case FL_UNFOCUS:
-    damage(FL_DAMAGE_HIGHLIGHT);
+    redraw(FL_DAMAGE_HIGHLIGHT);
     return 1;
 
   case FL_ENTER:
   case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
   case FL_MOVE:
     return 1;
 
@@ -211,5 +211,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.59 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.60 2001/12/16 22:32:03 spitzak Exp $".
 //

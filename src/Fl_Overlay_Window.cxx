@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.16 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,10 +43,11 @@ void Fl_Overlay_Window::flush() {
     return;
   }
 #endif
-  int erase_overlay = (damage()&FL_DAMAGE_OVERLAY);
+  bool erase_overlay = (damage()&FL_DAMAGE_OVERLAY) != 0;
   set_damage(damage()&~FL_DAMAGE_OVERLAY);
   Fl_Double_Window::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
+  fl_clip_region(0); // turn off any clip it left on
 }
 
 void Fl_Overlay_Window::layout() {
@@ -103,10 +104,16 @@ void _Fl_Overlay::flush() {
   fl_gc = gc;
   fl_overlay = 1;
   Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
+  current_ = w;
   Fl_X *i = Fl_X::i(this);
-  if (damage() != FL_DAMAGE_EXPOSE) XClearWindow(fl_display, fl_xid(this));
+  if (damage() == FL_DAMAGE_EXPOSE) {
   fl_clip_region(i->region); i->region = 0;
   w->draw_overlay();
+    fl_clip_region(0);
+  } else {
+    XClearWindow(fl_display, fl_xid(this));
+    w->draw_overlay();
+  }
   fl_overlay = 0;
 }
 
@@ -134,5 +141,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.16 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $".
 //
