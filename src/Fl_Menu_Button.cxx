@@ -1,9 +1,6 @@
+// "$Id: Fl_Menu_Button.cxx,v 1.61 2004/08/02 07:35:18 spitzak Exp $"
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.60 2004/08/01 22:28:22 spitzak Exp $"
-//
-// Menu button widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,34 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \class fltk::PopupMenu
+
+This subclass pops up a menu in response to a user click. The menu is
+popped up positioned so that the mouse is pointing at the last-selected
+item, even if it in a nested submenu (To turn off this behaivor do
+value(-1) after each item is selected)
+
+\image html menu_button.gif
+
+Normally any mouse button will pop up a menu and it is lined up above
+the button, or below it when there is no previous selected value as
+shown in the picture.
+
+However a PopupMenu can also have type() set to POPUP1, POPUP2,
+POPUP12, POPUP3, POPUP13, POPUP23, or POPUP123. It then becomes invisible
+and ignores all mouse buttons other than the ones named in the popup
+type. You can then resize it to cover another widget (or many widgets)
+so that pressing that button pops up the menu.
+
+The menu will also pop up in response to shortcuts indicated by
+the shortcut() or by putting '&x' in the label().
+
+Typing the fltk::Widget::shortcut() of any menu items will cause it
+to be picked. The callback will be done but there will be no visible
+effect to the widget.
+
+*/
 
 #include <fltk/PopupMenu.h>
 #include <fltk/events.h>
@@ -34,6 +58,11 @@ using namespace fltk;
 
 extern Widget* fl_did_clipping;
 
+/*! The little down-arrow indicator can be replaced by setting a new
+  glyph() function and making it draw whatever you want.
+  If you don't want any glyph at all it is probably easiest to
+  subclass and replace draw() with your own function.
+*/
 void PopupMenu::draw() {
   if (type()&7) { // draw nothing for the popup types
     fl_did_clipping = this;
@@ -57,6 +86,10 @@ void PopupMenu::draw() {
   focusbox()->draw(x+1, y+1, w-2, h-2, style(), flags);
 }
 
+/*! Wrapper for Menu::popup(). For NORMAL PopupMenu this places the
+  menu over the widget. For POPUP ones it uses the mouse position
+  and sets the "title" to the label() if it is not null.
+*/
 int PopupMenu::popup() {
   if (type()&7) {
     if (label()) {
@@ -134,5 +167,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.60 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.61 2004/08/02 07:35:18 spitzak Exp $".
 //

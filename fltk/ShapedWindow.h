@@ -1,11 +1,6 @@
+// "$Id: ShapedWindow.h,v 1.5 2004/08/02 07:35:17 spitzak Exp $"
 //
-// "$Id: ShapedWindow.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
-//
-// Window that can have a shape other than a rectangle. Right now the
-// shape is controlled by a bitmap, which matches X, but we really could
-// use a more powerful interface, perhaps tied into the path construction.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_ShapedWindow_h
 #define fltk_ShapedWindow_h
@@ -36,11 +30,11 @@ namespace fltk {
 class FL_API ShapedWindow : public Window {
   public:
     ShapedWindow(int W, int H, const char *l = 0)
-      : Window(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0; set_double_buffer();}
+      : Window(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0;}
     ShapedWindow(int X, int Y, int W, int H, const char *l = 0)
-      : Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0; set_double_buffer();}
+      : Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0;}
     void shape(xbmImage* b) { shape_ = b; changed = 1; }
-    void shape(xbmImage& b) { shape(&b); }
+    void shape(xbmImage& b) { shape_ =&b; changed = 1; }
 
   protected:
     virtual void draw();
@@ -53,5 +47,5 @@ class FL_API ShapedWindow : public Window {
 #endif
 
 //
-// End of "$Id: ShapedWindow.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
+// End of "$Id: ShapedWindow.h,v 1.5 2004/08/02 07:35:17 spitzak Exp $"
 //

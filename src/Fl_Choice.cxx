@@ -1,9 +1,6 @@
+// "$Id: Fl_Choice.cxx,v 1.78 2004/08/02 07:35:18 spitzak Exp $"
 //
-// "$Id: Fl_Choice.cxx,v 1.77 2004/08/01 22:28:22 spitzak Exp $"
-//
-// Choice widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,45 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \class fltk::Choice
+
+Subclass of fltk::Menu that provides a button that pops up the menu, and
+also displays the text of the most-recently selected menu item.
+
+\image html choice.gif
+
+The appearance is designed to look like an "uneditable ComboBox" in
+Windows, but it is somewhat different in that it does not contain a
+text editor, also the menu pops up with the current item under the
+cursor, which is immensely easier to use once you get used to it. This
+is the same UI as the Macintosh and Motif, which called this an
+OptionButton.
+
+The user can change the value by popping up the menu by clicking
+anywhere in the widget and moving the cursor to a different item, or
+by typing up and down arrow keys to cycle amoung the items.  Typing
+the fltk::Widget::shortcut() of any of the
+items will also change the value to that item.
+
+The menu will also pop up in response to shortcuts indicated by
+putting a '&' character in the label() or by setting the shortcut()
+of this widget. The user can then use arrow keys or the mouse to change
+the selected item.
+
+When the user changes the value() the callback is done.
+
+If you wish to display text that is different than any of the menu
+items, you may instead want an fltk::PopupMenu. It works identically
+but instead displays an empty box with the label() inside it, you
+can then change the label() as needed.
+
+If you want a "real" ComboBox where the user edits the text, this is
+a planned addition to the fltk::Input widget. All text input will have
+menus of possible replacements and completions. Not yet implemented,
+unfortunately.
+
+*/
 
 #include <fltk/Choice.h>
 #include <fltk/events.h>
@@ -36,6 +71,9 @@ using namespace fltk;
 
 extern bool fl_hide_shortcut;
 
+/*! You can change the icon drawn on the right edge by setting glyph()
+  to your own function that draws whatever you want.
+*/
 void Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
   box()->inset(X,Y,W,H);
@@ -77,6 +115,9 @@ void Choice::draw() {
   }
 }
 
+/*! Set the index of the item chosen. This causes it to redraw() to
+  show the new item. Otherwise it is identical to Menu::value().
+*/
 int Choice::value(int v) {
   if (focus(&v, 0)) {redraw(DAMAGE_VALUE); return true;}
   return false;
@@ -213,6 +254,9 @@ static void revert(Style* s) {
 static NamedStyle style("Choice", revert, &Choice::default_style);
 NamedStyle* Choice::default_style = &::style;
 
+/*! The constructor makes the menu empty. See Menu and StringList
+  for information on how to set the menu to a list of items.
+*/
 Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
   value(0);
   style(default_style);
@@ -223,5 +267,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.77 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.78 2004/08/02 07:35:18 spitzak Exp $".
 //

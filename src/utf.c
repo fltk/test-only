@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.13 2004/08/01 22:28:24 spitzak Exp $"
+// "$Id: utf.c,v 1.14 2004/08/02 07:35:18 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -762,19 +762,14 @@ unsigned utf8frommb(char* dst, unsigned dstlen,
 
 /*! Examines the first \a srclen bytes in \a src and return a verdict
     on whether it is UTF-8 or not.
-
     - Returns 0 if there is any illegal UTF-8 sequences, using the
       same rules as utf8decode(). Note that some UCS values considered
       illegal by RFC 3629, such as 0xffff, are considered legal by this.
-
     - Returns 1 if there are only single-byte characters (ie no bytes
       have the high bit set). This is legal UTF-8, but also indicates
       plain ASCII. It also returns 1 if \a srclen is zero.
-
     - Returns 2 if there are only characters less than 0x800.
-
     - Returns 3 if there are only characters less than 0x10000.
-
     - Returns 4 if there are characters in the 0x10000 to 0x10ffff range.
 
     Because there are many illegal sequences in UTF-8, it is almost

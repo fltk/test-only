@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.15 2004/07/25 23:22:13 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.16 2004/08/02 07:35:18 spitzak Exp $"
 //
-// Image file header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +19,26 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \class fltk::ShapedWindow
+
+This window's shape is clipped to an area defined by the alpha from
+an Image object. Current implementation insists that this be an
+fltk::xbmImage, which limits you to 1-bit alpha which must be supplied
+by the program. It should not be hard to modify this on newer
+systems to accept an arbitrary Image.
+
+The layout and widgets inside are unaware of the mask shape, and most will
+act as though the bounding box is available to them. Therefore this
+window type is usally sublassed or occupied by a single widget.
+
+If the window will be short-lived and does not have to move, you may
+be much better off using an fltk::MenuWindow. This is a normal window
+but with no border and no pixels are changed unless you draw into
+them. Thus you can get arbitrary shapes by the simple expediency of
+not drawing where it should be "transparent".
+
+*/
 
 #include <config.h>
 #include <fltk/ShapedWindow.h>
@@ -38,6 +55,17 @@ static HRGN bitmap2region(fltk::xbmImage*);
 #endif
 
 using namespace fltk;
+
+/*! \fn void ShapedWindow::shape(xbmImage* b)
+
+The alpha channel of the supplied image is used as the shape of the
+window. A pointer to the image is stored, so it must remain in existence
+until shape() is called again or the ShapedWindow is destroyed.
+
+If you want your window to resize you should subclass and make a
+layout() method that draws a new image and calls shape().
+
+*/
 
 // maybe one day we'll want to be able to resize the clip mask
 // when the window resized
@@ -176,5 +204,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.15 2004/07/25 23:22:13 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.16 2004/08/02 07:35:18 spitzak Exp $"
 //
