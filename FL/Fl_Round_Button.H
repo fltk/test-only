@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.H,v 1.11 2000/12/12 09:02:53 spitzak Exp $"
+// "$Id: Fl_Round_Button.H,v 1.12 2001/02/26 15:08:04 robertk Exp $"
 //
 // Round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,12 +33,11 @@
 
 class FL_API Fl_Round_Button : public Fl_Check_Button {
 public:
-    Fl_Round_Button(int x,int y,int w,int h,const char *l=0)
-	: Fl_Check_Button(x,y,w,h,l) { shape = FL_GLYPH_ROUND; }
+    Fl_Round_Button(int x,int y,int w,int h,const char *l=0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Round_Button.H,v 1.11 2000/12/12 09:02:53 spitzak Exp $".
+// End of "$Id: Fl_Round_Button.H,v 1.12 2001/02/26 15:08:04 robertk Exp $".
 //

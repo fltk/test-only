@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.31 2001/02/26 08:42:47 clip Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.32 2001/02/26 15:08:05 robertk Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,6 @@ float Fl_Tooltip::delay_ = 0.5f;
 int Fl_Tooltip::enabled_ = 1;
 
 #define MAX_WIDTH 400
-
-extern FL_API void (*Fl_Tooltip::enter)(Fl_Widget *);
-extern FL_API void (*Fl_Tooltip::enter_area)(Fl_Widget *, int, int, int, int, const char *);
-extern FL_API void (*Fl_Tooltip::exit)(Fl_Widget *);
-
 
 class Fl_TooltipBox : public Fl_Menu_Window {
 public:
@@ -160,5 +155,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.31 2001/02/26 08:42:47 clip Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.32 2001/02/26 15:08:05 robertk Exp $".
 //

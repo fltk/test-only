@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.37 2001/02/26 15:08:05 robertk Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -133,6 +133,13 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
   style(::style);
 }
 
+
+#include <FL/Fl_Round_Button.H>
+Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
+	: Fl_Check_Button(x,y,w,h,l) { 
+	shape = FL_GLYPH_ROUND; 
+}
+
 //
-// End of "$Id: Fl_Button.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.37 2001/02/26 15:08:05 robertk Exp $".
 //
