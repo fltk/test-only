@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MT /W3 /GR /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -100,7 +100,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
-# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /YX /c
+# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -129,7 +129,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /YX /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Os /Ob2 /I "." /I ".." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -155,61 +155,61 @@ LINK32=link.exe
 
 SOURCE=..\src\fl_bmp.cxx
 DEP_CPP_FL_BM=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_gif.cxx
 DEP_CPP_FL_GI=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\Fl_Guess_Image.cxx
 DEP_CPP_FL_GU=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Bitmap.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Bitmap.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	".\config.h"\
 	
 # SUBTRACT CPP /D "FL_DLL"
@@ -218,20 +218,20 @@ DEP_CPP_FL_GU=\
 
 SOURCE=..\images\fl_jpeg.cxx
 DEP_CPP_FL_JP=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -239,20 +239,20 @@ DEP_CPP_FL_JP=\
 
 SOURCE=..\images\fl_png.cxx
 DEP_CPP_FL_PN=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -260,21 +260,21 @@ DEP_CPP_FL_PN=\
 
 SOURCE=..\src\Fl_Shared_Image.cxx
 DEP_CPP_FL_SH=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Bitmap.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Bitmap.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -282,20 +282,20 @@ DEP_CPP_FL_SH=\
 
 SOURCE=..\src\fl_xpm.cxx
 DEP_CPP_FL_XP=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Image.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # End Target
