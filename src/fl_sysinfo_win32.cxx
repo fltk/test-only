@@ -1,5 +1,5 @@
 //
-// "$Id: fl_sysinfo_win32.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $"
+// "$Id: fl_sysinfo_win32.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $"
 //
 // Code to get windowing system specific info for FLTK.
 //
@@ -52,6 +52,21 @@ fl_sysinfo::update() {
   fl_sysinfo::screen_height = mode.dmPelsHeight;
   fl_sysinfo::screen_depth = mode.dmBitsPerPel;
 
+  // get display dimension info
+  HDC gc = CreateDC("DISPLAY", NULL, NULL, NULL);
+  if(gc) {
+	fl_sysinfo::screen_width_mm = GetDeviceCaps(gc, HORZSIZE);
+	fl_sysinfo::screen_height_mm = GetDeviceCaps(gc, VERTSIZE);
+	fl_sysinfo::screen_dpi_x = GetDeviceCaps(gc, LOGPIXELSX);
+	fl_sysinfo::screen_dpi_y = GetDeviceCaps(gc, LOGPIXELSY);
+    DeleteDC(gc);
+  } else {
+	fl_sysinfo::screen_dpi_x = 75;
+	fl_sysinfo::screen_dpi_y = 75;
+	fl_sysinfo::screen_width_mm = fl_sysinfo::screen_width / 75;
+	fl_sysinfo::screen_height_mm = fl_sysinfo::screen_height / 75;
+  }
+
   // grab mousewheel stuff from Windows
   UINT delta;
   SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
@@ -60,5 +75,5 @@ fl_sysinfo::update() {
 }
 
 //
-// End of "$Id: fl_sysinfo_win32.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: fl_sysinfo_win32.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_sysinfo.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $"
+// "$Id: fl_sysinfo.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $"
 //
 // Code to get windowing system specific info for FLTK.
 //
@@ -28,6 +28,10 @@
 int fl_sysinfo::screen_width = 0;
 int fl_sysinfo::screen_height = 0;
 int fl_sysinfo::screen_depth = 0;
+int fl_sysinfo::screen_width_mm = 0;
+int fl_sysinfo::screen_height_mm = 0;
+int fl_sysinfo::screen_dpi_x = 0;
+int fl_sysinfo::screen_dpi_y = 0;
 
 #ifdef WIN32
 #include "fl_sysinfo_win32.cxx"
@@ -36,5 +40,5 @@ int fl_sysinfo::screen_depth = 0;
 #endif
 
 //
-// End of "$Id: fl_sysinfo.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: fl_sysinfo.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $".
 //

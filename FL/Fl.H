@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.68 2001/03/08 23:49:28 robertk Exp $"
+// "$Id: Fl.H,v 1.69 2001/03/09 20:39:25 robertk Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -242,10 +242,14 @@ struct FL_API fl_sysinfo {
   static int screen_width;
   static int screen_height;
   static int screen_depth;
+  static int screen_width_mm;
+  static int screen_height_mm;
+  static int screen_dpi_x;
+  static int screen_dpi_y;
 };
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.68 2001/03/08 23:49:28 robertk Exp $".
+// End of "$Id: Fl.H,v 1.69 2001/03/09 20:39:25 robertk Exp $".
 //
