@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.131 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.132 2001/11/11 20:22:04 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -650,7 +650,6 @@ bool Fl::handle(int event, Fl_Window* window)
       if (handle(FL_KEY, window)) return true;
       }
       return false;
-#if 0
       // rejected mouse events produce FL_LEAVE events:
     case FL_DND_ENTER:
     case FL_DND_DRAG:
@@ -658,7 +657,6 @@ bool Fl::handle(int event, Fl_Window* window)
     case FL_MOVE:
       if (!modal_) belowmouse(window);
       break;
-#endif
     }
 
     // try the chain of global event handlers:
@@ -676,5 +674,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.131 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.132 2001/11/11 20:22:04 spitzak Exp $".
 //

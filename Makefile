@@ -1,4 +1,4 @@
-# "$Id: Makefile,v 1.24 2001/08/11 17:09:34 spitzak Exp $"
+# "$Id: Makefile,v 1.25 2001/11/11 20:22:04 spitzak Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -93,15 +93,13 @@ depend: $(GENERATED)
 	done
 
 clean:
-	-@ rm -f core config.cache *.o *.bck
+	-@ rm -f core *~ *.o *.bck
 	@for dir in $(DIRS); do\
 		(cd $$dir;$(MAKE) clean) || break;\
 	done
 
 distclean: clean
-	rm -f config.log config.h config.status makeinclude fltk-config
-#	@echo "all:" > Makefile
-#	@echo "	@echo \"*** You must run ./configure first! ***\"" >> Makefile
+	rm -f config.cache config.h config.log config.status makeinclude fltk-config
 
 configure: configure.in
 	autoconf
@@ -110,5 +108,5 @@ $(GENERATED) : configure configh.in makeinclude.in fltk-config.in
 	./configure
 
 #
-# End of "$Id: Makefile,v 1.24 2001/08/11 17:09:34 spitzak Exp $".
+# End of "$Id: Makefile,v 1.25 2001/11/11 20:22:04 spitzak Exp $".
 #
