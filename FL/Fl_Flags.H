@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.6 2000/04/24 08:31:20 bill Exp $"
+// "$Id: Fl_Flags.H,v 1.7 2000/05/01 19:39:45 gustavo Exp $"
 //
 // Unified flags set for fltk
 //
@@ -79,7 +79,7 @@ enum {
   FL_FOCUSED		= 0x00010000, // draw with keyboard focus
   FL_HIGHLIGHT		= 0x00020000, // draw highlighted
   FL_FRAME_ONLY		= 0x00040000, // don't draw interior
-  FL_NO_SHORTCUT_LABEL	= 0x00080000, // don't draw &x in label as underscore
+  FL_NO_SHORTCUT_LABEL	= 0x00080000  // don't draw &x in label as underscore
 
 };
 
