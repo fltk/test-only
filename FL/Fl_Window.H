@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.37 2000/06/03 08:49:09 bill Exp $"
+// "$Id: Fl_Window.H,v 1.38 2000/06/11 07:29:13 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -70,10 +70,12 @@ public:
   void show(const Fl_Window* parent);
   int exec(const Fl_Window* parent = 0);
   void show_inside(const Fl_Window* parent);
-  void hide();
+  void iconize();
+  int iconic() const;
+  virtual void destroy();
+
   void fullscreen();
   void fullscreen_off(int,int,int,int);
-  void iconize();
 
   int x_root() const ;
   int y_root() const ;
@@ -88,9 +90,6 @@ public:
   virtual void flush();
   virtual void draw();
   virtual void draw_n_clip();
-
-  // public so that Windows cleanup can call it
-  virtual void destroy();
 
 protected:
 
@@ -119,5 +118,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.37 2000/06/03 08:49:09 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.38 2000/06/11 07:29:13 bill Exp $".
 //
