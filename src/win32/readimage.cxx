@@ -1,5 +1,3 @@
-#include <fltk/x.h>
-#include <fltk/draw.h>
 
 using namespace fltk;
 

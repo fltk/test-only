@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// This program produces the contents of "cmap.h" as stdout
+// This program produces the contents of "colormap.h" as stdout
 
 // #include <gl/gl.h>
 #include <stdio.h>
@@ -59,11 +59,11 @@ static short cmap[256][3] = {
   {113,113,198},	// pale blue
   {142, 56,142},	// purple, orchid, pale magenta
   { 56,142,142},	// cadet blue, aquamarine, pale cyan
-// The next location is used for SELECTION_COLOR. It formerly was 2/3 gray
-// but this is changed to be the Windows blue color. This allows the default
-// behavior on both X and Windows to match:
-  {  0,  0,128},
-//{170,170,170},	// old 2/3 gray color
+// The next location was always a dark gray and was used as the selection
+// color by fltk1. To make it look more like Windows this was changed to
+// blue. It appears that all newer versions have changed it back:
+//{  0,  0,128},	// Windows selection color
+  {170,170,170},	// old 2/3 gray color
 // These next 16 are the FREE_COLOR area. In some versions of fltk
 // these were filled with random colors that a Irix 5.3 machine placed
 // in these locations. Other versions of fltk filled this with the 1/3
@@ -176,7 +176,8 @@ int main() {
   //for (i=16; i<32; i++) {cmap[i][0]=cmap[i][1]=cmap[i][2] = 85;}
 
   // fill in the gray ramp:
-  background(0xc0, 0xc0, 0xc0); // microsoft colors
+  background(0xe1, 0xe1, 0xe1); // GRAY75 == 75% brightness
+  // background(0xc0, 0xc0, 0xc0); // fltk1.1 colors, match windows 95
   // background(170, 170, 170); // old fltk colors
   // copy the 1/3 and 2/3 gray to the closest locations in gray ramp:
   cmap[39][0] = cmap[39][1] = cmap[39][2] = 85;

@@ -452,28 +452,27 @@ const Monitor& Monitor::all() {
   if (reload_info) {
     reload_info = false;
 
+    DEVMODE mode;
+    EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
 #if USE_MULTIMONITOR
     monitor.set(GetSystemMetrics(SM_XVIRTUALSCREEN),
 		GetSystemMetrics(SM_YVIRTUALSCREEN),
 		GetSystemMetrics(SM_CXVIRTUALSCREEN),
 		GetSystemMetrics(SM_CYVIRTUALSCREEN));
-#endif
-
-    // This is wrong, we should get the work area from the union of
-    // all the monitors in monitor list
-    RECT r;
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    monitor.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
-
-    DEVMODE mode;
-    EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
-#if !USE_MULTIMONITOR
+#else
     monitor.set(0, 0, mode.dmPelsWidth, mode.dmPelsHeight);
 #endif
+
     monitor.depth_ = mode.dmBitsPerPel;
     HDC screen = GetDC(0);
     monitor.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
     monitor.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
+
+    // This is wrong, we should get the work area from the union of
+    // all the monitors in monitor list:
+    RECT r;
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+    monitor.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
   }
   return monitor;
@@ -525,22 +524,23 @@ int Monitor::list(const Monitor** p) {
   if (!num_monitors) {
 #if USE_MULTIMONITOR
     num_monitors = GetSystemMetrics(SM_CMONITORS);
-    monitors = new Monitor[num_monitors];
-    // put the dpy and other info into them all:
-    const Monitor& a = all();
-    for (int j = 0; j < num_monitors; j++) monitors[j] = a;
-    // now do the callback to get the per-monitor info:
-    monitor_index = 0;
-    EnumDisplayMonitors(0,0,monitor_cb,0);
-#else
+    if (num_monitors > 1) {
+      monitors = new Monitor[num_monitors];
+      // put the dpy and other info into them all:
+      const Monitor& a = all();
+      for (int j = 0; j < num_monitors; j++) monitors[j] = a;
+      // now do the callback to get the per-monitor info:
+      monitor_index = 0;
+      EnumDisplayMonitors(0,0,monitor_cb,0);
+      goto DONE;
+    }
+#endif
     num_monitors = 1; // indicate that Xinerama failed
     monitors = (Monitor*)(&all());
-    // Guess if there are 2 monitors and assume they are side-by-side:
-    int w = GetSystemMetrics(SM_CXSCREEN);
-//  printf("SM_CXSCREEN = %d\n", w);
     // Guess for Nvidea which reports only one big monitor:
-    if (w > monitors->h()*2) w = monitors->w()/2;
-    if (w < monitors->w()) {
+    // Guess for dual monitors placed next to each other:
+    if (monitors->w() > 2*monitors->h()) {
+      int w = monitors[0].w()/2;
       num_monitors = 2;
       monitors = new Monitor[2];
       monitors[0] = monitors[1] = all();
@@ -551,14 +551,18 @@ int Monitor::list(const Monitor** p) {
       monitors[1].work.x(w);
       monitors[1].work.move_r(-monitors[0].work.w());
     }
+#if USE_MULTIMONITOR
+  DONE:;
 #endif
-//      printf("Got %d monitors:\n", num_monitors);
-//      for (int i=0; i < num_monitors; i++) {
-//        const Monitor& m = monitors[i];
-//        printf(" %d %d %d %d, work %d %d %d %d\n",
-//  	     m.x(), m.y(), m.w(), m.h(),
-//  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
-//      }
+#if 0
+    printf("Got %d monitors:\n", num_monitors);
+    for (int i=0; i < num_monitors; i++) {
+      const Monitor& m = monitors[i];
+      printf(" %d %d %d %d, work %d %d %d %d\n",
+	     m.x(), m.y(), m.w(), m.h(),
+	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
+    }
+#endif
   }
   *p = monitors;
   return num_monitors;

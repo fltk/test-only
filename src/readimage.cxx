@@ -49,6 +49,8 @@
 
 
 #include <config.h>
+#include <fltk/x.h>
+#include <fltk/draw.h>
 #if USE_X11
 # include "x11/readimage.cxx"
 #elif defined(_WIN32)

@@ -756,7 +756,6 @@ int Monitor::list(const Monitor** p) {
 #endif
     num_monitors = 1; // indicate that Xinerama failed
     monitors = (Monitor*)(&all());
-#if !USE_XINERAMA
     // Guess for dual monitors placed next to each other:
     if (monitors->w() > 2*monitors->h()) {
       int w = monitors[0].w()/2;
@@ -770,7 +769,7 @@ int Monitor::list(const Monitor** p) {
       monitors[1].work.x(w);
       monitors[1].work.move_r(-monitors[0].work.w());
     }
-#else
+#if USE_XINERAMA
   DONE:;
 #endif
 #if 0

@@ -22,8 +22,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#include <fltk/x.h>
-#include <fltk/draw.h>
 #include <fltk/string.h>
 
 #ifdef DEBUG
