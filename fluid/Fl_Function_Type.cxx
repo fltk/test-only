@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.25 1999/12/02 18:57:24 vincent Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.26 1999/12/17 20:18:08 bill Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -470,10 +470,11 @@ Fl_Decl_Type Fl_Decl_type;
 void Fl_Decl_Type::write_code1() {
   const char* c = name();
   if (!c) return;
-  // handle putting #include or extern into decl:
+  // handle putting #include or extern or typedef into decl:
   if (!isalpha(*c) && *c != '~'
       || !strncmp(c,"extern",6) && isspace(c[6])
       || !strncmp(c,"class",5) && isspace(c[5])
+      || !strncmp(c,"typedef",7) && isspace(c[7])
 //    || !strncmp(c,"struct",6) && isspace(c[6])
       ) {
     if (public_)
@@ -681,5 +682,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.25 1999/12/02 18:57:24 vincent Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.26 1999/12/17 20:18:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.8 1999/11/29 08:47:01 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.9 1999/12/17 20:18:11 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -68,22 +68,6 @@ int Fl_Widget::copy_style(const Fl_Style* t) {
   return 1;
 }
 
-// Retrieve values from a style, using parent's value if not in child:
-
-unsigned Fl_Widget::geti(const unsigned* a) const {
-  int i = a-(const unsigned*)&style_->color;
-  for (const Fl_Style* s = style_; s; s = s->parent)
-    if (*((unsigned*)(&s->color+i))) return *((unsigned*)(&s->color+i));
-  return 0;
-}
-
-void* Fl_Widget::getp(const void* const* a) const {
-  int i = a-(const void* const*)&style_->box;
-  for (const Fl_Style* s = style_; s; s = s->parent)
-    if (*((void**)(&s->box+i))) return *((void**)(&s->box+i));
-  return 0;
-}
-
 // Widgets set their own attributes by (possibly) creating a unique copy
 // of their current style and setting it there.  Because this copy does
 // not have any children the recursive search is not needed:
@@ -96,17 +80,37 @@ Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
   return newstyle;
 }
 
-void Fl_Widget::setp(const void* const * p, const void* v) {
-  int d = p-(const void**)&style_->box;
-  Fl_Style* s = fl_unique_style(style_);
-  *((const void**)&s->box + d) = v;
+// Retrieve/set values from a style, using parent's value if not in child:
+
+#define style_functions(TYPE,FIELD)	\
+TYPE Fl_Widget::FIELD() const {		\
+  for (const Fl_Style* s = style_;;) {	\
+    if (s->FIELD) return s->FIELD;	\
+    s = s->parent;			\
+    if (!s) return 0;			\
+  }					\
+}					\
+void Fl_Widget::FIELD(TYPE v) {		\
+  fl_unique_style(style_)->FIELD = v;	\
 }
 
-void Fl_Widget::seti(const unsigned * p, unsigned v) {
-  int d = p-(unsigned*)&style_->color;
-  Fl_Style* s = fl_unique_style(style_);
-  *((unsigned*)&s->color + d) = v;
-}
+style_functions(Fl_Boxtype,box);
+style_functions(Fl_Boxtype,glyph_box);
+style_functions(Fl_Glyph,glyph);
+style_functions(Fl_Font,label_font);
+style_functions(Fl_Font,text_font);
+style_functions(Fl_Labeltype,label_type);
+style_functions(Fl_Color,color);
+style_functions(Fl_Color,label_color);
+style_functions(Fl_Color,selection_color);
+style_functions(Fl_Color,selection_text_color);
+style_functions(Fl_Color,off_color);
+style_functions(Fl_Color,highlight_color);
+style_functions(Fl_Color,highlight_label_color);
+style_functions(Fl_Color,text_color);
+style_functions(unsigned,label_size);
+style_functions(unsigned,text_size);
+style_functions(unsigned,leading);
 
 // Named styles provide a list that can be searched by theme plugins.
 // The "revert" function is mostly provided to make it easy to initialize
@@ -161,5 +165,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.8 1999/11/29 08:47:01 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.9 1999/12/17 20:18:11 bill Exp $".
 //
