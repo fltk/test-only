@@ -21,7 +21,7 @@ void* prime_func(void* p)
       Fl::lock();
       browser->add(s);
       Fl::unlock();
-      Fl::awake();	// Cause the browser to redraw ...
+      Fl::awake((void*)0x80008000);	// Cause the browser to redraw ...
     }
   }
   return 0;
@@ -52,7 +52,10 @@ int main()
   Fl::create_thread(prime_thread, prime_func, browser2);
   Fl::create_thread(prime_thread, prime_func, browser2);
 
-  Fl::run();
+//  Fl::run();
+  while( Fl::wait() ) {
+     printf("%x\n", Fl::thread_message);
+  }
 
   return 0;
 }

@@ -54,7 +54,8 @@ FLDLE void theme_plugin()
     chdir(".fltk");
     if (!read_conf("../.fltkrc")) {
 #ifndef WIN32
-      read_conf(FLTK_LIBDIR"/lib/fltk/fltkrc");
+      chdir(FLTK_LIBDIR"/lib/fltk");
+      read_conf("fltkrc");
 #else
       chdir(getenv("WINDIR"));
       read_conf("fltk/fltkrc");

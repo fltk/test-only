@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.1 1999/10/20 23:22:21 vincent Exp $"
+// "$Id: Fl_Threads.cxx,v 1.2 1999/10/24 19:47:42 vincent Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -93,6 +93,7 @@ int Fl::unlock(Fl_Mutex a)
   pthread_mutex_unlock((pthread_mutex_t*)a);
 }
 
+// when called from a thread, it causes FLTK to awake from Fl::wait()
 int Fl::awake(void* msg)
 {
   return write(Fl::thread_filedes[1], &msg, sizeof(void*));
@@ -111,10 +112,24 @@ int Fl::awake(void* msg)
 // 'a': where to put the handler of the new thread
 // 'b': starting execution address
 // 'c': one parameter to the function
+#ifndef _MT
+#define _MT
+#endif
+#ifdef _POSIX_
+#undef _POSIX_
+#endif
+#include <process.h>
+
+static DWORD main_thread;
+
 int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 {
-  DWORD dummy;
-  return (t = (Fl_Thread)CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)f, p, 0, &dummy)) != 0;
+  main_thread = GetCurrentThreadId();
+  if (Fl::mutex == 0) {
+    Fl::mutex_init(Fl::mutex);
+    Fl::lock(Fl::mutex);
+  }
+  return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
 // set the priority of a thread. default value 0.5 for normal priority, 
@@ -133,9 +148,9 @@ void Fl::sleep(int a)
 }
 
 // create a mutex
-int Fl::mutex_init(Fl_Mutex&)
+int Fl::mutex_init(Fl_Mutex& mutex)
 {
-   return (ptmutex = (Fl_Mutex)CreateMutex(NULL, FALSE, NULL)) != 0;
+   return (mutex = (Fl_Mutex)CreateMutex(NULL, FALSE, NULL)) != 0;
 }
 
 // destroy a mutex
@@ -145,15 +160,20 @@ int Fl::mutex_destroy(Fl_Mutex a)
 }
 
 // lock/unlock a mutex
-int Fl::lock(Fl_Mutex)
+int Fl::lock(Fl_Mutex a)
 {
-  return WaitForSingleObject((HANDLE)a, INFINITE)
+  return WaitForSingleObject((HANDLE)a, INFINITE);
 }
-int Fl::unlock(Fl_Mutex)
+int Fl::unlock(Fl_Mutex a)
 {
   return ReleaseMutex((HANDLE)a);
 }
 
+// when called from a thread, it causes FLTK to awake from Fl::wait()
+int Fl::awake(void* msg)
+{
+  return PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0)? 0 : -1;
+}
 
 //
 // no thread support ...
@@ -204,8 +224,14 @@ int Fl::unlock(Fl_Mutex)
   return -1;
 }
 
+// when called from a thread, it causes FLTK to awake from Fl::wait()
+int Fl::awake(void* msg)
+{
+   return -1;
+}
+
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.1 1999/10/20 23:22:21 vincent Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.2 1999/10/24 19:47:42 vincent Exp $".
 //

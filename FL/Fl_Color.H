@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.3 1999/10/17 22:27:07 vincent Exp $"
+// "$Id: Fl_Color.H,v 1.4 1999/10/24 19:47:40 vincent Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #ifndef Fl_Color_h
 #define Fl_Color_h
 
-#include "Enumerations.H" // for and uchar
+#include "Enumerations.H" // for FL_API and uchar
 
 // I tried making this a class, so that constructors like Fl_Color(r,g,b)
 // could be used.  But gcc produced much worse code output, so I returned
@@ -90,5 +90,5 @@ FL_API void fl_text_background(Fl_Color);
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.3 1999/10/17 22:27:07 vincent Exp $".
+// End of "$Id: Fl_Color.H,v 1.4 1999/10/24 19:47:40 vincent Exp $".
 //
