@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.23 1999/11/21 08:05:31 vincent Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.24 1999/11/23 09:22:44 vincent Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,6 +109,7 @@ Fl_Type *Fl_Function_Type::make() {
   while (p && !p->is_decl_block()) p = p->parent;
   Fl_Function_Type *o = new Fl_Function_Type();
   o->name("make_window()");
+  o->attributes = 0;
   o->return_type = 0;
   o->add(p);
   o->factory = this;
@@ -125,6 +126,10 @@ void Fl_Function_Type::write_properties() {
     write_string("return_type");
     write_word(return_type);
   }
+  if (attributes) {
+    write_string("attributes");
+    write_word(attributes);
+  }
 }
 
 void Fl_Function_Type::read_property(const char *c) {
@@ -134,6 +139,8 @@ void Fl_Function_Type::read_property(const char *c) {
     cdecl_ = 1;
   } else if (!strcmp(c,"return_type")) {
     storestring(read_word(),return_type);
+  } else if (!strcmp(c,"attributes")) {
+    storestring(read_word(),attributes);
   } else {
     Fl_Type::read_property(c);
   }
@@ -145,6 +152,7 @@ void Fl_Function_Type::read_property(const char *c) {
 void Fl_Function_Type::open() {
   if (!function_panel) make_function_panel();
   f_return_type_input->static_value(return_type);
+  f_attributes_input->static_value(attributes);
   f_name_input->static_value(name());
   f_public_button->value(public_);
   f_c_button->value(cdecl_);
@@ -170,8 +178,9 @@ void Fl_Function_Type::open() {
     message = c_check(c); if (message) continue;
     name(f_name_input->value());
     storestring(c, return_type);
-    public_ = f_public_button->value();
-    cdecl_ = f_c_button->value();
+    storestring(f_attributes_input->value(), attributes);
+    public_ = f_public_button->value()? 1:0;
+    cdecl_ = f_c_button->value()? 1:0;
     break;
   }
  BREAK2:
@@ -188,6 +197,12 @@ void Fl_Function_Type::write_code1() {
   constructor=0;
   havewidgets = 0;
   Fl_Type *child;
+  char attr[256];
+  if (attributes) {
+    strncpy(attr, attributes, 255);
+    strcat(attr, " ");
+  } else
+    attr[0] = 0;
   for (child = next; child && child->level > level; child = child->next)
     if (child->is_widget() && child->level == level+1) {
       havewidgets = 1;
@@ -232,7 +247,7 @@ void Fl_Function_Type::write_code1() {
       if (is_static) write_h("static ");
       if (is_virtual) write_h("virtual ");
       if (!constructor) {
-        write_h("%s%s ", rtype, star);
+        write_h("%s%s%s ", attr, rtype, star);
 	write_c("%s%s ", rtype, star);
       }
 
@@ -250,14 +265,14 @@ void Fl_Function_Type::write_code1() {
       }
       *sptr = '\0';
 
-      write_h("%s;\n", s);
+      write_h("%s%s;\n", attr, s);
       write_c("%s::%s {\n", k, name());
     } else {
       if (public_) {
 	if (cdecl_)
-	  write_h("extern \"C\" { %s%s %s; }\n", rtype, star, name());
+	  write_h("extern \"C\" { %s%s%s %s; }\n", attr, rtype, star, name());
 	else
-	  write_h("%s%s %s;\n", rtype, star, name());
+	  write_h("%s%s%s %s;\n", attr, rtype, star, name());
       }
       else write_c("static ");
       write_c("%s%s %s {\n", rtype, star, name());
@@ -666,5 +681,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.23 1999/11/21 08:05:31 vincent Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.24 1999/11/23 09:22:44 vincent Exp $".
 //

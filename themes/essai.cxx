@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.14 1999/11/22 09:00:27 bill Exp $"
+// "$Id: essai.cxx,v 1.15 1999/11/23 09:22:50 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -103,7 +103,7 @@ extern "C"
 int fltk_theme(int, char**) {
   Fl_Style::revert();
 
-  fl_background(0xD0D0E000); // it would be nice to figure out color from image
+  //  fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
   Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
@@ -146,5 +146,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.14 1999/11/22 09:00:27 bill Exp $".
+// End of "$Id: essai.cxx,v 1.15 1999/11/23 09:22:50 vincent Exp $".
 //
