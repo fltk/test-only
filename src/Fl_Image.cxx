@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.27 2002/12/10 02:00:41 easysw Exp $"
+// "$Id: Fl_Image.cxx,v 1.28 2003/01/15 07:55:20 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ void Image::_draw(int XP, int YP, Flags)
       DeleteDC(new_gc);
 # else
       // VP : new code to draw masked image under windows. Maybe not optimal, but works for win2k/95 and probably 98
-      color(0);
+      setcolor(0);
       SetTextColor(gc, 0);
       HDC new_gc = CreateCompatibleDC(gc);
       HDC new_gc2 = CreateCompatibleDC(gc);
@@ -144,5 +144,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.27 2002/12/10 02:00:41 easysw Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.28 2003/01/15 07:55:20 spitzak Exp $".
 //

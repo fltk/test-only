@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.33 2002/12/10 02:01:01 easysw Exp $"
+// "$Id: fl_labeltype.cxx,v 1.34 2003/01/15 07:55:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,7 +31,7 @@
 #include <fltk/Window.h>
 #include <fltk/damage.h>
 #include <fltk/draw.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <config.h>
 using namespace fltk;
 
@@ -230,5 +230,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.33 2002/12/10 02:01:01 easysw Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.34 2003/01/15 07:55:20 spitzak Exp $".
 //

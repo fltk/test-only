@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.12 2003/01/15 07:55:20 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <config.h>
 using namespace fltk;
 
@@ -242,5 +242,5 @@ Box* Box::find(const char* name) {
 Box* Box::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.12 2003/01/15 07:55:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.19 2003/01/15 07:55:20 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -23,7 +23,7 @@
 
 #include <config.h>
 #include <fltk/Font.h>
-#include <string.h>
+#include <fltk/string.h>
 
 #ifdef _WIN32
 # include "fl_list_fonts_win32.cxx"
@@ -84,5 +84,5 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.19 2003/01/15 07:55:20 spitzak Exp $".
 //

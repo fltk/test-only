@@ -1,5 +1,5 @@
 //
-// "$Id: Color.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Color.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
@@ -91,6 +91,8 @@ enum {
 
 inline Color color(unsigned char r, unsigned char g, unsigned char b) {
   return Color((r<<24)+(g<<16)+(b<<8));}
+inline Color color(unsigned char g) {
+  return Color(g*0x1010100u);}
 FL_API Color color(const char*);
 FL_API Color lerp(Color c0, Color c1, float f);
 FL_API Color inactive(Color);
@@ -107,5 +109,5 @@ FL_API Color nearest_index(Color);
 #endif
 
 //
-// End of "$Id: Color.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Color.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.47 2002/12/10 02:01:01 easysw Exp $"
+// "$Id: fl_font_win32.cxx,v 1.48 2003/01/15 07:55:20 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <fltk/math.h>
+#include <fltk/string.h>
 
 using namespace fltk;
 
@@ -254,5 +255,5 @@ void fltk::set_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.47 2002/12/10 02:01:01 easysw Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.48 2003/01/15 07:55:20 spitzak Exp $".
 //

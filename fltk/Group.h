@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Group.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
@@ -62,6 +62,7 @@ public:
   void remove(Widget* o) {remove(find(*o));}
   void replace(int index, Widget&);
   void replace(Widget& old, Widget& o) {replace(find(old),o);}
+  void swap(int indexA, int indexB);
   void clear();
 
   void resizable(Widget& o) {resizable_ = &o;}
@@ -104,5 +105,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Group.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $".
 //
