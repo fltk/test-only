@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.27 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Type.h,v 1.28 2001/02/21 23:26:55 robertk Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -196,7 +196,7 @@ public:
   virtual void read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
-  ~Fl_Widget_Type();
+  virtual ~Fl_Widget_Type();
   void redraw();
 };
 
@@ -206,9 +206,27 @@ FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 ////////////////////////////////////////////////////////////////
 
+class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
+public:
+  virtual ~Fl_Group_Type();
+  virtual const char *type_name();
+  Fl_Widget *widget(int x,int y,int w,int h);
+  Fl_Widget_Type* _make();
+  Fl_Type *make();
+  void write_code();
+  void add_child(Fl_Type*, Fl_Type*);
+  void move_child(Fl_Type*, Fl_Type*);
+  void remove_child(Fl_Type*);
+  int is_parent() const;
+  int is_group() const;
+};
+
+////////////////////////////////////////////////////////////////
+
 FLUID_API extern Fl_Menu_Item window_type_menu[];
 
-class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
+//class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Window_Type : public Fl_Group_Type {
   Fl_Menu_Item* subtypes() {return window_type_menu;}
 
   friend class Overlay_Window;
@@ -251,25 +269,9 @@ public:
   void move_child(Fl_Type*, Fl_Type*);
   void remove_child(Fl_Type*);
 
-  int is_parent() const {return 1;}
-  int is_group() const {return 1;}
-  int is_window() const {return 1;}
-};
-
-////////////////////////////////////////////////////////////////
-
-class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
-public:
-  virtual const char *type_name();
-  Fl_Widget *widget(int x,int y,int w,int h);
-  Fl_Widget_Type* _make();
-  Fl_Type *make();
-  void write_code();
-  void add_child(Fl_Type*, Fl_Type*);
-  void move_child(Fl_Type*, Fl_Type*);
-  void remove_child(Fl_Type*);
-  int is_parent() const;
-  int is_group() const;
+  int is_parent() {return 1;}
+  int is_group() {return 1;}
+  int is_window() {return 1;}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -320,5 +322,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.27 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Type.h,v 1.28 2001/02/21 23:26:55 robertk Exp $".
 //

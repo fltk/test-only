@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.12 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.13 2001/02/21 23:26:55 robertk Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,17 @@ public:
 };
 
 Fl_Widget_Type* Fl_Group_Type::_make() {return new Fl_Group_Type();}
+
+Fl_Group_Type::~Fl_Group_Type() {
+  for (Fl_Type* q = first_child; q; q = q->next_brother) {
+	  remove_child(q);
+	  if(q->is_widget() && (((Fl_Widget_Type *)q)->o->parent() == o)) {
+		  ((Fl_Widget_Type *)q)->o->parent(0);
+		  // Fl_Group destructor will delete all its children!!
+		  ((Fl_Widget_Type *)q)->o = NULL;	
+	  }
+  }
+}
 
 Fl_Widget *Fl_Group_Type::widget(int x,int y,int w,int h) {
   igroup *g = new igroup(x,y,w,h);
@@ -283,5 +294,5 @@ public:
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.12 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.13 2001/02/21 23:26:55 robertk Exp $".
 //
