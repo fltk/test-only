@@ -25,14 +25,15 @@
 
 #include "FL_API.h"
 
-#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this
-
 /*! \addtogroup utilities
   \{ */
 
-FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory);
+FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory=0);
+inline char* filename_normalize(char* o, int l, char* i, const char* d=0) {return (char*)(filename_normalize(o,l,(const char*)i,d));}
 FL_API const char *filename_name(const char *);
+inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a));}
 FL_API const char *filename_ext(const char *);
+inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a));}
 FL_API bool filename_match(const char *, const char *pattern); // glob match
 FL_API bool filename_isdir(const char*);
 FL_API double filename_size(const char *); // return size of file
@@ -85,6 +86,14 @@ struct dirent {char d_name[1];};
 
 /*! \addtogroup utilities */
 FL_API int filename_list(const char *d, struct dirent ***);
+
+#ifndef PATH_MAX
+# ifdef _MAX_PATH
+#  define PATH_MAX _MAX_PATH
+# else
+#  define PATH_MAX 1024
+# endif
+#endif
 
 #endif
 

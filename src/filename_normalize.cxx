@@ -125,8 +125,6 @@ filename_normalize(char* output, int length, const char* input, const char* pwd)
 
 // Back-compatability with fltk1 functions:
 
-#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
-
 /**
   Back-compatability version of filename_normalize().
   This did not let you specify the size of the buffer, it did a useless
@@ -134,11 +132,11 @@ filename_normalize(char* output, int length, const char* input, const char* pwd)
   It also did not do the home-directory prefix.
 */
 bool fl_filename_absolute(char *output, const char *input, const char* pwd) {
-  char temp[FL_PATH_MAX];
-  if (input == output) {strlcpy(temp, input, FL_PATH_MAX); input = temp;}
-  const char* t = filename_normalize(output, FL_PATH_MAX, input, pwd);
+  char temp[PATH_MAX];
+  if (input == output) {strlcpy(temp, input, PATH_MAX); input = temp;}
+  const char* t = filename_normalize(output, PATH_MAX, input, pwd);
   if (t != output) {
-    strlcpy(output, input, FL_PATH_MAX);
+    strlcpy(output, input, PATH_MAX);
     return false;
   }
   return true;
@@ -151,7 +149,7 @@ bool fl_filename_absolute(char *output, const char *input, const char* pwd) {
 */
 bool fl_filename_expand(char *output, const char *input) {
   if (*input == '~') return fl_filename_absolute(output, input, 0);
-  if (output != input) strlcpy(output, input, FL_PATH_MAX);
+  if (output != input) strlcpy(output, input, PATH_MAX);
   return false;
 }
 

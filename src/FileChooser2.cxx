@@ -377,8 +377,8 @@ FileChooser::newdir()
 
   // Create the directory; ignore EEXIST errors...
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  char namebuf[FL_PATH_MAX];
-  utf8tomb(pathname, strlen(pathname), namebuf, FL_PATH_MAX);
+  char namebuf[PATH_MAX];
+  utf8tomb(pathname, strlen(pathname), namebuf, PATH_MAX);
   if (mkdir(namebuf))
 #else
   if (mkdir(pathname, 0777))
