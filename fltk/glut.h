@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.7 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: glut.h,v 1.8 2003/01/19 22:37:00 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,16 +44,18 @@
 #ifndef __glut_h__
 #define __glut_h__
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Gl_Window.h>
+#include <fltk/run.h>
+#include <fltk/GlWindow.h>
 #include <fltk/gl.h>
+#include <fltk/events.h>
+#include <fltk/visual.h>
 //#include <GL/glu.h>
 
 ////////////////////////////////////////////////////////////////
 // Glut is emulated using this window class and these static variables
 // (plus several more static variables hidden in glut.C):
 
-class FL_GLUT_API Fl_Glut_Window : public Fl_Gl_Window {
+class FL_GLUT_API Fl_Glut_Window : public fltk::GlWindow {
   void _init();
   int mouse_down;
 protected:
@@ -95,18 +97,20 @@ FL_GLUT_API void glutInit(int *argcp, char **argv); // creates first window
 
 FL_GLUT_API void glutInitDisplayMode(unsigned int mode);
 // the FL_ symbols have the same value as the GLUT ones:
-#define GLUT_RGB	FL_RGB
-#define GLUT_RGBA	FL_RGB
-#define GLUT_INDEX	FL_INDEX
-#define GLUT_SINGLE	FL_SINGLE
-#define GLUT_DOUBLE	FL_DOUBLE
-#define GLUT_ACCUM	FL_ACCUM
-#define GLUT_ALPHA	FL_ALPHA
-#define GLUT_DEPTH	FL_DEPTH
-#define GLUT_STENCIL	FL_STENCIL
-#define GLUT_MULTISAMPLE FL_MULTISAMPLE
-// #define GLUT_STEREO			256
-// #define GLUT_LUMINANCE		512
+enum {
+  GLUT_RGB	= fltk::RGB_COLOR,
+  GLUT_RGBA	= fltk::RGB_COLOR,
+  GLUT_INDEX	= fltk::INDEXED_COLOR,
+  GLUT_SINGLE	= fltk::SINGLE_BUFFER,
+  GLUT_DOUBLE	= fltk::DOUBLE_BUFFER,
+  GLUT_ACCUM	= fltk::ACCUM_BUFFER,
+  GLUT_ALPHA	= fltk::ALPHA_BUFFER,
+  GLUT_DEPTH	= fltk::DEPTH_BUFFER,
+  GLUT_STENCIL	= fltk::STENCIL_BUFFER,
+  GLUT_MULTISAMPLE = fltk::MULTISAMPLE,
+  GLUT_STEREO	= fltk::STEREO
+//GLUT_LUMINANCE = 512
+};
 
 FL_GLUT_API void glutInitWindowPosition(int x, int y);
 
@@ -148,31 +152,31 @@ inline void glutHideWindow() {glut_window->hide();}
 
 inline void glutFullScreen() {glut_window->fullscreen();}
 
-inline void glutSetCursor(Fl_Cursor cursor) {glut_window->cursor(cursor);}
-// notice that the numeric values are different than glut:
-#define GLUT_CURSOR_RIGHT_ARROW	((Fl_Cursor)2)
-#define GLUT_CURSOR_LEFT_ARROW	((Fl_Cursor)67)
-#define GLUT_CURSOR_INFO	FL_CURSOR_HAND
-#define GLUT_CURSOR_DESTROY	((Fl_Cursor)45)
-#define GLUT_CURSOR_HELP	FL_CURSOR_HELP
-#define GLUT_CURSOR_CYCLE	((Fl_Cursor)26)
-#define GLUT_CURSOR_SPRAY	((Fl_Cursor)63)
-#define GLUT_CURSOR_WAIT	FL_CURSOR_WAIT
-#define GLUT_CURSOR_TEXT	FL_CURSOR_INSERT
-#define GLUT_CURSOR_CROSSHAIR	FL_CURSOR_CROSS
-#define GLUT_CURSOR_UP_DOWN	FL_CURSOR_NS
-#define GLUT_CURSOR_LEFT_RIGHT	FL_CURSOR_WE
-#define GLUT_CURSOR_TOP_SIDE	FL_CURSOR_N
-#define GLUT_CURSOR_BOTTOM_SIDE	FL_CURSOR_S
-#define GLUT_CURSOR_LEFT_SIDE	FL_CURSOR_W
-#define GLUT_CURSOR_RIGHT_SIDE	FL_CURSOR_E
-#define GLUT_CURSOR_TOP_LEFT_CORNER	FL_CURSOR_NW
-#define GLUT_CURSOR_TOP_RIGHT_CORNER	FL_CURSOR_NE
-#define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	FL_CURSOR_SE
-#define GLUT_CURSOR_BOTTOM_LEFT_CORNER	FL_CURSOR_SW
-#define GLUT_CURSOR_INHERIT		FL_CURSOR_DEFAULT
-#define GLUT_CURSOR_NONE		FL_CURSOR_NONE
-#define GLUT_CURSOR_FULL_CROSSHAIR	FL_CURSOR_CROSS
+inline void glutSetCursor(fltk::Cursor* cursor) {glut_window->cursor(cursor);}
+
+//#define GLUT_CURSOR_RIGHT_ARROW
+//#define GLUT_CURSOR_LEFT_ARROW
+#define GLUT_CURSOR_INFO	fltk::CURSOR_HAND
+//#define GLUT_CURSOR_DESTROY
+#define GLUT_CURSOR_HELP	fltk::CURSOR_HELP
+//#define GLUT_CURSOR_CYCLE
+//#define GLUT_CURSOR_SPRAY
+#define GLUT_CURSOR_WAIT	fltk::CURSOR_WAIT
+#define GLUT_CURSOR_TEXT	fltk::CURSOR_INSERT
+#define GLUT_CURSOR_CROSSHAIR	fltk::CURSOR_CROSS
+#define GLUT_CURSOR_UP_DOWN	fltk::CURSOR_NS
+#define GLUT_CURSOR_TOP_SIDE	fltk::CURSOR_NS
+#define GLUT_CURSOR_BOTTOM_SIDE	fltk::CURSOR_NS
+#define GLUT_CURSOR_LEFT_RIGHT	fltk::CURSOR_WE
+#define GLUT_CURSOR_LEFT_SIDE	fltk::CURSOR_WE
+#define GLUT_CURSOR_RIGHT_SIDE	fltk::CURSOR_WE
+#define GLUT_CURSOR_TOP_LEFT_CORNER	fltk::CURSOR_NWSE
+#define GLUT_CURSOR_TOP_RIGHT_CORNER	fltk::CURSOR_NESW
+#define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	fltk::CURSOR_NWSE
+#define GLUT_CURSOR_BOTTOM_LEFT_CORNER	fltk::CURSOR_NESW
+#define GLUT_CURSOR_INHERIT		fltk::CURSOR_DEFAULT
+#define GLUT_CURSOR_NONE		fltk::CURSOR_NONE
+#define GLUT_CURSOR_FULL_CROSSHAIR	fltk::CURSOR_CROSS
 
 //inline void glutWarpPointer(int x, int y);
 
@@ -221,11 +225,13 @@ inline void glutKeyboardFunc(void (*f)(uchar key, int x, int y)) {
 
 inline void glutMouseFunc(void (*f)(int b, int state, int x, int y)) {
   glut_window->mouse = f;}
-#define GLUT_LEFT_BUTTON		0
-#define GLUT_MIDDLE_BUTTON		1
-#define GLUT_RIGHT_BUTTON		2
-#define GLUT_DOWN			0
-#define GLUT_UP				1
+enum {
+  GLUT_LEFT_BUTTON	= 0,
+  GLUT_MIDDLE_BUTTON	= 1,
+  GLUT_RIGHT_BUTTON	= 2,
+  GLUT_DOWN		= 0,
+  GLUT_UP		= 1
+};
 
 inline void glutMotionFunc(void (*f)(int x, int y)) {glut_window->motion= f;}
 
@@ -238,11 +244,11 @@ enum {GLUT_LEFT, GLUT_ENTERED};
 inline void glutVisibilityFunc(void (*f)(int s)) {glut_window->visibility=f;}
 enum {GLUT_NOT_VISIBLE, GLUT_VISIBLE};
 
-inline void glutIdleFunc(void (*f)()) {Fl::set_idle(f);}
+inline void glutIdleFunc(void (*f)()) {fltk::set_idle(f);}
 
 // Warning: this cast may not work on all machines:
 inline void glutTimerFunc(unsigned int msec, void (*f)(int), int value) {
-  Fl::add_timeout(msec*.001, (Fl_Timeout_Handler)f, (void *)value);
+  fltk::add_timeout(msec*.001, (fltk::TimeoutHandler)f, (void *)value);
 }
 
 inline void glutMenuStateFunc(void (*f)(int state)) {
@@ -254,28 +260,30 @@ enum {GLUT_MENU_NOT_IN_USE, GLUT_MENU_IN_USE};
 
 inline void glutSpecialFunc(void (*f)(int key, int x, int y)) {
   glut_window->special = f;}
-#define GLUT_KEY_F1			1
-#define GLUT_KEY_F2			2
-#define GLUT_KEY_F3			3
-#define GLUT_KEY_F4			4
-#define GLUT_KEY_F5			5
-#define GLUT_KEY_F6			6
-#define GLUT_KEY_F7			7
-#define GLUT_KEY_F8			8
-#define GLUT_KEY_F9			9
-#define GLUT_KEY_F10			10
-#define GLUT_KEY_F11			11
-#define GLUT_KEY_F12			12
+enum {
+  GLUT_KEY_F1		= 1,
+  GLUT_KEY_F2		= 2,
+  GLUT_KEY_F3		= 3,
+  GLUT_KEY_F4		= 4,
+  GLUT_KEY_F5		= 5,
+  GLUT_KEY_F6		= 6,
+  GLUT_KEY_F7		= 7,
+  GLUT_KEY_F8		= 8,
+  GLUT_KEY_F9		= 9,
+  GLUT_KEY_F10		= 10,
+  GLUT_KEY_F11		= 11,
+  GLUT_KEY_F12		= 12,
 // WARNING: Different values than Glut uses:
-#define GLUT_KEY_LEFT			FL_Left
-#define GLUT_KEY_UP			FL_Up
-#define GLUT_KEY_RIGHT			FL_Right
-#define GLUT_KEY_DOWN			FL_Down
-#define GLUT_KEY_PAGE_UP		FL_Page_Up
-#define GLUT_KEY_PAGE_DOWN		FL_Page_Down
-#define GLUT_KEY_HOME			FL_Home
-#define GLUT_KEY_END			FL_End
-#define GLUT_KEY_INSERT			FL_Insert
+  GLUT_KEY_LEFT		= fltk::LeftKey,
+  GLUT_KEY_UP		= fltk::UpKey,
+  GLUT_KEY_RIGHT	= fltk::RightKey,
+  GLUT_KEY_DOWN		= fltk::DownKey,
+  GLUT_KEY_PAGE_UP	= fltk::PageUpKey,
+  GLUT_KEY_PAGE_DOWN	= fltk::PageDownKey,
+  GLUT_KEY_HOME		= fltk::HomeKey,
+  GLUT_KEY_END		= fltk::EndKey,
+  GLUT_KEY_INSERT	= fltk::InsertKey
+};
 
 //inline void glutSpaceballMotionFunc(void (*)(int x, int y, int z));
 
@@ -366,11 +374,13 @@ enum {
 //#define GLUT_NUM_DIALS		608
 //#define GLUT_NUM_TABLET_BUTTONS	609
 
-inline int glutGetModifiers() {return Fl::event_state();}
+inline int glutGetModifiers() {return fltk::event_state();}
 // WARNING: these values are different than Glut uses:
-#define GLUT_ACTIVE_SHIFT               FL_SHIFT
-#define GLUT_ACTIVE_CTRL                FL_CTRL
-#define GLUT_ACTIVE_ALT                 FL_ALT
+enum {
+  GLUT_ACTIVE_SHIFT	= fltk::SHIFT,
+  GLUT_ACTIVE_CTRL	= fltk::CTRL,
+  GLUT_ACTIVE_ALT	= fltk::ALT
+};
 
 FL_GLUT_API int glutLayerGet(GLenum);
 #define GLUT_OVERLAY_POSSIBLE		800
@@ -404,7 +414,7 @@ FL_GLUT_API int glutLayerGet(GLenum);
 // Emulated Glut drawing functions:
 
 // Font argument must be a void* for compatability, so...
-extern FL_GLUT_API struct Glut_Bitmap_Font {Fl_Font font; int size;}
+extern FL_GLUT_API struct Glut_Bitmap_Font {fltk::Font* font; int size;}
   glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
   glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
   glutBitmapHelvetica18;
@@ -469,5 +479,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.7 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: glut.h,v 1.8 2003/01/19 22:37:00 spitzak Exp $".
 //

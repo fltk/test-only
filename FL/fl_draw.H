@@ -174,7 +174,7 @@ inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c)
 
 // images:
 #define fl_draw_image fltk::drawimage
-#define fl_draw_iamge_mono fltk::drawimagemono
+#define fl_draw_image_mono fltk::drawimagemono
 typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
 inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(x,y,w,h);}
 
@@ -191,5 +191,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.31 2003/01/19 22:07:22 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.32 2003/01/19 22:37:00 spitzak Exp $".
 //

@@ -9,6 +9,7 @@
 #include <fltk/Font.h>
 #include <fltk/Box.h>
 #include <fltk/error.h>
+#include <fltk/visual.h>
 
 namespace Fl = fltk;
 
