@@ -93,7 +93,7 @@ Widget::~Widget() {
     // When a widget is destroyed it can destroy unique styles:
     delete (Style*)style_; // cast away const
   }
-  if (flags_&COPIED_LABEL) delete[] label_;
+  if (flags_&COPIED_LABEL) delete[] const_cast<char*>( label_ );
 }
 
 /*! \fn Group* Widget::parent() const
@@ -121,7 +121,7 @@ bool Widget::contains(const Widget* b) const {
 void Widget::label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) {
-    delete[] label_;
+    delete[] const_cast<char*>( label_ );
     flags_ &= ~COPIED_LABEL;
   }
   label_ = s;
@@ -136,7 +136,7 @@ void Widget::label(const char* s) {
 */
 void Widget::copy_label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
-  if (flags_&COPIED_LABEL) delete[] label_;
+  if (flags_&COPIED_LABEL) delete[] const_cast<char*>( label_ );
   label_ = newstring(s);
   flags_ |= COPIED_LABEL;
 }

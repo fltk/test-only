@@ -50,8 +50,8 @@
 #include <sys/stat.h>
 #include <fltk/utf.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
-#include <windows.h>
-#include <fltk/utf.h>
+# include <windows.h>
+# include <fltk/utf.h>
 # undef _POSIX_
 # include <direct.h>
 # include <io.h>

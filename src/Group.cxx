@@ -114,7 +114,7 @@ void Group::clear() {
       o->parent(0); // stops it from calling remove()
       delete o;
     }
-    delete[] a;
+    delete[] const_cast<Widget**>( a );
   }
 }
 
@@ -142,11 +142,15 @@ void Group::insert(Widget &o, int index) {
   o.parent(this);
   if (children_ == 0) {
     // allocate for 1 child
-    array_ = new (Widget*)[1];
+	// FIXME - was: array_ = new (Widget*)[1];
+	//                                    ^-- VC++ 6.0 complains
+	array_ = new (Widget (*[1]));
     array_[0] = &o;
   } else {
     if (!(children_ & (children_-1))) {// double number of children
-      Widget** newarray = new (Widget*)[2*children_];
+      // FIXME - was: Widget** newarray = new (Widget*)[2*children_];
+	  //                                                ^-- VC++ 6.0 complains
+      Widget** newarray = new (Widget (*[2*children_]));
       memcpy(newarray, array_, children_*sizeof(Widget*));
       delete[] array_;
       array_ = newarray;

@@ -44,7 +44,7 @@ static int last_op = 0;
 // queries different aspects on the same file. 'stat' can be relatively slow.
 static bool fill_stat(const char *name, int new_op) {
   if (last_op!=new_op && last_statname && strcmp(last_statname, name)==0) return last_result;
-  delete[] last_statname;
+  delete[] const_cast<char *>( last_statname ); // otherwize VC++ will scream
   last_statname = newstring(name);
   char namebuf[1024];
   utf8tomb(name, strlen(name), namebuf, 1024);
