@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.197 2004/11/21 05:41:48 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.198 2004/12/05 20:20:59 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1304,8 +1304,16 @@ bool fltk::handle()
     XWindow junk; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
-    // tell Window about it and set flag to prevent echoing:
-    if (window->resize(X, Y, W, H)) resize_from_system = window;
+    // We don't want to override any pending changes from the user:
+    if (window->layout_damage() & LAYOUT_XYWH) {
+      if (window->layout_damage() & LAYOUT_XY) {X=window->x(); Y=window->y();}
+      if (window->layout_damage() & LAYOUT_WH) {W=window->w(); H=window->h();}
+      window->resize(X, Y, W, H);
+    } else {
+      // Set a flag so we don't echo the resize back to the window manager.
+       // Some badly-written ones will bounce it forever:
+      if (window->resize(X, Y, W, H)) resize_from_system = window;
+    }
     break;} // allow add_handler to do something too
 
   case ReparentNotify: {
@@ -2328,5 +2336,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.197 2004/11/21 05:41:48 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.198 2004/12/05 20:20:59 spitzak Exp $".
 //
