@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.11 1999/04/13 20:33:01 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.12 1999/04/27 20:12:47 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -120,9 +120,11 @@ J1:
     e = event;
     last_tb = current_tb;
     current_tb = 0;
-    for (i = 0; i < FL_MAX_MENU_TITLES && ((TitleBox*)titles[i])->mi; i++) {
-      TitleBox* t = (TitleBox*)titles[i];
-      if (Fl::event_inside(t->x(), t->y(), t->w(), t->h())) {current_tb = t; break;}
+    if (e != FL_LEAVE) {
+      for (i = 0; i < FL_MAX_MENU_TITLES && ((TitleBox*)titles[i])->mi; i++) {
+        TitleBox* t = (TitleBox*)titles[i];
+        if (Fl::event_inside(t->x(), t->y(), t->w(), t->h())) {current_tb = t; break;}
+      }
     }
     if (current_tb != last_tb) damage(FL_DAMAGE_CHILD);
     return 1;
@@ -170,5 +172,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l) : Fl_Menu_(x,y,w
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.11 1999/04/13 20:33:01 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.12 1999/04/27 20:12:47 carl Exp $".
 //
