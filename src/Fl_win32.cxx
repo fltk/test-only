@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.64 1999/11/15 04:02:43 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.65 1999/11/19 03:59:11 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -622,7 +622,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #endif
 
   case WM_SYSCOLORCHANGE:
-    fl_windows();
+    Fl::loadscheme();
     break;
 
   default:
@@ -896,5 +896,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.64 1999/11/15 04:02:43 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.65 1999/11/19 03:59:11 carl Exp $".
 //
