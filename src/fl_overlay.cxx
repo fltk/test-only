@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_overlay.cxx,v 1.14 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -36,19 +36,19 @@ using namespace fltk;
 static int px,py,pw,ph;
 
 static void draw_current_rect() {
-#ifdef _WIN32
-  int old = SetROP2(gc, R2_NOT);
-  strokerect(px, py, pw, ph);
-  SetROP2(gc, old);
-#elif (defined(__APPLE__) && !USE_X11)
-  PenMode( patXor );
-  strokerect(px, py, pw, ph);
-  PenMode( patCopy );
-#else
+#if USE_X11
   XSetFunction(xdisplay, gc, GXxor);
   XSetForeground(xdisplay, gc, 0xffffffff);
   XDrawRectangle(xdisplay, xwindow, gc, px, py, pw, ph);
   XSetFunction(xdisplay, gc, GXcopy);
+#elif defined(_WIN32)
+  int old = SetROP2(dc, R2_NOT);
+  strokerect(px, py, pw, ph);
+  SetROP2(dc, old);
+#elif defined(__APPLE__)
+  PenMode( patXor );
+  strokerect(px, py, pw, ph);
+  PenMode( patCopy );
 #endif
 }
 
@@ -69,5 +69,5 @@ void fltk::overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.14 2004/06/09 05:38:58 spitzak Exp $".
 //

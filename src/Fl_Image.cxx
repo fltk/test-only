@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.40 2004/06/04 08:34:24 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.41 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -239,7 +239,7 @@ ImageDraw::ImageDraw(Image* image) {
   data[0] = (void*)(xwindow);
 #elif defined(_WIN32)
   // make it not destroy the previous dc:
-  data[0] = (void*)gc;
+  data[0] = (void*)dc;
   data[1] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
 #elif defined(__APPLE__)
   GrafPtr prevPort; GDHandle prevGD;
@@ -257,7 +257,7 @@ ImageDraw::~ImageDraw() {
 #if USE_X11
   xwindow = (XWindow)(data[0]);
 #elif defined(_WIN32)
-  gc = (HDC)(data[0]);
+  dc = (HDC)(data[0]);
   DeleteDC(fl_bitmap_dc);
   fl_bitmap_dc = (HDC)(data[1]);
 #elif defined(__APPLE__)
@@ -302,10 +302,10 @@ void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
 #if USE_X11
   XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
 #elif defined(_WIN32)
-  HDC new_gc = CreateCompatibleDC(gc);
-  SelectObject(new_gc, (Pixmap)rgb);
-  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCCOPY);
-  DeleteDC(new_gc);
+  HDC new_dc = CreateCompatibleDC(dc);
+  SelectObject(new_dc, (HBITMAP)rgb);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCCOPY);
+  DeleteDC(new_dc);
 #elif defined(__APPLE__)
   // NYI!
 #else
@@ -345,22 +345,22 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 #elif defined(_WIN32)
 # if 0
   // Old version, are we sure this does not work?
-  HDC new_gc = CreateCompatibleDC(gc);
-  SelectObject(new_gc, (HBITMAP)alpha);
-  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCAND);
-  SelectObject(new_gc, (HBITMAP)rgb);
-  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCPAINT);
-  DeleteDC(new_gc);
+  HDC new_dc = CreateCompatibleDC(dc);
+  SelectObject(new_dc, (HBITMAP)alpha);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCAND);
+  SelectObject(new_dc, (HBITMAP)rgb);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCPAINT);
+  DeleteDC(new_dc);
 # else
 # if 0
   // I found this in the documentation. It works, but (unbelivable!) it
   // blinks worse than the more complicated code below. Darn you, Gates!
-  HDC new_gc = CreateCompatibleDC(gc);
-  SelectObject(new_gc, (Pixmap)rgb);
-  MaskBlt(gc, x, y, w, h, new_gc, src_x, src_y,
+  HDC new_dc = CreateCompatibleDC(dc);
+  SelectObject(new_dc, (Pixmap)rgb);
+  MaskBlt(dc, x, y, w, h, new_dc, src_x, src_y,
 	  (HBITMAP)alpha, src_x, src_y,
 	  MAKEROP4(SRCCOPY,0xEE0000));
-  DeleteDC(new_gc);
+  DeleteDC(new_dc);
 # else
   // VP : new code to draw masked image under windows.
   // Maybe not optimal, but works for win2k/95 and probably 98
@@ -369,17 +369,17 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   // there is a direct method of doing this...
   setcolor(0);
   setbrush();
-  SetTextColor(gc, 0);
-  HDC new_gc = CreateCompatibleDC(gc);
-  HDC new_gc2 = CreateCompatibleDC(gc);
-  SelectObject(new_gc, (HBITMAP)alpha);
-  SelectObject(new_gc2, (HBITMAP)rgb);
-  BitBlt(new_gc2, 0, 0, w_, h_, new_gc, 0, 0, SRCAND); // This should be done only once for performance
+  SetTextColor(dc, 0);
+  HDC new_dc = CreateCompatibleDC(dc);
+  HDC new_dc2 = CreateCompatibleDC(dc);
+  SelectObject(new_dc, (HBITMAP)alpha);
+  SelectObject(new_dc2, (HBITMAP)rgb);
+  BitBlt(new_dc2, 0, 0, w_, h_, new_dc, 0, 0, SRCAND); // This should be done only once for performance
   // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, 0xE20746L);
-  BitBlt(gc, x, y, w, h, new_gc2, src_x, src_y, SRCPAINT);
-  DeleteDC(new_gc2);
-  DeleteDC(new_gc);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, 0xE20746L);
+  BitBlt(dc, x, y, w, h, new_dc2, src_x, src_y, SRCPAINT);
+  DeleteDC(new_dc2);
+  DeleteDC(new_dc);
 # endif
 # endif
 #elif defined(__APPLE__)
@@ -416,13 +416,13 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
-  HDC tempdc = CreateCompatibleDC(gc);
+  HDC tempdc = CreateCompatibleDC(dc);
   SelectObject(tempdc, (HGDIOBJ)alpha);
-  SetTextColor(gc, 0); // VP : seems necessary at least under win95
+  SetTextColor(dc, 0); // VP : seems necessary at least under win95
   setbrush();
-  //SelectObject(gc, brush);
+  //SelectObject(dc, brush);
   // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(gc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+  BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
   // OSX version nyi
@@ -480,5 +480,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.40 2004/06/04 08:34:24 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.41 2004/06/09 05:38:57 spitzak Exp $".
 //

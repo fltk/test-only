@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.23 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id: win32.h,v 1.24 2004/06/09 05:38:57 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,30 +42,6 @@
 # define VK_APPS 0x5D
 #endif
 
-////////////////////////////////////////////////////////////////
-// Emulate X somewhat:
-
-typedef HWND XWindow;
-typedef POINT XPoint;
-struct FL_API XRectangle {int x, y, width, height;};
-typedef HRGN Region;
-typedef HBITMAP Pixmap;
-
-inline Region XRectangleRegion(int x, int y, int w, int h) {
-    return CreateRectRgn(x, y, x+w, y+h);
-}
-inline void XDestroyRegion(Region r) {DeleteObject(r);}
-inline void XClipBox(Region r, XRectangle* rect) {
-    RECT win_rect; GetRgnBox(r, &win_rect);
-    rect->x = win_rect.left;
-    rect->y = win_rect.top;
-    rect->width = win_rect.right-win_rect.left;
-    rect->height = win_rect.bottom-win_rect.top;
-}
-#define XDestroyWindow(a,b) DestroyWindow(b)
-#define XMapWindow(a,b)	ShowWindow(b, SW_RESTORE)
-#define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
-
 namespace fltk {
 
 ////////////////////////////////////////////////////////////////
@@ -84,7 +60,7 @@ extern FL_API MSG msg;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-extern FL_API HDC	gc;
+extern FL_API HDC	dc;
 extern FL_API HDC	getDC();
 extern FL_API HFONT	xfont();
 extern FL_API TEXTMETRIC* textmetric();
@@ -92,8 +68,8 @@ extern FL_API COLORREF	current_xpixel;
 extern FL_API COLORREF	xpixel(Color i);
 extern FL_API HPEN	setpen();
 extern FL_API HBRUSH	setbrush();
-extern FL_API void	clip_region(Region);
-extern FL_API Region	clip_region();
+extern FL_API void	clip_region(HRGN);
+extern FL_API HRGN	clip_region();
 
 extern FL_API void	draw_into(HBITMAP);
 extern FL_API void	stop_drawing(HBITMAP);
@@ -113,7 +89,7 @@ public:
   HBITMAP backbuffer;
   HDC bdc;
   Window* window;
-  Region region;
+  HRGN region;
   void expose(int x, int y, int w, int h);
   CreatedWindow* next;
   bool wait_for_expose;
@@ -129,8 +105,8 @@ public:
 };
 
 // convert xid <-> Window:
-inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
-Window* find(XWindow xid);
+inline HWND xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+Window* find(HWND xid);
 
 extern FL_API HCURSOR default_cursor;
 
@@ -142,5 +118,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.23 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id: win32.h,v 1.24 2004/06/09 05:38:57 spitzak Exp $".
 //

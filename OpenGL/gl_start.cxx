@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.14 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: gl_start.cxx,v 1.15 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -64,7 +64,7 @@ static GLContext context;
 //static int clip_state_number=-1;
 static int pw, ph;
 
-Region XRectangleRegion(int x, int y, int w, int h);
+//Region XRectangleRegion(int x, int y, int w, int h);
 
 void fltk::glstart() {
   if (!context) {
@@ -92,7 +92,7 @@ void fltk::glstart() {
     int x, y, w, h;
     if (clip_box(0, 0, Window::current()->w(), Window::current()->h(),
 		 x, y, w, h)) {
-      clip_region(XRectangleRegion(x,y,w,h));
+      //clip_region(XRectangleRegion(x,y,w,h));
       glScissor(x, Window::current()->h()-(y+h), w, h);
       glEnable(GL_SCISSOR_TEST);
     } else {
@@ -111,5 +111,5 @@ void fltk::glfinish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.14 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: gl_start.cxx,v 1.15 2004/06/09 05:38:57 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.17 2004/06/01 01:24:22 easysw Exp $"
+// "$Id: Fl_mac.cxx,v 1.18 2004/06/09 05:38:58 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1442,7 +1442,7 @@ void Window::make_current() const
     i->subRegion = NewRgn();
     SetRectRgn(i->subRegion, 0, 0, w(), h());
     for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
-      Region r = NewRgn();
+      RgnHandle r = NewRgn();
       Window* cw = cx->window;
       int x = cw->x();
       int y = cw->y();
@@ -1451,7 +1451,7 @@ void Window::make_current() const
       DisposeRgn(r);
     }
     for (CreatedWindow* cx = i->brother; cx; cx = cx->brother) {
-      Region r = NewRgn();
+      RgnHandle r = NewRgn();
       Window* cw = cx->window;
       int x = X+cw->x()-this->x();
       int y = Y+cw->y()-this->y();
@@ -1599,6 +1599,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.17 2004/06/01 01:24:22 easysw Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.18 2004/06/09 05:38:58 spitzak Exp $".
 //
 

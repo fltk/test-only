@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.28 2004/05/05 07:18:53 spitzak Exp $"
+// "$Id: x.h,v 1.29 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -71,13 +71,19 @@
  typedef struct _XftDraw XftDraw;
 # endif
 
+# if USE_CAIRO
+#  include <cairo.h>
+# else
+ typedef struct cairo cairo_t;
+# endif
+
 # undef Window
 
-#if defined(__FreeBSD__) || defined(__APPLE__)
+# if defined(__FreeBSD__) || defined(__APPLE__)
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
-#endif
+# endif
 
 #endif
 
@@ -120,12 +126,9 @@ extern FL_API Atom dnd_action;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-class Surface;
-
+extern FL_API cairo_t*	cc;
 extern FL_API GC	gc;
-extern FL_API Surface*	surface;
 extern FL_API XWindow	xwindow;
-extern FL_API XFontStruct*	xfont();
 extern FL_API ulong	current_xpixel;
 extern FL_API ulong	xpixel(Color i);
 extern FL_API void	clip_region(Region);
@@ -133,6 +136,8 @@ extern FL_API Region	clip_region();
 
 extern FL_API void	draw_into(XWindow);
 extern FL_API void	stop_drawing(XWindow);
+
+extern FL_API XFontStruct*	xfont();
 
 ////////////////////////////////////////////////////////////////
 // only include this if <fltk/Window.h> was included:
@@ -177,5 +182,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.28 2004/05/05 07:18:53 spitzak Exp $".
+// End of "$Id: x.h,v 1.29 2004/06/09 05:38:57 spitzak Exp $".
 //

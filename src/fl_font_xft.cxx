@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.21 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.22 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -266,7 +266,12 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 }
 
 void fltk::stop_drawing(XWindow window) {
-  if (xwindow == window) xwindow = 0;
+  if (xwindow == window) {
+#if USE_CAIRO
+    if (cc) {cairo_destroy(cc); cc = 0;}
+#endif
+    xwindow = 0;
+  }
   if (xftwindow == window && xft_gc) {
     XftDrawDestroy(xft_gc);
     xft_gc = 0;
@@ -426,5 +431,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.21 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.22 2004/06/09 05:38:58 spitzak Exp $"
 //

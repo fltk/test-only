@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.112 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -248,7 +248,16 @@ int Window::handle(int event) {
 
   case HIDE:
     if (flags()&MODAL) modal(0, false);
+#if USE_X11
     if (i) XUnmapWindow(xdisplay, i->xid);
+#elif defined(_WIN32)
+    if (i) ShowWindow(i->xid, SW_HIDE);
+#elif defined(__APPLE__)
+    if (i) HideWindow(i->xid);
+#else
+#error
+#endif
+
 #if defined(_WIN32)
     keep_app_active();
 #endif
@@ -583,19 +592,26 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
     window->set_damage(DAMAGE_ALL);
   } else if (!region) {
     // create a new region:
-    region = XRectangleRegion(X,Y,W,H);
+#if USE_X11
+    region = XRectangleRegion(X, Y, W, H);
+#elif defined(_WIN32)
+    region = CreateRectRgn(X, Y, X+W, Y+H);
+#elif defined(__APPLE__)
+    region = NewRgn();
+    SetRectRgn(region, X, Y, X+W, Y+H);
+#endif
   } else {
     // merge with the region:
 #if USE_X11
     XRectangle R;
     R.x = X; R.y = Y; R.width = W; R.height = H;
     XUnionRectWithRegion(&R, region, region);
-#elif defined(WIN32)
-    Region R = XRectangleRegion(X, Y, W, H);
+#elif defined(_WIN32)
+    HRGN R = CreateRectRgn(X, Y, X+W, Y+H);
     CombineRgn(region, region, R, RGN_OR);
-    XDestroyRegion(R);
+    DeleteObject(R);
 #elif defined(__APPLE__)
-    Region R = NewRgn(); 
+    RgnHandle R = NewRgn(); 
     SetRectRgn(R, X, Y, X+W, Y+H);
     UnionRgn(R, region, region);
     DisposeRgn(R);
@@ -717,12 +733,18 @@ void Window::destroy() {
   // Destroy graphics contexts that point at window:
   stop_drawing(x->xid);
 
+#if USE_X11
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
-  delete x;
-#ifdef _WIN32
+#elif defined(_WIN32)
+  if (x->region) DeleteObject(x->region);
+  DestroyWindow(x->xid);
   keep_app_active();
+#elif defined(__APPLE__)
+  if (x->region) DisposeRgn(x->region);
+  DisposeWindow(x->xid);
 #endif
+  delete x;
 }
 
 /*! Calls destroy(). The destructor <i>also deletes all the
@@ -736,5 +758,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.112 2004/06/09 05:38:58 spitzak Exp $".
 //

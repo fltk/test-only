@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.16 2004/06/04 08:34:25 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.17 2004/06/09 05:38:58 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -278,7 +278,7 @@ fkjlkasdjf
         }
     }
 #if 1
-    SetDIBitsToDevice(gc, x, y+j-k, w, k, 0, 0, 0, k,
+    SetDIBitsToDevice(dc, x, y+j-k, w, k, 0, 0, 0, k,
 		      (LPSTR)bottomline,
 		      (BITMAPINFO*)&head,
 #if USE_COLORMAP
@@ -295,7 +295,7 @@ fkjlkasdjf
       // This code was contributed to fltk but I have not seen it do any
       // actual alpha compositing. Maybe somebody can figure out what is
       // wrong?
-    HBITMAP b = CreateDIBitmap(gc,
+    HBITMAP b = CreateDIBitmap(dc,
 			       (BITMAPINFOHEADER*)&head,
 			       CBM_INIT,
 			       (LPSTR)bottomline,
@@ -313,7 +313,7 @@ fkjlkasdjf
     ii.hbmMask = b; //hMonoBitmap;
     ii.hbmColor = b;
     HICON imageIcon = ::CreateIconIndirect(&ii);
-    DrawIconEx(gc, x, y+j-k, imageIcon, w, k, 0, NULL, DI_NORMAL);
+    DrawIconEx(dc, x, y+j-k, imageIcon, w, k, 0, NULL, DI_NORMAL);
 
     // Clean up all the mess
     ::DestroyIcon(imageIcon);
@@ -330,5 +330,5 @@ fkjlkasdjf
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.16 2004/06/04 08:34:25 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.17 2004/06/09 05:38:58 spitzak Exp $".
 //

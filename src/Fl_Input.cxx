@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.89 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.90 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -950,20 +950,21 @@ void Input::reserve(int len) {
 bool Input::static_value(const char* str, int len) {
   clear_changed();
   if (undowidget == this) undowidget = 0;
-  if (str == value_ && len == size_) return false;
-  if (len) { // non-empty new value:
+  bool ret = true;
+  if (str == value_ && len == size_) {
+    ret = false;
+  } else if (len) { // non-empty new value:
     if (xscroll_ || (type() >= MULTILINE && yscroll_)) {
       xscroll_ = yscroll_ = 0;
       minimal_update(0);
-    } else {
-      int i = 0;
-      // find first different character:
-      if (value_) {
-	for (; i<size_ && i<len && str[i]==value_[i]; i++);
-	if (i==size_ && i==len) return false;
-      }
-      minimal_update(i);
     }
+    int i = 0;
+    // find first different character:
+    if (value_) {
+      for (; i<size_ && i<len && str[i]==value_[i]; i++);
+      if (i==size_ && i==len) ret = false;
+    }
+    if (ret) minimal_update(i);
     value_ = str;
     size_ = len;
   } else { // empty new value:
@@ -974,7 +975,7 @@ bool Input::static_value(const char* str, int len) {
     minimal_update(0);
   }
   position(0, size());
-  return true;
+  return ret;
 }
 
 /*! Same as static_value(str, str ? strlen(str) : 0) */
@@ -1595,5 +1596,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.89 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.90 2004/06/09 05:38:58 spitzak Exp $".
 //

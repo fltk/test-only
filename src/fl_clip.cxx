@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.22 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.23 2004/06/09 05:38:58 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -49,6 +49,14 @@ using namespace fltk;
   transformed coordianates.</i>
 */
 
+#if USE_X11
+// Region == Region
+#elif defined(_WIN32)
+# define Region HRGN
+#elif defined(__APPLE__)
+# define Region RgnHandle
+#endif
+
 static Region emptyrstack = 0;
 static Region* rstack = &emptyrstack;
 static int rstacksize = 0;
@@ -95,9 +103,12 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 void fl_restore_clip() {
   Region r = rstack[rstackptr];
   fl_clip_state_number++;
-#ifdef _WIN32
-  SelectClipRgn(gc, r); //if r is NULL, clip is automatically cleared
-#elif (defined(__APPLE__) && !USE_X11)
+#if USE_X11
+  if (r) XSetRegion(xdisplay, gc, r);
+  else XSetClipMask(xdisplay, gc, 0);
+#elif defined(_WIN32)
+  SelectClipRgn(dc, r); //if r is NULL, clip is automatically cleared
+#elif defined(__APPLE__)
   // We must intersect with the clip region for child windows:
   GrafPtr port; GDHandle GD; GetGWorld(&port, &GD);
   if ( port ) { // appaently this is zero for offscreen drawables
@@ -113,15 +124,20 @@ void fl_restore_clip() {
     }
   }
 #else
-  if (r) XSetRegion(xdisplay, gc, r);
-  else XSetClipMask(xdisplay, gc, 0);
+# error
 #endif
 }
 
 /*! Replace the top of the clip stack. */
 void fltk::clip_region(Region r) {
   Region oldr = rstack[rstackptr];
+#if USE_X11
   if (oldr) XDestroyRegion(oldr);
+#elif defined(_WIN32)
+  if (oldr) DeleteObject(oldr);
+#elif defined(__APPLE__)
+  if (oldr) DisposeRgn(oldr);
+#endif
   rstack[rstackptr] = r;
   fl_restore_clip();
 }
@@ -133,20 +149,24 @@ void fltk::push_clip(int x, int y, int w, int h) {
   Region r;
   if (w > 0 && h > 0) {
     transform(x,y);
-    r = XRectangleRegion(x, y, w, h);
     Region current = rstack[rstackptr];
+#if USE_X11
+    r = XRectangleRegion(x, y, w, h);
     if (current) {
-#ifdef _WIN32
-      CombineRgn(r,r,current,RGN_AND);
-#elif (defined(__APPLE__) && !USE_X11)
-      SectRgn(r, current, r); 
-#else
       Region temp = XCreateRegion();
       XIntersectRegion(current, r, temp);
       XDestroyRegion(r);
       r = temp;
-#endif
     }
+#elif defined(_WIN32)
+    r = CreateRectRgn(x, y, x+w, y+h);
+    if (current) CombineRgn(r,r,current,RGN_AND);
+#elif defined(__APPLE__)
+    r = NewRgn();
+    SetRectRgn(r, x, y, x+w, y+h);
+    if (current) SectRgn(r, current, r); 
+#else
+#endif
   } else { // make empty clip region:
 #ifdef _WIN32
     r = CreateRectRgn(0,0,0,0);
@@ -173,18 +193,21 @@ void fltk::clip_out(int x, int y, int w, int h) {
   // return without doing anything because that makes some old fltk code work:
   if (!current) return;
   transform(x,y);
+#if USE_X11
   Region r = XRectangleRegion(x, y, w, h);
-#ifdef _WIN32
-  CombineRgn(current,current,r,RGN_DIFF);
-  DeleteObject(r);
-#elif (defined(__APPLE__) && !USE_X11)
-  DiffRgn(current, r, current);
-#else
   Region temp = XCreateRegion();
   XSubtractRegion(current, r, temp);
   XDestroyRegion(r);
   XDestroyRegion(current);
   rstack[rstackptr] = temp;
+#elif defined(_WIN32)
+  Region r = CreateRectRgn(x, y, x+w, y+h);
+  CombineRgn(current,current,r,RGN_DIFF);
+  DeleteObject(r);
+#elif defined(__APPLE__)
+  Region r = NewRgn();
+  SetRectRgn(r, x, y, x+w, y+h);
+  DiffRgn(current, r, current);
 #endif
   fl_restore_clip();
 }
@@ -208,7 +231,13 @@ void fltk::push_no_clip() {
 void fltk::pop_clip() {
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
+#if USE_X11
     if (oldr) XDestroyRegion(oldr);
+#elif defined(_WIN32)
+    if (oldr) DeleteObject(oldr);
+#elif defined(__APPLE__)
+    if (oldr) DisposeRgn(oldr);
+#endif
     fl_restore_clip();
   }
 }
@@ -241,8 +270,8 @@ int fltk::not_clipped(int x, int y, int w, int h) {
 // The win32 API makes no distinction between partial and complete
 // intersection, so we have to check for partial intersection ourselves.
   int ret = 0;
-  Region rr = XRectangleRegion(x,y,w,h);
-  Region temp = CreateRectRgn(0,0,0,0);
+  Region rr = CreateRectRgn(x, y, x+w, y+h);
+  Region temp = CreateRectRgn(0, 0, 0, 0);
   if (CombineRgn(temp, rr, r, RGN_AND) == NULLREGION) { // disjoint
     ret = 0;
   } else if (EqualRgn(temp, rr)) { // complete
@@ -289,45 +318,7 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
   t = Window::current()->h(); if (y+h > t) {h = t-y; ret = 2;}
   // check for total clip (or for empty rectangle):
   if (w <= 0 || h <= 0) {X = Y = W = H = 0; return 0;}
-#ifdef _WIN32
-// The win32 API makes no distinction between partial and complete
-// intersection, so we have to check for partial intersection ourselves.
-// However, given that the regions may be composite, we have to do
-// some voodoo stuff...
-  Region rr = XRectangleRegion(x,y,w,h);
-  Region temp = CreateRectRgn(0,0,0,0);
-  if (CombineRgn(temp, rr, r, RGN_AND) == NULLREGION) { // disjoint
-    X = Y = W = H = 0;
-    ret = 0;
-  } else if (EqualRgn(temp, rr)) { // complete
-    X = x-dx;
-    Y = y-dy;
-    W = w; H = h;
-    // ret = ret
-  } else {	// parital intersection
-    RECT rect;
-    GetRgnBox(temp, &rect);
-    X = rect.left-dx; Y = rect.top-dy;
-    W = rect.right - rect.left; H = rect.bottom - rect.top;
-    ret = 2;
-  }
-  DeleteObject(temp);
-  DeleteObject(rr);
-  return ret;
-#elif (defined(__APPLE__) && !USE_X11)
-  RgnHandle rr = NewRgn();
-  SetRectRgn( rr, x, y, x+w, y+h );
-  SectRgn( r, rr, rr );
-  Rect rp; GetRegionBounds(rr, &rp);
-  X = rp.left;
-  Y = rp.top;
-  W = rp.right - X;
-  H = rp.bottom - Y;
-  DisposeRgn( rr );
-  if ( H==0 ) return 2;
-  if ( h==H && w==W ) return 0;
-  return 0;
-#else
+#if USE_X11
   switch (XRectInRegion(r, x, y, w, h)) {
   case 0: // completely outside
     X = Y = W = H = 0;
@@ -348,9 +339,49 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
     XDestroyRegion(rr);
     return 2;}
   }
+#elif defined(_WIN32)
+// The win32 API makes no distinction between partial and complete
+// intersection, so we have to check for partial intersection ourselves.
+// However, given that the regions may be composite, we have to do
+// some voodoo stuff...
+  Region rr = CreateRectRgn(x, y, x+w, y+h);
+  Region temp = CreateRectRgn(0,0,0,0);
+  if (CombineRgn(temp, rr, r, RGN_AND) == NULLREGION) { // disjoint
+    X = Y = W = H = 0;
+    ret = 0;
+  } else if (EqualRgn(temp, rr)) { // complete
+    X = x-dx;
+    Y = y-dy;
+    W = w; H = h;
+    // ret = ret
+  } else {	// parital intersection
+    RECT rect;
+    GetRgnBox(temp, &rect);
+    X = rect.left-dx; Y = rect.top-dy;
+    W = rect.right - rect.left; H = rect.bottom - rect.top;
+    ret = 2;
+  }
+  DeleteObject(temp);
+  DeleteObject(rr);
+  return ret;
+#elif defined(__APPLE__)
+  RgnHandle rr = NewRgn();
+  SetRectRgn( rr, x, y, x+w, y+h );
+  SectRgn( r, rr, rr );
+  Rect rp; GetRegionBounds(rr, &rp);
+  X = rp.left;
+  Y = rp.top;
+  W = rp.right - X;
+  H = rp.bottom - Y;
+  DisposeRgn( rr );
+  if ( H==0 ) return 2;
+  if ( h==H && w==W ) return 0;
+  return 0;
+#else
+# error
 #endif
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.22 2004/05/07 06:36:23 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.23 2004/06/09 05:38:58 spitzak Exp $"
 //

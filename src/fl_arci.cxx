@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.21 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -60,17 +60,17 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   case FILLPIE:
     setbrush();
     setpen();
-    Pie(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Pie(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case FILLARC:
     setbrush();
     setpen();
-    Chord(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Chord(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
     setpen();
-    Arc(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Arc(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   }
 #elif (defined(__APPLE__) && !USE_X11)
@@ -123,5 +123,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 */
 
 //
-// End of "$Id: fl_arci.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.21 2004/06/09 05:38:58 spitzak Exp $".
 //

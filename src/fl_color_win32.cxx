@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.36 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.37 2004/06/09 05:38:58 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -91,8 +91,8 @@ static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
 HPEN fltk::setpen() {
 #if USE_STOCK_BRUSH
   if (!lstyle && line_width <= 1) {
-    SelectObject(gc, stockpen);
-    SetDCPenColor(gc, current_xpixel);
+    SelectObject(dc, stockpen);
+    SetDCPenColor(dc, current_xpixel);
     return stockpen;
   }
 #endif
@@ -109,14 +109,14 @@ HPEN fltk::setpen() {
     }
     pen_for = current_xpixel;
   }
-  SelectObject(gc, current_pen);
+  SelectObject(dc, current_pen);
   return current_pen;
 }
 
 HBRUSH fltk::setbrush() {
 #if USE_STOCK_BRUSH
-  SelectObject(gc, stockbrush);
-  SetDCBrushColor(gc, current_xpixel);
+  SelectObject(dc, stockbrush);
+  SetDCBrushColor(dc, current_xpixel);
 #else
   if (!current_brush) goto J1;
   if (brush_for != current_xpixel) {
@@ -125,7 +125,7 @@ HBRUSH fltk::setbrush() {
     current_brush = CreateSolidBrush(current_xpixel);
     brush_for = current_xpixel;
   }
-  SelectObject(gc, current_brush);
+  SelectObject(dc, current_brush);
 #endif
   return current_brush;
 }
@@ -153,8 +153,8 @@ fl_select_palette(void)
   if (!beenhere) {
     beenhere = 1;
 
-    //if (GetDeviceCaps(gc, BITSPIXEL) > 8) return NULL;
-    int nColors = GetDeviceCaps(gc, SIZEPALETTE);
+    //if (GetDeviceCaps(dc, BITSPIXEL) > 8) return NULL;
+    int nColors = GetDeviceCaps(dc, SIZEPALETTE);
     if (nColors <= 0 || nColors > 256) return NULL;
     // this will try to work on < 256 color screens, but will probably
     // come out quite badly.
@@ -179,8 +179,8 @@ fl_select_palette(void)
     xpalette = CreatePalette(pPal);
   }
   if (xpalette) {
-    SelectPalette(gc, xpalette, FALSE);
-    RealizePalette(gc);
+    SelectPalette(dc, xpalette, FALSE);
+    RealizePalette(dc);
   }
   return xpalette;
 }
@@ -188,5 +188,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.36 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.37 2004/06/09 05:38:58 spitzak Exp $".
 //

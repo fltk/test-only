@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.172 2004/06/06 21:08:32 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.173 2004/06/09 05:38:58 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1633,6 +1633,10 @@ void Window::make_current() const {
 
 XWindow fltk::xwindow;
 GC fltk::gc;
+#if USE_CAIRO
+cairo_t* fltk::cc;
+#endif
+
 
 /*! Fltk can draw into any X window or pixmap that uses the fltk::xvisual.
   Calling this will make all drawing functions go there. Before you destroy
@@ -1649,6 +1653,16 @@ void fltk::draw_into(XWindow window) {
   // if no text is drawn into this window. It is created when the
   // xft text is drawn the first time.
   load_identity();
+  // Cairo context created as well:
+  if (cc) {
+    if (cairo_status(cc)) {
+      warning("Cairo: %s", cairo_status_string(cc));
+      // reset it somehow?
+    }
+  } else {
+    cc = cairo_create();
+  }
+  cairo_set_target_drawable (cc, xdisplay, window);
 }
 
 /*! \fn void fltk::stop_drawing(XWindow window);
@@ -1826,5 +1840,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.172 2004/06/06 21:08:32 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.173 2004/06/09 05:38:58 spitzak Exp $".
 //

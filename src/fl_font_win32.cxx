@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.51 2004/05/15 20:52:46 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.52 2004/06/09 05:38:58 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -245,12 +245,12 @@ float fltk::getwidth(const char* c, int n) {
 }
 
 void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
-  SetTextColor(gc, current_xpixel);
-  HGDIOBJ oldfont = SelectObject(gc, current->font);
-  TextOut(gc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
-  SelectObject(gc, oldfont);
+  SetTextColor(dc, current_xpixel);
+  HGDIOBJ oldfont = SelectObject(dc, current->font);
+  TextOut(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
+  SelectObject(dc, oldfont);
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.51 2004/05/15 20:52:46 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.52 2004/06/09 05:38:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.10 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: mac.h,v 1.11 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -41,22 +41,6 @@
 ////////////////////////////////////////////////////////////////
 // Emulate X somewhat:
 
-typedef WindowPtr XWindow;
-struct XPoint { int x, y; };
-struct XRectangle {int x, y, width, height;};
-typedef RgnHandle Region;
-typedef GWorldPtr Pixmap;
-
-inline Region XRectangleRegion(int x, int y, int w, int h) {
-  Region R = NewRgn();
-  SetRectRgn(R, x, y, x+w, y+h);
-  return R;
-}
-inline void XDestroyRegion(Region r) {DisposeRgn(r);}
-#define XDestroyWindow(a,b) DisposeWindow(b)
-#define XMapWindow(a,b) ShowWindow(b)
-#define XUnmapWindow(a,b) HideWindow(b)
-
 namespace fltk {
 
 ////////////////////////////////////////////////////////////////
@@ -76,8 +60,8 @@ extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-extern FL_API void	clip_region(Region);
-extern FL_API Region	clip_region();
+extern FL_API void	clip_region(RgnHandle);
+extern FL_API RgnHandle	clip_region();
 extern FL_API void	draw_into(GWorldPtr xid);
 extern FL_API void	stop_drawing(GWorldPtr xid);
 
@@ -92,10 +76,10 @@ class FL_API CreatedWindow {
 public:
   WindowPtr xid; // used by main windows
   Window* window;
-  Region region; // damage region
+  RgnHandle region; // damage region
   void expose(int x, int y, int w, int h);
   CreatedWindow* next;
-  Region subRegion; // region which clips out children
+  RgnHandle subRegion; // region which clips out children
   CreatedWindow *children, *brother;
   bool wait_for_expose;
   bool need_new_subRegion;
@@ -107,8 +91,8 @@ public:
 };
 
 // convert xid <-> Window:
-inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
-Window* find(XWindow xid);
+inline WindowPtr xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+Window* find(WindowPtr xid);
 
 extern CursHandle default_cursor;
 extern CursHandle current_cursor;
@@ -122,6 +106,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.10 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: mac.h,v 1.11 2004/06/09 05:38:57 spitzak Exp $".
 //
 

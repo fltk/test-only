@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.37 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.38 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -52,11 +52,11 @@ void fltk::strokerect(int x, int y, int w, int h) {
   XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
 #elif defined(_WIN32)
   setpen();
-  MoveToEx(gc, x, y, 0L); 
-  LineTo(gc, x+w-1, y);
-  LineTo(gc, x+w-1, y+h-1);
-  LineTo(gc, x, y+h-1);
-  LineTo(gc, x, y);
+  MoveToEx(dc, x, y, 0L); 
+  LineTo(dc, x+w-1, y);
+  LineTo(dc, x+w-1, y+h-1);
+  LineTo(dc, x, y+h-1);
+  LineTo(dc, x, y);
 #elif defined(__APPLE__)
   Rect rect;
   SetRect(&rect, x, y, x+w, y+h);
@@ -76,8 +76,8 @@ void fltk::fillrect(int x, int y, int w, int h) {
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-  SetBkColor(gc, current_xpixel);
-  ExtTextOut(gc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
+  SetBkColor(dc, current_xpixel);
+  ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 #elif defined(__APPLE__)
   Rect rect;
   SetRect(&rect, x, y, x+w, y+h);
@@ -95,12 +95,12 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
 #elif defined(_WIN32)
   setpen();
-  MoveToEx(gc, x, y, 0L); 
-  LineTo(gc, x1, y1);
+  MoveToEx(dc, x, y, 0L); 
+  LineTo(dc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
   // fltk is supposed to act like there is a 1-pixel pen.
-  SetPixel(gc, x1, y1, current_xpixel);
+  SetPixel(dc, x1, y1, current_xpixel);
 #elif defined(__APPLE__)
   MoveTo(x, y); 
   LineTo(x1, y1);
@@ -117,8 +117,8 @@ void fltk::drawline(float X, float Y, float X1, float Y1) {
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
 #elif defined(_WIN32)
   setpen();
-  MoveToEx(gc, x, y, 0L); 
-  LineTo(gc, x1, y1);
+  MoveToEx(dc, x, y, 0L); 
+  LineTo(dc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
   // fltk is supposed to act like there is a 1-pixel pen.
@@ -136,7 +136,7 @@ void fltk::drawpoint(int x, int y) {
 #if USE_X11
   XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
-  SetPixel(gc, x, y, current_xpixel);
+  SetPixel(dc, x, y, current_xpixel);
 #elif defined(__APPLE__)
   MoveTo(x, y); Line(0, 0);
 #else
@@ -150,7 +150,7 @@ void fltk::drawpoint(float X, float Y) {
 #if USE_X11
   XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
-  SetPixel(gc, x, y, current_xpixel);
+  SetPixel(dc, x, y, current_xpixel);
 #elif defined(__APPLE__)
   MoveTo(x, y); Line(0, 0);
 #else
@@ -161,5 +161,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.37 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.38 2004/06/09 05:38:58 spitzak Exp $".
 //

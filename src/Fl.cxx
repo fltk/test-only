@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.175 2004/03/28 17:33:14 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.176 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -67,14 +67,14 @@ using namespace fltk;
 
 /*!
   Returns the version number of fltk. This can be compared to the
-  value of the fltk::VERSION macro to see if the shared library of
+  value of the FL_VERSION macro to see if the shared library of
   fltk your program linked with is up to date.
 
   The FLTK version number is stored in a number of compile-time constants: 
-  - fltk::MAJOR_VERSION - The major release number, currently 2.
-  - fltk::MINOR_VERSION - The minor release number, currently 0.
-  - fltk::PATCH_VERSION - The patch release number, currently 1.
-  - fltk::VERSION - A combined floating-point version number of the
+  - FL_MAJOR_VERSION - The major release number, currently 2.
+  - FL_MINOR_VERSION - The minor release number, currently 0.
+  - FL_PATCH_VERSION - The patch release number, currently 1.
+  - FL_VERSION - A combined floating-point version number of the
     form M.mmpp where M is the major number, mm is the minor number,
     and pp is the patch number, currently 2.0001.
 */
@@ -123,12 +123,14 @@ static void fix_focus() {
   focus(0);
 }
 
-#ifdef _WIN32
+#if USE_X11
+# include "Fl_x.cxx"
+#elif defined(_WIN32)
 # include "Fl_win32.cxx"
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
 # include "Fl_mac.cxx"
 #else
-# include "Fl_x.cxx"
+# error
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -506,7 +508,14 @@ int fltk::ready() {
 
 CreatedWindow* CreatedWindow::first;
 
-Window* fltk::find(XWindow xid) {
+#if USE_X11
+Window* fltk::find(XWindow xid)
+#elif defined(_WIN32)
+Window* fltk::find(HWND xid)
+#elif defined(__APPLE__)
+Window* fltk::find(WindowPtr xid)
+#endif
+{
   CreatedWindow *x;
   for (CreatedWindow **pp = &CreatedWindow::first; (x = *pp); pp = &x->next)
     if (x->xid == xid) {
@@ -608,14 +617,19 @@ void fltk::flush() {
 	}
       }
       // destroy damage regions for windows that don't use them:
-      if (x->region) {XDestroyRegion(x->region); x->region = 0;}
+      if (x->region) {
+#if USE_X11
+	XDestroyRegion(x->region);
+#elif defined(_WIN32)
+	DeleteObject(x->region);
+#elif defined(__APPLE__)
+	DisposeRgn(x->region);
+#endif
+	x->region = 0;
+      }
     }
   }
-#ifdef _WIN32
-  GdiFlush();
-#elif (defined(__APPLE__) && !USE_X11)
-  //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
-#else
+#if USE_X11
   if (xmousewin && !pushed() && !grab()) {
     CreatedWindow* i = CreatedWindow::find(xmousewin);
     if (i->cursor != None && !i->cursor_for->contains(belowmouse_)) {
@@ -624,6 +638,10 @@ void fltk::flush() {
     }
   }
   XFlush(xdisplay);
+#elif defined(_WIN32)
+  GdiFlush();
+#elif defined(__APPLE__)
+  //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #endif
 }
 
@@ -719,7 +737,7 @@ void fltk::pushed(Widget *o) {
   widget.  */
 void Widget::throw_focus() {
   if (contains(fltk::pushed())) pushed_ = 0;
-#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
+#if USE_X11
   if (contains(selection_requestor)) selection_requestor = 0;
 #endif
   if (contains(fltk::belowmouse())) {belowmouse_ = 0; e_is_click = 0;}
@@ -768,17 +786,19 @@ void fltk::modal(Widget* widget, bool grab) {
   // release the old grab:
   if (grab_) {
     grab_ = false;
-#ifdef _WIN32
-    ReleaseCapture();
-    // if (event() == PUSH) repost_the_push_event(); NYI
-#elif (defined(__APPLE__) && !USE_X11)
-    // dunno what to do here
-#else
+#if USE_X11
     XUngrabKeyboard(xdisplay, event_time);
     event_is_click(0); // avoid double click
     XAllowEvents(xdisplay, event()==PUSH ? ReplayPointer : AsyncPointer, CurrentTime);
     XUngrabPointer(xdisplay, event_time); // Qt did not do this...
     XFlush(xdisplay); // make sure we are out of danger before continuing...
+#elif defined(_WIN32)
+    ReleaseCapture();
+    // if (event() == PUSH) repost_the_push_event(); NYI
+#elif defined(__APPLE__)
+    // dunno what to do here
+#else
+# error
 #endif
     // because we "pushed back" the PUSH, make it think no buttons are down:
     e_state &= 0xffffff;
@@ -790,16 +810,7 @@ void fltk::modal(Widget* widget, bool grab) {
   // be used as a target for the events, and it cannot disappear while the
   // grab is running. I just grab fltk's first window:
   if (grab && widget) {
-#ifdef _WIN32
-    Window* window = Window::first();
-    if (window) {
-      SetActiveWindow(xid(window));
-      SetCapture(xid(window));
-      grab_ = true;
-    }
-#elif (defined(__APPLE__) && !USE_X11)
-    // dunno what to do here
-#else
+#if USE_X11
     Window* window = Window::first();
     if (window &&
 	XGrabKeyboard(xdisplay,
@@ -828,6 +839,17 @@ void fltk::modal(Widget* widget, bool grab) {
     } else {
       //printf("XGrabKeyboard failed\n");
     }
+#elif defined(_WIN32)
+    Window* window = Window::first();
+    if (window) {
+      SetActiveWindow(xid(window));
+      SetCapture(xid(window));
+      grab_ = true;
+    }
+#elif defined(__APPLE__)
+    // dunno what to do here
+#else
+# error
 #endif
   }
 
@@ -1078,5 +1100,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.175 2004/03/28 17:33:14 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.176 2004/06/09 05:38:57 spitzak Exp $".
 //

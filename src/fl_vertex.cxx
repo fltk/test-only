@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.27 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.28 2004/06/09 05:38:58 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -284,10 +284,14 @@ void fltk::transform_distance(int& x, int& y) {
 */
 
 // typedef what the x,y fields in a point are:
-#ifdef _WIN32
-typedef int COORD_T;
-#else
+#if USE_X11
 typedef short COORD_T;
+#elif defined(_WIN32)
+typedef int COORD_T;
+typedef POINT XPoint;
+#else
+typedef int COORD_T;
+struct XPoint { int x, y; };
 #endif
 
 // Storage of the current path:
@@ -535,7 +539,7 @@ void fltk::drawpoints() {
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
 #elif defined(_WIN32)
   for (int i=0; i<numpoints; i++)
-    SetPixel(gc, xpoint[i].x, xpoint[i].y, current_xpixel);
+    SetPixel(dc, xpoint[i].x, xpoint[i].y, current_xpixel);
 #elif defined(__APPLE__)
   for (int i=0; i<numpoints; i++) {
     MoveTo(xpoint[i].x, xpoint[i].y); Line(0, 0);
@@ -566,17 +570,17 @@ void fltk::strokepath() {
 #elif defined(_WIN32)
   setpen();
   if (circle_w > 0)
-    Arc(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Arc(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	0,0, 0,0);
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
-    Polyline(gc, xpoint+loop_start, loop_size);
+    Polyline(dc, xpoint+loop_start, loop_size);
     loop_start += loop_size;
   }
   int loop_size = numpoints-loop_start;
   if (loop_size > 1)
-    Polyline(gc, xpoint+loop_start, loop_size);
+    Polyline(dc, xpoint+loop_start, loop_size);
 #elif defined(__APPLE__)
   if (circle_w > 0) {
     Rect r; r.left=circle_x; r.right=circle_x+circle_w+1;
@@ -633,13 +637,13 @@ void fltk::fillpath() {
   setbrush();
   setpen();
   if (circle_w > 0)
-    Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Chord(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
     closepath();
-    PolyPolygon(gc, xpoint, loop, loops);
+    PolyPolygon(dc, xpoint, loop, loops);
   } else if (numpoints > 2) {
-    Polygon(gc, xpoint, numpoints);
+    Polygon(dc, xpoint, numpoints);
   }
 #elif defined(__APPLE__)
   if (circle_w > 0) {
@@ -700,13 +704,13 @@ void fltk::fillstrokepath(Color color) {
   setcolor(color);
   setpen();
   if (circle_w > 0)
-    Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Chord(dc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
     closepath();
-    PolyPolygon(gc, xpoint, loop, loops);
+    PolyPolygon(dc, xpoint, loop, loops);
   } else if (numpoints > 2) {
-    Polygon(gc, xpoint, numpoints);
+    Polygon(dc, xpoint, numpoints);
   }
   inline_newpath();
 #elif defined(__APPLE__)
@@ -736,5 +740,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.27 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.28 2004/06/09 05:38:58 spitzak Exp $".
 //

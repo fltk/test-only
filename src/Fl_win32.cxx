@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.210 2004/06/06 21:08:32 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.211 2004/06/09 05:38:58 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -987,7 +987,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // needs to draw:
     i->region = CreateRectRgn(0,0,0,0);
     GetUpdateRgn(hWnd, i->region, 0);
-    // Now draw it using Windows' gc and clip region:
+    // Now draw it using Windows' HDC and clip region:
     BeginPaint(i->xid, &paint);
     in_wm_paint = window; // makes it use the hdc from the paint struct
     window->flush();
@@ -1190,7 +1190,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_PALETTECHANGED:
     if ((HWND)wParam != hWnd) {
       window->make_current();
-      if (fl_select_palette()) UpdateColors(gc);
+      if (fl_select_palette()) UpdateColors(dc);
     }
     break;
 
@@ -1491,15 +1491,15 @@ void Window::label(const char *name,const char *iname) {
 //
 // ImageDraw creates a temporary DC. See Image.cxx
 
-HDC fltk::gc;
+HDC fltk::dc;
 
 const Window *Window::current_;
 
 void Window::make_current() const {
 //    if (this == in_wm_paint)
-//      gc = paint.hdc;
+//      dc = paint.hdc;
 //    else
-  gc = i->dc;
+  dc = i->dc;
   current_ = this;
 #if USE_COLORMAP
   fl_select_palette();
@@ -1516,7 +1516,7 @@ void fltk::draw_into(HBITMAP bitmap) {
     SetBkMode(fl_bitmap_dc, TRANSPARENT);
   }
   SelectObject(fl_bitmap_dc, bitmap);
-  gc = fl_bitmap_dc;
+  dc = fl_bitmap_dc;
 #if USE_COLORMAP
   fl_select_palette();
 #endif // USE_COLORMAP
@@ -1527,17 +1527,17 @@ void fltk::stop_drawing(HWND window) {}
 
 void fltk::stop_drawing(HBITMAP bitmap) {}
 
-static HDC screen_gc = 0;
+static HDC screen_dc = 0;
 
 /** Return an arbitrary HDC which you can use for Win32 functions that
     need one as an argument. The returned value is short-lived and may
     be destroyed the next time anything is drawn into a window!
 */
 HDC fltk::getDC() {
-  //if (gc) return gc;
+  //if (dc) return dc;
   if (CreatedWindow::first) return CreatedWindow::first->dc;
-  if (screen_gc) ReleaseDC(0,screen_gc);
-  return (screen_gc = GetDC(0));
+  if (screen_dc) ReleaseDC(0,screen_dc);
+  return (screen_dc = GetDC(0));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1566,7 +1566,7 @@ void Window::flush() {
     // draw the back buffer if it needs anything:
     if (damage || i->backbuffer_bad) {
       // set the graphics context to draw into back buffer:
-      gc = i->bdc;
+      dc = i->bdc;
 #if USE_COLORMAP
       fl_select_palette();
 #endif // USE_COLORMAP
@@ -1588,10 +1588,10 @@ void Window::flush() {
 	  clip_region(0);
 	}
       }
-      //fl_restore_clip(); // duplicate region into new gc (there is none)
+      //fl_restore_clip(); // duplicate region into new dc (there is none)
     }
 
-    gc = i->dc;
+    dc = i->dc;
 
     // Clip the copying of the pixmap to the damage area,
     // this makes it faster, especially if the damage area is small:
@@ -1604,7 +1604,7 @@ void Window::flush() {
     int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
 
     // Copy the backbuffer to the window:
-    BitBlt(gc, X, Y, W, H, i->bdc, X, Y, SRCCOPY);
+    BitBlt(dc, X, Y, W, H, i->bdc, X, Y, SRCCOPY);
 
     if (i->overlay) draw_overlay();
     clip_region(0);
@@ -1652,9 +1652,9 @@ Cleanup::~Cleanup() {
   if (fl_bitmap_dc) DeleteDC(fl_bitmap_dc);
   // get rid of allocated font resources
   fl_font_rid();
-  if (screen_gc) ReleaseDC(0,screen_gc);
+  if (screen_dc) ReleaseDC(0,screen_dc);
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.210 2004/06/06 21:08:32 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.211 2004/06/09 05:38:58 spitzak Exp $".
 //

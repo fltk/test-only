@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.132 2004/06/04 08:58:03 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.133 2004/06/09 05:38:57 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -690,9 +690,9 @@ void Group::update_child(Widget& w) const {
   }
 }
 
-/** Add x() and y() to the position of all children. This can be used
-    to fix children widgets created for fltk1.1, where the x/y were
-    always relative to the window, rather than the surrounding group.
+/** If this is a Group and not a Window, subtract x() and y() from the
+    position of all children. This will fix the positions of widgets
+    created for fltk1.1 that are inside a group.
 */
 void Group::fix_old_positions() {
   if (is_window()) return; // in fltk 1.0 children of windows were relative
@@ -704,5 +704,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.132 2004/06/04 08:58:03 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.133 2004/06/09 05:38:57 spitzak Exp $".
 //
