@@ -2477,3 +2477,18 @@ Added FL_CURSOR_NO (slash in circle)
 
 Fl_Browser could crash if you used arrow keys to navigate to an item
 who's callback would delete the browser.
+
+Changed to use the fltk:: namespace.
+Use cvs checkout -d to get the new FL subdirectory!
+
+Not yet done:
+
+Back compatability header files in the FL directory are mostly missing
+
+Glut and Forms back compatability not done (we may drop Forms and move
+the Chart object back into fltk).
+
+Only a few of the test/ programs ported, others commented out of the
+makefile.
+
+It's not loading themes, I will fix asap.

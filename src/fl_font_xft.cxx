@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.12 2002/12/10 02:01:01 easysw Exp $"
+// "$Id: fl_font_xft.cxx,v 1.13 2002/12/10 09:43:26 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -236,7 +236,7 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   // XftCollorAllocValue returns:
   static XftColor color;
   color.pixel = current_xpixel;
-  uchar r,g,b; split_color(get_color(), r,g,b);
+  uchar r,g,b; split_color(getcolor(), r,g,b);
   color.color.red   = r*0x101;
   color.color.green = g*0x101;
   color.color.blue  = b*0x101;
@@ -400,5 +400,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.12 2002/12/10 02:01:01 easysw Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.13 2002/12/10 09:43:26 spitzak Exp $"
 //
