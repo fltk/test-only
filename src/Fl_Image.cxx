@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.6 1999/08/16 07:31:16 bill Exp $"
+// "$Id: Fl_Image.cxx,v 1.7 1999/08/23 16:43:11 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,6 @@
 #include <FL/Fl_Image.H>
 
 void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
-  measure(W,H);
   int cx;
   if (f & FL_ALIGN_LEFT) cx = 0;
   else if (f & FL_ALIGN_RIGHT) cx = w-W;
@@ -38,9 +37,37 @@ void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
   if (f & FL_ALIGN_BOTTOM) cy = h-H;
   else if (f & FL_ALIGN_TOP) cy = 0;
   else cy = h/2-H/2;
-  draw(X, Y, W, H, cx, cy);
+  if (f & FL_ALIGN_TILED)
+    draw_tiled(X, Y, W, H, cx, cy);
+  else
+    draw(X, Y, W, H, cx, cy);
 }
 
+// tiled image with minimal redraw
+void Fl_Image::draw_tiled(int x, int y, int w, int h, int cx, int cy) {
+  int iw, ih; measure(iw, ih);
+  if (iw==0) return;
+
+  int X,Y,W,H; fl_clip_box(x, y, w, h, X, Y, W, H);
+  if(W <= 0 || H <= 0) return;
+  cx += X-x; cy += Y-y;
+
+  int temp = -cx % iw;
+  cx = (temp>0 ? iw : 0) - temp;
+  temp = -cy % ih;
+  cy = (temp>0 ? ih : 0) - temp;
+
+  int ccx=cx;
+  while(-cy<H) {
+    while(-cx<W) {
+      draw(X, Y, W, H, cx, cy);
+      cx -= iw;
+    }
+    cy -= ih;
+    cx = ccx;
+  }
+}
+  
 // Most subclasses have draw() create the "mask" and "id" and then
 // call this method:
 
@@ -109,8 +136,8 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
   } // else { no mask or id, probably an error... }
 }
 
-// by default we assumme w,h are set by the constructor:
-void Fl_Image::measure(int, int) {}
+// give the measure of the image
+void Fl_Image::measure(int& W, int& H) { W=w; H=h; }
 
 // old code from Fl_Image that created the pixmap with fl_draw_image:
 //   if (!id) {
@@ -141,5 +168,5 @@ void Fl_Image::label(Fl_Menu_Item* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.6 1999/08/16 07:31:16 bill Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.7 1999/08/23 16:43:11 vincent Exp $".
 //

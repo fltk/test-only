@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $"
+// "$Id: code.cxx,v 1.11 1999/08/23 16:43:09 vincent Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -215,8 +215,24 @@ void write_cstring(const char *w, int length) {
   putc('\"', code_file);
 }
 
+// write an array of C characters in a decimal format
+void write_carray(const char *w, int length) {
+  if (varused_test) return;
+  const char *e = w+length;
+  int linelength = 1;
+  for (; w < e;) {
+    if (linelength >= 75) {fputs("\n",code_file); linelength = 0;}
+    int c = (uchar)*w++;
+    fprintf(code_file, "%d,", c);
+    linelength+=2;
+    if(c>=10) linelength++;
+    if(c>=100) linelength++;
+  }
+}
+
 // write a C string, quoting characters if necessary:
 void write_cstring(const char *w) {write_cstring(w,strlen(w));}
+void write_carray(const char *w) {write_carray(w,strlen(w));}
 
 void write_c(const char* format,...) {
   if (varused_test) {varused = 1; return;}
@@ -312,5 +328,5 @@ void Fl_Type::write_code1() {
 void Fl_Type::write_code2() {}
 
 //
-// End of "$Id: code.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $".
+// End of "$Id: code.cxx,v 1.11 1999/08/23 16:43:09 vincent Exp $".
 //

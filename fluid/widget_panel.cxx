@@ -6,6 +6,8 @@ Fl_Tabs *panel_tabs=(Fl_Tabs *)0;
 
 Fl_Box *image_label=(Fl_Box *)0;
 
+Fl_Light_Button *include_image_button=(Fl_Light_Button *)0;
+
 Fl_Input *v_input[4]={(Fl_Input *)0};
 
 Fl_Box *callback_label=(Fl_Box *)0;
@@ -21,13 +23,12 @@ Fl_Window* make_widget_panel() {
       o->callback((Fl_Callback*)propagate_tabs);
       { Fl_Group* o = new Fl_Group(0, 0, 358, 295, "GUI");
         o->callback((Fl_Callback*)propagate_group);
-        o->hide();
         { Fl_Input* o = new Fl_Input(80, 10, 270, 20, "Label:");
           o->callback((Fl_Callback*)label_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("Text displayed on or next to the widget");
         }
-        { Fl_Button* o = new Fl_Button(80, 60, 50, 20, "clip");
+        { Fl_Button* o = new Fl_Button(145, 60, 50, 20, "clip");
           o->type(1);
           o->box(FL_THIN_UP_BOX);
           o->label_size(12);
@@ -35,7 +36,7 @@ Fl_Window* make_widget_panel() {
           o->tooltip("Turn on clipping to the widget's area when drawing
 label.  This is slower so it should be left off if label will fit");
         }
-        { Fl_Button* o = new Fl_Button(130, 60, 50, 20, "wrap");
+        { Fl_Button* o = new Fl_Button(195, 60, 50, 20, "wrap");
           o->type(1);
           o->box(FL_THIN_UP_BOX);
           o->label_size(12);
@@ -190,11 +191,27 @@ application and will prevent events from going to other windows.");
           o->align(FL_ALIGN_TOP_LEFT);
           o->tooltip("The initial value (integer) of this widget");
         }
+        { Fl_Button* o = new Fl_Button(95, 60, 50, 20, "tiled");
+          o->type(1);
+          o->box(FL_THIN_UP_BOX);
+          o->label_size(12);
+          o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TILED));
+          o->tooltip("Draw the image tiled");
+        }
+        { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(5, 60, 90, 20, "include in code");
+          o->box(FL_THIN_UP_BOX);
+          o->label_size(10);
+          o->callback((Fl_Callback*)include_image_cb);
+          o->align(132|FL_ALIGN_INSIDE);
+          o->tooltip("Include the datas of the image inlined in 
+the code or keep it in an external file");
+        }
         o->end();
         Fl_Group::current()->resizable(o);
       }
       { Fl_Group* o = new Fl_Group(0, 0, 358, 295, "Style");
         o->callback((Fl_Callback*)propagate_group);
+        o->hide();
         { Fl_Choice* o = new Fl_Choice(90, 45, 220, 20, "Label Type:");
           o->box(FL_THIN_UP_BOX);
           o->text_size(12);

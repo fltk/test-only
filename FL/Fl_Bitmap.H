@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.H,v 1.6 1999/08/16 07:30:47 bill Exp $"
+// "$Id: Fl_Bitmap.H,v 1.7 1999/08/23 16:43:05 vincent Exp $"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,14 @@ public:
   Fl_Bitmap(const uchar *bits, int W, int H) : array(bits) {w = W; h = H;}
   Fl_Bitmap(const char *bits, int W, int H) :
     array((const uchar *)bits) {w = W; h = H;}
+
   void draw(int, int, int, int, int cx, int cy);
+
+  // The following method is also defined in the parent class
+  // but should be faster (no call to measure(w, h))
   void draw(int X, int Y) {draw(X,Y,w,h,0,0);}
+
+  // to be removed
   void draw(int X, int Y, int W, int H, Fl_Flags f=0) {
     Fl_Image::draw(X,Y,W,H,f);
   }
@@ -44,5 +50,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Bitmap.H,v 1.6 1999/08/16 07:30:47 bill Exp $".
+// End of "$Id: Fl_Bitmap.H,v 1.7 1999/08/23 16:43:05 vincent Exp $".
 //

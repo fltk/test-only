@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.2 1999/08/16 14:06:20 gustavo Exp $"
+// "$Id: Fl_Flags.H,v 1.3 1999/08/23 16:43:05 vincent Exp $"
 //
 // Unified flags set for fltk
 //
@@ -50,6 +50,7 @@ enum {
   FL_ALIGN_LEFT         = 0x00000004,
   FL_ALIGN_RIGHT        = 0x00000008,
   FL_ALIGN_INSIDE       = 0x00000010,
+  FL_ALIGN_TILED	= 0x00000020,
   FL_ALIGN_CLIP         = 0x00000040,
   FL_ALIGN_WRAP         = 0x00000080,
   FL_ALIGN_MASK		= 0x000000FF,

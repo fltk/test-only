@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.13 1999/08/16 07:31:03 bill Exp $"
+// "$Id: Fl_Type.cxx,v 1.14 1999/08/23 16:43:07 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,7 @@
 #include <stdio.h>
 
 #include "Fl_Type.h"
+#include "Fluid_Image.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -551,7 +552,11 @@ void delete_all(int selected_only) {
       f = g;
     } else f = f->next;
   }
-  if(!selected_only)    include_H_from_C=1;
+  if(!selected_only)
+  {
+    include_H_from_C=1;
+    images_dir="./";
+  }
 
   selection_changed(0);
 }
@@ -673,5 +678,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.13 1999/08/16 07:31:03 bill Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.14 1999/08/23 16:43:07 vincent Exp $".
 //

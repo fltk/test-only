@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.8 1999/08/16 07:31:06 bill Exp $"
+// "$Id: Fluid_Image.cxx,v 1.9 1999/08/23 16:43:08 vincent Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -35,17 +35,45 @@
 #include <FL/filename.H>
 
 extern void goto_source_dir(); // in fluid.C
+extern void goto_images_dir(); // in fluid.cxx
 extern void leave_source_dir(); // in fluid.C
+#define leave_images_dir() leave_source_dir()
+
+const char *images_dir = "";
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Pixmap.H>
+
+static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
+{
+  uchar *d=0;
+  FILE *fd = fopen(filename, "rb");
+  if(!fd) return 0;
+  size_t c=512, cc=0, r;
+  size = 0;
+  do {
+    c*=2;
+    cc+=c;
+    if(d)
+      d=(uchar *) realloc(d, cc);
+    else
+      d=(uchar *) malloc(cc);
+    r=fread(d+cc-c, 1, c, fd);
+    size+=r;
+  } while(r==c);
+  if(size!=cc) d=(uchar *) realloc(d, size?size:1);
+  return d;
+}
+
+////////////////////////////////////////////////////////////////
+#include <FL/Fl_Image_File.H>
 
 class pixmap_image : public Fluid_Image {
 protected:
-  Fl_Pixmap *p;
+  Fl_Image_File *p;
   int *linelength;
+  char *filetype;
 public:
-  pixmap_image(const char *name, FILE *);
+  pixmap_image(const char *name, bool subclass = 1);
   ~pixmap_image();
   virtual void label(Fl_Widget *); // set the label of this widget
   virtual void write_static();
@@ -54,117 +82,59 @@ public:
 };
 
 int pixmap_image::test_file(char *buffer) {
-  return (strstr(buffer,"/* XPM") != 0);
+  return fl_is_xpm((uchar*)buffer, 0);
 }
 
 void pixmap_image::label(Fl_Widget *o) {
   o->image(p);
 }
 
-static int pixmap_header_written;
+static int image_file_header_written;
 
 void pixmap_image::write_static() {
+  uchar* d=0;
   if (!p) return;
-  write_c("\n");
-  if (pixmap_header_written != write_number) {
-    write_c("#include <FL/Fl_Pixmap.H>\n");
-    pixmap_header_written = write_number;
+  if(image_file_header_written != write_number)
+  {
+    write_c("#include <FL/Fl_Image_File.H>\n");
+    image_file_header_written = write_number;
   }
-  write_c("static unsigned char *%s[] = {\n",
-	  unique_id(this, "image", filename_name(name()), 0));
-  int l;
-  for (l = 0; p->data[l]; l++) {
-    if (l) write_c(",\n");
-    write_c("(unsigned char*)\n");
-    write_cstring(p->data[l],linelength[l]);
+  if (include_datas) {
+    size_t l=0;
+    goto_images_dir();
+    d = fl_store_datas_from_file(name(), l);
+    if(d) {
+      write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
+      write_carray((const char*)d, l);
+      write_c("};\n");
+      free(d);
+    }
+    leave_images_dir();
   }
-  write_c("\n};\n");
-  write_c("static Fl_Pixmap %s(%s);\n",
-	  unique_id(this, "pixmap", filename_name(name()), 0),
+  write_c("static Fl_%s_Image *%s;\n", filetype, 
 	  unique_id(this, "image", filename_name(name()), 0));
 }
 
 void pixmap_image::write_code() {
   if (!p) return;
-  write_c("%so->image(%s);\n", indent(),
-	  unique_id(this, "pixmap", filename_name(name()), 0));
+  write_c("%sif (!%s) %s = new Fl_%s_Image(\"%s\"", indent(),  
+	  unique_id(this, "image", filename_name(name()), 0),
+	  unique_id(this, "image", filename_name(name()), 0),
+	  filetype, name());
+  if (include_datas)
+    write_c(", %s", unique_id(this, "datas", filename_name(name()), 0));
+  write_c(");\n%so->image(%s);\n", indent(), 
+	  unique_id(this, "image", filename_name(name()), 0));
 }
 
-static int hexdigit(int x) {
-  if (isdigit(x)) return x-'0';
-  if (isupper(x)) return x-'A'+10;
-  if (islower(x)) return x-'a'+10;
-  return 20;
-}
-
-#define MAXSIZE 2048
-
-pixmap_image::pixmap_image(const char *name, FILE *f) : Fluid_Image(name) {
-  if (!f) return; // for subclasses
-  // read all the c-strings out of the file:
-  char *data[MAXSIZE+1];
-  int length[MAXSIZE+1];
-  char buffer[MAXSIZE+20];
-  int i = 0;
-  while (i < MAXSIZE && fgets(buffer,MAXSIZE+20,f)) {
-    if (buffer[0] != '\"') continue;
-    char *p = buffer;
-    char *q = buffer+1;
-    while (*q != '\"' && p < buffer+MAXSIZE) {
-      if (*q == '\\') switch (*++q) {
-      case '\n':
-	fgets(q,(buffer+MAXSIZE+20)-q,f); break;
-      case 0:
-	break;
-      case 'x': {
-	q++;
-	int n = 0;
-	for (int x = 0; x < 3; x++) {
-	  int d = hexdigit(*q);
-	  if (d > 15) break;
-	  n = (n<<4)+d;
-	  q++;
-	}
-	*p++ = n;
-      } break;
-      default: {
-	int c = *q++;
-	if (c>='0' && c<='7') {
-	  c -= '0';
-	  for (int x=0; x<2; x++) {
-	    int d = hexdigit(*q);
-	    if (d>7) break;
-	    c = (c<<3)+d;
-	    q++;
-	  }
-	}
-	*p++ = c;
-      } break;
-      } else {
-	*p++ = *q++;
-      }
-    }
-    *p++ = 0;
-    data[i] = new char[p-buffer];
-    memcpy(data[i],buffer,p-buffer);
-    length[i] = p-buffer-1;
-    i++;
+pixmap_image::pixmap_image(const char *name, bool subclass) : Fluid_Image(name) {
+  if(!subclass) {
+    filetype = "XPM";
+    p = new Fl_XPM_Image((char*) name);
   }
-  data[i++] = 0; // put a null at the end
-
-  char** real_data = new char*[i];
-  linelength = new int[i];
-  while (i--) {real_data[i] = data[i]; linelength[i] = length[i];}
-  p = new Fl_Pixmap(real_data);
 }
 
 pixmap_image::~pixmap_image() {
-  if (p && p->data) {
-    char** real_data = (char**)(p->data);
-    for (int i = 0; real_data[i]; i++) delete[] real_data[i];
-    delete[] real_data;
-  }
-  delete[] linelength;
   delete p;
 }
 
@@ -172,39 +142,42 @@ pixmap_image::~pixmap_image() {
 
 class gif_image : public pixmap_image {
 public:
-  gif_image(const char *name, FILE *);
+  gif_image(const char *name);
   ~gif_image();
   static int test_file(char *buffer);
 };
 
 int gif_image::test_file(char *buffer) {
-  return !strncmp(buffer,"GIF",3);
+  return fl_is_gif((uchar*)buffer, 3);
 }
 
-// function in gif.C:
-int gif2xpm(
-    const char *infname,// filename for error messages
-    FILE *GifFile,	// file to read
-    char*** datap,	// return xpm data here
-    int** lengthp,	// return line lengths here
-    int inumber		// which image in movie (0 = first)
-);
-
-gif_image::gif_image(const char *name, FILE *f) : pixmap_image(name,0) {
-  char** datap;
-  if (gif2xpm(name,f,&datap,&linelength,0)) {
-    p = new Fl_Pixmap(datap);
-  } else
-    p = 0;
+gif_image::gif_image(const char *name) : pixmap_image(name) {
+  filetype = "GIF";
+  p = new Fl_GIF_Image((char*)name);
 }
 
 gif_image::~gif_image() {
-  if (p && p->data) {
-    char** real_data = (char**)(p->data);
-    for (int i = 0; i < 3; i++) delete[] real_data[i];
-    delete[] real_data;
-    p->data = 0;
-  }
+}
+
+////////////////////////////////////////////////////////////////
+
+class png_image : public pixmap_image {
+public:
+  png_image(const char *name);
+  ~png_image();
+  static int test_file(char *buffer);
+};
+
+int png_image::test_file(char *buffer) {
+  return fl_is_png((uchar*)buffer, 3);
+}
+
+png_image::png_image(const char *name) : pixmap_image(name) {
+  filetype = "PNG";
+  p = new Fl_PNG_Image((char*)name);
+}
+
+png_image::~png_image() {
 }
 
 ////////////////////////////////////////////////////////////////
@@ -255,14 +228,16 @@ void bitmap_image::write_static() {
 #else // this seems to produce slightly shorter c++ files
   write_c("static unsigned char %s[] =\n",
 	  unique_id(this, "bits", filename_name(name()), 0));
-  int n = ((p->w+7)/8)*p->h;
+  int w, h;
+  p->measure(w, h);
+  int n = ((w+7)/8)*h;
   write_cstring((const char*)(p->array), n);
   write_c(";\n");
 #endif
   write_c("static Fl_Bitmap %s(%s, %d, %d);\n",
 	  unique_id(this, "bitmap", filename_name(name()), 0),
 	  unique_id(this, "bits", filename_name(name()), 0),
-	  p->w, p->h);
+	  w, h);
 }
 
 void bitmap_image::write_code() {
@@ -345,12 +320,12 @@ Fluid_Image* Fluid_Image::find(const char *name) {
 
   Fluid_Image *ret = 0;
 
-  goto_source_dir();
+  goto_images_dir();
   FILE *f = fopen(name,"rb");
 
   if (!f) {
     read_error("%s : %s",name,strerror(errno));
-    leave_source_dir();
+    leave_images_dir();
   } else {
     // now see if we can identify the type, by reading in some data
     // and asking all the types we know about:
@@ -359,9 +334,11 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     rewind(f);
     buffer[1024] = 0; // null-terminate so strstr() works
     if (pixmap_image::test_file(buffer)) {
-      ret = new pixmap_image(name,f);
+      ret = new pixmap_image(name,0);
+    } else if (png_image::test_file(buffer)) {
+      ret = new png_image(name);
     } else if (gif_image::test_file(buffer)) {
-      ret = new gif_image(name,f);
+      ret = new gif_image(name);
     } else if (bitmap_image::test_file(buffer)) {
       ret = new bitmap_image(name,f);
     } else {
@@ -370,7 +347,7 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     }
     fclose(f);
   }
-  leave_source_dir();
+  leave_images_dir();
   if (!ret) ret = new bitmap_image(name, 0);
 
   // make a new entry in the table:
@@ -389,6 +366,7 @@ Fluid_Image::Fluid_Image(const char *name) {
   name_ = strdup(name);
   written = 0;
   refcount = 0;
+  include_datas=0;
 }
 
 void Fluid_Image::increment() {
@@ -403,9 +381,11 @@ void Fluid_Image::decrement() {
 
 Fluid_Image::~Fluid_Image() {
   int a;
-  for (a = 0;; a++) if (images[a] == this) break;
-  numimages--;
-  for (; a < numimages; a++) images[a] = images[a+1];
+  for (a = 0; a<numimages; a++) if (images[a] == this) break;
+  if(a<numimages) {
+    numimages--;
+    for (; a < numimages; a++) images[a] = images[a+1];
+  }
   free((void*)name_);
 }
 
@@ -414,14 +394,41 @@ Fluid_Image::~Fluid_Image() {
 #include <FL/fl_file_chooser.H>
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
-  goto_source_dir();
-  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif}",
+  goto_images_dir();
+  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif|png}",
 				     old ? old->name() : 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
-  leave_source_dir();
+  leave_images_dir();
   return ret;
 }
 
+////////////////////////////////////////////////////////////////
+
+static bool cancel, modal;
+void browse_dir_cb();
+
+#include "image_file_panel.h"
+#include "image_file_panel.cxx"
+
+void browse_dir_cb()
+{
+  char *f = fl_file_chooser("Images directory","",
+			    images_dir_input->value());
+  if(f) images_dir_input->value(f);
+}
+
+void set_images_dir_cb(Fl_Widget *, void *) {
+  goto_source_dir();
+  if(!images_dir_window) make_images_dir_window();
+  images_dir_input->value(images_dir);
+  images_dir_window->show();
+  cancel=0; modal=1;
+  while(modal) Fl::wait();
+  if(!cancel)
+    images_dir = images_dir_input->value();
+  leave_source_dir();
+}
+ 
 //
-// End of "$Id: Fluid_Image.cxx,v 1.8 1999/08/16 07:31:06 bill Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.9 1999/08/23 16:43:08 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.6 1999/08/23 16:43:12 vincent Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -196,7 +196,7 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
 	c[0] = uchar(C>>24);
 	c[1] = uchar(C>>16);
 	c[2] = uchar(C>>8);
-      } else { // assumme "None" or "#transparent" for any errors
+      } else { // assume "None" or "#transparent" for any errors
 	// this should be transparent...
 	bg = fl_get_color(bg);
 	transparent_index = index&255;
@@ -243,5 +243,5 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.6 1999/08/23 16:43:12 vincent Exp $".
 //

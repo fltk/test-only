@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.18 1999/07/21 17:28:18 carl Exp $"
+ * "$Id: configh.in,v 1.19 1999/08/23 16:43:04 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -205,5 +205,14 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.18 1999/07/21 17:28:18 carl Exp $".
+ * HAVE_PNG
+ *
+ * Do we have libpng ?
+ *
+ */
+  
+#define HAVE_PNG 0
+
+/*
+ * End of "$Id: configh.in,v 1.19 1999/08/23 16:43:04 vincent Exp $".
  */

@@ -334,6 +334,14 @@ SOURCE=..\src\fl_draw_pixmap.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_draw_image_file.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\fl_draw_image_file.H
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_engraved_label.cxx
 # End Source File
 # Begin Source File
@@ -359,6 +367,10 @@ SOURCE=..\src\Fl_get_system_colors.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Gl_Choice.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_gif.cxx
 # End Source File
 # Begin Source File
 
@@ -391,6 +403,10 @@ SOURCE=..\src\Fl_Input_.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Input_SW.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Image_File.cxx
 # End Source File
 # Begin Source File
 
@@ -483,6 +499,10 @@ SOURCE=..\src\Fl_Pixmap.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Positioner.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_png.cxx
 # End Source File
 # Begin Source File
 
@@ -627,6 +647,10 @@ SOURCE=..\src\Fl_Window_iconize.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_x.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_xpm.cxx
 # End Source File
 # Begin Source File
 

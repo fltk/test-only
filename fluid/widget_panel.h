@@ -34,6 +34,8 @@ extern void min_cb(Fl_Value_Input*, void*);
 extern void max_cb(Fl_Value_Input*, void*);
 extern void step_cb(Fl_Value_Input*, void*);
 extern void value_cb(Fl_Value_Input*, void*);
+extern void include_image_cb(Fl_Light_Button*, void*);
+extern Fl_Light_Button *include_image_button;
 #include <FL/Fl_Choice.H>
 extern Fl_Menu_Item labeltypemenu[];
 extern void labeltype_cb(Fl_Choice*, void*);
@@ -75,6 +77,7 @@ extern void ok_cb(Fl_Return_Button*, void*);
 Fl_Window* make_widget_panel();
 extern Fl_Tabs *panel_tabs;
 extern Fl_Box *image_label;
+extern Fl_Light_Button *include_image_button;
 extern Fl_Input *v_input[4];
 extern Fl_Box *callback_label;
 extern Fl_Light_Button *overlaybutton;

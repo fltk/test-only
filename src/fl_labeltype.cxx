@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.8 1999/08/16 07:31:28 bill Exp $"
+// "$Id: fl_labeltype.cxx,v 1.9 1999/08/23 16:43:12 vincent Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -79,13 +79,15 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color c, Fl_Flags f) c
 {
   if (!active_r()) f |= FL_INACTIVE;
   if (image_) {
+    int w, h;
+    image_->measure(w, h);
     fl_color((f&FL_INACTIVE) ? fl_inactive(c) : c);
     image_->draw(X, Y, W, H, f);
-    if (f & FL_ALIGN_BOTTOM) H -= image_->h;
-    else if (f & FL_ALIGN_TOP) {Y += image_->h; H -= image_->h;}
-    else if (f & FL_ALIGN_LEFT) {X += image_->w; W -= image_->w;}
-    else if (f & FL_ALIGN_RIGHT) W -= image_->w;
-    else {int d = (H+image_->h)/2; Y += d; H -= d;}
+    if (f & FL_ALIGN_BOTTOM) H -= h;
+    else if (f & FL_ALIGN_TOP) {Y += h; H -= h;}
+    else if (f & FL_ALIGN_LEFT) {X += w; W -= w;}
+    else if (f & FL_ALIGN_RIGHT) W -= w;
+    else {int d = (H+h)/2; Y += d; H -= d;}
   }
   if (label_ && *label_) {
     fl_font(label_font(), label_size());
@@ -107,5 +109,5 @@ void Fl_Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.8 1999/08/16 07:31:28 bill Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.9 1999/08/23 16:43:12 vincent Exp $".
 //

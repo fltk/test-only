@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.13 1999/06/15 17:02:29 gustavo Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.14 1999/08/23 16:43:11 vincent Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -193,5 +193,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.13 1999/06/15 17:02:29 gustavo Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.14 1999/08/23 16:43:11 vincent Exp $".
 //

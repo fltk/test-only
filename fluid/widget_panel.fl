@@ -8,16 +8,16 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {359 345 360 335} resizable hotspot visible
+    xywh {221 407 360 335} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
-      callback propagate_tabs open selected
+      callback propagate_tabs open
       xywh {0 0 358 320} resizable
     } {
       Fl_Group {} {
         label GUI
         callback propagate_group open
-        xywh {0 0 358 295} hide resizable
+        xywh {0 0 358 295} resizable
       } {
         Fl_Input {} {
           label {Label:}
@@ -31,14 +31,14 @@ Function {make_widget_panel()} {open
           callback align_cb
           tooltip {Turn on clipping to the widget's area when drawing
 label.  This is slower so it should be left off if label will fit}
-          xywh {80 60 50 20} type Toggle box THIN_UP_BOX labelsize 12
+          xywh {145 60 50 20} type Toggle box THIN_UP_BOX labelsize 12
         }
         Fl_Button {} {
           label wrap
           user_data FL_ALIGN_WRAP
           callback align_cb
           tooltip {Word-wrap the label}
-          xywh {130 60 50 20} type Toggle box THIN_UP_BOX labelsize 12
+          xywh {195 60 50 20} type Toggle box THIN_UP_BOX labelsize 12
         }
         Fl_Button {} {
           label {@-1<-}
@@ -187,11 +187,25 @@ application and will prevent events from going to other windows.}
           tooltip {The initial value (integer) of this widget}
           xywh {283 100 67 20} align 5 labelsize 10
         }
+        Fl_Button {} {
+          label tiled
+          user_data FL_ALIGN_TILED
+          callback align_cb
+          tooltip {Draw the image tiled}
+          xywh {95 60 50 20} type Toggle box THIN_UP_BOX labelsize 12
+        }
+        Fl_Light_Button include_image_button {
+          label {include in code}
+          callback include_image_cb selected
+          tooltip {Include the datas of the image inlined in 
+the code or keep it in an external file}
+          xywh {5 60 90 20} align 524436 box THIN_UP_BOX labelsize 10
+        }
       }
       Fl_Group {} {
         label Style
         callback propagate_group
-        xywh {0 0 358 295}
+        xywh {0 0 358 295} hide
       } {
         Fl_Choice {} {
           label {Label Type:}

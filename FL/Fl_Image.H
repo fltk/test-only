@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.6 1999/08/16 07:30:50 bill Exp $"
+// "$Id: Fl_Image.H,v 1.7 1999/08/23 16:43:06 vincent Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,13 +36,18 @@ protected:
   ulong id, mask;
   void _draw(int X, int Y, int W, int H, int cx, int cy);
 public:
-  int w, h;
+  int w, h; // public for back compatibility only
+
   Fl_Image() : id(0), mask(0) {}
-  virtual void measure(int W, int H);
+  virtual void measure(int& W, int& H); // this is the safe way to get the size of an image
   virtual void draw(int,int,int,int, int cx, int cy) = 0;
   virtual ~Fl_Image();
 
-  void draw(int X, int Y, int W, int H, Fl_Flags);
+  // the following draw methods will use the first defined virtual draw method
+  // and do not need to be redefined in subclasses of Fl_Image
+  void draw(int X, int Y, int W, int H, Fl_Flags f=0);
+  void draw(int X, int Y) { int w, h; measure(w, h); draw(X, Y, w, h, 0, 0); }
+  void draw_tiled(int X, int Y, int W, int H, int cx=0, int cy=0);
 
   // back compatability:
   void Fl_Image::label(Fl_Widget* o);
@@ -52,5 +57,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.6 1999/08/16 07:30:50 bill Exp $".
+// End of "$Id: Fl_Image.H,v 1.7 1999/08/23 16:43:06 vincent Exp $".
 //

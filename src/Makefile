@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.24 1999/08/16 07:31:25 bill Exp $"
+# "$Id: Makefile,v 1.25 1999/08/23 16:43:12 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -41,11 +41,9 @@ CPPFILES = \
 	Fl_Dial.cxx \
 	Fl_Double_Window.cxx \
 	Fl_Fly_Button.cxx \
-	Fl_Gl_Choice.cxx \
-	Fl_Gl_Overlay.cxx \
-	Fl_Gl_Window.cxx \
 	Fl_Group.cxx \
 	Fl_Image.cxx \
+	Fl_Image_File.cxx \
 	Fl_Input.cxx \
 	Fl_Input_.cxx \
 	Fl_Light_Button.cxx \
@@ -109,10 +107,12 @@ CPPFILES = \
 	fl_diamond_box.cxx \
 	fl_draw.cxx \
 	fl_draw_image.cxx \
+	fl_draw_image_file.cxx \
 	fl_draw_pixmap.cxx \
 	fl_engraved_label.cxx \
 	fl_file_chooser.cxx \
 	fl_font.cxx \
+	fl_gif.cxx \
 	fl_glyph.cxx \
 	fl_labeltype.cxx \
 	fl_line_style.cxx \
@@ -129,16 +129,25 @@ CPPFILES = \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
-	gl_draw.cxx \
-	gl_start.cxx \
+	fl_xpm.cxx \
 	forms_compatability.cxx \
 	forms_bitmap.cxx \
 	forms_free.cxx \
 	forms_fselect.cxx \
 	forms_pixmap.cxx \
-	forms_timer.cxx \
+	forms_timer.cxx
+
+CPPglFILES = \
+	Fl_Gl_Choice.cxx \
+	Fl_Gl_Overlay.cxx \
+	Fl_Gl_Window.cxx \
+	gl_draw.cxx \
+	gl_start.cxx \
 	glut_compatability.cxx \
 	glut_font.cxx
+
+CPPpngFILES = \
+	fl_png.cxx
 
 CFILES = \
 	fl_call_main.c \
@@ -190,20 +199,33 @@ CLEAN =
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
+DSONAME = $(DSOLIBNAME)$(DSOEXT)
+DSOglNAME = $(DSOLIBNAME)gl$(DSOEXT)
+DSOpngNAME = $(DSOLIBNAME)png$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
+OBJECTSgl = $(CPPglFILES:.cxx=.o)
+OBJECTSpng = $(CPPpngFILES:.cxx=.o)
 
-all:	$(LIBRARY) $(DSONAME)
+all:	$(LIBRARY) $(DSONAME) $(DSOglNAME) $(DSOpngNAME)
 
-$(LIBRARY): $(OBJECTS)
+$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
 	@echo $(LIBCOMMAND) $@ ...
 	@/bin/rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS)
+	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSpng)
 	@$(RANLIB) $@
 
 libfltk.so.2 libfltk.sl.2: $(OBJECTS)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
+
+libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
+	@echo $(DSOCOMMAND) $@ ...
+	@$(DSOCOMMAND) $@ $(OBJECTSgl)
+
+libfltkpng.so.2 libfltkpng.sl.2: $(OBJECTSpng)
+	@echo $(DSOCOMMAND) $@ ...
+	@$(DSOCOMMAND) $@ $(OBJECTSpng)
 
 .SUFFIXES:	.cxx .h .o
 
@@ -213,11 +235,11 @@ libfltk.so.2 libfltk.sl.2: $(OBJECTS)
 	$(CC) -I.. $(CFLAGS) -c $<
 
 clean :
-	-@ rm -f *.o *.do $(DSONAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@ rm -f *.o *.do $(DSONAME) $(DSOglNAME) $(DSOpngNAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
 	@touch makedepend
 
 depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CPPglFILES) $(CPPpngFILES) $(CFILES) > makedepend
 include makedepend
 
 ################################################################
@@ -228,19 +250,15 @@ install: $(LIBRARY) $(DSONAME)
 	@rm -f $(libdir)/$(LIBNAME)
 	@-cp $(LIBRARY) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)
-	@if test "$(DSONAME)" = libfltk.so.2; then\
-		rm -f $(libdir)/libfltk.so.2;\
-		rm -f $(libdir)/libfltk.so;\
-		cp libfltk.so.2 $(libdir); \
-		chmod 755 $(libdir)/libfltk.so.2; \
-		ln -s $(libdir)/libfltk.so.2 $(libdir)/libfltk.so;\
-	fi
-	@if test "$(DSONAME)" = libfltk.sl.2; then\
-		rm -f $(libdir)/libfltk.sl.2;\
-		rm -f $(libdir)/libfltk.sl;\
-		cp libfltk.sl.2 $(libdir); \
-		chmod 755 $(libdir)/libfltk.sl.2; \
-		ln -s $(libdir)/libfltk.sl.2 $(libdir)/libfltk.sl;\
+	@if test -n "$(DSONAME)"; then \
+		if test "$(DSONAME)" = libfltk.so.2; then ext=.so; else ext=.s1; fi; \
+		for lib in libfltk libfltkgl libfltkpng; do \
+			rm -f $(libdir)/$$lib$$ext.2;\
+			rm -f $(libdir)/$$lib$$ext;\
+			cp $$lib$$ext.2 $(libdir); \
+			chmod 755 $(libdir)/$$lib$$ext.2; \
+			ln -s $(libdir)/$$lib$$ext.2 $(libdir)/$$lib$$ext;\
+		done \
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
@@ -255,5 +273,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.24 1999/08/16 07:31:25 bill Exp $".
+# End of "$Id: Makefile,v 1.25 1999/08/23 16:43:12 vincent Exp $".
 #

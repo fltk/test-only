@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.9 1999/08/16 07:31:08 bill Exp $"
+// "$Id: file.cxx,v 1.10 1999/08/23 16:43:09 vincent Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "alignment_panel.h"
+#include "Fluid_Image.h"
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -321,6 +322,7 @@ int write_file(const char *filename, int selected_only) {
   if (!open_write(filename)) return 0;
   write_string("# data file for the Fltk User Interface Designer (fluid)\n"
 	       "version %.2f",FL_VERSION);
+  if(strlen(images_dir)) write_string("\nimages_dir %s", images_dir);
   if(!include_H_from_C)
     write_string("\ndo_not_include_H_from_C");
   if (!selected_only) {
@@ -393,6 +395,11 @@ static void read_children(Fl_Type *p, int paste) {
     if (!strcmp(c,"do_not_include_H_from_C"))
     {
       include_H_from_C=0;
+      goto CONTINUE;
+    }
+    if (!strcmp(c,"images_dir"))
+    {
+      images_dir = strdup(read_word()); // This will never get deleted ...
       goto CONTINUE;
     }
     if (!strcmp(c,"header_name")) {
@@ -592,5 +599,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.9 1999/08/16 07:31:08 bill Exp $".
+// End of "$Id: file.cxx,v 1.10 1999/08/23 16:43:09 vincent Exp $".
 //

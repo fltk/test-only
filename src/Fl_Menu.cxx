@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.36 1999/08/16 07:31:17 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.37 1999/08/23 16:43:11 vincent Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -178,9 +178,10 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*) const {
   *hp += 2; // add a bit of leading
   if (flags() & (FL_MENU_TOGGLE|FL_MENU_RADIO)) w += 14;
   if (image_) {
-    image_->measure(h,h);
-    if (image_->h > *hp) *hp = image_->h;
-    w += image_->w;
+    int W, H;
+    image_->measure(W, H);
+    if (H > *hp) *hp = H;
+    w += W;
   }
   *hp += style->box->dh();
   return w;
@@ -218,9 +219,11 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
   }
 
   if (image_) {
+    int W, H;
+    image_->measure(W, H);
     fl_color(lc);
-    image_->draw(x, y, image_->w, h, (flags()<<8) | FL_ALIGN_LEFT);
-    x += image_->w; w -= image_->w;
+    image_->draw(x, y, W, h, (flags()<<8) | FL_ALIGN_LEFT);
+    x += W; w -= W;
   }
   if (!fl_draw_shortcut) fl_draw_shortcut = 1;
   fl_font(style->text_font, style->text_size);
@@ -797,5 +800,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.36 1999/08/16 07:31:17 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.37 1999/08/23 16:43:11 vincent Exp $".
 //

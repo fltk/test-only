@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.42 1999/08/22 14:42:07 vincent Exp $"
+dnl# "$Id: configure.in,v 1.43 1999/08/23 16:43:04 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -76,30 +76,36 @@ if eval "test x$enable_shared = xyes"; then
   PICFLAG=1
   case $uname in
       SunOS* | UNIX_S*)
-          DSONAME="libfltk.so.2"
-	  DSOCOMMAND="\$(CXX) -Wl,-h,libfltk.so.2 \$(LDLIBS) -G $DEBUGFLAG -o"
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".so.2"
+	  DSOCOMMAND="\$(CXX) -Wl,-h,\$@ \$(LDLIBS) -G $DEBUGFLAG -o"
 	  ;;
       HP-UX*)
-          DSONAME="libfltk.sl.2"
-	  DSOCOMMAND="ld -b -z +h libfltk.sl.2 $DEBUGFLAG -o"
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".s1.2"
+	  DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
 	  ;;
       OSF1*)
-          DSONAME="libfltk.so.2"
-          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
-	  ;;
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".so.2"
+          DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
+cd 	  ;;
       IRIX*)
-          DSONAME="libfltk.so.2"
-          DSOCOMMAND="\$(CXX) -soname libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".so.2"
+          DSOCOMMAND="\$(CXX) -soname \$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	  ;;
       CYGWIN*)
-          DSONAME="fltk.dll"
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".2.dll"
           DSOCOMMAND="echo How do you make DLLs with CygWin..."
 	  ;;
       *)
           echo "Warning: shared libraries may not be supported.  Trying -shared"
 	  echo "         option with compiler."
-          DSONAME="libfltk.so.2"
-          DSOCOMMAND="\$(CXX) -Wl,-soname,libfltk.so.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
+	  DSOLIBNAME="libfltk"
+	  DSOEXT=".so.2"
+          DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ -shared $DEBUGFLAG -o"
 	  ;;
   esac
 fi])
@@ -170,6 +176,14 @@ else
 fi
 
 AC_SUBST(GLLIB)
+
+dnl# Test for libpng (and for libz by the way)
+LIBPNG=
+  AC_CHECK_LIB(png, png_read_image, \
+	AC_DEFINE(HAVE_PNG) LIBPNG=" -lpng -lz"\ 
+        ,,$X_EXTRA_LIBS -lz -lm)
+AC_SUBST(LIBPNG)
+ 
 
 AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
     if test "$uname" != "SunOS"; then
@@ -274,7 +288,8 @@ fi
 CFLAGS="$DEBUGFLAG $CFLAGS"
 CXXFLAGS="$DEBUGFLAG $CXXFLAGS"
 
-AC_SUBST(DSONAME)
+AC_SUBST(DSOLIBNAME)
+AC_SUBST(DSOEXT)
 AC_SUBST(DSOCOMMAND)
 AC_SUBST(LIBNAME)
 AC_SUBST(LIBCOMMAND)
@@ -283,5 +298,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.42 1999/08/22 14:42:07 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.43 1999/08/23 16:43:04 vincent Exp $".
 dnl#

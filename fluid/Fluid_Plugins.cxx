@@ -8,9 +8,11 @@
 Fluid_Plugin* plugins[MAXPLUGINS];
 int nbplugins;
 
+#ifndef FL_NO_DLL
 static int nboptions;
-Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 static int nbnew;
+#endif
+Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 static void ReadPlugin(char* s, char* location)

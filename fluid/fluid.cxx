@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.21 1999/08/22 06:14:37 vincent Exp $"
+// "$Id: fluid.cxx,v 1.22 1999/08/23 16:43:09 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,7 @@ const char *copyright =
 #include <FL/fl_file_chooser.H>
 #include <FL/fl_message.H>
 #include <FL/filename.H>
+#include <FL/fl_draw_image_file.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -95,11 +96,45 @@ void goto_source_dir() {
   int n = p-filename; if (n>1) n--; buffer[n] = 0;
   if (!pwd) {
     pwd = getcwd(0,1024);
-    if (!pwd) {fprintf(stderr,"getwd : %s\n",strerror(errno)); return;}
+    if (!pwd) {fprintf(stderr,"getcwd : %s\n",strerror(errno)); return;}
   }
   if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
 				buffer, strerror(errno)); return;}
   in_source_dir = 1;
+  fl_set_images_root_directory(buffer);
+}
+
+#include "Fluid_Image.h"
+void goto_images_dir() {
+  if (in_source_dir) return;
+  if (!filename || !*filename) return;
+  const char *p = filename_name(filename);
+  char buffer[1024];
+  if (p <= filename)
+    strcpy(buffer, images_dir);
+  else
+  {
+    strcpy(buffer,filename);
+    int n = p-filename; if (n>1) n--; buffer[n] = 0;
+    if(buffer[strlen(buffer)-1]!='/' && buffer[strlen(buffer)-1]!='\\')
+      strcat(buffer, "/");
+    strcat(buffer, images_dir);
+  }
+  if (!pwd) {
+    pwd = getcwd(0,1024);
+    if (!pwd) {fprintf(stderr,"getcwd : %s\n",strerror(errno)); return;}
+  }
+  if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
+				buffer, strerror(errno)); return;}
+  in_source_dir = 1;
+
+  // Call to fl_set_images_root_directory so that images are corretly displayed in FLUID.
+  // Construct the path name verbosely because images are loaded from draw() function and
+  // we do not know what is the cwd at this time
+  strcpy(buffer+strlen(pwd)+1, buffer);
+  strcpy(buffer, pwd);
+  buffer[strlen(pwd)]='/';
+  fl_set_images_root_directory(buffer);
 }
 
 void leave_source_dir() {
@@ -142,11 +177,12 @@ void open_cb(Fl_Widget *, void *v) {
   if (!v && modflag && !fl_ask("Discard changes?")) return;
   const char *c;
   if (!(c = fl_file_chooser("Open:", "*.f[ld]", filename))) return;
+  if (!v) set_filename(c);
   if (!read_file(c, v!=0)) {
     fl_message("Can't read %s: %s", c, strerror(errno));
     return;
   }
-  if (!v) {set_filename(c); modflag = 0;}
+  if (!v) modflag = 0;
   else modflag = 1;
 }
 
@@ -279,6 +315,8 @@ static void sort_cb(Fl_Widget *,void *) {
 
 void show_alignment_cb(Fl_Widget *, void *);
 
+void set_images_dir_cb(Fl_Widget *, void *);
+
 void about_cb(Fl_Widget *, void *) {
   if (!about_panel) make_about_panel(copyright);
   copyright_box->hide();
@@ -324,6 +362,7 @@ Fl_Menu_Item Main_Menu[] = {
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
   {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_ALT+'p',show_alignment_cb},
+  {"Set images root directory", FL_ALT+'d', set_images_dir_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
 {"&Plugins", 0, 0, (void *)Plugins_Options_Menu, FL_SUBMENU_POINTER},
@@ -440,5 +479,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.21 1999/08/22 06:14:37 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.22 1999/08/23 16:43:09 vincent Exp $".
 //
