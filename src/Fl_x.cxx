@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.170 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.171 2004/06/04 16:39:59 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -784,6 +784,8 @@ static Window* resize_from_system;
 static unsigned wheel_up_button = 4;
 static unsigned wheel_down_button = 5;
 
+int fl_actual_keysym;
+
 extern "C" {
   static Bool fake_keyup_test(Display*, XEvent* event, char* previous) {
      return
@@ -1089,6 +1091,7 @@ bool fltk::handle()
     static char buffer[21];
     KeySym keysym;
     int len = XLookupString(&(xevent.xkey), buffer, 20, &keysym, 0);
+    fl_actual_keysym = int(keysym);
     // Make ctrl+dash produce ^_ like it used to:
     if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
     // Any keys producing foreign letters produces the bottom 8 bits:
@@ -1118,10 +1121,11 @@ bool fltk::handle()
     goto GET_KEYSYM;}
 
   GET_KEYSYM: { // code for both KeyPress and KeyRelease:
+    // For compatability with Windows, and to allow alt+x to be matched
+    // for keyboard shortcuts even if the keyboard has been reprogrammed,
+    // we always return the unshifted keysym, except for the keypad where
+    // if numlock is off we return the function keys to match Windows:
     unsigned keycode = xevent.xkey.keycode;
-    // Use the unshifted keysym! This matches the symbols that the Win32
-    // version produces. However this will defeat older keyboard layouts
-    // that use shifted values for function keys.
     KeySym keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
     if (!keysym) {
       // X did not map this key, return keycode with 0x8000:
@@ -1139,18 +1143,22 @@ bool fltk::handle()
 #endif
     } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
       if (e_state & NUMLOCK) {
-	// Map keypad keys to ASCII...
+	keysym = fl_actual_keysym;
+      } else {
+#if 0 // turn them always into numeric keys (my preference):
 	keysym = Keypad+"7486293150."[keysym-0xff95];
 	e_text[0] = char(keysym) & 0x7F;
 	e_text[1] = 0;
 	e_length = 1;
-      } else {
-        // Map keypad to special key...
+#else // turn them into function keys indistinguisable from the normal
+      // function keys. This matches Windows and was voted on as the
+      // preferred behavior:
 	static const unsigned short table[] = {
 	  HomeKey, LeftKey, UpKey, RightKey,
 	  DownKey, PageUpKey, PageDownKey, EndKey,
 	  ClearKey, InsertKey, DeleteKey};
 	keysym = table[keysym-0xff95];
+#endif
       }
     } else {
       // WHY, OH WHY, do they keep changing the Alt + Meta keys!
@@ -1811,5 +1819,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.170 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.171 2004/06/04 16:39:59 spitzak Exp $".
 //

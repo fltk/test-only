@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.17 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.18 2004/06/04 16:39:59 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,7 +21,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/events.h>
+#include <stdio.h>
 using namespace fltk;
 
 // Before searching anything the following conversions are made:
@@ -134,7 +136,8 @@ static const char compose_pairs[] = {
   ":y"
 };
 
-#ifndef _WIN32 // X only
+#if USE_X11 // X only
+extern int fl_actual_keysym;
 // X dead-key lookup table.  This turns a dead-key keysym into the
 // first of two characters for one of the compose sequences.  These
 // keysyms start at 0xFE50.
@@ -193,11 +196,6 @@ bool fltk::compose(int& del) {
   else if (ascii == '/') ascii = '|';
   else if (ascii == '_' || ascii == '=') ascii = '-';
 
-  // Alt+letters are reserved for shortcuts.  But alt+foreign letters
-  // has to be allowed, because some key layouts require alt to be held
-  // down in order to type them...
-  if ((e_state & (ALT|META)) && !(ascii & 128)) return false;
-
   if (compose_state == 1) { // after the compose key
     
     // see if it is either character of any pair:
@@ -230,28 +228,31 @@ bool fltk::compose(int& del) {
 
   }
 
+#if USE_X11
+  int i = fl_actual_keysym;
+#else
   int i = e_keysym;
+#endif
+
+#if USE_X11 // X only
+  // See if they typed a dead key.  This gets it into the same state as
+  // typing prefix+accent:
+  if (i >= 0xfe50 && i <= 0xfe5b) {
+    compose_state = dead_keys[i-0xfe50];
+    return true;
+  }
+#endif
+
+  // Alt+letters are reserved for shortcuts.  But alt+foreign letters
+  // has to be allowed, because some key layouts require alt to be held
+  // down in order to type them...
+  if ((e_state & (ALT|META)) && !(ascii & 128)) return false;
 
   // See if they type the compose prefix key:
   if (i == RightCtrlKey || i == 0xff20/* Multi-Key */) {
     compose_state = 1;
     return true;
   }
-
-#ifndef _WIN32 // X only
-  // See if they typed a dead key.  This gets it into the same state as
-  // typing prefix+accent:
-  if (i >= 0xfe50 && i <= 0xfe5b) {
-    ascii = dead_keys[i-0xfe50];
-    for (const char *p = compose_pairs; *p; p += 2)
-      if (p[0] == ascii) {
-      compose_state = ascii;
-      return true;
-    }
-    compose_state = 0;
-    return true;
-  }
-#endif
 
   // Only insert non-control characters:
   if (e_length && (ascii & ~31 && ascii != 127)) {
