@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.12 1999/05/05 20:50:17 carl Exp $"
+// "$Id: menubar.cxx,v 1.13 1999/05/07 14:50:06 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -192,12 +192,16 @@ int main(int argc, char **argv) {
   menubar.find("&Font/@->")->labeltype(FL_SYMBOL_LABEL);
   menubar.find("&Checkbox/Red")->labelcolor(FL_RED);
   menubar.find("&Checkbox/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Checkbox/Red")->light_color(FL_RED);
   menubar.find("&Checkbox/Black")->labelcolor(FL_BLACK);
   menubar.find("&Checkbox/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Checkbox/Black")->light_color(FL_BLACK);
   menubar.find("&Radio/Red")->labelcolor(FL_RED);
   menubar.find("&Radio/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Radio/Red")->light_color(FL_RED);
   menubar.find("&Radio/Black")->labelcolor(FL_BLACK);
   menubar.find("&Radio/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Radio/Black")->light_color(FL_BLACK);
   menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
@@ -224,5 +228,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.12 1999/05/05 20:50:17 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.13 1999/05/07 14:50:06 carl Exp $".
 //
