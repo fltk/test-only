@@ -1,0 +1,180 @@
+#! /bin/sh
+
+MAJOR_VERSION=2
+MINOR_VERSION=0
+PATCH_VERSION=0
+VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
+
+### BEGIN FLTK-CONFIG
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+exec_prefix_set=no
+bindir=@bindir@
+includedir=@includedir@
+libdir=@libdir@
+srcdir=@srcdir@
+
+# compiler names
+CXX=@CXX@
+CC=@CC@
+
+# flags for C++ compiler:
+CFLAGS="@CFLAGS@"
+CXXFLAGS="@CXXFLAGS@"
+
+# program to make the archive:
+LIBNAME="@LIBNAME@"
+LIBCOMMAND="@LIBCOMMAND@"
+RANLIB="@RANLIB@"
+DSONAME="@DSONAME@"
+DSOCOMMAND="@DSOCOMMAND@"
+
+# libraries to link with:
+IMAGELIBS="@LIBPNG@ @LIBJPEG@"
+
+### END FLTK-CONFIG
+
+usage ()
+{
+    echo "Usage: fltk-config [OPTIONS]
+Options:
+	[--prefix[=DIR]]
+	[--exec-prefix[=DIR]]
+	[--version]
+	[--libs]
+	[--use-gl]
+	[--use-images]
+	[--use-glut]
+	[--use-forms]
+	[--cflags]
+"
+    exit $1
+}
+
+if test $# -eq 0; then usage 1
+fi
+
+# Parse command line options
+while test $# -gt 0 
+do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --prefix=*)
+      prefix=$optarg
+      if test $exec_prefix_set = no ; then
+        exec_prefix=$optarg
+      fi
+      ;;
+    --prefix)
+      echo_prefix=yes
+      ;;
+    --exec-prefix=*)
+      exec_prefix=$optarg
+      exec_prefix_set=yes
+      ;;
+    --exec-prefix)
+      echo_exec_prefix=yes
+      ;;
+    --version)
+      echo $VERSION
+      ;;
+    --libs)
+      echo_libs=yes
+      ;;
+    --use-gl)
+      use_gl=yes
+      ;;
+    --use-glut)
+      use_glut=yes
+      use_gl=yes
+      ;;
+    --use-images)
+      use_images=yes
+      ;;
+    --use-forms)
+      use_forms=yes
+      ;;
+    --cflags)
+      echo_cflags=yes
+      ;;
+    --cxxflags)
+      echo_cxxflags=yes
+      ;;
+    *)
+      echo_help=yes
+      ;;
+  esac
+  shift
+done
+
+if test -n "$echo_help"; then usage 1
+fi
+
+if test "$echo_prefix" = "yes"; then
+        echo $prefix
+fi
+
+if test "$echo_exec_prefix" = "yes"; then
+        echo $exec_prefix
+fi
+
+if test "$echo_cflags" = "yes"; then
+      if test ${prefix}/include != /usr/include ; then
+        includes=-I${prefix}/include
+        for i in $FLTK_CFLAGS ; do
+          if test $i = -I${prefix}/include ; then
+            includes=""
+          fi
+        done
+      fi
+      echo $includes $FLTK_CFLAGS
+fi
+
+if test "$echo_cxxflags" = "yes"; then
+      if test ${prefix}/include != /usr/include ; then
+        includes=-I${prefix}/include
+        for i in $FLTK_CXXFLAGS ; do
+          if test $i = -I${prefix}/include ; then
+            includes=""
+          fi
+        done
+      fi
+      echo $includes $FLTK_CXXFLAGS
+fi
+
+LDLIBS=""
+if test "$use_forms" = "yes"; then
+    LDLIBS="$LDLIBS -lfltk_forms"
+fi
+if test "$use_glut" = "yes"; then
+    LDLIBS="$LDLIBS -lfltk_glut"
+fi
+if test "$use_gl" = "yes"; then
+    LDLIBS="$LDLIBS -lfltk_gl @GLLIB@"
+fi
+if test "$use_images" = "yes"; then
+    LDLIBS="$LDLIBS -lfltk_images $IMAGELIBS"
+fi
+LDLIBS="$LDLIBS -lfltk @LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@"
+
+if test "$echo_libs" = "yes"; then
+      my_libs=
+      libdirs=-L${exec_prefix}/lib
+      for i in $LDLIBS ; do
+        if test $i != -L${exec_prefix}/lib ; then
+          if test -z "$my_libs" ; then
+            my_libs="$i"
+          else
+            my_libs="$my_libs $i"
+          fi
+        fi
+      done
+      echo $libdirs $my_libs
+fi
+
+# END of fltk-config

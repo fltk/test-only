@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.66 1999/11/21 05:55:37 vincent Exp $"
+dnl# "$Id: configure.in,v 1.67 1999/11/21 06:25:22 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -347,7 +347,7 @@ AC_SUBST(LIBCOMMAND)
 AC_SUBST(MAKEDEPEND)
 AC_SUBST(DLLCFLAGS)
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude)
+AC_OUTPUT(makeinclude fltk-config)
 
 cp config.h FL/
 cd lib
@@ -357,8 +357,8 @@ ln -s ../gl/libfltk_gl.a .
 ln -s ../glut/libfltk_glut.a .
 ln -s ../images/libfltk_images.a .
 cd ..
-dnl#chmod +x fltk-config
+chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.66 1999/11/21 05:55:37 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.67 1999/11/21 06:25:22 vincent Exp $".
 dnl#
