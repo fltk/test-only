@@ -1,6 +1,6 @@
 description = Same as Alternative, but commented
 author = Carl Thompson (clip@home.net)
-version = 8
+version = 9
 
 [global]
   widget style = Motif
@@ -16,6 +16,7 @@ version = 8
   down label color = 7
   down color = 14
   down box = 7
+  light color = 14
   menu title down color = 14
   menu title down label color = 7
   menu title down box = 7

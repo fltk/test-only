@@ -1,5 +1,5 @@
 #default style = GTK
-#default style = Alternative
+default style = Alternative
 #default style = SGIMotif
 #default style = NewMotif
 #default style = OldMotif

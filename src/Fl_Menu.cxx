@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.28 1999/04/10 19:29:19 gustavo Exp $"
+// "$Id: Fl_Menu.cxx,v 1.29 1999/05/05 20:48:35 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,7 @@ Fl_Menu_Item::Style::Style() {
   menu_item(DOWN_LABELCOLOR) = FL_BLACK;
   menu_item(DOWN_COLOR) = FL_WHITE;
   menu_item(DOWN_BOX) = FL_FLAT_BOX;
+  menu_item(LIGHT_COLOR) = FL_BLUE;
   menu_item(TITLE_DOWN_COLOR) = FL_WHITE;
   menu_item(TITLE_DOWN_LABELCOLOR) = FL_BLACK;
   menu_item(TITLE_DOWN_BOX) = FL_MEDIUM_UP_BOX;
@@ -84,6 +85,7 @@ void Fl_Menu_Item::loadstyle() const {
       { "down label color", DOWN_LABELCOLOR },
       { "down color", DOWN_COLOR },
       { "down box", DOWN_BOX },
+      { "light color", LIGHT_COLOR },
       { "menu title down color", TITLE_DOWN_COLOR },
       { "menu title down label color", TITLE_DOWN_LABELCOLOR },
       { "menu title down box", TITLE_DOWN_BOX },
@@ -222,24 +224,14 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 
   if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
     int y1 = y+(h-14)/2;
-    fl_color(FL_DARK3);
-    Fl_Color color = m ? m->down_color() : (Fl_Color)popup_style.color;
+    Fl_Color bg = value() ? light_color() : m ? m->down_color()
+                  : (Fl_Color)popup_style.color;
     if (flags & FL_MENU_RADIO) {
-      fl_line(x+2, y1+7, x+8, y1+1, x+14, y1+7);
-      if (selected) {
-        fl_color(color);
-        fl_polygon(x+3, y1+7, x+8, y1+2, x+13, y1+7, x+8, y1+12);
-      }
-      fl_color(FL_LIGHT3); fl_line(x+14, y1+7, x+8, y1+13, x+2, y1+7);
-      if (value()) {
-        fl_color(FL_BLACK);
-        fl_polygon(x+4, y1+7, x+8, y1+3, x+12, y1+7, x+8, y1+11);
-      }
+      fl_draw_box(FL_DIAMOND_DOWN_BOX, x+1, y1, 14, 14, bg);
     } else {
-      fl_yxline(x+3, y1+11, y1+2, x+12);
-      if (selected) {fl_color(color); fl_rectf(x+4, y1+3, 9, 9);}
-      fl_color(FL_LIGHT3); fl_xyline(x+4, y1+12, x+13, y1+3);
-      if (value()) {fl_color(FL_BLACK); fl_rectf(x+5, y1+4, 7, 7);}
+      fl_draw_box(FL_MEDIUM_DOWN_FRAME, x+3, y1+1, 12, 12, bg);
+      fl_draw_box(FL_THIN_UP_BOX, x+5, y1+3, 8, 8, bg);
+
     }
     x += 14; w -= 14;
   }
@@ -398,7 +390,8 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int erase) {
   // the shortcuts and arrows assumme fl_color() was left set by draw():
   if (m->submenu()) {
     int y1 = y+(h-14)/2;
-    fl_polygon(x+w-13, y1+2, x+w-13, y1+2+10, x+w-3, y1+2+5);
+//    fl_polygon(x+w-13, y1+2, x+w-13, y1+2+10, x+w-3, y1+2+5);
+    fl_draw_symbol("@>", x+w-h+6, y+3, h-6, h-6, FL_BLACK);
   } else if (m->shortcut_) {
     Fl_Font font = button ? button->textfont() : (Fl_Font)popup_style.textfont;
     int size = button ? button->textsize() : popup_style.textsize;
@@ -865,6 +858,13 @@ Fl_Color Fl_Menu_Item::down_color() const {
   return (Fl_Color)MENU_ITEM_STYLE->menu_item(DOWN_COLOR);
 }
 
+Fl_Color Fl_Menu_Item::light_color() const {
+  loadstyle();
+  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LIGHT_COLOR)))
+    return (Fl_Color)default_style()->menu_item(LIGHT_COLOR);
+  return (Fl_Color)MENU_ITEM_STYLE->menu_item(LIGHT_COLOR);
+}
+
 Fl_Color Fl_Menu_Item::down_labelcolor() const {
   loadstyle();
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_LABELCOLOR)))
@@ -873,5 +873,5 @@ Fl_Color Fl_Menu_Item::down_labelcolor() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.28 1999/04/10 19:29:19 gustavo Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.29 1999/05/05 20:48:35 carl Exp $".
 //

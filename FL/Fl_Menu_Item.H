@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.18 1999/04/11 01:18:32 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.19 1999/05/05 20:48:32 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,7 @@ struct Fl_Menu_Item {
     DOWN_LABELCOLOR,
     DOWN_COLOR,
     DOWN_BOX,
+    LIGHT_COLOR,
     TITLE_DOWN_COLOR,
     TITLE_DOWN_LABELCOLOR,
     TITLE_DOWN_BOX,
@@ -70,7 +71,7 @@ struct Fl_Menu_Item {
 
   struct Style {
     uchar menu_item_[MIA_END];
-    uchar sbf;
+    int sbf;
 
     Style();
     uchar& menu_item(Attribute a) { return menu_item_[a]; }
@@ -108,7 +109,7 @@ struct Fl_Menu_Item {
     { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
   void loadstyle() const;
-  uchar bf(uchar a) const {return (uchar)1 << a;}
+  int bf(uchar a) const {return (int)1 << a;}
 
   // advance N items, skipping submenus:
   const Fl_Menu_Item *next(int=1) const;
@@ -125,6 +126,7 @@ struct Fl_Menu_Item {
   uchar labelsize() const;
   Fl_Boxtype down_box() const;
   Fl_Color down_color() const;
+  Fl_Color light_color() const;
   Fl_Color down_labelcolor() const;
 
   void label(Fl_Labeltype a,const char* b);
@@ -134,6 +136,7 @@ struct Fl_Menu_Item {
   void labelsize(uchar a);
   void down_box(uchar b);
   void down_color(uchar c);
+  void light_color(uchar c);
   void down_labelcolor(uchar c);
 
   Fl_Callback_p callback() const {return callback_;}
@@ -228,5 +231,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.18 1999/04/11 01:18:32 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.19 1999/05/05 20:48:32 carl Exp $".
 //

@@ -1,6 +1,6 @@
 description = GTK (GNOME) Style
 author = Carl Thompson (clip@home.net)
-version = 8
+version = 9
 
 [global]
   widget style = Motif
@@ -19,6 +19,7 @@ version = 8
   down label color = 0
   down color = 52
   down box = 42
+  light color = 136
   menu title down color = 52
   menu title down label color = 0
   menu title down box = 42

@@ -1,10 +1,9 @@
 ##
 ## This is a FLTK style configuration file.
-## All items are needed except comments!
 ##
 description = Same as Alternative, but commented  # description of style
 author = Carl Thompson (clip@home.net)            # author of style
-version = 8                                       # version number of style
+version = 9                                       # version number of style
 
 [global]                                          # global options
   widget style = Motif                            # widget style - SGI or Windows
@@ -26,6 +25,7 @@ version = 8                                       # version number of style
   down label color = 7                            # color of label font when item selected
   down color = 14                                 # color of menu item box when selected
   down box = 7                                    # type of menu item box when selected
+  light color = 14                                # color of menu item lights when selected
   menu title down color = 14                      # color of menu title box when its submenu selected
   menu title down label color = 7                 # color of menu title label when its submenu selected
   menu title down box = 7                         # boxtype of menu title when its submenu selected

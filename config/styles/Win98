@@ -1,6 +1,6 @@
 description = Win98 Style
 author = Carl Thompson (clip@home.net)
-version = 8
+version = 9
 
 [global]
   widget style = Windows
@@ -16,6 +16,7 @@ version = 8
   down label color = 7
   down color = 136
   down box = 1
+  light color = 136
   menu title down color = 49
   menu title down label color = 0
   menu title down box = 7

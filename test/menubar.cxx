@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.10 1999/04/10 14:13:51 carl Exp $"
+// "$Id: menubar.cxx,v 1.11 1999/05/05 20:48:37 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ Fl_Menu_Item menutable[] = {
     {"shortcut",FL_ALT+FL_SHIFT+FL_F+1},
     {"shortcut",FL_ALT+FL_CTRL+FL_F+1},
     {"shortcut",FL_ALT+FL_SHIFT+FL_CTRL+FL_F+1, 0,0, FL_MENU_DIVIDER},
-    {"&Submenus", FL_ALT+'S',	0, (void*)"Submenu1", FL_SUBMENU},
+    {"&Submenus This is a really long menu name can you tell", FL_ALT+'S',	0, (void*)"Submenu1", FL_SUBMENU},
       {"A very long menu item"},
       {"&submenu",FL_CTRL+'S',	0, (void*)"submenu2", FL_SUBMENU},
 	{"item 1"},
@@ -224,5 +224,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.10 1999/04/10 14:13:51 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.11 1999/05/05 20:48:37 carl Exp $".
 //

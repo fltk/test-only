@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item_SW.cxx,v 1.2 1999/03/18 22:59:08 carl Exp $"
+// "$Id: Fl_Menu_Item_SW.cxx,v 1.3 1999/05/05 20:48:36 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -66,9 +66,14 @@ void Fl_Menu_Item::down_color(uchar c) {
   MENU_ITEM_STYLE->menu_item(DOWN_COLOR)=c;
 }
 
+void Fl_Menu_Item::light_color(uchar c) {
+  mstyle(&_style);
+  MENU_ITEM_STYLE->sbf |= bf(LIGHT_COLOR);
+  MENU_ITEM_STYLE->menu_item(LIGHT_COLOR)=c;
+}
+
 void Fl_Menu_Item::down_labelcolor(uchar c) {
   mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(DOWN_LABELCOLOR);
   MENU_ITEM_STYLE->menu_item(DOWN_LABELCOLOR)=c;
 }
-

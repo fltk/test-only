@@ -1,6 +1,6 @@
 description = SGI Irix 6.5 Motif Style
 author = Carl Thompson (clip@home.net)
-version = 8
+version = 9
 
 [global]
   widget style = SGI
@@ -23,6 +23,7 @@ version = 8
   down label color = 0
   down color = 54
   down box = 6
+  light color = 4
   menu title down color = 54
   menu title down label color = 0
   menu title down box = 2
