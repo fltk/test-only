@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.19 2004/01/20 08:24:16 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -49,13 +49,22 @@ bool fltk::event_key_state(int keysym) {
   int keycode;
   // Newer X servers have somehow mapped both Meta and Alt to the Alt
   // key, and put Super on the Windows key. Detect and work around this:
+  // Even newer X servers are further screwed up. What the hell are
+  // they thinking??
   if (keysym == LeftMetaKey) {
     keycode = XKeysymToKeycode(xdisplay, 0xffeb); // try XK_Super_L
     if (keycode) goto DONE;
+    keycode = XKeysymToKeycode(xdisplay, F0Key+13); // try F13 (!)
+    if (keycode && !XKeysymToKeycode(xdisplay, F0Key+14)) goto DONE;
   } else if (keysym == RightMetaKey) {
     keycode = XKeysymToKeycode(xdisplay, 0xffec); // try XK_Super_R
     if (keycode) goto DONE;
-  }
+    keycode = XKeysymToKeycode(xdisplay, 0xff20); // try XK_Multi_key
+    if (keycode) goto DONE;
+  } else if (keysym == RightAltKey) {
+    keycode = XKeysymToKeycode(xdisplay, 0xff7e); // try XK_Mode_switch
+    if (keycode) goto DONE;
+  }    
   keycode = XKeysymToKeycode(xdisplay, keysym);
   if (!keycode) {
 #ifdef __sgi
@@ -88,5 +97,5 @@ bool fltk::get_key_state(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.19 2004/01/20 08:24:16 spitzak Exp $".
 //

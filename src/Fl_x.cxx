@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.160 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.161 2004/01/20 08:24:16 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -701,8 +701,10 @@ ulong fltk::event_time; // the last timestamp from an x event
 
 char fl_key_vector[32]; // used by get_key()
 
-// Record event mouse position and state from an XEvent.
+// Records shift keys that X does not handle:
+static int extra_state;
 
+// Record event mouse position and state from an XEvent.
 static void set_event_xy(bool push) {
 #if CONSOLIDATE_MOTION
   send_motion = 0;
@@ -711,12 +713,8 @@ static void set_event_xy(bool push) {
   e_x = xevent.xbutton.x;
   e_y_root = xevent.xbutton.y_root;
   e_y = xevent.xbutton.y;
-  e_state = xevent.xbutton.state << 16;
+  e_state = (xevent.xbutton.state << 16) | extra_state;
   event_time = xevent.xbutton.time;
-#ifdef __sgi
-  // get the Win key off PC keyboards:
-  if (fl_key_vector[18]&0x18) e_state |= META;
-#endif
   // turn off is_click if enough time or mouse movement has passed:
   static int px, py;
   static ulong ptime;
@@ -759,6 +757,7 @@ bool fltk::handle()
 
   case MappingNotify:
     XRefreshKeyboardMapping((XMappingEvent*)&xevent.xmapping);
+    extra_state = 0;
     break;
 
   case ClientMessage: {
@@ -1084,6 +1083,8 @@ bool fltk::handle()
       case 147: keysym = LeftMetaKey; break;
       case 148: keysym = RightMetaKey; break;
       case 149: keysym = MenuKey; break;
+      if (fl_key_vector[18]&0x18) extra_state |= META;
+      else extra_state &= ~META;
       }
 #endif
     } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
@@ -1095,15 +1096,32 @@ bool fltk::handle()
       e_text[0] = char(keysym) & 0x7F;
       e_text[1] = 0;
       e_length = 1;
-    } else if (keysym == 0xffeb) {
-      // Newer X servers make the Windoze key return XK_Super_L
-      keysym = LeftMetaKey;
-    } else if (keysym == 0xffec) {
-      // Newer X servers make the Windows key return XK_Super_R
-      keysym = RightMetaKey;
-//  } else if (keysym == 0xff20) {
-//    // Some older ones made it return XK_Multi_key
-//    keysym = RightMetaKey;
+    } else {
+      // WHY, OH WHY, do they keep changing the Alt + Meta keys!
+      // Detect all the assignments I have seen and try to map them
+      // back. And now some of them are not setting the shift flags,
+      // so I have to kludge that as well...
+      switch (keysym) {
+      case F0Key+13: // F13, wtf? Use this only if F14 does not exist
+	if (XKeysymToKeycode(xdisplay, F0Key+14)) break;
+	// otherwise fall through
+      case 0xffeb: // XK_Super_L
+	keysym = LeftMetaKey;
+	break;
+      case 0xffec: // XK_Super_R
+	keysym = RightMetaKey;
+	break;
+      case 0xff20: // XK_Multi_key
+	keysym = RightMetaKey;
+	if (event==KEY) extra_state |= META;
+	else extra_state &= ~META;
+	break;
+      case 0xff7e: // XK_Mode_switch
+	keysym = RightAltKey;
+	if (event==KEY) extra_state |= ALT;
+	else extra_state &= ~ALT;
+	break;
+      }
     }
     e_keysym = int(keysym);
     break;}
@@ -1730,5 +1748,5 @@ bool fltk::system_theme() {return true;}
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.160 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.161 2004/01/20 08:24:16 spitzak Exp $".
 //
