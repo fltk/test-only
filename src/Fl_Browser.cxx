@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.22 2000/05/30 07:42:09 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.23 2000/06/02 00:31:43 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -50,43 +50,50 @@
 
 // Structure for each level of hierarchy we have encountered:
 struct Fl_Browser::Data {
-  int index[NUMMARKS];
-  Fl_Widget* widget; // the current widget
+  int index[NUMMARKS]; // item's index in parent group's child() list?
+  Fl_Widget* widget; // current item at this depth?
 };
+
+// this just makes things more readable
+#define TOPLEVEL 0
 
 void Fl_Browser::set_level(int n) {
   if (n >= levels) {
     data = (Data*)realloc((void*)data, (n+1)*sizeof(Data));
+    // CET - FIXME - shouldn't there be an outer loop that goes through
+    // all of the new levels?  Especially if there's an "Expand All"
+    // button for the browser?
     for (int i = 0; i < NUMMARKS; i++) data[levels].index[i] = -1;
     levels = n+1;
   }
-  item_level[0] = n;
+  item_level[HERE] = n;
 }
 
 Fl_Widget* Fl_Browser::goto_top() {
-  item_level[0] = 0;
-  item_position[0] = 0;
-  item_number[0] = 0;
-  data[0].index[0] = 0;
+  item_level[HERE] = 0;
+  item_position[HERE] = 0;
+  item_number[HERE] = 0;
+  data[TOPLEVEL].index[HERE] = 0;
   if (!children()) {
-    data[0].widget = 0;
+    data[TOPLEVEL].widget = 0;
     widget = 0;
     return 0;
   }
-  widget = data[0].widget = child(0);
+  widget = data[TOPLEVEL].widget = child(0);
   // skip leading invisible widgets:
   if (!widget->visible()) return forward();
   return widget;
 }
 
-Fl_Widget* Fl_Browser::goto_mark(int n) {
-  item_position[0] = item_position[n];
-  item_number[0] = item_number[n];
-  item_level[0] = item_level[n];
+// set current widget to a particular mark
+Fl_Widget* Fl_Browser::goto_mark(int mark) {
+  item_position[HERE] = item_position[mark];
+  item_number[HERE] = item_number[mark];
+  item_level[HERE] = item_level[mark];
   Fl_Group* parent = this;
   widget = 0;
-  for (int L = 0; L <= item_level[0]; L++) {
-    int i = data[L].index[0] = data[L].index[n];
+  for (int L = 0; L <= item_level[HERE]; L++) {
+    int i = data[L].index[HERE] = data[L].index[mark];
     if (i < 0 || i >= parent->children()) return 0; // some kind of foulup?
     widget = data[L].widget = parent->child(i);
     parent = (Fl_Group*)widget;
@@ -94,53 +101,66 @@ Fl_Widget* Fl_Browser::goto_mark(int n) {
   return widget;
 }
 
-void Fl_Browser::set_mark(int n, int from) {
-  int L = item_level[n] = item_level[from];
-  for (; L >= 0; L--) data[L].index[n] = data[L].index[from];
-  item_position[n] = item_position[from];
-  item_number[n] = item_number[from];
+// copy one mark to another
+void Fl_Browser::copy_mark(int dest_mark, int src_mark) {
+  item_position[dest_mark] = item_position[src_mark];
+  item_number[dest_mark] = item_number[src_mark];
+  item_level[dest_mark] = item_level[src_mark];
+  for (int L = item_level[src_mark]; L >= 0; L--)
+    data[L].index[dest_mark] = data[L].index[src_mark];
 }
 
-int Fl_Browser::at_mark(int n, int from) {
-  int L = item_level[from];
-  if (L != item_level[n]) return 0;
-  for (; L >= 0; L--)
-    if (data[L].index[n] != data[L].index[from]) return 0;
+// are these two marks equal?
+int Fl_Browser::marks_equal(int mark1, int mark2) {
+  if (item_level[mark1] != item_level[mark2]) return 0;
+  for (int L = item_level[mark2]; L >= 0; L--)
+    if (data[L].index[mark1] != data[L].index[mark2]) return 0;
   return 1;
 }
 
-int Fl_Browser::before_mark(int n, int from) {
-  for (int L = 0;; L++) {
-    if (L > item_level[n]) return 0;
-    if (L > item_level[from]) return 1;
-    int d = data[L].index[n] - data[L].index[from];
-    if (d > 0) return 1;
-    if (d < 0) return 0;
-  }
+// compare the relative locations of these two marks
+// return < 0 if mark1 is before mark2
+// return   0 if mark1 is mark2
+// return > 0 if mark1 is after mark2
+// CET - rewrote this to look suspicously similar to my conf_strcasecmp()
+// function... :-P
+int Fl_Browser::compare_mark_locations(int mark1, int mark2) {
+  int L1 = item_level[mark1], L2 = item_level[mark2];
+  int L = 0;
+  for (; L < L1 && L < L2 && data[L].index[mark1] == data[L].index[mark2]; L++) ;
+  if (L > item_level[mark1] && L > item_level[mark2]) return 0; // must be equal?
+  return data[L].index[mark1] - data[L].index[mark2];
 }
 
-void Fl_Browser::unset_mark(int n) {
-  data[0].index[n] = -1;
+// unsets this mark in toplevel
+void Fl_Browser::unset_mark(int mark) {
+  data[TOPLEVEL].index[mark] = -1;
 }
 
+// is this toplevel mark set?
 int Fl_Browser::is_set(int n) {
-  return data[0].index[n] >= 0;
+  return data[TOPLEVEL].index[n] >= 0;
 }
 
+// this method seems to go forward to next visible item at the current level
+// or to next item at parent's level if none.  Is that what it's supposed to
+// do?
 Fl_Widget* Fl_Browser::forward() {
   if (widget->visible()) {
-    item_position[0] += widget->height();
-    item_number[0]++;
+    item_position[HERE] += widget->height();
+    item_number[HERE]++;
   }
 
+  // figure out the current item's parent group
   Fl_Group* parent =
-    item_level[0] ? (Fl_Group*)(data[item_level[0]-1].widget) : this;
-  int index = data[item_level[0]].index[0];
+    item_level[HERE] ? (Fl_Group*)(data[item_level[HERE]-1].widget) : this;
+  // current item's index into parent group
+  int index = data[item_level[HERE]].index[HERE];
 
-  // If we are on an open group title, go to first item in group:
+  // If we are on an open group title with children, go to first item in group
   if (widget->is_group() && (widget->flags()&FL_OPEN) && widget->visible()
       && ((Fl_Group*)widget)->children()) {
-    set_level(item_level[0]+1);
+    set_level(item_level[HERE]+1);
     parent = (Fl_Group*)widget;
     index = 0;
   } else {
@@ -148,15 +168,16 @@ Fl_Widget* Fl_Browser::forward() {
     index++;
   }
 
+  // CET - FIXME - is this loop logic correct?
   // loop to find the next real item:
   for (;;) {
 
     // move up until we are at a group with another child:
     while (index >= parent->children()) {
-      if (!item_level[0]) return 0; // end of the entire browser
-      item_level[0]--;
-      parent = item_level[0] ? (Fl_Group*)(data[item_level[0]-1].widget) : this;
-      index = data[item_level[0]].index[0] + 1;
+      if (!item_level[HERE]) return 0; // end of the entire browser
+      item_level[HERE]--;
+      parent = item_level[HERE] ? (Fl_Group*)(data[item_level[HERE]-1].widget) : this;
+      index = data[item_level[HERE]].index[HERE] + 1;
     }
 
     // skip invisible items:
@@ -165,26 +186,28 @@ Fl_Widget* Fl_Browser::forward() {
     index++;
   }
 
-  data[item_level[0]].index[0] = index;
-  data[item_level[0]].widget = widget;
+  data[item_level[HERE]].index[HERE] = index;
+  data[item_level[HERE]].widget = widget;
   return widget;
 }
 
+// go backward one item
 Fl_Widget* Fl_Browser::backward() {
   Fl_Group* parent =
-    item_level[0] ? (Fl_Group*)(data[item_level[0]-1].widget) : this;
-  int index = data[item_level[0]].index[0];
+    item_level[HERE] ? (Fl_Group*)(data[item_level[HERE]-1].widget) : this;
+  int index = data[item_level[HERE]].index[HERE];
 
+  // there's got to be simpler logic for this loop...
   for (;;) {
 
     // go up to parent from first item in a group:
     if (!index) {
-      if (!item_level[0]) { // start of browser
-	item_position[0] = 0;
+      if (!item_level[HERE]) { // start of browser
+	item_position[HERE] = 0;
 	return 0;
       }
-      item_level[0]--;
-      widget = data[item_level[0]].widget;
+      item_level[HERE]--;
+      widget = data[item_level[HERE]].widget;
       break;
     }
 
@@ -195,27 +218,28 @@ Fl_Widget* Fl_Browser::backward() {
     // go to last child in a group:
     while (widget->is_group() && (widget->flags()&FL_OPEN) && widget->visible()
 	&& ((Fl_Group*)widget)->children()) {
-      data[item_level[0]].index[0] = index;
-      data[item_level[0]].widget = widget;
-      set_level(item_level[0]+1);
+      data[item_level[HERE]].index[HERE] = index;
+      data[item_level[HERE]].widget = widget;
+      set_level(item_level[HERE]+1);
       parent = (Fl_Group*)widget;
       index = parent->children()-1;
       widget = parent->child(index);
     }
 
     if (widget->visible()) {
-      data[item_level[0]].index[0] = index;
-      data[item_level[0]].widget = widget;
+      data[item_level[HERE]].index[HERE] = index;
+      data[item_level[HERE]].widget = widget;
       break;
     }
   }
 
-  data[item_level[0]].widget = widget;
-  item_position[0] -= widget->height();
-  item_number[0]--;
+  data[item_level[HERE]].widget = widget;
+  item_position[HERE] -= widget->height();
+  item_number[HERE]--;
   return widget;
 }
 
+// set current item to one at or before Y pixels from top of browser
 Fl_Widget* Fl_Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
   if (damage()&FL_DAMAGE_LAYOUT) layout();
@@ -223,33 +247,34 @@ Fl_Widget* Fl_Browser::goto_position(int Y) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
-    while (item_position[0] > Y) {
+    while (item_position[HERE] > Y) {
       if (!backward()) {goto_top(); break;}
     }
   }
   // move forward to the item:
   if (widget) for (;;) {
     int h = widget->height();
-    if (item_position[0]+h > Y) break;
+    if (item_position[HERE]+h > Y) break;
     if (!forward()) {
-      item_position[0] -= h;
-      item_number[0]--;
+      item_position[HERE] -= h;
+      item_number[HERE]--;
       break;
     }
   }
   return widget;
 }
 
-// mark current item as being damaged:
-void Fl_Browser::damage_item(int n) {
-  if (at_mark(REDRAW_0,n) || at_mark(REDRAW_1,n)) return;
+// set item referenced by this mark as being damaged:
+void Fl_Browser::damage_item(int mark) {
+  if (marks_equal(REDRAW_0, mark) || marks_equal(REDRAW_1, mark))
+    return;
   int m = REDRAW_0;
   if (is_set(m)) {
     m = REDRAW_1;
     // if both marks are used we give up and damage the whole thing:
     if (is_set(m)) {damage(FL_DAMAGE_EXPOSE); return;}
   }
-  set_mark(m,n);
+  copy_mark(m, mark);
   damage(FL_DAMAGE_SCROLL);
 }
 
@@ -315,7 +340,7 @@ static char openclose_drag;
 // Draws the current item:
 void Fl_Browser::draw_item() {
 
-  int y = Y+item_position[0]-yposition_;
+  int y = Y+item_position[HERE]-yposition_;
   int h = widget->height();
 
   Fl_Color label_color;
@@ -332,7 +357,7 @@ void Fl_Browser::draw_item() {
     label_color = widget->text_color();
     Fl_Color c0 = text_background();
     Fl_Color c1 = color();
-    if (item_number[0] & 1 && c1 != c0) {
+    if (item_number[HERE] & 1 && c1 != c0) {
       // draw odd-numbered items with a dark stripe, plus contrast-enhancing
       // pixel rows on top and bottom:
       fl_color(c1);
@@ -354,10 +379,10 @@ void Fl_Browser::draw_item() {
 
   int x = X-xposition_;
   // draw the glyphs, one for each nesting level:
-  for (int j = indented()?0:1; j <= item_level[0]; j++) {
+  for (int j = indented()?0:1; j <= item_level[HERE]; j++) {
     Fl_Group* parent = j ? (Fl_Group*)(data[j-1].widget) : this;
-    int g = data[j].index[0] < parent->children()-1;
-    if (j == item_level[0]) {
+    int g = data[j].index[HERE] < parent->children()-1;
+    if (j == item_level[HERE]) {
       if (indented() && widget->is_group()) {
 	g += (widget->flags() & FL_OPEN) ? OPEN_ELL : CLOSED_ELL;
       } else {
@@ -397,14 +422,14 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
 
   int draw_all = damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
-    int item_y = Y+item_position[0]-yposition_;
+    int item_y = Y+item_position[HERE]-yposition_;
     if (item_y >= y+h) break;
     if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
     if (!forward()) break;
   }
 
   // erase the area below the last item:
-  int bottom_y = Y+item_position[0]-yposition_;
+  int bottom_y = Y+item_position[HERE]-yposition_;
   if (bottom_y < y+h) {
     fl_color(text_background());
     fl_rectf(x, bottom_y, w, y+h-bottom_y);
@@ -429,7 +454,7 @@ void Fl_Browser::draw() {
 	if (!clipped) {fl_clip(X,Y,W,H); clipped = 1;}
 	draw_item();
       }
-    }    
+    }
     if (clipped) fl_pop_clip();
   }
   scrolldx = scrolldy = 0;
@@ -454,29 +479,36 @@ void Fl_Browser::draw() {
 // Scrolling and layout:
 
 void Fl_Browser::layout() {
-
   // Measure the height of all items and find widest one
   int max_width = 0;
+
+  // save current item
+  copy_mark(USER_0, HERE);
+  Fl_Widget* saved = widget;
 
   // count all the items scrolled off the top:
   int arrow_size = text_size()|1;
   widget = goto_top();
   while (widget) {
-    if (item_position[0]+widget->height() > yposition_) break;
-    int w = widget->width()+arrow_size*item_level[0];
+    if (item_position[HERE]+widget->height() > yposition_) break;
+    int w = widget->width()+arrow_size*item_level[HERE];
     if (w > max_width) max_width = w;
     widget = forward();
   }
   set_mark(FIRST_VISIBLE);
   // count all the rest of the items:
   while (widget) {
-    int w = widget->width()+arrow_size*item_level[0];
+    int w = widget->width()+arrow_size*item_level[HERE];
     if (w > max_width) max_width = w;
     widget = forward();
   }
   if (indented()) max_width += arrow_size; // optional if no groups!
 
-  int height = item_position[0];
+  int height = item_position[HERE];
+
+  // restore current item
+  copy_mark(HERE, USER_0);
+  widget = saved;
 
   // figure out the visible area:
 
@@ -563,15 +595,16 @@ void Fl_Browser::yposition(int Y) {
 
 // Set the focus (the one with the box around it):
 int Fl_Browser::set_focus() {
-  if (at_mark(FOCUS)) return 0;
-  damage_item();
-  damage_item(FOCUS);
-  set_mark(FOCUS);
-  if (item_position[0] < yposition_)
-    yposition(item_position[0]);
+  if (at_mark(FOCUS)) return 0; // current item already focused
+  damage_item(); // so will draw focus box around item?
+  damage_item(FOCUS); // so focus box around old focus item will be removed?
+  set_mark(FOCUS); // current item is new focus item
+  if (item_position[HERE] < yposition_)
+    yposition(item_position[HERE]); // make it first line
   else {
     int h = widget->height();
-    if (item_position[0]+h-yposition_ > H) yposition(item_position[0]+h-H);
+    if (item_position[HERE]+h-yposition_ > H)
+      yposition(item_position[HERE]+h-H); // make it last line
   }
   return 1;
 }
@@ -579,11 +612,11 @@ int Fl_Browser::set_focus() {
 // Sets up so that Fl_Menu_::item() returns the current item:
 void Fl_Browser::set_item() {
   // set the locations used by Fl_Menu_ for the current value:
-  focus(data[0].index[0]);
-  for (int i = 0; i < item_level[0]; i++)
-    ((Fl_Group*)(data[i].widget))->focus(data[i+1].index[0]);
-  if (data[item_level[0]].widget->is_group())
-    ((Fl_Group*)(data[item_level[0]].widget))->focus(-1);
+  focus(data[TOPLEVEL].index[HERE]);
+  for (int i = 0; i < item_level[HERE]; i++)
+    ((Fl_Group*)(data[i].widget))->focus(data[i+1].index[HERE]);
+  if (data[item_level[HERE]].widget->is_group())
+    ((Fl_Group*)(data[item_level[HERE]].widget))->focus(-1);
 }
 
 // force current item to a state and do callback for multibrowser:
@@ -610,7 +643,7 @@ int Fl_Browser::item_select(int value, int do_callback) {
 
 // Turn off all lines in the browser:
 void Fl_Browser::deselect(int do_callback) {
-  data->index[0] = -1;
+  data[TOPLEVEL].index[HERE] = -1;
   item_select_only(do_callback);
 }
 
@@ -667,8 +700,8 @@ int Fl_Browser::handle(int event) {
     if (!goto_position(Fl::event_y()-Y+yposition_)) return 1;
     // see if they clicked the open/close box
     int arrow_size = text_size()|1;
-    int xx = (item_level[0]+1)*arrow_size+X-xposition_-Fl::event_x();
-    if ((event==FL_PUSH || openclose_drag) && 
+    int xx = (item_level[HERE]+1)*arrow_size+X-xposition_-Fl::event_x();
+    if ((event==FL_PUSH || openclose_drag) &&
 	widget->is_group() && xx > 0 && xx < arrow_size) {
       if (event == FL_RELEASE) {
 	widget->invert_flag(FL_OPEN);
@@ -699,7 +732,7 @@ int Fl_Browser::handle(int event) {
       }
       // set everything from old focus to current to drag_type:
       int direction = before_mark(FOCUS);
-      set_mark(USER_0,FOCUS);
+      copy_mark(USER_0,FOCUS);
       set_focus();
       for (;;) {
 	item_select(drag_type, FL_WHEN_CHANGED);
@@ -763,7 +796,7 @@ Fl_Widget* Fl_Browser::goto_visible_focus() {
   if (item_position[FOCUS] < yposition_ ||
       item_position[FOCUS] > yposition_+H) {
     if (!goto_mark(FIRST_VISIBLE)) return 0;
-    if (item_position[0] < yposition_) forward();
+    if (item_position[HERE] < yposition_) forward();
     return widget;
   } else {
     return goto_mark(FOCUS);
@@ -780,17 +813,17 @@ Fl_Widget* Fl_Browser::goto_number(int number) {
   if (number < 0) number = 0;
   if (number >= children()) number = children()-1;
   if (damage() & FL_DAMAGE_LAYOUT) layout();
-  if (data->index[0] <= 0 || number <= data->index[0]/2) {
+  if (data[TOPLEVEL].index[HERE] <= 0 || number <= data[TOPLEVEL].index[HERE]/2) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
-    while (data->index[0] > number || item_level[0] > 0) {
+    while (data[TOPLEVEL].index[HERE] > number || item_level[HERE] > 0) {
       if (!backward()) {goto_top(); break;}
     }
   }
   // move forward to the item:
   for (;;) {
-    if (data->index[0] >= number) break;
+    if (data[TOPLEVEL].index[HERE] >= number) break;
     forward();
   }
   return widget;
@@ -808,8 +841,8 @@ int Fl_Browser::selected(int line) {
 
 void Fl_Browser::set_top() {
   set_mark(FIRST_VISIBLE);
-  scrolldy += (yposition_-item_position[0]); damage(FL_DAMAGE_SCROLL);
-  yposition_ = item_position[0];
+  scrolldy += (yposition_-item_position[HERE]); damage(FL_DAMAGE_SCROLL);
+  yposition_ = item_position[HERE];
   ((Fl_Slider*)&scrollbar)->value(yposition_);
 }
 
@@ -852,12 +885,11 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   indented_ = 0;
   format_char_ = '@';
   column_char_ = '\t';
-  data = 0;
   // set all the marks to the top:
   levels = 1;
-  data = (Data*)malloc(sizeof(Data));
+  data = (Data*)malloc(sizeof(Data)); // allocate space for TOPLEVEL (0)
   for (int i = 0; i < NUMMARKS; i++) {
-    data->index[i] = 0;
+    data[TOPLEVEL].index[i] = 0;
     item_position[i] = 0;
     item_number[i] = 0;
     item_level[i] = 0;
@@ -866,9 +898,9 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
 }
 
 Fl_Browser::~Fl_Browser() {
-  delete[] data;
+  free(data);
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.22 2000/05/30 07:42:09 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.23 2000/06/02 00:31:43 carl Exp $".
 //

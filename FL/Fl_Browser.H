@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.16 2000/05/30 07:41:57 bill Exp $"
+// "$Id: Fl_Browser.H,v 1.17 2000/06/02 00:31:41 carl Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -35,20 +35,45 @@ class FL_API Fl_Browser : public Fl_Menu_ {
 
 public:
 
-  Fl_Widget* goto_top();
-  Fl_Widget* goto_mark(int n);
-  Fl_Widget* goto_position(int y);
-  Fl_Widget* goto_number(int y);
-  Fl_Widget* goto_visible_focus();
-  Fl_Widget* forward();
-  Fl_Widget* backward();
+  // marks keep track of various items in the browser?
+  enum { // predefined marks - (there are no non-predefined marks, right?)
+    HERE = 0, // current item?
+    FOCUS,
+    FIRST_VISIBLE,
+    REDRAW_0,
+    REDRAW_1,
+    USER_0,
+    USER_1,
+    NUMMARKS
+  };
 
-  int at_mark(int mark, int from = 0);
-  int before_mark(int mark, int from = 0);
-  void set_mark(int mark, int from = 0);
+  Fl_Widget* goto_top(); // set current item to top item in browser?
+  Fl_Widget* goto_mark(int mark); // set current item to one of the marks?
+  Fl_Widget* goto_position(int y); // set current item to one (near) y pixels from top?
+  Fl_Widget* goto_number(int y); // go to toplevel item number
+  Fl_Widget* goto_visible_focus();
+  Fl_Widget* forward(); // set current item to next visible item?
+  Fl_Widget* backward(); // set current item to previous visible item?
+
+  // are these two marks the same item?
+  int marks_equal(int mark1, int mark2);
+  // is this mark the current item?
+  int at_mark(int mark) { return marks_equal(mark, HERE); }
+  // compare relative locations of these two marks
+  int compare_mark_locations(int mark1, int mark2);
+  // is current item before this mark?
+  int before_mark(int mark) { return compare_mark_locations(HERE, mark) < 0; }
+  // is current item after this mark?
+  int after_mark(int mark) { return compare_mark_locations(HERE, mark) > 0; }
+  // copy one mark to another
+  void copy_mark(int dest_mark, int src_mark);
+  // set this mark to current item
+  void set_mark(int mark) { copy_mark(mark, HERE); }
+  // unsets this mark (toplevel only)?
   void unset_mark(int mark);
+  // is this toplevel mark set?
   int is_set(int mark);
-  void damage_item(int mark = 0);
+  void damage_item(int mark = HERE);
 
   int set_focus();
   void set_top();
@@ -71,17 +96,6 @@ public:
     VERTICAL_ALWAYS = 6,
     BOTH_ALWAYS = 7,
     MULTI_BROWSER = 8
-  };
-
-  enum { // predefined marks
-    HERE = 0,
-    FOCUS,
-    FIRST_VISIBLE,
-    REDRAW_0,
-    REDRAW_1,
-    USER_0,
-    USER_1,
-    NUMMARKS
   };
 
   int xposition() const {return xposition_;}
@@ -133,8 +147,8 @@ private:
   Fl_Widget* widget;
   struct Data;
   Data* data;
-  int item_level[NUMMARKS];
-  int item_position[NUMMARKS];
+  int item_level[NUMMARKS]; // mark item's nesting depth in group hierarchy?
+  int item_position[NUMMARKS]; // distance in pixels from top of browser?
   int item_number[NUMMARKS];
   int levels;
   void set_level(int);
@@ -152,5 +166,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.16 2000/05/30 07:41:57 bill Exp $".
+// End of "$Id: Fl_Browser.H,v 1.17 2000/06/02 00:31:41 carl Exp $".
 //

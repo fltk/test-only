@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcasecmp.c,v 1.7 2000/03/02 20:47:18 carl Exp $"
+   "$Id: conf_strcasecmp.c,v 1.8 2000/06/02 00:31:44 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -42,9 +42,9 @@ conf_strcasecmp(const char *s1, const char *s2)
 {
 	for (; *s1 && *s2 && tolower(*s1) == tolower(*s2); s1++, s2++) ;        /* loop while chars equal & neither string ended */
 	if (!(*s1) && !(*s2)) return 0;                                         /* if both strings ended must be equal */
-	return *s1 - *s2;                                                       /* must be 1st different char, return comparison */
+	return tolower(*s1) - tolower(*s2);                                     /* must be 1st different char, return comparison */
 }
 
 /*
-    End of "$Id: conf_strcasecmp.c,v 1.7 2000/03/02 20:47:18 carl Exp $".
+    End of "$Id: conf_strcasecmp.c,v 1.8 2000/06/02 00:31:44 carl Exp $".
 */
