@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.22 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.23 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,11 +21,11 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/OverlayWindow.h>
 #include <fltk/damage.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <config.h>
 
 using namespace fltk;
 
@@ -168,5 +168,5 @@ void OverlayWindow::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.22 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.23 2004/03/25 18:13:18 spitzak Exp $".
 //

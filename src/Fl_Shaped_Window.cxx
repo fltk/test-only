@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.12 2002/12/10 02:00:50 easysw Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/ShapedWindow.h>
 #include <fltk/x.h>
 
@@ -174,5 +175,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.12 2002/12/10 02:00:50 easysw Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
 //

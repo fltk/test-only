@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.37 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -24,6 +24,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
 #include <fltk/math.h>
@@ -160,5 +161,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.37 2004/03/25 18:13:18 spitzak Exp $".
 //

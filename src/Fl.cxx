@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.173 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.174 2004/03/25 18:13:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,6 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/error.h>
@@ -30,7 +31,6 @@
 #include <fltk/Style.h>
 #include <fltk/Tooltip.h>
 
-#include <config.h>
 #if defined(_WIN32) && USE_MULTIMONITOR && WINVER<0x0500
 # undef WINVER
 # define WINVER 0x0500
@@ -1061,5 +1061,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.173 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.174 2004/03/25 18:13:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.24 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 // Implemented without using the xpm library (which I can't use because
 // it interferes with the color cube used by drawimage).
 
+#include <config.h>
 #include <fltk/xpmImage.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
@@ -66,5 +67,5 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.24 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.12 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.13 2004/03/25 18:13:17 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,13 +26,10 @@
 //
 // provides functions to measure and decompress PNG files
 
-#include <fltk/draw.h>
-#include <fltk/x.h>
-#include <fltk/SharedImage.h>
 #include <config.h>
 #if HAVE_LIBPNG
-#include <png.h>
-#include <stdlib.h>
+# include <png.h>
+# include <stdlib.h>
 
 static png_bytep cur_datas;
 
@@ -45,6 +42,10 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 // Dummy function to remove gcc's nasty warning about longjmp:
 static void declare_now(void*) { }
 #endif
+
+#include <fltk/draw.h>
+#include <fltk/x.h>
+#include <fltk/SharedImage.h>
 
 bool fltk::pngImage::test(const uchar* datas, unsigned size)
 {
@@ -255,5 +256,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.12 2003/11/04 08:10:57 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.13 2004/03/25 18:13:17 spitzak Exp $"
 //

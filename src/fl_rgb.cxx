@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rgb.cxx,v 1.8 2004/01/25 06:55:06 spitzak Exp $"
+// "$Id: fl_rgb.cxx,v 1.9 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,6 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/x.h>
 #include <fltk/Color.h>
 #include <stdio.h>
@@ -73,5 +74,5 @@ fltk::Color fltk::color(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.8 2004/01/25 06:55:06 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.9 2004/03/25 18:13:18 spitzak Exp $".
 //

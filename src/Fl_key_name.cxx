@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -23,19 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/events.h>
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
 #include <ctype.h>
 #include <string.h>
-#ifndef _WIN32
+#if USE_X11
 #include <fltk/x.h>
 #endif
 using namespace fltk;
-
-#if !defined(_WIN32) && !defined(__APPLE__)
-# define USE_X11 1
-#endif
 
 // This table must be in numeric order by fltk (X) keysym number.
 // On X the table is much shorter as it is only the names that
@@ -137,5 +134,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.12 2004/01/19 21:38:41 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.13 2004/03/25 18:13:18 spitzak Exp $"
 //

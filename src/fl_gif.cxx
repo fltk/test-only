@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.18 2004/03/25 18:13:18 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -43,6 +43,7 @@
  *                     (415) 336-1080
  */
 
+#include <config.h>
 #include <fltk/SharedImage.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
@@ -418,5 +419,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.18 2004/03/25 18:13:18 spitzak Exp $"
 //

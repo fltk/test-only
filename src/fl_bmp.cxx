@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.18 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -30,6 +30,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
 #include <fltk/SharedImage.h> // defines bmpImage.h
 #include <fltk/events.h>
 #include <fltk/error.h>
@@ -827,5 +828,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.18 2003/11/04 08:11:03 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
 //

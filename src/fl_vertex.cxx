@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.26 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.27 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -25,6 +25,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <fltk/x.h>
@@ -735,5 +736,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.26 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.27 2004/03/25 18:13:18 spitzak Exp $".
 //

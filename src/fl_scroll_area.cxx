@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.13 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.14 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 // a "callback" which is called to draw rectangular areas that are moved
 // into the drawing area.
 
+#include <config.h>
 #include <fltk/x.h>
 #include <fltk/draw.h>
 
@@ -104,5 +105,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.13 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.14 2004/03/25 18:13:18 spitzak Exp $".
 //

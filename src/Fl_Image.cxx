@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.36 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/Image.h>
 #include <fltk/Widget.h>
 #include <fltk/events.h>
@@ -205,5 +206,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.36 2004/03/25 18:13:18 spitzak Exp $".
 //

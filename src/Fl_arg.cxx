@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.46 2004/02/05 07:21:20 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.47 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,6 +26,7 @@
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
 
+#include <config.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/filename.h>
@@ -419,5 +420,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.46 2004/02/05 07:21:20 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.47 2004/03/25 18:13:18 spitzak Exp $".
 //

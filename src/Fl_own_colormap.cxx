@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.11 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.12 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,9 +21,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/visual.h>
 #include <fltk/x.h>
-#include <config.h>
 
 #if !USE_X11
 
@@ -78,5 +78,5 @@ void fltk::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.11 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.12 2004/03/25 18:13:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/Window.h>
 #include <fltk/Monitor.h>
 #include <fltk/events.h>
@@ -170,5 +171,5 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   Returns true if set_override() has been called. */
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $".
 //

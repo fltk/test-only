@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.10 2004/02/05 08:05:36 spitzak Exp $"
+// "$Id: fractals.cxx,v 1.11 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,7 @@ int main(int, char**) {
 #include <math.h>
 #include <limits.h>           /* ULONG_MAX is defined here */
 #include <float.h>            /* FLT_MAX is atleast defined here */
+typedef unsigned long ulong;
 
 #include <time.h>  /* for random seed */
 
@@ -817,5 +818,5 @@ int main(int argc, char** argv)
 #endif
 
 //
-// End of "$Id: fractals.cxx,v 1.10 2004/02/05 08:05:36 spitzak Exp $".
+// End of "$Id: fractals.cxx,v 1.11 2004/03/25 18:13:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.24 2003/11/04 08:10:58 spitzak Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/events.h>
 #include <fltk/x.h>
 #include <fltk/draw.h>
@@ -111,5 +112,5 @@ void xbmImage::draw(int x, int y) const {
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.24 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.25 2004/03/25 18:13:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.19 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Window_iconize.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/Window.h>
 #include <fltk/x.h>
 using namespace fltk;
@@ -56,5 +57,5 @@ void Window::iconize() {
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.19 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $".
 //

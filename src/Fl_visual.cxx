@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_visual.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,9 +23,9 @@
 
 // Set the default visual according to passed switches:
 
+#include <config.h>
 #include <fltk/visual.h>
 #include <fltk/x.h>
-#include <config.h>
 
 /*! \fn bool fltk::visual(int);
 
@@ -146,5 +146,5 @@ bool fltk::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.18 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $".
 //

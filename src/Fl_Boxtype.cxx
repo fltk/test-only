@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.16 2004/02/05 07:21:20 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.17 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 // These are the most common, square box types, which are always
 // linked in because the default styles use them.
 
+#include <config.h>
 #include <fltk/Box.h>
 #include <fltk/Style.h>
 #include <fltk/Widget.h>
@@ -40,7 +41,6 @@
 #include <fltk/x.h>
 #include <fltk/string.h>
 #include <fltk/math.h>
-#include <config.h>
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
@@ -318,5 +318,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.16 2004/02/05 07:21:20 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.17 2004/03/25 18:13:18 spitzak Exp $".
 //

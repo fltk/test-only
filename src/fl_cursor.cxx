@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 // This avoids a field in the Window, and I suspect is more
 // portable to other systems.
 
+#include <config.h>
 #include <fltk/Cursor.h>
 #include <fltk/Window.h>
 #include <fltk/x.h>
@@ -404,5 +405,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.21 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $".
 //

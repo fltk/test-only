@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.108 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.109 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -52,13 +52,13 @@ calls exit(0) if this is the last top-level window.
 // crap you need to do to communicate with X is in x.C, the
 // equivalent (but totally different) crap for MSWindows is in win32.C
 
+#include <config.h>
 #include <fltk/Window.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/layout.h>
 #include <fltk/run.h>
 #include <fltk/x.h>
-#include <config.h>
 using namespace fltk;
 
 /*! Return a pointer to the fltk::Window this widget is in.
@@ -676,5 +676,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.108 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.109 2004/03/25 18:13:18 spitzak Exp $".
 //

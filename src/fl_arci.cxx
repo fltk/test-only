@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.19 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -21,6 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <fltk/x.h>
@@ -122,5 +123,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 */
 
 //
-// End of "$Id: fl_arci.cxx,v 1.19 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $".
 //

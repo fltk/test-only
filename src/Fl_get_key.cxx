@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.19 2004/01/20 08:24:16 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -21,6 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #ifdef _WIN32
 # include "Fl_get_key_win32.cxx"
 #elif (defined(__APPLE__) && !USE_X11)
@@ -97,5 +98,5 @@ bool fltk::get_key_state(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.19 2004/01/20 08:24:16 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $".
 //

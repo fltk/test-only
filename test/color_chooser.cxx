@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.14 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: color_chooser.cxx,v 1.15 2004/03/25 18:13:18 spitzak Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (fltk).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/visual.h>
@@ -36,7 +37,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef _WIN32
+#if USE_X11
 #include "list_visuals.cxx"
 #endif
 
@@ -149,5 +150,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.14 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: color_chooser.cxx,v 1.15 2004/03/25 18:13:18 spitzak Exp $".
 //
