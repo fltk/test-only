@@ -35,7 +35,7 @@ Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
 #include "config.h"
 
-#ifdef HAVE_DLOPEN
+#if defined(HAVE_DLOPEN) || defined(WIN32)
 
 #include <FL/dirent.h>
 #include <FL/Fl_Plugins.H>
