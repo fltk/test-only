@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18.2.14.2.48.2.7 2004/03/29 21:22:35 rokan Exp $"
+# "$Id: Makefile,v 1.18.2.14.2.48.2.8 2004/04/06 22:37:23 rokan Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -182,6 +182,7 @@ CFILES = fl_call_main.c flstring.c scandir.c numericsort.c vsnprintf.c
 CLEAN =	core* cmap
 
 ################################################################
+INCLUDES = -I..
 
 include ../makeinclude
 
@@ -595,5 +596,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.18.2.14.2.48.2.7 2004/03/29 21:22:35 rokan Exp $".
+# End of "$Id: Makefile,v 1.18.2.14.2.48.2.8 2004/04/06 22:37:23 rokan Exp $".
 #

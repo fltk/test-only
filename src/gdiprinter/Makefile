@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $"
+# "$Id: Makefile,v 1.1.2.3 2004/04/06 22:37:23 rokan Exp $"
 #
 # Gdi printing library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -41,6 +41,8 @@ CLEAN =	core* cmap
 
 ################################################################
 
+INCLUDES = -I../..
+
 include ../../makeinclude
 
 
@@ -57,45 +59,14 @@ all:	../../lib/$(GDILIBNAME)
 	$(LIBCOMMAND) $@ $(GDIOBJECTS)
 	$(RANLIB) $@
 
-libfltk_gdi.so.1.2: $(GDIOBJECTS) ../libfltk.so.1.2
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(GDIOBJECTS) $(GDILIBS) -L.. -lfltk
-	-$(RM) libfltk_gdi.so
-	$(LN) libfltk_gdi.so.1.2 libfltk_gdi.so
-
-libfltk_gdi.sl.1.2: $(GDIOBJECTS) ../libfltk.sl.1.2
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(GDIOBJECTS) $(GDILIBS) -L.. -lfltk
-	-$(RM) libfltk_gdi.sl
-	$(LN) libfltk_gdi.sl.1.2 libfltk_hdi.sl
-
-libfltk_gdi.1.2.dylib: $(GDIOBJECTS) ../libfltk.1.2.dylib
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ \
-		-install_name $(libdir)/$@ \
-		-current_version 1.2.0 \
-		-compatibility_version 1.2.0 \
-		$(GDIOBJECTS) $(LDLIBS) $(GDILIBS) -L.. -lfltk
-	-$(RM) libfltk_gdi.dylib
-	$(LN) libfltk_gdi.1.2.dylib libfltk_gdi.dylib
-
-libfltk_gdi_s.a: $(GDIOBJECTS)
-	echo $(DSOCOMMAND) libfltk_gdi_s.o ...
-	$(DSOCOMMAND) libfltk_gdi_s.o $(GDIOBJECTS)
-	echo $(LIBCOMMAND) libfltk_gdi_s.a libfltk_gdi_s.o
-	-$(RM) $@
-	$(LIBCOMMAND) libfltk_gdi_s.a libfltk_gdi_s.o
-	$(CHMOD) +x libfltk_gdi_s.a
-
 
 	
 
 clean :
-	-@ $(RM) *.o  $GDIDSONAME\
-		../../lib/$(GDILIBNAME) \
-		libfltk_gdi.so\
-		libfltk_gdi.sl \
-		libfltk_gdi.dylib\
+	-@ $(RM) *.o \
+		../../lib/$(GDILIBNAME)
+		
+
 
 depend:	$(GDICPPFILES) 
 	makedepend -Y -I../../ -f  makedepend $(GDICPPFILES) 
@@ -106,36 +77,13 @@ include makedepend
 
 ################################################################
 
-install: ../../lib/$(GDILIBNAME) $(GDIDSONAME)
+install: ../../lib/$(GDILIBNAME)
 	echo "Installing fltk gdi libraries in $(libdir)..."
 	-$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(GDILIBNAME)
 	-$(CP)  ../../lib/$(GDILIBNAME) $(libdir)
 
 
-	if test x$(GDIDSONAME) = xlibfltk_gdi.so.1.2; then\
-		$(RM) $(libdir)/libfltk_gdi.so*;\
-		$(CP) libfltk_gdi.so.1.2 $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gdi.so.1.2; \
-		$(LN) libfltk_gdi.so.1.2 $(libdir)/libfltk_gdi.so;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi.sl.1.2; then\
-		$(RM) $(libdir)/libfltk_gdi.sl*;\
-		$(CP) libfltk_gdi.sl.1.2 $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gdi.sl.1.2; \
-		$(LN) libfltk_gdi.sl.1.2 $(libdir)/libfltk_gdi.sl;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi.1.2.dylib; then\
-		$(RM) $(libdir)/libfltk_gdi.*dylib;\
-		$(CP) libfltk_gdi.1.2.dylib $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gdi.1.2.dylib; \
-		$(LN) libfltk_gdi.1.2.dylib $(libdir)/libfltk_gdi.dylib;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi_s.a; then\
-		$(RM) $(libdir)/libfltk_gdi_s.a;\
-		$(CP) libfltk_gdi_s.a $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gdi.a; \
-	fi
 
 
 uninstall:
@@ -146,20 +94,8 @@ uninstall:
 	if test x$(libdir)/$(GDILIBNAME) != x; then\
 		$(RM) $(libdir)/$(GDILIBNAME);\
 	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi.so.1.2; then\
-		$(RM) $(libdir)/libfltk_gdi.so*;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi.sl.1.2; then\
-		$(RM) $(libdir)/libfltk_gdi.sl*;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi.1.2.dylib; then\
-		$(RM) $(libdir)/libfltk_gdi.*dylib;\
-	fi
-	if test x$(GDIDSONAME) = xlibfltk_gdi_s.a; then\
-		$(RM) $(libdir)/libfltk_gdi_s.a;\
-	fi
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $".
+# End of "$Id: Makefile,v 1.1.2.3 2004/04/06 22:37:23 rokan Exp $".
 #

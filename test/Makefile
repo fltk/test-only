@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19.2.7.2.38.2.3 2004/03/28 10:30:32 rokan Exp $"
+# "$Id: Makefile,v 1.19.2.7.2.38.2.4 2004/04/06 22:37:24 rokan Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,6 +23,7 @@
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
+INCLUDES = -I..
 include ../makeinclude
 
 CPPFILES =\
@@ -219,7 +220,7 @@ demo$(EXEEXT): demo.o
 	$(CXX) -I.. $(CXXFLAGS) -o $@ $< $(LINKFLTKFORMS) $(LDLIBS)
 	$(POSTBUILD) $@ ../FL/mac.r
 
-device$(EXEEXT): device.o
+device$(EXEEXT): device.o ../lib/$(PSLIBNAME)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) device.o -o $@ $(LINKFLTKPS)  $(LINKFLTKGDI)  $(LDLIBS)
 	$(POSTBUILD) $@ ../FL/mac.r
@@ -379,5 +380,5 @@ shape$(EXEEXT): shape.o
 
 
 #
-# End of "$Id: Makefile,v 1.19.2.7.2.38.2.3 2004/03/28 10:30:32 rokan Exp $".
+# End of "$Id: Makefile,v 1.19.2.7.2.38.2.4 2004/04/06 22:37:24 rokan Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.6 2004/03/28 13:10:00 rokan Exp $"
+# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.7 2004/04/06 22:37:22 rokan Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -84,6 +84,7 @@ LINKFLTKPS	= -L../lib -lfltk_ps @LINKFLTK@
 LINKSHARED	= @DSOLINK@ @LINKSHARED@ $(IMAGELIBS)
 IMAGELIBS	= @IMAGELIBS@
 GDILIBS		= @GDILIBS@
+PSLIBS		= @PSLIBS@
 
 # The extension to use for executables...
 EXEEXT		= @EXEEXT@
@@ -115,18 +116,16 @@ CAT3EXT		= @CAT3EXT@
 
 .o$(EXEEXT):
 	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	$(CXX) $(INCLUDES) $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
 .c.o:
 	echo Compiling $<...
-	$(CC) -I.. $(CFLAGS) -c $<
+	$(CC) $(INCLUDES) $(CFLAGS) -c $<
 
-# RK: CRITICAL To include fltk root directory from src/postscript by adding -I../.. 
-# as I wanted to make minimal changes to makefiles
 .cxx.o:
 	echo Compiling $<...
-	$(CXX) -I.. -I../.. $(CXXFLAGS) -c $<
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $<
 
 .man.0 .man.1 .man.3:
 	echo Formatting $<...
@@ -141,5 +140,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.6 2004/03/28 13:10:00 rokan Exp $".
+# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.7 2004/04/06 22:37:22 rokan Exp $".
 #

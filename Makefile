@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12.2.6.2.14.2.5 2004/03/28 11:37:05 rokan Exp $"
+# "$Id: Makefile,v 1.12.2.6.2.14.2.6 2004/04/06 22:37:22 rokan Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -22,6 +22,8 @@
 #
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 # #
+
+DIRFLAGS = 
 
 include makeinclude
 
@@ -97,5 +99,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.12.2.6.2.14.2.5 2004/03/28 11:37:05 rokan Exp $".
+# End of "$Id: Makefile,v 1.12.2.6.2.14.2.6 2004/04/06 22:37:22 rokan Exp $".
 #

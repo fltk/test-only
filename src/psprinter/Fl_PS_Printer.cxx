@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_PS_Printer.cxx,v 1.1.2.3 2004/04/02 20:50:28 rokan Exp $"
+// "$Id: Fl_PS_Printer.cxx,v 1.1.2.4 2004/04/06 22:37:24 rokan Exp $"
 //
 // Postscript device class for the Fast Light Tool Kit (FLTK).
 //
@@ -295,13 +295,9 @@ static const char * prolog_3 = // prolog relevant only if lang_level >2
 
 
 void Fl_PS_Printer::recover(){
-  //if (colored_) 
     color(cr_,cg_,cb_);
-  //if (line_styled_) 
     line_style(linestyle_,linewidth_,linedash_);
-  //if (fonted_) 
     font(font_,size_);
-  //colored_=line_styled_=fonted_=0;
 };
   
 void Fl_PS_Printer::reset(){
@@ -329,7 +325,7 @@ void Fl_PS_Printer::reset(){
  
 Fl_PS_Printer::~Fl_PS_Printer() {
   if(nPages){  // for eps nPages is 0 so it is fine ....
-    fprintf(output, "CR\nGR\n GR\nSP\n restore\n");
+    fprintf(output, "CR\nGR\nGR\nGR\nSP\n restore\n");
     if(!pages_){
       fprintf(output, "%%%%Trailer\n");
       fprintf(output, "%%%%Pages: %i\n" , nPages);
@@ -461,16 +457,14 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h
 void Fl_PS_Printer::page(double pw, double ph, int media) {
 
   if (nPages){
-    fprintf(output, "CR\nGR\nGR\nSP\nrestore\n");
+    fprintf(output, "CR\nGR\nGR\nGR\nSP\nrestore\n");
   }
   ++nPages;
   fprintf(output, "%%%%Page: %i %i\n" , nPages , nPages);
   if (pw>ph){
     fprintf(output, "%%%%PageOrientation: Landscape\n");
-    //fprintf(output, "%i Orientation\n", 1);
   }else{
     fprintf(output, "%%%%PageOrientation: Portrait\n");
-    //fprintf(output, "%i Orientation\n", 0);
   }
 
   fprintf(output, "%%%%BeginPageSetup\n");
@@ -478,15 +472,7 @@ void Fl_PS_Printer::page(double pw, double ph, int media) {
       int r = media & REVERSED;
       if(r) r = 2;
       fprintf(output, "<< /PageSize [%i %i] /Orientation %i>> setpagedevice\n", (int)(pw+.5), (int)(ph+.5), r);
-  }else
-    if(pw>ph)
-      if(media & REVERSED)
-        fprintf(output, "-90 rotate %i 0 translate\n", int(-pw));
-      else
-        fprintf(output, "90 rotate 0 %i translate\n", int(-ph));
-    else
-      if(media & REVERSED)
-        fprintf(output, "180 rotate %i %i translate\n", int(-pw), int(-ph));
+  }
   fprintf(output, "%%%%EndPageSetup\n");
   
   pw_=pw;
@@ -498,7 +484,20 @@ void Fl_PS_Printer::page(double pw, double ph, int media) {
   fprintf(output, "%g %g TR\n", (double)0 /*lm_*/ , ph_ /* - tm_*/);
   fprintf(output, "1 -1 SC\n");
   line_style(0);
+  fprintf(output, "GS\n");
+  
+  if(!((media & MEDIA) &&(lang_level_>1))){
+    if(pw>ph)
+      if(media & REVERSED)
+        fprintf(output, "-90 rotate %i 0 translate\n", int(-pw));
+      else
+        fprintf(output, "90 rotate 0 %i translate\n", int(-ph));
+    else
+      if(media & REVERSED)
+        fprintf(output, "180 rotate %i %i translate\n", int(-pw), int(-ph));
+  }
   fprintf(output, "GS\nCS\n");
+  
 
 };
 
@@ -532,7 +531,7 @@ void Fl_PS_Printer::place(double x, double y, double tx, double ty, double scale
 
 
 //
-// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.3 2004/04/02 20:50:28 rokan Exp $".
+// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.4 2004/04/06 22:37:24 rokan Exp $".
 //
 
 

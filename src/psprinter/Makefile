@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $"
+# "$Id: Makefile,v 1.1.2.3 2004/04/06 22:37:24 rokan Exp $"
 #
 # Postscript library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -41,10 +41,13 @@ CLEAN =	core* cmap
 
 ################################################################
 
+
+INCLUDES =  -I../..
+
 include ../../makeinclude
 
 
-PSOBJECTS = $(PSCPPFILES:.cxx=.o)
+PSOBJECTS =   $(PSCPPFILES:.cxx=.o)
 
 all:	../../lib/$(PSLIBNAME) $(PSDSONAME) 
 
@@ -59,13 +62,13 @@ all:	../../lib/$(PSLIBNAME) $(PSDSONAME)
 
 libfltk_ps.so.1.2: $(PSOBJECTS) ../libfltk.so.1.2
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(PSOBJECTS) $(PSLIBS) -L.. -lfltk
+	$(DSOCOMMAND) $@ $(PSOBJECTS) -L.. -lfltk 
 	-$(RM) libfltk_ps.so
 	$(LN) libfltk_ps.so.1.2 libfltk_ps.so
 
 libfltk_ps.sl.1.2: $(PSOBJECTS) ../libfltk.sl.1.2
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(PSOBJECTS) $(PSLIBS) -L.. -lfltk
+	$(DSOCOMMAND) $@ $(PSOBJECTS) -L.. -lfltk 
 	-$(RM) libfltk_ps.sl
 	$(LN) libfltk_ps.sl.1.2 libfltk_ps.sl
 
@@ -75,7 +78,7 @@ libfltk_ps.1.2.dylib: $(PSOBJECTS) ../libfltk.1.2.dylib
 		-install_name $(libdir)/$@ \
 		-current_version 1.2.0 \
 		-compatibility_version 1.2.0 \
-		$(PSOBJECTS) $(LDLIBS) $(PSLIBS) -L.. -lfltk
+		$(PSOBJECTS) $(LDLIBS) -L.. -lfltk
 	-$(RM) libfltk_ps.dylib
 	$(LN) libfltk_ps.1.2.dylib libfltk_ps.dylib
 
@@ -160,5 +163,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $".
+# End of "$Id: Makefile,v 1.1.2.3 2004/04/06 22:37:24 rokan Exp $".
 #

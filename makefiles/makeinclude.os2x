@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.7 2004/04/04 02:11:17 rokan Exp $"
+# "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.8 2004/04/06 22:37:23 rokan Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 #
@@ -102,17 +102,17 @@ CAT3EXT		=3
 
 .o$(EXEEXT):
 	echo Linking $@...
-	$(CXX) -I.. -I../.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	$(CXX) $(INCLUDES) $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
 .c.o:
 	echo Compiling $<...
-	$(CC) -I.. -I../.. $(CFLAGS) -c $<
+	$(CC) $(INCLUDES) $(CFLAGS) -c $<
 
 #RK :CRITICAL HACK to include fltk root from src/postscript
 .cxx.o:
 	echo Compiling $<...
-	$(CXX) -I.. -I../.. $(CXXFLAGS) -c $<
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $<
 
 .man.0 .man.1 .man.3:
 	echo Formatting $<...
@@ -127,5 +127,5 @@ CAT3EXT		=3
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.7 2004/04/04 02:11:17 rokan Exp $".
+# End of "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.8 2004/04/06 22:37:23 rokan Exp $".
 #

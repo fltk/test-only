@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H,v 1.1.2.5 2004/04/04 02:11:17 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.6 2004/04/06 22:37:22 rokan Exp $"
 //
 // Fl_Printer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,13 +40,9 @@ const double FL_PICA = 12;
 
 const int NO_PAGE_FORMATS=30;
 
-/** A base class for all printing devices
-*
-* This class devnes also usefull methods for paging and placement of drawings on the page.
-*/ 
+/** This is a base class for all printing devices. It also defines some usefull methods for paging and placement of drawings on the page. */ 
 
 class FL_EXPORT Fl_Printer:public Fl_Device{
-  //static const char * creator_;
   static const char * doc_info_;
 
 public:
@@ -84,7 +80,7 @@ public:
     ENVELOPE,
     MEDIA = 0x1000
   };
-  enum Page_Layout {PORTRAIT = 0, LANDSCAPE = 0x100, REVERSED = 0x200};
+  enum Page_Layout {PORTRAIT = 0, LANDSCAPE = 0x100, REVERSED = 0x200, ORIENTATION = 0x300};
 
 
 protected:
@@ -98,7 +94,7 @@ public:
 
   virtual void page(double pw, double ph, int media = 0)=0;
   virtual void page(int format)=0;
-  //virtual void orientation (int 
+  virtual void orientation (int o){};
   double page_width(){return pw_;};
   double page_height(){return ph_;};
 
@@ -116,5 +112,5 @@ public:
 #endif
 
 //
-// "$Id: Fl_Printer.H,v 1.1.2.5 2004/04/04 02:11:17 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.6 2004/04/06 22:37:22 rokan Exp $"
 //

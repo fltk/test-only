@@ -49,6 +49,7 @@ class FL_EXPORT Fl_PS_Printer:public Fl_Printer{
   int (*close_cmd_)(FILE *);
   int page_policy_;
   int nPages;
+  int orientation_;
 
 protected:
     int alpha_mask(const uchar * data, int w, int h, int D, int LD=0);
@@ -69,6 +70,7 @@ public:
 
     void close_command( int (*cmd)(FILE *)){close_cmd_=cmd;};
     FILE * file(){return output;};
+    //void orientation (int o);
 
     Fl_PS_Printer(FILE *o, int lang_level, int pages = 0); // ps (aslo multi-page) constructor
     Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h); //eps constructor
