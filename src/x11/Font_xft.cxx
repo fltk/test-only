@@ -64,19 +64,19 @@ using namespace fltk;
 
 // One of these is made for each combination of size + encoding:
 struct FontSize {
-  FontSize *next;	// linked list for this Fontdesc
+  unsigned size10;	// size*10
   XftFont* font;
   const char* encoding;
-  float size;
-  //~FontSize();
   XFontStruct* xfont;
+  //~FontSize();
 };
 
 // The xft font implementation adds the xft name and the above list:
 struct IFont {
   fltk::Font f;
   int attribute_mask; // all attributes that can be turned on
-  FontSize* first;
+  unsigned numsizes;
+  FontSize* fontsizes;
 };
 
 // We store the attributes in neat blocks of 2^n:
@@ -110,32 +110,46 @@ static XftFont* fontopen(const char* name, int attributes, bool core) {
 		     0);
 }
 
-void fltk::setfont(fltk::Font* font, float size) {
+void fltk::setfont(fltk::Font* font, float rsize) {
   // Reduce the number of sizes by rounding to various multiples:
-  size = rint(10*size)/10;
+  unsigned size10 = unsigned(10*rsize+.5);
 #ifndef XFT_MAJOR
   // Older Xft craps out with tiny sizes and returns null for the font
-  if (size < 2) size = 2;
+  if (size10 < 20) size10 = 20;
 #endif
-  if (font == current_font_ && size == current_size_ &&
+  if (font == current_font_ && current->size10 == size10 &&
       !strcasecmp(current->encoding, encoding_))
     return;
-  current_font_ = font; current_size_ = size;
-  FontSize* f;
-  // search the fontsizes we have generated already
-  for (f = ((IFont*)font)->first; f; f = f->next) {
-    if (f->size == size && !strcasecmp(f->encoding, encoding_))
-      break;
+  current_font_ = font; current_size_ = size10/10.0f;
+  // binary search the fontsizes we have generated already
+  FontSize* array = ((IFont*)font)->fontsizes;
+  unsigned n = ((IFont*)font)->numsizes;
+  unsigned a = 0; unsigned b = n;
+  while (a < b) {
+    unsigned c = (a+b)/2;
+    FontSize* f = array+c;
+    int d = f->size10-size10;
+    if (!d) d = strcasecmp(f->encoding, encoding_);
+    if (d < 0) a = c+1;
+    else if (d > 0) b = c;
+    else {current = f; return;}
   }
-  if (!f) {
-    f = new FontSize();
-    f->encoding = encoding_;
-    f->size = current_size_;
-    f->font = fontopen(font->name_, font->attributes_, false);
-    f->xfont = 0; // figure this out later
-    f->next = ((IFont*)font)->first;
-    ((IFont*)font)->first = f;
+  if (!(n&(n+1))) {
+    unsigned m = 2*(n+1)-1;
+    FontSize* newarray = new FontSize[m];
+    memcpy(newarray, array, a*sizeof(FontSize));
+    memcpy(newarray+a+1, array+a, (n-a)*sizeof(FontSize));
+    delete[] array;
+    ((IFont*)font)->fontsizes = array = newarray;
+  } else {
+    memmove(array+a+1, array+a, (n-a)*sizeof(FontSize));
   }
+  ((IFont*)font)->numsizes = n+1;
+  FontSize* f = array+a;
+  f->size10 = size10;
+  f->encoding = encoding_;
+  f->font = fontopen(font->name_, font->attributes_, false);
+  f->xfont = 0; // figure this out later
   current = f;
 }
 
@@ -391,7 +405,8 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
 	newfont[j].f.name_ = newfont[0].f.name_;
 	newfont[j].f.attributes_ = j;
 	newfont[j].attribute_mask = 3;
-	newfont[j].first = 0;
+	newfont[j].numsizes = 0;
+	newfont[j].fontsizes = 0;
       }
       font_array[i] = &(newfont->f);
     }

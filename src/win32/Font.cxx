@@ -35,13 +35,12 @@ using namespace fltk;
 
 // One of these is made for each combination of size + encoding:
 struct FontSize {
-  FontSize *next;	// linked list for a single Font
-  FontSize *next_all;// linked list so we can destroy em all
+  unsigned size;
   HFONT font;
   int charset;
-  unsigned size;
   int width[256];
   TEXTMETRICW metr;
+  FontSize* next_all;
   FontSize(const char* fontname, int attr, int size, int charset);
   ~FontSize();
 };
@@ -51,7 +50,8 @@ struct FontSize {
 struct IFont {
   fltk::Font f;
   int attribute_mask; // all attributes that can be turned on
-  FontSize* first;
+  unsigned numsizes;
+  FontSize** fontsizes;
 };
 
 // We store the attributes in neat blocks of 2^n:
@@ -130,7 +130,7 @@ FontSize::~FontSize() {
 // to do any fonts after this, because the pointers are not changed!
 void fl_font_rid() {
   for (FontSize* fontsize = all_fonts; fontsize;) {
-    FontSize* next = fontsize->next;
+    FontSize* next = fontsize->next_all;
     delete fontsize;
     fontsize = next;
   }
@@ -195,7 +195,8 @@ Font* fl_make_font(const char* name, int attrib) {
     newfont[j].f.name_ = newfont[0].f.name_;
     newfont[j].f.attributes_ = attrib|j;
     newfont[j].attribute_mask = 3;
-    newfont[j].first = 0;
+    newfont[j].numsizes = 0;
+    newfont[j].fontsizes = 0;
   }
   return &(newfont[0].f);
 }
@@ -220,20 +221,35 @@ void fltk::setfont(Font* font, float psize) {
   psize = int(psize+.5);
   unsigned size = unsigned(psize);
 
-  if (font == current_font_ && psize == current_size_ &&
+  if (font == current_font_ && current->size == size &&
       current->charset == charset) return;
   current_font_ = font; current_size_ = psize;
 
-  FontSize* f;
-  // search the fontsizes we have generated already:
-  for (f = ((IFont*)font)->first; f; f = f->next)
-    if (f->size == size && f->charset == charset) break;
-  if (!f) {
-    f = new FontSize(font->name_, font->attributes_, size, charset);
-    f->next = ((IFont*)font)->first;
-    ((IFont*)font)->first = f;
+  // binary search the fontsizes we have generated already
+  FontSize** array = ((IFont*)font)->fontsizes;
+  unsigned n = ((IFont*)font)->numsizes;
+  unsigned a = 0; unsigned b = n;
+  while (a < b) {
+    unsigned c = (a+b)/2;
+    FontSize* f = array[c];
+    int d = f->size-size;
+    if (!d) d = f->charset - charset;
+    if (d < 0) a = c+1;
+    else if (d > 0) b = c;
+    else {current = f; return;}
   }
-  current = f;
+  if (!(n&(n+1))) {
+    unsigned m = 2*(n+1)-1;
+    FontSize** newarray = new FontSize*[m];
+    memcpy(newarray, array, a*sizeof(FontSize*));
+    memcpy(newarray+a+1, array+a, (n-a)*sizeof(FontSize*));
+    delete[] array;
+    ((IFont*)font)->fontsizes = array = newarray;
+  } else {
+    memmove(array+a+1, array+a, (n-a)*sizeof(FontSize*));
+  }
+  ((IFont*)font)->numsizes = n+1;
+  current = array[a] = new FontSize(font->name_, font->attributes_, size, charset);
 }
 
 float fltk::getascent()  { return current->metr.tmAscent; }

@@ -103,7 +103,7 @@ Fl_Menu_Item align_choices[] = {
 
 int main(int argc, char** argv) {
   Fl_Window window(5*75,400);
-  window.clear_double_buffer();
+  //window.clear_double_buffer(); // use this to test scroll_area()
   window.box(FL_NO_BOX);
   Fl_Scroll scroll(0,0,5*75,300);
 
