@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.11 1999/11/01 02:21:38 carl Exp $"
+// "$Id: fl_options.cxx,v 1.12 1999/11/01 03:59:12 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -133,10 +133,10 @@ int Fl::loadstyle(int b) {
   char valstr[80];
   Fl_Color col;
 
-  int res = ::getconf(sfile, "global colors/background", valstr, sizeof(valstr));
-  if (res) return -6; // what happened?
-  col = grok_color(sfile, valstr);
-  fl_background(fl_get_color(col));
+  if (!::getconf(sfile, "global colors/background", valstr, sizeof(valstr))) {
+    col = grok_color(sfile, valstr);
+    fl_background(fl_get_color(col));
+  }
 
   static struct { char* key; Fl_Color col; } colors[] = {
     { "DARK1", FL_DARK1 },
