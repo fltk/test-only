@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.18 1999/06/12 00:34:22 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.19 1999/06/14 16:25:46 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -259,6 +259,8 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 }
 
 /*
+
+// Original clear()
 void Fl_Group::clear() {
   Fl_Widget*const* a = array();
   for (int i=children(); i--;) {
@@ -273,14 +275,36 @@ void Fl_Group::clear() {
   resizable_ = this;
   init_sizes();
 }
-*/
 
+// Carl's clear()
 void Fl_Group::clear() {
   while (children()) {
     remove(child(0));
     if (child(0)->parent() == this) delete child(0);
   }
   resizable_ = this;
+}
+
+*/
+
+// Bill's new clear()
+void Fl_Group::clear() {
+  Fl_Widget*const* old_array = array();
+  int old_children = children();
+  // clear everything now, in case fl_fix_focus recursively calls us:
+  children_ = 0;
+  array_ = 0;
+  savedfocus_ = 0;
+  resizable_ = this;
+  init_sizes();
+  // okay, now it is safe to destroy the children:
+  Fl_Widget*const* a = old_array;
+  for (int i=old_children; i--;) {
+    Fl_Widget* o = *a++;
+    // test the parent to see if child already destructed:
+    if (o->parent() == this) delete o;
+  }
+  if (old_children > 1) free((void*)old_array);
 }
 
 Fl_Group::~Fl_Group() {clear();}
@@ -503,5 +527,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.18 1999/06/12 00:34:22 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.19 1999/06/14 16:25:46 carl Exp $".
 //
