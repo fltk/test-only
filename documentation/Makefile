@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18 2002/04/14 08:02:28 spitzak Exp $"
+# "$Id: Makefile,v 1.19 2002/04/22 11:27:36 easysw Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -150,7 +150,7 @@ htmldir = $(prefix)/share/doc/fltk
 # According to FHS this should be:
 # mandir = $(prefix)/share/man/en/man
 # they say the "en/" is optional
-mandir = $(prefix)/man/man
+mandir = $(prefix)/share/man
 
 install:
 	-mkdir -p $(htmldir)
@@ -171,13 +171,13 @@ fltk.d/index.html: $(HTMLFILES)
 
 fltk.ps: $(HTMLFILES)
 	@echo "Generating PostScript documentation..."
-	@$(HTMLDOC) -f fltk.ps -t ps2 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
+	@$(HTMLDOC) -f fltk.ps $(MEDIA) -t ps2 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
 
 fltk.pdf: $(HTMLFILES)
 	@echo "Generating PDF documentation..."
 	@rm -f fltk.pdf
-	@$(HTMLDOC) -f fltk.pdf --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
+	@$(HTMLDOC) -f fltk.pdf $(MEDIA) --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.18 2002/04/14 08:02:28 spitzak Exp $".
+# End of "$Id: Makefile,v 1.19 2002/04/22 11:27:36 easysw Exp $".
 #
