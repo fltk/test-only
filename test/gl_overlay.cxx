@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.10 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: gl_overlay.cxx,v 1.11 2004/05/05 15:46:01 spitzak Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -65,6 +65,8 @@ void shape_window::draw() {
 // the valid() property may be used to avoid reinitializing your
 // GL transformation for each redraw:
   if (!valid()) {
+    static int r;
+    printf("Invalid %d\n", ++r);
     valid(1);
     glLoadIdentity();
     glViewport(0,0,w(),h());
@@ -188,5 +190,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.10 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.11 2004/05/05 15:46:01 spitzak Exp $".
 //

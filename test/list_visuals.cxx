@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: list_visuals.cxx,v 1.13 2004/05/05 15:46:01 spitzak Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 #include <fltk/error.h>
 
 int main(int, char**) {
-  fltk::fatal("Currently, this program works only under X.");
+  fltk::fatal("Only X has this sillyness.");
   return 1;
 }
 
@@ -208,8 +208,6 @@ void list_visuals() {
   }
 }
 
-#endif
-
 #ifndef fltk_run_h
 #include <fltk/run.h>
 int main(int argc, char **argv) {
@@ -220,7 +218,8 @@ int main(int argc, char **argv) {
   return 0;
 }
 #endif
+#endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: list_visuals.cxx,v 1.13 2004/05/05 15:46:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.19 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: demo.cxx,v 1.20 2004/05/05 15:46:01 spitzak Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,10 @@
 #include <string.h>
 #include <stdlib.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
-#  include <direct.h>
+# include <direct.h>
+# include <windows.h> 
 #else
-#  include <unistd.h>
+# include <unistd.h>
 #endif
 #include <fltk/run.h>
 #include <fltk/Window.h>
@@ -161,7 +162,7 @@ int numb2but(int inumb, int maxnumb)
 /* Pushing and Popping menus */
 
 char stack[64][32];
-char stsize = 0;
+int stsize = 0;
 
 void push_menu(const char nnn[])
 /* Pushes a menu to be visible */
@@ -334,6 +335,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.19 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: demo.cxx,v 1.20 2004/05/05 15:46:01 spitzak Exp $".
 //
 
