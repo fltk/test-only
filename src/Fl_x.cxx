@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.96 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.97 2000/11/15 18:20:24 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -361,8 +361,8 @@ void fl_open_display(Display* d) {
   // We may want the atom to be FLTK_MESSAGE_WINDOW, and change the message
   // to be FLTKChangeStyle so that the names match kde more closely.
 
-  Window root = RootWindow(d, fl_screen);
-  fl_message_window = XCreateSimpleWindow(d, root, 0,0,1,1,0, 0, 0);
+  fl_message_window =
+    XCreateSimpleWindow(d, RootWindow(d,fl_screen), 0,0,1,1,0, 0, 0);
   Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
   long data = 1;
   XChangeProperty(fl_display, fl_message_window, style_atom, style_atom, 32,
@@ -640,7 +640,6 @@ unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
 
 int fl_handle(const XEvent& xevent)
 {
-  Fl::e_keysym = 0;
   fl_xevent = &xevent;
   Fl_Window* window = fl_find(xevent.xany.window);
   int event = 0;
@@ -1020,7 +1019,8 @@ void Fl_Window::layout() {
       //if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x(), y(),
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      redraw(); // i->wait_for_expose = 1; (breaks menus somehow...)
+      i->wait_for_expose = 1; // (breaks menus somehow...)
+      // redraw(); // 
     }
     Fl_Group::layout();
   }
@@ -1294,5 +1294,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.96 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.97 2000/11/15 18:20:24 spitzak Exp $".
 //

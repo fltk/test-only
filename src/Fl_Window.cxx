@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.59 2000/10/18 08:45:38 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.60 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -68,12 +68,8 @@ void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
 
 void Fl_Window::default_callback(Fl_Window* window, void* v) {
   window->hide();
-  Fl_Widget::default_callback(window, v); // put on Fl::read_queue()
   // if there are no visible windows we exit:
-  for (Fl_Window* w = Fl::first_window(); ; w = Fl::next_window(w)) {
-    if (!w) exit(0);
-    if (w->visible() && !w->parent()) break;
-  }
+  if (!Fl::first_window()) exit(0);
 }
 
 static void revert(Fl_Style* s) {
@@ -182,9 +178,8 @@ int Fl_Window::handle(int event) {
       // This test is not needed if we always destroy top-level windows:
       if (this == Fl::modal_) {
 	// we are closing the modal window, find next one:
-	Fl_Window* w;
-	for (w = Fl::first_window(); w; w = Fl::next_window(w))
-	  if (w != this && w->modal() && w->visible()) break;
+	Fl_Window* w = this;
+	for (w = this; (w = Fl::next_window(w));) if (w->modal()) break;
 	Fl::modal_ = w;
       }
       //      if (!parent()) {
@@ -315,8 +310,7 @@ void Fl_Window::destroy() {
 
   if (this == Fl::modal_) { // we are closing the modal window, find next one:
     Fl_Window* w;
-    for (w = Fl::first_window(); w; w = Fl::next_window(w))
-      if (w->modal() && w->visible()) break;
+    for (w=Fl::first_window(); w; w=Fl::next_window(w)) if (w->modal()) break;
     Fl::modal_ = w;
   }
 
@@ -355,5 +349,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.59 2000/10/18 08:45:38 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.60 2000/11/15 18:20:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.113 2000/10/19 05:48:26 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.114 2000/11/15 18:20:23 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -226,13 +226,19 @@ Fl_Window* fl_find(Window xid) {
 }
 
 Fl_Window* Fl::first_window() {
-  Fl_X* x = Fl_X::first;
-  return x ? x->w : 0;
+  for (Fl_X* x = Fl_X::first;; x = x->next) {
+    if (!x) return 0;
+    Fl_Window* w = x->w;
+    if (w->visible() && !w->parent()) return w;
+  }
 }
 
 Fl_Window* Fl::next_window(const Fl_Window* w) {
-  Fl_X* x = Fl_X::i(w)->next;
-  return x ? x->w : 0;
+  for (Fl_X* x = Fl_X::i(w)->next;; x = x->next) {
+    if (!x) return 0;
+    Fl_Window* w = x->w;
+    if (w->visible() && !w->parent()) return w;
+  }
 }
 
 void Fl::first_window(Fl_Window* window) {
@@ -314,6 +320,7 @@ void fl_fix_focus() {
   Fl_Widget* w = xfocus;
 
   if (w) {
+    Fl::e_keysym = 0; // make sure widgets don't think a keystroke moved focus
     // System says this program has focus.
     // Modal overrides anything the system says:
     if (Fl::modal()) w = Fl::modal();
@@ -378,8 +385,9 @@ void Fl::grab(int (*cb)(int, void*), void* user_data) {
   SetActiveWindow(w); // is this necessary?
   SetCapture(w);
 #else
+  Window w = fl_xid(first_window());
   XGrabPointer(fl_display,
-	       fl_xid(first_window()),
+	       w,
 	       1,
 	       ButtonPressMask|ButtonReleaseMask|
 	       ButtonMotionMask|PointerMotionMask,
@@ -389,7 +397,7 @@ void Fl::grab(int (*cb)(int, void*), void* user_data) {
 	       0,
 	       fl_event_time);
   XGrabKeyboard(fl_display,
-		fl_xid(first_window()),
+		w,
 		1,
 		GrabModeAsync,
 		GrabModeAsync, 
@@ -522,6 +530,7 @@ int Fl::handle(int event, Fl_Window* window)
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
     to = focus();
+    break;
 
   default:
     if (modal()) to = modal();
@@ -578,5 +587,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.113 2000/10/19 05:48:26 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.114 2000/11/15 18:20:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.20 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.21 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -68,6 +68,12 @@ static void i_revert(Fl_Style* s) {
 static Fl_Named_Style* icon_style =
   new Fl_Named_Style("Message Icon", i_revert, &icon_style);
 
+static int button_number;
+static void set_button_number(Fl_Widget* w, long a) {
+  button_number = a;
+  w->window()->hide();
+}
+
 static Fl_Window *makeform() {
   if (window) {
     window->size(410,105);
@@ -84,8 +90,11 @@ static Fl_Window *makeform() {
   icon_style->parent = icon->style();
   icon->copy_style(icon_style);
   button[2] = new Fl_Button(110, 70, 90, 25);
+  button[2]->callback(set_button_number, 2);
   button[1] = new Fl_Return_Button(210, 70, 90, 25);
-  (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut(FL_Escape);
+  button[1]->callback(set_button_number, 1);
+  button[0] = new Fl_Button(310, 70, 90, 25);
+  button[0]->callback(set_button_number, 0);
   w->resizable(new Fl_Box(60,10,110-60,22));
   w->end();
   w->set_modal();
@@ -122,19 +131,10 @@ static int innards(const char* fmt, va_list ap,
   input->h(input->text_size()*2);
   window->focus(input->visible() ? (Fl_Widget*)input : (Fl_Widget*)button[1]);
   window->hotspot(button[0]);
-  window->show();
-  int r;
-  for (;;) {
-    Fl_Widget *o = Fl::readqueue();
-    if (!o) Fl::wait();
-    else if (o == button[0]) {r = 0; break;}
-    else if (o == button[1]) {r = 1; break;}
-    else if (o == button[2]) {r = 2; break;}
-    else if (o == window) {r = 0; break;}
-  }
-  window->hide();
+  button_number = 0;
+  window->exec();
   icon->label(prev_icon_label);
-  return r;
+  return button_number;
 }
 
 // pointers you can use to change fltk to a foreign language:
@@ -211,5 +211,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.20 2000/08/21 03:56:24 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.21 2000/11/15 18:20:24 spitzak Exp $".
 //

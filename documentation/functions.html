@@ -290,18 +290,25 @@ range-check to see if something is  on the keypad.</LI>
 FL_F</tt>.  The highest possible number is <tt>FL_F_Last</tt>, so you 
 can range-check a value.</LI>
 
-<LI>Buttons on the mouse are considered keys, and use the button 
-number (where the left button is 1) plus <tt>FL_Button</tt>.</LI>
+<LI>Buttons on the mouse are considered keys, and use
+<tt>FL_Button+n</tt>, where n is the button number (the left button is
+1).
 
-<LI>All other keys on the keypad have a symbol: <tt>FL_Escape, 
-FL_BackSpace, FL_Tab, FL_Enter, FL_Print, FL_Scroll_Lock, FL_Pause, 
-FL_Insert, FL_Home, FL_Page_Up, FL_Delete, FL_End, FL_Page_Down, 
-FL_Left, FL_Up, FL_Right, FL_Down, FL_Shift_L, FL_Shift_R, 
-FL_Control_L, FL_Control_R, FL_Caps_Lock, FL_Alt_L, FL_Alt_R, 
-FL_Meta_L, FL_Meta_R, FL_Menu, FL_Num_Lock, FL_KP_Enter</tt>.  Be 
+<LI>All other keys on a US 101-keyboard have a symbol.  Be
 careful not to confuse these with the very similar, but all-caps, 
-symbols used by <A href=events.html#event_state><tt>Fl::event_state()</tt>
-</A>.</LI>
+symbols used by <A href=events.html#event_state><tt>Fl::event_state()</tt></A>
+
+<ul><tt>FL_Escape<br> FL_BackSpace<br>FL_Tab<br> FL_Enter<br>
+FL_Print<br> FL_Scroll_Lock<br> FL_Pause<br> FL_Insert<br> FL_Home<br>
+FL_Page_Up<br> FL_Delete<br> FL_End<br> FL_Page_Down<br> FL_Left<br>
+FL_Up<br> FL_Right<br> FL_Down<br> FL_Shift_L<br> FL_Shift_R<br>
+FL_Control_L<br> FL_Control_R<br> FL_Caps_Lock<br> FL_Alt_L<br>
+FL_Alt_R<br> FL_Meta_L<br> FL_Meta_R<br> FL_Menu<br> FL_Num_Lock<br>
+FL_KP_Enter</tt></ul>
+
+<li>On X systems any unrecognized keys are reported as their X keysym
+value.
+
 </UL>
 
 On X <tt>Fl::get_key(FL_Button+n)</tt> does not work. 
@@ -346,7 +353,7 @@ after</I> the shift key is pressed or released.
 <A name=event_text><h3>char *Fl::event_text()</h3>
 
 Returns the ASCII text (in the future this may be UTF-8) produced by 
-the last <tt>FL_KEYBOARD</tt> or <tt>FL_PASTEM</tt> or possibly other 
+the last <tt>FL_KEYBOARD</tt> or <tt>FL_PASTE</tt> or possibly other 
 event.  A zero-length string is returned for any keyboard function keys 
 that do not produce text. This pointer points at a static buffer and is 
 only valid until the next event is processed. 
@@ -400,21 +407,25 @@ event_x(),event_y()</tt>.
 
 <h3><A name=first_window>Fl_Window *Fl::first_window()</A></h3>
 
-Returns the first top-level window in the list of shown() windows.  If
-a modal() window is shown this is the top-most modal window, otherwise
-it is the most recent window to get an event.
+Returns the first visible() top-level window. This is the
+<a href=#modal>modal()</a> window if it exists, if there are no
+modal windows it is the most recent window to get an event. Returns
+NULL if no windows are visible.
 
-<h3><A name=first_window>void Fl::first_window(Fl_Window*)</A></h3>
+<h3><A name=first_window_a>void Fl::first_window(Fl_Window*)</A></h3>
 
-Since the first window is used by default as the "parent" of modal
-windows, changing it is useful.  This removes the window from wherever
-it is in the list and inserts it at the top.  This is not done if
-Fl::modal() is on or if the window is not shown().
+Since <a href=#first_window>first_window()</a> is used by default as
+the "parent" of modal windows, changing it is useful.  This removes
+<i>window</i> from wherever it is in the list and inserts it at the
+top, as though it received an event. Code that then shows a modal
+window or calls <a href=Fl_Window.html#exec>Fl_Window::exec()</a>
+will make this window the "parent".
 
 <h3><A name=next_window>Fl_Window *Fl::next_window(Fl_Window *)</A></h3>
 
-Returns the next top-level window in the list of shown() windows.  You can 
-use this call to iterate through all the windows that are shown(). 
+Returns the next visible() top-level window, returns NULL after the
+last one.  You can use this and first_window() to iterate through all
+the visible windows.
 
 <h3><A name=flush>void Fl::flush()</A></h3>
 
@@ -422,17 +433,22 @@ Causes all the windows that need it to be redrawn and graphics forced
 out through the pipes.  This is what <tt>wait()</tt> does before 
 looking for events. 
 
-<h3><A name=focus>Fl_Widget *Fl::focus() const;
-<BR>void Fl::focus(Fl_Widget *)</A></h3>
+<h3><A name=focus>Fl_Widget *Fl::focus() const;</a></h3>
 
-Get or set the widget that will receive <tt>FL_KEYBOARD</tt> events. 
+Returns the widgets that will receive <tt>FL_KEYBOARD</tt>
+events. This is NULL if the application does not have focus now, or if
+no widgets accepted focus.
 
-<p>If you change <tt>Fl::focus()</tt>, the previous widget and all 
+<h3>void Fl::focus(Fl_Widget *)</A></h3>
+
+Change <tt>Fl::focus()</tt> to the given widget, the previous widget and all 
 parents (that don't contain the new widget) are sent <tt>FL_UNFOCUS</tt>
- events.  Changing the focus does <I>not</I> send <tt>FL_FOCUS</tt> to 
-this or any widget, because sending <tt>FL_FOCUS</tt> is supposed to <I>
-test</I> if the widget wants the focus (by it returning non-zero from <tt>
-handle()</tt>).</p>
+events, the new widget and all parents that don't contain the old
+widget are sent <tt>FL_FOCUS</tt> events. <tt>focus()</tt> is set whether or
+not the applicaton has the focus or if the widgets accept the
+focus. You may want to use <a
+href=Fl_Widget.html#take_focus>Fl_Widget::take_focus()</a> instead, it
+will test first.
 
 <h3><A name=get_mouse>void Fl::get_mouse(int &amp;x, int &amp;y)</A></h3>
 
@@ -533,12 +549,6 @@ events.  Changing this does <I>not</I> send <tt>FL_PUSH</tt> to this
 or any widget, because sending <tt>FL_PUSH</tt> is supposed to <I>test</I>
 if the widget wants the mouse (by it returning non-zero from <tt>
 handle()</tt>).</p>
-
-<h3><A name=readqueue>Fl_Widget *Fl::readqueue()</A></h3>
-
-All <tt>Fl_Widgets</tt> that don't have a callback defined use a 
-default callback that puts a pointer to the widget in this queue, and 
-this method reads the oldest widget out of this queue. 
 
 <h3><A name=ready>static int Fl::ready()</A></h3>
 

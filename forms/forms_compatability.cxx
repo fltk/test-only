@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.10 2000/11/15 18:20:23 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -150,26 +150,18 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 }
 
 // Emulate the event-getting routines.  XForms does not return until
-// a widget without a callback is activated.  Fl::readqueue() is still
-// in the main fltk source, this is probably the largest XForms
-// compatability function that I could not remove:
+// a widget without a callback is activated.  All widgets in fltk have
+// callbacks so this never returns. It appears to be better to have
+// this return after every event.
 
 Fl_Widget *fl_do_forms(void) {
-  Fl_Widget *obj;
-  while (!(obj = Fl::readqueue())) {
-    // exit if there are no windows visible:
-    for (Fl_Window* w = Fl::first_window(); ; w = Fl::next_window(w)) {
-      if (!w) exit(0);
-      if (w->visible() && !w->parent()) break;
-    }
-    Fl::wait();
-  }
-  return obj;
+  Fl::wait();	
+  return 0;
 }
 
 Fl_Widget *fl_check_forms() {
   Fl::check();
-  return Fl::readqueue();
+  return 0;
 }
 
 // Subclass to simulate the XForms text object.  This is the same as
@@ -262,5 +254,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.10 2000/11/15 18:20:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: ask.cxx,v 1.6 1999/10/04 09:12:51 bill Exp $"
+// "$Id: ask.cxx,v 1.7 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Standard dialog test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,28 +38,34 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Return_Button.H>
 
+static void ok_callback(Fl_Widget* w, void*) {
+  printf("ok\n");
+  w->window()->set_value();
+  w->window()->hide();
+}
+
+static void cancel_callback(Fl_Widget* w, void*) {
+  printf("cancel\n");
+  w->window()->hide();
+}
+
 int get_string(char*buffer) {
   Fl_Window window(320,75);
   Fl_Input input(60, 10, 250, 25, "Input:");
   input.value(buffer);
+  input.when(0);
   Fl_Button cancel(60, 40, 80, 25, "cancel");
+  cancel.callback(cancel_callback);
   Fl_Return_Button ok(150, 40, 80, 25, "OK");
+  ok.callback(ok_callback);
   window.hotspot(&cancel); // you must position modal windows
   window.end();
-  window.set_modal();
   //window.clear_border();
-  window.show();
-  for (;;) {
-    Fl::wait();
-    Fl_Widget *o;
-    while ((o = Fl::readqueue())) {
-      if (o == &ok) {
-	strcpy(buffer,input.value());
-	return 1;
-      } else if (o == &cancel || o == &window) {
-	return 0;
-      }
-    }
+  if (window.exec()) {
+    strcpy(buffer,input.value());
+    return 1;
+  } else {
+    return 0;
   }
 }
 
@@ -111,5 +117,5 @@ int main(int argc, char **argv) {
 }
     
 //
-// End of "$Id: ask.cxx,v 1.6 1999/10/04 09:12:51 bill Exp $".
+// End of "$Id: ask.cxx,v 1.7 2000/11/15 18:20:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.68 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.69 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -31,42 +31,8 @@
 #include <string.h> // for strdup
 #include <stdlib.h> // free
 
-////////////////////////////////////////////////////////////////
-// Duplicate the Forms queue for all callbacks from widgets.  The
-// widget is added to the queue and readqueue returns it:
-
-#define QUEUE_SIZE 20
-
-static Fl_Widget *obj_queue[QUEUE_SIZE];
-static int obj_head, obj_tail;
-
-void Fl_Widget::default_callback(Fl_Widget* o, void*) {
-#if 0
-  // This is necessary for strict forms compatability but is confusing.
-  // Use the parent's callback if this widget does not have one.
-  for (Fl_Widget *p = o->parent(); p; p = p->parent())
-    if (p->callback() != default_callback) {
-      p->do_callback(o,v);
-      return;
-    }
-#endif
-  obj_queue[obj_head++] = o;
-  if (obj_head >= QUEUE_SIZE) obj_head = 0;
-  if (obj_head == obj_tail) {
-    obj_tail++;
-    if (obj_tail >= QUEUE_SIZE) obj_tail = 0;
-  }
-}
-
-Fl_Widget *Fl::readqueue() {
-  if (obj_tail==obj_head) return 0;
-  Fl_Widget *o = obj_queue[obj_tail++];
-  if (obj_tail >= QUEUE_SIZE) obj_tail = 0;
-  return o;
-}
+void Fl_Widget::default_callback(Fl_Widget* w, void*) {}
     
-////////////////////////////////////////////////////////////////
-
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   style_	= default_style;
   parent_	= 0;
@@ -137,7 +103,7 @@ void Fl_Widget::relayout() {
 }
 
 void Fl_Widget::damage_label() {
-  if (!label()) return;
+  if (!label() && !image()) return;
   // ignore inside label:
   if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
   // outside label requires a marker flag and damage to parent:
@@ -476,5 +442,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.68 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.69 2000/11/15 18:20:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.29 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.30 2000/11/15 18:20:23 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -171,24 +171,31 @@ void Fl_Function_Type::read_property(const char *c) {
 #include "function_panel.h"
 #include <FL/fl_ask.H>
 
+static void ok_callback(Fl_Widget* w, void*) {
+  w->window()->set_value();
+  w->window()->hide();
+}
+
+static void cancel_callback(Fl_Widget* w, void*) {
+  w->window()->hide();
+}
+
 void Fl_Function_Type::open() {
-  if (!function_panel) make_function_panel();
+  if (!function_panel) {
+    make_function_panel();
+    f_panel_ok->callback(ok_callback);
+    f_panel_cancel->callback(cancel_callback);
+  }
   f_return_type_input->static_value(return_type);
   f_attributes_input->static_value(attributes);
   f_name_input->static_value(name());
   f_public_button->value(public_);
   f_c_button->value(cdecl_);
-  function_panel->show();
   const char* message = 0;
-  for (;;) { // repeat as long as there are errors
+  for (;;) {
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == f_panel_cancel) goto BREAK2;
-      else if (w == f_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
-    const char*c = f_name_input->value();
+    if (!function_panel->exec()) break;
+    const char* c = f_name_input->value();
     while (isspace(*c)) c++;
     message = c_check(c); if (message) continue;
     const char *d = c;
@@ -205,8 +212,6 @@ void Fl_Function_Type::open() {
     cdecl_ = f_c_button->value();
     break;
   }
- BREAK2:
-  function_panel->hide();
 }
 
 Fl_Function_Type Fl_Function_type;
@@ -340,24 +345,21 @@ Fl_Type *Fl_Code_Type::make() {
 }
 
 void Fl_Code_Type::open() {
-  if (!code_panel) make_code_panel();
+  if (!code_panel) {
+    make_code_panel();
+    code_panel_ok->callback(ok_callback);
+    code_panel_cancel->callback(cancel_callback);
+  }
   code_input->static_value(name());
-  code_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == code_panel_cancel) goto BREAK2;
-      else if (w == code_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
+    if (!code_panel->exec()) break;
     const char*c = code_input->value();
     message = c_check(c); if (message) continue;
     name(c);
     break;
   }
- BREAK2:
   code_panel->hide();
 }
 
@@ -417,19 +419,17 @@ void Fl_CodeBlock_Type::read_property(const char *c) {
 }
 
 void Fl_CodeBlock_Type::open() {
-  if (!codeblock_panel) make_codeblock_panel();
+  if (!codeblock_panel) {
+    make_codeblock_panel();
+    codeblock_panel_ok->callback(ok_callback);
+    codeblock_panel_cancel->callback(cancel_callback);
+  }
   code_before_input->static_value(name());
   code_after_input->static_value(after);
-  codeblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == codeblock_panel_cancel) goto BREAK2;
-      else if (w == codeblock_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
+    if (!codeblock_panel->exec()) break;
     const char*c = code_before_input->value();
     message = c_check(c); if (message) continue;
     name(c);
@@ -438,7 +438,6 @@ void Fl_CodeBlock_Type::open() {
     storestring(c, after);
     break;
   }
- BREAK2:
   codeblock_panel->hide();
 }
 
@@ -492,19 +491,17 @@ void Fl_Decl_Type::read_property(const char *c) {
 }
 
 void Fl_Decl_Type::open() {
-  if (!decl_panel) make_decl_panel();
+  if (!decl_panel) {
+    make_decl_panel();
+    decl_panel_ok->callback(ok_callback);
+    decl_panel_cancel->callback(cancel_callback);
+  }
   decl_input->static_value(name());
   decl_public_button->value(public_);
-  decl_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == decl_panel_cancel) goto BREAK2;
-      else if (w == decl_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
+    if (!decl_panel->exec()) break;
     const char*c = decl_input->value();
     while (isspace(*c)) c++;
     message = c_check(c&&c[0]=='#' ? c+1 : c);
@@ -513,7 +510,6 @@ void Fl_Decl_Type::open() {
     public_ = decl_public_button->value();
     break;
   }
- BREAK2:
   decl_panel->hide();
 }
 
@@ -594,19 +590,17 @@ void Fl_DeclBlock_Type::read_property(const char *c) {
 }
 
 void Fl_DeclBlock_Type::open() {
-  if (!declblock_panel) make_declblock_panel();
+  if (!declblock_panel) {
+    make_declblock_panel();
+    declblock_panel_ok->callback(ok_callback);
+    declblock_panel_cancel->callback(cancel_callback);
+  }
   decl_before_input->static_value(name());
   decl_after_input->static_value(after);
-  declblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == declblock_panel_cancel) goto BREAK2;
-      else if (w == declblock_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
+    if (!declblock_panel->exec()) break;
     const char*c = decl_before_input->value();
     while (isspace(*c)) c++;
     message = c_check(c&&c[0]=='#' ? c+1 : c);
@@ -619,7 +613,6 @@ void Fl_DeclBlock_Type::open() {
     storestring(c,after);
     break;
   }
- BREAK2:
   declblock_panel->hide();
 }
 
@@ -707,20 +700,18 @@ void Fl_Class_Type::read_property(const char *c) {
 }
 
 void Fl_Class_Type::open() {
-  if (!class_panel) make_class_panel();
+  if (!class_panel) {
+    make_class_panel();
+    c_panel_ok->callback(ok_callback);
+    c_panel_cancel->callback(cancel_callback);
+  }
   c_name_input->static_value(name());
   c_subclass_input->static_value(subclass_of);
   c_public_button->value(public_);
-  class_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert(message);
-    for (;;) {
-      Fl_Widget* w = Fl::readqueue();
-      if (w == c_panel_cancel) goto BREAK2;
-      else if (w == c_panel_ok) break;
-      else if (!w) Fl::wait();
-    }
+    if (!class_panel->exec()) break;
     const char*c = c_name_input->value();
     while (isspace(*c)) c++;
     if (!*c) goto OOPS;
@@ -734,7 +725,6 @@ void Fl_Class_Type::open() {
     public_ = c_public_button->value();
     break;
   }
- BREAK2:
   class_panel->hide();
 }
 
@@ -762,5 +752,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.29 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.30 2000/11/15 18:20:23 spitzak Exp $".
 //

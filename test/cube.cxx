@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.9 2000/06/19 06:01:32 bill Exp $"
+// "$Id: cube.cxx,v 1.10 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -123,6 +123,8 @@ Fl_Slider *speed, *size;
 Fl_Button *button, *wire, *flat;
 cube_box *cube, *cube2;
 
+static void exit_cb(Fl_Widget* w, void*) {exit(0);}
+
 void makeform(const char *name) {
   form = new Fl_Window(510+390,390,name);
   (void) new Fl_Box(FL_DOWN_BOX,20,20,350,350,"");
@@ -132,6 +134,7 @@ void makeform(const char *name) {
   wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
   flat = new Fl_Radio_Light_Button(390,50,100,30,"Flat");
   button = new Fl_Button(390,340,100,30,"Exit");
+  button->callback(exit_cb);
   cube = new cube_box(23,23,344,344, 0);
   cube2 = new cube_box(513,23,344,344, 0);
   Fl_Box *b = new Fl_Box(FL_NO_BOX,cube->x(),size->y(),
@@ -162,11 +165,10 @@ int main(int argc, char **argv) {
     cube->speed = cube2->speed = speed->value();
     cube->redraw();
     cube2->redraw();
-    if (Fl::readqueue() == button) break;
   }
   return 0;
 }
 
 //
-// End of "$Id: cube.cxx,v 1.9 2000/06/19 06:01:32 bill Exp $".
+// End of "$Id: cube.cxx,v 1.10 2000/11/15 18:20:24 spitzak Exp $".
 //

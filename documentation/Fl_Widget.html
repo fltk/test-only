@@ -55,6 +55,7 @@ to call <tt>redraw()</tt> after these. </P>
 <LI><A href=#contains>contains</A></LI>
 <LI><A href=#copy_label>copy_label</A></LI>
 <LI><A href=#damage>damage</A></LI>
+<LI><A href=#damage_label>damage_label</A></LI>
 <LI><A href=#deactivate>deactivate</A></LI>
 <LI><A href=#default_callback>default_callback</A></LI>
 <LI><A href=#do_callback>do_callback</A></LI>
@@ -385,9 +386,8 @@ their own callbacks in response to an &quot;OK&quot; button.
 <h4><A name=default_callback>static void 
 Fl_Widget::default_callback(Fl_Widget*, void*)</A></h4>
 
-The default callback, which puts a pointer to the widget on the queue
-returned by <A href=functions.html#readqueue><tt>Fl::readqueue()</tt></A>.
-You may want to call this from your own callback.
+The default callback does nothing.  <a href=#callback>callback()</a>
+is initialized to this.
 
 <h4><A name=visible>int Fl_Widget::visible() const</A><BR>
 <A name=visible_r>int Fl_Widget::visible_r() const</A><BR>
@@ -439,6 +439,12 @@ Mark the widget as needing its <tt>draw()</tt> method called.  The
 passed bits are or'd into the value of damage().  All parents then have
 <tt>damage(FL_DAMAGE_CHILD)</tt> called on them, and a global flag is
 set indicating that fltk should search for damaged widgets.
+
+<h4><a name=damage_label>void Fl_Widget::damage_label()</a></h4>
+
+Indicate that an outside labels needs to be redrawn. This does nothing
+if the label is inside the widget or there is no label. If the label
+is outside, the enclosing group is flagged to redraw it.
 
 <h4><A name=redraw>void Fl_Widget::redraw()</A></h4>
 

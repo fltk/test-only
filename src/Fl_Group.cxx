@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.87 2000/10/19 05:48:26 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.88 2000/11/15 18:20:24 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -163,6 +163,7 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   case FL_LEAVE:
   case FL_DND_RELEASE:
   case FL_DND_LEAVE:
+  case FL_KEYBOARD:
     // These events are sent directly by Fl.cxx to the widgets.  Trying
     // to redirect them is a mistake.  It appears best to ignore attempts.
     return 1; // return 1 so callers stops calling this.
@@ -571,5 +572,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.87 2000/10/19 05:48:26 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.88 2000/11/15 18:20:24 spitzak Exp $".
 //

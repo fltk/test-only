@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.130 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.131 2000/11/15 18:20:24 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -607,7 +607,6 @@ static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-  Fl::e_keysym = 0;
 
 #if 0
   // Not sure what this is, it may be left over from earlier attempts to
@@ -1272,5 +1271,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.130 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.131 2000/11/15 18:20:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.57 2000/10/17 07:50:07 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.58 2000/11/15 18:20:22 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -274,15 +274,18 @@ protected:
 
 private:
 
-  const Fl_Style*	style_;
-  Fl_Group*		parent_;
-  Fl_Callback*		callback_;
-  void*			user_data_;
+  // potential Fl_Item base structure:
   const char*		label_;
   Fl_Image*		image_;
-  const char*		tooltip_;
-  int			shortcut_;
+  int			shortcut_; // encode in the label?
   unsigned		flags_;
+  const Fl_Style*	style_;
+
+  // Fl_Widget:
+  Fl_Callback*		callback_;
+  void*			user_data_;
+  const char*		tooltip_; // make this into another widget?
+  Fl_Group*		parent_;
   int			x_,y_,w_,h_;
   uchar			type_;
   uchar			damage_;
@@ -293,5 +296,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.57 2000/10/17 07:50:07 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.58 2000/11/15 18:20:22 spitzak Exp $".
 //
