@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.166 2003/09/15 05:56:43 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.167 2003/09/17 05:57:37 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -263,23 +263,29 @@ static void run_checks() {
 }
 
 int fltk::wait(float time_to_wait) {
-  int ret = 0;
+
   // check functions must be run first so they can install idle or timeout
   // functions:
   run_checks();
-  if (idle) {
-    if (!in_idle) {in_idle = true; idle(); in_idle = false;}
-    // the idle function may turn off idle, we can then wait:
-    if (idle && time_to_wait > 0) {time_to_wait = 0; ret = 1;}
+
+  if (first_timeout) {
+    Timeout* t = first_timeout;
+    if (t->time < time_to_wait) time_to_wait = t->time;
   }
+
+  // run the system-specific part that waits for sockets & events:
+  if (time_to_wait <= 0 || idle && !in_idle) {
+    time_to_wait = 0;
+  } else {
+    flush();
+  }
+  int ret = fl_wait(time_to_wait);
+
   if (first_timeout) {
     elapse_timeouts();
     Timeout *t;
     while ((t = first_timeout)) {
-      if (t->time > 0) {
-	if (t->time < time_to_wait) {time_to_wait = t->time; ret = 1;}
-	break;
-      }
+      if (t->time > 0) break;
       // The first timeout in the array has expired.
       missed_timeout_by = t->time;
       // We must remove timeout from array before doing the callback:
@@ -290,20 +296,16 @@ int fltk::wait(float time_to_wait) {
       free_timeout = t;
       // Now it is safe for the callback to do add_timeout:
       cb(arg);
-      // return immediately afterwards because timeout was done:
-      time_to_wait = 0; ret = 1;
-      // we must run the checks again because the timeout may have changed
-      // the state:
-      run_checks();
+      // return true because something was done:
+      ret = 1;
     }
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
   }
-  // run the system-specific part that waits for sockets & events:
-  if (time_to_wait <= 0) time_to_wait = 0;
-  else flush();
-  if (fl_wait(time_to_wait)) ret = 1;
-  if (!time_to_wait) flush();
+
+  if (idle && !in_idle) {in_idle = true; idle(); in_idle = false;}
+
+  flush(); // is this needed?
   return ret;
 }
 
@@ -715,5 +717,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.166 2003/09/15 05:56:43 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.167 2003/09/17 05:57:37 spitzak Exp $".
 //

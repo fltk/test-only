@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.42 2003/08/26 14:49:47 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.43 2003/09/17 05:57:38 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -108,6 +108,10 @@ void Widget::draw_box() const {
   if (!active_r()) flags |= INACTIVE;
   if (focused()) flags |= SELECTED;
   box->draw(0, 0, w(), h(), color(), flags);
+  // draw a big x to show where image will be drawn:
+//    setcolor(BLACK);
+//    drawline(0,0,w(),h());
+//    drawline(0,h(),w(),0);
 }
 
 /** Same as draw_box() but draws only the boundary of the box() by
@@ -317,5 +321,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.42 2003/08/26 14:49:47 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.43 2003/09/17 05:57:38 spitzak Exp $".
 //
