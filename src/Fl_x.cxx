@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.127 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.128 2002/05/13 05:10:39 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -778,10 +778,6 @@ bool fl_handle()
     //if (Fl::grab_) XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
     unsigned keycode = fl_xevent.xkey.keycode;
     static unsigned lastkeycode;
-    // Use the unshifted keysym! This matches the symbols that the Win32
-    // version produces. However this will defeat older keyboard layouts
-    // that use shifted values for function keys.
-    KeySym keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     if (fl_xevent.type == KeyPress) {
       event = FL_KEY;
       fl_key_vector[keycode/8] |= (1 << (keycode%8));
@@ -795,9 +791,12 @@ bool fl_handle()
 	lastkeycode = keycode;
       }
       static char buffer[21];
-      int len = XLookupString(&(fl_xevent.xkey), buffer, 20, 0/*keysym*/, 0);
-      // Make ctrl+dash work like it used to:
-      if (fl_xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f; // ^_
+      KeySym keysym;
+      int len = XLookupString(&(fl_xevent.xkey), buffer, 20, &keysym, 0);
+      // Make ctrl+dash produce ^_ like it used to:
+      if (fl_xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
+      // Any keys producing foreign letters produces the bottom 8 bits:
+      if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
       buffer[len] = 0;
       Fl::e_text = buffer;
       Fl::e_length = len;
@@ -818,6 +817,10 @@ bool fl_handle()
       // make next keypress not be a repeating one:
       lastkeycode = 0;
     }
+    // Use the unshifted keysym! This matches the symbols that the Win32
+    // version produces. However this will defeat older keyboard layouts
+    // that use shifted values for function keys.
+    KeySym keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
       // Make all keypad keys act like NumLock is on all the time. This
       // is nicer (imho), but more importantly this gets rid of a range of
@@ -1352,5 +1355,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.127 2002/05/06 06:31:27 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.128 2002/05/13 05:10:39 spitzak Exp $".
 //

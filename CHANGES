@@ -2256,4 +2256,13 @@ Greg's rotation slider added to the symbols demo.
 Added Fl_Multi_Image and multiimage demo program.
 
 Valuator reported step() as Infinity, which messed up fluid's saved
-files. Added ability to set line & page size in fluid.
+files. Added ability to set line & page size in fluid. Fixed snap-to
+behavior of sliders.
+
+X version will produce characters when Cryillic letters are typed,
+though they are only correct if koi8-r encoding is used.
+
+Restored size and color of text for Fl_Value_Slider (note that this
+also controls the size of the numbers next to the tick marks).
+
+////////////////////////////////////////////////////////////////

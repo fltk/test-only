@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.8 2002/04/02 08:33:31 spitzak Exp $"
+// "$Id: x.h,v 1.9 2002/05/13 05:10:39 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -23,13 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This header file defines public interfaces to fltk that are specific
-// to the X version. Many of these symbols are replicated in header files
+// These are internal fltk symbols that are necessary or useful for
+// calling Xlib.  You should include this file if (and ONLY if) you
+// need to call Xlib directly.  You should avoid using this header
+// file in your software if at all possible.  NO FLTK HEADER FILE IS
+// ALLOWED TO INCLUDE THIS.
+//
+// Most of these symbols are replicated in header files
 // for other operating systems (win32.h, mac.h) but the definition of
 // the symbols is different, and usage may be somewhat different.
-//
-// You should avoid using this header file in your software if at all
-// possible. No fltk header file is allowed to include this.
 
 #ifndef Fl_X_H
 #define Fl_X_H
@@ -38,6 +40,8 @@
 
 #ifdef _WIN32
 # include "win32.h"
+#elif defined(__APPLE__)
+# include "mac.H"
 #else
 
 ////////////////////////////////////////////////////////////////
@@ -199,5 +203,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.8 2002/04/02 08:33:31 spitzak Exp $".
+// End of "$Id: x.h,v 1.9 2002/05/13 05:10:39 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: gl.h,v 1.3 2002/05/13 05:10:39 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,12 @@
 #  define APIENTRY
 # endif
 #endif
-#include <GL/gl.h>
+
+#ifdef __APPLE__
+# include <OpenGL/gl.h>
+#else
+# include <GL/gl.h>
+#endif
 
 FL_GL_API void gl_start();
 FL_GL_API void gl_finish();
@@ -78,5 +83,5 @@ FL_GL_API void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, in
 #endif
 
 //
-// End of "$Id: gl.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: gl.h,v 1.3 2002/05/13 05:10:39 spitzak Exp $".
 //
