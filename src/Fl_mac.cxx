@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.16 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.17 2004/06/01 01:24:22 easysw Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -808,7 +808,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( sym >= Keypad0 && sym <= KeypadLast ||
+    if ( ((e_state & NUMLOCK) && sym >= Keypad0 && sym <= KeypadLast) ||
 	 (sym&0xff00) == 0 ||
 	 sym == BackSpaceKey ||
 	 sym == TabKey ||
@@ -1599,6 +1599,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.16 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.17 2004/06/01 01:24:22 easysw Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.168 2004/05/05 07:19:08 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.169 2004/06/01 01:24:22 easysw Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1138,14 +1138,20 @@ bool fltk::handle()
       else extra_state &= ~META;
 #endif
     } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
-      // Make all keypad keys act like NumLock is on all the time. This
-      // is nicer (imho), but more importantly this gets rid of a range of
-      // keysyms that the Win32 version cannot produce. This strange
-      // table translates XK_KP_Home to '7', etc:
-      keysym = Keypad+"7486293150."[keysym-0xff95];
-      e_text[0] = char(keysym) & 0x7F;
-      e_text[1] = 0;
-      e_length = 1;
+      if (e_state & NUMLOCK) {
+	// Map keypad keys to ASCII...
+	keysym = Keypad+"7486293150."[keysym-0xff95];
+	e_text[0] = char(keysym) & 0x7F;
+	e_text[1] = 0;
+	e_length = 1;
+      } else {
+        // Map keypad to special key...
+	static const unsigned short table[] = {
+	  FL_Home, FL_Left, FL_Up, FL_Right,
+	  FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
+	  0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
+	keysym = table[keysym-0xff95];
+      }
     } else {
       // WHY, OH WHY, do they keep changing the Alt + Meta keys!
       // Detect all the assignments I have seen and try to map them
@@ -1804,5 +1810,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.168 2004/05/05 07:19:08 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.169 2004/06/01 01:24:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.207 2004/05/15 20:52:46 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.208 2004/06/01 01:24:22 easysw Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1076,7 +1076,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[0] = char(wParam);
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
       e_length = 1;
-    } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
+    } else if ((e_state & NUMLOCK) && e_keysym >= Keypad && e_keysym <= KeypadLast) {
       buffer[0] = e_keysym-Keypad;
       e_length = 1;
     } else {
@@ -1642,5 +1642,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.207 2004/05/15 20:52:46 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.208 2004/06/01 01:24:22 easysw Exp $".
 //
