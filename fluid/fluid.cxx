@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.43 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.44 2001/02/01 17:20:54 easysw Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 const char *copyright =
 "The FLTK user interface designer version 2.0\n"
-"Copyright 1998-1999 by Bill Spitzak and others.\n"
+"Copyright 1998-2001 by Bill Spitzak and others.\n"
 "\n"
 "This library is free software; you can redistribute it and/or "
 "modify it under the terms of the GNU Library General Public "
@@ -258,7 +258,15 @@ static int ipasteoffset;
 
 static char* cutfname() {
 #ifdef WIN32
-  return "\\.fluid_cut_buffer";
+  static char name[MAX_PATH+16] = "";
+
+  if (!name[0]) {
+    if (!GetTempPath(sizeof(name), name)) strcpy(name,"\\"); // failure
+
+    strcat(name, ".fluidcutbuffer");
+  }
+
+  return name;
 #else
   static char name[256] = "~/.fluid_cut_buffer";
   static char beenhere;
@@ -502,5 +510,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.43 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.44 2001/02/01 17:20:54 easysw Exp $".
 //
