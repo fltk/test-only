@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1_colors.cxx,v 1.1 1999/11/10 04:48:59 carl Exp $"
+// "$Id: KDE1_colors.cxx,v 1.2 1999/11/18 14:04:33 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,12 +27,19 @@
 
 // fltk plugin for Motif appearance
 
+#include <FL/Fl.H>
 #include <FL/Fl_Style.H>
 
 extern "C" int fltk_theme(int, char**);
 
-int fltk_theme(int, char**) { return fl_kde1_colors(); }
+int fltk_theme(int, char**) {
+  int r = fl_kde1_colors();
+
+  Fl::use_schemes = 1; // turn schemes back on
+
+  return r;
+}
 
 //
-// End of "$Id: KDE1_colors.cxx,v 1.1 1999/11/10 04:48:59 carl Exp $".
+// End of "$Id: KDE1_colors.cxx,v 1.2 1999/11/18 14:04:33 carl Exp $".
 //

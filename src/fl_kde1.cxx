@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.6 1999/11/18 04:33:22 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.7 1999/11/18 14:04:31 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -73,26 +73,6 @@ static int x_event_handler(int) {
 #endif
 
 int fl_kde1() {
-#ifndef WIN32
-  // create an X window to catch KDE style change messages
-  static int do_once = 0;
-  if (!do_once) {
-    do_once = 1;
-    if (!fl_display) fl_open_display();
-    Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
-    Window root = RootWindow(fl_display, fl_screen);
-    Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
-    long data = 1;
-    XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
-                    PropModeReplace, (unsigned char *)&data, 1);
-  }
-
-  // add handler to process KDE Change X events
-  fl_theme_handler(x_event_handler);
-#endif
-
-  Fl::theme(0); Fl::scheme(0); // will not be using themes or schemes
-
   char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80];
   const char* p = getenv("HOME");
   if (p) strncpy(home, p, sizeof(home));
@@ -138,11 +118,33 @@ int fl_kde1() {
     style->set_leading(motif_style ? 4 : 8);
   }
 
+#ifndef WIN32
+  // create an X window to catch KDE style change messages
+  static int do_once = 0;
+  if (!do_once) {
+    do_once = 1;
+    // turn themes off, this takes their place
+    // if this is run by the theme plugin, we turn it back on there
+    Fl::use_themes = 0;
+
+    if (!fl_display) fl_open_display();
+    Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
+    Window root = RootWindow(fl_display, fl_screen);
+    Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
+    long data = 1;
+    XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
+                    PropModeReplace, (unsigned char *)&data, 1);
+  }
+
+  // add handler to process KDE Change X events
+  fl_theme_handler(x_event_handler);
+#endif
+
   Fl::redraw();
 
   return 0;
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.6 1999/11/18 04:33:22 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.7 1999/11/18 14:04:31 carl Exp $".
 //
