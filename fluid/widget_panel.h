@@ -55,6 +55,7 @@ extern void selected_textcolor_cb(Fl_Light_Button*, void*);
 extern void color3_cb(Fl_Light_Button*, void*);
 extern void default_cb(Fl_Button*, void*);
 extern void highlight_label_color_cb(Fl_Light_Button*, void*);
+extern void glyph_box_cb(Fl_Choice*, void*);
 extern void name_cb(Fl_Input*, void*);
 extern void name_public_cb(Fl_Light_Button*, void*);
 extern void v_input_cb(Fl_Input*, void*);

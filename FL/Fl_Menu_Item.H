@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.29 1999/10/17 20:40:07 vincent Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.30 1999/11/01 02:21:14 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -57,12 +57,12 @@ struct FL_API Fl_Menu_Item {
   unsigned flags_;
 
 #ifndef FLTK_2
-  // Fltk 1.0 had 4 extra fields here: labeltype, labelfont,
-  // labelsize, labelcolor.  These are no longer supported with the
-  // style code and must eventually be deleted from your initializers.
-  // Dummy variables to handle static initializers (see above).  These are
-  // not used-- you can't initialize style information with the initializers
-  // anymore.
+  // Fltk 1.0 had 4 extra fields here: labeltype, labelfont, labelsize,
+  // labelcolor.  These are no longer supported with the style code and
+  // must eventually be deleted from your initializers.
+  // The following are dummy variables to handle those 4 extra fields.
+  // They are not used-- you can't initialize style information with the
+  // initializers anymore.
   uchar clobberMe1;
   uchar clobberMe2;
   uchar clobberMe3;
@@ -71,6 +71,10 @@ struct FL_API Fl_Menu_Item {
 
   Fl_Image* image_;
   const Fl_Style* style_;
+
+#ifdef DONT_LEAK_MEMORY
+  ~Fl_Menu_Item();
+#endif
 
   // advance N items, skipping submenus:
   const Fl_Menu_Item *next(int=1) const;
@@ -117,7 +121,7 @@ struct FL_API Fl_Menu_Item {
 
   // used by menubar:
   int measure(int* h, const Fl_Menu_*) const;
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
+  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0, int draw_box = 1) const;
 
   // popup menus without using an Fl_Menu_ widget: (highly depreciated!)
   const Fl_Menu_Item* popup(
@@ -149,6 +153,7 @@ struct FL_API Fl_Menu_Item {
   // menu item arrays.  Plan is to replace the whole Fl_Menu_Item design...
 
   Fl_Boxtype box()		const {return style()->box;}
+  Fl_Boxtype glyph_box()	const {return style()->glyph_box;}
   Fl_Glyph glyph()		const {return style()->glyph;}
   Fl_Font label_font()		const {return style()->label_font;}
   Fl_Font text_font()		const {return style()->text_font;}
@@ -167,6 +172,7 @@ struct FL_API Fl_Menu_Item {
   void seti(const unsigned*, unsigned);
 
   void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
+  void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
   void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (void*)a);}
   void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
   void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
@@ -247,5 +253,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.29 1999/10/17 20:40:07 vincent Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.30 1999/11/01 02:21:14 carl Exp $".
 //

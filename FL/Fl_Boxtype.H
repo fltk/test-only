@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.6 1999/10/17 20:39:59 vincent Exp $"
+// "$Id: Fl_Boxtype.H,v 1.7 1999/11/01 02:21:12 carl Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -35,6 +35,7 @@ struct FL_API Fl_Boxtype_ {
 	       int,int,int,int, Fl_Color fill, Fl_Flags);
   const void* data;
   const Fl_Boxtype_* down;
+  const Fl_Boxtype_* highlight;
   int dx_, dy_, dw_, dh_;
   bool rectangular;
 // public:
@@ -44,9 +45,24 @@ struct FL_API Fl_Boxtype_ {
   int dy() const {return dy_;}
   int dw() const {return dw_;}
   int dh() const {return dh_;}
+
+  static const Fl_Boxtype_* find(const char* name);
 };
 
 typedef const Fl_Boxtype_* Fl_Boxtype;
+
+// Create a global object of this type with correct parameter to define
+// a new boxtype class.  Plugins can search this to find the boxtypes
+// used by a program:
+class FL_API Fl_Boxtype_Definer {
+public:
+  const char* name;
+  const Fl_Boxtype_* boxtype;
+  Fl_Boxtype_Definer* next;
+  static Fl_Boxtype_Definer* first;
+  Fl_Boxtype_Definer(char* n, const Fl_Boxtype_& s) : name(n), boxtype(&s), next(first) {
+    first = this;}
+};
 
 extern FL_API const Fl_Boxtype_ fl_flat_box;
 #define FL_FLAT_BOX (&fl_flat_box)
@@ -54,6 +70,11 @@ extern FL_API const Fl_Boxtype_ fl_flat_up_box;
 #define FL_FLAT_UP_BOX (&fl_flat_up_box)
 extern FL_API const Fl_Boxtype_ fl_flat_down_box;
 #define FL_FLAT_DOWN_BOX (&fl_flat_down_box)
+extern FL_API const Fl_Boxtype_ fl_highlight_down_box;
+#define FL_HIGHLIGHT_DOWN_BOX (&fl_highlight_down_box)
+#define FL_HIGHLIGHT_BOX FL_HIGHLIGHT_DOWN_BOX
+extern FL_API const Fl_Boxtype_ fl_highlight_up_box;
+#define FL_HIGHLIGHT_UP_BOX (&fl_highlight_up_box)
 extern FL_API Fl_Boxtype_ fl_normal_box;
 #define FL_NORMAL_BOX (&fl_normal_box)
 extern FL_API Fl_Boxtype_ fl_down_box;
@@ -98,6 +119,7 @@ extern FL_API const Fl_Boxtype_ fl_border_frame;
 #define FL_BORDER_FRAME (&fl_border_frame)
 
 #ifndef FLTK_2 // back compatability section
+#define FL_UP_BOX (&fl_normal_box)
 #define FL_UP_FRAME (&fl_normal_box)
 #define FL_DOWN_FRAME (&fl_down_box)
 #define FL_THIN_UP_FRAME (&fl_thin_box)
@@ -107,7 +129,6 @@ extern FL_API const Fl_Boxtype_ fl_border_frame;
 #define FL_SHADOW_FRAME (&fl_shadow_box)
 #define FL_ROUNDED_FRAME (&fl_rounded_box)
 #define FL_OVAL_FRAME (&fl_oval_box)
-#define FL_UP_BOX (&fl_normal_box)
 #define FL_THIN_UP_BOX (&fl_thin_box)
 #define FL_ROUND_UP_BOX (&fl_round_box)
 #define FL_DIAMOND_UP_BOX (&fl_diamond_box)
@@ -118,5 +139,5 @@ extern FL_API const Fl_Boxtype_ fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.6 1999/10/17 20:39:59 vincent Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.7 1999/11/01 02:21:12 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.50 1999/10/26 18:55:41 mike Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.51 1999/11/01 02:21:25 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -347,12 +347,15 @@ Fl_Menu_Item boxmenu[] = {
 {"NO_BOX",		0,0, (void *)FL_NO_BOX},
 {"UP_BOX",		0,0, (void *)FL_UP_BOX},
 {"DOWN_BOX",		0,0, (void *)FL_DOWN_BOX},
+{"FLAT_BOX",		0,0, (void *)FL_FLAT_BOX},
 {"FLAT_UP_BOX",		0,0, (void *)FL_FLAT_UP_BOX},
 {"FLAT_DOWN_BOX",	0,0, (void *)FL_FLAT_DOWN_BOX},
 {"THIN_UP_BOX",		0,0, (void *)FL_THIN_UP_BOX},
 {"THIN_DOWN_BOX",	0,0, (void *)FL_THIN_DOWN_BOX},
-{"FLAT_BOX",		0,0, (void *)FL_FLAT_BOX},
 {"BORDER_BOX",		0,0, (void *)FL_BORDER_BOX},
+{"HIGHLIGHT_BOX",	0,0, (void *)FL_HIGHLIGHT_BOX},
+{"HIGHLIGHT_UP_BOX",	0,0, (void *)FL_HIGHLIGHT_UP_BOX},
+{"HIGHLIGHT_DOWN_BOX",	0,0, (void *)FL_HIGHLIGHT_DOWN_BOX},
 {"BORDER_FRAME",	0,0, (void *)FL_BORDER_FRAME},
 {"ENGRAVED_BOX",	0,0, (void *)FL_ENGRAVED_BOX},
 {"EMBOSSED_BOX",	0,0, (void *)FL_EMBOSSED_BOX},
@@ -401,6 +404,32 @@ void box_cb(Fl_Choice* i, void *v) {
         modflag = 1;
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
         q->o->box(n);
+        q->redraw();
+      }
+  }
+  Fl_Color tc = FL_BLACK;
+  if (NOT_DEFAULT(current_widget, box)) tc = FL_RED;
+  if (i->labelcolor() != tc) {
+    i->labelcolor(tc);
+    i->damage(FL_DAMAGE_CHILD_LABEL);
+  }
+}
+
+void glyph_box_cb(Fl_Choice* i, void *v) {
+  if (v == LOAD) {
+    i->show();
+    Fl_Boxtype n = current_widget->o->glyph_box();
+    for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
+      if ((void*)n == boxmenu[j].user_data()) {i->value(j); break;}
+  } else {
+    int m = i->value();
+    Fl_Boxtype n = Fl_Boxtype(boxmenu[m].user_data());
+    if (!n) return; // should not happen
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+        modflag = 1;
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+        q->o->glyph_box(n);
         q->redraw();
       }
   }
@@ -793,7 +822,6 @@ void color2_cb(Fl_Light_Button* i, void *v) {
     if (current_widget->is_light_button() ||
 	current_widget->is_menu_item()) i->label("On Color");
     else if (current_widget->is_button()) i->label("Down Color");
-    else if (current_widget->is_slider()) i->label("Thumb Color");
     else i->label("Selection Color");
     i->show();
   } else {
@@ -814,6 +842,8 @@ void color2_cb(Fl_Light_Button* i, void *v) {
 void color3_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = current_widget->o->off_color();
   if (v == LOAD) {
+    if (current_widget->is_slider()) i->label("Button Color");
+    else i->label("Color 3");
     i->show();
   } else {
     if (!fl_color_chooser(i->label(), c)) return;
@@ -841,6 +871,8 @@ void labelcolor_cb(Fl_Light_Button* i, void *v) {
 	q->o->labelcolor(c); q->redraw();
     }
   } else {
+    if (current_widget->is_slider()) i->label("Label / Glyph Color");
+    else i->label("Label Color");
     i->show();
   }
   i->off_color(c);
@@ -923,6 +955,8 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
 void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
   Fl_Color tc;
   if (v == LOAD) {
+    if (current_widget->is_slider()) i->label("Selected Glyph Color");
+    else i->label("Selected Text Color");
     tc = current_widget->o->selection_text_color();
     i->show();
   } else {
@@ -966,6 +1000,8 @@ void highlightcolor_cb(Fl_Light_Button* i, void *v) {
 void highlight_label_color_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = FL_BLACK;
   if (v == LOAD) {
+    if (current_widget->is_slider()) i->label("Highlight Glyph Color");
+    else i->label("Highlight Label Color");
     c = current_widget->o->highlight_label_color();
     i->show();
   } else {
@@ -1708,6 +1744,8 @@ void Fl_Widget_Type::write_widget_code() {
 
   if (o->box() != tplate->box())
     write_c("%so->box(FL_%s);\n", indent(), boxname(o->box()));
+  if (o->glyph_box() != tplate->glyph_box())
+    write_c("%so->glyph_box(FL_%s);\n", indent(), boxname(o->glyph_box()));
 //   if (o->glyph() != tplate->glyph())
 //     write_c("%so->box(FL_%s);\n", indent(), boxname(o->glyph()));
   if (o->label_font() != tplate->label_font())
@@ -1726,7 +1764,7 @@ void Fl_Widget_Type::write_widget_code() {
   if (o->selection_text_color() != tplate->selection_text_color())
     write_c("%so->selection_text_color((Fl_Color)%i);\n", indent(), o->selection_text_color());
   if (o->off_color() != tplate->off_color())
-    write_c("%so->off_color((Fl_Color)%i);\n", indent(), o->selection_color());
+    write_c("%so->off_color((Fl_Color)%i);\n", indent(), o->off_color());
   if (o->highlight_color() != tplate->highlight_color())
     write_c("%so->highlight_color((Fl_Color)%i);\n", indent(), o->highlight_color());
   if (o->highlight_label_color() != tplate->highlight_label_color())
@@ -1837,6 +1875,8 @@ void Fl_Widget_Type::write_properties() {
 
   if (o->box() != tplate->box()) {
     write_string("box"); write_word(boxname(o->box()));}
+  if (o->glyph_box() != tplate->glyph_box()) {
+    write_string("glyph_box"); write_word(boxname(o->glyph_box()));}
   // if (o->glyph() != tplate->glyph())...
   if (o->label_font() != tplate->label_font())
     write_string("labelfont %d", o->label_font()-fl_fonts);
@@ -1944,6 +1984,11 @@ void Fl_Widget_Type::read_property(const char *c) {
     Fl_Boxtype b = boxnumber(value);
     if (b) o->box(b);
     else read_error("Boxtype '%s' not found", value);
+  } else if (!strcmp(c,"glyph_box")) {
+    const char* value = read_word();
+    Fl_Boxtype b = boxnumber(value);
+    if (b) o->glyph_box(b);
+    else read_error("Glyph Boxtype '%s' not found", value);
   // } else if glyph...
   } else if (!strcmp(c,"labelfont")) {
     if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts+x);
@@ -2139,5 +2184,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.50 1999/10/26 18:55:41 mike Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.51 1999/11/01 02:21:25 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.18 1999/08/16 07:31:14 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.19 1999/11/01 02:21:31 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,13 +46,14 @@ void Fl_Choice::draw() {
     fl_clip(x(), y(), w()-3*H, h());
     fl_draw_shortcut = 2; // hack value to make '&' disappear
     Fl_Boxtype b = box();
-    m.draw(x()+b->dx(), y()+b->dy(), w()-b->dw()-3*H, h()-b->dh(), this);
+    m.draw(x()+b->dx(), y()+b->dy(), w()-b->dw()-3*H, h()-b->dh(), this, 0, 0);
     fl_draw_shortcut = 0;
     fl_pop_clip();
   }
 }
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
+  style(default_style);
   align(FL_ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
 }
@@ -84,13 +85,30 @@ int Fl_Choice::handle(int e) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (highlight_color() && active_r()) redraw();
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   default:
     return 0;
   }
 }
 
+Fl_Style Fl_Choice::default_style = {
+  0,                    // box
+  0,	                // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  0,		        // color
+  0,		        // label_color
+  FL_GRAY,	        // selection_color / on_color
+  0,		        // selection_text_color
+  FL_GRAY,	        // off_color
+  FL_LIGHT2             // highlight color
+};
+
+static Fl_Style_Definer x("choice", Fl_Choice::default_style);
+
 //
-// End of "$Id: Fl_Choice.cxx,v 1.18 1999/08/16 07:31:14 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.19 1999/11/01 02:21:31 carl Exp $".
 //

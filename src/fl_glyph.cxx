@@ -1,31 +1,38 @@
 // Default glyph function used by all the built-in styles.  This draws
-// somewhat Windoze-style things.
+// somewhat Windows-style things.
 
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Bitmap.H>
+#include "fastarrow.h"
+static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
+#include "mediumarrow.h"
+static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
+#include "slowarrow.h"
+static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 void fl_glyph(int t, int x,int y,int w,int h,
-	      Fl_Color c, Fl_Flags f)
+	      Fl_Color bc, Fl_Color fc, Fl_Flags f, Fl_Boxtype box)
 {
-  Fl_Color l = (f&FL_INACTIVE) ? Fl_Color(FL_INACTIVE_COLOR)
-    : fl_contrast(FL_NO_COLOR, c);
+  if (f&FL_INACTIVE) fc = fl_inactive(fc);
+
   switch (t) {
   case FL_GLYPH_CHECK:
-    FL_DOWN_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     if (f & FL_VALUE) {
-      fl_color(l);
+      fl_color(fc);
 #if 0 // Draws an X
-      x += FL_DOWN_BOX->dx();
-      y += FL_DOWN_BOX->dy();
-      int r = x+h-FL_DOWN_BOX->dh()-1;
-      int b = y+h-FL_DOWN_BOX->dh()-1;
+      x += box->dx();
+      y += box->dy();
+      int r = x+h-box->dh()-1;
+      int b = y+h-box->dh()-1;
       fl_line(x+1,y+1,r-1,b-1);
       fl_line(x,y+1,r-2,b-1);
       fl_line(x,b-1,r-2,y+1);
       fl_line(x+1,b-1,r-1,y+1);
-#else // draw Windoze check:
-      x += FL_DOWN_BOX->dx()+1;
-      w = h - FL_DOWN_BOX->dh() - 2;
+#else // draw Windows check:
+      x += box->dx()+1;
+      w = h - box->dh() - 2;
       int d1 = w/3;
       int d2 = w-d1;
       y = y+(h+d2)/2-d1-2;
@@ -39,51 +46,80 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;
   case FL_GLYPH_RADIO:
     //h = (h+1)&-2; // even only
-    FL_ROUND_DOWN_BOX->draw(x,y,h,h, c, f);
+    FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
     if (f & FL_VALUE) {
-      fl_color(l);
+      fl_color(fc);
       int d = h/5;
       fl_pie(x+d,y+d,h-d-d-1,h-d-d-1,0,360);
     }
     break;
+  case FL_GLYPH_LIGHT: {
+    box->draw(x,y,w,h, fc, f);
+    break;}
   case FL_GLYPH_UP: {
-    FL_NORMAL_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
     int Y1 = y+w1/2+W1/2;
-    fl_color(l);
+    fl_color(fc);
     fl_polygon(X1, Y1-W1, X1+W1, Y1, X1-W1, Y1);
     break;}
   case FL_GLYPH_DOWN: {
-    FL_NORMAL_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
     int Y1 = y+h-w1/2-W1/2-1;
-    fl_color(l);
+    fl_color(fc);
     fl_polygon(X1, Y1+W1, X1-W1, Y1, X1+W1, Y1);
     break;}
   case FL_GLYPH_LEFT: {
-    FL_NORMAL_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
     int X1 = x+w1/2+W1/2;
-    fl_color(l);
+    fl_color(fc);
     fl_polygon(X1-W1, Y1, X1, Y1-W1, X1, Y1+W1);
     break;}
   case FL_GLYPH_RIGHT: {
-    FL_NORMAL_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
     int X1 = x+w-w1/2-W1/2-1;
-    fl_color(l);
+    fl_color(fc);
     fl_polygon(X1+W1, Y1, X1, Y1+W1, X1, Y1-W1);
     break;}
+  case FL_GLYPH_FASTARROW: {
+    box->draw(x,y,w,h, bc, f);
+    fl_color(fc);
+    fastarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
+    break;}
+  case FL_GLYPH_MEDIUMARROW: {
+    box->draw(x,y,w,h, bc, f);
+    fl_color(fc);
+    mediumarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
+    break;}
+  case FL_GLYPH_SLOWARROW: {
+    box->draw(x,y,w,h, bc, f);
+    fl_color(fc);
+    slowarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
+    break;}
+  case FL_GLYPH_VNSLIDER: {
+    box->draw(x,y,w,h, bc, f);
+    int d = (h-4)/2;
+    FL_THIN_DOWN_BOX->draw(x+2, y+d, w-4, h-2*d, fc);
+    break;}
+  case FL_GLYPH_HNSLIDER: {
+    box->draw(x,y,w,h, bc, f);
+    int d = (w-4)/2;
+    FL_THIN_DOWN_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
+    break;}
+
   default:
-    FL_NORMAL_BOX->draw(x,y,w,h, c, f);
+    box->draw(x,y,w,h, bc, f);
     break;
   }
 }

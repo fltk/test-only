@@ -30,11 +30,13 @@
 #include <FL/Fl_Slider.H>
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Tabs.H>
+#include <FL/Fl_Style.H>
 
 #include <stdio.h>
 
 main() {
   printf("sizeof(Fl_Menu_Item) = %lu\n", (unsigned long)sizeof(struct Fl_Menu_Item));
+  printf("sizeof(Fl_Style) = %lu\n", (unsigned long)sizeof(struct Fl_Style));
   printf("sizeof(Fl_Widget) = %lu\n", (unsigned long)sizeof(class Fl_Widget));
   printf("  sizeof(Fl_Box) = %lu\n", (unsigned long)sizeof(class Fl_Box));
   printf("  sizeof(Fl_Button) = %lu\n", (unsigned long)sizeof(class Fl_Button));

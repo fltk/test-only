@@ -5,6 +5,6 @@
 
 #include "Enumerations.H"
 
-FL_API bool fl_load_plugin(const char* name, const char* type, const char* func);
+FL_API int fl_load_plugin(const char* name, const char* func);
 
 #endif

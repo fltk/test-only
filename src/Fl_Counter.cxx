@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.15 1999/08/16 07:31:15 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.16 1999/11/01 02:21:32 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,10 @@ void Fl_Counter::draw() {
 
   Fl_Flags fl[5];
   for (int i = 1; i < 5; i++) {
-    unsigned f = flags();	
-    if (Fl::belowmouse() == this) f |= FL_HIGHLIGHT;
-    if (mouseobj == i) f |= FL_VALUE;
-    fl[i] = (Fl_Flags)f;
+    fl[i] = flags();
+    if (!active_r()) { fl[i] |= FL_INACTIVE; highlight = 0; }
+    if (mouseobj == i) fl[i] |= FL_VALUE;
+    else if (highlight == i) fl[i] |= FL_HIGHLIGHT;
   }
 
   int xx[5], ww[5];
@@ -53,27 +53,36 @@ void Fl_Counter::draw() {
     xx[3] = x()+w()-1*W; ww[3] = W;
   }
 
-  Fl_Output::default_style.box->draw(xx[0], y(), ww[0], h(),
-				     Fl_Output::default_style.color, 0);
-  fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
-  char str[128]; format(str);
-  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
-  if (!(damage()&FL_DAMAGE_ALL)) return; // only need to redraw text
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
+    box()->draw(xx[0], y(), ww[0], h(), color(), 0);
+    fl_font(textfont(), textsize());
+    fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
+    char str[128]; format(str);
+    fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
+  }
 
-  Fl_Color c = active_r() ? off_color() : Fl_Color(FL_INACTIVE_COLOR);
-  if (type() == FL_NORMAL_COUNTER) {
+  // CET - FIXME - turn this into glyph drawing code
+  if (type() == FL_NORMAL_COUNTER &&
+      (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1))
+  {
     draw_glyph(0, xx[1], y(), ww[1], h(), fl[1]);
-    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), c);
+    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), FL_BLACK);
   }
-  draw_glyph(0, xx[2], y(), ww[2], h(), fl[2]);
-  fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), c);
-  draw_glyph(0, xx[3], y(), ww[3], h(), fl[3]);
-  fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), c);
-  if (type() == FL_NORMAL_COUNTER) {
+  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2) {
+    draw_glyph(0, xx[2], y(), ww[2], h(), fl[2]);
+    fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), FL_BLACK);
+  }
+  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3) {
+    draw_glyph(0, xx[3], y(), ww[3], h(), fl[3]);
+    fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), FL_BLACK);
+  }
+  if (type() == FL_NORMAL_COUNTER &&
+      (damage()&FL_DAMAGE_ALL || last == 4 || highlight == 4))
+  {
     draw_glyph(0, xx[4], y(), ww[4], h(), fl[4]);
-    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), c);
+    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), FL_BLACK);
   }
+  last = highlight;
 }
 
 void Fl_Counter::increment_cb() {
@@ -115,14 +124,15 @@ int Fl_Counter::calc_mouseobj() {
 }
 
 int Fl_Counter::handle(int event) {
-  int i;
+  highlight = calc_mouseobj();
+
   switch (event) {
   case FL_RELEASE:
     if (!Fl::pushed()) {
       if (mouseobj) {
         Fl::remove_timeout(repeat_callback, this);
         mouseobj = 0;
-        redraw();
+        damage(FL_DAMAGE_EXPOSE);
       }
     }
     handle_release();
@@ -130,18 +140,18 @@ int Fl_Counter::handle(int event) {
   case FL_PUSH:
     handle_push();
   case FL_DRAG:
-    i = calc_mouseobj();
-    if (i != mouseobj) {
+    if (highlight != mouseobj) {
       Fl::remove_timeout(repeat_callback, this);
-      mouseobj = i;
-      if (i) Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
+      mouseobj = highlight;
+      if (highlight) Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
       increment_cb();
-      redraw();
     }
     return 1;
+  case FL_MOVE:
+    if (last == highlight) return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (highlight_color() && active_r()) redraw();
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   default:
     return 0;
@@ -153,13 +163,31 @@ Fl_Counter::~Fl_Counter() {
 }
 
 Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(x, y, w, h, l) {
+  style(default_style);
   align(FL_ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
   Fl_Valuator::step(1, 10);
   lstep_ = 1.0;
-  mouseobj = 0;
+  mouseobj = highlight = 0;
 }
 
+Fl_Style Fl_Counter::default_style = {
+  FL_THIN_DOWN_BOX,     // box
+  0,	                // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  FL_LIGHT2,            // color - text background
+  0,		        // label_color
+  0,    	        // selection_color / on_color
+  0,		        // selection_text_color
+  FL_GRAY,	        // off_color - button color
+  FL_LIGHT2             // highlight color
+};
+
+static Fl_Style_Definer x("counter", Fl_Counter::default_style);
+
 //
-// End of "$Id: Fl_Counter.cxx,v 1.15 1999/08/16 07:31:15 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.16 1999/11/01 02:21:32 carl Exp $".
 //

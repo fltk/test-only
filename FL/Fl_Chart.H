@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.14 1999/10/17 20:40:00 vincent Exp $"
+// "$Id: Fl_Chart.H,v 1.15 1999/11/01 02:21:12 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -66,6 +66,8 @@ public:
   uchar autosize() const {return autosize_;}
   void autosize(uchar n) {autosize_ = n;}
 
+  static Fl_Style default_style;
+
 protected:
   void draw();
 
@@ -81,5 +83,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.14 1999/10/17 20:40:00 vincent Exp $".
+// End of "$Id: Fl_Chart.H,v 1.15 1999/11/01 02:21:12 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.40 1999/10/31 02:54:41 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.41 1999/11/01 02:21:36 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,6 +41,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <limits.h>
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -250,7 +251,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
-const char* fl_theme = 0;
+char *fl_theme, *fl_style;
 #include <FL/fl_load_plugin.H>
 
 void fl_open_display() {
@@ -270,19 +271,19 @@ void fl_open_display() {
   Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
 
   fl_screen = DefaultScreen(fl_display);
-// construct an XVisualInfo that matches the default Visual:
+  // construct an XVisualInfo that matches the default Visual:
   XVisualInfo templt; int num;
   templt.visualid = XVisualIDFromVisual(DefaultVisual(fl_display,fl_screen));
   fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
   fl_colormap = DefaultColormap(fl_display,fl_screen);
 
-// Load the theme plugin:
-// THIS CODE MUST BE DUPLICATED FOR WIN32:
-  const char* t = fl_theme; if (!t) t = "default";
-  if (!fl_load_plugin(t, "fltk/themes", "fltk_theme")) {
-    if (fl_theme) Fl::fatal("Can't load theme \"%s\"", t);
-  }
-
+  // Load the theme plugin and style:
+  // THIS CODE MUST BE DUPLICATED FOR WIN32:
+  char temp[PATH_MAX];
+  if (fl_theme) Fl::theme(fl_theme);
+  else if (!Fl::getconf("default theme", temp, sizeof(temp))) Fl::theme(temp);
+  if (fl_style) Fl::style(fl_style);
+  else if (!Fl::getconf("default style", temp, sizeof(temp))) Fl::style(temp);
 }
 
 void fl_close_display() {
@@ -468,7 +469,7 @@ int fl_handle(const XEvent& xevent)
       // force it to type a character (not sure if this ever is needed):
       if (!len) {buffer[0] = char(keysym); len = 1;}
       // ignore all effects of shift on the keysyms, which makes it a lot
-      // easier to program shortcuts and is Windoze-compatable:
+      // easier to program shortcuts and is Windows-compatable:
       keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     }
 #ifdef __sgi
@@ -491,7 +492,7 @@ int fl_handle(const XEvent& xevent)
     }
 #endif
     // We have to get rid of the XK_KP_function keys, because they are
-    // not produced on Windoze and thus case statements tend not to check
+    // not produced on Windows and thus case statements tend not to check
     // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
     if (keysym >= 0xff91 && keysym <= 0xff9f) {
       // Try to make them turn into FL_KP+'c' so that NumLock is
@@ -815,5 +816,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.40 1999/10/31 02:54:41 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.41 1999/11/01 02:21:36 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.12 1999/08/16 07:31:14 bill Exp $"
+// "$Id: Fl_Clock.cxx,v 1.13 1999/11/01 02:21:31 carl Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,11 +81,11 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   // draw the shadows:
   fl_push_matrix();
   fl_translate(0.60, 0.60);
-  drawhands(FL_DARK3, FL_DARK3);
+  drawhands(off_color(), off_color());
   fl_pop_matrix();
   // draw the tick marks:
   fl_push_matrix();
-  fl_color(off_color()); // color was 52
+  fl_color(text_color()); // color was 52
   for (int i=0; i<12; i++) {
     if (i==6) rect(-0.5, 9, 1, 2);
     else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
@@ -121,6 +121,7 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 : Fl_Widget(x, y, w, h, l) {
 //   box(FL_UP_BOX);
 //   selection_color(fl_gray_ramp(5));
+  style(default_style);
   align(FL_ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;
@@ -168,6 +169,26 @@ Fl_Clock::~Fl_Clock() {
   Fl::remove_timeout(tick, this);
 }
 
+Fl_Style Fl_Clock_Output::default_style = {
+  0,            // box
+  0,            // glyph_box
+  0,            // glyphs
+  0,            // label_font
+  0,            // text_font
+  0,            // label_type
+  0,            // color
+  0,            // label_color
+  FL_LIGHT1,    // selection_color
+  0,            // selection_text_color
+  FL_DARK3,     // off_color
+  0,            // highlight_color
+  0,            // highlight_label_color
+  FL_BLACK,     // text_color
+  // rest is zero
+};
+
+static Fl_Style_Definer x("clock", Fl_Clock_Output::default_style);
+
 //
-// End of "$Id: Fl_Clock.cxx,v 1.12 1999/08/16 07:31:14 bill Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.13 1999/11/01 02:21:31 carl Exp $".
 //

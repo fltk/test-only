@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.24 1999/10/27 08:40:50 bill Exp $"
+// "$Id: Fl.H,v 1.25 1999/11/01 02:21:11 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 
 #include "Enumerations.H"
 #include "Fl_Boxtype.H"
+#include "Fl_Style.H"
 
 // These header files are only needed for the obsolete functions:
 #include "Fl_Color.H"
@@ -40,6 +41,8 @@ class FL_API Fl {
 
 public: // should be private!
 
+  static int damage_;
+
   static int e_x;
   static int e_y;
   static int e_x_root;
@@ -48,13 +51,19 @@ public: // should be private!
   static int e_clicks;
   static int e_is_click;
   static int e_keysym;
-  static char* e_text;
   static int e_length;
-  static const char *encoding;
+
+  // style & theme stuff
+  static int use_styles;
+  static int use_themes;
+  static const char* style_;
+  static const char* theme_;
+
+  static char* e_text;
+  static const char* encoding;
   static Fl_Widget* belowmouse_;
   static Fl_Widget* pushed_;
   static Fl_Widget* focus_;
-  static int damage_;
   static Fl_Widget* selection_owner_;
   static Fl_Window* modal_;
   static Fl_Window* grab_;
@@ -239,10 +248,23 @@ public:
   static int awake(void* message = 0);	
 #endif
 
+  // style & theme stuff
+  static int style(const char*);
+  static const char* style();
+  static int loadstyle(int = 1);
+
+  static int theme(const char*);
+  static const char* theme();
+  static int loadtheme(int = 1);
+
+  // get the string value of a key from the global config file
+  static int getconf(const char *key, char *value, int value_length);
 };
+
+const char* fl_find_config_file(const  char* fn);
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.24 1999/10/27 08:40:50 bill Exp $".
+// End of "$Id: Fl.H,v 1.25 1999/11/01 02:21:11 carl Exp $".
 //

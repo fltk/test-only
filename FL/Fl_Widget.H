@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.29 1999/10/17 20:40:13 vincent Exp $"
+// "$Id: Fl_Widget.H,v 1.30 1999/11/01 02:21:16 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -122,7 +122,7 @@ public:
   int output() const {return (flags_&FL_OUTPUT);}
   void set_output() {flags_ |= FL_OUTPUT;}
   void clear_output() {flags_ &= ~FL_OUTPUT;}
-  int takesevents() const {return !(flags_&(FL_OUTPUT|FL_INVISIBLE|FL_INACTIVE));}
+  int takesevents() const {return (!output()&&active_r()&&visible_r());}
   int changed() const {return flags_&FL_CHANGED;}
   void set_changed() {flags_ |= FL_CHANGED;}
   void clear_changed() {flags_ &= ~FL_CHANGED;}
@@ -148,6 +148,8 @@ public:
   void measure_label(int&, int&) const;
 
   Fl_Boxtype box()		const {return style_->box;}
+  Fl_Boxtype glyph_box()	const {return style_->glyph_box;}
+  Fl_Boxtype box2()	        const {return style_->glyph_box;}
   Fl_Glyph glyph()		const {return style_->glyph;}
   Fl_Font label_font()		const {return style_->label_font;}
   Fl_Font text_font()		const {return style_->text_font;}
@@ -167,6 +169,8 @@ public:
   unsigned text_size()		const {return style_->text_size;}
 
   void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
+  void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
+  void box2(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
   void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (const void*)a);}
   void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
   void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
@@ -186,7 +190,8 @@ public:
   void text_size(unsigned a)	{seti(&style_->text_size, a);}
 
 #ifndef FLTK_2  // back-compatability section:
-  Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
+  Fl_Boxtype down_box()		const {return style_->glyph_box;}
+  Fl_Boxtype slider()		const {return style_->glyph_box;}
   Fl_Boxtype fly_box()		const {return style_->box;}
   Fl_Color color2()		const {return style_->selection_color;}
   Fl_Color color3()		const {return style_->off_color;}
@@ -202,7 +207,8 @@ public:
   Fl_Color selected_textcolor()	const {return style_->selection_text_color;}
   Fl_Color cursor_color()	const {return style_->off_color;}
 
-  void down_box(Fl_Boxtype)	{}
+  void down_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
+  void slider(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
   void fly_box(Fl_Boxtype)	{}
   void color2(Fl_Color a)	{seti(&style_->selection_color, a);}
   void labeltype(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
@@ -236,7 +242,7 @@ protected:
   void draw_frame() const; // just draws the edge of the box if possible
   void draw_label() const; // draw inside labels only
   void draw_label(Fl_Color) const;
-  void draw_glyph(int, int,int,int,int, Fl_Flags) const;
+  void draw_glyph(int, int,int,int,int, Fl_Flags, Fl_Boxtype = 0) const;
   Fl_Color draw_button() const; // special messy one for button style widgets
   void draw_button_label(int,int,int,int,Fl_Color) const;
 
@@ -272,5 +278,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.29 1999/10/17 20:40:13 vincent Exp $".
+// End of "$Id: Fl_Widget.H,v 1.30 1999/11/01 02:21:16 carl Exp $".
 //

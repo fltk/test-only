@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.13 1999/08/27 14:00:13 carl Exp $"
+// "$Id: fl_font_win32.cxx,v 1.14 1999/11/01 02:21:38 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -162,7 +162,7 @@ void fl_font(Fl_Font s, unsigned size) {
 const char *fl_encoding = "Windows";  // CET - FIXME
 
 void fl_font(Fl_Font s, unsigned size, const char *encoding) {
-// CET - FIXME - Are we doing this encoding stuff on Windoze?
+// CET - FIXME - Are we doing this encoding stuff on Windows?
   fl_font(s, size);
 }
 
@@ -201,5 +201,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.13 1999/08/27 14:00:13 carl Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.14 1999/11/01 02:21:38 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.10 1999/08/16 07:31:20 bill Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.11 1999/11/01 02:21:34 carl Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,10 @@
 #include <FL/fl_draw.H>
 
 Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
-  : Fl_Button(x,y,w,h,l) {}
+  : Fl_Button(x,y,w,h,l)
+{
+  style(default_style);
+}
 
 int fl_return_arrow(int x, int y, int w, int h, int active) {
   int size = w; if (h<size) size = h;
@@ -56,6 +59,7 @@ void Fl_Return_Button::draw() {
   Fl_Color lc = draw_button();
   int W = h();
   if (w()/3 < W) W = w()/3;
+// CET - FIXME
   fl_return_arrow(x()+w()-W-4, y(), W, h(), active_r());
   draw_button_label(x(), y(), w()-W+4, h(), lc);
 }
@@ -69,6 +73,23 @@ int Fl_Return_Button::handle(int event) {
     return Fl_Button::handle(event);
 }
 
+Fl_Style Fl_Return_Button::default_style = {
+  0,                    // box
+  0,                    // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  0,		        // color
+  0,		        // label_color
+  0,                    // selection_color / on_color
+  0,		        // selection_text_color
+  0,                    // off_color
+  0                     // highlight color
+};
+
+static Fl_Style_Definer x("return button", Fl_Return_Button::default_style);
+
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.10 1999/08/16 07:31:20 bill Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.11 1999/11/01 02:21:34 carl Exp $".
 //

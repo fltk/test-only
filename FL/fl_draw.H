@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.17 1999/10/17 22:27:07 vincent Exp $"
+// "$Id: fl_draw.H,v 1.18 1999/11/01 02:21:17 carl Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -144,10 +144,10 @@ FL_API double fl_width(uchar);
 // draw using current font:
 FL_API void fl_draw(const char*, int x, int y);
 FL_API void fl_draw(const char*, int n, int x, int y);
-FL_API void fl_measure(const char*, int& x, int& y);
+FL_API void fl_measure(const char*, int& w, int& h);
 FL_API void fl_draw(const char*, int,int,int,int, Fl_Flags);
 FL_API void fl_draw(const char*, int,int,int,int, Fl_Flags,
-	               void (*callthis)(const char *, int n, int x, int y));
+                    void (*callthis)(const char *, int n, int x, int y));
 
 // images:
 FL_API void fl_draw_image(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
@@ -183,5 +183,5 @@ FL_API int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalabl
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.17 1999/10/17 22:27:07 vincent Exp $".
+// End of "$Id: fl_draw.H,v 1.18 1999/11/01 02:21:17 carl Exp $".
 //

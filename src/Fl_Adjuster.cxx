@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.12 1999/08/16 07:31:12 bill Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.13 1999/11/01 02:21:29 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,15 +26,8 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Adjuster.H>
-#include <FL/Fl_Bitmap.H>
 #include <FL/fl_draw.H>
 
-#include "fastarrow.h"
-static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
-#include "mediumarrow.h"
-static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
-#include "slowarrow.h"
-static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
@@ -49,28 +42,40 @@ void Fl_Adjuster::draw() {
     dy = H = h()/3;
   }
 
-  draw_glyph(0, x(), y()+2*dy,  W, H, drag==1?FL_VALUE:0);
-  draw_glyph(0, x()+dx, y()+dy, W, H, drag==2?FL_VALUE:0);
-  draw_glyph(0, x()+2*dx, y(),  W, H, drag==3?FL_VALUE:0);
+  Fl_Flags f[4];
+  for (int i = 1; i < 4; i++) {
+    f[i] = flags();
+    if (!active_r()) { f[i] |= FL_INACTIVE; highlight = 0; }
+    if (drag == i) f[i] |= FL_VALUE;
+    else if (highlight == i) f[i] |= FL_HIGHLIGHT;
+  }
 
-  fl_color(active_r() ? off_color() : Fl_Color(FL_INACTIVE_COLOR));
-  fastarrow.draw(  x(),     y()+2*dy, W, H, FL_ALIGN_CENTER);
-  mediumarrow.draw(x()+dx,  y()+dy,   W, H, FL_ALIGN_CENTER);
-  slowarrow.draw(  x()+2*dx,y(),      W, H, FL_ALIGN_CENTER);
+  if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
+    draw_glyph(FL_GLYPH_FASTARROW, x(), y()+2*dy, W, H, f[1]);
+  if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
+    draw_glyph(FL_GLYPH_MEDIUMARROW, x()+dx, y()+dy, W, H, f[2]);
+  if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
+    draw_glyph(FL_GLYPH_SLOWARROW, x()+2*dx, y(), W, H, f[3]);
+  last = highlight;
 }
 
 int Fl_Adjuster::handle(int event) {
   double v;
   int delta;
   int mx = Fl::event_x();
+
+  if (Fl::event_inside(this)) {
+    if (w()>=h())
+      highlight = 3*(mx-x())/w() + 1;
+    else
+      highlight = 3-3*(Fl::event_y()-y()-1)/h();
+  } else highlight = 0;
+
   switch (event) {
   case FL_PUSH:
     ix = mx;
     if (!drag) {
-      if (w()>=h())
-        drag = 3*(mx-x())/w() + 1;
-      else
-        drag = 3-3*(Fl::event_y()-y()-1)/h();
+      drag = highlight;
       handle_push();
       redraw();
     }
@@ -117,20 +122,40 @@ int Fl_Adjuster::handle(int event) {
       handle_release();
     }
     return 1;
+  case FL_MOVE:
+    if (last == highlight) return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (takesevents() && highlight_color()) redraw();
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   }
   return 0;
 }
 
 Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,y,w,h,l) {
+  style(default_style);
   step(1, 10000);
-  drag = 0;
+  drag = highlight = 0;
   soft_ = 1;
 }
 
+Fl_Style Fl_Adjuster::default_style = {
+  0,                    // box
+  0,                    // glyph_box
+  0,	                // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  0,		        // color
+  0,		        // label_color
+  0,                    // selection_color / on_color
+  0,		        // selection_text_color
+  FL_GRAY,              // off_color - button color
+  FL_LIGHT2             // highlight color
+};
+
+static Fl_Style_Definer x("adjuster", Fl_Adjuster::default_style);
+
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.12 1999/08/16 07:31:12 bill Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.13 1999/11/01 02:21:29 carl Exp $".
 //

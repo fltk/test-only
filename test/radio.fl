@@ -1,5 +1,6 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
+images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 10 
@@ -10,10 +11,10 @@ Function {} {open
   Fl_Window {} {
     label {Radio buttons and Tooltips} open
     tooltip {This is a window}
-    xywh {60 352 380 274} visible
+    xywh {417 268 380 274} visible
   } {
     Fl_Button {} {
-      label Fl_Button
+      label Fl_Button selected
       tooltip {This is a button}
       xywh {20 10 160 30}
     }
@@ -39,7 +40,7 @@ Function {} {open
     }
     Fl_Group {} {open
       tooltip {This is a group}
-      xywh {190 10 70 120} box THIN_UP_FRAME
+      xywh {190 10 70 120}
     } {
       Fl_Check_Button {} {
         label radio
@@ -69,29 +70,29 @@ Function {} {open
       Fl_Button {} {
         label radio
         tooltip {This the first button of the group}
-        xywh {280 20 20 20} type Radio align 8
+        xywh {280 20 20 20} type Radio align 524296
       }
       Fl_Button {} {
         label radio
         tooltip {This the second button of the group}
-        xywh {280 45 20 20} type Radio align 8
+        xywh {280 45 20 20} type Radio align 524296
       }
       Fl_Button {} {
         label radio
         tooltip {This the third button of the group}
-        xywh {280 70 20 20} type Radio align 8
+        xywh {280 70 20 20} type Radio align 524296
       }
       Fl_Button {} {
         label radio
         tooltip {This the fourth button of the group}
-        xywh {280 95 20 20} type Radio align 8
+        xywh {280 95 20 20} type Radio align 524296
       }
     }
     Fl_Light_Button ttlb {
       label {Show Tooltips}
-      callback {Fl_Tooltip::enable(ttlb->value());} selected
+      callback {Fl_Tooltip::enable(ttlb->value());}
       tooltip {This button enables or disables tooltips}
-      xywh {130 230 110 30} value 1
+      xywh {120 230 130 30} value 1
       code0 {\#include <FL/Fl_Tooltip.H>}
     }
   }

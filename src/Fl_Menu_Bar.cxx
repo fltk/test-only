@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.19 1999/08/16 07:31:18 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.20 1999/11/01 02:21:33 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,25 +27,42 @@
 #include <FL/Fl_Menu_Bar.H>
 
 void Fl_Menu_Bar::draw() {
-  draw_box();
-  if (!menu() || !menu()->text) return;
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
+  if (!menu() || !menu()->text) { last_ = 0; return; }
   const Fl_Menu_Item* m;
-  int X = x()+5;
+  int X = x()+3;
   for (m=menu(); m->text; m = m->next()) {
-    m->draw(X, y(), 0, h(), this);
-    X += m->measure(0,this) + 16;
+    int W =m->measure(0,this) + 16;
+    int selected = (m == highlight_) ? 3 : 1;
+    if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == m || highlight_ == m)
+      m->draw(X, y() + 3, W, h() - 6, this, 2, selected);
+    X += W;
   }
+  last_ = highlight_;
 }
 
 int Fl_Menu_Bar::handle(int event) {
   const Fl_Menu_Item* v;
+  const Fl_Menu_Item* m;
+  int X = x()+3;
+  highlight_ = 0;
+  // FL_LEAVE events don't get the right coordinates
+  if (event != FL_LEAVE) for (m=menu(); m->text; m = m->next()) {
+    int W = m->measure(0,this) + 16;
+    if (Fl::event_inside(X, y() + 3, W, h() -6)) { highlight_ = m; break; }
+    X += W;
+  }
   if (menu() && menu()->text) switch (event) {
+  case FL_MOVE:
+    if (highlight_ == last_) return 1;
   case FL_ENTER:
   case FL_LEAVE:
+    damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
     v = 0;
   J1:
+    highlight_ = 0; damage(FL_DAMAGE_HIGHLIGHT);
     v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
     picked(v);
     return 1;
@@ -58,6 +75,22 @@ int Fl_Menu_Bar::handle(int event) {
   return 0;
 }
 
+Fl_Style Fl_Menu_Bar::default_style = {
+  0,                    // box
+  0,                    // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  0,		        // color
+  0,		        // label_color
+  0,                    // selection_color / on_color
+  0,		        // selection_text_color
+  0,	                // off_color
+};
+
+static Fl_Style_Definer x("menu bar", Fl_Menu_Bar::default_style);
+
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.19 1999/08/16 07:31:18 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.20 1999/11/01 02:21:33 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.6 1999/08/16 07:31:33 bill Exp $"
+// "$Id: buttons.cxx,v 1.7 1999/11/01 02:21:41 carl Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -35,17 +35,22 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Fly_Button.H>
 
+void rb_cb(Fl_Widget*, void*) {
+  Fl::theme("essai");
+}
+
 int main(int argc, char ** argv) {
   Fl_Window *window = new Fl_Window(320,170);
   (void) new Fl_Button(10, 10, 130, 30, "Fl_Button");
-  (void) new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
+  Fl_Return_Button* rb = new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
+  rb->callback(rb_cb);
   (void) new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");
   (void) new Fl_Radio_Button(150,50,160,30,"Fl_Radio_Button");
   (void) new Fl_Radio_Button(150,90,160,30,"Fl_Radio_Button");
   (void) new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
   (void) new Fl_Check_Button(150,130,160,30,"Fl_Check_Button");
   (void) new Fl_Fly_Button(10,130,130,30,"Fl_Fly_Button");
-
+  
   window->resizable(window);
   window->end();
   window->show(argc,argv);
@@ -53,5 +58,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.6 1999/08/16 07:31:33 bill Exp $".
+// End of "$Id: buttons.cxx,v 1.7 1999/11/01 02:21:41 carl Exp $".
 //

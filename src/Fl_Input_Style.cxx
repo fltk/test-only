@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.2 1999/10/27 08:40:55 bill Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.3 1999/11/01 02:21:33 carl Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -32,24 +32,25 @@
 
 Fl_Style Fl_Input::default_style = {
   FL_THIN_DOWN_BOX, // box DIFF
-  fl_glyph,	// glyphs
-  FL_HELVETICA,	// label_font
-  FL_HELVETICA,	// text_font
-  FL_NORMAL_LABEL, // label_type
+  0,            // glyph_box
+  0,            // glyphs
+  0,            // label_font
+  0,    	// text_font
+  0,            // label_type
   FL_WHITE,	// color DIFF
-  FL_NO_COLOR,	// label_color
+  FL_NO_COLOR,	// label_color DIFF
   FL_BLUE_SELECTION_COLOR, // selection_color DIFF
-  FL_WHITE,	// selection_text_color
-  FL_NO_COLOR,	// off_color
-  FL_NO_COLOR,	// highlight_color
-  FL_NO_COLOR,	// highlight_label_color
-  FL_NO_COLOR,	// text_color
-  FL_NORMAL_SIZE,// label_size
-  FL_NORMAL_SIZE,// text_size
+  FL_WHITE,	// selection_text_color DIFF
+  0,    	// off_color
+  0,    	// highlight_color
+  0,	        // highlight_label_color
+  0,	        // text_color
+  0,            // label_size
+  0,            // text_size
 };
 
 static Fl_Style_Definer x("input", Fl_Input::default_style);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.2 1999/10/27 08:40:55 bill Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.3 1999/11/01 02:21:33 carl Exp $".
 //

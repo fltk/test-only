@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.19 1999/10/27 08:40:54 bill Exp $"
+// "$Id: Fl_Dial.cxx,v 1.20 1999/11/01 02:21:32 carl Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
     fl_vertex(-0.25, 0.25);
     fl_vertex(0.0,   0.04);
     fl_end_polygon();
-    fl_color(off_color());
+    fl_color(highlight_color());
     fl_begin_loop();
     fl_vertex(0.0,   0.0);
     fl_vertex(-0.04, 0.0);
@@ -70,7 +70,7 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
     fl_end_loop();
   } else {
     fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    fl_color(off_color());
+    fl_color(highlight_color());
     fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
   }
   fl_pop_matrix();
@@ -126,13 +126,17 @@ int Fl_Dial::handle(int e) {
 
 Fl_Style Fl_Dial::default_style = {
   FL_OVAL_BOX,	// box
+  0,            // glyph_box
   0,		// glyph
   0,		// label_font
   0,		// text_font
   0,		// label_type
   0,		// color
   0,		// label_color
-  FL_DARK2	// selection_color
+  FL_DARK2,	// selection_color
+  0,		// selection_text_color
+  0,            // off_color
+  FL_BLACK      // highlight color
   // rest is zero
 };
 
@@ -146,5 +150,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.19 1999/10/27 08:40:54 bill Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.20 1999/11/01 02:21:32 carl Exp $".
 //

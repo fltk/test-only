@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.11 1999/10/27 08:40:56 bill Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.12 1999/11/01 02:21:33 carl Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -56,8 +56,9 @@ void Fl_Light_Button::draw() {
   int ww = hh/2+1;
   int xx = d*2;
   if (w()<ww+2*xx) xx = (w()-ww)/2;
-  FL_THIN_DOWN_BOX->draw(x()+xx, y()+d, ww, hh,
-			 (f&FL_VALUE) ? on_color() : off_color(), 0);
+  glyph()(FL_GLYPH_LIGHT,x()+xx, y()+d, ww, hh,
+          off_color(), (f&FL_VALUE) ? on_color() : off_color(),
+          active_r() ? 0 : FL_INACTIVE, glyph_box());
 
   draw_button_label(x()+W-d, y(), w()-W+d, h(), lc);
 }
@@ -69,6 +70,7 @@ int Fl_Light_Button::handle(int event) {
 
 Fl_Style Fl_Light_Button::default_style = {
   0,		// box
+  FL_THIN_DOWN_BOX,// glyph_box
   0,		// glyphs
   0,		// label_font
   0,		// text_font
@@ -77,11 +79,11 @@ Fl_Style Fl_Light_Button::default_style = {
   0,		// label_color
   FL_YELLOW,	// selection_color
   0,		// selection_text_color
-  FL_GRAY	// off_color
+  0,            // off_color
   // rest is zero
 };
 
-static Fl_Style_Definer x("light_button", Fl_Light_Button::default_style);
+static Fl_Style_Definer x("light button", Fl_Light_Button::default_style);
 
 Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
@@ -92,5 +94,5 @@ Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.11 1999/10/27 08:40:56 bill Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.12 1999/11/01 02:21:33 carl Exp $".
 //

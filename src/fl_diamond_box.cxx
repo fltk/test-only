@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.8 1999/11/01 02:21:37 carl Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -82,13 +82,13 @@ static void wrapper(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_diamond_box = {
-  wrapper, FL_UP_BOX, 0, 0,0,0,0
+  wrapper, FL_UP_BOX, 0, 0, 0,0,0,0
 };
 
 const Fl_Boxtype_ fl_diamond_down_box = {
-  wrapper, FL_DOWN_BOX, 0, 0,0,0,0
+  wrapper, FL_DOWN_BOX, 0, 0, 0,0,0,0
 };
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.8 1999/11/01 02:21:37 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.9 1999/08/23 16:43:12 vincent Exp $"
+// "$Id: fl_labeltype.cxx,v 1.10 1999/11/01 02:21:38 carl Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,12 +29,14 @@
 
 #include <FL/Fl_Labeltype.H>
 #include <FL/fl_draw.H>
+#include <string.h>
 
 void fl_no_label_draw(Fl_Labeltype, const char*,
 		    int, int, int, int, Fl_Color, Fl_Flags)
 {}
 
 Fl_Labeltype_ fl_no_label = {fl_no_label_draw, 0};
+static Fl_Labeltype_Definer none("none", fl_no_label);
 
 void fl_normal_label_draw(Fl_Labeltype, const char* label,
 		    int X, int Y, int W, int H,
@@ -45,6 +47,7 @@ void fl_normal_label_draw(Fl_Labeltype, const char* label,
 }
 
 Fl_Labeltype_ fl_normal_label = {fl_normal_label_draw, 0};
+static Fl_Labeltype_Definer normal("normal", fl_normal_label);
 
 ////////////////////////////////////////////////////////////////
 
@@ -108,6 +111,14 @@ void Fl_Widget::measure_label(int& w, int& h) const {
   fl_measure(label(), w, h);
 }
 
+const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
+  for (Fl_Labeltype_Definer* p = Fl_Labeltype_Definer::first; p; p = p->next)
+    if (!strcasecmp(name, p->name)) return p->labeltype;
+  return 0;
+}
+
+Fl_Labeltype_Definer* Fl_Labeltype_Definer::first = 0;
+
 //
-// End of "$Id: fl_labeltype.cxx,v 1.9 1999/08/23 16:43:12 vincent Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.10 1999/11/01 02:21:38 carl Exp $".
 //

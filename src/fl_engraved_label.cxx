@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.6 1999/11/01 02:21:38 carl Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -50,19 +50,22 @@ void fl_pattern_label(Fl_Labeltype l, const char* label,
 
 static int shadow_data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
 const Fl_Labeltype_ fl_shadow_label = {fl_pattern_label, shadow_data};
+static Fl_Labeltype_Definer shadow("shadow", fl_shadow_label);
 
 static int engraved_data[7][3] = {
   {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
   {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
   {0,0,0}};
 const Fl_Labeltype_ fl_engraved_label = {fl_pattern_label, engraved_data};
+static Fl_Labeltype_Definer engraved("engraved", fl_engraved_label);
 
 static int embossed_data[7][3] = {
   {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
   {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
   {0,0,0}};
 const Fl_Labeltype_ fl_embossed_label = {fl_pattern_label, embossed_data};
+static Fl_Labeltype_Definer embossed("embossed", fl_embossed_label);
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.6 1999/11/01 02:21:38 carl Exp $".
 //

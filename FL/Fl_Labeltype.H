@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.4 1999/10/17 20:40:06 vincent Exp $"
+// "$Id: Fl_Labeltype.H,v 1.5 1999/11/01 02:21:14 carl Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -37,12 +37,27 @@ struct FL_API Fl_Labeltype_ {
 // public:
   void draw(const char* m, int x,int y,int w,int h, Fl_Color c, Fl_Flags f=0)
     const {draw_(this, m, x, y, w, h, c, f);}
+
+  static const Fl_Labeltype_* find(const char* name);
 };
 
 typedef const Fl_Labeltype_* Fl_Labeltype;
 
+// Create a global object of this type with correct parameter to define
+// a new labeltype class.  Plugins can search this to find the labeltypes
+// used by a program:
+class FL_API Fl_Labeltype_Definer {
+public:
+  const char* name;
+  const Fl_Labeltype_* labeltype;
+  Fl_Labeltype_Definer* next;
+  static Fl_Labeltype_Definer* first;
+  Fl_Labeltype_Definer(char* n, const Fl_Labeltype_& s) : name(n), labeltype(&s), next(first) {
+    first = this;}
+};
+
 extern FL_API Fl_Labeltype_ fl_no_label;
-#define FL_NO_LABEL &fl_normal_label
+#define FL_NO_LABEL &fl_no_label
 extern FL_API Fl_Labeltype_ fl_normal_label;
 #define FL_NORMAL_LABEL &fl_normal_label
 extern FL_API const Fl_Labeltype_ fl_symbol_label;

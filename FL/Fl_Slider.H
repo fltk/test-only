@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.15 1999/10/17 20:40:11 vincent Exp $"
+// "$Id: Fl_Slider.H,v 1.16 1999/11/01 02:21:16 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ protected:
 
 private:
 
-  int slider_size_;
+  int slider_size_, highlighted_;
   void draw_bg(int, int, int, int);
 
 };
@@ -75,5 +75,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.15 1999/10/17 20:40:11 vincent Exp $".
+// End of "$Id: Fl_Slider.H,v 1.16 1999/11/01 02:21:16 carl Exp $".
 //

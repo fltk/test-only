@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.41 1999/10/27 08:41:02 bill Exp $"
+# "$Id: Makefile,v 1.42 1999/11/01 02:21:37 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -144,7 +144,8 @@ CPPFILES = \
 	forms_free.cxx \
 	forms_fselect.cxx \
 	forms_pixmap.cxx \
-	forms_timer.cxx
+	forms_timer.cxx \
+	fl_options.cxx
 
 CPPglFILES = \
 	Fl_Gl_Choice.cxx \
@@ -163,7 +164,25 @@ CPPimagesFILES = \
 CFILES = \
 	scandir.c \
 	numericsort.c \
-	vsnprintf.c
+	vsnprintf.c \
+	conf.c \
+	conf_atol.c \
+	conf_endtrim.c \
+	conf_get.c \
+	conf_keys.c \
+	conf_level_indent.c \
+	conf_strcasecmp.c \
+	conf_strcnt.c \
+	conf_list_free.c \
+	conf_trim.c \
+	conf_del.c \
+	conf_error.c \
+	conf_getboolean.c \
+	conf_getlong.c \
+	conf_sections.c \
+	conf_set.c \
+	conf_setboolean.c \
+	conf_setlong.c
 
 # files that were deleted:
 #	fl_set_font.cxx \
@@ -171,8 +190,6 @@ CFILES = \
 #	Fl_Style_Plugins.cxx \
 #	Fl_Style_Util.cxx \
 
-# Carl's style-reading source code:
-#	fl_options.cxx \
 #	Fl_Adjuster_SW.cxx \
 #	Fl_Browser_SW.cxx \
 #	Fl_Button_SW.cxx \
@@ -185,25 +202,6 @@ CFILES = \
 #	Fl_Menu_SW.cxx \
 #	Fl_Slider_SW.cxx \
 #	Fl_Widget_SW.cxx \
-
-#	conf.c \
-#	conf_atol.c \
-#	conf_del.c \
-#	conf_endtrim.c \
-#	conf_error.c \
-#	conf_get.c \
-#	conf_getboolean.c \
-#	conf_getlong.c \
-#	conf_keys.c \
-#	conf_level_indent.c \
-#	conf_list_free.c \
-#	conf_sections.c \
-#	conf_set.c \
-#	conf_setboolean.c \
-#	conf_setlong.c \
-#	conf_strcasecmp.c \
-#	conf_strcnt.c \
-#	conf_trim.c
 
 CLEAN =
 
@@ -292,5 +290,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.41 1999/10/27 08:41:02 bill Exp $".
+# End of "$Id: Makefile,v 1.42 1999/11/01 02:21:37 carl Exp $".
 #

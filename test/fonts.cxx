@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.11 1999/10/27 01:21:11 vincent Exp $"
+// "$Id: fonts.cxx,v 1.12 1999/11/01 02:21:42 carl Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,17 +43,16 @@ public:
     Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {
-  fl_clip(x(), y(), w(), h());
   draw_box();
+  fl_clip(x()+box()->dx(), y()+box()->dy(), w()-2*box()->dx(), h()-2*box()->dy());
   fl_font(font, size, encoding);
   fl_color(FL_BLACK);
   char buffer[32];
   for (int Y = 0; Y < 8; Y++) {
-    for (int X = 0; X < 32; X++) buffer[X] = 32*Y+X;
+    for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X) % 95 +32;
     fl_draw(buffer, 32, x()+3, y()+3+fl_height()*(Y+1));
   }
   fl_font(FL_HELVETICA,10);
-  fl_draw(font->system_name(), x()+3, y()+3, w()-6, h()-6, FL_ALIGN_BOTTOM_LEFT);
   fl_pop_clip();
 }
 
@@ -64,6 +63,7 @@ Fl_Hold_Browser *fontobj, *sizeobj, *encobj;
 Fl_Font* fonts; // list returned by fltk
 
 Fl_Check_Button* bold_button, *italic_button;
+Fl_Box* id_box;
 
 int pickedsize = 14;
 
@@ -123,6 +123,8 @@ void font_cb(Fl_Widget *, long) {
   }
 
   textobj->redraw();
+  id_box->label(textobj->font->system_name());
+  id_box->redraw();
 }
 
 void encoding_cb(Fl_Widget *, long) {
@@ -130,6 +132,7 @@ void encoding_cb(Fl_Widget *, long) {
   if (!i) return;
   textobj->encoding = encobj->text(i);
   textobj->redraw();
+  id_box->redraw();
 }
 
 void size_cb(Fl_Widget *, long) {
@@ -140,12 +143,13 @@ void size_cb(Fl_Widget *, long) {
   pickedsize = atoi(c);
   textobj->size = pickedsize;
   textobj->redraw();
+  id_box->redraw();
 }
 
 char label[400];
 
 void create_the_forms() {
-  form = new Fl_Window(550,370);
+  form = new Fl_Window(550,390);
 
   strcpy(label, "Hello, world!\n");
   int i = strlen(label);
@@ -157,16 +161,20 @@ void create_the_forms() {
 
   textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160,label);
   textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
-  bold_button = new Fl_Check_Button(10, 170, 70, 20, "Bold");
+  id_box = new Fl_Box(10, 172, 530, 15);
+  id_box->box(FL_FRAME_BOX);
+  id_box->labelsize(10);
+  id_box->align(FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+  bold_button = new Fl_Check_Button(10, 190, 70, 20, "Bold");
   bold_button->callback(font_cb, 1);
-  italic_button = new Fl_Check_Button(80, 170, 70, 20, "Italic");
+  italic_button = new Fl_Check_Button(80, 190, 70, 20, "Italic");
   italic_button->callback(font_cb, 1);
-  fontobj = new Fl_Hold_Browser(10, 190, 280, 170);
+  fontobj = new Fl_Hold_Browser(10, 210, 280, 170);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
-  encobj = new Fl_Hold_Browser(300, 190, 100, 170);
+  encobj = new Fl_Hold_Browser(300, 210, 100, 170);
   encobj->callback(encoding_cb, 1);
-  sizeobj = new Fl_Hold_Browser(410, 190, 130, 170);
+  sizeobj = new Fl_Hold_Browser(410, 210, 130, 170);
   sizeobj->callback(size_cb);
   form->end();
 }
@@ -184,5 +192,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.11 1999/10/27 01:21:11 vincent Exp $".
+// End of "$Id: fonts.cxx,v 1.12 1999/11/01 02:21:42 carl Exp $".
 //

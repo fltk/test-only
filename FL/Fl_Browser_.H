@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.17 1999/10/17 20:40:00 vincent Exp $"
+// "$Id: Fl_Browser_.H,v 1.18 1999/11/01 02:21:12 carl Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,7 @@ class FL_API Fl_Browser_ : public Fl_Group {
 public:
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
+  static Fl_Style default_style;
   int select(void *,int=1,int docallbacks=0);
   int select_only(void *,int docallbacks=0);
   int deselect(int docallbacks=0);
@@ -135,5 +136,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.17 1999/10/17 20:40:00 vincent Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.18 1999/11/01 02:21:12 carl Exp $".
 //

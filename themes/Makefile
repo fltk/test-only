@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 1999/10/27 12:57:17 carl Exp $"
+# "$Id: Makefile,v 1.3 1999/11/01 02:21:45 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,7 +23,9 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-all : essai motif classic windows
+THEMES=essai motif classic windows Demo
+
+all : $(THEMES)
 
 ################################################################
 
@@ -51,13 +53,16 @@ classic : classic.o ../lib/$(LIBNAME)
 windows : windows.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
+Demo : Demo.o ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+
 win32 : $(OBJECTS) $(OBJECTS2) ../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltkdll.2 $(GLDLIBS)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2) -L../lib -lfltkdll.2 $(GLDLIBS)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3) -L../lib -lfltkdll.2 $(GLDLIBS)
 
 clean :
-	-@ rm -f *.o *.po $(PROGRAM) $(PROGRAM2) $(CLEAN) core *~ makedepend
+	-@ rm -f *.o *.po $(THEMES) core *~ makedepend
 	@touch makedepend
 
 #depend:
@@ -65,5 +70,5 @@ clean :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.2 1999/10/27 12:57:17 carl Exp $".
+# End of "$Id: Makefile,v 1.3 1999/11/01 02:21:45 carl Exp $".
 #

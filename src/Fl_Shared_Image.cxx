@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.10 1999/10/22 03:11:21 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.11 1999/11/01 02:21:35 carl Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -114,7 +114,7 @@ void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
   }
 }
 
-Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name) {
+Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, const char* name) {
   if(image == 0) return 0;
   int c = strcmp(name, image->name);
   if(c == 0) return image;
@@ -123,7 +123,7 @@ Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name) {
 }
 
 
-char* Fl_Shared_Image::get_filename()
+const char* Fl_Shared_Image::get_filename()
 {
   if (name[0] == '/') return name;
   static char *s;
@@ -137,7 +137,7 @@ char* Fl_Shared_Image::get_filename()
 
 
 Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
-				      char* name, unsigned char *datas)
+				      const char* name, unsigned char *datas)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if(!image)
@@ -173,7 +173,7 @@ void Fl_Shared_Image::reload(uchar* pdatas)
   if (pdatas) datas = pdatas;
   measure(w, h);
 }
-void Fl_Shared_Image::reload(char* name, uchar* pdatas)
+void Fl_Shared_Image::reload(const char* name, uchar* pdatas)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if (image) image->reload(pdatas);
@@ -202,7 +202,7 @@ int Fl_Shared_Image::remove()
   forbid_delete = 1;
   return 1;
 }
-int Fl_Shared_Image::remove(char* name)
+int Fl_Shared_Image::remove(const char* name)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if (image) return image->remove();
@@ -233,5 +233,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.10 1999/10/22 03:11:21 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.11 1999/11/01 02:21:35 carl Exp $"
 //

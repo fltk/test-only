@@ -1,5 +1,6 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
+images_dir ./ 
 do_not_include_H_from_C 
 header_name {.h} 
 code_name {.cxx} 
@@ -12,7 +13,7 @@ Function {make_images_dir_window()} {open
     label {Images root directory}
     callback {images_dir_window->hide();
 modal=0;} open
-    xywh {26 190 310 100} visible
+    xywh {409 202 310 100} visible
   } {
     Fl_Return_Button {} {
       label OK
@@ -26,13 +27,13 @@ modal=0;}
 modal=0; cancel=1;}
       private xywh {180 70 60 20}
     }
-    Fl_Input images_dir_input {selected
+    Fl_Input images_dir_input {
       xywh {10 15 220 20} hotspot
     }
     Fl_Button {} {
       label {Browse ...}
-      callback {browse_dir_cb();}
-      private xywh {230 15 70 20} box THIN_UP_BOX
+      callback {browse_dir_cb();} selected
+      private xywh {230 15 70 20}
     }
     Fl_Box {} {
       label {(relative to the location of the .fl file)}

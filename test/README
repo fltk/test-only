@@ -23,8 +23,6 @@ mandelbrot:	A true application, using panels built in Fluid
 
 menubar:	Demo of how FL's menus work
 
-shiny:		Demo of drawing FL's controls using OpenGL
-
 forms:		An XForms program to demonstrate emulation
 
 colbrowser:	Another XForms program that is actually useful

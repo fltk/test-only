@@ -1,5 +1,5 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -10,12 +10,12 @@ Function {make_about_panel(const char *copyright)} {open
 } {
   Fl_Window about_panel {
     label {about fluid} open
-    xywh {328 293 303 258} resizable hotspot box UP_BOX color 97 selection_color 47 non_modal visible
+    xywh {307 284 303 258} resizable hotspot box UP_BOX color 97 selection_color 47 non_modal visible
   } {
     Fl_Group display_group {open
       xywh {10 10 289 240}
     } {
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {55 30 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
       } {
         Fl_Box {} {
@@ -23,7 +23,7 @@ Function {make_about_panel(const char *copyright)} {open
           xywh {85 120 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
         }
       }
-      Fl_Box {} {
+      Fl_Box {} {selected
         xywh {50 10 90 40} box FLAT_BOX color 97 selection_color 47
       }
       Fl_Box {} {
@@ -31,10 +31,9 @@ Function {make_about_panel(const char *copyright)} {open
       }
       Fl_Box {} {
         xywh {45 30 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
-        code3 {h<èFA}
       }
       Fl_Group {} {
-        label fluid selected
+        label fluid open
         xywh {10 135 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
       } {
         Fl_Box {} {
@@ -49,9 +48,8 @@ Function {make_about_panel(const char *copyright)} {open
       Fl_Box {} {
         xywh {57 135 56 2} box FLAT_BOX color 14 selection_color 47
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {145 23 149 122} box OFLAT_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 7 selection_color 47 labelsize 18
-        code3 {ð9ÐA}
       } {
         Fl_Box {} {
           label {FLTK User
@@ -66,7 +64,7 @@ Version 2.0}
 Click here for more information}
         callback {display_group->hide();
 copyright_box->show();}
-        xywh {175 164 95 41} align 524416 box BORDER_FRAME labelcolor 55 labelsize 10
+        xywh {175 164 95 41} align 524416 box BORDER_BOX labelsize 10
       }
     }
     Fl_Box copyright_box {

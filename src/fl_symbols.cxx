@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.10 1999/10/31 02:54:41 bill Exp $"
+// "$Id: fl_symbols.cxx,v 1.11 1999/11/01 02:21:39 carl Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -386,6 +386,7 @@ static void fl_symbol_label_draw(Fl_Labeltype, const char* label,
 }
 
 const Fl_Labeltype_ fl_symbol_label = {fl_symbol_label_draw, 0};
+static Fl_Labeltype_Definer symbol("symbol", fl_symbol_label);
 
 #include <FL/Fl.H>
 
@@ -394,5 +395,5 @@ void Fl::enable_symbols() {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.10 1999/10/31 02:54:41 bill Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.11 1999/11/01 02:21:39 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.9 1999/10/17 20:40:11 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.10 1999/11/01 02:21:15 carl Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ class FL_API Fl_Shared_Image : public Fl_Image {
 protected:
   Fl_Shared_Image* l1;    // Left leaf in the binary tree
   Fl_Shared_Image* l2;    // Right leaf in the binary tree
-  char* 	   name;  // Used to indentify the image, and as filename
+  const char* 	   name;  // Used to indentify the image, and as filename
   unsigned char*   datas; // If non zero, pointers on inlined compressed datas
   unsigned int     used;  // Last time used, for cache handling purpose
   int              refcount; // Number of time this image has been get
@@ -48,7 +48,7 @@ protected:
   void find_less_used();
   static void check_mem_usage();
 
-  char* get_filename();   // Return the filename obtained from the concatenation
+  const char* get_filename();// Return the filename obtained from the concatenation
                           // of the image root directory and this image name
                           // WARNING : the returned pointer will be 
                           // available only until next call to get_filename
@@ -57,7 +57,7 @@ protected:
   virtual void read() = 0;// decompress the image and create its pixmap
 
   static void insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
-  static Fl_Shared_Image* find(Fl_Shared_Image* image, char* name);
+  static Fl_Shared_Image* find(Fl_Shared_Image* image, const char* name);
   void remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image);
 
 
@@ -66,23 +66,23 @@ public:
   // the given name doesn't already exist. Use datas, or read from the
   // file with filename name if datas==0.
   static Fl_Shared_Image* get(Fl_Shared_Image* (*create)(), 
-			      char* name, unsigned char *datas=0);
+			      const char* name, unsigned char *datas=0);
 
   // Reload the image, useful if it has changed on disk, or if the datas
   // in memory have changed (you can also give a new pointer on datas)
   void reload(uchar* datas=0);
-  static void reload(char* name, uchar* datas=0);
+  static void reload(const char* name, uchar* datas=0);
 
   // Remove an image from the database and delete it if its refcount has 
   // falled to zero
   // Each remove decrement the refcount, each get increment it
   // Return 1 if it has been really deleted.
   int remove();
-  static int remove(char* name);
+  static int remove(const char* name);
 
   // Try to guess the filetype
   // Beware that calling this force you to link in all image types !
-  static Fl_Image_Type* guess(char* name, unsigned char *datas=0);
+  static Fl_Image_Type* guess(const char* name, unsigned char *datas=0);
 
   // Set the position where images are looked for on disk
   static void set_root_directory(char *d);
@@ -98,11 +98,11 @@ public:
 // Description of a file format
 struct FL_API Fl_Image_Type {
   // Name of the filetype as it appear in the source code (uppercase)
-  char* name;
+  const char* name;
   // Function to test the filetype
   int (*test)(unsigned char *datas, size_t size=0); 
   // Function to get/create an image of this type
-  Fl_Shared_Image* (*get)(char* name, uchar* datas=0);
+  Fl_Shared_Image* (*get)(const char* name, uchar* datas=0);
 };
 extern FL_API Fl_Image_Type fl_image_filetypes[];
 
@@ -117,7 +117,7 @@ public:
 // Check the given buffer if it is in PNG format
   static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H); // Return width and heigth
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
+  static Fl_Shared_Image* get(const char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
@@ -129,7 +129,7 @@ class FL_API Fl_GIF_Image : public Fl_Shared_Image {
 public:
   static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
+  static Fl_Shared_Image* get(const char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
@@ -141,7 +141,7 @@ class FL_API Fl_XPM_Image : public Fl_Shared_Image {
 public:
   static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
+  static Fl_Shared_Image* get(const char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
@@ -153,7 +153,7 @@ class FL_API Fl_BMP_Image : public Fl_Shared_Image {
 public:
   static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
+  static Fl_Shared_Image* get(const char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
@@ -165,7 +165,7 @@ class FL_API Fl_JPEG_Image : public Fl_Shared_Image {
 public:
   static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
+  static Fl_Shared_Image* get(const char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
@@ -176,7 +176,7 @@ extern FL_API Fl_Bitmap nosuch_bitmap;
 class FL_API Fl_UNKNOWN_Image {
 public:
   static int test(unsigned char *, size_t =0) { return 1; };
-  static Fl_Shared_Image* get(char*, uchar* = 0) { 
+  static Fl_Shared_Image* get(const char*, uchar* = 0) { 
     return (Fl_Shared_Image*) &nosuch_bitmap; 
   };
 };
@@ -184,5 +184,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.9 1999/10/17 20:40:11 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.10 1999/11/01 02:21:15 carl Exp $"
 //

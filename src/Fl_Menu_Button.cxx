@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.13 1999/10/12 22:22:54 vincent Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.14 1999/11/01 02:21:34 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@ void Fl_Menu_Button::draw() {
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
+// CET - FIXME
   if (active_r()) {
     fl_color(FL_DARK3); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
     fl_color(FL_LIGHT3); fl_line(X+H, Y, X+H/2, Y+H);
@@ -75,7 +76,7 @@ int Fl_Menu_Button::handle(int e) {
   case FL_ENTER:
   case FL_LEAVE:
     if (box() && !type()) {
-      if (highlight_color() && active_r()) redraw();
+      if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
       return 1;
     }
     return 0;
@@ -95,8 +96,29 @@ int Fl_Menu_Button::handle(int e) {
   }
 }
 
-Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l) : Fl_Menu_(X,Y,W,H,l) {}
+Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
+  : Fl_Menu_(X,Y,W,H,l)
+{
+  style(default_style);
+}
+
+Fl_Style Fl_Menu_Button::default_style = {
+  0,                    // box
+  0,                    // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,		        // label_type
+  0,		        // color
+  0,		        // label_color
+  0,                    // selection_color / on_color
+  0,		        // selection_text_color
+  FL_GRAY,	        // off_color
+  FL_LIGHT2             // highlight color
+};
+
+static Fl_Style_Definer x("menu button", Fl_Menu_Button::default_style);
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.13 1999/10/12 22:22:54 vincent Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.14 1999/11/01 02:21:34 carl Exp $".
 //

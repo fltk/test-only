@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.H,v 1.12 1999/10/17 20:40:06 vincent Exp $"
+// "$Id: Fl_Menu_Bar.H,v 1.13 1999/11/01 02:21:14 carl Exp $"
 //
 // Menu bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,16 +29,19 @@
 #include "Fl_Menu_.H"
 
 class FL_API Fl_Menu_Bar : public Fl_Menu_ {
-protected:
-    int handle(int);
-    void draw();
 public:
-    Fl_Menu_Bar(int x,int y,int w,int h,const char *l=0)
-      : Fl_Menu_(x,y,w,h,l) {}
+  Fl_Menu_Bar(int x,int y,int w,int h,const char *l=0)
+    : Fl_Menu_(x,y,w,h,l) { style(default_style); }
+  static Fl_Style default_style;
+protected:
+  int handle(int);
+  void draw();
+private:
+  const Fl_Menu_Item *highlight_, *last_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_Bar.H,v 1.12 1999/10/17 20:40:06 vincent Exp $".
+// End of "$Id: Fl_Menu_Bar.H,v 1.13 1999/11/01 02:21:14 carl Exp $".
 //

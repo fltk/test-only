@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.15 1999/10/03 06:31:45 bill Exp $"
+// "$Id: menubar.cxx,v 1.16 1999/11/01 02:21:42 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -139,6 +139,7 @@ Fl_Menu_Item menutable[] = {
     {"Italic",	0, 0},
     {"BoldItalic",0,0},
     {"Small",	0, 0},
+    {"Large",	0, 0},
     {"Emboss",	0, 0},
     {"Engrave",	0, 0},
     {"Shadow",	0, 0},
@@ -181,29 +182,28 @@ int main(int argc, char **argv) {
   
   window = new Fl_Window(WIDTH,400);
   Fl_Menu_Bar menubar(0,0,WIDTH,30); menubar.menu(menutable);
-#if 1
   menubar.find("&Font/Normal")->labelfont(FL_HELVETICA);
   menubar.find("&Font/Bold")->labelfont(FL_BOLD);
   menubar.find("&Font/Italic")->labelfont(FL_ITALIC);
   menubar.find("&Font/BoldItalic")->labelfont(FL_BOLD|FL_ITALIC);
   menubar.find("&Font/Small")->labelsize(10);
+  menubar.find("&Font/Large")->labelsize(24);
   menubar.find("&Font/Emboss")->labeltype(FL_EMBOSSED_LABEL);
   menubar.find("&Font/Engrave")->labeltype(FL_ENGRAVED_LABEL);
   menubar.find("&Font/Shadow")->labeltype(FL_SHADOW_LABEL);
   menubar.find("&Font/@->")->labeltype(FL_SYMBOL_LABEL);
   menubar.find("&Checkbox/Red")->labelcolor(FL_RED);
-  menubar.find("&Checkbox/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Checkbox/Red")->highlight_label_color(FL_RED);
   menubar.find("&Checkbox/Red")->light_color(FL_RED);
   menubar.find("&Checkbox/Black")->labelcolor(FL_BLACK);
-  menubar.find("&Checkbox/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Checkbox/Black")->highlight_label_color(FL_BLACK);
   menubar.find("&Checkbox/Black")->light_color(FL_BLACK);
   menubar.find("&Radio/Red")->labelcolor(FL_RED);
-  menubar.find("&Radio/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Radio/Red")->highlight_label_color(FL_RED);
   menubar.find("&Radio/Red")->light_color(FL_RED);
   menubar.find("&Radio/Black")->labelcolor(FL_BLACK);
-  menubar.find("&Radio/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Radio/Black")->highlight_label_color(FL_BLACK);
   menubar.find("&Radio/Black")->light_color(FL_BLACK);
-#endif
   menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
@@ -231,5 +231,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.15 1999/10/03 06:31:45 bill Exp $".
+// End of "$Id: menubar.cxx,v 1.16 1999/11/01 02:21:42 carl Exp $".
 //

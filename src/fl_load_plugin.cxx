@@ -1,5 +1,6 @@
 // fl_plugin.cxx
 
+#include <FL/Fl.H>
 #include <FL/fl_load_plugin.H>
 #include "config.h"
 
@@ -12,7 +13,7 @@ typedef void* DLhandle;
 
 #else
 
-// simulate posix on windoze:
+// simulate posix on windows:
 #include <windows.h>
 #include <winbase.h>
 typedef HINSTANCE DLhandle;
@@ -29,54 +30,31 @@ typedef HINSTANCE DLhandle;
 #include <stdlib.h>
 #include <errno.h>
 
-typedef bool (*Function)(const char *);
+typedef int (*Function)(int, const char * const *);
 
-bool fl_load_plugin(const char* name, const char* type, const char* func) {
-  char s[1024];
-
-  // see if an absolute name was given:
-  if (name[0] == '/' || name[0] == '.'
-#ifdef WIN32
-      || name[0] == '\\' || name[1]==':'
-#endif
-      ) goto TRYIT;
-
-  // try a hidden file in the home directory:
+// returns -1 if plugin file not found
+// returns -2 if plugin file couldn't be opened
+// returns -3 if couldn't find plugin_main()
+// returns -4 if uid != euid (setuid program?)
+// otherwise, returns result of plugin_main() (should be 0)
+int fl_load_plugin(const char* name, const char* func) {
 #ifndef WIN32
-  if (getuid() == geteuid()) {
-#endif
-    const char* h = getenv("HOME");
-#ifdef WIN32
-    if (!h) h = getenv("WINDIR");
-#endif
-    if (h) {
-      snprintf(s, 1024, "%s/.%s/%s", h, type, name);
-      if (access(s, F_OK) == 0) {name = s; goto TRYIT;}
-    }
-#ifndef WIN32
+  if (getuid() != geteuid()) {
+    fprintf(stderr, "fl_load_plugin(): Plugin loading disabled for setuid programs.\n");
+    return -4;
   }
 #endif
-
-  // try the normal location:
-  snprintf(s, 1024, "/usr/local/lib/%s/%s", type, name);
-  if (access(s, F_OK) == 0) {name = s; goto TRYIT;}
-
-  // also try this:
-  snprintf(s, 1024, "/lib/%s/%s", type, name);
-  if (access(s, F_OK) == 0) {name = s; goto TRYIT;}
-
-  return false;
-
- TRYIT:
-  // now open it, any further errors will be printed:
+  // open plugin, any errors will be printed
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (handle) {
     Function f = (Function)dlsym(handle, func);
-    if (f) return f(name);
+    if (f) {
+      const char* argv[2] = { name, 0 };
+      return f(1, argv);
+    }
   }
-  fprintf(stderr, "%s\n", dlerror());
-  if (handle) dlclose(handle);
-  return false;
-
+  fprintf(stderr, "fl_load_plugin(): %s\n", dlerror());
+  if (handle) { dlclose(handle); return -3; }
+  return -2;
 }
 

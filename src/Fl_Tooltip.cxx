@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.13 1999/10/27 08:40:59 bill Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.14 1999/11/01 02:21:35 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@ int Fl_Tooltip::enabled_ = 1;
 
 Fl_Style Fl_Tooltip::default_style = {
   FL_BORDER_BOX,// box
+  0,            // glyph_box
   0,		// glyphs
   FL_HELVETICA,	// label_font (this is the one that is used)
   0,		// text_font
@@ -60,6 +61,18 @@ static Fl_TooltipBox *window = 0;
 static void tooltip_timeout(Fl_Widget *v) {
   if (!v || !v->tooltip() || Fl::grab()) return;
 
+  if (!window) { // create the reusable X window
+    Fl_Group* saveCurrent = Fl_Group::current();
+    Fl_Group::current(0);
+    window = new Fl_TooltipBox;
+    window->clear_border();
+    window->end();
+    Fl_Group::current(saveCurrent);
+  }
+
+  // this cast bypasses the normal Fl_Window label() code:
+  ((Fl_Widget*)window)->label(v->tooltip());
+
   fl_font(Fl_Tooltip::default_style.label_font,
 	  Fl_Tooltip::default_style.label_size);
   int ww, hh;
@@ -85,19 +98,8 @@ static void tooltip_timeout(Fl_Widget *v) {
   }
   if (oy < 0) oy = 0;
 
-  if (!window) { // create the reusable X window
-    Fl_Group* saveCurrent = Fl_Group::current();
-    Fl_Group::current(0);
-    window = new Fl_TooltipBox;
-    window->clear_border();
-    window->end();
-    Fl_Group::current(saveCurrent);
-  }
-
-  // this cast bypasses the normal Fl_Window label() code:
-  ((Fl_Widget*)window)->label(v->tooltip());
-
   window->resize(ox, oy, ww, hh);
+
   window->show();
 }
 
@@ -135,5 +137,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.13 1999/10/27 08:40:59 bill Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.14 1999/11/01 02:21:35 carl Exp $".
 //

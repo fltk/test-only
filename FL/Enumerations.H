@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.33 1999/10/27 01:21:06 vincent Exp $"
+// "$Id: Enumerations.H,v 1.34 1999/11/01 02:21:10 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -26,19 +26,7 @@
 #ifndef Fl_Enumerations_H
 #define Fl_Enumerations_H
 
-//
-// The following is only used when building DLLs under WIN32
-//
-
-#if defined(WIN32) && defined(FL_DLL)
-#  ifdef FL_LIBRARY
-#    define FL_API	__declspec(dllexport)
-#  else
-#    define FL_API	__declspec(dllimport)
-#  endif /* FL_LIBRARY */
-#else
-#  define FL_API
-#endif /* FL_DLL */
+#include <FL/Fl_Export.h>
 
 #define FL_EXPORT // Not used anymore, but there are still some in sources
 
@@ -202,6 +190,7 @@ enum Fl_Damage {
   FL_DAMAGE_OVERLAY     = 0x08,
   FL_DAMAGE_CHILD_LABEL = 0x10,
   FL_DAMAGE_LAYOUT	= 0x20,
+  FL_DAMAGE_HIGHLIGHT   = 0x40,
   FL_DAMAGE_ALL         = 0x80
 };
 
@@ -214,5 +203,5 @@ enum Fl_Thread_Policy {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.33 1999/10/27 01:21:06 vincent Exp $".
+// End of "$Id: Enumerations.H,v 1.34 1999/11/01 02:21:10 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.10 1999/04/12 15:40:23 mike Exp $"
+// "$Id: fl_options.cxx,v 1.11 1999/11/01 02:21:38 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,223 +29,329 @@
 #include <stdlib.h>
 #include <FL/Fl.H>
 #include <FL/conf.h>
+#include <FL/fl_load_plugin.H>
+#include <FL/Fl_Color.H>
+#include <FL/Fl_Font.H>
+#include <FL/Fl_Labeltype.H>
 #include <config.h>
 #ifdef WIN32
 #include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+#ifndef R_OK
+#define R_OK 4
 #endif
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
 #endif
 
-const char* Fl::_style = "default";
+const char* Fl::style_ = 0;
+int Fl::use_styles = 1;
 
-// initialization to zero not necessary, compiler should do it.
+const char* Fl::theme_ = 0;
+int Fl::use_themes = 1;
 
-#ifdef FL_DEFAULT_STYLE
-Fl_Widget_Style Fl::_widget_style = FL_DEFAULT_STYLE;
-#else
-Fl_Widget_Style Fl::_widget_style = FL_WINDOWS_STYLE;
-#endif // FL_DEFAULT_STYLE
-
-// styles loaded
-int Fl::s_menu_item = 0;
-int Fl::s_browser = 0;
-int Fl::s_button = 0;
-int Fl::s_chart = 0;
-int Fl::s_light_button = 0;
-int Fl::s_check_button = 0;
-int Fl::s_choice = 0;
-int Fl::s_menu_ = 0;
-int Fl::s_menu_bar = 0;
-int Fl::s_menu_button = 0;
-int Fl::s_widget = 0;
-int Fl::s_window = 0;
-int Fl::s_slider = 0;
-int Fl::s_return_button = 0;
-int Fl::s_round_button = 0;
-int Fl::s_fly_button = 0;
-int Fl::s_scrollbar = 0;
-int Fl::s_input = 0;
-int Fl::s_output = 0;
-int Fl::s_adjuster = 0;
-int Fl::s_counter = 0;
-int Fl::s_roller = 0;
-int Fl::s_tooltip = 0;
-int Fl::s_background = 0;
-int Fl::s_mi_button = 0;
-
-void Fl::load_styles(int b) {
-  s_menu_item =
-  s_browser =
-  s_button =
-  s_chart =
-  s_light_button =
-  s_check_button =
-  s_choice =
-  s_menu_ =
-  s_menu_bar =
-  s_menu_button =
-  s_widget =
-  s_window =
-  s_slider =
-  s_return_button =
-  s_round_button =
-  s_fly_button =
-  s_scrollbar =
-  s_input =
-  s_output =
-  s_adjuster =
-  s_counter =
-  s_roller =
-  s_tooltip =
-  s_background =
-  s_mi_button =
-  b ? 0 : 1;
-  
-  if (b) Fl::redraw();
-}
-
-void Fl::style(const char *s) {
-  _style = s;
-
-  if (s) load_styles(1);
-  else load_styles(0);
-}
-
-const char *Fl::style() {
-  static char temp[80];
-
-  if (_style && !strcasecmp(_style, "default") &&
-      !find("default style", temp, sizeof(temp)))
-    return temp;
-
-  return _style;
-}
-
-// load a bunch of attributes
-void Fl::load_attributes(const char *section, uchar array[], Attribute *attrib) {
-  char key[256];
-
-  for (; attrib->key; attrib++) {
-    snprintf(key, sizeof(key), "%s/%s", section, attrib->key);
-    find(key, array[attrib->which], 1);
-  }
-}
-
-// get the string value of a key from the global or user's config file
-int Fl::find(const char *key, char *value, int value_length, int sf) {
-  int  r1 = CONF_ERR_FILE, r2;
-  char cf[PATH_MAX];
-
-  if (sf && !Fl::style()) return CONF_ERR_ARGUMENT;
-
-#ifndef WIN32
-  char *cptr = getenv("HOME");
-
-  if (sf)
-    snprintf(cf, sizeof(cf), "%s/.fltk/styles/%s", cptr ? cptr : "", Fl::style());
-  else
-    snprintf(cf, sizeof(cf), "%s/.fltk/config", cptr ? cptr : "");
-
-  r1 = getconf(cf, key, value, value_length);
-  if (!r1) return r1;
-
-  if (sf)
-    snprintf(cf, sizeof(cf), "/etc/fltk/styles/%s", Fl::style());
-  else
-    strcpy(cf, "/etc/fltk/config");
-#else
-  char windir[PATH_MAX];
-  GetWindowsDirectoryA(windir, sizeof(windir));
-  if (sf)
-    snprintf(cf, sizeof(cf), "%s\\fltk\\styles\\%s", windir, Fl::style());
-  else
-    snprintf(cf, sizeof(cf), "%s\\fltk\\config", windir);
+static int is_path_rooted(const char *fn) {
+  // see if an absolute name was given:
+  if (fn[0] == '/' || fn[0] == '.'
+#ifdef WIN32
+      || fn[0] == '\\' || fn[1]==':'
 #endif
-  r2 = getconf(cf, key, value, value_length);
-  if (!r2) return r2;
-  if (r1 == CONF_ERR_FILE && r2 == CONF_ERR_FILE) return CONF_ERR_FILE;
-  if (r1 != CONF_ERR_FILE) return r1;
-  return r2;
-}
-
-// get the uchar value of a key from the global or user's config file
-int Fl::find(const char *key, uchar &ucvalue, int sf) {
-  int  r;
-  char buf[80];
-
-  r = find(key, buf, sizeof(buf), sf);
-
-  if (!r) ucvalue = (uchar)atoi(buf);
-
-  return r;
-}
-
-// get the int value of a key from the global or user's config file
-int Fl::find(const char *key, int &ivalue, int sf) {
-  int  r;
-  char buf[80];
-
-  r = find(key, buf, sizeof(buf), sf);
-
-  if (!r) ivalue = atoi(buf);
-
-  return r;
-}
-
-/* CET - These methods are not used currently
-
-// get the long value of a key from the global or user's config file
-int Fl::find(const char *key, long &lvalue, int sf) {
-  int  r;
-  char buf[80];
-  
-  r = find(key, buf, sizeof(buf), sf);
- 
-  if (!r) lvalue = atol(buf);
- 
-  return r;
-}
-
-// get the boolean value of a key from the global or user's config file
-int Fl::find_boolean(const char *key, int &bvalue, int sf)
-{
-  int  r;
-  char svalue[80];
-  
-  r = find(key, svalue, sizeof(svalue), sf);
-  if (r) return r;
-
-  if (!strcasecmp(svalue, "ON") ||
-      !strcasecmp(svalue, "YES") ||
-      !strcasecmp(svalue, "Y") ||
-      !strcmp(svalue, "1") ||
-      !strcasecmp(svalue, "TRUE") ||
-      !strcasecmp(svalue, "T"))
-  {
-    bvalue = 1;
-  }
-  else
-  if (!strcasecmp(svalue, "OFF") ||
-      !strcasecmp(svalue, "NO") ||
-      !strcasecmp(svalue, "N") ||
-      !strcmp(svalue, "0") ||
-      !strcasecmp(svalue, "FALSE") ||
-      !strcasecmp(svalue, "F"))
-  {
-    bvalue = 0;
-  }
-  else
-  {
-    return CONF_ERR_NOVALUE;
-  }
-
+      )
+    return 1;
   return 0;
 }
 
-*/
+static Fl_Color grok_color(const char* cf, const char *colstr) {
+  char key[80], val[32];
+  const char *p = colstr;
+  snprintf(key, sizeof(key), "colors/%s", colstr);
+  if (!getconf(cf, key, val, sizeof(val))) p = val;
 
-//
-// End of "$Id: fl_options.cxx,v 1.10 1999/04/12 15:40:23 mike Exp $".
-//
+  if (strspn(p, "0123456789") == strlen(p)) return (Fl_Color)atol(p);
+
+  return fl_rgb(p);
+}
+
+
+static Fl_Font grok_font(const char* cf, const char* fontstr) {
+  char key[80], val[80];
+  const char *p = fontstr;
+  snprintf(key, sizeof(key), "fonts/%s", fontstr);
+  if (!getconf(cf, key, val, sizeof(val))) p = val;
+
+  if (strspn(p, "0123456789") == strlen(p)) return fl_fonts + atol(p);
+
+  static char* fonts[] = {
+    "helvetica",
+    "helvetica bold",
+    "helvetica italic",
+    "helvetica bold italic",
+    "courier",
+    "courier bold",
+    "courier italic",
+    "courier bold italic",
+    "times",
+    "times bold",
+    "times italic",
+    "times bold italic",
+    "symbol",
+    "screen",
+    "screen bold",
+    "dingbats",
+    0
+  };
+
+  for (int i = 0; fonts[i]; i++)
+    if (!strcasecmp(p, fonts[i])) return fl_fonts + i;
+
+  // not found
+  return 0;
+}
+
+int Fl::loadstyle(int b) {
+  use_styles = b;
+  if (!b) return 0;
+
+  char temp[PATH_MAX];
+  if (is_path_rooted(style())) strncpy(temp, style(), sizeof(temp));
+  else snprintf(temp, sizeof(temp), "styles/%s", style());
+
+  const char *p = fl_find_config_file(temp);
+  if (!p) { fprintf(stderr, "Cannot find style file: %s\n", temp); return -1; }
+
+  char sfile[PATH_MAX];
+  strcpy(sfile, p);
+
+  if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
+    for (p = strtok(temp, CONF_WHITESPACE); p; p = strtok(NULL, CONF_WHITESPACE))
+      if (theme(p)) fprintf(stderr, "Cannot load theme file: %s\n", p);
+
+  char valstr[80];
+  Fl_Color col;
+
+  int res = ::getconf(sfile, "global colors/background", valstr, sizeof(valstr));
+  if (res) return -6; // what happened?
+  col = grok_color(sfile, valstr);
+  fl_background(fl_get_color(col));
+
+  static struct { char* key; Fl_Color col; } colors[] = {
+    { "DARK1", FL_DARK1 },
+    { "DARK2", FL_DARK2 },
+    { "DARK3", FL_DARK3 },
+    { "LIGHT1", FL_LIGHT1 },
+    { "LIGHT2", FL_LIGHT2 },
+    { "LIGHT3", FL_LIGHT3 },
+    { "FREE1", FL_FREE_COLOR },
+    { "FREE2", (Fl_Color)(FL_FREE_COLOR+1) },
+    { "FREE3", (Fl_Color)(FL_FREE_COLOR+2) },
+    { "FREE4", (Fl_Color)(FL_FREE_COLOR+3) },
+    { 0 }
+  };
+
+  char s[32];
+
+  for (int i = 0; colors[i].key; i++) {
+    sprintf(s, "global colors/%s", colors[i].key);
+    int res = ::getconf(sfile, s, valstr, sizeof(valstr));
+    if (!res) {
+      col = grok_color(sfile, valstr);
+      fl_set_color(colors[i].col, col);
+    }
+  }
+
+  conf_list clist = 0;
+  conf_entry* cent;
+
+  Fl_Font font;
+  Fl_Labeltype labeltype;
+  Fl_Boxtype boxtype;
+
+  if (!getconf_sections(sfile, "widgets", &clist)) {
+    for (cent = clist; cent; cent = cent->next) {
+      Fl_Style* style = Fl_Style::find(cent->data);
+      if (!style) continue;
+
+      // box type
+      snprintf(temp, sizeof(temp), "widgets/%s/box", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->set_box(boxtype);
+
+
+      // glyph box type
+      snprintf(temp, sizeof(temp), "widgets/%s/glyph box", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->set_glyph_box(boxtype);
+
+
+      // color
+      snprintf(temp, sizeof(temp), "widgets/%s/color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_color(grok_color(sfile, valstr));
+
+      // label color
+      snprintf(temp, sizeof(temp), "widgets/%s/label color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_label_color(grok_color(sfile, valstr));
+
+      // selection color
+      snprintf(temp, sizeof(temp), "widgets/%s/selection color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_selection_color(grok_color(sfile, valstr));
+
+      // selection text color
+      snprintf(temp, sizeof(temp), "widgets/%s/selection text color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_selection_text_color(grok_color(sfile, valstr));
+
+      // off color
+      snprintf(temp, sizeof(temp), "widgets/%s/off color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_off_color(grok_color(sfile, valstr));
+
+      // highlight color
+      snprintf(temp, sizeof(temp), "widgets/%s/highlight color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_highlight_color(grok_color(sfile, valstr));
+
+      // highlight label color
+      snprintf(temp, sizeof(temp), "widgets/%s/highlight label color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_highlight_label_color(grok_color(sfile, valstr));
+
+      // color
+      snprintf(temp, sizeof(temp), "widgets/%s/text color", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_text_color(grok_color(sfile, valstr));
+
+      // label font
+      snprintf(temp, sizeof(temp), "widgets/%s/label font", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        if ( (font = grok_font(sfile, valstr)) ) style->set_label_font(font);
+
+      // text font
+      snprintf(temp, sizeof(temp), "widgets/%s/text font", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        if ( (font = grok_font(sfile, valstr)) ) style->set_text_font(font);
+
+      // label type
+      snprintf(temp, sizeof(temp), "widgets/%s/label type", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->set_label_type(labeltype);
+
+      // label size
+      snprintf(temp, sizeof(temp), "widgets/%s/label size", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_label_size(atol(valstr));
+
+      // text size
+      snprintf(temp, sizeof(temp), "widgets/%s/text size", cent->data);
+      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+        style->set_text_size(atol(valstr));
+
+    }
+    conf_list_free(&clist);
+  }
+
+  Fl::redraw();
+  return 0;
+}
+
+int Fl::style(const char *s) {
+  if (style_) free((void*)style_);
+  if (s) {
+    style_ = strdup(s);
+    return loadstyle(1);
+  }
+
+  style_ = 0;
+  return loadstyle(0);
+}
+
+const char* Fl::style() {
+  static char* s = new char[PATH_MAX];
+
+  if (!use_styles) return 0;
+  if (!style_) style_ = strdup("default");
+  strncpy(s, style_, PATH_MAX);
+  if (!strcasecmp(s, "default")) getconf("default style", s, PATH_MAX);
+
+  return s;
+}
+
+
+int Fl::loadtheme(int b) {
+  use_themes = b;
+  if (!b) return 0;
+
+  char temp[PATH_MAX];
+  if (is_path_rooted(theme())) strncpy(temp, theme(), sizeof(temp));
+  else snprintf(temp, sizeof(temp), "themes/%s", theme());
+
+  const char *tfile = fl_find_config_file(temp);
+  if (!tfile)
+    { fprintf(stderr, "Cannot find theme file: %s\n", temp); return -1; }
+
+  int r;
+  if ( (r = fl_load_plugin(tfile, "fltk_theme")) ) {
+    fprintf(stderr, "Can't load theme \"%s\": %d\n", tfile, r);
+    return r;
+  }
+
+  Fl::redraw();
+  return 0;
+}
+
+int Fl::theme(const char *t) {
+  if (theme_) free((void*)theme_);
+  if (t) {
+    theme_ = strdup(t);
+    return loadtheme(1);
+  }
+
+  theme_ = 0;
+  return loadtheme(0);
+}
+
+const char* Fl::theme() {
+  static char* t = new char[PATH_MAX];
+
+  if (!use_themes) return 0;
+  if (!theme_) theme_ = strdup("default");
+  strncpy(t, theme_, PATH_MAX);
+  if (!strcasecmp(t, "default")) getconf("default theme", t, PATH_MAX);
+
+  return t;
+}
+
+
+const char* fl_find_config_file(const char* fn) {
+  static char* path = new char[PATH_MAX];
+
+  if (is_path_rooted(fn)) {
+    strcpy(path, fn);
+  } else {
+    char *cptr = getenv("HOME");
+    if (cptr) {
+      snprintf(path, PATH_MAX, "%s/.fltk/%s", cptr, fn);
+      if (!access(path, R_OK)) return path;
+    }
+
+#ifndef WIN32
+    snprintf(path, PATH_MAX, FLTK_LIBDIR "/lib/fltk/%s", fn);
+#else
+    char windir[PATH_MAX];
+    GetWindowsDirectoryA(windir, sizeof(windir));
+    snprintf(path, PATH_MAX, "%s\\fltk\\%s", windir, fn);
+#endif
+  }
+
+  return access(path, R_OK) ? 0 : path;
+}
+
+int Fl::getconf(const char *key, char *value, int value_length)
+{ return ::getconf(fl_find_config_file("flconfig"), key, value, value_length); }
+

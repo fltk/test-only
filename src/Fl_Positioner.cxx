@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.10 1999/10/27 08:40:57 bill Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.11 1999/11/01 02:21:34 carl Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -106,7 +106,8 @@ int Fl_Positioner::handle(int e) {
 #include <FL/Fl_Input.H>
 
 static Fl_Style pos_style = {
-  FL_THIN_DOWN_BOX,	// box
+  FL_THIN_DOWN_BOX,// box
+  0,            // glyph_box
   0,		// glyphs
   0,		// label_font
   0,		// text_font
@@ -145,5 +146,5 @@ void Fl_Positioner::ybounds(double a, double b) {
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.10 1999/10/27 08:40:57 bill Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.11 1999/11/01 02:21:34 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.7 1999/10/27 01:21:10 vincent Exp $"
+// "$Id: fl_oval_box.cxx,v 1.8 1999/11/01 02:21:39 carl Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ static void oval_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_arc(x, y, w, h, 0, 360);
 }
 const Fl_Boxtype_ fl_oval_box = {
-  oval_draw, 0, 0, 1,1,2,2,
+  oval_draw, 0, 0, 0, 1,1,2,2,
 };
 
 static void oval_shadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
@@ -60,9 +60,9 @@ static void oval_shadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
   oval_draw(b, x, y, w, h, c, f);
 }
 const Fl_Boxtype_ fl_oval_shadow_box = {
-  oval_shadow_draw, 0, 0, 1,1,2+3,2+3,
+  oval_shadow_draw, 0, 0, 0, 1,1,2+3,2+3,
 };
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.7 1999/10/27 01:21:10 vincent Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.8 1999/11/01 02:21:39 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.6 1999/10/27 08:40:50 bill Exp $"
+// "$Id: Fl_Style.H,v 1.7 1999/11/01 02:21:16 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -32,11 +32,12 @@
 #include "Fl_Labeltype.H"
 #include "Fl_Font.H"
 
-typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Flags);
+typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
 
 struct FL_API Fl_Style {
 
   Fl_Boxtype	box;
+  Fl_Boxtype	glyph_box; // needed for all Light Buttons & sliders
   Fl_Glyph	glyph;
   Fl_Font	label_font;
   Fl_Font	text_font;
@@ -64,7 +65,9 @@ struct FL_API Fl_Style {
   void seti(unsigned*, unsigned);
   void seti(unsigned*, unsigned, int mask);
   void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
-  void set_glyph(Fl_Glyph v)	{setp((const void**)&glyph, (const void*)v);}
+  void set_glyph_box(Fl_Boxtype v)	{setp((const void**)&glyph_box, v);}
+  void set_box2(Fl_Boxtype v)		{setp((const void**)&glyph_box, v);}
+  void set_glyph(Fl_Glyph v)	        {setp((const void**)&glyph, (const void*)v);}
   void set_label_font(Fl_Font v)	{setp((const void**)&label_font, v);}
   void set_text_font(Fl_Font v)		{setp((const void**)&text_font, v);}
   void set_label_type(Fl_Labeltype v)	{setp((const void**)&label_type, v);}
@@ -83,11 +86,13 @@ struct FL_API Fl_Style {
   void set_text_size(unsigned v)	{seti(&text_size, v);}
 
   void add_child(Fl_Style* s) const;
+
+  static Fl_Style* find(const char* name);
 };
 
 // Create a global object of this type with correct parameter to define
-// a new style class. See example at the end in Fl_Input.cxx.  Plugins can
-// search this to find the styles used by a program:
+// a new style class.  Plugins can search this to find the styles used by
+// a program:
 class FL_API Fl_Style_Definer {
 public:
   const char* name;
@@ -98,22 +103,28 @@ public:
     first = this;}
 };
 
-void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Flags);
+FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
 
-enum {	// glyph types
+enum Fl_Glyphtype {	// glyph types
   // zero is reserved to draw an empty box
   FL_GLYPH_CHECK = 1,
   FL_GLYPH_RADIO,
+  FL_GLYPH_LIGHT,
   FL_GLYPH_UP,
   FL_GLYPH_DOWN,
   FL_GLYPH_LEFT,
   FL_GLYPH_RIGHT,
   FL_GLYPH_VSLIDER,
-  FL_GLYPH_HSLIDER
+  FL_GLYPH_HSLIDER,
+  FL_GLYPH_FASTARROW,
+  FL_GLYPH_MEDIUMARROW,
+  FL_GLYPH_SLOWARROW,
+  FL_GLYPH_VNSLIDER,
+  FL_GLYPH_HNSLIDER
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.6 1999/10/27 08:40:50 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.7 1999/11/01 02:21:16 carl Exp $".
 //

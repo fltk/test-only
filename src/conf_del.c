@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.6 1999/08/11 10:20:27 carl Exp $"
+   "$Id: conf_del.c,v 1.7 1999/11/01 02:21:37 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -50,12 +50,12 @@ delconf(const char *configfile, const char *k)
         char            section2[CONF_MAX_SECT_LEN + 2];                        /* section with [] added */
         char            line[CONF_MAX_LINE_LEN];                                /* line buffer */
         char            line2[CONF_MAX_LINE_LEN];                               /* temporary line buffer */
-	    char		    lineout[CONF_MAX_LINE_LEN];				                /* temporary output buffer */
+        char		lineout[CONF_MAX_LINE_LEN];				/* temporary output buffer */
         char            *p, *p2;                                                /* miscelaneous char pointers */
         struct stat     stat_buf;                                               /* buffer for stat info */
         int             new_flag;                                               /* does the config file already exist? */
         int             i;                                                      /* generic integer */
-	    char		    *comment;						                        /* comment found on line */
+        char		*comment = "";                                          /* comment found on line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
 
         if (!configfile || !k)
@@ -207,6 +207,8 @@ delconf(const char *configfile, const char *k)
 		    (p2 == line + strspn(line, CONF_WHITESPACE) ||
 		     strchr(CONF_WHITESPACE, *(p2 + 1))))
 		{
+printf("line: %s\n", line);
+printf("comment: %s\n", p2);
 			*p2 = (char)0;						/* kill the comment */
 			comment = ++p2;						/* but remember it */
 			endtrim(comment);
@@ -283,5 +285,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.6 1999/08/11 10:20:27 carl Exp $".
+    End of "$Id: conf_del.c,v 1.7 1999/11/01 02:21:37 carl Exp $".
 */

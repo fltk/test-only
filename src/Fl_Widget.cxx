@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.25 1999/10/27 08:40:59 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.26 1999/11/01 02:21:36 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -364,25 +364,29 @@ Fl_Color Fl_Widget::draw_button() const {
   } else if (Fl::belowmouse() == this && highlight_color()) {
     f |= FL_HIGHLIGHT;
     c = highlight_color();
-    if (highlight_label_color()) lc = highlight_label_color();
+    lc = highlight_label_color();
   }
   if (f & FL_VALUE) {
     c = selection_color();
-    if (selection_text_color()) lc = selection_text_color();
+    lc = selection_text_color();
   }
+
   box()->draw(x(), y(), w(), h(), c, f);
   return lc;
 }
 
-void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
-  Fl_Color c = color();
-  if (!active_r()) {
-    f |= FL_INACTIVE;
-  } else if (Fl::belowmouse() == this && highlight_color()) {
-    f |= FL_HIGHLIGHT;
-    c = highlight_color();
+void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f, Fl_Boxtype b) const {
+  if (!b) b = glyph_box();
+  Fl_Color bc = off_color(), fc = label_color();
+  if (f&FL_VALUE) {
+    bc = selection_color();
+    fc = selection_text_color();
   }
-  glyph()(T, X,Y,W,H, c, f);
+  if ((f&FL_HIGHLIGHT) && !(f&FL_INACTIVE)) {
+    fc = highlight_label_color();
+    bc = highlight_color();
+  }
+  glyph()(T, X,Y,W,H, bc, fc, f, b);
 }
 
 // Call the draw method, handle the clip out
@@ -415,13 +419,14 @@ void Fl_Widget::draw_n_clip()
 
 Fl_Style Fl_Widget::default_style = {
   FL_NORMAL_BOX,// box
+  FL_NORMAL_BOX,// glyph_box - for light buttons & sliders
   fl_glyph,	// glyphs
   FL_HELVETICA,	// label_font
   FL_HELVETICA,	// text_font
   FL_NORMAL_LABEL, // label_type
   FL_GRAY,	// color
   FL_NO_COLOR,	// label_color
-  FL_GRAY,	// selection_color / down_color / on_color
+  FL_LIGHT2,	// selection_color / down_color / on_color
   FL_NO_COLOR,	// selection_text_color
   FL_NO_COLOR,	// off_color
   FL_NO_COLOR,	// highlight_color
@@ -433,6 +438,8 @@ Fl_Style Fl_Widget::default_style = {
 
 Fl_Style_Definer* Fl_Style_Definer::first = 0;
 
+static Fl_Style_Definer x("default", Fl_Widget::default_style);
+
 //
-// End of "$Id: Fl_Widget.cxx,v 1.25 1999/10/27 08:40:59 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.26 1999/11/01 02:21:36 carl Exp $".
 //

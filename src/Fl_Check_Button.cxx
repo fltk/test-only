@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.9 1999/10/27 08:40:53 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.10 1999/11/01 02:21:31 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,9 +46,8 @@ void Fl_Check_Button::draw() {
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
   glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
-	  x()+d, y()+d+1, W, W,
-	  (f&FL_VALUE) ? on_color() : off_color(),
-	  f);
+	  x()+d, y()+d+1, W, W, off_color(),
+	  (f&FL_VALUE) ? on_color() : off_color(), f, glyph_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }
@@ -59,19 +58,22 @@ int Fl_Check_Button::handle(int event) {
 }
 
 Fl_Style Fl_Check_Button::default_style = {
-  FL_FLAT_BOX,	// box
+  FL_NO_BOX,	// box
+  FL_DOWN_BOX,	// glyph_box
   0,		// glyphs
   0,		// label_font
   0,		// text_font
   0,		// label_type
   0,		// color
   0,		// label_color
-  FL_WHITE,	// selection_color / on_color
+  FL_BLACK,	// selection_color / on_color
   0,		// selection_text_color
-  FL_WHITE	// off_color
+  FL_WHITE,	// off_color
+  FL_NO_COLOR   // highlight color
+
 };
 
-static Fl_Style_Definer x("check_button", Fl_Check_Button::default_style);
+static Fl_Style_Definer x("check button", Fl_Check_Button::default_style);
 
 Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)

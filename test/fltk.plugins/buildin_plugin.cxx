@@ -46,6 +46,8 @@ static fl_box boxtypes[] = {
 {"flat_box", &fl_flat_box},
 {"flat_up_box", &fl_flat_up_box},
 {"flat_down_box", &fl_flat_down_box},
+{"highlight_up_box", &fl_highlight_up_box},
+{"highlight_down_box", &fl_highlight_down_box},
 {"normal_box", &fl_normal_box},
 {"down_box", &fl_down_box},
 {"thin_box", &fl_thin_box},
@@ -79,9 +81,23 @@ static bool parse_boxtype(Fl_Style& style, char* s)
   return 0;
 }
 
+static bool parse_glyph_boxtype(Fl_Style& style, char* s)
+{
+  char* w = fl_parse_word(s);
+  for (fl_box* b = boxtypes; b->name; b++) {
+printf("want: %s   got: %s\n", w, b->name);
+    if (!strcmp(w, b->name)) {
+      style.set_glyph_box(b->bt);
+      return 1;
+    }
+  }
+  return 0;
+}
+
 FLDLE void style_plugin()
 {
   fl_add_style_entry_def("box", parse_boxtype);
+  fl_add_style_entry_def("glyph_box", parse_glyph_boxtype);
   fl_add_style_entry_def("color", parse_color);
   fl_add_style_entry_def("label_color", parse_label_color);
   fl_add_style_entry_def("selection_color", parse_selection_color);

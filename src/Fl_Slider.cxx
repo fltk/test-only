@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.22 1999/10/05 07:12:57 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.23 1999/11/01 02:21:35 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,20 +30,26 @@
 
 Fl_Style Fl_Slider::default_style = {
   FL_THIN_DOWN_BOX,	// used to be a thick down box
-  0,		// glyphs
-  0,		// label_font
-  0,		// text_font
-  0,		// label_type
-  FL_DARK2,	// color
-  0,		// label_color
-  FL_GRAY	// selection_color
+  0,                    // glyph_box
+  0,		        // glyphs
+  0,		        // label_font
+  0,		        // text_font
+  0,	        	// label_type
+  FL_DARK2,             // color - background
+  0,		        // label_color - glyph
+  0,	                // selection_color
+  0,                    // selection_text_color
+  FL_GRAY,              // off color - thumb
+  FL_LIGHT2             // highlight color
   // rest is zero
 };
+
+static Fl_Style_Definer x("slider", Fl_Slider::default_style);
 
 Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l) {
   style(default_style);
-  slider_size_ = 0;
+  slider_size_ = highlighted_ = 0;
 }
 
 Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
@@ -103,52 +109,68 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
     X = slider_position(W, S);
   }
 
-  if (X > 0) {
-    if (horizontal()) draw_bg(x, y, X, h);
-    else draw_bg(x, y, w, X);
-  }
-  if (X+S < W) {
-    if (horizontal()) draw_bg(x+X+S, y, w-X-S, h);
-      else draw_bg(x, y+X+S, w, h-X-S);
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
+    if (X > 0) {
+      if (horizontal()) draw_bg(x, y, X, h);
+      else draw_bg(x, y, w, X);
+    }
+    if (X+S < W) {
+      if (horizontal()) draw_bg(x+X+S, y, w-X-S, h);
+        else draw_bg(x, y+X+S, w, h-X-S);
+    }
   }
 
-  Fl_Color c = color2(); // not color()!  Different from all other widgets...
-  if (Fl::belowmouse() == this && highlight_color() && active_r())
-    c = highlight_color();
-
-  if (type() == FL_VERT_NICE_SLIDER) {
-    glyph()(0, x, y+X, w, S, FL_GRAY, 0);
-    int d = (S-4)/2;
-    FL_THIN_DOWN_BOX->draw(x+2, y+X+d, w-4, S-2*d, c);
-  } else if (type() == FL_HOR_NICE_SLIDER) {
-    glyph()(0, x+X, y, S, h, FL_GRAY, 0);
-    int d = (S-4)/2;
-    FL_THIN_DOWN_BOX->draw(x+X+d, y+2, S-2*d, h-4, c);
-  } else if (horizontal()) {
-    glyph()(FL_GLYPH_HSLIDER, x+X, y, S, h, c, 0);
-    draw_button_label(x+X, y, S, h, label_color());
-  } else {
-    glyph()(FL_GLYPH_VSLIDER, x, y+X, w, S, c, 0);
-    draw_button_label(x, y+X, w, S, label_color());
+  int highlight = 0;
+  if (Fl::belowmouse() == this && active_r()) {
+    if (horizontal()) {
+      if (Fl::event_inside(x+X, y, S, h))  highlight = 1;
+    } else {
+      if (Fl::event_inside(x, y+X, w, S))  highlight = 1;
+    }
   }
+
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT) || highlighted_ != highlight) {
+    Fl_Flags f = 0;
+    if (!active_r()) f = FL_INACTIVE;
+    else if (Fl::pushed() == this) f = FL_HIGHLIGHT; // Doesn't look right with FL_VALUE!
+    else if (highlight) f |= FL_HIGHLIGHT;
+
+    if (type() == FL_VERT_NICE_SLIDER)
+      draw_glyph(FL_GLYPH_VNSLIDER, x, y+X, w, S, f);
+    else if (type() == FL_HOR_NICE_SLIDER)
+      draw_glyph(FL_GLYPH_HNSLIDER, x+X, y, S, h, f);
+    else if (horizontal()) {
+      draw_glyph(type() == FL_HOR_FILL_SLIDER ? 0 : FL_GLYPH_HSLIDER,
+                 x+X, y, S, h, f);
+      draw_button_label(x+X, y, S, h, label_color());
+    } else {
+      draw_glyph(type() == FL_VERT_FILL_SLIDER ? 0 : FL_GLYPH_VSLIDER,
+                 x, y+X, w, S, f);
+      draw_button_label(x, y+X, w, S, label_color());
+    }
+  }
+  highlighted_ = highlight;
 }
 
 void Fl_Slider::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_frame();
   draw(x()+box()->dx(),
        y()+box()->dy(),
        w()-box()->dw(),
        h()-box()->dh());
+  if (damage()&FL_DAMAGE_ALL) draw_label();
 }
 
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
+  case FL_MOVE: // redrawing is minimized in draw() itself...
   case FL_ENTER:
   case FL_LEAVE:
-    if (highlight_color() && active_r()) redraw();
+    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_PUSH:
     if (!Fl::event_inside(x, y, w, h)) return 0;
+    damage(FL_DAMAGE_EXPOSE);
     handle_push();
   case FL_DRAG: {
     int W = (horizontal() ? w : h);
@@ -195,6 +217,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     handle_drag(clamp(v));
     } return 1;
   case FL_RELEASE:
+    damage(FL_DAMAGE_EXPOSE);
     handle_release();
     return 1;
   default:
@@ -211,5 +234,5 @@ int Fl_Slider::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.22 1999/10/05 07:12:57 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.23 1999/11/01 02:21:35 carl Exp $".
 //

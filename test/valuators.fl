@@ -1,5 +1,5 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -16,7 +16,7 @@ Function {} {open
 } {
   Fl_Window {} {
     label {Valuator classes, showing values for type()} open
-    xywh {140 163 567 506} color 43 selection_color 43
+    xywh {221 201 567 506} labelsize 10
     code0 {\#include <stdio.h>} visible
   } {
     Fl_Box {} {
@@ -26,17 +26,17 @@ Function {} {open
     Fl_Slider {} {
       label 0
       callback callback
-      xywh {30 45 20 145} align 1 selection_color 1 labelsize 8
+      xywh {30 45 20 145} align 1 off_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_VERT_FILL_SLIDER
       callback callback
-      xywh {70 55 20 145} type {Vert Fill} selection_color 1 labelsize 8
+      xywh {70 55 20 145} type {Vert Fill} off_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_VERT_NICE_SLIDER
       callback callback
-      xywh {105 45 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {105 45 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 labelcolor 1 selected_textcolor 1 highlight_label_color 1 labelsize 8
     }
     Fl_Box {} {
       label Fl_Value_Slider
@@ -45,42 +45,42 @@ Function {} {open
     Fl_Value_Slider {} {
       label 0
       callback callback
-      xywh {30 260 30 145} align 1 selection_color 1 labelsize 8
+      xywh {30 260 30 145} align 1 off_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_VERT_FILL_SLIDER
       callback callback
-      xywh {70 275 30 140} type {Vert Fill} selection_color 1 labelsize 8
+      xywh {70 275 30 140} type {Vert Fill} off_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_VERT_NICE_SLIDER
       callback callback
-      xywh {110 260 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {110 260 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 labelcolor 1 selected_textcolor 1 highlight_label_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_HORIZONTAL
       callback callback
-      xywh {140 80 130 20} type Horizontal selection_color 1 labelsize 8
+      xywh {140 80 130 20} type Horizontal off_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_FILL_SLIDER
       callback callback
-      xywh {140 120 130 20} type {Horz Fill} selection_color 1 labelsize 8
+      xywh {140 120 130 20} type {Horz Fill} off_color 1 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_NICE_SLIDER
       callback callback
-      xywh {140 160 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {140 160 130 20} type {Horz Knob} box FLAT_BOX color 10 labelcolor 1 selected_textcolor 1 highlight_label_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_SLIDER
       callback callback
-      xywh {140 290 130 20} type Horizontal selection_color 1 labelsize 8
+      xywh {140 290 130 20} type Horizontal off_color 1 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_FILL_SLIDER
       callback callback
-      xywh {140 330 130 20} type {Horz Fill} selection_color 1 labelsize 8
+      xywh {140 330 130 20} type {Horz Fill} off_color 1 labelsize 8
     }
     Fl_Box {} {
       label Fl_Adjuster
@@ -88,8 +88,8 @@ Function {} {open
     }
     Fl_Value_Slider {} {
       label FL_HOR_NICE_SLIDER
-      callback callback
-      xywh {140 370 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
+      callback callback selected
+      xywh {140 370 130 20} type {Horz Knob} box FLAT_BOX color 10 labelcolor 1 selected_textcolor 1 highlight_label_color 1 labelsize 8
     }
     Fl_Adjuster {} {
       label {w()>h()}
@@ -98,7 +98,7 @@ Function {} {open
     }
     Fl_Adjuster {} {
       label {w()<h()}
-      callback callback selected
+      callback callback
       xywh {520 35 25 75} labelsize 8
     }
     Fl_Box {} {
@@ -135,7 +135,7 @@ Function {} {open
     }
     Fl_Box {} {
       label {Some widgets have color(FL_GREEN) and color2(FL_RED) to show the areas these effect.}
-      xywh {455 375 100 120} align 128 box BORDER_FRAME color 43 labelsize 10
+      xywh {455 375 100 120} align 128 box ENGRAVED_BOX labelsize 10
     }
     Fl_Box {} {
       label Fl_Value_Output
