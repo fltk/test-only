@@ -11,7 +11,7 @@ version = 8
 [menu item]
   label type = 0
   label font = 0
-  label size = 14
+  label size = 12
   label color = 0
   down label color = 7
   down color = 14
@@ -31,8 +31,8 @@ version = 8
   color = 7
   selected color = 14
   box = 31
-  text font = 4
-  text size = 14
+  text font = 0
+  text size = 12
   text color = 0
   selected text color = 7
 
@@ -138,12 +138,12 @@ version = 8
   highlight box = 30
   down box = 42
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [menu bar]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -222,7 +222,7 @@ version = 8
   color = 7
   output color = 51
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
   selected color = 14
   selected text color = 7
@@ -256,7 +256,7 @@ version = 8
   highlight box = 30
   box2 = 10
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [roller]
