@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.92 2004/08/02 12:23:59 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.93 2004/08/02 12:31:44 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1526,6 +1526,7 @@ int Browser::set_column_start(int col, int x) {
   int ox = 0;
   for (int i=0; i<col; i++) ox += column_widths_p[i];
   int dx = x + xposition_ - ox;
+  int cwp, cwi;
 
   if (col==nColumn) {
     // Resize last column. 
@@ -1546,7 +1547,7 @@ int Browser::set_column_start(int col, int x) {
     }
   }
   // make sure that no column is smaller than 4 pixels (to the right)
-  int cwp = column_widths_p[col], cwi = column_widths_i[col];
+  cwp = column_widths_p[col], cwi = column_widths_i[col];
   if (cwi>0 && cwi<cwp) cwp = cwi;
   if (cwp-dx<4) {
     if (resize_to_w) {
@@ -1826,5 +1827,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.92 2004/08/02 12:23:59 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.93 2004/08/02 12:31:44 laza2000 Exp $".
 //
