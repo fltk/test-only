@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.9 2000/06/03 08:49:17 bill Exp $"
+// "$Id: subwindow.cxx,v 1.10 2001/02/28 21:19:50 clip Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,7 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Input_Browser.H>
 
 class testwindow : public Fl_Window {
   int handle(int);
@@ -104,7 +105,7 @@ int testwindow::handle(int e) {
 }
 
 const char* bigmess =
-#if 1
+#if 0
 "this|is|only|a test"
 #else
 "item1|item2|item3|item4|item5|"
@@ -147,7 +148,12 @@ int main(int, char **) {
   (void) new Fl_Toggle_Button(310,310,80,80,"&outer");
   (void) new EnterExit(10,310,80,80,"enterexit");
   (void) new Fl_Input(150,310,150,25,"input:");
-  (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
+  { Fl_Input_Browser *o = new Fl_Input_Browser(5,150,80,25,"menu&1");
+    o->type(FL_NONEDITABLE_INPUT_BROWSER|FL_INDENTED_INPUT_BROWSER);
+    o->add(bigmess);
+    o->value(o->child(0)->label());
+  }
+//  (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
   testwindow *subwindow =
     new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
   (void) new Fl_Toggle_Button(110,110,80,80,"&inner");
@@ -173,5 +179,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.9 2000/06/03 08:49:17 bill Exp $".
+// End of "$Id: subwindow.cxx,v 1.10 2001/02/28 21:19:50 clip Exp $".
 //

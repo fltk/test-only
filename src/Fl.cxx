@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.121 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl.cxx,v 1.122 2001/02/28 21:19:49 clip Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,7 @@ Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
 		*Fl::focus_;
 int		(*Fl::grab_)(int, void*);
+Fl_Window       *Fl::grabbed_ = 0;
 static void* grab_data;
 Fl_Window	*Fl::modal_;	// topmost modal() window
 int		Fl::damage_,
@@ -151,7 +152,7 @@ void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
   t->cb = cb;
   t->arg = arg;
   // insert-sort the new timeout:
-  Timeout** p = &first_timeout; 
+  Timeout** p = &first_timeout;
   while (*p && (*p)->time <= time) p = &((*p)->next);
   t->next = *p;
   *p = t;
@@ -217,7 +218,7 @@ void Fl::remove_check(Fl_Timeout_Handler cb, void *arg) {
     }
   }
 }
-  
+
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
 
@@ -410,7 +411,7 @@ void Fl::pushed(Fl_Widget *o) {
 
 void fl_fix_focus() {
 
-  if (Fl::grab()) return; // don't do anything while grab is on.
+  if (Fl::grab() || Fl::grabbed()) return; // don't do anything while grab is on.
 
   Fl_Widget* w = xfocus;
 
@@ -487,7 +488,7 @@ void Fl::grab(int (*cb)(int, void*), void* user_data) {
 	       ButtonPressMask|ButtonReleaseMask|
 	       ButtonMotionMask|PointerMotionMask,
 	       GrabModeAsync,
-	       GrabModeAsync, 
+	       GrabModeAsync,
 	       None,
 	       0,
 	       fl_event_time);
@@ -495,13 +496,14 @@ void Fl::grab(int (*cb)(int, void*), void* user_data) {
 		w,
 		1,
 		GrabModeAsync,
-		GrabModeAsync, 
+		GrabModeAsync,
 		fl_event_time);
 #endif
 }
 
 void Fl::release() {
   grab_ = 0;
+  grabbed_ = 0;
 #ifdef WIN32
   ReleaseCapture();
 #else
@@ -520,10 +522,6 @@ void Fl::release() {
     Fl::belowmouse(0);
   }
 }
-
-// Back-compatability function to use the handle method of a widget:
-static int widget_grab(int e, void* w) { return ((Fl_Widget*)w)->handle(e); }
-void Fl::grab(Fl_Widget* w) { grab(widget_grab, w); }
 
 ////////////////////////////////////////////////////////////////
 
@@ -570,6 +568,7 @@ static bool alternate_key() {
 int Fl::handle(int event, Fl_Window* window)
 {
   e_type = event;
+  if (grabbed_) window = grabbed_;
   if (grab_) {
     if (grab_(event, grab_data)) return true;
     if (event == FL_KEY && alternate_key()) return grab_(event, grab_data);
@@ -639,15 +638,13 @@ int Fl::handle(int event, Fl_Window* window)
 
   int ret = false;
   if (to && window) {
-    int dx = window->x();
-    int dy = window->y();
-    for (const Fl_Widget* w = to; w; w = w->parent())
-      {dx -= w->x(); dy -= w->y();}
-    int save_x = Fl::e_x; Fl::e_x += dx;
-    int save_y = Fl::e_y; Fl::e_y += dy;
+    int wx = 0, wy = 0;
+    for (Fl_Widget *w = to; w; w = w->parent())
+      { wx += w->x(); wy += w->y(); }
+    int save_x = Fl::e_x; int save_y = Fl::e_y;
+    Fl::e_x = Fl::e_x_root-wx;Fl::e_y = Fl::e_y_root-wy;
     ret = to->handle(event);
-    Fl::e_y = save_y;
-    Fl::e_x = save_x;
+    Fl::e_x = save_x; Fl::e_y = save_y;
   }
 
   if (!ret) {
@@ -683,5 +680,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.121 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl.cxx,v 1.122 2001/02/28 21:19:49 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.33 2001/02/21 06:15:45 clip Exp $"
+// "$Id: Alternative.cxx,v 1.34 2001/02/28 21:19:50 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -172,13 +172,9 @@ alt_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN:
-      // menu fudge factor
-      if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
-//      x += 2; y += 2; w -= 4; h -= 4;
-//      x += 4; y += 4; w -= 8; h -= 8;
     JUMP1:
       {Fl_Color d1, d2, l1, l2;
-      if (f&FL_VALUE) {
+      if (f&(FL_VALUE|FL_SELECTED)) {
         d1 = FL_LIGHT3; d2 = FL_LIGHT1; l1 = FL_BLACK; l2 = FL_DARK2;
       } else{
         l1 = FL_LIGHT3; l2 = FL_LIGHT1; d1 = FL_BLACK; d2 = FL_DARK2;
@@ -211,6 +207,7 @@ alt_glyph(const Fl_Widget* widget, int t,
       } else if (t == FL_GLYPH_DOWN) {
         fl_color(bc);
         fl_newpath();
+
         fl_vertex(x,y); fl_vertex(x+w/2,y+h-1); fl_vertex(x+w-1,y);
         fl_fill();
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1); fl_line(x+1,y+1, x+w/2,y+h-2);
@@ -246,11 +243,19 @@ alt_glyph(const Fl_Widget* widget, int t,
   }
 }
 
+static void
+alt_glyph2(const Fl_Widget* widget, int t,
+          int x, int y, int w, int h,
+          Fl_Flags f)
+{
+  alt_glyph(widget, t, x, y+(h-w)/2, w, w, f);
+}
+
 static void choice_glyph(const Fl_Widget* widget, int,
                          int x,int y,int w, int h,
                          Fl_Flags f)
 {
-  FL_FLAT_BOX->draw(widget,x,y,w,h,f);
+//  FL_FLAT_BOX->draw(widget,x,y,w,h,f);
   int H = h/3;
   int Y = y + (h-H)/2;
   widget->box()->draw(widget,x,Y,w,H,f);
@@ -294,6 +299,10 @@ int fltk_plugin() {
   Fl_Style::draw_sliders_pushed = 1;
 
   Fl_Style* s;
+  if ((s = Fl_Style::find("menu"))) {
+    s->glyph = alt_glyph;
+  }
+
   if ((s = Fl_Style::find("menu bar"))) {
     s->text_box = FL_HIGHLIGHT_BOX;
   }
@@ -304,7 +313,7 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->glyph = alt_glyph;
+    s->glyph = alt_glyph2;
   }
 
   if ((s = Fl_Style::find("choice"))) {
@@ -337,9 +346,13 @@ int fltk_plugin() {
     s->glyph = alt_glyph;
   }
 
+  if ((s = Fl_Style::find("input browser"))) {
+    s->glyph = alt_glyph2;
+  }
+
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.33 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: Alternative.cxx,v 1.34 2001/02/28 21:19:50 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.65 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl.H,v 1.66 2001/02/28 21:19:49 clip Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -67,6 +67,7 @@ public: // should be private!
 
   static int (*grab_)(int, void*);
   static void (*idle)();
+  static Fl_Window *grabbed_;
 
 public:
 
@@ -116,8 +117,9 @@ public:
   static void grab(int (*)(int, void*), void* = 0);
   static void local_grab(int (*f)(int, void*)) {grab_ = f;}
   static void local_grab(int (*f)(int, void*), void* v);
-  static void grab(Fl_Widget*);
-  static void grab(Fl_Widget& w) { grab(&w); }
+  static void grab(Fl_Window *w) { grabbed_ = w; grab(0, 0); }
+  static void local_grab(Fl_Window *w) { grabbed_ = w; }
+  static Fl_Window *grabbed() { return grabbed_; }
   static void release();
 
   // event information:
@@ -238,5 +240,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.65 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl.H,v 1.66 2001/02/28 21:19:49 clip Exp $".
 //

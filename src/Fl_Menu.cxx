@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.103 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.104 2001/02/28 21:19:50 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -346,8 +346,8 @@ void MenuWindow::draw() {
 
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
-	int nh = fl_height(widget->label_font(), widget->label_size())+2;
-	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
+        int nh = fl_height(widget->label_font(), widget->label_size());
+        draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
         Fl_Color c = widget->get_label_color(flags);
         //fl_font(widget->text_font(), widget->text_size());
@@ -732,5 +732,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.103 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.104 2001/02/28 21:19:50 clip Exp $".
 //

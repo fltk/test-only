@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.22 2000/10/17 07:50:07 spitzak Exp $"
+// "$Id: Fl_Browser.H,v 1.23 2001/02/28 21:19:49 clip Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -92,7 +92,11 @@ public:
   int is_set(int mark);  // false if unset_mark was called
   void damage_item(int mark); // make this item redraw
   int set_focus();
-  void set_top();
+  enum linepos { TOP, MIDDLE, BOTTOM };
+  void set_position(linepos);
+  void set_top() { set_position(TOP); }
+  void set_bottom() { set_position(BOTTOM); }
+  void set_middle() { set_position(MIDDLE); }
   int item_select(int value = 1, int do_callback = 0);
   int item_select_only(int do_callback = 0);
 
@@ -101,6 +105,8 @@ public:
   int select(int line, int value = 1);
   int selected(int line);
   void topline(int line) {goto_number(line); set_top();}
+  void bottomline(int line) {goto_number(line); set_bottom();}
+  void middleline(int line) {goto_number(line); set_middle();}
   char format_char() const {return format_char_;}
   void format_char(char c) {format_char_ = c;}
   char column_char() const {return column_char_;}
@@ -112,12 +118,13 @@ public:
   int value() const {return item_number[FOCUS];}
 
 private:
-
+  friend class Fl_Input_Browser;
   char indented_;
   char format_char_;
   char column_char_;
   int xposition_, yposition_;
   int scrolldx, scrolldy;
+  int last_height, last_max_width;
   static void hscrollbar_cb(Fl_Widget*, void*);
   static void scrollbar_cb(Fl_Widget*, void*);
   void draw_item();
@@ -146,5 +153,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.22 2000/10/17 07:50:07 spitzak Exp $".
+// End of "$Id: Fl_Browser.H,v 1.23 2001/02/28 21:19:49 clip Exp $".
 //

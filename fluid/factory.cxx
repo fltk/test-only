@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.18 2001/02/23 15:53:54 robertk Exp $"
+// "$Id: factory.cxx,v 1.19 2001/02/28 21:19:49 clip Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -141,30 +141,6 @@ static Fl_Round_Button_Type Fl_Round_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Browser.H>
-static Fl_Menu_Item browser_type_menu[] = {
-  {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
-  {"Select",0,0,(void*)FL_SELECT_BROWSER},
-  {"Hold",0,0,(void*)FL_HOLD_BROWSER},
-  {"Multi",0,0,(void*)FL_MULTI_BROWSER},
-  {0}};
-class Fl_Browser_Type : public Fl_Widget_Type {
-  int is_browser() const {return 1;}
-  Fl_Menu_Item *subtypes() {return browser_type_menu;}
-public:
-  virtual const char *type_name() {return "Fl_Browser";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Browser* b = new Fl_Browser(x,y,w,h);
-    char buffer[20];
-    for (int i = 1; i <= 20; i++) {
-      sprintf(buffer,"Browser Line %d",i);
-      b->add(buffer);
-    }
-    return b;
-  }
-  Fl_Widget_Type *_make() {return new Fl_Browser_Type();}
-};
-static Fl_Browser_Type Fl_Browser_type;
 
 ////////////////////////////////////////////////////////////////
 
@@ -397,6 +373,8 @@ extern class Fl_Menu_Button_Type Fl_Menu_Button_type;
 extern class Fl_Menu_Item_Type Fl_Menu_Item_type;
 extern class Fl_Menu_Divider_Type Fl_Menu_Divider_type;
 extern class Fl_Submenu_Type Fl_Submenu_type;
+extern class Fl_Browser_Type Fl_Browser_type;
+extern class Fl_Input_Browser_Type Fl_Input_Browser_type;
 
 extern void select(Fl_Type *,int);
 extern void select_only(Fl_Type *);
@@ -450,12 +428,13 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Fl_Menu_Bar_type},
   {0,0,cb,(void*)&Fl_Menu_Button_type},
   {0,0,cb,(void*)&Fl_Choice_type},
+  {0,0,cb,(void*)&Fl_Browser_type},
+  {0,0,cb,(void*)&Fl_Input_Browser_type},
   {0,0,cb, (void*)&Fl_Submenu_type},
   {0,0,cb, (void*)&Fl_Menu_Item_type},
   {0,0,cb, (void*)&Fl_Menu_Divider_type},
 {0},
 {"other",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Browser_type},
   {0,0,cb,(void*)&Fl_Box_type},
   {0,0,cb,(void*)&Fl_Clock_type},
 {0},
@@ -509,6 +488,8 @@ Fl_Type *Fl_Type_make(const char *tn) {
   return Fl_Type_make(tn, New_Menu);
 }
 
+#include <FL/Fl_Browser.H>
+#include <FL/Fl_Input_Browser.H>
 ////////////////////////////////////////////////////////////////
 
 // Since I have included all the .H files, do this table here:
@@ -599,7 +580,7 @@ static symbol table[] = {
   {"TIMESITALIC_STYLE",	 10},
   {"TIMESBOLDITALIC_STYLE",  11},
 //   {"SHADOW_STYLE",	0x100
-//   {"ENGRAVED_STYLE",	0x200	
+//   {"ENGRAVED_STYLE",	0x200
 //   {"EMBOSSED_STYLE",	0x300
   {"TINY_SIZE",		8},
   {"SMALL_SIZE",	11},
@@ -636,6 +617,10 @@ static symbol table[] = {
   {"HOR_FILL_SLIDER",	FL_HOR_FILL_SLIDER},
   {"VERT_NICE_SLIDER",	FL_VERT_NICE_SLIDER},
   {"HOR_NICE_SLIDER",	FL_HOR_NICE_SLIDER},
+  {"NORMAL_INPUT_BROWSER",	FL_NORMAL_INPUT_BROWSER},
+  {"NONEDITABLE_INPUT_BROWSER",	FL_NONEDITABLE_INPUT_BROWSER},
+  {"INDENTED_INPUT_BROWSER",	FL_INDENTED_INPUT_BROWSER},
+  {"NONEDITABLE_INPUT_BROWSER|INDENTED_INPUT_BROWSER",	FL_NONEDITABLE_INPUT_BROWSER|FL_INDENTED_INPUT_BROWSER},
 };
 
 #include <stdlib.h>
@@ -649,5 +634,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.18 2001/02/23 15:53:54 robertk Exp $".
+// End of "$Id: factory.cxx,v 1.19 2001/02/28 21:19:49 clip Exp $".
 //

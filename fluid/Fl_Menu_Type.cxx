@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.40 2001/02/23 15:53:54 robertk Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.41 2001/02/28 21:19:49 clip Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -175,6 +175,44 @@ public:
 
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
+#include <FL/Fl_Input_Browser.H>
+static Fl_Menu_Item input_browser_type_menu[] = {
+  {"Normal",0,0,(void*)FL_NORMAL_INPUT_BROWSER},
+  {"Non-Editable",0,0,(void*)FL_NONEDITABLE_INPUT_BROWSER},
+  {"Indented",0,0,(void*)FL_INDENTED_INPUT_BROWSER},
+  {"Non-Editable Indented",0,0,(void*)(FL_NONEDITABLE_INPUT_BROWSER|FL_INDENTED_INPUT_BROWSER)},
+  {0}};
+class Fl_Input_Browser_Type : public Fl_Menu_Type {
+  int is_input_browser() const {return 1;}
+  Fl_Menu_Item *subtypes() {return input_browser_type_menu;}
+public:
+  virtual const char *type_name() {return "Fl_Input_Browser";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    return new Fl_Input_Browser(x,y,w,h);
+  }
+  Fl_Widget_Type *_make() {return new Fl_Input_Browser_Type();}
+};
+Fl_Input_Browser_Type Fl_Input_Browser_type;
+
+#include <FL/Fl_Browser.H>
+static Fl_Menu_Item browser_type_menu[] = {
+  {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
+  {"Select",0,0,(void*)FL_SELECT_BROWSER},
+  {"Hold",0,0,(void*)FL_HOLD_BROWSER},
+  {"Multi",0,0,(void*)FL_MULTI_BROWSER},
+  {0}};
+class Fl_Browser_Type : public Fl_Menu_Type {
+  int is_browser() const {return 1;}
+  Fl_Menu_Item *subtypes() {return browser_type_menu;}
+public:
+  virtual const char *type_name() {return "Fl_Browser";}
+  Fl_Widget *widget(int x,int y,int w,int h) {
+    return new Fl_Browser(x,y,w,h);
+  }
+  Fl_Widget_Type *_make() {return new Fl_Browser_Type();}
+};
+Fl_Browser_Type Fl_Browser_type;
+
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:
 
@@ -238,5 +276,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.40 2001/02/23 15:53:54 robertk Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.41 2001/02/28 21:19:49 clip Exp $".
 //

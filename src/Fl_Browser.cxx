@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.38 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Browser.cxx,v 1.39 2001/02/28 21:19:49 clip Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -488,7 +488,7 @@ void Fl_Browser::draw() {
 
 void Fl_Browser::layout() {
   // Measure the height of all items and find widest one
-  int max_width = 0;
+  last_max_width = 0;
 
   // count all the items scrolled off the top:
   int arrow_size = fl_height(text_font(), text_size())|1;
@@ -496,7 +496,7 @@ void Fl_Browser::layout() {
     if (item_position[HERE]+item()->height() > yposition_) break;
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
-    if (w > max_width) max_width = w;
+    if (w > last_max_width) last_max_width = w;
     if (!next_visible()) break;
   }
   set_mark(FIRST_VISIBLE, HERE);
@@ -504,12 +504,12 @@ void Fl_Browser::layout() {
   if (item()) for (;;) {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
-    if (w > max_width) max_width = w;
+    if (w > last_max_width) last_max_width = w;
     if (!next_visible()) break;
   }
-  if (indented()) max_width += arrow_size; // optional if no groups!
+  if (indented()) last_max_width += arrow_size; // optional if no groups!
 
-  int height = item_position[HERE];
+  last_height = item_position[HERE];
 
   // figure out the visible area:
 
@@ -527,7 +527,7 @@ void Fl_Browser::layout() {
   // turn the scrollbars on and off as necessary:
 
   for (int z = 0; z<2; z++) {
-    if ((type()&VERTICAL) && (type()&ALWAYS_ON || height > H || yposition_)) {
+    if ((type()&VERTICAL) && (type()&ALWAYS_ON || last_height > H || yposition_)) {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
 	W -= scrollbar.w();
@@ -540,7 +540,7 @@ void Fl_Browser::layout() {
 	damage(FL_DAMAGE_ALL);
       }
     }
-    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || max_width > W || xposition_)) {
+    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || last_max_width > W || xposition_)) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
 	H -= hscrollbar.h();
@@ -557,12 +557,12 @@ void Fl_Browser::layout() {
 
   scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		   Y, scrollbar.w(), H);
-  scrollbar.value(yposition_, H, 0, height);
+  scrollbar.value(yposition_, H, 0, last_height);
   scrollbar.linesize(fl_height(text_font(), text_size())+leading());
   hscrollbar.resize(X,
 		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		    W, hscrollbar.h());
-  hscrollbar.value(xposition_, W, 0, max_width);
+  hscrollbar.value(xposition_, W, 0, last_max_width);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
   damage(FL_DAMAGE_LAYOUT);
@@ -867,11 +867,24 @@ int Fl_Browser::selected(int line) {
   return item()->value();
 }
 
-void Fl_Browser::set_top() {
+void Fl_Browser::set_position(linepos lpos) {
+/*
   set_mark(FIRST_VISIBLE, HERE);
   scrolldy += (yposition_-item_position[HERE]); damage(FL_DAMAGE_SCROLL);
   yposition_ = item_position[HERE];
   ((Fl_Slider*)&scrollbar)->value(yposition_);
+*/
+  int h = item() ? item()->height() : 0;
+  int p = item_position[HERE];
+  switch (lpos) {
+    case TOP: break;
+    case BOTTOM: p += h-H; break;
+    case MIDDLE: p += h-H/2; break;
+  }
+
+  if (p > last_height-H) p = last_height-H;
+  if (p < 0) p = 0;
+  yposition(p);
 }
 
 int Fl_Browser::displayed(int line) {
@@ -932,5 +945,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.38 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.39 2001/02/28 21:19:49 clip Exp $".
 //

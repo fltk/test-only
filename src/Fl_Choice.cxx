@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.53 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.54 2001/02/28 21:19:50 clip Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <FL/fl_draw.H>
 
 // Set this to 1 for "classic fltk" rather than Windows style:
-#define MOTIF_STYLE 0
+#define MOTIF_STYLE 1
 
 // The dimensions for the glyph in this and the Fl_Menu_Button are exactly
 // the same, so that glyphs may be shared between them.
@@ -55,8 +55,12 @@ void Fl_Choice::draw() {
   Fl_Widget* o = item();
   if (!o) item(o = child(0));
   if (o) {
+#if MOTIF_STYLE
+    o->clear_flag(FL_SELECTED);
+#else
     if (focused()) o->set_flag(FL_SELECTED);
     else o->clear_flag(FL_SELECTED);
+#endif
     fl_push_clip(X+2, Y+2, W-w1-2, H-4);
     int save_x = fl_x_; fl_x_ += X;
     int save_y = fl_y_; fl_y_ += Y+(H-o->height())/2;
@@ -195,5 +199,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.53 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.54 2001/02/28 21:19:50 clip Exp $".
 //

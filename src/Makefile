@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.90 2001/02/25 01:41:19 clip Exp $"
+# "$Id: Makefile,v 1.91 2001/02/28 21:19:50 clip Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,6 +51,7 @@ CPPFILES = \
 	Fl_Highlight_Button.cxx \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
+	Fl_Input_Browser.cxx \
 	Fl_Item.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
@@ -288,5 +289,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.90 2001/02/25 01:41:19 clip Exp $".
+# End of "$Id: Makefile,v 1.91 2001/02/28 21:19:50 clip Exp $".
 #
