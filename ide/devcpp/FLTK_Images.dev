@@ -1,7 +1,7 @@
 [Project]
 FileName=FLTK_Images.dev
 Name=FLTK Images
-UnitCount=82
+UnitCount=80
 Type=2
 Ver=1
 ObjFiles=
@@ -18,7 +18,7 @@ Icon=
 ExeOutput=../../lib
 ObjectOutput=
 OverrideOutput=1
-OverrideOutputName=libfltk_images_s.a
+OverrideOutputName=libfltk_images.a
 HostApplication=
 Folders=libjpeg,liibpng,zlib
 CommandLine=
@@ -903,7 +903,7 @@ BuildCmd=
 Major=2
 Minor=0
 Release=0
-Build=4
+Build=7
 LanguageID=1033
 CharsetID=1252
 CompanyName=FLTK Development Team

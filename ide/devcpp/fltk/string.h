@@ -1,21 +1,18 @@
-/* "$Id: string.h,v 1.2 2004/12/25 02:03:09 leka Exp $"
+/* "$Id$"
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2005 by Bill Spitzak and others.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- * USA.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
@@ -31,8 +28,6 @@
 
 #ifndef fltk_string_h
 #define fltk_string_h
-
-#include "FL_API.h"
 
 #if 1
 # include <string.h>
@@ -89,16 +84,16 @@
 extern "C" {
 #endif
 
+#include "FL_API.h"
+
+FL_API extern const char* newstring(const char *);
+
 #if defined(DOXYGEN) || defined(__MWERKS__)
 FL_API extern int strcasecmp(const char *, const char *);
 #endif
 
 #if defined(DOXYGEN) || defined(__MWERKS__)
 FL_API extern int strncasecmp(const char *, const char *, size_t);
-#endif
-
-#if defined(DOXYGEN) || defined(__MWERKS__)
-FL_API extern char *strdup(const char *);
 #endif
 
 #if defined(DOXYGEN)
@@ -126,5 +121,5 @@ FL_API extern size_t strlcpy(char *, const char *, size_t);
 #endif
 
 /*
- * End of "$Id: string.h,v 1.2 2004/12/25 02:03:09 leka Exp $".
+ * End of "$Id$".
  */
