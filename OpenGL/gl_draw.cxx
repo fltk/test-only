@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.1 1999/11/27 15:44:51 carl Exp $"
+// "$Id: gl_draw.cxx,v 1.2 2000/01/10 06:31:06 bill Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -44,24 +44,24 @@ int gl_width(const char* s, int n) {return fl_width(s,n);}
 int gl_width(uchar c) {return fl_width(c);}
 
 void gl_draw(const char* str, int n) {
-  if (!fl_font_->listbase) {
+  if (!fl_fontsize->listbase) {
 #ifdef WIN32
-    int base = fl_font_->metr.tmFirstChar;
-    int size = fl_font_->metr.tmLastChar-base+1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_font_->fid);
-    fl_font_->listbase = glGenLists(256);
-    wglUseFontBitmaps(fl_gc, base, size, fl_font_->listbase+base); 
+    int base = fl_fontsize->metr.tmFirstChar;
+    int size = fl_fontsize->metr.tmLastChar-base+1;
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_fontsize->fid);
+    fl_fontsize->listbase = glGenLists(256);
+    wglUseFontBitmaps(fl_gc, base, size, fl_fontsize->listbase+base); 
     SelectObject(fl_gc, oldFid);
 #else
     int base = fl_xfont->min_char_or_byte2;
     int size = fl_xfont->max_char_or_byte2-base+1;
-    fl_font_->listbase = glGenLists(256);
-    glXUseXFont(fl_xfont->fid, base, size, fl_font_->listbase+base);
+    fl_fontsize->listbase = glGenLists(256);
+    glXUseXFont(fl_xfont->fid, base, size, fl_fontsize->listbase+base);
 #endif
   }
 
   glPushAttrib(GL_LIST_BIT);
-    glListBase(fl_font_->listbase);
+    glListBase(fl_fontsize->listbase);
     glCallLists(n, GL_UNSIGNED_BYTE, str);
   glPopAttrib();
 }
@@ -140,5 +140,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.1 1999/11/27 15:44:51 carl Exp $".
+// End of "$Id: gl_draw.cxx,v 1.2 2000/01/10 06:31:06 bill Exp $".
 //

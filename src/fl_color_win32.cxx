@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.17 1999/09/20 17:12:09 vincent Exp $"
+// "$Id: fl_color_win32.cxx,v 1.18 2000/01/10 06:31:27 bill Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -78,20 +78,18 @@ void fl_color(Fl_Color i) {
   fl_color_ = i;
   int index;
   COLORREF rgb;
+  // this is the same as fl_nearest_color(i) but it also sets rgb:
   if (i & 0xFFFFFF00) {
-    // translate rgb colors into color index
     uchar r = i>>24;
     uchar g = i>>16;
     uchar b = i>> 8;
     rgb = RGB(r,g,b);
-    if (r == g && r == b) { // get it out of gray ramp
+    if (r == g && r == b)
       index = fl_gray_ramp(r*FL_NUM_GRAY/256);
-    } else {		// get it out of color cube:
+    else
       index =
          fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    }
   } else {
-    // translate index into rgb:
     index = i;
     unsigned c = fl_cmap[i];
     rgb = RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8));
@@ -205,5 +203,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.17 1999/09/20 17:12:09 vincent Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.18 2000/01/10 06:31:27 bill Exp $".
 //

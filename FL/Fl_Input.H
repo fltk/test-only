@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.12 1999/11/20 04:42:29 vincent Exp $"
+// "$Id: Fl_Input.H,v 1.13 2000/01/10 06:31:01 bill Exp $"
 //
 // Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ class FL_API Fl_Input : public Fl_Input_ {
   void handle_mouse(int keepmark=0);
 public:
   // the style is public because other widgets refer to it for box&color:
-  static Fl_Style* default_style;
+  static Fl_Named_Style* default_style;
   void draw();
   int handle(int);
   Fl_Input(int,int,int,int,const char * = 0);
@@ -45,5 +45,5 @@ public:
 #endif 
 
 //
-// End of "$Id: Fl_Input.H,v 1.12 1999/11/20 04:42:29 vincent Exp $".
+// End of "$Id: Fl_Input.H,v 1.13 2000/01/10 06:31:01 bill Exp $".
 //

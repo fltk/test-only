@@ -9,8 +9,8 @@ snap 3
 Function {make_function_panel()} {open
 } {
   Fl_Window function_panel {
-    label {function/method} open
-    xywh {251 470 287 218} resizable modal visible
+    label {function/method}
+    xywh {165 408 287 218} resizable modal visible
   } {
     Fl_Light_Button f_public_button {
       label public
@@ -24,6 +24,10 @@ Function {make_function_panel()} {open
       label {Name(args): (blank for main())}
       xywh {10 60 270 25} align 5 when 0 resizable
     }
+    Fl_Input f_attributes_input {
+      label {Attributes (virtual, static, __declspec, ...)}
+      xywh {10 105 270 25} align 5 when 0
+    }
     Fl_Input f_return_type_input {
       label {Return Type: (blank to return outermost widget)}
       xywh {10 150 270 25} align 5 when 0
@@ -36,18 +40,14 @@ Function {make_function_panel()} {open
       label Cancel
       xywh {200 185 80 25} shortcut 0xff1b
     }
-    Fl_Input f_attributes_input {
-      label {Attributes (virtual, static, __declspec, ...)} selected
-      xywh {10 105 270 25} align 5 when 0
-    }
   }
 } 
 
 Function {make_code_panel()} {open
 } {
   Fl_Window code_panel {
-    label code open
-    xywh {260 242 291 178} hide resizable modal
+    label code
+    xywh {171 177 291 178} resizable modal visible
   } {
     Fl_Input code_input {
       xywh {6 5 280 135} type Multiline align 0 when 0 resizable
@@ -66,8 +66,8 @@ Function {make_code_panel()} {open
 Function {make_codeblock_panel()} {open
 } {
   Fl_Window codeblock_panel {
-    label codeblock open
-    xywh {289 462 293 134} hide resizable modal
+    label codeblock
+    xywh {139 641 293 134} resizable modal visible
   } {
     Fl_Input code_before_input {
       xywh {10 5 275 25} align 5 when 0 resizable
@@ -93,8 +93,8 @@ Function {make_codeblock_panel()} {open
 Function {make_declblock_panel()} {open
 } {
   Fl_Window declblock_panel {
-    label {declaration block} open
-    xywh {517 141 293 134} hide resizable modal
+    label {declaration block}
+    xywh {511 96 293 134} resizable modal visible
   } {
     Fl_Input decl_before_input {
       xywh {15 10 275 25} align 5 when 0 resizable
@@ -120,8 +120,8 @@ Function {make_declblock_panel()} {open
 Function {make_decl_panel()} {open
 } {
   Fl_Window decl_panel {
-    label declaration open
-    xywh {282 823 290 176} hide resizable
+    label declaration
+    xywh {282 823 290 176} resizable visible
   } {
     Fl_Light_Button decl_public_button {
       label public
@@ -148,8 +148,8 @@ or a comment like "//foo" or "/*foo*/"}
 Function {make_class_panel()} {open
 } {
   Fl_Window class_panel {
-    label class open
-    xywh {517 813 287 173} hide resizable modal
+    label class selected
+    xywh {517 813 287 173} resizable modal visible
   } {
     Fl_Light_Button c_public_button {
       label public

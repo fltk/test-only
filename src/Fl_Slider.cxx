@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.36 2000/01/09 01:06:11 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.37 2000/01/10 06:31:24 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,21 +27,6 @@
 #include <FL/Fl_Slider.H>
 #include <FL/fl_draw.H>
 #include <math.h>
-
-Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
-: Fl_Valuator(x, y, w, h, l) {
-  style(default_style);
-  slider_size_ = 0;
-}
-
-Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
-  : Fl_Valuator(x, y, w, h, l) {
-  style(default_style);
-  slider_size_ = 0;
-  type(t);
-// fltk 1.0 (and XForms) set the box to FL_FLAT_BOX if the type was
-// FL_HOR/VERT_NICE_SLIDER.
-}
 
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
@@ -229,11 +214,25 @@ int Fl_Slider::handle(int event) {
 static void revert(Fl_Style *s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_DARK2;
-  s->glyph = fl_glyph;
 }
 
-Fl_Style* Fl_Slider::default_style = new Fl_Named_Style("Slider", revert, &Fl_Slider::default_style);
+static Fl_Named_Style* style = new Fl_Named_Style("Slider", revert, &style);
+
+Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
+: Fl_Valuator(x, y, w, h, l) {
+  style(::style);
+  slider_size_ = 0;
+}
+
+Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
+  : Fl_Valuator(x, y, w, h, l) {
+  style(::style);
+  slider_size_ = 0;
+  type(t);
+// fltk 1.0 (and XForms) set the box to FL_FLAT_BOX if the type was
+// FL_HOR/VERT_NICE_SLIDER.
+}
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.36 2000/01/09 01:06:11 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.37 2000/01/10 06:31:24 bill Exp $".
 //

@@ -10,12 +10,12 @@ extern Fl_Light_Button *f_public_button;
 extern Fl_Light_Button *f_c_button;
 #include <FL/Fl_Input.H>
 extern Fl_Input *f_name_input;
+extern Fl_Input *f_attributes_input;
 extern Fl_Input *f_return_type_input;
 #include <FL/Fl_Return_Button.H>
 extern Fl_Return_Button *f_panel_ok;
 #include <FL/Fl_Button.H>
 extern Fl_Button *f_panel_cancel;
-extern Fl_Input *f_attributes_input;
 Fl_Window* make_function_panel();
 extern Fl_Window *code_panel;
 extern Fl_Input *code_input;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.85 2000/01/09 08:17:28 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.86 2000/01/10 06:31:26 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -666,16 +666,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	Fl::handle(FL_HIDE, window);
       } else {
 	Fl::handle(FL_SHOW, window);
-	resize_from_system = window;
-	window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam));
-        window->layout();
+	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
+	  resize_from_system = window;
       }
     }
     break;
 
   case WM_MOVE:
-    resize_from_system = window;
-    window->resize(LOWORD(lParam), HIWORD(lParam), window->w(), window->h());
+    if (window->resize(LOWORD(lParam), HIWORD(lParam), window->w(), window->h()))
+      resize_from_system = window;
     break;
 
   case WM_SETCURSOR:
@@ -1003,74 +1002,70 @@ int fl_windows_colors() {
 // Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
 
   fl_background(background);
-  Fl_Widget::default_style->set_off_color(FL_GRAY);
+  Fl_Widget::default_style->label_color = foreground;
 
-  Fl_Widget::default_style->set_label_color(foreground);
-  Fl_Widget::default_style->set_highlight_label_color(foreground);
-  Fl_Widget::default_style->set_selection_text_color(foreground);
-
-  Fl_Widget::default_style->set_text_color(window_foreground);
+  Fl_Widget::default_style->text_color = window_foreground;
 
   Fl_Style* style;
   if ((style = Fl_Style::find("input"))) {
-    style->set_off_color(foreground); // cursor
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
+    style->off_color = foreground; // cursor
+    style->color = window_background;
+    style->text_color = window_foreground;
+    style->selection_color = select_background;
+    style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("output"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
+    style->color = window_background;
+    style->text_color = window_foreground;
+    style->selection_color = select_background;
+    style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("counter"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
+    style->color = window_background;
+    style->text_color = window_foreground;
   }
 
   if ((style = Fl_Style::find("browser"))) {
-    style->set_color(window_background);
-    style->set_text_color(window_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
+    style->color = window_background;
+    style->text_color = window_foreground;
+    style->selection_color = select_background;
+    style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("check button"))) {
-    style->set_selection_color(window_foreground);
-    style->set_off_color(window_background);
+    style->selection_color = window_foreground;
+    style->off_color = window_background;
   }
 
   if ((style = Fl_Style::find("scrollbar"))) {
-//    style->set_color(fl_color_average(slider_background, window_background, .5));
-    style->set_color(fl_color_average(background, window_background, .5));
+//    style->color = fl_color_average(slider_background, window_background, .5);
+    style->color = fl_color_average(background, window_background, .5);
   }
 
   if ((style = Fl_Style::find("menu item"))) {
-    style->set_color(menuitem_background);
-    style->set_label_color(menuitem_foreground);
-    style->set_selection_color(select_background);
-    style->set_selection_text_color(select_foreground);
+    style->color = menuitem_background;
+    style->label_color = menuitem_foreground;
+    style->selection_color = select_background;
+    style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("menu title"))) {
-    style->set_box(FL_HIGHLIGHT_BOX);
-    style->set_highlight_color(FL_GRAY);
-    style->set_highlight_label_color(foreground);
-    style->set_selection_color(FL_GRAY);
-    style->set_selection_text_color(foreground);
+    style->box = FL_HIGHLIGHT_BOX;
+    style->highlight_color = FL_GRAY;
+    style->highlight_label_color = foreground;
+    style->selection_color = FL_GRAY;
+    style->selection_text_color = foreground;
   }
 
   if ((style = Fl_Style::find("menu bar"))) {
-    style->set_highlight_color(FL_GRAY); // enable title highlighting
+    style->highlight_color = FL_GRAY); // enable title highlightig
   }
 
   if ((style = Fl_Style::find("tooltip"))) {
-    style->set_color(tooltip_background);
-    style->set_label_color(tooltip_foreground);
+    style->color = tooltip_background;
+    style->label_color = tooltip_foreground;
   }
 
 /* CET - FIXME - Font stuff not yet implemented
@@ -1088,15 +1083,15 @@ int fl_windows_colors() {
 
   if (font) {
     if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style.set_label_font(font);
-    Fl_Widget::default_style.set_text_font(font);
-    Fl_Widget::default_style.set_label_size(fontsize);
-    Fl_Widget::default_style.set_text_size(fontsize);
+    Fl_Widget::default_style->label_font = font;
+    Fl_Widget::default_style->text_font = font;
+    Fl_Widget::default_style->label_size = fontsize;
+    Fl_Widget::default_style->text_size = fontsize;
   }
 */
   return 0;
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.85 2000/01/09 08:17:28 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.86 2000/01/10 06:31:26 bill Exp $".
 //

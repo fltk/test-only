@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.36 1999/12/20 08:33:13 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.37 2000/01/10 06:31:21 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -270,12 +270,9 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       if (pp <= e) x2 = expandpos(p, pp, buf, &offset2)-xscroll_;
       else offset2 = strlen(buf);
       fl_color(selection_color());
-      fl_rectf(X+int(x1+.5), Y+ypos, int(x2-x1), height);
-      
-      //fl_clip(X+int(x1+.5), Y+ypos, int(x2-x1), height);
+      fl_rectf(X+x1, Y+ypos, x2-x1, height);
       fl_color(selection_text_color());
       fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
-      //fl_pop_clip();
       if (pp < e) {
 	fl_color(textcolor);
 	fl_draw(buf+offset2, X+x2, Y+ypos+desc);
@@ -614,7 +611,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
       if (!(damage()&FL_DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
-    if (when() & FL_WHEN_RELEASE && !Fl::pushed()) maybe_do_callback();
+    if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
 
   case FL_PUSH:
@@ -748,5 +745,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.36 1999/12/20 08:33:13 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.37 2000/01/10 06:31:21 bill Exp $".
 //

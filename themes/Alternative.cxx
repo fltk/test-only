@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.18 2000/01/07 08:50:44 bill Exp $"
+// "$Id: Alternative.cxx,v 1.19 2000/01/10 06:31:30 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -259,51 +259,51 @@ int fltk_theme(int, char**) {
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_box(FL_HIGHLIGHT_BOX);
-    s->set_glyph(alt_glyph);
-    s->set_glyph_box(FL_NO_BOX);
+    s->box = FL_HIGHLIGHT_BOX;
+    s->glyph = alt_glyph;
+    s->glyph_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_glyph(alt_glyph);
-    s->set_glyph_box(FL_NO_BOX);
+    s->glyph = alt_glyph;
+    s->glyph_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->set_glyph(alt_glyph);
+    s->glyph = alt_glyph;
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->set_glyph(choice_glyph);
-    s->set_glyph_box(FL_UP_BOX);
+    s->glyph = choice_glyph;
+    s->glyph_box = FL_UP_BOX;
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    s->set_glyph(alt_glyph);
+    s->glyph = alt_glyph;
   }
 
   if ((s = Fl_Style::find("return button"))) {
-    s->set_glyph(return_glyph);
+    s->glyph = return_glyph;
   }
 
   if ((s = Fl_Style::find("light button"))) {
-    s->set_glyph(light_glyph);
+    s->glyph = light_glyph;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->set_glyph(alt_glyph);
+    s->glyph = alt_glyph;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->set_glyph(alt_glyph);
+    s->glyph = alt_glyph;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->set_glyph(alt_glyph);
+    s->glyph = alt_glyph;
   }
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.18 2000/01/07 08:50:44 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.19 2000/01/10 06:31:30 bill Exp $".
 //

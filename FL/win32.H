@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.26 1999/11/15 04:02:32 carl Exp $"
+// "$Id: win32.H,v 1.27 2000/01/10 06:31:04 bill Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -89,7 +89,6 @@ public:
 extern FL_API HCURSOR fl_default_cursor;
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 Fl_Window* fl_find(Window xid);
-extern FL_API char fl_override_redirect; // hack into Fl_Window::make_xid()
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
 extern FL_API struct FL_API Fl_XMap {
@@ -102,8 +101,9 @@ inline HPEN fl_pen() {return fl_current_xmap->pen;}
 HBRUSH fl_brush(); // allocates a brush if necessary
 
 extern FL_API HINSTANCE fl_display;
-extern FL_API Window fl_window;
 extern FL_API HDC fl_gc;
+extern FL_API Window fl_window;
+extern FL_API HFONT fl_xfont;
 extern FL_API HPALETTE fl_palette; // non-zero only on 8-bit displays!
 extern FL_API HDC fl_GetDC(Window);
 extern FL_API MSG fl_msg;
@@ -131,5 +131,5 @@ extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.26 1999/11/15 04:02:32 carl Exp $".
+// End of "$Id: win32.H,v 1.27 2000/01/10 06:31:04 bill Exp $".
 //

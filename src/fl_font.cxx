@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.20 2000/01/09 15:42:02 mike Exp $"
+// "$Id: fl_font.cxx,v 1.21 2000/01/10 06:31:27 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 // Static variables containing the currently selected font & size:
 Fl_Font fl_font_;
 unsigned fl_size_;
-static Fl_FontSize* current_fontsize;
+Fl_FontSize* fl_fontsize;
 
 // Static variable for the default encoding:
 const char *fl_encoding = "iso8859-1";
@@ -50,8 +50,8 @@ XFontStruct* fl_xfont;
 static GC font_gc;
 
 static void set_current_fontsize(Fl_FontSize* f) {
-  if (f != current_fontsize) {
-    current_fontsize = f;
+  if (f != fl_fontsize) {
+    fl_fontsize = f;
     fl_xfont = f->font;
     font_gc = 0;
   }
@@ -138,7 +138,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  int base = 0; int size = 256;
 //  glDeleteLists(listbase+base,size);
 // }
-  if (this == current_fontsize) current_fontsize = 0;
+  if (this == fl_fontsize) fl_fontsize = 0;
   XFreeFont(fl_display, font);
 }
 #endif
@@ -179,7 +179,7 @@ void fl_font(Fl_Font font, unsigned size) {
 
 void fl_font(Fl_Font font, unsigned size, const char* encoding) {
   if (font == fl_font_ && size == fl_size_ &&
-      !strcmp(current_fontsize->encoding, encoding)) return;
+      !strcmp(fl_fontsize->encoding, encoding)) return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
@@ -297,5 +297,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.20 2000/01/09 15:42:02 mike Exp $".
+// End of "$Id: fl_font.cxx,v 1.21 2000/01/10 06:31:27 bill Exp $".
 //

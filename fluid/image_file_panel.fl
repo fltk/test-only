@@ -15,11 +15,17 @@ Function {make_images_dir_window()} {open
 modal=0;} open
     xywh {409 202 310 100} visible
   } {
-    Fl_Return_Button {} {
-      label OK
-      callback {images_dir_window->hide();
-modal=0;}
-      private xywh {250 70 50 20}
+    Fl_Input images_dir_input {
+      xywh {10 15 220 20} hotspot
+    }
+    Fl_Button {} {
+      label {Browse ...}
+      callback {browse_dir_cb();}
+      private xywh {230 15 70 20}
+    }
+    Fl_Box {} {
+      label {(relative to the location of the .fl file)}
+      xywh {10 40 220 20} align 149 labelsize 10
     }
     Fl_Button {} {
       label Cancel
@@ -27,17 +33,11 @@ modal=0;}
 modal=0; cancel=1;}
       private xywh {180 70 60 20}
     }
-    Fl_Input images_dir_input {
-      xywh {10 15 220 20} hotspot
-    }
-    Fl_Button {} {
-      label {Browse ...}
-      callback {browse_dir_cb();} selected
-      private xywh {230 15 70 20}
-    }
-    Fl_Box {} {
-      label {(relative to the location of the .fl file)}
-      xywh {10 40 220 20} align 149 labelsize 10
+    Fl_Return_Button {} {
+      label OK
+      callback {images_dir_window->hide();
+modal=0;}
+      private xywh {250 70 50 20}
     }
   }
 } 

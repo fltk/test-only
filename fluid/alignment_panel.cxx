@@ -10,15 +10,15 @@ Fl_Input *vertical_input=(Fl_Input *)0;
 
 Fl_Input *snap_input=(Fl_Input *)0;
 
-static void cb_Close(Fl_Button*, void*) {
-  alignment_window->hide();
-}
-
 Fl_Input *header_file_input=(Fl_Input *)0;
 
 Fl_Input *code_file_input=(Fl_Input *)0;
 
 Fl_Light_Button *include_H_from_C_button=(Fl_Light_Button *)0;
+
+static void cb_Close(Fl_Button*, void*) {
+  alignment_window->hide();
+}
 
 Fl_Window* make_alignment_window() {
   Fl_Window* w;
@@ -44,9 +44,6 @@ Fl_Window* make_alignment_window() {
       }
       o->end();
     }
-    { Fl_Button* o = new Fl_Button(140, 280, 60, 20, "Close");
-      o->callback((Fl_Callback*)cb_Close);
-    }
     { Fl_Group* o = new Fl_Group(10, 140, 190, 130, "Output File Names:");
       o->box(FL_ENGRAVED_BOX);
       o->align(FL_ALIGN_TOP_LEFT);
@@ -67,6 +64,9 @@ Fl_Window* make_alignment_window() {
         o->callback((Fl_Callback*)include_H_from_C_button_cb);
       }
       o->end();
+    }
+    { Fl_Button* o = new Fl_Button(140, 280, 60, 20, "Close");
+      o->callback((Fl_Callback*)cb_Close);
     }
     o->set_modal();
     o->end();

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.6 1999/11/27 15:45:02 carl Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.7 2000/01/10 06:31:13 bill Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -100,17 +100,6 @@ int Fl_Positioner::handle(int e) {
 
 #include <FL/Fl_Input.H>
 
-Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
-: Fl_Widget(x, y, w, h, l) {
-  style(default_style);
-  align(FL_ALIGN_BOTTOM);
-  when(FL_WHEN_CHANGED);
-  xmin = ymin = 0;
-  xmax = ymax = 1;
-  xvalue_ = yvalue_ = .5;
-  xstep_ = ystep_ = 0;
-}
-
 void Fl_Positioner::xbounds(double a, double b) {
   if (a != xmin || b != xmax) {
     xmin = a; xmax = b;
@@ -131,8 +120,19 @@ static void revert(Fl_Style* s) {
   s->selection_color = FL_RED;
 }
 
-Fl_Style* Fl_Positioner::default_style = new Fl_Named_Style("Positioner", revert, &Fl_Positioner::default_style);
+static Fl_Named_Style* style = new Fl_Named_Style("Positioner", revert, &style);
+
+Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
+: Fl_Widget(x, y, w, h, l) {
+  style(::style);
+  align(FL_ALIGN_BOTTOM);
+  when(FL_WHEN_CHANGED);
+  xmin = ymin = 0;
+  xmax = ymax = 1;
+  xvalue_ = yvalue_ = .5;
+  xstep_ = ystep_ = 0;
+}
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.6 1999/11/27 15:45:02 carl Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.7 2000/01/10 06:31:13 bill Exp $".
 //

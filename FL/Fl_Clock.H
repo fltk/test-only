@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.H,v 1.12 1999/11/20 04:42:28 vincent Exp $"
+// "$Id: Fl_Clock.H,v 1.13 2000/01/10 06:31:00 bill Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,6 @@ protected:
   void draw(int, int, int, int);
   void draw();
 private:
-  static Fl_Style* default_style;
   int hour_, minute_, second_;
   ulong value_;
   void drawhands(Fl_Color,Fl_Color); // part of draw
@@ -69,5 +68,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Clock.H,v 1.12 1999/11/20 04:42:28 vincent Exp $".
+// End of "$Id: Fl_Clock.H,v 1.13 2000/01/10 06:31:00 bill Exp $".
 //

@@ -10,13 +10,13 @@ Fl_Light_Button *f_c_button=(Fl_Light_Button *)0;
 
 Fl_Input *f_name_input=(Fl_Input *)0;
 
+Fl_Input *f_attributes_input=(Fl_Input *)0;
+
 Fl_Input *f_return_type_input=(Fl_Input *)0;
 
 Fl_Return_Button *f_panel_ok=(Fl_Return_Button *)0;
 
 Fl_Button *f_panel_cancel=(Fl_Button *)0;
-
-Fl_Input *f_attributes_input=(Fl_Input *)0;
 
 Fl_Window* make_function_panel() {
   Fl_Window* w;
@@ -34,19 +34,19 @@ Fl_Window* make_function_panel() {
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
     }
+    { Fl_Input* o = f_attributes_input = new Fl_Input(10, 105, 270, 25, "Attributes (virtual, static, __declspec, ...)");
+      o->align(FL_ALIGN_TOP_LEFT);
+      o->when(FL_WHEN_NEVER);
+    }
     { Fl_Input* o = f_return_type_input = new Fl_Input(10, 150, 270, 25, "Return Type: (blank to return outermost widget)");
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
     }
     { Fl_Return_Button* o = f_panel_ok = new Fl_Return_Button(110, 185, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = f_panel_cancel = new Fl_Button(200, 185, 80, 25, "Cancel");
       o->shortcut(0xff1b);
-    }
-    { Fl_Input* o = f_attributes_input = new Fl_Input(10, 105, 270, 25, "Attributes (virtual, static, __declspec, ...)");
-      o->align(FL_ALIGN_TOP_LEFT);
-      o->when(FL_WHEN_NEVER);
     }
     o->set_modal();
     o->end();
@@ -73,7 +73,7 @@ Fl_Window* make_code_panel() {
       Fl_Group::current()->resizable(o);
     }
     { Fl_Return_Button* o = code_panel_ok = new Fl_Return_Button(115, 145, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = code_panel_cancel = new Fl_Button(205, 145, 80, 25, "Cancel");
       o->shortcut(0xff1b);
@@ -111,7 +111,7 @@ Fl_Window* make_codeblock_panel() {
       o->when(FL_WHEN_NEVER);
     }
     { Fl_Return_Button* o = codeblock_panel_ok = new Fl_Return_Button(115, 100, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = codeblock_panel_cancel = new Fl_Button(205, 100, 80, 25, "Cancel");
       o->shortcut(0xff1b);
@@ -149,7 +149,7 @@ Fl_Window* make_declblock_panel() {
       o->when(FL_WHEN_NEVER);
     }
     { Fl_Return_Button* o = declblock_panel_ok = new Fl_Return_Button(120, 105, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = declblock_panel_cancel = new Fl_Button(210, 105, 80, 25, "Cancel");
       o->shortcut(0xff1b);
@@ -186,7 +186,7 @@ Fl_Window* make_decl_panel() {
       Fl_Group::current()->resizable(o);
     }
     { Fl_Return_Button* o = decl_panel_ok = new Fl_Return_Button(115, 145, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = decl_panel_cancel = new Fl_Button(205, 145, 80, 25, "Cancel");
       o->shortcut(0xff1b);
@@ -226,7 +226,7 @@ Fl_Window* make_class_panel() {
       o->when(FL_WHEN_NEVER);
     }
     { Fl_Return_Button* o = c_panel_ok = new Fl_Return_Button(110, 135, 80, 25, "OK");
-      w->hotspot(o);
+      ((Fl_Window*)(o->parent()))->hotspot(o);
     }
     { Fl_Button* o = c_panel_cancel = new Fl_Button(200, 135, 80, 25, "Cancel");
       o->shortcut(0xff1b);

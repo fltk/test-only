@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.9 1999/12/17 20:18:11 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.10 2000/01/10 06:31:24 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -41,10 +41,10 @@ static void revert(Fl_Style* s) {
   s->color                 = FL_GRAY;
   s->label_color           = FL_BLACK;
   s->selection_color       = FL_NO_COLOR;
-  s->selection_text_color  = FL_BLACK;
+  s->selection_text_color  = FL_NO_COLOR;
   s->off_color             = FL_GRAY;
   s->highlight_color       = FL_NO_COLOR;
-  s->highlight_label_color = FL_BLACK;
+  s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
   s->label_size		   = FL_NORMAL_SIZE;
   s->text_size             = FL_NORMAL_SIZE;
@@ -52,7 +52,7 @@ static void revert(Fl_Style* s) {
   s->parent                = 0;	// this is the topmost style always
 }
 
-Fl_Style* Fl_Widget::default_style;
+Fl_Named_Style* Fl_Widget::default_style;
 
 // Copying a style pointer from another widget is not safe if that
 // style is dynamic() because it may change or be deleted.  This makes
@@ -119,7 +119,7 @@ style_functions(unsigned,leading);
 
 static void plainrevert(Fl_Style*) {}
 
-Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Style** pds) {
+Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Named_Style** pds) {
   static bool init = 0;
   memset((void*)this, 0, sizeof(*this));
   if (!init) {
@@ -131,7 +131,7 @@ Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Styl
   else revertfunc = plainrevert;
   next = Fl_Named_Style::first;
   Fl_Named_Style::first = this;
-  pdefault_style = pds;
+  back_pointer = pds;
   name = n;
 }
 
@@ -165,5 +165,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.9 1999/12/17 20:18:11 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.10 2000/01/10 06:31:24 bill Exp $".
 //

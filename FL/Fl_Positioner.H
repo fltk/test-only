@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.H,v 1.9 1999/11/27 15:44:47 carl Exp $"
+// "$Id: Fl_Positioner.H,v 1.10 2000/01/10 06:31:03 bill Exp $"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,6 @@ protected:
   void draw();
 
 public:
-  static Fl_Style* default_style;
 
   int handle(int);
   Fl_Positioner(int x,int y,int w,int h, const char *l=0);
@@ -72,5 +71,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Positioner.H,v 1.9 1999/11/27 15:44:47 carl Exp $".
+// End of "$Id: Fl_Positioner.H,v 1.10 2000/01/10 06:31:03 bill Exp $".
 //

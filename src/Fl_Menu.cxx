@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.76 2000/01/09 15:42:01 mike Exp $"
+// "$Id: Fl_Menu.cxx,v 1.77 2000/01/10 06:31:22 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,8 @@ static void mw_revert(Fl_Style* s) {
   s->leading = 4;
 }
 
-static Fl_Style* menuwindow_default_style = new Fl_Named_Style("Menu_Window", mw_revert);
+static Fl_Named_Style* menuwindow_default_style =
+  new Fl_Named_Style("Menu_Window", mw_revert, &menuwindow_default_style);
 
 // The default style for all menu items:
 
@@ -86,7 +87,8 @@ static void mi_revert(Fl_Style* s) {
 //s->parent = Fl_Widget::default_style;
 }
 
-Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_revert, &Fl_Menu_Item::default_style);
+Fl_Named_Style* Fl_Menu_Item::default_style = 
+  new Fl_Named_Style("Menu_Item", mi_revert, &Fl_Menu_Item::default_style);
 
 // This style is directly referenced for the menu titles for some fields
 // (search this file for "title_style" to find out which).  This allows
@@ -102,7 +104,8 @@ static void mt_revert(Fl_Style* s) {
 #endif
 }
 
-Fl_Style* Fl_Menu_Item::title_style = new Fl_Named_Style("Menu_Title", mt_revert, &Fl_Menu_Item::title_style);
+Fl_Named_Style* Fl_Menu_Item::title_style =
+  new Fl_Named_Style("Menu_Title", mt_revert, &Fl_Menu_Item::title_style);
 
 extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
@@ -111,33 +114,38 @@ const Fl_Style* Fl_Menu_Item::style() const {
   return style_ ? style_ : default_style;
 }
 
-unsigned Fl_Menu_Item::geti(const unsigned* a) const {
-  int i = a-(const unsigned*)&style_->color;
-  for (const Fl_Style* s = style(); s; s = s->parent)
-    if (*((unsigned*)(&s->color+i))) return *((unsigned*)(&s->color+i));
-  return 0;
+// Retrieve/set values from a style, using parent's value if not in child:
+
+#define style_functions(TYPE,FIELD)	\
+TYPE Fl_Menu_Item::FIELD() const {	\
+  for (const Fl_Style* s = style();;) {	\
+    if (s->FIELD) return s->FIELD;	\
+    s = s->parent;			\
+    if (!s) return 0;			\
+  }					\
+}					\
+void Fl_Menu_Item::FIELD(TYPE v) {	\
+  if (!style_) style_ = default_style;	\
+  fl_unique_style(style_)->FIELD = v;	\
 }
 
-void* Fl_Menu_Item::getp(const void* const* a) const {
-  int i = a-(const void* const*)&style_->box;
-  for (const Fl_Style* s = style(); s; s = s->parent)
-    if (*((void**)(&s->box+i))) return *((void**)(&s->box+i));
-  return 0;
-}
-
-void Fl_Menu_Item::setp(const void* const * p, const void* v) {
-  int d = p-(const void**)&style_->box;
-  style_ = style();
-  Fl_Style* s = fl_unique_style(style_);
-  *((const void**)&s->box + d) = v;
-}
-
-void Fl_Menu_Item::seti(const unsigned * p, unsigned v) {
-  int d = p-(unsigned*)&style_->color;
-  style_ = style();
-  Fl_Style* s = fl_unique_style(style_);
-  *((unsigned*)&s->color + d) = v;
-}
+style_functions(Fl_Boxtype,box);
+style_functions(Fl_Boxtype,glyph_box);
+style_functions(Fl_Glyph,glyph);
+style_functions(Fl_Font,label_font);
+//style_functions(Fl_Font,text_font);
+style_functions(Fl_Labeltype,label_type);
+style_functions(Fl_Color,color);
+style_functions(Fl_Color,label_color);
+style_functions(Fl_Color,selection_color);
+style_functions(Fl_Color,selection_text_color);
+style_functions(Fl_Color,off_color);
+style_functions(Fl_Color,highlight_color);
+style_functions(Fl_Color,highlight_label_color);
+//style_functions(Fl_Color,text_color);
+style_functions(unsigned,label_size);
+//style_functions(unsigned,text_size);
+//style_functions(unsigned,leading);
 
 ////////////////////////////////////////////////////////////////
 
@@ -377,19 +385,6 @@ int menuwindow::ypos(int i) {
   return Y;
 }
 
-// scroll so item i is visible on screen
-void menuwindow::autoscroll(int i) {
-  int Y = y()+ypos(i);
-  if (Y <= Fl::y()) Y = Fl::y()-Y+10;
-  else {
-    Y = Y+itemheight-Fl::h()-Fl::y();
-    if (Y < 0) return;
-    Y = -Y-10;
-  }
-  Fl_Menu_Window::position(x(), y()+Y);
-  // y(y()+Y); // don't wait for response from X
-}
-
 ////////////////////////////////////////////////////////////////
 
 void menutitle::draw() {
@@ -575,9 +570,12 @@ static int backward(int menu) { // previous item in menu menu if possible
   return 0;
 }
 
+static int last_event;
+
 int menuwindow::handle(int e) {
   menustate &p = *(::p);
   const Fl_Menu_Item* m;
+  last_event = e;
   switch (e) {
 
   case FL_KEYBOARD:
@@ -585,7 +583,7 @@ int menuwindow::handle(int e) {
     case FL_Up:
       if (p.menubar && p.menu_number == 0) ;
       else if (backward(p.menu_number));
-      else if (p.menubar && p.menu_number==1) setitem(0, p.menus[0]->selected);
+      //else if (p.menubar && p.menu_number==1) setitem(0, p.menus[0]->selected);
       return 1;
     case FL_Down:
       if (p.menu_number || !p.menubar) forward(p.menu_number);
@@ -695,6 +693,27 @@ int menuwindow::handle(int e) {
 
   }
   return Fl_Window::handle(e);
+}
+
+static void autoscroll_timeout(void*) {
+  if (last_event == FL_DRAG || last_event == FL_MOVE)
+    p->menus[0]->handle(last_event);
+}
+
+// scroll so item i is visible on screen
+void menuwindow::autoscroll(int i) {
+  int Y = y()+ypos(i);
+  if (Y <= Fl::y()) Y = Fl::y()-Y+10;
+  else {
+    Y = Y+itemheight-Fl::h()-Fl::y();
+    if (Y < 0) return;
+    Y = -Y-10;
+  }
+  Fl_Menu_Window::position(x(), y()+Y);
+  // y(y()+Y); // don't wait for response from X
+  Fl::remove_timeout(autoscroll_timeout, 0);
+  if (last_event == FL_DRAG || last_event == FL_MOVE)
+    Fl::add_timeout(.1,autoscroll_timeout, 0);
 }
 
 const Fl_Menu_Item* Fl_Menu_Item::pulldown(
@@ -808,8 +827,8 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	    }
 	    p.menus[p.nummenus++] = mw =
 	      new menuwindow(menutable, nX, nY, 0, 0, 0, title, 0);
-	    mw->show();
 	    if (title) goto SHOW_MENUBAR_TITLE;
+	    mw->show();
 	  }
 	} else { // !m->submenu():
 	  while (p.nummenus > p.menu_number+1) delete p.menus[--p.nummenus];
@@ -826,6 +845,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	    mw->title->y(mw->title->y()+mw->title->h()-nh);
 	    mw->title->h(nh);
 	    mw->title->show();
+	    if (mw != fakemenu) mw->show();
 	  }
 	}
       }
@@ -833,6 +853,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
     Fl::wait();
   }
 
+  Fl::remove_timeout(autoscroll_timeout, 0);
   oldi = p.item();
   delete fakemenu;
   while (p.nummenus>1) delete p.menus[--p.nummenus];
@@ -874,5 +895,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.76 2000/01/09 15:42:01 mike Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.77 2000/01/10 06:31:22 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.50 2000/01/09 01:06:11 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.51 2000/01/10 06:31:25 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -85,18 +85,13 @@ void Fl_Widget::layout() {
   damage_ &= ~FL_DAMAGE_LAYOUT;
 }
 
-void Fl_Widget::resize(int X, int Y, int W, int H) {
+int Fl_Widget::resize(int X, int Y, int W, int H) {
+  if (x_ == X && y_ == Y && w_ == W && h_ == H) return 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   damage_ |= FL_DAMAGE_LAYOUT;
   for (Fl_Widget* w = this->parent(); w; w = w->parent())
     w->damage_ |= FL_DAMAGE_LAYOUT;
-}
-
-// this is useful for parent widgets to call to resize children:
-int Fl_Widget::damage_resize(int X, int Y, int W, int H) {
-  if (x() == X && y() == Y && w() == W && h() == H) return 0;
-  resize(X, Y, W, H);
-  redraw();
+  Fl::damage(FL_DAMAGE_LAYOUT);
   return 1;
 }
 
@@ -108,11 +103,20 @@ int Fl_Widget::take_focus() {
   return 1;
 }
 
+void Fl_Widget::damage_label() {
+  if (!label()) return;
+  // ignore inside label:
+  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
+  // outside label requires a marker flag and damage to parent:
+  damage_ |= FL_DAMAGE_CHILD_LABEL;
+  if (parent()) parent()->damage(FL_DAMAGE_CHILD);
+}
+
 void Fl_Widget::activate() {
   if (!active()) {
     clear_flag(FL_INACTIVE);
     if (active_r()) {
-      damage(FL_DAMAGE_ALL|FL_DAMAGE_CHILD_LABEL);
+      damage_label(); redraw();
       handle(FL_ACTIVATE);
       if (inside(Fl::focus())) Fl::focus()->take_focus();
     }
@@ -122,7 +126,7 @@ void Fl_Widget::activate() {
 void Fl_Widget::deactivate() {
   if (active_r()) {
     set_flag(FL_INACTIVE);
-    damage(FL_DAMAGE_ALL|FL_DAMAGE_CHILD_LABEL);
+    damage_label(); redraw();
     handle(FL_DEACTIVATE);
     throw_focus();
   } else {
@@ -140,7 +144,7 @@ void Fl_Widget::show() {
   if (!visible()) {
     clear_flag(FL_INVISIBLE);
     if (visible_r()) {
-      damage(FL_DAMAGE_ALL|FL_DAMAGE_CHILD_LABEL);
+      damage_label(); redraw();
       handle(FL_SHOW);
     }
   }
@@ -214,17 +218,16 @@ Fl_Color Fl_Widget::draw_button() const {
   Fl_Flags f = flags();
   Fl_Color c = color();
   Fl_Color lc = label_color();
-  if ((f&FL_VALUE) && selection_color()) {
-    c = selection_color();
-    lc = selection_text_color();
-  }
   if (!active_r()) {
     f |= FL_INACTIVE;
-    // lc = fl_inactive(lc); don't do this, draw_button_label() will do it
-  } else if (Fl::belowmouse() == this && highlight_color()) {
+  } else if (Fl::belowmouse() == this) {
     f |= FL_HIGHLIGHT;
-    c = highlight_color();
-    lc = highlight_label_color();
+    Fl_Color c1 = highlight_color();
+    if (c1) {c = c1; c1 = highlight_label_color(); if (c1) lc = c1;}
+  }
+  if (f&FL_VALUE) {
+    Fl_Color c1 = selection_color(); if (c1) c = c1;
+    c1 = selection_text_color(); if (c1) lc = c1;
   }
   if (Fl::focus() == this) f |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
@@ -243,9 +246,9 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
   Fl_Color fc = label_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
-  } else if ((f&FL_HIGHLIGHT) && highlight_color()) {
-    fc = highlight_label_color();
-    bc = highlight_color();
+  } else if (f&FL_HIGHLIGHT) {
+    Fl_Color c1 = highlight_color();
+    if (c1) {bc = c1; c1 = highlight_label_color(); if (c1) fc = c1;}
   }
   glyph()(T, X,Y,W,H, bc, fc, f, glyph_box());
 }
@@ -266,5 +269,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.50 2000/01/09 01:06:11 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.51 2000/01/10 06:31:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.8 2000/01/07 08:50:53 bill Exp $"
+// "$Id: motif.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -164,101 +164,101 @@ extern "C" int fltk_theme(int, char**)
   fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
 
-  Fl_Widget::default_style->set_box(&thin_motif_up_box);
-  Fl_Widget::default_style->set_selection_color(FL_DARK1);
-  Fl_Widget::default_style->set_glyph_box(&thin_motif_up_box);
-  //Fl_Widget::default_style->set_highlight_color(0);
+  Fl_Widget::default_style->box = &thin_motif_up_box;
+  Fl_Widget::default_style->selection_color = FL_DARK1;
+  Fl_Widget::default_style->glyph_box = &thin_motif_up_box;
+  //Fl_Widget::default_style->highlight_color = 0;
 
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_box(&thin_motif_menu_box);
-    s->set_glyph(motif_glyph);
-    s->set_glyph_box(FL_NO_BOX);
-    s->set_selection_color(FL_GRAY);
-    s->set_selection_text_color(FL_BLACK);
-    s->set_off_color(FL_GRAY);
+    s->box = &thin_motif_menu_box;
+    s->glyph = motif_glyph;
+    s->glyph_box = FL_NO_BOX;
+    s->selection_color = FL_GRAY;
+    s->selection_text_color = FL_BLACK;
+    s->off_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("menu window"))) {
-    s->set_leading(0);
+    s->leading = 0;
   }
 
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_box(&thin_motif_menu_box);
-    s->set_glyph(motif_glyph);
-    s->set_glyph_box(FL_NO_BOX);
-    s->set_selection_color(FL_GRAY);
-    s->set_selection_text_color(FL_BLACK);
-    s->set_off_color(FL_GRAY);
+    s->box = &thin_motif_menu_box;
+    s->glyph = motif_glyph;
+    s->glyph_box = FL_NO_BOX;
+    s->selection_color = FL_GRAY;
+    s->selection_text_color = FL_BLACK;
+    s->off_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    s->set_glyph(motif_glyph);
-    s->set_on_color(FL_DARK1);
-    s->set_off_color(FL_GRAY);
+    s->glyph = motif_glyph;
+    s->selection_color = FL_DARK1;
+    s->off_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->set_glyph(motif_glyph);
-    s->set_box(&thin_motif_down_box);
-    s->set_color(FL_DARK1);
-    s->set_selection_color(FL_DARK1);
+    s->glyph = motif_glyph;
+    s->box = &thin_motif_down_box;
+    s->color = FL_DARK1;
+    s->selection_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->set_box(&thin_motif_down_box);
-    s->set_color(FL_DARK1);
-    s->set_selection_color(FL_DARK1);
+    s->box = &thin_motif_down_box;
+    s->color = FL_DARK1;
+    s->selection_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->set_box(&thin_motif_down_box);
-    s->set_color(FL_DARK1);
-    s->set_selection_color(FL_DARK1);
+    s->box = &thin_motif_down_box;
+    s->color = FL_DARK1;
+    s->selection_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("input"))) {
-    s->set_color(FL_GRAY);
-    s->set_selection_color(FL_BLACK);
-    s->set_selection_text_color(FL_GRAY);
-    s->set_box(&thin_motif_down_box);
+    s->color = FL_GRAY;
+    s->selection_color = FL_BLACK;
+    s->selection_text_color = FL_GRAY;
+    s->box = &thin_motif_down_box;
   }
 
   if ((s = Fl_Style::find("output"))) {
-    s->set_color(FL_GRAY);
-    s->set_selection_color(FL_BLACK);
-    s->set_selection_text_color(FL_GRAY);
-    s->set_box(&thin_motif_down_box);
+    s->color = FL_GRAY;
+    s->selection_color = FL_BLACK;
+    s->selection_text_color = FL_GRAY;
+    s->box = &thin_motif_down_box;
   }
 
   if ((s = Fl_Style::find("counter"))) {
-    s->set_box(&thin_motif_down_box);
+    s->box = &thin_motif_down_box;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
-    s->set_box(&thin_motif_highlight_box);
-    s->set_highlight_color(FL_GRAY);
+    s->box = &thin_motif_highlight_box;
+    s->highlight_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->set_glyph(motif_glyph);
+    s->glyph = motif_glyph;
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->set_glyph(choice_glyph);
-    s->set_glyph_box(FL_UP_BOX);
+    s->glyph = choice_glyph;
+    s->glyph_box = FL_UP_BOX;
   }
 
   if ((s = Fl_Style::find("browser"))) {
-    s->set_color(FL_GRAY);
-    s->set_selection_color(FL_BLACK);
-    s->set_selection_text_color(FL_GRAY);
-    s->set_box(&thin_motif_down_box);
+    s->color = FL_GRAY;
+    s->selection_color = FL_BLACK;
+    s->selection_text_color = FL_GRAY;
+    s->box = &thin_motif_down_box;
   }
   return 0;
 }
 
 //
-// End of "$Id: motif.cxx,v 1.8 2000/01/07 08:50:53 bill Exp $"
+// End of "$Id: motif.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
 //

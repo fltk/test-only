@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.77 2000/01/09 08:17:26 bill Exp $"
+// "$Id: Fl.cxx,v 1.78 2000/01/10 06:31:16 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -737,8 +737,6 @@ void Fl_Widget::damage(uchar flags) {
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
     damage_ |= flags;
     Fl::damage(FL_DAMAGE_CHILD);
-    if ((damage()&FL_DAMAGE_CHILD_LABEL) && parent())
-      parent()->damage(FL_DAMAGE_CHILD);
   }
 }
 
@@ -806,5 +804,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.77 2000/01/09 08:17:26 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.78 2000/01/10 06:31:16 bill Exp $".
 //

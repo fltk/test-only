@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.18 1999/11/18 19:32:11 carl Exp $"
+// "$Id: fl_color.cxx,v 1.19 2000/01/10 06:31:26 bill Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -138,20 +138,7 @@ ulong fl_xpixel(Fl_Color i) {
   // color one but wastes time):
 
   // translate rgb colors into color index:
-  int index;
-  if (i & 0xFFFFFF00) {
-    uchar r = i>>24;
-    uchar g = i>>16;
-    uchar b = i>> 8;
-    if (r == g && r == b) { // get it out of gray ramp
-      index = fl_gray_ramp(r*FL_NUM_GRAY/256);
-    } else {		// get it out of color cube:
-      index =
-	fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    }
-  } else {
-    index = i;
-  }
+  int index = fl_nearest_color(i);
 
   // see if we have already allocated it:
 #if HAVE_OVERLAY
@@ -293,6 +280,15 @@ void fl_get_color(Fl_Color i, uchar& r, uchar& g, uchar& b) {
   b = uchar(i>>8);
 }
 
+Fl_Color fl_nearest_color(Fl_Color i) {
+  if (!(i & 0xFFFFFF00)) return i;
+  uchar r = i>>24;
+  uchar g = i>>16;
+  uchar b = i>> 8;
+  if (r == g && r == b) return fl_gray_ramp(r*FL_NUM_GRAY/256);
+  return fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+}
+
 Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, double weight) {
   Fl_Color rgb1 = fl_get_color(color1);
   Fl_Color rgb2 = fl_get_color(color2);
@@ -303,8 +299,12 @@ Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, double weight) {
 	(uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb2>>8))*(1-weight)));
 }
 
+Fl_Color fl_inactive(Fl_Color c) {
+  return fl_color_average(c, FL_GRAY, Fl_Style::inactive_color_weight);
+}
+
 Fl_Color fl_inactive(Fl_Color c, Fl_Flags f) {
-  if (f&FL_INACTIVE) return fl_color_average(c, FL_GRAY, Fl_Style::inactive_color_weight);
+  if (f&FL_INACTIVE) return fl_inactive(c);
   return c;
 }
 
@@ -320,5 +320,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.18 1999/11/18 19:32:11 carl Exp $".
+// End of "$Id: fl_color.cxx,v 1.19 2000/01/10 06:31:26 bill Exp $".
 //

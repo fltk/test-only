@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.H,v 1.14 1999/11/20 04:42:28 vincent Exp $"
+// "$Id: Fl_Check_Button.H,v 1.15 2000/01/10 06:30:59 bill Exp $"
 //
 // Check button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,12 +33,11 @@ public:
   virtual int handle(int);
   Fl_Check_Button(int x,int y,int w,int h,const char *l = 0);
 protected:
-  static Fl_Style* default_style;
   virtual void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Check_Button.H,v 1.14 1999/11/20 04:42:28 vincent Exp $".
+// End of "$Id: Fl_Check_Button.H,v 1.15 2000/01/10 06:30:59 bill Exp $".
 //

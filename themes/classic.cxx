@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.14 2000/01/07 08:50:47 bill Exp $"
+// "$Id: classic.cxx,v 1.15 2000/01/10 06:31:32 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -44,38 +44,38 @@ int fltk_theme(int, char**) {
   fl_down_box.data = "NNTUJJUWAAAA";
   Fl_Style* s;
   if ((s = Fl_Style::find("menu_item"))) {
-    s->set_box(FL_FLAT_BOX);
-    s->set_highlight_color(FL_WHITE);
-    s->set_highlight_label_color(0);
-    s->set_on_color(FL_GRAY);
-    s->set_off_color(FL_GRAY);
+    s->box = FL_FLAT_BOX;
+    s->highlight_color = FL_WHITE;
+    s->highlight_label_color = 0;
+    s->selection_color = FL_GRAY;
+    s->off_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("check_button"))) {
-    s->set_on_color(FL_BLACK);
-    s->set_off_color(FL_GRAY);
+    s->selection_color = FL_BLACK;
+    s->off_color = FL_GRAY;
   }
-  Fl_Widget::default_style->set_highlight_color(0);
+  Fl_Widget::default_style->highlight_color = 0;
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->set_box(FL_FLAT_BOX);
+    s->box = FL_FLAT_BOX;
   }
   if ((s = Fl_Style::find("slider"))) {
-    //s->set_box(FL_DOWN_BOX);
-    s->set_glyph_box(FL_UP_BOX);
+    //s->box = FL_DOWN_BOX;
+    s->glyph_box = FL_UP_BOX;
   }
   if ((s = Fl_Style::find("input"))) {
-    s->set_box(FL_DOWN_BOX);
-    s->set_selection_color(FL_DARK2);
-    s->set_selection_text_color(FL_BLACK);
+    s->box = FL_DOWN_BOX;
+    s->selection_color = FL_DARK2;
+    s->selection_text_color = FL_BLACK;
   }
   if ((s = Fl_Style::find("output"))) {
-    s->set_box(FL_DOWN_BOX);
-    s->set_color(FL_GRAY);
-    s->set_selection_color(FL_DARK2);
-    s->set_selection_text_color(FL_BLACK);
+    s->box = FL_DOWN_BOX;
+    s->color = FL_GRAY;
+    s->selection_color = FL_DARK2;
+    s->selection_text_color = FL_BLACK;
   }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.14 2000/01/07 08:50:47 bill Exp $".
+// End of "$Id: classic.cxx,v 1.15 2000/01/10 06:31:32 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.16 1999/11/22 09:00:25 bill Exp $"
+// "$Id: input.cxx,v 1.17 2000/01/10 06:31:29 bill Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -68,11 +68,11 @@ void color_cb(Fl_Widget* button, void* v) {
   }
   c = fl_show_colormap(c);
   switch ((long)v) {
-    case 0: s.set_color(c); break;
-    case 1: s.set_selection_color(c); break;
-    default: s.set_text_color(c); break;
+    case 0: s.color = c; break;
+    case 1: s.selection_color = c; break;
+    default: s.text_color = c; break;
   }
-  s.set_selection_text_color(fl_contrast(s.text_color, s.selection_color));
+  s.selection_text_color = fl_contrast(s.text_color, s.selection_color);
   button->color(c);
   button->labelcolor(fl_contrast(FL_BLACK,(Fl_Color)c));
   Fl::redraw();
@@ -127,5 +127,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.16 1999/11/22 09:00:25 bill Exp $".
+// End of "$Id: input.cxx,v 1.17 2000/01/10 06:31:29 bill Exp $".
 //

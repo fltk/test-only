@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.4 2000/01/08 22:14:16 vincent Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.5 2000/01/10 06:31:24 bill Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -92,30 +92,24 @@ void Fl_Style::start(char* name)
     Fl_Named_Style::first = c->first_style;
     Fl_Named_Style *l = Fl_Named_Style::first;
     while (l) {
-      if (l->pdefault_style) *l->pdefault_style = l;
+      *(l->back_pointer) = l;
       l = l->next;
     }
   } else {
     // The style class is a new one, need to copy all style structures
     Fl_Style_Class::current = new Fl_Style_Class;
 
-    Fl_Named_Style *l = Fl_Named_Style::first, *f = 0;
+    Fl_Named_Style *l = Fl_Named_Style::first;
+    Fl_Named_Style::first = 0;
     while (l) {
-      Fl_Named_Style* n = new Fl_Named_Style;
-      memcpy(n, l, sizeof(Fl_Named_Style));
-      n->next = f;
-      f = n;
-      if (n->pdefault_style) *n->pdefault_style = n;
+      *(l->back_pointer)=new Fl_Named_Style(l->name,l->revertfunc,l->back_pointer);
       l = l->next;
     }
 
-    Fl_Named_Style::first = f;
     // Update parent entries 
     // (suppose only possible parent is Fl_Widget::default_style    
-    while (f) {	
-      if (f->parent)
-	f->parent = Fl_Widget::default_style;
-      f = f->next;
+    for (l = Fl_Named_Style::first; l; l = l->next) {
+      if (l->parent) l->parent = Fl_Widget::default_style;
     }
     // It used to revert the style here but I don't think that is
     // necessary?
@@ -123,5 +117,5 @@ void Fl_Style::start(char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.4 2000/01/08 22:14:16 vincent Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.5 2000/01/10 06:31:24 bill Exp $".
 //

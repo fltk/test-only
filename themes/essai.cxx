@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.20 2000/01/07 08:50:53 bill Exp $"
+// "$Id: essai.cxx,v 1.21 2000/01/10 06:31:32 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -121,42 +121,42 @@ int fltk_theme(int, char**) {
   Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
   //Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
   Fl_Boxtype box3 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
-  Fl_Widget::default_style->set_box(box1);
-  Fl_Widget::default_style->set_glyph_box(box1);
-  Fl_Widget::default_style->set_highlight_color(FL_LIGHT2);
+  Fl_Widget::default_style->box = box1;
+  Fl_Widget::default_style->glyph_box = box1;
+  Fl_Widget::default_style->highlight_color = FL_LIGHT2;
   Fl_Style* s;
   if ((s = Fl_Style::find("window"))) {
-    s->set_box(flat1);
+    s->box = flat1;
   }
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_selection_text_color(FL_BLACK);
-    s->set_box(flat2);
+    s->selection_text_color = FL_BLACK;
+    s->box = flat2;
   }
   if ((s = Fl_Style::find("menu bar"))) {
-    s->set_highlight_color(FL_GRAY); // required for highlighting
-    s->set_box(flat2);
+    s->highlight_color = FL_GRAY; // required for highlighting
+    s->box = flat2;
   }
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_highlight_color(FL_GRAY); // required for highlighting
-    s->set_highlight_label_color(FL_BLACK);
-    s->set_selection_text_color(FL_BLACK);
-    s->set_box(flat2);
+    s->highlight_color = FL_GRAY; // required for highlighting
+    s->highlight_label_color = FL_BLACK;
+    s->selection_text_color = FL_BLACK;
+    s->box = flat2;
   }
   if ((s = Fl_Style::find("highlight button"))) {
-    s->set_box(flat1);
+    s->box = flat1;
   }
   if ((s = Fl_Style::find("button"))) {
-    s->set_selection_text_color(FL_BLACK);
+    s->selection_text_color = FL_BLACK;
   }
   if ((s = Fl_Style::find("tabs"))) {
-    s->set_box(box1);
+    s->box = box1;
   }
   if ((s = Fl_Style::find("light button"))) {
-    s->set_box(box3);
+    s->box = box3;
   }
   return 0;
 }
 
 //
-// End of "$Id: essai.cxx,v 1.20 2000/01/07 08:50:53 bill Exp $".
+// End of "$Id: essai.cxx,v 1.21 2000/01/10 06:31:32 bill Exp $".
 //

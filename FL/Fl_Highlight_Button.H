@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Highlight_Button.H,v 1.1 1999/11/21 06:23:16 carl Exp $"
+// "$Id: Fl_Highlight_Button.H,v 1.2 2000/01/10 06:31:01 bill Exp $"
 //
 // Highlight button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,6 @@
 #include "Fl_Button.H"
 
 class FL_API Fl_Highlight_Button : public Fl_Button {
-  static Fl_Style* default_style;
 public:
   Fl_Highlight_Button(int x,int y,int w,int h,const char *l=0);
 };
@@ -36,5 +35,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Highlight_Button.H,v 1.1 1999/11/21 06:23:16 carl Exp $".
+// End of "$Id: Fl_Highlight_Button.H,v 1.2 2000/01/10 06:31:01 bill Exp $".
 //

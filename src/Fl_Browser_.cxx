@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.38 2000/01/09 15:41:59 mike Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.39 2000/01/10 06:31:17 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -339,7 +339,7 @@ J1:
   // update the scrollbars and redraw them:
   int dy = top_ ? item_quick_height(top_) : 0; if (dy < 10) dy = 10;
   if (scrollbar.visible()) {
-    scrollbar.damage_resize(
+    scrollbar.resize(
 	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollbar_width_ : X+W,
 	Y, scrollbar_width_, H);
     scrollbar.value(position_, H, 0, full_height_);
@@ -348,7 +348,7 @@ J1:
     else update_child(scrollbar);
   }
   if (hscrollbar.visible()) {
-    hscrollbar.damage_resize(
+    hscrollbar.resize(
 	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollbar_width_ : Y+H,
 	W, scrollbar_width_);
     hscrollbar.value(hposition_, W, 0, full_width_);
@@ -629,32 +629,6 @@ int Fl_Browser_::handle(int event) {
   return 0;
 }
 
-#include <FL/Fl_Output.H>
-
-Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
-  : Fl_Group(x, y, w, h, l),
-    scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
-    hscrollbar(0, 0, 0, 0, 0)
-{
-  style(Fl_Output::default_style);
-  align(FL_ALIGN_BOTTOM);
-  position_ = real_position_ = 0;
-  hposition_ = real_hposition_ = 0;
-  offset_ = 0;
-  top_ = 0;
-  when(FL_WHEN_RELEASE_ALWAYS);
-  selection_ = 0;
-  scrollbar.callback(scrollbar_callback);
-//scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatability?
-  hscrollbar.callback(hscrollbar_callback);
-  hscrollbar.type(FL_HORIZONTAL);
-  has_scrollbar(BOTH);
-  max_width = 0;
-  max_width_item = 0;
-  redraw1 = redraw2 = 0;
-  end();
-}
-
 // Default versions of some of the virtual functions:
 
 int Fl_Browser_::item_quick_height(void* l) const {
@@ -683,13 +657,36 @@ int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 static void revert(Fl_Style* s) {
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
-  s->off_color = FL_BLACK;
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_LIGHT2;
 }
 
-Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
+static Fl_Named_Style* style = new Fl_Named_Style("Browser", revert, &style);
+
+Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
+  : Fl_Group(x, y, w, h, l),
+    scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
+    hscrollbar(0, 0, 0, 0, 0)
+{
+  style(::style);
+  align(FL_ALIGN_BOTTOM);
+  position_ = real_position_ = 0;
+  hposition_ = real_hposition_ = 0;
+  offset_ = 0;
+  top_ = 0;
+  when(FL_WHEN_RELEASE_ALWAYS);
+  selection_ = 0;
+  scrollbar.callback(scrollbar_callback);
+//scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatability?
+  hscrollbar.callback(hscrollbar_callback);
+  hscrollbar.type(FL_HORIZONTAL);
+  has_scrollbar(BOTH);
+  max_width = 0;
+  max_width_item = 0;
+  redraw1 = redraw2 = 0;
+  end();
+}
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.38 2000/01/09 15:41:59 mike Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.39 2000/01/10 06:31:17 bill Exp $".
 //

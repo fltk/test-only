@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.17 1999/11/20 04:42:28 vincent Exp $"
+// "$Id: Fl_Choice.H,v 1.18 2000/01/10 06:31:00 bill Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,12 +38,10 @@ public:
 protected:
   void draw();
 
-private:
-  static Fl_Style* default_style;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.17 1999/11/20 04:42:28 vincent Exp $".
+// End of "$Id: Fl_Choice.H,v 1.18 2000/01/10 06:31:00 bill Exp $".
 //

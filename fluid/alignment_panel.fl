@@ -13,7 +13,7 @@ Function {make_alignment_window()} {open
     xywh {265 250 210 310} modal visible
   } {
     Fl_Group {} {
-      label {Alignment:}
+      label {Alignment:} open
       xywh {10 20 190 100} align 5 box ENGRAVED_BOX
     } {
       Fl_Input horizontal_input {
@@ -38,13 +38,8 @@ Function {make_alignment_window()} {open
         code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
     }
-    Fl_Button {} {
-      label Close
-      callback {alignment_window->hide();}
-      xywh {140 280 60 20}
-    }
     Fl_Group {} {
-      label {Output File Names:} selected
+      label {Output File Names:} open
       xywh {10 140 190 130} align 5 box ENGRAVED_BOX
     } {
       Fl_Box {} {
@@ -68,6 +63,11 @@ Function {make_alignment_window()} {open
         callback include_H_from_C_button_cb
         xywh {20 240 170 20} value 1
       }
+    }
+    Fl_Button {} {
+      label Close
+      callback {alignment_window->hide();} selected
+      xywh {140 280 60 20}
     }
   }
 } 

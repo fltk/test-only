@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.2 1999/08/20 08:32:26 bill Exp $"
+// "$Id: Fl_FontSize.H,v 1.3 2000/01/10 06:31:21 bill Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -66,8 +66,10 @@ FL_EXPORT const char* fl_font_word(const char *p, int n);
 FL_EXPORT char *fl_find_fontsize(char *name);
 #endif
 
+extern Fl_FontSize *fl_fontsize;
+
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.2 1999/08/20 08:32:26 bill Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.3 2000/01/10 06:31:21 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.6 1999/11/29 08:46:58 bill Exp $"
+// "$Id: Fl_Color.H,v 1.7 2000/01/10 06:31:00 bill Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -29,10 +29,6 @@
 #include "Enumerations.H" // for FL_API and uchar
 #include "Fl_Flags.H" // for Fl_Flags & FL_INACTIVE
 
-// I tried making this a class, so that constructors like Fl_Color(r,g,b)
-// could be used.  But gcc produced much worse code output, so I returned
-// to the enumeration.
-
 typedef unsigned Fl_Color;
 
 enum {
@@ -40,7 +36,7 @@ enum {
   FL_GRAY_RAMP		= 32,
   FL_GRAY		= 49,	// 'R' default color, 75%
   FL_INACTIVE_COLOR	= 39,	// same as fl_inactive(FL_BLACK)
-  FL_COLOR_CUBE		= 56, // == 0x38, black
+  FL_COLOR_CUBE		= 0x38,
   FL_BLACK		= 0x38,
   FL_RED		= 0x58,
   FL_GREEN		= 0x3f,
@@ -59,7 +55,7 @@ enum {
   FL_LIGHT2		= 53,	// 'V'
   FL_LIGHT3		= 55,	// 'X' white
   FL_SELECTION_COLOR	= FL_GRAY, // older selection color
-  FL_FREE_COLOR		= 16 // for back compatability only
+  FL_FREE_COLOR		= 16
 #endif
 };
 
@@ -78,16 +74,18 @@ inline Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char b) {
   return Fl_Color((r<<24)+(g<<16)+(b<<8));}
 FL_API Fl_Color fl_rgb(const char*);
 FL_API Fl_Color fl_color_average(Fl_Color, Fl_Color, double weight);
-FL_API Fl_Color fl_inactive(Fl_Color c, Fl_Flags f = FL_INACTIVE);
+FL_API Fl_Color fl_inactive(Fl_Color);
+FL_API Fl_Color fl_inactive(Fl_Color, Fl_Flags f);
 FL_API Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
 FL_API Fl_Color fl_get_color(Fl_Color c);
 FL_API void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
-FL_API void fl_set_color(Fl_Color c, Fl_Color v);
-FL_API void fl_free_color(Fl_Color i);
+FL_API void fl_set_color(Fl_Color c, Fl_Color);
+FL_API void fl_free_color(Fl_Color c);
 FL_API void fl_background(Fl_Color);
+FL_API Fl_Color fl_nearest_color(Fl_Color);
 
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.6 1999/11/29 08:46:58 bill Exp $".
+// End of "$Id: Fl_Color.H,v 1.7 2000/01/10 06:31:00 bill Exp $".
 //

@@ -12,8 +12,8 @@ Intel or other little-endian machine the first byte in memory is
 <p><img src=fl_show_colormap.gif align=right>If the <b>rgb</b> is
 zero, the <b>N</b> is the color "index".  This index is used to look
 up an Fl_Color in an internal table of 256 colors, called the "fltk
-color map", shown here.  Thus using any integer in the range 0-255 as
-an Fl_Color will index the color map.  If <b>rgb</b> is not zero the
+colormap", shown here.  Thus using any integer in the range 0-255 as
+an Fl_Color will index the colormap.  If <b>rgb</b> is not zero the
 index value is ignored (future code may treat the last byte as an
 "alpha" value).
 
@@ -24,20 +24,21 @@ as the default label color for everything so that changing color zero
 can be used by the -fg switch.  You should use <code>FL_BLACK</code> (56)
 to get black.
 
-<p>The entries 1-31 in the color map are settable by the user program.
+<p>The entries 1-31 in the colormap are settable by the user program.
 The advantage of using these over <a href=#fl_rgb>fl_rgb(r,g,b)</a> is
-that they are reproduced exactly on 8-bit screens.  Normal rgb colors
-are selected on 8-bit screens by using the nearest color from the
-color cube.  Colors 1-15 are preset for back compatability but fltk no
-longer uses these so you can change them.
+that they are reproduced <i>exactly</i> on 8-bit screens (normal rgb
+colors are selected on 8-bit screens by using <a
+href=#fl_nearest_color>fl_nearest_color()</a>).  Colors 1-15 are preset
+for back compatability but fltk no longer uses these so you can change
+them.
 
-<p>Entries 32-55 of the color map are a 24-entry "gray" ramp.  This
+<p>Entries 32-55 of the colormap are a 24-entry "gray" ramp.  This
 ramp is modified by the -bg switch or other user preferences so that
 the entry <tt>FL_GRAY</tt> (49) is the background color, and the
 others are a nice range from black to white.  These are used to draw
 box edges.
 
-<p>The remiander of the color map is a 5x8x5 color cube.  This cube is
+<p>The remiander of the colormap is a 5x8x5 color cube.  This cube is
 used to dither images or <a href=drawing.html#fl_rectf>fl_rectf()</a>
 on 8-bit screens.  In addition the symbols <code>FL_BLACK, FL_RED,
 FL_GREEN, FL_YELLOW, FL_BLUE, FL_MAGENTA, FL_CYAN, FL_WHITE, and
@@ -46,13 +47,13 @@ have different values than fltk1.0!).
 
 <h2>Methods and functions</h2>
 
+<a name=fl_rgb>
 <h4>Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char
 b)</h4>
 
 Inline function to build a color out of individual bytes.  The index
 is set to zero.
 
-<a name=fl_rgb>
 <h4>Fl_Color fl_rgb(const char*);</h4>
 
 Return a named color, returns 0 if the name is not found (on X this
@@ -68,6 +69,13 @@ Returns a color that is <code>weight*A+(1-weight)*B</code>.
 
 Returns some color between c and FL_GRAY.
 
+<a name=fl_inactive>
+<h4>Fl_Color fl_inactive(Fl_Color c, Fl_Flags f);</h4>
+
+This returns <code>fl_inactive(c)</code> if the bit
+<code>FL_INACTIVE</code> is turned on in <i>f</i>, otherwise <i>c</i>
+is returned unchanged.
+
 <a name=fl_contrast>
 <h4>Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);</h4>
 
@@ -80,32 +88,40 @@ when no color is specified in the style.
 <a name=fl_get_color>
 <h4>Fl_Color fl_get_color(Fl_Color c);</h4>
 
-If c is an indexed color, this returns the full rgb color from the
-color map.  This returns c unchanged if it is not an indexed color.
+Turns an indexed color into an rgb color by looking it up in the
+colormap.  If <i>c</i> is not an indexed color it is returned
+unchanged.
 
-<a name=fl_get_color>
 <h4>void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);</h4>
 
-If c is an indexed color, this returns the full rgb color from the
-color map.  This returns c unchanged if it is not an indexed color.
-The rgb portions of the color are extracted and put in the passed
+Turns an indexed color into an rgb color if necessary, and then
+the rgb portions of the color are extracted and put in the passed
 variables.
 
-<a name=fl_set_color>
-<h4>void fl_set_color(Fl_Color i, Fl_Color v);</h4>
+<a name=fl_nearest_color>
+<h4>Fl_Color fl_nearest_color(Fl_Color c);</h4>
 
-Set entry <i>i</i> in the fltk color map to <i>v</i>.  <i>i</i> should
-be in the range 1-31, and <i>v</i> should be an rgb color.
+Turns an rgb color into an indexed color.  If <i>c</i> is already an
+indexed color it is returned unchanged.  Otherwise, the closest color
+from the gray ramp or color cube is returned.
+
+<a name=fl_set_color>
+<h4>void fl_set_color(Fl_Color index, Fl_Color v);</h4>
+
+Set entry <i>index</i> in the fltk colormap to the rgb values of
+<i>v</i>.  <i>index</i> must be in the range 1-31.
 
 <a name=fl_free_color>
-<h4>void fl_free_color(Fl_Color i);</h4>
+<h4>void fl_free_color(Fl_Color index);</h4>
 
-Tell colormapped-display that we don't need this indexed color anymore.
+Tell a colormapped-display that we don't need this indexed color
+anymore.  Fltk will free any hardware colormap it allocated so that it
+can be reused by this or another program.
 
 <a name=fl_gray_ramp>
-<h4>Fl_Color fl_gray_ramp(int i)</h4>
+<h4>Fl_Color fl_gray_ramp(int index)</h4>
 
-Return indexed color <i>i</i> from the gray ramp (this is a simple
+Return indexed color <i>index</i> from the gray ramp (this is a simple
 inline function).  There are <code>FL_NUM_GRAY</code> (24) shades in
 the gray ramp, with zero being black and 23 being white.
 

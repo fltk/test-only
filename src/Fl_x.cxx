@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.59 2000/01/09 08:17:29 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.60 2000/01/10 06:31:26 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -569,10 +569,9 @@ int fl_handle(const XEvent& xevent)
     // So anyway, do a round trip to find the correct x,y:
     Window r, c; int X, Y, wX, wY; unsigned int m;
     XQueryPointer(fl_display, fl_xid(window), &r, &c, &X, &Y, &wX, &wY, &m);
-    resize_from_system = window;
-    window->resize(X-wX, Y-wY,
-		   xevent.xconfigure.width,
-		   xevent.xconfigure.height);
+    if (window->resize(X-wX, Y-wY,
+		       xevent.xconfigure.width, xevent.xconfigure.height))
+      resize_from_system = window;
     return 1;}
   }
 
@@ -597,8 +596,8 @@ void Fl_Window::layout() {
     set_old_size();
   } else {
     if (this == resize_from_system) resize_from_system = 0;
-    if (!resizable()) size_range(w(), h(), w(), h());
     else if (i) {
+      //if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x(), y(),
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
       redraw(); // i->wait_for_expose = 1; (breaks menus somehow...)
@@ -848,5 +847,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.59 2000/01/09 08:17:29 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.60 2000/01/10 06:31:26 bill Exp $".
 //

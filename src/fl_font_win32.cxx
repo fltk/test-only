@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.18 2000/01/09 15:42:03 mike Exp $"
+// "$Id: fl_font_win32.cxx,v 1.19 2000/01/10 06:31:27 bill Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  int base = 0; int size = 256;
 //  glDeleteLists(listbase+base,size);
 // }
-  if (this == current_fontsize) current_fontsize = 0;
+  if (this == fl_fontsize) fl_fontsize = 0;
   DeleteObject(fid);
 }
 #endif
@@ -109,7 +109,8 @@ Fl_Font_ fl_fonts[] = {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-//static HDC font_gc;
+Fl_FontSize* fl_fontsize;
+HFONT fl_xfont;
 
 void fl_font(Fl_Font font, unsigned size) {
   fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
@@ -129,42 +130,39 @@ void fl_font(Fl_Font font, unsigned size, const char* encoding) {
     f->next = font->first;
     ((Fl_Font_*)font)->first = f;
   }
-  if (f != current_fontsize) {
-    current_fontsize = f;
-/* CET - FIXME
-    fl_xfont = s->font;
-    font_gc = 0;
-*/
+  if (f != fl_fontsize) {
+    fl_fontsize = f;
+    fl_xfont = f->font;
   }
 }
 
 int fl_height() {
-  return (current_fontsize->metr.tmAscent + current_fontsize->metr.tmDescent);
+  return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
 int fl_descent() {
-  return current_fontsize->metr.tmDescent;
+  return fl_fontsize->metr.tmDescent;
 }
 
 int fl_width(const char* c) {
   int w = 0;
-  while (*c) w += current_fontsize->width[uchar(*c++)];
+  while (*c) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
 
 int fl_width(const char* c, int n) {
   int w = 0;
-  while (n--) w += current_fontsize->width[uchar(*c++)];
+  while (n--) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
 
 int fl_width(uchar c) {
-  return current_fontsize->width[c];
+  return fl_fontsize->width[c];
 }
 
 void fl_draw(const char* str, int n, int x, int y) {
   SetTextColor(fl_gc, fl_RGB());
-  SelectObject(fl_gc, current_fontsize->fid);
+  SelectObject(fl_gc, fl_fontsize->fid);
   TextOut(fl_gc, x, y, str, n);
 }
 
@@ -173,5 +171,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.18 2000/01/09 15:42:03 mike Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.19 2000/01/10 06:31:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.8 2000/01/09 01:06:16 bill Exp $"
+// "$Id: windows.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -149,95 +149,95 @@ extern "C" int fltk_theme(int, char**)
   fl_up_box.data = "2AAXXIIUU";
   fl_down_box.data = "2XXIIUUAA";
 
-  Fl_Widget::default_style->set_label_type(&win98_label);
+  Fl_Widget::default_style->label_type = &win98_label;
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu window"))) {
-    s->set_box(&win98_menu_window_box);
-    s->set_leading(6);
+    s->box = &win98_menu_window_box;
+    s->leading = 6;
   }
 
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_box(FL_HIGHLIGHT_BOX);
+    s->box = FL_HIGHLIGHT_BOX;
     fltk_glyph = s->glyph;
-    s->set_glyph_box(FL_NO_BOX);
-    s->set_selection_color(FL_GRAY);
-    s->set_selection_text_color(FL_BLACK);
-    s->set_highlight_color(FL_GRAY);
+    s->glyph_box = FL_NO_BOX;
+    s->selection_color = FL_GRAY;
+    s->selection_text_color = FL_BLACK;
+    s->highlight_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("menu item"))) {
     fltk_glyph = s->glyph;
-    s->set_glyph(windows_glyph);
-    s->set_glyph_box(FL_NO_BOX);
+    s->glyph = windows_glyph;
+    s->glyph_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
-    s->set_highlight_color(FL_GRAY); // needed for title highlighting
+    s->highlight_color = FL_GRAY; // needed for title highlighting
   }
 
   if ((s = Fl_Style::find("input"))) {
-    s->set_box(FL_DOWN_BOX);
+    s->box = FL_DOWN_BOX;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-//    s->set_glyph_box(&win98_menu_window_box);
-    s->set_box(FL_DOWN_BOX);
+//    s->glyph_box = &win98_menu_window_box;
+    s->box = FL_DOWN_BOX;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-//    s->set_glyph_box(&win98_menu_window_box);
-    s->set_box(FL_DOWN_BOX);
+//    s->glyph_box = &win98_menu_window_box;
+    s->box = FL_DOWN_BOX;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
     fltk_glyph = s->glyph;
-    s->set_glyph(windows_glyph);
-    s->set_glyph_box(&win98_menu_window_box);
-    s->set_color(52);
+    s->glyph = windows_glyph;
+    s->glyph_box = &win98_menu_window_box;
+    s->color = 52;
   }
 
   if ((s = Fl_Style::find("output"))) {
-    s->set_color(FL_WHITE);
-    s->set_box(FL_DOWN_BOX);
+    s->color = FL_WHITE;
+    s->box = FL_DOWN_BOX;
   }
 
   if ((s = Fl_Style::find("counter"))) {
-    s->set_color(FL_WHITE);
-    s->set_box(FL_DOWN_BOX);
+    s->color = FL_WHITE;
+    s->box = FL_DOWN_BOX;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
-    s->set_highlight_color(FL_GRAY);
+    s->highlight_color = FL_GRAY;
   }
 
   if ((s = Fl_Style::find("check button"))) {
     fltk_glyph = s->glyph;
-    s->set_glyph(windows_glyph);
+    s->glyph = windows_glyph;
   }
 
   if ((s = Fl_Style::find("return button"))) {
     return_glyph = s->glyph;
-    s->set_glyph(my_return_glyph);
+    s->glyph = my_return_glyph;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->set_glyph(windows_glyph);
+    s->glyph = windows_glyph;
   }
 
   if ((s = Fl_Style::find("adjuster"))) {
     adjuster_glyph = s->glyph;
-    s->set_glyph(my_adjuster_glyph);
+    s->glyph = my_adjuster_glyph;
   }
 
   if ((s = Fl_Style::find("counter"))) {
     counter_glyph = s->glyph;
-    s->set_glyph(my_counter_glyph);
+    s->glyph = my_counter_glyph;
   }
 
   return 0;
 }
 
 //
-// End of "$Id: windows.cxx,v 1.8 2000/01/09 01:06:16 bill Exp $"
+// End of "$Id: windows.cxx,v 1.9 2000/01/10 06:31:32 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.59 1999/12/22 01:12:29 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.60 2000/01/10 06:31:09 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -251,7 +251,7 @@ void name_cb(Fl_Input* o, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->name() && *(current_widget->name())) tc = FL_RED;
   if (o->labelcolor() != tc)
-    { o->labelcolor(tc); o->damage(FL_DAMAGE_CHILD_LABEL); }
+    { o->labelcolor(tc); o->damage_label(); }
 }
 
 void name_public_cb(Fl_Light_Button* i, void* v) {
@@ -287,7 +287,7 @@ void label_cb(Fl_Input* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->label() && *(current_widget->label())) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 static char* oldtooltip;
@@ -310,7 +310,7 @@ void tooltip_cb(Fl_Input* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->tooltip() && *(current_widget->tooltip())) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@ void box_cb(Fl_Choice* i, void *v) {
   if (NOT_DEFAULT(current_widget, box)) tc = FL_RED;
   if (i->labelcolor() != tc) {
     i->labelcolor(tc);
-    i->damage(FL_DAMAGE_CHILD_LABEL);
+    i->damage_label();
   }
 }
 
@@ -433,72 +433,12 @@ void glyph_box_cb(Fl_Choice* i, void *v) {
       }
   }
   Fl_Color tc = FL_BLACK;
-  if (NOT_DEFAULT(current_widget, box)) tc = FL_RED;
+  if (NOT_DEFAULT(current_widget, glyph_box)) tc = FL_RED;
   if (i->labelcolor() != tc) {
     i->labelcolor(tc);
-    i->damage(FL_DAMAGE_CHILD_LABEL);
+    i->damage_label();
   }
 }
-
-#if 0
-
-void down_box_cb(Fl_Choice* i, void *) {
-  if (v == LOAD) {
-    Fl_Boxtype n;
-    if (current_widget->is_button() || current_widget->is_menu_item()) {
-      n = ((Fl_Button*)(current_widget->o))->down_box();
-      if (current_widget->is_light_button()) i->label("light box");
-      else i->label("down box");
-    } else if (current_widget->is_menu()) {
-      n = ((Fl_Menu_*)(current_widget->o))->down_box();
-      i->label("menu box");
-    } else {
-      i->hide(); return;
-    }
-    i->show();
-    for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
-      if (boxmenu[j].user_data() == n) {i->value(j); break;}
-  } else {
-    int m = i->value();
-    Fl_Boxtype n = Fl_Boxtype(boxmenu[m].user_data());
-    if (!n) return; // should not happen
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_widget()) {
-	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-        q->o->down_box(n);
-        q->redraw();
-      }
-  }
-  Fl_Color tc = FL_BLACK;
-  if (NOT_DEFAULT(current_widget, down_box)) tc = FL_RED;
-  i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL);
-}
-
-void highlight_box_cb(Fl_Choice* i, void *) {
-  if (v == LOAD) {
-    Fl_Boxtype n = current_widget->o->highlight_box();
-    i->show();
-    for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
-      if (boxmenu[j].user_data() == n) {i->value(j); break;}
-  } else {
-    int m = i->value();
-    Fl_Boxtype n = Fl_Boxtype(boxmenu[m].user_data());
-    if (!n) return; // should not happen
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_widget()) {
-	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-        q->o->highlight_box(n);
-        q->redraw();
-      }
-  }
-  Fl_Color tc = FL_BLACK;
-  if (NOT_DEFAULT(current_widget, highlight_box)) tc = FL_RED;
-  if (i->labelcolor() != tc) {
-    i->labelcolor(tc);
-    i->damage(FL_DAMAGE_CHILD_LABEL);
-  }
-}
-#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -707,7 +647,7 @@ void labelfont_cb(Fl_Choice* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, label_font)) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void labelsize_cb(Fl_Value_Input* i, void *v) {
@@ -788,7 +728,7 @@ void labeltype_cb(Fl_Choice* i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, label_type)) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -810,7 +750,7 @@ void color_cb(Fl_Light_Button* i, void *v) {
     }
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -833,7 +773,7 @@ void color2_cb(Fl_Light_Button* i, void *v) {
     }
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, selection_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -854,7 +794,7 @@ void color3_cb(Fl_Light_Button* i, void *v) {
     }
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, off_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -875,7 +815,7 @@ void labelcolor_cb(Fl_Light_Button* i, void *v) {
     i->show();
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, label_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -902,7 +842,7 @@ void textfont_cb(Fl_Choice* i, void* v) {
   tc = FL_BLACK;
   if (NOT_DEFAULT(current_widget, text_font)) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void textsize_cb(Fl_Value_Input* i, void* v) {
@@ -946,7 +886,7 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
       }
   }
   i->off_color(tc);
-  i->on_color(tc);
+  i->selection_color(tc);
   i->labelcolor(NOT_DEFAULT(current_widget, text_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -969,7 +909,7 @@ void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
       }
   }
   i->off_color(tc);
-  i->on_color(tc);
+  i->selection_color(tc);
   i->labelcolor(NOT_DEFAULT(current_widget, selection_text_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -991,7 +931,7 @@ void highlightcolor_cb(Fl_Light_Button* i, void *v) {
     }
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, highlight_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -1015,7 +955,7 @@ void highlight_label_color_cb(Fl_Light_Button* i, void *v) {
     }
   }
   i->off_color(c);
-  i->on_color(c);
+  i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, highlight_label_color) ? FL_RED : FL_BLACK);
   i->redraw();
 }
@@ -1122,7 +1062,7 @@ void callback_cb(Fl_Input* i, void *v) {
   if (current_widget->callback()) tc = FL_RED;
   if (callback_label->labelcolor() != tc) {
     callback_label->labelcolor(tc);
-    callback_label->damage(FL_DAMAGE_CHILD_LABEL);
+    callback_label->damage_label();
   }
 }
 
@@ -1140,7 +1080,7 @@ void user_data_cb(Fl_Input *i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->user_data()) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void user_data_type_cb(Fl_Input *i, void *v) {
@@ -1166,7 +1106,7 @@ void user_data_type_cb(Fl_Input *i, void *v) {
   Fl_Color tc = FL_BLACK;
   if (strcmp(i->value(), "void*")) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 // "v_attributes" let user type in random code for attribute settings:
@@ -1188,7 +1128,7 @@ void v_input_cb(Fl_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() && *i->value()) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void subclass_cb(Fl_Input* i, void* v) {
@@ -1207,7 +1147,7 @@ void subclass_cb(Fl_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (current_widget->subclass() && *(current_widget->subclass())) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1252,7 +1192,7 @@ void min_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void max_cb(Fl_Value_Input* i, void* v) {
@@ -1275,7 +1215,7 @@ void max_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 1.0) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void step_cb(Fl_Value_Input* i, void* v) {
@@ -1298,7 +1238,7 @@ void step_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 void value_cb(Fl_Value_Input* i, void* v) {
@@ -1328,7 +1268,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
   Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+    { i->labelcolor(tc); i->damage_label(); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2191,5 +2131,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.59 1999/12/22 01:12:29 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.60 2000/01/10 06:31:09 bill Exp $".
 //

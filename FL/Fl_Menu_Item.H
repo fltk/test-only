@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.39 2000/01/07 08:50:13 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.40 2000/01/10 06:31:02 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ struct FL_API Fl_Menu_Item {
   const Fl_Style* style_;
 
 #ifdef DONT_LEAK_MEMORY
-  ~Fl_Menu_Item() if (style_->dynamic()) delete s; }
+  ~Fl_Menu_Item() { if (style_->dynamic()) delete s; }
 #endif
 
   // advance N items, skipping submenus:
@@ -143,8 +143,8 @@ struct FL_API Fl_Menu_Item {
   void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
 
   int size() const ;
-  static Fl_Style* default_style;
-  static Fl_Style* title_style;
+  static Fl_Named_Style* default_style;
+  static Fl_Named_Style* title_style;
 
 #ifndef FLTK_2
   // This is temporary and bad.  Setting a style will create a new Fl_Style
@@ -152,48 +152,44 @@ struct FL_API Fl_Menu_Item {
   // that adds a destructor that causes C++ to produce exit code for static
   // menu item arrays.  Plan is to replace the whole Fl_Menu_Item design...
 
-  Fl_Boxtype box()		const {return (Fl_Boxtype)getp((const void* const*)&style_->box);}
-  Fl_Boxtype glyph_box()	const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
-  Fl_Boxtype box2()	        const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
-  Fl_Glyph glyph()		const {return (Fl_Glyph)getp((const void* const*)&style_->glyph);}
-  Fl_Font label_font()		const {return (Fl_Font)getp((const void* const*)&style_->label_font);}
-  Fl_Font text_font()		const {return (Fl_Font)getp((const void* const*)&style_->text_font);}
-  Fl_Labeltype label_type()	const {return (Fl_Labeltype)getp((const void* const*)&style_->label_type);}
-  Fl_Color color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
-  Fl_Color up_color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
-  Fl_Color label_color()	const {return (Fl_Color)geti((const unsigned*)&style_->label_color);}
-  Fl_Color selection_color()	const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
-  Fl_Color selection_text_color() const {return (Fl_Color)geti((const unsigned*)&style_->selection_text_color);}
-  Fl_Color on_color()		const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
-  Fl_Color off_color()		const {return (Fl_Color)geti((const unsigned*)&style_->off_color);}
-  Fl_Color highlight_color()	const {return (Fl_Color)geti((const unsigned*)&style_->highlight_color);}
-  Fl_Color highlight_label_color() const {return (Fl_Color)geti((const unsigned*)&style_->highlight_label_color);}
-  Fl_Color text_color()		const {return (Fl_Color)geti((const unsigned*)&style_->text_color);}
-  unsigned label_size()		const {return geti((const unsigned*)&style_->label_size);}
-  unsigned text_size()		const {return geti((const unsigned*)&style_->text_size);}
+  Fl_Boxtype	box()			const;
+  Fl_Boxtype	glyph_box()		const;
+  Fl_Glyph	glyph()			const;
+  Fl_Font	label_font()		const;
+  Fl_Font	text_font()		const;
+  Fl_Labeltype	label_type()		const;
+  Fl_Color	color()			const;
+  Fl_Color	label_color()		const;
+  Fl_Color	selection_color()	const;
+  Fl_Color	selection_text_color()	const;
+  Fl_Color	off_color()		const;
+  Fl_Color	highlight_color()	const;
+  Fl_Color	highlight_label_color()	const;
+  Fl_Color	text_color()		const;
+  unsigned	label_size()		const;
+  unsigned	text_size()		const;
+  unsigned	leading()		const;
 
-  unsigned geti(const unsigned* a) const;
-  void* getp(const void* const* a) const;
-  void setp(const void* const *, const void*);
-  void seti(const unsigned*, unsigned);
+  void	box(Fl_Boxtype)		;
+  void	glyph_box(Fl_Boxtype)	;
+  void	glyph(Fl_Glyph)		;
+  void	label_font(Fl_Font)	;
+  void	text_font(Fl_Font)	;
+  void	label_type(Fl_Labeltype);
+  void	color(Fl_Color)		;
+  void	label_color(Fl_Color)	;
+  void	selection_color(Fl_Color);
+  void	selection_text_color(Fl_Color);
+  void	off_color(Fl_Color)	;
+  void	highlight_color(Fl_Color);
+  void	highlight_label_color(Fl_Color);
+  void	text_color(Fl_Color a)	;
+  void	label_size(unsigned a)	;
+  void	text_size(unsigned a)	;
+  void	leading(unsigned a)	;
 
-  void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
-  void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
-  void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (void*)a);}
-  void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
-  void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
-  void label_type(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
-  void color(Fl_Color a)	{seti(&style_->color, a);}
-  void label_color(Fl_Color a)	{seti(&style_->label_color, a);}
-  void selection_color(Fl_Color a) {seti(&style_->selection_color, a);}
-  void selection_text_color(Fl_Color a) {seti(&style_->selection_text_color, a);}
-  void highlight_color(Fl_Color a) {seti(&style_->highlight_color, a);}
-  void highlight_label_color(Fl_Color a) {seti(&style_->highlight_label_color, a);}
-  void text_color(Fl_Color a)	{seti(&style_->text_color, a);}
-  void label_size(unsigned a)	{seti(&style_->label_size, a);}
-  void text_size(unsigned a)	{seti(&style_->text_size, a);}
+#ifndef FLTK_2  // back-compatability section:
 
-  // even more back-comptability stuff:
   Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
   Fl_Boxtype fly_box()		const {return box();}
   Fl_Color down_color()		const {return selection_color();}
@@ -228,6 +224,8 @@ struct FL_API Fl_Menu_Item {
   void textcolor(Fl_Color a)	{text_color(a);}
   void selected_textcolor(Fl_Color a) {selection_text_color(a);}
 
+#endif
+
   int checked() const {return flags_&FL_MENU_VALUE;}
   void check() {flags_ |= FL_MENU_VALUE;}
   void uncheck() {flags_ &= ~FL_MENU_VALUE;}
@@ -259,5 +257,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.39 2000/01/07 08:50:13 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.40 2000/01/10 06:31:02 bill Exp $".
 //

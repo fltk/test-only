@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.42 1999/12/17 20:18:06 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.43 2000/01/10 06:31:04 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ public:
   void	style(const Fl_Style* s) {style_ = s;}
   void	style(const Fl_Style& s) {style_ = &s;}
   int	copy_style(const Fl_Style* s);
-  static Fl_Style* default_style;
+  static Fl_Named_Style* default_style;
 
   Fl_Group* parent() const	{return parent_;}
   void	parent(Fl_Group* w)	{parent_ = w;}
@@ -72,8 +72,7 @@ public:
   void	w(int v)		{w_ = v;}
   int	h() const		{return h_;}
   void	h(int v)		{h_ = v;}
-  void	resize(int,int,int,int)	;
-  int	damage_resize(int,int,int,int);
+  int	resize(int,int,int,int)	;
   void	position(int X,int Y)	{resize(X,Y,w_,h_);}
   void	size(int W,int H)	{resize(x_,y_,W,H);}
 
@@ -148,6 +147,7 @@ public:
   void	clear_damage(uchar c=0)	{damage_ = c;}
   void	damage(uchar c)		;
   void	damage(uchar c,int,int,int,int);
+  void	damage_label()		;
 
   void	draw_box() const	;
   void	draw_frame() const	;
@@ -171,9 +171,6 @@ public:
   Fl_Color	selection_color()	const;
   Fl_Color	selection_text_color()	const;
   Fl_Color	off_color()		const;
-  Fl_Color	on_color()		const {return selection_color();}
-  Fl_Color	up_color()		const {return color();}
-  Fl_Color	down_color()		const {return selection_color();}
   Fl_Color	highlight_color()	const;
   Fl_Color	highlight_label_color()	const;
   Fl_Color	text_color()		const;
@@ -192,9 +189,6 @@ public:
   void	selection_color(Fl_Color);
   void	selection_text_color(Fl_Color);
   void	off_color(Fl_Color)	;
-  void	on_color(Fl_Color a)	{selection_color(a);}
-  void	up_color(Fl_Color a)	{color(a);}
-  void	down_color(Fl_Color a)	{selection_color(a);}
   void	highlight_color(Fl_Color);
   void	highlight_label_color(Fl_Color);
   void	text_color(Fl_Color a)	;
@@ -274,5 +268,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.42 1999/12/17 20:18:06 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.43 2000/01/10 06:31:04 bill Exp $".
 //

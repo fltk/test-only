@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.21 2000/01/09 01:06:10 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.22 2000/01/10 06:31:18 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@ void Fl_Check_Button::draw() {
   Fl_Flags f = flags();
   Fl_Color c = color();
   Fl_Color bc = off_color();
-  Fl_Color fc = on_color();
+  Fl_Color fc = selection_color();
   Fl_Color lc = label_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
@@ -75,12 +75,12 @@ static void revert(Fl_Style* s) {
   s->glyph = fl_glyph;
 }
 
-Fl_Style* Fl_Check_Button::default_style = new Fl_Named_Style("Check_Button", revert, &Fl_Check_Button::default_style);
+static Fl_Named_Style* style = new Fl_Named_Style("Check_Button", revert, &style);
 
 Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
 {
-  style(default_style);
+  style(::style);
   type(FL_TOGGLE_BUTTON);
   set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }

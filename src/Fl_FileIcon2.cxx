@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.3 2000/01/08 22:29:51 vincent Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.4 2000/01/10 06:31:20 bill Exp $"
 //
 // Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -134,7 +134,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a letter at file position %d (saw '%c')\n",
+      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a letter at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -147,7 +147,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == '(')
         break;
-      else if ((ptr - command) < (sizeof(command) - 1))
+      else if (ptr < command+sizeof(command)-1)
         *ptr++ = ch;
     }
 
@@ -156,7 +156,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ( at file position %d (saw '%c')\n",
+      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ( at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -168,7 +168,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == ')')
         break;
-      else if ((ptr - params) < (sizeof(params) - 1))
+      else if (ptr < params+sizeof(params)-1)
         *ptr++ = ch;
     }
 
@@ -177,7 +177,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ) at file position %d (saw '%c')\n",
+      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ) at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -185,7 +185,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ; at file position %d (saw '%c')\n",
+      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ; at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -276,7 +276,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     }
     else
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Unknown command \"%s\" at file position %d.\n",
+      fprintf(stderr, "Fl_FileIcon::load_fti(): Unknown command \"%s\" at file position %ld.\n",
               command, ftell(fp) - 1);
       break;
     }
@@ -320,6 +320,7 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
     return;
 
   // Read the file header until we find the first string...
+  ptr = NULL;
   while (fgets(line, sizeof(line), fp) != NULL)
     if ((ptr = strchr(line, '\"')) != NULL)
       break;
@@ -438,6 +439,7 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
   }
 
   // Read the image data...
+  startx = 0;
   for (y = height - 1; y >= 0; y --)
   {
     while (fgets(line, sizeof(line), fp) != NULL)
@@ -806,5 +808,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.3 2000/01/08 22:29:51 vincent Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.4 2000/01/10 06:31:20 bill Exp $".
 //

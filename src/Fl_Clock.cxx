@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.17 1999/11/20 04:42:40 vincent Exp $"
+// "$Id: Fl_Clock.cxx,v 1.18 2000/01/10 06:31:19 bill Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -117,18 +117,6 @@ void Fl_Clock_Output::value(ulong v) {
   value(timeofday->tm_hour, timeofday->tm_min, timeofday->tm_sec);
 }
 
-Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
-: Fl_Widget(x, y, w, h, l) {
-//   box(FL_UP_BOX);
-//   selection_color(fl_gray_ramp(5));
-  style(default_style);
-  align(FL_ALIGN_BOTTOM);
-  hour_ = 0;
-  minute_ = 0;
-  second_ = 0;
-  value_ = 0;
-}
-
 ////////////////////////////////////////////////////////////////
 
 Fl_Clock::Fl_Clock(int x, int y, int w, int h, const char *l)
@@ -175,8 +163,20 @@ static void revert(Fl_Style* s) {
   s->text_color = FL_BLACK;
 }
 
-Fl_Style* Fl_Clock_Output::default_style = new Fl_Named_Style("clock", revert, &Fl_Clock_Output::default_style);
+static Fl_Named_Style* style = new Fl_Named_Style("clock", revert, &style);
+
+Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
+: Fl_Widget(x, y, w, h, l) {
+//   box(FL_UP_BOX);
+//   selection_color(fl_gray_ramp(5));
+  style(::style);
+  align(FL_ALIGN_BOTTOM);
+  hour_ = 0;
+  minute_ = 0;
+  second_ = 0;
+  value_ = 0;
+}
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.17 1999/11/20 04:42:40 vincent Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.18 2000/01/10 06:31:19 bill Exp $".
 //

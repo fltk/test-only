@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.23 2000/01/07 08:50:14 bill Exp $"
+// "$Id: Fl_Style.H,v 1.24 2000/01/10 06:31:03 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -43,9 +43,6 @@ struct FL_API Fl_Style {
   Fl_Font	label_font;
   Fl_Font	text_font;
   Fl_Labeltype	label_type;
-  // All items after color must be sizeof(int).  All items before must
-  // be sizeof(void*)!  This allows the style inheritance to use tacky
-  // code to copy things.
   Fl_Color	color;
   Fl_Color	label_color;
   Fl_Color	selection_color;
@@ -57,6 +54,9 @@ struct FL_API Fl_Style {
   unsigned	label_size;
   unsigned	text_size;
   unsigned	leading;
+  static int draw_boxes_inactive; // should boxes ever be drawn inactive?
+  static int inactive_menu_hack; // Microsoft sucks
+  static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
 
   Fl_Style* parent;
 
@@ -64,34 +64,6 @@ struct FL_API Fl_Style {
   int dynamic() const {return !revertfunc;}
 
   Fl_Style(); // creates a dynamic() style
-
-  void setp(const void** p, const void* v) { *p = v; }
-  void seti(unsigned* p, unsigned v) { *p = v; }
-
-  void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
-  void set_glyph_box(Fl_Boxtype v)	{setp((const void**)&glyph_box, v);}
-  void set_glyph(Fl_Glyph v)	        {setp((const void**)&glyph, (const void*)v);}
-  void set_label_font(Fl_Font v)	{setp((const void**)&label_font, v);}
-  void set_text_font(Fl_Font v)		{setp((const void**)&text_font, v);}
-  void set_label_type(Fl_Labeltype v)	{setp((const void**)&label_type, v);}
-  void set_color(Fl_Color v)		{seti(&color, v);}
-  void set_up_color(Fl_Color v)		{seti(&color, v);}
-  void set_label_color(Fl_Color v)	{seti(&label_color, v);}
-  void set_selection_color(Fl_Color v)	{seti(&selection_color, v);}
-  void set_selection_text_color(Fl_Color v) {seti(&selection_text_color, v);}
-  void set_on_color(Fl_Color v)		{seti(&selection_color, v);}
-  void set_down_color(Fl_Color v)	{seti(&selection_color, v);}
-  void set_off_color(Fl_Color v)	{seti(&off_color, v);}
-  void set_highlight_color(Fl_Color v)	{seti(&highlight_color, v);}
-  void set_highlight_label_color(Fl_Color v) {seti(&highlight_label_color, v);}
-  void set_text_color(Fl_Color v)	{seti(&text_color, v);}
-  void set_label_size(unsigned v)	{seti(&label_size, v);}
-  void set_text_size(unsigned v)	{seti(&text_size, v);}
-  void set_leading(unsigned v)		{seti(&leading, v);}
-
-  static int draw_boxes_inactive; // should boxes ever be drawn inactive?
-  static int inactive_menu_hack; // Microsoft sucks
-  static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
 
   static void start(char* name);	// start a new class of style or use a previously started one
 
@@ -117,12 +89,10 @@ enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
 
 struct FL_API Fl_Named_Style : public Fl_Style {
   const char* name;
-  Fl_Style** pdefault_style;
   Fl_Named_Style* next;
   static Fl_Named_Style* first;
-
-  Fl_Named_Style(const char* name, void (*revertfunc)(Fl_Style*)=0, Fl_Style** pdefault_style = 0);
-  Fl_Named_Style() { }	// Empty constructor used by Fl_Style::start only
+  Fl_Named_Style** back_pointer; // used by Fl_Style::start
+  Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
 };
 
 FL_API const char* fl_find_config_file(const char* fn, const char* prefix=0, const char* suffix=0);
@@ -130,5 +100,5 @@ FL_API const char* fl_find_config_file(const char* fn, const char* prefix=0, con
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.23 2000/01/07 08:50:14 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.24 2000/01/10 06:31:03 bill Exp $".
 //

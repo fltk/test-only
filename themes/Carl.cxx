@@ -1,5 +1,5 @@
 //
-// "$Id: Carl.cxx,v 1.1 2000/01/07 08:50:45 bill Exp $"
+// "$Id: Carl.cxx,v 1.2 2000/01/10 06:31:31 bill Exp $"
 //
 // This is the default theme provided with fltk.  It reads a database file
 // that allows most of the Fl_Styles to be modified.  This should be named
@@ -162,78 +162,78 @@ int fltk_theme(int argc, char** argv)
       // box type
       snprintf(temp, sizeof(temp), "widgets/%s/box", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->set_box(boxtype);
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
 
 
       // glyph box type
       snprintf(temp, sizeof(temp), "widgets/%s/glyph box", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->set_glyph_box(boxtype);
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->glyph_box = boxtype;
 
       // color
       snprintf(temp, sizeof(temp), "widgets/%s/color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_color(grok_color(sfile, valstr));
+        style->color = grok_color(sfile, valstr);
 
       // label color
       snprintf(temp, sizeof(temp), "widgets/%s/label color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_label_color(grok_color(sfile, valstr));
+        style->label_color = grok_color(sfile, valstr);
 
       // selection color
       snprintf(temp, sizeof(temp), "widgets/%s/selection color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_selection_color(grok_color(sfile, valstr));
+        style->selection_color = grok_color(sfile, valstr);
 
       // selection text color
       snprintf(temp, sizeof(temp), "widgets/%s/selection text color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_selection_text_color(grok_color(sfile, valstr));
+        style->selection_text_color = grok_color(sfile, valstr);
 
       // off color
       snprintf(temp, sizeof(temp), "widgets/%s/off color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_off_color(grok_color(sfile, valstr));
+        style->off_color = grok_color(sfile, valstr);
 
       // highlight color
       snprintf(temp, sizeof(temp), "widgets/%s/highlight color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_highlight_color(grok_color(sfile, valstr));
+        style->highlight_color = grok_color(sfile, valstr);
 
       // highlight label color
       snprintf(temp, sizeof(temp), "widgets/%s/highlight label color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_highlight_label_color(grok_color(sfile, valstr));
+        style->highlight_label_color = grok_color(sfile, valstr);
 
       // color
       snprintf(temp, sizeof(temp), "widgets/%s/text color", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_text_color(grok_color(sfile, valstr));
+        style->text_color = grok_color(sfile, valstr);
 
       // label font
       snprintf(temp, sizeof(temp), "widgets/%s/label font", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->set_label_font(font);
+        if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
 
       // text font
       snprintf(temp, sizeof(temp), "widgets/%s/text font", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->set_text_font(font);
+        if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
 
       // label type
       snprintf(temp, sizeof(temp), "widgets/%s/label type", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->set_label_type(labeltype);
+        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
 
       // label size
       snprintf(temp, sizeof(temp), "widgets/%s/label size", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_label_size(atol(valstr));
+        style->label_size = atol(valstr);
 
       // text size
       snprintf(temp, sizeof(temp), "widgets/%s/text size", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->set_text_size(atol(valstr));
+        style->text_size = atol(valstr);
 
     }
     conf_list_free(&clist);
@@ -242,5 +242,5 @@ int fltk_theme(int argc, char** argv)
 }
 
 //
-// End of "$Id: Carl.cxx,v 1.1 2000/01/07 08:50:45 bill Exp $".
+// End of "$Id: Carl.cxx,v 1.2 2000/01/10 06:31:31 bill Exp $".
 //

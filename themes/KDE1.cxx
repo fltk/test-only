@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.4 2000/01/07 08:50:45 bill Exp $"
+// "$Id: KDE1.cxx,v 1.5 2000/01/10 06:31:31 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -166,121 +166,121 @@ extern "C" int fltk_theme(int argc, char**)
     if (font && fontitalic) font = font->italic;
   }
 
-  Fl_Widget::default_style->set_highlight_color(0); // turn off widget highlighting
+  Fl_Widget::default_style->highlight_color = 0; // turn off widget highlighting
 
   Fl_Style* style;
   if (background) {
     fl_background(background);
-    Fl_Widget::default_style->set_off_color(background);
+    Fl_Widget::default_style->off_color = background;
   }
 
   if (foreground) {
-    Fl_Widget::default_style->set_label_color(foreground);
-    Fl_Widget::default_style->set_highlight_label_color(foreground);
-    Fl_Widget::default_style->set_text_color(foreground);
-    Fl_Widget::default_style->set_selection_text_color(foreground);
+    Fl_Widget::default_style->label_color = foreground;
+    Fl_Widget::default_style->highlight_label_color = foreground;
+    Fl_Widget::default_style->text_color = foreground;
+    Fl_Widget::default_style->selection_text_color = foreground;
   }
 
   if ((style = Fl_Style::find("input"))) {
-    if (foreground) style->set_off_color(foreground);
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
+    if (foreground) style->off_color = foreground;
+    if (window_background) style->color = window_background;
+    if (select_background) style->selection_color = select_background;
+    if (select_foreground) style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("output"))) {
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
+    if (window_background) style->color = window_background;
+    if (select_background) style->selection_color = select_background;
+    if (select_foreground) style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("counter"))) {
-    if (window_background) style->set_color(window_background);
+    if (window_background) style->color = window_background;
   }
 
   if ((style = Fl_Style::find("browser"))) {
-    if (window_background) style->set_color(window_background);
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
+    if (window_background) style->color = window_background;
+    if (select_background) style->selection_color = select_background;
+    if (select_foreground) style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("check button"))) {
     // this should be only on round and not check...
-    if (foreground) style->set_selection_color(foreground);
-    if (window_background) style->set_off_color(window_background);
+    if (foreground) style->selection_color = foreground;
+    if (window_background) style->off_color = window_background;
   }
 
   if ((style = Fl_Style::find("menu item"))) {
-    if (select_background) style->set_selection_color(select_background);
-    if (select_foreground) style->set_selection_text_color(select_foreground);
+    if (select_background) style->selection_color = select_background;
+    if (select_foreground) style->selection_text_color = select_foreground;
   }
 
   if ((style = Fl_Style::find("menu title"))) {
-    if (select_background) style->set_highlight_color(background);
-    if (select_foreground) style->set_highlight_label_color(foreground);
-    if (select_background) style->set_selection_color(background);
-    if (select_foreground) style->set_selection_text_color(foreground);
+    if (select_background) style->highlight_color = background;
+    if (select_foreground) style->highlight_label_color = foreground;
+    if (select_background) style->selection_color = background;
+    if (select_foreground) style->selection_text_color = foreground;
   }
 
 // Don't bother.  KDE gets it wrong.
 //  if ((style = Fl_Style::find("scrollbar"))) {
 //    if (background && window_background)
-//      style->set_color(fl_color_average(background, window_background, 0.5));
+//      style->color = fl_color_average(background, window_background, 0.5);
 //  }
 
 /* looks better for dark backgrounds
   if ((style = Fl_Style::find("scrollbar"))) {
-    if (foreground) style->set_color(48);
+    if (foreground) style->color = 48;
   }
 
   if ((style = Fl_Style::find("slider"))) {
-    if (foreground) style->set_color(48);
+    if (foreground) style->color = 48;
   }
 
   if ((style = Fl_Style::find("value slider"))) {
-    if (foreground) style->set_color(48);
+    if (foreground) style->color = 48;
   }
 */
   if (font) {
     if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style->set_label_font(font);
-    Fl_Widget::default_style->set_text_font(font);
-    Fl_Widget::default_style->set_label_size(fontsize);
-    Fl_Widget::default_style->set_text_size(fontsize);
+    Fl_Widget::default_style->label_font = font;
+    Fl_Widget::default_style->text_font = font;
+    Fl_Widget::default_style->label_size = fontsize;
+    Fl_Widget::default_style->text_size = fontsize;
   }
 
   if (!colors_only) {
 
     // for title highlighting
     if ((style = Fl_Style::find("menu bar"))) {
-      if (motif_style) style->set_highlight_color(0);
-      else style->set_highlight_label_color(foreground);
+      if (motif_style) style->highlight_color = 0;
+      else style->highlight_label_color = foreground;
     }
 
     if (motif_style) {
 //    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
       if ((style = Fl_Style::find("menu item"))) {
-	style->set_selection_color(background);
-	style->set_selection_text_color(foreground);
+	style->selection_color = background;
+	style->selection_text_color = foreground;
       }
       if ((style = Fl_Style::find("check button"))) {
-	style->set_selection_color(FL_DARK1);
-	style->set_off_color(background);
+	style->selection_color = FL_DARK1;
+	style->off_color = background;
       }
     } else {
       Fl_Style::inactive_color_weight = 0.15f;
 
       if ((style = Fl_Style::find("menu window"))) {
-	style->set_box(&kdewin_menu_window_box);
+	style->box = &kdewin_menu_window_box;
       }
 
       if ((style = Fl_Style::find("scrollbar"))) {
-	style->set_glyph_box(&kdewin_menu_window_box);
+	style->glyph_box = &kdewin_menu_window_box;
       }
     }
 
     if ((style = Fl_Style::find("menu window"))) {
-      style->set_leading(motif_style ? 4 : 8);
+      style->leading = motif_style ? 4 : 8;
     }
   }
 
@@ -292,5 +292,5 @@ extern "C" int fltk_theme(int argc, char**)
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.4 2000/01/07 08:50:45 bill Exp $".
+// End of "$Id: KDE1.cxx,v 1.5 2000/01/10 06:31:31 bill Exp $".
 //

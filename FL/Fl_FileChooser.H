@@ -10,8 +10,8 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
 #include "filename.H"
-#include "Fl_FileBrowser.h"
-#include "Fl_FileInput.h"
+#include "Fl_FileBrowser.H"
+#include "Fl_FileInput.H"
 #include <FL/Fl_Return_Button.H>
 
 class Fl_FileChooser {

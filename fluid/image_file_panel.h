@@ -5,10 +5,10 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 extern Fl_Window *images_dir_window;
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
 extern Fl_Input *images_dir_input;
+#include <FL/Fl_Button.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Return_Button.H>
 Fl_Window* make_images_dir_window();
 #endif
