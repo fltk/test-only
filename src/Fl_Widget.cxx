@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.64 2000/06/02 00:31:43 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.65 2000/06/12 02:06:00 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -85,16 +85,7 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
 }
 
 Fl_Widget::~Fl_Widget() {
-#if 0
-  // This would be the logical thing to do, but it crashes composite
-  // objects, and greatly slows down the destruction of a tree:
   if (parent_) parent_->remove(this);
-#else
-  // Instead this is used to prevent double destruction when the parent
-  // group is destroyed.  If you don't plan to destroy the group
-  // immediately, you better do the remove() yourself!
-  parent_ = 0;
-#endif
   throw_focus();
   if (style_->dynamic()) {
     // When a widget is destroyed it can destroy unique styles:
@@ -405,5 +396,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.64 2000/06/02 00:31:43 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.65 2000/06/12 02:06:00 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.24 2000/06/10 04:10:18 carl Exp $"
+// "$Id: Fl_Group.H,v 1.25 2000/06/12 02:05:58 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -39,31 +39,6 @@ public:
 };
 
 class FL_API Fl_Group : public Fl_Widget {
-
-  friend class Fl_List;
-  Fl_List* list_;
-  int children_;
-  int focus_;
-  Fl_Widget** array_;
-  Fl_Widget* resizable_;
-
-  int *sizes_; // remembered initial sizes of children
-  int ox_,oy_,ow_,oh_; // old size, used by layout
-
-  static Fl_Group *current_;
-
-protected:
-
-  void draw_child(Fl_Widget&) const;
-  void update_child(Fl_Widget&) const;
-  void draw_outside_label(Fl_Widget&) const ;
-  int* sizes();
-  int ox() const {return ox_;}
-  int oy() const {return oy_;}
-  int ow() const {return ow_;}
-  int oh() const {return oh_;}
-  void set_old_size() {ox_=x();oy_=y();ow_=w();oh_=h();}
-  int send(int, Fl_Widget&);
 
 public:
 
@@ -113,10 +88,38 @@ public:
   // back compatability function:
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
   friend void fl_end_group(); // forms emulation function
+
+protected:
+
+  void draw_child(Fl_Widget&) const;
+  void update_child(Fl_Widget&) const;
+  void draw_outside_label(Fl_Widget&) const ;
+  int* sizes();
+  int ox() const {return ox_;}
+  int oy() const {return oy_;}
+  int ow() const {return ow_;}
+  int oh() const {return oh_;}
+  void set_old_size() {ox_=x();oy_=y();ow_=w();oh_=h();}
+  int send(int, Fl_Widget&);
+
+private:
+
+  friend class Fl_List;
+  Fl_List* list_;
+  int children_;
+  int focus_;
+  Fl_Widget** array_;
+
+  Fl_Widget* resizable_;
+  int *sizes_; // remembered initial sizes of children
+  int ox_,oy_,ow_,oh_; // old size, used by layout
+
+  static Fl_Group *current_;
+
 };
 
-// dummy class used to end child groups in constructors for complex
-// subclasses of Fl_Group:
+// This dummy class can be used in constructors to set the parent
+// group to any desired value before creating child widget instances.
 class FL_API Fl_End {
 public:
   Fl_End() {Fl_Group::current()->end();}
@@ -126,5 +129,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.24 2000/06/10 04:10:18 carl Exp $".
+// End of "$Id: Fl_Group.H,v 1.25 2000/06/12 02:05:58 bill Exp $".
 //

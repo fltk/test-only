@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.72 2000/05/30 07:42:11 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.73 2000/06/12 02:05:59 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -92,10 +92,8 @@ void Fl_Group::clear() {
     // okay, now it is safe to destroy the children:
     while (e > a) {
       Fl_Widget* o = *--e;
-      // This test is to detect if ~Fl_Widget was already called on the
-      // child (it set parent to zero).  This is a hack but it makes
-      // destruction of composite objects faster:
-      if (o->parent() == this) delete o;
+      o->parent(0); // stops it from calling remove()
+      delete o;
     }
     free((void*)a);
   }
@@ -108,7 +106,7 @@ void Fl_Group::insert(Fl_Widget &o, int index) {
   o.parent(this);
   if (children_ == 0) {
     // allocate for 1 child
-    array_ = (Fl_Widget**)malloc(sizeof(Fl_Widget));
+    array_ = (Fl_Widget**)malloc(sizeof(Fl_Widget*));
     array_[0] = &o;
   } else {
     if (!(children_ & (children_-1))) // double number of children
@@ -126,15 +124,6 @@ void Fl_Group::add(Fl_Widget &o) {insert(o, children_);}
 void Fl_Group::remove(int index) {
   if (index >= children_) return;
   Fl_Widget* o = array_[index];
-#if 0
-// WAS: I removed this to be consistent with others methods that don't
-// do redraw().  Not sure what may have relied on it:
-  if (o->visible_r()) {
-    // we must redraw the enclosing group that has an opaque box:
-    for (Fl_Group *p = this; p; p = p->parent())
-      if (p->box() != FL_NO_BOX || !p->parent()) {p->redraw(); break;}
-  }
-#endif
   o->parent(0);
   children_--;
   for (int i=index; i < children_; ++i) array_[i] = array_[i+1];
@@ -150,10 +139,12 @@ void Fl_Group::replace(int index, Fl_Widget& o) {
 }
 
 int Fl_Group::find(const Fl_Widget* o) const {
-  while (o && o->parent() != this) o = o->parent();
-  Fl_Widget*const* a = array_;
-  int i; for (i=0; i < children_; ++i) if (*a++ == o) break;
-  return i;
+  //while (o && o->parent() != this) o = o->parent();
+  // Search backwards so if children are deleted in backwards order
+  // they are found quickly:
+  for (int index = children_; index--;)
+    if (array_[index] == o) return index;
+  return children_;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -576,5 +567,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.72 2000/05/30 07:42:11 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.73 2000/06/12 02:05:59 bill Exp $".
 //

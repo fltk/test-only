@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.44 2000/06/11 21:17:28 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.45 2000/06/12 02:06:00 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -141,7 +141,10 @@ int Fl_Window::handle(int event) {
       showtype = SW_SHOWNORMAL;
     ShowWindow(i->xid, showtype);
 #else
-    XMapWindow(fl_display, i->xid);
+    if (parent())
+      XMapWindow(fl_display, i->xid);
+    else
+      XMapRaised(fl_display, i->xid);
 #endif
     return 1;}
     
@@ -170,6 +173,9 @@ int Fl_Window::handle(int event) {
 void Fl_Window::show() {
       
   if (!parent()) {
+
+    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
+
     if (!shown()) {
       // Create a new top-level window
 
@@ -320,5 +326,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.44 2000/06/11 21:17:28 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.45 2000/06/12 02:06:00 bill Exp $".
 //
