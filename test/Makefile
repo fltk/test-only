@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.70 2004/01/06 06:43:03 spitzak Exp $"
+# "$Id: Makefile,v 1.71 2004/02/05 08:05:36 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -190,11 +190,6 @@ CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o ../lib/$(LIBPREFIX)fltk_gl
 		$(LINKFLTKGL) $(GLDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
-glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
-	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
-
 cube$(EXEEXT): cube.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
@@ -203,6 +198,16 @@ cube$(EXEEXT): cube.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
 fullscreen$(EXEEXT): fullscreen.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../FL/mac.r
+
+fractals$(EXEEXT): fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../FL/mac.r
+
+glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) glpuzzle.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
 gl_overlay$(EXEEXT): gl_overlay.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
@@ -241,5 +246,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.70 2004/01/06 06:43:03 spitzak Exp $".
+# End of "$Id: Makefile,v 1.71 2004/02/05 08:05:36 spitzak Exp $".
 #

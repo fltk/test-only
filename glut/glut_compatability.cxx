@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.12 2003/10/28 17:45:13 spitzak Exp $"
+// "$Id: glut_compatability.cxx,v 1.13 2004/02/05 08:05:35 spitzak Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,12 @@
 #if HAVE_GL
 
 #include <fltk/glut.h>
+#include <fltk/Menu.h>
+#include <fltk/Item.h>
+#include <fltk/ItemGroup.h>
+#include <fltk/Monitor.h>
+
+using namespace fltk;
 
 #define MAXWINDOWS 32
 static Fl_Glut_Window *windows[MAXWINDOWS+1];
@@ -50,7 +56,7 @@ static void default_reshape(int w, int h) {glViewport(0,0,w,h);}
 
 void Fl_Glut_Window::make_current() {
   glut_window = this;
-  if (shown()) Fl_Gl_Window::make_current();
+  if (shown()) GlWindow::make_current();
 }
 
 static int indraw;
@@ -76,14 +82,14 @@ static void domenu(int, int, int);
 
 int Fl_Glut_Window::handle(int event) {
   make_current();
-  int ex = Fl::event_x();
-  int ey = Fl::event_y();
+  int ex = event_x();
+  int ey = event_y();
   int button;
   switch (event) {
 
-  case FL_PUSH:
-    if (keyboard || special) Fl::focus(this);
-    button = Fl::event_button()-1;
+  case PUSH:
+    if (keyboard || special) focus(this);
+    button = event_button()-1;
     if (button<0) button = 0;
     if (button>2) button = 2;
     if (menu[button]) {domenu(menu[button],ex,ey); return 1;}
@@ -92,67 +98,67 @@ int Fl_Glut_Window::handle(int event) {
     if (motion) return 1;
     break;
 
-  case FL_MOUSEWHEEL:
-    button = Fl::event_dy();
+  case MOUSEWHEEL:
+    button = event_dy();
     while (button < 0) {mouse(3,GLUT_DOWN,ex,ey); ++button;}
     while (button > 0) {mouse(4,GLUT_DOWN,ex,ey); --button;}
     return 1;
     break;
 
-  case FL_RELEASE:
+  case RELEASE:
     for (button = 0; button < 3; button++) if (mouse_down & (1<<button)) {
       if (mouse) mouse(button,GLUT_UP,ex,ey);
     }
     mouse_down = 0;
     return 1;
 
-  case FL_ENTER:
+  case ENTER:
     if (entry) {entry(GLUT_ENTERED); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case FL_LEAVE:
+  case LEAVE:
     if (entry) {entry(GLUT_LEFT); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case FL_DRAG:
+  case DRAG:
     if (motion) {motion(ex, ey); return 1;}
     break;
 
-  case FL_MOVE:
+  case MOVE:
     if (passivemotion) {passivemotion(ex, ey); return 1;}
     break;
 
-  case FL_FOCUS:
+  case FOCUS:
     if (keyboard || special) return 1;
     break;
 
-  case FL_KEY:
-  case FL_SHORTCUT:
-    if (Fl::event_text()[0]) {
-      if (keyboard) {keyboard(Fl::event_text()[0],ex,ey); return 1;}
+  case KEY:
+  case SHORTCUT:
+    if (event_text()[0]) {
+      if (keyboard) {keyboard(event_text()[0],ex,ey); return 1;}
       break;
     } else {
       if (special) {
-	int k = Fl::event_key();
-	if (k > FL_F && k <= FL_F_Last) k = k-FL_F;
+	int k = event_key();
+	if (k > F0Key && k <= LastFunctionKey) k = k-F0Key;
 	special(k,ex,ey);
 	return 1;
       }
       break;
     }
 
-  case FL_HIDE:
+  case HIDE:
     if (visibility) visibility(GLUT_NOT_VISIBLE);
     break;
 
-  case FL_SHOW:
+  case SHOW:
     if (visibility) visibility(GLUT_VISIBLE);
     break;
   }
 
-  return Fl_Gl_Window::handle(event);
+  return GlWindow::handle(event);
 }
 
 static int glut_mode = GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH;
@@ -174,10 +180,10 @@ void Fl_Glut_Window::_init() {
 }
 
 Fl_Glut_Window::Fl_Glut_Window(int w, int h, const char *t) :
-  Fl_Gl_Window(w,h,t) {_init();}
+  GlWindow(w,h,t) {_init();}
 
 Fl_Glut_Window::Fl_Glut_Window(int x,int y,int w,int h, const char *t) :
-  Fl_Gl_Window(x,y,w,h,t) {_init();}
+  GlWindow(x,y,w,h,t) {_init();}
 
 static int initargc;
 static char **initargv;
@@ -188,7 +194,7 @@ void glutInit(int *argc, char **argv) {
   int i,j;
   for (i=0; i<=*argc; i++) initargv[i] = argv[i];
   for (i=j=1; i<*argc; ) {
-    if (Fl::arg(*argc,argv,i));
+    if (arg(*argc,argv,i));
     else argv[j++] = argv[i++];
   }
   argv[j] = 0;
@@ -199,7 +205,7 @@ void glutInitDisplayMode(unsigned int mode) {
   glut_mode = mode;
 }
 
-void glutMainLoop() {Fl::run();}
+void glutMainLoop() {run();}
 
 ////////////////////////////////////////////////////////////////
 
@@ -254,14 +260,11 @@ void glutSetWindow(int win) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <fltk/Fl_Menu_.h>
-#include <fltk/Fl_Item.h>
-#include <fltk/Fl_Item_Group.h>
 
 #define MAXMENUS 32
-static Fl_Menu_* menus[MAXMENUS+1];
+static Menu* menus[MAXMENUS+1];
 
-static void item_cb(Fl_Widget* w, long v) {
+static void item_cb(Widget* w, long v) {
   ((void(*)(int))(w->parent()->user_data()))(int(v));
 }
 
@@ -269,16 +272,16 @@ static void domenu(int n, int ex, int ey) {
   glut_menu = n;
   if (glut_menustate_function) glut_menustate_function(1);
   if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
-  menus[n]->popup(Fl::event_x(), Fl::event_y(), 0);
+  menus[n]->popup(event_x(), event_y(), 0);
   if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
   if (glut_menustate_function) glut_menustate_function(0);
 }
 
 int glutCreateMenu(void (*cb)(int)) {
-  Fl_Group::current(0); // don't add it to any window
+  Group::current(0); // don't add it to any window
   int i;
   for (i=1; i<MAXMENUS; i++) if (!menus[i]) break;
-  Fl_Menu_* m = new Fl_Item_Group("menu");
+  Menu* m = new ItemGroup("menu");
   // store the callback in the user_data, the child widgets will
   // look here for it:
   m->user_data((void*)cb);
@@ -293,7 +296,7 @@ void glutDestroyMenu(int n) {
 
 void glutAddMenuEntry(const char *label, int value) {
   menus[glut_menu]->begin();
-  Fl_Item* m = new Fl_Item(label);
+  Item* m = new Item(label);
   m->callback(item_cb, long(value));
 }
 
@@ -303,7 +306,7 @@ void glutAddSubMenu(const char *label, int submenu) {
 }
 
 void glutChangeToMenuEntry(int item, const char *label, int value) {
-  Fl_Widget* m = menus[glut_menu]->child(item-1);
+  Widget* m = menus[glut_menu]->child(item-1);
   m->label(label);
   m->argument(value);
 }
@@ -315,7 +318,7 @@ void glutChangeToSubMenu(int item, const char *label, int submenu) {
 }
 
 void glutRemoveMenuItem(int item) {
-  Fl_Menu_* m = menus[glut_menu];
+  Menu* m = menus[glut_menu];
   if (item > m->children() || item < 1) return;
   delete m->child(item-1);
 }
@@ -336,12 +339,12 @@ int glutGet(GLenum type) {
       return 0;
 //case GLUT_WINDOW_NUM_CHILDREN:
 //case GLUT_WINDOW_CURSOR: return 
-  case GLUT_SCREEN_WIDTH: return Fl::w();
-  case GLUT_SCREEN_HEIGHT: return Fl::h();
+  case GLUT_SCREEN_WIDTH: return Monitor::all().w();
+  case GLUT_SCREEN_HEIGHT: return Monitor::all().h();
 //case GLUT_SCREEN_WIDTH_MM:
 //case GLUT_SCREEN_HEIGHT_MM:
   case GLUT_MENU_NUM_ITEMS: return menus[glut_menu]->children();
-  case GLUT_DISPLAY_MODE_POSSIBLE: return Fl_Gl_Window::can_do(glut_mode);
+  case GLUT_DISPLAY_MODE_POSSIBLE: return GlWindow::can_do(glut_mode);
   case GLUT_INIT_WINDOW_X: return initx;
   case GLUT_INIT_WINDOW_Y: return inity;
   case GLUT_INIT_WINDOW_WIDTH: return initw;
@@ -375,5 +378,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.12 2003/10/28 17:45:13 spitzak Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.13 2004/02/05 08:05:35 spitzak Exp $".
 //

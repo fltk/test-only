@@ -1,5 +1,5 @@
 //
-// "$Id: glut_font.cxx,v 1.7 2002/12/10 02:00:36 easysw Exp $"
+// "$Id: glut_font.cxx,v 1.8 2004/02/05 08:05:35 spitzak Exp $"
 //
 // GLUT bitmap font routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,29 +31,30 @@
 
 #include <fltk/glut.h>
 #include <fltk/gl.h>
+using namespace fltk;
 
-Glut_Bitmap_Font glutBitmap9By15 = {FL_SCREEN, 15};
-Glut_Bitmap_Font glutBitmap8By13 = {FL_SCREEN, 13};
-Glut_Bitmap_Font glutBitmapTimesRoman10 = {FL_TIMES, 10};
-Glut_Bitmap_Font glutBitmapTimesRoman24 = {FL_TIMES, 24};
-Glut_Bitmap_Font glutBitmapHelvetica10 = {FL_HELVETICA, 10};
-Glut_Bitmap_Font glutBitmapHelvetica12 = {FL_HELVETICA, 12};
-Glut_Bitmap_Font glutBitmapHelvetica18 = {FL_HELVETICA, 18};
+Glut_Bitmap_Font glutBitmap9By15 = {SCREEN_FONT, 15};
+Glut_Bitmap_Font glutBitmap8By13 = {SCREEN_FONT, 13};
+Glut_Bitmap_Font glutBitmapTimesRoman10 = {TIMES, 10};
+Glut_Bitmap_Font glutBitmapTimesRoman24 = {TIMES, 24};
+Glut_Bitmap_Font glutBitmapHelvetica10 = {HELVETICA, 10};
+Glut_Bitmap_Font glutBitmapHelvetica12 = {HELVETICA, 12};
+Glut_Bitmap_Font glutBitmapHelvetica18 = {HELVETICA, 18};
 
 void glutBitmapCharacter(void* font, int character) {
-  gl_font(((Glut_Bitmap_Font *)font)->font,((Glut_Bitmap_Font *)font)->size);
+  glsetfont(((Glut_Bitmap_Font *)font)->font,((Glut_Bitmap_Font *)font)->size);
   char a[1]; a[0] = character;
-  gl_draw(a,1);
+  gldrawtext(a,1);
 }
 
 int glutBitmapWidth(void* font, int character) {
-  gl_font(((Glut_Bitmap_Font *)font)->font,((Glut_Bitmap_Font *)font)->size);
+  glsetfont(((Glut_Bitmap_Font *)font)->font,((Glut_Bitmap_Font *)font)->size);
   char a[1]; a[0] = character;
-  return int(gl_width(a,1)+.5);
+  return int(glgetwidth(a,1)+.5);
 }
 
 #endif
 
 //
-// End of "$Id: glut_font.cxx,v 1.7 2002/12/10 02:00:36 easysw Exp $".
+// End of "$Id: glut_font.cxx,v 1.8 2004/02/05 08:05:35 spitzak Exp $".
 //

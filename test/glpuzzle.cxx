@@ -1,9 +1,10 @@
 //
-// "$Id: glpuzzle.cxx,v 1.17 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: glpuzzle.cxx,v 1.18 2004/02/05 08:05:36 spitzak Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
-// This is rewritten to remove use of the Glut emulation so it can
-// demonstrate an Fl_Gl_Window subclass.
+//
+// This is a GLUT demo program to demonstrate fltk's GLUT emulation.
+// Search for "fltk" to find all the changes
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -25,343 +26,31 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+// this block added for fltk's distribtion so it will compile w/o OpenGL:
+#include <config.h>
+#if !HAVE_GL || !HAVE_GL_GLU_H
+#include <FL/Fl.H>
+#include <FL/fl_message.H>
+int main(int, char**) {
+  fl_alert("This demo does not work without GL and GLU");
+  return 1;
+}
+#else
+// end of added block
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Gl_Window.h>
-#include <fltk/gl.h>
-#include <GL/glu.h>
-
-////////////////////////////////////////////////////////////////
-/*
- * (c) Copyright 1993, 1994, Silicon Graphics, Inc.
- * Trackball code:
- *
- * Implementation of a virtual trackball.
- * Implemented by Gavin Bell, lots of ideas from Thant Tessman and
- *   the August '88 issue of Siggraph's "Computer Graphics," pp. 121-129.
- *
- * Vector manip code:
- *
- * Original code from:
- * David M. Ciemiewicz, Mark Grossman, Henry Moreton, and Paul Haeberli
- *
- * Much mucking with by:
- * Gavin Bell
- */
-
-/*
- * Pass the x and y coordinates of the last and current positions of
- * the mouse, scaled so they are from (-1.0 ... 1.0).
- *
- * The resulting rotation is returned as a quaternion rotation in the
- * first paramater.
- */
-void
-trackball(float q[4], float p1x, float p1y, float p2x, float p2y);
-
-/*
- * Given two quaternions, add them together to get a third quaternion.
- * Adding quaternions to get a compound rotation is analagous to adding
- * translations to get a compound translation.  When incrementally
- * adding rotations, the first argument here should be the new
- * rotation, the second and third the total rotation (which will be
- * over-written with the resulting new total rotation).
- */
-void
-add_quats(float *q1, float *q2, float *dest);
-
-/*
- * A useful function, builds a rotation matrix in Matrix based on
- * given quaternion.
- */
-void
-build_rotmatrix(float m[4][4], float q[4]);
-
-/*
- * This function computes a quaternion based on an axis (defined by
- * the given vector) and an angle about which to rotate.  The angle is
- * expressed in radians.  The result is put into the third argument.
- */
-void
-axis_to_quat(float a[3], float phi, float q[4]);
-
-/*
- * This size should really be based on the distance from the center of
- * rotation to the point on the object underneath the mouse.  That
- * point would then track the mouse as closely as possible.  This is a
- * simple example, though, so that is left as an Exercise for the
- * Programmer.
- */
-#define TRACKBALLSIZE  (0.8)
-
-/*
- * Local function prototypes (not defined in trackball.h)
- */
-static float tb_project_to_sphere(float, float, float);
-static void normalize_quat(float [4]);
-
-void
-vzero(float *v)
-{
-    v[0] = 0.0;
-    v[1] = 0.0;
-    v[2] = 0.0;
-}
-
-void
-vset(float *v, float x, float y, float z)
-{
-    v[0] = x;
-    v[1] = y;
-    v[2] = z;
-}
-
-void
-vsub(const float *src1, const float *src2, float *dst)
-{
-    dst[0] = src1[0] - src2[0];
-    dst[1] = src1[1] - src2[1];
-    dst[2] = src1[2] - src2[2];
-}
-
-void
-vcopy(const float *v1, float *v2)
-{
-    register int i;
-    for (i = 0 ; i < 3 ; i++)
-        v2[i] = v1[i];
-}
-
-void
-vcross(const float *v1, const float *v2, float *cross)
-{
-    float temp[3];
-
-    temp[0] = (v1[1] * v2[2]) - (v1[2] * v2[1]);
-    temp[1] = (v1[2] * v2[0]) - (v1[0] * v2[2]);
-    temp[2] = (v1[0] * v2[1]) - (v1[1] * v2[0]);
-    vcopy(temp, cross);
-}
-
-float
-vlength(const float *v)
-{
-    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-}
-
-void
-vscale(float *v, float div)
-{
-    v[0] *= div;
-    v[1] *= div;
-    v[2] *= div;
-}
-
-void
-vnormal(float *v)
-{
-    vscale(v,1.0/vlength(v));
-}
-
-float
-vdot(const float *v1, const float *v2)
-{
-    return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
-}
-
-void
-vadd(const float *src1, const float *src2, float *dst)
-{
-    dst[0] = src1[0] + src2[0];
-    dst[1] = src1[1] + src2[1];
-    dst[2] = src1[2] + src2[2];
-}
-
-/*
- * Ok, simulate a track-ball.  Project the points onto the virtual
- * trackball, then figure out the axis of rotation, which is the cross
- * product of P1 P2 and O P1 (O is the center of the ball, 0,0,0)
- * Note:  This is a deformed trackball-- is a trackball in the center,
- * but is deformed into a hyperbolic sheet of rotation away from the
- * center.  This particular function was chosen after trying out
- * several variations.
- *
- * It is assumed that the arguments to this routine are in the range
- * (-1.0 ... 1.0)
- */
-void
-trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
-{
-    float a[3]; /* Axis of rotation */
-    float phi;  /* how much to rotate about axis */
-    float p1[3], p2[3], d[3];
-    float t;
-
-    if (p1x == p2x && p1y == p2y) {
-        /* Zero rotation */
-        vzero(q);
-        q[3] = 1.0;
-        return;
-    }
-
-    /*
-     * First, figure out z-coordinates for projection of P1 and P2 to
-     * deformed sphere
-     */
-    vset(p1,p1x,p1y,tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
-    vset(p2,p2x,p2y,tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
-
-    /*
-     *  Now, we want the cross product of P1 and P2
-     */
-    vcross(p2,p1,a);
-
-    /*
-     *  Figure out how much to rotate around that axis.
-     */
-    vsub(p1,p2,d);
-    t = vlength(d) / (2.0*TRACKBALLSIZE);
-
-    /*
-     * Avoid problems with out-of-control values...
-     */
-    if (t > 1.0) t = 1.0;
-    if (t < -1.0) t = -1.0;
-    phi = 2.0 * asin(t);
-
-    axis_to_quat(a,phi,q);
-}
-
-/*
- *  Given an axis and angle, compute quaternion.
- */
-void
-axis_to_quat(float a[3], float phi, float q[4])
-{
-    vnormal(a);
-    vcopy(a,q);
-    vscale(q,sin(phi/2.0));
-    q[3] = cos(phi/2.0);
-}
-
-/*
- * Project an x,y pair onto a sphere of radius r OR a hyperbolic sheet
- * if we are away from the center of the sphere.
- */
-static float
-tb_project_to_sphere(float r, float x, float y)
-{
-    float d, t, z;
-
-    d = sqrt(x*x + y*y);
-    if (d < r * 0.70710678118654752440) {    /* Inside sphere */
-        z = sqrt(r*r - d*d);
-    } else {           /* On hyperbola */
-        t = r / 1.41421356237309504880;
-        z = t*t / d;
-    }
-    return z;
-}
-
-/*
- * Given two rotations, e1 and e2, expressed as quaternion rotations,
- * figure out the equivalent single rotation and stuff it into dest.
- *
- * This routine also normalizes the result every RENORMCOUNT times it is
- * called, to keep error from creeping in.
- *
- * NOTE: This routine is written so that q1 or q2 may be the same
- * as dest (or each other).
- */
-
-#define RENORMCOUNT 97
-
-void
-add_quats(float q1[4], float q2[4], float dest[4])
-{
-    static int count=0;
-    float t1[4], t2[4], t3[4];
-    float tf[4];
-
-    vcopy(q1,t1);
-    vscale(t1,q2[3]);
-
-    vcopy(q2,t2);
-    vscale(t2,q1[3]);
-
-    vcross(q2,q1,t3);
-    vadd(t1,t2,tf);
-    vadd(t3,tf,tf);
-    tf[3] = q1[3] * q2[3] - vdot(q1,q2);
-
-    dest[0] = tf[0];
-    dest[1] = tf[1];
-    dest[2] = tf[2];
-    dest[3] = tf[3];
-
-    if (++count > RENORMCOUNT) {
-        count = 0;
-        normalize_quat(dest);
-    }
-}
-
-/*
- * Quaternions always obey:  a^2 + b^2 + c^2 + d^2 = 1.0
- * If they don't add up to 1.0, dividing by their magnitued will
- * renormalize them.
- *
- * Note: See the following for more information on quaternions:
- *
- * - Shoemake, K., Animating rotation with quaternion curves, Computer
- *   Graphics 19, No 3 (Proc. SIGGRAPH'85), 245-254, 1985.
- * - Pletinckx, D., Quaternion calculus as a basic tool in computer
- *   graphics, The Visual Computer 5, 2-13, 1989.
- */
-static void
-normalize_quat(float q[4])
-{
-    int i;
-    float mag;
-
-    mag = (q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
-    for (i = 0; i < 4; i++) q[i] /= mag;
-}
-
-/*
- * Build a rotation matrix, given a quaternion rotation.
- *
- */
-void
-build_rotmatrix(float m[4][4], float q[4])
-{
-    m[0][0] = 1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]);
-    m[0][1] = 2.0 * (q[0] * q[1] - q[2] * q[3]);
-    m[0][2] = 2.0 * (q[2] * q[0] + q[1] * q[3]);
-    m[0][3] = 0.0;
-
-    m[1][0] = 2.0 * (q[0] * q[1] + q[2] * q[3]);
-    m[1][1]= 1.0 - 2.0 * (q[2] * q[2] + q[0] * q[0]);
-    m[1][2] = 2.0 * (q[1] * q[2] - q[0] * q[3]);
-    m[1][3] = 0.0;
-
-    m[2][0] = 2.0 * (q[2] * q[0] - q[1] * q[3]);
-    m[2][1] = 2.0 * (q[1] * q[2] + q[0] * q[3]);
-    m[2][2] = 1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]);
-    m[2][3] = 0.0;
-
-    m[3][0] = 0.0;
-    m[3][1] = 0.0;
-    m[3][2] = 0.0;
-    m[3][3] = 1.0;
-}
-
-// end of trackball code
-////////////////////////////////////////////////////////////////
+#include <FL/glut.H>	// changed for fltk
+#ifdef __APPLE__
+# include <OpenGL/glu.h>
+#else
+# include <GL/glu.h> // added for fltk
+#endif
+#include "trackball.c"	// changed from trackball.h for fltk
 
 #define WIDTH 4
 #define HEIGHT 5
@@ -412,12 +101,14 @@ static struct puzzle *startPuzzle;
 static struct puzzlelist *puzzles;
 static struct puzzlelist *lastentry;
 
-int curX, curY;
+int curX, curY, visible;
 
 #define MOVE_SPEED 0.2
 static unsigned char movingPiece;
 static float move_x, move_y;
 static float curquat[4];
+static int doubleBuffer = 1;
+static int depth = 1;
 
 static char xsize[PIECES + 1] =
 {0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2};
@@ -755,8 +446,11 @@ drawAll(void)
   glMultMatrixf(&(m[0][0]));
   glRotatef(180, 0, 0, 1);
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+  if (depth) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  } else {
+    glClear(GL_COLOR_BUFFER_BIT);
+  }
   for (i = 1; i <= PIECES; i++) {
     done[i] = 0;
   }
@@ -780,93 +474,35 @@ drawAll(void)
   }
 }
 
-class Puzzle_Window : public Fl_Gl_Window {
-public:
-  void draw();
-  int handle(int);
-  Puzzle_Window(int W, int H) : Fl_Gl_Window(W,H) {}
-} *puzzle_window;
-
 void
-init(void)
+redraw(void)
 {
-  static float lmodel_ambient[] =
-  {0.0, 0.0, 0.0, 0.0};
-  static float lmodel_twoside[] =
-  {GL_FALSE};
-  static float lmodel_local[] =
-  {GL_FALSE};
-  static float light0_ambient[] =
-  {0.1, 0.1, 0.1, 1.0};
-  static float light0_diffuse[] =
-  {1.0, 1.0, 1.0, 0.0};
-  static float light0_position[] =
-  {0.8660254, 0.5, 1, 0};
-  static float light0_specular[] =
-  {0.0, 0.0, 0.0, 0.0};
-  static float bevel_mat_ambient[] =
-  {0.0, 0.0, 0.0, 1.0};
-  static float bevel_mat_shininess[] =
-  {40.0};
-  static float bevel_mat_specular[] =
-  {0.0, 0.0, 0.0, 0.0};
-  static float bevel_mat_diffuse[] =
-  {1.0, 0.0, 0.0, 0.0};
-
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
-  glEnable(GL_DEPTH_TEST);
-  glClearDepth(1.0);
-
-  glClearColor(0.5, 0.5, 0.5, 0.0);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-  glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-  glEnable(GL_LIGHT0);
-
-  glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, lmodel_local);
-  glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside);
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-  glEnable(GL_LIGHTING);
-
-  glMaterialfv(GL_FRONT, GL_AMBIENT, bevel_mat_ambient);
-  glMaterialfv(GL_FRONT, GL_SHININESS, bevel_mat_shininess);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, bevel_mat_specular);
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, bevel_mat_diffuse);
-
-  glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-  glEnable(GL_COLOR_MATERIAL);
-  glShadeModel(GL_FLAT);
-}
-
-void Puzzle_Window::draw() {
-  if (!valid()) {
-    ::init(); // should only be called when context created, but
-	      // fltk does not give an indication of that...
-    W = w();
-    H = h();
-    glViewport(0, 0, W, H);
-    glGetIntegerv(GL_VIEWPORT, viewport);
-  }
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(45, viewport[2]*1.0/viewport[3], 0.1, 100.0);
+
   drawAll();
+
+  if (doubleBuffer)
+    glutSwapBuffers();
+  else
+    glFinish();
 }
 
 void
 solidifyChain(struct puzzle *puzzle)
 {
-  static char buf[30];
-  int i = 0;
+  int i;
+  char buf[256];
+
+  i = 0;
   while (puzzle->backptr) {
     i++;
     puzzle->backptr->solnptr = puzzle;
     puzzle = puzzle->backptr;
   }
   sprintf(buf, "%d moves to complete!", i);
-  puzzle_window->label(buf);
+  glutSetWindowTitle(buf);
 }
 
 int
@@ -1087,7 +723,7 @@ continueSolving(void)
       }
     }
   }
-  puzzle_window->label("What!  No change?");
+  glutSetWindowTitle("What!  No change?");
   freeSolutions();
   return 0;
 
@@ -1121,7 +757,7 @@ solvePuzzle(void)
   int i;
 
   if (solution(thePuzzle)) {
-    puzzle_window->label("Puzzle already solved!");
+    glutSetWindowTitle("Puzzle already solved!");
     return 0;
   }
   addConfig(thePuzzle, NULL);
@@ -1138,8 +774,8 @@ solvePuzzle(void)
   if (puzzles == NULL) {
     freeSolutions();
     sprintf(buf, "I can't solve it! (%d positions examined)", i);
-    puzzle_window->label(buf);
-    return 0;
+    glutSetWindowTitle(buf);
+    return 1;
   }
   return 1;
 }
@@ -1147,7 +783,6 @@ solvePuzzle(void)
 int
 selectPiece(int mousex, int mousey)
 {
-  puzzle_window->make_current();
   long hits;
   GLuint selectBuf[1024];
   GLuint closest;
@@ -1498,163 +1133,170 @@ static int spinning;
 static float lastquat[4];
 static int sel_piece;
 
-#include <fltk/Fl_Menu_.h>
+static void
+Reshape(int width, int height)
+{
 
-void set_solving(int);
-
-void solve_cb(Fl_Widget*, void*) {set_solving(!solving);}
-
-void reset_cb(Fl_Widget*, void*) {
-  set_solving(0);
-  memcpy(thePuzzle, startConfig, HEIGHT * WIDTH);
-  puzzle_window->redraw();
+  W = width;
+  H = height;
+  glViewport(0, 0, W, H);
+  glGetIntegerv(GL_VIEWPORT, viewport);
 }
 
-int piece;
-void delete_cb(Fl_Widget*, void*) {
-  set_solving(0);
-  if (piece) {nukePiece(piece); puzzle_window->redraw();}
-}
-
-void quit_cb(Fl_Widget*, void*) {
-  exit(0);
-}
-
-void reset_view_cb(Fl_Widget*, void*) {
-  trackball(curquat, 0.0, 0.0, 0.0, 0.0);
-  puzzle_window->redraw();
-  spinning = false;
-  changeState();
-}
-
-Fl_Menu_* menu;
-
-Fl_Menu_Item menu_table[] = {
-  {"solve it for me", 's', solve_cb},
-  {"reset the puzzle", 'r', reset_cb},
-  {"delete this piece", 'd', delete_cb},
-  {"reset view", 'o', reset_view_cb},
-  {"quit", 'q', quit_cb},
-  {0}};
-
-void set_solving(int s) {
-  if (s == solving) return;
-  if (s) {
-    menu->child(0)->label("stop solving");
-    puzzle_window->cursor(FL_CURSOR_WAIT);
-    Fl::flush();
-    if (solvePuzzle()) {solving = 1; changeState(); return;}
-  }
-  freeSolutions();
-  solving = 0;
-  menu->child(0)->label("solve it for me");
-  puzzle_window->cursor(FL_CURSOR_DEFAULT);
-  movingPiece = 0;
-  changeState();
-}
-
-int Puzzle_Window::handle(int event) {
-  int x = Fl::event_x();
-  int y = Fl::event_y();
-  switch (event) {
-  case FL_KEY:
-    switch (Fl::event_key()) {
-    case FL_Escape:
-    case 'Q':
-    case 'q':
-      exit(0);
-      break;
-    case 'S':
-    case 's':
-      solve_cb(this,0);
-      break;
-    case 'D':
-    case 'd':
-      piece = selectPiece(x, y);
-      delete_cb(this,0);
-      break;
-    case 'R':
-    case 'r':
-      reset_cb(this,0);
-      break;
-    case 'O':
-    case 'o':
-      reset_view_cb(this,0);
-      break;
-    default:
-      break;
+void
+toggleSolve(void)
+{
+    if (solving) {
+      freeSolutions();
+      solving = 0;
+      glutChangeToMenuEntry(1, "Solving", 1);
+      glutSetWindowTitle("glpuzzle");
+      movingPiece = 0;
+    } else {
+      glutChangeToMenuEntry(1, "Stop solving", 1);
+      glutSetWindowTitle("Solving...");
+      if (solvePuzzle()) {
+        solving = 1;
+      }
     }
-    return 1;
+    changeState();
+    glutPostRedisplay();
+}
 
-  case FL_PUSH:
-    mousex = curX = x;
-    mousey = curY = y;
-    switch (Fl::event_button()) {
-    case 1:
-      set_solving(0);
-      left_mouse = true;
+void reset(void)
+{
+    if (solving) {
+      freeSolutions();
+      solving = 0;
+      glutChangeToMenuEntry(1, "Solving", 1);
+      glutSetWindowTitle("glpuzzle");
+      movingPiece = 0;
+      changeState();
+    }
+    memcpy(thePuzzle, startConfig, HEIGHT * WIDTH);
+    glutPostRedisplay();
+}
+
+void
+keyboard(unsigned char c, int x, int y)
+{
+  int piece;
+
+  switch (c) {
+  case 27:
+    exit(0);
+    break;
+  case 'D':
+  case 'd':
+    if (solving) {
+      freeSolutions();
+      solving = 0;
+      glutChangeToMenuEntry(1, "Solving", 1);
+      glutSetWindowTitle("glpuzzle");
+      movingPiece = 0;
+      changeState();
+    }
+    piece = selectPiece(x, y);
+    if (piece) {
+      nukePiece(piece);
+    }
+    glutPostRedisplay();
+    break;
+  case 'R':
+  case 'r':
+    reset();
+    break;
+  case 'S':
+  case 's':
+    toggleSolve();
+    break;
+  case 'b':
+  case 'B':
+    depth = 1 - depth;
+    if (depth) {
+      glEnable(GL_DEPTH_TEST);
+    } else {
+      glDisable(GL_DEPTH_TEST);
+    }
+    glutPostRedisplay();
+    break;
+  default:
+    break;
+  }
+}
+
+void
+motion(int x, int y)
+{
+  float selx, sely;
+
+  if (middle_mouse && !left_mouse) {
+    if (mousex != x || mousey != y) {
+      trackball(lastquat,
+        (2.0*mousex - W) / W,
+        (H - 2.0*mousey) / H,
+        (2.0*x - W) / W,
+        (H - 2.0*y) / H);
+      spinning = 1;
+    } else {
+      spinning = 0;
+    }
+    changeState();
+  } else {
+    computeCoords(sel_piece, x, y, &selx, &sely);
+    moveSelection(selx, sely);
+  }
+  mousex = x;
+  mousey = y;
+  glutPostRedisplay();
+}
+
+void
+mouse(int b, int s, int x, int y)
+{
+  float selx, sely;
+
+  mousex = x;
+  mousey = y;
+  curX = x;
+  curY = y;
+  if (s == GLUT_DOWN) {
+    switch (b) {
+    case GLUT_LEFT_BUTTON:
+      if (solving) {
+        freeSolutions();
+        solving = 0;
+      glutChangeToMenuEntry(1, "Solving", 1);
+        glutSetWindowTitle("glpuzzle");
+        movingPiece = 0;
+      }
+      left_mouse = GL_TRUE;
       sel_piece = selectPiece(mousex, mousey);
       if (!sel_piece) {
-	left_mouse = false;
-	middle_mouse = true; // let it rotate object
-      } else {
-	float selx, sely;
-	if (computeCoords(sel_piece, mousex, mousey, &selx, &sely)) {
-	  grabPiece(sel_piece, selx, sely);
-	}
+      left_mouse = GL_FALSE;
+      middle_mouse = GL_TRUE; // let it rotate object
+      } else if (computeCoords(sel_piece, mousex, mousey, &selx, &sely)) {
+        grabPiece(sel_piece, selx, sely);
       }
-      redraw();
+      glutPostRedisplay();
       break;
-    case 2:
-      middle_mouse = true;
-      redraw();
+    case GLUT_MIDDLE_BUTTON:
+      middle_mouse = GL_TRUE;
+      glutPostRedisplay();
       break;
-    default:
-      piece = selectPiece(x, y);
-      if (piece) menu->child(2)->activate(); else menu->child(2)->deactivate();
-      menu->popup(x, y);
-      return 1;
     }
-    // fall through to drag handler:
-
-  case FL_DRAG:
-    if (middle_mouse && !left_mouse) {
-      if (mousex != x || mousey != y) {
-	trackball(lastquat,
-		  (2.0*mousex - W) / W,
-		  (H - 2.0*mousey) / H,
-		  (2.0*x - W) / W,
-		  (H - 2.0*y) / H);
-	spinning = 1;
-      } else {
-	spinning = 0;
-      }
-      changeState();
-    } else {
-      float selx, sely;
-      computeCoords(sel_piece, x, y, &selx, &sely);
-      moveSelection(selx, sely);
-    }
-    mousex = x;
-    mousey = y;
-    redraw();
-    return 1;
-
-  case FL_RELEASE:
+  } else {
     if (left_mouse) {
-      left_mouse = false;
+      left_mouse = GL_FALSE;
       dropSelection();
-      redraw();
+      glutPostRedisplay();
     } else if (middle_mouse) {
       middle_mouse = GL_FALSE;
-      redraw();
+      glutPostRedisplay();
     }
-    return 1;
-
   }
-  return Fl_Gl_Window::handle(event);
+  motion(x, y);
 }
-
 
 void
 animate(void)
@@ -1662,40 +1304,185 @@ animate(void)
   if (spinning) {
     add_quats(lastquat, curquat, curquat);
   }
-  puzzle_window->redraw();
+  glutPostRedisplay();
   if (solving) {
     if (!continueSolving()) {
-      set_solving(0);
+      solving = 0;
+      glutChangeToMenuEntry(1, "Solving", 1);
+      glutSetWindowTitle("glpuzzle");
     }
   }
-  if (!solving && !spinning) {
-    Fl::set_idle(0);
+  if (!solving && !spinning && !visible) {
+    glutIdleFunc(NULL);
   }
 }
 
 void
 changeState(void)
 {
-  if (puzzle_window->visible() && (solving || spinning)) {
-    Fl::set_idle(animate);
+  if (visible) {
+    if (!solving && !spinning) {
+      glutIdleFunc(NULL);
+    } else {
+      glutIdleFunc(animate);
+    }
   } else {
-    Fl::set_idle(0);
+    glutIdleFunc(NULL);
   }
+}
+
+void
+init(void)
+{
+  static float lmodel_ambient[] =
+  {0.0, 0.0, 0.0, 0.0};
+  static float lmodel_twoside[] =
+  {GL_FALSE};
+  static float lmodel_local[] =
+  {GL_FALSE};
+  static float light0_ambient[] =
+  {0.1, 0.1, 0.1, 1.0};
+  static float light0_diffuse[] =
+  {1.0, 1.0, 1.0, 0.0};
+  static float light0_position[] =
+  {0.8660254, 0.5, 1, 0};
+  static float light0_specular[] =
+  {0.0, 0.0, 0.0, 0.0};
+  static float bevel_mat_ambient[] =
+  {0.0, 0.0, 0.0, 1.0};
+  static float bevel_mat_shininess[] =
+  {40.0};
+  static float bevel_mat_specular[] =
+  {0.0, 0.0, 0.0, 0.0};
+  static float bevel_mat_diffuse[] =
+  {1.0, 0.0, 0.0, 0.0};
+
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  glEnable(GL_DEPTH_TEST);
+  glClearDepth(1.0);
+
+  glClearColor(0.5, 0.5, 0.5, 0.0);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+  glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+  glEnable(GL_LIGHT0);
+
+  glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, lmodel_local);
+  glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside);
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+  glEnable(GL_LIGHTING);
+
+  glMaterialfv(GL_FRONT, GL_AMBIENT, bevel_mat_ambient);
+  glMaterialfv(GL_FRONT, GL_SHININESS, bevel_mat_shininess);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, bevel_mat_specular);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, bevel_mat_diffuse);
+
+  glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+  glEnable(GL_COLOR_MATERIAL);
+  glShadeModel(GL_FLAT);
+
+  trackball(curquat, 0.0, 0.0, 0.0, 0.0);
+  srandom(time(NULL));
+}
+
+static void
+Usage(void)
+{
+  printf("Usage: puzzle [-s]\n");
+  printf("   -s:  Run in single buffered mode\n");
+  exit(-1);
+}
+
+void
+visibility(int v)
+{
+  if (v == GLUT_VISIBLE) {
+    visible = 1;
+  } else {
+    visible = 0;
+  }
+  changeState();
+}
+
+void
+menu(int choice)
+{
+   switch(choice) {
+   case 1:
+      toggleSolve();
+      break;
+   case 2:
+      reset();
+      break;
+   case 3:
+      exit(0);
+      break;
+   }
 }
 
 int
 main(int argc, char **argv)
 {
-  puzzle_window = new Puzzle_Window(W,H);
-  puzzle_window->resizable(puzzle_window);
-  puzzle_window->show(argc, argv);
-  trackball(curquat, 0.0, 0.0, 0.0, 0.0);
-  srandom(time(NULL));
-  menu = new Fl_Menu_(0,0,0,0);
-  menu_table->add_to(menu);
-  return Fl::run();
+  long i;
+
+  glutInit(&argc, argv);
+  for (i = 1; i < argc; i++) {
+    if (argv[i][0] == '-') {
+      switch (argv[i][1]) {
+      case 's':
+        doubleBuffer = 0;
+        break;
+      default:
+        Usage();
+      }
+    } else {
+      Usage();
+    }
+  }
+
+  glutInitWindowSize(W, H);
+  if (doubleBuffer) {
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+  } else {
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB | GLUT_SINGLE | GLUT_MULTISAMPLE);
+  }
+
+  glutCreateWindow("glpuzzle");
+  visible = 1; // added for fltk, bug in original program?
+
+  init();
+
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+  printf("\n");
+  printf("r   Reset puzzle\n");
+  printf("s   Solve puzzle (may take a few seconds to compute)\n");
+  printf("d   Destroy a piece - makes the puzzle easier\n");
+  printf("b   Toggles the depth buffer on and off\n");
+  printf("\n");
+  printf("Left mouse moves pieces\n");
+  printf("Middle mouse spins the puzzle\n");
+  printf("Right mouse has menu\n");
+
+  glutReshapeFunc(Reshape);
+  glutDisplayFunc(redraw);
+  glutKeyboardFunc(keyboard);
+  glutMotionFunc(motion);
+  glutMouseFunc(mouse);
+  glutVisibilityFunc(visibility);
+  glutCreateMenu(menu);
+  glutAddMenuEntry("Solve", 1);
+  glutAddMenuEntry("Reset", 2);
+  glutAddMenuEntry("Quit", 3);
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+  glutMainLoop();
+  return 0;             /* ANSI C requires main to return int. */
 }
 
+#endif // added for fltk's distribution
+
 //
-// End of "$Id: glpuzzle.cxx,v 1.17 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.18 2004/02/05 08:05:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.21 2002/12/15 10:42:52 spitzak Exp $"
+# "$Id: Makefile,v 1.22 2004/02/05 08:05:35 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -39,15 +39,13 @@ DSOCFLAGS += -DFL_GLUT_LIBRARY
 DSOCXXFLAGS += -DFL_GLUT_LIBRARY
 LDLIBS := $(GLUTLIBS) $(LDLIBS)
 
-LIBRARY = ../lib/$(LIBNAME)_glut
-DSO = ../lib/$(DSOLIBglutNAME)
-DSONAME = $(DSOLIBglutNAME)$(DSOEXT)
+LIBNAME	= ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(BUILDTARGETS)
+all:	static
 
-static:	$(LIBRARY)$(LIBEXT)
+static:	$(LIBNAME)
 
 shared:	$(DSO)$(DSOEXT)
 
@@ -57,7 +55,7 @@ programs: demos
 
 $(DEMOS): $(FLGLUTLIB) $(FLGLLIB) $(FLLIB)
 
-$(LIBRARY).a: $(OBJECTS)
+$(LIBNAME): $(OBJECTS)
 	@rm -f $@
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
@@ -79,7 +77,7 @@ $(DSO).2.dll: $(OBJECTS)
 #	../fluid/fluid -c $<
 
 clean :
-	@rm -f *.o $(DEMOS) *.exe $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
+	@rm -f *.o $(DEMOS) *.exe $(LIBNAME) $(DSO)$(DSOEXT) \
 	       ../lib/$(DLLIMPORTNAME) core *~ makedepend
 	@touch makedepend
 
@@ -98,7 +96,7 @@ install_static: static
 	@echo "Installing static libraries..."
 	@mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)_glut$(LIBEXT)
-	@cp $(LIBRARY)$(LIBEXT) $(libdir)
+	@cp $(LIBNAME) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)_glut$(LIBEXT) 
 
 install_shared: shared
@@ -115,5 +113,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.21 2002/12/15 10:42:52 spitzak Exp $".
+# End of "$Id: Makefile,v 1.22 2004/02/05 08:05:35 spitzak Exp $".
 #
