@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shortcut.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $"
+// "$Id: fl_shortcut.cxx,v 1.7 1999/09/14 17:52:46 carl Exp $"
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -48,29 +48,29 @@
 #include <X11/Xlib.h>
 #endif
 
-bool Fl::test_shortcut(int shortcut) {
-  if (!shortcut) return false;
+int Fl::test_shortcut(int shortcut) {
+  if (!shortcut) return 0;
 
   int shift = Fl::event_state();
   // see if any required shift flags are off:
-  if ((shortcut&shift) != (shortcut&0x7fff0000)) return false;
+  if ((shortcut&shift) != (shortcut&0x7fff0000)) return 0;
   // record shift flags that are wrong:
   int mismatch = (shortcut^shift)&0x7fff0000;
   // these three must always be correct:
-  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return false;
+  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return 0;
 
   int key = shortcut & 0xffff;
 
   // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return true;
+  if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return 1;
 
   // try matching ascii, ignore shift:
-  if (key == event_text()[0]) return true;
+  if (key == event_text()[0]) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
   if ((shift&FL_CTRL) && key >= 0x3f && key <= 0x5F
-      && event_text()[0]==(key^0x40)) return true;
-  return false;
+      && event_text()[0]==(key^0x40)) return 1;
+  return 0;
 }
 
 const char * fl_shortcut_label(int shortcut) {
@@ -105,24 +105,24 @@ const char * fl_shortcut_label(int shortcut) {
 
 // Tests for &x shortcuts in button labels:
 
-bool Fl_Widget::test_shortcut(const char *label) {
+int Fl_Widget::test_shortcut(const char *label) {
   char c = Fl::event_text()[0];
-  if (!c || !label) return false;
+  if (!c || !label) return 0;
   for (;;) {
     if (!*label) return 0;
     if (*label++ == '&' && *label) {
       if (*label == '&') label++;
-      else if (*label == c) return true;
-      else return false;
+      else if (*label == c) return 1;
+      else return 0;
     }
   }
 }
 
-bool Fl_Widget::test_shortcut() {
-  if (!(flags()&FL_SHORTCUT_LABEL)) return false;
+int Fl_Widget::test_shortcut() {
+  if (!(flags()&FL_SHORTCUT_LABEL)) return 0;
   return test_shortcut(label());
 }
 
 //
-// End of "$Id: fl_shortcut.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $".
+// End of "$Id: fl_shortcut.cxx,v 1.7 1999/09/14 17:52:46 carl Exp $".
 //

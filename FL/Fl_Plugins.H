@@ -46,4 +46,4 @@ typedef void* FLDLhandle;
 
 #endif
 
-#endif FL_Plugins_H
+#endif // FL_Plugins_H

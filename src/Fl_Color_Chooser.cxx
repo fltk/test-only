@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.12 1999/09/14 07:17:21 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.13 1999/09/14 17:52:38 carl Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -454,7 +454,7 @@ static void make_it() {
   window->set_modal();
 }
 
-static bool run_it(const char* name) {
+static int run_it(const char* name) {
   window->label(name);
   ok_color->color(chooser->value());
   cancel_color->color(chooser->value());
@@ -465,42 +465,42 @@ static bool run_it(const char* name) {
     for (;;) {
       Fl_Widget* o = Fl::readqueue();
       if (!o) break;
-      if (o == ok_button) {window->hide(); return true;}
-      if (o == window || o == cancel_button) {window->hide(); return false;}
+      if (o == ok_button) {window->hide(); return 1;}
+      if (o == window || o == cancel_button) {window->hide(); return 0;}
     }
   }
-  return false;
+  return 0;
 }
 
-bool fl_color_chooser(const char* name, double& r, double& g, double& b) {
+int fl_color_chooser(const char* name, double& r, double& g, double& b) {
   make_it();
   chooser->rgb(r,g,b);
-  if (!run_it(name)) return false;
+  if (!run_it(name)) return 0;
   r = chooser->r();
   g = chooser->g();
   b = chooser->b();
-  return true;
+  return 1;
 }
 
-bool fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
+int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
   make_it();
   chooser->rgb(r/255.0, g/255.0, b/255.0);
-  if (!run_it(name)) return false;
+  if (!run_it(name)) return 0;
   r = uchar(255*chooser->r()+.5);
   g = uchar(255*chooser->g()+.5);
   b = uchar(255*chooser->b()+.5);
-  return true;
+  return 1;
 }
 
-bool fl_color_chooser(const char* name, Fl_Color& c) {
+int fl_color_chooser(const char* name, Fl_Color& c) {
   make_it();
   chooser->value(c);
   picked_color = c;
-  if (!run_it(name)) return false;
+  if (!run_it(name)) return 0;
   c = picked_color;
-  return true;
+  return 1;
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.12 1999/09/14 07:17:21 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.13 1999/09/14 17:52:38 carl Exp $".
 //

@@ -28,7 +28,7 @@
 #endif
 
 class Fl_Align_Group : public Fl_Group {
-  bool vertical_;
+  int vertical_;
   uchar n_to_break_,dw_,dh_;
   Fl_Align align_;
 
@@ -37,15 +37,15 @@ public:
   void layout();
 
   Fl_Align_Group(int X, int Y, int W, int H, const char* L = 0,
-		 uchar n_to_break = 0, uchar vertical = true,
+		 uchar n_to_break = 0, uchar vertical = 1,
 		 Fl_Align align = FL_ALIGN_LEFT,
 		 uchar dw = 0,uchar dh = 0)
     : Fl_Group(X,Y,W,H,L),
       vertical_(vertical), n_to_break_(n_to_break), dw_(dw), dh_(dh),
       align_(align) {}
 
-  bool vertical() const {return vertical_;}
-  void vertical(bool v) {vertical_ = v;}
+  int vertical() const {return vertical_;}
+  void vertical(int v) {vertical_ = v;}
 
   uchar n_to_break() const {return n_to_break_;}
   void n_to_break(uchar n) {n_to_break_ = n;}

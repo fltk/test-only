@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.H,v 1.6 1999/09/01 08:23:47 bill Exp $"
+// "$Id: Fl_Color_Chooser.H,v 1.7 1999/09/14 17:52:27 carl Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -90,12 +90,12 @@ public:
   FL_EXPORT Fl_Color_Chooser(int,int,int,int,const char* = 0);
 };
 
-FL_EXPORT bool fl_color_chooser(const char*name,double& r,double& g,double& b);
-FL_EXPORT bool fl_color_chooser(const char*name, uchar& r, uchar& g, uchar& b);
-FL_EXPORT bool fl_color_chooser(const char*name, Fl_Color& c);
+FL_EXPORT int fl_color_chooser(const char*name,double& r,double& g,double& b);
+FL_EXPORT int fl_color_chooser(const char*name, uchar& r, uchar& g, uchar& b);
+FL_EXPORT int fl_color_chooser(const char*name, Fl_Color& c);
 
 #endif
 
 //
-// End of "$Id: Fl_Color_Chooser.H,v 1.6 1999/09/01 08:23:47 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.H,v 1.7 1999/09/14 17:52:27 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.14 1999/08/16 07:30:50 bill Exp $"
+// "$Id: Fl_Input_.H,v 1.15 1999/09/14 17:52:28 carl Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,7 @@ protected:
   int yscroll() const {return yscroll_;}
 
 private:
-  bool erase_cursor_only;
+  int erase_cursor_only;
 
   int size_;
   int bufsize;
@@ -107,5 +107,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.14 1999/08/16 07:30:50 bill Exp $".
+// End of "$Id: Fl_Input_.H,v 1.15 1999/09/14 17:52:28 carl Exp $".
 //

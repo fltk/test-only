@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.6 1999/08/29 20:08:03 bill Exp $"
+// "$Id: fl_jpeg.cxx,v 1.7 1999/09/14 17:52:44 carl Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -359,7 +359,7 @@ void Fl_JPEG_Image::read()
 #endif
 }
 
-bool Fl_JPEG_Image::test(uchar* datas, size_t size)
+int Fl_JPEG_Image::test(uchar* datas, size_t size)
 {
 #if !HAVE_JPEG
   return 0;
@@ -399,5 +399,5 @@ bool Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.6 1999/08/29 20:08:03 bill Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.7 1999/09/14 17:52:44 carl Exp $"
 //

@@ -5,6 +5,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
+#include <stdlib.h>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Check_Button.H>
@@ -15,5 +16,4 @@ extern Fl_Browser *browser;
 #include <FL/Fl_Button.H>
 Fl_Window* make_window();
 extern Fl_Menu_Item menu_[];
-extern Fl_Browser *browser;
 #endif

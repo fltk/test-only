@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.15 1999/08/20 08:32:27 bill Exp $"
+// "$Id: fl_font.cxx,v 1.16 1999/09/14 17:52:43 carl Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,7 +109,7 @@ char* fl_find_fontsize(char* name) {
   return r;
 }
 
-void fl_font(Fl_Font s, unsigned size, const char* encoding) {
+void fl_font(const Fl_Font s, unsigned size, const char* encoding) {
   static Fl_Font curfont;
   if (s == curfont) { // see if it is the current font...
       Fl_FontSize* f = fl_font_;
@@ -143,7 +143,7 @@ void fl_font(Fl_Font s, unsigned size, const char* encoding) {
   unsigned ptsize = 0;	// best one found so far
   unsigned matchedlength = 32767;
   char namebuffer[1024];	// holds scalable font name
-  bool found_encoding = false;
+  int found_encoding = 0;
   int m = s->n; if (m<0) m = -m;
   for (int n=0; n < m; n++) {
 
@@ -154,7 +154,7 @@ void fl_font(Fl_Font s, unsigned size, const char* encoding) {
       if (*c++ && !strcmp(c, encoding)) {
 	// yes, encoding matches
 	if (!found_encoding) ptsize = 0; // force it to choose this
-	found_encoding = true;
+	found_encoding = 1;
       } else {
 	if (found_encoding) continue;
       }
@@ -216,7 +216,7 @@ void fl_font(Fl_Font s, unsigned size, const char* encoding) {
 
 const char *fl_encoding = "iso8859-1";
 
-void fl_font(Fl_Font f, unsigned size) {
+void fl_font(const Fl_Font f, unsigned size) {
   fl_font(f ? f : FL_HELVETICA, size, fl_encoding);
 }
 
@@ -308,5 +308,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.15 1999/08/20 08:32:27 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.16 1999/09/14 17:52:43 carl Exp $".
 //

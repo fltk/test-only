@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.9 1999/08/16 07:31:22 bill Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.10 1999/09/14 17:52:40 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <FL/Fl_Menu_Window.H>
 
 float Fl_Tooltip::delay_ = 0.5f;
-bool Fl_Tooltip::enabled_ = 1;
+int Fl_Tooltip::enabled_ = 1;
 
 Fl_Style Fl_Tooltip::default_style = {
   FL_BORDER_BOX,// box
@@ -136,5 +136,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.9 1999/08/16 07:31:22 bill Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.10 1999/09/14 17:52:40 carl Exp $".
 //

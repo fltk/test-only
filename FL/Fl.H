@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.16 1999/08/20 19:58:00 carl Exp $"
+// "$Id: Fl.H,v 1.17 1999/09/14 17:52:27 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -75,11 +75,11 @@ public:
   static void own_colormap();
 
   // execution:
-  static bool wait();
+  static int wait();
   static double wait(double time);
-  static bool check();
-  static bool ready();
-  static bool run();
+  static int check();
+  static int ready();
+  static int run();
   static Fl_Widget* readqueue();
   static void add_timeout(double t,void (*cb)(void*),void* = 0);
   static void remove_timeout(void (*cb)(void*), void* = 0);
@@ -122,9 +122,9 @@ public:
   static int get_key(int);
   static const char* event_text() {return e_text;}
   static int event_length() {return e_length;}
-  static bool event_inside(int,int,int,int);
-  static bool event_inside(const Fl_Widget*);
-  static bool test_shortcut(int);
+  static int event_inside(int,int,int,int);
+  static int event_inside(const Fl_Widget*);
+  static int test_shortcut(int);
 
   // event destinations:
   static int handle(int, Fl_Window*);
@@ -194,5 +194,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.16 1999/08/20 19:58:00 carl Exp $".
+// End of "$Id: Fl.H,v 1.17 1999/09/14 17:52:27 carl Exp $".
 //

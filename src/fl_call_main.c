@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.3 1999/08/26 07:58:17 bill Exp $"
+ * "$Id: fl_call_main.c,v 1.4 1999/09/14 17:52:42 carl Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -24,6 +24,7 @@
  * Please report all bugs and problems to "fltk-bugs@easysw.com".
  */
 
+/*
 // This WinMain() function can be overridden by an application and
 // is provided for compatibility with programs written for other
 // operating systems that conform to the ANSI standard entry point
@@ -41,6 +42,7 @@
 // we want to update this to always use the parent's console,
 // but at present we have not identified a function or API in
 // Microsoft(r) Windows(r) that allows for it.
+*/
 
 #if defined(WIN32) && !defined(FL_DLL)
 
@@ -74,6 +76,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 /*
- * End of "$Id: fl_call_main.c,v 1.3 1999/08/26 07:58:17 bill Exp $".
+ * End of "$Id: fl_call_main.c,v 1.4 1999/09/14 17:52:42 carl Exp $".
  */
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.7 1999/08/23 16:43:06 vincent Exp $"
+// "$Id: Fl_Image.H,v 1.8 1999/09/14 17:52:28 carl Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -50,12 +50,12 @@ public:
   void draw_tiled(int X, int Y, int W, int H, int cx=0, int cy=0);
 
   // back compatability:
-  void Fl_Image::label(Fl_Widget* o);
-  void Fl_Image::label(Fl_Menu_Item* o);
+  void label(Fl_Widget* o);
+  void label(Fl_Menu_Item* o);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.7 1999/08/23 16:43:06 vincent Exp $".
+// End of "$Id: Fl_Image.H,v 1.8 1999/09/14 17:52:28 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.10 1999/08/20 08:32:27 bill Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.11 1999/09/14 17:52:45 carl Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -111,13 +111,13 @@ static int to_nice(char* o, const char* p) {
     // strip them out.  Also strip out all *, -, and spaces and replace
     // them with spaces.
 
-    bool punctuation = false;
+    int punctuation = 0;
     for (;*p; p++) {
       if (!strncmp(p,"bold",4)) {type |= FL_BOLD; p += 3; continue;}
       if (!strncmp(p,"italic",6)) {type |= FL_ITALIC; p += 5; continue;}
-      if (*p == '*' || *p == ' ' || *p == '-') punctuation = true;
+      if (*p == '*' || *p == ' ' || *p == '-') punctuation = 1;
       else {
-	if (punctuation) {*o++ = ' '; punctuation = false;}
+	if (punctuation) {*o++ = ' '; punctuation = 0;}
 	*o++ = *p;
       }
     }
@@ -216,7 +216,7 @@ static int ultrasort(const void *aa, const void *bb) {
   return (asize - bsize);
 }
 
-int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
+int fl_list_fonts(Fl_Font*& arrayp, int everything) {
   static Fl_Font* array = 0;
   static int num_fonts = 0;
   if (array) {arrayp = array; return num_fonts;}
@@ -370,5 +370,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 #endif
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.10 1999/08/20 08:32:27 bill Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.11 1999/09/14 17:52:45 carl Exp $".
 //

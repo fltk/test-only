@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.44 1999/09/08 06:25:10 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.45 1999/09/14 17:52:32 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -268,11 +268,9 @@ void name_public_cb(Fl_Light_Button* i, void* v) {
 
 static char* oldlabel;
 static unsigned oldlabellen;
-static Fl_Input *label_input;
 
 void label_cb(Fl_Input* i, void *v) {
   if (v == LOAD) {
-    label_input = i;
     i->static_value(current_widget->label());
     if (strlen(i->value()) >= oldlabellen) {
       oldlabellen = strlen(i->value())+128;
@@ -340,7 +338,7 @@ void* item_pointer(Fl_Menu_Item* m, const char* i) {
 }
 int item_number(Fl_Menu_Item* m, const char* i) {
   void* v = item_pointer(m,i);
-  if (v) return int(v);
+  if (v) return (long)v;
   return atoi(i);
 }
 
@@ -1371,14 +1369,13 @@ inline Fluid_Plugin** next_panel(Fluid_Plugin** pp, Fluid_Plugin* &p)
   if(pp < plugins+nbplugins) p = *pp;
   return pp;
 }
-#define for_all_plugins(p) for(Fluid_Plugin *p, **pp = next_panel(plugins, p);\
-pp-plugins<nbplugins; \
-pp = next_panel(pp+1, p) )
 
 void set_cb(Fl_Button*, void*) {
   haderror = 0;
   propagate_group(the_panel, 0);
-  for_all_plugins(p) if(p->panel_is_orphan) propagate_group(p->panel, 0);
+  Fluid_Plugin *p, **pp;
+  for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
+    if(p->panel_is_orphan) propagate_group(p->panel, 0);
 }
 
 void ok_cb(Fl_Return_Button* o, void* v) {
@@ -1409,7 +1406,9 @@ void revert_cb(Fl_Button*, void*) {
   // but for now only the first label works...
   if (numselected == 1) current_widget->label(oldlabel);
   propagate_group(the_panel, LOAD);
-  for_all_plugins(p) if(p->panel_is_orphan) propagate_group(p->panel, LOAD);
+  Fluid_Plugin *p, **pp;
+  for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
+    if(p->panel_is_orphan) propagate_group(p->panel, LOAD);
 }
 
 void cancel_cb(Fl_Button* o, void* v) {
@@ -1440,9 +1439,12 @@ static void load_panel() {
     }
   }
   if (numselected) {
-    for_all_plugins(p) p->please_show_panel = 0;
+    Fluid_Plugin *p, **pp;
+    for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
+      p->please_show_panel = 0;
     propagate_group(the_panel, LOAD);
-    for_all_plugins(p) {
+    for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
+    {
       if(p->panel_is_orphan) {
 	propagate_group(p->panel, LOAD);
 	if(p->please_show_panel) {
@@ -1473,7 +1475,9 @@ static void load_panel() {
 void Fl_Widget_Type::open() {
   if (!the_panel) {
     the_panel = make_widget_panel();
-    for_all_plugins(p) {
+    Fluid_Plugin *p, **pp;
+    for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
+    {
       p->make_panel();
       // All plugin panels are initially not mapped in the main pannel
       p->panel_is_orphan = 1; 
@@ -1953,7 +1957,7 @@ void Fl_Widget_Type::read_property(const char *c) {
       o->labeltype((Fl_Labeltype)item_pointer(labeltypemenu,c));
     }
   } else if (!strcmp(c, "image")) {
-    bool inlined = 1;
+    int inlined = 1;
     c = read_word();
     if (!strcmp(c, "inlined")) c = read_word(); // for back compatability
     if (!strcmp(c, "not_inlined")) {
@@ -2127,5 +2131,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.44 1999/09/08 06:25:10 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.45 1999/09/14 17:52:32 carl Exp $".
 //

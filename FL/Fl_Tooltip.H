@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.6 1999/08/16 07:30:53 bill Exp $"
+// "$Id: Fl_Tooltip.H,v 1.7 1999/09/14 17:52:29 carl Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -36,9 +36,9 @@ FL_EXPORT class Fl_Tooltip {
 public:
   static float delay() { return delay_; }
   static void delay(float f) { delay_ = (f < 0.1) ? 0.1 : f; }
-  static bool enabled() { return enabled_; }
-  static void enable(bool b = true) { enabled_ = b; }
-  static void disable() { enable(false); }
+  static int enabled() { return enabled_; }
+  static void enable(int b = 1) { enabled_ = b; }
+  static void disable() { enable(0); }
 
   // This function is called by widgets
   // when the pointer enters them
@@ -66,11 +66,11 @@ public:
 
 private:
   static float delay_;
-  static bool enabled_;
+  static int enabled_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.6 1999/08/16 07:30:53 bill Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.7 1999/09/14 17:52:29 carl Exp $".
 //

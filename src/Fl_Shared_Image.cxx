@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.5 1999/09/01 00:23:22 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.6 1999/09/14 17:52:39 carl Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ static size_t mem_usage_limit=0;
 // WARNING : this is updated incrementally, so beware that it keeps balanced
 // when deleting or creating pixmaps !
 static size_t mem_used=0; 
-static bool forbid_delete = 1;
+static int forbid_delete = 1;
 
 
 Fl_Shared_Image::~Fl_Shared_Image()
@@ -212,7 +212,7 @@ void Fl_Shared_Image::remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* ima
   }
 }
 
-bool Fl_Shared_Image::remove()
+int Fl_Shared_Image::remove()
 {
   if (--refcount) return 0;
   remove_from_tree(first_image, this);
@@ -221,7 +221,7 @@ bool Fl_Shared_Image::remove()
   forbid_delete = 1;
   return 1;
 }
-bool Fl_Shared_Image::remove(char* name)
+int Fl_Shared_Image::remove(char* name)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if (image) return image->remove();
@@ -230,7 +230,7 @@ bool Fl_Shared_Image::remove(char* name)
 
 Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
 {
-  bool loaded = 0;
+  int loaded = 0;
   size_t size = 1024;
   if (!datas) {
     datas = new uchar[1025];
@@ -281,5 +281,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.5 1999/09/01 00:23:22 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.6 1999/09/14 17:52:39 carl Exp $"
 //

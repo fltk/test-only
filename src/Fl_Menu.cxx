@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.38 1999/09/14 07:17:22 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.39 1999/09/14 17:52:39 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -100,7 +100,7 @@ Fl_Style Fl_Menu_Item::title_style = {
 // Return the style to use.  Inherit it if this is the first time this
 // one has been referenced.
 
-const Fl_Style* Fl_Menu_Item::style(bool title) const {
+const Fl_Style* Fl_Menu_Item::style(int title) const {
   Fl_Style* parent = title ? &title_style : &default_style;
   if (!parent->previous) Fl_Widget::default_style.add_child(parent);
   Fl_Style* s = (Fl_Style*)style_;
@@ -112,7 +112,7 @@ const Fl_Style* Fl_Menu_Item::style(bool title) const {
   return s;
 }
 
-static inline bool unique(const Fl_Style* s) {return s->child == s;}
+static inline int unique(const Fl_Style* s) {return s->child == s;}
 static inline void make_unique(Fl_Style* s) {s->child = s;}
 
 Fl_Style* Fl_Menu_Item::wstyle() {
@@ -168,7 +168,7 @@ extern char fl_draw_shortcut;
 
 // width of label, including effect of & characters:
 int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*) const {
-  const Fl_Style* style = this->style(false);
+  const Fl_Style* style = this->style(0);
   // it used to use m for default style
   fl_font(style->label_font, style->label_size);
   fl_draw_shortcut = 1;
@@ -798,5 +798,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.38 1999/09/14 07:17:22 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.39 1999/09/14 17:52:39 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.5 1999/08/29 20:08:03 bill Exp $"
+// "$Id: fl_bmp.cxx,v 1.6 1999/09/14 17:52:42 carl Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -83,7 +83,7 @@ typedef unsigned char uchar;
 static FILE *bmpFile;
 static uchar* bmpDatas;
 
-bool Fl_BMP_Image::test(uchar* buffer, size_t size)
+int Fl_BMP_Image::test(uchar* buffer, size_t size)
 {
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
@@ -823,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.5 1999/08/29 20:08:03 bill Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.6 1999/09/14 17:52:42 carl Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.15 1999/09/14 07:17:16 bill Exp $"
+// "$Id: x.H,v 1.16 1999/09/14 17:52:30 carl Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -102,8 +102,8 @@ public:
   Fl_Window *w;
   Region region;
   Fl_X *next;
-  bool wait_for_expose;
-  bool backbuffer_bad; // used for XDBE
+  int wait_for_expose;
+  int backbuffer_bad; // used for XDBE
   static Fl_X* first;
   static Fl_X* i(const Fl_Window* w) {return w->i;}
   void sendxjunk();
@@ -120,5 +120,5 @@ FL_EXPORT Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.15 1999/09/14 07:17:16 bill Exp $".
+// End of "$Id: x.H,v 1.16 1999/09/14 17:52:30 carl Exp $".
 //

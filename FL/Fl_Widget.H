@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.23 1999/08/16 07:30:54 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.24 1999/09/14 17:52:29 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,9 +49,9 @@ public:
 
   const Fl_Style* style() const {return style_;}
   Fl_Style* wstyle();
-  bool style(Fl_Style* s);
-  bool style(Fl_Style& s) {return style(&s);}
-  bool copy_style(const Fl_Style* s);
+  int style(Fl_Style* s);
+  int style(Fl_Style& s) {return style(&s);}
+  int copy_style(const Fl_Style* s);
   static Fl_Style default_style;
 
   Fl_Group* parent() const {return parent_;}
@@ -66,7 +66,7 @@ public:
   int w() const {return w_;}
   int h() const {return h_;}
   void resize(int,int,int,int);
-  bool damage_resize(int,int,int,int);
+  int damage_resize(int,int,int,int);
   void position(int X,int Y) {resize(X,Y,w_,h_);}
   void size(int W,int H) {resize(x_,y_,W,H);}
 
@@ -98,42 +98,42 @@ public:
   void do_callback() {callback_(this,user_data_);}
   void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
-  bool test_shortcut();
-  static bool test_shortcut(const char*);
-  bool contains(const Fl_Widget*) const ;
-  bool inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
+  int test_shortcut();
+  static int test_shortcut(const char*);
+  int contains(const Fl_Widget*) const ;
+  int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
 
   Fl_Flags flags() const {return flags_;}
   Fl_Flags align() const {return flags_;}
   void align(unsigned a) {flags_ = flags_&~FL_ALIGN_MASK|a;}
 
-  bool visible() const {return !(flags_&FL_INVISIBLE);}
-  bool visible_r() const;
+  int visible() const {return !(flags_&FL_INVISIBLE);}
+  int visible_r() const;
   void show();
   void hide();
   void set_visible() {flags_ &= ~FL_INVISIBLE;}
   void clear_visible() {flags_ |= FL_INVISIBLE;}
-  bool active() const {return !(flags_&FL_INACTIVE);}
-  bool active_r() const;
+  int active() const {return !(flags_&FL_INACTIVE);}
+  int active_r() const;
   void activate();
   void activate(int b) { if (b) activate(); else deactivate(); }
   void deactivate();
-  bool output() const {return (flags_&FL_OUTPUT);}
+  int output() const {return (flags_&FL_OUTPUT);}
   void set_output() {flags_ |= FL_OUTPUT;}
   void clear_output() {flags_ &= ~FL_OUTPUT;}
-  bool takesevents() const {return !(flags_&(FL_OUTPUT|FL_INVISIBLE|FL_INACTIVE));}
-  bool changed() const {return flags_&FL_CHANGED;}
+  int takesevents() const {return !(flags_&(FL_OUTPUT|FL_INVISIBLE|FL_INACTIVE));}
+  int changed() const {return flags_&FL_CHANGED;}
   void set_changed() {flags_ |= FL_CHANGED;}
   void clear_changed() {flags_ &= ~FL_CHANGED;}
-  bool value() const {return flags_&FL_VALUE;}
+  int value() const {return flags_&FL_VALUE;}
   void set_value() {flags_ |= FL_VALUE;}
   void clear_value() {flags_ &= ~FL_VALUE;}
-  bool value(bool);
-  bool set();
-  bool clear();
+  int value(int);
+  int set();
+  int clear();
   void setonly();
 
-  bool take_focus();
+  int take_focus();
   void throw_focus();
 
   void redraw();
@@ -268,5 +268,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.23 1999/08/16 07:30:54 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.24 1999/09/14 17:52:29 carl Exp $".
 //

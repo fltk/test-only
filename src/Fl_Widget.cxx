@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.16 1999/08/28 17:20:57 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.17 1999/09/14 17:52:40 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -93,19 +93,19 @@ void Fl_Widget::resize(int X, int Y, int W, int H) {
 }
 
 // this is useful for parent widgets to call to resize children:
-bool Fl_Widget::damage_resize(int X, int Y, int W, int H) {
-  if (x() == X && y() == Y && w() == W && h() == H) return false;
+int Fl_Widget::damage_resize(int X, int Y, int W, int H) {
+  if (x() == X && y() == Y && w() == W && h() == H) return 0;
   resize(X, Y, W, H);
   redraw();
-  return true;
+  return 1;
 }
 
-bool Fl_Widget::take_focus() {
-  if (!takesevents()) return false;
-  if (!handle(FL_FOCUS)) return false; // see if it wants it
-  if (contains(Fl::focus())) return true; // it called Fl::focus for us
+int Fl_Widget::take_focus() {
+  if (!takesevents()) return 0;
+  if (!handle(FL_FOCUS)) return 0; // see if it wants it
+  if (contains(Fl::focus())) return 1; // it called Fl::focus for us
   Fl::focus(this);
-  return true;
+  return 1;
 }
 
 void Fl_Widget::activate() {
@@ -130,10 +130,10 @@ void Fl_Widget::deactivate() {
   }
 }
 
-bool Fl_Widget::active_r() const {
+int Fl_Widget::active_r() const {
   for (const Fl_Widget* o = this; o; o = o->parent())
-    if (!o->active()) return false;
-  return true;
+    if (!o->active()) return 0;
+  return 1;
 }
 
 void Fl_Widget::show() {
@@ -160,17 +160,17 @@ void Fl_Widget::hide() {
   }
 }
 
-bool Fl_Widget::visible_r() const {
+int Fl_Widget::visible_r() const {
   for (const Fl_Widget* o = this; o; o = o->parent())
-    if (!o->visible()) return false;
-  return true;
+    if (!o->visible()) return 0;
+  return 1;
 }
 
 // return true if widget is inside (or equal to) this:
 // Returns false for null widgets.
-bool Fl_Widget::contains(const Fl_Widget *o) const {
-  for (; o; o = o->parent_) if (o == this) return true;
-  return false;
+int Fl_Widget::contains(const Fl_Widget *o) const {
+  for (; o; o = o->parent_) if (o == this) return 1;
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ bool Fl_Widget::contains(const Fl_Widget *o) const {
 
 // Styles that are only used by one widget and have no children can
 // safely be modified and destroyed.  This is detected with this:
-static inline bool unique(const Fl_Style* s) {return s->child == s;}
+static inline int unique(const Fl_Style* s) {return s->child == s;}
 static inline void make_unique(Fl_Style* s) {s->child = s;}
 
 // Returns a style that can be modified.  This creates a unique
@@ -227,11 +227,11 @@ void Fl_Style::add_child(Fl_Style* s) const {
   for (; p1 <= e1; p1++,q1++) if (!*p1) *p1 = *q1;
 }
 
-bool Fl_Widget::style(Fl_Style* s) {
-  if (s->previous) {style_ = s; return false;}
+int Fl_Widget::style(Fl_Style* s) {
+  if (s->previous) {style_ = s; return 0;}
   style_->add_child(s);
   style_ = s;
-  return true;
+  return 1;
 }
 
 // Copying a style pointer from another widget is not safe if that
@@ -239,8 +239,8 @@ bool Fl_Widget::style(Fl_Style* s) {
 // another unique() copy if necessary.  Returns true if this new copy
 // is made (no code uses this return value right now).
 
-bool Fl_Widget::copy_style(const Fl_Style* t) {
-  if (!unique(t)) {style_ = t; return false;}
+int Fl_Widget::copy_style(const Fl_Style* t) {
+  if (!unique(t)) {style_ = t; return 0;}
   Fl_Style* parent = (Fl_Style*)t; // cast away const
   Fl_Style* s = new Fl_Style;
   *s = *t;
@@ -250,7 +250,7 @@ bool Fl_Widget::copy_style(const Fl_Style* t) {
   s->previous = &(parent->child);
   parent->child = s;
   style_ = s;
-  return true;
+  return 1;
 }
 
 // Inherit a pointer-sized thing:
@@ -427,5 +427,5 @@ Fl_Style Fl_Output::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.16 1999/08/28 17:20:57 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.17 1999/09/14 17:52:40 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.32 1999/09/14 07:17:25 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.33 1999/09/14 17:52:42 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -653,7 +653,7 @@ void Fl_X::create(Fl_Window* w,
   x->other_xid = 0;
   x->w = w; w->i = x;
   x->region = 0;
-  x->wait_for_expose = true;
+  x->wait_for_expose = 1;
   x->next = Fl_X::first;
   Fl_X::first = x;
 
@@ -843,5 +843,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.32 1999/09/14 07:17:25 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.33 1999/09/14 17:52:42 carl Exp $".
 //

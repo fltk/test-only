@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.13 1999/08/16 07:31:13 bill Exp $"
+// "$Id: Fl_Button.cxx,v 1.14 1999/09/14 17:52:38 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,29 +27,29 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 
-bool Fl_Widget::set() {
+int Fl_Widget::set() {
   clear_changed();
-  if (!value()) {set_value(); redraw(); return true;}
-  return false;
+  if (!value()) {set_value(); redraw(); return 1;}
+  return 0;
 }
 
-bool Fl_Widget::clear() {
+int Fl_Widget::clear() {
   clear_changed();
-  if (value()) {clear_value(); redraw(); return true;}
-  return false;
+  if (value()) {clear_value(); redraw(); return 1;}
+  return 0;
 }
 
-bool Fl_Widget::value(bool v) {
+int Fl_Widget::value(int v) {
   return v ? set() : clear();
 }
 
 void Fl_Widget::setonly() { // set this radio button on, turn others off
-  value(true);
+  value(1);
   Fl_Widget*const* a = parent()->array();
   for (int i = parent()->children(); i--;) {
     Fl_Widget* o = *a++;
     if (o != this && o->type()==FL_RADIO_BUTTON)
-      o->value(false);
+      o->value(0);
   }
 }
 
@@ -60,8 +60,8 @@ void Fl_Button::draw() {
 }
 
 int Fl_Button::handle(int event) {
-  static bool oldval;
-  bool newval;
+  static int oldval;
+  int newval;
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
@@ -71,7 +71,7 @@ int Fl_Button::handle(int event) {
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(this)) {
-      if (type()==FL_RADIO_BUTTON) newval = true;
+      if (type()==FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
     } else
       newval = oldval;
@@ -114,5 +114,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.13 1999/08/16 07:31:13 bill Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.14 1999/09/14 17:52:38 carl Exp $".
 //

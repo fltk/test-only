@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $"
+// "$Id: fl_round_box.cxx,v 1.9 1999/09/14 17:52:44 carl Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,13 +33,10 @@
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.
 // This function is to fix that:
-#ifdef WIN32
+// SGI's compiler is broken too
 void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
   fl_arc(x,y,w,h,a1,a2);
 }
-#else
-#define fl_arc_i fl_arc
-#endif
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
@@ -120,5 +117,5 @@ const Fl_Boxtype_ fl_round_down_box = {
 };
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.9 1999/09/14 17:52:44 carl Exp $".
 //

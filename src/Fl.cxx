@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.37 1999/09/14 07:17:20 bill Exp $"
+// "$Id: Fl.cxx,v 1.38 1999/09/14 17:52:36 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,13 +58,13 @@ static double fl_elapsed();
 //                       the given rectangle.
 //
 
-bool Fl::event_inside(int x,int y,int w,int h) /*const*/ {
+int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = event_x() - x;
   int my = event_y() - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
 }
 
-bool Fl::event_inside(const Fl_Widget *o) /*const*/ {
+int Fl::event_inside(const Fl_Widget *o) /*const*/ {
   return event_inside(o->x(),o->y(),o->w(),o->h());
 }
 
@@ -207,7 +207,7 @@ static void callidle() {
   in_idle = 0;
 }
 
-bool Fl::wait() {
+int Fl::wait() {
   callidle();
   int expired = 0;
   if (numtimeouts) {fl_elapsed(); expired = call_timeouts();}
@@ -235,7 +235,7 @@ double Fl::wait(double time) {
   return time - fl_elapsed();
 }
 
-bool Fl::check() {
+int Fl::check() {
   callidle();
   if (numtimeouts) {fl_elapsed(); call_timeouts();}
   fl_wait(1, 0.0);
@@ -243,13 +243,13 @@ bool Fl::check() {
   return Fl_X::first != 0; // return true if there is a window
 }
 
-bool Fl::ready() {
+int Fl::ready() {
   // if (idle && !in_idle) return 1; // should it do this?
   if (numtimeouts) {fl_elapsed(); if (timeout[0].time <= 0) return 1;}
   return fl_ready();
 }
 
-bool Fl::run() {
+int Fl::run() {
   while (wait());
   return 0;
 }
@@ -636,7 +636,7 @@ void Fl_Window::show(const Fl_Window* modal_for) {
   fl_modal_for = 0;
 }
 
-bool Fl_Window::exec(const Fl_Window* modal_for) {
+int Fl_Window::exec(const Fl_Window* modal_for) {
   set_modal();
   clear();
   fl_modal_for = modal_for;
@@ -770,5 +770,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.37 1999/09/14 07:17:20 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.38 1999/09/14 17:52:36 carl Exp $".
 //

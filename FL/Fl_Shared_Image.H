@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.6 1999/09/01 00:23:21 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.7 1999/09/14 17:52:29 carl Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,8 +53,8 @@ protected:
 
   virtual void read() = 0;// decompress the image and create its pixmap
 
-  static void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
-  static Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name);
+  static void insert(Fl_Shared_Image*& p, Fl_Shared_Image* image);
+  static Fl_Shared_Image* find(Fl_Shared_Image* image, char* name);
   void remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image);
 
 
@@ -74,8 +74,8 @@ public:
   // falled to zero
   // Each remove decrement the refcount, each get increment it
   // Return 1 if it has been really deleted.
-  bool remove();
-  static bool remove(char* name);
+  int remove();
+  static int remove(char* name);
 
   // Try to guess the filetype
   static Fl_Image_Type* guess(char* name, unsigned char *datas=0);
@@ -96,7 +96,7 @@ struct Fl_Image_Type {
   // Name of the filetype as it appear in the source code (uppercase)
   char* name;
   // Function to test the filetype
-  bool (*test)(unsigned char *datas, size_t size=0); 
+  int (*test)(unsigned char *datas, size_t size=0); 
   // Function to get/create an image of this type
   Fl_Shared_Image* (*get)(char* name, uchar* datas=0);
 };
@@ -105,61 +105,61 @@ extern Fl_Image_Type fl_image_filetypes[];
 /* Specific image format functions. Add you own file format here. */
 
 // PNG image class
-class Fl_PNG_Image : Fl_Shared_Image {
+class Fl_PNG_Image : public Fl_Shared_Image {
   void read();		// Uncompress PNG datas
   Fl_PNG_Image() { }
   static Fl_Shared_Image* create() { return new Fl_PNG_Image; } // Instantiate
 public:
 // Check the given buffer if is is in PNG format
-  static bool test(unsigned char *datas, size_t size=0);
+  static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H); // Return width and heigth
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
 
-class Fl_GIF_Image : Fl_Shared_Image {
+class Fl_GIF_Image : public Fl_Shared_Image {
   void read();
   Fl_GIF_Image() { }
   static Fl_Shared_Image* create() { return new Fl_GIF_Image; }
 public:
-  static bool test(unsigned char *datas, size_t size=0);
+  static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
 
-class Fl_XPM_Image : Fl_Shared_Image {
+class Fl_XPM_Image : public Fl_Shared_Image {
   void read();
   Fl_XPM_Image() { }
   static Fl_Shared_Image* create() { return new Fl_XPM_Image; }
 public:
-  static bool test(unsigned char *datas, size_t size=0);
+  static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
 
-class Fl_BMP_Image : Fl_Shared_Image {
+class Fl_BMP_Image : public Fl_Shared_Image {
   void read();
   Fl_BMP_Image() { }
   static Fl_Shared_Image* create() { return new Fl_BMP_Image; }
 public:
-  static bool test(unsigned char *datas, size_t size=0);
+  static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
   }
 };
 
-class Fl_JPEG_Image : Fl_Shared_Image {
+class Fl_JPEG_Image : public Fl_Shared_Image {
   void read();
   Fl_JPEG_Image() { }
   static Fl_Shared_Image* create() { return new Fl_JPEG_Image; }
 public:
-  static bool test(unsigned char *datas, size_t size=0);
+  static int test(unsigned char *datas, size_t size=0);
   void measure(int& W, int& H);
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) {
     return Fl_Shared_Image::get(create, name, datas);
@@ -171,7 +171,7 @@ extern Fl_Bitmap nosuch_bitmap;
 
 class Fl_UNKNOWN_Image {
 public:
-  static bool test(unsigned char *, size_t =0) { return 1; };
+  static int test(unsigned char *, size_t =0) { return 1; };
   static Fl_Shared_Image* get(char*, uchar* = 0) { 
     return (Fl_Shared_Image*) &nosuch_bitmap; 
   };
@@ -180,5 +180,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.6 1999/09/01 00:23:21 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.7 1999/09/14 17:52:29 carl Exp $"
 //

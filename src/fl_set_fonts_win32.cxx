@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts_win32.cxx,v 1.7 1999/08/27 13:34:05 carl Exp $"
+// "$Id: fl_set_fonts_win32.cxx,v 1.8 1999/09/14 17:52:45 carl Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ int Fl_Font_::sizes(int*& sizep) const {
   return 1;
 }
 
-int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
+int fl_list_fonts(Fl_Font*& arrayp, int everything) {
   #warning "fl_list_fonts() not implemented under Windows yet! - CET"
   arrayp = 0;
   return 0;
@@ -102,5 +102,5 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
 CET - FIXME */
 
 //
-// End of "$Id: fl_set_fonts_win32.cxx,v 1.7 1999/08/27 13:34:05 carl Exp $".
+// End of "$Id: fl_set_fonts_win32.cxx,v 1.8 1999/09/14 17:52:45 carl Exp $".
 //

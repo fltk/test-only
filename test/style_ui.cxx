@@ -66,7 +66,7 @@ static void cb_OK(Fl_Return_Button*, void*) {
 
 Fl_Window* make_window() {
   Fl_Window* w;
-  { Fl_Window* o = new Fl_Window(534, 406);
+  { Fl_Window* o = new Fl_Window(530, 405);
     w = o;
     { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 535, 30);
       o->menu(menu_);
