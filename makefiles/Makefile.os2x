@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile.os2x,v 1.6 1999/02/01 20:27:15 mike Exp $"
+# "$Id: Makefile.os2x,v 1.7 2000/01/09 01:06:08 bill Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,47 +25,25 @@
 
 SHELL=cmd.exe
 
-all: makeinclude config.h
-	echo "=== making src ==="
-	touch src/makedepend
-	cd src & $(MAKE)
-	echo "=== making fluid ==="
-	touch fluid/makedepend
-	cd fluid & $(MAKE)
-	echo "=== making test ==="
-	touch test/makedepend
-	cd test & $(MAKE)
+SUBDIRS	=	src images fluid forms OpenGL glut test
 
-install:
-	echo "=== installing src ==="
-	touch src/makedepend
-	cd src & $(MAKE) install
-	echo "=== installing fluid ==="
-	touch fluid/makedepend
-	cd fluid & $(MAKE) install
+# forms OpenGL glut test
+all: makeinclude config.h
+	for %i in ($(SUBDIRS)) do \
+	(cd %i && touch makedepend && $(MAKE) && cd ..)
+
+install:  makeinclude config.h
+	for %i in ($(SUBDIRS)) do \
+	(cd %i && touch makedepend && $(MAKE) install && cd ..)
 
 depend:
-	echo "=== making src dependencies ==="
-	touch src/makedepend
-	cd src & $(MAKE) depend
-	echo "=== making fluid dependencies ==="
-	touch fluid/makedepend
-	cd fluid & $(MAKE) depend
-	echo "=== making test dependencies ==="
-	touch test/makedepend
-	cd test & $(MAKE) depend
+	for %i in ($(SUBDIRS)) do \
+	(cd %i && touch makedepend && $(MAKE) depend && cd ..)
 
 clean:
 	-@ rm -f core config.cache *.o *.bck
-	echo "=== cleaning src ==="
-	touch src/makedepend
-	cd src & $(MAKE) clean
-	echo "=== cleaning fluid ==="
-	touch fluid/makedepend
-	cd fluid & $(MAKE) clean
-	echo "=== cleaning test ==="
-	touch test/makedepend
-	cd test & $(MAKE) clean
+	for %i in ($(SUBDIRS)) do \
+	(cd %i && $(MAKE) clean && cd ..)
 
 config.h: makefiles\config.os2x
 	copy $< $@
@@ -74,5 +52,5 @@ makeinclude: makefiles\makeinclude.os2x
 	copy $< $@
 
 #
-# End of "$Id: Makefile.os2x,v 1.6 1999/02/01 20:27:15 mike Exp $".
+# End of "$Id: Makefile.os2x,v 1.7 2000/01/09 01:06:08 bill Exp $".
 #

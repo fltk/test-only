@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.18 1999/11/16 07:36:11 bill Exp $"
+// "$Id: fl_font.cxx,v 1.19 2000/01/09 01:06:12 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,21 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Select fonts from the fltk font table.
+#include <config.h>
+#include <FL/Fl_Font.H>
+#include <FL/fl_draw.H>
+
+// Static variables containing the currently selected font & size:
+Fl_Font fl_font_;
+unsigned fl_size_;
+
+// Static variable for the default encoding:
+const char *fl_encoding = "iso8859-1";
 
 #ifdef WIN32
 #include "fl_font_win32.cxx"
 #else
 
-#include <config.h>
-#include <FL/Fl_Font.H>
-#include <FL/fl_draw.H>
 #include <FL/x.H>
 #include "Fl_FontSize.H"
 
@@ -39,16 +45,64 @@
 #include <stdlib.h>
 #include <string.h>
 
-Fl_FontSize* fl_font_;
+static Fl_FontSize* current_fontsize;
 XFontStruct* fl_xfont;
 static GC font_gc;
 
-void fl_font(Fl_FontSize* s) {
-  if (s != fl_font_) {
-    fl_font_ = s;
-    fl_xfont = s->font;
+static void set_current_fontsize(Fl_FontSize* f) {
+  if (f != current_fontsize) {
+    current_fontsize = f;
+    fl_xfont = f->font;
     font_gc = 0;
   }
+}
+
+////////////////////////////////////////////////////////////////
+// Things you can do once the font+size has been selected:
+
+void fl_draw(const char* str, int n, int x, int y) {
+  if (font_gc != fl_gc) {
+    // I removed this, the user MUST set the font before drawing: (was)
+    // if (!fl_xfont) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+    font_gc = fl_gc;
+    XSetFont(fl_display, fl_gc, fl_xfont->fid);
+  }
+  XDrawString(fl_display, fl_window, fl_gc, x, y, str, n);
+}
+
+void fl_draw(const char* str, int x, int y) {
+  fl_draw(str, strlen(str), x, y);
+}
+
+int fl_height() {
+  return (fl_xfont->ascent + fl_xfont->descent);
+}
+
+int fl_descent() {
+  return fl_xfont->descent;
+}
+
+int fl_width(const char* c) {
+  return XTextWidth(fl_xfont, c, strlen(c));
+}
+
+int fl_width(const char* c, int n) {
+  return XTextWidth(fl_xfont, c, n);
+}
+
+int fl_width(uchar c) {
+#if 1
+  XCharStruct* p = fl_xfont->per_char;
+  if (p) {
+    int a = fl_xfont->min_char_or_byte2;
+    int b = fl_xfont->max_char_or_byte2 - a;
+    int x = c-a;
+    if (x >= 0 && x <= b) return p[x].width;
+  }
+  return fl_xfont->min_bounds.width;
+#else
+  return XTextWidth(fl_xfont, &c, 1);
+#endif
 }
 
 // return dash number N, or pointer to ending null if none:
@@ -84,16 +138,26 @@ Fl_FontSize::~Fl_FontSize() {
 //  int base = 0; int size = 256;
 //  glDeleteLists(listbase+base,size);
 // }
-  if (this == fl_font_) fl_font_ = 0;
+  if (this == current_fontsize) current_fontsize = 0;
   XFreeFont(fl_display, font);
 }
 #endif
 
 ////////////////////////////////////////////////////////////////
-// fl_font(f,size,encoding):
-// This works by searching all the XListFonts that matched the wildcard
-// name for the best matching size and encoding.  This is a quite lengthy
-// process!
+// The rest of this file is the enormous amount of crap you have to
+// do to get a font & size out of X.  To select a font+size, all
+// matchine X fonts are listed with XListFonts, and then the first
+// of the following is found and used:
+//	pixelsize == size
+//	pixelsize == 0 (which indicates a scalable font)
+//	the largest pixelsize < size
+//	the smallest pixelsize > size
+// Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
+// Also I have not been able to find any other method than a search
+// that will reliably return a bitmap version of the font if one is
+// available at the correct size.  This is because X will not return
+// it unless you fill in all the garbage fields (swidth, etc)
+// correctly.  What a pita!
 
 // return a pointer to a number we think is "point size":
 char* fl_find_fontsize(char* name) {
@@ -109,45 +173,45 @@ char* fl_find_fontsize(char* name) {
   return r;
 }
 
-void fl_font(const Fl_Font s, unsigned size, const char* encoding) {
-  static Fl_Font curfont;
-  if (s == curfont) { // see if it is the current font...
-      Fl_FontSize* f = fl_font_;
-      if (f->minsize <= size && f->maxsize >= size &&
-	  (!f->encoding || !strcmp(f->encoding, encoding))) return;
-  }
-  curfont = s;
+void fl_font(Fl_Font font, unsigned size) {
+  fl_font(font ? font : FL_HELVETICA, size, fl_encoding);
+}
+
+void fl_font(Fl_Font font, unsigned size, const char* encoding) {
+  if (font == fl_font_ && size == fl_size_ &&
+      !strcmp(current_fontsize->encoding, encoding)) return;
+  fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
-  // search the fonts we have generated already:
-  for (f = s->first; f; f = f->next)
+  // search the FontSize we have generated already:
+  for (f = font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size
 	&& (!f->encoding || !strcmp(f->encoding, encoding))) {
-      fl_font(f); return;
+      set_current_fontsize(f); return;
     }
 
   // now search the XListFonts results:
   fl_open_display();
-  if (!s->xlist) {
-    Fl_Font_* t = (Fl_Font_*)s; // cast away const
+  if (!font->xlist) {
+    Fl_Font_* t = (Fl_Font_*)font; // cast away const
     t->xlist = XListFonts(fl_display, t->name_, 100, &(t->n));
     if (!t->xlist) {	// use fixed if no matching font...
       t->first = f = new Fl_FontSize("fixed");
       f->minsize = 0;
       f->maxsize = 32767;
-      fl_font(f); return;
+      set_current_fontsize(f); return;
     }
   }
   // search for largest <= font size:
-  char* name = s->xlist[0];
+  char* name = font->xlist[0];
   unsigned ptsize = 0;	// best one found so far
   unsigned matchedlength = 32767;
   char namebuffer[1024];	// holds scalable font name
   int found_encoding = 0;
-  int m = s->n; if (m<0) m = -m;
+  int m = font->n; if (m<0) m = -m;
   for (int n=0; n < m; n++) {
 
-    char* thisname = s->xlist[n];
+    char* thisname = font->xlist[n];
     if (*thisname == '-') {
       // check for matching encoding
       const char* c = fl_font_word(thisname, 13);
@@ -171,14 +235,10 @@ void fl_font(const Fl_Font s, unsigned size, const char* encoding) {
       // whoa!  A scalable font!  Use unless exact match found:
       int l = c-thisname;
       memcpy(namebuffer,thisname,l);
-#if 1 // this works if you don't want stdio
+      // print the pointsize into it:
       if (size>=100) namebuffer[l++] = size/100+'0';
       if (size>=10) namebuffer[l++] = (size/10)%10+'0';
       namebuffer[l++] = (size%10)+'0';
-#else
-      //for some reason, sprintf fails to return the right value under Solaris.
-      l += sprintf(namebuffer+l,"%d",size);
-#endif
       while (*c == '0') c++;
       strcpy(namebuffer+l,c);
       name = namebuffer;
@@ -193,11 +253,11 @@ void fl_font(const Fl_Font s, unsigned size, const char* encoding) {
   }
 
   if (ptsize != size) { // see if we already found this unscalable font:
-    for (f = s->first; f; f = f->next) {
+    for (f = font->first; f; f = f->next) {
       if (f->minsize <= ptsize && f->maxsize >= ptsize) {
 	if (f->minsize > size) f->minsize = size;
 	if (f->maxsize < size) f->maxsize = size;
-	fl_font(f); return;
+	set_current_fontsize(f); return;
       }
     }
   }
@@ -206,93 +266,10 @@ void fl_font(const Fl_Font s, unsigned size, const char* encoding) {
   f = new Fl_FontSize(name);
   if (ptsize < size) {f->minsize = ptsize; f->maxsize = size;}
   else {f->minsize = size; f->maxsize = ptsize;}
-  f->next = s->first;
-  ((Fl_Font_*)s)->first = f;
-  fl_font(f);
+  f->next = font->first;
+  ((Fl_Font_*)font)->first = f;
+  set_current_fontsize(f);
 
-}
-
-// back-compatable selector that uses default encoding:
-
-const char *fl_encoding = "iso8859-1";
-
-void fl_font(const Fl_Font f, unsigned size) {
-  fl_font(f ? f : FL_HELVETICA, size, fl_encoding);
-}
-
-////////////////////////////////////////////////////////////////
-// Things you can do once the font+size has been selected:
-
-int fl_height() {
-  return (fl_xfont->ascent + fl_xfont->descent);
-}
-
-int fl_descent() {
-  return fl_xfont->descent;
-}
-
-int fl_width(const char* c) {
-#if 0
-  XCharStruct* p = fl_xfont->per_char;
-  if (!p) return strlen(c)*fl_xfont->min_bounds.width;
-  int a = fl_xfont->min_char_or_byte2;
-  int b = fl_xfont->max_char_or_byte2 - a;
-  int w = 0;
-  while (*c) {
-    int x = *(uchar*)c++ - a;
-    if (x >= 0 && x <= b) w += p[x].width;
-    else w += fl_xfont->min_bounds.width;
-  }
-  return w;
-#else
-  return XTextWidth(fl_xfont, c, strlen(c));
-#endif
-}
-
-int fl_width(const char* c, int n) {
-#if 0
-  XCharStruct* p = fl_xfont->per_char;
-  if (!p) return n*fl_xfont->min_bounds.width;
-  int a = fl_xfont->min_char_or_byte2;
-  int b = fl_xfont->max_char_or_byte2 - a;
-  int w = 0;
-  while (n--) {
-    int x = *(uchar*)c++ - a;
-    if (x >= 0 && x <= b) w += p[x].width;
-    else w += fl_xfont->min_bounds.width;
-  }
-  return w;
-#else
-  return XTextWidth(fl_xfont, c, n);
-#endif
-}
-
-int fl_width(uchar c) {
-#if 1
-  XCharStruct* p = fl_xfont->per_char;
-  if (p) {
-    int a = fl_xfont->min_char_or_byte2;
-    int b = fl_xfont->max_char_or_byte2 - a;
-    int x = c-a;
-    if (x >= 0 && x <= b) return p[x].width;
-  }
-  return fl_xfont->min_bounds.width;
-#else
-  return XTextWidth(fl_xfont, &c, 1);
-#endif
-}
-
-void fl_draw(const char* str, int n, int x, int y) {
-  if (font_gc != fl_gc) {
-    if (!fl_xfont) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-    font_gc = fl_gc;
-    XSetFont(fl_display, fl_gc, fl_xfont->fid);
-  }
-  XDrawString(fl_display, fl_window, fl_gc, x, y, str, n);
-}
-
-void fl_draw(const char* str, int x, int y) {
-  fl_draw(str, strlen(str), x, y);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -320,5 +297,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.18 1999/11/16 07:36:11 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.19 2000/01/09 01:06:12 bill Exp $".
 //

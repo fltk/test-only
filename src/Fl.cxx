@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.75 2000/01/07 08:50:25 bill Exp $"
+// "$Id: Fl.cxx,v 1.76 2000/01/09 01:06:09 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -709,11 +709,6 @@ int Fl_Window::handle(int event) {
   return 0;
 }
 
-////////////////////////////////////////////////////////////////
-// ~Fl_Widget() calls this: this function must get rid of any
-// global pointers to the widget.  This is also called by hide()
-// and deactivate().
-
 // call this to free a selection (or change the owner):
 void Fl::selection_owner(Fl_Widget *owner) {
   if (selection_owner_ && owner != selection_owner_)
@@ -809,5 +804,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.75 2000/01/07 08:50:25 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.76 2000/01/09 01:06:09 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.20 1999/12/20 08:33:10 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.21 2000/01/09 01:06:10 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,8 +36,6 @@ void Fl_Check_Button::draw() {
   Fl_Color fc = on_color();
   Fl_Color lc = label_color();
   if (!active_r()) {
-    bc = fl_inactive(bc);
-    fc = fl_inactive(fc);
     f |= FL_INACTIVE;
   } else if (Fl::belowmouse() == this && highlight_color()) {
     c = highlight_color();

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.15 1999/11/19 15:11:58 carl Exp $"
+// "$Id: fonts.cxx,v 1.16 2000/01/09 01:06:14 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -179,7 +179,9 @@ void create_the_forms() {
 
 int main(int argc, char **argv) {
   create_the_forms();
-  int numfonts = fl_list_fonts(fonts, 1);
+  int all = 0;
+  if (argc > 1 && argv[argc-1][0] == 'a') {all = 1; argc--;}
+  int numfonts = fl_list_fonts(fonts, all); 
   for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
   fontobj->value(1);
   font_cb(fontobj,0);
@@ -188,5 +190,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.15 1999/11/19 15:11:58 carl Exp $".
+// End of "$Id: fonts.cxx,v 1.16 2000/01/09 01:06:14 bill Exp $".
 //

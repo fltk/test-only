@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.27 1999/12/20 08:33:11 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.28 2000/01/09 01:06:10 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@ static void glyph(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
 		  Fl_Flags f, Fl_Boxtype box)
 {
   box->draw(x,y,w,h, bc, f);
-
+  fc = fl_inactive(fc, f);
   switch (t) {
     case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x, y, w, h, fc); break;
     case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x, y, w, h, fc); break;
@@ -199,5 +199,5 @@ static void revert(Fl_Style *s) {
 Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.27 1999/12/20 08:33:11 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.28 2000/01/09 01:06:10 bill Exp $".
 //

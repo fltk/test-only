@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.37 2000/01/07 08:50:13 bill Exp $"
+// "$Id: Fl.H,v 1.38 2000/01/09 01:06:06 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,6 @@ public: // should be private!
   static int e_keysym;
   static int e_length;
   static char* e_text;
-  static const char* encoding;
   static Fl_Widget* belowmouse_;
   static Fl_Widget* pushed_;
   static Fl_Widget* focus_;
@@ -224,5 +223,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.37 2000/01/07 08:50:13 bill Exp $".
+// End of "$Id: Fl.H,v 1.38 2000/01/09 01:06:06 bill Exp $".
 //

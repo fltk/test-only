@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.73 2000/01/07 08:50:26 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.74 2000/01/09 01:06:11 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -421,7 +421,6 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    fc = fl_inactive(fc, f);
     int X=x; int Y=y; int W=w; int H=h;
     m->box()->inset(X,Y,W,H);
     // we need the leading() part so that the height is based solely on the
@@ -862,5 +861,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.73 2000/01/07 08:50:26 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.74 2000/01/09 01:06:11 bill Exp $".
 //

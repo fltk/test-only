@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.34 2000/01/07 08:50:10 bill Exp $"
+ * "$Id: configh.in,v 1.35 2000/01/09 01:06:04 bill Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -117,7 +117,10 @@
 #define HAVE_SCANDIR 0
 
 /*
- * Possibly missing sprintf-style functions:
+ * Length-limited sprintf functions to prevent buffer overflows.  These
+ * names are used by glibc and some other Unix systems.  For most
+ * other systems fltk will provide an equivalent function, this file
+ * also declares those functions.
  */
 
 #define HAVE_VSNPRINTF 0
@@ -167,7 +170,7 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_POLL:
  *
- * Use poll() if we don't have select().
+ * Use the Linux/Irix poll() call instead of select()
  */
 
 #define HAVE_POLL 0
@@ -216,5 +219,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONFIGDIR "."
 
 /*
- * End of "$Id: configh.in,v 1.34 2000/01/07 08:50:10 bill Exp $".
+ * End of "$Id: configh.in,v 1.35 2000/01/09 01:06:04 bill Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_theme.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $"
+// "$Id: Fl_theme.cxx,v 1.3 2000/01/09 01:06:12 bill Exp $"
 //
 // Theme loading code for the Fast Light Tool Kit (FLTK).
 //
@@ -129,6 +129,7 @@ int Fl::loadtheme() {
   return loadtheme(theme(), scheme());
 }
 
+// string comparison, except NULL==NULL and does not crash if either is null
 static int nullstrequ(const char* a, const char* b) {
   return a ? b && !strcmp(a,b) : !b;
 }
@@ -189,6 +190,6 @@ static void unloadtheme() {
 }
 
 //
-// End of "$Id: Fl_theme.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $".
+// End of "$Id: Fl_theme.cxx,v 1.3 2000/01/09 01:06:12 bill Exp $".
 //
 

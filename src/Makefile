@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.62 2000/01/07 22:58:54 mike Exp $"
+# "$Id: Makefile,v 1.63 2000/01/09 01:06:12 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -124,6 +124,7 @@ CPPFILES = \
 	fl_glyph.cxx \
 	fl_labeltype.cxx \
 	fl_line_style.cxx \
+	fl_list_fonts.cxx \
 	fl_load_plugin.cxx \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
@@ -132,7 +133,6 @@ CPPFILES = \
 	fl_round_box.cxx \
 	fl_rounded_box.cxx \
 	fl_rgb.cxx \
-	fl_set_fonts.cxx \
 	fl_scroll_area.cxx \
 	Fl_Shared_Image.cxx \
 	fl_shadow_box.cxx \
@@ -149,6 +149,8 @@ CFILES = \
 	scandir.c \
 	numericsort.c \
 	vsnprintf.c
+
+# files that were deleted:
 
 #	conf.c \
 #	conf_atol.c \
@@ -169,8 +171,8 @@ CFILES = \
 #	conf_setboolean.c \
 #	conf_setlong.c
 
-# files that were deleted:
 #	fl_set_font.cxx \
+#	fl_set_fonts.cxx \
 #	Fl_Threads.cxx \
 #	Fl_Style_Plugins.cxx \
 #	Fl_Style_Util.cxx \
@@ -270,5 +272,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.62 2000/01/07 22:58:54 mike Exp $".
+# End of "$Id: Makefile,v 1.63 2000/01/09 01:06:12 bill Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.7 2000/01/09 01:06:10 bill Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,11 +43,16 @@
 #include <string.h>
 #include <config.h>
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
 #  include <windows.h>
 #  include <direct.h>
-#endif /* WIN32 || __EMX__ */
+#endif /* WIN32 */
 
+#if defined(__EMX__)
+#define  INCL_DOS
+#define  INCL_DOSMISC
+#include <os2.h>
+#endif /* __EMX__ */
 
 //
 // FL_BLINE definition from "Fl_Browser.cxx"...
@@ -293,9 +298,8 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     if (icon == (Fl_FileIcon *)0)
       icon = Fl_FileIcon::find("any", Fl_FileIcon::DIR);
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
     DWORD	drives;		// Drive available bits
-
 
     drives = GetLogicalDrives();
     for (i = 'A'; i <= 'Z'; i ++, drives >>= 1)
@@ -311,9 +315,30 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
 	num_files ++;
       }
 #else
+#if defined(__EMX__)
+    ULONG  CurDrive;
+    ULONG  DriveMap;     // Drive available bits
+    int start = 3;      /* 'C' */
+
+
+    DosQueryCurrentDisk(&CurDrive, &DriveMap);
+    DriveMap>>=start-1;
+    for (i = 'A'; i <= 'Z'; i ++, DriveMap >>= 1)
+      if (DriveMap & 1)
+      {
+        sprintf(filename, "%c:", i);
+
+	if (i < 'C')
+	  add(filename, icon);
+	else
+	  add(filename, icon);
+
+	num_files ++;
+      }
+#else
+ 
     FILE	*mtab;		// /etc/mtab or /etc/mnttab file
     char	line[1024];	// Input line
-
 
     //
     // Open the file that contains a list of mounted filesystems...
@@ -327,7 +352,6 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     if (mtab == NULL)
       mtab = fopen("/etc/vfstab", "r");
 #  endif
-
     if (mtab != NULL)
     {
       while (fgets(line, sizeof(line), mtab) != NULL)
@@ -343,7 +367,8 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
 
       fclose(mtab);
     }
-#endif // WIN32 || __EMX__
+#endif // WIN32
+#endif // _EMX__
   }
   else
   {
@@ -415,5 +440,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.7 2000/01/09 01:06:10 bill Exp $".
 //

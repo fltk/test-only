@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.7 2000/01/07 08:50:54 bill Exp $"
+// "$Id: windows.cxx,v 1.8 2000/01/09 01:06:16 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -79,8 +79,9 @@ static void
 inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 	    Fl_Flags f, Fl_Boxtype box, Fl_Glyph function)
 {
-  // Draw active widgets and slider thumbs or check or radio buttons normally:
-  if (t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
+  // Draw active widgets, slider thumbs or check or radio buttons normally:
+  if (!(f & FL_INACTIVE) ||
+      t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
       t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
       t == FL_GLYPH_CHECK || t == FL_GLYPH_RADIO)
   {
@@ -94,17 +95,9 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
     box->inset(x,y,w,h);
   }
 
-  // Draw active widgets normally (this is called here becuase the above
-  // inset call is bypassed in the normal fltk code and using it shrinks
-  // the arrows just about the right amount to make them match win98:
-  if (!(f & FL_INACTIVE)) {
-    function(t, x, y, w, h, bc, fc, f, FL_NO_BOX);
-    return;
-  }
-
   f &= ~FL_INACTIVE;
   function(t, x+1, y+1, w, h, bc, FL_LIGHT3, f, FL_NO_BOX);
-  function(t, x,   y,   w, h, bc, fc, f, FL_NO_BOX);
+  function(t, x,   y,   w, h, bc, fl_inactive(fc), f, FL_NO_BOX);
 }
 
 static Fl_Glyph fltk_glyph = 0;
@@ -246,5 +239,5 @@ extern "C" int fltk_theme(int, char**)
 }
 
 //
-// End of "$Id: windows.cxx,v 1.7 2000/01/07 08:50:54 bill Exp $"
+// End of "$Id: windows.cxx,v 1.8 2000/01/09 01:06:16 bill Exp $"
 //
