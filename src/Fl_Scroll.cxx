@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.42 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.43 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -229,8 +229,8 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
   yposition_ = 0;
   scrolldx = scrolldy = layoutdx = layoutdy = 0;
   hscrollbar.parent(this);
-  hscrollbar.type(Slider::HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
+  scrollbar.set_vertical();
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
   Group::current(parent());
@@ -294,5 +294,5 @@ int ScrollGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.42 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.43 2004/05/15 20:52:45 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.110 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -338,7 +338,7 @@ void Widget::copy_label(const char* s) {
 
   When a widget resized or moved (or when it is initially created),
   flags are set in it to indicate the layout is damaged. This will
-  cause the virtual functionlayout() to be called later on, just
+  cause the virtual function layout() to be called later on, just
   before fltk attempts to draw the windows on the screen.
 
   This is useful because often calculating the new layout is quite
@@ -466,6 +466,31 @@ MyClass::layout() {
 
 /*! \fn void Widget::layout_damage(uchar c)
   Directly change the value returned by layout_damage(). */
+
+/*! \fn bool Widget::horizontal() const
+  Return true if this widget has a horizontal orientation and fltk::Pack
+  will position it against the top or bottom edge. This is the default.
+*/
+
+/*! \fn bool Widget::vertical() const
+  Same as !horizontal().
+*/
+
+/*! \fn void Widget::set_vertical() const
+  Makes vertical() return true. This will affect how a surrounding
+  fltk::Pack (or similar group) will place the widget, but you must
+  call relayout() to indicate that this must be recalculated.
+
+  Some widgets classes such as fltk::MenuBar or fltk::Slider will draw
+  differently if this is turned on, in a vertical arrangement.
+*/
+
+/*! \fn void Widget::set_horizontal() const
+  Undoes set_vertical() and makes horizontal() return true. This will
+  affect how a surrounding fltk::Pack (or similar group) will place
+  the widget, but you must call relayout() to indicate that this must
+  be recalculated.
+*/
 
 /* \} */ // end of layout section of documentation
 
@@ -1111,5 +1136,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.110 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $".
 //

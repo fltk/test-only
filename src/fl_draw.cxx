@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.41 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.42 2004/05/15 20:52:46 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -169,16 +169,18 @@ static const SizeSymbol sizesymbols("s");
 static const SizeSymbol sizesymbolS("S");
 
 /*! \addtogroup symbols
-  "@." does nothing. This is for back-compatability with fltk1.1,
-  but in that it caused all further @-commands to be ignored. This
-  is not implemented, all @-commands are interpreted unless you
-  set RAW_LABEL in the flags pased to fltk::draw().
+  "@." prints nothing and also stops any interpretation of @ or &
+  characters later in the string. This will allow you to concatenate
+  some @-commands to the start of an arbitrary string.
 */
 class NothingSymbol : public Symbol {
 public:
   NothingSymbol() : Symbol(".") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {w = h = 0;}
+  void _measure(float& w, float& h) const {
+    w = h = 0;
+    flags |= RAW_LABEL;
+  }
 };
 static const NothingSymbol nothingsymbol;
 
@@ -665,5 +667,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.41 2004/05/07 06:36:23 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.42 2004/05/15 20:52:46 spitzak Exp $".
 //

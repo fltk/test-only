@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.69 2004/03/05 08:13:41 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.70 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,76 +38,31 @@ using namespace fltk;
 extern bool fl_hide_shortcut;
 
 void MenuBar::draw() {
-  if (damage()&(~DAMAGE_HIGHLIGHT)) draw_box();
-  if (!children()) { last_ = -1; return; }
-  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = this->h();
-  box()->inset(x1,y1,w1,h1);
-  int X = 3;
-  if (style()->hide_shortcut() &&
-      !(event_key_state(LeftAltKey) || event_key_state(RightAltKey)))
-    fl_hide_shortcut = true;
-  Item::set_style(this);
-  for (int i = 0; i < children(); i++) {
-    Widget* widget = child(i);
-    if (!widget->visible()) continue;
-    int W = widget->width() + 10;
-    if (damage()&(~DAMAGE_HIGHLIGHT) || last_ == i || highlight_ == i) {
-      // If you change how the items are drawn, you probably need to
-      // change MenuTitle::draw and the functions find_selected and
-      // titlex in PopupMenu.cxx.
-      if (i == highlight_ && takesevents() && widget->active_r())
-	widget->set_flag(HIGHLIGHT);
-      else
-	widget->clear_flag(HIGHLIGHT);
-      widget->clear_flag(SELECTED);
-      buttonbox()->draw(X, y1+1, W, h1-2, style(),
-			(widget->flags()&~VALUE)|OUTPUT);
-      int save_w = widget->w(); widget->w(W-10);
-      int save_h = widget->h(); widget->h(h1-2);
-      push_matrix();
-      translate(X+5, (h()-widget->h())>>1);
-      widget->draw();
-      pop_matrix();
-      widget->w(save_w);
-      widget->h(save_h);
-    }
-    X += W;
-  }
-  fl_hide_shortcut = false;
-  Item::clear_style();
+  Menu::draw(this, 0, 0, highlight_, last_);
   last_ = highlight_;
 }
 
 int MenuBar::handle(int event) {
   int children = this->children();
   if (!children) return 0;
-  int X = 3;
   int i;
-  highlight_ = -1;
-  // LEAVE events don't get the right coordinates
-  if (event != LEAVE && takesevents()) for (i = 0; i < children; ++i) {
-    Widget* widget = child(i);
-    if (!widget->visible()) continue;
-    int W = widget->width() + 10;
-    if (event_inside(X, 0, W, h())) {
-      highlight_ = widget->takesevents() ? i : -1;
-      break;
-    }
-    X += W;
-  }
   switch (event) {
+  case LEAVE:
+    highlight_ = -1;
+    goto J2;
   case MOVE:
   case ENTER:
-  case LEAVE:
+    highlight_ = Menu::find_selected(this,0,0,event_x(), event_y());
+  J2:
     if (highlight_ == last_) return 1;
     Tooltip::exit();
-    redraw(DAMAGE_HIGHLIGHT);
+    redraw(DAMAGE_CHILD);
     return 1;
   case PUSH:
     if (highlight_ < 0) return 0;
     value(-1);
   J1:
-    highlight_ = -1; redraw(DAMAGE_HIGHLIGHT);
+    highlight_ = -1; redraw(DAMAGE_CHILD);
     popup(0, 0, w(), h(), 0, true);
     return 1;
   case SHORTCUT:
@@ -155,6 +110,7 @@ int MenuBar::handle(int event) {
 static void revert(Style* s) {
   s->color_ = GRAY75;
   s->box_ = FLAT_BOX;
+  s->leading_ = 4;
 #if 0
   // NT 4.0 style
   s->buttonbox_ = FLAT_BOX;
@@ -174,5 +130,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.69 2004/03/05 08:13:41 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.70 2004/05/15 20:52:45 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.10 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: Widget.h,v 1.11 2004/05/15 20:52:44 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -164,6 +164,10 @@ public:
   bool	click_to_focus()	{ return (flags_ & CLICK_TO_FOCUS) != 0; }
   void  set_click_to_focus()	{ flags_ |= CLICK_TO_FOCUS; }
   void	clear_click_to_focus()	{ flags_ &= ~CLICK_TO_FOCUS; }
+  bool  horizontal() const	{ return !(flags_&LAYOUT_VERTICAL);}
+  bool  vertical() const	{ return (flags_&LAYOUT_VERTICAL)!=0;}
+  void	set_horizontal()	{ flags_ &= ~LAYOUT_VERTICAL; }
+  void	set_vertical()		{ flags_ |= LAYOUT_VERTICAL; }
 
   bool	take_focus()		;
   void	throw_focus()		;
@@ -308,5 +312,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.10 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.11 2004/05/15 20:52:44 spitzak Exp $".
 //

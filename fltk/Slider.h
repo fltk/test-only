@@ -1,5 +1,5 @@
 //
-// "$Id: Slider.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: Slider.h,v 1.5 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Slider value control. By default it moves vertically with the
 // minimum number at the bottom. See HorizontalSlider for one that
@@ -43,8 +43,7 @@ class FL_API Slider : public Valuator {
 public:
 
   enum { // bit flags for type():
-    VERTICAL		= 0,
-    HORIZONTAL		= 1,
+    LINEAR		= 0,
     TICK_ABOVE		= 2,
     TICK_LEFT		= TICK_ABOVE,
     TICK_BELOW		= 4,
@@ -52,10 +51,13 @@ public:
     TICK_BOTH		= TICK_ABOVE|TICK_BELOW,
     LOG			= 8
 #ifdef FLTK_1_SLIDER
-    ,FILL		= 16
+    // for back-compatability only
+    ,VERTICAL		= 0,
+    HORIZONTAL		= 1,
+    FILL		= 16
 #endif
   };
-  bool horizontal() const {return (type()&HORIZONTAL)!=0;}
+  bool horizontal() const {return !(flags()&LAYOUT_VERTICAL) || (type()&1);}
   bool log() const {return (type()&LOG)!=0;}
 
   void draw();
@@ -90,5 +92,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Slider.h,v 1.4 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: Slider.h,v 1.5 2004/05/15 20:52:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.97 2004/03/14 07:42:57 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.98 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -126,6 +126,7 @@ FluidType *WidgetType::make() {
   t->factory = this;
   // Construct the fltk::Widget:
   t->o = widget(X,Y,W,H);
+  if (H>W) t->o->set_vertical();
   fluid_style_set->make_current();
   if (reading_file) t->o->label(0);
   else if (t->o->label()) t->label(t->o->label()); // allow editing
@@ -1652,6 +1653,8 @@ void WidgetType::write_widget_code() {
       write_c("%so->type(%d);\n", indent(), o->type());
   }
 
+  if (o->vertical()) write_c("%so->set_vertical();\n", indent());
+
   if (image) image->write_code();
 
   if (o->box() != tplate->box())
@@ -1793,6 +1796,12 @@ void WidgetType::write_properties() {
     write_string("type");
     write_word(number_to_text(o->type(), subtypes()));
   }
+  // write horizontal or vertical if it disagrees with dimensions:
+  if (o->h()>o->w()) {
+    if (!o->vertical()) write_string("horizontal");
+  } else {
+    if (o->vertical()) write_string("vertical");
+  }
   if (set_xy && is_window()) {
     write_string("set_xy");  
   }
@@ -1893,10 +1902,24 @@ void WidgetType::read_property(const char *c) {
 	while (p->parent()) {x -= p->x(); y -= p->y(); p = p->parent();}
       }
       o->x(x); o->y(y); o->w(w); o->h(h);
+      if (h > w) o->set_vertical(); else o->set_horizontal();
       //o->layout();
     }
+  } else if (!strcmp(c,"horizontal")) {
+    o->set_horizontal();
+  } else if (!strcmp(c,"vertical")) {
+    o->set_vertical();
   } else if (!strcmp(c,"type")) {
-    o->type(number_from_text(read_word(), subtypes()));
+    const char* c = read_word();
+    // Strip off leading "VERTICAL|fltk::Type::" written by older fltk2 fluid:
+    if (!strncmp(c,"VERTICAL",8)) c += 8;
+    else if (!strncmp(c,"HORIZONTAL",10)) c += 10;
+    if (*c == '|') {
+      c++;
+      const char* d = c;
+      while (*d && *d != '|') if (*d++ == ':') c = d;
+    }
+    o->type(number_from_text(c, subtypes()));
   } else if (!strcmp(c,"set_xy")) {
     set_xy = true;
   } else if (!strcmp(c,"align")) {
@@ -2065,6 +2088,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
       x += pasteoffset;
       y += pasteoffset;
       o->resize(int(x),int(y),int(w),int(h));
+      if (h>w) o->set_vertical();
       o->layout();
     }
   } else if (!strcmp(name,"label")) {
@@ -2146,5 +2170,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.97 2004/03/14 07:42:57 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.98 2004/05/15 20:52:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.46 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.47 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -396,12 +396,18 @@ extern void fix_group_size(FluidType *t);
 void WindowType::moveallchildren()
 {
   FluidType *i;
+  bool first = true;
   for (i = first_child; i;) {
     if (i->selected && i->is_widget() && !i->is_menu_item()) {
       WidgetType* o = (WidgetType*)i;
       int x,y,r,t;
       newposition(o,x,y,r,t);
       o->o->resize(x,y,r-x,t-y);
+      if (first && (drag != DRAG)) {
+	first = false;
+	if (r-x > t-y) o->o->set_horizontal();
+	else if (r-x < t-y) o->o->set_vertical();
+      }
       i = i->next_brother;
     } else {
       i = i->walk(this);
@@ -694,5 +700,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.46 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.47 2004/05/15 20:52:44 spitzak Exp $".
 //

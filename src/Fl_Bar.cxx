@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.8 2004/05/07 06:36:22 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.9 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -41,7 +41,6 @@ NamedStyle* BarGroup::default_style = &::style;
 BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
   : Group(x, y, w, h,title)
 {
-  type(HORIZONTAL);
   style(default_style);
   open_ = true;
   highlighted = false;
@@ -50,8 +49,6 @@ BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
   saved_size = h;
   align(ALIGN_INSIDE);
 }
-
-#define horizontal() ((type()&1) && !(this->flags()&PACK_VERTICAL))
 
 void BarGroup::glyph_box(int& x, int& y, int& w, int& h) {
   x = y = 0; w = this->w(); h = this->h(); //box()->inset(x,y,w,h);
@@ -139,7 +136,7 @@ void BarGroup::draw()
     if (pushed) f |= VALUE;
     if (highlighted) f |= HIGHLIGHT;
     int x,y,w,h; glyph_box(x,y,w,h);
-    draw_glyph((horizontal()?open_:!open_)?GLYPH_RIGHT_BUTTON:GLYPH_DOWN_BUTTON,
+    draw_glyph((horizontal())?GLYPH_RIGHT_BUTTON:GLYPH_DOWN_BUTTON,
 	       x, y, w, h, f);
   }
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.46 2004/05/07 06:36:22 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.47 2004/05/15 20:52:43 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -104,9 +104,6 @@ bool GlWindow::mode(int m) {
 
 void GlWindow::make_current() {
   current_ = this;
-#ifdef _WIN32
-  xwindow = (HBITMAP)(xid(this));
-#endif
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = create_gl_context(this, gl_choice);
@@ -328,5 +325,5 @@ void GlWindow::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.46 2004/05/07 06:36:22 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.47 2004/05/15 20:52:43 spitzak Exp $".
 //

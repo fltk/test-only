@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.38 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.39 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -230,7 +230,7 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
 */
 
 #ifdef _WIN32
-extern bool keepgc;
+extern HDC fl_bitmap_dc;
 #endif
 
 ImageDraw::ImageDraw(Image* image) {
@@ -238,9 +238,9 @@ ImageDraw::ImageDraw(Image* image) {
 #if USE_X11
   data[0] = (void*)(xwindow);
 #elif defined(_WIN32)
-  data[0] = (void*)(xwindow);
-  data[1] = (void*)(gc); gc = 0;
-  data[2] = (void*)(keepgc);
+  // make it not destroy the previous dc:
+  data[0] = (void*)gc;
+  data[1] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
 #elif defined(__APPLE__)
   GrafPtr prevPort; GDHandle prevGD;
   GetGWorld(&prevPort, &prevGD);
@@ -257,10 +257,9 @@ ImageDraw::~ImageDraw() {
 #if USE_X11
   xwindow = (XWindow)(data[0]);
 #elif defined(_WIN32)
-  DeleteDC(gc);
-  keepgc = (bool)(data[2]);
-  gc = (HDC)(data[1]);
-  xwindow = (HBITMAP)(data[0]);
+  gc = (HDC)(data[0]);
+  DeleteDC(fl_bitmap_dc);
+  fl_bitmap_dc = (HDC)(data[1]);
 #elif defined(__APPLE__)
   SetGWorld((GrafPtr)(data[0]), (GDHandle)(data[1]));
 #else
@@ -470,5 +469,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.38 2004/05/07 06:36:23 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.39 2004/05/15 20:52:45 spitzak Exp $".
 //

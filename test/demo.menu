@@ -10,15 +10,15 @@
 #
 
 @main:Widget\nTests:@x
-	@x:Fl_Browser:browser
-	@x:Fl_Input:input
-	@x:Fl_Output:output
-	@x:Fl_Button\n&&\nFl_Tooltip:radio
-	@x:Fl_Tabs:tabs
-	@x:Fl_Tile:tile
-	@x:Fl_Scroll:scroll
-	@x:Fl_Pack:pack
-	@x:Fl_Menu:menubar
+	@x:Browser:browser
+	@x:Input:input
+	@x:Output:output
+	@x:Button\n&&\nTooltip:radio
+	@x:TabGroup:tabs
+	@x:TiledGroup:tile
+	@x:ScrollGroup:scroll
+	@x:PackedGroup:pack
+	@x:Menu:menu
 
 @main:Window\nTests:@w
 	@w:overlay:overlay
@@ -29,16 +29,17 @@
 	@w:iconize:iconize
 	@w:fullscreen:fullscreen
 	@w:resizable:resizable
-	@w:resize:resize
+	@w:program\nresize:resize
 
 @main:Drawing\nTests:@d
 	@d:text labels:label
-	@d:Fl_Image\nlabels:image
-	@d:pixmap\nbrowser:pixmap_browser
+	@d:Image\nlabels:image
+#	@d:pixmap\nbrowser:pixmap_browser
 	@d:cursor:cursor
-	@d:fl_arc:arc
-	@d:fl_curve:curve
-	@d:fl_line_style:line_style
+	@d:addarc():arc
+	@d:addcurve():curve
+	@d:line_style():line_style
+	@d:fonts:fonts
 
 @main:Events:@u
 	@u:navigation:navigation
@@ -48,7 +49,7 @@
 
 @main:Fluid\n(UI design tool):../fluid/fluid valuators.fl
 
-@main:Cool\nDemos:@e
+@main:Nice\nDemos:@e
 	@e:X Color\nBrowser:../forms/colbrowser
 	@e:Mandelbrot:mandelbrot
 	@e:Fractals:../glut/fractals
@@ -59,7 +60,6 @@
 	@o:color choosers:color_chooser r
 	@o:file chooser:file_chooser
 	@o:XForms Emulation:../forms/forms
-	@o:fonts:fonts
 
 @main:Tutorial\nfrom\nManual:@j
 	@j:ask\n(modified):ask

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.71 2004/03/05 08:14:18 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.72 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -53,13 +53,14 @@ using namespace fltk;
   (which defaults to GRAY75) is used to fill in the area behind the
   slider and tick marks.
 
+  You can use set_vertical() to make the slider move up/down rather
+  than horizontally.
+
   The following bits may be or'd together and given to type():
-  - fltk::Slider::VERTICAL : Slider moves vertically (this is the default)
-  - fltk::Slider::HORIZONTAL : Slider moves horizontally.
   - fltk::Slider::TICK_ABOVE : Put tick marks above the horizontal slider.
-  - fltk::Slider::TICK_LEFT : Put tick marks to the left of a vertical slider, same value as TICK_ABOVE
+  - fltk::Slider::TICK_LEFT : Put tick marks to the left of a vertical slider (same value as TICK_ABOVE)
   - fltk::Slider::TICK_BELOW : Put tick marks below the horizontal slider.
-  - fltk::Slider::TICK_RIGHT : Put tick marks to the right of a vertical slider, same value as TICK_BELOW
+  - fltk::Slider::TICK_RIGHT : Put tick marks to the right of a vertical slider (same value as TICK_BELOW)
   - fltk::Slider::TICK_BOTH : Put tick marks on both sides of the slider.
   - fltk::Slider::LOG : Use a logarithimic or power scale for the slider.
 
@@ -569,8 +570,9 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
   style(default_style);
   tick_size_ = 4;
   slider_size_ = 12;
+  //set_vertical();
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.71 2004/03/05 08:14:18 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.72 2004/05/15 20:52:45 spitzak Exp $".
 //

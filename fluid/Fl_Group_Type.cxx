@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.18 2002/12/10 02:00:30 easysw Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.19 2004/05/15 20:52:44 spitzak Exp $"
 //
 // fltk::Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -172,13 +172,16 @@ void GroupType::write_code() {
 
 #include <fltk/PackedGroup.h>
 
+#if 0
+// I took this out because I don't think it is needed for back-compatability
 static const Enumeration pack_type_menu[] = {
   {"normal",		0,		(void*)fltk::PackedGroup::NORMAL},
-  {"horizontal",	"HORIZONTAL",	(void*)fltk::PackedGroup::HORIZONTAL},
+  {"all-vertical",	"HORIZONTAL",	(void*)fltk::PackedGroup::ALL_CHILDREN_VERTICAL},
   {0}};
+#endif
 
 class PackType : public GroupType {
-  const Enumeration *subtypes() const {return pack_type_menu;}
+  //const Enumeration *subtypes() const {return pack_type_menu;}
 public:
   virtual const char *type_name() const {return "fltk::PackedGroup";}
   WidgetType *_make() {return new PackType();}
@@ -300,5 +303,5 @@ public:
 TileType Tiletype;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.18 2002/12/10 02:00:30 easysw Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.19 2004/05/15 20:52:44 spitzak Exp $".
 //

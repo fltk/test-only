@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.24 2002/12/10 02:00:45 easysw Exp $"
+// "$Id: Fl_Pack.cxx,v 1.25 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,12 +44,11 @@ using namespace fltk;
 // against the left edge (or the right if after the resizable()). This
 // is done by setting VERTICAL_LAYOUT in the type().
 
-#define is_vertical(widget) (type()&1 || widget->flags()&PACK_VERTICAL)
+#define is_vertical(widget) (type()&1 || widget->vertical())
 
 PackedGroup::PackedGroup(int x,int y,int w ,int h,const char *l)
 : Group(x, y, w, h, l) {
   spacing_ = 0;
-  type(VERTICAL);
   //resizable(0);
 }
 
@@ -133,5 +132,5 @@ void PackedGroup::layout() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.24 2002/12/10 02:00:45 easysw Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.25 2004/05/15 20:52:45 spitzak Exp $".
 //

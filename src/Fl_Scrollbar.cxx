@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.68 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.69 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ using namespace fltk;
   Home/End (they jump to the top or bottom).
 */
 
-#define vertical() (!(type()&1))
+#define vertical() (!horizontal())
 
 /*! \fn void Scrollbar::linesize(int)
  This number controls how big the steps are that the arrow keys do. In
@@ -307,5 +307,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.68 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.69 2004/05/15 20:52:45 spitzak Exp $".
 //

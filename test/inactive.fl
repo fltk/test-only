@@ -9,48 +9,48 @@ snap 3
 Function {} {open
 } {
   {fltk::Window} {} {open
-    xywh {46 192 395 280} resizable visible
+    xywh {554 266 395 274} resizable visible
   } {
     {fltk::Group} the_group {
       label {activate()/deactivate() called on this Fl_Group} open
-      xywh {5 6 384 239} align 17 resizable box ENGRAVED_BOX
+      xywh {5 6 384 233} align 17 resizable box ENGRAVED_BOX
     } {
       {fltk::Button} {} {
         label button
-        xywh {25 27 105 22}
+        xywh {25 27 105 21}
       }
       {fltk::Group} {} {
         label {Child group} open
-        xywh {25 75 105 105}
+        xywh {25 74 105 102}
       } {
         {fltk::CheckButton} {} {
           label red
-          xywh {0 0 105 25} type RADIO labelcolor 1 selection_color 1 selection_textcolor 1 highlight_labelcolor 1
+          xywh {0 0 105 25} type RADIO selection_color 1 selection_textcolor 1 labelcolor 1 highlight_textcolor 1
         }
         {fltk::CheckButton} {} {
           label green
-          xywh {0 25 105 25} type RADIO labelcolor 2 selection_color 2 selection_textcolor 2 highlight_labelcolor 2
+          xywh {0 25 105 25} type RADIO selection_color 2 selection_textcolor 2 labelcolor 2 highlight_textcolor 2
         }
         {fltk::CheckButton} {} {
           label blue
-          xywh {0 50 105 25} type RADIO labelcolor 4 selection_color 4 selection_textcolor 4 highlight_labelcolor 4
+          xywh {0 50 105 25} type RADIO selection_color 4 selection_textcolor 4 labelcolor 4 highlight_textcolor 4
         }
         {fltk::CheckButton} {} {
           label white
-          xywh {0 75 105 25} type RADIO labelcolor 7 selection_color 7 selection_textcolor 55 highlight_labelcolor 55
+          xywh {0 75 105 25} type RADIO selection_color 7 selection_textcolor 55 labelcolor 7 highlight_textcolor 55
         }
       }
       {fltk::Slider} {} {
         label Fl_Slider
-        xywh {140 25 24 150} value 0.5
+        xywh {140 25 24 146} value 0.5
       }
       {fltk::Input} {} {
-        xywh {170 27 195 22}
+        xywh {170 27 195 21}
         extra_code {o->static_value("Fl_Input");}
       }
       {fltk::InputBrowser} {} {
         label {input browser} open
-        xywh {255 60 110 22}
+        xywh {255 59 110 21}
         extra_code {o->value("Shemp");}
       } {
         {fltk::Item} {} {
@@ -65,27 +65,27 @@ Function {} {open
       }
       {fltk::Widget} {} {
         label Fl_Box
-        xywh {215 137 145 88} box ENGRAVED_BOX labelfont 3 labeltype SHADOW_LABEL labelsize 38
+        xywh {215 134 145 86} box ENGRAVED_BOX labelfont 3 labeltype SHADOW_LABEL labelsize 38
       }
       {fltk::ValueInput} {} {
         label {value:} selected
         tooltip {This Fl_Value_Output widget has a tooltip.}
-        xywh {230 93 135 33} textfont 5 textcolor 4 textsize 24 maximum 10000 step 1
+        xywh {230 91 135 32} textfont 5 textcolor 4 textsize 24 maximum 10000 step 1
       }
       {fltk::Scrollbar} {} {
         label scrollbar
-        xywh {15 195 180 20} type HORIZONTAL maximum 100
+        xywh {15 191 180 19} maximum 100
       }
     }
     {fltk::Button} {} {
       label active
       callback {the_group->activate();}
-      xywh {5 250 190 25} type RADIO value 1
+      xywh {5 244 190 25} type RADIO value 1
     }
     {fltk::Button} {} {
       label inactive
       callback {the_group->deactivate();}
-      xywh {205 250 184 25} type RADIO
+      xywh {205 244 184 25} type RADIO
     }
   }
 } 

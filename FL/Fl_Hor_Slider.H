@@ -2,8 +2,7 @@
 #define Fl_Hor_Slider_H
 
 #include "Fl_Slider.H"
-#include <fltk/HorizontalSlider.h>
-typedef fltk::HorizontalSlider Fl_Hor_Slider;
+typedef fltk::Slider Fl_Hor_Slider;
 
 #endif
 

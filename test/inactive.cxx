@@ -17,15 +17,15 @@ static void cb_inactive(fltk::Button*, void*) {
 int main (int argc, char **argv) {
 
   fltk::Window* w;
-   {fltk::Window* o = new fltk::Window(395, 280);
+   {fltk::Window* o = new fltk::Window(395, 274);
     w = o;
     o->begin();
-     {fltk::Group* o = the_group = new fltk::Group(5, 6, 384, 239, "activate()/deactivate() called on this Fl_Group");
+     {fltk::Group* o = the_group = new fltk::Group(5, 6, 384, 233, "activate()/deactivate() called on this Fl_Group");
       o->box(fltk::ENGRAVED_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
       o->begin();
-      new fltk::Button(25, 27, 105, 22, "button");
-       {fltk::Group* o = new fltk::Group(25, 75, 105, 105, "Child group");
+      new fltk::Button(25, 27, 105, 21, "button");
+       {fltk::Group* o = new fltk::Group(25, 74, 105, 102, "Child group");
         o->begin();
          {fltk::CheckButton* o = new fltk::CheckButton(0, 0, 105, 25, "red");
           o->type(fltk::CheckButton::RADIO);
@@ -57,13 +57,14 @@ int main (int argc, char **argv) {
         }
         o->end();
       }
-       {fltk::Slider* o = new fltk::Slider(140, 25, 24, 150, "Fl_Slider");
+       {fltk::Slider* o = new fltk::Slider(140, 25, 24, 146, "Fl_Slider");
+        o->set_vertical();
         o->value(0.5);
       }
-       {fltk::Input* o = new fltk::Input(170, 27, 195, 22);
+       {fltk::Input* o = new fltk::Input(170, 27, 195, 21);
         o->static_value("Fl_Input");
       }
-       {fltk::InputBrowser* o = new fltk::InputBrowser(255, 60, 110, 22, "input browser");
+       {fltk::InputBrowser* o = new fltk::InputBrowser(255, 59, 110, 21, "input browser");
         o->begin();
         new fltk::Item("Moe");
         new fltk::Item("Larry");
@@ -71,34 +72,32 @@ int main (int argc, char **argv) {
         o->end();
         o->value("Shemp");
       }
-       {fltk::Widget* o = new fltk::Widget(215, 137, 145, 88, "Fl_Box");
+       {fltk::Widget* o = new fltk::Widget(215, 134, 145, 86, "Fl_Box");
         o->box(fltk::ENGRAVED_BOX);
         o->labelfont(fltk::HELVETICA_BOLD_ITALIC);
         o->labeltype(fltk::SHADOW_LABEL);
         o->labelsize(38);
       }
-       {fltk::ValueInput* o = new fltk::ValueInput(230, 93, 135, 33, "value:");
+       {fltk::ValueInput* o = new fltk::ValueInput(230, 91, 135, 32, "value:");
         o->textfont(fltk::COURIER_BOLD);
         o->textcolor((fltk::Color)4);
-        o->highlight_textcolor((fltk::Color)4);
         o->textsize(24);
         o->maximum(10000);
         o->step(1);
         o->tooltip("This Fl_Value_Output widget has a tooltip.");
       }
-       {fltk::Scrollbar* o = new fltk::Scrollbar(15, 195, 180, 20, "scrollbar");
-        o->type(fltk::Scrollbar::HORIZONTAL);
+       {fltk::Scrollbar* o = new fltk::Scrollbar(15, 191, 180, 19, "scrollbar");
         o->maximum(100);
       }
       o->end();
       fltk::Group::current()->resizable(o);
     }
-     {fltk::Button* o = new fltk::Button(5, 250, 190, 25, "active");
+     {fltk::Button* o = new fltk::Button(5, 244, 190, 25, "active");
       o->type(fltk::Button::RADIO);
-      o->value(1);
+      o->set_value();
       o->callback((fltk::Callback*)cb_active);
     }
-     {fltk::Button* o = new fltk::Button(205, 250, 184, 25, "inactive");
+     {fltk::Button* o = new fltk::Button(205, 244, 184, 25, "inactive");
       o->type(fltk::Button::RADIO);
       o->callback((fltk::Callback*)cb_inactive);
     }

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.50 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.51 2004/05/15 20:52:46 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -102,6 +102,10 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   HDC dc = getDC();
   SelectObject(dc, font);
   GetTextMetrics(dc, &current->metr);
+//    printf("FontSize '%s' %d %d %d -> %d %d\n",
+//  	 name, attr, size, charset,
+//  	 current->metr.tmAscent,
+//  	 current->metr.tmDescent);
   //BOOL ret = GetCharWidthFloat(dc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
   //GetCharWidth(dc, 0, 255, current->width);
@@ -248,5 +252,5 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.50 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.51 2004/05/15 20:52:46 spitzak Exp $".
 //

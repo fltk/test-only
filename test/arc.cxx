@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.17 2004/05/04 07:30:44 spitzak Exp $"
+// "$Id: arc.cxx,v 1.18 2004/05/15 20:52:47 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,8 +24,8 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/Window.h>
-#include <fltk/HorizontalValueSlider.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/ValueSlider.h>
 #include <fltk/draw.h>
 
 float args[7] = {90, 90, 100, 100, 0, 360, 0};
@@ -50,9 +50,9 @@ class Drawing : public fltk::Widget {
     fltk::fillstrokepath(fltk::WHITE);
     fltk::pop_matrix();
     fltk::setcolor(fltk::GRAY66);
-    fltk::fillrect(10,270-(int) args[3],(int) args[2],(int) args[3]);
+    fltk::fillrect(10,270-args[3],args[2],args[3]);
     fltk::setcolor(fltk::GRAY10);
-    fltk::fillarc(10,270-(int) args[3],(int) args[2],(int) args[3],(int) args[4],(int) args[5]);
+    fltk::fillarc(10,270-args[3],args[2],args[3],args[4],args[5]);
     fltk::pop_clip();
   }
 public:
@@ -68,8 +68,7 @@ void slider_cb(fltk::Widget* o, void* v) {
 }
 
 int main(int argc, char** argv) {
-  fltk::Window window(300,500);
-  window.set_double_buffer();
+  fltk::DoubleBufferWindow window(300,500);
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
@@ -77,11 +76,11 @@ int main(int argc, char** argv) {
   int y = 300;
   for (int n = 0; n<7; n++) {
     fltk::Slider* s =
-      new fltk::HorizontalValueSlider(50,y,240,25,name[n]); y += 25;
+      new fltk::ValueSlider(50,y,240,25,name[n]); y += 25;
     if (n<4) {s->minimum(0); s->maximum(300);}
     else if (n==6) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
-    s->type(fltk::Slider::HORIZONTAL | fltk::Slider::TICK_ABOVE);
+    s->type(fltk::Slider::TICK_ABOVE);
     s->step(1);
     s->value(args[n]);
 	s->clear_flag(fltk::ALIGN_MASK);
@@ -97,6 +96,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.17 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.18 2004/05/15 20:52:47 spitzak Exp $".
 //
 

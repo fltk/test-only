@@ -1,5 +1,5 @@
 //
-// "$Id: PackedGroup.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
+// "$Id: PackedGroup.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Group that places all it's child widgets packed against the
 // edges. The edge is decided by the PACK_VERTICAL flag stored on
@@ -36,10 +36,9 @@ namespace fltk {
 class FL_API PackedGroup : public Group {
   int spacing_;
 public:
-  enum { // values for type(int)
+  enum { // values for type(int), for back-compatability
     NORMAL	= GROUP_TYPE,
-    VERTICAL	= NORMAL, // for back compatability
-    HORIZONTAL	= GROUP_TYPE+1
+    ALL_CHILDREN_VERTICAL = GROUP_TYPE+1
   };
   void layout();
   PackedGroup(int x,int y,int w ,int h,const char *l = 0);
@@ -52,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: PackedGroup.h,v 1.3 2003/04/20 03:17:48 easysw Exp $".
+// End of "$Id: PackedGroup.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $".
 //

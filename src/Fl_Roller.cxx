@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.36 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.37 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,19 +31,21 @@
 #include <fltk/math.h>
 using namespace fltk;
 
+#define horizontal() (!(flags()&LAYOUT_VERTICAL)||(type()&1))
+
 /*! \class fltk::ThumbWheel
 
   A control similar to SGI's Inventor toolkit, commonly used to move 3D
   objects or control zoom.
 
   \image html Fl_Roller.gif
-  Set type() to ThumbWheel::HORIZONTAL or ThumbWheel::VERTICAL (the default)
-  to change what direction it goes in.
+
+  You can use set_vertical() to make the thumbwheel move vertically.
 */
 
 int ThumbWheel::handle(int event) {
   static int ipos;
-  int newpos = type()==HORIZONTAL ? event_x() : -event_y();
+  int newpos = horizontal() ? event_x() : -event_y();
   switch (event) {
   case PUSH:
     handle_push();
@@ -64,11 +66,11 @@ int ThumbWheel::handle(int event) {
     case DownKey:
     case HomeKey:
     case EndKey:
-      if (type()==HORIZONTAL) return 0;
+      if (horizontal()) return 0;
       break;
     case LeftKey:
     case RightKey:
-      if (type() != HORIZONTAL) return 0;
+      if (!horizontal()) return 0;
     } // else fall through...
   default:
     return Valuator::handle(event);
@@ -86,7 +88,7 @@ void ThumbWheel::draw() {
 
   const double ARC = 1.5; // 1/2 the number of radians visible
   const double delta = .2; // radians per knurl
-  if (type()==HORIZONTAL) {
+  if (horizontal()) {
     // draw shaded ends of wheel:
     int h1 = W/4+1; // distance from end that shading starts
     setcolor(buttoncolor()); fillrect(X+h1,Y,W-2*h1,H);
@@ -167,9 +169,10 @@ void ThumbWheel::draw() {
 
 ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H,L) {
   step(.001);
+  //set_vertical();
   //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.36 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.37 2004/05/15 20:52:45 spitzak Exp $".
 //

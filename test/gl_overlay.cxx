@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.11 2004/05/05 15:46:01 spitzak Exp $"
+// "$Id: gl_overlay.cxx,v 1.12 2004/05/15 20:52:47 spitzak Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <config.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/ToggleButton.h>
 #include <fltk/math.h>
 
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 //sw.mode(FLTK::RGB);
   window.resizable(&sw);
 
-  fltk::HorizontalSlider oslider(60, 5, window.w()-70, 30, "Overlay:");
+  fltk::Slider oslider(60, 5, window.w()-70, 30, "Overlay:");
   oslider.clear_flag(fltk::ALIGN_MASK);
   oslider.set_flag(fltk::ALIGN_LEFT);
 #if HAVE_GL
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
   oslider.range(3,40);
   oslider.tooltip("Move this slider to make overlay redraw");
 
-  fltk::HorizontalSlider slider(60, 40, window.w()-70, 30, "Normal:");
+  fltk::Slider slider(60, 40, window.w()-70, 30, "Normal:");
   slider.clear_flag(fltk::ALIGN_MASK);
   slider.set_flag(fltk::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
@@ -190,5 +190,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.11 2004/05/05 15:46:01 spitzak Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.12 2004/05/15 20:52:47 spitzak Exp $".
 //

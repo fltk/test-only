@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/StringList.h>
 #include <fltk/events.h>
 using namespace fltk;
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
   o->shortcut(ALT+'q');
   o->callback(quit_cb);
   new Divider();
-  (new HorizontalSlider(0,0,100,30))->value(.3);
+  (new Slider(0,0,100,30))->value(.3);
   build_hierarchy();
   file.end();
   ItemGroup edit("&Edit");
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
   const int VWIDTH=100;
 
   MenuBar mb0(0,HEIGHT,VWIDTH,400-HEIGHT);
-  mb0.set_flag(PACK_VERTICAL);
+  mb0.set_vertical();
   mb0.begin();
   build_hierarchy();
   mb0.end();

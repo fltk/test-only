@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.6 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.7 2004/05/15 20:52:45 spitzak Exp $"
 //
 // HelpView widget routines.
 //
@@ -2190,6 +2190,7 @@ HelpView::HelpView (int xx, // I - Left position
   size_ = 0;
   hsize_ = 0;
 
+  scrollbar_->set_vertical();
   scrollbar_->value (0, hh, 0, 1);
   scrollbar_->step (8.0);
   scrollbar_->show ();
@@ -2199,7 +2200,6 @@ HelpView::HelpView (int xx, // I - Left position
   hscrollbar_->step (8.0);
   hscrollbar_->show ();
   hscrollbar_->callback (hscrollbar_callback);
-  hscrollbar_->type (Scrollbar::HORIZONTAL);
   end ();
 }
 
@@ -2592,5 +2592,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.6 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.7 2004/05/15 20:52:45 spitzak Exp $".
 //

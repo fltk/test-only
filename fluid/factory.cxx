@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.31 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: factory.cxx,v 1.32 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -220,17 +220,13 @@ static DialType Dialtype;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/ThumbWheel.h>
-static const Enumeration roller_type_menu[] = {
-  {"Vertical",   "VERTICAL",   (void*)fltk::ThumbWheel::VERTICAL},
-  {"Horizontal", "HORIZONTAL", (void*)fltk::ThumbWheel::HORIZONTAL},
-  {0}};
 class ThumbWheelType : public WidgetType {
-  const Enumeration *subtypes() const {return roller_type_menu;}
   int is_valuator() const {return 1;}
 public:
   virtual const char *type_name() const {return "fltk::ThumbWheel";}
   fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::ThumbWheel(x,y,w,h);}
+    return new fltk::ThumbWheel(x,y,w,h);
+  }
   WidgetType *_make() {return new ThumbWheelType();}
 };
 static ThumbWheelType ThumbWheeltype;
@@ -239,25 +235,15 @@ static ThumbWheelType ThumbWheeltype;
 
 #include <fltk/Scrollbar.h>
 static const Enumeration slider_type_menu[] = {
-  {"Vertical Lin No ticks","VERTICAL",	(void*)fltk::Slider::VERTICAL},
-  {"Vertical Lin Left","VERTICAL|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_ABOVE)},
-  {"Vertical Lin Right","VERTICAL|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_BELOW)},
-  {"Vertical Lin Both","VERTICAL|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_BOTH)},
+  {"Linear No ticks",	"LINEAR",	(void*)(fltk::Slider::LINEAR)},
+  {"Linear Top/left ticks","TICK_ABOVE",(void*)(fltk::Slider::TICK_ABOVE)},
+  {"Linear Bottom/right ticks","TICK_BELOW",(void*)(fltk::Slider::TICK_BELOW)},
+  {"Linear Both ticks","TICK_BOTH", (void*)(fltk::Slider::TICK_BOTH)},
 
-  {"Vertical Log No ticks","VERTICAL|fltk::Slider::LOG",	(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG)},
-  {"Vertical Log Left","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE)},
-  {"Vertical Log Right","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW)},
-  {"Vertical Log Both","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
-
-  {"Horizontal Lin No ticks","HORIZONTAL",	(void*)fltk::Slider::HORIZONTAL},
-  {"Horizontal Lin Above","HORIZONTAL|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_ABOVE)},
-  {"Horizontal Lin Below","HORIZONTAL|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_BELOW)},
-  {"Horizontal Lin Both","HORIZONTAL|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_BOTH)},
-
-  {"Horizontal Log No ticks","HORIZONTAL|fltk::Slider::LOG",	(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG)},
-  {"Horizontal Log Above","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE)},
-  {"Horizontal Log Below","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW)},
-  {"Horizontal Log Both","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
+  {"Log No ticks",	"LOG",	(void*)(fltk::Slider::LOG)},
+  {"Log Top/left ticks","LOG|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::LOG|fltk::Slider::TICK_ABOVE)},
+  {"Log Bottom/right ticks","LOG|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::LOG|fltk::Slider::TICK_BELOW)},
+  {"Log Both ticks","LOG|fltk::Slider::TICK_BOTH", (void*)(fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
 
   {0}};
 class SliderType : public WidgetType {
@@ -267,22 +253,20 @@ class SliderType : public WidgetType {
 public:
   virtual const char *type_name() const {return "fltk::Slider";}
   fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::Slider(x,y,w,h);}
+    return new fltk::Slider(x,y,w,h);
+  }
   WidgetType *_make() {return new SliderType();}
 };
 static SliderType Slidertype;
 
-static const Enumeration scrollbar_type_menu[] = {
-  {"Vertical",	"VERTICAL",	(void*)fltk::Scrollbar::VERTICAL},
-  {"Horizontal","HORIZONTAL",	(void*)fltk::Scrollbar::HORIZONTAL},
-  {0}};
 class ScrollbarType : public SliderType {
-  const Enumeration *subtypes() const {return scrollbar_type_menu;}
+  const Enumeration *subtypes() const {return 0;}
   int is_scrollbar() const {return 1;}
 public:
   virtual const char *type_name() const {return "fltk::Scrollbar";}
   fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::Scrollbar(x,y,w,h);}
+    return new fltk::Scrollbar(x,y,w,h);
+  }
   WidgetType *_make() {return new ScrollbarType();}
 };
 static ScrollbarType Scrollbartype;
@@ -346,7 +330,8 @@ public:
   int is_value_slider() const {return 1;}
   virtual const char *type_name() const {return "fltk::ValueSlider";}
   fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::ValueSlider(x,y,w,h);}
+    return new fltk::ValueSlider(x,y,w,h);
+  }
   WidgetType *_make() {return new ValueSliderType();}
 };
 static ValueSliderType ValueSlidertype;
@@ -646,12 +631,12 @@ static symbol table[] = {
   //  {"SIMPLE_COUNTER",	fltk::Counter::SIMPLE},
   {"LINE_DIAL",		fltk::Dial::LINE},
   {"FILL_DIAL",		fltk::Dial::FILL},
-  {"VERT_SLIDER",	fltk::Slider::VERTICAL},
-  {"HOR_SLIDER",	fltk::Slider::HORIZONTAL},
-  {"VERT_FILL_SLIDER",	fltk::Slider::VERTICAL},
-  {"HOR_FILL_SLIDER",	fltk::Slider::HORIZONTAL},
-  {"VERT_NICE_SLIDER",	fltk::Slider::VERTICAL},
-  {"HOR_NICE_SLIDER",	fltk::Slider::HORIZONTAL},
+  {"VERT_SLIDER",	fltk::Slider::LINEAR},
+  {"HOR_SLIDER",	fltk::Slider::LINEAR},
+  {"VERT_FILL_SLIDER",	fltk::Slider::LINEAR},
+  {"HOR_FILL_SLIDER",	fltk::Slider::LINEAR},
+  {"VERT_NICE_SLIDER",	fltk::Slider::LINEAR},
+  {"HOR_NICE_SLIDER",	fltk::Slider::LINEAR},
 };
 
 #include <stdlib.h>
@@ -669,5 +654,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.31 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.32 2004/05/15 20:52:44 spitzak Exp $".
 //

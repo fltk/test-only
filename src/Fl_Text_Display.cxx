@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.26 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.27 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -84,10 +84,10 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
   begin();
 
   mVScrollBar = new Scrollbar(0,0,0,0);
+  mVScrollBar->set_vertical();
   mVScrollBar->callback((Callback*)v_scrollbar_cb, this);
   mHScrollBar = new Scrollbar(0,0,0,0);
   mHScrollBar->callback((Callback*)h_scrollbar_cb, this);
-  mHScrollBar->type(Scrollbar::HORIZONTAL);
 
   end();
 
@@ -2014,5 +2014,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.26 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.27 2004/05/15 20:52:45 spitzak Exp $".
 //

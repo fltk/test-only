@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.12 2004/01/23 06:34:44 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.13 2004/05/15 20:52:47 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <fltk/Symbol.h>
 #include <fltk/run.h>
 #include <fltk/string.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <stdlib.h>
 
 using namespace fltk;
@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   browser.color(GRAY85);
   window.resizable(browser);
   Slider slider(0, browser.h(), window.w(), sliderh);
-  slider.type(Slider::HORIZONTAL|Slider::TICK_ABOVE|Slider::LOG);
+  slider.type(Slider::TICK_ABOVE|Slider::LOG);
   slider.range(1,60);
   slider.step(1);
   slider.value(browser.textsize());

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.56 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.57 2004/05/15 20:52:45 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -269,6 +269,11 @@ int Menu::children() const {
   return list_->children(this, 0, 0);
 }
 
+/*! Returns the number of children of some child. Same as children(&i,1). */
+int Menu::children(int i) const {
+  return list_->children(this, &i, 1);
+}
+
 /*! Calls list()->child(this, indexes, level). 
   If an fltk::List is used, the returned widget may be a temporary data
   structure and may be overwritten by another call to child() in this
@@ -471,5 +476,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.56 2004/05/07 06:36:23 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.57 2004/05/15 20:52:45 spitzak Exp $"
 //

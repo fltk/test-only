@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.29 2004/05/04 07:30:44 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.30 2004/05/15 20:52:47 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1260,7 +1260,7 @@ void undo_cb(fltk::Widget*, void* pb) {
 
 //--------------------------
 
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/ValueInput.h>
 
 fltk::Window *intel_window;
@@ -1277,7 +1277,7 @@ void intel_cb(fltk::Widget*, void*) {
   if (!intel_window) {
     intel_window = new fltk::Window(200,25,"Checkers Intelligence");
     intel_window->begin();
-    fltk::Slider* s = new fltk::HorizontalSlider(60,0,140,25);
+    fltk::Slider* s = new fltk::Slider(60,0,140,25);
     s->minimum(1); s->maximum(500); s->value(50);
     s->callback(intel_slider_cb);
     intel_output = new fltk::ValueInput(0,0,60,25);
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.29 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.30 2004/05/15 20:52:47 spitzak Exp $".
 //

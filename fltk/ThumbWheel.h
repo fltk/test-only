@@ -1,5 +1,5 @@
 //
-// "$Id: ThumbWheel.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: ThumbWheel.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Inventor-style thumbwheel control for a single floating point value.
 //
@@ -34,10 +34,10 @@ namespace fltk {
 
 class FL_API ThumbWheel : public Valuator {
 public:
-  enum { // values for type()
-    VERTICAL = 0,
-    HORIZONTAL = 1
-  };
+#ifdef FLTK_1_SLIDER
+  // for back-compatability only
+  enum {HORIZONTAL = 1};
+#endif
   int handle(int);
   ThumbWheel(int X,int Y,int W,int H,const char* L=0);
 
@@ -50,5 +50,5 @@ protected:
 #endif
 
 //
-// End of "$Id: ThumbWheel.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: ThumbWheel.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $".
 //

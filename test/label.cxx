@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $"
+// "$Id: label.cxx,v 1.19 2004/05/15 20:52:47 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Box.h>
-#include <fltk/HorizontalValueSlider.h>
+#include <fltk/ValueSlider.h>
 #include <fltk/ToggleButton.h>
 #include <fltk/Input.h>
 #include <fltk/Choice.h>
@@ -37,8 +37,8 @@ using namespace fltk;
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Widget *textbox;
 Input *input;
-HorizontalValueSlider *fontslider;
-HorizontalValueSlider *sizes;
+ValueSlider *fontslider;
+ValueSlider *sizes;
 Window *window;
 
 void button_cb(Widget *,void *) {
@@ -117,8 +117,8 @@ int main(int argc, char **argv) {
   input->when(WHEN_CHANGED);
   input->callback(input_cb);
 
-  sizes= new HorizontalValueSlider(50,350,350,25,"Size:");
-  sizes->type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  sizes= new ValueSlider(50,350,350,25,"Size:");
+  sizes->type(Slider::TICK_ABOVE);
   sizes->clear_flag(ALIGN_MASK);
   sizes->set_flag(ALIGN_LEFT);
   sizes->range(1,64);
@@ -126,8 +126,8 @@ int main(int argc, char **argv) {
   sizes->value(14);
   sizes->callback(size_cb);
 
-  fontslider=new HorizontalValueSlider(50,325,350,25,"Font:");
-  fontslider->type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  fontslider=new ValueSlider(50,325,350,25,"Font:");
+  fontslider->type(Slider::TICK_ABOVE);
   fontslider->clear_flag(ALIGN_MASK);
   fontslider->set_flag(ALIGN_LEFT);
   fontslider->range(0,15);
@@ -168,5 +168,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: label.cxx,v 1.19 2004/05/15 20:52:47 spitzak Exp $".
 //

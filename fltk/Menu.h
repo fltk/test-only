@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.8 2004/05/07 06:36:22 spitzak Exp $"
+// "$Id: Menu.h,v 1.9 2004/05/15 20:52:44 spitzak Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -64,6 +64,7 @@ public:
   static NamedStyle* default_style;
 
   int children(const int* indexes, int level) const ;
+  int children(int index) const;
   int children() const ;
   Widget* child(const int* indexes, int level) const ;
   Widget* child(int index) const ;
@@ -75,6 +76,11 @@ public:
   int value() const {return Group::focus();}
   void value(int v) {Group::focus(v);}
   int  size() const {return children();}
+
+  void layout(Widget*,const int* indexes, int level) const;
+  void draw(Widget*,const int* indexes, int level, int, int) const;
+  int find_selected(Widget*,const int* indexes, int level, int, int) const;
+  void get_location(Widget*,const int* indexes, int level, int, int&,int&,int&,int&) const;
 
   int popup(int x,int y,int w=0,int h=0, const char* title=0,bool menubar=false);
   int handle_shortcut();
@@ -146,5 +152,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.8 2004/05/07 06:36:22 spitzak Exp $".
+// End of "$Id: Menu.h,v 1.9 2004/05/15 20:52:44 spitzak Exp $".
 //

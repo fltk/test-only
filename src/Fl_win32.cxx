@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.206 2004/05/11 06:31:09 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.207 2004/05/15 20:52:46 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1415,7 +1415,6 @@ void CreatedWindow::create(Window* window) {
   x->next = CreatedWindow::first;
   CreatedWindow::first = x;
 
-
 #if USE_DRAGDROP
   RegisterDragDrop(x->xid, &flDropTarget);
 #endif
@@ -1470,23 +1469,27 @@ void Window::label(const char *name,const char *iname) {
 
 ////////////////////////////////////////////////////////////////
 // Drawing context
-// This version keeps just one HDC object, it destroys the previous
-// one, then creates the new one, each time the window changes.
+//
+// DC's are more of a pain in Windows...
+//
+// Each window has a DC made with GetDC(window). If I understand the
+// documentation right, this is destroyed/released when the window
+// is destroyed.
+//
+// Calling Image::make_current() will make a temporary DC. This is
+// kept until you draw into another image, or you destroy the image.
+//
+// ImageDraw creates a temporary DC. See Image.cxx
+
+HDC fltk::gc;
 
 const Window *Window::current_;
-HBITMAP fltk::xwindow; // This may be an HWND when drawing into window
-HDC fltk::gc;
-bool keepgc;
 
 void Window::make_current() const {
 //    if (this == in_wm_paint)
-//	xwindow = this->xid();
 //      gc = paint.hdc;
 //    else
-  if (xwindow == (HBITMAP)(i->xid)) return;
-  xwindow = (HBITMAP)(i->xid);
-  if (gc && !keepgc) DeleteDC(gc);
-  gc = i->dc; keepgc = true;
+  gc = i->dc;
   current_ = this;
 #if USE_COLORMAP
   fl_select_palette();
@@ -1494,42 +1497,34 @@ void Window::make_current() const {
   load_identity();
 }
 
-void fltk::draw_into(HBITMAP window) {
-  if (xwindow == window) return;
-  xwindow = window;
-  HDC dc = CreateCompatibleDC(getDC());
-  SelectObject(dc, window);
-  SetTextAlign(dc, TA_BASELINE|TA_LEFT);
-  SetBkMode(dc, TRANSPARENT);
-  if (gc && !keepgc) DeleteDC(gc);
-  gc = dc; keepgc = false;
+HDC fl_bitmap_dc;
+
+void fltk::draw_into(HBITMAP bitmap) {
+  if (!fl_bitmap_dc) {
+    fl_bitmap_dc = CreateCompatibleDC(getDC());
+    SetTextAlign(fl_bitmap_dc, TA_BASELINE|TA_LEFT);
+    SetBkMode(fl_bitmap_dc, TRANSPARENT);
+  }
+  SelectObject(fl_bitmap_dc, bitmap);
+  gc = fl_bitmap_dc;
 #if USE_COLORMAP
   fl_select_palette();
 #endif // USE_COLORMAP
   load_identity();
 }
 
-void fltk::stop_drawing(HWND window) {
-  stop_drawing((HBITMAP)window);
-}
+void fltk::stop_drawing(HWND window) {}
 
-void fltk::stop_drawing(HBITMAP window) {
-  if (xwindow != window) return;
-  xwindow = 0;
-  if (gc) {if (!keepgc) DeleteDC(gc); gc = 0;}
-}
-
-static HDC screen_gc; // result from last getDC()
+void fltk::stop_drawing(HBITMAP bitmap) {}
 
 /** Return an arbitrary HDC which you can use for Win32 functions that
     need one as an argument. The returned value is short-lived and may
     be destroyed the next time anything is drawn into a window!
 */
 HDC fltk::getDC() {
-//    if (gc) return gc;
-//    if (CreatedWindow::first) return CreatedWindow::first->dc;
-  if (!screen_gc) screen_gc = GetDC(0);
-  return screen_gc;
+  //if (gc) return gc;
+  if (CreatedWindow::first) return CreatedWindow::first->dc;
+  return GetDC(0);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1553,18 +1548,16 @@ void Window::flush() {
       SetBkMode(i->bdc, TRANSPARENT);
     }
 
-    if (gc && !keepgc) {DeleteDC(gc); gc = 0;}
     current_ = this;
 
     // draw the back buffer if it needs anything:
     if (damage || i->backbuffer_bad) {
       // set the graphics context to draw into back buffer:
-      gc = i->bdc; keepgc = true;
+      gc = i->bdc;
 #if USE_COLORMAP
       fl_select_palette();
 #endif // USE_COLORMAP
       load_identity();
-      xwindow = i->backbuffer;
       if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
 	set_damage(DAMAGE_ALL);
 	draw();
@@ -1585,8 +1578,7 @@ void Window::flush() {
       //fl_restore_clip(); // duplicate region into new gc (there is none)
     }
 
-    gc = i->dc; keepgc = true;
-    xwindow = (HBITMAP)(i->xid);
+    gc = i->dc;
 
     // Clip the copying of the pixmap to the damage area,
     // this makes it faster, especially if the damage area is small:
@@ -1625,11 +1617,10 @@ void Window::flush() {
   turned on. */
 void Window::free_backbuffer() {
   if (!i || !i->backbuffer) return;
-  stop_drawing(i->backbuffer);
   DeleteDC(i->bdc);
+  i->bdc = 0;
   DeleteObject(i->backbuffer);
   i->backbuffer = 0;
-  i->bdc = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1645,11 +1636,11 @@ extern void fl_font_rid();
 Cleanup::~Cleanup() {
   // nasty but works (I think) - deallocates GDI resources in windows
   while (CreatedWindow* x = CreatedWindow::first) x->window->destroy();
-  if (screen_gc) ReleaseDC(0, screen_gc);
+  if (fl_bitmap_dc) DeleteDC(fl_bitmap_dc);
   // get rid of allocated font resources
   fl_font_rid();
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.206 2004/05/11 06:31:09 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.207 2004/05/15 20:52:46 spitzak Exp $".
 //

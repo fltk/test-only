@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.85 2004/05/07 06:36:22 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.86 2004/05/15 20:52:45 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1526,8 +1526,8 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   yposition_ = 0;
   scrolldx = scrolldy = 0;
   hscrollbar.parent(this);
-  hscrollbar.type(Slider::HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
+  scrollbar.set_vertical();
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
   indented_ = 0;
@@ -1583,5 +1583,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.85 2004/05/07 06:36:22 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.86 2004/05/15 20:52:45 spitzak Exp $".
 //
