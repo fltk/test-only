@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.132 2001/11/11 20:22:04 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.133 2001/11/28 17:35:53 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <config.h>
+
+double Fl::version() {return FL_VERSION;}
 
 //
 // Globals...
@@ -674,5 +676,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.132 2001/11/11 20:22:04 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.133 2001/11/28 17:35:53 spitzak Exp $".
 //

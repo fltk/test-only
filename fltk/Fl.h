@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.7 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl.h,v 1.8 2001/11/28 17:35:53 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -80,6 +80,8 @@ public: // should be private!
   static const char* scheme_;
 
 public:
+
+  static double version();
 
   // argument parsers:
   static int arg(int, char**, int&);
@@ -250,5 +252,5 @@ FL_API int fl_getconf(const char *key, char *value, int value_length);
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.7 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl.h,v 1.8 2001/11/28 17:35:53 spitzak Exp $".
 //

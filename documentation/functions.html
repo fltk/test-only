@@ -18,6 +18,14 @@ the <a href=utility.html>Utility</a> appendix.
 <p>Also see the description of all the classes listed in the <a
 href=widgets.html>Classes</a> appendix.
 
+<h3><a name=version>double Fl::version()</a></h3>
+
+Returns the version number of fltk. This can be compared to the value
+of the <tt>FL_VERSION</tt> macro to see if the shared library of fltk your
+program linked with is up to date. The current version is 2.0001 and
+is of the form M.mmpp where M is the major number (2), mm is the minor
+number, and pp is the patch number.
+
 <h3><A name=add_fd>void Fl::add_fd(int fd, void (*cb)(int, void 
 *), void* = 0)
 <BR>void Fl::add_fd(int fd, int when, void (*cb)(int, void*), void* = 0)</A>
