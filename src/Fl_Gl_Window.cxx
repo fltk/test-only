@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.13 1999/03/31 14:52:45 mike Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.14 1999/06/04 11:51:44 carl Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -298,7 +298,7 @@ void Fl_Gl_Window::hide() {
     glXMakeCurrent(fl_display, 0, 0);
     if (context != fl_first_context)
       glXDestroyContext(fl_display, (GLXContext)context);
-#ifdef GLX_MESA_release_buffers
+#if GLX_MESA_release_buffers
     glXReleaseBuffersMESA(fl_display, fl_xid(this));
 #endif
 #endif
@@ -328,5 +328,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.13 1999/03/31 14:52:45 mike Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.14 1999/06/04 11:51:44 carl Exp $".
 //
