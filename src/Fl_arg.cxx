@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.47 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.48 2004/07/25 23:22:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -232,7 +232,7 @@ void Window::show(int argc, char **argv) {
 
   show();
 
-#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
+#if USE_X11
   // set the command string, used by state-saving window managers:
   int i;
   int n=0; for (i=0; i<argc; i++) n += strlen(argv[i])+1;
@@ -420,5 +420,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.47 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.48 2004/07/25 23:22:14 spitzak Exp $".
 //

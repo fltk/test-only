@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_visual.cxx,v 1.20 2004/07/25 23:22:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -55,25 +55,7 @@
   system supports the passed values.
 */
 
-#ifdef _WIN32
-bool fltk::visual(int flags) {
-  if (flags & DOUBLE_BUFFER) return false;
-  bool ret = true;
-  HDC screen = GetDC(0);
-  if ((!(flags & INDEXED_COLOR) && GetDeviceCaps(screen, BITSPIXEL) <= 8) ||
-     ((flags & RGB24_COLOR) && GetDeviceCaps(screen, BITSPIXEL)<24)) ret = false;
-  ReleaseDC(0, screen);
-  return ret;
-}
-
-#elif (defined(__APPLE__) && !USE_X11)
-
-bool fltk::visual(int flags) {
-  // INDEXED_COLOR probably should return false, but who really cares...
-  return true;
-}
-
-#else
+#if USE_X11
 
 #if USE_XDBE
 #define Window XWindow
@@ -143,8 +125,28 @@ bool fltk::visual(int flags) {
   return true;
 }
 
+#elif defined(_WIN32)
+
+bool fltk::visual(int flags) {
+  if (flags & DOUBLE_BUFFER) return false;
+  bool ret = true;
+  HDC screen = GetDC(0);
+  if ((!(flags & INDEXED_COLOR) && GetDeviceCaps(screen, BITSPIXEL) <= 8) ||
+     ((flags & RGB24_COLOR) && GetDeviceCaps(screen, BITSPIXEL)<24)) ret = false;
+  ReleaseDC(0, screen);
+  return ret;
+}
+
+#else
+// all other systems we assumme are rgb-always:
+
+bool fltk::visual(int flags) {
+  // INDEXED_COLOR probably should return false, but who really cares...
+  return true;
+}
+
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.19 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.20 2004/07/25 23:22:14 spitzak Exp $".
 //

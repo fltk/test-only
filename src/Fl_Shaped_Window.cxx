@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.14 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.15 2004/07/25 23:22:13 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,14 +27,14 @@
 #include <fltk/ShapedWindow.h>
 #include <fltk/x.h>
 
-#ifdef _WIN32
+#if USE_X11
+# define Window XWindow
+# include <X11/extensions/shape.h>
+# undef Window
+#elif defined(_WIN32)
 static HRGN bitmap2region(fltk::xbmImage*);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
 // Not yet implemented for Apple
-#else
-#define Window XWindow
-#include <X11/extensions/shape.h>
-#undef Window
 #endif
 
 using namespace fltk;
@@ -48,12 +48,7 @@ void ShapedWindow::draw() {
     // size of window has change since last time
     lw = w(); lh = h();
     xbmImage* mask = resize_bitmap(shape_, w(), h());
-#ifdef _WIN32
-    HRGN region = bitmap2region(mask);
-    SetWindowRgn(xid(this), region, TRUE);
-#elif (defined(__APPLE__) && !USE_X11)
-    // not yet implemented for Apple
-#else
+#if USE_X11
     Pixmap pmask = XCreateBitmapFromData(xdisplay, xid(this),
                   (const char*)mask->array, mask->width(), mask->height());
     hide();
@@ -61,6 +56,12 @@ void ShapedWindow::draw() {
                       pmask, ShapeSet);
     show();
     if (pmask != None) XFreePixmap(xdisplay, pmask);
+#elif defined(_WIN32)
+    HRGN region = bitmap2region(mask);
+    SetWindowRgn(xid(this), region, TRUE);
+#elif defined(__APPLE__)
+    // not yet implemented for Apple
+#else
 #endif
     changed = 0;
   }
@@ -175,5 +176,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.14 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.15 2004/07/25 23:22:13 spitzak Exp $"
 //

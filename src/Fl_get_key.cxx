@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -22,11 +22,15 @@
 //
 
 #include <config.h>
-#ifdef _WIN32
-# include "Fl_get_key_win32.cxx"
-#elif (defined(__APPLE__) && !USE_X11)
-# include "Fl_get_key_mac.cxx"
-#else
+#if !USE_X11
+# ifdef _WIN32
+#  include "Fl_get_key_win32.cxx"
+# elif defined(__APPLE__)
+#  include "Fl_get_key_mac.cxx"
+# else
+#  error
+# endif
+#else // X11 version:
 
 // Return the current state of a key.  This is the X version.  I identify
 // keys (mostly) by the X keysym.  So this turns the keysym into a keycode
@@ -98,5 +102,5 @@ bool fltk::get_key_state(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $".
 //

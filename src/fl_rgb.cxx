@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rgb.cxx,v 1.9 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_rgb.cxx,v 1.10 2004/07/25 23:22:15 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -41,7 +41,12 @@ fltk::Color fltk::color(const char* name) {
   if (sscanf(name, "%d,%d,%d", &R,&G,&B) == 3) {
     c = color(R,G,B);
   } else {
-#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
+#if USE_X11
+    XColor x;
+    open_display();
+    if (!XParseColor(xdisplay, xcolormap, name, &x)) return NO_COLOR;
+    c = color(x.red>>8, x.green>>8, x.blue>>8);
+#else
     // simulation of XParseColor:
     if (*name == '#') name++;
     if (name[0]=='0' && name[1]=='x') name += 2;
@@ -62,11 +67,6 @@ fltk::Color fltk::color(const char* name) {
       case 4: R >>= 8; G >>= 8; B >>= 8; break;
     }
     c = color(R,G,B);
-#else
-    XColor x;
-    open_display();
-    if (!XParseColor(xdisplay, xcolormap, name, &x)) return NO_COLOR;
-    c = color(x.red>>8, x.green>>8, x.blue>>8);
 #endif
   }
   if (!c) c = BLACK;
@@ -74,5 +74,5 @@ fltk::Color fltk::color(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.9 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.10 2004/07/25 23:22:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.21 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.22 2004/07/25 23:22:14 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -47,7 +47,24 @@ using namespace fltk;
 void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   if (w <= 0 || h <= 0) return;
   transform(x,y);
-#ifdef _WIN32
+#if USE_X11
+  int A = int(a1*64);
+  int B = int(a2*64)-A;
+  switch(what) {
+  case FILLPIE:
+    XSetArcMode(xdisplay, gc, ArcPieSlice);
+    goto J1;
+  case FILLARC:
+    XSetArcMode(xdisplay, gc, ArcChord);
+  J1:
+    XFillArc(xdisplay, xwindow, gc, x-1, y-1, w+1, h+1, A, B);
+    break;
+  case STROKEPIE: // not correct, should draw lines to center
+  case STROKEARC:
+    XDrawArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
+    break;
+  }
+#elif defined(_WIN32)
   if (a1 == a2) return;
   if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
   if (a2 >= a1+360) a1 = a2 = 0;
@@ -73,7 +90,7 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
     Arc(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   }
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
   Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
   a1 = a2-a1; a2 = 450-a2;
   switch (what) {
@@ -87,22 +104,7 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
     break;
   }
 #else
-  int A = int(a1*64);
-  int B = int(a2*64)-A;
-  switch(what) {
-  case FILLPIE:
-    XSetArcMode(xdisplay, gc, ArcPieSlice);
-    goto J1;
-  case FILLARC:
-    XSetArcMode(xdisplay, gc, ArcChord);
-  J1:
-    XFillArc(xdisplay, xwindow, gc, x-1, y-1, w+1, h+1, A, B);
-    break;
-  case STROKEPIE: // not correct, should draw lines to center
-  case STROKEARC:
-    XDrawArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
-    break;
-  }
+# error
 #endif
 }
 
@@ -123,5 +125,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 */
 
 //
-// End of "$Id: fl_arci.cxx,v 1.21 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.22 2004/07/25 23:22:14 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.23 2004/07/24 12:18:59 laza2000 Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.24 2004/07/25 23:22:14 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -30,32 +30,13 @@
 #include <fltk/x.h>
 using namespace fltk;
 
-#ifdef _WIN32_WCE
-// Windows CE taskbar
-# define TASKBAR_CLASS TEXT("HHTaskBar")
-#elif _WIN32
-// Desktop windows taskbar
-# define TASKBAR_CLASS TEXT("Shell_TrayWnd")
-#endif
-
+#if USE_X11
 #if 0
-#ifdef _WIN32
-#elif (defined(__APPLE__) && !USE_X11)
-#else
-// Neither the X or Win32 version will successfully hide the taskbar.
-// I would like it, but maybe that should be a third state of the window.
-// On both systems it looks like it is much harder to do it.
-
 // Supposedly this tells the new X window managers to put this atop 
 // the taskbar. In our experiments there is no indication that this
-// produces any different behavior.
-
-// Right now KDE is broken and always puts the taskbar atop the window.
-// Gnome appears to recognize the attempt to make the window fullscreen
-// and puts the taskbar below it (this is good behavior).
-
-// Last word on Windows is that you must use DirectX (!) to do this.
-// Gah!
+// produces any different behavior so I don't bother. New X window
+// managers seem to recognize attempts to resize to fullscreen size
+// and do the right thing.
 static void fsonoff(XWindow xwindow, bool onoff) {
   static Atom _NET_WM_STATE;
   static Atom _NET_WM_STATE_REMOVE;
@@ -90,6 +71,20 @@ static void fsonoff(XWindow xwindow, bool onoff) {
 	     SubstructureNotifyMask|SubstructureRedirectMask, &e);
 }
 #endif
+
+#elif defined(_WIN32)
+
+# define HIDE_TASKBAR 1
+
+# if HIDE_TASKBAR
+#  ifdef _WIN32_WCE
+// Windows CE taskbar
+#   define TASKBAR_CLASS TEXT("HHTaskBar")
+#  elif _WIN32
+// Desktop windows taskbar
+#   define TASKBAR_CLASS TEXT("Shell_TrayWnd")
+#  endif
+# endif
 #endif
 
 /*! Makes the window completely fill the Monitor, without any window
@@ -113,29 +108,8 @@ static void fsonoff(XWindow xwindow, bool onoff) {
 */
 void Window::fullscreen() {
   const Monitor& monitor = Monitor::find(x()+w()/2, y()+h()/2);
-#ifdef _WIN32
-  // Disable caption & borders
-  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
-  flags &= ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME);
-  SetWindowLong(xid(this), GWL_STYLE, flags);
 
-# if 1
-  // Find taskbar and hide it
-  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
-  if (taskbar) ShowWindow(taskbar, SW_HIDE);
-# else
-  // Make window topmost, so it goes top of taskbar
-  // This will still keep modal and child_of windows top of this.
-  SetWindowPos(xid(this), HWND_TOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
-# endif
-  clear_border(); // Necessary to make CreatedWindow::borders return dx,dy,dw,dh 0
-  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
-
-  // Still missing: we need to tell Windows that this window can go atop
-  // the taskbar.
-#elif (defined(__APPLE__) && !USE_X11)
-  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
-#else
+#if USE_X11
   // Most X window managers will not place the window where we want it unless
   // the border is turned off. And most (all except Irix 4DWM, as far as I
   // can tell) will ignore attempts to change the border unless the window
@@ -147,19 +121,45 @@ void Window::fullscreen() {
   if (shown()) i->sendxjunk();
   resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
   //if (shown()) fsonoff(i->xid, true);
+
+#elif defined(_WIN32)
+  // Disable caption & borders
+  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
+  flags &= ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME);
+  SetWindowLong(xid(this), GWL_STYLE, flags);
+# if HIDE_TASKBAR
+  // Find taskbar and hide it
+  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
+  if (taskbar) ShowWindow(taskbar, SW_HIDE);
+# else
+  // Make window topmost, so it goes top of taskbar
+  // This will still keep modal and child_of windows top of this.
+  SetWindowPos(xid(this), HWND_TOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
+# endif
+  clear_border(); // Necessary to make CreatedWindow::borders return dx,dy,dw,dh 0
+  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
+
+#else
+  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
 #endif
 }
 
 /*! Turns off any side effects of fullscreen() and does resize(x,y,w,h). */
 void Window::fullscreen_off(int X,int Y,int W,int H) {
   // This function must exactly undo whatever fullscreen() did
-#ifdef _WIN32
+
+#if USE_X11
+  clear_flag(Window::NOBORDER);
+  //if (shown()) fsonoff(i->xid, false);
+  if (shown()) i->sendxjunk();
+  resize(X, Y, W, H);
+
+#elif defined(_WIN32)
   // Restore window flags
   LONG flags = GetWindowLong(xid(this), GWL_STYLE);
   flags |= (WS_BORDER | WS_CAPTION | WS_THICKFRAME);
   SetWindowLong(xid(this), GWL_STYLE, flags);
-
-# if 1
+# if HIDE_TASKBAR
   // Find taskbar and show it again
   HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
   if (taskbar) ShowWindow(taskbar, SW_RESTORE);
@@ -167,15 +167,10 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   // We are not topmost anymore
   SetWindowPos(xid(this), HWND_NOTOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
 # endif
-
   clear_flag(Window::NOBORDER); //Borders are back
   resize(X, Y, W, H);
-#elif (defined(__APPLE__) && !USE_X11)
-  resize(X, Y, W, H);
+
 #else
-  clear_flag(Window::NOBORDER);
-  //if (shown()) fsonoff(i->xid, false);
-  if (shown()) i->sendxjunk();
   resize(X, Y, W, H);
 #endif
 }
@@ -210,5 +205,5 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   Returns true if set_override() has been called. */
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.23 2004/07/24 12:18:59 laza2000 Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.24 2004/07/25 23:22:14 spitzak Exp $".
 //
