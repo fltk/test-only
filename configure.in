@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.35 1999/03/31 14:52:22 mike Exp $"
+dnl# "$Id: configure.in,v 1.36 1999/04/06 20:02:47 carl Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -54,6 +54,25 @@ PICFLAG=0
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
 
+case `(uname) 2>/dev/null` in
+    IRIX*)
+	CFLAGS="$CFLAGS -DSGI"
+	CXXFLAGS="$CXXFLAGS -DSGI"
+	LDLIBS="-lX11 -lXext"
+	;;
+    CYGWIN*)
+	CFLAGS="$CFLAGS -DWIN32 -mno-cygwin"
+	CXXFLAGS="$CXXFLAGS -DWIN32 -mno-cygwin"
+	uname="CYGWIN"
+	LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -mno-cygwin -mwindows"
+	;;
+    *)
+	LDLIBS="-lX11 -lXext"
+	;;
+esac
+
+AC_SUBST(LDLIBS)
+
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]],[if eval "test x$enable_debug = xyes"; then
   DEBUGFLAG="-g "
 fi])
@@ -76,6 +95,10 @@ if eval "test x$enable_shared = xyes"; then
       IRIX*)
           DSONAME="libfltk.so.1"
           DSOCOMMAND="\$(CXX) -soname libfltk.so.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+	  ;;
+      CYGWIN*)
+          DSONAME="fltk.dll"
+          DSOCOMMAND="echo How do you make DLLs with CygWin..."
 	  ;;
       *)
           echo "Warning: shared libraries may not be supported.  Trying -shared"
@@ -140,10 +163,17 @@ CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
 dnl# My test to see if OpenGL is on this machine:
 GLLIB=
-AC_CHECK_LIB(GL, glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lGLU -lGL", \
-    AC_CHECK_LIB(MesaGL,glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGLU -lMesaGL",,\
-	-lX11 -lXext $X_EXTRA_LIBS -lm), \
-    -lX11 -lXext $X_EXTRA_LIBS -lm)
+if test "$uname" = "CYGWIN"
+then
+    GLLIB="-lopengl32 -lglu32"
+    AC_DEFINE(HAVE_GL)
+else
+    AC_CHECK_LIB(GL, glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lGLU -lGL", \
+	AC_CHECK_LIB(MesaGL,glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGLU -lMesaGL",,\
+	    -lX11 -lXext $X_EXTRA_LIBS -lm), \
+	-lX11 -lXext $X_EXTRA_LIBS -lm)
+fi
+
 AC_SUBST(GLLIB)
 
 AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
@@ -154,12 +184,14 @@ AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
         AC_DEFINE(HAVE_XDBE)
     fi)
 
-AC_CACHE_CHECK("for X overlay visuals", ac_cv_have_overlay,
-    if xprop -root 2>/dev/null | grep -c "SERVER_OVERLAY_VISUALS" >/dev/null; then
-        ac_cv_have_overlay=yes
-    else
-        ac_cv_have_overlay=no
-    fi)
+ac_cv_have_overlay=no
+if test "$uname" != "CYGWIN"; then
+    AC_CACHE_CHECK("for X overlay visuals", ac_cv_have_overlay,
+	if xprop -root 2>/dev/null | grep -c "SERVER_OVERLAY_VISUALS" >/dev/null; then
+	    ac_cv_have_overlay=yes
+	fi)
+fi
+
 if test "$ac_cv_have_overlay" = yes; then
     AC_DEFINE(HAVE_OVERLAY)
 fi
@@ -234,5 +266,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.35 1999/03/31 14:52:22 mike Exp $".
+dnl# End of "$Id: configure.in,v 1.36 1999/04/06 20:02:47 carl Exp $".
 dnl#

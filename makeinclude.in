@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.8 1999/03/31 14:52:22 mike Exp $"
+# "$Id: makeinclude.in,v 1.9 1999/04/06 20:02:47 carl Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -49,9 +49,9 @@ DSONAME		=@DSONAME@
 DSOCOMMAND	=@DSOCOMMAND@
 
 # libraries to link with:
-LDLIBS		=@LDFLAGS@ @LIBS@ -lX11 -lXext @X_EXTRA_LIBS@ -lm
-GLDLIBS		=@LDFLAGS@ @LIBS@ @GLLIB@ -lX11 -lXext @X_EXTRA_LIBS@ -lm
+LDLIBS		=@LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm
+GLDLIBS		=@LDFLAGS@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm
 
 #
-# End of "$Id: makeinclude.in,v 1.8 1999/03/31 14:52:22 mike Exp $".
+# End of "$Id: makeinclude.in,v 1.9 1999/04/06 20:02:47 carl Exp $".
 #
