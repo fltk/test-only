@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.9 2000/06/27 02:55:29 easysw Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.10 2000/07/18 22:18:53 clip Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -519,7 +519,7 @@ Fl_FileChooser::fileNameCB()
       pathname[sizeof(pathname) - 1] = '\0';
 
       if (filename[strlen(filename) - 1] == '/')
-        strncat(pathname, "/", sizeof(pathname) - 1);
+        strncat(pathname, "/", sizeof(pathname) - strlen(pathname) - 1);
     }
     else
       snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
@@ -670,5 +670,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.9 2000/06/27 02:55:29 easysw Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.10 2000/07/18 22:18:53 clip Exp $".
 //
