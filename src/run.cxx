@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-// things that should be in different source files:
+/* things that should be in different source files: */
 #include <fltk/FL_VERSION.h>
 #include <fltk/Monitor.h>
 

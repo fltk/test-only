@@ -29,7 +29,7 @@
 #include <ctype.h>
 using namespace fltk;
 
-// These are for getting the default leading:
+/* These are for getting the default leading: */
 #include <fltk/Widget.h>
 #include <fltk/Style.h>
 

@@ -1,7 +1,7 @@
 //
-// "$Id: scroll.cxx,v 1.22 2004/12/30 11:39:21 spitzak Exp $"
+// "$Id$"
 //
-// Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
+// ScrollGroup test program for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -67,12 +67,13 @@ Fl_Scroll* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
   thescroll->box(((Fl_Button*)o)->value() ? FL_DOWN_FRAME : FL_NO_BOX);
+  thescroll->relayout(); // added for fltk2
   thescroll->redraw();
 }
 
 void type_cb(Fl_Widget*, void* v) {
   thescroll->type(int(v));
-  thescroll->redraw();
+  thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 
 Fl_Menu_Item choices[] = {
@@ -87,8 +88,9 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  thescroll->scrollbar.align(int(v));
-  thescroll->redraw();
+  thescroll->scrollbar_align(int(v));
+  //thescroll->scrollbar.align(int(v)); // fltk1 version
+  thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 
 Fl_Menu_Item align_choices[] = {
@@ -101,6 +103,7 @@ Fl_Menu_Item align_choices[] = {
 
 int main(int argc, char** argv) {
   Fl_Window window(5*75,400);
+  window.clear_double_buffer();
   window.box(FL_NO_BOX);
   Fl_Scroll scroll(0,0,5*75,300);
 
@@ -125,7 +128,7 @@ int main(int argc, char** argv) {
   choice.menu(choices);
   choice.value(3);
 
-  Fl_Choice achoice(150, 360, 200, 25, "scrollbar.align():");
+  Fl_Choice achoice(150, 360, 200, 25, "scrollbar_align():");
   achoice.menu(align_choices);
   achoice.value(3);
 
@@ -139,5 +142,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.22 2004/12/30 11:39:21 spitzak Exp $".
+// End of "$Id$".
 //

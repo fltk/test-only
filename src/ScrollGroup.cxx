@@ -1,9 +1,6 @@
-//
 // "$Id$"
 //
-// Scroll widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/ScrollGroup.h>
 #include <fltk/events.h>
@@ -31,6 +27,57 @@
 #include <fltk/draw.h>
 #include <config.h>
 using namespace fltk;
+
+/*! \class fltk::ScrollGroup
+
+This container widget lets you maneuver around a set of widgets much 
+larger than your window.  If the child widgets are larger than the size 
+of this object then scrollbars will appear so that you can scroll over 
+to them:
+
+\image html Fl_Scroll.gif
+
+The default type() will just scroll a whole arrangement of widgets and
+never resize them.  This is useful if you just want to get a big
+control panel into a smaller window. The bounding box of the widgets
+are the area it can scroll, this will remove any borders, if you want
+the borders preserved put some invisible widgets there as
+placeholders.
+
+This can be used to pan around a large drawing by making a single
+child widget "canvas".  This child widget should be of your own class,
+with a draw() method that draws everything. The scrolling is done by
+changing the x() and y() of the widget and drawing it with the fltk
+clip region set to the newly exposed rectangles. You can speed things
+up by using fltk::not_clipped() or fltk::intersect_with_clip() to
+detect and skip the clipped portions of the drawing.
+
+By default you can scroll in both directions, and the scrollbars 
+disappear if the data will fit in the area of the scroll. type()
+can change this: 
+- HORIZONTAL resize vertically but scroll horizontally
+- VERTICAL resize horizontally but scroll vertically
+- BOTH this is the default
+- HORIZONTAL_ALWAYS resize vertically but always show horizontal scrollbar
+- VERTICAL_ALWAYS resize horizontally but always show vertical scrollbar
+- BOTH_ALWAYS always show both scrollbars
+
+If you use HORIZONTAL or VERTICAL you must initally position and size
+your child widgets as though the scrollbar is off (ie fill the box()
+width entirely if type() is VERTICAL). The first time layout() is
+called it will resize the widgets to fit inside the scrollbars.
+
+It is very useful to put a single PackedGroup child into a VERTICAL ScrollGroup.
+
+Also note that scrollbar_align() (a Style parameter) can put the
+scrollbars on different sides of the widget.
+
+Currently you cannot use Window or any subclass (including GlWindow)
+as a child of this.  The clipping is not conveyed to the operating
+system's window and it will draw over the scrollbars and neighboring
+objects.
+
+*/
 
 #if USE_CLIPOUT
 extern Widget* fl_did_clipping;
@@ -75,6 +122,10 @@ void ScrollGroup::draw_clip(void* v, const Rectangle& r) {
   pop_clip();
 }
 
+/*! Set the rectangle to the scrolling area (in the ScrollGroup's
+  coordinate system). This removes the border of the box() and the
+  space needed for any visible scrollbars.
+*/
 void ScrollGroup::bbox(Rectangle& r) {
   r.set(0,0,w(),h()); box()->inset(r);
   if (scrollbar.visible()) {
@@ -97,8 +148,9 @@ void ScrollGroup::draw() {
   } else {
     if (scrolldx || scrolldy) {
       scrollrect(r, scrolldx, scrolldy, draw_clip, this);
-    }
-    if (d & DAMAGE_CHILD) { // draw damaged children
+    } else if (d & DAMAGE_SCROLL) {
+      draw_clip(this,r);
+    } else if (d & DAMAGE_CHILD) { // draw damaged children
       push_clip(r);
       for (int i = children(); i--;) {
 	Widget& w = *child(i);
@@ -129,90 +181,142 @@ void ScrollGroup::draw() {
 
 void ScrollGroup::layout() {
 
-  // move all the children and accumulate their bounding boxes:
-  int dx = layoutdx;
-  int dy = layoutdy;
-  layoutdx = layoutdy = 0;
-  scrolldx += dx;
-  scrolldy += dy;
-  int l = w();
-  int r = 0;
-  int t = h();
-  int b = 0;
-  int numchildren = children();
-  for (int i=0; i < numchildren; i++) {
-    Widget* o = child(i);
-    o->position(o->x()+dx, o->y()+dy);
-    o->layout();
-    if (o->x() < l) l = o->x();
-    if (o->y() < t) t = o->y();
-    if (o->x()+o->w() > r) r = o->x()+o->w();
-    if (o->y()+o->h() > b) b = o->y()+o->h();
+  int layout_damage = this->layout_damage();
+
+  // handle movement in xy without wasting time:
+  if (!(layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE))) {
+    Group::layout();
+    return;
   }
 
-  const int sw = scrollbar_width();
+  Rectangle rectangle; bbox(rectangle);
 
-  // See if children would fit if we had no scrollbars...
-  Rectangle R(w(),h()); box()->inset(R);
-  int vneeded = 0;
-  int hneeded = 0;
-  if (type() & VERTICAL) {
-    if ((type() & ALWAYS_ON) || t < R.y() || b > R.b()) {
-      vneeded = 1;
-      if (scrollbar_align() & ALIGN_LEFT) R.move_x(sw);
-      else R.move_r(-sw);
+  // This loop repeats if any scrollbars turn on or off:
+  for (int repeat=0; repeat<2; repeat++) {
+
+    layout_damage &= ~LAYOUT_WH;
+    if (!(type()&HORIZONTAL)) layout_damage |= LAYOUT_W;
+    if (!(type()&VERTICAL)) layout_damage |= LAYOUT_H;
+    Group::layout(rectangle, layout_damage);
+
+    // move all the children and accumulate their bounding boxes:
+    int dx = layoutdx;
+    int dy = layoutdy;
+    layoutdx = layoutdy = 0;
+    scrolldx += dx;
+    scrolldy += dy;
+    int l = w();
+    int r = 0;
+    int t = h();
+    int b = 0;
+    int numchildren = children();
+    for (int i=0; i < numchildren; i++) {
+      Widget* o = child(i);
+      o->position(o->x()+dx, o->y()+dy);
+      o->layout();
+      if (o->x() < l) l = o->x();
+      if (o->y() < t) t = o->y();
+      if (o->x()+o->w() > r) r = o->x()+o->w();
+      if (o->y()+o->h() > b) b = o->y()+o->h();
     }
-  }
 
-  if (type() & HORIZONTAL) {
-    if ((type() & ALWAYS_ON) || l < R.x() || r > R.r()) {
-      hneeded = 1;
-      if (scrollbar_align() & ALIGN_TOP) R.move_y(sw);
-      else R.move_b(-sw);
-      // recheck vertical since we added a horizontal scrollbar
-      if (!vneeded && (type() & VERTICAL)) {
-	if (t < R.y() || b > R.b()) {
-	  vneeded = 1;
-	  if (scrollbar_align() & ALIGN_LEFT) R.move_x(sw);
-	  else R.move_r(-sw);
-	}
+    // If there is empty space on the bottom (VERTICAL mode) or right
+    // (HORIZONTAL mode), and widgets off to the top or left, move
+    // widgets to use up the available space.
+    int newDx = 0;
+    int newDy = 0;
+    if ( type() & VERTICAL ) {
+      if ( b < rectangle.b() ) {
+	int space = rectangle.b()-b;
+	int hidden = rectangle.y()-t;
+	newDy = (space>hidden) ? hidden : space;
+	newDy = (newDy>0) ? newDy : 0;
       }
     }
-  }
-  // Now that we know what's needed, make it so.
-  if (vneeded) {
-    if (!scrollbar.visible()) {
-      scrollbar.set_visible();
-      redraw(DAMAGE_ALL);
+    if ( type() & HORIZONTAL ) {
+      if ( r < rectangle.r() ) {
+	int space = rectangle.r()-r;
+	int hidden = rectangle.x()-l; // ell
+	newDx = (space>hidden) ? hidden : space;
+	newDx = (newDx>0) ? newDx : 0;
+      }
     }
-  } else {
-    if (scrollbar.visible()) {
-      scrollbar.clear_visible();
-      redraw(DAMAGE_ALL);
+
+    // Move the child widgets again if they are to be kept inside.
+    if ( newDx || newDy ) {
+      for (int i=0; i < numchildren; i++) {
+	Widget* o = child(i);
+	o->position(o->x()+newDx, o->y()+newDy);
+	o->layout();
+      }
     }
-  }
-  if (hneeded) {
-    if (!hscrollbar.visible()) {
-      hscrollbar.set_visible();
-      redraw(DAMAGE_ALL);
+
+    // Turn on/off the scrollbars if it fits:
+    if ((type() & VERTICAL) &&
+	((type() & ALWAYS_ON) || t < rectangle.y() || b > rectangle.b())) {
+      // turn on the vertical scrollbar
+      if (!scrollbar.visible()) {
+	scrollbar.set_visible();
+	scrollbar.redraw();
+      }
+    } else {
+      // turn off the vertical scrollbar
+      if (scrollbar.visible()) {
+	scrollbar.clear_visible();
+      }
     }
-  } else {
-    if (hscrollbar.visible()) {
-      hscrollbar.clear_visible();
-      redraw(DAMAGE_ALL);
+
+    if ((type() & HORIZONTAL) &&
+	((type() & ALWAYS_ON) || l < rectangle.x() || r > rectangle.r())) {
+      // turn on the horizontal scrollbar
+      if (!hscrollbar.visible()) {
+	hscrollbar.set_visible();
+	hscrollbar.redraw();
+      }
+    } else {
+      // turn off the horizontal scrollbar
+      if (hscrollbar.visible()) {
+	hscrollbar.clear_visible();
+      }
     }
+
+    // fix the width of the scrollbars to current preferences:
+    const int sw = scrollbar_width();
+    scrollbar.w(sw);
+    hscrollbar.h(sw);
+    // Figure out the new contents rectangle and put scrollbars outside it:
+    Rectangle R; bbox(R);
+
+    scrollbar.resize(scrollbar_align()&ALIGN_LEFT ? R.x()-sw : R.r(), R.y(), sw, R.h());
+
+    scrollbar.value(yposition_ = (R.y()-t), R.h(), 0, b-t);
+    hscrollbar.resize(R.x(), scrollbar_align()&ALIGN_TOP ? R.y()-sw : R.b(), R.w(), sw);
+    hscrollbar.value(xposition_ = (R.x()-l), R.w(), 0, r-l);
+
+    // We are done if the new rectangle is the same as last time:
+    if (R.x() == rectangle.x() &&
+	R.y() == rectangle.y() &&
+	R.w() == rectangle.w() &&
+	R.h() == rectangle.h()) break;
+    // otherwise layout again in this new rectangle:
+    rectangle = R;
   }
 
-  scrollbar.resize(scrollbar_align()&ALIGN_LEFT ? R.x()-sw : R.r(), R.y(), sw, R.h());
-  scrollbar.value(yposition_ = (R.y()-t), R.h(), 0, b-t);
-  hscrollbar.resize(R.x(), scrollbar_align()&ALIGN_TOP ? R.y()-sw : R.b(), R.w(), sw);
-  hscrollbar.value(xposition_ = (R.x()-l), R.w(), 0, r-l);
-
-  Widget::layout();
-  redraw(DAMAGE_SCROLL);
 }
 
-void ScrollGroup::position(int X, int Y) {
+/*! \fn int ScrollGroup::xposition() const
+  Return the horizontal scrolling position. This is the distance from the
+  left-most widget to the left of the bbox().
+*/
+
+/*! \fn int ScrollGroup::yposition() const
+  Return the vertical scrolling position. This is the distance from the
+  top-most widget edge to the top of the bbox().
+*/
+
+/*! Set xposition() and yposition() to these new values, thus scrolling
+  the display. */
+void ScrollGroup::scrollTo(int X, int Y) {
   int dx = xposition_-X;
   int dy = yposition_-Y;
   if (!dx && !dy) return;
@@ -225,12 +329,12 @@ void ScrollGroup::position(int X, int Y) {
 
 void ScrollGroup::hscrollbar_cb(Widget* o, void*) {
   ScrollGroup* s = (ScrollGroup*)(o->parent());
-  s->position(int(((Scrollbar*)o)->value()), s->yposition());
+  s->scrollTo(int(((Scrollbar*)o)->value()), s->yposition());
 }
 
 void ScrollGroup::scrollbar_cb(Widget* o, void*) {
   ScrollGroup* s = (ScrollGroup*)(o->parent());
-  s->position(s->xposition(), int(((Scrollbar*)o)->value()));
+  s->scrollTo(s->xposition(), int(((Scrollbar*)o)->value()));
 }
 
 #define SLIDER_WIDTH 16
@@ -239,8 +343,10 @@ static inline int nogroup(int X) {Group::current(0); return X;}
 
 ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
   : Group(X,Y,W,H,L),
+    // This initial size & position of scrollbars is probably not used:
     scrollbar(nogroup(X)+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
-    hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH) {
+    hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH)
+{
   type(BOTH);
   xposition_ = 0;
   yposition_ = 0;
@@ -257,6 +363,7 @@ int ScrollGroup::handle(int event) {
   switch (event) {
 
   case FOCUS_CHANGE: {
+    //    return Group::handle(event);
     // The event indicates that the focus changed to a different child,
     // auto-scroll to show it:
     Widget* w = fltk::focus();
@@ -276,7 +383,7 @@ int ScrollGroup::handle(int event) {
     int dy = 0;
     if (y < R.y()) {dy = R.y()-y; if (b+dy > R.b()) {dy = R.b()-b; if (dy < 0) dy = 0;}}
     else if (b > R.b()) {dy = R.b()-b; if (y+dy < R.y()) {dy = R.y()-y; if (dy > 0) dy = 0;}}
-    position(xposition_-dx, yposition_-dy);
+    scrollTo(xposition_-dx, yposition_-dy);
     break;}
 
   case PUSH:

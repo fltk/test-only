@@ -1,5 +1,5 @@
 //
-// "$Id: ScrollGroup.h,v 1.3 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Group that adds scrollbars so you can scroll around the area
 // covered by all the child widgets. For most uses you will make
@@ -46,7 +46,6 @@ class FL_API ScrollGroup : public Group {
 
 protected:
 
-  void layout();
   void draw();
 
 public:
@@ -55,7 +54,8 @@ public:
   Scrollbar scrollbar;
   Scrollbar hscrollbar;
 
-  int handle(int);
+  virtual int handle(int);
+  virtual void layout();
 
   ScrollGroup(int X,int Y,int W,int H,const char*l=0);
 
@@ -66,12 +66,12 @@ public:
     ALWAYS_ON = 4,
     HORIZONTAL_ALWAYS = 5,
     VERTICAL_ALWAYS = 6,
-    BOTH_ALWAYS = 7
+    BOTH_ALWAYS = 7,
   };
 
   int xposition() const {return xposition_;}
   int yposition() const {return yposition_;}
-  void position(int, int);
+  void scrollTo(int, int);
 };
 
 }
@@ -79,5 +79,5 @@ public:
 #endif
 
 //
-// End of "$Id: ScrollGroup.h,v 1.3 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

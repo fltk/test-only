@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h,v 1.8 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
@@ -91,6 +91,7 @@ protected:
   void update_child(Widget&) const;
   void draw_outside_label(Widget&) const ;
   int* sizes();
+  void layout(const Rectangle&, int layout_damage);
 
 private:
 
@@ -110,5 +111,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h,v 1.8 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

@@ -25,7 +25,7 @@
 
 // This program produces the contents of "colormap.h" as stdout
 
-// #include <gl/gl.h>
+/* #include <gl/gl.h> */
 #include <stdio.h>
 
 // This table is initialized with color values I got by reading the

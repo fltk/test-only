@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.12 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id$"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
@@ -102,7 +102,7 @@ void Fl_Menu_Item::add_to(Menu* menu, void* data) const {
   ::add(menu, this, data);
 }
     
-// Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays:
+/* Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays: */
 #include <fltk/PopupMenu.h>
 #include <fltk/events.h>
 

@@ -63,6 +63,8 @@ and the items in them are widgets.
 #include <fltk/damage.h>
 #include <stdlib.h>
 
+#include <fltk/ScrollGroup.h>
+
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
@@ -511,19 +513,40 @@ int* Group::sizes() {
 }
 
 void Group::layout() {
-
-  // Save the layout damage and then clear it. This is so layout() of a
-  // child can turn it back on and subclasses like PackedGroup can detect that:
   int layout_damage = this->layout_damage();
+  if (resizable() && layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE))
+    layout_damage |= LAYOUT_WH;
+  else
+    layout_damage &= ~LAYOUT_WH;
+  layout(Rectangle(w(),h()),layout_damage);
+}
+
+/*!
+  Inner implementation of layout(). The child widgets are resized
+  and positioned so that the area that was initially surrounded by this
+  widget now fits inside the rectangle.
+
+  \a r is a rectangle, in the coordinate system of this Group (ie 0,0
+  is the top-left corner of the Group).
+
+  \a layout_damage controls what is done. If LAYOUT_W or LAYOUT_H are
+  off then no resizing or moving of widgets in that direction is done.
+
+  This is used by ScrollGroup to resize the widgets to fit inside the
+  scrollbars.
+*/
+void Group::layout(const Rectangle& r, int layout_damage) {
+
+  // Clear the layout damage, so layout() of a child can turn it back
+  // on and subclasses like PackedGroup can detect that:
   Widget::layout();
 
-  if (resizable() && children_ && layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE)) {
+  if (children_ && layout_damage&LAYOUT_WH) {
     int* p = sizes(); // initialize the size array
 
     // get changes in size from the initial size:
-    int dw = w()-p[1];
-    int dh = h()-p[3];
-
+    int dw = r.w()-p[1];
+    int dh = r.h()-p[3];
     p+=4;
 
     // Calculate a new size & position for every child widget:
@@ -537,51 +560,58 @@ void Group::layout() {
     Widget*const* e = a+children_;
     while (a < e) {
       Widget* o = *a++;
-      int X = *p++;
-      if (X >= IR) X += dw;
-      else if (X > IX) {
-	switch (resize_align_&12) {
-	case 0: X = X + dw/2; break; // ALIGN_CENTER
-	case 4: break; // ALIGN_LEFT
-	case 8: X = X+dw; break; // ALIGN_RIGHT
-	case 12: X = X + dw * (X-IX)/(IR-IX); break; // both
-	}
-      }
-      int R = *p++;
-      if (R >= IR) R += dw;
-      else if (R > IX) {
-	switch (resize_align_&12) {
-	case 0: R = R + dw/2; break; // ALIGN_CENTER
-	case 4: break; // ALIGN_LEFT
-	case 8: R = R+dw; break; // ALIGN_RIGHT
-	case 12: R = R + dw * (R-IX)/(IR-IX); // both
-	}
-      }
-      int Y = *p++;
-      if (Y >= IB) Y += dh;
-      else if (Y > IY) {
-	switch (resize_align_&3) {
-	case 0: Y = Y + dh/2; break; // ALIGN_CENTER
-	case 1: break; // ALIGN_TOP
-	case 2: Y = Y+dh; break; // ALIGN_BOTTOM
-	case 3: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
-	}
-      }
-      int B = *p++;
-      if (B >= IB) B += dh;
-      else if (B > IY) {
-	switch (resize_align_&3) {
-	case 0: B = B + dh/2; break; // ALIGN_CENTER
-	case 1: break; // ALIGN_TOP
-	case 2: B = B+dh; break; // ALIGN_BOTTOM
-	case 3: B = B + dh*(B-IY)/(IB-IY); break; //both;
-	}
-      }
       int flags = o->layout_damage();
-      if (X != o->x()) {flags |= LAYOUT_X; o->x(X);}
-      if (Y != o->y()) {flags |= LAYOUT_Y; o->y(Y);}
-      if (R-X != o->w()) {flags |= LAYOUT_W; o->w(R-X);}
-      if (B-Y != o->h()) {flags |= LAYOUT_H; o->h(B-Y);}
+      int X = *p++;
+      int R = *p++;
+      int Y = *p++;
+      int B = *p++;
+
+      if (layout_damage & LAYOUT_W) {
+	if (X >= IR) X += dw;
+	else if (X > IX) {
+	  switch (resize_align_&12) {
+	  case 0: X = X + dw/2; break; // ALIGN_CENTER
+	  case 4: break; // ALIGN_LEFT
+	  case 8: X = X+dw; break; // ALIGN_RIGHT
+	  case 12: X = X + dw * (X-IX)/(IR-IX); break; // both
+	  }
+	}
+	if (R >= IR) R += dw;
+	else if (R > IX) {
+	  switch (resize_align_&12) {
+	  case 0: R = R + dw/2; break; // ALIGN_CENTER
+	  case 4: break; // ALIGN_LEFT
+	  case 8: R = R+dw; break; // ALIGN_RIGHT
+	  case 12: R = R + dw * (R-IX)/(IR-IX); // both
+	  }
+	}
+	if (R-X != o->w()) {flags |= LAYOUT_W; o->w(R-X);}
+	X += r.x();
+	if (X != o->x()) {flags |= LAYOUT_X; o->x(X);}
+      }
+      if (layout_damage & LAYOUT_H) {
+	if (Y >= IB) Y += dh;
+	else if (Y > IY) {
+	  switch (resize_align_&3) {
+	  case 0: Y = Y + dh/2; break; // ALIGN_CENTER
+	  case 1: break; // ALIGN_TOP
+	  case 2: Y = Y+dh; break; // ALIGN_BOTTOM
+	  case 3: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
+	  }
+	}
+	if (B >= IB) B += dh;
+	else if (B > IY) {
+	  switch (resize_align_&3) {
+	  case 0: B = B + dh/2; break; // ALIGN_CENTER
+	  case 1: break; // ALIGN_TOP
+	  case 2: B = B+dh; break; // ALIGN_BOTTOM
+	  case 3: B = B + dh*(B-IY)/(IB-IY); break; //both;
+	  }
+	}
+	if (B-Y != o->h()) {flags |= LAYOUT_H; o->h(B-Y);}
+	Y += r.y();
+	if (Y != o->y()) {flags |= LAYOUT_Y; o->y(Y);}
+      }
       o->layout_damage(flags);
     }
   }
