@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.14 1999/11/11 10:02:09 bill Exp $"
+// "$Id: Fl_Style.H,v 1.15 1999/11/11 18:25:11 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -56,10 +56,11 @@ struct FL_API Fl_Style {
   unsigned	text_size;
 
   Fl_Style*     parent;
+  int           dynamic; // was this style dynamically created so widget
+                         // could modify its attributes
 
-  Fl_Style(); // creates a "local" style
+  Fl_Style(const char* name = 0, void (*revertfunc)(Fl_Style*) = 0);
 
-  Fl_Style(const char* n, void (*)(Fl_Style*) = 0); // named style
   const char*   name;
   void          (*revertfunc)(Fl_Style*);
   Fl_Style*     next;
@@ -123,5 +124,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.14 1999/11/11 10:02:09 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.15 1999/11/11 18:25:11 carl Exp $".
 //
