@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.40 1999/09/18 00:30:16 carl Exp $"
+// "$Id: Fl.cxx,v 1.41 1999/09/18 14:13:12 vincent Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -613,7 +613,9 @@ void Fl_Window::show() {
   if (parent()) {
     Fl_Widget::show();
   } else if (!i) {
+#ifndef WIN32
     fl_open_display();
+#endif
     if (non_modal() && !fl_modal_for) {
       // back compatability with older modal() and non_modal() flags:
       fl_modal_for = Fl::first_window();
@@ -776,5 +778,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.40 1999/09/18 00:30:16 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.41 1999/09/18 14:13:12 vincent Exp $".
 //
