@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.19 1999/11/21 04:22:48 vincent Exp $"
+# "$Id: makeinclude.in,v 1.20 1999/11/21 05:55:38 vincent Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -47,6 +47,11 @@ LD_PLUGIN_FLAGS	=@LD_PLUGIN_FLAGS@	# to build some plugin
 
 # program to make the archive:
 LIBNAME		=@LIBNAME@
+DSOLIBNAME	=@DSOLIBNAME@
+DSOLIBformsNAME	=@DSOLIBformsNAME@
+DSOLIBimagesNAME=@DSOLIBimagesNAME@
+DSOLIBglNAME	=@DSOLIBglNAME@
+DSOLIBglutNAME	=@DSOLIBglutNAME@
 LIBCOMMAND	=@LIBCOMMAND@
 RANLIB		=@RANLIB@
 DSOEXT		=@DSOEXT@
@@ -60,5 +65,5 @@ GLDLIBS		=@LDFLAGS@ -lfltk_gl @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLO
 IMAGELIBS	=@LIBPNG@ @LIBJPEG@
 
 #
-# End of "$Id: makeinclude.in,v 1.19 1999/11/21 04:22:48 vincent Exp $".
+# End of "$Id: makeinclude.in,v 1.20 1999/11/21 05:55:38 vincent Exp $".
 #

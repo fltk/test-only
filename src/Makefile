@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.51 1999/11/21 04:23:02 vincent Exp $"
+# "$Id: Makefile,v 1.52 1999/11/21 05:55:46 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -193,11 +193,11 @@ CLEAN =
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
-DSONAME = $(LIBNAME)$(DSOEXT)
+DSONAME = $(DSOLIBNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).a $(DSOEXT)
+all:	$(LIBRARY).a $(DSONAME)
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@echo $(LIBCOMMAND) $@ ...
@@ -205,12 +205,11 @@ $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	@$(RANLIB) $@
 
-libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOEXT)
+libfltk.so.2 libfltk.sl.2: $(OBJECTS)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
-	@touch $(DSOEXT)	# Create a dummy file to satisfy dependencies
 
-fltk.2.dll: $(OBJECTS:.o=.dll.o) $(DSOEXT)
+fltk.2.dll: $(OBJECTS:.o=.dll.o)
 	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
 	@$(DSOCOMMAND) -o $@ \
@@ -238,19 +237,19 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY).a $(DSOEXT)
+install: $(LIBRARY).a $(DSONAME)
 	@echo "Installing libraries..."
 	@-mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)
 	@-cp $(LIBRARY).a $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME).a
 	@if test -n "$(DSOEXT)"; then \
-		if test "$(DSONAME)" = $(LIBRARY).so.2; then ext=.so; else ext=.s1; fi; \
-		rm -f $(libdir)/$(LIBRARY)$$ext.2;\
-		rm -f $(libdir)/$(LIBRARY)$$ext;\
-		cp $(LIBRARY)$$ext.2 $(libdir); \
-		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
-		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
+		if test $(DSONAME) = $(LIBNAME).so.2; then ext=.so; else ext=.s1; fi; \
+		rm -f $(libdir)/$(LIBNAME)$$ext.2;\
+		rm -f $(libdir)/$(LIBNAME)$$ext;\
+		cp $(LIBNAME)$$ext.2 $(libdir); \
+		chmod 755 $(libdir)/$(LIBNAME)$$ext.2; \
+		ln -s $(libdir)/$(LIBNAME)$$ext.2 $(libdir)/$(LIBNAME)$$ext;\
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
@@ -265,5 +264,5 @@ install: $(LIBRARY).a $(DSOEXT)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.51 1999/11/21 04:23:02 vincent Exp $".
+# End of "$Id: Makefile,v 1.52 1999/11/21 05:55:46 vincent Exp $".
 #
