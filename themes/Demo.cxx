@@ -57,18 +57,26 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
   int d = w <= h ? w : h;
   if (d <= 1) return;
   fl_color(color);
-  void (*f)(int,int,int,int,double,double);
-  f = (which==FILL) ? fl_pie : fl_arc;
-  if (which >= CLOSED) {
-    f(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
-    f(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
-  } else if (which == UPPER_LEFT) {
-    f(x+w-d, y, d, d, 45, w<=h ? 180 : 90);
-    f(x, y+h-d, d, d, w<=h ? 180 : 90, 225);
-  } else { // LOWER_RIGHT
-    f(x, y+h-d, d, d, 225, w<=h ? 360 : 270);
-    f(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45);
+
+  switch (which) {
+    case UPPER_LEFT :
+      fl_arc(x+w-d, y, d, d, 45, w<=h ? 180 : 90);
+      fl_arc(x, y+h-d, d, d, w<=h ? 180 : 90, 225);
+      break;
+    case LOWER_RIGHT :
+      fl_arc(x, y+h-d, d, d, 225, w<=h ? 360 : 270);
+      fl_arc(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45);
+      break;
+    case CLOSED :
+      fl_arc(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
+      fl_arc(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
+      break;
+    case FILL :
+      fl_pie(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
+      fl_pie(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
+      break;
   }
+
   if (which == FILL) {
     if (w < h)
       fl_rectf(x, y+d/2, w, h-(d&-2));
