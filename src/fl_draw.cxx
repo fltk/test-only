@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.25 2002/12/10 02:00:58 easysw Exp $"
+// "$Id: fl_draw.cxx,v 1.26 2003/06/30 07:55:17 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,7 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <string.h>
+#include <ctype.h>
 using namespace fltk;
 
 // These are for getting the default leading:
@@ -53,118 +54,194 @@ static float line_ascent() {
   return (line_spacing() + getascent() - getdescent()) / 2;
 }
 
-// Any string longer than this does not get &x underscore processing.
-#define MAX_LENGTH_FOR_UNDERSCORE 128
+namespace fltk {
+class Symbol {
+  public:
+    virtual void draw(const char* start,
+		      const char* end,
+		      float x, float y) const = 0;
+    virtual void measure(const char* start,
+		      const char* end,
+		      float& w, float& h) const = 0;
+};
+}
 
 const int* fltk::column_widths_ = 0;
 
-// The implementation splits the text up into individual calls to draw.
-// Each has an x/y position and a segment of text. Probably should be
-// expanded to have a font & size, This will allow
-// much more complex drawing than we currently support, such as imbedded
-// words in different fonts.
+// The implementation splits the text up into individual "symbols"
+// Each has an x/y position and a segment of text and a pointer to
+// a Symbol object that uses that information to draw it. These calls
+// may also have side effects like changing the color or font.
 struct Segment {
+  const Symbol* symbol;
   const char* start;
   const char* end; // points after last character
   float x,y;
 };
 
-// The results are put into this array of segments. This may increase
-// in size at any time:
+// Sequences of characters that are not interpreted are turned into
+// this "symbol" which draws the text in the current font:
+class PlainText : public Symbol {
+public:
+  void draw(const char* start, const char* end, float x, float y) const {
+    drawtext_transformed(start, end-start, x, y+line_ascent());
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = getwidth(start, end-start);
+    h = getsize();
+  }
+};
+static const PlainText plaintext;
+
+namespace fltk {void load_identity();}
+
+// Dummy standin for symbols:
+class SymbolSymbol : public Symbol {
+public:
+  void draw(const char* start, const char* end, float x, float y) const {
+    // copy the name to zero-terminate it:
+    char buf[10];
+    int i = 0;
+    for (const char* q = start; q < end && i < 9;) buf[i++] = *q++;
+    buf[i] = 0;
+    int n = line_spacing();
+    draw_symbol(buf, int(x), int(y), n, n, getcolor());
+  }
+  void measure(const char* start, const char* end, float& w, float& h) const {
+    w = h = line_spacing();
+  }
+};
+static const SymbolSymbol symbol;
+
+// The current set of segments. Call add() to add a new one:
 static Segment* segments;
-static int num_segments;
+static int segment_count;
+static int segment_array_size;
 
-static float max_x;
-
-// Create a new segment:
-static /*inline*/ void set(int index,
-		  const char* start,
-		  const char* end,
-		  float width,
-		  float x, float y, float w,
-		  Flags flags
-		  )
+// Create a new segment and insert it at index:
+static /*inline*/ void add(int index,
+			   const Symbol* symbol,
+			   const char* start,
+			   const char* end,
+			   float x, float y
+			   )
 {
   // enlarge the array if necessary:
-  if (index >= num_segments) {
-    num_segments = index ? 2*index : 32;
-    Segment* new_array = new Segment[num_segments];
+  if (segment_count >= segment_array_size) {
+    segment_array_size = segment_count ? 2*segment_count : 32;
+    Segment* new_array = new Segment[segment_array_size];
     memcpy(new_array, segments, index*sizeof(Segment));
+    memcpy(new_array+index+1, segments+index, (segment_count-index)*sizeof(Segment));
     delete[] segments;
     segments = new_array;
+  } else {
+    memmove(segments+index+1, segments+index, (segment_count-index)*sizeof(Segment));
   }
+  segment_count++;
   Segment& s = segments[index];
+  s.symbol = symbol;
   s.start = start;
   s.end = end;
-  if (x+width > max_x) max_x = x+width;
-  if (flags & ALIGN_RIGHT) {
-    s.x = x+w-width;
-    if (flags & ALIGN_LEFT && s.x > x) s.x = x;
-  }
-  else if (flags & ALIGN_LEFT) s.x = x;
-  else s.x = x+(w-width)/2;
-  s.y = y + line_ascent();
-}
-
-// word-wrap a section of text into one segment per line:
-// Returns the y of the last line
-static float wrap(
-  const char* start,
-  const char* end,
-  float x, float y, float w,
-  Flags flags,
-  int& index
-  )
-{
-  float width = 0;
-  if (flags & ALIGN_WRAP) {
-    const char* word_start = start;
-    const char* word_end = start;
-    for (const char* p = start; ; p++) {
-      if (p >= end || *p == ' ') {
-	// test for word-wrap:
-	if (word_start < p) {
-	  float newwidth = width + getwidth(word_end, p-word_end);
-	  if (word_end > start && newwidth > w) { // break before this word
-	    set(index++, start, word_end, width, x, y, w, flags);
-	    y += line_spacing();
-	    start = word_end = p = word_start;
-	    width = 0;
-	    continue;
-	  } else {
-	    width = newwidth;
-	    word_end = p;
-	  }
-	}
-	word_start = p+1;
-	if (p >= end) break;
-      }
-    }
-  } else {
-    width = getwidth(start, end-start);
-  }
-  if (start < end) set(index++, start, end, width, x, y, w, flags);
-  return y;
+  s.x = x;
+  s.y = y;
 }
 
 bool fl_hide_shortcut; // set by Choice
 
-// Parses and lays out the text into segments. Return value is the
-// y height of the text. The width is stored in max_x. The index is
-// set to be the number of segments.
+// As we build the segments we keep track of the furthest-right edge:
+static float max_x;
+
+// Find all the segments in a section of raw text and arrange them as
+// though they are aligned with the top-left corner at x,y and wrap at
+// w.  This is complex because a stream of letters may turn into 1 or
+// 2 segments due to word wrapping.  Returns the y of the last
+// line. Sets max_x to the rightmost edge
+static float wrap(
+  const char* start,
+  const char* end,
+  float ix, float y, float w,
+  Flags flags
+  )
+{
+  float x = ix; // accumulated position if we don't wrap
+
+  const char* word_end = start; // where to end it if we wrap
+  const char* word_start = start; // where to start new segment
+  float width = 0; 		// width of current text
+  // start..p indicates current text segment being built
+
+  for (const char* p = start; ;p++) {
+    if ((flags & ALIGN_WRAP) && (p >= end || *p == ' ')) {
+      if (word_start < p) {
+	float newwidth = width + getwidth(word_end, p-word_end);
+	if ((flags & ALIGN_WRAP) && word_end > start && x+newwidth > ix+w) {
+	  // break before thsi word
+	  add(segment_count, &plaintext, start, word_end, x, y);
+	  if (x+width > max_x+ix) max_x = x+width-ix;
+	  y += line_spacing();
+	  start = word_end = p = word_start;
+	  x = ix;
+	  width = 0;
+	  continue;
+	} else {
+	  width = newwidth;
+	  word_end = p;
+	}
+      }
+      word_start = p+1;
+    }
+    if (p < end && ((flags & RAW_LABEL) || (*p != '&' && *p != '@'))) continue;
+    if (start < p) {
+      // add text before this next object
+      width += getwidth(word_end, p-word_end);
+      add(segment_count, &plaintext, start, p, x, y);
+      x += width;
+      if (x > max_x+ix) max_x = x-ix;
+    }
+    for (;;) {
+      if (p >= end) return y;
+      if (*p == '&') {
+	p++;
+	if (*p == '&') break;
+	// add an underscore under next letter:
+	if (!fl_hide_shortcut) {
+	  const char* us = "_";
+	  add(segment_count, &plaintext, us, us+1, x, y);
+	}
+      } else if (*p == '@') {
+	p++;
+	if (*p == '@') break;
+	// parse out an @-command:
+	const char* q = p;
+	if (*q == '#') q++; // optional leading '#'
+	if (*q == '+' || *q == '-') q++;
+	while (isdigit(*q)) q++; // leading numbers
+	while (q < end && !isdigit(*q) && *q != '@' && *q != ' ') q++;
+	while (isdigit(*q)) q++; // trailing numbers
+	add(segment_count, &symbol, p, q, x, y);
+	float W,H; symbol.measure(p,q,W,H); x += W;
+	if (x > max_x+ix) max_x = x-ix;
+	p = q;
+	if (p < end && *p == ' ') p++; // ignore trailing space
+      } else break;
+    }
+    // start the next block of text:
+    word_start = word_end = start = p; width = 0;
+  }
+}
+
+// Split at newlines and tabs into sections and then call wrap on them
+// Return value is the y height of the text. The width is stored in
+// max_x.
 static float split(
     const char* str,
     int W, int /*H*/,
-    Flags flags,
-    int& index,
-    char* tempbuf // for the underscore stuff...
+    Flags flags
     )
 {
   const int* column = column_widths_;
 
-  bool look_for_underscore = !(flags & RAW_LABEL);
-  bool saw_underscore = false;
-
+  segment_count = 0;
   float x = 0;
   max_x = 0;
   float y = 0;
@@ -179,48 +256,11 @@ static float split(
       if (column && *column) w = *column++;
       else w = ((p-str+8)&-8)*getwidth("2",1);
     } else {
-      if (*p == '&' && look_for_underscore) saw_underscore = true;
       p++;
       continue;
     }
     float newy;
-    // Edit out any '&' sign if this is reasonably short label and use
-    // it's position later to underscore a letter. This is done by
-    // copying the text to the tempbuf and then reusing that buffer
-    // as the source for this text:
-    if (saw_underscore && p-str < MAX_LENGTH_FOR_UNDERSCORE) {
-      look_for_underscore = false;
-      char* a = tempbuf;
-      const char* b = str;
-      const char* underscore_at = 0;
-      while (b < p) {
-	if (*b == '&' && b+1 < p) {
-	  b++;
-	  if (*b != '&' && !fl_hide_shortcut && !underscore_at)
-	    underscore_at = a;
-	}
-	*a++ = *b++;
-      }
-      int i = index; // remember where it starts
-      // create segments for the text:
-      newy = wrap(tempbuf, a, x, y, w, flags, index);
-      // add a segment to print the underscore:
-      if (underscore_at) for (; i < index; i++) {
-	Segment& s = segments[i];
-	if (underscore_at >= s.start && underscore_at < s.end) {
-	  const char* text = "_";
-	  float save_y = s.y;
-	  set(index, text, text+1, 0,
-	      s.x+getwidth(s.start, underscore_at-s.start), y, 0,
-	      ALIGN_LEFT);
-	  segments[index].y = save_y;
-	  index++;
-	  break;
-	}
-      }
-    } else {
-      newy = wrap(str, p, x, y, w, flags, index);
-    }
+    newy = wrap(str, p, x, y, w, flags);
     if (newy > max_y) max_y = newy;
     if (!*p) {
       return max_y+line_spacing();
@@ -239,11 +279,9 @@ void fltk::drawtext(
     Flags flags
 ) {
   if (!str || !*str) return;
-  char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
-  int index = 0;
-  int h = int(split(str, W, H, flags, index, tempbuf)+.5);
+  int h = int(split(str, W, H, flags)+.5);
   transform(X,Y);
-  int dy;
+  int dx, dy;
   if (flags & ALIGN_BOTTOM) {
     dy = Y+H-h;
     if ((flags & ALIGN_TOP) && dy > Y) dy = Y;
@@ -252,20 +290,29 @@ void fltk::drawtext(
   } else {
     dy = Y+((H-h)>>1);
   }
-  for (int i = 0; i < index; i++) {
-    Segment& s = segments[i];
-    drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+  if (flags & ALIGN_RIGHT) {
+    dx = X+W-int(max_x+.5);
+    if ((flags & ALIGN_LEFT) && dx > X) dx = X;
+  } else if (flags & ALIGN_LEFT) {
+    dx = X;
+  } else {
+    dx = X+((W-int(max_x+.5))>>1);
   }
+  push_matrix();
+  load_identity();
+  for (int i = 0; i < segment_count; i++) {
+    Segment& s = segments[i];
+    s.symbol->draw(s.start, s.end, s.x+dx, s.y+dy);
+  }
+  pop_matrix();
 }
 
 void fltk::measure(const char* str, int& w, int& h, Flags flags) {
   if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
-  char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
-  int index = 0;
-  h = int(split(str, w, h, flags, index, tempbuf)+.5);
+  h = int(split(str, w, h, flags)+.5);
   w = int(max_x+.5);
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.25 2002/12/10 02:00:58 easysw Exp $".
+// End of "$Id: fl_draw.cxx,v 1.26 2003/06/30 07:55:17 spitzak Exp $".
 //

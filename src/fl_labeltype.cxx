@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.36 2003/02/07 08:21:26 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.37 2003/06/30 07:55:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -53,6 +53,7 @@ void LabelType::draw(const char* label,
     draw(label, X+1, Y+1, W, H, GRAY90, flags&~INACTIVE);
     color = inactive(color);
   }
+#if 0
   if (!(flags&RAW_LABEL) && *label == '@') {
     int x1 = X;
     int y1 = Y;
@@ -69,6 +70,7 @@ void LabelType::draw(const char* label,
     }
     if (draw_symbol(label, x1, y1, w1, h1, color)) return;
   }
+#endif
   setcolor(color);
   drawtext(label, X, Y, W, H, flags);
 }
@@ -220,5 +222,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.36 2003/02/07 08:21:26 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.37 2003/06/30 07:55:17 spitzak Exp $".
 //

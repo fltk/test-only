@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.29 2002/12/10 02:01:03 easysw Exp $"
+// "$Id: fl_symbols.cxx,v 1.30 2003/06/30 07:55:17 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -98,7 +98,7 @@ void fl_glyph_return(const Widget*, int,
 // provided for back compatability:
 int fltk::draw_symbol(const char *label,int x,int y,int w,int h,Color col) {
   const char *p = label;
-  if (*p++ != '@') return 0;
+  if (*p == '@') p++;
   init_symbols();
   bool equalscale = false;
   if (*p == '#') {
@@ -346,5 +346,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.29 2002/12/10 02:01:03 easysw Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.30 2003/06/30 07:55:17 spitzak Exp $".
 //
