@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.35 2001/07/25 19:05:44 robertk Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -122,10 +122,20 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
   // If the item's callback is not set, use the menu's callback:
   if (callback == Fl_Widget::default_callback) callback = this->callback();
 
+#if 0
   // Notice that "this" is passed as the widget. This appears to
   // be necessary for back compatability. You can use item() to
   // get the actual widget.
   callback(this, widget->user_data());
+#endif
+  // If the item has data, use it, else use the menus data:
+  void* data = widget->user_data() ? widget->user_data() : this->user_data(); 
+  // If the item's callback is not set, use the menu's callback:
+  if (widget->callback() == Fl_Widget::default_callback) {
+    if (!data) data = widget;
+    widget = this;
+  }
+  callback(widget, data);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -217,5 +227,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.35 2001/07/25 19:05:44 robertk Exp $"
 //
