@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.99 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.100 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -197,7 +197,7 @@ void Window::show() {
     clear_visible();
 
     // open the display:
-    Style::load_theme();
+    load_theme();
     open_display();
     layout();
 
@@ -426,6 +426,7 @@ void Window::destroy() {
   }
 
   // Make sure no events are sent to this window:
+  if (flags()&MODAL) modal(0, false);
   throw_focus();
   clear_visible();
 
@@ -443,5 +444,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.99 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.100 2003/06/24 07:10:48 spitzak Exp $".
 //

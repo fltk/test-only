@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.187 2003/05/19 06:50:07 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.188 2003/06/24 07:10:48 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -40,6 +40,7 @@
 #include <limits.h>
 #include <time.h>
 #include <winsock.h>
+#include <commctrl.h>
 #include <ctype.h>
 
 //
@@ -78,6 +79,11 @@
 //
 
 #define WM_FLSELECT	(WM_USER+0x0400)
+
+// WM_MAKEWAITRETURN is the user-defined message that is used to try
+// to make wait() return to the main loop so the windows version acts
+// like GUI programs on more sensible operating systems
+#define WM_MAKEWAITRETURN (WM_USER+0x401)
 
 /**
  * returns pointer to the filename, or "" if name ends with '/' or ':'
@@ -186,7 +192,8 @@ void* fltk::thread_message() {
 }
 
 MSG msg;
-#include <stdio.h>
+
+UINT fl_wake_msg = 0;
 
 // Wait up to the given time for any events or sockets to become ready,
 // do the callbacks for the events and sockets.
@@ -257,13 +264,21 @@ static inline int fl_wait(double time_to_wait) {
       // looks like it is best to do the dispatch-message anyway:
     }
 #endif
-    if (msg.message == WM_USER) {
+    if (msg.message == fl_wake_msg) {
       // This is used by awake() and by WndProc() in an attempt
       // to get wait() to return. That does not always work
       // unfortunately, as Windoze calls WndProc directly sometimes.
       // If that happens it gives up and calls flush() 
       if (msg.wParam) thread_message_ = (void*)msg.wParam;
-    } else {
+    }
+    // WM_MAKEWAITRETURN is used by WndProc to try to make wait()
+    // return so the main loop recovers and can flush the display. We
+    // purposely do not dispatch this message, as the desired result
+    // has happened: this function will return.  For who knows what
+    // reason, sometimes Windoze will call WndProc directly in
+    // response to the Post, so it never gets here. This is detected
+    // and at that point I give up and call flush().
+    if (msg.message != WM_MAKEWAITRETURN) {
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
@@ -406,7 +421,13 @@ HANDLE fl_global_selection(int clipboard) {
 
 // Drag-n-drop requires GCC 3.x or a non-GNU compiler...
 #if !defined(__GNUC__) || __GNUC__ >= 3
+// Drag-n-drop is totally disabled until Wonko can figure out what is wrong
+# define USE_DRAGDROP 1
+#else
+# define USE_DRAGDROP 0
+#endif
 
+#if USE_DRAGDROP
 // I believe this was written by Matthias Melcher, correct?
 
 #include <ole2.h>
@@ -417,13 +438,13 @@ static Window *dnd_target_window = 0;
 /**
  * subclass the IDropTarget to receive data from DnD operations
  */
-class FLDropTarget : public IDropTarget
+class FlDropTarget : public IDropTarget
 {
   DWORD m_cRefCount;
   DWORD lastEffect;
   int px, py;
 public:
-  FLDropTarget() : m_cRefCount(0) { } // initialize
+  FlDropTarget() : m_cRefCount(0) { } // initialize
   HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid, LPVOID *ppvObject ) {
     if (IID_IUnknown==riid || IID_IDropTarget==riid)
     {
@@ -438,8 +459,7 @@ public:
   ULONG STDMETHODCALLTYPE Release() {
     long nTemp;
     nTemp = --m_cRefCount;
-    if(nTemp==0)
-      delete this;
+    //if (nTemp==0) delete this; // we don't really destroy it
     return nTemp;
   }
   HRESULT STDMETHODCALLTYPE DragEnter( IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
@@ -576,86 +596,31 @@ public:
 
 ////////////////////////////////////////////////////////////////
 
-/* This code lifted from SDL, also under the LGPL - CET
+//
+// USE_TRACK_MOUSE - define it if you have TrackMouseEvent()...
+//
+// Apparently, at least some versions of Cygwin/MingW don't provide
+// the TrackMouseEvent() function.  You can define this by hand
+// if you have it - this is only needed to support subwindow
+// enter/leave notification under Windows.
+//
 
-   Special code to handle mouse leave events - this sucks...
-   http://support.microsoft.com/support/kb/articles/q183/1/07.asp
-
-   TrackMouseEvent() is only available on Win98 and WinNT.
-   _TrackMouseEvent() is available on Win95, but isn't yet in the mingw32
-   development environment, and only works on systems that have had IE 3.0
-   or newer installed on them (which is not the case with the base Win95).
-   Therefore, we implement our own version of _TrackMouseEvent() which
-   uses our own implementation if TrackMouseEvent() is not available.
-*/
-
-#ifdef TME_LEAVE
-# define _TRACKMOUSEEVENT TRACKMOUSEEVENT
-# define _TrackMouseEvent TrackMouseEvent
-#else
-
-# define TME_LEAVE 2
-
-jafklsjdfljas
-typedef struct _tagTRACKMOUSEEVENT {
-  DWORD cbSize;
-  DWORD dwFlags;
-  HWND	hwndTrack;
-  DWORD dwHoverTime;
-} _TRACKMOUSEEVENT, *_LPTRACKMOUSEEVENT;
-
-static BOOL (WINAPI *_TrackMouseFunction)(_TRACKMOUSEEVENT *ptme) = NULL;
-
-static VOID CALLBACK
-TrackMouseTimerProc(HWND hWnd, UINT, UINT idEvent, DWORD) {
-  RECT rect;
-  POINT pt;
-
-  GetClientRect(hWnd, &rect);
-  MapWindowPoints(hWnd, NULL, (LPPOINT)&rect, 2);
-  GetCursorPos(&pt);
-  if (!PtInRect(&rect, pt) || (WindowFromPoint(pt) != hWnd)) {
-    if ( !KillTimer(hWnd, idEvent) ) {
-			/* Error killing the timer! */
-    }
-    PostMessage(hWnd, WM_MOUSELEAVE, 0, 0);
-  }
-}
-
-static BOOL WINAPI
-WIN_TrackMouseEvent(_TRACKMOUSEEVENT *ptme)
-{
-  if (ptme->dwFlags == TME_LEAVE)
-    return SetTimer(ptme->hwndTrack, ptme->dwFlags, 100,
-		    (TIMERPROC)TrackMouseTimerProc);
-  return FALSE;
-}
-
-static BOOL _TrackMouseEvent(_TRACKMOUSEEVENT* ptme) {
-  // look for mouse leave events
-  if (!_TrackMouseFunction) {
-    /* Get the version of TrackMouseEvent() we use */
-    HMODULE handle = GetModuleHandle("USER32.DLL");
-    if (handle) _TrackMouseFunction =
-(BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
-    if (!_TrackMouseFunction) _TrackMouseFunction = WIN_TrackMouseEvent;
-  }
-  return _TrackMouseFunction(ptme);
-}
-#endif
-
-////////////////////////////////////////////////////////////////
+#if !defined(__GNUC__)
+#  define USE_TRACK_MOUSE
+#endif // !__GNUC__
 
 static bool mouse_event(Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
   xmousewin = window;
   if (!window) return false;
-  _TRACKMOUSEEVENT tme;
-  tme.cbSize    = sizeof(_TRACKMOUSEEVENT);
+#ifdef USE_TRACK_MOUSE
+  TRACKMOUSEEVENT tme;
+  tme.cbSize    = sizeof(TRACKMOUSEEVENT);
   tme.dwFlags   = TME_LEAVE;
   tme.hwndTrack = xid(window);
   _TrackMouseEvent(&tme);
+#endif
   static int px, py, pmx, pmy;
   POINT pt;
   e_x = pt.x = (signed short)LOWORD(lParam);
@@ -787,7 +752,7 @@ static Window* resize_from_system;
 //  static Window* in_wm_paint;
 //  static PAINTSTRUCT paint;
 
-#define MakeWaitReturn() PostMessage(hWnd, WM_USER, 0, 0)
+#define MakeWaitReturn() PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
 
 extern bool fl_windows_damaged;
 
@@ -968,10 +933,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // if same as last key, increment repeat count:
     if (lParam & (1<<30)) {
       e_clicks++;
-      e_is_click = 0;
     } else {
       e_clicks = 0;
-      e_is_click = 1;
     }
     lastkeysym = e_keysym;
     // translate to text:
@@ -1039,12 +1002,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     MakeWaitReturn();
     break;
 
-  case WM_USER:
+  case WM_MAKEWAITRETURN:
     // This will be called if MakeWaitReturn fails because Stoopid Windows
     // called the WndProc directly. Instead do the best we can, which is
     // to flush the display.
-    // record the awake() argument:
-    if (msg.wParam) thread_message_ = (void*)msg.wParam;
     flush();
     break;
 
@@ -1104,7 +1065,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SETTINGCHANGE:
     reload_info = true;
   case WM_SYSCOLORCHANGE:
-    Style::reload_theme();
+    reload_theme();
     break;
 
   case WM_DESTROYCLIPBOARD:
@@ -1212,17 +1173,26 @@ void CreatedWindow::create(Window* window) {
     wc.lpfnWndProc = (WNDPROC)WndProc;
     wc.cbClsExtra = wc.cbWndExtra = 0;
     wc.hInstance = xdisplay;
-    if (!window->icon()) window->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
-    wc.hIcon = wc.hIconSm = (HICON)window->icon();
+    HICON icon = (HICON)window->icon();
+    if (!icon) {
+      icon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(101),
+			      IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
+      if (!icon) icon = LoadIcon(NULL, IDI_APPLICATION);
+    }
+    wc.hIcon = wc.hIconSm = icon;
     if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
     wc.hCursor = default_cursor;
     //uchar r,g,b; get_color(GRAY,r,g,b);
     //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
     wc.hbrBackground = NULL;
     wc.lpszMenuName = NULL;
-    wc.lpszClassName = Window::xclass();
+    wc.lpszClassName = "fltk";
     wc.cbSize = sizeof(WNDCLASSEX);
     RegisterClassEx(&wc);
+    fl_wake_msg = RegisterWindowMessage("fltk::ThreadWakeup");
+#if USE_DRAGDROP
+    OleInitialize(0L);
+#endif
   }
 
   HWND parent;
@@ -1274,7 +1244,7 @@ void CreatedWindow::create(Window* window) {
   x->cursor_for = 0;
   x->xid = CreateWindowEx(
     styleEx,
-    Window::xclass(), window->label(), style,
+    "fltk", window->label(), style,
     xp, yp, window->w()+dw, window->h()+dh,
     parent,
     NULL, // menu
@@ -1298,11 +1268,8 @@ void CreatedWindow::create(Window* window) {
   x->next = CreatedWindow::first;
   CreatedWindow::first = x;
 
-  // Drag-n-drop requires GCC 3.x or a non-GNU compiler...
-#if !defined(__GNUC__) || __GNUC__ >= 3
-  // Register all windows for potential drag'n'drop operations
-  static bool oleInitialized = false;
-  if (!oleInitialized) {oleInitialized = true; OleInitialize(0L);}
+
+#if USE_DRAGDROP
   RegisterDragDrop(x->xid, &flDropTarget);
 #endif
 }
@@ -1436,7 +1403,7 @@ static int win_fontsize(int winsize) {
   return winsize*3/4; // cellsize: convert to charsize
 }
 
-bool fltk::get_system_colors() {
+bool fltk::system_theme() {
 
   Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
@@ -1530,7 +1497,6 @@ bool fltk::get_system_colors() {
   Font* font; float size;
 
   // get font info for regular widgets from LOGFONT structure
-  //  font = setfont((const char*)ncm.lfMessageFont.lfFaceName);
   font = fltk::font((const char*)ncm.lfMessageFont.lfFaceName,
 		    (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
 		    (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
@@ -1543,10 +1509,9 @@ bool fltk::get_system_colors() {
 
   if ((style = Style::find("item"))) {
     // get font info for menu items from LOGFONT structure
-    //font = setfont((const char*)ncm.lfMenuFont.lfFaceName);
-    font = fltk::font((const char*)ncm.lfMessageFont.lfFaceName,
-		      (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
-		      (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
+    font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
+		      (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
+		      (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
     size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
 
     style->labelfont = style->textfont = font;
@@ -1565,10 +1530,9 @@ bool fltk::get_system_colors() {
 
   if ((style = Style::find("tooltip"))) {
     // get font info for tooltips from LOGFONT structure
-    //font = setfont((const char*)ncm.lfStatusFont.lfFaceName);
-    font = fltk::font((const char*)ncm.lfMessageFont.lfFaceName,
-		      (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
-		      (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
+    font = fltk::font((const char*)ncm.lfStatusFont.lfFaceName,
+		      (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
+		      (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
     size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
     style->labelfont = style->textfont = font;
@@ -1586,5 +1550,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.187 2003/05/19 06:50:07 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.188 2003/06/24 07:10:48 spitzak Exp $".
 //

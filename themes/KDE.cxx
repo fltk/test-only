@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.11 2003/03/31 07:17:49 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.12 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -24,9 +24,8 @@
 //
 
 // KDE version 1 & 2 theme.  This reads the KDE .kderc file to get all the
-// style information.  If Fl::scheme() is not null then this skips over
-// the windows/motif switching, which allows this to be loaded atop
-// another theme easily.
+// style information. Older KDE also indicated if windows or Motif style is
+// wanted, but this code is commented out because newer KDE ignores it.
 
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
@@ -44,8 +43,6 @@
 #endif
 
 using namespace fltk;
-
-static bool colors_only = 0;
 
 //kdewin_menu_text_box("kde windows menu window", "2AAUUIIXX", &fltk::downBox);
 
@@ -69,11 +66,11 @@ static int x_event_handler(int,Window*) {
   if (cm->message_type == KIPC) {
     if (cm->data.l[0] == PaletteChanged) ;
     else if (cm->data.l[0] == FontChanged) ;
-    else if (!colors_only && cm->data.l[0] == StyleChanged) ;
+    //else if (cm->data.l[0] == StyleChanged) ; // only if Motif is used
     else return 0;
   } else if (cm->message_type == ChangeGeneral) ;
   else if (cm->message_type == ChangePalette) ;
-  else if (!colors_only && cm->message_type == ChangeStyle) ;
+  //else if (cm->message_type == ChangeStyle) ;
   else return 0;
   Style::reload_theme();
 
@@ -107,8 +104,6 @@ static void add_event_handler() {
 
 extern "C" bool fltk_theme() {
 
-  colors_only = Style::scheme() != 0;
-
   char kderc[PATH_MAX], home[PATH_MAX] = "", s[80] = "";
   const char* p = getenv("HOME");
   if (p) strncpy(home, p, sizeof(home));
@@ -122,19 +117,17 @@ extern "C" bool fltk_theme() {
   
 #if 0
   int motif_style = 0;
-  if (!colors_only) {
-    if (!getconf(kderc, "KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
-      motif_style = 1;
-    if (motif_style) {
-      // load the motif.theme to set it to motif appearance:
-      Theme f = Style::load_theme("motif");
-      if (f) f();
-      else {
-	fprintf(stderr,"Unable to load motif theme as part of kde\n");
-	motif_style = 0;
-      }
-      // see below for modifications to the motif/windows themes
+  if (!getconf(kderc, "KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
+    motif_style = 1;
+  if (motif_style) {
+    // load the motif.theme to set it to motif appearance:
+    Theme f = Style::load_theme("motif");
+    if (f) f();
+    else {
+      fprintf(stderr,"Unable to load motif theme as part of kde\n");
+      motif_style = 0;
     }
+    // see below for modifications to the motif/windows themes
   }
 #endif
 
@@ -310,27 +303,25 @@ extern "C" bool fltk_theme() {
 */
 
 #if 0
-  if (!colors_only) {
-    if (motif_style) {
-//    setcolor(GRAY90, GRAY85); // looks better for dark backgrounds
-      if ((style = Style::find("menu"))) {
-	style->leading = 4;
-      }
-      if ((style = Style::find("check button"))) {
-	style->selection_color = GRAY66;
-	style->buttoncolor = GRAY75;
-      }
-    } else {
-
-//      if ((style = Style::find("menu"))) {
-//        style->leading = 8;
-//        style->box = &kdewin_menu_text_box;
-//      }
-
-//      if ((style = Style::find("scrollbar"))) {
-//        style->box = &kdewin_menu_text_box;
-//      }
+  if (motif_style) {
+//  setcolor(GRAY90, GRAY85); // looks better for dark backgrounds
+    if ((style = Style::find("menu"))) {
+      style->leading = 4;
     }
+    if ((style = Style::find("check button"))) {
+      style->selection_color = GRAY66;
+      style->buttoncolor = GRAY75;
+    }
+  } else {
+
+//  if ((style = Style::find("menu"))) {
+//    style->leading = 8;
+//    style->box = &kdewin_menu_text_box;
+//  }
+
+//  if ((style = Style::find("scrollbar"))) {
+//    style->box = &kdewin_menu_text_box;
+//  }
   }
 #endif
 
@@ -341,5 +332,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.11 2003/03/31 07:17:49 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.12 2003/06/24 07:10:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.25 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.26 2003/06/24 07:10:48 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -114,17 +114,17 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
   // we need to do something about different encodings of the same font
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
-  if (!p && lplf->lfCharSet != ANSI_CHARSET) return 1;
-  //const char *name = (const char*)(lplf->lfFaceName);
-  const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
+  if (lplf->lfCharSet != ANSI_CHARSET) return 1;
+  const char *name = (const char*)(lplf->lfFaceName);
+  //const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
 
   if (num_fonts >= array_size) {
     array_size = array_size ? 2*array_size : 128;
     font_array = (Font**)realloc(font_array, array_size*sizeof(Font*));
   }
   int attrib = 0;
-  if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
-    attrib = BOLD;
+//    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
+//      attrib = BOLD;
   font_array[num_fonts++] = fl_make_font(name, attrib);
   return 1;
 }
@@ -132,11 +132,11 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
 int fltk::list_fonts(Font**& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = getDC();
-  LOGFONT lf;
-  memset(&lf, 0, sizeof(lf));
-  lf.lfCharSet = ANSI_CHARSET;
-  EnumFontFamiliesEx(dc, &lf, (FONTENUMPROC)enumcb, 0, 0);
-  //EnumFontFamiliesEx(dc, NULL, (FONTENUMPROC)enumcb, 0);
+  //LOGFONT lf;
+  //memset(&lf, 0, sizeof(lf));
+  //lf.lfCharSet = ANSI_CHARSET;
+  //EnumFontFamiliesEx(dc, &lf, (FONTENUMPROC)enumcb, 0, 0);
+  EnumFontFamiliesEx(dc, NULL, (FONTENUMPROC)enumcb, 0, 0);
   ReleaseDC(0, dc);
   qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
   arrayp = font_array;
@@ -144,5 +144,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.25 2002/12/10 02:01:02 easysw Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.26 2003/06/24 07:10:48 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.41 2003/02/21 18:16:40 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.42 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -108,14 +108,6 @@ int fltk::arg(int argc, char **argv, int &i) {
     fl_bg_switch = color(v);
     if (!fl_bg_switch) error("Unknown color \"%s\"", v);
 
-  } else if (match(s, "theme")) {
-    Theme f = Style::load_theme(v);
-    if (!f) error("Unable to load theme \"%s\"", v);
-    else Style::theme(f);
-
-  } else if (match(s, "scheme")) {
-    Style::scheme(v);
-
   } else return 0; // unrecognized
 
   i += 2;
@@ -194,11 +186,9 @@ static const char * const helpmsg =
 " -d[isplay] host:n.n\n"
 #endif
 " -g[eometry] WxH+X+Y\n"
-" -t[heme] theme\n"
-//" -s[cheme] scheme (argument to theme)\n"
-" -bg color\n"
 " -n[ame] windowname\n"
-" -i[conic]";
+" -i[conic]\n"
+" -bg color";
 
 const char * const fltk::help = helpmsg+13;
 
@@ -345,5 +335,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.41 2003/02/21 18:16:40 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.42 2003/06/24 07:10:48 spitzak Exp $".
 //

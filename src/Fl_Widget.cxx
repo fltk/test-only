@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.101 2003/05/25 18:07:35 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.102 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -319,9 +319,12 @@ int Widget::send(int event) {
     // we always return zero as we want this event sent to every child
     break;
 
+  case SHORTCUT:
+    if (active()) ret = handle(event);
+    break;
+
   default:
-    if (!takesevents()) break;
-    ret = handle(event);
+    if (takesevents()) ret = handle(event);
     break;
   }
 
@@ -546,5 +549,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.101 2003/05/25 18:07:35 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.102 2003/06/24 07:10:48 spitzak Exp $".
 //

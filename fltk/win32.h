@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.14 2003/04/19 21:45:28 spitzak Exp $"
+// "$Id: win32.h,v 1.15 2003/06/24 07:10:47 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,6 @@
 #ifndef FL_WIN32_H
 #define FL_WIN32_H
 
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#endif
 #include <windows.h>
 #include <winuser.h>
 // In some of the distributions, the gcc header files are missing some stuff:
@@ -204,5 +201,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.14 2003/04/19 21:45:28 spitzak Exp $".
+// End of "$Id: win32.h,v 1.15 2003/06/24 07:10:47 spitzak Exp $".
 //

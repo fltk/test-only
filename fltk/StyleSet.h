@@ -1,5 +1,5 @@
 //
-// "$Id: StyleSet.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: StyleSet.h,v 1.4 2003/06/24 07:10:47 spitzak Exp $"
 //
 // Saves and restores all the styles used by Widget constructors. Fluid
 // uses this so you can preview a style without fluid's own control
@@ -35,7 +35,6 @@ namespace fltk {
 class FL_API StyleSet {
   NamedStyle* first_style;
   Theme theme;
-  const char* scheme;
   Color background;
   void* reserved; // pointer to extra saved stuff
 public:

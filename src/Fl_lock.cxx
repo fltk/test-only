@@ -64,9 +64,15 @@ void fltk::unlock() {
   unlock_function();
 }
 
-// when called from a thread, it causes FLTK to awake from wait()
+extern UINT fl_wake_msg;
+
+//
+// 'Fl::awake()' - Let the main thread know an update is pending.
+//
+// When called from a thread, it causes FLTK to awake from Fl::wait()...
+//
 void fltk::awake(void* msg) {
-  PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0);
+  PostThreadMessage( main_thread, fl_wake_msg, (WPARAM)msg, 0);
 }
 
 ////////////////////////////////////////////////////////////////

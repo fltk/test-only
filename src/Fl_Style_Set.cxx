@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Set.cxx,v 1.4 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Style_Set.cxx,v 1.5 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -31,6 +31,8 @@ using namespace fltk;
 
 static StyleSet* current_set;
 
+extern "C" FL_API bool fltk_theme();
+
 StyleSet::StyleSet() {
   // The first one constructed becomes the current one:
   if (!current_set) {
@@ -38,8 +40,7 @@ StyleSet::StyleSet() {
     return;
   }
   // Otherwise we must init to a blank set:
-  theme = 0;
-  scheme = 0;
+  fltk::theme(fltk_theme);
   background = 0xc0c0c000; // get_color_index(GRAY75); // 
   // Make all the named styles build copies of themselves and then
   // assign that list to this set:
@@ -67,15 +68,13 @@ void StyleSet::make_current() {
 
   // update the fields in the current set so they are saved:
   StyleSet* c = current_set;
-  c->theme = Style::theme();
-  c->scheme = Style::scheme();
+  c->theme = fltk::theme();
   c->background = get_color_index(GRAY75);
   c->first_style = NamedStyle::first;
 
   current_set = this;
 
-  Style::theme(theme);
-  Style::scheme(scheme);
+  fltk::theme(theme);
   set_background(background);
   NamedStyle *l = NamedStyle::first = first_style;
   while (l) {
@@ -96,5 +95,5 @@ StyleSet::~StyleSet() {
 }
 
 //
-// End of "$Id: Fl_Style_Set.cxx,v 1.4 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Style_Set.cxx,v 1.5 2003/06/24 07:10:48 spitzak Exp $".
 //

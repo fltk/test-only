@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.10 2002/12/10 02:00:57 easysw Exp $"
+// "$Id: fl_color_x.cxx,v 1.11 2003/06/24 07:10:48 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 // This file does not compile independently, it is included by color.cxx
 
 #include "XColorMap.h"
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////
 // Code to look at the X visual and figure out the best way to turn
@@ -318,5 +319,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.10 2002/12/10 02:00:57 easysw Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.11 2003/06/24 07:10:48 spitzak Exp $"
 //

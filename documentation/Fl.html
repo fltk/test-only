@@ -19,8 +19,6 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#add_handler">add_handler</a></li>
 <li><a href="#add_idle">add_idle</a></li>
 <li><a href="#add_timeout">add_timeout</a></li>
-<li><a href="#arg">arg</a></li>
-<li><a href="#args">args</a></li>
 <li><a href="#awake">awake</a></li>
 <li><a href="#belowmouse">belowmouse</a></li>
 <li><a href="#check">check</a></li>
@@ -28,10 +26,10 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#compose_reset">compose_reset</a></li>
 <li><a href="#copy">copy</a></li>
 <li><a href="#damage">damage</a></li>
+<li><a href="#display">display</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href="#display">display</a></li>
 <li><a href="#dnd">dnd</a></li>
 <li><a href="#error">error</a></li>
 <li><a href="#event">event</a></li>
@@ -61,12 +59,11 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#get_mouse">get_mouse</a></li>
 <li><a href="#gl_visual">gl_visual</a></li>
 <li><a href="#has_check">has_check</a></li>
-<li><a href="#has_idle">has_idle</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href="#has_idle">has_idle</a></li>
 <li><a href="#has_timeout">has_timeout</a></li>
-<li><a href="#help">help</a></li>
 <li><a href="#info">info</a></li>
 <li><a href="#key_name">key_name</a></li>
 <li><a href="#lock">lock</a></li>
@@ -78,10 +75,10 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#ready">ready</a></li>
 <li><a href="#redraw">redraw</a></li>
 <li><a href="#remove_check">remove_check</a></li>
-<li><a href="#remove_fd">remove_fd</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href="#remove_fd">remove_fd</a></li>
 <li><a href="#remove_idle">remove_idle</a></li>
 <li><a href="#remove_timeout">remove_timeout</a></li>
 <li><a href="#repeat_timeout">repeat_timeout</a></li>
@@ -124,116 +121,6 @@ constants:
 of the form M.mmpp where M is the major number, mm is the minor
 number, and pp is the patch number, currently 2.0001. </li>
 </ul>
-
-<h4><a name="args">int fltk::args(int argc, char **argv, int &amp;i, int (*callback)(int, char**,int &amp;)=0)</a></h4>
-
-FLTK provides an <I>entirely optional</I> command-line switch parser. 
-You don't have to call it if you don't like them! Everything it can do 
-can be done with other calls to FLTK. 
-
-<p>To use the switch parser, call <a
-href="#args"><tt>fltk::args(...)</tt></a> near the start of your program.
-This does <I>not</I> open the display, instead switches that need the
-display open are stashed into static variables.  Then you <I>must</I>
-display your first window by calling <a href="Fl_Window.html#show">
-window-&gt;show(argc,argv)</a>, which will do anything stored in the
-static variables.</p>
-
-<p><tt>callback</tt> lets you define your own switches.  It is called 
-with the same <tt>argc</tt> and <tt>argv</tt>, and with <tt>i</tt> the 
-index of each word. The callback should return zero if the switch is 
-unrecognized, and not change <tt>i</tt>.  It should return non-zero if 
-the switch is recognized, and add at least 1 to <tt>i</tt> (it can add 
-more to consume words after the switch).  This function is called 
-<i>before</i> any other tests, so <i>you can override any FLTK
-switch</i> (this is why fltk can use very short switches instead of
-the long ones all other toolkits force you to use).</p>
-<p>On return <tt>i</tt> is set to the index of the first non-switch. 
-This is either:</p>
-
-<ul>
-<li>The first word that does not start with '-'.</li>
-<li>The word '-' (used by many programs to name stdin as a file)</li>
-<li>The first unrecognized switch (return value is 0).</li>
-<li><tt>argc</tt></li>
-</ul>
-
-The return value is <tt>i</tt> unless an unrecognized switch is found, 
-in which case it is zero.  If your program takes no arguments other 
-than switches you should produce an error if the return value is less 
-than <tt>argc</tt>. 
-
-<p>All switches may be abbreviated one letter and case is ignored:
-
-<ul>
-
-<li><tt>-display host:n.n</tt> The X display to use (ignored  under 
-WIN32).</li>
-
-<li><tt>-geometry WxH</tt> Window is resized to this width & height</li>
-<li><tt>-geometry +X+Y</tt> Initial window position</li>
-<li><tt>-geometry WxH+X+Y</tt> Window is resized and positioned.</li>
-
-<li><tt>-name string</tt> <a
-href="x.html#xclass">fltk::Window::xclass(string)</a> will be
-done to the window, possibly changing its icon.</li>
-
-<li><tt>-title string</tt> <a
-href="Fl_Window.html#label">fltk::Window::label(string)</a> will be done
-to the window, changing both its title and the icontitle.</li>
-
-<li><tt>-iconic</tt> <a
-href="Fl_Window.html#iconize">fltk::Window::iconize()</a> will be done to
-the window.</li>
-
-<li><tt>-bg color</tt> XParseColor is used to lookup the passed color
-and then <a href="Fl_Color.html#background">fltk::background()</a> is
-done.  Under WIN32 only color names of the form &quot;#xxxxxx&quot;
-are understood.</li>
-
-<li><tt>-theme name</tt> Calls <a
-href="theme.html#load_theme2">fltk::Style::load_theme(name)</a> and if
-found it calls <a href="theme.html#theme">fltk::Style::theme(x)</a>
-with it. If the theme plugin is not found it exits with an error. The
-plugin is looked for in <tt>~/.fltk/name.theme</tt> and
-<tt>/usr/local/lib/name.theme</tt>.
-
-<li><tt>-scheme name</tt> Calls
-<a href="theme.html#scheme">fltk::Style::scheme(name)</a>. Some theme
-plugins may do something with this argument, typically it is used to
-name a file the theme reads.
-
-</ul>
-
-<h4>void fltk::args(int argc, char **argv)</h4>
-
-The second form of <tt>fltk::args()</tt> is useful if your program does
-not have command line switches of its own.  It parses all the
-switches, and if any are not recognized it calls <a
-href="#fatal"><tt>fltk::fatal(fltk::help)</tt></a>.
-
-<h4><a name="arg">int fltk::arg(int argc, char **argv, int &amp;i)</a></h4>
-
-Consume a single switch from <tt>argv</tt>, starting at word i. 
-Returns the number of words eaten (1 or 2, or 0 if it is not 
-recognized) and adds the same value to <tt>i</tt>.  You can use this 
-function if you prefer to control the incrementing through the 
-arguments yourself. 
-
-<h4><a name="help">const char* const fltk::help;</a></h4>
-
-This is the usage string that is displayed if <a
-href="#args"><tt>fltk::args()</tt></a> detects an invalid argument on
-the command-line. It's value is:
-
-<pre>
-" -d[isplay] host:n.n\n"
-" -g[eometry] WxH+X+Y\n"
-" -t[heme] theme\n"
-" -n[ame] windowname\n"
-" -i[conic]\n"
-" -bg color";
-</pre>
 
 <h4><a name="display">void fltk::display(const char *)</a></h4>
 
@@ -293,7 +180,7 @@ However the colors may flash as you move the cursor between windows.
 
 <p>This does nothing if the current visual is not colormapped.</p>
 
-<h4><a name="info">const fltk::Screen_Info& fltk::info()</a></h4>
+<h4><a name="screenInfo">const fltk::ScreenInfo& fltk::screenInfo()</a></h4>
 
 Return a structure of information describing the current state of the
 screen. Currently this structure contains the following (this may be
@@ -307,8 +194,8 @@ added to in the future):
 <li><tt>int width</tt> full screen width in pixels
 <li><tt>int height</tt> full screen height in pixels
 <li><tt>int depth</tt> bits per pixel
-<li><tt>int width_mm</tt> screen width in millimeters
-<li><tt>int height_mm</tt> screen height in millimeters
+<li><tt>float dpi_x</tt> pixels per inch horizontally
+<li><tt>float dpi_y</tt> pixels per inch vertically
 </ul>
 
 <h2><a name=waiting>Waiting for events</a></h2>

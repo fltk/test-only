@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.31 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -50,13 +50,13 @@ void fltk::fillrect(int x, int y, int w, int h) {
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-#if 1
+# if 1
   // From the MFC CDC class, apparently this is faster:
   SetBkColor(gc, current_xpixel);
   ExtTextOut(gc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
-#else
+# else
   FillRect(gc, &rect, setbrush());
-#endif
+# endif
 #else
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #endif
@@ -87,5 +87,5 @@ void fltk::drawpoint(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.31 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $".
 //

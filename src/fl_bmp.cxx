@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.15 2002/12/09 04:52:28 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -114,7 +114,7 @@ static uchar GETC()
 //////////////////////////////////////////////////////////////////////////
 static unsigned short ReadLittleEndianWORD()
 {
-  char c1, c2;
+  uchar c1, c2;
 
   c1 = GETC();
   c2 = GETC();
@@ -133,9 +133,9 @@ static unsigned short ReadLittleEndianWORD()
 // Returns:   The double word read from the file
 //
 //////////////////////////////////////////////////////////////////////////
-static unsigned short ReadLittleEndianDWORD()
+static unsigned int ReadLittleEndianDWORD()
 {
-  char c1, c2, c3, c4;
+  uchar c1, c2, c3, c4;
 
   c1 = GETC();
   c2 = GETC();
@@ -159,7 +159,7 @@ static unsigned short ReadLittleEndianDWORD()
 #if 0
 static short ReadLittleEndianUINT()
 {
-  char c1, c2;
+  uchar c1; signed char c2;
 
   c1 = GETC();
   c2 = GETC();
@@ -827,5 +827,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.15 2002/12/09 04:52:28 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
 //

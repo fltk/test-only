@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: Style.h,v 1.6 2003/06/24 07:10:47 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -97,8 +97,6 @@ typedef void (*GlyphStyle)(const Widget*, int type,
 			  int,int,int,int,
 			  Flags);
 
-extern "C" {typedef bool (*Theme)();}
-
 struct FL_API Style {
   const Style* parent;
   void  (*revertfunc)(Style*);
@@ -132,18 +130,6 @@ struct FL_API Style {
   bool dynamic() const {return !revertfunc;}
 
   static Style* find(const char* name);
-  static void revert();
-  static Theme theme() {return theme_;}
-  static void theme(Theme f) {theme_ = f;}
-  static Theme load_theme(const char*);
-  static void load_theme();
-  static void reload_theme();
-  static const char* scheme() {return scheme_;}
-  static void scheme(const char* f) {scheme_ = f;}
-
-private:
-  static Theme theme_;
-  static const char* scheme_;
 };
 
 struct FL_API NamedStyle : public Style {
@@ -167,16 +153,19 @@ enum GlyphNumber {	// glyph types understood by Widget::default_glyph()
   GLYPH_RIGHT_BUTTON
 };
 
-FL_API bool get_system_colors();
-FL_API const char* find_config_file(char* out, int size, const char* name);
-FL_API void redraw();
+// Themes:
+extern "C" {typedef bool (*Theme)();}
+extern FL_API Theme theme_;
+inline Theme theme() {return theme_;}
+inline void theme(Theme f) {theme_ = f;}
+FL_API void load_theme();
+FL_API void reload_theme();
+FL_API bool system_theme();
 
 }
-
-extern "C" FL_API bool fltk_theme();
 
 #endif
 
 //
-// End of "$Id: Style.h,v 1.5 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: Style.h,v 1.6 2003/06/24 07:10:47 spitzak Exp $".
 //

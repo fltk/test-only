@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.80 2003/04/27 01:54:52 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.81 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -949,12 +949,13 @@ bool Input::handle_key() {
   case ReturnKey:
   case KeypadEnter:
     // if (key_is_shortcut()) return true;
+    if (ctrl || shift) return false;
     if (when() & WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
       return true;
     }
-    if (type() < MULTILINE || ctrl || shift) return false;
+    if (type() < MULTILINE) return false;
     return replace(position(), mark(), '\n');
 
   case TabKey:
@@ -1318,5 +1319,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.80 2003/04/27 01:54:52 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.81 2003/06/24 07:10:48 spitzak Exp $".
 //

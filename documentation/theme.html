@@ -7,109 +7,83 @@
 
 Just before the first window is shown, fltk calls the "theme"
 function, which is used to initialize the styles to the user's and
-programmer's preferences.
+programmer's preferences. This is a function pointer and it is set and
+read with <a href="#theme">fltk::theme(x)</a> and <a
+href="#theme">fltk::theme()</a>.  This function should set all the <a
+href="Fl_Named_Style.html">NamedStyle</a> structures to the correct
+values for the appearance selected by the user and operating system.
+The return value is ignored but you should return true for future
+compatability.
 
-<p>There are several ways to change the "theme" function:
+<p>This pointer is declared as a "C" function to make it easier to
+load the correct function by name from a plugin. Theme functions are
+actually of the form
+<tt>extern&nbsp;"C"&nbsp;bool&nbsp;fltk_theme()</tt>. A typedef of
+<tt>fltk::Theme</tt> is provided.
 
-<p>If fltk is dynamically linked (or statically linked on some Unix
+<p>By default this points at a C function called "fltk_theme" that in
+turn calls the function <a
+href="#system_theme">fltk::system_theme()</a>.  You can "override" the
+theme function and customize fltk's appearance in several ways:
+
+<ol>
+
+<li>If fltk is dynamically linked (or statically linked on some Unix
 systems, including Linux if -shared was given to the linker) a "theme
-plugin" can be loaded. This is a plugin that defines a function called
-fltk_theme(). If nothing is done fltk will automatically look for a
-plugin in <tt>~/.fltk/default.theme</tt> and
-<tt>/usr/local/lib/fltk/default.theme</tt> (<tt>%SystemDrive%</tt> is
-added on Windows).
+plugin" can be loaded. You can use the function <a
+href="#load_plugin">fltk::load_plugin()</a> to read such a plugin in a
+portable way. The default <a href="utility.html#args">fltk::args()</a>
+function does this.
 
-<p>If fltk is statically linked (or in all cases on some Unix systems
+<li>If fltk is statically linked (or in all cases on some Unix systems
 such as Irix), your program can replace fltk_theme with it's own
-definition by linking a object file that defines fltk_theme().
+definition at compile time. The one you supply will replace the one in
+the fltk library.
 
-<p>You can call fltk::Style::theme(function) to set the function
+<li>You can call fltk::theme(function) to set the function
 directly.
 
-<p>If fltk is dynamically linked and <a
-href="Fl.html#args">fltk::args()</a> is used, the theme may be loaded by
-name by the -theme switch. This calls
-fltk::Style::theme(fltk::Style::load_theme(name)).
-
-<p>Theme functions are actually of the form
-<tt>extern&nbsp;"C"&nbsp;bool&nbsp;fltk_theme()</tt> (future versions
-of fltk are likely to add arguments to provide the plugin filename to
-this function prototype). A typedef of <tt>fltk::Theme</tt> is
-provided. They are expected to return true on success and false if
-there is any problem (currently fltk ignores this return value), and
-should print to stderr or call fltk::warning() with any explanation of
-problems.
+</ol>
 
 <h2><a name=tcontrol>Controlling themes</a></h2>
 
-<h4><a name=theme>static fltk::Theme fltk::Style::theme();
-<br>static void theme(fltk::Theme f);</a></h4>
+<h4><a name=theme>static fltk::Theme fltk::theme();
+<br>static void fltk::theme(fltk::Theme f);</a></h4>
 
 Get or set the function that will be called when the theme is loaded.
 
-<h4><a name=scheme>static const char* fltk::Style::scheme();
-<br>static void fltk::Style::scheme(const char* f);</a></h4>
+<h4><a name=scheme>static const char* fltk::scheme();
+<br>static void fltk::scheme(const char* f);</a></h4>
 
-Fltk also keeps track of a single string pointer that can be used as
-an "argument" to the theme function, perhaps to identify a file it
-should read. The default value is null. If you use <a
-href="Fl.html#args">fltk::args()</a> then the "-scheme" switch sets
-this.
+(NYI) This string is maintained so that a theme plugin can look at it
+and use it for any purpose it wants. <a
+href="utility.html#args">fltk::args()</a> will set this if the user gives the
+"-scheme" switch. The default value is null.
 
-<h4><a name=load_theme>static fltk::Theme fltk::Style::load_theme(const char* name);</a></h4>
+<h4><a name=load_theme2>static void fltk::load_theme();</a></h4>
 
-Locate a theme plugin by name, load it into memory, and return the
-fltk_theme() function. Returns null if the plugin is not found or
-there is a problem loading it or locating the fltk_theme() function,
-and prints information about what went wrong to stderr.
+Force the theme to be loaded. Calling this multiple times does nothing
+(call <a href="#reload_theme">reload_theme()</a> if you want to make a
+change to <a href="#theme">theme()</a>. take effect). Normally fltk
+calls this just before the first window is shown(). You can call this
+earlier to make sure all the styles are correct, for instance if you
+want to measure the size of labels, which depends on the font
+selected.
 
-<p>".theme" is added to the end of the name if not already there and
-<a href=#find_config_file>fltk::find_config_file()</a> is called to
-locate the plugin (this means you can provide a full pathname for the
-plugin). If the plugin is found it is loaded with <a
-href=#load_plugin>fltk::load_plugin()</a>.
+<h4><a name=reload_theme>static void fltk::reload_theme();</a></h4>
 
-<p>If the name is null, the empty string, or if it "default" and there
-is no plugin named "default", then the built-in fltk_theme() function
-is returned. This built-in calls <a
-href=#get_system_colors>fltk::get_system_colors()</a>.
+If <a href="#load_theme">load_theme()</a> has been called, this will
+restore all the Style information back to the compiled-in default
+values, and then call the theme() function again. This is useful if
+theme() changes, or if external information that your theme uses changes.
 
-<p>If fltk is statically linked then null, the empty string, and
-"default" return the built-in fltk_theme(), otherwise an error is
-printed and null is returned.
-
-<h4><a name=load_theme2>static void fltk::Style::load_theme();</a></h4>
-
-If this <i>has not</i> been called before, it loads the current theme
-by running the fltk::Style::theme() function. If that has not been set it
-sets it to <a href=#load_theme>fltk::Style::load_theme("default")</a>.
-Progams can call this before showing the first window to force the
-theme to be loaded, otherwise fltk waits until the first window is
-shown to call this.
-
-<h4><a name=reload_theme>static void fltk::Style::reload_theme();</a></h4>
-
-If <a href=#load_theme2>fltk::Style::load_theme(void)</a> <i>has</i> been
-called before, this calls <a href=#revert>fltk::Style::revert()</a> and
-then re-runs the theme function. This will allow the theme to respond
-to changes in any system configuration or files. This does nothing if
-themes have not been started yet to avoid wasting time before it matters.
+<p>If load_theme() has never been called this returns and does
+nothing.  This allows your code to change the themes several times
+without wasting time before the first window is shown.
 
 <p>On Windows this is automatically called in response to a
 <tt>WM_SYSCOLORCHANGE</tt>. On X the theme itself needs to set up some
 event handler to call this, see the KDE theme source code for an example.
-
-<p>A program should call this if it changes the <a
-href=#theme>fltk::Style::theme()</a> or <a
-href=#scheme>fltk::Style::scheme()</a>.
-
-<h4><a name=revert>static void fltk::Style::revert();</a></h4>
-
-Return all the styles to their default settings (by calling the
-revert() function on each of them) and also undo some global settings
-such as <a href=Fl_Color.html#background>fltk::background</a>. This is
-done by <a href=#reload_theme>reload_theme()</a> before loading the
-theme again.
 
 <h2><a name=timplement>Implementing a Theme</a></h2>
 
@@ -121,47 +95,19 @@ themselves.
 
 <p>The following functions are useful when writing a theme.
 
-<h4><a name=get_system_colors>bool fltk::get_system_colors();</a></h4>
+<h4><a name=system_theme>bool fltk::system_theme();</a></h4>
 
-Read system configuration (GetSysColor() and similar functions on
-Win32, on X it reads a <i>few</i> entries from the xrdb database) and
-retrieve information such as colors and fonts and put them into the
-styles. This is what the default theme does, many other themes will
-find this useful.
-
-<h4><a name=find_config_file>const char* fltk::find_config_file(char* out, int size, const char* name);</a></h4>
-
-Search for a file in fltk's configuration directories, and return the
-found filename. If necessary the <i>out</i> buffer is used to printf
-the filename and a pointer to that is returned, <i>size</i> is the
-length of this buffer. Returns null if the filename is not found.
-
-<p>If the name starts with '/' or '.' (or on Windows if it starts with
-'\\' or the second character is a ':') then it is returned unchanged
-(note that this does not check for existence of the file).
-
-<p>Otherwise the following locations are searched in order and the
-first one found is returned:
-
-<ul>
-
-<li><tt>~/.fltk/</tt><i>name</i></li>
-
-<li><tt>%HOMEPATH%/fltk/</tt><i>name</i></li> (Windows only)
-
-<li><tt>%USERPROFILE%/fltk/</tt><i>name</i></li> (Windows only)
-
-<li><tt>/usr/local/lib/fltk/</tt><i>name</i></li> (this may be changed
-by a configuration option when fltk is compiled)
-
-</ul>
+System-specific "theme". This is called by default by fltk, and if you
+write a theme function you probably want to call it as well. On Window
+it uses GetSysColor(), and it does similar things on other operating
+systems to get the appearance to match the user's settings for other
+software as much as possible.
 
 <h4><a name=load_plugin>void* fltk::load_plugin(const char* name, const char* symbol);</a></h4>
 
 Loads a shared object (DLL) in a portable way. <i>name</i> is a
-complete filename (such as one located by <a
-href=#find_config_file><tt>fltk::find_config_file()</tt></a>) and
-<i>symbol</i> is the name of some object in the plugin.
+complete filename and <i>symbol</i> is the name of some object in the
+plugin.
 
 <p>If the plugin file successfully loads (or has already been loaded)
 then a pointer to the given symbol is returned. If the plugin is not

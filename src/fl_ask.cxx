@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.29 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.30 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ static int innards(
   const char *b1,
   const char *b2)
 {
-  Style::load_theme();
+  load_theme();
   Window window(3*BORDER_W+ICON_W+INPUT_W, 3*BORDER_H+ICON_H+BUTTON_H);
   window.begin();
 
@@ -232,5 +232,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.29 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.30 2003/06/24 07:10:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.145 2003/05/25 18:07:35 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.146 2003/06/24 07:10:48 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -310,39 +310,10 @@ void fltk::open_display(Display* d) {
 
   xscreen = DefaultScreen(d);
 
-  // Carl inserted something much like the KDE plugin does to register
-  // a style client message.  I would prefer to either leave this up
-  // to the plugin, or use the SAME atoms as KDE (to avoid even more
-  // namespace pollution).  See the kde plugin for sample code.
-
-  // I don't think an X window with the name "FLTK_STYLE_WINDOW" pollutes
-  // the namespace very badly.  We could use the same atoms as KDE, but then
-  // FLTK windows would redraw every time we changed the KDE scheme, and
-  // KDE windows would redraw every time we changed the FLTK scheme which
-  // to me would be unacceptable.  Moreover, this would make FLTK dependant
-  // on a particular KDE version; different versions of KDE (currently just
-  // v1 & v2) handle this in different ways.  We would need put logic in
-  // FLTK to figure out which version of KDE is running and do it in that
-  // way, and that would break again if the KDE folks changed methods again.
-  // It doesn't hurt anything and saves code needed for KDE compatibility
-  // to just do it our own way.  Finally, it just doesn't seem "right" for
-  // FLTK applications to advertise themselves as KDE applications when in
-  // fact they are not.  That could potentially break KDE as it waits for
-  // a FLTK application to do some KDE thing that it doesn't know how to
-  // respond to.  That's what the KDE theme is for!
-  //
-  // CET
-
-  // WAS: ok.  I made it public so the window id can be used for grab, etc.
-  // We may want the atom to be FLTK_MESSAGE_WINDOW, and change the message
-  // to be FLTKChangeStyle so that the names match kde more closely.
-
+  // This window is used for interfaces that need a window id even
+  // though there is no real reason to have a window visible:
   message_window =
     XCreateSimpleWindow(d, RootWindow(d, xscreen), 0,0,1,1,0, 0, 0);
-  Atom style_atom = XInternAtom(d, "FLTK_STYLE_WINDOW", False);
-  long data = 1;
-  XChangeProperty(d, message_window, style_atom, style_atom, 32,
-		  PropModeReplace, (unsigned char *)&data, 1);
 
   // construct an XVisualInfo that matches the default Visual:
   XVisualInfo templt; int num;
@@ -544,7 +515,7 @@ bool fltk::handle()
       return true;
 
     } else if (message == FLTKChangeScheme) {
-      Style::reload_theme();
+      reload_theme();
       return true;
 
     } else if (message == XdndEnter) {
@@ -1378,7 +1349,7 @@ static Color to_color(const char* p) {
   return p ? color(p) : 0;
 }
 
-bool fltk::get_system_colors() {
+bool fltk::system_theme() {
   open_display();
 
   Color color;
@@ -1444,5 +1415,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.145 2003/05/25 18:07:35 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.146 2003/06/24 07:10:48 spitzak Exp $".
 //

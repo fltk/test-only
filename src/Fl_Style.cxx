@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.44 2003/02/03 02:33:57 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.45 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -24,8 +24,9 @@
 //
 
 #include <fltk/Widget.h>
-#include <fltk/load_plugin.h>
 #include <fltk/string.h>
+#include <fltk/math.h>
+#include <fltk/run.h>
 #include <stdlib.h>
 #include <config.h>
 #if defined(_WIN32)
@@ -36,7 +37,7 @@
 # include <unistd.h>
 #endif
 #include <ctype.h>
-#include <fltk/math.h>
+
 using namespace fltk;
 
 NamedStyle* NamedStyle::first;
@@ -131,10 +132,25 @@ style_functions(float,		leading		)
 style_functions(unsigned char,	scrollbar_align	)
 style_functions(unsigned char,	scrollbar_width	)
 
-// Named styles provide a list that can be searched by theme plugins.
-// The "revert" function is mostly provided to make it easy to initialize
-// the fields even though C++ does not allow a structure constant.
-// It is also used to undo theme changes.
+/*! \class NamedStyle
+
+  Typically a widget class will define a single NamedStyle that is
+  used by all instances of that widget. A "theme" can locate this
+  structure by looking it up by name (using the find() method) and
+  then change it to change the appearance of all widgets of
+  that class.
+
+  The reason a string name is used, rather than making the style be
+  a public static data member of the class, is so that a theme can
+  modify a large number of types of widgets without having them
+  all linked into a program. If find() returns null it should just skip
+  that setting code because that widget is not used by this program.
+
+  The "revert" function is mostly provided to make it easy to initialize
+  the fields even though C++ does not allow a structure constant.
+  It is also used to undo theme changes when fltk::reload_theme()
+  is called.
+*/
 
 static void plainrevert(Style*) {}
 
@@ -179,9 +195,60 @@ int Style::wheel_scroll_lines = 3;
 ////////////////////////////////////////////////////////////////
 // Themes:
 
-void Style::revert() {
+extern "C" FL_API bool fltk_theme();
+
+/*! \fn fltk::theme(Theme)
+  Set a function that sets all the NamedStyle structures to the
+  correct values for the appearance selected by the user and
+  operating system. This function is called by fltk before the
+  first window is shown, and also whenever it receives a signal
+  from the operating system that the user's preferences have
+  changed.
+
+  The return value is ignored but you should return true for future
+  compatability.
+
+  This pointer is declared as a "C" function to make it easier to load
+  the correct function by name from a plugin, if you would like to
+  write a scheme where the appearance is controlled by plugins.  Fltk
+  provides a convienence function to portably load plugins called
+  fltk::load_plugin() that you may want to use if you are writing such
+  a system.
+
+  You can also statically override this at compile time. The default
+  value is a function called fltk_theme() (not in the fltk namespace),
+  which just calls system_theme(). You may be able to link in
+  your own function called fltk_theme() and thus override the default
+  theme at compile time. For instance building the fltk library with
+  the KDE.cxx file will make it always load KDE color and font
+  settings.  */
+
+Theme fltk::theme_ = fltk_theme;
+
+Color fl_bg_switch = 0; // set by -bg in arg.cxx
+
+static bool theme_loaded;
+
+/*! If load_theme() has been called, this will restore all the style
+  information back to the compiled-in default values, and then call
+  the theme() function again. This is useful if theme() changes, or
+  if external information changes such that the result of your theme()
+  function changes.
+
+  If load_theme() has never been called this returns and does nothing.
+  This allows your code to change the themes several times without
+  wasting time before the first window is shown.
+
+  On Windows this is automatically called when a message comes from
+  the OS indicating the user's preferences have changed. The KDE.cxx
+  code also sets things up so KDE change messages cause this to be
+  called.
+*/
+void fltk::reload_theme() {
+  if (!theme_loaded) return;
+  // revert to compiled defaults:
   // set_background((Color)0xc0c0c000); // not necessary?
-  draw_boxes_inactive = 1;
+  Style::draw_boxes_inactive = 1;
   for (NamedStyle* p = NamedStyle::first; p; p = p->next) {
     if (p->name) {
       Style temp = *p;
@@ -191,122 +258,24 @@ void Style::revert() {
       p->revertfunc(p);
     }
   }
+  theme_loaded = false;
+  load_theme();
   fltk::redraw();
 }
 
-Color fl_bg_switch = 0; // set by -bg in arg.cxx
-
-static bool theme_loaded;
-
-// Force the theme to be reloaded, if it already has been loaded.
-// This does nothing if load_theme() has not been called before (when
-// load_theme() is called this same actions will be done). Otherwise
-// this will call revert() on the styles and run the current theme
-// procedure.
-void Style::reload_theme() {
-  if (theme_loaded) {
-    theme_loaded = false;
-    revert();
-    load_theme();
-  }
-}
-
-// Force the theme to be loaded. This does nothing if this has already
-// been called. Normally this is called when the first window is shown()
-// but you can call this if you want your program to be able to use any
-// settings the theme made.
-void Style::load_theme() {
+/*! Force the theme to be loaded. Calling this multiple times does
+  nothing (call reload_theme() if you want to make a change to theme()
+  take effect). Normally fltk calls this just before the first window
+  is shown(). You can call this earlier to make sure all the styles
+  are correct, for instance if you want to measure the size of labels,
+  which depends on the font selected.
+*/
+void fltk::load_theme() {
   if (theme_loaded) return;
   theme_loaded = true;
-  if (!theme_) theme_ = load_theme("default");
   theme_();
   if (fl_bg_switch) set_background(fl_bg_switch);
 }
-
-Theme Style::theme_;
-const char* Style::scheme_;
-
-////////////////////////////////////////////////////////////////
-// Theme plugin finder & loader
-
-#ifndef FL_SHARED
-
-Theme Style::load_theme(const char* name) {
-  // no name leaves the built-in default:
-  if (!name || !*name) return fltk_theme;
-  // "default" works:
-  if (!strcmp(name, "default")) return fltk_theme;
-  // otherwise we can't do anything
-  fprintf(stderr, "%s : FLTK linked statically, cannot load plugins\n", name);
-  return 0;
-}
-
-#else
-
-#ifndef FILENAME_MAX
-# define FILENAME_MAX 1024
-#endif
-
-Theme Style::load_theme(const char* name) {
-  // no name leaves the built-in default:
-  if (!name || !*name) return fltk_theme;
-
-  // add ".theme" if it is not there:
-  char name_buf[FILENAME_MAX];
-  int n = strlen(name);
-  if (n < 6 || strcasecmp(name+n-6, ".theme")) {
-    snprintf(name_buf, FILENAME_MAX, "%s.theme", name);
-    name = name_buf;
-  }
-
-  // search for the file:
-  char path_buf[FILENAME_MAX];
-  const char *path = find_config_file(path_buf, FILENAME_MAX, name);
-
-  if (!path) {
-    // If they said "default" it is ok if the plugin is not found:
-    if (!strncmp(name, "default.", 8)) return fltk_theme;
-    return 0;
-  }
-
-  return (Theme)load_plugin(path, "fltk_theme");
-}
-
-const char* fltk::find_config_file(char* path, int size, const char* name)
-{
-  // See if the user typed in an "absolute" path name
-  if (name[0] == '/' || name[0] == '.'
-#ifdef _WIN32
-      || name[0] == '\\' || name[1] == ':'
-#endif
-      ) {
-    return name;
-  }
-  // Look in the ~/.fltk directory:
-  char *cptr = getenv("HOME");
-  if (cptr) {
-    snprintf(path, size, "%s/.fltk/%s", cptr, name);
-    if (access(path, R_OK) == 0) return path;
-  }
-#ifdef _WIN32
-  cptr = getenv("HOMEPATH");
-  if (cptr) {
-    snprintf(path, size, "%s/fltk/%s", cptr, name);
-    if (access(path, R_OK) == 0) return path;
-  }
-  cptr = getenv("USERPROFILE");
-  if (cptr) {
-    snprintf(path,sizeof(path), "%s/Application Data/fltk/%s", cptr, name);
-    if (access(path, R_OK) == 0) return path;
-  }
-#endif
-  // try the default /usr/local/lib/fltk:
-  snprintf(path, sizeof(path), CONFIGDIR "/%s", name);
-  if (access(path, R_OK) == 0) return path;
-  return 0;
-}
-
-#endif
 
 ///////////////////////////////////////////////////////////////
 
@@ -338,5 +307,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.44 2003/02/03 02:33:57 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.45 2003/06/24 07:10:48 spitzak Exp $".
 //

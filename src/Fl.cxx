@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.163 2003/03/31 07:17:43 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.164 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -248,8 +248,7 @@ int fltk::wait() {
   return wait(FOREVER);
 }
 
-int fltk::wait(float time_to_wait) {
-  int ret = 0;
+static void run_checks() {
   // checks are a bit messy so that add/remove and wait may be called
   // from inside them without causing an infinite loop. We must also
   // do them first so that they can install an idle or timeout function:
@@ -261,6 +260,13 @@ int fltk::wait(float time_to_wait) {
     }
     next_check = first_check;
   }
+}
+
+int fltk::wait(float time_to_wait) {
+  int ret = 0;
+  // check functions must be run first so they can install idle or timeout
+  // functions:
+  run_checks();
   if (idle) {
     if (!in_idle) {in_idle = true; idle(); in_idle = false;}
     // the idle function may turn off idle, we can then wait:
@@ -286,6 +292,9 @@ int fltk::wait(float time_to_wait) {
       cb(arg);
       // return immediately afterwards because timeout was done:
       time_to_wait = 0; ret = 1;
+      // we must run the checks again because the timeout may have changed
+      // the state:
+      run_checks();
     }
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
@@ -691,5 +700,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.163 2003/03/31 07:17:43 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.164 2003/06/24 07:10:48 spitzak Exp $".
 //

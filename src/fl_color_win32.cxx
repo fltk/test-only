@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.34 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.35 2003/06/24 07:10:48 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -24,6 +24,14 @@
 //
 
 // This file does not compile independently, it is included by color.cxx
+
+// "Stock brushes" are an attempt to modernize Win32 GDI into a "set
+// current color" style interface and can vastly speed up drawing.
+// However it only exists on NT5.0 and Win98 and later.
+// Warning: this currently requires defining _WIN32_WINNT in fl_color.cxx
+// in order to get the correct symbols included by windows.h. If anybody
+// knows how to fix this, please tell me!!!
+#define USE_STOCK_BRUSH 1
 
 // The current color:
 Color		fltk::current_color_;
@@ -83,13 +91,13 @@ void fltk::line_style(int style, int width, char* dashes) {
   }
 }
 
-#if _WIN32_WINNT >= 0x0500
+#if USE_STOCK_BRUSH
 static HPEN stockpen = (HPEN)GetStockObject(DC_PEN);
 static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
 #endif
 
 HPEN fltk::setpen() {
-#if _WIN32_WINNT >= 0x0500
+#if USE_STOCK_BRUSH
   if (!lstyle && line_width <= 1) {
     SelectObject(gc, stockpen);
     SetDCPenColor(gc, current_xpixel);
@@ -114,7 +122,7 @@ HPEN fltk::setpen() {
 }
 
 HBRUSH fltk::setbrush() {
-#if _WIN32_WINNT >= 0x0500
+#if USE_STOCK_BRUSH
   SelectObject(gc, stockbrush);
   SetDCBrushColor(gc, current_xpixel);
 #else
@@ -188,5 +196,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.34 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.35 2003/06/24 07:10:48 spitzak Exp $".
 //

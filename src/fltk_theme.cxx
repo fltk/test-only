@@ -1,14 +1,15 @@
-/* fltk_theme.cxx
-
-   This function is in a file by itself so that a program that statically
-   links with fltk can customize it's theme by linking one of the theme
-   plugins. Because the theme plugins define a function called fltk_theme()
-   they will override this and cause fltk to call the plugin instead.
-*/
+// fltk_theme.cxx
 
 #include <fltk/Style.h>
 
+/*! This is the default value of fltk::theme(). It calls
+  fltk::system_theme().
+
+  If fltk is statically linked with a program then you can "theme"
+  the program by simply linking in an object file that defines a
+  different fltk_theme() function.
+*/
+
 extern "C" bool fltk_theme() {
-  fltk::get_system_colors();
-  return true;
+  return fltk::system_theme();
 }

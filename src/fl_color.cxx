@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.31 2002/12/10 02:00:57 easysw Exp $"
+// "$Id: fl_color.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,8 +26,13 @@
 #include <fltk/Color.h>
 #include <fltk/draw.h>
 #include <config.h>
+#ifdef _WIN32 // Crap needed before windows.h so StockBrushes work
+# ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0500
+# endif
+#endif
 #include <fltk/x.h>
-#include <string.h>
+
 using namespace fltk;
 
 // The fltk "colormap". In fltk 1.0 this allowed the gui colors to be
@@ -114,5 +119,5 @@ Color fltk::get_color_index(Color i) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.31 2002/12/10 02:00:57 easysw Exp $".
+// End of "$Id: fl_color.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $".
 //

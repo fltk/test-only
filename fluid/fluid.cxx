@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.64 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.65 2003/06/24 07:10:48 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -367,6 +367,7 @@ fltk::StyleSet* style_set;
 char* theme;
 
 void set_theme(const char* s) {
+#if 0
   if (!s || !*s) {
     if (!theme) return;
     free((void*)theme);
@@ -387,6 +388,7 @@ void set_theme(const char* s) {
   fltk::redraw();
   if (!f) fltk::alert("Error loading theme \"%s\" (plugin not found?)",
 		   theme ? theme : "");
+#endif
 }
 
 void theme_cb(fltk::Widget *, void *) {
@@ -560,5 +562,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.64 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.65 2003/06/24 07:10:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.15 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -165,13 +165,21 @@ FontSize::~FontSize() {
 #endif
 
 // This call is used by gl_setfont to get a bitmapped font. Xft actually does
-// a pretty good job of selecting X fonts...
+// a pretty good job of selecting X fonts. Unfortunatlye Xft2 seems to have
+// completely hidden or removed this interface...
 XFontStruct* fltk::xfont() {
+#if defined(XFT_MAJOR) && XFT_MAJOR >= 2
+  // kludge!
+  static XFontStruct* fixed = 0;
+  if (!fixed) fixed = XLoadQueryFont(fl_display, "variable");
+  return fixed;
+#else
   if (current->font->core) return current->font->u.core.font;
   static XftFont* xftfont;
   if (xftfont) XftFontClose (xdisplay, xftfont);
   xftfont = fontopen(current_font_->name_, current_font_->attributes_, true);
   return xftfont->u.core.font;
+#endif
 }
 
 const char* fltk::Font::current_name() {
@@ -401,5 +409,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.15 2003/04/19 21:45:29 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
 //
