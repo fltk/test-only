@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.5 2002/02/10 22:57:50 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.6 2002/02/18 04:58:15 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -126,6 +126,11 @@ extern "C" bool fltk_theme() {
     kde1 = 1;
   }
   conf_clear_cache();
+  
+  // 2.0 used pixelsize and 2.1 of KDE used pointsize of fonts, but there
+  // is no really good way to figure out which is in use. This is a guess:
+  bool newer_kde = false;
+  if (!getconf(kderc, "KDE/AntiAliasing", s, sizeof(s))) newer_kde = true;
 
   int motif_style = 0;
   if (!colors_only) {
@@ -182,21 +187,27 @@ extern "C" bool fltk_theme() {
   char* sv; // to save strtok_r() state
   if (!getconf(kderc, "General/font", s, sizeof(s))) {
     char fontname[64] = "";
-    int fontbold = 0, fontitalic = 0;
 
-    if ( (p = strtok_r(s, ",", &sv)) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok_r(0, ",", &sv)) ) fontsize = atoi(p);
+    if ( (p = strtok_r(s, ",", &sv)) ) {
+      // strip leading foundry name, if any:
+      char* q = strchr(p, '-');
+      if (q) p = q+1;
+      strncpy(fontname, p, sizeof(fontname));
+    }
+    if ( (p = strtok_r(0, ",", &sv)) ) {
+      fontsize = atoi(p);
+      if (newer_kde) fontsize = (4*fontsize+2)/3;
+    }
     strtok_r(0, ",", &sv); // I have no idea what this is
     if ( (p = strtok_r(0, ",", &sv)) ) {
       strncpy(fontencoding, p, sizeof(fontencoding));
       if (!strncasecmp(fontencoding, "iso-", 4))
         memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1); // hack!
     }
-    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
-    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
-    font = fl_find_font(fontname);
-    if (font && fontbold) font = font->bold();
-    if (font && fontitalic) font = font->italic();
+    int attrib = 0;
+    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = FL_BOLD;
+    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= FL_ITALIC;
+    font = fl_find_font(fontname, attrib);
   }
 
   Fl_Font menufont = 0;
@@ -204,21 +215,27 @@ extern "C" bool fltk_theme() {
   static char menufontencoding[32] = "";
   if (!getconf(kderc, "General/menuFont", s, sizeof(s))) {
     char fontname[64] = "";
-    int fontbold = 0, fontitalic = 0;
 
-    if ( (p = strtok_r(s, ",", &sv)) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok_r(0, ",", &sv)) ) menufontsize = atoi(p);
+    if ( (p = strtok_r(s, ",", &sv)) ) {
+      // strip leading foundry name, if any:
+      char* q = strchr(p, '-');
+      if (q) p = q+1;
+      strncpy(fontname, p, sizeof(fontname));
+    }
+    if ( (p = strtok_r(0, ",", &sv)) ) {
+      menufontsize = atoi(p);
+      if (newer_kde) menufontsize = (4*menufontsize+2)/3;
+    }
     strtok_r(0, ",", &sv); // I have no idea what this is
     if ( (p = strtok_r(0, ",", &sv)) ) {
       strncpy(menufontencoding, p, sizeof(menufontencoding));
       if (!strncasecmp(menufontencoding, "iso-", 4))
         memmove(menufontencoding+3,menufontencoding+4, strlen(menufontencoding+4)+1); // hack!
     }
-    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
-    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
-    menufont = fl_find_font(fontname);
-    if (menufont && fontbold) menufont = font->bold();
-    if (menufont && fontitalic) menufont = font->italic();
+    int attrib = 0;
+    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = FL_BOLD;
+    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= FL_ITALIC;
+    menufont = fl_find_font(fontname, attrib);
   }
 
   // turn off highlighting:
@@ -356,5 +373,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.5 2002/02/10 22:57:50 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.6 2002/02/18 04:58:15 spitzak Exp $".
 //

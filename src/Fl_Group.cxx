@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.105 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.106 2002/02/18 04:58:15 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -292,7 +292,12 @@ int Fl_Group::handle(int event) {
     }
     return 0;
 
+  case FL_DRAG:
+  case FL_KEY:
+  case FL_KEYUP:
   case FL_LEAVE:
+    // these events are sent directly to widgets, and should not be
+    // passed to them from a parent widget.
     return 0;
   }
 
@@ -661,5 +666,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.105 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.106 2002/02/18 04:58:15 spitzak Exp $".
 //

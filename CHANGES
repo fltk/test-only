@@ -2055,3 +2055,14 @@ not going to work right unless I get rid of fl_background(), but fluid
 loads themes pretty well now.
 
 Checked in 2/10/02
+////////////////////////////////////////////////////////////////
+
+X version of list_fonts changed to match the output of xft more.
+
+Fl_Gl_Window defaults to only using glxSwapBuffers, as attempts to
+copy regions seem broken on the newest win2k drivers. You can change
+this by setting the GL_SWAP_TYPE environment variable.
+
+Fl_Group does not pass FL_DRAG, FL_KEY, FL_KEYUP, and FL_LEAVE events
+to children, so it can be used as a base class for something that does
+handle these events.

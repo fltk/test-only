@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.33 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.34 2002/02/18 04:58:15 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,25 +34,26 @@
 
 ////////////////////////////////////////////////////////////////
 
-// The environment variable $GL_SWAP_TYPE defines what is in the back
-// buffer after doing a glXSwapBuffers().
+// The symbol SWAP_TYPE defines what is in the back buffer after doing
+// a glXSwapBuffers().
 
 // The OpenGl documentation says that the contents of the backbuffer
 // are "undefined" after glXSwapBuffers().  However, if we know what
-// is in the backbuffers then we can save a good deal of time!
+// is in the backbuffers then we can save a good deal of time.  For
+// this reason you can define some symbols to describe what is left in
+// the back buffer.
 
-// $GL_SWAP_TYPE should be one of these keywords (ie "setenv
-// GL_SWAP_TYPE COPY"). If not set UNDEFINED is used.
+// Having not found any way to determine this from glx (or wgl) I have
+// resorted to letting the user specify it with an environment variable,
+// GL_SWAP_TYPE, it should be equal to one of these symbols:
 
-enum {
-  GET_FROM_ENV_VARIABLE = 0,
-  UNDEFINED, 	// anything
-  SWAP,		// former front buffer (same as UNDEFINED)
-  COPY,		// unchanged
-  NODAMAGE	// unchanged even by X expose() events
-};
+// contents of back buffer after glXSwapBuffers():
+#define SWAP 1		// default (assumme garbage is in back buffer)
+#define USE_COPY 2	// use glCopyPixels to imitate COPY behavior
+#define COPY 3		// unchanged
+#define NODAMAGE 4	// unchanged even by X expose() events
 
-static char SWAP_TYPE = GET_FROM_ENV_VARIABLE;
+static char SWAP_TYPE; // 0 = determine it from environment variable
 
 ////////////////////////////////////////////////////////////////
 
@@ -196,11 +197,12 @@ void Fl_Gl_Window::flush() {
     glDrawBuffer(GL_BACK);
 
     if (!SWAP_TYPE) {
-      SWAP_TYPE = UNDEFINED;
+      SWAP_TYPE = SWAP;
       const char* c = getenv("GL_SWAP_TYPE");
-      if (c) {
-	if (!strcmp(c,"COPY")) SWAP_TYPE = COPY;
-	else if (!strcmp(c, "NODAMAGE")) SWAP_TYPE = NODAMAGE;
+      if (c) switch (c[0]) {
+      case 'U' : SWAP_TYPE = USE_COPY; break;
+      case 'C' : SWAP_TYPE = COPY; break;
+      case 'N' : SWAP_TYPE = NODAMAGE; break;
       }
     }
 
@@ -220,42 +222,38 @@ void Fl_Gl_Window::flush() {
       else
 	swap_buffers();
 
-    } else { // SWAP_TYPE == UNDEFINED
-
+    } else if (SWAP_TYPE == USE_COPY && overlay == this) {
       // If we are faking the overlay, use CopyPixels to act like
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
-      if (overlay == this) {
-	// update the back buffer if it is wrong:
-	if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
-	// we use a seperate context for the copy because rasterpos must be 0
-	// and depth test needs to be off:
-	static GLContext ortho_context = 0;
-	static Fl_Gl_Window* ortho_window = 0;
-	if (!ortho_context) {
-	  ortho_context = fl_create_gl_context(this, gl_choice);
-	  save_valid = 0;
-	}
-	fl_set_gl_context(this, ortho_context);
-	if (!save_valid || ortho_window != this) {
-	  ortho_window = this;
-	  glDisable(GL_DEPTH_TEST);
-	  glReadBuffer(GL_BACK);
-	  glDrawBuffer(GL_FRONT);
-	  glLoadIdentity();
-	  glViewport(0, 0, w(), h());
-	  glOrtho(0, w(), 0, h(), -1, 1);
-	  glRasterPos2i(0,0);
-	}
-	glCopyPixels(0,0,w(),h(),GL_COLOR);
-	make_current(); // set current context back to draw overlay
-	damage1_ = 0; // remember that back buffer is now undamaged
-
-      } else {
-
-	damage1_ = damage(); // remember that backbuffer is damaged
-	set_damage(~0); draw_swap();
-
+      // don't draw if only the overlay is damaged:
+      if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
+      // we use a seperate context for the copy because rasterpos must be 0
+      // and depth test needs to be off:
+      static GLContext ortho_context = 0;
+      static Fl_Gl_Window* ortho_window = 0;
+      if (!ortho_context) {
+	ortho_context = fl_create_gl_context(this, gl_choice);
+	save_valid = 0;
       }
+      fl_set_gl_context(this, ortho_context);
+      if (!save_valid || ortho_window != this) {
+	ortho_window = this;
+	glDisable(GL_DEPTH_TEST);
+	glReadBuffer(GL_BACK);
+	glDrawBuffer(GL_FRONT);
+	glLoadIdentity();
+	glViewport(0, 0, w(), h());
+	glOrtho(0, w(), 0, h(), -1, 1);
+	glRasterPos2i(0,0);
+	}
+      glCopyPixels(0,0,w(),h(),GL_COLOR);
+      make_current(); // set current context back to draw overlay
+      damage1_ = 0;
+
+    } else {
+
+      damage1_ = damage();
+      set_damage(~0); draw_swap();
 
     }
 
@@ -326,5 +324,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.33 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.34 2002/02/18 04:58:15 spitzak Exp $".
 //

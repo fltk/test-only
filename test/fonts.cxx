@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.24 2001/11/14 09:21:43 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.25 2002/02/18 04:58:15 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -42,10 +42,9 @@ public:
   FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
     Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
+
 void FontDisplay::draw() {
   draw_box();
-// CET - FIXME - ??!?!  WTF?
-//  int ix = x(), iy = y(), iw = w(), ih = h();
   int ix = 0, iy = 0, iw = w(), ih = h();
   box()->inset(ix, iy, iw, ih);
   fl_push_clip(ix, iy, iw, ih);
@@ -56,7 +55,6 @@ void FontDisplay::draw() {
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
     for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X);
-//    fl_draw(buffer, 32, x()+3, y()+3+size*Y);
     fl_draw(buffer, 32, 3, 3+fl_height()*Y);
   }
   fl_encoding(saved_encoding);
@@ -79,10 +77,6 @@ void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
 //printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
 
-// CET - FIXME - new browser code has value starting from 0!
-//  if (!fn) return;
-//  fn--;
-
   Fl_Font f = fonts[fn];
   if (f->bold() == f) bold_button->deactivate();
   else bold_button->activate();
@@ -92,22 +86,19 @@ void font_cb(Fl_Widget *, long) {
   if (italic_button->value()) f = f->italic();
   textobj->font = f;
 
-// CET - FIXME - new browser code has value starting from 0!
-  int pickedencoding = encobj->value();
+  char saved[30]; strncpy(saved, textobj->encoding, 29);
   encobj->clear();
   const char** encodings; int ne = f->encodings(encodings);
-  if (!ne) {
-    textobj->encoding = fl_encoding();
-  } else {
-    pickedencoding = 0;
-    for (int i = 0; i < ne; i++) {
-      encobj->add(encodings[i]);
-      if (!strcmp(encodings[i], fl_encoding())) pickedencoding = i;
-    }
-    textobj->encoding = encodings[pickedencoding];
-// CET - FIXME - new browser code has value starting from 0!
-    encobj->value(pickedencoding);
+  int picked = -1;
+  int iso8859 = 0;
+  for (int i = 0; i < ne; i++) {
+    encobj->add(encodings[i]);
+    if (!strcmp(encodings[i], saved)) picked = i;
+    if (!strcmp(encodings[i], fl_encoding())) iso8859 = i;
   }
+  if (picked < 0) picked = iso8859;
+  textobj->encoding = encodings[picked];
+  encobj->value(picked);
 
   sizeobj->clear();
   int *s; int n = f->sizes(s);
@@ -204,11 +195,12 @@ int main(int argc, char **argv) {
   for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
 // CET - FIXME - new browser code has value starting from 0!
   fontobj->value(0);
+  textobj->encoding = fl_encoding();
   font_cb(fontobj,0);
   form->show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.24 2001/11/14 09:21:43 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.25 2002/02/18 04:58:15 spitzak Exp $".
 //

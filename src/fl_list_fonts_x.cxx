@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.6 2001/11/14 09:21:43 spitzak Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.7 2002/02/18 04:58:15 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -59,17 +59,18 @@ static const char* font_word(const char* p, int n) {
 static int attribute(int n, const char *p) {
   // don't put blank things into name:
   if (!*p || *p=='-' || *p=='*') return 0;
-  if (n == 3) { // weight
+  if (n == 3 || n == 5) { // weight or sWidth
     if (!strncmp(p,"normal",6) ||
 	!strncmp(p,"light",5) ||
 	!strncmp(p,"medium",6) ||
-	!strncmp(p,"book",4)) return 0;
-    if (!strncmp(p,"bold",4) || !strncmp(p,"demi",4)) return FL_BOLD;
+	!strncmp(p,"book",4) ||
+	!strncmp(p,"regular",7)) return 0;
+    if (!strncmp(p,"bold",4) ||
+	!strncmp(p+4,"bold",4) ||
+	!strncmp(p+5,"bold",4)) return FL_BOLD;
   } else if (n == 4) { // slant
     if (*p == 'r') return 0;
     if (*p == 'i' || *p == 'o') return FL_ITALIC;
-  } else if (n == 5) { // sWidth
-    if (!strncmp(p,"normal",6)) return 0;
   }
   return -1;
 }
@@ -87,7 +88,7 @@ static int to_nice(char* o, const char* p) {
   strncpy(o,x,e-x); o += e-x;
 
   // collect all the attribute words:
-  for (int n = 3; n <= 6; n++) {
+  for (int n = 3; n <= 5; n++) {
     // get the next word:
     if (*e) e++; x = e; e = font_word(x,1);
     int t = attribute(n,x);
@@ -142,25 +143,30 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 
   int array_size = 0;
   for (int i=0; i<xlistsize;) {
-    int first_xlist = i;
-    const char* skip_foundry = font_word(xlist[i++],2);
-    int length = font_word(skip_foundry, 6)-skip_foundry;
-    for (;;) { // find all matching fonts:
-      if (i >= xlistsize) break;
-      if (strncmp(font_word(xlist[i],2), skip_foundry, length)) break;
-      i++;
+    char newname[128];
+    int attribute = to_nice(newname, xlist[i]);
+
+    // find all the matching fonts:
+    int n = 1;
+    for (; i+n < xlistsize; n++) {
+      char nextname[128];
+      int nextattribute = to_nice(nextname, xlist[i+n]);
+      if (nextattribute != attribute || strcmp(nextname, newname)) break;
     }
 
     Fl_Font_* newfont;
+    // See if it is one of our built-in fonts:
+    const char* skip_foundry = font_word(xlist[i],2);
+    int length = font_word(skip_foundry, 6)-skip_foundry;
     for (int j = 0; ; j++) {
-      if (j >= 16) { // create a new font
+      if (j >= 16) { // no, create a new font
 	newfont = new Fl_Font_;
-	newfont->name_ = xlist[first_xlist];
+	newfont->name_ = xlist[i];
 	newfont->bold_ = newfont;
 	newfont->italic_ = newfont;
 	newfont->first = 0;
-	newfont->xlist = xlist+first_xlist;
-	newfont->n = -(i-first_xlist);
+	newfont->xlist = xlist+i;
+	newfont->n = -n;
 	break;
       }
       // see if it is one of our built-in fonts:
@@ -168,16 +174,15 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       if (!strncmp(skip_foundry, fl_fonts[j].name_+2, length)) {
 	newfont = fl_fonts+j;
 	if (!newfont->xlist) {
-	  newfont->xlist = xlist+first_xlist;
-	  newfont->n = -(i-first_xlist);
+	  newfont->xlist = xlist+i;
+	  newfont->n = -n;
 	}
 	break;
       }
     }
-    char newname[128];
-    int a = to_nice(newname, newfont->xlist[0]);
-    if (a && !strcmp(newname, family_name)) {
-      switch (a) {
+
+    if (attribute && !strcmp(newname, family_name)) {
+      switch (attribute) {
       case FL_BOLD: family->bold_ = newfont; break;
       case FL_ITALIC: family->italic_ = newfont; break;
       case FL_BOLD|FL_ITALIC:
@@ -193,6 +198,8 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       }
       font_array[num_fonts++] = newfont;
     }
+
+    i += n;
   }
   arrayp = font_array;
   return num_fonts;
@@ -272,5 +279,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.6 2001/11/14 09:21:43 spitzak Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.7 2002/02/18 04:58:15 spitzak Exp $"
 //
