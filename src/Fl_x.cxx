@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.41 1999/11/01 02:21:36 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.42 1999/11/01 22:51:40 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -251,7 +251,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
-char *fl_theme, *fl_style;
+extern char *fl_style, *fl_theme;
 #include <FL/fl_load_plugin.H>
 
 void fl_open_display() {
@@ -816,5 +816,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.41 1999/11/01 02:21:36 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.42 1999/11/01 22:51:40 carl Exp $".
 //

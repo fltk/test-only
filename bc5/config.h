@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.4 1999/04/01 05:15:15 carl Exp $"
+ * "$Id: config.h,v 1.5 1999/11/01 22:51:34 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -26,22 +26,6 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <stddef.h>
-
-/*
- * BORDER_WIDTH:
- *
- * Thickness of FL_UP_BOX and FL_DOWN_BOX.  Current 1,2, and 3 are
- * supported.
- *
- * 3 is the historic FLTK look.
- * 2 is the default and looks like Microsoft Windows, KDE, and Qt.
- * 1 is a plausible future evolution...
- *
- * Note that this may be simulated at runtime by redefining the boxtypes
- * using Fl::set_boxtype().
- */
-
-#define BORDER_WIDTH 3
 
 /*
  * HAVE_GL:
@@ -72,8 +56,10 @@
 /*
  * USE_XDBE:
  *
- * Actually try to use the double-buffer extension?  Set this to zero
- * disable use of XDBE without breaking the list_visuals program.
+ * Actually try to use the double-buffer extension?
+ * You can try this, it may speed up Fl_Double_Window.  However we have
+ * found most (all?) X implementations to be broken, or at least I
+ * don't understand the documentation, or something...
  */
 
 #define USE_XDBE HAVE_XDBE
@@ -167,5 +153,42 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.4 1999/04/01 05:15:15 carl Exp $".
+ * HAVE_PNG
+ *
+ * Do we have libpng ?
+ */
+
+#define HAVE_PNG 0
+
+/*
+ * HAVE_JPEG
+ *
+ * Do we have libjpeg ?
+ */
+
+#define HAVE_JPEG 0
+
+/*
+ * HAVE_DLOPEN
+ *
+ * Do we have ELF shared objects support?
+ * (used in FL/Fl_Plugin.H)
+ */
+
+#define HAVE_DLOPEN 0
+
+/*
+ * HAVE_PTHREAD
+ *
+ * Do we have MIT pthread
+ *
+ * Do we have POSIX threads?
+ */
+
+#define HAVE_PTHREAD 0
+#define HAVE_SCHED_GET_PRIORITY_MAX 0
+#define HAVE_PTHREAD_SETSCHEDPARAM 0
+
+/*
+ * End of "$Id: config.h,v 1.5 1999/11/01 22:51:34 carl Exp $".
  */

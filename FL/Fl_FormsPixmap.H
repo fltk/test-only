@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FormsPixmap.H,v 1.6 1999/10/17 20:40:03 vincent Exp $"
+// "$Id: Fl_FormsPixmap.H,v 1.7 1999/11/01 22:51:31 carl Exp $"
 //
 // Forms pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,7 @@ protected:
     void draw();
 public:
     Fl_FormsPixmap(Fl_Boxtype, int, int, int, int, const char * = 0);
-    void set(/*const*/char * const * bits);
+    void set(const char * const * bits);
     void Pixmap(Fl_Pixmap *B) {b = B;}
     Fl_Pixmap *Pixmap() const {return b;}
 };
@@ -42,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_FormsPixmap.H,v 1.6 1999/10/17 20:40:03 vincent Exp $".
+// End of "$Id: Fl_FormsPixmap.H,v 1.7 1999/11/01 22:51:31 carl Exp $".
 //

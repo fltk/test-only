@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.50 1999/11/01 02:21:29 carl Exp $"
+// "$Id: Fl.cxx,v 1.51 1999/11/01 22:51:37 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <config.h>
 
 //
 // Globals...
@@ -51,6 +52,8 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
+
+char *fl_theme, *fl_style;
 
 static double fl_elapsed();
 
@@ -809,5 +812,5 @@ Fl_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.50 1999/11/01 02:21:29 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.51 1999/11/01 22:51:37 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.2 1999/10/28 01:02:12 vincent Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.3 1999/11/01 22:51:38 carl Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -195,7 +195,7 @@ Fl_FileIcon::find(const char *filename,	// I - Name of file */
     if (!stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
-        filetype = DIRECTORY;
+        filetype = DIR;
 #ifdef S_IFIFO
       else if (S_ISFIFO(fileinfo.st_mode))
         filetype = FIFO;
@@ -884,7 +884,7 @@ Fl_FileIcon::load_system_icons(void)
       icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtdata.m.pm");
 
-      icon = new Fl_FileIcon("*", Fl_FileIcon::DIRECTORY);
+      icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
       icon->load_xpm("/usr/dt/appconfig/icons/C/DtdirB.m.pm");
 
       icon = new Fl_FileIcon("core", Fl_FileIcon::PLAIN);
@@ -905,7 +905,7 @@ Fl_FileIcon::load_system_icons(void)
       icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 
-      icon = new Fl_FileIcon("*", Fl_FileIcon::DIRECTORY);
+      icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.folder.closed.fti");
 
       icon = new Fl_FileIcon("core", Fl_FileIcon::PLAIN);
@@ -945,7 +945,7 @@ Fl_FileIcon::load_system_icons(void)
     {
       // Create the default icons...
       new Fl_FileIcon("*", Fl_FileIcon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
-      new Fl_FileIcon("*", Fl_FileIcon::DIRECTORY, sizeof(dir) / sizeof(dir[0]), dir);
+      new Fl_FileIcon("*", Fl_FileIcon::DIR, sizeof(dir) / sizeof(dir[0]), dir);
     }
 
     // Mark things as initialized...
@@ -955,5 +955,5 @@ Fl_FileIcon::load_system_icons(void)
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.2 1999/10/28 01:02:12 vincent Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.3 1999/11/01 22:51:38 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.12 1999/10/27 08:41:05 bill Exp $"
+// "$Id: input.cxx,v 1.13 1999/11/01 22:51:43 carl Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -125,10 +125,10 @@ int main(int argc, char **argv) {
   window->resizable(window);
   window->end();
   window->show(argc,argv);
-  Fl::lock();
+// CET - FIXME - crashes windows  Fl::lock();
   return Fl::run();
 }
 
 //
-// End of "$Id: input.cxx,v 1.12 1999/10/27 08:41:05 bill Exp $".
+// End of "$Id: input.cxx,v 1.13 1999/11/01 22:51:43 carl Exp $".
 //

@@ -21,7 +21,7 @@
 #include <FL/Fl.H>
 #include "config.h"
 
-#ifdef HAVE_PTHREAD
+#if HAVE_PTHREAD
 #include <unistd.h>
 #include <pthread.h>
 

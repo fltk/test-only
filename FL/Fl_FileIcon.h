@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.h,v 1.1 1999/10/17 15:20:23 mike Exp $"
+// "$Id: Fl_FileIcon.h,v 1.2 1999/11/01 22:51:31 carl Exp $"
 //
 // Fl_FileIcon definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ class Fl_FileIcon		//// Icon data
     FIFO,			// Only named pipes
     DEVICE,			// Only character and block devices
     LINK,			// Only symbolic links
-    DIRECTORY			// Only directories
+    DIR 			// Only directories
   };
 
   enum				// Data opcodes
@@ -103,5 +103,5 @@ class Fl_FileIcon		//// Icon data
 #endif // !_FL_FILEICON_H_
 
 //
-// End of "$Id: Fl_FileIcon.h,v 1.1 1999/10/17 15:20:23 mike Exp $".
+// End of "$Id: Fl_FileIcon.h,v 1.2 1999/11/01 22:51:31 carl Exp $".
 //

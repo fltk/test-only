@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.11 1999/10/17 20:40:15 vincent Exp $"
+// "$Id: forms.H,v 1.12 1999/11/01 22:51:32 carl Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -505,7 +505,7 @@ inline void fl_set_bitmapbutton_data(Fl_Widget* o,int a,int b,uchar* c) {
   (new Fl_Bitmap(c,a,b))->label(o);}  // does not delete old Fl_Bitmap!
 
 inline Fl_Widget* fl_add_pixmapbutton(int t,int x,int y,int w,int h,const char* l) {Fl_Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
-inline void fl_set_pixmapbutton_data(Fl_Widget* o, char*const* c) {
+inline void fl_set_pixmapbutton_data(Fl_Widget* o, const char*const* c) {
   (new Fl_Pixmap(c))->label(o);}  // does not delete old Fl_Pixmap!
 
 // Fl_Canvas object not yet implemented!
@@ -841,5 +841,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.11 1999/10/17 20:40:15 vincent Exp $".
+// End of "$Id: forms.H,v 1.12 1999/11/01 22:51:32 carl Exp $".
 //

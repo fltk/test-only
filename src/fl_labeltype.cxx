@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.10 1999/11/01 02:21:38 carl Exp $"
+// "$Id: fl_labeltype.cxx,v 1.11 1999/11/01 22:51:40 carl Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/Fl_Labeltype.H>
 #include <FL/fl_draw.H>
 #include <string.h>
+#include <config.h>
 
 void fl_no_label_draw(Fl_Labeltype, const char*,
 		    int, int, int, int, Fl_Color, Fl_Flags)
@@ -120,5 +121,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 Fl_Labeltype_Definer* Fl_Labeltype_Definer::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.10 1999/11/01 02:21:38 carl Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.11 1999/11/01 22:51:40 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.55 1999/10/27 08:41:01 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.56 1999/11/01 22:51:39 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <limits.H>
 #include <time.h>
 #include <winsock.h>
 #include <ctype.h>
+
+
+#ifndef PATH_MAX
+#define PATH_MAX 128
+#endif
 
 
 //
@@ -147,8 +153,11 @@ double fl_wait(int timeout_flag, double time) {
   int have_message = 0;
   int timerid;
 
+// Bill removed this stuff?
+#if 0
   // clear the thread message
   Fl::thread_message = 0;
+#endif
   fl_unlock_function();
 
   if (nfds) {
@@ -208,9 +217,12 @@ double fl_wait(int timeout_flag, double time) {
 
   // execute it, them execute any other messages that become ready during it:
   while (have_message) {
+// Bill removed this stuff?
+#if 0
     if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
       Fl::thread_message = (void*)fl_msg.wParam;
     else
+#endif
       DispatchMessage(&fl_msg);
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
   }
@@ -847,6 +859,22 @@ void Fl_Window::make_current() {
   fl_clip_region(0);
 }
 
+extern char *fl_style, *fl_theme;
+
+void fl_open_display() {
+  static int opened = 0;
+  if (opened) return;
+  opened = 1;
+
+  // Load the theme plugin and style:
+  // THIS CODE MUST BE DUPLICATED FOR WIN32:
+  char temp[PATH_MAX];
+  if (fl_theme) Fl::theme(fl_theme);
+  else if (!Fl::getconf("default theme", temp, sizeof(temp))) Fl::theme(temp);
+  if (fl_style) Fl::style(fl_style);
+  else if (!Fl::getconf("default style", temp, sizeof(temp))) Fl::style(temp);
+}
+
 //
-// End of "$Id: Fl_win32.cxx,v 1.55 1999/10/27 08:41:01 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.56 1999/11/01 22:51:39 carl Exp $".
 //
