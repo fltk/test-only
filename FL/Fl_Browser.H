@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.20 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Browser.H,v 1.21 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -35,36 +35,6 @@ class FL_API Fl_Browser : public Fl_Menu_ {
 
 public:
 
-  // marks keep track of various items in the browser?
-  enum { // predefined marks - (there are no non-predefined marks, right? yes)
-    HERE = 0, // current item, the one moved by all the calls
-    FOCUS,
-    FIRST_VISIBLE,
-    REDRAW_0,
-    REDRAW_1,
-    USER_0,
-    USER_1,
-    NUMMARKS
-  };
-
-  Fl_Widget* goto_top(); // set HERE to top of browser
-  Fl_Widget* goto_mark(int mark); // set HERE to mark
-  Fl_Widget* goto_position(int y); // set HERE to item y pixels from top
-  Fl_Widget* goto_number(int n); // set HERE to n'th visible item
-  Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
-  Fl_Widget* forward(); // set HERE to next visible item
-  Fl_Widget* backward(); // set HERE to previous visible item
-  void set_mark(int dest, int mark); // set dest to mark
-  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
-  int at_mark(int mark) { return !compare_marks(HERE,mark); }
-  void unset_mark(int mark);  // makes mark have illegal value
-  int is_set(int mark);  // false if unset_mark was called
-  void damage_item(int mark); // make this item redraw
-  int set_focus();
-  void set_top();
-  int item_select(int value = 1, int do_callback = 0);
-  int item_select_only(int do_callback = 0);
-
   Fl_Browser(int X,int Y,int W,int H,const char*l=0);
   ~Fl_Browser();
 
@@ -94,6 +64,37 @@ public:
   void layout();
   void draw();
 
+  // marks keep track of various items in the browser?
+  enum { // predefined marks - (there are no non-predefined marks, right? yes)
+    HERE = 0, // current item, the one moved by all the calls
+    FOCUS,
+    FIRST_VISIBLE,
+    REDRAW_0,
+    REDRAW_1,
+    USER_0,
+    USER_1,
+    NUMMARKS
+  };
+
+  Fl_Widget* goto_top(); // set HERE to top of browser
+  Fl_Widget* goto_mark(int mark); // set HERE to mark
+  Fl_Widget* goto_position(int y); // set HERE to item y pixels from top
+  Fl_Widget* goto_number(int n); // set HERE to n'th visible item
+  Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
+  Fl_Widget* goto_index(const int* indexes, int level);
+  Fl_Widget* forward(); // set HERE to next visible item
+  Fl_Widget* backward(); // set HERE to previous visible item
+  void set_mark(int dest, int mark); // set dest to mark
+  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
+  int at_mark(int mark) { return !compare_marks(HERE,mark); }
+  void unset_mark(int mark);  // makes mark have illegal value
+  int is_set(int mark);  // false if unset_mark was called
+  void damage_item(int mark); // make this item redraw
+  int set_focus();
+  void set_top();
+  int item_select(int value = 1, int do_callback = 0);
+  int item_select_only(int do_callback = 0);
+
   // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.H)
   void deselect(int do_callback = 0);
   int select(int line, int value = 1);
@@ -107,7 +108,7 @@ public:
   void display(int line, int value = 1);
   int topline() const {return item_number[FIRST_VISIBLE];}
   void value(int v) {if (goto_number(v)) set_focus();}
-  int value() const {return Fl_Menu_::value();}
+  int value() const {return item_number[FOCUS];}
 
 private:
 
@@ -144,5 +145,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.20 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Browser.H,v 1.21 2000/09/11 07:29:32 spitzak Exp $".
 //

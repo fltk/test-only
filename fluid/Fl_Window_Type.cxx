@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.30 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.31 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -241,7 +241,7 @@ Fl_Window_Type Fl_Window_type;
 // nearest multiple of gridsize, and snap to original position
 void Fl_Window_Type::newdx() {
   int dx, dy;
-  if (Fl::event_state(FL_ALT)) {
+  if (Fl::event_state(FL_ALT) || drag == BOX) {
     dx = mx-x1;
     dy = my-y1;
   } else {
@@ -324,11 +324,14 @@ void Fl_Window_Type::draw_overlay() {
       Fl_Widget_Type* o = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(o,x,y,r,t);
+      int hidden = (!o->o->visible_r());
+      if (hidden) fl_line_style(FL_DASH);
       fl_rect(x,y,r-x,t-y);
       if (x < bx) bx = x;
       if (y < by) by = y;
       if (r > br) br = r;
       if (t > bt) bt = t;
+      if (hidden) fl_line_style(FL_SOLID);
     }
   }
   if (selected) return;
@@ -370,7 +373,6 @@ void toggle_overlays(Fl_Widget *,void *) {
 
 extern void select(Fl_Type *,int);
 extern void select_only(Fl_Type *);
-extern void deselect();
 extern Fl_Type* in_this_only;
 extern void fix_group_size(Fl_Type *t);
 
@@ -432,7 +434,8 @@ int Fl_Window_Type::handle(int event) {
       for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
 	if (i->is_widget() && !i->is_menu_item()) {
 	  Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	  if (o->o->visible() && Fl::event_inside(o->o)) inner_selection = o;
+	  if (o->o->visible_r() && Fl::event_inside(o->o))
+	    inner_selection = o;
 	}
       }
       if (inner_selection) selection = inner_selection;
@@ -458,8 +461,7 @@ int Fl_Window_Type::handle(int event) {
 	Fl::event_is_click(0);
 	select(t, !t->selected);
       } else {
-	deselect();
-	select(t, 1);
+	select_only(t);
 	if (t->is_menu_item()) t->open();
       }
       selection = t;
@@ -488,21 +490,24 @@ int Fl_Window_Type::handle(int event) {
       if (my<y1) {int t = y1; y1 = my; my = t;}
       int n = 0;
       int toggle = Fl::event_state(FL_SHIFT);
-      // clear selection on everything:
-      if (!toggle) deselect(); else Fl::event_is_click(0);
+      if (toggle) Fl::event_is_click(0);
+
       // select everything in box:
       for (Fl_Type* i = first_child; i; i = i->walk(this)) {
 	if (i->is_widget() && !i->is_menu_item()) {
 	  Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	  if (o->o->visible()) {
+	  if (o->o->parent()->visible_r()) {
 	    if (o->o->x()>=x1 && o->o->y()>y1 &&
 		o->o->x()+o->o->w()<mx && o->o->y()+o->o->h()<my) {
+	      if (toggle) select(o, !o->selected);
+	      else if (!n) select_only(o);
+	      else select(o, 1);
 	      n++;
-	      select(o, toggle ? !o->selected : 1);
 	    }
 	  }
 	}
       }
+
       // if nothing in box, select what was clicked on:
       if (!n) {
 	// find the innermost item clicked on:
@@ -512,15 +517,18 @@ int Fl_Window_Type::handle(int event) {
 	  for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
 	    if (i->is_widget() && !i->is_menu_item()) {
 	      Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	      if (o->o->visible() && Fl::event_inside(o->o)) inner_selection = o;
+	      if (o->o->visible_r() && Fl::event_inside(o->o))
+		inner_selection = o;
 	    }
 	  }
 	  if (inner_selection) selection = inner_selection;
 	  else break;
 	}
-	select(selection, toggle ? !selection->selected : 1);
+	if (toggle) select(selection, !selection->selected);
+	else select_only(selection);
       }
       if (overlays_invisible) toggle_overlays(0,0);
+      ((Overlay_Window *)(this->o))->redraw_overlay();
     }
     drag = 0;
     if (widget_x)
@@ -532,26 +540,25 @@ int Fl_Window_Type::handle(int event) {
       }
     return 1;
 
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    return 1;
+
   case FL_KEYBOARD: {
 
-    int backtab = 0;
     switch (Fl::event_key()) {
 
     case FL_Escape:
       ((Fl_Window*)o)->hide();
       return 1;
 
-    case 0xFE20: // backtab
-      backtab = 1;
     case FL_Tab: {
-      if (Fl::event_state(FL_SHIFT)) backtab = 1;
+      int backtab = (Fl::event_state(FL_SHIFT));
       // see if the current item is in this window:
       Fl_Type *i = Fl_Type::current;
       while (i && i->parent != this) i = i->parent;
-      if (!i) {
-	// nope, just use first item:
-	i = first_child;
-      } else {
+      if (i) {
+	i = Fl_Type::current;
 	for (;;) {
 	  if (backtab) {
 	    if (i->previous_brother) {
@@ -565,11 +572,13 @@ int Fl_Window_Type::handle(int event) {
 	      if (i == this) i = 0;
 	    }
 	  } else i = i->walk(this);
-	  if (!i || i->is_widget() && !i->is_menu_item()) break;
+	  if (!i) break;
+	  if (i->is_widget() && !i->is_menu_item() &&
+	      ((Fl_Widget_Type*)i)->o->parent()->visible_r()) break;
 	}
       }
-      deselect();
-      if (i) select(i,1);
+      if (!i) i = first_child;
+      select_only(i);
       return 1;}
 
     case FL_Left:  dx = -1; dy = 0; goto ARROW;
@@ -669,5 +678,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.30 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.31 2000/09/11 07:29:32 spitzak Exp $".
 //

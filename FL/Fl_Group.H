@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.26 2000/08/21 03:56:23 spitzak Exp $"
+// "$Id: Fl_Group.H,v 1.27 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,9 @@ class Fl_Group;
 
 class FL_API Fl_List {
 public:
-  virtual int children(const Fl_Group*, int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Group*, int* indexes, int level);
-  virtual void value_changed(const Fl_Group*, Fl_Widget*);
+  virtual int children(const Fl_Group*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Group*, const int* indexes, int level);
+  virtual void flags_changed(const Fl_Group*, Fl_Widget*);
 };
 
 class FL_API Fl_Group : public Fl_Widget {
@@ -46,8 +46,8 @@ public:
   Fl_List* list() const {return list_;}
   void list(Fl_List* l) {list_ = l;}
 
-  int children(int* indexes, int level) const ;
-  Fl_Widget* child(int* indexes, int level) const ;
+  int children(const int* indexes, int level) const ;
+  Fl_Widget* child(const int* indexes, int level) const ;
   int children() const;
   Fl_Widget* child(int n) const;
 
@@ -132,5 +132,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.26 2000/08/21 03:56:23 spitzak Exp $".
+// End of "$Id: Fl_Group.H,v 1.27 2000/09/11 07:29:32 spitzak Exp $".
 //

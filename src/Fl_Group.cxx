@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.84 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.85 2000/09/11 07:29:33 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@
 // Subclasses of Fl_List may want to call the base class to allow
 // normal widgets to be prepended to whatever they return.
 
-int Fl_List::children(const Fl_Group* group, int* indexes, int level) {
+int Fl_List::children(const Fl_Group* group, const int* indexes, int level) {
   if (!level) return group->children_;
   int i = *indexes;
   if (i < 0 || i >= group->children_) return -1;
@@ -50,7 +50,7 @@ int Fl_List::children(const Fl_Group* group, int* indexes, int level) {
   return ((Fl_Group*)widget)->children(indexes+1, level-1);
 }
 
-Fl_Widget* Fl_List::child(const Fl_Group* group, int* indexes, int level) {
+Fl_Widget* Fl_List::child(const Fl_Group* group,const int* indexes,int level) {
   int i = *indexes;
   if (i < 0 || i >= group->children_) return 0;
   Fl_Widget* widget = group->array_[i];
@@ -59,11 +59,11 @@ Fl_Widget* Fl_List::child(const Fl_Group* group, int* indexes, int level) {
   return ((Fl_Group*)widget)->child(indexes+1, level-1);
 }
 
-void Fl_List::value_changed(const Fl_Group*, Fl_Widget*) {}
+void Fl_List::flags_changed(const Fl_Group*, Fl_Widget*) {}
 
 static Fl_List default_list;
 
-int Fl_Group::children(int* indexes, int level) const {
+int Fl_Group::children(const int* indexes, int level) const {
   return list_->children(this, indexes, level);
 }
 
@@ -71,7 +71,7 @@ int Fl_Group::children() const {
   return list_->children(this, 0, 0);
 }
 
-Fl_Widget* Fl_Group::child(int* indexes, int level) const {
+Fl_Widget* Fl_Group::child(const int* indexes, int level) const {
   return list_->child(this, indexes, level);
 }
 
@@ -303,7 +303,7 @@ int Fl_Group::handle(int event) {
 
   case FL_FOCUS:
     if (contains(Fl::focus())) {
-      // This is called to indicate that the focus is being set/changed
+      // The focus is being changed to some widget inside this.
       focus_ = find(Fl::focus());
       return 1;
     }
@@ -609,5 +609,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.84 2000/09/05 17:36:21 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.85 2000/09/11 07:29:33 spitzak Exp $".
 //

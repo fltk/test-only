@@ -1,7 +1,7 @@
 #include <FL/Fl_String_List.H>
 #include <FL/Fl_Item.H>
 
-int Fl_String_List::children(const Fl_Group* group, int* indexes, int level) {
+int Fl_String_List::children(const Fl_Group* group, const int* indexes, int level) {
   int n = Fl_List::children(group, 0,0);
   if (!level) {
     return children_ + n;
@@ -12,7 +12,7 @@ int Fl_String_List::children(const Fl_Group* group, int* indexes, int level) {
   }
 }
 
-Fl_Widget* Fl_String_List::child(const Fl_Group* group, int* indexes, int level) {
+Fl_Widget* Fl_String_List::child(const Fl_Group* group, const int* indexes, int level) {
   int n = *indexes - Fl_List::children(group, 0,0);
   if (n < 0) return Fl_List::child(group, indexes, level);
   if (n >= children_) return 0;

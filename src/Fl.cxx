@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.109 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.110 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -327,14 +327,9 @@ void fl_fix_focus() {
     // System says this program has focus.
     // Modal overrides anything the system says:
     if (Fl::modal()) w = Fl::modal();
-    // Move to outermost window:
-    while (w->parent()) w = w->parent();
-    if (w->contains(Fl::focus())) return; // it already has it
-    // Give it the focus:
-    if (w->takesevents()) {
-      w->handle(FL_FOCUS);
-      if (w->contains(Fl::focus())) return; // it took it
-    }
+    // Move to outermost window (WAS: system code should do this)
+    // while (w->parent()) w = w->parent();
+    if (w->take_focus()) return;
   }
   // give nothing the focus:
   Fl::focus(0);
@@ -583,5 +578,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.109 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.110 2000/09/11 07:29:32 spitzak Exp $".
 //

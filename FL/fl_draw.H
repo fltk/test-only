@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.22 2000/08/20 04:31:36 spitzak Exp $"
+// "$Id: fl_draw.H,v 1.23 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -131,8 +131,8 @@ FL_API void fl_transformed_vertex(double x, double y);
 extern FL_API Fl_Font fl_font_;
 extern FL_API unsigned fl_size_;
 extern FL_API const char* fl_encoding;
-FL_API void fl_font(const Fl_Font, unsigned size);
-FL_API void fl_font(const Fl_Font, unsigned size, const char* encoding);
+FL_API void fl_font(Fl_Font, unsigned size);
+FL_API void fl_font(Fl_Font, unsigned size, const char* encoding);
 inline Fl_Font fl_font() {return fl_font_;}
 inline unsigned fl_size() {return fl_size_;}
 
@@ -185,5 +185,5 @@ FL_API int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalabl
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.22 2000/08/20 04:31:36 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.23 2000/09/11 07:29:32 spitzak Exp $".
 //

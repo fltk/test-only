@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.70 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.71 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -173,8 +173,7 @@ void Fl_Widget_Type::extra_code(int m,const char *n) {
 
 extern void redraw_browser();
 void Fl_Widget_Type::subclass(const char *n) {
-  if (storestring(n,subclass_))
-    redraw_browser();
+  if (storestring(n,subclass_)) redraw_browser();
 }
 
 void Fl_Widget_Type::redraw() {
@@ -948,6 +947,7 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
       q->o->text_color(tc);
+      q->redraw();
     }
   }
   i->selection_color(tc);
@@ -970,6 +970,7 @@ void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
       q->o->selection_text_color(tc);
+      q->redraw();
     }
   }
   i->selection_color(tc);
@@ -1398,6 +1399,7 @@ void default_cb(Fl_Button*, void* v) {
 }
 
 void revert_cb(Fl_Button*, void*) {
+  if (!current_widget) return;
   // We have to revert all dynamically changing fields:
   // but for now only the first label works...
   if (numselected == 1) current_widget->label(oldlabel);
@@ -1461,8 +1463,7 @@ static void load_panel() {
 	}
       }
     }	
-  } else
-    the_panel->hide();
+  }
 }
 
 // This is called when user double-clicks an item, open or update the panel:
@@ -1490,7 +1491,6 @@ void Fl_Widget_Type::open() {
 }
 
 extern void redraw_overlays();
-extern void redraw_browser();
 
 // Called when the select value on the passed object changes, or when
 // objects are deleted (in which case the passed object is null).
@@ -2156,5 +2156,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.70 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.71 2000/09/11 07:29:32 spitzak Exp $".
 //

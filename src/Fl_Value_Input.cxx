@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.24 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.25 2000/09/11 07:29:33 spitzak Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -83,14 +83,14 @@ int Fl_Value_Input::handle(int event) {
   static int ix, drag;
   switch (event) {
   case FL_PUSH:
-    if (!step()) goto DEFAULT;
+    if (!step()) break;
     take_focus();
     ix = mx;
     drag = Fl::event_button();
     handle_push();
-    return 1;
+    break;
   case FL_DRAG:
-    if (!step()) goto DEFAULT;
+    if (!step()) break;
     delta = mx-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
@@ -101,24 +101,19 @@ int Fl_Value_Input::handle(int event) {
     input.position(input.size(),0);
     return 1;
   case FL_RELEASE:
-    if (!step()) goto DEFAULT;
-    if (!Fl::pushed()) {
-      if (value() != previous_value() || !Fl::event_is_click())
-        handle_release();
-      else {
-        input.handle(FL_PUSH);
-        input.handle(FL_RELEASE);
-      }
+    if (!step()) break;
+    if (value() != previous_value() || !Fl::event_is_click()) {
+      handle_release();
+      return 1;
     }
-    return 1;
+    break;
   case FL_FOCUS:
     Fl::focus(&input);
-  default:
-  DEFAULT:
-    input.type(step()>=1.0 ? FL_INT_INPUT : FL_FLOAT_INPUT);
-    if (input.handle(event)) return 1;
-    return Fl_Valuator::handle(event);
+    break;
   }
+  input.type(step()>=1.0 ? FL_INT_INPUT : FL_FLOAT_INPUT);
+  if (input.handle(event)) return 1;
+  return Fl_Valuator::handle(event);
 }
 
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
@@ -138,5 +133,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.24 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.25 2000/09/11 07:29:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.49 2000/08/21 03:56:24 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.50 2000/09/11 07:29:33 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,49 +27,97 @@
 #include <FL/Fl_Choice.H>
 #include <FL/fl_draw.H>
 
+// Set this to 1 for "classic fltk" rather than Windows style:
+#define MOTIF_STYLE 0
+
 // The dimensions for the glyph in this and the Fl_Menu_Button are exactly
 // the same, so that glyphs may be shared between them.
 
 extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
+  int X=x(); int Y=y(); int W=w(); int H=h();
+#if MOTIF_STYLE
   draw_button();
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  box()->inset(X,Y,W,H);
   int w1 = H*4/5;
+#else
+  draw_text_frame();
+  text_box()->inset(X,Y,W,H);
+  int w1 = H*4/5;
+  fl_color(text_background());
+  fl_rectf(X,Y,W-w1,H);
+  if (focused()) {
+    fl_color(selection_color());
+    fl_rectf(X+2, Y+2, W-w1-4, H-4);
+  }
+#endif
   Fl_Widget* o = item();
-
-// CET - this would look great for a combo box but not for a choice
-//  Fl_Color label_color = o ? o->label_color() : lc;
-//  if (focused()) {
-//    Fl_Color c = selection_color();
-//    if (c) {
-//      fl_color(c);
-//      fl_rectf(X+2, Y+2, W-w1-4, H-4);
-//      c = selection_text_color(); if (c) label_color = c;
-//    }
-//  }
+  if (!o) item((o = child(value())));
   if (o) {
     fl_clip(X+2, Y+2, W-w1-2, H-4);
     o->x(X);
     o->y(Y+(H-o->height())/2);
     int save_w = o->w(); o->w(W-w1);
-    fl_color(o->label_color());
-    if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
+#if MOTIF_STYLE
     o->clear_flag(FL_SELECTED);
+#else
+    if (focused()) o->set_flag(FL_SELECTED);
+    else o->clear_flag(FL_SELECTED);
+#endif
+    if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
     o->draw();
     fl_draw_shortcut = 0;
     o->w(save_w);
     fl_pop_clip();
   }
   // draw the little mark at the right:
-  draw_glyph(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, 0);
+  Fl_Flags flags = this->flags();
+  if (!active_r())
+    flags |= FL_INACTIVE;
+  else if (belowmouse())
+    flags |= FL_HIGHLIGHT;
+#if MOTIF_STYLE
+  // draw the little mark at the right:
+  draw_glyph(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, flags);
+#else
+#if 1
+  draw_glyph(FL_GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags);
+#else
+  // attempt to draw an up/down arrow like the Mac uses, since the
+  // popup menu is more like how the Mac works:
+  draw_glyph(0, X+W-w1, Y, w1, H, flags);
+  int x = X+W-w1+2;
+  int w = w1-4;
+  int h = (w+1)/2;
+  int y = Y+H/2;
+  draw_glyph(FL_GLYPH_UP, x, y-h-1, w, h, flags);
+  draw_glyph(FL_GLYPH_DOWN, x, y+1, w, h, flags);
+#endif
+#endif
 }
 
-// int Fl_Choice::value(int v) {
-//   value(find(v));
-//   redraw();
-//   return 1;
-// }
+int Fl_Choice::value(int v) {return value(&v, 0);}
+
+int Fl_Choice::value(const int* indexes, int level) {
+  // rather annoying kludge to try to detect if the item from an Fl_List
+  // has changed by looking for the label and user data to change:
+  Fl_Widget* save_item = item();
+  const char* save_label = 0;
+  void* save_data = 0;
+  if (save_item) {
+    save_label = save_item->label();
+    save_data = save_item->user_data();
+  }
+  Fl_Menu_::value(indexes, level);
+  if (item() == save_item) {
+    if (!save_item) return 0;
+    if (save_label == save_item->label() && save_data==save_item->user_data())
+      return 0;
+  }
+  redraw();
+  return 1;
+}
 
 int Fl_Choice::handle(int e) {
   int children = this->children(0,0);
@@ -133,14 +181,7 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-static void revert(Fl_Style* s) {
-//  s->selection_color = FL_GRAY;
-//  s->selection_text_color = FL_BLACK;
-  s->text_box = FL_NO_BOX;
-  s->text_background = FL_GRAY;
-}
-
-static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
+static Fl_Named_Style* style = new Fl_Named_Style("Choice", 0, &style);
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
   value(0);
@@ -151,5 +192,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.49 2000/08/21 03:56:24 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.50 2000/09/11 07:29:33 spitzak Exp $".
 //

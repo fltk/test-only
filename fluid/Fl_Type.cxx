@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.22 2000/09/11 07:29:32 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,9 +53,9 @@ Fl_Type *Fl_Type::first;
 Fl_Type *Fl_Type::current;
 
 class Widget_List : public Fl_List {
-  virtual int children(const Fl_Group*, int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Group*, int* indexes, int level);
-  virtual void value_changed(const Fl_Group*, Fl_Widget*);
+  virtual int children(const Fl_Group*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Group*, const int* indexes, int level);
+  virtual void flags_changed(const Fl_Group*, Fl_Widget*);
 };
 
 static Widget_List widgetlist;
@@ -77,7 +77,7 @@ Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
   return widget_browser;
 }
 
-int Widget_List::children(const Fl_Group*, int* indexes, int level) {
+int Widget_List::children(const Fl_Group*, const int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0; l < level; l++) {
@@ -89,7 +89,7 @@ int Widget_List::children(const Fl_Group*, int* indexes, int level) {
   return n;
 }
 
-Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
+Fl_Widget* Widget_List::child(const Fl_Group*, const int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0;; l++) {
@@ -104,10 +104,9 @@ Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
     widget = new Fl_Item();
   }
   widget->user_data(item);
-  widget->type(item->is_parent() ? FL_GROUP : 0);
   if (item->new_selected) widget->set_flag(FL_VALUE);
   else widget->clear_flag(FL_VALUE);
-  if (item->open_) widget->set_flag(FL_OPEN);
+  if (item->is_parent() && item->open_) widget->set_flag(FL_OPEN);
   else widget->clear_flag(FL_OPEN);
 
   widget->label(item->title());
@@ -116,7 +115,7 @@ Fl_Widget* Widget_List::child(const Fl_Group*, int* indexes, int level) {
   return widget;
 }
 
-void Widget_List::value_changed(const Fl_Group*, Fl_Widget* w) {
+void Widget_List::flags_changed(const Fl_Group*, Fl_Widget* w) {
   Fl_Type* item = (Fl_Type*)(w->user_data());
   item->open_ = (w->flags()&FL_OPEN)!=0;
   int value = (w->flags()&FL_VALUE)!=0;
@@ -139,6 +138,17 @@ void select(Fl_Type* item, int value) {
 void select_only(Fl_Type* i) {
   for (Fl_Type* item = Fl_Type::first; item; item = item->walk())
     select(item, item == i);
+  if (!widget_browser || !i) return;
+  int indexes[100];
+  int L = 100;
+  while (i) {
+    Fl_Type* child = i->parent ? i->parent->first_child : Fl_Type::first;
+    int n; for (n = 0; child != i; child=child->next_brother) n++;
+    indexes[--L] = n;
+    i = i->parent;
+  }
+  widget_browser->goto_index(indexes+L, 99-L);
+  widget_browser->set_focus();
 }
 
 void deselect() {
@@ -160,8 +170,9 @@ const char* Fl_Type::title() {
   return type_name();
 }
 
+// Call this when the descriptive text changes:
 void redraw_browser() {
-  widget_browser->relayout();
+  widget_browser->redraw();
 }
 
 Fl_Type::Fl_Type() {
@@ -191,6 +202,8 @@ Fl_Type* Fl_Type::walk(const Fl_Type* topmost) const {
   }
   return p->next_brother;
 }
+
+// walk() is the same as walk(0), which walks the entire tree:
 
 Fl_Type* Fl_Type::walk() const {
   if (first_child) return first_child;
@@ -228,7 +241,7 @@ void Fl_Type::add(Fl_Type *p) {
   if (p) p->add_child(this,0);
   open_ = 1;
   modflag = 1;
-  redraw_browser();
+  widget_browser->relayout();
 }
 
 // add to a parent before another widget:
@@ -241,7 +254,7 @@ void Fl_Type::insert(Fl_Type *g) {
   next_brother = g;
   g->previous_brother = this;
   if (parent) parent->add_child(this, g);
-  redraw_browser();
+  widget_browser->relayout();
 }
 
 // delete from parent:
@@ -253,7 +266,7 @@ void Fl_Type::remove() {
   previous_brother = next_brother = 0;
   if (parent) parent->remove_child(this);
   parent = 0;
-  redraw_browser();
+  widget_browser->relayout();
   selection_changed(0);
 }
 
@@ -328,7 +341,7 @@ Fl_Type::~Fl_Type() {
   if (next_brother) next_brother->previous_brother = previous_brother;
   if (current == this) current = 0;
   modflag = 1;
-  if (widget_browser) redraw_browser();
+  if (widget_browser) widget_browser->relayout();
 }
 
 int Fl_Type::is_parent() const {return 0;}
@@ -361,12 +374,22 @@ Fl_Type *in_this_only; // set if menu popped-up in window
 void select_all_cb(Fl_Widget *,void *) {
   Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
   if (in_this_only) {
-    Fl_Type *t = parent;
-    for (; t && t != in_this_only; t = t->parent);
-    if (t != in_this_only) parent = in_this_only;
+    // make sure we don't select outside the current window
+    Fl_Type* p;
+    for (p = parent; p && p != in_this_only; p = p->parent);
+    if (!p) parent = in_this_only;
   }
-  for (Fl_Type *t = parent?parent->first_child:Fl_Type::first;
-       t; t = t->walk()) select(t,1);
+  for (;;) {
+    // select all children of parent:
+    int changed = 0;
+    for (Fl_Type *t = parent ? parent->first_child : Fl_Type::first;
+	 t; t = t->walk(parent))
+      if (!t->new_selected) {changed = 1; select(t,1);}
+    if (changed) break;
+    // if everything was selected, try a higher parent:
+    if (!parent || parent == in_this_only) break;
+    parent = parent->parent;
+  }
 }
 
 void delete_all(int selected_only) {
@@ -495,5 +518,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.22 2000/09/11 07:29:32 spitzak Exp $".
 //

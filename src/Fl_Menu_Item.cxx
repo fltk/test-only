@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.1 2000/02/16 07:30:05 bill Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.2 2000/09/11 07:29:33 spitzak Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -105,14 +105,15 @@ void Fl_Menu_::add(const Fl_Menu_Item* m, void* data) {
 }
     
 // Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays:
+#include <FL/Fl_Menu_Button.H>
 
 static Fl_Menu_* get_menu(const Fl_Menu_Item* m, void* data) {
   static const Fl_Menu_Item* cached_item;
-  static Fl_Menu_* cached_menu;
+  static Fl_Menu_Button* cached_menu;
   if (m != cached_item) {
     if (!cached_menu) {
       Fl_Group::current(0); // fix missing end()
-      cached_menu = new Fl_Menu_(0,0,0,0);
+      cached_menu = new Fl_Menu_Button(0,0,0,0);
     }
     cached_menu->menu(m);
     cached_item = m;
