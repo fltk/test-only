@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Value_Slider.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Value slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,23 +28,35 @@
 
 #include "Fl_Slider.H"
 
+/** The Fl_Value_Slider widget is a Fl_Slider widget with a box displaying the current
+ * value. 
+ *   \image html value_slider.gif
+ */
 class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
     uchar textfont_, textsize_;
     unsigned textcolor_;
 public:
     void draw();
     int handle(int);
+      /** Creates a new Fl_Value_Slider widget using the given position, size, and
+       * label string. The default boxtype is FL_DOWN_BOX . */
     Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
+      /** Gets the typeface of the text in the value box. */
     Fl_Font textfont() const {return (Fl_Font)textfont_;}
+      /** Sets the typeface of the text in the value box. */
     void textfont(uchar s) {textfont_ = s;}
+      /** Gets the size of the text in the value box. */
     uchar textsize() const {return textsize_;}
+      /** Sets the size of the text in the value box. */
     void textsize(uchar s) {textsize_ = s;}
+      /** Gets the color of the text in the value box. */
     Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+      /** Sets the color of the text in the value box. */
     void textcolor(unsigned s) {textcolor_ = s;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Slider.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Value_Slider.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

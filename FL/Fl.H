@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.8.2.11.2.21.2.2 2003/11/07 03:47:22 easysw Exp $"
+// "$Id: Fl.H,v 1.8.2.11.2.21.2.3 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,8 @@ typedef void (Fl_Box_Draw_F)(int,int,int,int, Fl_Color);
 
 typedef void (*Fl_Timeout_Handler)(void*);
 
+/** The Fl class is the FLTK global (static) class containing state information and
+ * global methods for the current application. */
 class FL_EXPORT Fl {
   Fl() {}; // no constructor!
 
@@ -87,9 +89,60 @@ public:
   static double version();
 
   // argument parsers:
+    /** Consume a single switch from \a argv, starting at word \i i. Returns the
+     * number of words eaten (1 or 2, or 0 if it is not recognized) and adds the same
+     * value to \a i. You can use this function if you prefer to control the
+     * incrementing through the arguments yourself. */
   static int arg(int, char**, int&);
+    /** FLTK provides an <i>entirely optional</i> command-line switch parser. You don't
+     * have to call it if you don't like them! Everything it can do can be done with other
+     * calls to FLTK.
+     *
+     * To use the switch parser, call Fl::args(...) near the start of your program. This
+     * does not open the display, instead switches that need the display open are stashed
+     * into static variables. Then you must display your first window by calling 
+     * <tt>window->show(argc,argv)</tt>, which will do anything stored in the static
+     * variables.
+     *
+     * \a callback lets you define your own switches. It is called with the same \a argc
+     * and \a argv, and with \a i the index of each word. The callback should return
+     * zero if the switch is unrecognized, and not change i. It should return non-zero
+     * if the switch is recognized, and add at least 1 to i (it can add more to
+     * consume words after the switch). This function is called before any other
+     * tests, so you can override any FLTK switch (this is why FLTK can use very
+     * short switches instead of the long ones all other toolkits force you to use).
+     *
+     * On return \a i is set to the index of the first non-switch. This is either:
+     * \arg The first word that does not start with '-'.
+     * \arg The word '-' (used by many programs to name stdin as a file)
+     * \arg The first unrecognized switch (return value is 0).
+     * \arg \a argc
+     *
+     * The return value is \a i unless an unrecognized switch is found, in which case
+     * it is zero. If your program takes no arguments other than switches you should
+     * produce an error if the return value is less than argc.
+     *
+     * All switches except -bg2 may be abbreviated one letter and case is ignored:
+     * \arg \c -bg \a color or \c -background \a color : Sets the background color using Fl::background().
+     * \arg \c -bg2 \a color or \c -background2 \a color : Sets the secondary background color using Fl::background2().
+     * \arg \c -display \a host:n.n : Sets the X display to use; this option is silently ignored under WIN32 and MacOS.
+     * \arg \c -dnd and \c -nodnd : Enables or disables drag and drop text operations using Fl::dnd_text_ops().
+     * \arg \c -fg \a color or \c -foreground \a color : Sets the foreground color using Fl::foreground().
+     * \arg \c -geometry \a WxH+X+Y : Sets the initial window position and size according the the standard X geometry string.
+     * \arg \c -iconic : Iconifies the window using Fl_Window::iconize().
+     * \arg \c -kbd and \c -nokbd : Enables or disables visible keyboard focus for non-text widgets using Fl::visible_focus().
+     * \arg \c -name \a string : Sets the window class using Fl_Window::xclass().
+     * \arg \c -scheme \a string : Sets the widget scheme using Fl::scheme().
+     * \arg \c -title \a string : Sets the window title using Fl_Window::label().
+     * \arg \c -tooltips and \c -notooltips : Enables or disables tooltips using Fl_Tooltip::enable().
+     *
+     * A usage string is displayed if Fl::args() detects an invalid argument on the
+     * command-line. You can change the message by setting the Fl::help pointer. */
   static int args(int, char**, int&, int (*)(int,char**,int&) = 0);
   static const char* const help;
+    /** The second form of Fl::args() is useful if your program does not have command
+     * line switches of its own. It parses all the switches, and if any are not
+     * recognized it calls Fl::abort(Fl::help); */
   static void args(int, char**);
 
   // things called by initialization:
@@ -114,17 +167,70 @@ public:
   static int ready();
   static int run();
   static Fl_Widget* readqueue();
+    /** Add a one-shot timeout callback. The function will be called by Fl::wait() at
+     * \a t seconds after this function is called. The optional void* argument is passed
+     * to the callback. */
   static void add_timeout(double t, Fl_Timeout_Handler,void* = 0);
   static void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);
   static int  has_timeout(Fl_Timeout_Handler, void* = 0);
   static void remove_timeout(Fl_Timeout_Handler, void* = 0);
+    /** FLTK will call this callback just before it flushes the display and waits for
+     * events. This is different than an idle callback because it is only called once, 
+     * then FLTK calls the system and tells it not to return until an event happens.
+     *
+     * This can be used by code that wants to monitor the application's state, such as
+     * to keep a display up to date. The advantage of using a check callback is that
+     * it is called only when no events are pending. If events are coming in quickly,
+     * whole blocks of them will be processed before this is called once. This can
+     * save significant time and avoid the application falling behind the events.
+     *
+     * \code
+        bool state_changed; // anything that changes the display turns this on
+        
+        void callback(void*) {
+          if (!state_changed) return;
+          state_changed = false;
+          do_expensive_calculation();
+          widget->redraw();
+        }
+        
+        main() {
+          Fl::add_check(callback);
+          return Fl::run();
+        }
+    * \endcode
+    */
   static void add_check(Fl_Timeout_Handler, void* = 0);
   static int  has_check(Fl_Timeout_Handler, void* = 0);
   static void remove_check(Fl_Timeout_Handler, void* = 0);
+    /** Add file descriptor fd to listen to. When the fd becomes ready for reading
+     * Fl::wait() will call the callback and then return. The callback is passed the
+     * fd and the arbitrary void* argument.
+     *
+     * The second version takes a when bitfield, with the bits \c FL_READ, \c FL_WRITE,
+     * and \c FL_EXCEPT defined, to indicate when the callback should be done.
+     *
+     * There can only be one callback of each type for a file descriptor. 
+     * Fl::remove_fd() gets rid of all the callbacks for a given file descriptor.
+     *
+     * Under UNIX any file descriptor can be monitored (files, devices, pipes, sockets,
+     * etc.) Due to limitations in Microsoft Windows, WIN32 applications can only
+     * monitor sockets. */
   static void add_fd(int fd, int when, void (*cb)(int,void*),void* =0);
   static void add_fd(int fd, void (*cb)(int, void*), void* = 0);
   static void remove_fd(int, int when);
   static void remove_fd(int);
+    /** Adds a callback function that is called every time by Fl::wait() and also makes
+     * it act as though the timeout is zero (this makes Fl::wait() return immediately,
+     * so if it is in a loop it is called repeatedly, and thus the idle fucntion is called
+     * repeatedly). The idle function can be used to get background processing done.
+     * 
+     * You can have multiple idle callbacks. To remove an idle callback use Fl::remove_idle().
+     *
+     * Fl::wait() and Fl::check() call idle callbacks, but Fl::ready() does not.
+     * 
+     * The idle callback can call any FLTK functions, including Fl::wait(), Fl::check(), 
+     * and Fl::ready(). FLTK will not recursively call the idle callback. */
   static void add_idle(void (*cb)(void*), void* = 0);
   static int  has_idle(void (*cb)(void*), void* = 0);
   static void remove_idle(void (*cb)(void*), void* = 0);
@@ -176,6 +282,15 @@ public:
   static void pushed(Fl_Widget*);
   static Fl_Widget* focus()	{return focus_;}
   static void focus(Fl_Widget*);
+    /** Install a function to parse unrecognized events. If FLTK cannot figure out what
+     * to do with an event, it calls each of these functions (most recent first) until
+     * one of them returns non-zero. If none of them returns non zero then the event is
+     * ignored. Events that cause this to be called are:
+     * \arg \c FL_SHORTCUT events that are not recognized by any widget. This lets you
+     *      provide global shortcut keys.
+     * \arg System events that FLTK does not recognize. See fl_xevent.
+     * \arg \a Some other events when the widget FLTK selected returns zero from its
+     *       handle() method. Exactly which ones may change in future versions, however. */
   static void add_handler(int (*h)(int));
   static void remove_handler(int (*h)(int));
 
@@ -263,5 +378,5 @@ public:
 #endif // !Fl_H
 
 //
-// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.2 2003/11/07 03:47:22 easysw Exp $".
+// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.3 2003/11/22 01:04:39 matthiaswm Exp $".
 //

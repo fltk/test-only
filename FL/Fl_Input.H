@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.5.2.3.2.2.2.3 2003/11/19 02:46:11 matthiaswm Exp $"
+// "$Id: Fl_Input.H,v 1.5.2.3.2.2.2.4 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ insert (see table that follows.)
 
 <P>The single-character sequences may be followed by a space if
 necessary to remove ambiguity.  For instance, if you really want to
-type "&ordf;~" rather than "&atilde;" you must type [compose][a][space][~].
+type &quot;&ordf;~&quot; rather than &quot;&atilde;&quot; you must type [compose][a][space][~].
 
 <p>The same key may be used to "quote" control characters into the
 text.  If you need a <tt>^Q</tt> character you can get one by typing
@@ -249,5 +249,5 @@ public:
 #endif 
 
 //
-// End of "$Id: Fl_Input.H,v 1.5.2.3.2.2.2.3 2003/11/19 02:46:11 matthiaswm Exp $".
+// End of "$Id: Fl_Input.H,v 1.5.2.3.2.2.2.4 2003/11/22 01:04:39 matthiaswm Exp $".
 //

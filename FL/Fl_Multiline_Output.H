@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Output.H,v 1.4.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Multiline_Output.H,v 1.4.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Multi line output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,13 @@
 
 #include "Fl_Output.H"
 
+/** This widget is a subclass of Fl_Output that displays multiple lines of
+ * text. It also displays tab characters as whitespace to the next column. 
+ */
 class Fl_Multiline_Output : public Fl_Output {
 public:
+      /** Creates a new Fl_Multiline_Output widget using the given position,
+       * size, and label string. The default boxtype is \c FL_DOWN_BOX. */
     Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0)
 	: Fl_Output(X,Y,W,H,l) {type(FL_MULTILINE_OUTPUT);}
 };
@@ -37,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Output.H,v 1.4.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Multiline_Output.H,v 1.4.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Wizard.H,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Wizard.H,v 1.1.2.4.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Fl_Wizard widget definitions.
 //
@@ -37,6 +37,12 @@
 // Fl_Wizard class...
 //
 
+/** The Fl_Wizard widget is based off the Fl_Tabs widget, but instead of displaying
+ * tabs it only changes "tabs" under program control. Its primary purpose is to
+ * support "wizards" that step a user through configuration or troubleshooting tasks.
+ *
+ * As with Fl_Tabs, wizard panes are composed of child (usually Fl_Group) widgets.
+ * Navigation buttons must be added separately. */
 class FL_EXPORT Fl_Wizard : public Fl_Group
 {
   Fl_Widget *value_;
@@ -45,16 +51,23 @@ class FL_EXPORT Fl_Wizard : public Fl_Group
 
   public:
 
-  Fl_Wizard(int, int, int, int, const char * = 0);
+    /** The constructor creates the Fl_Wizard widget at the specified position and size. */
+  Fl_Wizard(int x, int y, int w, int h, const char *label = 0);
 
+    /** This method shows the next child of the wizard. If the last child is already
+     * visible, this function does nothing. */
   void		next();
+    /** This method shows the previous child of the wizard. If the first child is
+     * already visible, this function does nothing. */
   void		prev();
+    /** Gets the child widget that is visible. */
   Fl_Widget	*value();
+    /** Sets the child widget that is visible. */
   void		value(Fl_Widget *);
 };
 
 #endif // !_Fl_Wizard_H_
 
 //
-// End of "$Id: Fl_Wizard.H,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Wizard.H,v 1.1.2.4.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

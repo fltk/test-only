@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.4 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Preferences methods for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@
 char Fl_Preferences::nameBuffer[128];
 
 
-/**
+/*
  * create the initial preferences base
  * - root: machine or user preferences
  * - vendor: unique identification of author or vendor of application
@@ -67,10 +67,10 @@ free(malloc(1)); // FIXME
 }
 
 
-/**
+/*
  * create the initial preferences base
- * - path: an application-supplied path
- * example: Fl_Preferences base( "/usr/foo" );
+ * \arg \a path: an application-supplied path
+ * \example Fl_Preferences base( "/usr/foo" );
  */
 Fl_Preferences::Fl_Preferences( const char *path, const char *vendor, const char *application )
 {
@@ -79,7 +79,7 @@ Fl_Preferences::Fl_Preferences( const char *path, const char *vendor, const char
 }
 
 
-/**
+/*
  * create a Preferences node in relation to a parent node for reading and writing
  * - parent: base name for group
  * - group: group name (can contain '/' seperated group names)
@@ -92,11 +92,11 @@ Fl_Preferences::Fl_Preferences( Fl_Preferences &parent, const char *key )
 }
 
 
-/**
+/*
  * create a Preferences node in relation to a parent node for reading and writing
- * - parent: base name for group
- * - group: group name (can contain '/' seperated group names)
- * example: Fl_Preferences colors( base, "setup/colors" );
+ * \arg \a parent: base name for group
+ * \arg \a group: group name (can contain '/' seperated group names)
+ * \example Fl_Preferences colors( base, "setup/colors" );
  */
 Fl_Preferences::Fl_Preferences( Fl_Preferences *parent, const char *key )
 {
@@ -105,7 +105,7 @@ Fl_Preferences::Fl_Preferences( Fl_Preferences *parent, const char *key )
 }
 
 
-/**
+/*
  * destroy individual keys
  * - destroying the base preferences will flush changes to the prefs file
  * - after destroying the base, none of the depending preferences must be read or written
@@ -117,7 +117,7 @@ Fl_Preferences::~Fl_Preferences()
 }
 
 
-/**
+/*
  * return the number of groups that are contained within a group
  * example: int n = base.groups();
  */
@@ -127,7 +127,7 @@ int Fl_Preferences::groups()
 }
 
 
-/**
+/*
  * return the group name of the n'th group
  * - there is no guaranteed order of group names
  * - the index must be within the range given by groups()
@@ -139,7 +139,7 @@ const char *Fl_Preferences::group( int ix )
 }
 
 
-/**
+/*
  * return 1, if a group with this name exists
  * example: if ( base.groupExists( "setup/colors" ) ) ...
  */
@@ -149,7 +149,7 @@ char Fl_Preferences::groupExists( const char *key )
 }
 
 
-/**
+/*
  * delete a group
  * example: setup.deleteGroup( "colors/buttons" );
  */
@@ -161,7 +161,7 @@ char Fl_Preferences::deleteGroup( const char *key )
 }
 
 
-/**
+/*
  * return the number of entries (name/value) pairs for a group
  * example: int n = buttonColor.entries();
  */
@@ -171,7 +171,7 @@ int Fl_Preferences::entries()
 }
 
 
-/**
+/*
  * return the name of an entry
  * - there is no guaranteed order of entry names
  * - the index must be within the range given by entries()
@@ -183,7 +183,7 @@ const char *Fl_Preferences::entry( int ix )
 }
 
 
-/**
+/*
  * return 1, if an entry with this name exists
  * example: if ( buttonColor.entryExists( "red" ) ) ...
  */
@@ -193,7 +193,7 @@ char Fl_Preferences::entryExists( const char *key )
 }
 
 
-/**
+/*
  * remove a single entry (name/value pair)
  * example: buttonColor.deleteEntry( "red" );
  */
@@ -203,7 +203,7 @@ char Fl_Preferences::deleteEntry( const char *key )
 }
 
 
-/**
+/*
  * read an entry from the group
  */
 char Fl_Preferences::get( const char *key, int &value, int defaultValue )
@@ -214,7 +214,7 @@ char Fl_Preferences::get( const char *key, int &value, int defaultValue )
 }
 
 
-/**
+/*
  * set an entry (name/value pair)
  */
 char Fl_Preferences::set( const char *key, int value )
@@ -225,7 +225,7 @@ char Fl_Preferences::set( const char *key, int value )
 }
 
 
-/**
+/*
  * read an entry from the group
  */
 char Fl_Preferences::get( const char *key, float &value, float defaultValue )
@@ -236,7 +236,7 @@ char Fl_Preferences::get( const char *key, float &value, float defaultValue )
 }
 
 
-/**
+/*
  * set an entry (name/value pair)
  */
 char Fl_Preferences::set( const char *key, float value )
@@ -247,7 +247,7 @@ char Fl_Preferences::set( const char *key, float value )
 }
 
 
-/**
+/*
  * read an entry from the group
  */
 char Fl_Preferences::get( const char *key, double &value, double defaultValue )
@@ -258,7 +258,7 @@ char Fl_Preferences::get( const char *key, double &value, double defaultValue )
 }
 
 
-/**
+/*
  * set an entry (name/value pair)
  */
 char Fl_Preferences::set( const char *key, double value )
@@ -299,7 +299,7 @@ static char *decodeText( const char *src )
 }
 
 
-/**
+/*
  * read a text entry from the group
  * the text will be moved into the given text buffer
  * text will be clipped to the buffer size
@@ -320,7 +320,7 @@ char Fl_Preferences::get( const char *key, char *text, const char *defaultValue,
 }
 
 
-/**
+/*
  * read a text entry from the group
  * 'text' will be changed to point to a new text buffer
  * the text buffer must be deleted with 'free(text)' by the user.
@@ -342,7 +342,7 @@ char Fl_Preferences::get( const char *key, char *&text, const char *defaultValue
 }
 
 
-/**
+/*
  * set an entry (name/value pair)
  */
 char Fl_Preferences::set( const char *key, const char *text )
@@ -396,7 +396,7 @@ static void *decodeHex( const char *src, int &size )
 }
 
 
-/**
+/*
  * read a binary entry from the group
  * the data will be moved into the given destination buffer
  * data will be clipped to the buffer size
@@ -418,7 +418,7 @@ char Fl_Preferences::get( const char *key, void *data, const void *defaultValue,
 }
 
 
-/**
+/*
  * read a binary entry from the group
  * 'data' will be changed to point to a new data buffer
  * the data buffer must be deleted with 'free(data)' by the user.
@@ -443,7 +443,7 @@ char Fl_Preferences::get( const char *key, void *&data, const void *defaultValue
 }
 
 
-/**
+/*
  * set an entry (name/value pair)
  */
 char Fl_Preferences::set( const char *key, const void *data, int dsize )
@@ -464,7 +464,7 @@ char Fl_Preferences::set( const char *key, const void *data, int dsize )
 }
 
 
-/**
+/*
  * return the size of the value part of an entry
  */
 int Fl_Preferences::size( const char *key )
@@ -473,7 +473,7 @@ int Fl_Preferences::size( const char *key )
   return v ? strlen( v ) : 0 ;
 }
 
-/**
+/*
  * creates a path that is related to the preferences file
  * and that is usable for application data beyond what is covered 
  * by Fl_Preferences.
@@ -494,7 +494,7 @@ char Fl_Preferences::getUserdataPath( char *path, int pathlen )
   return 0;
 }
 
-/**
+/*
  * write all preferences to disk
  * - this function works only with the base preference group
  * - this function is rarely used as deleting the base preferences flushes automatically
@@ -509,7 +509,7 @@ void Fl_Preferences::flush()
 // helper class to create dynamic group and entry names on the fly
 //
 
-/**
+/*
  * create a group name or entry name on the fly
  * - this version creates a simple unsigned integer as an entry name
  * example:
@@ -525,7 +525,7 @@ Fl_Preferences::Name::Name( unsigned int n )
   sprintf(data_, "%u", n);
 }
 
-/**
+/*
  * create a group name or entry name on the fly
  * - this version creates entry names as in 'printf'
  * example:
@@ -1142,5 +1142,5 @@ char Fl_Preferences::Node::remove()
 
 
 //
-// End of "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.4 2003/11/22 01:04:39 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
+// "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.3 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -129,7 +129,9 @@ public:
     /** Scrolls the browser so the middle line in the browser is n. */
   void middleline(int l) { lineposition(l, MIDDLE); }
 
-  int select(int, int=1);
+    /** Selects one or more lines. */
+  int select(int line, int n=1);
+    /** Gets the current selection state of a line. */
   int selected(int) const ;
     /** Makes line n visible for selection. */
   void show(int n);
@@ -141,7 +143,10 @@ public:
     /** Returns a non-zero value if line n is visible. */
   int visible(int n) const ;
 
+    /** Gets the last toggled line. This returns zero if no line has been
+     * toggled, so be aware that this can happen in a callback. */
   int value() const ;
+    /** Selects a single line. */
   void value(int v) {select(v);}
     /** Returns the text for line n. If n is out of range it returns \c NULL. */
   const char* text(int n) const ;
@@ -218,5 +223,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
+// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.3 2003/11/22 01:04:39 matthiaswm Exp $".
 //

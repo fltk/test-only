@@ -8,6 +8,10 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
 
+/** The Fl_Help_Dialog widget displays a standard help dialog window using
+ * the Fl_Help_View widget.
+ *   \image html Fl_Help_Dialog.gif
+ */
 class FL_EXPORT Fl_Help_Dialog {
   int index_;
   int max_;
@@ -15,6 +19,7 @@ class FL_EXPORT Fl_Help_Dialog {
   char file_[100][256];
   int find_pos_;
 public:
+    /** The constructor creates the dialog pictured above. */
   Fl_Help_Dialog();
 private:
   Fl_Double_Window *window_;
@@ -39,17 +44,25 @@ private:
   inline void cb_find__i(Fl_Input*, void*);
   static void cb_find_(Fl_Input*, void*);
 public:
+    /** The destructor destroys the widget and frees all memory that has
+     * been allocated for the current file. */
   ~Fl_Help_Dialog();
   int h();
+    /** Hides the Fl_Help_Dialog window. */
   void hide();
+    /** Loads the specified HTML file into the Fl_Help_View widget. The
+     * filename can also contain a target name ("filename.html#target"). */
   void load(const char *f);
   void position(int xx, int yy);
   void resize(int xx, int yy, int ww, int hh);
+    /** Shows the Fl_Help_Dialog window. */
   void show();
   void show(int argc, char **argv);
   void textsize(uchar s);
   uchar textsize();
+    /** Sets the top line in the Fl_Help_View widget to the named line. */
   void topline(const char *n);
+    /** Sets the top line in the Fl_Help_View widget to the numbered line. */
   void topline(int n);
   int visible();
   int w();

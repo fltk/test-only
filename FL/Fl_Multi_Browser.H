@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multi_Browser.H,v 1.4.2.3.2.1.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Multi_Browser.H,v 1.4.2.3.2.1.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Multi browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,20 @@
 
 #include "Fl_Browser.H"
 
+/** The Fl_Multi_Browser class is a subclass of Fl_Browser which lets the
+ * user select any set of the lines. The user interface is Macintosh style:
+ * clicking an item turns off all the others and selects that one,
+ * dragging selects all the items the mouse moves over, and shift + click
+ * toggles the items. This is different then how forms did it. Normally
+ * the callback is done when the user releases the mouse, but you can
+ * change this with when().
+ *
+ * \see Fl_Browser for methods to add and remove lines from the browser. 
+ */
 class Fl_Multi_Browser : public Fl_Browser {
 public:
+      /** Creates a new Fl_Multi_Browser widget using the given position,
+       * size, and label string. The default boxtype is \c FL_DOWN_BOX. */
     Fl_Multi_Browser(int x,int y,int w,int h,const char *l=0)
 	: Fl_Browser(x,y,w,h,l) {type(FL_MULTI_BROWSER);}
 };
@@ -37,5 +49,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multi_Browser.H,v 1.4.2.3.2.1.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Multi_Browser.H,v 1.4.2.3.2.1.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Text_Display.H,v 1.4.2.12.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -34,6 +34,9 @@
 #include "Fl_Scrollbar.H"
 #include "Fl_Text_Buffer.H"
 
+/** This is the FLTK text display widget. It allows the user to view multiple lines of
+ * text and supports highlighting and scrolling. The buffer that is displayed in the
+ * widget is managed by the Fl_Text_Buffer class. */
 class FL_EXPORT Fl_Text_Display: public Fl_Group {
   public:
     enum {
@@ -69,57 +72,101 @@ class FL_EXPORT Fl_Text_Display: public Fl_Group {
       unsigned	attr;
     };
 
+      /** Creates a new text display widget. */
     Fl_Text_Display(int X, int Y, int W, int H, const char *l = 0);
+      /** Destroys a text display widget. */
     ~Fl_Text_Display();
 
     virtual int handle(int e);
+      /** Sets the current text buffer associated with the text widget. Multiple text 
+       * widgets can be associated with the same text buffer. */
     void buffer(Fl_Text_Buffer* buf);
     void buffer(Fl_Text_Buffer& buf) { buffer(&buf); }
+      /** Gets the current text buffer associated with the text widget. */
     Fl_Text_Buffer* buffer() { return mBuffer; }
+      /** Marks text from start to end as needing a redraw. */
     void redisplay_range(int start, int end);
+      /** Scrolls the current buffer to start at the specified line and column. */
     void scroll(int topLineNum, int horizOffset);
+      /** Inserts text at the current insert position. */
     void insert(const char* text);
+      /** Replaces text at the current insert position. */
     void overstrike(const char* text);
+      /** Sets the current insert position. */
     void insert_position(int newPos);
+      /** Gets the current insert position. */
     int insert_position() { return mCursorPos; }
+      /** Returns non-zero if the specified mouse position is inside the current selection. */
     int in_selection(int x, int y);
+      /** Scrolls the text buffer to show the current insert position. */
     void show_insert_position();
+      /** Moves the current insert position right one character. */
     int move_right();
+      /** Moves the current insert position left one character. */
     int move_left();
+      /** Moves the current insert position up one line. */
     int move_up();
+      /** Moves the current insert position down one line. */
     int move_down();
     int count_lines(int start, int end, bool start_pos_is_line_start);
     int line_start(int pos);
     int line_end(int pos, bool start_pos_is_line_start);
     int skip_lines(int startPos, int nLines, bool startPosIsLineStart);
     int rewind_lines(int startPos, int nLines);
+      /** Moves the current insert position right one word. */
     void next_word(void);
+      /** Moves the current insert position left one word. */
     void previous_word(void);
+      /** Shows or hides the text cursor. */
     void show_cursor(int b = 1);
+      /** Hides the text cursor. */
     void hide_cursor() { show_cursor(0); }
+      /** Sets the text cursor style to one of the following:
+       * \arg \c Fl_Text_Display::NORMAL_CURSOR - Shows an I beam.
+       * \arg \c Fl_Text_Display::CARET_CURSOR - Shows a caret under the text.
+       * \arg \c Fl_Text_Display::DIM_CURSOR - Shows a dimmed I beam.
+       * \arg \c Fl_Text_Display::BLOCK_CURSOR - Shows an unfilled box around the current character.
+       * \arg \c Fl_Text_Display::HEAVY_CURSOR - Shows a thick I beam. */
     void cursor_style(int style);
+      /** Gets the width/height of the scrollbars. */
     int scrollbar_width() { return scrollbar_width_; }
+      /** Gets where scrollbars are attached to the widget. */
     Fl_Align scrollbar_align() { return scrollbar_align_; }
+      /** Sets the width/height of the scrollbars. */
     void scrollbar_width(int W) { scrollbar_width_ = W; }
+      /** ets where scrollbars are attached to the widget - \c FL_ALIGN_LEFT and 
+       * \c FL_ALIGN_RIGHT for the vertical scrollbar and \c FL_ALIGN_TOP and
+       * \c FL_ALIGN_BOTTOM for the horizontal scrollbar. */
     void scrollbar_align(Fl_Align a) { scrollbar_align_ = a; }
+      /** Moves the insert position to the beginning of the current word. */
     int word_start(int pos) { return buffer()->word_start(pos); }
+      /** Moves the insert position to the end of the current word. */
     int word_end(int pos) { return buffer()->word_end(pos); }
-
-    
+      /** Sets the text buffer, text styles, and callbacks to use when displaying text
+       * in the widget. Style buffers cannot be shared between widgets and are often
+       * used to do syntax highlighting. The editor example from Chapter 4 shows how
+       * to use the highlight_data() method. */
     void highlight_data(Fl_Text_Buffer *styleBuffer,
                         const Style_Table_Entry *styleTable,
                         int nStyles, char unfinishedStyle,
                         Unfinished_Style_Cb unfinishedHighlightCB,
                         void *cbArg);
-
+      /** Returns the style associated with the character at position 
+       * <tt>lineStartPos + lineIndex</tt>. */
     int position_style(int lineStartPos, int lineLen, int lineIndex,
                        int dispIndex);
 
+      /** Gets the default font used when drawing text in the widget. */
     Fl_Font textfont() const {return (Fl_Font)textfont_;}
+      /** Sets the default font used when drawing text in the widget. */
     void textfont(uchar s) {textfont_ = s;}
+      /** Gets the default size of text in the widget. */
     uchar textsize() const {return textsize_;}
+      /** Sets the default size of text in the widget. */
     void textsize(uchar s) {textsize_ = s;}
+      /** Gets the default color of text in the widget. */
     Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+      /** Sets the default color of text in the widget. */
     void textcolor(unsigned n) {textcolor_ = n;}
 
     int wrapped_column(int row, int column);
@@ -288,5 +335,5 @@ class FL_EXPORT Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.4.2.12.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Counter.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,13 @@
 #define FL_NORMAL_COUNTER	0
 #define FL_SIMPLE_COUNTER	1
 
+/** The Fl_Counter widget is provided for forms compatibility. It controls
+ * a single floating point value. 
+ *   \image html counter.gif
+ * Fl_Counter supports the following type()'s:
+ * \arg \c FL_NORMAL_COUNTER - Displays a counter with 4 arrow buttons.
+ * \arg \c FL_SIMPLE_COUNTER - Displays a counter with only 2 arrow buttons.
+ */
 class FL_EXPORT Fl_Counter : public Fl_Valuator {
 
   uchar textfont_, textsize_;
@@ -53,8 +60,12 @@ protected:
 public:
 
   int handle(int);
-  Fl_Counter(int,int,int,int,const char * = 0);
+    /** Creates a new Fl_Counter widget using the given position, size, 
+     * and label string. The default type is \c FL_NORMAL_COUNTER. */
+  Fl_Counter(int x,int y,int width,int height,const char *label = 0);
+    /** Destroys the valuator. */
   ~Fl_Counter();
+    /** Set the increment for the double-arrow buttons. The default value is 1.0. */
   void lstep(double a) {lstep_ = a;}
   void step(double a,double b) {Fl_Valuator::step(a); lstep_ = b;}
   void step(double a) {Fl_Valuator::step(a);}
@@ -70,5 +81,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Counter.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

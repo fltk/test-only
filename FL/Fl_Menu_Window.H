@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Menu_Window.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Menu window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,11 @@
 
 #include "Fl_Single_Window.H"
 
+/** The Fl_Menu_Window widget is a window type used for menus. By
+ * default the window is drawn in the hardware overlay planes if they
+ * are available so that the menu don't force the rest of the window to
+ * redraw. 
+ */
 class FL_EXPORT Fl_Menu_Window : public Fl_Single_Window {
   enum {NO_OVERLAY = 128};
 public:
@@ -36,11 +41,16 @@ public:
   void flush();
   void hide();
   int overlay() {return !(flags()&NO_OVERLAY);}
+    /** Tells FLTK to use hardware overlay planes if they are available. */
   void set_overlay() {clear_flag(NO_OVERLAY);}
+    /** Tells FLTK to use normal drawing planes instead of overlay planes.
+     * This is usually necessary if your menu contains multi-color pixmaps. */
   void clear_overlay() {set_flag(NO_OVERLAY);}
   ~Fl_Menu_Window();
   Fl_Menu_Window(int W, int H, const char *l = 0)
     : Fl_Single_Window(W,H,l) { image(0); }
+    /** Creates a new Fl_Menu_Window widget using the given position, size,
+     * and label string. */
   Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0)
     : Fl_Single_Window(X,Y,W,H,l) { image(0); }
 };
@@ -48,5 +58,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Window.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Menu_Window.H,v 1.5.2.3.2.3.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

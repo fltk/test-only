@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.H,v 1.1.2.10.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Help_View.H,v 1.1.2.10.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Help Viewer widget definitions.
 //
@@ -92,6 +92,9 @@ struct Fl_Help_Target
 // Fl_Help_View class...
 //
 
+/** The Fl_Help_View widget displays HTML text. Most HTML 2.0 elements are
+ * supported, as well as a primitive implementation of tables. GIF, JPEG,
+ * and PNG images are displayed inline. */
 class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widget
 {
   enum { RIGHT = -1, CENTER, LEFT };	// Alignments
@@ -158,36 +161,73 @@ class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widget
 
   public:
 
+    /** The constructor creates the Fl_Help_View widget at the specified
+     * position and size. */
   Fl_Help_View(int xx, int yy, int ww, int hh, const char *l = 0);
+    /** The destructor destroys the widget and frees all memory that has
+     * been allocated for the current file. */
   ~Fl_Help_View();
+    /** This method returns the current directory (base) path for the file in the buffer. */
   const char	*directory() const { if (directory_[0]) return (directory_);
   					else return ((const char *)0); }
+    /** This method returns the current filename for the text in the buffer. */
   const char	*filename() const { if (filename_[0]) return (filename_);
   					else return ((const char *)0); }
   int		find(const char *s, int p = 0);
+    /** This method assigns a callback function to use when a link is followed
+     * or a file is loaded (via Fl_Help_View::load()) that requires a different
+     * file or path. The callback function receives a pointer to the Fl_Help_View
+     * widget and the URI or full pathname for the file in question. It must
+     * return a pathname that can be opened as a local file or \c NULL:
+     * 
+     * <tt>const char *fn(Fl_Widget *w, const char *uri);</tt>
+     *
+     * The link function can be used to retrieve remote or virtual documents,
+     * returning a temporary file that contains the actual data. If the link
+     * function returns \c NULL, the value of the Fl_Help_View widget will
+     * remain unchanged.
+     *
+     * If the link callback cannot handle the URI scheme, it should return
+     * the uri value unchanged or set the value() of the widget before
+     * returning \c NULL. */
   void		link(Fl_Help_Func *fn) { link_ = fn; }
+    /** This method loads the specified file or URL. */
   int		load(const char *f);
   void		resize(int,int,int,int);
+    /** This method returns the length of the buffer text in pixels. */
   int		size() const { return (size_); }
   void		size(int W, int H) { Fl_Widget::size(W, H); }
+    /** Sets the default text color. */
   void		textcolor(Fl_Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
+    /** Returns the current default text color. */
   Fl_Color	textcolor() const { return (defcolor_); }
+    /** Sets the default text font. */
   void		textfont(uchar f) { textfont_ = f; format(); }
+    /** Returns the current default text font. */
   uchar		textfont() const { return (textfont_); }
+    /** Sets the default text size. */
   void		textsize(uchar s) { textsize_ = s; format(); }
+    /** Returns the current default text size. */
   uchar		textsize() const { return (textsize_); }
+    /** This method returns the current document title, or \c NULL if there
+     * is no title. */
   const char	*title() { return (title_); }
+    /** Scroll the text to the indicated position with a named destination. */
   void		topline(const char *n);
+    /** Scroll the text to the indicated position by pixel line. */
   void		topline(int);
+    /** Returns the current top line in pixels. */
   int		topline() const { return (topline_); }
   void		leftline(int);
   int		leftline() const { return (leftline_); }
+    /** Sets the current buffer to the string provided and reformats the text. */
   void		value(const char *v);
+    /** Returns the current buffer contents.*/
   const char	*value() const { return (value_); }
 };
 
 #endif // !Fl_Help_View_H
 
 //
-// End of "$Id: Fl_Help_View.H,v 1.1.2.10.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Help_View.H,v 1.1.2.10.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

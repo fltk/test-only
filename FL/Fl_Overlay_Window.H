@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.H,v 1.5.2.3.2.4.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Overlay_Window.H,v 1.5.2.3.2.4.2.2 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Overlay window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,22 @@
 
 #include "Fl_Double_Window.H"
 
+/** This window provides double buffering and also the ability to draw the
+ * "overlay" which is another picture placed on top of the main image. The
+ * overlay is designed to be a rapidly-changing but simple graphic such as
+ * a mouse selection box. Fl_Overlay_Window uses the overlay planes provided
+ * by your graphics hardware if they are available.
+ *
+ * If no hardware support is found the overlay is simulated by drawing
+ * directly into the on-screen copy of the double-buffered window, and
+ * "erased" by copying the backbuffer over it again. This means the overlay
+ * will blink if you change the image in the window. */
 class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
   friend class _Fl_Overlay;
+    /** You must subclass Fl_Overlay_Window and provide this method. It is
+     * just like a draw() method, except it draws the overlay. The overlay
+     * will have already been "cleared" when this is called. You can use
+     * any of the routines described in<FL/fl_draw.H>. */
   virtual void draw_overlay() = 0;
   Fl_Window *overlay_;
 public:
@@ -39,9 +53,15 @@ public:
   void resize(int,int,int,int);
   ~Fl_Overlay_Window();
   int can_do_overlay();
+    /** Call this to indicate that the overlay data has changed and needs to
+     * be redrawn. The overlay will be clear until the first time this is
+     * called, so if you want an initial display you must call this after
+     * calling show(). */
   void redraw_overlay();
   Fl_Overlay_Window(int W, int H, const char *l=0)
     : Fl_Double_Window(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
+    /** Creates a new Fl_Overlay_Window widget using the given position,
+     * size, and label (title) string. */
   Fl_Overlay_Window(int X, int Y, int W, int H, const char *l=0)
     : Fl_Double_Window(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
   void show(int a, char **b) {Fl_Double_Window::show(a,b);}
@@ -50,5 +70,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.H,v 1.5.2.3.2.4.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Overlay_Window.H,v 1.5.2.3.2.4.2.2 2003/11/22 01:04:39 matthiaswm Exp $".
 //

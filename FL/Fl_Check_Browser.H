@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.3 2003/11/22 01:04:39 matthiaswm Exp $"
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,8 @@
 #include "Fl.H"
 #include "Fl_Browser_.H"
 
+/** The Fl_Check_Browser widget displays a scrolling list of text lines
+ * that may be selected and/or checked by the user. */
 class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
   /* required routines for Fl_Browser_ subclass: */
 
@@ -66,31 +68,43 @@ class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
 
   public:
 
+    /** The constructor makes an empty browser. */
   Fl_Check_Browser(int x, int y, int w, int h, const char *l = 0);
 
-  int add(char *s);               // add an (unchecked) item
-  int add(char *s, int b);        // add an item and set checked
-				  // both return the new nitems()
-
-  // inline const char * methods to avoid breaking binary compatibility...
+  int add(char *s);
+    /** Add a new unchecked line to the end of the browser. The text is
+     * copied using the \c strdup() function. It may also be \c NULL to make
+     * a blank line. Setting the second argument creates a checked item. */
+  int add(char *s, int b);
+    // inline const char * methods to avoid breaking binary compatibility...
   int add(const char *s) { return add((char *)s); }
   int add(const char *s, int b) { return add((char *)s, b); }
 
-  void clear();                   // delete all items
+    /** Remove every item from the browser. */
+  void clear();
+    /** Returns how many lines are in the browser. The last line number is equal to this. */
   int nitems() const { return nitems_; }
+    /** Returns how many items are currently checked. */
   int nchecked() const { return nchecked_; }
+    /** Gets the current status of item item. */
   int checked(int item) const;
+    /** Sets the check status of item \a item to \a b. */
   void checked(int item, int b);
+    /** Equivalent to Fl_Check_Browser::checked(item, 1). */
   void set_checked(int item) { checked(item, 1); }
+    /** Sets all the items checked. */
   void check_all();
+    /** Sets all the items unchecked. */
   void check_none();
-  int value() const;              // currently selected item
-  char *text(int item) const;     // returns pointer to internal buffer
+    /** Returns the index of the currently selected item. */
+  int value() const;
+    /** Return a pointer to an internal buffer holding item item's text. */
+  char *text(int item) const;
 };
 
 #endif // Fl_Check_Browser_H
 
 //
-// End of "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Check_Browser.H,v 1.1.2.4.2.3 2003/11/22 01:04:39 matthiaswm Exp $".
 //
 
