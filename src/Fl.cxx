@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.146 2002/05/15 16:38:01 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.147 2002/06/17 16:03:52 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -70,9 +70,11 @@ FL_API void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
 FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
 #ifdef _WIN32
-#include "Fl_win32.cxx"
+# include "Fl_win32.cxx"
+#elif defined(__APPLE__)
+# include "Fl_mac.cxx"
 #else
-#include "Fl_x.cxx"
+# include "Fl_x.cxx"
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -625,5 +627,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.146 2002/05/15 16:38:01 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.147 2002/06/17 16:03:52 spitzak Exp $".
 //

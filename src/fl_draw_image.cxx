@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.15 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.16 2002/06/17 16:03:54 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,9 @@
 
 // These files define "innards" and the "DITHER_RECTF" macro:
 #ifdef _WIN32
-#include "fl_draw_image_win32.cxx"
+# include "fl_draw_image_win32.cxx"
+#elif defined(__APPLE__)
+# include "fl_draw_image_mac.cxx"
 #else
 #include "fl_draw_image_x.cxx"
 #endif
@@ -72,5 +74,5 @@ void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
 }
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.15 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.16 2002/06/17 16:03:54 spitzak Exp $".
 //

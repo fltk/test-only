@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.7 2001/08/07 07:06:17 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.8 2002/06/17 16:03:53 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,9 @@
 #include <fltk/x.h>
 
 #ifdef _WIN32
-#include <malloc.h>
 static HRGN bitmap2region(Fl_Bitmap*);
+#elif defined(__APPLE__)
+// Not yet implemented for Apple
 #else
 #include <X11/extensions/shape.h>
 #endif
@@ -42,7 +43,12 @@ void Fl_Shaped_Window::draw() {
     // size of window has change since last time
     lw = w(); lh = h();
     Fl_Bitmap* mask = resize_bitmap(shape_, w(), h());
-#ifndef _WIN32
+#ifdef _WIN32
+    HRGN region = bitmap2region(mask);
+    SetWindowRgn(fl_xid(this), region, TRUE);
+#elif defined(__APPLE__)
+    // not yet implemented for Apple
+#else
     Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
                   (const char*)mask->array, mask->width(), mask->height());
     hide();
@@ -50,9 +56,6 @@ void Fl_Shaped_Window::draw() {
                       pmask, ShapeSet);
     show();
     if (pmask != None) XFreePixmap(fl_display, pmask);
-#else
-    HRGN region = bitmap2region(mask);
-    SetWindowRgn(fl_xid(this), region, TRUE);
 #endif
     changed = 0;
   }
@@ -66,6 +69,7 @@ static Fl_Bitmap* resize_bitmap(Fl_Bitmap* bitmap, int /*W*/, int /*H*/) {
 }
 
 #ifdef _WIN32
+#include <malloc.h>
 static inline BYTE bit(int x) { return (BYTE)(1 << (x % 8)); }
 
 // Windows uses regions only to specify the clip mask of a window therefore
@@ -166,5 +170,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.7 2001/08/07 07:06:17 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.8 2002/06/17 16:03:53 spitzak Exp $"
 //

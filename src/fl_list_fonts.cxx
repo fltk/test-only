@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.14 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.15 2002/06/17 16:03:54 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -26,7 +26,9 @@
 #include <string.h>
 
 #ifdef _WIN32
-#include "fl_list_fonts_win32.cxx"
+# include "fl_list_fonts_win32.cxx"
+#elif defined(__APPLE__)
+# include "fl_list_fonts_mac.cxx"
 #else
 # if USE_XFT
 // the code is included by fl_font.cxx
@@ -82,5 +84,5 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.14 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.15 2002/06/17 16:03:54 spitzak Exp $".
 //

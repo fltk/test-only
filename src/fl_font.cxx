@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.33 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.34 2002/06/17 16:03:54 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,8 @@ const char *fl_encoding_ = "iso8859-1";
   
 #ifdef _WIN32
 # include "fl_font_win32.cxx"
+#elif defined(__APPLE__)
+# include "fl_font_mac.cxx"
 #else
 # if USE_XFT
 #  include "fl_font_xft.cxx"
@@ -52,5 +54,5 @@ int
 fl_width(uchar c) { return fl_width((char *)&c, 1); }
 
 //
-// End of "$Id: fl_font.cxx,v 1.33 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.34 2002/06/17 16:03:54 spitzak Exp $".
 //

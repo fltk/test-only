@@ -2298,3 +2298,7 @@ movements set the focus. It also appears that Windows emulation can be
 enabled by turning this flag on on *all* widgets (if not then the
 widgets that don't want this should turn the flag off).
 
+////////////////////////////////////////////////////////////////
+
+gl_draw(char*,int) was missing from gl header file. Glut compatability
+fixed to not need gl_width(char).
