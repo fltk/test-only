@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.8 2000/06/11 07:30:58 bill Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -130,19 +130,20 @@ void Fl_Gl_Window::make_overlay() {
 	fl_overlay_depth = pfd.cColorBits; // used by gl_color()
 	if (fl_overlay_depth > 8) fl_overlay_depth = 8;
 	COLORREF palette[256];
+	int n = (1<<fl_overlay_depth)-1;
 	// copy all colors except #0 into the overlay palette:
-	for (int i = 0; i < 256; i++) {
+	for (int i = 0; i <= n; i++) {
 	  uchar r,g,b; Fl::get_color((Fl_Color)i,r,g,b);
 	  palette[i] = RGB(r,g,b);
 	}
 	// always provide black & white in the last 2 pixels:
 	if (fl_overlay_depth < 8) {
-	  palette[(1<<fl_overlay_depth)-2] = RGB(0,0,0);
-	  palette[(1<<fl_overlay_depth)-1] = RGB(255,255,255);
+	  palette[n-1] = RGB(0,0,0);
+	  palette[n] = RGB(255,255,255);
 	}
 	// and use it:
-	wglSetLayerPaletteEntries(hdc, 1, 1, 255, palette+1);
-	wglRealizeLayerPalette(hdc, 1, TRUE);
+	wglSetLayerPaletteEntries(hdc, 1, 1, n, palette+1);
+	wglRealizeLayerPalette(hdc, 1, TRUE); // this line may not be needed
       }
       valid(0);
       return;
@@ -178,8 +179,6 @@ void Fl_Gl_Window::make_overlay_current() {
   if (overlay != this) {
 #ifdef WIN32
     fl_set_gl_context(this, (GLXContext)overlay);
-    if (fl_overlay_depth)
-      wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
 #else
     ((Fl_Gl_Window*)overlay)->make_current();
 #endif
@@ -201,5 +200,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.7 2000/05/27 01:17:25 carl Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.8 2000/06/11 07:30:58 bill Exp $".
 //

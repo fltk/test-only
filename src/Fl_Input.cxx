@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.33 2000/05/30 07:42:12 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.34 2000/06/11 07:31:07 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -112,14 +112,7 @@ int Fl_Input::handle_key() {
   case FL_Tab:
     if (Fl::event_state(FL_CTRL|FL_SHIFT) || type()!=FL_MULTILINE_INPUT) return 0;
     return replace(position(), mark(), &ascii, 1);
-  case FL_Control_R:
-  case 0xff20: // Multi-Key
-    ascii = ctrl('Q'); break;
-  default:
-    if (!ascii) return 0; // don't reset compose on shift keys
   }
-
-  Fl::compose_reset();
 
   int i;
   switch (ascii) {
@@ -190,7 +183,7 @@ int Fl_Input::handle_key() {
   case ctrl('L'):
   case ctrl('M'):
     // insert a few selected control characters literally:
-    if (type() != FL_FLOAT_INPUT || type() != FL_INT_INPUT)
+    if (type() != FL_FLOAT_INPUT && type() != FL_INT_INPUT)
       return replace(position(), mark(), &ascii, 1);
   }
   return 0;
@@ -221,11 +214,10 @@ int Fl_Input::handle(int event) {
     case FL_Tab:
       position(size(),0);
       break;
+    default:
+      position(position(),mark());// turns off the saved up/down arrow position
+      break;
     }
-    break;
-
-  case FL_UNFOCUS:
-    Fl::compose_reset();
     break;
 
   case FL_SHORTCUT:
@@ -248,7 +240,6 @@ int Fl_Input::handle(int event) {
       }
 #endif
     }
-    Fl::compose_reset();
     break;
 
   case FL_RELEASE:
@@ -273,5 +264,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.33 2000/05/30 07:42:12 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.34 2000/06/11 07:31:07 bill Exp $".
 //

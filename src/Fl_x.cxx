@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.75 2000/06/03 08:49:16 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.76 2000/06/11 07:31:10 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -432,12 +432,12 @@ int fl_handle(const XEvent& xevent)
     window->do_callback();
     return 1;
 
-  case MapNotify:
-    ((Fl_Widget*)window)->show();
+  case UnmapNotify:
+    Fl_X::i(window)->wait_for_expose = 1;
     return 1;
 
-  case UnmapNotify:
-    ((Fl_Widget*)window)->hide();
+  case MapNotify:
+    // supposedly an Expose event will come in and deiconize it
     return 1;
 
   case Expose:
@@ -645,8 +645,8 @@ void Fl_Window::create() {
   Fl_X::create(this, fl_visual, fl_colormap, -1);
 }
 
-char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+extern const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
@@ -712,8 +712,6 @@ void Fl_X::create(Fl_Window* w,
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  int showit = 1;
-
   if (!w->parent() && w->border()) {
     // Communicate all kinds 'o junk to the X Window Manager:
 
@@ -730,10 +728,8 @@ void Fl_X::create(Fl_Window* w,
     XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
 		    (unsigned char *)w->xclass(), strlen(w->xclass()));
 
-    if (fl_modal_for) {
+    if (fl_modal_for)
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
-      if (!fl_modal_for->visible()) showit = 0;
-    }
 
     XWMHints hints;
     hints.input = True;
@@ -741,21 +737,12 @@ void Fl_X::create(Fl_Window* w,
     if (fl_show_iconic) {
       hints.flags |= StateHint;
       hints.initial_state = IconicState;
-      fl_show_iconic = 0;
-      showit = 0;
     }
     if (w->icon()) {
       hints.icon_pixmap = (Pixmap)w->icon();
       hints.flags       |= IconPixmapHint;
     }
     XSetWMHints(fl_display, x->xid, &hints);
-  }
-
-  XMapWindow(fl_display, x->xid);
-  if (showit) {
-    w->set_visible();
-    w->handle(FL_SHOW); // get child windows to appear
-    w->redraw();
   }
 }
 
@@ -824,6 +811,10 @@ void Fl_X::sendxjunk() {
 void Fl_Window::size_range_() {
   size_range_set = 1;
   if (i) i->sendxjunk();
+}
+
+int Fl_Window::iconic() const {
+  return (i && visible() && i->wait_for_expose);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -910,5 +901,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.75 2000/06/03 08:49:16 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.76 2000/06/11 07:31:10 bill Exp $".
 //

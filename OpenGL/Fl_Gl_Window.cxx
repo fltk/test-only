@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.15 2000/06/10 19:41:14 carl Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.16 2000/06/11 07:30:58 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,7 +134,12 @@ void Fl_Gl_Window::ortho() {
 
 void Fl_Gl_Window::swap_buffers() {
 #ifdef WIN32
+#if HAVE_GL_OVERLAY
+  // Do not swap the overlay, to match GLX:
+  wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_MAIN_PLANE);
+#else
   SwapBuffers(Fl_X::i(this)->private_dc);
+#endif
 #else
   glXSwapBuffers(fl_display, fl_xid(this));
 #endif
@@ -155,10 +160,9 @@ void Fl_Gl_Window::flush() {
 #endif
 
 #if HAVE_GL_OVERLAY && defined(WIN32)
-  if (overlay && overlay != this &&
-      ((damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE))
-       || !save_valid)) {
-    // Draw into hardware overlay planes
+  // Draw into hardware overlay planes:
+  if (overlay && overlay != this
+      && (damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE) || !save_valid)) {
     fl_set_gl_context(this, (GLXContext)overlay);
     if (fl_overlay_depth)
       wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
@@ -168,8 +172,8 @@ void Fl_Gl_Window::flush() {
     draw_overlay();
     fl_overlay = 0;
     valid(save_valid);
-    if (damage() == FL_DAMAGE_OVERLAY) {
-      wglSwapLayerBuffers(Fl_X::i(this)->private_dc,WGL_SWAP_OVERLAY1);
+    wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_OVERLAY1);
+    if (damage() == FL_DAMAGE_OVERLAY) { // main layer is undamaged
       if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
       return;
     }
@@ -309,5 +313,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.15 2000/06/10 19:41:14 carl Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.16 2000/06/11 07:30:58 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.67 2000/06/03 08:49:12 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.68 2000/06/11 07:31:03 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -2004,10 +2004,8 @@ void Fl_Widget_Type::read_property(const char *c) {
     Fl_Boxtype b = boxnumber(value);
     if (b) o->text_box(b);
     else read_error("Boxtype '%s' not found", value);
-  } else if (!strcmp(name, "down_box")) { // ignore this fltk 1.0 item
+  } else if (!strcmp(c, "down_box")) { // ignore this fltk 1.0 item
     read_word();
-    return 1;
-  // } else if glyph...
   } else if (!strcmp(c,"labelfont")) {
     if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts+x);
   } else if (!strcmp(c,"textfont")) {
@@ -2203,5 +2201,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.67 2000/06/03 08:49:12 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.68 2000/06/11 07:31:03 bill Exp $".
 //

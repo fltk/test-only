@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.46 2000/04/11 08:16:43 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.1 2000/06/11 07:31:02 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Browser.H>
+#include "Fl_Browser_.H"
 #include <FL/fl_draw.H>
 
 // This is the base class for browsers.  To be useful it must be
@@ -66,7 +66,7 @@ int Fl_Browser_::scrollbar_width_ = 16;
 // return where to draw the actual box:
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   X = x(); Y = y(); W = w(); H = h();
-  window_box()->inset(X,Y,W,H);
+  text_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar_width_;
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar_width_;
@@ -232,7 +232,7 @@ void Fl_Browser_::display(void* x) {
 void Fl_Browser_::draw() {
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
-    draw_window_frame();
+    draw_text_frame();
     drawsquare = 1;
   }
 
@@ -293,7 +293,7 @@ J1:
 	fl_color(selection_color());
 	fl_rectf(X, yy+Y, W, hh);
       } else {
-	fl_color(window_color());
+	fl_color(text_background());
 	fl_rectf(X, yy+Y, W, hh);
       }
       if (l == focus_line) {
@@ -310,7 +310,7 @@ J1:
   }
   // erase the area below last line:
   if (yy < H) {
-    fl_color(window_color());
+    fl_color(text_background());
     fl_rectf(X, yy+Y, W, H-yy);
   }
   fl_pop_clip();
@@ -706,5 +706,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.46 2000/04/11 08:16:43 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.1 2000/06/11 07:31:02 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.5 2000/05/27 01:17:29 carl Exp $"
+// "$Id: Fl_compose.cxx,v 1.6 2000/06/11 07:31:09 bill Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -63,9 +63,6 @@ int Fl::compose(int& del) {
 
   del = 0;
   char ascii = e_text[0];
-
-  // The Delete and other special keys should not be composed...
-  if (ascii < 32 || ascii == 127) return 0;
 
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held

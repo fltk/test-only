@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.77 2000/06/10 04:10:14 carl Exp $"
+dnl# "$Id: configure.in,v 1.78 2000/06/11 07:30:56 bill Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -57,8 +57,6 @@ LDLIBS="-lX11 -lXext"
 DEBUGFLAG=""
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
-COPTS=""
-CXXOPTS=""
 SYSTYPE="UNIX"
 DSOCFLAGS="-fPIC"
 case $uname in
@@ -271,21 +269,21 @@ MAKEDEPEND="\${CXX} -M"
 dnl# add warnings to compiler switches:
 dnl# do this last so messing with switches does not break tests
 if test -n "$GXX"; then
-    COPTS="-Wall $COPTS"
-    CXXOPTS="-Wall -Wno-return-type $CXXOPTS"
+    CFLAGS="-Wall $CFLAGS"
+    CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
-        COPTS="$COPTS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
-        CXXOPTS="$CXXOPTS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
+        CFLAGS="$CFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
+        CXXFLAGS="$CXXFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
     fi
 
     # See if GCC supports -fno-exceptions...
     echo "Testing if GCC supports -fno-exceptions..."
-    OLDCOPTS="$COPTS"
-    COPTS="$COPTS -fno-exceptions"
+    OLDCFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -fno-exceptions"
     AC_TRY_COMPILE(,,
-	CXXOPTS="$CXXOPTS -fno-exceptions"
+	CXXFLAGS="$CXXFLAGS -fno-exceptions"
 	echo "Congratulations - your GCC supports exceptions; disabling them for FLTK...",
-	COPTS="$OLDCOPTS"
+	CFLAGS="$OLDCFLAGS"
 	echo "GCC does not support exceptions...")
 
     # See if we are running Solaris; if so, try the -fpermissive option...
@@ -314,13 +312,13 @@ else
 		#     LD="ld -n32"
 		#     MAKEDEPEND="CC -M"
 
-        	COPTS="-fullwarn $COPTS"
-        	CXXOPTS="-fullwarn $CXXOPTS"
+        	CFLAGS="-fullwarn $CFLAGS"
+        	CXXFLAGS="-fullwarn $CXXFLAGS"
 		if test -z "$DEBUGFLAG"; then
 	            DEBUGFLAG="-O2 -OPT:Olimit=3000"
 		fi
 	    else
-        	CXXOPTS="+w +pp $CXXOPTS"
+        	CXXFLAGS="+w +pp $CXXFLAGS"
 		if test -z "$DEBUGFLAG"; then
 	            DEBUGFLAG="-O2 -Olimit=3000"
 		fi
@@ -354,8 +352,6 @@ fi
 
 PREFIX=${prefix}
 AC_SUBST(DEBUGFLAG)
-AC_SUBST(COPTS)
-AC_SUBST(CXXOPTS)
 
 if test "$PREFIX" = "NONE"; then
     AC_DEFINE_UNQUOTED(CONFIGDIR, "${ac_default_prefix}/lib/fltk")
@@ -384,5 +380,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.77 2000/06/10 04:10:14 carl Exp $".
+dnl# End of "$Id: configure.in,v 1.78 2000/06/11 07:30:56 bill Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.111 2000/06/10 04:10:30 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.112 2000/06/11 07:31:09 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -697,18 +697,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SHOWWINDOW:
     if (!window->parent()) {
       if (wParam)
-	((Fl_Widget*)window)->show();
+	; // supposedly a Paint event will come in turn off iconize indicator
       else
-	((Fl_Widget*)window)->hide();
+	Fl_X::i(window)->wait_for_expose = 1;
     }
     break;
 
   case WM_SIZE:
     if (!window->parent()) {
       if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	((Fl_Widget*)window)->hide();
+	Fl_X::i(window)->wait_for_expose = 1;
       } else {
-	((Fl_Widget*)window)->show();
+	; // supposedly a Paint event will come in turn off iconize indicator
 	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
 	  resize_from_system = window;
 	window->layout(); // This works, but is it the right way?
@@ -824,8 +824,8 @@ void Fl_Window::create() {
   Fl_X::create(this);
 }
 
-char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+extern const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
 
@@ -866,7 +866,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   int yp = w->y();
 
   int dx, dy, dw, dh;
-  int showit = 1;
+
   if (w->parent()) {
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
     styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
@@ -882,7 +882,6 @@ Fl_X* Fl_X::create(Fl_Window* w) {
 
     if (fl_modal_for) {
       parent = fl_modal_for->i->xid;
-      if (!fl_modal_for->visible()) showit = 0;
     } else {
       parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
     }
@@ -918,19 +917,6 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  x->wait_for_expose = 1;
-  if (fl_show_iconic) {showit = 0; fl_show_iconic = 0;}
-  if (showit) {
-    w->set_visible();
-    w->handle(FL_SHOW); // get child windows to appear
-    w->redraw(); // force draw to happen
-  }
-  // If we've captured the mouse, we dont want do activate any
-  // other windows from the code, or we loose the capture.
-  // Also, we don't want to activate the window for tooltips.
-  ShowWindow(x->xid, !showit ? SW_SHOWMINNOACTIVE :
-	     (Fl::grab() || style&WS_POPUP) ? SW_SHOWNOACTIVATE :
-	     SW_SHOWNORMAL);
   return x;
 }
 
@@ -956,6 +942,10 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
     minmax->ptMaxTrackSize.y = w->maxh + dw;
     minmax->ptMaxSize.y = w->maxh + dw;
   }
+}
+
+int Fl_Window::iconic() const {
+  return i && IsIconic(i->xid);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1186,5 +1176,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.111 2000/06/10 04:10:30 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.112 2000/06/11 07:31:09 bill Exp $".
 //

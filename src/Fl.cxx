@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.97 2000/06/06 23:10:05 carl Exp $"
+// "$Id: Fl.cxx,v 1.98 2000/06/11 07:31:06 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -169,7 +169,9 @@ int Fl::wait() {
     initclock = 0;
     fl_wait(0,0);
   }
-  return Fl_X::first != 0; // return true if there is a window
+  // return true if any windows are visible:
+  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible()) return 1;
+  return 0;
 }
 
 double Fl::wait(double time) {
@@ -188,7 +190,9 @@ int Fl::check() {
   if (numtimeouts) {fl_elapsed(); call_timeouts();}
   fl_wait(1, 0.0);
   flush();
-  return Fl_X::first != 0; // return true if there is a window
+  // return true if any windows are visible:
+  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible()) return 1;
+  return 0;
 }
 
 int Fl::run() {
@@ -252,6 +256,7 @@ int Fl::event_inside(const Fl_Widget& o) /*const*/ {
 void Fl::focus(Fl_Widget *o) {
   Fl_Widget *p = focus_;
   if (o != p) {
+    Fl::compose_reset();
     focus_ = o;
     for (; p && !p->contains(o); p = p->parent()) p->handle(FL_UNFOCUS);
     for (; o; o = o->parent()) o->handle(FL_FOCUS);
@@ -506,5 +511,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.97 2000/06/06 23:10:05 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.98 2000/06/11 07:31:06 bill Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.27 2000/06/10 04:10:15 carl Exp $"
+# "$Id: makeinclude.in,v 1.28 2000/06/11 07:30:56 bill Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -40,8 +40,8 @@ CC		=@CC@
 MAKEDEPEND	=@MAKEDEPEND@
 
 # flags for C++ compiler:
-CFLAGS		=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @COPTS@ @CFLAGS@
-CXXFLAGS	=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @CXXOPTS@ @CXXFLAGS@ @X_CFLAGS@
+CFLAGS		=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @CFLAGS@
+CXXFLAGS	=@DEBUGFLAG@ -I@srcdir@ $(XTRAFLAGS) @CXXFLAGS@ @X_CFLAGS@
 DSOCFLAGS	=@DSOCFLAGS@
 DEBUGFLAGS	=@DEBUGFLAG@
 
@@ -75,16 +75,16 @@ THREADSLIBS	=@THREADSLIBS@
 .SUFFIXES:	.c .cxx .h .fl .o
 
 .c.o:
-	$(CC) -I.. $(CFLAGS) $(COPTS) $< -c
+	$(CC) -I.. $(CFLAGS) $< -c
 
 .cxx.o:
-	$(CXX) -I.. $(CXXFLAGS) $(CXXOPTS) $< -c
+	$(CXX) -I.. $(CXXFLAGS) $< -c
 
 %.shared.o : %.cxx
-	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) $(CXXOPTS) -c $< -o $@
+	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
 %.shared.o : %.c
-	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) $(COPTS) -c $< -o $@
+	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 #
-# End of "$Id: makeinclude.in,v 1.27 2000/06/10 04:10:15 carl Exp $".
+# End of "$Id: makeinclude.in,v 1.28 2000/06/11 07:30:56 bill Exp $".
 #
