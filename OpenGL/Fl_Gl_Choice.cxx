@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.5 2000/04/24 08:31:22 bill Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.6 2000/05/01 17:25:15 carl Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
 
   // Replacement for ChoosePixelFormat() that finds one with an overlay
   // if possible:
-  if (!fl_gc) fl_GetDC(0);
+  if (!fl_gc) fl_gc = GetDC(0); fl_window = 0; // Why are we messing with the root window?
   int pixelFormat = 0;
   PIXELFORMATDESCRIPTOR chosen_pfd;
   for (int i = 1; ; i++) {
@@ -160,7 +160,11 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
 HDC fl_private_dc(Fl_Window* w, Fl_Gl_Choice *g) {
   Fl_X* i = Fl_X::i(w);
   if (!i->private_dc) {
-    i->private_dc = GetDCEx(i->xid, 0, DCX_CACHE);
+    // Hmmm.  This seems wrong.  I believe this will actually do the opposite
+    // of what is intended and use a common DC.  FLTK now uses private DCs by
+    // default for all windows anyway.
+    // i->private_dc = GetDCEx(i->xid, 0, DCX_CACHE);
+    i->private_dc = GetDC(i->xid);
     SetPixelFormat(i->private_dc, g->pixelFormat, &g->pfd);
 #if USE_COLORMAP
     if (fl_palette) SelectPalette(i->private_dc, fl_palette, FALSE);
@@ -200,5 +204,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.5 2000/04/24 08:31:22 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.6 2000/05/01 17:25:15 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.38 2000/04/28 21:43:57 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.39 2000/05/01 17:25:16 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -133,15 +133,28 @@ void Fl_Window::destroy() {
   handle(FL_HIDE);
 
 #ifdef WIN32
-  if (x->private_dc) ReleaseDC(x->xid,x->private_dc);
-  if (x->xid == fl_window && fl_gc) {
-    ReleaseDC(fl_window, fl_gc);
-    fl_window = (HWND)-1;
+  // we need to delete the pen and brush objects in the dc
+  HDC dc = x->private_dc ? x->private_dc : GetDC(x->xid);
+  COLORREF rgb = RGB(0, 0, 0);
+  HPEN newpen = CreatePen(PS_SOLID, 1, rgb);
+  HBRUSH newbrush = CreateSolidBrush(rgb);
+  HPEN oldpen = (HPEN)SelectObject(dc, newpen); // this returns the old pen
+  if (oldpen) DeleteObject(oldpen);
+  HBRUSH oldbrush = (HBRUSH)SelectObject(dc, newbrush); // this returns the old brush
+  if (oldbrush) DeleteObject(oldbrush);
+  ReleaseDC(x->xid, dc); // not useful?
+  if (x->xid == fl_window) {
+    fl_window = 0;
     fl_gc = 0;
   }
-#endif
+  DestroyWindow(x->xid);
+  if (x->region) XDestroyRegion(x->region);
+  DeleteObject(newpen);
+  DeleteObject(newbrush);
+#else
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(fl_display, x->xid);
+#endif                                                                    2
 
   delete x;
 }
@@ -287,5 +300,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.38 2000/04/28 21:43:57 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.39 2000/05/01 17:25:16 carl Exp $".
 //

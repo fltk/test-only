@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.22 2000/04/27 00:30:08 carl Exp $"
+// "$Id: fl_font_win32.cxx,v 1.23 2000/05/01 17:25:17 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
     DEFAULT_PITCH,	// pitch and family 
     name	        // pointer to typeface name string 
     );
-  HDC screen =  fl_GetDC(0);
+  HDC screen =  GetDC(0);
   SelectObject(screen, fid);
   GetTextMetrics(screen, &metr);
 //  BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
@@ -175,5 +175,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.22 2000/04/27 00:30:08 carl Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.23 2000/05/01 17:25:17 carl Exp $".
 //

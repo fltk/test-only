@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.9 2000/04/27 00:30:07 carl Exp $"
+// "$Id: Fl_visual.cxx,v 1.10 2000/05/01 17:25:16 carl Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 
 #ifdef WIN32
 int Fl::visual(int flags) {
-  HDC screen = fl_GetDC(0);
+  HDC screen = GetDC(0);
   if (flags & FL_DOUBLE) return 0;
   if (!(flags & FL_INDEX) &&
     GetDeviceCaps(screen, BITSPIXEL) <= 8) return 0;
@@ -107,5 +107,5 @@ int Fl::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.9 2000/04/27 00:30:07 carl Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.10 2000/05/01 17:25:16 carl Exp $".
 //

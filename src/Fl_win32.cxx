@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.100 2000/04/27 00:30:08 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.101 2000/05/01 17:25:16 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -828,30 +828,33 @@ const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
 
 Fl_X* Fl_X::create(Fl_Window* w) {
-
   const char* class_name = "FLTK"; // create a "FLTK" WNDCLASS
+  static int registered = 0;
+  if (!registered) {
+    static WNDCLASSEX wc;
+    // Documentation states a device context consumes about 800 bytes
+    // of memory... so who cares? If 800 bytes per window is what it
+    // takes to speed things up, I'm game.
+    //wc.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC | CS_DBLCLKS;
+    wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
+    wc.lpfnWndProc = (WNDPROC)WndProc;
+    wc.cbClsExtra = wc.cbWndExtra = 0;
+    wc.hInstance = fl_display;
+    if (!w->icon())
+      w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
+    wc.hIcon = wc.hIconSm = (HICON)w->icon();
+    if (!fl_default_cursor) fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hCursor = fl_default_cursor;
+    //uchar r,g,b; Fl::get_color(FL_GRAY,r,g,b);
+    //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
+    wc.hbrBackground = NULL;
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = class_name;
+    wc.cbSize = sizeof(WNDCLASSEX);
+    RegisterClassEx(&wc);
 
-  WNDCLASSEX wc;
-  // Documentation states a device context consumes about 800 bytes
-  // of memory... so who cares? If 800 bytes per window is what it
-  // takes to speed things up, I'm game.
-  //wc.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC | CS_DBLCLKS;
-  wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
-  wc.lpfnWndProc = (WNDPROC)WndProc;
-  wc.cbClsExtra = wc.cbWndExtra = 0;
-  wc.hInstance = fl_display;
-  if (!w->icon())
-    w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
-  wc.hIcon = wc.hIconSm = (HICON)w->icon();
-  if (!fl_default_cursor) fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hCursor = fl_default_cursor;
-  //uchar r,g,b; Fl::get_color(FL_GRAY,r,g,b);
-  //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
-  wc.hbrBackground = NULL;
-  wc.lpszMenuName = NULL;
-  wc.lpszClassName = class_name;
-  wc.cbSize = sizeof(WNDCLASSEX);
-  RegisterClassEx(&wc);
+    registered = 1;
+  }
 
   HWND parent;
   DWORD style;
@@ -978,15 +981,15 @@ HWND fl_window = 0;
 
 // Here we ensure only one GetDC is ever in place.
 HDC fl_GetDC(HWND w) {
+  if (!w) return 0;
   HDC dc = GetDC(w);
-  if (w) { // only set fl_gc and fl_window if not the whole screen context
-    if (fl_window) ReleaseDC(fl_window, fl_gc);
-    fl_window = w;
-    fl_gc = dc;
-    // calling GetDC seems to always reset these: (?)
-    SetTextAlign(fl_gc, TA_BASELINE|TA_LEFT);
-    SetBkMode(fl_gc, TRANSPARENT);
-  }
+  if (fl_window) ReleaseDC(fl_window, fl_gc);
+  fl_window = w;
+  fl_gc = dc;
+  // calling GetDC seems to always reset these: (?)
+  // shouldn't when using private DCs, I think?
+  SetTextAlign(fl_gc, TA_BASELINE|TA_LEFT);
+  SetBkMode(fl_gc, TRANSPARENT);
   return dc;
 }
 
@@ -994,9 +997,7 @@ HDC fl_GetDC(HWND w) {
 static struct Cleanup { ~Cleanup(); } cleanup;
 
 Cleanup::~Cleanup() {
-    ReleaseDC(fl_window, fl_gc);
-    DeleteObject(fl_current_xmap.pen);
-    DeleteObject(fl_current_xmap.brush);
+  // CET - FIXME
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
@@ -1104,5 +1105,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.100 2000/04/27 00:30:08 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.101 2000/05/01 17:25:16 carl Exp $".
 //
