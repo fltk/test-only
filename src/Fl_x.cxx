@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.205 2005/01/27 08:50:22 spitzak Exp $"
+// "$Id$"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -2315,5 +2315,5 @@ void Window::layout() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.205 2005/01/27 08:50:22 spitzak Exp $".
+// End of "$Id$".
 //

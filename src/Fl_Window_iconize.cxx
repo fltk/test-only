@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.22 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -51,10 +51,9 @@ void Window::iconize() {
     CollapseWindow(i->xid, true);
 #else
 #endif
-    clear_visible();
   }
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.22 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id$".
 //
