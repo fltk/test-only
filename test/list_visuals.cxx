@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $"
+// "$Id: list_visuals.cxx,v 1.10 2002/12/10 01:10:23 easysw Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,7 @@ int main(int, char**) {
 #include <config.h>
 #include <fltk/x.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 const char *ClassNames[] = {
   "StaticGray ",
@@ -221,5 +222,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $".
+// End of "$Id: list_visuals.cxx,v 1.10 2002/12/10 01:10:23 easysw Exp $".
 //
