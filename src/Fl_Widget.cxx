@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.36 1999/11/10 18:06:07 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.37 1999/11/11 10:02:13 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -181,10 +181,9 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
 // and return that new one, with the const removed:
 
 Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
-  if (pointer->dynamic) return (Fl_Style*)pointer;
+  if (!pointer->revertfunc) return (Fl_Style*)pointer;
   Fl_Style* newstyle = new Fl_Style;
   newstyle->parent = (Fl_Style*)pointer;
-  newstyle->dynamic = 1;
   pointer = newstyle;
   return newstyle;
 }
@@ -205,11 +204,11 @@ void Fl_Widget::style(Fl_Style* s) {
 // is made (no code uses this return value right now).
 
 int Fl_Widget::copy_style(const Fl_Style* t) {
-  if (!t->dynamic) {style_ = t; return 0;}
+  if (style_ == t) return 0;
+  if (style_ && !style_->revertfunc) delete style_;
+  if (t->revertfunc) {style_ = t; return 0;}
   Fl_Style* s = new Fl_Style;
   s->parent = (Fl_Style*)t;
-  s->dynamic = 1;
-  if (style_ && style_->dynamic) delete style_;
   style_ = s;
   return 1;
 }
@@ -245,11 +244,13 @@ void Fl_Widget::seti(const unsigned * p, unsigned v) {
 }
 
 // Named styles provide a list that can be searched by theme plugins.
-// The "revert" function is mostly provided to get around C++ problems
-// with constructors. (?)  It may be able to be used to undo any theme
-// changes.
+// The "revert" function is mostly provided to make it easy to initialize
+// the fields even though C++ does not allow a structure constant.
+// It is alos used to undo theme changes.
 
 Fl_Style* Fl_Style::first = 0;
+
+static void plainrevert(Fl_Style*) {}
 
 Fl_Style::Fl_Style(const char* n, void (*r)(Fl_Style*))
 {
@@ -259,6 +260,13 @@ Fl_Style::Fl_Style(const char* n, void (*r)(Fl_Style*))
 
   if (n) { name = n; next = first; first = this;}
   if (r) { revertfunc = r; r(this); }
+  else revertfunc = plainrevert;
+}
+
+// This constructor is used to create local styles for widgets that
+// change their own attributes:
+Fl_Style::Fl_Style() {
+  memset((void*)this, 0, sizeof(*this));
 }
 
 // When a widget is destroyed it can destroy unique styles:
@@ -275,7 +283,7 @@ Fl_Widget::~Fl_Widget() {
   parent_ = 0;
 #endif
   throw_focus();
-  if (style_->dynamic) {
+  if (!style_->revertfunc) {
     Fl_Style* s = (Fl_Style*)style_; // cast away const
     delete s;
   }
@@ -375,5 +383,5 @@ static void revert(Fl_Style* s) {
 Fl_Style Fl_Widget::default_style("default", revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.36 1999/11/10 18:06:07 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.37 1999/11/11 10:02:13 bill Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.32 1999/11/07 08:11:52 bill Exp $"
+# "$Id: Makefile,v 1.33 1999/11/11 10:02:15 bill Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -28,7 +28,7 @@ CPPFILES =\
 	adjuster.cxx arc.cxx ask.cxx bitmap.cxx boxtype.cxx browser.cxx button.cxx \
 	buttons.cxx checkers.cxx clock.cxx color_chooser.cxx \
 	cube.cxx cursor.cxx curve.cxx demo.cxx doublebuffer.cxx editor.cxx \
-	file_chooser.cxx fonts.cxx fullscreen.cxx \
+	file_chooser.cxx fonts.cxx fullscreen.cxx glpuzzle.cxx \
 	gl_overlay.cxx hello.cxx iconize.cxx image.cxx input.cxx \
 	keyboard.cxx label.cxx list_visuals.cxx mandelbrot.cxx menubar.cxx \
 	message.cxx navigation.cxx output.cxx overlay.cxx pixmap.cxx \
@@ -39,7 +39,7 @@ CPPFILES =\
 
 ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	clock color_chooser cube cursor curve demo doublebuffer \
-	editor file_chooser fonts fullscreen gl_overlay \
+	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
 	hello iconize image input keyboard label list_visuals \
 	mandelbrot menubar message navigation output overlay pixmap \
 	pixmap_browser radio resizebox scroll shape subwindow \
@@ -74,6 +74,8 @@ CubeView: CubeMain.o CubeView.o CubeViewUI.o
 CubeMain.o: CubeViewUI.h CubeView.h
 CubeView.o: CubeView.h
 
+glpuzzle: glpuzzle.cxx
+	$(CXX) -I.. $(CXXFLAGS) glpuzzle.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 cube: cube.cxx
 	$(CXX) -I.. $(CXXFLAGS) cube.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 fullscreen: fullscreen.cxx
@@ -104,5 +106,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.32 1999/11/07 08:11:52 bill Exp $".
+# End of "$Id: Makefile,v 1.33 1999/11/11 10:02:15 bill Exp $".
 #
