@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.115 2004/06/09 06:22:20 spitzak Exp $"
+dnl "$Id: configure.in,v 1.116 2004/06/24 21:19:47 xpxqx Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -625,7 +625,7 @@ case $uname in
 
 	dnl Check for Cairo library unless disabled...
 	AC_ARG_ENABLE(cairo,[  --enable-cairo          use Cairo graphics (default=no)])
-	if test x$enable_cairo == xyes; then
+	if test x$enable_cairo = xyes; then
 	    AC_DEFINE(USE_CAIRO)
 	    LIBS="-lcairo $LIBS"
 	fi
@@ -951,5 +951,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.115 2004/06/09 06:22:20 spitzak Exp $".
+dnl End of "$Id: configure.in,v 1.116 2004/06/24 21:19:47 xpxqx Exp $".
 dnl
