@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.24 2000/05/30 07:41:59 bill Exp $"
+// "$Id: x.H,v 1.25 2000/07/10 07:35:43 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -55,6 +55,7 @@ void fl_close_display();
 
 // constant info about the X server connection:
 extern FL_API Display *fl_display;
+extern FL_API Window fl_message_window;
 extern FL_API int fl_screen;
 extern FL_API XVisualInfo *fl_visual;
 extern FL_API Colormap fl_colormap;
@@ -128,5 +129,5 @@ Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.24 2000/05/30 07:41:59 bill Exp $".
+// End of "$Id: x.H,v 1.25 2000/07/10 07:35:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.62 2000/06/18 11:05:40 vincent Exp $"
+// "$Id: fl_options.cxx,v 1.63 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -132,9 +132,9 @@ void fl_startup() {
   }
 #ifndef WIN32
   if (!Fl::getconf("mouse wheel/button 1", temp, sizeof(temp)))
-    fl_mousewheel_b1 = atoi(temp);
+    fl_mousewheel_up = atoi(temp);
   if (!Fl::getconf("mouse wheel/button 2", temp, sizeof(temp)))
-    fl_mousewheel_b2 = atoi(temp);
+    fl_mousewheel_down = atoi(temp);
 #endif
 */
 
@@ -250,96 +250,89 @@ int Fl::scheme(const char *s) {
     }
   }
 
-  conf_list clist = 0;
-  conf_entry* cent;
+  for (Fl_Named_Style* style = Fl_Named_Style::first; style; style = style->next) {
+    int namepos = snprintf(temp, sizeof(temp), "widgets/%s/", style->name);
+    int namelen = sizeof(temp)-namepos;
 
-  Fl_Font font;
-  Fl_Labeltype labeltype;
-  Fl_Boxtype boxtype;
+    // box type
+    Fl_Boxtype boxtype;
+    strncpy(temp+namepos, "box", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
 
-  if (!getconf_sections(sfile, "widgets", &clist)) {
-    for (cent = clist; cent; cent = cent->next) {
-      Fl_Style* style = Fl_Style::find(cent->data);
-      if (!style) continue;
+    // glyph box type
+    strncpy(temp+namepos, "text box", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
 
-      // box type
-      snprintf(temp, sizeof(temp), "widgets/%s/box", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
+    // color
+    strncpy(temp+namepos, "color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->color = grok_color(sfile, valstr);
 
+    // label color
+    strncpy(temp+namepos, "label color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->label_color = grok_color(sfile, valstr);
 
-      // glyph box type
-      snprintf(temp, sizeof(temp), "widgets/%s/text box", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
+    // selection color
+    strncpy(temp+namepos, "selection color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->selection_color = grok_color(sfile, valstr);
 
-      // color
-      snprintf(temp, sizeof(temp), "widgets/%s/color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->color = grok_color(sfile, valstr);
+    // selection text color
+    strncpy(temp+namepos, "selection text color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->selection_text_color = grok_color(sfile, valstr);
 
-      // label color
-      snprintf(temp, sizeof(temp), "widgets/%s/label color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->label_color = grok_color(sfile, valstr);
+    // off color
+    strncpy(temp+namepos, "text background", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->text_background = grok_color(sfile, valstr);
 
-      // selection color
-      snprintf(temp, sizeof(temp), "widgets/%s/selection color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->selection_color = grok_color(sfile, valstr);
+    // highlight color
+    strncpy(temp+namepos, "highlight color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->highlight_color = grok_color(sfile, valstr);
 
-      // selection text color
-      snprintf(temp, sizeof(temp), "widgets/%s/selection text color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->selection_text_color = grok_color(sfile, valstr);
+    // highlight label color
+    strncpy(temp+namepos, "highlight label color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->highlight_label_color = grok_color(sfile, valstr);
 
-      // off color
-      snprintf(temp, sizeof(temp), "widgets/%s/text background", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->text_background = grok_color(sfile, valstr);
+    // color
+    strncpy(temp+namepos, "text color", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->text_color = grok_color(sfile, valstr);
 
-      // highlight color
-      snprintf(temp, sizeof(temp), "widgets/%s/highlight color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->highlight_color = grok_color(sfile, valstr);
+    Fl_Font font;
 
-      // highlight label color
-      snprintf(temp, sizeof(temp), "widgets/%s/highlight label color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->highlight_label_color = grok_color(sfile, valstr);
+    // label font
+    strncpy(temp+namepos, "label font", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
 
-      // color
-      snprintf(temp, sizeof(temp), "widgets/%s/text color", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->text_color = grok_color(sfile, valstr);
+    // text font
+    strncpy(temp+namepos, "text font", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
 
-      // label font
-      snprintf(temp, sizeof(temp), "widgets/%s/label font", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
+    // label type
+    Fl_Labeltype labeltype;
+    strncpy(temp+namepos, "label type", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
 
-      // text font
-      snprintf(temp, sizeof(temp), "widgets/%s/text font", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
+    // label size
+    strncpy(temp+namepos, "label size", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->label_size = (int)strtol(valstr,0,0);
 
-      // label type
-      snprintf(temp, sizeof(temp), "widgets/%s/label type", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
+    // text size
+    strncpy(temp+namepos, "text size", namelen);
+    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
+      style->text_size = (int)strtol(valstr,0,0);
 
-      // label size
-      snprintf(temp, sizeof(temp), "widgets/%s/label size", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->label_size = (int)strtol(valstr,0,0);
-
-      // text size
-      snprintf(temp, sizeof(temp), "widgets/%s/text size", cent->data);
-      if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->text_size = (int)strtol(valstr,0,0);
-
-    }
-    conf_list_free(&clist);
   }
 
   Fl::redraw();
@@ -422,7 +415,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.62 2000/06/18 11:05:40 vincent Exp $".
+// End of "$Id: fl_options.cxx,v 1.63 2000/07/10 07:35:43 spitzak Exp $".
 //
 
 

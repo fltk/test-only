@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.20 2000/05/01 17:25:17 carl Exp $"
+// "$Id: fl_color_win32.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -43,11 +43,11 @@ static unsigned fl_cmap[256] = {
 };
 
 // The current color:
-Fl_XMap fl_current_xmap;
-
-HPALETTE fl_palette;
-
-Fl_Color fl_color_;
+Fl_Color	fl_color_;
+COLORREF	fl_rgb;
+FL_API HPEN	fl_pen;
+FL_API HBRUSH	fl_brush;
+HPALETTE	fl_palette;
 
 void fl_color(Fl_Color i) {
   fl_color_ = i;
@@ -91,9 +91,9 @@ void fl_color(Fl_Color i) {
   HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush); // this returns the old brush
   if (oldbrush) DeleteObject(oldbrush);
 
-  fl_current_xmap.rgb = rgb;
-  fl_current_xmap.pen = newpen;
-  fl_current_xmap.brush = newbrush;
+  fl_rgb = rgb;
+  fl_pen = newpen;
+  fl_brush = newbrush;
 }
 
 void fl_free_color(Fl_Color i) {
@@ -148,5 +148,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.20 2000/05/01 17:25:17 carl Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $".
 //

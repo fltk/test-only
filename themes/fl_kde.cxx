@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.4 2000/06/12 09:02:01 carl Exp $"
+// "$Id: fl_kde.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -93,15 +93,13 @@ static void add_event_handler() {
   if (do_once) return;
   do_once = 1;
   Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
-  Window root = RootWindow(fl_display, fl_screen);
-  Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
   long data = 1;
-  XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
+  XChangeProperty(fl_display, fl_message_window, kde_atom, kde_atom, 32,
 		  PropModeReplace, (unsigned char *)&data, 1);
-  General = XInternAtom(fl_display, "KDEChangeGeneral", False);
-  Style = XInternAtom(fl_display, "KDEChangeStyle", False);
-  Palette = XInternAtom(fl_display, "KDEChangePalette", False);
-  KIPC = XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
+  General	= XInternAtom(fl_display, "KDEChangeGeneral", False);
+  Style		= XInternAtom(fl_display, "KDEChangeStyle", False);
+  Palette	= XInternAtom(fl_display, "KDEChangePalette", False);
+  KIPC		= XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
 }
 
 #endif
@@ -364,5 +362,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.4 2000/06/12 09:02:01 carl Exp $".
+// End of "$Id: fl_kde.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $".
 //

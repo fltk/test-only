@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_cutpaste.cxx,v 1.7 2000/05/17 07:08:10 bill Exp $"
+// "$Id: Fl_cutpaste.cxx,v 1.8 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Cut/paste code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,12 +134,7 @@ void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
   selection_buffer[len] = 0; // needed for direct paste
   selection_length = len;
   selection_owner(&owner);
-  static Window selxid; // window X thinks selection belongs to
-  if (!selxid) selxid =
-		 XCreateSimpleWindow(fl_display, 
-				     RootWindow(fl_display, fl_screen),
-				     0,0,1,1,0,0,0);
-  XSetSelectionOwner(fl_display, XA_PRIMARY, selxid, fl_event_time);
+  XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
   if (!beenhere) {
     Fl::add_handler(selection_xevent_handler);
     beenhere = 1;
@@ -149,5 +144,5 @@ void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
 #endif
 
 //
-// End of "$Id: Fl_cutpaste.cxx,v 1.7 2000/05/17 07:08:10 bill Exp $".
+// End of "$Id: Fl_cutpaste.cxx,v 1.8 2000/07/10 07:35:43 spitzak Exp $".
 //

@@ -113,7 +113,7 @@ images) to the smallest rectangle needed to update the visible area.
 
 <H3><A name=colors>Colors</A></H3>
 
-<H4>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</H4>
+<H4><a name=fl_color>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</H4>
 
 Set the color for all subsequent drawing operations. <TT><a
 href=Fl_Color.html>Fl_Color</a></TT> is a typedef for a 32-bit integer
@@ -140,7 +140,8 @@ Same as <tt>fl_color(fl_rgb(r,g,b))</tt>.
 
 <h3><A name=lines>Line dashes and thickness</a></h3>
 
-<h4>void fl_line_style(int style, int width=0, char* dashes=0)</h4>
+<h4><a name=fl_line_style>
+void fl_line_style(int style, int width=0, char* dashes=0)</h4>
 
 Set how to draw lines (the "pen").  If you change this it is your
 responsibility to set it back to the default with
@@ -345,12 +346,13 @@ Returns the current font.
 
 Returns the current font size.
 
-<H4>void fl_draw(const char *, float x, float y)
-<BR>void fl_draw(const char *, int n, float x, float y)</H4>
+<h4><a name=fl_draw>void fl_draw(const char*, float x, float y)
+<br>void fl_draw(const char*, int n, float x, float y)</h4>
+
 Draw a nul-terminated string or an array of <TT>n</TT> characters 
 starting at the given location. 
 
-<H4>void fl_draw(const char *, int x, int y, int w, int h, Fl_Flags)</H4>
+<H4>void fl_draw(const char*, int x, int y, int w, int h, Fl_Flags)</H4>
 Fancy string drawing function which is used to draw all the labels.
 The string is formatted and aligned inside the passed box.  Handles
 '\t' and '\n', expands all other control characters to ^X, and aligns
@@ -374,11 +376,11 @@ box to draw the text at so it looks centered vertically in that box.
 <BR> float fl_width(uchar)</H4>
  Return the pixel width of a nul-terminated string, a sequence of <TT>n</TT>
  characters, or a single character in the current font. 
-<H4>void fl_measure(const char *, int &amp;w, int &amp;h)</H4>
+<H4>void fl_measure(const char*, int &amp;w, int &amp;h)</H4>
  Measure how wide and tall the string will be when printed by the <TT>
 fl_draw(...align)</TT> function.  If the incoming <TT>w</TT> is 
 non-zero it will wrap to that width. 
-<H4>const char *fl_shortcut_label(ulong)</H4>
+<H4>const char* fl_shortcut_label(ulong)</H4>
  Unparse a shortcut value as used by <A href=Fl_Button.html#Fl_Button.shortcut>
 <TT>Fl_Button</TT></A> or <A href=Fl_Menu_Item.html#Fl_Menu_Item><TT>
 Fl_Menu_Item</TT></A> into a human-readable string like &quot;Alt+N&quot;.  This 
@@ -422,9 +424,9 @@ only way to get transparency or to draw 1-bit bitmaps.
  It is undefined whether the location or drawing of the image is 
 affected by the current transformation, so you should only call these 
 when it is the identity. 
-<H4>void fl_draw_image(const uchar *, int X, int Y, int W, int H, int D 
+<H4>void fl_draw_image(const uchar*, int X, int Y, int W, int H, int D 
 = 3, int LD = 0)
-<BR> void fl_draw_image_mono(const uchar *, int X, int Y, int W, int H, 
+<BR> void fl_draw_image_mono(const uchar*, int X, int Y, int W, int H, 
 int D = 1, int LD = 0)</H4>
  Draw an 8-bit per color RGB or luminance image.  The pointer points at 
 the &quot;r&quot; data of the top-left pixel.  Data must be in <TT>r,g,b</TT>
@@ -453,17 +455,17 @@ a color image.
 cannot draw the image in the current visual it will abort.  FLTK 
 supports any visual of 8 bits or less, and all common TrueColor visuals 
 up to 32 bits. </P>
-<H4>typedef void (*fl_draw_image_cb)(void *, int x, int y, int w, uchar 
+<H4>typedef void (*fl_draw_image_cb)(void*, int x, int y, int w, uchar 
 *)
-<BR> void fl_draw_image(fl_draw_image_cb, void *, int X, int Y, int W, 
+<BR> void fl_draw_image(fl_draw_image_cb, void*, int X, int Y, int W, 
 int H, int D = 3)
-<BR> void fl_draw_image_mono(fl_draw_image_cb, void *, int X, int Y, 
+<BR> void fl_draw_image_mono(fl_draw_image_cb, void*, int X, int Y, 
 int W, int H, int D = 1)</H4>
  Call the passed function to provide each scan line of the image.  This 
 lets you generate the image as it is being drawn, or do arbitrary 
 decompression of stored data (provided it can be decompressed to 
 individual scan lines easily). 
-<P>The callback is called with the <TT>void *</TT> user data pointer 
+<P>The callback is called with the <TT>void*</TT> user data pointer 
 (this can be used to point at a structure of information about the 
 image), and the <TT>x</TT>, <TT>y</TT>, and <TT>w</TT> of the scan line 
 desired from the image.  0,0 is the upper-left corner (<I>not <TT>X,Y</TT>
@@ -482,7 +484,7 @@ the start of the buffer. </P>
 first one may be greater than zero. </P>
 <P>If <TT>D</TT> is 4 or more, you must fill in the unused bytes with 
 zero. </P>
-<H4>int fl_draw_pixmap(char **data, int X, int Y, <a href=Fl_Color.html>Fl_Color</a> = FL_GRAY)</H4>
+<H4>int fl_draw_pixmap(char** data, int X, int Y, <a href=Fl_Color.html>Fl_Color</a> = FL_GRAY)</H4>
 Draws XPM image data, with the top-left corner at the given position. 
 The image is dithered on 8-bit displays so you won't lose color space 
 for programs displaying both images and pixmaps.  This function returns 
@@ -501,7 +503,7 @@ most efficient way to do it, and has the same visual limitations as
 listed above for <TT>fl_draw_image()</TT>.  Transparent colors are 
 replaced by the optional <TT><a href=Fl_Color.html>Fl_Color</a></TT> argument (this may change in 
 the future). 
-<H4>int fl_measure_pixmap(char **data, int &amp;w, int &amp;h)</H4>
+<H4>int fl_measure_pixmap(char** data, int &amp;w, int &amp;h)</H4>
  An XPM image contains the dimensions in its data.  This function finds 
 and returns the width and height.  The return value is non-zero if it 
 parsed the dimensions ok, and zero if there is any problem. 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.78 2000/06/18 07:57:32 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.79 2000/07/10 07:35:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -256,6 +256,7 @@ static int fl_ready() {
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
+Window fl_message_window;
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
@@ -263,6 +264,7 @@ Colormap fl_colormap;
 static Atom wm_delete_window;
 static Atom wm_protocols;
        Atom fl_motif_wm_hints;
+static Atom FLTKChangeScheme;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
@@ -275,19 +277,6 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   XGetErrorText(d, e->error_code, buf1, 128);
   Fl::warning("%s: %s 0x%lx", buf2, buf1, e->resourceid);
   return 0;
-}
-
-// this function handles FLTK style change messages
-static int style_event_handler(int) {
-  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
-  Atom Scheme = XInternAtom(fl_display, "FLTKChangeScheme", False);
-  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
-  if (cm->message_type != Scheme || !strcasecmp(Fl::scheme(), "none")) return 0;
-  char scheme[80];
-  if (!Fl::getconf("scheme", scheme, sizeof(scheme))) {
-    Fl::scheme(scheme);
-  }
-  return 1;
 }
 
 void fl_open_display() {
@@ -304,11 +293,12 @@ void fl_open_display() {
 
 void fl_open_display(Display* d) {
   fl_display = d;
-
-  wm_delete_window = XInternAtom(d,"WM_DELETE_WINDOW",0);
-  wm_protocols = XInternAtom(d,"WM_PROTOCOLS",0);
-  fl_motif_wm_hints = XInternAtom(d,"_MOTIF_WM_HINTS",0);
   Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
+
+  wm_delete_window	= XInternAtom(d, "WM_DELETE_WINDOW", 0);
+  wm_protocols		= XInternAtom(d, "WM_PROTOCOLS", 0);
+  fl_motif_wm_hints	= XInternAtom(d, "_MOTIF_WM_HINTS", 0);
+  FLTKChangeScheme	= XInternAtom(d, "FLTKChangeScheme", 0);
 
   fl_screen = DefaultScreen(fl_display);
   // construct an XVisualInfo that matches the default Visual:
@@ -340,15 +330,16 @@ void fl_open_display(Display* d) {
   //
   // CET
 
-  Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
-  Window root = RootWindow(fl_display, fl_screen);
-  Window style_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
-  long data = 1;
-  XChangeProperty(fl_display, style_win, style_atom, style_atom, 32,
-                  PropModeReplace, (unsigned char *)&data, 1);
+  // WAS: ok.  I made it public so the window id can be used for grab, etc.
+  // We may want the atom to be FLTK_MESSAGE_WINDOW, and change the message
+  // to be FLTKChangeStyle so that the names match kde more closely.
 
-  // add handler to process style change X events
-  Fl::add_handler(style_event_handler);
+  Window root = RootWindow(d, fl_screen);
+  fl_message_window = XCreateSimpleWindow(d, root, 0,0,1,1,0, 0, 0);
+  Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
+  long data = 1;
+  XChangeProperty(fl_display, fl_message_window, style_atom, style_atom, 32,
+                  PropModeReplace, (unsigned char *)&data, 1);
 
 #if !USE_COLORMAP
   Fl::visual(FL_RGB);
@@ -438,65 +429,41 @@ int fl_handle(const XEvent& xevent)
 {
   Fl::e_keysym = 0;
   fl_xevent = &xevent;
-  Window xid = xevent.xany.window;
+  Fl_Window* window = fl_find(xevent.xany.window);
+  int event = 0;
 
   switch (xevent.type) {
 
-  // events where we don't care about window:
-
   case KeymapNotify:
     memcpy(fl_key_vector, xevent.xkeymap.key_vector, 32);
-    return 0;
+    break;
 
   case MappingNotify:
     XRefreshKeyboardMapping((XMappingEvent*)&xevent.xmapping);
-    return 0;
-
-  // events where interesting window id is in a different place:
-  case CirculateNotify:
-  case CirculateRequest:
-  case ConfigureNotify:
-  case ConfigureRequest:
-  case CreateNotify:
-  case DestroyNotify:
-  case GravityNotify:
-  case MapNotify:
-  case MapRequest:
-  case ReparentNotify:
-  case UnmapNotify:
-    xid = xevent.xmaprequest.window;
     break;
-  }
-
-  int event = 0;
-  Fl_Window* window = fl_find(xid);
-
-  if (window) switch (xevent.type) {
 
   case ClientMessage:
-    if ((Atom)(xevent.xclient.data.l[0]) != wm_delete_window) break;
-    if (Fl::grab() || Fl::modal() && window != Fl::modal()) return 0;
-    window->do_callback();
-    return 1;
+    if (window && (Atom)(xevent.xclient.data.l[0]) == wm_delete_window) {
+      if (!Fl::grab() && !(Fl::modal() && window != Fl::modal()))
+	window->do_callback();
+      return 1;
+    } else if (xevent.xclient.message_type == FLTKChangeScheme) {
+      if (!strcasecmp(Fl::scheme(), "none")) return 0;
+      char scheme[80];
+      if (!Fl::getconf("scheme", scheme, sizeof(scheme))) Fl::scheme(scheme);
+      return 1;
+    }
+    break;
 
   case UnmapNotify:
-    Fl_X::i(window)->wait_for_expose = 1;
-    return 1;
-
-  case MapNotify:
-    // supposedly an Expose event will come in and deiconize it
-    return 1;
+    window = fl_find(xevent.xmapping.window);
+    if (window) {Fl_X::i(window)->wait_for_expose = 1; return 1;}
+    break;
 
   case Expose:
-    Fl_X::i(window)->wait_for_expose = 0;
-#if 0
-    // try to keep windows on top even if WM_TRANSIENT_FOR does not work:
-    // opaque move/resize window managers do not like this, so I disabled it.
-    if (Fl::first_window()->non_modal() && window != Fl::first_window())
-      Fl::first_window()->show();
-#endif
-
   case GraphicsExpose:
+    if (!window) break;
+    Fl_X::i(window)->wait_for_expose = 0;
     window->damage(FL_DAMAGE_EXPOSE, xevent.xexpose.x, xevent.xexpose.y,
 		   xevent.xexpose.width, xevent.xexpose.height);
     return 1;
@@ -537,11 +504,11 @@ int fl_handle(const XEvent& xevent)
 
   case FocusIn:
     xfocus = window;
-    fl_fix_focus();
+    if (window) {fl_fix_focus(); return 1;}
     break;
 
   case FocusOut:
-    if (window == xfocus) {xfocus = 0; fl_fix_focus();}
+    if (window && window == xfocus) {xfocus = 0; fl_fix_focus(); return 1;}
     break;
 
   case KeyPress:
@@ -649,6 +616,8 @@ int fl_handle(const XEvent& xevent)
     // artificial event with the correct position afterwards (and some
     // window managers do not send this fake event anyway)
     // So anyway, do a round trip to find the correct x,y:
+    window = fl_find(xevent.xconfigure.window);
+    if (!window) break;
     Window r, c; int X, Y, wX, wY; unsigned int m;
     XQueryPointer(fl_display, fl_xid(window), &r, &c, &X, &Y, &wX, &wY, &m);
     if (window->resize(X-wX, Y-wY,
@@ -948,5 +917,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.78 2000/06/18 07:57:32 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.79 2000/07/10 07:35:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.12 2000/03/19 01:38:31 bill Exp $"
+// "$Id: Fl_Image.cxx,v 1.13 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -101,7 +101,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
 #ifdef WIN32
       HDC tempdc = CreateCompatibleDC(fl_gc);
       SelectObject(tempdc, (HGDIOBJ)mask);
-      SelectObject(fl_gc, fl_brush());
+      SelectObject(fl_gc, fl_brush);
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
       DeleteDC(tempdc);
@@ -147,5 +147,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.12 2000/03/19 01:38:31 bill Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.13 2000/07/10 07:35:43 spitzak Exp $".
 //

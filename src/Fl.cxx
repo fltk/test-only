@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.102 2000/06/23 07:09:13 bill Exp $"
+// "$Id: Fl.cxx,v 1.103 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -441,23 +441,6 @@ void Fl::release() {
 
 ////////////////////////////////////////////////////////////////
 
-// Call to->handle but first replace the mouse x/y with the correct
-// values to account for nested X windows. 'window' is the outermost
-// window the event was posted to by X:
-static int send(int event, Fl_Widget* to, Fl_Window* window) {
-  if (!to || !window) return 0;
-  int dx = window->x();
-  int dy = window->y();
-  for (const Fl_Widget* w = to; w; w = w->parent())
-    if (w->is_window()) {dx -= w->x(); dy -= w->y();}
-  int save_x = Fl::e_x; Fl::e_x += dx;
-  int save_y = Fl::e_y; Fl::e_y += dy;
-  int ret = to->handle(event);
-  Fl::e_y = save_y;
-  Fl::e_x = save_x;
-  return ret;
-}
-
 struct handler_link {
   int (*handle)(int);
   const handler_link *next;
@@ -476,6 +459,8 @@ int Fl::handle(int event, Fl_Window* window)
 {
   if (grab_) return grab_(event, grab_data);
 
+  Fl_Widget* to = window;
+
   switch (event) {
 
   case FL_PUSH:
@@ -484,67 +469,78 @@ int Fl::handle(int event, Fl_Window* window)
       if (modal() && window != modal()) return 0;
       pushed_ = window;
     }
-    return send(event, pushed(), window);
+    to = pushed();
+    break;
 
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
-    if (pushed()) return send(FL_DRAG, pushed(), window);
-    else if (!modal() || window == modal()) send(event, window, window);
-    return 1;
+    if (pushed()) {to = pushed_; event = FL_DRAG;}
+    else if (modal() && window != modal()) return 1;
+    break;
 
   case FL_LEAVE:
     if (!pushed_) belowmouse(0);
-    return 1;
+    if (window) return 1;
 
-  case FL_RELEASE: {
-    Fl_Widget* w = pushed();
+  case FL_RELEASE:
+    to = pushed();
     if (!(event_pushed())) pushed_=0;
-    send(event, w, window);
-    if (!pushed_) {
-      if (xmousewin) send(FL_MOVE, xmousewin, window);
-      else belowmouse(0);
-    }
-    return 1;}
-
-  // only send FL_KEYUP to focus widget since FL_KEY only goes there
-  case FL_KEYUP:
-    return send(FL_KEYUP, focus(), window);
+    break;
 
   case FL_KEY:
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
-
-    // Try sending keystroke to the focus, if any:
-    if (send(FL_KEY, focus(), window)) return 1;
-    // try flipping the case of letter shortcuts:
-    if (isalpha(event_text()[0])) {
-      if (handle(FL_SHORTCUT, window)) return 1;
-      char* c = (char*)event_text(); // cast away const
-      *c = isupper(*c) ? tolower(*c) : toupper(*c);
-    }
-
-    event = FL_SHORTCUT;
-    // fall through to the shortcut handling case:
+    to = focus();
 
   default:
-    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_ENTER,
-    // and many other events of interest.  They are sent to the
-    // outermost window and that must pass them to the children:
-    if (send(event, modal() ? modal() : window, window)) return 1;
+    if (modal()) to = modal();
     break;
 
   case 0: // events from system that fltk does not understand
+    to = 0;
     break;
   }
 
+  int ret = 0;
+  if (to && window) {
+    int dx = window->x();
+    int dy = window->y();
+    for (const Fl_Widget* w = to; w; w = w->parent())
+      if (w->is_window()) {dx -= w->x(); dy -= w->y();}
+    int save_x = Fl::e_x; Fl::e_x += dx;
+    int save_y = Fl::e_y; Fl::e_y += dy;
+    ret = to->handle(event);
+    Fl::e_y = save_y;
+    Fl::e_x = save_x;
+  }
+
+  // if keyboard is ignored, try shortcut events:
+  if (!ret && event == FL_KEY) {
+    // try shortcut events:
+    if (handle(FL_SHORTCUT, window)) return 1;
+    // try flipping the case of letter shortcuts:
+    if (isalpha(event_text()[0])) {
+      char* c = (char*)event_text(); // cast away const
+      *c = isupper(*c) ? tolower(*c) : toupper(*c);
+      if (handle(FL_SHORTCUT, window)) return 1;
+    }
+    return 0;
+  }
+
   // try the chain of global event handlers:
-  for (const handler_link *h = handlers; h; h = h->next)
-    if (h->handle(event)) return 1;
-  return 0;
+  if (!ret) for (const handler_link *h = handlers; h; h = h->next)
+    if (h->handle(event)) {ret = 1; break;}
+
+  if (event == FL_RELEASE && !pushed_ && xmousewin) {
+    // send a dummy move event when the user releases the mouse:
+    handle(FL_MOVE, xmousewin);
+  }
+
+  return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.102 2000/06/23 07:09:13 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.103 2000/07/10 07:35:43 spitzak Exp $".
 //

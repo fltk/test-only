@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.32 2000/06/10 04:10:22 carl Exp $"
+// "$Id: win32.H,v 1.33 2000/07/10 07:35:43 spitzak Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,22 +64,15 @@ inline void XClipBox(Region r,XRectangle* rect) {
 #define XMapWindow(a,b) ShowWindow(b, SW_RESTORE)
 #define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
 
-// most recent fl_color() or fl_rgbcolor() points at one of these:
-FL_API struct FL_API Fl_XMap {
-  COLORREF rgb;	// this should be the type the RGB() macro returns
-  HPEN pen;	// pen, 0 if none created yet
-  HBRUSH brush;	// ref to solid brush, 0 if none created yet
-};
-extern FL_API Fl_XMap fl_current_xmap;
-inline COLORREF fl_RGB() {return fl_current_xmap.rgb;}
-inline HPEN fl_pen() {return fl_current_xmap.pen;}
-inline HBRUSH fl_brush() {return fl_current_xmap.brush;}
+extern FL_API HINSTANCE	fl_display;
+extern FL_API HDC	fl_gc;
+extern FL_API Window	fl_window;
+extern FL_API HFONT	fl_xfont;
+extern FL_API HPALETTE	fl_palette; // non-zero only on 8-bit displays!
+extern FL_API COLORREF	fl_rgb;
+extern FL_API HPEN	fl_pen;
+extern FL_API HBRUSH	fl_brush;
 
-extern FL_API HINSTANCE fl_display;
-extern FL_API HDC fl_gc;
-extern FL_API Window fl_window;
-extern FL_API HFONT fl_xfont;
-extern FL_API HPALETTE fl_palette; // non-zero only on 8-bit displays!
 extern FL_API HDC fl_GetDC(Window);
 extern FL_API MSG fl_msg;
 
@@ -135,5 +128,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.32 2000/06/10 04:10:22 carl Exp $".
+// End of "$Id: win32.H,v 1.33 2000/07/10 07:35:43 spitzak Exp $".
 //

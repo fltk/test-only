@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.20 2000/05/17 23:34:13 carl Exp $"
+// "$Id: fl_rect.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $"
 //
 // These routines from fl_draw.H are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -46,7 +46,7 @@ void fl_rectf(int x, int y, int w, int h) {
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-  FillRect(fl_gc, &rect, fl_brush());
+  FillRect(fl_gc, &rect, fl_brush);
 #else
   if (w && h) XFillRectangle(fl_display, fl_window, fl_gc, x, y, w, h);
 #endif
@@ -140,7 +140,7 @@ void fl_line(int x, int y, int x1, int y1) {
   LineTo(fl_gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x1, y1, fl_RGB());
+  SetPixel(fl_gc, x1, y1, fl_rgb);
 #else
   XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
 #endif
@@ -153,7 +153,7 @@ void fl_line(int x, int y, int x1, int y1, int x2, int y2) {
   LineTo(fl_gc, x2, y2);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x2, y2, fl_RGB());
+  SetPixel(fl_gc, x2, y2, fl_rgb);
 #else
   XPoint p[3];
   p[0].x = x;  p[0].y = y;
@@ -203,7 +203,7 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {
   p[1].x = x1; p[1].y = y1;
   p[2].x = x2; p[2].y = y2;
 #ifdef WIN32
-  SelectObject(fl_gc, fl_brush());
+  SelectObject(fl_gc, fl_brush);
   Polygon(fl_gc, p, 3);
 #else
   p[3].x = x;  p[3].y = y;
@@ -219,7 +219,7 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   p[2].x = x2; p[2].y = y2;
   p[3].x = x3; p[3].y = y3;
 #ifdef WIN32
-  SelectObject(fl_gc, fl_brush());
+  SelectObject(fl_gc, fl_brush);
   Polygon(fl_gc, p, 4);
 #else
   p[4].x = x;  p[4].y = y;
@@ -230,12 +230,12 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
 
 void fl_point(int x, int y) {
 #ifdef WIN32
-  SetPixel(fl_gc, x, y, fl_RGB());
+  SetPixel(fl_gc, x, y, fl_rgb);
 #else
   XDrawPoint(fl_display, fl_window, fl_gc, x, y);
 #endif
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.20 2000/05/17 23:34:13 carl Exp $".
+// End of "$Id: fl_rect.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.22 2000/07/07 08:40:31 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.23 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -51,9 +51,12 @@ static void figure_out_visual() {
   if (!fl_visual->red_mask || !fl_visual->green_mask || !fl_visual->blue_mask){
 #if USE_COLORMAP
     fl_redmask = 0;
+    // make sure black & white are allocated:
+    fl_xpixel(FL_BLACK);
+    fl_xpixel(FL_WHITE);
     return;
 #else
-    Fl::fatal("Requires true color visual");
+    Fl::fatal("Requires TrueColor visual");
 #endif
   }
 
@@ -146,14 +149,21 @@ ulong fl_xpixel(Fl_Color i) {
 #else
   Fl_XColor &xmap = fl_xmap[0][index];
 #endif
-  if (xmap.mapped) return xmap.pixel;
+  if (!xmap.mapped) {
+    // figure out the rgb to ask for.  Use the specified one unless this
+    // is an indexed color, in which case we use the colormap entry:
+    if (!(i & 0xFFFFFF00)) i = (Fl_Color)fl_cmap[i];
+    uchar r = i>>24;
+    uchar g = i>>16;
+    uchar b = i>> 8;
+    fl_allocate_xpixel(xmap, r, g, b);
+  }
+  return xmap.pixel;
+}
 
-  // figure out the rgb to ask for (prefer the requested rgb over color cube):
-  if (!(i & 0xFFFFFF00)) i = (Fl_Color)fl_cmap[i];
-  uchar r = i>>24;
-  uchar g = i>>16;
-  uchar b = i>> 8;
-
+// Create an X colormap entry and place it in the given xmap entry:
+void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
+{
 #if HAVE_OVERLAY
   Colormap colormap = fl_overlay ? fl_overlay_colormap : fl_colormap;
   static XColor* ac[2];
@@ -166,13 +176,13 @@ ulong fl_xpixel(Fl_Color i) {
   static int numcolors;
 #endif
 
-  // I don't try to allocate colors with XAllocColor once it fails
-  // with any color.  It is possible that it will work, since a color
+  // I don't try to allocate colors with XAllocColor after the first
+  // failure.  It is possible that it will work, since a color
   // may have been freed, but some servers are extremely slow and this
-  // avoids one round trip:
-  if (!numcolors) { // don't try after a failure
+  // avoids a round trip for every color after that:
+  if (!numcolors) { // if we have not failed yet:
 
-    // Try the legal X thing of XAllocColor:
+    // Try XAllocColor:
     XColor xcol;
     xcol.red = r<<8; xcol.green = g<<8; xcol.blue = b<<8;
     if (XAllocColor(fl_display, colormap, &xcol)) {
@@ -180,13 +190,14 @@ ulong fl_xpixel(Fl_Color i) {
       xmap.r = xcol.red>>8;
       xmap.g = xcol.green>>8;
       xmap.b = xcol.blue>>8;
-      return xmap.pixel = xcol.pixel;
+      xmap.pixel = xcol.pixel;
+      return;
     }
 
-    // Failed, get the colormap so we can search it:
+    // Failed, read the colormap so we can search it:
     // I only read the colormap once.  Again this is due to the slowness
     // of round-trips to the X server, even though other programs may alter
-    // the colormap after this and make decisions here wrong.
+    // the colormap after this and make decisions here wrong:
 #if HAVE_OVERLAY
     if (fl_overlay) numcolors = fl_overlay_visual->colormap_size; else
 #endif
@@ -196,7 +207,7 @@ ulong fl_xpixel(Fl_Color i) {
     XQueryColors(fl_display, colormap, allcolors, numcolors);
   }
 
-  // find least-squares match:
+  // Find least-squares match in the colormap:
   int mindist = 0x7FFFFFFF;
   unsigned int bestmatch = 0;
   for (unsigned int n = numcolors; n--;) {
@@ -231,7 +242,6 @@ ulong fl_xpixel(Fl_Color i) {
   xmap.r = p.red>>8;
   xmap.g = p.green>>8;
   xmap.b = p.blue>>8;
-  return xmap.pixel;
 #endif
 }
 
@@ -320,5 +330,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.22 2000/07/07 08:40:31 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.23 2000/07/10 07:35:43 spitzak Exp $".
 //

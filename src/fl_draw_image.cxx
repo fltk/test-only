@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.9 2000/07/07 08:40:31 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.10 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -96,10 +96,7 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
     Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
-    if (!xmap.mapped) {
-      xmap.pixel = fl_xpixel((r<<24)|(g<<16)|(b<<8));
-      xmap.mapped = true;
-    }
+    if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
     r -= xmap.r;
     g -= xmap.g;
     b -= xmap.b;
@@ -128,10 +125,7 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
     Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
-    if (!xmap.mapped) {
-      xmap.pixel = fl_xpixel((r<<24)|(g<<16)|(b<<8));
-      xmap.mapped = true;
-    }
+    if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
     r -= xmap.r;
     g -= xmap.g;
     b -= xmap.b;
@@ -353,8 +347,7 @@ mono32_converter(const uchar *from,uchar *to,int w, int delta) {
 
 static void figure_out_visual() {
 
-  fl_xpixel(FL_BLACK); // setup fl_redmask, etc, in fl_color.C
-  fl_xpixel(FL_WHITE); // also make sure white is allocated
+  fl_xpixel(FL_BLACK); // make sure figure_out_visual in fl_color.cxx is called
 
   static XPixmapFormatValues *pfvlist;
   static int FL_NUM_pfv;
@@ -579,5 +572,5 @@ void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.9 2000/07/07 08:40:31 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.10 2000/07/10 07:35:43 spitzak Exp $".
 //

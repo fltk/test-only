@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.5 1999/01/07 19:17:44 mike Exp $"
+// "$Id: fl_vertex.cxx,v 1.6 2000/07/10 07:35:43 spitzak Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -122,7 +122,7 @@ void fl_vertex(double x,double y) {
 
 void fl_end_points() {
 #ifdef WIN32
-  for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_RGB());
+  for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_rgb);
 #else
   if (n>1) XDrawPoints(fl_display, fl_window, fl_gc, p, n, 0);
 #endif
@@ -150,7 +150,7 @@ void fl_end_polygon() {
   fixloop();
 #ifdef WIN32
   if (n>2) {
-    SelectObject(fl_gc, fl_brush());
+    SelectObject(fl_gc, fl_brush);
     Polygon(fl_gc, p, n);
   }
 #else
@@ -189,7 +189,7 @@ void fl_end_complex_polygon() {
   fl_gap();
 #ifdef WIN32
   if (n>2) {
-    SelectObject(fl_gc, fl_brush());
+    SelectObject(fl_gc, fl_brush);
     PolyPolygon(fl_gc, p, counts, numcount);
   }
 #else
@@ -212,7 +212,7 @@ void fl_circle(double x, double y,double r) {
   int h = int(yt+ry+.5)-lly;
 #ifdef WIN32
   if (what==POLYGON) {
-    SelectObject(fl_gc, fl_brush());
+    SelectObject(fl_gc, fl_brush);
     Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
   } else
     Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
@@ -223,5 +223,5 @@ void fl_circle(double x, double y,double r) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.5 1999/01/07 19:17:44 mike Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.6 2000/07/10 07:35:43 spitzak Exp $".
 //
