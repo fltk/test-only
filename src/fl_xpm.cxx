@@ -29,7 +29,7 @@
 #include <FL/fl_draw_image_file.H>
 #include <stdio.h>
 #include <ctype.h>
-#include <strings.h>
+#include <string.h>
 
 extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 extern Fl_Color fl_transparent_color; // hack for WIN32
