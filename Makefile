@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.13 1999/03/31 14:52:21 mike Exp $"
+# "$Id: Makefile,v 1.14 1999/04/01 01:23:29 carl Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -67,6 +67,10 @@ distclean: clean
 makeinclude: configure configh.in makeinclude.in
 	./configure
 
+configure: configure.in
+	autoconf
+
+
 #
-# End of "$Id: Makefile,v 1.13 1999/03/31 14:52:21 mike Exp $".
+# End of "$Id: Makefile,v 1.14 1999/04/01 01:23:29 carl Exp $".
 #
