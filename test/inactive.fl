@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.00 
+version 2.00 
 header_name {.h} 
 code_name {.cxx} 
 gridx 5 
@@ -8,11 +8,11 @@ snap 3
 Function {} {open
 } {
   Fl_Window {} {open
-    xywh {478 486 420 295} visible
+    xywh {482 502 420 295} visible
   } {
     Fl_Group the_group {
       label {activate()/deactivate() called on this Fl_Group} open
-      xywh {25 25 375 235} box ENGRAVED_FRAME align 17
+      xywh {25 25 375 235} align 17 box ENGRAVED_FRAME
     } {
       Fl_Button {} {
         label button
@@ -24,19 +24,19 @@ Function {} {open
       } {
         Fl_Check_Button {} {
           label red
-          xywh {50 100 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 1 labelcolor 1
+          xywh {50 100 105 25} type Radio labelcolor 1 selection_color 1 down_box DIAMOND_DOWN_BOX
         }
         Fl_Check_Button {} {
           label green
-          xywh {50 120 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 2 labelcolor 2
+          xywh {50 120 105 25} type Radio labelcolor 2 selection_color 2 down_box DIAMOND_DOWN_BOX
         }
         Fl_Check_Button {} {
           label blue
-          xywh {50 140 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 4 labelcolor 4
+          xywh {50 140 105 25} type Radio labelcolor 4 selection_color 4 down_box DIAMOND_DOWN_BOX
         }
         Fl_Check_Button {} {
           label white
-          xywh {50 160 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 7 labelcolor 7
+          xywh {50 160 105 25} type Radio labelcolor 7 selection_color 7 down_box DIAMOND_DOWN_BOX
         }
       }
       Fl_Slider {} {
@@ -49,7 +49,7 @@ Function {} {open
       }
       Fl_Menu_Button {} {
         label menu open selected
-        xywh {235 105 110 30} box MEDIUM_UP_BOX down_box MEDIUM_UP_BOX
+        xywh {235 105 110 30}
       } {
         menuitem {} {
           label item
@@ -74,11 +74,11 @@ Function {} {open
       }
       Fl_Box {} {
         label Fl_Box
-        xywh {240 205 145 50} box EMBOSSED_FRAME labeltype SHADOW_LABEL labelfont 3 labelsize 38
+        xywh {240 205 145 50} labeltype SHADOW_LABEL labelfont 3 labelsize 38 box EMBOSSED_FRAME
       }
       Fl_Value_Output {} {
         label {value:}
-        xywh {255 165 130 30} maximum 10000 step 1 textfont 5 textsize 24 textcolor 4
+        xywh {255 165 130 30} maximum 10000 step 1 textfont 5 textcolor 4 textsize 24
       }
       Fl_Scrollbar {} {
         label scrollbar
