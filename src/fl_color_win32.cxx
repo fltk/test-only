@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.18 2000/01/10 06:31:27 bill Exp $"
+// "$Id: fl_color_win32.cxx,v 1.19 2000/04/27 00:30:08 carl Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 // before use.
 
 #include <config.h>
+#include <stdio.h>
 #include <FL/Fl.H>
 #include <FL/win32.H>
 #include <FL/fl_draw.H>
@@ -41,36 +42,10 @@ static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-// I keep track of 256 pens & brushes.  They are indexed by the closest
-// color from the fl_cmap into this table:
-Fl_XMap fl_xmap[256];
-
 // The current color:
-Fl_XMap* fl_current_xmap;
+Fl_XMap fl_current_xmap;
 
 HPALETTE fl_palette;
-HPEN tmppen=0;
-HBRUSH tmpbrush=0;
-
-static void clear_xmap(Fl_XMap& xmap) {
-  if (xmap.pen) {
-    if(!tmppen) tmppen = CreatePen(PS_SOLID, 1, 0);
-    if(!tmpbrush) tmpbrush = CreateSolidBrush(0);
-    HPEN oldpen = (HPEN)SelectObject(fl_gc, tmppen); // Push out the current pen of the gc
-    if(oldpen != xmap.pen) SelectObject(fl_gc, oldpen); // Put it back if it is not the one we are about to delete
-    SelectObject(fl_gc, tmpbrush); // Push out the old pen of the gc
-    //fl_current_xmap = 0;
-    DeleteObject((HGDIOBJ)(xmap.pen));
-    xmap.pen = 0;
-    xmap.brush = -1;
-  }
-}
-
-static void set_xmap(Fl_XMap& xmap, COLORREF c) {
-  xmap.rgb = c;
-  xmap.pen = CreatePen(PS_SOLID, 1, xmap.rgb);
-  xmap.brush = -1;
-}
 
 Fl_Color fl_color_;
 
@@ -97,63 +72,33 @@ void fl_color(Fl_Color i) {
 #if USE_COLORMAP
   if (fl_palette) rgb = PALETTEINDEX(index);
 #endif
-  Fl_XMap &xmap = fl_xmap[index];
-  if (xmap.rgb != rgb) {
-    clear_xmap(xmap);
-    xmap.rgb = rgb;
-  }
-  if (!xmap.pen) set_xmap(xmap, rgb);
-  fl_current_xmap = &xmap;
-  SelectObject(fl_gc, (HGDIOBJ)(xmap.pen));
-}
 
-HBRUSH fl_brush() {
-  Fl_XMap *xmap = fl_current_xmap;
-  // Wonko: we use some statistics to cache only a limited number
-  // of brushes:
-#define FL_N_BRUSH 16
-  static struct Fl_Brush {
-    HBRUSH brush;
-    unsigned short usage;
-    Fl_XMap* backref;
-  } brushes[FL_N_BRUSH];
-
-  int i = xmap->brush; // find the associated brush
-  if (i != -1) { // if the brush was allready allocated
-    if (brushes[i].brush == NULL) goto CREATE_BRUSH;
-    if ( (++brushes[i].usage) > 32000 ) { // keep a usage statistic
-      for (int j=0; j<FL_N_BRUSH; j++) {
-	if (brushes[j].usage>16000)
-	  brushes[j].usage -= 16000;
-	else 
-	  brushes[j].usage = 0;
-      }
-    }
-    return brushes[i].brush;
-  } else {
-    int umin = 32000, imin = 0;
-    for (i=0; i<FL_N_BRUSH; i++) {
-      if (brushes[i].brush == NULL) goto CREATE_BRUSH;
-      if (brushes[i].usage<umin) {
-	umin = brushes[i].usage;
-	imin = i;
-      }
-    }
-    i = imin;
-    DeleteObject(brushes[i].brush);
-    brushes[i].brush = NULL;
-    brushes[i].backref->brush = -1;
+  HPEN newpen = CreatePen(PS_SOLID, 1, rgb);
+  if (!newpen) {
+    // CET - FIXME - remove this debug fprintf()?
+    fprintf(stderr, "fl_color(): Could not create GDI pen object.\n");
+    return;
   }
-CREATE_BRUSH:
-  brushes[i].brush = CreateSolidBrush(xmap->rgb);
-  brushes[i].usage = 0;
-  brushes[i].backref = xmap;
-  xmap->brush = i;
-  return brushes[i].brush;
+  HBRUSH newbrush = CreateSolidBrush(rgb);
+  if (!newbrush) {
+    // CET - FIXME - remove this debug fprintf()?
+    fprintf(stderr, "fl_color(): Could not create GDI brush object.\n");
+    DeleteObject(newpen);
+    return;
+  }
+  HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen); // this returns the old pen
+  DeleteObject((HGDIOBJ)oldpen);
+  HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush); // this returns the old brush
+  DeleteObject((HGDIOBJ)oldbrush);
+
+  fl_current_xmap.rgb = rgb;
+  fl_current_xmap.pen = newpen;
+  fl_current_xmap.brush = newbrush;
 }
 
 void fl_free_color(Fl_Color i) {
-  clear_xmap(fl_xmap[i]);
+  // CET - FIXME - Are there colormapped displays on Windows?
+  //               Would this only be used for private colormaps?
 }
 
 #if USE_COLORMAP
@@ -203,5 +148,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.18 2000/01/10 06:31:27 bill Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.19 2000/04/27 00:30:08 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.99 2000/04/25 07:50:43 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.100 2000/04/27 00:30:08 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -96,6 +96,7 @@ static struct FD {
   void (*cb)(int, void*);
   void* arg;
 } *fd = 0;
+
 
 void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   remove_fd(n,events);
@@ -710,6 +711,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	((Fl_Widget*)window)->show();
 	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
 	  resize_from_system = window;
+	window->layout(); // This works, but is it the right way?
       }
     }
     break;
@@ -971,22 +973,30 @@ void Fl_Window::label(const char *name,const char *iname) {
 Fl_Window *Fl_Window::current_;
 // the current context
 HDC fl_gc = 0;
-// the current window handle, initially set to -1 so we can correctly
-// allocate fl_GetDC(0)
-HWND fl_window = (HWND)-1;
+// the current window handle
+HWND fl_window = 0;
 
 // Here we ensure only one GetDC is ever in place.
 HDC fl_GetDC(HWND w) {
-  if (fl_gc) {
-    if (w == fl_window) return fl_gc;
-    ReleaseDC(fl_window, fl_gc);
+  HDC dc = GetDC(w);
+  if (w) { // only set fl_gc and fl_window if not the whole screen context
+    if (fl_window) ReleaseDC(fl_window, fl_gc);
+    fl_window = w;
+    fl_gc = dc;
+    // calling GetDC seems to always reset these: (?)
+    SetTextAlign(fl_gc, TA_BASELINE|TA_LEFT);
+    SetBkMode(fl_gc, TRANSPARENT);
   }
-  fl_gc = GetDC(w);
-  fl_window = w;
-  // calling GetDC seems to always reset these: (?)
-  SetTextAlign(fl_gc, TA_BASELINE|TA_LEFT);
-  SetBkMode(fl_gc, TRANSPARENT);
-  return fl_gc;
+  return dc;
+}
+
+// clean up after Windows
+static struct Cleanup { ~Cleanup(); } cleanup;
+
+Cleanup::~Cleanup() {
+    ReleaseDC(fl_window, fl_gc);
+    DeleteObject(fl_current_xmap.pen);
+    DeleteObject(fl_current_xmap.brush);
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
@@ -1094,5 +1104,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.99 2000/04/25 07:50:43 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.100 2000/04/27 00:30:08 carl Exp $".
 //

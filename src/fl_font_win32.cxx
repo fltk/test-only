@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.21 2000/03/17 09:50:10 bill Exp $"
+// "$Id: fl_font_win32.cxx,v 1.22 2000/04/27 00:30:08 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Fl_FontSize::Fl_FontSize(const char* name, int size, int encoding) {
+Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   int weight = FW_NORMAL;
   int italic = 0;
   switch (*name++) {
@@ -49,23 +49,24 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int encoding) {
     italic,
     FALSE,	        // underline attribute flag 
     FALSE,	        // strikeout attribute flag 
-    encoding,		// character set identifier
+    charset,		// character set identifier
     OUT_DEFAULT_PRECIS,	// output precision 
     CLIP_DEFAULT_PRECIS,// clipping precision 
     DEFAULT_QUALITY,	// output quality 
     DEFAULT_PITCH,	// pitch and family 
     name	        // pointer to typeface name string 
     );
-  if (!fl_gc) fl_GetDC(0);
-  SelectObject(fl_gc, fid);
-  GetTextMetrics(fl_gc, &metr);
-//  BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
+  HDC screen =  fl_GetDC(0);
+  SelectObject(screen, fid);
+  GetTextMetrics(screen, &metr);
+//  BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
 // ...would be the right call, but is not implemented into Window95! (WinNT?)
-  GetCharWidth(fl_gc, 0, 255, width);
+  GetCharWidth(screen, 0, 255, width);
 #if HAVE_GL
   listbase = 0;
 #endif
   minsize = maxsize = size;
+  encoding = charset;
 }
 
 #if HAVE_GL
@@ -174,5 +175,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.21 2000/03/17 09:50:10 bill Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.22 2000/04/27 00:30:08 carl Exp $".
 //

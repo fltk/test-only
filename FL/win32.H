@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.27 2000/01/10 06:31:04 bill Exp $"
+// "$Id: win32.H,v 1.28 2000/04/27 00:30:07 carl Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,14 +91,15 @@ inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 Fl_Window* fl_find(Window xid);
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
-extern FL_API struct FL_API Fl_XMap {
+FL_API struct FL_API Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
-  int brush;	// ref to solid brush, 0 if none created yet
-} *fl_current_xmap;
-inline COLORREF fl_RGB() {return fl_current_xmap->rgb;}
-inline HPEN fl_pen() {return fl_current_xmap->pen;}
-HBRUSH fl_brush(); // allocates a brush if necessary
+  HBRUSH brush;	// ref to solid brush, 0 if none created yet
+};
+extern Fl_XMap fl_current_xmap;
+inline COLORREF fl_RGB() {return fl_current_xmap.rgb;}
+inline HPEN fl_pen() {return fl_current_xmap.pen;}
+inline HBRUSH fl_brush() {return fl_current_xmap.brush;}
 
 extern FL_API HINSTANCE fl_display;
 extern FL_API HDC fl_gc;
@@ -131,5 +132,5 @@ extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.27 2000/01/10 06:31:04 bill Exp $".
+// End of "$Id: win32.H,v 1.28 2000/04/27 00:30:07 carl Exp $".
 //

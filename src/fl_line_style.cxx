@@ -3,6 +3,7 @@
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 #include <string.h>
+#include <stdio.h>
 
 void fl_line_style(int style, int width, char* dashes) {
 #ifdef WIN32
@@ -19,10 +20,14 @@ void fl_line_style(int style, int width, char* dashes) {
   if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
   static LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
-  SelectObject(fl_gc,newpen);
-  static HPEN oldpen;
-  if (oldpen) DeleteObject(oldpen);
-  oldpen = newpen;
+  if (!newpen) {
+    // CET - FIXME - remove this debug fprintf()?
+    fprintf(stderr, "fl_line_style(): Could not create GDI pen object.\n");
+    return;
+  }
+  HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
+  DeleteObject(oldpen);
+  fl_current_xmap.pen = newpen;
 #else
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the WIN32 dash patterns on X
