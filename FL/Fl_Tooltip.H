@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.4 1999/04/11 01:18:32 carl Exp $"
+// "$Id: Fl_Tooltip.H,v 1.5 1999/05/12 23:20:27 carl Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,8 @@ public:
   static uchar textcolor() { return default_style.textcolor_; }
   static void boxtype(uchar b) { default_style.box_ = b; }
   static uchar boxtype() { return default_style.box_; }
-  static void enable(int b = 1) { enabled = b; }
+  static int enabled() { return _enabled; }
+  static void enable(int b = 1) { _enabled = b; }
   static void disable() { enable(0); }
 
   // This function is called by widgets
@@ -85,7 +86,7 @@ private:
   static Fl_Menu_Window *window;
   static Fl_Widget *widget;
   static int shown;
-  static int enabled;
+  static int _enabled;
 
   static void tooltip_timeout(Fl_Widget *);
   static void tooltip_enter(Fl_Widget *);
@@ -97,5 +98,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.4 1999/04/11 01:18:32 carl Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.5 1999/05/12 23:20:27 carl Exp $".
 //

@@ -1,277 +1,188 @@
-description = Same as Alternative, but commented
-author = Carl Thompson (clip@home.net)
-version = 9
+##
+## This is a FLTK style configuration file.
+## All items are needed except comments!
+##
+description = An Alternative FLTK Style           # description of style
+author = Carl Thompson (clip@home.net)            # author of style
+version = 3                                       # version number of style
 
-[global]
-  widget style = Motif
+[global]                                          # global options
+  background red = 192                            # background gray ramp - red
+  background green = 192                          # background gray ramp - green
+  background blue = 192                           # background gray ramp - blue
 
-  [global/color]
-    background = c0c0c0
+[menu item]                                       # menu item attributes
+  label type = 0                                  # type number for label font
+  label font = 0                                  # font number for label font
+  label size = 14                                 # font size for label font
+  label color = 0                                 # color for label font (index into palette)
+  down label color = 7                            # color of label font when item selected
+  down color = 14                                 # color of menu item box when selected
+  down box = 7                                    # type of menu item box when selected
+  menu title down color = 14                      # color of menu title box when its submenu selected
+  menu title down label color = 7                 # color of menu title label when its submenu selected
+  menu title down box = 7                         # boxtype of menu title when its submenu selected
+  menu title highlight color = 14                 # color of menu title box when mouse is over it
+  menu title highlight box = 6                    # boxtype of menu title when mouse is over it
+  menu title highlight label color = 7            # color of menu title label when mouse is over it
 
-[menu item]
-  label type = 0
-  label font = 0
-  label size = 12
-  label color = 0
-  down label color = 7
-  down color = 14
-  down box = 7
-  light color = 14
-  menu title down color = 14
-  menu title down label color = 7
-  menu title down box = 7
-  menu title highlight color = 51
-  menu title highlight box = 30
-  menu title highlight label color = 0
+[browser]                                         # browser attributes
+  label color = 0                                 # color of label font
+  label size = 14                                 # size of label font
+  label type = 0                                  # type number pf label font
+  label font = 0                                  # font number of label font
+  color = 7                                       # browser background color
+  selected color = 14                             # color of selections in browser
+  box = 31                                        # boxtype of browser
+  text font = 4                                   # font number of browser text
+  text size = 14                                  # size of browser text
+  text color = 0                                  # color of browser text
+  selected text color = 7                         # color of selected browser text
 
-[browser]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 7
-  selected color = 14
-  box = 31
-  text font = 0
-  text size = 12
-  text color = 0
-  selected text color = 7
+[chart]                                           # chart attributes
+  label color = 0                                 # color of label font
+  label size = 14                                 # size of label font
+  label type = 0                                  # type number pf label font
+  label font = 0                                  # font number of label font
+  color = 7                                       # chart background color
+  color2 = 49                                     # ???
+  box = 14                                        # boxtype for chart
+  text font = 0                                   # font number for chart text?
+  text size = 10                                  # size of chart text?
+  text color = 0                                  # color of chart text?
 
-[chart]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 7
-  color2 = 49
-  box = 14
-  text font = 0
-  text size = 10
-  text color = 0
+[button]                                          # button attributes
+  label color = 0                                 # color of label font
+  label size = 14                                 # size of label font
+  label type = 0                                  # type number pf label font
+  label font = 0                                  # font number of label font
+  color = 49                                      # color of button background
+  down color = 14                                 # color of button background when selected
+  highlight color = 51                            # color of button background when mouse over it
+  box = 30                                        # boxtype of button
+  down box = 31                                   # boxtype of button when pressed
+  highlight box = 30                              # boxtype of button when mouse over it
+  down label color = 7                            # color of label text when selected
 
-[button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 14
-  highlight color = 51
-  box = 30
-  down box = 31
-  highlight box = 30
-  down label color = 7
+[check button]                                    # check button attributes (inherits button styles)
+  down color = 14                                 # color of light when selected
+  down label color = 0                            # color of label text when selected
 
-[check button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  selected light color = 14
-  unselected light color = 49
-  highlight color = 51
-  box = 0
-  highlight box = 30
-  down label color = 0
+[round button]                                    # round button attributes (inherits from button)
+  down color = 14                                 # color of light when selected
+  down label color = 0                            # color of label text when selected
 
-[round button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  selected light color = 14
-  unselected light color = 49
-  highlight color = 51
-  box = 30
-  highlight box = 30
-  down label color = 0
+[light button]                                    # light button attributes (inherits from button)
+  down color = 1                                  # color of light when selected
+  down label color = 0                            # color of label text when selected
 
-[light button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  unselected light color = 0
-  selected light color = 1
-  highlight color = 51
-  box = 30
-  down box = 0
-  highlight box = 30
-  down label color = 0
+[return button]                                   # return button attributes (inherits from button)
+  box = 2                                         # boxtype
+  highlight box = 2                               # boxtype when mouse over it
 
-[return button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 14
-  highlight color = 51
-  box = 2
-  down box = 3
-  highlight box = 2
-  down label color = 7
+[choice]                                          # choice menu attributes
+  label color = 0                                 # color of text of menu entries
+  label size = 14                                 # size of text of menu entries
+  label type = 0                                  # type of font of menu entries
+  label font = 0                                  # font of menu entries
+  color = 49                                      # color of the choice BUTTON
+  down color = 49                                 # color of the choice PULL DOWN MENU WINDOW
+  highlight color = 51                            # color of choice button when mouse over it
+  box = 30                                        # boxtype of choice button
+  highlight box = 30                              # boxtype of choice when mouse is over it
+  down box = 30                                   # boxtype of choice pull down menu window
+  text font = 0                                   # font of text displayed on choice
+  text size = 14                                  # font size of text displayed on choice
+  text color = 0                                  # font color of text displayed on choice
 
-[highlight button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 14
-  highlight color = 51
-  down box = 31
-  highlight box = 30
-  down label color = 7
+[menu bar]                                        # menu bar attributes
+  label color = 0                                 # probably does nothing
+  label size = 14                                 # probably does nothing
+  label type = 0                                  # probably does nothing
+  label font = 0                                  # probably does nothing
+  color = 49                                      # color of menu bar
+  down color = 49                                 # color of pull down menu window
+  box = 30                                        # boxtype of menu bar
+  down box = 30                                   # boxtype of pull down menu window
+  text font = 0                                   # font of shortcuts
+  text size = 12                                  # font size of shortcuts
+  text color = 0                                  # font color of shortcuts
 
-[choice]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 49
-  highlight color = 51
-  box = 30
-  highlight box = 30
-  down box = 42
-  text font = 0
-  text size = 12
-  text color = 0
+[menu button]                                     # menu button attributes
+  label color = 0                                 # color of label of menu button
+  label size = 14                                 # size of label of menu button
+  label type = 0                                  # font type of label of menu button
+  label font = 0                                  # font number of label of menu button
+  color = 49                                      # color of menu button
+  down color = 49                                 # color of pull down menu window
+  highlight color = 51                            # color of menu button when mouse is over it
+  box = 30                                        # boxtype of menu button
+  highlight box = 30                              # boxtype of menu button when mouse is over it
+  down box = 30                                   # boxtype of pull down menu window
+  text font = 0                                   # font of shortcuts?
+  text size = 14                                  # font size of shortcuts?
+  text color = 0                                  # font color of shortcuts?
 
-[menu bar]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 49
-  box = 30
-  down box = 42
-  text font = 0
-  text size = 12
-  text color = 0
+[widget]                                          # generic widget attributes (all inherit from this)
+  label color = 0                                 # font color of widget label
+  label size = 14                                 # font size of widget label
+  label type = 0                                  # font type of widget label
+  label font = 0                                  # font number of widget label
+  color = 49                                      # color of widget
+  color2 = 49                                     # may do something depending on the widget
+  box = 0                                         # you probably don't want to mess with this
 
-[menu button]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  down color = 49
-  highlight color = 51
-  box = 30
-  highlight box = 30
-  down box = 42
-  text font = 0
-  text size = 12
-  text color = 0
+[window]                                          # window attributes
+  color = 49                                      # background color of the window
+  box = 1                                        # boxtype for window
 
-[popup menu]
-  box = 42
-  color = 49
-  shortcut font = 0
-  shortcut size = 12
+[slider]                                          # slider attributes
+  color = 49                                      # color of slider background area
+  color2 = 49                                     # color of the slider button
+  highlight color = 51                            # color of the slider button when mouse over it
+  box = 31                                        # boxtype of the slider background area
+  slider box = 30                                 # boxtype of the slider button
 
-[widget]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  color2 = 14
-  color3 = 51
-  box = 0
+[scroll bar]                                      # scroll bar attributes (inherits from slider)
+  color = 46                                      # color of scroll bar background area
+  color2 = 49                                     # color of the scroll bar buttons
+  highlight color = 51                            # color of the scroll bar buttons when mouse over it
+  box = 1                                         # boxtype of the scroll bar background area
+  slider box = 30                                 # boxtype of the scroll bar buttons
 
-[window]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  box = 1
+[text input output]                               # input and output widget attributes
+  box = 31                                        # boxtype of the input / output area
+  color = 7                                       # background color of input / output area
+  text font = 0                                   # font number of input / output text
+  text size = 14                                  # size of input / output text
+  text color = 0                                  # color of input / output text
+  selected color = 14                             # background color of selected input / output text
+  selected text color = 7                         # font color of selected input / output text
+  cursor color = 0                                # color of the text cursor
+  label font = 0                                  # font number of the input / output area's label
+  label size = 14                                 # font size of the input / output area's label
+  label color = 0                                 # font color of the input / output area's label
+  label type = 0                                  # font type of the input / output area's label
 
-[slider]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  color2 = 49
-  color3 = 49
-  highlight color = 51
-  box = 31
-  slider box = 42
+[adjuster]                                        # ajuster attributes
+  color = 49                                      # color of the adjuster button
+  color2 = 0                                      # color of the ajuster arrow symbol on the button
+  highlight color = 51                            # color of the adjuster button when mouse over it
+  box = 30                                        # boxtype of the adjuster button
+  highlight box = 30                              # boxtype of the adjuster buttonwhen mouse is over it
 
-[scroll bar]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 46
-  color2 = 49
-  arrow color = 0
-  highlight color = 51
-  box = 31
-  slider box = 42
+[counter]                                         # counter attributes
+  color = 49                                      # color of the counter button
+  color2 = 0                                      # color of the counter arrow symbol on the button
+  highlight color = 51                            # color of the counter button when mouse over it
+  box = 30                                        # boxtype of the adjuster button
+  highlight box = 30                              # boxtype of the adjuster button when mouse over it
+  box2 = 1                                        # boxtype of the counter's text area
+  text font = 0                                   # font number of the counter's text
+  text size = 14                                  # font size of the counter's text
+  text color = 0                                  # color of the counter's text
 
-[text input output]
-  box = 31
-  color = 7
-  output color = 51
-  text font = 0
-  text size = 12
-  text color = 0
-  selected color = 14
-  selected text color = 7
-  cursor color = 0
-  label font = 0
-  label size = 12
-  label color = 0
-  label type = 0
+[roller]                                          # roller attributes
+  color = 49                                      # color of the roller
+  box = 30                                        # boxtype of the roller
 
-[adjuster]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  arrow color = 0
-  highlight color = 51
-  box = 30
-  highlight box = 30
-
-[counter]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  text area color = 49
-  arrow color = 0
-  highlight color = 51
-  box = 30
-  highlight box = 30
-  box2 = 10
-  text font = 0
-  text size = 12
-  text color = 0
-
-[roller]
-  label color = 0
-  label size = 12
-  label type = 0
-  label font = 0
-  color = 49
-  box = 30
-
-[tooltip]
-  delay = 500
-  box = 14
-  color = 215
-  text color = 0
-  text font = 0
-  text size = 12

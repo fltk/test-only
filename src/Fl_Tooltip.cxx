@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.7 1999/05/06 05:52:21 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.8 1999/05/12 23:20:30 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ Fl_TooltipBox *Fl_Tooltip::box = 0;
 Fl_Menu_Window *Fl_Tooltip::window = 0;
 Fl_Widget *Fl_Tooltip::widget = 0;
 int Fl_Tooltip::shown = 0;
-int Fl_Tooltip::enabled = 1;
+int Fl_Tooltip::_enabled = 1;
 
 Fl_Tooltip::Style Fl_Tooltip::default_style = {
   0.5f,
@@ -126,7 +126,7 @@ if (cheesy_flag) return;
   if (w == widget || w == (Fl_Widget*)window) return;
   tooltip_exit(widget);
   widget = w;
-  if (!w || !w->tooltip() || !enabled) return;
+  if (!w || !w->tooltip() || !_enabled) return;
 
   loadstyle();
   Fl::add_timeout(default_style.delay_, (void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
@@ -162,5 +162,5 @@ void Fl_Widget::tooltip(const char *t) {
 }
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.7 1999/05/06 05:52:21 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.8 1999/05/12 23:20:30 carl Exp $".
 //
