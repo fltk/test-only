@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $"
+// "$Id: fl_rect.cxx,v 1.14 2000/04/16 08:31:50 bill Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -317,8 +317,9 @@ void fl_clip_out(int x, int y, int w, int h) {
   Region r = XRectangleRegion(x,y,w,h);
   Region current = rstack[rstackptr];
 // This is not needed as caller must do push of a clip beforehand.
-//if (!current) current = rstack[rstackptr] =
-//  XRectangleRegion(0,0,Fl_Window::current()->w(),Fl_Window::current()->h());
+  // This should not be needed, fixes bug in doublebuffer demo?
+  if (!current) return; //current = rstack[rstackptr] =
+  //XRectangleRegion(0,0,Fl_Window::current()->w(),Fl_Window::current()->h());
 #ifndef WIN32
   Region temp = XCreateRegion();
   XSubtractRegion(current, r, temp);
@@ -442,5 +443,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $".
+// End of "$Id: fl_rect.cxx,v 1.14 2000/04/16 08:31:50 bill Exp $".
 //

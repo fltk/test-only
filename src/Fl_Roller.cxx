@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.18 2000/02/14 11:32:54 bill Exp $"
+// "$Id: Fl_Roller.cxx,v 1.19 2000/04/16 08:31:47 bill Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 
 int Fl_Roller::handle(int event) {
   static int ipos;
-  int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
+  int newpos = horizontal() ? Fl::event_x() : -Fl::event_y();
   switch (event) {
   case FL_PUSH:
     take_focus();
@@ -45,26 +45,21 @@ int Fl_Roller::handle(int event) {
   case FL_RELEASE:
     handle_release();
     return 1;
-  case FL_KEYBOARD: {
-    // Only arrows in the correct direction are used.  Also the up/down
-    // keystrokes are reversed from the default for Fl_Valuator.
-    // This is due to back-compatability with scrollbars.
-    int i = linesize();
-    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+  case FL_KEYBOARD:
+    // Only arrows in the correct direction are used.  This allows the
+    // opposite arrows to be used to navigate between a set of parellel
+    // rollers.
     switch (Fl::event_key()) {
-    case FL_Down: if (!horizontal()) goto UP; else return 0;
-    case FL_Left: if (horizontal()) goto DOWN; else return 0;
-    case FL_Up: if (!horizontal()) goto DOWN; else return 0;
-    case FL_Right: if (horizontal()) goto UP; else return 0;
-    case FL_BackSpace:
-    DOWN:
-      i = -i;
-    case ' ':
-    UP:
-      handle_drag(clamp(increment(value(), i)));
-      return 1;
-    }}
-    // else fall through to the default case:
+    case FL_Up:
+    case FL_Down:
+    case FL_Home:
+    case FL_End:
+      if (horizontal()) return 0;
+      break;
+    case FL_Left:
+    case FL_Right:
+      if (!horizontal()) return 0;
+    } // else fall through...
   default:
     return Fl_Valuator::handle(event);
   }
@@ -116,6 +111,7 @@ void Fl_Roller::draw() {
       fl_xyline(X+h1,Y+H,X);
     }
   } else { // vertical one
+    offset = (1-offset);
     // draw shaded ends of wheel:
     int h1 = H/4+1; // distance from end that shading starts
     fl_color(color()); fl_rectf(X,Y+h1,W,H-2*h1);
@@ -163,5 +159,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.18 2000/02/14 11:32:54 bill Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.19 2000/04/16 08:31:47 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.95 2000/04/03 17:09:21 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.96 2000/04/16 08:31:49 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -558,8 +558,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    Fl::handle(FL_CLOSE, window);
-    return 0;
+    if (Fl::grab() || Fl::modal() && window != Fl::modal()) return 0;
+    window->do_callback();
+    return 1;
 
   case WM_PAINT: {
 
@@ -611,11 +612,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KILLFOCUS:
     Fl::handle(FL_UNFOCUS, window);
     Fl::flush(); // it never returns to main loop when deactivated...
-    break;
-
-  case WM_SHOWWINDOW:
-    if (!window->parent())
-      Fl::handle(wParam ? FL_SHOW : FL_HIDE, window);
     break;
 
   case WM_KEYDOWN:
@@ -688,12 +684,21 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
     break;
 
+  case WM_SHOWWINDOW:
+    if (!window->parent()) {
+      if (wParam)
+	((Fl_Widget*)window)->show();
+      else
+	((Fl_Wdiget*)window)->hide();
+    }
+    break;
+
   case WM_SIZE:
     if (!window->parent()) {
       if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	Fl::handle(FL_HIDE, window);
+	((Fl_Wdiget*)window)->hide();
       } else {
-	Fl::handle(FL_SHOW, window);
+	((Fl_Widget*)window)->show();
 	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
 	  resize_from_system = window;
       }
@@ -807,10 +812,9 @@ void Fl_Window::create() {
   Fl_X::create(this);
 }
 
-int fl_show_iconic;		// true if called from iconize()
-int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
-static const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
-static const Fl_Window* fl_mdi_window;	// set by show_inside()
+char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
 
 Fl_X* Fl_X::create(Fl_Window* w) {
@@ -859,7 +863,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     if (style&WS_POPUP) styleEx |= WS_EX_TOOLWINDOW;
     xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
-    if (fl_modal_for && !fl_disable_transient_for) {
+    if (fl_modal_for) {
       parent = fl_modal_for->i->xid;
     } else {
       parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
@@ -1075,5 +1079,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.95 2000/04/03 17:09:21 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.96 2000/04/16 08:31:49 bill Exp $".
 //

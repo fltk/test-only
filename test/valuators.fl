@@ -111,8 +111,8 @@ Function {} {open
     }
     Fl_Scrollbar {} {
       label 0
-      callback callback
-      xywh {395 20 20 105} align 1 labelsize 8 maximum 100
+      callback callback selected
+      xywh {395 20 20 105} align 1 labelsize 8 minimum 100 maximum 0
     }
     Fl_Scrollbar {} {
       label FL_HORIZONTAL
@@ -164,7 +164,7 @@ Function {} {open
       }
       Fl_Dial {} {
         label FL_FILL_DIAL
-        callback callback selected
+        callback callback
         xywh {475 280 65 65} type Fill color 1959162112 selection_color 1 window_color 2442184192 labelsize 8 value 0.75
         code0 {o->angles(0,360);}
       }

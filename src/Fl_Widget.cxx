@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.59 2000/04/15 04:47:24 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.60 2000/04/16 08:31:47 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -320,42 +320,45 @@ void Fl_Widget::draw_window_frame() const {
 
 // Draw the box of a widget that acts as a button, and return the color
 // to pass to draw_button_label():
-Fl_Color Fl_Widget::draw_button(Fl_Flags f) const {
-  Fl_Color c = color();
-  Fl_Color lc = label_color();
+Fl_Color Fl_Widget::draw_button(Fl_Flags flags) const {
+  Fl_Color background_color = color();
+  Fl_Color foreground_color = label_color();
   if (!active_r()) {
-    f |= FL_INACTIVE;
+    flags |= FL_INACTIVE;
   } else if (belowmouse()) {
-    f |= FL_HIGHLIGHT;
-    Fl_Color c1 = highlight_color(); if (c1) c = c1;
-    c1 = highlight_label_color(); if (c1) lc = c1;
+    flags |= FL_HIGHLIGHT;
+    Fl_Color c = highlight_color(); if (c) background_color = c;
+    c = highlight_label_color(); if (c) foreground_color = c;
   }
-  if (f&FL_VALUE && box() != FL_NO_BOX) {
-    Fl_Color c1 = selection_color(); if (c1) c = c1;
-    c1 = selection_text_color(); if (c1) lc = c1;
+  if (flags&FL_VALUE && box() != FL_NO_BOX) {
+    background_color = selection_color();
+    foreground_color = selection_text_color();
   }
-  if (focused()) f |= FL_FOCUSED;
+  if (focused()) flags |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
-  if (!(f&FL_FOCUSED) && box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
+  else if (box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
     fl_clip(x(), y(), w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  box()->draw(x(), y(), w(), h(), c, f);
-  return lc;
+  box()->draw(x(), y(), w(), h(), background_color, flags);
+  return foreground_color;
 }
 
-void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
-  Fl_Color bc = (f&FL_VALUE) ? selection_color() : color();
-  Fl_Color fc = (f&FL_VALUE) ? selection_text_color() : text_color();
+void Fl_Widget::draw_glyph(int T,int X,int Y,int W,int H, Fl_Flags flags) const
+{
+  Fl_Color background_color =
+    (flags & FL_VALUE) ? selection_color() : color();
+  Fl_Color foreground_color =
+    (flags & FL_VALUE) ? selection_text_color() : text_color();
   if (!active_r()) {
-    f |= FL_INACTIVE;
-  } else if (f&FL_HIGHLIGHT) {
-    Fl_Color c1 = highlight_color(); if (c1) bc = c1;
-    c1 = highlight_label_color(); if (c1) fc = c1;
+    flags |= FL_INACTIVE;
+  } else if (flags & FL_HIGHLIGHT) {
+    Fl_Color c = highlight_color(); if (c) background_color = c;
+    c = highlight_label_color(); if (c) foreground_color = c;
   }
-  glyph()(T, X,Y,W,H, bc, fc, f, box());
+  glyph()(T, X,Y,W,H, background_color, foreground_color, flags, box());
 }
 
 // Call the draw method, handle the clip out
@@ -373,5 +376,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.59 2000/04/15 04:47:24 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.60 2000/04/16 08:31:47 bill Exp $".
 //

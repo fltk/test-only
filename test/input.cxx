@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.19 2000/04/03 17:09:22 bill Exp $"
+// "$Id: input.cxx,v 1.20 2000/04/16 08:31:52 bill Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -79,16 +79,16 @@ void color_cb(Fl_Widget* button, void* v) {
 }
 
 int main(int argc, char **argv) {
-  Fl_Window *window = new Fl_Window(400,400);
+  Fl_Window *window = new Fl_Window(400,350);
 
   int y = 10;
-  input[0] = new Fl_Input(70,y,300,30,"Normal:"); y += 35;
+  input[0] = new Fl_Input(70,y,300,23,"Normal:"); y += 27;
   // input[0]->cursor_color(FL_SELECTION_COLOR);
   //  input[0]->maximum_size(20);
   // input[0]->static_value("this is a testgarbage");
-  input[1] = new Fl_Float_Input(70,y,300,30,"Float:"); y += 35;
-  input[2] = new Fl_Int_Input(70,y,300,30,"Int:"); y += 35;
-  input[3] = new Fl_Secret_Input(70,y,300,30,"Secret:"); y += 35;
+  input[1] = new Fl_Float_Input(70,y,300,23,"Float:"); y += 27;
+  input[2] = new Fl_Int_Input(70,y,300,23,"Int:"); y += 27;
+  input[3] = new Fl_Secret_Input(70,y,300,23,"Secret:"); y += 27;
   input[4] = new Fl_Multiline_Input(70,y,300,100,"Multiline:"); y += 105;
 
   for (int i = 0; i < 4; i++) {
@@ -97,25 +97,25 @@ int main(int argc, char **argv) {
   int y1 = y;
 
   Fl_Button *b;
-  b = new Fl_Toggle_Button(10,y,200,25,"FL_WHEN_&CHANGED");
-  b->callback(toggle_cb, FL_WHEN_CHANGED); y += 25;
-  b = new Fl_Toggle_Button(10,y,200,25,"FL_WHEN_&RELEASE");
-  b->callback(toggle_cb, FL_WHEN_RELEASE); y += 25;
-  b = new Fl_Toggle_Button(10,y,200,25,"FL_WHEN_&ENTER_KEY");
-  b->callback(toggle_cb, FL_WHEN_ENTER_KEY); y += 25;
-  b = new Fl_Toggle_Button(10,y,200,25,"FL_WHEN_&NOT_CHANGED");
-  b->callback(toggle_cb, FL_WHEN_NOT_CHANGED); y += 25;
+  b = new Fl_Toggle_Button(10,y,200,23,"FL_WHEN_&CHANGED");
+  b->callback(toggle_cb, FL_WHEN_CHANGED); y += 23;
+  b = new Fl_Toggle_Button(10,y,200,23,"FL_WHEN_&RELEASE");
+  b->callback(toggle_cb, FL_WHEN_RELEASE); y += 23;
+  b = new Fl_Toggle_Button(10,y,200,23,"FL_WHEN_&ENTER_KEY");
+  b->callback(toggle_cb, FL_WHEN_ENTER_KEY); y += 23;
+  b = new Fl_Toggle_Button(10,y,200,23,"FL_WHEN_&NOT_CHANGED");
+  b->callback(toggle_cb, FL_WHEN_NOT_CHANGED); y += 23;
   y += 5;
-  b = new Fl_Button(10,y,200,25,"&print changed()");
+  b = new Fl_Button(10,y,200,23,"&print changed()");
   b->callback(button_cb);
 
-  b = new Fl_Button(220,y1,100,25,"color"); y1 += 25;
+  b = new Fl_Button(220,y1,100,23,"color"); y1 += 23;
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
   b->label_color(fl_contrast(FL_BLACK,b->color()));
-  b = new Fl_Button(220,y1,100,25,"selection_color"); y1 += 25;
+  b = new Fl_Button(220,y1,100,23,"selection_color"); y1 += 23;
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
   b->label_color(fl_contrast(FL_BLACK,b->color()));
-  b = new Fl_Button(220,y1,100,25,"text_color"); y1 += 25;
+  b = new Fl_Button(220,y1,100,23,"text_color"); y1 += 23;
   b->color(input[0]->text_color()); b->callback(color_cb, (void*)2);
   b->label_color(fl_contrast(FL_BLACK,b->color()));
 
@@ -127,5 +127,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.19 2000/04/03 17:09:22 bill Exp $".
+// End of "$Id: input.cxx,v 1.20 2000/04/16 08:31:52 bill Exp $".
 //

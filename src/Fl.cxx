@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.87 2000/04/14 17:15:46 bill Exp $"
+// "$Id: Fl.cxx,v 1.88 2000/04/16 08:31:45 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,8 +57,8 @@ int		Fl::damage_,
 char		*Fl::e_text = "";
 int		Fl::e_length;
 
-static Fl_Window *fl_xfocus;	// which window X thinks has focus
-Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
+static Fl_Window *xfocus;	// which window X thinks has focus
+static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
 
 // Timeouts are insert-sorted into order.  This works good if there
 // are only a small number:
@@ -225,6 +225,7 @@ Fl_Window* Fl::next_window(const Fl_Window* w) {
   Fl_X* x = Fl_X::i(w)->next; return x ? x->w : 0;}
 
 ////////////////////////////////////////////////////////////////
+// Event handling:
 
 int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = event_x() - x;
@@ -272,8 +273,8 @@ void fl_fix_focus() {
 
   if (Fl::grab()) return; // don't do anything while grab is on.
 
-  // set focus based on Fl::modal() and fl_xfocus
-  Fl_Widget* w = fl_xfocus;
+  // set focus based on Fl::modal() and xfocus
+  Fl_Widget* w = xfocus;
   if (w) {
     while (w->parent()) w = w->parent();
     if (Fl::modal()) w = Fl::modal();
@@ -310,10 +311,82 @@ void Fl_Widget::throw_focus() {
 #endif
   if (contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
   if (contains(Fl::focus())) Fl::focus_ = 0;
-  if (this == fl_xfocus) fl_xfocus = 0;
-  if (this == fl_xmousewin) fl_xmousewin = 0;
+  if (this == xfocus) xfocus = 0;
+  if (this == xmousewin) xmousewin = 0;
   Fl_Tooltip::exit(this);
   fl_fix_focus();
+}
+
+// call this to free a selection (or change the owner):
+void Fl::selection_owner(Fl_Widget *owner) {
+  if (selection_owner_ && owner != selection_owner_)
+    selection_owner_->handle(FL_SELECTIONCLEAR);
+  if (focus_ && owner != focus_ && focus_ != selection_owner_)
+    focus_->handle(FL_SELECTIONCLEAR); // clear non-X-selection highlight
+  selection_owner_ = owner;
+}
+
+////////////////////////////////////////////////////////////////
+// "Grab" is done while menu systems are up.  This has several effects:
+// Events are all sent to the "grab window", which does not even
+// have to be displayed (and in the case of Fl_Menu.C it isn't).
+// The system is also told to "grab" events and send them to this app.
+
+// On both X and Win32 "this app" has to be identified by a window,
+// fltk just picks the top-most displayed window, which is not
+// necessarily where the events are really going!
+
+void Fl::grab(Fl_Window* w) {
+  if (w) {
+    if (!grab_) {
+#ifdef WIN32
+      HWND w = fl_xid(first_window());
+      SetActiveWindow(w); // is this necessary?
+      SetCapture(w);
+#else
+      XGrabPointer(fl_display,
+		   fl_xid(first_window()),
+		   1,
+		   ButtonPressMask|ButtonReleaseMask|
+		   ButtonMotionMask|PointerMotionMask,
+		   GrabModeAsync,
+		   GrabModeAsync, 
+		   None,
+		   0,
+		   fl_event_time);
+      XGrabKeyboard(fl_display,
+		    fl_xid(first_window()),
+		    1,
+		    GrabModeAsync,
+		    GrabModeAsync, 
+		    fl_event_time);
+#endif
+    }
+    if (pushed_) pushed_ = w;
+    grab_ = w;
+  } else {
+    if (grab_) {
+#ifdef WIN32
+      ReleaseCapture();
+#else
+      XUngrabKeyboard(fl_display, fl_event_time);
+      XUngrabPointer(fl_display, fl_event_time);
+      // this flush is done in case the picked menu item goes into
+      // an infinite loop, so we don't leave the X server locked up:
+      XFlush(fl_display);
+#endif
+      grab_ = 0;
+      pushed_ = 0;
+      if (xmousewin) {
+	// send a FL_MOVE event so the enter/leave state is up to date
+	Fl::e_x = Fl::e_x_root-xmousewin->x();
+	Fl::e_y = Fl::e_y_root-xmousewin->y();
+	xmousewin->handle(FL_MOVE);
+      } else {
+	Fl::belowmouse(0);
+      }
+    }
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -354,19 +427,6 @@ int Fl::handle(int event, Fl_Window* window)
 
   switch (event) {
 
-  case FL_CLOSE:
-    if (grab() || modal() && window != modal()) return 0;
-    w->do_callback();
-    return 1;
-
-  case FL_SHOW:
-    ((Fl_Widget*)w)->show();
-    return 1;
-
-  case FL_HIDE:
-    ((Fl_Widget*)w)->hide();
-    return 1;
-
   case FL_PUSH:
     Fl_Tooltip::enter((Fl_Widget*)0);
     if (pushed()) w = pushed();
@@ -381,7 +441,7 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_MOVE:
 //case FL_DRAG: // does not happen
-    fl_xmousewin = window; // this should already be set, but just in case.
+    xmousewin = window; // this should already be set, but just in case.
     if (grab()) w = grab();
     if (w != pushed()) send(FL_MOVE, w, window);
     if (pushed()) send(FL_DRAG, pushed(), window);
@@ -397,18 +457,18 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_UNFOCUS:
     window = 0;
   case FL_FOCUS:
-    fl_xfocus = window;
+    xfocus = window;
     fl_fix_focus();
     return 1;
 
   case FL_ENTER:
-    fl_xmousewin = window;
+    xmousewin = window;
     if (!grab()) send(event, w, window);
     return 1;
 
   case FL_LEAVE:
-    if (window == fl_xmousewin) {
-      fl_xmousewin = 0;
+    if (window == xmousewin) {
+      xmousewin = 0;
       if (!grab()) belowmouse(0);
     }
     return 1;
@@ -416,7 +476,7 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_KEYBOARD:
 
     Fl_Tooltip::enter((Fl_Widget*)0);
-    fl_xfocus = window; // this should already be set, but just in case.
+    xfocus = window; // this should already be set, but just in case.
     // fl_fix_focus(); clobbers e_keysym, so do not call this, or save it
 
     // Try sending keystroke to the focus, if any:
@@ -459,200 +519,6 @@ int Fl::handle(int event, Fl_Window* window)
   }
 }
 
-////////////////////////////////////////////////////////////////
-
-void Fl_Window::destroy() {
-
-  Fl_X* x = i;
-  if (!x) return;
-
-  // remove from the list of windows:
-  Fl_X** pp = &Fl_X::first;
-  for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
-  *pp = x->next;
-  i = 0;
-
-  // recursively remove any subwindows:
-  for (Fl_X *w = Fl_X::first; w;) {
-    Fl_Window* W = w->w;
-    if (W->window() == this) {
-      W->destroy();
-      w = Fl_X::first;
-    } else w = w->next;
-  }
-
-  if (this == Fl::modal_) { // we are closing the modal window, find next one:
-    Fl_Window* w;
-    for (w = Fl::first_window(); w; w = Fl::next_window(w))
-      if (w->modal()) break;
-    Fl::modal_ = w;
-  }
-
-  // Make sure no events are sent to this window:
-  throw_focus();
-  handle(FL_HIDE);
-
-#ifdef WIN32
-  if (x->private_dc) ReleaseDC(x->xid,x->private_dc);
-  if (x->xid == fl_window && fl_gc) {
-    ReleaseDC(fl_window, fl_gc);
-    fl_window = (HWND)-1;
-    fl_gc = 0;
-  }
-#else
-  if (x->region) XDestroyRegion(x->region);
-#endif
-  XDestroyWindow(fl_display, x->xid);
-
-  delete x;
-}
-
-Fl_Window::~Fl_Window() {
-  destroy();
-}
-
-// Fl_Window::show()/hide() are different than Fl_Widget::show()/hide(),
-// even though they are not virtual functions.  This was necessary for
-// compatability with fltk 1.0.
-
-// Fl_Window::show()/hide() actually create and destroy the X window.
-// Fl_Window::show() also has the effect of raising an outer window if
-// it is already shown.  The method Fl_Window::shown() is true between
-// Fl_Window::show() and hide().
-
-// Fl_Widget::show()/hide() are ignored for outer windows, it is assummed
-// these are called only in response to the user iconizing/deiconizing
-// the window and thus the window is already in the right state.  For
-// child windows these do unmap/map the X window, this was so that
-// child windows inside Fl_Tabs work.
-
-// The purpose is to save server resources, and to avoid the need to
-// have a fourth state for the window:
 //
-// visible:		window->shown();
-// iconized:		window->shown() && !window->visible();
-// not on screen:	!window->shown();
-// not on screen but known by system: does not happen in fltk
-
-extern void fl_startup();
-
-void Fl_Window::show() {
-  if (parent()) {
-    set_visible();
-    handle(FL_SHOW);
-  } else if (!i) {
-    Fl_Group::current(0); // get rid of very common user bug: forgot end()
-
-    // this is the secret place where the world is initialized:
-#ifndef WIN32
-    fl_open_display();
-#endif
-    // one-time startup stuff for schemes & config
-    fl_startup();
-// CET - FIXME    Fl::loadtheme();
-
-    layout();
-
-    // back compatability with older modal() and non_modal() flags:
-    if (non_modal() && !fl_modal_for) {
-      fl_modal_for = Fl::first_window();
-      while (fl_modal_for && fl_modal_for->parent())
-	fl_modal_for = fl_modal_for->window();
-    }
-    // back-compatability automatic size_range() based on resizable():
-    if (!size_range_set) {
-      if (resizable()) {
-	Fl_Widget *o = resizable();
-	int minw = o->w(); if (minw > 100) minw = 100;
-	int minh = o->h(); if (minh > 100) minh = 100;
-	size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
-      } else {
-	size_range(w(), h(), w(), h());
-      }
-    }
-    create();
-    fl_modal_for = 0;
-    set_visible();
-    handle(FL_SHOW);
-    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
-  } else {
-#ifdef WIN32
-    if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!Fl::grab()) // we would lose the capture if we activated the window
-      BringWindowToTop(i->xid);
-#else
-    XMapRaised(fl_display, i->xid);
-#endif
-  }
-}
-
-void Fl_Window::show(const Fl_Window* modal_for) {
-  // find the outermost window and make sure it has been shown():
-  while (modal_for && modal_for->parent()) modal_for = modal_for->window();
-  if (modal_for && modal_for->shown()) fl_modal_for = modal_for;
-  show();
-  fl_modal_for = 0;
-}
-
-int Fl_Window::exec(const Fl_Window* modal_for) {
-  clear(); // clear the value()
-  set_modal();
-  show(modal_for);
-  while (shown()) Fl::wait();
-  return value();
-}
-
-void Fl_Window::show_inside(const Fl_Window* w) {
-#ifdef WIN32
-  fl_mdi_window = w;
-  show();
-  fl_mdi_window = 0;
-#else
-  show(w);
-#endif
-}
-
-void Fl_Window::hide() {
-  destroy();
-  clear_visible();
-}
-
-// Fl_Widget::show()/hide() call this:
-int Fl_Window::handle(int event) {
-  if (parent()) switch (event) {
-  case FL_SHOW:
-    if (!i) create();
-    else XMapWindow(fl_display, i->xid);
-    break;
-  case FL_HIDE:
-    if (i && !visible()) XUnmapWindow(fl_display, i->xid);
-    break;
-  }
-  if (Fl_Group::handle(event)) return 1;
-  // Make the Escape key close windows:
-  if (event == FL_SHORTCUT && !parent() && test_shortcut()) {
-    do_callback();
-    return 1;
-  }
-  return 0;
-}
-
-// call this to free a selection (or change the owner):
-void Fl::selection_owner(Fl_Widget *owner) {
-  if (selection_owner_ && owner != selection_owner_)
-    selection_owner_->handle(FL_SELECTIONCLEAR);
-  if (focus_ && owner != focus_ && focus_ != selection_owner_)
-    focus_->handle(FL_SELECTIONCLEAR); // clear non-X-selection highlight
-  selection_owner_ = owner;
-}
-
-void Fl_Window::flush() {
-  make_current();
-//if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
-  fl_clip_region(i->region); i->region = 0;
-  draw();
-}
-
-//
-// End of "$Id: Fl.cxx,v 1.87 2000/04/14 17:15:46 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.88 2000/04/16 08:31:45 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.85 2000/04/12 08:05:40 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.86 2000/04/16 08:31:46 bill Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -73,15 +73,15 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L, Fl_Group* button)
 }
 
 void MenuTitle::draw() {
-  Fl_Color bgcolor = selection_color();
-  Fl_Color label_color = selection_text_color();
-  window_box()->draw(0, 0, w(), h(), bgcolor, FL_VALUE);
+  Fl_Boxtype box = window_box(); // used for menubars
+  if (box == FL_NO_BOX) box = this->box(); // used for popup menus
+  box->draw(0, 0, w(), h(), selection_color(), FL_VALUE);
   // this allow a toggle or other widget to preview it's state:
   if (Fl::pushed()) Fl::pushed_ = item;
   item->x(5);
   item->y((h()-item->h())/2);
   int save_w = item->w(); item->w(w()-10);
-  fl_color(label_color); item->draw();
+  fl_color(selection_text_color()); item->draw();
   item->w(save_w);
   if (Fl::pushed()) Fl::pushed_ = Fl::grab_;
 }
@@ -779,5 +779,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.85 2000/04/12 08:05:40 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.86 2000/04/16 08:31:46 bill Exp $".
 //

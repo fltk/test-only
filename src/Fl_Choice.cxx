@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.43 2000/04/15 04:47:22 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.44 2000/04/16 08:31:45 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,9 +37,9 @@ void Fl_Choice::draw() {
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
   Fl_Widget* o = children() ? item() : 0;
-  Fl_Color label_color = o ? o->label_color() : lc;
 
 // CET - this would look great for a combo box but not for a choice
+//  Fl_Color label_color = o ? o->label_color() : lc;
 //  if (focused()) {
 //    Fl_Color c = selection_color();
 //    if (c) {
@@ -57,7 +57,7 @@ void Fl_Choice::draw() {
     o->x(X);
     o->y(Y+(H-o->h())/2);
     int save_w = o->w(); o->w(W-w1);
-    fl_color(label_color);
+    fl_color(o->label_color());
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
     o->draw();
     fl_draw_shortcut = 0;
@@ -152,5 +152,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.43 2000/04/15 04:47:22 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.44 2000/04/16 08:31:45 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.67 2000/03/20 08:40:25 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.68 2000/04/16 08:31:50 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -426,16 +426,18 @@ int fl_handle(const XEvent& xevent)
   if (window) switch (xevent.type) {
 
   case ClientMessage:
-    if ((Atom)(xevent.xclient.data.l[0]) == wm_delete_window) event = FL_CLOSE;
-    break;
+    if ((Atom)(xevent.xclient.data.l[0]) != wm_delete_window) break;
+    if (Fl::grab() || Fl::modal() && window != Fl::modal()) return 0;
+    window->do_callback();
+    return 1;
 
   case MapNotify:
-    event = FL_SHOW;
-    break;
+    ((Fl_Widget*)window)->show();
+    return 1;
 
   case UnmapNotify:
-    event = FL_HIDE;
-    break;
+    ((Fl_Widget*)window)->hide();
+    return 1;
 
   case Expose:
     Fl_X::i(window)->wait_for_expose = 0;
@@ -641,9 +643,8 @@ void Fl_Window::create() {
   Fl_X::create(this, fl_visual, fl_colormap, -1);
 }
 
-int fl_show_iconic;		// true if called from iconize()
-int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
-static const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
@@ -730,7 +731,7 @@ void Fl_X::create(Fl_Window* w,
 		      (unsigned char *)buffer, p-buffer-1);
     }
 
-    if (fl_modal_for && !fl_disable_transient_for)
+    if (fl_modal_for)
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
 
     XWMHints hints;
@@ -847,7 +848,6 @@ Window fl_window;
 Fl_Window *Fl_Window::current_;
 GC fl_gc;
 
-// make X drawing go into this window (called by subclass flush() impl.)
 void Fl_Window::make_current() {
   static GC gc;	// the GC used by all X windows with fl_visual
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
@@ -859,5 +859,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: Fl_x.cxx,v 1.67 2000/03/20 08:40:25 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.68 2000/04/16 08:31:50 bill Exp $".
 //

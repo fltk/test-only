@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.23 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Output.cxx,v 1.24 2000/04/16 08:31:46 bill Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,7 @@ int Fl_Output::handle(int event) {
   if (event == FL_ENTER) return 1; // For tooltips
   if (event == FL_FOCUS) return 0;
   int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  if (event == FL_PUSH && !focused()) take_focus();
   return Fl_Input_::handletext(event,X,Y,W,H);
 }
 
@@ -51,5 +52,5 @@ Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.23 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.24 2000/04/16 08:31:46 bill Exp $".
 //
