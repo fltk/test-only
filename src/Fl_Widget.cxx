@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.56 2000/04/11 17:14:12 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.57 2000/04/14 01:49:13 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -348,8 +348,8 @@ Fl_Color Fl_Widget::draw_button() const {
 }
 
 void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
-  Fl_Color bc = color();
-  Fl_Color fc = label_color();
+  Fl_Color bc = (f&FL_VALUE) ? selection_color() : color();
+  Fl_Color fc = (f&FL_VALUE) ? selection_text_color() : text_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
   } else if (f&FL_HIGHLIGHT) {
@@ -374,5 +374,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.56 2000/04/11 17:14:12 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.57 2000/04/14 01:49:13 carl Exp $".
 //

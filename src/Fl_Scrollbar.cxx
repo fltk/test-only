@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.39 2000/04/10 06:45:45 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.40 2000/04/14 01:49:12 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -146,6 +146,14 @@ int Fl_Scrollbar::handle(int event) {
   }
 }
 
+// Fltk 2.0 is incompatable with the use of color:
+// color area:                                  1.0:            2.0:
+// background behind scrollbar                  color           window_color
+// scrollbar slider & buttons                   FL_GRAY         color
+// scrollbar slider & buttons when selected     FL_GRAY         selection_color
+// scrollbar button symbols                     selection_color text_color
+// scrollbar button symbols when selected       selection_color selection_text_color
+
 void Fl_Scrollbar::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_window_frame();
 
@@ -197,5 +205,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.39 2000/04/10 06:45:45 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.40 2000/04/14 01:49:12 carl Exp $".
 //

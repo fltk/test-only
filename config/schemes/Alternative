@@ -13,7 +13,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   themes = Alternative                            # theme plugins to load for this scheme
 
 [global colors]                                   # global color options
-#  background = grey                              # background color
+#  background = gray                              # background color
 #  LIGHT1 = red                                   # color for FL_LIGHT1
 #  LIGHT2 = green                                 # color for FL_LIGHT2
 #  LIGHT3 = blue                                  # color for FL_LIGHT3
@@ -29,11 +29,11 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     label font = helvetica                        # font of widget label
     text font = helvetica                         # font of text (if applicable)
     label type = normal                           # font type of widget label
-    color = grey                                  # color of widget
+    color = gray                                  # color of widget
     label color = black                           # font color of widget label
     selection color = puke green                  # background color of selected text
     selection text color = white                  # color of selected text
-    off color = grey                              # may do something depending on the widget
+    off color = gray                              # may do something depending on the widget
     highlight color = light1                      # color of widget when highlighted
     highlight label color = black                 # color of widget label when highlighted
     text color = black                            # color of text
@@ -81,19 +81,24 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     off color = black                             # color of light when not selected
 
   [widgets/slider]                                # slider attributes
-    color = puke green                  # color of the slider button when pushed
-    selection text color = white                  # color of slider button glyph (if any) when pushed
-    window box = down                                    # boxtype of the slider background area
+    color = gray                                  # color of the slider thumb
+    selection color = puke green                  # color of nice slider thumb color mark
+    text color = black                            # color of slider thumb symbol (if any)
+    window box = down                             # boxtype of the slider background area
 
   [widgets/value slider]                          # slider attributes
-    color = puke green                  # color of the slider button when pushed
-    selection text color = white                  # color of slider button glyph (if any) when pushed
+    color = gray
+    selection color = puke green                  # color of nice slider thumb color mark
+    text color = black                            # color of slider thumb symbol (if any)
     window box = down
 
   [widgets/scrollbar]                             # scroll bar attributes
-    selection text color = white                  # color of scroll bar button glyphs (if any) when pushed
-    window color = scroll bar gray                       # color of scroll bar background area
-    window box = down
+    color = gray                                  # color of the scrollbar buttons
+    selection color = puke green                  # color of the scrollbar buttons when pushed
+    text color = black                            # color of scrollbar button symbols
+    selection text color = white                  # color of scrollbar button symbols when pushed
+    window color = scroll bar gray                # color of scrollbar background area
+    window box = down                             # boxtype of the scrollbar background area
 
   [widgets/input]                                 # input widget attributes
     box = down                                    # boxtype of the input area

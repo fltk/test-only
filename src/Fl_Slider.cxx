@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.40 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.41 2000/04/14 01:49:13 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,6 +69,16 @@ int Fl_Slider::slider_position(int W, int S) {
   else return int(val*(W-S)+.5);
 }
 
+// Fltk 2.0 is incompatable with the use of color:
+// color area:                          1.0:                    2.0:
+// background behind slider             color                   window_color
+
+// normal slider                        selection_color         color
+// normal slider symbol                 N/A                     text_color
+
+// nice slider slider                   FL_GRAY                 color
+// nice slider color mark               selection_color         selection_color
+
 // Draw a normal rectangular slider in the passed region:
 void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
   if (w <= 0 || h <= 0) return;
@@ -93,16 +103,11 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     else draw_bg(x, y+X+S, w, h-X-S, f);
   }
 
-  // Fltk 2.0 is incompatable with the use of color:
-  // use:			1.0:		2.0:
-  // background behind slider	color		window_color
-  // normal slider, arrows	selection_color	color
-  // nice slider slider		FL_GRAY		color
-  // nice slider color mark	selection_color	selection_color
-
   Fl_Color bc = color();
-  Fl_Color fc = selection_color();
-
+  Fl_Color fc = text_color();
+  // Sigh. Special case for "nice" sliders
+  if (type() == FL_HOR_NICE_SLIDER || type() == FL_VERT_NICE_SLIDER)
+    fc = selection_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
   } else if ((f&FL_HIGHLIGHT) && highlight_color()) {
@@ -210,6 +215,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 int Fl_Slider::handle(int event) {
   int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   if (event == FL_PUSH) take_focus();
+
   return handle(event,X,Y,W,H);
 }
 
@@ -235,5 +241,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.40 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.41 2000/04/14 01:49:13 carl Exp $".
 //
