@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.28 1999/11/04 20:05:35 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.29 1999/11/04 20:44:17 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -426,7 +426,7 @@ Fl_Style Fl_Widget::default_style = {
   FL_NORMAL_LABEL, // label_type
   FL_GRAY,	// color
   FL_NO_COLOR,	// label_color
-  FL_LIGHT2,	// selection_color / down_color / on_color
+  FL_LIGHT1,	// selection_color / down_color / on_color
   FL_NO_COLOR,	// selection_text_color
   FL_GRAY,	// off_color
   FL_LIGHT1,	// highlight_color
@@ -441,5 +441,5 @@ Fl_Style_Definer* Fl_Style_Definer::first = 0;
 static Fl_Style_Definer x("default", Fl_Widget::default_style);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.28 1999/11/04 20:05:35 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.29 1999/11/04 20:44:17 carl Exp $".
 //
