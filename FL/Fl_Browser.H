@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.5 2004/03/18 08:00:28 matthiaswm Exp $"
+// "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.6 2004/07/26 20:56:14 easysw Exp $"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -90,6 +90,7 @@ protected:
   FL_BLINE* _remove(int) ;
   void insert(int, FL_BLINE*);
   int lineno(void*) const ;
+  void swap(FL_BLINE *a, FL_BLINE *b);
 
 public:
 
@@ -110,6 +111,8 @@ public:
      * was any error in opening or reading the file, in which case errno is
      * set to the system error. The data() of each line is set to \c NULL. */
   int  load(const char* filename);
+    /** Swaps two lines in the browser. */
+  void swap(int a, int b);
     /** Remove all the lines in the browser. */
   void clear();
 
@@ -223,5 +226,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.5 2004/03/18 08:00:28 matthiaswm Exp $".
+// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.6 2004/07/26 20:56:14 easysw Exp $".
 //
