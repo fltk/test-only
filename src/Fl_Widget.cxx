@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.84 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.85 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -346,17 +346,24 @@ int Fl_Widget::test_shortcut() const {
 ////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
-// Fill the entire widget with it's box and color:
-Fl_Flags Fl_Widget::draw_box() const {
-  if (damage()&FL_DAMAGE_EXPOSE && !box()->fills_rectangle() && parent()) {
+// Draw only the edge of the widget. Assummes boxtype is rectangular:
+void Fl_Widget::draw_frame() const {
+  Fl_Flags flags = this->flags();
+  if (!active_r()) flags |= FL_INACTIVE;
+  box()->draw(0, 0, w(), h(), color(), flags|FL_INVISIBLE);
+}
+
+// Fill the entire widget with it's box, handle non-rectangular boxes:
+void Fl_Widget::draw_box() const {
+  Fl_Boxtype box = this->box();
+  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle() && parent()) {
     fl_push_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  Fl_Flags f = flags();
-  if (!active_r()) f |= FL_INACTIVE;
-  box()->draw(0, 0, w(), h(), color(), f);
-  return f;
+  Fl_Flags flags = this->flags();
+  if (!active_r()) flags |= FL_INACTIVE;
+  box->draw(0, 0, w(), h(), color(), flags);
 }
 
 extern void fl_dotted_box(int,int,int,int);
@@ -371,6 +378,16 @@ extern void fl_dotted_box(int,int,int,int);
 
 Fl_Flags Fl_Widget::draw_as_button(Fl_Flags flags, int&x, int&y, int& w, int& h) const {
 
+  Fl_Boxtype box = this->box();
+  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
+  // FL_NO_BOX buttons such as checkmarks:
+  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
+      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
+    fl_push_clip(0, 0, this->w(), this->h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
+
   if (!active_r())
     flags |= FL_INACTIVE;
   else if (belowmouse() && !(flags&FL_SELECTED))
@@ -384,81 +401,13 @@ Fl_Flags Fl_Widget::draw_as_button(Fl_Flags flags, int&x, int&y, int& w, int& h)
   else
     color = this->color();
 
-  Fl_Boxtype box = this->box();
-
-  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
-  // FL_NO_BOX buttons such as checkmarks:
-  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
-      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
-    fl_push_clip(0, 0, this->w(), this->h());
-    parent()->draw_group_box();
-    fl_pop_clip();
-  }
   box->draw(0, 0, this->w(), this->h(), color, flags);
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
   if (focused()) {
-    fl_color(get_glyph_color());
+    fl_color(text_color());
     fl_dotted_box(x+1, y+1, w-2, h-2);
   }
   return flags;
-}
-
-// Draw only the edge of the widget. Assumme it is rectangular:
-Fl_Flags Fl_Widget::draw_frame() const {
-  return draw_frame(0, 0, w(), h());
-}
-
-// Draw the edge of the widget somewhere inside it:
-Fl_Flags Fl_Widget::draw_frame(int x, int y, int w, int h) const {
-  Fl_Flags f = flags();
-  if (!active_r()) f |= FL_INACTIVE;
-  box()->draw(x,y,w,h, color(), f|FL_INVISIBLE);
-  return f;
-}
-
-// Return the color to draw glyphs:
-Fl_Color Fl_Widget::get_glyph_color(Fl_Flags flags) const
-{
-  Fl_Color c;
-  if (flags&FL_SELECTED)
-    c = selection_text_color();
-  else if (flags&FL_HIGHLIGHT && (c = highlight_label_color()))
-    ;
-  else
-    c = text_color();
-  return fl_inactive(c, flags);
-}
-
-// Return the color to draw the box behind a glyph:
-Fl_Color Fl_Widget::get_box_color(Fl_Flags flags) const
-{
-  Fl_Color c;
-  if (flags & FL_SELECTED)
-    c = selection_color();
-  else if (flags & FL_HIGHLIGHT && (c = highlight_color()))
-    ;
-  else
-    c = button_color();
-  return c;
-}
-
-// Return the color to draw labels:
-Fl_Color Fl_Widget::get_label_color(Fl_Flags flags) const
-{
-  Fl_Color c;
-  // Figure out if alignment puts the label inside the widget:
-  if (!(this->flags()&15) || (this->flags() & FL_ALIGN_INSIDE)) {
-    // yes, inside label is affected by selection or highlight:
-    if (flags&FL_SELECTED)
-      c = selection_text_color();
-    else if (flags&FL_HIGHLIGHT && (c = highlight_label_color()))
-      ;
-    else
-      c = label_color();
-  } else {
-    c = label_color();
-  }
-  return fl_inactive(c, flags);
 }
 
 // Set up for incremental redraw:
@@ -486,5 +435,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.84 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.85 2002/01/23 08:46:01 spitzak Exp $".
 //

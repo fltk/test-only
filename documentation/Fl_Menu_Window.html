@@ -21,11 +21,11 @@
 <h3>Description</h3>
 
 The <tt>Fl_Menu_Window</tt> widget is a window type used for menus and
-tooltips. By default the window is drawn in the hardware overlay
-planes if they are available so that when the menu disappears whatever
-was behind it does not have to redraw. If this is not possible, on X
-it also sets the "save behind" flag to indicate that the server should
-save the image behind the menu.
+tooltips. In earlier versions of fltk it used hardware overlay planes
+if possible, but this is currently disabled because it does not work
+with Xft anti-aliased fonts. It also turns on the <a
+href="Fl_Window.html#override">override()</a> bit to remove window
+borders.
 
 <h3>Methods</h3>
 

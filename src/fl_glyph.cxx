@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.28 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.29 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,21 +27,18 @@
 #include <fltk/Fl_Style.h>
 #include <fltk/fl_draw.h>
 
-void fl_glyph(const Fl_Widget* widget, int t,
-	      int x,int y,int w,int h, Fl_Flags f)
+void fl_glyph(const Fl_Widget* widget, int glyph,
+	      int x,int y,int w,int h, Fl_Flags flags)
 {
-  Fl_Color color = widget->get_glyph_color(f);
-
   // handle special glyphs that don't draw the box:
-  switch (t) {
+  switch (glyph) {
 
   case FL_GLYPH_CHECK: {
     Fl_Boxtype box = widget->button_box();
-    box->draw(x, y, w, h, widget->color(), f&FL_INACTIVE|FL_VALUE);
+    box->draw(x, y, w, h, widget->color(), flags&FL_INACTIVE|FL_VALUE);
     box->inset(x, y, w, h);
-    color = fl_inactive(widget->text_color(),f);
-    if (f & FL_VALUE) {
-      fl_color(color);
+    if (flags & FL_VALUE) {
+      fl_color(fl_inactive(widget->text_color(),flags));
       x += 1;
       w = h - 2;
       int d1 = w/3;
@@ -56,12 +53,11 @@ void fl_glyph(const Fl_Widget* widget, int t,
 
   case FL_GLYPH_ROUND:
     h = (h+1)&(~1); // even only
-    FL_ROUND_DOWN_BOX->draw(x, y, w, h, widget->color(), f&FL_INACTIVE);
-    color = fl_inactive(widget->text_color(),f);
-    if (f & FL_VALUE) {
+    FL_ROUND_DOWN_BOX->draw(x, y, w, h, widget->color(), flags&FL_INACTIVE);
+    if (flags & FL_VALUE) {
       int d = h/4;
       fl_ellipse(x+d, y+d, h-d-d-1, h-d-d-1);
-      fl_color(color); fl_fill();
+      fl_color(fl_inactive(widget->text_color(),flags)); fl_fill();
     }
     return;
 
@@ -72,28 +68,36 @@ void fl_glyph(const Fl_Widget* widget, int t,
     // these glyphs do not have a box
     break;
 
-  case FL_GLYPH_CHOICE: {
-    // make the box much smaller:
-    int H = h/3;
-    y += (h-H)/2;
-    h = H;
-  } // and fall through to default case to draw the box:
   default: {
     Fl_Boxtype box = widget->button_box();
-    box->draw(x,y,w,h, widget->get_box_color(f), f);
-    box->inset(x,y,w,h);
-    }
+    if (box != FL_NO_BOX) {
+      Fl_Color color;
+      if (flags & FL_SELECTED) color = widget->selection_color();
+      else if (flags & FL_HIGHLIGHT && (color = widget->highlight_color())) ;
+      else color = widget->button_color();
+      box->draw(x,y,w,h, color, flags);
+      box->inset(x,y,w,h);
+    }}
   }
 
+  Fl_Color color;
+  if (flags & FL_SELECTED)
+    color = widget->selection_text_color();
+  else if (flags&FL_HIGHLIGHT && (color = widget->highlight_label_color()))
+    ;
+  else
+    color = widget->text_color();
   // to draw the shape inactive, draw it twice to get the engraved look:
   int i = 0;
-  if( f & FL_INACTIVE && !(f & FL_SELECTED)) 
-	  i = 1;
+  if (flags & FL_INACTIVE) {
+    i = 1;
+    color = fl_inactive(color);
+  }
   for ( /*i*/ ; i >= 0; i--) {
     fl_color(i ? Fl_Color(FL_LIGHT3) : color);
 
     int w1 = (w+2)/3; int x1,y1;
-    switch(t) {
+    switch(glyph) {
 
     case FL_GLYPH_UP_BUTTON:
     case FL_GLYPH_UP:
@@ -149,5 +153,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.28 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.29 2002/01/23 08:46:01 spitzak Exp $".
 //

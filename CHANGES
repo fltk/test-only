@@ -1963,3 +1963,27 @@ able to make it look just like that by changing the glyph function).
 
 Checked in 1/19/02
 ////////////////////////////////////////////////////////////////
+
+NT version of fl_circle/fl_ellipse changed to match what X draws.
+
+fl_circle/fl_ellipse round to integer positions differently, makes
+Fl_Dial draw nicer.
+
+X version of fl_fill and fl_fill_stroke fixed to draw a path with more
+than 2 closepaths correctly.
+
+Fl_Input (and subclasses) can draw "inside" labels. The label is put
+into the box at the left of the box followed by a colon. You may want
+to fiddle with the label_size() or label_color() to differentiate it
+from the text.
+
+Added Fl_Numeric_Input. This new class lets you edit numbers with the
+up/down arrow keys (works really well). Fluid fixed to use it, try it
+to see how it works.
+
+Lots of cleanup to the widget/glyph drawing code.
+
+Documentation fixes.
+
+Checked in 1/23/02
+////////////////////////////////////////////////////////////////

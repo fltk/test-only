@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.46 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.47 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -165,7 +165,7 @@ Fl_Choice_Type Fl_Choice_type;
 
 #include <fltk/Fl_Menu_Bar.h>
 
-class FLUID_API Fl_Menu_Bar_Type : public Fl_Menu_Type {
+class Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
   virtual const char *type_name() const {return "Fl_Menu_Bar";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -275,5 +275,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.46 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.47 2002/01/23 08:46:00 spitzak Exp $".
 //

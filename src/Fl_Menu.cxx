@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.118 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.119 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -120,20 +120,23 @@ void MenuTitle::draw() {
   if (box == FL_NO_BOX) box = Fl_Widget::default_style->button_box;
 
   Fl_Flags flags;
+  Fl_Color color;
   if (!menustate->menubar) {
     // a title on a popup menu
     flags = 0;
+    color = style_widget->button_color();
   } else if (box == FL_FLAT_BOX) {
     // NT 4 style
-    flags = FL_SELECTED; widget->set_flag(FL_SELECTED);
+    flags = FL_SELECTED;
+    if (widget->active()) widget->set_flag(FL_SELECTED);
+    color = style_widget->selection_color();
   } else {
     // Windows98 style
     flags = FL_VALUE;
+    color = style_widget->button_color();
   }
 
-  if (!widget->active_r()) flags &= ~(FL_VALUE|FL_SELECTED|FL_HIGHLIGHT);
-
-  box->draw(0, 0, w(), h(), style_widget->get_box_color(flags), flags);
+  box->draw(0, 0, w(), h(), color, flags);
 
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_state(FL_BUTTONS)) Fl::pushed_ = widget;
@@ -308,16 +311,17 @@ void MenuWindow::draw() {
     // for minimal update, only draw the items that changed selection:
     if (damage() != FL_DAMAGE_CHILD || i==selected || i==drawn_selected) {
 
-      Fl_Flags flags = widget->flags()&~(FL_VALUE|FL_SELECTED|FL_ALIGN_MASK);
+      Fl_Flags flags = widget->flags();
       if (i == selected && !(flags & FL_OUTPUT)) {
-	flags = FL_SELECTED; widget->set_flag(FL_SELECTED);
+	flags |= FL_SELECTED;
+	flags &= ~FL_INACTIVE; // damn Windoze compatability...
 	// this allow a toggle or other widget to preview it's state:
 	if (Fl::event_state(FL_BUTTONS) && widget->takesevents())
 	  Fl::pushed_ = widget;
 	fl_color(menustate->widget->selection_color());
 	fl_rectf(x,y,w,ih);
       } else {
-	widget->clear_flag(FL_SELECTED);
+	flags &= ~FL_SELECTED;
 	// erase the background if only doing partial update. This uses
 	// clipping so background pixmaps will work:
 	if (damage() == FL_DAMAGE_CHILD) {
@@ -326,24 +330,30 @@ void MenuWindow::draw() {
 	  fl_pop_clip();
 	}
       }
-      if (!widget->active_r()) flags |= FL_INACTIVE;
       fl_x_ = x;
       fl_y_ = y+leading/2;
       int save_w = widget->w(); widget->w(w);
+      int save_flags = widget->flags();
+      widget->flags(flags);
       widget->draw();
+      widget->flags(save_flags);
       widget->w(save_w);
       Fl::pushed_ = 0;
       fl_x_ = fl_y_ = 0;
+      flags &= ~(FL_VALUE|FL_ALIGN_MASK);
 
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
-        int nh = fl_height(widget->label_font(), widget->label_size());
-        draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
+	int nh = fl_height(widget->text_font(), widget->text_size());
+	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
-        Fl_Color c = widget->get_label_color(flags);
-        //fl_font(widget->text_font(), widget->text_size());
+	fl_font(widget->text_font(), widget->text_size());
 	widget->label_type()->draw(Fl::key_name(widget->shortcut()),
-				   x, y, w-3, ih, c, flags | FL_ALIGN_RIGHT);
+				   x, y, w-3, ih,
+				   (flags&FL_SELECTED) ?
+				   widget->selection_text_color() : 
+				   widget->label_color(),
+				   flags|FL_ALIGN_RIGHT);
       }
     }
     y += ih;
@@ -575,19 +585,21 @@ int MenuWindow::handle(int event) {
     if (!widget) {Fl::exit_modal(); return 1;}
     // ignore clicks on inactive items:
     if (!widget->takesevents()) return 1;
+#if 0
     if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.level)) {
       p.widget->focus(p.indexes, p.level);
       p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.level];
       if (widget->type() == Fl_Item::RADIO) mw->redraw();
       else if (checkmark(widget)) mw->redraw(FL_DAMAGE_CHILD);
-    } else {
-      // ignore clicks on menu titles unless it they have a callback:
-      if (widget->callback() == Fl_Widget::default_callback &&
-	  p.current_children() >= 0) return 1;
-      p.state = DONE_STATE;
-      Fl::exit_modal();
+      return 1;
     }
+#endif
+    // ignore clicks on menu titles unless it they have a callback:
+    if (widget->callback() == Fl_Widget::default_callback &&
+	p.current_children() >= 0) return 1;
+    p.state = DONE_STATE;
+    Fl::exit_modal();
     return 1;
   }
   return Fl_Menu_Window::handle(event);
@@ -743,5 +755,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.118 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.119 2002/01/23 08:46:01 spitzak Exp $".
 //

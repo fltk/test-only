@@ -9,7 +9,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {94 250 380 373} resizable hotspot visible
+    xywh {74 345 380 373} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
       callback propagate_tabs open
@@ -17,11 +17,11 @@ Function {make_widget_panel()} {open
     } {
       Fl_Group {} {
         label GUI
-        callback propagate_group open
+        callback propagate_group open selected
         xywh {0 23 380 297}
       } {
         Fl_Input {} {
-          label {Class:}
+          label Class
           user_data 4
           callback user_class_cb
           tooltip {This allows you to name a user-defined class that this widget is an instance of, rather than an fltk built-in class. You will need to add a \#include declaration so that the definition of your class is included in the fluid output.}
@@ -33,19 +33,19 @@ Function {make_widget_panel()} {open
           xywh {250 11 120 22}
         } {}
         Fl_Input {} {
-          label {Label:}
+          label Label
           callback label_cb
           tooltip {Text displayed on or next to the widget}
           xywh {80 33 290 22} when CHANGED
           extra_code {o->take_focus();}
         }
         Fl_Box image_label {
-          label {Image:}
+          label Image
           xywh {9 55 71 22} align 24
         }
         Fl_Button {} {
           label {Image name}
-          callback image_cb selected
+          callback image_cb
           tooltip {Select an image to label the widget}
           xywh {80 55 220 22} align 524308 box DOWN_BOX color 7
         }
@@ -56,7 +56,7 @@ Function {make_widget_panel()} {open
           xywh {305 55 50 22} align 524436 label_size 10
         }
         Fl_Box {} {
-          label {Alignment:}
+          label Alignment
           xywh {10 77 70 22} align 24
         }
         Fl_Button {} {
@@ -109,25 +109,28 @@ Function {make_widget_panel()} {open
           xywh {245 78 40 20} type TOGGLE
         }
         Fl_Value_Input widget_x {
-          label {x,y,w,h:}
+          label x
           callback x_cb
           tooltip {The x coordinate of the widget.}
-          xywh {80 105 55 22} maximum 2000 step 1 value 10
+          xywh {80 105 55 22} align 20 when ENTER_KEY label_size 10 maximum 2000 step 1 value 10
         }
         Fl_Value_Input widget_y {
+          label y
           callback y_cb
           tooltip {The y coordinate of the widget.}
-          xywh {135 105 55 22} align 5 maximum 2000 step 1 value 10
+          xywh {135 105 55 22} align 20 when ENTER_KEY label_size 10 maximum 2000 step 1 value 10
         }
         Fl_Value_Input widget_width {
+          label w
           callback width_cb
           tooltip {The width of the widget.}
-          xywh {190 105 55 22} align 5 maximum 2000 step 1 value 10
+          xywh {190 105 55 22} align 20 when ENTER_KEY label_size 10 maximum 2000 step 1 value 10
         }
         Fl_Value_Input widget_height {
+          label h
           callback height_cb
           tooltip {The height of the widget.}
-          xywh {245 105 55 22} align 5 maximum 2000 step 1 value 10
+          xywh {245 105 55 22} align 20 when ENTER_KEY label_size 10 maximum 2000 step 1 value 10
         }
         Fl_Check_Button set_xy {
           label {Set xy}
@@ -151,40 +154,40 @@ Function {make_widget_panel()} {open
           label Child
           callback non_modal_cb
           tooltip {This window will stay on top of others in the application.}
-          xywh {290 132 70 22}
+          xywh {290 132 75 22}
         }
         Fl_Value_Input {} {
-          label {Value:}
+          label Value
           callback value_cb
           tooltip {The initial value (integer) of this widget}
-          xywh {80 138 55 22} hide
+          xywh {80 132 55 22} when ENTER_KEY
         }
         Fl_Value_Input {} {
-          label {Minimum:}
+          label min
           callback min_cb
           tooltip {The minimum value for this valuator}
-          xywh {135 138 55 22} align 4101 hide label_size 10
+          xywh {135 132 60 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Value_Input {} {
-          label {Maximum:}
+          label max
           callback max_cb
           tooltip {The maximum value for this valuator}
-          xywh {190 138 55 22} align 4101 hide label_size 10 value 1
+          xywh {195 132 60 22} align 20 when ENTER_KEY label_size 10 value 1
         }
         Fl_Value_Input {} {
-          label {Size:}
-          callback slider_size_cb
-          tooltip {The size of the scroller}
-          xywh {245 138 55 22} align 4101 hide label_size 10
-        }
-        Fl_Value_Input {} {
-          label {Step:}
+          label step
           callback step_cb
           tooltip {Amount to change this valuator when mouse moves 1 pixel}
-          xywh {300 138 55 22} align 4101 hide label_size 10
+          xywh {255 132 60 22} align 20 when ENTER_KEY label_size 10
+        }
+        Fl_Value_Input {} {
+          label size
+          callback slider_size_cb
+          tooltip {The size of the scroller}
+          xywh {315 132 55 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Group {} {
-          label {Attributes:}
+          label Attributes
           callback propagate_group open
           xywh {80 158 280 22} align 4
         } {
@@ -214,7 +217,7 @@ Function {make_widget_panel()} {open
           }
         }
         Fl_Button {} {
-          label {Shortcut:}
+          label Shortcut
           callback shortcut_in_cb
           tooltip {To set a shortcut:
    Click here, then type the key combination you want.
@@ -227,7 +230,7 @@ To get out of shortcut-setting mode:
           class Shortcut_Button
         }
         Fl_Input {} {
-          label {Tooltip:}
+          label Tooltip
           callback tooltip_cb
           tooltip {The pop up tooltip which should be used for the widget.}
           xywh {80 209 290 78} type Wordwrap box BORDER_BOX color 0xffffe100
@@ -236,6 +239,10 @@ To get out of shortcut-setting mode:
           label resizable
           xywh {80 220 275 67} hide deactivate resizable
         }
+        Fl_Box {} {
+          label Dimensions
+          xywh {10 105 70 22} align 24
+        }
       }
       Fl_Group {} {
         label Style
@@ -243,7 +250,7 @@ To get out of shortcut-setting mode:
         xywh {0 23 380 297} hide
       } {
         Fl_Choice {} {
-          label {Box:}
+          label Box
           callback box_cb
           tooltip {Type of box to draw around the widget.}
           xywh {85 9 270 22}
@@ -263,7 +270,7 @@ To get out of shortcut-setting mode:
           extra_code {o->type(0);}
         }
         Fl_Choice {} {
-          label {Button box:}
+          label {Button box}
           callback button_box_cb open
           tooltip {Type of box to draw around buttons that are in the widget.}
           xywh {85 66 270 22}
@@ -283,13 +290,13 @@ To get out of shortcut-setting mode:
           extra_code {o->type(0);}
         }
         Fl_Choice {} {
-          label {Label Type:}
+          label {Label Type}
           callback label_type_cb open
           tooltip {How to draw the label}
           xywh {85 121 270 22}
         } {}
         Fl_Choice {} {
-          label {Label Font:}
+          label {Label Font}
           callback label_font_cb open
           tooltip {Font to use for the label}
           xywh {85 143 215 22}
@@ -297,7 +304,7 @@ To get out of shortcut-setting mode:
         Fl_Value_Input {} {
           callback label_size_cb
           tooltip {Size of the font to use for the label}
-          xywh {300 143 55 22} maximum 100 step 1 value 14
+          xywh {300 143 55 22} when ENTER_KEY maximum 100 step 1 value 14
         }
         Fl_Light_Button {} {
           label {Label Color}
@@ -314,7 +321,7 @@ To get out of shortcut-setting mode:
           extra_code {o->type(0);}
         }
         Fl_Choice {} {
-          label {Text Font:}
+          label {Text Font}
           callback text_font_cb open
           tooltip {Font to use for text displayed inside the widget}
           xywh {85 198 215 22}
@@ -322,7 +329,7 @@ To get out of shortcut-setting mode:
         Fl_Value_Input {} {
           callback text_size_cb
           tooltip {Size of the font to use for text displayed inside the widget}
-          xywh {300 198 55 22} maximum 100 step 1 value 14
+          xywh {300 198 55 22} when ENTER_KEY maximum 100 step 1 value 14
         }
         Fl_Light_Button {} {
           label {Text Color}
@@ -355,7 +362,7 @@ To get out of shortcut-setting mode:
         xywh {0 23 380 302} hide resizable
       } {
         Fl_Input {} {
-          label {Name:}
+          label Name
           callback name_cb
           tooltip {The variable or member name in which to store a pointer to this widget.}
           xywh {80 11 230 22} when CHANGED
@@ -367,14 +374,14 @@ To get out of shortcut-setting mode:
           xywh {315 11 50 22} label_size 10
         }
         Fl_Input extra_code_input {
-          label {Extra Code:}
+          label {Extra Code}
           user_data 0
           callback extra_code_input_cb
           tooltip {Extra code to be exectuted after the widget is created. The variable "o" points at the widget.}
           xywh {80 44 285 99} type Multiline
         }
         Fl_Input {} {
-          label {Callback:}
+          label Callback
           callback callback_cb
           tooltip {The name of the callback function, or code body of the callback function}
           xywh {80 154 285 99} type Multiline
@@ -384,19 +391,19 @@ To get out of shortcut-setting mode:
           xywh {80 165 165 65} hide deactivate resizable
         }
         Fl_Input {} {
-          label {User Data:}
+          label {User Data}
           callback user_data_cb
           tooltip {Value passed as the second argument to the callback.  This must be of the type given below.}
           xywh {80 253 145 22}
         }
         Fl_Choice {} {
-          label {When:}
+          label When
           callback when_cb
           tooltip {What actions cause the callback to be called.}
           xywh {265 253 100 22} when NEVER
         } {}
         Fl_Input {} {
-          label {Type:}
+          label Type
           callback user_data_type_cb
           tooltip {Type of User Data. This must be "long" or a pointer.}
           xywh {80 275 145 22}

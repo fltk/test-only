@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Flags.h,v 1.4 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Unified flags set for fltk
 //
@@ -66,17 +66,15 @@ enum {
 #endif
 
   FL_INACTIVE		= 0x00000100, // does not get events, gray it out
-  FL_MENU_STAYS_UP	= 0x00000200, // dont exit menu when picked
+  FL_OUTPUT		= 0x00000200, // does not get events
   FL_VALUE		= 0x00000400, // indicates true/down/on state
-  FL_OPEN		= 0x00000800, // this parent item in browser is open
+  FL_SELECTED		= 0x00000800, // draw using selection colors
   FL_INVISIBLE		= 0x00001000, // does not get events, does not draw
-  FL_OUTPUT		= 0x00002000, // does not get events
+  FL_HIGHLIGHT		= 0x00002000, // draw highlighted
   FL_CHANGED		= 0x00004000, // value changed since last callback
   FL_COPIED_LABEL	= 0x00008000, // copy_label() was called
   FL_RAW_LABEL		= 0x00010000, // don't interpret & or @ in label
-  FL_HIGHLIGHT		= 0x00020000, // draw highlighted
-  FL_PACK_VERTICAL	= 0x00040000, // Fl_Pack puts this widget vertical
-  FL_SELECTED		= 0x00080000  // draw using selection colors
+  FL_PACK_VERTICAL	= 0x00020000  // Fl_Pack puts this widget vertical
 
 };
 

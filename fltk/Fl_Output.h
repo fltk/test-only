@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Output.h,v 1.2 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,22 +29,15 @@
 #include "Fl_Input.h"
 
 class FL_API Fl_Output : public Fl_Input {
-  virtual int replace(int, int, const char*, int); // does nothing
+  virtual bool replace(int, int, const char*, int); // does nothing
 public:
   Fl_Output(int x, int y, int w, int h, const char *l = 0);
   static Fl_Named_Style* default_style;
   int handle(int);
-
-#if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
-  Fl_Boxtype box() const {return text_box();}
-  void box(Fl_Boxtype b) {text_box(b);}
-  Fl_Color color() const {return text_background();}
-  void color(Fl_Color c) {text_background(c);}
-#endif
 };
 
 #endif 
 
 //
-// End of "$Id: Fl_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Output.h,v 1.2 2002/01/23 08:46:00 spitzak Exp $".
 //

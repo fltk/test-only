@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Counter.cxx,v 1.45 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,28 +36,22 @@ enum {
   FL_GLYPH_2RIGHTARROW
 };
 
-// just like Fl_Widget::get_glyph_color() except assumes no box around glyph
-static Fl_Color counter_glyph_color(const Fl_Widget *w, Fl_Flags f) {
-  Fl_Color c = w->text_color();
-  if (f&FL_SELECTED)
-    c = w->selection_text_color();
-  else if (f&FL_HIGHLIGHT && w->highlight_label_color())
-    c = w->highlight_label_color();
-  return fl_inactive(c, f);
-}
-
-static void glyph(const Fl_Widget* widget, int t,
-		  int x,int y,int w,int h, Fl_Flags f)
+static void glyph(const Fl_Widget* widget, int glyph,
+		  int x,int y,int w,int h, Fl_Flags flags)
 {
-  widget->button_box()->draw(x,y,w,h,widget->get_box_color(f),f);
-  // can't use this 'cause glyph box is shared with text box
-  // Fl_Color fc = widget->get_glyph_color(f);
-  Fl_Color fc = counter_glyph_color(widget, f);
-  switch (t) {
-    case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x, y, w, h, fc); break;
-    case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x, y, w, h, fc); break;
-    case FL_GLYPH_RIGHTARROW: fl_draw_symbol("@-4>",  x, y, w, h, fc); break;
-    case FL_GLYPH_2RIGHTARROW: fl_draw_symbol("@-4>>", x, y, w, h, fc); break;
+  Fl_Color color;
+
+  if (flags & FL_HIGHLIGHT && (color = widget->highlight_color())) ;
+  else color = widget->button_color();
+  widget->button_box()->draw(x,y,w,h, color, flags);
+
+  if (flags&FL_HIGHLIGHT && (color = widget->highlight_label_color()));
+  else color = fl_inactive(widget->text_color(),flags);
+  switch (glyph) {
+    case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x,y,w,h, color); break;
+    case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x,y,w,h, color); break;
+    case FL_GLYPH_RIGHTARROW: fl_draw_symbol("@-4>",  x,y,w,h, color); break;
+    case FL_GLYPH_2RIGHTARROW: fl_draw_symbol("@-4>>", x,y,w,h, color); break;
   }
 }
 
@@ -67,7 +61,7 @@ void Fl_Counter::draw() {
   if (!active_r()) fl[0] |= FL_INACTIVE;
   for (int i = 1; i < 5; i++) {
     fl[i] = fl[0];
-    if (mouseobj == i) fl[i] |= FL_VALUE|FL_SELECTED;
+    if (mouseobj == i) fl[i] |= FL_VALUE;
     else if (highlight == i) fl[i] |= FL_HIGHLIGHT;
   }
 
@@ -97,7 +91,7 @@ void Fl_Counter::draw() {
     fl_rectf(xx[0]+(ww[0]-w)/2, (this->h()-h)/2,w,h);
     fl_color(selection_text_color());
   } else {
-    fl_color(get_glyph_color());
+    fl_color(fl_inactive(text_color(), fl[0]));
   }
   fl_draw(str, xx[0], 0, ww[0], h(), FL_ALIGN_CENTER);
 
@@ -218,5 +212,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.45 2002/01/23 08:46:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.56 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -136,13 +136,15 @@ bool Fl_Browser::is_set(int mark) {
   return item_index[mark][0] >= 0;
 }
 
+#define item_is_parent() (children(item_index[HERE],item_level[HERE]+1)>=0)
+
 // Move forward to the next visible item (what down-arrow does).
 // This does not move and returns null if we are at the bottom
 Fl_Widget* Fl_Browser::next_visible() {
   if (item()->visible()) item_position[HERE] += item()->height();
 
   // If we are on an open group title with children, go to first item in group
-  if (item()->flags()&FL_OPEN && item()->visible()) {
+  if (item()->flags()&FL_VALUE && item()->visible() && item_is_parent()) {
     set_level(item_level[HERE]+1);
     item_index[HERE][item_level[HERE]] = 0;
   } else {
@@ -194,7 +196,7 @@ Fl_Widget* Fl_Browser::previous_visible() {
     item(child(item_index[HERE], item_level[HERE]));
 
     // go to last child in a group:
-    while (item()->flags()&FL_OPEN && item()->visible()) {
+    while (item()->flags()&FL_VALUE && item()->visible() && item_is_parent()) {
       int n = children(item_index[HERE], item_level[HERE]+1);
       if (n <= 0) break; // the group is empty, remain on it's title
       set_level(item_level[HERE]+1);
@@ -281,8 +283,8 @@ static Fl_Bitmap browser_minus(browser_minus_bits, browser_minus_width, browser_
 static void
 glyph(const Fl_Widget* widget, int glyph, int x,int y,int w,int h, Fl_Flags f)
 {
-  // fl_color((Fl_Color)9); fl_rect(x,y,w,h); // draw boundary for testing
-  fl_color(widget->get_glyph_color(f|FL_INACTIVE));
+  fl_color((f&FL_SELECTED) ? widget->selection_text_color()
+	   : fl_inactive(widget->text_color()));
   int lx = x+w/2;
   int ly = y+(h-1)/2;
   switch (glyph) {
@@ -339,13 +341,13 @@ void Fl_Browser::draw_item() {
 
   int is_focus = at_mark(FOCUS);
 
-  if (multi() ? widget->value() : is_focus) {
+  if (multi() ? widget->selected() : is_focus) {
     fl_color(selection_color());
     fl_rectf(X, y, W, h);
-    widget->set_flag(FL_SELECTED);
+    widget->set_selected();
     flags = FL_SELECTED;
   } else {
-    widget->clear_flag(FL_SELECTED);
+    widget->clear_selected();
     flags = 0;
 #if DRAW_STRIPES
     Fl_Color c0 = color();
@@ -372,7 +374,7 @@ void Fl_Browser::draw_item() {
 
   int arrow_size = fl_height(text_font(), text_size())|1;
   int preview_open =
-    (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? FL_OPEN : 0;
+    (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? FL_VALUE : 0;
   widget->invert_flag(preview_open);
 
   int x = X-xposition_;
@@ -381,7 +383,7 @@ void Fl_Browser::draw_item() {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
     if (j == item_level[HERE]) {
       g += ELL;
-      if (widget->flags() & FL_OPEN)
+      if (widget->flags() & FL_VALUE)
 	g += OPEN_ELL-ELL;
       else if (children(item_index[HERE],j+1)>=0)
 	g += CLOSED_ELL-ELL;
@@ -391,7 +393,8 @@ void Fl_Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    fl_color(get_glyph_color(flags));
+    fl_color((flags&FL_SELECTED) ? widget->selection_text_color()
+	     : widget->text_color());
     fl_line_style(FL_DASH);
     int w = widget->width();
     if (x + w > X+W) {
@@ -486,18 +489,15 @@ void Fl_Browser::draw() {
 ////////////////////////////////////////////////////////////////
 // Scrolling and layout:
 
-#define item_is_parent() \
-(item()->flags()&FL_OPEN || children(item_index[HERE],item_level[HERE]+1)>=0)
-
 bool Fl_Browser::item_open(bool open)
 {
   if (!item() || !item_is_parent()) return false;
   if (open) {
-    if (item()->flags() & FL_OPEN) return false;
-    item()->set_flag(FL_OPEN);
+    if (item()->flags() & FL_VALUE) return false;
+    item()->set_flag(FL_VALUE);
   } else {
-    if (!(item()->flags() & FL_OPEN)) return false;
-    item()->clear_flag(FL_OPEN);
+    if (!(item()->flags() & FL_VALUE)) return false;
+    item()->clear_flag(FL_VALUE);
   }
   list()->flags_changed(this, item());
   relayout(FL_LAYOUT_CHILD);
@@ -641,13 +641,12 @@ bool Fl_Browser::set_focus() {
 bool Fl_Browser::set_selected(bool value, int do_callback) {
   if (multi()) {
     //if (value) set_focus();
-    Fl_Flags f = item()->flags();
     if (value) {
-      if (f & FL_VALUE) return false;
-      item()->set_flag(FL_VALUE);
+      if (item()->selected()) return false;
+      item()->set_selected();
     } else {
-      if (!(f & FL_VALUE)) return false;
-      item()->clear_flag(FL_VALUE);
+      if (!item()->selected()) return false;
+      item()->clear_selected();
     }
     list()->flags_changed(this, item());
     damage_item(HERE);
@@ -742,7 +741,7 @@ int Fl_Browser::handle(int event) {
       if (event == FL_PUSH) {
 	if (Fl::event_state(FL_CTRL)) {
 	  // start a new selection block without changing state
-	  drag_type = !item()->value();
+	  drag_type = !item()->selected();
 	  if (openclose_drag) drag_type = !drag_type; // don't change it
 	  set_selected(drag_type, FL_WHEN_CHANGED);
 	  set_focus();
@@ -750,7 +749,7 @@ int Fl_Browser::handle(int event) {
 	  return 1;
 	} else if (Fl::event_state(FL_SHIFT)) {
 	  // extend the current focus
-	  drag_type = !item()->value();
+	  drag_type = !item()->selected();
 	  Fl::event_clicks(0); // make it not be a double-click for callback
 	} else {
 	  select_only_this(FL_WHEN_CHANGED);
@@ -776,7 +775,7 @@ int Fl_Browser::handle(int event) {
     goto_mark(FOCUS);
     if (openclose_drag == 1 || Fl::event_clicks() && item_is_parent()) {
       // toggle the open/close state of this item
-      item_open(!(item()->flags()&FL_OPEN));
+      item_open(!(item()->flags()&FL_VALUE));
       Fl::event_is_click(0); // make next click not be double
     } else if (Fl::event_clicks() && (when()&FL_WHEN_ENTER_KEY)) {
       // double clicks act like Enter
@@ -814,7 +813,7 @@ int Fl_Browser::handle(int event) {
       goto RELEASE;
     case ' ':
       if (!multi() || !goto_visible_focus()) break;
-      set_selected(!item()->value(), FL_WHEN_CHANGED);
+      set_selected(!item()->selected(), FL_WHEN_CHANGED);
     RELEASE:
       if ((when()&FL_WHEN_RELEASE) &&
 	  (changed() || (when()&FL_WHEN_NOT_CHANGED))) {
@@ -923,7 +922,7 @@ bool Fl_Browser::select(int line, bool value) {
 
 bool Fl_Browser::selected(int line) {
   if (!goto_index(line)) return false;
-  return item()->value();
+  return item()->selected();
 }
 
 void Fl_Browser::set_position(linepos lpos) {
@@ -1002,5 +1001,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.56 2002/01/23 08:46:00 spitzak Exp $".
 //

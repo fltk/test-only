@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.37 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,10 +46,17 @@ enum {
 };
 
 static void glyph(const Fl_Widget* widget, int t,
-		  int x,int y,int w,int h, Fl_Flags f)
+		  int x,int y,int w,int h, Fl_Flags flags)
 {
-  widget->button_box()->draw(x,y,w,h,widget->get_box_color(f),f);
-  fl_color(widget->get_glyph_color(f));
+  Fl_Color color;
+
+  if (flags & FL_HIGHLIGHT && (color = widget->highlight_color())) ;
+  else color = widget->button_color();
+  widget->button_box()->draw(x,y,w,h, color, flags);
+
+  if (flags&FL_HIGHLIGHT && (color = widget->highlight_label_color()));
+  else color = fl_inactive(widget->text_color(),flags);
+  fl_color(color);
   Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
   b->draw(x+(w-b->width())/2, y+(h-b->height())/2);
 }
@@ -72,7 +79,7 @@ void Fl_Adjuster::draw() {
   Fl_Flags f[4];
   for (int i = 1; i < 4; i++) {
     f[i] = flags();
-    if (drag == i) f[i] |= FL_VALUE|FL_SELECTED;
+    if (drag == i) f[i] |= FL_VALUE;
     else if (highlight == i) f[i] |= FL_HIGHLIGHT;
   }
 
@@ -85,7 +92,7 @@ void Fl_Adjuster::draw() {
 
   if (focused()) {
     Fl_Boxtype box = button_box();
-    fl_color(get_glyph_color());
+    fl_color(text_color());
     fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
   }
 
@@ -187,5 +194,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.37 2002/01/23 08:46:00 spitzak Exp $".
 //

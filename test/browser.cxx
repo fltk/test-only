@@ -35,7 +35,7 @@ cb_remove(Fl_Widget*, void* ptr) {
   if (tree->type() & Fl_Browser::MULTI) {
     Fl_Widget* w = tree->goto_top();
     while (w) {
-      if (w->value()) {
+      if (w->selected()) {
 	Fl_Group* g = w->parent();
 	g->remove(w);
 	delete w;
@@ -66,7 +66,7 @@ cb_multi(Fl_Widget* w, void* ptr) {
 static Fl_Group* current_group(Fl_Browser* tree) {
   Fl_Widget* w = tree->goto_focus();
   if (!w) return tree;
-  if (w->is_group() && w->flags()&FL_OPEN) return (Fl_Group*)w;
+  if (w->is_group() && w->flags()&FL_VALUE) return (Fl_Group*)w;
   return w->parent() ? w->parent() : tree;
 }
 
@@ -75,7 +75,7 @@ static Fl_Group* add_folder(Fl_Group* parent,
   parent->begin();
   Fl_Item_Group* o = new Fl_Item_Group(name);
   o->image(image);
-  if (open) o->set_flag(FL_OPEN);
+  if (open) o->set_flag(FL_VALUE);
   return o;
 }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.37 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.38 2002/01/23 08:46:02 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -69,8 +69,12 @@ alt_glyph(const Fl_Widget* widget, int t,
           Fl_Flags f)
 {
   Fl_Color gbc = widget->color();
-  Fl_Color gfc = widget->get_glyph_color(f&(~FL_SELECTED));
-  Fl_Color bc = widget->get_box_color(f);
+  Fl_Color gfc = fl_inactive(widget->text_color(), f);
+  Fl_Color bc;
+  if (f & FL_SELECTED) bc = widget->selection_color();
+  else if (f & FL_HIGHLIGHT && (bc = widget->highlight_color())) ;
+  else bc = widget->button_color();
+
   switch (t) {
     case FL_GLYPH_CHECK: {
       w = (w-1)|1; h = (h-1)|1;
@@ -258,14 +262,14 @@ static void choice_glyph(const Fl_Widget* widget, int,
   FL_FLAT_BOX->draw(x,y,w,h,widget->color(),f);
   int H = h/3;
   int Y = y + (h-H)/2;
-  widget->box()->draw(x,Y,w,H,widget->get_box_color(f),f);
+  widget->box()->draw(x,Y,w,H,widget->button_color(),f);
 }
 
 static void light_glyph(const Fl_Widget* widget, int,
                         int x,int y,int w, int h,
                         Fl_Flags f)
 {
-  Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
+  Fl_Color fc = fl_inactive(widget->text_color(), f);
   Fl_Color bc = widget->color();
   FL_DOWN_BOX->draw(x+2, y, w-4, h, bc, f&(~FL_VALUE));
   FL_THIN_UP_BOX->draw(x+4, y+2, w-8, h-4, f&FL_VALUE ? fc : bc, f&(~FL_VALUE));
@@ -354,5 +358,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.37 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.38 2002/01/23 08:46:02 spitzak Exp $".
 //

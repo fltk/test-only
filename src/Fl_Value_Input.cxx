@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.30 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -50,9 +50,10 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
 
 void Fl_Value_Input::draw() {
   if (damage()&~FL_DAMAGE_CHILD) input.set_damage(FL_DAMAGE_ALL);
+  input.label(label());
+  input.align(align());
   input.copy_style(style()); // force it to use this style
-  input.draw();
-  input.set_damage(0);
+  input.draw();  input.set_damage(0);
 }
 
 void Fl_Value_Input::layout() {
@@ -77,6 +78,7 @@ void Fl_Value_Input::value_damage() {
 }
 
 int Fl_Value_Input::handle(int event) {
+#if 0 // obsolete drag-adjust code, use Fl_Value_Output if you want this
   double v;
   int delta;
   int mx = Fl::event_x()-Fl::event_y();
@@ -111,19 +113,22 @@ int Fl_Value_Input::handle(int event) {
     Fl::focus(&input);
     break;
   }
+#else
+  if (event == FL_FOCUS) Fl::focus(&input);
+#endif
   input.type(step()>=1.0 ? Fl_Float_Input::INT : Fl_Float_Input::FLOAT);
+  input.when(when());
   if (input.handle(event)) return 1;
   return Fl_Valuator::handle(event);
 }
 
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
-  soft_ = 0;
+  //soft_ = 0;
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);
   input.parent((Fl_Group*)this); // kludge!
   input.callback(input_cb, this);
-  input.when(FL_WHEN_CHANGED);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
 }
@@ -133,5 +138,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.30 2002/01/23 08:46:01 spitzak Exp $".
 //

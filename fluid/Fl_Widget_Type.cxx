@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.83 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.84 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1764,8 +1764,8 @@ void Fl_Widget_Type::write_properties() {
   if ((!set_xy) && (is_window())) {
     write_string("set_xy");  
   }
-  if ((o->flags()&FL_ALIGN_MASK)!=(tplate->flags()&FL_ALIGN_MASK))
-    write_string("align %d", o->flags());
+  if (o->align() != tplate->align())
+    write_string("align %d", o->align());
   if (o->when() != tplate->when())
     write_string("when %s", number_to_text(o->when(), whenmenu));
   if (!o->visible()) write_string("hide");
@@ -2106,5 +2106,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.83 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.84 2002/01/23 08:46:00 spitzak Exp $".
 //

@@ -31,7 +31,7 @@ Fl_Window* make_widget_panel() {
       o->callback((Fl_Callback*)propagate_tabs);
        {Fl_Group* o = new Fl_Group(0, 23, 380, 297, "GUI");
         o->callback((Fl_Callback*)propagate_group);
-         {Fl_Input* o = new Fl_Input(80, 11, 170, 22, "Class:");
+         {Fl_Input* o = new Fl_Input(80, 11, 170, 22, "Class");
           o->callback((Fl_Callback*)user_class_cb, (void*)(4));
           o->when(FL_WHEN_CHANGED);
           o->tooltip("This allows you to name a user-defined class that this widget is an instance \
@@ -43,13 +43,13 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("Selects a value for type() for this widget");
           o->end();
         }
-         {Fl_Input* o = new Fl_Input(80, 33, 290, 22, "Label:");
+         {Fl_Input* o = new Fl_Input(80, 33, 290, 22, "Label");
           o->callback((Fl_Callback*)label_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("Text displayed on or next to the widget");
           o->take_focus();
         }
-         {Fl_Box* o = image_label = new Fl_Box(9, 55, 71, 22, "Image:");
+         {Fl_Box* o = image_label = new Fl_Box(9, 55, 71, 22, "Image");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
          {Fl_Button* o = new Fl_Button(80, 55, 220, 22, "Image name");
@@ -66,7 +66,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("The image data is inserted as inline data into the output C++ code, rather th\
 an generating code to read the image file.");
         }
-         {Fl_Box* o = new Fl_Box(10, 77, 70, 22, "Alignment:");
+         {Fl_Box* o = new Fl_Box(10, 77, 70, 22, "Alignment");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
          {Fl_Button* o = new Fl_Button(80, 78, 20, 20, "@-1<-");
@@ -110,35 +110,44 @@ an generating code to read the image file.");
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_WRAP));
           o->tooltip("Word-wrap the label");
         }
-         {Fl_Value_Input* o = widget_x = new Fl_Value_Input(80, 105, 55, 22, "x,y,w,h:");
+         {Fl_Value_Input* o = widget_x = new Fl_Value_Input(80, 105, 55, 22, "x");
+          o->label_size(10);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((Fl_Callback*)x_cb);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The x coordinate of the widget.");
         }
-         {Fl_Value_Input* o = widget_y = new Fl_Value_Input(135, 105, 55, 22);
+         {Fl_Value_Input* o = widget_y = new Fl_Value_Input(135, 105, 55, 22, "y");
+          o->label_size(10);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((Fl_Callback*)y_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The y coordinate of the widget.");
         }
-         {Fl_Value_Input* o = widget_width = new Fl_Value_Input(190, 105, 55, 22);
+         {Fl_Value_Input* o = widget_width = new Fl_Value_Input(190, 105, 55, 22, "w");
+          o->label_size(10);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((Fl_Callback*)width_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The width of the widget.");
         }
-         {Fl_Value_Input* o = widget_height = new Fl_Value_Input(245, 105, 55, 22);
+         {Fl_Value_Input* o = widget_height = new Fl_Value_Input(245, 105, 55, 22, "h");
+          o->label_size(10);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((Fl_Callback*)height_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The height of the widget.");
         }
          {Fl_Check_Button* o = set_xy = new Fl_Check_Button(305, 105, 60, 22, "Set xy");
@@ -155,45 +164,45 @@ an generating code to read the image file.");
           o->tooltip("This window will stay on top of others in the application and will block even\
 ts from going to other windows until it is hidden or closed.");
         }
-         {Fl_Check_Button* o = new Fl_Check_Button(290, 132, 70, 22, "Child");
+         {Fl_Check_Button* o = new Fl_Check_Button(290, 132, 75, 22, "Child");
           o->callback((Fl_Callback*)non_modal_cb);
           o->tooltip("This window will stay on top of others in the application.");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(80, 138, 55, 22, "Value:");
+         {Fl_Value_Input* o = new Fl_Value_Input(80, 132, 55, 22, "Value");
           o->callback((Fl_Callback*)value_cb);
-          o->hide();
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The initial value (integer) of this widget");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(135, 138, 55, 22, "Minimum:");
+         {Fl_Value_Input* o = new Fl_Value_Input(135, 132, 60, 22, "min");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-          o->hide();
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The minimum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(190, 138, 55, 22, "Maximum:");
+         {Fl_Value_Input* o = new Fl_Value_Input(195, 132, 60, 22, "max");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-          o->hide();
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The maximum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(245, 138, 55, 22, "Size:");
-          o->label_size(10);
-          o->callback((Fl_Callback*)slider_size_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-          o->hide();
-          o->tooltip("The size of the scroller");
-        }
-         {Fl_Value_Input* o = new Fl_Value_Input(300, 138, 55, 22, "Step:");
+         {Fl_Value_Input* o = new Fl_Value_Input(255, 132, 60, 22, "step");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
-          o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-          o->hide();
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("Amount to change this valuator when mouse moves 1 pixel");
         }
-         {Fl_Group* o = new Fl_Group(80, 158, 280, 22, "Attributes:");
+         {Fl_Value_Input* o = new Fl_Value_Input(315, 132, 55, 22, "size");
+          o->label_size(10);
+          o->callback((Fl_Callback*)slider_size_cb);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
+          o->tooltip("The size of the scroller");
+        }
+         {Fl_Group* o = new Fl_Group(80, 158, 280, 22, "Attributes");
           o->callback((Fl_Callback*)propagate_group);
           o->align(FL_ALIGN_LEFT);
            {Fl_Check_Button* o = new Fl_Check_Button(0, 0, 65, 22, "Visible");
@@ -218,7 +227,7 @@ ow() is called.");
           }
           o->end();
         }
-         {Shortcut_Button* o = new Shortcut_Button(80, 181, 290, 22, "Shortcut:");
+         {Shortcut_Button* o = new Shortcut_Button(80, 181, 290, 22, "Shortcut");
           o->box(FL_DOWN_BOX);
           o->color((Fl_Color)7);
           o->callback((Fl_Callback*)shortcut_in_cb);
@@ -227,7 +236,7 @@ ow() is called.");
 o delete the shortcut:\n   Click here, then type backspace.\nTo get out of sho\
 rtcut-setting mode:\n   Click the mouse on this again, or on some other field.");
         }
-         {Fl_Wordwrap_Input* o = new Fl_Wordwrap_Input(80, 209, 290, 78, "Tooltip:");
+         {Fl_Wordwrap_Input* o = new Fl_Wordwrap_Input(80, 209, 290, 78, "Tooltip");
           o->type(5);
           o->box(FL_BORDER_BOX);
           o->color((Fl_Color)0xffffe100);
@@ -239,12 +248,15 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
           o->deactivate();
           Fl_Group::current()->resizable(o);
         }
+         {Fl_Box* o = new Fl_Box(10, 105, 70, 22, "Dimensions");
+          o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+        }
         o->end();
       }
        {Fl_Group* o = new Fl_Group(0, 23, 380, 297, "Style");
         o->callback((Fl_Callback*)propagate_group);
         o->hide();
-         {Fl_Choice* o = new Fl_Choice(85, 9, 270, 22, "Box:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(85, 9, 270, 22, "Box"); o->begin();
           o->callback((Fl_Callback*)box_cb);
           o->tooltip("Type of box to draw around the widget.");
           o->end();
@@ -262,7 +274,7 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
 eft chip in the color chooser) to disable highlighting.");
           o->type(0);
         }
-         {Fl_Choice* o = new Fl_Choice(85, 66, 270, 22, "Button box:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(85, 66, 270, 22, "Button box"); o->begin();
           o->callback((Fl_Callback*)button_box_cb);
           o->tooltip("Type of box to draw around buttons that are in the widget.");
           o->end();
@@ -280,12 +292,12 @@ eft chip in the color chooser) to disable highlighting.");
 .");
           o->type(0);
         }
-         {Fl_Choice* o = new Fl_Choice(85, 121, 270, 22, "Label Type:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(85, 121, 270, 22, "Label Type"); o->begin();
           o->callback((Fl_Callback*)label_type_cb);
           o->tooltip("How to draw the label");
           o->end();
         }
-         {Fl_Choice* o = new Fl_Choice(85, 143, 215, 22, "Label Font:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(85, 143, 215, 22, "Label Font"); o->begin();
           o->callback((Fl_Callback*)label_font_cb);
           o->tooltip("Font to use for the label");
           o->end();
@@ -295,6 +307,7 @@ eft chip in the color chooser) to disable highlighting.");
           o->step(1);
           o->value(14);
           o->callback((Fl_Callback*)label_size_cb);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("Size of the font to use for the label");
         }
          {Fl_Light_Button* o = new Fl_Light_Button(85, 165, 135, 22, "Label Color");
@@ -310,7 +323,7 @@ eft chip in the color chooser) to disable highlighting.");
 black top-left chip in the color chooser) to leave the label colors unchanged.");
           o->type(0);
         }
-         {Fl_Choice* o = new Fl_Choice(85, 198, 215, 22, "Text Font:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(85, 198, 215, 22, "Text Font"); o->begin();
           o->callback((Fl_Callback*)text_font_cb);
           o->tooltip("Font to use for text displayed inside the widget");
           o->end();
@@ -320,6 +333,7 @@ black top-left chip in the color chooser) to leave the label colors unchanged.")
           o->step(1);
           o->value(14);
           o->callback((Fl_Callback*)text_size_cb);
+          o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("Size of the font to use for text displayed inside the widget");
         }
          {Fl_Light_Button* o = new Fl_Light_Button(85, 220, 135, 22, "Text Color");
@@ -348,7 +362,7 @@ black top-left chip in the color chooser) to leave the label colors unchanged.")
        {Fl_Group* o = new Fl_Group(0, 23, 380, 302, "C++");
         o->callback((Fl_Callback*)propagate_group);
         o->hide();
-         {Fl_Input* o = new Fl_Input(80, 11, 230, 22, "Name:");
+         {Fl_Input* o = new Fl_Input(80, 11, 230, 22, "Name");
           o->callback((Fl_Callback*)name_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("The variable or member name in which to store a pointer to this widget.");
@@ -358,13 +372,13 @@ black top-left chip in the color chooser) to leave the label colors unchanged.")
           o->callback((Fl_Callback*)name_public_cb);
           o->tooltip("Make the variable public");
         }
-         {Fl_Multiline_Input* o = extra_code_input = new Fl_Multiline_Input(80, 44, 285, 99, "Extra Code:");
+         {Fl_Multiline_Input* o = extra_code_input = new Fl_Multiline_Input(80, 44, 285, 99, "Extra Code");
           o->type(4);
           o->callback((Fl_Callback*)extra_code_input_cb, (void*)(0));
           o->tooltip("Extra code to be exectuted after the widget is created. The variable \"o\" po\
 ints at the widget.");
         }
-         {Fl_Multiline_Input* o = new Fl_Multiline_Input(80, 154, 285, 99, "Callback:");
+         {Fl_Multiline_Input* o = new Fl_Multiline_Input(80, 154, 285, 99, "Callback");
           o->type(4);
           o->callback((Fl_Callback*)callback_cb);
           o->tooltip("The name of the callback function, or code body of the callback function");
@@ -374,18 +388,18 @@ ints at the widget.");
           o->deactivate();
           Fl_Group::current()->resizable(o);
         }
-         {Fl_Input* o = new Fl_Input(80, 253, 145, 22, "User Data:");
+         {Fl_Input* o = new Fl_Input(80, 253, 145, 22, "User Data");
           o->callback((Fl_Callback*)user_data_cb);
           o->tooltip("Value passed as the second argument to the callback.  This must be of the typ\
 e given below.");
         }
-         {Fl_Choice* o = new Fl_Choice(265, 253, 100, 22, "When:"); o->begin();
+         {Fl_Choice* o = new Fl_Choice(265, 253, 100, 22, "When"); o->begin();
           o->callback((Fl_Callback*)when_cb);
           o->when(FL_WHEN_NEVER);
           o->tooltip("What actions cause the callback to be called.");
           o->end();
         }
-         {Fl_Input* o = new Fl_Input(80, 275, 145, 22, "Type:");
+         {Fl_Input* o = new Fl_Input(80, 275, 145, 22, "Type");
           o->callback((Fl_Callback*)user_data_type_cb);
           o->tooltip("Type of User Data. This must be \"long\" or a pointer.");
         }

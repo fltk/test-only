@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,52 +49,45 @@ public:
   int handle(int);
   int handle(int event, int, int, int, int);
 
-  int value(const char*);
-  int value(const char*, int);
-  int static_value(const char*);
-  int static_value(const char*, int);
+  bool value(const char*);
+  bool value(const char*, int);
+  bool static_value(const char*);
+  bool static_value(const char*, int);
   const char* value() const {return value_;}
   char index(int i) const {return value_[i];}
   int size() const {return size_;}
   int maximum_size() const {return maximum_size_;}
   void maximum_size(int m) {maximum_size_ = m;}
 
-  char show_cursor() const {return show_cursor_;}
-  void show_cursor(char i);
-
   int position() const {return position_;}
   int mark() const {return mark_;}
-  int position(int p, int m);
-  int position(int p) {return position(p, p);}
-  int mark(int m) {return position(position(), m);}
-  virtual int replace(int, int, const char*, int);
-  int cut() {return replace(position(), mark(), 0, 0);}
-  int cut(int n) {return replace(position(), position()+n, 0, 0);}
-  int cut(int a, int b) {return replace(a, b, 0, 0);}
-  int insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
-  int replace(int a, int b, char c) {return replace(a,b,&c,1);}
-  int copy(bool clipboard = true);
-  int undo();
+  void position(int p, int m);
+  void position(int p) {position(p, p);}
+  void up_down_position(int position, bool extend);
+  void mark(int m) {return position(position(), m);}
+
+  virtual bool replace(int, int, const char*, int);
+  bool cut() {return replace(position(), mark(), 0, 0);}
+  bool cut(int n) {return replace(position(), position()+n, 0, 0);}
+  bool cut(int a, int b) {return replace(a, b, 0, 0);}
+  bool insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
+  bool replace(int a, int b, char c) {return replace(a,b,&c,1);}
+  bool copy(bool clipboard = true);
+  bool undo();
+  void maybe_do_callback();
+
   int word_start(int i) const;
   int word_end(int i) const;
   int line_start(int i) const;
   int line_end(int i) const;
   int mouse_position(int, int, int, int) const;
-  int up_down_position(int position, int extend);
-  void maybe_do_callback();
   int xscroll() const {return xscroll_;}
   int yscroll() const {return yscroll_;}
 
-#if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
-  Fl_Boxtype box() const {return text_box();}
-  void box(Fl_Boxtype b) {text_box(b);}
-  Fl_Color color() const {return text_background();}
-  void color(Fl_Color c) {text_background(c);}
-#endif
-
 private:
-  char erase_cursor_only;
-  char show_cursor_;
+
+  const char* value_;
+  char* buffer;
 
   int size_;
   int bufsize;
@@ -103,21 +96,20 @@ private:
   int xscroll_, yscroll_;
   int mu_p;
   int maximum_size_;
-
-  const char* value_;
-  char* buffer;
+  int label_width;
 
   const char* expand(const char*, char*, int) const;
   int expandpos(const char*, const char*, const char*, int*) const;
   void minimal_update(int, int);
   void minimal_update(int p);
+  void update_cursor(bool show);
   void put_in_buffer(int newsize);
 
   void setfont() const;
 
-  int handle_key();
-  int shift_position(int p);
-  int shift_up_down_position(int p);
+  bool handle_key();
+  void shift_position(int p);
+  void shift_up_down_position(int p);
 
 };
 
@@ -131,5 +123,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $".
 //

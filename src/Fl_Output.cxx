@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Output.cxx,v 1.30 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,8 +32,8 @@
 #include <fltk/Fl_Output.h>
 #include <fltk/fl_draw.h>
 
-int Fl_Output::replace(int, int, const char*, int) {
-  return 0;
+bool Fl_Output::replace(int, int, const char*, int) {
+  return false;
 }
 
 int Fl_Output::handle(int event) {
@@ -52,5 +52,5 @@ Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.30 2002/01/23 08:46:01 spitzak Exp $".
 //

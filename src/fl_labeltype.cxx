@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.26 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.27 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -40,16 +40,15 @@ Fl_No_Label fl_no_label("none");
 
 void Fl_Labeltype_::draw(const char* label,
 			 int X, int Y, int W, int H,
-			 Fl_Color c, Fl_Flags f) const
+			 Fl_Color color, Fl_Flags flags) const
 {
-  if (f&FL_INACTIVE) {
-    if (!(f&FL_SELECTED)) {
-      fl_color(FL_LIGHT2);
-      fl_draw(label, X+1, Y+1, W, H, f);
-    }
+  if (flags & FL_INACTIVE) {
+    fl_color(FL_LIGHT2);
+    fl_draw(label, X+1, Y+1, W, H, flags);
+    color = fl_inactive(color);
   }
-  fl_color(c);
-  fl_draw(label, X, Y, W, H, f);
+  fl_color(color);
+  fl_draw(label, X, Y, W, H, flags);
 }
 Fl_Labeltype_ fl_normal_label("normal");
 
@@ -81,7 +80,20 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 {
   fl_font(label_font(), label_size());
   if (!active_r()) flags |= FL_INACTIVE;
-  Fl_Color color = get_label_color(flags);
+
+  Fl_Color color;
+  // Figure out if alignment puts the label inside the widget:
+  if (!(this->flags()&15) || (this->flags() & FL_ALIGN_INSIDE)) {
+    // yes, inside label is affected by selection or highlight:
+    if (flags&FL_SELECTED)
+      color = selection_text_color();
+    else if (flags&FL_HIGHLIGHT && (color = highlight_label_color()))
+      ;
+    else
+      color = label_color();
+  } else {
+    color = label_color();
+  }
 
   if (flags & FL_ALIGN_CLIP) fl_push_clip(X, Y, W, H);
 
@@ -123,7 +135,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
     else if (flags & FL_ALIGN_TOP) cy = 0;
     else cy = h/2-H/2;
 
-    fl_color((flags&FL_INACTIVE) ? fl_inactive(color) : color);
+    fl_color(fl_inactive(color, flags));
     image_->draw(X-cx, Y-cy, W, H, flags);
 
     // figure out the rectangle that remains for text:
@@ -156,5 +168,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.26 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.27 2002/01/23 08:46:01 spitzak Exp $".
 //

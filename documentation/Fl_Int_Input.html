@@ -1,34 +1,50 @@
-<HTML><BODY>
-<HR break>
-<H2><A name=Fl_Int_Input>class Fl_Int_Input</A></H2>
-<HR>
-<H3>Class Hierarchy</H3>
-<UL>
-<PRE>
-<A href=Fl_Input.html#Fl_Input>Fl_Input</A>
+<html><head><title>Fl_Int_Input</title></head><body bgcolor = white>
+
+<hr break>
+<a name=Fl_Int_Input><h2>class Fl_Int_Input</h2></a>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre><a href=Fl_Float_Input.html>Fl_Float_Input</A>
    |
    +----<B>Fl_Int_Input</B>
-</PRE>
-</UL>
-<H3>Include Files</H3>
-<UL>
-<PRE>
-#include &lt;fltk/Fl_Input.h&gt;
-</PRE>
-</UL>
-<H3>Description</H3>
- The <TT>Fl_Int_Input</TT> class is a subclass of <TT>Fl_Input</TT>
- that only allows the user to type decimal digits (or hex numbers of
- the form <tt>0xaef</tt>).
-<H3>Methods</H3>
-<UL>
-<LI><A href=#Fl_Int_Input.Fl_Int_Input>Fl_Int_Input</A></LI>
-<LI><A href=#Fl_Int_Input.~Fl_Int_Input>~Fl_Int_Input</A></LI>
-</UL>
-<H4><A name=Fl_Int_Input.Fl_Int_Input>Fl_Int_Input::Fl_Int_Input(int x, 
-int y, int w, int h, const char *label = 0)</A></H4>
- Creates a new <TT>Fl_Int_Input</TT> widget using the given position, 
-size, and label string. The default boxtype is <TT>FL_DOWN_BOX</TT>. 
-<H4><A name=Fl_Int_Input.~Fl_Int_Input>virtual 
-Fl_Int_Input::~Fl_Int_Input()</A></H4>
- Destroys the widget and any value associated with it. </BODY></HTML>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
+#include &lt;fltk/Fl_Int_Input.h&gt;
+</pre></ul>
+
+<h3>Description</h3>
+
+The <tt>Fl_Int_Input</tt> class is a subclass of <tt>Fl_Input</tt>
+that only allows the user to type decimal digits (or hex numbers of
+the form <tt>0xaef</tt>). Besides editing the text the user can use
+the up/down arrow keys to change the digits.
+
+<p>If you change <a href="Fl_Widget.html#when">when()</a> to
+<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+hits the up/down arrow keys or when the user types the Enter key. This
+may be more useful than the default setting of
+<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+partially-edited numbers are in the field.
+
+<h3>Methods</h3>
+
+<ul>
+<li><a href=#Fl_Int_Input>Fl_Int_Input</a></li>
+<li><a href=#~Fl_Int_Input>~Fl_Int_Input</a></li>
+</ul>
+
+<a name=Fl_Int_Input><h4>Fl_Int_Input::Fl_Int_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+
+Creates a new <TT>Fl_Int_Input</TT> widget using the given position, 
+size, and label string.
+
+<a name=~Fl_Int_Input><h4>virtual Fl_Int_Input::~Fl_Int_Input()</h4></a>
+
+Destroys the widget and any value associated with it.
+
+</body></html>

@@ -49,13 +49,14 @@ after changing any visible properties.
 <li><a href=#changed>changed</a></li>
 <li><a href=#clear_flag>clear_flag</a></li>
 <li><a href=#clear_changed>clear_changed</a></li>
+<li><a href=#clear_selected>clear_selected</a></li>
 <li><a href=#clear_value>clear_value</a></li>
 <li><a href=#clear_visible>clear_visible</a>
 <li><a href=#color>color</a></li>
-<li><a href=#contains>contains</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href=#contains>contains</a></li>
 <li><a href=#copy_label>copy_label</a></li>
 <li><a href=#damage>damage</a></li>
 <li><a href=#deactivate>deactivate</a></li>
@@ -70,14 +71,11 @@ after changing any visible properties.
 <li><a href=#draw_inside_label>draw_inside_label</a>
 <li><a href=#flags>flags</a></li>
 <li><a href=#focused>focused</a></li>
-<li><a href=#get_box_color>get_box_color</a>
-<li><a href=#get_glyph_color>get_glyph_color</a>
-<li><a href=#get_label_color>get_label_color</a>
+<li><a href=#handle>handle</a></li>
+<li><a href=#height>height</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#handle>handle</a></li>
-<li><a href=#height>height</a></li>
 <li><a href=#h>h</a></li>
 <li><a href=#hide>hide</a></li>
 <li><a href=#inside>inside</a></li>
@@ -93,21 +91,23 @@ after changing any visible properties.
 <li><a href=#layout_damage>layout_damage</a></li>
 <li><a href=#make_current>make_current</a>
 <li><a href=#measure_label>measure_label</a>
+<li><a href=#output>output</a></li>
+<li><a href=#parent>parent</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#output>output</a></li>
-<li><a href=#parent>parent</a></li>
 <li><a href=#position>position</a></li>
 <li><a href=#pushed>pushed</a></li>
 <li><a href=#redraw>redraw</a></li>
 <li><a href=#redraw_label>redraw_label</a></li>
 <li><a href=#relayout>relayout</a></li>
 <li><a href=#resize>resize</a></li>
+<li><a href=#selected>selected</a></li>
 <li><a href=#selection_color>selection_color</a></li>
 <li><a href=#set_changed>set_changed</a></li>
 <li><a href=#set_damage>set_damage</a></li>
 <li><a href=#set_flag>set_flag</a></li>
+<li><a href=#set_selected>set_selected</a></li>
 <li><a href=#set_value>set_value</a></li>
 <li><a href=#set_visible>set_visible</a></li>
 <li><a href=#shortcut>shortcut</a></li>
@@ -503,17 +503,15 @@ flags that indicate the current state and exactly how to draw
 things. The following flags are defined:
 
 <ul>
-<li><tt>FL_INACTIVE</tt> - does not get events, gray it out
-<li><tt>FL_INVISIBLE</tt> - not visible
-<li><tt>FL_OUTPUT</tt> - does not get events but draws normally
-<li><tt>FL_VALUE</tt> - <tt>value()</tt>, indicates true/down/on/checked state
-<li><tt>FL_CHANGED</tt> - <tt>changed()</tt>, value changed since last callback
-<li><tt>FL_COPIED_LABEL</tt> - destructor will delete label()
+<li><tt>FL_INVISIBLE</tt> - !<a href="#visible">visible()</a>
+<li><tt>FL_INACTIVE</tt> - !<a href="#active">active()</a>
+<li><tt>FL_OUTPUT</tt> - <a href="#output">output()</a>
+<li><tt>FL_VALUE</tt> - <a href="#value">value()</a>
+<li><tt>FL_SELECTED</tt> - <a href="#selected">selected()</a>
 <li><tt>FL_HIGHLIGHT</tt> - draw highlighted
-<li><tt>FL_SELECTED</tt> - draw using selection colors
-<li><tt>FL_RAW_LABEL</tt> - don't draw &amp;x in label as underscore
-<li><tt>FL_MENU_STAYS_UP</tt> - dont exit menu when picked
-<li><tt>FL_OPEN</tt> - this group in a Fl_Browser is open
+<li><tt>FL_CHANGED</tt> - <a href="#changed">changed()</a>
+<li><tt>FL_COPIED_LABEL</tt> - indicates <a href="#copy_label">copy_label()</a> was called
+<li><tt>FL_RAW_LABEL</tt> - prevents interpretation of '&amp;' and '@' in labels
 <li><tt>FL_ALIGN_*</tt> - label alignment, see below.
 <li><tt>FL_PACK_VERTICAL</tt> - <a href="Fl_Pack.html">Fl_Pack</a> puts this widget vertical
 </ul>
@@ -603,9 +601,20 @@ the program sets the stored value. </p>
 <br><a name=set_value>void set_value()</a>
 <br><a name=clear_value>void clear_value()</a></h4>
 
-A true/false flag used by <a href=Fl_Button.html>Fl_Button</a> and by
-items in an <a href=Fl_Browser.html>Fl_Browser</a> to indicate if they
-are on or off.
+A true/false flag used by <a href="Fl_Button.html">Fl_Button</a> to
+indicate the current state and by "parent" items in a hierarchial <a
+href="Fl_Browser.html">Fl_Browser</a> to indicate if they are
+open. Many widgets will draw pushed-in or otherwise indicate that this
+flag is on.
+
+<h4><a name=selected>bool selected() const</a>
+<br><a name=set_selected>void set_selected()</a>
+<br><a name=clear_selected>void clear_selected()</a></h4>
+
+A true/false flag used to mark widgets currently selected in
+<a href="Fl_Menu_.html">Fl_Menu</a> and
+<a href="Fl_Browser.html">Fl_Browser</a> widgets. Some widgets will
+draw with much different colors if this is on.
 
 <a name=take_focus><h4>int Fl_Widget::take_focus()</h4></a>
 
@@ -747,29 +756,9 @@ href="#flags">flags()</a> then the box may draw differently to show this.
 
 <a name=draw_as_button><h4>Fl_Flags Fl_Widget::draw_as_button(Fl_Flags, int&amp; x, int&amp; y, int&amp; w, int&amp; h) const;</h4></a>
 
-Draw the widget as though it was a button.
-
-<p>The passed flags can make it use the selection color, and draw as
-inactive or pushed in.
-
-<ul>
-
-<li><tt>FL_SELECTED</tt> if <tt>FL_VALUE</tt> is on and
-<tt>selected_color</tt> is set <i>in this widget's style</i> (not
-inherited).
-
-<li><tt>FL_INACTIVE</tt> if <tt>!active_r()</tt>
-
-<li><tt>FL_HIGHLIGHT</tt> if <tt>belowmouse()</tt>
-
-<li><tt>FL_FOCUSED</tt> if <tt>focused()</tt>
-
-</ul>
-
-<p>The return value is the setting of flags that should be passed to
-draw_inside_label() and the xywh are set to the box interior.
-
-Returns the resulting flags so you can pass them to another function.
+Draw the widget as though it was a button. This uses more of the bits
+in the flags to control appearance, and returns the flags and bounding
+box needed for draw_inside_label().
 
 <a name=draw_frame><h4>Fl_Flags Fl_Widget::draw_frame() const;
 <br>Fl_Flags Fl_Widget::draw_frame(int x, int y, int w, int h) const ;</h4></a>
@@ -817,24 +806,5 @@ the widget's flags).
 
 Return in w and h the size that the widget's <tt>label()</tt> and
 <tt>image()</tt> will take.
-
-<a name=get_box_color><h4>Fl_Color Fl_Widget::get_box_color(Fl_Flags) const ;</h4></a>
-
-Returns the correct color to draw an internal button, based on the
-values of <tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
-<tt>button_color(), selection_color(), highlight_color()</tt> of this widget.
-
-<a name=get_label_color><h4>Fl_Color Fl_Widget::get_label_color(Fl_Flags) const ;</h4></a>
-
-Returns the correct color to draw an interior label, based on the
-values of <tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
-<tt>label_color(), selection_color(), highlight_color()</tt> of this widget.
-
-<a name=get_glyph_color><h4>Fl_Color Fl_Widget::get_glyph_color(Fl_Flags) const ;</h4></a>
-
-Returns the correct color to draw a glyph, based on the values of
-<tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
-<tt>text_color(), selection_text_color(), highlight_label_color()</tt>
-of this widget.
 
 </body></html>

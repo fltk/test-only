@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.17 2002/01/20 10:12:48 spitzak Exp $"
+// "$Id: fl_motif.cxx,v 1.18 2002/01/23 08:46:02 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -67,7 +67,7 @@ thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
 static void motif_glyph(const Fl_Widget* widget, int t,
 			int x, int y, int w, int h, Fl_Flags f)
 {
-  Fl_Color fc = widget->get_glyph_color(f);
+  Fl_Color fc = fl_inactive(widget->text_color(), f);
   Fl_Color bc = widget->button_color();
   switch (t) {
     case FL_GLYPH_ROUND: {
@@ -276,5 +276,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.17 2002/01/20 10:12:48 spitzak Exp $"
+// End of "$Id: fl_motif.cxx,v 1.18 2002/01/23 08:46:02 spitzak Exp $"
 //

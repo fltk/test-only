@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.37 2002/01/23 08:46:01 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,36 +39,42 @@ void Fl_Value_Slider::draw() {
   } else {
     bw = 35; sx += 35; sw -= 35;
   }
-  Fl_Boxtype valuebox = Fl_Output::default_style->box;
-  if (!valuebox) valuebox = Fl_Widget::default_style->box;
-  if (damage()&FL_DAMAGE_ALL) {
-    draw_frame(sx, sy, sw, sh);
-    valuebox->draw(bx, by, bw, bh, 0, FL_INVISIBLE); // draw edge only
-  }
-  box()->inset(sx, sy, sw, sh);
-  Fl_Flags f = 0;
-  if (!active_r()) f = FL_INACTIVE;
-  else {
-    if (Fl::pushed() == this) f |= FL_VALUE;
-    else if (belowmouse()) f |= FL_HIGHLIGHT;
-  }
-  Fl_Slider::draw(sx, sy, sw, sh, f);
+  Fl_Flags flags = this->flags();
+  if (!active_r()) flags |= FL_INACTIVE;
+
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
     // copy the box & color from the default style:
     Fl_Color bg = Fl_Output::default_style->color;
     if (!bg) bg = Fl_Widget::default_style->color;
-    fl_color(bg);
+    Fl_Boxtype valuebox = Fl_Output::default_style->box;
+    if (!valuebox) valuebox = Fl_Widget::default_style->box;
+    // draw the edge of the box around text:
+    if (damage()&FL_DAMAGE_ALL)
+      valuebox->draw(bx, by, bw, bh, bg, flags|FL_INVISIBLE);
+    // erase the interior of the box:
     valuebox->inset(bx, by, bw, bh);
+    fl_color(bg);
     fl_rectf(bx, by, bw, bh);
     // now draw the text:
     char buf[128];
     format(buf);
     fl_push_clip(bx, by, bw, bh);
     fl_font(text_font(), text_size());
-    fl_color(get_glyph_color());
+    fl_color(fl_inactive(text_color(),flags));
     fl_draw(buf, bx, by, bw, bh, 0);
     fl_pop_clip();
   }
+
+  // draw the edge of the slider:
+  if (damage()&FL_DAMAGE_ALL)
+    box()->draw(sx, sy, sw, sh, color(), flags|FL_INVISIBLE);
+  // draw the slider itself:
+  if (!(flags & FL_INACTIVE)) {
+    if (Fl::pushed() == this) flags |= FL_VALUE;
+    else if (belowmouse()) flags |= FL_HIGHLIGHT;
+  }
+  box()->inset(sx, sy, sw, sh);
+  Fl_Slider::draw(sx, sy, sw, sh, flags);
 }
 
 int Fl_Value_Slider::handle(int event) {
@@ -99,5 +105,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.37 2002/01/23 08:46:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.5 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,10 +134,10 @@ Fl_Frame_Box::Fl_Frame_Box(const char* n, const char* s, const Fl_Frame_Box* d)
   dx_ = dy_ = i;
 }
 
-const Fl_Frame_Box fl_down_box("down", "2WWMMPPAA", &fl_up_box);
+const Fl_Frame_Box fl_down_box("down", "2WWMMPPAA");
 const Fl_Frame_Box fl_up_box("up", "2AAWWMMTT", &fl_down_box);
 
-const Fl_Frame_Box fl_thin_down_box("thin down", "2WWHH", &fl_thin_up_box);
+const Fl_Frame_Box fl_thin_down_box("thin down", "2WWHH");
 const Fl_Frame_Box fl_thin_up_box("thin up", "2HHWW", &fl_thin_down_box);
 
 // in fltk 1.0 these used to point at each other as a "down" version:
@@ -195,5 +195,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.4 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.5 2002/01/23 08:46:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.14 2002/01/23 08:46:02 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -148,10 +148,11 @@ void fl_transformed_vertex(double xf, double yf) {
 void fl_closepath() {
   if (points > loop_start+2) {
     // close the shape by duplicating first point:
+    XPoint& q = point[loop_start];
     // the array always has one extra point so we don't need to check
     XPoint& p = point[points-1];
-    XPoint& q = point[loop_start];
     if (p.x != q.x || p.y != q.y) point[points++] = q;
+    // remember the new loop:
     if (loops >= loop_array_size) {
       loop_array_size = loop_array_size ? 2*loop_array_size : 16;
       loop = (int*)realloc((void*)loop, loop_array_size*sizeof(int));
@@ -171,15 +172,17 @@ void fl_circle(double x, double y, double r) {
   double xt = fl_transform_x(x,y);
   double yt = fl_transform_y(x,y);
   double rt = r * sqrt(fabs(m.a*m.d-m.b*m.c));
-  circle_x = int(rint(xt-rt))+fl_x_;
-  circle_w = int(rint(xt+rt))+fl_x_-circle_x;
-  circle_y = int(rint(yt-rt))+fl_y_;
-  circle_h = int(rint(yt+rt))+fl_y_-circle_y;
+  circle_w = circle_h = int(rint(rt*2));
+  circle_x = int(rint(xt-circle_w*.5))+fl_x_;
+  circle_y = int(rint(yt-circle_h*.5))+fl_y_;
 }
 
-// Add an ellipse to the path. Very lame, only works right for orthogonal
-// transformations.
+// Add an ellipse to the path. On X/Win32 this only works for 90 degree
+// rotations and only one ellipse (or cirlce) per path is supported.
 void fl_ellipse(double x, double y, double w, double h) {
+#if 1
+  // Use X/Win32 drawing functions as best we can. Only works for 90
+  // degree rotations:
   x += w/2;
   y += h/2;
   double cx = fl_transform_x(x,y);
@@ -190,14 +193,17 @@ void fl_ellipse(double x, double y, double w, double h) {
   d1 = fl_transform_dy(w,0);
   d2 = fl_transform_dy(0,h);
   double ry = sqrt(d1*d1+d2*d2)/2;
-  circle_x = int(rint(cx-rx))+fl_x_;
-  circle_w = int(rint(cx+rx))+fl_x_-circle_x;
-  circle_y = int(rint(cy-ry))+fl_y_;
-  circle_h = int(rint(cy+ry))+fl_y_-circle_y;
-// this would work if fl_arc drew nicely:
-// fl_closepath();
-// fl_arc(x, y, w, h, 0, 360);
-// fl_closepath();
+  circle_w = int(rint(rx*2));
+  circle_x = int(rint(cx-circle_w*.5))+fl_x_;
+  circle_h = int(rint(ry*2));
+  circle_y = int(rint(cy-circle_h*.5))+fl_y_;
+#else
+  // This produces the correct image, but not as nice as using circles
+  // produced by the server:
+  fl_closepath();
+  fl_arc(x, y, w, h, 0, 360);
+  fl_closepath();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -216,7 +222,7 @@ void fl_points() {
 void fl_stroke() {
 #ifdef _WIN32
   if (circle_w > 0)
-    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	0,0, 0,0);
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
@@ -250,7 +256,7 @@ void fl_stroke() {
 void fl_fill() {
 #ifdef _WIN32
   if (circle_w > 0)
-    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
     fl_closepath();
@@ -263,8 +269,17 @@ void fl_fill() {
     XFillArc(fl_display, fl_window, fl_gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
   if (loops) fl_closepath();
-  if (points > 2)
+  if (points > 2) {
+    // back-trace the lines between each "disconnected" part so they
+    // are actually connected:
+    int n = points-1;
+    for (int i = loops; --i > 1;) {
+      n -= loop[i];
+      XPoint& q = point[n];
+      fl_vertex(q.x-fl_x_, q.y-fl_y_);
+    }      
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+  }
 #endif
   inline_newpath();
 }
@@ -280,7 +295,7 @@ void fl_fill_stroke(Fl_Color color) {
   fl_colorref = saved;
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
   if (circle_w > 0)
-    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
+    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
     fl_closepath();
@@ -296,8 +311,19 @@ void fl_fill_stroke(Fl_Color color) {
     XFillArc(fl_display, fl_window, fl_gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
   fl_closepath();
-  if (points > 2)
+  if (points > 2) {
+    int saved_points = points;
+    // back-trace the lines between each "disconnected" part so they
+    // are actually connected:
+    int n = saved_points-1;
+    for (int i = loops; --i > 1;) {
+      n -= loop[i];
+      XPoint& q = point[n];
+      fl_vertex(q.x-fl_x_, q.y-fl_y_);
+    }      
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+    points = saved_points; // throw away the extra points
+  }
   Fl_Color saved = fl_color();
   fl_color(color); fl_stroke();
   fl_color(saved);
@@ -305,5 +331,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.14 2002/01/23 08:46:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Float_Input.cxx,v 1.7 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <fltk/Fl_Float_Input.h>
 #include <string.h>
 
-int Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
+bool Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
   for (int n = 0; n < ilen; n++) {
     char ascii = text[n];
     Fl::compose_reset(); // ignore any foreign letters...
@@ -40,11 +40,11 @@ int Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
 	 && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) ||
 	type()==FLOAT && ascii && strchr(".eE+-", ascii))
       continue; // it's ok;
-    return 0;
+    return false;
   }
   return Fl_Input::replace(b,e,text,ilen);
 }
 
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.7 2002/01/23 08:46:00 spitzak Exp $"
 //

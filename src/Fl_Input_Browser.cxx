@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.14 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.15 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -160,6 +160,8 @@ Fl_Input_Browser::handle(int e) {
     over_now = 0;
   if (over_now != over_last) redraw(FL_DAMAGE_HIGHLIGHT);
 
+  if (e == FL_FOCUS) Fl::focus(input);
+
   if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
     && !(type()&NONEDITABLE) && Fl::pushed() != this)
   {
@@ -235,7 +237,7 @@ Fl_Input_Browser::handle(int e) {
 
     case FL_ENTER: case FL_MOVE: return 1;
   }
-  return Fl_Menu_::handle(e);
+  return 0;
 }
 
 void
@@ -258,7 +260,7 @@ Fl_Input_Browser::draw() {
     input->set_damage(0);
   }
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_VALUE|FL_DAMAGE_HIGHLIGHT)) {
-    if (ib == this) f |= (FL_VALUE/*|FL_SELECTED*/);
+    if (ib == this) f |= FL_VALUE;
     if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
     // draw the little mark at the right:
@@ -268,5 +270,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.14 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.15 2002/01/23 08:46:00 spitzak Exp $".
 //

@@ -1,0 +1,107 @@
+<html><head><title>Fl_Numeric_Input</title></head><body bgcolor = white>
+
+<hr break>
+<a name=Fl_Numeric_Input><h2>class Fl_Numeric_Input</h2></a>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre><a href=Fl_Input.html>Fl_Input</A>
+   |
+   +----<b>Fl_Numeric_Input</b>
+           |
+           +----<a href="Fl_Float_Input.html">Fl_Float_Input</a>, <a href="Fl_Int_Input.html">Fl_Int_Input</a>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
+#include &lt;fltk/Fl_Numeric_Input.h&gt;
+</pre></ul>
+
+<h3>Description</h3>
+
+The <tt>Fl_Numeric_Input</tt> class is a subclass of <tt>Fl_Input</tt>
+that redefines the up and down arrow keys to increment and decrement
+the digit of the number to the right of the cursor. This makes it very
+easy to edit numbers.
+
+<p>If you change <a href="Fl_Widget.html#when">when()</a> to
+<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+hits the up/down arrow keys or when the user types the Enter key. This
+may be more useful than the default setting of
+<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+partially-edited numbers are in the field.
+
+<p>This version lets the user type any text into the field. This is
+useful if you run the text through an expression parser so the user
+can type in math expressions. However if you want to limit the input
+to text that can be run through strtol() or strtod() you should use
+the subclasses <a href="Fl_Int_Input.html">Fl_Int_Input</a> or <a
+href="Fl_Float_Input.html">Fl_Float_Input</a>.
+
+<p><i>This user interface design is Copyright (C) 2000-2002 Digital
+Domain.  Patent Pending!  License is ONLY granted to implement this
+algorithim as GPL or LGPL code (closed source may call an LGPL library
+to use it, however).  License to use this technology in closed source
+code may be available:</i></p>
+
+<ul><i>Digital Domain
+<br>Intellectual Property
+<br>300 Rose Avenue, Venice, CA 90291, USA
+<br>(310)314-2800 FAX(310)314-2888</i></ul>
+
+<h3>Methods</h3>
+
+<ul>
+<li><a href="#Fl_Numeric_Input">Fl_Numeric_Input</a></li>
+<li><a href="#~Fl_Numeric_Input">~Fl_Numeric_Input</a></li>
+<li><a href="#handle">handle</a></li>
+<li><a href="#handle_arrow">handle_arrow</a></li>
+<li><a href="#value">value</a></li>
+</ul>
+
+<a name=Fl_Numeric_Input><h4>Fl_Numeric_Input::Fl_Numeric_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+
+Creates a new <TT>Fl_Numeric_Input</TT> widget using the given position, 
+size, and label string. The text starts out blank (you may want to set
+it to "0").
+
+<a name=~Fl_Numeric_Input><h4>virtual Fl_Numeric_Input::~Fl_Numeric_Input()</h4></a>
+
+Destroys the widget and any value associated with it.
+
+<a name="handle"><h4>virtual int handle(int event)</h4></a>
+
+The event handler checks for <tt>Fl_Up</tt> and <tt>Fl_Down</tt>
+keystrokes and calls <a href="#handle_arrow">handle_arrow()</a> with
+them, otherwise it passes the events to the base class.
+
+<a name="handle_arrow"><h4>int handle_arrow(int direction)</h4></a>
+
+Do the work of up-arrow (if direction is greater than zero) or
+down-arrow if direction is less than zero. This protected method is
+available so subclasses can change what keys do this, or invert the
+direction of the arrows.
+
+<a name="value"><h4>void value(double);</h4></a>
+
+Does a %g sprintf of the value and uses the result to set the string
+value. Notice that there is no inverse function, you will have to call
+<tt>strtod(widget->value(),0,0)</tt> yourself.
+
+<a name="value"><h4>void value(int);</h4></a>
+
+Does a %d sprintf of the value and uses the result to set the string
+value. Notice that there is no inverse function, you will have to call
+<tt>strtol(widget->value(),0,0)</tt> yourself.
+
+<a name="value"><h4>void value(const char* s);
+<br>const char* value() const;</h4></a>
+
+Same as the methods from Fl_Input, these let you set or get the string
+value in the widget. You may also want <a
+href="Fl_Input.html#static_value">static_value()</a> if you have a
+string in static memory.
+
+</body></html>

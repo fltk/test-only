@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.7 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.8 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -150,6 +150,9 @@ public:
   bool	value() const		{return (flags_&FL_VALUE)!=0;}
   void	set_value()		{flags_ |= FL_VALUE;}
   void	clear_value()		{flags_ &= ~FL_VALUE;}
+  bool	selected() const	{return (flags_&FL_SELECTED)!=0;}
+  void	set_selected()		{flags_ |= FL_SELECTED;}
+  void	clear_selected()	{flags_ &= ~FL_SELECTED;}
 
   bool	take_focus()		;
   void	throw_focus()		;
@@ -168,12 +171,11 @@ public:
 
   void	make_current() const	;
 
-  Fl_Flags draw_box() const	;
-  Fl_Flags draw_as_button(Fl_Flags,int&,int&,int&,int&) const;
-  Fl_Flags draw_frame() const ;
-  Fl_Flags draw_frame(int,int,int,int) const ;
-  void draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
+  void  draw_frame() const ;
+  void  draw_box() const	;
+  void  draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
     { glyph()(this,t,x,y,w,h,f); }
+  Fl_Flags draw_as_button(Fl_Flags,int&,int&,int&,int&) const;
 
   void  draw_label(int x,int y,int w,int h, Fl_Flags f) const ;
   void  draw_inside_label(int x,int y,int w,int h, Fl_Flags f) const ;
@@ -198,14 +200,6 @@ public:
   unsigned	label_size()		const;
   unsigned	text_size()		const;
   unsigned	leading()		const;
-
-  // These methods calculate colors based on selected / highlighted etc.
-  Fl_Color get_box_color(Fl_Flags f) const ;
-  Fl_Color get_box_color() const { return get_box_color(flags_); }
-  Fl_Color get_label_color(Fl_Flags f) const;
-  Fl_Color get_label_color() const { return get_label_color(flags_); }
-  Fl_Color get_glyph_color(Fl_Flags f) const;
-  Fl_Color get_glyph_color() const { return get_glyph_color(flags_); }
 
   void box(Fl_Boxtype)		;
   void button_box(Fl_Boxtype)	;
@@ -295,5 +289,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.7 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.8 2002/01/23 08:46:00 spitzak Exp $".
 //

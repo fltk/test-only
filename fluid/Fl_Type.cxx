@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.30 2002/01/23 08:46:00 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -206,10 +206,10 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
     widget = new Fl_Item();
   }
   widget->user_data(item);
-  if (item->selected) widget->set_flag(FL_VALUE);
-  else widget->clear_flag(FL_VALUE);
-  if (item->is_parent() && item->open_) widget->set_flag(FL_OPEN);
-  else widget->clear_flag(FL_OPEN);
+  if (item->selected) widget->set_selected();
+  else widget->clear_selected();
+  if (item->is_parent() && item->open_) widget->set_value();
+  else widget->clear_value();
 
   widget->label(item->title());
   widget->w(0);
@@ -220,8 +220,8 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
 
 void Widget_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {
   Fl_Type* item = (Fl_Type*)(w->user_data());
-  item->open_ = (w->flags()&FL_OPEN)!=0;
-  item->new_selected = (w->flags()&FL_VALUE)!=0;
+  item->open_ = w->value();
+  item->new_selected = w->selected();
   if (item->new_selected != item->selected) selection_changed(item);
 }
 
@@ -637,5 +637,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.30 2002/01/23 08:46:00 spitzak Exp $".
 //

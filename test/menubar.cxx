@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.35 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: menubar.cxx,v 1.36 2002/01/23 08:46:02 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -99,7 +99,7 @@ Fl_Menu_Item menutable[] = {
     {0},
   {"&Edit",0,0,0,FL_SUBMENU},
     {"Undo",	FL_ALT+'z',	0},
-    {"Redo",	FL_ALT+'r',	0, 0, FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
+    {"Redo",	FL_ALT+'r',	0, 0, FL_MENU_DIVIDER},
     {"Cut",	FL_ALT+'x',	0},
     {"Copy",	FL_ALT+'c',	0},
     {"Paste",	FL_ALT+'v',	0},
@@ -110,30 +110,30 @@ Fl_Menu_Item menutable[] = {
     {"Size",	0,	0},
     {0},
   {"&Checkbox",0,0,0,FL_SUBMENU},
-    {"&Alpha",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_VALUE|FL_MENU_STAYS_UP},
-    {"&Beta",	0,	0, (void *)2, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"&Gamma",	0,	0, (void *)3, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"&Delta",	0,	0, (void *)4, FL_MENU_TOGGLE|FL_MENU_VALUE|FL_MENU_STAYS_UP},
-    {"&Epsilon",0,	0, (void *)5, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"&Pi",	0,	0, (void *)6, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"&Mu",	0,	0, (void *)7, FL_MENU_TOGGLE|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
-    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"Black",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
-    {"00",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
-    {"000",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"&Alpha",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_VALUE},
+    {"&Beta",	0,	0, (void *)2, FL_MENU_TOGGLE},
+    {"&Gamma",	0,	0, (void *)3, FL_MENU_TOGGLE},
+    {"&Delta",	0,	0, (void *)4, FL_MENU_TOGGLE|FL_MENU_VALUE},
+    {"&Epsilon",0,	0, (void *)5, FL_MENU_TOGGLE},
+    {"&Pi",	0,	0, (void *)6, FL_MENU_TOGGLE},
+    {"&Mu",	0,	0, (void *)7, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
+    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE},
+    {"Black",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
+    {"00",	0,	0, (void *)1, FL_MENU_TOGGLE},
+    {"000",	0,	0, (void *)1, FL_MENU_TOGGLE},
     {0},
   {"&Radio",0,0,0,FL_SUBMENU},
-    {"&Alpha",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"&Beta",	0,	0, (void *)2, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"&Gamma",	0,	0, (void *)3, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"&Delta",	0,	0, (void *)4, FL_MENU_RADIO|FL_MENU_VALUE|FL_MENU_STAYS_UP},
-    {"&Epsilon",0,	0, (void *)5, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"&Pi",	0,	0, (void *)6, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"&Mu",	0,	0, (void *)7, FL_MENU_RADIO|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
-    {"Red",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"Black",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
-    {"00",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
-    {"000",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Alpha",	0,	0, (void *)1, FL_MENU_RADIO},
+    {"&Beta",	0,	0, (void *)2, FL_MENU_RADIO},
+    {"&Gamma",	0,	0, (void *)3, FL_MENU_RADIO},
+    {"&Delta",	0,	0, (void *)4, FL_MENU_RADIO|FL_MENU_VALUE},
+    {"&Epsilon",0,	0, (void *)5, FL_MENU_RADIO},
+    {"&Pi",	0,	0, (void *)6, FL_MENU_RADIO},
+    {"&Mu",	0,	0, (void *)7, FL_MENU_RADIO|FL_MENU_DIVIDER},
+    {"Red",	0,	0, (void *)1, FL_MENU_RADIO},
+    {"Black",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_DIVIDER},
+    {"00",	0,	0, (void *)1, FL_MENU_RADIO},
+    {"000",	0,	0, (void *)1, FL_MENU_RADIO},
     {0},
   {"&Font",0,0,0,FL_SUBMENU},
     {"Normal",	0, 0},
@@ -158,7 +158,7 @@ Fl_Menu_Item menutable[] = {
     {"A very long menu item"},
     {0},
   {"&Huge", 0, 0, (void*)hugemenu, FL_SUBMENU_POINTER},
-  {"button",0, 0, 0, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+  {"button",0, 0, 0, FL_MENU_TOGGLE},
   {0}
 };
 
@@ -234,5 +234,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.35 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: menubar.cxx,v 1.36 2002/01/23 08:46:02 spitzak Exp $".
 //
