@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.8 1999/08/26 20:41:27 carl Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,8 @@ ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
   int Bpr = (bpp*w+7)/8;			//: bytes per row
   int pad = Bpr&1, w1 = (w+7)/8, shr = ((w-1)&7)+1;
   if (bpp==4) shr = (shr+1)/2;
-  uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray, *src = bitmap;
+  uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray;
+  const uchar* src = bitmap;
   for (int i=0; i<h; i++) {
     //: this is slooow, but we do it only once per pixmap
     for (int j=w1; j>0; j--) {
@@ -89,5 +90,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.8 1999/08/26 20:41:27 carl Exp $".
 //
