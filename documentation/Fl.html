@@ -107,7 +107,7 @@ the <a href="utility.html">Utility</a> appendix.
 
 <a name=startup><h2>Startup functions</h2></a>
 
-<a name="version"><h4>double Fl::version()</h4></a>
+<a name="version"><h4>float Fl::version()</h4></a>
 
 Returns the version number of fltk. This can be compared to the value
 of the <tt>FL_VERSION</tt> macro to see if the shared library of fltk your
@@ -319,7 +319,7 @@ Same as <a href="#wait"><tt>Fl::wait(infinity)</tt></a>.  Call this repeatedly t
 your program.  You can also check what happened each time after this
 returns, which is quite useful for managing program state.
 
-<h4>int Fl::wait(double time)</h4>
+<h4>int Fl::wait(float time)</h4>
 
 Waits until "something happens", or the given time interval passes.
 <i>It can return much sooner than the time if something happens.</i>

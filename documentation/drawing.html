@@ -72,14 +72,23 @@ if you want accurately scaled drawings.
 Save and restore the current transformation.  The maximum depth of the 
 stack is 10.
 
-<h4><a name=fl_scale>void fl_scale(float x, float y)
-<br>void fl_scale(float x)</a>
-<br><a name=fl_translate>void fl_translate(float x, float y)</a>
-<br><a name=fl_rotate>void fl_rotate(float d)</a>
+<h4><a name=fl_scale>void fl_scale(float factor_x, float factor_y)
+<br>void fl_scale(float factor)</a>
+<br><a name=fl_translate>void fl_translate(float dx, float dy)</a>
+<br>void fl_translate(int dx, int dy)
+<br><a name=fl_rotate>void fl_rotate(float degrees_ccw)</a>
 <br><a name=fl_mult_matrix>void fl_mult_matrix(float a, float b, float c, float d, float x, float y)</a></h4>
 
 Concatenate another transformation onto the current one.  The rotation 
 angle is in degrees (not radians) and is counter-clockwise. 
+
+<p>fl_translate(int,int) is provided because it is much faster than
+the floating-point version. However C++ will not "resolve" which one
+you want to call if you try passing doubles as arguments. To get it to
+compile, make sure you cast the arguments to float (add 'f' after
+floating-point constants). Use the 'f' versions (ie sinf(), cosf(),
+etc) of the math functions from &lt;fltk/math.h&gt; to produce floats
+and get maximum calculation speed.
 
 <h4><a name=fl_load_identity>void fl_load_identity()</a>
 
@@ -87,7 +96,7 @@ Replace the current transform with the identity transform, which puts
 0,0 in the top-left corner of the window and each unit is 1 pixel in
 size.
 
-<h4><a name=fl_transform>void fl_transform(double& x, double& y)</a></h4>
+<h4><a name=fl_transform>void fl_transform(float& x, float& y)</a></h4>
 
 Replace x and y with the transformed coordinates.
 
@@ -96,7 +105,7 @@ Replace x and y with the transformed coordinates.
 Replace x and y with the transformed coordinates, rounded to the
 nearest integer.
 
-<h4><a name=fl_transform_distance>void fl_transform_distance(double& x, double& y)</a></h4>
+<h4><a name=fl_transform_distance>void fl_transform_distance(float& x, float& y)</a></h4>
 
 Replace x and y with the tranformed coordinates, ignoring
 translation. This transforms a vector which is measuring a distance
@@ -237,19 +246,26 @@ OpenGL when greater accuracy and/or performance is required.
 Clear the current "path". This is normally done by fl_fill() or any
 other drawing command.
 
-<a name=fl_vertex><h4>void fl_vertex(double x, double y)
+<a name=fl_vertex><h4>void fl_vertex(float x, float y)
 <br>void fl_vertex(int x, int y)</h4></a>
 
 Add a single vertex to the current path. (If you are familiar with
 PostScript, this does a "moveto" if the path is clear or fl_closepath
 was done last, otherwise it does a "lineto").
 
+<p>fl_vertex(int,int) is provided because it is much faster than
+the floating-point version. However C++ will not "resolve" which one
+you want to call if you try passing doubles as arguments. To get it to
+compile, make sure you cast the arguments to float (add 'f' after
+floating-point constants). Use the 'f' versions (ie sinf(), cosf(),
+etc) of the math functions from &lt;fltk/math.h&gt; to produce floats
+and get maximum calculation speed.
+
 <a name=fl_vertices><h4>void fl_vertices(int n, const float v[][2]);
 <br>void fl_vertices(int n, const int v[][2]);</h4></a>
 
 Add a whole set of vertices to the current path. This is much faster
-than calling fl_vertex once for each point. Notice that the array is
-float rather than double.
+than calling fl_vertex once for each point.
 
 <a name=fl_transformed_vertices><h4>void fl_transformed_vertices(int n, const float v[][2]);</h4></a>
 
@@ -344,7 +360,7 @@ Color a rectangle that exactly fills the given bounding box.
 
 Draw a straight line between the two points.
 
-<a name=fl_pie><h4>void fl_pie(int x, int y, int w, int h, double start, double end, int what=FL_PIE);</h4></a>
+<a name=fl_pie><h4>void fl_pie(int x, int y, int w, int h, float start, float end, int what=FL_PIE);</h4></a>
 
 These functions match the rather limited circle drawing code provided
 by X and WIN32.  The advantage over using <A
@@ -369,7 +385,7 @@ passed as a font. For most uses one of the built-in constant fonts
 like <tt>FL_HELVETICA</tt> can be used.
 
 <A name=fl_font><h4>
-void fl_font(<a href=Fl_Font.html>Fl_Font</a>, double size)</h4></a>
+void fl_font(<a href=Fl_Font.html>Fl_Font</a>, float size)</h4></a>
 
 Set the current font and font scaling so the size is <i>size</i>
 pixels. The size is unaffected by the current transformation matrix
@@ -383,12 +399,12 @@ following code:
 
 <pre>
 const Fl_Screen_Info& info = <a href="Fl.html#info">Fl::info()</a>;
-double pixels_per_point = info.height/(info.height_mm*(72/25.4));
-double font_pixel_size = font_point_size*pixels_per_point;
+float pixels_per_point = info.height/(info.height_mm*(72/25.4));
+float font_pixel_size = font_point_size*pixels_per_point;
 </pre>
 
-<A name=fl_font_named><h4>void fl_font(const char* name, double size);<br>
-void fl_font(const char* name, int attributes, double size);</h4></a>
+<A name=fl_font_named><h4>void fl_font(const char* name, float size);<br>
+void fl_font(const char* name, int attributes, float size);</h4></a>
 
 Set the current font by name. Exactly what names work depend on your
 system, it is best to use <a
@@ -423,7 +439,7 @@ will be removed.
 
 Returns the current font.
 
-<a name=fl_size><h4>double fl_size()</h4></a>
+<a name=fl_size><h4>float fl_size()</h4></a>
 
 Returns the current font size.
 
@@ -431,34 +447,34 @@ Returns the current font size.
 
 Returns the current encoding.
 
-<a name=fl_height><h4>double fl_height()</h4></a>
+<a name=fl_height><h4>float fl_height()</h4></a>
 
 Returns the vertical size of the font according to the system.  I
 recommended that you use <tt>fl_size()</tt> instead for portability
 and because many X fonts return erroneous values for this. Notice that
 the dimension is in transformed coordinates.
 
-<a name=fl_descent><h4>double fl_descent()</h4></a>
+<a name=fl_descent><h4>float fl_descent()</h4></a>
 
 Recommended distance above the bottom of a <tt>fl_height()</tt> tall 
 box to draw the text at so it looks centered vertically in that box. 
 Notice that the dimension is in transformed coordinates.
 
-<a name=fl_width><h4>double fl_width(const char*)
-<br>double fl_width(const char*, int n)</h4></a>
+<a name=fl_width><h4>float fl_width(const char*)
+<br>float fl_width(const char*, int n)</h4></a>
 
 Return the pixel width of a nul-terminated string, or a string of
 length <tt>n</tt> bytes.  Notice that the dimension is in transformed
 coordinates.
 
-<a name=fl_draw><h4>void fl_draw(const char*, double x, double y)
-<br>void fl_draw(const char*, int n, double x, double y)</h4></a>
+<a name=fl_draw><h4>void fl_draw(const char*, float x, float y)
+<br>void fl_draw(const char*, int n, float x, float y)</h4></a>
 
 Draw a nul-terminated string or an array of <i>n</i> bytes
 starting at the given location. 
 
 <a name=fl_transformed_draw><h4>void fl_transformed_draw(const char*,
-int n, double x, double y)</h4></a>
+int n, float x, float y)</h4></a>
 
 Draw an array of <i>n</i> bytes starting at the given location,
 which is given in actual device units, such as those returned by <a
