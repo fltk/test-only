@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.10 1999/04/07 18:45:57 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,15 +41,13 @@ static uchar active_ramp[24] = {
   FL_GRAY_RAMP+12,FL_GRAY_RAMP+13,FL_GRAY_RAMP+14,FL_GRAY_RAMP+15,
   FL_GRAY_RAMP+16,FL_GRAY_RAMP+17,FL_GRAY_RAMP+18,FL_GRAY_RAMP+19,
   FL_GRAY_RAMP+20,FL_GRAY_RAMP+21,FL_GRAY_RAMP+22,FL_GRAY_RAMP+23};
-static uchar inactive_ramp[24] = {
-  43, 43, 44, 44,
-  44, 45, 45, 46,
-  46, 46, 47, 47,
-  48, 48, 48, 49,
-  49, 49, 50, 50,
-  51, 51, 52, 52};
+static uchar inactive_ramp[24];
 static int draw_it_active = 1;
-uchar *fl_gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
+uchar *fl_gray_ramp() {
+  if (draw_it_active) return active_ramp-'A';
+  for (int i = 0; i < 24; i++) inactive_ramp[i] = inactive((Fl_Color)active_ramp[i]);
+  return inactive_ramp-'A';
+}
 
 void fl_frame(const char* s, int x, int y, int w, int h) {
   uchar *g = fl_gray_ramp();
@@ -116,7 +114,7 @@ void fl_thin_up_box(int x, int y, int w, int h, Fl_Color c) {
 }
 
 void fl_up_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("AAAAWUJJUTNN",x,y,w,h);
+  fl_frame("AAAAWUHHUSNN",x,y,w,h);
 }
 
 void fl_up_box(int x, int y, int w, int h, Fl_Color c) {
@@ -125,7 +123,7 @@ void fl_up_box(int x, int y, int w, int h, Fl_Color c) {
 }
 
 void fl_down_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("NNTUJJUWAAAA",x,y,w,h);
+  fl_frame("NNSUHHUWAAAA",x,y,w,h);
 }
 
 void fl_down_box(int x, int y, int w, int h, Fl_Color c) {
@@ -134,31 +132,31 @@ void fl_down_box(int x, int y, int w, int h, Fl_Color c) {
 }
 
 void fl_medium_down_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("LLWWAASS",x,y,w,h);
+  fl_frame("NNWWAASS",x,y,w,h);
 }
 
 void fl_medium_up_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("WWAASSLL",x,y,w,h);
+  fl_frame("WWAASSNN",x,y,w,h);
 }
 
 void fl_medium_up_frame2(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("SSAAWWLL",x,y,w,h);
+  fl_frame("SSAAWWNN",x,y,w,h);
 }
 
 void fl_motif_down_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("KKVVKKVVKKVV",x,y,w,h);
+  fl_frame("HHUUHHUUHHUU",x,y,w,h);
 }
 
 void fl_motif_up_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("VVKKVVKKVVKK",x,y,w,h);
+  fl_frame("UUHHUUHHUUHH",x,y,w,h);
 }
 
 void fl_thin_motif_down_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("KKVVKKVV",x,y,w,h);
+  fl_frame("HHUUHHUU",x,y,w,h);
 }
 
 void fl_thin_motif_up_frame(int x, int y, int w, int h, Fl_Color) {
-  fl_frame("VVKKVVKK",x,y,w,h);
+  fl_frame("UUHHUUHH",x,y,w,h);
 }
 
 void fl_medium_up_box(int x, int y, int w, int h, Fl_Color c) {
@@ -342,5 +340,5 @@ const {
 }
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.10 1999/04/07 18:45:57 carl Exp $".
 //

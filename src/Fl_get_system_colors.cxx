@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.6 1999/01/13 15:57:38 mike Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.7 1999/04/07 18:45:57 carl Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/math.h>
+#include <config.h>
 
 void Fl::background(uchar r, uchar g, uchar b) {
   // replace the gray ramp so that FL_GRAY is this color
@@ -58,12 +59,11 @@ const char *fl_fg;
 const char *fl_bg;
 const char *fl_bg2;
 
-#ifdef WIN32
-
 #include <stdio.h>
 // simulation of XParseColor:
 int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
   if (*p == '#') p++;
+  if (!strncmp(p, "0x", 2)) p+= 2;
   int n = strlen(p);
   int m = n/3;
   const char *pattern = 0;
@@ -78,6 +78,8 @@ int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
   r = R; g = G; b = B;
   return 1;
 }
+
+#ifdef WIN32
 
 static void
 getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
@@ -127,5 +129,5 @@ void Fl::get_system_colors()
 #endif
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.6 1999/01/13 15:57:38 mike Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.7 1999/04/07 18:45:57 carl Exp $".
 //

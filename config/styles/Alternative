@@ -1,12 +1,12 @@
 description = Same as Alternative, but commented
 author = Carl Thompson (clip@home.net)
-version = 7
+version = 8
 
 [global]
-  background red = 192
-  background green = 192
-  background blue = 192
-  widget style = SGI
+  widget style = Motif
+
+  [global/color]
+    background = c0c0c0
 
 [menu item]
   label type = 0

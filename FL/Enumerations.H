@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.23 1999/04/05 06:38:01 carl Exp $"
+// "$Id: Enumerations.H,v 1.24 1999/04/07 18:45:52 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -299,6 +299,7 @@ enum Fl_Color {	// standard colors
 
 FL_EXPORT Fl_Color inactive(Fl_Color c);
 FL_EXPORT Fl_Color contrast(Fl_Color fg, Fl_Color bg);
+FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 FL_EXPORT Fl_Color fl_color_average(Fl_Color c1, Fl_Color c2, float weight);
 inline Fl_Color fl_lighter(Fl_Color c) { return fl_color_average(c, FL_WHITE, .67f); }
 inline Fl_Color fl_darker(Fl_Color c) { return fl_color_average(c, FL_BLACK, .67f); }
@@ -378,5 +379,5 @@ enum Fl_Widget_Style {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.23 1999/04/05 06:38:01 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.24 1999/04/07 18:45:52 carl Exp $".
 //

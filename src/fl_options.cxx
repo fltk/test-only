@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.8 1999/04/05 06:38:06 carl Exp $"
+// "$Id: fl_options.cxx,v 1.9 1999/04/07 18:45:57 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -135,7 +135,7 @@ void Fl::load_attributes(const char *section, uchar array[], Attribute *attrib) 
 
 // get the string value of a key from the global or user's config file
 int Fl::find(const char *key, char *value, int value_length, int sf) {
-  int  r;
+  int  r1 = CONF_ERR_FILE, r2;
   char cf[PATH_MAX];
 
   if (sf && !Fl::style()) return CONF_ERR_ARGUMENT;
@@ -148,8 +148,8 @@ int Fl::find(const char *key, char *value, int value_length, int sf) {
   else
     snprintf(cf, sizeof(cf), "%s/.fltk/config", cptr ? cptr : "");
 
-  r = getconf(cf, key, value, value_length);
-  if (!r) return r;
+  r1 = getconf(cf, key, value, value_length);
+  if (!r1) return r1;
 
   if (sf)
     snprintf(cf, sizeof(cf), "/etc/fltk/styles/%s", Fl::style());
@@ -163,8 +163,11 @@ int Fl::find(const char *key, char *value, int value_length, int sf) {
   else
     snprintf(cf, sizeof(cf), "%s\\fltk\\config", windir);
 #endif
-  r = getconf(cf, key, value, value_length);
-  return r;
+  r2 = getconf(cf, key, value, value_length);
+  if (!r2) return r2;
+  if (r1 == CONF_ERR_FILE && r2 == CONF_ERR_FILE) return CONF_ERR_FILE;
+  if (r1 != CONF_ERR_FILE) return r1;
+  return r2;
 }
 
 // get the uchar value of a key from the global or user's config file
@@ -244,5 +247,5 @@ int Fl::find_boolean(const char *key, int &bvalue, int sf)
 */
 
 //
-// End of "$Id: fl_options.cxx,v 1.8 1999/04/05 06:38:06 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.9 1999/04/07 18:45:57 carl Exp $".
 //

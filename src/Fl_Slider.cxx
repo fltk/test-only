@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.13 1999/04/05 06:38:06 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.14 1999/04/07 18:45:56 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -196,6 +196,7 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
     (Fl::belowmouse() == this && color2() == DEFAULT_STYLE->widget(COLOR2))
     ? fly_color() : color2();
   col = active_r() ? col : inactive(col);
+
   if (!box1) {box1 = (Fl_Boxtype)(box()&-2); if (!box1) box1 = FL_MEDIUM_UP_BOX;}
   Fl_Color col3 = // Used for "nice" sliders
     (Fl::belowmouse() == this && color3() == DEFAULT_STYLE->widget(COLOR3))
@@ -331,5 +332,5 @@ Fl_Color Fl_Slider::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.13 1999/04/05 06:38:06 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.14 1999/04/07 18:45:56 carl Exp $".
 //

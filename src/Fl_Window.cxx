@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.18 1999/04/07 01:13:42 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.19 1999/04/07 18:45:56 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -54,20 +54,45 @@ void Fl_Window::loadstyle() const {
   if (!Fl::s_background) {
     Fl::s_background = 1;
 
+    char color[32];
     uchar r = 0xc0, g=0xc0, b=0xc0;
 
-    int res = Fl::find("global/background red", r, 1);
+    int res = Fl::find("global/color/background", color, sizeof(color), 1);
     if (res == CONF_ERR_FILE) { Fl::load_styles(0); return; }
-    Fl::find("global/background green", g, 1);
-    Fl::find("global/background blue", b, 1);
+    if (!res) {
+      fl_parse_color(color, r, g, b);
+      Fl::background(r, g, b);
+    }
 
-    if (!res) Fl::background(r, g, b);
+    static struct { char* key; Fl_Color col; } colors[] = {
+      { "DARK1", FL_DARK1 },
+      { "DARK2", FL_DARK2 },
+      { "DARK3", FL_DARK3 },
+      { "LIGHT1", FL_LIGHT1 },
+      { "LIGHT2", FL_LIGHT2 },
+      { "LIGHT3", FL_LIGHT3 },
+      { "FREE1", FL_FREE_COLOR },
+      { "FREE2", (Fl_Color)(FL_FREE_COLOR+1) },
+      { "FREE3", (Fl_Color)(FL_FREE_COLOR+2) },
+      { "FREE4", (Fl_Color)(FL_FREE_COLOR+3) },
+      { 0 }
+    };
 
     char s[32];
+
+    for (int i = 0; colors[i].key; i++) {
+      sprintf(s, "global/color/%s", colors[i].key);
+      int res = Fl::find(s, color, sizeof(color), 1);
+      if (!res) {
+        fl_parse_color(color, r, g, b);
+        Fl::set_color(colors[i].col, r, g, b);
+      }
+    }
+
     if (!Fl::find("global/widget style", s, sizeof(s), 1)) {
       if (!strcasecmp(s, "sgi")) Fl::widget_style(FL_SGI_STYLE);
-      else if(!strcasecmp(s, "motif")) Fl::widget_style(FL_MOTIF_STYLE);
-      else Fl::widget_style(FL_WINDOWS_STYLE);
+      else if(!strcasecmp(s, "windows")) Fl::widget_style(FL_WINDOWS_STYLE);
+      else Fl::widget_style(FL_MOTIF_STYLE);
     }
   }
 
@@ -164,5 +189,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.18 1999/04/07 01:13:42 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.19 1999/04/07 18:45:56 carl Exp $".
 //
