@@ -1,9 +1,6 @@
-//
 // "$Id$"
 //
-// The fltk drawing library
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_draw_h
 #define fltk_draw_h
@@ -29,6 +25,7 @@
 #include "Flags.h" // for alignment values
 #include "Color.h"
 #include "Rectangle.h"
+#include "PixelType.h"
 
 namespace fltk {
 
@@ -161,29 +158,17 @@ inline void column_widths(const int* i) {column_widths_ = i;}
 
 /*! \addtogroup images
   \{ */
-enum PixelType {
-  // Commented out ones are nyi and will only be done as people need them
-  // Low 3 bits indicate number of bytes to use!
-  LUMINANCE= 1, /*!< 1 byte, 0xff = white, 0 = black */
-  //LUMA= 2, /*!< 2 bytes: brightness, alpha. Unpremultiplied. */
-  RGB	= 3, /*!< 3 bytes: r,g,b */
-  RGBA	= 4  /*!< 4 bytes: r,g,b,a. Unpremultiplied. */
-  //MASK= 5, /*!< 1 byte alpha, fltk::getcolor() is used to fill it. */
-  //ALUM= 6,/*!< 2 bytes: alpha, brightness. Unpremultiplied. */
-  //BGR	= 7, /*!< 3 bytes: b,g,r */
-  //ABGR= 8  /*!< 4 bytes: a,g,b,r. Unpremultiplied */
-};
-FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta, int ldelta);
-FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta);
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta, int ldelta);
 
 typedef const uchar* (*DrawImageCallback)(void* data, int x, int y, int w, uchar* buffer);
-FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&, int delta);
 FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&);
+FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&, int delta);
 
-FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta, int ldelta);
-FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta);
 FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta, int ldelta);
 /*! \} */
 
 // depreciated:

@@ -266,9 +266,10 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   }
   Item::clear_style();
 
-  W += hotKeysW + box->dw();
+  Rectangle r(W,H); box->inset(r);
+  W += hotKeysW + (W-r.w());
   if (W > widget->w()) widget->w(W);
-  widget->h(H+box->dh());
+  widget->h(H + (H-r.h()));
 }
 
 /*! Draw the menu items inside the widget.
@@ -494,7 +495,9 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     return;
   }
 
-  const int dh = menubox(this)->dh();
+  Rectangle temprect(100,100);
+  menubox(this)->inset(temprect);
+  const int dh = 100-temprect.h();
   int Wtitle = 0;
   int Htitle = 0;
 

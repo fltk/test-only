@@ -51,9 +51,11 @@ public:
     Color bg, fg; style->boxcolors(f, bg, fg);
     rbox(r, bg, fg);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {1,1,2,2,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-2);
+    r.h(r.h()-2);
   }
   RoundedBox(const char* n) : Box(n) {}
 };
@@ -75,9 +77,11 @@ public:
     r.move(-3,-3);
     roundedBox.draw(r, style, f);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {1,1,5,5,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-5);
+    r.h(r.h()-5);
   }
   RShadowBox(const char* n) : Box(n) {}
 };
@@ -93,9 +97,11 @@ public:
     Color bg, fg; style->boxcolors(f, bg, fg);
     rbox(r, bg, bg);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {7,7,14,14,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+7);
+    r.y(r.y()+7);
+    r.w(r.w()-14);
+    r.h(r.h()-14);
   }
   RFlatBox(const char* n) : Box(n) {}
 };

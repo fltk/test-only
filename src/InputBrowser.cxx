@@ -213,8 +213,8 @@ InputBrowser::handle(int e) {
       browser->callback(ComboBrowser_cb);
       mw->end();
       browser->layout(); // (WAS: it is ok to do this)
-      int W = browser->width()+browser->scrollbar.w()+browser->box()->dw();
-      int H = browser->height()+browser->box()->dh();
+      int W = browser->width()+browser->scrollbar.w();
+      int H = browser->height();
       if (W > maxw_) W = maxw_;
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;

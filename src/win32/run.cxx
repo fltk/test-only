@@ -2252,7 +2252,7 @@ void Window::flush() {
 
     // Clip the copying of the pixmap to the damage area,
     // this makes it faster, especially if the damage area is small:
-    if (!eraseoverlay) {
+    if (!damage && !eraseoverlay) {
       clip_region(i->region); i->region = 0;
     }
 

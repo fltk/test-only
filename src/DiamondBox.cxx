@@ -37,11 +37,14 @@
 using namespace fltk;
 
 // Diamond with an edge pattern like FrameBox:
-class DiamondBox : public FrameBox {
+class DiamondBox : public Box {
 public:
+  const char* data;
+  const DiamondBox* down;
   void _draw(const Rectangle& r, const Style*, Flags=0) const;
-  DiamondBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) {boxinfo_.fills_rectangle = 0;}
+  void inset(Rectangle& r) const {r.inset(5);}
+  DiamondBox(const char* n, const char* s, const DiamondBox* d=0)
+    : Box(n), data(s), down(d) {}
 };
 
 extern void fl_to_inactive(const char* s, char* to);
@@ -52,7 +55,7 @@ void DiamondBox::_draw(const Rectangle& r, const Style* style, Flags flags) cons
   int x = r.x(); int w = r.w(); if (w&1) w--; else {w -= 2; x++;}
   int y1 = r.center_y();
   int y = r.y(); int h = r.h(); if (h&1) h--; else {h -= 2; y++;}
-  const char* s = (flags & VALUE) ? down->data() : data();
+  const char* s = (flags & VALUE) ? down->data : data;
   char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;

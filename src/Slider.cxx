@@ -475,12 +475,14 @@ int Slider::handle(int event, const Rectangle& r) {
   case DRAG: {
     // figure out the space the slider moves in and where the event is:
     int w,mx;
+    Rectangle r1(r);
+    box()->inset(r1);
     if (horizontal()) {
-      w = r.w()-box()->dw();
-      mx = event_x()-r.x()-box()->dx();
+      w = r1.w();
+      mx = event_x()-r1.x();
     } else {
-      w = r.h()-box()->dh();
-      mx = event_y()-r.y()-box()->dy();
+      w = r1.h();
+      mx = event_y()-r1.y();
     }
     if (w <= slider_size_) return 1;
     static int offcenter;

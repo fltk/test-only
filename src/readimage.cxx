@@ -21,19 +21,20 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/*! \fn uchar *fltk::readimage(uchar* buffer, PixelType type, const Rectangle&rectangle);
+#include <config.h>
+#include <fltk/x.h>
+#include <fltk/draw.h>
 
-    Reads a 2-D image off the current drawing destination. The
+/** Reads a 2-D image off the current drawing destination. The
     resulting data can be passed to fltk::drawimage() or the 8-bit
     pixels examined or stored by your program.
 
-    The return value is a pointer to the resulting pixel data, or NULL
-    if there is some problem (such as an inability to read from the
-    current output surface).
+    The return value is either \a p or NULL if there is some problem
+    (such as an inability to read from the current output surface, or
+    if the rectangle is empty).
 
-    \a buffer points to a buffer to use (and thus the return value on
-    success), or is NULL to indicate that readimage() should malloc
-    the correct amount of memory itself and return that.
+    \a p points to the location to store the first byte of the
+    upper-left pixel of the image.
 
     \a type can be fltk::RGB or fltk::RGBA (possibly other types will
     be supported in the future).
@@ -44,13 +45,40 @@
     scaled is undefined. If the rectangle extends outside the current
     drawing surface, or into areas obscured by overlapping windows, the
     result in those areas is undefined.
+*/
+uchar* fltk::readimage(uchar* p, PixelType type, const Rectangle& r) {
+  return fltk::readimage(p, type, r, type&3);
+}
 
+/** Same except \a delta is how much to add to a pointer into the
+    buffer to go to the next pixel. This can be used to skip over
+    extra data for each pixel, for instance to read RGB data into
+    a 4-byte/pixel buffer. The skipped pixels are left with undefined
+    values, do not assumme they are unchanged!
+*/
+uchar* fltk::readimage(uchar* p, PixelType type, const Rectangle& r, int delta) {
+  if (r.empty()) return 0;
+  return fltk::readimage(p, type, r, delta, delta*r.w());
+}
+
+/** \fn uchar *fltk::readimage(uchar* p, PixelType type, const Rectangle&rectangle, int delta, int linedelta);
+
+    \a p points to the location to store the first byte of the
+    upper-left pixel of the image. The caller must allocate this,
+    it cannot be NULL.
+
+    \a delta is how much to add to a pointer to advance from one pixel
+    to the one to it's right. Any bytes skipped over are left with
+    undefined values in them.
+
+    \a linedelta is how much to add to a pointer to advance from one
+    pixel to the one below it. Any bytes skipped over are left with
+    undefined values in them.
+
+    Negative values for \a delta and \a linedelta can be used to
+    produce mirror images or 90 degree rotations of the data.
 */
 
-
-#include <config.h>
-#include <fltk/x.h>
-#include <fltk/draw.h>
 #if USE_X11
 # include "x11/readimage.cxx"
 #elif defined(_WIN32)
@@ -60,6 +88,6 @@
 #else
 
 // Function returns null to indicate failure on unsupported platforms:
-uchar *fltk::readimage(uchar *, PixelType, const Rectangle&) {return 0;}
+uchar* fltk::readimage(uchar *, PixelType, const Rectangle&, int,int) {return 0;}
 
 #endif

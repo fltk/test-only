@@ -494,7 +494,7 @@ int Input::line_end(int i) const {
     int j = i;
     while (j > 0 && index(j-1) != '\n') j--;
     // now measure lines until we get past i, end of that line is real eol:
-    int wordwrap = w()-box()->dw()-6;
+    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -517,7 +517,7 @@ int Input::line_start(int i) const {
   while (j > 0 && index(j-1) != '\n') j--;
   if (type() >= WORDWRAP) {
     // now measure lines until we get past i, start of that line is real eol:
-    int wordwrap = w()-box()->dw()-6;
+    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -636,7 +636,12 @@ void Input::position(int new_position, int new_mark) {
 void Input::up_down_position(int i, bool keepmark) {
   // cursor must already be at start of line!
   setfont();
-  int wordwrap = type() > MULTILINE ? w()-box()->dw()-6 : 0;
+  int wordwrap;
+  if (type() > MULTILINE) {
+    Rectangle r(w(),h()); box()->inset(r); wordwrap = r.w()-6;
+  } else {
+    wordwrap = 0;
+  }
   char buf[MAXBUF];
   const char* p = value()+i;
   const char* e = expand(p, buf, wordwrap);

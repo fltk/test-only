@@ -187,10 +187,8 @@ void FlatBox::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) c
   setcolor(bg);
   fillrect(r);
 }
-const BoxInfo* FlatBox::boxinfo() const {
-  static const BoxInfo b = {0,0,0,0,3};
-  return &b;
-}
+bool FlatBox::fills_rectangle() const {return true;}
+bool FlatBox::is_frame() const {return true;}
 FlatBox::FlatBox(const char* name) : Box(name) {}
 static FlatBox flatBox("flat");
 
@@ -277,13 +275,20 @@ FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
   : Box(n), data_(s), down(d ? d : this)
 {
   int i = strlen(s)/2;
-  boxinfo_.dw = boxinfo_.dh = i;
+  dw = dh = i;
   i /= 2;
-  boxinfo_.dx = boxinfo_.dy = i;
-  boxinfo_.fills_rectangle = 3;
+  dx = dy = i;
 }
 
-const BoxInfo* FrameBox::boxinfo() const {return &boxinfo_;}
+void FrameBox::inset(Rectangle& r) const {
+  r.x(r.x()+dx);
+  r.y(r.y()+dy);
+  r.w(r.w()-dw);
+  r.h(r.h()-dh);
+}
+
+bool FrameBox::fills_rectangle() const {return true;}
+bool FrameBox::is_frame() const {return true;}
 
 static FrameBox downBox("down", "WWHHPPAA");
 /*! \ingroup boxes
@@ -338,9 +343,11 @@ public:
     setcolor(style->textcolor());
     strokerect(r);
   }
-  const BoxInfo* boxinfo() const {
-    static const BoxInfo b = {1,1,2,2,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-2);
+    r.h(r.h()-2);
   }
   BorderFrame(const char* n) : Box(n) {}
 };
@@ -367,9 +374,10 @@ void HighlightBox::_draw(const fltk::Rectangle& r, const Style* style, Flags fla
     FlatBox::_draw(r, style, flags);
   }
 }
-const BoxInfo* HighlightBox::boxinfo() const {
-  return down->boxinfo();
-}
+void HighlightBox::inset(Rectangle& r) const {down->inset(r);}
+bool HighlightBox::fills_rectangle() const {return true;}
+bool HighlightBox::is_frame() const {return down->is_frame();}
+
 HighlightBox::HighlightBox(const char* n, const Box* b)
   : FlatBox(n), down(b) {}
 

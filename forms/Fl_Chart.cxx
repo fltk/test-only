@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.18 2002/12/10 02:00:34 easysw Exp $"
+// "$Id$"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -198,9 +198,15 @@ static void draw_piechart(int x,int y,int w,int h,
   float txc,tyc;	/* temporary center */
   float lh = fl_height();
   /* compute center and radius */
+#if 0
   xc = x+w/2.0f; yc = y+h/2.0f;
   rad = h/2.0f - lh;
   if (special) { yc += 0.1f*rad; rad = 0.9f*rad;}
+#else // fix suggested by str #780
+  double h_denom = (special ? 2.3 : 2.0);
+  rad = (h - 2*lh)/h_denom/1.1;
+  xc = x+w/2.0; yc = y+h-1.1*rad-lh;
+#endif
   /* compute sum of values */
   tot = 0;
   for (i=0; i<numb; i++)
@@ -396,5 +402,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.18 2002/12/10 02:00:34 easysw Exp $".
+// End of "$Id$".
 //

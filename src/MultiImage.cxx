@@ -48,7 +48,13 @@ void MultiImage::_measure(int& w, int& h) const {
 }
 
 /*! Returns the info from the first image given to the constructor. */
-const BoxInfo* MultiImage::boxinfo() const {return images[0]->boxinfo();}
+void MultiImage::inset(Rectangle& r) const {images[0]->inset(r);}
+
+/*! Returns the info from the first image given to the constructor. */
+bool MultiImage::fills_rectangle() const {return images[0]->fills_rectangle();}
+
+/*! Returns the info from the first image given to the constructor. */
+bool MultiImage::is_frame() const {return images[0]->is_frame();}
 
 /*! Select one of the images and draw it. The last image with all the
   flags specified for it turned on will be drawn. If none of them match

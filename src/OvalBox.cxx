@@ -40,9 +40,11 @@ public:
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {1,1,2,2,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-2);
+    r.h(r.h()-2);
   }
   OvalBox(const char* n) : Box(n) {}
 };
@@ -65,9 +67,11 @@ public:
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {1,1,5,5,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-5);
+    r.h(r.h()-5);
   }
   OvalShadowBox(const char* n) : Box(n) {}
 };

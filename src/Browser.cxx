@@ -772,7 +772,8 @@ void Browser::draw() {
   update_child(hscrollbar);
 
   if (header_) {
-    Rectangle r(box()->dx(), box()->dy(), w()-box()->dw(), header_[0]->h());
+    int h = header_[0]->h();
+    Rectangle r(interior.x(), interior.y()-h, interior.w(), h);
     push_clip(r);
     for (int i=0; i<nHeader; i++) {
       update_child(*header_[i]);
@@ -1639,7 +1640,7 @@ public:
 
   void layout() {
     setfont(labelfont(),labelsize());
-    h(int(getascent()+getdescent()+leading()+box()->dh()));
+    h(int(getascent()+getdescent()+leading()+2));
     Button::layout();
   }
 };

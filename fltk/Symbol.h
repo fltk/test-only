@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.h,v 1.8 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // The fltk drawing library
 //
@@ -30,15 +30,11 @@
 #include "Flags.h"
 #include "Color.h"
 #include "Rectangle.h"
+#include "PixelType.h"
 
 namespace fltk {
 
 class FL_API Style;
-
-struct BoxInfo {
-  int dx,dy,dw,dh;
-  int fills_rectangle;
-};
 
 class FL_API Symbol {
   const char* name_;
@@ -60,22 +56,17 @@ class FL_API Symbol {
   virtual void _draw(const Rectangle&, const Style*,Flags) const = 0;
   void draw(const Rectangle& r, const Style* s, Flags f = 0) const {_draw(r,s,f);}
 
-  virtual const BoxInfo* boxinfo() const;
-  int fills_rectangle() const {return boxinfo()->fills_rectangle;}
-  int dx() const {return boxinfo()->dx;}
-  int dy() const {return boxinfo()->dy;}
-  int dw() const {return boxinfo()->dw;}
-  int dh() const {return boxinfo()->dh;}
-  void inset(Rectangle& r) const {
-    const BoxInfo* b = boxinfo();
-    r.x(r.x()+b->dx);
-    r.y(r.y()+b->dy);
-    r.w(r.w()-b->dw);
-    r.h(r.h()-b->dh);
-  }
+  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags) const;
+  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags, int delta) const;
+  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags, int delta, int linedelta) const;
 
+  // Hints for widgets:
+  virtual void inset(Rectangle& r) const;
+  virtual bool fills_rectangle() const;
+  virtual bool is_frame() const;
+
+  // hash table lookup:
   static const Symbol* find(const char* name);
-
   static const Symbol* find(const char* start, const char* end);
   static const Symbol* iterate(int& index);
   static void text(const char* s) {text_=s;}

@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.13 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -62,7 +62,7 @@ public:
   // implementation as Symbol subclass:
   void _draw(const Rectangle&, const Style*, Flags) const;
   void _measure(int& W, int& H) const;
-  const BoxInfo* boxinfo() const;
+  bool fills_rectangle() const;
 
   // for back compatability with fltk1 only:
   void label(Widget* o);
@@ -116,5 +116,5 @@ class FL_API ImageDraw {
 #endif
 
 //
-// End of "$Id: Image.h,v 1.13 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

@@ -46,10 +46,13 @@ public:
     setcolor(fg);
     strokerect(r);
   }
-  const BoxInfo* boxinfo() const {
-    static BoxInfo b = {1,1,2+SIZE,2+SIZE,0};
-    return &b;
+  void inset(Rectangle& r) const {
+    r.x(r.x()+1);
+    r.y(r.y()+1);
+    r.w(r.w()-(2+SIZE));
+    r.h(r.h()-(2+SIZE));
   }
+  bool is_frame() const {return true;}
   ShadowBox(const char* n) : Box(n) {}
 };
 static ShadowBox shadowBox("shadow_box");

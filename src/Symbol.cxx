@@ -313,65 +313,33 @@ void Symbol::_measure(int& w, int& h) const {}
     - r.baseline_y() is where to put the baseline
 */
 
-/** Return widget box-drawing hints.
+/** Move the edges of \a r to be the "interior" of the symbol. If
+    this symbol is used as a Widget::box() then this method is used
+    to determine where to put the widget interior.
 
-    This returns a pointer to a structure (which should be a static
-    constant) containing information used by widgets when they use
-    the Symbol as a box around the edges of the widget.
-
-    By default this returns a pointer to an all-zero structure. If
-    your symbol is intended to be a widget box you will want to
-    change this.
-
-    dx, dy, dw, dh = positive insets in pixels that should be applied
-    to the box area to get the area the contents should be drawn in.
-    Notice that dw and dh are subtracted from the width, and are
-    typically twice the dx and dy values.
-
-    fills_rectangle = if zero then no assumptions about the shape that
-    is drawn are made, except that it fits into the xywh passed to draw().
-
-    A value of one means that this will completely replace all pixels
-    in the xywh rectangle. Fltk can use this to avoid unnecessary
-    blinking when drawing single-buffered. Notice that it may be
-    useful to set this on many images.
-
-    A value of two means that the entire area inside the dx,dy,dw,dh
-    inset is filled with a solid rectangle of the color() from the
-    style. Many widgets will take advantage of this to accelerate
-    redrawing of interior text by erasing the rectangles themselves.
-    Widgets may also call draw() with the INVISIBLE flag to indicate
-    that you can skip drawing this rectangle, if you do this it can
-    greately reduce blinking in single-buffered windows, but it is
-    not required. Warning: some widgets such as Browser either assumme
-    this is true, or revert to extremely slow drawing if false.
-
-    A value of three means both the above are true.
+    The default implementation returns \a r unchanged.
 */
-const BoxInfo* Symbol::boxinfo() const {
-  static BoxInfo b = {0,0,0,0,0};
-  return &b;
-}
+void Symbol::inset(Rectangle& r) const {}
 
-/** \fn int Symbol::fills_rectangle() const;
-    Returns boxinfo()->fills_rectangle
+/** Return true if the symbol will completely fill all the pixels
+    in the Rectangle passed to draw(). Widgets use this to test
+    whether they need to erase their area before drawing the box.
+    The default implementation returns false.
 */
-/** \fn int Symbol::dx() const;
-    Returns boxinfo()->dx
+bool Symbol::fills_rectangle() const {return false;}
+
+/** Return true to indicate that the area returned by inset() is
+    filled with a solid rectangle of the color() from the Style
+    passed to draw(). Many widgets assumme this is true of their box().
+
+    If the INVISIBLE flag is passed to draw(), this symbol is allowed
+    to skip drawing the interior. This is used by widgets to indicate
+    they are going to fill it anyway, and can save some time.
+
+    The default implementation returns false, but most of the useful
+    values for a Widget's box() return true.
 */
-/** \fn int Symbol::dy() const;
-    Returns boxinfo()->dy
-*/
-/** \fn int Symbol::dw() const;
-    Returns boxinfo()->dw
-*/
-/** \fn int Symbol::dh() const;
-    Returns boxinfo()->dh
-*/
-/** \fn void Symbol::inset(Rectangle& r) const {
-    Move the edges of \a r to be the inside of the symbol, as determined
-    by the contents of boxinfo().
-*/
+bool Symbol::is_frame() const {return false;}
 
 /**************** The routines seen by the user *************************/
 

@@ -40,7 +40,9 @@ using namespace fltk;
 uchar *				// O - Pixel buffer or NULL if failed
 fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
 	PixelType type,		// Type of pixels to store (RGB and RGBA only now)
-	const Rectangle& r	// area to read
+	const Rectangle& r,	// area to read
+		int d,		// pointer increment per pixel
+		int linedelta	// pointer increment per line
 ) {
   int X = r.x();
   int Y = r.y();
@@ -49,7 +51,6 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
   XImage	*image;		// Captured image
   int		i, maxindex;	// Looping vars
   int           x, y;		// Current X & Y in image
-  int		d;		// Depth of image
   unsigned char *line,		// Array to hold image row
 		*line_ptr;	// Pointer to current line image
   unsigned char	*pixel;		// Current color value
@@ -103,13 +104,13 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
   printf("blue_mask        = %08x\n", image->blue_mask);
 #endif // FLTK_DEBUG
 
-  d = type&3;
-
-  // Allocate the image data array as needed...
-  if (!p) p = new uchar[w * h * d];
-
   // None of these read alpha yet, so set the alpha to 1 everywhere.
-  if (d > 3) memset(p, 0xff, w * h * d);
+  if (type > 3) {
+    for (int y = 0; y < h; y++) {
+      line = p + y * linedelta + 3;
+      for (int x = 0; x < w; x++) {*line = 0xff; line += d;}
+    }
+  }
 
   // Check if we have colormap image...
   if (image->red_mask == 0) {
@@ -129,7 +130,7 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
     // Read the pixels and output an RGB image...
     for (y = 0; y < image->height; y ++) {
       pixel = (unsigned char *)(image->data + y * image->bytes_per_line);
-      line  = p + y * w * d;
+      line  = p + y * linedelta;
 
       switch (image->bits_per_pixel) {
 	case 1 :
@@ -259,7 +260,7 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
     // Read the pixels and output an RGB image...
     for (y = 0; y < image->height; y ++) {
       pixel = (unsigned char *)(image->data + y * image->bytes_per_line);
-      line  = p + y * w * d;
+      line  = p + y * linedelta;
 
       switch (image->bits_per_pixel) {
 	case 8 :

@@ -2182,13 +2182,13 @@ void Window::flush() {
 	  set_damage(damage & ~DAMAGE_EXPOSE);
 	  draw();
 	}
-	// draw for any expose events (if Xdbe is not being used this will
-	// only happen for redraw(x,y,w,h) calls):
+	// draw for any expose events (this will only happen for
+	// redraw(x,y,w,h) calls):
 	if (i->region) {
 	  clip_region(i->region); i->region = 0;
 	  set_damage(DAMAGE_EXPOSE); draw();
 	  // hack to only copy the damage region from back to front:
-	  if (!(damage & ~DAMAGE_EXPOSE) && !i->overlay) {
+	  if (!(damage & ~DAMAGE_EXPOSE) && !eraseoverlay) {
 	    draw_into(frontbuffer);
 	    goto ALREADY_CLIPPED;
 	  }
@@ -2212,7 +2212,7 @@ void Window::flush() {
 
     // Clip the copying of the pixmap to the damage area,
     // this makes it faster, especially if the damage area is small:
-    if (!eraseoverlay) {
+    if (!damage && !eraseoverlay) {
       clip_region(i->region); i->region = 0;
     }
 

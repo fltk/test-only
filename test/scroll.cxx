@@ -34,10 +34,10 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
-class Drawing : public Fl_Widget {
+class Drawing : public Fl_Window {
   void draw();
 public:
-  Drawing(int X,int Y,int W,int H,const char* L) : Fl_Widget(X,Y,W,H,L) {
+  Drawing(int X,int Y,int W,int H,const char* L) : Fl_Window(X,Y,W,H,L) {
     align(FL_ALIGN_TOP);
     box(FL_FLAT_BOX);
     color(FL_WHITE);

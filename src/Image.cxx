@@ -603,11 +603,7 @@ void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
 /*! If the image has no alpha, it claims to fill the box. This is
   only true if you draw the size it returned from measure() or
   smaller. */
-const BoxInfo* Image::boxinfo() const {
-  if (!rgb || alpha) return Symbol::boxinfo();
-  static const BoxInfo filled = {0,0,0,0,true};
-  return &filled;
-}
+bool Image::fills_rectangle() const {return rgb && !alpha;}
 
 #include <fltk/Widget.h>
 

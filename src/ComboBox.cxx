@@ -82,7 +82,9 @@ void ComboBox::draw() {
 void ComboBox::layout() {
   Choice::layout();
   int w1 = h()*4/5;
-  input_->resize(box()->dx(), box()->dy(), w()-w1-box()->dw(), h()-box()->dh());
+  Rectangle r(w(),h());
+  box()->inset(r);
+  input_->resize(r.x(),r.y(),r.w(),r.h());
 }
 
 int ComboBox::handle(int event) {

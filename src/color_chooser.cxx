@@ -385,8 +385,7 @@ void ColorChooser::layout() {
     cellbox.resize(0,h-ch,w(),ch);
     h = h-ch;
     int ww = w()*20/140;
-    int maxw = 24+valuebox.box()->dw();
-    if (ww>maxw) ww = maxw;
+    if (ww>28) ww = 28;
     int xx = w()-ww;
     if (alphabox.visible()) {
       alphabox.resize(xx,0,ww,h);

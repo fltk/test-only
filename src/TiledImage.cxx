@@ -91,10 +91,7 @@ void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) cons
   pop_clip();
 }
 
-const BoxInfo* TiledImage::boxinfo() const {
-  if (image_) return image_->boxinfo();
-  else return Symbol::boxinfo();
-}
+void TiledImage::inset(Rectangle& r) const {if (image_) image_->inset(r);}
 
 //
 // End of "$Id$".
