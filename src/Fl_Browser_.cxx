@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.40 2000/01/16 07:44:31 robertk Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.41 2000/01/23 01:38:19 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -546,24 +546,48 @@ int Fl_Browser_::handle(int event) {
   case FL_PUSH:
     if (!Fl::event_inside(X, Y, W, H)) return handle_i(event,1);
     take_focus();
-    if (type() == FL_SELECT_BROWSER) deselect();
     my = py = Fl::event_y();
     change = 0;
     if (type() == FL_NORMAL_BROWSER || !top_)
       ;
-    else if (type() == FL_MULTI_BROWSER) {
+    else if (type() != FL_MULTI_BROWSER) {
+      change = select_only(find_item(my), when() & FL_WHEN_CHANGED);
+    } else {
       void* l = find_item(my);
       whichway = 1;
-      if (Fl::event_state(FL_SHIFT|FL_CTRL)) { // toggle selection:
+      if (Fl::event_state(FL_CTRL)) { // toggle selection:
 	if (l) {
 	  whichway = !item_selected(l);
 	  change = select(l, whichway, when() & FL_WHEN_CHANGED);
 	}
-      } else {
+      } else if (Fl::event_state(FL_SHIFT)) { // extend selection:
+	change = 0;
+	if (selection_ && l != selection_) {
+	  void *m = l;
+	  int down = 0;
+	  whichway = item_selected(selection_);
+	  for (m = selection_; m; m = item_next(m)) {
+	    if (m == l) down = 1;
+	  }
+	  void *n;
+	  if (down) {
+	    m = selection_;
+	    n = l;
+	  } else {
+	    m = l;
+	    n = selection_;
+	  }
+	  while (m != n) {
+	    select(m, whichway, when() & FL_WHEN_CHANGED);
+	    m = item_next(m);
+	  }
+	  select(n, whichway, when() & FL_WHEN_CHANGED);
+	  select(l, whichway, when() & FL_WHEN_CHANGED);
+	  change = 1;
+	}
+      } else { // select only this item
 	change = select_only(l, when() & FL_WHEN_CHANGED);
       }
-    } else {
-      change = select_only(find_item(my), when() & FL_WHEN_CHANGED);
     }
     return 1;
 
@@ -689,5 +713,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.40 2000/01/16 07:44:31 robertk Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.41 2000/01/23 01:38:19 bill Exp $".
 //

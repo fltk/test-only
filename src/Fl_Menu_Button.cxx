@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.29 2000/01/19 09:41:47 bill Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.30 2000/01/23 01:38:20 bill Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -77,6 +77,11 @@ int Fl_Menu_Button::handle(int e) {
     return 1;
 
   case FL_PUSH:
+    // If you uncomment this line (or make a subclass that does this) then
+    // a mouse click picks the current item, and the menu goes away.  The
+    // user must drag the mouse to select a different item.  Depending on
+    // the size and usage of the menu, this may be more user-friendly:
+    // Fl::event_is_click(0);
     if (type()) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
     } else 
@@ -111,5 +116,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.29 2000/01/19 09:41:47 bill Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.30 2000/01/23 01:38:20 bill Exp $".
 //

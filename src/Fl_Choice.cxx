@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.37 2000/01/19 09:41:46 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.38 2000/01/23 01:38:20 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -71,9 +71,16 @@ int Fl_Choice::handle(int e) {
     return 1;
 
   case FL_PUSH:
+    // If you uncomment this line (or make a subclass that does this) then
+    // a mouse click picks the current item, and the menu goes away.  The
+    // user must drag the mouse to select a different item.  Depending on
+    // the size and usage of the menu, this may be more user-friendly:
+    // Fl::event_is_click(0);
+    if (Fl::focus() != this && Fl::event_x() < x()+w()-h()*4/5) {
+      take_focus();
+      return 1;
+    }
     take_focus();
-    if (Fl::event_x() < x()+w()-h()*4/5) return 1;
-    //Fl::event_is_click(0);
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     if (!v || v->submenu()) return 1;
@@ -125,5 +132,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.37 2000/01/19 09:41:46 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.38 2000/01/23 01:38:20 bill Exp $".
 //

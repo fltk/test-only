@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.16 2000/01/19 09:41:49 bill Exp $"
+// "$Id: classic.cxx,v 1.17 2000/01/23 01:38:21 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -85,6 +85,11 @@ int fltk_theme(int, char**) {
     s->selection_color = FL_DARK2;
     s->selection_text_color = FL_BLACK;
   }
+  if ((s = Fl_Style::find("browser"))) {
+    s->box = FL_DOWN_BOX;
+    s->selection_color = FL_DARK2;
+    s->selection_text_color = FL_BLACK;
+  }
   if ((s = Fl_Style::find("output"))) {
     s->box = FL_DOWN_BOX;
     s->color = FL_GRAY;
@@ -100,5 +105,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.16 2000/01/19 09:41:49 bill Exp $".
+// End of "$Id: classic.cxx,v 1.17 2000/01/23 01:38:21 bill Exp $".
 //
