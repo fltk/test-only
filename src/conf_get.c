@@ -20,6 +20,10 @@
 
 #include <FL/conf.h>
 
+#if defined(WIN32) || defined(__EMX__)
+#  define strcasecmp(s,t) stricmp((s),(t))
+#endif /* WIN32 || __EMX__ */
+
 /*
         int getconf(const char *configfile, const char *key, char *svalue,
                     int slen)
@@ -75,8 +79,8 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 		{
 			if ((p2 = strchr(line, conf_comment_sep)))
 				*p2 = (char)0;
-		
-                       if (!strcasecmp(trim(line), section2))
+
+                        if (!strcasecmp(trim(line), section2))
 		               break;
 		}
                 if (!p)

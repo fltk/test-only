@@ -78,7 +78,7 @@ delconf(const char *configfile, const char *k)
              return (errno == EEXIST) ? CONF_ERR_AGAIN : CONF_ERR_FILE;         /* return appropriate error */
         close(i);
         
-        new_flag = access(configfile, F_OK);                                    /* is this a new config file? */
+        new_flag = access(configfile, 0);                                    /* is this a new config file? */
         if (!new_flag)                                                          /* if already exists */
         {
                 stat(configfile, &stat_buf);                                    /* get original permisson info */

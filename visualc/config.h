@@ -1,9 +1,9 @@
 /*
- * "$Id: config.h,v 1.5 1999/03/04 18:11:37 mike Exp $"
+ * "$Id: config.h,v 1.6 1999/03/21 16:21:15 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
- * Copyright 1998 by Bill Spitzak and others.
+ * Copyright 1998-1999 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -107,7 +107,7 @@
 
 #define U16 unsigned short
 #define U32 unsigned
-#undef U64
+/*#undef U64*/
 
 /*
  * HAVE_DIRENT_H, HAVE_SYS_NDIR_H, HAVE_SYS_DIR_H, HAVE_NDIR_H, HAVE_SCANDIR:
@@ -116,17 +116,17 @@
  */
 
 #define HAVE_DIRENT_H 1
-#define HAVE_SYS_NDIR_H 0
-#define HAVE_SYS_DIR_H 0
-#define HAVE_NDIR_H 0
-#define HAVE_SCANDIR 0
+/*#undef HAVE_SYS_NDIR_H*/
+/*#undef HAVE_SYS_DIR_H*/
+/*#undef HAVE_NDIR_H*/
+/*#undef HAVE_SCANDIR*/
 
 /*
  * possibly missing sprintf-style functions:
  */
 
-#define HAVE_VSNPRINTF 0
-#define HAVE_SNPRINTF 0
+/*#undef HAVE_VSNPRINTF*/
+/*#undef HAVE_SNPRINTF*/
 #define HAVE_VSPRINTF 1
 
 /*
@@ -135,8 +135,8 @@
  * Use poll() if we don't have select().
  */
 
-#define HAVE_POLL 0
+/*#undef HAVE_POLL*/
 
 /*
- * End of "$Id: config.h,v 1.5 1999/03/04 18:11:37 mike Exp $".
+ * End of "$Id: config.h,v 1.6 1999/03/21 16:21:15 mike Exp $".
  */

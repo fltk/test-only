@@ -56,42 +56,48 @@
 
 
 #ifndef CONF_H
-#define CONF_H
+#  define CONF_H
 
-#ifdef __cplusplus
+
+/* includes */
+#  include <sys/types.h>
+#  include <stdlib.h>
+#  include <stdio.h>
+#  include <string.h>
+#  include <sys/stat.h>
+#  include <fcntl.h>
+#  include <ctype.h>
+#  include <errno.h>
+#  if defined(WIN32) || defined(__EMX__)
+#    include <io.h>
+#  else
+#    include <unistd.h>
+#  endif /* WIN32 || __EMX__ */
+
+
+/* misc defines */
+#  define WHITESPACE		" \t\n\r"	/* all whitespace characters */
+#  define CONF_MAX_LEVEL	10		/* maximum depth of sections in config file */
+#  define CONF_INDENT		2		/* number of spaces to use for indenting */
+#  define CONF_MAX_LINE_LEN	512		/* maximum length of line in config file */
+#  define CONF_MAX_SECT_LEN	128		/* maximum length of section name */
+#  define CONF_MAXPATHLEN	128		/* maximum length of pathname */
+
+
+/* error defines */
+#  define CONF_SUCCESS		0		/* successful return */
+#  define CONF_ERR_ARGUMENT	1		/* argument invalid (NULL?) */
+#  define CONF_ERR_FILE		2		/* trouble accessing config file or directory */
+#  define CONF_ERR_SECTION	3		/* requested section was not found */
+#  define CONF_ERR_KEY		4		/* requested key was not found */
+#  define CONF_ERR_DEPTH	5		/* nested sections in config file too deep */
+#  define CONF_ERR_MEMORY	6		/* memory allocation error */
+#  define CONF_ERR_NOVALUE	7		/* key found, but no value associated with it */
+#  define CONF_ERR_AGAIN	8		/* try operation again (lockfile existed?) */
+
+#  ifdef __cplusplus
 extern "C" {
-#endif
-
-  /* includes */
-  #include        <sys/types.h>
-  #include        <stdlib.h>
-  #include        <stdio.h>
-  #include        <string.h>
-  #include        <sys/stat.h>
-  #include        <fcntl.h>
-  #include        <unistd.h>
-  #include        <ctype.h>
-  #include        <errno.h>
-  
-  /* misc defines */
-  #define WHITESPACE        " \t\x0A\x0D"                                       /* all whitespace characters */
-  #define CONF_MAX_LEVEL    10                                                  /* maximum depth of sections in config file */
-  #define CONF_INDENT       2                                                   /* number of spaces to use for indenting */
-  #define CONF_MAX_LINE_LEN 512                                                 /* maximum length of line in config file */
-  #define CONF_MAX_SECT_LEN 128                                                 /* maximum length of section name */
-  #define CONF_MAXPATHLEN   128                                                 /* maximum length of pathname */
-
-
-  /* error defines */
-  #define CONF_SUCCESS      0                                                   /* successful return */
-  #define CONF_ERR_ARGUMENT 1                                                   /* argument invalid (NULL?) */
-  #define CONF_ERR_FILE     2                                                   /* trouble accessing config file or directory */
-  #define CONF_ERR_SECTION  3                                                   /* requested section was not found */
-  #define CONF_ERR_KEY      4                                                   /* requested key was not found */
-  #define CONF_ERR_DEPTH    5                                                   /* nested sections in config file too deep */
-  #define CONF_ERR_MEMORY   6                                                   /* memory allocation error */
-  #define CONF_ERR_NOVALUE  7                                                   /* key found, but no value associated with it */
-  #define CONF_ERR_AGAIN    8                                                   /* try operation again (lockfile existed?) */
+#  endif
 
   /* data types */
   typedef struct _conf_entry
@@ -360,9 +366,12 @@ extern "C" {
   const char *level_indent(int l);                                       /* returns right amount of leading whitespace */
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
-#endif
+#endif /* !CONF_H */
 
+/*
+ * End of "$Id: conf.h,v 1.2 1999/03/21 16:21:08 mike Exp $".
+ */

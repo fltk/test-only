@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.8 1999/03/18 22:59:11 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.9 1999/03/21 16:21:10 mike Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,11 @@ void Fl_Window::loadstyle() const {
 
     char s[32];
     if (!Fl::find("global/widget style", s, sizeof(s), 1)) {
+#if defined(WIN32) || defined(__EMX__)
+      if (!stricmp(s, "sgi")) Fl::widget_style(FL_SGI_STYLE);
+#else
       if (!strcasecmp(s, "sgi")) Fl::widget_style(FL_SGI_STYLE);
+#endif /* WIN32 || __EMX__ */
       else Fl::widget_style(FL_WINDOWS_STYLE);
     }
   }
@@ -161,5 +165,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.8 1999/03/18 22:59:11 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.9 1999/03/21 16:21:10 mike Exp $".
 //

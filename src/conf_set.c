@@ -80,9 +80,9 @@ setconf(const char *configfile, const char *k, const char *svalue)
         }
         
         if (conf_DOS)                                                           /* if in DOS output mode */
-                strcpy(endln, "\xD\xA");                                        /* carriage return followed ny linefeed */
+                strcpy(endln, "\r\n");                                        /* carriage return followed ny linefeed */
         else                                                                    /* not DOS output mode */
-                strcpy(endln, "\xA");                                           /* linefeed only */
+                strcpy(endln, "\n");                                           /* linefeed only */
 
         sprintf(configfile2, "%s.lock", configfile);                            /* create new file name */
         
@@ -90,7 +90,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
         if (i == -1)                                                            /* if an error occurred opening the lock file */
              return (errno == EEXIST) ? CONF_ERR_AGAIN : CONF_ERR_FILE;         /* return appropriate error */
         close(i);        
-        new_flag = access(configfile, F_OK);                                    /* is this a new config file? */
+        new_flag = access(configfile, 0);                                    /* is this a new config file? */
         if (!new_flag)                                                          /* if already exists */
                 stat(configfile, &stat_buf);                                    /* get original permisson info */
 
