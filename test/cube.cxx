@@ -50,7 +50,7 @@ public:
   }
 };
 #else
-#include <fltk/GlWindow.H>
+#include <fltk/GlWindow.h>
 #include <fltk/gl.h>
 
 class cube_box : public GlWindow {
