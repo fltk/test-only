@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_set.c,v 1.4 1999/03/23 13:58:20 carl Exp $"
+   "$Id: conf_set.c,v 1.5 1999/04/01 05:15:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -51,24 +51,24 @@
 int
 setconf(const char *configfile, const char *k, const char *svalue)
 {
-        int             done_flag = 0;                                          /* has entry already been written? */
+        int             done_flag;                                              /* has entry already been written? */
         int             newsec_flag = 0;                                        /* are we in a new section? */
         char            configfile2[CONF_MAXPATHLEN + 6];                       /* file name for old config file */
         FILE            *ifp;                                                   /* file pointer for config file */
         FILE            *ifp2;                                                  /* file pointer for new config file */
         char            line[CONF_MAX_LINE_LEN];                                /* line buffer */
         char            line2[CONF_MAX_LINE_LEN];                               /* temporary line buffer */
-	char		lineout[CONF_MAX_LINE_LEN];				/* temporary output buffer */
+	    char		    lineout[CONF_MAX_LINE_LEN];				                /* temporary output buffer */
         char            base_section[CONF_MAX_LEVEL][CONF_MAX_SECT_LEN];        /* parent section of this section */
         char            base_section2[CONF_MAX_LEVEL][CONF_MAX_SECT_LEN];       /* parent section with [] added */
         int             bsl[CONF_MAX_LEVEL];
         char            *p, *p2;                                                /* miscelaneous char pointer */
         struct stat     stat_buf;                                               /* buffer for stat info */
-        int             new_flag = 0;                                           /* does the config file already exist? */
+        int             new_flag;                                               /* does the config file already exist? */
         int             section_flag = 1;                                       /* section given */
         int             i, level = 0, current_level = 0, last_level;
         int             indent_kludge = 0;
-	char		*comment = "";                                          /* the comment found on the line */
+	    char		    *comment = "";                                          /* the comment found on the line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
 
         if (!configfile || !k)
@@ -86,13 +86,13 @@ setconf(const char *configfile, const char *k, const char *svalue)
             key = keysect;                                                      /* set key */
             section = "";                                                       /* set toplevel section */
         }
-        
+
         sprintf(configfile2, "%s.lock", configfile);                            /* create new file name */
-        
+
         i = open(configfile2, O_CREAT | O_EXCL, 0600);                          /* try to create lock file */
         if (i == -1)                                                            /* if an error occurred opening the lock file */
              return (errno == EEXIST) ? CONF_ERR_AGAIN : CONF_ERR_FILE;         /* return appropriate error */
-        close(i);        
+        close(i);
         new_flag = access(configfile, F_OK);                                    /* is this a new config file? */
         if (!new_flag)                                                          /* if already exists */
                 stat(configfile, &stat_buf);                                    /* get original permisson info */
@@ -191,7 +191,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			{
 				if ((p2 = strchr(line, conf_comment_sep)))      /* if comment found */
 					*p2 = (char)0;				/* kill it */
-				
+
                                 if (!strcasecmp(trim(line), base_section2[i]))	/* if this is the section we are looking for */
 					break;					/* stop looking */
 			}
@@ -664,5 +664,5 @@ setconf(const char *configfile, const char *k, const char *svalue)
 } /* setconf() */
 
 /*
-    End of "$Id: conf_set.c,v 1.4 1999/03/23 13:58:20 carl Exp $".
+    End of "$Id: conf_set.c,v 1.5 1999/04/01 05:15:17 carl Exp $".
 */

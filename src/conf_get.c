@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.4 1999/03/23 13:58:19 carl Exp $"
+   "$Id: conf_get.c,v 1.5 1999/04/01 05:15:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -24,10 +24,6 @@
 
 #include <FL/conf.h>
 #include <config.h>
-
-#if defined(WIN32) || defined(__EMX__)
-#  define strcasecmp(s,t) stricmp((s),(t))
-#endif /* WIN32 || __EMX__ */
 
 /*
         int getconf(const char *configfile, const char *key, char *svalue,
@@ -133,5 +129,5 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 } /* getconf() */
 
 /*
-    End of "$Id: conf_get.c,v 1.4 1999/03/23 13:58:19 carl Exp $".
+    End of "$Id: conf_get.c,v 1.5 1999/04/01 05:15:17 carl Exp $".
 */

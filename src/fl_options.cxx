@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.6 1999/03/31 19:28:03 carl Exp $"
+// "$Id: fl_options.cxx,v 1.7 1999/04/01 05:15:17 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,10 @@
 #include <config.h>
 #ifdef WIN32
 #include <windows.h>
+#endif
+
+#ifndef PATH_MAX
+#define PATH_MAX 128
 #endif
 
 const char* Fl::_style = "default";
@@ -240,5 +244,5 @@ int Fl::find_boolean(const char *key, int &bvalue, int sf)
 */
 
 //
-// End of "$Id: fl_options.cxx,v 1.6 1999/03/31 19:28:03 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.7 1999/04/01 05:15:17 carl Exp $".
 //

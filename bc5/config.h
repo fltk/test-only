@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.3 1999/03/31 19:31:23 carl Exp $"
+ * "$Id: config.h,v 1.4 1999/04/01 05:15:15 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -23,6 +23,10 @@
  * Please report all bugs and problems to "FLTK-bugs@easysw.com".
  */
 
+#include <stdarg.h>
+#include <sys/types.h>
+#include <stddef.h>
+
 /*
  * BORDER_WIDTH:
  *
@@ -37,7 +41,7 @@
  * using Fl::set_boxtype().
  */
 
-#define BORDER_WIDTH 2
+#define BORDER_WIDTH 3
 
 /*
  * HAVE_GL:
@@ -133,8 +137,16 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 1
 
-extern "C" int snprintf(char* str, size_t size, const char* fmt, ...);
-extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+extern int snprintf(char* str, size_t size, const char* fmt, ...);
+extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 /*
  * HAVE_SYS_SELECT_H:
@@ -155,5 +167,5 @@ extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.3 1999/03/31 19:31:23 carl Exp $".
+ * End of "$Id: config.h,v 1.4 1999/04/01 05:15:15 carl Exp $".
  */

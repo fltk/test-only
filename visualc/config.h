@@ -1,7 +1,7 @@
 /*
- * "$Id: config.h,v 1.8 1999/03/31 19:31:22 carl Exp $"
+ * "$Id: config.h,v 1.9 1999/04/01 05:15:18 carl Exp $"
  *
- * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
+ * Configuration file for the Fast Light Tool Kit (FLTK).
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -23,17 +23,25 @@
  * Please report all bugs and problems to "FLTK-bugs@easysw.com".
  */
 
+#include <stdarg.h>
+#include <sys/types.h>
+#include <stddef.h>
+
 /*
  * BORDER_WIDTH:
  *
  * Thickness of FL_UP_BOX and FL_DOWN_BOX.  Current 1,2, and 3 are
- * supported.  3 is the historic FLTK look.  2 looks more like Microsoft
- * Windows, KDE, and Qt, and is the default when building for Windows.
- * 1 is a plausible future evolution...  Note that this may be simulated
- * at runtime by redefining the boxtypes using Fl::set_boxtype().
+ * supported.
+ *
+ * 3 is the historic FLTK look.
+ * 2 is the default and looks like Microsoft Windows, KDE, and Qt.
+ * 1 is a plausible future evolution...
+ *
+ * Note that this may be simulated at runtime by redefining the boxtypes
+ * using Fl::set_boxtype().
  */
 
-#define BORDER_WIDTH 2
+#define BORDER_WIDTH 3
 
 /*
  * HAVE_GL:
@@ -88,7 +96,7 @@
  * set this to 1.
  */
 
-#define HAVE_GL_OVERLAY 1
+#define HAVE_GL_OVERLAY HAVE_OVERLAY
 
 /*
  * WORDS_BIGENDIAN:
@@ -107,7 +115,7 @@
 
 #define U16 unsigned short
 #define U32 unsigned
-/*#undef U64*/
+/* #undef U64 */
 
 /*
  * HAVE_DIRENT_H, HAVE_SYS_NDIR_H, HAVE_SYS_DIR_H, HAVE_NDIR_H, HAVE_SCANDIR:
@@ -116,21 +124,37 @@
  */
 
 #define HAVE_DIRENT_H 1
-/*#undef HAVE_SYS_NDIR_H*/
-/*#undef HAVE_SYS_DIR_H*/
-/*#undef HAVE_NDIR_H*/
-/*#undef HAVE_SCANDIR*/
+#define HAVE_SYS_NDIR_H 0
+#define HAVE_SYS_DIR_H 0
+#define HAVE_NDIR_H 0
+#define HAVE_SCANDIR 0
 
 /*
  * possibly missing sprintf-style functions:
  */
 
-/*#undef HAVE_VSNPRINTF*/
-/*#undef HAVE_SNPRINTF*/
+#define HAVE_VSNPRINTF 0
+#define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 1
 
-extern "C" int snprintf(char* str, size_t size, const char* fmt, ...);
-extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+extern int snprintf(char* str, size_t size, const char* fmt, ...);
+extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+/*
+ * HAVE_SYS_SELECT_H:
+ *
+ * Whether or not select() call has its own header file.
+ */
+
+#define HAVE_SYS_SELECT_H 0
 
 /*
  * HAVE_POLL:
@@ -138,10 +162,10 @@ extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
  * Use poll() if we don't have select().
  */
 
-/*#undef HAVE_POLL*/
+#define HAVE_POLL 0
 
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.8 1999/03/31 19:31:22 carl Exp $".
+ * End of "$Id: config.h,v 1.9 1999/04/01 05:15:18 carl Exp $".
  */

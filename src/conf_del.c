@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.4 1999/03/23 13:58:18 carl Exp $"
+   "$Id: conf_del.c,v 1.5 1999/04/01 05:15:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -50,13 +50,13 @@ delconf(const char *configfile, const char *k)
         char            section2[CONF_MAX_SECT_LEN + 2];                        /* section with [] added */
         char            line[CONF_MAX_LINE_LEN];                                /* line buffer */
         char            line2[CONF_MAX_LINE_LEN];                               /* temporary line buffer */
-	char		lineout[CONF_MAX_LINE_LEN];				/* temporary output buffer */
+	    char		    lineout[CONF_MAX_LINE_LEN];				                /* temporary output buffer */
         char            *p, *p2;                                                /* miscelaneous char pointers */
         struct stat     stat_buf;                                               /* buffer for stat info */
-        int             new_flag = 0;                                           /* does the config file already exist? */
+        int             new_flag;                                               /* does the config file already exist? */
         int             i;                                                      /* generic integer */
-	char		*comment;						/* comment found on line */
-        char            keysect[CONF_MAX_SECT_LEN], *key, *section;              /* key, section, and both */
+	    char		    *comment;						                        /* comment found on line */
+        char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
 
         if (!configfile || !k)
                 return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
@@ -276,5 +276,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.4 1999/03/23 13:58:18 carl Exp $".
+    End of "$Id: conf_del.c,v 1.5 1999/04/01 05:15:17 carl Exp $".
 */
