@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.107 2003/11/14 07:15:11 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -232,8 +232,6 @@ static void keep_app_active() {
     }
 }
 #endif
-
-extern Window* fl_actual_window; // in Fl.cxx
 
 extern Window* fl_actual_window; // in Fl.cxx
 
@@ -680,5 +678,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.106 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.107 2003/11/14 07:15:11 spitzak Exp $".
 //
