@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.23 2001/05/29 20:53:00 robertk Exp $"
+// "$Id: Fluid_Image.cxx,v 1.24 2001/06/28 16:15:35 robertk Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -104,8 +104,8 @@ void generic_image::write_static() {
   if (inlined) {
     size_t l=0;
     goto_images_dir();
-    if (filetype->name && !conf_strcasecmp(filetype->name, "xpm")) {
-      write_c("static char *%s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
+    if (filetype->name && !strcasecmp(filetype->name, "xpm")) {
+      write_c("static const char *%s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
       FILE* fp = fopen(name(), "rb");
       if(fp) {
 	indentation += 2;
@@ -145,7 +145,7 @@ void generic_image::write_code() {
   if (!p) return;
   write_c("%so->image(Fl_%s_Image::get(\"%s\"", indent(), filetype->name, name());
   if (inlined)
-    write_c(", %s%s", (filetype->name && !strcmp(filetype->name, "xpm")) ? 
+    write_c(", %s%s", (filetype->name && !strcasecmp(filetype->name, "xpm")) ? 
 		"(uchar*)" : "", unique_id(this, "datas", filename_name(name()), 0));
   write_c("));\n");
 }
@@ -389,5 +389,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.23 2001/05/29 20:53:00 robertk Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.24 2001/06/28 16:15:35 robertk Exp $".
 //
