@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.16 2000/06/18 11:05:39 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.17 2000/07/14 08:35:01 clip Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,7 @@ void Fl_Shared_Image::check_mem_usage()
     first_image->find_less_used();
     if(limage->id) {
       mem_used -= limage->w*limage->h;
-      fl_delete_offscreen((Fl_Offscreen) limage->id);
+      fl_delete_offscreen(limage->id);
       limage->id=0;
       if(limage->mask) {
 	fl_delete_bitmap(limage->mask);
@@ -98,7 +98,7 @@ void Fl_Shared_Image::clear_cache()
 {
   if(id) {
     mem_used -= w*h;
-    fl_delete_offscreen((Fl_Offscreen) id);
+    fl_delete_offscreen(id);
     id=0;
     if(mask) {
       fl_delete_bitmap(mask);
@@ -180,7 +180,7 @@ void Fl_Shared_Image::reload(uchar* pdatas)
 {
   if (id) {
     mem_used -= w*h;
-    fl_delete_offscreen((Fl_Offscreen)id);
+    fl_delete_offscreen(id);
     id=0;
     if (mask) {
       fl_delete_bitmap(mask);
@@ -250,5 +250,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.16 2000/06/18 11:05:39 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.17 2000/07/14 08:35:01 clip Exp $"
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.82 2000/06/18 11:05:39 vincent Exp $"
+# "$Id: Makefile,v 1.83 2000/07/14 08:35:01 clip Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -187,8 +187,6 @@ CFILES = \
 #	Fl_Slider_SW.cxx \
 #	Fl_Widget_SW.cxx \
 
-CLEAN =
-
 ################################################################
 
 XTRAFLAGS = -DFL_LIBRARY
@@ -201,13 +199,24 @@ include ../makeinclude
 .cxx.o:
 	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
+%.shared.o : %.cxx
+	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
+%.shared.o : %.c
+	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
+
 LIBRARY = ../lib/$(LIBNAME)
 DSO = ../lib/$(DSOLIBNAME)
 DSONAME = $(DSOLIBNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
+all: static shared programs
+
+static: $(LIBRARY)$(LIBEXT)
+
+shared: $(DSO)$(DSOEXT)
+
+programs:
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@rm -f $@
@@ -215,20 +224,20 @@ $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	$(RANLIB) $@
 
 $(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
-	@-rm -f $@
+	rm -f $@
 	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
-	mv $(DSONAME) $@
+	@mv $(DSONAME) $@
+	
 
 DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
 $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 	@-rm -f $@
 	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
-	mv $@.import ../lib/$(DLLIMPORTNAME)
+	-mv $@.import ../lib/$(DLLIMPORTNAME)
 
 clean :
-	@rm -f *.o $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) $(CLEAN) \
-	        core *~ ../include/*~ makedepend cmap
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSO)$(DSOEXT); fi
+	@rm -f *.o $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) ../lib/$(DLLIMPORTNAME) \
+	       core *~ ../include/*~ makedepend cmap
 	@touch makedepend
 
 depend:
@@ -237,22 +246,9 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
-	@echo "Installing libraries..."
-	@mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)$(LIBEXT)
-	@rm -f $(libdir)/$(DLLIMPORTNAME)
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBNAME)$(DSOEXT); fi
-	@if [ -n "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi
-	@cp $(LIBRARY)$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)$(LIBEXT)
-	@if [ -n "$(DSOEXT)" ]; then \
-		cp $(DSO)$(DSOEXT) $(libdir); \
-		chmod 755 $(libdir)/$(DSOLIBNAME)$(DSOEXT) ; \
-		if [ -n "$(DSOSHORTEXT)" ]; then \
-			ln -s $(DSOLIBNAME)$(DSOEXT) $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi; \
-	fi
-	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
+install: install_static install_shared
+
+install_headers:
 	@echo "Installing include files..."
 	@mkdir -p $(includedir)
 	@rm -rf $(includedir)/FL $(includedir)/Fl
@@ -265,10 +261,32 @@ install: $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 		ln -s $$file $(includedir)/FL/$$newfile;\
 	done; fi
 	@if [ ! "$(SYSTYPE)" = "WIN32" ]; then ln -sf FL $(includedir)/Fl; fi
+
+install_fltk_config:
 	@echo "Installing fltk-config..."
 	@mkdir -p $(bindir)
 	@cp ../fltk-config $(bindir)
 
+install_static: static install_headers install_fltk_config
+	@echo "Installing static libraries..."
+	@mkdir -p $(libdir)
+	@rm -f $(libdir)/$(LIBNAME)$(LIBEXT)
+	@cp $(LIBRARY)$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)$(LIBEXT)
+
+install_shared: shared
+	@echo "Installing shared libraries..."
+	@rm -f $(libdir)/$(DLLIMPORTNAME)
+	@rm -f $(libdir)/$(DSOLIBNAME)$(DSOEXT)
+	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi
+	@cp $(DSO)$(DSOEXT) $(libdir)
+	@-chmod 755 $(libdir)/$(DSOLIBNAME)$(DSOEXT)
+	@if [ "$(DSOSHORTEXT)" ]; then \
+		ln -s $(DSOLIBNAME)$(DSOEXT) $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi
+	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
+
+install_programs:
+
 #
-# End of "$Id: Makefile,v 1.82 2000/06/18 11:05:39 vincent Exp $".
+# End of "$Id: Makefile,v 1.83 2000/07/14 08:35:01 clip Exp $".
 #

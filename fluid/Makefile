@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.33 2000/06/18 11:05:32 vincent Exp $"
+# "$Id: Makefile,v 1.34 2000/07/14 08:35:00 clip Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -52,26 +52,21 @@ OBJECTSDLL = $(CPPFILES:.cxx=.dll.o)
 include ../makeinclude
 
 .c.o:
-	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
+	$(CC) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CFLAGS) $< -c
 
 .cxx.o:
-	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
+	$(CXX) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
-.SUFFIXES : .dll.o
+all: static shared programs
 
-%.dll.o : %.cxx
-	echo Compiling $@...
-	$(CXX) -DFL_SHARED -I.. $(CXXFLAGS) -c $< -o $@
+static:
 
-$(PROGRAM) : $(OBJECTS) ../lib/$(LIBNAME).a
-	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTS) -L../forms -L../lib -lfltk_images $(LDLIBS) $(IMAGELIBS)
+shared:
 
-# for mingw32, to build the version of fluid that use the dll and that works
-# with plugins ...
-dll : $(OBJECTSDLL) ../lib/libfltkdll.2.a
-	$(EXPORTCOMMAND) $(OBJECTSDLL)  --output-lib ../libfluid.a --def ../lib/null.def -D fluid.exe --output-exp fluid.exp
-	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTSDLL) -L../lib -lfltkdll.2 $(LDLIBS) fluid.exp
+programs: $(PROGRAM)
 
+$(PROGRAM) : $(OBJECTS) $(FLLIB) $(FLIMAGESLIB)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) $(IMAGELIBS) $(LDLIBS) $(JPEGLIBS) $(PNGLIBS)
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
@@ -81,7 +76,13 @@ depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 include makedepend
 
-install: $(PROGRAM)
+install: install_static install_shared install_programs
+
+install_static:
+
+install_shared:
+
+install_programs: $(PROGRAM)
 	@echo "Installing FLUID..."
 	@-mkdir -p $(bindir)
 	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then \
@@ -108,5 +109,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.33 2000/06/18 11:05:32 vincent Exp $".
+# End of "$Id: Makefile,v 1.34 2000/07/14 08:35:00 clip Exp $".
 #

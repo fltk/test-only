@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.48 2000/06/18 11:05:40 vincent Exp $"
+# "$Id: Makefile,v 1.49 2000/07/14 08:35:01 clip Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,47 +46,61 @@ ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	symbols tabs tile fast_slow resize pack inactive sizes \
 	image_file layout threads fltk_scheme menubar line_style valuators
 
-all:	$(ALL)
+all:	demos
+
+static:
+
+shared:
+
+demos:	$(ALL)
+
+programs: demos
 
 include ../makeinclude
 
-.cxx:
-	$(CXX) $< `../fltk-config --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
+#.cxx:
+#	$(CXX) $< `../fltk-config --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
+#
+#.cxx.o:
+#	$(CXX) `../fltk-config --cxxflags` $(DEBUGFLAGS) $< -c
+
+.c.o:
+	$(CC) -I.. $(EXEFLAGS) $(CFLAGS) $< -c
 
 .cxx.o:
-	$(CXX) `../fltk-config --cxxflags` $(DEBUGFLAGS) $< -c
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< -c
 
-#.cxx:
-#	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
+.cxx:
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
 
-$(ALL):  ../lib/$(LIBNAME).a
+$(ALL): $(FLLIB)
 
 # FLUID file rules
 .fl.cxx .fl.h:
 	../fluid/fluid -c $<
 
 # Other programs needing special "help"...
-CubeView: CubeMain.o CubeView.o CubeViewUI.o
-	$(CXX) CubeMain.o CubeView.o CubeViewUI.o `../fltk-config --use-gl --ldflags` $(DEBUGFLAGS) -o $@
+CubeView: CubeMain.o CubeView.o CubeViewUI.o $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o $(GLDLIBS) $(LDLIBS) -o $@
 CubeMain.o: CubeViewUI.h CubeView.h
 CubeView.o: CubeView.h
 
-glpuzzle: glpuzzle.cxx
-	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-cube: cube.cxx
-	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-fullscreen: fullscreen.cxx
-	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-gl_overlay: gl_overlay.cxx
-	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
+glpuzzle: glpuzzle.cxx $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+cube: cube.cxx $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+fullscreen: fullscreen.cxx $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+gl_overlay: gl_overlay.cxx $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 keyboard: keyboard.cxx keyboard_ui.cxx
 mandelbrot: mandelbrot.cxx mandelbrot_ui.cxx
-shape: shape.cxx
-	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-image_file: image_file.cxx
-	$(CXX) $< `../fltk-config --use-images --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-threads: threads.cxx
-	$(CXX) $< `../fltk-config --multithread --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
+shape: shape.cxx $(FLGLLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+image_file: image_file.cxx $(FLIMAGESLIB) $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(IMAGELIBS) $(PNGLIBS) $(JPEGLIBS) $(LDLIBS) -o $@
+threads: threads.cxx $(FLLIB)
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(THREADSLIBS) $(LDLIBS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
@@ -100,8 +114,13 @@ clean:
 	-@ rm -f $(ALL) jpeg_image *.o core *~
 
 install:
-	@echo Nothing to install in test directory.
+
+install_static:
+
+install_shared:
+
+install_programs:
 
 #
-# End of "$Id: Makefile,v 1.48 2000/06/18 11:05:40 vincent Exp $".
+# End of "$Id: Makefile,v 1.49 2000/07/14 08:35:01 clip Exp $".
 #

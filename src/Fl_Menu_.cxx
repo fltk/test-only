@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.24 2000/06/12 06:35:38 bill Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.25 2000/07/14 08:35:01 clip Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -30,7 +30,7 @@
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Item.H> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
 
-int fl_dont_execute = 0; // hack for fluid
+FL_API int fl_dont_execute = 0; // hack for fluid
 
 void Fl_Menu_::execute(Fl_Widget* w) {
   if (fl_dont_execute) return;
@@ -109,5 +109,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.24 2000/06/12 06:35:38 bill Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.25 2000/07/14 08:35:01 clip Exp $"
 //

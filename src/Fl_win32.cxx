@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.115 2000/07/13 08:52:44 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.116 2000/07/14 08:35:01 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -31,6 +31,7 @@
 #include <config.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Style.H>
 #include <FL/win32.H>
 #include <string.h>
 #include <stdlib.h>
@@ -520,7 +521,6 @@ static int ms2fltk(int vk, int extended) {
 extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
-void fl_get_system_colors();
 static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -735,8 +735,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SYSCOLORCHANGE:
   case WM_SETTINGCHANGE:
-    Fl::reload_scheme();
-    window->redraw();
+    // reload windows colors only if we haven't forced a scheme
+    if (!Fl::scheme()) { fl_get_system_colors(); window->redraw(); }
     break;
 
   default:
@@ -1159,5 +1159,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.115 2000/07/13 08:52:44 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.116 2000/07/14 08:35:01 clip Exp $".
 //

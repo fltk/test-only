@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $"
 //
 // These routines from fl_draw.H are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -140,7 +140,7 @@ void fl_line(int x, int y, int x1, int y1) {
   LineTo(fl_gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x1, y1, fl_rgb);
+  SetPixel(fl_gc, x1, y1, fl_colorref);
 #else
   XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
 #endif
@@ -153,7 +153,7 @@ void fl_line(int x, int y, int x1, int y1, int x2, int y2) {
   LineTo(fl_gc, x2, y2);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x2, y2, fl_rgb);
+  SetPixel(fl_gc, x2, y2, fl_colorref);
 #else
   XPoint p[3];
   p[0].x = x;  p[0].y = y;
@@ -230,12 +230,12 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
 
 void fl_point(int x, int y) {
 #ifdef WIN32
-  SetPixel(fl_gc, x, y, fl_rgb);
+  SetPixel(fl_gc, x, y, fl_colorref);
 #else
   XDrawPoint(fl_display, fl_window, fl_gc, x, y);
 #endif
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.21 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $".
 //

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+autoconf
+
+# Assuming GCC
+CC=gcc
+CXX=gcc
+export CC CXX
+
+./configure $*
+
+make clean all

@@ -99,7 +99,7 @@ public:
 
 typedef unsigned long Fl_Thread;
 
-FL_API static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
+static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
   return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.17 2000/07/13 08:52:44 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.18 2000/07/14 08:35:01 clip Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -68,8 +68,9 @@ int Fl_Widget::copy_style(const Fl_Style* t) {
   return 1;
 }
 
-// Widgets set their own attributes by (possibly) creating a new dynamic()
-// copy of their style.
+// Widgets set their own attributes by (possibly) creating a unique copy
+// of their current style and setting it there.  Because this copy does
+// not have any children the recursive search is not needed:
 
 Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
   if (pointer->dynamic()) return (Fl_Style*)pointer;
@@ -168,6 +169,7 @@ extern char fl_up_box_revert[];
 extern char fl_down_box_revert[];
 
 void Fl_Style::revert() {
+  Fl::theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
   fl_up_box.data = fl_up_box_revert;
   fl_down_box.data = fl_down_box_revert;
@@ -210,5 +212,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.17 2000/07/13 08:52:44 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.18 2000/07/14 08:35:01 clip Exp $".
 //

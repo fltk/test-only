@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.6 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -122,7 +122,7 @@ void fl_vertex(double x,double y) {
 
 void fl_end_points() {
 #ifdef WIN32
-  for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_rgb);
+  for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_colorref);
 #else
   if (n>1) XDrawPoints(fl_display, fl_window, fl_gc, p, n, 0);
 #endif
@@ -223,5 +223,5 @@ void fl_circle(double x, double y,double r) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.6 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $".
 //

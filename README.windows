@@ -1,0 +1,3 @@
+Current versions of FLTK may require the winsock2 DLL (WS2_32.DLL).  If you
+have an older version of Windows 95, you may not have this DLL and you will
+to get it from the Microsoft web site.

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.8 2000/06/18 11:05:36 vincent Exp $"
+# "$Id: Makefile,v 1.9 2000/07/14 08:35:00 clip Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -44,16 +44,30 @@ include ../makeinclude
 	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
 #.cxx:
-#	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(IMAGESLIBS) -o $@
+#	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(IMAGESLIBS) $(LDLIBS) -o $@
+
+%.shared.o : %.cxx
+	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
+%.shared.o : %.c
+	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 LIBRARY = ../lib/$(LIBNAME)_images
 DSO = ../lib/$(DSOLIBimagesNAME)
 DSONAME = $(DSOLIBimagesNAME)$(DSOEXT)
-LIBRARIES = $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARIES) $(DEMOS)
+all:	static shared programs
+
+static:	$(LIBRARY)$(LIBEXT)
+
+shared:	$(DSO)$(DSOEXT)
+
+demos: $(DEMOS)
+
+programs: demos
+
+$(DEMOS): $(FLIMAGESLIB) $(FLLIB)
 
 $(LIBRARY).a: $(OBJECTS)
 	@rm -f $@
@@ -72,15 +86,14 @@ $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS) $(DLLIMPORTLIBS)
 	mv $@.import ../lib/$(DLLIMPORTNAME)
 
-$(DEMOS): $(LIBRARIES)
 
 .fl.cxx .fl.h:
 	echo Generating $@...
 	../fluid/fluid -c $<
 
 clean :
-	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) core *~ makedepend
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSO)$(DSOEXT); fi
+	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
+	       ../lib/$(DLLIMPORTNAME) core *~ makedepend
 	@touch makedepend
 
 depend:
@@ -89,23 +102,28 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARIES)
-	@echo "Installing libraries..."
+install: install_static install_shared install_programs
+
+install_static: static
+	@echo "Installing static libraries..."
 	@mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)_images$(LIBEXT)
-	@rm -f $(libdir)/$(DLLIMPORTNAME)
-	@if [ -n "$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOEXT); fi
-	@if [ -n "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi
 	@cp $(LIBRARY)$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_images$(LIBEXT)
-	@if [ -n "$(DSOEXT)" ]; then \
-		cp $(DSO)$(DSOEXT) $(libdir); \
-		chmod 755 $(libdir)/$(DSOLIBimagesNAME)$(DSOEXT); \
-		if [ -n "$(DSOSHORTEXT)" ]; then \
-			ln -s $(DSOLIBimagesNAME)$(DSOEXT) $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi; \
-	fi
-	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
+	@-chmod 644 $(libdir)/$(LIBNAME)_images$(LIBEXT) 
+
+install_shared: shared
+	@echo "Installing shared libraries..."
+	@rm -f $(libdir)/$(DLLIMPORTNAME)
+	@rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOEXT)
+	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi
+	@cp $(DSO)$(DSOEXT) $(libdir)
+	@chmod 755 $(libdir)/$(DSOLIBglNAME)$(DSOEXT)
+	@if [ "$(DSOSHORTEXT)" ]; then \
+		ln -s $(DSOLIBimagesNAME)$(DSOEXT) $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi
+	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then  cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
+
+install_programs:
 
 #
-# End of "$Id: Makefile,v 1.8 2000/06/18 11:05:36 vincent Exp $".
+# End of "$Id: Makefile,v 1.9 2000/07/14 08:35:00 clip Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.32 2000/06/10 04:10:20 carl Exp $"
+// "$Id: Fl_Style.H,v 1.33 2000/07/14 08:34:59 clip Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -59,7 +59,7 @@ struct FL_API Fl_Style {
   static int	scrollbar_width;
   static int	scrollbar_align;
 
-  Fl_Style* parent;
+  const Fl_Style* parent;
 
   void  (*revertfunc)(Fl_Style*);
   int dynamic() const {return !revertfunc;}
@@ -100,8 +100,10 @@ struct FL_API Fl_Named_Style : public Fl_Style {
   Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
 };
 
+FL_API void fl_get_system_colors();
+
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.32 2000/06/10 04:10:20 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.33 2000/07/14 08:34:59 clip Exp $".
 //

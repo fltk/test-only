@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.13 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.14 2000/07/14 08:35:01 clip Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
       int ox = X-cx; if (ox < 0) ox += w;
       int oy = Y-cy; if (oy < 0) oy += h;
       XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-      fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
+      fl_copy_offscreen(X, Y, W, H, id, cx, cy);
       // put the old clip region back
       XSetClipOrigin(fl_display, fl_gc, 0, 0);
       fl_restore_clip();
@@ -117,7 +117,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
     }
   } else if (id) {
     // pix only, no mask
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, id, cx, cy);
   } // else { no mask or id, probably an error... }
 }
 
@@ -127,14 +127,14 @@ void Fl_Image::measure(int& W, int& H) { W=w; H=h; }
 // old code from Fl_Image that created the pixmap with fl_draw_image:
 //   if (!id) {
 //     id = (ulong)fl_create_offscreen(w, h);
-//     fl_begin_offscreen((Fl_Offscreen)id);
+//     fl_begin_offscreen(id);
 //     fl_draw_image(array, 0, 0, w, h, d, ld);
 //     fl_end_offscreen();
 //   }
 
 Fl_Image::~Fl_Image() {
   if (mask) fl_delete_bitmap(mask);
-  if (id) fl_delete_offscreen((Fl_Offscreen)id);
+  if (id) fl_delete_offscreen(id);
 }
 
 #include <FL/Fl_Widget.H>
@@ -147,5 +147,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.13 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.14 2000/07/14 08:35:01 clip Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile.in,v 1.1 2000/06/12 09:01:27 carl Exp $"
+# "$Id: Makefile.in,v 1.2 2000/07/14 08:34:59 clip Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,13 +34,34 @@ DIRS	=	$(SUBDIRS) $(PLUGINS) $(TESTS)
 
 GENERATED = configure Makefile makeinclude config.h fltk-config
 
+BUILDTARGETS = @BUILDTARGETS@
+INSTALLTARGETS = @INSTALLTARGETS@
+
 all: $(GENERATED)
 	@for dir in $(DIRS); do\
 		echo "=== making $$dir ===";\
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir;$(MAKE));\
+		(cd $$dir; $(MAKE) $(BUILDTARGETS));\
+	done
+
+static: $(GENERATED)
+	@for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
+		if test ! -f $$dir/makedepend; then\
+			touch $$dir/makedepend;\
+		fi;\
+		(cd $$dir; $(MAKE) static);\
+	done
+
+shared: $(GENERATED)
+	@for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
+		if test ! -f $$dir/makedepend; then\
+			touch $$dir/makedepend;\
+		fi;\
+		(cd $$dir; $(MAKE) shared);\
 	done
 
 install: $(GENERATED)
@@ -49,7 +70,34 @@ install: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir;$(MAKE) install);\
+		(cd $$dir; $(MAKE) $(INSTALLTARGETS));\
+	done
+
+install_static: $(GENERATED)
+	@for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
+		if test ! -f $$dir/makedepend; then\
+			touch $$dir/makedepend;\
+		fi;\
+		(cd $$dir; $(MAKE) install_static);\
+	done
+
+install_shared: $(GENERATED)
+	@for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
+		if test ! -f $$dir/makedepend; then\
+			touch $$dir/makedepend;\
+		fi;\
+		(cd $$dir; $(MAKE) install_shared);\
+	done
+
+install_programs: $(GENERATED)
+	@for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
+		if test ! -f $$dir/makedepend; then\
+			touch $$dir/makedepend;\
+		fi;\
+		(cd $$dir; $(MAKE) install_programs);\
 	done
 
 depend: $(GENERATED)
@@ -73,22 +121,10 @@ distclean: clean
 #	@echo "all:" > Makefile
 #	@echo "	@echo \"*** You must run ./configure first! ***\"" >> Makefile
 
-Makefile: Makefile.in
-	@echo "*** You must run ./configure first! ***"
+$(GENERATED):
+	@echo "Please run one of the build scripts to properly update build files"
 	@exit 1
 
-makeinclude: configure makeinclude.in
-	./configure
-
-config.h: configh.in
-	./configure
-
-fltk-config: fltk-config.in
-	./configure
-
-configure: configure.in
-	autoconf
-
 #
-# End of "$Id: Makefile.in,v 1.1 2000/06/12 09:01:27 carl Exp $".
+# End of "$Id: Makefile.in,v 1.2 2000/07/14 08:34:59 clip Exp $".
 #

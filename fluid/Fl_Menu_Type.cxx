@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.32 2000/05/30 07:42:03 bill Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.33 2000/07/14 08:35:00 clip Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -62,7 +62,7 @@ Fl_Submenu_Type Fl_Submenu_type;
 
 ////////////////////////////////////////////////////////////////
 
-extern int fl_dont_execute; // in Fl_Menu.cxx
+extern FL_API int fl_dont_execute; // in Fl_Menu.cxx
 
 Fl_Type* Fl_Menu_Type::click_test(int, int) {
   if (selected) return 0; // let user move the widget
@@ -161,5 +161,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.32 2000/05/30 07:42:03 bill Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.33 2000/07/14 08:35:00 clip Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.30 2000/06/18 11:05:26 vincent Exp $"
+# "$Id: makeinclude.in,v 1.31 2000/07/14 08:34:59 clip Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -67,20 +67,23 @@ EXEFLAGS	=@EXEFLAGS@
 LDLIBS		=@LDFLAGS@ @FLLIB@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
 DSOLIBS		=@DSOLIBS@
 THEMELIBS	=@THEMELIBS@
-GLDLIBS		=@LDFLAGS@ @FLGLLIB@ @FLLIB@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-GLUTLIBS	=@LDFLAGS@ @FLGLUTLIB@ @FLGLLIB@ @FLLIB@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-FORMSLIBS	=@LDFLAGS@ @FLFORMSLIB@ @FLLIB@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-IMAGELIBS	=@FLIMAGESLIB@ @FLLIB@ @LIBPNG@ @LIBJPEG@
+GLDLIBS		=@FLGLLIB@ @GLLIB@
+GLUTLIBS	=@FLGLUTLIB@ @FLGLLIB@ @GLLIB@
+FORMSLIBS	=@FLFORMSLIB@
+IMAGELIBS	=@FLIMAGESLIB@
 THREADSLIBS	=@THREADSLIBS@
+JPEGLIBS	=@LIBJPEG@
+PNGLIBS		=@LIBPNG@
+
+FLLIB		=@FLLIB@
+FLGLLIB		=@FLGLLIB@
+FLGLUTLIB	=@FLGLUTLIB@
+FLFORMSLIB	=@FLFORMSLIB@
+FLIMAGESLIB	=@FLIMAGESLIB@
 
 # Build commands and filename extensions...
 .SUFFIXES:	.c .cxx .h .fl .o
 
-%.shared.o : %.cxx
-	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
-%.shared.o : %.c
-	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
-
 #
-# End of "$Id: makeinclude.in,v 1.30 2000/06/18 11:05:26 vincent Exp $".
+# End of "$Id: makeinclude.in,v 1.31 2000/07/14 08:34:59 clip Exp $".
 #

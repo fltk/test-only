@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.33 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: win32.H,v 1.34 2000/07/14 08:34:59 clip Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,6 +48,8 @@ typedef HWND Window;
 typedef POINT XPoint;
 struct FL_API XRectangle {int x, y, width, height;};
 typedef HRGN Region;
+typedef HBITMAP Pixmap;
+
 FL_API void fl_clip_region(Region);
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
@@ -69,7 +71,7 @@ extern FL_API HDC	fl_gc;
 extern FL_API Window	fl_window;
 extern FL_API HFONT	fl_xfont;
 extern FL_API HPALETTE	fl_palette; // non-zero only on 8-bit displays!
-extern FL_API COLORREF	fl_rgb;
+extern FL_API COLORREF	fl_colorref;
 extern FL_API HPEN	fl_pen;
 extern FL_API HBRUSH	fl_brush;
 
@@ -77,7 +79,6 @@ extern FL_API HDC fl_GetDC(Window);
 extern FL_API MSG fl_msg;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
-#define Fl_Offscreen HBITMAP
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
 extern FL_API HDC fl_makeDC(HBITMAP);
@@ -93,7 +94,7 @@ FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,in
 
 // binary images, created from in-memory data:
 // See Fl_Image::_draw() for code that uses these.
-extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
+extern FL_API Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h);
 #define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
 
 extern FL_API HCURSOR fl_default_cursor;
@@ -128,5 +129,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.33 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: win32.H,v 1.34 2000/07/14 08:34:59 clip Exp $".
 //

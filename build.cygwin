@@ -1,0 +1,11 @@
+#!/bin/sh
+
+autoconf
+
+./configure $*
+
+# In order to find DLLs
+PATH=$PATH:`pwd`/lib
+export PATH
+
+make clean all

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.23 2000/06/18 11:05:42 vincent Exp $"
+# "$Id: Makefile,v 1.24 2000/07/14 08:35:01 clip Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -35,12 +35,10 @@ XTRAFLAGS =
 
 include ../makeinclude
 
-%.po : ../src/%.cxx
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -I../$(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-%.po : ../images/%.cxx
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -I../ $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-%.po : ../src/%.c
-	$(CC) -DFL_DLL -DFL_INPLUGIN -I../ $(INCLUDES) $(CFLAGS) $(SUPFLAGS) -c $< -o $@
+%.shared.o : %.cxx
+	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
+%.shared.o : %.c
+	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 LIBRARY = ../lib/$(LIBNAME)_themes
 
@@ -51,46 +49,54 @@ CPPFILES = \
 
 OBJECTS = $(CPPFILES:.cxx=.shared.o) $(CFILES:.c=.shared.o)
 
-all : $(LIBRARY)$(LIBEXT) $(THEMES)
+all : static shared programs
+
+static: $(LIBRARY)$(LIBEXT)
+
+shared: $(THEMES)
+
+demos:
+
+programs: demos
 
 $(LIBRARY).a: $(OBJECTS)
 	@rm -f $@
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-ESSAI_OBJ = essai.shared.o  fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
+ESSAI_OBJ = essai.shared.o
 essai.theme : $(ESSAI_OBJ)
 	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS)
 	cp $@ ../config/themes
 	cp bg*.jpeg ../config/themes
 
 
-MOTIF_OBJ = motif.shared.o fl_motif.shared.o fl_list_fonts.po
+MOTIF_OBJ = motif.shared.o fl_motif.shared.o
 motif.theme : $(MOTIF_OBJ)
 	$(THEMECOMMAND) $@ $(MOTIF_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-CLASSIC_OBJ = classic.shared.o fl_list_fonts.po
+CLASSIC_OBJ = classic.shared.o
 classic.theme : $(CLASSIC_OBJ)
 	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-WINDOWS_OBJ = windows.shared.o fl_windows.shared.o fl_list_fonts.po
+WINDOWS_OBJ = windows.shared.o fl_windows.shared.o
 windows.theme : $(WINDOWS_OBJ)
 	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-ALT_OBJ = Alternative.shared.o fl_list_fonts.po
+ALT_OBJ = Alternative.shared.o
 Alternative.theme : $(ALT_OBJ)
 	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDE_OBJ = KDE.shared.o fl_kde.shared.o fl_list_fonts.po
+KDE_OBJ = KDE.shared.o fl_kde.shared.o
 KDE.theme : $(KDE_OBJ)
 	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o fl_list_fonts.po
+KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o
 KDE_colors.theme : $(KDEC_OBJ)
 	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
@@ -99,22 +105,28 @@ clean :
 	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
 	@touch makedepend
 
-install : all
-	@echo "Installing library..."
+install : install_static install_shared install_programs
+
+install_static:
+	@echo "Installing static library..."
 	@-mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)_themes$(LIBEXT)
 	@-cp $(LIBRARY)$(LIBEXT) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)_themes$(LIBEXT)
+
+install_shared:
 	@echo "Installing themes..."
 	@-mkdir -p $(libdir)/fltk/schemes
 	@-mkdir -p $(libdir)/fltk/themes
 	@(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
 	@cp -f $(THEMES) $(libdir)/fltk/themes
 
+install_programs:
+
 #depend:
 #	$(MAKEDEPEND) $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.23 2000/06/18 11:05:42 vincent Exp $".
+# End of "$Id: Makefile,v 1.24 2000/07/14 08:35:01 clip Exp $".
 #

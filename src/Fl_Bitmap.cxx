@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.10 2000/01/07 22:58:51 mike Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.11 2000/07/14 08:35:01 clip Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 // Written by Matt
 // Updated by Mike to just make a simple 1-bit deep bitmap; I don't think it
 // needs to do the other stuff since 1-bit bitmaps are used for text, too...
-ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
+Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h) {
   // this won't work ehen the user changes display mode during run or
   // has two screens with differnet depths
   static uchar hiNibble[16] =
@@ -55,7 +55,7 @@ ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
     if (pad)
       *dst++ = 0;
   }
-  ulong r = (ulong)CreateBitmap(w, h, 1, 1, newarray);
+  Pixmap r = CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
   return r;
 }
@@ -68,5 +68,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.10 2000/01/07 22:58:51 mike Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.11 2000/07/14 08:35:01 clip Exp $".
 //

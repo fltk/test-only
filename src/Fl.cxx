@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.103 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.104 2000/07/14 08:35:00 clip Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -200,7 +200,7 @@ void Fl::repeat_timeout(double t, Fl_Timeout_Handler cb, void *v) {
   numtimeouts++;
 }
 
-int Fl::has_timeout(void (*cb)(void *), void *v) {
+int Fl::has_timeout(Fl_Timeout_Handler cb, void *v) {
   for (int i=0; i<numtimeouts; i++)
     if (timeout[i].cb == cb && timeout[i].arg==v) return 1;
   return 0;
@@ -542,5 +542,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.103 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.104 2000/07/14 08:35:00 clip Exp $".
 //

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+autoconf
+
+CC="gcc -mno-cygwin"
+CXX="g++ -mno-cygwin"
+export CC CXX
+
+# In order to find DLLs
+PATH=$PATH:`pwd`/lib
+export PATH
+
+./configure $*
+
+make clean all

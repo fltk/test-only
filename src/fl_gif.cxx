@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.6 1999/09/17 16:23:57 vincent Exp $"
+// "$Id: fl_gif.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
 //
 // fl_gif.cxx
 //
@@ -397,8 +397,8 @@ void Fl_GIF_Image::read()
 
   data[Height+2] = 0; // null to end string array
 
-  id = (ulong) fl_create_offscreen(w, h);
-  fl_begin_offscreen((Fl_Offscreen)id);
+  id = fl_create_offscreen(w, h);
+  fl_begin_offscreen(id);
 
 extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 
@@ -407,7 +407,7 @@ extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
   fl_draw_pixmap(data, 0, 0, FL_BLACK);
   fl_mask_bitmap = 0;
   if (bitmap) {
-    mask = (ulong) fl_create_bitmap(bitmap, w, h);
+    mask = fl_create_bitmap(bitmap, w, h);
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -421,5 +421,5 @@ extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.6 1999/09/17 16:23:57 vincent Exp $"
+// End of "$Id: fl_gif.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.25 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: x.H,v 1.26 2000/07/14 08:34:59 clip Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -76,7 +76,6 @@ extern FL_API const XEvent* fl_xevent;
 extern FL_API ulong fl_event_time;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window:
-#define Fl_Offscreen ulong
 #define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
@@ -91,7 +90,7 @@ extern FL_API ulong fl_event_time;
 
 // binary images, created from in-memory data:
 // See Fl_Image::_draw() for code that uses these.
-static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
+static inline Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h) {
   return XCreateBitmapFromData(fl_display, fl_window,
 			       (const char*)bitmap, (w+7)&-8, h);
 }
@@ -129,5 +128,5 @@ Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.25 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: x.H,v 1.26 2000/07/14 08:34:59 clip Exp $".
 //

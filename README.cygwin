@@ -1,18 +1,7 @@
 
 This file explains how to build the FLTK library and demonstration programs
-under Windows 95/98 or Windows NT 4.0 using the free Cygwin tools.  For this
-release, you must use the configure script to generate your makefiles.
-
-Note for users of the original versions of Windows 95:  You will need to have
-updated your system to compile and use FLTK programs.  Specifically, FLTK
-programs require an updated USER32.DLL.  If you've installed  certain newer
-(post 1996?) Microsoft software you probably already have this, but you should
-also be able to get this by downloading the Windows 95 updates available from
-Microsoft (www.microsoft.com).  Newer versions of Windows 95 and all versions
-of Windows 98 should be fine.  If you are not certain, try building FLTK and
-running one of the demos.  If it works, you have the updated DLL.
-
-Future version of FLTK may also require WS2_32.DLL.
+under Windows using the free Cygwin tools.  For this release, you must use the
+build script or configure script to generate your makefiles.
 
 Normal FLTK programs that do not use any Cygwin DLL functionality use only
 the Mingw32 components of Cygwin.  Therefore, you are not obligated to pay
