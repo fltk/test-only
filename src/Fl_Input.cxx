@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.47 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Input.cxx,v 1.48 2001/03/12 08:17:05 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -145,25 +145,15 @@ void Fl_Input::draw() {
 
 void Fl_Input::draw(int X, int Y, int W, int H)
 {
-  // CET - FIXME - the minimal update stuff should be fixed and when
-  // text is drawn the background should always be cleared because
-  // antialiased font rendering will not look right if drawn more
-  // than once in the same area.
-  damage(FL_DAMAGE_ALL);
+
   Fl_Color background = text_background();
+
+  // handle a totally blank one quickly:
   if (!show_cursor() && !size()) {
-    // we have to erase it if cursor was there
     fl_color(background);
     fl_rectf(X, Y, W, H);
     return;
   }
-
-  if (damage() & FL_DAMAGE_ALL) {
-    // erase background
-    fl_color(background);
-    fl_rectf(X, Y, W, H);
-  }
-  if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
   int selstart, selend;
   if (!show_cursor() && !pushed())
@@ -175,7 +165,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   }
 
   setfont();
-  int wordwrap = (type()>FL_MULTILINE_INPUT) ? W : 0;
+  int wordwrap = (type()>FL_MULTILINE_INPUT) ? W-8 : 0;
 
   const char *p, *e;
   char buf[MAXBUF];
@@ -196,7 +186,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 	// figure out scrolling so there is space after the cursor:
 	newscroll = curx+20-W;
 	// figure out the furthest left we ever want to scroll:
-	int ex = int(expandpos(p, e, buf, 0))+2-W;
+	int ex = int(expandpos(p, e, buf, 0))-W+8;
 	// use minimum of both amounts:
 	if (ex < newscroll) newscroll = ex;
       } else if (curx < newscroll+20) {
@@ -225,13 +215,22 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     yscroll_ = -(H-height)/2;
   }
 
+  // if we are not doing minimal update a single erase is done,
+  // rather than one per line:
+  if (damage() & FL_DAMAGE_ALL) {
+    fl_color(background);
+    fl_rectf(X, Y, W, H);
+  }
+
   fl_push_clip(X, Y, W, H);
+
   Fl_Color textcolor = text_color();
   if (!active_r()) textcolor = fl_inactive(text_color());
 
-  p = value();
   // visit each line and draw it:
+  p = value();
   int desc = height-fl_descent();
+  int xpos = X-xscroll_; if (W > 12) xpos += 3;
   int ypos = -yscroll_;
   for (; ypos < H;) {
 
@@ -242,51 +241,69 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
     if (!(damage()&FL_DAMAGE_ALL)) {	// for minimal update:
       const char* pp = value()+mu_p; // pointer to where minimal update starts
-      if (e >= pp && (!erase_cursor_only || p <= pp)) { // we must erase this
+      if (e < pp) goto CONTINUE2; // this line is before the changes
+      if (erase_cursor_only && p > pp) goto CONTINUE2; // this line is after
       // calculate area to erase:
-      int x1 = -xscroll_;
-      if (p < pp) x1 += expandpos(p, pp, buf, 0);
-      // erase it:
+      int r = X+W;
+      int x;
+      if (p >= pp) {
+	x = X;
+	if (erase_cursor_only) r = xpos+2;
+      } else {
+	x = xpos+expandpos(p, pp, buf, 0);
+	if (erase_cursor_only) r = x+2;
+      }
+      // clip to and erase it:
       fl_color(background);
-      fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
+      fl_rectf(x, Y+ypos, r-x, height);
+      fl_clip(x, Y+ypos, r-x, height);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
       // that is nyi.
-      }
     }
 
     // Draw selection area if required:
     if (selstart < selend && selstart <= e-value() && selend > p-value()) {
       const char* pp = value()+selstart;
-      int x1 = -xscroll_;
+      // draw unselected text before the selection:
+      int x1 = xpos;
       int offset1 = 0;
       if (pp > p) {
 	fl_color(textcolor);
 	x1 += expandpos(p, pp, buf, &offset1);
-	fl_draw(buf, offset1, X-xscroll_, Y+ypos+desc);
+	fl_draw(buf, offset1, xpos, Y+ypos+desc);
       }
+      // draw selected text for this line:
       pp = value()+selend;
-      int x2 = W;
+      int x2 = X+W;
       int offset2;
-      if (pp <= e) x2 = expandpos(p, pp, buf, &offset2)-xscroll_;
+      if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
       fl_color(selection_color());
-      fl_rectf(X+x1, Y+ypos, x2-x1, height);
+      fl_rectf(x1, Y+ypos, x2-x1, height);
       fl_color(selection_text_color());
-      fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
+      fl_draw(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
+      // draw unselected text after the selection:
       if (pp < e) {
 	fl_color(textcolor);
-	fl_draw(buf+offset2, X+x2, Y+ypos+desc);
+	fl_draw(buf+offset2, x2, Y+ypos+desc);
       }
     } else {
-      // draw the cursor:
+      // draw unselected text:
       fl_color(textcolor);
-      if (show_cursor() && selstart == selend &&
-	  position() >= p-value() && position() <= e-value()) {
-	fl_rectf(X+curx-xscroll_, Y+ypos, 2, height);
-      }
-      fl_draw(buf, X-xscroll_, Y+ypos+desc);
+      fl_draw(buf, xpos, Y+ypos+desc);
     }
+
+    if (!(damage()&FL_DAMAGE_ALL)) fl_pop_clip();
+
+  CONTINUE2:
+    // draw the cursor:
+    if (show_cursor() && selstart == selend &&
+	position() >= p-value() && position() <= e-value()) {
+      fl_color(textcolor);
+      fl_rectf(xpos+curx, Y+ypos, 2, height);
+    }
+
   CONTINUE:
     ypos += height;
     if (e >= value_+size_) break;
@@ -376,13 +393,13 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     // internally.  Using the style accessor functions is not guaranteed
     // to give correct results for what is actually displayed!  They
     // should _only_ be used in layout() and draw().
+    // WAS: I think this is ok. Calls in response to user events can
+    // assumme layout() has been called recently.
     theline /= (fl_height(text_font(), text_size())+leading());
   }
 
-  if (W > 12) {X += 3; W -= 6;} // add a left/right border
-
   setfont();
-  int wordwrap = (type()>FL_MULTILINE_INPUT) ? W : 0;
+  int wordwrap = (type()>FL_MULTILINE_INPUT) ? W-8 : 0;
 
   // Step through all the lines until we reach the pointed-to line.
   // Expand the lines to printed representation into the buffer:
@@ -396,15 +413,18 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     if (e >= value_+size_) break;
   }
   // Do a binary search for the horizontal character position:
-  const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
+
+  int xpos = X-xscroll_; if (W > 12) xpos += 3;
+
+  const char *l, *r, *t; double f0 = Fl::event_x()-xpos;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
-    int f = X-xscroll_+expandpos(p, t, buf, 0);
+    int f = xpos+expandpos(p, t, buf, 0);
     if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
     else r = t-1;
   }
   if (l < e) { // see if closer to character on right:
-    int f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
+    int f1 = xpos+expandpos(p, l+1, buf, 0)-Fl::event_x();
     if (f1 < f0) l = l+1;
   }
   return l-value();
@@ -423,8 +443,8 @@ int Fl_Input::position(int p, int m) {
     if (m != mark_) minimal_update(mark_, m);
   } else {
     // new position is a cursor:
-    if (position_ == mark_) erase_cursor_only = 1;
     minimal_update(position_, mark_);
+    if (position_ == mark_) erase_cursor_only = 1;
   }
   position_ = p;
   mark_ = m;
@@ -542,13 +562,16 @@ int Fl_Input::replace(int b, int e, const char* text, int ilen) {
   undowidget = this;
   undoat = b+ilen;
 
-  // Insertions into the word at the end of the line will cause it to
-  // wrap to the next line, so we must indicate that the changes may start
-  // right after the whitespace before the current word.  This will
+  // When editing with word wrap, it is possible to effectively turn
+  // the space before the current word into a newline or back, so the
+  // minimal update pointer must point at it.  This will
   // result in sub-optimal update when such wrapping does not happen
   // but it is too hard to figure out for now...
-  if (type() > FL_MULTILINE_INPUT)
-    while (b > 0 && !isspace(index(b))) b--;
+  if (type() > FL_MULTILINE_INPUT) {
+    int c = b - 1;
+    while (c > 0 && !isspace(index(c))) c--;
+    if (c > 0) b = c;
+  }
 
   // make sure we redraw the old selection or cursor:
   if (mark_ < b) b = mark_;
@@ -1018,5 +1041,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.47 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.48 2001/03/12 08:17:05 spitzak Exp $".
 //
