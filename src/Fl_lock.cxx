@@ -14,11 +14,14 @@
    Fl::unlock() - release the recursive lock.
 
    Fl::awake(void*) - Causes Fl::wait() to return (with the lock locked)
-   even if there are no events ready.  Upon return Fl::thread_message()
-   will return the void* argument.
+   even if there are no events ready.
 
-   See also the Fl_Thread header file, which provides convienence
-   functions
+   Fl::thread_message() - returns an argument sent to an Fl::awake call,
+   or returns null if none.  Warning: the current implementation only
+   has a one-entry queue and only returns the most recent value!
+
+   See also the Fl_Threads.H header file, which provides convienence
+   functions so you can create your own threads and mutexes.
 */
 
 #include <FL/Fl.H>
@@ -71,16 +74,15 @@ static int thread_filedes[2];
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
-static void* message;
-
+static void* thread_message_;
 void* Fl::thread_message() {
-  void* r = message;
-  message = 0;
+  void* r = thread_message_;
+  thread_message_ = 0;
   return r;
 }
 
 static void thread_awake_cb(int fd, void*) {
-  read(fd, &message, sizeof(void*));
+  read(fd, &thread_message_, sizeof(void*));
 }
 
 void Fl::lock() {

@@ -45,12 +45,12 @@ void Fl_Align_Group::layout() {
   uchar label_space[256];
   memset(label_space,0,n_variable*sizeof(uchar));
 
-  Fl_Widget*const* a = array();
   int u=0, v=0;
   int total_label_space=0;
+  int numchildren = children();
   if (align()) {
-    for (i = children(); i--;) {
-      Fl_Widget* o = *a++;
+    for (i = 0; i < numchildren; i++) {
+      Fl_Widget* o = child(i);
       int w=0,h;
       fl_font(o->label_font(),o->label_size());
       fl_measure(o->label(),w,h);
@@ -68,10 +68,9 @@ void Fl_Align_Group::layout() {
   if (!is_window()) {cx += x(); cy += y();}
   int icx = cx, icy = cy;
 
-  a = array();
   u = v = 0;
-  for (i = children(); i--;) {
-    Fl_Widget* o = *a++;
+  for (i = 0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     int which = (variable_is_y == vertical()) ? u : v; 
     int X = cx, Y = cy;
     if (align() & FL_ALIGN_TOP) Y += label_space[which];

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.20 2000/05/15 05:52:25 bill Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.21 2000/05/17 07:08:08 bill Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -52,16 +52,14 @@ void Fl_Menu_::execute(Fl_Widget* w) {
       else break;
     }
   }
-  // We search from the item up to find a non-zero user-data and
-  // a non-default callback to call:
-  void* data = w->user_data();
-  Fl_Widget* cb_w = w;
-  while (w != this) {
-    w = w->parent();
-    if (!data) data = w->user_data();
-    if (cb_w->callback() == Fl_Widget::default_callback) cb_w = w;
+  // Items without a callback cause the menu/browser's callback to
+  // be called and the item's user data passed, or the item itself
+  // if the item has no user data.
+  if (w->callback() == Fl_Widget::default_callback) {
+    do_callback(this, w->user_data() ? w->user_data() : (void*)w);
+  } else {
+    w->do_callback(w, user_data());
   }
-  cb_w->do_callback(cb_w, data);
 }
 
 Fl_Widget* Fl_Menu_::item() const {
@@ -110,5 +108,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.20 2000/05/15 05:52:25 bill Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.21 2000/05/17 07:08:08 bill Exp $"
 //

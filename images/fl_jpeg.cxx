@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
+// "$Id: fl_jpeg.cxx,v 1.3 2000/05/17 07:08:06 bill Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ extern "C" {
 #include <jpeglib.h>
 }
 #include <setjmp.h>
-
+#include <string.h>
 
 typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
@@ -404,5 +404,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.3 2000/05/17 07:08:06 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.69 2000/05/15 21:29:52 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.70 2000/05/17 07:08:08 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,11 +41,27 @@ static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
 
+// The default list returns the storage of the Fl_Group:
+inline int Fl_List::children(const Fl_Group* group) {
+  return group->children_;
+}
+
+inline Fl_Widget* Fl_List::child(const Fl_Group* group, int n) {
+  return group->array_[n];
+}
+
+int Fl_Group::children() const {return list_->children(this);}
+
+Fl_Widget* Fl_Group::child(int n) const {return list_->child(this,n);}
+
+static Fl_List default_list;
+
 // This style is unnamed since there is no reason for themes to change it:
 static Fl_Named_Style* style = new Fl_Named_Style(0, revert, &style);
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
+  list_(&default_list),
   children_(0),
   focus_(0),
   array_(0),
@@ -135,7 +151,7 @@ void Fl_Group::replace(int index, Fl_Widget& o) {
 
 int Fl_Group::find(const Fl_Widget* o) const {
   while (o && o->parent() != this) o = o->parent();
-  Fl_Widget*const* a = array();
+  Fl_Widget*const* a = array_;
   int i; for (i=0; i < children_; ++i) if (*a++ == o) break;
   return i;
 }
@@ -260,7 +276,7 @@ int Fl_Group::handle(int event) {
     switch (navigation_key()) {
     default:
       // try to give it to whatever child had focus last:
-      if (focus_ >= 0 && focus_ < children())
+      if (focus_ >= 0 && focus_ < numchildren)
 	if (child(focus_)->take_focus()) return 1;
       // otherwise fall through to search for first one that wants focus:
     case FL_Right:
@@ -292,7 +308,7 @@ int Fl_Group::handle(int event) {
     for (int j = i;;) {
       if (send(event, *child(j))) return 1;
       j++;
-      if (j >= children()) j = 0;
+      if (j >= numchildren) j = 0;
       if (j == i) break;
     }
   }
@@ -304,7 +320,7 @@ int Fl_Group::handle(int event) {
 
     // loop from the current focus looking for a new focus, quit when
     // we reach the original again:
-    int previous = i;
+    int previous = i = focus_;
     Fl_Widget* o = child(i);
     int old_x = o->x();
     int old_r = o->x()+o->w();
@@ -346,6 +362,7 @@ int Fl_Group::handle(int event) {
 
 ////////////////////////////////////////////////////////////////
 // Layout
+// Only real child widgets are handled, stuff in the Fl_List is ignored.
 
 // sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
@@ -383,7 +400,7 @@ int* Fl_Group::sizes() {
     }
     // next is all the children's sizes:
     p += 8;
-    Fl_Widget*const* a = array();
+    Fl_Widget*const* a = array_;
     Fl_Widget*const* e = a+children_;
     while (a < e) {
       Fl_Widget* o = *a++;
@@ -402,7 +419,7 @@ void Fl_Group::layout() {
     if (!is_window()) {
       int dx = x()-ox();
       int dy = y()-oy();
-      Fl_Widget*const* a = array();
+      Fl_Widget*const* a = array_;
       Fl_Widget*const* e = a+children_;
       while (a < e) {
 	Fl_Widget* o = *a++;
@@ -426,7 +443,7 @@ void Fl_Group::layout() {
     int IY = *p++;
     int IB = *p++;
 
-    Fl_Widget*const* a = array();
+    Fl_Widget*const* a = array_;
     Fl_Widget*const* e = a+children_;
     while (a < e) {
       Fl_Widget* o = *a++;
@@ -457,24 +474,22 @@ void Fl_Group::layout() {
 // Draw
 
 void Fl_Group::draw() {
-  Fl_Widget*const* a = array();
-  Fl_Widget*const* e = a+children_;
+  int numchildren = children();
   if (damage() & ~FL_DAMAGE_CHILD) {
     // Full redraw of the group:
     fl_clip(x(), y(), w(), h());
-    while (e > a) draw_child(**--e);
+    int n; for (n = numchildren; n;) draw_child(*child(--n));
     draw_group_box();
     fl_pop_clip(); // this is here for back compatability?
-    e = a+children_;
-    while (a < e) draw_outside_label(**a++);
+    for (n = 0; n < numchildren; n++) draw_outside_label(*child(n));
     // perhaps fl_pop_clip() should be here?
   } else {
     // only some child widget has been damaged, draw them without
     // doing any clipping.  This is for maximum speed, even though
     // this may result in different output if this widget overlaps
     // another widget or a label.
-    while (a < e) {
-      Fl_Widget& w = **a++;
+    for (int n = 0; n < numchildren; n++) {
+      Fl_Widget& w = *child(n);
       if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
 	draw_outside_label(w);
 	w.set_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
@@ -560,5 +575,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.69 2000/05/15 21:29:52 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.70 2000/05/17 07:08:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.19 2000/05/16 02:49:51 carl Exp $"
+// "$Id: Fl_Browser.cxx,v 1.20 2000/05/17 07:08:07 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -696,6 +696,7 @@ int Fl_Browser::handle(int event) {
 	  // start a new selection block without changing state
 	  set_focus();
 	  drag_type = !item_selected();
+	  if (openclose_drag) drag_type = !drag_type; // don't change it
 	} else if (Fl::event_state(FL_SHIFT)) {
 	  // extend the current focus
 	  drag_type = !item_selected();
@@ -876,5 +877,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.19 2000/05/16 02:49:51 carl Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.20 2000/05/17 07:08:07 bill Exp $".
 //

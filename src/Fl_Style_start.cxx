@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.6 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.7 2000/05/17 07:08:09 bill Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -30,14 +30,14 @@
 
 
 struct Fl_Style_Class {
-  char* name;
+  const char* name;
   Fl_Named_Style* first_style;
   Fl_Style_Class* next;
   int draw_boxes_inactive; // should boxes ever be drawn inactive?
   
   static Fl_Style_Class *first;
   static Fl_Style_Class *current;
-  static char* current_name;
+  static const char* current_name;
 
   void store_global();
   void get_global();
@@ -47,7 +47,7 @@ struct Fl_Style_Class {
 
 Fl_Style_Class* Fl_Style_Class::first;
 Fl_Style_Class* Fl_Style_Class::current = new Fl_Style_Class;
-char* Fl_Style_Class::current_name = "style1";
+const char* Fl_Style_Class::current_name = "style1";
 
 void Fl_Style_Class::store_global()
 {
@@ -59,7 +59,7 @@ void Fl_Style_Class::get_global()
   Fl_Style::draw_boxes_inactive = draw_boxes_inactive;
 }
 
-void Fl_Style::start(char* name)
+void Fl_Style::start(const char* name)
 {
   if (!strcmp(name, Fl_Style_Class::current_name)) return;
 
@@ -114,5 +114,5 @@ void Fl_Style::start(char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.6 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.7 2000/05/17 07:08:09 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.14 2000/04/10 06:45:44 bill Exp $"
+// "$Id: Fl_Pack.cxx,v 1.15 2000/05/17 07:08:08 bill Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,9 +44,9 @@ void Fl_Pack::draw() {
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
   uchar d = damage();
-  Fl_Widget*const* a = array();
-  for (int i = children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i = 0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     if (o->visible()) {
       int X,Y,W,H;
       if (horizontal()) {
@@ -104,5 +104,5 @@ void Fl_Pack::draw() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.14 2000/04/10 06:45:44 bill Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.15 2000/05/17 07:08:08 bill Exp $".
 //

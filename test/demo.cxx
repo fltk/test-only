@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $"
+// "$Id: demo.cxx,v 1.14 2000/05/17 07:08:12 bill Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ typedef struct {
 MENU menus[MAXMENU];
 int mennumb = 0;
 
-int find_menu(char nnn[])
+int find_menu(const char nnn[])
 /* Returns the number of a given menu name. */
 {
   int i;
@@ -160,7 +160,7 @@ int numb2but(int inumb, int maxnumb)
 char stack[64][32];
 char stsize = 0;
 
-void push_menu(char nnn[])
+void push_menu(const char nnn[])
 /* Pushes a menu to be visible */
 {
   int n,i,bn;
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $".
+// End of "$Id: demo.cxx,v 1.14 2000/05/17 07:08:12 bill Exp $".
 //
 

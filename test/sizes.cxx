@@ -32,7 +32,7 @@
 
 #include <stdio.h>
 
-main() {
+int main() {
   printf("sizeof(Fl_Menu_Item) = %lu\n", (unsigned long)sizeof(struct Fl_Menu_Item));
   printf("sizeof(Fl_Style) = %lu\n", (unsigned long)sizeof(struct Fl_Style));
   printf("sizeof(Fl_Widget) = %lu\n", (unsigned long)sizeof(class Fl_Widget));
@@ -65,4 +65,5 @@ main() {
   printf("      sizeof(Fl_Scrollbar) = %lu\n", (unsigned long)sizeof(class Fl_Scrollbar));
   printf("    sizeof(Fl_Value_Input) = %lu\n", (unsigned long)sizeof(class Fl_Value_Input));
   printf("    sizeof(Fl_Value_Output) = %lu\n", (unsigned long)sizeof(class Fl_Value_Output));
+  return 0;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.103 2000/05/11 22:03:28 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.104 2000/05/17 07:08:10 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -200,11 +200,10 @@ static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
 
-static void* message;
-
+static void* thread_message_;
 void* Fl::thread_message() {
-  void* r = message;
-  message = 0;
+  void* r = thread_message_;
+  thread_message_ = 0;
   return r;
 }
 
@@ -289,7 +288,7 @@ static double fl_wait(int timeout_flag, double time) {
     } else
 #endif // USE_ASYNC_SELECT
     if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
-      message = (void*)fl_msg.wParam;
+      thread_message_ = (void*)fl_msg.wParam;
     else {
       TranslateMessage(&fl_msg);
       DispatchMessage(&fl_msg);
@@ -1110,5 +1109,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.103 2000/05/11 22:03:28 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.104 2000/05/17 07:08:10 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.52 2000/04/21 05:35:21 carl Exp $"
+// "$Id: fl_options.cxx,v 1.53 2000/05/17 07:08:11 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,7 +174,7 @@ static Fl_Font grok_font(const char* cf, const char* sec, const char* fontstr) {
 
   if (strspn(p, "0123456789") == strlen(p)) return fl_fonts + atol(p);
 
-  static char* fonts[] = {
+  static const char* fonts[] = {
     "helvetica",
     "helvetica bold",
     "helvetica italic",
@@ -249,14 +249,14 @@ int loadscheme(int b) {
     fl_background(fl_get_color(col));
   }
 
-  static struct { char* key; Fl_Color col; } colors[] = {
+  static struct { const char* key; Fl_Color col; } colors[] = {
     { "DARK1", FL_DARK1 },
     { "DARK2", FL_DARK2 },
     { "DARK3", FL_DARK3 },
     { "LIGHT1", FL_LIGHT1 },
     { "LIGHT2", FL_LIGHT2 },
     { "LIGHT3", FL_LIGHT3 },
-    { 0 }
+    { 0, 0 }
   };
 
   for (int i = 0; colors[i].key; i++) {
@@ -504,7 +504,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.52 2000/04/21 05:35:21 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.53 2000/05/17 07:08:11 bill Exp $".
 //
 
 

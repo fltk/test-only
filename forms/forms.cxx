@@ -1,5 +1,5 @@
 //
-// "$Id: forms.cxx,v 1.3 2000/01/16 07:44:26 robertk Exp $"
+// "$Id: forms.cxx,v 1.4 2000/05/17 07:08:05 bill Exp $"
 //
 // Another forms demo for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ static int border = 1; // changed from FL_TRANSIENT for fltk
 // (this is so the close box and Esc work to close the window)
 
 // fltk: changed from int to Fl_Boxtype
-typedef struct { Fl_Boxtype val; char *name; } VN_struct;
+typedef struct { Fl_Boxtype val; const char *name; } VN_struct;
 #define VN(a) {a,#a}
 
 // static VN_struct gmode[] =
@@ -166,7 +166,7 @@ create_the_forms (void)
 
 /*************** Main Routine ***********************/
 
-char *browserlines[] = {
+const char *browserlines[] = {
    " ", "@C1@c@l@bObjects Demo",   " ",
    "This demo shows you all",      "objects that currently",
    "exist in the Forms Library.",  " ",
@@ -185,7 +185,7 @@ int
 main (int argc, char *argv[])
 {
   FL_COLOR c = 0;
-  char **p;
+  const char **p;
   VN_struct *vn;
 
   fl_initialize(&argc, argv, "FormDemo", 0, 0);
@@ -230,5 +230,5 @@ main (int argc, char *argv[])
 }
 
 //
-// End of "$Id: forms.cxx,v 1.3 2000/01/16 07:44:26 robertk Exp $".
+// End of "$Id: forms.cxx,v 1.4 2000/05/17 07:08:05 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.22 2000/05/15 05:52:26 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.23 2000/05/17 07:08:08 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,10 +31,9 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   fl_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
   // draw all the children, clipping them out of the region:
-  Fl_Widget*const* a = s->array();
-  Fl_Widget*const* e = a+s->children();
-  while (e > a) {
-    Fl_Widget& w = **--e;
+  int numchildren = s->children(); int i;
+  for (i = numchildren; i--;) {
+    Fl_Widget& w = *s->child(i);
     if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) continue;
     // Partial-clipped children with their own damage will still need
     // to be redrawn before the scroll is finished drawing.  Don't clear
@@ -52,8 +51,8 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   // fill the rest of the region with color:
   fl_color(s->color()); fl_rectf(X,Y,W,H);
   // draw the outside labels:
-  e = a+s->children();
-  while (a < e) s->draw_outside_label(**a++);
+  for (i = numchildren; i--;)
+    s->draw_outside_label(*s->child(i));
   fl_pop_clip();
 }
 
@@ -82,10 +81,8 @@ void Fl_Scroll::draw() {
     }
     if (d & FL_DAMAGE_CHILD) { // draw damaged children
       fl_clip(X, Y, W, H);
-      Fl_Widget*const* a = array();
-      Fl_Widget*const* e = a+children();
-      while (a < e) {
-	Fl_Widget& w = **a++;
+      for (int i = children(); i--;) {
+	Fl_Widget& w = *child(i);
 	if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
 	  draw_outside_label(w);
 	  w.set_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
@@ -116,15 +113,15 @@ void Fl_Scroll::layout() {
   int X,Y,W,H; bbox(X,Y,W,H);
 
   // move all the children and accumulate their bounding boxes:
-  Fl_Widget*const* a = array();
   int l = X; int r = X; int t = Y; int b = Y;
   int dx = layoutdx + ox() - x();
   int dy = layoutdy + oy() - y();
   layoutdx = layoutdy = 0;
   scrolldx += dx;
   scrolldy += dy;
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     o->position(o->x()+dx, o->y()+dy);
     o->layout();
     if (o->x() < l) l = o->x();
@@ -263,5 +260,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.22 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.23 2000/05/17 07:08:08 bill Exp $".
 //

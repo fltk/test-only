@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.7 1999/09/17 16:23:57 vincent Exp $"
+// "$Id: fl_bmp.cxx,v 1.8 2000/05/17 07:08:11 bill Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -88,7 +88,7 @@ int Fl_BMP_Image::test(uchar* buffer, size_t size)
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
 
-inline void SetError(char* /*s*/)
+inline void SetError(const char* /*s*/)
 {
   //  fprintf(stderr, s);
 }
@@ -823,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.7 1999/09/17 16:23:57 vincent Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.8 2000/05/17 07:08:11 bill Exp $"
 //

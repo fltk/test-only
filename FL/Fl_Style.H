@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.28 2000/04/18 00:45:39 carl Exp $"
+// "$Id: Fl_Style.H,v 1.29 2000/05/17 07:08:03 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -64,7 +64,7 @@ struct FL_API Fl_Style {
   Fl_Style(); // creates a dynamic() style
 
   static void revert();                 // use FLTK default style
-  static void start(char* name);	// start a new class of style or use a previously started one
+  static void start(const char* name);	// start a new class of style or use a previously started one
 
   // find a default style by its string ID
   static Fl_Named_Style* find(const char* name);
@@ -102,5 +102,5 @@ FL_API const char* fl_find_config_file(const char*);
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.28 2000/04/18 00:45:39 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.29 2000/05/17 07:08:03 bill Exp $".
 //

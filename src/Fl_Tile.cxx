@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.14 2000/01/10 06:31:24 bill Exp $"
+// "$Id: Fl_Tile.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,11 @@
 // pass zero as oldx or oldy to disable drag in that direction:
 
 void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
-  Fl_Widget*const* a = array();
   int* p = sizes();
   p += 8; // skip group & resizable's saved size
-  for (int i=children(); i--; p += 4) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; p += 4, i++) {
+    Fl_Widget* o = child(i);
     if (o == resizable()) continue;
     int X = o->x();
     int R = X+o->w();
@@ -78,10 +78,10 @@ void Fl_Tile::layout() {
   int OB = p[7];
   int NB = y()+h()-(p[3]-OB);
   // move everything to be on correct side of new resizable:
-  Fl_Widget*const* a = array();
   p += 8;
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     int X = o->x()+dx;
     int R = X+o->w();
     if (*p++ >= OR) X += dw; else if (X > NR) X = NR;
@@ -132,11 +132,11 @@ int Fl_Tile::handle(int event) {
     int mindy = 100;
     int oldx = 0;
     int oldy = 0;
-    Fl_Widget*const* a = array();
     int* q = sizes();
     int* p = q+8;
-    for (int i=children(); i--; p += 4) {
-      Fl_Widget* o = *a++;
+    int numchildren = children();
+    for (int i=0; i < numchildren; p += 4, i++) {
+      Fl_Widget* o = child(i);
       if (o == resizable()) continue;
       if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
 	int t = mx - (o->x()+o->w());
@@ -197,5 +197,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.14 2000/01/10 06:31:24 bill Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $".
 //

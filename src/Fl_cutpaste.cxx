@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_cutpaste.cxx,v 1.6 1999/03/02 07:03:15 bill Exp $"
+// "$Id: Fl_cutpaste.cxx,v 1.7 2000/05/17 07:08:10 bill Exp $"
 //
 // Cut/paste code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,8 @@
 #else
 
 #include <FL/Fl.H>
-#include <FL/x.H>
 #include <FL/Fl_Window.H>
+#include <FL/x.H>
 #include <string.h>
 
 static char *selection_buffer;
@@ -149,5 +149,5 @@ void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
 #endif
 
 //
-// End of "$Id: Fl_cutpaste.cxx,v 1.6 1999/03/02 07:03:15 bill Exp $".
+// End of "$Id: Fl_cutpaste.cxx,v 1.7 2000/05/17 07:08:10 bill Exp $".
 //

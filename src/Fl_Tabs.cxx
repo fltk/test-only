@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.39 2000/05/15 05:52:27 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.40 2000/05/17 07:08:09 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,11 +44,11 @@
 
 int Fl_Tabs::tab_positions(int* p, int* w) {
   int selected = -1;
-  Fl_Widget*const* a = array();
   int i;
   p[0] = 0;
-  for (i=0; i<children(); i++) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (i=0; i<numchildren; i++) {
+    Fl_Widget* o = child(i);
     if (o->visible()) selected = i;
     if (o->label()) {
       int wt = 0; int ht = 0; o->measure_label(wt,ht);
@@ -88,9 +88,9 @@ int Fl_Tabs::tab_positions(int* p, int* w) {
 int Fl_Tabs::tab_height() {
   int H = h();
   int H2 = y();
-  Fl_Widget*const* a = array();
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     if (o->y() < y()+H) H = o->y()-y();
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
@@ -234,12 +234,12 @@ int Fl_Tabs::push(Fl_Widget *o) {
 // show()/hide() called without it screwing up.
 Fl_Widget* Fl_Tabs::value() {
   Fl_Widget* v = 0;
-  Fl_Widget*const* a = array();
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     if (v) o->hide();
     else if (o->visible()) v = o;
-    else if (!i) {o->show(); v = o;}
+    else if (i==numchildren-1) {o->show(); v = o;}
   }
   return v;
 }
@@ -248,9 +248,9 @@ Fl_Widget* Fl_Tabs::value() {
 // visible, iff it is really a child:
 int Fl_Tabs::value(Fl_Widget *newvalue) {
   int setfocus = !focused() && contains(Fl::focus());
-  Fl_Widget*const* a = array();
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+  int numchildren = children();
+  for (int i=0; i < numchildren; i++) {
+    Fl_Widget* o = child(i);
     if (o == newvalue) {
       if (o->visible()) return 0; // no change
       o->show();
@@ -285,14 +285,13 @@ void Fl_Tabs::draw() {
     int selected = tab_positions(p,w);
     int i;
 
-    Fl_Widget*const* a = array();
     for (i=0; i<selected; i++)
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, a[i], LEFT);
+      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), LEFT);
     for (i=children()-1; i > selected; i--)
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, a[i], RIGHT);
+      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), RIGHT);
     if (v) {
       i = selected;
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, a[i], SELECTED);
+      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), SELECTED);
     } else {
       // draw the edge when no selection:
       fl_color(H >= 0 ? FL_LIGHT3 : FL_DARK3);
@@ -378,5 +377,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.39 2000/05/15 05:52:27 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.40 2000/05/17 07:08:09 bill Exp $".
 //

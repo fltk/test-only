@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.13 2000/05/02 15:20:24 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.14 2000/05/17 07:08:03 bill Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,7 +88,7 @@ public:
   FL_IMAGES_API static Fl_Image_Type* guess(const char* name, unsigned char *datas=0);
 
   // Set the position where images are looked for on disk
-  FL_API static void set_root_directory(char *d);
+  FL_API static void set_root_directory(const char *d);
 
   // Set the size of the cache (0 = unlimited is the default)
   FL_API static void set_cache_size(size_t l);
@@ -187,5 +187,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.13 2000/05/02 15:20:24 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.14 2000/05/17 07:08:03 bill Exp $"
 //

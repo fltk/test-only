@@ -32,7 +32,7 @@ void fl_line_style(int style, int width, char* dashes) {
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the WIN32 dash patterns on X
   char buf[7];
-  if (!ndashes && (style&0xff)) {
+  if (style&0xff) {
     int w = width ? width : 1;
     char dash, dot, gap;
     // adjust lengths to account for cap:
@@ -46,6 +46,7 @@ void fl_line_style(int style, int width, char* dashes) {
     }
     char* p = dashes = buf;
     switch (style & 0xff) {
+    default:
     case FL_DASH:	*p++ = dash; *p++ = gap; break;
     case FL_DOT:	*p++ = dot; *p++ = gap; break;
     case FL_DASHDOT:	*p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
@@ -53,11 +54,11 @@ void fl_line_style(int style, int width, char* dashes) {
     }
     ndashes = p-buf;
   }
+  if (ndashes) XSetDashes(fl_display, fl_gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
   XSetLineAttributes(fl_display, fl_gc, width, 
 		     ndashes ? LineOnOffDash : LineSolid,
 		     Cap[(style>>8)&3], Join[(style>>12)&3]);
-  if (ndashes) XSetDashes(fl_display, fl_gc, 0, dashes, ndashes);
 #endif
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_NewBrowser.cxx,v 1.2 2000/05/11 22:03:27 bill Exp $"
+// "$Id: Fl_NewBrowser.cxx,v 1.3 2000/05/17 07:08:08 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -28,6 +28,8 @@
 #include <FL/Fl_NewBrowser.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
+
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////
 // Compile-time style configuration options.
@@ -626,5 +628,5 @@ int Fl_Browser::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_NewBrowser.cxx,v 1.2 2000/05/11 22:03:27 bill Exp $".
+// End of "$Id: Fl_NewBrowser.cxx,v 1.3 2000/05/17 07:08:08 bill Exp $".
 //

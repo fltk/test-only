@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.28 2000/04/27 00:30:07 carl Exp $"
+// "$Id: win32.H,v 1.29 2000/05/17 07:08:04 bill Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,32 +64,6 @@ inline void XClipBox(Region r,XRectangle* rect) {
 #define XMapWindow(a,b) ShowWindow(b, SW_RESTORE)
 #define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
 
-#include "Fl_Window.H"
-
-// this object contains all win32-specific stuff about a window:
-// Warning: this object is highly subject to change!
-class FL_API Fl_X {
-public:
-  Window xid;
-  HBITMAP other_xid; // for double-buffered windows
-  Fl_Window* w;
-  Region region;
-  Fl_X *next;
-  int wait_for_expose;
-  HDC private_dc; // used for OpenGL
-  HCURSOR cursor;
-  inline void flush() {w->flush();}
-  static Fl_X* first;
-  static Fl_X* i(const Fl_Window* w) {return w->i;}
-  static int borders(const Fl_Window* w,
-					 int& dx, int& dy, int& dw, int& dh);
-  void set_minmax(LPMINMAXINFO minmax);
-  static Fl_X* create(Fl_Window*);
-};
-extern FL_API HCURSOR fl_default_cursor;
-inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
-Fl_Window* fl_find(Window xid);
-
 // most recent fl_color() or fl_rgbcolor() points at one of these:
 FL_API struct FL_API Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
@@ -129,8 +103,37 @@ void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy)
 extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
 
+#ifdef Fl_Window_H // only include this if we are working with windows
+
+// this object contains all X-specific stuff about a window:
+// Warning: this object is highly subject to change!  It's definition
+// is only here so that fl_xid can be declared inline:
+
+class FL_API Fl_X {
+public:
+  Window xid;
+  HBITMAP other_xid; // for double-buffered windows
+  Fl_Window* w;
+  Region region;
+  Fl_X *next;
+  int wait_for_expose;
+  HDC private_dc; // used for OpenGL
+  HCURSOR cursor;
+  inline void flush() {w->flush();}
+  static Fl_X* first;
+  static Fl_X* i(const Fl_Window* w) {return w->i;}
+  static int borders(const Fl_Window* w,
+					 int& dx, int& dy, int& dw, int& dh);
+  void set_minmax(LPMINMAXINFO minmax);
+  static Fl_X* create(Fl_Window*);
+};
+extern FL_API HCURSOR fl_default_cursor;
+inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
+Fl_Window* fl_find(Window xid);
+
+#endif
 #endif
 
 //
-// End of "$Id: win32.H,v 1.28 2000/04/27 00:30:07 carl Exp $".
+// End of "$Id: win32.H,v 1.29 2000/05/17 07:08:04 bill Exp $".
 //

@@ -114,6 +114,8 @@ void cb_sort_reverse(Fl_Widget*, void*) {
 void cb_sort_random(Fl_Widget*, void*) {
 }
 
+#include <FL/Fl_String_List.H>
+
 int main(int argc,char** argv) {
   Fl_Window win(240, 304, "Browser Example");
   Fl_Button remove_button(10, 200, 100, 22, "Remove");
@@ -142,6 +144,8 @@ int main(int argc,char** argv) {
   colors_button.set();
   tree.callback(cb_test);
 
+  tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+#if 0
   //int w[3] = {150, 200, 0};
   //tree.column_widths(w);
 
@@ -204,6 +208,7 @@ int main(int argc,char** argv) {
     printf("Successfully deleted \"nonexistant\"\n");
   else
     printf("Could not delete \"nonexistant\"\n");
+#endif
 #endif
 
   win.show(argc,argv);

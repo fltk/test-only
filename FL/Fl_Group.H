@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.22 2000/04/10 06:45:40 bill Exp $"
+// "$Id: Fl_Group.H,v 1.23 2000/05/17 07:08:03 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,16 +30,26 @@
 #include "Fl_Widget.H"
 #endif
 
+class Fl_Group;
+
+class FL_API Fl_List {
+public:
+  virtual int children(const Fl_Group*);
+  virtual Fl_Widget* child(const Fl_Group*, int n);
+};
+
 class FL_API Fl_Group : public Fl_Widget {
-  friend class Fl_Tabs;
+
+  friend class Fl_List;
+  Fl_List* list_;
   int children_;
   int focus_;
   Fl_Widget** array_;
   Fl_Widget* resizable_;
+
   int *sizes_; // remembered initial sizes of children
   int ox_,oy_,ow_,oh_; // old size, used by layout
 
-  int navigation(int);
   static Fl_Group *current_;
 
 protected:
@@ -62,17 +72,19 @@ public:
   void draw_group_box() const;
   void layout();
   int handle(int);
+
   void begin() {current_ = this;}
   void end() {current_ = (Fl_Group*)parent();}
   static Fl_Group *current() {return current_;}
   static void current(Fl_Group *g) {current_ = g;}
 
-  void old_size(const Fl_Widget*,int*);
-  int children() const {return children_;}
-  Fl_Widget* child(int n) const {return array_[n];}
+  int children() const;
+  Fl_Widget* child(int n) const;
+  Fl_List* list() const {return list_;}
+  void list(Fl_List* l) {list_ = l;}
+
   int find(const Fl_Widget*) const;
   int find(const Fl_Widget& o) const {return find(&o);}
-  Fl_Widget* const* array() const {return array_;}
 
   Fl_Group(int,int,int,int, const char * = 0);
   virtual ~Fl_Group();
@@ -114,5 +126,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.22 2000/04/10 06:45:40 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.23 2000/05/17 07:08:03 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.23 2000/04/16 08:31:48 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.24 2000/05/17 07:08:10 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,10 +27,10 @@
 // You do not need to call this!  Feel free to make up your own switches.
 
 #include <FL/Fl.H>
-#include <FL/x.H>
 #include <FL/Fl_Window.H>
 #include <FL/filename.H>
 #include <FL/fl_draw.H>
+#include <FL/x.H>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -345,5 +345,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.23 2000/04/16 08:31:48 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.24 2000/05/17 07:08:10 bill Exp $".
 //

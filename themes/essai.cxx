@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.24 2000/04/12 08:05:44 bill Exp $"
+// "$Id: essai.cxx,v 1.25 2000/05/17 07:08:13 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -53,7 +53,7 @@ public:
   Fl_Shared_Image* normal_img;
   Fl_Shared_Image* down_img;
   Fl_Shared_Image* highlight_img;
-  Fl_Image_Box(char*, char*, char*, Fl_Flags = 0);
+  Fl_Image_Box(const char*, const char*, const char*, Fl_Flags = 0);
 };
 
 void Fl_Image_Box::draw(int x, int y, int w, int h,
@@ -78,7 +78,7 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   }
 }
 
-Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b, Fl_Flags m) :
+Fl_Image_Box::Fl_Image_Box(const char* normal_b, const char* down_b, const char* highlight_b, Fl_Flags m) :
 Fl_Boxtype_(0), mask(m) {
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
   down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
@@ -89,7 +89,7 @@ class Fl_Image_NoBorderBox : public Fl_Image_Box {
   void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
   void inset(int& x,int& y,int& w,int& h) const {}
 public:
-  Fl_Image_NoBorderBox(char*a, char*b, char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {}
+  Fl_Image_NoBorderBox(const char*a, const char*b, const char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {}
 };
 
 void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
@@ -154,5 +154,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.24 2000/04/12 08:05:44 bill Exp $".
+// End of "$Id: essai.cxx,v 1.25 2000/05/17 07:08:13 bill Exp $".
 //
