@@ -197,7 +197,7 @@ int fl_measure_bmp(char *filename, uchar *pdatas, int &w, int &h)
     h = infoHeader.pixelHeight = ReadLittleEndianDWORD();
   }
 
-  fclose(bmpFile);
+  if (!pdatas) fclose(bmpFile);
 
   return w;
 }

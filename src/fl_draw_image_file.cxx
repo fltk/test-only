@@ -40,7 +40,7 @@ static char *root=0;
 
 static fl_image_file_struct  *first_image = 0;
 
-static int used=0;
+static int image_used=0;
 static size_t mem_usage_limit=0;
 
 
@@ -50,20 +50,20 @@ void fl_set_image_file_mem_usage_limit(size_t l)
 }
 
 fl_image_file_struct *lifs;
-static size_t count(fl_image_file_struct* ifs) {
-  size_t s = ifs->mem;
-  if(ifs->l1) s += count(ifs->l1);
-  if(ifs->l2) s += count(ifs->l2);
-  if(ifs->id && (lifs->id == 0 || ifs->used<lifs->used)) lifs=ifs;
+size_t fl_image_file_struct::count() {
+  size_t s = mem;
+  if(l1) s += l1->count();
+  if(l2) s += l2->count();
+  if(id && (lifs->id == 0 || used<lifs->used)) lifs=this;
   return s;
 }
-static void check_mem_usage()
+void fl_image_file_struct::check_mem_usage()
 {
   if(mem_usage_limit==0 || first_image==NULL) return;
 
  again:
   lifs=first_image;
-  size_t s=count(first_image);
+  size_t s=first_image->count();
   if(lifs->id && s>mem_usage_limit+lifs->mem)
   {
     lifs->mem=0;
@@ -90,7 +90,7 @@ void fl_set_images_root_directory(char *d)
     root=strdup(d);
 }
 
-static void insert(fl_image_file_struct*& p, fl_image_file_struct* ifs) {
+void fl_image_file_struct::insert(fl_image_file_struct*& p, fl_image_file_struct* ifs) {
   if(p == 0)
     p = ifs;
   else {
@@ -100,7 +100,7 @@ static void insert(fl_image_file_struct*& p, fl_image_file_struct* ifs) {
   }
 }
 
-static fl_image_file_struct* find(fl_image_file_struct* ifs, char* name) {
+fl_image_file_struct* fl_image_file_struct::find(fl_image_file_struct* ifs, char* name) {
   if(ifs == 0) return 0;
   int c = strcmp(name, ifs->filename);
   if(c == 0) return ifs;
@@ -126,7 +126,7 @@ fl_image_file_struct* fl_get_image_file_struct(char* filename,
         Fl_Image_File_Measure_F *measure,  Fl_Image_File_Read_F *read,
         unsigned char *datas)
 {
-  fl_image_file_struct *ifs=find(first_image, filename);
+  fl_image_file_struct *ifs=fl_image_file_struct::find(first_image, filename);
   if(!ifs)
   {
     ifs=new fl_image_file_struct;
@@ -146,64 +146,33 @@ fl_image_file_struct* fl_get_image_file_struct(char* filename,
     ifs->id = ifs->read(convert(ifs->filename), ifs->datas, ifs->mask);
     ifs->mem=ifs->w*ifs->h;
 #endif*/
-    insert(first_image, ifs);
+    fl_image_file_struct::insert(first_image, ifs);
   }
   else if(ifs->datas==NULL) ifs->datas=datas;
-  ifs->used = used++;
+  ifs->used = image_used++;
   return ifs;
 }
 
-// Ensure that the image and mask are decoded
+// Ensure that the image and mask are uncompressed
 // Take care of the image cache state
-void fl_prepare_image_file(fl_image_file_struct *ifs)
+void fl_image_file_struct::prepare_image_file()
 {
-  if(!ifs->id && !ifs->mask) // Need to uncompress the image
+  if(!id && !mask) // Need to uncompress the image ?
   {
-    ifs->id = ifs->read(convert(ifs->filename), ifs->datas, ifs->mask);
-    if(!ifs->id) return; 
-    ifs->mem=ifs->w*ifs->h;
-    ifs->used=used++; // do it before check_mem_usage
+    id = read(convert(filename), datas, mask);
+    if(!id) return; 
+    mem=w*h;
+    used = image_used++; // do it before check_mem_usage
     check_mem_usage();
   }
   else
-    ifs->used=used++;
+    used = image_used++;
 }
 
-void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H, 
-			int cx, int cy)
+void fl_image_file_struct::draw(int X, int Y, int W, int H, 
+				int cx, int cy)
 {
-  if(ifs->w==0) return;
-  fl_prepare_image_file(ifs);
-#ifdef WIN32
-  if (ifs->mask) {
-    HDC new_gc = CreateCompatibleDC(fl_gc);
-    SelectObject(new_gc, (void*)ifs->mask);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-    SelectObject(new_gc, (void*)ifs->id);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
-    DeleteDC(new_gc);
-  } else {
-    fl_copy_offscreen(X, Y, W, H, ifs->id, cx, cy);
-  }
-#else
-  if (ifs->mask) {
-    // I can't figure out how to combine a mask with existing region,
-    // so cut the image down to a clipped rectangle:
-    int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
-    cx += nx-X; X = nx;
-    cy += ny-Y; Y = ny;
-    // make X use the bitmap as a mask:
-    XSetClipMask(fl_display, fl_gc, ifs->mask);
-    int ox = X-cx; if (ox < 0) ox += ifs->w;
-    int oy = Y-cy; if (oy < 0) oy += ifs->h;
-    XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-  }
-  fl_copy_offscreen(X, Y, W, H, ifs->id, cx, cy);
-  if (ifs->mask) {
-    // put the old clip region back
-    XSetClipOrigin(fl_display, fl_gc, 0, 0);
-    fl_restore_clip();
-  }
-#endif
+  if(w==0) return;
+  prepare_image_file();
+  _draw(X, Y, W, H, cx, cy);
 }
-

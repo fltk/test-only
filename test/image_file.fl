@@ -8,12 +8,14 @@ gridy 5
 snap 3
 Function {main()} {open return_type int
 } {
-  code {fl_set_images_root_directory("images");} {}
-  Fl_Window window {open
-    xywh {253 112 420 370} resizable box NO_BOX visible
+  code {fl_set_images_root_directory("images");
+fl_set_image_file_mem_usage_limit(10);} {}
+  Fl_Window window {
+    label {The background is a BMP file} open
+    xywh {435 268 420 370} resizable box NO_BOX visible
   } {
     Fl_Box {} {
-      xywh {0 0 420 370} align 32 labelfont 1 labeltype SHADOW_LABEL image {coucou.xpm} labelcolor 3
+      xywh {0 0 420 370} align 32 labelfont 1 labeltype SHADOW_LABEL image {ulon.bmp} labelcolor 3
     }
     Fl_Box {} {
       label {tiled GIF image loaded from disk}
@@ -21,11 +23,11 @@ Function {main()} {open return_type int
     }
     Fl_Box {} {
       label {PNG image with datas included in code}
-      xywh {135 20 85 100} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {coucou.png} labelcolor 3
+      xywh {140 25 85 100} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {coucou.png} labelcolor 3
     }
     Fl_Box {} {
       label {XPM image loaded from disk} selected
-      xywh {135 125 85 100} labelfont 1 labeltype SHADOW_LABEL image {../porsche.xpm} labelcolor 3
+      xywh {140 125 85 100} labelfont 1 labeltype SHADOW_LABEL image {../porsche.xpm} labelcolor 3
     }
   }
   code {window->show();

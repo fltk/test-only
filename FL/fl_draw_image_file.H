@@ -25,6 +25,7 @@
 #define fl_draw_image_file_H
 
 #include "x.H"
+#include <FL/Fl_Image.H>
 
 // image file:
 typedef int (Fl_Image_File_Measure_F)(char* filename, unsigned char* datas, 
@@ -32,27 +33,44 @@ typedef int (Fl_Image_File_Measure_F)(char* filename, unsigned char* datas,
 typedef Fl_Offscreen (Fl_Image_File_Read_F)(char* filename, 
 		 unsigned char *datas, Fl_Offscreen& mask);
 
-struct fl_image_file_struct {
+// The class fl_image_file_struct is used to maintain a binary tree of all
+// images used in FLTK. There is one and only one fl_image_file_struct object
+// per image, thus one should never try to create or destroy such an object !
+
+class fl_image_file_struct : public Fl_Image {
+  friend class Fl_Image_File;
+
+private:
+  fl_image_file_struct() { }; // Constructor is private on purpose
+
+  size_t count();
+  static void check_mem_usage();
+
   fl_image_file_struct* l1;
   fl_image_file_struct* l2;
   char* filename;
   unsigned char* datas;
-  int w, h;
-  Fl_Offscreen id;
-  Fl_Offscreen mask;
   unsigned int used;
+
   Fl_Image_File_Measure_F* measure;
   Fl_Image_File_Read_F* read;
   size_t mem; // Currently the memory taken by the image is calculted in unit 
               // pixel, and not in byte ! (used to limit amount of memory used)
-};
 
-fl_image_file_struct* fl_get_image_file_struct(char* filename,  
+  void prepare_image_file();
+  static void fl_image_file_struct::insert(fl_image_file_struct*& p, fl_image_file_struct* ifs);
+  static fl_image_file_struct* fl_image_file_struct::find(fl_image_file_struct* ifs, char* name);
+
+
+public:
+  friend fl_image_file_struct* fl_get_image_file_struct(char* filename,  
         Fl_Image_File_Measure_F *measure,  Fl_Image_File_Read_F *read,
 	unsigned char *datas=0);
-void fl_prepare_image_file(fl_image_file_struct *ifs);
-void fl_draw_image_file(fl_image_file_struct *ifs, int X, int Y, int W, int H, 
-			int cx, int cy);
+
+  void draw(int X, int Y, int W, int H, 
+	    int cx, int cy);
+};
+
 void fl_set_images_root_directory(char *d);
 void fl_set_image_file_mem_usage_limit(size_t l);
 

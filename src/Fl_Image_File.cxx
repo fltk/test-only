@@ -45,21 +45,8 @@ Fl_Image_File::~Fl_Image_File() {
 
 void Fl_Image_File::draw(int X, int Y, int W, int H, int cx,int cy) {
   if (ifs->w==0) return;
-  if (!id && !mask) {
-    fl_prepare_image_file(ifs);
-    id = ifs->id;
-    mask = ifs->mask;
-  }
-  _draw(X, Y, W, H, cx, cy);
-/*  // clip the box down to the size of image, quit if empty:
-  if (cx < 0) {W += cx; X -= cx; cx = 0;}
-  if (cx+W > ifs->w) W = ifs->w-cx;
-  if (W <= 0) return;
-  if (cy < 0) {H += cy; Y -= cy; cy = 0;}
-  if (cy+H > ifs->h) H = ifs->h-cy;
-  if (H <= 0) return;
-
-  fl_draw_image_file(ifs, X, Y, W, H, cx, cy);*/
+  ifs->prepare_image_file();
+  ifs->_draw(X, Y, W, H, cx, cy);
 }
 
 void Fl_Image_File::measure(int& W, int& H) {
