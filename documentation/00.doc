@@ -1,0 +1,18 @@
+// This file forced Doxygen to come up with the "modules" in the
+// desired order, and sets the title. To put the text into a chapter
+// you should use \addtogroup name
+
+/*! \defgroup example1 Example 1: A Simple FLTK Program */
+
+/*! \defgroup example2 Example 2: Using Callbacks */
+
+/*! \defgroup startup Functions to Call Before Showing a Window */
+
+/*! \defgroup execution */
+
+/*! \defgroup dialogs Popup Dialog Services */
+
+/*! \defgroup drawing Drawing Functions */
+
+/*! \defgroup utilities Non-fltk Utility Functions */
+
