@@ -198,6 +198,9 @@ clean:
 	$(RM) core*
 	$(RM) ../lib/$(LIBNAME)
 	$(RM) ../lib/$(DSONAME)
+        ifeq ($(DSONAME), fltk.dll)
+	$(RM) lib$(DSONAME).a $(DSONAME)
+        endif
 
 
 #
@@ -230,6 +233,11 @@ include makedepend
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
+
+../lib/fltk.dll: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LDLIBS)
+	cp ../lib/fltk.dll ./
 
 libfltk_s.a: $(OBJECTS)
 	echo $(DSOCOMMAND) libfltk_s.o ...
@@ -277,6 +285,9 @@ install:
 	$(CP) ../lib/$(DSONAME) $(libdir)
 	$(LN) $(DSONAME) $(libdir)/$(DSOLINK)
         endif
+        ifeq ($(DSONAME), fltk.dll)
+	$(CP) lib$(DSONAME).a $(libdir)
+        endif
 
 #
 # Uninstall the libraries...
@@ -294,6 +305,10 @@ uninstall:
 	echo "Removing shared core library from $(libdir)"
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
+        ifeq ($(DSONAME), fltk.dll)
+	$(RM) $(libdir)/lib$(DSONAME).a
+        endif
+
 
 #
 # End of "$Id$".

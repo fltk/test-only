@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.49 2005/01/25 20:11:22 matthiaswm Exp $"
+# "$Id$"
 #
 # FLUID makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -111,7 +111,7 @@ fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk$(LIBSUFFIX) \
 fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk$(DSOSUFFIX) \
 		../images/$(DSOPREFIX)fltk_images$(DSOSUFFIX)
 	echo Linking $@...
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LIBS) $(LDLIBS)
 	$(POSTBUILD) $@ ../FL/mac.r
 
 
@@ -146,5 +146,5 @@ rebuild:
 
 
 #
-# End of "$Id: Makefile,v 1.49 2005/01/25 20:11:22 matthiaswm Exp $".
+# End of "$Id$".
 #

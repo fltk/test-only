@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.26 2004/12/19 19:40:33 laza2000 Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -71,6 +71,9 @@ clean:
 	$(RM) core*
 	$(RM) ../lib/$(LIBNAME)
 	$(RM) ../lib/$(DSONAME)
+        ifeq ($(DSONAME), fltk_images.dll)
+	$(RM) lib$(DSONAME).a $(DSONAME)
+        endif
 
 
 #
@@ -104,6 +107,11 @@ include makedepend
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
+../lib/fltk_images.dll: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(LDLIBS)
+	cp ../lib/fltk_images.dll ./
+	
 #
 # Install everything...
 #
@@ -123,6 +131,9 @@ install:
 	$(CP) ../lib/$(DSONAME) $(libdir)
 	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
         endif
+        ifeq ($(DSONAME), fltk_images.dll)
+	$(CP) lib$(DSONAME).a $(libdir)
+        endif
 #
 # Uninstall the libraries...
 #
@@ -133,8 +144,10 @@ uninstall:
 	echo "Removing shared images library from $(libdir)"
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
-
+        ifeq ($(DSONAME), fltk_images.dll)
+	$(RM) $(libdir)/lib$(DSONAME).a
+        endif
 
 #
-# End of "$Id: Makefile,v 1.26 2004/12/19 19:40:33 laza2000 Exp $".
+# End of "$Id$".
 #

@@ -47,13 +47,17 @@ AC_SUBST(FL_API_VERSION)
 dnl Get the operating system and version number...
 uname=`uname`
 uversion=`uname -r | sed -e '1,$s/[[^0-9]]//g'`
-if test x$uname = xIRIX64; then
-    uname="IRIX"
-fi
-if test x$uname = x; then
-    # MingW doesn't provide any output when uname is run, even with "-s"...
-    uname="CYGWIN"
-fi
+case $uname in
+	IRIX*)
+		uname="IRIX"
+		;;
+	MINGW*)
+		uname="MINGW"
+		;;
+	*)
+		uname="CYGWIN"
+		;;
+esac
 
 dnl Don't automatically add "-g" to compiler options...
 CFLAGS="${CFLAGS:=}"
@@ -65,7 +69,7 @@ AC_SUBST(OPTIM)
 
 dnl OS-specific pre-tests...
 case $uname in
-    CYGWIN* | MINGW*)
+    CYGWIN*)
         # Handle Cygwin option *first*, before all other tests.
 	AC_ARG_ENABLE(cygwin, [  --enable-cygwin         use the CygWin libraries (default=no)])
 	if test x$enable_cygwin != xyes; then
@@ -192,9 +196,22 @@ if test x$enable_shared = xyes; then
             DSOCOMMAND="\$(CXX) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
             ;;
-        CYGWIN* | MINGW*)
+        CYGWIN*)
             AC_MSG_WARN(Shared libraries are not supported under CygWin.)
 	    ;;
+		MINGW*)
+			DSOPREFIX=""
+			DSOSUFFIX=".dll"
+			DSOSYMLINK=""
+
+			PICFLAG=0
+			SHAREDSUFFIX=".dll"
+			DSOCOMMAND="\$(CXX) -Wl,--out-implib,lib\$(DSONAME).a -shared -DFL_SHARED -DFL_LIBRARY -DFL_IMAGES_LIBRARY -DFL_GLUT_LIBRARY -DFL_FORMS_LIBRARY -DFL_GL_LIBRARY $DEBUGFLAG -o"
+	        CFLAGS="$CFLAGS -D_WIN32"
+			CPPFLAGS="$CPPFLAGS -D_WIN32"
+	        CXXFLAGS="$CXXFLAGS -D_WIN32"
+			LDFLAGS="-Wl,--enable-runtime-pseudo-reloc"
+		;;
 	*)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
             DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"

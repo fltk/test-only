@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.21 2004/08/04 18:13:50 laza2000 Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -70,7 +70,9 @@ clean:
 	$(RM) core*
 	$(RM) ../lib/$(LIBNAME)
 	$(RM) ../lib/$(DSONAME)
-
+        ifeq ($(DSONAME), fltk_gl.dll)
+	$(RM) lib$(DSONAME).a $(DSONAME)
+        endif
 
 #
 # Make dependencies, excluding standard include directories...
@@ -96,13 +98,17 @@ include makedepend
 	echo $(LIBCOMMAND) $@ ...
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
-
+	
 ../lib/$(DSONAME): $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
+../lib/fltk_gl.dll: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(GLDLIBS)
+	cp ../lib/fltk_gl.dll ./
 
 #
 # Install everything...
@@ -123,7 +129,10 @@ install:
 	$(CP) ../lib/$(DSONAME) $(libdir)
 	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
         endif
-
+        ifeq ($(DSONAME), fltk_gl.dll)
+	$(CP) lib$(DSONAME).a $(libdir)
+        endif
+	
 #
 # Uninstall the libraries...
 #
@@ -134,8 +143,11 @@ uninstall:
 	echo "Removing shared OpenGL library from $(libdir)"
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
+        ifeq ($(DSONAME), fltk_gl.dll)
+	$(RM) $(libdir)/lib$(DSONAME).a
+        endif
 
 
 #
-# End of "$Id: Makefile,v 1.21 2004/08/04 18:13:50 laza2000 Exp $".
+# End of "$Id$".
 #
