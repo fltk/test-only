@@ -31,8 +31,8 @@
 #include <FL/Fl_Layout.H>
 #include <FL/Fl_Window.H> //just to get the FL_WINDOW constant!
 
-void Fl_Align_Layout::perform() {
-
+void Fl_Align_Group::layout() {
+  Fl_Widget::layout();
   int i;
 
   int n_lines = n_to_break() ? 

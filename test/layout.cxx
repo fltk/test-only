@@ -28,15 +28,14 @@
 #include <FL/Fl_Layout.H>
 #include <FL/Fl_Window.H>
 
-Fl_Align_Layout* align_layout;
-Fl_Group* lower_half;
+Fl_Align_Group* lower_half;
 
 void align_cb(Fl_Choice* c,long w) {
   switch (w) {
-    case 0: align_layout->vertical(!c->value()); break;
+    case 0: lower_half->vertical(!c->value()); break;
     case 1: 
     case 2: {
-      Fl_Align new_align = align_layout->align();
+      Fl_Align new_align = lower_half->align();
       new_align &= (w == 1) ?
                    (FL_ALIGN_TOP | FL_ALIGN_BOTTOM) :
                    (FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
@@ -44,28 +43,25 @@ void align_cb(Fl_Choice* c,long w) {
       if (w == 1 && c->value() == 1) new_align |= FL_ALIGN_RIGHT;
       if (w == 2 && c->value() == 0) new_align |= FL_ALIGN_TOP;
       if (w == 2 && c->value() == 1) new_align |= FL_ALIGN_BOTTOM;
-      align_layout->align(new_align);
+      lower_half->align(new_align);
     }
     default: break;
   }
-  lower_half->perform_layout();
+  lower_half->layout();
   lower_half->redraw();
 }
 
 int main(int argc, char ** argv) {
   Fl_Window *window = new Fl_Window(600,400);
-  Fl_Layout *pak_layout = new Fl_Align_Layout(2,true,0,5,5);
-  window->change_layout(pak_layout);
-  Fl_Layout::release(pak_layout);
 
-  Fl_Group* o=new Fl_Group(0,0,0,0);
-  Fl_Layout* top_layout = new Fl_Align_Layout(2,false,FL_ALIGN_TOP_LEFT);
-  o->change_layout(top_layout);
-  Fl_Layout::release(top_layout);
+  // I had to add this new group so that we can get the desired layout
+  // type, since you no longer can change it on a window:
+  Fl_Align_Group main_group(0,0,600,400,0,2,true,0,5,5);
+
+  Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,0,2,false,FL_ALIGN_TOP_LEFT);
   {
-    Fl_Layout* digits_layout = new Fl_Align_Layout(3,false,0,10,10);
-    Fl_Group* o=new Fl_Group(0,0,0,0,"Tiled Buttons");
-    o->change_layout(digits_layout);
+    Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,"Tiled Buttons",
+					   3,false,0,10,10);
     o->box(FL_DOWN_BOX);
     char *l,labels[18];
     l=labels;
@@ -74,13 +70,11 @@ int main(int argc, char ** argv) {
       (void) new Fl_Button(0,0,0,0,l);
       l+=2;
     }
-    Fl_Layout::release(digits_layout);
     o->end();
   }
   {
-    Fl_Layout* ver_layout = new Fl_Align_Layout(3,true,0,10,10);
-    Fl_Group* o=new Fl_Group(0,0,0,0,"Fl_Align_Layout options");
-    o->change_layout(ver_layout);
+    Fl_Align_Group* o=new Fl_Align_Group(0,0,0,0,"Fl_Align_Group options",
+					 3,true,0,10,10);
     o->box(FL_DOWN_BOX);
     static char* labels[3][3]={{"Vertical","Horizontal",""},
 			       {"Left","Right","Center"},
@@ -93,13 +87,10 @@ int main(int argc, char ** argv) {
       c->user_data((void*)i);
       c->value(i==2?2:0);
     }
-    Fl_Layout::release(ver_layout);
     o->end();
   }
   o->end();
-  o = lower_half = new Fl_Group(0,0,0,0);
-  align_layout = new Fl_Align_Layout(4,true,FL_ALIGN_LEFT,10,10);
-  o->change_layout(align_layout);
+  o = lower_half = new Fl_Align_Group(0,0,0,0,0,4,true,FL_ALIGN_LEFT,10,10);
   o->box(FL_DOWN_BOX);
   static char* labels[24]={"Although","these","labels","have",
                            "different","lengths",",","the",
@@ -108,11 +99,11 @@ int main(int argc, char ** argv) {
 			   "Variable","lenghts\nare","respected\n,","as\nseen",
 			   "h","e","r","e"};
   for (int i=0;i<24;i++) (void) new Fl_Button(0,0,0,0,labels[i]);
-  Fl_Layout::release(align_layout);
   o->end();
 
-  window->perform_layout();
-  window->resizable(window);
+  main_group.end();
+  main_group.layout(); // this is a bug, should not be necessary to call this
+  window->resizable(main_group);
   window->end();
   window->show(argc,argv);
   return Fl::run();

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.9 1999/08/16 07:31:21 bill Exp $"
+// "$Id: Fl_Tile.cxx,v 1.10 1999/08/29 23:38:02 bill Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -90,7 +90,7 @@ void Fl_Tile::layout() {
     int B = Y+o->h();
     if (*p++ >= OB) Y += dh; else if (Y > NB) Y = NB;
     if (*p++ >= OB) B += dh; else if (B > NB) B = NB;
-    o->resize(X,Y,R-X,B-Y); layout(o); o->redraw();
+    o->resize(X,Y,R-X,B-Y); o->layout(); o->redraw();
   }
   set_old_size();
 }
@@ -196,5 +196,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.9 1999/08/16 07:31:21 bill Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.10 1999/08/29 23:38:02 bill Exp $".
 //

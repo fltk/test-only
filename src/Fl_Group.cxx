@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.24 1999/08/29 20:08:02 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.25 1999/08/29 23:38:01 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,17 +30,12 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Layout.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
 #include <FL/Fl_Tooltip.H>
 
 Fl_Group* Fl_Group::current_;
-
-Fl_Group* Fl_Layout::group_[16];
-int Fl_Layout::sp_=-1;
-Fl_Layout::~Fl_Layout() {} 
 
 // Hack: A single child is stored in the pointer to the array, while
 // multiple children are stored in an allocated array:
@@ -260,7 +255,6 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   children_(0),
   array_(0),
   savedfocus_(0),
-  layout_(0),
   resizable_(this),
   sizes_(0), // this is allocated when the group is end()ed.
   ox_(X),
@@ -296,7 +290,7 @@ void Fl_Group::clear() {
   if (old_children > 1) free((void*)old_array);
 }
 
-Fl_Group::~Fl_Group() {clear();Fl_Layout::release(layout_);}
+Fl_Group::~Fl_Group() {clear();}
 
 void Fl_Group::insert(Fl_Widget &o, int i) {
   if (o.parent()) o.parent()->remove(o);
@@ -434,7 +428,7 @@ void Fl_Group::old_size(const Fl_Widget* o,int* r) {
 }
 #endif
 
-void Fl_Group::classic_layout() {
+void Fl_Group::layout() {
 
   Fl_Widget::layout();
   // get changes from previous position:
@@ -488,23 +482,6 @@ void Fl_Group::classic_layout() {
     }
   }
   set_old_size();
-}
-
-void Fl_Group::perform_layout() {
-  Fl_Layout::push_group(this);
-  layout_->perform();
-  Fl_Layout::pop_group();
-  Fl_Widget::layout();
-}
-
-void Fl_Group::layout() {
-  if (layout_) perform_layout(); else classic_layout();
-}
-    
-void Fl_Group::change_layout(Fl_Layout* l) {
-  Fl_Layout::acquire(l);
-  Fl_Layout::release(layout_);
-  layout_=l;
 }
 
 void Fl_Group::draw() {
@@ -577,5 +554,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.24 1999/08/29 20:08:02 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.25 1999/08/29 23:38:01 bill Exp $".
 //
