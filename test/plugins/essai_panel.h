@@ -3,10 +3,9 @@
 #ifndef essai_panel_h
 #define essai_panel_h
 #include <FL/Fl.H>
-#include <FL/Fl_Slider.H>
 #include <FL/Fl_Window.H>
+extern Fl_Window *Essai;
+#include <FL/Fl_Slider.H>
 extern void major_tick_precision_cb(Fl_Slider*, void*);
-extern Fl_Window *Essai;
 Fl_Window* make_window();
-extern Fl_Window *Essai;
 #endif

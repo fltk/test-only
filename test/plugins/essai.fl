@@ -1,5 +1,6 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.00 
+version 2.00 
+images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 5 
@@ -12,9 +13,9 @@ Function {make_window()} {open
   } {
     Fl_Pix_Button {} {
       label pixbutton
-      xywh {25 25 20 20} align 1
+      xywh {25 25 20 20} align 524289
     }
-    Fl_NSlider {} {selected
+    Fl_NSlider {} {
       xywh {110 30 35 175} type {Vert Half}
       majorTickPrecision 3
     }

@@ -157,7 +157,7 @@ void major_tick_precision_cb(Fl_Slider* o, void* v)
 #include "essai_panel.cxx"
 void make_panel()
 {
-  fluid_plugin.panel = make_window();
+  fluid_plugin.panel = (Fl_Window*)make_window();
 }
 
 
