@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.7 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.8 2004/07/04 17:46:07 laza2000 Exp $"
 //
 // HelpView widget routines.
 //
@@ -1948,7 +1948,7 @@ Color                        // O - Color value
 
 static const char *sharedImageName;
 static SharedImage *sharedImageLoad() {
-  ImageType *it = SharedImage::guess( sharedImageName );
+  ImageType *it = guess_image( sharedImageName );
   if (!it) return 0;
   return it->get( sharedImageName, 0 );
 }
@@ -2592,5 +2592,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.7 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.8 2004/07/04 17:46:07 laza2000 Exp $".
 //
