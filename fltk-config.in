@@ -4,7 +4,7 @@
 #
 # original version by James Dean Palmer, adapted by Vincent Penne
 #
-# "$Id: fltk-config.in,v 1.5 1999/12/06 21:34:29 vincent Exp $"
+# "$Id: fltk-config.in,v 1.6 1999/12/07 23:33:28 vincent Exp $"
 #
 
 MAJOR_VERSION=2
@@ -14,7 +14,11 @@ VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
 
 ### BEGIN fltk-config
 
-prefix=@prefix@
+# Calculate the prefix from the location of *this* file
+prefix=`echo "$0" | sed 's/\/bin\/fltk-config//
+s/\/fltk-config//'`
+
+#prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
 bindir=@bindir@
@@ -63,10 +67,6 @@ Options:
 
 if test $# -eq 0; then usage 1
 fi
-
-# Calculate the prefix from the location of *this* file
-prefix=`echo "$0" | sed 's/\/bin\/fltk-config//
-s/\/fltk-config//'`
 
 # Parse command line options
 while test $# -gt 0 
@@ -143,27 +143,15 @@ if test "$echo_exec_prefix" = "yes"; then
 fi
 
 if test "$echo_cflags" = "yes"; then
-      if test ${prefix}/include != /usr/include ; then
-        includes=-I${prefix}/include
-        for i in $FLTK_CFLAGS ; do
-          if test $i = -I${prefix}/include ; then
-            includes=""
-          fi
-        done
-      fi
-      echo $includes -I$prefix $FLTK_CFLAGS
+      includes=-I`echo "$0" | sed 's/\/bin\/fltk-config/\/include/
+s/\/fltk-config//'`
+      echo $includes $FLTK_CFLAGS
 fi
 
 if test "$echo_cxxflags" = "yes"; then
-      if test ${prefix}/include != /usr/include ; then
-        includes=-I${prefix}/include
-        for i in $FLTK_CXXFLAGS ; do
-          if test $i = -I${prefix}/include ; then
-            includes=""
-          fi
-        done
-      fi
-      echo $includes -I$prefix $FLTK_CXXFLAGS
+      includes=-I`echo "$0" | sed 's/\/bin\/fltk-config/\/include/
+s/\/fltk-config//'`
+      echo $includes $FLTK_CXXFLAGS
 fi
 
 # Calculate libraries needed in funcion
@@ -218,4 +206,3 @@ if test "$echo_libs" = "yes"; then
 fi
 
 # END of fltk-config
-
