@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.33 2003/08/02 21:35:07 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.34 2003/08/04 03:35:43 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,9 +26,7 @@
 // These are small graphics drawn by the normal label-drawing
 // code when the string starts with an '@' sign.
 
-// Adapted from original code written by:
-
-// Written by Mark Overmars
+// Adapted from original code Written by Mark Overmars
 // Version 2.1 a
 // Date: Oct  2, 1992
 
@@ -39,47 +37,115 @@
 #include <ctype.h>
 using namespace fltk;
 
-#define MAXSYMBOL       211
-   /* Maximal number of symbols in table. Only half of them are
-      used. Should be prime. */
-static Symbol* symbols[MAXSYMBOL];      /* The symbols */
-static int symbnumb = 0;              /* Their number */
+////////////////////////////////////////////////////////////////
+// Hash table using Quadratic Probing and reallocation of table
+// Hey feel free to replace this with a better hash table implementation!
+
+static Symbol** hashtable = 0;
+static int hashtablesize;
+static int num_symbols = 0;
+#define DELETED ((Symbol*)1)
 
 // returns hash entry if it exists, or first empty slot:
-static int hashindex(const char *name, int n) {
-  int pos = n ? (
-    n > 1 ? (
-      n > 2 ? 71*name[0]+31*name[1]+name[2] : 31*name[0]+name[1]
-    ) :
-      name[0]
-  ) : 0;
-  pos %= MAXSYMBOL;
-  int hh2 = n ? (
-    (n>1) ? 51*name[0]+3*name[1] : 3*name[0]
-    )+n : 1;
-  hh2 %= MAXSYMBOL; if (!hh2) hh2 = 1;
-  for (;;) {
-    if (!symbols[pos]) return pos;
-    if (!strncmp(symbols[pos]->name(), name, n) && !symbols[pos]->name()[n]) return pos;
-    pos = (pos + hh2) % MAXSYMBOL;
+static unsigned hashindex(const char *name, unsigned n, bool delok) {
+  // Calculate the hash index:
+  unsigned pos = 0;
+  unsigned i; for (i = 0; i < n; i++) pos = 37*pos + name[i];
+  pos %= hashtablesize;
+  // Quadratic probing through the hash table to find empty slot
+  // or a null:
+  for (i = 0;;) {
+    Symbol* s = hashtable[pos];
+    if (!s) break;
+    if (s == DELETED) {if (delok) break;}
+    else if (!strncmp(s->name(), name, n) && !s->name()[n]) break;
+    pos += 2 * ++i - 1;
+    pos %= hashtablesize;
   }
+  return pos;
 }
 
-static void init_symbols(void);
+static void double_hashtable() {
+  // Remember the old table:
+  Symbol** oldtable = hashtable;
+  int oldsize = hashtablesize;
+  // figure out a new size that is prime and >= 2 * currentsize.
+  int n = 2*hashtablesize+1;
+  for (int i = 3; i*i <= n; i += 2) while (n%i == 0) {i = 3; n += 2;}
+  //printf("Realloc to new table size of %d\n", n);
+  // allocate new table and set it all to zero:
+  hashtablesize = n;
+  hashtable = new Symbol*[hashtablesize];
+  memset(hashtable, 0, hashtablesize*sizeof(Symbol*));
+  // copy all the symbols over:
+  for (n = 0; n < oldsize; n++) {
+    Symbol* s = oldtable[n];
+    if (s && s != DELETED) {
+      int pos = hashindex(s->name(), strlen(s->name()), true);
+      hashtable[pos] = s;
+    }
+  }
+  // throw away old table:
+  delete[] oldtable;
+}
+
+// This is called by init_symbols, below:
+static inline void init_hashtable() {
+  // This size is chosen so no realloc is done for the built-in set
+  // of symbols. If you add a lot of built-in symbols it is probably
+  // a good idea to increase this:
+  // Number must be prime!!!
+  hashtablesize = 79;
+  hashtable = new Symbol*[hashtablesize];
+  memset(hashtable, 0, hashtablesize*sizeof(Symbol*));
+}
+
+// Creates the hash table and populates it with our built-in set:
+static void init_symbols();
+static bool symbols_initialized = false;
+
+////////////////////////////////////////////////////////////////
 
 /** The constructor for a Symbol adds it's name to a hash table that
     is looked up in when "@" signs are found in a label. See find()
-    for details.
-
-    Pass null for the name if you are making some internal symbol that
-    cannot be called from a label.
+    for details. Pass null for the name to not put it in hash table.
 */
-Symbol::Symbol(const char* name) : name_(name) {
-  if (!name) return; // ignore internal ones
-  if (symbnumb > MAXSYMBOL / 2) return;	// table is full
-  int pos = hashindex(name, strlen(name));
-  symbols[pos] = this;
-  symbnumb++;
+Symbol::Symbol(const char* name) : name_(0) {
+  if (!symbols_initialized) {
+    symbols_initialized = true;
+    init_symbols();
+  }
+  this->name(name);
+}
+
+/** Sets the name() of the symbol. If it is in the hash table under
+    the old name it is removed. If the new name is not NULL then it
+    is added under the new name to the hash table.
+
+    The strings are assummed to belong to the calling program. You
+    can go through the trouble of freeing the old one, or just leak
+    it like Fluid does.
+
+    You \e must call name(0) before destroying a Symbol.
+    The Symbol class does not have a destructor because C++ will
+    call it for all the static symbols and thus slow down program exit.
+*/
+void Symbol::name(const char* name) {
+  if (name_ == name) return;
+  if (name_) {
+    int pos = hashindex(name_, strlen(name_), false);
+    if (hashtable[pos]==this) hashtable[pos] = DELETED;
+  }
+  name_ = name;
+  if (name) {
+    int pos = hashindex(name, strlen(name), true);
+    // don't expand hash table if we are replacing things:
+    if (hashtable[pos]) {hashtable[pos] = this; return;}
+    // put it in the hash table:
+    hashtable[pos] = this;
+    // if table is more than half-full we need to reallocate it:
+    if (++num_symbols > hashtablesize/2) double_hashtable();
+  }
 }
 
 /** Locate a symbol by the name used to construct it. \a name points
@@ -87,47 +153,42 @@ Symbol::Symbol(const char* name) : name_(name) {
     the end (this allows the name to be extracted from a longer string
     without having to copy it).
 
-    To allow symbols to read "arguments" from the text, only the last
-    block of non-digits is used to look up the symbol. The symbol
-    itself can read all the leading and trailing digits and characters
-    to control it's own behavior. For instance "a23bz98+90sym900" will
-    look up "sym".
-
-    Trailing uppercase hex digits and the letter 'x' are also skipped
-    to allow arguments to be typed in hex.
+    To allow symbols to read "arguments" this will also try stripping
+    off a leading +/- sign and integer and any trailing text that
+    looks like comma-seperated integers, hex, or floating point
+    constant. For back-compatability it will also strip a leading '#'.
+    So the symbol "+400foo1,2,0xbeef" will lookup "foo".
 */
 const Symbol* Symbol::find(const char* name, const char* end) {
-  init_symbols();
+  if (!symbols_initialized) return 0; // does this ever happen?
+
   // for back-compatability a leading # is ignored:
-  if (*name == '#') name++;
-  // if last character is a digit, strip off all trailing digits or hex:
-  const char* e = end;
-  if (e > name && isxdigit(*(e-1))) {
-    for (e--; ;e--) {
-      if (e <= name) break;
-      char c = *(e-1);
-      if (isxdigit(c) || c=='x' || c=='X' || c == '+' || c == '-' || c=='.')
-	continue;
-      else
-	break;
-    }
-    // Above ate hex letters at start, skip past them:
-    while (e < end && isalpha(*e)) e++;
+  if (name[0] == '#') name++;
+  // Remove any leading integer:
+  if (name < end-1 && (name[0]=='+' || name[0]=='-') && isdigit(name[1])) name++;
+  while (name < end && isdigit(name[0])) name++;
+
+  // Try the name without any more changes:
+  int pos = hashindex(name, end-name, false);
+  if (hashtable[pos]) return hashtable[pos];
+
+  // Remove trailing "arguments" and try lookup again:
+  const char* p = name;
+  while (p < end) {
+    if (isdigit(*p)) break;
+    if (p < end-1 && (*p=='+'||*p=='-'||*p=='.') && isdigit(p[1])) break;
+    p++;
   }
-  const char* p;
-  if (e <= name) {
-    // if there is just numbers, use entire number as symbol:
-    p = name; e = end;
-  } else {
-    // go to start of non-digits:
-    for (p = e-1;; p--) {
-      if (p <= name) break;
-      if (isdigit(*(p-1))) break;
+  if (p < end) {
+    const char* q = p+1;
+    while (q < end) {
+      if (isxdigit(*q) || strchr("+-.eExX,",*q)) q++;
+      else return 0;
     }
+    pos = hashindex(name, p-name, false);
+    return hashtable[pos];
   }
-  // now look it up:
-  int pos = hashindex(p, e-p);
-  return symbols[pos];
+  return 0;
 }
 
 /**************** The routines seen by the user *************************/
@@ -373,9 +434,7 @@ static void draw_menu(Color col)
 }
 
 static void init_symbols(void) {
-  static bool beenhere;
-  if (beenhere) return;
-  beenhere = true;
+  init_hashtable();
 
   //add_symbol("",		draw_arrow1,		1);
   add_symbol("->",		draw_arrow1,		1);
@@ -408,5 +467,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.33 2003/08/02 21:35:07 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.34 2003/08/04 03:35:43 spitzak Exp $".
 //

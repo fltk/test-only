@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.h,v 1.1 2003/07/21 19:43:57 spitzak Exp $"
+// "$Id: Symbol.h,v 1.2 2003/08/04 03:35:43 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -34,8 +34,9 @@ namespace fltk {
 class FL_API Symbol {
   const char* name_;
  public:
-  const char* name() const {return name_;}
   Symbol(const char* name);
+  const char* name() const {return name_;}
+  void name(const char*);
   virtual void draw(const char* start, const char* end,
 		    float x, float y) const = 0;
   virtual void measure(const char* start, const char* end,
