@@ -1,19 +1,7 @@
 //
-// "$Id: Fl_Type.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.27 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
-//
-// Each object described by Fluid is one of these objects.  They
-// are all stored in a double-linked list.
-//
-// They "type" of the object is covered by the virtual functions.
-// There will probably be a lot of these virtual functions.
-//
-// The type browser is also a list of these objects, but they
-// are "factory" instances, not "real" ones.  These objects exist
-// only so the "make" method can be called on them.  They are
-// not in the linked list and are not written to files or
-// copied or otherwise examined.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -34,6 +22,24 @@
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
+
+// Each object created by Fluid is a subclass of Fl_Type. The majority
+// of these are going to describe Fl_Widgets, so you will see the word
+// "widget" used a lot instead of Fl_Type. But there are also functions
+// and lines of code and anything else that can go into the browser.
+//
+// A hierarchial list of all Fl_Types is managed. The Widget Browser
+// is the display in the main window of this list. Most of this code
+// is concerned with drawing and updating the widget browser, with
+// keeping the list up to date and rearranging it, and keeping track
+// of which objects are selected.
+//
+// The "Type Browser" is also a list of Fl_Type, but is used for the
+// popup menu of new objects to create. In this case these are
+// "factory instances", not "real" ones.  Factory instances exist only
+// so the "make" method can be called on them.  They are not in the
+// linked list and are not written to files or copied or otherwise
+// examined.
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Browser.h>
@@ -62,9 +68,8 @@ static Widget_List widgetlist;
 
 static Fl_Browser *widget_browser;
 
-static void Widget_Browser_callback(Fl_Widget *,void *w) {
-  if (w && Fl::event_clicks())
-    ((Fl_Type*)w)->open();
+static void Widget_Browser_callback(Fl_Widget *,void *) {
+  if (Fl_Type::current) Fl_Type::current->open();
 }
 
 Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
@@ -73,6 +78,7 @@ Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
   widget_browser->end();
   widget_browser->list(&widgetlist);
   widget_browser->callback(Widget_Browser_callback);
+  widget_browser->when(FL_WHEN_ENTER_KEY);
   widget_browser->indented(1);
   return widget_browser;
 }
@@ -159,16 +165,35 @@ void deselect() {
 
 extern const char* subclassname(Fl_Type*);
 
-// Generate a descriptive text for this item, to put in browser & window titles
+// Generate a descriptive text for this item, to put in browser & window
+// titles. Warning: the buffer used is overwritten each time!
 const char* Fl_Type::title() {
-  const char* c = name(); if (c) return c;
-  if (is_widget() || is_class()) {
-    c = label();
-    if (c && *c) return c;
-    c = subclassname(this);
-    if (c) return c;
+#define MAXLABEL 128
+  static char buffer[MAXLABEL];
+  const char* type = subclassname(this);
+  const char* name = this->name();
+  bool quoted = false;
+  if (!name || !*name) {
+    name = label();
+    if (!name || !*name) return type;
+    quoted = true;
   }
-  return type_name();
+  // copy but stop at any newline or when the buffer fills up:
+  char* e = buffer+MAXLABEL-1; if (quoted) e--;
+  char* p = buffer;
+  while (p < e && *type) *p++ = *type++;
+  if (p >= e-4) return name;
+  *p++ = ' ';
+  if (quoted) *p++ = '"';
+  while (p < e && (*name&~31)) *p++ = *name++;
+  if (*name) {
+    if (p > e-3) p = e-3;
+    strcpy(p, quoted ? "...\"" : "...");
+  } else {
+    if (quoted) *p++ = '"';
+    *p++ = 0;
+  }
+  return buffer;
 }
 
 // Call this when the descriptive text changes:
@@ -519,5 +544,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.27 2002/01/11 08:49:08 spitzak Exp $".
 //

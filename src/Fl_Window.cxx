@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.77 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.78 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -154,11 +154,7 @@ int Fl_Window::handle(int event) {
       // This does not appear to work unfortunately...
       //if (child_of_) ((Fl_Window*)child_of_)->show();
 #endif
-      if (i) {
-	XUnmapWindow(fl_display, i->xid);
-	// Emulation of undocumented modal() from fltk1:
-	if (flags()&FL_MODAL) Fl::modal(0,false);
-      }
+      if (i) XUnmapWindow(fl_display, i->xid);
       break;
   }
 
@@ -356,5 +352,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.77 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.78 2002/01/11 08:49:08 spitzak Exp $".
 //

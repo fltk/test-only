@@ -1899,7 +1899,25 @@ Fl_Input.
 Checked in 12/16/01
 ////////////////////////////////////////////////////////////////
 
+Fl_Pack rewritten to use layout(), it works *MUCH* better. We need a
+way to mark widgets as "vertical" to make this really useful, I am
+open to suggestions.
 
+Windows with the (back-compatability) FL_MODAL flag set messed up
+modal state if exec() was called on them. This caused most of the
+Fluid control panels to not work.
+
+Fl_Browser: right,left can be used to open/close parent items and by
+repeatedly holding them down visit every item (somewhat like Windows
+but I hope the behavior is more useful). Double-click open/closes
+parent items like Windows, too. indented(0) is usable for hierarchial
+data. The Enter key can cause the callback if you set
+FL_WHEN_ENTER_KEY, this also causes double-click on non-parents to do
+the callback. Fluid fixed to use this so it is easy to open the
+control panel for an item.
+
+Checked in 1/11/02
+////////////////////////////////////////////////////////////////
 
 
 

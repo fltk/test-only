@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Pack.cxx,v 1.20 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,93 +23,118 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Based on code by Curtis Edwards
-// Group that compresses all it's children together and resizes to surround
-// them on each redraw (only if box() is zero)
-// Bugs: ?
-
-#include <fltk/Fl.h>
 #include <fltk/Fl_Pack.h>
-#include <fltk/fl_draw.h>
+
+// Resizes all the child widgets to be the full width and stacks them
+// vertically. All widgets before the resizable (or all of them if
+// there is no resizable) are pushed against the top of this widget,
+// all widgets after the resizable are pushed against the bottom, and
+// the resizable fills the remaining space.
+
+// A child widget can change it's height by calling layout() on itself
+// and this will rearrange all other widgets to accomodate the new height.
+
+// If resizable is not set, the Fl_Pack itself resizes to surround the
+// items, allowing it to be imbedded in a surrounding Fl_Pack.
+
+// The code can support widgets that extend vertically, these are put
+// against the left edge (or the right if after the resizable()).
+// However I currently lack any way to to determine the orientation of
+// a widget.  This could possibly be done by looking at the widgets's
+// original shape, or by a flag stored in the widget's type() or
+// align() or flags(), or by data stored on the Fl_Pack itself.
+// Currently you can only change *all* the widgets to vertical by
+// setting the Fl_Pack type to "HORIZONTAL". The following macro
+// controls how it decides the orientation of a widget:
+
+#define is_vertical(widget) type()!=VERTICAL
 
 Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
 : Fl_Group(x, y, w, h, l) {
-  resizable(0);
   spacing_ = 0;
-  // type(VERTICAL); // already set like this
+  //type(VERTICAL);
+  //resizable(0);
 }
 
-void Fl_Pack::draw() {
-  int tx=0; int ty=0; int tw=w(); int th=h(); text_box()->inset(tx,ty,tw,th);
-  int current_position = horizontal() ? tx : ty;
-  int maximum_position = current_position;
-  uchar d = damage();
-  int numchildren = children();
-  for (int i = 0; i < numchildren; i++) {
-    Fl_Widget* o = child(i);
-    if (o->visible()) {
-      int X,Y,W,H;
-      if (horizontal()) {
-        X = current_position;
-        W = o->w();
-        Y = ty;
-        H = th;
-      } else {
-        X = tx;
-        W = tw;
-        Y = current_position;
-        H = o->h();
-      }
-      // Last child, if resizable, takes all remaining room
-      if(i == 0 && o == this->resizable()) {
-       if(horizontal())
-         W = this->w() - Fl::box_dw(box()) - maximum_position;
-       else
-         H = this->h() - Fl::box_dh(box()) - maximum_position;
-      }
-      if (spacing_ && current_position>maximum_position &&
-  	  (X != o->x() || Y != o->y() || d&FL_DAMAGE_ALL)) {
-        fl_color(color());
-        if (horizontal())
-	  fl_rectf(maximum_position, ty, spacing_, th);
-        else
-	  fl_rectf(tx, maximum_position, tw, spacing_);
-      }
-      if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
-	o->resize(X,Y,W,H);
-	//o->set_damage(FL_DAMAGE_ALL);
-      }
-      if (d&FL_DAMAGE_ALL) o->set_damage(FL_DAMAGE_ALL);
-      update_child(*o);
-      // child's draw() can change it's size, so use new size:
-      current_position += (horizontal() ? o->w() : o->h());
-      if (current_position > maximum_position)
-        maximum_position = current_position;
-      current_position += spacing_;
-    }
-  }
+void Fl_Pack::layout() {
+  for (int iter = 0; iter < 2; iter++) {
+    if (!layout_damage()) break;
 
-  if (horizontal()) {
-    if (maximum_position < tx+tw) {
-      fl_color(color());
-      fl_rectf(maximum_position, ty, tx+tw-maximum_position, th);
+    // we only need to do something special if the group is resized:
+    if (!(layout_damage() & ~FL_LAYOUT_XY) || !children()) {
+      Fl_Group::layout();
+      return;
     }
-    tw = maximum_position-tx;
-  } else {
-    if (maximum_position < ty+th) {
-      fl_color(color());
-      fl_rectf(tx, maximum_position, tw, ty+th-maximum_position);
-    }
-    th = maximum_position-ty;
-  }
 
-  int dx=0; int dy=0; int dw=0; int dh=0; text_box()->inset(dx,dy,dw,dh);
-  tw -= dw; if (tw <= 0) tw = 1;
-  th -= dh; if (th <= 0) th = 1;
-  if (tw != w() || th != h()) {Fl_Widget::resize(x(),y(),tw,th); d = FL_DAMAGE_ALL;}
-  if (d&FL_DAMAGE_ALL) draw_text_frame();
+    // clear the layout flags, so any resizes of children will set them again:
+    Fl_Widget::layout();
+
+    // This is the rectangle to lay out the remaining widgets in:
+    int x = 0;
+    int y = 0;
+    int r = this->w();
+    int b = this->h();
+    text_box()->inset(x,y,r,b);
+
+    bool saw_horizontal = false;
+    bool saw_vertical = false;
+
+    // layout all the top & left widgets (the ones before the resizable):
+    int i; for (i = 0; i < children(); i++) {
+      Fl_Widget* widget = child(i);
+      if (widget->contains(resizable())) break;
+      if (!widget->visible()) continue;
+      if (is_vertical(widget)) {
+	widget->resize(x, y, widget->w(), b-y);
+	widget->layout();
+	x = widget->x()+widget->w()+spacing_;
+	saw_vertical = true;
+      } else { // put along top edge:
+	widget->resize(x, y, r-x, widget->h());
+	widget->layout();
+	y = widget->y()+widget->h()+spacing_;
+	saw_horizontal = true;
+      }
+    }
+
+    int resizable_index = i;
+
+    // layout all the bottom & right widgets by going backwards:
+    for (i = children()-1; i > resizable_index; i--) {
+      Fl_Widget* widget = child(i);
+      if (!widget->visible()) continue;
+      if (is_vertical(widget)) {
+	int W = widget->w();
+	widget->resize(r-W, y, W, b-y);
+	widget->layout();
+	r = widget->x()-spacing_;
+	saw_vertical = true;
+      } else { // put along top edge:
+	int H = widget->h();
+	widget->resize(x, b-H, r-x, H);
+	widget->layout();
+	b = widget->y()-spacing_;
+	saw_horizontal = true;
+      }
+    }
+
+    // Lay out the resizable widget to fill the remaining space:
+    if (resizable_index < children()) {
+      Fl_Widget* widget = child(resizable_index);
+      widget->resize(x, y, r-x, b-y);
+      widget->layout();
+    }
+
+    // A non-resizable widget will become the size of it's items:
+    int W = w();
+    if (r < x || !resizable() && !saw_horizontal) W -= (r-x);
+    int H = h();
+    if (b < y || !resizable() && !saw_vertical) H -= (b-y);
+    size(W,H);
+  }
+  redraw();
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.20 2002/01/11 08:49:08 spitzak Exp $".
 //

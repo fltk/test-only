@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.37 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.38 2002/01/11 08:49:08 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -244,7 +244,7 @@ void Fl_Function_Type::open() {
     const char *d = c;
     for (; *d != '('; d++) if (isspace(*d) || !*d) break;
     if (*c && *d != '(') {
-      message = "must be name(arguments), try again:"; continue;
+      message = "Name must contain argument list in parenthesis."; continue;
     }
     c = f_return_type_input->value();
     message = c_check(c); if (message) continue;
@@ -808,5 +808,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.37 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.38 2002/01/11 08:49:08 spitzak Exp $".
 //

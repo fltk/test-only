@@ -1,5 +1,5 @@
 //
-// "$Id: pack.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: pack.cxx,v 1.9 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Fl_Pack test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,20 +38,24 @@
 Fl_Pack *pack;
 Fl_Scroll *scroll;
 
+// Callback for when horizontal/vertical are changed:
 void type_cb(Fl_Light_Button*, long v) {
+  pack->type(uchar(v));
+  // Resize the widgets to small squares so the pack will resize them
+  // to strips that are 25 wide:
   for (int i = 0; i < pack->children(); i++) {
     Fl_Widget* o = pack->child(i);
     o->resize(0,0,25,25);
   }
-  pack->resize(scroll->x(),scroll->y(),scroll->w(),scroll->h());
-  pack->parent()->redraw();
-  pack->type(uchar(v));
-  pack->redraw();
+  // Resize the pack to fit into the scroll box:
+  pack->resize(0, 0, scroll->w()-scroll->scrollbar.w(),
+	       scroll->h()-scroll->hscrollbar.h());
 }
 
+// Callback for when the spacing is changed:
 void spacing_cb(Fl_Value_Slider*o, long) {
   pack->spacing(int(o->value()));
-  scroll->redraw();
+  pack->relayout();
 }
 
 int main(int argc, char **argv) {
@@ -115,5 +119,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pack.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: pack.cxx,v 1.9 2002/01/11 08:49:08 spitzak Exp $".
 //

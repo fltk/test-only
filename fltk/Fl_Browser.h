@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.5 2002/01/11 08:49:07 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -146,6 +146,7 @@ private:
   void unset_mark(int mark);  // makes mark have illegal value
   bool is_set(int mark);  // false if unset_mark was called
   void damage_item(int mark); // make this item redraw
+  bool item_open(bool); // set open/close state of this item, if it is a parent
   enum linepos { TOP, MIDDLE, BOTTOM };
   void set_position(linepos);
 
@@ -168,5 +169,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.5 2002/01/11 08:49:07 spitzak Exp $".
 //

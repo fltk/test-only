@@ -125,6 +125,14 @@ void cb_when_not_changed(Fl_Widget* b, void* ptr) {
     tree->when(tree->when()&~FL_WHEN_NOT_CHANGED);
 }
 
+void cb_when_enter_key(Fl_Widget* b, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*)ptr;
+  if (b->value())
+    tree->when(tree->when()|FL_WHEN_ENTER_KEY);
+  else
+    tree->when(tree->when()&~FL_WHEN_ENTER_KEY);
+}
+
 #define USE_STRING_LIST 0
 #if USE_STRING_LIST
 #include <fltk/Fl_String_List.h>
@@ -151,16 +159,21 @@ int main(int argc,char** argv) {
   Fl_Button add_folder_button(5, 248, 70, 22, "Add Folder");
   add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
 
-  Fl_Check_Button multi_button(80, 200, 160, 22, "FL_MULTI_BROWSER");
+  Fl_Check_Button multi_button(80, 200, 160, 20, "FL_MULTI_BROWSER");
   multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
 
-  Fl_Check_Button when_changed_button(80, 224, 160, 22, "FL_WHEN_CHANGED");
+  Fl_Check_Button when_changed_button(80, 220, 160, 20, "FL_WHEN_CHANGED");
   when_changed_button.callback(cb_when_changed, (void *)&tree);
-  Fl_Check_Button when_not_changed_button(80, 248, 160, 22, "FL_WHEN_NOT_CHANGED");
+
+  Fl_Check_Button when_not_changed_button(80, 240, 160, 20, "FL_WHEN_NOT_CHANGED");
   when_not_changed_button.callback(cb_when_not_changed, (void *)&tree);
-  Fl_Check_Button when_release_button(80, 272, 160, 22, "FL_WHEN_RELEASE");
+
+  Fl_Check_Button when_release_button(80, 260, 160, 20, "FL_WHEN_RELEASE");
   when_release_button.callback(cb_when_release, (void *)&tree);
   when_release_button.set_value();
+
+  Fl_Check_Button when_enter_key_button(80, 280, 160, 20, "FL_WHEN_ENTER_KEY");
+  when_enter_key_button.callback(cb_when_enter_key, (void *)&tree);
 
   win.resizable(tree);
   win.end();

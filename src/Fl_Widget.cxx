@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.82 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.83 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -134,34 +134,26 @@ will be drawn twice. The gain is that region calculations are not done
 on every redraw(), restoring the speed we had in earlier fltk.
 
 I renamed damage(n) to redraw(n) to match fltk method style. damage(n)
-is reserved for directly manipulating the damage flags but is
-undefined (if -DFLTK2 is given) to force all old software to be
-rewritten to call redraw(n).
+is reserved for changing damage_ but for now use set_damage(n) for this.
 
-"Exposure" turns on FL_DAMAGE_EXPOSE on a window and accumulates a
-region that merges all the exposures. All other redraw() calls set
-bits on the widget and all it's parents but don't touch the region.
+Normal redraw(n) will turn on those damage bits in the widget and turn
+on FL_DAMAGE_CHILD in all the parents. Groups should call redraw_child()
+on each child when FL_DAMAGE_CHILD is on.
 
-Fl_Window::flush() saves and clears the FL_DAMAGE_EXPOSE flag and then
-calls draw() (if any other damage flags are on) to update all the widgets
-that called redraw(). It then restores the FL_DAMAGE_EXPOSE flag and if
-non-zero it sets the region and calls draw() again, this time the draw
-must propagate the FL_DAMAGE_EXPOSE to all children in the clip region
-and draw them.
+Expose events accumulates a region but does not turn on any damage
+bits.  The flush() method on a window must cause this area to be
+updated. This may be done by copying a back buffer. The normal window
+calls draw() again with the clip region set and damage() set to
+FL_DAMAGE_EXPOSE. All widgets should redraw every pixel in the clip
+region if FL_DAMAGE_EXPOSE is turned on. Exposure that covers the
+entire window is detected and changed into FL_DAMAGE_ALL, so only one
+redraw is done.
 
-Since an expose that covers the entire window, and a redraw() on the
-window itself, are common events, this is detected and the window is
-only drawn once with both the FL_DAMAGE_ALL and FL_DAMAGE_EXPOSE bits on.
+The redraw(x,y,w,h) function does the same thing as expose events but
+it sets FL_DAMAGE_EXPOSE. This is so flush() for double-buffered
+windows can tell these apart from normal expose events.
 
 */
-
-void Fl_Widget::redraw_label() {
-  if (!label() && !image()) return;
-  // ignore inside label (not sure why this does not cause a redraw()):
-  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
-  // outside label requires a marker flag and damage to parent:
-  redraw(FL_DAMAGE_CHILD_LABEL);
-}
 
 void Fl_Widget::redraw() {
   redraw(FL_DAMAGE_ALL);
@@ -176,6 +168,14 @@ void Fl_Widget::redraw(uchar flags) {
       if (widget->is_window()) break;
   }
   Fl::damage(FL_DAMAGE_CHILD);
+}
+
+void Fl_Widget::redraw_label() {
+  if (!label() && !image()) return;
+  // ignore inside label (not sure why this does not cause a redraw()):
+  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
+  // outside label requires a marker flag and damage to parent:
+  redraw(FL_DAMAGE_CHILD_LABEL);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -479,5 +479,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.82 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.83 2002/01/11 08:49:08 spitzak Exp $".
 //

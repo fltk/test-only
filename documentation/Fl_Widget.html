@@ -137,6 +137,11 @@ after changing any visible properties.
 
 </table></center>
 
+<hr>
+The constructor and these 5 virtual functions are usually rewritten by
+any subclass. This is described in more detail under <a
+href=subclassing.html>subclassing</a>.
+
 <a name=Fl_Widget><h4>Fl_Widget::Fl_Widget(int x, int y, int w, int h, const char* label=0);</h4></a>
 
 This is the protected constructor for an Fl_Widget, but all derived 
@@ -149,9 +154,10 @@ and an optional value for <a href=#label><tt>label()</tt></a>.
 
 <a name=~Fl_Widget><h4>virtual Fl_Widget::~Fl_Widget();</h4></a>
 
-Destroying single widgets is not very common.  It is your 
-responsibility to either remove() them from any enclosing group, or to 
-destroy that group <I>immediately</I> after destroying the children. 
+Removes itself from the parent widget (if any), and destroys any label
+made with <a href=#copy_label>copy_label()</a>. Destroying an <a
+href=Fl_Group.html>Fl_Group</a> will destroy any children, so to avoid
+double-destruction you must destroy the children first or not at all.
 
 <a name=draw><h4>virtual void draw();</h4></a>
 
@@ -162,10 +168,9 @@ version is <a href=subclassing.html#draw>here</a>.
 <a name=handle><h4>virtual int handle(int event);</h4></a>
 
 Handle an <a href=events.html>event</a>, and return non-zero if the
-widget understood and used the event. See <a
-href=subclassing.html#handle>here</a> for information on how to write
-this function for a subclass. The default version returns true for
-<tt>FL_ENTER, FL_LEAVE</tt> and <tt>FL_MOVE</tt>.
+widget understood and used the event. The default version returns true for
+<tt>FL_ENTER, FL_LEAVE</tt> and <tt>FL_MOVE</tt>. Information on how
+to write your own version is <a href=subclassing.html#handle>here</a>.
 
 <a name=layout><h4>virtual void layout();</h4></a>
 
@@ -174,6 +179,8 @@ href=#relayout>relayout()</a> or <a href=#resize>resize()</a> with a
 different size will cause this to be called later (after all pending
 events are handled and just before <a href=#draw>draw()</a> is
 called).
+
+<hr>
 
 <a name=style><h4>const <a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::style() const</h4></a>
 

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.54 2001/12/16 22:32:03 spitzak Exp $"
+# "$Id: Makefile,v 1.55 2002/01/11 08:49:08 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -100,9 +100,9 @@ shape: shape.cxx $(FLGLLIB) $(FLLIB)
 image_file: image_file.cxx $(FLIMAGESLIB) $(FLLIB)
 	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(IMAGELIBS) $(PNGLIBS) $(JPEGLIBS) $(LDLIBS) -o $@
 threads: threads.cxx $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(THREADSLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
 thread_test: thread_test.cxx $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(THREADSLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
@@ -124,5 +124,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.54 2001/12/16 22:32:03 spitzak Exp $".
+# End of "$Id: Makefile,v 1.55 2002/01/11 08:49:08 spitzak Exp $".
 #

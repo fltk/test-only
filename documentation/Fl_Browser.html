@@ -57,6 +57,38 @@ href=#value>value(n)</a></tt>.
 <p>The subclass <a href=Fl_Multi_Browser.html>Fl_Multi_Browser</a>
 lets the user select more than one item at the same time.
 
+<h4>Callbacks</h4>
+
+You can control when callbacks are done with the <a
+href="Fl_Widget.html#when"><tt>when()</tt></a> method. The following
+values are useful, the default value is <tt>FL_WHEN_RELEASE</tt>.
+
+<ul>
+
+<li><tt>FL_WHEN_NEVER</tt> - Callback is never done. <a
+href="Fl_Widget.html#changed"><tt>changed()</tt></a> can be used to
+see if the user has modified the browser.</li>
+
+<li><tt>FL_WHEN_CHANGED</tt> - Callback is done whenever the user
+changes the current item. If they drag the mouse through items the
+callback is done for each one, and the callback is done for each
+keystroke that changes the selected item.</li>
+
+<li><tt>FL_WHEN_RELEASE</tt> - Callback is done when the user releases
+the mouse and the selected item has changed, and on any keystroke that
+changes the item.</li>
+
+<li><tt>FL_WHEN_RELEASE_ALWAYS</tt> - Callback is done when the user
+releases the mouse even if the current item has not changed, and on
+any arrow keystroke even when at the top or bottom of the browser. You
+must use this if you want to detect the user double-clicking an item.</li>
+
+<li><tt>FL_WHEN_ENTER_KEY</tt> - Callback is only done if the user
+hits the Enter key and some item is selected. In the current version
+the callback is also done if the user double-clicks a non-parent item.</li>
+
+</ul>
+
 <h3>Methods</h3>
 
 <center>
@@ -216,10 +248,11 @@ Set the vertical scrolling to a certain value.
 <a name=indented><h4>bool indented() const
 <br>void indented(bool v)</h4></a>
 
-This is turned on by <tt>layout()</tt> if there are any parent items
-in the browser, to indicate that space must be reserved on the left
-for the + and - boxes. You can turn this on manually to reserve the
-space even if there are no parent items.
+Turn this on to for space to be reserved for open/close boxes drawn to
+the left of top-level items. You usually want this for a hierarchial
+browser. This should be off for a flat browser, or to emulate Windows
+Explorer where "my computer" does not have an open/close to the left
+of it. The default value is <tt>false</tt>.
 
 <h4><a name=scrollbar>Fl_Scrollbar scrollbar;</a>
 <br><a name=hscrollbar>Fl_Scrollbar hscrollbar;</a></h4>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Pack.h,v 1.2 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Pack header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ public:
     VERTICAL = 0,
     HORIZONTAL = 1
   };
-  void draw();
+  void layout();
   Fl_Pack(int x,int y,int w ,int h,const char *l = 0);
   int spacing() const {return spacing_;}
   void spacing(int i) {spacing_ = i;}
@@ -45,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Pack.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Pack.h,v 1.2 2002/01/11 08:49:08 spitzak Exp $".
 //

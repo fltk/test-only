@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.52 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.53 2002/01/11 08:49:08 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -381,13 +381,11 @@ void Fl_Browser::draw_item() {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
     if (j == item_level[HERE]) {
       g += ELL;
-      if (indented()) {
 	if (widget->flags() & FL_OPEN)
 	  g += OPEN_ELL-ELL;
 	else if (children(item_index[HERE],j+1)>=0)
 	  g += CLOSED_ELL-ELL;
       }
-    }
     draw_glyph(g, x, y, arrow_size, h, flags);
     x += arrow_size;
   }
@@ -491,6 +489,21 @@ void Fl_Browser::draw() {
 #define item_is_parent() \
 (item()->flags()&FL_OPEN || children(item_index[HERE],item_level[HERE]+1)>=0)
 
+bool Fl_Browser::item_open(bool open)
+{
+  if (!item() || !item_is_parent()) return false;
+  if (open) {
+    if (item()->flags() & FL_OPEN) return false;
+    item()->set_flag(FL_OPEN);
+  } else {
+    if (!(item()->flags() & FL_OPEN)) return false;
+    item()->clear_flag(FL_OPEN);
+  }
+  list()->flags_changed(this, item());
+  relayout(FL_LAYOUT_CHILD);
+  return true;
+}
+
 void Fl_Browser::layout() {
   // figure out the visible area:
 
@@ -513,7 +526,7 @@ void Fl_Browser::layout() {
   if (!goto_top()) yposition_ = 0;
   else for (;;) {
     if (item_position[HERE]+item()->height() > yposition_) break;
-    if (!indented_ && item_is_parent()) indented_ = true;
+    //if (!indented_ && item_is_parent()) indented_ = true;
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
     if (w > width_) width_ = w;
@@ -525,7 +538,7 @@ void Fl_Browser::layout() {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
     if (w > width_) width_ = w;
-    if (!indented_ && item_is_parent()) indented_ = true;
+    //if (!indented_ && item_is_parent()) indented_ = true;
     if (!next_visible()) break;
   }
   if (indented()) width_ += arrow_size;
@@ -606,7 +619,7 @@ bool Fl_Browser::set_focus() {
   damage_item(HERE); // so will draw focus box around item?
   damage_item(FOCUS); // so focus box around old focus item will be removed?
   set_mark(FOCUS, HERE); // current item is new focus item
-  if (layout_damage()) {
+  if (layout_damage() & FL_LAYOUT_DAMAGE) {
     // center the focus
     int y = item_position[FOCUS]-h()/2;
     if (y < 0) y = 0;
@@ -715,7 +728,7 @@ int Fl_Browser::handle(int event) {
 
     // see if they clicked the open/close box
     int arrow_size = fl_height(text_font(), text_size())|1;
-    int xx = (item_level[HERE]+1)*arrow_size+X-xposition_-Fl::event_x();
+    int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-Fl::event_x();
     if ((event==FL_PUSH || openclose_drag) && xx > 0 && xx < arrow_size &&
 	item_is_parent()) {
       if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
@@ -731,16 +744,17 @@ int Fl_Browser::handle(int event) {
 	  if (openclose_drag) drag_type = !drag_type; // don't change it
 	  set_selected(drag_type, FL_WHEN_CHANGED);
 	  set_focus();
+	  Fl::event_clicks(0); // make it not be a double-click for callback
 	  return 1;
 	} else if (Fl::event_state(FL_SHIFT)) {
 	  // extend the current focus
 	  drag_type = !item()->value();
+	  Fl::event_clicks(0); // make it not be a double-click for callback
 	} else {
 	  select_only_this(FL_WHEN_CHANGED);
 	  drag_type = true;
 	  return 1;
 	}
-	Fl::event_clicks(0);
       }
       // set everything from old focus to current to drag_type:
       int direction = compare_marks(HERE,FOCUS);
@@ -757,36 +771,37 @@ int Fl_Browser::handle(int event) {
     return 1;}
 
   case FL_RELEASE:
-	goto_mark(FOCUS);
-    if (openclose_drag) {
-      if (openclose_drag == 1) goto TOGGLE_OPEN;
-      // otherwise they dragged off the glyph so do nothing...
+    goto_mark(FOCUS);
+    if (openclose_drag == 1 || Fl::event_clicks() && item_is_parent()) {
+      // toggle the open/close state of this item
+      item_open(!(item()->flags()&FL_OPEN));
+      Fl::event_is_click(0); // make next click not be double
+    } else if (Fl::event_clicks() && (when()&FL_WHEN_ENTER_KEY)) {
+      // double clicks act like Enter
+      Fl::e_keysym = FL_Enter;
+      clear_changed();
+      execute(item());
       return 1;
-    } else if (Fl::event_clicks()) {
-      // if (item_is_parent()) goto TOGGLE_OPEN;
-      // double clicks always cause the callback unless when() is zero
-      if (when()) {
-	clear_changed();
-	execute(item());
-      }
-      return 1;
-      }
-    Fl::event_clicks(0); // make program not think it is a double-click
+    }
     goto RELEASE;
 
   case FL_KEY:
     Fl::event_clicks(0); // make program not think it is a double-click
     switch (Fl::event_key()) {
+    case FL_Right:
+    case FL_Left:
     case FL_Up:
     case FL_Down:
       if (!goto_visible_focus()) {
-	if (!goto_top()) break;
-      } else {
-	if (Fl::event_key() == FL_Up) {
+	// If the focus was scrolled off, we just change the item to
+	// the top one in the browser.
+	if (!item()) break;
+      } else if (Fl::event_key() == FL_Up || Fl::event_key() == FL_Left) {
 	  if (!previous_visible()) return 1;
-	} else {
-	  if (!next_visible()) return 1;
-	}
+	if (Fl::event_key() == FL_Left) item_open(false);
+      } else {
+	if (Fl::event_key() == FL_Right) item_open(true);
+	if (!next_visible()) return 1;
       }
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
 	if (Fl::event_state(FL_SHIFT)) set_selected(1,FL_WHEN_CHANGED);
@@ -795,32 +810,21 @@ int Fl_Browser::handle(int event) {
 	select_only_this(FL_WHEN_CHANGED);
       }
       goto RELEASE;
-    case FL_Enter:
-      if (!goto_visible_focus()) {
-	return 1;
-      } else if (item_is_parent()) {
-      TOGGLE_OPEN:
-	item()->invert_flag(FL_OPEN);
-	list()->flags_changed(this, item());
-	relayout();
-	//damage(FL_DAMAGE_CONTENTS, X, Fl::event_y() - Y, w() - item()->x(), h() - item()->h());
-	Fl::event_is_click(0); // make next click not be double
-	goto RELEASE;
-      } else if (when()) {
-	Fl::event_clicks(1); // make program think it was a double-click
-	clear_changed();
-	execute(item());
-	return 1;
-      }
     case ' ':
-      if (!goto_visible_focus()) break;
-      if (multi()) set_selected(!item()->value(), FL_WHEN_CHANGED);
+      if (!multi() || !goto_visible_focus()) break;
+      set_selected(!item()->value(), FL_WHEN_CHANGED);
     RELEASE:
       if ((when()&FL_WHEN_RELEASE) &&
 	  (changed() || (when()&FL_WHEN_NOT_CHANGED))) {
       clear_changed();
       execute(item());
       }
+      return 1;
+    case FL_Enter:
+      if (!(when() & FL_WHEN_ENTER_KEY)) break;
+      if (!goto_visible_focus()) break;
+      clear_changed();
+      execute(item());
       return 1;
     default:
       if (send(event,scrollbar)) return 1;
@@ -842,18 +846,21 @@ int Fl_Browser::handle(int event) {
   return 0;
 }
 
-// go to focus unless it is not visible, in that case go to first item
-// visible in the menu and return false.  This is used by keystrokes so
-// the browser does not scroll unexpectedly.
+// Go to the focus if it is visible and return it.
+// If it is not visible, go to the top of the visible region and return
+// zero. This is used by keystrokes so the browser does not scroll
+// unexpectedly.
 Fl_Widget* Fl_Browser::goto_visible_focus() {
-  if (item_position[FOCUS] < yposition_ ||
-      item_position[FOCUS] > yposition_+H) {
-    if (!goto_mark(FIRST_VISIBLE)) return 0;
-    if (item_position[HERE] < yposition_) next_visible();
-    return item();
-  } else {
-    return goto_mark(FOCUS);
+  if (item_position[FOCUS] >= yposition_ &&
+      item_position[FOCUS] <= yposition_+H) {
+    if (goto_mark(FOCUS)) return item();
   }
+  if (goto_mark(FIRST_VISIBLE)) {
+    if (item_position[HERE] < yposition_) next_visible();
+    if (item()) return 0;
+  }
+  goto_top();
+  return 0;
 }
 
 // Go to a supplied list of indexes, stopping on that item or a closed
@@ -994,5 +1001,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.52 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.53 2002/01/11 08:49:08 spitzak Exp $".
 //
