@@ -1,5 +1,5 @@
 //
-// "$Id$"
+// "$Id: $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -24,41 +24,13 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <config.h>
-
-#if USE_QUARTZ
-# include "fl_clip_mac.cxx"
-#else
-
 #include <fltk/Window.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
 #include <stdlib.h>
 using namespace fltk;
 
-/*! \defgroup clipping Clipping
-    \ingroup drawing
-
-  You can limit all your drawing to a region by calling
-  fltk::push_clip(), and put the drawings back by using
-  fltk::pop_clip(). Fltk may also set up clipping before draw() is
-  called to limit the drawing to the region of the window that is
-  damaged.
-
-  When drawing you can also test the current clip region with
-  fltk::not_clipped() and fltk::clip_box(). By using these to skip
-  over complex drawings that are clipped you can greatly speed up your
-  program's redisplay.
-
-  <i>The width and height of the clipping region is measured in
-  transformed coordianates.</i>
-*/
-
-#if USE_X11
-// Region == Region
-#elif defined(_WIN32)
-# define Region HRGN
-#endif
+#define Region RgnHandle
 
 static Region emptyrstack = 0;
 static Region* rstack = &emptyrstack;
@@ -88,43 +60,33 @@ Region fltk::clip_region() {
   return rstack[rstackptr];
 }
 
-#if USE_X11
-// Missing X call: (is this the fastest way to init a 1-rectangle region?)
-// MSWindows equivalent exists, implemented inline in win32.h
-Region XRectangleRegion(int x, int y, int w, int h) {
-  XRectangle R;
-  R.x = x; R.y = y; R.width = w; R.height = h;
-  Region r = XCreateRegion();
-  XUnionRectWithRegion(&R, r, r);
-  return r;
-}
-#endif
-
 // Make the system's clip match the top of the clip stack.  This can
 // be used after changing the stack, or to undo any clobbering of clip
 // done by your program:
 void fl_restore_clip() {
   Region r = rstack[rstackptr];
   fl_clip_state_number++;
-#if USE_CAIRO
-#elif USE_X11
-  if (r) XSetRegion(xdisplay, gc, r);
-  else XSetClipMask(xdisplay, gc, 0);
-#elif defined(_WIN32)
-  SelectClipRgn(dc, r); //if r is NULL, clip is automatically cleared
-#else
-# error
-#endif
+  if ( quartz_window ) {
+    GrafPtr port = GetWindowPort( quartz_window );
+    if ( port ) { 
+      RgnHandle portClip = NewRgn();
+      CopyRgn( CreatedWindow::find(Window::current())->subRegion, 
+               portClip ); // changed
+      if ( r )
+        SectRgn( portClip, r, portClip );
+      Rect portRect; GetPortBounds(port, &portRect);
+      CreatedWindow::clear_quartz_clipping();
+      ClipCGContextToRegion(quartz_gc, &portRect, portClip );
+      CreatedWindow::fill_quartz_context();
+      DisposeRgn( portClip );
+    }
+  }
 }
 
 /*! Replace the top of the clip stack. */
 void fltk::clip_region(Region r) {
   Region oldr = rstack[rstackptr];
-#if USE_X11
-  if (oldr) XDestroyRegion(oldr);
-#elif defined(_WIN32)
-  if (oldr) DeleteObject(oldr);
-#endif
+  if (oldr) DisposeRgn(oldr);
   rstack[rstackptr] = r;
   fl_restore_clip();
 }
@@ -134,31 +96,13 @@ void fltk::clip_region(Region r) {
   onto the clip stack. */
 void fltk::push_clip(const Rectangle& r1) {
   Rectangle r(r1); transform(r);
-  Region region;
+  Region region = NewRgn();
   if (r.empty()) {
-#if USE_X11
-    region = XCreateRegion();
-#elif defined(_WIN32)
-    region = CreateRectRgn(0,0,0,0);
-#else
-# error
-#endif
+    SetEmptyRgn(region);
   } else {
     Region current = rstack[rstackptr];
-#if USE_X11
-    region = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
-    if (current) {
-      Region temp = XCreateRegion();
-      XIntersectRegion(current, region, temp);
-      XDestroyRegion(region);
-      region = temp;
-    }
-#elif defined(_WIN32)
-    region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
-    if (current) CombineRgn(region, region, current, RGN_AND);
-#else
-# error
-#endif
+    SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
+    if (current) SectRgn(region, current, region);
   }
   pushregion(region);
   fl_restore_clip();
@@ -175,22 +119,11 @@ void fltk::push_clip(const Rectangle& r1) {
 void fltk::clipout(const Rectangle& r1) {
   Rectangle r(r1); transform(r);
   if (r.empty()) return;
-#if USE_X11
   Region current = rstack[rstackptr];
-  if (!current) current = XRectangleRegion(0,0,16383,16383);//?
-  Region region = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
-  Region temp = XCreateRegion();
-  XSubtractRegion(current, region, temp);
-  XDestroyRegion(region);
-  XDestroyRegion(current);
-  rstack[rstackptr] = temp;
-#elif defined(_WIN32)
-  Region current = rstack[rstackptr];
-  if (!current) current = CreateRectRgn(0,0,16383,16383);
-  Region region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
-  CombineRgn(current, current, region, RGN_DIFF);
-  DeleteObject(region);
-#endif
+  if (!current) {current = NewRgn(); SetRectRgn(current, 0,0,16383,16383);}
+  Region region = NewRgn();
+  SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
+  DiffRgn(current, region, current);
   fl_restore_clip();
 }
 
@@ -213,11 +146,7 @@ void fltk::push_no_clip() {
 void fltk::pop_clip() {
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
-#if USE_X11
-    if (oldr) XDestroyRegion(oldr);
-#elif defined(_WIN32)
-    if (oldr) DeleteObject(oldr);
-#endif
+    if (oldr) DisposeRgn(oldr);
     fl_restore_clip();
   }
 }
@@ -236,13 +165,9 @@ bool fltk::not_clipped(const Rectangle& r1) {
       || r.y() >= Window::current()->h()) return false;
   Region region = rstack[rstackptr];
   if (!region) return true;
-#if USE_X11
-  return XRectInRegion(region, r.x(), r.y(), r.w(), r.h());
-#elif defined(_WIN32)
-  RECT rect;
+  Rect rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
-  return RectInRegion(region,&rect);
-#endif
+  return RectInRgn(&rect, region);
 }
 
 /*!
@@ -262,10 +187,6 @@ bool fltk::not_clipped(const Rectangle& r1) {
 */
 int fltk::intersect_with_clip(Rectangle& r) {
   Region region = rstack[rstackptr];
-  // If no clip region, claim it is not clipped. This is wrong because the
-  // rectangle may be clipped by the window itself, but this test would
-  // break the current draw-image-into-buffer code. This needs to be fixed
-  // by replacing Window::current() below:
   if (!region) return 1;
   // Test against the window to get 16-bit values:
   int ret = 1;
@@ -275,52 +196,17 @@ int fltk::intersect_with_clip(Rectangle& r) {
   t = Window::current()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
   // check for total clip (or for empty rectangle):
   if (r.empty()) return 0;
-#if USE_X11
-  switch (XRectInRegion(region, r.x(), r.y(), r.w(), r.h())) {
-  case 0: // completely outside
-    r.set(0,0,0,0);
-    return 0;
-  case 1: // completely inside:
-    return ret;
-  default: { // partial:
-    Region rr = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
-    Region temp = XCreateRegion();
-    XIntersectRegion(region, rr, temp);
-    XRectangle xr;
-    XClipBox(temp, &xr);
-    r.set(xr.x, xr.y, xr.width, xr.height);
-    XDestroyRegion(temp);
-    XDestroyRegion(rr);
-    return 2;}
-  }
-#elif defined(_WIN32)
-// The win32 API makes no distinction between partial and complete
-// intersection, so we have to check for partial intersection ourselves.
-// However, given that the regions may be composite, we have to do
-// some voodoo stuff...
-  Region rr = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
-  Region temp = CreateRectRgn(0,0,0,0);
-  if (CombineRgn(temp, rr, region, RGN_AND) == NULLREGION) { // disjoint
-    r.set(0,0,0,0);
-    ret = 0;
-  } else if (EqualRgn(temp, rr)) { // complete
-    // ret = ret
-  } else {	// parital intersection
-    RECT xr;
-    GetRgnBox(temp, &xr);
-    r.set(xr.left, xr.top, xr.right-xr.left, xr.bottom-xr.top);
-    ret = 2;
-  }
-  DeleteObject(temp);
-  DeleteObject(rr);
+  RgnHandle rr = NewRgn();
+  SetRectRgn(rr, r.x(), r.y(), r.r(), r.b());
+  SectRgn(region, rr, rr);
+  Rect rp; GetRegionBounds(rr, &rp);
+  if (rp.bottom <= rp.top) ret = 0;
+  else if (rp.right-rp.left < r.w() || rp.bottom-rp.top < r.h()) ret = 2;
+  r.set(rp.left, rp.top, rp.right-rp.left, rp.bottom-rp.top);
+  DisposeRgn(rr);
   return ret;
-#else
-# error
-#endif
 }
 
-#endif
-
 //
-// End of "$Id$"
+// End of "$Id: $"
 //

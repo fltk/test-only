@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $"
+// "$Id$"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,20 +26,22 @@
 // we need to remember some settings for the current context
 
 namespace fltk {
-  float quartz_line_width_ = 1.0f;
+
+float quartz_line_width_ = 1.0f;
+static enum CGLineCap quartz_line_cap_ = kCGLineCapButt;
+static enum CGLineJoin quartz_line_join_ = kCGLineJoinMiter;
+static float *quartz_line_pattern = 0;
+static int quartz_line_pattern_size = 0;
+
+void restore_quartz_line_style() {
+  CGContextSetLineWidth(quartz_gc, quartz_line_width_);
+  CGContextSetLineCap(quartz_gc, quartz_line_cap_);
+  CGContextSetLineJoin(quartz_gc, quartz_line_join_);
+  CGContextSetLineDash(quartz_gc, 0, 
+      quartz_line_pattern, quartz_line_pattern_size);
 }
-/* //+++
-static enum CGLineCap fl_quartz_line_cap_ = kCGLineCapButt;
-static enum CGLineJoin fl_quartz_line_join_ = kCGLineJoinMiter;
-static float *fl_quartz_line_pattern = 0;
-static int fl_quartz_line_pattern_size = 0;
-void fl_quartz_restore_line_style_() {
-  CGContextSetLineWidth(fl_gc, fl_quartz_line_width_);
-  CGContextSetLineCap(fl_gc, fl_quartz_line_cap_);
-  CGContextSetLineJoin(fl_gc, fl_quartz_line_join_);
-  CGContextSetLineDash(fl_gc, 0, fl_quartz_line_pattern, fl_quartz_line_pattern_size);
-}
-*/
+
+} // end of namespace
 
 // Because carbon has a 'current color' in the drawing context this
 // is really simple.
@@ -66,25 +68,54 @@ void fltk::setcolor(Color i) {
 // Used by setcolor_index
 static void free_color(Color) {}
 
-// This is here because stoopid Windows requires you to set the color
-// and dash pattern in the same code, so they cannot be seperated.
-// QuickDraw supports pen size and pattern, but no dash patterns, so
-// dashes are faked with stippling patterns.
+static enum CGLineCap Cap[4] = {
+  kCGLineCapButt, kCGLineCapButt, kCGLineCapRound, kCGLineCapSquare 
+};
+
+static enum CGLineJoin Join[4] = {
+  kCGLineJoinMiter, kCGLineJoinMiter, kCGLineJoinRound, kCGLineJoinBevel 
+};
+
 void fltk::line_style(int style, int width, char* dashes) {
-  static Pattern	styles[] = {
-    { { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } },	// FL_SOLID
-    { { 0xf0, 0xf0, 0xf0, 0xf0, 0x0f, 0x0f, 0x0f, 0x0f } },	// FL_DASH
-    { { 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55 } }	// FL_DOT
-  };
-
-  if (!width) width = 1;
-  PenSize(width, width);
-
-  style &= 0xff;
-  if (style > 2) style = 2;
-  PenPat(styles + style);
+  if (width<1) width = 1;
+  quartz_line_width_ = (float)width;
+  quartz_line_cap_ = Cap[(style>>8)&3];
+  quartz_line_join_ = Join[(style>>12)&3];
+  char *d = dashes;
+  static float pattern[16];
+  if (d && *d) {
+    float *p = pattern;
+    while (*d) { *p++ = (float)*d++; }
+    quartz_line_pattern = pattern;
+    quartz_line_pattern_size = d-dashes;
+  } else if (style & 0xff) {
+    char dash, dot, gap;
+    // adjust lengths to account for cap:
+    if (style & 0x200) {
+      dash = char(2*width);
+      dot = 1;
+      gap = char(2*width-1);
+    } else {
+      dash = char(3*width);
+      dot = gap = char(width);
+    }
+    float *p = pattern;
+    switch (style & 0xff) {
+    case DASH:       *p++ = dash; *p++ = gap; break;
+    case DOT:        *p++ = dot; *p++ = gap; break;
+    case DASHDOT:    *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
+    case DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; 
+                     *p++ = dot; *p++ = gap; break;
+    }
+    quartz_line_pattern_size = p-pattern;
+    quartz_line_pattern = pattern;
+  } else {
+    quartz_line_pattern = 0; 
+    quartz_line_pattern_size = 0;
+  }
+  restore_quartz_line_style();
 }
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $".
+// End of "$Id$".
 //

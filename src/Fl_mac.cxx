@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.23 2005/01/26 22:35:27 matthiaswm Exp $"
+// "$Id$"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1408,7 +1408,8 @@ void Window::label(const char *name, const char * iname) {
 const Window *Window::current_;
 
 //+++ verify port to FLTK2
-void fltk::draw_into(GWorldPtr gWorld) {
+void fltk::draw_into(CGImageRef gWorld) {
+/*
   if ( gWorld ) {
     SetGWorld( gWorld, 0 ); // sets the correct port
     PixMapHandle pm = GetGWorldPixMap(gWorld);
@@ -1421,11 +1422,12 @@ void fltk::draw_into(GWorldPtr gWorld) {
       LockPixels( pm );
     }
   }
+*/
 }
 
 //+++ verify port to FLTK2
-void fltk::stop_drawing(GWorldPtr gWorld) {
-  // ?
+void fltk::stop_drawing(CGImageRef) {
+  CreatedWindow::release_quartz_context();
 }
 
 /**
@@ -1436,7 +1438,6 @@ void Window::make_current() const
 {
   CreatedWindow::release_quartz_context();
   current_ = this;
-  quartz_window = i->xid;
   // Find the root window and our position in it:
   int X = 0;
   int Y = 0;
@@ -1446,7 +1447,8 @@ void Window::make_current() const
     X += o->x();
     Y += o->y();
   }
-  SetPort(GetWindowPort(root->i->xid));
+  quartz_window = root->i->xid;
+  SetPort(GetWindowPort(quartz_window));
   SetOrigin(-X, -Y);
   // We force a clip region to handle child windows. To speed things up
   // we only recalculate the clip region when children are shown, hidden,
@@ -1475,22 +1477,20 @@ void Window::make_current() const
       DisposeRgn(r);
     }
   }
-  SetPortClipRegion( GetWindowPort(root->i->xid), i->subRegion );
-  QDBeginCGContext(GetWindowPort(i->xid), &i->gc);
-  quartz_gc = i->gc;
+  SetPortClipRegion( GetWindowPort(quartz_window), i->subRegion );
+  QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
+  quartz_gc = root->i->gc = i->gc;
   CGContextSaveGState(quartz_gc);
   CreatedWindow::fill_quartz_context();
 }
 
 // helper function to manage the current CGContext fl_gc
-/* //+++
-extern class Fl_FontSize *fl_fontsize;
-extern void fl_font(class Fl_FontSize*);
-extern void fl_quartz_restore_line_style_();
-*/
+namespace fltk {
+  extern void restore_quartz_line_style();
+}
 
-// FLTK has only on global graphics state. This function copies the FLTK state into the
-// current Quartz context
+// FLTK has only one global graphics state. This function copies the FLTK 
+// state into the current Quartz context
 void CreatedWindow::fill_quartz_context() {
   if (!quartz_gc) return;
   int hgt = 0;
@@ -1505,13 +1505,13 @@ void CreatedWindow::fill_quartz_context() {
   CGContextScaleCTM(quartz_gc, 1.0f, -1.0f);
   static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
   CGContextSetTextMatrix(quartz_gc, font_mx);
-  //+++ fl_font(fl_fontsize);
+  setfont(current_font_, current_size_);
   setcolor(current_color_);
-  //+++ fl_quartz_restore_line_style_();
+  restore_quartz_line_style();
 }
 
-// The only way to reste clipping to its original state is to pop the current graphics
-// state and restore the global state.
+// The only way to reset clipping to its original state is to pop the 
+// current graphics state and restore the global state.
 void CreatedWindow::clear_quartz_clipping() {
   if (!quartz_gc) return;
   CGContextRestoreGState(quartz_gc);
@@ -1527,27 +1527,23 @@ void CreatedWindow::release_quartz_context(CreatedWindow *x) {
   quartz_gc = 0;
 }
 
-void CreatedWindow::begin_quartz_image(CGRect &rect, const Rectangle &) {
-  /* //+++
-  CGContextSaveGState(fl_gc);
-  CGAffineTransform mx = CGContextGetCTM(fl_gc);
+void CreatedWindow::begin_quartz_image(CGRect &rect, const Rectangle &c) {
+  CGContextSaveGState(quartz_gc);
+  CGAffineTransform mx = CGContextGetCTM(quartz_gc);
   CGRect r2 = rect;
   r2.origin.x -= 0.5f;
   r2.origin.y -= 0.5f;
-  CGContextClipToRect(fl_gc, r2);
+  CGContextClipToRect(quartz_gc, r2);
   mx.d = -1.0; mx.tx = -mx.tx;
-  CGContextConcatCTM(fl_gc, mx);
-  rect.origin.x = rect.origin.x - cx;
-  rect.origin.y = (mx.ty+0.5f) - rect.origin.y - h + cy;
-  rect.size.width = w;
-  rect.size.height = h;
-  */
+  CGContextConcatCTM(quartz_gc, mx);
+  rect.origin.x = rect.origin.x - c.x();
+  rect.origin.y = (mx.ty+0.5f) - rect.origin.y - c.h() + c.y();
+  rect.size.width = c.w();
+  rect.size.height = c.h();
 }
 
 void CreatedWindow::end_quartz_image() {
-  /* //+++
-  CGContextRestoreGState(fl_gc);
-  */
+  CGContextRestoreGState(quartz_gc);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1694,6 +1690,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.23 2005/01/26 22:35:27 matthiaswm Exp $".
+// End of "$Id$".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.14 2004/06/11 08:07:20 spitzak Exp $"
+// "$Id$"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -385,5 +385,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.14 2004/06/11 08:07:20 spitzak Exp $"
+// End of "$Id$"
 //

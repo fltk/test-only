@@ -330,7 +330,7 @@ void fltk::transform(Rectangle& R) {
 
 #if USE_CAIRO
 // Cairo has its own coordinate stack
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 // Quartz has its own coordinate stack
 static bool first_point = true;
 namespace fltk { 
@@ -390,7 +390,7 @@ void fltk::addvertex(float X, float Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -418,7 +418,7 @@ void fltk::addvertex(int X, int Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -452,7 +452,7 @@ void fltk::addvertices(int n, const float array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -500,7 +500,7 @@ void fltk::addvertices(int n, const int array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const int* a = array[0];
   const int* e = a+2*n;
   for (; a < e; a += 2) {
@@ -549,7 +549,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
   for (; a < e; a += 2) {
     cairo_line_to(cc,a[0],a[1]);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -585,8 +585,9 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 void fltk::closepath() {
 #if USE_CAIRO
   cairo_close_path(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextClosePath(quartz_gc);
+  first_point = true;
 #else
   if (numpoints > loop_start+2) {
     // close the shape by duplicating first point:
@@ -628,11 +629,14 @@ void fltk::closepath() {
   \see addchord()
 */
 void fltk::addpie(const Rectangle& r, float start, float end) {
-#if USE_CAIRO || defined(__APPLE__) && !USE_X11
+#if USE_CAIRO && !USE_X11
   closepath();
   addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
   addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
   closepath();
+#elif USE_QUARTZ
+  //+++ addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
+  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
 #else
   circle = r; transform(circle);
   circle_start = start;
@@ -653,10 +657,12 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   of a closed version draws the straight edge is indeterminate.
 */
 void fltk::addchord(const Rectangle& r, float start, float end) {
-#if USE_CAIRO || defined(__APPLE__) && !USE_X11
+#if USE_CAIRO && !USE_X11
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
   closepath();
+  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
+#elif USE_QUARTZ
   addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
 #else
   circle = r; transform(circle);
@@ -669,7 +675,7 @@ void fltk::addchord(const Rectangle& r, float start, float end) {
 static inline void inline_newpath() {
 #if USE_CAIRO
   cairo_new_path(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   first_point = true;
   CGContextBeginPath(quartz_gc);
 #else
@@ -692,7 +698,7 @@ void fltk::newpath() {inline_newpath();}
 void fltk::drawpoints() {
 #if USE_CAIRO
   // Not implemented!
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   // Not implemented!
 #elif USE_X11
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
@@ -711,7 +717,7 @@ void fltk::drawpoints() {
 void fltk::strokepath() {
 #if USE_CAIRO
   cairo_stroke(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextStrokePath(quartz_gc);
 #elif USE_X11
   if (circle_type) {
@@ -778,7 +784,7 @@ void fltk::strokepath() {
 void fltk::fillpath() {
 #if USE_CAIRO
   cairo_fill(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextFillPath(quartz_gc);
 #elif USE_X11
   if (circle_type) {
@@ -851,7 +857,7 @@ void fltk::fillstrokepath(Color color) {
   cairo_restore(cc);
   setcolor(color);
   cairo_stroke(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   closepath();
   uchar r, g, b; 
   split_color(color, r, g, b);

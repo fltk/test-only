@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.51 2005/01/25 09:49:11 spitzak Exp $"
+// "$Id$"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -148,10 +148,9 @@ void Image::destroy_cache() {
   stop_drawing((HBITMAP)rgb);
   if (alpha && alpha != rgb) {DeleteObject((HBITMAP)alpha); alpha = 0;}
   if (rgb) {DeleteObject((HBITMAP)rgb); rgb = 0;}
-#elif defined(__APPLE__)
-  stop_drawing((GWorldPtr)rgb);
-  if (alpha && alpha != rgb) {DisposeGWorld((GWorldPtr)alpha); alpha = 0;}
-  if (rgb) {DisposeGWorld((GWorldPtr)rgb); rgb = 0;}
+#elif USE_QUARTZ
+  stop_drawing((CGImageRef)rgb);
+  if (rgb) CGImageRelease((CGImageRef)rgb);
 #else
 #error
 #endif
@@ -198,16 +197,22 @@ void Image::make_current() {
     bmi.bmiHeader.biSizeImage = w_ * h_ * 4;
 
     rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
-#elif defined(__APPLE__)
-    // ???
+#elif USE_QUARTZ
+    CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
+    CGDataProviderRef src = CGDataProviderCreateWithData( 0L, 0, 0, 0L);
+    rgb = CGImageCreate( w_, h_, 8, 32, 4*w_,
+        lut, kCGImageAlphaNone,
+        src, 0L, false, kCGRenderingIntentDefault);
+    CGColorSpaceRelease(lut);
+    CGDataProviderRelease(src);
 #endif
   }
 #if USE_X11
   draw_into((XWindow)rgb);
 #elif defined(_WIN32)
   draw_into((HBITMAP)rgb);
-#elif defined(__APPLE__)
-  draw_into((GWorldPtr)rgb);
+#elif USE_QUARTZ
+  draw_into((CGImageRef)rgb);
 #endif
 }
 
@@ -591,5 +596,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.51 2005/01/25 09:49:11 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.37 2005/01/26 22:35:27 matthiaswm Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -172,5 +172,5 @@ Color fltk::get_color_index(Color color) {
   done by multiplying \a gray by 0x1010100. */
 
 //
-// End of "$Id: fl_color.cxx,v 1.37 2005/01/26 22:35:27 matthiaswm Exp $".
+// End of "$Id$".
 //

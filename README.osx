@@ -17,7 +17,7 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     Not all demo applications will be compiled. A few test will fail and abort.
     
     FLTK2 will work with Carbon and Quartz. I expect a useful version to be
-    finished by the end of January 2005. Testing and bug fixing should 
+    finished by the first week of February 2005. Testing and bug fixing should 
     be finished by the end of February.
   
     incomplete todo list:
@@ -27,6 +27,8 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
      o clipping
      o TextEditor with floating point positioning
      o text conversion to utf8
+     o pie code does not draw pies (see 'valuator' test)
+     o arc code draws additional lines (see 'boxtype')
 
     - Matthias Melcher
     

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.28 2005/01/27 08:50:40 spitzak Exp $"
+// "$Id$"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -55,11 +55,11 @@ Box* const fltk::OVAL_BOX = &ovalBox;
 class OvalShadowBox : public Box {
 public:
   void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Rectangle r1(r); r1.move_x(3); r1.move_y(3);
+    Rectangle r1(r); 
+    r1.move(3, 3);
     setcolor(GRAY33);
-    addchord(r, 0, 360);
+    addchord(r1, 0, 360);
     fillpath();
-    r1.move(-3,-3);
     Color bg, fg; style->boxcolors(f,bg,fg);
     setcolor(bg);
     addchord(r, 0, 360);
@@ -95,5 +95,5 @@ Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.28 2005/01/27 08:50:40 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.26 2005/01/27 08:50:40 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -92,7 +92,6 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
     break;
   }
 #elif USE_QUARTZ
-//+++ port me!
   a1 = (-a1)/180.0f*M_PI; a2 = (-a2)/180.0f*M_PI;
   float cx = r.center_x()-0.5f, cy = r.center_y()-0.5f;
   float w = r.w(), h = r.h();
@@ -121,26 +120,9 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
     split_color(c, r, g, b);
     CGContextSetRGBStrokeColor(quartz_gc, r/255.0f, g/255.0f, b/255.0f, 1.0);
     CGContextDrawPath(quartz_gc, kCGPathFillStroke);
+    setcolor(c);
     break; }
   }
-/*
-  Rect rect;
-  rect.left=r.x(); rect.right=r.r(); rect.top=r.y(); rect.bottom=r.b();
-  a1 = a2-a1; a2 = 450-a2;
-  switch (what) {
-  case FILLPIE:
-  case FILLARC: // not correct, should fill chord
-    PaintArc(&rect, (short int)a2, (short int)a1);
-    break;
-  case STROKEARC:
-    FrameArc(&rect, (short int)a2, (short int)a1);
-    break;
-  case FILLSTROKEARC:
-    PaintArc(&rect, (short int)a2, (short int)a1);
-    setcolor(c);
-    FrameArc(&rect, (short int)a2, (short int)a1);
-  }
-*/
 #else
 # error
 #endif
@@ -174,5 +156,5 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
 #endif
 
 //
-// End of "$Id: fl_arci.cxx,v 1.26 2005/01/27 08:50:40 spitzak Exp $".
+// End of "$Id$".
 //

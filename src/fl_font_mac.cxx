@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx,v 1.9 2005/01/26 22:35:28 matthiaswm Exp $"
+// "$Id$"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -207,7 +207,10 @@ void fltk::setfont(Font* font, float psize) {
     GetFontInfo(&(f->fi));
     //FontMetrics(&(f->mr));
   } */
-  CGContextSelectFont(quartz_gc, f->q_name, (float)f->size, kCGEncodingMacRoman);
+  if (f) {
+    CGContextSelectFont(quartz_gc, f->q_name, (float)f->size, 
+                        kCGEncodingMacRoman);
+  }
 }
 
 float fltk::getascent()  { return current->ascent; }
@@ -234,5 +237,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_mac.cxx,v 1.9 2005/01/26 22:35:28 matthiaswm Exp $".
+// End of "$Id$".
 //

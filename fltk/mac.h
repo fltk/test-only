@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.13 2005/01/25 20:11:21 matthiaswm Exp $"
+// "$Id$"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,8 +64,8 @@ extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
 
 extern FL_API void	clip_region(RgnHandle);
 extern FL_API RgnHandle	clip_region();
-extern FL_API void	draw_into(GWorldPtr xid);
-extern FL_API void	stop_drawing(GWorldPtr xid);
+extern FL_API void	draw_into(CGImageRef xid);
+extern FL_API void	stop_drawing(CGImageRef xid);
 
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
@@ -89,11 +89,8 @@ public:
   static CreatedWindow* first;
   static CreatedWindow* find(const Window* window) {return window->i;}
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
-  void free_gc() {}
   // Quartz additions:
   CGContextRef gc;
-  static ATSUTextLayout atsu_layout;
-  static ATSUStyle      atsu_style;
   static void fill_quartz_context(); 
   static void clear_quartz_clipping();
   static void release_quartz_context(CreatedWindow *x=0);
@@ -117,6 +114,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.13 2005/01/25 20:11:21 matthiaswm Exp $".
+// End of "$Id$".
 //
 
