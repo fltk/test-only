@@ -1,9 +1,11 @@
 //
-// "$Id: fl_bmp.cxx,v 1.22 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.23 2004/07/19 22:24:52 laza2000 Exp $"
 //
-// Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
+// bmpImage routines.
 //
-// Copyright 1997-1999 by Distributed Simulation Technology Inc.
+// Copyright 1997-2003 by Easy Software Products.
+// Copyright 1998-2004 by Bill Spitzak and others.
+// Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,15 +22,8 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to /dev/null
-//   
-
-
-/////////////////////////////////////////////////////////////////////////////
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-// BMP Library
-//
-/////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
 #include <fltk/SharedImage.h> // defines bmpImage.h
@@ -39,62 +34,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 using namespace fltk;
 
-const int PIXEL_SIZE = 4;  // Number of bytes a pixel requires.
-const int IMG_NON_TRANSPARENT = 0;
-#define BMP_DEBUG    0
-
-typedef struct
-{
-  char          id1;
-  char          id2;
-  unsigned long fileSize;
-  unsigned long reserved;
-  unsigned long dataOffSet;
-} BITMAP_FILE_HEADER;
-
-typedef struct
-{
-  unsigned long  headerSize;      //DWORD
-  long           pixelWidth;      //LONG
-  long           pixelHeight;     //LONG
-  unsigned short numPlanes;       //WORD
-  unsigned short bitsPerPixel;    //WORD
-  unsigned long  compression;     //DWORD
-  unsigned long  imageDataSize;   //DWORD
-  long           xPixelsPerMeter; //LONG
-  long           yPixelsPerMeter; //LONG
-  unsigned long  colorsUsed;      //DWORD
-  unsigned long  importantColors; //DWORD
-} BITMAP_INFO_HEADER;
-
-typedef struct
-{
-  unsigned char r, g, b, u;
-} RGB_QUAD;
-
-#ifndef BI_RGB
-// Compression specifications
-#define BI_RGB       0
-#define BI_RLE8      1
-#define BI_RLE4      2
-#define BI_BITFIELDS 3
-#endif
-
-typedef unsigned char uchar;
 static FILE *bmpFile;
+static uchar* bmpDatasStart;
 static uchar* bmpDatas;
-
-bool bmpImage::test(const uchar* buffer, unsigned size)
-{
-  return !strncmp((char*)buffer, "BM", size<2? size:2);
-}
-
-inline void SetError(const char* s)
-{
-  warning(s);
-}
 
 static uchar GETC()
 {
@@ -102,693 +47,504 @@ static uchar GETC()
   else return fgetc(bmpFile);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Method:    ReadLittleEndianWORD
-//
-// Purpose:   Read a word in Little Endian byte ordering.
-//
-// Arguments: f    Pointer to the image file
-//
-// Returns:   The word read from the file
-//
-//////////////////////////////////////////////////////////////////////////
-static unsigned short ReadLittleEndianWORD()
+
+static int FREAD(void *buf, int size)
 {
-  uchar c1, c2;
-
-  c1 = GETC();
-  c2 = GETC();
-
-  return (c2 << 8) + c1;
+  if (bmpDatas) {
+    memcpy(buf, bmpDatas, size);
+    bmpDatas += size;
+    return size;
+  }
+  return fread(buf, 1, size, bmpFile);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Method:    ReadLittleEndianDWORD
-//
-// Purpose:   Read a double word in Little Endian byte ordering.
-//
-// Arguments: f    Pointer to the image file
-//
-// Returns:   The double word read from the file
-//
-//////////////////////////////////////////////////////////////////////////
-static unsigned int ReadLittleEndianDWORD()
+static int FSEEK(int offset)
 {
-  uchar c1, c2, c3, c4;
-
-  c1 = GETC();
-  c2 = GETC();
-  c3 = GETC();
-  c4 = GETC();
-
-  return (c4 << 24) + (c3 << 16) + (c2 << 8) + c1;
+  if (bmpDatas) {    
+    bmpDatas = bmpDatasStart + offset;
+    return offset;
+  }
+  return fseek(bmpFile, offset, SEEK_SET);
 }
 
-//////////////////////////////////////////////////////////////////////////
 //
-// Method:    ReadLittleEndianUINT
+// BMP definitions...
 //
-// Purpose:   Read an unsigned integer in Little Endian byte ordering.
+
+#ifndef BI_RGB
+#  define BI_RGB       0             // No compression - straight BGR data
+#  define BI_RLE8      1             // 8-bit run-length compression
+#  define BI_RLE4      2             // 4-bit run-length compression
+#  define BI_BITFIELDS 3             // RGB bitmap with RGB masks
+#endif // !BI_RGB
+
+
 //
-// Arguments: f    Pointer to the image file
+// Local functions...
 //
-// Returns:   The unsigned integer read from the file
-//
-//////////////////////////////////////////////////////////////////////////
-#if 0
-static short ReadLittleEndianUINT()
+
+static int		read_long();
+static unsigned short	read_word();
+static unsigned int	read_dword();
+
+bool bmpImage::test(const uchar* buffer, unsigned size)
 {
-  uchar c1; signed char c2;
-
-  c1 = GETC();
-  c2 = GETC();
-
-  return (c2 << 8) + c1;
+  return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
-#endif
 
 void bmpImage::_measure(float &W, float &H) const
 {
-
   if (w() >= 0) { 
     W = (float)w(); 
-	H = (float)h(); 
+    H = (float)h(); 
     return; 
   }
 
   bmpDatas = (uchar*)datas;
+  bmpDatasStart = bmpDatas;
 
-  BITMAP_FILE_HEADER fileHeader;
-  //BITMAP_INFO_HEADER infoHeader;
-
-  if (!datas)
-    if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
-      {
-	SetError("Error while opening BMP texture file.");
-	const_cast<bmpImage*>(this)->setsize(0,0);
-	return;
-      }
-
-  {
-    // Read BMP file header structure
-    fileHeader.id1 = GETC();
-    fileHeader.id2 = GETC();
-
-    // Check to make sure this is a BMP file
-    if ((fileHeader.id1 != 'B') || (fileHeader.id2 != 'M'))
-    {
-      if (!datas) fclose(bmpFile);
-      SetError("Error reading BMP texture file, not a legitimate BMP file.");
+  if (!datas) {
+    if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
+      fltk::warning("Cannot open BMP file '%s'", get_filename());
       const_cast<bmpImage*>(this)->setsize(0,0);
       return;
     }
-
-    // Reading Little Endian because BMPs are Intel based
-    fileHeader.fileSize = ReadLittleEndianDWORD();
-    fileHeader.reserved = ReadLittleEndianDWORD();
-    fileHeader.dataOffSet = ReadLittleEndianDWORD();
-
-    // Read BMP info header structure
-    /*infoHeader.headerSize =*/ ReadLittleEndianDWORD();
-    int w = ReadLittleEndianDWORD();
-    int h = ReadLittleEndianDWORD();
-    const_cast<bmpImage*>(this)->setsize(w,h);
   }
 
-  if (!datas) fclose(bmpFile);
-
-  W = (float)w();
-  H = (float)h();
-  return;
-}
-
-void bmpImage::read()
-{
-  bmpDatas = (uchar*)datas;
-
-  BITMAP_FILE_HEADER fileHeader;
-  BITMAP_INFO_HEADER infoHeader;
-  RGB_QUAD *palette = 0;
-  register int w, h;
-  unsigned int index;
-  unsigned char *pRgbBuf;
-  unsigned char *rgbBuf;
-  int scanLinePad;
-  int linePad;
-
-  if (!datas)
-    if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
-      {
-	SetError("Error while opening BMP texture file.");
-	return;
-      }
-
-  {
-    // Read BMP file header structure
-    fileHeader.id1 = GETC();
-    fileHeader.id2 = GETC();
-
-    // Check to make sure this is a BMP file
-    if ((fileHeader.id1 != 'B') || (fileHeader.id2 != 'M'))
-    {
-      if (!datas) fclose(bmpFile);
-      SetError("Error reading BMP texture file, not a legitimate BMP file.");
-      return;
-    }
-
-    // Reading Little Endian because BMPs are Intel based
-    fileHeader.fileSize = ReadLittleEndianDWORD();
-    fileHeader.reserved = ReadLittleEndianDWORD();
-    fileHeader.dataOffSet = ReadLittleEndianDWORD();
-
-    // Read BMP info header structure
-    infoHeader.headerSize = ReadLittleEndianDWORD();
-    infoHeader.pixelWidth = ReadLittleEndianDWORD();
-    infoHeader.pixelHeight = ReadLittleEndianDWORD();
-    infoHeader.numPlanes = ReadLittleEndianWORD();
-    infoHeader.bitsPerPixel = ReadLittleEndianWORD();
-    infoHeader.compression = ReadLittleEndianDWORD();
-    infoHeader.imageDataSize = ReadLittleEndianDWORD();
-    infoHeader.xPixelsPerMeter = ReadLittleEndianDWORD();
-    infoHeader.yPixelsPerMeter = ReadLittleEndianDWORD();
-    infoHeader.colorsUsed = ReadLittleEndianDWORD();
-    infoHeader.importantColors = ReadLittleEndianDWORD();
-
-    // Store the dimensions of the image
-    int _width = infoHeader.pixelWidth;
-    int _height = infoHeader.pixelHeight;
-    int _texWidth = _width;
-    int _texHeight = _height;
-
-    // Allocate memory based on image size
-    rgbBuf = new unsigned char[_texWidth * _texHeight * PIXEL_SIZE];
-    if (!rgbBuf)
-    {
-      SetError("Error reading BMP texture file, out of memory error.");
-      goto error;
-    }
-    memset(rgbBuf, 0, (_texWidth * _texHeight * PIXEL_SIZE));
-    scanLinePad = (_texWidth - _width) * PIXEL_SIZE;
-
-    if (infoHeader.colorsUsed == 0)
-    {
-      switch (infoHeader.bitsPerPixel)
-      {
-	case 1:
-	  infoHeader.colorsUsed = 2;
-	  break;
-	case 2:
-	  infoHeader.colorsUsed = 4;
-	  break;
-	case 4:
-	  infoHeader.colorsUsed = 16;
-	  break;
-	case 8:
-	  infoHeader.colorsUsed = 256;
-	  break;
-      }
-    }
-
-    #if BMP_DEBUG
-      printf("Header size %d\n",infoHeader.headerSize);
-      printf("Pixel width %d\n",infoHeader.pixelWidth);
-      printf("Pixel height %d\n",infoHeader.pixelHeight);
-      printf("Planes is   %d\n",infoHeader.numPlanes);
-      printf("Bits/pixels %d\n",infoHeader.bitsPerPixel);
-      
-      printf("Compression is %d\n",infoHeader.compression);
-      printf("Image size in bytes is %d\n",infoHeader.imageDataSize);
-      printf("XPels is %d\n",infoHeader.xPixelsPerMeter);
-      printf("YPels is %d\n",infoHeader.yPixelsPerMeter);
-      printf("Colors used is %d\n",infoHeader.colorsUsed);
-      printf("Important colors are %d\n",infoHeader.importantColors);
-    #endif
-
-    // Allocate memory for color map
-    palette = new RGB_QUAD[infoHeader.colorsUsed];
-    if (!palette)
-    {
-      SetError("Error reading BMP texture file, out of memory error.");
-      goto error;
-    }
-
-    // Read color map
-    for (index = 0; index < infoHeader.colorsUsed; index++)
-    {
-      palette[index].b = GETC();
-      palette[index].g = GETC();
-      palette[index].r = GETC();
-      palette[index].u = GETC();
-    }
-
-    // Read BMP image data
-    pRgbBuf = rgbBuf;
-    switch (infoHeader.bitsPerPixel)
-    {
-      case 1:
-	int bit, mask, bitIndex;
-	int notMult8;
-
-	// No compression for 1 bit per pixel
-	if (infoHeader.compression != BI_RGB)
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-
-	notMult8 = _width % 8;
-
-        // BMP file lines are word (4 byte) aligned
-	if (notMult8)
-	  linePad = 4 - ((_width / 8 + 1) % 4);
-	else
-	  linePad = (_width / 8) % 4;
-
-	for (h = 0; h < _height; h++)
-	{
-	  uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-	  for (w = 0; w < _width / 8; w++)
-	  {
-	    index = GETC();
-	    for (bit = 7; bit >= 0; bit--)
-	    {
-	      mask = 1 << bit;
-	      bitIndex = (index & mask) ? 1 : 0;
-
-	      *row++ = palette[bitIndex].r;
-	      *row++ = palette[bitIndex].g;
-	      *row++ = palette[bitIndex].b;
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-	    }
-	  }
-
-	  // Handle a non-multiple of 8 pixels on a line
-	  if (notMult8)
-	    for (w = 0; w < notMult8; w++)
-	    {
-	      index = GETC();
-	      for (bit = 7; bit >= 8 - notMult8; bit--)
-	      {
-					mask = 1 << bit;
-					bitIndex = (index & mask) ? 1 : 0;
-
-					*row++ = palette[bitIndex].r;
-					*row++ = palette[bitIndex].g;
-					*row++ = palette[bitIndex].b;
-					*row++ = IMG_NON_TRANSPARENT; // alpha		
-	      }
-	    }
-
-			// Skip padding bytes in file
-      for (w = 0; w < linePad; w++)
-				GETC();
-			// Skip padding bytes in memory
-			//pRgbBuf += scanLinePad;
-	}
-	break;
-
-
-      case 4:
-	int upperIndex, lowerIndex;
-	int oddPixels;
-
-	// No compression
-	if (infoHeader.compression == BI_RGB)
-	{
-	  oddPixels = _width % 2;
-	  // BMP file lines are word (4 byte) aligned
-	  if (oddPixels)
-	    linePad = 4 - ((_width / 2 + 1) % 4);
-	  else
-	    linePad = (_width / 2) % 4;
-
-	  for (h = _height - 1; h >= 0; h --)
-	  {
-			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-
-	    for (w = 0; w < _width / 2; w++)
-	    {
-	      index = GETC();
-	      // Upper four bits
-	      upperIndex = (index >> 4) & 15;
-
-	      *row++ = palette[upperIndex].r;
-	      *row++ = palette[upperIndex].g;
-	      *row++ = palette[upperIndex].b;
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-
-	      // Lower four bits
-	      lowerIndex = index & 15;
-
-	      *row++ = palette[lowerIndex].r;
-	      *row++ = palette[lowerIndex].g;
-	      *row++ = palette[lowerIndex].b;
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-	    }
-
-	    // Handle odd number of pixels on a line
-	    if (oddPixels)
-	    {
-	      index = GETC();
-	      // Upper four bits
-	      upperIndex = (index >> 4) & 15;
-	      
-	      *row++ = palette[upperIndex].r;
-	      *row++ = palette[upperIndex].g;
-	      *row++ = palette[upperIndex].b;
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-	    }
-	    
-	    // Skip padding bytes in file
-	    for (w = 0; w < linePad; w++)
-	      GETC();
-	    
-	    // Skip padding bytes in memory
-	    //pRgbBuf += scanLinePad;
-	  }
-	}
-
-	// todo: test RLE compression
-	// Run Length Encoding compression
-	else if (infoHeader.compression == BI_RLE4)
-	{
-	  //todo: fill in code
-	  SetError("Error reading BMP texture file, compression not " \
-		   "supported.");
-	  goto error;
-	}
-
-	else
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-	break;
-	
-
-      case 8:
-	// No compression
-	if (infoHeader.compression == BI_RGB)
-	{
-	  // BMP file lines are word (4 byte) aligned
-	  linePad = (_width % 4) ? 4 - (_width % 4) : 0;
-	  
-	  for (h = _height - 1; h >= 0; h --)
-	  {
-			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-
-	    for (w = 0; w < _width; w++)
-	    {
-	      index = GETC();		
-		
-				*row++ = palette[index].r;
-	      *row++ = palette[index].g;
-	      *row++ = palette[index].b;
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-	    }
-	    
-	    // Skip padding bytes in file
-	    for (w = 0; w < linePad; w++)
-	      GETC();
-	    
-	    // Skip padding bytes in memory
-	    //pRgbBuf = pRgbBuf + (scanLinePad);
-	  }
-	}
-
-	//todo: test RLE compression
-	// Run Length Encoding compression
-	else if (infoHeader.compression == BI_RLE8)
-	{
-	  SetError("Error reading BMP texture file, compression not " \
-		   "supported.");
-	  goto error;
-#ifdef TODO
-	  int first, second;
-	  int notEOF = TRUE;
-	  int pixelCount = 0;
-	  int w;
-
-	  while (notEOF)
-	  {
-	    first = GETC();
-	    pixelCount++;
-	    second = GETC();
-	    pixelCount++;
-
-	    if (first == 0) // Escape sequence
-	    {
-	      switch (second)
-	      {
-		case 0: // End of line
-		  // Read the width of image
-		  for (w = 0; w < _width - pixelCount; w++)
-		    pRgbBuf++;
-		  pixelCount = 0;
-
-		  // Skip padding bytes in memory
-		  pRgbBuf = pRgbBuf + (scanLinePad);
-		  break;
-
-		case 1: // End of bitmap
-		  notEOF = FALSE;
-
-		  // Read the width of image
-		  for (w = 0; w < _width - pixelCount; w++)
-		    pRgbBuf++;
-		  pixelCount = 0;
-
-		  // Skip padding bytes in memory
-		  pRgbBuf = pRgbBuf + (scanLinePad);
-		  break;
-
-		case 2: // Delta to next pixel
-		  //todo: fill in code
-		  break;
-		  
-		default: // Absolute mode (03H <= second <= FFH)
-		  // Copy pixels from palette
-		  if ((second > 2) && (second < 256))
-		    while (second-- && notEOF)
-		    {
-		      int linePad;
-		      
-		      index = GETC();			  
-		      
-		      *pRgbBuf++ = palette[index].r;
-		      *pRgbBuf++ = palette[index].g;
-		      *pRgbBuf++ = palette[index].b;
-		      *pRgbBuf++ = IMG_NON_TRANSPARENT; // alpha
-		      
-		      // Absolute mode runs are word (4 byte) aligned
-		      linePad = (index % 4) ? 4 - (index % 4) : 0;
-		      // Skip padding bytes in file
-		      while (linePad--)
-		      {
-			GETC();
-			pixelCount++;
-		      }
-		    }
-		  break;
-	      }
-	    }
-
-	    else // Encoded mode, repeat pixel from color palette
-	    {
-	      int linePad;
-	      // Encoded mode runs are word (4 byte) aligned
-	      linePad = (first % 4) ? 4 - (first % 4) : 0;
-	      
-	      while (first--)
-	      {
-		*pRgbBuf++ = palette[second].r;
-		*pRgbBuf++ = palette[second].g;
-		*pRgbBuf++ = palette[second].b;
-		*pRgbBuf++ = IMG_NON_TRANSPARENT; // alpha
-	      }
-	      // Skip padding bytes in file
-	      while (linePad--)
-	      {
-		GETC();
-		pixelCount++;
-	      }
-	    }
-	  }
-#endif
-	}
-	  
-	else
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-	break;
-	
-
-      case 16:
-	int upper8Bits, lower8Bits;
-	int redValue, greenValue, blueValue;
-	
-	// No compression
-	if (infoHeader.compression == BI_RGB)
-	{
-	  // BMP file lines are word (4 byte) aligned
-	  linePad = _width % 4;
-	
-	  for (h = 0; h < _height; h++)
-	  {
-			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-	    for (w = 0; w < _width; w++)
-	    {
-	      upper8Bits = GETC();
-	      lower8Bits = GETC();
-
-	      // Red is most significant 5 bits
-	      redValue = (124 & upper8Bits) >> 2; // 124 = (31 << 2)
-	      *row++ = redValue;	      
-
-	      // Green is next 5 bits
-	      greenValue = (3 & upper8Bits) << 3;
-	      greenValue = greenValue | (224 & lower8Bits); // 224 = (7 << 5)
-	      *row++ = greenValue;	      
-
-	      // Blue is least significant 5 bits
-	      blueValue = 31 & lower8Bits;
-	      *row++ = blueValue;	      
-	      
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	     
-	    }
-	    
-	    // Skip padding bytes in file
-	    for (w = 0; w < linePad; w++)
-	      GETC();
-	    
-	    // Skip padding bytes in memory
-	    // pRgbBuf += scanLinePad;
-	  }
-	}
-
-	else if (infoHeader.compression == BI_BITFIELDS)
-	{
-	  //todo: fill in code
-	  SetError("Error reading BMP texture file, " \
-		   "compression not supported.");
-	  goto error;
-	}
-
-	else
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-	break;
-	
-
-      case 24:
-	int red, green, blue;
-
-	// No compression for 24 bits per pixel
-	if (infoHeader.compression != BI_RGB)
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-
-	// BMP file lines are word (4 byte) aligned
-	linePad = (_width * 3 % 4) ? 4 - (_width * 3 % 4) : 0;	
-
-	for (h = _height - 1; h >= 0; h --)	
-	{		
-		uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-		for (w = 0; w < _width; w++)
-		{		  
-			blue	= GETC();
-			green	= GETC();
-			red		= GETC();		
-
-			*row++ = red;			
-			*row++ = green;
-			*row++ = blue;
-			*row++ = IMG_NON_TRANSPARENT; // alpha			
-		}
-
-		// Skip padding bytes in file
-		for (w = 0; w < linePad; w++)
-			GETC();
-
-		// Skip padding bytes in memory
-		//pRgbBuf += scanLinePad;
-	}
-	break;
-
-
-      case 32:
-	// No compression
-	if (infoHeader.compression == BI_RGB)
-	{
-	  for (h = 0; h < _height; h++)
-	  {
-			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
-	    for (w = 0; w < _width; w++)
-	    {
-	      *row++ = GETC();
-	      *row++ = GETC();
-	      *row++ = GETC();
-	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
-	    }
-	    
-	    // Skip padding bytes in memory
-	    // pRgbBuf += scanLinePad;
-	  }
-	}
-
-	else if (infoHeader.compression == BI_BITFIELDS)
-	{
-	  //todo: fill in code
-	  SetError("Error reading BMP texture file, " \
-		   "compression not supported.");
-	  goto error;
-	}
-
-	else
-	{
-	  SetError("Error reading BMP texture file, " \
-		   "compression and bits per pixel mismatch.");
-	  goto error;
-	}
-	break;
-
-	
-      default:
-	SetError("Error reading BMP texture file, " \
-		 "unknown number of bits per pixel.");
-	goto error;
-    }
-    
-    if(!datas) fclose(bmpFile);
-
-    ImageDraw idraw(this);
-    drawimage(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
-
-    delete []palette;
-    delete []rgbBuf;
+  // Get the header...
+  uchar byte = (uchar)GETC();	// Check "BM" sync chars
+  uchar bit  = (uchar)GETC();
+  if (byte != 'B' || bit != 'M') {
+    if (!datas) fclose(bmpFile);
     return;
   }
 
-error:
-  if(palette)
-    delete []palette;
-  delete []rgbBuf;
+  read_dword();	// Skip size
+  read_word();	// Skip reserved stuff
+  read_word();
+  read_dword(); // Read offset to image data
+
+  // Then the bitmap information...
+  int info_size = read_dword();
+
+  if (info_size < 40) {
+    // Old Windows/OS2 BMP header...
+    W = read_word();
+    H = read_word();
+    const_cast<bmpImage*>(this)->setsize(W,H);
+  } else {
+    // New BMP header...
+    W = read_long();
+    H = read_long();
+    const_cast<bmpImage*>(this)->setsize(W,H);
+  }
+
+  if (!datas) fclose(bmpFile);
+  
   return;
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.22 2004/07/06 05:49:31 spitzak Exp $"
+// Load a BMP image file.
+//
+void bmpImage::read()
+{
+  bmpDatas = (uchar*)datas;
+  bmpDatasStart = bmpDatas;
+
+  int		info_size,	// Size of info header
+		depth,		// Depth of image (bits)
+		bDepth = 3,	// Depth of image (bytes)
+		compression,	// Type of compression
+		colors_used,	// Number of colors used
+		x, y,		// Looping vars
+		color,		// Color of RLE pixel
+		repcount,	// Number of times to repeat
+		temp,		// Temporary color
+		align,		// Alignment bytes
+		dataSize;	// number of bytes in image data set
+  long		offbits;	// Offset to image data
+  uchar		bit,		// Bit in image
+		byte;		// Byte in image
+  uchar		*ptr;		// Pointer into pixels
+  uchar		colormap[256][3];// Colormap
+  uchar		mask = 0;	// single bit mask follows image data
+
+  if (!datas) {
+    if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
+      fltk::warning("Cannot open BMP file '%s'", get_filename());
+      return;
+    }
+  }
+  
+  // Get the header...
+  byte = (uchar)GETC();	// Check "BM" sync chars
+  bit  = (uchar)GETC();
+  if (byte != 'B' || bit != 'M') {
+    if (!datas) fclose(bmpFile);
+    return;
+  }
+
+  read_dword();		// Skip size
+  read_word();		// Skip reserved stuff
+  read_word();
+  offbits = (long)read_dword();// Read offset to image data
+
+  // Then the bitmap information...
+  info_size = read_dword();
+
+//  printf("offbits = %ld, info_size = %d\n", offbits, info_size);
+
+  if (info_size < 40) {
+    // Old Windows/OS2 BMP header...
+    int W = read_word();
+    int H = read_word();
+    this->setsize(W,H);
+    read_word();
+    depth = read_word();
+    compression = BI_RGB;
+    colors_used = 0;
+
+    repcount = info_size - 12;
+  } else {
+    // New BMP header...
+    int W = read_long();
+    int H = read_long();
+    this->setsize(W,H);
+    read_word();
+    depth = read_word();
+    compression = read_dword();
+    dataSize = read_dword();
+    read_long();
+    read_long();
+    colors_used = read_dword();
+    read_dword();
+
+    repcount = info_size - 40;
+
+    if (!compression && depth>=8 && w()>32/depth) {
+      int Bpp = depth/8;
+      int maskSize = (((w()*Bpp+3)&~3)*h()) + (((((w()+7)/8)+3)&~3)*h());
+      if (maskSize==2*dataSize) {
+        mask = 1;        
+	h_ = (h_/2);
+	bDepth = 4;
+      }
+    }
+  }
+
+//  printf("w() = %d, h() = %d, depth = %d, compression = %d, colors_used = %d, repcount = %d\n",
+//         w(), h(), depth, compression, colors_used, repcount);
+
+  // Skip remaining header bytes...
+  while (repcount > 0) {
+    GETC();
+    repcount --;
+  }
+
+  // Check header data...
+  if (!w() || !h() || !depth) {
+    if (!datas) fclose(bmpFile);
+    return;
+  }
+
+  // Get colormap...
+  if (colors_used == 0 && depth <= 8)
+    colors_used = 1 << depth;
+
+  for (repcount = 0; repcount < colors_used; repcount ++) {
+    // Read BGR color...
+    FREAD(colormap[repcount], 3);
+    //fread(colormap[repcount], 1, 3, );
+
+    // Skip pad byte for new BMP files...
+    if (info_size > 12) GETC();
+  }
+
+  // Setup image and buffers...
+  if (offbits) FSEEK(offbits);
+
+  uchar *array = new uchar[w() * h() * bDepth];
+  //alloc_array = 1;
+
+  // Read the image data...
+  color = 0;
+  repcount = 0;
+  align = 0;
+  byte  = 0;
+  temp  = 0;
+
+  for (y = h() - 1; y >= 0; y --) {
+    ptr = (uchar *)array + y * w() * bDepth;
+
+    switch (depth)
+    {
+      case 1 : // Bitmap
+          for (x = w(), bit = 128; x > 0; x --) {
+	    if (bit == 128) byte = (uchar)GETC();
+
+	    if (byte & bit) {
+	      *ptr++ = colormap[1][2];
+	      *ptr++ = colormap[1][1];
+	      *ptr++ = colormap[1][0];
+	    } else {
+	      *ptr++ = colormap[0][2];
+	      *ptr++ = colormap[0][1];
+	      *ptr++ = colormap[0][0];
+	    }
+
+	    if (bit > 1)
+	      bit >>= 1;
+	    else
+	      bit = 128;
+	  }
+
+          // Read remaining bytes to align to 32 bits...
+	  for (temp = (w() + 7) / 8; temp & 3; temp ++) {
+	    GETC();
+	  }
+          break;
+
+      case 4 : // 16-color
+          for (x = w(), bit = 0xf0; x > 0; x --) {
+	    // Get a new repcount as needed...
+	    if (repcount == 0) {
+              if (compression != BI_RLE4) {
+		repcount = 2;
+		color = -1;
+              } else {
+		while (align > 0) {
+	          align --;
+		  GETC();
+        	}
+
+		if ((repcount = GETC()) == 0) {
+		  if ((repcount = GETC()) == 0) {
+		    // End of line...
+                    x ++;
+		    continue;
+		  } else if (repcount == 1) {
+                    // End of image...
+		    break;
+		  } else if (repcount == 2) {
+		    // Delta...
+		    repcount = GETC() * GETC() * w();
+		    color = 0;
+		  } else {
+		    // Absolute...
+		    color = -1;
+		    align = ((4 - (repcount & 3)) / 2) & 1;
+		  }
+		} else {
+	          color = GETC();
+		}
+	      }
+	    }
+
+            // Get a new color as needed...
+	    repcount --;
+
+	    // Extract the next pixel...
+            if (bit == 0xf0) {
+	      // Get the next color byte as needed...
+              if (color < 0) temp = GETC();
+	      else temp = color;
+
+              // Copy the color value...
+	      *ptr++ = colormap[(temp >> 4) & 15][2];
+	      *ptr++ = colormap[(temp >> 4) & 15][1];
+	      *ptr++ = colormap[(temp >> 4) & 15][0];
+
+	      bit  = 0x0f;
+	    } else {
+	      bit  = 0xf0;
+
+              // Copy the color value...
+	      *ptr++ = colormap[temp & 15][2];
+	      *ptr++ = colormap[temp & 15][1];
+	      *ptr++ = colormap[temp & 15][0];
+	    }
+
+	  }
+
+	  if (!compression) {
+            // Read remaining bytes to align to 32 bits...
+	    for (temp = (w() + 1) / 2; temp & 3; temp ++) {
+	      GETC();
+	    }
+	  }
+          break;
+
+      case 8 : // 256-color
+          for (x = w(); x > 0; x --) {
+	    // Get a new repcount as needed...
+            if (compression != BI_RLE8) {
+	      repcount = 1;
+	      color = -1;
+            }
+
+	    if (repcount == 0) {
+	      while (align > 0) {
+	        align --;
+		GETC();
+              }
+
+	      if ((repcount = GETC()) == 0) {
+		if ((repcount = GETC()) == 0) {
+		  // End of line...
+                  x ++;
+		  continue;
+		} else if (repcount == 1) {
+		  // End of image...
+		  break;
+		} else if (repcount == 2) {
+		  // Delta...
+		  repcount = GETC() * GETC() * w();
+		  color = 0;
+		} else {
+		  // Absolute...
+		  color = -1;
+		  align = (2 - (repcount & 1)) & 1;
+		}
+	      } else {
+	        color = GETC();
+              }
+            }
+
+            // Get a new color as needed...
+            if (color < 0) temp = GETC();
+	    else temp = color;
+
+            repcount --;
+
+            // Copy the color value...
+	    *ptr++ = colormap[temp][2];
+	    *ptr++ = colormap[temp][1];
+	    *ptr++ = colormap[temp][0];
+	    if (mask) ptr++;
+	  }
+
+	  if (!compression) {
+            // Read remaining bytes to align to 32 bits...
+	    for (temp = w(); temp & 3; temp ++) {
+	      GETC();
+	    }
+	  }
+          break;
+
+      case 16 : // 16-bit 5:5:5 RGB
+          for (x = w(); x > 0; x --, ptr += bDepth) {
+	    uchar b = GETC(), a = GETC() ;
+#ifdef USE_5_6_5 // Green as the brightest color should have one bit more 5:6:5
+	    ptr[0] = (uchar)(( b << 3 ) & 0xf8);
+	    ptr[1] = (uchar)(((a << 5) & 0xe0) | ((b >> 3) & 0x1c));
+	    ptr[2] = (uchar)(a & 0xf8);
+#else // this is the default wasting one bit: 5:5:5
+	    ptr[2] = (uchar)((b << 3) & 0xf8);
+	    ptr[1] = (uchar)(((a << 6) & 0xc0) | ((b >> 2) & 0x38));
+	    ptr[0] = (uchar)((a<<1) & 0xf8);
+#endif
+	  }
+
+          // Read remaining bytes to align to 32 bits...
+	  for (temp = w() * 3; temp & 3; temp ++) {
+	    GETC();
+	  }
+          break;
+
+      case 24 : // 24-bit RGB
+          for (x = w(); x > 0; x --, ptr += bDepth) {
+	    ptr[2] = (uchar)GETC();
+	    ptr[1] = (uchar)GETC();
+	    ptr[0] = (uchar)GETC();
+	  }
+
+          // Read remaining bytes to align to 32 bits...
+	  for (temp = w() * 3; temp & 3; temp ++) {
+	    GETC();
+	  }
+          break;
+    }
+  }
+  
+  if (mask) {
+    for (y = h() - 1; y >= 0; y --) {
+      ptr = (uchar *)array + y * w() * bDepth + 3;
+      for (x = w(), bit = 128; x > 0; x --, ptr+=bDepth) {
+	if (bit == 128) byte = (uchar)GETC();
+	if (byte & bit)
+	  *ptr = 0;
+	else
+	  *ptr = 255;
+	if (bit > 1)
+	  bit >>= 1;
+	else
+	  bit = 128;
+      }
+      // Read remaining bytes to align to 32 bits...
+      for (temp = (w() + 7) / 8; temp & 3; temp ++)
+	GETC();
+    }
+  }
+
+  ImageDraw idraw(this);
+  drawimage(array, 0, 0, w_, h_, bDepth);
+
+  // Close the file and return...
+  if (!datas) fclose(bmpFile);
+
+  delete []array;
+}
+
+
+//
+// 'read_word()' - Read a 16-bit unsigned integer.
+//
+
+static unsigned short	// O - 16-bit unsigned integer
+read_word() {
+  unsigned char b0, b1;	// Bytes from file
+
+  b0 = (uchar)GETC();
+  b1 = (uchar)GETC();
+
+  return ((b1 << 8) | b0);
+}
+
+
+//
+// 'read_dword()' - Read a 32-bit unsigned integer.
+//
+
+static unsigned int		// O - 32-bit unsigned integer
+read_dword() {
+  unsigned char b0, b1, b2, b3;	// Bytes from file
+
+  b0 = (uchar)GETC();
+  b1 = (uchar)GETC();
+  b2 = (uchar)GETC();
+  b3 = (uchar)GETC();
+
+  return ((((((b3 << 8) | b2) << 8) | b1) << 8) | b0);
+}
+
+
+//
+// 'read_long()' - Read a 32-bit signed integer.
+//
+
+static int			// O - 32-bit signed integer
+read_long() {
+  unsigned char b0, b1, b2, b3;	// Bytes from file
+
+  b0 = (uchar)GETC();
+  b1 = (uchar)GETC();
+  b2 = (uchar)GETC();
+  b3 = (uchar)GETC();
+
+  return ((int)(((((b3 << 8) | b2) << 8) | b1) << 8) | b0);
+}
+
+//
+// End of "$Id: fl_bmp.cxx,v 1.23 2004/07/19 22:24:52 laza2000 Exp $"
 //
