@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.139 2002/12/10 02:00:54 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.140 2003/01/26 06:06:31 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1061,27 +1061,43 @@ void CreatedWindow::create(Window* window,
   x->next = CreatedWindow::first;
   CreatedWindow::first = x;
 
-  if (!window->parent() && !window->override()) { // send junk to X window manager:
-
-    // Setting this allows the window manager to use the window's class
-    // to look up things like border colors and icons in the xrdb database:
-    XChangeProperty(xdisplay, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
-		    (unsigned char *)window->xclass(), strlen(window->xclass()));
+  if (!window->parent() && !window->override()) {
+    // send all kinds 'o junk to X Window Manager:
 
     // Set the label:
     window->label(window->label(), window->iconlabel());
+
     // Makes the close button produce an event:
     XChangeProperty(xdisplay, x->xid, WM_PROTOCOLS,
  		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
+
+    // send size limits and border:
+    x->sendxjunk();
+
+    // Setting this allows the window manager to use the window's class
+    // to look up things like border colors and icons in the xrdb database:
+    if (window->xclass()) {
+      char buffer[1024];
+      char *p; const char *q;
+      // truncate on any punctuation, because they break XResource lookup:
+      for (p = buffer, q = window->xclass(); isalnum(*q)||(*q&128);) *p++ = *q++;
+      *p++ = 0;
+      // create the capitalized version:
+      q = buffer;
+      *p = toupper(*q++); if (*p++ == 'X') *p++ = toupper(*q++);
+      while ((*p++ = *q++));
+      XChangeProperty(xdisplay, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
+		      (unsigned char *)buffer, p-buffer-1);
+    }
+
+    // Send child window information:
+    if (window->child_of() && window->child_of()->shown())
+      XSetTransientForHint(xdisplay, x->xid, window->child_of()->i->xid);
 
     // Make it receptive to DnD:
     int version = 4;
     XChangeProperty(xdisplay, x->xid, XdndAware,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
-
-    // Send child window information:
-    if (window->child_of() && window->child_of()->shown())
-      XSetTransientForHint(xdisplay, x->xid, window->child_of()->i->xid);
 
     // Set up the icon and initial icon state:
     XWMHints hints;
@@ -1098,8 +1114,6 @@ void CreatedWindow::create(Window* window,
     }
     XSetWMHints(xdisplay, x->xid, &hints);
 
-    // send size limits and border:
-    x->sendxjunk();
   }
 }
 
@@ -1388,5 +1402,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.139 2002/12/10 02:00:54 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.140 2003/01/26 06:06:31 spitzak Exp $".
 //
