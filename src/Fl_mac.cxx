@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.8 2003/08/26 16:14:26 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -494,6 +494,7 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
     // quit if callback did not close the window:
     if ( CreatedWindow::first == x ) break;
   }
+  QuitApplicationEventLoop();
   fl_unlock_function();
   return noErr;
 }
@@ -803,7 +804,12 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( ( (sym>=Keypad0) && (sym<=KeypadLast) ) || ((sym&0xff00)==0) || (sym==TabKey) ) {
+    if ( sym >= Keypad0 && sym <= KeypadLast ||
+	 (sym&0xff00) == 0 ||
+	 sym == BackSpaceKey ||
+	 sym == TabKey ||
+	 sym == ReturnKey ||
+	 sym == EscapeKey) {
       buffer[0] = key;
       e_length = 1;
     } else {
@@ -1519,6 +1525,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.8 2003/08/26 16:14:26 spitzak Exp $".
 //
 

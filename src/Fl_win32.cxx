@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.192 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.193 2003/08/26 16:14:27 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1324,17 +1324,21 @@ void Window::label(const char *name,const char *iname) {
 const Window *Window::current_;
 HDC fltk::gc;
 
-extern void fl_font_rid();
+static HDC screen_gc; // result from last getDC()
 
-// clean up after Windows
-static struct Cleanup { ~Cleanup(); } cleanup;
-
-Cleanup::~Cleanup() {
-  // nasty but works (I think) - deallocates GDI resources in windows
-  while (CreatedWindow* x = CreatedWindow::first) x->window->destroy();
-
-  // get rid of allocated font resources
-  fl_font_rid();
+/** Return an arbitrary HDC which you can use for Win32 functions that
+    need one as an argument. The returned value is short-lived and may
+    be destroyed by the next call to this or to the next call to destroy
+    a window.
+*/
+HDC fltk::getDC() {
+  if (screen_gc) {
+    ReleaseDC(0, screen_gc);
+    screen_gc = 0;
+  }
+  if (gc) return gc;
+  screen_gc = GetDC(0);
+  return screen_gc;
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
@@ -1373,6 +1377,19 @@ void fltk::copy_offscreen(int x,int y,int w,int h,
   SelectObject(new_gc, bitmap);
   BitBlt(gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
   DeleteDC(new_gc);
+}
+
+extern void fl_font_rid();
+
+// clean up after Windows
+static struct Cleanup { ~Cleanup(); } cleanup;
+
+Cleanup::~Cleanup() {
+  // nasty but works (I think) - deallocates GDI resources in windows
+  while (CreatedWindow* x = CreatedWindow::first) x->window->destroy();
+
+  // get rid of allocated font resources
+  fl_font_rid();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1540,5 +1557,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.192 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.193 2003/08/26 16:14:27 spitzak Exp $".
 //
