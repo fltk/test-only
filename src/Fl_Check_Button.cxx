@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.41 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.42 2003/07/23 00:05:59 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,7 @@ static void default_glyph(const Widget* widget, int glyph,
     Color color = (box == NO_BOX && (flags&SELECTED)) ?
       widget->selection_textcolor() : widget->textcolor();
     setcolor(inactive(color, flags));
+    if (h < 4) {fillrect(x+w/2-1,y+h/2-1,2,2); return;}
     x += 1;
     w = h - 2;
     int d1 = w/3;

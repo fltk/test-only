@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.16 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.17 2003/07/23 00:05:59 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,9 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   transform(x,y);
 #ifdef _WIN32
   if (a1 == a2) return;
-  w++; h++; // is this needed to match X?
+  if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
+  if (a2 >= a1+360) a1 = a2 = 0;
+  //w++; h++; // is this needed to match X?
   int xa = x+w/2+int(w*cosf(a1*float(M_PI/180.0)));
   int ya = y+h/2-int(h*sinf(a1*float(M_PI/180.0)));
   int xb = x+w/2+int(w*cosf(a2*float(M_PI/180.0)));
@@ -51,10 +53,12 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   switch (what) {
   case FILLPIE:
     setbrush();
+    setpen();
     Pie(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case FILLARC:
     setbrush();
+    setpen();
     Chord(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case STROKEPIE: // not correct, should draw lines to center
@@ -86,7 +90,7 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   case FILLARC:
     XSetArcMode(xdisplay, gc, ArcChord);
   J1:
-    XFillArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
+    XFillArc(xdisplay, xwindow, gc, x-1, y-1, w+1, h+1, A, B);
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
@@ -97,5 +101,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.16 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.17 2003/07/23 00:05:59 spitzak Exp $".
 //
