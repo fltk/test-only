@@ -142,25 +142,25 @@ between this and the window).  Returns <TT>NULL</TT> if none.  Note:
 for an <TT>Fl_Window</TT>, this returns its <I>parent</I> window (if 
 any), not <I>this</I> window. 
 
-<h4><a name=style>const Fl_Style* Fl_Widget::style() const</h4>
+<h4><a name=style>const <a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::style() const</h4>
 
 Return the <a href=Fl_Style.html>Fl_Style</a> structure used by this
 widget.  Normally this structure is shared with many other widgets.
 
-<h4><a name=wstyle>Fl_Style* Fl_Widget::wstyle();</h4>
+<h4><a name=wstyle><a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::wstyle();</h4>
 
 Returns a "writable" style.  If the current value of <a
 href=#style>style()</a> is shared then a unique copy is made and
 returned.  This may be modified without changing other widgets.
 
-<h4>bool Fl_Widget::style(Fl_Style* s);
-<br>bool Fl_Widget::style(Fl_Style& s);</h4>
+<h4>bool Fl_Widget::style(<a href=Fl_Style.html>Fl_Style</a>* s);
+<br>bool Fl_Widget::style(<a href=Fl_Style.html>Fl_Style</a>& s);</h4>
 
 Set the style to this <i>shared</i> style.  If this style has never
 been used before fltk adds it as a child of the current style and
 returns true (this allows the calling code to initialize it).
 
-<h4><a name=copy_style>bool copy_style(const Fl_Style* s);</h4>
+<h4><a name=copy_style>bool copy_style(const <a href=Fl_Style.html>Fl_Style</a>* s);</h4>
 
 Copy the style from another widget.  If it is not shared then a copy
 is made, otherwise the pointer is just copied.  This is done so that

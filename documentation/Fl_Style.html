@@ -8,22 +8,17 @@ linked into a hierarchy of parents & child styles, so that it is
 possible to change an item in a parent style and propagate all the
 changes to the children.
 
-<p>Fl_Style is a normal structure, to make it easier to make static
-constants and for tricks in the themes code.  However you should avoid
-modifying any fields directly in normal program code.
+<p>When a widget looks up a value from a style, it looks at that style
+and each parent up until it finds a non-zero value to return, or until
+there are no more parents, in which case zero is used.  Thus changing
+a parent style can make global changes as long as widgets do not have
+local values set.
 
-<p>In normal usage methods like Fl_Widget::box(n) will create a
+<p>In normal usage "set" methods like Fl_Widget::box(n) will create a
 "unique" style for that widget, which is a child of the original
 style, and set the box in that style.  This "unique" style is reused
 for any other changes to that widget and it is deleted when the widget
 is deleted.
-
-<p>Widget classes that want a default style that is different than
-their parent's class would define a static style structure containing
-all the differences between their default and the parent's default.
-They would then do this->style(default_style) in the constructor.
-This will add the default style as a child of the parent's default
-style and assign it to the widget.
 
 <h2>Member variables</h2>
 
@@ -32,7 +27,13 @@ style and assign it to the widget.
 Box drawn around the exterior of the widget.  Default is
 <code>FL_UP_BOX</code>.
 
-<h4>void (*glyph)(int type, int x,int y,int w,int h, <a href=Fl_Color.html>Fl_Color</a>, Fl_Flags);</h4>
+<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> glyph_box;</h4>
+
+This box is passed to the glyph function and many glyphs use it to
+draw the border of their button.
+
+<h4>void (*glyph)(int type, int x,int y,int w,int h, <a
+href=Fl_Color.html>Fl_Color</a> bg, Fl_Color fg, Fl_Flags, Fl_Boxtype);</h4>
 
 Draw a widget part, called a "glyph", such as a checkbox or arrow
 button.  You should use the <code>FL_VALUE</code> of the flags to
@@ -61,7 +62,15 @@ scrollbar
 
 <li><code>FL_GLYPH_HSLIDER</code> - draw a horizontal slider/scrollbar handle
 
+<li>All other values draw an empty box.
+
 </ul>
+
+<p>These symbols all have values starting at 100 or more.  Many widget
+subclasses define a private glyph function to draw parts of
+themselves.  This function may be replaced by your program to modify
+their appearance, but you will have to examine the source code to see
+what code values they use.
 
 <h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
 
@@ -116,7 +125,7 @@ The color to draw text atop the <code>selection_color</code>.  The
 default of zero causes <code>fl_contrast(text/label_color,
 selection_color)</code> to be used.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> up_color;</h4>
+<h4><a href=Fl_Color.html>Fl_Color</a> off_color;</h4>
 
 Check buttons, radio buttons, menu items, and light buttons use this
 to color the glyph when the button is turned off.  The default of zero
@@ -152,9 +161,15 @@ Size of <code>label_font</code>.  Default is 14.
 
 Size of <code>text_font</code>.  Default is 14.
 
+<h4>unsigned int leading;</h4>
+
+Extra spacing added between lines drawn in the
+<code>text_font</code>.  The default is 2.
+
 <h2>Methods</h2>
 
 <h4>void Fl_Style::set_box(Fl_Boxtype);<br>
+void Fl_Style::set_glyph_box(Fl_Boxtype);<br>
 void Fl_Style::set_glyph(Fl_Glyph);<br>
 void Fl_Style::set_label_font(Fl_Font);<br>
 void Fl_Style::set_text_font(Fl_Font);<br>
@@ -164,12 +179,13 @@ void Fl_Style::set_label_color(Fl_Color);<br>
 void Fl_Style::set_selection_color(Fl_Color);<br>
 void Fl_Style::set_selection_text_color(Fl_Color);<br>
 void Fl_Style::set_down_color(Fl_Color);<br>
-void Fl_Style::set_up_color(Fl_Color);<br>
+void Fl_Style::set_off_color(Fl_Color);<br>
 void Fl_Style::set_highlight_color(Fl_Color);<br>
 void Fl_Style::set_highlight_label_color(Fl_Color);<br>
 void Fl_Style::set_text_color(Fl_Color);<br>
 void Fl_Style::set_label_size(unsigned);<br>
-void Fl_Style::set_text_size(unsigned);</h4>
+void Fl_Style::set_text_size(unsigned);<br>
+void Fl_Style::set_leading(unsigned);</h4>
 
 You can directly set any member (by doing <code>style->box=foo</code>)
 but that only changes it in that style.  These methods also propagate
@@ -177,38 +193,36 @@ the change to any child styles that have the same value as
 this used to have.  This allows "themes" to affect all the widgets
 that have been created.
 
-<h4>void Fl_Style::add_child(Fl_Style* s) const;</h4>
+<h2>Fl_Named_Style</h2>
 
-Add <i>s</i> as a child style of this one, unless it already is a
-child of this or some other style.  All fields with a value of zero in
-are set to the values in this.  This is used by Fl_Widget::style(Fl_Style*).
-
-<h2>Default Styles</h2>
+<h4><code>Fl_Named_Style(const char* name, void (*revertfunc)(Fl_Style*)=0, Fl_Style** pdefault_style = 0);</code></h4>
 
 If you define your own widget class you may want it to have a default
 style that is different than the parent class.  To do this you should
-declare a static style structure, initialized with the values that are
-different than the parent, and with zero (or <code>FL_NO_COLOR</code>)
-in all other locations.  It is easiest to copy the one out of
-Fl_Widget and edit it.  Make this public so that theme code can modify
-it.  Do <i>not</i> make it const:
+declare a static style structure with a string name so that the theme
+code can locate (and possibly modify) it.  You must also provide a
+"revert" function which is used to initialize the style and to reset
+it if the user changes the theme (it is cleared to zero before revert
+is called).
 
-<p><pre><code>Fl_Style Fl_Slider::default_style = {
-  FL_THIN_DOWN_BOX, // box
-  0,		// glyphs
-  0,		// label_font
-  0,		// text_font
-  0,		// label_type
-  FL_DARK2,	// color
-  FL_NO_COLOR,	// label_color
-  FL_GRAY	// selection_color
-  // rest is zero
-};
+<p>Here is an example of a class that wants the box to default to
+FL_ROUND_BOX:
+
+
+<p><pre><code>static void revert(Fl_Style* s) {
+  s->box = FL_ROUND_BOX;
+}
+static Fl_Named_Style my_style("MyWidget", revert);
+
+MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
+  : Fl_Widget(x,y,w,h,l)
+{
+  style(box_style);
+}
 </pre></code>
 
-<p>Then in your constructor put <code>style(default_style)</code>.
-This will add the new style as a child of the parent class style
-(which was set by the parent class constructor).
+<p>If you don't care if the themes can see you widget, you can pass a
+null pointer as the style name.
 
 <h2>Setting a Theme</h2>
 
@@ -222,10 +236,9 @@ that any changes are propagated to children.  Since the styles are
 already arranged into an inheritance hierarchy, you usually don't need
 to write them all, just a few.
 
-<p>Note that truly arbitrary themes would require adding code to the
-constructors of every widget so that a different style may be chosen
-for every widget, this was not done because it was unnecessary for
-any themes we were intersted in.
+<h4><code>Fl_Named_Style* Fl_Style::find(const char* name);</code></h4>
+
+<p>To locate a style to modify by name, use this static Fl_Style method.
 
 <h4>Fl_Widget::default_style</h4>
 
