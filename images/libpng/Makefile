@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1 2004/08/04 20:44:15 laza2000 Exp $"
+# "$Id: Makefile,v 1.2 2004/08/13 07:57:54 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -28,7 +28,10 @@
 #
 
 include ../../makeinclude
-CFLAGS += -I$(ZLIBINC)
+
+ifneq ( ,$(ZLIBINC))
+	CFLAGS += -I$(ZLIBINC)
+endif
 
 #
 # Files for this directory...
@@ -46,7 +49,7 @@ OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 # Make everything...
 #
 
-all:		$(LIBTARGET)
+all:		../../lib/$(LIBNAME)
 
 static:		../../lib/$(LIBNAME)
 
@@ -101,5 +104,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1 2004/08/04 20:44:15 laza2000 Exp $".
+# End of "$Id: Makefile,v 1.2 2004/08/13 07:57:54 laza2000 Exp $".
 #
