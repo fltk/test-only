@@ -78,10 +78,11 @@ const char *b1, const char *b2, ...)</A></H3>
 
 Shows the message with three buttons below it marked with the strings
 <tt> b0</tt>, <tt>b1</tt>, and <tt>b2</tt>.  Returns 0, 1, or 2
-depending on which button is hit. ESC is a shortcut for button 0 and
-the enter key is a shortcut for button 1.  Notice the buttons are
-positioned &quot;backwards&quot; You can hide buttons by passing
-<tt>NULL</tt> as their labels.
+depending on which button is hit. If one of the strings begins with
+the special character '*' then the associated button will be the default
+which is selected when the enter key is pressed.  ESC is a shortcut for
+button 0.  Notice the buttons are positioned &quot;backwards&quot; You
+can hide buttons by passing <tt>NULL</tt> as their labels.
 
 <P ALIGN=CENTER><IMG src=./fl_choice.gif border=1></p>
 
@@ -109,12 +110,13 @@ href=Fl_Secret_Input.html#Fl_Secret_Input>
 
 Change the font and font size used for the messages in all the popups. 
 
-<H3><A name=fl_message_icon>Fl_Widget *fl_message_icon()</A></H3>
+<H3><A name=fl_message_icon>void fl_message_icon(Fl_Widget *)</A></H3>
 
-Returns a pointer to the box at the left edge of all the popups.  You 
-can alter the font, color, or label (including making it a Pixmap), 
-before calling the functions. 
-
+Sets the widget that will be displayed as the icon for all the popups.  Any
+widget with any label can be created and used as the icon, including widgets
+with callbacks! Calling this function with <tt>NULL</tt> will reset the
+icons to the FLTK default.
+ 
 <H3><A name=fl_file_chooser>char *fl_file_chooser(const char * message, 
 const char *pattern, const char *fname)</A></H3>
 

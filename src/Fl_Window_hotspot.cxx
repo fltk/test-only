@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.11 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.12 2001/02/23 05:14:18 clip Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -65,11 +65,11 @@ void Fl_Window::hotspot(const Fl_Widget *o, int offscreen) {
   int Y = o->h()/2;
   while (o != this) {
     X += o->x(); Y += o->y();
-    o = o->window();
+    o = o->parent();
   }
   hotspot(X, Y, offscreen);
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.11 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.12 2001/02/23 05:14:18 clip Exp $".
 //

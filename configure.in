@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.88 2001/02/21 06:15:44 clip Exp $"
+dnl# "$Id: configure.in,v 1.89 2001/02/23 05:14:17 clip Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -242,10 +242,10 @@ dnl# Test for libpng (and for libz by the way)
 dnl# We check for a 1.0 function so versions of libpng < 1.0 are not
 dnl# used...
 AC_CHECK_HEADER(png.h, AC_CHECK_LIB(png, png_set_sig_bytes, \
-	AC_DEFINE(HAVE_PNG) LIBPNG=" -lpng -lz"\ 
+	AC_DEFINE(HAVE_PNG) LIBPNG=" -lpng -lz"\
         ,,$X_EXTRA_LIBS -lz -lm))
 AC_SUBST(LIBPNG)
- 
+
 
 dnl# Test for libjpeg
 AC_CHECK_HEADER(jpeglib.h, AC_CHECK_LIB(jpeg, jpeg_stdio_src, \
@@ -427,5 +427,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.88 2001/02/21 06:15:44 clip Exp $".
+dnl# End of "$Id: configure.in,v 1.89 2001/02/23 05:14:17 clip Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.H,v 1.13 2000/06/10 04:10:21 carl Exp $"
+// "$Id: fl_ask.H,v 1.14 2001/02/23 05:14:18 clip Exp $"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ FL_API const char *fl_input(const char *label, const char *deflt = 0, ...);
 FL_API const char *fl_password(const char *label, const char *deflt = 0, ...);
 
 // You can modify this widget to change the icon in the popup panel:
-FL_API Fl_Widget *fl_message_icon();
+FL_API void fl_message_icon(Fl_Widget *);
 
 #ifndef FLTK_2
 extern FL_API Fl_Named_Style* fl_message_style;
@@ -59,5 +59,5 @@ extern FL_API const char* fl_cancel;
 #endif
 
 //
-// End of "$Id: fl_ask.H,v 1.13 2000/06/10 04:10:21 carl Exp $".
+// End of "$Id: fl_ask.H,v 1.14 2001/02/23 05:14:18 clip Exp $".
 //

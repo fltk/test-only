@@ -31,5 +31,5 @@
   plugins = xft
 
   [default/xft plugin]
-    minimum antialias size = 16
+    minimum antialias size = 14
     #minimum antialias size = 0

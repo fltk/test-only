@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.21 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.22 2001/02/23 05:14:18 clip Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@
 #include <config.h>
 
 #include <FL/Fl.H>
+#include <FL/fl_draw.H>
 
 #include <FL/fl_ask.H>
 
@@ -45,7 +46,7 @@
 #include <FL/Fl_Secret_Input.H>
 static Fl_Window *window;
 static Fl_Box *message;
-static Fl_Box *icon;
+static Fl_Widget *icon;
 static Fl_Button *button[3];
 static Fl_Input *input;
 static const char *iconlabel = "?";
@@ -74,28 +75,49 @@ static void set_button_number(Fl_Widget* w, long a) {
   w->window()->hide();
 }
 
-static Fl_Window *makeform() {
-  if (window) {
-    window->size(410,105);
-    return window;
+static Fl_Widget* user_icon = 0;
+void fl_message_icon(Fl_Widget *w) { user_icon = w; }
+
+static Fl_Window *makeform(const char *istr, int itype, int default_button) {
+  if (user_icon) {
+    icon = user_icon;
+    icon->position(10, 10);
+  } else {
+    icon = new Fl_Box(10, 10, 50, 50);
+    icon_style->parent = icon->style();
+    icon->copy_style(icon_style);
+    icon->label(iconlabel);
   }
-  Fl_Window *w = window = new Fl_Window(410,105);
-  message = new Fl_Box(60, 0, 340, 70);
+  if (window) delete window;
+  Fl_Window *w = window = new Fl_Window(10+icon->w()+10+340+10,10+icon->h()+10+25+10);
+  // This keeps the icon from resizing.
+  Fl_Group *ig = new Fl_Group(icon->x(), icon->y(), icon->w(), icon->h());
+  icon->position(0, 0);
+  ig->add(icon);
+  ig->end();
+  message = new Fl_Box(10+icon->w()+10, 0, 340, 10+icon->h()+10);
   message->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
   fl_message_style->parent = message->style();
   message->copy_style(fl_message_style);
-  input = new Fl_Input(60,32,340,30);
-  input->hide();
-  icon = new Fl_Box(10, 10, 50, 50);
-  icon_style->parent = icon->style();
-  icon->copy_style(icon_style);
-  button[2] = new Fl_Button(110, 70, 90, 25);
-  button[2]->callback(set_button_number, 2);
-  button[1] = new Fl_Return_Button(210, 70, 90, 25);
-  button[1]->callback(set_button_number, 1);
-  button[0] = new Fl_Button(310, 70, 90, 25);
-  button[0]->callback(set_button_number, 0);
-  w->resizable(new Fl_Box(60,10,110-60,22));
+  if (istr) {
+    input = new Fl_Input(message->x(), 0, message->w(), 0);
+    input->h(fl_height(input->text_font(), input->text_size())+10);
+    input->y(10+icon->h()-input->h());
+    input->type(itype);
+    input->value(istr);
+    message->h(input->y());
+  }
+
+  for (int i = 0; i <= 2; i++) {
+    if (i == default_button)
+      button[i] = new Fl_Return_Button(w->w()-100*(i+1), 10+icon->h()+10, 90, 25);
+    else
+      button[i] = new Fl_Button(w->w()-100*(i+1), 10+icon->h()+10, 90, 25);
+    button[i]->callback(set_button_number, i);
+  }
+
+  w->resizable(message);
+//  w->size_range(w->w(), w->h(), 0, w->h());
   w->end();
   w->set_modal();
   return w;
@@ -107,12 +129,16 @@ int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 }
 #endif
 
-static int innards(const char* fmt, va_list ap,
+static int innards(const char *istr, int itype, const char* fmt, va_list ap,
   const char *b0,
   const char *b1,
   const char *b2)
 {
-  makeform();
+  int default_button = b1 ? 1 : 0;
+  if (b0 && *b0 == '*') { b0++; default_button = 0; }
+  if (b1 && *b1 == '*') { b1++; default_button = 1; }
+  if (b2 && *b2 == '*') { b2++; default_button = 2; }
+  makeform(istr, itype, default_button);
   char buffer[1024];
   if (!strcmp(fmt,"%s")) {
     message->label(va_arg(ap, const char*));
@@ -120,20 +146,16 @@ static int innards(const char* fmt, va_list ap,
     vsnprintf(buffer, 1024, fmt, ap);
     message->label(buffer);
   }
-  if (b0) {button[0]->show();button[0]->label(b0);button[1]->position(210,70);}
-  else {button[0]->hide(); button[1]->position(310,70);}
-  if (b1) {button[1]->show(); button[1]->label(b1);}
+  if (b0) button[0]->label(b0);
+  else button[0]->hide();
+  if (b1) button[1]->label(b1);
   else button[1]->hide();
-  if (b2) {button[2]->show(); button[2]->label(b2);}
+  if (b2) button[2]->label(b2);
   else button[2]->hide();
-  const char* prev_icon_label = icon->label();
-  if (!prev_icon_label) icon->label(iconlabel);
-  input->h(input->text_size()*2);
-  window->focus(input->visible() ? (Fl_Widget*)input : (Fl_Widget*)button[1]);
-  window->hotspot(button[0]);
   button_number = 0;
+  window->focus(istr ? (Fl_Widget *)input : (Fl_Widget *)button[default_button]);
+  window->hotspot(button[default_button]);
   window->exec();
-  icon->label(prev_icon_label);
   return button_number;
 }
 
@@ -149,24 +171,23 @@ void fl_message(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   iconlabel = "i";
-  innards(fmt, ap, 0, fl_ok, 0);
+  innards(0, 0, fmt, ap, fl_ok, 0, 0);
   va_end(ap);
-  iconlabel = "?";
 }
 
 void fl_alert(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   iconlabel = "!";
-  innards(fmt, ap, 0, fl_ok, 0);
+  innards(0, 0, fmt, ap, fl_ok, 0, 0);
   va_end(ap);
-  iconlabel = "?";
 }
 
 int fl_ask(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  int r = innards(fmt, ap, fl_no, fl_yes, 0);
+  iconlabel = "?";
+  int r = innards(0, 0, fmt, ap, fl_no, fl_yes, 0);
   va_end(ap);
   return r;
 }
@@ -174,29 +195,22 @@ int fl_ask(const char *fmt, ...) {
 int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   va_list ap;
   va_start(ap, b2);
-  int r = innards(fmt, ap, b0, b1, b2);
+  iconlabel = "?";
+  int r = innards(0, 0, fmt, ap, b0, b1, b2);
   va_end(ap);
   return r;
 }
 
-Fl_Widget *fl_message_icon() {makeform(); return icon;}
-
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
-  makeform();
-  message->size(340, 40);
-  input->type(type);
-  input->show();
-  input->value(defstr);
-  int r = innards(fmt, ap, fl_cancel, fl_ok, 0);
-  input->hide();
-  message->size(340, 70);
+  int r = innards(defstr, type, fmt, ap, fl_cancel, fl_ok, 0);
   return r ? input->value() : 0;
 }
 
 const char* fl_input(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
+  iconlabel = "?";
   const char* r = input_innards(fmt, ap, defstr, FL_NORMAL_INPUT);
   va_end(ap);
   return r;
@@ -205,11 +219,12 @@ const char* fl_input(const char *fmt, const char *defstr, ...) {
 const char *fl_password(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, FL_SECRET_INPUT);
+  iconlabel = "?";
+  const char* r = input_innards(fmt, ap, defstr ? defstr : "", FL_SECRET_INPUT);
   va_end(ap);
   return r;
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.21 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.22 2001/02/23 05:14:18 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.8 2001/02/21 06:15:45 clip Exp $"
+// "$Id: editor.cxx,v 1.9 2001/02/23 05:14:18 clip Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -107,14 +107,16 @@ EditorWindow::~EditorWindow() {
 int check_save(void) {
   if (!changed) return 1;
 
-  if (fl_ask("The current file has not been saved.\n"
-             "Would you like to save it now?"))
-  {
+  int r = fl_choice("The current file has not been saved.\n"
+                    "Would you like to save it now?",
+                    "Cancel", "No", "*Yes");
+
+  if (r == 2) {
     save_cb(); // Save the file...
     return !changed;
-  } else {
-    return 1;
-  }
+  };
+
+   return (r == 1) ? 1 : 0;
 }
 
 int loading = 0;
@@ -213,8 +215,7 @@ void changed_cb(int, int nInserted, int nDeleted,int, const char*, void* v) {
 }
 
 void new_cb(Fl_Widget*, void*) {
-  if (changed && !check_save())
-    return;
+  if (!check_save()) return;
 
   filename[0] = '\0';
   textbuf->select(0, textbuf->length());
@@ -224,8 +225,7 @@ void new_cb(Fl_Widget*, void*) {
 }
 
 void open_cb(Fl_Widget*, void*) {
-  if (changed)
-    if (!check_save()) return;
+  if (!check_save()) return;
 
   char *newfile = fl_file_chooser("Open File?", "*", filename);
   if (newfile != NULL) load_file(newfile, -1);
@@ -246,8 +246,9 @@ int num_windows = 0;
 
 void close_cb(Fl_Widget*, void* v) {
   Fl_Window* w = (Fl_Window*)v;
-  if (num_windows == 1 && changed && !check_save())
+  if (num_windows == 1 && !check_save()) {
     return;
+  }
 
   w->hide();
   textbuf->remove_modify_callback(changed_cb, w);
@@ -366,12 +367,12 @@ void view_cb(Fl_Widget*, void*) {
 }
 
 Fl_Menu_Item menuitems[] = {
-  { "&File", 0, 0, 0, FL_SUBMENU },
-    { "&New",        0, (Fl_Callback *)new_cb },
-    { "&Open...",    FL_CTRL + 'o', (Fl_Callback *)open_cb },
-    { "&Insert...",  FL_CTRL + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
-    { "&Save",       FL_CTRL + 's', (Fl_Callback *)save_cb },
-    { "Save &As...", FL_CTRL + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
+  { "&File",              0, 0, 0, FL_SUBMENU },
+    { "&New File",        0, (Fl_Callback *)new_cb },
+    { "&Open File...",    FL_CTRL + 'o', (Fl_Callback *)open_cb },
+    { "&Insert File...",  FL_CTRL + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
+    { "&Save File",       FL_CTRL + 's', (Fl_Callback *)save_cb },
+    { "Save File &As...", FL_CTRL + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
     { "New &View", FL_ALT + 'v', (Fl_Callback *)view_cb, 0 },
     { "&Close View", FL_CTRL + 'w', (Fl_Callback *)close_cb, 0, FL_MENU_DIVIDER },
     { "E&xit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
@@ -400,7 +401,7 @@ Fl_Window* new_view() {
     w->begin();
     Fl_Menu_Bar* m = new Fl_Menu_Bar(0, 0, 512, 30);
     m->menu(menuitems);
-    m->find("&File/&Insert...")->user_data(w);
+    m->find("&File/&Insert File...")->user_data(w);
     m->find("&File/&Close View")->user_data(w);
     m->find("&Edit/Cu&t")->user_data(w);
     m->find("&Edit/&Copy")->user_data(w);
@@ -431,5 +432,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.8 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: editor.cxx,v 1.9 2001/02/23 05:14:18 clip Exp $".
 //
