@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,15 +28,21 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
+#include <FL/fl_utf8.H>
 #include "Fl_Font.H"
 
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #ifdef WIN32
 #  include "fl_font_win32.cxx"
 #elif defined(__APPLE__)
 #  include "fl_font_mac.cxx"
+#elif NANO_X
+#  include "fl_font_nx.cxx"
+#elif DJGPP
+#  include "fl_font_dj2.cxx"
 #elif USE_XFT
 #  include "fl_font_xft.cxx"
 #else
@@ -44,15 +50,16 @@
 #endif // WIN32
 
 
-double fl_width(const char* c) {
-  if (c) return fl_width(c, strlen(c));
+double Fl_Fltk::width(const char* c) {
+  if (c) return Fl_Fltk::width(c, strlen(c));
   else return 0.0f;
 }
 
-void fl_draw(const char* str, int x, int y) {
-  fl_draw(str, strlen(str), x, y);
+void Fl_Fltk::draw(const char* str, int x, int y) {
+  Fl_Fltk::draw(str, strlen(str), x, y);
 }
 
+
 //
-// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.11.2.11.2.15.2.1 2003/11/02 01:37:41 easysw Exp $"
+ * "$Id: configh.in,v 1.11.2.11.2.15.2.2 2003/11/07 03:47:22 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -218,7 +218,22 @@
 #undef HAVE_PTHREAD
 #undef HAVE_PTHREAD_H
 
+/*
+ * HAVE_XUTF8:
+ *
+ * Do we have the X11 UTF-8 library ?
+ */
+
+#define HAVE_XUTF8 0
 
 /*
- * End of "$Id: configh.in,v 1.11.2.11.2.15.2.1 2003/11/02 01:37:41 easysw Exp $".
+ * HAVE_XUTF8:
+ *
+ * Do we have the X11 UTF-8 library ?
+ */
+
+#define HAVE_XTEST 0
+
+/*
+ * End of "$Id: configh.in,v 1.11.2.11.2.15.2.2 2003/11/07 03:47:22 easysw Exp $".
  */

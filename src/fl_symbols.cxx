@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.2 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.3 2003/11/07 03:47:25 easysw Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -94,6 +94,7 @@ int fl_return_arrow(int x,int y,int w,int h);
 // provided for back compatability:
 int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {  
   const char *p = label;
+  
   if (*p++ != '@') return 0;
   fl_init_symbols();
   int equalscale = 0;
@@ -129,6 +130,7 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   }
   int pos = find(p);
   if (!symbols[pos].notempty) return 0;
+
   if (symbols[pos].scalable == 3) { // kludge to detect return arrow
     fl_return_arrow(x,y,w,h);
     return 1;
@@ -179,6 +181,7 @@ static void draw_arrow1(Fl_Color col)
   set_outline_color(col);
   BC; vv(-0.8,-0.4); vv(-0.8,0.4); vv(0.0,0.4); vv(0.0,0.8); vv(0.8,0.0);
       vv(0.0,-0.8); vv(0.0,-0.4); EC;
+
 }
 
 static void draw_arrow1bar(Fl_Color col)
@@ -326,8 +329,9 @@ static void draw_menu(Fl_Color col)
 }
 
 static void fl_init_symbols(void) {
-  static char beenhere;
+  static char beenhere = 0;
   if (beenhere) return;
+
   beenhere = 1;
   symbnumb = 0;
 
@@ -361,5 +365,5 @@ static void fl_init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.2 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.3 2003/11/07 03:47:25 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.1 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.2 2003/11/07 03:47:23 easysw Exp $"
 //
 // Fl_JPEG_Image routines.
 //
@@ -36,7 +36,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <FL/fl_utf8.H>
 
 // Some releases of the Cygwin JPEG libraries don't have a correctly
 // updated header file for the INT32 data type; the following define
@@ -81,7 +81,7 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *jpeg)	// I - File to load
   JSAMPROW			row;		// Sample row pointer
 
 
-  if ((fp = fopen(jpeg, "rb")) == NULL) return;
+  if ((fp = fl_fopen(jpeg, "rb")) == NULL) return;
 
   cinfo.err = jpeg_std_error(&jerr);
   jerr.error_exit = jpeg_error_handler;
@@ -122,5 +122,5 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *jpeg)	// I - File to load
 }
 
 //
-// End of "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.1 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.2 2003/11/07 03:47:23 easysw Exp $".
 //

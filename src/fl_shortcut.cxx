@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -159,10 +159,13 @@ const char * fl_shortcut_label(int shortcut) {
   *p = 0;
   return buf;
 #else
-  const char* q;
+  const char* q = 0;
   if (key == FL_Enter || key == '\r') q="Enter";  // don't use Xlib's "Return":
   else if (key > 32 && key < 0x100) q = 0;
+#if !NANO_X && !DJGPP
+//FIXME_DJGPP
   else q = XKeysymToString(key);
+#endif
   if (!q) {*p++ = uchar(key); *p = 0; return buf;}
   if (p > buf) {strcpy(p,q); return buf;} else return q;
 #endif
@@ -172,7 +175,7 @@ const char * fl_shortcut_label(int shortcut) {
 #include <stdlib.h>
 int fl_old_shortcut(const char* s) {
   if (!s || !*s) return 0;
-  int n = 0;
+  long n = 0;
   if (*s == '#') {n |= FL_ALT; s++;}
   if (*s == '+') {n |= FL_SHIFT; s++;}
   if (*s == '^') {n |= FL_CTRL; s++;}
@@ -201,5 +204,5 @@ int Fl_Widget::test_shortcut() {
 }
 
 //
-// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

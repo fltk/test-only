@@ -1,5 +1,5 @@
 //
-// "$Id: bitmap.cxx,v 1.4.2.3.2.4.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: bitmap.cxx,v 1.4.2.3.2.4.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Bitmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,9 +25,11 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Shaped_Window.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Bitmap.H>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define sorceress_width 75
 #define sorceress_height 75
@@ -116,8 +118,38 @@ void button_cb(Fl_Widget *,void *) {
   w->redraw();
 }
 
+class My_Shaped_Window : public Fl_Shaped_Window
+{
+public:
+	My_Shaped_Window(int x, int y, int w, int h) :  
+		Fl_Shaped_Window(x, y, w, h)
+	{
+		;
+	}
+	int handle(int e) {
+		int ret = Fl_Shaped_Window::handle(e);
+		if (e == FL_MOVE) {
+			position(x() + Fl::event_x() - 5, y() + Fl::event_y() - 5);
+		} else if (e == FL_PUSH) {
+			exit(0);
+		}
+		return ret;
+	}	
+};
 int main(int argc, char **argv) {
+  Fl_Shaped_Window *s = new My_Shaped_Window(25, 21, sorceress_width,sorceress_height);
+  s->box(FL_FLAT_BOX);   
+  s->shape(new Fl_Bitmap(sorceress_bits,sorceress_width,sorceress_height));
+  s->color(FL_GREEN);  
+  s->end();
+  s->show();
+
   w = new Fl_Window(400,400);
+  s = new My_Shaped_Window(10, 110, sorceress_width,sorceress_height);
+  s->box(FL_FLAT_BOX); 
+  s->shape(new Fl_Bitmap(sorceress_bits,sorceress_width,sorceress_height));
+  s->color(FL_RED);  
+  s->end();
   b = new Fl_Button(140,160,120,120,"Bitmap");
   b->image(new Fl_Bitmap(sorceress_bits,sorceress_width,sorceress_height));
   leftb = new Fl_Toggle_Button(25,50,50,25,"left");
@@ -135,11 +167,13 @@ int main(int argc, char **argv) {
   inactb = new Fl_Toggle_Button(125,75,100,25,"inactive");
   inactb->callback(button_cb);
   w->resizable(w);
+  
   w->end();
   w->show(argc, argv);
+  //s->show();
   return Fl::run();
 }
 
 //
-// End of "$Id: bitmap.cxx,v 1.4.2.3.2.4.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: bitmap.cxx,v 1.4.2.3.2.4.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

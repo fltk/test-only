@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.10.2.11.2.5.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: filename_list.cxx,v 1.10.2.11.2.5.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,15 +28,19 @@
 #include <FL/filename.H>
 #include "flstring.h"
 
+#if MSDOS
+#define strcasecmp stricmp
+#endif
 
+
+#if !defined(HAVE_SCANDIR) || __APPLE__
 extern "C" {
-#ifndef HAVE_SCANDIR
-  int fl_scandir (const char *dir, dirent ***namelist,
+  extern int fl_scandir (const char *dir, dirent ***namelist,
 	          int (*select)(dirent *),
 	          int (*compar)(dirent **, dirent **));
-#  define scandir	fl_scandir
-#endif
+#  define scandir(a,b,c,d)	fl_scandir(a,b,c,d)
 }
+#endif
 
 int fl_alphasort(struct dirent **a, struct dirent **b) {
   return strcmp((*a)->d_name, (*b)->d_name);
@@ -58,7 +62,7 @@ int fl_filename_list(const char *d, dirent ***list,
 #elif defined(_AIX)
   // AIX is almost standard...
   return scandir(d, list, 0, (int(*)(void*, void*))sort);
-#elif HAVE_SCANDIR && !defined(__sgi)
+#elif HAVE_SCANDIR && !defined(__sgi) && !__APPLE__
   // The vast majority of UNIX systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
   // changes:
@@ -71,5 +75,5 @@ int fl_filename_list(const char *d, dirent ***list,
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.10.2.11.2.5.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: filename_list.cxx,v 1.10.2.11.2.5.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

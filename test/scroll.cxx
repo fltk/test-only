@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: scroll.cxx,v 1.4.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,29 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+
+// This file is modified to be printable to postscript (R.K.)
+
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Scroll.H>
-#include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Toggle_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Box.H>
 #include <string.h>
 #include <stdio.h>
 #include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <FL/fl_math.h>
+#include <FL/Fl_File_Chooser.H>
+#include <FL/Fl_Ps.H>
+#ifdef WIN32
+#include <FL/Fl_Gdi.H>
+#endif
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_Image.H>
+#include "porsche.xpm"
+
 
 class Drawing : public Fl_Widget {
   void draw();
@@ -42,7 +55,30 @@ public:
     box(FL_FLAT_BOX);
     color(FL_WHITE);
   }
+  
 };
+
+
+void print(Fl_Widget *, void *w) {
+
+	Fl_PrintingGroup * g = (Fl_PrintingGroup *)w;
+#ifdef WIN32
+	Fl_Gdi *doc = new Fl_Gdi();
+#else
+	const char *f = fl_file_chooser("Save", "*.ps" , "*.ps");
+	FILE *o = fl_fopen(f, "w");
+	Fl_Ps * doc= new Fl_Ps(o,1,PS_PORTRAIT, PS_A4);
+#endif
+	doc->page(72,72,72,72, PS_LANDSCAPE, PS_ASK); //margins
+	doc->fit(g->x(),g->y(),g->w(),g->h()); //fitting into margins
+	g->print(doc);
+	delete doc;
+#ifndef WIN32
+	 fclose(o);
+#endif
+	
+};
+
 
 void Drawing::draw() {
   draw_box();
@@ -69,7 +105,8 @@ void box_cb(Fl_Widget* o, void*) {
 }
 
 void type_cb(Fl_Widget*, void* v) {
-  thescroll->type(int(v));
+  long x = (long)v;
+  thescroll->type(x);
   thescroll->redraw();
 }
 
@@ -100,8 +137,14 @@ Fl_Menu_Item align_choices[] = {
 int main(int argc, char** argv) {
   Fl_Window window(5*75,400);
   window.box(FL_NO_BOX);
+
+//encaplulation of the window
+
+  Fl_PrintingGroup gr(0,0,5*75,window.h());
   Fl_Scroll scroll(0,0,5*75,300);
 
+//encaplulation what is inside scrolling
+  Fl_PrintingGroup dc(0,0,5*75,8*25+5*75+320);
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
     char buf[20]; sprintf(buf,"%d",n++);
@@ -110,13 +153,23 @@ int main(int argc, char** argv) {
     b->labelcolor(FL_WHITE);
   }
   Drawing drawing(0,8*25,5*75,5*75,0);
+  Fl_Button b(0, 10*75 + 25,5*75,120,"Pixmap"); 
+  Fl_Pixmap *pixmap = new Fl_Pixmap(porsche_xpm); 
+  
+  b.image(pixmap);
+  
+  dc.end();
+//end encapsulationof widgets
+  
+  
+  
   scroll.end();
   window.resizable(scroll);
 
   Fl_Box box(0,300,5*75,window.h()-300); // gray area below the scroll
   box.box(FL_FLAT_BOX);
 
-  Fl_Light_Button but1(150, 310, 200, 25, "box");
+  Fl_Toggle_Button but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);
   
   Fl_Choice choice(150, 335, 200, 25, "type():");
@@ -127,15 +180,26 @@ int main(int argc, char** argv) {
   achoice.menu(align_choices);
   achoice.value(3);
 
+  Fl_Button *b1 = new Fl_Button(5,310, 90, 25, "Print window");
+  b1->callback(print,&gr);
+
+  Fl_Button *b2 = new Fl_Button(5,335, 90, 25, "Print \"doc\"");
+  b2->callback(print,&dc);
+
   thescroll = &scroll;
 
   //scroll.box(FL_DOWN_BOX);
   //scroll.type(Fl_Scroll::VERTICAL);
+
+
+  gr.end();
+//end encapsulationof window
+
   window.end();
   window.show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: scroll.cxx,v 1.4.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

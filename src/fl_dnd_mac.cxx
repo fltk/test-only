@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_mac.cxx,v 1.1.2.3.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_dnd_mac.cxx,v 1.1.2.3.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,6 +48,7 @@ int Fl::dnd()
   result = NewDrag( &dragRef );
   if ( result != noErr ) return false;
   
+  //                                      'utxt'
   result = AddDragItemFlavor( dragRef, 1, 'TEXT', fl_selection_buffer, fl_selection_length, 0 );
   if ( result != noErr ) { DisposeDrag( dragRef ); return false; }
   
@@ -81,5 +82,5 @@ int Fl::dnd()
   
 
 //
-// End of "$Id: fl_dnd_mac.cxx,v 1.1.2.3.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_dnd_mac.cxx,v 1.1.2.3.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

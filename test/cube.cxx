@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.4.2.5.2.5.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: cube.cxx,v 1.4.2.5.2.5.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,7 @@ void cube_box::draw() {
     glEnable(GL_DEPTH_TEST);
     glFrustum(-1,1,-1,1,2,10000);
     glTranslatef(0,0,-10);
-    gl_font(FL_HELVETICA_BOLD, 16 );
+    gl_font(FL_HELVETICA, 32 );
   }
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
@@ -113,12 +113,18 @@ void cube_box::draw() {
   glRotatef(float(lasttime*2.3),0,1,0);
   glTranslatef(-1.0, 1.2f, -1.5);
   glScalef(float(size),float(size),float(size));
+
   drawcube(wire);
-  glPopMatrix();
-  gl_color(FL_GRAY);
-  glDisable(GL_DEPTH_TEST);
-  gl_draw(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
   glEnable(GL_DEPTH_TEST);
+  glPopMatrix();
+  glDisable(GL_DEPTH_TEST);
+  static char buf[80];
+  unsigned short b[] = {'U', 'T', 'F', 0xAE, 0xA9, 0x39e};
+  int l = fl_unicode2utf((xchar*)b, 6, buf);
+  buf[l] = 0;
+  gl_color(FL_GRAY);
+  gl_draw(wire ? "Cube: wire" : buf, 0, 0);
+
 }
 
 #endif
@@ -184,5 +190,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cube.cxx,v 1.4.2.5.2.5.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: cube.cxx,v 1.4.2.5.2.5.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

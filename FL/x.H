@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.10.2.8.2.11.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: x.H,v 1.10.2.8.2.11.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,17 @@
 
 #ifndef Fl_X_H
 #  define Fl_X_H
-
+#  include <FL/Fl_Fltk.H>
 #  include "Enumerations.H"
 
 #  ifdef WIN32
 #    include "win32.H"
 #  elif defined(__APPLE__)
 #    include "mac.H"
+#  elif defined(NANO_X)
+#    include "nx.H"
+#  elif defined(DJGPP)
+#    include "dj2.H"
 #  else
 #    if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
 #      pragma set woff 3322
@@ -48,6 +52,10 @@
 #    endif
 #    include <X11/Xatom.h>
 #    include "Fl_Window.H"
+#    if HAVE_XUTF8
+#      include <libXutf8/Xutf8.h>
+#    endif
+
 
 // Mirror X definition of Region to Fl_Region, for portability...
 typedef Region Fl_Region;
@@ -66,7 +74,12 @@ extern FL_EXPORT Colormap fl_colormap;
 // drawing functions:
 extern FL_EXPORT GC fl_gc;
 extern FL_EXPORT Window fl_window;
+
+#if HAVE_XUTF8
+extern FL_EXPORT XUtf8FontStruct* fl_xfont;
+#else 
 extern FL_EXPORT XFontStruct* fl_xfont;
+#endif
 FL_EXPORT ulong fl_xpixel(Fl_Color i);
 FL_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
 FL_EXPORT void fl_clip_region(Fl_Region);
@@ -141,5 +154,5 @@ extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b)
 #endif
 
 //
-// End of "$Id: x.H,v 1.10.2.8.2.11.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: x.H,v 1.10.2.8.2.11.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.8.2.4.2.2.2.1 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_Clock.cxx,v 1.8.2.4.2.2.2.2 2003/11/07 03:47:23 easysw Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,9 @@
 #include <math.h>
 #include <time.h>
 #ifndef WIN32
+#if (!MSDOS || DJGPP) && !__APPLE__
 #  include <sys/time.h>
+#endif
 #endif /* !WIN32 */
 
 // Original clock display written by Paul Haeberli at SGI.
@@ -39,7 +41,24 @@
 const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float  minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
 const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
-
+#if MSDOS && !DJGPP 
+struct timeval {
+	unsigned long tv_sec, tv_usec;
+};
+static int gettimeofday(struct timeval *tp, void*tz)
+{
+	static unsigned long s, u;
+	tp->tv_sec = time(NULL);
+	if (tp->tv_sec == u) {
+		s += 20000;
+	} else {
+		s = 0;
+	}
+	tp->tv_usec = s;
+	u = tp->tv_sec;
+	return 0;
+}
+#endif
 static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
 {
   fl_push_matrix();
@@ -140,7 +159,7 @@ Fl_Clock::Fl_Clock(uchar t, int X, int Y, int W, int H, const char *l)
 }
 
 static void tick(void *v) {
-#ifdef WIN32
+#if defined(WIN32) || __APPLE__
   ((Fl_Clock*)v)->value(time(0));
   Fl::add_timeout(1.0, tick, v);
 #else
@@ -170,5 +189,5 @@ Fl_Clock::~Fl_Clock() {
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.8.2.4.2.2.2.1 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.8.2.4.2.2.2.2 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_BMP_Image.cxx,v 1.1.2.11.2.2 2003/11/02 01:37:44 easysw Exp $"
+// "$Id: Fl_BMP_Image.cxx,v 1.1.2.11.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Fl_BMP_Image routines.
 //
@@ -36,7 +36,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <FL/fl_utf8.H>
 
 //
 // BMP definitions...
@@ -85,7 +85,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
   uchar		mask = 0;	// single bit mask follows image data
 
   // Open the file...
-  if ((fp = fopen(bmp, "rb")) == NULL) return;
+  if ((fp = fl_fopen(bmp, "rb")) == NULL) return;
 
   // Get the header...
   byte = (uchar)getc(fp);	// Check "BM" sync chars
@@ -139,6 +139,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 	bDepth = 4;
       }
     }
+
   }
 
 //  printf("w() = %d, h() = %d, depth = %d, compression = %d, colors_used = %d, repcount = %d\n",
@@ -339,11 +340,10 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 	    }
 	  }
           break;
-
       case 16 : // 16-bit 5:5:5 RGB
           for (x = w(); x > 0; x --, ptr += bDepth) {
 	    uchar b = getc(fp), a = getc(fp) ;
-#ifdef USE_5_6_5 // Green as the brightest color should have one bit more 5:6:5
+           #ifdef USE_5_6_5 // Green as the brightes color should ahve one bit more 5:6:5
 	    ptr[0] = (uchar)(( b << 3 ) & 0xf8);
 	    ptr[1] = (uchar)(((a << 5) & 0xe0) | ((b >> 3) & 0x1c));
 	    ptr[2] = (uchar)(a & 0xf8);
@@ -359,6 +359,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 	    getc(fp);
 	  }
           break;
+
 
       case 24 : // 24-bit RGB
           for (x = w(); x > 0; x --, ptr += bDepth) {
@@ -450,5 +451,5 @@ read_long(FILE *fp) {		// I - File to read from
 
 
 //
-// End of "$Id: Fl_BMP_Image.cxx,v 1.1.2.11.2.2 2003/11/02 01:37:44 easysw Exp $".
+// End of "$Id: Fl_BMP_Image.cxx,v 1.1.2.11.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

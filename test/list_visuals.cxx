@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#if defined(WIN32) || defined(__APPLE__)
+#if defined(WIN32) || defined(__APPLE__) || NANO_X
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 
@@ -235,5 +235,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

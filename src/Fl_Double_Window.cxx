@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.1 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.2 2003/11/07 03:47:23 easysw Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Fltk.H>
+#include <stdlib.h>
 
 // On systems that support double buffering "naturally" the base
 // Fl_Window class will probably do double-buffer and this subclass
@@ -59,7 +61,7 @@ static int can_xdbe() {
 #endif
 
 void Fl_Double_Window::show() {
-#if !defined(WIN32) && !defined(__APPLE__)
+#if !defined(WIN32) && !defined(__APPLE__) && !DJGPP
   if (!shown()) { // don't set the background pixel
     fl_open_display();
     Fl_X::make_xid(this);
@@ -219,7 +221,9 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     if (damage()) {
       fl_clip_region(myi->region); myi->region = 0;
       fl_window = myi->other_xid;
+
       draw();
+
       fl_window = myi->xid;
     }
     if (!copy) {
@@ -238,11 +242,15 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     fl_clip_region(myi->region); myi->region = 0;
 #ifdef WIN32
     HDC _sgc = fl_gc;
+    if (fl->type != FL_GDI_DEVICE) {
     fl_gc = fl_makeDC(myi->other_xid);
+    }
     fl_restore_clip(); // duplicate region into new gc
     draw();
+    if (fl->type != FL_GDI_DEVICE) {
     DeleteDC(fl_gc);
     fl_gc = _sgc;
+    }
 #elif defined(__APPLE__)
     if ( myi->other_xid ) {
       fl_begin_offscreen( myi->other_xid );
@@ -252,6 +260,12 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     } else {
       draw();
     }
+#elif DJGPP // X:
+    fl_window = myi->other_xid;
+    GrSetContext(fl_get_context(fl_window));
+    draw();
+    fl_window = myi->xid;
+    GrSetContext(fl_get_context(fl_window));
 #else // X:
     fl_window = myi->other_xid;
     draw();
@@ -299,5 +313,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.1 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.2 2003/11/07 03:47:23 easysw Exp $".
 //

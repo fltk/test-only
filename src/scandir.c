@@ -18,10 +18,14 @@ USA.  */
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include "scandir_win32.c"
+#elif MSDOS
+#  include "scandir_dos.c"
+#elif __APPLE__
+#  include "scandir_mac.c"
 #else
 
 #  include "flstring.h"
-
+#  include <FL/fl_utf8.H>
 #  if !HAVE_SCANDIR
 #    include <stdlib.h>
 #    include <sys/types.h>
@@ -49,7 +53,7 @@ fl_scandir(const char *dir, struct dirent ***namelist,
 	   int (*select)(struct dirent *),
 	   int (*compar)(struct dirent **, struct dirent **))
 {
-  DIR *dp = opendir (dir);
+  DIR *dp = opendir (fl_utf2mbcs(dir));
   struct dirent **v = NULL;
   size_t vsize = 0, i;
   struct dirent *d;
@@ -120,5 +124,5 @@ fl_scandir(const char *dir, struct dirent ***namelist,
 #endif
 
 /*
- * End of "$Id: scandir.c,v 1.4.2.1.2.2 2002/05/04 12:37:41 easysw Exp $".
+ * End of "$Id: scandir.c,v 1.4.2.1.2.2.2.1 2003/11/07 03:47:25 easysw Exp $".
  */

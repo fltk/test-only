@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.9.2.7.2.3.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: checkers.cxx,v 1.9.2.7.2.3.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -177,7 +177,7 @@ piece *tb;		// pointer to real or swapped board
 #define ENEMY WHITE
 #define ENEMYKING WHITEKING
 
-char check(int target,int direction) {
+char checkit(int target,int direction) {
   // see if enemy at target can be jumped from direction by our piece
   int dst = target-direction;
   if (tb[dst]) return(0);
@@ -205,12 +205,12 @@ void analyzemove(int direction,int src) {
   if (!tb[target]) {
     if (!tb[target+direction]) is_protected[target] = 1;
     piece a = tb[src]; tb[src] = EMPTY;
-    if (check(target,4) || check(target,5) ||
-	check(target,-4) || check(target,-5) ||
-	(tb[src+4]&ENEMY && check(src+4,4)) ||
-	(tb[src+5]&ENEMY && check(src+5,5)) ||
-	(tb[src-4]&ENEMY && check(src-4,-4)) ||
-	(tb[src-5]&ENEMY && check(src-5,-5)))
+    if (checkit(target,4) || checkit(target,5) ||
+	checkit(target,-4) || checkit(target,-5) ||
+	(tb[src+4]&ENEMY && checkit(src+4,4)) ||
+	(tb[src+5]&ENEMY && checkit(src+5,5)) ||
+	(tb[src-4]&ENEMY && checkit(src-4,-4)) ||
+	(tb[src-5]&ENEMY && checkit(src-5,-5)))
       deniedmoves++;
     else undeniedmoves++;
     tb[src] = a;
@@ -1343,7 +1343,7 @@ int main(int argc, char **argv) {
     fprintf(stderr," -t : use VT100 display\n", Fl::help);
     exit(1);
   }
-  if (!getenv("DISPLAY")) terminal = 1;
+  if (!fl_getenv("DISPLAY")) terminal = 1;
   if (!terminal)
 #endif
 #ifdef FLTK
@@ -1355,5 +1355,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.9.2.7.2.3.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: checkers.cxx,v 1.9.2.7.2.3.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.1.2.4.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.1.2.4.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -254,26 +254,26 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 }
 
-void fl_draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_Fltk::draw_image(const unsigned char* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void fl_draw_image(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Fltk::draw_image(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void fl_draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_Fltk::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Fltk::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+void Fl_Fltk::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
   fl_color(r,g,b);
   fl_rectf(x,y,w,h);
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.1.2.4.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.1.2.4.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

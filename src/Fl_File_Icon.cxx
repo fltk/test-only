@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.1 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.2 2003/11/07 03:47:23 easysw Exp $"
 //
 // Fl_File_Icon routines.
 //
@@ -43,8 +43,11 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <errno.h>
+#if !__APPLE__
 #include <sys/types.h>
+#endif
 #include <sys/stat.h>
+#include <FL/fl_utf8.H>
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
 #  include <io.h>
 #  define F_OK	0
@@ -199,7 +202,7 @@ Fl_File_Icon::find(const char *filename,// I - Name of file */
     else
       filetype = PLAIN;
 #else
-    if (!stat(filename, &fileinfo))
+    if (!fl_stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
         filetype = DIRECTORY;
@@ -477,5 +480,5 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 
 
 //
-// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.1 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.2 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Implementation of fl_color(i), fl_color(r,g,b).
+// Implementation of Fl_Fltk::color(i), Fl_Fltk::color(r,g,b).
 
 #ifdef WIN32
 #  include "fl_color_win32.cxx"
 #elif defined(__APPLE__)
 #  include "fl_color_mac.cxx"
+#elif defined(NANO_X)
+#  include "fl_color_nx.cxx"
+#elif defined(DJGPP)
+#  include "fl_color_dj2.cxx"
 #else
 
 // Also code to look at the X visual and figure out the best way to turn
@@ -38,10 +42,14 @@
 // being used to index arrays.  So I always copy them to an integer
 // before use.
 
-#  include "Fl_XColor.H"
+
 #  include <FL/Fl.H>
 #  include <FL/x.H>
 #  include <FL/fl_draw.H>
+
+#  include "Fl_XColor.H"
+
+const char* fl_requires_true_color = "Requires true color visual";
 
 ////////////////////////////////////////////////////////////////
 // figure_out_visual() calculates masks & shifts for generating
@@ -58,7 +66,7 @@ static void figure_out_visual() {
     fl_redmask = 0;
     return;
 #  else
-    Fl::fatal("Requires true color visual");
+    Fl::fatal(fl_requires_true_color);
 #  endif
   }
 
@@ -91,7 +99,7 @@ static void figure_out_visual() {
 
 }
 
-static unsigned fl_cmap[256] = {
+static unsigned long fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
@@ -135,7 +143,7 @@ ulong fl_xpixel(uchar r,uchar g,uchar b) {
      ) >> fl_extrashift;
 }
 
-void fl_color(uchar r,uchar g,uchar b) {
+void Fl_Fltk::color(uchar r,uchar g,uchar b) {
   fl_color_ = fl_rgb_color(r, g, b);
   XSetForeground(fl_display, fl_gc, fl_xpixel(r,g,b));
 }
@@ -275,10 +283,10 @@ ulong fl_xpixel(Fl_Color i) {
 
 Fl_Color fl_color_;
 
-void fl_color(Fl_Color i) {
+void Fl_Fltk::color(Fl_Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
-    fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
+    Fl_Fltk::color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
   } else {
     fl_color_ = i;
     XSetForeground(fl_display, fl_gc, fl_xpixel(i));
@@ -377,5 +385,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_color.cxx,v 1.12.2.5.2.7.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

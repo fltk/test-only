@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.2 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Image.H>
+#include <FL/Fl_Fltk.H>
 #include "flstring.h"
 
 
@@ -138,7 +139,7 @@ void Fl_RGB_Image::uncache() {
 Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   // Optimize the simple copy where the width and height are the same,
   // or when we are copying an empty image...
-  if ((W == w() && H == h()) ||
+  if (/*(W == w() && H == h()) ||*/
       !w() || !h() || !d() || !array) {
     return new Fl_RGB_Image(array, w(), h(), d(), ld());
   }
@@ -308,6 +309,7 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if (cy < 0) {H += cy; Y -= cy; cy = 0;}
   if (cy+H > h()) H = h()-cy;
   if (H <= 0) return;
+
   if (!id) {
     id = fl_create_offscreen(w(), h());
     fl_begin_offscreen((Fl_Offscreen)id);
@@ -318,7 +320,27 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
       mask = fl_create_alphamask(w(), h(), d(), ld(), array);
     }
   }
+  if (fl->type == FL_PS_DEVICE) {
+    fl_draw_image(array, XP, YP, w(), h(), d(), ld());
+    return;
+  }
 #ifdef WIN32
+  if (fl->type == FL_GDI_DEVICE) {
+		if (mask) {
+		    HDC new_gc = CreateCompatibleDC(fl_gc);
+			SelectObject(new_gc, (void*)mask);
+			StretchBlt(fl->gc, (int)(XP*fl->s+fl->L), (int)(YP*fl->s+fl->T), (int)(w()*fl->s), (int)(h()*fl->s), new_gc, 0, 0, WP, HP, SRCAND);
+			SelectObject(new_gc, (void*)id);
+			StretchBlt(fl->gc, (int)(XP*fl->s+fl->L), (int)(YP*fl->s+fl->T), (int)(w()*fl->s), (int)(h()*fl->s), new_gc, 0, 0, WP, HP, SRCPAINT);
+			DeleteDC(new_gc);
+		} else {
+			HDC new_gc = CreateCompatibleDC(fl_gc);
+			SelectObject(new_gc, id);	
+			StretchBlt(fl->gc, (int)(XP*fl->s+fl->L), (int)(YP*fl->s+fl->T), (int)(WP*fl->s), (int)(HP*fl->s), new_gc, 0, 0, WP, HP, SRCCOPY);
+			DeleteDC(new_gc);
+		}
+		return;
+  } 
   if (mask) {
     HDC new_gc = CreateCompatibleDC(fl_gc);
     SelectObject(new_gc, (void*)mask);
@@ -365,24 +387,51 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
     fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
   }
 #else
+#if NANO_X
+  GR_GC_ID oldgc;
+#endif
   if (mask) {
     // I can't figure out how to combine a mask with existing region,
     // so cut the image down to a clipped rectangle:
     int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
     cx += nx-X; X = nx;
     cy += ny-Y; Y = ny;
+#if NANO_X
+  GR_GC_ID oldgc;
+  if (mask) 
+  {
+    oldgc = fl_gc;
+    fl_gc = GrNewGC();
+    GrSetGCRegion(fl_gc,(unsigned long)mask);
+    GrOffsetRegion((unsigned long)mask,X,Y);
+  }
+#elif DJGPP
+	//FIXME_DJGPP
+#else
     // make X use the bitmap as a mask:
     XSetClipMask(fl_display, fl_gc, mask);
     int ox = X-cx; if (ox < 0) ox += w();
     int oy = Y-cy; if (oy < 0) oy += h();
     XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
+#endif
   }
   fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+#if NANO_X
+ if (mask)
+  {
+    GrOffsetRegion((unsigned long)mask,-X,-Y);
+    GrDestroyGC(fl_gc);
+    fl_gc = oldgc;
+  }
+#elif DJGPP
+	//FIXME_DJGPP
+#else
   if (mask) {
     // put the old clip region back
     XSetClipOrigin(fl_display, fl_gc, 0, 0);
     fl_restore_clip();
   }
+#endif
 #endif
 }
 
@@ -397,5 +446,5 @@ void Fl_RGB_Image::label(Fl_Menu_Item* m) {
 
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.2 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.1 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,12 +30,17 @@
 #include <FL/x.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Tooltip.H>
+#if !MSDOS
 #include <FL/filename.H>
+#else
+#define strcasecmp stricmp
+#endif
 #include <FL/fl_draw.H>
+#include <FL/fl_utf8.H>
 #include <ctype.h>
 #include "flstring.h"
 
-#if defined(WIN32) || defined(__APPLE__)
+#if defined(WIN32) || defined(__APPLE__) || NANO_X || DJGPP
 int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #  define NoValue	0x0000
 #  define XValue  	0x0001
@@ -174,9 +179,14 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   return i;
 }
 
+
 // show a main window, use any parsed arguments
 void Fl_Window::show(int argc, char **argv) {
   if (argc && !arg_called) Fl::args(argc,argv);
+#if NANO_X || DJGPP
+	show();
+	return;
+#else
 
   Fl::get_system_colors();
 
@@ -249,6 +259,7 @@ void Fl_Window::show(int argc, char **argv) {
 		  (unsigned char *)buffer, p-buffer-1);
   delete[] buffer;
 #endif // !WIN32 && !__APPLE__
+#endif
 }
 
 // Calls useful for simple demo programs, with automatic help message:
@@ -277,7 +288,7 @@ void Fl::args(int argc, char **argv) {
   int i; if (Fl::args(argc,argv,i) < argc) Fl::error(helpmsg);
 }
 
-#if defined(WIN32) || defined(__APPLE__)
+#if defined(WIN32) || defined(__APPLE__) || NANO_X || DJGPP
 
 /* the following function was stolen from the X sources as indicated. */
 
@@ -416,5 +427,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.1 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

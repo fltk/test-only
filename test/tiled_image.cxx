@@ -1,5 +1,5 @@
 //
-// "$Id: tiled_image.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: tiled_image.cxx,v 1.1.2.5.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Fl_Tiled_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 #include <FL/x.H>
-#if !defined(WIN32) && !defined(__APPLE__)
+#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
 #include "list_visuals.cxx"
 #endif
 
@@ -58,7 +58,7 @@ int arg(int argc, char **argv, int &i) {
 }
 
 int main(int argc, char **argv) {
-#if !defined(WIN32) && !defined(__APPLE__)
+#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
   int i = 1;
 
   Fl::args(argc,argv,i,arg);
@@ -100,5 +100,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: tiled_image.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: tiled_image.cxx,v 1.1.2.5.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

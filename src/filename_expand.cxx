@@ -1,5 +1,5 @@
 //
-// "$Id: filename_expand.cxx,v 1.4.2.4.2.6.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: filename_expand.cxx,v 1.4.2.4.2.6.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,10 +31,16 @@
 #include <FL/filename.H>
 #include <stdlib.h>
 #include "flstring.h"
+#include <FL/fl_utf8.H>
 #if defined(WIN32) && !defined(__CYGWIN__)
+#include <windows.h>
+#elif __APPLE__
+
 #else
 # include <unistd.h>
+#if !MSDOS
 # include <pwd.h>
+#endif
 #endif
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
@@ -53,24 +59,47 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
   int ret = 0;
 
   for (char *a=temp; a<end; ) {	// for each slash component
-    char *e; for (e=a; e<end && !isdirsep(*e); e++); // find next slash
+    char *e; for (e=a; e<end && !isdirsep(*e); e++) {;} // find next slash
     const char *value = 0; // this will point at substitute value
     switch (*a) {
     case '~':	// a home directory name
       if (e <= a+1) {	// current user's directory
-	value = getenv("HOME");
-#ifndef WIN32
+#ifdef WIN32
+		xchar*e = (xchar*)_wgetenv(L"HOME");
+		value = (char*) malloc(wcslen((wchar_t*)e) * 5);
+		int l = fl_unicode2utf(e, l, (char*)value);
+		((char*)value)[l] = 0;
+#elif MSDOS
+		value = fl_getenv("HOME");
+#else
+		value = fl_getenv("HOME");
+#ifndef __APPLE__
       } else {	// another user's directory
 	struct passwd *pwd;
 	char t = *e; *(char *)e = 0; 
         pwd = getpwnam(a+1); 
         *(char *)e = t;
 	    if (pwd) value = pwd->pw_dir;
+#endif /* __APPLE__ */
 #endif
       }
       break;
     case '$':		/* an environment variable */
-      {char t = *e; *(char *)e = 0; value = getenv(a+1); *(char *)e = t;}
+      {char t = *e; *(char *)e = 0; 
+#ifdef WIN32
+		int len    = strlen(a+1);
+		xchar* wbuf = (xchar*)malloc((len+6) * sizeof(xchar));
+		len = fl_utf2unicode((unsigned char*)a+1, len, wbuf);
+		wbuf[len] = 0;
+		xchar *e = (xchar*)_wgetenv((wchar_t*)wbuf);
+		free(wbuf);
+		value = (char*) malloc(wcslen((wchar_t*)e) * 5);
+		len = fl_unicode2utf(e, wcslen((wchar_t*)e), (char*)value);
+		((char*)value)[len] = 0;
+#else
+	  value = fl_getenv(a+1);
+#endif
+	  *(char *)e = t;}
       break;
     }
     if (value) {
@@ -87,6 +116,9 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
       *end = '\0';
       memcpy(a, value, t);
       ret++;
+#ifdef WIN32
+	  free((char*)value);
+#endif
     } else {
       a = e+1;
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
@@ -99,10 +131,11 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
 
   delete[] temp;
 
+  
   return ret;
 }
 
 
 //
-// End of "$Id: filename_expand.cxx,v 1.4.2.4.2.6.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: filename_expand.cxx,v 1.4.2.4.2.6.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.4.2.3.2.1.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: arc.cxx,v 1.4.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
     s->step(1);
     s->value(args[n]);
     s->align(FL_ALIGN_LEFT);
-    s->callback(slider_cb, (void*)n);
+    s->callback(slider_cb, (void*)((long)n));
   }
 
   window.end();
@@ -92,6 +92,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.4.2.3.2.1.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: arc.cxx,v 1.4.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
 //
 

@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.5 2003/11/02 02:00:53 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.6 2003/11/07 03:47:22 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -414,6 +414,39 @@ if test "x$enable_threads" = xyes; then
     fi
 fi
 
+dnl# MICROWINDOWS ..........
+
+MICROWINFOLDER=""
+NANOX=0
+
+AC_ARG_WITH(microwin, [  --with-microwin=[microwindows base path]  Uses MicroWindows instead of X (specify path)],
+[
+    echo "Using MicroWindows instead of X..."
+    MICROWINFOLDER=$with_microwin
+    AC_DEFINE(USE_COLORMAP,0)
+    if test -d $MICROWINFOLDER/include/microwin; then
+        MWINCLUDES="-I$MICROWINFOLDER/include -I$MICROWINFOLDER/include/microwin"
+    else
+        MWINCLUDES="-I$MICROWINFOLDER/include"
+    fi
+
+    NANOX=1
+    CFLAGS="$CFLAGS -DNANO_X=1 $MWINCLUDES -DNANOXFOLDER='\"$MICROWINFOLDER/bin\"'"
+    CXXFLAGS="$CXXFLAGS -DNANO_X=1 $MWINCLUDES -DNANOXFOLDER='\"$MICROWINFOLDER/bin\"'"
+    MWLIBS="-L$MICROWINFOLDER/lib -lnano-X -lmwengine -lmwdrivers -lmwfonts -ljpeg"
+    LDFLAGS="$LDFLAGS -DNANO_X=1"
+ ])
+
+AC_SUBST(MICROWINFOLDER)
+AC_SUBST(NANOX)
+AC_SUBST(MWLIBS)
+
+AC_ARG_WITH(xdrivers, [  --with-xdrivers    Specifies where the X drivers for Microwindows are ],
+[
+   NANOX=0
+])
+
+
 dnl Define OS-specific stuff...
 HLINKS=
 POSTBUILD=:
@@ -424,10 +457,10 @@ AC_ARG_WITH(links, [  --with-links            make header links for common missp
 case $uname in
     CYGWIN* | MINGW*)
 	dnl Cygwin environment...
-	CFLAGS="-mwindows -DWIN32 $CFLAGS"
-	CXXFLAGS="-mwindows -DWIN32 $CXXFLAGS"
+	CFLAGS="-mwindows -DWIN32 -mms-bitfields $CFLAGS"
+	CXXFLAGS="-mwindows -DWIN32 -mms-bitfields $CXXFLAGS"
 	LDFLAGS="-mwindows $LDFLAGS"
-	LIBS="$LIBS -lole32 -luuid -lcomctl32 -lwsock32"
+	LIBS="$LIBS -lole32 -limm32 -luuid -lcomctl32 -lwinspool -lwsock32"
 	OPTIM="$OPTIM"
 
 	if test x$enable_gl != xno; then
@@ -490,7 +523,7 @@ case $uname in
 	    AC_DEFINE(HAVE_PTHREAD)
 	    THREADS="threads"
 	fi
-
+	if [ test $NANOX = 0 ]; then
 	dnl Check for X11...
 	AC_PATH_XTRA
 
@@ -510,7 +543,7 @@ case $uname in
 	if test "x$x_includes" != x; then
 	    ac_cpp="$ac_cpp -I$x_includes"
 	fi
-
+ 	fi
 	dnl Check for OpenGL unless disabled...
 	GLLIB=
 
@@ -588,6 +621,29 @@ case $uname in
 	fi
 	;;
 esac
+
+
+XUTFLIB=
+if [ test $NANOX = 0 ]; then
+    AC_CHECK_LIB(Xutf8, XGetUtf8FontAndGlyph, \
+        AC_DEFINE(HAVE_XUTF8) XUTFLIB=" -lXutf8", ,\
+        -lX11 $X_EXTRA_LIBS)
+fi
+
+#case $uname in
+#	MINGW*)
+#	    ;;
+#	*)
+#	    if test "x$XUTFLIB" = x ; then
+#   		AC_MSG_ERROR(You must install Xutf8 before compiling FLTK-UTF8)
+#	    fi
+#esac
+
+AC_SUBST(XUTFLIB)
+
+AC_CHECK_LIB(Xtst, XTestFakeButtonEvent, AC_DEFINE(HAVE_XTEST) \
+	LIBS="-lXtst $LIBS", , 
+	$X_EXTRA_LIBS)
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIB)
@@ -865,5 +921,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.5 2003/11/02 02:00:53 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.6 2003/11/07 03:47:22 easysw Exp $".
 dnl

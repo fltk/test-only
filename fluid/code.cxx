@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.9.2.9.2.5.2.1 2003/11/02 01:37:44 easysw Exp $"
+// "$Id: code.cxx,v 1.9.2.9.2.5.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <FL/Fl.H>
 #include "Fl_Type.h"
 #include "alignment_panel.h"
+#include <FL/fl_utf8.H>
 
 static FILE *code_file;
 static FILE *header_file;
@@ -261,13 +262,13 @@ int write_code(const char *s, const char *t) {
   indentation = 0;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fopen(s,"w");
+    FILE *f = fl_fopen(s,"w");
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fopen(t,"w");
+    FILE *f = fl_fopen(t,"w");
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -332,7 +333,7 @@ int write_code(const char *s, const char *t) {
 }
 
 int write_strings(const char *sfile) {
-  FILE *fp = fopen(sfile, "w");
+  FILE *fp = fl_fopen(sfile, "w");
   Fl_Type *p;
   Fl_Widget_Type *w;
   int i;
@@ -463,5 +464,5 @@ void Fl_Type::write_code1() {
 void Fl_Type::write_code2() {}
 
 //
-// End of "$Id: code.cxx,v 1.9.2.9.2.5.2.1 2003/11/02 01:37:44 easysw Exp $".
+// End of "$Id: code.cxx,v 1.9.2.9.2.5.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

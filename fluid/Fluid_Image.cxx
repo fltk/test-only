@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.1 2003/11/02 01:37:44 easysw Exp $"
+// "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <FL/filename.H>
+#include <FL/fl_utf8.H>
 
 extern void goto_source_dir(); // in fluid.C
 extern void leave_source_dir(); // in fluid.C
@@ -146,7 +147,7 @@ Fluid_Image* Fluid_Image::find(const char *iname) {
   // no, so now see if the file exists:
 
   goto_source_dir();
-  FILE *f = fopen(iname,"rb");
+  FILE *f = fl_fopen(iname,"rb");
   if (!f) {
     read_error("%s : %s",iname,strerror(errno));
     leave_source_dir();
@@ -221,5 +222,5 @@ Fluid_Image *ui_find_image(const char *oldname) {
 
 
 //
-// End of "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.1 2003/11/02 01:37:44 easysw Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.7.2.9.2.13.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

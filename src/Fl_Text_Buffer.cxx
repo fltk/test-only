@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.2 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.3 2003/11/07 03:47:24 easysw Exp $"
 //
 // Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
@@ -29,7 +29,14 @@
 #include <ctype.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Text_Buffer.H>
+#include <FL/fl_utf8.H>
 
+#ifdef __APPLE__
+#define CW_BUG 37
+//#include <MemoryManager.h>
+#else
+#define CW_BUG 0
+#endif
 
 #define PREFERRED_GAP_SIZE 80
 /* Initial size for the buffer gap (empty space
@@ -69,6 +76,34 @@ static const char *ControlCodeTable[ 32 ] = {
   "bs", "ht", "nl", "vt", "np", "cr", "so", "si",
   "dle", "dc1", "dc2", "dc3", "dc4", "nak", "syn", "etb",
   "can", "em", "sub", "esc", "fs", "gs", "rs", "us"};
+
+
+const char* fl_ins1_failed = "Fl_Text_Buffer::insert_column(): internal consistency check ins1 failed";
+const char* fl_ovly1_failed = "Fl_Text_Buffer::overlay_rectangle(): internal consistency check ovly1 failed";
+const char* fl_repl1_failed = "Fl_Text_Buffer::replace_rectangular(): internal consistency check repl1 failed";
+const char* fl_cannot_modify_cb = "Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove";
+const char* fl_cannot_find_pre = "Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove";
+
+static int utf_len(char c)
+{
+  if (!(c & 0x80)) return 1;
+  if (c & 0x40) {
+    if (c & 0x20) {
+      if (c & 0x10) {
+        if (c & 0x08) {
+          if (c & 0x04) {
+            return 6;
+          }
+          return 5;
+        }
+        return 4;
+      }
+      return 3;
+    }
+    return 2;
+  }
+  return 0;
+}
 
 static char* undobuffer;
 static int undobufferlength;
@@ -195,7 +230,7 @@ void Fl_Text_Buffer::text( const char *t ) {
 ** include the character pointed to by "end"
 */
 char * Fl_Text_Buffer::text_range( int start, int end ) {
-  char * s;
+  char * s = NULL;
   int copiedLength, part1Length;
 
   /* Make sure start and end are ok, and allocate memory for returned string.
@@ -213,17 +248,18 @@ char * Fl_Text_Buffer::text_range( int start, int end ) {
   if ( end > mLength )
     end = mLength;
   copiedLength = end - start;
+  
   s = (char *)malloc( copiedLength + 1 );
 
   /* Copy the text from the buffer to the returned string */
   if ( end <= mGapStart ) {
-    memcpy( s, &mBuf[ start ], copiedLength );
+    memcpy( s, mBuf+start, copiedLength );
   } else if ( start >= mGapStart ) {
-    memcpy( s, &mBuf[ start + ( mGapEnd - mGapStart ) ], copiedLength );
+    memcpy( s, mBuf + start + ( mGapEnd - mGapStart ), copiedLength );
   } else {
     part1Length = mGapStart - start;
-    memcpy( s, &mBuf[ start ], part1Length );
-    memcpy( &s[ part1Length ], &mBuf[ mGapEnd ], copiedLength - part1Length );
+    memcpy( s, mBuf + start, part1Length );
+    memcpy( s + part1Length, mBuf + mGapEnd, copiedLength - part1Length );
   }
   s[ copiedLength ] = '\0';
   return s;
@@ -275,7 +311,7 @@ void Fl_Text_Buffer::replace( int start, int end, const char *s ) {
   nInserted = insert_( start, s );
   mCursorPosHint = start + nInserted;
   call_modify_callbacks( start, end - start, nInserted, 0, deletedText );
-  free( (void *)deletedText );
+  free( (char *)deletedText );
 }
 
 void Fl_Text_Buffer::remove( int start, int end ) {
@@ -401,7 +437,7 @@ void Fl_Text_Buffer::insert_column( int column, int startPos, const char *s,
   insert_column_( column, lineStartPos, s, &insertDeleted, &nInserted,
                   &mCursorPosHint );
   if ( nDeleted != insertDeleted )
-    Fl::error("Fl_Text_Buffer::insert_column(): internal consistency check ins1 failed");
+    Fl::error(fl_ins1_failed);
   call_modify_callbacks( lineStartPos, nDeleted, nInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( charsInserted != NULL )
@@ -430,7 +466,7 @@ void Fl_Text_Buffer::overlay_rectangular( int startPos, int rectStart,
   overlay_rectangular_( lineStartPos, rectStart, rectEnd, s, &insertDeleted,
                         &nInserted, &mCursorPosHint );
   if ( nDeleted != insertDeleted )
-    Fl::error("Fl_Text_Buffer::overlay_rectangle(): internal consistency check ovly1 failed");
+    Fl::error(fl_ovly1_failed);
   call_modify_callbacks( lineStartPos, nDeleted, nInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( charsInserted != NULL )
@@ -492,7 +528,7 @@ void Fl_Text_Buffer::replace_rectangular( int start, int end, int rectStart,
 
   /* Figure out how many chars were inserted and call modify callbacks */
   if ( insertDeleted != deleteInserted + linesPadded )
-    Fl::error("Fl_Text_Buffer::replace_rectangular(): internal consistency check repl1 failed");
+    Fl::error(fl_repl1_failed);
   call_modify_callbacks( start, end - start, insertInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( nInsertedLines < nDeletedLines )
@@ -719,8 +755,8 @@ void Fl_Text_Buffer::add_modify_callback( Fl_Text_Modify_Cb bufModifiedCB,
   void **newCBArgs;
   int i;
 
-  newModifyProcs = new Fl_Text_Modify_Cb [ mNModifyProcs + 1 ];
-  newCBArgs = new void * [ mNModifyProcs + 1 ];
+  newModifyProcs = new Fl_Text_Modify_Cb [ mNModifyProcs + 1 + CW_BUG];
+  newCBArgs = new void * [ mNModifyProcs + 1 + CW_BUG];
   for ( i = 0; i < mNModifyProcs; i++ ) {
     newModifyProcs[ i + 1 ] = mNodifyProcs[ i ];
     newCBArgs[ i + 1 ] = mCbArgs[ i ];
@@ -750,7 +786,7 @@ void Fl_Text_Buffer::remove_modify_callback( Fl_Text_Modify_Cb bufModifiedCB,
     }
   }
   if ( toRemove == -1 ) {
-    Fl::error("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
+    Fl::error(fl_cannot_modify_cb);
     return;
   }
 
@@ -824,7 +860,7 @@ void Fl_Text_Buffer::remove_predelete_callback(
     	}
     }
     if (toRemove == -1) {
-    	Fl::error("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
+    	Fl::error(fl_cannot_find_pre);
     	return;
     }
     
@@ -908,8 +944,21 @@ int Fl_Text_Buffer::word_end( int pos ) {
 ** equal in length to FL_TEXT_MAX_EXP_CHAR_LEN
 */
 int Fl_Text_Buffer::expand_character( int pos, int indent, char *outStr ) {
-  return expand_character( character( pos ), indent, outStr,
+  int ret;
+  char c = character( pos );
+  ret = expand_character( c, indent, outStr,
                            mTabDist, mNullSubsChar );
+  if (ret > 1 && (c & 0x80)) {
+    int i;
+    i = utf_len(c);
+    while (i > 1) {
+      i--;
+      pos++;
+      outStr++;
+      *outStr = character( pos );
+    }
+  }
+  return ret;
 }
 
 /*
@@ -943,6 +992,11 @@ int Fl_Text_Buffer::expand_character( char c, int indent, char *outStr, int tabD
   } else if ( c == nullSubsChar ) {
     sprintf( outStr, "<nul>" );
     return 5;
+  } else if ((c & 0x80) && !(c & 0x40)) {
+    return 0;
+  } else if (c & 0x80) {
+    *outStr = c;
+    return utf_len(c);
   }
 
   /* Otherwise, just return the character */
@@ -967,6 +1021,11 @@ int Fl_Text_Buffer::character_width( char c, int indent, int tabDist, char nullS
     return 5;
   else if ( c == nullSubsChar )
     return 5;
+  else if ((c & 0x80) && !(c & 0x40))
+    return 0;
+  else if (c & 0x80) {
+    return utf_len(c);
+  }
   return 1;
 }
 
@@ -2133,7 +2192,7 @@ void Fl_Text_Buffer::reallocate_with_gap( int newGapStart, int newGapLen ) {
             &mBuf[ mGapEnd + newGapStart - mGapStart ],
             mLength - newGapStart );
   }
-  free( (void *) mBuf );
+  if (mBuf) free( (void *) mBuf );
   mBuf = newBuf;
   mGapStart = newGapStart;
   mGapEnd = newGapEnd;
@@ -2479,7 +2538,7 @@ static int min( int i1, int i2 ) {
 int
 Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
   FILE *fp;  int r;
-  if (!(fp = fopen(file, "r"))) return 1;
+  if (!(fp = fl_fopen(file, "r"))) return 1;
   char *buffer = new char[buflen];
   for (; (r = fread(buffer, 1, buflen - 1, fp)) > 0; pos += r) {
     buffer[r] = (char)0;
@@ -2495,7 +2554,7 @@ Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
 int
 Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
   FILE *fp;
-  if (!(fp = fopen(file, "w"))) return 1;
+  if (!(fp = fl_fopen(file, "w"))) return 1;
   for (int n; (n = min(end - start, buflen)); start += n) {
     const char *p = text_range(start, start + n);
     int r = fwrite(p, 1, n, fp);
@@ -2510,5 +2569,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.2 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.3 2003/11/07 03:47:24 easysw Exp $".
 //

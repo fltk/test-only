@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,10 @@
 #  include "fl_set_fonts_win32.cxx"
 #elif defined(__APPLE__)
 #  include "fl_set_fonts_mac.cxx"
+#elif defined(NANO_X)
+#  include "fl_set_fonts_nx.cxx"
+#elif defined(DJGPP)
+#  include "fl_set_fonts_dj2.cxx"
 #elif USE_XFT
 #  include "fl_set_fonts_xft.cxx"
 #else
@@ -40,5 +44,5 @@
 #endif // WIN32
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

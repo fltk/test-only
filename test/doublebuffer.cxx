@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: doublebuffer.cxx,v 1.4.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Hor_Slider.H>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <FL/fl_math.h>
 #include <stdio.h>
 
 // this purposely draws each line 10 times to be slow:
@@ -122,5 +122,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.4.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

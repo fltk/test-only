@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.8.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_ask.cxx,v 1.8.2.8.2.10.2.3 2003/11/07 03:47:24 easysw Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -243,6 +243,9 @@ void fl_beep(int type) {
     default :
       break;
   }
+#elif NANO_X
+#elif DJGPP
+  // FIXME_DJGPP
 #else
   switch (type) {
     case FL_BEEP_DEFAULT :
@@ -344,5 +347,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.8.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_ask.cxx,v 1.8.2.8.2.10.2.3 2003/11/07 03:47:24 easysw Exp $".
 //

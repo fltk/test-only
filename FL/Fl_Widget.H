@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ class FL_EXPORT Fl_Widget {
   Fl_Group* parent_;
   Fl_Callback* callback_;
   void* user_data_;
-  short x_,y_,w_,h_;
+  int x_,y_,w_,h_;
   Fl_Label label_;
   int flags_;
   unsigned color_;
@@ -217,5 +217,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

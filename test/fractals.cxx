@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.5.2.6.2.4.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: fractals.cxx,v 1.5.2.6.2.4.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -62,6 +62,7 @@ int main(int, char**) {
  */
 
 #include <FL/glut.H>
+#include <FL/fl_draw.H>
 #ifdef __APPLE__
 #  include <OpenGL/glu.h>
 #else
@@ -633,11 +634,17 @@ void display(void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
+/*
+  glColor3ub(255,255,255);
+  gl_font(0, 140);
+  glRasterPos3i(0, 0, 2);
+  gl_draw("hello");
+*/
   if (Rebuild) {
     Create(Fract);
     Rebuild = 0;
   }
+
 
   glCallList(Fract);
 
@@ -648,7 +655,6 @@ void display(void)
   // Use glFinish() instead of glFlush() to avoid getting many frames
   // ahead of the display (problem with some Linux OpenGL implementations...)
   //
-
   glFinish();
 }
 
@@ -715,28 +721,28 @@ void MenuInit(void)
   int submenu3, submenu2, submenu1;
 
   submenu1 = glutCreateMenu(setlevel);
-  glutAddMenuEntry("0", 0);  glutAddMenuEntry("1", 1);
-  glutAddMenuEntry("2", 2);  glutAddMenuEntry("3", 3);
-  glutAddMenuEntry("4", 4);  glutAddMenuEntry("5", 5);
-  glutAddMenuEntry("6", 6);  glutAddMenuEntry("7", 7);
-  glutAddMenuEntry("8", 8);
+  glutAddMenuEntry("0", (void*)0);  glutAddMenuEntry("1",(void*) 1);
+  glutAddMenuEntry("2", (void*)2);  glutAddMenuEntry("3", (void*)3);
+  glutAddMenuEntry("4", (void*)4);  glutAddMenuEntry("5", (void*)5);
+  glutAddMenuEntry("6",(void*)6);  glutAddMenuEntry("7", (void*)7);
+  glutAddMenuEntry("8", (void*)8);
 
   submenu2 = glutCreateMenu(choosefract);
-  glutAddMenuEntry("Moutain", MOUNTAIN);
-  glutAddMenuEntry("Tree", TREE);
-  glutAddMenuEntry("Island", ISLAND);
+  glutAddMenuEntry("Moutain", (void*)MOUNTAIN);
+  glutAddMenuEntry("Tree", (void*)TREE);
+  glutAddMenuEntry("Island", (void*)ISLAND);
 
   submenu3 = glutCreateMenu(agvSwitchMoveMode);
-  glutAddMenuEntry("Flying", FLYING);
-  glutAddMenuEntry("Polar", POLAR);
+  glutAddMenuEntry("Flying", (void*)FLYING);
+  glutAddMenuEntry("Polar", (void*)POLAR);
 
   glutCreateMenu(handlemenu);
   glutAddSubMenu("Level", submenu1);
   glutAddSubMenu("Fractal", submenu2);
   glutAddSubMenu("Movement", submenu3);
-  glutAddMenuEntry("New Fractal",      MENU_RAND);
-  glutAddMenuEntry("Toggle Axes", MENU_AXES);
-  glutAddMenuEntry("Quit",             MENU_QUIT);
+  glutAddMenuEntry("New Fractal",     (void*) MENU_RAND);
+  glutAddMenuEntry("Toggle Axes", (void*)MENU_AXES);
+  glutAddMenuEntry("Quit",             (void*)MENU_QUIT);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
@@ -816,5 +822,5 @@ int main(int argc, char** argv)
 #endif
 
 //
-// End of "$Id: fractals.cxx,v 1.5.2.6.2.4.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: fractals.cxx,v 1.5.2.6.2.4.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

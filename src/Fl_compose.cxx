@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.1.2.7.2.1.2.2 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_compose.cxx,v 1.1.2.7.2.1.2.3 2003/11/07 03:47:24 easysw Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -24,6 +24,7 @@
 //
 
 #include <FL/Fl.H>
+#include <FL/fl_utf8.H>
 
 //
 // MRS: Uncomment the following define to get the original (pre-1.1.2)
@@ -55,7 +56,7 @@ static char dead_keys[] = {
   '.',	// XK_dead_abovedot
   ':',	// XK_dead_diaeresis
   '*',	// XK_dead_abovering
-  0,	// XK_dead_doubleacute
+  '"',	// XK_dead_doubleacute
   'v',	// XK_dead_caron
   ','	// XK_dead_cedilla
 //   0,	// XK_dead_ogonek
@@ -88,7 +89,10 @@ int Fl::compose(int& del) {
   if (compose_state == 1) { // after the compose key
 
     if (ascii == ' ') { // space turns into nbsp
-      e_text[0] = char(0xA0);
+      //e_text[0] = char(0xA0);
+      int len = fl_ucs2utf(0xA0, e_text);
+      e_text[len] = '\0';
+      e_length = len;
       compose_state = 0;
       return 1;
     }
@@ -96,7 +100,12 @@ int Fl::compose(int& del) {
     // see if it is either character of any pair:
     for (const char *p = compose_pairs; *p; p += 2) 
       if (p[0] == ascii || p[1] == ascii) {
-	if (p[1] == ' ') e_text[0] = (p-compose_pairs)/2+0xA0;
+	if (p[1] == ' ') {
+		//e_text[0] = (p-compose_pairs)/2+0xA0;
+      		int len = fl_ucs2utf((p-compose_pairs)/2+0xA0, e_text);
+      		e_text[len] = '\0';
+      		e_length = len;
+	}
 	compose_state = ascii;
 	return 1;
       }
@@ -112,7 +121,10 @@ int Fl::compose(int& del) {
     // now search for the pair in either order:
     for (const char *p = compose_pairs; *p; p += 2) {
       if (p[0] == ascii && p[1] == c1 || p[1] == ascii && p[0] == c1) {
-	e_text[0] = (p-compose_pairs)/2+0xA0;
+	//e_text[0] = (p-compose_pairs)/2+0xA0;
+     	int len = fl_ucs2utf((p-compose_pairs)/2+0xA0, e_text);
+      	e_text[len] = '\0';
+      	e_length = len;
 	del = 1; // delete the old character and insert new one
 	compose_state = 0;
 	return 1;

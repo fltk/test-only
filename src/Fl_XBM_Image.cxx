@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_XBM_Image.cxx,v 1.1.2.7.2.2 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_XBM_Image.cxx,v 1.1.2.7.2.3 2003/11/07 03:47:24 easysw Exp $"
 //
 // Fl_XBM_Image routines.
 //
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
-
+#include <FL/fl_utf8.H>
 //
 // 'Fl_XBM_Image::Fl_XBM_Image()' - Load an XBM file.
 //
@@ -45,7 +45,7 @@ Fl_XBM_Image::Fl_XBM_Image(const char *name) : Fl_Bitmap((const char *)0,0,0) {
   FILE	*f;
   uchar	*ptr;
 
-  if ((f = fopen(name, "rb")) == NULL) return;
+  if ((f = fl_fopen(name, "rb")) == NULL) return;
 
   char buffer[1024];
   char junk[1024];
@@ -100,5 +100,5 @@ Fl_XBM_Image::Fl_XBM_Image(const char *name) : Fl_Bitmap((const char *)0,0,0) {
 
 
 //
-// End of "$Id: Fl_XBM_Image.cxx,v 1.1.2.7.2.2 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_XBM_Image.cxx,v 1.1.2.7.2.3 2003/11/07 03:47:24 easysw Exp $".
 //

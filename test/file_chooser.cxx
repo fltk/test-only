@@ -1,5 +1,5 @@
 //
-// "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.2 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.3 2003/11/07 03:47:25 easysw Exp $"
 //
 // File chooser test program.
 //
@@ -45,7 +45,7 @@
 #include <FL/Fl_PNM_Image.H>
 #include <FL/Fl_Light_Button.H>
 #include "../src/flstring.h"
-
+#include <FL/fl_utf8.H>
 
 //
 // Globals...
@@ -219,7 +219,7 @@ pdf_check(const char *name,	// I - Name of file
   if (memcmp(header, "%PDF", 4) != 0)
     return 0;
 
-  home = getenv("HOME");
+  home = fl_getenv("HOME");
   snprintf(preview, sizeof(preview), "%s/.preview.ppm", home ? home : "");
 
   snprintf(command, sizeof(command),
@@ -255,7 +255,7 @@ ps_check(const char *name,	// I - Name of file
   if (memcmp(header, "%!", 2) != 0)
     return 0;
 
-  home = getenv("HOME");
+  home = fl_getenv("HOME");
   snprintf(preview, sizeof(preview), "%s/.preview.ppm", home ? home : "");
 
   if (memcmp(header, "%!PS", 4) == 0) {
@@ -263,8 +263,8 @@ ps_check(const char *name,	// I - Name of file
     snprintf(outname, sizeof(outname), "%s/.preview.ps", home ? home : "");
 
     if (strcmp(name, outname) != 0) {
-      in   = fopen(name, "rb");
-      out  = fopen(outname, "wb");
+      in   = fl_fopen(name, "rb");
+      out  = fl_fopen(outname, "wb");
       page = 0;
 
       while (fgets(line, sizeof(line), in) != NULL) {
@@ -323,9 +323,6 @@ show_callback(void)
 
     for (i = 1; i <= count; i ++)
     {
-      if (!fc->value(i))
-        break;
-
       fl_filename_relative(relative, sizeof(relative), fc->value(i));
 
       files->add(relative,
@@ -336,7 +333,89 @@ show_callback(void)
   }
 }
 
+#if defined(WIN32) && defined(FL_DLL) && !defined (__GNUC__)
+
+#include <FL/fl_utf8.H>
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifdef __MWERKS__
+# include <crtl.h>
+#endif
+
+extern int main(int, char *[]);
+
+#ifdef BORLAND5
+# define __argc _argc
+# define __argv _argv
+#endif
+
+static int mbcs2utf(const char *s, int l, char *buf)
+{
+  xchar *mbwbuf;
+  if (!s) return 0;
+  mbwbuf = (xchar*)malloc((l * 6 +6) * sizeof(xchar));
+  l = mbstowcs(mbwbuf, s, l);
+  l = fl_unicode2utf(mbwbuf, l, buf);
+  free(mbwbuf);
+  return l;
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                             LPSTR lpCmdLine, int nCmdShow) {
+  int rc, i;
+  char **ar;
+
+#ifdef _DEBUG
+ /*
+  * If we are using compiling in debug mode, open a console window so
+  * we can see any printf's, etc...
+  *
+  * While we can detect if the program was run from the command-line -
+  * look at the CMDLINE environment variable, it will be "WIN" for
+  * programs started from the GUI - the shell seems to run all WIN32
+  * applications in the background anyways...
+  */
+
+  AllocConsole();
+  freopen("conin$", "r", stdin);
+  freopen("conout$", "w", stdout);
+  freopen("conout$", "w", stderr);
+#endif /* _DEBUG */
+
+ 
+  ar = (char**) malloc(sizeof(char*) * (__argc + 1));
+  i = 0;
+  while (i < __argc) {
+    int l;
+    if (__wargv && fl_is_nt4()) {
+      for (l = 0; __wargv[i] && __wargv[i][l]; l++) {};
+      ar[i] = (char*) malloc((l * 5) + 1);
+      ar[i][fl_unicode2utf(__wargv[i], l, ar[i])] = 0;
+    } else {
+      for (l = 0; __argv[i] && __argv[i][l]; l++) {};
+      ar[i] = (char*) malloc((l * 5) + 1);
+      ar[i][mbcs2utf(__argv[i], l, ar[i])] = 0;
+    }
+    i++;  
+  }
+  ar[__argc] = 0;
+
+  /* Run the standard main entry point function... */
+  rc = main(__argc, ar);
+
+#ifdef _DEBUG
+  fclose(stdin);
+  fclose(stdout);
+  fclose(stderr);
+#endif /* _DEBUG */
+
+  return rc;
+}
+
+#endif
 
 //
-// End of "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.2 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.3 2003/11/07 03:47:25 easysw Exp $".
 //

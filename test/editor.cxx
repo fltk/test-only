@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.2.2.3.2.16.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: editor.cxx,v 1.2.2.3.2.16.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -50,6 +50,7 @@
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/Fl_Text_Editor.H>
+
 
 
 int                changed = 0;
@@ -327,8 +328,8 @@ style_update(int        pos,		// I - Position of update
              void       *cbArg) {	// I - Callback data
   int	start,				// Start of text
 	end;				// End of text
-  char	last,				// Last style on line
-	*style,				// Style data
+  char	last;				// Last style on line
+  char *style,				// Style data
 	*text;				// Text data
 
 
@@ -341,12 +342,12 @@ style_update(int        pos,		// I - Position of update
   // Track changes in the text buffer...
   if (nInserted > 0) {
     // Insert characters into the style buffer...
-    style = new char[nInserted + 1];
+    style = (char*)malloc(nInserted + 1);
     memset(style, 'A', nInserted);
     style[nInserted] = '\0';
 
     stylebuf->replace(pos, pos + nDeleted, style);
-    delete[] style;
+    free(style);
   } else {
     // Just delete characters in the style buffer...
     stylebuf->remove(pos, pos + nDeleted);
@@ -420,7 +421,15 @@ class EditorWindow : public Fl_Double_Window {
 
     Fl_Text_Editor     *editor;
     char               search[256];
+
+    void resize(int X, int Y, int W, int H);
 };
+
+void EditorWindow::resize(int X, int Y, int W, int H)
+{
+	fl_set_status(25,  H - 25, W - 70, 25);
+	Fl_Double_Window::resize(X, Y, W, H);	
+}
 
 EditorWindow::EditorWindow(int w, int h, const char* t) : Fl_Double_Window(w, h, t) {
   replace_dlg = new Fl_Window(300, 105, "Replace");
@@ -442,6 +451,7 @@ EditorWindow::EditorWindow(int w, int h, const char* t) : Fl_Double_Window(w, h,
   replace_dlg->set_non_modal();
   editor = 0;
   *search = (char)0;
+  fl_set_status(25,  h - 25, w - 70, 25);
 }
 
 EditorWindow::~EditorWindow() {
@@ -758,10 +768,14 @@ Fl_Window* new_view() {
 }
 
 int main(int argc, char **argv) {
+
   textbuf = new Fl_Text_Buffer;
   style_init();
 
   Fl_Window* window = new_view();
+
+  Fl::set_font(FL_COURIER, 
+   "-*-courier-medium-r-normal--*-iso8859-1, *-jisx0208.1983-*");
 
   window->show(1, argv);
 
@@ -771,5 +785,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.2.2.3.2.16.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: editor.cxx,v 1.2.2.3.2.16.2.2 2003/11/07 03:47:25 easysw Exp $".
 //

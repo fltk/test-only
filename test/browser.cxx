@@ -1,5 +1,5 @@
 //
-// "$Id: browser.cxx,v 1.5.2.6.2.4.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: browser.cxx,v 1.5.2.6.2.4.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // Browser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -129,6 +129,18 @@ int main(int argc, char **argv) {
       printf("Can't load %s, %s\n", fname, strerror(errno));
       exit(1);
     }
+#elif __APPLE__
+    int done = 1;
+    if ( 1 ) 
+    {
+      fname = "../../../browser.cxx";
+      done = browser->load(fname);
+    }
+    if ( !done )
+    {
+      printf("Can't load %s, %s\n", fname, strerror(errno));
+      exit(1);
+    }
 #else
     printf("Can't load %s, %s\n", fname, strerror(errno));
     exit(1);
@@ -157,6 +169,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: browser.cxx,v 1.5.2.6.2.4.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: browser.cxx,v 1.5.2.6.2.4.2.2 2003/11/07 03:47:25 easysw Exp $".
 //
 

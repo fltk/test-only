@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.7.2.6.2.7.2.1 2003/11/02 01:37:44 easysw Exp $"
+// "$Id: file.cxx,v 1.7.2.6.2.7.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 #include "../src/flstring.h"
 #include <stdarg.h>
 #include "alignment_panel.h"
+#include "../FL/fl_utf8.H"
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -41,7 +42,7 @@ static FILE *fout;
 
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
-  FILE *f = fopen(s,"w");
+  FILE *f = fl_fopen(s,"w");
   if (!f) return 0;
   fout = f;
   return 1;
@@ -133,7 +134,7 @@ static const char *fname;
 int open_read(const char *s) {
   lineno = 1;
   if (!s) {fin = stdin; fname = "stdin"; return 1;}
-  FILE *f = fopen(s,"r");
+  FILE *f = fl_fopen(s,"r");
   if (!f) return 0;
   fin = f;
   fname = s;
@@ -637,5 +638,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.7.2.6.2.7.2.1 2003/11/02 01:37:44 easysw Exp $".
+// End of "$Id: file.cxx,v 1.7.2.6.2.7.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.8.2.5.2.1.2.1 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.8.2.5.2.1.2.2 2003/11/07 03:47:23 easysw Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Menu_Window.H>
+#include <FL/Fl_Fltk.H>
 
 // WIN32 note: HAVE_OVERLAY is false
 #if HAVE_OVERLAY
@@ -62,7 +63,7 @@ void Fl_Menu_Window::show() {
 
 void Fl_Menu_Window::flush() {
 #if HAVE_OVERLAY
-  if (!fl_overlay_visual || !overlay()) {Fl_Single_Window::flush(); return;}
+  if (!fl_overlay_visual || !overlay() || fl->type == FL_GDI_DEVICE) {Fl_Single_Window::flush(); return;}
   Fl_X *myi = Fl_X::i(this);
   fl_window = myi->xid;
   if (!gc) gc = XCreateGC(fl_display, myi->xid, 0, 0);
@@ -97,5 +98,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.8.2.5.2.1.2.1 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.8.2.5.2.1.2.2 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.2 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Fl_File_Browser routines.
 //
@@ -39,6 +39,7 @@
 
 #include <FL/Fl_File_Browser.H>
 #include <FL/fl_draw.H>
+#include <FL/fl_utf8.H>
 #include <FL/filename.H>
 #include <stdio.h>
 #include <stdlib.h>
@@ -423,7 +424,11 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
   clear();
   directory_ = directory;
 
+#if __APPLE__
+  if (0) 
+#else
   if (directory_[0] == '\0')
+#endif
   {
     //
     // No directory specified; for UNIX list all mount points.  For DOS
@@ -525,13 +530,13 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
     // Open the file that contains a list of mounted filesystems...
     //
 
-    mtab = fopen("/etc/mnttab", "r");	// Fairly standard
+    mtab = fl_fopen("/etc/mnttab", "r");	// Fairly standard
     if (mtab == NULL)
-      mtab = fopen("/etc/mtab", "r");	// More standard
+      mtab = fl_fopen("/etc/mtab", "r");	// More standard
     if (mtab == NULL)
-      mtab = fopen("/etc/fstab", "r");	// Otherwise fallback to full list
+      mtab = fl_fopen("/etc/fstab", "r");	// Otherwise fallback to full list
     if (mtab == NULL)
-      mtab = fopen("/etc/vfstab", "r");	// Alternate full list file
+      mtab = fl_fopen("/etc/vfstab", "r");	// Alternate full list file
 
     if (mtab != NULL)
     {
@@ -573,6 +578,12 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
       strlcat(filename, "/", sizeof(filename));
 
     num_files = fl_filename_list(filename, &files, sort);
+#elif __APPLE__
+    if (directory_[0] == '\0') {
+      num_files = fl_filename_list("/", &files, sort);
+    } else {
+      num_files = fl_filename_list(directory_, &files, sort);
+    }
 #else
     num_files = fl_filename_list(directory_, &files, sort);
 #endif /* WIN32 || __EMX__ */
@@ -588,7 +599,7 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
 
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(WIN32) && !defined(__CYGWIN__) || __APPLE__
 	if (files[i]->d_name[strlen(files[i]->d_name) - 1] == '/')
 	{
           num_dirs ++;
@@ -639,5 +650,5 @@ Fl_File_Browser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.2 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
+#include <stdio.h>
+#include "config.h"
 
+#if HAVE_XTEST
+#include <X11/extensions/XTest.h>
+#endif
 
 extern Atom fl_XdndAware;
 extern Atom fl_XdndSelection;
@@ -38,9 +43,13 @@ extern Atom fl_XdndDrop;
 extern Atom fl_XdndStatus;
 extern Atom fl_XdndActionCopy;
 extern Atom fl_XdndFinished;
-//extern Atom fl_XdndProxy;
+extern Atom fl_XdndProxy;
+extern Atom fl_XaTextUriList;
 
 extern char fl_i_own_selection[2];
+extern char *fl_selection_buffer[2];
+extern int fl_selection_length[2];
+extern int fl_selection_buffer_length[2];
 
 extern void fl_sendClientMessage(Window window, Atom message,
                                  unsigned long d0,
@@ -64,6 +73,25 @@ static int dnd_aware(Window& window) {
 }
 
 static int grabfunc(int event) {
+  if ((!event || event == FL_MOVE || event == FL_RELEASE) &&  Fl::pushed() /*&& 
+	Fl::pushed() != Fl::belowmouse()*/) 
+  {
+    if (event == FL_MOVE || (event != FL_RELEASE )) 
+    {
+	static int x=0, y=0;
+      	Window root; unsigned int junk3; int junk;
+        Window child = RootWindow(fl_display, fl_screen);
+      	XQueryPointer(fl_display, child, &root, &child,
+		    &Fl::e_x_root, &Fl::e_y_root, &junk, &junk, &junk3);
+	if (Fl::e_x_root != x || Fl::e_y_root != y) {
+		x = Fl::e_x_root;
+		y = Fl::e_y_root;
+		Fl::pushed()->handle(FL_DRAG);
+	}
+    } else {
+	Fl::pushed()->handle(event);
+    }
+  }
   if (event == FL_RELEASE) Fl::pushed(0);
   return 0;
 }
@@ -80,7 +108,40 @@ static int local_handle(int event, Fl_Window* window) {
   return ret;
 }
 
+static Window get_proxy(Window win)
+{
+  Atom actualType;
+  int actualFormat;
+  unsigned long itemCount, remainingBytes;
+  unsigned char* rawData = NULL;
+  Window proxy = win;
+
+
+  XGrabServer(fl_display);  
+  XGetWindowProperty(fl_display, win, fl_XdndProxy, 
+                     0, 1024, False, XA_WINDOW,
+                     &actualType, &actualFormat,
+                     &itemCount, &remainingBytes, &rawData);
+  if (!rawData) {
+    XDeleteProperty(fl_display, win, fl_XdndProxy);
+  } else if (!(actualType == XA_WINDOW && actualFormat == 32 &&
+             itemCount > 0 && (proxy = *((Window*)rawData))))
+  {
+    proxy = win;
+  }
+  XFree(rawData);
+  XUngrabServer(fl_display);
+
+  return proxy;
+}
+
+Window fl_dnd_target_window = 0;
+
 int Fl::dnd() {
+  int lx = 0, ly = 0;
+  static char is_here = 0;
+  if (is_here) return 0;
+  Fl_Widget *foc = NULL;
   Fl_Window *source_fl_win = Fl::first_window();
   Fl::first_window()->cursor((Fl_Cursor)21);
   Window source_window = fl_xid(Fl::first_window());
@@ -88,6 +149,11 @@ int Fl::dnd() {
   Window target_window = 0;
   Fl_Window* local_window = 0;
   int dndversion = 4; int dest_x, dest_y;
+  fl_dnd_target_window = 0;
+  Window m = fl_message_window;
+
+  if (!fl_message_window) fl_message_window = source_window;
+
   XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
 
   while (Fl::pushed()) {
@@ -100,51 +166,87 @@ int Fl::dnd() {
       XQueryPointer(fl_display, child, &root, &child,
 		    &e_x_root, &e_y_root, &dest_x, &dest_y, &junk3);
       if (!child) {
+	root = get_proxy(root);
 	if (!new_window && (new_version = dnd_aware(root))) new_window = root;
 	break;
       }
+      child = get_proxy(child);
       new_window = child;
       if ((new_local_window = fl_find(child))) break;
       if ((new_version = dnd_aware(new_window))) break;
     }
 
-    if (new_window != target_window) {
+    if (new_window != fl_dnd_target_window) {
       if (local_window) {
 	local_handle(FL_DND_LEAVE, local_window);
       } else if (dndversion) {
-	fl_sendClientMessage(target_window, fl_XdndLeave, source_window);
+        Fl::first_window()->cursor((Fl_Cursor)21);
+	fl_sendClientMessage(fl_dnd_target_window, fl_XdndLeave, source_window);
       }
       dndversion = new_version;
-      target_window = new_window;
+      fl_dnd_target_window = new_window;
       local_window = new_local_window;
       if (local_window) {
 	local_handle(FL_DND_ENTER, local_window);
       } else if (dndversion) {
-	fl_sendClientMessage(target_window, fl_XdndEnter, source_window,
-			     dndversion<<24, XA_STRING, 0, 0);
+	fl_sendClientMessage(fl_dnd_target_window, fl_XdndEnter, source_window,
+			  dndversion<<24, fl_XaTextUriList/*XA_STRING*/, 0, 0);
       }
     }
     if (local_window) {
       local_handle(FL_DND_DRAG, local_window);
-    } else if (dndversion) {
-      fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
+      foc = focus_;
+    } else if (dndversion && (e_x_root != lx || e_y_root != ly)) {
+      fl_sendClientMessage(fl_dnd_target_window, fl_XdndPosition, source_window,
 			   0, (e_x_root<<16)|e_y_root, fl_event_time,
 			   fl_XdndActionCopy);
     }
+    lx = e_x_root;
+    ly = e_y_root;
     Fl::wait();
+    Fl::check();
+    Fl::flush();
   }
 
   if (local_window) {
     fl_i_own_selection[0] = 1;
-    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(), 0);
+    fl_local_grab = 0;
+    if (foc && foc->handle(FL_DND_RELEASE)) {
+    	fl_local_grab = grabfunc;
+	e_text = fl_selection_buffer[0];
+        e_length = fl_selection_length[0];
+	foc->handle(FL_DROP);
+    }
+    fl_local_grab = grabfunc;
   } else if (dndversion) {
-    fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
+    fl_sendClientMessage(fl_dnd_target_window, fl_XdndDrop, source_window,
 			 0, fl_event_time);
-  } else if (target_window) {
+  } else if (fl_dnd_target_window) {
+    char *ptr = fl_selection_buffer[0];
+    char *d = ptr;
+    int l = fl_selection_length[0];
+    int i = 0;
+    int inf = 1;
+    while (i < l) {
+	if (inf && *ptr == ':') {
+		inf = 0;
+	} else if (inf) {
+	} else if (*ptr == '\r') {
+		*d = ' ';
+		inf = 1;
+		d++;
+	} else {
+		*d = *ptr;
+		d++;
+	}
+	i++; ptr++;
+    } 
+    *d = 0;
+    fl_selection_length[0] = d - fl_selection_buffer[0];	
     // fake a drop by clicking the middle mouse button:
     XButtonEvent msg;
     msg.type = ButtonPress;
-    msg.window = target_window;
+    msg.window = fl_dnd_target_window;
     msg.root = RootWindow(fl_display, fl_screen);
     msg.subwindow = 0;
     msg.time = fl_event_time+1;
@@ -168,5 +270,5 @@ int Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

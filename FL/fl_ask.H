@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.H,v 1.7.2.4.2.5.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: fl_ask.H,v 1.7.2.4.2.5.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,9 +59,74 @@ extern FL_EXPORT const char* fl_yes;
 extern FL_EXPORT const char* fl_ok;
 extern FL_EXPORT const char* fl_cancel;
 extern FL_EXPORT const char* fl_close;
+extern FL_EXPORT const char* fl_choose_file;
+extern FL_EXPORT const char* fl_show;
+extern FL_EXPORT const char* fl_favorites;
+extern FL_EXPORT const char* fl_create_a_new_directory;
+extern FL_EXPORT const char* fl_preview;
+extern FL_EXPORT const char* fl_file_name;
+extern FL_EXPORT const char* fl_manage_favorites;
+extern FL_EXPORT const char* fl_unable_to_load_icon;
+extern FL_EXPORT const char* fl_unable_to_open_fti;
+extern FL_EXPORT const char* fl_expected_letter_fti;
+extern FL_EXPORT const char* fl_expected_a_fti;
+extern FL_EXPORT const char* fl_expected_b_fti;
+extern FL_EXPORT const char* fl_expected_c_fti;
+extern FL_EXPORT const char* fl_unknown_command_fti;
+extern FL_EXPORT const char* fl_gif_unable_to_open;
+extern FL_EXPORT const char* fl_gif_is_not_gif;
+extern FL_EXPORT const char* fl_gif_is_version;
+extern FL_EXPORT const char* fl_gif_no_colormap;
+extern FL_EXPORT const char* fl_gif_unexpected_eof;
+extern FL_EXPORT const char* fl_gif_unknown_extension;
+extern FL_EXPORT const char* fl_gif_unknown_code;
+extern FL_EXPORT const char* fl_gif_lzw_barF;
+extern FL_EXPORT const char* fl_show_previous_help_page;
+extern FL_EXPORT const char* fl_make_the_help_text_smaller;
+extern FL_EXPORT const char* fl_make_the_help_text_larger;
+extern FL_EXPORT const char* fl_show_next_help_page;
+extern FL_EXPORT const char* fl_help_dialog;
+extern FL_EXPORT const char* fl_untitled;
+extern FL_EXPORT const char* fl_no_uri;
+extern FL_EXPORT const char* fl_unable_to_follow;
+extern FL_EXPORT const char* fl_pnm_early_eof;
+extern FL_EXPORT const char* fl_ins1_failed;
+extern FL_EXPORT const char* fl_ovly1_failed;
+extern FL_EXPORT const char* fl_repl1_failed;
+extern FL_EXPORT const char* fl_cannot_modify_cb;
+extern FL_EXPORT const char* fl_cannot_find_pre;
+extern FL_EXPORT const char* fl_ptvl_failed;
+extern FL_EXPORT const char* fl_bad_measuremenT;
+extern FL_EXPORT const char* fl_error;
+extern FL_EXPORT const char* fl_unknown_color;
+extern FL_EXPORT const char* fl_xio_error;
+extern FL_EXPORT const char* fl_cannot_open_display;
+extern FL_EXPORT const char* fl_requires_true_color;
+extern FL_EXPORT const char* fl_cannot_do_scanline;
+extern FL_EXPORT const char* fl_cannot_bits_per_pixel;
+extern FL_EXPORT const char* fl_cannot_24bit;
+extern FL_EXPORT const char* fl_cannot_do_bits_per_pixel;
+extern FL_EXPORT const char* fl_cannot_do_delta;
+extern FL_EXPORT const char* fl_cannot_create_pen;
+extern FL_EXPORT const char* fl_gif_lzw_barf;
+extern FL_EXPORT const char* fl_bad_measurement;
 
+
+/*
+const char	*Fl_File_Chooser::add_favorites_label = "Add to Favorites";
+const char	*Fl_File_Chooser::all_files_label = "All Files (*)";
+const char	*Fl_File_Chooser::custom_filter_label = "Custom Filter";
+const char	*Fl_File_Chooser::existing_file_label = "Please choose an existing file!";
+const char	*Fl_File_Chooser::favorites_label = "Favorites";
+const char	*Fl_File_Chooser::filename_label = "Filename:";
+const char	*Fl_File_Chooser::filesystems_label = "My Computer";
+const char	*Fl_File_Chooser::manage_favorites_label = "Manage Favorites";
+const char	*Fl_File_Chooser::new_directory_label = "New Directory?";
+const char	*Fl_File_Chooser::preview_label = "Preview";
+const char	*Fl_File_Chooser::show_label = "Show:";
+*/
 #endif
 
 //
-// End of "$Id: fl_ask.H,v 1.7.2.4.2.5.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: fl_ask.H,v 1.7.2.4.2.5.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 */
 
 #include <FL/filename.H>
+#include <FL/fl_utf8.H>
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>
@@ -63,7 +64,7 @@ int fl_filename_absolute(char *to, int tolen, const char *from) {
   char *temp = new char[tolen];
   const char *start = from;
 
-  a = getcwd(temp, tolen);
+  a = fl_getcwd(temp, tolen);
   if (!a) {
     strlcpy(to, from, tolen);
     delete[] temp;
@@ -121,16 +122,15 @@ fl_filename_relative(char       *to,	// O - Relative filename
        !isdirsep(from[2]))) {
 #else
   if (from[0] == '\0' || !isdirsep(*from)) {
+    strlcpy(to, from, tolen);
 #endif // WIN32 || __EMX__
-    strlcpy(to, from, tolen);
     return 0;
   }
 
-  if (!getcwd(cwd, sizeof(cwd))) {
+  if (!fl_getcwd(cwd, sizeof(cwd))) {
     strlcpy(to, from, tolen);
     return 0;
   }
-
 #if defined(WIN32) || defined(__EMX__)
   if (*from != *cwd) {
     // Not the same drive...
@@ -176,5 +176,5 @@ fl_filename_relative(char       *to,	// O - Relative filename
 
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.2 2003/11/02 01:37:44 easysw Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Bitmap.H>
+#include <FL/Fl_Fltk.H>
 #include "flstring.h"
 
 #ifdef __APPLE__ // MacOS bitmask functions
@@ -161,7 +162,6 @@ Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
 
   id = CreateBitmap(w, h, np, bpp, newarray);
   delete[] newarray;
-
   return id;
 }
 
@@ -197,6 +197,54 @@ Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data, int for_mask) {
 void fl_delete_bitmask(Fl_Bitmask bm) {
   DeleteObject((HGDIOBJ)bm);
 }
+#elif NANO_X || DJGPP
+Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *array) {
+    int k = 0;
+    int w1 = (w+7)/8;
+    int w2 = ((w+15)/16)*2;
+
+    uchar * new_array = new uchar [ w2 * h ];
+
+    static uchar reverse_table [ 16 ] = // bit reversal lookup table
+    {
+      0x00, 0x88, 0x44, 0xCC, 0x22, 0xAA, 0x66, 0xEE,
+      0x11, 0x99, 0x55, 0xDD, 0x33, 0xBB, 0x77, 0xFF
+    };
+
+    if (w < 8)
+    {
+      for ( int y = 0; y < h; ++y )
+      {
+        char p = array[y];
+        new_array[k] = 0;
+        new_array[k+1] =
+          (reverse_table[ p    &0x0F] & 0xF0) |
+          (reverse_table[(p>>4)&0x0F] & 0x0F);
+        k += 2;
+      }
+    }
+    else
+    {
+      uchar * dest = new_array;
+      for ( int y = 0; y < h; ++y )
+      {
+        for ( int n = 0; n < w1; ++n, ++k )
+	{
+          uchar p = array[k + ((n % 2) ? -1 : 1)];
+          *dest++ = 
+            (reverse_table[ p    &0x0F] & 0xF0) |
+	    (reverse_table[(p>>4)&0x0F] & 0x0F);
+	}
+        dest += w2-w1;
+      }
+    }
+    return new_array;
+}
+
+void fl_delete_bitmask(Fl_Bitmask bm) {
+  delete(bm);
+}
+
 #else // X11 bitmask functions
 Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
   return XCreateBitmapFromData(fl_display, fl_window, (const char *)data,
@@ -350,12 +398,22 @@ void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 #ifdef WIN32
   if (!id) id = fl_create_bitmap(w(), h(), array);
 
+  if (fl->type == FL_GDI_DEVICE) {
+    HDC tempdc = CreateCompatibleDC(fl_gc);
+    SelectObject(tempdc, (HGDIOBJ)id);
+	SelectObject(tempdc, fl_brush());
+	StretchBlt(fl->gc, (int)(XP*fl->s + fl->L), (int)(YP*fl->s + fl->T), (int)(WP*fl->s), (int)(HP*fl->s), tempdc,0, 0, WP, HP, 0xE20746L);
+    DeleteDC(tempdc);
+	return;
+  } else {
   HDC tempdc = CreateCompatibleDC(fl_gc);
   SelectObject(tempdc, (HGDIOBJ)id);
   SelectObject(fl_gc, fl_brush());
   // secret bitblt code found in old MSWindows reference manual:
   BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
   DeleteDC(tempdc);
+  }
+  
 #elif defined(__APPLE__)
   if (!id) id = fl_create_bitmask(w(), h(), array);
   GrafPtr dstPort;
@@ -370,6 +428,15 @@ void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 	   &dst, 				// dst bounds
 	   srcOr, 				// mode
 	   0L);					// mask region
+#elif defined(NANO_X)
+  if (!id) id = fl_create_bitmask(w(), h(), array);
+  {
+    // if you don't set this the first time the bitmap is drawn in test/bitmap.cxx the background color is wrong (WHITE): all subsequent draws are correct -- why?
+    GrSetGCUseBackground(fl_gc,false);
+  }
+  GrBitmap(fl_window,fl_gc,X,Y,W,H,(GR_BITMAP*)id);
+#elif defined(DJGPP)
+	//FIXME_DJGPP
 #else
   if (!id) id = fl_create_bitmask(w(), h(), array);
 
@@ -391,8 +458,8 @@ Fl_Bitmap::~Fl_Bitmap() {
 void Fl_Bitmap::uncache() {
   if (id) {
     fl_delete_bitmask((Fl_Offscreen)id);
-    id = 0;
   }
+  id = 0;
 }
 
 void Fl_Bitmap::label(Fl_Widget* widget) {
@@ -474,5 +541,5 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.2 2003/11/02 01:37:44 easysw Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

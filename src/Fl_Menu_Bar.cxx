@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.7.2.6.2.1.2.2 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.7.2.6.2.1.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/fl_draw.H>
+#include <stdlib.h>
 
 void Fl_Menu_Bar::draw() {
   draw_box();
@@ -72,5 +73,5 @@ int Fl_Menu_Bar::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.7.2.6.2.1.2.2 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.7.2.6.2.1.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

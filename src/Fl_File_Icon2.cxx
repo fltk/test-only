@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Icon2.cxx,v 1.1.2.17.2.2 2003/11/02 01:37:45 easysw Exp $"
+// "$Id: Fl_File_Icon2.cxx,v 1.1.2.17.2.3 2003/11/07 03:47:23 easysw Exp $"
 //
 // Fl_File_Icon system icon routines.
 //
@@ -41,8 +41,12 @@
 #include <ctype.h>
 #include <errno.h>
 #include <FL/math.h>
+#if !__APPLE__
 #include <sys/types.h>
+#endif
 #include <sys/stat.h>
+#include <FL/fl_utf8.H>
+
 #if defined(WIN32) && ! defined(__CYGWIN__)
 #  include <io.h>
 #  define F_OK	0
@@ -56,6 +60,9 @@
 #include <FL/fl_draw.H>
 #include <FL/filename.H>
 
+#if MSDOS
+#define strncasecmp strnicmp
+#endif
 
 //
 // Define missing POSIX/XPG4 macros as needed...
@@ -85,7 +92,7 @@ static char	*get_kde_val(char *str, const char *key);
 //
 
 static const char *kdedir = NULL;
-
+const char* fl_unable_to_load_icon = "Fl_File_Icon::load(): Unable to load icon file \"%s\".";
 
 //
 // 'Fl_File_Icon::load()' - Load an icon file...
@@ -107,11 +114,17 @@ Fl_File_Icon::load(const char *f)	// I - File to read from
 
   if (i)
   {
-    Fl::warning("Fl_File_Icon::load(): Unable to load icon file \"%s\".", f);
+    Fl::warning(fl_unable_to_load_icon, f);
     return;
   }
 }
 
+const char* fl_unable_to_open_fti = "Fl_File_Icon::load_fti(): Unable to open \"%s\" - %s";
+const char* fl_expected_letter_fti =  "Fl_File_Icon::load_fti(): Expected a letter at file position %ld (saw '%c')";
+const char* fl_expected_a_fti = "Fl_File_Icon::load_fti(): Expected a ( at file position %ld (saw '%c')";
+const char* fl_expected_b_fti = "Fl_File_Icon::load_fti(): Expected a ) at file position %ld (saw '%c')";
+const char* fl_expected_c_fti = "Fl_File_Icon::load_fti(): Expected a ; at file position %ld (saw '%c')";
+const char* fl_unknown_command_fti = "Fl_File_Icon::load_fti(): Unknown command \"%s\" at file position %ld.";
 
 //
 // 'Fl_File_Icon::load_fti()' - Load an SGI-format FTI file...
@@ -129,10 +142,9 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 
 
   // Try to open the file...
-  if ((fp = fopen(fti, "rb")) == NULL)
+  if ((fp = fl_fopen(fti, "rb")) == NULL)
   {
-    Fl::error("Fl_File_Icon::load_fti(): Unable to open \"%s\" - %s",
-              fti, strerror(errno));
+    Fl::error(fl_unable_to_open_fti, fti, strerror(errno));
     return -1;
   }
 
@@ -161,8 +173,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a letter at file position %ld (saw '%c')",
-                ftell(fp) - 1, ch);
+      Fl::error(fl_expected_letter_fti, ftell(fp) - 1, ch);
       break;
     }
 
@@ -183,8 +194,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ( at file position %ld (saw '%c')",
-                ftell(fp) - 1, ch);
+      Fl::error(fl_expected_a_fti, ftell(fp) - 1, ch);
       break;
     }
 
@@ -204,16 +214,14 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ) at file position %ld (saw '%c')",
-                ftell(fp) - 1, ch);
+      Fl::error(fl_expected_b_fti, ftell(fp) - 1, ch);
       break;
     }
 
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ; at file position %ld (saw '%c')",
-                ftell(fp) - 1, ch);
+      Fl::error(fl_expected_c_fti, ftell(fp) - 1, ch);
       break;
     }
 
@@ -311,8 +319,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     }
     else
     {
-      Fl::error("Fl_File_Icon::load_fti(): Unknown command \"%s\" at file position %ld.",
-                command, ftell(fp) - 1);
+      Fl::error(fl_unknown_command_fti, command, ftell(fp) - 1);
       break;
     }
   }
@@ -660,11 +667,11 @@ Fl_File_Icon::load_system_icons(void)
     if (!kdedir)
     {
       // Figure out where KDE is installed...
-      if ((kdedir = getenv("KDEDIR")) == NULL)
+      if ((kdedir = fl_getenv("KDEDIR")) == NULL)
       {
-        if (!access("/opt/kde", F_OK))
+        if (!fl_access("/opt/kde", F_OK))
 	  kdedir = "/opt/kde";
-	else if (!access("/usr/local/share/mimelnk", F_OK))
+	else if (!fl_access("/usr/local/share/mimelnk", F_OK))
 	  kdedir = "/usr/local";
         else
 	  kdedir = "/usr";
@@ -673,7 +680,7 @@ Fl_File_Icon::load_system_icons(void)
 
     snprintf(filename, sizeof(filename), "%s/share/mimelnk", kdedir);
 
-    if (!access(filename, F_OK))
+    if (!fl_access(filename, F_OK))
     {
       // Load KDE icons...
       icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
@@ -681,7 +688,7 @@ Fl_File_Icon::load_system_icons(void)
       snprintf(filename, sizeof(filename),
                "%s/share/icons/hicolor/16x16/mimetypes/unknown.png", kdedir);
 
-      if (access(filename, F_OK))
+      if (fl_access(filename, F_OK))
 	snprintf(filename, sizeof(filename), "%s/share/icons/unknown.xpm",
 	         kdedir);
 
@@ -692,13 +699,13 @@ Fl_File_Icon::load_system_icons(void)
       snprintf(filename, sizeof(filename),
                "%s/share/icons/hicolor/16x16/filesystems/link.png", kdedir);
 
-      if (!access(filename, F_OK))
+      if (!fl_access(filename, F_OK))
         icon->load_image(filename);
 
       snprintf(filename, sizeof(filename), "%s/share/mimelnk", kdedir);
       load_kde_icons(filename);
     }
-    else if (!access("/usr/share/icons/folder.xpm", F_OK))
+    else if (!fl_access("/usr/share/icons/folder.xpm", F_OK))
     {
       // Load GNOME icons...
       icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
@@ -707,7 +714,7 @@ Fl_File_Icon::load_system_icons(void)
       icon = new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY);
       icon->load_image("/usr/share/icons/folder.xpm");
     }
-    else if (!access("/usr/dt/appconfig/icons", F_OK))
+    else if (!fl_access("/usr/dt/appconfig/icons", F_OK))
     {
       // Load CDE icons...
       icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
@@ -728,7 +735,7 @@ Fl_File_Icon::load_system_icons(void)
       icon = new Fl_File_Icon("*.ppd", Fl_File_Icon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/DtPrtpr.m.pm");
     }
-    else if (!access("/usr/lib/filetype", F_OK))
+    else if (!fl_access("/usr/lib/filetype", F_OK))
     {
       // Load SGI icons...
       icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
@@ -743,7 +750,7 @@ Fl_File_Icon::load_system_icons(void)
       icon = new Fl_File_Icon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_File_Icon::PLAIN);
       icon->load_fti("/usr/lib/filetype/system/iconlib/ImageFile.fti");
 
-      if (!access("/usr/lib/filetype/install/iconlib/acroread.doc.fti", F_OK))
+      if (!fl_access("/usr/lib/filetype/install/iconlib/acroread.doc.fti", F_OK))
       {
 	icon = new Fl_File_Icon("*.{eps|ps}", Fl_File_Icon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
@@ -757,14 +764,14 @@ Fl_File_Icon::load_system_icons(void)
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
       }
 
-      if (!access("/usr/lib/filetype/install/iconlib/html.fti", F_OK))
+      if (!fl_access("/usr/lib/filetype/install/iconlib/html.fti", F_OK))
       {
 	icon = new Fl_File_Icon("*.{htm|html|shtml}", Fl_File_Icon::PLAIN);
         icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 	icon->load_fti("/usr/lib/filetype/install/iconlib/html.fti");
       }
 
-      if (!access("/usr/lib/filetype/install/iconlib/color.ps.idle.fti", F_OK))
+      if (!fl_access("/usr/lib/filetype/install/iconlib/color.ps.idle.fti", F_OK))
       {
 	icon = new Fl_File_Icon("*.ppd", Fl_File_Icon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/install/iconlib/color.ps.idle.fti");
@@ -841,7 +848,7 @@ load_kde_mimelnk(const char *filename)
   pattern[0]      = '\0';
   iconfilename[0] = '\0';
 
-  if ((fp = fopen(filename, "rb")) != NULL)
+  if ((fp = fl_fopen(filename, "rb")) != NULL)
   {
     while (fgets(tmp, sizeof(tmp), fp))
     {
@@ -859,7 +866,7 @@ load_kde_mimelnk(const char *filename)
     {
       snprintf(tmp, sizeof(tmp), "%s/share/icons/hicolor", kdedir);
 
-      if (!access(tmp, F_OK))
+      if (!fl_access(tmp, F_OK))
       {
         // KDE 2.x icons
 	int		i;		// Looping var
@@ -896,7 +903,7 @@ load_kde_mimelnk(const char *filename)
         snprintf(full_iconfilename, sizeof(full_iconfilename),
 	         "%s/%s", tmp, iconfilename);
 
-        if (access(full_iconfilename, F_OK)) return;
+        if (fl_access(full_iconfilename, F_OK)) return;
       }
 
       if (strncmp(mimetype, "inode/", 6) == 0) {
@@ -971,5 +978,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_File_Icon2.cxx,v 1.1.2.17.2.2 2003/11/02 01:37:45 easysw Exp $".
+// End of "$Id: Fl_File_Icon2.cxx,v 1.1.2.17.2.3 2003/11/07 03:47:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,12 +38,13 @@ class FL_EXPORT Fl_Window : public Fl_Group {
   friend class Fl_X;
   Fl_X *i; // points at the system-specific stuff
 
+  unsigned long wm_props;
   const char* iconlabel_;
   const char* xclass_;
   const void* icon_;
   // size_range stuff:
-  short minw, minh, maxw, maxh;
-  uchar dw, dh, aspect, size_range_set;
+  int minw, minh, maxw, maxh;
+  uchar dw, dh, aspect, size_range_set, wm_resize;
   // cursor stuff
   Fl_Cursor cursor_default;
   Fl_Color cursor_fg, cursor_bg;
@@ -88,7 +89,7 @@ public:
   void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
   void free_position()	{clear_flag(FL_FORCE_POSITION);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0) {
-    minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_();}
+    minw=a; minh=b; maxw=c; maxh=d; dw=(uchar)e; dh=(uchar)f; aspect=(uchar)g; size_range_();}
 
   const char* label() const	{return Fl_Widget::label();}
   const char* iconlabel() const	{return iconlabel_;}
@@ -124,5 +125,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

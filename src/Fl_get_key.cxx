@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,10 @@
 #  include "Fl_get_key_win32.cxx"
 #elif defined(__APPLE__)
 #  include "Fl_get_key_mac.cxx"
+#elif defined(NANO_X)
+#  include "Fl_get_key_nx.cxx"
+#elif defined(DJGPP)
+#  include "Fl_get_key_dj2.cxx"
 #else
 
 // Return the current state of a key.  This is the X version.  I identify
@@ -63,5 +67,5 @@ int Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

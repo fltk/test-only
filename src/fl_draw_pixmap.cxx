@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.3 2003/11/07 03:47:24 easysw Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,7 @@ int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h) {
 }
 
 int fl_measure_pixmap(const char * const *data, int &w, int &h) {
+  if (!data || !data[0]) return 0;
   int i = sscanf(data[0],"%d%d%d%d",&w,&h,&ncolors,&chars_per_pixel);
   if (i<4 || w<=0 || h<=0 ||
       chars_per_pixel!=1 && chars_per_pixel!=2) return w=0;
@@ -97,7 +98,9 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 }
 
 #else
-
+#if MSDOS && !DJGPP
+typedef unsigned long U32;
+#endif
 // The callback from fl_draw_image to get a row of data passes this:
 struct pixmap_data {
   int w, h;
@@ -253,12 +256,15 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
       }
     }
   }
-
-  fl_draw_image(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  if (fl->type == FL_PS_DEVICE) {
+	fl->draw_image(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  } else {
+	fltk.draw_image(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  }
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.3 2003/11/07 03:47:24 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.8.2.11.2.21.2.1 2003/11/02 01:37:41 easysw Exp $"
+// "$Id: Fl.H,v 1.8.2.11.2.21.2.2 2003/11/07 03:47:22 easysw Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #ifndef Fl_H
 #  define Fl_H
 
+#  include "fl_utf8.H" 
 #  include "Enumerations.H"
 #  ifndef Fl_Object
 #    define Fl_Object Fl_Widget
@@ -57,7 +58,7 @@ public: // should be private!
   static int e_y_root;
   static int e_dx;
   static int e_dy;
-  static int e_state;
+  static long e_state;
   static int e_clicks;
   static int e_is_click;
   static int e_keysym;
@@ -154,8 +155,8 @@ public:
   static int event_is_click()	{return e_is_click;}
   static void event_is_click(int i) {e_is_click = i;} // only 0 works!
   static int event_button()	{return e_keysym-FL_Button;}
-  static int event_state()	{return e_state;}
-  static int event_state(int i) {return e_state&i;}
+  static long event_state()	{return e_state;}
+  static int event_state(long i) {return e_state&i;}
   static int event_key()	{return e_keysym;}
   static int event_key(int);
   static int get_key(int);
@@ -262,5 +263,5 @@ public:
 #endif // !Fl_H
 
 //
-// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.1 2003/11/02 01:37:41 easysw Exp $".
+// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.2 2003/11/07 03:47:22 easysw Exp $".
 //

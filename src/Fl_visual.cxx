@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.7.2.4.2.4.2.1 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_visual.cxx,v 1.7.2.4.2.4.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,15 @@ int Fl::visual(int flags) {
 int Fl::visual(int flags) {
   (void)flags;
   return 1;
+}
+#elif defined(NANO_X)
+int Fl::visual(int flags) {
+	printf("Now sopport FL::visula ,now!! in file(Fl_visul.cxx)\n");
+	return 0;
+}
+#elif defined(DJGPP)
+int Fl::visual(int flags) {
+	return 0;
 }
 
 #else
@@ -115,5 +124,5 @@ int Fl::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.7.2.4.2.4.2.1 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.7.2.4.2.4.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

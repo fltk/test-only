@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.1 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.2 2003/11/07 03:47:24 easysw Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,8 @@
 #include <FL/math.h>
 #endif
 
-void fl_arc(int x,int y,int w,int h,double a1,double a2) {
+
+void Fl_Fltk::arc(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 #ifdef WIN32
   int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
@@ -51,12 +52,22 @@ void fl_arc(int x,int y,int w,int h,double a1,double a2) {
   Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
   a1 = a2-a1; a2 = 450-a2;
   FrameArc(&r, (short int)a2, (short int)a1);
+#elif NANO_X
+  --w;  --h;
+
+  GrArcAngle(fl_window, fl_gc, x + w/2, y + h/2, w/2, h/2, 
+	     int(a1 * 64), int(a2 * 64), MWARC);
+
+  ++w;  ++h;
+
+#elif DJGPP
+  // FIXME_DJGPP
 #else
   XDrawArc(fl_display, fl_window, fl_gc, x,y,w-1,h-1, int(a1*64),int((a2-a1)*64));
 #endif
 }
 
-void fl_pie(int x,int y,int w,int h,double a1,double a2) {
+void Fl_Fltk::pie(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 #ifdef WIN32
   if (a1 == a2) return;
@@ -70,11 +81,21 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2) {
   Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
   a1 = a2-a1; a2 = 450-a2;
   PaintArc(&r, (short int)a2, (short int)a1);
+#elif NANO_X
+  --w;  --h;
+
+  GrArcAngle(fl_window, fl_gc, x + w/2, y + h/2, w/2, h/2, 
+	   int(a1 * 64), int(a2 * 64), MWPIE);
+  
+  ++w;  ++h;
+
+#elif DJGPP
+  // FIXME_DJGPP
 #else
   XFillArc(fl_display, fl_window, fl_gc, x,y,w,h, int(a1*64),int((a2-a1)*64));
 #endif
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.1 2003/11/02 01:37:47 easysw Exp $".
+// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.2 2003/11/07 03:47:24 easysw Exp $".
 //

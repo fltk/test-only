@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,7 @@
 #include <FL/fl_draw.H>
 #include <stdio.h>
 #include <stdlib.h>
+#include <FL/fl_utf8.H>
 
 void readtheimage(const char *name); // below
 int width;
@@ -136,7 +137,7 @@ extern "C" {
 void readtheimage(const char *name) {
   struct jpeg_decompress_struct cinfo;
   struct jpeg_error_mgr jerr;
-  FILE * infile = fopen(name, "rb");
+  FILE * infile = fl_fopen(name, "rb");
   if (!infile) {
     fprintf(stderr, "can't open %s\n", name);
     exit(1);
@@ -197,5 +198,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
 //
