@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.74 2000/04/24 08:31:18 bill Exp $"
+dnl# "$Id: configure.in,v 1.75 2000/06/03 14:23:36 mike Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -278,17 +278,37 @@ dnl# add warnings to compiler switches:
 dnl# do this last so messing with switches does not break tests
 if test -n "$GXX"; then
     CFLAGS="-Wall $CFLAGS"
-    CXXFLAGS="-Wall $CXXFLAGS"
-    echo "If you have old Xlib headers you may need to add -wno-return-type to CXXFLAGS"
+    CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
-        CFLAGS="-fomit-frame-pointer $CFLAGS"
-dnl# old gcc did not like "-fno-exceptions"
-        CXXFLAGS="-fomit-frame-pointer $CXXFLAGS"
-	DEBUGFLAG="-O2"
+        CFLAGS="-O2 -fforce-mem -fforce-addr -fcaller-saves $CFLAGS"
+        CXXFLAGS="-O2 -fforce-mem -fforce-addr -fcaller-saves $CXXFLAGS"
     fi
     if test $PICFLAG = 1; then
     	CFLAGS="-fPIC $CFLAGS"
     	CXXFLAGS="-fPIC $CXXFLAGS"
+    fi
+
+    # See if GCC supports -fno-exceptions...
+    echo "Testing if GCC supports -fno-exceptions..."
+    OLDCFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -fno-exceptions"
+    AC_TRY_COMPILE(,,
+	CXXFLAGS="$CXXFLAGS -fno-exceptions"
+	echo "Congratulations - your GCC supports exceptions; disabling them for FLTK...",
+	CFLAGS="$OLDCFLAGS"
+	echo "GCC does not support exceptions...")
+
+    # See if we are running Solaris; if so, try the -fpermissive option...
+    if test $uname = SunOS; then
+	echo "Testing if GCC supports -fpermissive..."
+
+	OLDCFLAGS="$CFLAGS"
+	CFLAGS="$CFLAGS -fpermissive"
+	AC_TRY_COMPILE(,,
+	    CXXFLAGS="$CXXFLAGS -fpermissive"
+	    echo "Enabling -fpermissive to work around X header bugs...",
+	    CFLAGS="$OLDCFLAGS"
+	    echo "The -fpermissive option is not required by your GCC...")
     fi
 else
     case `(uname) 2>/dev/null` in
@@ -375,5 +395,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.74 2000/04/24 08:31:18 bill Exp $".
+dnl# End of "$Id: configure.in,v 1.75 2000/06/03 14:23:36 mike Exp $".
 dnl#

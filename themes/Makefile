@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18 2000/05/30 10:37:52 carl Exp $"
+# "$Id: Makefile,v 1.19 2000/06/03 14:23:46 mike Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -42,17 +42,20 @@ OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 all : $(LIBRARY).a $(THEMES)
 
-.SUFFIXES : .cxx .c .o
-
 .cxx.o :
+	echo Compiling $@...
 	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 .c.o :
+	echo Compiling $@...
 	$(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 %.po : ../src/%.cxx
+	echo Compiling $@...
 	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
 %.po : ../images/%.cxx
+	echo Compiling $@...
 	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
 %.po : ../src/%.c
+	echo Compiling $@...
 	$(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CFLAGS) $(SUPFLAGS) -c $< -o $@
 
 $(LIBRARY).a: $(OBJECTS)
@@ -117,5 +120,5 @@ install : all
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.18 2000/05/30 10:37:52 carl Exp $".
+# End of "$Id: Makefile,v 1.19 2000/06/03 14:23:46 mike Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.3 1999/11/27 15:45:11 carl Exp $"
+# "$Id: Makefile,v 1.4 2000/06/03 14:23:42 mike Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -53,15 +53,8 @@ $(LIBRARY).so.2 $(LIBRARY).sl.2: $(OBJECTS)
 
 .SUFFIXES:	.cxx .h .o .fl
 
-.cxx.o :
-	$(CXX) -I.. $(CXXFLAGS) -c $<
-.c.o :
-	$(CC) -I.. $(CFLAGS) -c $<
-
-.cxx :
-	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(IMAGESLIBS) -o $@
-
 .fl.cxx .fl.h:
+	echo Generating $@...
 	../fluid/fluid -c $<
 
 clean :
@@ -90,5 +83,5 @@ install: $(LIBRARY).a
 	fi
 
 #
-# End of "$Id: Makefile,v 1.3 1999/11/27 15:45:11 carl Exp $".
+# End of "$Id: Makefile,v 1.4 2000/06/03 14:23:42 mike Exp $".
 #

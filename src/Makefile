@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.76 2000/06/03 05:32:19 carl Exp $"
+# "$Id: Makefile,v 1.77 2000/06/03 14:23:43 mike Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -217,16 +217,11 @@ fltk.2.dll: $(OBJECTS:.o=.dll.o)
 	@$(DSOCOMMAND) -o $@ \
 	    $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 
-.SUFFIXES:	.cxx .c .h .o
-
-.cxx.o :
-	$(CXX) -I.. $(CXXFLAGS) -c $<
-.c.o :
-	$(CC) -I.. $(CFLAGS) -c $<
-
 %.dll.o : %.cxx
+	echo Compiling $@...
 	$(CXX) -I.. $(CXXFLAGS) $(DLLCFLAGS) -c $< -o $@
 %.dll.o : %.x
+	echo Compiling $@...
 	$(CC) -I.. $(CFLAGS) $(DLLCFLAGS) -c $< -o $@
 
 clean :
@@ -270,5 +265,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.76 2000/06/03 05:32:19 carl Exp $".
+# End of "$Id: Makefile,v 1.77 2000/06/03 14:23:43 mike Exp $".
 #
