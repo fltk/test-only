@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_atol.c,v 1.3 1999/03/23 13:58:18 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -64,3 +68,7 @@ conf_atol(const char *decstr)
 
         return (10 * conf_atol(dec) + r) * sign;                                /* recursive funtion call to compute result */
 }
+
+/*
+    End of "$Id: conf_atol.c,v 1.3 1999/03/23 13:58:18 carl Exp $".
+*/

@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_getboolean.c,v 1.3 1999/03/23 13:58:19 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -71,4 +75,6 @@ getconf_boolean(const char *configfile, const char *key, int *bvalue)
         return CONF_SUCCESS;
 } /* getconf_boolean() */
 
-
+/*
+    End of "$Id: conf_getboolean.c,v 1.3 1999/03/23 13:58:19 carl Exp $".
+*/

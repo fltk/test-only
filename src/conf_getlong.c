@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_getlong.c,v 1.3 1999/03/23 13:58:19 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -49,3 +53,7 @@ getconf_long(const char *configfile, const char *key, long *lvalue)
         *lvalue = atol(svalue);                                                 /* convert to long */
         return CONF_SUCCESS;
 } /* getconf_long() */
+
+/*
+    End of "$Id: conf_getlong.c,v 1.3 1999/03/23 13:58:19 carl Exp $".
+*/

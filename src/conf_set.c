@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_set.c,v 1.4 1999/03/23 13:58:20 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -659,3 +663,6 @@ setconf(const char *configfile, const char *k, const char *svalue)
         return CONF_SUCCESS;                                                    /* key was not found */
 } /* setconf() */
 
+/*
+    End of "$Id: conf_set.c,v 1.4 1999/03/23 13:58:20 carl Exp $".
+*/

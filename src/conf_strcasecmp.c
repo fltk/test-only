@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_strcasecmp.c,v 1.2 1999/03/23 13:58:21 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -40,3 +44,7 @@ conf_strcasecmp(const char *s1, const char *s2)
 	if (!(*s1) && !(*s2)) return 0;                                         /* if both strings ended must be equal */
 	return *s1 - *s2;                                                       /* must be 1st different char, return comparison */
 }
+
+/*
+    End of "$Id: conf_strcasecmp.c,v 1.2 1999/03/23 13:58:21 carl Exp $".
+*/

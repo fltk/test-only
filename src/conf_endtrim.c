@@ -1,4 +1,8 @@
 /*
+   "$Id: conf_endtrim.c,v 1.3 1999/03/23 13:58:18 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.20
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -45,3 +49,6 @@ endtrim(char *s)
         return s;
 }
 
+/*
+    End of "$Id: conf_endtrim.c,v 1.3 1999/03/23 13:58:18 carl Exp $".
+*/
