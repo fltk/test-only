@@ -20,10 +20,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The Fl_Align_Layout sets all group's children's label alignments to
-// it's own align() value and resize()s the children to fit in the space 
+// The Fl_Align_Group overrides all group's children's label alignments to
+// it's own align() value, tiles and resize()s the children to fit in the space 
 // not required by the (outsize) labels. 
 
+#include <stdio.h>
 #include <string.h>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Flags.H>
@@ -37,7 +38,7 @@ void Fl_Align_Group::layout() {
   int n_lines = n_to_break() ? 
                 (children() / n_to_break() + (children() % n_to_break()?1:0)):
 		1;
-  int variable_is_y = align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM);
+  bool variable_is_y = align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM);
   int nx = vertical() ? n_lines : n_to_break() ? n_to_break() : children(); 
   int ny = vertical() ? n_to_break() ? n_to_break() : children() : n_lines;
   int n_variable = variable_is_y ? ny : nx;
@@ -75,7 +76,11 @@ void Fl_Align_Group::layout() {
     int X = cx, Y = cy;
     if (align() & FL_ALIGN_TOP) Y += label_space[which];
     else if (!variable_is_y && align() & FL_ALIGN_LEFT) X += label_space[which];
+
     o->resize(X,Y,W,H);
+    o->align(align());
+    o->layout();
+
     if (++u == n_to_break()) {
       u = 0; v++;
       if (vertical()) {
@@ -94,8 +99,6 @@ void Fl_Align_Group::layout() {
         if (!variable_is_y) cx += label_space[which];
       }
     }
-	o->set_flag(align());
-    o->layout();
   }
   init_sizes();
 }
