@@ -1,6 +1,10 @@
-// This file forced Doxygen to come up with the "modules" in the
-// desired order, and sets the title. To put the text into a chapter
-// you should use \addtogroup name
+// This file forced Doxygen to come up with the "modules" (chapters)
+// in the desired order, and to set the titles of them. It is named
+// 00.doc to force Doxygen to read it first.
+
+// To put the text into a chapter you should use "\addtogroup name".
+// Any groups you add to that are not listed here are appended to the
+// end of the list in random order.
 
 /*! \defgroup example1 Example 1: A Simple FLTK Program */
 
@@ -10,7 +14,11 @@
 
 /*! \defgroup example4 Example 4: Drawing Things */
 
-/*! \defgroup startup Functions to Call Before Showing a Window */
+/*! \defgroup editor Example 6: A Simple Text Editor */
+
+/*! \defgroup startup Initialization and Argument Parser */
+
+/*! \defgroup themes Themes */
 
 /*! \defgroup execution */
 

@@ -1,4 +1,4 @@
-// editor.cxx (example5)
+// editor.cxx (example6)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,6 @@ char               filename[256] = "";
 char               title[256];
 TextBuffer	   *textbuf;
 
-
 void save_cb();
 void saveas_cb();
 void find2_cb(Widget*, void*);
@@ -36,48 +35,11 @@ void replcan_cb(Widget*, void*);
 
 class EditorWindow : public Window {
   public:
-    EditorWindow(int w, int h, const char* t);
+    EditorWindow(int w, int h, TextBuffer*, const char* t);
     ~EditorWindow();
 
-    Window          *replace_dlg;
-    Input           *replace_find;
-    Input           *replace_with;
-    Button          *replace_all;
-    ReturnButton    *replace_next;
-    Button          *replace_cancel;
-
     TextEditor     *editor;
-    char               search[256];
 };
-
-EditorWindow::EditorWindow(int w, int h, const char* t) : Window(w, h, t) {
-  replace_dlg = new Window(300, 105, "Replace");
-  replace_dlg->begin();
-    replace_find = new Input(70, 10, 210, 25, "Find:");
-    replace_find->clear_flag(ALIGN_MASK);
-    replace_find->set_flag(ALIGN_LEFT);
-
-    replace_with = new Input(70, 40, 210, 25, "Replace:");
-    replace_with->clear_flag(ALIGN_MASK);
-    replace_with->set_flag(ALIGN_LEFT);
-
-    replace_all = new Button(10, 70, 90, 25, "Replace All");
-    replace_all->callback((Callback *)replall_cb, this);
-
-    replace_next = new ReturnButton(105, 70, 120, 25, "Replace Next");
-    replace_next->callback((Callback *)replace2_cb, this);
-
-    replace_cancel = new Button(230, 70, 60, 25, "Cancel");
-    replace_cancel->callback((Callback *)replcan_cb, this);
-  replace_dlg->end();
-  replace_dlg->set_non_modal();
-  editor = 0;
-  *search = (char)0;
-}
-
-EditorWindow::~EditorWindow() {
-  delete replace_dlg;
-}
 
 int check_save(void) {
   if (!changed) return 1;
@@ -134,35 +96,35 @@ void delete_cb(Widget*, void*) {
   textbuf->remove_selection();
 }
 
-void find_cb(Widget* w, void* v) {
-  EditorWindow* e = (EditorWindow*)v;
-  const char *val;
+char               search[256];
 
-  val = input("Search String:", e->search);
+void find_cb(Widget* w, void* v) {
+  const char *val;
+  val = input("Search String:", search);
   if (val != NULL) {
     // User entered a string - go find it!
-    strcpy(e->search, val);
+    strcpy(search, val);
     find2_cb(w, v);
   }
 }
 
 void find2_cb(Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  if (e->search[0] == '\0') {
+  if (search[0] == '\0') {
     // Search string is blank; get a new one...
     find_cb(w, v);
     return;
   }
 
   int pos = e->editor->insert_position();
-  int found = textbuf->search_forward(pos, e->search, &pos);
+  int found = textbuf->search_forward(pos, search, &pos);
   if (found) {
     // Found a match; select and update the position...
-    textbuf->select(pos, pos+strlen(e->search));
-    e->editor->insert_position(pos+strlen(e->search));
+    textbuf->select(pos, pos+strlen(search));
+    e->editor->insert_position(pos+strlen(search));
     e->editor->show_insert_position();
   }
-  else alert("No occurrences of \'%s\' found!", e->search);
+  else alert("No occurrences of \'%s\' found!", search);
 }
 
 void set_title(Window* w) {
@@ -221,41 +183,70 @@ int num_windows = 0;
 
 void close_cb(Widget*, void* v) {
   Window* w = (Window*)v;
-  if (num_windows == 1 && !check_save()) {
-    return;
+  if (num_windows <= 1) {
+    if (!check_save()) return;
+    exit(0);
   }
-
-  w->hide();
-  textbuf->remove_modify_callback(changed_cb, w);
+  --num_windows;
   delete w;
-  num_windows--;
-  if (!num_windows) exit(0);
 }
 
 void quit_cb(Widget*, void*) {
-  if (changed && !check_save())
-    return;
-
+  if (!check_save()) return;
   exit(0);
+}
+
+// Dialog box for search/replace:
+
+Input           *replace_find;
+Input           *replace_with;
+Button          *replace_all;
+ReturnButton    *replace_next;
+Button          *replace_cancel;
+
+Window* replace_dlg(EditorWindow* e) {
+  static Window *replace_dlg = 0;
+  if (!replace_dlg) {
+    replace_dlg = new Window(300, 105, "Replace");
+    replace_dlg->begin();
+    replace_find = new Input(70, 10, 210, 25, "Find:");
+    replace_find->clear_flag(ALIGN_MASK);
+    replace_find->set_flag(ALIGN_LEFT);
+
+    replace_with = new Input(70, 40, 210, 25, "Replace:");
+    replace_with->clear_flag(ALIGN_MASK);
+    replace_with->set_flag(ALIGN_LEFT);
+
+    replace_all = new Button(10, 70, 90, 25, "Replace All");
+
+    replace_next = new ReturnButton(105, 70, 120, 25, "Replace Next");
+
+    replace_cancel = new Button(230, 70, 60, 25, "Cancel");
+    replace_dlg->end();
+  }
+  replace_all->callback((Callback *)replall_cb, e);
+  replace_next->callback((Callback *)replace2_cb, e);
+  replace_cancel->callback((Callback *)replcan_cb, e);
+  return replace_dlg;
 }
 
 void replace_cb(Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  e->replace_dlg->show(e);
+  replace_dlg(e)->show(e);
 }
 
 void replace2_cb(Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  const char *find = e->replace_find->value();
-  const char *replace = e->replace_with->value();
+  const char *find = replace_find->value();
+  const char *replace = replace_with->value();
 
   if (find[0] == '\0') {
     // Search string is blank; get a new one...
-    e->replace_dlg->show();
+    replace_dlg(e)->show(e);
     return;
   }
 
-  e->replace_dlg->hide();
+  replace_dlg(e)->hide();
 
   int pos = e->editor->insert_position();
   int found = textbuf->search_forward(pos, find, &pos);
@@ -274,17 +265,16 @@ void replace2_cb(Widget*, void* v) {
 
 void replall_cb(Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  const char *find = e->replace_find->value();
-  const char *replace = e->replace_with->value();
+  const char *find = replace_find->value();
+  const char *replace = replace_with->value();
 
-  find = e->replace_find->value();
   if (find[0] == '\0') {
     // Search string is blank; get a new one...
-    e->replace_dlg->show();
+    replace_dlg(e)->show(e);
     return;
   }
 
-  e->replace_dlg->hide();
+  replace_dlg(e)->hide();
 
   e->editor->insert_position(0);
   int times = 0;
@@ -311,7 +301,7 @@ void replall_cb(Widget*, void* v) {
 
 void replcan_cb(Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  e->replace_dlg->hide();
+  replace_dlg(e)->hide();
 }
 
 void save_cb() {
@@ -334,19 +324,25 @@ void undo_cb(Widget*, void*) {
   alert("Undo not implemented!");
 }
 
-Window* new_view();
-
-void view_cb(Widget*, void*) {
-  Window* w = new_view();
-  w->show();
+Window* new_view() {
+  Window* w = new EditorWindow(512, 384+22, textbuf, title);
+  w->callback((Callback *)close_cb, w);
+  num_windows++;
+  return w;
 }
 
-Window* new_view() {
-  EditorWindow* w = new EditorWindow(512, 384+22, title);
-    w->begin();
-    MenuBar* m = new MenuBar(0, 0, 512, 25);
+void view_cb(Widget*, void*) {
+  new_view()->show();
+}
 
-    m->user_data(w); // make this be passed to all menu callbacks
+EditorWindow::EditorWindow(int w, int h, TextBuffer* textbuffer, const char* t)
+  : Window(w, h, t)
+{
+  *search = (char)0;
+  begin();
+   MenuBar* m = new MenuBar(0, 0, 512, 25);
+
+    m->user_data(this); // make this be passed to all menu callbacks
     m->add("&File/&New File",		0,        (Callback*)new_cb);
     m->add("&File/&Open File...",	CTRL+'o', (Callback*)open_cb);
     m->add("&File/_&Insert File...",	CTRL+'i', (Callback*)insert_cb);
@@ -367,17 +363,18 @@ Window* new_view() {
     m->add("&Search/&Replace...",	CTRL+'r', (Callback*)replace_cb);
     m->add("&Search/Replace &Again",	CTRL+'t', (Callback*)replace2_cb);
 
-    w->editor = new TextEditor(0, 25, 512, 354+5);
-    w->editor->buffer(textbuf);
-    Input* i = new Input(0, 384, 512, 22);
-    i->value("Click here to test focus navigation");
-  w->end();
-  w->resizable(w->editor);
-  w->callback((Callback *)close_cb, w);
-  textbuf->add_modify_callback(changed_cb, w);
-  textbuf->call_modify_callbacks();
-  num_windows++;
-  return w;
+   editor = new TextEditor(0, 25, 512, 354+5);
+   editor->buffer(textbuf);
+   textbuf->add_modify_callback(changed_cb, this);
+   //textbuf->call_modify_callbacks();
+   Input* i = new Input(0, 384, 512, 22);
+   i->value("Click here to test focus navigation");
+  end();
+  resizable(editor);
+}
+
+EditorWindow::~EditorWindow() {
+  editor->buffer()->remove_modify_callback(changed_cb, this);
 }
 
 int main(int argc, char **argv) {
@@ -385,11 +382,10 @@ int main(int argc, char **argv) {
   if (argc > 1) load_file(argv[1], -1);
 
   Window* window = new_view();
-
   window->show(1, argv);
   return run();
 }
 
 //
-// End of "$Id: editor.cxx,v 1.16 2004/02/17 07:46:12 spitzak Exp $".
+// End of "$Id: editor.cxx,v 1.17 2004/03/05 08:17:01 spitzak Exp $".
 //
