@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.191 2004/08/07 20:48:35 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.192 2004/09/09 06:03:56 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1290,33 +1290,31 @@ bool fltk::handle()
   // So anyway, do a round trip to find the correct x,y:
   // WAS: Actually, TWO round trips! Is X stoopid or what?
   case ConfigureNotify:
-  case MapNotify: {
-    window = find(xevent.xmapping.window);
+    /*case MapNotify:*/ {
+    //window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
 
     // figure out where OS really put window
     XWindowAttributes actual;
     XGetWindowAttributes(xdisplay, xid(window), &actual);
-    XWindow cr; int X, Y, W = actual.width, H = actual.height;
+    XWindow junk; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
-			  0, 0, &X, &Y, &cr);
-#if 0
-    // Faster version that does not bother with calling resize as the
-    // user drags the window around. This was what most Win32 versions
-    // of fltk did. This breaks programs that want to track the current
-    // position to figure out what corner is being resized when layout
-    // is called.
-    if (W == window->w() && H == window->h()) {
-      window->x(X);
-      window->y(Y);
-      break;
-    }
-#endif
+			  0, 0, &X, &Y, &junk);
     // tell Window about it and set flag to prevent echoing:
     if (window->resize(X, Y, W, H)) resize_from_system = window;
-    break; // allow add_handler to do something too
-  }
+    break;} // allow add_handler to do something too
+
+  case ReparentNotify: {
+    if (!window) break;
+    if (window->parent()) break; // ignore child windows
+    int X, Y; XWindow junk;
+    //ReparentNotify gives the new position of the window relative to
+    //the new parent. FLTK cares about the position on the root window.
+    XTranslateCoordinates(xdisplay, xid(window), XRootWindow(xdisplay,xscreen),
+			  0, 0, &X, &Y, &junk);
+    window->position(X, Y);
+    break;}
 
   case UnmapNotify:
     window = find(xevent.xmapping.window);
@@ -2335,5 +2333,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.191 2004/08/07 20:48:35 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.192 2004/09/09 06:03:56 spitzak Exp $".
 //
