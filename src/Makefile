@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.101 2002/02/10 22:57:49 spitzak Exp $"
+# "$Id: Makefile,v 1.102 2002/05/06 06:31:27 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -64,6 +64,7 @@ CPPFILES = \
 	Fl_Menu_Item.cxx \
 	Fl_Menu_Window.cxx \
 	Fl_Menu_global.cxx \
+	Fl_Multi_Image.cxx \
 	Fl_Numeric_Input.cxx \
 	Fl_Output.cxx \
 	Fl_Overlay_Window.cxx \
@@ -247,5 +248,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.101 2002/02/10 22:57:49 spitzak Exp $".
+# End of "$Id: Makefile,v 1.102 2002/05/06 06:31:27 spitzak Exp $".
 #

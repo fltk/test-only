@@ -155,6 +155,13 @@ an generating code to read the image file.");
           o->tooltip("Window will use this x,y rather than being positioned by the operating system\
 .");
         }
+         {Fl_Value_Input* o = new Fl_Value_Input(315, 105, 55, 22, "size");
+          o->label_size(10);
+          o->callback((Fl_Callback*)slider_size_cb);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
+          o->tooltip("The size of the scroller");
+        }
          {Fl_Check_Button* o = new Fl_Check_Button(145, 132, 70, 22, "Border");
           o->callback((Fl_Callback*)border_cb);
           o->tooltip("Enable the window manager border");
@@ -171,16 +178,16 @@ ts from going to other windows until it is hidden or closed.");
          {Fl_Value_Input* o = new Fl_Value_Input(80, 132, 55, 22, "Value");
           o->callback((Fl_Callback*)value_cb);
           o->when(FL_WHEN_ENTER_KEY);
-          o->tooltip("The initial value (integer) of this widget");
+          o->tooltip("The initial value of this widget");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(135, 132, 60, 22, "min");
+         {Fl_Value_Input* o = new Fl_Value_Input(135, 132, 55, 22, "mn");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The minimum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(195, 132, 60, 22, "max");
+         {Fl_Value_Input* o = new Fl_Value_Input(190, 132, 55, 22, "mx");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
@@ -188,19 +195,31 @@ ts from going to other windows until it is hidden or closed.");
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The maximum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(255, 132, 60, 22, "step");
+         {Fl_Value_Input* o = new Fl_Value_Input(245, 132, 45, 22, "s");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
-          o->tooltip("Amount to change this valuator when mouse moves 1 pixel");
+          o->tooltip("step:\nRound all movements to multiples of this.\n");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(315, 132, 55, 22, "size");
+         {Fl_Value_Input* o = new Fl_Value_Input(290, 132, 40, 22, "L");
           o->label_size(10);
-          o->callback((Fl_Callback*)slider_size_cb);
+          o->minimum(1);
+          o->step(1);
+          o->callback((Fl_Callback*)line_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
-          o->tooltip("The size of the scroller");
+          o->tooltip("linesize:\nNumber of steps to move for arrow keys.");
+        }
+         {Fl_Value_Input* o = new Fl_Value_Input(330, 132, 40, 22, "P");
+          o->label_size(10);
+          o->minimum(1);
+          o->step(1);
+          o->callback((Fl_Callback*)page_cb);
+          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+          o->when(FL_WHEN_ENTER_KEY);
+          o->tooltip("pagesize:\nNumber of steps to move for PageUp/PageDown\nHow far apart tick ma\
+rks are.");
         }
          {Fl_Group* o = new Fl_Group(80, 158, 280, 22, "Attributes");
           o->callback((Fl_Callback*)propagate_group);

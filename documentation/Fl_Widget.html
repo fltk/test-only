@@ -53,10 +53,10 @@ after changing any visible properties.
 <li><a href=#clear_selected>clear_selected</a></li>
 <li><a href=#clear_value>clear_value</a></li>
 <li><a href=#clear_visible>clear_visible</a>
-<li><a href=#color>color</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href=#color>color</a></li>
 <li><a href=#contains>contains</a></li>
 <li><a href=#copy_label>copy_label</a></li>
 <li><a href=#damage>damage</a></li>
@@ -64,9 +64,7 @@ after changing any visible properties.
 <li><a href=#default_callback>default_callback</a></li>
 <li><a href=#do_callback>do_callback</a></li>
 <li><a href=#draw>draw</a>
-<li><a href=#draw_as_button>draw_as_button</a>
 <li><a href=#draw_box>draw_box</a>
-<li><a href=#draw_frame>draw_text_frame</a>
 <li><a href=#draw_glyph>draw_glyph</a>
 <li><a href=#draw_label>draw_label</a>
 <li><a href=#draw_inside_label>draw_inside_label</a>
@@ -95,10 +93,10 @@ after changing any visible properties.
 <li><a href=#measure_label>measure_label</a>
 <li><a href=#output>output</a></li>
 <li><a href=#parent>parent</a></li>
-<li><a href=#position>position</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href=#position>position</a></li>
 <li><a href=#pushed>pushed</a></li>
 <li><a href=#redraw>redraw</a></li>
 <li><a href=#redraw_label>redraw_label</a></li>
@@ -106,6 +104,7 @@ after changing any visible properties.
 <li><a href=#resize>resize</a></li>
 <li><a href=#selected>selected</a></li>
 <li><a href=#selection_color>selection_color</a></li>
+<li><a href=#send>send</a></li>
 <li><a href=#set_changed>set_changed</a></li>
 <li><a href=#set_damage>set_damage</a></li>
 <li><a href=#set_flag>set_flag</a></li>
@@ -114,12 +113,12 @@ after changing any visible properties.
 <li><a href=#set_visible>set_visible</a></li>
 <li><a href=#shortcut>shortcut</a></li>
 <li><a href=#show>show</a></li>
-<li><a href=#size>size</a></li>
-<li><a href=#style>style</a></li>
-<li><a href=#take_focus>take_focus</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href=#size>size</a></li>
+<li><a href=#style>style</a></li>
+<li><a href=#take_focus>take_focus</a></li>
 <li><a href=#takesevents>takesevents</a></li>
 <li><a href=#test_shortcut>test_shortcut</a></li>
 <li><a href=#tooltip>tooltip</a></li>
@@ -154,13 +153,6 @@ widgets have a matching public constructor.  It takes a value for
 <a href=#h><tt>h()</tt></a>, 
 and an optional value for <a href=#label><tt>label()</tt></a>.
 
-<a name=~Fl_Widget><h4>virtual Fl_Widget::~Fl_Widget();</h4></a>
-
-Removes itself from the parent widget (if any), and destroys any label
-made with <a href=#copy_label>copy_label()</a>. Destroying an <a
-href=Fl_Group.html>Fl_Group</a> will destroy any children, so to avoid
-double-destruction you must destroy the children first or not at all.
-
 <a name=draw><h4>virtual void draw();</h4></a>
 
 Draw the widget. The default version draws the box to fill the widget
@@ -173,6 +165,9 @@ Handle an <a href=events.html>event</a>, and return non-zero if the
 widget understood and used the event. The default version returns true for
 <tt>FL_ENTER, FL_LEAVE</tt> and <tt>FL_MOVE</tt>. Information on how
 to write your own version is <a href=subclassing.html#handle>here</a>.
+If you want to send an event to a widget you probably want to use <a
+href=#send>send()</a> which will do some extra processing before and
+after the event is handled.
 
 <a name=layout><h4>virtual void layout();</h4></a>
 
@@ -182,7 +177,41 @@ different size will cause this to be called later (after all pending
 events are handled and just before <a href=#draw>draw()</a> is
 called).
 
+<a name=~Fl_Widget><h4>virtual Fl_Widget::~Fl_Widget();</h4></a>
+
+The destructor is virtual. The base class removes itself from the
+parent widget (if any), and destroys any label made with <a
+href=#copy_label>copy_label()</a>.
+
 <hr>
+
+<a name=send><h4>int Fl_Widget::send(int event)</h4></a>
+
+Call the <a href=#handle>handle()</a> method on the widget and return
+the result, but also does some processing of events:
+
+<ul>
+
+<li>It makes sure the widget is active and/or visible if the event
+requres this. 
+
+<li>It adjusts Fl::event_x/y to be relative to the widget (It is the
+caller's responsibility to see if the mouse is pointing at the
+widget).
+
+<li>If this is not the <a href=Fl.html#belowmouse>Fl::belowmouse()</a>
+widget then it changes <tt>FL_MOVE</tt> into <tt>FL_ENTER</tt> and
+turns <tt>FL_DND_DRAG</tt> into <tt>FL_DND_ENTER</tt>. If this
+<i>is</i> the <a href=Fl.html#belowmouse>Fl::belowmouse()</a> widget
+then the opposite conversion is done.
+
+<li>For move, focus, and push events if <a href=#handle>handle()</a>
+returns true it sets the <a
+href=Fl.html#belowmouse>Fl::belowmouse()</a> or <a
+href=Fl.html#focus>Fl::focus()</a> or <a
+href=Fl.html#pushed>Fl::pushed()</a> widget to reflect this.
+
+</ul>
 
 <a name=style><h4>const <a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::style() const</h4></a>
 
@@ -840,6 +869,13 @@ to draw into this widget. You only need to call this if you want to
 incrementally update your widget. When <a href=#draw>draw()</a> is
 called this will already have been done.
 
+<a name=draw_frame><h4>Fl_Flags Fl_Widget::draw_frame() const;</h4></a>
+
+Draws only the edge of the <tt>box()</tt> (by or'ing
+<tt>FL_INVISIBLE</tt> into the flags to it). If <tt>!active_r()</tt>
+then it also or's in <tt>FL_INACTIVE</tt>. This will only work for
+rectangular boxtypes.
+
 <a name=draw_box><h4>Fl_Flags Fl_Widget::draw_box() const;</h4></a>
 
 Fills the entire widget with it's <a href="#box">box()</a> and <a
@@ -848,19 +884,6 @@ href="#damage">damage()</a> contains <tt>FL_DAMAGE_EXPOSE</tt> then
 the parent group's box is drawn to fill in the missing areas. If the
 widget is inactive or if any bits are turned on in <a
 href="#flags">flags()</a> then the box may draw differently to show this.
-
-<a name=draw_as_button><h4>Fl_Flags Fl_Widget::draw_as_button(Fl_Flags, int&amp; x, int&amp; y, int&amp; w, int&amp; h) const;</h4></a>
-
-Draw the widget as though it was a button. This uses more of the bits
-in the flags to control appearance, and returns the flags and bounding
-box needed for draw_inside_label().
-
-<a name=draw_frame><h4>Fl_Flags Fl_Widget::draw_frame() const;
-<br>Fl_Flags Fl_Widget::draw_frame(int x, int y, int w, int h) const ;</h4></a>
-
-Draws <tt>box()</tt> with the <tt>FL_FRAME_ONLY</tt> flag turned
-on (so only the edge is drawn). Also turns on <tt>FL_INACTIVE</tt> if
-<tt>!active_r()</tt>.
 
 <a name=draw_glyph><h4>void Fl_Widget::draw_glyph(int type, int x,int y,int w,int h, Fl_Flags f) const</h4></a>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.36 2002/04/11 07:47:46 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.37 2002/05/06 06:31:27 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -312,26 +312,34 @@ const char* fl_find_config_file(char* path, int size, const char* name)
 
 #include <fltk/math.h>
 
+// FL_GRAY is replaced with the passed color. For intermediate colors
+// the gray ramp is replaced with a gamma curve that passes through that
+// color. If the color is too dark or light then the gray ramp is left
+// at a straight line and FL_GRAY is not between the two adjacent entries.
+
 void fl_background(Fl_Color c) {
-  // replace the gray ramp so that FL_GRAY is this color
   int r = (c>>24)&255;
-  if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powr;
+  if (r < 0x30 || r > 0xf0) powr = 1;
+  else powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   int g = (c>>16)&255;
-  if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powg;
+  if (g < 0x30 || g > 0xf0) powg = 1;
+  else powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   int b = (c>>8)&255;
-  if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  for (int i = 0; i < FL_NUM_GRAY; i++) {
+  double powb;
+  if (b < 0x30 || b > 0xf0) powb = 1;
+  else powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  for (int i = 0; i < FL_NUM_GRAY; i++) if (i != FL_GRAY) {
     double gray = i/(FL_NUM_GRAY-1.0);
     fl_set_color(fl_gray_ramp(i),
 		 fl_rgb(uchar(pow(gray,powr)*255+.5),
 			uchar(pow(gray,powg)*255+.5),
 			uchar(pow(gray,powb)*255+.5)));
   }
+  fl_set_color(FL_GRAY, c);
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.36 2002/04/11 07:47:46 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.37 2002/05/06 06:31:27 spitzak Exp $".
 //

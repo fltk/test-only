@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.22 2002/05/06 06:31:27 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   set_flag(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   value_ = 0.0;
-  istep_ = 0;
+  step_ = 0;
   minimum_ = 0.0;
   maximum_ = 1.0;
   linesize_ = 1;
@@ -48,7 +48,7 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 void Fl_Valuator::precision(int p) {
   int B = 1;
   for (int i=0; i<p; i++) B *= 10;
-  istep_ = B;
+  step_ = 1.0/B;
 }
 #endif
 
@@ -90,9 +90,13 @@ void Fl_Valuator::handle_release() {
 }
 
 double Fl_Valuator::round(double v) const {
-  if (istep_ < 0) return rint(v/istep_)*istep_;
-  else if (istep_ > 0) return rint(v*istep_)/istep_;
-  else return v;
+  if (step_ >= 1) {
+    double is = rint(step_); return rint(v/is)*is;
+  } else if (step_ > 0) {
+    double is = rint(1/step_); return rint(v*is)/is;
+  } else {
+    return v;
+  }
 }
 
 double Fl_Valuator::clamp(double v) const {
@@ -113,26 +117,26 @@ double Fl_Valuator::softclamp(double v) const {
 }
 
 double Fl_Valuator::increment(double v, int n) const {
-  if (istep_ < 0) {
-    int is = -istep_;
-    if (minimum_ > maximum_) is = -is;
+  if (minimum_ > maximum_) n = -n;
+  if (step_ >= 1) {
+    double is = rint(step_);
     return rint(v/is+n)*is;
-  } else if (istep_ > 0) {
-    int is = istep_;
-    if (minimum_ > maximum_) is = -is;
+  } else if (step_ > 0) {
+    double is = rint(1/step_);
     return rint(v*is+n)/is;
   } else {
-    int is = int(100/(maximum_-minimum_));
-    if (!is) is = maximum_>minimum_ ? 1 : -1;
+    int is = int(100/fabs(maximum_-minimum_));
+    if (!is) is = 1;
     return rint(v*is+n)/is;
   }
 }
 
 int Fl_Valuator::format(char* buffer) {
   double v = value();
-  if (!istep_) return sprintf(buffer, "%g", v);
-  if (istep_==1 || istep_ < 0) return sprintf(buffer, "%ld", long(v));
+  if (step_ >= 1) return sprintf(buffer, "%ld", long(v));
+  else if (step_ <= 0) return sprintf(buffer, "%g", v);
   int i, x;
+  int istep_ = int(rint(1/step_));
   for (x = 10, i = 2; x < istep_; x *= 10) i++;
   if (x == istep_) i--;
   return sprintf(buffer, "%.*f", i, v);
@@ -184,5 +188,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.22 2002/05/06 06:31:27 spitzak Exp $".
 //

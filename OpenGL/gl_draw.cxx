@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.19 2002/01/20 07:37:14 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.20 2002/05/06 06:31:26 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -68,9 +68,10 @@ void gl_font(Fl_Font font, int size) {
 #ifdef _WIN32
     int base = fl_textmetric()->tmFirstChar;
     int size = fl_textmetric()->tmLastChar - base + 1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_xfont());
-    wglUseFontBitmaps(fl_gc, base, size, current->listbase+base); 
-    SelectObject(fl_gc, oldFid);
+    HDC hdc = GetDC(0);
+    HFONT oldFid = (HFONT)SelectObject(hdc, fl_xfont());
+    wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
+    SelectObject(hdc, oldFid);
 #else
     XFontStruct* font = fl_xfont();
     int base = font->min_char_or_byte2;
@@ -185,5 +186,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.19 2002/01/20 07:37:14 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.20 2002/05/06 06:31:26 spitzak Exp $".
 //

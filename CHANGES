@@ -2243,3 +2243,17 @@ mouse move.
 Log style Fl_Sliders work, try doing
 widget->type(widget->type()|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE).
 
+////////////////////////////////////////////////////////////////
+
+fl_background() will produce usable gray shades when the color is
+white or black (makes the high-contrast Windows styles work).
+
+Lots of fixes to the WIN32 drawing code to get rid of blinking and
+make the windows update when the application is not active.
+
+Greg's rotation slider added to the symbols demo.
+
+Added Fl_Multi_Image and multiimage demo program.
+
+Valuator reported step() as Infinity, which messed up fluid's saved
+files. Added ability to set line & page size in fluid.

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.1 2002/01/20 08:12:28 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.2 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -66,9 +66,9 @@ int Fl_Bar::handle(int event)
   case FL_LEAVE:
     if (highlight_color() && takesevents()) {
       glyph_box(x,y,w,h);
-      bool h = Fl::event_inside(x,y,w,h);
-      if (h != highlighted) {
-	highlighted = h;
+      bool hl = Fl::event_inside(x,y,w,h);
+      if (hl != highlighted) {
+	highlighted = hl;
 	redraw(FL_DAMAGE_HIGHLIGHT);
       }
     }

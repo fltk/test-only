@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.36 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.37 2002/05/06 06:31:26 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -146,41 +146,11 @@ bool fl_overlay;
 
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
+  uchar save_damage = damage();
 
+  Fl_X* i = Fl_X::i(this);
 #if USE_GL_OVERLAY && defined(_WIN32)
-
-#if SGI320_BUG
-  bool fixcursor = false; // for fixing the SGI 320 bug
-#endif
-
-  // Draw into hardware overlay planes if they are damaged:
-  if (overlay && overlay != this
-      && (damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE) || !save_valid)) {
-#if SGI320_BUG
-    // SGI 320 messes up overlay with user-defined cursors:
-    if (Fl_X::i(this)->cursor && Fl_X::i(this)->cursor != fl_default_cursor) {
-      fixcursor = true; // make it restore cursor later
-      SetCursor(0);
-    }
-#endif
-    fl_set_gl_context(this, (GLContext)overlay);
-    if (fl_overlay_depth)
-      wglRealizeLayerPalette(Fl_X::i(this)->dc, 1, TRUE);
-    glDisable(GL_SCISSOR_TEST);
-    if (!(mode_ & FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
-    fl_overlay = true;
-    draw_overlay();
-    fl_overlay = false;
-    valid(save_valid);
-    wglSwapLayerBuffers(Fl_X::i(this)->dc, WGL_SWAP_OVERLAY1);
-    // if only the overlay was damaged we are done, leave main layer alone:
-    if (damage() == FL_DAMAGE_OVERLAY) {
-#if SGI320_BUG
-      if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
-#endif
-      return;
-    }
-  }
+  if (save_damage == FL_DAMAGE_OVERLAY && !i->region) goto OVERLAY_ONLY;
 #endif
 
   make_current();
@@ -203,7 +173,7 @@ void Fl_Gl_Window::flush() {
     if (SWAP_TYPE == NODAMAGE) {
 
       // don't draw if only overlay damage or expose events:
-      if ((damage()&~(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE)) || !save_valid)
+      if (save_damage != FL_DAMAGE_OVERLAY || !save_valid)
 	draw_swap();
       else
 	swap_buffers();
@@ -211,7 +181,7 @@ void Fl_Gl_Window::flush() {
     } else if (SWAP_TYPE == COPY) {
 
       // don't draw if only the overlay is damaged:
-      if (damage() != FL_DAMAGE_OVERLAY || !save_valid)
+      if (save_damage != FL_DAMAGE_OVERLAY || i->region || !save_valid)
 	draw_swap();
       else
 	swap_buffers();
@@ -220,7 +190,7 @@ void Fl_Gl_Window::flush() {
       // If we are faking the overlay, use CopyPixels to act like
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
       // don't draw if only the overlay is damaged:
-      if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
+      if (damage1_ || save_damage != FL_DAMAGE_OVERLAY || i->region || !save_valid) draw();
       // we use a seperate context for the copy because rasterpos must be 0
       // and depth test needs to be off:
       static GLContext ortho_context = 0;
@@ -246,7 +216,7 @@ void Fl_Gl_Window::flush() {
 
     } else {
 
-      damage1_ = damage();
+      damage1_ = save_damage;
       set_damage(~0);
       draw();
       if (overlay == this) draw_overlay();
@@ -270,8 +240,32 @@ void Fl_Gl_Window::flush() {
     glFlush();
   }
 
-#if USE_GL_OVERLAY && defined(_WIN32) && SGI320_BUG
-  if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
+#if USE_GL_OVERLAY && defined(_WIN32)
+ OVERLAY_ONLY:
+  // Draw into hardware overlay planes if they are damaged:
+  if (overlay && overlay != this
+      && (i->region || save_damage&FL_DAMAGE_OVERLAY || !save_valid)) {
+#if SGI320_BUG
+    // SGI 320 messes up overlay with user-defined cursors:
+    bool fixcursor = false;
+    if (i->cursor && i->cursor != fl_default_cursor) {
+      fixcursor = true; // make it restore cursor later
+      SetCursor(0);
+    }
+#endif
+    fl_set_gl_context(this, (GLContext)overlay);
+    if (fl_overlay_depth) wglRealizeLayerPalette(i->dc, 1, TRUE);
+    glDisable(GL_SCISSOR_TEST);
+    if (!(mode_&FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
+    fl_overlay = true;
+    valid(save_valid);
+    draw_overlay();
+    fl_overlay = false;
+    wglSwapLayerBuffers(i->dc, WGL_SWAP_OVERLAY1);
+#if SGI320_BUG
+    if (fixcursor) SetCursor(i->cursor);
+#endif
+  }
 #endif
   valid(1);
 }
@@ -323,5 +317,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.36 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.37 2002/05/06 06:31:26 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.24 2002/02/25 09:00:20 spitzak Exp $"
+// "$Id: factory.cxx,v 1.25 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -245,14 +245,26 @@ static Fl_Roller_Type Fl_Roller_type;
 
 #include <fltk/Fl_Scrollbar.h>
 static const Enumeration slider_type_menu[] = {
-  {"Vertical",	"VERTICAL",	(void*)Fl_Slider::VERTICAL},
-  {"Vert TickA","VERTICAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_ABOVE)},
-  {"Vert TickB","VERTICAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BELOW)},
-  {"Vert TickC","VERTICAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BOTH)},
-  {"Horizontal","HORIZONTAL",	(void*)Fl_Slider::HORIZONTAL},
-  {"Horz TickA","HORIZONTAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE)},
-  {"Horz TickB","HORIZONTAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW)},
-  {"Horz TickC","HORIZONTAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH)},
+  {"Vertical Lin No ticks","VERTICAL",	(void*)Fl_Slider::VERTICAL},
+  {"Vertical Lin Left","VERTICAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_ABOVE)},
+  {"Vertical Lin Right","VERTICAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BELOW)},
+  {"Vertical Lin Both","VERTICAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BOTH)},
+
+  {"Vertical Log No ticks","VERTICAL|Fl_Slider::LOG",	(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG)},
+  {"Vertical Log Left","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE)},
+  {"Vertical Log Right","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW)},
+  {"Vertical Log Both","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH)},
+
+  {"Horizontal Lin No ticks","HORIZONTAL",	(void*)Fl_Slider::HORIZONTAL},
+  {"Horizontal Lin Above","HORIZONTAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE)},
+  {"Horizontal Lin Below","HORIZONTAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW)},
+  {"Horizontal Lin Both","HORIZONTAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH)},
+
+  {"Horizontal Log No ticks","HORIZONTAL|Fl_Slider::LOG",	(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG)},
+  {"Horizontal Log Above","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE)},
+  {"Horizontal Log Below","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW)},
+  {"Horizontal Log Both","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH)},
+
   {0}};
 class Fl_Slider_Type : public Fl_Widget_Type {
   const Enumeration *subtypes() const {return slider_type_menu;}
@@ -267,8 +279,8 @@ public:
 static Fl_Slider_Type Fl_Slider_type;
 
 static const Enumeration scrollbar_type_menu[] = {
-  {"Horizontal","HORIZONTAL",	(void*)Fl_Scrollbar::HORIZONTAL},
   {"Vertical",	"VERTICAL",	(void*)Fl_Scrollbar::VERTICAL},
+  {"Horizontal","HORIZONTAL",	(void*)Fl_Scrollbar::HORIZONTAL},
   {0}};
 class Fl_Scrollbar_Type : public Fl_Slider_Type {
   const Enumeration *subtypes() const {return scrollbar_type_menu;}
@@ -633,5 +645,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.24 2002/02/25 09:00:20 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.25 2002/05/06 06:31:26 spitzak Exp $".
 //

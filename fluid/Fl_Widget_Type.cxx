@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.86 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.87 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1194,6 +1194,50 @@ void step_cb(Fl_Value_Input* i, void* v) {
     { i->label_color(c); i->redraw_label(); }
 }
 
+void line_cb(Fl_Value_Input* i, void* v) {
+  if (v == LOAD) {
+    if (!current_widget->is_valuator()) {i->hide(); return;}
+    i->show();
+    i->value(((Fl_Valuator*)(current_widget->o))->linesize());
+  } else {
+    int n = int(i->value());
+    if (n > 0) for_all_selected_widgets() {
+      modflag = 1;
+      Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+      if (q->is_valuator()) {
+	((Fl_Valuator*)(q->o))->linesize(n);
+	q->redraw();
+      }
+    }
+  }
+  Fl_Color c = FL_BLACK;
+  if (i->value() != 1.0) c = FL_RED;
+  if (i->label_color() != c)
+    { i->label_color(c); i->redraw_label(); }
+}
+
+void page_cb(Fl_Value_Input* i, void* v) {
+  if (v == LOAD) {
+    if (!current_widget->is_valuator()) {i->hide(); return;}
+    i->show();
+    i->value(((Fl_Valuator*)(current_widget->o))->pagesize());
+  } else {
+    int n = int(i->value());
+    if (n > 0) for_all_selected_widgets() {
+      modflag = 1;
+      Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+      if (q->is_valuator()) {
+	((Fl_Valuator*)(q->o))->pagesize(n);
+	q->redraw();
+      }
+    }
+  }
+  Fl_Color c = FL_BLACK;
+  if (i->value() != 10.0) c = FL_RED;
+  if (i->label_color() != c)
+    { i->label_color(c); i->redraw_label(); }
+}
+
 void value_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
@@ -1681,6 +1725,10 @@ void Fl_Widget_Type::write_widget_code() {
       write_c("%so->maximum(%g);\n", indent(), v->maximum());
     if (v->step()!=f->step())
       write_c("%so->step(%g);\n", indent(), v->step());
+    if (v->linesize()!=f->linesize())
+      write_c("%so->linesize(%g);\n", indent(), v->linesize());
+    if (v->pagesize()!=f->pagesize())
+      write_c("%so->pagesize(%g);\n", indent(), v->pagesize());
     if (v->value())
       write_c("%so->value(%g);\n", indent(), v->value());
     if (is_valuator()==2) {
@@ -1827,6 +1875,8 @@ void Fl_Widget_Type::write_properties() {
     if (v->minimum()!=f->minimum()) write_string("minimum %g",v->minimum());
     if (v->maximum()!=f->maximum()) write_string("maximum %g",v->maximum());
     if (v->step()!=f->step()) write_string("step %g",v->step());
+    if (v->linesize()!=f->linesize()) write_string("linesize %d",v->linesize());
+    if (v->pagesize()!=f->pagesize()) write_string("pagesize %d",v->pagesize());
     if (v->value()!=0.0) write_string("value %g",v->value());
     if (is_valuator()==2) {
       double x = ((Fl_Slider*)v)->slider_size();
@@ -1966,6 +2016,10 @@ void Fl_Widget_Type::read_property(const char *c) {
     ((Fl_Valuator*)o)->maximum(strtod(read_word(),0));
   } else if (!strcmp(c,"step") && is_valuator()) {
     ((Fl_Valuator*)o)->step(strtod(read_word(),0));
+  } else if (!strcmp(c,"linesize") && is_valuator()) {
+    ((Fl_Valuator*)o)->linesize(strtod(read_word(),0));
+  } else if (!strcmp(c,"pagesize") && is_valuator()) {
+    ((Fl_Valuator*)o)->pagesize(strtod(read_word(),0));
   } else if (!strcmp(c,"value") && is_valuator()) {
     ((Fl_Valuator*)o)->value(strtod(read_word(),0));
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
@@ -2110,5 +2164,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.86 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.87 2002/05/06 06:31:26 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.142 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.143 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -211,9 +211,21 @@ void Fl::remove_check(Fl_Timeout_Handler cb, void *arg) {
 
 void (*Fl::idle)(); // see Fl_add_idle.cxx for the add/remove functions
 
-extern int fl_wait(double time); // in Fl_x.cxx or Fl_win32.cxx
-
 static char in_idle;
+
+#define FOREVER 1e20
+
+int Fl::run() {
+  while (first_window()) wait(FOREVER);
+  return(0);
+// WAS: This was tried for fltk 2.0, and the callback for closing the last
+// window in Fl_Window.C called exit(). This proved to be unpopular:
+//  for (;;) wait(FOREVER);
+}
+
+int Fl::wait() {
+  return wait(FOREVER);
+}
 
 int Fl::wait(double time_to_wait) {
   int ret = 0;
@@ -257,37 +269,17 @@ int Fl::wait(double time_to_wait) {
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
   }
-  if (time_to_wait <= 0.0) {
-    // do flush second so that the results of callbacks are visible:
-    if (fl_wait(0.0)) ret = 1;
-    flush();
-  } else {
-    // do flush first so that user sees the display:
-    flush();
-    if (fl_wait(time_to_wait)) ret = 1;
-  }
+  // update display after the callbacks but before waiting:
+  flush();
+  // run the system-specific part that waits for sockets & events:
+  if (time_to_wait <= 0.0) time_to_wait = 0.0;
+  if (fl_wait(time_to_wait)) ret = 1;
   return ret;
 }
 
 int Fl::check() {
   return wait(0.0);
 }
-
-#define FOREVER 1e20
-
-int Fl::wait() {
-  return wait(FOREVER);
-}
-
-int Fl::run() {
-  while (first_window()) wait(FOREVER);
-  return(0);
-// WAS: This was tried for fltk 2.0, and the callback for closing the last
-// window in Fl_Window.C called exit(). This proved to be unpopular:
-//  for (;;) wait(FOREVER);
-}
-
-extern int fl_ready();
 
 int Fl::ready() {
   if (first_timeout) {
@@ -296,6 +288,7 @@ int Fl::ready() {
   } else {
     reset_clock = 1;
   }
+  // run the system-specific part:
   return fl_ready();
 }
 
@@ -629,5 +622,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.142 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.143 2002/05/06 06:31:26 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.88 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.89 2002/05/06 06:31:27 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -178,10 +178,10 @@ void Fl_Widget::redraw(uchar flags) {
 
 void Fl_Widget::redraw_label() {
   if (!label() && !image()) return;
-  // ignore inside label (not sure why this does not cause a redraw()):
-  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) return;
+  // inside label redraws the widget:
+  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) redraw();
   // outside label requires a marker flag and damage to parent:
-  redraw(FL_DAMAGE_CHILD_LABEL);
+  else redraw(FL_DAMAGE_CHILD_LABEL);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -193,9 +193,15 @@ void Fl_Widget::redraw_label() {
 int Fl_Widget::handle(int event) {
   switch (event) {
   case FL_ENTER:
-  case FL_LEAVE:
   case FL_MOVE:
-    if (box() != FL_NO_BOX) return 1;
+    // Though returning true will work for normal widgets, it will not
+    // work if this is a group and some child has the belowmouse because
+    // send() will not change the belowmouse then. Setting belowmouse
+    // directly fixes this.
+    // The check for is_window is there to fix problems with a large
+    // number of older fltk programs that set FL_NO_BOX on windows to
+    // stop them from blinking (this is not necessary in fltk2.0):
+    if (box()!=FL_NO_BOX || is_window()) {Fl::belowmouse(this); return true;}
   default:
     return 0;
   }
@@ -451,6 +457,7 @@ int Fl_Widget::test_shortcut() const {
 void Fl_Widget::draw_frame() const {
   Fl_Flags flags = this->flags();
   if (!active_r()) flags |= FL_INACTIVE;
+  if (focused()) flags |= FL_SELECTED;
   box()->draw(0, 0, w(), h(), color(), flags|FL_INVISIBLE);
 }
 
@@ -464,6 +471,7 @@ void Fl_Widget::draw_box() const {
   }
   Fl_Flags flags = this->flags();
   if (!active_r()) flags |= FL_INACTIVE;
+  if (focused()) flags |= FL_SELECTED;
   box->draw(0, 0, w(), h(), color(), flags);
 }
 
@@ -492,5 +500,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.88 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.89 2002/05/06 06:31:27 spitzak Exp $".
 //

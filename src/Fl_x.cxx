@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.126 2002/04/16 08:57:51 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.127 2002/05/06 06:31:27 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -161,7 +161,9 @@ static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
 
-static int fl_wait(double time_to_wait) {
+// Wait up to the given time for any events or sockets to become ready,
+// do the callbacks for the events and sockets:
+static inline int fl_wait(double time_to_wait) {
 
   // OpenGL and other broken libraries call XEventsQueued()
   // and thus cause the file descriptor to not be ready,
@@ -210,7 +212,7 @@ static int fl_wait(double time_to_wait) {
 }
 
 // fl_ready() is just like fl_wait(0.0) except no callbacks are done:
-static int fl_ready() {
+static inline int fl_ready() {
   if (XQLength(fl_display)) return 1;
 #if USE_POLL
   return ::poll(pollfds, nfds, 0);
@@ -654,7 +656,18 @@ bool fl_handle()
     Window cr; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
-
+#if 0
+    // Faster version that does not bother with calling resize as the
+    // user drags the window around. This was what most Win32 versions
+    // of fltk did. This breaks programs that want to track the current
+    // position to figure out what corner is being resized when layout
+    // is called.
+    if (W == window->w() && H == window->h()) {
+      window->x(X);
+      window->y(Y);
+      break;
+    }
+#endif
     // tell Fl_Window about it and set flag to prevent echoing:
     if (window->resize(X, Y, W, H)) resize_from_system = window;
     break; // allow add_handler to do something too
@@ -1339,5 +1352,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.126 2002/04/16 08:57:51 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.127 2002/05/06 06:31:27 spitzak Exp $".
 //

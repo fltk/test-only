@@ -1,0 +1,62 @@
+<html><head><title>class Fl_Multi_Image</title></head><body bgcolor=white>
+<!-- NEW PAGE -->
+<h2>class Fl_Multi_Image</h2>
+<hr>
+
+This subclass of <a href="Fl_Image.html"><tt>Fl_Image</tt></a>
+allows a different image to be used for different states of the
+widget. For instance a different image can be drawn when a button is
+pushed in, or when it has the focus, or when it is highlighted by the
+mouse.
+
+<h4>Fl_Multi_Image(Fl_Image& image0,<br>
+	Fl_Flags flags1, Fl_Image& image1,<br>
+	Fl_Flags flags2, Fl_Image& image2,<br>
+	...)</h4>
+
+The constructors takes references to the base <i>image0</i>, and up to
+seven pairs of flags and supplemental images.  There are actually many
+constructors, for each possible number of supplemental images up to 7.
+
+<p>You want the images with fewer flags first. See the description of
+draw for the exact algorithim, but basically the last matching image
+is used. Useful flags (which may be or'd together) are:
+
+<ul>
+
+<li><tt>FL_VALUE</tt> : true when the button is pushed in or turned on.
+
+<li><tt>FL_SELECTED</tt> : true for selected browser items, or for
+buttons, menu items, or other widgets that have the focus. If you use
+this to indicate focus you may want to turn off the "dotted box" by
+doing <tt>widget->focus_box(FL_NO_BOX)</tt>.
+
+<li><tt>FL_HIGHLIGHT</tt> : true when the mouse cursor is pointing at
+the button. To make this work you must also set
+<tt>widget->highlight_color(FL_GRAY></tt> (the actual color is
+ignored) so fltk knows it need to redraw it to show highlighting.
+
+<li><tt>FL_INACTIVE</tt> : true when the widget is inactive.
+
+</ul>
+
+<h4>~Fl_Multi_Image()</h4>
+
+<p>The destructor does not destroy or touch any of the referenced
+images.
+
+<h4>void draw(int x, int y, int w, int h, Fl_Flags flags)</h4>
+
+Draw searches all the images supplied to the constructor. For each
+image it compares <i>flags</i> to the flags supplied to the
+constructor for that image. All flags supplied to the constructor must
+be turned on, however other flags may also be turned on. After
+searching, the last image that had matching flags is the one that is
+drawn. If no images had matching flags then <i>image0</i> is drawn.
+
+<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+
+Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
+the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.
+
+</body></html>

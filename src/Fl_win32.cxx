@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.171 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.172 2002/05/06 06:31:27 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -185,13 +185,15 @@ void* Fl::thread_message() {
 }
 
 MSG fl_msg;
+#include <stdio.h>
 
-// This is never called with time_to_wait < 0.0.
+// Wait up to the given time for any events or sockets to become ready,
+// do the callbacks for the events and sockets.
 // It *should* return negative on error, 0 if nothing happens before
 // timeout, and >0 if any callbacks were done.	This version only
 // returns zero if nothing happens during a 0.0 timeout, otherwise
 // it returns 1.
-static int fl_wait(double time_to_wait) {
+static inline int fl_wait(double time_to_wait) {
   int have_message = 0;
   int timerid;
 
@@ -254,10 +256,16 @@ static int fl_wait(double time_to_wait) {
       // looks like it is best to do the dispatch-message anyway:
     }
 #endif
-    if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
-      thread_message_ = (void*)fl_msg.wParam;
-    TranslateMessage(&fl_msg);
-    DispatchMessage(&fl_msg);
+    if (fl_msg.message == WM_USER) {
+      // This is used by Fl::awake() and by WndProc() in an attempt
+      // to get Fl::wait() to return. That does not always work
+      // unfortunately, as Windoze calls WndProc directly sometimes.
+      // If that happens it gives up and calls Fl::flush() 
+      if (fl_msg.wParam) thread_message_ = (void*)fl_msg.wParam;
+    } else {
+      TranslateMessage(&fl_msg);
+      DispatchMessage(&fl_msg);
+    }
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
   }
 
@@ -266,7 +274,7 @@ static int fl_wait(double time_to_wait) {
 }
 
 // fl_ready() is just like fl_wait(0.0) except no callbacks are done:
-static int fl_ready() {
+static inline int fl_ready() {
   if (PeekMessage(&fl_msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
 #ifdef USE_ASYNC_SELECT
   return 0;
@@ -582,6 +590,10 @@ extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
 static Fl_Window* resize_from_system;
+//  static Fl_Window* in_wm_paint;
+//  static PAINTSTRUCT paint;
+
+#define MakeWaitReturn() PostMessage(hWnd, WM_USER, 0, 0)
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -609,10 +621,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_CAPTURECHANGED:
-    if (Fl::grab_) Fl::exit_modal();
-    // this is necessary so the fltk main loop gets called, otherwise
-    // Windows never returns from GetMessage! :-(
-    PostMessage(hWnd, WM_USER, 0, 0);
+    if (Fl::grab_) {
+      Fl::exit_modal();
+      // Make Fl::wait() return so that the function that called modal()
+      // can continue executing:
+      MakeWaitReturn();
+    }
     break;
 
 #if 0
@@ -636,29 +650,50 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (!window) break;
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = false;
+#if 1
     // Merge the region into whatever is accumulated by fltk. I do this
     // by invalidating the fltk region and reading the resulting region
     // back:
     if (i->region) InvalidateRgn(hWnd, i->region, FALSE);
     else i->region = CreateRectRgn(0,0,0,0);
     GetUpdateRgn(hWnd, i->region, 0);
-#if 0
-    // Ideally we should wait on redrawing until Fl::flush() is called
-    // by turning this flag on:
+    // This convinces MSWindows we have painted whatever they wanted
+    // us to paint, and stops it from sending WM_PAINT messages:
+    ValidateRgn(hWnd, i->region);
+    // This makes Fl::flush() do something:
     Fl::damage(FL_DAMAGE_EXPOSE);
+    // Originally it called Fl::flush() directly here, but it appears to
+    // be better to get Fl::wait() to return by posting a message. This
+    // merges the damage together and waits for idle. Windows appears to
+    // sometimes send WM_PAINT while we are painting the previous contents
+    // and this minimizes the chances that will mess it up:
+    MakeWaitReturn();
+    //Fl::flush();
 #else
-    // But it appears that Windows is just not happy unless you do a
-    // draw right now. It holds it's breath and turns blue if you try
-    // to disobey. This is rather a pain, I have to throw away Window's
-    // setting of the region and recreate it later:
-    SelectClipRgn(i->dc, 0);
+    // This version was an attempt to fool fltk into doing what Windows
+    // wants, which is to draw immediately in response to the WM_PAINT
+    // event. This did not work as well as the above simpler version,
+    // and also appeared to be no faster.
+    // Since we can't merge or otherwise change the clip region, we
+    // must first get rid of any other damage before doing the drawing:
+    if (window->damage() || i->region) {
+      window->flush();
+      window->set_damage(0);
+      if (i->region) {XDestroyRegion(i->region); i->region = 0;}
+    }
+    // Now get the damage region, so fltk has some idea what area it
+    // needs to draw:
+    i->region = CreateRectRgn(0,0,0,0);
+    GetUpdateRgn(hWnd, i->region, 0);
+    // Now draw it using Windows' gc and clip region:
+    BeginPaint(i->xid, &paint);
+    in_wm_paint = window; // makes it use the hdc from the paint struct
     window->flush();
     window->set_damage(0);
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
+    EndPaint(i->xid, &paint);
+    in_wm_paint = 0;
 #endif
-    // This convinces MSWindows we have painted whatever they wanted
-    // us to paint, and stops it from sending WM_PAINT messages:
-    ValidateRgn(hWnd, NULL);
     } break;
 
   case WM_LBUTTONDOWN:	mouse_event(window, 0, 1, wParam, lParam); return 0;
@@ -698,9 +733,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (xfocus != window) {
       xfocus = window;
       fl_fix_focus();
-      // this is necessary so the fltk main loop gets called, otherwise
-      // Windows never returns from GetMessage! :-(
-      PostMessage(hWnd, WM_USER, 0, 0);
+      MakeWaitReturn();
     }
     break;
 
@@ -802,20 +835,30 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     } else { // Unmap event
       Fl_X::i(window)->wait_for_expose = true;
     }
+    MakeWaitReturn();
     break;
 
   case WM_SIZE:
-    if (!window || window->parent()) break; // ignore child windows
-    if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) { // iconize
-      Fl_X::i(window)->wait_for_expose = true;
-    } else { // resize, deiconize
-      // supposedly a Paint event will come in turn off iconize indicator
-      if (window->resize(window->x(), window->y(),
-			 LOWORD(lParam), HIWORD(lParam))) {
-	resize_from_system = window;
-	window->layout(); // This works, but is it the right way?
+    if (window && !window->parent()) {
+      if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) { // iconize
+	Fl_X::i(window)->wait_for_expose = true;
+      } else { // resize, deiconize
+	// supposedly a Paint event will come in turn off iconize indicator
+	if (window->resize(window->x(), window->y(),
+			   LOWORD(lParam), HIWORD(lParam)))
+	  resize_from_system = window;
+      }
     }
-    }
+    MakeWaitReturn();
+    break;
+
+  case WM_USER:
+    // This will be called if MakeWaitReturn fails because Stoopid Windows
+    // called the WndProc directly. Instead do the best we can, which is
+    // to flush the display.
+    // record the awake() argument:
+    if (fl_msg.wParam) thread_message_ = (void*)fl_msg.wParam;
+    Fl::flush();
     break;
 
   case WM_MOVE:
@@ -823,12 +866,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #if 0
     if (window->resize((signed short)LOWORD(lParam),
 		       (signed short)HIWORD(lParam),
-		       window->w(),
-		       window->h())) {
+		       window->w(), window->h()))
       resize_from_system = window;
-      window->layout();
-    }
+    MakeWaitReturn();
 #else
+    // Don't bother having dragging windows call resize or layout, just
+    // set the coordinates directly. This should be faster but I can't
+    // see too much difference. This should also be copied to X version.
     window->x((signed short)LOWORD(lParam));
     window->y((signed short)HIWORD(lParam));
 #endif
@@ -1141,7 +1185,10 @@ Cleanup::~Cleanup() {
 
 // make X drawing go into this window (called by subclass flush() impl.)
 void Fl_Window::make_current() const {
-  i->make_current();
+//    if (this == in_wm_paint)
+//      fl_gc = paint.hdc;
+//    else
+    i->make_current();
 #if USE_COLORMAP
   // Windows maintains a hardware and software color palette; the
   // SelectPalette() call updates the current soft->hard mapping
@@ -1341,5 +1388,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.171 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.172 2002/05/06 06:31:27 spitzak Exp $".
 //

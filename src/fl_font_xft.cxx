@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.6 2002/03/26 18:00:35 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.7 2002/05/06 06:31:27 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -61,6 +61,16 @@
 #include <fltk/fl_draw.h>
 #include <fltk/x.h>
 #include <X11/Xft/Xft.h>
+// define some symbols missing from some Xft header files:
+#ifndef XFT_MINSPACE
+#define XFT_MINSPACE        "minspace"  /* Bool use minimum line spacing */
+#endif
+#ifndef XFT_MATRIX
+#define XFT_MATRIX          "matrix"    /* XftMatrix */
+typedef struct _XftMatrix {
+    double xx, xy, yx, yy;
+} XftMatrix;
+#endif                                                        
 #include <string.h>
 #include <stdlib.h>
 
@@ -384,5 +394,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.6 2002/03/26 18:00:35 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.7 2002/05/06 06:31:27 spitzak Exp $"
 //

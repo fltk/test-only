@@ -48,6 +48,11 @@ The destructor throws away temporary data created to draw the image,
 but in most cases does not destroy the local data passed to a
 constructor.
 
+<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+
+Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
+the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.
+
 <p>The base class destructor will destroy anything created for <tt>id</tt> or
 <tt>mask</tt>.
 

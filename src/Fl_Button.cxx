@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.51 2002/04/11 07:47:45 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.52 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -167,13 +167,17 @@ void Fl_Button::draw(int glyph, int glyph_width) const
     // If the box is FL_NO_BOX we need to avoid drawing the label so
     // that it does not blink and does not draw multiple times (which
     // will make it look bold if antialiasing is on).
-    if ((damage()&FL_DAMAGE_EXPOSE) ||
+    if (!label()) {
+      // don't do anything if no label, so buttons that are an image
+      // only will redraw correctly and with minimum blinking.
+    } else if ((damage()&FL_DAMAGE_EXPOSE) ||
 	(damage()&FL_DAMAGE_HIGHLIGHT) && !focused()) {
-      // erase the background:
+      // erase the background behind where the label will draw:
       fl_push_clip(0, 0, w, h);
       parent()->draw_group_box();
       fl_pop_clip();
     } else {
+      // Don't draw the label unnecessarily:
       draw_label = false;
     }
   } else {
@@ -230,5 +234,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.51 2002/04/11 07:47:45 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.52 2002/05/06 06:31:26 spitzak Exp $".
 //

@@ -29,18 +29,38 @@ the <a href="Fl_Valuator.html#maximum">maximum()</a> to reverse the
 slider direction. See <a href="Fl_Valuator.html">Fl_Valuator</a> for
 how to set or get the value or handle callbacks when the value changes.
 
-<p><img src=slider.gif>
+<p><img src=slider.gif> <img src=logslider.gif>
 
 <p>The appearance of the slider may be changed by setting the <a
-href="Fl_Widget.html#type">type()</a> or the <a
-href="Fl_Widget.html#box">box()</a> which is drawn around the moving
-part, or the <a href="Fl_Widget.html#color">color()</a> which fills in
-this box, or the <a
-href="Fl_Widget.html#button_color">button_color()</a> which colors the
-sliding part, or <a href="Fl_Widget.html#text_color">text_color()</a>
-which colors the tick marks.  More elaborate modifications to the
-appearance may be done by subclassing the widget and replacing
-portions of how it is drawn.
+href="#type">type()</a> to the "or" of a several bits.
+
+<p>By default the slider moves vertically. Setting the
+<tt>HORIZONTAL</tt> bit in the type makes it move horizontally.
+
+<p>"Log" sliders have a non-uniform scale. The above-right diagram
+shows some examples. The scale is truly logarithmic if both the 
+<a
+href="Fl_Valuator.html#minimum">minimum()</a> and
+the <a href="Fl_Valuator.html#maximum">maximum()</a> are non-zero and
+have the same sign. Otherwise the slider position is the square root
+of the value (or -sqrt(-value) for negative values).
+
+<p>You can turn on tick marks by turning on bits in the type(). The
+tick marks are the <a href="Fl_Valuator.html#pagesize">pagesize()</a>
+apart. For log sliders, they are the <a
+href="Fl_Valuator.html#pagesize">pagesize()</a> apart near zero, and
+every ten tickmarks they are ten times further apart. The color of the
+tick marks is controlled by <a
+href="Fl_Widget.html#text_color">text_color()</a>, and the font used
+to draw the "0" and "1" is <a href="Fl_Widget.html#text_font">text_font()</a>.
+
+<p>Setting the <a href="Fl_Widget.html#box">box()</a> as shown in the
+example on the bottom-left will remove the "slot" and draw a box
+around the slider and the tick marks. Setting the <a
+href="Fl_Widget.html#color">color()</a> fills in this box. Setting the
+<a href="Fl_Widget.html#button_box">button_box()</a> changes how the
+moving part is drawn (only rectangular boxes work), and <a
+href="Fl_Widget.html#button_color">button_color()</a> colors it.
 
 <h3>Methods</h3>
 <ul>
@@ -98,7 +118,7 @@ vertical slider, same value as <tt>TICK_BELOW</tt>
 the slider.
 
 <li><tt>Fl_Slider::LOG</tt> - Use a logarithimic or power scale for
-the slider (NYI).
+the slider.
 
 </ul>
 

@@ -8,29 +8,35 @@ encapsulates the width, height, and bits of an X bitmap (XBM), and
 allows you to make an <TT>Fl_Widget</TT> use a bitmap as a label, or
 to just draw the bitmap directly.
 
-<H4>Fl_Bitmap(const char *bits, int W, int H)
-<BR> Fl_Bitmap(const uchar *bits, int W, int H)</H4>
+<h4>Fl_Bitmap(const char *bits, int W, int H)
+<br>Fl_Bitmap(const unsigned char *bits, int W, int H)</h4>
+
 Construct using an X bitmap.  The bits pointer is simply copied to the 
 object, so it must point at persistent storage.  The two constructors 
 are provided because various X implementations disagree about the type 
 of bitmap data.  To use an XBM file use: 
-<UL>
-<PRE>
-#include &quot;foo.xbm&quot;
+
+<ul><pre>#include &quot;foo.xbm&quot;
 ...
 Fl_Bitmap bitmap = new Fl_Bitmap(foo_bits, foo_width, foo_height);
-</PRE>
-</UL>
-<H4>~Fl_Bitmap()</H4>
- The destructor will destroy any X pixmap created.  It does not do 
+</pre></ul>
+
+<h4>~Fl_Bitmap()</h4>
+
+The destructor will destroy any X pixmap created.  It does not do 
 anything to the bits data. 
-<H4>void draw(int x, int y, int w, int h, int ox = 0, int oy = 0)</H4>
-1 bits are drawn with the current color, 0 bits 
-are unchanged.
-The image is clipped to the destination rectangle: the area
-<TT>ox,oy,w,h</TT> is copied to <TT>x,y,w,h</TT>.
-<H4>void draw(int x, int y)</H4>
-Draws the bitmap with the upper-left corner at <TT>x,y</TT>.  This is 
-the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>. 
+
+<h4>void draw(int x, int y, int w, int h, Fl_Flags = 0)</h4>
+
+The image is drawn with the top-left corner at <i>x,y</i>. The
+<i>w</i> and <i>h</i> are ignored.  1 bits are drawn with the current
+color, 0 bits are unchanged. The flags are ignored
+(<tt>FL_INACTIVE</tt> can be done by selecting a gray version of the
+color).
+
+<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+
+Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
+the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.
 
 </body></html>

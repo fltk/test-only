@@ -17,7 +17,7 @@ Function {make_widget_panel()} {open
     } {
       Fl_Group {} {
         label GUI
-        callback propagate_group open selected
+        callback propagate_group open
         xywh {0 23 380 297}
       } {
         Fl_Input {} {
@@ -47,13 +47,13 @@ Function {make_widget_panel()} {open
           label {Image name}
           callback image_cb
           tooltip {Select an image to label the widget}
-          xywh {80 55 220 22} align 524308 box DOWN_BOX color 7
+          xywh {80 55 220 22} align 20 box DOWN_BOX color 7
         }
         Fl_Check_Button include_image_button {
           label inline
           callback image_inlined_cb
           tooltip {The image data is inserted as inline data into the output C++ code, rather than generating code to read the image file.}
-          xywh {305 55 50 22} align 524436 label_size 10
+          xywh {305 55 50 22} align 148 label_size 10
         }
         Fl_Box {} {
           label Alignment
@@ -138,6 +138,12 @@ Function {make_widget_panel()} {open
           tooltip {Window will use this x,y rather than being positioned by the operating system.}
           xywh {305 105 60 22}
         }
+        Fl_Value_Input {} {
+          label size
+          callback slider_size_cb
+          tooltip {The size of the scroller}
+          xywh {315 105 55 22} align 20 when ENTER_KEY label_size 10
+        }
         Fl_Check_Button {} {
           label Border
           callback border_cb
@@ -159,32 +165,43 @@ Function {make_widget_panel()} {open
         Fl_Value_Input {} {
           label Value
           callback value_cb
-          tooltip {The initial value (integer) of this widget}
+          tooltip {The initial value of this widget}
           xywh {80 132 55 22} when ENTER_KEY
         }
         Fl_Value_Input {} {
-          label min
+          label mn
           callback min_cb
           tooltip {The minimum value for this valuator}
-          xywh {135 132 60 22} align 20 when ENTER_KEY label_size 10
+          xywh {135 132 55 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Value_Input {} {
-          label max
+          label mx
           callback max_cb
           tooltip {The maximum value for this valuator}
-          xywh {195 132 60 22} align 20 when ENTER_KEY label_size 10 value 1
+          xywh {190 132 55 22} align 20 when ENTER_KEY label_size 10 value 1
         }
         Fl_Value_Input {} {
-          label step
-          callback step_cb
-          tooltip {Amount to change this valuator when mouse moves 1 pixel}
-          xywh {255 132 60 22} align 20 when ENTER_KEY label_size 10
+          label s
+          callback step_cb selected
+          tooltip {step:
+Round all movements to multiples of this.
+}
+          xywh {245 132 45 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Value_Input {} {
-          label size
-          callback slider_size_cb
-          tooltip {The size of the scroller}
-          xywh {315 132 55 22} align 20 when ENTER_KEY label_size 10
+          label L
+          callback line_cb
+          tooltip {linesize:
+Number of steps to move for arrow keys.}
+          xywh {290 132 40 22} align 20 when ENTER_KEY label_size 10 minimum 1 step 1
+        }
+        Fl_Value_Input {} {
+          label P
+          callback page_cb
+          tooltip {pagesize:
+Number of steps to move for PageUp/PageDown
+How far apart tick marks are.}
+          xywh {330 132 40 22} align 20 when ENTER_KEY label_size 10 minimum 1 step 1
         }
         Fl_Group {} {
           label Attributes
@@ -225,7 +242,7 @@ To delete the shortcut:
    Click here, then type backspace.
 To get out of shortcut-setting mode:
    Click the mouse on this again, or on some other field.}
-          xywh {80 181 290 22} align 524292 box DOWN_BOX color 7
+          xywh {80 181 290 22} align 4 box DOWN_BOX color 7
           extra_code {\#include "Shortcut_Button.h"}
           class Shortcut_Button
         }

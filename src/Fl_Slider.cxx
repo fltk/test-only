@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.58 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.59 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -120,25 +120,23 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h)
   fl_color(color);
   double A = minimum();
   double B = maximum();
-  int incr = pagesize(); if (incr < 1) incr = 1;
-  if (log()) {
-    int n = 0;
-    for (double v1 = 0; ;v1 = increment(v1,incr)) {
-      if (++n > 10) {n = 2; incr *= 10;}
-      double v = fabs(v1);
-      if (v > fabs(A) && v > fabs(B)) break;
-      if (B < 0 || A < 0) {
-	int t = slider_position(-v, w);
-	fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
-      }
-      if (B > 0 || A > 0) {
-	int t = slider_position(v, w);
-	fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+  if (A > B) {A = B; B = minimum();}
+  int incr = pagesize();
+  int n = 0;
+  for (double v1 = 0; ;v1 = increment(v1,incr)) {
+    if (log() && ++n > 10) {n = 2; incr *= 10;}
+    double v = fabs(v1);
+    if (v > fabs(A) && v > fabs(B)) break;
+    if (v >= A && v <= B) {
+      int t = slider_position(v, w);
+      fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+      if (v == 0 || v == 1) {
+	fl_font(text_font(), text_size());
+	fl_draw(v?"1":"0", x1+dx*t+1, y1+dy*t+fl_size()-fl_descent()+1);
       }
     }
-  } else {
-    for (double v = A; v >= A && v <= B; v = increment(v, incr)) {
-      int t = slider_position(v, w);
+    if (-v >= A && -v <= B) {
+      int t = slider_position(-v, w);
       fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
     }
   }
@@ -188,19 +186,19 @@ void Fl_Slider::draw()
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
+      focus_box()->draw(ix+1, iy+1, iw-2, ih-2, label_color(), FL_INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
       if (horizontal()) {
 	switch (type()&TICK_BOTH) {
 	case TICK_ABOVE: ih = sy+sh/2-iy; break;
-	case TICK_BELOW: ih += iy; iy = sy+sh/2; ih -= iy; break;
+	case TICK_BELOW: ih += iy; iy = sy+sh/2+(iy?0:3); ih -= iy; break;
 	}
       } else {
 	switch (type()&TICK_BOTH) {
 	case TICK_ABOVE: iw = sx+sw/2-ix; break;
-	case TICK_BELOW: iw += ix; ix = sx+sw/2; iw -= ix; break;
+	case TICK_BELOW: iw += ix; ix = sx+sw/2+(iy?0:3); iw -= ix; break;
 	}
       }
       draw_ticks(ix, iy, iw, ih);
@@ -330,7 +328,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
       X = w-slider_size_;
       offcenter = mx-X; if (offcenter > slider_size_) offcenter = slider_size_;
     }
-    v = position_value(X, w);
+    v = round(position_value(X, w));
     // make sure a click outside the sliderbar moves it:
     if (event == FL_PUSH && v == value()) {
       offcenter = slider_size_/2;
@@ -388,6 +386,8 @@ static void glyph(const Fl_Widget* widget, int glyph,
 
 static void revert(Fl_Style *s) {
   s->color = FL_GRAY;
+  s->text_color = FL_DARK3;
+  s->text_size = 8;
   s->box = FL_FLAT_BOX;
   s->glyph = ::glyph;
 }
@@ -402,5 +402,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.58 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.59 2002/05/06 06:31:26 spitzak Exp $".
 //

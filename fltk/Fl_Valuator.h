@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.h,v 1.4 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Valuator.h,v 1.5 2002/05/06 06:31:26 spitzak Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,9 +37,8 @@ public:
   double value() const {return value_;}
   int value(double);
 
-  int istep() const {return istep_;}
-  double step() const {return istep_ < 0 ? -istep_ : 1.0/istep_;}
-  void step(double a) {istep_ = a <= 1 ? int(1.0/a+.5) : -int(a+.5);}
+  float step() const {return step_;}
+  void step(float a) {step_ = a;}
 
   double minimum() const {return minimum_;}
   void minimum(double a) {minimum_ = a;}
@@ -49,11 +48,11 @@ public:
 
   void range(double a, double b) {minimum_ = a; maximum_ = b;}
 
-  int linesize() const {return linesize_;}
-  void linesize(int i) {linesize_ = i;}
+  short unsigned linesize() const {return linesize_;}
+  void linesize(short unsigned i) {linesize_ = i;}
 
-  int pagesize() const {return pagesize_;}
-  void pagesize(int i) {pagesize_ = i;}
+  short unsigned pagesize() const {return pagesize_;}
+  void pagesize(short unsigned i) {pagesize_ = i;}
 
   virtual int format(char*);
 
@@ -87,14 +86,14 @@ private:
   static double previous_value_;
   double minimum_;
   double maximum_;
-  int istep_;
-  int linesize_;
-  int pagesize_;
+  float step_;
+  short unsigned linesize_;
+  short unsigned pagesize_;
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Valuator.h,v 1.4 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Valuator.h,v 1.5 2002/05/06 06:31:26 spitzak Exp $".
 //

@@ -94,8 +94,8 @@ that you have defined:
 Fl_Widget* My_Fl_List::child(const Fl_Menu_*, const int* indexes, int level) {
   Node* node = root;
   for (int l = 0; l &lt;= level; l++) {
-    if (!node->is_parent()) return -1;
-    if (indexes[l] >= node->children_count()) return -1;
+    if (!node->is_parent()) return 0;
+    if (indexes[l] >= node->children_count()) return 0;
     node = node->child(indexes[l]);
   }
   static Fl_Widget* widget;

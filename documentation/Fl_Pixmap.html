@@ -8,30 +8,32 @@ encapsulates the data from an XPM image, and allows you to
 make an <TT>Fl_Widget</TT> use a pixmap as a label, or to just draw
 the pixmap directly.
 
-<H4>Fl_Pixmap(char *const* data)</H4>
- Construct using XPM data.  The data pointer is simply copied to the 
+<h4>Fl_Pixmap(char *const* data)</h4>
+
+Construct using XPM data.  The data pointer is simply copied to the 
 object, so it must point at persistent storage.  To use an XPM file do: 
-<UL>
-<PRE>
-#include &lt;fltk/Fl_Pixmap.h&gt;
+
+<ul><pre>#include &lt;fltk/Fl_Pixmap.h&gt;
 #include &quot;foo.xpm&quot;
 ...
 Fl_Pixmap pixmap = new Fl_Pixmap(foo);
-</PRE>
-</UL>
-<H4>~Fl_Pixmap()</H4>
- The destructor will destroy any X pixmap created.  It does not do 
+</pre></ul>
+
+<h4>~Fl_Pixmap()</h4>
+
+The destructor will destroy any X pixmap created.  It does not do 
 anything to the data. 
 
-<H4>void draw(int x, int y, int w, int h, int ox = 0, int oy = 0)</H4>
-The image is clipped to the destination rectangle: the area
-<TT>ox,oy,w,h</TT> is copied to <TT>x,y,w,h</TT>.  The current
-implementation converts the pixmap to 24-bit RGB data and uses <A
-href=#fl_draw_image><TT>fl_draw_image()</TT></A> to draw it.  Thus you
-will get dithered colors on an 8 bit screen. </P>
+<h4>void draw(int x, int y, int w, int h, Fl_Flags = 0)</h4>
 
-<H4>void draw(int x, int y)</H4>
- Draws the image with the upper-left corner at <TT>x,y</TT>.  This is 
-the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>.
+The image is drawn with the top-left corner at <i>x,y</i>. The
+<i>w</i> and <i>h</i> are ignored. The <i>flags</i> are ignored
+(although really it should use <tt>FL_INACTIVE</tt> to gray out the
+image).
+
+<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+
+Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
+the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.
 
 </body></html>
