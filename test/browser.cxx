@@ -85,6 +85,7 @@ static fltk::Widget* add_paper(fltk::Group* parent,
 			   const char* name, int, fltk::Image* image) {
   parent->begin();
   fltk::Item* o = new fltk::Item(name);
+  o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
   o->image(image);
   return o;
 }
@@ -140,16 +141,14 @@ void button_cb(fltk::Widget* b, void *) {
 }
 
 const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
-int widths[]   = {100, 70, 50, fltk::Browser::NormalResize};
+int widths[]   = {100, 70, 50, 0};
 
 fltk::Browser *browser;
-void change_resize(fltk::Widget *, long arg) {
-  if (widths[1]==-1) widths[1] = 70;
-
-  if (arg==1)       widths[3] = fltk::Browser::NormalResize;
-  else if (arg==2)  widths[3] = fltk::Browser::Resize2Width;
-  else if (arg==3)  { widths[3] = fltk::Browser::NormalResize; widths[1] = -1; }
-
+void change_resize(fltk::Widget *w, long arg) {
+  if (w->value()) 
+    widths[1] = -1;
+  else
+    widths[1] = 70; 
   browser->column_widths(widths);
 }
 
@@ -164,7 +163,7 @@ const char* const strings[] = {
 
 int main(int argc,char** argv) {
 
-  fltk::Window win(240, 370, "Browser Example");
+  fltk::Window win(240, 330, "Browser Example");
   win.begin();
 
   fltk::Browser tree(10, 10, 220, 180);
@@ -200,15 +199,8 @@ int main(int argc,char** argv) {
   fltk::CheckButton when_enter_key_button(80, 280, 160, 20, "fltk::WHEN_ENTER_KEY");
   when_enter_key_button.callback(cb_when_enter_key, (void *)&tree);
 
-  fltk::RadioButton resize_a(80, 310, 160, 20, "Browser::NormalResize");
-  resize_a.callback(change_resize, 1);
-  resize_a.set();
-
-  fltk::RadioButton resize_b(80, 330, 160, 20, "Browser::Resize2Width");
-  resize_b.callback(change_resize, 2);
-
-  fltk::RadioButton resize_c(80, 350, 160, 20, "Set flexible column");
-  resize_c.callback(change_resize, 3);
+  fltk::CheckButton resize(80, 310, 160, 20, "Make 2. column flexible");
+  resize.callback(change_resize, 3);
 
   win.resizable(tree);
   win.end();
@@ -221,8 +213,6 @@ int main(int argc,char** argv) {
   tree.list(new fltk::String_List(strings, sizeof(strings)/sizeof(*strings)));
   //tree.list(new fltk::String_List(strings));
 #else
-  //int w[3] = {150, 200, 0};
-  //tree.column_widths(w);
 
   // Add some nodes with icons -- some open, some closed.
   // fltk::ToggleNode::fltk::ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )
