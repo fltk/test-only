@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.61 2000/11/15 18:20:22 spitzak Exp $"
+// "$Id: Fl.H,v 1.62 2000/12/12 09:02:53 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,6 +91,9 @@ public:
   static void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);
   static int has_timeout(Fl_Timeout_Handler, void* = 0);
   static void remove_timeout(Fl_Timeout_Handler, void* = 0);
+  static void add_check(Fl_Timeout_Handler, void* = 0);
+  static int  has_check(Fl_Timeout_Handler, void* = 0);
+  static void remove_check(Fl_Timeout_Handler, void* = 0);
   static void add_fd(int fd, int when, void (*cb)(int,void*),void* =0);
   static void add_fd(int fd, void (*cb)(int, void*), void* = 0);
   static void remove_fd(int, int when);
@@ -235,5 +238,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.61 2000/11/15 18:20:22 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.62 2000/12/12 09:02:53 spitzak Exp $".
 //

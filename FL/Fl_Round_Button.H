@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.H,v 1.10 2000/04/15 04:47:19 carl Exp $"
+// "$Id: Fl_Round_Button.H,v 1.11 2000/12/12 09:02:53 spitzak Exp $"
 //
 // Round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,8 @@
 #ifndef Fl_Round_Button_H
 #define Fl_Round_Button_H
 
+#include "Fl_Check_Button.H"
+
 // The type of drawing is now controlled by type()==FL_RADIO_BUTTON,
 // so this is identical to an Fl_Check_Button
 
@@ -38,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Round_Button.H,v 1.10 2000/04/15 04:47:19 carl Exp $".
+// End of "$Id: Fl_Round_Button.H,v 1.11 2000/12/12 09:02:53 spitzak Exp $".
 //

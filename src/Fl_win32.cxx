@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.131 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.132 2000/12/12 09:02:53 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -155,24 +155,6 @@ void Fl::remove_fd(int n, int events) {
 
 void Fl::remove_fd(int n) {
   remove_fd(n, -1);
-}
-
-// This function must subtract running time from any pending timeouts.
-// If reset_clock is true then we have not called this recently, in
-// that case just remember the time and subtract nothing.
-static void elapse_timeouts() {
-  unsigned long newclock = GetTickCount();
-  static unsigned long prevclock;
-  if (reset_clock) {
-    prevclock = newclock;
-    reset_clock = 0;
-    return;
-  }
-  if (newclock <= prevclock) return;
-  double elapsed = (newclock-prevclock)/1000.0;
-  prevclock = newclock;
-  // expire any timeouts:
-  for (int i=0; i<numtimeouts; i++) timeout[i].time -= elapsed;
 }
 
 // these pointers are set by the Fl::lock() function:
@@ -1271,5 +1253,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.131 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.132 2000/12/12 09:02:53 spitzak Exp $".
 //

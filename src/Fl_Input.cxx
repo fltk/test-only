@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.41 2000/11/28 16:19:42 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.42 2000/12/12 09:02:53 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -531,7 +531,7 @@ int Fl_Input::replace(int b, int e, const char* text, int ilen) {
     size_ += ilen;
   }
   undowidget = this;
-  mark_ = position_ = undoat = b+ilen;
+  undoat = b+ilen;
 
   // Insertions into the word at the end of the line will cause it to
   // wrap to the next line, so we must indicate that the changes may start
@@ -541,7 +541,14 @@ int Fl_Input::replace(int b, int e, const char* text, int ilen) {
   if (type() > FL_MULTILINE_INPUT)
     while (b > 0 && !isspace(index(b))) b--;
 
+  // make sure we redraw the old selection or cursor:
+  if (mark_ < b) b = mark_;
+  if (position_ < b) b = position_;
+
   minimal_update(b);
+
+  mark_ = position_ = undoat;
+
   if (when()&FL_WHEN_CHANGED) do_callback(); else set_changed();
   return 1;
 }
@@ -986,5 +993,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.41 2000/11/28 16:19:42 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.42 2000/12/12 09:02:53 spitzak Exp $".
 //

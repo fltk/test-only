@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.19 2000/10/18 07:18:23 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.20 2000/12/12 09:02:53 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -110,7 +110,7 @@ void Fl_Gl_Window::make_current() {
     RealizePalette(fl_gc);
   }
 #endif // USE_COLORMAP
-  glDrawBuffer(GL_BACK);
+  if (mode_ & FL_DOUBLE) glDrawBuffer(GL_BACK);
   current_ = this;
 }
 
@@ -321,5 +321,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.19 2000/10/18 07:18:23 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.20 2000/12/12 09:02:53 spitzak Exp $".
 //

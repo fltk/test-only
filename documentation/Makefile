@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.10 1999/06/20 15:24:27 mike Exp $"
+# "$Id: Makefile,v 1.11 2000/12/12 09:02:53 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -74,7 +74,6 @@ HTMLFILES	= \
 		Fl_Group.html \
 		Fl_Hold_Browser.html \
 		Fl_Input.html \
-		Fl_Input_.html \
 		Fl_Int_Input.html \
 		Fl_Light_Button.html \
 		Fl_Menu_.html \
@@ -142,5 +141,5 @@ fltk.pdf: $(HTMLFILES)
 	@$(HTMLDOC) -f fltk.pdf --jpeg --compression=9 --duplex --verbose --toclevels 2 --title FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.10 1999/06/20 15:24:27 mike Exp $".
+# End of "$Id: Makefile,v 1.11 2000/12/12 09:02:53 spitzak Exp $".
 #

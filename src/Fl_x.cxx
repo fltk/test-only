@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.98 2000/11/28 16:19:42 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.99 2000/12/12 09:02:53 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -141,30 +141,6 @@ void Fl::remove_fd(int n, int events) {
 void Fl::remove_fd(int n) {
   remove_fd(n, -1);
 }
-
-// This function must subtract running time from any pending timeouts.
-// If reset_clock is true then we have not called this recently, in
-// that case just remember the time and subtract nothing.
-static void elapse_timeouts() {
-  static struct timeval prevclock;
-  struct timeval newclock;
-  gettimeofday(&newclock, NULL);
-  if (reset_clock) {
-    prevclock.tv_sec = newclock.tv_sec;
-    prevclock.tv_usec = newclock.tv_usec;
-    reset_clock = 0;
-    return;
-  }
-  double elapsed = newclock.tv_sec - prevclock.tv_sec +
-    (newclock.tv_usec - prevclock.tv_usec)/1000000.0;
-  prevclock.tv_sec = newclock.tv_sec;
-  prevclock.tv_usec = newclock.tv_usec;
-  if (elapsed <= 0) return;
-
-  // expire any timeouts:
-  for (int i=0; i<numtimeouts; i++) timeout[i].time -= elapsed;
-}
-
 
 #if CONSOLIDATE_MOTION
 static Fl_Window* send_motion;
@@ -1294,5 +1270,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.98 2000/11/28 16:19:42 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.99 2000/12/12 09:02:53 spitzak Exp $".
 //
