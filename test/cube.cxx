@@ -1,11 +1,11 @@
 //
-// "$Id: cube.cxx,v 1.20 2004/06/04 08:58:05 spitzak Exp $"
+// "$Id$"
 //
-// Another forms test program for the Fast Light Tool Kit (FLTK).
+// OpenGL test program for the Fast Light Tool Kit (FLTK).
 //
 // Modified to have 2 cubes to test multiple OpenGL contexts
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,11 +27,12 @@
 
 #include <config.h>
 #include <fltk/run.h>
-#include <fltk/Window.h>
-#include <fltk/Box.h>
-#include <fltk/Button.h>
-#include <fltk/RadioLightButton.h>
-#include <fltk/Slider.h>
+#include <fltk/draw.h>
+#include <fltk/Window.H>
+#include <fltk/Box.H>
+#include <fltk/Button.H>
+#include <fltk/RadioLightButton.H>
+#include <fltk/Slider.H>
 #include <stdlib.h>
 
 using namespace fltk;
@@ -49,7 +50,7 @@ public:
   }
 };
 #else
-#include <fltk/GlWindow.h>
+#include <fltk/GlWindow.H>
 #include <fltk/gl.h>
 
 class cube_box : public GlWindow {
@@ -106,6 +107,7 @@ void cube_box::draw() {
     glEnable(GL_DEPTH_TEST);
     glFrustum(-1,1,-1,1,2,10000);
     glTranslatef(0,0,-10);
+    setfont(HELVETICA_BOLD, 16 );
   }
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
@@ -116,6 +118,10 @@ void cube_box::draw() {
   glScalef(float(size),float(size),float(size));
   drawcube(wire);
   glPopMatrix();
+  color(GRAY75);
+  glDisable(GL_DEPTH_TEST);
+  drawtext(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
+  glEnable(GL_DEPTH_TEST);
 }
 
 #endif
@@ -125,27 +131,50 @@ Slider *speed, *size;
 Button *button, *wire, *flat;
 cube_box *cube, *cube2;
 
-static void exit_cb(Widget* w, void*) {exit(0);}
+static void exit_cb(Widget*, void*) {
+  form->hide();
+}
 
 void makeform(const char *name) {
   form = new Window(510+390,390,name);
   form->begin();
-//  (void) new Box(DOWN_BOX,20,20,350,350,"");
-//  (void) new Box(DOWN_BOX,510,20,350,350,"");
-  speed = new Slider(390,90,40,220,"Speed"); speed->set_vertical();
-  size = new Slider(450,90,40,220,"Size"); size->set_vertical();
+  Widget *box = new Widget(20,20,350,350,"");
+  box->box(DOWN_BOX);
+  box = new Widget(510,20,350,350,"");
+  box->box(DOWN_BOX);
+  speed = new Slider(390,90,40,220,"Speed");
+  speed->set_vertical();
+  size = new Slider(450,90,40,220,"Size");
+  size->set_vertical();
   wire = new RadioLightButton(390,20,100,30,"Wire");
   flat = new RadioLightButton(390,50,100,30,"Flat");
   button = new Button(390,340,100,30,"Exit");
   button->callback(exit_cb);
-  cube  = new cube_box(23,23,344,344, 0);
+  cube = new cube_box(23,23,344,344, 0);
   cube2 = new cube_box(513,23,344,344, 0);
-//  Box *b = new Box(NO_BOX,cube->x(),size->y(), cube->w(),size->h(),0);
-//  form->resizable(b);
-//  b->hide();
+  Widget *b = new Widget(cube->x(),size->y(), cube->w(),size->h(),0);
+  b->box(NO_BOX);
+  form->resizable(b);
+  b->hide();
   form->end();
 }
-#include <stdio.h>
+
+/* 
+ * It should be noted that it is not a good practice to have an idle 
+ * callback in place at all times because it will eat all available 
+ * processor time. A timout callback would be a better solution.
+ * However, "idle" is used in this particular test program to show
+ * maximum OpenGL performance.
+ */
+
+void idle_cb(void*) {
+  cube->wire = wire->value();
+  cube2->wire = !wire->value();
+  cube->size = cube2->size = size->value();
+  cube->speed = cube2->speed = speed->value();
+  cube->redraw();
+  cube2->redraw();
+}
 
 int main(int argc, char **argv) {
   makeform(argv[0]);
@@ -156,25 +185,23 @@ int main(int argc, char **argv) {
   flat->value(1); cube->wire = 0; cube2->wire = 1;
   form->label("cube");
   form->show(argc,argv);
+  cube->show();
+  cube2->show();
 #if 0
-  Fl::run();
-#else
-  for (;form->visible();) {
-	if (form->iconic() || !speed->value())
-	  fltk::wait();	// waits until something happens
-	else
-	  check();	// returns immediately
-	cube->wire = wire->value();
-	cube2->wire = !wire->value();
-	cube->size = cube2->size = size->value();
-	cube->speed = cube2->speed = speed->value();
-	cube->redraw();
-	cube2->redraw();
-  }
+  // This demonstrates how to manipulate OpenGL contexts.
+  // In this case the same context is used by multiple windows (I'm not
+  // sure if this is allowed on Win32, can somebody check?).
+  // This fixes a bug on the XFree86 3.0 OpenGL where only one context
+  // per program seems to work, but there are probably better uses for
+  // this!
+  cube->make_current(); // causes context to be created
+  cube2->context(cube->context()); // share the contexts
 #endif
+  fltk::add_idle(idle_cb, 0);
+  fltk::run();
   return 0;
 }
 
 //
-// End of "$Id: cube.cxx,v 1.20 2004/06/04 08:58:05 spitzak Exp $".
+// End of "$Id$".
 //

@@ -115,6 +115,7 @@ TARGETS = \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
 	color_chooser$(EXEEXT) \
+	cube$(EXEEXT) \
 	cursor$(EXEEXT) \
 	curve$(EXEEXT) \
 	demo$(EXEEXT) \
