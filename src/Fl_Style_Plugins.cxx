@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.1 1999/09/27 12:20:03 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.2 1999/09/27 17:43:35 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -184,6 +184,7 @@ static struct fl_box {
   char* name;
   Fl_Boxtype_ bt;
 } boxtypes[] = {
+{"no_box", 0},
 {"flat_box", fl_flat_box},
 {"flat_up_box", fl_flat_up_box},
 {"flat_down_box", fl_flat_down_box},
@@ -237,5 +238,5 @@ void fl_default_style_def()
 }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.1 1999/09/27 12:20:03 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.2 1999/09/27 17:43:35 vincent Exp $".
 //

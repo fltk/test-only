@@ -5,6 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(WIN32) && !defined(CYGNUS)
+# include <direct.h>
+#else
+# include <unistd.h>
+#endif
+#include <string.h>
 
 extern "C" void theme_plugin();
 
@@ -43,7 +49,10 @@ FLDLE void theme_plugin()
 {
   if (!read_conf("fltkrc")) {
     char s[1024];
-    sprintf(s, "%s/.fltkrc", getenv("HOME"));
-    read_conf(s);
+    getcwd(s, 1023);
+    chdir(getenv("HOME"));
+    chdir(".fltk");
+    read_conf("../.fltkrc");
+    chdir(s);
   }
 }

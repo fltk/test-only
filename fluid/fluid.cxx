@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.25 1999/09/20 01:51:17 vincent Exp $"
+// "$Id: fluid.cxx,v 1.26 1999/09/27 17:43:33 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,7 @@ const char *copyright =
 #include <FL/fl_file_chooser.H>
 #include <FL/fl_message.H>
 #include <FL/filename.H>
+#include <FL/Fl_Style_Util.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -455,6 +456,7 @@ int main(int argc,char **argv) {
     return 1;
   }
   const char *c = argv[i];
+  fl_read_style_plugins();
   make_main_window();
   if (c) set_filename(c);
   read_plugins();
@@ -479,5 +481,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.25 1999/09/20 01:51:17 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.26 1999/09/27 17:43:33 vincent Exp $".
 //

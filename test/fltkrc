@@ -3,19 +3,27 @@
 #
 
 [window]
-#box		= image_box images/bg2.png	# This is an example 
+box		= image_flat_box images/bg.jpeg	# This is an example 
 						# of boxtype plugin
 
 [global]
-box		= image_box images/bg.png	# This is an example 
+box		= image_box images/bg2.jpeg	# This is an example 
 						# of boxtype plugin
 #box		= round_box			# Normal box
 color		= #d0d0e0			# Color in hex
-label_color	= 0, 0, 0			# Color in r, g, b
+label_color	= .2, 0, 0			# Color in r, g, b
 
 [check_button]
-box		= image_flat_box images/bg.png	# This is an example 
-						# of boxtype plugin
+box		= no_box
+
 [menu_item]
-box		= image_flat_box images/bg.png	# This is an example 
+box		= image_flat_box images/bg2.jpeg# This is an example 
+						# of boxtype plugin
+
+[tabs]
+box		= image_box images/bg2.jpeg	# This is an example 
+						# of boxtype plugin
+
+#[box]
+#box		= image_box images/bg2.jpeg	# This is an example 
 						# of boxtype plugin

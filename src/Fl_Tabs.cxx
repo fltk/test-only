@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.14 1999/08/20 22:50:14 carl Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.15 1999/09/27 17:43:35 vincent Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -268,6 +268,8 @@ static Fl_Style tabs_style = {
   // rest is zero and inherited from parent's style
 };
 
+Fl_Style_Definer fl_tabs_style_definer("tabs", tabs_style);
+
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
   : Fl_Group(X,Y,W,H,l)
 {
@@ -276,5 +278,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.14 1999/08/20 22:50:14 carl Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.15 1999/09/27 17:43:35 vincent Exp $".
 //
