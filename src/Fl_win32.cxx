@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.194 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.195 2003/09/06 22:37:36 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -688,7 +688,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_CLEAR,	Keypad5,	ClearKey},
   {VK_RETURN,	ReturnKey,	KeypadEnter},
   {VK_SHIFT,	LeftShiftKey,	RightShiftKey},
-  {VK_CONTROL,	LeftControlKey,	RightControlKey},
+  {VK_CONTROL,	LeftCtrlKey,	RightCtrlKey},
   {VK_MENU,	LeftAltKey,	RightAltKey},
   {VK_PAUSE,	PauseKey},
   {VK_CAPITAL,	CapsLockKey},
@@ -705,8 +705,8 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_SNAPSHOT, PrintKey},	// does not work on NT
   {VK_INSERT,	Keypad0,	InsertKey},
   {VK_DELETE,	DecimalKey,	DeleteKey},
-  {VK_LWIN,	LeftCommandKey},
-  {VK_RWIN,	RightCommandKey},
+  {VK_LWIN,	LeftMetaKey},
+  {VK_RWIN,	RightMetaKey},
   {VK_APPS,	MenuKey},
   {VK_MULTIPLY, MultiplyKey},
   {VK_ADD,	AddKey},
@@ -917,7 +917,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       // _WIN32 bug?  GetKeyState returns garbage if the user hit the
       // Windows key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	state |= COMMAND;
+	state |= META;
     }
     if (GetKeyState(VK_SCROLL)) state |= SCROLLLOCK;
     e_state = state;
@@ -1557,5 +1557,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.194 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.195 2003/09/06 22:37:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.81 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.82 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -841,7 +841,7 @@ bool Input::handle_key() {
 
   bool ctrl = event_state(CTRL);
   bool shift = event_state(SHIFT);
-  bool alt = event_state(ALT|COMMAND);
+  bool alt = event_state(ALT|META);
 
   switch (event_key()) {
 
@@ -1038,6 +1038,13 @@ bool Input::handle_key() {
     // 's' incremental search
     // 'u' repeat count prefix
 
+  case LeftShiftKey:
+  case RightShiftKey:
+  case LeftCtrlKey:
+  case RightCtrlKey:
+    // Don't pass these to other widgets. The user considers them
+    // part of typing.
+    return true;
   }
 
   // Insert any other keys (like ^J) into the text, if no shortcuts eat them:
@@ -1124,7 +1131,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     // trying to type into this text field:
 #if 1
     if (event_text()[0] < ' ' && event_key() != BackSpaceKey) return 0;
-    if (event_state(ALT|COMMAND)) return 0;
+    if (event_state(ALT|META)) return 0;
 #else
     // attempt to see if nobody else interested in key. This did not
     // work as keys that did nothing still moved the focus.
@@ -1143,7 +1150,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 #if DND_OUT
     // See if they clicked in the selected test, if so we start a timeout
     // to see if they hold it long enough to start dragging:
-    if (!event_state(ALT|COMMAND|CTRL|SHIFT) &&
+    if (!event_state(ALT|META|CTRL|SHIFT) &&
 	focused() && type()!=SECRET &&
 	(newpos >= mark() && newpos < position() ||
 	newpos >= position() && newpos < mark())) {
@@ -1282,10 +1289,10 @@ int Input::handle(int event, int X, int Y, int W, int H) {
       int p = dnd_target_position;
       if (p <= position() && p <= mark()) {
 	// we are inserting before the selection
-	if (!event_state(SHIFT|CTRL|ALT|COMMAND)) cut();
+	if (!event_state(SHIFT|CTRL|ALT|META)) cut();
       } else if (p >= position() && p >= mark()) {
 	// we are inserting after the selection, cut & adjust offset
-	if (!event_state(SHIFT|CTRL|ALT|COMMAND)) {
+	if (!event_state(SHIFT|CTRL|ALT|META)) {
 	  dnd_target_position -= abs(mark()-position());
 	  cut();
 	}
@@ -1319,5 +1326,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.81 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.82 2003/09/06 22:37:36 spitzak Exp $".
 //

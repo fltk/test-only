@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_mac.cxx,v 1.6 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl_get_key_mac.cxx,v 1.7 2003/09/06 22:37:36 spitzak Exp $"
 //
 // MacOS keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -63,9 +63,9 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 96, F5Key }, { 97, F6Key }, { 98, F7Key }, { 100, F8Key }, 
   { 101, F9Key }, { 109, F10Key }, { 103, F11Key }, { 111, F12Key }, 
   { 56, LeftShiftKey }, { 56, RightShiftKey },
-  { 59, LeftControlKey }, { 59, RightControlKey }, 
+  { 59, LeftCtrlKey }, { 59, RightCtrlKey }, 
   { 57, CapsLockKey },
-  { 55, LeftCommandKey }, { 55, RightCommandKey },
+  { 55, LeftMetaKey }, { 55, RightMetaKey },
   { 58, LeftAltKey }, { 58, RightAltKey },
 };
 
@@ -105,5 +105,5 @@ bool fltk::get_key_state(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_mac.cxx,v 1.6 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_get_key_mac.cxx,v 1.7 2003/09/06 22:37:36 spitzak Exp $".
 //

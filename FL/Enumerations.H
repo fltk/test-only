@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.56 2003/04/20 03:17:46 easysw Exp $"
+// "$Id: Enumerations.H,v 1.57 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -102,8 +102,8 @@ enum Fl_When { // These should match values in fltk/Widget.h
 #define FL_Control_L	0xffe3
 #define FL_Control_R	0xffe4
 #define FL_Caps_Lock	0xffe5
-#define FL_Meta_L	0xffe7 // the left MSWindows key on XFree86
-#define FL_Meta_R	0xffe8 // the right MSWindows key on XFree86
+#define FL_Meta_L	0xffe7
+#define FL_Meta_R	0xffe8
 #define FL_Alt_L	0xffe9
 #define FL_Alt_R	0xffea
 #define FL_Delete	0xffff
@@ -113,7 +113,7 @@ enum Fl_When { // These should match values in fltk/Widget.h
 #define FL_CTRL		0x00040000
 #define FL_ALT		0x00080000
 #define FL_NUM_LOCK	0x00100000 // most X servers do this?
-#define FL_META		0x00400000 // fltk2.0 calls this "COMMAND"
+#define FL_META		0x00400000
 #define FL_SCROLL_LOCK	0x00800000
 #define FL_BUTTON1	0x01000000
 #define FL_BUTTON2	0x02000000
@@ -352,5 +352,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.56 2003/04/20 03:17:46 easysw Exp $".
+// End of "$Id: Enumerations.H,v 1.57 2003/09/06 22:37:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: events.h,v 1.6 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -121,13 +121,13 @@ enum {
   LastFunctionKey = F0Key+35, // highest number allowed
   LeftShiftKey	= 0xffe1,
   RightShiftKey	= 0xffe2,
-  LeftControlKey= 0xffe3,
-  RightControlKey=0xffe4,
+  LeftCtrlKey	= 0xffe3,
+  RightCtrlKey	= 0xffe4,
   CapsLockKey	= 0xffe5,
+  LeftMetaKey	= 0xffe7,
+  RightMetaKey	= 0xffe8,
   LeftAltKey	= 0xffe9,
   RightAltKey	= 0xffea,
-  LeftCommandKey= 0xffeb, // left "windows" key, XK_Super_L
-  RightCommandKey=0xffec, // right "windows" key, XK_Super_L
   DeleteKey	= 0xffff
 };
 
@@ -138,7 +138,7 @@ enum {
   CTRL		= 0x00040000,
   ALT		= 0x00080000,
   NUMLOCK	= 0x00100000,
-  COMMAND	= 0x00400000,
+  META		= 0x00400000,
   SCROLLLOCK	= 0x00800000,
   BUTTON1	= 0x01000000,
   BUTTON2	= 0x02000000,

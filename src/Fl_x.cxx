@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.150 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.151 2003/09/06 22:37:36 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -467,7 +467,7 @@ static void set_event_xy(bool push) {
   event_time = xevent.xbutton.time;
 #ifdef __sgi
   // get the Win key off PC keyboards:
-  if (fl_key_vector[18]&0x18) e_state |= COMMAND;
+  if (fl_key_vector[18]&0x18) e_state |= META;
 #endif
   // turn off is_click if enough time or mouse movement has passed:
   static int px, py;
@@ -831,7 +831,19 @@ bool fltk::handle()
     // version produces. However this will defeat older keyboard layouts
     // that use shifted values for function keys.
     KeySym keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
-    if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
+    if (!keysym) {
+      // X did not map this key, return keycode with 0x8000:
+      keysym = keycode|0x8000;
+#ifdef __sgi
+      // You can plug a microsoft keyboard into an Irix box but these
+      // keys are not translated.  Make them translate like XFree86 does:
+      switch (keycode) {
+      case 147: keysym = LeftMetaKey; break;
+      case 148: keysym = RightMetaKey; break;
+      case 149: keysym = MenuKey; break;
+      }
+#endif
+    } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
       // Make all keypad keys act like NumLock is on all the time. This
       // is nicer (imho), but more importantly this gets rid of a range of
       // keysyms that the Win32 version cannot produce. This strange
@@ -840,22 +852,15 @@ bool fltk::handle()
       e_text[0] = char(keysym) & 0x7F;
       e_text[1] = 0;
       e_length = 1;
-    } else if (keysym == 0xffe7) { // XK_Meta_L
-      // old versions of XFree86 used XK_Meta for the "windows" key
-      keysym = LeftCommandKey;
-    } else if (keysym == 0xffe8) { // XK_Meta_R
-      keysym = RightCommandKey;
-    } else if (!keysym) { // X did not map this key
-      keysym = keycode|0x8000;
-#ifdef __sgi
-      // You can plug a microsoft keyboard into an Irix box but these
-      // keys are not translated.  Make them translate like XFree86 does:
-      switch (keycode) {
-      case 147: keysym = LeftCommandKey; break;
-      case 148: keysym = RightCommandKey; break;
-      case 149: keysym = MenuKey; break;
-      }
-#endif
+    } else if (keysym == 0xffeb) {
+      // Newer X servers make the Windoze key return XK_Super_L
+      keysym = LeftMetaKey;
+    } else if (keysym == 0xffec) {
+      // Newer X servers make the Windows key return XK_Super_R
+      keysym = RightMetaKey;
+//  } else if (keysym == 0xff20) {
+//    // Some older ones made it return XK_Multi_key
+//    keysym = RightMetaKey;
     }
     e_keysym = int(keysym);
     set_event_xy(true);
@@ -1135,7 +1140,6 @@ void CreatedWindow::create(Window* window,
     }
     XSetWMHints(xdisplay, x->xid, hints);
     XFree(hints);
-
   }
 }
 
@@ -1425,5 +1429,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.150 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.151 2003/09/06 22:37:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.14 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: keyboard.cxx,v 1.15 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -67,13 +67,13 @@ struct {int n; const char* text;} table[] = {
   {fltk::DownKey, "fltk::DownKey"},
   {fltk::LeftShiftKey, "fltk::LeftShiftKey"},
   {fltk::RightShiftKey, "fltk::RightShiftKey"},
-  {fltk::LeftControlKey, "fltk::LeftControlKey"},
-  {fltk::RightControlKey, "fltk::RightControlKey"},
+  {fltk::LeftCtrlKey, "fltk::LeftCtrlKey"},
+  {fltk::RightCtrlKey, "fltk::RightCtrlKey"},
   {fltk::CapsLockKey, "fltk::CapsLockKey"},
   {fltk::LeftAltKey, "fltk::LeftAltKey"},
   {fltk::RightAltKey, "fltk::RightAltKey"},
-  {fltk::LeftCommandKey, "fltk::LeftCommandKey"},
-  {fltk::RightCommandKey, "fltk::RightCommandKey"},
+  {fltk::LeftMetaKey, "fltk::LeftMetaKey"},
+  {fltk::RightMetaKey, "fltk::RightMetaKey"},
   {fltk::MenuKey, "fltk::MenuKey"},
   {fltk::NumLockKey, "fltk::NumLockKey"},
   {fltk::KeypadEnter, "fltk::KeypadEnter"},
@@ -146,5 +146,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.14 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: keyboard.cxx,v 1.15 2003/09/06 22:37:36 spitzak Exp $".
 //

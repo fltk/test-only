@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.10 2003/02/21 18:16:41 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.11 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -47,8 +47,6 @@ static Keyname table[] = {
   {TabKey,	"Tab"},
   {ClearKey,	"Clear"},
   {ReturnKey,	"Return"}, // older fltk said "Enter"
-#endif
-#if !USE_X11
   {PauseKey,	"Pause"},
   {ScrollLockKey,"ScrollLock"},
   {EscapeKey,	"Escape"},
@@ -69,15 +67,13 @@ static Keyname table[] = {
   {KeypadEnter,	"KeypadEnter"},
   {LeftShiftKey,"LeftShift"},
   {RightShiftKey,"RightShift"},
-  {LeftControlKey, "LeftControl"},
-  {RightControlKey,"RightControl"},
+  {LeftCtrlKey, "LeftCtrl"},
+  {RightCtrlKey,"RightCtrl"},
   {CapsLockKey,	"CapsLock"},
+  {LeftMetaKey,	"LeftMeta"},
+  {RightMetaKey,"RightMeta"},
   {LeftAltKey,	"LeftAlt"},
   {RightAltKey,	"RightAlt"},
-#endif
-  {LeftCommandKey,	"LeftCommand"}, // X says "Super_L"
-  {RightCommandKey,	"RightCommand"}, // X says "Super_R"
-#if !USE_X11
   {DeleteKey,	"Delete"}
 #endif
 };
@@ -86,7 +82,7 @@ const char* fltk::key_name(int shortcut) {
   static char buf[20];
   char *p = buf;
   if (!shortcut) {*p = 0; return buf;}
-  if (shortcut & COMMAND) {strcpy(p,"Command+"); p += 5;}
+  if (shortcut & META) {strcpy(p,"Meta+"); p += 5;}
   if (shortcut & ALT) {strcpy(p,"Alt+"); p += 4;}
   if (shortcut & SHIFT) {strcpy(p,"Shift+"); p += 6;}
   if (shortcut & CTRL) {strcpy(p,"Ctrl+"); p += 5;}
@@ -134,5 +130,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.10 2003/02/21 18:16:41 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.11 2003/09/06 22:37:36 spitzak Exp $"
 //

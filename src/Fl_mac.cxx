@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.8 2003/08/26 16:14:26 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.9 2003/09/06 22:37:36 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -715,7 +715,7 @@ static void mods_to_e_state( UInt32 mods )
 {
   int state = 0;
   if ( mods & kEventKeyModifierNumLockMask ) state |= NUMLOCK;
-  if ( mods & cmdKey ) state |= COMMAND;
+  if ( mods & cmdKey ) state |= META;
   if ( mods & (optionKey|rightOptionKey) ) state |= ALT;
   if ( mods & (controlKey|rightControlKey) ) state |= CTRL;
   if ( mods & (shiftKey|rightShiftKey) ) state |= SHIFT;
@@ -730,12 +730,12 @@ static void mods_to_e_state( UInt32 mods )
  */
 static unsigned mods_to_e_keysym( UInt32 mods )
 {
-  if ( mods & cmdKey ) return LeftCommandKey;
+  if ( mods & cmdKey ) return LeftMetaKey;
   else if ( mods & kEventKeyModifierNumLockMask ) return NumLockKey;
   else if ( mods & optionKey ) return LeftAltKey;
   else if ( mods & rightOptionKey ) return RightAltKey;
-  else if ( mods & controlKey ) return LeftControlKey;
-  else if ( mods & rightControlKey ) return RightControlKey;
+  else if ( mods & controlKey ) return LeftCtrlKey;
+  else if ( mods & rightControlKey ) return RightCtrlKey;
   else if ( mods & shiftKey ) return LeftShiftKey;
   else if ( mods & rightShiftKey ) return RightShiftKey;
   else if ( mods & alphaLock ) return CapsLockKey;
@@ -1525,6 +1525,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.8 2003/08/26 16:14:26 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.9 2003/09/06 22:37:36 spitzak Exp $".
 //
 

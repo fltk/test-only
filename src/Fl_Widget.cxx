@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.103 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.104 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -435,7 +435,7 @@ void Widget::remove_timeout() {
 
   To make it easier to match some things it is more complex:
 
-  Only COMMAND, ALT, SHIFT, and CTRL must be "off".  A zero in the
+  Only META, ALT, SHIFT, and CTRL must be "off".  A zero in the
   other shift flags indicates "dont care". For instance we normally
   don't care is SCROLL_LOCK or BUTTON1 is on, but you can require them
   to be on by adding them to the shortcut.
@@ -464,7 +464,7 @@ bool fltk::test_shortcut(int shortcut) {
   // record shift flags that are wrong:
   int mismatch = (shortcut^shift)&0x7fff0000;
   // these three must always be correct:
-  if (mismatch&(COMMAND|ALT|CTRL)) return false;
+  if (mismatch&(META|ALT|CTRL)) return false;
 
   int key = shortcut & 0xffff;
   if (key < 0x7f) key = tolower(key);
@@ -547,5 +547,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.103 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.104 2003/09/06 22:37:36 spitzak Exp $".
 //

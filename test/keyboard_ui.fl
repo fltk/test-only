@@ -522,13 +522,13 @@ Function {make_window()} {open
     }
     {fltk::Button} {} {
       label Ctrl
-      user_data {fltk::LeftControlKey} user_data_type {void*}
+      user_data {fltk::LeftCtrlKey} user_data_type {void*}
       callback key_cb
       xywh {15 160 30 20} align 20 labelsize 8
     }
     {fltk::Button} {} {
-      label Cmd
-      user_data {fltk::LeftCommandKey} user_data_type {void*}
+      label Meta
+      user_data {fltk::LeftMetaKey} user_data_type {void*}
       callback key_cb
       xywh {45 160 30 20} labelsize 8
     }
@@ -550,8 +550,8 @@ Function {make_window()} {open
       xywh {190 160 30 20} labelsize 8
     }
     {fltk::Button} {} {
-      label Cmd
-      user_data {fltk::RightCommandKey} user_data_type {void*}
+      label Meta
+      user_data {fltk::RightMetaKey} user_data_type {void*}
       callback key_cb
       xywh {220 160 30 20} labelsize 8
     }
@@ -563,7 +563,7 @@ Function {make_window()} {open
     }
     {fltk::Button} {} {
       label Ctrl
-      user_data {fltk::RightControlKey} user_data_type {void*}
+      user_data {fltk::RightCtrlKey} user_data_type {void*}
       callback key_cb
       xywh {280 160 30 20} align 20 labelsize 8
     }
@@ -638,8 +638,8 @@ Function {make_window()} {open
       xywh {420 25 20 10} selection_color 3 labelsize 8
     }
     {fltk::Button} {} {
-      label cmd
-      user_data {fltk::COMMAND} user_data_type {void*}
+      label meta
+      user_data {fltk::META} user_data_type {void*}
       callback shift_cb
       xywh {440 25 20 10} selection_color 3 labelsize 8
     }

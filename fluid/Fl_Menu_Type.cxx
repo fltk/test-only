@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.52 2002/12/15 10:42:49 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.53 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -233,9 +233,9 @@ int Shortcut_Button::handle(int e) {
     if (!value()) return 0;
     int v = fltk::event_text()[0];
     if (v > 32 && v < 0x7f || v > 0xa0 && v <= 0xff) {
-      v = v | fltk::event_state()&(fltk::COMMAND|fltk::ALT|fltk::CTRL);
+      v = v | fltk::event_state()&(fltk::META|fltk::ALT|fltk::CTRL);
     } else {
-      v = fltk::event_state()&(fltk::COMMAND|fltk::ALT|fltk::CTRL|fltk::SHIFT) | fltk::event_key();
+      v = fltk::event_state()&(fltk::META|fltk::ALT|fltk::CTRL|fltk::SHIFT) | fltk::event_key();
       if (v == fltk::BackSpaceKey && svalue) v = 0;
     }
     if (v != svalue) {svalue = v; do_callback(); redraw();}
@@ -280,5 +280,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.52 2002/12/15 10:42:49 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.53 2003/09/06 22:37:36 spitzak Exp $".
 //

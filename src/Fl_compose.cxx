@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.15 2002/12/10 02:00:53 easysw Exp $"
+// "$Id: Fl_compose.cxx,v 1.16 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -176,7 +176,7 @@ bool fltk::compose(int& del) {
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  if ((e_state & (ALT|COMMAND)) && !(ascii & 128)) return false;
+  if ((e_state & (ALT|META)) && !(ascii & 128)) return false;
 
   if (compose_state == 1) { // after the compose key
     
@@ -213,7 +213,7 @@ bool fltk::compose(int& del) {
   int i = e_keysym;
 
   // See if they type the compose prefix key:
-  if (i == RightControlKey || i == 0xff20/* Multi-Key */) {
+  if (i == RightCtrlKey || i == 0xff20/* Multi-Key */) {
     compose_state = 1;
     return true;
   }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.17 2002/12/18 08:34:22 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.18 2003/09/06 22:37:36 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -450,7 +450,7 @@ int TextEditor::handle_key() {
   }
 
   int key = event_key();
-  int state = event_state() & (SHIFT|CTRL|ALT|COMMAND);
+  int state = event_state() & (SHIFT|CTRL|ALT|META);
   KeyFunc f = bound_key_function(key, state, global_key_bindings);
   if (!f) f = bound_key_function(key, state, key_bindings);
   if (!f) f = default_key_function_;
@@ -503,5 +503,5 @@ int TextEditor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.17 2002/12/18 08:34:22 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.18 2003/09/06 22:37:36 spitzak Exp $".
 //
