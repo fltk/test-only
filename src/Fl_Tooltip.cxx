@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.29 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.30 2001/02/26 05:40:35 robertk Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -115,6 +115,9 @@ tt_exit(Fl_Widget *w) {
     // this hide() which could cause unwanted recursion in tooltip_enter()
     cheesy_flag = 1;
     window->hide();
+    // Next two lines fix losing focus problem on Win32
+    delete window;
+    window = NULL;
     cheesy_flag = 0;
   }
 }
@@ -160,5 +163,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.29 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.30 2001/02/26 05:40:35 robertk Exp $".
 //
