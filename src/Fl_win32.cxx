@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.91 2000/03/03 21:21:44 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.92 2000/03/08 05:18:31 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -60,7 +60,6 @@
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
-#  define TRACKMOUSEEVENTUNDEFINED
 #endif
 
 //
@@ -69,45 +68,6 @@
 //
 
 #define WM_FLSELECT	(WM_USER+0x0400)
-
-#ifdef _MSVC_VER
-# if _MSVC_VER <= 11
-#  define TRACKMOUSEEVENTUNDEFINED
-# endif
-#endif
-
-// Borland 5 and VC5 are too old to have this new (post Win95) stuff
-#if defined(BORLAND5) || defined(TRACKMOUSEEVENTUNDEFINED)
-#define TME_LEAVE 2
-typedef struct tagTRACKMOUSEEVENT {
-  DWORD cbSize;
-  DWORD dwFlags;
-  HWND  hwndTrack;
-  DWORD dwHoverTime;
-} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
-#endif
-
-
-bool have_TrackMouseEvent = 1;
-#if defined(__MINGW32__) || defined(__CYGWIN32__)
-BOOL WINAPI (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
-#else
-BOOL (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
-#endif
-void check_TrackMouseEvent() {
-  HINSTANCE lib;
-  lib = LoadLibrary("User32");
-  if (lib) {
-    ptTrackMouseEvent = (BOOL (*)(LPTRACKMOUSEEVENT))GetProcAddress(lib, "TrackMouseEvent");
-    if (ptTrackMouseEvent) return;
-  }
-  lib = LoadLibrary("COMCTL32");
-  if (lib) {
-    ptTrackMouseEvent = (BOOL (*)(LPTRACKMOUSEEVENT))GetProcAddress(lib, "_TrackMouseEvent");
-    if (ptTrackMouseEvent) return;
-  }
-  have_TrackMouseEvent = 0;
-}
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -380,8 +340,58 @@ void Fl::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
-static TRACKMOUSEEVENT mouseevent = {
-  sizeof(TRACKMOUSEEVENT),
+#ifndef TME_LEAVE
+#define TME_LEAVE 2
+#endif
+
+typedef struct _tagTRACKMOUSEEVENT {
+  DWORD cbSize;
+  DWORD dwFlags;
+  HWND  hwndTrack;
+  DWORD dwHoverTime;
+} _TRACKMOUSEEVENT, *_LPTRACKMOUSEEVENT;
+
+/* This code lifted from SDL, also under the LGPL - CET
+
+   Special code to handle mouse leave events - this sucks...
+   http://support.microsoft.com/support/kb/articles/q183/1/07.asp
+
+   TrackMouseEvent() is only available on Win98 and WinNT.
+   _TrackMouseEvent() is available on Win95, but isn't yet in the mingw32
+   development environment, and only works on systems that have had IE 3.0
+   or newer installed on them (which is not the case with the base Win95).
+   Therefore, we implement our own version of _TrackMouseEvent() which
+   uses our own implementation if TrackMouseEvent() is not available.
+*/
+static BOOL (WINAPI *_TrackMouseEvent)(_TRACKMOUSEEVENT *ptme) = NULL;
+
+static VOID CALLBACK
+TrackMouseTimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
+  RECT rect;
+  POINT pt;
+
+  GetClientRect(hWnd, &rect);
+  MapWindowPoints(hWnd, NULL, (LPPOINT)&rect, 2);
+  GetCursorPos(&pt);
+  if (!PtInRect(&rect, pt) || (WindowFromPoint(pt) != hWnd)) {
+    if ( !KillTimer(hWnd, idEvent) ) {
+                        /* Error killing the timer! */
+    }
+    PostMessage(hWnd, WM_MOUSELEAVE, 0, 0);
+  }
+}
+
+static BOOL WINAPI
+WIN_TrackMouseEvent(_TRACKMOUSEEVENT *ptme)
+{
+  if (ptme->dwFlags == TME_LEAVE)
+    return SetTimer(ptme->hwndTrack, ptme->dwFlags, 100,
+                    (TIMERPROC)TrackMouseTimerProc);
+  return FALSE;
+}
+
+static _TRACKMOUSEEVENT mouseevent = {
+  sizeof(_TRACKMOUSEEVENT),
   TME_LEAVE
 };
 
@@ -441,14 +451,15 @@ static int mouse_event(Fl_Window *window, int what, int button,
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
 
     // look for mouse leave events
-    if (have_TrackMouseEvent) {
-      if (!ptTrackMouseEvent) {
-        check_TrackMouseEvent();
-        if (!have_TrackMouseEvent) return Fl::handle(FL_MOVE,window);
-      }
-      mouseevent.hwndTrack = fl_xid(window);
-      ptTrackMouseEvent(&mouseevent);
+    if (!_TrackMouseEvent) {
+      /* Get the version of TrackMouseEvent() we use */
+      HMODULE handle = GetModuleHandle("USER32.DLL");
+      if (handle) _TrackMouseEvent =
+        (BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
+      if (!_TrackMouseEvent) _TrackMouseEvent = WIN_TrackMouseEvent;
     }
+    mouseevent.hwndTrack = fl_xid(window);
+    _TrackMouseEvent(&mouseevent);
 
     return Fl::handle(FL_MOVE,window);
   }
@@ -1115,5 +1126,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.91 2000/03/03 21:21:44 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.92 2000/03/08 05:18:31 carl Exp $".
 //
