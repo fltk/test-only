@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.34 2004/07/21 07:16:00 laza2000 Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.35 2004/12/05 19:41:41 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -791,6 +791,7 @@ void TextDisplay::next_word() {
 
 void TextDisplay::previous_word() {
   int pos = insert_position();
+  if (pos <= 0) return;
   pos--;
   while ( pos && !( isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) {
     pos--;
@@ -2124,5 +2125,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.34 2004/07/21 07:16:00 laza2000 Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.35 2004/12/05 19:41:41 spitzak Exp $".
 //
