@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   mb.begin();
   build_hierarchy();
   mb.end();
-  mb.type(Fl_Menu_Item::POPUP3);
+  mb.type(Fl_Menu_Button::POPUP3);
 
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton");
   mb1.callback(callback);
