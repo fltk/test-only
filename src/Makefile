@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.64 2000/02/14 11:32:57 bill Exp $"
+# "$Id: Makefile,v 1.65 2000/02/16 07:30:05 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -99,7 +99,6 @@ CPPFILES = \
 	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
 	Fl_visual.cxx \
-	Fl_x.cxx \
 	filename_absolute.cxx \
 	filename_expand.cxx \
 	filename_ext.cxx \
@@ -275,5 +274,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.64 2000/02/14 11:32:57 bill Exp $".
+# End of "$Id: Makefile,v 1.65 2000/02/16 07:30:05 bill Exp $".
 #

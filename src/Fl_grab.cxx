@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_grab.cxx,v 1.4 1999/12/15 18:58:42 bill Exp $"
+// "$Id: Fl_grab.cxx,v 1.5 2000/02/16 07:30:05 bill Exp $"
 //
 // Grab/release code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 // This also modifies how Fl_Window::show() works, on X it turns on
 // override_redirect, it does similar things on WIN32.
 
-extern void fl_fix_focus(); // in Fl.cxx
+extern void fl_fix_focus(int); // in Fl.cxx
 
 void Fl::grab(Fl_Window* w) {
   if (w) {
@@ -78,11 +78,11 @@ void Fl::grab(Fl_Window* w) {
 #endif
       grab_ = 0;
       pushed_ = 0;
-      fl_fix_focus();
+      fl_fix_focus(1);
     }
   }
 }
 
 //
-// End of "$Id: Fl_grab.cxx,v 1.4 1999/12/15 18:58:42 bill Exp $".
+// End of "$Id: Fl_grab.cxx,v 1.5 2000/02/16 07:30:05 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.80 2000/02/14 11:32:45 bill Exp $"
+// "$Id: Fl.cxx,v 1.81 2000/02/16 07:30:04 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,6 +41,8 @@ Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
 		*Fl::focus_,
 		*Fl::selection_owner_;
+Fl_Window	*Fl::grab_,	// most recent Fl::grab()
+		*Fl::modal_;	// topmost modal() window
 int		Fl::damage_,
 		Fl::e_x,
 		Fl::e_y,
@@ -55,22 +57,8 @@ int		Fl::damage_,
 char		*Fl::e_text = "";
 int		Fl::e_length;
 
-static double fl_elapsed();
-
-//
-// 'Fl:event_inside()' - Return whether or not the mouse event is inside
-//                       the given rectangle.
-//
-
-int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
-  int mx = event_x() - x;
-  int my = event_y() - y;
-  return (mx >= 0 && mx < w && my >= 0 && my < h);
-}
-
-int Fl::event_inside(const Fl_Widget *o) /*const*/ {
-  return event_inside(o->x(),o->y(),o->w(),o->h());
-}
+static Fl_Window *fl_xfocus;	// which window X thinks has focus
+static Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
 
 // Timeouts are insert-sorted into order.  This works good if there
 // are only a small number:
@@ -82,6 +70,15 @@ static struct Timeout {
 } * timeout;
 static int numtimeouts;
 static int timeout_array_size;
+static int initclock; // if false we didn't call fl_elapsed() last time
+
+#ifdef _WIN32
+#include "Fl_win32.cxx"
+#else
+#include "Fl_x.cxx"
+#endif
+
+////////////////////////////////////////////////////////////////
 
 void Fl::add_timeout(double t, Fl_Timeout_Handler cb, void *v) {
 
@@ -147,55 +144,6 @@ void Fl::flush() {
 #endif
 }
 
-extern double fl_wait(int timeout_flag, double timeout);
-extern int fl_ready();
-
-static int initclock; // if false we didn't call fl_elapsed() last time
-
-#ifndef WIN32
-#include <sys/time.h>
-#endif
-
-// fl_elapsed must return the amount of time since the last time it was
-// called.  To reduce the number of system calls the to get the
-// current time, the "initclock" symbol is turned on by an indefinite
-// wait.  This should then reset the measured-from time and return zero
-static double fl_elapsed() {
-
-#ifdef WIN32
-
-  unsigned long newclock = GetTickCount();
-  const int TICKS_PER_SECOND = 1000; // divisor of the value to get seconds
-  static unsigned long prevclock;
-  if (!initclock) {prevclock = newclock; initclock = 1; return 0.0;}
-  else if (newclock < prevclock) return 0.0;
-
-  double t = double(newclock-prevclock)/TICKS_PER_SECOND;
-  prevclock = newclock;
-
-#else
-
-  static struct timeval prevclock;
-  struct timeval newclock;
-  gettimeofday(&newclock, NULL);
-  if (!initclock) {
-    prevclock.tv_sec = newclock.tv_sec;
-    prevclock.tv_usec = newclock.tv_usec;
-    initclock = 1;
-    return 0.0;
-  }
-  double t = newclock.tv_sec - prevclock.tv_sec +
-    (newclock.tv_usec - prevclock.tv_usec)/1000000.0;
-  prevclock.tv_sec = newclock.tv_sec;
-  prevclock.tv_usec = newclock.tv_usec;
-
-#endif
-
-  // expire any timeouts:
-  if (t > 0.0) for (int i=0; i<numtimeouts; i++) timeout[i].time -= t;
-  return t;
-}
-
 void (*Fl::idle)();
 static char in_idle;
 static void callidle() {
@@ -241,12 +189,6 @@ int Fl::check() {
   return Fl_X::first != 0; // return true if there is a window
 }
 
-int Fl::ready() {
-  // if (idle && !in_idle) return 1; // should it do this?
-  if (numtimeouts) {fl_elapsed(); if (timeout[0].time <= 0) return 1;}
-  return fl_ready();
-}
-
 int Fl::run() {
   while (wait());
   return 0;
@@ -284,6 +226,16 @@ Fl_Window* Fl::next_window(const Fl_Window* w) {
 
 ////////////////////////////////////////////////////////////////
 
+int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
+  int mx = event_x() - x;
+  int my = event_y() - y;
+  return (mx >= 0 && mx < w && my >= 0 && my < h);
+}
+
+int Fl::event_inside(const Fl_Widget *o) /*const*/ {
+  return event_inside(o->x(),o->y(),o->w(),o->h());
+}
+
 void Fl::focus(Fl_Widget *o) {
   if (grab()) return; // don't do anything while grab is on
   Fl_Widget *p = focus_;
@@ -308,19 +260,14 @@ void Fl::pushed(Fl_Widget *o) {
   pushed_ = o;
 }
 
-Fl_Window *fl_xfocus;	// which window X thinks has focus
-Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
-Fl_Window *Fl::grab_;	// most recent Fl::grab()
-Fl_Window *Fl::modal_;	// topmost modal() window
+// Update focus() and belowmouse() in response to anything that might
+// change them.  If the argument is non-zero then a move event is sent
+// to wake up the widget that is below the mouse.
 
-// Update modal(), focus() and other state according to system state,
-// and send FL_ENTER, FL_LEAVE, FL_FOCUS, and/or FL_UNFOCUS events.
-// This is the only function that produces these events in response
-// to system activity.
 // This is called whenever a window is added or hidden, and whenever
 // X says the focus or mouse window have changed.
 
-void fl_fix_focus() {
+void fl_fix_focus(int sendmove) {
 
   if (Fl::grab()) return; // don't do anything while grab is on.
 
@@ -330,11 +277,15 @@ void fl_fix_focus() {
     while (w->parent()) w = w->parent();
     if (Fl::modal()) w = Fl::modal();
     if (!w->contains(Fl::focus())) {
+      // make sure widget does not think it got called by a navigation key:
+      int save = Fl::e_keysym;
+      Fl::e_keysym = 0;
       if (w->takesevents() &&
 	  w->handle(FL_FOCUS) &&
 	  w->contains(Fl::focus()))
 	;
       else Fl::focus(w); // give it focus even if it does not want it
+      Fl::e_keysym = save;
     }
   } else
     Fl::focus(0);
@@ -347,7 +298,7 @@ void fl_fix_focus() {
       if (!w->contains(Fl::belowmouse())) {
 	Fl::belowmouse(w);
 	w->handle(FL_ENTER);
-      } else {
+      } else if (sendmove) {
 	// send a FL_MOVE event so the enter/leave state is up to date
 	Fl::e_x = Fl::e_x_root-fl_xmousewin->x();
 	Fl::e_y = Fl::e_y_root-fl_xmousewin->y();
@@ -382,7 +333,7 @@ void Fl_Widget::throw_focus() {
   if (this == fl_xfocus) fl_xfocus = 0;
   if (this == fl_xmousewin) fl_xmousewin = 0;
   Fl_Tooltip::exit(this);
-  fl_fix_focus();
+  fl_fix_focus(0);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -470,34 +421,33 @@ int Fl::handle(int event, Fl_Window* window)
     return send(event, w, window);
 
   case FL_RELEASE: {
-    if (!pushed()) return 0;
     w = pushed();
     if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
     int r = send(event, w, window);
-    fl_fix_focus();
+    fl_fix_focus(1);
     return r;}
 
   case FL_UNFOCUS:
     window = 0;
   case FL_FOCUS:
     fl_xfocus = window;
-    e_keysym = 0; // make sure it is not confused with navigation key
-    fl_fix_focus();
+    fl_fix_focus(0);
     return 1;
 
   case FL_ENTER:
     fl_xmousewin = window;
-    fl_fix_focus();
+    fl_fix_focus(0);
     return 1;
 
   case FL_LEAVE:
-    if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus();}
+    if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus(0);}
     return 1;
 
   case FL_KEYBOARD:
 
     Fl_Tooltip::enter((Fl_Widget*)0);
     fl_xfocus = window; // this should already be set, but just in case.
+    fl_fix_focus(0);
 
     // Try sending keystroke to the focus, if any:
     w = grab(); if (!w) w = focus();
@@ -506,7 +456,8 @@ int Fl::handle(int event, Fl_Window* window)
     // try flipping the case of letter shortcuts:
     if (isalpha(event_text()[0])) {
       if (handle(FL_SHORTCUT, window)) return 1;
-      *(char*)(event_text()) ^= ('A'^'a');
+      char* c = (char*)event_text(); // cast away const
+      *c = isupper(*c) ? tolower(*c) : toupper(*c);
     }
 
     event = FL_SHORTCUT;
@@ -613,8 +564,6 @@ Fl_Window::~Fl_Window() {
 // not on screen:	!window->shown();
 // not on screen but known by system: does not happen in fltk
 
-extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
-
 void Fl_Window::show() {
   if (parent()) {
     set_visible();
@@ -648,7 +597,7 @@ void Fl_Window::show() {
     fl_modal_for = 0;
     set_visible();
     handle(FL_SHOW);
-    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
+    if (modal()) {Fl::modal_ = this; fl_fix_focus(0);}
   } else {
 #ifdef WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
@@ -676,18 +625,15 @@ int Fl_Window::exec(const Fl_Window* modal_for) {
   return value();
 }
 
-#ifdef WIN32
-extern const Fl_Window* fl_mdi_window;
 void Fl_Window::show_inside(const Fl_Window* w) {
+#ifdef WIN32
   fl_mdi_window = w;
   show();
   fl_mdi_window = 0;
-}
 #else
-void Fl_Window::show_inside(const Fl_Window* w) {
   show(w);
-}
 #endif
+}
 
 void Fl_Window::hide() {
   destroy();
@@ -798,5 +744,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.80 2000/02/14 11:32:45 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.81 2000/02/16 07:30:04 bill Exp $".
 //

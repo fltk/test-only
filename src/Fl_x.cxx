@@ -1,7 +1,8 @@
 //
-// "$Id: Fl_x.cxx,v 1.62 2000/02/14 11:32:57 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.63 2000/02/16 07:30:05 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
+// This file is #included by Fl.cxx
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -22,10 +23,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
-
-#ifdef WIN32
-#include "Fl_win32.cxx"
-#else
 
 #define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
 
@@ -137,7 +134,32 @@ void Fl::remove_fd(int n) {
   remove_fd(n, -1);
 }
 
-int fl_ready() {
+// fl_elapsed must return the amount of time since the last time it was
+// called.  To reduce the number of system calls the to get the
+// current time, the "initclock" symbol is turned on by an indefinite
+// wait.  This should then reset the measured-from time and return zero
+static double fl_elapsed() {
+  static struct timeval prevclock;
+  struct timeval newclock;
+  gettimeofday(&newclock, NULL);
+  if (!initclock) {
+    prevclock.tv_sec = newclock.tv_sec;
+    prevclock.tv_usec = newclock.tv_usec;
+    initclock = 1;
+    return 0.0;
+  }
+  double t = newclock.tv_sec - prevclock.tv_sec +
+    (newclock.tv_usec - prevclock.tv_usec)/1000000.0;
+  prevclock.tv_sec = newclock.tv_sec;
+  prevclock.tv_usec = newclock.tv_usec;
+  // expire any timeouts:
+  if (t > 0.0) for (int i=0; i<numtimeouts; i++) timeout[i].time -= t;
+  return t;
+}
+
+int Fl::ready() {
+  // if (idle && !in_idle) return 1; // should it do this?
+  if (numtimeouts) {fl_elapsed(); if (timeout[0].time <= 0) return 1;}
   if (XQLength(fl_display)) return 1;
 #if HAVE_POLL
   return ::poll(fds, nfds, 0);
@@ -176,7 +198,7 @@ static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
 
-double fl_wait(int timeout_flag, double time) {
+static double fl_wait(int timeout_flag, double time) {
 
   // OpenGL and other broken libraries call XEventsQueued
   // unnecessarily and thus cause the file descriptor to not be ready,
@@ -612,9 +634,13 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create()
 
+void Fl_Window::create() {
+  Fl_X::create(this, fl_visual, fl_colormap, -1);
+}
+
 int fl_show_iconic;		// true if called from iconize()
 int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
-const Fl_Window* fl_modal_for;	// parent of modal() window
+static const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
@@ -817,22 +843,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Implement the virtual functions for the base Fl_Window class:
-
-// Display can *look* faster (it isn't really faster) if X's background
-// color is used to erase the window.  In fltk 2.0 the only way to
-// prevent this is to set the box to FL_NO_BOX.
-//
-// Drawing should really be faster if FL_FRAME_ONLY is passed to the
-// box drawing function, since X has already erased the interior.  But
-// on XFree86 (and prehaps all X's) this has a problem if the window
-// is resized while a save-behind window is atop it.  The previous
-// contents are restored to the area, but this assummes the area is
-// cleared to background color.  So I had to give up on this...
-
-void Fl_Window::create() {
-  Fl_X::create(this, fl_visual, fl_colormap, -1);
-}
+// Drawing context
 
 Window fl_window;
 Fl_Window *Fl_Window::current_;
@@ -840,7 +851,7 @@ GC fl_gc;
 
 // make X drawing go into this window (called by subclass flush() impl.)
 void Fl_Window::make_current() {
-  static GC gc;	// the GC used by all X windows
+  static GC gc;	// the GC used by all X windows with fl_visual
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_window = i->xid;
   fl_gc = gc;
@@ -848,8 +859,14 @@ void Fl_Window::make_current() {
   fl_clip_region(0);
 }
 
-#endif
+////////////////////////////////////////////////////////////////
+// Load theme information from whatever may be the standard...
+// Perhaps use KDE's XGetDefault() settings?
+
+void fl_windows_colors() {
+  // NYI
+}
 
 //
-// End of "$Id: Fl_x.cxx,v 1.62 2000/02/14 11:32:57 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.63 2000/02/16 07:30:05 bill Exp $".
 //

@@ -1,7 +1,8 @@
 //
-// "$Id: Fl_win32.cxx,v 1.88 2000/02/14 11:32:56 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.89 2000/02/16 07:30:05 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
+// This file is #included by Fl.cxx
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -38,12 +39,6 @@
 #include <time.h>
 #include <winsock.h>
 #include <ctype.h>
-
-
-#ifndef PATH_MAX
-#define PATH_MAX 128
-#endif
-
 
 //
 // USE_ASYNC_SELECT - define it if you have WSAAsyncSelect()...
@@ -202,9 +197,29 @@ void Fl::remove_fd(int n) {
 
 MSG fl_msg;
 
-int fl_ready() {
-  if (PeekMessage(&fl_msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
+// fl_elapsed must return the amount of time since the last time it was
+// called.  To reduce the number of system calls the to get the
+// current time, the "initclock" symbol is turned on by an indefinite
+// wait.  This should then reset the measured-from time and return zero
+static double fl_elapsed() {
+  unsigned long newclock = GetTickCount();
+  const int TICKS_PER_SECOND = 1000; // divisor of the value to get seconds
+  static unsigned long prevclock;
+  if (!initclock) {prevclock = newclock; initclock = 1; return 0.0;}
+  else if (newclock < prevclock) return 0.0;
 
+  double t = double(newclock-prevclock)/TICKS_PER_SECOND;
+  prevclock = newclock;
+
+  // expire any timeouts:
+  if (t > 0.0) for (int i=0; i<numtimeouts; i++) timeout[i].time -= t;
+  return t;
+}
+
+int Fl::ready() {
+  // if (idle && !in_idle) return 1; // should it do this?
+  if (numtimeouts) {fl_elapsed(); if (timeout[0].time <= 0) return 1;}
+  if (PeekMessage(&fl_msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
 #ifdef USE_ASYNC_SELECT
   return (0);
 #else
@@ -232,7 +247,7 @@ void* Fl::thread_message() {
   return r;
 }
 
-double fl_wait(int timeout_flag, double time) {
+static double fl_wait(int timeout_flag, double time) {
   int have_message = 0;
   int timerid;
 
@@ -778,11 +793,14 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create():
 
-#include <FL/Fl_Window.H>
+void Fl_Window::create() {
+  Fl_X::create(this);
+}
+
 int fl_show_iconic;		// true if called from iconize()
 int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
-const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
-const Fl_Window* fl_mdi_window;	// set by show_inside()
+static const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
+static const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
 
 Fl_X* Fl_X::create(Fl_Window* w) {
@@ -923,22 +941,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Implement the virtual functions for the base Fl_Window class:
-
-// If the box is a filled rectangle, we can make the redisplay *look*
-// faster by using X's background pixel erasing.  We can make it
-// actually *be* faster by drawing the frame only, this is done by
-// setting fl_boxcheat, which is seen by code in fl_drawbox.C:
-// For WIN32 it looks like all windows share a background color, so
-// I use FL_GRAY for this and only do this cheat for windows that are
-// that color.
-// Actually it is totally disabled.
-// Fl_Widget *fl_boxcheat;
-//static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
-
-void Fl_Window::create() {
-  Fl_X::create(this);
-}
+// Drawing context
 
 Fl_Window *Fl_Window::current_;
 // the current context
@@ -989,7 +992,7 @@ static Fl_Color win_color(int wincol) {
   return FL_BLACK;
 }
 
-int fl_windows_colors() {
+void fl_windows_colors() {
   Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
   Fl_Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
@@ -1095,5 +1098,5 @@ int fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.88 2000/02/14 11:32:56 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.89 2000/02/16 07:30:05 bill Exp $".
 //
