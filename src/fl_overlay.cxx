@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.16 2005/01/24 08:07:55 spitzak Exp $"
+// "$Id: fl_overlay.cxx,v 1.17 2005/01/25 09:49:13 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #include <fltk/draw.h>
 using namespace fltk;
 
-static Rectangle pr(0,0,0,0);
+static fltk::Rectangle pr(0,0,0,0);
 
 static void draw_current_rect() {
   if (pr.empty()) return;
@@ -69,5 +69,5 @@ void fltk::overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.16 2005/01/24 08:07:55 spitzak Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.17 2005/01/25 09:49:13 spitzak Exp $".
 //

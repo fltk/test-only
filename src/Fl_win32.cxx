@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.242 2005/01/24 17:25:15 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.243 2005/01/25 09:49:12 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -496,7 +496,7 @@ static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
   m.set(mi.rcMonitor.left,
 	mi.rcMonitor.top,
 	mi.rcMonitor.right - mi.rcMonitor.left,
-	mi.rcMonitor.bottom - mi.rcMonitor.top;
+	mi.rcMonitor.bottom - mi.rcMonitor.top);
   m.work.set(mi.rcWork.left,
 	     mi.rcWork.top,
 	     mi.rcWork.right - mi.rcWork.left,
@@ -2212,12 +2212,12 @@ void Window::flush() {
       clip_region(i->region); i->region = 0;
     }
 
+    // Copy the backbuffer to the window:
     // Must be an implementation problem in the server, but on Irix (at least)
     // it is much faster if I clip the rectangle requested down:
-    int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
-
-    // Copy the backbuffer to the window:
-    BitBlt(dc, X, Y, W, H, i->bdc, X, Y, SRCCOPY);
+    Rectangle r(w(),h());
+    if (intersect_with_clip(r))
+      BitBlt(dc, r.x(), r.y(), r.w(), r.h(), i->bdc, r.x(), r.y(), SRCCOPY);
 
     if (i->overlay) draw_overlay();    
     clip_region(0);
@@ -2377,5 +2377,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.242 2005/01/24 17:25:15 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.243 2005/01/25 09:49:12 spitzak Exp $".
 //

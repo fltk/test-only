@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.26 2005/01/24 08:07:14 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.27 2005/01/25 09:49:10 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,9 +47,9 @@ using namespace fltk;
 
 class FL_API DottedFrame : public Box {
 public:
-  void _draw(const Rectangle& r1, const Style* s, Flags flags) const {
+  void _draw(const fltk::Rectangle& r1, const Style* s, Flags flags) const {
     if (!(flags & FOCUSED)) return;
-    Rectangle r(r1);
+    fltk::Rectangle r(r1);
     if (r.w() > 4) {r.move_x(1); r.move_r(-1);}
     else if (r.w() > 3) r.move_r(-1);
     else return;
@@ -160,7 +160,7 @@ Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
 class NoBox : public Box {
 public:
-  void _draw(const Rectangle&, const Style* s, Flags) const {}
+  void _draw(const fltk::Rectangle&, const Style* s, Flags) const {}
   NoBox(const char* name) : Box(name) {}
 };
 static NoBox noBox("none");
@@ -179,7 +179,7 @@ Box* const fltk::NO_BOX = &noBox;
   Draws a rectangle filled with style->color(). This is a useful
   base class for some box types.
 */
-void FlatBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void FlatBox::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   if (flags & INVISIBLE) return;
   if (r.empty()) return;
@@ -233,10 +233,10 @@ void fl_to_inactive(const char* s, char* to) {
   *to = 0;
 }
 
-void FrameBox::_draw(const Rectangle& R, const Style* style, Flags flags) const
+void FrameBox::_draw(const fltk::Rectangle& R, const Style* style, Flags flags) const
 {
   if (R.empty()) return;
-  Rectangle r(R);
+  fltk::Rectangle r(R);
   const char* s = data();
   if (flags & VALUE) s = down->data();
   char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
@@ -333,7 +333,7 @@ Box* const fltk::BORDER_BOX = &borderBox;
 
 class BorderFrame : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style,Flags flags) const
+  void _draw(const fltk::Rectangle& r, const Style* style,Flags flags) const
   {
     setcolor(style->textcolor());
     strokerect(r);
@@ -359,7 +359,7 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
-void HighlightBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void HighlightBox::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) {
     down->draw(r, style, flags);
@@ -387,5 +387,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.26 2005/01/24 08:07:14 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.27 2005/01/25 09:49:10 spitzak Exp $".
 //

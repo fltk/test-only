@@ -1,4 +1,4 @@
-// "$Id: Fl_Shared_Image.cxx,v 1.36 2005/01/24 08:07:45 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.37 2005/01/25 09:49:12 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -28,7 +28,6 @@
 #include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 #include <fltk/xbmImage.h>
-#include <fltk/x.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -225,5 +224,5 @@ void SharedImage::_draw(const Rectangle& r, const Style* style, Flags flags) con
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.36 2005/01/24 08:07:45 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.37 2005/01/25 09:49:12 spitzak Exp $"
 //

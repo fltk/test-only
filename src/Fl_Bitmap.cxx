@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.27 2005/01/24 08:07:14 spitzak Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.28 2005/01/25 09:49:10 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -38,7 +38,7 @@ using namespace fltk;
   single color as another argument? You can also call the draw(x,y)
   method which will use the current color.
 */
-void xbmImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void xbmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   if (!drawn())
     (const_cast<xbmImage*>(this))->set_alpha_bitmap(array,this->w(),this->h());
@@ -61,5 +61,5 @@ void xbmImage::draw(int x, int y) const {
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.27 2005/01/24 08:07:14 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.28 2005/01/25 09:49:10 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.50 2005/01/24 08:07:20 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.51 2005/01/25 09:49:11 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -337,8 +337,8 @@ void fl_restore_clip(); // in rect.C
 // that is visible and clipped to the size of the image. It will call
 // return if it is invisible.
 #define clip_code() \
-  Rectangle ir(r1); transform(ir); \
-  Rectangle R(ir); if (!intersect_with_clip(R)) return; \
+  fltk::Rectangle ir(r1); transform(ir); \
+  fltk::Rectangle R(ir); if (!intersect_with_clip(R)) return; \
   src_x += R.x()-ir.x(); \
   if (src_x < 0) {R.move_x(-src_x); src_x = 0;} \
   if (src_x >= w_) return; \
@@ -358,7 +358,7 @@ void fl_restore_clip(); // in rect.C
   are outside the image). The part of the image that then intersects
   \a r is then drawn.
 */
-void Image::copy(const Rectangle& r1, int src_x, int src_y) const {
+void Image::copy(const fltk::Rectangle& r1, int src_x, int src_y) const {
   // handle undrawn images like the documentation says, as black:
   if (!rgb) {setcolor(BLACK); fillrect(r1); return;}
   clip_code();
@@ -394,7 +394,7 @@ void Image::copy(const Rectangle& r1, int src_x, int src_y) const {
   are outside the image). The part of the image that then intersects
   \a r is then drawn.
 */
-void Image::over(const Rectangle& r1, int src_x, int src_y) const {
+void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
 
   // Draw bitmaps as documented, the rgb pretends to be black:
   if (!rgb) { setcolor(BLACK); fill(r1, src_x, src_y); return; }
@@ -489,7 +489,7 @@ void Image::over(const Rectangle& r1, int src_x, int src_y) const {
   an anti-aliased character in a font, and can be drawn in any color.
   It is also used to draw inactive images.
 */
-void Image::fill(const Rectangle& r1, int src_x, int src_y) const
+void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
 {
   // If there is no alpha channel then act like it is all white
   // and thus a rectangle should be drawn:
@@ -547,7 +547,7 @@ void Image::fill(const Rectangle& r1, int src_x, int src_y) const
   If the INACTIVE flag is on, this tries to draw the image inactive
   by calling fill() twice with gray colors. Otherwise it calls over().
 */
-void Image::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void Image::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {  
   if (flags & INACTIVE) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
@@ -591,5 +591,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.50 2005/01/24 08:07:20 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.51 2005/01/25 09:49:11 spitzak Exp $".
 //

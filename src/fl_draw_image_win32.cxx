@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.25 2005/01/24 08:07:54 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.26 2005/01/25 09:49:12 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -119,7 +119,7 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 #endif // USE_COLORMAP
 
 static void innards(const uchar *buf, PixelType type,
-		    const Rectangle& r1,
+		    const fltk::Rectangle& r1,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
@@ -127,8 +127,8 @@ static void innards(const uchar *buf, PixelType type,
   char indexed = (xpalette != 0);
 #endif
 
-  Rectangle r(r1); transform(r);
-  Rectangle cr(r); if (!intersect_with_clip(cr)) return;
+  fltk::Rectangle r(r1); transform(r);
+  fltk::Rectangle cr(r); if (!intersect_with_clip(cr)) return;
   if (!linedelta) linedelta = r1.w()*delta;
   int x = cr.x();
   int y = cr.y();
@@ -315,5 +315,5 @@ static void innards(const uchar *buf, PixelType type,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.25 2005/01/24 08:07:54 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.26 2005/01/25 09:49:12 spitzak Exp $".
 //

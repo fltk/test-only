@@ -1,6 +1,7 @@
-// "$Id: Fl_Browser.cxx,v 1.103 2005/01/24 08:07:15 spitzak Exp $"
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// "$Id: Fl_Browser.cxx,v 1.104 2005/01/25 09:49:11 spitzak Exp $"
+//
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -1818,5 +1819,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.103 2005/01/24 08:07:15 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.104 2005/01/25 09:49:11 spitzak Exp $".
 //

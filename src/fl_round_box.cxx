@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.35 2005/01/24 08:07:56 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.36 2005/01/25 09:49:13 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,6 @@ enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
 static void lozenge(int which, int x,int y,int w,int h, Color color)
 {
-  w--; h--;
   int d = w <= h ? w : h;
   if (d <= 1) return;
   setcolor(color);
@@ -57,14 +56,14 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
   Rectangle r1(x+w-d, y, d, d);
   Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
-    fillpie(r1, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
-    fillpie(r2, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
+    arci(r1, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
+    arci(r2, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
   } else if (which == UPPER_LEFT) {
-    fillpie(r1, 45, w<=h ? 180 : 90, what);
-    fillpie(r2, w<=h ? 180 : 90, 225, what);
+    arci(r1, 45, w<=h ? 180 : 90, what);
+    arci(r2, w<=h ? 180 : 90, 225, what);
   } else { // LOWER_RIGHT
-    fillpie(r1, w<=h ? 360 : 270, 360+45, what);
-    fillpie(r2, 225, w<=h ? 360 : 270, what);
+    arci(r1, w<=h ? 360 : 270, 360+45, what);
+    arci(r2, 225, w<=h ? 360 : 270, what);
   }
   if (which == FILL) {
     if (w < h)
@@ -73,10 +72,10 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
       fillrect(Rectangle(x+d/2, y, w-(d&-2), h));
   } else {
     if (w < h) {
-      if (which != UPPER_LEFT) drawline(x+w, y+d/2, x+w, y+h-d/2);
+      if (which != UPPER_LEFT) drawline(x+w-1, y+d/2, x+w-1, y+h-d/2);
       if (which != LOWER_RIGHT) drawline(x, y+d/2, x, y+h-d/2);
     } else if (w > h) {
-      if (which != UPPER_LEFT) drawline(x+d/2, y+h, x+w-d/2, y+h);
+      if (which != UPPER_LEFT) drawline(x+d/2, y+h-1, x+w-d/2, y+h-1);
       if (which != LOWER_RIGHT) drawline(x+d/2, y, x+w-d/2, y);
     }
   }
@@ -126,5 +125,5 @@ static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.35 2005/01/24 08:07:56 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.36 2005/01/25 09:49:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id: draw.h,v 1.14 2005/01/25 09:49:10 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -111,17 +111,18 @@ FL_API void fillstrokepath(Color);
 
 /*! \addtogroup rectangle
   \{ */
-FL_API void strokerect(const Rectangle&);
 FL_API void fillrect(const Rectangle&);
-FL_API void drawpoint(float x, float y);
+FL_API void strokerect(const Rectangle&);
 FL_API void drawpoint(int x, int y);
-FL_API void drawline(float x0, float y0, float x1, float y1);
+FL_API void drawpoint(float x, float y);
 FL_API void drawline(int x0, int y0, int x1, int y1);
-enum {FILLPIE, FILLARC, STROKEPIE, STROKEARC};
-FL_API void fillpie(const Rectangle&,float a,float a2,int what=FILLPIE);
-inline void strokepie(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,STROKEPIE);}
-inline void fillarc(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,FILLARC);}
-inline void strokearc(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,STROKEARC);}
+FL_API void drawline(float x0, float y0, float x1, float y1);
+FL_API void arci(const Rectangle&, float, float, int what, Color=0);
+enum {FILLPIE, FILLARC, STROKEARC, FILLSTROKEARC};
+inline void fillpie(const Rectangle& r, float a, float a2) {arci(r,a,a2,FILLPIE);}
+inline void fillarc(const Rectangle& r,float a,float a2) {arci(r,a,a2,FILLARC);}
+inline void strokearc(const Rectangle& r,float a,float a2) {arci(r,a,a2,STROKEARC);}
+inline void fillstrokearc(const Rectangle& r, float a, float a2, Color c) {arci(r,a,a2,FILLSTROKEARC,c);}
 /*! \} */
 
 /*! \addtogroup font
@@ -206,5 +207,5 @@ FL_API void overlay_clear();
 #endif
 
 //
-// End of "$Id: draw.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id: draw.h,v 1.14 2005/01/25 09:49:10 spitzak Exp $".
 //

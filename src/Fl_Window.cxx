@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.121 2005/01/24 08:34:32 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.122 2005/01/25 09:49:12 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -630,10 +630,10 @@ void Window::show_inside(const Window* frame) {
   completely. Also if your normal drawing causes blinking (due to
   overlapping objects) this can make the display look much better by
   limiting the blinking to the small area that is actually changing.  */
-void Widget::redraw(const Rectangle& r1) {
+void Widget::redraw(const fltk::Rectangle& r1) {
   // go up to the window, clipping to each widget's area, quit if empty:
   Widget* window = this;
-  Rectangle r(r1);
+  fltk::Rectangle r(r1);
   for (;;) {
     if (r.x() < 0) r.set_x(0);
     if (r.y() < 0) r.set_y(0);
@@ -654,7 +654,7 @@ void Widget::redraw(const Rectangle& r1) {
 // Merge a rectangle into a window's expose region. If the entire
 // window is damaged we switch to a DAMAGE_ALL mode which will
 // avoid drawing it twice:
-void CreatedWindow::expose(const Rectangle& r) {
+void CreatedWindow::expose(const fltk::Rectangle& r) {
   // Ignore if window already marked as completely damaged:
   if (window->damage() & DAMAGE_ALL) ;
   // Detect expose events that cover the entire window:
@@ -735,7 +735,7 @@ void CreatedWindow::expose(const Rectangle& r) {
 */
 void Window::draw_overlay() {
   setcolor(RED);
-  fillrect(Rectangle(w(),h()));
+  fillrect(fltk::Rectangle(w(),h()));
 }
 
 /** Indicate that the image made by draw_overlay() has changed and must
@@ -831,5 +831,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.121 2005/01/24 08:34:32 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.122 2005/01/25 09:49:12 spitzak Exp $".
 //

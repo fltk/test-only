@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.23 2005/01/24 08:07:52 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.24 2005/01/25 09:49:12 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -27,7 +27,9 @@
 #include <fltk/x.h>
 using namespace fltk;
 
-/*!
+/*! Innards of fillpie(), strokepie(), fillarc(), strokearc(),
+  fillstrokepie(), and fillstrokearc().
+
   These functions match the rather limited circle drawing code
   provided by X and WIN32. The advantage over using addarc() is that
   they are faster because they often use the hardware, and that small
@@ -39,58 +41,53 @@ using namespace fltk;
   goes from angle \a a1 to \a a2, measured in degrees counter-clockwise
   from 3'oclock.
 
-  The default if \a what is not specified is to fill a pie-slice shape
-  with the current color. \a what is used to implement the other
-  functions and can be one of fltk::FILLPIE, fltk::FILLARC, fltk::STROKEPIE,
-  fltk::STROKEARC.
-
   The result if the transformation is rotated is undefined and will
   differ depending on the backend.
 */
-void fltk::fillpie(const Rectangle& r1, float a1, float a2, int what) {
+void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
   Rectangle r(r1); transform(r);
   if (r.empty()) return;
+
 #if USE_X11
+
   int A = int(a1*64);
   int B = int(a2*64)-A;
-  switch(what) {
-  case FILLPIE:
-    XSetArcMode(xdisplay, gc, ArcPieSlice);
-    goto J1;
-  case FILLARC:
-    XSetArcMode(xdisplay, gc, ArcChord);
-  J1:
-    XFillArc(xdisplay, xwindow, gc, r.x()-1, r.y()-1, r.w()+1, r.h()+1, A, B);
-    break;
-  case STROKEPIE: // not correct, should draw lines to center
-  case STROKEARC:
-    XDrawArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h(), A, B);
-    break;
+  if (what != STROKEARC && r.w()>2 && r.h()>2) {
+    XSetArcMode(xdisplay, gc, what == FILLPIE ? ArcPieSlice : ArcChord);
+    XFillArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
   }
+  if (what == FILLSTROKEARC) setcolor(c);
+  XDrawArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1, A, B);
+
 #elif defined(_WIN32)
   if (a1 == a2) return;
   if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
   if (a2 >= a1+360) a1 = a2 = 0;
   //w++; h++; // is this needed to match X?
-  int xa = r.center_x()+int(w*cosf(a1*float(M_PI/180.0)));
-  int ya = r.center_y()-int(h*sinf(a1*float(M_PI/180.0)));
-  int xb = r.center_x()+int(w*cosf(a2*float(M_PI/180.0)));
-  int yb = r.center_y()-int(h*sinf(a2*float(M_PI/180.0)));
+  int xa = r.center_x()+int(r.w()*cosf(a1*float(M_PI/180.0)));
+  int ya = r.center_y()-int(r.h()*sinf(a1*float(M_PI/180.0)));
+  int xb = r.center_x()+int(r.w()*cosf(a2*float(M_PI/180.0)));
+  int yb = r.center_y()-int(r.h()*sinf(a2*float(M_PI/180.0)));
   switch (what) {
   case FILLPIE:
     setbrush();
     setpen();
-    Pie(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
+    Pie(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
     break;
   case FILLARC:
     setbrush();
     setpen();
-    Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
+    Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
     break;
-  case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
     setpen();
-    Arc(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
+    Arc(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
+    break;
+  case FILLSTROKEARC:
+    setbrush();
+    setcolor(c);
+    setpen();
+    Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
     break;
   }
 #elif defined(__APPLE__)
@@ -102,25 +99,31 @@ void fltk::fillpie(const Rectangle& r1, float a1, float a2, int what) {
   case FILLARC: // not correct, should fill chord
     PaintArc(&rect, (short int)a2, (short int)a1);
     break;
-  case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
     FrameArc(&rect, (short int)a2, (short int)a1);
     break;
+  case FILLSTROKEARC:
+    PaintArc(&rect, (short int)a2, (short int)a1);
+    setcolor(c);
+    FrameArc(&rect, (short int)a2, (short int)a1);
   }
 #else
 # error
 #endif
 }
 
-/*! \fn void fltk::strokepie(const Rectangle&, float a, float a2);
-  Draw a line along a closed path around the pie slice, including two
-  straight lines from the ends of the arc to the center. (nyi, right
-  now it acts like strokearc().
+/*! \fn void fltk::fillpie(const Rectangle&, float a, float a2);
+  Draw a pie-slice shape. If the angles are 360 or more degrees apart
+  a full circle is drawn. Such a circle will just touch each side
+  of the rectangle.
 */
 
 /*! \fn void fltk::fillarc(const Rectangle&, float a, float a2);
   Fill a "chord" shape, with an arc and one straight line joining the
-  ends.
+  ends. If the angles are more than 360 degrees apart a fill circle is
+  drawn. Such a circle will just touch each side of the rectangle. In
+  addition the line drawn by strokearc() if the line_style() is zero,
+  will just hide this edge.
 */
 
 /*! \fn void fltk::strokearc(const Rectangle&, float a, float a2);
@@ -128,6 +131,12 @@ void fltk::fillpie(const Rectangle& r1, float a1, float a2, int what) {
   the curved edge.
 */
 
+/*! \fn void fltk::fillstrokearc(const Rectangle&, float a, float a2, Color);
+  Does both fillarc and strokearc, using the Color argument as the
+  stroke color. In most implementations fillpie() draws a line anyway
+  so this saves time.
+*/
+
 //
-// End of "$Id: fl_arci.cxx,v 1.23 2005/01/24 08:07:52 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.24 2005/01/25 09:49:12 spitzak Exp $".
 //

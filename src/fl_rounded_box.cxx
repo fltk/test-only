@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.24 2005/01/24 08:07:56 spitzak Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.25 2005/01/25 09:49:13 spitzak Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@ static void rbox(const Rectangle& r, Color fill, Color line) {
   float d = r.w()|1;
   if (r.h() < r.w()) d = r.h()|1;
   if (d > 31) d = 31;
-  
+
   //d -= .5;
   float X = r.x();
   float Y = r.y();
@@ -106,5 +106,5 @@ static RFlatBox rflatBox("rflat");
 Box* const fltk::RFLAT_BOX = &rflatBox;
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.24 2005/01/24 08:07:56 spitzak Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.25 2005/01/25 09:49:13 spitzak Exp $".
 //

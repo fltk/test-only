@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.50 2005/01/24 08:07:17 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.51 2005/01/25 09:49:11 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -62,7 +62,7 @@ static void default_glyph(int glyph,
     Rectangle r(R); box->inset(r);
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(fg);
-    if (r.h() < 4) {fillrect(Rectangle(r,2,2)); return;}
+    if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
     int x = r.x()+1;
     int w = r.h()-2;
     int d1 = w/3;

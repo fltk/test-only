@@ -1,6 +1,7 @@
-// "$Id: Fl_Adjuster.cxx,v 1.53 2005/01/24 08:07:13 spitzak Exp $"
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// "$Id: Fl_Adjuster.cxx,v 1.54 2005/01/25 09:49:10 spitzak Exp $"
+//
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -182,5 +183,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.53 2005/01/24 08:07:13 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.54 2005/01/25 09:49:10 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.29 2005/01/24 17:25:17 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.30 2005/01/25 09:49:12 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -270,7 +270,7 @@ bool fltk::not_clipped(const Rectangle& r1) {
 #elif defined(_WIN32)
   RECT rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
-  return RectInRegion(r,&rect);
+  return RectInRegion(region,&rect);
 #elif defined(__APPLE__)
   Rect rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
@@ -363,5 +363,5 @@ int fltk::intersect_with_clip(Rectangle& r) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.29 2005/01/24 17:25:17 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.30 2005/01/25 09:49:12 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.47 2005/01/24 08:07:19 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.48 2005/01/25 09:49:11 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -65,8 +65,10 @@ using namespace fltk;
 
 void Dial::draw() {
   Rectangle r(w(),h());
-  if ((damage()&DAMAGE_ALL) && !(type()==FILL && box()==OVAL_BOX)) draw_box();
-  box()->inset(r);
+  if (type()!=FILL || box() != OVAL_BOX) {
+    if (damage()&DAMAGE_ALL) draw_box();
+    box()->inset(r);
+  }
   Color fillcolor = selection_color();
   Color linecolor = textcolor();
   if (!active_r()) {
@@ -82,13 +84,14 @@ void Dial::draw() {
     fillpie(r, 270-angle, 270-a1);
     if (box() == OVAL_BOX) {
       setcolor(linecolor);
-      strokearc(Rectangle(w()-1,h()-1), 0, 360);
+      strokearc(r, 0, 360);
     }
   } else {
     if (!(damage()&DAMAGE_ALL)) {
-      addellipse(r.x()+1, r.y()+1, r.w()-2, r.h()-2);
+      // erase interior without erasing any box edge:
+      Rectangle r1(r); r1.inset(1);
       setcolor(color());
-      fillpath();
+      fillarc(r1, 0, 360);
     }
     push_matrix();
     translate(r.center_x()-.5f, r.center_y()-.5f);
@@ -98,7 +101,7 @@ void Dial::draw() {
       static float v[4][2] = {{0,0}, {-0.04f,0}, {-0.25f,0.25f}, {0,0.04f}};
       addvertices(4,v);
     } else {
-      addcircle(-0.22f, 0.22f, 0.075f);
+      addcircle(-0.20f, 0.20f, 0.075f);
     }
     setcolor(fillcolor);
     fillstrokepath(linecolor);
@@ -163,5 +166,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.47 2005/01/24 08:07:19 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.48 2005/01/25 09:49:11 spitzak Exp $".
 //

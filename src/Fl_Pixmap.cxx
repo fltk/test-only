@@ -1,4 +1,4 @@
-// "$Id: Fl_Pixmap.cxx,v 1.31 2005/01/24 08:07:27 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.32 2005/01/25 09:49:11 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -59,7 +59,7 @@ void xpmImage::_measure(int& w, int& h) const {
 
 extern Color fg_kludge;
 
-void xpmImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   Color bg = NO_COLOR;
   Color fg = NO_COLOR;
@@ -102,5 +102,5 @@ void xpmImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.31 2005/01/24 08:07:27 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.32 2005/01/25 09:49:11 spitzak Exp $".
 //
