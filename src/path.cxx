@@ -348,6 +348,9 @@ namespace fltk {
     }
   }
 }
+static fltk::Rectangle circle;
+static float circle_start, circle_end;
+enum {NONE=0, PIE, CHORD} circle_type;
 #else
 // We have to store the path ourselves on X11 and Win32. Path is stored
 // as transformed points plus lengths of "loops".
@@ -646,11 +649,10 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   addarc(r.x()+delta/2, r.y()+delta/2, r.w()-delta, r.h()-delta, start, end);
   closepath();
 #elif USE_QUARTZ
-  closepath();
-  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
-  addvertex(r.x()+(r.w()-delta)*.5f, r.y()+(r.h()-delta)*.5f);
-  addarc(r.x(), r.y(), r.w()-delta, r.h()-delta, start, end);
-  closepath();
+  circle = r;
+  circle_start = start;
+  circle_end = end;
+  circle_type = PIE;
 #else
   circle = r; transform(circle);
   circle_start = start;
@@ -676,9 +678,10 @@ void fltk::addchord(const Rectangle& r, float start, float end) {
   float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
   addarc(r.x()+delta/2, r.y()+delta/2, r.w()-delta, r.h()-delta, start, end);
 #elif USE_QUARTZ
-  closepath();
-  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
-  addarc(r.x(), r.y(), r.w()-delta, r.h()-delta, start, end);
+  circle = r;
+  circle_start = start;
+  circle_end = end;
+  circle_type = CHORD;
 #else
   circle = r; transform(circle);
   circle_start = start;
@@ -692,6 +695,7 @@ static inline void inline_newpath() {
   cairo_new_path(cc);
 #elif USE_QUARTZ
   first_point = true;
+  circle_type = NONE;
   CGContextBeginPath(quartz_gc);
 #else
   numpoints = loop_start = loops = 0;
@@ -734,6 +738,13 @@ void fltk::strokepath() {
   cairo_stroke(cc);
 #elif USE_QUARTZ
   CGContextStrokePath(quartz_gc);
+  if (circle_type) {
+    first_point = true;
+    CGContextBeginPath(quartz_gc);
+    const Rectangle& r = circle;
+    addarc(r.x(), r.y(), r.w()-1, r.h()-1, circle_start, circle_end);
+    CGContextStrokePath(quartz_gc);
+  }
 #elif USE_X11
   if (circle_type) {
     int A = int(circle_start*64);
@@ -801,6 +812,14 @@ void fltk::fillpath() {
   cairo_fill(cc);
 #elif USE_QUARTZ
   CGContextFillPath(quartz_gc);
+  if (circle_type) {
+    first_point = true;
+    CGContextBeginPath(quartz_gc);
+    const Rectangle& r = circle;
+    addvertex(r.x()+(r.w()-1)*0.5f, r.y()+(r.h()-1)*0.5f);
+    addarc(r.x(), r.y(), r.w()-1, r.h()-1, circle_start, circle_end);
+    CGContextFillPath(quartz_gc);
+  }
 #elif USE_X11
   if (circle_type) {
     int A = int(circle_start*64);
@@ -878,6 +897,18 @@ void fltk::fillstrokepath(Color color) {
   split_color(color, r, g, b);
   CGContextSetRGBStrokeColor(quartz_gc, r/255.0f, g/255.0f, b/255.0f, 1.0);
   CGContextDrawPath(quartz_gc, kCGPathFillStroke);
+  if (circle_type) {
+    first_point = true;
+    CGContextBeginPath(quartz_gc);
+    const Rectangle& r = circle;
+    if (circle_type==PIE) addvertex(r.x()+(r.w()-1)*0.5f, r.y()+(r.h()-1)*0.5f);
+    addarc(r.x(), r.y(), r.w()-1, r.h()-1, circle_start, circle_end);
+    CGContextFillPath(quartz_gc);
+    first_point = true;
+    CGContextBeginPath(quartz_gc);
+    addarc(r.x(), r.y(), r.w()-1, r.h()-1, circle_start, circle_end);
+    CGContextStrokePath(quartz_gc);
+  }
   setcolor(color);
   inline_newpath();
 #elif USE_X11

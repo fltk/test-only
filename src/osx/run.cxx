@@ -537,6 +537,8 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   
   switch ( kind )
   {
+  case kEventWindowBoundsChanging:
+    break;
   case kEventWindowDrawContent:
     handleUpdateEvent( xid( window ) );
     ret = noErr;
@@ -1278,7 +1280,7 @@ void Window::create()
       if (contains(modal())) {
 	winclass = kMovableModalWindowClass;
 	winattr = kWindowStandardHandlerAttribute |
-	  kWindowCloseBoxAttribute;
+	          kWindowCloseBoxAttribute;
 	where = kWindowAlertPositionOnParentWindowScreen;
 #if 0
       } else if (child_of()) {
@@ -1358,8 +1360,9 @@ void Window::create()
         { kEventClassWindow, kEventWindowActivated },
         { kEventClassWindow, kEventWindowDeactivated },
         { kEventClassWindow, kEventWindowClose },
+        { kEventClassWindow, kEventWindowBoundsChanging },
         { kEventClassWindow, kEventWindowBoundsChanged } };
-      ret = InstallWindowEventHandler( x->xid, windowHandler, 7, windowEvents, this, 0L );
+      ret = InstallWindowEventHandler( x->xid, windowHandler, 8, windowEvents, this, 0L );
       ret = InstallTrackingHandler( dndTrackingHandler, x->xid, this);
       ret = InstallReceiveHandler( dndReceiveHandler, x->xid, this);
     }
