@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.3 2004/05/15 23:00:34 easysw Exp $"
+// "$Id: x.cxx,v 1.1.2.4 2004/06/01 01:13:40 easysw Exp $"
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1040,18 +1040,17 @@ int fl_handle(const XEvent& thisevent)
     // not produced on Windoze and thus case statements tend not to check
     // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
     if (keysym >= 0xff91 && keysym <= 0xff9f) {
-      // Try to make them turn into FL_KP+'c' so that NumLock is
-      // irrelevant, by looking at the shifted code.  This matches the
-      // behavior of the translator in Fl_win32.cxx, and IMHO is the
-      // user-friendly result:
+      // Map keypad keysym to character or keysym depending on
+      // numlock state...
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
-      if (keysym1 <= 0x7f || keysym1 > 0xff9f && keysym1 <= FL_KP_Last) {
+      if ((xevent.xkey.state & Mod2Mask) &&
+          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))) {
+	// Store ASCII numeric keypad value...
 	keysym = keysym1 | FL_KP;
 	buffer[0] = char(keysym1) & 0x7F;
 	len = 1;
       } else {
-	// If that failed to work, just translate them to the matching
-	// normal function keys:
+	// Map keypad to special key...
 	static const unsigned short table[15] = {
 	  FL_F+1, FL_F+2, FL_F+3, FL_F+4,
 	  FL_Home, FL_Left, FL_Up, FL_Right,
@@ -1520,5 +1519,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: x.cxx,v 1.1.2.3 2004/05/15 23:00:34 easysw Exp $".
+// End of "$Id: x.cxx,v 1.1.2.4 2004/06/01 01:13:40 easysw Exp $".
 //
