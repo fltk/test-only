@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.11 1999/10/11 01:00:27 vincent Exp $"
+// "$Id: file.cxx,v 1.12 1999/10/26 18:55:42 mike Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -320,8 +320,8 @@ extern const char* code_file_name;
 
 int write_file(const char *filename, int selected_only) {
   if (!open_write(filename)) return 0;
-  write_string("# data file for the Fltk User Interface Designer (fluid)\n"
-	       "version %.2f",FL_VERSION);
+  write_string("# data file for the FLTK User Interface Designer (FLUID)\n"
+	       "version %.4f",FL_VERSION);
   if(strlen(images_dir)) write_string("\nimages_dir %s", images_dir);
   if(!include_H_from_C)
     write_string("\ndo_not_include_H_from_C");
@@ -599,5 +599,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.11 1999/10/11 01:00:27 vincent Exp $".
+// End of "$Id: file.cxx,v 1.12 1999/10/26 18:55:42 mike Exp $".
 //
