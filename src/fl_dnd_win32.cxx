@@ -1,11 +1,11 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.7 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.8 2003/04/20 03:17:51 easysw Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
 // into the application is in win32.cxx
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -170,5 +170,5 @@ bool fltk::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.7 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.8 2003/04/20 03:17:51 easysw Exp $".
 //

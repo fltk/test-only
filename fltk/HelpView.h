@@ -1,9 +1,9 @@
 //
-// "$Id: HelpView.h,v 1.1 2003/01/14 06:51:01 spitzak Exp $"
+// "$Id: HelpView.h,v 1.2 2003/04/20 03:17:47 easysw Exp $"
 //
 // Help Viewer widget definitions.
 //
-// Copyright 1997-2002 by Easy Software Products.
+// Copyright 1997-2003 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -219,5 +219,5 @@ public:
 #endif // !HelpView_H
 
 //
-// End of "$Id: HelpView.h,v 1.1 2003/01/14 06:51:01 spitzak Exp $".
+// End of "$Id: HelpView.h,v 1.2 2003/04/20 03:17:47 easysw Exp $".
 //

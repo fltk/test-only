@@ -1,10 +1,10 @@
 //
-// "$Id: MultiBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: MultiBrowser.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //
 // Browser that lets the user select more than one item at a time.
 // Most of the implementation is in the base Browser class.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: MultiBrowser.h,v 1.3 2003/04/20 03:17:48 easysw Exp $".
 //

@@ -1,12 +1,12 @@
 //
-// "$Id: ItemGroup.h,v 1.3 2003/01/21 07:53:38 spitzak Exp $"
+// "$Id: ItemGroup.h,v 1.4 2003/04/20 03:17:47 easysw Exp $"
 //
 // Widget designed to be a nested list in a menu or browser. This
 // copies the drawing and style code from Item. I did not modify the
 // base Menu class this way because the style inheritance would mess
 // up the styles of MenuButton and MenuBar. Code is in Item.cxx
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

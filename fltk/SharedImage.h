@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.4 2003/02/07 08:21:14 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -8,7 +8,7 @@
 // Also a bunch of image types that read files. Maybe they should be
 // in their own header files.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -196,5 +196,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.4 2003/02/07 08:21:14 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
 //

@@ -1,10 +1,10 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.8 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.9 2003/04/20 03:17:51 easysw Exp $"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

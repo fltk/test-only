@@ -1,10 +1,10 @@
 //
-// "$Id: TiledImage.h,v 1.3 2003/02/07 08:21:15 spitzak Exp $"
+// "$Id: TiledImage.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
 //
 // A tiled image completely fills the bounding box passed to it with
 // replications of the internal Image passed to it.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: TiledImage.h,v 1.3 2003/02/07 08:21:15 spitzak Exp $"
+// End of "$Id: TiledImage.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.14 2003/04/01 07:24:05 spitzak Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.15 2003/04/20 03:17:51 easysw Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,6 +53,8 @@ extern "C" {
 }
 #endif
 
+#if 0 // NO JPEG writing in the RGB image class; this belongs someplace
+      // else entirely!!!
 bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 {
 #if WRITE_JPEG
@@ -116,7 +118,8 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
   return false;
 #endif // WRITE_JPEG
 }
+#endif // 0
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.14 2003/04/01 07:24:05 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.15 2003/04/20 03:17:51 easysw Exp $".
 //

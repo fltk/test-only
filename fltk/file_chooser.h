@@ -1,8 +1,8 @@
 //
-// "$Id: file_chooser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: file_chooser.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
 //
 // Popup file chooser.
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -42,5 +42,5 @@ FL_API void file_chooser_callback(void (*cb)(const char *));
 #endif
 
 //
-// End of "$Id: file_chooser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: file_chooser.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
 //

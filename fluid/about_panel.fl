@@ -64,7 +64,7 @@ Version 2.0}
         }
       }
       {fltk::Button} {} {
-        label {©1998-2002
+        label {©1998-2003
 Click here for more information}
         callback {display_group->hide();
 copyright_box->show();}

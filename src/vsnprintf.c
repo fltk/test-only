@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.c,v 1.13 2002/12/22 05:30:22 easysw Exp $"
+ * "$Id: vsnprintf.c,v 1.14 2003/04/20 03:17:51 easysw Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -17,7 +17,7 @@
  * Only handles formats that are both documented in the glibc man page
  * for printf and also handled by your system's sprintf().
  *
- * Copyright 1998-2002 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -138,6 +138,6 @@ int fltk_snprintf(char* str, size_t size, const char* fmt, ...) {
 #endif
 
 /*
- * End of "$Id: vsnprintf.c,v 1.13 2002/12/22 05:30:22 easysw Exp $".
+ * End of "$Id: vsnprintf.c,v 1.14 2003/04/20 03:17:51 easysw Exp $".
  */
 

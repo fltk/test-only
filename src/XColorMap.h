@@ -1,10 +1,10 @@
 //
-// "$Id: XColorMap.h,v 1.3 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: XColorMap.h,v 1.4 2003/04/20 03:17:51 easysw Exp $"
 //
 // Internal structure used to keep track of the current state of
 // the X colormap. Only useful for 8-bit colormapped X visuals.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -42,5 +42,5 @@ extern unsigned char fl_redmask, fl_greenmask, fl_bluemask;
 extern int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
 //
-// End of "$Id: XColorMap.h,v 1.3 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: XColorMap.h,v 1.4 2003/04/20 03:17:51 easysw Exp $".
 //

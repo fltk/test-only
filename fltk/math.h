@@ -1,10 +1,10 @@
 //
-// "$Id: math.h,v 1.8 2003/01/26 06:33:10 spitzak Exp $"
+// "$Id: math.h,v 1.9 2003/04/20 03:17:49 easysw Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -85,5 +85,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.8 2003/01/26 06:33:10 spitzak Exp $".
+// End of "$Id: math.h,v 1.9 2003/04/20 03:17:49 easysw Exp $".
 //

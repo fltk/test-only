@@ -115,7 +115,7 @@ fltk::DoubleBufferWindow* make_about_panel(const char *copyright) {
         o->end();
         o->resizable(o);
       }
-       {fltk::Button* o = new fltk::Button(175, 159, 95, 41, "\251""1998-2002\nClick here for more information");
+       {fltk::Button* o = new fltk::Button(175, 159, 95, 41, "\251""1998-2003\nClick here for more information");
         o->box(fltk::BORDER_BOX);
         o->color((fltk::Color)136);
         o->labelcolor((fltk::Color)6);

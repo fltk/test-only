@@ -1,11 +1,11 @@
 //
-// "$Id: MultiLineInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: MultiLineInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //
 // Allows you to edit a *small* number of lines of text. Does not have
 // any scrollbars. You may want a TextEditor instead, it is designed for
 // large amounts of text.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,5 +44,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiLineInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: MultiLineInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $".
 //

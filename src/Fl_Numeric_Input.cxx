@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.8 2002/12/10 02:00:44 easysw Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.9 2003/04/20 03:17:51 easysw Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -20,7 +20,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-// This user interface design is Copyright (C) 2000-2002 Digital Domain.
+// This user interface design is Copyright (C) 2000-2003 Digital Domain.
 // Patent Pending!
 //
 // License is ONLY granted to implement this algorithim as GPL or LGPL code.

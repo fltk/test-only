@@ -1,12 +1,12 @@
 //
-// "$Id: MenuWindow.h,v 1.3 2003/04/14 05:13:57 spitzak Exp $"
+// "$Id: MenuWindow.h,v 1.4 2003/04/20 03:17:47 easysw Exp $"
 //
 // A MenuWindow tries to tell the system to display it as fast as possible
 // and without any borders. On X this does override-redirect. Earlier
 // versions would also try to use overlay planes, though that is
 // disabled currently.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: MenuWindow.h,v 1.3 2003/04/14 05:13:57 spitzak Exp $".
+// End of "$Id: MenuWindow.h,v 1.4 2003/04/20 03:17:47 easysw Exp $".
 //

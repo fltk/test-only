@@ -1,10 +1,10 @@
 //
-// "$Id: RadioButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: RadioButton.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //
 // Button with a circle indicator to it's left, turning it on turns
 // off all other radio buttons in the same Group.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -42,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: RadioButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: RadioButton.h,v 1.3 2003/04/20 03:17:48 easysw Exp $".
 //

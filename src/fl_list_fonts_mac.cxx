@@ -1,9 +1,9 @@
 //
-// "$Id: fl_list_fonts_mac.cxx,v 1.1 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_list_fonts_mac.cxx,v 1.2 2003/04/20 03:17:51 easysw Exp $"
 //
 // MacOS font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -152,5 +152,5 @@ int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
 }
 
 //
-// End of "$Id: fl_list_fonts_mac.cxx,v 1.1 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_list_fonts_mac.cxx,v 1.2 2003/04/20 03:17:51 easysw Exp $".
 //

@@ -1,12 +1,12 @@
 //
-// "$Id: xpmImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $"
+// "$Id: xpmImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
 // be convienently #include'd to inline the image into a program.
 // Just pass the pointer defined by the file to the constructor.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $".
+// End of "$Id: xpmImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $".
 //

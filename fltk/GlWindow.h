@@ -1,10 +1,10 @@
 //
-// "$Id: GlWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: GlWindow.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
 //
 // OpenGL window. You must subclass this and implement draw() if
 // you want this to work.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -98,5 +98,5 @@ private:
 #endif
 
 //
-// End of "$Id: GlWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: GlWindow.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
 //

@@ -1,10 +1,10 @@
 //
-// "$Id: Group.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $"
+// "$Id: Group.h,v 1.4 2003/04/20 03:17:47 easysw Exp $"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -105,5 +105,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h,v 1.3 2003/01/15 07:55:19 spitzak Exp $".
+// End of "$Id: Group.h,v 1.4 2003/04/20 03:17:47 easysw Exp $".
 //

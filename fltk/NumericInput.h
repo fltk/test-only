@@ -1,12 +1,12 @@
 //
-// "$Id: NumericInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: NumericInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //
 // One-line text input field, which handles up/down arrows to
 // change the digit to the right of the cursor. This still allows
 // arbitrary text such as a math expression to be typed, if you
 // want to restrict the user to a number use FloatInput or IntInput.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -50,5 +50,5 @@ class FL_API NumericInput : public Input {
 #endif
 
 //
-// End of "$Id: NumericInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// End of "$Id: NumericInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //

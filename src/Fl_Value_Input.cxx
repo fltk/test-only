@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.40 2003/03/31 07:17:47 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.41 2003/04/20 03:17:51 easysw Exp $"
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -221,5 +221,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.40 2003/03/31 07:17:47 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.41 2003/04/20 03:17:51 easysw Exp $".
 //

@@ -1,10 +1,10 @@
 //
-// "$Id: MultiImage.h,v 1.4 2003/02/07 08:21:13 spitzak Exp $"
+// "$Id: MultiImage.h,v 1.5 2003/04/20 03:17:48 easysw Exp $"
 //
 // Image type that draws a different image depending on the flags,
 // for instace VALUE or SELECTED or HIGHLIGHT.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -130,5 +130,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiImage.h,v 1.4 2003/02/07 08:21:13 spitzak Exp $".
+// End of "$Id: MultiImage.h,v 1.5 2003/04/20 03:17:48 easysw Exp $".
 //

@@ -1,12 +1,12 @@
 //
-// "$Id: LabelType.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: LabelType.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
 //
 // A LabelType determines how to draw the text of the label. This
 // is not used very much, it can be used to draw engraved or shadowed
 // labels. You could also put in code that interprets the text of
 // the label and draws anything you want with it.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -1,12 +1,12 @@
 //
-// "$Id: PackedGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: PackedGroup.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
 //
 // Group that places all it's child widgets packed against the
 // edges. The edge is decided by the PACK_VERTICAL flag stored on
 // the child and by whether the child is before or after the
 // resizable() child.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: PackedGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: PackedGroup.h,v 1.3 2003/04/20 03:17:48 easysw Exp $".
 //

@@ -1,12 +1,12 @@
 //
-// "$Id: TabGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: TabGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
 //
 // For making a "tabbed dialog box". Each child widget creates a tab.
 // Only one is visible at a time. This works best if all the children
 // have the same size and they don't cover a strip at the top for the
 // tabs.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -63,5 +63,5 @@ private:
 #endif
 
 //
-// End of "$Id: TabGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: TabGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
 //

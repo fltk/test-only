@@ -1,11 +1,11 @@
 //
-// "$Id: Image.h,v 1.4 2003/02/07 08:21:13 spitzak Exp $"
+// "$Id: Image.h,v 1.5 2003/04/20 03:17:47 easysw Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
 // into an image.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ namespace fltk {
 class FL_API Widget;
 
 class FL_API Image {
+#if 1 // OLD STUFF
 protected:
   int w, h;
   void* id, * mask;
@@ -48,6 +49,47 @@ public:
   virtual ~Image();
   // for back compatability only:
   void label(Widget* o);
+#else // NEW STUFF
+  int w_, h_, d_, ld_, count_;
+  const char * const *data_;
+
+  // Forbid use of copy contructor and assign operator
+  Fl_Image & operator=(const Fl_Image &);
+  Fl_Image(const Fl_Image &);
+
+  protected:
+
+  void		w(int W) {w_ = W;}
+  void		h(int H) {h_ = H;}
+  void		d(int D) {d_ = D;}
+  void		ld(int LD) {ld_ = LD;}
+  void		data(const char * const *p, int c) {data_ = p; count_ = c;}
+  void		draw_empty(int X, int Y);
+
+  public:
+
+  int		w() const { return w_; }
+  int		h() const { return h_; }
+  int		d() const { return d_; }
+  int		ld() const { return ld_; }
+  int		count() const { return count_; }
+  const char * const *data() const { return data_; }
+
+  		Image(int W, int H, int D) { w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
+  virtual	~Image();
+  virtual	Image *copy(int W, int H);
+  Image		*copy() { return copy(w(), h()); }
+  virtual void	color_average(Fl_Color c, float i);
+  void		inactive() { color_average(FL_GRAY, .33f); }
+  virtual void	desaturate();
+  virtual void	draw(int X, int W, int W, int H, Flags F = 0);
+  void		draw(int X, int Y, Flags F = 0) { draw(X, Y, w(), h(), F); }
+  virtual void	measure(int& W, int& H);
+  virtual void	uncache();
+
+  // for back compatability only:
+  virtual void	label(Widget*w);
+#endif // 0
 };
 
 }
@@ -55,5 +97,5 @@ public:
 #endif
 
 //
-// End of "$Id: Image.h,v 1.4 2003/02/07 08:21:13 spitzak Exp $".
+// End of "$Id: Image.h,v 1.5 2003/04/20 03:17:47 easysw Exp $".
 //

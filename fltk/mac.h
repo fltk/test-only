@@ -1,9 +1,9 @@
 //
-// "$Id: mac.h,v 1.4 2003/02/21 18:16:32 spitzak Exp $"
+// "$Id: mac.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -179,6 +179,6 @@ extern CursHandle default_cursor;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.4 2003/02/21 18:16:32 spitzak Exp $".
+// End of "$Id: mac.h,v 1.5 2003/04/20 03:17:49 easysw Exp $".
 //
 

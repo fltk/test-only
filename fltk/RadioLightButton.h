@@ -1,9 +1,9 @@
 //
-// "$Id: RadioLightButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: RadioLightButton.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
 //
 // LightButton that toggles off all others in the group when turned on.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: RadioLightButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: RadioLightButton.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
 //

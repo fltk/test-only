@@ -1,9 +1,9 @@
 //
-// "$Id: rgbImage.h,v 1.5 2003/02/21 18:16:33 spitzak Exp $"
+// "$Id: rgbImage.h,v 1.6 2003/04/20 03:17:49 easysw Exp $"
 //
 // Image subclass that draws uncompressed 8-bit rgb data from memory.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,7 +38,6 @@ public:
     : data(d) {w = W; h = H; depth = D;}
   void draw(int, int, int, int, Flags = 0);
   void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
-  bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 };
 
 }
@@ -46,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: rgbImage.h,v 1.5 2003/02/21 18:16:33 spitzak Exp $".
+// End of "$Id: rgbImage.h,v 1.6 2003/04/20 03:17:49 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Menu.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -8,7 +8,7 @@
 // popup method for widgets to call so they can use this to
 // implement their own popup menus.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -139,5 +139,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Menu.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
 //

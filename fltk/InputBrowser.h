@@ -1,5 +1,5 @@
 //
-// "$Id: InputBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: InputBrowser.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
 //
 // MicroSoft style "ComboBox" with the menu appearing below with a
 // scrollbar. I would like to use the name "ComboBox" or "InputChoice"
@@ -9,7 +9,7 @@
 // The implementation is a good example of how to get a widget to appear
 // in a modal pop-up window.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -72,5 +72,5 @@ protected:
 #endif
 
 //
-// End of "$Id: InputBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: InputBrowser.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
 //
