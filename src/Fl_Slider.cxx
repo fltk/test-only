@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.21 1999/10/04 09:12:48 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.22 1999/10/05 07:12:57 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -103,20 +103,13 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
     X = slider_position(W, S);
   }
 
-  if (damage()&FL_DAMAGE_ALL) { // complete redraw
-    draw_bg(x, y, w, h);
-  } else { // partial redraw, clip off new position of slider
-    if (X > 0) {
-      if (horizontal()) fl_clip(x, y, X, h); else fl_clip(x, y, w, X);
-      draw_bg(x, y, w, h);
-      fl_pop_clip();
-    }
-    if (X+S < W) {
-      if (horizontal()) fl_clip(x+X+S, y, w-X-S, h);
-      else fl_clip(x, y+X+S, w, h-X-S);
-      draw_bg(x, y, w, h);
-      fl_pop_clip();
-    }
+  if (X > 0) {
+    if (horizontal()) draw_bg(x, y, X, h);
+    else draw_bg(x, y, w, X);
+  }
+  if (X+S < W) {
+    if (horizontal()) draw_bg(x+X+S, y, w-X-S, h);
+      else draw_bg(x, y+X+S, w, h-X-S);
   }
 
   Fl_Color c = color2(); // not color()!  Different from all other widgets...
@@ -218,5 +211,5 @@ int Fl_Slider::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.21 1999/10/04 09:12:48 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.22 1999/10/05 07:12:57 bill Exp $".
 //
