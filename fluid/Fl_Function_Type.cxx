@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.19 1999/08/16 07:31:02 bill Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.20 1999/08/17 05:34:44 bill Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -223,9 +223,9 @@ void Fl_Function_Type::write_code1() {
 	if (!strncmp(name(), k, n) && name()[n] == '(') constructor = 1;
       }
       write_h("  ");
+      if (is_static) write_h("static ");
+      if (is_virtual) write_h("virtual ");
       if (!constructor) {
-	if (is_static) write_h("static ");
-	if (is_virtual) write_h("virtual ");
         write_h("%s%s ", rtype, star);
 	write_c("%s%s ", rtype, star);
       }
@@ -660,5 +660,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.19 1999/08/16 07:31:02 bill Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.20 1999/08/17 05:34:44 bill Exp $".
 //
