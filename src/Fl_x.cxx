@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.70 2000/04/25 07:50:44 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.71 2000/05/11 22:03:28 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -489,12 +489,11 @@ int fl_handle(const XEvent& xevent)
 
   case FocusIn:
     xfocus = window;
-    event = FL_FOCUS;
+    fl_fix_focus();
     break;
 
   case FocusOut:
-    if (window == xfocus) xfocus = 0;
-    event = FL_UNFOCUS;
+    if (window == xfocus) {xfocus = 0; fl_fix_focus();}
     break;
 
   case KeyPress:
@@ -871,5 +870,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: Fl_x.cxx,v 1.70 2000/04/25 07:50:44 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.71 2000/05/11 22:03:28 bill Exp $".
 //

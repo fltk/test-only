@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.102 2000/05/02 06:09:15 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.103 2000/05/11 22:03:28 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -616,12 +616,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SETFOCUS:
     xfocus = window;
-    Fl::handle(FL_FOCUS, window);
+    fl_fix_focus();
     break;
 
   case WM_KILLFOCUS:
-    if (window == xfocus) xfocus = 0;
-    Fl::handle(FL_UNFOCUS, window);
+    if (window == xfocus) {xfocus = 0; fl_fix_focus();}
     Fl::flush(); // it never returns to main loop when deactivated...
     break;
 
@@ -1111,5 +1110,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.102 2000/05/02 06:09:15 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.103 2000/05/11 22:03:28 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.6 2000/04/03 17:09:17 bill Exp $"
+// "$Id: forms_compatability.cxx,v 1.7 2000/05/11 22:03:26 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -214,12 +214,14 @@ Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
 
 // Convert an XForms shortcut string name to an fltk integer shortcut:
 
+#include <stdlib.h>
 int fl_old_shortcut(const char* s) {
   if (!s || !*s) return 0;
   int n = 0;
   if (*s == '#') {n |= FL_ALT; s++;}
   if (*s == '+') {n |= FL_SHIFT; s++;}
   if (*s == '^') {n |= FL_CTRL; s++;}
+  if (s[1]) return n | (int)strtol(s,0,0); // allow 0xf00 to get any key
   return n | *s;
 }
 
@@ -255,5 +257,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.6 2000/04/03 17:09:17 bill Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.7 2000/05/11 22:03:26 bill Exp $".
 //

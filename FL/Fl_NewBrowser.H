@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_NewBrowser.H,v 1.1 2000/04/24 08:31:21 bill Exp $"
+// "$Id: Fl_NewBrowser.H,v 1.2 2000/05/11 22:03:25 bill Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -33,36 +33,27 @@
 #include "Fl_Scrollbar.H"
 
 class FL_API Fl_Browser : public Fl_Menu_ {
-
-  int xposition_, yposition_;
-  int scrolldx, scrolldy;
-  static void hscrollbar_cb(Fl_Widget*, void*);
-  static void scrollbar_cb(Fl_Widget*, void*);
-  void draw_clip(int,int,int,int);
-  static void draw_clip_cb(void*,int,int,int,int);
   Fl_End endgroup;
 
-  struct Data;
-  Data* data;
-  int levels;
+public:
 
-  int level;
-  int item_index;
-  int first_visible_position;
-  int first_visible_level;
-  int first_visible_index;
-  void set_level(int);
-  int measure(Fl_Widget*);
   Fl_Widget* goto_top();
-  Fl_Widget* goto_first_visible();
-  void set_first_visible();
+  Fl_Widget* goto_mark(int n);
+  Fl_Widget* goto_position(int y);
+  Fl_Widget* goto_number(int y);
+
   Fl_Widget* forward();
   Fl_Widget* backward();
-  int goto_position(int y);
-  Fl_Widget* goto_focus();
-  void set_focus();
 
-public:
+  int at_mark(int n);
+  void set_mark(int n);
+
+  int item_level() const {return item_level_;}
+  int item_position() const {return item_position_;}
+  int item_height() const {return item_height_;}
+  int item_number() const {return item_number_;}
+
+  void set_focus();
 
   void bbox(int&,int&,int&,int&);
   Fl_Scrollbar scrollbar;
@@ -86,10 +77,42 @@ public:
     MULTI_BROWSER = 8
   };
 
+  enum { // predefined marks
+    FOCUS = 0,
+    FIRST_VISIBLE,
+    REDRAW_0,
+    REDRAW_1,
+    USER_0,
+    USER_1,
+    NUMMARKS
+  };
+
   int xposition() const {return xposition_;}
   void xposition(int);
   int yposition() const {return yposition_;}
   void yposition(int);
+
+private:
+
+  int xposition_, yposition_;
+  int scrolldx, scrolldy;
+  static void hscrollbar_cb(Fl_Widget*, void*);
+  static void scrollbar_cb(Fl_Widget*, void*);
+  void draw_clip(int,int,int,int);
+  static void draw_clip_cb(void*,int,int,int,int);
+
+  // Mark and current item storage:
+  int item_level_;
+  int item_position_;
+  int item_height_;
+  int item_number_;
+  struct Data;
+  Data* data;
+  int mark_position[NUMMARKS];
+  int mark_number[NUMMARKS];
+  int levels;
+  void set_level(int);
+
 };
 
 #define FL_NORMAL_BROWSER Fl_Browser::BOTH
@@ -103,5 +126,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_NewBrowser.H,v 1.1 2000/04/24 08:31:21 bill Exp $".
+// End of "$Id: Fl_NewBrowser.H,v 1.2 2000/05/11 22:03:25 bill Exp $".
 //

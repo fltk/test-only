@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.89 2000/04/24 08:31:24 bill Exp $"
+// "$Id: Fl.cxx,v 1.90 2000/05/11 22:03:27 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,8 @@ static struct Timeout {
 static int numtimeouts;
 static int timeout_array_size;
 static int initclock; // if false we didn't call fl_elapsed() last time
+
+void fl_fix_focus();
 
 #ifdef _WIN32
 #include "Fl_win32.cxx"
@@ -159,7 +161,6 @@ int Fl::wait() {
   int expired = 0;
   if (numtimeouts) {fl_elapsed(); expired = call_timeouts();}
   flush();
-  if (!Fl_X::first) return 0; // no windows
   if ((idle && !in_idle) || expired) {
     fl_wait(1,0.0);
   } else if (numtimeouts) {
@@ -168,7 +169,7 @@ int Fl::wait() {
     initclock = 0;
     fl_wait(0,0);
   }
-  return 1;
+  return Fl_X::first != 0; // return true if there is a window
 }
 
 double Fl::wait(double time) {
@@ -437,31 +438,23 @@ int Fl::handle(int event, Fl_Window* window)
     window->show();
     return 1;
 
+  case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
-    if (w != pushed()) send(FL_MOVE, w, window);
+    if (w != pushed() && (!modal() || w == modal())) send(event, w, window);
     if (pushed()) send(FL_DRAG, pushed(), window);
-    return 1;
-
-  case FL_RELEASE: {
-    w = pushed();
-    if (!(event_pushed())) pushed_=0;
-    int r = w ? send(event, w, window) : 0;
-    return r;}
-
-  case FL_UNFOCUS:
-  case FL_FOCUS:
-    fl_fix_focus();
-    return 1;
-
-  case FL_ENTER:
-    send(event, w, window);
     return 1;
 
   case FL_LEAVE:
     belowmouse(0);
     return 1;
+
+  case FL_RELEASE:
+    w = pushed();
+    if (!(event_pushed())) pushed_=0;
+    if (w) return send(event, w, window);
+    return 0;
 
   case FL_KEYBOARD:
 
@@ -483,18 +476,18 @@ int Fl::handle(int event, Fl_Window* window)
     // fall through to the shortcut handling case:
 
   default:
-    // All other events (including FL_SHORTCUT, FL_MOUSEWHEEL,
-    // FL_KEYUP, and all new events that we may add) are sent first to
-    // the focus, and then to each window around the focus and
-    // up, until something accepts it.  Part of this search is done by
-    // Fl_Group::handle(), which sends the events to every child.  This
-    // causes every widget in the window to be tried eventually, so
-    // if something is interested in the event it should see it.
-
-    w = focus();
-    if (!w) {w = modal();
-    if (!w) {w = window;}}
+    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, FL_ENTER,
+    // and many other events of interest.
+#if 1
+    // nice simple sending of the event to outermost windows:
+    if (send(event, modal() ? modal() : window, window)) return 1;
+#else
+    // Old code that preferred to send these near the focus first:
+    w = window;
+    if (w->contains(focus())) w = focus();
+    if (modal() && !modal()->contains(w)) w = modal();
     for (; w; w = w->parent()) if (send(event, w, window)) return 1;
+#endif
     // otherwise fall through to the unknown case:
 
   case 0:
@@ -507,5 +500,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.89 2000/04/24 08:31:24 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.90 2000/05/11 22:03:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.88 2000/04/24 08:31:26 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.89 2000/05/11 22:03:27 bill Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -402,6 +402,7 @@ static int handle(int e, void* data) {
   switch (e) {
 
   case FL_KEYBOARD:
+  case FL_SHORTCUT: {
     switch (Fl::event_key()) {
     case FL_Up:
       if (p.menubar && p.menu_number == 0) ;
@@ -429,7 +430,16 @@ static int handle(int e, void* data) {
       p.state = ABORT_STATE;
       return 1;
     }
-    break;
+    for (int menu = p.nummenus; menu--;) {
+      MenuWindow &mw = *(p.menus[menu]);
+      for (int item = 0; item < mw.numitems; item++) {
+	w = mw.list->child(item);
+	if (w->takesevents() && w->test_shortcut()) {
+	  setitem(p, menu, item);
+	  goto EXECUTE;
+	}
+      }
+    }} break;
 
   case FL_KEYUP:
     if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
@@ -441,18 +451,6 @@ static int handle(int e, void* data) {
       return 1;
     } else
       return 0;
-
-  case FL_SHORTCUT: {
-    for (int menu = p.nummenus; menu--;) {
-      MenuWindow &mw = *(p.menus[menu]);
-      for (int item = 0; item < mw.numitems; item++) {
-	w = mw.list->child(item);
-	if (w->takesevents() && w->test_shortcut()) {
-	  setitem(p, menu, item);
-	  goto EXECUTE;
-	}
-      }
-    }} break;
 
   case FL_PUSH:
   case FL_MOVE:
@@ -702,5 +700,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.88 2000/04/24 08:31:26 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.89 2000/05/11 22:03:27 bill Exp $".
 //
