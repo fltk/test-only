@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.15 1999/11/27 15:45:18 carl Exp $"
+ * "$Id: config.h,v 1.16 2000/01/11 00:20:16 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -59,7 +59,7 @@
  * fl_draw_image), but FLTK will only work on TrueColor visuals.
  */
 
-#define USE_COLORMAP 1
+#define USE_COLORMAP 0
 
 /*
  * HAVE_XDBE:
@@ -186,5 +186,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define strncasecmp(a,b,c) strnicmp(a,b,c)
 
 /*
- * End of "$Id: config.h,v 1.15 1999/11/27 15:45:18 carl Exp $".
+ * End of "$Id: config.h,v 1.16 2000/01/11 00:20:16 mike Exp $".
  */

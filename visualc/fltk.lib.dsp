@@ -450,10 +450,6 @@ SOURCE=..\src\Fl_Scrollbar.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_set_fonts.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_shadow_box.cxx
 # End Source File
 # Begin Source File

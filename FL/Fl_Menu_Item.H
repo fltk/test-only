@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.40 2000/01/10 06:31:02 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.41 2000/01/11 00:20:13 mike Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -146,7 +146,6 @@ struct FL_API Fl_Menu_Item {
   static Fl_Named_Style* default_style;
   static Fl_Named_Style* title_style;
 
-#ifndef FLTK_2
   // This is temporary and bad.  Setting a style will create a new Fl_Style
   // structure that is not deleted when the menu item is destroyed, because
   // that adds a destructor that causes C++ to produce exit code for static
@@ -224,7 +223,7 @@ struct FL_API Fl_Menu_Item {
   void textcolor(Fl_Color a)	{text_color(a);}
   void selected_textcolor(Fl_Color a) {selection_text_color(a);}
 
-#endif
+#endif // !FLTK_2
 
   int checked() const {return flags_&FL_MENU_VALUE;}
   void check() {flags_ |= FL_MENU_VALUE;}
@@ -232,7 +231,6 @@ struct FL_API Fl_Menu_Item {
   int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
   int add(const char*a, const char* b, Fl_Callback* c,void* d = 0,int e = 0) {
     return add(a,fl_old_shortcut(b),c,d,e);}
-#endif
 
 };
 
@@ -257,5 +255,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.40 2000/01/10 06:31:02 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.41 2000/01/11 00:20:13 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.77 2000/01/10 06:31:22 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.78 2000/01/11 00:20:14 mike Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -133,7 +133,7 @@ style_functions(Fl_Boxtype,box);
 style_functions(Fl_Boxtype,glyph_box);
 style_functions(Fl_Glyph,glyph);
 style_functions(Fl_Font,label_font);
-//style_functions(Fl_Font,text_font);
+style_functions(Fl_Font,text_font);
 style_functions(Fl_Labeltype,label_type);
 style_functions(Fl_Color,color);
 style_functions(Fl_Color,label_color);
@@ -142,10 +142,10 @@ style_functions(Fl_Color,selection_text_color);
 style_functions(Fl_Color,off_color);
 style_functions(Fl_Color,highlight_color);
 style_functions(Fl_Color,highlight_label_color);
-//style_functions(Fl_Color,text_color);
+style_functions(Fl_Color,text_color);
 style_functions(unsigned,label_size);
-//style_functions(unsigned,text_size);
-//style_functions(unsigned,leading);
+style_functions(unsigned,text_size);
+style_functions(unsigned,leading);
 
 ////////////////////////////////////////////////////////////////
 
@@ -895,5 +895,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.77 2000/01/10 06:31:22 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.78 2000/01/11 00:20:14 mike Exp $".
 //

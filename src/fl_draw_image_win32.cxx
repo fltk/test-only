@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.5 1999/08/27 13:34:04 carl Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.6 2000/01/11 00:20:15 mike Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -124,7 +124,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
 
-  static U32 bmibuffer[256+12];
+  static U32 bmibuffer[256+12] = {0};
   BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
   if (!bmi.bmiHeader.biSize) {
     bmi.bmiHeader.biSize = sizeof(bmi)-4; // does it use this to determine type?
@@ -258,5 +258,5 @@ void fl_rectf(int x, int y, int w, int h, Fl_Color col) {
 }
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.5 1999/08/27 13:34:04 carl Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.6 2000/01/11 00:20:15 mike Exp $".
 //

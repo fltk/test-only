@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.86 2000/01/10 06:31:26 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.87 2000/01/11 00:20:15 mike Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1060,7 +1060,7 @@ int fl_windows_colors() {
   }
 
   if ((style = Fl_Style::find("menu bar"))) {
-    style->highlight_color = FL_GRAY); // enable title highlightig
+    style->highlight_color = FL_GRAY; // enable title highlightig
   }
 
   if ((style = Fl_Style::find("tooltip"))) {
@@ -1093,5 +1093,5 @@ int fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.86 2000/01/10 06:31:26 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.87 2000/01/11 00:20:15 mike Exp $".
 //

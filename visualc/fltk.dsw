@@ -273,9 +273,6 @@ Package=<4>
     Project_Dep_Name fluid
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fonts
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name hello
     End Project Dependency
     Begin Project Dependency
@@ -307,9 +304,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name pixmap_browser
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name resizebox
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name scroll
@@ -646,21 +640,6 @@ Package=<4>
 ###############################################################################
 
 Project: "pixmap_browser"=.\pixmap_browser.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "resizebox"=.\resizebox.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

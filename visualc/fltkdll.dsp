@@ -446,9 +446,7 @@ DEP_CPP_FL_BRO=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Input_.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Output.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
@@ -829,6 +827,7 @@ DEP_CPP_FL_EN=\
 SOURCE=..\src\fl_file_chooser.cxx
 DEP_CPP_FL_FI=\
 	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Browser.H"\
@@ -850,6 +849,7 @@ DEP_CPP_FL_FI=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Return_Button.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
@@ -891,6 +891,7 @@ DEP_CPP_FL_FIL=\
 SOURCE=..\src\Fl_FileChooser.cxx
 DEP_CPP_FL_FILE=\
 	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Bitmap.H"\
 	"..\FL\Fl_Boxtype.H"\
@@ -913,12 +914,14 @@ DEP_CPP_FL_FILE=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Return_Button.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
 	"..\FL\Fl_Window.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -948,6 +951,7 @@ DEP_CPP_FL_FILEC=\
 	"..\FL\Fl_Labeltype.H"\
 	"..\FL\Fl_Menu_.H"\
 	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Return_Button.H"\
 	"..\FL\Fl_Scrollbar.H"\
 	"..\FL\Fl_Slider.H"\
 	"..\FL\Fl_Style.H"\
@@ -1019,7 +1023,6 @@ DEP_CPP_FL_FILEIN=\
 SOURCE=..\src\fl_font.cxx
 DEP_CPP_FL_FO=\
 	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Color.H"\
 	"..\FL\fl_draw.H"\
@@ -1835,28 +1838,6 @@ DEP_CPP_FL_SCRO=\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Valuator.H"\
 	"..\FL\Fl_Widget.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_set_fonts.cxx
-DEP_CPP_FL_SE=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	"..\src\fl_fontsize.h"\
-	"..\src\fl_set_fonts_win32.cxx"\
 	
 # End Source File
 # Begin Source File
