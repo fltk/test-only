@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.40 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.41 2000/11/28 16:19:42 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -306,12 +306,14 @@ static int isword(char c) {
 
 int Fl_Input::word_end(int i) const {
   if (type() == FL_SECRET_INPUT) return size();
+  while (!i || !isword(index(i-1))) i++;
   while (i < size() && isword(index(i))) i++;
   return i;
 }
 
 int Fl_Input::word_start(int i) const {
   if (type() == FL_SECRET_INPUT) return 0;
+  while (!isword(index(i))) i--;
   while (i > 0 && isword(index(i-1))) i--;
   return i;
 }
@@ -713,12 +715,6 @@ int Fl_Input::shift_up_down_position(int p) {
   return up_down_position(p, Fl::event_state(FL_SHIFT));
 }
 
-// If you define this symbol as zero you will get the peculiar fltk
-// behavior where moving off the end of an input field will move the
-// cursor into the next field.
-// Define it as 1 to prevent cursor movement from going to next field.
-#define NORMAL_INPUT_MOVE 0
-
 #define ctrl(x) (x^0x40)
 
 int Fl_Input::handle_key() {
@@ -730,28 +726,54 @@ int Fl_Input::handle_key() {
 
   switch (Fl::event_key()) {
   case FL_Left:
-    return shift_position(position()-1) + NORMAL_INPUT_MOVE;
+    if (Fl::event_state(FL_CTRL)) shift_position(word_start(position()-1));
+    else shift_position(position()-1);
+    return 1;
   case FL_Right:
-    return shift_position(position()+1) + NORMAL_INPUT_MOVE;
+    if (Fl::event_state(FL_CTRL)) shift_position(word_end(position()+1));
+    else shift_position(position()+1);
+    return 1;
   case FL_Up:
+    if (type() < FL_MULTILINE_INPUT) return 0;
     i = line_start(position());
-    if (!i) return NORMAL_INPUT_MOVE;
-    shift_up_down_position(line_start(i-1));
+    if (!i) shift_position(0);
+    else shift_up_down_position(line_start(i-1));
     return 1;
   case FL_Down:
+    if (type() < FL_MULTILINE_INPUT) return 0;
     i = line_end(position());
-    if (i >= size()) return NORMAL_INPUT_MOVE;
-    shift_up_down_position(i+1);
+    if (i >= size()) shift_position(i);
+    else shift_up_down_position(i+1);
     return 1;
+  case FL_Page_Up: {
+    if (type() < FL_MULTILINE_INPUT) return 0;
+    i = line_start(position());
+    for (int n = h()/(text_size()+leading()); n--;) i = line_start(i-1);
+    shift_position(i);
+    return 1;}
+  case FL_Page_Down: {
+    if (type() < FL_MULTILINE_INPUT) return 0;
+    i = line_end(position());
+    for (int n = h()/(text_size()+leading()); n--;) i = line_end(i)+1;
+    shift_position(i+1);
+    return 1;}
   case FL_Home:
+    if (Fl::event_state(FL_CTRL)) {shift_position(0); return 1;}
     // if already at start of line, select the entire buffer. This
     // makes two ^A's do a select-all for both Emacs & Win32 compatability
     if (!shift_position(line_start(position()))) position(0, size());
     return 1;
   case FL_End:
+    if (Fl::event_state(FL_CTRL)) {shift_position(size()); return 1;}
     shift_position(line_end(position()));
     return 1;
+  case FL_Insert:
+    if (Fl::event_state(FL_CTRL)) return copy();
+    else if (Fl::event_state(FL_SHIFT)) {Fl::paste(*this); return 1;}
+    return 0; // CUA toggles insert mode on/off, we don't support that!
   case FL_Delete:
+    // what does CUA do with Ctrl+Delete?
+    if (Fl::event_state(FL_SHIFT)) copy();
     if (mark() != position()) cut(); else cut(1);
     return 1;
   case FL_BackSpace:
@@ -964,5 +986,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.40 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.41 2000/11/28 16:19:42 spitzak Exp $".
 //

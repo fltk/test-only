@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.97 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.98 2000/11/28 16:19:42 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1029,11 +1029,11 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create()
 
+extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+
 void Fl_Window::create() {
   Fl_X::create(this, fl_visual, fl_colormap, -1);
 }
-
-extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
@@ -1065,7 +1065,7 @@ void Fl_X::create(Fl_Window* w,
   attr.bit_gravity = 0; // StaticGravity;
 
   if (background >= 0) {
-    attr.background_pixel=background;
+    attr.background_pixel = background;
     mask |= CWBackPixel;
   }
 
@@ -1294,5 +1294,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.97 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.98 2000/11/28 16:19:42 spitzak Exp $".
 //
