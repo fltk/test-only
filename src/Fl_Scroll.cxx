@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.15 1999/11/19 10:06:49 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.16 1999/11/22 09:09:54 vincent Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -43,9 +43,10 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   fl_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
   // erase background if there is a boxtype:
-  if (s->box() && !(s->damage()&FL_DAMAGE_ALL)) {
-    fl_color(s->color());
-    fl_rectf(X,Y,W,H);
+  if (!(s->damage()&FL_DAMAGE_ALL)) {
+    fl_clip(X,Y,W,H);
+    s->draw_group_box();
+    fl_pop_clip();
   }
   Fl_Widget*const* a = s->array();
   int R = X; int B = Y; // track bottom & right edge of all children
@@ -58,12 +59,14 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   }
   // fill any area to right & bottom of widgets:
   if (R < X+W && B > Y) {
-    fl_color(s->color());
-    fl_rectf(R,Y,X+W-R,B-Y);
+    fl_clip(R,Y,X+W-R,B-Y);
+    s->draw_group_box();
+    fl_pop_clip();
   }
   if (B < Y+H) {
-    fl_color(s->color());
-    fl_rectf(X,B,W,Y+H-B);
+    fl_clip(X,B,W,Y+H-B);
+    s->draw_group_box();
+    fl_pop_clip();
   }
   fl_pop_clip();
 }
@@ -87,7 +90,9 @@ void Fl_Scroll::draw() {
   uchar d = damage();
 
   if (d & FL_DAMAGE_ALL) { // full redraw
-    draw_frame();
+    fl_clip(x(), y(), w(), h());
+    draw_group_box();
+    fl_pop_clip();
     draw_clip(this, X, Y, W, H);
   } else {
     if (d & FL_DAMAGE_SCROLL) { // scroll the contents:
@@ -231,5 +236,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.15 1999/11/19 10:06:49 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.16 1999/11/22 09:09:54 vincent Exp $".
 //
