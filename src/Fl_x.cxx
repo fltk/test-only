@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.81 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.82 2000/07/14 10:09:17 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -449,9 +449,7 @@ int fl_handle(const XEvent& xevent)
 	window->do_callback();
       return 1;
     } else if (xevent.xclient.message_type == FLTKChangeScheme) {
-      if (!strcasecmp(Fl::scheme(), "none")) return 0;
-      char scheme[80];
-      if (!Fl::getconf("scheme", scheme, sizeof(scheme))) Fl::scheme(scheme);
+      Fl::reload_scheme();
       return 1;
     }
     break;
@@ -918,5 +916,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.81 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.82 2000/07/14 10:09:17 spitzak Exp $".
 //

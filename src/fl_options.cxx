@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.65 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_options.cxx,v 1.66 2000/07/14 10:09:17 spitzak Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -21,7 +21,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
-//
+//                                   Shell No 2
 
 #include <stdio.h>
 #include <string.h>
@@ -53,100 +53,47 @@ extern "C" int access(const char *, int);
 #define PATH_MAX 128
 #endif
 
-const char* fl_startup_theme = 0;
 const char* Fl::scheme_ = 0;
 Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 
-const char* flconfig = 0;
-static const char* flconfig_section = "default";
+static const char* flconfig = 0;
+static char beenhere = 0;
+extern void fl_get_system_colors();
 
-/* CET - FIXME - Add DISPLAY specific configuration at some point?
-static int match(const char* s1, const char* s2) {
- // CET - FIXME - should do something to allow wildcards
-  return strcasecmp(s1, s2) ? 0 : 1;
-}
-
-static int display_match(const char* s) {
-  char display[PATH_MAX];
-  char* p = getenv("DISPLAY");
-  if (!p) return 0;
-
-#ifndef WIN32
-  if (*display == ':') {
-    char temp[PATH_MAX];
-    strcpy(temp, display);
-#endif
-  strncpy(display, p, sizeof(display));
-
-  if (match(s, display)) return 1;
-
-  if ( (p = strrchr(display, ':')) ) *p = (char)0; // remove display number
-  if (match(s, display)) return 1;
-
-  if ( (p = strchr(display, '.')) ) *p = (char)0; // remove domain
-  if (match(s, display)) return 1;
-
-  return 0;
-}
-*/
-
-static int theme_handler(int);
+static int load_scheme(const char*);
 
 // one-time startup stuff
 void fl_startup() {
+  beenhere = 1;
   if (!flconfig) {
     const char* p = fl_find_config_file("flconfig");
     if (p) flconfig = strdup(p);
   }
-
-  /* CET - FIXME - Add DISPLAY specific configuration at some point?
-  conf_list clist = 0;
-  conf_entry* cent;
-  getconf_sections(flconfig, 0, &clist);
-  for (cent = clist; cent; cent = cent->next) if (display_match(cent->data)) {
-    flconfig_section = strdup(cent->data);
-    break;
-  }
-  conf_list_free(&clist);
-  printf("section: %s\n", flconfig_section); // CET - FIXME
-  */
-
+  fl_get_system_colors();
+  const char* s = Fl::scheme();
   char temp[PATH_MAX];
-  if (Fl::scheme()) Fl::scheme(Fl::scheme());
-  else if (!Fl::getconf("scheme", temp, sizeof(temp))) Fl::scheme(temp);
-  else fl_get_system_colors();
-  if (fl_startup_theme) Fl::theme(fl_startup_theme);
-  Fl::add_handler(theme_handler);
-
-/* CET - FIXME - Fix mousewheel stuff?
-  char temp[80];
-  if (!Fl::getconf("mouse wheel/mode", temp, sizeof(temp)))
-    fl_mousewheel_mode = atoi(temp);
-  if (!Fl::getconf("mouse wheel/delta", temp, sizeof(temp)))
-    fl_mousewheel_sdelta = strtod(temp, 0);
-  if (!Fl::getconf("mouse wheel/axis", temp, sizeof(temp))) {
-    if (!strcasecmp(temp, "x")) fl_mousewheel_delta = &Fl::e_x_delta;
-    if (!strcasecmp(temp, "z")) fl_mousewheel_delta = &Fl::e_z_delta;
-  }
-#ifndef WIN32
-  if (!Fl::getconf("mouse wheel/button 1", temp, sizeof(temp)))
-    fl_mousewheel_up = atoi(temp);
-  if (!Fl::getconf("mouse wheel/button 2", temp, sizeof(temp)))
-    fl_mousewheel_down = atoi(temp);
-#endif
-*/
-
+  if (!s && !getconf(flconfig, "default/scheme", temp, sizeof(temp))) s = temp;
+  load_scheme(s);
+  if (fl_bg_switch) fl_background(fl_bg_switch);
 }
 
-static Fl_Theme_Handler _theme_handler = 0;
-
-void Fl::theme_handler(Fl_Theme_Handler handler) {
-  _theme_handler = handler;
+// After it is opened it can call this to redo everything:
+int Fl::reload_scheme() {
+  Fl_Style::revert();
+  fl_startup();
+  return 0;
 }
 
-static int theme_handler(int e) {
-  return _theme_handler ? _theme_handler(e) : 0;
+// When we change the scheme we automatically call reload_scheme if needed:
+int Fl::scheme(const char* s) {
+  if (scheme_ == s) return 0;
+  if (s && scheme_ && !strcmp(s,scheme_)) return 0;
+  scheme_ = s;
+  if (beenhere) reload_scheme();
+  return 1;
 }
+
+// The rest of this is Carl's config file reader:
 
 static Fl_Color grok_color(const char* cf, const char *colstr) {
   char key[80], val[32];
@@ -169,43 +116,18 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   long l = strtoul(p, &q, 0);
   if (!*q) return fl_fonts+l;
 
-  static const char* fonts[] = {
-    "helvetica",
-    "helvetica bold",
-    "helvetica italic",
-    "helvetica bold italic",
-    "courier",
-    "courier bold",
-    "courier italic",
-    "courier bold italic",
-    "times",
-    "times bold",
-    "times italic",
-    "times bold italic",
-    "symbol",
-    "screen",
-    "screen bold",
-    "dingbats",
-    0
-  };
-
-  for (int i = 0; fonts[i]; i++)
-    if (!strcasecmp(p, fonts[i])) return fl_fonts + i;
-
-  // not found
-  return 0;
+  return fl_font(p);
 }
 
-int Fl::scheme(const char *s) {
-  Fl::scheme_ = s;
-  Fl_Style::revert();
-  if (!s || !strcasecmp(s, "none")) return 0;
+static int load_theme(const char*);
+
+static int load_scheme(const char* s) {
 
   char temp[PATH_MAX];
-  strncpy(temp, Fl::scheme(), sizeof(temp));
+  strncpy(temp, s, sizeof(temp));
   const char* p = access(temp, R_OK) ? 0 : temp;
-  if (!p && !conf_is_path_rooted(Fl::scheme())) {
-    snprintf(temp, sizeof(temp), "schemes/%s", Fl::scheme());
+  if (!p && !conf_is_path_rooted(s)) {
+    snprintf(temp, sizeof(temp), "schemes/%s", s);
     p = fl_find_config_file(temp);
   }
 
@@ -218,7 +140,7 @@ int Fl::scheme(const char *s) {
   strncpy(sfile, p, sizeof(sfile));
   if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
     for (p = strtok(temp, CONF_WHITESPACE); p; p = strtok(NULL, CONF_WHITESPACE))
-      Fl::theme(p);
+      load_theme(p);
   char valstr[80];
   Fl_Color col;
 
@@ -335,9 +257,9 @@ int Fl::scheme(const char *s) {
   return 0;
 }
 
-int Fl::theme(const char *t) {
+static int load_theme(const char *t) {
 // don't try to load themes if not linked to shared libraries
-#ifdef FL_SHARED
+  //#ifdef FL_SHARED
   if (!t) { Fl_Style::revert(); return 0; }
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
@@ -363,7 +285,7 @@ int Fl::theme(const char *t) {
   }
 
   Fl::redraw();
-#endif
+  //#endif
   return 0;
 }
 
@@ -403,14 +325,8 @@ const char* fl_find_config_file(const char* fn, int cflag) {
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
-int Fl::getconf(const char *key, char *value, int value_length) {
-  char temp[80];
-  snprintf(temp, sizeof(temp), "%s/%s", flconfig_section, key);
-  return ::getconf(flconfig, temp, value, value_length);
-}
-
 //
-// End of "$Id: fl_options.cxx,v 1.65 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.66 2000/07/14 10:09:17 spitzak Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.28 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_arg.cxx,v 1.29 2000/07/14 10:09:17 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -61,8 +61,6 @@ static char return_i;
 static const char* name;
 static const char* geometry;
 extern Fl_Color fl_bg_switch;	// in fl_options.cxx
-extern const char* fl_startup_theme;	// in fl_options.cxx
-
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
@@ -108,9 +106,6 @@ int Fl::arg(int argc, char **argv, int &i) {
   } else if (match(s, "bg") || match(s, "background")) {
     fl_bg_switch = fl_rgb(v);
     if (!fl_bg_switch) Fl::error("Unknown color: %s", v);
-
-  } else if (match(s, "theme")) {
-    fl_startup_theme = v;
 
   } else if (match(s, "scheme")) {
     Fl::scheme_ = v;
@@ -197,7 +192,6 @@ static const char * const helpmsg =
 #endif
 " -g[eometry] WxH+X+Y\n"
 " -s[cheme] scheme\n"
-" -t[heme] theme\n"
 " -n[ame] windowname\n"
 " -i[conic]\n"
 " -bg color";
@@ -347,5 +341,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.28 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.29 2000/07/14 10:09:17 spitzak Exp $".
 //

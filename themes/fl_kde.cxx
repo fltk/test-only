@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.6 2000/07/14 10:09:17 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -81,25 +81,25 @@ static int x_event_handler(int) {
   if (colors_only && cm->message_type == Style)
     return 0;
   // Geez, really need to work on that logic...
-  fl_kde(colors_only);
+  //fl_kde(colors_only);
+  Fl::reload_scheme();
   return 1;
 }
 
 static void add_event_handler() {
-  Fl::theme_handler(x_event_handler);
+  if (General) return; // we have already don this
 
-  // create an X window to catch KDE style change messages
-  static int do_once = 0;
-  if (do_once) return;
-  do_once = 1;
   Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
   long data = 1;
   XChangeProperty(fl_display, fl_message_window, kde_atom, kde_atom, 32,
 		  PropModeReplace, (unsigned char *)&data, 1);
+
   General	= XInternAtom(fl_display, "KDEChangeGeneral", False);
   Style		= XInternAtom(fl_display, "KDEChangeStyle", False);
   Palette	= XInternAtom(fl_display, "KDEChangePalette", False);
   KIPC		= XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
+
+  Fl::add_handler(x_event_handler);
 }
 
 #endif
@@ -126,10 +126,10 @@ int fl_kde(int co) {
   int motif_style = 0;
   if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
     motif_style = 1;
-  if (!colors_only) {
-    Fl::theme(motif_style ? "motif" : "windows");
-    // see below for modifications to the motif/windows themes
-  }
+//   if (!colors_only) {
+//     Fl::theme(motif_style ? "motif" : "windows");
+//     // see below for modifications to the motif/windows themes
+//   }
 
   Fl_Color foreground = FL_NO_COLOR;
   if (!kderc.get("General/foreground", s, sizeof(s)))
@@ -362,5 +362,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.6 2000/07/14 10:09:17 spitzak Exp $".
 //
