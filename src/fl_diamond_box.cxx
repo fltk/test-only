@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.16 1999/11/28 18:44:44 carl Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.17 1999/11/29 08:47:04 bill Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -82,8 +82,7 @@ int Fl_Diamond_Box::fills_rectangle() const {return false;}
 
 const Fl_Diamond_Box fl_diamond_up_box(0, FL_UP_BOX);
 const Fl_Diamond_Box fl_diamond_down_box(0, FL_DOWN_BOX);
-const Fl_Diamond_Box fl_diamond_box(0, FL_NORMAL_BOX);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.16 1999/11/28 18:44:44 carl Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.17 1999/11/29 08:47:04 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.22 1999/11/28 18:44:45 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.23 1999/11/29 08:47:06 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -144,8 +144,8 @@ int fl_windows() {
 
   // This is Win98 style which is different than NT 4.
   // Windows 2000 is more likely to look like this.
-  strcpy(fl_normal_up_box_data, "2AAXXIIUU");
-  strcpy(fl_normal_down_box_data, "2XXIIUUAA");
+  fl_up_box.data = "2AAXXIIUU";
+  fl_down_box.data = "2XXIIUUAA";
 
   Fl_Widget::default_style->set_selection_color(FL_GRAY);
   Fl_Widget::default_style->set_highlight_color(0);
@@ -244,5 +244,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.22 1999/11/28 18:44:45 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.23 1999/11/29 08:47:06 bill Exp $".
 //

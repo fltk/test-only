@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.40 1999/11/28 18:44:45 carl Exp $"
+// "$Id: fl_options.cxx,v 1.41 1999/11/29 08:47:06 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -125,7 +125,7 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
 
 int Fl::loadscheme(int b) {
   use_schemes = b;
-  if (!b) return 0;
+  if (!b || !scheme()) return 0;
 
   char temp[PATH_MAX];
   if (conf_is_path_rooted(scheme())) strncpy(temp, scheme(), sizeof(temp));
@@ -280,31 +280,17 @@ int Fl::loadscheme(int b) {
 }
 
 int Fl::scheme(const char *s) {
-  if (scheme_) free((void*)scheme_);
-  if (s) {
-    scheme_ = strdup(s);
-    return loadscheme(1);
-  }
-
-  scheme_ = 0;
-  return loadscheme(0);
+  scheme_ = s;
+  return loadscheme(s != 0);
 }
 
 const char* Fl::scheme() {
-  static char* s = new char[PATH_MAX];
-
-  if (!use_schemes) return 0;
-  if (!scheme_) scheme_ = strdup("default");
-  strncpy(s, scheme_, PATH_MAX);
-  if (!strcasecmp(s, "default")) getconf("default scheme", s, PATH_MAX);
-
-  return s;
+  return scheme_;
 }
-
 
 int Fl::loadtheme(int b) {
   use_themes = b;
-  if (!b) return 0;
+  if (!b || !theme()) return 0;
 
   char temp[PATH_MAX];
   if (conf_is_path_rooted(theme())) strncpy(temp, theme(), sizeof(temp));
@@ -332,25 +318,12 @@ int Fl::loadtheme(int b) {
 }
 
 int Fl::theme(const char *t) {
-  if (theme_) free((void*)theme_);
-  if (t) {
-    theme_ = strdup(t);
-    return loadtheme(1);
-  }
-
-  theme_ = 0;
-  return loadtheme(0);
+  theme_ = t;
+  return loadtheme(t != 0);
 }
 
 const char* Fl::theme() {
-  static char* t = new char[PATH_MAX];
-
-  if (!use_themes) return 0;
-  if (!theme_) theme_ = strdup("default");
-  strncpy(t, theme_, PATH_MAX);
-  if (!strcasecmp(t, "default")) getconf("default theme", t, PATH_MAX);
-
-  return t;
+  return theme_;
 }
 
 
@@ -511,15 +484,15 @@ static void style_clear(Fl_Style *s) {
   s->revertfunc = temp.revertfunc;
 }
 
-extern const char* fl_normal_up_box_revert;
-extern const char* fl_normal_down_box_revert;
+extern const char* fl_up_box_revert;
+extern const char* fl_down_box_revert;
 
 void Fl_Style::revert() {
   fl_theme_handler(0);
 
   fl_background((Fl_Color)0xc0c0c000);
-  strcpy(fl_normal_up_box_data, fl_normal_up_box_revert);
-  strcpy(fl_normal_down_box_data, fl_normal_down_box_revert);
+  fl_up_box.data = fl_up_box_revert;
+  fl_down_box.data = fl_down_box_revert;
   Fl_Style::draw_boxes_inactive = 1;
   Fl_Style::inactive_menu_hack = 0;
   Fl_Style::inactive_color_weight = 0.33f;
@@ -534,7 +507,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.40 1999/11/28 18:44:45 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.41 1999/11/29 08:47:06 bill Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.H,v 1.5 1999/11/10 04:48:42 carl Exp $"
+// "$Id: Fl_Color.H,v 1.6 1999/11/29 08:46:58 bill Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -84,12 +84,10 @@ FL_API Fl_Color fl_get_color(Fl_Color c);
 FL_API void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);
 FL_API void fl_set_color(Fl_Color c, Fl_Color v);
 FL_API void fl_free_color(Fl_Color i);
-FL_API void fl_foreground(Fl_Color);
 FL_API void fl_background(Fl_Color);
-FL_API void fl_text_background(Fl_Color);
 
 #endif
 
 //
-// End of "$Id: Fl_Color.H,v 1.5 1999/11/10 04:48:42 carl Exp $".
+// End of "$Id: Fl_Color.H,v 1.6 1999/11/29 08:46:58 bill Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.56 1999/11/27 15:45:17 carl Exp $"
+# "$Id: Makefile,v 1.57 1999/11/29 08:47:03 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -92,7 +92,6 @@ CPPFILES = \
 	Fl_cutpaste.cxx \
 	Fl_display.cxx \
 	Fl_get_key.cxx \
-	Fl_get_system_colors.cxx \
 	Fl_grab.cxx \
 	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
@@ -108,6 +107,7 @@ CPPFILES = \
 	fl_arc.cxx \
 	fl_arci.cxx \
 	fl_ask.cxx \
+	fl_background.cxx \
 	fl_boxtype.cxx \
 	fl_color.cxx \
 	fl_cursor.cxx \
@@ -129,6 +129,7 @@ CPPFILES = \
 	fl_rect.cxx \
 	fl_round_box.cxx \
 	fl_rounded_box.cxx \
+	fl_rgb.cxx \
 	fl_set_fonts.cxx \
 	fl_scroll_area.cxx \
 	Fl_Shared_Image.cxx \
@@ -265,5 +266,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then ln -sf FL $(includedir)/Fl; fi
 
 #
-# End of "$Id: Makefile,v 1.56 1999/11/27 15:45:17 carl Exp $".
+# End of "$Id: Makefile,v 1.57 1999/11/29 08:47:03 bill Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.17 1999/11/28 18:44:47 carl Exp $"
+// "$Id: essai.cxx,v 1.18 1999/11/29 08:47:10 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -47,7 +47,7 @@
 
 class Fl_Image_Box : public Fl_Boxtype_ {
   Fl_Flags mask;
-  void inset(int& x,int& y,int& w,int& h) const {fl_normal_up_box.inset(x,y,w,h);}
+  void inset(int& x,int& y,int& w,int& h) const {fl_up_box.inset(x,y,w,h);}
   int fills_rectangle() const {return true;}
 public:
   void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
@@ -66,9 +66,9 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   else if (flags&FL_HIGHLIGHT) img = highlight_img;
   else img = normal_img;
 
-  fl_normal_box.draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~mask));
+  fl_up_box.draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~mask));
   if (!(flags&FL_FRAME_ONLY)) {
-    fl_normal_box.inset(x,y,w,h);
+    fl_up_box.inset(x,y,w,h);
     img->draw_tiled(x,y,w,h, -w/2, -h/2);
   }
 }
@@ -146,5 +146,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.17 1999/11/28 18:44:47 carl Exp $".
+// End of "$Id: essai.cxx,v 1.18 1999/11/29 08:47:10 bill Exp $".
 //

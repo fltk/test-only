@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.7 1999/11/20 04:42:47 vincent Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.8 1999/11/29 08:47:05 bill Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -37,22 +37,6 @@
 #define PATH_MAX 128
 #endif
 
-static Fl_Color parse_color(const char *instr) {
-  char colstr[32];
-  strncpy(colstr, instr, sizeof(colstr));
-  const char *p;
-  if (!(p = strtok(colstr, ","))) return FL_NO_COLOR;
-  uchar r = atoi(p);
-  if (!(p = strtok(NULL, ","))) return FL_NO_COLOR;
-  uchar g = atoi(p);
-  if (!(p = strtok(NULL, ","))) return FL_NO_COLOR;
-  uchar b = atoi(p);
-
-  Fl_Color col = fl_rgb(r, g, b);
-  if (!col) return FL_BLACK;
-  return col;
-}
-
 #ifndef WIN32
 #include <FL/x.H>
 
@@ -80,28 +64,28 @@ int fl_kde1_colors() {
 
   Fl_Color foreground = FL_NO_COLOR;
   if (!kderc.get("General/foreground", s, sizeof(s)))
-    foreground = parse_color(s);
+    foreground = fl_rgb(s);
 
   Fl_Color background = FL_NO_COLOR;
   if (!kderc.get("General/background", s, sizeof(s)))
-    background = parse_color(s);
+    background = fl_rgb(s);
 
   Fl_Color select_foreground = FL_NO_COLOR;
   if (!kderc.get("General/selectForeground", s, sizeof(s)))
-    select_foreground = parse_color(s);
+    select_foreground = fl_rgb(s);
 
   Fl_Color select_background = FL_NO_COLOR;
   if (!kderc.get("General/selectBackground", s, sizeof(s)))
-    select_background = parse_color(s);
+    select_background = fl_rgb(s);
 
   // this one seems to do absolutely nothing
   Fl_Color window_foreground = FL_NO_COLOR;
   if (!kderc.get("General/windowForeground", s, sizeof(s)))
-    window_foreground = parse_color(s);
+    window_foreground = fl_rgb(s);
 
   Fl_Color window_background = FL_NO_COLOR;
   if (!kderc.get("General/windowBackground", s, sizeof(s)))
-    window_background = parse_color(s);
+    window_background = fl_rgb(s);
 
   Fl_Font font = 0;
   int fontsize = 0;
@@ -138,7 +122,6 @@ int fl_kde1_colors() {
       int i, numfonts;
       for (i = 0, numfonts = fl_list_fonts(fontlist); i < numfonts; i++)
         if (!strcasecmp(fontlist[i]->name(), fontname)) break;
-
       if (i != numfonts) font = fontlist[i];
     }
 #endif
@@ -257,5 +240,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.7 1999/11/20 04:42:47 vincent Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.8 1999/11/29 08:47:05 bill Exp $".
 //

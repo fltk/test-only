@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.16 1999/11/28 18:44:46 carl Exp $"
+// "$Id: Alternative.cxx,v 1.17 1999/11/29 08:47:09 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -34,10 +34,7 @@ static const Fl_Frame_Box
 alt_thick_down_box("alternative thick down", "NNUUJJXXAAAA");
 
 static const Fl_Frame_Box
-alt_thick_up_box("alternative thick up", "AAAAXXJJUUNN");
-
-static const Fl_Frame_Box
-alt_thick_box("alternative thick", &alt_thick_up_box, &alt_thick_down_box);
+alt_thick_up_box("alternative thick up", "AAAAXXJJUUNN", &alt_thick_down_box);
 
 // some old stuff for boxtype drawing
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -235,8 +232,8 @@ static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Colo
 static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
 		  Fl_Flags f, Fl_Boxtype)
 {
-  FL_DOWN_FRAME->draw(x, y, w, h, fc, f);
-  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f);
+  FL_DOWN_FRAME->draw(x, y, w, h, fc, f & ~FL_VALUE);
+  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f & ~FL_VALUE);
 }
 
 static void return_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color,
@@ -309,5 +306,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.16 1999/11/28 18:44:46 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.17 1999/11/29 08:47:09 bill Exp $".
 //

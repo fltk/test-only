@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.35 1999/11/28 18:44:36 carl Exp $"
+// "$Id: Fl.H,v 1.36 1999/11/29 08:46:57 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,8 @@ public: // should be private!
 
   static int e_x;
   static int e_y;
+  static int e_dx;
+  static int e_dy;
   static int e_x_root;
   static int e_y_root;
   static int e_state;
@@ -54,12 +56,6 @@ public: // should be private!
   static int e_is_click;
   static int e_keysym;
   static int e_length;
-#ifdef USE_VIEWCHANGE
-  static int e_delta_mode;
-  static float e_x_delta;
-  static float e_y_delta;
-  static float e_z_delta;
-#endif
   static char* e_text;
   static const char* encoding;
   static Fl_Widget* belowmouse_;
@@ -120,15 +116,11 @@ public:
   // event information:
   static int event_x()		{return e_x;}
   static int event_y()		{return e_y;}
+  static int event_dx()		{return e_dx;}
+  static int event_dy()		{return e_dy;}
   static int event_x_root()	{return e_x_root;}
   static int event_y_root()	{return e_y_root;}
   static void get_mouse(int &,int &);
-#ifdef USE_VIEWCHANGE
-  static void delta_x(int& mode, float& xdelta);
-  static void delta_y(int& mode, float& ydelta);
-  static void delta_z(int& mode, float& zdelta);
-  static void delta(int& mode, float& xdelta, float& ydelta, float& zdelta);
-#endif
   static int event_clicks()	{return e_clicks;}
   static void event_clicks(int i) {e_clicks = i;}
   static int event_is_click()	{return e_is_click;}
@@ -175,9 +167,8 @@ public:
   static unsigned get_color(Fl_Color c) {return fl_get_color(c);}
   static void get_color(Fl_Color c,uchar& r,uchar& g,uchar& b) {fl_get_color(c,r,g,b);}
   static void free_color(Fl_Color c, int = 0) {fl_free_color(c);}
-
   static void background(uchar r, uchar g, uchar b) {fl_background(fl_rgb(r,g,b));}
-  static void foreground(uchar r, uchar g, uchar b) {fl_foreground(fl_rgb(r,g,b));}
+  //static void foreground(uchar r, uchar g, uchar b)
 
   //static const char* get_font(Fl_Font);
   //static const char* get_font_name(Fl_Font, int* attributes = 0);
@@ -240,5 +231,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.35 1999/11/28 18:44:36 carl Exp $".
+// End of "$Id: Fl.H,v 1.36 1999/11/29 08:46:57 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.12 1999/11/21 06:23:28 carl Exp $"
+// "$Id: fl_glyph.cxx,v 1.13 1999/11/29 08:47:04 bill Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -76,7 +76,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
       break;
     }
     case FL_GLYPH_CHECK: {
-      box->draw(x,y,w,h, bc, f);
+      box->draw(x,y,w,h, bc, f & ~FL_VALUE);
       if (f & FL_VALUE) {
         fl_color(fc);
         box->inset(x,y,w,h);
@@ -95,7 +95,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     }
     case FL_GLYPH_RADIO: {
       h = (h+1)&(~1); // even only
-      if (box != FL_NO_BOX) FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
+      if (box != FL_NO_BOX) FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f&~FL_VALUE);
       if (f & FL_VALUE) {
         fl_color(fc);
         int d = h/4; // box != FL_NO_BOX ? h/4 : 0; //h/5;
@@ -121,5 +121,5 @@ void fl_glyph(int t, int x,int y,int w,int h,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.12 1999/11/21 06:23:28 carl Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.13 1999/11/29 08:47:04 bill Exp $".
 //

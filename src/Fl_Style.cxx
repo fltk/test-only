@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.7 1999/11/23 07:28:32 vincent Exp $"
+// "$Id: Fl_Style.cxx,v 1.8 1999/11/29 08:47:01 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -29,19 +29,12 @@
 
 Fl_Named_Style* Fl_Named_Style::first;
 
-static void
-fl_default_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
-                 Fl_Flags f, Fl_Boxtype box)
-{
-  box->draw(x,y,w,h, bc, f);
-}
-
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
 static void revert(Fl_Style* s) {
   s->box                   = FL_NORMAL_BOX;
   s->glyph_box             = FL_NORMAL_BOX;
-  s->glyph                 = fl_default_glyph;
+  s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
   s->label_type            = FL_NORMAL_LABEL;
@@ -168,5 +161,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.7 1999/11/23 07:28:32 vincent Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.8 1999/11/29 08:47:01 bill Exp $".
 //

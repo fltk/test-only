@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.13 1999/11/28 18:44:45 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.14 1999/11/29 08:47:05 bill Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -38,32 +38,18 @@
 static const Fl_Frame_Box kdewin_menu_window_box(
   "kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
-static Fl_Color parse_color(const char *instr) {
-  char colstr[32];
-  strncpy(colstr, instr, sizeof(colstr));
-  const char *p;
-  if (!(p = strtok(colstr, ","))) return FL_NO_COLOR;
-  uchar r = atoi(p);
-  if (!(p = strtok(NULL, ","))) return FL_NO_COLOR;
-  uchar g = atoi(p);
-  if (!(p = strtok(NULL, ","))) return FL_NO_COLOR;
-  uchar b = atoi(p);
-
-  Fl_Color col = fl_rgb(r, g, b);
-  if (!col) return FL_BLACK;
-  return col;
-}
-
 #ifndef WIN32
 #include <FL/x.H>
 
 // this function handles KDE style change messages
 static int x_event_handler(int) {
   if (fl_xevent->type != ClientMessage) return 0; // not a Client message
-
-  Atom General = XInternAtom(fl_display, "KDEChangeGeneral", False);
-  Atom Style = XInternAtom(fl_display, "KDEChangeStyle", False);
-  Atom Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+  static Atom General, Style, Palette;
+  if (!General) {
+    General = XInternAtom(fl_display, "KDEChangeGeneral", False);
+    Style = XInternAtom(fl_display, "KDEChangeStyle", False);
+    Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+  }
   XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
   if (cm->message_type != General && cm->message_type != Style &&
       cm->message_type != Palette)
@@ -87,11 +73,11 @@ int fl_kde1() {
 
   Fl_Color foreground = FL_NO_COLOR;
   if (!kderc.get("General/foreground", s, sizeof(s)))
-    foreground = parse_color(s);
+    foreground = fl_rgb(s);
 
   Fl_Color background = FL_NO_COLOR;
   if (!kderc.get("General/background", s, sizeof(s)))
-    background = parse_color(s);
+    background = fl_rgb(s);
 
   if (motif_style) fl_motif();
   else fl_windows();
@@ -159,5 +145,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.13 1999/11/28 18:44:45 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.14 1999/11/29 08:47:05 bill Exp $".
 //

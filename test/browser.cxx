@@ -1,5 +1,5 @@
 //
-// "$Id: browser.cxx,v 1.6 1999/06/20 15:24:34 mike Exp $"
+// "$Id: browser.cxx,v 1.7 1999/11/29 08:47:08 bill Exp $"
 //
 // Browser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,9 @@ void b_cb(Fl_Widget* o, void*) {
 	 ((Fl_Browser*)o)->value(), Fl::event_clicks());
 }
 
+extern int fl_mousewheel_up;
+extern int fl_mousewheel_down;
+
 int main(int argc, char **argv) {
   int i;
   if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help);
@@ -91,10 +94,12 @@ int main(int argc, char **argv) {
   browser.position(0);
   window.resizable(&browser);
   window.show(argc,argv);
+  fl_mousewheel_up = 2;
+  fl_mousewheel_down = 3;
   return Fl::run();
 }
 
 //
-// End of "$Id: browser.cxx,v 1.6 1999/06/20 15:24:34 mike Exp $".
+// End of "$Id: browser.cxx,v 1.7 1999/11/29 08:47:08 bill Exp $".
 //
 

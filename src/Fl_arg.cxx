@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.18 1999/11/16 07:36:10 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.19 1999/11/29 08:47:01 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,17 +60,7 @@ static char arg_called;
 static char return_i;
 static const char* name;
 static const char* geometry;
-static const char* fg = 0;
 static const char* bg = 0;
-static const char* bg2 = 0;
-
-static void
-colorswitch(const char *arg, void (*func)(Fl_Color)) {
-  if (!arg) return;
-  Fl_Color c = fl_rgb(arg);
-  if (!c) Fl::error("Unknown color: %s", arg);
-  else func(c);
-}
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
@@ -113,20 +103,14 @@ int Fl::arg(int argc, char **argv, int &i) {
   } else if (match(s, "name")) {
     name = v;
 
-  } else if (match(s, "bg2", 3) || match(s, "background2", 11)) {
-    bg2 = v;
-
   } else if (match(s, "bg") || match(s, "background")) {
     bg = v;
 
-  } else if (match(s, "fg") || match(s, "foreground")) {
-    fg = v;
-
   } else if (match(s, "theme")) {
-    Fl::theme_ = strdup(v);
+    Fl::theme_ = v;
 
   } else if (match(s, "scheme")) {
-    Fl::scheme_ = strdup(v);
+    Fl::scheme_ = v;
 
   } else return 0; // unrecognized
 
@@ -183,9 +167,11 @@ void Fl_Window::show(int argc, char **argv) {
 
   // wait until the display is open (and WIN32 reads system colors) to
   // interpret the color switches:
-  colorswitch(bg, fl_background);
-  colorswitch(bg2,fl_text_background);
-  colorswitch(fg, fl_foreground);
+  if (bg) {
+    Fl_Color c = fl_rgb(bg);
+    if (!c) Fl::error("Unknown color: %s", bg);
+    else fl_background(c);
+  }
 
 #ifndef WIN32
   // set the command string, used by state-saving window managers:
@@ -218,9 +204,7 @@ static const char * const helpmsg =
 " -t[heme] theme\n"
 " -n[ame] windowname\n"
 " -i[conic]\n"
-" -fg color\n"
-" -bg color\n"
-" -bg2 color";
+" -bg color";
 
 const char * const Fl::help = helpmsg+13;
 
@@ -367,5 +351,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.18 1999/11/16 07:36:10 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.19 1999/11/29 08:47:01 bill Exp $".
 //
