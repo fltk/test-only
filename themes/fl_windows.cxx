@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: fl_windows.cxx,v 1.11 2002/01/20 10:12:48 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -53,9 +53,9 @@ int fl_windows() {
   Fl_Style::draw_boxes_inactive = 0;
 
 // newer versions of Windows & KDE look closer to FLTK default
-//  Fl_Widget::default_style->box = &win98_up_box;
+//  Fl_Widget::default_style->button_box = &win98_up_box;
 // this may be needed if fltk's default is the thin box:
-//  Fl_Widget::default_style->button_box = &win98_down_box;
+//  Fl_Widget::default_style->box = &win98_down_box;
 
   Fl_Style* s;
 
@@ -89,5 +89,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $"
+// End of "$Id: fl_windows.cxx,v 1.11 2002/01/20 10:12:48 spitzak Exp $"
 //

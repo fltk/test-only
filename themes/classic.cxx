@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.29 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: classic.cxx,v 1.30 2002/01/20 10:12:48 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -77,6 +77,9 @@ extern "C" int fltk_plugin() {
   Fl_Widget::default_style->selection_text_color = 0;
 
   Fl_Style* s;
+  if ((s = Fl_Style::find("button"))) {
+    s->box = &classic_up_box;
+  }
   if ((s = Fl_Style::find("menu"))) {
     s->selection_color = FL_WHITE;
     s->selection_text_color = 0;
@@ -103,5 +106,5 @@ extern "C" int fltk_plugin() {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.29 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: classic.cxx,v 1.30 2002/01/20 10:12:48 spitzak Exp $".
 //

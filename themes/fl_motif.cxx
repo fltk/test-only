@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.16 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: fl_motif.cxx,v 1.17 2002/01/20 10:12:48 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -68,7 +68,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
 			int x, int y, int w, int h, Fl_Flags f)
 {
   Fl_Color fc = widget->get_glyph_color(f);
-  Fl_Color bc = widget->color();
+  Fl_Color bc = widget->button_color();
   switch (t) {
     case FL_GLYPH_ROUND: {
       w = (w-1)|1; h = (h-1)|1;
@@ -80,7 +80,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
 //       if (f&FL_INACTIVE)
 //         { light = fl_inactive(light); dark = fl_inactive(dark); }
       fl_color((f & FL_VALUE) ? fc : bc);
-      fl_vertex(x+3,y1); fl_vertex(x1,y+3); fl_vertex(x+w-4,y1); fl_vertex(x1,y+h-4);
+      fl_vertex(x+3,y1); fl_vertex(x1+1,y+2); fl_vertex(x+w-3,y1); fl_vertex(x1,y+h-4);
       fl_fill();
 
       fl_color(light); fl_line(x, y1, x1, y); fl_line(x1, y, x+w-1, y1);
@@ -224,6 +224,10 @@ int fl_motif()
 
   Fl_Style* s;
 
+  if ((s = Fl_Style::find("button"))) {
+    s->box = &thin_motif_up_box;
+  }
+
   if ((s = Fl_Style::find("menu"))) {
     s->button_box = &thin_motif_menu_box; // this does not work anymore...
     //s->leading = 0;
@@ -272,5 +276,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.16 2002/01/20 07:37:16 spitzak Exp $"
+// End of "$Id: fl_motif.cxx,v 1.17 2002/01/20 10:12:48 spitzak Exp $"
 //

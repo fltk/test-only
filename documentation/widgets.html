@@ -1,180 +1,182 @@
 <html><head><title>FLTK Classes</title></head><body bgcolor=white>
 
-<H1 ALIGN=RIGHT><A NAME=widgets>A - Class Reference</A></H1>
+<h1 align=right><a name=widgets>A - Class Reference</a></h1>
 
 This appendix describes all of the classes and structures in FLTK.
 
 <p>The "class" <tt>Fl::</tt> should actually be considered a
 namespace, it contains only static methods, and is described in
-<A href=Fl.html#functions>Appendix B</A>.
+<a href="Fl.html#functions">Appendix B</a>.
 
 <p>FLTK also provides a number of global functions with
 <tt>fl_xyz</tt> names. The majority of these are concerned with
 drawing or graphics state, and are described in the <a
-href=drawing.html>Drawing</a> appendix. The others are a set of modal
+href="drawing.html">Drawing</a> appendix. The others are a set of modal
 popup utility functions for asking questions described in 
-the <a href=utility.html>Utility</a> appendix.
+the <a href="utility.html">Utility</a> appendix.
 
-<H2>Alphabetical List of Classes</H2>
+<h2>Alphabetical List of Classes</h2>
 
-<CENTER><TABLE WIDTH=80%>
-<TR ALIGN=LEFT VALIGN=TOP>
-<TD>
-<A HREF=Fl.html>Fl</A><BR>
-<A HREF=Fl_Adjuster.html>Fl_Adjuster</A><BR>
-<A HREF=Fl_Image.html#Fl_Bitmap>Fl_Bitmap</a><br>
-<A HREF=Fl_Box.html>Fl_Box</A><BR>
-<A HREF=Fl_Boxtype.html>Fl_Boxtype</a><br>
-<A HREF=Fl_Browser.html>Fl_Browser</A><BR>
-<A HREF=Fl_Button.html>Fl_Button</A><BR>
-<A HREF=Fl_Chart.html>Fl_Chart</A><BR>
-<A HREF=Fl_Check_Button.html>Fl_Check_Button</A><BR>
-<A HREF=Fl_Choice.html>Fl_Choice</A><BR>
-<A HREF=Fl_Clock.html>Fl_Clock</A><BR>
-<A HREF=Fl_Color.html>Fl_Color</a><br>
-<A HREF=Fl_Color_Chooser.html>Fl_Color_Chooser</A><BR>
-<A HREF=Fl_Counter.html>Fl_Counter</A><BR>
-<A HREF=Fl_Dial.html>Fl_Dial</A><BR>
-<A HREF=Fl_Double_Window.html>Fl_Double_Window</A><BR>
-<A HREF=Fl_End.html>Fl_End</A><BR>
-<A HREF=Fl_Float_Input.html>Fl_Float_Input</A><BR>
-<A HREF=Fl_Font.html>Fl_Font</a><br>
-<A HREF=Fl_Gl_Window.html>Fl_Gl_Window</A><BR>
-<A HREF=Fl_Group.html>Fl_Group</A><BR>
-</TD>
-<TD>
-<A HREF=Fl_Image.html>Fl_Image</a><br>
-<A HREF=Fl_Input.html>Fl_Input</A><BR>
-<A HREF=Fl_Int_Input.html>Fl_Int_Input</A><BR>
-<A HREF=Fl_Item.html>Fl_Item</A><BR>
-<A HREF=Fl_Item_Group.html>Fl_Item_Group</A><BR>
-<A HREF=Fl_Labeltype.html>Fl_Labeltype</a><br>
-<A HREF=Fl_Light_Button.html>Fl_Light_Button</A><BR>
-<a href=Fl_List.html>Fl_List</a><br>
-<A HREF=Fl_Menu_.html>Fl_Menu_</A><BR>
-<A HREF=Fl_Menu_Bar.html>Fl_Menu_Bar</A><BR>
-<A HREF=Fl_Menu_Button.html>Fl_Menu_Button</A><BR>
-<A HREF=Fl_Menu_Item.html>Fl_Menu_Item</A><BR>
-<A HREF=Fl_Menu_Window.html>Fl_Menu_Window</A><BR>
-<A HREF=Fl_Multi_Browser.html>Fl_Multi_Browser</A><BR>
-<A HREF=Fl_Multiline_Input.html>Fl_Multiline_Input</A><BR>
-<A HREF=Fl_Multiline_Output.html>Fl_Multiline_Output</A><BR>
-<A HREF=Fl_Output.html>Fl_Output</A><BR>
-<A HREF=Fl_Overlay_Window.html>Fl_Overlay_Window</A><BR>
-<A HREF=Fl_Pack.html>Fl_Pack</A><BR>
-<A HREF=Fl_Image.html#Fl_Pixmap>Fl_Pixmap</a><br>
-<A HREF=Fl_Positioner.html>Fl_Positioner</A><BR>
-</TD>
-<TD>
-<A HREF=Fl_Image.html#Fl_RGB_Image>Fl_RGB_Image</a><br>
-<A HREF=Fl_Repeat_Button.html>Fl_Repeat_Button</A><BR>
-<A HREF=Fl_Return_Button.html>Fl_Return_Button</A><BR>
-<A HREF=Fl_Roller.html>Fl_Roller</A><BR>
-<A HREF=Fl_Round_Button.html>Fl_Round_Button</A><BR>
-<A HREF=Fl_Scroll.html>Fl_Scroll</A><BR>
-<A HREF=Fl_Scrollbar.html>Fl_Scrollbar</A><BR>
-<A HREF=Fl_Secret_Input.html>Fl_Secret_Input</A><BR>
-<A HREF=Fl_Single_Window.html>Fl_Single_Window</A><BR>
-<A HREF=Fl_Slider.html>Fl_Slider</A><BR>
-<A HREF=Fl_Style.html>Fl_Style</a><br>
-<A HREF=Fl_Tabs.html>Fl_Tabs</A><BR>
-<A HREF=Fl_Tile.html>Fl_Tile</A><BR>
-<A HREF=Fl_Valuator.html>Fl_Valuator</A><BR>
-<A HREF=Fl_Value_Input.html>Fl_Value_Input</A><BR>
-<A HREF=Fl_Value_Output.html>Fl_Value_Output</A><BR>
-<A HREF=Fl_Value_Slider.html>Fl_Value_Slider</A><BR>
-<A HREF=Fl_Widget.html>Fl_Widget</A><BR>
-<A HREF=Fl_Window.html>Fl_Window</A><BR>
-</TD>
-</TR>
-</TABLE></CENTER>
+<center><table width=80%>
+<tr align=left valign=top>
+<td>
+<a href="Fl.html">Fl</a><br>
+<a href="Fl_Adjuster.html">Fl_Adjuster</a><br>
+<a href="Fl_Bar.html">Fl_Bar</a><br>
+<a href="Fl_Image.html#Fl_Bitmap">Fl_Bitmap</a><br>
+<a href="Fl_Box.html">Fl_Box</a><br>
+<a href="Fl_Boxtype.html">Fl_Boxtype</a><br>
+<a href="Fl_Browser.html">Fl_Browser</a><br>
+<a href="Fl_Button.html">Fl_Button</a><br>
+<a href="Fl_Chart.html">Fl_Chart</a><br>
+<a href="Fl_Check_Button.html">Fl_Check_Button</a><br>
+<a href="Fl_Choice.html">Fl_Choice</a><br>
+<a href="Fl_Clock.html">Fl_Clock</a><br>
+<a href="Fl_Color.html">Fl_Color</a><br>
+<a href="Fl_Color_Chooser.html">Fl_Color_Chooser</a><br>
+<a href="Fl_Counter.html">Fl_Counter</a><br>
+<a href="Fl_Dial.html">Fl_Dial</a><br>
+<a href="Fl_Double_Window.html">Fl_Double_Window</a><br>
+<a href="Fl_End.html">Fl_End</a><br>
+<a href="Fl_Float_Input.html">Fl_Float_Input</a><br>
+<a href="Fl_Font.html">Fl_Font</a><br>
+<a href="Fl_Gl_Window.html">Fl_Gl_Window</a><br>
+<a href="Fl_Group.html">Fl_Group</a><br>
+</td>
+<td>
+<a href="Fl_Image.html">Fl_Image</a><br>
+<a href="Fl_Input.html">Fl_Input</a><br>
+<a href="Fl_Int_Input.html">Fl_Int_Input</a><br>
+<a href="Fl_Item.html">Fl_Item</a><br>
+<a href="Fl_Item_Group.html">Fl_Item_Group</a><br>
+<a href="Fl_Labeltype.html">Fl_Labeltype</a><br>
+<a href="Fl_Light_Button.html">Fl_Light_Button</a><br>
+<a href="Fl_List.html">Fl_List</a><br>
+<a href="Fl_Menu_.html">Fl_Menu_</a><br>
+<a href="Fl_Menu_Bar.html">Fl_Menu_Bar</a><br>
+<a href="Fl_Menu_Button.html">Fl_Menu_Button</a><br>
+<a href="Fl_Menu_Item.html">Fl_Menu_Item</a><br>
+<a href="Fl_Menu_Window.html">Fl_Menu_Window</a><br>
+<a href="Fl_Multi_Browser.html">Fl_Multi_Browser</a><br>
+<a href="Fl_Multiline_Input.html">Fl_Multiline_Input</a><br>
+<a href="Fl_Multiline_Output.html">Fl_Multiline_Output</a><br>
+<a href="Fl_Output.html">Fl_Output</a><br>
+<a href="Fl_Overlay_Window.html">Fl_Overlay_Window</a><br>
+<a href="Fl_Pack.html">Fl_Pack</a><br>
+<a href="Fl_Image.html#Fl_Pixmap">Fl_Pixmap</a><br>
+<a href="Fl_Positioner.html">Fl_Positioner</a><br>
+</td>
+<td>
+<a href="Fl_Image.html#Fl_RGB_Image">Fl_RGB_Image</a><br>
+<a href="Fl_Repeat_Button.html">Fl_Repeat_Button</a><br>
+<a href="Fl_Return_Button.html">Fl_Return_Button</a><br>
+<a href="Fl_Roller.html">Fl_Roller</a><br>
+<a href="Fl_Round_Button.html">Fl_Round_Button</a><br>
+<a href="Fl_Scroll.html">Fl_Scroll</a><br>
+<a href="Fl_Scrollbar.html">Fl_Scrollbar</a><br>
+<a href="Fl_Secret_Input.html">Fl_Secret_Input</a><br>
+<a href="Fl_Single_Window.html">Fl_Single_Window</a><br>
+<a href="Fl_Slider.html">Fl_Slider</a><br>
+<a href="Fl_Style.html">Fl_Style</a><br>
+<a href="Fl_Tabs.html">Fl_Tabs</a><br>
+<a href="Fl_Tile.html">Fl_Tile</a><br>
+<a href="Fl_Valuator.html">Fl_Valuator</a><br>
+<a href="Fl_Value_Input.html">Fl_Value_Input</a><br>
+<a href="Fl_Value_Output.html">Fl_Value_Output</a><br>
+<a href="Fl_Value_Slider.html">Fl_Value_Slider</a><br>
+<a href="Fl_Widget.html">Fl_Widget</a><br>
+<a href="Fl_Window.html">Fl_Window</a><br>
+</td>
+</tr>
+</table></center>
 
-<H2>Class Hierarchy</H2>
+<h2>Class Hierarchy</h2>
 
-<UL>
-  <LI><A HREF=Fl.html>Fl</A>
-  <LI><A HREF=Fl_Boxtype.html>Fl_Boxtype</a>
-  <LI><A HREF=Fl_Color.html>Fl_Color</a>
-  <LI><A HREF=Fl_End.html#Fl_End>Fl_End</A>
-  <LI><A HREF=Fl_Font.html>Fl_Font</a>
-  <li><A HREF=Fl_Image.html>Fl_Image</a>
+<ul>
+  <li><a href="Fl.html">Fl</a>
+  <li><a href="Fl_Boxtype.html">Fl_Boxtype</a>
+  <li><a href="Fl_Color.html">Fl_Color</a>
+  <li><a href="Fl_End.html#Fl_End">Fl_End</a>
+  <li><a href="Fl_Font.html">Fl_Font</a>
+  <li><a href="Fl_Image.html">Fl_Image</a>
   <ul>
-    <li><A HREF=Fl_Image.html#Fl_Bitmap>Fl_Bitmap</a>
-    <li><A HREF=Fl_Image.html#Fl_Bitmap>Fl_Pixmap</a>
-    <li><A HREF=Fl_Image.html#Fl_RGB_Image>Fl_RGB_Image</a>
+    <li><a href="Fl_Image.html#Fl_Bitmap">Fl_Bitmap</a>
+    <li><a href="Fl_Image.html#Fl_Bitmap">Fl_Pixmap</a>
+    <li><a href="Fl_Image.html#Fl_RGB_Image">Fl_RGB_Image</a>
   </ul>
-  <LI><A HREF=Fl_Labeltype.html>Fl_Labeltype</a>
-  <li><A HREF=Fl_List.html>Fl_List</a>
-  <LI><A HREF=Fl_Menu_Item.html>Fl_Menu_Item</A>
-  <LI><A HREF=Fl_Style.html>Fl_Style</a>
-  <LI><A HREF=Fl_Widget.html>Fl_Widget</A>
-  <UL>
-    <LI><A HREF=Fl_Box.html>Fl_Box</A>
-    <LI><A HREF=Fl_Button.html>Fl_Button</A>
-    <UL>
-      <LI><A HREF=Fl_Check_Button.html>Fl_Check_Button</A>
-      <LI><A HREF=Fl_Light_Button.html>Fl_Light_Button</A>
-      <LI><A HREF=Fl_Repeat_Button.html>Fl_Repeat_Button</A>
-      <LI><A HREF=Fl_Return_Button.html>Fl_Return_Button</A>
-      <LI><A HREF=Fl_Round_Button.html>Fl_Round_Button</A>
-    </UL>
-    <LI><A HREF=Fl_Chart.html>Fl_Chart</A>
-    <LI><A HREF=Fl_Clock.html>Fl_Clock</A>
-    <LI><A HREF=Fl_Group.html>Fl_Group</A>
-    <UL>
-      <LI><A HREF=Fl_Color_Chooser.html>Fl_Color_Chooser</A>
-      <li><A HREF=Fl_Item_Group.html>Fl_Item_Group</A><BR>
-      <LI><A HREF=Fl_Pack.html>Fl_Pack</A>
-      <LI><A HREF=Fl_Menu_.html>Fl_Menu_</A>
-      <UL>
-        <LI><A HREF=Fl_Browser.html>Fl_Browser</A>
-	<UL>
-	  <LI><A HREF=Fl_Multi_Browser.html>Fl_Multi_Browser</A>
-	</UL>
-	<LI><A HREF=Fl_Choice.html>Fl_Choice</A>
-	<LI><A HREF=Fl_Menu_Bar.html>Fl_Menu_Bar</A>
-	<LI><A HREF=Fl_Menu_Button.html>Fl_Menu_Button</A>
-      </UL>
-      <LI><A HREF=Fl_Scroll.html>Fl_Scroll</A>
-      <LI><A HREF=Fl_Tabs.html>Fl_Tabs</A>
-      <LI><A HREF=Fl_Tile.html>Fl_Tile</A>
-      <LI><A HREF=Fl_Window.html>Fl_Window</A>
-      <UL>
-	<LI><A HREF=Fl_Double_Window.html>Fl_Double_Window</A>
-	<LI><A HREF=Fl_Gl_Window.html>Fl_Gl_Window</A>
-	<LI><A HREF=Fl_Menu_Window.html>Fl_Menu_Window</A>
-	<LI><A HREF=Fl_Overlay_Window.html>Fl_Overlay_Window</A>
-	<LI><A HREF=Fl_Single_Window.html>Fl_Single_Window</A>
-      </UL>
-    </UL>
-    <LI><A HREF=Fl_Input.html>Fl_Input</A>
-    <UL>
-      <LI><A HREF=Fl_Float_Input.html>Fl_Float_Input</A>
-      <LI><A HREF=Fl_Int_Input.html>Fl_Int_Input</A>
-      <LI><A HREF=Fl_Multiline_Input.html>Fl_Multiline_Input</A>
-      <LI><A HREF=Fl_Secret_Input.html>Fl_Secret_Input</A>
-      <LI><A HREF=Fl_Output.html>Fl_Output</A>
-      <UL>
-	<LI><A HREF=Fl_Multiline_Output.html>Fl_Multiline_Output</A>
-      </UL>
-    </UL>
-    <li><A HREF=Fl_Item.html>Fl_Item</A><BR>
-    <LI><A HREF=Fl_Positioner.html>Fl_Positioner</A>
-    <LI><A HREF=Fl_Valuator.html>Fl_Valuator</A>
-    <UL>
-      <LI><A HREF=Fl_Adjuster.html>Fl_Adjuster</A>
-      <LI><A HREF=Fl_Counter.html>Fl_Counter</A>
-      <LI><A HREF=Fl_Dial.html>Fl_Dial</A>
-      <LI><A HREF=Fl_Roller.html>Fl_Roller</A>
-      <LI><A HREF=Fl_Slider.html>Fl_Slider</A>
-      <UL>
-	<LI><A HREF=Fl_Scrollbar.html>Fl_Scrollbar</A>
-	<LI><A HREF=Fl_Value_Slider.html>Fl_Value_Slider</A>
-      </UL>
-      <LI><A HREF=Fl_Value_Input.html>Fl_Value_Input</A>
-      <LI><A HREF=Fl_Value_Output.html>Fl_Value_Output</A>
-    </UL>
-  </UL>
-</UL>
+  <li><a href="Fl_Labeltype.html">Fl_Labeltype</a>
+  <li><a href="Fl_List.html">Fl_List</a>
+  <li><a href="Fl_Menu_Item.html">Fl_Menu_Item</a>
+  <li><a href="Fl_Style.html">Fl_Style</a>
+  <li><a href="Fl_Widget.html">Fl_Widget</a>
+  <ul>
+    <li><a href="Fl_Box.html">Fl_Box</a>
+    <li><a href="Fl_Button.html">Fl_Button</a>
+    <ul>
+      <li><a href="Fl_Check_Button.html">Fl_Check_Button</a>
+      <li><a href="Fl_Light_Button.html">Fl_Light_Button</a>
+      <li><a href="Fl_Repeat_Button.html">Fl_Repeat_Button</a>
+      <li><a href="Fl_Return_Button.html">Fl_Return_Button</a>
+      <li><a href="Fl_Round_Button.html">Fl_Round_Button</a>
+    </ul>
+    <li><a href="Fl_Chart.html">Fl_Chart</a>
+    <li><a href="Fl_Clock.html">Fl_Clock</a>
+    <li><a href="Fl_Group.html">Fl_Group</a>
+    <ul>
+      <li><a href="Fl_Bar.html">Fl_Bar</a>
+      <li><a href="Fl_Color_Chooser.html">Fl_Color_Chooser</a>
+      <li><a href="Fl_Item_Group.html">Fl_Item_Group</a>
+      <li><a href="Fl_Pack.html">Fl_Pack</a>
+      <li><a href="Fl_Menu_.html">Fl_Menu_</a>
+      <ul>
+        <li><a href="Fl_Browser.html">Fl_Browser</a>
+	<ul>
+	  <li><a href="Fl_Multi_Browser.html">Fl_Multi_Browser</a>
+	</ul>
+	<li><a href="Fl_Choice.html">Fl_Choice</a>
+	<li><a href="Fl_Menu_Bar.html">Fl_Menu_Bar</a>
+	<li><a href="Fl_Menu_Button.html">Fl_Menu_Button</a>
+      </ul>
+      <li><a href="Fl_Scroll.html">Fl_Scroll</a>
+      <li><a href="Fl_Tabs.html">Fl_Tabs</a>
+      <li><a href="Fl_Tile.html">Fl_Tile</a>
+      <li><a href="Fl_Window.html">Fl_Window</a>
+      <ul>
+	<li><a href="Fl_Double_Window.html">Fl_Double_Window</a>
+	<li><a href="Fl_Gl_Window.html">Fl_Gl_Window</a>
+	<li><a href="Fl_Menu_Window.html">Fl_Menu_Window</a>
+	<li><a href="Fl_Overlay_Window.html">Fl_Overlay_Window</a>
+	<li><a href="Fl_Single_Window.html">Fl_Single_Window</a>
+      </ul>
+    </ul>
+    <li><a href="Fl_Input.html">Fl_Input</a>
+    <ul>
+      <li><a href="Fl_Float_Input.html">Fl_Float_Input</a>
+      <li><a href="Fl_Int_Input.html">Fl_Int_Input</a>
+      <li><a href="Fl_Multiline_Input.html">Fl_Multiline_Input</a>
+      <li><a href="Fl_Secret_Input.html">Fl_Secret_Input</a>
+      <li><a href="Fl_Output.html">Fl_Output</a>
+      <ul>
+	<li><a href="Fl_Multiline_Output.html">Fl_Multiline_Output</a>
+      </ul>
+    </ul>
+    <li><a href="Fl_Item.html">Fl_Item</a>
+    <li><a href="Fl_Positioner.html">Fl_Positioner</a>
+    <li><a href="Fl_Valuator.html">Fl_Valuator</a>
+    <ul>
+      <li><a href="Fl_Adjuster.html">Fl_Adjuster</a>
+      <li><a href="Fl_Counter.html">Fl_Counter</a>
+      <li><a href="Fl_Dial.html">Fl_Dial</a>
+      <li><a href="Fl_Roller.html">Fl_Roller</a>
+      <li><a href="Fl_Slider.html">Fl_Slider</a>
+      <ul>
+	<li><a href="Fl_Scrollbar.html">Fl_Scrollbar</a>
+	<li><a href="Fl_Value_Slider.html">Fl_Value_Slider</a>
+      </ul>
+      <li><a href="Fl_Value_Input.html">Fl_Value_Input</a>
+      <li><a href="Fl_Value_Output.html">Fl_Value_Output</a>
+    </ul>
+  </ul>
+</ul>
 
-</BODY></HTML>
+</body></html>

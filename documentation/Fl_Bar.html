@@ -1,0 +1,92 @@
+<html><head><title>Fl_Bar</title></head><body bgcolor = white>
+
+<hr break>
+<a name=Fl_Widget><h2>class Fl_Bar</h2></a>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre>
+<A href=Fl_Group.html>Fl_Group</A>
+   |
+   +----<B>Fl_Bar</B>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
+#include &lt;fltk/Fl_Bar.h&gt;
+</pre></ul>
+
+<h3>Description</h3>
+
+This group widget can be "closed" by the user by clicking on the small
+box that is at the left edge. When it is closed it resizes to a small
+horizontal strip with the box at the left edge and draws the <a
+href="Fl_Widget.html#label">label()</a> (if any), and all child
+widgets are hidden and do not get any events. When opened the label
+disappears and all child widgets reappear.
+
+<p>This must be made a child of an <a href="Fl_Pack.html">Fl_Pack</a>
+for the resizing to be useful.
+
+<p><center><img src="Fl_Bar.gif"></center>
+<p><center><img src="Fl_Bar_closed.gif"></center>
+
+<p>If <a
+href="Fl_Widget.html#type">type()</a> of the bar is set to
+<tt>Fl_Bar::VERTICAL</tt> then it will be a vertical strip with the
+control box at the top.
+
+<p>The default box is <tt>FL_FLAT_BOX</tt>. If there are several bars
+you probably need to change this in order to see the dividing lines
+between them.
+
+<H3>Methods</H3>
+
+<center>
+<table width=90%>
+<tr><td align=left valign=top>
+<ul>
+<li><a href=#Fl_Bar>Fl_Bar</a></li>
+<li><a href=#~Fl_Bar>~Fl_Bar</a></li>
+<li><a href=#opened>opened</a></li>
+<li><a href=#open>open</a></li>
+<li><a href=#close>close</a></li>
+<li><a href=#glyph_size>glyph_size</a></li>
+</ul>
+</td></tr>
+</table>
+</center>
+
+<a name=Fl_Bar><h4>Fl_Bar::Fl_Bar(int x, int y, int w, int h, const char *label = 0)</h4></a>
+
+Creates a new empty Fl_Bar.
+
+<a name=~Fl_Bar><h4>virtual Fl_Bar::~Fl_Bar()</h4></a>
+
+Like all groups, the destructor <I>also deletes all the
+children</I>. This allows a whole tree to be deleted at once, without
+having to keep a pointer to all the children in the user code.
+
+<a name=opened><h4>bool Fl_Bar::opened() const
+<br>bool Fl_Bar::opened(bool)</h4></a>
+
+True if the bar is opened, false if it is closed. Setting this value
+returns true if the new value is different than the old one.
+
+<a name=open><h4>bool Fl_Bar::open()</h4></a>
+
+Same as <tt>opened(true)</tt>
+
+<a name=close><h4>bool Fl_Bar::close()</h4></a>
+
+Same as <tt>opened(false)</tt>
+
+<a name=glyph_size><h4>int Fl_Bar::glyph_size() const
+<br>void Fl_Bar::glyph_size(int)</h4></a>
+
+Get or set the width of the box (or the height if this is a vertical
+bar), this is also the thickness the bar resizes to when closed.
+
+</body></html>
