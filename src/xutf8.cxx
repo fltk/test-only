@@ -39,6 +39,10 @@
  */
 #include <fltk/x.h>
 #include <fltk/utf.h>
+#if HAVE_ICONV
+#  include <errno.h>
+#  include <iconv.h>
+#endif /* HAVE_ICONV */
 
 static struct codepair {
   unsigned short keysym;
@@ -851,17 +855,16 @@ long keysym2ucs(KeySym keysym)
   return -1;
 }
 
-#if HAVE_ICONV
 
-#  include <errno.h>
-#  include <iconv.h>
-
-// Emulate Xutf8LookupString from XFree86 using locale-dependent
-// multibyte to UTF-8 trancoding using iconv (Yuck!).
 int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
 		      char* buffer, int buffer_len,
 		      KeySym *keysym, Status* status)
 {
+  int len;
+
+#if HAVE_ICONV
+  // Emulate Xutf8LookupString from XFree86 using locale-dependent
+  // multibyte to UTF-8 trancoding using iconv (Yuck!).
   static iconv_t cd_to = 0;
 
   // WAS: "char" did not work for me. I tried "ISO_8859-1" and it worked,
@@ -872,11 +875,11 @@ int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
   if (cd_to != (iconv_t)(-1)) { // only if iconv is going to work
 
     static char* mb_buffer = 0;
-    static int mb_buffer_len;
+    static int mb_buffer_len = 0;
     if (!mb_buffer) mb_buffer = (char*)malloc(mb_buffer_len = buffer_len);
     else if (buffer_len > mb_buffer_len)
       mb_buffer = (char*)realloc(mb_buffer, mb_buffer_len = buffer_len);
-    int len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
+    len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
 
     switch (*status) { 
     case XLookupChars:
@@ -887,73 +890,54 @@ int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
       return len; // return the error back to the caller
     }
 
-    //   printf("mb:");
-    //   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
+    //   printf(" mb:");
+    //   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i] & 0xff);
+    //   printf(", ");
 
-    char* inbuf = mb_buffer;
-    size_t inbytesleft = mb_buffer_len;
+    const char* inbuf = mb_buffer;
+    size_t inbytesleft = len;
     char* outbuf = buffer;
     size_t outbytesleft = buffer_len;
     if (iconv(cd_to, &inbuf, &inbytesleft, &outbuf, &outbytesleft) < 0) {
       if (errno==E2BIG) {
 	*status = XBufferOverflow;
 	// guess that the remaining characters are the number of bytes needed:
+        //   printf("(XBufferOverflow)\n");
 	return buffer_len + inbytesleft;
       }
     }
 
-    //   printf(" utf8:");
-    //   for (int i = 0; buffer+i < outbuf; i++) printf(" %02x", buffer[i]&0xff);
-    //   printf("\n");
-
     // otherwise, even on conversion errors, we return the result length:
-    return outbuf-buffer;
-  }
+    len = outbuf - buffer;
+  } else
 
-  // else use the keysym-translator:
-#else // !HAVE_ICONV
-int Xutf8LookupString(XIC, XKeyPressedEvent* event,
-		      char* buffer, int buffer_len,
-		      KeySym *keysym, Status* status)
-{
-#endif
+#endif /* !HAVE_ICONV */
+  {
+    // else use the keysym-translator:
 
-  // Emulate Xutf8LookupString from XFree86 converting keysym values into the
-  // corresponding ISO 10646-1 (UCS, Unicode) values and, finally, to UTF-8.
+    // Emulate Xutf8LookupString from XFree86 converting keysym values into the
+    // corresponding ISO 10646-1 (UCS, Unicode) values and, finally, to UTF-8.
 
-  int rc;
-  int codepoint;
-  int len;
+    int rc = XLookupString(event, buffer, buffer_len, keysym, NULL);
+    int codepoint = (rc > 0 ? buffer[0] & 0xFF : keysym2ucs(*keysym));
 
-  rc = XLookupString(event, buffer, buffer_len, keysym, NULL);
-
-  if (rc > 0) {
-    codepoint = buffer[0] & 0xFF;
-  } else {
-    codepoint = keysym2ucs(*keysym);
-  }
-
-  if (codepoint < 0) {
-    if (*keysym == None) {
-      *status = XLookupNone;
+    if (codepoint < 0) {
+      *status = (*keysym == None ? XLookupNone : XLookupKeySym);
+      len = 0;
+    } else if (buffer_len < utf8bytes(codepoint)) {
+      *status = XBufferOverflow;
+      len = utf8bytes(codepoint);
     } else {
-      *status = XLookupKeySym;
+      *status = (*keysym != None ? XLookupBoth : XLookupChars);
+      len = utf8encode(codepoint, buffer);
     }
-    return 0;
+
+    //   printf("ucs: %08x, ", codepoint & 0xffffffff);
   }
 
-  if (buffer_len < utf8bytes(codepoint)) {
-    *status = XBufferOverflow;
-    return utf8bytes(codepoint);
-  }
-
-  len = utf8encode(codepoint, buffer);
-
-  if (*keysym != None) {
-    *status = XLookupBoth;
-  } else {
-    *status = XLookupChars;
-  }
+  //   printf("keysym: %04x, utf8:", *keysym & 0xffff);
+  //   for (int i=0; i<len; i++) printf(" %02x", buffer[i] & 0xff);
+  //   printf(", len: %d\n", len);
 
   return len;
 }
