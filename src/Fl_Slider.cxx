@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.70 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.71 2004/03/05 08:14:18 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -194,8 +194,9 @@ double Slider::position_value(int X, int w) {
     for (i = -1; i >= l; i--) denom *= 10;
     if (l-w > 0.69897) denom *= 5;
     else if (l-w > 0.30103) denom *= 2;
-    return floor(value*denom/num+.5)*num/denom;
+    value = floor(value*denom/num+.5)*num/denom;
   }
+  if (flip) return -value;
   return value;
 }
 
@@ -571,5 +572,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.70 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.71 2004/03/05 08:14:18 spitzak Exp $".
 //
