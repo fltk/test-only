@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.137 2004/11/12 06:50:15 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.138 2004/12/05 23:24:01 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -370,10 +370,12 @@ int Group::handle(int event) {
       if (event_y() >= child->y()+child->h()) continue;
       // see if it wants the event:
       if (child->send(event)) return true;
+#if 0
       // quit when we reach a widget that claims mouse points at it,
       // so we don't pass the events to widgets "hidden" behind that one.
       if (event != ENTER && event != MOVE &&
 	  child->contains(fltk::belowmouse())) return false;
+#endif
     }
     return Widget::handle(event);
 
@@ -718,5 +720,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.137 2004/11/12 06:50:15 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.138 2004/12/05 23:24:01 spitzak Exp $".
 //
