@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.185 2003/02/21 18:16:44 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.186 2003/03/26 22:05:20 easysw Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -33,6 +33,7 @@
 #include <fltk/Window.h>
 #include <fltk/Style.h>
 #include <fltk/win32.h>
+#include <fltk/filename.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -88,6 +89,17 @@
 //
 
 #define WM_FLSELECT	(WM_USER+0x0400)
+
+/**
+ * returns pointer to the filename, or "" if name ends with '/' or ':'
+ */
+const char *filename_name(const char *name) {
+  const char *p,*q;
+  q = name;
+  if (q[0] && q[1]==':') q += 2; // skip leading drive letter
+  for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
+  return q;
+}
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -1346,17 +1358,6 @@ bool Window::iconic() const {
 
 ////////////////////////////////////////////////////////////////
 
-/**
- * returns pointer to the filename, or "" if name ends with '/' or ':'
- */
-const char *filename_name(const char *name) {
-  const char *p,*q;
-  q = name;
-  if (q[0] && q[1]==':') q += 2; // skip leading drive letter
-  for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
-  return q;
-}
-
 void Window::label(const char *name,const char *iname) {
   Widget::label(name);
   iconlabel_ = iname;
@@ -1600,5 +1601,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.185 2003/02/21 18:16:44 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.186 2003/03/26 22:05:20 easysw Exp $".
 //

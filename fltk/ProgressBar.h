@@ -1,5 +1,5 @@
 //
-// "$Id: ProgressBar.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: ProgressBar.h,v 1.3 2003/03/26 22:05:12 easysw Exp $"
 //
 // Progress indicator with bar that fills up and text showing the
 // job being done and expected time to go. Not fully implemented yet.
@@ -41,7 +41,7 @@ protected:
   Color mTextColor;
   void draw();
 public:
-  FL_API ProgressBar(int x, int y, int w, int h, const char *lbl = 0);
+  ProgressBar(int x, int y, int w, int h, const char *lbl = 0);
   void range(double min, double max, double step = 1)  { mMin = min; mMax = max; mStep = step; };
   void step(double step)		{ mPresent += step; redraw(); };
   double minimum()	{ return mMin; }

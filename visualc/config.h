@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.22 2002/12/10 02:01:07 easysw Exp $"
+ * "$Id: config.h,v 1.23 2003/03/26 22:05:28 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -196,10 +196,6 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
   
 #define HAVE_JPEG 0
 
-#define strcasecmp(a,b) stricmp(a,b)
-#define strncasecmp(a,b,c) strnicmp(a,b,c)
-#define strtok_r(a,b,c) strtok(a,b)
-
 /*
  * CONFIGDIR
  *
@@ -219,5 +215,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.22 2002/12/10 02:01:07 easysw Exp $".
+ * End of "$Id: config.h,v 1.23 2003/03/26 22:05:28 easysw Exp $".
  */

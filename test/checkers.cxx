@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.26 2003/01/24 08:11:29 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.27 2003/03/26 22:05:25 easysw Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1123,7 +1123,7 @@ int Board::handle(int e) {
     case fltk::SHORTCUT:
       return busymenu->test_shortcut() != 0;
     default:
-      return fltk::Window::handle(e);
+      return Window::handle(e);
     }
   }
   node *t, *n;
@@ -1175,7 +1175,7 @@ int Board::handle(int e) {
     computer_move(0);
     return 1;
   default:
-    return fltk::Window::handle(e);
+    return Window::handle(e);
   }
 }
 
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.26 2003/01/24 08:11:29 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.27 2003/03/26 22:05:25 easysw Exp $".
 //

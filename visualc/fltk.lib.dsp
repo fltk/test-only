@@ -264,10 +264,6 @@ SOURCE=..\src\Fl_compose.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Counter.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_cursor.cxx
 # End Source File
 # Begin Source File
@@ -420,10 +416,6 @@ SOURCE=..\src\fl_list_fonts.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\forms\fl_load_browser.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_load_plugin.cxx
 # End Source File
 # Begin Source File
@@ -572,10 +564,6 @@ SOURCE=..\src\fl_show_colormap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Single_Window.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
@@ -632,10 +620,6 @@ SOURCE=..\src\Fl_Value_Input.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Value_Output.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Value_Slider.cxx
 # End Source File
 # Begin Source File
@@ -672,10 +656,6 @@ SOURCE=..\src\Fl_XColor.H
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_xpm.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fltk_theme.cxx
 # End Source File
 # Begin Source File
@@ -685,14 +665,6 @@ SOURCE=..\OpenGL\gl_draw.cxx
 # Begin Source File
 
 SOURCE=..\OpenGL\gl_start.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\glut\glut_compatability.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\glut\glut_font.cxx
 # End Source File
 # Begin Source File
 
@@ -713,6 +685,10 @@ SOURCE=..\glut\trackball.c
 # Begin Source File
 
 SOURCE=..\glut\trackball.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\ValueOutput.cxx
 # End Source File
 # End Target
 # End Project

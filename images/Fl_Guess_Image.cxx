@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.13 2003/03/26 22:05:19 easysw Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,7 @@ ImageType fltk::image_filetypes[] = {
   { 0, UnknownImage::test, UnknownImage::get }
 };
 
-FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas)
+ImageType* SharedImage::guess(const char* name, const uchar* datas)
 {
   uchar* read_data = 0;
   const uchar* test_data = datas;
@@ -83,5 +83,5 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.13 2003/03/26 22:05:19 easysw Exp $"
 //

@@ -159,181 +159,150 @@ SOURCE=..\src\fastarrow.h
 
 SOURCE=..\src\filename_absolute.cxx
 DEP_CPP_FILEN=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_expand.cxx
 DEP_CPP_FILENA=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_ext.cxx
 DEP_CPP_FILENAM=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_isdir.cxx
 DEP_CPP_FILENAME=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
+	"..\fltk\fl_api.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_list.cxx
 DEP_CPP_FILENAME_=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
+	"..\fltk\fl_api.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_match.cxx
 DEP_CPP_FILENAME_M=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_setext.cxx
 DEP_CPP_FILENAME_S=\
-	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl_Export.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl.cxx
 DEP_CPP_FL_CX=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Tooltip.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\error.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\fl_version.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\run.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\tooltip.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	"..\src\Fl_mac.cxx"\
 	"..\src\fl_win32.cxx"\
 	"..\src\Fl_x.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
-	
-NODEP_CPP_FL_CX=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_abort.cxx
 DEP_CPP_FL_AB=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\vsnprintf.h"\
+	"..\fltk\error.h"\
+	"..\fltk\fl_api.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_add_idle.cxx
 DEP_CPP_FL_AD=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\run.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Adjuster.cxx
 DEP_CPP_FL_ADJ=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Adjuster.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\adjuster.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\xbmimage.h"\
 	"..\src\fastarrow.h"\
 	"..\src\mediumarrow.h"\
 	"..\src\slowarrow.h"\
-	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Align_Group.cxx
 DEP_CPP_FL_AL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Align_Group.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\aligngroup.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_arc.cxx
 DEP_CPP_FL_AR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\math.h"\
 	
 # End Source File
@@ -341,173 +310,142 @@ DEP_CPP_FL_AR=\
 
 SOURCE=..\src\fl_arci.cxx
 DEP_CPP_FL_ARC=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\math.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_ARC=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_arg.cxx
 DEP_CPP_FL_ARG=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\color.h"\
+	"..\fltk\error.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	{$(INCLUDE)}"dirent.h"\
-	
-NODEP_CPP_FL_ARG=\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\run.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_ask.cxx
 DEP_CPP_FL_AS=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\fl_ask.h"\
-	"..\fltk\Fl_Box.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Secret_Input.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\vsnprintf.h"\
+	"..\fltk\ask.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\secretinput.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Bar.cxx
 DEP_CPP_FL_BA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bar.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\bargroup.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Bitmap.cxx
 DEP_CPP_FL_BI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_BI=\
-	"..\fltk\mac.H"\
+	"..\fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Box.cxx
 DEP_CPP_FL_BO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Box.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\invisiblebox.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_boxtype.cxx
 DEP_CPP_FL_BOX=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_BOX=\
-	"..\fltk\mac.H"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Browser.cxx
 DEP_CPP_FL_BR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\error.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\image.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\xbmimage.h"\
 	"..\src\browser_minus.xbm"\
 	"..\src\browser_plus.xbm"\
 	
@@ -516,20 +454,17 @@ DEP_CPP_FL_BR=\
 
 SOURCE=..\src\Fl_Button.cxx
 DEP_CPP_FL_BU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	".\config.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
@@ -540,82 +475,66 @@ SOURCE=..\src\fl_call_main.c
 
 SOURCE=..\src\Fl_Check_Button.cxx
 DEP_CPP_FL_CH=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Check_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\checkbutton.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Choice.cxx
 DEP_CPP_FL_CHO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Choice.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\choice.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_clip.cxx
 DEP_CPP_FL_CL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_CL=\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Clock.cxx
 DEP_CPP_FL_CLO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Clock.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\clock.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
@@ -626,273 +545,212 @@ SOURCE=..\src\fl_cmap.h
 
 SOURCE=..\src\fl_color.cxx
 DEP_CPP_FL_CO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_cmap.h"\
+	"..\src\fl_color_mac.cxx"\
 	"..\src\fl_color_win32.cxx"\
 	"..\src\fl_color_x.cxx"\
-	"..\src\Fl_XColor.H"\
+	"..\src\XColorMap.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_CO=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Color_Chooser.cxx
 DEP_CPP_FL_COL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Box.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Choice.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Color_Chooser.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Float_Input.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Numeric_Input.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Value_Input.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\ask.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\choice.h"\
+	"..\fltk\color.h"\
+	"..\fltk\colorchooser.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\floatinput.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\item.h"\
 	"..\fltk\math.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\numericinput.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\valueinput.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_compose.cxx
 DEP_CPP_FL_COM=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Counter.cxx
-DEP_CPP_FL_COU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Counter.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Output.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	".\config.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_cursor.cxx
 DEP_CPP_FL_CU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_CU=\
+	"..\fltk\color.h"\
+	"..\fltk\cursor.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_curve.cxx
 DEP_CPP_FL_CUR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\math.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Dial.cxx
 DEP_CPP_FL_DI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Dial.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\dial.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\math.h"\
-	".\config.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_diamond_box.cxx
 DEP_CPP_FL_DIA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_display.cxx
 DEP_CPP_FL_DIS=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\run.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_dnd.cxx
 DEP_CPP_FL_DN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\cursor.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\run.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	"..\src\fl_dnd_mac.cxx"\
 	"..\src\fl_dnd_win32.cxx"\
 	"..\src\fl_dnd_x.cxx"\
-	
-NODEP_CPP_FL_DN=\
-	"..\fltk\mac.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Double_Window.cxx
 DEP_CPP_FL_DO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Double_Window.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\doublebufferwindow.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_DO=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw.cxx
 DEP_CPP_FL_DR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\math.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw_image.cxx
 DEP_CPP_FL_DRA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\error.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\src\fl_draw_image_mac.cxx"\
 	"..\src\fl_draw_image_win32.cxx"\
 	"..\src\fl_draw_image_x.cxx"\
-	"..\src\Fl_XColor.H"\
+	"..\src\XColorMap.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_DRA=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw_pixmap.cxx
 DEP_CPP_FL_DRAW=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	".\config.h"\
 	
 # End Source File
@@ -900,252 +758,208 @@ DEP_CPP_FL_DRAW=\
 
 SOURCE=..\src\fl_engraved_label.cxx
 DEP_CPP_FL_EN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\labeltype.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_file_chooser.cxx
 DEP_CPP_FL_FI=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\button.h"\
+	"..\fltk\choice.h"\
+	"..\fltk\color.h"\
+	"..\fltk\file_chooser.h"\
+	"..\fltk\filebrowser.h"\
+	"..\fltk\filechooser.h"\
+	"..\fltk\fileicon.h"\
+	"..\fltk\fileinput.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Choice.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\fl_file_chooser.h"\
-	"..\fltk\Fl_FileBrowser.h"\
-	"..\fltk\Fl_FileChooser.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_FileInput.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileBrowser.cxx
 DEP_CPP_FL_FIL=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\filebrowser.h"\
+	"..\fltk\fileicon.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileBrowser.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\vsnprintf.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileChooser.cxx
 DEP_CPP_FL_FILE=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\button.h"\
+	"..\fltk\choice.h"\
+	"..\fltk\color.h"\
+	"..\fltk\filebrowser.h"\
+	"..\fltk\filechooser.h"\
+	"..\fltk\fileicon.h"\
+	"..\fltk\fileinput.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Choice.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileBrowser.h"\
-	"..\fltk\Fl_FileChooser.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_FileInput.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\vsnprintf.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\image.h"\
+	"..\fltk\input.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
+	"..\fltk\xbmimage.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileChooser2.cxx
 DEP_CPP_FL_FILEC=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\ask.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\button.h"\
+	"..\fltk\choice.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\filebrowser.h"\
+	"..\fltk\filechooser.h"\
+	"..\fltk\fileicon.h"\
+	"..\fltk\fileinput.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\fl_ask.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Choice.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileBrowser.h"\
-	"..\fltk\Fl_FileChooser.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_FileInput.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\vsnprintf.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileIcon.cxx
 DEP_CPP_FL_FILEI=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fileicon.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	{$(INCLUDE)}"dirent.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileIcon2.cxx
 DEP_CPP_FL_FILEIC=\
-	"..\fltk\Enumerations.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fileicon.h"\
 	"..\fltk\filename.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileIcon.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_FileInput.cxx
 DEP_CPP_FL_FILEIN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_FileInput.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fileinput.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\input.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Float_Input.cxx
 DEP_CPP_FL_FL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Float_Input.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Numeric_Input.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\floatinput.h"\
+	"..\fltk\input.h"\
+	"..\fltk\numericinput.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_font.cxx
 DEP_CPP_FL_FO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\error.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\font.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\math.h"\
+	"..\fltk\style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\src\fl_font_mac.cxx"\
 	"..\src\fl_font_win32.cxx"\
 	"..\src\fl_font_x.cxx"\
 	"..\src\fl_font_xft.cxx"\
+	"..\src\IFont.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_FO=\
-	"..\fltk\mac.H"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1156,44 +970,35 @@ SOURCE=..\src\fl_fontsize.h
 
 SOURCE=..\src\Fl_get_key.cxx
 DEP_CPP_FL_GE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\src\Fl_get_key_mac.cxx"\
 	"..\src\fl_get_key_win32.cxx"\
-	
-NODEP_CPP_FL_GE=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\OpenGL\Fl_Gl_Choice.cxx
 DEP_CPP_FL_GL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	"..\OpenGL\Fl_Gl_Choice.H"\
-	".\config.h"\
-	
-NODEP_CPP_FL_GL=\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\visual.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\opengl\glchoice.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1204,314 +1009,250 @@ SOURCE=..\OpenGL\Fl_Gl_Choice.H
 
 SOURCE=..\OpenGL\Fl_Gl_Overlay.cxx
 DEP_CPP_FL_GL_=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Gl_Window.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	"..\OpenGL\Fl_Gl_Choice.H"\
-	".\config.h"\
-	
-NODEP_CPP_FL_GL_=\
+	"..\fltk\glwindow.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\opengl\glchoice.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\OpenGL\Fl_Gl_Window.cxx
 DEP_CPP_FL_GL_W=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Gl_Window.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\error.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	"..\OpenGL\Fl_Gl_Choice.H"\
-	".\config.h"\
-	
-NODEP_CPP_FL_GL_W=\
+	"..\fltk\glwindow.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\visual.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\opengl\glchoice.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_glyph.cxx
 DEP_CPP_FL_GLY=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Group.cxx
 DEP_CPP_FL_GR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Tooltip.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Highlight_Button.cxx
 DEP_CPP_FL_HI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Highlight_Button.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\highlightbutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Image.cxx
 DEP_CPP_FL_IM=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_IM=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Input.cxx
 DEP_CPP_FL_IN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\input.h"\
+	"..\fltk\math.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Input_Browser.cxx
 DEP_CPP_FL_INP=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Input_Browser.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Menu_Window.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\box.h"\
+	"..\fltk\browser.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\inputbrowser.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\menuwindow.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Item.cxx
 DEP_CPP_FL_IT=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Check_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Divider.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Item_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\checkbutton.h"\
+	"..\fltk\color.h"\
+	"..\fltk\divider.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\image.h"\
+	"..\fltk\item.h"\
+	"..\fltk\itemgroup.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_key_name.cxx
 DEP_CPP_FL_KE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_KE=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_labeltype.cxx
 DEP_CPP_FL_LA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\image.h"\
+	"..\fltk\labeltype.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	".\config.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Light_Button.cxx
 DEP_CPP_FL_LI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Check_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Light_Button.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\checkbutton.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\lightbutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_list_fonts.cxx
 DEP_CPP_FL_LIS=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\font.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\src\fl_list_fonts_mac.cxx"\
 	"..\src\fl_list_fonts_win32.cxx"\
 	"..\src\fl_list_fonts_x.cxx"\
+	"..\src\IFont.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_LIS=\
-	"..\fltk\mac.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\forms\fl_load_browser.cxx
-DEP_CPP_FL_LO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Browser.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_load_plugin.cxx
-DEP_CPP_FL_LOA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\fl_load_plugin.h"\
+DEP_CPP_FL_LO=\
+	"..\fltk\fl_api.h"\
+	"..\fltk\load_plugin.h"\
+	"..\src\dlload_osx.cxx"\
 	".\config.h"\
 	
 # End Source File
@@ -1519,120 +1260,63 @@ DEP_CPP_FL_LOA=\
 
 SOURCE=..\src\Fl_lock.cxx
 DEP_CPP_FL_LOC=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\run.h"\
 	".\config.h"\
-	{$(INCLUDE)}"config\_epilog.h"\
-	{$(INCLUDE)}"config\_msvc_warnings_off.h"\
-	{$(INCLUDE)}"config\_prolog.h"\
-	{$(INCLUDE)}"config\stl_apcc.h"\
-	{$(INCLUDE)}"config\stl_apple.h"\
-	{$(INCLUDE)}"config\stl_as400.h"\
-	{$(INCLUDE)}"config\stl_bc.h"\
-	{$(INCLUDE)}"config\stl_como.h"\
-	{$(INCLUDE)}"config\stl_confix.h"\
-	{$(INCLUDE)}"config\stl_dec.h"\
-	{$(INCLUDE)}"config\stl_dec_vms.h"\
-	{$(INCLUDE)}"config\stl_fujitsu.h"\
-	{$(INCLUDE)}"config\stl_gcc.h"\
-	{$(INCLUDE)}"config\stl_hpacc.h"\
-	{$(INCLUDE)}"config\stl_ibm.h"\
-	{$(INCLUDE)}"config\stl_intel.h"\
-	{$(INCLUDE)}"config\stl_kai.h"\
-	{$(INCLUDE)}"config\stl_msvc.h"\
-	{$(INCLUDE)}"config\stl_mwerks.h"\
-	{$(INCLUDE)}"config\stl_mycomp.h"\
-	{$(INCLUDE)}"config\stl_sco.h"\
-	{$(INCLUDE)}"config\stl_select_lib.h"\
-	{$(INCLUDE)}"config\stl_sgi.h"\
-	{$(INCLUDE)}"config\stl_solaris.h"\
-	{$(INCLUDE)}"config\stl_sunpro.h"\
-	{$(INCLUDE)}"config\stl_symantec.h"\
-	{$(INCLUDE)}"config\stl_watcom.h"\
-	{$(INCLUDE)}"config\stl_wince.h"\
-	{$(INCLUDE)}"config\stlcomp.h"\
-	{$(INCLUDE)}"config\vc_select_lib.h"\
-	{$(INCLUDE)}"pthread.h"\
-	{$(INCLUDE)}"stl\_abbrevs.h"\
-	{$(INCLUDE)}"stl\_config.h"\
-	{$(INCLUDE)}"stl\_config_compat.h"\
-	{$(INCLUDE)}"stl\_config_compat_post.h"\
-	{$(INCLUDE)}"stl\_epilog.h"\
-	{$(INCLUDE)}"stl\_prolog.h"\
-	{$(INCLUDE)}"stl\_site_config.h"\
-	{$(INCLUDE)}"stl_user_config.h"\
-	
-NODEP_CPP_FL_LOC=\
-	"..\..\usr\include\pthread.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu.cxx
 DEP_CPP_FL_ME=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Menu_Window.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\labeltype.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\menuwindow.h"\
+	"..\fltk\run.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_.cxx
 DEP_CPP_FL_MEN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_add.cxx
 DEP_CPP_FL_MENU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Divider.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Item_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\divider.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\itemgroup.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\src\array.h"\
 	
 # End Source File
@@ -1640,21 +1324,20 @@ DEP_CPP_FL_MENU=\
 
 SOURCE=..\src\Fl_Menu_Bar.cxx
 DEP_CPP_FL_MENU_=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Bar.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\menubar.h"\
+	"..\fltk\style.h"\
+	"..\fltk\tooltip.h"\
+	"..\fltk\widget.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1662,611 +1345,484 @@ DEP_CPP_FL_MENU_=\
 
 SOURCE=..\src\Fl_Menu_Button.cxx
 DEP_CPP_FL_MENU_B=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Button.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	".\config.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\popupmenu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_global.cxx
 DEP_CPP_FL_MENU_G=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_Item.cxx
 DEP_CPP_FL_MENU_I=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Divider.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Item_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Button.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fl\fl_menu_item.h"\
+	"..\fltk\color.h"\
+	"..\fltk\divider.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\itemgroup.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\popupmenu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_Window.cxx
 DEP_CPP_FL_MENU_W=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_Window.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\menuwindow.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_MENU_W=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Numeric_Input.cxx
 DEP_CPP_FL_NU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Numeric_Input.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\input.h"\
+	"..\fltk\numericinput.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Output.cxx
 DEP_CPP_FL_OU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Output.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\input.h"\
+	"..\fltk\output.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_oval_box.cxx
 DEP_CPP_FL_OV=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_overlay.cxx
 DEP_CPP_FL_OVE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_OVE=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_overlay_visual.cxx
 DEP_CPP_FL_OVER=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OVER=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Overlay_Window.cxx
 DEP_CPP_FL_OVERL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Double_Window.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Overlay_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\doublebufferwindow.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\overlaywindow.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OVERL=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_own_colormap.cxx
 DEP_CPP_FL_OW=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\visual.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_OW=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Pack.cxx
 DEP_CPP_FL_PA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Pack.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\packedgroup.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Pixmap.cxx
 DEP_CPP_FL_PI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Pixmap.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_PI=\
-	"..\fltk\mac.H"\
+	"..\fltk\xpmimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_plastic_box.cxx
 DEP_CPP_FL_PL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_ProgressBar.cxx
 DEP_CPP_FL_PR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Box.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_ProgressBar.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\progressbar.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Radio_Button.cxx
 DEP_CPP_FL_RA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Check_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\fl_radio_button.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\checkbutton.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\radiobutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rect.cxx
 DEP_CPP_FL_RE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_RE=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Repeat_Button.cxx
 DEP_CPP_FL_REP=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Repeat_Button.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\repeatbutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Return_Button.cxx
 DEP_CPP_FL_RET=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Button.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Return_Button.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\returnbutton.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rgb.cxx
 DEP_CPP_FL_RG=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_RG=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_RGB_Image.cxx
 DEP_CPP_FL_RGB=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_RGB_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\rgbimage.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_RGB=\
-	"..\fltk\mac.H"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Roller.cxx
 DEP_CPP_FL_RO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Roller.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
-	".\config.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\math.h"\
+	"..\fltk\style.h"\
+	"..\fltk\thumbwheel.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_round_box.cxx
 DEP_CPP_FL_ROU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rounded_box.cxx
 DEP_CPP_FL_ROUN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Scroll.cxx
 DEP_CPP_FL_SC=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Scroll.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\scrollgroup.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_scroll_area.cxx
 DEP_CPP_FL_SCR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_SCR=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Scrollbar.cxx
 DEP_CPP_FL_SCRO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_shadow_box.cxx
 DEP_CPP_FL_SH=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Shaped_Window.cxx
 DEP_CPP_FL_SHA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Double_Window.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Shaped_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_SHA=\
+	"..\fltk\color.h"\
+	"..\fltk\doublebufferwindow.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\image.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\shapedwindow.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_show_colormap.cxx
 DEP_CPP_FL_SHO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\fl_show_colormap.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Single_Window.cxx
-DEP_CPP_FL_SI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\menuwindow.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\show_colormap.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Slider.cxx
 DEP_CPP_FL_SL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\math.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	".\config.h"\
 	
 # End Source File
@@ -2274,430 +1830,338 @@ DEP_CPP_FL_SL=\
 
 SOURCE=..\src\Fl_String_List.cxx
 DEP_CPP_FL_ST=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_String_List.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\stringlist.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Style.cxx
 DEP_CPP_FL_STY=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\fl_load_plugin.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\load_plugin.h"\
 	"..\fltk\math.h"\
-	"..\fltk\vsnprintf.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	".\config.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Style_Set.cxx
 DEP_CPP_FL_STYL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\fl_style_set.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
+	"..\fltk\styleset.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_symbols.cxx
 DEP_CPP_FL_SY=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tabs.cxx
 DEP_CPP_FL_TA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Tabs.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\style.h"\
+	"..\fltk\tabgroup.h"\
+	"..\fltk\tooltip.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Text_Buffer.cxx
 DEP_CPP_FL_TE=\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Text_Buffer.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\textbuffer.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Text_Display.cxx
 DEP_CPP_FL_TEX=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Text_Buffer.h"\
-	"..\fltk\Fl_Text_Display.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\textbuffer.h"\
+	"..\fltk\textdisplay.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Text_Editor.cxx
 DEP_CPP_FL_TEXT=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Scrollbar.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Text_Buffer.h"\
-	"..\fltk\Fl_Text_Display.h"\
-	"..\fltk\Fl_Text_Editor.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\textbuffer.h"\
+	"..\fltk\textdisplay.h"\
+	"..\fltk\texteditor.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tile.cxx
 DEP_CPP_FL_TI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Tile.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\cursor.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\style.h"\
+	"..\fltk\tiledgroup.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tiled_Image.cxx
 DEP_CPP_FL_TIL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Tiled_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\tiledimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tooltip.cxx
 DEP_CPP_FL_TO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_Window.h"\
-	"..\fltk\Fl_Single_Window.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Tooltip.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\menuwindow.h"\
+	"..\fltk\run.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\tooltip.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Valuator.cxx
 DEP_CPP_FL_VA=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\math.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Value_Input.cxx
 DEP_CPP_FL_VAL=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Float_Input.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Numeric_Input.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Value_Input.h"\
-	"..\fltk\Fl_Widget.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Value_Output.cxx
-DEP_CPP_FL_VALU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Output.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Value_Output.h"\
-	"..\fltk\Fl_Widget.h"\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\floatinput.h"\
+	"..\fltk\group.h"\
+	"..\fltk\input.h"\
+	"..\fltk\math.h"\
+	"..\fltk\numericinput.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\valueinput.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Value_Slider.cxx
-DEP_CPP_FL_VALUE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Input.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Output.h"\
-	"..\fltk\Fl_Slider.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Valuator.h"\
-	"..\fltk\Fl_Value_Slider.h"\
-	"..\fltk\Fl_Widget.h"\
-	".\config.h"\
+DEP_CPP_FL_VALU=\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\slider.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\valueslider.h"\
+	"..\fltk\widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_vertex.cxx
 DEP_CPP_FL_VE=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
 	"..\fltk\math.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_VE=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_visual.cxx
 DEP_CPP_FL_VI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\visual.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_VI=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Widget.cxx
 DEP_CPP_FL_WI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\run.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window.cxx
 DEP_CPP_FL_WIN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\layout.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\run.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_WIN=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_fullscreen.cxx
 DEP_CPP_FL_WIND=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_WIND=\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_hotspot.cxx
 DEP_CPP_FL_WINDO=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\screeninfo.h"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_iconize.cxx
 DEP_CPP_FL_WINDOW=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_WINDOW=\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
 	
 # End Source File
 # Begin Source File
@@ -2708,113 +2172,50 @@ SOURCE=..\src\Fl_XColor.H
 
 SOURCE=..\src\fltk_theme.cxx
 DEP_CPP_FLTK_=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\style.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\OpenGL\gl_draw.cxx
 DEP_CPP_GL_DR=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	"..\OpenGL\Fl_Gl_Choice.H"\
-	".\config.h"\
-	
-NODEP_CPP_GL_DR=\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
+	"..\fltk\style.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\opengl\glchoice.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\OpenGL\gl_start.cxx
 DEP_CPP_GL_ST=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	"..\OpenGL\Fl_Gl_Choice.H"\
-	".\config.h"\
-	
-NODEP_CPP_GL_ST=\
+	"..\fltk\group.h"\
 	"..\fltk\mac.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\glut\glut_compatability.cxx
-DEP_CPP_GLUT_=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Gl_Window.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Item.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Menu_.h"\
-	"..\fltk\Fl_Menu_Item.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\gl.h"\
-	"..\fltk\glut.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\glut\glut_font.cxx
-DEP_CPP_GLUT_F=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Gl_Window.h"\
-	"..\fltk\Fl_Group.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\Fl_Window.h"\
-	"..\fltk\gl.h"\
-	"..\fltk\glut.h"\
+	"..\fltk\style.h"\
+	"..\fltk\visual.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	"..\opengl\glchoice.h"\
 	".\config.h"\
 	
 # End Source File
@@ -2828,7 +2229,6 @@ SOURCE=..\src\scandir.c
 DEP_CPP_SCAND=\
 	"..\src\scandir_win32.c"\
 	".\config.h"\
-	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2845,6 +2245,24 @@ DEP_CPP_TRACK=\
 # Begin Source File
 
 SOURCE=..\glut\trackball.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\ValueOutput.cxx
+DEP_CPP_VALUE=\
+	"..\fltk\box.h"\
+	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\run.h"\
+	"..\fltk\style.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\valueoutput.h"\
+	"..\fltk\widget.h"\
+	
 # End Source File
 # End Target
 # End Project

@@ -153,205 +153,69 @@ LINK32=link.exe
 # Name "fltkdll_images - Win32 Release MinSize"
 # Begin Source File
 
-SOURCE=..\src\fl_bmp.cxx
-DEP_CPP_FL_BM=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_BM=\
-	"..\fltk\mac.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_gif.cxx
-DEP_CPP_FL_GI=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_GI=\
-	"..\fltk\mac.H"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\images\Fl_Guess_Image.cxx
 DEP_CPP_FL_GU=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\sharedimage.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\fltk\xbmimage.h"\
 	".\config.h"\
 	
-NODEP_CPP_FL_GU=\
-	"..\fltk\mac.H"\
-	
-# SUBTRACT CPP /D "FL_DLL"
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_jpeg.cxx
 DEP_CPP_FL_JP=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\sharedimage.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"jconfig.h"\
-	{$(INCLUDE)}"jerror.h"\
-	{$(INCLUDE)}"jmorecfg.h"\
-	{$(INCLUDE)}"jpeglib.h"\
-	
-NODEP_CPP_FL_JP=\
-	"..\..\dtlwsup\include\jpegint.h"\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_png.cxx
 DEP_CPP_FL_PN=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\sharedimage.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"config\_epilog.h"\
-	{$(INCLUDE)}"config\_msvc_warnings_off.h"\
-	{$(INCLUDE)}"config\_prolog.h"\
-	{$(INCLUDE)}"config\stl_apcc.h"\
-	{$(INCLUDE)}"config\stl_apple.h"\
-	{$(INCLUDE)}"config\stl_as400.h"\
-	{$(INCLUDE)}"config\stl_bc.h"\
-	{$(INCLUDE)}"config\stl_como.h"\
-	{$(INCLUDE)}"config\stl_confix.h"\
-	{$(INCLUDE)}"config\stl_dec.h"\
-	{$(INCLUDE)}"config\stl_dec_vms.h"\
-	{$(INCLUDE)}"config\stl_fujitsu.h"\
-	{$(INCLUDE)}"config\stl_gcc.h"\
-	{$(INCLUDE)}"config\stl_hpacc.h"\
-	{$(INCLUDE)}"config\stl_ibm.h"\
-	{$(INCLUDE)}"config\stl_intel.h"\
-	{$(INCLUDE)}"config\stl_kai.h"\
-	{$(INCLUDE)}"config\stl_msvc.h"\
-	{$(INCLUDE)}"config\stl_mwerks.h"\
-	{$(INCLUDE)}"config\stl_mycomp.h"\
-	{$(INCLUDE)}"config\stl_sco.h"\
-	{$(INCLUDE)}"config\stl_select_lib.h"\
-	{$(INCLUDE)}"config\stl_sgi.h"\
-	{$(INCLUDE)}"config\stl_solaris.h"\
-	{$(INCLUDE)}"config\stl_sunpro.h"\
-	{$(INCLUDE)}"config\stl_symantec.h"\
-	{$(INCLUDE)}"config\stl_watcom.h"\
-	{$(INCLUDE)}"config\stl_wince.h"\
-	{$(INCLUDE)}"config\stlcomp.h"\
-	{$(INCLUDE)}"config\vc_select_lib.h"\
-	{$(INCLUDE)}"mem.h"\
-	{$(INCLUDE)}"png.h"\
-	{$(INCLUDE)}"pngconf.h"\
-	{$(INCLUDE)}"stl\_abbrevs.h"\
-	{$(INCLUDE)}"stl\_config.h"\
-	{$(INCLUDE)}"stl\_config_compat.h"\
-	{$(INCLUDE)}"stl\_config_compat_post.h"\
-	{$(INCLUDE)}"stl\_epilog.h"\
-	{$(INCLUDE)}"stl\_prolog.h"\
-	{$(INCLUDE)}"stl\_site_config.h"\
-	{$(INCLUDE)}"stl_user_config.h"\
-	{$(INCLUDE)}"zconf.h"\
-	{$(INCLUDE)}"zlib.h"\
-	
-NODEP_CPP_FL_PN=\
-	"..\..\dtlwsup\include\alloc.h"\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Shared_Image.cxx
 DEP_CPP_FL_SH=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Bitmap.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.H"\
+	"..\fltk\sharedimage.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	"..\fltk\xbmimage.h"\
 	".\config.h"\
-	
-NODEP_CPP_FL_SH=\
-	"..\fltk\mac.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_xpm.cxx
-DEP_CPP_FL_XP=\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\fl_draw.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Shared_Image.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	
-NODEP_CPP_FL_XP=\
-	"..\fltk\mac.H"\
 	
 # End Source File
 # End Target

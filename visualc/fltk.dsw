@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "adjuster"=.\adjuster.dsp - Package Owner=<4>
+Project: "boxtype"=".\boxtype.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -18,7 +18,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "arc"=.\arc.dsp - Package Owner=<4>
+Project: "checkers"=".\checkers.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -33,7 +33,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ask"=.\ask.dsp - Package Owner=<4>
+Project: "color_chooser"=".\color_chooser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -48,7 +48,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "boxtype"=.\boxtype.dsp - Package Owner=<4>
+Project: "cursor"=".\cursor.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -63,7 +63,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "browser"=.\browser.dsp - Package Owner=<4>
+Project: "demo"=".\demo.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -73,165 +73,18 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "button"=.\button.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "buttons"=.\buttons.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "checkers"=.\checkers.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "clock"=.\clock.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "color_chooser"=.\color_chooser.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "cursor"=.\cursor.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "curve"=.\curve.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "demo"=.\demo.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name adjuster
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name arc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ask
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name boxtype
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name browser
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name button
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name buttons
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name checkers
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name clock
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name color_chooser
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name cursor
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name curve
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name doublebuffer
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name file_chooser
@@ -243,40 +96,10 @@ Package=<4>
     Project_Dep_Name hello
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name iconize
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name input
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name label
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name menubar
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name message
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name navigation
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name output
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name overlay
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name pixmap_browser
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name scroll
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name subwindow
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name symbols
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name tile
@@ -285,19 +108,13 @@ Package=<4>
     Project_Dep_Name pack
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name editor
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkdll
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name image
     End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "doublebuffer"=.\doublebuffer.dsp - Package Owner=<4>
+Project: "file_chooser"=".\file_chooser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -312,7 +129,43 @@ Package=<4>
 
 ###############################################################################
 
-Project: "editor"=.\editor.dsp - Package Owner=<4>
+Project: "fltk"=".\fltk.lib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltk_images"=".\fltk_images.lib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltkdll_images"=".\fltkdll_images.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -327,136 +180,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "file_chooser"=.\file_chooser.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltk"=.\fltk.lib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltk_images"=.\fltk_images.lib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltkdll"=.\fltkdll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltkdll_images"=.\fltkdll_images.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltkdll
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fluid"=.\fluid.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltkdll
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkdll_images
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fonts"=.\fonts.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "hello"=.\hello.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "iconize"=.\iconize.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "image"=.\image.dsp - Package Owner=<4>
+Project: "fluid"=".\fluid.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -474,7 +198,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "input"=.\input.dsp - Package Owner=<4>
+Project: "fonts"=".\fonts.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -489,7 +213,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "label"=.\label.dsp - Package Owner=<4>
+Project: "hello"=".\hello.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -504,7 +228,25 @@ Package=<4>
 
 ###############################################################################
 
-Project: "menubar"=.\menubar.dsp - Package Owner=<4>
+Project: "image"=".\image.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "input"=".\input.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -519,7 +261,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "message"=.\message.dsp - Package Owner=<4>
+Project: "label"=".\label.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -534,7 +276,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "navigation"=.\navigation.dsp - Package Owner=<4>
+Project: "pack"=".\pack.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -549,127 +291,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "output"=.\output.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "overlay"=.\overlay.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "pack"=.\pack.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "pixmap_browser"=.\pixmap_browser.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "radio"=.\radio.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "scroll"=.\scroll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "subwindow"=.\subwindow.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "symbols"=.\symbols.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "tile"=.\tile.dsp - Package Owner=<4>
+Project: "tile"=".\tile.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
