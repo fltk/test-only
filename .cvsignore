@@ -1,9 +1,11 @@
+*.bck
+autom4te.cache
 config.cache
 config.h
 config.log
 config.status
 configure
+configure.lineno
 fltk-config
 fltk.list
 makeinclude
-*.bck
