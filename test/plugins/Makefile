@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.11 1999/11/08 22:22:00 carl Exp $"
+# "$Id: Makefile,v 1.12 1999/11/19 15:12:02 carl Exp $"
 #
 # Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -36,6 +36,8 @@ INCLUDES = -I../../fluid -I../..
 
 include ../../makeinclude
 
+all: $(PROGRAM) Fl_NSlider.o
+
 .SUFFIXES : .cxx .c .o
 
 .cxx.o :
@@ -59,5 +61,5 @@ install:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.11 1999/11/08 22:22:00 carl Exp $".
+# End of "$Id: Makefile,v 1.12 1999/11/19 15:12:02 carl Exp $".
 #

@@ -8,6 +8,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Valuator.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Group.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include "math.h"
