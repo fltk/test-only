@@ -402,12 +402,27 @@ Returns the last window that was made current.
 Change the cursor for this window.  This always calls the system, if
 you are changing the cursor a lot you may want to keep track of how
 you set it in a static varaible and call this only if the new cursor
-is different.
+is different. The colors only work on X, they are not implemented on
+WIN32.</p>
 
-<p>The type <tt>Fl_Cursor</tt> is an enumeration defined in <a
-href=enumerations.html#cursor> <tt>&lt;Enumerations.H&gt;</tt></A>.
-(Under X you can get any XC_cursor value by passing <tt>
-Fl_Cursor((XC_foo/2)+1)</tt>).  The colors only work on X, they are
-not implemented on WIN32.
+<p>The following constants define the mouse cursors that are available:</p>
+
+<UL>
+<LI><TT>FL_CURSOR_DEFAULT</TT> - the default cursor, usually an arrow (0)</LI>
+<LI><TT>FL_CURSOR_ARROW</TT> - an arrow pointer </LI>
+<LI><TT>FL_CURSOR_CROSS</TT> - crosshair </LI>
+<LI><TT>FL_CURSOR_WAIT</TT> - watch or hourglass </LI>
+<LI><TT>FL_CURSOR_INSERT</TT> - I-beam </LI>
+<LI><TT>FL_CURSOR_HAND</TT> - hand (uparrow on MSWindows) </LI>
+<LI><TT>FL_CURSOR_HELP</TT> - question mark </LI>
+<LI><TT>FL_CURSOR_MOVE</TT> - 4-pointed arrow </LI>
+<LI><TT>FL_CURSOR_NS</TT> - up/down arrow </LI>
+<LI><TT>FL_CURSOR_WE</TT> - left/right arrow </LI>
+<LI><TT>FL_CURSOR_NWSE</TT> - diagonal arrow </LI>
+<LI><TT>FL_CURSOR_NESW</TT> - diagonal arrow </LI>
+<LI><TT>FL_CURSOR_NONE</TT> - invisible </LI>
+<li>Under X you can get any XC_cursor value by passing
+<tt>Fl_Cursor((XC_foo/2)+1)</tt>).</li>
+</ul>
 
 </body></html>

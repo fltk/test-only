@@ -16,7 +16,14 @@ href="drawing.html#fl_draw"><tt>fl_draw(const char*)</tt></a> to draw
 letters. See the documentaion on <a href="drawing.html">drawing
 functions</a>.
 
-<p>The following Fl_Font values are predefined:</p>
+<p>The following Fl_Font values are predefined. These names are
+historical, actually <tt>FL_HELVETICA</tt> will give the system's
+sans-serif font, <tt>FL_TIMES</tt> will give the system's serif font,
+and <tt>FL_COURIER</tt> will give the system's fixed-pitch
+font. <tt>FL_SCREEN</tt> will give a fixed-pitch font designed for
+computer i/o, it may match <tt>FL_COURIER</tt>. Avoid
+<tt>FL_SYMBOL</tt> and <tt>FL_ZAPF_DINGBATS</tt> for compatability
+with future versions of fltk.
 
 <ul>
 <li><tt>FL_HELVETICA</tt> (Ariel on Win32)
@@ -31,9 +38,9 @@ functions</a>.
 <li><tt>FL_TIMES_BOLD</tt>
 <li><tt>FL_TIMES_ITALIC</tt>
 <li><tt>FL_TIMES_BOLD_ITALIC</tt>
-<li><tt>FL_SYMBOL</tt>
 <li><tt>FL_SCREEN</tt> (Terminal style font)
 <li><tt>FL_SCREEN_BOLD</tt>
+<li><tt>FL_SYMBOL</tt>
 <li><tt>FL_ZAPF_DINGBATS</tt> (Wingdings font on Win32!)
 </ul>
 

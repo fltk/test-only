@@ -434,12 +434,45 @@ and may not be portable to some machines.
 <a name=when><h4>Fl_When Fl_Widget::when() const
 <br>void Fl_Widget::when(Fl_When)</h4></a>
 
-<tt>Fl_Widget::when()</tt> is a set of bitflags used by subclasses of <tt>
-Fl_Widget</tt> to decide when to do the callback.  If the value is zero 
-then the callback is never done.  Other values are described in the 
-individual widgets.  This field is in the base class so that you can 
-scan a panel and <tt>do_callback()</tt> on all the ones that don't do 
-their own callbacks in response to an &quot;OK&quot; button. 
+<tt>Fl_Widget::when()</tt> is a set of bitflags used by subclasses of
+<tt> Fl_Widget</tt> to decide when to do the callback. This field is
+in the base class so that you can scan a panel and
+<tt>do_callback()</tt> on all the ones that don't do their own
+callbacks in response to an &quot;OK&quot; button.
+
+<p>The following constants can be used, their exact meaning depends on
+the widget's implementation:
+
+<UL>
+
+<LI><TT>FL_WHEN_NEVER</TT> - Never call the callback (0). </LI>
+
+<LI><TT>FL_WHEN_CHANGED</TT> - Do the callback each time the widget's
+value is changed by the user (many callbacks may be done as the user
+drags the mouse)</LI>
+
+<LI><TT>FL_WHEN_RELEASE</TT> - Each keystroke that modifies the value,
+or when the mouse is released and the value has changed, causes the
+callback (some widgets do not implement this and act like
+<tt>FL_WHEN_CHANGED</tt>)</li>
+
+<LI><TT>FL_WHEN_RELEASE_ALWAYS</TT> - Each recognized keystroke and the mouse
+being released will cause the callback, even if the value did not
+change. (some widgets do not implement this and act like
+<tt>FL_WHEN_RELEASE</tt>)</li>
+
+<LI><TT>FL_WHEN_ENTER_KEY</TT> - Do the callback when the user presses
+the ENTER key and the value has chagned (used by <a
+href="Fl_Input.html">Fl_Input</a> and <a
+href="Fl_Browser.html">Fl_Browser</a>.</LI>
+
+<LI><TT>FL_WHEN_ENTER_KEY_ALWAYS</TT> - Do the callback when the user 
+presses the ENTER key, even if the value has not changed.</LI>
+
+<LI><TT>FL_WHEN_ENTER_KEY_CHANGED</TT> - Do the callback when the user 
+presses the ENTER key and each time the value changes.</li>
+
+</UL>
 
 <a name=default_callback><h4>static void Fl_Widget::default_callback(Fl_Widget*, void*)</h4></a>
 
@@ -527,15 +560,24 @@ value.  This determines how the label is printed next to or inside the
 widget.  The default value is <tt>FL_ALIGN_CENTER</tt>, which centers
 the label.  The value can be any of these constants or'd together:
 
-<ul>
-<li><tt>FL_ALIGN_CENTER</tt></li>
-<li><tt>FL_ALIGN_TOP</tt></li>
-<li><tt>FL_ALIGN_BOTTOM</tt></li>
-<li><tt>FL_ALIGN_LEFT</tt></li>
-<li><tt>FL_ALIGN_RIGHT</tt></li>
-<li><tt>FL_ALIGN_INSIDE</tt></li>
-<li><tt>FL_ALIGN_CLIP</tt></li>
-<li><tt>FL_ALIGN_WRAP</tt></li>
+<UL>
+<LI><TT>FL_ALIGN_CENTER</TT> - The label is centered (0). </LI>
+<LI><TT>FL_ALIGN_TOP</TT> - The label is top-aligned. </LI>
+<LI><TT>FL_ALIGN_BOTTOM</TT> - The label is bottom-aligned. </LI>
+<LI><TT>FL_ALIGN_LEFT</TT> - The label is left-aligned. </LI>
+<LI><TT>FL_ALIGN_RIGHT</TT> - The label is right-aligned. </LI>
+<LI><TT>FL_ALIGN_CLIP</TT> - The label is clipped to the widget. </LI>
+<LI><TT>FL_ALIGN_WRAP</TT> - The label text is wrapped as needed. </LI>
+<LI><TT>FL_ALIGN_TOP_LEFT</TT></LI>
+<LI><TT>FL_ALIGN_TOP_RIGHT</TT></LI>
+<LI><TT>FL_ALIGN_BOTTOM_LEFT</TT></LI>
+<LI><TT>FL_ALIGN_BOTTOM_RIGHT</TT></LI>
+<LI><TT>FL_ALIGN_LEFT_TOP</TT></LI>
+<LI><TT>FL_ALIGN_RIGHT_TOP</TT></LI>
+<LI><TT>FL_ALIGN_LEFT_BOTTOM</TT></LI>
+<LI><TT>FL_ALIGN_RIGHT_BOTTOM</TT></LI>
+<LI><TT>FL_ALIGN_INSIDE</TT> - 'or' this with other values to put
+label inside the widget. </LI>
 </ul>
 
 <h4><a name=visible>int Fl_Widget::visible() const</a>
@@ -708,6 +750,40 @@ MyClass::draw() {
 }
 </pre></ul>
 
+Fltk assigns meaning to the following bits in the damage:
+
+<ul>
+<li><tt>FL_DAMAGE_CHILD</tt> - A child of this group widget needs to
+be redrawn (non-group widgets can use this bit for their own purposes).</li>
+<li><tt>FL_DAMAGE_CHILD_LABEL</tt> - An outside label of this widget
+needs to be redrawn. This is handled (and this bit is cleared) by the
+parent group.</li>
+<li><tt>FL_DAMAGE_EXPOSE</tt> - Damage caused by <a
+href=Fl_Widget.html#expose><tt>expose()</tt></a> or by expose events
+from the operating system. If this and <tt>FL_DAMAGE_ALL</tt> is on
+the widget should draw every pixel inside it's region.
+<li><tt>FL_DAMAGE_ALL</tt> - This bit is set by <a
+href=Fl_Widget.html#redraw><tt>redraw()</tt></a> and indicates that
+all of the widget (but not "holes" where the background shows through)
+needs to be redraw.</li>
+</ul>
+
+To avoid collisions with the these and any other future assigned bit
+values, widgets should limit themselves to these predefined bits for
+managing their own damage. You can use the names if they are
+appropriate, or define your own symbols with the same values:
+
+<ul>
+<li><tt>FL_DAMAGE_VALUE</tt></li>
+<li><tt>FL_DAMAGE_PUSHED</tt></li>
+<li><tt>FL_DAMAGE_SCROLL</tt></li>
+<li><tt>FL_DAMAGE_OVERLAY</tt> Same value as <tt>FL_DAMAGE_SCROLL</tt>.
+<li><tt>FL_DAMAGE_HIGHLIGHT</tt></li>
+<li><tt>FL_DAMAGE_CONTENTS</tt> Same as <tt>FL_DAMAGE_EXPOSE</tt> but
+if <tt>FL_DAMAGE_ALL</tt> is off you can use this for your own
+purposes.</li>
+</ul>
+
 <a name=set_damage><h4>void Fl_Widget::set_damage(uchar c)</h4></a>
 
 Directly change the value returned by <a
@@ -736,6 +812,21 @@ MyClass::layout() {
   redraw();
 }
 </pre></ul>
+
+The following bit values are defined:
+
+<ul>
+<li><tt>FL_LAYOUT_X</tt> - x() changed by resize()</li>
+<li><tt>FL_LAYOUT_Y</tt> - y() changed by resize()</li>
+<li><tt>FL_LAYOUT_XY</tt> - same as <tt>FL_LAYOUT_X|FL_LAYOUT_Y</tt></li>
+<li><tt>FL_LAYOUT_W</tt> - w() changed by resize()</li>
+<li><tt>FL_LAYOUT_H</tt> - h() changed by resize()</li>
+<li><tt>FL_LAYOUT_WH</tt> - same as <tt>FL_LAYOUT_W|FL_LAYOUT_H</tt></li>
+<li><tt>FL_LAYOUT_XYWH</tt> - same as <tt>FL_LAYOUT_XY|FL_LAYOUT_WH</tt></li>
+<li><tt>FL_LAYOUT_CHILD</tt> - layout() needs to be called on a child
+of this group widget.</li>
+<li><tt>FL_LAYOUT_DAMAGE</tt> - relayout() was called.</li>
+</ul>
 
 <h4>void Fl_Widget::layout_damage(uchar c)</h4></a>
 

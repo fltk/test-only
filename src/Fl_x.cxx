@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.124 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.125 2002/04/02 08:33:32 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -250,6 +250,7 @@ Atom fl_XdndDrop;
 Atom fl_XdndStatus;
 Atom fl_XdndActionCopy;
 Atom fl_XdndFinished;
+Atom fl_textplain;
 //Atom fl_XdndProxy;
 
 extern "C" {
@@ -297,6 +298,7 @@ void fl_open_display(Display* d) {
   fl_XdndStatus         = XInternAtom(d, "XdndStatus",		0);
   fl_XdndActionCopy     = XInternAtom(d, "XdndActionCopy",	0);
   fl_XdndFinished       = XInternAtom(d, "XdndFinished",	0);
+  fl_textplain	      	= XInternAtom(d, "text/plain",		0);
   //fl_XdndProxy        = XInternAtom(d, "XdndProxy",		0);
 
   fl_screen = DefaultScreen(d);
@@ -417,6 +419,7 @@ void Fl::paste(Fl_Widget &receiver, bool clipboard) {
 
 Window fl_dnd_source_window;
 Atom *fl_dnd_source_types; // null-terminated list of data types being supplied
+Atom *fl_incoming_dnd_source_types;
 Atom fl_dnd_type;
 Atom fl_dnd_source_action;
 Atom fl_dnd_action;
@@ -540,6 +543,7 @@ bool fl_handle()
       return true;
 
     } else if (message == fl_XdndEnter) {
+      xmousewin = window;
       fl_dnd_source_window = data[0];
       // version number is data[1]>>24
       if (data[1]&1) {
@@ -551,25 +555,38 @@ bool fl_handle()
 			   &count, &remaining, &buffer);
 	if (actual != XA_ATOM || format != 32 || count<4 || !buffer)
 	  goto FAILED;
-	delete [] fl_dnd_source_types;
-	fl_dnd_source_types = new Atom[count+1];
+	delete [] fl_incoming_dnd_source_types;
+	fl_incoming_dnd_source_types = new Atom[count+1];
+	fl_dnd_source_types = fl_incoming_dnd_source_types;
 	for (unsigned i = 0; i < count; i++)
 	  fl_dnd_source_types[i] = ((Atom*)buffer)[i];
 	fl_dnd_source_types[count] = 0;
       } else {
       FAILED:
 	// less than four data types, or if the above messes up:
-	if (!fl_dnd_source_types) fl_dnd_source_types = new Atom[4];
+	if (!fl_incoming_dnd_source_types)
+	  fl_incoming_dnd_source_types = new Atom[4];
+	fl_dnd_source_types = fl_incoming_dnd_source_types;
 	fl_dnd_source_types[0] = data[2];
 	fl_dnd_source_types[1] = data[3];
 	fl_dnd_source_types[2] = data[4];
 	fl_dnd_source_types[3] = 0;
       }
-      fl_dnd_type = fl_dnd_source_types[0]; // should pick text or url
+#if 0 // print what types are being pasted:
+      for (int i = 0; fl_dnd_source_types[i]; i++) {
+	char* x = XGetAtomName(fl_display, fl_dnd_source_types[i]);
+	printf("source type of %s\n",x);
+	XFree(x);
+      }
+#endif
+      // This should return one of the fl_dnd_source_types but the values
+      // are a mess. It appears this works well:
+      fl_dnd_type = fl_textplain;
       event = FL_DND_ENTER;
       break;
 
     } else if (message == fl_XdndPosition) {
+      xmousewin = window;
       fl_dnd_source_window = data[0];
       Fl::e_x_root = data[2]>>16;
       Fl::e_y_root = data[2]&0xFFFF;
@@ -595,6 +612,7 @@ bool fl_handle()
       break;
 
     } else if (message == fl_XdndDrop) {
+      xmousewin = window;
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
       Window to_window = fl_xevent.xclient.window;
@@ -1318,5 +1336,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.124 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.125 2002/04/02 08:33:32 spitzak Exp $".
 //

@@ -205,46 +205,75 @@ window-&gt;icon((char*)p);</PRE></UL>
 
 The <tt>fl_dnd_*</tt> variables allow your fltk program to use the
 Xdnd protocol to manipulate files and interact with file managers. You
-can ignore these if you just want to open the dropped file or insert
-the filename into the user's text. Notice I have little information on
-how to use these, I just tried to clean up the Xlib interface and
-present the variables nicely.
-
-<a name=fl_dnd_action><h4>Atom fl_dnd_action</h4></a>
-
-<p><tt>fl_dnd_action</tt> is set by the program to indicate what it
-will do to the object. You must do this before returning non-zero for
-an <a href=events.html#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> event (due
-to oddities in the Xdnd design, it must be set in resonse to
-<tt>FL_DND_DRAG</tt> rather than <tt>FL_DND_RELEASE</tt>). Fltk
-presets it to <tt>XdndActionCopy</tt> if you don't set it.
-
-<a name=fl_dnd_source_action><h4>Atom fl_dnd_source_action</h4></a>
-
-The action the source program wants to perform, copy this to
-<tt>fl_dnd_action</tt> if you agree (?). Due to oddities in the Xdnd
-design this variable is not set until the first <a
-href=events.html#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> event, and it
-may change for each drag event.
+can ignore these if you just want to drag & drop blocks of text.  I
+have little information on how to use these, I just tried to clean up
+the Xlib interface and present the variables nicely.
 
 <a name=fl_dnd_source_window><h4>Window fl_dnd_source_window</h4></a>
 
-The id of the window being dragged from. Perhaps this can be used to
-find out more information about the source program?
+The id of the window being dragged from.
+
+<a name=fl_dnd_source_action><h4>Atom fl_dnd_source_action</h4></a>
+
+The action the source program wants to perform. Due to oddities in the
+Xdnd design this variable is <i>not</i> set on the <a
+href="events.html#FL_DND_ENTER"><tt>FL_DND_ENTER</tt></a> event,
+instead it is set on each <a
+href=events.html#FL_DND_DRAG><tt>FL_DND_DRAG</tt></a> event, and it
+may change each time.
+
+<p>To print the string value of the <tt>Atom</tt> use this code:
+
+<ul><pre>char* x = XGetAtomName(fl_display, fl_dnd_source_action);
+puts(x);
+XFree(x);</pre></ul>
+
+<p>You can set this before calling <a
+href="Fl.html#dnd"><tt>Fl::dnd()</tt></a> to communicate a different
+action. See <a
+href=#fl_dnd_source_types><tt>fl_dnd_source_types</tt></a>, which you
+must also set.
+
+<a name=fl_dnd_action><h4>Atom fl_dnd_action</h4></a>
+
+The program can set this before returning non-zero for an <a
+href="events.html#FL_DND_DRAG"><tt>FL_DND_DRAG</tt></a> event to
+indicate what it will do to the object. Fltk presets this to
+<tt>XdndActionCopy</tt> so that is returned if you don't set it.
 
 <a name=fl_dnd_source_types><h4>Atom *fl_dnd_source_types</h4></a>
 
 Zero-terminated list of atoms describing the formats of the source
-data. Any value you put in <tt>fl_dnd_type</tt> must be one of these.
+data. This is set on the <a
+href="events.html#FL_DND_ENTER"><tt>FL_DND_ENTER</tt></a> event.  The
+following code will print them all as text, a typical value is
+<tt>"text/plain;charset=UTF-8"</tt> (gag).
+
+<ul><pre>for (int i = 0; fl_dnd_source_types[i]; i++) {
+  char* x = XGetAtomName(fl_display, fl_dnd_source_types[i]);
+  puts(x);
+  XFree(x);
+}</pre></ul>
+
+<p>You can set this and <a
+href=#fl_dnd_source_action><tt>fl_dnd_source_action</tt></a> before calling <a
+href="Fl.html#dnd"><tt>Fl::dnd()</tt></a> to change information about
+the source. You must set both of these, if you don't fltk will default
+to <tt>"text/plain"</tt> as the type and <tt>XdndActionCopy</tt> as
+the action. To set this change it to point at your own array. Only the
+first 3 types are sent. Also, fltk has no support for reporting back
+what type the target requested, so all your types must use the same
+block of data.
 
 <a name=fl_dnd_type><h4>Atom fl_dnd_type</h4></a>
 
-You can set this when responding to a <a
-href=events.html#FL_DND_RELEASE><tt>FL_DND_RELEASE</tt></a> event to
-indicate the translation wanted. In my opinion this is not needed as
-it appears that all modern drag & drop is of URL's, not data. Fltk
-defaults this to <tt>fl_dnd_source_types[0]</tt>, which seems to
-work...
+The program can set this when returning non-zero for an <a
+href="events.html#FL_DND_RELEASE"><tt>FL_DND_RELEASE</tt></a> event to
+indicate the translation wanted. Fltk presets this to
+<tt>"text/plain"</tt> so that is returned if you don't set it
+(supposedly it should be limited to one of the
+values in <tt>fl_dnd_source_types</tt>, but <tt>"text/plain"</tt>
+appears to always work).
 
 <a name=windows><h3>Using a Subclass of Fl_Window for Special X Stuff</h3></a>
 

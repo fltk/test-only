@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.7 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: x.h,v 1.8 2002/04/02 08:33:31 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -83,6 +83,15 @@ extern FL_API bool	fl_handle();
 
 // set by last fl_xevent with a timestamp:
 extern FL_API ulong	fl_event_time;
+
+////////////////////////////////////////////////////////////////
+// DnD:
+
+extern FL_API Window fl_dnd_source_window;
+extern FL_API Atom *fl_dnd_source_types;
+extern FL_API Atom fl_dnd_type;
+extern FL_API Atom fl_dnd_source_action;
+extern FL_API Atom fl_dnd_action;
 
 ////////////////////////////////////////////////////////////////
 // drawing functions:
@@ -190,5 +199,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.7 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: x.h,v 1.8 2002/04/02 08:33:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.59 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.60 2002/04/02 08:33:32 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -119,6 +119,7 @@ int Fl_Input::expandpos(
 static Fl_Input* erase_cursor_only;
 
 void Fl_Input::minimal_update(int p) {
+  if (erase_cursor_only == this) erase_cursor_only = 0;
   if (damage() & FL_DAMAGE_ALL) return; // don't waste time if it won't be done
   if (damage() & FL_DAMAGE_VALUE) {
     if (p < mu_p) mu_p = p;
@@ -126,7 +127,6 @@ void Fl_Input::minimal_update(int p) {
     mu_p = p;
   }
   redraw(FL_DAMAGE_VALUE);
-  if (erase_cursor_only == this) erase_cursor_only = 0;
 }
 
 void Fl_Input::minimal_update(int p, int q) {
@@ -134,17 +134,14 @@ void Fl_Input::minimal_update(int p, int q) {
   minimal_update(p);
 }
 
-// Minimal update for the cursor / focus turning on or off:
-void Fl_Input::update_cursor(bool show) {
-  if (mark_ != position_) {
-    // toggle the selection area on/off
-    minimal_update(mark_, position_);
-  } else if (show) {
-    // cause it to draw the cursor next time
-    minimal_update(size()+1);
-  } else if (!(damage()&FL_DAMAGE_VALUE)) {
-    // cause next draw to do minimal erase of cursor, if no other damage:
-    minimal_update(position_); erase_cursor_only = this;
+// Erase a cursor that was drawn at the given point and possibly draw new one:
+void Fl_Input::erase_cursor_at(int p) {
+  if (!damage()) {
+    mu_p = p;
+    redraw(FL_DAMAGE_VALUE);
+    erase_cursor_only = this;
+  } else {
+    minimal_update(p);
   }
 }
 
@@ -153,6 +150,7 @@ void Fl_Input::update_cursor(bool show) {
 static double up_down_pos;
 static bool was_up_down;
 static Fl_Input* dnd_target;
+static int dnd_target_position;
 
 void Fl_Input::setfont() const {
   fl_font(text_font(), text_size());
@@ -193,18 +191,19 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 {
 
   Fl_Color background = color();
-  bool show_cursor = this==dnd_target || focused();
-  bool erase_cursor_only = this == ::erase_cursor_only;
+  bool erase_cursor_only =
+    this == ::erase_cursor_only &&
+    !(damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE));
 
   // handle a totally blank one quickly:
-  if (!show_cursor && !size()) {
+  if (!size() && !focused() && this != dnd_target) {
     fl_color(background);
     fl_rectf(X, Y, W, H);
     return;
   }
 
   int selstart, selend;
-  if (!show_cursor && !pushed())
+  if (!focused() && !pushed())
     selstart = selend = 0;
   else if (position() <= mark()) {
     selstart = position(); selend = mark();
@@ -224,10 +223,11 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   int desc = line_descent();
   int lines;
   int curx, cury;
+  int cursor_position = (this==dnd_target) ? dnd_target_position : position();
   for (p=value(), curx=cury=lines=0; ;) {
     e = expand(p, buf, wordwrap);
-    if (position() >= p-value() && position() <= e-value()) {
-      curx = expandpos(p, value()+position(), buf, 0);
+    if (cursor_position >= p-value() && cursor_position <= e-value()) {
+      curx = expandpos(p, value()+cursor_position, buf, 0);
       if (focused() && !was_up_down) up_down_pos = curx;
       cury = lines*height;
       int newscroll = xscroll_;
@@ -351,8 +351,8 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   CONTINUE2:
     // draw the cursor:
-    if (show_cursor && selstart == selend &&
-	position() >= p-value() && position() <= e-value()) {
+    if ((this==dnd_target || focused() && selstart == selend) &&
+	cursor_position >= p-value() && cursor_position <= e-value()) {
       fl_color(textcolor);
       fl_rectf(xpos+curx, Y+ypos, 2, height);
     }
@@ -497,8 +497,8 @@ void Fl_Input::position(int p, int m) {
     if (m != mark_) minimal_update(mark_, m);
   } else {
     // new position is a cursor:
-    minimal_update(position_, mark_);
-    if (position_ == mark_) erase_cursor_only = this;
+    if (position_ == mark_) erase_cursor_at(position_);
+    else minimal_update(position_, mark_);
   }
   position_ = p;
   mark_ = m;
@@ -698,7 +698,6 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
 {
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
-  //show_cursor_ = 0;
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;
@@ -1007,10 +1006,9 @@ int Fl_Input::handle(int event) {
 // set this to 1 to get the ability to drag selected text out to other
 // widgets, like some IDEs do. This appears to mostly be a pain because
 // you cannot select a region inside the current region.
-#define DND_OUT 0
+#define DND_OUT 1
 
 int Fl_Input::handle(int event, int X, int Y, int W, int H) {
-  static int dnd_save_position, dnd_save_mark;
 #if DND_OUT
   static int drag_start;
 #endif
@@ -1052,11 +1050,17 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       position(position(), mark());
     }
 #endif
-    update_cursor(true);
+    // redraw the highlight area:
+    if (mark_ != position_) minimal_update(mark_, position_);
+    // else just make the cursor appear:
+    else minimal_update(size()+1);
     return 2; // returns 2 to make Fl_Group think it really important
 
   case FL_UNFOCUS:
-    update_cursor(false);
+    // redraw the highlight area:
+    if (mark_ != position_) minimal_update(mark_, position_);
+    // else make the cursor disappear:
+    else erase_cursor_at(position_);
   case FL_HIDE:
     if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
@@ -1160,48 +1164,37 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 
   case FL_DND_ENTER:
     Fl::belowmouse(this); // send the leave events first
-#if !DND_OUT
-    dnd_target = this;
-    dnd_save_position = position();
-    dnd_save_mark = mark();
-    update_cursor(true);
-#endif
     // fall through:
   case FL_DND_DRAG: {
     int p = mouse_position(X, Y, W, H);
 #if DND_OUT
     // detect if they are dropping atop the original selection:
-    if (focused()) {
+    if (focused() &&
+	(p >= position() && p < mark() || p >= mark() && p < position())) {
       if (dnd_target == this) {
-	if (p>=dnd_save_position && p<dnd_save_mark ||
-	    p>=dnd_save_mark && p<dnd_save_position) {
-	  dnd_target = 0;
-	  position(dnd_save_position, dnd_save_mark);
-	  return 0;
-	}
-      } else {
-	if (p >= position() && p < mark() ||
-	    p >= mark() && p < position())
-	  return 0;
+	dnd_target = 0;
+	erase_cursor_at(dnd_target_position);
       }
-    }
-    if (dnd_target != this) {
-      dnd_target = this;
-      dnd_save_position = position();
-      dnd_save_mark = mark();
-      update_cursor(true);
+      return 0;
     }
 #endif
-    position(p);}
-    return 1;
+    if (dnd_target != this) {
+      dnd_target = this;
+      dnd_target_position = p;
+      minimal_update(size()+1); // turn on the cursor
+    } else if (dnd_target_position != p) {
+      erase_cursor_at(dnd_target_position);
+      dnd_target_position = p;
+      minimal_update(size()+1); // turn on the cursor
+    }
+    return 1;}
 
   case FL_DND_LEAVE:
 #if DND_OUT
-    if (dnd_target != this) return 0;
+    if (dnd_target != this) {minimal_update(0); return 0;}
 #endif
+    erase_cursor_at(dnd_target_position);
     dnd_target = 0;
-    position(dnd_save_position, dnd_save_mark);
-    update_cursor(false);
     return 1;
 
   case FL_DND_RELEASE:
@@ -1209,15 +1202,19 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     if (dnd_target != this) return 0;
 #endif
     dnd_target = 0;
+    position(dnd_target_position);
     take_focus();
     return 1;
 
   case FL_PASTE: {
-    // strip trailing control characters and spaces before pasting:
     const char* t = Fl::event_text();
-    const char* e = t+Fl::event_length();
-    if (type()<MULTILINE) while (e > t && *(uchar*)(e-1) <= ' ') e--;
-    return replace(position(), mark(), t, e-t);}
+    int n = Fl::event_length();
+    // strip trailing nulls:
+    while (n > 0 && !t[n-1]) n--;
+    // strip all trailing control & whitespace for single-line inputs:
+    if (type() < MULTILINE)
+      while (n > 0 && ((unsigned char*)t)[n-1] <= ' ') n--;
+    return replace(position(), mark(), t, n);}
 
   default:
     return 0;
@@ -1225,5 +1222,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.59 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.60 2002/04/02 08:33:32 spitzak Exp $".
 //

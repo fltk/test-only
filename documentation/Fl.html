@@ -31,6 +31,7 @@ older C++ compilers that do not handle namespaces.
 </td><td align=left valign=top>
 <ul>
 <li><a href="#display">display</a></li>
+<li><a href="#dnd">dnd</a></li>
 <li><a href="#error">error</a></li>
 <li><a href="#event">event</a></li>
 <li><a href="#event_button">event_button</a></li>
@@ -43,10 +44,10 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#event_length">event_length</a></li>
 <li><a href="#event_state">event_state</a></li>
 <li><a href="#event_text">event_text</a></li>
-<li><a href="#event_x">event_x</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href="#event_x">event_x</a></li>
 <li><a href="#event_x_root">event_x_root</a></li>
 <li><a href="#event_y">event_y</a></li>
 <li><a href="#event_y_root">event_y_root</a></li>
@@ -60,10 +61,10 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#gl_visual">gl_visual</a></li>
 <li><a href="#has_check">has_check</a></li>
 <li><a href="#has_idle">has_idle</a></li>
-<li><a href="#has_timeout">has_timeout</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
+<li><a href="#has_timeout">has_timeout</a></li>
 <li><a href="#help">help</a></li>
 <li><a href="#info">info</a></li>
 <li><a href="#key_name">key_name</a></li>
@@ -109,21 +110,21 @@ the <a href="utility.html">Utility</a> appendix.
 
 Returns the version number of fltk. This can be compared to the value
 of the <tt>FL_VERSION</tt> macro to see if the shared library of fltk your
-program linked with is up to date. The current version is 2.0001 and
-is of the form M.mmpp where M is the major number (2), mm is the minor
-number, and pp is the patch number.
+program linked with is up to date.
 
-<a name="arg"><h4>int Fl::arg(int argc, char **argv, int &amp;i)</h4></a>
+<p>The FLTK version number is stored in a number of compile-time 
+constants: 
 
-Consume a single switch from <tt>argv</tt>, starting at word i. 
-Returns the number of words eaten (1 or 2, or 0 if it is not 
-recognized) and adds the same value to <tt>i</tt>.  You can use this 
-function if you prefer to control the incrementing through the 
-arguments yourself. 
+<ul>
+<li><tt>FL_MAJOR_VERSION</tt> - The major release number, currently 2.</li>
+<li><tt>FL_MINOR_VERSION</tt> - The minor release number, currently 0.</li>
+<li><tt>FL_PATCH_VERSION</tt> - The patch release number, currently 1.</li>
+<li><tt>FL_VERSION</tt> - A combined floating-point version number
+of the form M.mmpp where M is the major number, mm is the minor
+number, and pp is the patch number, currently 2.0001. </li>
+</ul>
 
-<a name="args"><h4>int Fl::args(int argc, char **argv, int &amp;i, int 
-(*callback)(int, char**,int &amp;)=0)
-<br>void Fl::args(int argc, char **argv)</h4></a>
+<a name="args"><h4>int Fl::args(int argc, char **argv, int &amp;i, int (*callback)(int, char**,int &amp;)=0)</h4></a>
 
 FLTK provides an <I>entirely optional</I> command-line switch parser. 
 You don't have to call it if you don't like them! Everything it can do 
@@ -203,9 +204,20 @@ name a file the theme reads.
 
 </ul>
 
-The second form of <tt>Fl::args()</tt> is useful if your program does 
-not have command line switches of its own.  It parses all the switches, 
-and if any are not recognized it calls <a href="#abort"><tt>Fl::abort(Fl::help)</tt></a>. 
+<h4>void Fl::args(int argc, char **argv)</h4>
+
+The second form of <tt>Fl::args()</tt> is useful if your program does
+not have command line switches of its own.  It parses all the
+switches, and if any are not recognized it calls <a
+href="#abort"><tt>Fl::abort(Fl::help)</tt></a>.
+
+<a name="arg"><h4>int Fl::arg(int argc, char **argv, int &amp;i)</h4></a>
+
+Consume a single switch from <tt>argv</tt>, starting at word i. 
+Returns the number of words eaten (1 or 2, or 0 if it is not 
+recognized) and adds the same value to <tt>i</tt>.  You can use this 
+function if you prefer to control the incrementing through the 
+arguments yourself. 
 
 <a name="help"><h4>const char* const Fl::help;</h4></a>
 
@@ -267,7 +279,7 @@ drawing to work. Doing this on X will reduce colormap flashing at the
 edges of <a href="Fl_Gl_Window.html"><tt>Fl_Gl_Window</tt></a>s when
 they are inside regular windows.
 
-<p>See <a href="Fl_Gl_Window.html#Fl_Gl_Window.mode"><tt>Fl_Gl_Window</tt></a>
+<p>See <a href="Fl_Gl_Window.html#mode"><tt>Fl_Gl_Window</tt></a>
 for a list of additional values for the argument.</p>
 
 <p><i>This function seems to have been renamed</i> <tt>fl_gl_visual(int)</tt>.
@@ -506,21 +518,24 @@ callback that does not exist.
 <br>void Fl::add_fd(int fd, int when, void (*cb)(int, void*), void* = 0)</h4></a>
 
 Add file descriptor <tt>fd</tt> to listen to.  When the <tt>fd</tt>
-becomes ready for reading <a href="#wait"><tt>Fl::wait()</tt></a> will call the callback
-and then return.  The callback is
-passed the <tt>fd</tt> and the arbitrary <tt>void*</tt> argument.
+becomes ready for reading <a href="#wait"><tt>Fl::wait()</tt></a> will
+call the callback and then return.  The callback is passed the
+<tt>fd</tt> and the arbitrary <tt>void*</tt> argument.
 
-<P>The second version takes a <tt>when</tt> bitfield, with the bits
-<tt>FL_READ</tt>, <tt>FL_WRITE</tt>, and <tt>FL_EXCEPT</tt> defined,
-to indicate when the callback should be done. Using this you can
-register a different callback for each event. What happens if you make
-multiple callbacks for the same <i>fd</i> that share <i>when</i> bits
-is undefined.
+<P>The second version takes a <tt>when</tt> bitfield to indicate when
+the callback should be done. You can or these together to make the
+callback be called for multiple conditions:
 
-<P>Under UNIX <I>any</I> file descriptor can be monitored (files,
+<ul>
+<li><tt>FL_READ</tt> - Call the callback when there is data to be read.</li>
+<li><tt>FL_WRITE</tt> - Call the callback when data can be written without blocking.</li>
+<li><tt>FL_EXCEPT</tt> - Call the callback if an exception occurs on the file.</li>
+</ul>
+
+<p>Under UNIX <i>any</i> file descriptor can be monitored (files,
 devices, pipes, sockets, etc.) Due to limitations in Microsoft
-Windows, WIN32 applications can only monitor sockets (? and the
-<i>when</i> value is ignored?)
+Windows, WIN32 applications can only monitor sockets (? and is the
+<i>when</i> value ignored?)
 
 <a name="remove_fd"><h4>void Fl::remove_fd(int fd, int when = -1)</h4></a>
 
@@ -667,9 +682,14 @@ time and position are inaccessible.
 
 <a name="event_button"><h4>int Fl::event_button()</h4></a>
 
-Returns which mouse button was last pushed. The left button is 1, the
-middle is 2, the right is 3. <tt>FL_KEY</tt> events set this to other
-other values.
+Returns which mouse button was last pushed or released. You can use
+numerical constants or these values:
+
+<ul>
+<li><tt>FL_LEFT_MOUSE</tt> 1</li>
+<li><tt>FL_MIDDLE_MOUSE</tt> 2</li>
+<li><tt>FL_RIGHT_MOUSE</tt> 3</li>
+</ul>
 
 <a name="event_state"><h4>ulong Fl::event_state()
 <br>bool Fl::event_state(ulong)</h4></a>
@@ -679,18 +699,20 @@ were held down during the most recent event.  The second version
 returns true if any of the passed bits are turned on.  The legal 
 bits are: 
 
-<ul>
-<li><tt>FL_SHIFT</tt></li>
-<li><tt>FL_CAPS_LOCK</tt></li>
-<li><tt>FL_CTRL</tt></li>
-<li><tt>FL_ALT</tt></li>
-<li><tt>FL_NUM_LOCK</tt></li>
-<li><tt>FL_WIN</tt></li>
-<li><tt>FL_SCROLL_LOCK</tt></li>
-<li><tt>FL_BUTTON1</tt></li>
-<li><tt>FL_BUTTON2</tt></li>
-<li><tt>FL_BUTTON3</tt></li>
-</ul>
+<UL>
+<LI><TT>FL_SHIFT</TT> - One of the shift keys is down. </LI>
+<LI><TT>FL_CAPS_LOCK</TT> - The caps lock is on. </LI>
+<LI><TT>FL_CTRL</TT> - One of the ctrl keys is down. </LI>
+<LI><TT>FL_ALT</TT> - One of the alt keys is down. </LI>
+<LI><TT>FL_NUM_LOCK</TT> - The num lock is on. </LI>
+<LI><TT>FL_WIN</TT> - One of the Windows keys is down. </LI>
+<LI><TT>FL_SCROLL_LOCK</TT> - The scroll lock is on. </LI>
+<LI><TT>FL_BUTTON1</TT> - Mouse button 1 is pushed. </LI>
+<LI><TT>FL_BUTTON2</TT> - Mouse button 2 is pushed. </LI>
+<LI><TT>FL_BUTTON3</TT> - Mouse button 3 is pushed. </LI>
+<LI><TT>FL_BUTTONS</TT> - Any mouse button is pushed. </LI>
+<LI><TT>FL_BUTTON(n)</TT> - Mouse button n is pushed. </LI>
+</UL>
 
 X servers do not agree on shift states, so FL_NUM_LOCK, FL_WIN, and
 FL_SCROLL_LOCK may not work.  The values were selected to match the
@@ -712,38 +734,61 @@ on the keyboard:</p>
 
 <ul>
 
-<li>All keys on the main keyboard producing a printable ASCII
+<li><tt>'a'</tt> through <tt>'z'</tt>,
+<tt>'0'</tt> through <tt>'9'</tt>,
+<tt>'`'</tt>,
+<tt>'-'</tt>,
+<tt>'='</tt>,
+<tt>'['</tt>,
+<tt>']'</tt>,
+<tt>'\\'</tt>,
+<tt>';'</tt>,
+<tt>'\''</tt>,
+<tt>','</tt>,
+<tt>'.'</tt>,
+<tt>'/'</tt> -
+All keys on the main keyboard producing a printable ASCII
 character use the value of that ASCII character (as though shift,
-ctrl, and caps lock were not on). The A key is <tt>'a'</tt>, the space
-bar is 32.</li>
+ctrl, and caps lock were not on).
 
-<li>All keys on the numeric keypad producing a printable ASCII
-character produce <tt>FL_KP(c)</tt> where c is the character. This is
-the same as <tt>FL_KP(0)+c</tt> so you can retrieve the ascii
-character by subtracting <tt>FL_KP(0)</tt>. To see if a key is on the
-keypad check <tt>key&gt;=FL_KP(0) &amp;&amp; key&lt;=FL_KP_Last</tt>.
-
-<li>All numbered function keys produce <tt>FL_F(n)</tt> where n is the
-number of the key. This is the same as <tt>FL_F(0)+n</tt> so you can
-get the function key number by subtracting <tt>FL_F(0)</tt>. To see if
-a key is a function key, check <tt>key&gt;=FL_F(0) &amp;&amp;
-key&lt;=FL_F_Last</tt>.
-
-<li>All other keys on a US 101-keyboard have a symbol.  Be
-careful not to confuse these with the very similar, but all-caps, 
-symbols used by <a href="#event_state"><tt>Fl::event_state()</tt></a>
-
-<ul><tt>FL_Escape<br> FL_BackSpace<br>FL_Tab<br> FL_Enter<br>
-FL_Print<br> FL_Scroll_Lock<br> FL_Pause<br> FL_Insert<br> FL_Home<br>
-FL_Page_Up<br> FL_Delete<br> FL_End<br> FL_Page_Down<br> FL_Left<br>
-FL_Up<br> FL_Right<br> FL_Down<br> FL_Shift_L<br> FL_Shift_R<br>
-FL_Control_L<br> FL_Control_R<br> FL_Caps_Lock<br> FL_Alt_L<br>
-FL_Alt_R<br> FL_Win_L<br> FL_Win_R<br> FL_Menu<br> FL_Num_Lock<br>
-FL_KP_Enter</tt></ul>
-
+<li><tt>Fl_Space</tt> - The space key, same as <tt>'&nbsp;'</tt> or 32.
+<li><tt>FL_BackSpace</tt> - The backspace key.</li>
+<li><tt>FL_Tab</tt> - The tab key.</li>
+<li><tt>FL_Enter</tt> - The enter key.</li>
+<li><tt>FL_Pause</tt> - The pause key.</li>
+<li><tt>FL_Scroll_Lock</tt> - The scroll lock key.</li>
+<li><tt>FL_Escape</tt> - The escape key.</li>
+<li><tt>FL_Home</tt> - The home key.</li>
+<li><tt>FL_Left</tt> - The left arrow key.</li>
+<li><tt>FL_Up</tt> - The up arrow key.</li>
+<li><tt>FL_Right</tt> - The right arrow key.</li>
+<li><tt>FL_Down</tt> - The down arrow key.</li>
+<li><tt>FL_Page_Up</tt> - The page-up key.</li>
+<li><tt>FL_Page_Down</tt> - The page-down key.</li>
+<li><tt>FL_End</tt> - The end key.</li>
+<li><tt>FL_Print</tt> - The print (or print-screen) key.</li>
+<li><tt>FL_Insert</tt> - The insert key.</li>
+<li><tt>FL_Menu</tt> - The menu key.</li>
+<li><tt>FL_Num_Lock</tt> - The num lock key.</li>
+<li><tt>FL_KP(c)</tt> - One of the keypad numbers, for instance
+<tt>FL_KP('5')</tt> is the 5 key</li>
+<li><tt>FL_KP_Enter</tt> - Same as <tt>FL_KP('\r')</tt>, the enter key on the keypad.</li>
+<li><tt>FL_KP_Last</tt> - All keypad keys are in the range <tt>FL_KP(0),FL_KP_Last</tt></li>
+<li><tt>FL_F(n)</tt> - A numbered function key, for instance
+<tt>FL_F(2)</tt> is the F2 key.</li>
+<li><tt>FL_F_Last</tt> - All function keys are in the range <tt>FL_F(0),FL_F_Last</tt></li>
+<li><tt>FL_Shift_L</tt> - The lefthand shift key.</li>
+<li><tt>FL_Shift_R</tt> - The righthand shift key.</li>
+<li><tt>FL_Control_L</tt> - The lefthand control key.</li>
+<li><tt>FL_Control_R</tt> - The righthand control key.</li>
+<li><tt>FL_Caps_Lock</tt> - The caps lock key.</li>
+<li><tt>FL_Alt_L</tt> - The left alt key.</li>
+<li><tt>FL_Alt_R</tt> - The right alt key.</li>
+<li><tt>FL_Win_L</tt> - The left Windows key.</li>
+<li><tt>FL_Win_R</tt> - The right Windows key.</li>
+<li><tt>FL_Delete</tt> - The delete key.</li>
 <li>On X systems any unrecognized keys are reported as their X keysym
-value.
-
+value.</li>
 </ul>
 
 <a name="event_key_state"><h4>bool Fl::event_key_state(int key)</h4></a>
@@ -794,8 +839,8 @@ href="Fl_Widget.html#test_shortcut"><tt>Fl_Widget::test_shortcut()</tt></a>.
 Unparse a key name (as returned by <a
 href="#event_key"><tt>Fl::event_key()</tt></a>) or a shortcut value (as
 used by <a href="Fl_Button.html#shortcut">
-<TT>Fl_Button</TT></a> or <a href="Fl_Menu_Item.html#Fl_Menu_Item"><TT>
-Fl_Menu_Item</TT></a>) into a human-readable string like "Alt+N".  If
+<tt>Fl_Button</tt></a> or <a href="Fl_Menu_Item.html#Fl_Menu_Item"><tt>
+Fl_Menu_Item</tt></a>) into a human-readable string like "Alt+N".  If
 the shortcut is zero an empty string is returned. <i>The return value
 points at a static buffer that is overwritten with each call.</i>
 
@@ -922,6 +967,8 @@ focus or if the widgets accept the focus. You may want to use <a
 href="Fl_Widget.html#take_focus">Fl_Widget::take_focus()</a> instead, it
 will test first.
 
+<h2>Copy, Paste, and Drag &amp; Drop</h2>
+
 <a name="copy"><h4>void Fl::copy(const char *stuff, int len, bool clipboard=false)</h4></a>
 
 Change the current selection.  The block of text is 
@@ -947,10 +994,12 @@ of this.</I>
 
 <a name="paste"><h4>void Fl::paste(Fl_Widget *receiver, bool clipboard = false)</h4></a>
 
-Cause an <a href="events.html#FL_PASTE"><tt>FL_PASTE</tt></a> event to be
-sent to the <i>receiver</i> with the contents of the current selection
-in the <a href="#event_text"><tt>Fl::event_text()</tt></a>. The
-selection can be set by <a href="#copy"><tt>Fl::copy()</tt></a>.
+This is what a widget does when a "paste" command (like Ctrl+V or the
+middle mouse click) is done to it.  Cause an <a
+href="events.html#FL_PASTE"><tt>FL_PASTE</tt></a> event to be sent to
+the <i>receiver</i> with the contents of the current selection in the
+<a href="#event_text"><tt>Fl::event_text()</tt></a>. The selection can
+be set by <a href="#copy"><tt>Fl::copy()</tt></a>.
 
 <p>There are actually two buffers. If <i>clipboard</i> is true then
 the text is from the user-visible selection that is moved around
@@ -964,6 +1013,17 @@ this, or for it to happen <I>later</I>, or possibly <I>not at all</I>.
 This allows the window system to take as long as necessary to retrieve
 the paste buffer (or even to screw up completely) without complex and
 error-prone synchronization code most toolkits require.
+
+<a name="dnd"><h4>bool Fl::dnd()</h4></a>
+
+Drag and drop the data set by the most recent <a
+href="#copy"><tt>Fl::copy()</tt></a> (with the <i>clipboard</i>
+argument false). Returns true if the data was dropped on something
+that accepted it.
+
+<p>By default only blocks of text are dragged. You can use <a
+href="x.html#dnd">system-specific variables</a> to change the type of
+data.
 
 <h2>Multithreading</h2>
 

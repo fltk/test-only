@@ -2151,3 +2151,24 @@ On X, if you use size_range() on a window but don't set resizable(),
 calling resize() would destroy the size_range() settings. This no
 longer does this, it only messes with it for non-resizable windows.
 
+Tooltips fixed up to work like most other toolkits (dragging between
+several widgets with tooltips will instantly display the new tooltip
+if the first one was put up).
+
+////////////////////////////////////////////////////////////////
+
+Removed enumerations chapter from manual, put the remaining info from
+that next to the calls that use it. Added FL_Space (for space key) and
+fixed FL_KP_Last value.
+
+Turned on DnD from Fl_Input and Fl_Text_Editor/Fl_Text_Display.
+Drag-in for Fl_Text_Editor not yet implemented.
+
+Some fixes to X DND to work better with KDE. Now previews whether a
+drop is going to work or not, and defaults the type to "text/plain"
+which makes filenames and other stuff come in better. Dragging inside
+the same fltk application looks the same to the widget as drags from
+outside (the types and action are set). You can preset the types and
+action before calling fl_dnd() to allow drag-out of other data
+(changing the data based on the requested type is not supported,
+however).

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.19 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.20 2002/04/02 08:33:32 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1872,11 +1872,6 @@ void fl_text_drag_me(int pos, Fl_Text_Display* d) {
 
 int Fl_Text_Display::handle(int event) {
   if (!buffer()) return 0;
-  // This isn't very elegant!
-  if (!Fl::event_inside(text_area.x, text_area.y, text_area.w, text_area.h)
-      && !dragging) {
-    return Fl_Group::handle(event);
-  }
 
   switch (event) {
 
@@ -1889,12 +1884,20 @@ int Fl_Text_Display::handle(int event) {
       return 1;
 
     case FL_PUSH: {
+        // handle clicks in the scrollbars:
+        if (!Fl::event_inside(text_area.x,text_area.y,text_area.w,text_area.h))
+	  return Fl_Group::handle(event);
         take_focus();
         if (Fl::event_state()&FL_SHIFT) return handle(FL_DRAG);
         dragging = 1;
         int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
         dragType = Fl::event_clicks();
         dragPos = pos;
+	// See if maybe they are starting to do drag & drop:
+	if (!dragType && in_selection(Fl::event_x(), Fl::event_y())) {
+	  dragType = -1;
+	  return 1;
+	}
         if (dragType == DRAG_CHAR)
           buffer()->unselect();
         else if (dragType == DRAG_WORD)
@@ -1911,7 +1914,20 @@ int Fl_Text_Display::handle(int event) {
       }
 
     case FL_DRAG: {
-        if (dragType < 0) return 1;
+        if (dragType < 0) { // possibly starting drag & drop
+	  // wait until we are pretty sure they are dragging:
+	  if (Fl::event_is_click()) return 1;
+	  dragType = 0;
+	  // drag:
+	  const char* copy = buffer()->selection_text();
+	  if (*copy) {
+	    Fl::copy(copy, strlen(copy), false);
+	    free((void*)copy);
+	    Fl::dnd();
+	    return 1;
+	  }
+	  free((void*)copy);
+	}
         int X = Fl::event_x(), Y = Fl::event_y(), pos;
         if (Y < text_area.y) {
           move_up();
@@ -1925,8 +1941,13 @@ int Fl_Text_Display::handle(int event) {
       }
 
     case FL_RELEASE: {
-        dragging = 0;
-
+        // if they just clicked inside the selection, put the cursor there
+        if (dragType < 0) {
+          buffer()->unselect();
+          insert_position(dragPos);
+	  show_insert_position();
+	  dragType = 0;
+	}
         // convert from WORD or LINE selection to CHAR
         if (insert_position() >= dragPos)
           dragPos = buffer()->primary_selection()->start();
@@ -1961,5 +1982,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.19 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.20 2002/04/02 08:33:32 spitzak Exp $".
 //
