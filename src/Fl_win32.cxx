@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.37 1999/06/15 17:02:32 gustavo Exp $"
+// "$Id: Fl_win32.cxx,v 1.38 1999/06/17 22:41:05 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -583,12 +583,13 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
+// CET - FIXME - Gustavo, please fix this!
 void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
-  int is_a_resize = (W != w() || H != h());
+  int is_a_resize = (ow() != w() || oh() != h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
-  if (X != x() || Y != y()) set_flag(FL_FORCE_POSITION);
+  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
     else {if (!is_a_resize) {Fl_Widget::layout();return;} flags |= SWP_NOMOVE;}
   if (is_a_resize) {
     Fl_Group::layout();
@@ -598,6 +599,7 @@ void Fl_Window::layout() {
     flags |= SWP_NOSIZE;
   }
   if (resize_from_program && shown()) {
+/* CET - FIXME - Gustavo, please fix this!
     int dummy, bt, bx, by;
     //Ignore window managing when resizing, so that windows (and more
     //specifically menus) can be moved offscreen.
@@ -607,7 +609,8 @@ void Fl_Window::layout() {
       W += 2*bx;
       H += 2*by+bt;
     }
-    SetWindowPos(i->xid, 0, X, Y, W, H, flags);
+*/
+    SetWindowPos(i->xid, 0, ox(), oy(), ow(), oh(), flags);
   }
 }
 
@@ -907,5 +910,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.37 1999/06/15 17:02:32 gustavo Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.38 1999/06/17 22:41:05 carl Exp $".
 //
