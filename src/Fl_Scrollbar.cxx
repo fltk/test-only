@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.20 1999/11/01 02:21:35 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.21 1999/11/03 09:18:32 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -43,6 +43,7 @@ bool Fl_Scrollbar::value(int p, int w, int t, int l) {
   if (S != slider_size() || t != minimum() || b != maximum()) {
     slider_size(S); minimum(t); maximum(b); redraw();
   }
+  pagesize_ = w-1; if (pagesize_ <= 0) pagesize_ = 1;
   return Fl_Slider::value(p);
 }
 
@@ -90,20 +91,20 @@ int Fl_Scrollbar::handle(int event) {
     if (mx < X) highlight_ = 1;
     else if (mx >= X+W) highlight_ = 2;
     else {
-      int sliderx = slider_position(W, slider_size(W, H));
+      /*int sliderx = slider_position(W, slider_size(W, H));
       if (mx < X+sliderx) highlight_ = 3;
       else if (mx >= X+sliderx+slider_size(W, H)) highlight_ = 4;
-      else highlight_ = 5;
+      else*/ highlight_ = 5;
     }
   } else {
     if (mx < X || mx >= X+W) highlight_ = 0;
     else if (my < Y) highlight_ = 1;
     else if (my >= Y+H) highlight_ = 2;
     else {
-      int slidery = slider_position(H, slider_size(H, W));
+      /*int slidery = slider_position(H, slider_size(H, W));
       if (my < Y+slidery) highlight_ = 3;
       else if (my >= Y+slidery+slider_size(H, W)) highlight_ = 4;
-      else highlight_ = 5;
+      else */ highlight_ = 5;
     }
   }
   switch (event) {
@@ -125,7 +126,6 @@ int Fl_Scrollbar::handle(int event) {
   case FL_PUSH:
     if (pushed_) return 1;
     if (highlight_ != 5) pushed_ = highlight_;
-
     if (pushed_) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
@@ -211,26 +211,31 @@ void Fl_Scrollbar::draw() {
       f2 |= FL_HIGHLIGHT;
   }
 
+  Fl_Flags f;
+  if (!active_r()) f = FL_INACTIVE;
+  else if (highlight_ == 5) f = FL_HIGHLIGHT;
+  else f = 0;
+
   if (horizontal()) {
-    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); last_ = highlight_; return; }
-    Fl_Slider::draw(X+H,Y,W-2*H,H);
+    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
+    Fl_Slider::draw(X+H,Y,W-2*H,H,f);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1) {
-      fl_color(color()); fl_rectf(X, Y, H, H); // in case scroll buttons don't cover background
+      //fl_color(color()); fl_rectf(X, Y, H, H); // in case scroll buttons don't cover background
       draw_glyph(FL_GLYPH_LEFT, X, Y, H, H, f1);
     }
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2) {
-      fl_color(color()); fl_rectf(X+W-H, Y, H, H); // in case scroll buttons don't cover background
+      //fl_color(color()); fl_rectf(X+W-H, Y, H, H); // in case scroll buttons don't cover background
       draw_glyph(FL_GLYPH_RIGHT, X+W-H, Y, H, H, f2);
     }
   } else { // vertical
-    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); last_ = highlight_; return; }
-    Fl_Slider::draw(X,Y+W,W,H-2*W);
+    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
+    Fl_Slider::draw(X,Y+W,W,H-2*W,f);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1) {
-      fl_color(color()); fl_rectf(X, Y, W, W); // in case scroll buttons don't cover background
+      //fl_color(color()); fl_rectf(X, Y, W, W); // in case scroll buttons don't cover background
       draw_glyph(FL_GLYPH_UP, X, Y, W, W, f1);
     }
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2) {
-      fl_color(color()); fl_rectf(X, Y+H-W, W, W); // in case scroll buttons don't cover background
+      //fl_color(color()); fl_rectf(X, Y+H-W, W, W); // in case scroll buttons don't cover background
       draw_glyph(FL_GLYPH_DOWN, X, Y+H-W, W, W, f2);
     }
   }
@@ -266,5 +271,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.20 1999/11/01 02:21:35 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.21 1999/11/03 09:18:32 bill Exp $".
 //

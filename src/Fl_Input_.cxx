@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.30 1999/10/31 02:54:39 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.31 1999/11/03 09:18:31 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -77,8 +77,10 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
     }
 #endif
     if (p >= value_+size_) break;
-    int c = *p++ & 255;
-    if (c < ' ' || c == 127) {
+    int c = *p++;
+    if (c & 0xE0) {
+      *o++ = c;
+    } else {
       if (c=='\n' && type()==FL_MULTILINE_INPUT) {p--; break;}
       if (c == '\t' && type()==FL_MULTILINE_INPUT) {
 	for (c = (o-buf)%8; c<8 && o<e; c++) *o++ = ' ';
@@ -86,15 +88,6 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
 	*o++ = '^';
 	*o++ = c ^ 0x40;
       }
-    } else if (c >= 128 && c < 0xA0) {
-      *o++ = '\\';
-      *o++ = (c>>6)+'0';
-      *o++ = ((c>>3)&7)+'0';
-      *o++ = (c&7)+'0';
-    } else if (c == 0xA0) { // nbsp
-      *o++ = ' ';
-    } else {
-      *o++ = c;
     }
   }
   *o = 0;
@@ -111,14 +104,12 @@ double Fl_Input_::expandpos(
   int n = 0;
   if (type()==FL_SECRET_INPUT) n = e-p;
   else while (p<e) {
-    int c = *p++ & 255;
-    if (c < ' ' || c == 127) {
+    int c = *p++;
+    if (c & 0xE0) {
+      n++;
+    } else {
       if (c == '\t' && type()==FL_MULTILINE_INPUT) n += 8-(n%8);
       else n += 2;
-    } else if (c >= 128 && c < 0xA0) {
-      n += 4;
-    } else {
-      n++;
     }
   }
   if (returnn) *returnn = n;
@@ -750,5 +741,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.30 1999/10/31 02:54:39 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.31 1999/11/03 09:18:31 bill Exp $".
 //

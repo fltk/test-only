@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.8 1999/08/16 07:31:26 bill Exp $"
+// "$Id: fl_draw.cxx,v 1.9 1999/11/03 09:18:33 bill Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@
 char fl_draw_shortcut;	// set by fl_labeltypes.C
 static char* underline_at;
 
-// Copy p to buf, replacing unprintable characters with ^X and \nnn
+// Copy p to buf, replacing unprintable characters with ^X
 // Stop at a newline of if MAXBUF characters written to buffer.
 // Also word-wrap if width exceeds maxw.
 // Returns a pointer to the start of the next line of caharcters.
@@ -58,7 +58,7 @@ expand(const char* from, char* buf, double maxw, int& n, double &width, int wrap
   const char* p = from;
   for (;; p++) {
 
-    int c = *p & 255;
+    int c = *p;
 
     if (!c || c == ' ' || c == '\n') {
       // test for word-wrap:
@@ -79,35 +79,21 @@ expand(const char* from, char* buf, double maxw, int& n, double &width, int wrap
 
     if (o > e) break; // don't overflow buffer
 
-    if (c == '\t') {
-      for (c = (o-buf)%8; c<8 && o<e; c++) *o++ = ' ';
-
-    } else if (c == '&' && fl_draw_shortcut && *(p+1)) {
+    if (c == '&' && fl_draw_shortcut && *(p+1)) {
       if (*(p+1) == '&') {p++; *o++ = '&';}
       else if (fl_draw_shortcut != 2) underline_at = o;
 
-    } else if (c < ' ' || c == 127) { // ^X
+    } else if (c&0xE0) { // this test skips all characters < ' '
+      *o++ = c;
+
+#if 0 // expand tabs, does anybody use this for labels?
+    } else if (c == '\t') {
+      for (c = (o-buf)%8; c<8 && o<e; c++) *o++ = ' ';
+#endif
+
+    } else { // ^X
       *o++ = '^';
       *o++ = c ^ 0x40;
-
-   /*
-    * mike@easysw.com - The following escaping code causes problems when
-    * using the PostScript ISOLatin1 and WinANSI encodings, because these
-    * map to I18N characters...
-    */
-#if 0
-    } else if (c >= 128 && c < 0xA0) { // \nnn
-      *o++ = '\\';
-      *o++ = (c>>6)+'0';
-      *o++ = ((c>>3)&7)+'0';
-      *o++ = (c&7)+'0';
-#endif /* 0 */
-
-    } else if (c == 0xA0) { // non-breaking space
-      *o++ = ' ';
-
-    } else {
-      *o++ = c;
 
     }
   }
@@ -200,5 +186,5 @@ void fl_measure(const char* str, int& w, int& h) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.8 1999/08/16 07:31:26 bill Exp $".
+// End of "$Id: fl_draw.cxx,v 1.9 1999/11/03 09:18:33 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.16 1999/09/14 17:52:43 carl Exp $"
+// "$Id: fl_font.cxx,v 1.17 1999/11/03 09:18:33 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -232,6 +232,7 @@ int fl_descent() {
 }
 
 double fl_width(const char* c) {
+#if 0
   XCharStruct* p = fl_xfont->per_char;
   if (!p) return strlen(c)*fl_xfont->min_bounds.width;
   int a = fl_xfont->min_char_or_byte2;
@@ -243,9 +244,13 @@ double fl_width(const char* c) {
     else w += fl_xfont->min_bounds.width;
   }
   return w;
+#else
+  return XTextWidth(fl_xfont, c, strlen(c));
+#endif
 }
 
 double fl_width(const char* c, int n) {
+#if 0
   XCharStruct* p = fl_xfont->per_char;
   if (!p) return n*fl_xfont->min_bounds.width;
   int a = fl_xfont->min_char_or_byte2;
@@ -257,9 +262,13 @@ double fl_width(const char* c, int n) {
     else w += fl_xfont->min_bounds.width;
   }
   return w;
+#else
+  return XTextWidth(fl_xfont, c, n);
+#endif
 }
 
 double fl_width(uchar c) {
+#if 1
   XCharStruct* p = fl_xfont->per_char;
   if (p) {
     int a = fl_xfont->min_char_or_byte2;
@@ -268,6 +277,9 @@ double fl_width(uchar c) {
     if (x >= 0 && x <= b) return p[x].width;
   }
   return fl_xfont->min_bounds.width;
+#else
+  return XTextWidth(fl_xfont, &c, 1);
+#endif
 }
 
 void fl_draw(const char* str, int n, int x, int y) {
@@ -308,5 +320,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.16 1999/09/14 17:52:43 carl Exp $".
+// End of "$Id: fl_font.cxx,v 1.17 1999/11/03 09:18:33 bill Exp $".
 //
