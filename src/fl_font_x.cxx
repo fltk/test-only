@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.22 2004/07/02 05:40:59 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.23 2004/07/15 16:25:09 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 /*! Donated code that selects from an alternative font if the character
   cannot be printed in the current font. Did not work very well for me
   and it slows down normal printing a lot. */
-#define X_UTF8_FONT 0
+#define X_UTF8_FONT 1
 
 #include <fltk/draw.h>
 #include <fltk/error.h>
@@ -131,10 +131,11 @@ static XChar2b* utf8to2b(const char* text, int n, int* charcount) {
   bool sawutf8 = false;
   int count = 0;
   while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0xC2) p++; // ascii letter or bad code
+    if (*(unsigned char*)p < 0x80) p++; // ascii
+    else if (*(unsigned char*)p < 0xa0) {sawutf8 = 1; p++;} //cp1252
+    else if (*(unsigned char*)p < 0xC2) p++; // other bad code
     else {
-      int len = utf8valid(p,e);
+      int len; utf8decode(p,e,&len);
       if (len > 1) sawutf8 = true;
       else if (!len) len = 1;
       p += len;
@@ -174,6 +175,17 @@ typedef struct {
 } XFontUtf8;
 XFontUtf8 xfont_utf8[32] = {0};
 
+#define FONT_INDEX_DISABLE -1
+#define FONT_INDEX_FULL    -2
+//#define FONT_DEBUG
+
+// return dash number N, or pointer to ending null if none:
+static const char *
+font_word(const char* p, int n) {
+  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
+  return p;
+}
+
 static void get_font_entry(char *buf, int buf_size, char **pp)
 {
   char *p, *r;
@@ -196,7 +208,7 @@ static void get_font_entry(char *buf, int buf_size, char **pp)
   }
 }
 
-static const char* get_utf8_font_name_from_basefont(const char *basefont, bool safe = false)
+static const char* get_utf8_font_name_from_basefont(const char *basefont, int safelevel = 0)
 {
   char *pname = strdup(basefont), *pnameold;
   char weight[16], slant[16], ptsize[16];
@@ -218,26 +230,39 @@ static const char* get_utf8_font_name_from_basefont(const char *basefont, bool s
   get_font_entry(NULL, 0, &pname); /* pixsize */
   free(pnameold);
 
-  if (!safe)
-    sprintf(fontname, "-*-unifont-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
+  switch(safelevel) {
+  case 0:
+    sprintf(fontname, "-*-*-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
+      weight, slant, ptsize);
+    break;
+  case 1:
+    sprintf(fontname, "-gnu-unifont-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
       weight, slant, "*");
-  else
-    sprintf(fontname, "-*-unifont-*-*-*--*-*-*-*-*-*-iso10646-1");
+    break;
+  case 2:
+    sprintf(fontname, "-*-*-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
+      weight, slant, "*");
+    break;
+  case 3:
+    sprintf(fontname, "-*-*-%s-%s-normal--%s-*-*-*-*-*-iso10646-1",
+      "*", "*", ptsize);
+    break;
+  default:
+    return NULL;
+  }
   return fontname;
 }
 
-#define FONT_INDEX_DISABLE -1
-#define FONT_INDEX_FULL    -2
 static int get_xfont_utf8_index(const char *fontname)
 {
   for(unsigned int i = 0; i < sizeof(xfont_utf8)/sizeof(XFontUtf8); i++) {
-	if (xfont_utf8[i].name == NULL)
+    if (xfont_utf8[i].name == NULL)
       return i;
-	if (xfont_utf8[i].enable == false)
-      return -1;
     if (!strcmp(xfont_utf8[i].name, fontname)) {
-	  return i;
-	}
+      if (xfont_utf8[i].enable == false)
+        return -1;
+      return i;
+    }
   }
   return -2;
 }
@@ -248,30 +273,21 @@ static bool font_is_showable(XFontStruct *f, unsigned int cc)
   XCharStruct *cs;
 
   if (f->min_byte1 == 0 && f->max_byte1 == 0) {
-    if (cc > f->max_char_or_byte2)
-      return false;
+    if (cc > f->max_char_or_byte2) return false;
+    if (cc < f->min_char_or_byte2) return false;
     cc -= f->min_char_or_byte2;
-    if (cc < 0)
-      return false;
   } else {
     b1 = (cc >> 8) & 0xff;
     b2 = cc & 0xff;
-    if (b1 > f->max_byte1)
-      return false;
+    if (b1 > f->max_byte1) return false;
+    if (b1 < f->min_byte1) return false;
     b1 -= f->min_byte1;
-    if (b1 < 0)
-      return false;
-    if (b2 > f->max_char_or_byte2)
-      return false;
+    if (b2 > f->max_char_or_byte2) return false;
+    if (b2 < f->min_char_or_byte2) return false;
     b2 -= f->min_char_or_byte2;
-    if (b2 < 0)
-      return false;
     cc = b1 * (f->max_char_or_byte2 - f->min_char_or_byte2 + 1) + b2;
-	if (cc >= 0xffff)
-	  return false;
+    if (cc >= 0xffff) return false;
   }
-  if (cc < 0)
-    return false;
   cs = f->per_char;
   if (!cs)
     return &f->min_bounds; /* all char have same metrics */
@@ -285,32 +301,133 @@ static bool font_is_showable(XFontStruct *f, unsigned int cc)
   }
 }
 
-static XFontStruct* get_xfont_utf8(const char* basefont)
+static XFontStruct* get_xfont_utf8(const char* basefont, int cc)
 {
   XFontStruct* f = 0;
-  const char* utf8_fontname = get_utf8_font_name_from_basefont(basefont);
-  int font_index = get_xfont_utf8_index(utf8_fontname);
+  char fontname[256];
+  char buf[256];
+  char familyold[256];
+  char family[256];
+  char *pname;
+  unsigned int realsize;
+
+  strcpy(fontname, basefont);
+  // replace fontname if ptsize = 0
+  realsize = -atol(font_word(fontname, 7));
+  if (!realsize) {
+    pname = fontname;
+    char realname[256];
+
+    realname[0] = 0;
+    for(int entry = 0; entry < 14; entry++) {
+      get_font_entry(buf, sizeof(buf), &pname);
+      if (entry == 7)
+        sprintf(buf, "%d", current->maxsize);
+      strcat(realname, buf);
+      strcat(realname, "-");
+      if (entry == 13)
+        strcat(realname, pname);
+    }
+    strcpy(fontname, realname);
+  }
+
+  int font_index = get_xfont_utf8_index(fontname);
   switch(font_index) {
   case FONT_INDEX_FULL:
+    //printf("full request = %s\n", fontname);
+    break;
   case FONT_INDEX_DISABLE:
+    //printf("disable request = %s\n", fontname);
     break;
   default:
     if (!xfont_utf8[font_index].name) {
-      xfont_utf8[font_index].font = XLoadQueryFont(xdisplay, utf8_fontname);
-  	  if (!xfont_utf8[font_index].font) {
-  	    const char* safe_fontname = get_utf8_font_name_from_basefont(basefont, true);
-        xfont_utf8[font_index].font = XLoadQueryFont(xdisplay, safe_fontname);
-  	  }
-  	  if (xfont_utf8[font_index].font) {
-        xfont_utf8[font_index].name = strdup(utf8_fontname);
-        xfont_utf8[font_index].enable = true;
-  	    f = xfont_utf8[font_index].font;
-  	  } else {
-        xfont_utf8[font_index].name = 0;
-        xfont_utf8[font_index].enable = false;
-  	  }
-    } else
-  	  f = xfont_utf8[font_index].font;
+      int safelevel = 0;
+      const char* utf8_fontname;
+#ifdef FONT_DEBUG
+      printf("basefont = %s\n", basefont);
+#endif
+
+      xfont_utf8[font_index].name = strdup(fontname);
+
+      // try some safety fonts
+      while((utf8_fontname = get_utf8_font_name_from_basefont(fontname, safelevel))) {
+        char** xlist;
+        int nlist = 0;
+        unsigned int acceptold = 0, ptsize;
+        char acceptfont[256];
+        acceptfont[0] = 0;
+        familyold[0] = 0;
+
+#ifdef FONT_DEBUG
+        printf(" pattern = %s\n", utf8_fontname);
+#endif
+        xlist = XListFonts(xdisplay, utf8_fontname, 1000, &nlist);
+        for(int nfont = 0; nfont < nlist; nfont++) {
+          // get family name for skipping entry
+          pname = xlist[nfont];
+          get_font_entry(NULL, 0, &pname);
+          get_font_entry(buf, sizeof(buf), &pname);
+          strcpy(family, buf);
+          if (!strcmp(family, familyold)) {
+            continue;
+          } else
+          if (acceptfont[0])
+            break;
+
+          // don't use scalable font
+          if (atol(font_word(xlist[nfont], 12)) == 0) {
+            strcpy(familyold, family);
+            continue;
+          }
+          ptsize = -atol(font_word(xlist[nfont], 7));
+          if (ptsize > current->maxsize+2) {
+            strcpy(familyold, family);
+            continue;
+          }
+#ifdef FONT_DEBUG
+		  printf("trying %s\n", xlist[nfont]);
+#endif
+          XFontStruct *ff = XLoadQueryFont(xdisplay, xlist[nfont]);
+          if (font_is_showable(ff, cc)) {
+            strcpy(familyold, family);
+            if (safelevel == 0) {
+#ifdef FONT_DEBUG
+              printf("   match = %s\n", xlist[nfont]);
+#endif
+              xfont_utf8[font_index].font = ff;
+              break;
+            } else {
+              if (ptsize > acceptold) {
+#ifdef FONT_DEBUG
+                printf("   match = %s\n", xlist[nfont]);
+#endif
+                strcpy(acceptfont, xlist[nfont]);
+                acceptold = ptsize;
+				if (ptsize == realsize)
+                  break;
+              }
+            }
+		  } else {
+            strcpy(familyold, family);
+          }
+          XFreeFont(xdisplay, ff);
+        }
+        XFreeFontNames(xlist);
+        if (safelevel > 0 && acceptfont[0]) {
+          xfont_utf8[font_index].font = XLoadQueryFont(xdisplay, acceptfont);
+        }
+        if (!xfont_utf8[font_index].font) {
+          xfont_utf8[font_index].enable = false;
+        } else {
+          xfont_utf8[font_index].enable = true;
+          f = xfont_utf8[font_index].font;
+          break;
+        }
+        safelevel++;
+      }
+    } else {
+      f = xfont_utf8[font_index].font;
+    }
   }
   return f;
 }
@@ -336,14 +453,20 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 		  int(floorf(x+.5f)),
 		  int(floorf(y+.5f)), buffer, n);
 #else
+#ifdef FONT_DEBUG
+	//printf("current = %s\n", current->name);
+#endif
     XFontStruct *f = current->font, *oldf = f;
     for(int i = 0; i < count; i++) {
       int cc = (buffer[i].byte1 << 8) + buffer[i].byte2;
       if (!font_is_showable(current->font, cc)) {
-        f = get_xfont_utf8(current->name);
+        f = get_xfont_utf8(current->name, cc);
 	if (!f) {
 	  f = current->font;
-	  buffer[i].byte1 = '?' << 8;
+#ifdef FONT_DEBUG
+	  printf("can't draw %C\n");
+#endif
+	  buffer[i].byte1 = 0;
 	  buffer[i].byte2 = '?';
 	}
       } else
@@ -389,10 +512,10 @@ float fltk::getwidth(const char *text, int n) {
     for(int i = 0; i < count; i++) {
       int cc = (buffer[i].byte1 << 8) + buffer[i].byte2;
       if (!font_is_showable(current->font, cc)) {
-        f = get_xfont_utf8(current->name);
+        f = get_xfont_utf8(current->name, cc);
 	if (!f) {
 	  f = current->font;
-	  buffer[i].byte1 = '?' << 8;
+	  buffer[i].byte1 = 0;
 	  buffer[i].byte2 = '?';
 	}
       } else
@@ -428,13 +551,6 @@ float fltk::getwidth(const char *text, int n) {
 // bitmap font unless all the extra fields are filled in correctly.
 //
 // Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
-
-// return dash number N, or pointer to ending null if none:
-static const char *
-font_word(const char* p, int n) {
-  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
-  return p;
-}
 
 /*!
   Set the current font and font scaling so the size is size
@@ -640,5 +756,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.22 2004/07/02 05:40:59 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.23 2004/07/15 16:25:09 spitzak Exp $"
 //
