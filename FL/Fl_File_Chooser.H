@@ -1,5 +1,10 @@
-#ifndef fl_file_chooser_H
-#define fl_file_chooser_H
+#ifndef Fl_File_Chooser_H
+#define Fl_File_Chooser_H
+
+#include "Fl_Widget.H"
+
+#include <fltk/FileChooser.h>
+typedef fltk::FileChooser Fl_File_Chooser;
 
 #include <fltk/file_chooser.h>
 

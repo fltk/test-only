@@ -7,6 +7,9 @@ header files and linking with the fltk2.0 library.
 
 Known changes that must be done to fltk1.1 code to make them compile:
 
+Widgets inside groups will need their x,y coordinates fixed as they
+are now relative to the group, not the window.
+
 FL_BOLD, FL_ITALIC - these symbols used to be added to fonts to get
 bold and italic. This no longer works. You should replace them with
 the single symbol for the font (like FL_HELVETICA_BOLD in place of
