@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.187 2004/07/31 11:46:05 laza2000 Exp $"
+// "$Id: Fl_x.cxx,v 1.188 2004/08/01 07:58:29 laza2000 Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1032,9 +1032,6 @@ extern "C" {
 
 bool fltk::handle()
 {
-#ifdef HAVE_EXCEPTIONS
-  try {
-#endif
   Window* window = find(xevent.xany.window);
   int event = 0;
 
@@ -1604,12 +1601,6 @@ bool fltk::handle()
 
   }
   return handle(event, window);
-#ifdef HAVE_EXCEPTIONS
-  } catch (...) {
-    // Re-throw all!
-    throw;
-  }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2186,5 +2177,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.187 2004/07/31 11:46:05 laza2000 Exp $".
+// End of "$Id: Fl_x.cxx,v 1.188 2004/08/01 07:58:29 laza2000 Exp $".
 //
