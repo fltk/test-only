@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.60 2005/01/24 08:34:31 spitzak Exp $"
+// "$Id$"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -56,13 +56,14 @@ using namespace fltk;
   a relative search, a Browser and Menu will usually ask for adjoining
   items.
 
-  If you wish to make a hierarcial Browser, you must have space in
-  your data to store the state of the fltk::VALUE flag on each parent
-  item, and must implement the flags_changed() method.
-
-  If you wish to use an MultiBrowser you must also have space in your
+  If you wish to use a MultiBrowser you must also have space in your
   data to store the state of the fltk::SELECTED flag on each item, and
   and must implement the flags_changed() method.
+
+  If you wish to make a hierarcial Browser, you may want to have space
+  in your data to store the state of the fltk::VALUE flag on each parent
+  item, and implement the flags_changed() method. If you don't do this
+  the browser is only able to keep one item open at each level.
 
   The base List class returns the child widgets from the Menu that
   owns it.  All Menus share a single instance of this by default, so
@@ -478,5 +479,5 @@ int Menu::handle_shortcut() {
 */
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.60 2005/01/24 08:34:31 spitzak Exp $"
+// End of "$Id$"
 //

@@ -20,7 +20,7 @@ fltk's functions are better anyway).
 
 \include drawing.cxx
 
-This program displays two windows that look like this:
+This program displays a window that looks like this:
 
 \image html drawing.gif
 
@@ -46,20 +46,16 @@ Normally you must draw all the pixels inside your widget. So the first
 thing we do is fill the entire background with black.
 
 Fltk's drawing functions are similar to PostScript. Here we first set
-the drawing color to black, then we draw a rectangle in that color.
+the drawing color to black, then we draw a rectangle in that
+color.
 
 By default, the coordinate system is set up so one unit is a pixel and
 positive is right and down. w() and h() are methods on the widget to
 return it's current width and height.
 
-\until setfont
-
-Next we select the font we want to draw the text in the middle
-in. This should be done before transforming the coordinates, so that
-does not affect the font size. It is recommended you use the
-labelfont() or textfont() so that user's preferences will affect your
-widgets. I made the text somewhat smaller, it is best to use a ratio
-like this, so the user's general font size preferences are chosen.
+The fltk::Rectangle class is a very simple container for four
+integers. The constructor here initializes the top-left corner to 0,0
+and the size to w(),h(), thus the rectangle fills the widget.
 
 \until translate
 
@@ -96,6 +92,13 @@ fillstrokepath(). You could also just fill the path with fillpath(),
 only draw the line with strokepath(), or draw a dot at each vertex
 with drawpoints(). All of these do an automatic "newpath", unlike
 PostScript.
+
+\until setfont
+
+Next we restore the previous transformation and select the font we
+want to draw the text in the middle in. It is recommended you use the
+labelfont() or textfont() so that user's preferences will affect your
+widgets.
 
 \until drawtext
 

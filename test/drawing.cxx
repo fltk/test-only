@@ -3,7 +3,7 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Widget.h>
-#include <fltk/HorizontalSlider.h>
+#include <fltk/Slider.h>
 #include <fltk/math.h>
 #include <fltk/draw.h>
 #include <fltk/string.h> // for snprintf
@@ -15,8 +15,7 @@ class ShapeWidget : public Widget {
 
   void draw() {
     setcolor(BLACK);
-    fillrect(0,0,w(),h());
-    setfont(labelfont(), labelsize()*3/4);
+    fillrect(Rectangle(w(),h()));
     push_matrix();
     scale(w()/2.0f, h()/2.0f);
     translate(1,1);
@@ -26,6 +25,8 @@ class ShapeWidget : public Widget {
       addvertex(cosf(ang),sinf(ang));
     }
     fillstrokepath(WHITE);
+    pop_matrix();
+    setfont(labelfont(), labelsize());
     setcolor(WHITE);
     char buf[200];
     double ang = 2*M_PI/sides();
@@ -40,8 +41,7 @@ class ShapeWidget : public Widget {
 	     sqrt(2-2*cos(ang)),
 	     sides()*sqrt(2-2*cos(ang)),
 	     sides()*sin(ang)/2);
-    drawtext(buf,-.5f,-.5f,1.0f,1.0f,ALIGN_WRAP);
-    pop_matrix();
+    drawtext(buf, Rectangle(w(),h()), ALIGN_WRAP);
   }
 
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
   ShapeWidget sw(10, 10, 280, 280);
   window.resizable(&sw);
 
-  HorizontalSlider slider(50, 295, window.w()-60, 30, "Sides:");
+  Slider slider(50, 295, window.w()-60, 30, "Sides:");
   slider.clear_flag(ALIGN_MASK);
   slider.set_flag(ALIGN_LEFT);
   slider.callback(slider_callback, &sw);

@@ -67,6 +67,7 @@
 	@j:CubeView:CubeView
 	@j:editor:editor editor.cxx
 	@j:hello:hello
+	@j:drawing:drawing
 	@j:shape:shape
 
 @main:Images\nfor\nManual:@i
