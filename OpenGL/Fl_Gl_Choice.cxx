@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.24 2004/02/05 07:21:20 spitzak Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.25 2004/09/26 19:33:19 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -81,17 +81,18 @@ GlChoice* GlChoice::find(int mode) {
   } else {
     list[n++] = GLX_RGBA;
     list[n++] = GLX_GREEN_SIZE;
-    list[n++] = (mode & RGB24_COLOR) ? 8 : 1;
+    const int bits = (mode & RGB24_COLOR) ? 8 : 1;
+    list[n++] = bits;
     if (mode & ALPHA_BUFFER) {
       list[n++] = GLX_ALPHA_SIZE;
-      list[n++] = 1;
+      list[n++] = bits;
     }
     if (mode & ACCUM_BUFFER) {
       list[n++] = GLX_ACCUM_GREEN_SIZE;
-      list[n++] = 1;
+      list[n++] = bits;
       if (mode & ALPHA_BUFFER) {
 	list[n++] = GLX_ACCUM_ALPHA_SIZE;
-	list[n++] = 1;
+	list[n++] = bits;
       }
     }
   }
@@ -214,5 +215,5 @@ void fltk::delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.24 2004/02/05 07:21:20 spitzak Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.25 2004/09/26 19:33:19 spitzak Exp $".
 //
