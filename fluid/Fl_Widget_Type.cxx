@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.21 1999/03/24 23:34:38 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.22 1999/03/24 23:43:52 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1612,6 +1612,8 @@ void selection_changed(Fl_Type *p) {
   redraw_overlays();
   // load the panel with the new settings:
   load_panel();
+  if (the_panel) the_panel->redraw();
+  if (style_panel) style_panel->redraw();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2468,5 +2470,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.21 1999/03/24 23:34:38 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.22 1999/03/24 23:43:52 carl Exp $".
 //
