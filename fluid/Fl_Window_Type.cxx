@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.36 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.37 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,6 @@
 #include <fltk/Fl_Overlay_Window.h>
 #include <fltk/fl_message.h>
 #include <fltk/fl_draw.h>
-#include <fltk/Fl_Menu_Item.h>
 #include "Fl_Type.h"
 #include <math.h>
 #include <stdlib.h>
@@ -45,7 +44,7 @@ int snap = 3;
 int include_H_from_C = 1;
 
 void alignment_cb(Fl_Input *i, long v) {
-  int n = atoi(i->value());
+  int n = (int)strtol(i->value(),0,0);
   if (n < 0) n = 0;
   switch (v) {
   case 1: gridx = n; break;
@@ -82,10 +81,14 @@ void include_H_from_C_button_cb(Fl_Check_Button* b, void*) {
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Menu_Item window_type_menu[] = {
-  {"Single",0,0,(void*)FL_WINDOW_TYPE},
-  {"Double",0,0,(void*)(FL_WINDOW_TYPE+1)},
+const char* Fl_Window_Type::type_name() const {return "Fl_Window";}
+
+static const Enumeration window_type_menu[] = {
+  {"Single", 0, (void*)Fl_Widget::WINDOW_TYPE},
+  {"Double", 0, (void*)(Fl_Widget::WINDOW_TYPE+1), "Fl_Double_Window"},
   {0}};
+
+const Enumeration* Fl_Window_Type::subtypes() const {return window_type_menu;}
 
 int overlays_invisible;
 
@@ -408,6 +411,7 @@ void Fl_Window_Type::moveallchildren()
   dx = dy = 0;
 }
 
+#include <fltk/Fl_Menu_Item.h>
 
 extern Fl_Menu_Item Main_Menu[];
 extern Fl_Menu_Item New_Menu[];
@@ -678,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.36 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.37 2002/01/20 07:37:15 spitzak Exp $".
 //

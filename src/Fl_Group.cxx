@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.101 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.102 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,6 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The Fl_Group is the only defined container type in fltk.
-
 // Fl_Window itself is a subclass of this, and most of the event
 // handling is designed so windows themselves work correctly.
 
@@ -40,14 +38,13 @@
 FL_API Fl_Group* Fl_Group::current_;
 
 static void revert(Fl_Style* s) {
+  s->color = FL_GRAY;
   s->box = FL_FLAT_BOX; //FL_NO_BOX;
 }
 
 // This style is unnamed since there is no reason for themes to change it:
 extern Fl_Named_Style* group_style;
-
 static Fl_Named_Style the_style(0, revert, &group_style);
-
 Fl_Named_Style* group_style = &the_style;
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
@@ -62,7 +59,7 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   ow_(W),
   oh_(H)
 {
-  type(FL_GROUP_TYPE);
+  type(GROUP_TYPE);
   style(::group_style);
   align(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
@@ -430,7 +427,13 @@ int* Fl_Group::sizes() {
 }
 
 void Fl_Group::layout() {
-  if (resizable() && children_ && (!sizes_ || layout_damage()&FL_LAYOUT_WH)) {
+
+  // Save the layout damage and then clear it. This is so layout() of a
+  // child can turn it back on and subclasses like Fl_Pack can detect that:
+  int layout_damage = this->layout_damage();
+  Fl_Widget::layout();
+
+  if (resizable() && children_ && (!sizes_ || layout_damage&FL_LAYOUT_WH)) {
 
     // get changes in size from the initial size:
     // If this is the first call assumme this is the initial size.
@@ -478,21 +481,20 @@ void Fl_Group::layout() {
     // still need to call inner things that need layout:
     Fl_Widget*const* a = array_;
     Fl_Widget*const* e = a+children_;
-    if ((layout_damage() & FL_LAYOUT_XY) && !is_window()) {
-    while (a < e) {
-      Fl_Widget* widget = *a++;
+    if ((layout_damage & FL_LAYOUT_XY) && !is_window()) {
+      while (a < e) {
+	Fl_Widget* widget = *a++;
 	widget->layout_damage(widget->layout_damage()|FL_LAYOUT_XY);
 	widget->layout();
-    }
+      }
     } else {
       while (a < e) {
 	Fl_Widget* widget = *a++;
 	if (widget->layout_damage()) widget->layout();
-  }
+      }
     }
   }
-  if (layout_damage() & FL_LAYOUT_WH) redraw();
-  Fl_Widget::layout();
+  if (layout_damage & FL_LAYOUT_WH) redraw();
   set_old_size();
 }
 
@@ -516,9 +518,6 @@ void Fl_Group::draw() {
     // out, and then draw the background:
     fl_push_clip(0, 0, w(), h());
     int n; for (n = numchildren; n--;) draw_child(*child(n));
-    if (!box()->fills_rectangle()) {
-      if (parent()) parent()->draw_group_box();
-    }
     draw_box();
     draw_inside_label();
     fl_pop_clip();
@@ -569,10 +568,9 @@ void Fl_Group::draw_group_box() const {
   if (!box()->fills_rectangle()) {
     if (parent()) {
       parent()->draw_group_box();
-// WAS: leave this out, so that FL_NO_BOX can be used to stop blinking:
-//      } else {
-//        fl_color(color());	
-//        fl_rectf(0, 0, w(), h());
+    } else {
+      fl_color(color());	
+      fl_rectf(0, 0, w(), h());
     }
   }
   draw_box();
@@ -593,16 +591,16 @@ Fl_Widget* fl_did_clipping;
 // region.
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (w.visible() && !w.is_window()) {
-  if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
-  int save_x = fl_x_; fl_x_ += w.x();
-  int save_y = fl_y_; fl_y_ += w.y();
+    if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
+    int save_x = fl_x_; fl_x_ += w.x();
+    int save_y = fl_y_; fl_y_ += w.y();
     fl_did_clipping = 0;
     w.set_damage(FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
     w.draw();
     w.set_damage(0);
     if (fl_did_clipping != &w) fl_clip_out(0,0,w.w(),w.h());
-  fl_y_ = save_y;
-  fl_x_ = save_x;
+    fl_y_ = save_y;
+    fl_x_ = save_x;
   }
 }
 
@@ -660,5 +658,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.101 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.102 2002/01/20 07:37:15 spitzak Exp $".
 //

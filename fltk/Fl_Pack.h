@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.h,v 1.2 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Pack.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Pack header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,18 +32,18 @@ class FL_API Fl_Pack : public Fl_Group {
   int spacing_;
 public:
   enum { // values for type(int)
-    VERTICAL = 0,
-    HORIZONTAL = 1
+    NORMAL	= GROUP_TYPE,
+    VERTICAL	= NORMAL, // for back compatability
+    HORIZONTAL	= GROUP_TYPE+1
   };
   void layout();
   Fl_Pack(int x,int y,int w ,int h,const char *l = 0);
   int spacing() const {return spacing_;}
   void spacing(int i) {spacing_ = i;}
-  uchar horizontal() const {return type();}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Pack.h,v 1.2 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Pack.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $".
 //

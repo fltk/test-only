@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: glpuzzle.cxx,v 1.14 2002/01/20 07:37:16 spitzak Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 // This is rewritten to remove use of the Glut emulation so it can
@@ -1692,10 +1692,10 @@ main(int argc, char **argv)
   trackball(curquat, 0.0, 0.0, 0.0, 0.0);
   srandom(time(NULL));
   menu = new Fl_Menu_(0,0,0,0);
-  menu->add(menu_table);
+  menu_table->add_to(menu);
   return Fl::run();
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.14 2002/01/20 07:37:16 spitzak Exp $".
 //

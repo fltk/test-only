@@ -8,8 +8,8 @@ gridy 5
 snap 3
 Function {} {open
 } {
-  Fl_Window {} {open selected
-    xywh {692 305 560 470} resizable visible
+  Fl_Window {} {open
+    xywh {562 242 560 470} resizable visible
   } {
     Fl_Menu_Bar {} {open
       tooltip {A right-justified help item can be made by making a second menubar and putting it to the right of the resizable().}
@@ -48,7 +48,7 @@ Function {} {open
     Fl_Box {} {
       label {
 This program demonstrates how you set the resizable() of a window to get things to resize the way you want.}
-      xywh {95 25 465 419} align 209 box FLAT_BOX color 19 labelcolor 7
+      xywh {95 25 465 419} align 209 box FLAT_BOX color 19 label_color 7
     }
     Fl_Button {} {
       label These
@@ -72,20 +72,20 @@ This program demonstrates how you set the resizable() of a window to get things 
     }
     Fl_Button {} {
       label {Things that}
-      xywh {0 150 95 25} color 2389675008
+      xywh {0 150 95 25} color 0x8e6f8c00
     }
     Fl_Button {} {
       label {overlap the box}
-      xywh {0 175 95 25} color 2389675008
+      xywh {0 175 95 25} color 0x8e6f8c00
     }
     Fl_Button {} {
       label {will scale.}
-      xywh {0 200 95 25} color 2389675008
+      xywh {0 200 95 25} color 0x8e6f8c00
     }
     Fl_Group {} {
       label {A group} open
       tooltip {This group has resizable(0) (this is the default).  But you can set a group's resizable to nest different resize behavior.}
-      xywh {0 225 95 190} align 18 box ENGRAVED_BOX labeltype ENGRAVED_LABEL labelcolor 49
+      xywh {0 225 95 190} align 18 box ENGRAVED_BOX label_type ENGRAVED_LABEL label_color 49
     } {
       Fl_Button {} {
         label {You can put}
@@ -114,27 +114,27 @@ This program demonstrates how you set the resizable() of a window to get things 
     }
     Fl_Button {} {
       label {@<<}
-      xywh {460 445 25 25} labeltype SYMBOL_LABEL
+      xywh {460 445 25 25} label_type SYMBOL_LABEL
     }
     Fl_Button {} {
       label {@<}
-      xywh {485 445 25 25} labeltype SYMBOL_LABEL
+      xywh {485 445 25 25} label_type SYMBOL_LABEL
     }
     Fl_Button {} {
       label {@>}
-      xywh {510 445 25 25} labeltype SYMBOL_LABEL
+      xywh {510 445 25 25} label_type SYMBOL_LABEL
     }
     Fl_Button {} {
       label {@>>}
-      xywh {535 445 25 25} labeltype SYMBOL_LABEL
+      xywh {535 445 25 25} label_type SYMBOL_LABEL
     }
     Fl_Box {} {
       label {This is the resizable() of the window.
-It is normally invisible.}
+It is normally invisible.} selected
       tooltip {To make it invisible, use an Fl_Box with the default box(FL_NO_BOX) and no label.
 
 Fltk sets the window's minimum size such that this widget's minimum size is 100, unless it starts out smaller than that.  You can override this default by calling size_range() on the window.}
-      xywh {95 150 365 270} align 192 resizable box BORDER_BOX color 37 labelcolor 1
+      xywh {95 150 365 270} align 192 resizable box BORDER_BOX color 37 label_color 1
     }
   }
   code {// w->size_range(w->w()-w->resizable()->w(), w->h()-w->resizable()->h());} {}

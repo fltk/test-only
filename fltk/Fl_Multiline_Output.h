@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Multiline_Output.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Multi line output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,11 @@
 class FL_API Fl_Multiline_Output : public Fl_Output {
 public:
     Fl_Multiline_Output(int x,int y,int w,int h,const char *l = 0)
-	: Fl_Output(x,y,w,h,l) {type(FL_MULTILINE_INPUT);}
+	: Fl_Output(x,y,w,h,l) {type(MULTILINE);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Output.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Multiline_Output.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

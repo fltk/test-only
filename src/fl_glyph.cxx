@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.28 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,21 +30,16 @@
 void fl_glyph(const Fl_Widget* widget, int t,
 	      int x,int y,int w,int h, Fl_Flags f)
 {
-  Fl_Boxtype box;
   Fl_Color color = widget->get_glyph_color(f);
 
   // handle special glyphs that don't draw the box:
   switch (t) {
 
-  case FL_GLYPH_CHECK:
-    box = widget->text_box();
-    if (box != FL_NO_BOX) {
-      box->draw(x,y,w,h, widget->color(), f&FL_INACTIVE|FL_FRAME_ONLY);
-      box->inset(x,y,w,h);
-      fl_color(widget->text_background());
-      fl_rectf(x,y,w,h);
-      color = fl_inactive(widget->text_color(),f);
-    }
+  case FL_GLYPH_CHECK: {
+    Fl_Boxtype box = widget->button_box();
+    box->draw(x, y, w, h, widget->color(), f&FL_INACTIVE|FL_VALUE);
+    box->inset(x, y, w, h);
+    color = fl_inactive(widget->text_color(),f);
     if (f & FL_VALUE) {
       fl_color(color);
       x += 1;
@@ -56,18 +51,15 @@ void fl_glyph(const Fl_Widget* widget, int t,
 	fl_line(x, y, x+d1, y+d1);
 	fl_line(x+d1, y+d1, x+w-1, y+d1-d2+1);
       }
-    }
+    }}
     return;
 
   case FL_GLYPH_ROUND:
     h = (h+1)&(~1); // even only
-    box = widget->text_box();
-    if (box != FL_NO_BOX) {
-      FL_ROUND_DOWN_BOX->draw(x,y,w,h,widget->text_background(),f&FL_INACTIVE);
-      color = fl_inactive(widget->text_color(),f);
-    }
+    FL_ROUND_DOWN_BOX->draw(x, y, w, h, widget->color(), f&FL_INACTIVE);
+    color = fl_inactive(widget->text_color(),f);
     if (f & FL_VALUE) {
-      int d = h/4; // box != FL_NO_BOX ? h/4 : 0; //h/5;
+      int d = h/4;
       fl_ellipse(x+d, y+d, h-d-d-1, h-d-d-1);
       fl_color(color); fl_fill();
     }
@@ -87,7 +79,7 @@ void fl_glyph(const Fl_Widget* widget, int t,
     h = H;
   } // and fall through to default case to draw the box:
   default: {
-    Fl_Boxtype box = widget->box();
+    Fl_Boxtype box = widget->button_box();
     box->draw(x,y,w,h, widget->get_box_color(f), f);
     box->inset(x,y,w,h);
     }
@@ -157,5 +149,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.28 2002/01/20 07:37:16 spitzak Exp $".
 //

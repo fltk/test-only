@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.35 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ enum {
 static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
-  widget->box()->draw(x,y,w,h,widget->get_box_color(f),f);
+  widget->button_box()->draw(x,y,w,h,widget->get_box_color(f),f);
   fl_color(widget->get_glyph_color(f));
   Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
   b->draw(x+(w-b->width())/2, y+(h-b->height())/2);
@@ -84,7 +84,7 @@ void Fl_Adjuster::draw() {
     draw_glyph(FL_GLYPH_SLOWARROW, 2*dx, 0, W, H, f[3]);
 
   if (focused()) {
-    Fl_Boxtype box = this->box();
+    Fl_Boxtype box = button_box();
     fl_color(get_glyph_color());
     fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
   }
@@ -173,7 +173,7 @@ int Fl_Adjuster::handle(int event) {
 static void revert(Fl_Style* s) {
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
-  s->text_box = FL_NO_BOX;
+  s->box = FL_NO_BOX; // for compatability if in the future it draws the box
   s->glyph = glyph;
 }
 static Fl_Named_Style style("Adjuster", revert, &Fl_Adjuster::default_style);
@@ -187,5 +187,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.35 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $".
 //

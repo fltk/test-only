@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.5 2002/01/11 08:49:07 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -41,14 +41,8 @@ public:
   ~Fl_Browser();
 
   enum { // values for type()
-    HORIZONTAL = 1,
-    VERTICAL = 2,
-    BOTH = 3,
-    ALWAYS_ON = 4,
-    HORIZONTAL_ALWAYS = 5,
-    VERTICAL_ALWAYS = 6,
-    BOTH_ALWAYS = 7,
-    MULTI_BROWSER = 8
+    NORMAL = 0,
+    MULTI = 1
   };
 
   int width() const {return width_;}
@@ -124,7 +118,7 @@ private:
   static void draw_clip_cb(void*,int,int,int,int);
   int X,Y,W,H; // bounding box area
 
-  int multi() const {return type()&MULTI_BROWSER;}
+  int multi() const {return type()&MULTI;}
 
   // Marks serve as "indexes" into the hierarchial browser. We probably
   // need to make some sort of public interface but I have not figured
@@ -160,14 +154,14 @@ private:
 };
 
 #ifndef FLTK_2
-#define FL_NORMAL_BROWSER Fl_Browser::BOTH
-#define FL_MULTI_BROWSER (Fl_Browser::BOTH|Fl_Browser::MULTI_BROWSER)
-#define FL_SELECT_BROWSER Fl_Browser::BOTH
-#define FL_HOLD_BROWSER Fl_Browser::BOTH
+#define FL_NORMAL_BROWSER Fl_Browser::NORMAL
+#define FL_MULTI_BROWSER  Fl_Browser::MULTI
+#define FL_SELECT_BROWSER Fl_Browser::NORMAL
+#define FL_HOLD_BROWSER   Fl_Browser::NORMAL
 #endif
 
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.5 2002/01/11 08:49:07 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.28 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,16 +42,113 @@
 // examined.
 
 #include <fltk/Fl.h>
-#include <fltk/Fl_Browser.h>
+#include <fltk/Fl_Multi_Browser.h>
 #include <fltk/Fl_Item.h>
 #include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <config.h> // for strcasecmp
 
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
+
+////////////////////////////////////////////////////////////////
+// Code to access lists of enuerations:
+
+const Enumeration* from_value(void* data, const Enumeration* table)
+{
+  for (;table->menu_entry; table++)
+    if (table->compiled == data) return table;
+  return 0;
+}
+
+const Enumeration* from_text(const char* text, const Enumeration* table)
+{
+  // For back compatability we strip leading FL_ from symbols:
+  if (text[0]=='F' && text[1]=='L' && text[2]=='_') text += 3;
+  for (;table->menu_entry; table++) {
+    if (table->symbol && !strcmp(table->symbol, text)) return table;
+    // also for back compatability we match the menu entry and subclass:
+    if (!strcasecmp(table->menu_entry, text)) return table;
+    if (table->subclass && !strcmp(table->subclass, text)) return table;
+  }
+  return 0;
+}
+
+const char* to_text(void* data, const Enumeration* table)
+{
+  for (;table->menu_entry; table++) {
+    if (table->compiled == data) {
+      if (table->symbol && !table->subclass) return table->symbol;
+      return table->menu_entry;
+    }
+  }
+  return 0;
+}
+
+int number_from_text(const char* text, const Enumeration* table)
+{
+  if (table) {
+    const Enumeration* t = from_text(text, table);
+    if (t) return int(t->compiled);
+  }
+  return strtol(text, 0, 0);
+}
+
+const char* number_to_text(int number, const Enumeration* table)
+{
+  if (table) {
+    const char* t = to_text((void*)number, table);
+    if (t) return t;
+  }
+  static char buffer[20];
+  sprintf(buffer, "%d", number);
+  return buffer;
+}
+
+////////////////////////////////////////////////////////////////
+// Code to translate a table of Enumeration entries into Fl_Menu items:
+
+class Enumeration_List : public Fl_List {
+  virtual int children(const Fl_Menu_*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
+};
+
+static Enumeration_List enumeration_list;
+
+void set_menu(Fl_Menu_* menu, const Enumeration* list) {
+  menu->list(&enumeration_list);
+  menu->user_data((void*)list);
+}
+
+int Enumeration_List::children(const Fl_Menu_* menu, const int*, int level)
+{
+  if (level) return -1;
+  const Enumeration* e = (const Enumeration*)(menu->user_data());
+  int n = 0;
+  while (e->menu_entry) {n++; e++;}
+  return n;
+}
+
+Fl_Widget* Enumeration_List::child(const Fl_Menu_* menu, const int* indexes, int)
+{
+  const Enumeration* e = (const Enumeration*)(menu->user_data());
+  int n = *indexes;
+  while (n && e->menu_entry) {n--; e++;}
+  if (!e->menu_entry) return 0;
+  static Fl_Widget* widget;
+  if (!widget) {
+    Fl_Group::current(0);
+    widget = new Fl_Item();
+  }
+  widget->user_data((void*)e);
+  widget->label(e->menu_entry);
+  widget->w(0);
+  widget->h(0);
+  return widget;
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -73,8 +170,7 @@ static void Widget_Browser_callback(Fl_Widget *,void *) {
 }
 
 Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
-  widget_browser = new Fl_Browser(x,y,w,h);
-  widget_browser->type(FL_MULTI_BROWSER);
+  widget_browser = new Fl_Multi_Browser(x,y,w,h);
   widget_browser->end();
   widget_browser->list(&widgetlist);
   widget_browser->callback(Widget_Browser_callback);
@@ -158,27 +254,29 @@ void deselect() {
     select(item,0);
 }
 
-extern const char* subclassname(Fl_Type*);
-
 // Generate a descriptive text for this item, to put in browser & window
 // titles. Warning: the buffer used is overwritten each time!
 const char* Fl_Type::title() {
 #define MAXLABEL 128
   static char buffer[MAXLABEL];
-  const char* type = subclassname(this);
+  const char* t1 = type_name();
+  const char* type = 0;
+  if (is_widget()) type = t1 = ((Fl_Widget_Type*)this)->subclass();
   const char* name = this->name();
   bool quoted = false;
   if (!name || !*name) {
     name = label();
-    if (!name || !*name) return type;
+    if (!name || !*name) return t1;
     quoted = true;
   }
   // copy but stop at any newline or when the buffer fills up:
   char* e = buffer+MAXLABEL-1; if (quoted) e--;
   char* p = buffer;
-  while (p < e && *type) *p++ = *type++;
-  if (p >= e-4) return name;
-  *p++ = ' ';
+  if (type) {
+    while (p < e && *type) *p++ = *type++;
+    if (p >= e-4) return name;
+    *p++ = ' ';
+  }
   if (quoted) *p++ = '"';
   while (p < e && (*name&~31)) *p++ = *name++;
   if (*name) {
@@ -539,5 +637,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.28 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.29 2002/01/20 07:37:15 spitzak Exp $".
 //

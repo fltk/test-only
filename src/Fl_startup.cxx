@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_startup.cxx,v 1.7 2001/07/29 21:38:41 spitzak Exp $"
+// "$Id: Fl_startup.cxx,v 1.8 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
@@ -209,9 +209,9 @@ static int load_scheme(const char *s) {
       if (!getconf_list(key_list, "box", valstr, sizeof(valstr)))
         if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
 
-      // box around text/glyph within widget
-      if (!getconf_list(key_list, "text box", valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
+      // box around buttons within widget
+      if (!getconf_list(key_list, "button box", valstr, sizeof(valstr)))
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->button_box = boxtype;
 
       // color of widget background
       if (!getconf_list(key_list, "color", valstr, sizeof(valstr)))
@@ -231,9 +231,9 @@ static int load_scheme(const char *s) {
       if (!getconf_list(key_list, "selection text color", valstr, sizeof(valstr)))
         style->selection_text_color = grok_color(sfile, valstr);
 
-      // background of text/glyph within widget
-      if (!getconf_list(key_list, "text background", valstr, sizeof(valstr)))
-        style->text_background = grok_color(sfile, valstr);
+      // background of buttons within widget
+      if (!getconf_list(key_list, "button color", valstr, sizeof(valstr)))
+        style->button_color = grok_color(sfile, valstr);
 
       // color of widget's background when widget is highlighted
       if (!getconf_list(key_list, "highlight color", valstr, sizeof(valstr)))
@@ -384,5 +384,5 @@ static struct Startup {
 
 
 //
-// End of "$Id: Fl_startup.cxx,v 1.7 2001/07/29 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_startup.cxx,v 1.8 2002/01/20 07:37:15 spitzak Exp $".
 //

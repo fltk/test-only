@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.160 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.161 2002/01/20 07:37:16 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -577,8 +577,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   switch (uMsg) {
 
   case WM_SYNCPAINT:
-  // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
-  // events in a row are a signal to redraw the entire window.
+    // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
+    // events in a row are a signal to redraw the entire window.
     if (syncpaint_count) {
       InvalidateRect(fl_window,0,FALSE);
       syncpaint_count = 0;
@@ -1179,7 +1179,7 @@ void fl_get_system_colors() {
   fl_background(background);
   Fl_Widget::default_style->label_color = foreground;
   Fl_Widget::default_style->highlight_label_color = foreground;
-  Fl_Widget::default_style->text_background = text_background;
+  Fl_Widget::default_style->color = text_background;
   Fl_Widget::default_style->text_color = text_foreground;
   Fl_Widget::default_style->selection_color = select_background;
   Fl_Widget::default_style->selection_text_color = select_foreground;
@@ -1187,8 +1187,8 @@ void fl_get_system_colors() {
   Fl_Style* style;
 
   if ((style = Fl_Style::find("scrollbar"))) {
-//    style->text_background = fl_color_average(slider_background, text_background, .5);
-    style->text_background = fl_color_average(background, text_background, .5);
+//    style->color = fl_color_average(slider_background, text_background, .5);
+    style->color = fl_color_average(background, text_background, .5);
   }
 
   if ((style = Fl_Style::find("item"))) {
@@ -1302,5 +1302,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.160 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.161 2002/01/20 07:37:16 spitzak Exp $".
 //

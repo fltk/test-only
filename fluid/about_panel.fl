@@ -14,15 +14,15 @@ Function {make_about_panel(const char *copyright)} {open
   } {
     Fl_Group display_group {open
       xywh {5 5 295 245} box NO_BOX
-      code0 {o->resizable(o);}
+      extra_code {o->resizable(o);}
     } {
       Fl_Group {} {open
-        xywh {55 25 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
-        code0 {o->resizable(o);}
+        xywh {55 25 60 150} box UP_BOX color 14 label_color 6 selection_color 47
+        extra_code {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {30 90 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {30 90 15 15} align 17 box OVAL_BOX color 6 label_color 7 selection_color 47 label_size 20
         }
       }
       Fl_Box {} {
@@ -32,35 +32,35 @@ Function {make_about_panel(const char *copyright)} {open
         xywh {60 45 50 65} box DOWN_BOX color 6 selection_color 47
       }
       Fl_Box {} {
-        xywh {45 25 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
+        xywh {45 25 80 25} align 16 box ROUND_UP_BOX color 6 label_color 6 selection_color 47
       }
       Fl_Group {} {
         label fluid open
-        xywh {10 130 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
-        code0 {o->resizable(o);}
+        xywh {10 130 150 105} align 16 box ROUND_UP_BOX label_font 1 label_type SHADOW_LABEL color 14 label_color 6 selection_color 47 label_size 40
+        extra_code {o->resizable(o);}
       } {
         Fl_Box {} {
           label {` }
-          xywh {69 20 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {69 20 15 15} align 17 box OVAL_BOX color 6 label_color 7 selection_color 47 label_size 20
         }
         Fl_Box {} {
           label {` }
-          xywh {60 5 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
+          xywh {60 5 15 15} align 17 box OVAL_BOX color 6 label_color 7 selection_color 47 label_size 20
         }
       }
       Fl_Box {} {
         xywh {57 130 56 2} box FLAT_BOX color 14 selection_color 47
       }
       Fl_Group {} {open
-        xywh {145 18 149 122} box OFLAT_BOX labelfont 1 color 14 labelcolor 7 selection_color 47 labelsize 18
-        code0 {o->resizable(o);}
+        xywh {145 18 149 122} box OFLAT_BOX label_font 1 color 14 label_color 7 selection_color 47 label_size 18
+        extra_code {o->resizable(o);}
       } {
         Fl_Box {} {
           label {FLTK User
 Interface
 Designer
 Version 2.0}
-          xywh {5 4 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
+          xywh {5 4 140 113} box OVAL_BOX label_font 1 label_type SHADOW_LABEL color 12 label_color 7 selection_color 47 label_size 18
         }
       }
       Fl_Button {} {
@@ -68,17 +68,17 @@ Version 2.0}
 Click here for more information}
         callback {display_group->hide();
 copyright_box->show();} selected
-        xywh {175 159 95 41} align 524416 box BORDER_BOX color 136 labelcolor 6 labelsize 10
+        xywh {175 159 95 41} align 524416 box BORDER_BOX color 136 label_color 6 label_size 10
       }
     }
     Fl_Box copyright_box {
-      xywh {3 5 297 250} align 4244 hide resizable labelcolor 6 labelsize 10
-      code0 {o->label(copyright);}
+      xywh {3 5 297 250} align 4244 hide resizable label_color 6 label_size 10
+      extra_code {o->label(copyright);}
     }
     Fl_Return_Button {} {
       label OK
       callback {((Fl_Window*)(o->parent()))->hide();}
-      xywh {240 223 55 22} labelsize 10 shortcut 0xff0d
+      xywh {240 223 55 22} label_size 10 shortcut 0xff0d
     }
   }
 } 

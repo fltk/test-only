@@ -1,14 +1,14 @@
 //
-// "$Id: colbrowser.cxx,v 1.8 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: colbrowser.cxx,v 1.9 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
 // This is an XForms program from the 0.86 distribution of XForms.
 // It has been modified as little as possible to work under fltk by
 // using fltk's Forms emulation.  Search for "fltk" to find all the
-// changes.
+// changes
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/forms.h>	// changed for fltk
@@ -47,6 +47,7 @@ static int load_browser(char *);
   static const char *rgbfile = "SYS$MANAGER:DECW$RGB.DAT";
 #else
 #ifdef __EMX__   /* OS2 */
+#include <X11/XlibInt.h>
   static const char *rgbfile = "/XFree86/lib/X11/rgb.txt";
 #else
 #ifdef __FreeBSD__
@@ -83,6 +84,7 @@ main(int argc, char *argv[])
     // (on transient windows attempting to close it just calls the callback)
     fl_show_form(cl, FL_PLACE_FREE, 1/*FL_TRANSIENT*/, "RGB Browser");
 
+
     while (fl_do_forms())
 	;
     return 0;
@@ -94,7 +96,7 @@ set_entry(int i)
     RGBdb *db = rgbdb + i;
 
     fl_freeze_form(cl);
-// unclear why demo is doing this.  This messes up fltk:
+// unclear why demo is doing this.  This messes up FL:
 //    fl_mapcolor(FL_FREE_COL4+i, db->r, db->g, db->b);
     fl_mapcolor(FL_FREE_COL4, db->r, db->g, db->b);
     fl_set_slider_value(rs, db->r);
@@ -109,9 +111,9 @@ br_cb(Fl_Widget * ob, long)
 {
     int r = fl_get_browser(ob);
 
-    if (r < 0) // fltk: replace <= with <
+    if (r <= 0)
 	return;
-    set_entry(r); // fltk: replaced r+1 with r
+    set_entry(r - 1);
 }
 
 static int
@@ -249,8 +251,8 @@ search_rgb(Fl_Widget *, long)
     i = search_entry(r, g, b);
     /* change topline only if necessary */
     if(i < top || i > (top+15))
-        fl_set_browser_topline(colbr, i-8);
-    fl_select_browser_line(colbr, i); // fltk: replaced i+1 with i
+       fl_set_browser_topline(colbr, i-8);
+    fl_select_browser_line(colbr, i + 1);
     fl_unfreeze_form(cl);
 }
 
@@ -300,25 +302,25 @@ create_form_cl(void)
                         FL_INDIANRED);
     fl_set_object_callback(obj, db_cb, 0);
     rs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 225, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_RED, FL_INDIANRED); // colors swapped for fltk
+    fl_set_object_color(obj, FL_INDIANRED, FL_RED);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 0);
-    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
+    fl_set_slider_return(obj, 0);
 
     gs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 255, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_GREEN, FL_INDIANRED); // colors swapped for fltk
+    fl_set_object_color(obj, FL_INDIANRED, FL_GREEN);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 1);
-    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
+    fl_set_slider_return(obj, 0);
 
     bs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 285, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_BLUE, FL_INDIANRED); // colors swapped for fltk
+    fl_set_object_color(obj, FL_INDIANRED, FL_BLUE);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 2);
-    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
+    fl_set_slider_return(obj, 0);
 
 
     colbr = obj = fl_add_browser(FL_HOLD_BROWSER, 10, 90, 205, 240, "");
@@ -339,5 +341,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.8 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: colbrowser.cxx,v 1.9 2002/01/20 07:37:15 spitzak Exp $".
 //

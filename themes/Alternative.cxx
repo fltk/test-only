@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.36 2001/07/24 04:44:26 clip Exp $"
+// "$Id: Alternative.cxx,v 1.37 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -68,7 +68,7 @@ alt_glyph(const Fl_Widget* widget, int t,
           int x, int y, int w, int h,
           Fl_Flags f)
 {
-  Fl_Color gbc = widget->get_glyph_background(f);
+  Fl_Color gbc = widget->color();
   Fl_Color gfc = widget->get_glyph_color(f&(~FL_SELECTED));
   Fl_Color bc = widget->get_box_color(f);
   switch (t) {
@@ -165,7 +165,7 @@ alt_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_UP_BUTTON:
     case FL_GLYPH_DOWN_BUTTON:
       // erase area behind scrollbars arrows
-      fl_color(widget->get_glyph_background());
+      fl_color(widget->color());
       fl_rectf(x,y,w,h);
       t -= (FL_GLYPH_RIGHT_BUTTON-FL_GLYPH_RIGHT);
       goto JUMP1;
@@ -266,7 +266,7 @@ static void light_glyph(const Fl_Widget* widget, int,
                         Fl_Flags f)
 {
   Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
-  Fl_Color bc = widget->get_glyph_background(f);
+  Fl_Color bc = widget->color();
   FL_DOWN_BOX->draw(x+2, y, w-4, h, bc, f&(~FL_VALUE));
   FL_THIN_UP_BOX->draw(x+4, y+2, w-8, h-4, f&FL_VALUE ? fc : bc, f&(~FL_VALUE));
 }
@@ -304,12 +304,12 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
-    s->text_box = FL_HIGHLIGHT_BOX;
+    s->button_box = FL_HIGHLIGHT_BOX;
   }
 
   if ((s = Fl_Style::find("item"))) {
     s->glyph = alt_glyph;
-    s->text_box = FL_NO_BOX;
+    s->button_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
@@ -317,7 +317,7 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->text_box = FL_NORMAL_BOX;
+    s->box = FL_NORMAL_BOX;
     s->glyph = choice_glyph;
   }
 
@@ -354,5 +354,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.36 2001/07/24 04:44:26 clip Exp $".
+// End of "$Id: Alternative.cxx,v 1.37 2002/01/20 07:37:16 spitzak Exp $".
 //

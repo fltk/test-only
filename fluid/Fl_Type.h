@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.30 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Type.h,v 1.31 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@
 //
 
 #include <fltk/Fl_Widget.h>
-#include <fltk/Fl_Menu_Item.h>
 #include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
 
@@ -84,7 +83,7 @@ public:
   void move_before(Fl_Type*); // move before a sibling
 
   virtual const char *title(); // string for browser
-  virtual const char *type_name() = 0; // type for code output
+  virtual const char *type_name() const = 0; // type for code output
 
   const char *name() const {return name_;}
   void name(const char *);
@@ -141,20 +140,41 @@ public:
   virtual int is_value_output() const;
   virtual int is_value_slider() const;
 
-  const char* class_name(const int need_nest) const;
+  const char* member_of(bool need_nest = false) const;
 };
 
 ////////////////////////////////////////////////////////////////
 
-#define NUM_EXTRA_CODE 4
+// This structure is used to define tables of enumerations:
+
+struct Enumeration {
+  const char* menu_entry;	// user-friendly string, null for end of table
+  const char* symbol;		// symbol for c++ code and for .fl file
+  void* compiled;		// symbol compiled for use by fluid
+  const char* subclass;		// For type() of widgets, use this subclass
+};
+
+// Use this call to make a menu/Fl_Choice from a table. Warning this
+// will overwrite the user_data() of the Fl_Menu_:
+class Fl_Menu_;
+void set_menu(Fl_Menu_*, const Enumeration*);
+
+// Converters from/to strings and values:
+const Enumeration* from_value(void* data, const Enumeration* table);
+const Enumeration* from_text(const char* text, const Enumeration* table);
+const char* to_text(void* data, const Enumeration* table);
+int number_from_text(const char* text, const Enumeration* table);
+const char* number_to_text(int number, const Enumeration* table);
+
+////////////////////////////////////////////////////////////////
 
 class FLUID_API Fl_Widget_Type : public Fl_Type {
   virtual Fl_Widget *widget(int,int,int,int) = 0;
   virtual Fl_Widget_Type *_make() = 0; // virtual constructor
   virtual void setlabel(const char *);
 
-  const char *extra_code_[NUM_EXTRA_CODE];
-  const char *subclass_;
+  const char *extra_code_;
+  const char *user_class_;
   uchar hotspot_;
 
 protected:
@@ -179,16 +199,16 @@ public:
   Fl_Type *make();
   void open();
 
-  const char *extra_code(int n) const {return extra_code_[n];}
-  void extra_code(int n,const char *);
-  const char *subclass() const {return subclass_;}
-  void subclass(const char *);
+  const char *extra_code() const {return extra_code_;}
+  void extra_code(const char *);
+  const char *user_class() const {return user_class_;}
+  void user_class(const char *);
   uchar hotspot() const {return hotspot_;}
   void hotspot(uchar v) {hotspot_ = v;}
   uchar resizable() const;
   void resizable(uchar v);
 
-  virtual Fl_Menu_Item *subtypes();
+  virtual const Enumeration* subtypes() const;
 
   virtual int is_widget() const;
 
@@ -198,6 +218,9 @@ public:
 
   virtual ~Fl_Widget_Type();
   void redraw();
+
+  const char* subclass() const;
+  const char* array_name() const;
 };
 
 #define LOAD ((void*)9831)
@@ -208,8 +231,9 @@ FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
 public:
+  const Enumeration* subtypes() const;
   virtual ~Fl_Group_Type();
-  virtual const char *type_name();
+  virtual const char *type_name() const;
   Fl_Widget *widget(int x,int y,int w,int h);
   Fl_Widget_Type* _make();
   Fl_Type *make();
@@ -223,11 +247,9 @@ public:
 
 ////////////////////////////////////////////////////////////////
 
-FLUID_API extern Fl_Menu_Item window_type_menu[];
-
 //class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
 class FLUID_API Fl_Window_Type : public Fl_Group_Type {
-  Fl_Menu_Item* subtypes() {return window_type_menu;}
+  const Enumeration* subtypes() const;
 
   friend class Overlay_Window;
   int mx,my;		// mouse position during dragging
@@ -255,7 +277,7 @@ public:
   uchar modal, non_modal, border;
 
   Fl_Type *make();
-  virtual const char *type_name() {return "Fl_Window";}
+  virtual const char *type_name() const;
 
   void open();
 
@@ -322,5 +344,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.30 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Type.h,v 1.31 2002/01/20 07:37:15 spitzak Exp $".
 //

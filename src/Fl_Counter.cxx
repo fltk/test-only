@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Counter.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ static Fl_Color counter_glyph_color(const Fl_Widget *w, Fl_Flags f) {
 static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
-  widget->box()->draw(x,y,w,h,widget->get_box_color(f),f);
+  widget->button_box()->draw(x,y,w,h,widget->get_box_color(f),f);
   // can't use this 'cause glyph box is shared with text box
   // Fl_Color fc = widget->get_glyph_color(f);
   Fl_Color fc = counter_glyph_color(widget, f);
@@ -63,15 +63,16 @@ static void glyph(const Fl_Widget* widget, int t,
 
 void Fl_Counter::draw() {
   Fl_Flags fl[5];
+  fl[0] = flags();
+  if (!active_r()) fl[0] |= FL_INACTIVE;
   for (int i = 1; i < 5; i++) {
-    fl[i] = flags();
-    if (!active_r()) fl[i] |= FL_INACTIVE;
-    else if (mouseobj == i) fl[i] |= FL_VALUE|FL_SELECTED;
+    fl[i] = fl[0];
+    if (mouseobj == i) fl[i] |= FL_VALUE|FL_SELECTED;
     else if (highlight == i) fl[i] |= FL_HIGHLIGHT;
   }
 
   int xx[5], ww[5];
-  if (type() == FL_NORMAL_COUNTER) {
+  if (type() != SIMPLE) {
     int W = w()*15/100;
     xx[1] = 0;	     ww[1] = W;
     xx[2] = 1*W;     ww[2] = W;
@@ -85,7 +86,7 @@ void Fl_Counter::draw() {
     xx[3] = w()-1*W; ww[3] = W;
   }
 
-  draw_text_box(xx[0], 0, ww[0], h());
+  box()->draw(xx[0], 0, ww[0], h(), color(), fl[0]);
 
   char str[128]; format(str);
   fl_font(text_font(), text_size());
@@ -100,14 +101,14 @@ void Fl_Counter::draw() {
   }
   fl_draw(str, xx[0], 0, ww[0], h(), FL_ALIGN_CENTER);
 
-  if (type() == FL_NORMAL_COUNTER &&
+  if (type() != SIMPLE &&
       (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1))
     draw_glyph(FL_GLYPH_2LEFTARROW, xx[1], 0, ww[1], h(), fl[1]);
   if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
     draw_glyph(FL_GLYPH_LEFTARROW, xx[2], 0, ww[2], h(), fl[2]);
   if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
     draw_glyph(FL_GLYPH_RIGHTARROW, xx[3], 0, ww[3], h(), fl[3]);
-  if (type() == FL_NORMAL_COUNTER &&
+  if (type() != SIMPLE &&
       (damage()&FL_DAMAGE_ALL || last == 4 || highlight == 4))
     draw_glyph(FL_GLYPH_2RIGHTARROW, xx[4], 0, ww[4], h(), fl[4]);
   last = highlight;
@@ -138,7 +139,7 @@ void Fl_Counter::repeat_callback(void* v) {
 
 int Fl_Counter::calc_mouseobj() {
   int mx = Fl::event_x();
-  if (type() == FL_NORMAL_COUNTER) {
+  if (type() != SIMPLE) {
     int W = w()*15/100;
     if (mx < W) return 1;
     if (mx < 2*W) return 2;
@@ -217,5 +218,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $".
 //

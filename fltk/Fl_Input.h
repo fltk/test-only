@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,16 @@
 #include "Fl_Widget.h"
 #endif
 
-#define FL_NORMAL_INPUT		0
-#define FL_SECRET_INPUT		3
-#define FL_MULTILINE_INPUT	4
-#define FL_WORDWRAP_INPUT	5
-
 class FL_API Fl_Input : public Fl_Widget {
 public:
+  enum { // values for type()
+    NORMAL = 0,
+    // this hole was used by float & int types
+    SECRET = 3,
+    MULTILINE = 4,
+    WORDWRAP = 5
+  };
+
   Fl_Input(int, int, int, int, const char* = 0);
   ~Fl_Input();
   static Fl_Named_Style* default_style;
@@ -118,8 +121,15 @@ private:
 
 };
 
+#ifndef FLTK_2
+#define FL_NORMAL_INPUT		Fl_Input::NORMAL
+#define FL_SECRET_INPUT		Fl_Input::SECRET
+#define FL_MULTILINE_INPUT	Fl_Input::MULTILINE
+#define FL_WORDWRAP_INPUT	Fl_Input::WORDWRAP
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

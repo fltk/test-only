@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.20 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Pack.cxx,v 1.21 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,21 +38,15 @@
 // items, allowing it to be imbedded in a surrounding Fl_Pack.
 
 // The code can support widgets that extend vertically, these are put
-// against the left edge (or the right if after the resizable()).
-// However I currently lack any way to to determine the orientation of
-// a widget.  This could possibly be done by looking at the widgets's
-// original shape, or by a flag stored in the widget's type() or
-// align() or flags(), or by data stored on the Fl_Pack itself.
-// Currently you can only change *all* the widgets to vertical by
-// setting the Fl_Pack type to "HORIZONTAL". The following macro
-// controls how it decides the orientation of a widget:
+// against the left edge (or the right if after the resizable()). This
+// is done by setting FL_VERTICAL_LAYOUT in the type().
 
-#define is_vertical(widget) type()!=VERTICAL
+#define is_vertical(widget) (type()&1 || widget->flags()&FL_PACK_VERTICAL)
 
 Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
 : Fl_Group(x, y, w, h, l) {
   spacing_ = 0;
-  //type(VERTICAL);
+  type(VERTICAL);
   //resizable(0);
 }
 
@@ -61,9 +55,9 @@ void Fl_Pack::layout() {
     if (!layout_damage()) break;
 
     // we only need to do something special if the group is resized:
-    if (!(layout_damage() & ~FL_LAYOUT_XY) || !children()) {
+    if (!(layout_damage() & (FL_LAYOUT_WH|FL_LAYOUT_DAMAGE)) || !children()) {
       Fl_Group::layout();
-      return;
+      if (!(layout_damage() & FL_LAYOUT_DAMAGE)) break;
     }
 
     // clear the layout flags, so any resizes of children will set them again:
@@ -74,7 +68,7 @@ void Fl_Pack::layout() {
     int y = 0;
     int r = this->w();
     int b = this->h();
-    text_box()->inset(x,y,r,b);
+    box()->inset(x,y,r,b);
 
     bool saw_horizontal = false;
     bool saw_vertical = false;
@@ -136,5 +130,5 @@ void Fl_Pack::layout() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.20 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.21 2002/01/20 07:37:15 spitzak Exp $".
 //

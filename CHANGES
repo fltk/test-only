@@ -1928,6 +1928,38 @@ resizable checkbox fixed.
 Fl_Menu_Window does not use overlay except on SGI, so that it works
 with xft implementations.
 
+////////////////////////////////////////////////////////////////
 
+Colors changed to be much more back compatable with fltk1.*:
+Removed text_box() and text_background(), it uses box() and color()
+for these. Added new button_box() and button_color() for use by
+widgets that draw internal buttons. Sliders now draw just like 1.1
 
+New flags bit FL_PACK_VERTICAL added to tell Fl_Pack to put the widget
+vertically. This allows arbitrary layout without as many nested Fl_Pack
+widgets.
 
+All type() enumerations are made class members, for instance
+FL_WORDWRAP_INPUT is now Fl_Input::WORDWRAP. Back-compatability
+#defines added to the header files.
+
+Considerable work done on fluid so that values for type are written to
+the saved file and the code as symbols, allowing them to change value
+in the future.
+
+Fluid will generate a subclass for some type() values instead of a
+type() setting.
+
+Reran the new fluid on all the .fl files.
+
+Fixed the julia sets in mandelbrot demo
+
+Fill Dial draws it's background correctly.
+
+New Fl_Bar class. This is a group that can be opened/closed by
+clicking the box at the left edge. You must put this into an Fl_Pack
+for it to be useful. Based on Curtis Edwards' FrameTab (you should be
+able to make it look just like that by changing the glyph function).
+
+Checked in 1/19/02
+////////////////////////////////////////////////////////////////

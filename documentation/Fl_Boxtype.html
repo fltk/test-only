@@ -28,14 +28,13 @@ are of use to the boxes, ignore any other bits that are on:
 <li><tt>FL_VALUE</tt> - draw the box pushed in, you can ignore this if
 the box type is already pushed in.
 
-<li><tt>FL_FOCUSED</tt> - draw the button with keyboard focus.
-
 <li><tt>FL_HIGHLIGHT</tt> - draw the box highlighted.  Usually you can
 ignore this because the fill color will also be changed.
 
-<li><tt>FL_FRAME_ONLY</tt> - it is not necessary to fill in the
-interior of the box.  You can fill it in anyway but obeying this flag
-can make drawing faster and flicker less.
+<li><tt>FL_INVISIBLE</tt> - you should only draw the outer edge of the
+box and not fill it in. This is used to draw the boxes around browsers
+and text widgets. You can ignore this and things will still draw
+ok, but they may flicker more than necessary.
 
 </ul>
 
@@ -47,7 +46,7 @@ and then draw a black outline:
 void xyz_draw(const Fl_Boxtype_*, int x, int y, int w, int h,
 	      Fl_Color c, Fl_Flags f)
 {
-  if (!(f&FL_FRAME_ONLY)) {
+  if (!(f&FL_INVISIBLE)) {
     fl_color(c);
     fl_rectf(x, y, w, h);
   }

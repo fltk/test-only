@@ -1,80 +1,100 @@
-<HTML><BODY>
-<HR break>
-<H2><A name=Fl_Pack>class Fl_Pack</A></H2>
-<HR>
-<H3>Class Hierarchy</H3>
-<UL>
-<PRE>
-<A href=Fl_Group.html#Fl_Group>Fl_Group</A>
+<html><head><title>Fl_Pack</title></head><body bgcolor = white>
+
+<hr break>
+<a name=Fl_Widget><h2>class Fl_Pack</h2></a>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre>
+<A href=Fl_Group.html>Fl_Group</A>
    |
    +----<B>Fl_Pack</B>
-</PRE>
-</UL>
-<H3>Include Files</H3>
-<UL>
-<PRE>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
 #include &lt;fltk/Fl_Pack.h&gt;
-</PRE>
-</UL>
-<H3>Description</H3>
- This widget was designed to add the functionality of compressing and 
-aligning widgets. 
-<P>If <TT>type()</TT> is <TT>FL_HORIZONTAL</TT> all the children are 
-resized to the height of the <TT>Fl_Pack</TT>, and are moved next to 
-each other horizontally. If <TT>type()</TT> is not <TT>FL_HORIZONTAL</TT>
- then the children are resized to the width and are stacked below each 
-other.  Then the <TT>Fl_Pack</TT> resizes itself to surround the child 
-widgets. </P>
-<P>This widget is needed for the <A href=#Fl_Tab><TT>Fl_Tab</TT></A>. 
- In addition you may want to put the <TT>Fl_Pack</TT> inside an <A href=Fl_Scroll.html#Fl_Scroll>
-<TT>Fl_Scroll</TT></A>. </P>
+</pre></ul>
+
+<h3>Description</h3>
+
+This grouping widget arranges and resizes all of it's children so they
+are all packed close together and completely fill the widget. This is
+similar to layout widgets used by TK and some other toolkits.
+
+<p><center><img src="Fl_Pack.gif"></center>
+
+<p>In the above image the widgets 1,4,7, and 8 have the
+<tt>FL_PACK_VERTICAL</tt> bit on in their <a
+href="Fl_Widget.html#flags">flags()</a>. The widgets are
+numbered with the order they were added to the pack.
+
+<p>Each child widget is stretched (ie one of it's dimensions is
+changed and the other left alone) to completely fill the remaining
+space on one edge of the pack and placed against all the previous
+widgets on that edge.
+
+<p>Any widget with the <tt>FL_PACK_VERTICAL</tt> bit (8) set in the <a
+href="Fl_Widget.html#flags">flags()</a> are placed against the left or
+right edge, otherwise against the top or bottom edge.  (If <a
+href="Fl_Widget.html#type">type()</a> of the pack is set to
+<tt>Fl_Pack::HORIZONTAL</tt> then it will "pack horzontally" which
+means that all widgets are packed against the left or right edges,
+whether or not they have <tt>FL_PACK_VERTICAL</tt> turned on)
+
+<p>All widgets before the <a
+href="Fl_Group.html#resizable">resizable()</a> widget are placed
+against the top and left edge, all widgets after the <a
+href="Fl_Group.html#resizable">resizable()</a> widget are placed
+against the bottom and right edge in backwards order.  If the <a
+href="Fl_Group.html#resizable">resizable()</a> is not set, all widgets
+are placed against the top and left edge, and the pack itself resizes
+to surround them. Such a pack must be imbedded in another pack or be
+the only child of a window so that this resizing can be used to layout
+the parent widget.
+
+<p>If any child changes size the pack automatically re-layouts and
+possibly changes it's own size to accomodate it. If you add, move,
+remove, hide, or show a child widget, or change the
+<tt>FL_PACK_VERTICAL</tt> flag, you should call <a
+href="Fl_Widget.html#relayout">relayout()</a> on the pack yourself.
+
+<p>The default box is <tt>FL_FLAT_BOX</tt>. If you set it to
+something else the border of the box is drawn and the widgets are
+packed against the inside of this border.
+
 <H3>Methods</H3>
-<CENTER>
-<TABLE width=90%>
-<TR><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Pack.Fl_Pack>Fl_Pack</A></LI>
-<LI><A href=#Fl_Pack.~Fl_Pack>~Fl_Pack</A></LI>
-<LI><A href=#Fl_Pack.add>add</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Pack.add_resizeable>add_resizeable</A></LI>
-<LI><A href=#Fl_Pack.array>array</A></LI>
-<LI><A href=#Fl_Pack.begin>begin</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Pack.child>child</A></LI>
-<LI><A href=#Fl_Pack.children>children</A></LI>
-<LI><A href=#Fl_Pack.current>current</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Pack.end>end</A></LI>
-<LI><A href=#Fl_Pack.find>find</A></LI>
-<LI><A href=#Fl_Pack.insert>insert</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Pack.remove>remove</A></LI>
-<LI><A href=#Fl_Pack.resizeable>resizeable</A></LI>
-</UL>
-</TD></TR>
-</TABLE>
-</CENTER>
-<H4><A name=Fl_Pack.Fl_Pack>Fl_Pack::Fl_Pack(int x, int y, int w, int 
-h, const char *label = 0)</A></H4>
- Creates a new <TT>Fl_Pack</TT> widget using the given position, size, 
-and label string. The default boxtype is <TT>FL_NO_BOX</TT>. 
-<H4><A name=Fl_Pack.~Fl_Pack>virtual Fl_Pack::~Fl_Pack()</A></H4>
- The destructor <I>also deletes all the children</I>. This allows a 
-whole tree to be deleted at once, without having to keep a pointer to 
-all the children in the user code. A kludge has been done so the <TT>
-Fl_Pack</TT> and all of it's children can be automatic (local) 
-variables, but you must declare the <TT>Fl_Pack</TT><I>first</I>, so 
-that it is destroyed last. 
-<H4><A name=Fl_Pack.spacing>int Fl_Pack::spacing() const
-<BR> void Fl_Pack::spacing(int)</A></H4>
- Gets or sets the number of extra pixels of blank space that are added 
+
+<center>
+<table width=90%>
+<tr><td align=left valign=top>
+<ul>
+<li><a href=#Fl_Pack>Fl_Pack</a></li>
+<li><a href=#~Fl_Pack>~Fl_Pack</a></li>
+<li><a href=#spacing>spacing</a></li>
+</ul>
+</td></tr>
+</table>
+</center>
+
+<a name=Fl_Pack><h4>Fl_Pack::Fl_Pack(int x, int y, int w, int h, const char *label = 0)</h4></a>
+
+Creates a new empty Fl_Pack.
+
+<a name=~Fl_Pack><h4>virtual Fl_Pack::~Fl_Pack()</h4></a>
+
+Like all groups, the destructor <I>also deletes all the
+children</I>. This allows a whole tree to be deleted at once, without
+having to keep a pointer to all the children in the user code.
+
+<a name=spacing><h4>int Fl_Pack::spacing() const
+<br>void Fl_Pack::spacing(int)</h4></a>
+
+Gets or sets the number of extra pixels of blank space that are added
+between each child widget.
+
+</body></html>
+
 between the children. </BODY></HTML>

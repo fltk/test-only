@@ -14,7 +14,7 @@ Function {make_function_panel()} {open
   } {
     Fl_Check_Button f_public_button {
       label public
-      xywh {10 15 74 25} when 0
+      xywh {10 15 74 25} when NEVER
     }
     Fl_Check_Button f_c_button {
       label {C declaration}
@@ -22,15 +22,15 @@ Function {make_function_panel()} {open
     }
     Fl_Input f_name_input {
       label {Name(args): (blank for main())}
-      xywh {10 55 300 22} align 5 when 0 resizable
+      xywh {10 55 300 22} align 5 when NEVER
     }
     Fl_Input f_attributes_input {
       label {Attributes (virtual, static, __declspec, ...)}
-      xywh {10 99 300 22} align 5 when 0
+      xywh {10 99 300 22} align 5 when NEVER
     }
     Fl_Input f_return_type_input {
       label {Return Type: (blank to return outermost widget)}
-      xywh {10 143 300 22} align 5 when 0
+      xywh {10 143 300 22} align 5 when NEVER
     }
     Fl_Return_Button f_panel_ok {
       label OK
@@ -50,7 +50,7 @@ Function {make_code_panel()} {open
     xywh {171 177 290 175} resizable modal visible
   } {
     Fl_Input code_input {
-      xywh {6 5 280 138} type Multiline align 0 when 0 resizable
+      xywh {6 5 280 138} type Multiline align 0 when NEVER
     }
     Fl_Return_Button code_panel_ok {
       label OK
@@ -70,14 +70,14 @@ Function {make_codeblock_panel()} {open
     xywh {539 470 290 131} resizable modal visible
   } {
     Fl_Input code_before_input {
-      xywh {10 11 270 22} align 5 when 0 resizable
+      xywh {10 11 270 22} align 5 when NEVER
     }
     Fl_Box {} {
       label {"{...child code...}" is inserted here}
       xywh {10 33 270 33} align 20
     }
     Fl_Input code_after_input {
-      xywh {10 65 270 23} align 5 when 0
+      xywh {10 65 270 23} align 5 when NEVER
     }
     Fl_Return_Button codeblock_panel_ok {
       label OK
@@ -97,14 +97,14 @@ Function {make_declblock_panel()} {open
     xywh {540 629 290 131} resizable modal visible
   } {
     Fl_Input decl_before_input {
-      xywh {10 11 270 22} align 5 when 0 resizable
+      xywh {10 11 270 22} align 5 when NEVER
     }
     Fl_Box {} {
       label {"\\n...child code...\\n" is inserted here}
       xywh {10 33 270 33} align 20
     }
     Fl_Input decl_after_input {
-      xywh {10 66 270 22} align 5 when 0
+      xywh {10 66 270 22} align 5 when NEVER
     }
     Fl_Return_Button declblock_panel_ok {
       label OK
@@ -125,14 +125,14 @@ Function {make_decl_panel()} {open
   } {
     Fl_Check_Button decl_public_button {
       label public
-      xywh {10 11 65 22} when 0
+      xywh {10 11 65 22} when NEVER
     }
     Fl_Input decl_input {
       label {can be any declartion, like "int x;",
 an external symbol like "extern int foo();",
 a \#directive like "\#include <foo.h>",
 or a comment like "//foo" or "/*foo*/"} selected
-      xywh {10 44 270 22} align 6 when 0 resizable
+      xywh {10 44 270 22} align 6 when NEVER resizable
     }
     Fl_Return_Button decl_panel_ok {
       label OK
@@ -153,15 +153,15 @@ Function {make_class_panel()} {open
   } {
     Fl_Check_Button c_public_button {
       label public
-      xywh {10 11 65 22} when 0
+      xywh {10 11 65 22} when NEVER
     }
     Fl_Input c_name_input {
       label {name:}
-      xywh {10 44 260 22} align 5 when 0 resizable
+      xywh {10 44 260 22} align 5 when NEVER resizable
     }
     Fl_Input c_subclass_input {
       label {subclass of (text between : and \{)}
-      xywh {10 89 260 21} align 5 when 0
+      xywh {10 89 260 21} align 5 when NEVER
     }
     Fl_Return_Button c_panel_ok {
       label OK

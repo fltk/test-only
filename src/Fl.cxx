@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.135 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.136 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -355,7 +355,7 @@ void Fl::flush() {
 	if (window->damage() || x->region) {
 	  window->flush();
 	  window->set_damage(0);
-      }
+	}
       }
       // destroy damage regions for windows that don't use them:
       if (x->region) {XDestroyRegion(x->region); x->region = 0;}
@@ -499,7 +499,7 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 	XAllowEvents(fl_display, SyncPointer, CurrentTime);
       } else {
 	//printf("XGrabPointer failed\n");
-  XUngrabKeyboard(fl_display, fl_event_time);
+	XUngrabKeyboard(fl_display, fl_event_time);
       }
     } else {
       //printf("XGrabKeyboard failed\n");
@@ -513,9 +513,9 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
     fl_fix_focus();
     // generate a dummy move event so the highlights are correct for
     // the new modal widget:
-  if (xmousewin) {
-    Fl::e_x = Fl::e_x_root-xmousewin->x();
-    Fl::e_y = Fl::e_y_root-xmousewin->y();
+    if (xmousewin) {
+      Fl::e_x = Fl::e_x_root-xmousewin->x();
+      Fl::e_y = Fl::e_y_root-xmousewin->y();
       Fl::handle(FL_MOVE, xmousewin);
     }
   }
@@ -551,7 +551,7 @@ bool Fl::handle(int event, Fl_Window* window)
   switch (event) {
 
   case FL_PUSH:
-      Fl_Tooltip::enter((Fl_Widget*)0);
+    Fl_Tooltip::enter((Fl_Widget*)0);
     if (pushed()) to = pushed();
     break;
 
@@ -678,5 +678,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.135 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.136 2002/01/20 07:37:15 spitzak Exp $".
 //

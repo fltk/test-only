@@ -32,7 +32,7 @@ cb_test(Fl_Widget* browser, void*) {
 void
 cb_remove(Fl_Widget*, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
-  if (tree->type() & Fl_Browser::MULTI_BROWSER) {
+  if (tree->type() & Fl_Browser::MULTI) {
     Fl_Widget* w = tree->goto_top();
     while (w) {
       if (w->value()) {
@@ -59,7 +59,7 @@ cb_remove(Fl_Widget*, void* ptr) {
 void
 cb_multi(Fl_Widget* w, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
-  tree->type(w->value() ? FL_MULTI_BROWSER : FL_NORMAL_BROWSER);
+  tree->type(w->value() ? Fl_Browser::MULTI : Fl_Browser::NORMAL);
   tree->relayout();
 }
 
@@ -159,7 +159,7 @@ int main(int argc,char** argv) {
   Fl_Button add_folder_button(5, 248, 70, 22, "Add Folder");
   add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
 
-  Fl_Check_Button multi_button(80, 200, 160, 20, "FL_MULTI_BROWSER");
+  Fl_Check_Button multi_button(80, 200, 160, 20, "Fl_Browser::MULTI");
   multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
 
   Fl_Check_Button when_changed_button(80, 220, 160, 20, "FL_WHEN_CHANGED");

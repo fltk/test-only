@@ -2,194 +2,194 @@
 
 #include "function_panel.h"
 
-Fl_Window *function_panel=(Fl_Window *)0;
+Fl_Window* function_panel;
 
-Fl_Check_Button *f_public_button=(Fl_Check_Button *)0;
+Fl_Check_Button* f_public_button;
 
-Fl_Check_Button *f_c_button=(Fl_Check_Button *)0;
+Fl_Check_Button* f_c_button;
 
-Fl_Input *f_name_input=(Fl_Input *)0;
+Fl_Input* f_name_input;
 
-Fl_Input *f_attributes_input=(Fl_Input *)0;
+Fl_Input* f_attributes_input;
 
-Fl_Input *f_return_type_input=(Fl_Input *)0;
+Fl_Input* f_return_type_input;
 
-Fl_Return_Button *f_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* f_panel_ok;
 
-Fl_Button *f_panel_cancel=(Fl_Button *)0;
+Fl_Button* f_panel_cancel;
 
 Fl_Window* make_function_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = function_panel = new Fl_Window(320, 208, "function/method");
+   {Fl_Window* o = function_panel = new Fl_Window(320, 208, "function/method");
     w = o;
-     {    Fl_Check_Button* o = f_public_button = new Fl_Check_Button(10, 15, 74, 25, "public");
+     {Fl_Check_Button* o = f_public_button = new Fl_Check_Button(10, 15, 74, 25, "public");
       o->when(FL_WHEN_NEVER);
     }
     f_c_button = new Fl_Check_Button(101, 15, 104, 25, "C declaration");
-     {    Fl_Input* o = f_name_input = new Fl_Input(10, 55, 300, 22, "Name(args): (blank for main())");
-      o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
-      o->when(FL_WHEN_NEVER);
-      Fl_Group::current()->resizable(o);
-    }
-     {    Fl_Input* o = f_attributes_input = new Fl_Input(10, 99, 300, 22, "Attributes (virtual, static, __declspec, ...)");
+     {Fl_Input* o = f_name_input = new Fl_Input(10, 55, 300, 22, "Name(args): (blank for main())");
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Input* o = f_return_type_input = new Fl_Input(10, 143, 300, 22, "Return Type: (blank to return outermost widget)");
+     {Fl_Input* o = f_attributes_input = new Fl_Input(10, 99, 300, 22, "Attributes (virtual, static, __declspec, ...)");
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Return_Button* o = f_panel_ok = new Fl_Return_Button(120, 176, 92, 22, "OK");
+     {Fl_Input* o = f_return_type_input = new Fl_Input(10, 143, 300, 22, "Return Type: (blank to return outermost widget)");
+      o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+      o->when(FL_WHEN_NEVER);
+    }
+     {Fl_Return_Button* o = f_panel_ok = new Fl_Return_Button(120, 176, 92, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = f_panel_cancel = new Fl_Button(220, 176, 90, 22, "Cancel");
+     {Fl_Button* o = f_panel_cancel = new Fl_Button(220, 176, 90, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->set_modal();
     o->end();
+    o->resizable(o);
   }
   return w;
 }
 
-Fl_Window *code_panel=(Fl_Window *)0;
+Fl_Window* code_panel;
 
-Fl_Input *code_input=(Fl_Input *)0;
+Fl_Multiline_Input* code_input;
 
-Fl_Return_Button *code_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* code_panel_ok;
 
-Fl_Button *code_panel_cancel=(Fl_Button *)0;
+Fl_Button* code_panel_cancel;
 
 Fl_Window* make_code_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = code_panel = new Fl_Window(290, 175, "code");
+   {Fl_Window* o = code_panel = new Fl_Window(290, 175, "code");
     w = o;
-     {    Fl_Input* o = code_input = new Fl_Input(6, 5, 280, 138);
+     {Fl_Multiline_Input* o = code_input = new Fl_Multiline_Input(6, 5, 280, 138);
       o->type(4);
       o->align(FL_ALIGN_CENTER);
       o->when(FL_WHEN_NEVER);
-      Fl_Group::current()->resizable(o);
     }
-     {    Fl_Return_Button* o = code_panel_ok = new Fl_Return_Button(115, 148, 80, 22, "OK");
+     {Fl_Return_Button* o = code_panel_ok = new Fl_Return_Button(115, 148, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = code_panel_cancel = new Fl_Button(205, 148, 80, 22, "Cancel");
+     {Fl_Button* o = code_panel_cancel = new Fl_Button(205, 148, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->set_modal();
     o->end();
+    o->resizable(o);
   }
   return w;
 }
 
-Fl_Window *codeblock_panel=(Fl_Window *)0;
+Fl_Window* codeblock_panel;
 
-Fl_Input *code_before_input=(Fl_Input *)0;
+Fl_Input* code_before_input;
 
-Fl_Input *code_after_input=(Fl_Input *)0;
+Fl_Input* code_after_input;
 
-Fl_Return_Button *codeblock_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* codeblock_panel_ok;
 
-Fl_Button *codeblock_panel_cancel=(Fl_Button *)0;
+Fl_Button* codeblock_panel_cancel;
 
 Fl_Window* make_codeblock_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = codeblock_panel = new Fl_Window(290, 131, "codeblock");
+   {Fl_Window* o = codeblock_panel = new Fl_Window(290, 131, "codeblock");
     w = o;
-     {    Fl_Input* o = code_before_input = new Fl_Input(10, 11, 270, 22);
+     {Fl_Input* o = code_before_input = new Fl_Input(10, 11, 270, 22);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
-      Fl_Group::current()->resizable(o);
     }
-     {    Fl_Box* o = new Fl_Box(10, 33, 270, 33, "\"{...child code...}\" is inserted here");
+     {Fl_Box* o = new Fl_Box(10, 33, 270, 33, "\"{...child code...}\" is inserted here");
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-     {    Fl_Input* o = code_after_input = new Fl_Input(10, 65, 270, 23);
+     {Fl_Input* o = code_after_input = new Fl_Input(10, 65, 270, 23);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Return_Button* o = codeblock_panel_ok = new Fl_Return_Button(110, 99, 80, 22, "OK");
+     {Fl_Return_Button* o = codeblock_panel_ok = new Fl_Return_Button(110, 99, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = codeblock_panel_cancel = new Fl_Button(200, 99, 80, 22, "Cancel");
+     {Fl_Button* o = codeblock_panel_cancel = new Fl_Button(200, 99, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->set_modal();
     o->end();
+    o->resizable(o);
   }
   return w;
 }
 
-Fl_Window *declblock_panel=(Fl_Window *)0;
+Fl_Window* declblock_panel;
 
-Fl_Input *decl_before_input=(Fl_Input *)0;
+Fl_Input* decl_before_input;
 
-Fl_Input *decl_after_input=(Fl_Input *)0;
+Fl_Input* decl_after_input;
 
-Fl_Return_Button *declblock_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* declblock_panel_ok;
 
-Fl_Button *declblock_panel_cancel=(Fl_Button *)0;
+Fl_Button* declblock_panel_cancel;
 
 Fl_Window* make_declblock_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = declblock_panel = new Fl_Window(290, 131, "declaration block");
+   {Fl_Window* o = declblock_panel = new Fl_Window(290, 131, "declaration block");
     w = o;
-     {    Fl_Input* o = decl_before_input = new Fl_Input(10, 11, 270, 22);
+     {Fl_Input* o = decl_before_input = new Fl_Input(10, 11, 270, 22);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
-      Fl_Group::current()->resizable(o);
     }
-     {    Fl_Box* o = new Fl_Box(10, 33, 270, 33, "\"\\n...child code...\\n\" is inserted here");
+     {Fl_Box* o = new Fl_Box(10, 33, 270, 33, "\"\\n...child code...\\n\" is inserted here");
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-     {    Fl_Input* o = decl_after_input = new Fl_Input(10, 66, 270, 22);
+     {Fl_Input* o = decl_after_input = new Fl_Input(10, 66, 270, 22);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Return_Button* o = declblock_panel_ok = new Fl_Return_Button(110, 99, 80, 22, "OK");
+     {Fl_Return_Button* o = declblock_panel_ok = new Fl_Return_Button(110, 99, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = declblock_panel_cancel = new Fl_Button(200, 99, 80, 22, "Cancel");
+     {Fl_Button* o = declblock_panel_cancel = new Fl_Button(200, 99, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->set_modal();
     o->end();
+    o->resizable(o);
   }
   return w;
 }
 
-Fl_Window *decl_panel=(Fl_Window *)0;
+Fl_Window* decl_panel;
 
-Fl_Check_Button *decl_public_button=(Fl_Check_Button *)0;
+Fl_Check_Button* decl_public_button;
 
-Fl_Input *decl_input=(Fl_Input *)0;
+Fl_Input* decl_input;
 
-Fl_Return_Button *decl_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* decl_panel_ok;
 
-Fl_Button *decl_panel_cancel=(Fl_Button *)0;
+Fl_Button* decl_panel_cancel;
 
 Fl_Window* make_decl_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = decl_panel = new Fl_Window(290, 175, "declaration");
+   {Fl_Window* o = decl_panel = new Fl_Window(290, 175, "declaration");
     w = o;
-     {    Fl_Check_Button* o = decl_public_button = new Fl_Check_Button(10, 11, 65, 22, "public");
+     {Fl_Check_Button* o = decl_public_button = new Fl_Check_Button(10, 11, 65, 22, "public");
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Input* o = decl_input = new Fl_Input(10, 44, 270, 22, "can be any declartion, like \"int x;\",\nan external symbol like \"extern int\
+     {Fl_Input* o = decl_input = new Fl_Input(10, 44, 270, 22, "can be any declartion, like \"int x;\",\nan external symbol like \"extern int\
  foo();\",\na #directive like \"#include <foo.h>\",\nor a comment like \"//foo\
 \" or \"/*foo*/\"");
       o->align(FL_ALIGN_BOTTOM | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
     }
-     {    Fl_Return_Button* o = decl_panel_ok = new Fl_Return_Button(110, 143, 80, 22, "OK");
+     {Fl_Return_Button* o = decl_panel_ok = new Fl_Return_Button(110, 143, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = decl_panel_cancel = new Fl_Button(200, 143, 80, 22, "Cancel");
+     {Fl_Button* o = decl_panel_cancel = new Fl_Button(200, 143, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->end();
@@ -197,39 +197,39 @@ Fl_Window* make_decl_panel() {
   return w;
 }
 
-Fl_Window *class_panel=(Fl_Window *)0;
+Fl_Window* class_panel;
 
-Fl_Check_Button *c_public_button=(Fl_Check_Button *)0;
+Fl_Check_Button* c_public_button;
 
-Fl_Input *c_name_input=(Fl_Input *)0;
+Fl_Input* c_name_input;
 
-Fl_Input *c_subclass_input=(Fl_Input *)0;
+Fl_Input* c_subclass_input;
 
-Fl_Return_Button *c_panel_ok=(Fl_Return_Button *)0;
+Fl_Return_Button* c_panel_ok;
 
-Fl_Button *c_panel_cancel=(Fl_Button *)0;
+Fl_Button* c_panel_cancel;
 
 Fl_Window* make_class_panel() {
   Fl_Window* w;
-   {  Fl_Window* o = class_panel = new Fl_Window(280, 164, "class");
+   {Fl_Window* o = class_panel = new Fl_Window(280, 164, "class");
     w = o;
-     {    Fl_Check_Button* o = c_public_button = new Fl_Check_Button(10, 11, 65, 22, "public");
+     {Fl_Check_Button* o = c_public_button = new Fl_Check_Button(10, 11, 65, 22, "public");
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Input* o = c_name_input = new Fl_Input(10, 44, 260, 22, "name:");
+     {Fl_Input* o = c_name_input = new Fl_Input(10, 44, 260, 22, "name:");
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
     }
-     {    Fl_Input* o = c_subclass_input = new Fl_Input(10, 89, 260, 21, "subclass of (text between : and {)");
+     {Fl_Input* o = c_subclass_input = new Fl_Input(10, 89, 260, 21, "subclass of (text between : and {)");
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_NEVER);
     }
-     {    Fl_Return_Button* o = c_panel_ok = new Fl_Return_Button(100, 132, 80, 22, "OK");
+     {Fl_Return_Button* o = c_panel_ok = new Fl_Return_Button(100, 132, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((Fl_Window*)(o->parent()))->hotspot(o);
     }
-     {    Fl_Button* o = c_panel_cancel = new Fl_Button(190, 132, 80, 22, "Cancel");
+     {Fl_Button* o = c_panel_cancel = new Fl_Button(190, 132, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->set_modal();

@@ -1,5 +1,6 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0001 
+images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 2 
@@ -11,51 +12,51 @@ class CubeViewUI {open
   } {
     Fl_Window mainWindow {
       label CubeView open
-      private xywh {436 156 419 406} resizable visible
+      private xywh {725 229 419 406} resizable visible
     } {
       Fl_Group {} {open
         xywh {5 3 374 399}
       } {
         Fl_Group VChange {open
-          xywh {5 100 37 192}
+          xywh {0 97 37 192}
         } {
           Fl_Roller vrot {
             label {V Rot}
             callback {cube->v_angle(((Fl_Roller *)o)->value());
 cube->redraw();}
-            xywh {5 100 17 186} align 128 labeltype NO_LABEL minimum -180 maximum 180 step 1
-            code0 {\#include <stdio.h>}
+            xywh {0 0 17 186} align 128 label_type NO_LABEL minimum -180 maximum 180 step 1
+            extra_code {\#include <stdio.h>}
           }
           Fl_Slider ypan {
             callback {cube->pany(((Fl_Slider *)o)->value());
 cube->redraw();}
-            xywh {25 100 17 186} type {Vert Knob} align 0 labeltype NO_LABEL labelcolor 136 minimum -25 maximum 25 step 0.1
+            xywh {20 0 17 186} type VERTICAL_NICE align 0 label_type NO_LABEL label_color 136 minimum -25 maximum 25 step 0.1
           }
         }
         Fl_Group HChange {open
-          xywh {120 362 190 40}
+          xywh {115 359 190 40}
         } {
           Fl_Slider xpan {
             callback {cube->panx(((Fl_Slider *)o)->value());
 cube->redraw();}
-            xywh {122 364 186 17} type {Horz Knob} align 0 labeltype NO_LABEL labelcolor 136 minimum 25 maximum -25 step 0.1
+            xywh {2 2 186 17} type HORIZONTAL_NICE align 0 label_type NO_LABEL label_color 136 minimum 25 maximum -25 step 0.1
           }
           Fl_Roller hrot {
             label {H Rotation}
             callback {cube->h_angle(((Fl_Roller *)o)->value());
 cube->redraw();}
-            xywh {122 383 186 17} type Horizontal align 8 labeltype NO_LABEL minimum -180 maximum 180 step 1
+            xywh {2 21 186 17} type HORIZONTAL align 8 label_type NO_LABEL minimum -180 maximum 180 step 1
           }
         }
         Fl_Group MainView {open
-          xywh {46 27 333 333}
+          xywh {41 24 333 333}
         } {
           Fl_Box cframe {
-            xywh {46 27 333 333} color 4 selection_color 69 box DOWN_BOX
+            xywh {0 0 333 333} box DOWN_BOX color 4 selection_color 69
           }
           Fl_Box cube {selected
-            xywh {48 29 329 329}
-            code0 {\#include "CubeView.h"}
+            xywh {2 2 329 329}
+            extra_code {\#include "CubeView.h"}
             class CubeView
           }
         }
@@ -63,7 +64,7 @@ cube->redraw();}
           label Zoom
           callback {cube->size=((Fl_Value_Slider *)o)->value();
 cube->redraw();}
-          xywh {106 3 227 19} type {Horz Knob} align 4 labelfont 1 labelcolor 136 minimum 1 maximum 50 step 0.1 value 10
+          xywh {101 0 227 19} type HORIZONTAL_NICE align 4 label_font 1 label_color 136 minimum 1 maximum 50 step 0.1 value 10
         }
       }
     }

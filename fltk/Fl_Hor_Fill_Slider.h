@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Hor_Fill_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Hor_Fill_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Horizontal fill slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,11 @@
 class FL_API Fl_Hor_Fill_Slider : public Fl_Slider {
 public:
     Fl_Hor_Fill_Slider(int x,int y,int w,int h,const char *l=0)
-	: Fl_Slider(x,y,w,h,l) {type(FL_HOR_FILL_SLIDER);}
+	: Fl_Slider(x,y,w,h,l) {type(HORIZONTAL_FILL);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Hor_Fill_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Hor_Fill_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

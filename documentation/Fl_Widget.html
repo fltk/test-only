@@ -62,10 +62,9 @@ after changing any visible properties.
 <li><a href=#default_callback>default_callback</a></li>
 <li><a href=#do_callback>do_callback</a></li>
 <li><a href=#draw>draw</a>
+<li><a href=#draw_as_button>draw_as_button</a>
 <li><a href=#draw_box>draw_box</a>
-<li><a href=#draw_button>draw_button</a>
-<li><a href=#draw_text_frame>draw_text_frame</a>
-<li><a href=#draw_text_box>draw_text_box</a>
+<li><a href=#draw_frame>draw_text_frame</a>
 <li><a href=#draw_glyph>draw_glyph</a>
 <li><a href=#draw_label>draw_label</a>
 <li><a href=#draw_inside_label>draw_inside_label</a>
@@ -73,10 +72,10 @@ after changing any visible properties.
 <li><a href=#focused>focused</a></li>
 <li><a href=#get_box_color>get_box_color</a>
 <li><a href=#get_glyph_color>get_glyph_color</a>
+<li><a href=#get_label_color>get_label_color</a>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#get_label_color>get_label_color</a>
 <li><a href=#handle>handle</a></li>
 <li><a href=#height>height</a></li>
 <li><a href=#h>h</a></li>
@@ -93,10 +92,10 @@ after changing any visible properties.
 <li><a href=#layout>layout</a></li>
 <li><a href=#layout_damage>layout_damage</a></li>
 <li><a href=#make_current>make_current</a>
+<li><a href=#measure_label>measure_label</a>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#measure_label>measure_label</a>
 <li><a href=#output>output</a></li>
 <li><a href=#parent>parent</a></li>
 <li><a href=#position>position</a></li>
@@ -113,10 +112,11 @@ after changing any visible properties.
 <li><a href=#set_visible>set_visible</a></li>
 <li><a href=#shortcut>shortcut</a></li>
 <li><a href=#show>show</a></li>
+<li><a href=#size>size</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#size>size</a></li>
+<li><a href=#style>style</a></li>
 <li><a href=#take_focus>take_focus</a></li>
 <li><a href=#takesevents>takesevents</a></li>
 <li><a href=#test_shortcut>test_shortcut</a></li>
@@ -209,7 +209,8 @@ returned.  This may be modified without changing other widgets.
 
 <h4>
 <a name=box>Fl_Boxtype Fl_Widget::box();</a><br>
-<a name=text_box>Fl_Boxtype Fl_Widget::text_box();</a><br>
+<a name=button_box>Fl_Boxtype Fl_Widget::button_box();</a><br>
+<a name=button_color>Fl_Color Fl_Widget::button_color();</a><br>
 <a name=glyph>Fl_Glyph Fl_Widget::glyph();</a><br>
 <a name=label_font>Fl_Font Fl_Widget::label_font();</a><br>
 <a name=text_font>Fl_Font Fl_Widget::text_font();</a><br>
@@ -218,7 +219,6 @@ returned.  This may be modified without changing other widgets.
 <a name=label_color>Fl_Color Fl_Widget::label_color();</a><br>
 <a name=selection_color>Fl_Color Fl_Widget::selection_color();</a><br>
 <a name=selection_text_color>Fl_Color Fl_Widget::selection_text_color();</a><br>
-<a name=text_background>Fl_Color Fl_Widget::text_background();</a><br>
 <a name=highlight_color>Fl_Color Fl_Widget::highlight_color();</a><br>
 <a name=highlight_label_color>Fl_Color Fl_Widget::highlight_label_color();</a><br>
 <a name=text_color>Fl_Color Fl_Widget::text_color();</a><br>
@@ -229,7 +229,7 @@ returned.  This may be modified without changing other widgets.
 Return the given field out of the <a href=#style>style()</a>.
 
 <h4>void Fl_Widget::box(Fl_Boxtype);<br>
-void Fl_Widget::text_box(Fl_Boxtype);<br>
+void Fl_Widget::button_box(Fl_Boxtype);<br>
 void Fl_Widget::glyph(Fl_Glyph);<br>
 void Fl_Widget::label_font(Fl_Font);<br>
 void Fl_Widget::text_font(Fl_Font);<br>
@@ -238,7 +238,7 @@ void Fl_Widget::color(Fl_Color);<br>
 void Fl_Widget::label_color(Fl_Color);<br>
 void Fl_Widget::highlight_color(Fl_Color);<br>
 void Fl_Widget::highlight_label_color(Fl_Color);<br>
-void Fl_Widget::text_background(Fl_Color);<br>
+void Fl_Widget::button_color(Fl_Color);<br>
 void Fl_Widget::text_color(Fl_Color);<br>
 void Fl_Widget::selection_color(Fl_Color);<br>
 void Fl_Widget::selection_text_color(Fl_Color);<br>
@@ -280,11 +280,11 @@ range 0-99 here (larger values are reserved for use by FLTK).
 internally (you are free to use it, though). If you don't have RTTI you can
 use the clumsy FLTK mechanisim, by having <TT>type()</TT> use a unique
 value.  These unique values must be greater than the symbol
-<TT>FL_RESERVED_TYPE</TT> (which is 100).  Look through the header
-files for <TT>FL_RESERVED_TYPE</TT> to find an unused number.  If you
-make a subclass of <TT>Fl_Window</TT> you must use <TT>FL_WINDOW +
+<TT>Fl_Widget::RESERVED_TYPE</TT> (which is 100).  Look through the header
+files for <TT>Fl_Widget::RESERVED_TYPE</TT> to find an unused number.  If you
+make a subclass of <TT>Fl_Window</TT> you must use <TT>Fl_Widget::WINDOW_TYPE +
 n</TT> (<TT>n</tt> must be in the range 1 to 7), if you
-make a subclass of <TT>Fl_Group</TT> you must use <TT>FL_GROUP +
+make a subclass of <TT>Fl_Group</TT> you must use <TT>Fl_Widget::GROUP_TYPE +
 n</TT> (<TT>n</tt> must be in the range 1 to 7) (fltk needs to be able
 to identify Fl_Window and Fl_Group subclasses internally).
 
@@ -504,16 +504,14 @@ things. The following flags are defined:
 
 <ul>
 <li><tt>FL_INACTIVE</tt> - does not get events, gray it out
-<li><tt>FL_INVISIBLE</tt> - does not get events, does not draw
-<li><tt>FL_OUTPUT</tt> - does not get events
-<li><tt>FL_VALUE</tt> - <tt>value()</tt>, indicates true/down/on state
+<li><tt>FL_INVISIBLE</tt> - not visible
+<li><tt>FL_OUTPUT</tt> - does not get events but draws normally
+<li><tt>FL_VALUE</tt> - <tt>value()</tt>, indicates true/down/on/checked state
 <li><tt>FL_CHANGED</tt> - <tt>changed()</tt>, value changed since last callback
 <li><tt>FL_COPIED_LABEL</tt> - destructor will delete label()
-<li><tt>FL_FOCUSED</tt> - draw with keyboard focus
 <li><tt>FL_HIGHLIGHT</tt> - draw highlighted
-<li><tt>FL_FRAME_ONLY</tt> - don't draw interior of boxes
 <li><tt>FL_SELECTED</tt> - draw using selection colors
-<li><tt>FL_NO_SHORTCUT_LABEL</tt> - don't draw &amp;x in label as underscore
+<li><tt>FL_RAW_LABEL</tt> - don't draw &amp;x in label as underscore
 <li><tt>FL_MENU_STAYS_UP</tt> - dont exit menu when picked
 <li><tt>FL_OPEN</tt> - this group in a Fl_Browser is open
 <li><tt>FL_ALIGN_*</tt> - label alignment, see below.
@@ -737,20 +735,21 @@ to draw into this widget. You only need to call this if you want to
 incrementally update your widget. When <a href=#draw>draw()</a> is
 called this will already have been done.
 
-<a name=draw_box><h4>void Fl_Widget::draw_box(int x, int y, int w, int h, Fl_Flags f) const;</h4></a>
-
 <a name=draw_box><h4>Fl_Flags Fl_Widget::draw_box() const;</h4></a>
 
-Calls <a href=Fl_Boxtype.html>box()->draw()</a> with the widget's size
-and the current <a href=#flags><tt>flags()</tt></a> except
-<tt>FL_INACTIVE</tt> is or'd in if <a
-href=#active_r><tt>active_r()</tt></a> is false.
+Fills the entire widget with it's <a href="#box">box()</a> and <a
+href="#color">color()</a>. If the box is not rectangular and <a
+href="#damage">damage()</a> contains <tt>FL_DAMAGE_EXPOSE</tt> then
+the parent group's box is drawn to fill in the missing areas. If the
+widget is inactive or if any bits are turned on in <a
+href="#flags">flags()</a> then the box may draw differently to show this.
 
-<a name=draw_button><h4>Fl_Flags Fl_Widget::draw_button(Fl_Flags) const;</h4></a>
+<a name=draw_as_button><h4>Fl_Flags Fl_Widget::draw_as_button(Fl_Flags, int&amp; x, int&amp; y, int&amp; w, int&amp; h) const;</h4></a>
 
-Standard routine for drawing <a
-href=Fl_Button.html><tt>Fl_Button</tt></a> and similar widgets.  Calls
-<tt>draw_box()</tt> but with the following bits 'or'd into the passed flags:
+Draw the widget as though it was a button.
+
+<p>The passed flags can make it use the selection color, and draw as
+inactive or pushed in.
 
 <ul>
 
@@ -766,22 +765,17 @@ inherited).
 
 </ul>
 
+<p>The return value is the setting of flags that should be passed to
+draw_inside_label() and the xywh are set to the box interior.
+
 Returns the resulting flags so you can pass them to another function.
 
-<a name=draw_text_frame><h4>Fl_Flags Fl_Widget::draw_text_frame() const;
-<br>Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const ;</h4></a>
+<a name=draw_frame><h4>Fl_Flags Fl_Widget::draw_frame() const;
+<br>Fl_Flags Fl_Widget::draw_frame(int x, int y, int w, int h) const ;</h4></a>
 
-Draws <tt>text_box()</tt> with the <tt>FL_FRAME_ONLY</tt> flag turned
+Draws <tt>box()</tt> with the <tt>FL_FRAME_ONLY</tt> flag turned
 on (so only the edge is drawn). Also turns on <tt>FL_INACTIVE</tt> if
 <tt>!active_r()</tt>.
-
-<a name=draw_text_box><h4>Fl_Flags Fl_Widget::draw_text_box() const;
-<br>Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const ;</h4></a>
-
-Calls <a href=#draw_text_frame><tt>draw_text_frame()</tt></a> and then
-draws a rectangle of <tt>text_background()</tt> color inside it. It
-uses <tt>text_box()->inset()</tt> to figure out where to draw the
-rectangle.
 
 <a name=draw_glyph><h4>void Fl_Widget::draw_glyph(int type, int x,int y,int w,int h, Fl_Flags f) const</h4></a>
 
@@ -825,9 +819,9 @@ Return in w and h the size that the widget's <tt>label()</tt> and
 
 <a name=get_box_color><h4>Fl_Color Fl_Widget::get_box_color(Fl_Flags) const ;</h4></a>
 
-Returns the correct color to draw the interior of a box, based on the
+Returns the correct color to draw an internal button, based on the
 values of <tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
-<tt>color(), selection_color(), highlight_color()</tt> of this widget.
+<tt>button_color(), selection_color(), highlight_color()</tt> of this widget.
 
 <a name=get_label_color><h4>Fl_Color Fl_Widget::get_label_color(Fl_Flags) const ;</h4></a>
 
@@ -838,7 +832,7 @@ values of <tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
 <a name=get_glyph_color><h4>Fl_Color Fl_Widget::get_glyph_color(Fl_Flags) const ;</h4></a>
 
 Returns the correct color to draw a glyph, based on the values of
-<tt>FL_INACTIVE, FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
+<tt>FL_SELECTED, FL_HIGHLIGHT</tt> of the flags and the
 <tt>text_color(), selection_text_color(), highlight_label_color()</tt>
 of this widget.
 

@@ -10,206 +10,217 @@ static void callback(Fl_Widget* o, void*) {
 int main (int argc, char **argv) {
 
   Fl_Window* w;
-   {  Fl_Window* o = new Fl_Window(567, 506, "Valuator classes, showing values for the type()");
+   {Fl_Window* o = new Fl_Window(567, 506, "Valuator classes, showing values for the type()");
     w = o;
     o->label_size(10);
-     {    Fl_Box* o = new Fl_Box(10, 10, 280, 210, "Fl_Slider");
+     {Fl_Box* o = new Fl_Box(10, 10, 280, 215, "Fl_Slider");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Slider* o = new Fl_Slider(30, 45, 20, 145, "0");
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
+     {Fl_Slider* o = new Fl_Slider(30, 45, 20, 145, "VERTICAL");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {    Fl_Slider* o = new Fl_Slider(70, 55, 20, 145, "FL_VERT_FILL_SLIDER");
-      o->type(2);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
+     {Fl_Slider* o = new Fl_Slider(70, 55, 20, 145, "VERTICAL_FILL");
+      o->type(Fl_Slider::VERTICAL_FILL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Slider* o = new Fl_Slider(105, 45, 20, 145, "FL_VERT_NICE_SLIDER");
-      o->type(4);
-      o->text_box(FL_FLAT_BOX);
-      o->color((Fl_Color)1959162112);
+     {Fl_Slider* o = new Fl_Slider(105, 45, 20, 145, "VERTICAL_NICE");
+      o->type(Fl_Slider::VERTICAL_NICE);
+      o->box(FL_FLAT_BOX);
+      o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
-      o->text_background((Fl_Color)-1852783104);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {    Fl_Slider* o = new Fl_Slider(140, 80, 130, 20, "FL_HORIZONTAL");
-      o->type(1);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
-      o->label_size(8);
-      o->callback((Fl_Callback*)callback);
-    }
-     {    Fl_Slider* o = new Fl_Slider(140, 120, 130, 20, "FL_HOR_FILL_SLIDER");
-      o->type(3);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
-      o->label_size(8);
-      o->callback((Fl_Callback*)callback);
-    }
-     {    Fl_Slider* o = new Fl_Slider(140, 160, 130, 20, "FL_HOR_NICE_SLIDER");
-      o->type(5);
-      o->text_box(FL_FLAT_BOX);
-      o->color((Fl_Color)1959162112);
+     {Fl_Slider* o = new Fl_Slider(140, 80, 130, 20, "HORIZONTAL");
+      o->type(Fl_Slider::HORIZONTAL);
+      o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
-      o->text_background((Fl_Color)-1852783104);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(10, 230, 280, 205, "Fl_Value_Slider");
+     {Fl_Slider* o = new Fl_Slider(140, 120, 130, 20, "HORIZONTAL_FILL");
+      o->type(Fl_Slider::HORIZONTAL_FILL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Slider* o = new Fl_Slider(140, 160, 130, 20, "HORIZONTAL_NICE");
+      o->type(Fl_Slider::HORIZONTAL_NICE);
+      o->box(FL_FLAT_BOX);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Box* o = new Fl_Box(10, 230, 280, 210, "Fl_Value_Slider");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(30, 260, 30, 145, "0");
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(30, 260, 30, 145, "VERTICAL");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
+      o->text_size(10);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(70, 275, 30, 140, "FL_VERT_FILL_SLIDER");
-      o->type(2);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(70, 275, 30, 140, "VERTICAL_FILL");
+      o->type(Fl_Value_Slider::VERTICAL_FILL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
+      o->text_size(10);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(110, 260, 20, 145, "FL_VERT_NICE_SLIDER");
-      o->type(4);
-      o->text_box(FL_FLAT_BOX);
-      o->color((Fl_Color)1959162112);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(110, 260, 25, 145, "VERTICAL_NICE");
+      o->type(Fl_Value_Slider::VERTICAL_NICE);
+      o->box(FL_FLAT_BOX);
+      o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
-      o->text_background((Fl_Color)-1852783104);
       o->label_size(8);
+      o->text_size(10);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(140, 290, 130, 20, "FL_HOR_SLIDER");
-      o->type(1);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
-      o->label_size(8);
-      o->callback((Fl_Callback*)callback);
-    }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(140, 330, 130, 20, "FL_HOR_FILL_SLIDER");
-      o->type(3);
-      o->color((Fl_Color)1959162112);
-      o->text_background((Fl_Color)-1852783104);
-      o->label_size(8);
-      o->callback((Fl_Callback*)callback);
-    }
-     {    Fl_Value_Slider* o = new Fl_Value_Slider(140, 370, 130, 20, "FL_HOR_NICE_SLIDER");
-      o->type(5);
-      o->text_box(FL_FLAT_BOX);
-      o->color((Fl_Color)1959162112);
+     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 290, 130, 20, "HORIZONTAL");
+      o->type(Fl_Value_Slider::HORIZONTAL);
+      o->color((Fl_Color)10);
       o->selection_color((Fl_Color)1);
-      o->text_background((Fl_Color)-1852783104);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(10, 445, 140, 50, "Fl_Value_Input");
+     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 330, 130, 20, "HORIZONTAL_FILL");
+      o->type(Fl_Value_Slider::HORIZONTAL_FILL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Value_Slider* o = new Fl_Value_Slider(140, 370, 130, 20, "HORIZONTAL_NICE");
+      o->type(Fl_Value_Slider::HORIZONTAL_NICE);
+      o->box(FL_FLAT_BOX);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
+      o->label_size(8);
+      o->callback((Fl_Callback*)callback);
+    }
+     {Fl_Box* o = new Fl_Box(10, 445, 140, 50, "Fl_Value_Input");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Value_Input* o = new Fl_Value_Input(30, 460, 110, 30, "0");
-      o->label_size(8);
+     {Fl_Value_Input* o = new Fl_Value_Input(30, 460, 110, 30);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->maximum(100);
       o->step(0.1);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(155, 445, 135, 50, "Fl_Value_Output");
+     {Fl_Box* o = new Fl_Box(155, 445, 135, 50, "Fl_Value_Output");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Value_Output* o = new Fl_Value_Output(170, 460, 110, 30, "0");
-      o->label_size(8);
+     {Fl_Value_Output* o = new Fl_Value_Output(170, 460, 110, 30);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->maximum(100);
       o->step(0.1);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(295, 10, 130, 120, "   Fl_Scrollbar");
+     {Fl_Box* o = new Fl_Box(295, 10, 130, 120, "   Fl_Scrollbar");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-     {    Fl_Scrollbar* o = new Fl_Scrollbar(395, 20, 20, 105, "0");
+     {Fl_Scrollbar* o = new Fl_Scrollbar(395, 20, 20, 105, "VERTICAL");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->minimum(100);
       o->maximum(0);
       o->callback((Fl_Callback*)callback);
       o->align(FL_ALIGN_TOP);
     }
-     {    Fl_Scrollbar* o = new Fl_Scrollbar(300, 65, 95, 20, "FL_HORIZONTAL");
-      o->type(1);
+     {Fl_Scrollbar* o = new Fl_Scrollbar(300, 65, 95, 20, "HORIZONTAL");
+      o->type(Fl_Scrollbar::HORIZONTAL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->maximum(100);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(430, 10, 125, 120, "Fl_Adjuster");
+     {Fl_Box* o = new Fl_Box(430, 10, 125, 120, "Fl_Adjuster");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Adjuster* o = new Fl_Adjuster(440, 60, 75, 25, "w()>h()");
+     {Fl_Adjuster* o = new Fl_Adjuster(440, 60, 75, 25, "w()>h()");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Adjuster* o = new Fl_Adjuster(520, 35, 25, 75, "w()<h()");
+     {Fl_Adjuster* o = new Fl_Adjuster(520, 35, 25, 75, "w()<h()");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(345, 135, 210, 115, "Fl_Counter");
+     {Fl_Box* o = new Fl_Box(345, 135, 210, 115, "Fl_Counter");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Counter* o = new Fl_Counter(360, 160, 180, 30, "0");
+     {Fl_Counter* o = new Fl_Counter(360, 160, 180, 30, "NORMAL");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Counter* o = new Fl_Counter(360, 205, 180, 30, "FL_SIMPLE_COUNTER");
-      o->type(1);
+     {Fl_Counter* o = new Fl_Counter(360, 205, 180, 30, "SIMPLE");
+      o->type(Fl_Counter::SIMPLE);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Group* o = new Fl_Group(300, 260, 255, 105, "Fl_Dial");
+     {Fl_Group* o = new Fl_Group(295, 255, 260, 110, "Fl_Dial");
       o->box(FL_ENGRAVED_BOX);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
-       {      Fl_Dial* o = new Fl_Dial(15, 20, 65, 65, "0");
-        o->color((Fl_Color)1959162112);
+       {Fl_Dial* o = new Fl_Dial(15, 20, 65, 65, "NORMAL");
+        o->color((Fl_Color)10);
         o->selection_color((Fl_Color)1);
-        o->text_background((Fl_Color)-1852783104);
         o->label_size(8);
         o->value(0.5);
         o->callback((Fl_Callback*)callback);
         o->angles(0,315);
       }
-       {      Fl_Dial* o = new Fl_Dial(95, 20, 65, 65, "FL_LINE_DIAL");
-        o->type(1);
-        o->color((Fl_Color)1959162112);
+       {Fl_Dial* o = new Fl_Dial(95, 20, 65, 65, "LINE");
+        o->type(Fl_Dial::LINE);
+        o->color((Fl_Color)10);
         o->selection_color((Fl_Color)1);
-        o->text_background((Fl_Color)-1852783104);
         o->label_size(8);
         o->value(0.5);
         o->callback((Fl_Callback*)callback);
       }
-       {      Fl_Dial* o = new Fl_Dial(175, 20, 65, 65, "FL_FILL_DIAL");
-        o->type(2);
-        o->color((Fl_Color)1959162112);
+       {Fl_Dial* o = new Fl_Dial(175, 20, 65, 65, "FILL");
+        o->type(Fl_Dial::FILL);
+        o->color((Fl_Color)10);
         o->selection_color((Fl_Color)1);
-        o->text_background((Fl_Color)-1852783104);
         o->label_size(8);
         o->value(0.75);
         o->callback((Fl_Callback*)callback);
@@ -217,27 +228,32 @@ int main (int argc, char **argv) {
       }
       o->end();
     }
-     {    Fl_Box* o = new Fl_Box(300, 375, 145, 120, "Fl_Roller");
+     {Fl_Box* o = new Fl_Box(295, 370, 145, 125, "Fl_Roller");
       o->box(FL_ENGRAVED_BOX);
       o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
-     {    Fl_Roller* o = new Fl_Roller(315, 390, 20, 95, "0");
+     {Fl_Roller* o = new Fl_Roller(315, 390, 20, 95, "VERTICAL");
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Roller* o = new Fl_Roller(340, 430, 90, 20, "FL_HORIZONTAL");
-      o->type(1);
+     {Fl_Roller* o = new Fl_Roller(340, 430, 90, 20, "HORIZONTAL");
+      o->type(Fl_Roller::HORIZONTAL);
+      o->color((Fl_Color)10);
+      o->selection_color((Fl_Color)1);
       o->label_size(8);
       o->callback((Fl_Callback*)callback);
     }
-     {    Fl_Box* o = new Fl_Box(455, 375, 100, 120, "Several widgets have color(green), window_color(purple), and selection_color(\
-red) to show the areas these colors affect.");
+     {Fl_Box* o = new Fl_Box(445, 370, 110, 125, "All widgets have color(green) and selection_color(red) to show the areas thes\
+e colors affect.");
       o->box(FL_ENGRAVED_BOX);
       o->label_size(10);
       o->align(FL_ALIGN_WRAP);
     }
     o->end();
+    o->resizable(o);
   }
   w->show(argc, argv);
   return Fl::run();

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.h,v 1.2 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Flags.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Unified flags set for fltk
 //
@@ -43,7 +43,7 @@ enum {
   FL_NO_FLAGS		= 0,
 
 // from Fl_Align, values are comptable with fltk 1.0:
-// These control the location and appearance of text labels:
+// These control the location and appearance of labels:
   FL_ALIGN_CENTER	= 0,
   FL_ALIGN_TOP          = 0x00000001,
   FL_ALIGN_BOTTOM       = 0x00000002,
@@ -65,7 +65,6 @@ enum {
   FL_ALIGN_NOWRAP	= 0,
 #endif
 
-// Values used to store widget state:
   FL_INACTIVE		= 0x00000100, // does not get events, gray it out
   FL_MENU_STAYS_UP	= 0x00000200, // dont exit menu when picked
   FL_VALUE		= 0x00000400, // indicates true/down/on state
@@ -74,13 +73,9 @@ enum {
   FL_OUTPUT		= 0x00002000, // does not get events
   FL_CHANGED		= 0x00004000, // value changed since last callback
   FL_COPIED_LABEL	= 0x00008000, // copy_label() was called
-
   FL_RAW_LABEL		= 0x00010000, // don't interpret & or @ in label
-
-// Values used to draw boxes, glyphs, labels:
-// Use of these is depreciated and will be eliminated soon!
   FL_HIGHLIGHT		= 0x00020000, // draw highlighted
-  FL_FRAME_ONLY		= 0x00040000, // don't draw interior
+  FL_PACK_VERTICAL	= 0x00040000, // Fl_Pack puts this widget vertical
   FL_SELECTED		= 0x00080000  // draw using selection colors
 
 };

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.9 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.10 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -42,11 +42,11 @@ bool Fl::event_key(int keysym) {
   int keycode = XKeysymToKeycode(fl_display, keysym);
   if (!keycode) {
 #ifdef __sgi
-  // get some missing PC keyboard keys:
+    // get some missing PC keyboard keys:
     if (keysym == FL_Win_L) keycode = 147;
     else if (keysym == FL_Win_R) keycode = 148;
     else if (keysym == FL_Menu) keycode = 149;
-  else
+    else
 #endif
       keycode = keysym & 0xff; // undo the |0x8000 done to unknown keycodes
   }
@@ -62,5 +62,5 @@ bool Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.9 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.10 2002/01/20 07:37:15 spitzak Exp $".
 //

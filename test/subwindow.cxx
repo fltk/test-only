@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: subwindow.cxx,v 1.12 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -149,7 +149,7 @@ int main(int, char **) {
   (void) new EnterExit(10,310,80,80,"enterexit");
   (void) new Fl_Input(150,310,150,25,"input:");
   { Fl_Input_Browser *o = new Fl_Input_Browser(5,150,80,25,"menu&1");
-    o->type(FL_NONEDITABLE_INPUT_BROWSER|FL_INDENTED_INPUT_BROWSER);
+    o->type(Fl_Input_Browser::NONEDITABLE_INDENTED);
     o->add(bigmess);
     o->value(o->child(0)->label());
   }
@@ -179,5 +179,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: subwindow.cxx,v 1.12 2002/01/20 07:37:16 spitzak Exp $".
 //

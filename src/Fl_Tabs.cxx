@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.50 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.51 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -399,10 +399,9 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
   : Fl_Group(X,Y,W,H,l)
 {
   style(default_style);
-  type(FL_TABS_TYPE);
   push_ = 0;
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.50 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.51 2002/01/20 07:37:15 spitzak Exp $".
 //

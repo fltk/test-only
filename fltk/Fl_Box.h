@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Box.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,8 +33,7 @@
 class FL_API Fl_Box : public Fl_Widget {
 public:
   Fl_Box(int x, int y, int w, int h, const char *l=0);
-  Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *l)
-    : Fl_Widget(x,y,w,h,l) {box(b);}
+  Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *l);
   static Fl_Named_Style* default_style;
   void draw();
 };
@@ -42,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Box.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Box.h,v 1.3 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Button.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,14 @@
 #include "Fl_Widget.h"
 #endif
 
-// values for type()
-#define FL_TOGGLE_BUTTON	(FL_RESERVED_TYPE+1)
-#define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2)
-#define FL_HIDDEN_BUTTON	3 // for Forms compatability
-
 class FL_API Fl_Button : public Fl_Widget {
 public:
+  enum { // values for type(), should match Fl_Button
+    NORMAL = 0,
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2,
+    HIDDEN = 3
+  };
   int   value() const {return Fl_Widget::value();}
   int	value(int);
   int	set();
@@ -51,8 +52,14 @@ protected:
   Fl_Flags draw_box(Fl_Flags);
 };
 
+#ifndef FLTK_2 // for back compatability:
+#define FL_TOGGLE_BUTTON	Fl_Button::TOGGLE
+#define FL_RADIO_BUTTON		Fl_Button::RADIO
+#define FL_HIDDEN_BUTTON	Fl_Button::HIDDEN
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Button.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Button.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $".
 //

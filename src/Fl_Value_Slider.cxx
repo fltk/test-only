@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,32 +29,34 @@
 #include <fltk/Fl_Output.h>
 #include <config.h>
 
+#define vertical() (!(type()&1))
+
 void Fl_Value_Slider::draw() {
   int sx = 0, sy = 0, sw = w(), sh = h();
   int bx = 0, by = 0, bw = w(), bh = h();
-  if (horizontal()) {
-    bw = 35; sx += 35; sw -= 35;
-  } else {
+  if (vertical()) {
     sy += 25; bh = 25; sh -= 25;
+  } else {
+    bw = 35; sx += 35; sw -= 35;
   }
-  Fl_Boxtype valuebox = Fl_Output::default_style->text_box;
-  if (!valuebox) valuebox = Fl_Widget::default_style->text_box;
+  Fl_Boxtype valuebox = Fl_Output::default_style->box;
+  if (!valuebox) valuebox = Fl_Widget::default_style->box;
   if (damage()&FL_DAMAGE_ALL) {
-    draw_text_frame(sx, sy, sw, sh);
-    valuebox->draw(bx, by, bw, bh, 0, FL_FRAME_ONLY);
+    draw_frame(sx, sy, sw, sh);
+    valuebox->draw(bx, by, bw, bh, 0, FL_INVISIBLE); // draw edge only
   }
-  text_box()->inset(sx, sy, sw, sh);
+  box()->inset(sx, sy, sw, sh);
   Fl_Flags f = 0;
   if (!active_r()) f = FL_INACTIVE;
   else {
-    if (Fl::pushed() == this) f |= (FL_SELECTED|FL_VALUE);
+    if (Fl::pushed() == this) f |= FL_VALUE;
     else if (belowmouse()) f |= FL_HIGHLIGHT;
   }
   Fl_Slider::draw(sx, sy, sw, sh, f);
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
     // copy the box & color from the default style:
-    Fl_Color bg = Fl_Output::default_style->text_background;
-    if (!bg) bg = Fl_Widget::default_style->text_background;
+    Fl_Color bg = Fl_Output::default_style->color;
+    if (!bg) bg = Fl_Widget::default_style->color;
     fl_color(bg);
     valuebox->inset(bx, by, bw, bh);
     fl_rectf(bx, by, bw, bh);
@@ -71,12 +73,12 @@ void Fl_Value_Slider::draw() {
 
 int Fl_Value_Slider::handle(int event) {
   int sx = 0, sy = 0, sw = w(), sh = h();
-  if (horizontal()) {
-    sx += 35; sw -= 35;
-  } else {
+  if (vertical()) {
     sy += 25; sh -= 25;
+  } else {
+    sx += 35; sw -= 35;
   }
-  text_box()->inset(sx, sy, sw, sh);
+  box()->inset(sx, sy, sw, sh);
 #if CLICK_MOVES_FOCUS
   if (event == FL_PUSH) take_focus();
 #endif
@@ -84,8 +86,8 @@ int Fl_Value_Slider::handle(int event) {
 }
 
 static void revert(Fl_Style* s) {
-  s->text_background = FL_DARK2;
-//  s->text_size = 10;
+  s->color = FL_DARK2;
+//s->text_size = 10;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Value Slider", revert, &style);
@@ -97,5 +99,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $".
 //

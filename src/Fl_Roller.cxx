@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.23 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Rapid-App style knob
+// SGI Inventor / Rapid-App style knob
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Roller.h>
@@ -33,7 +33,7 @@
 
 int Fl_Roller::handle(int event) {
   static int ipos;
-  int newpos = horizontal() ? Fl::event_x() : -Fl::event_y();
+  int newpos = type()==HORIZONTAL ? Fl::event_x() : -Fl::event_y();
   switch (event) {
   case FL_PUSH:
 #if CLICK_MOVES_FOCUS
@@ -57,11 +57,11 @@ int Fl_Roller::handle(int event) {
     case FL_Down:
     case FL_Home:
     case FL_End:
-      if (horizontal()) return 0;
+      if (type()==HORIZONTAL) return 0;
       break;
     case FL_Left:
     case FL_Right:
-      if (!horizontal()) return 0;
+      if (type() != HORIZONTAL) return 0;
     } // else fall through...
   default:
     return Fl_Valuator::handle(event);
@@ -70,7 +70,7 @@ int Fl_Roller::handle(int event) {
 
 void Fl_Roller::draw() {
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) draw_box();
-  int X=0; int Y=0; int W=w()-1; int H=h()-1; box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   if (W<=0 || H<=0) return;
 
   double s = step();
@@ -79,10 +79,10 @@ void Fl_Roller::draw() {
 
   const double ARC = 1.5; // 1/2 the number of radians visible
   const double delta = .2; // radians per knurl
-  if (horizontal()) { // horizontal one
+  if (type()==HORIZONTAL) {
     // draw shaded ends of wheel:
     int h1 = W/4+1; // distance from end that shading starts
-    fl_color(color()); fl_rectf(X+h1,Y,W-2*h1,H);
+    fl_color(button_color()); fl_rectf(X+h1,Y,W-2*h1,H);
     for (int i=0; h1; i++) {
       fl_color((Fl_Color)(FL_GRAY-i-1));
       int h2 = FL_GRAY-i-1 > FL_DARK3 ? 2*h1/3+1 : 0;
@@ -119,7 +119,7 @@ void Fl_Roller::draw() {
     offset = (1-offset);
     // draw shaded ends of wheel:
     int h1 = H/4+1; // distance from end that shading starts
-    fl_color(color()); fl_rectf(X,Y+h1,W,H-2*h1);
+    fl_color(button_color()); fl_rectf(X,Y+h1,W,H-2*h1);
     for (int i=0; h1; i++) {
       fl_color((Fl_Color)(FL_GRAY-i-1));
       int h2 = FL_GRAY-i-1 > FL_DARK3 ? 2*h1/3+1 : 0;
@@ -166,5 +166,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.23 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $".
 //

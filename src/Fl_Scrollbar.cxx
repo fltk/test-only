@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define vertical() (!(type()&1))
+
 int Fl_Scrollbar::value(int p, int w, int t, int l) {
 //	p = position, first line displayed
 //	w = window, number of lines displayed
@@ -37,8 +39,8 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;
-  int X=0; int Y=0; int W=this->w(); int H=h(); text_box()->inset(X,Y,W,H);
-  if (!horizontal()) {int T = W; W = H; H = T; T = b; b = t; t = T;}
+  int X=0; int Y=0; int W=this->w(); int H=h(); box()->inset(X,Y,W,H);
+  if (vertical()) {int T = W; W = H; H = T; T = b; b = t; t = T;}
   if (W >= 3*H) W -= 2*H;
   int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
   if (S != slider_size() || t != minimum() || b != maximum()) {
@@ -70,13 +72,13 @@ void Fl_Scrollbar::timeout_cb(void* v) {
 
 int Fl_Scrollbar::handle(int event) {
   // area of scrollbar:
-  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
 
   // adjust slider area to be inside the arrow buttons:
-  if (horizontal()) {
-    if (W >= 3*H) {X += H; W -= 2*H;}
-  } else {
+  if (vertical()) {
     if (H >= 3*W) {Y += W; H -= 2*W;}
+  } else {
+    if (W >= 3*H) {X += H; W -= 2*H;}
   }
 
   // which widget part is highlighted?
@@ -84,22 +86,22 @@ int Fl_Scrollbar::handle(int event) {
   int my = Fl::event_y();
   int which_part;
   if (!Fl::event_inside(0, 0, w(), h())) which_part = 0;
-  else if (horizontal()) {
-    if (mx < X) which_part = 1;
-    else if (mx >= X+W) which_part = 2;
-    else {
-      int sliderx = slider_position(W, slider_size(W, H));
-      if (mx < X+sliderx) which_part = 3;
-      else if (mx >= X+sliderx+slider_size(W, H)) which_part = 4;
-      else which_part = 5;
-    }
-  } else {
+  else if (vertical()) {
     if (my < Y) which_part = 1;
     else if (my >= Y+H) which_part = 2;
     else {
       int slidery = slider_position(H, slider_size(H, W));
       if (my < Y+slidery) which_part = 3;
       else if (my >= Y+slidery+slider_size(H, W)) which_part = 4;
+      else which_part = 5;
+    }
+  } else { // horizontal
+    if (mx < X) which_part = 1;
+    else if (mx >= X+W) which_part = 2;
+    else {
+      int sliderx = slider_position(W, slider_size(W, H));
+      if (mx < X+sliderx) which_part = 3;
+      else if (mx >= X+sliderx+slider_size(W, H)) which_part = 4;
       else which_part = 5;
     }
   }
@@ -133,7 +135,7 @@ int Fl_Scrollbar::handle(int event) {
     handle_release();
     return 1;
   case FL_MOUSEWHEEL: {
-    int n = (horizontal() ? Fl::event_dx() : Fl::event_dy())
+    int n = (vertical() ? Fl::event_dy() : Fl::event_dx())
       * Fl_Style::wheel_scroll_lines;
     int sign = 1; if (n < 0) {n = -n; sign = -1;}
     n *= linesize();
@@ -142,7 +144,7 @@ int Fl_Scrollbar::handle(int event) {
     return 1;
   }
   case FL_KEYBOARD:
-    if (!horizontal()) switch(Fl::event_key()) {
+    if (vertical()) switch(Fl::event_key()) {
     case FL_Home: handle_drag(maximum()); return 1;
     case FL_End:  handle_drag(minimum()); return 1;
     } // else fall through...
@@ -153,43 +155,43 @@ int Fl_Scrollbar::handle(int event) {
 
 // Fltk 2.0 is incompatable with the use of color:
 // color area:                                  1.0:            2.0:
-// background behind scrollbar                  color           text_background
-// scrollbar slider & buttons                   FL_GRAY         color
+// background behind scrollbar                  color           color
+// scrollbar slider & buttons                   FL_GRAY         button_color
 // scrollbar slider & buttons when selected     FL_GRAY         selection_color
 // scrollbar button symbols                     selection_color text_color
 // scrollbar button symbols when selected       selection_color selection_text_color
 
 void Fl_Scrollbar::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
 
-  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
 
   // 1 = left/top   2 = right/bottom   5 = slider button
   Fl_Flags f1 = 0, f2 = 0, f5 = 0;
   if (!active_r()) {
     f1 |= FL_INACTIVE; f2 |= FL_INACTIVE; f5 |= FL_INACTIVE;
   } else {
-    if (pushed_ == 1) f1 = FL_VALUE|FL_SELECTED;
+    if (pushed_ == 1) f1 = FL_VALUE;
     else if (highlight_ == 1) f1 = FL_HIGHLIGHT;
-    if (pushed_ == 2) f2 = FL_VALUE|FL_SELECTED;
+    if (pushed_ == 2) f2 = FL_VALUE;
     else if (highlight_ == 2) f2 = FL_HIGHLIGHT;
-    if (pushed_ == 5) f5 = FL_VALUE|FL_SELECTED;
+    if (pushed_ == 5) f5 = FL_VALUE;
     else if (highlight_ == 5) f5 = FL_HIGHLIGHT;
   }
-  if (horizontal()) {
-    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
-    Fl_Slider::draw(X+H,Y,W-2*H,H,f5);
-    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
-      draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
-    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
-      draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
-  } else { // vertical
+  if (vertical()) {
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
     Fl_Slider::draw(X,Y+W,W,H-2*W,f5);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_UP_BUTTON, X, Y, W, W, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
+  } else { // horizontal:
+    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
+    Fl_Slider::draw(X+H,Y,W-2*H,H,f5);
+    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
+      draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
+    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
+      draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
   }
   last_ = highlight_;
 }
@@ -197,8 +199,8 @@ void Fl_Scrollbar::draw() {
 static void revert(Fl_Style* s) {
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
-  s->text_box = FL_FLAT_BOX;
-  s->text_background = FL_DARK2;
+  s->box = FL_FLAT_BOX;
+  s->color = FL_DARK2;
 }
 static Fl_Named_Style style("Scrollbar", revert, &Fl_Scrollbar::default_style);
 Fl_Named_Style* Fl_Scrollbar::default_style = &::style;
@@ -212,5 +214,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.54 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $".
 //

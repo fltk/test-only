@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: fl_windows.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -55,7 +55,7 @@ int fl_windows() {
 // newer versions of Windows & KDE look closer to FLTK default
 //  Fl_Widget::default_style->box = &win98_up_box;
 // this may be needed if fltk's default is the thin box:
-//  Fl_Widget::default_style->text_box = &win98_down_box;
+//  Fl_Widget::default_style->button_box = &win98_down_box;
 
   Fl_Style* s;
 
@@ -65,7 +65,7 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("item"))) {
-    s->text_box = FL_NO_BOX; // no box around checkmarks
+    s->button_box = FL_NO_BOX; // no box around checkmarks
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
@@ -78,7 +78,7 @@ int fl_windows() {
 
   if ((s = Fl_Style::find("scrollbar"))) {
 //    s->box = &win98_menu_window_box;
-    s->text_background = 52;
+    s->color = 52;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
@@ -89,5 +89,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
+// End of "$Id: fl_windows.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $"
 //

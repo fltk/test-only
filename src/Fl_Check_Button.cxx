@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.34 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.35 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,16 +30,17 @@
 
 void Fl_Check_Button::draw() {
   // Draw the outer box as though it were a button:
-  Fl_Flags flags = draw_button(pushed()?FL_VALUE:0);
+  int x,y,w,h;
+  Fl_Flags flags = draw_as_button(pushed()?FL_VALUE:0, x,y,w,h);
   flags = (flags&~FL_VALUE)|(this->flags()&FL_VALUE);
   // Draw the check box:
-  int W = h();
-  int d = h()/6;
-  draw_inside_label(W-d, 0, w()-W+d, h(), flags);
+  int W = h;
+  int d = h/6;
+  draw_inside_label(x+W-d, y, w-W+d, h, flags);
   int X = d; int Y = d+1; W = W-2*d-2;
-  if (X+W > w()) X = 0;
+  if (X+W > w) X = 0;
   if (flags&FL_VALUE) flags &= ~FL_HIGHLIGHT; // don't highlight selected buttons
-  draw_glyph(shape, X, Y, W, W, flags);
+  draw_glyph(shape, x+X, y+Y, W, W, flags);
 }
 
 int Fl_Check_Button::handle(int event) {
@@ -57,7 +58,7 @@ Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
 {
   style(default_style);
-  type(FL_TOGGLE_BUTTON);
+  type(TOGGLE);
   shape = FL_GLYPH_CHECK;
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);

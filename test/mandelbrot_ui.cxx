@@ -6,7 +6,6 @@
 inline void Drawing_Window::cb_x_input_i(Fl_Input* o, void*) {
   d->X = atof(o->value());;
   d->new_display();
-
 }
 void Drawing_Window::cb_x_input(Fl_Input* o, void* v) {
   ((Drawing_Window*)(o->parent()->user_data()))->cb_x_input_i(o,v);
@@ -15,7 +14,6 @@ void Drawing_Window::cb_x_input(Fl_Input* o, void* v) {
 inline void Drawing_Window::cb_y_input_i(Fl_Input* o, void*) {
   d->Y = atof(o->value());
   d->new_display();
-
 }
 void Drawing_Window::cb_y_input(Fl_Input* o, void* v) {
   ((Drawing_Window*)(o->parent()->user_data()))->cb_y_input_i(o,v);
@@ -24,7 +22,6 @@ void Drawing_Window::cb_y_input(Fl_Input* o, void* v) {
 inline void Drawing_Window::cb_w_input_i(Fl_Input* o, void*) {
   d->scale = atof(o->value());
   d->new_display();
-
 }
 void Drawing_Window::cb_w_input(Fl_Input* o, void* v) {
   ((Drawing_Window*)(o->parent()->user_data()))->cb_w_input_i(o,v);
@@ -33,7 +30,6 @@ void Drawing_Window::cb_w_input(Fl_Input* o, void* v) {
 inline void Drawing_Window::cb_brightness_i(Fl_Slider* o, void*) {
   d->brightness = int(o->value());
   d->new_display();
-
 }
 void Drawing_Window::cb_brightness(Fl_Slider* o, void* v) {
   ((Drawing_Window*)(o->parent()->user_data()))->cb_brightness_i(o,v);
@@ -42,7 +38,6 @@ void Drawing_Window::cb_brightness(Fl_Slider* o, void* v) {
 inline void Drawing_Window::cb_iterations_i(Fl_Slider* o, void*) {
   d->iterations = 1<<int(o->value());
   d->new_display();
-
 }
 void Drawing_Window::cb_iterations(Fl_Slider* o, void* v) {
   ((Drawing_Window*)(o->parent()->user_data()))->cb_iterations_i(o,v);
@@ -50,42 +45,41 @@ void Drawing_Window::cb_iterations(Fl_Slider* o, void* v) {
 
 void Drawing_Window::make_window() {
   Fl_Window* w;
-   {  Fl_Window* o = window = new Fl_Window(450, 520);
+   {Fl_Window* o = window = new Fl_Window(450, 520);
     w = o;
     o->user_data((void*)(this));
-     {    Drawing_Area* o = d = new Drawing_Area(20, 80, 410, 430);
+     {Drawing_Area* o = d = new Drawing_Area(20, 80, 410, 430);
       o->box(FL_DOWN_BOX);
       o->user_data((void*)(this));
-      Fl_Group::current()->resizable(o);
     }
-     {    Fl_Input* o = x_input = new Fl_Input(30, 10, 125, 25, "x:");
+     {Fl_Input* o = x_input = new Fl_Input(30, 10, 125, 25, "x:");
       o->callback((Fl_Callback*)cb_x_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-     {    Fl_Input* o = y_input = new Fl_Input(175, 10, 125, 25, "y:");
+     {Fl_Input* o = y_input = new Fl_Input(175, 10, 125, 25, "y:");
       o->callback((Fl_Callback*)cb_y_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-     {    Fl_Input* o = w_input = new Fl_Input(325, 10, 105, 25, "w:");
+     {Fl_Input* o = w_input = new Fl_Input(325, 10, 105, 25, "w:");
       o->callback((Fl_Callback*)cb_w_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-     {    Fl_Slider* o = new Fl_Slider(80, 38, 160, 20, "brightness:");
-      o->type(5);
-      o->text_box(FL_FLAT_BOX);
+     {Fl_Slider* o = new Fl_Slider(80, 38, 160, 20, "brightness:");
+      o->type(Fl_Slider::HORIZONTAL_NICE);
+      o->box(FL_FLAT_BOX);
       o->step(1);
       o->callback((Fl_Callback*)cb_brightness);
       o->align(FL_ALIGN_LEFT);
       o->range(0,d->MAX_BRIGHTNESS);
       o->value(d->DEFAULT_BRIGHTNESS);
     }
-     {    Fl_Box* o = new Fl_Box(240, 44, 190, 30, "left: click = zoom out, drag = zoom in\nright click: Julia set");
+     {Fl_Box* o = new Fl_Box(240, 44, 190, 30, "left: click = zoom out, drag = zoom in\nright click: Julia set");
       o->label_size(10);
       o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
     }
-     {    Fl_Slider* o = new Fl_Slider(80, 60, 160, 20, "iterations:");
-      o->type(5);
-      o->text_box(FL_FLAT_BOX);
+     {Fl_Slider* o = new Fl_Slider(80, 60, 160, 20, "iterations:");
+      o->type(Fl_Slider::HORIZONTAL_NICE);
+      o->box(FL_FLAT_BOX);
       o->step(1);
       o->callback((Fl_Callback*)cb_iterations);
       o->align(FL_ALIGN_LEFT);
@@ -94,5 +88,6 @@ void Drawing_Window::make_window() {
     }
     o->size_range(220,220);
     o->end();
+    o->resizable(o);
   }
 }

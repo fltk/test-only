@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.14 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -107,7 +107,7 @@ ComboBrowser::handle(int event) {
   int hse = hscrollbar.visible() && Fl::event_inside(hscrollbar.x(),
             hscrollbar.y(), w(), hscrollbar.h());
 
-//  int X = x(), Y = y(), W = w(), H = h(); text_box()->inset(X, Y, W, H);
+//  int X = x(), Y = y(), W = w(), H = h(); box()->inset(X, Y, W, H);
 //  if (!Fl::event_inside(X, Y, W, H)) return 0;
   if (!Fl::event_inside(0, 0, w(), h())) return 0;
 
@@ -149,7 +149,7 @@ public:
 int
 Fl_Input_Browser::handle(int e) {
   int TX, TY = 0, TW, TH = h();
-  if (type()&FL_NONEDITABLE_INPUT_BROWSER) {
+  if (type()&NONEDITABLE) {
     TX = 0; TW = w();
   } else {
     TX = input->x()+input->w(); TW = w()-(input->x()+input->w());
@@ -161,7 +161,7 @@ Fl_Input_Browser::handle(int e) {
   if (over_now != over_last) redraw(FL_DAMAGE_HIGHLIGHT);
 
   if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
-    && !(type()&FL_NONEDITABLE_INPUT_BROWSER) && Fl::pushed() != this)
+    && !(type()&NONEDITABLE) && Fl::pushed() != this)
   {
     if (e == FL_PUSH) Fl::pushed(input);
     return input->handle(e);
@@ -180,16 +180,16 @@ Fl_Input_Browser::handle(int e) {
       mw->set_override();
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
-      if (type()&FL_INDENTED_INPUT_BROWSER) b->indented(1);
-      b->text_box(FL_BORDER_BOX);
+      b->indented((type()&INDENTED) != 0);
+      b->box(FL_BORDER_BOX);
       share_list.other = this;
       b->list(&share_list);
       b->when(FL_WHEN_RELEASE_ALWAYS);
       b->callback(ComboBrowser_cb);
       mw->end();
       b->layout(); // (WAS: it is ok to do this)
-      int W = b->width()+b->scrollbar.w()+b->text_box()->dw();
-      int H = b->height()+b->text_box()->dh();
+      int W = b->width()+b->scrollbar.w()+b->box()->dw();
+      int H = b->height()+b->box()->dh();
       if (W > maxw_) W = maxw_;
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;
@@ -220,7 +220,7 @@ Fl_Input_Browser::handle(int e) {
       mw->exec(0, true);
 
       delete mw;
-      if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
+      if (type()&NONEDITABLE) throw_focus();
       else Fl::focus(input);
 
       ib = 0;
@@ -230,7 +230,7 @@ Fl_Input_Browser::handle(int e) {
 
     case FL_FOCUS:
     case FL_UNFOCUS:
-      if (type()&FL_NONEDITABLE_INPUT_BROWSER) break;
+      if (type()&NONEDITABLE) break;
       return input->handle(e);
 
     case FL_ENTER: case FL_MOVE: return 1;
@@ -243,15 +243,14 @@ Fl_Input_Browser::draw() {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
   minw_ = w();
-  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
-  int X = 0, Y = 0, W = w(), H = h();
-  text_box()->inset(X, Y, W, H);
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  int X = 0, Y = 0, W = w(), H = h(); box()->inset(X, Y, W, H);
   int W1 = H*4/5;
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_CHILD)) {
     input->resize(X, Y, W-W1, H);
     input->set_damage(FL_DAMAGE_ALL);
     input->copy_style(style()); // force it to use this style
-    input->text_box(FL_FLAT_BOX);
+    input->box(FL_FLAT_BOX);
     // fix for relative coordinates
     fl_x_ += X; fl_y_ += Y;
     input->draw();
@@ -259,16 +258,15 @@ Fl_Input_Browser::draw() {
     input->set_damage(0);
   }
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_VALUE|FL_DAMAGE_HIGHLIGHT)) {
-    if  (ib == this) f |= (FL_VALUE/*|FL_SELECTED*/);
+    if (ib == this) f |= (FL_VALUE/*|FL_SELECTED*/);
     if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
-    box()->draw(X, Y, W, H, get_box_color(f), f);
-    box()->inset(X, Y, W, H);
-    draw_glyph(FL_GLYPH_DOWN, X, Y, W, H, f);
+    // draw the little mark at the right:
+    draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y, W, H, f);
     over_last = over_now;
   }
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.14 2002/01/20 07:37:15 spitzak Exp $".
 //

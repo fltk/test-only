@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.32 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.33 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
 }
 
 void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
-  X = 0; Y = 0; W = w(); H = h(); text_box()->inset(X,Y,W,H);
+  X = 0; Y = 0; W = w(); H = h(); box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -71,7 +71,7 @@ void Fl_Scroll::draw() {
 
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
-    draw_text_frame();
+    draw_frame();
     draw_clip(this, X, Y, W, H);
   } else {
     if (scrolldx || scrolldy) {
@@ -98,8 +98,8 @@ void Fl_Scroll::draw() {
     hscrollbar.set_damage(FL_DAMAGE_ALL);
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
-      fl_color(color());
-      fl_rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
+      fl_color(button_color());
+      fl_rectf(scrollbar.x(),hscrollbar.y(),scrollbar.w(),hscrollbar.h());
     }
   }
   update_child(scrollbar);
@@ -130,7 +130,7 @@ void Fl_Scroll::layout() {
   }
 
   // See if children would fit if we had no scrollbars...
-  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int vneeded = 0;
   int hneeded = 0;
   if (type() & VERTICAL) {
@@ -225,7 +225,7 @@ Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
   yposition_ = 0;
   scrolldx = scrolldy = layoutdx = layoutdy = 0;
   hscrollbar.parent(this);
-  hscrollbar.type(FL_HORIZONTAL);
+  hscrollbar.type(Fl_Slider::HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
@@ -287,5 +287,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.32 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.33 2002/01/20 07:37:15 spitzak Exp $".
 //

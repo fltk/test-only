@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.30 2002/01/20 07:37:16 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ void fl_line_style(int style, int width, char* dashes) {
   if (!width && (line_style || dash_pattern_size)) line_width = 1;
   fl_pen = fl_create_pen();
   HPEN oldpen = (HPEN)SelectObject(fl_gc, fl_pen);
-    if (oldpen) DeleteObject(oldpen);
+  if (oldpen) DeleteObject(oldpen);
 }
 
 HPEN fl_create_pen() {
@@ -101,11 +101,11 @@ void fl_color(Fl_Color i) {
 
   fl_brush = CreateSolidBrush(fl_colorref);
   HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, fl_brush);
-    if (oldbrush) DeleteObject(oldbrush);
+  if (oldbrush) DeleteObject(oldbrush);
 
   fl_pen = fl_create_pen();
   HPEN oldpen = (HPEN)SelectObject(fl_gc, fl_pen);
-    if (oldpen) DeleteObject(oldpen);
+  if (oldpen) DeleteObject(oldpen);
 }
 
 void fl_free_color(Fl_Color) {
@@ -160,5 +160,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.29 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.30 2002/01/20 07:37:16 spitzak Exp $".
 //

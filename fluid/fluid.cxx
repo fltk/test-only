@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.55 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.56 2002/01/20 07:37:15 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -368,6 +368,7 @@ void scheme_cb(Fl_Widget *, void *) {
 }
 
 ////////////////////////////////////////////////////////////////
+#include <fltk/Fl_Menu_Item.h>
 
 extern Fl_Menu_Item New_Menu[];
 
@@ -433,7 +434,7 @@ void make_main_window() {
     menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
     menubar->box(FL_FLAT_BOX);
     fill_in_New_Menu();
-    menubar->menu(Main_Menu);
+    Main_Menu->add_to(menubar);
     // this is removed because the new ctrl+bindings mess up emacs in
     // the text fields:
     //    menubar->global();
@@ -527,5 +528,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.55 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.56 2002/01/20 07:37:15 spitzak Exp $".
 //

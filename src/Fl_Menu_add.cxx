@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.29 2001/11/20 20:23:39 robertk Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -62,8 +62,8 @@ static Fl_Widget* append(
     o = new Fl_Item();
   }
   o->copy_label(text);
-  if (flags & FL_MENU_TOGGLE) o->type(FL_TOGGLE_ITEM);
-  if (flags & FL_MENU_RADIO) o->type(FL_RADIO_ITEM);
+  if (flags & FL_MENU_RADIO) o->type(Fl_Item::RADIO);
+  else if (flags & FL_MENU_TOGGLE) o->type(Fl_Item::TOGGLE);
   // these flags have been cleverly assigned so this shift and mask
   // converts from the old values to the new ones:
   o->set_flag((flags<<8)&(FL_INACTIVE|FL_VALUE|FL_INVISIBLE));
@@ -238,5 +238,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.29 2001/11/20 20:23:39 robertk Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
 //

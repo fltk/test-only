@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Input_Browser.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Combo box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,15 @@
 #include <fltk/Fl_Menu_.h>
 #include <fltk/Fl_Input.h>
 
-// values for type()
-#define FL_NORMAL_INPUT_BROWSER      0
-#define FL_NONEDITABLE_INPUT_BROWSER 1
-#define FL_INDENTED_INPUT_BROWSER    2
-
 class FL_API Fl_Input_Browser : public Fl_Menu_ {
 public:
+  enum { // values for type()
+    NORMAL = 0,
+    NONEDITABLE = 1,
+    INDENTED = 2,
+    NONEDITABLE_INDENTED = 3
+  };
+
   Fl_Input_Browser(int,int,int,int,const char * = 0);
   ~Fl_Input_Browser() { input->parent(0); delete input; }
   static Fl_Named_Style* default_style;
@@ -61,5 +63,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Input_Browser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

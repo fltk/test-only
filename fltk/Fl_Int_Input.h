@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Int_Input.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Int_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Integer input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,11 @@
 class FL_API Fl_Int_Input : public Fl_Float_Input {
 public:
   Fl_Int_Input(int x,int y,int w,int h,const char *l = 0)
-    : Fl_Float_Input(x,y,w,h,l) {type(FL_INT_INPUT);}
+    : Fl_Float_Input(x,y,w,h,l) {type(INT);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Int_Input.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Int_Input.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

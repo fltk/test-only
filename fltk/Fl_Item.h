@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget designed to be a menu or browser item.
 //
@@ -30,12 +30,13 @@
 #include "Fl_Widget.h"
 #endif
 
-// values for type() (should be the same as the _BUTTON symbols)
-#define FL_TOGGLE_ITEM	(FL_RESERVED_TYPE+1)
-#define FL_RADIO_ITEM	(FL_RESERVED_TYPE+2)
-
 class FL_API Fl_Item : public Fl_Widget {
 public:
+  enum { // values for type(), should match Fl_Button
+    NORMAL = 0,
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2
+  };
   void draw();
   void layout();
   Fl_Item(const char* label = 0);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.15 2001/12/17 15:15:17 easysw Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.16 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -84,7 +84,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   mVScrollBar->callback((Fl_Callback*)v_scrollbar_cb, this);
   mHScrollBar = new Fl_Scrollbar(0,0,0,0);
   mHScrollBar->callback((Fl_Callback*)h_scrollbar_cb, this);
-  mHScrollBar->type(FL_HORIZONTAL);
+  mHScrollBar->type(Fl_Scrollbar::HORIZONTAL);
 
   Fl_Group::current(current);
 
@@ -194,7 +194,7 @@ int Fl_Text_Display::longest_vline() {
 void Fl_Text_Display::layout() {
   if (!buffer() || !visible_r()) return;
   int X = 0, Y = 0, W = w(), H = h();
-  text_box()->inset(X, Y, W, H);
+  box()->inset(X, Y, W, H);
   text_area.x = X+LEFT_MARGIN;
   text_area.y = Y+BOTTOM_MARGIN;
   text_area.w = W-LEFT_MARGIN-RIGHT_MARGIN;
@@ -1060,9 +1060,9 @@ void Fl_Text_Display::draw_string( int style, int X, int Y, int toX,
     size = styleRec->size;
     foreground = styleRec->color;
     background = style & PRIMARY_MASK ? selection_color() :
-                 style & HIGHLIGHT_MASK ? highlight_color() : text_background();
+                 style & HIGHLIGHT_MASK ? highlight_color() : color();
     if ( foreground == background )   /* B&W kludge */
-      foreground = text_background();
+      foreground = color();
   } else if ( style & HIGHLIGHT_MASK ) {
     foreground = highlight_label_color();
     background = highlight_color();
@@ -1071,7 +1071,7 @@ void Fl_Text_Display::draw_string( int style, int X, int Y, int toX,
     background = selection_color();
   } else {
     foreground = text_color();
-    background = text_background();
+    background = color();
   }
 
   fl_color( background );
@@ -1116,7 +1116,7 @@ void Fl_Text_Display::clear_rect( int style, int X, int Y,
     fl_color( selection_color() );
     fl_rectf( X, Y, width, height );
   } else {
-    fl_color( text_background() );
+    fl_color( color() );
     fl_rectf( X, Y, width, height );
   }
 }
@@ -1747,31 +1747,32 @@ void Fl_Text_Display::draw(void) {
   if (damage() & FL_DAMAGE_ALL) {
     //printf("drawing all\n");
     // draw the box()
-    draw_text_frame();
+    draw_frame();
 
     // left margin
     fl_rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,
              LEFT_MARGIN, text_area.h+TOP_MARGIN+BOTTOM_MARGIN,
-             text_background());
+             color());
 
     // right margin
     fl_rectf(text_area.x+text_area.w, text_area.y-TOP_MARGIN,
              RIGHT_MARGIN, text_area.h+TOP_MARGIN+BOTTOM_MARGIN,
-             text_background());
+             color());
 
     // top margin
     fl_rectf(text_area.x, text_area.y-TOP_MARGIN,
-             text_area.w, TOP_MARGIN, text_background());
+             text_area.w, TOP_MARGIN, color());
 
     // bottom margin
     fl_rectf(text_area.x, text_area.y+text_area.h,
-             text_area.w, BOTTOM_MARGIN, text_background());
+             text_area.w, BOTTOM_MARGIN, color());
 
     // draw that little box in the corner of the scrollbars
-    if (mVScrollBar->visible() && mHScrollBar->visible())
+    if (mVScrollBar->visible() && mHScrollBar->visible()) {
+      fl_color(button_color());
       fl_rectf(mVScrollBar->x(), mHScrollBar->y(),
-               mVScrollBar->w(), mHScrollBar->h(),
-               color());
+	       mVScrollBar->w(), mHScrollBar->h());
+    }
 
     // blank the previous cursor protrusions
   }
@@ -1783,9 +1784,9 @@ void Fl_Text_Display::draw(void) {
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
                  text_area.h);
     fl_rectf(text_area.x-LEFT_MARGIN, mCursorOldY,
-             LEFT_MARGIN, mMaxsize, text_background());
+             LEFT_MARGIN, mMaxsize, color());
     fl_rectf(text_area.x+text_area.w, mCursorOldY,
-             RIGHT_MARGIN, mMaxsize, text_background());
+             RIGHT_MARGIN, mMaxsize, color());
     fl_pop_clip();
   }
 
@@ -1956,5 +1957,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.15 2001/12/17 15:15:17 easysw Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.16 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -16,6 +16,7 @@ extern void load_coding_style();
 extern const char *get_opening_brace(int is_function);
 extern const char *get_indent_string(int level);
 extern void show_coding_style_cb(Fl_Widget *, void *);
+extern void write_includes_from_code(char*);
 #include <fltk/Fl_Window.h>
 #include <fltk/Fl_Tabs.h>
 #include <fltk/Fl_Group.h>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.54 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -348,8 +348,8 @@ void Fl_Browser::draw_item() {
     widget->clear_flag(FL_SELECTED);
     flags = 0;
 #if DRAW_STRIPES
-    Fl_Color c0 = text_background();
-    Fl_Color c1 = color();
+    Fl_Color c0 = color();
+    Fl_Color c1 = button_color();
     int x=1; for (int j=0; j<=item_level[HERE]; j++) x ^= item_index[HERE][j]+1;
     if (x & 1 && c1 != c0) {
       // draw odd-numbered items with a dark stripe, plus contrast-enhancing
@@ -365,7 +365,7 @@ void Fl_Browser::draw_item() {
       fl_rectf(X, y, W, h);
     }
 #else
-    fl_color(text_background());
+    fl_color(color());
     fl_rectf(X, y, W, h);
 #endif
   }
@@ -381,11 +381,11 @@ void Fl_Browser::draw_item() {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
     if (j == item_level[HERE]) {
       g += ELL;
-	if (widget->flags() & FL_OPEN)
-	  g += OPEN_ELL-ELL;
-	else if (children(item_index[HERE],j+1)>=0)
-	  g += CLOSED_ELL-ELL;
-      }
+      if (widget->flags() & FL_OPEN)
+	g += OPEN_ELL-ELL;
+      else if (children(item_index[HERE],j+1)>=0)
+	g += CLOSED_ELL-ELL;
+    }
     draw_glyph(g, x, y, arrow_size, h, flags);
     x += arrow_size;
   }
@@ -433,7 +433,7 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   // erase the area below the last item:
   int bottom_y = Y+item_position[HERE]-yposition_;
   if (bottom_y < y+h) {
-    fl_color(text_background());
+    fl_color(color());
     fl_rectf(x, bottom_y, w, y+h-bottom_y);
   }
   fl_pop_clip();
@@ -445,7 +445,7 @@ void Fl_Browser::draw() {
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
     //printf("full redraw damage %x\n", d);
-    draw_text_frame();
+    draw_frame();
     draw_clip(X, Y, W, H);
   } else if (d & FL_DAMAGE_CONTENTS) { // redraw contents
     //printf("contents redraw damage %x\n", d);
@@ -474,7 +474,7 @@ void Fl_Browser::draw() {
     hscrollbar.set_damage(FL_DAMAGE_ALL);
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
-      fl_color(parent()->color());
+      fl_color(button_color());
       fl_rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
     }
   }
@@ -508,7 +508,7 @@ void Fl_Browser::layout() {
   // figure out the visible area:
 
   X = 0; Y = 0; W = w(); H = h();
-  text_box()->inset(X,Y,W,H);
+  box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -547,7 +547,7 @@ void Fl_Browser::layout() {
   // turn the scrollbars on and off as necessary:
 
   for (int z = 0; z<2; z++) {
-    if ((type()&VERTICAL) && (type()&ALWAYS_ON || height_ > H || yposition_)) {
+    if (height_ > H || yposition_) {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
 	W -= scrollbar.w();
@@ -560,7 +560,7 @@ void Fl_Browser::layout() {
 	redraw(FL_DAMAGE_ALL);
       }
     }
-    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || width_ > W || xposition_)) {
+    if (width_ > W || xposition_) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
 	H -= hscrollbar.h();
@@ -640,24 +640,24 @@ bool Fl_Browser::set_focus() {
 // force current item to a state and do callback for multibrowser:
 bool Fl_Browser::set_selected(bool value, int do_callback) {
   if (multi()) {
-    if (value) set_focus();
-  Fl_Flags f = item()->flags();
-  if (value) {
-    if (f & FL_VALUE) return false;
-    item()->set_flag(FL_VALUE);
-  } else {
-    if (!(f & FL_VALUE)) return false;
-    item()->clear_flag(FL_VALUE);
-  }
-  list()->flags_changed(this, item());
-  damage_item(HERE);
-  if (when() & do_callback) {
-    clear_changed();
-    execute(item());
-  } else if (do_callback) {
-    set_changed();
-  }
-  return true;
+    //if (value) set_focus();
+    Fl_Flags f = item()->flags();
+    if (value) {
+      if (f & FL_VALUE) return false;
+      item()->set_flag(FL_VALUE);
+    } else {
+      if (!(f & FL_VALUE)) return false;
+      item()->clear_flag(FL_VALUE);
+    }
+    list()->flags_changed(this, item());
+    damage_item(HERE);
+    if (when() & do_callback) {
+      clear_changed();
+      execute(item());
+    } else if (do_callback) {
+      set_changed();
+    }
+    return true;
   } else {
     if (value) return (select_only_this(do_callback));
     else return deselect(do_callback);
@@ -818,8 +818,8 @@ int Fl_Browser::handle(int event) {
     RELEASE:
       if ((when()&FL_WHEN_RELEASE) &&
 	  (changed() || (when()&FL_WHEN_NOT_CHANGED))) {
-      clear_changed();
-      execute(item());
+	clear_changed();
+	execute(item());
       }
       return 1;
     case FL_Enter:
@@ -973,13 +973,12 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   : Fl_Menu_(X,Y,W,H,L), endgroup(0),
     scrollbar(X+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH) {
-  type(BOTH);
   style(default_style);
   xposition_ = 0;
   yposition_ = 0;
   scrolldx = scrolldy = 0;
   hscrollbar.parent(this);
-  hscrollbar.type(FL_HORIZONTAL);
+  hscrollbar.type(Fl_Slider::HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
@@ -1003,5 +1002,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.54 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.55 2002/01/20 07:37:15 spitzak Exp $".
 //

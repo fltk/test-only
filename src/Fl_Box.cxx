@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.23 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 #include <fltk/Fl_Box.h>
 
 static void revert(Fl_Style* s) {
+  s->color = FL_GRAY;
   s->box = FL_NO_BOX;
 }
 // this is unnamed as there is no need for themes to alter this:
@@ -43,6 +44,13 @@ Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
   : Fl_Widget(x,y,w,h,l)
 {
   style(default_style);
+}
+
+Fl_Box::Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *l)
+  : Fl_Widget(x,y,w,h,l)
+{
+  style(default_style);
+  box(b);
 }
 
 extern Fl_Widget* fl_did_clipping;
@@ -61,5 +69,5 @@ void Fl_Box::draw() {
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.23 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -24,15 +24,15 @@ is deleted.
 
 <h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
 
-The type of box to draw around the outer edge of the widget, or around
-raised button-like things in a complex widget such as a scrollbar.
-The default is <code>FL_UP_BOX</code>.
+The type of box to draw around the outer edge of the widget (for the
+majority of widgets, some classes ignore this or use it to draw only
+text fields inside the widget). The default is <code>FL_DOWN_BOX</code>.
 
-<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> text_box;</h4>
+<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> button_box;</h4>
 
-The type of box to draw around text fields and other sunken parts of a
-widget, such as the checkmark in a check button or the background of a
-slider.  The default is <code>FL_DOWN_BOX</code>.
+The type of box to draw buttons internal the widget (notice that <a
+href="Fl_Button.html">Fl_Button</a> uses <tt>box</tt>, however). The
+default is <code>FL_UP_BOX</code>.
 
 <h4>void (*glyph)(int type, int x,int y,int w,int h, <a
 href=Fl_Color.html>Fl_Color</a> bg, Fl_Color fg, Fl_Flags, Fl_Boxtype);</h4>
@@ -124,10 +124,9 @@ zero disables highlighting.
 Color to draw labels atop the <code>highlight_color</code>.  The
 default of zero leaves the <code>label_color</code> unchanged.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> text_background;</h4>
+<h4><a href=Fl_Color.html>Fl_Color</a> button_color;</h4>
 
-Color passed to <code>text_box</code>.  Default is
-<code>FL_LIGHT2</code>.
+Color used when drawing internal buttons. Default is <code>FL_GRAY</code>.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
 
@@ -140,7 +139,7 @@ default is Windows 95 blue.
 
 <p>Check buttons, radio buttons, menu items, and light buttons use
 this to color in the glyph that indicates check/radio state when the
-button is turned on (<code>text_background</code> is used for the check
+button is turned on (<code>button_color</code> is used for the check
 marks when they are off).
 
 <h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
@@ -236,7 +235,7 @@ here to get check marks correct.
 <h4>Fl_Style::find("menu")</h4>
 
 This style is used for the pop-up menu windows.
-<code>text_box</code> is drawn around each item, and
+<code>button_box</code> is drawn around each item, and
 <code>selection_color</code> is used to color the current one.
 
 <h4>Fl_Style::find("item")</h4>

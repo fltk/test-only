@@ -5,7 +5,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
 #include <fltk/Fl_Group.h>
-extern Fl_Group *the_group;
+extern Fl_Group* the_group;
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Check_Button.h>
 #include <fltk/Fl_Slider.h>

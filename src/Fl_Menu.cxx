@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.117 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.118 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -30,7 +30,8 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Menu_Window.h>
 #include <fltk/Fl_Menu_.h>
-#include <fltk/Fl_Item.h> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
+#include <fltk/Fl_Item.h> // for TOGGLE, RADIO
+#define checkmark(item) (item->type()>=Fl_Item::TOGGLE && item->type()<=Fl_Item::RADIO)
 #include <fltk/fl_draw.h>
 
 // class MenuTitle is a small window for the title, it will look like
@@ -104,17 +105,19 @@ MenuTitle::MenuTitle(MenuState* m, int X, int Y, int W, int H, Fl_Widget* L)
   if (L->image()) clear_overlay();
 }
 
-// In order to draw the rather inconsiste Windows-style menubars, I use
-// the text_box() of the menubar to draw a box around the selected items.
-// If Windows was consistent they would use a dark blue selection box
-// like earlier versions of NT did. Sigh...
+// In order to draw the rather inconsistant Windows-style menubars, the
+// button_box() of the menubar is only used to draw the selected menu
+// titles. The single static Fl_Menu::style->button_box is used for drawing
+// the selected items in the menus. If Windows was consistent (like NT4 was)
+// then we could have used the button_box of the menu widget to control
+// the popup items so menus in the same program could appear different. Sigh!
 
 void MenuTitle::draw() {
 
   Fl_Widget* style_widget = menustate->widget;
-  Fl_Boxtype box = style_widget->text_box();
+  Fl_Boxtype box = style_widget->button_box();
   // popup menus may have no box set:
-  if (box == FL_NO_BOX) box = Fl_Widget::default_style->box;
+  if (box == FL_NO_BOX) box = Fl_Widget::default_style->button_box;
 
   Fl_Flags flags;
   if (!menustate->menubar) {
@@ -168,13 +171,14 @@ public:
 };
 
 // The box, color, and selection color of all menus is taken from
-// this. The text_box is drawn around each item in the menu. The
-// color is rather clumsily replaced with the text_background
+// this. The button_box is drawn around each item in the menu (nyi).
+// The color is rather clumsily replaced with the color()
 // of the calling widget to allow compatability with fltk 1.0 and
 // to allow popup menus to have different colors.
 
 static void revert(Fl_Style *s) {
-  s->text_box = FL_NO_BOX;
+  s->box = FL_UP_BOX;
+  s->button_box = FL_FLAT_BOX;
 }
 static Fl_Named_Style style("Menu", revert, &MenuWindow::default_style);
 Fl_Named_Style* MenuWindow::default_style = &::style;
@@ -548,8 +552,7 @@ int MenuWindow::handle(int event) {
   	  p.state = INITIAL_STATE;
 	// redraw checkboxes so they preview the state they will be in:
 	Fl_Widget* widget = p.menus[menu]->get_widget(item);
-	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
-	  p.menus[menu]->redraw(FL_DAMAGE_CHILD);
+	if (checkmark(widget)) p.menus[menu]->redraw(FL_DAMAGE_CHILD);
       }
     setitem(p, menu, item);
     return 1;}
@@ -562,8 +565,7 @@ int MenuWindow::handle(int event) {
       // redraw checkboxes so they preview the state they will be in:
       if (p.indexes[p.level] >= 0) {
 	widget = p.current_widget();
-	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
-	  p.menus[p.level]->redraw(FL_DAMAGE_CHILD);
+	if (checkmark(widget)) p.menus[p.level]->redraw(FL_DAMAGE_CHILD);
       }
       return 1;
     }
@@ -577,8 +579,8 @@ int MenuWindow::handle(int event) {
       p.widget->focus(p.indexes, p.level);
       p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.level];
-      if (widget->type() == FL_RADIO_ITEM) mw->redraw();
-      else if (widget->type() == FL_TOGGLE_ITEM) mw->redraw(FL_DAMAGE_CHILD);
+      if (widget->type() == Fl_Item::RADIO) mw->redraw();
+      else if (checkmark(widget)) mw->redraw(FL_DAMAGE_CHILD);
     } else {
       // ignore clicks on menu titles unless it they have a callback:
       if (widget->callback() == Fl_Widget::default_callback &&
@@ -598,7 +600,7 @@ int Fl_Menu_::popup(
 {
   Fl_Group::current(0); // fix possible programmer error...
 
-  MenuWindow::default_style->color = text_background();
+  MenuWindow::default_style->color = color();
 
   // figure out where to pop up in screen coordinates:
   if (parent()) {
@@ -735,13 +737,11 @@ int Fl_Menu_::popup(
 
   // Execute whatever item the user picked:
   focus(p.indexes, p.level);
-  if (menubar && !p.level &&
-      (item()->type()==FL_RADIO_ITEM || item()->type()==FL_TOGGLE_ITEM))
-    redraw();
+  if (menubar && !p.level && checkmark(item())) redraw();
   execute(item());
   return 1;
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.117 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.118 2002/01/20 07:37:15 spitzak Exp $".
 //

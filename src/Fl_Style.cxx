@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -33,17 +33,17 @@ Fl_Named_Style* Fl_Named_Style::first;
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
 static void revert(Fl_Style* s) {
-  s->box                   = FL_UP_BOX;
-  s->text_box		   = FL_DOWN_BOX;
+  s->box                   = FL_DOWN_BOX;
+  s->button_box		   = FL_UP_BOX;
   s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
   s->label_type            = FL_NORMAL_LABEL;
-  s->color                 = FL_GRAY;
+  s->color                 = fl_gray_ramp(FL_NUM_GRAY-1);
+  s->button_color	   = FL_GRAY;
   s->label_color           = FL_BLACK;
   s->selection_color	   = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color  = FL_WHITE;
-  s->text_background	   = fl_gray_ramp(FL_NUM_GRAY-1);
   s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
@@ -97,16 +97,16 @@ void Fl_Widget::FIELD(TYPE v) {		\
 }
 
 style_functions(Fl_Boxtype,box)
-style_functions(Fl_Boxtype,text_box)
+style_functions(Fl_Boxtype,button_box)
 style_functions(Fl_Glyph,glyph)
 style_functions(Fl_Font,label_font)
 style_functions(Fl_Font,text_font)
 style_functions(Fl_Labeltype,label_type)
 style_functions(Fl_Color,color)
+style_functions(Fl_Color,button_color)
 style_functions(Fl_Color,label_color)
 style_functions(Fl_Color,selection_color)
 style_functions(Fl_Color,selection_text_color)
-style_functions(Fl_Color,text_background)
 style_functions(Fl_Color,highlight_color)
 style_functions(Fl_Color,highlight_label_color)
 style_functions(Fl_Color,text_color)
@@ -205,5 +205,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
 //

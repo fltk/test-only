@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.51 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.52 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,14 +29,16 @@
 #include <math.h>
 #include <config.h>
 
+#define vertical() (!(type()&1))
+
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
 void Fl_Slider::draw_bg(int x, int y, int w, int h, Fl_Flags f) {
-  fl_color(text_background());
+  fl_color(color());
   fl_rectf(x, y, w, h);
-  if (type() == FL_VERT_NICE_SLIDER) {
+  if (type() == VERTICAL_NICE) {
     FL_THIN_DOWN_BOX->draw(x+w/2-2, y, 4, h, fl_inactive(FL_BLACK, f), f);
-  } else if (type() == FL_HOR_NICE_SLIDER) {
+  } else if (type() == HORIZONTAL_NICE) {
     FL_THIN_DOWN_BOX->draw(x, y+h/2-2, w, 4, fl_inactive(FL_BLACK, f), f);
   }
   if (focused()) {
@@ -52,7 +54,7 @@ int Fl_Slider::slider_size(int W, int H) {
   int S = slider_size_;
   if (S <= 0) {
     S = H/2+1;
-    if (type()==FL_VERT_NICE_SLIDER || type()==FL_HOR_NICE_SLIDER) S += 4;
+    if (type()==VERTICAL_NICE || type()==HORIZONTAL_NICE) S += 4;
   }
   if (S < W) return S;
   if (minimum() == maximum()) return W;
@@ -64,7 +66,7 @@ int Fl_Slider::slider_size(int W, int H) {
 int Fl_Slider::slider_position(int W, int S) {
   if (minimum() == maximum()) return 0;
   double val = (value()-minimum())/(maximum()-minimum());
-  if (!horizontal()) val = 1-val;
+  if (vertical()) val = 1-val;
   if (val >= 1.0) return W-S;
   else if (val <= 0.0) return 0;
   else return int(val*(W-S)+.5);
@@ -72,64 +74,65 @@ int Fl_Slider::slider_position(int W, int S) {
 
 // Fltk 2.0 is incompatable with the use of color:
 // color area:                          1.0:                    2.0:
-// background behind slider             color                   text_background
-
-// normal slider                        selection_color         color
+// background behind slider             color                   color
+// normal slider                        selection_color         selection_color
 // normal slider symbol                 N/A                     text_color
-
-// nice slider slider                   FL_GRAY                 color
+// nice slider slider                   FL_GRAY                 button_color
 // nice slider color mark               selection_color         selection_color
 
 // Draw a normal rectangular slider in the passed region:
 void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
-  if (!Fl_Style::draw_sliders_pushed) f &= ~(FL_VALUE|FL_SELECTED);
+  if (!Fl_Style::draw_sliders_pushed) f &= ~FL_VALUE;
+
   if (w <= 0 || h <= 0) return;
-  int W = (horizontal() ? w : h);
+  int W = (vertical() ? h : w);
   int X,S;
-  if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
+  if (type()==HORIZONTAL_FILL || type() == VERTICAL_FILL) {
     S = slider_position(W, 0);
-    if (!(minimum()>maximum()) == !horizontal()) {S = W-S; X = W-S;}
+    if (!(minimum()<=maximum()) == !vertical()) {S = W-S; X = W-S;}
     else X = 0;
   } else {
-    S = slider_size(W, horizontal() ? h : w);
+    S = slider_size(W, vertical() ? w : h);
     X = slider_position(W, S);
   }
 
   if (X > 0) {
-    if (horizontal()) draw_bg(x, y, X, h, f);
-    else draw_bg(x, y, w, X, f);
+    if (vertical()) draw_bg(x, y, w, X, f);
+    else draw_bg(x, y, X, h, f);
   }
   if (X+S < W) {
-    if (horizontal()) draw_bg(x+X+S, y, w-X-S, h, f);
-    else draw_bg(x, y+X+S, w, h-X-S, f);
+    if (vertical()) draw_bg(x, y+X+S, w, h-X-S, f);
+    else draw_bg(x+X+S, y, w-X-S, h, f);
   }
 
-  // Sigh. Special case for "nice" sliders
-  if (horizontal()) {
+  // if user directly set selected_color we use it:
+  if (style()->selection_color && type()<VERTICAL_NICE) f |= FL_SELECTED;
+
+  if (vertical()) {
     int g;
-    if (type() == FL_HOR_NICE_SLIDER) g = FL_GLYPH_HNSLIDER;
-    else if (type() == FL_HOR_FILL_SLIDER) g = 0;
-    else g = FL_GLYPH_HSLIDER;
-    draw_glyph(g, x+X, y, S, h, f);
-    draw_inside_label(x+X, y, S, h, f);
-  } else {
-    int g;
-    if (type() == FL_VERT_NICE_SLIDER) g = FL_GLYPH_VNSLIDER;
-    else if (type() == FL_VERT_FILL_SLIDER) g = 0;
+    if (type() == VERTICAL_NICE) g = FL_GLYPH_VNSLIDER;
+    else if (type() == VERTICAL_FILL) g = 0;
     else g = FL_GLYPH_VSLIDER;
     draw_glyph(g, x, y+X, w, S, f);
     draw_inside_label(x, y+X, w, S, f);
+  } else {
+    int g;
+    if (type() == HORIZONTAL_NICE) g = FL_GLYPH_HNSLIDER;
+    else if (type() == HORIZONTAL_FILL) g = 0;
+    else g = FL_GLYPH_HSLIDER;
+    draw_glyph(g, x+X, y, S, h, f);
+    draw_inside_label(x+X, y, S, h, f);
   }
 }
 
 void Fl_Slider::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
-  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
   if (!active_r()) {
     f |= FL_INACTIVE;
   } else {
-    if (Fl::pushed() == this) f |= (FL_SELECTED|FL_VALUE);
+    if (Fl::pushed() == this) f |= FL_VALUE;
     else if (belowmouse()) f |= FL_HIGHLIGHT;
   }
   draw(X,Y,W,H, f);
@@ -141,14 +144,14 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     handle_push();
     redraw(FL_DAMAGE_VALUE);
   case FL_DRAG: {
-    int W = (horizontal() ? w : h);
-    int H = (horizontal() ? h : w);
-    int mx = (horizontal() ? Fl::event_x()-x : Fl::event_y()-y);
+    int H = (vertical() ? w : h);
+    int W = (vertical() ? h : w);
+    int mx = (vertical() ? Fl::event_y()-y : Fl::event_x()-x);
     int S = slider_size(W,H);
     if (W <= S) return 1;
     int X;
     static int offcenter;
-    if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
+    if (type() == HORIZONTAL_FILL || type() == VERTICAL_FILL) {
       X = slider_position(W, 0);
       if (event == FL_PUSH) {
 	offcenter = mx-X;
@@ -176,7 +179,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
       X = W-S;
       offcenter = mx-X; if (offcenter > S) offcenter = S;
     }
-    if (!horizontal()) X = (W-S)-X;
+    if (vertical()) X = (W-S)-X;
     v = round(X*(maximum()-minimum())/(W-S) + minimum());
     // make sure a click outside the sliderbar moves it:
     if (event == FL_PUSH && v == value()) {
@@ -197,11 +200,11 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     switch (Fl::event_key()) {
     case FL_Up:
     case FL_Down:
-      if (horizontal()) return 0;
+      if (!vertical()) return 0;
       break;
     case FL_Left:
     case FL_Right:
-      if (!horizontal()) return 0;
+      if (vertical()) return 0;
     }
   default:
     return Fl_Valuator::handle(event);
@@ -209,7 +212,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Slider::handle(int event) {
-  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
 #if CLICK_MOVES_FOCUS
   if (event == FL_PUSH) take_focus();
 #endif
@@ -217,7 +220,7 @@ int Fl_Slider::handle(int event) {
 }
 
 static void revert(Fl_Style *s) {
-  s->text_background = FL_DARK2;
+  s->color = FL_DARK2;
 }
 static Fl_Named_Style style("Slider", revert, &Fl_Slider::default_style);
 Fl_Named_Style* Fl_Slider::default_style = &::style;
@@ -234,9 +237,9 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
   slider_size_ = 0;
   type(t);
 // fltk 1.0 (and XForms) set the box to FL_FLAT_BOX if the type was
-// FL_HOR/VERT_NICE_SLIDER.
+// HORIZONTAL_NICE or VERTICAL_NICE
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.51 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.52 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -25,13 +25,34 @@
 
 <h3>Description</h3>
 
-The <tt>Fl_Group</tt> class is the FLTK container widget. It maintains
-an array of child widgets. These children can themselves be any widget
-including <tt>Fl_Group</tt>. The most-used subclass of
-<tt>Fl_Group</tt> is <a
-href="Fl_Window.html#Fl_Window"><tt>Fl_Window</tt></a>, however nested
-groups can also be used to control radio buttons or to enforce resize 
-behavior. Also <a href="#Fl_Menu_.html">Fl_Menu_</a> is a subclass and
+The Fl_Group class is the FLTK container widget. It maintains 
+an array of child widgets. These children can themselves be any widget 
+including Fl_Group, nesting groups allows much more control
+over layout and resize behavior. Nested groups are also necessary to
+group radio buttons together.
+
+<p>By default Fl_Group preserves the positions and sizes of all it's
+children, they do not move no matter what sizes or other children are
+added or removed.
+
+<p>Setting <a href=#resizable>resizable()</a> will change the layout
+behavior so that it responds to resizing by moving or resizing the
+children to fit. See <a href=#resizable>below</a> for details.
+
+<p>You may want to use an <a
+href="Fl_Pack.html">Fl_Pack</a> or a <a
+href="Fl_Scroll.html">Fl_Scroll</a> to get other common layout
+behavior that can respond to changes in the sizes of child widgets.
+
+<p>The most-used subclass of Fl_Group is <a
+href="Fl_Window.html"><tt>Fl_Window</tt></a>, all the rules about
+resizing apply to windows. Setting <a href=#resizable>resizable()</a>
+on a window will allow the user to resize it. If you want different
+behavior (such as from <a href="Fl_Pack.html">Fl_Pack</a>) for your
+window you should make the window have that as a single resizable
+child that fills it.
+
+<p><a href="#Fl_Menu_.html">Fl_Menu_</a> is a subclass and
 thus all menus and browsers are groups and the items in them are
 widgets.
 
@@ -199,11 +220,10 @@ box are moved.
 <P align=center><IMG align=TOP SRC=./resizebox1.gif>&nbsp;&nbsp; <IMG align=TOP
 SRC=./resizebox2.gif>
 
-<P>The resizable may be set to the group itself (this is the default 
-value for an <tt>Fl_Group</tt>, although <tt>NULL</tt> is the default 
-for an <tt>Fl_Window</tt>), in which case all the contents are resized. 
-If the resizable is <tt>NULL</tt> then all widgets remain a fixed size 
-and distance from the top-left corner. 
+<P>The resizable may be set to the group itself, in which case all the
+contents are resized.  If the resizable is <tt>NULL</tt> (the default)
+then all widgets remain a fixed size and distance from the top-left
+corner.
 
 <P>It is possible to achieve any type of resize behavior by using an 
 invisible <tt>Fl_Box</tt> as the resizable and/or by using a hierarchy 

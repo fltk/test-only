@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,17 +30,18 @@
 #include "Fl_Valuator.h"
 #endif
 
-// values for type(), lowest bit indicate horizontal:
-#define FL_VERT_SLIDER		0
-#define FL_HOR_SLIDER		1
-#define FL_VERT_FILL_SLIDER	2
-#define FL_HOR_FILL_SLIDER	3
-#define FL_VERT_NICE_SLIDER	4
-#define FL_HOR_NICE_SLIDER	5
-
 class FL_API Fl_Slider : public Fl_Valuator {
 
 public:
+
+  enum { // values for type(), odd numbers are vertical
+    VERTICAL		= 0,
+    HORIZONTAL		= 1,
+    VERTICAL_FILL	= 2,
+    HORIZONTAL_FILL	= 3,
+    VERTICAL_NICE	= 4,
+    HORIZONTAL_NICE	= 5
+  };
 
   void draw();
   int handle(int);
@@ -71,8 +72,17 @@ private:
   void draw_bg(int, int, int, int, Fl_Flags);
 };
 
+#ifndef FLTK_2
+#define FL_VERT_SLIDER		Fl_Slider::VERTICAL
+#define FL_HOR_SLIDER		Fl_Slider::HORIZONTAL
+#define FL_VERT_FILL_SLIDER	Fl_Slider::VERTICAL_FILL
+#define FL_HOR_FILL_SLIDER	Fl_Slider::HORIZONTAL_FILL
+#define FL_VERT_NICE_SLIDER	Fl_Slider::VERTICAL_NICE
+#define FL_HOR_NICE_SLIDER	Fl_Slider::HORIZONTAL_NICE
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Slider.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.18 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -107,8 +107,8 @@ void _Fl_Overlay::flush() {
   current_ = w;
   Fl_X *i = Fl_X::i(this);
   if (damage() == FL_DAMAGE_EXPOSE) {
-  fl_clip_region(i->region); i->region = 0;
-  w->draw_overlay();
+    fl_clip_region(i->region); i->region = 0;
+    w->draw_overlay();
     fl_clip_region(0);
   } else {
     XClearWindow(fl_display, fl_xid(this));
@@ -141,5 +141,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.17 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.18 2002/01/20 07:37:15 spitzak Exp $".
 //

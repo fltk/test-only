@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -83,8 +83,8 @@ static const Fl_Menu_Item* add(Fl_Group* g, const Fl_Menu_Item* m,void* data) {
       o->shortcut(m->shortcut_);
       if (m->callback_) o->callback(m->callback_);
       o->user_data(data ? data : m->user_data_);
-      if (m->flags & FL_MENU_TOGGLE) o->type(FL_TOGGLE_ITEM);
-      if (m->flags & FL_MENU_RADIO) o->type(FL_RADIO_ITEM);
+      if (m->flags & FL_MENU_RADIO) o->type(Fl_Item::RADIO);
+      else if (m->flags & FL_MENU_TOGGLE) o->type(Fl_Item::TOGGLE);
     }
     if (m->labeltype_) o->label_type(m->labeltype_);
     if (m->labelfont_) o->label_font(m->labelfont_);
@@ -100,8 +100,8 @@ static const Fl_Menu_Item* add(Fl_Group* g, const Fl_Menu_Item* m,void* data) {
   return m;
 }
 
-void Fl_Menu_::add(const Fl_Menu_Item* m, void* data) {
-  ::add(this, m, data);
+void Fl_Menu_Item::add_to(Fl_Menu_* menu, void* data) const {
+  ::add(menu, this, data);
 }
     
 // Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays:

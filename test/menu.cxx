@@ -85,16 +85,16 @@ int main(int argc, char **argv) {
   edit.end();
   //edit.deactivate();
   Fl_Item_Group options("&Options");
-  o = new Fl_Item("Red"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Green"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Blue"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Aqua"); o->type(FL_RADIO_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Toggle 1"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Toggle 2"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Toggle 3"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
-  o = new Fl_Item("Toggle 4"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Red"); o->type(Fl_Item::RADIO); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Green"); o->type(Fl_Item::RADIO); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Blue"); o->type(Fl_Item::RADIO); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Aqua"); o->type(Fl_Item::RADIO); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Toggle 1"); o->type(Fl_Item::TOGGLE); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Toggle 2"); o->type(Fl_Item::TOGGLE); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Toggle 3"); o->type(Fl_Item::TOGGLE); o->set_flag(FL_MENU_STAYS_UP);
+  o = new Fl_Item("Toggle 4"); o->type(Fl_Item::TOGGLE); o->set_flag(FL_MENU_STAYS_UP);
   options.end();
-  Fl_Item item("&Item"); item.type(FL_TOGGLE_ITEM);
+  Fl_Item item("&Item"); item.type(Fl_Item::TOGGLE);
   menubar.end();
   menubar.tooltip("This is a menu bar");
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
   ch.tooltip("This is a choice");
 
   Fl_Input_Browser ib(410,50,100,25,"input_&browser:");
-  ib.type(FL_INDENTED_INPUT_BROWSER);
+  ib.type(Fl_Input_Browser::INDENTED);
   ib.callback(callback);
   ib.begin();
   build_hierarchy();

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: factory.cxx,v 1.23 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,14 +33,9 @@
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Group.h>
-#include <fltk/Fl_Menu_Item.h>
 #include <string.h>
 #include <stdio.h>
-//  #if defined(_WIN32) && defined(_MSC_VER)
-//  #	include "../visualc/config.h"
-//  #else
 #include <config.h> // for strcasecmp
-//  #endif
 
 #include "Fluid_Plugins.h"
 #include "Fl_Type.h"
@@ -50,7 +45,7 @@
 #include <fltk/Fl_Box.h>
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Box";}
+  virtual const char *type_name() const {return "Fl_Box";}
   Fl_Widget *widget(int x,int y,int w, int h) {
     return new Fl_Box(x,y,w,h,"label");}
   Fl_Widget_Type *_make() {return new Fl_Box_Type();}
@@ -60,15 +55,15 @@ static Fl_Box_Type Fl_Box_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Button.h>
-static Fl_Menu_Item buttontype_menu[] = {
-  {"Normal",0,0,(void*)0},
-  {"Toggle",0,0,(void*)FL_TOGGLE_BUTTON},
-  {"Radio",0,0,(void*)FL_RADIO_BUTTON},
+static const Enumeration buttontype_menu[] = {
+  {"Normal", 0,		(void*)Fl_Button::NORMAL},
+  {"Toggle", "TOGGLE",	(void*)Fl_Button::TOGGLE},
+  {"Radio",  "RADIO",	(void*)Fl_Button::RADIO},
   {0}};
 class Fl_Button_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return buttontype_menu;}
+  const Enumeration *subtypes() const {return buttontype_menu;}
 public:
-  virtual const char *type_name() {return "Fl_Button";}
+  virtual const char *type_name() const {return "Fl_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Button_Type();}
@@ -81,7 +76,7 @@ static Fl_Button_Type Fl_Button_type;
 #include <fltk/Fl_Return_Button.h>
 class Fl_Return_Button_Type : public Fl_Button_Type {
 public:
-  virtual const char *type_name() {return "Fl_Return_Button";}
+  virtual const char *type_name() const {return "Fl_Return_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Return_Button(x,y,w,h,0);}
   Fl_Widget_Type *_make() {return new Fl_Return_Button_Type();}
@@ -93,7 +88,7 @@ static Fl_Return_Button_Type Fl_Return_Button_type;
 #include <fltk/Fl_Repeat_Button.h>
 class Fl_Repeat_Button_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Repeat_Button";}
+  virtual const char *type_name() const {return "Fl_Repeat_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Repeat_Button(x,y,w,h,0);}
   Fl_Widget_Type *_make() {return new Fl_Repeat_Button_Type();}
@@ -106,7 +101,7 @@ static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
 class Fl_Light_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
-  virtual const char *type_name() {return "Fl_Light_Button";}
+  virtual const char *type_name() const {return "Fl_Light_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Light_Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Light_Button_Type();}
@@ -119,7 +114,7 @@ static Fl_Light_Button_Type Fl_Light_Button_type;
 class Fl_Check_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
-  virtual const char *type_name() {return "Fl_Check_Button";}
+  virtual const char *type_name() const {return "Fl_Check_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Check_Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Check_Button_Type();}
@@ -132,7 +127,7 @@ static Fl_Check_Button_Type Fl_Check_Button_type;
 class Fl_Round_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
-  virtual const char *type_name() {return "Fl_Round_Button";}
+  virtual const char *type_name() const {return "Fl_Round_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Round_Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Round_Button_Type();}
@@ -141,20 +136,17 @@ static Fl_Round_Button_Type Fl_Round_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////////
-
 #include <fltk/Fl_Counter.h>
-static Fl_Menu_Item counter_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_COUNTER},
-  {"Simple",0,0,(void*)FL_SIMPLE_COUNTER},
+static const Enumeration counter_type_menu[] = {
+  {"Normal", "NORMAL", (void*)Fl_Counter::NORMAL},
+  {"Simple", "SIMPLE", (void*)Fl_Counter::SIMPLE},
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return counter_type_menu;}
+  const Enumeration *subtypes() const {return counter_type_menu;}
   int is_valuator() const {return 1;}
   int is_counter() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Counter";}
+  virtual const char *type_name() const {return "Fl_Counter";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Counter(x,y,w,h,"counter:");}
   Fl_Widget_Type *_make() {return new Fl_Counter_Type();}
@@ -164,21 +156,19 @@ static Fl_Counter_Type Fl_Counter_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Input.h>
-static Fl_Menu_Item input_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_INPUT},
-  {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
-  {"Wordwrap",0,0,(void*)FL_WORDWRAP_INPUT},
-  {"Secret",0,0,(void*)FL_SECRET_INPUT},
-#if 0 // WAS: This needs to be fixed for back compatability!
-  {"Int",0,0,(void*)FL_INT_INPUT},
-  {"Float",0,0,(void*)FL_FLOAT_INPUT},
-#endif
+static const Enumeration input_type_menu[] = {
+  {"Normal",	0,	(void*)Fl_Input::NORMAL},
+  {"Float",	0,	(void*)1,			"Fl_Float_Input"},
+  {"Int",	0,	(void*)2,			"Fl_Int_Input"},
+  {"Secret",	0,	(void*)Fl_Input::SECRET,	"Fl_Secret_Input"},
+  {"Multiline",	0,	(void*)Fl_Input::MULTILINE,	"Fl_Multiline_Input"},
+  {"Wordwrap",	0,	(void*)Fl_Input::WORDWRAP,	"Fl_Wordwrap_Input"},
   {0}};
 class Fl_Input_Type : public Fl_Widget_Type {
   int is_input() const {return 1;}
-  Fl_Menu_Item *subtypes() {return input_type_menu;}
+  const Enumeration *subtypes() const {return input_type_menu;}
 public:
-  virtual const char *type_name() {return "Fl_Input";}
+  virtual const char *type_name() const {return "Fl_Input";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Input *o = new Fl_Input(x,y,w,h,"input:");
     o->value("Text Input");
@@ -193,7 +183,7 @@ static Fl_Input_Type Fl_Input_type;
 #include <fltk/Fl_Clock.h>
 class Fl_Clock_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Clock";}
+  virtual const char *type_name() const {return "Fl_Clock";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Clock(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Clock_Type();}
@@ -207,7 +197,7 @@ class Fl_Adjuster_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
   int is_adjuster() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Adjuster";}
+  virtual const char *type_name() const {return "Fl_Adjuster";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Adjuster(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Adjuster_Type();}
@@ -217,16 +207,16 @@ static Fl_Adjuster_Type Fl_Adjuster_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Dial.h>
-static Fl_Menu_Item dial_type_menu[] = {
-  {"Dot",0,0,(void*)0},
-  {"Line",0,0,(void*)FL_LINE_DIAL},
-  {"Fill",0,0,(void*)FL_FILL_DIAL},
+static const Enumeration dial_type_menu[] = {
+  {"Dot", 	0,	(void*)Fl_Dial::NORMAL},
+  {"Line",	"LINE",	(void*)Fl_Dial::LINE},
+  {"Fill",	"FILL",	(void*)Fl_Dial::FILL},
   {0}};
 class Fl_Dial_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return dial_type_menu;}
+  const Enumeration *subtypes() const {return dial_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Dial";}
+  virtual const char *type_name() const {return "Fl_Dial";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Dial(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Dial_Type();}
@@ -236,15 +226,15 @@ static Fl_Dial_Type Fl_Dial_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Roller.h>
-static Fl_Menu_Item roller_type_menu[] = {
-  {"Vertical",0,0,(void*)0},
-  {"Horizontal",0,0,(void*)FL_HORIZONTAL},
+static const Enumeration roller_type_menu[] = {
+  {"Vertical",   "VERTICAL",   (void*)Fl_Roller::VERTICAL},
+  {"Horizontal", "HORIZONTAL", (void*)Fl_Roller::HORIZONTAL},
   {0}};
 class Fl_Roller_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return roller_type_menu;}
+  const Enumeration *subtypes() const {return roller_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Roller";}
+  virtual const char *type_name() const {return "Fl_Roller";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Roller(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Roller_Type();}
@@ -254,35 +244,35 @@ static Fl_Roller_Type Fl_Roller_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Scrollbar.h>
-static Fl_Menu_Item slider_type_menu[] = {
-  {"Vertical",0,0,(void*)FL_VERT_SLIDER},
-  {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
-  {"Vert Fill",0,0,(void*)FL_VERT_FILL_SLIDER},
-  {"Horz Fill",0,0,(void*)FL_HOR_FILL_SLIDER},
-  {"Vert Knob",0,0,(void*)FL_VERT_NICE_SLIDER},
-  {"Horz Knob",0,0,(void*)FL_HOR_NICE_SLIDER},
+static const Enumeration slider_type_menu[] = {
+  {"Vertical",	"VERTICAL",	(void*)Fl_Slider::VERTICAL},
+  {"Horizontal","HORIZONTAL",	(void*)Fl_Slider::HORIZONTAL},
+  {"Vert Fill", "VERTICAL_FILL",(void*)Fl_Slider::VERTICAL_FILL},
+  {"Horz Fill", "HORIZONTAL_FILL",(void*)Fl_Slider::HORIZONTAL_FILL},
+  {"Vert Knob", "VERTICAL_NICE",(void*)Fl_Slider::VERTICAL_NICE},
+  {"Horz Knob",	"HORIZONTAL_NICE",(void*)Fl_Slider::HORIZONTAL_NICE},
   {0}};
 class Fl_Slider_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return slider_type_menu;}
+  const Enumeration *subtypes() const {return slider_type_menu;}
   int is_valuator() const {return 2;}
   int is_slider() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Slider";}
+  virtual const char *type_name() const {return "Fl_Slider";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Slider(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Slider_Type();}
 };
 static Fl_Slider_Type Fl_Slider_type;
 
-static Fl_Menu_Item scrollbar_type_menu[] = {
-  {"Vertical",0,0,(void*)FL_VERT_SLIDER},
-  {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
+static const Enumeration scrollbar_type_menu[] = {
+  {"Horizontal","HORIZONTAL",	(void*)Fl_Scrollbar::HORIZONTAL},
+  {"Vertical",	"VERTICAL",	(void*)Fl_Scrollbar::VERTICAL},
   {0}};
 class Fl_Scrollbar_Type : public Fl_Slider_Type {
-  Fl_Menu_Item *subtypes() {return scrollbar_type_menu;}
+  const Enumeration *subtypes() const {return scrollbar_type_menu;}
   int is_scrollbar() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Scrollbar";}
+  virtual const char *type_name() const {return "Fl_Scrollbar";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Scrollbar(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Scrollbar_Type();}
@@ -292,15 +282,15 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Fl_Output.h>
-static Fl_Menu_Item output_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_INPUT},
-  {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
-  {"Wordwrap",0,0,(void*)FL_WORDWRAP_INPUT},
+static const Enumeration output_type_menu[] = {
+  {"Normal",	0,	(void*)Fl_Output::NORMAL},
+  {"Multiline",	0,	(void*)Fl_Output::MULTILINE, "Fl_Multiline_Output"},
+  {"Wordwrap",	0,	(void*)Fl_Output::WORDWRAP, "Fl_Wordwrap_Output"},
   {0}};
 class Fl_Output_Type : public Fl_Input_Type {
-  Fl_Menu_Item *subtypes() {return output_type_menu;}
+  const Enumeration *subtypes() const {return output_type_menu;}
 public:
-  virtual const char *type_name() {return "Fl_Output";}
+  virtual const char *type_name() const {return "Fl_Output";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Output *o = new Fl_Output(x,y,w,h,"output:");
     o->value("Text Output");
@@ -316,7 +306,7 @@ static Fl_Output_Type Fl_Output_type;
 class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   int is_value_input() const {return 1;}
-  virtual const char *type_name() {return "Fl_Value_Input";}
+  virtual const char *type_name() const {return "Fl_Value_Input";}
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Input *o = new Fl_Value_Input(x,y,w,h,"value:");
@@ -332,7 +322,7 @@ static Fl_Value_Input_Type Fl_Value_Input_type;
 class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   int is_value_output() const {return 1;}
-  virtual const char *type_name() {return "Fl_Value_Output";}
+  virtual const char *type_name() const {return "Fl_Value_Output";}
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Output *o = new Fl_Value_Output(x,y,w,h,"value:");
@@ -348,7 +338,7 @@ static Fl_Value_Output_Type Fl_Value_Output_type;
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
 public:
   int is_value_slider() const {return 1;}
-  virtual const char *type_name() {return "Fl_Value_Slider";}
+  virtual const char *type_name() const {return "Fl_Value_Slider";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Value_Slider(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Value_Slider_Type();}
@@ -385,6 +375,8 @@ static void cb(Fl_Widget *, void *v) {
   Fl_Type *t = ((Fl_Type*)v)->make();
   if (t) {select_only(t); modflag = 1; t->open();}
 }
+
+#include <fltk/Fl_Menu_Item.h>
 
 Fl_Menu_Item New_Menu[] = {
 {"code",0,0,0,FL_SUBMENU},
@@ -491,11 +483,13 @@ Fl_Type *Fl_Type_make(const char *tn) {
 }
 
 #include <fltk/Fl_Browser.h>
-#include <fltk/Fl_Input_Browser.h>
+
 ////////////////////////////////////////////////////////////////
 
 // Since I have included all the .h files, do this table here:
-// This table is only used to read fdesign files:
+
+// This table is only used for back compatability with XForms fdesign files,
+// there should be no need to add to it in future versions of fluid.
 
 struct symbol {const char *name; int value;};
 
@@ -509,40 +503,41 @@ static symbol table[] = {
   {"CYAN",	FL_CYAN},
   {"WHITE",	FL_WHITE},
 
-  {"LCOL",		 FL_BLACK},
-  {"COL1",		 FL_GRAY},
-  {"MCOL",		 FL_LIGHT1},
-  {"LEFT_BCOL",		 FL_LIGHT3},
-  {"TOP_BCOL",		 FL_LIGHT2},
-  {"BOTTOM_BCOL",	 FL_DARK2},
-  {"RIGHT_BCOL",		 FL_DARK3},
-  {"INACTIVE",		 FL_INACTIVE_COLOR},
-  {"INACTIVE_COL",	 FL_INACTIVE_COLOR},
-  {"FREE_COL1",		 FL_FREE_COLOR},
-  {"FREE_COL2",		 FL_FREE_COLOR+1},
-  {"FREE_COL3",		 FL_FREE_COLOR+2},
-  {"FREE_COL4",		 FL_FREE_COLOR+3},
-  {"FREE_COL5",		 FL_FREE_COLOR+4},
-  {"FREE_COL6",		 FL_FREE_COLOR+5},
-  {"FREE_COL7",		 FL_FREE_COLOR+6},
-  {"FREE_COL8",		 FL_FREE_COLOR+7},
-  {"FREE_COL9",		 FL_FREE_COLOR+8},
-  {"FREE_COL10",		 FL_FREE_COLOR+9},
-  {"FREE_COL11",		 FL_FREE_COLOR+10},
-  {"FREE_COL12",		 FL_FREE_COLOR+11},
-  {"FREE_COL13",		 FL_FREE_COLOR+12},
-  {"FREE_COL14",		 FL_FREE_COLOR+13},
-  {"FREE_COL15",		 FL_FREE_COLOR+14},
-  {"FREE_COL16",		 FL_FREE_COLOR+15},
-  {"TOMATO",		 131},
-  {"INDIANRED",		 164},
-  {"SLATEBLUE",		 195},
-  {"DARKGOLD",		 84},
-  {"PALEGREEN",		 157},
-  {"ORCHID",		 203},
-  {"DARKCYAN",		 189},
-  {"DARKTOMATO",		 113},
-  {"WHEAT",		 174},
+  {"LCOL",		FL_BLACK},
+  {"COL1",		FL_GRAY},
+  {"MCOL",		51},
+  {"LEFT_BCOL",		55},
+  {"TOP_BCOL",		53},
+  {"BOTTOM_BCOL",	45},
+  {"RIGHT_BCOL",	39},
+  {"INACTIVE",		FL_INACTIVE_COLOR},
+  {"INACTIVE_COL",	FL_INACTIVE_COLOR},
+  {"FREE_COL1",		16},
+  {"FREE_COL2",		17},
+  {"FREE_COL3",		18},
+  {"FREE_COL4",		19},
+  {"FREE_COL5",		20},
+  {"FREE_COL6",		21},
+  {"FREE_COL7",		22},
+  {"FREE_COL8",		23},
+  {"FREE_COL9",		24},
+  {"FREE_COL10",	25},
+  {"FREE_COL11",	26},
+  {"FREE_COL12",	27},
+  {"FREE_COL13",	28},
+  {"FREE_COL14",	29},
+  {"FREE_COL15",	30},
+  {"FREE_COL16",	31},
+  {"TOMATO",		131},
+  {"INDIANRED",		164},
+  {"SLATEBLUE",		195},
+  {"DARKGOLD",		84},
+  {"PALEGREEN",		157},
+  {"ORCHID",		203},
+  {"DARKCYAN",		189},
+  {"DARKTOMATO",	113},
+  {"WHEAT",		174},
+
   {"ALIGN_CENTER",	FL_ALIGN_CENTER},
   {"ALIGN_TOP",		FL_ALIGN_TOP},
   {"ALIGN_BOTTOM",	FL_ALIGN_BOTTOM},
@@ -586,43 +581,39 @@ static symbol table[] = {
 //   {"EMBOSSED_STYLE",	0x300
   {"TINY_SIZE",		8},
   {"SMALL_SIZE",	11},
-  {"NORMAL_SIZE",	FL_NORMAL_SIZE},
+  {"NORMAL_SIZE",	12},
   {"MEDIUM_SIZE",	18},
   {"LARGE_SIZE",	24},
   {"HUGE_SIZE",		32},
-  {"DEFAULT_SIZE",	FL_NORMAL_SIZE},
+  {"DEFAULT_SIZE",	12},
   {"TINY_FONT",		8},
   {"SMALL_FONT",	11},
-  {"NORMAL_FONT",	FL_NORMAL_SIZE},
+  {"NORMAL_FONT",	12},
   {"MEDIUM_FONT",	18},
   {"LARGE_FONT",	24},
   {"HUGE_FONT",		32},
   {"NORMAL_FONT1",	11},
-  {"NORMAL_FONT2",	FL_NORMAL_SIZE},
+  {"NORMAL_FONT2",	12},
   {"DEFAULT_FONT",	11},
   {"RETURN_END_CHANGED",0},
   {"RETURN_CHANGED",	1},
   {"RETURN_END",	2},
   {"RETURN_ALWAYS",	3},
-  {"PUSH_BUTTON",	FL_TOGGLE_BUTTON},
-  {"RADIO_BUTTON",	FL_RADIO_BUTTON},
-  {"HIDDEN_BUTTON",	FL_HIDDEN_BUTTON},
-  {"SELECT_BROWSER",	FL_SELECT_BROWSER},
-  {"HOLD_BROWSER",	FL_HOLD_BROWSER},
-  {"MULTI_BROWSER",	FL_MULTI_BROWSER},
-  {"SIMPLE_COUNTER",	FL_SIMPLE_COUNTER},
-  {"LINE_DIAL",		FL_LINE_DIAL},
-  {"FILL_DIAL",		FL_FILL_DIAL},
-  {"VERT_SLIDER",	FL_VERT_SLIDER},
-  {"HOR_SLIDER",	FL_HOR_SLIDER},
-  {"VERT_FILL_SLIDER",	FL_VERT_FILL_SLIDER},
-  {"HOR_FILL_SLIDER",	FL_HOR_FILL_SLIDER},
-  {"VERT_NICE_SLIDER",	FL_VERT_NICE_SLIDER},
-  {"HOR_NICE_SLIDER",	FL_HOR_NICE_SLIDER},
-  {"NORMAL_INPUT_BROWSER",	FL_NORMAL_INPUT_BROWSER},
-  {"NONEDITABLE_INPUT_BROWSER",	FL_NONEDITABLE_INPUT_BROWSER},
-  {"INDENTED_INPUT_BROWSER",	FL_INDENTED_INPUT_BROWSER},
-  {"NONEDITABLE_INPUT_BROWSER|INDENTED_INPUT_BROWSER",	FL_NONEDITABLE_INPUT_BROWSER|FL_INDENTED_INPUT_BROWSER},
+  {"PUSH_BUTTON",	Fl_Button::TOGGLE},
+  {"RADIO_BUTTON",	Fl_Button::RADIO},
+  {"HIDDEN_BUTTON",	Fl_Button::HIDDEN},
+  {"SELECT_BROWSER",	Fl_Browser::NORMAL},
+  {"HOLD_BROWSER",	Fl_Browser::NORMAL},
+  {"MULTI_BROWSER",	Fl_Browser::MULTI},
+  {"SIMPLE_COUNTER",	Fl_Counter::SIMPLE},
+  {"LINE_DIAL",		Fl_Dial::LINE},
+  {"FILL_DIAL",		Fl_Dial::FILL},
+  {"VERT_SLIDER",	Fl_Slider::VERTICAL},
+  {"HOR_SLIDER",	Fl_Slider::HORIZONTAL},
+  {"VERT_FILL_SLIDER",	Fl_Slider::VERTICAL_FILL},
+  {"HOR_FILL_SLIDER",	Fl_Slider::HORIZONTAL_FILL},
+  {"VERT_NICE_SLIDER",	Fl_Slider::VERTICAL_NICE},
+  {"HOR_NICE_SLIDER",	Fl_Slider::HORIZONTAL_NICE},
 };
 
 #include <stdlib.h>
@@ -631,10 +622,14 @@ int lookup_symbol(const char *name, int &v, int numberok) {
   if (name[0]=='F' && name[1]=='L' && name[2]=='_') name += 3;
   for (int i=0; i < int(sizeof(table)/sizeof(*table)); i++)
     if (!strcasecmp(name,table[i].name)) {v = table[i].value; return 1;}
-  if (numberok && ((v = atoi(name)) || !strcmp(name,"0"))) return 1;
+  if (numberok) {
+    char* p;
+    v = strtol(name, &p, 0);
+    if (!*p && p > name) return 1;
+  }
   return 0;
 }
 
 //
-// End of "$Id: factory.cxx,v 1.22 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.23 2002/01/20 07:37:15 spitzak Exp $".
 //

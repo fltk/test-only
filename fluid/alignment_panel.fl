@@ -6,7 +6,7 @@ code_name {.cxx}
 gridx 10 
 gridy 10 
 snap 3
-Function {make_alignment_window()} {open
+Function {make_alignment_window()} {open selected
 } {
   Fl_Window alignment_window {
     label {fluid Preferences} open
@@ -21,21 +21,21 @@ Function {make_alignment_window()} {open
         user_data 1 user_data_type long
         callback alignment_cb
         xywh {80 10 100 22}
-        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
       Fl_Input vertical_input {
         label {Vertical:}
         user_data 2 user_data_type long
         callback alignment_cb
         xywh {80 40 100 22}
-        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
       Fl_Input snap_input {
         label {Snap:}
         user_data 3 user_data_type long
-        callback alignment_cb selected
+        callback alignment_cb
         xywh {80 70 100 22}
-        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
     }
     Fl_Group {} {
@@ -44,19 +44,19 @@ Function {make_alignment_window()} {open
     } {
       Fl_Box {} {
         label {Use "name.ext" to set name or just ".ext" to set only extension.}
-        xywh {10 10 170 30} align 148 labelsize 10
+        xywh {10 10 170 30} align 148 label_size 10
       }
       Fl_Input header_file_input {
         label {Header File:}
         user_data 1 user_data_type {void*}
         callback header_input_cb
-        xywh {90 40 90 22} when 1
+        xywh {90 40 90 22} when CHANGED
       }
       Fl_Input code_file_input {
         label {Code File:}
         user_data 1 user_data_type {void*}
         callback code_input_cb
-        xywh {90 70 90 22} when 1
+        xywh {90 70 90 22} when CHANGED
       }
       Fl_Check_Button include_H_from_C_button {
         label {\#include "header" in code}

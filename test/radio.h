@@ -11,5 +11,5 @@
 #include <fltk/Fl_Round_Button.h>
 #include <fltk/Fl_Group.h>
 #include <fltk/Fl_Tooltip.h>
-extern Fl_Light_Button *ttlb;
+extern Fl_Light_Button* ttlb;
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.29 2001/09/10 07:38:06 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,13 +35,12 @@ static void glyph(const Fl_Widget* widget, int/*t*/,
 {
   int ww = w/2+1;
   Fl_Color color =
-    (f&FL_VALUE) ? widget->selection_color() : widget->text_background();
+    (f&FL_VALUE) ? widget->selection_color() : widget->button_color();
   FL_THIN_DOWN_BOX->draw(x+(w-ww)/2, y, ww, h, color, f&FL_INACTIVE);
 }
 
 static void revert(Fl_Style* s) {
   s->selection_color = FL_YELLOW;
-  s->text_background = FL_GRAY;
   s->glyph = glyph;
 }
 static Fl_Named_Style style("Light_Button", revert, &Fl_Light_Button::default_style);
@@ -50,9 +49,10 @@ Fl_Named_Style* Fl_Light_Button::default_style = &::style;
 Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
   : Fl_Check_Button(x, y, w, h, l)
 {
+  default_style->parent = Fl_Button::default_style;
   style(default_style);
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.29 2001/09/10 07:38:06 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
 //

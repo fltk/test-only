@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
   set();
   for (int i = parent()->children(); i--;) {
     Fl_Widget* o = parent()->child(i);
-    if (o != this && o->type()==FL_RADIO_BUTTON)
+    if (o != this && o->type() == RADIO)
       ((Fl_Button*)o)->clear();
   }
 }
@@ -57,7 +57,7 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
 extern Fl_Widget* fl_did_clipping;
 
 void Fl_Button::draw() {
-  if (type() == FL_HIDDEN_BUTTON) {
+  if (type() == HIDDEN) {
     fl_did_clipping = this;
     return;
   }
@@ -70,9 +70,8 @@ void Fl_Button::draw() {
   } else {
     f = 0;
   }
-  f = draw_button(f);
-  Fl_Boxtype box = this->box();
-  draw_inside_label(box->dx(), box->dy(), w()-box->dw(), h()-box->dh(), f);
+  int x,y,w,h; f = draw_as_button(f,x,y,w,h);
+  draw_inside_label(x,y,w,h,f);
 }
 
 int Fl_Button::handle(int event) {
@@ -91,7 +90,7 @@ int Fl_Button::handle(int event) {
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(0,0,w(),h())) {
-      if (type()==FL_RADIO_BUTTON) newval = 1;
+      if (type() == RADIO) newval = 1;
       else newval = !oldval;
     } else
       newval = oldval;
@@ -100,9 +99,9 @@ int Fl_Button::handle(int event) {
   case FL_RELEASE:
     if (!Fl::pushed()) {
       if (value() == oldval) return 1;
-      if (type()==FL_RADIO_BUTTON)
+      if (type() == RADIO)
 	setonly();
-      else if (type() == FL_TOGGLE_BUTTON)
+      else if (type()) // TOGGLE
 	  ; // leave it as set
       else {
 	value(oldval);
@@ -122,10 +121,10 @@ int Fl_Button::handle(int event) {
   case FL_SHORTCUT:
     if (!test_shortcut()) return 0;
   EXECUTE:
-    if (type()==FL_RADIO_BUTTON && !value()) {
+    if (type() == RADIO && !value()) {
       setonly();
       if (when() & FL_WHEN_CHANGED) do_callback();
-    } else if (type() == FL_TOGGLE_BUTTON) {
+    } else if (type()) { // TOGGLE
       value(!value());
       if (when() & FL_WHEN_CHANGED) do_callback();
     }
@@ -136,7 +135,10 @@ int Fl_Button::handle(int event) {
   }
 }
 
-static void revert(Fl_Style*) {}
+static void revert(Fl_Style* s) {
+  s->color = FL_GRAY;
+  s->box = FL_UP_BOX;
+}
 
 static Fl_Named_Style style("Button", revert, &Fl_Button::default_style);
 Fl_Named_Style* Fl_Button::default_style = &::style;
@@ -145,13 +147,6 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
   style(default_style);
 }
 
-
-#include <fltk/Fl_Round_Button.h>
-Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
-	: Fl_Check_Button(x,y,w,h,l) { 
-	shape = FL_GLYPH_ROUND; 
-}
-
 //
-// End of "$Id: Fl_Button.cxx,v 1.43 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.44 2002/01/20 07:37:15 spitzak Exp $".
 //

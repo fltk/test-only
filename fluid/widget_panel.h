@@ -6,33 +6,33 @@
 #include <fltk/Fl_Window.h>
 #include <fltk/Fl_Tabs.h>
 extern void propagate_tabs(Fl_Tabs*, void*);
-extern Fl_Tabs *panel_tabs;
+extern Fl_Tabs* panel_tabs;
 #include <fltk/Fl_Group.h>
 extern void propagate_group(Fl_Group*, void*);
 #include <fltk/Fl_Input.h>
-extern void subclass_cb(Fl_Input*, void*);
+extern void user_class_cb(Fl_Input*, void*);
 #include <fltk/Fl_Choice.h>
 extern void subtype_cb(Fl_Choice*, void*);
 extern void label_cb(Fl_Input*, void*);
 #include <fltk/Fl_Box.h>
-extern Fl_Box *image_label;
+extern Fl_Box* image_label;
 #include <fltk/Fl_Button.h>
 extern void image_cb(Fl_Button*, void*);
 #include <fltk/Fl_Check_Button.h>
 extern void image_inlined_cb(Fl_Check_Button*, void*);
-extern Fl_Check_Button *include_image_button;
+extern Fl_Check_Button* include_image_button;
 extern void align_cb(Fl_Button*, void*);
 #include <fltk/Fl_Value_Input.h>
 extern void x_cb(Fl_Value_Input*, void*);
-extern Fl_Value_Input *widget_x;
+extern Fl_Value_Input* widget_x;
 extern void y_cb(Fl_Value_Input*, void*);
-extern Fl_Value_Input *widget_y;
+extern Fl_Value_Input* widget_y;
 extern void width_cb(Fl_Value_Input*, void*);
-extern Fl_Value_Input *widget_width;
+extern Fl_Value_Input* widget_width;
 extern void height_cb(Fl_Value_Input*, void*);
-extern Fl_Value_Input *widget_height;
+extern Fl_Value_Input* widget_height;
 extern void set_xy_cb(Fl_Check_Button*, void*);
-extern Fl_Check_Button *set_xy;
+extern Fl_Check_Button* set_xy;
 extern void border_cb(Fl_Check_Button*, void*);
 extern void modal_cb(Fl_Check_Button*, void*);
 extern void non_modal_cb(Fl_Check_Button*, void*);
@@ -47,41 +47,37 @@ extern void resizable_cb(Fl_Check_Button*, void*);
 extern void hotspot_cb(Fl_Check_Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
-extern void tooltip_cb(Fl_Input*, void*);
-extern Fl_Menu_Item boxmenu[];
+#include <fltk/Fl_Wordwrap_Input.h>
+extern void tooltip_cb(Fl_Wordwrap_Input*, void*);
 extern void box_cb(Fl_Choice*, void*);
 #include <fltk/Fl_Light_Button.h>
 extern void color_cb(Fl_Light_Button*, void*);
-extern void highlightcolor_cb(Fl_Light_Button*, void*);
-extern Fl_Menu_Item labeltypemenu[];
-extern void labeltype_cb(Fl_Choice*, void*);
-extern Fl_Menu_Item fontmenu[];
-extern void labelfont_cb(Fl_Choice*, void*);
-extern void labelsize_cb(Fl_Value_Input*, void*);
-extern void labelcolor_cb(Fl_Light_Button*, void*);
+extern void highlight_color_cb(Fl_Light_Button*, void*);
+extern void button_box_cb(Fl_Choice*, void*);
+extern void button_color_cb(Fl_Light_Button*, void*);
+extern void selection_color_cb(Fl_Light_Button*, void*);
+extern void label_type_cb(Fl_Choice*, void*);
+extern void label_font_cb(Fl_Choice*, void*);
+extern void label_size_cb(Fl_Value_Input*, void*);
+extern void label_color_cb(Fl_Light_Button*, void*);
 extern void highlight_label_color_cb(Fl_Light_Button*, void*);
-extern void text_box_cb(Fl_Choice*, void*);
-extern void color3_cb(Fl_Light_Button*, void*);
-extern void color2_cb(Fl_Light_Button*, void*);
-extern void textfont_cb(Fl_Choice*, void*);
-extern void textsize_cb(Fl_Value_Input*, void*);
-extern void textcolor_cb(Fl_Light_Button*, void*);
-extern void selected_textcolor_cb(Fl_Light_Button*, void*);
+extern void text_font_cb(Fl_Choice*, void*);
+extern void text_size_cb(Fl_Value_Input*, void*);
+extern void text_color_cb(Fl_Light_Button*, void*);
+extern void selected_text_color_cb(Fl_Light_Button*, void*);
 extern void default_cb(Fl_Button*, void*);
 extern void name_cb(Fl_Input*, void*);
 extern void name_public_cb(Fl_Check_Button*, void*);
-extern void v_input_cb(Fl_Input*, void*);
-extern Fl_Input *v_input[4];
-extern Fl_Box *callback_label;
-extern void callback_cb(Fl_Input*, void*);
+#include <fltk/Fl_Multiline_Input.h>
+extern void extra_code_input_cb(Fl_Multiline_Input*, void*);
+extern Fl_Multiline_Input* extra_code_input;
+extern void callback_cb(Fl_Multiline_Input*, void*);
 extern void user_data_cb(Fl_Input*, void*);
-extern Fl_Menu_Item whenmenu[];
 extern void when_cb(Fl_Choice*, void*);
 extern void user_data_type_cb(Fl_Input*, void*);
-extern void when_button_cb(Fl_Check_Button*, void*);
 extern int overlays_invisible;
 extern void overlay_cb(Fl_Check_Button*, void*);
-extern Fl_Check_Button *overlaybutton;
+extern Fl_Check_Button* overlaybutton;
 #include <fltk/Fl_Return_Button.h>
 extern void ok_cb(Fl_Return_Button*, void*);
 extern void cancel_cb(Fl_Button*, void*);

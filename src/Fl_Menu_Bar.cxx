@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.48 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.49 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@ void Fl_Menu_Bar::draw() {
       widget->clear_flag(FL_SELECTED);
       int x1 = X; int y1 = 0; int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
-      text_box()->draw(X, y1+1, W, h1-2, text_background(), widget->flags()&~FL_VALUE);
+      button_box()->draw(X, y1+1, W, h1-2, button_color(), widget->flags()&~FL_VALUE);
       int save_x = fl_x_; fl_x_ += X+5;
       int save_y = fl_y_; fl_y_ += (h()-widget->h())/2;
       int save_w = widget->w(); widget->w(W-10);
@@ -120,19 +120,19 @@ int Fl_Menu_Bar::handle(int event) {
   return 0;
 }
 
-// The default style for menu bars.  The text_box() is used to draw
+// The default style for menu bars.  The button_box() is used to draw
 // the boxes around the popup titles, this is done by Fl_Menu.cxx, and
 // done here for highlight boxes.
 
 static void revert(Fl_Style* s) {
+  s->color = FL_GRAY;
   s->box = FL_FLAT_BOX;
-  s->text_background = FL_GRAY; // controls color of the menu
 #if 0
   // NT 4.0 style
-  s->text_box = FL_FLAT_BOX;
+  s->button_box = FL_FLAT_BOX;
 #else
   // Windows98 style:
-  s->text_box = FL_HIGHLIGHT_BOX;
+  s->button_box = FL_HIGHLIGHT_BOX;
 #endif
   s->leading = 4;
 }
@@ -146,5 +146,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.48 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.49 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.24 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: file.cxx,v 1.25 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -424,7 +424,7 @@ static void read_children(Fl_Type *p, int paste) {
     for (i=0; i<sizeof(inttable)/sizeof(*inttable); i++) {
       if (!strcmp(c,inttable[i].name)) {
 	c = read_word();
-	*inttable[i].value = atoi(c);
+	*inttable[i].value = int(strtol(c,0,0));
 	goto CONTINUE;
       }
     }
@@ -656,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.24 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.25 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.79 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.80 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -55,6 +55,7 @@ void Fl_Window::default_callback(Fl_Window* window, void*) {
 }
 
 static void revert(Fl_Style* s) {
+  s->color = FL_GRAY;
   s->box = FL_FLAT_BOX;
 }
 static Fl_Named_Style style("Window", revert, &Fl_Window::default_style);
@@ -62,7 +63,7 @@ Fl_Named_Style* Fl_Window::default_style = &::style;
 
 void Fl_Window::_Fl_Window() {
   style(default_style);
-  type(FL_WINDOW_TYPE);
+  type(WINDOW_TYPE);
   i = 0;
   icon_ = 0;
   iconlabel_ = 0;
@@ -354,5 +355,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.79 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.80 2002/01/20 07:37:15 spitzak Exp $".
 //

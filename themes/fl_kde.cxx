@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.20 2001/10/22 05:22:32 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.21 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -227,7 +227,7 @@ int fl_kde(int co) {
     style->selection_text_color = foreground;
   }
 
-  if (window_background) style->text_background = window_background;
+  if (window_background) style->color = window_background;
 
   if (select_background) style->selection_color = select_background;
 
@@ -343,7 +343,7 @@ int fl_kde(int co) {
       }
       if ((style = Fl_Style::find("check button"))) {
 	style->selection_color = FL_DARK1;
-	style->text_background = FL_GRAY;
+	style->button_color = FL_GRAY;
       }
     } else {
 
@@ -368,5 +368,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.20 2001/10/22 05:22:32 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.21 2002/01/20 07:37:16 spitzak Exp $".
 //

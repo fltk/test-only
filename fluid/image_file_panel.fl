@@ -13,7 +13,7 @@ Function {make_images_dir_window()} {open
     label {Images root directory}
     callback {images_dir_window->hide();
 modal=0;} open
-    xywh {409 202 310 100} visible
+    xywh {409 202 310 100} resizable visible
   } {
     Fl_Input images_dir_input {
       xywh {10 22 220 22} hotspot
@@ -25,7 +25,7 @@ modal=0;} open
     }
     Fl_Box {} {
       label {(relative to the location of the .fl file)}
-      xywh {10 44 220 16} align 149 labelsize 10
+      xywh {10 44 220 16} align 149 label_size 10
     }
     Fl_Return_Button {} {
       label OK

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Counter.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,10 @@
 
 #include <fltk/Fl_Valuator.h>
 
-// values for type():
-#define FL_NORMAL_COUNTER	0
-#define FL_SIMPLE_COUNTER	1
-
 class FL_API Fl_Counter : public Fl_Valuator {
 
 public:
+  enum {NORMAL = 0, SIMPLE = 1};
   int handle(int);
   Fl_Counter(int,int,int,int,const char * = 0);
   static Fl_Named_Style* default_style;
@@ -60,8 +57,13 @@ private:
 
 };
 
+#ifndef FLTK_2
+#define FL_NORMAL_COUNTER	Fl_Counter::NORMAL
+#define FL_SIMPLE_COUNTER	Fl_Counter::SIMPLE
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Counter.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Counter.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Clock.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,16 +28,11 @@
 
 #include <fltk/Fl_Widget.h>
 
-// values for type:
-#define FL_SQUARE_CLOCK		0
-#define FL_ROUND_CLOCK		1
-#define FL_ANALOG_CLOCK FL_SQUARE_CLOCK
-#define FL_DIGITAL_CLOCK FL_SQUARE_CLOCK // nyi
-
 // a Fl_Clock_Output can be used to display a program-supplied time:
 
 class FL_API Fl_Clock_Output : public Fl_Widget {
 public:
+  enum {SQUARE = 0, ANALOG = 0, ROUND, DIGITAL};
   Fl_Clock_Output(int x,int y,int w,int h, const char *l = 0);
   void value(ulong v);	// set to this Unix time
   void value(int,int,int);	// set hour, minute, second
@@ -66,8 +61,15 @@ public:
   ~Fl_Clock();
 };
 
+#ifndef FLTK_2
+#define FL_SQUARE_CLOCK		Fl_Clock_Output::SQUARE
+#define FL_ROUND_CLOCK		Fl_Clock_Output::ROUND
+#define FL_ANALOG_CLOCK		Fl_Clock_Output::SQUARE
+#define FL_DIGITAL_CLOCK	Fl_Clock_Oupput::DIGITAL
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Clock.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Clock.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

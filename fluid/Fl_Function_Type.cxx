@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.38 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.39 2002/01/20 07:37:15 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -159,7 +159,7 @@ public:
   void write_code();
   void open();
   int ismain() {return name_ == 0;}
-  virtual const char *type_name() {return "Function";}
+  virtual const char *type_name() const {return "Function";}
   virtual const char *title() {
     return name() ? name() : "main()";
   }
@@ -259,8 +259,7 @@ void Fl_Function_Type::open() {
 
 Fl_Function_Type Fl_Function_type;
 
-extern const char* subclassname(Fl_Type*);
-Fl_Type* last_group;
+Fl_Widget_Type* last_group;
 
 void Fl_Function_Type::write_code() {
   const char* rtype = return_type;
@@ -276,7 +275,7 @@ void Fl_Function_Type::write_code() {
   for (child = first_child; child; child = child->next_brother)
     if (child->is_widget()) {
       havewidgets = 1;
-      last_group = child;
+      last_group = (Fl_Widget_Type*)child;
     }
   write_c("\n");
   if (ismain()) {
@@ -284,7 +283,7 @@ void Fl_Function_Type::write_code() {
 			gno_space_parens ? "" : " ", get_opening_brace(1));
     // write_c("int main(int argc, char **argv) {\n");
     if (havewidgets)
-      rtype = subclassname(last_group);
+      rtype = last_group->subclass();
     else 
       rtype = "void";
   } else {
@@ -301,12 +300,12 @@ void Fl_Function_Type::write_code() {
     }
     if (!rtype) {
       if (havewidgets) {
-	rtype = subclassname(last_group);
+	rtype = last_group->subclass();
 	star = "*";
       } else rtype = "void";
     }
 
-    const char* k = class_name(0);
+    const char* k = member_of(0);
     if (k) {
       write_public(public_);
       if (name()[0] == '~')
@@ -354,9 +353,7 @@ void Fl_Function_Type::write_code() {
   }
   indentation += 2;
   if(havewidgets) 
-	  write_c("%s%s* w;\n", indent(), 
-			  strcmp(rtype, subclassname(last_group)) == 0 ? 
-			  rtype : subclassname(last_group));
+    write_c("%s%s* w;\n", indent(), last_group->subclass());
 
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
 
@@ -380,8 +377,9 @@ class Fl_Code_Type : public Fl_Type {
 public:
   Fl_Type *make();
   void write_code();
+  void write_static();
   void open();
-  virtual const char *type_name() {return "code";}
+  virtual const char *type_name() const {return "code";}
   int is_code_block() const {return 0;}
 };
 
@@ -428,6 +426,13 @@ void Fl_Code_Type::write_code() {
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
 }
 
+void Fl_Code_Type::write_static() {
+  const char* c = name();
+  if (!c) return;
+  //write_c("%s%s\n", indent(), c);
+  write_includes_from_code((char *)c);
+}
+
 ////////////////////////////////////////////////////////////////
 
 class Fl_CodeBlock_Type : public Fl_Type {
@@ -436,7 +441,7 @@ public:
   Fl_Type *make();
   void write_code();
   void open();
-  virtual const char *type_name() {return "codeblock";}
+  virtual const char *type_name() const {return "codeblock";}
   int is_code_block() const {return 1;}
   int is_parent() const {return 1;}
   void write_properties();
@@ -517,7 +522,7 @@ public:
   Fl_Type *make();
   void write_code();
   void open();
-  virtual const char *type_name() {return "decl";}
+  virtual const char *type_name() const {return "decl";}
   void write_properties();
   void read_property(const char *);
 };
@@ -590,7 +595,7 @@ void Fl_Decl_Type::write_code() {
   // lose all trailing semicolons so I can add one:
   const char* e = c+strlen(c);
   while (e>c && e[-1]==';') e--;
-  if (class_name(1)) {
+  if (member_of()) {
     write_public(public_);
     write_h("%s%.*s;\n", get_indent_string(1), e-c, c);
   } else {
@@ -613,7 +618,7 @@ public:
   Fl_Type *make();
   void write_code();
   void open();
-  virtual const char *type_name() {return "declblock";}
+  virtual const char *type_name() const {return "declblock";}
   void write_properties();
   void read_property(const char *);
   int is_parent() const {return 1;}
@@ -694,7 +699,7 @@ public:
   Fl_Type *make();
   void write_code();
   void open();
-  virtual const char *type_name() {return "class";}
+  virtual const char *type_name() const {return "class";}
   int is_parent() const {return 1;}
   int is_decl_block() const {return 1;}
   int is_class() const {return 1;}
@@ -702,22 +707,24 @@ public:
   void read_property(const char *);
 };
 
-const char* Fl_Type::class_name(const int need_nest) const {
+// Return the class that this is a member of, or null if this is not
+// a member of a class. If need_nest is true then a fully-qualified
+// name (ie foo::bar::baz) of nested classes is returned, you need this
+// if you actually want to print the class.
+const char* Fl_Type::member_of(bool need_nest) const {
   Fl_Type* p = parent;
   while (p) {
     if (p->is_class()) {
+      if (!need_nest) return p->name();
       // see if we are nested in another class, we must fully-qualify name:
       // this is lame but works...
-      const char* q = 0;
-      if(need_nest) q=p->class_name(need_nest);
-      if (q) {
-	static char buffer[256];
-	if (q != buffer) strcpy(buffer, q);
-	strcat(buffer, "::");
-	strcat(buffer, p->name());
-	return buffer;
-      }
-      return p->name();
+      const char* q = p->member_of(true);
+      if (!q) return p->name();
+      static char buffer[256];
+      if (q != buffer) strcpy(buffer, q);
+      strcat(buffer, "::");
+      strcat(buffer, p->name());
+      return buffer;
     }
     p = p->parent;
   }
@@ -808,5 +815,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.38 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.39 2002/01/20 07:37:15 spitzak Exp $".
 //

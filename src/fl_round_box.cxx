@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.27 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
   const char* s = (f & FL_VALUE) ? down->data() : data();
   char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
-  if (!(f & FL_FRAME_ONLY)) {
+  if (!(f & FL_INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     int d = strlen(s)/4;
@@ -109,5 +109,5 @@ const Fl_Round_Box fl_round_up_box(0, "2AAWWMMTT", &fl_round_down_box);
 const Fl_Round_Box fl_round_down_box(0, "2WWMMPPAA", &fl_round_up_box);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.27 2002/01/20 07:37:16 spitzak Exp $".
 //

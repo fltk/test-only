@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.119 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.120 2002/01/20 07:37:16 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -645,7 +645,7 @@ bool fl_handle()
       }
     }
     Fl_X::i(window)->expose(fl_xevent.xexpose.x, fl_xevent.xexpose.y,
-		   fl_xevent.xexpose.width, fl_xevent.xexpose.height);
+			    fl_xevent.xexpose.width, fl_xevent.xexpose.height);
     return true;
 
   case ButtonPress: {
@@ -782,13 +782,13 @@ bool fl_handle()
     } else if (!keysym) { // X did not map this key
       keysym = keycode|0x8000;
 #ifdef __sgi
-    // You can plug a microsoft keyboard into an sgi but the extra shift
-    // keys are not translated.  Make them translate like XFree86 does:
+      // You can plug a microsoft keyboard into an sgi but the extra shift
+      // keys are not translated.  Make them translate like XFree86 does:
       switch(keycode) {
       case 147: keysym = FL_Win_L; break;
       case 148: keysym = FL_Win_R; break;
-    case 149: keysym = FL_Menu; break;
-    }
+      case 149: keysym = FL_Menu; break;
+      }
 #endif
     }
     Fl::e_keysym = int(keysym);
@@ -1248,7 +1248,7 @@ void fl_get_system_colors() {
 
 #if MY_GET_DEFAULT
   color = to_color(get_default("Text.background"));
-  if (color) Fl_Widget::default_style->text_background = color;
+  if (color) Fl_Widget::default_style->color = color;
 
   color = to_color(get_default("Text.foreground"));
   if (color) Fl_Widget::default_style->text_color = color;
@@ -1260,7 +1260,7 @@ void fl_get_system_colors() {
   if (color) Fl_Widget::default_style->selection_text_color = color;
 #else
   color = to_color(get_default("Text","background"));
-  if (color) Fl_Widget::default_style->text_background = color;
+  if (color) Fl_Widget::default_style->color = color;
 
   color = to_color(get_default("Text","foreground"));
   if (color) Fl_Widget::default_style->text_color = color;
@@ -1297,5 +1297,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.119 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.120 2002/01/20 07:37:16 spitzak Exp $".
 //

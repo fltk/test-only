@@ -1,5 +1,5 @@
 //
-// "$Id: mandelbrot.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: mandelbrot.cxx,v 1.12 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Mandelbrot set demo for the Fast Light Tool Kit (FLTK).
 //
@@ -81,24 +81,23 @@ int Drawing_Area::idle() {
   if (nextline < H) {
     if (!buffer) buffer = new uchar[W*H];
     double yy = Y+(H/2-nextline)*scale/W;
-    double yi = julia ? jY : yy;
+    double yi = yy; if (julia) yy = jY;
     uchar *p = buffer+nextline*W;
     for (int xi = 0; xi < W; xi++) {
-      double wx = X+(xi-W/2)*scale/W;
-      double xx = julia ? jX : wx;
-      double wy = yi;
+      double xx = X+(xi-W/2)*scale/W;
+      double wx = xx; double wy = yi;
+      if (julia) xx = jX;
       for (int i=0; ; i++) {
-	if (i >= iterations) {*p = 0; break;}
-	double t = wx*wx - wy*wy + xx;
-	wy = 2*wx*wy + yy;
-	wx = t;
-	if (wx*wx + wy*wy > 4) {
-	  wx = t = 1-double(i)/(1<<10);
-	  //t = t > 0 ? pow(t,brightness+1) : 0
-	  if (t <= 0) t = 0; else for (i=brightness; i--;) t*=wx;
-	  *p = 255-int(254*t);
-	  break;
-	}
+        if (i >= iterations) {*p = 0; break;}
+        double t = wx*wx - wy*wy + xx;
+        wy = 2*wx*wy + yy;
+        wx = t;
+        if (wx*wx + wy*wy > 4) {
+          wx = t = 1-double(i)/(1<<10);
+          if (t <= 0) t = 0; else for (i=brightness; i--;) t*=wx;
+          *p = 255-int(254*t);
+          break;
+        }
       }
       p++;
     }
@@ -116,7 +115,7 @@ void Drawing_Area::erase_box() {
 int Drawing_Area::handle(int event) {
   static int ix, iy;
   static int dragged;
-  static int button;
+  static bool julia_picker;
   int x2,y2;
   switch (event) {
   case FL_PUSH:
@@ -124,44 +123,15 @@ int Drawing_Area::handle(int event) {
     ix = Fl::event_x(); if (ix<0) ix=0; if (ix>=w()) ix=w()-1;
     iy = Fl::event_y(); if (iy<0) iy=0; if (iy>=h()) iy=h()-1;
     dragged = 0;
-    button = Fl::event_button();
-    return 1;
+    julia_picker = (!julia && Fl::event_button() != 1);
+    if (!julia_picker) return 1;
+    // else fall through...
   case FL_DRAG:
     dragged = 1;
     erase_box();
     x2 = Fl::event_x(); if (x2<0) x2=0; if (x2>=w()) x2=w()-1;
     y2 = Fl::event_y(); if (y2<0) y2=0; if (y2>=h()) y2=h()-1;
-    if (button != 1) {ix = x2; iy = y2; return 1;}
-    if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
-    if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
-    make_current();
-    fl_overlay_rect(sx,sy,sw,sh);
-    return 1;
-  case FL_RELEASE:
-    if (button == 1) {
-      erase_box();
-      if (dragged && sw > 3 && sh > 3) {
-	X = X + (sx+sw/2-W/2)*scale/W;
-	Y = Y + (-sy-sh/2+H/2)*scale/W;
-	scale = sw*scale/W;
-      } else if (!dragged) {
-	scale = 2*scale;
-	if (julia) {
-	  if (scale >= 4) {
-	    scale = 4;
-	    X = Y = 0;
-	  }
-	} else {
-	  if (scale >= 2.5) {
-	    scale = 2.5;
-	    X = -.75;
-	    Y = 0;
-	  }
-	}
-      } else return 1;
-      ((Drawing_Window*)(user_data()))->update_label();
-      new_display();
-    } else if (!julia) {
+    if (julia_picker) {
       if (!jbrot.d) {
 	jbrot.make_window();
 	jbrot.d->julia = 1;
@@ -170,14 +140,44 @@ int Drawing_Area::handle(int event) {
 	jbrot.d->scale = 4;
 	jbrot.update_label();
       }
-      jbrot.d->jX = X + (ix-W/2)*scale/W;
-      jbrot.d->jY = Y + (H/2-iy)*scale/W;
+      jbrot.d->jX = X + (x2-W/2)*scale/W;
+      jbrot.d->jY = Y + (H/2-y2)*scale/W;
       static char buffer[128];
       sprintf(buffer, "Julia %.7f %.7f",jbrot.d->jX,jbrot.d->jY);
       jbrot.window->label(buffer);
       jbrot.window->show();
       jbrot.d->new_display();
+      return 1;
     }
+    if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
+    if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
+    make_current();
+    fl_overlay_rect(sx,sy,sw,sh);
+    return 1;
+  case FL_RELEASE:
+    if (julia_picker) return 1;
+    erase_box();
+    if (dragged && sw > 3 && sh > 3) {
+      X = X + (sx+sw/2-W/2)*scale/W;
+      Y = Y + (-sy-sh/2+H/2)*scale/W;
+      scale = sw*scale/W;
+    } else if (!dragged) {
+      scale = 2*scale;
+      if (julia) {
+	if (scale >= 4) {
+	  scale = 4;
+	  X = Y = 0;
+	}
+      } else {
+	if (scale >= 2.5) {
+	  scale = 2.5;
+	  X = -.75;
+	  Y = 0;
+	}
+      }
+    } else return 1;
+    ((Drawing_Window*)(user_data()))->update_label();
+    new_display();
     return 1;
   }
   return 0;
@@ -200,5 +200,5 @@ void Drawing_Area::layout() {
 }
 
 //
-// End of "$Id: mandelbrot.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: mandelbrot.cxx,v 1.12 2002/01/20 07:37:16 spitzak Exp $".
 //

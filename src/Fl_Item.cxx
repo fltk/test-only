@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.15 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -52,14 +52,14 @@ void Fl_Item::draw() {
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   box()->inset(x,y,w,h);
 
-  if (type() == FL_TOGGLE_ITEM || type()==FL_RADIO_ITEM) {
+  if (type()) {
     // if pushed, preview the resulting state:
     int lflags = flags();
     if (pushed()) {
-      if (type()==FL_TOGGLE_ITEM) lflags ^= FL_VALUE;
+      if (type() != RADIO) lflags ^= FL_VALUE;
       else lflags |= FL_VALUE;
     }
-    draw_glyph(type()==FL_RADIO_ITEM ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
+    draw_glyph(type() == RADIO ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
 	       x+3, y+(h-13)/2, 13, 13, lflags);
     x += 15; w -= 15;
   }
@@ -73,7 +73,7 @@ void Fl_Item::layout() {
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   fl_font(label_font(), label_size());
   int w = 250, h = 250; fl_measure(label(), w, h, flags());
-  if (type()==FL_TOGGLE_ITEM || type()==FL_RADIO_ITEM) w += 15;
+  if (type()) w += 15;
   if (image()) {
     int W, H;
     image()->measure(W, H);
@@ -92,39 +92,23 @@ void Fl_Item::layout() {
 Fl_Item_Group::Fl_Item_Group(const char* l) : Fl_Group(0,0,0,0,l) {
   style(::style);
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
-  // end()?
 }
 
-void Fl_Item_Group::draw() {
-//  ((Fl_Item*)this)->Fl_Item::draw();
-  draw_box();
+// implementation of draw & layout should be identical to Fl_Item type()==0
 
+void Fl_Item_Group::draw() {
+  draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   box()->inset(x,y,w,h);
-
-  if (type() == FL_TOGGLE_ITEM || type()==FL_RADIO_ITEM) {
-    // if pushed, preview the resulting state:
-    int lflags = flags();
-    if (pushed()) {
-      if (type()==FL_TOGGLE_ITEM) lflags ^= FL_VALUE;
-      else lflags |= FL_VALUE;
-    }
-    draw_glyph(type()==FL_RADIO_ITEM ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
-	       x+3, y+(h-13)/2, 13, 13, lflags);
-    x += 15; w -= 15;
-  }
-
   draw_label(x+3, y, w-6, h, flags());
 }
 
 void Fl_Item_Group::layout() {
-//  ((Fl_Item*)this)->Fl_Item::layout();
   if (w() && h()) return; // already at the correct size
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   fl_font(label_font(), label_size());
   int h; int w = 0; 
   fl_measure(label(), w, h, flags());
-  if (type()==FL_TOGGLE_ITEM || type()==FL_RADIO_ITEM) w += 15;
   if (image()) {
     int W, H;
     image()->measure(W, H);

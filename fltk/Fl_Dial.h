@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Dial.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,15 +30,10 @@
 #include "Fl_Valuator.h"
 #endif
 
-// values for type():
-#define FL_NORMAL_DIAL	0
-#define FL_LINE_DIAL	1
-#define FL_FILL_DIAL	2
-
 class FL_API Fl_Dial : public Fl_Valuator {
 
 public:
-
+  enum {NORMAL = 0, LINE, FILL}; // values for type()
   int handle(int);
   Fl_Dial(int x,int y,int w,int h, const char *l = 0);
   static Fl_Named_Style* default_style;
@@ -58,8 +53,14 @@ private:
 
 };
 
+#ifndef FLTK_2
+#define FL_NORMAL_DIAL	Fl_Dial::NORMAL
+#define FL_LINE_DIAL	Fl_Dial::LINE
+#define FL_FILL_DIAL	Fl_Dial::FILL
+#endif
+
 #endif
 
 //
-// End of "$Id: Fl_Dial.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Dial.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -77,11 +77,11 @@ inline void Fl_FileChooser::cb_okButton_i(Fl_Return_Button*, void*) {
   char pathname[1024];
 
   snprintf(pathname, sizeof(pathname), "%s/%s",
-               fileList->directory(), fileName->value());
+	   fileList->directory(), fileName->value());
   if (filename_isdir(pathname))
-  directory(pathname);
+    directory(pathname);
   else
-  window->hide();
+    window->hide();
 }
 
 void Fl_FileChooser::cb_okButton(Fl_Return_Button* o, void* v) {
@@ -230,13 +230,13 @@ uchar Fl_FileChooser::textsize() {
 void Fl_FileChooser::type(int t) {
   type_ = t;
   if (t == MULTI)
-  fileList->type(FL_MULTI_BROWSER);
+    fileList->type(FL_MULTI_BROWSER);
   else
-  fileList->type(FL_HOLD_BROWSER);
+    fileList->type(FL_HOLD_BROWSER);
   if (t != CREATE)
-  newButton->deactivate();
+    newButton->deactivate();
   else
-  newButton->activate();
+    newButton->activate();
 }
 
 int Fl_FileChooser::type() {

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.5 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -87,16 +87,16 @@ const char* Fl::key_name(int shortcut) {
   if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
   int key = shortcut & 0xFFFF;
 
-    // binary search the table for a match:
-    int a = 0;
-    int b = sizeof(table)/sizeof(*table);
+  // binary search the table for a match:
+  int a = 0;
+  int b = sizeof(table)/sizeof(*table);
   const char* q = 0;
-    while (a < b) {
-      int c = (a+b)/2;
+  while (a < b) {
+    int c = (a+b)/2;
     if (table[c].key == key) {q = table[c].name; break;}
-      if (table[c].key < key) a = c+1;
-      else b = c;
-    }
+    if (table[c].key < key) a = c+1;
+    else b = c;
+  }
   if (!q) {
 #ifdef _WIN32 // if not X
     if (key >= FL_F(0) && key <= FL_F_Last) {
@@ -110,8 +110,8 @@ const char* Fl::key_name(int shortcut) {
       // mark keypad keys with KP_ prefix
       strcpy(p,"KP_"); p += 3;
       *p++ = uchar(key & 127);
-  *p = 0;
-  return buf;
+      *p = 0;
+      return buf;
     }
 #else
     if (key <= 32 || key >= 0x100) q = XKeysymToString(key);
@@ -129,5 +129,5 @@ const char* Fl::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.5 2001/11/29 17:39:30 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.7 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,6 @@
 
 #include "Fl_Style.h"
 
-enum { // Values for type():
-  FL_RESERVED_TYPE	= 0x64,
-  FL_GROUP_TYPE		= 0xe0,
-  FL_WINDOW_TYPE	= 0xF0
-};
-
 class FL_API Fl_Widget;
 class FL_API Fl_Window;
 class FL_API Fl_Image;
@@ -50,6 +44,12 @@ class FL_API Fl_Widget {
   Fl_Widget(const Fl_Widget &);
 
 public:
+
+  enum { // values for type():
+    RESERVED_TYPE	= 0x64,
+    GROUP_TYPE		= 0xe0,
+    WINDOW_TYPE		= 0xf0
+  };
 
   virtual void draw();
   virtual int handle(int);
@@ -68,8 +68,8 @@ public:
 
   uchar	type() const		{return type_;}
   void	type(uchar t)		{type_ = t;}
-  bool	is_group() const	{return type_ >= FL_GROUP_TYPE;}
-  bool	is_window() const	{return type_ >= FL_WINDOW_TYPE;}
+  bool	is_group() const	{return type_ >= GROUP_TYPE;}
+  bool	is_window() const	{return type_ >= WINDOW_TYPE;}
 
   int	x() const		{return x_;}
   void	x(int v)		{x_ = v;}
@@ -169,13 +169,10 @@ public:
   void	make_current() const	;
 
   Fl_Flags draw_box() const	;
-  Fl_Flags draw_button(Fl_Flags) const;
-  Fl_Flags draw_text_frame() const ;
-  Fl_Flags draw_text_frame(int,int,int,int) const ;
-  Fl_Flags draw_text_box() const ;
-  Fl_Flags draw_text_box(int,int,int,int) const ;
-
-  void	draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
+  Fl_Flags draw_as_button(Fl_Flags,int&,int&,int&,int&) const;
+  Fl_Flags draw_frame() const ;
+  Fl_Flags draw_frame(int,int,int,int) const ;
+  void draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
     { glyph()(this,t,x,y,w,h,f); }
 
   void  draw_label(int x,int y,int w,int h, Fl_Flags f) const ;
@@ -185,7 +182,7 @@ public:
   void	measure_label(int&, int&) const ;
 
   Fl_Boxtype	box()			const;
-  Fl_Boxtype	text_box()		const;
+  Fl_Boxtype	button_box()		const;
   Fl_Glyph	glyph()			const;
   Fl_Font	label_font()		const;
   Fl_Font	text_font()		const;
@@ -194,15 +191,13 @@ public:
   Fl_Color	label_color()		const;
   Fl_Color	selection_color()	const;
   Fl_Color	selection_text_color()	const;
-  Fl_Color	text_background()	const;
+  Fl_Color	button_color()		const;
   Fl_Color	highlight_color()	const;
   Fl_Color	highlight_label_color()	const;
   Fl_Color	text_color()		const;
   unsigned	label_size()		const;
   unsigned	text_size()		const;
   unsigned	leading()		const;
-
-  Fl_Boxtype glyph_box() const { return text_box(); }
 
   // These methods calculate colors based on selected / highlighted etc.
   Fl_Color get_box_color(Fl_Flags f) const ;
@@ -211,11 +206,9 @@ public:
   Fl_Color get_label_color() const { return get_label_color(flags_); }
   Fl_Color get_glyph_color(Fl_Flags f) const;
   Fl_Color get_glyph_color() const { return get_glyph_color(flags_); }
-  Fl_Color get_glyph_background(Fl_Flags f) const;
-  Fl_Color get_glyph_background() const { return get_glyph_background(flags_); }
 
   void box(Fl_Boxtype)		;
-  void text_box(Fl_Boxtype)	;
+  void button_box(Fl_Boxtype)	;
   void glyph(Fl_Glyph)		;
   void label_font(Fl_Font)	;
   void text_font(Fl_Font)	;
@@ -224,7 +217,7 @@ public:
   void label_color(Fl_Color)	;
   void selection_color(Fl_Color);
   void selection_text_color(Fl_Color);
-  void text_background(Fl_Color)	;
+  void button_color(Fl_Color)	;
   void highlight_color(Fl_Color);
   void highlight_label_color(Fl_Color);
   void text_color(Fl_Color a)	;
@@ -232,20 +225,16 @@ public:
   void text_size(unsigned a)	;
   void leading(unsigned a)	;
 
-//  void glyph_box(Fl_Boxtype b) { text_box(b); }
-//  void glyph_color(Fl_Color c) { text_color(c); }
-//  void glyph_background(Fl_Color c) { text_background(c); }
-
 #ifndef FLTK_2  // back-compatability section:
 
   Fl_Flags align() const	{return flags_&FL_ALIGN_MASK;}
 
-  Fl_Boxtype	down_box()		const {return text_box();}
-  Fl_Boxtype	slider()		const {return box();}
-  Fl_Boxtype	box2()			const {return text_box();}
+  Fl_Boxtype	down_box()		const {return box();}
+  Fl_Boxtype	slider()		const {return button_box();}
+  Fl_Boxtype	box2()			const {return box();}
   Fl_Boxtype	fly_box()		const {return box();}
   Fl_Color	color2()		const {return selection_color();}
-  Fl_Color	color3()		const {return text_background();}
+  Fl_Color	color3()		const {return button_color();}
   Fl_Labeltype	labeltype()		const {return label_type();}
   Fl_Color	labelcolor()		const {return label_color();}
   Fl_Color	down_labelcolor()	const {return selection_text_color();}
@@ -258,12 +247,12 @@ public:
   Fl_Color	selected_textcolor()	const {return selection_text_color();}
   Fl_Color	cursor_color()		const {return selection_color();}
 
-  void down_box(Fl_Boxtype a)           {text_box(a);}
-  void slider(Fl_Boxtype a)             {box(a);}
+  void down_box(Fl_Boxtype a)           {box(a);}
+  void slider(Fl_Boxtype a)             {button_box(a);}
   void fly_box(Fl_Boxtype)              {}
   void color(Fl_Color a, Fl_Color b)    {color(a); selection_color(b);}
   void color2(Fl_Color a)               {selection_color(a);}
-  void color3(Fl_Color a)               {text_background(a);}
+  void color3(Fl_Color a)               {button_color(a);}
   void labeltype(Fl_Labeltype a)        {label_type(a);}
   void labelcolor(Fl_Color a)           {label_color(a);}
   void down_labelcolor(Fl_Color a)      {selection_text_color(a);}
@@ -306,5 +295,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.7 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -321,14 +321,14 @@ image (such as a backing buffer) around.
 
 <ul><pre>void MyWindow::flush() {
   if (damage() == FL_DAMAGE_EXPOSE) {
-  fl_clip_region(Fl_X::i(this)-&gt;region);
-  Fl_X::i(this)-&gt;region = 0;
+    fl_clip_region(Fl_X::i(this)-&gt;region);
+    Fl_X::i(this)-&gt;region = 0;
     copy_image(backing_store_pixmap, fl_xid(this));
   } else {
     fl_window = backing_store_pixmap;
     fl_gc = backing_store_gc;
     this->draw();
-  copy_image(backing_store_pixmap, fl_xid(this));
+    copy_image(backing_store_pixmap, fl_xid(this));
   }
 }</pre></ul>
 

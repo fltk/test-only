@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Toggle_Button.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Toggle_Button.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Toggle button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,11 @@
 class FL_API Fl_Toggle_Button : public Fl_Button {
 public:
     Fl_Toggle_Button(int x,int y,int w,int h,const char *l=0)
-	: Fl_Button(x,y,w,h,l) {type(FL_TOGGLE_BUTTON);}
+	: Fl_Button(x,y,w,h,l) {type(TOGGLE);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Toggle_Button.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Toggle_Button.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.40 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.41 2002/01/20 07:37:15 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -28,7 +28,8 @@
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Menu_.h>
-#include <fltk/Fl_Item.h> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
+#include <fltk/Fl_Item.h> // for TOGGLE, RADIO
+#define checkmark(item) (item->type()>=Fl_Item::TOGGLE && item->type()<=Fl_Item::RADIO)
 
 ////////////////////////////////////////////////////////////////
 
@@ -99,23 +100,23 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
   if (!widget) return; // never do callback when no widget is picked
-  if (widget->type() == FL_TOGGLE_ITEM) {
-    if (widget->value()) widget->clear_value(); else widget->set_value();
-  } else if (widget->type() == FL_RADIO_ITEM) {
+  if (widget->type() == Fl_Item::RADIO) {
     widget->set_value();
     Fl_Group* g = widget->parent();
     int i = g->find(widget);
     int j;
     for (j = i-1; j >= 0; j--) {
       Fl_Widget* o = g->child(j);
-      if (o->type() != FL_RADIO_ITEM) break;
+      if (o->type() != Fl_Item::RADIO) break;
       o->clear_value();
     }
     for (j = i+1; j < g->children(); j++) {
       Fl_Widget* o = g->child(j);
-      if (o->type() != FL_RADIO_ITEM) break;
+      if (o->type() != Fl_Item::RADIO) break;
       o->clear_value();
     }
+  } else if (checkmark(widget)) {
+    if (widget->value()) widget->clear_value(); else widget->set_value();
   }
 
   do_callback();
@@ -221,5 +222,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.40 2001/12/10 06:25:42 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.41 2002/01/20 07:37:15 spitzak Exp $"
 //

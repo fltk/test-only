@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Menu_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Back-compatability menu items for FLTK.  The new Fl_Menu_ class
 // converts these tables into child Fl_Item and Fl_Group_Item widgets.
@@ -25,7 +25,6 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef FLTK_2
 #ifndef Fl_Menu_Item_H
 #define Fl_Menu_Item_H
 
@@ -58,6 +57,9 @@ struct FL_API Fl_Menu_Item {
   Fl_Font labelfont_;
   unsigned labelsize_;
   Fl_Color labelcolor_;
+
+  // Used to add or set an Fl_Menu_ widget:
+  void add_to(Fl_Menu_*, void* data = 0) const;
 
   // popup menus without using an Fl_Menu_ widget:
   // Warning: this is now quite expensive, as it creates a temporary
@@ -121,10 +123,6 @@ struct FL_API Fl_Menu_Item {
   void activate() {flags &= ~FL_MENU_INACTIVE;}
   void deactivate() {flags |= FL_MENU_INACTIVE;}
 
-  // used by menubar:
-  int measure(int* h, const Fl_Menu_*) const;
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
-
   const Fl_Menu_Item* find_shortcut(int *ip=0) const;
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
@@ -135,6 +133,7 @@ struct FL_API Fl_Menu_Item {
   int checked() const {return flags&FL_MENU_VALUE;}
   void check() {flags |= FL_MENU_VALUE;}
   void uncheck() {flags &= ~FL_MENU_VALUE;}
+
 #if 0
   int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
   int add(const char*a, const char* b, Fl_Callback* c,
@@ -159,8 +158,7 @@ enum {	// back-compatability enum:
 };
 
 #endif
-#endif
 
 //
-// End of "$Id: Fl_Menu_Item.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Menu_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

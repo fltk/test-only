@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -204,7 +204,7 @@ enum { // Values for Fl::visual(), Fl::gl_visual(), Fl_Gl_Window::mode()
 enum {
   FL_DAMAGE_VALUE	= 0x01,
   FL_DAMAGE_PUSHED	= 0x02,
-  FL_DAMAGE_SCROLL      = 0x04,
+  FL_DAMAGE_SCROLL	= 0x04,
   FL_DAMAGE_OVERLAY	= 0x04, // reused value
   FL_DAMAGE_HIGHLIGHT   = 0x08,
   FL_DAMAGE_CHILD       = 0x10,
@@ -230,5 +230,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.6 2002/01/20 07:37:15 spitzak Exp $".
 //

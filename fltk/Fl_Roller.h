@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Roller.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Roller header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,10 @@
 
 class FL_API Fl_Roller : public Fl_Valuator {
 public:
+  enum { // values for type()
+    VERTICAL = 0,
+    HORIZONTAL = 1
+  };
   int handle(int);
   Fl_Roller(int X,int Y,int W,int H,const char* L=0);
 
@@ -42,5 +46,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Roller.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Roller.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

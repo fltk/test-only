@@ -4,9 +4,9 @@
 #define image_file_panel_h
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
-extern Fl_Window *images_dir_window;
+extern Fl_Window* images_dir_window;
 #include <fltk/Fl_Input.h>
-extern Fl_Input *images_dir_input;
+extern Fl_Input* images_dir_input;
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Box.h>
 #include <fltk/Fl_Return_Button.h>

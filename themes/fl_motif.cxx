@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.15 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: fl_motif.cxx,v 1.16 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -68,7 +68,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
 			int x, int y, int w, int h, Fl_Flags f)
 {
   Fl_Color fc = widget->get_glyph_color(f);
-  Fl_Color bc = widget->get_glyph_background(f);
+  Fl_Color bc = widget->color();
   switch (t) {
     case FL_GLYPH_ROUND: {
       w = (w-1)|1; h = (h-1)|1;
@@ -102,7 +102,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_UP_BUTTON:
     case FL_GLYPH_DOWN_BUTTON:
       // draw background of scroll buttons
-      fl_color(widget->text_background());
+      fl_color(widget->color());
       fl_rectf(x,y,w,h);
       goto JUMP1;
     case FL_GLYPH_RIGHT:
@@ -214,9 +214,9 @@ int fl_motif()
 {
   Fl_Style::draw_boxes_inactive = 0;
 
-  Fl_Widget::default_style->box = &thin_motif_up_box;
-  Fl_Widget::default_style->text_box = &thin_motif_down_box;
-  Fl_Widget::default_style->text_background = FL_GRAY;
+  Fl_Widget::default_style->button_box = &thin_motif_up_box;
+  Fl_Widget::default_style->box = &thin_motif_down_box;
+  Fl_Widget::default_style->color = FL_GRAY;
   Fl_Widget::default_style->selection_color = FL_BLACK;
   Fl_Widget::default_style->selection_text_color = FL_GRAY;
   Fl_Widget::default_style->glyph = motif_glyph;
@@ -225,34 +225,34 @@ int fl_motif()
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
-    s->text_box = &thin_motif_menu_box; // this does not work anymore...
+    s->button_box = &thin_motif_menu_box; // this does not work anymore...
     //s->leading = 0;
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
-    s->text_box = &thin_motif_menu_box;
+    s->button_box = &thin_motif_menu_box;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->text_box = &thin_motif_menu_box;
+    s->box = &thin_motif_menu_box;
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->text_box = &thin_motif_up_box;
+    s->box = &thin_motif_up_box;
     s->glyph = choice_glyph;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->text_box = &thin_motif_down_box;
-    s->text_background = FL_DARK1;
+    s->box = &thin_motif_down_box;
+    s->color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->text_background = FL_DARK1;
+    s->color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->text_background = FL_DARK1;
+    s->color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
@@ -261,16 +261,16 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    s->text_color = FL_DARK1;
+    s->button_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("radio button"))) {
-    s->text_color = FL_DARK1;
+    s->button_color = FL_DARK1;
   }
 
   return 0;
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.15 2001/07/23 09:50:06 spitzak Exp $"
+// End of "$Id: fl_motif.cxx,v 1.16 2002/01/20 07:37:16 spitzak Exp $"
 //

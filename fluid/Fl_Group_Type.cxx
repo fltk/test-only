@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.15 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,7 @@ Fl_Widget *Fl_Group_Type::widget(int x,int y,int w,int h) {
   return g;
 }
 
-const char* Fl_Group_Type::type_name() {return "Fl_Group";}
+const char* Fl_Group_Type::type_name() const {return "Fl_Group";}
 
 int Fl_Group_Type::is_parent() const {return 1;}
 int Fl_Group_Type::is_group() const {return 1;}
@@ -149,6 +149,8 @@ void ungroup_cb(Fl_Widget *, void *) {
   if (!q->first_child) delete q;
 }
 
+const Enumeration *Fl_Group_Type::subtypes() const {return 0;}
+
 ////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
@@ -166,15 +168,15 @@ void Fl_Group_Type::write_code() {
 
 #include <fltk/Fl_Pack.h>
 
-static Fl_Menu_Item pack_type_menu[] = {
-  {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
-  {"VERTICAL", 0, 0, (void*)Fl_Pack::VERTICAL},
+static const Enumeration pack_type_menu[] = {
+  {"normal",		0,		(void*)Fl_Pack::NORMAL},
+  {"horizontal",	"HORIZONTAL",	(void*)Fl_Pack::HORIZONTAL},
   {0}};
 
 class Fl_Pack_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return pack_type_menu;}
+  const Enumeration *subtypes() const {return pack_type_menu;}
 public:
-  virtual const char *type_name() {return "Fl_Pack";}
+  virtual const char *type_name() const {return "Fl_Pack";}
   Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
 };
 
@@ -194,7 +196,7 @@ public:
 
 class Fl_Tabs_Type : public Fl_Group_Type {
 public:
-  virtual const char *type_name() {return "Fl_Tabs";}
+  virtual const char *type_name() const {return "Fl_Tabs";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     itabs *g = new itabs(x,y,w,h); Fl_Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Tabs_Type();}
@@ -265,19 +267,19 @@ void Fl_Group_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 
 #include <fltk/Fl_Scroll.h>
 
-static Fl_Menu_Item scroll_type_menu[] = {
-  {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},
-  {"HORIZONTAL", 0, 0, (void*)Fl_Scroll::HORIZONTAL},
-  {"VERTICAL", 0, 0, (void*)Fl_Scroll::VERTICAL},
-  {"HORIZONTAL_ALWAYS", 0, 0, (void*)Fl_Scroll::HORIZONTAL_ALWAYS},
-  {"VERTICAL_ALWAYS", 0, 0, (void*)Fl_Scroll::VERTICAL_ALWAYS},
-  {"BOTH_ALWAYS", 0, 0, (void*)Fl_Scroll::BOTH_ALWAYS},
+static const Enumeration scroll_type_menu[] = {
+  {"Both",		"BOTH",		(void*)Fl_Scroll::BOTH},
+  {"Horizontal",	"HORIZONTAL",	(void*)Fl_Scroll::HORIZONTAL},
+  {"Vertical",		"VERTICAL",	(void*)Fl_Scroll::VERTICAL},
+  {"Horizontal Always",	"HORIZONTAL_ALWAYS", (void*)Fl_Scroll::HORIZONTAL_ALWAYS},
+  {"Vertical Always",	"VERTICAL_ALWAYS", (void*)Fl_Scroll::VERTICAL_ALWAYS},
+  {"Both Always",	"BOTH_ALWAYS",	(void*)Fl_Scroll::BOTH_ALWAYS},
   {0}};
 
 class Fl_Scroll_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return scroll_type_menu;}
+  const Enumeration *subtypes() const {return scroll_type_menu;}
 public:
-  virtual const char *type_name() {return "Fl_Scroll";}
+  virtual const char *type_name() const {return "Fl_Scroll";}
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
 };
 
@@ -287,12 +289,12 @@ Fl_Scroll_Type Fl_Scroll_type;	// the "factory"
 
 class Fl_Tile_Type : public Fl_Group_Type {
 public:
-  virtual const char *type_name() {return "Fl_Tile";}
+  virtual const char *type_name() const {return "Fl_Tile";}
   Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
 };
 
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.15 2002/01/20 07:37:15 spitzak Exp $".
 //

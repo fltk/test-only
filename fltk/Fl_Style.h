@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.3 2001/07/24 16:25:08 clip Exp $"
+// "$Id: Fl_Style.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -42,13 +42,13 @@ struct FL_API Fl_Named_Style;
 
 struct FL_API Fl_Style {
   Fl_Boxtype    box;
-  Fl_Boxtype    text_box;
+  Fl_Boxtype    button_box;
   Fl_Glyph      glyph;
   Fl_Font       label_font;
   Fl_Font       text_font;
   Fl_Labeltype  label_type;
   Fl_Color      color;
-  Fl_Color      text_background;
+  Fl_Color      button_color;
   Fl_Color      label_color;
   Fl_Color      selection_color;
   Fl_Color      selection_text_color;
@@ -117,5 +117,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.3 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: Fl_Style.h,v 1.4 2002/01/20 07:37:15 spitzak Exp $".
 //

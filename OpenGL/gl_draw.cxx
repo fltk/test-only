@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.18 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.19 2002/01/20 07:37:14 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ struct FontSize {
 };
 static FontSize* root, *current;
 
-void  gl_font(Fl_Font font, int size) {
+void gl_font(Fl_Font font, int size) {
   fl_font(font, size); // necessary so fl_measure() works
   if (!current || current->font != font || current->size != size) {
     FontSize** p = &root;
@@ -82,7 +82,7 @@ void  gl_font(Fl_Font font, int size) {
   glListBase(current->listbase);
 }
 
-void  gl_font(int fontid, int size) {
+void gl_font(int fontid, int size) {
   gl_font(fl_fonts + (fontid % 16), size);
 }
 
@@ -185,5 +185,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.18 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.19 2002/01/20 07:37:14 spitzak Exp $".
 //

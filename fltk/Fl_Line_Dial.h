@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Line_Dial.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Line_Dial.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Line dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,11 @@
 class FL_API Fl_Line_Dial : public Fl_Dial {
 public:
     Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Dial(x,y,w,h,l) {type(FL_LINE_DIAL);}
+	: Fl_Dial(x,y,w,h,l) {type(LINE);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Line_Dial.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Line_Dial.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
 //

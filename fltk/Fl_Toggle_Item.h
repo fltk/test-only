@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Toggle_Item.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Toggle_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Widget designed to be a menu or browser item.
 //
@@ -30,7 +30,7 @@
 
 class FL_API Fl_Toggle_Item : public Fl_Item {
 public:
-  Fl_Toggle_Item(const char* l = 0) : Fl_Item(l) {type(FL_TOGGLE_ITEM);}
+  Fl_Toggle_Item(const char* l = 0) : Fl_Item(l) {type(TOGGLE);}
 };
 
 #endif

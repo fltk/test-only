@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: scroll.cxx,v 1.17 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -64,7 +64,7 @@ void Drawing::draw() {
 Fl_Scroll* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
-  thescroll->text_box(o->value() ? (Fl_Boxtype)FL_DOWN_BOX : FL_NO_BOX);
+  thescroll->box(o->value() ? (Fl_Boxtype)FL_DOWN_BOX : FL_NO_BOX);
   thescroll->relayout();
   thescroll->redraw();
 }
@@ -147,5 +147,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: scroll.cxx,v 1.17 2002/01/20 07:37:16 spitzak Exp $".
 //

@@ -75,19 +75,19 @@ scandir (const char *dir, struct dirent ***namelist,
       size_t dsize;
 
       if (i == vsize) {
-          struct dirent **newv;
-          if (vsize == 0)
-            vsize = 10;
-          else
-            vsize *= 2;
-          newv = (struct dirent **) realloc (v, vsize * sizeof (*v));
+	struct dirent **newv;
+	if (vsize == 0)
+	  vsize = 10;
+	else
+	  vsize *= 2;
+	newv = (struct dirent **) realloc (v, vsize * sizeof (*v));
 	if (newv == NULL) {
-            lose:
-              errno = ENOMEM;
-              break;
-            }
-          v = newv;
-        }
+	lose:
+	  errno = ENOMEM;
+	  break;
+	}
+	v = newv;
+      }
 
 #define _D_EXACT_NAMLEN(d) (strlen ((d)->d_name))
 #define _D_ALLOC_NAMLEN(d) (sizeof (d)->d_name > 1 ? sizeof (d)->d_name : \
@@ -98,16 +98,16 @@ scandir (const char *dir, struct dirent ***namelist,
       if (v[i] == NULL) goto lose;
 
       memcpy (v[i++], d, dsize);
-      }
+    }
 
   if (errno != 0) {
-      save = errno;
-      (void) closedir (dp);
+    save = errno;
+    (void) closedir (dp);
     while (i > 0) free (v[--i]);
-      free (v);
-      errno = save;
-      return -1;
-    }
+    free (v);
+    errno = save;
+    return -1;
+  }
 
   (void) closedir (dp);
   errno = save;

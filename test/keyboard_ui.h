@@ -5,8 +5,8 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
 #include <fltk/Fl_Output.h>
-extern Fl_Output *key_output;
-extern Fl_Output *text_output;
+extern Fl_Output* key_output;
+extern Fl_Output* text_output;
 #include <fltk/Fl_Button.h>
 extern void key_cb(Fl_Button*, void*);
 #include <fltk/Fl_Box.h>

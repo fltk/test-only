@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,6 +25,7 @@
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Dial.h>
+#include <fltk/Fl_Group.h>
 #include <fltk/fl_draw.h>
 #include <stdlib.h>
 #include <fltk/math.h>
@@ -34,7 +35,7 @@
 
 void Fl_Dial::draw() {
   int X = 0; int Y = 0; int W = w(); int H = h();
-  if (!(type() == FL_FILL_DIAL && box() == FL_OVAL_BOX)) {
+  if (!(type() == FILL && box() == FL_OVAL_BOX)) {
     if (damage()&FL_DAMAGE_ALL) draw_box();
     box()->inset(X,Y,W,H);
   }
@@ -45,7 +46,12 @@ void Fl_Dial::draw() {
     linecolor = fl_inactive(linecolor);
   }
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
-  if (type() == FL_FILL_DIAL) {
+  if (type() == FILL) {
+    if (damage()&FL_DAMAGE_EXPOSE && box() == FL_OVAL_BOX) {
+      fl_push_clip(0, 0, w(), h());
+      parent()->draw_group_box();
+      fl_pop_clip();
+    }
     fl_color(color());
     fl_pie(X, Y, W-1, H-1, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
     fl_color(fillcolor);
@@ -63,7 +69,7 @@ void Fl_Dial::draw() {
     fl_translate(X+W/2-.5, Y+H/2-.5);
     fl_scale(W-1, H-1);
     fl_rotate(45-angle);
-    if (type()) { // FL_LINE_DIAL
+    if (type() == LINE) {
       fl_vertex(0.0,   0.0);
       fl_vertex(-0.04, 0.0);
       fl_vertex(-0.25, 0.25);
@@ -134,5 +140,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.36 2002/01/20 07:37:15 spitzak Exp $".
 //

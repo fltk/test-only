@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.28 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: classic.cxx,v 1.29 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -68,12 +68,11 @@ const Fl_Frame_Box classic_down_box(0, "NNTUJJUWAAAA",&classic_up_box);
 
 extern "C" int fltk_plugin() {
 
-  Fl_Widget::default_style->box = &classic_up_box;
-  Fl_Widget::default_style->text_box = &classic_down_box;
+  Fl_Widget::default_style->button_box = &classic_up_box;
+  Fl_Widget::default_style->box = &classic_down_box;
   Fl_Widget::default_style->highlight_color = 0;
   Fl_Widget::default_style->label_size = 14;
   Fl_Widget::default_style->text_size = 14;
-  Fl_Widget::default_style->text_box = FL_DOWN_BOX;
   Fl_Widget::default_style->selection_color = FL_DARK2;
   Fl_Widget::default_style->selection_text_color = 0;
 
@@ -81,21 +80,21 @@ extern "C" int fltk_plugin() {
   if ((s = Fl_Style::find("menu"))) {
     s->selection_color = FL_WHITE;
     s->selection_text_color = 0;
-    s->text_background = FL_GRAY;
+    s->color = FL_GRAY;
   }
   if ((s = Fl_Style::find("item"))) {
     s->text_color = FL_BLACK;
   }
   if ((s = Fl_Style::find("menu_bar"))) {
-    s->text_box = &menu_title_box;
+    s->button_box = &menu_title_box;
     s->selection_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("check_button"))) {
     s->text_color = FL_BLACK;
-    //s->text_background = FL_GRAY;
+    //s->button_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("output"))) {
-    s->text_background = FL_GRAY;
+    s->color = FL_GRAY;
   }
   if ((s = Fl_Style::find("choice"))) {
     s->glyph = choice_glyph;
@@ -104,5 +103,5 @@ extern "C" int fltk_plugin() {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.28 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: classic.cxx,v 1.29 2002/01/20 07:37:16 spitzak Exp $".
 //

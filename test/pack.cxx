@@ -1,5 +1,5 @@
 //
-// "$Id: pack.cxx,v 1.9 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: pack.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $"
 //
 // Fl_Pack test program for the Fast Light Tool Kit (FLTK).
 //
@@ -97,17 +97,17 @@ int main(int argc, char **argv) {
   scroll->end();
   {Fl_Light_Button* o = new Fl_Light_Button(10, 325, 175, 25, "HORIZONTAL");
    o->type(FL_RADIO_BUTTON);
-   o->value(1);
    o->callback((Fl_Callback*)type_cb, (void*)(Fl_Pack::HORIZONTAL));
   }
   {Fl_Light_Button* o = new Fl_Light_Button(10, 350, 175, 25, "VERTICAL");
    o->type(FL_RADIO_BUTTON);
+   o->value(1);
    o->callback((Fl_Callback*)type_cb, (void*)(Fl_Pack::VERTICAL));
   }
   {Fl_Value_Slider* o = new Fl_Value_Slider(50,375, 295,25,"spacing:");
    o->clear_flag(FL_ALIGN_MASK);
    o->set_flag(FL_ALIGN_LEFT);
-   o->type(FL_HORIZONTAL);
+   o->type(Fl_Slider::HORIZONTAL);
    o->range(0,30);
    o->step(1);
    o->callback((Fl_Callback*)spacing_cb);
@@ -119,5 +119,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pack.cxx,v 1.9 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: pack.cxx,v 1.10 2002/01/20 07:37:16 spitzak Exp $".
 //
