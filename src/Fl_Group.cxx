@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.12 1999/03/23 16:58:21 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.13 1999/03/23 17:09:07 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -443,26 +443,26 @@ void Fl_Group::draw() {
 
 // Draw a child only if it needs it:
 void Fl_Group::update_child(Fl_Widget& w) const {
-  if (w.damage() && w.visible() && w.type() < FL_WINDOW &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
-  {
-    w.clear_damage(w.damage()&~FL_DAMAGE_CHILD_LABEL);
-    if (w.damage()) w.draw();	
-    w.clear_damage();
+  if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
     draw_outside_label(w);
+    w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
+  }
+  if (w.damage() && w.visible() && w.type() < FL_WINDOW &&
+      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+    w.draw();	
+    w.clear_damage();
   }
 }
 
 // Force a child to redraw:
 void Fl_Group::draw_child(Fl_Widget& w) const {
+  draw_outside_label(w);
   if (w.visible() && w.type() < FL_WINDOW &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
-  {
+      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
     w.clear_damage(FL_DAMAGE_ALL);
     w.draw();
     w.clear_damage();
   }
-  draw_outside_label(w);
 }
 
 extern char fl_draw_shortcut;
@@ -499,5 +499,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.12 1999/03/23 16:58:21 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.13 1999/03/23 17:09:07 carl Exp $".
 //
