@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.11 2001/02/20 20:43:34 robertk Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -133,7 +133,7 @@ void fl_vertex(int X, int Y) {
     if (points >= point_array_size) {
       point_array_size = point_array_size ? 2*point_array_size : 16;
       point = (XPoint*)realloc((void*)point,
-			       (point_array_size+1)*sizeof(XPoint*));
+			       (point_array_size+1)*sizeof(XPoint));
     }
     point[points].x = x;
     point[points].y = y;
@@ -302,5 +302,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.11 2001/02/20 20:43:34 robertk Exp $".
 //
