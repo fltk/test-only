@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 
   Fl_Box box(0,HEIGHT,WIDTH,400-HEIGHT);
   box.color(FL_WHITE);
-  box.box(FL_FLAT_BOX);
+  box.box(FL_DOWN_BOX);
   box.tooltip("Press right button for a pop-up menu");
 
   Fl_Menu_Button mb(0,25,WIDTH,400-HEIGHT, "popup");

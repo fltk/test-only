@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.25 2000/02/14 11:33:00 bill Exp $"
+// "$Id: menubar.cxx,v 1.26 2000/04/28 21:48:24 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,39 +23,38 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This program is used to test fltk 1.0 back-compatability for menu
-// items.  The following changes were necessary:
-
-// 1. Added FL_HELVETICA to the fonts because they are now pointers
-
-// 2. Changed the callback to use the returned widget rather than trying
-// to get an Fl_Menu_Item back from the menu button
-
-// 3. removed the "microsoft style" button, since it defaults to
-// Microsoft style now, and styles have made this not work anymore.
-
 #include <FL/Fl.H>
+#include <FL/Fl_Output.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Toggle_Button.H>
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Tooltip.H>
+#include <FL/fl_draw.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/fl_draw.H>
+
+Fl_Window *window;
+
+Fl_Menu_* menus[4];
 
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
-//const Fl_Menu_Item* m = mw->mvalue();
-  const Fl_Widget* m = mw->item(); // replacement line for fltk 2.0
+  const Fl_Menu_Item* m = mw->mvalue();
   if (!m)
     printf("NULL\n");
   else if (m->shortcut())
     printf("%s - %s\n", m->label(), fl_shortcut_label(m->shortcut()));
   else
     printf("%s\n", m->label());
+  if (!strcmp("item 77", m->label())) {
+    if (mw->find("button")) mw->replace("button", "Spitzak");
+    else mw->replace("Spitzak", "button");
+    menus[0]->redraw();
+  }
 }
 
 void quit_cb(Fl_Widget*, void*) {exit(0);}
@@ -76,7 +75,7 @@ Fl_Menu_Item menutable[] = {
     {"shortcut",FL_ALT+FL_SHIFT+'a'},
     {"shortcut",FL_ALT+FL_CTRL+'a'},
     {"shortcut",FL_ALT+FL_SHIFT+FL_CTRL+'a', 0,0, FL_MENU_DIVIDER},
-    {"shortcut",'\r'/*FL_Enter*/},
+  {"shortcut",'\r'/*FL_Enter*/},
     {"shortcut",FL_CTRL+FL_Enter, 0,0, FL_MENU_DIVIDER},
     {"shortcut",FL_F+1},
     {"shortcut",FL_SHIFT+FL_F+1},
@@ -99,7 +98,7 @@ Fl_Menu_Item menutable[] = {
     {0},
   {"&Edit",0,0,0,FL_SUBMENU},
     {"Undo",	FL_ALT+'z',	0},
-    {"Redo",	FL_ALT+'r',	0, 0, FL_MENU_DIVIDER},
+    {"Redo",	FL_ALT+'r',	0, 0, FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
     {"Cut",	FL_ALT+'x',	0},
     {"Copy",	FL_ALT+'c',	0},
     {"Paste",	FL_ALT+'v',	0},
@@ -110,41 +109,42 @@ Fl_Menu_Item menutable[] = {
     {"Size",	0,	0},
     {0},
   {"&Checkbox",0,0,0,FL_SUBMENU},
-    {"&Alpha",	FL_F+2,	0, (void *)1, FL_MENU_TOGGLE},
-    {"&Beta",	0,	0, (void *)2, FL_MENU_TOGGLE},
-    {"&Gamma",	0,	0, (void *)3, FL_MENU_TOGGLE},
-    {"&Delta",	0,	0, (void *)4, FL_MENU_TOGGLE|FL_MENU_VALUE},
-    {"&Epsilon",0,	0, (void *)5, FL_MENU_TOGGLE},
-    {"&Pi",	0,	0, (void *)6, FL_MENU_TOGGLE},
-    {"&Mu",	0,	0, (void *)7, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
-    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE, 0, 0, 0, 1},
-    {"Black",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
-    {"00",	0,	0, (void *)1, FL_MENU_TOGGLE},
-    {"000",	0,	0, (void *)1, FL_MENU_TOGGLE},
+    {"&Alpha",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_VALUE|FL_MENU_STAYS_UP},
+    {"&Beta",	0,	0, (void *)2, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"&Gamma",	0,	0, (void *)3, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"&Delta",	0,	0, (void *)4, FL_MENU_TOGGLE|FL_MENU_VALUE|FL_MENU_STAYS_UP},
+    {"&Epsilon",0,	0, (void *)5, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"&Pi",	0,	0, (void *)6, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"&Mu",	0,	0, (void *)7, FL_MENU_TOGGLE|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
+    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"Black",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
+    {"00",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
+    {"000",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
     {0},
   {"&Radio",0,0,0,FL_SUBMENU},
-    {"&Alpha",	0,	0, (void *)1, FL_MENU_RADIO},
-    {"&Beta",	0,	0, (void *)2, FL_MENU_RADIO},
-    {"&Gamma",	0,	0, (void *)3, FL_MENU_RADIO},
-    {"&Delta",	0,	0, (void *)4, FL_MENU_RADIO|FL_MENU_VALUE},
-    {"&Epsilon",0,	0, (void *)5, FL_MENU_RADIO},
-    {"&Pi",	0,	0, (void *)6, FL_MENU_RADIO},
-    {"&Mu",	0,	0, (void *)7, FL_MENU_RADIO|FL_MENU_DIVIDER},
-    {"Red",	0,	0, (void *)1, FL_MENU_RADIO},
-    {"Black",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_DIVIDER},
-    {"00",	0,	0, (void *)1, FL_MENU_RADIO},
-    {"000",	0,	0, (void *)1, FL_MENU_RADIO},
+    {"&Alpha",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Beta",	0,	0, (void *)2, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Gamma",	0,	0, (void *)3, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Delta",	0,	0, (void *)4, FL_MENU_RADIO|FL_MENU_VALUE|FL_MENU_STAYS_UP},
+    {"&Epsilon",0,	0, (void *)5, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Pi",	0,	0, (void *)6, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"&Mu",	0,	0, (void *)7, FL_MENU_RADIO|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
+    {"Red",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"Black",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_DIVIDER|FL_MENU_STAYS_UP},
+    {"00",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
+    {"000",	0,	0, (void *)1, FL_MENU_RADIO|FL_MENU_STAYS_UP},
     {0},
-  {"&Font",0,0,0,FL_SUBMENU /*, 0, FL_BOLD, 20*/},
-    {"Normal",	0, 0, 0, 0, 0, 0, 14},
-    {"Bold",	0, 0, 0, 0, 0, FL_HELVETICA+FL_BOLD, 14},
-    {"Italic",	0, 0, 0, 0, 0, FL_HELVETICA+FL_ITALIC, 14},
-    {"BoldItalic",0,0,0, 0, 0, FL_HELVETICA+FL_BOLD+FL_ITALIC, 14},
-    {"Small",	0, 0, 0, 0, 0, FL_HELVETICA+FL_BOLD+FL_ITALIC, 10},
-    {"Emboss",	0, 0, 0, 0, FL_EMBOSSED_LABEL},
-    {"Engrave",	0, 0, 0, 0, FL_ENGRAVED_LABEL},
-    {"Shadow",	0, 0, 0, 0, FL_SHADOW_LABEL},
-    {"@->",	0, 0, 0, 0, FL_SYMBOL_LABEL},
+  {"&Font",0,0,0,FL_SUBMENU},
+    {"Normal",	0, 0},
+    {"Bold",	0, 0},
+    {"Italic",	0, 0},
+    {"BoldItalic",0,0},
+    {"Small",	0, 0},
+    {"Large",	0, 0},
+    {"Emboss",	0, 0},
+    {"Engrave",	0, 0},
+    {"Shadow",	0, 0},
+    {"@->",	0, 0},
     {0},
   {"E&mpty",0,0,0,FL_SUBMENU},
     {0},
@@ -157,7 +157,7 @@ Fl_Menu_Item menutable[] = {
     {"A very long menu item"},
     {0},
   {"&Huge", 0, 0, (void*)hugemenu, FL_SUBMENU_POINTER},
-  {"button",0, 0, 0, FL_MENU_TOGGLE},
+  {"button",0, 0, 0, FL_MENU_TOGGLE|FL_MENU_STAYS_UP},
   {0}
 };
 
@@ -173,28 +173,7 @@ Fl_Menu_Item pulldown[] = {
 };
 
 #define WIDTH 600
-
-Fl_Menu_* menus[4];
-
-#if 0
-// turn MicroSoft style on/off
-void button_cb(Fl_Widget* w, void*) {
-  if (((Fl_Button*)w)->value()) {
-    for (int i = 0; i < 4; i++) {
-      menus[i]->down_box(FL_FLAT_BOX);
-      menus[i]->selection_color(137);
-      menus[i]->textfont(FL_HELVETICA);
-    }
-  } else {
-    for (int i = 0; i < 4; i++) {
-      menus[i]->down_box(FL_NO_BOX);
-      menus[i]->selection_color(FL_WHITE);
-      menus[i]->textfont(FL_BOLD|FL_ITALIC);
-    }
-  }
-  menus[0]->parent()->redraw();
-}
-#endif
+#define HEIGHT 24 //30 // use 25 for better Windoze look
 
 int main(int argc, char **argv) {
   for (int i=0; i<99; i++) {
@@ -202,34 +181,53 @@ int main(int argc, char **argv) {
     sprintf(buf,"item %d",i);
     hugemenu[i].text = strdup(buf);
   }
-  Fl_Window window(WIDTH,400);
-  Fl_Menu_Bar menubar(0,0,WIDTH,30); menubar.menu(menutable);
+  
+  window = new Fl_Window(WIDTH,400);
+  Fl_Menu_Bar menubar(0,0,WIDTH,HEIGHT); menubar.menu(menutable);
+  menubar.find("&Font/Normal")->label_font(FL_HELVETICA);
+  menubar.find("&Font/Bold")->label_font(FL_HELVETICA_BOLD);
+  menubar.find("&Font/Italic")->label_font(FL_HELVETICA_ITALIC);
+  menubar.find("&Font/BoldItalic")->label_font(FL_HELVETICA_BOLD_ITALIC);
+  menubar.find("&Font/Small")->label_size(10);
+  menubar.find("&Font/Large")->label_size(24);
+  menubar.find("&Font/Emboss")->label_type(FL_EMBOSSED_LABEL);
+  menubar.find("&Font/Engrave")->label_type(FL_ENGRAVED_LABEL);
+  menubar.find("&Font/Shadow")->label_type(FL_SHADOW_LABEL);
+  menubar.find("&Font/@->")->label_type(FL_SYMBOL_LABEL);
+  menubar.find("&Checkbox/Red")->label_color(FL_RED);
+  menubar.find("&Checkbox/Red")->selection_text_color(FL_RED);
+  menubar.find("&Checkbox/Black")->label_color(FL_BLACK);
+  menubar.find("&Checkbox/Black")->selection_text_color(FL_BLACK);
+  menubar.find("&Radio/Red")->label_color(FL_RED);
+  menubar.find("&Radio/Red")->selection_text_color(FL_RED);
+  menubar.find("&Radio/Black")->label_color(FL_BLACK);
+  menubar.find("&Radio/Black")->selection_text_color(FL_BLACK);
+  menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
+  menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
+  Fl_Box box(0,HEIGHT,WIDTH,400-HEIGHT, "Press right button\nfor a pop-up menu");
+  box.copy_style(Fl_Output::default_style);
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
+  mb1.tooltip("This is a menu button");
   menus[1] = &mb1;
-  Fl_Choice ch(300,100,80,25,"&choice:"); ch.menu(pulldown);
+  Fl_Choice ch(300,100,90,25,"&choice:"); ch.menu(pulldown);
   ch.callback(test_cb);
+  ch.tooltip("This is a choice");
   menus[2] = &ch;
-  Fl_Menu_Button mb(0,0,WIDTH,400,"&popup");
+  Fl_Menu_Button mb(0,25,WIDTH,400-HEIGHT/*,"&popup"*/);
   mb.type(Fl_Menu_Button::POPUP3);
   mb.menu(menutable);
-  mb.remove(1); // delete the "File" submenu
   mb.callback(test_cb);
   menus[3] = &mb;
-  Fl_Box b(200,200,200,100,"Press right button\nfor a pop-up menu");
-#if 0
-  Fl_Toggle_Button t(250,50,150,25,"MicroSoft Style");
-  t.callback(button_cb);
-#endif
-  window.resizable(&mb);
-  window.size_range(300,20);
-  window.end();
-  window.show(argc, argv);
+  window->resizable(&mb);
+  window->size_range(300,20);
+  window->end();
+  window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.25 2000/02/14 11:33:00 bill Exp $".
+// End of "$Id: menubar.cxx,v 1.26 2000/04/28 21:48:24 carl Exp $".
 //
