@@ -1,9 +1,9 @@
 //
-// "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.2 2003/11/02 01:37:48 easysw Exp $"
 //
 // File chooser test program.
 //
-// Copyright 1999-2002 by Michael Sweet.
+// Copyright 1999-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -338,5 +338,5 @@ show_callback(void)
 
 
 //
-// End of "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.1 2002/11/25 19:34:13 easysw Exp $".
+// End of "$Id: file_chooser.cxx,v 1.4.2.3.2.8.2.2 2003/11/02 01:37:48 easysw Exp $".
 //

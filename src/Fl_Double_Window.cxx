@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5 2002/01/01 15:11:30 easysw Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.1 2003/11/02 01:37:45 easysw Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -196,8 +196,11 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     else
 #endif
 #ifdef __APPLE__
-    // the Apple OS X window manager double buffers ALL windows anyway, so there is no need to waste memory and time
-    // BTW: Windows2000 and later also forces doublebuffering if transparent windows are beeing used (alpha channel)
+    // the Apple OS X window manager double buffers ALL windows
+    // anyway, so there is no need to waste memory and time.
+    //
+    // BTW: Windows2000 and later also forces doublebuffering if
+    // transparent windows are beeing used (alpha channel)
     if ( ( !QDIsPortBuffered( GetWindowPort(myi->xid) ) ) || force_doublebuffering_ )
       myi->other_xid = fl_create_offscreen(w(), h());
 #else
@@ -296,5 +299,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5 2002/01/01 15:11:30 easysw Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.1 2003/11/02 01:37:45 easysw Exp $".
 //

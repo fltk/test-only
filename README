@@ -1,4 +1,4 @@
-README - Fast Light Tool Kit (FLTK) Version 1.1.0
+README - Fast Light Tool Kit (FLTK) Version 1.2.0
 -------------------------------------------------
 
 WHAT IS FLTK?
@@ -180,7 +180,7 @@ TRADEMARKS
 
 COPYRIGHT
 
-    FLTK is copyright 1998-2002 by Bill Spitzak
+    FLTK is copyright 1998-2004 by Bill Spitzak
     (spitzak@users.sourceforge.net) and others, including:
 
         Craig P. Earls
@@ -188,7 +188,7 @@ COPYRIGHT
 	Gustavo Hime (hime@users.sourceforge.net)
 	Talbot Hughes
 	Robert Kesterson (robertk@users.sourceforge.net)
-	Matthias Melcher (matthias@users.sourceforge.net)
+	Matthias Melcher (matthiaswm@users.sourceforge.net)
 	James Dean Palmer (jamespalmer@users.sourceforge.net)
 	Vincent Penne (vincentp@users.sourceforge.net)
         Michael Sweet (easysw@users.sourceforge.net)

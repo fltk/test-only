@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.1 2002/11/25 19:34:10 easysw Exp $"
+// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.2 2003/11/02 01:37:45 easysw Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -125,12 +125,12 @@ Fl_RGB_Image::~Fl_RGB_Image() {
 
 void Fl_RGB_Image::uncache() {
   if (id) {
-    fl_delete_offscreen(id);
+    fl_delete_offscreen((Fl_Offscreen)id);
     id = 0;
   }
 
   if (mask) {
-    fl_delete_bitmask(mask);
+    fl_delete_bitmask((Fl_Bitmask)mask);
     mask = 0;
   }
 }
@@ -169,8 +169,8 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   new_image->alloc_array = 1;
 
   // Scale the image using a nearest-neighbor algorithm...
-  for (dy = H, sy = 0, yerr = H / 2, new_ptr = new_array; dy > 0; dy --) {
-    for (dx = W, xerr = W / 2, old_ptr = array + sy * (w() * d() + ld());
+  for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
+    for (dx = W, xerr = W, old_ptr = array + sy * (w() * d() + ld());
 	 dx > 0;
 	 dx --) {
       for (c = 0; c < d(); c ++) *new_ptr++ = old_ptr[c];
@@ -310,7 +310,7 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if (H <= 0) return;
   if (!id) {
     id = fl_create_offscreen(w(), h());
-    fl_begin_offscreen(id);
+    fl_begin_offscreen((Fl_Offscreen)id);
     fl_draw_image(array, 0, 0, w(), h(), d(), ld());
     fl_end_offscreen();
 
@@ -327,22 +327,27 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
     BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
     DeleteDC(new_gc);
   } else {
-    fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
   }
 #elif defined(__APPLE__)
   if (mask) {
     Rect src, dst;
-    src.left = 0; src.right = w();
-    src.top = 0; src.bottom = h();
-    dst.left = X; dst.right = X+w();
-    dst.top = Y; dst.bottom = Y+h();
+    // MRS: STR #114 says we should be using cx, cy, W, and H...
+//    src.left = 0; src.right = w();
+//    src.top = 0; src.bottom = h();
+//    dst.left = X; dst.right = X+w();
+//    dst.top = Y; dst.bottom = Y+h();
+    src.left = cx; src.right = cx+W;
+    src.top = cy; src.bottom = cy+H;
+    dst.left = X; dst.right = X+W;
+    dst.top = Y; dst.bottom = Y+H;
     RGBColor rgb;
     rgb.red = 0xffff; rgb.green = 0xffff; rgb.blue = 0xffff;
     RGBBackColor(&rgb);
     rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
     RGBForeColor(&rgb);
 
-#if 0
+#  if 0
     // MRS: This *should* work, but doesn't on my system (iBook); change to
     //      "#if 1" and restore the corresponding code in Fl_Bitmap.cxx
     //      to test the real alpha channel support.
@@ -350,14 +355,14 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 	         GetPortBitMapForCopyBits((GrafPtr)mask), 
 	         GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
                  &src, &src, &dst, blend, NULL);
-#else // Fallback to screen-door transparency...
+#  else // Fallback to screen-door transparency...
     CopyMask(GetPortBitMapForCopyBits((GrafPtr)id),
 	     GetPortBitMapForCopyBits((GrafPtr)mask), 
 	     GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
              &src, &src, &dst);
-#endif // 0
+#  endif // 0
   } else {
-    fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
   }
 #else
   if (mask) {
@@ -392,5 +397,5 @@ void Fl_RGB_Image::label(Fl_Menu_Item* m) {
 
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.1 2002/11/25 19:34:10 easysw Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.2 2003/11/02 01:37:45 easysw Exp $".
 //

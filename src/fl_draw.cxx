@@ -1,9 +1,9 @@
 //
-// "$Id: fl_draw.cxx,v 1.6.2.4.2.12 2002/05/16 12:47:43 easysw Exp $"
+// "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,7 +44,7 @@ char fl_draw_shortcut;	// set by fl_labeltypes.cxx
 static char* underline_at;
 
 // Copy p to buf, replacing unprintable characters with ^X and \nnn
-// Stop at a newline of if MAXBUF characters written to buffer.
+// Stop at a newline or if MAXBUF characters written to buffer.
 // Also word-wrap if width exceeds maxw.
 // Returns a pointer to the start of the next line of caharcters.
 // Sets n to the number of characters put into the buffer.
@@ -143,7 +143,7 @@ void fl_draw(
       symwidth[0] = min(w,h);
     }
 
-    if (str && (p = strrchr(str, '@')) != NULL && p > (str + 1)) {
+    if (str && (p = strrchr(str, '@')) != NULL && p > (str + 1) && p[-1] != '@') {
       strlcpy(symbol[1], p, sizeof(symbol[1]));
       symwidth[1] = min(w,h);
     }
@@ -156,7 +156,7 @@ void fl_draw(
       e = expand(p, buf, w - symtotal, buflen, width, align&FL_ALIGN_WRAP,
                  draw_symbols);
       lines++;
-      if (!*e || (*e == '@' && draw_symbols)) break;
+      if (!*e || (*e == '@' && e[1] != '@' && draw_symbols)) break;
       p = e;
     }
   } else lines = 0;
@@ -211,7 +211,7 @@ void fl_draw(
       if (underline_at)
 	callthis("_",1,xpos+int(fl_width(buf,underline_at-buf)),ypos-desc);
 
-      if (!*e || *e == '@') break;
+      if (!*e || (*e == '@' && e[1] != '@')) break;
       p = e;
     }
   }
@@ -325,5 +325,5 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.6.2.4.2.12 2002/05/16 12:47:43 easysw Exp $".
+// End of "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_cursor.cxx,v 1.6.2.6.2.7 2002/08/09 03:17:30 easysw Exp $"
+// "$Id: fl_cursor.cxx,v 1.6.2.6.2.7.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -279,7 +279,7 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
     if (c >= FL_CURSOR_NS) {
       TableEntry *q = (c > FL_CURSOR_NESW) ? table+4 : table+(c-FL_CURSOR_NS);
       if (!(q->cursor)) {
-	XColor dummy;
+	XColor dummy = { 0 };
 	Pixmap p = XCreateBitmapFromData(fl_display,
 	  RootWindow(fl_display, fl_screen), (const char*)(q->bits),
 	  CURSORSIZE, CURSORSIZE);
@@ -312,5 +312,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.6.2.6.2.7 2002/08/09 03:17:30 easysw Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.6.2.6.2.7.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5 2002/07/11 04:11:41 matthiaswm Exp $"
+// "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // MacOS system menu bar widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -110,11 +110,11 @@ static void catMenuFont( const Fl_Menu_Item *m, char *dst )
  * append a marker to identify the menu shortcut
  * <B, I, U, O, and S
 enum {
-ÊÊÊÊkMenuNoModifiersÊÊÊÊÊÊÊÊ= 0,
-ÊÊÊÊkMenuShiftModifierÊÊÊÊÊÊ= (1 << 0),
-ÊÊÊÊkMenuOptionModifierÊÊÊÊÊ= (1 << 1),
-ÊÊÊÊkMenuControlModifierÊÊÊÊ= (1 << 2),
-ÊÊÊÊkMenuNoCommandModifierÊÊ= (1 << 3)
+  kMenuNoModifiers = 0,
+  kMenuShiftModifier = (1 << 0),
+  kMenuOptionModifier = (1 << 1),
+  kMenuControlModifier = (1 << 2),
+  kMenuNoCommandModifier = (1 << 3)
 }; 
  */
 static void setMenuShortcut( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
@@ -316,5 +316,5 @@ int Fl_Menu_Bar::handle(int event) {
 */
 
 //
-// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5 2002/07/11 04:11:41 matthiaswm Exp $".
+// End of "$Id: Fl_Sys_Menu_Bar.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

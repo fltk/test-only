@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.1 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.2 2003/11/02 01:37:46 easysw Exp $"
 //
-// Copyright 2001-2002 by Bill Spitzak and others.
+// Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>
+#include <FL/Fl.H>
 #include <FL/Fl_Text_Buffer.H>
 
 
@@ -130,12 +131,12 @@ Fl_Text_Buffer::Fl_Text_Buffer( int requestedSize ) {
 Fl_Text_Buffer::~Fl_Text_Buffer() {
   free( mBuf );
   if ( mNModifyProcs != 0 ) {
-    free( ( void * ) mNodifyProcs );
-    free( ( void * ) mCbArgs );
+    delete[] mNodifyProcs;
+    delete[] mCbArgs;
   }
   if ( mNPredeleteProcs != 0 ) {
-    free( ( void * ) mPredeleteProcs );
-    free( ( void * ) mPredeleteCbArgs );
+    delete[] mPredeleteProcs;
+    delete[] mPredeleteCbArgs;
   }
 }
 
@@ -400,7 +401,7 @@ void Fl_Text_Buffer::insert_column( int column, int startPos, const char *s,
   insert_column_( column, lineStartPos, s, &insertDeleted, &nInserted,
                   &mCursorPosHint );
   if ( nDeleted != insertDeleted )
-    fprintf( stderr, "internal consistency check ins1 failed" );
+    Fl::error("Fl_Text_Buffer::insert_column(): internal consistency check ins1 failed");
   call_modify_callbacks( lineStartPos, nDeleted, nInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( charsInserted != NULL )
@@ -429,7 +430,7 @@ void Fl_Text_Buffer::overlay_rectangular( int startPos, int rectStart,
   overlay_rectangular_( lineStartPos, rectStart, rectEnd, s, &insertDeleted,
                         &nInserted, &mCursorPosHint );
   if ( nDeleted != insertDeleted )
-    fprintf( stderr, "internal consistency check ovly1 failed" );
+    Fl::error("Fl_Text_Buffer::overlay_rectangle(): internal consistency check ovly1 failed");
   call_modify_callbacks( lineStartPos, nDeleted, nInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( charsInserted != NULL )
@@ -491,7 +492,7 @@ void Fl_Text_Buffer::replace_rectangular( int start, int end, int rectStart,
 
   /* Figure out how many chars were inserted and call modify callbacks */
   if ( insertDeleted != deleteInserted + linesPadded )
-    fprintf( stderr, "NEdit: internal consistency check repl1 failed\n" );
+    Fl::error("Fl_Text_Buffer::replace_rectangular(): internal consistency check repl1 failed");
   call_modify_callbacks( start, end - start, insertInserted, 0, deletedText );
   free( (void *) deletedText );
   if ( nInsertedLines < nDeletedLines )
@@ -749,7 +750,7 @@ void Fl_Text_Buffer::remove_modify_callback( Fl_Text_Modify_Cb bufModifiedCB,
     }
   }
   if ( toRemove == -1 ) {
-    fprintf( stderr, "Internal Error: Can't find modify CB to remove\n" );
+    Fl::error("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
     return;
   }
 
@@ -823,7 +824,7 @@ void Fl_Text_Buffer::remove_predelete_callback(
     	}
     }
     if (toRemove == -1) {
-    	fprintf(stderr, "Internal Error: Can't find pre-delete CB to remove\n");
+    	Fl::error("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
     	return;
     }
     
@@ -2223,7 +2224,7 @@ int Fl_Text_Buffer::findchar_backward( int startPos, char searchChar,
                                      int *foundPos ) {
   int pos, gapLen = mGapEnd - mGapStart;
 
-  if ( startPos <= 0 || startPos >= mLength ) {
+  if ( startPos <= 0 || startPos > mLength ) {
     *foundPos = 0;
     return 0;
   }
@@ -2509,5 +2510,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.1 2002/11/25 19:34:12 easysw Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.9.2.12.2.2 2003/11/02 01:37:46 easysw Exp $".
 //

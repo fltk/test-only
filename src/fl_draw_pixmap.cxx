@@ -1,9 +1,9 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -260,5 +260,5 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.1 2002/11/25 19:34:13 easysw Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.2 2003/11/02 01:37:47 easysw Exp $".
 //

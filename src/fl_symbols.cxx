@@ -1,9 +1,9 @@
 //
-// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.2 2003/11/02 01:37:47 easysw Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -159,7 +159,7 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
 
 //for the outline color
 static void set_outline_color(Fl_Color c) {
-  fl_color(fl_color_average(c, FL_BLACK, 0.5f));
+  fl_color(fl_darker(c));
 }
 
 static void rectangle(double x,double y,double x2,double y2,Fl_Color col) {
@@ -361,5 +361,5 @@ static void fl_init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.1 2002/11/25 19:34:13 easysw Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.2 2003/11/02 01:37:47 easysw Exp $".
 //

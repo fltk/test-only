@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.16.2.8.2.1 2002/10/29 19:46:40 easysw Exp $"
+// "$Id: Fl_Tooltip.H,v 1.16.2.8.2.2 2003/11/02 01:37:42 easysw Exp $"
 //
 // Tooltip header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,6 +33,8 @@ class FL_EXPORT Fl_Tooltip {
 public:
   static float delay() { return delay_; }
   static void delay(float f) { delay_ = f; }
+  static float hoverdelay() { return hoverdelay_; }
+  static void hoverdelay(float f) { hoverdelay_ = f; }
   static int enabled() { return enabled_; }
   static void enable(int b = 1) { enabled_ = b;}
   static void disable() { enabled_ = 0; }
@@ -52,6 +54,7 @@ public:
   static Fl_Color textcolor() { return (Fl_Color)textcolor_; }
 private:
   static float delay_;
+  static float hoverdelay_;
   static int enabled_;
   static unsigned color_;
   static unsigned textcolor_;
@@ -63,5 +66,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.16.2.8.2.1 2002/10/29 19:46:40 easysw Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.16.2.8.2.2 2003/11/02 01:37:42 easysw Exp $".
 //

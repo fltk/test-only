@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.2 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.3 2003/11/02 01:37:46 easysw Exp $"
 //
-// Copyright 2001-2002 by Bill Spitzak and others.
+// Copyright 2001-2004 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -153,6 +153,7 @@ Fl_Text_Display::~Fl_Text_Display() {
 void Fl_Text_Display::buffer( Fl_Text_Buffer *buf ) {
   /* If the text display is already displaying a buffer, clear it off
      of the display and remove our callback from it */
+  if ( buf == mBuffer) return;
   if ( mBuffer != 0 ) {
     buffer_modified_cb( 0, 0, mBuffer->length(), 0, 0, this );
     mBuffer->remove_modify_callback( buffer_modified_cb, this );
@@ -1120,13 +1121,16 @@ int Fl_Text_Display::rewind_lines(int startPos, int nLines) {
     }
 }
 
+static inline int fl_isseparator(int c) {
+  return c != '$' && c != '_' && (isspace(c) || ispunct(c));
+}
+
 void Fl_Text_Display::next_word() {
   int pos = insert_position();
-  while ( pos < buffer()->length() && (
-            isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) {
+  while (pos < buffer()->length() && !fl_isseparator(buffer()->character(pos))) {
     pos++;
   }
-  while ( pos < buffer()->length() && !( isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) {
+  while (pos < buffer()->length() && fl_isseparator(buffer()->character(pos))) {
     pos++;
   }
 
@@ -1136,13 +1140,13 @@ void Fl_Text_Display::next_word() {
 void Fl_Text_Display::previous_word() {
   int pos = insert_position();
   pos--;
-  while ( pos && !( isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) {
+  while (pos && fl_isseparator(buffer()->character(pos))) {
     pos--;
   }
-  while ( pos && ( isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) {
+  while (pos && !fl_isseparator(buffer()->character(pos))) {
     pos--;
   }
-  if ( !( isalnum( buffer()->character( pos ) ) || buffer()->character( pos ) == '_' ) ) pos++;
+  if (fl_isseparator(buffer()->character(pos))) pos++;
 
   insert_position( pos );
 }
@@ -1359,7 +1363,7 @@ int Fl_Text_Display::position_to_line( int pos, int *lineNum ) {
     if ( empty_vlines() ) {
       if ( mLastChar < mBuffer->length() ) {
         if ( !position_to_line( mLastChar, lineNum ) ) {
-          fprintf( stderr, "Consistency check ptvl failed\n" );
+          Fl::error("Fl_Text_Display::position_to_line(): Consistency check ptvl failed");
           return 0;
         }
         return ++( *lineNum ) <= mNVisibleLines - 1;
@@ -1428,8 +1432,8 @@ void Fl_Text_Display::draw_vline(int visLineNum, int leftClip, int rightClip,
      prevent a potential infinite loop if X does not advance */
   stdCharWidth = TMPFONTWIDTH;   //mFontStruct->max_bounds.width;
   if ( stdCharWidth <= 0 ) {
-    fprintf( stderr, "Internal Error, bad font measurement\n" );
-    delete [] (char *)lineStr;
+    Fl::error("Fl_Text_Display::draw_vline(): bad font measurement");
+    free((void *)lineStr);
     return;
   }
 
@@ -1537,7 +1541,7 @@ void Fl_Text_Display::draw_vline(int visLineNum, int leftClip, int rightClip,
     }
   */
   if ( lineStr != NULL )
-    delete [] (char *)lineStr;
+    free((void *)lineStr);
 }
 
 /*
@@ -1577,12 +1581,12 @@ void Fl_Text_Display::draw_string( int style, int X, int Y, int toX,
     font  = styleRec->font;
     fsize = styleRec->size;
 
-    if ( style & (HIGHLIGHT_MASK | PRIMARY_MASK) ) {
+    if ( style & (HIGHLIGHT_MASK | PRIMARY_MASK) && Fl::focus() == this) {
       background = selection_color();
     } else background = color();
 
     foreground = fl_contrast(styleRec->color, background);
-  } else if ( style & (HIGHLIGHT_MASK | PRIMARY_MASK) ) {
+  } else if ( style & (HIGHLIGHT_MASK | PRIMARY_MASK) && Fl::focus() == this ) {
     background = selection_color();
     foreground = fl_contrast(textcolor(), background);
   } else {
@@ -1625,11 +1629,14 @@ void Fl_Text_Display::clear_rect( int style, int X, int Y,
   if ( width == 0 )
     return;
 
-  if ( style & HIGHLIGHT_MASK ) {
+  if ( Fl::focus() != this ) {
+    fl_color( color() );
+    fl_rectf( X, Y, width, height );
+  } else if ( style & HIGHLIGHT_MASK ) {
     fl_color( fl_contrast(textcolor(), color()) );
     fl_rectf( X, Y, width, height );
   } else if ( style & PRIMARY_MASK ) {
-    fl_color( FL_SELECTION_COLOR );
+    fl_color( selection_color() );
     fl_rectf( X, Y, width, height );
   } else {
     fl_color( color() );
@@ -2219,6 +2226,8 @@ static int min( int i1, int i2 ) {
 static int countlines( const char *string ) {
   const char * c;
   int lineCount = 0;
+
+  if (!string) return 0;
 
   for ( c = string; *c != '\0'; c++ )
     if ( *c == '\n' ) lineCount++;
@@ -2810,10 +2819,16 @@ void Fl_Text_Display::draw(void) {
 
   // draw the non-text, non-scrollbar areas.
   if (damage() & FL_DAMAGE_ALL) {
-    //printf("drawing all\n");
+//    printf("drawing all (box = %d)\n", box());
     // draw the box()
-    draw_box(box(), text_area.x, text_area.y, text_area.w, text_area.h,
-             color());
+    int W = w(), H = h();
+
+    if (mHScrollBar->visible())
+      W -= scrollbar_width();
+    if (mVScrollBar->visible())
+      H -= scrollbar_width();
+
+    draw_box(box(), x(), y(), W, H, color());
 
     // left margin
     fl_rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,
@@ -2842,7 +2857,7 @@ void Fl_Text_Display::draw(void) {
     // blank the previous cursor protrusions
   }
   else if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_EXPOSE)) {
-    //printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
+//    printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
     // CET - FIXME - save old cursor position instead and just draw side needed?
     fl_push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
@@ -2964,7 +2979,7 @@ int Fl_Text_Display::handle(int event) {
 
     case FL_LEAVE:
     case FL_HIDE:
-      if (active_r()) {
+      if (active_r() && window()) {
         window()->cursor(FL_CURSOR_DEFAULT);
 
 	return 1;
@@ -2973,7 +2988,10 @@ int Fl_Text_Display::handle(int event) {
       }
 
     case FL_PUSH: {
-        Fl::focus(this); // Take focus from any child widgets...
+	if (Fl::focus() != this) {
+	  Fl::focus(this);
+	  handle(FL_FOCUS);
+	}
         if (Fl::event_state()&FL_SHIFT) return handle(FL_DRAG);
         dragging = 1;
         int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
@@ -3028,6 +3046,12 @@ int Fl_Text_Display::handle(int event) {
 
     case FL_MOUSEWHEEL:
       return mVScrollBar->handle(event);
+
+    case FL_FOCUS:
+    case FL_UNFOCUS:
+      if (buffer()->primary_selection()->start() !=
+          buffer()->primary_selection()->end()) redraw(); // Redraw selections...
+      break;
   }
 
   return 0;
@@ -3035,5 +3059,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.2 2002/11/25 19:34:12 easysw Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.3 2003/11/02 01:37:46 easysw Exp $".
 //

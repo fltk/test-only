@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_compose.cxx,v 1.1.2.7.2.1.2.1 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_compose.cxx,v 1.1.2.7.2.1.2.2 2003/11/02 01:37:46 easysw Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -76,7 +76,14 @@ int Fl::compose(int& del) {
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  if (e_state & (FL_ALT|FL_META) && !(ascii & 128)) return 0;
+  //
+  // OSX users sometimes need to hold down ALT for keys, so we only check
+  // for META on OSX...
+#ifdef __APPLE__
+  if ((e_state & FL_META) && !(ascii & 128)) return 0;
+#else
+  if ((e_state & (FL_ALT|FL_META)) && !(ascii & 128)) return 0;
+#endif // __APPLE__
 
   if (compose_state == 1) { // after the compose key
 

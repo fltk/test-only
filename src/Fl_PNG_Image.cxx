@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_PNG_Image.cxx,v 1.1.2.8 2002/08/05 17:50:25 easysw Exp $"
+// "$Id: Fl_PNG_Image.cxx,v 1.1.2.8.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Fl_PNG_Image routines.
 //
-// Copyright 1997-2002 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@
 // Include necessary header files...
 //
 
+#include <FL/Fl.H>
 #include <FL/Fl_PNG_Image.H>
 #include <config.h>
 #include <stdio.h>
@@ -71,6 +72,12 @@ Fl_PNG_Image::Fl_PNG_Image(const char *png) // I - File to read
   // Setup the PNG data structures...
   pp   = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   info = png_create_info_struct(pp);
+
+  if (setjmp(pp->jmpbuf))
+  {
+    Fl::warning("PNG file \"%s\" contains errors!\n", png);
+    return;
+  }
 
   // Initialize the PNG read "engine"...
   png_init_io(pp, fp);
@@ -132,5 +139,5 @@ Fl_PNG_Image::Fl_PNG_Image(const char *png) // I - File to read
 
 
 //
-// End of "$Id: Fl_PNG_Image.cxx,v 1.1.2.8 2002/08/05 17:50:25 easysw Exp $".
+// End of "$Id: Fl_PNG_Image.cxx,v 1.1.2.8.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

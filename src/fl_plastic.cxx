@@ -1,12 +1,12 @@
 //
-// "$Id: fl_plastic.cxx,v 1.1.2.13 2002/05/16 02:16:17 easysw Exp $"
+// "$Id: fl_plastic.cxx,v 1.1.2.13.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
 //
 // These box types provide a cross between Aqua and KDE buttons; kindof
 // like translucent plastic buttons...
 //
-// Copyright 2001-2002 by Michael Sweet.
+// Copyright 2001-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,12 +34,48 @@
 #include <FL/fl_draw.H>
 #include "flstring.h"
 
+//
+// Uncomment the following line to restore the old plastic box type
+// appearance.
+//
+
+//#define USE_OLD_PLASTIC_BOX
+#define USE_OLD_PLASTIC_COLOR
 
 extern uchar *fl_gray_ramp();
 
 inline Fl_Color shade_color(uchar gc, Fl_Color bc) {
+#ifdef USE_OLD_PLASTIC_COLOR
   return fl_color_average((Fl_Color)gc, bc, 0.75f);
+#else
+  unsigned	grgb = Fl::get_color((Fl_Color)gc),
+		brgb = Fl::get_color(bc);
+  int		red, green, blue, gray;
+
+
+  gray  = ((grgb >> 24) & 255);
+  red   = gray * ((brgb >> 24) & 255) / 255 + gray * gray / 510;
+  gray  = ((grgb >> 16) & 255);
+  green = gray * ((brgb >> 16) & 255) / 255 + gray * gray / 510;
+  gray  = ((grgb >> 8) & 255);
+  blue  = gray * ((brgb >> 8) & 255) / 255 + gray * gray / 510;
+
+  if (red > 255)
+    red = 255;
+
+  if (green > 255)
+    green = 255;
+
+  if (blue > 255)
+    blue = 255;
+
+  if (Fl::draw_box_active())
+    return fl_rgb_color(red, green, blue);
+  else
+    return fl_color_average(FL_GRAY, fl_rgb_color(red, green, blue), 0.75f);
+#endif // USE_OLD_PLASTIC_COLOR
 }
+
 
 static void shade_frame(int x, int y, int w, int h, const char *c, Fl_Color bc) {
   uchar *g = fl_gray_ramp();
@@ -136,14 +172,29 @@ static void shade_rect(int x, int y, int w, int h, const char *c, Fl_Color bc)
 
 
 static void up_frame(int x, int y, int w, int h, Fl_Color c) {
-  shade_frame(x, y, w, h - 1, "MNFKKLNO", c);
+  shade_frame(x, y, w, h - 1, "KLDIIJLM", c);
 }
 
 
 static void up_box(int x, int y, int w, int h, Fl_Color c) {
-  shade_rect(x + 2, y + 2, w - 4, h - 5, "TXSPPQQRSSTTUVS", c);
-
+#ifdef USE_OLD_PLASTIC_BOX
+  shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
   up_frame(x, y, w, h, c);
+#else
+  shade_rect(x + 1, y + 1, w - 2, h - 3, "RVQNOPQRSTUVWVQ", c);
+  shade_frame(x, y, w, h - 1, "IJLM", c);
+#endif // USE_OLD_PLASTIC_BOX
+}
+
+
+static void thin_up_box(int x, int y, int w, int h, Fl_Color c) {
+#ifdef USE_OLD_PLASTIC_BOX
+  shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
+  up_frame(x, y, w, h, c);
+#else
+  shade_rect(x + 1, y + 1, w - 2, h - 3, "RQOQSUWQ", c);
+  shade_frame(x, y, w, h - 1, "IJLM", c);
+#endif // USE_OLD_PLASTIC_BOX
 }
 
 
@@ -167,11 +218,13 @@ Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX() {
   fl_internal_boxtype(_FL_PLASTIC_DOWN_BOX, down_box);
   fl_internal_boxtype(_FL_PLASTIC_UP_FRAME, up_frame);
   fl_internal_boxtype(_FL_PLASTIC_DOWN_FRAME, down_frame);
+  fl_internal_boxtype(_FL_PLASTIC_THIN_UP_BOX, thin_up_box);
+  fl_internal_boxtype(_FL_PLASTIC_THIN_DOWN_BOX, down_box);
 
   return _FL_PLASTIC_UP_BOX;
 }
 
 
 //
-// End of "$Id: fl_plastic.cxx,v 1.1.2.13 2002/05/16 02:16:17 easysw Exp $".
+// End of "$Id: fl_plastic.cxx,v 1.1.2.13.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

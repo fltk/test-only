@@ -1,9 +1,9 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.4.2.3.2.2.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.4.2.3.2.2.2.2 2003/11/02 01:37:47 easysw Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -258,5 +258,5 @@ void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
 }
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.4.2.3.2.2.2.1 2002/11/25 19:34:13 easysw Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.4.2.3.2.2.2.2 2003/11/02 01:37:47 easysw Exp $".
 //

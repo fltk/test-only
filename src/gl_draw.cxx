@@ -1,9 +1,9 @@
 //
-// "$Id: gl_draw.cxx,v 1.7.2.5.2.9 2002/08/09 22:57:00 easysw Exp $"
+// "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,6 +36,10 @@
 #include "Fl_Gl_Choice.H"
 #include "Fl_Font.H"
 
+#if USE_XFT
+extern XFontStruct* fl_xxfont();
+#endif // USE_XFT
+
 int   gl_height() {return fl_height();}
 int   gl_descent() {return fl_descent();}
 double gl_width(const char* s) {return fl_width(s);}
@@ -58,6 +62,9 @@ void  gl_font(int fontid, int size) {
     aglUseFont(aglGetCurrentContext(), fl_fontsize->font, fl_fontsize->face,
                fl_fontsize->size, 0, 256, fl_fontsize->listbase);
 #else
+#  if USE_XFT
+    fl_xfont = fl_xxfont();
+#  endif // USE_XFT
     int base = fl_xfont->min_char_or_byte2;
     int count = fl_xfont->max_char_or_byte2-base+1;
     fl_fontsize->listbase = glGenLists(256);
@@ -159,5 +166,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.7.2.5.2.9 2002/08/09 22:57:00 easysw Exp $".
+// End of "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

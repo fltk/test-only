@@ -1,9 +1,9 @@
 //
-// "$Id: forms_fselect.cxx,v 1.4.2.3.2.4 2002/05/16 12:47:43 easysw Exp $"
+// "$Id: forms_fselect.cxx,v 1.4.2.3.2.4.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Forms file selection routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 
 static char fl_directory[1024];
 static const char *fl_pattern;  // assummed passed value is static
-static char fl_filename[256];
+static char fl_filename[1024];
 
 char* fl_show_file_selector(const char *message,const char *dir,
 			    const char *pat,const char *fname) {
@@ -48,7 +48,7 @@ char* fl_show_file_selector(const char *message,const char *dir,
   if (!q) return 0;
   strlcpy(fl_directory, q, sizeof(fl_directory));
   p = (char *)fl_filename_name(fl_directory);
-  strlcpy(fl_filename, p, sizeof(fl_directory));
+  strlcpy(fl_filename, p, sizeof(fl_filename));
   if (p > fl_directory+1) p--;
   *p = 0;
   return (char *)q;
@@ -61,5 +61,5 @@ char*	fl_get_pattern() {return (char *)fl_pattern;}
 char*	fl_get_filename() {return fl_filename;}
 
 //
-// End of "$Id: forms_fselect.cxx,v 1.4.2.3.2.4 2002/05/16 12:47:43 easysw Exp $".
+// End of "$Id: forms_fselect.cxx,v 1.4.2.3.2.4.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

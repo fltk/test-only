@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Window.H,v 1.12.2.6.2.5 2002/08/14 16:19:48 easysw Exp $"
+// "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "Fl_Group.H"
 
 #define FL_WINDOW 0xF0	// all subclasses have type() >= this
+#define FL_DOUBLE_WINDOW 0xF1
 
 class Fl_X;
 
@@ -123,5 +124,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.12.2.6.2.5 2002/08/14 16:19:48 easysw Exp $".
+// End of "$Id: Fl_Window.H,v 1.12.2.6.2.5.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

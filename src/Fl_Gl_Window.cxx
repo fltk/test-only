@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.1 2002/11/25 19:34:10 easysw Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.2 2003/11/02 01:37:45 easysw Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -124,10 +124,31 @@ int Fl_Gl_Window::mode(int m, const int *a) {
 #define NON_LOCAL_CONTEXT 0x80000000
 
 void Fl_Gl_Window::make_current() {
+//  puts("Fl_Gl_Window::make_current()");
+//  printf("make_current: context_=%p\n", context_);
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = fl_create_gl_context(this, g);
     valid(0);
+
+//#ifdef __APPLE__
+//    GLint xywh[4];
+//
+//    if (parent() && parent()->window()) {
+//      xywh[0] = x();
+//      xywh[1] = parent()->window()->h() - y() - h();
+//    } else {
+//      xywh[0] = 0;
+//      xywh[1] = 0;
+//    }
+//
+//    xywh[2] = w();
+//    xywh[3] = h();
+//    aglSetInteger(context_, AGL_BUFFER_RECT, xywh);
+//    printf("make_current: xywh=[%d %d %d %d]\n", xywh[0], xywh[1], xywh[2], xywh[3]);
+//
+//    aglUpdateContext(context_);
+//#endif // __APPLE__
   }
   fl_set_gl_context(this, context_);
 #if defined(WIN32) && USE_COLORMAP
@@ -314,10 +335,27 @@ void Fl_Gl_Window::flush() {
 }
 
 void Fl_Gl_Window::resize(int X,int Y,int W,int H) {
+//  printf("Fl_Gl_Window::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
   if (W != w() || H != h()) {
     valid(0);
 #ifdef __APPLE__
-  aglUpdateContext(context_);
+    GLint xywh[4];
+
+    if (window()) {
+      // MRS: This isn't quite right, but the parent window won't have its W and H updated yet...
+      xywh[0] = x();
+      xywh[1] = window()->h() - y() - h();
+    } else {
+      xywh[0] = 0;
+      xywh[1] = 0;
+    }
+
+    xywh[2] = W;
+    xywh[3] = H;
+    aglSetInteger(context_, AGL_BUFFER_RECT, xywh);
+//    printf("resize: xywh=[%d %d %d %d]\n", xywh[0], xywh[1], xywh[2], xywh[3]);
+
+    aglUpdateContext(context_);
 #elif !defined(WIN32)
     if (!resizable() && overlay && overlay != this)
       ((Fl_Gl_Window*)overlay)->resize(0,0,W,H);
@@ -360,6 +398,10 @@ void Fl_Gl_Window::init() {
   overlay  = 0;
   valid_   = 0;
   damage1_ = 0;
+
+  int H = h();
+  h(1); // Make sure we actually do something in resize()...
+  resize(x(), y(), w(), H);
 }
 
 void Fl_Gl_Window::draw_overlay() {}
@@ -367,5 +409,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.1 2002/11/25 19:34:10 easysw Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.2 2003/11/02 01:37:45 easysw Exp $".
 //

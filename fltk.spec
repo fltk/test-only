@@ -1,9 +1,9 @@
 #
-# "$Id: fltk.spec,v 1.1.2.9.2.20.2.1 2002/10/29 20:21:00 easysw Exp $"
+# "$Id: fltk.spec,v 1.1.2.9.2.20.2.2 2003/11/02 01:37:41 easysw Exp $"
 #
 # RPM spec file for FLTK.
 #
-# Copyright 1998-2002 by Bill Spitzak and others.
+# Copyright 1998-2004 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -96,5 +96,5 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/doc/fltk/*
 
 #
-# End of "$Id: fltk.spec,v 1.1.2.9.2.20.2.1 2002/10/29 20:21:00 easysw Exp $".
+# End of "$Id: fltk.spec,v 1.1.2.9.2.20.2.2 2003/11/02 01:37:41 easysw Exp $".
 #

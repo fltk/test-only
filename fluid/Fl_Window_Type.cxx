@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6 2002/08/09 22:57:00 easysw Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6.2.1 2003/11/02 01:37:44 easysw Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -7,7 +7,7 @@
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -304,6 +304,9 @@ void Fl_Window_Type::open() {
     w->show();
     w->resizable(p);
   }
+
+  w->size_range(gridx * snap, gridy * snap, Fl::w(), Fl::h(),
+                gridx * snap, gridy * snap, 0);
 }
 
 // control panel items:
@@ -792,5 +795,5 @@ int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6 2002/08/09 22:57:00 easysw Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.13.2.10.2.6.2.1 2003/11/02 01:37:44 easysw Exp $".
 //

@@ -46,6 +46,8 @@ following types of drawing functions:
 
 <UL>
 
+	<LI><A href="#boxdraw">Boxes</A></LI>
+
 	<LI><A href="#clipping">Clipping</A></LI>
 
 	<LI><A href="#colors">Colors</A></LI>
@@ -63,6 +65,45 @@ following types of drawing functions:
 	<LI><A href="#overlay">Overlay</A></LI>
 
 </UL>
+
+<H3><A name="boxdraw">Boxes</A></H3>
+
+<P>FLTK provides three functions that can be used to draw boxes
+for buttons and other UI controls. Each function uses the
+supplied upper-lefthand corner and width and height to determine
+where to draw the box.
+
+<H4><A NAME="fl_draw_box">void fl_draw_box(Fl_Boxtype b, int x, int y, int w, int h, Fl_Color c);</A></H4>
+
+<P>The first box drawing function is <CODE>fl_draw_box()</CODE>
+which draws a standard boxtype <CODE>c</CODE> in the specified
+color <CODE>c</CODE>.
+
+<H4><A NAME="fl_frame">void fl_frame(const char *s, int x, int y, int w, int h);</A></H4>
+
+<P>The <CODE>fl_frame()</CODE> function draws a series of line
+segments around the given box. The string <CODE>s</CODE> must
+contain groups of 4 letters which specify one of 24 standard
+grayscale values, where 'A' is black and 'X' is white. The order
+of each set of 4 characters is: top, left, bottom, right. The
+results of calling <CODE>fl_frame()</CODE> with a string that is
+not a multiple of 4 characters in length are undefined.
+
+<P>The only difference between this function and
+<CODE>fl_frame2()</CODE> is the order of the line segments.
+
+<H4><A NAME="fl_frame2">void fl_frame2(const char *s, int x, int y, int w, int h);</A></H4>
+
+<P>The <CODE>fl_frame2()</CODE> function draws a series of line
+segments around the given box. The string <CODE>s</CODE> must
+contain groups of 4 letters which specify one of 24 standard
+grayscale values, where 'A' is black and 'X' is white. The order
+of each set of 4 characters is: bottom, right, top, left. The
+results of calling <CODE>fl_frame2()</CODE> with a string that is
+not a multiple of 4 characters in length are undefined.
+
+<P>The only difference between this function and
+<CODE>fl_frame()</CODE> is the order of the line segments.
 
 <H3><A name="clipping">Clipping</A></H3>
 
@@ -453,11 +494,16 @@ want a circle as part of a complex polygon you must use <TT>fl_arc()</TT>.
 It is undefined whether this location or the characters are
 modified by the current transformation.
 
-<H4>void fl_draw(const char *, float x, float y)
-<BR>void fl_draw(const char *, int n, float x, float y)</H4>
+<H4>void fl_draw(const char *, int x, int y)
+<BR>void fl_draw(const char *, int n, int x, int y)</H4>
 
 <P>Draw a nul-terminated string or an array of <TT>n</TT> characters
-starting at the given location.
+starting at the given location. Text is aligned to the left and to
+the baseline of the font. To align to the bottom, subtract fl_descent() from
+<i>y</i>. To align to the top, subtract fl_descent() and add fl_height().
+This version of fl_draw provides direct access to
+the text drawing function of the underlying OS. It does not apply any 
+special handling to control characters. 
 
 <H4>void fl_draw(const char *, int x, int y, int w, int h,
 Fl_Align align, Fl_Image *img = 0, int draw_symbols = 1)</H4>
@@ -466,7 +512,7 @@ Fl_Align align, Fl_Image *img = 0, int draw_symbols = 1)</H4>
 labels. The string is formatted and aligned inside the passed
 box.  Handles '\t' and '\n', expands all other control
 characters to ^X, and aligns inside or against the edges of the
-box. See <A
+box described by <i>x</i>, <i>y</i>, <i>w</i> and <i>h</i>. See <A
 href="Fl_Widget.html#Fl_Widget.align"><TT>Fl_Widget::align()</TT></A>
 for values for <TT>align</TT>. The value
 <TT>FL_ALIGN_INSIDE</TT> is ignored, as this function always
@@ -478,6 +524,8 @@ image is drawn above or below the text as specified by the
 
 <P>The <TT>draw_symbols</TT> argument specifies whether or not
 to look for symbol names starting with the "@" character.
+
+<P>The text length is limited to 1024 caracters per line.
 
 <H4>void fl_measure(const char *, int &amp;w, int &amp;h, int draw_symbols = 1)</H4>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.1 2002/11/25 19:34:07 easysw Exp $"
+// "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.2 2003/11/02 01:37:43 easysw Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -11,7 +11,7 @@
 // instance of this object.  It could also have a "copy()" function,
 // but it was easier to implement this by using the file read/write
 // that is needed to save the setup anyways.
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -230,6 +230,12 @@ public:
   int pixmapID() { return 12; }
   void write_properties();
   void read_property(const char *);
+
+  // class prefix attribute access
+  void prefix(const char* p);
+  const char*  prefix() const {return class_prefix;}
+private:
+  const char* class_prefix;
 };
 
 #define NUM_EXTRA_CODE 4
@@ -254,6 +260,7 @@ protected:
   void write_extra_code();
   void write_block_close();
   void write_code2();
+  void write_color(const char*, Fl_Color);
 
 public:
 
@@ -587,5 +594,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.1 2002/11/25 19:34:07 easysw Exp $".
+// End of "$Id: Fl_Type.h,v 1.5.2.11.2.6.2.2 2003/11/02 01:37:43 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.1 2002/11/25 19:34:10 easysw Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.2 2003/11/02 01:37:45 easysw Exp $"
 //
 // Fl_Help_View widget routines.
 //
-// Copyright 1997-2002 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -767,6 +767,68 @@ Fl_Help_View::draw()
 
 
 //
+// 'Fl_Help_View::find()' - Find the specified string...
+//
+
+int						// O - Matching position or -1 if not found
+Fl_Help_View::find(const char *s,		// I - String to find
+                   int        p)		// I - Starting position
+{
+  int		i,				// Looping var
+		c;				// Current character
+  Fl_Help_Block	*b;				// Current block
+  const char	*bp,				// Block matching pointer
+		*bs,				// Start of current comparison
+		*sp;				// Search string pointer
+
+
+  // Range check input...
+  if (!s) return -1;
+
+  if (p < 0 || p >= (int)strlen(value_)) p = 0;
+  else if (p > 0) p ++;
+
+  // Look for the string...
+  for (i = nblocks_, b = blocks_; i > 0; i --, b ++) {
+    if (b->end < (value_ + p))
+      continue;
+
+    if (b->start < (value_ + p)) bp = value_ + p;
+    else bp = b->start;
+
+    for (sp = s, bs = bp; *sp && *bp && bp < b->end; bp ++) {
+      if (*bp == '<') {
+        // skip to end of element...
+	while (*bp && bp < b->end && *bp != '>') bp ++;
+	continue;
+      } else if (*bp == '&') {
+        // decode HTML entity...
+	if ((c = quote_char(bp + 1)) < 0) c = '&';
+	else bp = strchr(bp + 1, ';') + 1;
+      } else c = *bp;
+
+      if (tolower(*sp) == tolower(c)) sp ++;
+      else {
+        // No match, so reset to start of search...
+	sp = s;
+	bs ++;
+	bp = bs;
+      }
+    }
+
+    if (!*sp) {
+      // Found a match!
+      topline(b->y - b->h);
+      return (b->end - value_);
+    }
+  }
+
+  // No match!
+  return (-1);
+}
+
+
+//
 // 'Fl_Help_View::format()' - Format the help text.
 //
 
@@ -833,22 +895,23 @@ Fl_Help_View::format()
     // Setup for formatting...
     initfont(font, fsize);
 
-    line        = 0;
-    links       = 0;
-    xx          = 4;
-    yy          = fsize + 2;
-    ww          = 0;
-    column      = 0;
-    border      = 0;
-    hh          = 0;
-    block       = add_block(value_, xx, yy, hsize_, 0);
-    row         = 0;
-    head        = 0;
-    pre         = 0;
-    talign      = LEFT;
-    newalign    = LEFT;
-    needspace   = 0;
-    linkdest[0] = '\0';
+    line         = 0;
+    links        = 0;
+    xx           = 4;
+    yy           = fsize + 2;
+    ww           = 0;
+    column       = 0;
+    border       = 0;
+    hh           = 0;
+    block        = add_block(value_, xx, yy, hsize_, 0);
+    row          = 0;
+    head         = 0;
+    pre          = 0;
+    talign       = LEFT;
+    newalign     = LEFT;
+    needspace    = 0;
+    linkdest[0]  = '\0';
+    table_offset = 0;
 
     for (ptr = value_, s = buf; *ptr;)
     {
@@ -2696,9 +2759,11 @@ quote_char(const char *p) {	// I - Quoted string
     { "yuml;",   5, 255 }
   };
 
-
-  if (isdigit(*p)) return atoi(p);
-
+  if (!strchr(p, ';')) return -1;
+  if (*p == '#') {
+    if (*(p+1) == 'x' || *(p+1) == 'X') return strtol(p+2, NULL, 16);
+    else return atoi(p+1);
+  }
   for (i = (int)(sizeof(names) / sizeof(names[0])), nameptr = names; i > 0; i --, nameptr ++)
     if (strncmp(p, nameptr->name, nameptr->namelen) == 0)
       return nameptr->code;
@@ -2730,5 +2795,5 @@ hscrollbar_callback(Fl_Widget *s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.1 2002/11/25 19:34:10 easysw Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.2 2003/11/02 01:37:45 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.5.2.5 2002/08/09 03:17:30 easysw Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -81,6 +81,7 @@ static int local_handle(int event, Fl_Window* window) {
 }
 
 int Fl::dnd() {
+  Fl_Window *source_fl_win = Fl::first_window();
   Fl::first_window()->cursor((Fl_Cursor)21);
   Window source_window = fl_xid(Fl::first_window());
   fl_local_grab = grabfunc;
@@ -161,11 +162,11 @@ int Fl::dnd() {
   }
 
   fl_local_grab = 0;
-  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
+  source_fl_win->cursor(FL_CURSOR_DEFAULT);
   return 1;
 }
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.5.2.5 2002/08/09 03:17:30 easysw Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.5.2.5.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

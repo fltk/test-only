@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.3 2002/11/25 19:34:10 easysw Exp $"
+// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.4 2003/11/02 01:37:45 easysw Exp $"
 //
 // More Fl_File_Chooser routines.
 //
-// Copyright 1999-2002 by Michael Sweet.
+// Copyright 1999-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -112,7 +112,6 @@ Fl_File_Chooser::count()
   int		i;		// Looping var
   int		fcount;		// Number of selected files
   const char	*filename;	// Filename in input field or list
-  char		pathname[1024];	// Full path to file
 
 
   if (!(type_ & MULTI))
@@ -122,7 +121,7 @@ Fl_File_Chooser::count()
 
 //    printf("Fl_File_Chooser::count(): filename=\"%s\"\n", filename);
 
-    if (filename == NULL || filename[0] == '\0')
+    if (!filename || !filename[0])
       return (0);
 
     // Is the file name just the current directory?
@@ -134,12 +133,8 @@ Fl_File_Chooser::count()
     {
       // See if this file is a directory...
       filename = (char *)fileList->text(i);
-      if (directory_[0] != '\0')
-	snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-      else
-	strlcpy(pathname, filename, sizeof(pathname));
 
-      if (!fl_filename_isdir(pathname))
+      if (filename[strlen(filename) - 1] != '/')
 	fcount ++;
     }
 
@@ -403,6 +398,12 @@ Fl_File_Chooser::fileListCB()
     {
       // Change directories...
       directory(pathname);
+
+      // Reset the click count so that a click in the same spot won't
+      // be treated as a triple-click.  We use a value of -1 because
+      // the next click will increment click count to 0, which is what
+      // we really want...
+      Fl::event_clicks(-1);
     }
     else
     {
@@ -457,7 +458,7 @@ Fl_File_Chooser::fileNameCB()
   // Get the filename from the text field...
   filename = (char *)fileName->value();
 
-  if (filename == NULL || filename[0] == '\0') {
+  if (!filename || !filename[0]) {
     okButton->deactivate();
     return;
   }
@@ -487,7 +488,7 @@ Fl_File_Chooser::fileNameCB()
   filename = pathname;
 
   // Now process things according to the key pressed...
-  if (Fl::event_key() == FL_Enter)
+  if (Fl::event_key() == FL_Enter  ||  Fl::event_key() == FL_KP_Enter)
   {
     // Enter pressed - select or change directory...
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
@@ -1004,7 +1005,7 @@ Fl_File_Chooser::value(int f)	// I - File number
 
   if (!(type_ & MULTI)) {
     name = fileName->value();
-    if (name[0] == '\0') return NULL;
+    if (!name || !name[0]) return NULL;
     else if (fl_filename_isdir(name)) {
       if (type_ & DIRECTORY) {
         // Strip trailing slash, if any...
@@ -1021,16 +1022,19 @@ Fl_File_Chooser::value(int f)	// I - File number
       // See if this file is a directory...
       name = fileList->text(i);
 
-      if (directory_[0]) {
-	snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
-      } else {
-	strlcpy(pathname, name, sizeof(pathname));
-      }
-
-      if (!fl_filename_isdir(pathname)) {
-        // Nope, see if this this is "the one"...
+      if (name[strlen(name) - 1] != '/') {
+        // Not a directory, see if this this is "the one"...
 	fcount ++;
-	if (fcount == f) return (pathname);
+
+	if (fcount == f) {
+	  if (directory_[0]) {
+	    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
+	  } else {
+	    strlcpy(pathname, name, sizeof(pathname));
+	  }
+
+	  return (pathname);
+	}
       }
     }
 
@@ -1159,5 +1163,5 @@ unquote_pathname(char       *dst,	// O - Destination string
 
 
 //
-// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.3 2002/11/25 19:34:10 easysw Exp $".
+// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.4 2003/11/02 01:37:45 easysw Exp $".
 //

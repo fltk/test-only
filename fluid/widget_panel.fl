@@ -1,11 +1,11 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0102 
+version 1.0104 
 header_name {.h} 
 code_name {.cxx}
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {318 157 415 370} type Double resizable hotspot visible
+    xywh {851 210 415 370} type Double resizable hotspot visible
   } {
     Fl_Tabs {} {
       callback {propagate_load((Fl_Group *)o,v);} open
@@ -13,7 +13,7 @@ Function {make_widget_panel()} {open
     } {
       Fl_Group {} {
         label GUI
-        callback propagate_load
+        callback propagate_load open
         xywh {10 30 395 295} when 0 hide resizable
       } {
         Fl_Group {} {
@@ -21,7 +21,7 @@ Function {make_widget_panel()} {open
           xywh {95 40 301 280} resizable
         } {
           Fl_Group {} {
-            callback propagate_load
+            callback propagate_load open
             xywh {95 40 300 20}
           } {
             Fl_Input {} {
@@ -37,7 +37,7 @@ Function {make_widget_panel()} {open
             } {}
           }
           Fl_Group {} {
-            callback propagate_load
+            callback propagate_load open
             xywh {95 65 300 20}
           } {
             Fl_Input {} {
@@ -52,7 +52,7 @@ Function {make_widget_panel()} {open
             }
           }
           Fl_Group {} {
-            callback propagate_load
+            callback propagate_load open
             xywh {95 90 300 20}
           } {
             Fl_Input {} {
@@ -66,29 +66,9 @@ Function {make_widget_panel()} {open
               tooltip {Click to choose the inactive image.} xywh {290 90 105 20}
             }
           }
-          Fl_Value_Input {} {
-            label {X:}
-            callback x_cb
-            tooltip {The X position of the widget.} xywh {95 150 60 20} labelsize 10 align 5 maximum 2048 step 1
-          }
-          Fl_Value_Input {} {
-            label {Y:}
-            callback y_cb
-            tooltip {The Y position of the widget.} xywh {155 150 60 20} labelsize 10 align 5 maximum 2048 step 1
-          }
-          Fl_Value_Input {} {
-            label {Width:}
-            callback w_cb
-            tooltip {The width of the widget.} xywh {215 150 60 20} labelsize 10 align 5 maximum 2048 step 1
-          }
-          Fl_Value_Input {} {
-            label {Height:}
-            callback h_cb
-            tooltip {The height of the widget.} xywh {275 150 60 20} labelsize 10 align 5 maximum 2048 step 1
-          }
           Fl_Group {} {
             label {Alignment:}
-            callback propagate_load
+            callback propagate_load open
             xywh {95 115 300 21} align 4
           } {
             Fl_Button {} {
@@ -144,9 +124,29 @@ image}
               xywh {256 116 20 20} resizable
             }
           }
+          Fl_Value_Input {} {
+            label {X:}
+            callback x_cb
+            tooltip {The X position of the widget.} xywh {95 150 60 20} labelsize 10 align 5 maximum 2048 step 1
+          }
           Fl_Box {} {
             label {Position:}
             xywh {95 150 0 20} align 24
+          }
+          Fl_Value_Input {} {
+            label {Y:}
+            callback y_cb
+            tooltip {The Y position of the widget.} xywh {155 150 60 20} labelsize 10 align 5 maximum 2048 step 1
+          }
+          Fl_Value_Input {} {
+            label {Width:}
+            callback w_cb
+            tooltip {The width of the widget.} xywh {215 150 60 20} labelsize 10 align 5 maximum 2048 step 1
+          }
+          Fl_Value_Input {} {
+            label {Height:}
+            callback h_cb
+            tooltip {The height of the widget.} xywh {275 150 60 20} labelsize 10 align 5 maximum 2048 step 1
           }
           Fl_Box {} {
             label {Values:}
@@ -185,9 +185,14 @@ image}
             class Shortcut_Button
           }
           Fl_Group {} {
-            callback propagate_load
+            callback propagate_load open
             xywh {95 235 300 20}
           } {
+            Fl_Input {} {
+              label {X Class:}
+              callback xclass_cb
+              tooltip {The X resource class.} xywh {95 235 115 20} resizable
+            }
             Fl_Light_Button {} {
               label Border
               callback border_cb
@@ -203,11 +208,6 @@ image}
               callback non_modal_cb
               tooltip {Make the window non-modal.} xywh {325 235 70 20} selection_color 1 labelsize 9 align 148
             }
-            Fl_Input {} {
-              label {X Class:}
-              callback xclass_cb
-              tooltip {The X resource class.} xywh {95 235 115 20} resizable
-            }
           }
           Fl_Group {} {
             callback propagate_load open
@@ -217,6 +217,10 @@ image}
               label Visible
               callback visible_cb
               tooltip {Show the widget.} xywh {95 260 70 20} selection_color 1 labelsize 10
+            }
+            Fl_Box {} {
+              label {Attributes:}
+              xywh {95 260 0 20} align 4
             }
             Fl_Light_Button {} {
               label Active
@@ -236,10 +240,6 @@ image}
             Fl_Box {} {
               xywh {376 260 20 20} resizable
             }
-            Fl_Box {} {
-              label {Attributes:}
-              xywh {95 260 0 20} align 4
-            }
           }
           Fl_Input {} {
             label {Tooltip:}
@@ -257,7 +257,7 @@ image}
         xywh {10 30 395 295} when 0 hide
       } {
         Fl_Group {} {
-          callback propagate_load
+          callback propagate_load open
           xywh {100 40 295 276} resizable
         } {
           Fl_Group {} {
@@ -265,7 +265,7 @@ image}
             xywh {100 40 295 95}
           } {
             Fl_Group {} {
-              callback propagate_load
+              callback propagate_load open
               xywh {100 40 295 20}
             } {
               Fl_Choice {} {
@@ -286,7 +286,7 @@ image}
               }
             }
             Fl_Group {} {
-              callback propagate_load
+              callback propagate_load open
               xywh {100 65 295 20}
             } {
               Fl_Choice {} {
@@ -303,7 +303,7 @@ image}
               }
             }
             Fl_Group {} {
-              callback propagate_load
+              callback propagate_load open
               xywh {100 90 295 20}
             } {
               Fl_Choice {} {
@@ -320,7 +320,7 @@ image}
               }
             }
             Fl_Group {} {
-              callback propagate_load
+              callback propagate_load open
               xywh {100 115 295 20}
             } {
               Fl_Choice {} {
@@ -352,7 +352,7 @@ image}
         xywh {10 30 395 295} when 0
       } {
         Fl_Group {} {
-          callback propagate_load
+          callback propagate_load open
           xywh {100 40 295 132}
         } {
           Fl_Group {} {
@@ -413,18 +413,14 @@ image}
         } {
           Fl_Text_Editor {} {
             label {Callback:}
-            callback callback_cb selected
+            callback callback_cb
             tooltip {The callback function or code for the widget.} xywh {102 177 291 86} box NO_BOX align 4 textfont 4 resizable
             code0 {o->buffer(new Fl_Text_Buffer());}
             code1 {o->textfont(FL_COURIER);}
           }
         }
-        Fl_Box {} {
-          label label
-          xywh {95 325 100 0} hide deactivate
-        }
         Fl_Group {} {
-          callback propagate_load
+          callback propagate_load open
           xywh {100 270 295 45}
         } {
           Fl_Group {} {
@@ -460,33 +456,37 @@ image}
             }
           }
         }
+        Fl_Box {} {
+          label label
+          xywh {95 325 100 0} hide deactivate
+        }
       }
     }
     Fl_Group {} {
       xywh {10 335 395 25}
     } {
+      Fl_Box {} {
+        xywh {12 335 12 25} resizable
+      }
       Fl_Button {} {
         label {No &Overlay}
-        callback overlay_cb
-        tooltip {Hide the widget overlay box.} xywh {50 335 100 25} labelcolor 1
+        callback overlay_cb selected
+        tooltip {Hide the widget overlay box.} xywh {215 335 100 25} labelcolor 1
       }
       Fl_Button {} {
         label Revert
         callback revert_cb
-        xywh {155 335 80 25}
-      }
-      Fl_Button {} {
-        label Cancel
-        callback cancel_cb
-        xywh {325 335 80 25}
+        xywh {155 335 80 25} hide
       }
       Fl_Return_Button {} {
         label OK
         callback ok_cb
-        xywh {240 335 80 25}
+        xywh {325 335 80 25}
       }
-      Fl_Box {} {
-        xywh {12 335 12 25} resizable
+      Fl_Button {} {
+        label Cancel
+        callback cancel_cb
+        xywh {325 335 80 25} hide
       }
     }
   }

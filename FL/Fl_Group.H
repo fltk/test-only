@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.1 2002/11/25 19:34:06 easysw Exp $"
+// "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.2 2003/11/02 01:37:42 easysw Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -97,5 +97,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.1 2002/11/25 19:34:06 easysw Exp $".
+// End of "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.2 2003/11/02 01:37:42 easysw Exp $".
 //

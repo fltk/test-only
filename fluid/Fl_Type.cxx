@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.1 2002/11/25 19:34:07 easysw Exp $"
+// "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.2 2003/11/02 01:37:43 easysw Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -15,7 +15,7 @@
 // not in the linked list and are not written to files or
 // copied or otherwise examined.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -358,7 +358,7 @@ int Widget_Browser::handle(int e) {
     if (!Fl::event_inside(X,Y,W,H)) break;
     l = (Fl_Type*)find_item(Fl::event_y());
     if (l) {
-      X += 12*l->level + 18;
+      X += 12*l->level + 18 - hposition();
       if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) {
 	title = pushedtitle = l;
 	redraw_line(l);
@@ -370,7 +370,7 @@ int Widget_Browser::handle(int e) {
     if (!title) break;
     l = (Fl_Type*)find_item(Fl::event_y());
     if (l) {
-      X += 10*l->level;
+      X += 12*l->level + 18 - hposition();
       if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) ;
       else l = 0;
     }
@@ -726,6 +726,13 @@ void later_cb(Fl_Widget*,void*) {
 void Fl_Type::write() {
     write_indent(level);
     write_word(type_name());
+    
+    if (is_class()) {
+      const char * p = 	((Fl_Class_Type*)this)->prefix();
+      if (p &&	strlen(p))
+	write_word(p);
+    }
+
     write_word(name());
     write_open(level);
     write_properties();
@@ -784,5 +791,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.1 2002/11/25 19:34:07 easysw Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.6.2.6.2.9.2.2 2003/11/02 01:37:43 easysw Exp $".
 //

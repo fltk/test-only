@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.12.2.3.2.4 2002/08/09 01:09:48 easysw Exp $"
+// "$Id: Fl_Dial.cxx,v 1.12.2.3.2.4.2.1 2003/11/02 01:37:45 easysw Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -93,8 +93,8 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
   case FL_PUSH:
     handle_push();
   case FL_DRAG: {
-    int mx = Fl::event_x()-X-W/2;
-    int my = Fl::event_y()-Y-H/2;
+    int mx = (Fl::event_x()-X-W/2)*H;
+    int my = (Fl::event_y()-Y-H/2)*W;
     if (!mx && !my) return 1;
     double angle = 270-atan2((float)-my, (float)mx)*180/M_PI;
     double oldangle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
@@ -134,5 +134,5 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.12.2.3.2.4 2002/08/09 01:09:48 easysw Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.12.2.3.2.4.2.1 2003/11/02 01:37:45 easysw Exp $".
 //

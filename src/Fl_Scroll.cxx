@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2 2002/08/09 22:57:00 easysw Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,6 +26,14 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
+
+// Clear all but the scrollbars...
+void Fl_Scroll::clear() {
+  for (int i=children() - 1; i >= 0; i --) {
+    Fl_Widget* o = child(i);
+    if (o != &hscrollbar && o != &scrollbar) delete o;
+  }
+}
 
 // Insure the scrollbars are the last children:
 void Fl_Scroll::fix_scrollbar_order() {
@@ -50,10 +58,20 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   int R = X; int B = Y; // track bottom & right edge of all children
   for (int i=s->children()-2; i--;) {
     Fl_Widget& o = **a++;
+    int NR, NB;
     s->draw_child(o);
     s->draw_outside_label(o);
-    if (o.x()+o.w() > R) R = o.x()+o.w();
-    if (o.y()+o.h() > B) B = o.y()+o.h();
+    NR = o.x()+o.w();
+    NB = o.y()+o.h();
+    if ((o.align() & (FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT)) &&
+        !(o.align() & FL_ALIGN_INSIDE)) {
+      int LW = 0, LH = 0;
+      o.measure_label(LW, LH);
+      if (o.align() & FL_ALIGN_BOTTOM) NB += LH;
+      else NR += LW;
+    }
+    if (NR > R) R = NR;
+    if (NB > B) B = NB;
   }
   // fill any area to right & bottom of widgets:
   if (R < X+W && B > Y) {
@@ -248,5 +266,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2 2002/08/09 22:57:00 easysw Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

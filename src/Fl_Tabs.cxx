@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.6.2.10.2.14.2.2 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.6.2.10.2.14.2.3 2003/11/02 01:37:46 easysw Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ int Fl_Tabs::tab_positions(int* p, int* wp) {
   int selected = 0;
   Fl_Widget*const* a = array();
   int i;
-  p[0] = 0;
+  p[0] = Fl::box_dx(box());
   for (i=0; i<children(); i++) {
     Fl_Widget* o = *a++;
     if (o->visible()) selected = i;
@@ -302,5 +302,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.6.2.10.2.14.2.2 2002/11/25 19:34:12 easysw Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.6.2.10.2.14.2.3 2003/11/02 01:37:46 easysw Exp $".
 //

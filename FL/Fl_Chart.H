@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Chart.H,v 1.6.2.3.2.4 2002/09/04 20:33:17 easysw Exp $"
+// "$Id: Fl_Chart.H,v 1.6.2.3.2.4.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -71,6 +71,7 @@ public:
     void bounds(double *a,double *b) const {*a = min; *b = max;}
     void bounds(double a,double b);
     int size() const {return numb;}
+    void size(int W, int H) { Fl_Widget::size(W, H); }
     int maxsize() const {return maxnumb;}
     void maxsize(int);
     Fl_Font textfont() const {return (Fl_Font)textfont_;}
@@ -86,5 +87,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.6.2.3.2.4 2002/09/04 20:33:17 easysw Exp $".
+// End of "$Id: Fl_Chart.H,v 1.6.2.3.2.4.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: filename_absolute.cxx,v 1.5.2.4.2.9 2002/10/10 19:33:22 easysw Exp $"
+// "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -176,5 +176,5 @@ fl_filename_relative(char       *to,	// O - Relative filename
 
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.5.2.4.2.9 2002/10/10 19:33:22 easysw Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.5.2.4.2.9.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.1 2002/11/25 19:34:07 easysw Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.2 2003/11/02 01:37:43 easysw Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -396,6 +396,7 @@ void x_cb(Fl_Value_Input *i, void *v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize((int)i->value(), w->y(), w->w(), w->h());
+	if (w->window()) w->window()->redraw();
       }
   }
 }
@@ -412,6 +413,7 @@ void y_cb(Fl_Value_Input *i, void *v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), (int)i->value(), w->w(), w->h());
+	if (w->window()) w->window()->redraw();
       }
   }
 }
@@ -428,6 +430,7 @@ void w_cb(Fl_Value_Input *i, void *v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), (int)i->value(), w->h());
+	if (w->window()) w->window()->redraw();
       }
   }
 }
@@ -444,6 +447,7 @@ void h_cb(Fl_Value_Input *i, void *v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), w->w(), (int)i->value());
+	if (w->window()) w->window()->redraw();
       }
   }
 }
@@ -501,6 +505,8 @@ Fl_Menu_Item boxmenu[] = {
 {"OFLAT_BOX",0,0,(void *)FL_OFLAT_BOX},
 {"PLASTIC_UP_BOX",0,0,(void *)FL_PLASTIC_UP_BOX},
 {"PLASTIC_DOWN_BOX",0,0,(void *)FL_PLASTIC_DOWN_BOX},
+{"PLASTIC_THIN_UP_BOX",0,0,(void *)FL_PLASTIC_THIN_UP_BOX},
+{"PLASTIC_THIN_DOWN_BOX",0,0,(void *)FL_PLASTIC_THIN_DOWN_BOX},
 {0},
 {"frames",0,0,0,FL_SUBMENU},
 {"UP_FRAME",0,0,(void *)FL_UP_FRAME},
@@ -948,9 +954,13 @@ void callback_cb(Fl_Text_Editor* i, void *v) {
   } else {
     char *c = i->buffer()->text();
     const char *d = c_check(c);
-    if (d) {fl_message("Error in callback: %s",d); haderror = 1; return;}
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next) if (o->selected) {
-      o->callback(c);
+    if (d) {
+      fl_message("Error in callback: %s",d);
+      if (i->window()) i->window()->make_current();
+      haderror = 1;
+    }
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->selected) o->callback(c);
     }
     free(c);
   }
@@ -1528,6 +1538,43 @@ void Fl_Widget_Type::write_code1() {
   if (varused) write_widget_code();
 }
 
+void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
+  const char* color_name = 0;
+  switch (color) {
+  case FL_FOREGROUND_COLOR:	color_name = "FL_FOREGROUND_COLOR";	break;
+  case FL_BACKGROUND2_COLOR:	color_name = "FL_BACKGROUND2_COLOR";	break;
+  case FL_INACTIVE_COLOR:	color_name = "FL_INACTIVE_COLOR";	break;
+  case FL_SELECTION_COLOR:	color_name = "FL_SELECTION_COLOR";	break;
+  case FL_GRAY0:		color_name = "FL_GRAY0";		break;
+  case FL_DARK3:		color_name = "FL_DARK3";		break;
+  case FL_DARK2:		color_name = "FL_DARK2";		break;
+  case FL_DARK1:		color_name = "FL_DARK1";		break;
+  case FL_BACKGROUND_COLOR:	color_name = "FL_BACKGROUND_COLOR";	break;
+  case FL_LIGHT1:		color_name = "FL_LIGHT1";		break;
+  case FL_LIGHT2:		color_name = "FL_LIGHT2";		break;
+  case FL_LIGHT3:		color_name = "FL_LIGHT3";		break;
+  case FL_BLACK:		color_name = "FL_BLACK";		break;
+  case FL_RED:			color_name = "FL_RED";			break;
+  case FL_GREEN:		color_name = "FL_GREEN";		break;
+  case FL_YELLOW:		color_name = "FL_YELLOW";		break;
+  case FL_BLUE:			color_name = "FL_BLUE";			break;
+  case FL_MAGENTA:		color_name = "FL_MAGENTA";		break;
+  case FL_CYAN:			color_name = "FL_CYAN";			break;
+  case FL_DARK_RED:		color_name = "FL_DARK_RED";		break;
+  case FL_DARK_GREEN:		color_name = "FL_DARK_GREEN";		break;
+  case FL_DARK_YELLOW:		color_name = "FL_DARK_YELLOW";		break;
+  case FL_DARK_BLUE:		color_name = "FL_DARK_BLUE";		break;
+  case FL_DARK_MAGENTA:		color_name = "FL_DARK_MAGENTA";		break;
+  case FL_DARK_CYAN:		color_name = "FL_DARK_CYAN";		break;
+  case FL_WHITE:		color_name = "FL_WHITE";		break;
+  }
+  if (color_name) {
+    write_c("%so->%s(%s);\n", indent(), field, color_name);
+  } else {
+    write_c("%so->%s((Fl_Color)%d);\n", indent(), field, color);
+  }
+}
+
 // this is split from write_code1() for Fl_Window_Type:
 void Fl_Widget_Type::write_widget_code() {
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
@@ -1570,9 +1617,9 @@ void Fl_Widget_Type::write_widget_code() {
 			       boxname(b->down_box()));
   }
   if (o->color() != tplate->color() || subclass())
-    write_c("%so->color(%d);\n", indent(), o->color());
+    write_color("color", o->color());
   if (o->selection_color() != tplate->selection_color() || subclass())
-    write_c("%so->selection_color(%d);\n", indent(), o->selection_color());
+    write_color("selection_color", o->selection_color());
   if (image) image->write_code();
   if (inactive) inactive->write_code(1);
   if (o->labeltype() != tplate->labeltype() || subclass())
@@ -1583,7 +1630,7 @@ void Fl_Widget_Type::write_widget_code() {
   if (o->labelsize() != tplate->labelsize() || subclass())
     write_c("%so->labelsize(%d);\n", indent(), o->labelsize());
   if (o->labelcolor() != tplate->labelcolor() || subclass())
-    write_c("%so->labelcolor(%d);\n", indent(), o->labelcolor());
+    write_color("labelcolor", o->labelcolor());
   if (is_valuator()) {
     Fl_Valuator* v = (Fl_Valuator*)o;
     Fl_Valuator* f = (Fl_Valuator*)(tplate);
@@ -1673,7 +1720,7 @@ void Fl_Widget_Type::write_properties() {
   }
   write_string("xywh {%d %d %d %d}", o->x(), o->y(), o->w(), o->h());
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
-  if (o->type() != tplate->type()) {
+  if (o->type() != tplate->type() || is_window()) {
     write_string("type");
     write_word(item_name(subtypes(), o->type()));
   }
@@ -1972,5 +2019,5 @@ int Fl_Widget_Type::read_fdesign(const char* propname, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.1 2002/11/25 19:34:07 easysw Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.2 2003/11/02 01:37:43 easysw Exp $".
 //

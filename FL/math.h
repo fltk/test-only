@@ -1,9 +1,9 @@
 //
-// "$Id: math.h,v 1.4.2.4.2.7 2002/09/03 15:32:59 easysw Exp $"
+// "$Id: math.h,v 1.4.2.4.2.7.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Math header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +26,20 @@
 #ifndef fl_math_h
 #  define fl_math_h
 
-#  include <math.h>
+// Apple's ProjectBuilder has the nasty habit of including recursively
+// down the file tree. To avoid re-including <FL/math.h> we must 
+// directly include the systems math file. (Plus, I could not find a 
+// predefined macro for ProjectBuilder builds, so we have to define it 
+// in the project)
+#  if defined(__APPLE__) && defined(__PROJECTBUILDER__)
+#    include "/usr/include/math.h"
+#  else
+#    include <math.h>
+#  endif
+
+#  ifdef __EMX__
+#    include <float.h>
+#  endif
 
 
 #  ifndef M_PI
@@ -42,10 +55,6 @@
 #    define M_SQRT1_2       0.70710678118654752440
 #  endif // !M_SQRT2
 
-#  ifdef __EMX__
-#    include <float.h>
-#  endif
-
 #  if (defined(WIN32) || defined(CRAY)) && !defined(__MINGW32__) && !defined(__MWERKS__)
 
 inline double rint(double v) {return floor(v+.5);}
@@ -57,5 +66,5 @@ inline double copysign(double a, double b) {return b<0 ? -a : a;}
 
 
 //
-// End of "$Id: math.h,v 1.4.2.4.2.7 2002/09/03 15:32:59 easysw Exp $".
+// End of "$Id: math.h,v 1.4.2.4.2.7.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

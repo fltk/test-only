@@ -1,9 +1,9 @@
 /*
- * "$Id: filename.H,v 1.11.2.4.2.10 2002/07/08 15:20:57 easysw Exp $"
+ * "$Id: filename.H,v 1.11.2.4.2.10.2.1 2003/11/02 01:37:42 easysw Exp $"
  *
  * Filename header file for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2002 by Bill Spitzak and others.
+ * Copyright 1998-2004 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,6 +54,16 @@ inline int fl_filename_relative(char *to, const char *from) { return fl_filename
 #  if defined(WIN32) && !defined(__CYGWIN__)
 
 struct dirent {char d_name[1];};
+
+#  elif defined(__APPLE__) && defined(__PROJECTBUILDER__)
+
+// Apple's ProjectBuilder has the nasty habit of including recursively
+// down the file tree. To avoid re-including <FL/dirent.h> we must 
+// directly include the systems math file. (Plus, I could not find a 
+// predefined macro for ProjectBuilder builds, so we have to define it 
+// in the project)
+#    include <sys/types.h>
+#    include "/usr/include/dirent.h"
 
 #  else
 /*
@@ -109,6 +119,7 @@ FL_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
 #    define filename_match	fl_filename_match
 #    define filename_name	fl_filename_name
 #    define filename_relative	fl_filename_relative
+#    define filename_setext	fl_filename_setext
 #    define numericsort		fl_numericsort
 #  endif /* FLTK_1_0_COMPAT */
 
@@ -116,5 +127,5 @@ FL_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
 #endif /* FL_FILENAME_H */
 
 /*
- * End of "$Id: filename.H,v 1.11.2.4.2.10 2002/07/08 15:20:57 easysw Exp $".
+ * End of "$Id: filename.H,v 1.11.2.4.2.10.2.1 2003/11/02 01:37:42 easysw Exp $".
  */

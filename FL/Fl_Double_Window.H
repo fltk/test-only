@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3 2002/08/14 16:49:38 easysw Exp $"
+// "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,13 +40,13 @@ public:
   void hide();
   ~Fl_Double_Window();
   Fl_Double_Window(int W, int H, const char *l = 0) 
-    : Fl_Window(W,H,l), force_doublebuffering_(0) {}
+    : Fl_Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
   Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
-    : Fl_Window(X,Y,W,H,l), force_doublebuffering_(0) {}
+    : Fl_Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3 2002/08/14 16:49:38 easysw Exp $".
+// End of "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10 2002/08/09 03:17:30 easysw Exp $"
+// "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -226,6 +226,8 @@ static struct {
   {fl_down_box,		2,2,4,4,0}, // _FL_PLASTIC_DOWN_BOX,
   {fl_up_frame,		2,2,4,4,0}, // _FL_PLASTIC_UP_FRAME,
   {fl_down_frame,	2,2,4,4,0}, // _FL_PLASTIC_DOWN_FRAME,
+  {fl_up_box,		2,2,4,4,0}, // _FL_PLASTIC_THIN_UP_BOX,
+  {fl_down_box,		2,2,4,4,0}, // _FL_PLASTIC_THIN_DOWN_BOX,
   {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+0
   {fl_down_box,		3,3,6,6,0}, // FL_FREE_BOX+1
   {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+2
@@ -267,7 +269,7 @@ void Fl::set_boxtype(Fl_Boxtype t, Fl_Boxtype f) {
 }
 
 void fl_draw_box(Fl_Boxtype t, int x, int y, int w, int h, Fl_Color c) {
-  if (t) fl_box_table[t].f(x,y,w,h,c);
+  if (t && fl_box_table[t].f) fl_box_table[t].f(x,y,w,h,c);
 }
 
 //extern Fl_Widget *fl_boxcheat; // hack set by Fl_Window.cxx
@@ -295,5 +297,5 @@ const {
 }
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10 2002/08/09 03:17:30 easysw Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

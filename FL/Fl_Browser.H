@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Browser.H,v 1.8.2.7.2.3 2002/08/14 16:49:37 easysw Exp $"
+// "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.1 2003/11/02 01:37:41 easysw Exp $"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -75,7 +75,8 @@ public:
   void clear();
 
   int size() const {return lines;}
-  
+  void size(int W, int H) { Fl_Widget::size(W, H); }
+
   int topline() const ;
   enum Fl_Line_Position { TOP, BOTTOM, MIDDLE };
   void lineposition(int, Fl_Line_Position);
@@ -123,5 +124,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3 2002/08/14 16:49:37 easysw Exp $".
+// End of "$Id: Fl_Browser.H,v 1.8.2.7.2.3.2.1 2003/11/02 01:37:41 easysw Exp $".
 //

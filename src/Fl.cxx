@@ -1,9 +1,9 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.2 2002/11/25 19:34:09 easysw Exp $"
+// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.3 2003/11/02 01:37:44 easysw Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -545,8 +545,13 @@ void fl_throw_focus(Fl_Widget *o) {
 // values to account for nested X windows. 'window' is the outermost
 // window the event was posted to by X:
 static int send(int event, Fl_Widget* to, Fl_Window* window) {
-  int dx = window->x();
-  int dy = window->y();
+  int dx, dy;
+  if (window) {
+    dx = window->x();
+    dy = window->y();
+  } else {
+    dx = dy = 0;
+  }
   for (const Fl_Widget* w = to; w; w = w->parent())
     if (w->type()>=FL_WINDOW) {dx -= w->x(); dy -= w->y();}
   int save_x = Fl::e_x; Fl::e_x += dx;
@@ -811,27 +816,36 @@ Fl_Window::~Fl_Window() {
 
 int Fl_Window::handle(int ev)
 {
-  if (parent()) switch (ev) {
-  case FL_SHOW:
-    if (!shown()) show();
-    else XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
-    break;
-  case FL_HIDE:
-    if (shown()) {
-      // Find what really turned invisible, if is was a parent window
-      // we do nothing.  We need to avoid unnecessary unmap calls
-      // because they cause the display to blink when the parent is
-      // remapped.  However if this or any intermediate non-window
-      // widget has really had hide() called directly on it, we must
-      // unmap because when the parent window is remapped we don't
-      // want to reappear.
-      if (visible()) {
-       Fl_Widget* p = parent(); for (;p->visible();p = p->parent()) {}
-       if (p->type() >= FL_WINDOW) break; // don't do the unmap
+  if (parent()) {
+    switch (ev) {
+    case FL_SHOW:
+      if (!shown()) show();
+      else XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
+      break;
+    case FL_HIDE:
+      if (shown()) {
+	// Find what really turned invisible, if is was a parent window
+	// we do nothing.  We need to avoid unnecessary unmap calls
+	// because they cause the display to blink when the parent is
+	// remapped.  However if this or any intermediate non-window
+	// widget has really had hide() called directly on it, we must
+	// unmap because when the parent window is remapped we don't
+	// want to reappear.
+	if (visible()) {
+	 Fl_Widget* p = parent(); for (;p->visible();p = p->parent()) {}
+	 if (p->type() >= FL_WINDOW) break; // don't do the unmap
+	}
+#ifdef __APPLE__
+        hide();
+	set_visible();
+#else
+	XUnmapWindow(fl_display, fl_xid(this));
+#endif // __APPLE__
       }
-      XUnmapWindow(fl_display, fl_xid(this));
+      break;
     }
-    break;
+//  } else if (ev == FL_FOCUS || ev == FL_UNFOCUS) {
+//    Fl_Tooltip::exit(Fl_Tooltip::current());
   }
 
   return Fl_Group::handle(ev);
@@ -971,5 +985,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.2 2002/11/25 19:34:09 easysw Exp $".
+// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.3 2003/11/02 01:37:44 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_mac.cxx,v 1.1.2.34.2.2 2002/10/30 14:28:51 easysw Exp $"
+// "$Id: Fl_mac.cxx,v 1.1.2.34.2.3 2003/11/02 01:37:46 easysw Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,6 +41,9 @@
 // true mouse moves.  On very slow systems however, this flag may
 // still be useful.
 #define CONSOLIDATE_MOTION 0
+extern "C" {
+#include <pthread.h>
+}
 
 #include <FL/Fl.H>
 #include <FL/x.H>
@@ -51,7 +54,6 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <unistd.h>
-#include <pthread.h>
 
 // #define DEBUG_SELECT		// UNCOMMENT FOR SELECT()/THREAD DEBUGGING
 #ifdef DEBUG_SELECT
@@ -70,6 +72,7 @@ extern void fl_fix_focus();
 // forward definition of functions in this file
 static void handleUpdateEvent( WindowPtr xid );
 //+ int fl_handle(const EventRecord &event);
+static int FSSpec2UnixPath( FSSpec *fs, char *dst );
 
 // public variables
 int fl_screen;
@@ -116,7 +119,7 @@ static unsigned short macKeyLookUp[128] =
     'u', '[', 'i', 'p', FL_Enter, 'l', 'j', '\'',
     'k', ';', '\\', ',', '/', 'n', 'm', '.',
 
-    FL_Tab, ' ', '`', FL_BackSpace, 0, FL_Escape, 0, 0,
+    FL_Tab, ' ', '`', FL_BackSpace, 0/*kp_enter on powerbook G4*/, FL_Escape, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 
     0, FL_KP+'.', FL_Right, FL_KP+'*', 0, FL_KP+'+', FL_Left, FL_Num_Lock,
@@ -637,7 +640,7 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
       return noErr; // FLTK has not close all windows, so we return to the main program now
     }
   }
-  ExitToShell();
+  QuitApplicationEventLoop();
 
   fl_unlock_function();
 
@@ -663,6 +666,10 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   
   switch ( kind )
   {
+  case kEventWindowBoundsChanging:
+    GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &currentBounds );
+    GetEventParameter( event, kEventParamOriginalBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &originalBounds );
+    break;
   case kEventWindowDrawContent:
     handleUpdateEvent( fl_xid( window ) );
     ret = noErr;
@@ -770,7 +777,8 @@ static void chord_to_e_state( UInt32 chord )
   static ulong state[] = 
   { 
     0, FL_BUTTON1, FL_BUTTON3, FL_BUTTON1|FL_BUTTON3, FL_BUTTON2,
-    FL_BUTTON2|FL_BUTTON1, FL_BUTTON2|FL_BUTTON3, FL_BUTTON2|FL_BUTTON1|FL_BUTTON3
+    FL_BUTTON2|FL_BUTTON1, FL_BUTTON2|FL_BUTTON3, 
+    FL_BUTTON2|FL_BUTTON1|FL_BUTTON3
   };
   Fl::e_state = ( Fl::e_state & 0xff0000 ) | state[ chord & 0x07 ];
 }
@@ -946,7 +954,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
       sym = macKeyLookUp[ keyCode & 0x7f ];
     Fl::e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( ( (sym>=FL_KP) && (sym<=FL_KP_Last) ) || ((sym&0xff00)==0) || (sym==FL_Tab) ) {
+    if ( ( (sym>=FL_KP) && (sym<=FL_KP_Last) ) || ((sym&0xff00)==0) || (sym==FL_Tab) || (sym==FL_Enter) ) {
       buffer[0] = key;
       Fl::e_length = 1;
     } else {
@@ -979,6 +987,90 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     fl_unlock_function();
   
     return CallNextEventHandler( nextHandler, event );;
+  }
+}
+
+
+
+/**
+ * Open callback function to call...
+ */
+
+static void	(*open_cb)(const char *) = 0;
+
+
+/**
+ * Event handler for Apple-O key combination and also for file opens
+ * via the finder...
+ */
+
+static OSErr OpenAppleEventHandler(const AppleEvent *appleEvt,
+                                   AppleEvent *reply,
+				   UInt32 refcon) {
+  OSErr err;
+  AEDescList documents;
+  long i, n;
+  FSSpec fileSpec;
+  AEKeyword keyWd;
+  DescType typeCd;
+  Size actSz;
+  char filename[1024];
+
+  if (!open_cb) return noErr;
+
+  // Initialize the document list...
+  AECreateDesc(typeNull, NULL, 0, &documents);
+ 
+  // Get the open parameter(s)...
+  err = AEGetParamDesc(appleEvt, keyDirectObject, typeAEList, &documents);
+  if (err != noErr) {
+    AEDisposeDesc(&documents);
+    return err;
+  }
+
+  // Lock access to FLTK in this thread...
+  fl_lock_function();
+
+  // Open the documents via the callback...
+  if (AECountItems(&documents, &n) == noErr) {
+    for (i = 1; i <= n; i ++) {
+      // Get the next FSSpec record...
+      AEGetNthPtr(&documents, i, typeFSS, &keyWd, &typeCd,
+                  (Ptr)&fileSpec, sizeof(fileSpec),
+		  (actSz = sizeof(fileSpec), &actSz));
+
+      // Convert to a UNIX path...
+      FSSpec2UnixPath(&fileSpec, filename);
+
+      // Call the callback with the filename...
+      (*open_cb)(filename);
+    }
+  }
+
+  // Unlock access to FLTK for all threads...
+  fl_unlock_function();
+
+  // Get rid of the document list...
+  AEDisposeDesc(&documents);
+
+  return noErr;
+}
+
+
+/**
+ * Install an open documents event handler...
+ */
+
+void fl_open_callback(void (*cb)(const char *)) {
+  open_cb = cb;
+  if (cb) {
+    AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments,
+                          NewAEEventHandlerUPP((AEEventHandlerProcPtr)
+			      OpenAppleEventHandler), 0, false);
+  } else {
+    AERemoveEventHandler(kCoreEventClass, kAEOpenDocuments,
+                          NewAEEventHandlerUPP((AEEventHandlerProcPtr)
+			      OpenAppleEventHandler), false);
   }
 }
 
@@ -1344,9 +1436,10 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   dst[-1] = 0;
 //  if ( Fl::e_text[Fl::e_length-1]==0 ) Fl::e_length--; // modify, if trailing 0 is part of string
   Fl::e_length = dst - Fl::e_text - 1;
+//  printf("Sending following text to widget %p:\n%s\n", Fl::belowmouse(), Fl::e_text);
   target->handle(FL_PASTE);
   free( Fl::e_text );
-  
+
   fl_dnd_target_window = 0L;
   breakMacEventLoop();
   return noErr;
@@ -1376,17 +1469,19 @@ void Fl_X::make(Fl_Window* w)
     x->cursor = fl_default_cursor;
     Fl_Window *win = w->window();
     Fl_X *xo = Fl_X::i(win);
-    x->xidNext = xo->xidChildren;
-    x->xidChildren = 0L;
-    xo->xidChildren = x;
-    x->xid = fl_xid(win);
-    x->w = w; w->i = x;
-    x->wait_for_expose = 0;
-    x->next = Fl_X::first; // must be in the list for ::flush()
-    Fl_X::first = x;
     w->set_visible();
-    w->handle(FL_SHOW);
-    w->redraw(); // force draw to happen
+    if (xo) {
+      x->xidNext = xo->xidChildren;
+      x->xidChildren = 0L;
+      xo->xidChildren = x;
+      x->xid = fl_xid(win);
+      x->w = w; w->i = x;
+      x->wait_for_expose = 0;
+      x->next = Fl_X::first; // must be in the list for ::flush()
+      Fl_X::first = x;
+      w->handle(FL_SHOW);
+      w->redraw(); // force draw to happen
+    }
     fl_show_iconic = 0;
   }
   else // create a desktop window
@@ -1414,16 +1509,23 @@ void Fl_X::make(Fl_Window* w)
       }
     }
     int xwm = xp, ywm = yp, bt, bx, by;
-    if (!fake_X_wm(w, xwm, ywm, bt, bx, by)) 
-      { winclass = kHelpWindowClass; winattr = 0; } // menu windows and tooltips
-    else if (w->modal())
+
+    if (!fake_X_wm(w, xwm, ywm, bt, bx, by)) {
+      // menu windows and tooltips
+      winclass = kHelpWindowClass;
+      winattr  = 0;
+    } else if (w->modal()) {
       winclass = kMovableModalWindowClass;
+    }
+
     if (by+bt) {
       wp += 2*bx;
       hp += 2*by+bt;
     }
     if (!(w->flags() & Fl_Window::FL_FORCE_POSITION)) {
-      w->x(xyPos+Fl::x()); w->y(xyPos+Fl::y()); // use the Carbon functions below for default window positioning
+      // use the Carbon functions below for default window positioning
+      w->x(xyPos+Fl::x());
+      w->y(xyPos+Fl::y());
       xyPos += 25;
       if (xyPos>200) xyPos = 25;
     } else {
@@ -1449,8 +1551,12 @@ void Fl_X::make(Fl_Window* w)
 
     const char *name = w->label();
     Str255 pTitle; 
-    if (name) { pTitle[0] = strlen(name); memcpy(pTitle+1, name, pTitle[0]); }
-    else pTitle[0]=0;
+    if (name) {
+      if (strlen(name) > 255) pTitle[0] = 255;
+      else pTitle[0] = strlen(name);
+
+      memcpy(pTitle+1, name, pTitle[0]);
+    } else pTitle[0] = 0;
 
     Fl_X* x = new Fl_X;
     x->other_xid = 0; // room for doublebuffering image map. On OS X this is only used by overlay windows
@@ -1464,17 +1570,20 @@ void Fl_X::make(Fl_Window* w)
     CreateNewWindow( winclass, winattr, &wRect, &(x->xid) );
     SetWTitle(x->xid, pTitle);
     MoveWindow(x->xid, wRect.left, wRect.top, 1);	// avoid Carbon Bug on old OS
-    if (w->non_modal() && !w->modal())
-      SetWindowClass(x->xid, kFloatingWindowClass );	// Major kludge: this is to have the regular look, but stay above the document windows
+    if (w->non_modal() && !w->modal()) {
+      // Major kludge: this is to have the regular look, but stay above the document windows
+      SetWindowClass(x->xid, kFloatingWindowClass);
+    }
     if (!(w->flags() & Fl_Window::FL_FORCE_POSITION))
     {
       WindowRef pw = Fl_X::first ? Fl_X::first->xid : 0 ;
-      if ( w->modal() )
-        RepositionWindow( x->xid, pw, kWindowAlertPositionOnParentWindowScreen );
-      else if ( w->non_modal() )
-        RepositionWindow( x->xid, pw, kWindowCenterOnParentWindowScreen );
-      else
-        RepositionWindow( x->xid, pw, kWindowCascadeOnParentWindowScreen );
+      if (w->modal()) {
+        RepositionWindow(x->xid, pw, kWindowAlertPositionOnParentWindowScreen);
+      } else if (w->non_modal()) {
+        RepositionWindow(x->xid, pw, kWindowCenterOnParentWindowScreen);
+      } else {
+        RepositionWindow(x->xid, pw, kWindowCascadeOnParentWindowScreen);
+      }
     }
     x->w = w; w->i = x;
     x->wait_for_expose = 1;
@@ -1510,8 +1619,9 @@ void Fl_X::make(Fl_Window* w)
         { kEventClassWindow, kEventWindowActivated },
         { kEventClassWindow, kEventWindowDeactivated },
         { kEventClassWindow, kEventWindowClose },
+        { kEventClassWindow, kEventWindowBoundsChanging },
         { kEventClassWindow, kEventWindowBoundsChanged } };
-      ret = InstallWindowEventHandler( x->xid, windowHandler, 7, windowEvents, w, 0L );
+      ret = InstallWindowEventHandler( x->xid, windowHandler, 8, windowEvents, w, 0L );
       ret = InstallTrackingHandler( dndTrackingHandler, x->xid, w );
       ret = InstallReceiveHandler( dndReceiveHandler, x->xid, w );
     }
@@ -1531,6 +1641,11 @@ void Fl_X::make(Fl_Window* w)
     }
 
     ShowWindow(x->xid);
+
+    Rect rect;
+    GetWindowBounds(x->xid, kWindowContentRgn, &rect);
+    w->x(rect.left); w->y(rect.top);
+    w->w(rect.right-rect.left); w->h(rect.bottom-rect.top);
 
     w->handle(FL_SHOW);
     w->redraw(); // force draw to happen
@@ -1617,15 +1732,26 @@ void Fl_Window::show() {
  */
 void Fl_Window::resize(int X,int Y,int W,int H) {
   int is_a_resize = (W != w() || H != h());
+//  printf("Fl_Winodw::resize(X=%d, Y=%d, W=%d, H=%d), is_a_resize=%d, resize_from_system=%p, this=%p\n",
+//         X, Y, W, H, is_a_resize, resize_from_system, this);
   if (X != x() || Y != y()) set_flag(FL_FORCE_POSITION);
   else if (!is_a_resize) return;
   if ( (resize_from_system!=this) && (!parent()) && shown()) {
     MoveWindow(i->xid, X, Y, 0);
     if (is_a_resize) {
+      if (!resizable()) size_range(W>0 ? W : 1, H>0 ? H : 1, W>0 ? W : 1, H>0 ? H : 1);
       SizeWindow(i->xid, W>0 ? W : 1, H>0 ? H : 1, 1);
       Rect all; all.top=-32000; all.bottom=32000; all.left=-32000; all.right=32000;
       InvalWindowRect( i->xid, &all );    
     }
+  } else if (resize_from_system == this && size_range_set && !parent() && shown()) {
+    if (size_range_set) {
+      if (W < minw) W = minw;
+      else if (W > maxw && maxw) W = maxw;
+      if (H < minh) H = minh;
+      else if (H > maxh && maxh) H = maxh;
+    }
+    SizeWindow(i->xid, W>0 ? W : 1, H>0 ? H : 1, 1);
   }
   resize_from_system = 0;
   if (is_a_resize) {
@@ -1744,12 +1870,13 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
   }
   Fl::e_text = fl_selection_buffer[clipboard];
   Fl::e_length = fl_selection_length[clipboard];
+  if (!Fl::e_text) Fl::e_text = (char *)"";
   receiver.handle(FL_PASTE);
   return;
 }
 
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.1.2.34.2.2 2002/10/30 14:28:51 easysw Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.1.2.34.2.3 2003/11/02 01:37:46 easysw Exp $".
 //
 

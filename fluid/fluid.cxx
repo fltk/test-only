@@ -1,9 +1,9 @@
 //
-// "$Id: fluid.cxx,v 1.15.2.13.2.33.2.1 2002/11/25 19:34:08 easysw Exp $"
+// "$Id: fluid.cxx,v 1.15.2.13.2.33.2.2 2003/11/02 01:37:44 easysw Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -177,6 +177,30 @@ void exit_cb(Fl_Widget *,void *) {
 
   exit(0);
 }
+
+#ifdef __APPLE__
+#  include <FL/x.H>
+
+void
+apple_open_cb(const char *c) {
+  if (modflag && !fl_ask("Discard changes?")) return;
+  const char *oldfilename;
+  oldfilename = filename;
+  filename    = NULL;
+  set_filename(c);
+  if (!read_file(c, 0)) {
+    fl_message("Can't read %s: %s", c, strerror(errno));
+    free((void *)filename);
+    filename = oldfilename;
+    if (main_window) main_window->label(filename);
+    return;
+  }
+
+  // Loaded a file; free the old filename...
+  modflag = 0;
+  if (oldfilename) free((void *)oldfilename);
+}
+#endif // __APPLE__
 
 void open_cb(Fl_Widget *, void *v) {
   if (!v && modflag && !fl_ask("Discard changes?")) return;
@@ -363,7 +387,7 @@ void cut_cb(Fl_Widget *, void *) {
 extern int force_parent;
 
 void paste_cb(Fl_Widget*, void*) {
-  if (ipasteoffset) force_parent = 1;
+  //if (ipasteoffset) force_parent = 1;
   pasteoffset = ipasteoffset;
   if (gridx>1) pasteoffset = ((pasteoffset-1)/gridx+1)*gridx;
   if (gridy>1) pasteoffset = ((pasteoffset-1)/gridy+1)*gridy;
@@ -626,7 +650,7 @@ void update_history(const char *flname) {
 }
 
 // Shell command support...
-#if !defined(WIN32) || defined(__CYGWIN__)
+#if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(__MWERKS__)
 // Support the full piped shell command...
 static FILE *shell_pipe = 0;
 
@@ -636,16 +660,18 @@ shell_pipe_cb(int, void*) {
 
   if (fgets(line, sizeof(line), shell_pipe) != NULL) {
     // Add the line to the output list...
-    shell_run_list->add(line);
-    shell_run_list->make_visible(shell_run_list->size());
+    shell_run_buffer->append(line);
   } else {
     // End of file; tell the parent...
     Fl::remove_fd(fileno(shell_pipe));
 
     pclose(shell_pipe);
     shell_pipe = NULL;
-    shell_run_list->add("... END SHELL COMMAND ...");
+    shell_run_buffer->append("... END SHELL COMMAND ...\n");
   }
+
+  shell_run_display->scroll(shell_run_display->count_lines(0,
+                            shell_run_buffer->length(), 1), 0);
 }
 
 void
@@ -682,8 +708,9 @@ do_shell_command(Fl_Return_Button*, void*) {
   }
 
   // Show the output window and clear things...
-  shell_run_list->clear();
-  shell_run_list->add(command);
+  shell_run_buffer->text("");
+  shell_run_buffer->append(command);
+  shell_run_buffer->append("\n");
   shell_run_window->label("Shell Command Running...");
 
   if ((shell_pipe = popen(command, "r")) == NULL) {
@@ -692,7 +719,7 @@ do_shell_command(Fl_Return_Button*, void*) {
   }
 
   shell_run_button->deactivate();
-  shell_run_window->hotspot(shell_run_list);
+  shell_run_window->hotspot(shell_run_display);
   shell_run_window->show();
 
   Fl::add_fd(fileno(shell_pipe), shell_pipe_cb);
@@ -742,7 +769,7 @@ do_shell_command(Fl_Return_Button*, void*) {
     fl_message("Shell command completed successfully!");
   }
 }
-#endif // !WIN32 || __CYGWIN__
+#endif // (!WIN32 || __CYGWIN__) && !__MWERKS__
 
 
 void
@@ -815,7 +842,13 @@ int main(int argc,char **argv) {
 
   fl_register_images();
 
+  if (!compile_only) Fl::scheme(NULL);
+
   make_main_window();
+
+#ifdef __APPLE__
+  fl_open_callback(apple_open_cb);
+#endif // __APPLE__
 
   if (c) set_filename(c);
   if (!compile_only) {
@@ -853,5 +886,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.15.2.13.2.33.2.1 2002/11/25 19:34:08 easysw Exp $".
+// End of "$Id: fluid.cxx,v 1.15.2.13.2.33.2.2 2003/11/02 01:37:44 easysw Exp $".
 //

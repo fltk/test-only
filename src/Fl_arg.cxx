@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_arg.cxx,v 1.5.2.8.2.13 2002/10/28 19:43:24 easysw Exp $"
+// "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -174,38 +174,34 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   return i;
 }
 
-
 // show a main window, use any parsed arguments
 void Fl_Window::show(int argc, char **argv) {
-  if (!argc) {show(); return;}
-  if (!arg_called) {
+  if (argc && !arg_called) Fl::args(argc,argv);
+
+  Fl::get_system_colors();
+
 #if !defined(WIN32) && !defined(__APPLE__)
-    // Get defaults for drag-n-drop and focus...
-    const char *key = 0, *val;
+  // Get defaults for drag-n-drop and focus...
+  const char *key = 0, *val;
 
-    fl_open_display();
+  if (Fl::first_window()) key = Fl::first_window()->xclass();
+  if (!key) key = "fltk";
 
-    if (Fl::first_window()) key = Fl::first_window()->xclass();
-    if (!key) key = "fltk";
+  val = XGetDefault(fl_display, key, "dndTextOps");
+  if (val) Fl::dnd_text_ops(strcasecmp(val, "true") == 0 ||
+                            strcasecmp(val, "on") == 0 ||
+                            strcasecmp(val, "yes") == 0);
 
-    val = XGetDefault(fl_display, key, "dndTextOps");
-    if (val) Fl::dnd_text_ops(strcasecmp(val, "true") == 0 ||
+  val = XGetDefault(fl_display, key, "tooltips");
+  if (val) Fl_Tooltip::enable(strcasecmp(val, "true") == 0 ||
                               strcasecmp(val, "on") == 0 ||
                               strcasecmp(val, "yes") == 0);
 
-    val = XGetDefault(fl_display, key, "tooltips");
-    if (val) Fl_Tooltip::enable(strcasecmp(val, "true") == 0 ||
-                                strcasecmp(val, "on") == 0 ||
-                                strcasecmp(val, "yes") == 0);
-
-    val = XGetDefault(fl_display, key, "visibleFocus");
-    if (val) Fl::visible_focus(strcasecmp(val, "true") == 0 ||
-                               strcasecmp(val, "on") == 0 ||
-                               strcasecmp(val, "yes") == 0);
+  val = XGetDefault(fl_display, key, "visibleFocus");
+  if (val) Fl::visible_focus(strcasecmp(val, "true") == 0 ||
+                             strcasecmp(val, "on") == 0 ||
+                             strcasecmp(val, "yes") == 0);
 #endif // !WIN32 && !__APPLE__
-
-    Fl::args(argc,argv);
-  }
 
   // set colors first, so background_pixel is correct:
   static char beenhere;
@@ -420,5 +416,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.5.2.8.2.13 2002/10/28 19:43:24 easysw Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.5.2.8.2.13.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

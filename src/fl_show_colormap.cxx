@@ -1,9 +1,9 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.5.2.4.2.2.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.5.2.4.2.2.2.2 2003/11/02 01:37:47 easysw Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -102,6 +102,7 @@ int ColorMenu::handle(int e) {
     case FL_Left: if (c > 0) c--; break;
     case FL_Right: if (c < 255) c++; break;
     case FL_Escape: which = initial; done = 1; return 1;
+    case FL_KP_Enter:
     case FL_Enter: done = 1; return 1;
     default: return 0;
     }
@@ -150,5 +151,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.5.2.4.2.2.2.1 2002/11/25 19:34:13 easysw Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.5.2.4.2.2.2.2 2003/11/02 01:37:47 easysw Exp $".
 //

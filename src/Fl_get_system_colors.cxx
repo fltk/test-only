@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.1 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.2 2003/11/02 01:37:46 easysw Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,7 +39,14 @@ extern "C" int putenv(const char*);
 #endif // __APPLE__ && __MWERKS__
 
 
+static char	fl_bg_set = 0;
+static char	fl_bg2_set = 0;
+static char	fl_fg_set = 0;
+
+
 void Fl::background(uchar r, uchar g, uchar b) {
+  fl_bg_set = 1;
+
   // replace the gray ramp so that FL_GRAY is this color
   if (!r) r = 1; else if (r==255) r = 254;
   double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
@@ -57,10 +64,15 @@ void Fl::background(uchar r, uchar g, uchar b) {
 }
 
 void Fl::foreground(uchar r, uchar g, uchar b) {
+  fl_fg_set = 1;
+
   Fl::set_color(FL_FOREGROUND_COLOR,r,g,b);
 }
 
 void Fl::background2(uchar r, uchar g, uchar b) {
+  fl_fg_set  = 1;
+  fl_bg2_set = 1;
+
   Fl::set_color(FL_BACKGROUND2_COLOR,r,g,b);
   Fl::set_color(FL_FOREGROUND_COLOR,
                 get_color(fl_contrast(FL_FOREGROUND_COLOR,FL_BACKGROUND2_COLOR)));
@@ -131,9 +143,9 @@ getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
 }
 
 void Fl::get_system_colors() {
-  getsyscolor(COLOR_WINDOW,	fl_bg2,Fl::background2);
-  getsyscolor(COLOR_WINDOWTEXT,	fl_fg, Fl::foreground);
-  getsyscolor(COLOR_BTNFACE,	fl_bg, Fl::background);
+  if (!fl_bg2_set) getsyscolor(COLOR_WINDOW,	fl_bg2,Fl::background2);
+  if (!fl_fg_set) getsyscolor(COLOR_WINDOWTEXT,	fl_fg, Fl::foreground);
+  if (!fl_bg_set) getsyscolor(COLOR_BTNFACE,	fl_bg, Fl::background);
   getsyscolor(COLOR_HIGHLIGHT,	0,     set_selection_color);
 }
 
@@ -147,10 +159,10 @@ void Fl::get_system_colors()
 {
   fl_open_display();
 
-  foreground(0, 0, 0);
-  background(0xe0, 0xe0, 0xe0);
-  background2(0xf0, 0xf0, 0xf0);
-  set_selection_color(0x80, 0x80, 0x80);
+  if (!fl_bg2_set) background2(0xff, 0xff, 0xff);
+  if (!fl_fg_set) foreground(0, 0, 0);
+  if (!fl_bg_set) background(0xd8, 0xd8, 0xd8);
+  set_selection_color(0x00, 0x00, 0x80);
 }
 #else
 
@@ -183,9 +195,9 @@ void Fl::get_system_colors()
   const char* key1 = 0;
   if (Fl::first_window()) key1 = Fl::first_window()->xclass();
   if (!key1) key1 = "fltk";
-  getsyscolor(key1,  "background",	fl_bg,	"#c0c0c0", Fl::background);
-  getsyscolor(key1,  "foreground",	fl_fg,	"#000000", Fl::foreground);
-  getsyscolor("Text","background",	fl_bg2,	"#ffffff", Fl::background2);
+  if (!fl_bg2_set) getsyscolor("Text","background",	fl_bg2,	"#ffffff", Fl::background2);
+  if (!fl_fg_set) getsyscolor(key1,  "foreground",	fl_fg,	"#000000", Fl::foreground);
+  if (!fl_bg_set) getsyscolor(key1,  "background",	fl_bg,	"#c0c0c0", Fl::background);
   getsyscolor(key1,  "selectBackground",0,	"#000080", set_selection_color);
 }
 
@@ -247,28 +259,32 @@ int Fl::scheme(const char *s) {
 int Fl::reload_scheme() {
   Fl_Window *win;
 
-  get_system_colors();
-
   if (scheme_ && !strcasecmp(scheme_, "plastic")) {
     // Update the tile image to match the background color...
     uchar r, g, b;
+    int nr, ng, nb;
+    int i;
+    static uchar levels[3] = { 0xff, 0xef, 0xe8 };
 
     get_color(FL_GRAY, r, g, b);
-    sprintf(tile_cmap[0], "O c #%02x%02x%02x", r, g, b);
-    sprintf(tile_cmap[1], "o c #%02x%02x%02x", 0xe0 * (int)r / 0xf0,
-            0xe0 * (int)g / 0xf0, 0xe0 * (int)b / 0xf0);
-    sprintf(tile_cmap[2], ". c #%02x%02x%02x", 0xd8 * (int)r / 0xf0,
-            0xd8 * (int)g / 0xf0, 0xd8 * (int)b / 0xf0);
 
-    if (tile.id) {
-      fl_delete_offscreen(tile.id);
-      tile.id = 0;
+//    printf("FL_GRAY = 0x%02x 0x%02x 0x%02x\n", r, g, b);
+
+    for (i = 0; i < 3; i ++) {
+      nr = levels[i] * r / 0xe8;
+      if (nr > 255) nr = 255;
+
+      ng = levels[i] * g / 0xe8;
+      if (ng > 255) ng = 255;
+
+      nb = levels[i] * b / 0xe8;
+      if (nb > 255) nb = 255;
+
+      sprintf(tile_cmap[i], "%c c #%02x%02x%02x", "Oo."[i], nr, ng, nb);
+//      puts(tile_cmap[i]);
     }
 
-    if (tile.mask) {
-      fl_delete_bitmask(tile.mask);
-      tile.mask = 0;
-    }
+    tile.uncache();
 
     if (!scheme_bg_) scheme_bg_ = new Fl_Tiled_Image(&tile, w(), h());
 
@@ -280,8 +296,8 @@ int Fl::reload_scheme() {
 
     set_boxtype(FL_UP_BOX,          FL_PLASTIC_UP_BOX);
     set_boxtype(FL_DOWN_BOX,        FL_PLASTIC_DOWN_BOX);
-    set_boxtype(FL_THIN_UP_BOX,     FL_PLASTIC_UP_BOX);
-    set_boxtype(FL_THIN_DOWN_BOX,   FL_PLASTIC_DOWN_BOX);
+    set_boxtype(FL_THIN_UP_BOX,     FL_PLASTIC_THIN_UP_BOX);
+    set_boxtype(FL_THIN_DOWN_BOX,   FL_PLASTIC_THIN_DOWN_BOX);
     set_boxtype(_FL_ROUND_UP_BOX,   FL_PLASTIC_UP_BOX);
     set_boxtype(_FL_ROUND_DOWN_BOX, FL_PLASTIC_UP_BOX);
   } else {
@@ -317,5 +333,5 @@ int Fl::reload_scheme() {
 
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.1 2002/11/25 19:34:12 easysw Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.2 2003/11/02 01:37:46 easysw Exp $".
 //

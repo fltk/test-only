@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.8.2.10.2.11 2002/10/24 12:53:41 easysw Exp $"
+// "$Id: Fl_Slider.cxx,v 1.8.2.10.2.11.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -244,18 +244,22 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
       case FL_Up:
         if (horizontal()) return 0;
 	handle_drag(clamp(increment(value(),-1)));
+	handle_release();
 	return 1;
       case FL_Down:
         if (horizontal()) return 0;
 	handle_drag(clamp(increment(value(),1)));
+	handle_release();
 	return 1;
       case FL_Left:
         if (!horizontal()) return 0;
 	handle_drag(clamp(increment(value(),-1)));
+	handle_release();
 	return 1;
       case FL_Right:
         if (!horizontal()) return 0;
 	handle_drag(clamp(increment(value(),1)));
+	handle_release();
 	return 1;
       default:
         return 0;
@@ -286,5 +290,5 @@ int Fl_Slider::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.8.2.10.2.11 2002/10/24 12:53:41 easysw Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.8.2.10.2.11.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

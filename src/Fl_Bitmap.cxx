@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.1 2002/11/25 19:34:09 easysw Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.2 2003/11/02 01:37:44 easysw Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -361,10 +361,10 @@ void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   GrafPtr dstPort;
   GetPort( &dstPort );
   Rect src, dst;
-  GetPortBounds( id, &src );
+  GetPortBounds( (Fl_Offscreen)id, &src );
   SetRect( &src, cx, cy, cx+W, cy+H );
   SetRect( &dst, X, Y, X+W, Y+H );
-  CopyBits(GetPortBitMapForCopyBits(id),	// srcBits
+  CopyBits(GetPortBitMapForCopyBits((Fl_Offscreen)id),	// srcBits
 	   GetPortBitMapForCopyBits(dstPort),	// dstBits
 	   &src,		 		// src bounds
 	   &dst, 				// dst bounds
@@ -390,7 +390,7 @@ Fl_Bitmap::~Fl_Bitmap() {
 
 void Fl_Bitmap::uncache() {
   if (id) {
-    fl_delete_bitmask(id);
+    fl_delete_bitmask((Fl_Offscreen)id);
     id = 0;
   }
 }
@@ -437,8 +437,8 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
   memset(new_array, 0, H * (W + 7) / 8);
 
   // Scale the image using a nearest-neighbor algorithm...
-  for (dy = H, sy = 0, yerr = H / 2, new_ptr = new_array; dy > 0; dy --) {
-    for (dx = W, xerr = W / 2, old_ptr = array + sy * (w() + 7) / 8, sx = 0, new_bit = 128;
+  for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
+    for (dx = W, xerr = W, old_ptr = array + sy * (w() + 7) / 8, sx = 0, new_bit = 128;
 	 dx > 0;
 	 dx --) {
       old_bit = (uchar)(128 >> (sx & 7));
@@ -474,5 +474,5 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.1 2002/11/25 19:34:09 easysw Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.2 2003/11/02 01:37:44 easysw Exp $".
 //

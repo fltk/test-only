@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_get_key_mac.cxx,v 1.1.2.5 2002/06/07 16:56:15 easysw Exp $"
+// "$Id: Fl_get_key_mac.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // MacOS keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -59,8 +59,8 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 0x7a, FL_F+1 }, { 0x78, FL_F+2  }, { 0x63, FL_F+3  }, { 0x76, FL_F+4  }, 
   { 0x60, FL_F+5 }, { 0x61, FL_F+6  }, { 0x62, FL_F+7  }, { 0x64, FL_F+8  }, 
   { 0x65, FL_F+9 }, { 0x6D, FL_F+10 }, { 0x67, FL_F+11 }, { 0x6f, FL_F+12 }, 
-  { 56, FL_Shift_L }, { 56, FL_Shift_R }, { 55, FL_Control_L }, { 55, FL_Control_R }, 
-  { 57, FL_Caps_Lock }, { 59, FL_Meta_L }, { 59, FL_Meta_R },
+  { 56, FL_Shift_L }, { 56, FL_Shift_R }, { 59, FL_Control_L }, { 59, FL_Control_R }, 
+  { 57, FL_Caps_Lock }, { 55, FL_Meta_L }, { 55, FL_Meta_R },
   { 58, FL_Alt_L }, { 58, FL_Alt_R },
 };
 
@@ -99,5 +99,5 @@ int Fl::get_key(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_mac.cxx,v 1.1.2.5 2002/06/07 16:56:15 easysw Exp $".
+// End of "$Id: Fl_get_key_mac.cxx,v 1.1.2.5.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.7.2.6.2.7 2002/08/09 22:57:00 easysw Exp $"
+// "$Id: file.cxx,v 1.7.2.6.2.7.2.1 2003/11/02 01:37:44 easysw Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -8,7 +8,7 @@
 // They are somewhat similar to tcl, using matching { and }
 // to quote strings.
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -458,6 +458,12 @@ static void read_children(Fl_Type *p, int paste) {
     t->name(read_word());
 
     c = read_word(1);
+    if (strcmp(c,"{") && t->is_class()) {   // <prefix> <name>
+      ((Fl_Class_Type*)t)->prefix(t->name());
+      t->name(c);
+      c = read_word(1);
+    }
+
     if (strcmp(c,"{")) {
       read_error("Missing property list for %s\n",t->title());
       goto REUSE_C;
@@ -631,5 +637,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.7.2.6.2.7 2002/08/09 22:57:00 easysw Exp $".
+// End of "$Id: file.cxx,v 1.7.2.6.2.7.2.1 2003/11/02 01:37:44 easysw Exp $".
 //

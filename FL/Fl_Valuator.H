@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Valuator.H,v 1.5.2.5.2.2 2002/08/14 16:19:48 easysw Exp $"
+// "$Id: Fl_Valuator.H,v 1.5.2.5.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -80,5 +80,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.5.2.5.2.2 2002/08/14 16:19:48 easysw Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.5.2.5.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

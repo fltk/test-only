@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_win32.cxx,v 1.33.2.37.2.40.2.2 2002/11/25 19:34:12 easysw Exp $"
+// "$Id: Fl_win32.cxx,v 1.33.2.37.2.40.2.3 2003/11/02 01:37:46 easysw Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -397,6 +397,8 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
     // called in response to FL_PASTE!
     Fl::e_text = fl_selection_buffer[clipboard];
     Fl::e_length = fl_selection_length[clipboard];
+
+    if (!Fl::e_text) Fl::e_text = (char *)"";
     receiver.handle(FL_PASTE);
   } else {
     if (!OpenClipboard(NULL)) return;
@@ -613,7 +615,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     fl_save_pen();
     i->flush();
     fl_restore_pen();
-    ValidateRgn(hWnd,i->region);
+    if (window->type() == FL_DOUBLE_WINDOW) ValidateRgn(hWnd,0);
+    else ValidateRgn(hWnd,i->region);
     window->clear_damage();
     } return 0;
 
@@ -688,7 +691,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // save the keysym until we figure out the characters:
     Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
     // See if TranslateMessage turned it into a WM_*CHAR message:
-    if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
+    if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
       uMsg = fl_msg.message;
       wParam = fl_msg.wParam;
       lParam = fl_msg.lParam;
@@ -1192,5 +1195,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.33.2.37.2.40.2.2 2002/11/25 19:34:12 easysw Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.33.2.37.2.40.2.3 2003/11/02 01:37:46 easysw Exp $".
 //

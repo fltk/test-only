@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.6.2.4.2.3 2002/08/09 01:09:49 easysw Exp $"
+// "$Id: Fl_Pack.cxx,v 1.6.2.4.2.3.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -90,7 +90,7 @@ void Fl_Pack::draw() {
        else
          H = th - rh;
       }
-      if (spacing_ && current_position>maximum_position &&
+      if (spacing_ && current_position>maximum_position && box() &&
   	  (X != o->x() || Y != o->y() || d&FL_DAMAGE_ALL)) {
         fl_color(color());
         if (horizontal())
@@ -112,13 +112,13 @@ void Fl_Pack::draw() {
   }
 
   if (horizontal()) {
-    if (maximum_position < tx+tw) {
+    if (maximum_position < tx+tw && box()) {
       fl_color(color());
       fl_rectf(maximum_position, ty, tx+tw-maximum_position, th);
     }
     tw = maximum_position-tx;
   } else {
-    if (maximum_position < ty+th) {
+    if (maximum_position < ty+th && box()) {
       fl_color(color());
       fl_rectf(tx, maximum_position, tw, ty+th-maximum_position);
     }
@@ -132,5 +132,5 @@ void Fl_Pack::draw() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.6.2.4.2.3 2002/08/09 01:09:49 easysw Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.6.2.4.2.3.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

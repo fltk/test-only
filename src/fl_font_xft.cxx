@@ -1,9 +1,9 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.4.2.7.2.1 2002/11/25 19:34:13 easysw Exp $"
+// "$Id: fl_font_xft.cxx,v 1.4.2.7.2.2 2003/11/02 01:37:47 easysw Exp $"
 //
 // Xft font code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2001-2002 Bill Spitzak and others.
+// Copyright 2001-2004 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -142,6 +142,9 @@ static XftFont* fontopen(const char* name, bool core) {
 Fl_FontSize::Fl_FontSize(const char* name) {
   encoding = fl_encoding_;
   size = fl_size_;
+#if HAVE_GL
+  listbase = 0;
+#endif // HAVE_GL
   font = fontopen(name, false);
 }
 
@@ -162,6 +165,24 @@ double fl_width(const char *str, int n) {
 double fl_width(uchar c) {
   return fl_width((const char *)(&c), 1);
 }
+
+#if HAVE_GL
+// This call is used by opengl to get a bitmapped font.
+XFontStruct* fl_xxfont() {
+#  if XFT_MAJOR > 1
+  // kludge!
+  static XFontStruct* fixed = 0;
+  if (!fixed) fixed = XLoadQueryFont(fl_display, "fixed");
+  return fixed;
+#  else
+  if (current_font->core) return current_font->u.core.font;
+  static XftFont* xftfont;
+  if (xftfont) XftFontClose (fl_display, xftfont);
+  xftfont = fontopen(fl_fonts[fl_font_].name, true);
+  return xftfont->u.core.font;
+#  endif // XFT_MAJOR > 1
+}
+#endif // HAVE_GL
 
 #if USE_OVERLAY
 // Currently Xft does not work with colormapped visuals, so this probably
@@ -226,5 +247,5 @@ void fl_draw(const char *str, int n, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.4.2.7.2.1 2002/11/25 19:34:13 easysw Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.4.2.7.2.2 2003/11/02 01:37:47 easysw Exp $"
 //

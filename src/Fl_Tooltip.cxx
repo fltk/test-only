@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.1 2002/10/29 19:46:40 easysw Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.2 2003/11/02 01:37:46 easysw Exp $"
 //
 // Tooltip source file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include <stdio.h>
 
 float		Fl_Tooltip::delay_ = 1.0f;
+float		Fl_Tooltip::hoverdelay_ = 0.2f;
 int		Fl_Tooltip::enabled_ = 1;
 unsigned	Fl_Tooltip::color_ = fl_color_cube(FL_NUM_RED - 1,
 		                                   FL_NUM_GREEN - 1,
@@ -144,8 +145,10 @@ void Fl_Tooltip::current(Fl_Widget* w) {
 // This is called when a widget is destroyed:
 static void
 tt_exit(Fl_Widget *w) {
-//  printf("tt_exit(w=%p)\n", w);
-//  printf("    widget=%p, window=%p\n", widget, window);
+#ifdef DEBUG
+  printf("tt_exit(w=%p)\n", w);
+  printf("    widget=%p, window=%p\n", Fl_Tooltip::current(), window);
+#endif // DEBUG
 
   if (!Fl_Tooltip::current()) return;
   Fl_Tooltip::current(0);
@@ -154,14 +157,17 @@ tt_exit(Fl_Widget *w) {
   if (window) window->hide();
   if (recent_tooltip) {
     if (Fl::event_state() & FL_BUTTONS) recent_tooltip = 0;
-    else Fl::add_timeout(.2f, recent_timeout);
+    else Fl::add_timeout(Fl_Tooltip::hoverdelay(), recent_timeout);
   }
 }
 
 static void
 tt_enter(Fl_Widget* wp) {
-//  printf("tt_enter(widget=%p)\n", widget);
-//  printf("    window=%p\n", window);
+#ifdef DEBUG
+  printf("tt_enter(wp=%p)\n", wp);
+  printf("    window=%p\n", window);
+#endif // DEBUG
+
   // find the enclosing group with a tooltip:
   Fl_Widget* w = wp;
   while (w && !w->tooltip()) {
@@ -171,16 +177,18 @@ tt_enter(Fl_Widget* wp) {
   if (!w) {
     Fl_Tooltip::enter_area(0, 0, 0, 0, 0, 0);
   } else {
-    Fl_Tooltip::enter_area(wp,0,0,wp->w(), wp->h(), w->tooltip());
+    Fl_Tooltip::enter_area(w,0,0,w->w(), w->h(), w->tooltip());
   }
 }
 
 void
 Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 {
-//  printf("Fl_Tooltip::enter_area(wid=%p, x=%d, y=%d, w=%d, h=%d, t=\"%s\")\n",
-//         wid, x, y, w, h, t ? t : "(null)");
-//  printf("    recursion=%d, window=%p\n", recursion, window);
+#ifdef DEBUG
+  printf("Fl_Tooltip::enter_area(wid=%p, x=%d, y=%d, w=%d, h=%d, t=\"%s\")\n",
+         wid, x, y, w, h, t ? t : "(null)");
+  printf("    recursion=%d, window=%p\n", recursion, window);
+#endif // DEBUG
 
   if (recursion) return;
   if (!t || !*t || !enabled()) {
@@ -196,7 +204,10 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
   // remember it:
   widget_ = wid; X = x; Y = y; W = w; H = h; tip = t;
   // popup the tooltip immediately if it was recently up:
-  if (recent_tooltip || Fl_Tooltip::delay() < .1) {
+  if (recent_tooltip) {
+    if (window) window->hide();
+    Fl::add_timeout(Fl_Tooltip::hoverdelay(), tooltip_timeout);
+  } else if (Fl_Tooltip::delay() < .1) {
 #ifdef WIN32
     // possible fix for the Windows titlebar, it seems to want the
     // window to be destroyed, moving it messes up the parenting:
@@ -208,8 +219,10 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
     Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
   }
 
-//  printf("    tip=\"%s\", window->shown()=%d\n", tip ? tip : "(null)",
-//         window ? window->shown() : 0);
+#ifdef DEBUG
+  printf("    tip=\"%s\", window->shown()=%d\n", tip ? tip : "(null)",
+         window ? window->shown() : 0);
+#endif // DEBUG
 }
 
 void Fl_Widget::tooltip(const char *tt) {
@@ -223,5 +236,5 @@ void Fl_Widget::tooltip(const char *tt) {
 }
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.1 2002/10/29 19:46:40 easysw Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.2 2003/11/02 01:37:46 easysw Exp $".
 //

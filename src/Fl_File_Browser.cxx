@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.1 2002/11/25 19:34:10 easysw Exp $"
+// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.2 2003/11/02 01:37:45 easysw Exp $"
 //
 // Fl_File_Browser routines.
 //
-// Copyright 1999-2002 by Michael Sweet.
+// Copyright 1999-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -582,12 +582,8 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 
     for (i = 0, num_dirs = 0; i < num_files; i ++)
     {
-#if 0
-      if (strcmp(files[i]->d_name, ".") != 0 &&
-          strcmp(files[i]->d_name, "..") != 0)
-#else
-      if (strcmp(files[i]->d_name, ".") != 0)
-#endif // 0
+      if (strcmp(files[i]->d_name, ".") &&
+          strcmp(files[i]->d_name, "./"))
       {
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
@@ -643,5 +639,5 @@ Fl_File_Browser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.1 2002/11/25 19:34:10 easysw Exp $".
+// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.2 2003/11/02 01:37:45 easysw Exp $".
 //

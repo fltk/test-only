@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Help_View.H,v 1.1.2.10 2002/07/14 19:08:25 easysw Exp $"
+// "$Id: Fl_Help_View.H,v 1.1.2.10.2.1 2003/11/02 01:37:42 easysw Exp $"
 //
 // Help Viewer widget definitions.
 //
-// Copyright 1997-2002 by Easy Software Products.
+// Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -164,10 +164,12 @@ class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widget
   					else return ((const char *)0); }
   const char	*filename() const { if (filename_[0]) return (filename_);
   					else return ((const char *)0); }
+  int		find(const char *s, int p = 0);
   void		link(Fl_Help_Func *fn) { link_ = fn; }
   int		load(const char *f);
   void		resize(int,int,int,int);
   int		size() const { return (size_); }
+  void		size(int W, int H) { Fl_Widget::size(W, H); }
   void		textcolor(Fl_Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
   Fl_Color	textcolor() const { return (defcolor_); }
   void		textfont(uchar f) { textfont_ = f; format(); }
@@ -187,5 +189,5 @@ class FL_EXPORT Fl_Help_View : public Fl_Group	//// Help viewer widget
 #endif // !Fl_Help_View_H
 
 //
-// End of "$Id: Fl_Help_View.H,v 1.1.2.10 2002/07/14 19:08:25 easysw Exp $".
+// End of "$Id: Fl_Help_View.H,v 1.1.2.10.2.1 2003/11/02 01:37:42 easysw Exp $".
 //

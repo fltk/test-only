@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.23.2.18 2002/10/20 03:13:56 easysw Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.23.2.18.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Shared image code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -466,5 +466,5 @@ Fl_Shared_Image::remove_handler(Fl_Shared_Handler f) {
 
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.23.2.18 2002/10/20 03:13:56 easysw Exp $".
+// End of "$Id: Fl_Shared_Image.cxx,v 1.23.2.18.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

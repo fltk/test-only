@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3 2002/01/01 15:11:31 easysw Exp $"
+// "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:46 easysw Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -50,6 +50,7 @@ int Fl::event_key(int k) {
   else
 #  endif
     i = XKeysymToKeycode(fl_display, k);
+  if (i==0) return 0;
   return fl_key_vector[i/8] & (1 << (i%8));
 }
 
@@ -62,5 +63,5 @@ int Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3 2002/01/01 15:11:31 easysw Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:46 easysw Exp $".
 //

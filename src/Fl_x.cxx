@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_x.cxx,v 1.24.2.24.2.24 2002/10/20 06:06:31 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -123,6 +123,7 @@ void Fl::add_fd(int n, void (*cb)(int, void*), void* v) {
 
 void Fl::remove_fd(int n, int events) {
   int i,j;
+  maxfd = -1; // recalculate maxfd on the fly
   for (i=j=0; i<nfds; i++) {
 #  if USE_POLL
     if (pollfds[i].fd == n) {
@@ -137,6 +138,7 @@ void Fl::remove_fd(int n, int events) {
       fd[i].events = e;
     }
 #  endif
+    if (fd[i].fd > maxfd) maxfd = fd[i].fd;
     // move it down in the array if necessary:
     if (j<i) {
       fd[j] = fd[i];
@@ -151,7 +153,6 @@ void Fl::remove_fd(int n, int events) {
   if (events & POLLIN) FD_CLR(n, &fdsets[0]);
   if (events & POLLOUT) FD_CLR(n, &fdsets[1]);
   if (events & POLLERR) FD_CLR(n, &fdsets[2]);
-  if (n == maxfd) maxfd--;
 #  endif
 }
 
@@ -159,24 +160,26 @@ void Fl::remove_fd(int n) {
   remove_fd(n, -1);
 }
 
-#  if CONSOLIDATE_MOTION
+#if CONSOLIDATE_MOTION
 static Fl_Window* send_motion;
 extern Fl_Window* fl_xmousewin;
-#  endif
+#endif
+static bool in_a_window; // true if in any of our windows, even destroyed ones
 static void do_queued_events() {
- while (XEventsQueued(fl_display,QueuedAfterReading)) {
+  in_a_window = true;
+  while (XEventsQueued(fl_display,QueuedAfterReading)) {
     XEvent xevent;
     XNextEvent(fl_display, &xevent);
     fl_handle(xevent);
   }
   // we send FL_LEAVE only if the mouse did not enter some other window:
-  if (!fl_xmousewin) Fl::handle(FL_LEAVE, 0);
-#  if CONSOLIDATE_MOTION
+  if (!in_a_window) Fl::handle(FL_LEAVE, 0);
+#if CONSOLIDATE_MOTION
   else if (send_motion == fl_xmousewin) {
     send_motion = 0;
     Fl::handle(FL_MOVE, fl_xmousewin);
   }
-#  endif
+#endif
 }
 
 // these pointers are set by the Fl::lock() function:
@@ -394,6 +397,7 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
     // called in response to FL_PASTE!
     Fl::e_text = fl_selection_buffer[clipboard];
     Fl::e_length = fl_selection_length[clipboard];
+    if (!Fl::e_text) Fl::e_text = (char *)"";
     receiver.handle(FL_PASTE);
     return;
   }
@@ -495,11 +499,21 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_bug_fix;
 
+extern "C" {
+  static Bool fake_keyup_test(Display*, XEvent* event, char* previous) {
+     return
+      event->type == KeyPress &&
+      event->xkey.keycode == ((XKeyEvent*)previous)->keycode &&
+      event->xkey.time == ((XKeyEvent*)previous)->time;
+  }
+}
+
 ////////////////////////////////////////////////////////////////
 
-int fl_handle(const XEvent& xevent)
+int fl_handle(const XEvent& thisevent)
 {
-  fl_xevent = &xevent;
+  XEvent xevent = thisevent;
+  fl_xevent = &thisevent;
   Window xid = xevent.xany.window;
 
   switch (xevent.type) {
@@ -539,7 +553,7 @@ int fl_handle(const XEvent& xevent)
       bytesread += count*format/8;
       if (!remaining) break;
     }
-    Fl::e_text = (char*)buffer;
+    Fl::e_text = buffer ? (char*)buffer : (char *)"";
     Fl::e_length = bytesread;
     fl_selection_requestor->handle(FL_PASTE);
     // Detect if this paste is due to Xdnd by the property name (I use
@@ -615,6 +629,7 @@ int fl_handle(const XEvent& xevent)
       event = FL_CLOSE;
     } else if (message == fl_XdndEnter) {
       fl_xmousewin = window;
+      in_a_window = true;
       fl_dnd_source_window = data[0];
       // version number is data[1]>>24
       if (data[1]&1) {
@@ -646,6 +661,7 @@ int fl_handle(const XEvent& xevent)
 
     } else if (message == fl_XdndPosition) {
       fl_xmousewin = window;
+      in_a_window = true;
       fl_dnd_source_window = data[0];
       Fl::e_x_root = data[2]>>16;
       Fl::e_y_root = data[2]&0xFFFF;
@@ -672,6 +688,7 @@ int fl_handle(const XEvent& xevent)
 
     } else if (message == fl_XdndDrop) {
       fl_xmousewin = window;
+      in_a_window = true;
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
       Window to_window = fl_xevent->xclient.window;
@@ -721,6 +738,7 @@ int fl_handle(const XEvent& xevent)
 
   case KeyPress:
   case KeyRelease: {
+  KEYPRESS:
     int keycode = xevent.xkey.keycode;
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
     static char buffer[21];
@@ -743,6 +761,15 @@ int fl_handle(const XEvent& xevent)
       Fl::e_text = buffer;
       Fl::e_length = len;
     } else {
+      // Stupid X sends fake key-up events when a repeating key is held
+      // down, probably due to some back compatability problem. Fortunatley
+      // we can detect this because the repeating KeyPress event is in
+      // the queue, get it and execute it instead:
+      XEvent temp;
+      if (XCheckIfEvent(fl_display,&temp,fake_keyup_test,(char*)(&xevent))){
+	xevent = temp;
+	goto KEYPRESS;
+      }
       event = FL_KEYUP;
       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
       // keyup events just get the unshifted keysym:
@@ -812,16 +839,19 @@ int fl_handle(const XEvent& xevent)
     }
 
     fl_xmousewin = window;
+    in_a_window = true;
     break;
 
   case MotionNotify:
     set_event_xy();
 #  if CONSOLIDATE_MOTION
     send_motion = fl_xmousewin = window;
+    in_a_window = true;
     return 0;
 #  else
     event = FL_MOVE;
     fl_xmousewin = window;
+    in_a_window = true;
     break;
 #  endif
 
@@ -834,6 +864,7 @@ int fl_handle(const XEvent& xevent)
     event = FL_RELEASE;
 
     fl_xmousewin = window;
+    in_a_window = true;
     break;
 
   case EnterNotify:
@@ -844,15 +875,16 @@ int fl_handle(const XEvent& xevent)
     event = FL_ENTER;
 
     fl_xmousewin = window;
+    in_a_window = true;
     break;
 
   case LeaveNotify:
     if (xevent.xcrossing.detail == NotifyInferior) break;
     set_event_xy();
     Fl::e_state = xevent.xcrossing.state << 16;
-//    event = FL_LEAVE;
     fl_xmousewin = 0;
-    break;
+    in_a_window = false; // make do_queued_events produce FL_LEAVE event
+    return 0;
 
   // We cannot rely on the x,y position in the configure notify event.
   // I now think this is an unavoidable problem with X: it is impossible
@@ -1057,20 +1089,21 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
     XChangeProperty(fl_display, xp->xid, fl_XdndAware,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
-    XWMHints hints;
-    hints.input = True;
-    hints.flags = InputHint;
+    XWMHints *hints = XAllocWMHints();
+    hints->input = True;
+    hints->flags = InputHint;
     if (fl_show_iconic) {
-      hints.flags |= StateHint;
-      hints.initial_state = IconicState;
+      hints->flags |= StateHint;
+      hints->initial_state = IconicState;
       fl_show_iconic = 0;
       showit = 0;
     }
     if (win->icon()) {
-      hints.icon_pixmap = (Pixmap)win->icon();
-      hints.flags       |= IconPixmapHint;
+      hints->icon_pixmap = (Pixmap)win->icon();
+      hints->flags       |= IconPixmapHint;
     }
-    XSetWMHints(fl_display, xp->xid, &hints);
+    XSetWMHints(fl_display, xp->xid, hints);
+    XFree(hints);
   }
 
   XMapWindow(fl_display, xp->xid);
@@ -1099,51 +1132,51 @@ void Fl_X::sendxjunk() {
     return; // because this recursively called here
   }
 
-  XSizeHints hints;
+  XSizeHints *hints = XAllocSizeHints();
   // memset(&hints, 0, sizeof(hints)); jreiser suggestion to fix purify?
-  hints.min_width = w->minw;
-  hints.min_height = w->minh;
-  hints.max_width = w->maxw;
-  hints.max_height = w->maxh;
-  hints.width_inc = w->dw;
-  hints.height_inc = w->dh;
-  hints.win_gravity = StaticGravity;
+  hints->min_width = w->minw;
+  hints->min_height = w->minh;
+  hints->max_width = w->maxw;
+  hints->max_height = w->maxh;
+  hints->width_inc = w->dw;
+  hints->height_inc = w->dh;
+  hints->win_gravity = StaticGravity;
 
   // see the file /usr/include/X11/Xm/MwmUtil.h:
   // fill all fields to avoid bugs in kwm and perhaps other window managers:
   // 0, MWM_FUNC_ALL, MWM_DECOR_ALL
   long prop[5] = {0, 1, 1, 0, 0};
 
-  if (hints.min_width != hints.max_width ||
-      hints.min_height != hints.max_height) { // resizable
-    hints.flags = PMinSize|PWinGravity;
-    if (hints.max_width >= hints.min_width ||
-	hints.max_height >= hints.min_height) {
-      hints.flags = PMinSize|PMaxSize|PWinGravity;
+  if (hints->min_width != hints->max_width ||
+      hints->min_height != hints->max_height) { // resizable
+    hints->flags = PMinSize|PWinGravity;
+    if (hints->max_width >= hints->min_width ||
+	hints->max_height >= hints->min_height) {
+      hints->flags = PMinSize|PMaxSize|PWinGravity;
       // unfortunately we can't set just one maximum size.  Guess a
       // value for the other one.  Some window managers will make the
       // window fit on screen when maximized, others will put it off screen:
-      if (hints.max_width < hints.min_width) hints.max_width = Fl::w();
-      if (hints.max_height < hints.min_height) hints.max_height = Fl::h();
+      if (hints->max_width < hints->min_width) hints->max_width = Fl::w();
+      if (hints->max_height < hints->min_height) hints->max_height = Fl::h();
     }
-    if (hints.width_inc && hints.height_inc) hints.flags |= PResizeInc;
+    if (hints->width_inc && hints->height_inc) hints->flags |= PResizeInc;
     if (w->aspect) {
       // stupid X!  It could insist that the corner go on the
       // straight line between min and max...
-      hints.min_aspect.x = hints.max_aspect.x = hints.min_width;
-      hints.min_aspect.y = hints.max_aspect.y = hints.min_height;
-      hints.flags |= PAspect;
+      hints->min_aspect.x = hints->max_aspect.x = hints->min_width;
+      hints->min_aspect.y = hints->max_aspect.y = hints->min_height;
+      hints->flags |= PAspect;
     }
   } else { // not resizable:
-    hints.flags = PMinSize|PMaxSize|PWinGravity;
+    hints->flags = PMinSize|PMaxSize|PWinGravity;
     prop[0] = 1; // MWM_HINTS_FUNCTIONS
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
   if (w->flags() & Fl_Window::FL_FORCE_POSITION) {
-    hints.flags |= USPosition;
-    hints.x = w->x();
-    hints.y = w->y();
+    hints->flags |= USPosition;
+    hints->x = w->x();
+    hints->y = w->y();
   }
 
   if (!w->border()) {
@@ -1151,10 +1184,11 @@ void Fl_X::sendxjunk() {
     prop[2] = 0; // no decorations
   }
 
-  XSetWMNormalHints(fl_display, xid, &hints);
+  XSetWMNormalHints(fl_display, xid, hints);
   XChangeProperty(fl_display, xid,
 		  fl_MOTIF_WM_HINTS, fl_MOTIF_WM_HINTS,
 		  32, 0, (unsigned char *)prop, 5);
+  XFree(hints);
 }
 
 void Fl_Window::size_range_() {
@@ -1234,5 +1268,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24 2002/10/20 06:06:31 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

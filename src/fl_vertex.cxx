@@ -1,9 +1,9 @@
 //
-// "$Id: fl_vertex.cxx,v 1.5.2.3.2.5 2002/01/01 15:11:32 easysw Exp $"
+// "$Id: fl_vertex.cxx,v 1.5.2.3.2.5.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -131,6 +131,10 @@ void fl_end_points() {
 }
 
 void fl_end_line() {
+  if (n < 2) {
+    fl_end_points();
+    return;
+  }
 #ifdef WIN32
   if (n>1) Polyline(fl_gc, p, n);
 #elif defined(__APPLE__)
@@ -154,6 +158,10 @@ void fl_end_loop() {
 
 void fl_end_polygon() {
   fixloop();
+  if (n < 3) {
+    fl_end_line();
+    return;
+  }
 #ifdef WIN32
   if (n>2) {
     SelectObject(fl_gc, fl_brush());
@@ -201,6 +209,10 @@ void fl_gap() {
 
 void fl_end_complex_polygon() {
   fl_gap();
+  if (n < 3) {
+    fl_end_line();
+    return;
+  }
 #ifdef WIN32
   if (n>2) {
     SelectObject(fl_gc, fl_brush());
@@ -248,5 +260,5 @@ void fl_circle(double x, double y,double r) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.5.2.3.2.5 2002/01/01 15:11:32 easysw Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.5.2.3.2.5.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

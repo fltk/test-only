@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.9.2.12.2.6.2.1 2002/11/25 19:34:09 easysw Exp $"
+// "$Id: Fl_Browser.cxx,v 1.9.2.12.2.6.2.2 2003/11/02 01:37:45 easysw Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -495,5 +495,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.9.2.12.2.6.2.1 2002/11/25 19:34:09 easysw Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.9.2.12.2.6.2.2 2003/11/02 01:37:45 easysw Exp $".
 //

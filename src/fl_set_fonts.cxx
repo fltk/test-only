@@ -1,9 +1,9 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6 2002/05/25 13:38:25 easysw Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,5 +40,5 @@
 #endif // WIN32
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6 2002/05/25 13:38:25 easysw Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

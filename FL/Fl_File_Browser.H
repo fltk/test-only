@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.1 2002/11/25 19:34:06 easysw Exp $"
+// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $"
 //
 // FileBrowser definitions.
 //
-// Copyright 1999-2002 by Michael Sweet.
+// Copyright 1999-2004 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -75,5 +75,5 @@ public:
 #endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.1 2002/11/25 19:34:06 easysw Exp $".
+// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7 2002/08/09 03:17:30 easysw Exp $"
+// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -78,6 +78,7 @@ int Fl::test_shortcut(int shortcut) {
 // This table must be in numeric order by fltk (X) keysym number:
 struct Keyname {int key; const char* name;};
 static Keyname table[] = {
+  {' ', "Space"},
   {FL_BackSpace, "Backspace"},
   {FL_Tab,	"Tab"},
   {0xff0b/*XK_Clear*/, "Clear"},
@@ -117,10 +118,10 @@ const char * fl_shortcut_label(int shortcut) {
   if (!shortcut) {*p = 0; return buf;}
 #ifdef __APPLE__
   // \todo Mac :  we might want to change the symbols for Mac users - consider drawing Apple Symbols... .
-  if (shortcut & FL_SHIFT) {strcpy(p,"shift+"); p += 6;} //: Mac hollow up arrow
-  if (shortcut & FL_META)  {strcpy(p,"ctrl+"); p += 5;}  //: Mac 'cotrol'
-  if (shortcut & FL_ALT)   {strcpy(p,"option+"); p += 7;}   //: Mac 'Option' or fancy switch symbol
-  if (shortcut & FL_CTRL)  {strcpy(p,"cmd+"); p += 4;}  //: Mac Apple or Curlyflour
+  if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;} //: Mac hollow up arrow
+  if (shortcut & FL_META)  {strcpy(p,"Cmd+"); p += 4;}  //: Mac 'Apple' key
+  if (shortcut & FL_ALT)   {strcpy(p,"Option+"); p += 7;}   //: Mac 'Alt/Option' or fancy switch symbol
+  if (shortcut & FL_CTRL)  {strcpy(p,"Ctrl+"); p += 5;}  //: Mac ctrl key
 #else
   if (shortcut & FL_META) {strcpy(p,"Meta+"); p += 5;}
   if (shortcut & FL_ALT) {strcpy(p,"Alt+"); p += 4;}
@@ -200,5 +201,5 @@ int Fl_Widget::test_shortcut() {
 }
 
 //
-// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7 2002/08/09 03:17:30 easysw Exp $".
+// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.1 2003/11/02 01:37:47 easysw Exp $".
 //

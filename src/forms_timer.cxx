@@ -1,9 +1,9 @@
 //
-// "$Id: forms_timer.cxx,v 1.4.2.3.2.3 2002/08/09 03:17:30 easysw Exp $"
+// "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.1 2003/11/02 01:37:47 easysw Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,14 +31,15 @@
 #include <FL/Fl_Timer.H>
 #include <FL/fl_draw.H>
 #ifdef WIN32
-# ifdef __MWERKS__
-#  include <time.h>
-# else
-#  include <sys/types.h> 
-#  include <sys/timeb.h>
-# endif
+#  ifdef __MWERKS__
+#    include <time.h>
+#  else
+#    include <sys/types.h> 
+#    include <sys/timeb.h>
+#  endif
 #else
-# include <sys/time.h>
+#  include <time.h>
+#  include <sys/time.h>
 #endif
 #include <stdio.h>
 
@@ -161,5 +162,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3 2002/08/09 03:17:30 easysw Exp $".
+// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.1 2003/11/02 01:37:47 easysw Exp $".
 //
