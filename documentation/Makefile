@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.23 2003/01/15 02:27:19 easysw Exp $"
+# "$Id: Makefile,v 1.24 2003/04/02 18:38:39 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -43,13 +43,20 @@ MEDIA		=	--size universal
 #MEDIA		=	--size 7x8.5in --fontsize 9.0
 
 # These are the HTML "source" files; the files are formatted in the
-# order listed...
+# order listed... DON'T REORDER THEM!
 HTMLFILES	= \
+		preface.html \
+		intro.html \
 		basics.html \
 		common.html \
-		drawing.html \
 		editor.html \
+		fluid.html \
+		Fl.html \
+		utility.html \
 		events.html \
+		drawing.html \
+		opengl.html \
+		widgets.html \
 		Fl_Bar.html \
 		Fl_Bitmap.html \
 		Fl_Box.html \
@@ -70,7 +77,6 @@ HTMLFILES	= \
 		Fl_Free.html \
 		Fl_Gl_Window.html \
 		Fl_Group.html \
-		Fl.html \
 		Fl_Image.html \
 		Fl_Input.html \
 		Fl_Int_Input.html \
@@ -103,7 +109,6 @@ HTMLFILES	= \
 		Fl_Scrollbar.html \
 		Fl_Scroll.html \
 		Fl_Secret_Input.html \
-		Fl_Single_Window.html \
 		Fl_Slider.html \
 		Fl_Style.html \
 		Fl_Style_Set.html \
@@ -114,7 +119,6 @@ HTMLFILES	= \
 		Fl_Tile.html \
 		Fl_Timer.html \
 		Fl_Tooltip.html \
-		fluid.html \
 		Fl_Valuator.html \
 		Fl_Value_Input.html \
 		Fl_Value_Slider.html \
@@ -122,19 +126,13 @@ HTMLFILES	= \
 		Fl_Window.html \
 		Fl_Wordwrap_Input.html \
 		Fl_Wordwrap_Output.html \
-		forms.html \
-		glut.html \
-		index.html \
-		intro.html \
-		license.html \
-		opengl.html \
-		preface.html \
 		subclassing.html \
 		theme.html \
-		utility.html \
-		widgets.html \
+		x.html \
 		win32.html \
-		x.html
+		forms.html \
+		glut.html \
+		license.html
 
 MAN1FILES	= \
 		fltk-config.man \
@@ -215,7 +213,7 @@ fltk.d/index.html: $(HTMLFILES)
 	echo "Generating HTML documentation..."
 	-mkdir fltk.d
 	-rm -f fltk.d/*
-	$(HTMLDOC) -d fltk.d -t html --verbose --toclevels 2 --bodycolor white --titleimage FL.gif $(HTMLFILES)
+	$(HTMLDOC) -d fltk.d -t html --verbose --toclevels 2 --bodycolor white --titleimage fltk.gif $(HTMLFILES)
 
 #
 # The PostScript manual can be printed...
@@ -223,7 +221,7 @@ fltk.d/index.html: $(HTMLFILES)
 
 fltk.ps: $(HTMLFILES)
 	@echo "Generating PostScript documentation..."
-	@$(HTMLDOC) -f fltk.ps $(MEDIA) -t ps2 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
+	@$(HTMLDOC) -f fltk.ps $(MEDIA) -t ps2 --duplex --verbose --toclevels 2 --titleimage fltk.gif $(HTMLFILES)
 
 #
 # The PDF manual can be printed or viewed...
@@ -232,9 +230,9 @@ fltk.ps: $(HTMLFILES)
 fltk.pdf: $(HTMLFILES)
 	@echo "Generating PDF documentation..."
 	@rm -f fltk.pdf
-	@$(HTMLDOC) -f fltk.pdf $(MEDIA) --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
+	@$(HTMLDOC) -f fltk.pdf $(MEDIA) --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage fltk.gif $(HTMLFILES)
 
 
 #
-# End of "$Id: Makefile,v 1.23 2003/01/15 02:27:19 easysw Exp $".
+# End of "$Id: Makefile,v 1.24 2003/04/02 18:38:39 spitzak Exp $".
 #
