@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.15 2000/03/17 09:50:04 bill Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.16 2000/04/15 04:47:21 carl Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,7 @@ static void ReadPlugins(char* location)
   if (n <= 0)
     return;
 
-  printf("ReadPlugins: n = %d\n", n);
+//  printf("ReadPlugins: n = %d\n", n);
 
   for (int i = 0; i < n; i ++) 
   {
@@ -144,5 +144,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.15 2000/03/17 09:50:04 bill Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.16 2000/04/15 04:47:21 carl Exp $"
 //

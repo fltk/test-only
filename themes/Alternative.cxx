@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.24 2000/04/12 08:05:43 bill Exp $"
+// "$Id: Alternative.cxx,v 1.25 2000/04/15 04:47:24 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -102,8 +102,10 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
       int y1 = y+h/2;
       Fl_Color light = 54, dark = 32;
 
-      if (f&FL_INACTIVE)
-        { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
+      if (f&FL_INACTIVE) {
+        bc = fl_inactive(bc); fc = fl_inactive(fc);
+        light = fl_inactive(light); dark = fl_inactive(dark);
+      }
       fl_color((f&FL_VALUE) ? fc : bc); fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
 
       fl_color(dark);
@@ -121,7 +123,7 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
       fl_line(x+3, y1, x1, y+h-4, x+w-4, y1);
       break;
     }
-    case FL_GLYPH_RADIO: {
+    case FL_GLYPH_ROUND: {
       if (box == FL_NO_BOX)
         { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
       Fl_Color light = 54, dark = 32;
@@ -240,11 +242,13 @@ static void choice_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc, Fl_Colo
   box->draw(x,Y,w,H, bc, f);
 }
 
-static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
-		  Fl_Flags f, Fl_Boxtype)
+static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc,
+                        Fl_Color fc, Fl_Flags f, Fl_Boxtype)
 {
-  FL_DOWN_BOX->draw(x, y, w, h, fc, f & ~FL_VALUE);
-  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f & ~FL_VALUE);
+  int on = f&FL_VALUE;
+  f &= ~FL_VALUE;
+  FL_DOWN_BOX->draw(x, y, w, h, bc, f);
+  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, on ? fc : bc, f);
 }
 
 static void return_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color,
@@ -283,6 +287,7 @@ int fltk_theme(int, char**) {
   }
 
   if ((s = Fl_Style::find("choice"))) {
+    s->window_box = FL_NORMAL_BOX;
     s->glyph = choice_glyph;
   }
 
@@ -314,5 +319,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.24 2000/04/12 08:05:43 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.25 2000/04/15 04:47:24 carl Exp $".
 //

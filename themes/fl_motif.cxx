@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.4 2000/04/12 08:05:44 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.5 2000/04/15 04:47:25 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -70,7 +70,7 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
                 Fl_Flags f, Fl_Boxtype box)
 {
   switch (t) {
-    case FL_GLYPH_RADIO: {
+    case FL_GLYPH_ROUND: {
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
@@ -241,5 +241,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.4 2000/04/12 08:05:44 bill Exp $"
+// End of "$Id: fl_motif.cxx,v 1.5 2000/04/15 04:47:25 carl Exp $"
 //

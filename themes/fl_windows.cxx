@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
+// "$Id: fl_windows.cxx,v 1.3 2000/04/15 04:47:25 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -84,7 +84,8 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
   if (!(f & FL_INACTIVE && fc != FL_WHITE) ||
       t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
       t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
-      t == FL_GLYPH_CHECK || t == FL_GLYPH_RADIO)
+      t == FL_GLYPH_CHECK || t == FL_GLYPH_ROUND ||
+      t == FL_GLYPH_LIGHT)
   {
     function(t, x, y, w, h, bc, fc, f, box);
     return;
@@ -207,5 +208,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
+// End of "$Id: fl_windows.cxx,v 1.3 2000/04/15 04:47:25 carl Exp $"
 //

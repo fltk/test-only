@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.58 2000/04/14 18:53:06 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.59 2000/04/15 04:47:24 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -320,8 +320,7 @@ void Fl_Widget::draw_window_frame() const {
 
 // Draw the box of a widget that acts as a button, and return the color
 // to pass to draw_button_label():
-Fl_Color Fl_Widget::draw_button() const {
-  Fl_Flags f = flags();
+Fl_Color Fl_Widget::draw_button(Fl_Flags f) const {
   Fl_Color c = color();
   Fl_Color lc = label_color();
   if (!active_r()) {
@@ -331,7 +330,7 @@ Fl_Color Fl_Widget::draw_button() const {
     Fl_Color c1 = highlight_color(); if (c1) c = c1;
     c1 = highlight_label_color(); if (c1) lc = c1;
   }
-  if (f&FL_VALUE) {
+  if (f&FL_VALUE && box() != FL_NO_BOX) {
     Fl_Color c1 = selection_color(); if (c1) c = c1;
     c1 = selection_text_color(); if (c1) lc = c1;
   }
@@ -374,5 +373,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.58 2000/04/14 18:53:06 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.59 2000/04/15 04:47:24 carl Exp $".
 //

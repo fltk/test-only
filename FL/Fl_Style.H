@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.26 2000/04/03 17:09:12 bill Exp $"
+// "$Id: Fl_Style.H,v 1.27 2000/04/15 04:47:19 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -73,8 +73,9 @@ FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxt
 
 enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
   // the numbers 0-99 are reserved for private glyph functions
-  FL_GLYPH_CHECK = 100,
-  FL_GLYPH_RADIO,
+  FL_GLYPH_DEFAULT = 100,
+  FL_GLYPH_CHECK,
+  FL_GLYPH_ROUND,
   FL_GLYPH_UP,
   FL_GLYPH_DOWN,
   FL_GLYPH_LEFT,
@@ -82,7 +83,9 @@ enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
   FL_GLYPH_VSLIDER,
   FL_GLYPH_HSLIDER,
   FL_GLYPH_VNSLIDER,
-  FL_GLYPH_HNSLIDER
+  FL_GLYPH_HNSLIDER,
+  FL_GLYPH_LIGHT,
+  FL_GLYPH_CHOICE
 };
 
 struct FL_API Fl_Named_Style : public Fl_Style {
@@ -98,5 +101,5 @@ FL_API const char* fl_find_config_file(const char*);
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.26 2000/04/03 17:09:12 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.27 2000/04/15 04:47:19 carl Exp $".
 //

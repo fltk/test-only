@@ -24,8 +24,8 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 [widgets]
 
   [widgets/default]                               # inherited widget attributes (not all used on all widgets)
-    box = normal                                  # you probably don't want to mess with this
-    glyph box = normal                            # or this
+    box = up                                      # you probably don't want to mess with this
+    glyph box = up                                # or this
     label font = helvetica                        # font of widget label
     text font = helvetica                         # font of text (if applicable)
     label type = normal                           # font type of widget label
@@ -54,6 +54,10 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     selection text color = white                  # color of menu title label when its submenu selected
     window box = highlight			  # boxtype of menu titles
 
+  [widgets/menu button]                           # menu button attributes
+
+  [widgets/choice]                                # choice attributes
+
   [widgets/browser]                               # browser attributes
     selection color = puke green                  # color of selections in browser
     box = up                                      # boxtype of browser
@@ -63,22 +67,36 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = border                                  # boxtype for chart
     text size = 10                                # size of chart text?
 
+  [widgets/button]
+    selection color = puke green                  # color of button when selected
+    selection text color = white                  # color of button label when selected
+
+  [widgets/highlight button]
+    selection color = puke green                  # color of button when selected
+    selection text color = white                  # color of button label when selected
+
   [widgets/return button]                         # return button attributes
+    selection color = puke green                  # color of button when selected
+    selection text color = white                  # color of button label when selected
     box = alternative thick                       # boxtype of button
 
   [widgets/check button]                          # check button attributes
     off color = gray                              # color of light when not selected
-    selection color = red                         # color of light when selected
+    text color = red                              # color of light when selected
+    window color = black                          # color of light when not selected
     box = none                                    # boxtype of button
 
+# I don't think this section does anything now!
   [widgets/round button]                          # round button attributes
-    off color = black                             # color of light when not selected
-    selection color = red                         # color of light when selected
+    window color = black                          # color of light when not selected
+    text color = red                              # color of light when selected
     box = none                                    # boxtype of button
 
   [widgets/light button]                          # light button attributes
-    selection color = red                         # color of light when selected
-    off color = black                             # color of light when not selected
+    selection color = puke green                  # color of button when selected
+    selection text color = white                  # color of button label when selected
+    text color = red                              # color of light when selected
+    window color = black                          # color of light when not selected
 
   [widgets/slider]                                # slider attributes
     color = gray                                  # color of the slider thumb
@@ -118,8 +136,14 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     selection text color = white                  # font color of selected text
 
   [widgets/counter]                               # counter attributes
-    box = border                                  # boxtype of the counter's text area
-    color = light2                                # color of text area
+    window color = light2                         # color of text area
+    selection color = puke green                  # color of buttons when selected
+    selection text color = white                  # color of button symbols when selected
+
+  [widgets/adjuster]                              # adjuster attributes
+    window color = light2                         # color of text area
+    selection color = puke green                  # color of buttons when selected
+    selection text color = white                  # color of button symbols when selected
 
   [widgets/tooltip]
     delay = 500                                   # milliseconds before tooltip pops up

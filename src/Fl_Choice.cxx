@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.42 2000/04/12 08:05:40 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.43 2000/04/15 04:47:22 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,19 +33,21 @@
 extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
-  Fl_Widget* o = children() ? item() : 0;
-  draw_window_box();
-  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  Fl_Color lc = draw_button(flags());
+  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
-  Fl_Color label_color = o ? o->label_color() : text_color();
-  if (focused()) {
-    Fl_Color c = selection_color();
-    if (c) {
-      fl_color(c);
-      fl_rectf(X+2, Y+2, W-w1-4, H-4);
-      c = selection_text_color(); if (c) label_color = c;
-    }
-  }
+  Fl_Widget* o = children() ? item() : 0;
+  Fl_Color label_color = o ? o->label_color() : lc;
+
+// CET - this would look great for a combo box but not for a choice
+//  if (focused()) {
+//    Fl_Color c = selection_color();
+//    if (c) {
+//      fl_color(c);
+//      fl_rectf(X+2, Y+2, W-w1-4, H-4);
+//      c = selection_text_color(); if (c) label_color = c;
+//    }
+//  }
   if (o) {
     if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
     fl_clip(X+2, Y+2, W-w1-2, H-4);
@@ -65,7 +67,10 @@ void Fl_Choice::draw() {
     fl_pop_clip();
   }
   // draw the little mark at the right:
-  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, belowmouse() ? FL_HIGHLIGHT : 0);
+  Fl_Flags f = 0;
+  Fl_Color gc = (window_box() == FL_NO_BOX) ? lc : text_color();
+  if (!active_r()) f |= FL_INACTIVE;
+  glyph()(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, window_color(), gc, f, window_box());
 }
 
 // int Fl_Choice::value(int v) {
@@ -129,7 +134,14 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-static Fl_Named_Style* style = new Fl_Named_Style("Choice", 0, &style);
+static void revert(Fl_Style* s) {
+//  s->selection_color = FL_GRAY;
+//  s->selection_text_color = FL_BLACK;
+  s->window_box = FL_NO_BOX;
+  s->window_color = FL_GRAY;
+}
+
+static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
   value(0);
@@ -140,5 +152,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.42 2000/04/12 08:05:40 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.43 2000/04/15 04:47:22 carl Exp $".
 //
