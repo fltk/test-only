@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.8 1999/11/18 19:32:12 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.9 1999/11/18 21:05:39 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -34,6 +34,14 @@
 #ifndef PATH_MAX
 #define PATH_MAX 128
 #endif
+
+// a boxtype drawing function in fl_boxtype.cxx
+extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
+                     Fl_Color c, Fl_Flags f);
+
+static const Fl_Boxtype_ kdewin_menu_window_box = {
+  fl_frame, "2AAUUIIXX", FL_DOWN_BOX, 2,2,4,4, 1
+};
 
 static Fl_Color parse_color(const char *instr) {
   char colstr[32];
@@ -114,6 +122,16 @@ int fl_kde1() {
     }
   } else {
     Fl_Style::inactive_color_weight = 0.15f;
+    fl_up_box.data = "2AAXXIIUU";
+    fl_down_box.data = "2XXIIUUAA";
+
+    if ((style = Fl_Style::find("menu window"))) {
+      style->set_box(&kdewin_menu_window_box);
+    }
+
+    if ((style = Fl_Style::find("scrollbar"))) {
+      style->set_glyph_box(&kdewin_menu_window_box);
+    }
   }
 
   if ((style = Fl_Style::find("menu window"))) {
@@ -142,11 +160,13 @@ int fl_kde1() {
   fl_theme_handler(x_event_handler);
 #endif
 
+  static Fl_Boxtype_Definer kdewin_menu_window("kde windows menu window", kdewin_menu_window_box);
+
   Fl::redraw();
 
   return 0;
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.8 1999/11/18 19:32:12 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.9 1999/11/18 21:05:39 carl Exp $".
 //
