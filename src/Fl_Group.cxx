@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.112 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.113 2002/09/02 06:33:47 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -246,15 +246,14 @@ int Fl_Group::handle(int event) {
   if (previous < 0 || previous >= numchildren) previous = 0;
   for (i = previous;;) {
     if (child(i)->send(event)) return true;
-    i++;
-    if (i >= numchildren) i = 0;
+    if (++i >= numchildren) i = 0;
     if (i == previous) break;
   }
 
   if (event == FL_SHORTCUT) {
     // Try to do keyboard navigation for unused shortcut keys:
     // Ignore if focus is not a child of this, but work if there is no focus:
-    if (Fl::focus()==this || Fl::focus() && !contains(Fl::focus())) return 0;
+    //if (Fl::focus()==this || Fl::focus() && !contains(Fl::focus())) return 0;
     int key = navigation_key();
     if (!key) return false;
 
@@ -272,7 +271,10 @@ int Fl_Group::handle(int event) {
 	  i = 0;
 	}
       }
-      if (i == previous) break;
+      if (i == previous) {
+	Fl::focus(0);
+	return child(i)->take_focus();
+      }
       if (key == FL_Down || key == FL_Up) {
 	// for up/down, the widgets have to overlap horizontally:
 	Fl_Widget* o = child(i);
@@ -589,5 +591,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.112 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.113 2002/09/02 06:33:47 spitzak Exp $".
 //

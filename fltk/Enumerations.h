@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.7 2002/04/02 08:33:31 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.8 2002/09/02 06:33:46 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -112,6 +112,7 @@ enum { // Fl_Widget::when():
 #define FL_Print	0xff61
 #define FL_Insert	0xff63
 #define FL_Menu		0xff67
+#define FL_Help		0xff68 // the 'help' key on Mac keyboards
 #define FL_Num_Lock	0xff7f
 #define FL_KP(c)	(0xff80+(c)) // FL_KP('x') is 'x' on numeric keypad
 #define FL_KP_Enter	0xff8d // same as Fl_KP('\r')
@@ -231,5 +232,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.7 2002/04/02 08:33:31 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.8 2002/09/02 06:33:46 spitzak Exp $".
 //

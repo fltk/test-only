@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.177 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.178 2002/09/02 06:33:47 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1131,11 +1131,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 ////////////////////////////////////////////////////////////////
-// Sets the 4 return values to the thickness of the window border, so
-// that window positions can be adjusted to match the X method of
-// placing the contents at an absolute position.  The return value
-// is also the value to put in the window style.
 
+/**
+ * Sets the 4 return values to the thickness of the window border,
+ * and returns the value to put into the window style. This is used
+ * so that window positions are specified for the contents of the
+ * window, rather than for the border, to match how X works.
+ */
 int Fl_X::borders(const Fl_Window* window, int& dx,int& dy,int& dw,int& dh) {
   if (!window->border() || window->override() || window->parent()) {
     dx = dy = dw = dh = 0;
@@ -1322,6 +1324,9 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
   }
 }
 
+/**
+ * Returns true if the window is shown but is iconized.
+ */
 bool Fl_Window::iconic() const {
   return i && IsIconic(i->xid);
 }
@@ -1330,7 +1335,9 @@ bool Fl_Window::iconic() const {
 
 #include <fltk/filename.h> // need so FL_API filename_name works
 
-// returns pointer to the filename, or null if name ends with '/'
+/**
+ * returns pointer to the filename, or "" if name ends with '/' or ':'
+ */
 const char *filename_name(const char *name) {
   const char *p,*q;
   q = name;
@@ -1346,7 +1353,7 @@ void Fl_Window::label(const char *name,const char *iname) {
     if (!name) name = "";
     SetWindowText(i->xid, name);
     // if (!iname) iname = filename_name(name);
-    // should do something with iname here...
+    // should do something with iname here, it should label the taskbar icon
   }
 }
 
@@ -1573,5 +1580,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.177 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.178 2002/09/02 06:33:47 spitzak Exp $".
 //

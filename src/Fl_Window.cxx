@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.86 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.87 2002/09/02 06:33:47 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -142,14 +142,38 @@ int Fl_Window::handle(int event) {
     // If we've captured the mouse, we don't want do activate any
     // other windows from the code, or we lose the capture.
     // Also, we don't want to activate the window for tooltips.
-    else if (Fl::grab() || override())
-      showtype = SW_SHOWNOACTIVATE;
     else if (fl_show_iconic)
       showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
+    else if (Fl::grab() || override())
+      showtype = SW_SHOWNOACTIVATE;
     else
       showtype = SW_SHOWNORMAL;
 
     ShowWindow(i->xid, showtype);
+#elif defined(__APPLE__)
+    if (parent()) return 1; // needs to update clip and redraw...
+    if (fl_show_iconic) {
+      fl_show_iconic = 0;
+      CollapseWindow( i->xid, true ); // \todo Mac ; untested
+      ShowWindow(x->xid); // ???
+    } else if (Fl::grab() || override()) {
+      // If we've captured the mouse, we don't want do activate any
+      // other windows from the code, or we lose the capture.
+      // Also, we don't want to activate the window for tooltips.
+      ShowWindow(x->xid);
+      BringToFront(i->xid);
+    } else {
+      if ( !x->next ) {
+	// if this is the first window, bring the application to the front
+	// WAS: perhaps it should always do this?
+	ProcessSerialNumber psn;
+	OSErr err = GetCurrentProcess( &psn );
+	if ( err==noErr ) SetFrontProcess( &psn );
+      }
+      ShowWindow(x->xid);
+      BringToFront(i->xid);
+      SelectWindow(i->xid);
+    }
 #else
     XMapWindow(fl_display, i->xid);
 #endif
@@ -165,8 +189,11 @@ int Fl_Window::handle(int event) {
 
   if (!parent()) {
     // Make the Escape key close windows:
-    if (event == FL_SHORTCUT && !Fl::event_clicks() && test_shortcut()) {do_callback(); return 1;}
-#ifndef _WIN32
+    if (event == FL_SHORTCUT && !Fl::event_clicks() && test_shortcut()) {
+      do_callback();
+      return 1;
+    }
+#if !defined(_WIN32) && !defined(__APPLE__)
     // Unused clicks raise windows:
     if (event == FL_PUSH) XMapRaised(fl_display, i->xid);
 #endif
@@ -190,6 +217,10 @@ void Fl_Window::show() {
 #ifdef _WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
     if (!Fl::grab() && !override()) BringWindowToTop(i->xid);
+#elif defined(__APPLE__)
+    // is some call needed to deiconize?
+    BringToFront(i->xid);
+    if (!Fl::grab() && !override()) SelectWindow(i->xid);
 #else
     XMapRaised(fl_display, i->xid);
 #endif
@@ -336,5 +367,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.86 2002/05/06 06:31:27 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.87 2002/09/02 06:33:47 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.148 2002/06/18 06:47:31 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.149 2002/09/02 06:33:47 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -360,6 +360,8 @@ void Fl::flush() {
   }
 #ifdef _WIN32
   GdiFlush();
+#elif defined(__APPLE__)
+  //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #else
   if (fl_display) XFlush(fl_display);
 #endif
@@ -426,8 +428,8 @@ void fl_fix_focus() {
 
 void Fl_Widget::throw_focus() {
   if (contains(Fl::pushed())) Fl::pushed_ = 0;
-#ifndef _WIN32
-  if (contains(fl_selection_requestor)) fl_selection_requestor = 0;
+#if !defined(_WIN32) && !defined(__APPLE__)
+  if (contains(selection_requestor)) selection_requestor = 0;
 #endif
   if (contains(Fl::belowmouse())) {Fl::belowmouse_ = 0; Fl::e_is_click = 0;}
   if (contains(Fl::focus())) Fl::focus_ = 0;
@@ -447,6 +449,8 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 #ifdef _WIN32
     ReleaseCapture();
     // if (event() == FL_PUSH) repost_the_push_event(); NYI
+#elif defined(__APPLE__)
+    // dunno what to do here
 #else
     XUngrabKeyboard(fl_display, fl_event_time);
     Fl::event_is_click(0); // avoid double click
@@ -471,6 +475,8 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
       SetCapture(fl_xid(window));
       grab_ = true;
     }
+#elif defined(__APPLE__)
+    // dunno what to do here
 #else
     Fl_Window* window = first_window();
     if (window &&
@@ -632,5 +638,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.148 2002/06/18 06:47:31 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.149 2002/09/02 06:33:47 spitzak Exp $".
 //

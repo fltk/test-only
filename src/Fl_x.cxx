@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.131 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.132 2002/09/02 06:33:47 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -395,31 +395,6 @@ void Fl::get_mouse(int &x, int &y) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Code used for paste and DnD into the program:
-
-static Fl_Widget *fl_selection_requestor;
-static char *selection_buffer[2];
-static int selection_length[2];
-static int selection_buffer_length[2];
-bool fl_i_own_selection[2];
-
-// Call this when a "paste" operation happens:
-void Fl::paste(Fl_Widget &receiver, bool clipboard) {
-  if (fl_i_own_selection[clipboard]) {
-    // We already have it, do it quickly without window server.
-    // Notice that the text is clobbered if set_selection is
-    // called in response to FL_PASTE!
-    Fl::e_text = selection_buffer[clipboard];
-    Fl::e_length = selection_length[clipboard];
-    receiver.handle(FL_PASTE);
-    return;
-  }
-  // otherwise get the window server to return it:
-  fl_selection_requestor = &receiver;
-  Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
-  XConvertSelection(fl_display, property, XA_STRING, property,
-		    fl_xid(Fl::first_window()), fl_event_time);
-}
 
 Window fl_dnd_source_window;
 Atom *fl_dnd_source_types; // null-terminated list of data types being supplied
@@ -449,7 +424,13 @@ void fl_sendClientMessage(Window window, Atom message,
 }
 
 ////////////////////////////////////////////////////////////////
-// Code for copying to clipboard and DnD out of the program:
+// Code used for cut & paste
+
+static Fl_Widget *selection_requestor;
+static char *selection_buffer[2];
+static int selection_length[2];
+static int selection_buffer_length[2];
+bool fl_i_own_selection[2];
 
 void Fl::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
@@ -464,6 +445,24 @@ void Fl::copy(const char *stuff, int len, bool clipboard) {
   fl_i_own_selection[clipboard] = true;
   Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
   XSetSelectionOwner(fl_display, property, fl_message_window, fl_event_time);
+}
+
+// Call this when a "paste" operation happens:
+void Fl::paste(Fl_Widget &receiver, bool clipboard) {
+  if (fl_i_own_selection[clipboard]) {
+    // We already have it, do it quickly without window server.
+    // Notice that the text is clobbered if set_selection is
+    // called in response to FL_PASTE!
+    Fl::e_text = selection_buffer[clipboard];
+    Fl::e_length = selection_length[clipboard];
+    receiver.handle(FL_PASTE);
+    return;
+  }
+  // otherwise get the window server to return it:
+  selection_requestor = &receiver;
+  Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
+  XConvertSelection(fl_display, property, XA_STRING, property,
+		    fl_xid(Fl::first_window()), fl_event_time);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -628,7 +627,7 @@ bool fl_handle()
       fl_event_time = data[2];
       Window to_window = fl_xevent.xclient.window;
       if (Fl::handle(FL_DND_RELEASE, window)) {
-	fl_selection_requestor = Fl::belowmouse();
+	selection_requestor = Fl::belowmouse();
 	XConvertSelection(fl_display, fl_XdndSelection,
 			  fl_dnd_type, XA_SECONDARY,
 			  to_window, fl_event_time);
@@ -861,7 +860,7 @@ bool fl_handle()
     break;}
 
   case SelectionNotify: {
-    if (!fl_selection_requestor) return false;
+    if (!selection_requestor) return false;
     static unsigned char* buffer;
     if (buffer) {XFree(buffer); buffer = 0;}
     long read = 0;
@@ -889,7 +888,7 @@ bool fl_handle()
     }
     Fl::e_text = (char*)buffer;
     Fl::e_length = read;
-    fl_selection_requestor->handle(FL_PASTE);
+    selection_requestor->handle(FL_PASTE);
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
@@ -942,9 +941,13 @@ bool fl_handle()
 
 ////////////////////////////////////////////////////////////////
 
+/**
+ * Resizes the actual system window in response to a resize() call from
+ * the program.
+ */
 void Fl_Window::layout() {
   if (this == resize_from_system) {
-    // prevent echoing changes back to the server
+    // Ignore changes that came from the system
     resize_from_system = 0;
   } else if ((layout_damage()&FL_LAYOUT_XYWH) && i) { // only for shown windows
     // figure out where the window should be in it's parent:
@@ -996,8 +999,8 @@ void Fl_X::create(Fl_Window* window,
   ulong root;
 
   if (window->parent()) {
-    // locate the surrounding window and adjust window position for
-    // any intermediate group widgets:
+    // Find the position in the surrounding window, taking into account
+    // any intermediate Fl_Group widgets:
     for (Fl_Widget *o = window->parent(); ; o = o->parent()) {
       if (o->is_window()) {root = ((Fl_Window*)o)->i->xid; break;}
       X += o->x();
@@ -1155,13 +1158,21 @@ void Fl_Window::size_range_() {
   if (i) i->sendxjunk();
 }
 
+/**
+ * Returns true if the window is shown but is iconized. On X this is
+ * also true in the time between when show() is called and when the
+ * window manager finally puts the window on the screen and causes
+ * an expose event.
+ */
 bool Fl_Window::iconic() const {
   return (i && visible() && i->wait_for_expose);
 }
 
 ////////////////////////////////////////////////////////////////
 
-// returns pointer to the filename, or null if name ends with '/'
+/**
+ * returns pointer to the filename, or "" if name ends with '/'
+ */
 const char *filename_name(const char *name) {
   const char *p,*q;
   for (p=q=name; *p;) if (*p++ == '/') q = p;
@@ -1363,5 +1374,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.131 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.132 2002/09/02 06:33:47 spitzak Exp $".
 //
