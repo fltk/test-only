@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.87 2004/06/04 08:30:46 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.88 2004/07/15 16:13:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -500,17 +500,13 @@ enum {
   NONE, BAR, ELL, TEE, CLOSED_ELL, CLOSED_TEE, OPEN_ELL, OPEN_TEE
 };
 
-#include <fltk/xbmImage.h>
-#include "browser_plus.xbm"
-static xbmImage browser_plus(browser_plus_bits, browser_plus_width, browser_plus_height);
-#include "browser_minus.xbm"
-static xbmImage browser_minus(browser_minus_bits, browser_minus_width, browser_minus_height);
+#define BOXSIZE 9
 
 static void
 glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
 {
   Color bg, fg; style->boxcolors(f|OUTPUT, bg, fg);
-  if (fg == BLACK) fg = GRAY33;
+  //if (fg == BLACK) fg = GRAY33;
   setcolor(fg);
   int lx = x+w/2;
   int ly = y+(h-1)/2;
@@ -535,19 +531,20 @@ glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
     goto J1;
   case CLOSED_ELL:
   case OPEN_ELL:
-    yxline(lx, y, lx, ly);
+    drawline(lx, y, lx, ly);
   J1:
-    glyph(widget, glyph < OPEN_ELL ? GLYPH_RIGHT : GLYPH_DOWN,
-	     x, y, w, h, f);
+    Widget::default_glyph(glyph < OPEN_ELL ? GLYPH_RIGHT : GLYPH_DOWN,
+	     x, y, w, h, style, f);
     break;
 #else
   default: {
-    const int boxsize = browser_plus_width/2;
+    const int boxsize = BOXSIZE/2;
     drawline(lx, y, lx, ly-boxsize);
     if (glyph&1) drawline(lx, ly+boxsize, lx, y+h-1);
     drawline(lx+boxsize, ly, x+w, ly);
-    xbmImage* image = (glyph < OPEN_ELL) ? &browser_plus : &browser_minus;
-    image->draw(lx-boxsize, ly-boxsize);
+    strokerect(lx-boxsize, ly-boxsize, BOXSIZE, BOXSIZE);
+    drawline(lx-boxsize+2, ly, lx+boxsize-2, ly);
+    if (glyph < OPEN_ELL) drawline(lx, ly-boxsize+2, lx, ly+boxsize-2);
     }
 #endif
   }
@@ -585,7 +582,7 @@ void Browser::draw_item() {
       // pixel rows on top and bottom:
       setcolor(c1);
       fillrect(X, y+1, W, h-2);
-      setcolor(c0 <= LIGHT1 ? c1 : Color(LIGHT1));
+      setcolor(c0 <= GRAY85 ? c1 : GRAY85);
       //setcolor(lerp(c1, c0, 1.9));
       drawline(X, y, X+W, y);
       drawline(X, y+h-1, X+W, y+h-1);
@@ -632,7 +629,7 @@ void Browser::draw_item() {
   translate(x, y);
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   int save_w = widget->w();
-  widget->w(X+W);
+  if (!save_w) widget->w(X+W-x);
   widget->draw();
   widget->w(save_w);
   widget->set_damage(0);
@@ -1698,5 +1695,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.87 2004/06/04 08:30:46 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.88 2004/07/15 16:13:21 spitzak Exp $".
 //
