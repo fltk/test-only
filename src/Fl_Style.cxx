@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.45 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.46 2003/07/22 00:09:00 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -189,6 +189,7 @@ Style* Style::find(const char* name) {
   return 0;
 }
 
+bool Style::hide_shortcut = true;
 bool Style::draw_boxes_inactive = true;
 int Style::wheel_scroll_lines = 3;
 
@@ -307,5 +308,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.45 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.46 2003/07/22 00:09:00 spitzak Exp $".
 //

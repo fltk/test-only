@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.140 2003/04/27 01:54:52 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.141 2003/07/22 00:09:00 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -308,12 +308,16 @@ int MWindow::ypos(int index) {
 }
 
 extern Color fl_item_labelcolor(const Widget* widget);
+extern bool fl_hide_shortcut;
 
 void MWindow::draw() {
   if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), color(), 0);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
   int leading = int(this->leading());
+  if (Style::hide_shortcut &&
+      !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
+    fl_hide_shortcut = true;
   for (int i = 0; i < children; i++) {
     Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -369,6 +373,7 @@ void MWindow::draw() {
     y += ih;
   }
   drawn_selected = selected;
+  fl_hide_shortcut = false;
 }
 
 int MWindow::find_selected(int mx, int my) {
@@ -510,6 +515,13 @@ int MWindow::handle(int event) {
   case KEY:
     track_mouse = false;
     switch (event_key()) {
+    case LeftAltKey:
+    case RightAltKey:
+      if (Style::hide_shortcut) {
+	for (int i = 0; i < p.nummenus; i++)
+	  p.menus[i]->redraw();
+      }
+      return 1;
     case UpKey:
       if (p.menubar && p.level == 0) ;
       else if (backward(p, p.level));
@@ -571,15 +583,20 @@ int MWindow::handle(int event) {
     return 1; // always eat all the keystrokes
 
   case KEYUP:
-    if ((event_key() == LeftAltKey || event_key() == RightAltKey)
-	&& event_is_click()) {
-      // checking for event_clicks insures that the keyup matches the
-      // keydown that preceeded it, so Alt was pressed & released without
-      // any intermediate values.
-      exit_modal();
-      return 1;
-    } else
-      return 0;
+    if (event_key() == LeftAltKey || event_key() == RightAltKey) {
+      if (event_is_click()) {
+	// checking for event_clicks insures that the keyup matches the
+	// keydown that preceeded it, so Alt was pressed & released without
+	// any intermediate values.
+	exit_modal();
+	return 1;
+      }
+      if (Style::hide_shortcut) {
+	for (int i = 0; i < p.nummenus; i++)
+	  p.menus[i]->redraw();
+      }
+    }
+    return 0;
 
   case ENTER: // this messes up menu bar pulldown shortcuts
   case MOVE:
@@ -823,5 +840,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.140 2003/04/27 01:54:52 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.141 2003/07/22 00:09:00 spitzak Exp $".
 //

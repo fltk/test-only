@@ -5,8 +5,7 @@ header_name {.h}
 code_name {.cxx} 
 gridx 5 
 gridy 11 
-snap 2 
-theme KDE
+snap 2
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
@@ -19,7 +18,7 @@ Function {make_widget_panel()} {open
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 23 380 297} hide
+        xywh {0 23 380 297}
       } {
         {fltk::Input} {} {
           label Class
@@ -61,32 +60,32 @@ Function {make_widget_panel()} {open
           xywh {10 77 70 22} align 24 box NO_BOX
         }
         {fltk::Button} {} {
-          label {@-1<-}
+          label {@4->}
           user_data {fltk::ALIGN_LEFT}
-          callback align_cb
+          callback align_cb selected
           tooltip {Places label on the left of the widget}
-          xywh {80 78 20 20} type TOGGLE
+          xywh {80 78 20 20} type TOGGLE labelsize 11 textsize 11
         }
         {fltk::Button} {} {
-          label {@-1->}
+          label {@6->}
           user_data {fltk::ALIGN_RIGHT}
-          callback align_cb
+          callback align_cb selected
           tooltip {Places label on the right of the widget}
-          xywh {100 78 20 20} type TOGGLE
+          xywh {100 78 20 20} type TOGGLE labelsize 11 textsize 11
         }
         {fltk::Button} {} {
-          label {@-18}
+          label {@8->}
           user_data {fltk::ALIGN_TOP}
-          callback align_cb
+          callback align_cb selected
           tooltip {Places label on the top of the widget}
-          xywh {120 78 20 20} type TOGGLE
+          xywh {120 78 20 20} type TOGGLE labelsize 11 textsize 11
         }
         {fltk::Button} {} {
-          label {@-12}
+          label {@2->}
           user_data {fltk::ALIGN_BOTTOM}
-          callback align_cb
+          callback align_cb selected
           tooltip {Places label on the bottom of the widget}
-          xywh {140 78 20 20} type TOGGLE
+          xywh {140 78 20 20} type TOGGLE labelsize 11 textsize 11
         }
         {fltk::Button} {} {
           label inside
@@ -257,111 +256,111 @@ To get out of shortcut-setting mode:
       {fltk::Group} {} {
         label Style
         callback propagate_group open
-        xywh {0 23 380 297}
+        xywh {0 23 380 297} hide
       } {
         {fltk::Choice} {} {
           label Box
-          callback box_cb selected
+          callback box_cb
           tooltip {Type of box to draw around the contents of the widget.}
           xywh {85 9 270 22}
         } {}
         {fltk::LightButton} {} {
           label Color
-          callback color_cb selected
+          callback color_cb
           tooltip {Color of the contents area.}
-          xywh {85 31 135 22} labelsize 11
+          xywh {85 31 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Text Color}
-          callback text_color_cb selected
+          callback text_color_cb
           tooltip {Color of text drawn in the widget.}
-          xywh {220 31 135 22} labelsize 11
+          xywh {220 31 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Selection Color}
-          callback selection_color_cb selected
+          callback selection_color_cb
           tooltip {Color to draw behind selected text}
-          xywh {85 53 135 22} labelsize 11
+          xywh {85 53 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Selected Text Color}
-          callback selected_text_color_cb selected
+          callback selected_text_color_cb
           tooltip {Color to draw selected text}
-          xywh {220 53 135 22} labelsize 11
+          xywh {220 53 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::Choice} {} {
           label {Button box}
-          callback button_box_cb open selected
+          callback button_box_cb open
           tooltip {Type of box to draw around buttons}
           xywh {85 88 270 22}
         } {}
         {fltk::LightButton} {} {
           label {Button Color}
-          callback button_color_cb selected
+          callback button_color_cb
           tooltip {Color to draw buttons inside the widget.}
-          xywh {85 110 135 22} labelsize 11
+          xywh {85 110 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Label Color}
-          callback label_color_cb selected
+          callback label_color_cb
           tooltip {Color to draw the labels on buttons, and color to draw the label.}
-          xywh {220 110 135 22} labelsize 11
+          xywh {220 110 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Highlight Color}
-          callback highlight_color_cb selected
+          callback highlight_color_cb
           tooltip {Color to use to draw buttons when they are highlighted.  Use color zero (the black top-left chip in the color chooser) to disable highlighting.}
-          xywh {85 132 135 22} labelsize 11
+          xywh {85 132 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Highlight Label Color}
-          callback highlight_label_color_cb selected
+          callback highlight_label_color_cb
           tooltip {Color to draw the button labels when the buttons are highlighted.  Use color zero (the black top-left chip in the color chooser) to leave the label colors unchanged.}
-          xywh {220 132 135 22} labelsize 11
+          xywh {220 132 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::Choice} {} {
           label {Label Style}
-          callback label_style_cb open selected
+          callback label_style_cb open
           tooltip {How to draw the label.}
           xywh {85 165 270 22}
         } {}
         {fltk::Choice} {} {
           label {Label Font}
-          callback label_font_cb open selected
+          callback label_font_cb open
           tooltip {Font to use for the label}
           xywh {85 187 215 22}
         } {}
         {fltk::ValueInput} {} {
-          callback label_size_cb selected
+          callback label_size_cb
           tooltip {Size of the font to use for the label}
           xywh {300 187 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
         }
         {fltk::Choice} {} {
           label {Text Font}
-          callback text_font_cb open selected
+          callback text_font_cb open
           tooltip {Font to use for text displayed inside the widget}
           xywh {85 220 215 22}
         } {}
         {fltk::ValueInput} {} {
-          callback text_size_cb selected
+          callback text_size_cb
           tooltip {Size of the font to use for text displayed inside the widget}
           xywh {300 220 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
         }
         {fltk::Widget} {} {
-          label resizable selected
+          label resizable
           xywh {85 242 270 3} hide deactivate resizable
         }
         {fltk::Button} {} {
           label {Reset to default}
-          callback default_cb selected
+          callback default_cb
           tooltip {Reset all the above items to the default values for this widget class.}
           xywh {85 253 124 22}
         }
