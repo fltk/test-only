@@ -5,6 +5,7 @@
 #include <fltk/Window.h>
 #include <fltk/Button.h>
 #include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
 #include <fltk/Input.h>
 #include <fltk/run.h>
 #include <fltk/events.h>
@@ -98,7 +99,7 @@ cb_add_folder(fltk::Widget*, void* ptr) {
 void
 cb_add_paper(fltk::Widget*, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*) ptr;
-  add_paper(current_group(tree), "New paper", 0, fileSmall);
+  add_paper(current_group(tree), "New paper\t2.col\t3.col", 0, fileSmall);
   tree->relayout();
 }
 
@@ -138,6 +139,20 @@ void button_cb(fltk::Widget* b, void *) {
   printf("Button %s pushed\n", b->label());
 }
 
+const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
+int widths[]   = {100, 70, 50, fltk::Browser::NormalResize};
+
+fltk::Browser *browser;
+void change_resize(fltk::Widget *, long arg) {
+  if (widths[1]==-1) widths[1] = 70;
+
+  if (arg==1)       widths[3] = fltk::Browser::NormalResize;
+  else if (arg==2)  widths[3] = fltk::Browser::Resize2Width;
+  else if (arg==3)  { widths[3] = fltk::Browser::NormalResize; widths[1] = -1; }
+
+  browser->column_widths(widths);
+}
+
 #define USE_STRING_LIST 0
 #if USE_STRING_LIST
 #include <fltk/fltk::String_List.h>
@@ -149,12 +164,16 @@ const char* const strings[] = {
 
 int main(int argc,char** argv) {
 
-  fltk::Window win(240, 304, "Browser Example");
+  fltk::Window win(240, 370, "Browser Example");
   win.begin();
 
   fltk::Browser tree(10, 10, 220, 180);
   tree.indented(1);
   tree.callback(cb_test);
+
+  browser = &tree;
+  tree.column_widths(widths);
+  tree.column_labels(labels);
 
   fltk::Button remove_button(5, 200, 70, 22, "Remove");
   remove_button.callback((fltk::Callback*)cb_remove, (void *)&tree);
@@ -181,6 +200,16 @@ int main(int argc,char** argv) {
   fltk::CheckButton when_enter_key_button(80, 280, 160, 20, "fltk::WHEN_ENTER_KEY");
   when_enter_key_button.callback(cb_when_enter_key, (void *)&tree);
 
+  fltk::RadioButton resize_a(80, 310, 160, 20, "Browser::NormalResize");
+  resize_a.callback(change_resize, 1);
+  resize_a.set();
+
+  fltk::RadioButton resize_b(80, 330, 160, 20, "Browser::Resize2Width");
+  resize_b.callback(change_resize, 2);
+
+  fltk::RadioButton resize_c(80, 350, 160, 20, "Set flexible column");
+  resize_c.callback(change_resize, 3);
+
   win.resizable(tree);
   win.end();
 
@@ -199,9 +228,9 @@ int main(int argc,char** argv) {
   // fltk::ToggleNode::fltk::ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )
   fltk::Group* g;
 
-  g = add_folder(&tree, "aaa\t123", 1, folderSmall);
+  g = add_folder(&tree, "aaa\t2.col\t3.col", 1, folderSmall);
 
-  add_folder(g, "bbb TWO\t456", 1, folderSmall);
+  add_folder(g, "bbb TWO\t2.col\t3.col", 1, folderSmall);
 
   g = add_folder(&tree, "bbb", 0, folderSmall);
 
