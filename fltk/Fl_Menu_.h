@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.h,v 1.2 2001/07/29 21:39:54 spitzak Exp $"
+// "$Id: Fl_Menu_.h,v 1.3 2001/08/05 10:48:38 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,10 +59,9 @@ public:
 
   int popup(int x,int y,int w=0,int h=0,Fl_Widget* title=0,bool menubar=false);
   int handle_shortcut();
+  static void default_callback(Fl_Widget*, void*);
   void execute(Fl_Widget*);
   void global();
-
-  static Fl_Menu_* callback_menu;
 
 #ifndef FLTK_2
   // Commented-out methods cannot be emulated.
@@ -137,5 +136,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.h,v 1.2 2001/07/29 21:39:54 spitzak Exp $".
+// End of "$Id: Fl_Menu_.h,v 1.3 2001/08/05 10:48:38 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.36 2001/07/29 21:39:54 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.37 2001/08/05 10:48:38 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -70,6 +70,7 @@ static Fl_List default_list;
 
 Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l), list_(&default_list), item_(0) {
+  callback(default_callback);
   end();
 }
 
@@ -93,14 +94,11 @@ Fl_Widget* Fl_Menu_::child(int n) const {
 
 FL_API int fl_dont_execute = 0; // hack for fluid
 
-// This pointer can be used by callbacks to find the menu
-Fl_Menu_* Fl_Menu_::callback_menu;
-
 // Do the callback for the current item:
 void Fl_Menu_::execute(Fl_Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
-  if (!widget) {do_callback(); return;}
+  if (!widget) return; // never do callback when no widget is picked
   if (widget->type() == FL_TOGGLE_ITEM) {
     if (widget->value()) widget->clear_value(); else widget->set_value();
   } else if (widget->type() == FL_RADIO_ITEM) {
@@ -120,20 +118,12 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
     }
   }
 
-  // For back compatability, if there is no callback set we use the
-  // menu's callback the way fltk1.0 did:
-  if (widget->callback() == Fl_Widget::default_callback) {
-    void* data = widget->user_data();
-    // fltk1.0 also did this, but this prevents a null pointer from
-    // being used as the data:
-    //if (!data) data = widget;
-    do_callback(this, data);
-  } else {
-    // set a pointer so the callback can find the menu:
-    callback_menu = this;
-    // and do the callback normally for this widget:
-    widget->do_callback();
-  }
+  do_callback();
+}
+
+// Normally the callback for the menu is set to this:
+void Fl_Menu_::default_callback(Fl_Widget* widget, void*) {
+  ((Fl_Menu_*)widget)->item()->do_callback();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -225,5 +215,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.36 2001/07/29 21:39:54 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.37 2001/08/05 10:48:38 spitzak Exp $"
 //

@@ -1,92 +1,62 @@
 /*
- * "$Id: configh.in,v 1.44 2001/07/24 07:48:22 spitzak Exp $"
+ * "$Id: configh.in,v 1.45 2001/08/05 10:48:38 spitzak Exp $"
  *
- * If this file is "config.h", it has been copied from "configh.in" by
- * the ./configure program, which has replaced some of the symbols
- * with the correct values for your system.
+ * This file is used to compile fltk. It should not be necessary for
+ * programs that use fltk to refer to this file, and this file is not
+ * included by any of the fltk header files.
  *
  * If this file is "configh.in" it is the input to ./configure.
  */
 
-/*
- * HAVE_GL:
- *
- * Do you have OpenGL? Set this to 0 if you don't have or plan to use
- * OpenGL, and FLTK will be smaller.
- */
-
+/* Set this to 0 if your system does not have OpenGL. This will
+   disable all the code in libfltk_gl and disable the demo programs
+   that use OpenGL.
+*/
 #define HAVE_GL 0
 
-/*
- * USE_COLORMAP:
- *
- * Setting this to zero will save a good deal of code (especially for
- * fl_draw_image), but FLTK will only work on TrueColor visuals.
- */
-
+/* Setting this to zero will delete code to handle X and win32
+   colormaps, this will save a good deal of code (especially for
+   fl_draw_image), but fltk will only work on TrueColor visuals.
+*/
 #define USE_COLORMAP 1
 
-/*
- * HAVE_XDBE:
- *
- * Do we have the X double-buffer extension?  Turning this on will
- * make the list_visuals program produce more information.
- */
-
+/* Do we have the X double-buffer extension?  Turning this on will
+   make the list_visuals program produce more information.
+*/
 #define HAVE_XDBE 0
 
-/*
- * USE_XDBE:
- *
- * Actually try to use the double-buffer extension?
- * You can try this, it may speed up Fl_Double_Window.  However we have
- * found most (all?) X implementations to be broken, or at least I
- * don't understand the documentation, or something...
- */
-
+/* Actually try to use the double-buffer extension? Fl_Double_Window
+   was intended to use this, however we have found most (all?) X
+   implementations to be broken (or I don't understand the
+   documentation)
+*/
 #define USE_XDBE 0
 
-/*
- * HAVE_OVERLAY:
- *
- * Use the X overlay extension?  FLTK will try to use an overlay
- * visual for Fl_Overlay_Window, the Gl_Window overlay, and for the
- * menus.  Setting this to zero will remove a substantial amount of
- * code from FLTK.  Overlays have only been tested on Irix!
- */
-
+/* Use the X overlay extension?  FLTK will try to use an overlay
+   visual for Fl_Overlay_Window, the Gl_Window overlay, and for the
+   menus.  Setting this to zero will remove a substantial amount of
+   code from FLTK.  Overlays have only been tested on Irix!
+*/
 #define HAVE_OVERLAY 0
 
-/*
- * HAVE_GL_OVERLAY:
- *
- * It is possible your GL has an overlay even if X does not.  If so,
- * set this to 1.
- */
-
+/* It is possible your GL has an overlay even if X does not.  If so,
+   set this to 1.
+*/
 #define HAVE_GL_OVERLAY HAVE_OVERLAY
 
-/*
- * WORDS_BIGENDIAN:
- *
- * Byte order of your machine: 1 = big-endian, 0 = little-endian.
- */
-
+/* Byte order of your machine: 1 = big-endian, 0 = little-endian.
+*/
 #define WORDS_BIGENDIAN 0
 
-/*
- * U16, U32, U64:
- *
- * Types used by fl_draw_image.  One of U32 or U64 must be defined.
- * U16 is optional but FLTK will work better with it!
- */
-
+/* Types used by fl_draw_image.  One of U32 or U64 must be defined.
+   U16 is optional but FLTK will work better with it!
+*/
 #undef U16
 #undef U32
 #undef U64
 
-/* Various Unix header files that differ between systems: */
-
+/* Unix header files that differ on some older systems:
+*/
 #define HAVE_DIRENT_H 1
 #define HAVE_SYS_NDIR_H 0
 #define HAVE_SYS_DIR_H 0
@@ -94,13 +64,15 @@
 #define HAVE_SCANDIR 0
 #define HAVE_SYS_SELECT_H 0
 
-/* See fltk/vsnprintf.h for replacement functions if these are undefined: */
-
+/* Does the system have the really useful snprintf() and vsnprintf()
+   functions? If not, fltk includes emulation functions. Also see the
+   fltk/vsnprintf.h header which allows user programs to access these
+   emulations.
+*/
 #define HAVE_SNPRINTF 0
 #define HAVE_VSNPRINTF 0
 
-/* Possibly missing functions and inline replacements: */
-
+/* Possibly missing function and inline replacement: */
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
@@ -108,105 +80,78 @@
 # define strncasecmp(a,b,c) strnicmp(a,b,c)
 #endif
 
+/* Possibly missing function and inline replacement: */
 #define HAVE_STRTOK_R 0
 
 #if ! HAVE_STRTOK_R
 #  define strtok_r(a,b,c) strtok(a,b)
 #endif
 
-/*
- * USE_POLL:
- *
- * Use the Posix poll() call instead of select() ?
- */
-
+/* Use the Posix poll() call instead of select() ?
+*/
 #define USE_POLL 0
 
-/*
- * HAVE_PNG
- *
- * Do we have libpng ?
- */
-  
+/* Do we have libpng ? (for reading .png images)
+*/
 #define HAVE_PNG 0
 
-/*
- * HAVE_JPEG
- *
- * Do we have libjpeg ?
- */
-  
+/* Do we have libjpeg ? (for reading .jpg images)
+*/
 #define HAVE_JPEG 0
 
-/*
- * HAVE_DLOPEN
- *
- * Enables plugin support on Unix
- */
-  
-#define HAVE_DLOPEN 0
-
-/*
- * HAVE_PTHREAD
- *
- * Makes Fl::lock() and Fl::unlock() work on Unix
- */
-  
+/* Enables Fl::lock() and Fl::unlock() on Unix
+*/
 #define HAVE_PTHREAD 0
 
-/*
- * Read the conf files. If you turn this off you can delete all the
- * conf_*.c source files from the library.
- */
+/* Enables fl_load_plugin() on Unix
+*/
+#define HAVE_DLOPEN 0
 
-#define USE_CONF 1
-
-/*
- * Load plugins. This makes it understand -theme and also load plugins
- * named in conf files (if conf files are enabled). Requies HAVE_DLOPEN
- */
-
+/* Load plugins. This makes it understand -theme and also load plugins
+   named in conf files (if conf files are enabled). Requies HAVE_DLOPEN
+*/
 #define USE_PLUGINS HAVE_DLOPEN
 
-/*
- * Enable workarounds for bugs in the overlay hardware support in the
- * XFree86 drivers provided by Boxx for their FireGL cards.
- */
+/* Read the conf files (flconfig and scheme/schemename). If you turn
+   this off you can delete all the conf_*.c source files from the library.
+*/
+#define USE_CONF 1
+
+/* Where, after ~/.fltk, to look for conf and plugin files
+*/
+#define CONFIGDIR "/usr/local/lib/fltk"
+
+/* define this to give reading config files a serious speed boost
+   but you will need to call conf_clear_cache() to see changes
+*/
+#define CONF_CACHED
+
+/* The BoXX machines (and possibly other Linux machines) have bugs in
+   the X/OpenGL driver for FireGL for handling hardware overlays. Turn
+   this on to work around these, but it will cause the overlay to
+   blink unnecessarily.
+*/
 #define BOXX_OVERLAY_BUGS 0
 
-/*
- * Enables Windows GUI emulation: clicking on most widgets (such as
- * buttons) moves the focus to them. This makes some useful GUI designs
- * impossible.
- */
+/* The SGI 320 NT machines have a bug where the cursor interferes with
+   the hardware overlay. Turn this on to work around this. I have been
+   told this slows down display quite a bit on some NT machines.
+*/
+#define SGI320_BUG 0
+
+/* Enables Windows GUI emulation: clicking on most widgets (such as
+   buttons) moves the focus to them. This makes some useful GUI designs
+   impossible.
+*/
 #define CLICK_MOVES_FOCUS 0
 
-/*
- * Enables Windows GUI emulation: hitting the Alt key navigates the
- * focus to the menubar. This makes using Alt as a modifier for dragging
- * windows difficult as the user must click the mouse if they thought
- * they were going to drag and change their minds.
- */
+/* Enables Windows GUI emulation: hitting the Alt key navigates the
+   focus to the menubar. This makes using Alt as a modifier very
+   difficult because the user can't press it and then change their
+   mind and release it.
+*/
 #define ALT_GOES_TO_MENUBAR 0
 
 /*
- * CONFIGDIR
- *
- * Where, after ~/.fltk, to look for conf and plugin files
- */
-
-#define CONFIGDIR "."
-
-/*
- * CONF_CACHED
- *
- * define this to give reading config files a serious speed boost
- * but you will need to call conf_clear_cache() to see changes
- *
-*/
-
-#define CONF_CACHED
-
-/*
- * End of "$Id: configh.in,v 1.44 2001/07/24 07:48:22 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.45 2001/08/05 10:48:38 spitzak Exp $".
  */

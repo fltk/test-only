@@ -3,7 +3,7 @@
 #include <string.h>
 #include <fltk/Fl_Window.h>
 #include "Fl_Type.h"	// for indent() prototype
-#if defined(WIN32) && !defined (__GNUC__)
+#if defined(_WIN32) && !defined (__GNUC__)
 #	define strcasecmp  stricmp
 #else
 #	include "../config.h" // for strcasecmp
@@ -40,7 +40,7 @@ coding_style_option options[] = {
 		
 static FILE *get_coding_style_file(const char *mode)
 {
-#ifdef WIN32
+#ifdef _WIN32
   FILE *fp = fopen("fluid_coding_style", mode);
 #else
   char s[256];

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.71 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.72 2001/08/05 10:48:38 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,6 @@ bool fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 int Fl_Window::handle(int event) {
   switch (event) {
     case FL_SHOW: {
-
       // limit events to only this window if it is modal:
       if (!parent() && modal()) {Fl::modal_ = this; fl_fix_focus();}
 
@@ -174,8 +173,8 @@ int Fl_Window::handle(int event) {
 	Fl_Window* w = this;
 	for (w = this; (w = Fl::next_window(w));) if (w->modal()) break;
 	Fl::modal_ = w;
-		// if this is the only one, close it.
-	if(!Fl::next_window(this)) Fl::modal_ = NULL;
+	// if this is the only modal window we exit the modal mode:
+	if (!Fl::next_window(this)) Fl::modal_ = NULL;
       }
       //      if (!parent()) {
       // WAS: I temporarily removed this to see if I can get it to work...
@@ -348,5 +347,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.71 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.72 2001/08/05 10:48:38 spitzak Exp $".
 //

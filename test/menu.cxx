@@ -21,7 +21,12 @@
 #define HEIGHT 23
 
 void callback(Fl_Widget* w, void*) {
-  printf("Callback for %s\n", w->label());
+  Fl_Menu_* menu = (Fl_Menu_*)w;
+  Fl_Widget* item = menu->item();
+  printf("Callback for %s, item is %s\n",
+	 menu->label() ? menu->label() : "menu bar",
+	 item->label() ? item->label() : "unnamed");
+  item->do_callback();
 }
 
 const char* const strings[] = {

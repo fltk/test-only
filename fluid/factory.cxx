@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: factory.cxx,v 1.21 2001/08/05 10:48:38 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #include <fltk/Fl_Menu_Item.h>
 #include <string.h>
 #include <stdio.h>
-#if defined(WIN32) && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
 #	include "../visualc/config.h"
 #else
 #include <config.h> // for strcasecmp
@@ -634,5 +634,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.21 2001/08/05 10:48:38 spitzak Exp $".
 //

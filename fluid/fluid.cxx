@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.51 2001/08/05 10:48:38 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ const char *copyright =
 #include <ctype.h>
 #include <errno.h>
 
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 # include <direct.h>
 #else
 # include <unistd.h>
@@ -135,14 +135,14 @@ void goto_images_dir() {
   // Call to fl_set_images_root_directory so that images are corretly displayed in FLUID.
   // Construct the path name verbosely because images are loaded from draw() function and
   // we do not know what is the cwd at this time
-#ifdef WIN32
-  if(buffer[1] != ':') {
+#ifdef _WIN32
+  if (buffer[1] != ':') {
 #endif
 	// this is skipped on Win32 if the path has a drive letter (like "C:\whatever")
 	memmove(buffer+strlen(pwd)+1, buffer, strlen(buffer));
 	strcpy(buffer, pwd);
 	buffer[strlen(pwd)]='/';
-#ifdef WIN32
+#ifdef _WIN32
   }
 #endif
   Fl_Shared_Image::set_root_directory(buffer);
@@ -266,7 +266,7 @@ extern int pasteoffset;
 static int ipasteoffset;
 
 static char* cutfname() {
-#ifdef WIN32
+#ifdef _WIN32
   static char name[MAX_PATH+16] = "";
 
   if (!name[0]) {
@@ -460,7 +460,7 @@ static int arg(int argc, char** argv, int& i) {
   return 0;
 }
 
-#ifndef WIN32
+#ifndef _WIN32
 
 #include <signal.h>
 #ifdef _sigargs
@@ -514,12 +514,12 @@ int main(int argc,char **argv) {
   }
   if (compile_only) {write_cb(0,0); exit(0);}
   modflag = 0;
-#ifndef WIN32
+#ifndef _WIN32
   signal(SIGINT,sigint);
 #endif
   return Fl::run();
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.51 2001/08/05 10:48:38 spitzak Exp $".
 //

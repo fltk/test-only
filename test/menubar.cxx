@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.33 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: menubar.cxx,v 1.34 2001/08/05 10:48:38 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ Fl_Menu_* menus[4];
 
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
-  const Fl_Widget* m = mw->item();
+  Fl_Widget* m = mw->item();
   if (!m)
     printf("NULL\n");
   else if (m->shortcut())
@@ -55,6 +55,7 @@ void test_cb(Fl_Widget* w, void*) {
     else mw->replace("Spitzak", "button");
     menus[0]->redraw();
   }
+  m->do_callback();
 }
 
 void quit_cb(Fl_Widget*, void*) {exit(0);}
@@ -233,5 +234,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.33 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: menubar.cxx,v 1.34 2001/08/05 10:48:38 spitzak Exp $".
 //
