@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.15 1999/11/10 18:06:01 carl Exp $"
+// "$Id: Fl_Box.cxx,v 1.16 1999/11/11 17:47:32 carl Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,21 +38,20 @@ void Fl_Box::draw_n_clip()
     Fl_Widget::draw_n_clip();
 }
 
+static void revert(Fl_Style* s) {
+  s->box = FL_NO_BOX;
+}
+
 // this is private as there is no need for themes to alter this:
+static Fl_Style box_style(0, revert);
 
 Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
   : Fl_Widget(x,y,w,h,l)
 {
   type(FL_BOX);
-  style(default_style);
+  style(box_style);
 }
-
-static void revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
-}
-
-static Fl_Style default_style(0, revert);
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.15 1999/11/10 18:06:01 carl Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.16 1999/11/11 17:47:32 carl Exp $".
 //
