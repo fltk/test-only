@@ -25,6 +25,8 @@
 
 #include "FL_API.h"
 
+#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this
+
 /*! \addtogroup utilities
   \{ */
 
