@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.20 2004/08/30 02:35:13 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.21 2004/09/05 21:40:40 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -242,7 +242,7 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
+static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 {
   // x,y,w *should* be used, if this can be called by drawimage
   // while clipping is on.  However when an Fl_Offscreen is being
@@ -252,6 +252,7 @@ static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
   // (the provided buffer is always big enough for this).
   jpeg_decompress_struct * ptcinfo = (jpeg_decompress_struct *) v;
   jpeg_read_scanlines(ptcinfo, (JSAMPLE**)&b, 1);
+  return b; // +x*3?
 }
 
 #endif
@@ -411,5 +412,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.20 2004/08/30 02:35:13 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.21 2004/09/05 21:40:40 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.181 2004/08/07 20:48:35 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.182 2004/09/05 21:40:40 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1038,7 +1038,7 @@ bool fltk::handle(int event, Window* window)
       e_y = e_y_root+fl_pushed_dy;
       return to->handle(RELEASE) != 0;
     } else {
-      return false;
+      break;
     }
 
   case LEAVE:
@@ -1063,21 +1063,23 @@ bool fltk::handle(int event, Window* window)
   case KEY:
     Tooltip::exit();
     xfocus = window; // this should already be set, but just in case.
-    // try sending keystroke to the focus:
+    // Send to focus widget, then each parent so that keyboard navigation
+    // can be done:
     to = focus();
     if (outside_modal(to)) to = modal_;
     while (to) {
       if (send_from_root(to,event)) return true;
       to = to->parent();
     }
-    // try sending a shortcut to the window:
-    if (handle(SHORTCUT, window)) return true;
-//      // Try using upper-case instead of lower-case for letter shortcuts:
-//      if (islower(e_text[0])) {
-//        e_text[0] ^= 0x20;
-//        return handle(SHORTCUT, window);
-//    }
-    return false;
+    // If nothing wanted the keystroke, try sending shortcut event to
+    // every widget in the window:
+    event = SHORTCUT;
+    to = window;
+    break;
+
+  case KEYUP:
+    to = focus();
+    break;
 
 //default: break;
   }
@@ -1093,17 +1095,9 @@ bool fltk::handle(int event, Window* window)
   }
   dnd_flag = false;
 
-  if (event == RELEASE && !pushed_) {
-    // send a dummy move event when the user releases the mouse:
-    if (xmousewin) handle(MOVE, xmousewin);
-    else belowmouse(0);
-    // Don't pop up the tooltip for whatever they are pointing at:
-    Tooltip::current(belowmouse_);
-  }
-
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.181 2004/08/07 20:48:35 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.182 2004/09/05 21:40:40 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.23 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,7 @@ struct xpm_data {
 };
 
 // callback for 1 byte per pixel:
-static void cb1(void*v, int x, int y, int w, uchar* buf) {
+static const uchar* cb1(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+x;
   U64* q = (U64*)buf;
@@ -74,10 +74,11 @@ static void cb1(void*v, int x, int y, int w, uchar* buf) {
     *q++ = (d.colors[p[1]]<<32) | d.colors[p[0]];
 #endif
   }
+  return buf;
 }
 
 // callback for 2 bytes per pixel:
-static void cb2(void*v, int x, int y, int w, uchar* buf) {
+static const uchar* cb2(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+2*x;
   U64* q = (U64*)buf;
@@ -92,6 +93,7 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
     *q++ = (colors1[index1]<<32) | colors[index];
 #endif
   }
+  return buf;
 }
 
 #else
@@ -107,15 +109,16 @@ struct xpm_data {
 };
 
 // callback for 1 byte per pixel:
-static void cb1(void*v, int x, int y, int w, uchar* buf) {
+static const uchar* cb1(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+x;
   U32* q = (U32*)buf;
   for (int X=w; X--;) *q++ = d.colors[*p++];
+  return buf;
 }
 
 // callback for 2 bytes per pixel:
-static void cb2(void*v, int x, int y, int w, uchar* buf) {
+static const uchar* cb2(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+2*x;
   U32* q = (U32*)buf;
@@ -123,6 +126,7 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
     U32* colors = d.byte1[*p++];
     *q++ = colors[*p++];
   }
+  return buf;
 }
 
 #endif
@@ -295,5 +299,5 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.23 2004/09/05 21:40:41 spitzak Exp $".
 //

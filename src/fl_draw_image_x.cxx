@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.8 2004/08/30 02:35:14 spitzak Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.9 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -521,8 +521,8 @@ static void innards(const uchar *buf, PixelType type,
 	STORETYPE *to = buffer;
 	int k;
 	for (k = 0; j<h && k<blocking; k++, j++) {
-	  cb(userdata, dx, dy+j, w, (uchar*)linebuf);
-	  conv((uchar*)linebuf, (uchar*)to, w, delta);
+	  const uchar* ret = cb(userdata, dx, dy+j, w, (uchar*)linebuf);
+	  conv(ret, (uchar*)to, w, delta);
 	  to += linesize;
 	}
 	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
@@ -535,5 +535,5 @@ static void innards(const uchar *buf, PixelType type,
 #define DITHER_FILLRECT (xvisual->depth <= 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.8 2004/08/30 02:35:14 spitzak Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.9 2004/09/05 21:40:41 spitzak Exp $"
 //

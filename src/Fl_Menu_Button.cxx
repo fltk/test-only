@@ -1,4 +1,4 @@
-// "$Id: Fl_Menu_Button.cxx,v 1.61 2004/08/02 07:35:18 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.62 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -81,8 +81,8 @@ void PopupMenu::draw() {
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
   draw_label(x,y,w,h, style(), flags);
   // draw the little mark at the right:
-  int w1 = int(textsize());
-  draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
+//    int w1 = int(textsize());
+//    draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
   focusbox()->draw(x+1, y+1, w-2, h-2, style(), flags);
 }
 
@@ -167,5 +167,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.61 2004/08/02 07:35:18 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.62 2004/09/05 21:40:41 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.39 2004/08/30 02:35:13 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.40 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -186,7 +186,7 @@ int ccHueBox::handle(int e) {
   }
 }
 
-static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
+static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
   ccHueBox* v = (ccHueBox*)vv;
   int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
   v->box()->inset(x1,y1,w1,h1);
@@ -196,6 +196,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 #else
   const float V = 1.0f;
 #endif
+  uchar* buf = p;
   for (int x = X; x < X+W; x++) {
     float Xf = float(x)/w1;
     float H,S; tohs(Xf,Yf,H,S);
@@ -205,6 +206,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
     *buf++ = uchar(255*g+.5f);
     *buf++ = uchar(255*b+.5f);
   }
+  return p;
 }
 
 void ccHueBox::draw() {
@@ -264,7 +266,7 @@ struct Idata {
   bool aimage;
 };
 
-static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
+static const uchar* generate_vimage(void* vv, int X, int Y, int W, uchar* p) {
   const Idata& i = *((Idata*)vv);
   float yy = 255*(float(Y-3)/(i.h-6));
   if (yy<0) yy = 0; else if (yy > 255) yy = 255;
@@ -272,6 +274,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   uchar r = uchar(i.r*Yf+.5f);
   uchar g = uchar(i.g*Yf+.5f);
   uchar b = uchar(i.b*Yf+.5f);
+  uchar* buf = p;
   if (i.aimage) {
     uchar r1 = uchar(r+yy);
     uchar g1 = uchar(g+yy);
@@ -289,6 +292,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
       *buf++ = r; *buf++ = g; *buf++ = b;
     }
   }
+  return p;
 }
 
 void ccValueBox::draw() {
@@ -668,5 +672,5 @@ bool fltk::color_chooser(const char* name, Color& c) {
 /*! \} */
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.39 2004/08/30 02:35:13 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.40 2004/09/05 21:40:41 spitzak Exp $".
 //

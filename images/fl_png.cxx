@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.18 2004/08/30 02:35:13 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.19 2004/09/05 21:40:40 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -148,9 +148,10 @@ void fltk::pngImage::_measure(float &W, float &H) const
 }
 
 #if HAVE_LIBPNG
-static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
+static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
 {
   png_read_row((png_structp)v, b, NULL);
+  return b;
 }
 #endif
 
@@ -264,5 +265,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.18 2004/08/30 02:35:13 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.19 2004/09/05 21:40:40 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.23 2004/08/30 02:35:14 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.24 2004/09/05 21:40:41 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -222,8 +222,7 @@ static void innards(const uchar *buf, PixelType type,
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
       if (!buf) { // run the converter:		  
-        cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
-        from = (uchar*)line_buffer;
+        from = cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
       } else {
         from = buf;
         buf += linedelta;
@@ -313,5 +312,5 @@ static void innards(const uchar *buf, PixelType type,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.23 2004/08/30 02:35:14 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.24 2004/09/05 21:40:41 spitzak Exp $".
 //

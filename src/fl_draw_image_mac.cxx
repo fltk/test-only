@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.7 2004/08/30 02:35:14 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.8 2004/09/05 21:40:41 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -82,9 +82,8 @@ static void innards(const uchar *buf, PixelType type,
               if ( mono ) delta -= 1; else delta -= 3; 
               for ( int i=0; i<H; i++ )
               {
-                uchar *src = tmpBuf;
                 uchar *dst = base + i*rowBytes;
-                cb( userdata, 0, i, W, tmpBuf );
+                const uchar* src = cb( userdata, 0, i, W, tmpBuf );
                 if ( mono ) {
                   for ( int j=0; j<W; j++ )
                     { uchar c = *src++; *dst++ = 0; *dst++ = c; *dst++ = c; *dst++ = c; src += delta; }
@@ -133,8 +132,7 @@ static void innards(const uchar *buf, PixelType type,
     uchar *tmpBuf = new uchar[ W*3 ];
     for ( int i=0; i<H; i++ )
     {
-      uchar *src = tmpBuf;
-      cb( userdata, 0, i, W, tmpBuf );
+      const uchar* src = cb( userdata, 0, i, W, tmpBuf );
       for ( int j=0; j<W; j++ )
       {
         if ( mono )          
@@ -228,8 +226,7 @@ static void innards(const uchar *buf, PixelType type,
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
       if (!buf) { // run the converter:
-	cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
-	from = (uchar*)line_buffer;
+	from = cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
       } else {
 	from = buf;
 	buf += linedelta;
@@ -256,5 +253,5 @@ static void innards(const uchar *buf, PixelType type,
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.7 2004/08/30 02:35:14 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.8 2004/09/05 21:40:41 spitzak Exp $".
 //

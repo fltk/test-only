@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.62 2004/07/11 19:54:54 laza2000 Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.63 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -76,7 +76,7 @@ void TooltipBox::layout() {
   int ww, hh;
   ww = MAX_WIDTH;
   measure(label(), ww, hh, flags()|OUTPUT);
-  ww += 6; hh += 6;
+  ww += 7; hh += 6;
 
   // find position on the screen of the widget:
   int ox = event_x_root();
@@ -232,5 +232,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.62 2004/07/11 19:54:54 laza2000 Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.63 2004/09/05 21:40:41 spitzak Exp $".
 //

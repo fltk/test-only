@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.25 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -132,25 +132,22 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 }
 
 /*! \typedef fltk::DrawImageCallback
-  Type of function passed to drawimage(). It must fill in the buffer
-  pointed to by the last argument with the pixels to draw for a row.
-*/
 
-/*!
+  Type of function passed to drawimage(). It must return a pointer
+  to a horizontal row of \a w pixels, starting with the pixel at
+  \a x and \a y (relative to the top-left corner of the image, not
+  to the coordinate space drawimage() is called in). These pixels
+  must be in the format described by \a type passed to drawimage()
+  and must be the \a delta apart passed to drawimage().
 
-  Call the passed function to provide each scan line of the
-  image. This lets you generate the image as it is being drawn, or do
-  arbitrary decompression of stored data (provided it can be
-  decompressed to individual scan lines easily).
+  \a data is the same as the argument passed to drawimage().
+  This can be used to point at a structure of information about
+  the image.
 
-  \a callback is called with the void* \a data argument (this can be
-  used to point at a structure of information about the image), and
-  the x, y, and w of the scan line desired from the image, measured
-  from the upper-left corner. (notice that the upper-left corner is
-  passed as 0,0 to the callback, not \a x,y!). The \a pointer argument
-  to the callback is a buffer, and \a w pixels of data in the form
-  specified by \a type must be written here by \a callback, \a delta
-  apart from each other.
+  The passed \a buffer contains room for at least the number of
+  pixels specified by the width passed to drawimage(). You can use
+  this as temporary storage to construct a row of the image, and
+  return a pointer to it (or offset \a x into it if desired).
 
   Due to cropping, less than the whole image may be requested. So the
   callback may get an \a x greater than zero, the first \a y passed to
@@ -161,8 +158,30 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   once: decompress it into the buffer, and then if x is not zero,
   shift the data over so the x'th pixel is at the start of the buffer.
 
-  You can assume the y's will be consecutive, except the first one may
-  be greater than zero.
+*/
+
+/*!
+
+  Call the passed function to provide each scan line of the
+  image. This lets you generate the image as it is being drawn, or do
+  arbitrary decompression of stored data (provided it can be
+  decompressed to individual scan lines easily).
+
+  \a callback is called with the void* \a data argument (this can be
+  used to point at a structure of information about the image), the x,
+  y, and number of pixels desired from the image, measured from the
+  upper-left corner of the image. It is also given a buffer of at
+  least \a w pixels that can be used as temporary storage, for
+  instance to decompress a line read from a file. You can then return
+  a pointer to this buffer, or to somewhere inside it.
+
+  The callback must return n pixels of the format described by \a
+  type, \a delta apart from each other.
+
+  The \a xywh rectangle describes the area to draw. The callback is
+  called with y values between \a y and \a y+h-1. Due to cropping not
+  all pixels may be asked for. You can assumme y will be asked for in
+  increasing order.
 */
 void fltk::drawimage(DrawImageCallback cb,
 		     void* data, fltk::PixelType type,
@@ -193,5 +212,5 @@ void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.24 2004/08/30 02:35:14 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.25 2004/09/05 21:40:41 spitzak Exp $".
 //

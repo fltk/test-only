@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.49 2004/08/07 22:01:04 laza2000 Exp $"
+// "$Id: fl_draw.cxx,v 1.50 2004/09/05 21:40:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -425,8 +425,6 @@ static void wrap(
   const char* word_end = start; // where to end it if we wrap
   const char* word_start = start; // where to start new segment
   float width = 0; 		// width of current text
-  bool was_symbol = false;      // last block was symbol
-  float symbol_w=0;             // pre-measured symbol width
   // start..p indicates current text segment being built
   int first_segment = segment_count;
 
@@ -438,8 +436,6 @@ static void wrap(
     const Symbol* symbol = 0;
     bool underscore = false;
     const char* q = p;
-
-    symbol_w = 0;
 
     // stop only on "interesting" characters:
   SKIP_LETTERS:
@@ -455,13 +451,6 @@ static void wrap(
 	while (q<end && *q && !isspace((uchar)*q) && *q!='@' && *q!=';') q++;
 	symbol = Symbol::find(p+1,q);
 	if (!symbol) {++p; goto SKIP_LETTERS;}
-        else if (!was_symbol) {
-          // Pre-measure width of the symbol
-          Symbol::text(p+1);
-          float W,H; W = H = getsize(); symbol->measure(W,H); symbol_w = W;
-          Symbol::text("");
-          normalsymbol._measure(W,H); // Restore sizes/fonts
-        }
       }
     } else if (*p=='&' && !(flags&RAW_LABEL) && p+1<end) {
       q = p+1;
@@ -474,10 +463,20 @@ static void wrap(
       ++p; goto SKIP_LETTERS;
     }
 
+    const float text_w = getwidth(word_end, p-word_end);
+    float symbol_w, symbol_h;
+    if (symbol) {
+      Symbol::text(p+1);
+      symbol_w = symbol_h = getsize();
+      symbol->measure(symbol_w, symbol_h);
+      Symbol::text("");
+    } else {
+      symbol_w = symbol_h = 0;
+    }
+
     // Wrap the current block of text:
     if (flags & ALIGN_WRAP) {
-      float newwidth = width + getwidth(word_end, p-word_end);
-      if (x+newwidth+symbol_w > ix+w && (was_symbol || word_start > start)) {
+      if (x+width+text_w+symbol_w > ix+w && word_start > start) {
 	// break before this word
 	if (word_end > start) {
 	  add(0, start, word_end, x, y+ascent, width, getsize(),
@@ -487,22 +486,21 @@ static void wrap(
 	y = align(first_segment, ix, y, w, x);
 	x = ix;
 	width = 0;
-        start = word_end = word_start;
+	start = word_end = word_start;
 	first_segment = segment_count;
 	// back up and start formatting from start of new line:
-	if (!was_symbol && word_start < p) {p = word_start+1; continue;}
+	if (word_start < p) {p = word_start+1; continue;}
       } else {
-	width = newwidth;
+	width += text_w;
 	word_end = p;
       }
     }
-    was_symbol = false;
     // spaces are just added to the current block:
     if (*p == ' ') {p = word_start = q; continue;}
 
     // add text before this next object:
     if (start < p) {
-      width += getwidth(word_end, p-word_end);
+      if (p > word_end) width += text_w;
       add(0, start, p, x, y+ascent, width, getsize(), ascent, spacing);
       x += width;
     }
@@ -514,23 +512,19 @@ static void wrap(
 	add(0, us, us+1, x, y+ascent, getsize(),getsize(), ascent, spacing);
       }
       p = q;
-    } else if (symbol) {      
-      Symbol::text(p+1);
-      float W,H; W = H = getsize(); symbol->measure(W,H);    
-      Symbol::text("");
-      was_symbol = true;
-      if (!W) {
+    } else if (symbol) {
+      if (!symbol_w) {
 	// it may have changed the font or dx,dy:
 	setsa(spacing, ascent);
 	//if (dy > 0) spacing += dy; else ascent -= dy;
-	add(symbol, p+1, q, x, y+ascent, W, H, 0, 0);
+	add(symbol, p+1, q, x, y+ascent, symbol_w, symbol_h, 0, 0);
       } else {
 	// center the symbol in the vertical size of current font:
 	//int a = ascent-((spacing-int(H+1.5f))>>1);
-	int a = int(getascent()-getdescent()+H+1)>>1;
-	add(symbol, p+1, q, x, y, W, H, a, int(H+.5));
-	x += W;        
-      }      
+	int a = int(getascent()-getdescent()+symbol_h+1)>>1;
+	add(symbol, p+1, q, x, y, symbol_w, symbol_h, a, int(symbol_h+.5));
+	x += symbol_w;
+      }
       // skip the terminating space or semicolon:
       if (q < end && *q==';') q++;
       p = q;
@@ -573,7 +567,7 @@ static float split(
       w = W-x;
     } else if (*p == '\t') {
       if (column && *column) {
-        w = (float)(*column++);
+	w = (float)(*column++);
       }
       else w = ((p-str+4)&-4)*getwidth("2",1);
     } else {
@@ -640,17 +634,17 @@ static void _drawtext(
     for (h = 0; h < segment_count; h++) {
       Segment& s = segments[h];
       if (s.column != current_column) {
-        current_column = s.column;
-        int i, xx = X;
-        for (i=0; i<current_column; i++) xx += column_widths_[i];
-        pop_clip();
-        push_clip(xx, Y, column_widths_[current_column], H);
+	current_column = s.column;
+	int i, xx = X;
+	for (i=0; i<current_column; i++) xx += column_widths_[i];
+	pop_clip();
+	push_clip(xx, Y, column_widths_[current_column], H);
       }
       if (s.symbol) {
-        Symbol::text(s.start);
-        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
+	Symbol::text(s.start);
+	s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
       } else {
-        drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+	drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
       }
     }
     pop_clip();
@@ -658,10 +652,10 @@ static void _drawtext(
     for (h = 0; h < segment_count; h++) {
       Segment& s = segments[h];
       if (s.symbol) {
-        Symbol::text(s.start);
-        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
+	Symbol::text(s.start);
+	s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
       } else {
-        drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+	drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
       }
     }
   }
@@ -732,5 +726,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.49 2004/08/07 22:01:04 laza2000 Exp $".
+// End of "$Id: fl_draw.cxx,v 1.50 2004/09/05 21:40:41 spitzak Exp $".
 //
