@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.8 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: glut_compatability.cxx,v 1.9 2002/09/23 07:15:22 spitzak Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -247,12 +247,13 @@ void glutSetWindow(int win) {
 ////////////////////////////////////////////////////////////////
 #include <fltk/Fl_Menu_.h>
 #include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
 
 #define MAXMENUS 32
 static Fl_Menu_* menus[MAXMENUS+1];
 
-static void menu_cb(Fl_Widget* w, void* v) {
-  ((void(*)(int))(w->user_data()))(int(v));
+static void item_cb(Fl_Widget* w, long v) {
+  ((void(*)(int))(w->parent()->user_data()))(int(v));
 }
 
 static void domenu(int n, int ex, int ey) {
@@ -268,8 +269,10 @@ int glutCreateMenu(void (*cb)(int)) {
   Fl_Group::current(0); // don't add it to any window
   int i;
   for (i=1; i<MAXMENUS; i++) if (!menus[i]) break;
-  Fl_Menu_* m = new Fl_Menu_(0,0,0,0);
-  m->callback(menu_cb, (void*)cb);
+  Fl_Menu_* m = new Fl_Item_Group("menu");
+  // store the callback in the user_data, the child widgets will
+  // look here for it:
+  m->user_data((void*)cb);
   menus[i] = m;
   return glut_menu = i;
 }
@@ -282,7 +285,7 @@ void glutDestroyMenu(int n) {
 void glutAddMenuEntry(const char *label, int value) {
   menus[glut_menu]->begin();
   Fl_Item* m = new Fl_Item(label);
-  m->argument(value);
+  m->callback(item_cb, long(value));
 }
 
 void glutAddSubMenu(const char *label, int submenu) {
@@ -363,5 +366,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.8 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.9 2002/09/23 07:15:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.h,v 1.4 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: Fl_Tooltip.h,v 1.5 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <fltk/Fl_Widget.h>
 
 class FL_API Fl_Tooltip {
+  static Fl_Widget* widget;
 public:
   static float delay() { return delay_; }
   static void delay(float f) { delay_ = f; }
@@ -37,15 +38,14 @@ public:
   static void enable(bool b = true) { enabled_ = b; }
   static void disable() { enabled_ = false; }
 
-  // This is called when the pointer enters a widget,
-  // Also enter(0) gets rid of any displayed or pending tooltip:
-  static void (*enter)(Fl_Widget* w);
-
-  // A widget may also pop up tooltips for internal parts by calling this:
-  static void enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
-
-  // This is called when a widget is destroyed or hidden:
-  static void (*exit)(Fl_Widget *w);
+  typedef const char* (*Generator)(Fl_Widget*, void*);
+  static void enter(Fl_Widget* w, int X, int Y, int W, int H, Generator, void* = 0);
+  static void enter(Fl_Widget* w, int X, int Y, int W, int H, const char* t)
+    { enter(w, X, Y, W, H, 0, (void*)t); }
+  static void enter(Fl_Widget* w);
+  static void exit();
+  static Fl_Widget* current() {return widget;}
+  static void current(Fl_Widget*);
 
   static Fl_Named_Style* default_style;
   static Fl_Font font()		{ return default_style->label_font; }
@@ -67,5 +67,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.h,v 1.4 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.h,v 1.5 2002/09/23 07:15:22 spitzak Exp $".
 //

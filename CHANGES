@@ -2391,3 +2391,25 @@ integers. Also VC++ warns about the int->float conversions. Both of
 these can be fixed with casts but I have not gotten all the VC++
 warnings out yet (I don't turn them off because the double->float
 warning is also turned off and I want that one).
+
+////////////////////////////////////////////////////////////////
+
+Fl_Tooltip::enter() now takes a "generate" function and a void*
+argument. This allows the text to be deferred until the tooltip pops
+up, which may save time if the text is expensive to make.
+
+Fl_Tooltip::current(widget) added, it acts like the tooltip is already
+set for the given widget. This may be useful for preventing tooltips
+from popping up when the mouse moves back into a widget. Unfortunately
+fltk cannot call this itself because it has to allow the callbacks to
+destroy the widgets.
+
+Instead I did other fixes so that when you click and release a mouse
+button, the tooltip does not pop back up. I fixed 3 cases: dragging
+off a button so you are pointing at another, a pop-up menu
+disappearing so the cursor lands in a widget, and a modal window
+disappearing so the cursor lands in a widget. This was a big PITA but
+it should get rid of the biggest problems with fltk's over-exuberance
+for showing tooltips.
+
+The glut emulation pop-up menus have been fixed.

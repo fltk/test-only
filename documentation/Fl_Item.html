@@ -22,15 +22,27 @@
 
 This widget is designed to be put into <a
 href="Fl_Menu_.html">Fl_Menu</a> and <a
-href="Fl_Browser.html">Fl_Browser</a> widgets. It draws it's label()
-without erasing the background, if <tt>FL_SELECTED</tt> is set in the
-flags it draws the label with the selected label color so it contrasts
-with the background.
+href="Fl_Browser.html">Fl_Browser</a> widgets.
+
+<p>It's draw() method is designed to appear correctly inside menus and
+browsers, despite inconsistencies in the designs of these things on
+Windows. By default it does not erase it's background and assumes that
+if <tt>FL_SELECTED</tt> is set in the flags it should use the
+selected_label_color(). You can change this by setting box() or the
+colors in the style, or by overriding the draw() method, but if you do
+so you will probably have to limit your widget to either menus or
+browsers, but not both.
+
+<p>The browser draws the focus dotted box and the hierarchy
+indicators, and the shortcut key assigments in menus is drawn by the
+menu code. You cannot turn these off or modify them, unfortunately I
+was unable to get these into the child widgets and still replicate the
+standard Windows UI appearance.
 
 <p>Currently you can set <a href="Fl_Widget.html#type">type()</a> to
 <tt>Fl_Item::TOGGLE</tt> to get a checkmark on the left and
 <tt>Fl_Item::RADIO</tt> to make it a radio button. This may change in
-future versions however and you may need a subclass for this.
+future versions however and you may need to use a subclass for this.
 
 <p>In a multi-browser, the <a href="Fl_Widget.html#selected">selected()</a>
 indicates if the widget is currently selected.

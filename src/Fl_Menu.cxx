@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.129 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.130 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -752,15 +752,18 @@ int Fl_Menu_::popup(
     }
   }
 
-  Fl::modal(saved_modal, saved_grab);
   Fl::remove_timeout(autoscroll_timeout, &p);
 
   // destroy all the submenus we created:
   delete p.fakemenu;
   while (--p.nummenus) delete p.menus[p.nummenus];
-  toplevel.hide();
 
+  // I believe this is here so that if you exec() a window in response
+  // to a menu item the correct window is selected as the parent:
   Fl::first_window((Fl_Window*)(toplevel.child_of()));
+
+  toplevel.hide();
+  Fl::modal(saved_modal, saved_grab);
 
   if (p.state != DONE_STATE) return 0; // user did not pick anything
 
@@ -772,5 +775,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.129 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.130 2002/09/23 07:15:22 spitzak Exp $".
 //

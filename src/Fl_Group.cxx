@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.113 2002/09/02 06:33:47 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.114 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -240,52 +240,48 @@ int Fl_Group::handle(int event) {
 
   // Try to give all other events to every child, starting at focus:
 
-  if (!numchildren) return false;
-  // Try to give to each child, starting at focus:
-  int previous = focus_;
-  if (previous < 0 || previous >= numchildren) previous = 0;
-  for (i = previous;;) {
-    if (child(i)->send(event)) return true;
-    if (++i >= numchildren) i = 0;
-    if (i == previous) break;
-  }
-
-  if (event == FL_SHORTCUT) {
-    // Try to do keyboard navigation for unused shortcut keys:
-    // Ignore if focus is not a child of this, but work if there is no focus:
-    //if (Fl::focus()==this || Fl::focus() && !contains(Fl::focus())) return 0;
-    int key = navigation_key();
-    if (!key) return false;
-
+  if (numchildren) {
+    // Try to give to each child, starting at focus:
+    int previous = focus_;
+    if (previous < 0 || previous >= numchildren) previous = 0;
     for (i = previous;;) {
-      if (key == FL_Left || key == FL_Up) {
-	if (i) --i;
-	else {
-	  if (parent()) return false;
-	  i = numchildren-1;
+      if (child(i)->send(event)) return true;
+      if (++i >= numchildren) i = 0;
+      if (i == previous) break;
+    }
+
+    if (event == FL_SHORTCUT) {
+      // Try to do keyboard navigation for unused shortcut keys:
+      int key = navigation_key();
+      if (key) for (i = previous;;) {
+	if (key == FL_Left || key == FL_Up) {
+	  if (i) --i;
+	  else {
+	    if (parent()) return false;
+	    i = numchildren-1;
+	  }
+	} else {
+	  ++i;
+	  if (i >= numchildren) {
+	    if (parent()) return false;
+	    i = 0;
+	  }
 	}
-      } else {
-	++i;
-	if (i >= numchildren) {
-	  if (parent()) return false;
-	  i = 0;
+	if (i == previous) {
+	  Fl::focus(0);
+	  return child(i)->take_focus();
 	}
+	if (key == FL_Down || key == FL_Up) {
+	  // for up/down, the widgets have to overlap horizontally:
+	  Fl_Widget* o = child(i);
+	  Fl_Widget* p = child(previous);
+	  if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
+	}
+	if (child(i)->take_focus()) return true;
       }
-      if (i == previous) {
-	Fl::focus(0);
-	return child(i)->take_focus();
-      }
-      if (key == FL_Down || key == FL_Up) {
-	// for up/down, the widgets have to overlap horizontally:
-	Fl_Widget* o = child(i);
-	Fl_Widget* p = child(previous);
-	if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
-      }
-      if (child(i)->take_focus()) return true;
     }
   }
-
-  return false;
+  return Fl_Widget::handle(event);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -591,5 +587,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.113 2002/09/02 06:33:47 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.114 2002/09/23 07:15:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.151 2002/09/18 05:51:45 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.152 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <config.h>
+#include <assert.h>
 
 float Fl::version() {return FL_VERSION;}
 
@@ -64,10 +65,6 @@ static Fl_Window *xfocus;	// which window X thinks has focus
 static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
 
 void fl_fix_focus();
-
-static void nothing(Fl_Widget *) {}
-FL_API void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
-FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
 #ifdef _WIN32
 # include "Fl_win32.cxx"
@@ -432,10 +429,10 @@ void Fl_Widget::throw_focus() {
   if (contains(selection_requestor)) selection_requestor = 0;
 #endif
   if (contains(Fl::belowmouse())) {Fl::belowmouse_ = 0; Fl::e_is_click = 0;}
+  if (this == xmousewin) xmousewin = Fl::first_window();
   if (contains(Fl::focus())) Fl::focus_ = 0;
   if (this == xfocus) xfocus = 0;
-  if (this == xmousewin) xmousewin = 0;
-  Fl_Tooltip::exit(this);
+  if (this == Fl_Tooltip::current()) Fl_Tooltip::current(0);
   if (this == Fl::modal_) {Fl::modal_ = 0; Fl::exit_modal();}
 }
 
@@ -509,18 +506,18 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 #endif
   }
 
-  if (widget != modal_) {
-    modal_ = widget;
-    pushed_ = belowmouse_ = 0;
-    fl_fix_focus();
-    // generate a dummy move event so the highlights are correct for
-    // the new modal widget:
-    if (xmousewin) {
-      Fl::e_x = Fl::e_x_root-xmousewin->x();
-      Fl::e_y = Fl::e_y_root-xmousewin->y();
-      Fl::handle(FL_MOVE, xmousewin);
-    }
-  }
+  modal_ = widget;
+  fl_fix_focus();
+  // Generate a dummy move event so the highlights are correct for
+  // the new modal widget. This is mostly useful when exiting modal
+  // state because it will correct the highlights in the new top
+  // window. This also stops tooltips from appearing in for the
+  // widget the mouse ends up pointing at. For this to work you should
+  // hide any modal windows or widgets before calling this to turn
+  // modal state off.
+  if (xmousewin) handle(FL_MOVE, xmousewin);
+  // Don't pop up the tooltip for whatever they are pointing at:
+  Fl_Tooltip::current(belowmouse_);
 
   exit_modal_ = false;
 }
@@ -553,8 +550,8 @@ bool Fl::handle(int event, Fl_Window* window)
   switch (event) {
 
   case FL_PUSH:
-    Fl_Tooltip::enter((Fl_Widget*)0);
     if (pushed()) to = pushed();
+    Fl_Tooltip::current(to);
     break;
 
   case FL_ENTER:
@@ -573,7 +570,7 @@ bool Fl::handle(int event, Fl_Window* window)
     return ret;}
 
   case FL_LEAVE:
-    if (!pushed_) {belowmouse(0); Fl_Tooltip::enter(0);}
+    if (!pushed_) {belowmouse(0); Fl_Tooltip::exit();}
     return true;
 
   case FL_RELEASE:
@@ -597,7 +594,7 @@ bool Fl::handle(int event, Fl_Window* window)
     break;
 
   case FL_KEY:
-    Fl_Tooltip::enter((Fl_Widget*)0);
+    Fl_Tooltip::exit();
     xfocus = window; // this should already be set, but just in case.
     // try sending keystroke to the focus:
     to = focus();
@@ -632,11 +629,13 @@ bool Fl::handle(int event, Fl_Window* window)
     // send a dummy move event when the user releases the mouse:
     if (xmousewin) handle(FL_MOVE, xmousewin);
     else belowmouse(0);
+    // Don't pop up the tooltip for whatever they are pointing at:
+    Fl_Tooltip::current(belowmouse_);
   }
 
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.151 2002/09/18 05:51:45 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.152 2002/09/23 07:15:22 spitzak Exp $".
 //

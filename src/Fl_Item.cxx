@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.18 2002/09/09 01:39:57 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.19 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -99,7 +99,7 @@ void Fl_Item::layout() {
 
 #include <fltk/Fl_Item_Group.h>
 
-Fl_Item_Group::Fl_Item_Group(const char* l) : Fl_Group(0,0,0,0,l) {
+Fl_Item_Group::Fl_Item_Group(const char* l) : Fl_Menu_(0,0,0,0,l) {
   style(::style);
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.41 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.42 2002/09/23 07:15:22 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -72,7 +72,6 @@ static Fl_List default_list;
 Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l), list_(&default_list), item_(0) {
   callback(default_callback);
-  end();
 }
 
 int Fl_Menu_::children(const int* indexes, int level) const {
@@ -124,7 +123,8 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
 
 // Normally the callback for the menu is set to this:
 void Fl_Menu_::default_callback(Fl_Widget* widget, void*) {
-  ((Fl_Menu_*)widget)->item()->do_callback();
+  Fl_Widget* item = ((Fl_Menu_*)widget)->item();
+  if (item) item->do_callback();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -222,5 +222,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.41 2002/01/20 07:37:15 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.42 2002/09/23 07:15:22 spitzak Exp $"
 //

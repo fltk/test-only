@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.134 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.135 2002/09/23 07:15:23 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -768,7 +768,7 @@ bool fl_handle()
     if (fl_xevent.xcrossing.detail == NotifyInferior) break;
     set_event_xy(false);
     Fl::e_state = fl_xevent.xcrossing.state << 16;
-    xmousewin = 0;
+    if (window == xmousewin) xmousewin = 0;
     break;
 
   case FocusIn:
@@ -1374,5 +1374,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.134 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.135 2002/09/23 07:15:23 spitzak Exp $".
 //

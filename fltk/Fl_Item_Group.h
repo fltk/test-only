@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item_Group.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Item_Group.h,v 1.2 2002/09/23 07:15:22 spitzak Exp $"
 //
 // Widget designed to be a nested list in a menu or browser.
 // Code is in Fl_Item.cxx
@@ -27,9 +27,9 @@
 #ifndef Fl_Item_Group_H
 #define Fl_Item_Group_H
 
-#include "Fl_Group.h"
+#include "Fl_Menu_.h"
 
-class FL_API Fl_Item_Group : public Fl_Group {
+class FL_API Fl_Item_Group : public Fl_Menu_ {
 public:
   void draw();
   void layout();

@@ -7,7 +7,7 @@
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href="Fl_Group.html">Fl_Group</a>
+<a href="Fl_Menu_.html">Fl_Menu_</a>
    |
    +----<b>Fl_Item_Group</b>
 </pre>
@@ -20,16 +20,22 @@
 
 <h3>Description</h3>
 
-This widget is designed to be put into <a
-href="Fl_Menu_.html">Fl_Menu</a> and <a
-href="Fl_Browser.html">Fl_Browser</a> widgets. It indicates the title
+This widget describes a set of items that are to be put inside a
+<a href="Fl_Menu_.html">Fl_Menu</a> or <a
+href="Fl_Browser.html">Fl_Browser</a> widget. It indicates the title
 of a submenu, or a level of hierarchy in the browser. Any child
 widgets are the items in that submenu, or the items under this parent
 in the browser.
 
-<p>It draws it's label() without erasing the background, if
-<tt>FL_SELECTED</tt> is set in the flags it draws the label with the
-selected label color so it contrasts with the background.
+<p>If this widget is told to draw, it draws just like <a
+href="Fl_Item.html">Fl_Item</a> draws. See that for more details. The
+triangle indicating a submenu is not drawn by this, it is drawn by the
+parent menu.
+
+<p>Because this is an Fl_Menu_ subclass, you can also call <a
+href="Fl_Menu_.html#popup">popup()</a> and <a
+href="Fl_Menu_.html#add">add()</a> and other methods to manipulate the
+items inside it.
 
 <p>In a browser, the <a href="Fl_Widget.html#value">value()</a>
 indicates if the widget is open or not.  In a multi-browser, the <a
