@@ -1,5 +1,5 @@
 //
-// "$Id: shape.cxx,v 1.11 2004/06/07 00:26:22 spitzak Exp $"
+// "$Id: shape.cxx,v 1.12 2004/12/21 16:42:35 spitzak Exp $"
 //
 // Tiny OpenGL demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,7 @@ class shape_window : public fltk::Widget {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    : Widget(FLTK::DOWN_BOX,x,y,w,h,l){
+    : Widget(x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
@@ -113,5 +113,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shape.cxx,v 1.11 2004/06/07 00:26:22 spitzak Exp $".
+// End of "$Id: shape.cxx,v 1.12 2004/12/21 16:42:35 spitzak Exp $".
 //

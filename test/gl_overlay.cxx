@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.12 2004/05/15 20:52:47 spitzak Exp $"
+// "$Id: gl_overlay.cxx,v 1.13 2004/12/21 16:42:34 spitzak Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ class shape_window : public fltk::Widget {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :fltk::Widget(FLTK::DOWN_BOX,x,y,w,h,l){
+    :fltk::Widget(x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
@@ -190,5 +190,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.12 2004/05/15 20:52:47 spitzak Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.13 2004/12/21 16:42:34 spitzak Exp $".
 //
