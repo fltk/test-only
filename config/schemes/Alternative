@@ -113,8 +113,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 
   [widgets/counter]                               # counter attributes
     box = border                                  # boxtype of the counter's text area
-    selection color = puke green                  # background color of selected text
-    selection text color = white                  # color of selected text
+    color = light2                                # color of text area
 
   [widgets/tooltip]
     delay = 500                                   # milliseconds before tooltip pops up

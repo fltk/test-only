@@ -15,7 +15,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 [widgets]
 
   [widgets/default]
-    highlight color = light2
+    highlight color = light1
 
   [widgets/menu item]                             # menu item attributes
     box = alternative menu                        # boxtype of menu items
@@ -51,4 +51,4 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = engraved                                # box around tooltips
 
 [colors]
-  light2 = 53
+  light1 = 51
