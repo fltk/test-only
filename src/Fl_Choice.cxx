@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.25 1999/11/10 18:06:02 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.26 1999/11/13 03:01:23 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,17 +36,20 @@ extern char fl_draw_shortcut;
 void Fl_Choice::draw() {
   draw_button();
   // draw the tick mark:
-  int H = labelsize()/2+1;
-  FL_THIN_UP_BOX->draw(x()+w()-3*H, y()+(h()-H)/2, 2*H, H,
-		       color(), FL_FRAME_ONLY);
+  int H = h() - box()->dh() - 4;
+  int X = x()+ w() - box()->dx() - H - 2;
+  int Y = y()+(h()-H)/2;
+  Fl_Flags f = active_r() ? Fl::belowmouse() == this ? FL_HIGHLIGHT : 0
+                            : FL_INACTIVE;
+  draw_glyph(FL_GLYPH_CHOICE, X, Y, H, H, f);
   if (mvalue()) {
     // Shouldn't do this, but we can handle it
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
-    fl_clip(x(), y(), w()-3*H, h());
+    fl_clip(x(), y(), X-x(), h());
     fl_draw_shortcut = 2; // hack value to make '&' disappear
     Fl_Boxtype b = box();
-    m.draw(x()+b->dx(), y()+b->dy(), w()-b->dw()-3*H, h()-b->dh(), this, 0, 0);
+    m.draw(x()+b->dx(), y()+b->dy(), X-x(), h()-b->dh(), this, 0, 0);
     fl_draw_shortcut = 0;
     fl_pop_clip();
   }
@@ -95,5 +98,5 @@ int Fl_Choice::handle(int e) {
 Fl_Style Fl_Choice::default_style("Choice");
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.25 1999/11/10 18:06:02 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.26 1999/11/13 03:01:23 carl Exp $".
 //

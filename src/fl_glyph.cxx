@@ -3,13 +3,6 @@
 
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
-#include <FL/Fl_Bitmap.H>
-#include "fastarrow.h"
-static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
-#include "mediumarrow.h"
-static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
-#include "slowarrow.h"
-static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 void fl_glyph(int t, int x,int y,int w,int h,
 	      Fl_Color bc, Fl_Color fc, Fl_Flags f, Fl_Boxtype box)
@@ -45,7 +38,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     }
     break;
   case FL_GLYPH_RADIO:
-    //h = (h+1)&-2; // even only
+    h = (h+1)&(~1); // even only
     if (box != FL_NO_BOX) FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
@@ -58,7 +51,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_UP: {
     box->draw(x,y,w,h, bc, f);
-    x += 2; y += 2; w -= 4; h -= 4;
+    x += 3; y += 3; w -= 6; h -= 6;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -68,7 +61,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_DOWN: {
     box->draw(x,y,w,h, bc, f);
-    x += 2; y += 2; w -= 4; h -= 4;
+    x += 3; y += 3; w -= 6; h -= 6;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -78,7 +71,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_LEFT: {
     box->draw(x,y,w,h, bc, f);
-    x += 2; y += 2; w -= 4; h -= 4;
+    x += 3; y += 3; w -= 6; h -= 6;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
@@ -88,28 +81,13 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_RIGHT: {
     box->draw(x,y,w,h, bc, f);
-    x += 2; y += 2; w -= 4; h -= 4;
+    x += 3; y += 3; w -= 6; h -= 6;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
     int X1 = x+w-w1/2-W1/2-1;
     fl_color(fc);
     fl_polygon(X1+W1, Y1, X1, Y1+W1, X1, Y1-W1);
-    break;}
-  case FL_GLYPH_FASTARROW: {
-    box->draw(x,y,w,h, bc, f);
-    fl_color(fc);
-    fastarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
-    break;}
-  case FL_GLYPH_MEDIUMARROW: {
-    box->draw(x,y,w,h, bc, f);
-    fl_color(fc);
-    mediumarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
-    break;}
-  case FL_GLYPH_SLOWARROW: {
-    box->draw(x,y,w,h, bc, f);
-    fl_color(fc);
-    slowarrow.draw(x, y, w, h, FL_ALIGN_CENTER);
     break;}
   case FL_GLYPH_VNSLIDER: {
     box->draw(x,y,w,h, bc, f);
@@ -121,7 +99,11 @@ void fl_glyph(int t, int x,int y,int w,int h,
     int d = (w-4)/2;
     FL_THIN_DOWN_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
     break;}
-
+  case FL_GLYPH_CHOICE: {
+    h /= 2;
+    y += h/2;
+    box->draw(x,y,w,h, bc, f);
+    break;}
   default:
     box->draw(x,y,w,h, bc, f);
     break;

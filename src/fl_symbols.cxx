@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.11 1999/11/01 02:21:39 carl Exp $"
+// "$Id: fl_symbols.cxx,v 1.12 1999/11/13 03:01:24 carl Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -88,7 +88,7 @@ int fl_add_symbol(const char *name, void (*drawit)(Fl_Color), int scalable)
   return 1;
 }
 
-int fl_return_arrow(int x,int y,int w,int h);
+int fl_return_arrow(int x,int y,int w,int h, int active);
 
 // provided for back compatability:
 int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
@@ -129,7 +129,7 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   int pos = find(p);
   if (!symbols[pos].notempty) return 0;
   if (symbols[pos].scalable == 3) { // kludge to detect return arrow
-    fl_return_arrow(x,y,w,h);
+    fl_return_arrow(x,y,w,h,1);
     return 1;
   }
   fl_push_matrix();
@@ -395,5 +395,5 @@ void Fl::enable_symbols() {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.11 1999/11/01 02:21:39 carl Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.12 1999/11/13 03:01:24 carl Exp $".
 //

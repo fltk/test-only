@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.14 1999/11/10 18:06:02 carl Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.15 1999/11/13 03:01:23 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,12 +31,14 @@ void Fl_Check_Button::draw() {
   // Draw the outer box as though it was a button:
   Fl_Flags f = flags();
   Fl_Color c = color();
+  Fl_Color bc = off_color();
   Fl_Color lc = label_color();
   if (!active_r()) {
+    bc = fl_inactive(bc);
     f |= FL_INACTIVE;
   } else if (Fl::belowmouse() == this && highlight_color()) {
     c = highlight_color();
-    if (highlight_label_color()) lc = highlight_label_color();
+    lc = highlight_label_color();
     f |= FL_HIGHLIGHT;
   }
   box()->draw(x(), y(), w(), h(), c,
@@ -46,8 +48,8 @@ void Fl_Check_Button::draw() {
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
   glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
-	  x()+d, y()+d+1, W, W, off_color(),
-	  (f&FL_VALUE) ? on_color() : off_color(), f, glyph_box());
+	  x()+d, y()+d+1, W, W, bc, (f&FL_VALUE) ? on_color() : bc,
+	  f, glyph_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }

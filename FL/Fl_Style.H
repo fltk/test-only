@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.15 1999/11/11 18:25:11 carl Exp $"
+// "$Id: Fl_Style.H,v 1.16 1999/11/13 03:01:21 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -109,11 +109,9 @@ enum Fl_Glyphtype {	// glyph types
   FL_GLYPH_RIGHT,
   FL_GLYPH_VSLIDER,
   FL_GLYPH_HSLIDER,
-  FL_GLYPH_FASTARROW,
-  FL_GLYPH_MEDIUMARROW,
-  FL_GLYPH_SLOWARROW,
   FL_GLYPH_VNSLIDER,
-  FL_GLYPH_HNSLIDER
+  FL_GLYPH_HNSLIDER,
+  FL_GLYPH_CHOICE
 };
 
 FL_API int fl_kde1();
@@ -124,5 +122,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.15 1999/11/11 18:25:11 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.16 1999/11/13 03:01:21 carl Exp $".
 //
