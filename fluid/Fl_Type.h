@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.8 1999/03/31 14:52:31 mike Exp $"
+// "$Id: Fl_Type.h,v 1.9 1999/03/31 19:14:20 carl Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -288,6 +288,7 @@ public:
   ~Fl_Widget_Type();
   void redraw();
 };
+
 void* const LOAD = (void *)9831;
 extern Fl_Widget_Type *current_widget; // one of the selected ones
 
@@ -435,27 +436,27 @@ public:
 };
 
 
+#include <FL/Fl_Menu_.H>
 ////////////////////////////////////////////////////////////////
 // This is the base class for widgets that contain a menu (ie
 // subclasses of Fl_Menu_.
 // This is a parent widget and menu items can be added as
 // children.  An actual array of Fl_Menu_Items is kept parallel
 // with the child objects and updated as they change.
-#include <FL/Fl_Menu_.H>
+
 class Fl_Menu_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
-    Fl_Menu_ *o = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+    Fl_Menu_ *o = (Fl_Menu_*)(this->o);
     switch (w) {
-    case 4:
-    case 0: f = o->textfont(); s = o->textsize(); c = o->textcolor(); break;
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
     case 1: o->textfont(f); break;
     case 2: o->textsize(s); break;
-    case 3: o->textcolor(c); break;
+    case 3: o->textcolor(tc); break;
     }
     return 1;
   }
 public:
-  int is_menu_button() const {return 1;}
+  int is_menu() const {return 1;}
   int is_parent() const {return 1;}
   int menusize;
   void build_menu();
@@ -487,6 +488,7 @@ extern Fl_Menu_Item dummymenu[];
 #include <FL/Fl_Choice.H>
 class Fl_Choice_Type : public Fl_Menu_Type {
 public:
+  int is_choice() const {return 1;}
   virtual const char *type_name() {return "Fl_Choice";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
@@ -544,5 +546,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.8 1999/03/31 14:52:31 mike Exp $".
+// End of "$Id: Fl_Type.h,v 1.9 1999/03/31 19:14:20 carl Exp $".
 //

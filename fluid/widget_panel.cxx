@@ -255,7 +255,7 @@ Fl_Window* make_widget_panel() {
       o->when(0);
     }
     { Fl_Group* o = new Fl_Group(20, 400, 350, 35);
-      { Fl_Button* o = new Fl_Button(20, 400, 90, 35, "No &Overlay");
+      { Fl_Button* o = new Fl_Button(20, 400, 90, 35, "&Overlay");
         o->labelcolor(1);
         o->callback((Fl_Callback*)overlay_cb);
       }

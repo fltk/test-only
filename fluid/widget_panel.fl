@@ -7,8 +7,8 @@ gridy 5
 snap 2
 Function {make_widget_panel()} {open
 } {
-  Fl_Window {} {open
-    xywh {118 26 387 448} resizable hotspot visible
+  Fl_Window {} {open selected
+    xywh {122 42 387 448} resizable hotspot visible
   } {
     Fl_Input {} {
       label {name:}
@@ -213,7 +213,7 @@ Function {make_widget_panel()} {open
       xywh {20 400 350 35}
     } {
       Fl_Button {} {
-        label {No &Overlay}
+        label {&Overlay}
         callback overlay_cb
         xywh {20 400 90 35} labelcolor 1
       }
@@ -238,8 +238,8 @@ Function {make_widget_panel()} {open
 
 Function {make_style_panel()} {open
 } {
-  Fl_Window {} {open selected
-    xywh {83 79 330 279} visible
+  Fl_Window {} {open
+    xywh {87 95 330 279} visible
   } {
     Fl_Choice {} {
       label {label type:}

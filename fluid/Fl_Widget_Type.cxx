@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.25 1999/03/31 14:52:31 mike Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.26 1999/03/31 19:14:20 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -245,7 +245,6 @@ void xclass_cb(Fl_Input* i, void* v) {
     i->show();
     i->value(((Fl_Widget_Type *)current_widget)->xclass);
   } else {
-    modflag = 1;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* w = (Fl_Widget_Type*)o;
@@ -2474,5 +2473,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.25 1999/03/31 14:52:31 mike Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.26 1999/03/31 19:14:20 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.20 1999/03/31 14:52:30 mike Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.21 1999/03/31 19:14:19 carl Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -368,6 +368,7 @@ void Fl_Menu_Item_Type::write_code2() {
             boxname(((Fl_Button*)o)->down_box()));
 }
 
+
 void Fl_Menu_Type::build_menu() {
   Fl_Menu_* w = (Fl_Menu_*)o;
   // count how many Fl_Menu_Item structures needed:
@@ -456,16 +457,10 @@ Fl_Menu_Item button_type_menu[] = {
   {0}};
 
 Fl_Menu_Button_Type Fl_Menu_Button_type;
-
-////////////////////////////////////////////////////////////////
+Fl_Choice_Type Fl_Choice_type;
+Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
 Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
-
-Fl_Choice_Type Fl_Choice_type;
-
-////////////////////////////////////////////////////////////////
-
-Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:
@@ -510,5 +505,5 @@ int Shortcut_Button::handle(int e) {
 }
   
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.20 1999/03/31 14:52:30 mike Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.21 1999/03/31 19:14:19 carl Exp $".
 //
