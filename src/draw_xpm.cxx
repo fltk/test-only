@@ -215,10 +215,10 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 	while (*p && isspace(*p)) p++; uchar what = *p++;
 	while (*p && !isspace(*p)) p++;
 	while (*p && isspace(*p)) p++;
-	if (!*p) {p = previous_word; break;}
-	if (what == 'c') break;
+	if (!*p) break;
 	previous_word = p;
 	while (*p && !isspace(*p)) p++;
+	if (what == 'c') break;
       }
 #ifdef U64
       *(U64*)c = 0;
@@ -226,7 +226,16 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
       c += 4;
 #endif
 #endif
-      Color C = color((const char*)p);
+      Color C;
+      if (*p) {
+	char buf[30];
+	if (p-previous_word > 29) p = previous_word+29;
+	memcpy(buf, previous_word, p-previous_word);
+	buf[p-previous_word] = 0;
+	C = color(buf);
+      } else {	
+	C = color((const char*)previous_word);
+      }
       if (C) {
 	c[0] = uchar(C>>24);
 	c[1] = uchar(C>>16);
