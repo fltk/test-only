@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.25 2004/06/19 23:02:10 spitzak Exp $"
+// "$Id: win32.h,v 1.26 2004/07/19 23:46:23 laza2000 Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,47 @@
 # define VK_LWIN 0x5B
 # define VK_RWIN 0x5C
 # define VK_APPS 0x5D
+#endif
+
+extern "C" {
+	
+int win_8to16(const char *src, int sn, unsigned short *dst, int dn);
+
+// Function pointer declarations
+
+typedef HWND (WINAPI *pfCreateWindowExW)(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+typedef HMODULE (WINAPI *pfLoadLibraryW)(LPCWSTR lpFileName);
+typedef BOOL (WINAPI *pfPeekMessage)(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
+typedef BOOL (WINAPI *pfGetMessage)(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax);
+typedef LRESULT (WINAPI *pfDispatchMessage)(const MSG *lpmsg);
+typedef BOOL (WINAPI *pfSetWindowTextW)(HWND hWnd, LPCWSTR lpString);
+typedef LRESULT (WINAPI *pfDefWindowProc)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+typedef BOOL (WINAPI *pfPostMessage)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+typedef int (WINAPI *pfMessageBoxW)(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType);
+
+typedef HFONT (WINAPI *pfCreateFontIndirectW)(CONST LOGFONTW *);
+typedef BOOL (WINAPI *pfGetTextMetricsW)(HDC, LPTEXTMETRICW);
+
+extern pfCreateWindowExW __CreateWindowExW;
+extern pfLoadLibraryW	 __LoadLibraryW;
+extern pfPeekMessage	 __PeekMessage;
+extern pfGetMessage	 __GetMessage;
+extern pfDispatchMessage __DispatchMessage;
+extern pfSetWindowTextW	 __SetWindowTextW;
+extern pfDefWindowProc	 __DefWindowProc;
+extern pfPostMessage	 __PostMessage;
+extern pfMessageBoxW	 __MessageBoxW;
+
+extern pfCreateFontIndirectW __CreateFontIndirectW;
+extern pfGetTextMetricsW     __GetTextMetricsW;
+
+}; /* extern "C" */
+
+#ifdef __MINGW32__
+// MinGW cannot convert ushort to wchar_t ...
+# define US2WC(x) ((wchar_t*)x)
+#else
+# define US2WC(x) (x)
 #endif
 
 namespace fltk {
@@ -118,5 +159,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.25 2004/06/19 23:02:10 spitzak Exp $".
+// End of "$Id: win32.h,v 1.26 2004/07/19 23:46:23 laza2000 Exp $".
 //
