@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.30 1999/11/01 02:21:16 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.31 1999/11/05 21:43:40 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,9 +49,8 @@ public:
   virtual ~Fl_Widget();
 
   const Fl_Style* style() const {return style_;}
-  int style(Fl_Style* s);
-  int style(Fl_Style* s, Fl_Style* p);
-  int style(Fl_Style& s) {return style(&s);}
+  void style(Fl_Style* s);
+  void style(Fl_Style& s) {style(&s);}
   int copy_style(const Fl_Style* s);
   static Fl_Style default_style;
 
@@ -147,26 +146,26 @@ public:
   void draw_label(int,int,int,int, Fl_Color, Fl_Flags) const;
   void measure_label(int&, int&) const;
 
-  Fl_Boxtype box()		const {return style_->box;}
-  Fl_Boxtype glyph_box()	const {return style_->glyph_box;}
-  Fl_Boxtype box2()	        const {return style_->glyph_box;}
-  Fl_Glyph glyph()		const {return style_->glyph;}
-  Fl_Font label_font()		const {return style_->label_font;}
-  Fl_Font text_font()		const {return style_->text_font;}
-  Fl_Labeltype label_type()	const {return style_->label_type;}
-  Fl_Color color()		const {return style_->color;}
-  Fl_Color up_color()		const {return style_->color;}
-  Fl_Color label_color()	const {return style_->label_color;}
-  Fl_Color selection_color()	const {return style_->selection_color;}
-  Fl_Color selection_text_color() const {return style_->selection_text_color;}
-  Fl_Color on_color()		const {return style_->selection_color;}
-  Fl_Color down_color()		const {return style_->selection_color;}
-  Fl_Color off_color()		const {return style_->off_color;}
-  Fl_Color highlight_color()	const {return style_->highlight_color;}
-  Fl_Color highlight_label_color() const{return style_->highlight_label_color;}
-  Fl_Color text_color()		const {return style_->text_color;}
-  unsigned label_size()		const {return style_->label_size;}
-  unsigned text_size()		const {return style_->text_size;}
+  Fl_Boxtype box()		const {return (Fl_Boxtype)getp((const void* const*)&style_->box);}
+  Fl_Boxtype glyph_box()	const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
+  Fl_Boxtype box2()	        const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
+  Fl_Glyph glyph()		const {return (Fl_Glyph)getp((const void* const*)&style_->glyph);}
+  Fl_Font label_font()		const {return (Fl_Font)getp((const void* const*)&style_->label_font);}
+  Fl_Font text_font()		const {return (Fl_Font)getp((const void* const*)&style_->text_font);}
+  Fl_Labeltype label_type()	const {return (Fl_Labeltype)getp((const void* const*)&style_->label_type);}
+  Fl_Color color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
+  Fl_Color up_color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
+  Fl_Color label_color()	const {return (Fl_Color)geti((const unsigned*)&style_->label_color);}
+  Fl_Color selection_color()	const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
+  Fl_Color selection_text_color() const {return (Fl_Color)geti((const unsigned*)&style_->selection_text_color);}
+  Fl_Color on_color()		const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
+  Fl_Color down_color()		const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
+  Fl_Color off_color()		const {return (Fl_Color)geti((const unsigned*)&style_->off_color);}
+  Fl_Color highlight_color()	const {return (Fl_Color)geti((const unsigned*)&style_->highlight_color);}
+  Fl_Color highlight_label_color() const{return (Fl_Color)geti((const unsigned*)&style_->highlight_label_color);}
+  Fl_Color text_color()		const {return (Fl_Color)geti((const unsigned*)&style_->text_color);}
+  unsigned label_size()		const {return geti((const unsigned*)&style_->label_size);}
+  unsigned text_size()		const {return geti((const unsigned*)&style_->text_size);}
 
   void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
   void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
@@ -190,40 +189,40 @@ public:
   void text_size(unsigned a)	{seti(&style_->text_size, a);}
 
 #ifndef FLTK_2  // back-compatability section:
-  Fl_Boxtype down_box()		const {return style_->glyph_box;}
-  Fl_Boxtype slider()		const {return style_->glyph_box;}
-  Fl_Boxtype fly_box()		const {return style_->box;}
-  Fl_Color color2()		const {return style_->selection_color;}
-  Fl_Color color3()		const {return style_->off_color;}
-  Fl_Labeltype labeltype()	const {return style_->label_type;}
-  Fl_Color labelcolor()		const {return style_->label_color;}
-  Fl_Color down_labelcolor()	const {return style_->selection_text_color;}
-  Fl_Font labelfont()		const {return style_->label_font;}
-  unsigned labelsize()		const {return style_->label_size;}
-  Fl_Color fly_color()		const {return style_->highlight_color;}
-  Fl_Font textfont()		const {return style_->text_font;}
-  unsigned textsize()		const {return style_->text_size;}
-  Fl_Color textcolor()		const {return style_->text_color;}
-  Fl_Color selected_textcolor()	const {return style_->selection_text_color;}
-  Fl_Color cursor_color()	const {return style_->off_color;}
+  Fl_Boxtype down_box()		const {return glyph_box();}
+  Fl_Boxtype slider()		const {return glyph_box();}
+  Fl_Boxtype fly_box()		const {return box();}
+  Fl_Color color2()		const {return selection_color();}
+  Fl_Color color3()		const {return off_color();}
+  Fl_Labeltype labeltype()	const {return label_type();}
+  Fl_Color labelcolor()		const {return label_color();}
+  Fl_Color down_labelcolor()	const {return selection_text_color();}
+  Fl_Font labelfont()		const {return label_font();}
+  unsigned labelsize()		const {return label_size();}
+  Fl_Color fly_color()		const {return highlight_color();}
+  Fl_Font textfont()		const {return text_font();}
+  unsigned textsize()		const {return text_size();}
+  Fl_Color textcolor()		const {return text_color();}
+  Fl_Color selected_textcolor()	const {return selection_text_color();}
+  Fl_Color cursor_color()	const {return off_color();}
 
-  void down_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
-  void slider(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
-  void fly_box(Fl_Boxtype)	{}
-  void color2(Fl_Color a)	{seti(&style_->selection_color, a);}
-  void labeltype(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
-  void labelcolor(Fl_Color a)	{seti(&style_->label_color, a);}
-  void down_labelcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
-  void labelfont(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
-  void labelfont(unsigned a)	{setp((const void**)&style_->label_font, fl_fonts+a);}
-  void labelsize(unsigned a)	{seti(&style_->label_size, a);}
-  void fly_color(Fl_Color a)	{seti(&style_->highlight_color, a);}
-  void textfont(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
-  void textfont(unsigned a)	{setp((const void**)&style_->text_font, fl_fonts+a);}
-  void textsize(unsigned a)	{seti(&style_->text_size, a);}
-  void textcolor(Fl_Color a)	{seti(&style_->text_color, a);}
-  void selected_textcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
-  void cursor_color(Fl_Color a)	{seti(&style_->off_color, a);}
+  void down_box(Fl_Boxtype a)           {glyph_box(a);}
+  void slider(Fl_Boxtype a)             {glyph_box(a);}
+  void fly_box(Fl_Boxtype)              {}
+  void color2(Fl_Color a)               {selection_color(a);}
+  void labeltype(Fl_Labeltype a)        {label_type(a);}
+  void labelcolor(Fl_Color a)           {label_color(a);}
+  void down_labelcolor(Fl_Color a)      {selection_text_color(a);}
+  void labelfont(Fl_Font a)             {label_font(a);}
+  void labelfont(unsigned a)            {label_font(fl_fonts+a);}
+  void labelsize(unsigned a)            {label_size(a);}
+  void fly_color(Fl_Color a)            {highlight_color(a);}
+  void textfont(Fl_Font a)              {text_font(a);}
+  void textfont(unsigned a)             {text_font(fl_fonts+a);}
+  void textsize(unsigned a)             {text_size(a);}
+  void textcolor(Fl_Color a)            {text_color(a);}
+  void selected_textcolor(Fl_Color a)   {selection_text_color(a);}
+  void cursor_color(Fl_Color a)         {off_color(a);}
 #endif
 
 protected:
@@ -246,6 +245,8 @@ protected:
   Fl_Color draw_button() const; // special messy one for button style widgets
   void draw_button_label(int,int,int,int,Fl_Color) const;
 
+  unsigned geti(const unsigned* a) const;
+  void* getp(const void* const* a) const;
   void setp(const void* const *, const void*);
   void seti(const unsigned*, unsigned);
 
@@ -278,5 +279,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.30 1999/11/01 02:21:16 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.31 1999/11/05 21:43:40 carl Exp $".
 //

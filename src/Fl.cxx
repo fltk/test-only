@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.52 1999/11/02 20:55:38 carl Exp $"
+// "$Id: Fl.cxx,v 1.53 1999/11/05 21:43:45 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -813,12 +813,6 @@ int fl_old_shortcut(const char* s) {
   return n | *s;
 }
 
-Fl_Style* Fl_Style::find(const char* name) {
-  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next)
-    if (!strcasecmp(name, p->name)) return p->style;
-  return 0;
-}
-
 //
-// End of "$Id: Fl.cxx,v 1.52 1999/11/02 20:55:38 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.53 1999/11/05 21:43:45 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.13 1999/11/02 20:55:41 carl Exp $"
+// "$Id: fl_options.cxx,v 1.14 1999/11/05 21:43:56 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 #include <FL/Fl_Color.H>
 #include <FL/Fl_Font.H>
 #include <FL/Fl_Labeltype.H>
+#include <FL/Fl_Style.H>
+#include <FL/Fl_Widget.H>
 #include <config.h>
 #ifdef WIN32
 #include <windows.h>
@@ -129,12 +131,14 @@ int Fl::loadscheme(int b) {
     return -1;
   }
 
+  Fl_Style::revert();
+
   char sfile[PATH_MAX];
   strcpy(sfile, p);
 
   if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
     for (p = strtok(temp, CONF_WHITESPACE); p; p = strtok(NULL, CONF_WHITESPACE))
-      if (theme(p)) fprintf(stderr, "Cannot load theme file: %s\n", p);
+      theme(p);
 
   char valstr[80];
   Fl_Color col;
@@ -151,10 +155,6 @@ int Fl::loadscheme(int b) {
     { "LIGHT1", FL_LIGHT1 },
     { "LIGHT2", FL_LIGHT2 },
     { "LIGHT3", FL_LIGHT3 },
-    { "FREE1", FL_FREE_COLOR },
-    { "FREE2", (Fl_Color)(FL_FREE_COLOR+1) },
-    { "FREE3", (Fl_Color)(FL_FREE_COLOR+2) },
-    { "FREE4", (Fl_Color)(FL_FREE_COLOR+3) },
     { 0 }
   };
 
@@ -363,4 +363,49 @@ const char* fl_find_config_file(const char* fn) {
 
 int Fl::getconf(const char *key, char *value, int value_length)
 { return ::getconf(fl_find_config_file("flconfig"), key, value, value_length); }
+
+Fl_Style* Fl_Style::find(const char* name) {
+  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next)
+    if (!strcasecmp(name, p->name)) return p->style;
+  return 0;
+}
+
+static void style_clear(Fl_Style *s) {
+  Fl_Style *p = s->parent;
+  memset(s, 0, sizeof(*s));
+  s->parent = p;
+}
+
+void Fl_Style::revert() {
+  fl_background((Fl_Color)0xc0c0c000);
+  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
+    style_clear(p->style);
+    if (p->revert) p->revert(p->style);
+  }
+  Fl::redraw();
+}
+
+unsigned Fl_Style::geti(unsigned i) const {
+  if (*((unsigned*)(&color+i))) return *((unsigned*)(&color+i));
+  if (parent) return parent->geti(i);
+  return *((unsigned*)&Fl_Widget::default_style.color+i);
+}
+
+void* Fl_Style::getp(unsigned i) const {
+  if (*((void**)(&box+i))) return *((void**)(&box+i));
+  if (parent) return parent->getp(i);
+  return *((void**)&Fl_Widget::default_style.box+i);
+}
+
+Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
+  : name(n), style(&s), revert(rf), next(first)
+{
+  if (revert) revert(style);
+  first = this;
+}
+
+//
+// End of "$Id: fl_options.cxx,v 1.14 1999/11/05 21:43:56 carl Exp $".
+//
+
 

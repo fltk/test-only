@@ -1,6 +1,10 @@
-# What scheme file should we use?
-#default scheme = Demo
+# Which scheme should we use?
+# default scheme = Alternative
 
-# What theme file should we use?
-#default theme = Demo
-#default theme = essai
+# Which theme should we use?
+# default theme = Alternative # loaded by Alternative scheme automatically
+# default theme = KDE
+# default theme = classic
+# default theme = essai
+# default theme = motif
+# default theme = windows

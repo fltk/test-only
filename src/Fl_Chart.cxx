@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.12 1999/11/01 02:21:30 carl Exp $"
+// "$Id: Fl_Chart.cxx,v 1.13 1999/11/05 21:43:48 carl Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -287,7 +287,7 @@ void Fl_Chart::draw() {
 
 Fl_Chart::Fl_Chart(int x,int y,int w,int h,const char *l) :
 Fl_Widget(x,y,w,h,l) {
-  style(Fl_Output::default_style);
+  style(default_style);
   align(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
@@ -381,13 +381,10 @@ void Fl_Chart::maxsize(int m) {
   }
 }
 
-Fl_Style Fl_Chart::default_style = {
- // all zeros
-};
-
+Fl_Style Fl_Chart::default_style;
 static Fl_Style_Definer x("chart", Fl_Chart::default_style);
 
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.12 1999/11/01 02:21:30 carl Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.13 1999/11/05 21:43:48 carl Exp $".
 //

@@ -10,10 +10,10 @@ version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
 [general]
-  themes = Demo                                   # theme plugins to load for this scheme
+  themes = Alternative                            # theme plugins to load for this scheme
 
 [global colors]                                   # global color options
-  background = gray                               # background color
+#  background = gray                              # background color
 #  LIGHT1 = red                                   # color for FL_LIGHT1
 #  LIGHT2 = green                                 # color for FL_LIGHT2
 #  LIGHT3 = blue                                  # color for FL_LIGHT3
@@ -34,7 +34,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     selection color = puke green                  # background color of selected text
     selection text color = white                  # color of selected text
     off color = grey                              # may do something depending on the widget
-    highlight color = light2                      # color of widget when highlighted
+    highlight color = light1                      # color of widget when highlighted
     highlight label color = black                 # color of widget label when highlighted
     text color = black                            # color of text
     label size = 12                               # font size of widget label
@@ -85,7 +85,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = down                                    # boxtype of the slider background area
 
   [widgets/scroll bar]                            # scroll bar attributes
-    selection color = light2                      # color of the scroll bar buttons when pushed
+    selection color = light1                      # color of the scroll bar buttons when pushed
     selection text color = white                  # color of scroll bar button glyphs (if any) when pushed
     color = scroll bar gray                       # color of scroll bar background area
     box = down                                    # boxtype of the scroll bar background area
@@ -99,7 +99,6 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 
   [widgets/output]                                # input and output widget attributes
     box = down                                    # boxtype of the input / output area
-    color = light2                                # background color of output area
     text size = 14                                # size of input / output text
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
@@ -130,8 +129,8 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   green = #00ff00
   blue = #0000ff
   gray = 49
-  black = 0
+  black = 56                                      # do not use 0 when you want FL_BLACK!
   puke green = 14
   white = 7
-  light2 = 53
+  light1 = 51
   scroll bar gray = 46

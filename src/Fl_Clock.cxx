@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.13 1999/11/01 02:21:31 carl Exp $"
+// "$Id: Fl_Clock.cxx,v 1.14 1999/11/05 21:43:50 carl Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -169,26 +169,16 @@ Fl_Clock::~Fl_Clock() {
   Fl::remove_timeout(tick, this);
 }
 
-Fl_Style Fl_Clock_Output::default_style = {
-  0,            // box
-  0,            // glyph_box
-  0,            // glyphs
-  0,            // label_font
-  0,            // text_font
-  0,            // label_type
-  0,            // color
-  0,            // label_color
-  FL_LIGHT1,    // selection_color
-  0,            // selection_text_color
-  FL_DARK3,     // off_color
-  0,            // highlight_color
-  0,            // highlight_label_color
-  FL_BLACK,     // text_color
-  // rest is zero
-};
+Fl_Style Fl_Clock_Output::default_style;
 
-static Fl_Style_Definer x("clock", Fl_Clock_Output::default_style);
+static void revert(Fl_Style* s) {
+  s->selection_color = FL_LIGHT1;
+  s->off_color = FL_DARK3;
+  s->text_color = FL_BLACK;
+}
+
+static Fl_Style_Definer x("clock", Fl_Clock_Output::default_style, revert);
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.13 1999/11/01 02:21:31 carl Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.14 1999/11/05 21:43:50 carl Exp $".
 //

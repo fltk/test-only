@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.5 1999/11/01 15:20:07 mike Exp $"
+# "$Id: Makefile,v 1.6 1999/11/05 21:43:59 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,8 +23,8 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai motif classic windows Demo
-STYLES=Demo
+THEMES=essai motif classic windows Alternative KDE
+STYLES=Alternative
 
 all : $(THEMES)
 
@@ -54,7 +54,10 @@ classic : classic.o ../lib/$(LIBNAME)
 windows : windows.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
-Demo : Demo.o ../lib/$(LIBNAME)
+Alternative : Alternative.o ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+
+KDE : KDE.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
 win32 : $(OBJECTS) $(OBJECTS2) ../lib/$(LIBNAME)
@@ -79,5 +82,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.5 1999/11/01 15:20:07 mike Exp $".
+# End of "$Id: Makefile,v 1.6 1999/11/05 21:43:59 carl Exp $".
 #

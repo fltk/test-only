@@ -13,7 +13,11 @@
 
 extern "C" fltk_theme(int, char**);
 int fltk_theme(int, char**) {
-  fl_background(0xC0C0C000);
+  Fl_Style::revert(); // revert to FLTK default styles
+
+#warning Please do not modify the default boxtypes directly like this.
+#warning It will screw up other themes loaded later.  better to create
+#warning a new boxtype.  Please fix.
   fl_normal_box.data = "2AAUWMMTT";
   fl_normal_box.dx_ = 2;
   fl_normal_box.dy_ = 2;
@@ -36,10 +40,17 @@ int fltk_theme(int, char**) {
     s->set_on_color(FL_WHITE);
     s->set_off_color(FL_WHITE);
   }
-  Fl_Widget::default_style.set_highlight_color(0);
+  Fl_Widget::default_style.set_highlight_color(FL_NO_COLOR);
   Fl_Widget::default_style.set_glyph(fl_glyph);
   if ((s = Fl_Style::find("scrollbar"))) {
     s->set_box(FL_FLAT_BOX);
+    s->set_highlight_color(FL_NO_COLOR);
+  }
+  if ((s = Fl_Style::find("slider"))) {
+    s->set_highlight_color(FL_NO_COLOR);
+  }
+  if ((s = Fl_Style::find("button"))) {
+    s->set_highlight_color(FL_NO_COLOR);
   }
   if ((s = Fl_Style::find("input"))) {
     s->set_box(FL_DOWN_BOX);

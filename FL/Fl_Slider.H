@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.17 1999/11/03 09:18:29 bill Exp $"
+// "$Id: Fl_Slider.H,v 1.18 1999/11/05 21:43:39 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,6 @@
 class FL_API Fl_Slider : public Fl_Valuator {
 
 public:
-
   static Fl_Style default_style;
   void draw();
   int handle(int);
@@ -75,5 +74,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.17 1999/11/03 09:18:29 bill Exp $".
+// End of "$Id: Fl_Slider.H,v 1.18 1999/11/05 21:43:39 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.20 1999/11/01 02:21:32 carl Exp $"
+// "$Id: Fl_Dial.cxx,v 1.21 1999/11/05 21:43:50 carl Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -124,23 +124,15 @@ int Fl_Dial::handle(int e) {
 		h()-box()->dh());
 }
 
-Fl_Style Fl_Dial::default_style = {
-  FL_OVAL_BOX,	// box
-  0,            // glyph_box
-  0,		// glyph
-  0,		// label_font
-  0,		// text_font
-  0,		// label_type
-  0,		// color
-  0,		// label_color
-  FL_DARK2,	// selection_color
-  0,		// selection_text_color
-  0,            // off_color
-  FL_BLACK      // highlight color
-  // rest is zero
-};
+Fl_Style Fl_Dial::default_style;
 
-static Fl_Style_Definer x("dial", Fl_Dial::default_style);
+static void revert(Fl_Style* s) {
+  s->box = FL_OVAL_BOX;
+  s->selection_color = FL_DARK2;
+  s->highlight_color = FL_BLACK;
+}
+
+static Fl_Style_Definer x("dial", Fl_Dial::default_style, revert);
 
 Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
   : Fl_Valuator(x, y, w, h, l) {
@@ -150,5 +142,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.20 1999/11/01 02:21:32 carl Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.21 1999/11/05 21:43:50 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.30 1999/11/05 00:35:48 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.31 1999/11/05 21:43:55 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Group.H>
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////
 // Duplicate the Forms queue for all callbacks from widgets.  The
@@ -176,74 +177,26 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
 ////////////////////////////////////////////////////////////////
 // Styles:
 
-// Styles that are only used by one widget and have no children can
-// safely be modified and destroyed.  This is detected with this:
-static inline int unique(const Fl_Style* s) {return s->child == s;}
-static inline void make_unique(Fl_Style* s) {s->child = s;}
-
 // Possibly replace this pointer with a new one that can be modified
 // and return that new one, with the const removed:
 
 Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
-  Fl_Style* oldstyle = (Fl_Style*)pointer; // cast away const
-  if (unique(oldstyle)) return oldstyle;
+  if (pointer->dynamic) return (Fl_Style*)pointer;
   Fl_Style* newstyle = new Fl_Style;
-  *newstyle = *oldstyle;
-  make_unique(newstyle);
-  newstyle->mbf = 0;
-  // insert it as first child into list:
-  newstyle->next = oldstyle->child;
-  if (newstyle->next) newstyle->next->previous = &(newstyle->next);
-  newstyle->previous = &(oldstyle->child);
-  oldstyle->child = newstyle;
+  memset(newstyle, 0, sizeof(*newstyle));
+  newstyle->dynamic = 1;
+  newstyle->parent = (Fl_Style*)pointer;
   pointer = newstyle;
   return newstyle;
 }
 
-// Set the style to a structure that the caller owns.  This is assummed
-// to be a static style structure and if this is the first time it has
-// been used it is inserted into the inheritance tree as a child of the
-// current style.  This returns true if this is the first time this
-// style has been inserted, this can be used to test to initialize
-// the style.
-// Set mbf according to the entries that have been kept from the original 
-// structure.
+void Fl_Widget::style(Fl_Style* s) {
+  s->parent = &Fl_Widget::default_style;
 
-// This is also called by Fl_Menu.cxx to set Fl_Menu_Item styles:
-void Fl_Style::add_child(Fl_Style* s) const {
-  if (s->previous) return;
-  s->next = child;
-  if (s->next) s->next->previous = &(s->next);
-  s->previous = &(((Fl_Style*)this)->child);
-  s->child = 0;
-  ((Fl_Style*)this)->child = s;
+  // use this for multilevel inheritance?
+  // if (style_) { s->parent = style_; }
 
-  int bf = 0;
-  // copy all the integer-sized things:
-  unsigned *e1 = &s->color;
-  const unsigned *q1 = &text_size;
-  unsigned *p1 = &s->text_size;
-  for (; p1 >= e1; p1--,q1--) {
-    bf <<= 1;
-    if (!*p1) *p1 = *q1; else bf |= 1;
-  }
-  // copy all the pointer-sized things:
-  void** e = (void**)&s->box;
-  void*const* q = (void**)&label_type;
-  void** p = (void**)&s->label_type;
-  for (; p >= e; p--,q--) {
-    bf <<= 1;
-    if (!*p) *p = *q; else bf |= 1;
-  }
-  // We use the calculated bf only if mbf has not been set manually ...
-  if (!s->mbf) s->mbf = bf;
-}
-
-int Fl_Widget::style(Fl_Style* s) {
-  if (s->previous) {style_ = s; return 0;}
-  style_->add_child(s);
   style_ = s;
-  return 1;
 }
 
 // Copying a style pointer from another widget is not safe if that
@@ -252,51 +205,22 @@ int Fl_Widget::style(Fl_Style* s) {
 // is made (no code uses this return value right now).
 
 int Fl_Widget::copy_style(const Fl_Style* t) {
-  if (!unique(t)) {style_ = t; return 0;}
-  Fl_Style* parent = (Fl_Style*)t; // cast away const
+  if (!t->dynamic) {style_ = t; return 0;}
   Fl_Style* s = new Fl_Style;
   *s = *t;
-  make_unique(s);
-  s->mbf = 0;
-  s->next = parent->child;
-  if (s->next) s->next->previous = &(s->next);
-  s->previous = &(parent->child);
-  parent->child = s;
+  s->dynamic = 1;
   style_ = s;
   return 1;
 }
 
-// Inherit a pointer-sized thing:
-
-void Fl_Style::setp(const void** p, const void* v) {
-  const int mask = 1 << (p-(const void**)&box);
-  mbf |= mask;
-  setp(p, v, mask);	// propagate into children
+unsigned Fl_Widget::geti(const unsigned* a) const {
+  if (*a) return *a;
+  return style_->geti(a-(const unsigned*)&style_->color);
 }
 
-void Fl_Style::setp(const void** p, const void* v, int mask) {
-  *p = v;
-  if (!unique(this)) for (Fl_Style* s = child; s; s = s->next) {
-    const void** p1 = (const void**)((char*)s + ((char*)p - (char*)this));
-    if (!(s->mbf&mask)) s->setp(p1, v, mask);
-  }
-}
-  
-// Inherit a integer-sized thing:
-
-void Fl_Style::seti(unsigned* p, unsigned v) {
-  const int mask = 1 << (p-(unsigned*)&color) + 
-                        ((const void**)&color-(const void**)&box);
-  mbf |= mask;
-  seti(p, v, mask);	// propagate into children
-}
-
-void Fl_Style::seti(unsigned* p, unsigned v, int mask) {
-  *p = v;
-  if (!unique(this)) for (Fl_Style* s = child; s; s = s->next) {
-    unsigned* p1 = (unsigned*)((char*)s + ((char*)p - (char*)this));
-    if (!(s->mbf&mask)) s->seti(p1, v, mask);
-  }
+void* Fl_Widget::getp(const void* const* a) const {
+  if (*a) return (void*)*a;
+  return style_->getp(a-(const void* const*)&style_->box);
 }
 
 // Widgets set their own attributes by (possibly) creating a unique copy
@@ -304,17 +228,15 @@ void Fl_Style::seti(unsigned* p, unsigned v, int mask) {
 // not have any children the recursive search is not needed:
 
 void Fl_Widget::setp(const void* const * p, const void* v) {
-  int d = p-(const void**)&(style_->box);
+  int d = p-(const void**)&style_->box;
   Fl_Style* s = fl_unique_style(style_);
-  *((const void**)&(s->box) + d) = v;
-  s->mbf |= 1<< d;
+  *((const void**)&s->box + d) = v;
 }
 
 void Fl_Widget::seti(const unsigned * p, unsigned v) {
-  int d = p-(unsigned*)&(style_->color);
+  int d = p-(unsigned*)&style_->color;
   Fl_Style* s = fl_unique_style(style_);
-  *((unsigned*)&(s->color) + d) = v;
-  s->mbf |= 1 << (d+((const void**)&(s->color) - ((const void**)&(s->box))));
+  *((unsigned*)&s->color + d) = v;
 }
 
 // When a widget is destroyed it can destroy unique styles:
@@ -331,9 +253,8 @@ Fl_Widget::~Fl_Widget() {
   parent_ = 0;
 #endif
   throw_focus();
-  if (unique(style_)) {
+  if (style_->dynamic) {
     Fl_Style* s = (Fl_Style*)style_; // cast away const
-    *(s->previous) = s->next;
     delete s;
   }
 }
@@ -405,29 +326,44 @@ void Fl_Widget::draw_n_clip()
   fl_clip_out(x(), y(), w(), h());
 }
 
-Fl_Style Fl_Widget::default_style = {
-  FL_NORMAL_BOX,// box
-  FL_NORMAL_BOX,// glyph_box - for light buttons & sliders
-  fl_glyph,	// glyphs
-  FL_HELVETICA,	// label_font
-  FL_HELVETICA,	// text_font
-  FL_NORMAL_LABEL, // label_type
-  FL_GRAY,	// color
-  FL_NO_COLOR,	// label_color
-  FL_LIGHT1,	// selection_color / down_color / on_color
-  FL_NO_COLOR,	// selection_text_color
-  FL_GRAY,	// off_color
-  FL_LIGHT1,	// highlight_color
-  FL_NO_COLOR,	// highlight_label_color
-  FL_NO_COLOR,	// text_color
-  FL_NORMAL_SIZE,// label_size
-  FL_NORMAL_SIZE,// text_size
-};
+////////////////////////////////////////////////////////////////
+// Some widgets have imbedded text fields (such as Fl_Value_Slider).
+// This is to be discouraged because composite widgets (widgets with
+// child widgets) is a better design.  But for back compatability
+// they cross reference the Fl_Input/Fl_Output widget styles.  This
+// caused problems if Fl_Input/Fl_Output were not intantiated, so I fix
+// this by declaring their styles here, already set up as though the
+// inheritance tree was built:
+
+Fl_Style Fl_Widget::default_style;
+static void revert(Fl_Style* s) {
+  Fl_Style default_style = {
+    FL_NORMAL_BOX,    // box
+    FL_NORMAL_BOX,    // glyph_box - for light buttons & sliders
+    fl_glyph,         // glyphs
+    FL_HELVETICA,     // label_font
+    FL_HELVETICA,     // text_font
+    FL_NORMAL_LABEL,  // label_type
+    FL_GRAY,          // color
+    FL_BLACK,         // label_color
+    FL_LIGHT1,        // selection_color / down_color / on_color
+    FL_BLACK,         // selection_text_color
+    FL_GRAY,          // off_color
+    FL_NO_COLOR,      // highlight_color
+    FL_BLACK,         // highlight_label_color
+    FL_BLACK,         // text_color
+    FL_NORMAL_SIZE,   // label_size
+    FL_NORMAL_SIZE,   // text_size
+
+    0,                // parent
+    0                 // dynamic
+  };
+  *s = default_style;
+}
 
 Fl_Style_Definer* Fl_Style_Definer::first = 0;
-
-static Fl_Style_Definer x("default", Fl_Widget::default_style);
+static Fl_Style_Definer x("default", Fl_Widget::default_style, revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.30 1999/11/05 00:35:48 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.31 1999/11/05 21:43:55 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.22 1999/10/27 08:40:58 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.23 1999/11/05 21:43:54 carl Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -294,21 +294,22 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 }
 
 // this is private as there is no need for themes to alter this:
-static Fl_Style tabs_style = {
-  FL_THIN_UP_BOX // box
-  // rest is zero and inherited from parent's style
-};
+Fl_Style Fl_Tabs::default_style;
 
-static Fl_Style_Definer x("tabs", tabs_style);
+static void revert(Fl_Style* s) {
+  s->box = FL_THIN_UP_BOX;
+}
+
+static Fl_Style_Definer x("tabs", Fl_Tabs::default_style, revert);
 
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
   : Fl_Group(X,Y,W,H,l)
 {
-  style(tabs_style);
+  style(default_style);
   type(FL_TABS);
   push_ = 0;
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.22 1999/10/27 08:40:58 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.23 1999/11/05 21:43:54 carl Exp $".
 //

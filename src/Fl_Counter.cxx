@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.17 1999/11/04 20:00:57 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.18 1999/11/05 21:43:50 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -171,23 +171,15 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
   mouseobj = highlight = 0;
 }
 
-Fl_Style Fl_Counter::default_style = {
-  FL_THIN_DOWN_BOX,     // box
-  0,	                // glyph_box
-  0,		        // glyphs
-  0,		        // label_font
-  0,		        // text_font
-  0,		        // label_type
-  FL_LIGHT2,            // color - text background
-  0,		        // label_color
-  0,    	        // selection_color / on_color
-  0,		        // selection_text_color
-  0,	                // off_color - button color
-  0                     // highlight color
-};
+Fl_Style Fl_Counter::default_style;
 
-static Fl_Style_Definer x("counter", Fl_Counter::default_style);
+static void revert(Fl_Style *s) {
+  s->box = FL_THIN_DOWN_BOX;
+  s->color = FL_LIGHT2;
+}
+
+static Fl_Style_Definer x("counter", Fl_Counter::default_style, revert);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.17 1999/11/04 20:00:57 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.18 1999/11/05 21:43:50 carl Exp $".
 //

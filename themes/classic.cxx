@@ -13,7 +13,11 @@
 
 extern "C" fltk_theme(int, char**);
 int fltk_theme(int, char**) {
-  fl_background(0xC0C0C000);
+  Fl_Style::revert(); // revert to FLTK default styles
+
+#warning Please do not modify the default boxtypes directly like this.
+#warning It will screw up other themes loaded later.  better to create
+#warning a new boxtype.  Please fix.
   fl_normal_box.data = "AAAAWUJJUTNN";
   fl_normal_box.dx_ = 3;
   fl_normal_box.dy_ = 3;

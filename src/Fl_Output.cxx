@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.16 1999/11/01 02:21:34 carl Exp $"
+// "$Id: Fl_Output.cxx,v 1.17 1999/11/05 21:43:52 carl Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -45,18 +45,17 @@ int Fl_Output::handle(int event) {
 }
 
 // Fl_Output defaults to the same as Fl_Input and is a child of it:
-Fl_Style Fl_Output::default_style = {
-  0,		// box
-  0,            // glyph_box
-  0,		// glyphs
-  0,		// label_font
-  0,		// text_font
-  0,		// label_type
-  FL_LIGHT2,	// color
-  // rest is zero
-};
+Fl_Style Fl_Output::default_style;
 
-static Fl_Style_Definer x("output", Fl_Output::default_style);
+static void revert(Fl_Style* s) {
+  s->selection_color = FL_BLUE_SELECTION_COLOR;
+  s->selection_text_color = FL_WHITE;
+  s->off_color = FL_BLACK;
+  s->box = FL_THIN_DOWN_BOX;
+  s->color = FL_LIGHT2;
+}
+
+static Fl_Style_Definer x("output", Fl_Output::default_style, revert);
 
 #include <FL/Fl_Input.H>
 Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
@@ -73,5 +72,5 @@ Fl_Input fl_init_input_style(0,0,0,0,0);
 Fl_Output fl_init_output_style(0,0,0,0,0);
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.16 1999/11/01 02:21:34 carl Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.17 1999/11/05 21:43:52 carl Exp $".
 //

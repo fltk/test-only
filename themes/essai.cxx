@@ -83,6 +83,7 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* normal_b, char* down_b,
 
 extern "C" fltk_theme(int, char**);
 int fltk_theme(int, char** argv) {
+  Fl_Style::revert(); // revert to FLTK default styles
   fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");

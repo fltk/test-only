@@ -1,5 +1,5 @@
 //
-// "$Id: boxtype.cxx,v 1.6 1999/08/16 07:31:33 bill Exp $"
+// "$Id: boxtype.cxx,v 1.7 1999/11/05 21:43:57 carl Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 int N = 0;
 #define W 150
 #define H 50
-#define ROWS 8
+#define ROWS 5
 
 Fl_Window *window;
 
@@ -53,30 +53,30 @@ int main(int argc, char ** argv) {
   window->color(12);// light blue
   bt("FL_NO_BOX",FL_NO_BOX);
   bt("FL_FLAT_BOX",FL_FLAT_BOX);
-  N += 2; // go to start of next row to line up boxes & frames
+//  N += 2; // go to start of next row to line up boxes & frames
   bt("FL_UP_BOX",FL_UP_BOX);
   bt("FL_DOWN_BOX",FL_DOWN_BOX);
-  bt("FL_UP_FRAME",FL_UP_FRAME);
-  bt("FL_DOWN_FRAME",FL_DOWN_FRAME);
+//  bt("FL_UP_FRAME",FL_UP_FRAME);
+//  bt("FL_DOWN_FRAME",FL_DOWN_FRAME);
   bt("FL_THIN_UP_BOX",FL_THIN_UP_BOX);
   bt("FL_THIN_DOWN_BOX",FL_THIN_DOWN_BOX);
-  bt("FL_THIN_UP_FRAME",FL_THIN_UP_FRAME);
-  bt("FL_THIN_DOWN_FRAME",FL_THIN_DOWN_FRAME);
+//  bt("FL_THIN_UP_FRAME",FL_THIN_UP_FRAME);
+//  bt("FL_THIN_DOWN_FRAME",FL_THIN_DOWN_FRAME);
   bt("FL_ENGRAVED_BOX",FL_ENGRAVED_BOX);
   bt("FL_EMBOSSED_BOX",FL_EMBOSSED_BOX);
-  bt("FL_ENGRAVED_FRAME",FL_ENGRAVED_FRAME);
-  bt("FL_EMBOSSED_FRAME",FL_EMBOSSED_FRAME);
+//  bt("FL_ENGRAVED_FRAME",FL_ENGRAVED_FRAME);
+//  bt("FL_EMBOSSED_FRAME",FL_EMBOSSED_FRAME);
   bt("FL_BORDER_BOX",FL_BORDER_BOX);
   bt("FL_SHADOW_BOX",FL_SHADOW_BOX);
-  bt("FL_BORDER_FRAME",FL_BORDER_FRAME);
-  bt("FL_SHADOW_FRAME",FL_SHADOW_FRAME);
+//  bt("FL_BORDER_FRAME",FL_BORDER_FRAME);
+//  bt("FL_SHADOW_FRAME",FL_SHADOW_FRAME);
   bt("FL_ROUNDED_BOX",FL_ROUNDED_BOX);
   bt("FL_RSHADOW_BOX",FL_RSHADOW_BOX);
-  bt("FL_ROUNDED_FRAME",FL_ROUNDED_FRAME);
+//  bt("FL_ROUNDED_FRAME",FL_ROUNDED_FRAME);
   bt("FL_RFLAT_BOX",FL_RFLAT_BOX);
   bt("FL_OVAL_BOX",FL_OVAL_BOX);
   bt("FL_OSHADOW_BOX",FL_OSHADOW_BOX);
-  bt("FL_OVAL_FRAME",FL_OVAL_FRAME);
+//  bt("FL_OVAL_FRAME",FL_OVAL_FRAME);
   bt("FL_OFLAT_BOX",FL_OFLAT_BOX);
   bt("FL_ROUND_UP_BOX",FL_ROUND_UP_BOX);
   bt("FL_ROUND_DOWN_BOX",FL_ROUND_DOWN_BOX);
@@ -89,5 +89,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.6 1999/08/16 07:31:33 bill Exp $".
+// End of "$Id: boxtype.cxx,v 1.7 1999/11/05 21:43:57 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.51 1999/11/01 02:21:25 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.52 1999/11/05 21:43:44 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1429,9 +1429,7 @@ void default_cb(Fl_Button*, void* v) {
     ((Fl_Widget_Type*)(current_widget->factory))->o->style();
   Fl_Style* s1 = (Fl_Style*)(current_widget->o->style());
   if (s1 == default_style) return;
-  // kludge, this code perhaps should be in fltk.  Delete the style
-  // and remove it from hierarchy:
-  *(s1->previous) = s1->next;
+  // Delete the style:
   delete s1;
   // this just assigns the pointer:
   current_widget->o->style((Fl_Style*)default_style);
@@ -2184,5 +2182,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.51 1999/11/01 02:21:25 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.52 1999/11/05 21:43:44 carl Exp $".
 //

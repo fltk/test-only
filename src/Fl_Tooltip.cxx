@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.15 1999/11/04 20:00:59 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.16 1999/11/05 21:43:54 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,18 +30,14 @@
 float Fl_Tooltip::delay_ = 0.5f;
 int Fl_Tooltip::enabled_ = 1;
 
-Fl_Style Fl_Tooltip::default_style = {
-  FL_BORDER_BOX,// box
-  0,            // glyph_box
-  0,		// glyphs
-  0,            // label_font (this is the one that is used)
-  0,		// text_font
-  0,            // label_type
-  Fl_Color(215) // color
-  // rest is zero
-};
+Fl_Style Fl_Tooltip::default_style;
 
-static Fl_Style_Definer x("tooltip", Fl_Tooltip::default_style);
+static void revert(Fl_Style* s) {
+  s->box = FL_BORDER_BOX;
+  s->color = (Fl_Color)215;
+}
+
+static Fl_Style_Definer x("tooltip", Fl_Tooltip::default_style, revert);
 
 #define MAX_WIDTH 400
 
@@ -73,8 +69,7 @@ static void tooltip_timeout(Fl_Widget *v) {
   // this cast bypasses the normal Fl_Window label() code:
   ((Fl_Widget*)window)->label(v->tooltip());
 
-  fl_font(Fl_Tooltip::default_style.label_font,
-	  Fl_Tooltip::default_style.label_size);
+  fl_font(window->label_font(), window->label_size());
   int ww, hh;
   ww = MAX_WIDTH;
   fl_measure(v->tooltip(), ww, hh);
@@ -137,5 +132,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.15 1999/11/04 20:00:59 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.16 1999/11/05 21:43:54 carl Exp $".
 //

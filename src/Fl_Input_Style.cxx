@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.4 1999/11/04 20:00:58 carl Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.5 1999/11/05 21:43:51 carl Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -30,27 +30,18 @@
 
 // Fl_Input, the box, color, and selection color are different:
 
-Fl_Style Fl_Input::default_style = {
-  FL_THIN_DOWN_BOX, // box DIFF
-  0,            // glyph_box
-  0,            // glyphs
-  0,            // label_font
-  0,    	// text_font
-  0,            // label_type
-  FL_WHITE,	// color DIFF
-  0,            // label_color
-  FL_BLUE_SELECTION_COLOR, // selection_color DIFF
-  FL_WHITE,	// selection_text_color DIFF
-  FL_BLACK,    	// off_color - DIFF - cursor color
-  0,    	// highlight_color
-  0,	        // highlight_label_color
-  0,	        // text_color
-  0,            // label_size
-  0,            // text_size
-};
+Fl_Style Fl_Input::default_style;
 
-static Fl_Style_Definer x("input", Fl_Input::default_style);
+static void revert(Fl_Style* s) {
+  s->box = FL_THIN_DOWN_BOX;
+  s->color = FL_WHITE;
+  s->selection_color = FL_BLUE_SELECTION_COLOR;
+  s->selection_text_color = FL_WHITE;
+  s->off_color = FL_BLACK;
+}
+
+static Fl_Style_Definer x("input", Fl_Input::default_style, revert);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.4 1999/11/04 20:00:58 carl Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.5 1999/11/05 21:43:51 carl Exp $".
 //

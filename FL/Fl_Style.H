@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.7 1999/11/01 02:21:16 carl Exp $"
+// "$Id: Fl_Style.H,v 1.8 1999/11/05 21:43:39 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -55,15 +55,16 @@ struct FL_API Fl_Style {
   Fl_Color	text_color;
   unsigned	label_size;
   unsigned	text_size;
-  Fl_Style*	child;
-  Fl_Style*	next;
-  Fl_Style**	previous;
-  int		mbf;	// Which entries are different from the parent's ones
 
-  void setp(const void**, const void*);
-  void setp(const void**, const void*, int mask);
-  void seti(unsigned*, unsigned);
-  void seti(unsigned*, unsigned, int mask);
+  // if you add more non-attributes, be sure to fix style_clear() in fl_options.cxx
+  Fl_Style*     parent;
+  uchar         dynamic; // is this a modifiable style?
+
+  void setp(const void** p, const void* v) { *p = v; }
+  void seti(unsigned* p, unsigned v) { *p = v; }
+  unsigned geti(unsigned) const;
+  void* getp(unsigned) const;
+
   void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
   void set_glyph_box(Fl_Boxtype v)	{setp((const void**)&glyph_box, v);}
   void set_box2(Fl_Boxtype v)		{setp((const void**)&glyph_box, v);}
@@ -85,10 +86,14 @@ struct FL_API Fl_Style {
   void set_label_size(unsigned v)	{seti(&label_size, v);}
   void set_text_size(unsigned v)	{seti(&text_size, v);}
 
-  void add_child(Fl_Style* s) const;
-
+  // find a default style by its string ID
   static Fl_Style* find(const char* name);
+
+  // set the FLTK default style
+  static void revert();
 };
+
+typedef void (*Fl_Style_Reverter)(Fl_Style*);
 
 // Create a global object of this type with correct parameter to define
 // a new style class.  Plugins can search this to find the styles used by
@@ -97,10 +102,11 @@ class FL_API Fl_Style_Definer {
 public:
   const char* name;
   Fl_Style* style;
+  Fl_Style_Reverter revert;
   Fl_Style_Definer* next;
   static Fl_Style_Definer* first;
-  Fl_Style_Definer(char* n, Fl_Style& s) : name(n), style(&s), next(first) {
-    first = this;}
+
+  Fl_Style_Definer(char*, Fl_Style&, Fl_Style_Reverter = 0);
 };
 
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
@@ -126,5 +132,5 @@ enum Fl_Glyphtype {	// glyph types
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.7 1999/11/01 02:21:16 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.8 1999/11/05 21:43:39 carl Exp $".
 //

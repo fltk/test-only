@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.12 1999/11/01 02:21:33 carl Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.13 1999/11/05 21:43:52 carl Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -68,22 +68,14 @@ int Fl_Light_Button::handle(int event) {
   return Fl_Button::handle(event);
 }
 
-Fl_Style Fl_Light_Button::default_style = {
-  0,		// box
-  FL_THIN_DOWN_BOX,// glyph_box
-  0,		// glyphs
-  0,		// label_font
-  0,		// text_font
-  0,		// label_type
-  0,		// color
-  0,		// label_color
-  FL_YELLOW,	// selection_color
-  0,		// selection_text_color
-  0,            // off_color
-  // rest is zero
-};
+Fl_Style Fl_Light_Button::default_style;
 
-static Fl_Style_Definer x("light button", Fl_Light_Button::default_style);
+static void revert(Fl_Style* s) {
+  s->glyph_box = FL_THIN_DOWN_BOX;
+  s->selection_color = FL_YELLOW;
+}
+
+static Fl_Style_Definer x("light button", Fl_Light_Button::default_style, revert);
 
 Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
@@ -94,5 +86,5 @@ Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.12 1999/11/01 02:21:33 carl Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.13 1999/11/05 21:43:52 carl Exp $".
 //
