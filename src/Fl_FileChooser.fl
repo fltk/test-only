@@ -1,13 +1,13 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.00 
+version 2.00 
+images_dir ./ 
 do_not_include_H_from_C 
 header_name {.h} 
 code_name {.cxx} 
 gridx 5 
 gridy 5 
 snap 3
-decl {\#include <Fl/Fl_FileChooser.h>} {selected
-} 
+decl {\#include <FL/Fl_FileChooser.h>} {} 
 
 class Fl_FileChooser {open
 } {
@@ -19,8 +19,8 @@ class Fl_FileChooser {open
       label {Pick a File}
       callback {fileList->deselect();
 fileName->value("");
-window->hide();} open
-      private xywh {391 243 375 315} resizable hotspot
+window->hide();} open selected
+      xywh {391 243 375 315} resizable hotspot
       code0 {if (title) window->label(title);}
       code1 {\#include <stdio.h>}
       code2 {\#include <stdlib.h>}
@@ -53,14 +53,12 @@ window->hide();}
         class Fl_FileInput
       }
       Fl_Button upButton {
-        label {up.xbm}
         callback {up();}
-        private xywh {280 10 25 25} labeltype image labelsize 8
+        private xywh {280 10 25 25} image not_inlined {up.xbm} labelsize 8
       }
       Fl_Button newButton {
-        label {new.xbm}
         callback {newdir();}
-        private xywh {310 10 25 25} labeltype image labelsize 8
+        private xywh {310 10 25 25} image not_inlined {new.xbm} labelsize 8
       }
       Fl_Choice dirMenu {
         label {Directory:}
@@ -74,10 +72,9 @@ directory(pathname);} open
         private xywh {75 10 200 25}
       } {}
       Fl_Button {} {
-        label {allfiles.xbm}
         callback {fileList->filter("*");;
 rescan();}
-        private xywh {340 10 25 25} labeltype image labelsize 28 labelcolor 4 align 16
+        private xywh {340 10 25 25} align 524304 image not_inlined {allfiles.xbm} labelcolor 4 labelsize 28
       }
     }
     code {window->size_range(345, 270, 345);

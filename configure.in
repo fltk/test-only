@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.54 1999/10/24 19:47:39 vincent Exp $"
+dnl# "$Id: configure.in,v 1.55 1999/10/25 21:12:06 mike Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -162,6 +162,7 @@ AC_CHECK_FUNCS(snprintf,
 AC_CHECK_FUNCS(atol)
 AC_CHECK_FUNCS(strcasecmp)
 AC_CHECK_FUNCS(vsprintf)
+AC_CHECK_FUNCS(usleep)
 
 AC_PATH_XTRA
 echo "Ignoring libraries \"$X_PRE_LIBS\" requested by configure."
@@ -186,8 +187,10 @@ fi
 AC_SUBST(GLLIB)
 
 dnl# Test for libpng (and for libz by the way)
+dnl# We check for a 1.0 function so versions of libpng < 1.0 are not
+dnl# used...
 LIBPNG=
-  AC_CHECK_LIB(png, png_read_image, \
+  AC_CHECK_LIB(png, png_set_sig_bytes, \
 	AC_DEFINE(HAVE_PNG) LIBPNG=" -lpng -lz"\ 
         ,,$X_EXTRA_LIBS -lz -lm)
 AC_SUBST(LIBPNG)
@@ -217,16 +220,22 @@ if test "$ac_cv_have_overlay" = yes; then
     AC_DEFINE(HAVE_OVERLAY)
 fi
 
+dnl ******** NOTE: IRIX does not support -rdynamic; if you need it for
+dnl ********       linux do a case statement after the check please...
+
 have_dlopen=no
 AC_CHECK_LIB(c, dlopen, \
-     LD_DLOPEN_FLAGS="-rdynamic" have_dlopen=yes,
+     LD_DLOPEN_FLAGS=""
+     have_dlopen=yes,
      AC_CHECK_LIB(dl, dlopen, \
-      LD_DLOPEN_FLAGS="-rdynamic -ldl" have_dlopen=yes,,),
+      LD_DLOPEN_FLAGS="-ldl" have_dlopen=yes,,),
 )
 
+dnl ******** NOTE: IRIX does not support -rdynamic; if you need it for
+dnl ********       linux do a case statement after the check please...
 if test $have_dlopen = yes; then
     AC_DEFINE(HAVE_DLOPEN)
-    LD_DLL_FLAGS="-shared -rdynamic"
+    LD_DLL_FLAGS="-shared"
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
@@ -276,16 +285,18 @@ else
 		#     LD="ld -n32"
 		#     MAKEDEPEND="CC -M"
 
-		echo "FOR BEST RESULTS BEFORE COMPILING: setenv SGI_ABI -n32"
-        	# -woff 3322 is necessary due to errors in Xlib headers on IRIX
         	CFLAGS="-fullwarn $CFLAGS"
-        	CXXFLAGS="-fullwarn -woff 1685,3322 $CXXFLAGS"
+        	CXXFLAGS="-fullwarn $CXXFLAGS"
+		if test -z "$DEBUGFLAG"; then
+        	    CFLAGS="-O2 -OPT:Olimit=3000 $CFLAGS"
+        	    CXXFLAGS="-O2 -OPT:Olimit=3000 $CXXFLAGS"
+		fi
 	    else
         	CXXFLAGS="+w +pp $CXXFLAGS"
-	    fi
-	    if test -z "$DEBUGFLAG"; then
-        	CFLAGS="-O2 $CFLAGS"
-        	CXXFLAGS="-O2 $CXXFLAGS"
+		if test -z "$DEBUGFLAG"; then
+        	    CFLAGS="-O2 -Olimit=3000 $CFLAGS"
+        	    CXXFLAGS="-O2 -Olimit=3000 $CXXFLAGS"
+		fi
 	    fi
 	    ;;
 	HP-UX*)
@@ -340,5 +351,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.54 1999/10/24 19:47:39 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.55 1999/10/25 21:12:06 mike Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.7 1999/10/17 22:27:09 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.8 1999/10/25 21:12:11 mike Exp $"
 //
 // Style definition and plugin support
 //
@@ -179,7 +179,7 @@ char* fl_parse_word(char*&s)
 #include <FL/Fl_Color.H>
 Fl_Color fl_parse_color(char*&s)
 {
-  char* w = strdup(fl_parse_word(s));
+  char* w = fl_parse_word(s);
   if (*w == '#') {
     w = fl_parse_word(s);
     return strtol(w, 0, 16) << 8;
@@ -195,7 +195,6 @@ Fl_Color fl_parse_color(char*&s)
     } else
       return Fl_Color(atoi(w));
   }
-  free(w);
 }
 
 // Link in the Fl_Shared_Image basic routines (~5Kb of code) so that plugins
@@ -205,5 +204,5 @@ Fl_Color fl_parse_color(char*&s)
 void fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.7 1999/10/17 22:27:09 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.8 1999/10/25 21:12:11 mike Exp $".
 //

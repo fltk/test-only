@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.9 1999/09/25 18:29:10 vincent Exp $"
+# "$Id: Makefile,v 1.10 1999/10/25 21:12:14 mike Exp $"
 #
 # Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -39,7 +39,7 @@ include ../../makeinclude
 .SUFFIXES : .cxx .c .o
 
 .cxx.o :
-	$(CXX) -DFL_DLL -DFLUID_PLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
+	$(CXX) -DFL_DLL -DFLUID_PLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
 	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
@@ -56,5 +56,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.9 1999/09/25 18:29:10 vincent Exp $".
+# End of "$Id: Makefile,v 1.10 1999/10/25 21:12:14 mike Exp $".
 #

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.24 1999/10/20 23:22:18 vincent Exp $"
+ * "$Id: configh.in,v 1.25 1999/10/25 21:12:06 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -157,7 +157,7 @@
 #define HAVE_SCANDIR 0
 
 /*
- * possibly missing sprintf-style functions:
+ * Possibly missing sprintf-style functions:
  */
 
 #define HAVE_VSNPRINTF 0
@@ -180,17 +180,21 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 }
 #endif /* __cplusplus */
 
-/* possibly missing other functions */
-#define HAVE_ATOL 0
+/*
+ * Possibly missing other functions
+ */
 
-#if ! HAVE_ATOL
-#define atol(a) conf_atol(a)
-#endif
+#define HAVE_ATOL 0
+#define HAVE_USLEEP 0
+
+#if !HAVE_ATOL
+#  define atol(a) conf_atol(a)
+#endif /* !HAVE_ATOL */
 
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
-#define strcasecmp(a,b) conf_strcasecmp(a,b)
+#  define strcasecmp(a,b) conf_strcasecmp(a,b)
 #endif
 
 /*
@@ -212,8 +216,7 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_PNG
  *
- * Do we have libpng ?
- *
+ * Do we have libpng?
  */
   
 #define HAVE_PNG 0
@@ -221,8 +224,7 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_JPEG
  *
- * Do we have libjpeg ?
- *
+ * Do we have libjpeg?
  */
   
 #define HAVE_JPEG 0
@@ -230,9 +232,8 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_DLOPEN
  *
- * Do we have ELF shared objects support ?
+ * Do we have ELF shared objects support?
  * (used in FL/Fl_Plugin.H)
- *
  */
   
 #define HAVE_DLOPEN 0
@@ -240,8 +241,7 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_PTHREAD
  *
- * Do we have MIT pthread
- *
+ * Do we have POSIX threads?
  */
   
 #define HAVE_PTHREAD 0
@@ -249,12 +249,11 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * FLTK_LIBDIR
  *
- * Where FLTK is installed ?
- *
+ * Where FLTK is installed?
  */
 
 #define FLTK_LIBDIR ""
 
 /*
- * End of "$Id: configh.in,v 1.24 1999/10/20 23:22:18 vincent Exp $".
+ * End of "$Id: configh.in,v 1.25 1999/10/25 21:12:06 mike Exp $".
  */

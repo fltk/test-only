@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.2 1999/10/24 19:47:42 vincent Exp $"
+// "$Id: Fl_Threads.cxx,v 1.3 1999/10/25 21:12:11 mike Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include "config.h"
 
+
 int 	 Fl::thread_filedes[2];
 void* 	 Fl::thread_message;
 Fl_Mutex Fl::mutex;
@@ -38,7 +39,9 @@ Fl_Mutex Fl::mutex;
 #include <pthread.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 // create a new thread 
 // 'a': where to put the handler of the new thread
@@ -64,7 +67,16 @@ int Fl::set_thread_priority(Fl_Thread, float)
 // sleep for 'a' milliseconds
 void Fl::sleep(int a)
 {
-  ::sleep(a==0 || a>500? int((a+500)/1000.) : 1);	// To be improved !!
+#if HAVE_USLEEP
+  usleep(a * 1000);
+#else
+  struct timeval t;
+
+  t.tv_sec;
+  t.tv_usec = a * 1000;
+
+  select(0, NULL, NULL, NULL, &t);
+#endif // HAVE_USLEEP
 }
 
 // create a mutex
@@ -86,11 +98,11 @@ int Fl::mutex_destroy(Fl_Mutex a)
 // lock/unlock a mutex
 int Fl::lock(Fl_Mutex a)
 {
-  pthread_mutex_lock((pthread_mutex_t*)a);
+  return pthread_mutex_lock((pthread_mutex_t*)a);
 }
 int Fl::unlock(Fl_Mutex a)
 {
-  pthread_mutex_unlock((pthread_mutex_t*)a);
+  return pthread_mutex_unlock((pthread_mutex_t*)a);
 }
 
 // when called from a thread, it causes FLTK to awake from Fl::wait()
@@ -233,5 +245,5 @@ int Fl::awake(void* msg)
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.2 1999/10/24 19:47:42 vincent Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.3 1999/10/25 21:12:11 mike Exp $".
 //

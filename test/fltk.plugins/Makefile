@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.5 1999/10/22 03:11:25 vincent Exp $"
+# "$Id: Makefile,v 1.6 1999/10/25 21:12:13 mike Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -40,24 +40,21 @@ CPPFILES3 = \
 
 ################################################################
 
-OBJECTS = $(CPPFILES:.cxx=.o) fl_jpeg.po fl_draw_image.po
+OBJECTS = $(CPPFILES:.cxx=.o) fl_jpeg.o fl_draw_image.o
 OBJECTS2 = $(CPPFILES2:.cxx=.o)
-OBJECTS3 = $(CPPFILES3:.cxx=.o) fl_diamond_box.po \
-	fl_rounded_box.po fl_round_box.po \
-	fl_oval_box.po fl_shadow_box.po \
-	fl_vertex.po
+OBJECTS3 = $(CPPFILES3:.cxx=.o) fl_diamond_box.o \
+	fl_rounded_box.o fl_round_box.o \
+	fl_oval_box.o fl_shadow_box.o \
+	fl_vertex.o
 
-INCLUDES = -I../..
+INCLUDES = -I../.. -I../../src
 
 include ../../makeinclude
 
 .SUFFIXES : .cxx .c .o
 
 .cxx.o :
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
-
-%.po : ../../src/%.cxx
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
+	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) $(IMAGELIBS)
@@ -67,6 +64,30 @@ $(PROGRAM2) : $(OBJECTS2) ../../lib/$(LIBNAME)
 
 $(PROGRAM3) : $(OBJECTS3) ../../lib/$(LIBNAME)
 	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3)
+
+fl_diamond_box.cxx:	../../src/fl_diamond_box.cxx
+	cp ../../src/fl_diamond_box.cxx .
+
+fl_rounded_box.cxx:	../../src/fl_rounded_box.cxx
+	cp ../../src/fl_rounded_box.cxx .
+
+fl_round_box.cxx:	../../src/fl_round_box.cxx
+	cp ../../src/fl_round_box.cxx .
+
+fl_oval_box.cxx:	../../src/fl_oval_box.cxx
+	cp ../../src/fl_oval_box.cxx .
+
+fl_shadow_box.cxx:	../../src/fl_shadow_box.cxx
+	cp ../../src/fl_shadow_box.cxx .
+
+fl_vertex.cxx:		../../src/fl_vertex.cxx
+	cp ../../src/fl_vertex.cxx .
+
+fl_jpeg.cxx:		../../src/fl_jpeg.cxx
+	cp ../../src/fl_jpeg.cxx .
+
+fl_draw_image.cxx:		../../src/fl_draw_image.cxx
+	cp ../../src/fl_draw_image.cxx .
 
 win32 : $(OBJECTS) $(OBJECTS2) ../../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 $(GLDLIBS)
@@ -91,5 +112,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.5 1999/10/22 03:11:25 vincent Exp $".
+# End of "$Id: Makefile,v 1.6 1999/10/25 21:12:13 mike Exp $".
 #

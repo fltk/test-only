@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.11 1999/09/28 08:08:51 bill Exp $"
+// "$Id: fl_png.cxx,v 1.12 1999/10/25 21:12:12 mike Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,10 +42,10 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
   memcpy(d, cur_datas, length);
   cur_datas += length;
 }
-#endif
 
 // Dummy function to remove gcc's nasty warning about longjmp:
 static void declare_now(void*) { }
+#endif
 
 int Fl_PNG_Image::test(unsigned char *datas, size_t size)
 {
@@ -60,6 +60,7 @@ void Fl_PNG_Image::measure(int &W, int &H)
 {
 #if !HAVE_PNG
   W = w = 0;
+  H = h = 0;
 #else
   if (w>=0) { 
     W=w; H=h; 
@@ -251,5 +252,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.11 1999/09/28 08:08:51 bill Exp $"
+// End of "$Id: fl_png.cxx,v 1.12 1999/10/25 21:12:12 mike Exp $"
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.5 1999/10/11 01:00:30 vincent Exp $"
+ * "$Id: fl_call_main.c,v 1.6 1999/10/25 21:12:11 mike Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -25,26 +25,26 @@
  */
 
 /*
-// This WinMain() function can be overridden by an application and
-// is provided for compatibility with programs written for other
-// operating systems that conform to the ANSI standard entry point
-// "main()".  This will allow you to build a WIN32 Application
-// without any special settings.
-//
-// Because of problems with the Microsoft Visual C++ header files
-// and/or compiler, you cannot have a WinMain function in a DLL.
-// I don't know why.  Thus, this nifty feature is only available
-// if you link to the static library.
-//
-// Currently the debug version of this library will create a
-// console window for your application so you can put printf()
-// statements for debugging or informational purposes.  Ultimately
-// we want to update this to always use the parent's console,
-// but at present we have not identified a function or API in
-// Microsoft(r) Windows(r) that allows for it.
-*/
+ * This WinMain() function can be overridden by an application and
+ * is provided for compatibility with programs written for other
+ * operating systems that conform to the ANSI standard entry point
+ * "main()".  This will allow you to build a WIN32 Application
+ * without any special settings.
+ *
+ * Because of problems with the Microsoft Visual C++ header files
+ * and/or compiler, you cannot have a WinMain function in a DLL.
+ * I don't know why.  Thus, this nifty feature is only available
+ * if you link to the static library.
+ *
+ * Currently the debug version of this library will create a
+ * console window for your application so you can put printf()
+ * statements for debugging or informational purposes.  Ultimately
+ * we want to update this to always use the parent's console,
+ * but at present we have not identified a function or API in
+ * Microsoft(r) Windows(r) that allows for it.
+ */
 
-#if defined(WIN32) //&& !defined(FL_DLL)
+#if defined(WIN32) && !defined(FL_DLL)
 
 #include <windows.h>
 #include <stdio.h>
@@ -68,15 +68,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   freopen("conin$", "r", stdin);
   freopen("conout$", "w", stdout);
   freopen("conout$", "w", stderr);
-#endif // _DEBUG
+#endif /* _DEBUG */
 
-  // Run the standard main entry point function...
+  /* Run the standard main entry point function... */
   return main(__argc, __argv);
 }
 
-#endif
+#endif /* WIN32 && !FL_DLL */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.5 1999/10/11 01:00:30 vincent Exp $".
+ * End of "$Id: fl_call_main.c,v 1.6 1999/10/25 21:12:11 mike Exp $".
  */
 
