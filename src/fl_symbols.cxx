@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.31 2003/07/01 07:03:15 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.32 2003/07/03 06:51:43 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -98,6 +98,8 @@ Symbol::Symbol(const char* name) : name_(name) {
 */
 const Symbol* Symbol::find(const char* name, const char* end) {
   init_symbols();
+  // for back-compatability a leading # is ignored:
+  if (*name == '#') name++;
   // strip off trailing digits:
   const char* e = end;
   for (;; e--) {
@@ -401,5 +403,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.31 2003/07/01 07:03:15 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.32 2003/07/03 06:51:43 spitzak Exp $".
 //
