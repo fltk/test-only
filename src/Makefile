@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.46 1999/11/12 05:00:22 vincent Exp $"
+# "$Id: Makefile,v 1.47 1999/11/12 20:34:58 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -227,8 +227,16 @@ libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 fltk.2.dll: $(OBJECTS:.o=.dllo) $(OBJECTSimages:.o=.dllo) $(OBJECTSgl:.o=.dllo)
 	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
+	@mkdir -p dllobjects
+	@rm -f dlllist
+	@touch dlllist
+	@for i in $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl); do \
+		cp $$(echo $$i | sed s/\\.o/.dllo/) dllobjects/$$i;	\
+		echo dllobjects/$$i" " >> dlllist;	\
+	done
 	@$(DSOCOMMAND) -o $@ \
-	    $(OBJECTS:.o=.dllo) $(OBJECTSimages:.o=.dllo) $(OBJECTSgl:.o=.dllo) $(CXXFLAGS) $(GLDLIBS)
+	    $$(cat dlllist) $(CXXFLAGS) $(GLDLIBS)
+	@rm -r dllobjects dlllist
 
 libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
@@ -289,5 +297,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.46 1999/11/12 05:00:22 vincent Exp $".
+# End of "$Id: Makefile,v 1.47 1999/11/12 20:34:58 vincent Exp $".
 #

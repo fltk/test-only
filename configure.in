@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.62 1999/11/12 05:00:17 vincent Exp $"
+dnl# "$Id: configure.in,v 1.63 1999/11/12 20:34:55 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -104,7 +104,6 @@ cd 	  ;;
 	  DSOLIBNAME="fltk.2"
 	  DSOEXT=".dll"
           DSOCOMMAND="dllwrap --export-all --target i386-mingw32 \
-	--def ../lib/null.def \
 	--implib ../lib/libfltkdll.2.a \
 	--output-exp ../lib/libfltkdll.2.exp \
 	--driver-name \$(CXX)"
@@ -351,5 +350,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.62 1999/11/12 05:00:17 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.63 1999/11/12 20:34:55 vincent Exp $".
 dnl#

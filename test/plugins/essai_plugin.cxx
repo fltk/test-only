@@ -11,7 +11,7 @@
 
 // Description of the plugin : declared extern "C" to avoid C++ name encoding
 // (MS Visual C does encode C++ name of variables and not only functions !! Wonder why ...)
-extern "C" FLUID_EXPORT Fluid_Plugin fluid_plugin;
+extern "C" FLUID_PLUGIN_API Fluid_Plugin fluid_plugin;
 
 
 void option_cb(Fl_Widget* o, void* p)
@@ -165,7 +165,7 @@ void make_panel()
 
 
 // This is the description of the plugin
-FLUID_EXPORT Fluid_Plugin fluid_plugin = {
+FLUID_PLUGIN_API Fluid_Plugin fluid_plugin = {
   "Essai",       // Name of the plugin
   options_menu,  // pointer on the 'option' menu
   new_menu,      // pointer on the 'new' menu

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.18 1999/10/11 01:00:26 vincent Exp $"
+// "$Id: Fl_Type.h,v 1.19 1999/11/12 20:34:56 vincent Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
 
-class FLUID_IMPORT Fl_Type {
+class FLUID_API Fl_Type {
 
   friend class Widget_Browser;
   friend Fl_Widget *make_type_browser(int,int,int,int,const char *l=0);
@@ -143,7 +143,7 @@ public:
   const char* class_name() const;
 };
 
-class FLUID_IMPORT Fl_Function_Type : public Fl_Type {
+class FLUID_API Fl_Function_Type : public Fl_Type {
   const char* return_type;
   char public_, cdecl_, constructor, havewidgets;
 public:
@@ -162,7 +162,7 @@ public:
   void read_property(const char *);
 };
 
-class FLUID_IMPORT Fl_Code_Type : public Fl_Type {
+class FLUID_API Fl_Code_Type : public Fl_Type {
 public:
   Fl_Type *make();
   void write_code1();
@@ -172,7 +172,7 @@ public:
   int is_code_block() const {return 0;}
 };
 
-class FLUID_IMPORT Fl_CodeBlock_Type : public Fl_Type {
+class FLUID_API Fl_CodeBlock_Type : public Fl_Type {
   const char* after;
 public:
   Fl_Type *make();
@@ -186,7 +186,7 @@ public:
   void read_property(const char *);
 };
 
-class FLUID_IMPORT Fl_Decl_Type : public Fl_Type {
+class FLUID_API Fl_Decl_Type : public Fl_Type {
   char public_;
 public:
   Fl_Type *make();
@@ -198,7 +198,7 @@ public:
   void read_property(const char *);
 };
 
-class FLUID_IMPORT Fl_DeclBlock_Type : public Fl_Type {
+class FLUID_API Fl_DeclBlock_Type : public Fl_Type {
   const char* after;
 public:
   Fl_Type *make();
@@ -212,7 +212,7 @@ public:
   int is_decl_block() const {return 1;}
 };
 
-class FLUID_IMPORT Fl_Class_Type : public Fl_Type {
+class FLUID_API Fl_Class_Type : public Fl_Type {
   const char* subclass_of;
   char public_;
 public:
@@ -234,7 +234,7 @@ public:
 
 #define NUM_EXTRA_CODE 4
 
-class FLUID_IMPORT Fl_Widget_Type : public Fl_Type {
+class FLUID_API Fl_Widget_Type : public Fl_Type {
   virtual Fl_Widget *widget(int,int,int,int) = 0;
   virtual Fl_Widget_Type *_make() = 0; // virtual constructor
   virtual void setlabel(const char *);
@@ -287,7 +287,7 @@ public:
 };
 
 void* const LOAD = (void *)9831;
-FLUID_IMPORT extern Fl_Widget_Type *current_widget; // one of the selected ones
+FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Pack.H>
@@ -308,7 +308,7 @@ public:
   }
 };
 
-class FLUID_IMPORT Fl_Group_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Group";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -324,19 +324,19 @@ public:
   int is_group() const {return 1;}
 };
 
-FLUID_IMPORT extern const char pack_type_name[];
-FLUID_IMPORT extern Fl_Menu_Item pack_type_menu[];
+FLUID_API extern const char pack_type_name[];
+FLUID_API extern Fl_Menu_Item pack_type_menu[];
 
-class FLUID_IMPORT Fl_Pack_Type : public Fl_Group_Type {
+class FLUID_API Fl_Pack_Type : public Fl_Group_Type {
   Fl_Menu_Item *subtypes() {return pack_type_menu;}
 public:
   virtual const char *type_name() {return pack_type_name;}
   Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
 };
 
-FLUID_IMPORT extern const char tabs_type_name[];
+FLUID_API extern const char tabs_type_name[];
 
-class FLUID_IMPORT Fl_Tabs_Type : public Fl_Group_Type {
+class FLUID_API Fl_Tabs_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return tabs_type_name;}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -347,27 +347,27 @@ public:
   void remove_child(Fl_Type*);
 };
 
-FLUID_IMPORT extern const char scroll_type_name[];
-FLUID_IMPORT extern Fl_Menu_Item scroll_type_menu[];
+FLUID_API extern const char scroll_type_name[];
+FLUID_API extern Fl_Menu_Item scroll_type_menu[];
 
-class FLUID_IMPORT Fl_Scroll_Type : public Fl_Group_Type {
+class FLUID_API Fl_Scroll_Type : public Fl_Group_Type {
   Fl_Menu_Item *subtypes() {return scroll_type_menu;}
 public:
   virtual const char *type_name() {return scroll_type_name;}
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
 };
 
-FLUID_IMPORT extern const char tile_type_name[];
+FLUID_API extern const char tile_type_name[];
 
-class FLUID_IMPORT Fl_Tile_Type : public Fl_Group_Type {
+class FLUID_API Fl_Tile_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return tile_type_name;}
   Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
 };
 
-FLUID_IMPORT extern Fl_Menu_Item window_type_menu[];
+FLUID_API extern Fl_Menu_Item window_type_menu[];
 
-class FLUID_IMPORT Fl_Window_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
   Fl_Menu_Item* subtypes() {return window_type_menu;}
 
   friend class Overlay_Window;
@@ -414,9 +414,9 @@ public:
   int is_window() const {return 1;}
 };
 
-FLUID_IMPORT extern Fl_Menu_Item menu_item_type_menu[];
+FLUID_API extern Fl_Menu_Item menu_item_type_menu[];
 
-class FLUID_IMPORT Fl_Menu_Item_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
   Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
   const char* type_name() {return "menuitem";}
@@ -433,7 +433,7 @@ public:
   void write_code2();
 };
 
-class FLUID_IMPORT Fl_Submenu_Type : public Fl_Menu_Item_Type {
+class FLUID_API Fl_Submenu_Type : public Fl_Menu_Item_Type {
 public:
   Fl_Menu_Item* subtypes() {return 0;}
   const char* type_name() {return "submenu";}
@@ -456,7 +456,7 @@ public:
 // children.  An actual array of Fl_Menu_Items is kept parallel
 // with the child objects and updated as they change.
 
-class FLUID_IMPORT Fl_Menu_Type : public Fl_Widget_Type {
+class FLUID_API Fl_Menu_Type : public Fl_Widget_Type {
 public:
   int is_menu_button() const {return 1;}
   int is_parent() const {return 1;}
@@ -473,10 +473,10 @@ public:
   void write_code2();
 };
 
-FLUID_IMPORT extern Fl_Menu_Item button_type_menu[];
+FLUID_API extern Fl_Menu_Item button_type_menu[];
 
 #include <FL/Fl_Menu_Button.H>
-class FLUID_IMPORT Fl_Menu_Button_Type : public Fl_Menu_Type {
+class FLUID_API Fl_Menu_Button_Type : public Fl_Menu_Type {
   Fl_Menu_Item *subtypes() {return button_type_menu;}
 public:
   virtual const char *type_name() {return "Fl_Menu_Button";}
@@ -485,10 +485,10 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
 };
 
-FLUID_IMPORT extern Fl_Menu_Item dummymenu[];
+FLUID_API extern Fl_Menu_Item dummymenu[];
 
 #include <FL/Fl_Choice.H>
-class FLUID_IMPORT Fl_Choice_Type : public Fl_Menu_Type {
+class FLUID_API Fl_Choice_Type : public Fl_Menu_Type {
 public:
   int is_choice() const {return 1;}
   virtual const char *type_name() {return "Fl_Choice";}
@@ -501,7 +501,7 @@ public:
 };
 
 #include <FL/Fl_Menu_Bar.H>
-class FLUID_IMPORT Fl_Menu_Bar_Type : public Fl_Menu_Type {
+class FLUID_API Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
   virtual const char *type_name() {return "Fl_Menu_Bar";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -515,40 +515,40 @@ void delete_all(int selected_only=0);
 void selection_changed(Fl_Type* new_current);
 
 // file operations:
-FLUID_IMPORT void write_word(const char *);
-FLUID_IMPORT void write_string(const char *,...);
-FLUID_IMPORT int write_file(const char *, int selected_only = 0);
-FLUID_IMPORT int write_code(const char *cfile, const char *hfile);
+FLUID_API void write_word(const char *);
+FLUID_API void write_string(const char *,...);
+FLUID_API int write_file(const char *, int selected_only = 0);
+FLUID_API int write_code(const char *cfile, const char *hfile);
 
-FLUID_IMPORT int write_declare(const char *, ...);
-FLUID_IMPORT int is_id(char);
-FLUID_IMPORT const char* unique_id(void* o, const char*, const char*, const char*);
-FLUID_IMPORT void write_c(const char*, ...);
-FLUID_IMPORT void write_h(const char*, ...);
-FLUID_IMPORT void write_cstring(const char *);
-FLUID_IMPORT void write_cstring(const char *,int length);
-FLUID_IMPORT void write_carray(const char *);
-FLUID_IMPORT void write_carray(const char *,int length);
-FLUID_IMPORT void write_indent(int n);
-FLUID_IMPORT void write_open(int);
-FLUID_IMPORT void write_close(int n);
-FLUID_IMPORT extern int write_number;
-FLUID_IMPORT void write_public(int state); // writes pubic:/private: as needed
-FLUID_IMPORT extern int indentation;
-FLUID_IMPORT extern const char* indent();
+FLUID_API int write_declare(const char *, ...);
+FLUID_API int is_id(char);
+FLUID_API const char* unique_id(void* o, const char*, const char*, const char*);
+FLUID_API void write_c(const char*, ...);
+FLUID_API void write_h(const char*, ...);
+FLUID_API void write_cstring(const char *);
+FLUID_API void write_cstring(const char *,int length);
+FLUID_API void write_carray(const char *);
+FLUID_API void write_carray(const char *,int length);
+FLUID_API void write_indent(int n);
+FLUID_API void write_open(int);
+FLUID_API void write_close(int n);
+FLUID_API extern int write_number;
+FLUID_API void write_public(int state); // writes pubic:/private: as needed
+FLUID_API extern int indentation;
+FLUID_API extern const char* indent();
 
-FLUID_IMPORT int read_file(const char *, int merge);
-FLUID_IMPORT const char *read_word(int wantbrace = 0);
-FLUID_IMPORT void read_error(const char *format, ...);
+FLUID_API int read_file(const char *, int merge);
+FLUID_API const char *read_word(int wantbrace = 0);
+FLUID_API void read_error(const char *format, ...);
 
 // check legality of c code (sort of) and return error:
-FLUID_IMPORT const char *c_check(const char *c, int type = 0);
+FLUID_API const char *c_check(const char *c, int type = 0);
 
 // replace a string pointer with new value, strips leading/trailing blanks:
-FLUID_IMPORT int storestring(const char *n, const char * & p, int nostrip=0);
+FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 
-FLUID_IMPORT extern int include_H_from_C;
+FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.18 1999/10/11 01:00:26 vincent Exp $".
+// End of "$Id: Fl_Type.h,v 1.19 1999/11/12 20:34:56 vincent Exp $".
 //
