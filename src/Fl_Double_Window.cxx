@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.15 1999/08/27 17:09:02 gustavo Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.16 1999/08/28 17:20:56 bill Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -176,11 +176,6 @@ void Fl_Double_Window::maybe_free_backbuffer(int W, int H) {
 #endif
 }
 
-void Fl_Double_Window::resize_from_system(int X, int Y, int W, int H) {
-  maybe_free_backbuffer(W,H);
-  Fl_Window::resize_from_system(X,Y,W,H);
-}
-
 void Fl_Double_Window::layout() {
   maybe_free_backbuffer(ow(),oh());
   Fl_Window::layout();
@@ -202,5 +197,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.15 1999/08/27 17:09:02 gustavo Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.16 1999/08/28 17:20:56 bill Exp $".
 //

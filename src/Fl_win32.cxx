@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.44 1999/08/26 07:58:16 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.45 1999/08/28 17:20:57 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -371,6 +371,8 @@ static int ms2fltk(int vk, int extended) {
 extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
+static Fl_Window* resize_from_system;
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   static char buffer[2];
@@ -517,14 +519,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	Fl::handle(FL_HIDE, window);
       } else {
 	Fl::handle(FL_SHOW, window);
-	window->resize_from_system(window->x(), window->y(), LOWORD(lParam), HIWORD(lParam));
+	resize_from_system = window;
+	window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam));
       }
     }
     break;
 
   case WM_MOVE:
-    window->resize_from_system(LOWORD(lParam), HIWORD(lParam),
-			       window->w(), window->h());
+    resize_from_system = window;
+    window->resize(LOWORD(lParam), HIWORD(lParam), window->w(), window->h());
     break;
 
   case WM_SETCURSOR:
@@ -620,17 +623,6 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::resize_from_system(int X, int Y, int W, int H) {
-  if (W == w() && H == h()) {
-    x(X); y(Y);
-    set_old_size();
-  } else {
-    resize(X, Y, W, H);
-    Fl_Group::layout();
-    if (shown()) {redraw(); i->wait_for_expose = 1;}
-  }
-}
-
 void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
@@ -643,7 +635,8 @@ void Fl_Window::layout() {
     Fl_Group::layout();
     if (shown()) {redraw(); i->wait_for_expose = 1;}
   }
-  if (shown()) {
+  if (this == resize_from_system) resize_from_system = 0;
+  else if (shown()) {
     int dummy, bt, bx, by;
     //Ignore window managing when resizing, so that windows (and more
     //specifically menus) can be moved offscreen.
@@ -899,5 +892,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.44 1999/08/26 07:58:16 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.45 1999/08/28 17:20:57 bill Exp $".
 //
