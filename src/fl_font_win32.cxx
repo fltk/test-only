@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.36 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.37 2001/08/01 14:08:48 robertk Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,6 @@ win_font_load(const char *name, const char *encoding, int size) {
   //BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
   //GetCharWidth(fl_gc, 0, 255, fl_fontsize->width);
-
   return (void *)font;
 }
 
@@ -182,8 +181,9 @@ win_font_width(const char* c, int n) {
 static void
 win_font_draw(const char *str, int n, int x, int y) {
   SetTextColor(fl_gc, fl_colorref);
-  SelectObject(fl_gc, (HFONT)fl_fontsize->font);
+  HGDIOBJ oldfont = SelectObject(fl_gc, (HFONT)fl_fontsize->font);
   TextOut(fl_gc, x+fl_x_, y+fl_y_, str, n);
+  SelectObject(fl_gc, oldfont);
 }
 
 static void
@@ -198,5 +198,5 @@ win_renderer = {
 Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.36 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.37 2001/08/01 14:08:48 robertk Exp $".
 //

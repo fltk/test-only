@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.14 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.15 2001/08/01 14:08:49 robertk Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,9 @@ int Fl_Font_::sizes(int*& sizep) const {
 
 // list fonts:
 
+static char *attr_names[] = { " Bold-Italic", " Bold Italic", " Italic", " Bold", NULL};
+static char *attr_letters = "PPIB ";
+
 static Fl_Font_* make_a_font(char attrib, const char* name) {
   // see if it is one of our built-in fonts and return it:
   for (int j = 0; j < 16; j++) {
@@ -75,6 +78,14 @@ static Fl_Font_* make_a_font(char attrib, const char* name) {
   char *n = new char[strlen(name)+2];
   n[0] = attrib;
   strcpy(n+1, name);
+
+  // if this is something like "Arial Bold", strip the "Bold" part if not using it
+  char *pEnd = n + strlen(n);
+  for(int i = 0; attr_names[i]; i++) {
+	  char *pTemp = strstr(n, attr_names[i]);
+	  if(pTemp == pEnd - strlen(attr_names[i]))
+		  *pTemp = '\0';
+  }
   newfont->name_ = n;
   newfont->bold_ = newfont;
   newfont->italic_ = newfont;
@@ -93,12 +104,14 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
-
   const char *name = (const char*)(lpelf->elfFullName);
 
+  bool bNeedBold = (lpelf->elfLogFont.lfWeight <= 400);
+  if(strstr(name, " Bold") == name + strlen(name) - 5)
+	  bNeedBold = true;
   Fl_Font_* base = make_a_font(' ', name);
   base->italic_ = make_a_font('I', name);
-  if (lpelf->elfLogFont.lfWeight <= 400) {
+  if (bNeedBold) {
     base->bold_ = make_a_font('B', name);
     base->italic_->bold_ = base->bold_->italic_ = make_a_font('P', name);
   }
@@ -125,7 +138,11 @@ static int
 win_list_fonts(Fl_Font*& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = GetDC(0);
-  EnumFontFamilies(dc, NULL, (FONTENUMPROC)enumcb, 0);
+  LOGFONT lf;
+  memset(&lf, 0, sizeof(lf));
+  lf.lfCharSet = ANSI_CHARSET;
+  EnumFontFamiliesEx(dc, &lf, (FONTENUMPROC)enumcb, 0, 0);
+  //EnumFontFamiliesEx(dc, NULL, (FONTENUMPROC)enumcb, 0);
   ReleaseDC(0, dc);
   qsort(font_array, num_fonts, sizeof(Fl_Font), sort_function);
   arrayp = font_array;
@@ -159,5 +176,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.14 2001/07/29 22:04:44 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.15 2001/08/01 14:08:49 robertk Exp $"
 //
