@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Highlight_Button.cxx,v 1.4 2000/04/15 04:47:23 carl Exp $"
+// "$Id: Fl_Highlight_Button.cxx,v 1.5 2000/07/12 01:39:07 clip Exp $"
 //
 // Highlight button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@ static void revert(Fl_Style* s) {
   s->highlight_color = FL_LIGHT1;
 }
 
-static Fl_Named_Style* style =new Fl_Named_Style("Highlight_Button",revert,&style);
+static Fl_Named_Style* style =new Fl_Named_Style("Highlight Button",revert,&style);
 
 Fl_Highlight_Button::Fl_Highlight_Button(int x,int y,int w,int h,const char *l)
   : Fl_Button(x,y,w,h,l)
@@ -42,5 +42,5 @@ Fl_Highlight_Button::Fl_Highlight_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Highlight_Button.cxx,v 1.4 2000/04/15 04:47:23 carl Exp $".
+// End of "$Id: Fl_Highlight_Button.cxx,v 1.5 2000/07/12 01:39:07 clip Exp $".
 //

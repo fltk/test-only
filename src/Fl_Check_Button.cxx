@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.27 2000/05/30 07:42:10 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.28 2000/07/12 01:39:07 clip Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ static void revert(Fl_Style* s) {
   s->text_color = FL_BLACK;
 }
 
-static Fl_Named_Style* style = new Fl_Named_Style("Check_Button", revert, &style);
+static Fl_Named_Style* style = new Fl_Named_Style("Check Button", revert, &style);
 
 Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)

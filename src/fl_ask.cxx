@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.16 2000/03/17 09:50:10 bill Exp $"
+// "$Id: fl_ask.cxx,v 1.17 2000/07/12 01:39:07 clip Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,7 @@ static void i_revert(Fl_Style* s) {
 }
 
 static Fl_Named_Style* icon_style =
-  new Fl_Named_Style("Message_Icon", i_revert, &icon_style);
+  new Fl_Named_Style("Message Icon", i_revert, &icon_style);
 
 static Fl_Window *makeform() {
   if (window) {
@@ -211,5 +211,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.16 2000/03/17 09:50:10 bill Exp $".
+// End of "$Id: fl_ask.cxx,v 1.17 2000/07/12 01:39:07 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.36 2000/05/30 07:42:13 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.37 2000/07/12 01:39:07 clip Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -131,7 +131,7 @@ static void revert(Fl_Style* s) {
 #endif
 }
 
-static Fl_Named_Style* style = new Fl_Named_Style("Menu_Bar", revert, &style);
+static Fl_Named_Style* style = new Fl_Named_Style("Menu Bar", revert, &style);
 
 Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
   : Fl_Menu_(x,y,w,h,l)
@@ -140,5 +140,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.36 2000/05/30 07:42:13 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.37 2000/07/12 01:39:07 clip Exp $".
 //
