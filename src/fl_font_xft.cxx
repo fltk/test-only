@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.24 2004/06/22 08:28:58 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.25 2004/07/13 22:53:35 laza2000 Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -438,7 +438,7 @@ int fltk::Font::encodings(const char**& arrayp) {
   static int array_size = 0;
   if (fs->nfont > array_size) {
     delete[] array;
-    array = new (const char*)[array_size = fs->nfont];
+    array = new const char*[array_size = fs->nfont];
   }
   int j = 0;
   for (int i = 0; i < fs->nfont; i++) {
@@ -452,5 +452,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.24 2004/06/22 08:28:58 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.25 2004/07/13 22:53:35 laza2000 Exp $"
 //
