@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.43 2002/05/13 05:10:39 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.44 2002/05/31 16:35:55 robertk Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -139,9 +139,7 @@ int Fl_Value_Slider::handle(int event) {
   } else {
     int th = text_size(); ih -= th;
   }
-#if CLICK_MOVES_FOCUS
-  if (event == FL_PUSH) take_focus();
-#endif
+  if (event == FL_PUSH && click_to_focus()) take_focus();
   return Fl_Slider::handle(event, ix, iy, iw, ih);
 }
 
@@ -158,8 +156,13 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
   if (!default_style->glyph) default_style->glyph = style()->glyph;
   style(default_style);
   step(.01);
+#if CLICK_MOVES_FOCUS
+  set_click_to_focus();
+#else
+  clear_click_to_focus();
+#endif
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.43 2002/05/13 05:10:39 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.44 2002/05/31 16:35:55 robertk Exp $".
 //

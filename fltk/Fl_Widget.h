@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.13 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.14 2002/05/31 16:35:55 robertk Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -155,6 +155,9 @@ public:
   bool	selected() const	{return (flags_&FL_SELECTED)!=0;}
   void	set_selected()		{flags_ |= FL_SELECTED;}
   void	clear_selected()	{flags_ &= ~FL_SELECTED;}
+  bool	click_to_focus()	{return (flags_ & FL_CLICK_TO_FOCUS) != 0;}
+  void  set_click_to_focus()	{flags_ |= FL_CLICK_TO_FOCUS;}
+  void	clear_click_to_focus()	{flags_ &= ~FL_CLICK_TO_FOCUS;}
 
   bool	take_focus()		;
   void	throw_focus()		;
@@ -291,5 +294,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.13 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.14 2002/05/31 16:35:55 robertk Exp $".
 //

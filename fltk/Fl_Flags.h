@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.h,v 1.4 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Flags.h,v 1.5 2002/05/31 16:35:55 robertk Exp $"
 //
 // Unified flags set for fltk
 //
@@ -74,7 +74,8 @@ enum {
   FL_CHANGED		= 0x00004000, // value changed since last callback
   FL_COPIED_LABEL	= 0x00008000, // copy_label() was called
   FL_RAW_LABEL		= 0x00010000, // don't interpret & or @ in label
-  FL_PACK_VERTICAL	= 0x00020000  // Fl_Pack puts this widget vertical
+  FL_PACK_VERTICAL	= 0x00020000, // Fl_Pack puts this widget vertical
+  FL_CLICK_TO_FOCUS = 0x00040000  // Set true if clicking this widget causes it to take focus
 
 };
 

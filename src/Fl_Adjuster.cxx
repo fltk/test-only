@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.39 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.40 2002/05/31 16:35:55 robertk Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -114,9 +114,8 @@ int Fl_Adjuster::handle(int event) {
   switch (event) {
 
   case FL_PUSH:
-#if CLICK_MOVES_FOCUS
-    take_focus();
-#endif
+	if(click_to_focus())
+	  take_focus();
     handle_push();
     ix = mx;
     drag = highlight = which_button;
@@ -190,8 +189,13 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   step(1.0/10000);
   drag = highlight = 0;
   soft_ = 1;
+#if CLICK_MOVES_FOCUS
+  set_click_to_focus();
+#else
+  clear_click_to_focus();
+#endif
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.39 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.40 2002/05/31 16:35:55 robertk Exp $".
 //

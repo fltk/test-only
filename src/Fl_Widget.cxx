@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.89 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.90 2002/05/31 16:35:55 robertk Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   image_	= 0;
   tooltip_	= 0;
   shortcut_	= 0;
-  flags_	= 0;
+  flags_	= FL_CLICK_TO_FOCUS;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
   damage_	= FL_DAMAGE_ALL;
@@ -500,5 +500,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.89 2002/05/06 06:31:27 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.90 2002/05/31 16:35:55 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.52 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.53 2002/05/31 16:35:55 robertk Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -66,9 +66,8 @@ int Fl_Button::handle(int event) {
   case FL_MOVE:
     return 1;
   case FL_PUSH:
-#if CLICK_MOVES_FOCUS
-    take_focus();
-#endif
+	if(click_to_focus())
+      take_focus();
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(0,0,w(),h())) {
@@ -231,8 +230,13 @@ Fl_Named_Style* Fl_Button::default_style = &::style;
 
 Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
   style(default_style);
+#if CLICK_MOVES_FOCUS
+  set_click_to_focus();
+#else
+  clear_click_to_focus();
+#endif
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.52 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.53 2002/05/31 16:35:55 robertk Exp $".
 //
