@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.33 2005/01/02 19:24:01 leka Exp $"
+// "$Id$"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -11,7 +11,7 @@
 // to a factory instance for every class (both the ones defined
 // here and ones in other files)
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -351,6 +351,19 @@ static ValueSliderType ValueSlidertype;
 
 ////////////////////////////////////////////////////////////////
 
+#include <fltk/BarGroup.h>
+class BarGroupType : public WidgetType {
+public:
+  virtual const char *type_name() const { return "fltk::BarGroup"; }
+  fltk::Widget *widget(int x, int y, int w, int h) {
+    return new fltk::BarGroup(x, y, w, h);
+  }
+  WidgetType *_make() { return new BarGroupType(); }
+};
+static BarGroupType BarGrouptype;
+
+////////////////////////////////////////////////////////////////
+
 extern class FunctionType Functiontype;
 extern class CodeType Codetype;
 extern class CodeBlockType CodeBlocktype;
@@ -398,6 +411,7 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Tabstype},
   {0,0,cb,(void*)&Scrolltype},
   {0,0,cb,(void*)&Tiletype},
+  {0,0,cb,(void*)&BarGrouptype},
 {0},
 {"buttons",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Buttontype},
@@ -668,5 +682,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.33 2005/01/02 19:24:01 leka Exp $".
+// End of "$Id$".
 //

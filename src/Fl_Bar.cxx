@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.12 2005/01/24 08:07:14 spitzak Exp $"
+// "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -107,6 +107,7 @@ int BarGroup::handle(int event)
       pushed = false;
       highlighted = true;
       redraw(DAMAGE_HIGHLIGHT);
+      do_callback();
     } else if (highlighted) {
       highlighted = false;
       redraw(DAMAGE_HIGHLIGHT);
@@ -135,6 +136,7 @@ void BarGroup::draw()
     Flags flags = current_flags();
     if (horizontal()) {
       r.x(saved_size); r.w(r.w()-saved_size);
+      flags &= ~(ALIGN_TOP|ALIGN_BOTTOM);
       flags |= ALIGN_LEFT|ALIGN_INSIDE;
     } else {
       r.y(saved_size); r.h(r.h()-saved_size);
