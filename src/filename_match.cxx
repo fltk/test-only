@@ -1,5 +1,5 @@
 //
-// "$Id: filename_match.cxx,v 1.8 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: filename_match.cxx,v 1.9 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Pattern matching routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,59 +27,59 @@
 #include <fltk/filename.h>
 #include <ctype.h>
 
-int filename_match(const char *s, const char *p) {
-  int matched;
+bool filename_match(const char *s, const char *p) {
+  int nesting;
 
   for (;;) {
     switch(*p++) {
 
     case '?' :	// match any single character
-      if (!*s++) return 0;
+      if (!*s++) return false;
       break;
 
     case '*' :	// match 0-n of any characters
-      if (!*p) return 1; // do trailing * quickly
-      while (!filename_match(s, p)) if (!*s++) return 0;
-      return 1;
+      if (!*p) return true; // do trailing * quickly
+      while (!filename_match(s, p)) if (!*s++) return false;
+      return true;
 
     case '[': {	// match one character in set of form [abc-d] or [^a-b]
-      if (!*s) return 0;
-      int reverse = (*p=='^' || *p=='!'); if (reverse) p++;
-      matched = 0;
+      if (!*s) return false;
+      bool reverse = (*p=='^' || *p=='!'); if (reverse) p++;
+      bool matched = false;
       char last = 0;
       while (*p) {
 	if (*p=='-' && last) {
-	  if (*s <= *++p && *s >= last ) matched = 1;
+	  if (*s <= *++p && *s >= last ) matched = true;
 	  last = 0;
 	} else {
-	  if (*s == *p) matched = 1;
+	  if (*s == *p) matched = true;
 	}
 	last = *p++;
 	if (*p==']') break;
       }
-      if (matched == reverse) return 0;
+      if (matched == reverse) return false;
       s++; p++;}
     break;
 
     case '{' : // {pattern1|pattern2|pattern3}
     NEXTCASE:
-    if (filename_match(s,p)) return 1;
-    for (matched = 0;;) {
+    if (filename_match(s,p)) return true;
+    for (nesting = 0;;) {
       switch (*p++) {
       case '\\': if (*p) p++; break;
-      case '{': matched++; break;
-      case '}': if (!matched--) return 0; break;
-      case '|': case ',': if (matched==0) goto NEXTCASE;
-      case 0: return 0;
+      case '{': nesting++; break;
+      case '}': if (!nesting--) return false; break;
+      case '|': case ',': if (nesting==0) goto NEXTCASE;
+      case 0: return false;
       }
     }
     case '|':	// skip rest of |pattern|pattern} when called recursively
     case ',':
-      for (matched = 0; *p && matched >= 0;) {
+      for (nesting = 0; *p && nesting >= 0;) {
 	switch (*p++) {
 	case '\\': if (*p) p++; break;
-	case '{': matched++; break;
-	case '}': matched--; break;
+	case '{': nesting++; break;
+	case '}': nesting--; break;
 	}
       }
       break;
@@ -92,16 +92,16 @@ int filename_match(const char *s, const char *p) {
 #if defined(_WIN32) && !defined(__CYGWIN__)
     case '\\':	// quote next character
       if (*p) p++;
-      if (*s++ != *(p-1)) return 0;
+      if (*s++ != *(p-1)) return false;
       break;
     default:
-      if (tolower(*s) != tolower(*(p-1))) return 0;
+      if (tolower(*s) != tolower(*(p-1))) return false;
       s++;
 #else
     case '\\':	// quote next character
       if (*p) p++;
     default  :
-      if (*s++ != *(p-1)) return 0;
+      if (*s++ != *(p-1)) return false;
       break;
 #endif
     }
@@ -109,5 +109,5 @@ int filename_match(const char *s, const char *p) {
 }
 
 //
-// End of "$Id: filename_match.cxx,v 1.8 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: filename_match.cxx,v 1.9 2001/08/08 06:28:11 spitzak Exp $".
 //

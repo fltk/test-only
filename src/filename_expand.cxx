@@ -1,5 +1,5 @@
 //
-// "$Id: filename_expand.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: filename_expand.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,21 +38,24 @@
 #endif
 
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-static inline int isdirsep(char c) {return c=='/' || c=='\\';}
+static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
 
-int filename_expand(char *to,const char *from) {
+bool filename_expand(char *to, const char *from) {
 
   char temp[FL_PATH_MAX];
-  strcpy(temp,from);
-  const char *start = temp;
-  const char *end = temp+strlen(temp);
+  // do a strlcpy():
+  char* a = temp;
+  const char* end = from;
+  while (a < temp+FL_PATH_MAX-1 && *end) *a++ = *end++;
+  *a = 0;
+  end = a;
 
-  int ret = 0;
+  bool ret = false;
 
-  for (char *a=temp; a<end; ) {	// for each slash component
+  for (a=temp; a<end; ) {	// for each slash component
     char *e; for (e=a; e<end && !isdirsep(*e); e++); // find next slash
     const char *value = 0; // this will point at substitute value
     switch (*a) {
@@ -75,27 +78,31 @@ int filename_expand(char *to,const char *from) {
     }
     if (value) {
       // substitutions that start with slash delete everything before them:
-      if (isdirsep(value[0])) start = a;
+      if (isdirsep(value[0])) a = temp;
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
       // also if it starts with "A:"
-      if (value[0] && value[1]==':') start = a;
+      if (value[0] && value[1]==':') a = temp;
 #endif
       int t = strlen(value); if (isdirsep(value[t-1])) t--;
-      memmove(a+t, e, end+1-e);
       end = a+t+(end-e);
+      if (end > temp+FL_PATH_MAX-1) {
+	t -= end-(temp+FL_PATH_MAX-1);
+	end = temp+FL_PATH_MAX-1;
+      }
+      memmove(a+t, e, end+1-(a+t));
       memcpy(a, value, t);
-      ret++;
+      ret = true;
     } else {
       a = e+1;
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-      if (*e == '\\') {*e = '/'; ret++;} // ha ha!
+      if (*e == '\\') {*e = '/'; ret = true;} // only forward slashes allowed
 #endif
     }
   }
-  strcpy(to,start);
+  if (ret || to != from) strcpy(to, temp);
   return ret;
 }
 
 //
-// End of "$Id: filename_expand.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: filename_expand.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $".
 //

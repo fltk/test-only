@@ -37,8 +37,8 @@
 
 #include <fltk/Fl_Bitmap.h>
 
-#include "sorceress.xbm"
-Fl_Bitmap bitmap(sorceress_bits, sorceress_width, sorceress_height);
+#include "escherknot.xbm"
+Fl_Bitmap bitmap(escherknot_bits, escherknot_width, escherknot_height);
 
 ////////////////////////////////////////////////////////////////
 
@@ -214,5 +214,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.13 2001/08/07 07:06:17 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.14 2001/08/08 06:28:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: filename.h,v 1.3 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,21 +32,21 @@
 
 #include <fltk/Enumerations.h>
 
-#define FL_PATH_MAX 256 // all buffers are this length
+#define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
 
 FL_API const char *filename_name(const char *); // return pointer to name
 FL_API const char *filename_ext(const char *); // return pointer to .ext
 FL_API char *filename_setext(char *,const char *ext); // clobber .ext
-FL_API int filename_expand(char *, const char *from); // do $x and ~x
-FL_API int filename_absolute(char *, const char *from); // prepend getcwd()
-FL_API int filename_match(const char *, const char *pattern); // glob match
-FL_API int filename_isdir(const char*);
+FL_API bool filename_expand(char *, const char *from); // do $x and ~x
+FL_API bool filename_absolute(char *, const char *from); // prepend getcwd()
+FL_API bool filename_match(const char *, const char *pattern); // glob match
+FL_API bool filename_isdir(const char*);
 
 // Portable "scandir" function.  Ugly but apparently necessary...
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 
-struct FL_API dirent {char d_name[1];};
+struct dirent {char d_name[1];};
 
 #else
 
@@ -68,5 +68,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: filename.h,v 1.3 2001/08/08 06:28:11 spitzak Exp $".
 //

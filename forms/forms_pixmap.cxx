@@ -1,5 +1,5 @@
 //
-// "$Id: forms_pixmap.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: forms_pixmap.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Forms pixmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,11 +43,11 @@ void Fl_FormsPixmap::draw() {
   box()->draw(0, 0, w(), h(), selection_color());
   if (b) {
     int W,H; b->measure(W,H);
-    b->draw(0, 0, w(), h(), (W-w())/2, (H-h())/2);
+    b->draw((w()-W)/2, (h()-H)/2);
   }
   draw_inside_label();
 }
 
 //
-// End of "$Id: forms_pixmap.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: forms_pixmap.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Window.h,v 1.2 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,17 +42,17 @@ public:
   virtual int handle(int);
 
   void clear_border()	{set_flag(FL_NOBORDER);}
-  int border() const	{return !(flags() & FL_NOBORDER);}
+  bool border() const	{return !(flags() & FL_NOBORDER);}
   void set_override()	{set_flag(FL_NOBORDER|FL_OVERRIDE);}
-  int override() const  { return flags()&FL_OVERRIDE; }
+  bool override() const {return (flags()&FL_OVERRIDE)!=0; }
   void set_modal()	{set_flag(FL_MODAL);}
-  int modal() const	{return flags() & FL_MODAL;}
+  bool modal() const	{return (flags()&FL_MODAL) != 0;}
   void set_non_modal()	{set_flag(FL_NON_MODAL);} // back compatability only!
 
   void move(int x, int y);
-  void hotspot(int x, int y, int offscreen = 0);
-  void hotspot(const Fl_Widget*, int offscreen = 0);
-  void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
+  void hotspot(int x, int y, bool offscreen = false);
+  void hotspot(const Fl_Widget*, bool offscreen = false);
+  void hotspot(const Fl_Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
     { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
 
@@ -66,14 +66,14 @@ public:
   static const char* xclass()	{return xclass_;}
   static void xclass(const char* v) {xclass_ = v;}
 
-  int shown() const {return i != 0;}
+  bool shown() const {return i != 0;}
   void show();
   void show(int, char**);
   void show(const Fl_Window* parent);
-  int exec(const Fl_Window* parent = 0);
+  bool exec(const Fl_Window* parent = 0);
   void show_inside(const Fl_Window* parent);
   void iconize();
-  int iconic() const;
+  bool iconic() const;
   virtual void destroy();
 
   void fullscreen();
@@ -124,5 +124,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Window.h,v 1.2 2001/08/08 06:28:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.153 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.154 2001/08/08 06:28:11 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1015,7 +1015,7 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
   }
 }
 
-int Fl_Window::iconic() const {
+bool Fl_Window::iconic() const {
   return i && IsIconic(i->xid);
 }
 
@@ -1272,5 +1272,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.153 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.154 2001/08/08 06:28:11 spitzak Exp $".
 //

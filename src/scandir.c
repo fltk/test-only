@@ -14,15 +14,21 @@ Library General Public License for more details.
 You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-USA.  */
+USA.
+
+Yes, this code is copied from a library that is LGPL. However this
+code is #ifdef'd out on most machines including Linux and
+Windows. Therefore our modified LGPL (which explicitly allows static
+linking) can be used on all such machines.
+
+*/
+
+#include <config.h>
+#if ! HAVE_SCANDIR
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include "scandir_win32.c"
 #else
-
-#include <config.h>
-
-#if ! HAVE_SCANDIR
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -58,28 +64,24 @@ scandir (const char *dir, struct dirent ***namelist,
   struct dirent *d;
   int save;
 
-  if (dp == NULL)
-    return -1;
+  if (dp == NULL) return -1;
 
   save = errno;
   errno = 0;
 
   i = 0;
   while ((d = readdir (dp)) != NULL)
-    if (select == NULL || (*select) (d))
-      {
+    if (select == NULL || (*select) (d)) {
       size_t dsize;
 
-      if (i == vsize)
-        {
+      if (i == vsize) {
           struct dirent **newv;
           if (vsize == 0)
             vsize = 10;
           else
             vsize *= 2;
           newv = (struct dirent **) realloc (v, vsize * sizeof (*v));
-          if (newv == NULL)
-            {
+	if (newv == NULL) {
             lose:
               errno = ENOMEM;
               break;
@@ -93,18 +95,15 @@ scandir (const char *dir, struct dirent ***namelist,
 
       dsize = &d->d_name[_D_ALLOC_NAMLEN (d)] - (char *) d;
       v[i] = (struct dirent *) malloc (dsize);
-      if (v[i] == NULL)
-        goto lose;
+      if (v[i] == NULL) goto lose;
 
       memcpy (v[i++], d, dsize);
       }
 
-  if (errno != 0)
-    {
+  if (errno != 0) {
       save = errno;
       (void) closedir (dp);
-      while (i > 0)
-      free (v[--i]);
+    while (i > 0) free (v[--i]);
       free (v);
       errno = save;
       return -1;
@@ -119,9 +118,13 @@ scandir (const char *dir, struct dirent ***namelist,
   return i;
 }
 
+#endif /* !_WIN32 */
+
+/* This function is not used by fltk, but is usually provided with scandir
+   implementations: */
+
 int alphasort (struct dirent **a, struct dirent **b) {
   return strcmp ((*a)->d_name, (*b)->d_name);
 }
 
-#endif
 #endif

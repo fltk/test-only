@@ -1,5 +1,5 @@
 //
-// "$Id: filename_absolute.cxx,v 1.9 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: filename_absolute.cxx,v 1.10 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,30 +43,30 @@
 #endif
 
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-static inline int isdirsep(char c) {return c=='/' || c=='\\';}
+static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
 
-int filename_absolute(char *to,const char *from) {
+bool filename_absolute(char *to,const char *from) {
 
-  if (isdirsep(*from) || *from == '|'
+  if (isdirsep(from[0]) /*|| from[0] == '|' // for tcl pipes? */
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-      || from[1]==':'
+      || from[0] && from[1]==':'
 #endif
       ) {
-    strcpy(to,from);
-    return 0;
+    strcpy(to, from);
+    return false;
   }
 
   char *a,temp[FL_PATH_MAX];
   const char *start = from;
 
   a = getenv("PWD");
-  if (a) strncpy(temp,a,FL_PATH_MAX);
-  else {a = getcwd(temp,FL_PATH_MAX); if (!a) return 0;}
+  if (a) strncpy(temp, a, FL_PATH_MAX);
+  else {a = getcwd(temp, FL_PATH_MAX); if (!a) return false;}
 #if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-  for (a = temp; *a; a++) if (*a=='\\') *a = '/'; // ha ha
+  for (a = temp; *a; a++) if (*a=='\\') *a = '/'; // forward slashes only
 #else
   a = temp+strlen(temp);
 #endif
@@ -85,12 +85,13 @@ int filename_absolute(char *to,const char *from) {
       break;
   }
   *a++ = '/';
-  strcpy(a,start);
-  strcpy(to,temp);
-  return 1;
+  strncpy(a, start, FL_PATH_MAX-(a-temp));
+  temp[FL_PATH_MAX-1] = 0;
+  strcpy(to, temp);
+  return true;
 
 }
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.9 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.10 2001/08/08 06:28:11 spitzak Exp $".
 //

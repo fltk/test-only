@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.72 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.73 2001/08/08 06:28:11 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -256,7 +256,7 @@ void Fl_Window::modal_for(const Fl_Window* w) {
   clear_flag(FL_NON_MODAL); // stop the back-compatability hack
 }
 
-int Fl_Window::exec(const Fl_Window* w) {
+bool Fl_Window::exec(const Fl_Window* w) {
   clear_value();
   set_modal();
   show(w);
@@ -347,5 +347,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.72 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.73 2001/08/08 06:28:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.14 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.15 2001/08/08 06:28:11 spitzak Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef __CYGWIN__
 // Emulation of posix scandir() call
+// This source file is #include'd by scandir.c
 
 #include <config.h>
 #include <string.h>
@@ -94,12 +94,6 @@ int scandir(const char *dirname, struct dirent ***namelist,
   return nDir;
 }
 
-int alphasort (struct dirent **a, struct dirent **b) {
-  return strcmp ((*a)->d_name, (*b)->d_name);
-}
-
-#endif
-
 //
-// End of "$Id: scandir_win32.c,v 1.14 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.15 2001/08/08 06:28:11 spitzak Exp $".
 //
