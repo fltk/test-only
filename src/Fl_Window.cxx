@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.84 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.85 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -161,27 +161,15 @@ int Fl_Window::handle(int event) {
     break;
   }
 
-  if (Fl_Group::handle(event)) return 1;
+  int ret = Fl_Group::handle(event); if (ret) return ret;
 
-  switch (event) {
-  case FL_SHORTCUT:
+  if (!parent()) {
     // Make the Escape key close windows:
-    if (!parent() && test_shortcut()) {do_callback(); return 1;}
-    break;
-  case FL_PUSH:
-    // Because windows are opaque they must consume the clicks on them,
-    // otherwise if they were subwindows the clicks would get passed
-    // to widgets hidden behind them. On X unwanted clicks also raise
-    // the window (stupid Windows does this all the time even if the
-    // click is used, so doing it is redundant there).
+    if (event == FL_SHORTCUT && !Fl::event_clicks() && test_shortcut()) {do_callback(); return 1;}
 #ifndef _WIN32
-    {Fl_Window* w = this;
-    while (w->parent()) w = w->window();
-    XMapRaised(fl_display, w->i->xid);}
+    // Unused clicks raise windows:
+    if (event == FL_PUSH) XMapRaised(fl_display, i->xid);
 #endif
-  case FL_DRAG:
-  case FL_RELEASE:
-    return 1;
   }
   return 0;
 }
@@ -347,5 +335,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.84 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.85 2002/04/25 16:39:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.20 2002/04/02 08:33:32 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1962,7 +1962,7 @@ int Fl_Text_Display::handle(int event) {
       }
 
     case FL_MOUSEWHEEL:
-      return send(event, *mVScrollBar);
+      return mVScrollBar->send(event);
 #if 0
         // I shouldn't be using mNVisibleLines or mTopLineNum here in handle()
         // because the values for these might change between now and layout(),
@@ -1982,5 +1982,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.20 2002/04/02 08:33:32 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.17 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: scroll.cxx,v 1.18 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -87,8 +87,7 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  thescroll->scrollbar.clear_flag(FL_ALIGN_MASK);
-  thescroll->scrollbar.set_flag((long)v);
+  Fl_Style::scrollbar_align = (Fl_Flags)v;
   thescroll->relayout();
   thescroll->redraw();
 }
@@ -133,7 +132,7 @@ int main(int argc, char** argv) {
   choice.menu(choices);
   choice.value(3);
 
-  Fl_Choice achoice(150, 360, 200, 25, "scrollbar.align():");
+  Fl_Choice achoice(150, 360, 200, 25, "scrollbar_align():");
   achoice.menu(align_choices);
   achoice.value(3);
 
@@ -147,5 +146,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.17 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: scroll.cxx,v 1.18 2002/04/25 16:39:33 spitzak Exp $".
 //

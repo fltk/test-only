@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.123 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.124 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -545,6 +545,7 @@ int MenuWindow::handle(int event) {
     } else
       return 0;
 
+  // case FL_ENTER: // this messes up menu bar pulldown shortcuts
   case FL_PUSH:
   case FL_MOVE:
   case FL_DRAG: {
@@ -709,7 +710,6 @@ int Fl_Menu_::popup(
     if (p.level < p.nummenus-1) continue; // submenu already up
 
     Fl_Widget* widget = p.current_widget();
-
     if (!widget) continue; // this should not happen
 
     MenuWindow* mw = p.menus[p.level];
@@ -765,5 +765,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.123 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.124 2002/04/25 16:39:33 spitzak Exp $".
 //

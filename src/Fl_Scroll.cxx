@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.36 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.37 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -58,11 +58,11 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
   X = 0; Y = 0; W = w(); H = h(); box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
-    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+    if (scrollbar_align() & FL_ALIGN_LEFT) X += scrollbar.w();
   }
   if (hscrollbar.visible()) {
     H -= hscrollbar.h();
-    if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
+    if (scrollbar_align() & FL_ALIGN_TOP) Y += hscrollbar.h();
   }
 }
 
@@ -259,23 +259,30 @@ int Fl_Scroll::handle(int event) {
     break;
 
   case FL_PUSH:
-  case FL_MOVE:
   case FL_ENTER:
-    if (scrollbar_align()&FL_ALIGN_LEFT ?
-	(Fl::event_x() < scrollbar.x()+scrollbar.w()) :
-	(Fl::event_x() >= scrollbar.x()))
-      if (send(event,scrollbar)) return 1;
-    if (scrollbar_align()&FL_ALIGN_TOP ?
-	(Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
-	(Fl::event_y() >= hscrollbar.y()))
-      if (send(event,hscrollbar)) return 1;
+  case FL_MOVE:
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    // For all mouse events check to see if we are in the scrollbar
+    // areas and send to them:
+    if (scrollbar.visible() &&
+	(scrollbar_align()&FL_ALIGN_LEFT ?
+	 (Fl::event_x() < scrollbar.x()+scrollbar.w()) :
+	 (Fl::event_x() >= scrollbar.x())))
+      return scrollbar.send(event);
+    if (hscrollbar.visible() &&
+	(scrollbar_align()&FL_ALIGN_TOP ?
+	 (Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
+	 (Fl::event_y() >= hscrollbar.y())))
+      return hscrollbar.send(event);
     break;
+
   case FL_MOUSEWHEEL:
-    return send(event, scrollbar);
+    return scrollbar.send(event);
 
   }
 
-  if (Fl_Group::handle(event)) return 1;
+  int ret = Fl_Group::handle(event); if (ret) return ret;
 
   if (event == FL_SHORTCUT) {
     if (scrollbar.takesevents() && scrollbar.handle(FL_KEY)) return 1;
@@ -285,5 +292,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.36 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.37 2002/04/25 16:39:33 spitzak Exp $".
 //

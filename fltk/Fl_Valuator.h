@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.h,v 1.3 2002/02/25 09:00:20 spitzak Exp $"
+// "$Id: Fl_Valuator.h,v 1.4 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,8 +37,9 @@ public:
   double value() const {return value_;}
   int value(double);
 
-  double step() const {return 1.0/istep;}
-  void step(double a) {istep = int(1.0/a+.5);}
+  int istep() const {return istep_;}
+  double step() const {return istep_ < 0 ? -istep_ : 1.0/istep_;}
+  void step(double a) {istep_ = a <= 1 ? int(1.0/a+.5) : -int(a+.5);}
 
   double minimum() const {return minimum_;}
   void minimum(double a) {minimum_ = a;}
@@ -86,7 +87,7 @@ private:
   static double previous_value_;
   double minimum_;
   double maximum_;
-  int istep;
+  int istep_;
   int linesize_;
   int pagesize_;
 
@@ -95,5 +96,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.h,v 1.3 2002/02/25 09:00:20 spitzak Exp $".
+// End of "$Id: Fl_Valuator.h,v 1.4 2002/04/25 16:39:33 spitzak Exp $".
 //

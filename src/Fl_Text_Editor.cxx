@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.14 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.15 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -470,7 +470,7 @@ int Fl_Text_Editor::handle(int event) {
       return 1;
 
     case FL_FOCUS:
-      return 2; // indicate that this widget should get initial focus
+      return 3; // indicate that this widget should get initial focus
 
     default:
       return 1;
@@ -500,5 +500,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.14 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.15 2002/04/25 16:39:33 spitzak Exp $".
 //

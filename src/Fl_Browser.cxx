@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.61 2002/04/11 07:47:45 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.62 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -773,20 +773,21 @@ int Fl_Browser::handle(int event) {
     return 1;
 
   case FL_PUSH:
-  case FL_MOVE:
   case FL_ENTER:
-    if (scrollbar.align()&FL_ALIGN_LEFT ?
-	(Fl::event_x() < scrollbar.x()+scrollbar.w()) :
-	(Fl::event_x() >= scrollbar.x()))
-      if (send(event,scrollbar)) return 1;
-    if (hscrollbar.align()&FL_ALIGN_TOP ?
-	(Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
-	(Fl::event_y() >= hscrollbar.y()))
-      if (send(event,hscrollbar)) return 1;
-    if (event != FL_PUSH) {
-      Fl::belowmouse(this);
-      return 1;
-    }
+  case FL_MOVE:
+    // For all mouse events check to see if we are in the scrollbar
+    // areas and send to them:
+    if (scrollbar.visible() &&
+	(scrollbar_align()&FL_ALIGN_LEFT ?
+	 (Fl::event_x() < scrollbar.x()+scrollbar.w()) :
+	 (Fl::event_x() >= scrollbar.x())))
+      return scrollbar.send(event);
+    if (hscrollbar.visible() &&
+	(scrollbar_align()&FL_ALIGN_TOP ?
+	 (Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
+	 (Fl::event_y() >= hscrollbar.y())))
+      return hscrollbar.send(event);
+    if (event != FL_PUSH) return 1; // return true for enter/move
     take_focus();
     openclose_drag = 0;
   case FL_DRAG: {
@@ -894,13 +895,13 @@ int Fl_Browser::handle(int event) {
       execute(item());
       return 1;
     default:
-      if (send(event,scrollbar)) return 1;
-      if (send(event,hscrollbar)) return 1;
+      if (scrollbar.send(event)) return 1;
+      if (hscrollbar.send(event)) return 1;
     }
     break;
 
   case FL_MOUSEWHEEL:
-    return send(event, scrollbar);
+    return scrollbar.send(event);
 #if 0
     int n = Fl::event_dy() * Fl_Style::wheel_scroll_lines;
     goto_mark(FIRST_VISIBLE);
@@ -1061,5 +1062,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.61 2002/04/11 07:47:45 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.62 2002/04/25 16:39:33 spitzak Exp $".
 //

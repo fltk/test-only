@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.57 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.58 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,20 +33,71 @@
 // Return the location of the left/top edge of a box of slider_size() would
 // be if the area the slider can move in is of width/height w.
 int Fl_Slider::slider_position(double value, int w) {
-  w -= slider_size_; if (w <= 0 || minimum() == maximum()) return 0;
-  double val = (value-minimum())/(maximum()-minimum());
-  if (!horizontal()) val = 1-val;
-  if (val >= 1) return w;
-  else if (val <= 0) return 0;
-  else return int(val*w+.5);
+  double A = minimum();
+  double B = maximum();
+  if (B == A) return 0;
+  bool flip = B < A;
+  if (flip) {A = B; B = minimum();}
+  if (!horizontal()) flip = !flip;
+  // if both are negative, make the range positive:
+  if (B <= 0) {flip = !flip; double t = A; A = -B; B = -t; value = -value;}
+  double fraction;
+  if (!log()) {
+    // linear slider
+    fraction = (value-A)/(B-A);
+  } else if (A > 0) {
+    // logatithmic slider
+    if (value <= A) fraction = 0;
+    else fraction = (::log(value)-::log(A))/(::log(B)-::log(A));
+  } else if (A == 0) {
+    // squared slider
+    if (value <= 0) fraction = 0;
+    else fraction = sqrt(value/B);
+  } else {
+    // squared signed slider
+    if (value < 0) fraction = (1-sqrt(value/A))*.5;
+    else fraction = (1+sqrt(value/B))*.5;
+  }
+  if (flip) fraction = 1-fraction;
+  w -= slider_size_; if (w <= 0) return 0;
+  if (fraction >= 1) return w;
+  else if (fraction <= 0) return 0;
+  else return int(fraction*w+.5);
 }
 
 // Return the value if the left/top edge of a box of slider_size() is placed
 // at this location in an area of width/height w:
 double Fl_Slider::position_value(int X, int w) {
   w -= slider_size_; if (w <= 0) return minimum();
-  if (!horizontal()) X = w-X;
-  return round(X*(maximum()-minimum())/w + minimum());
+  double A = minimum();
+  double B = maximum();
+  bool flip = B < A;
+  if (flip) {A = B; B = minimum();}
+  if (!horizontal()) flip = !flip;
+  if (flip) X = w-X;
+  double fraction = double(X)/w;
+  // if both are negative, make the range positive:
+  flip = (B <= 0);
+  if (flip) {double t = A; A = -B; B = -t; fraction = 1-fraction;}
+  double value;
+  if (!log()) {
+    // linear slider
+    value = fraction*(B-A)+A;
+  } else if (A > 0) {
+    // log slider
+    value = exp(fraction*(::log(B)-::log(A))+::log(A));
+  } else if (A == 0) {
+    // squared slider
+    value = fraction*fraction*B;
+  } else {
+    // squared signed slider
+    fraction = 2*fraction - 1;
+    if (fraction < 0) value = fraction*fraction*A;
+    else value = fraction*fraction*B;
+  }
+  // we round 10x finer when we are below the lowest 10 steps:
+  if (fabs(value)<=9*step()) return round(value*10)/10;
+  else return round(value);
 }
 
 // Draw tick marks. These lines cross the passed rectangle perpendicular to
@@ -63,16 +114,33 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h)
     y1 = y2 = y+(slider_size_-1)/2; dy = 1;
     w = h;
   }
-  if (w <= 0 || minimum() == maximum()) return;
-  int incr = pagesize(); if (incr < 1) incr = 1;
+  if (w <= 0) return;
   Fl_Color color = text_color();
   if (!active_r()) color = fl_inactive(color);
   fl_color(color);
-  for (double v = minimum();
-       v >= minimum() && v <= maximum();
-       v = increment(v,incr)) {
-    int t = slider_position(v, w);
-    fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+  double A = minimum();
+  double B = maximum();
+  int incr = pagesize(); if (incr < 1) incr = 1;
+  if (log()) {
+    int n = 0;
+    for (double v1 = 0; ;v1 = increment(v1,incr)) {
+      if (++n > 10) {n = 2; incr *= 10;}
+      double v = fabs(v1);
+      if (v > fabs(A) && v > fabs(B)) break;
+      if (B < 0 || A < 0) {
+	int t = slider_position(-v, w);
+	fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+      }
+      if (B > 0 || A > 0) {
+	int t = slider_position(v, w);
+	fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+      }
+    }
+  } else {
+    for (double v = A; v >= A && v <= B; v = increment(v, incr)) {
+      int t = slider_position(v, w);
+      fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+    }
   }
 }
 
@@ -334,5 +402,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.57 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.58 2002/04/25 16:39:33 spitzak Exp $".
 //

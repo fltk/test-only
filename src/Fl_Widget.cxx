@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.87 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.88 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -187,20 +187,120 @@ void Fl_Widget::redraw_label() {
 ////////////////////////////////////////////////////////////////
 // Events:
 
+// Default handler. This returns 1 for mouse movement over opaque widgets,
+// so they can block widgets they overlap from getting events, also so
+// you can put tooltips on them.
 int Fl_Widget::handle(int event) {
-  // Must return 1 for tooltips and mouse tracking to work.  A
-  // subclass can return zero to make itself "invisible" so that
-  // it does not affect highlighting.
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
   case FL_MOVE:
-    return 1;
+    if (box() != FL_NO_BOX) return 1;
   default:
     return 0;
   }
 }
 
+// send(event) is a wrapper for handle() that should be called to send
+// events. It does a few things:
+//
+// 1. It adjusts Fl::event_x/y to be relative to the widget.
+//
+// 2. It makes sure the widget is active and/or visible if the event
+// requres this. It is the caller's responsibility to see if the
+// mouse is pointing at the widget.
+//
+// 3. If handle returns true it sets the belowmouse or focus widget
+// to reflect this.
+
+int Fl_Widget::send(int event) {
+
+  // Figure out the mouse position in this widget from the root mouse position:
+  int ex = Fl::e_x_root;
+  int ey = Fl::e_y_root;
+  {for (Fl_Widget *t=this; t; t = t->parent()) {ex -= t->x(); ey -= t->y();}}
+  int save_x = Fl::e_x;
+  Fl::e_x = ex;
+  int save_y = Fl::e_y;
+  Fl::e_y = ey;
+
+  int ret = 0;
+  switch (event) {
+
+  case FL_FOCUS:
+    if (!takesevents()) break;
+    ret = handle(event);
+    if (ret) {
+      // If it returns true then this is the focus() widget, but only
+      // set this if handle() did not pass this on to a child:
+      if (!contains(Fl::focus())) Fl::focus(this);
+    }
+    break;
+
+  case FL_ENTER:
+  case FL_MOVE:
+    if (!visible()) break;
+    // figure out correct type of event:
+    event = (contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
+    ret = handle(event);
+    if (ret) {
+      // If return value is true then this is the belowmouse widget,
+      // set it, but only if handle() did not set it to some child:
+      if (!contains(Fl::belowmouse())) Fl::belowmouse(this);
+    }
+    break;
+
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    if (!takesevents()) break;
+    // figure out correct type of event:
+    event = (contains(Fl::belowmouse())) ? FL_DND_DRAG : FL_DND_ENTER;
+    // see if it wants the event:
+    ret = handle(event);
+    if (ret) {
+      // If return value is true then this is the belowmouse widget,
+      // set it, but only if handle() did not set it to some child:
+      if (!contains(Fl::belowmouse())) Fl::belowmouse(this);
+    }
+    break;
+
+  case FL_PUSH:
+    if (!takesevents()) break;
+    // see if it wants the event:
+    ret = handle(event);
+    if (ret) {
+      // If it returns true then this is the pushed() widget. But we
+      // only set this if handle() did not pass this on to a child,
+      // and if the mouse is still down:
+      if (Fl::event_state(0x0f000000) && !contains(Fl::pushed()))
+	Fl::pushed(this);
+    }
+    break;
+
+  case FL_SHOW:
+  case FL_HIDE:
+    if (visible()) handle(event);
+    // we always return zero as we want this event sent to every child
+    break;
+
+  case FL_ACTIVATE:
+  case FL_DEACTIVATE:
+    if (takesevents()) handle(event);
+    // we always return zero as we want this event sent to every child
+    break;
+
+  default:
+    if (!takesevents()) break;
+    ret = handle(event);
+    break;
+  }
+
+  Fl::e_x = save_x; Fl::e_y = save_y;
+  return ret;
+}
+
+// Very similar to send(FL_FOCUS) except it does not send it if it already
+// has the focus.
 bool Fl_Widget::take_focus() {
   if (focused()) return true;
   if (!takesevents() || !handle(FL_FOCUS)) return false;
@@ -323,6 +423,7 @@ bool Fl::test_shortcut(int shortcut) {
 }
 
 // Test against shortcut() and possibly against a &x shortcut in the label:
+#include <ctype.h>
 
 int Fl_Widget::test_shortcut() const {
 
@@ -337,7 +438,7 @@ int Fl_Widget::test_shortcut() const {
     if (!*label) return false;
     if (*label++ == '&') {
       if (*label == '&') label++;
-      else if (*label == c) return 2; // signal for Fl_Menu code
+      else if (tolower(*label) == c) return 2; // signal for Fl_Menu code
       else return false;
     }
   }
@@ -391,5 +492,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.87 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.88 2002/04/25 16:39:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.141 2002/04/17 08:56:04 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.142 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -557,22 +557,11 @@ bool Fl::handle(int event, Fl_Window* window)
     if (pushed()) to = pushed();
     break;
 
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
-    dnd_flag = 1;
-    break;
-
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     if (pushed()) {to = pushed_; event = FL_DRAG;}
     break;
-
-  case FL_DND_LEAVE:
-    dnd_flag = 1;
-    belowmouse(0);
-    dnd_flag = 0;
-    return true;
 
   case FL_LEAVE:
     if (!pushed_) belowmouse(0);
@@ -583,6 +572,17 @@ bool Fl::handle(int event, Fl_Window* window)
     if (!event_state(FL_BUTTONS)) pushed_=0;
     break;
 
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    dnd_flag = 1;
+    break;
+
+  case FL_DND_LEAVE:
+    dnd_flag = 1;
+    belowmouse(0);
+    dnd_flag = 0;
+    return true;
+
   case FL_DND_RELEASE:
     to = belowmouse();
     break;
@@ -590,8 +590,18 @@ bool Fl::handle(int event, Fl_Window* window)
   case FL_KEY:
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
+    // try sending keystroke to the focus:
     to = focus();
-    break;
+    if (modal_ && !modal_->contains(to)) to = modal_;
+    if (to && to->send(event)) return true;
+    // try sending a shortcut to the window:
+    if (handle(FL_SHORTCUT, window)) return true;
+    // Try using upper-case instead of lower-case for letter shortcuts:
+    if (islower(Fl::e_text[0])) {
+      Fl::e_text[0] ^= 0x20;
+      return handle(FL_SHORTCUT, window);
+    }
+    return false;
 
   case 0: // events from system that fltk does not understand
     to = 0;
@@ -601,65 +611,8 @@ bool Fl::handle(int event, Fl_Window* window)
   // restrict to modal widgets:
   if (modal_ && !modal_->contains(to)) to = modal_;
 
-  bool ret = false;
-  if (to) {
-    // see if to should get events:
-    switch (event) {
-    default:
-      if (!to->takesevents()) break;
-      // otherwise fall through:
-    case FL_ENTER: // these events are always sent even to inactive widgets
-    case FL_MOVE:
-    case FL_SHOW:
-    case FL_HIDE:
-      int wx = 0, wy = 0;
-      for (Fl_Widget *w = to; w; w = w->parent())
-	{ wx += w->x(); wy += w->y(); }
-      int save_x = Fl::e_x; int save_y = Fl::e_y;
-      Fl::e_x = Fl::e_x_root-wx;Fl::e_y = Fl::e_y_root-wy;
-      ret = to->handle(event) != 0;
-      Fl::e_x = save_x; Fl::e_y = save_y;
-    }
-  }
-
-  if (ret) {
-    switch (event) {
-    case FL_ENTER:
-    case FL_DND_ENTER:
-      // Successful completion of FL_ENTER means the widget is now the
-      // belowmouse widget, but only call Fl::belowmouse if the child
-      // widget did not do so:
-      if (!to->contains(Fl::belowmouse())) Fl::belowmouse(to);
-      break;
-    case FL_PUSH:
-      // Successful completion of FL_PUSH means the widget is now the
-      // pushed widget, but only call Fl::belowmouse if the child
-      // widget did not do so and the mouse is still down:
-      if (event_state(0x0f000000) && !to->contains(pushed()))
-	pushed_ = to;
-      break;
-    }
-  } else {
-    switch (event) {
-    case FL_KEY:
-      // If there is no focus or it ignores the key, try a shortcut:
-      return handle(FL_SHORTCUT, window);
-    case FL_SHORTCUT:
-      // Try using upper-case instead of lower-case for letter shortcuts:
-      if (islower(Fl::e_text[0])) {
-	Fl::e_text[0] ^= 0x20;
-	return handle(FL_SHORTCUT, window);
-      }
-      return false;
-      // rejected mouse events produce FL_LEAVE events:
-    case FL_DND_ENTER:
-    case FL_DND_DRAG:
-    case FL_ENTER:
-    case FL_MOVE:
-      if (!modal_) belowmouse(window);
-      break;
-    }
-
+  bool ret = to && to->send(event);
+  if (!ret) {
     // try the chain of global event handlers:
     for (const handler_link *h = handlers; h; h = h->next)
       if (h->handle(event)) {ret = true; break;}
@@ -676,5 +629,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.141 2002/04/17 08:56:04 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.142 2002/04/25 16:39:33 spitzak Exp $".
 //

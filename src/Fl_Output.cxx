@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.31 2002/04/14 08:02:34 spitzak Exp $"
+// "$Id: Fl_Output.cxx,v 1.32 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,8 +37,8 @@ int Fl_Output::handle(int event) {
   if (event == FL_SHORTCUT) return 0;
   // You can't drag&drop on it either:
   if (event == FL_DND_ENTER) return 0;
-  // Don't return 2 for FL_FOCUS, return 1 instead:
-  return Fl_Input::handle(event) ? 1 : 0;
+  // Don't return 3 for FL_FOCUS, return 1 instead:
+  return Fl_Input::handle(event)&1;
 }
 
 // Output has it's own style so the color can be set to gray like
@@ -53,5 +53,5 @@ Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.31 2002/04/14 08:02:34 spitzak Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.32 2002/04/25 16:39:33 spitzak Exp $".
 //

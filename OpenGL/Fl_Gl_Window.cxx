@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.35 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.36 2002/04/25 16:39:33 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,8 +48,8 @@
 // GL_SWAP_TYPE, it should be equal to one of these symbols:
 
 // contents of back buffer after glXSwapBuffers():
-#define SWAP 1		// default (assumme garbage is in back buffer)
-#define USE_COPY 2	// use glCopyPixels to imitate COPY behavior
+#define SWAP 1		// assumme garbage is in back buffer
+#define USE_COPY 2	// use glCopyPixels to imitate COPY behavior (default)
 #define COPY 3		// unchanged
 #define NODAMAGE 4	// unchanged even by X expose() events
 
@@ -190,12 +190,13 @@ void Fl_Gl_Window::flush() {
     glDrawBuffer(GL_BACK);
 
     if (!SWAP_TYPE) {
-      SWAP_TYPE = SWAP;
+      SWAP_TYPE = USE_COPY;
       const char* c = getenv("GL_SWAP_TYPE");
       if (c) switch (c[0]) {
       case 'U' : SWAP_TYPE = USE_COPY; break;
       case 'C' : SWAP_TYPE = COPY; break;
       case 'N' : SWAP_TYPE = NODAMAGE; break;
+      default  : SWAP_TYPE = SWAP; break;
       }
     }
 
@@ -246,7 +247,11 @@ void Fl_Gl_Window::flush() {
     } else {
 
       damage1_ = damage();
-      set_damage(~0); draw_swap();
+      set_damage(~0);
+      draw();
+      if (overlay == this) draw_overlay();
+      if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
+      goto NO_OVERLAY;
 
     }
 
@@ -256,6 +261,7 @@ void Fl_Gl_Window::flush() {
       glDrawBuffer(GL_BACK);
       glFlush();
     }
+  NO_OVERLAY:;
 
   } else {	// single-buffered context is simpler:
 
@@ -317,5 +323,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.35 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.36 2002/04/25 16:39:33 spitzak Exp $".
 //

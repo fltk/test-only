@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.109 2002/04/11 07:47:46 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.110 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -147,79 +147,6 @@ int Fl_Group::find(const Fl_Widget* o) const {
 ////////////////////////////////////////////////////////////////
 // Handle
 
-// send(event,o) is mostly wrapper stuff that should have been done by
-// the handle() methods of widgets.  This could probably have been done
-// by having handle() check active/visible and having it return a pointer
-// to the widget rather than 1 on success.  Oh well...
-
-int Fl_Group::send(int event, Fl_Widget& to) {
-
-  // First see if the widget really should get the event:
-  switch (event) {
-
-  case FL_FOCUS:
-    // All current group implemetations do this before calling here, but
-    // this is reasonable:
-    return to.take_focus();
-
-  case FL_ENTER:
-  case FL_MOVE:
-    // figure out correct type of event:
-    event = (to.contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
-    // Enter/exit are sent to inactive widgets so that tooltips will work.
-  case FL_SHOW:
-  case FL_HIDE:
-    // These events don't need the widget active.
-    if (!to.visible()) return 0;
-    break;
-
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
-    // figure out correct type of event:
-    event = (to.contains(Fl::belowmouse())) ? FL_DND_DRAG : FL_DND_ENTER;
-
-  default:
-    if (!to.takesevents()) return 0;
-  }
-
-  // Now send the event and return if the widget does not use it.
-  // Adjust event to be relative to the widget:
-  int save_x = Fl::e_x; Fl::e_x -= to.x();
-  int save_y = Fl::e_y; Fl::e_y -= to.y();
-  int ret = to.handle(event);
-  Fl::e_y = save_y;
-  Fl::e_x = save_x;
-  if (!ret) return 0;
-
-  switch (event) {
-
-  case FL_ENTER:
-  case FL_DND_ENTER:
-    // Successful completion of FL_ENTER means the widget is now the
-    // belowmouse widget, but only call Fl::belowmouse if the child
-    // widget did not do so:
-    if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
-    break;
-
-  case FL_PUSH:
-    // Successful completion of FL_PUSH means the widget is now the
-    // pushed widget, but only set Fl::pushed() if the child
-    // widget did not do so and the mouse is still down:
-    if (Fl::event_state(0x0f000000) && !to.contains(Fl::pushed()))
-      Fl::pushed(to);
-    break;
-
-  case FL_SHOW:
-  case FL_HIDE:
-    // Return zero so if a group just loops sending an event to every
-    // child until one of them returns non-zero, these will get sent
-    // to every child:
-    return 0;
-  }
-
-  return 1;
-}
-
 // Turn FL_Tab into FL_Right or FL_Left for keyboard navigation
 int Fl_Group::navigation_key() {
   switch (Fl::event_key()) {
@@ -246,79 +173,81 @@ int Fl_Group::handle(int event) {
     if (contains(Fl::focus())) {
       // The focus is being changed to some widget inside this.
       focus_ = find(Fl::focus());
-      return 1;
+      return true;
     }
     // otherwise it indicates an attempt to give this widget focus:
     switch (navigation_key()) {
     default: {
       // try to give it to whatever child had focus last:
       if (focus_ >= 0 && focus_ < numchildren)
-	if (child(focus_)->take_focus()) return 1;
+	if (child(focus_)->take_focus()) return true;
       // otherwise search for the widget that needs the focus, but
       // prefer a widget that returns 2:
       Fl_Widget* f1 = 0; int ret = 0;
       for (i = 0; i < numchildren; ++i) {
 	Fl_Widget* w = child(i);
-	if (w->takesevents()) {
-	  int n = w->handle(FL_FOCUS);
-	  if (n == 2) {f1 = w; ret = 2; break;}
-	  else if (n) {f1 = w; ret = 1;}
-	}
+	int n = w->handle(FL_FOCUS);
+	if (n) {ret = n; f1 = w; if (n & 2) break;}
       }
       if (f1 && !f1->contains(Fl::focus())) Fl::focus(f1);
       return ret;}
     case FL_Right:
     case FL_Down:
       for (i=0; i < numchildren; ++i)
-	if (child(i)->take_focus()) return 1;
+	if (child(i)->take_focus()) return true;
       break;
     case FL_Left:
     case FL_Up:
       for (i = numchildren; i--;)
-	if (child(i)->take_focus()) return 1;
+	if (child(i)->take_focus()) return true;
       break;
     }
-    return 0;
+    return false;
 
   case FL_PUSH:
   case FL_ENTER:
   case FL_MOVE:
   case FL_DND_ENTER:
   case FL_DND_DRAG:
-    // send mouse events to each child in backwards order until one of
-    // them accepts it:
+    // search the children in backwards (top to bottom) order:
     for (i = numchildren; i--;) {
-      Fl_Widget& o = *child(i);
-      int mx = Fl::event_x() - o.x();
-      int my = Fl::event_y() - o.y();
-      if (mx >= 0 && mx < o.w() && my >= 0 && my < o.h())
-	if (send(event, *child(i))) return 1;
+      Fl_Widget* child = this->child(i);
+      // ignore widgets we are not pointing at:
+      if (Fl::event_x() < child->x()) continue;
+      if (Fl::event_x() >= child->x()+child->w()) continue;
+      if (Fl::event_y() < child->y()) continue;
+      if (Fl::event_y() >= child->y()+child->h()) continue;
+      // see if it wants the event:
+      if (child->send(event)) return true;
+      // quit when we reach a widget that claims mouse points at it,
+      // so we don't pass the events to widgets "hidden" behind that one.
+      if (event != FL_ENTER && event != FL_MOVE &&
+	  child->contains(Fl::belowmouse())) return false;
     }
-    if (tooltip() && (event==FL_ENTER || event==FL_MOVE)) {
-      Fl::belowmouse(this);
-      return 1;
-    }
-    return 0;
+    if (event == FL_ENTER || event == FL_MOVE)
+      if (box() != FL_NO_BOX) {Fl::belowmouse(this); return true;}
+    return Fl_Widget::handle(event);
 
   case FL_DRAG:
+  case FL_RELEASE:
   case FL_KEY:
-  case FL_KEYUP:
   case FL_LEAVE:
   case FL_DND_LEAVE:
-    // these events are sent directly to widgets, and should not be
-    // passed to them from a parent widget.
-    return 0;
+    // Ignore these. We handle them if the belowmouse of pushed widget
+    // has been set to this. Subclasses may do something with these.
+    // Definately do not pass them to child widgets!
+    return false;
 
   }
 
   // Try to give all other events to every child, starting at focus:
 
-  if (!numchildren) return 0;
+  if (!numchildren) return false;
   // Try to give to each child, starting at focus:
   int previous = focus_;
   if (previous < 0 || previous >= numchildren) previous = 0;
   for (i = previous;;) {
-    if (send(event, *child(i))) return 1;
+    if (child(i)->send(event)) return true;
     i++;
     if (i >= numchildren) i = 0;
     if (i == previous) break;
@@ -329,19 +258,19 @@ int Fl_Group::handle(int event) {
     // Ignore if focus is not a child of this, but work if there is no focus:
     if (Fl::focus()==this || Fl::focus() && !contains(Fl::focus())) return 0;
     int key = navigation_key();
-    if (!key) return 0;
+    if (!key) return false;
 
     for (i = previous;;) {
       if (key == FL_Left || key == FL_Up) {
 	if (i) --i;
 	else {
-	  if (parent()) return 0;
+	  if (parent()) return false;
 	  i = numchildren-1;
 	}
       } else {
 	++i;
 	if (i >= numchildren) {
-	  if (parent()) return 0;
+	  if (parent()) return false;
 	  i = 0;
 	}
       }
@@ -352,11 +281,11 @@ int Fl_Group::handle(int event) {
 	Fl_Widget* p = child(previous);
 	if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
       }
-      if (child(i)->take_focus()) return 1;
+      if (child(i)->take_focus()) return true;
     }
   }
 
-  return 0;
+  return false;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -664,5 +593,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.109 2002/04/11 07:47:46 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.110 2002/04/25 16:39:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.51 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.52 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -101,21 +101,22 @@ int Fl_Menu_Bar::handle(int event) {
     }
     if (handle_shortcut()) return 1;
     return 0;
-#if 1 //ALT_GOES_TO_MENUBAR
   case FL_KEYUP:
-    if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
-	&& Fl::event_is_click()) {
-      // checking for event_clicks insures that the keyup matches the
-      // keydown that preceeded it, so Alt was pressed & released without
-      // any intermediate values.  On X it is false if Alt is held down
-      // for a long time, too.
-      for (i = 0; i < children; i++) {
-	Fl_Widget* w = child(i);
-	if (w->active()) {value(i); goto J1;}
-      }
-      return 0;
+    // In the future maybe any shortcut() will work, but for now
+    // only the Alt key does. Setting the shortcut to zero will disable
+    // the alt key shortcut.
+    if (shortcut() != FL_Alt_L && shortcut() != FL_Alt_R) break;
+    if (Fl::event_key() != FL_Alt_L && Fl::event_key() != FL_Alt_R) break;
+    // checking for event_clicks insures that the keyup matches the
+    // keydown that preceeded it, so Alt was pressed & released without
+    // any intermediate values.  On X it is false if Alt is held down
+    // for a long time, too:
+    if (!Fl::event_is_click()) break;
+    // okay we got the shortcut, find first menu and pop it up:
+    for (i = 0; i < children; i++) {
+      Fl_Widget* w = child(i);
+      if (w->active()) {value(i); goto J1;}
     }
-#endif
   }
   return 0;
 }
@@ -142,8 +143,9 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
   : Fl_Menu_(x,y,w,h,l)
 {
   style(default_style);
+  shortcut(FL_Alt_L);
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.51 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.52 2002/04/25 16:39:33 spitzak Exp $".
 //

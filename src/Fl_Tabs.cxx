@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.53 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.54 2002/04/25 16:39:33 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -137,7 +137,7 @@ int Fl_Tabs::handle(int event) {
       // this is called to indicate that some child got the focus
       /*if (Fl::focus() == this || focus() < 0)*/ redraw(FL_DAMAGE_VALUE);
       focus(Fl::focus() == this ? -1 : 0);
-      return 1;
+      return true;
     }
     // otherwise this indicates that somebody is trying to give focus to this
     switch (navigation_key()) {
@@ -146,19 +146,20 @@ int Fl_Tabs::handle(int event) {
       // else fall through...
     case FL_Left:
     case FL_Up:
-      // return 2 if the group contains and Fl_Input, return 1 otherwise:
-      if (selected && selected->takesevents()) {
+      // Try to give the contents the focus. Also preserve a return value
+      // of 2 (which indicates the contents have a text field):
+      if (selected) {
 	int n = selected->handle(FL_FOCUS);
 	if (n) {
 	  if (!selected->contains(Fl::focus())) Fl::focus(selected);
 	  return n;
 	}
       }
-      break;
     case FL_Right:
     case FL_Down:
-      break;
-    } return 1;
+      // moving right moves focus to the tabs.
+      return true;
+    }
 
   case FL_UNFOCUS:
     if (focus() < 0) redraw(FL_DAMAGE_VALUE);
@@ -208,7 +209,7 @@ int Fl_Tabs::handle(int event) {
       goto MOVE;
     }
     if (!selected) return 0;
-    if (send(event, *selected)) return 1;
+    if (selected->send(event)) return 1;
     if (!contains(Fl::focus())) return 0;
     switch (navigation_key()) {
     case FL_Right:
@@ -224,7 +225,7 @@ int Fl_Tabs::handle(int event) {
     }
   }  
 
-  if (selected) return send(event, *selected);
+  if (selected) return selected->send(event);
   return 0;
 }
 
@@ -380,11 +381,8 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     }
     o->draw_label(x, y, w, h, FL_ALIGN_CENTER);
     if (sel && focused()) {
-      fl_color(FL_BLACK);
-      fl_line_style(FL_DOT);
       if (H<0) y--;
-      fl_rect(x, y, w, h);
-      fl_line_style(0);
+      focus_box()->draw(x, y, w, h, FL_BLACK, FL_INVISIBLE);
     }
   }
 }
@@ -404,5 +402,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.53 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.54 2002/04/25 16:39:33 spitzak Exp $".
 //

@@ -2219,4 +2219,27 @@ Checked in 4/15/02
 
 Deactivated windows work (they stop events from going to children)
 
+////////////////////////////////////////////////////////////////
+
+setenv GL_SWAP_TYPE 0 will prevent it from drawing in the front buffer
+to do gl overlays. This will blink less and gets around bugs in some
+drivers.
+
+Groups with a box can become the belowmouse() widget. And when looking
+for a widget to accept FL_PUSH, it stops searching when it reaches the
+belowmouse widget, allowing them to hide any widgets below them
+without having to respond to mouse clicks.
+
+All new send() method that simplifies the event handling and makes it
+easier to make composite widgets without using Fl_Group. This also
+fixes a lot of bugs where opaque overlapping widgets would not block
+events to widgets hidden by them, and where outermost windows did not
+respect activate/deactivate, did not get FL_ENTER events, and
+otherwise acted different than other widgets.
+
+In Win32 version subwindows got FL_ENTER/FL_LEAVE events on every
+mouse move.
+
+Log style Fl_Sliders work, try doing
+widget->type(widget->type()|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE).
 
