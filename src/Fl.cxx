@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.184 2004/11/12 06:50:14 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.185 2004/11/13 07:25:16 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -609,6 +609,7 @@ int fltk::damage_;
   wait() calls this before it waits for events.
 */
 void fltk::flush() {
+  if (!xdisplay) return; // ignore if no windows created yet
   if (damage_) {
     damage_ = false; // turn it off so Window::flush() can turn it back on
     for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
@@ -1125,5 +1126,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.184 2004/11/12 06:50:14 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.185 2004/11/13 07:25:16 spitzak Exp $".
 //
