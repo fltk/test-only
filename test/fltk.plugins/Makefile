@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.3 1999/10/09 15:32:18 vincent Exp $"
+# "$Id: Makefile,v 1.4 1999/10/11 17:57:37 vincent Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -40,12 +40,12 @@ CPPFILES3 = \
 
 ################################################################
 
-OBJECTS = $(CPPFILES:.cxx=.o) ../../src/fl_jpeg.o ../../src/fl_draw_image.o
+OBJECTS = $(CPPFILES:.cxx=.o) fl_jpeg.po fl_draw_image.po
 OBJECTS2 = $(CPPFILES2:.cxx=.o)
-OBJECTS3 = $(CPPFILES3:.cxx=.o) ../../src/fl_diamond_box.o \
-	../../src/fl_rounded_box.o ../../src/fl_round_box.o \
-	../../src/fl_oval_box.o ../../src/fl_shadow_box.o \
-	../../src/fl_vertex.o
+OBJECTS3 = $(CPPFILES3:.cxx=.o) fl_diamond_box.po \
+	fl_rounded_box.po fl_round_box.po \
+	fl_oval_box.po fl_shadow_box.po \
+	fl_vertex.po
 
 INCLUDES = -I../..
 
@@ -55,6 +55,9 @@ include ../../makeinclude
 
 .cxx.o :
 	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
+
+%.po : ../../src/%.cxx
+	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
@@ -71,7 +74,7 @@ win32 : $(OBJECTS) $(OBJECTS2) ../../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3) -L../../lib -lfltkdll.2 $(GLDLIBS)
 
 clean :
-	-@ rm -f *.o $(PROGRAM) $(PROGRAM2) $(CLEAN) core *~ makedepend
+	-@ rm -f *.o *.po $(PROGRAM) $(PROGRAM2) $(CLEAN) core *~ makedepend
 	@touch makedepend
 
 install : $(PROGRAM) $(PROGRAM2) $(PROGRAM3)
@@ -88,5 +91,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.3 1999/10/09 15:32:18 vincent Exp $".
+# End of "$Id: Makefile,v 1.4 1999/10/11 17:57:37 vincent Exp $".
 #
