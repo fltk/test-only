@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.7 2000/05/30 07:42:00 bill Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.8 2001/01/23 21:28:27 clip Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -158,7 +158,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
 
 #ifdef WIN32
 
-HDC fl_private_dc(Fl_Window* w, Fl_Gl_Choice *g) {
+HDC fl_private_dc(const Fl_Window* w, Fl_Gl_Choice *g) {
   Fl_X* i = Fl_X::i(w);
   if (!i->private_dc) {
     // Hmmm.  This seems wrong.  I believe this will actually do the opposite
@@ -178,9 +178,9 @@ HDC fl_private_dc(Fl_Window* w, Fl_Gl_Choice *g) {
 
 static GLXContext cached_context;
 
-static Fl_Window* cached_window;
+static const Fl_Window* cached_window;
 
-void fl_set_gl_context(Fl_Window* w, GLXContext c) {
+void fl_set_gl_context(const Fl_Window* w, GLXContext c) {
   if (c != cached_context || w != cached_window) {
     cached_context = c;
     cached_window = w;
@@ -205,5 +205,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.7 2000/05/30 07:42:00 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.8 2001/01/23 21:28:27 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 08:31:22 bill Exp $"
+// "$Id: Fl_Gl_Choice.H,v 1.4 2001/01/23 21:28:27 clip Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -75,14 +75,14 @@ class Fl_Window;
 
 #ifdef WIN32
 // This must be called before fl_set_gl_context works:
-HDC fl_private_dc(Fl_Window*, Fl_Gl_Choice *g);
+HDC fl_private_dc(const Fl_Window*, Fl_Gl_Choice *g);
 #endif
 
-void fl_set_gl_context(Fl_Window*, GLXContext);
+void fl_set_gl_context(const Fl_Window*, GLXContext);
 void fl_no_gl_context();
 
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 08:31:22 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.H,v 1.4 2001/01/23 21:28:27 clip Exp $".
 //
