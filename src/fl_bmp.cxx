@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.21 2004/07/04 17:23:21 laza2000 Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -173,7 +173,8 @@ void bmpImage::_measure(float &W, float &H) const
 {
 
   if (w() >= 0) { 
-    W=w(); H=h(); 
+    W = (float)w(); 
+	H = (float)h(); 
     return; 
   }
 
@@ -218,8 +219,8 @@ void bmpImage::_measure(float &W, float &H) const
 
   if (!datas) fclose(bmpFile);
 
-  W = w();
-  H = h();
+  W = (float)w();
+  H = (float)h();
   return;
 }
 
@@ -368,6 +369,7 @@ void bmpImage::read()
 
 	for (h = 0; h < _height; h++)
 	{
+	  uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
 	  for (w = 0; w < _width / 8; w++)
 	  {
 	    index = GETC();
@@ -376,14 +378,10 @@ void bmpImage::read()
 	      mask = 1 << bit;
 	      bitIndex = (index & mask) ? 1 : 0;
 
-	      *pRgbBuf = palette[bitIndex].r;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[bitIndex].g;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[bitIndex].b;
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = palette[bitIndex].r;
+	      *row++ = palette[bitIndex].g;
+	      *row++ = palette[bitIndex].b;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 	    }
 	  }
 
@@ -394,26 +392,21 @@ void bmpImage::read()
 	      index = GETC();
 	      for (bit = 7; bit >= 8 - notMult8; bit--)
 	      {
-		mask = 1 << bit;
-		bitIndex = (index & mask) ? 1 : 0;
+					mask = 1 << bit;
+					bitIndex = (index & mask) ? 1 : 0;
 
-		*pRgbBuf = palette[bitIndex].r;
-		pRgbBuf++;
-		*pRgbBuf = palette[bitIndex].g;
-		pRgbBuf++;
-		*pRgbBuf = palette[bitIndex].b;
-		pRgbBuf++;
-		*pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-		pRgbBuf++;
+					*row++ = palette[bitIndex].r;
+					*row++ = palette[bitIndex].g;
+					*row++ = palette[bitIndex].b;
+					*row++ = IMG_NON_TRANSPARENT; // alpha		
 	      }
 	    }
 
-	  // Skip padding bytes in file
-          for (w = 0; w < linePad; w++)
-	    GETC();
-
-          // Skip padding bytes in memory
-	  pRgbBuf += scanLinePad;
+			// Skip padding bytes in file
+      for (w = 0; w < linePad; w++)
+				GETC();
+			// Skip padding bytes in memory
+			//pRgbBuf += scanLinePad;
 	}
 	break;
 
@@ -432,34 +425,28 @@ void bmpImage::read()
 	  else
 	    linePad = (_width / 2) % 4;
 
-	  for (h = 0; h < _height; h++)
+	  for (h = _height - 1; h >= 0; h --)
 	  {
+			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
+
 	    for (w = 0; w < _width / 2; w++)
 	    {
 	      index = GETC();
 	      // Upper four bits
 	      upperIndex = (index >> 4) & 15;
 
-	      *pRgbBuf = palette[upperIndex].r;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[upperIndex].g;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[upperIndex].b;
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = palette[upperIndex].r;
+	      *row++ = palette[upperIndex].g;
+	      *row++ = palette[upperIndex].b;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 
 	      // Lower four bits
 	      lowerIndex = index & 15;
 
-	      *pRgbBuf = palette[lowerIndex].r;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[lowerIndex].g;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[lowerIndex].b;
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = palette[lowerIndex].r;
+	      *row++ = palette[lowerIndex].g;
+	      *row++ = palette[lowerIndex].b;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 	    }
 
 	    // Handle odd number of pixels on a line
@@ -469,14 +456,10 @@ void bmpImage::read()
 	      // Upper four bits
 	      upperIndex = (index >> 4) & 15;
 	      
-	      *pRgbBuf = palette[upperIndex].r;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[upperIndex].g;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[upperIndex].b;
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = palette[upperIndex].r;
+	      *row++ = palette[upperIndex].g;
+	      *row++ = palette[upperIndex].b;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 	    }
 	    
 	    // Skip padding bytes in file
@@ -484,7 +467,7 @@ void bmpImage::read()
 	      GETC();
 	    
 	    // Skip padding bytes in memory
-	    pRgbBuf += scanLinePad;
+	    //pRgbBuf += scanLinePad;
 	  }
 	}
 
@@ -514,19 +497,18 @@ void bmpImage::read()
 	  // BMP file lines are word (4 byte) aligned
 	  linePad = (_width % 4) ? 4 - (_width % 4) : 0;
 	  
-	  for (h = 0; h < _height; h++)
+	  for (h = _height - 1; h >= 0; h --)
 	  {
+			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
+
 	    for (w = 0; w < _width; w++)
 	    {
-	      index = GETC();
-	      *pRgbBuf = palette[index].r;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[index].g;
-	      pRgbBuf++;
-	      *pRgbBuf = palette[index].b;
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      index = GETC();		
+		
+				*row++ = palette[index].r;
+	      *row++ = palette[index].g;
+	      *row++ = palette[index].b;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 	    }
 	    
 	    // Skip padding bytes in file
@@ -534,7 +516,7 @@ void bmpImage::read()
 	      GETC();
 	    
 	    // Skip padding bytes in memory
-	    pRgbBuf = pRgbBuf + (scanLinePad);
+	    //pRgbBuf = pRgbBuf + (scanLinePad);
 	  }
 	}
 
@@ -595,7 +577,7 @@ void bmpImage::read()
 		    {
 		      int linePad;
 		      
-		      index = GETC();
+		      index = GETC();			  
 		      
 		      *pRgbBuf = palette[index].r;
 		      pRgbBuf++;
@@ -668,6 +650,7 @@ void bmpImage::read()
 	
 	  for (h = 0; h < _height; h++)
 	  {
+			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
 	    for (w = 0; w < _width; w++)
 	    {
 	      upper8Bits = GETC();
@@ -675,22 +658,18 @@ void bmpImage::read()
 
 	      // Red is most significant 5 bits
 	      redValue = (124 & upper8Bits) >> 2; // 124 = (31 << 2)
-	      *pRgbBuf = redValue;
-	      pRgbBuf++;
+	      *row++ = redValue;	      
 
 	      // Green is next 5 bits
 	      greenValue = (3 & upper8Bits) << 3;
 	      greenValue = greenValue | (224 & lower8Bits); // 224 = (7 << 5)
-	      *pRgbBuf = greenValue;
-	      pRgbBuf++;
+	      *row++ = greenValue;	      
 
 	      // Blue is least significant 5 bits
 	      blueValue = 31 & lower8Bits;
-	      *pRgbBuf = blueValue;
-	      pRgbBuf++;
+	      *row++ = blueValue;	      
 	      
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	     
 	    }
 	    
 	    // Skip padding bytes in file
@@ -698,7 +677,7 @@ void bmpImage::read()
 	      GETC();
 	    
 	    // Skip padding bytes in memory
-	    pRgbBuf += scanLinePad;
+	    // pRgbBuf += scanLinePad;
 	  }
 	}
 
@@ -731,31 +710,29 @@ void bmpImage::read()
 	}
 
 	// BMP file lines are word (4 byte) aligned
-	linePad = (_width * 3 % 4) ? 4 - (_width * 3 % 4) : 0;
+	linePad = (_width * 3 % 4) ? 4 - (_width * 3 % 4) : 0;	
 
-	for (h = 0; h < _height; h++)
-	{
-	  for (w = 0; w < _width; w++)
-	  {
-	    blue = GETC();
-	    green = GETC();
-	    red = GETC();
-	    *pRgbBuf = red;
-	    pRgbBuf++;
-	    *pRgbBuf = green;
-	    pRgbBuf++;
-	    *pRgbBuf = blue;
-	    pRgbBuf++;
-	    *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	    pRgbBuf++;
-	  }
+	for (h = _height - 1; h >= 0; h --)	
+	{		
+		uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
+		for (w = 0; w < _width; w++)
+		{		  
+			blue	= GETC();
+			green	= GETC();
+			red		= GETC();		
 
-          // Skip padding bytes in file
-          for (w = 0; w < linePad; w++)
-	    GETC();
+			*row++ = red;			
+			*row++ = green;
+			*row++ = blue;
+			*row++ = IMG_NON_TRANSPARENT; // alpha			
+		}
 
-          // Skip padding bytes in memory
-	  pRgbBuf += scanLinePad;
+		// Skip padding bytes in file
+		for (w = 0; w < linePad; w++)
+			GETC();
+
+		// Skip padding bytes in memory
+		//pRgbBuf += scanLinePad;
 	}
 	break;
 
@@ -766,20 +743,17 @@ void bmpImage::read()
 	{
 	  for (h = 0; h < _height; h++)
 	  {
+			uchar *row = (uchar *)pRgbBuf + h * _width * PIXEL_SIZE;
 	    for (w = 0; w < _width; w++)
 	    {
-	      *pRgbBuf = GETC();
-	      pRgbBuf++;
-	      *pRgbBuf = GETC();
-	      pRgbBuf++;
-	      *pRgbBuf = GETC();
-	      pRgbBuf++;
-	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
-	      pRgbBuf++;
+	      *row++ = GETC();
+	      *row++ = GETC();
+	      *row++ = GETC();
+	      *row++ = IMG_NON_TRANSPARENT; // alpha	      
 	    }
 	    
 	    // Skip padding bytes in memory
-	    pRgbBuf += scanLinePad;
+	    // pRgbBuf += scanLinePad;
 	  }
 	}
 
@@ -824,5 +798,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.20 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.21 2004/07/04 17:23:21 laza2000 Exp $"
 //
