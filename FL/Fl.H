@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.11 1999/04/11 15:34:20 mike Exp $"
+// "$Id: Fl.H,v 1.12 1999/04/12 15:01:40 mike Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -176,7 +176,7 @@ public:
   static FL_EXPORT void set_font(Fl_Font, const char*);
   static FL_EXPORT void set_font(Fl_Font, Fl_Font);
   static FL_EXPORT Fl_Font set_fonts(const char* = 0);
-  static FL_EXPORT const char *set_encoding(const char *e, const char *loc)
+  static FL_EXPORT void set_encoding(const char *e, const char *loc)
     { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) encoding=e;}
 
   // labeltypes:
@@ -279,5 +279,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.11 1999/04/11 15:34:20 mike Exp $".
+// End of "$Id: Fl.H,v 1.12 1999/04/12 15:01:40 mike Exp $".
 //

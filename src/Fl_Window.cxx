@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.19 1999/04/07 18:45:56 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.20 1999/04/12 15:01:41 mike Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -112,10 +112,14 @@ void Fl_Window::loadstyle() const {
   }
   // CET - for testing only-- will be removed
 #ifndef WIN32
-  struct sigaction sa;
-  memset(&sa, 0, sizeof(sa));
-  sa.sa_handler = (void (*)(int))stylechange;
-  sigaction(SIGUSR1, &sa, 0);
+//  MRS - this signal stuff is driving me crazy - need to update configure
+//        to get the f**king cast right, or not use it.  Leave this commented
+//        out until this is done so we don't keep changing it back and forth!
+//
+//  struct sigaction sa;
+//  memset(&sa, 0, sizeof(sa));
+//  sa.sa_handler = (void (*)(int))stylechange;
+//  sigaction(SIGUSR1, &sa, 0);
 #endif
 }
 
@@ -189,5 +193,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.19 1999/04/07 18:45:56 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.20 1999/04/12 15:01:41 mike Exp $".
 //

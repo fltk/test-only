@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.6 1999/01/07 19:17:42 mike Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.7 1999/04/12 15:01:41 mike Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -85,9 +85,8 @@ static int attribute(int n, const char *p) {
 }
 
 // return non-zero if the registry-encoding should be used:
-extern const char* fl_encoding;
 static int use_registry(const char *p) {
-  return *p && *p!='*' && strcmp(p,fl_encoding);
+  return *p && *p!='*' && strcmp(p,Fl::encoding);
 }
 
 // turn a stored (with *'s) X font name into a pretty name:
@@ -243,7 +242,7 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
   int xlistsize;
   char buf[20];
   if (!xstarname) {
-    strcpy(buf,"-*-"); strcpy(buf+3,fl_encoding);
+    strcpy(buf,"-*-"); strcpy(buf+3,Fl::encoding);
     xstarname = buf;
   }
   char **xlist = XListFonts(fl_display, xstarname, 10000, &xlistsize);
@@ -325,5 +324,5 @@ int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
 #endif
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.6 1999/01/07 19:17:42 mike Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.7 1999/04/12 15:01:41 mike Exp $".
 //

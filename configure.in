@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.36 1999/04/06 20:02:47 carl Exp $"
+dnl# "$Id: configure.in,v 1.37 1999/04/12 15:01:39 mike Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -54,12 +54,7 @@ PICFLAG=0
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
 
-case `(uname) 2>/dev/null` in
-    IRIX*)
-	CFLAGS="$CFLAGS -DSGI"
-	CXXFLAGS="$CXXFLAGS -DSGI"
-	LDLIBS="-lX11 -lXext"
-	;;
+case $uname in
     CYGWIN*)
 	CFLAGS="$CFLAGS -DWIN32 -mno-cygwin"
 	CXXFLAGS="$CXXFLAGS -DWIN32 -mno-cygwin"
@@ -266,5 +261,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.36 1999/04/06 20:02:47 carl Exp $".
+dnl# End of "$Id: configure.in,v 1.37 1999/04/12 15:01:39 mike Exp $".
 dnl#
