@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.124 2001/03/11 16:14:28 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.125 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,10 +40,8 @@
 
 Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
-		*Fl::focus_;
-int		(*Fl::grab_)(int, void*);
-Fl_Window       *Fl::grabbed_ = 0;
-static void* grab_data;
+		*Fl::focus_,
+		*Fl::grab_;
 Fl_Window	*Fl::modal_;	// topmost modal() window
 int		Fl::damage_,
 		Fl::e_type,
@@ -417,7 +415,7 @@ void Fl::pushed(Fl_Widget *o) {
 
 void fl_fix_focus() {
 
-  if (Fl::grab() || Fl::grabbed()) return; // don't do anything while grab is on.
+  if (Fl::grab()) return; // don't do anything while grab is on.
 
   Fl_Widget* w = xfocus;
 
@@ -462,10 +460,7 @@ void Fl_Widget::throw_focus() {
 // Use release() to undo this. You can also temporarily undo it by
 // setting the function to zero.
 
-void Fl::local_grab(int (*cb)(int, void*), void* user_data) {
-  grab_ = cb;
-  grab_data = user_data;
-}
+//void Fl::local_grab(Fl_Widget*) inline
 
 // grab() does the same thing but also messes with the window system
 // in an attempt to get events from the entire screen. This is used
@@ -479,9 +474,8 @@ void Fl::local_grab(int (*cb)(int, void*), void* user_data) {
 // window, fltk just picks the top-most displayed window, which is not
 // necessarily where the events are really going!
 
-void Fl::grab(int (*cb)(int, void*), void* user_data) {
-  grab_ = cb;
-  grab_data = user_data;
+void Fl::grab(Fl_Widget* widget) {
+  grab_ = widget;
 #ifdef WIN32
   HWND w = fl_xid(first_window());
   SetActiveWindow(w); // is this necessary?
@@ -509,7 +503,6 @@ void Fl::grab(int (*cb)(int, void*), void* user_data) {
 
 void Fl::release() {
   grab_ = 0;
-  grabbed_ = 0;
 #ifdef WIN32
   ReleaseCapture();
 #else
@@ -571,15 +564,12 @@ static bool alternate_key() {
   return false;
 }
 
+int (*fl_local_grab)(int); // used by fl_dnd_x.cxx
+
 int Fl::handle(int event, Fl_Window* window)
 {
   e_type = event;
-  if (grabbed_) window = grabbed_;
-  if (grab_) {
-    if (grab_(event, grab_data)) return true;
-    if (event == FL_KEY && alternate_key()) return grab_(event, grab_data);
-    return false;
-  }
+  if (fl_local_grab) return fl_local_grab(event);
 
   Fl_Widget* to = window;
 
@@ -588,7 +578,6 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_PUSH:
     if (!pushed()) {
       Fl_Tooltip::enter((Fl_Widget*)0);
-      if (modal() && window != modal()) return false;
       pushed_ = window;
     }
     to = pushed();
@@ -596,7 +585,6 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_DND_ENTER:
   case FL_DND_DRAG:
-    if (modal() && window != modal()) return true;
     dnd_flag = 1;
     break;
 
@@ -605,7 +593,6 @@ int Fl::handle(int event, Fl_Window* window)
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {to = pushed_; event = FL_DRAG;}
-    else if (modal() && window != modal()) return true;
     break;
 
   case FL_DND_LEAVE:
@@ -633,13 +620,16 @@ int Fl::handle(int event, Fl_Window* window)
     to = focus();
     break;
 
-  default:
-    if (modal()) to = modal();
-    break;
-
   case 0: // events from system that fltk does not understand
     to = 0;
     break;
+  }
+
+  // restrict to grab and modal widgets:
+  if (grab_) {
+    if (!grab_->contains(to)) to = grab_;
+  } else if (modal_) {
+    if (!modal_->contains(to)) to = modal_;
   }
 
   int ret = false;
@@ -667,7 +657,7 @@ int Fl::handle(int event, Fl_Window* window)
     case FL_DND_DRAG:
     case FL_ENTER:
     case FL_MOVE:
-      belowmouse(window);
+      if (!grab_) belowmouse(window);
       break;
     }
 
@@ -686,5 +676,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.124 2001/03/11 16:14:28 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.125 2001/03/12 00:49:03 spitzak Exp $".
 //

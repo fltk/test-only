@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.52 2001/02/20 06:59:48 spitzak Exp $"
+// "$Id: Enumerations.H,v 1.53 2001/03/12 00:49:01 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,7 @@ enum {	// events
   FL_DEACTIVATE		= 13,
   FL_SHOW		= 14,
   FL_HIDE		= 15,
-  FL_VIEWCHANGE         = 16,
+  FL_MOUSEWHEEL		= 16,
   FL_PASTE		= 17,
   FL_DND_ENTER		= 18,
   FL_DND_DRAG		= 29,
@@ -211,5 +211,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.52 2001/02/20 06:59:48 spitzak Exp $".
+// End of "$Id: Enumerations.H,v 1.53 2001/03/12 00:49:01 spitzak Exp $".
 //

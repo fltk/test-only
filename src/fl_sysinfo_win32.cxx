@@ -1,5 +1,5 @@
 //
-// "$Id: fl_sysinfo_win32.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $"
+// "$Id: fl_sysinfo_win32.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Code to get windowing system specific info for FLTK.
 //
@@ -30,14 +30,6 @@
 #include <limits.h>
 
 
-#ifndef SPI_GETWHEELSCROLLLINES
-#define SPI_GETWHEELSCROLLLINES   104
-#endif
-
-#ifndef WHEEL_PAGESCROLL
-#define WHEEL_PAGESCROLL        (UINT_MAX) /* Scroll one page */
-#endif
-
 #ifndef ENUM_CURRENT_SETTINGS
 #define ENUM_CURRENT_SETTINGS ((DWORD)-1)
 #endif
@@ -67,13 +59,8 @@ fl_sysinfo::update() {
 	fl_sysinfo::screen_height_mm = fl_sysinfo::screen_height / 75;
   }
 
-  // grab mousewheel stuff from Windows
-  UINT delta;
-  SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
-  if (delta == WHEEL_PAGESCROLL) Fl_Style::mousewheel_delta = INT_MAX;
-  else Fl_Style::mousewheel_delta = (int)delta;
 }
 
 //
-// End of "$Id: fl_sysinfo_win32.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $".
+// End of "$Id: fl_sysinfo_win32.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $".
 //

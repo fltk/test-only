@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.107 2001/03/09 02:40:10 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.108 2001/03/12 00:49:03 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -498,7 +498,8 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_from_system;
 
-unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
+static unsigned wheel_up_button = 4;
+static unsigned wheel_down_button = 5;
 
 int fl_handle(const XEvent& xevent)
 {
@@ -521,7 +522,7 @@ int fl_handle(const XEvent& xevent)
     const long* data = fl_xevent->xclient.data.l;
 
     if (window && (Atom)(data[0]) == WM_DELETE_WINDOW) {
-      if (!(Fl::grab()||Fl::grabbed()) && !(Fl::modal() && window != Fl::modal()))
+      if (!Fl::grab() && !(Fl::modal() && window != Fl::modal()))
 	window->do_callback();
       return 1;
 
@@ -590,7 +591,8 @@ int fl_handle(const XEvent& xevent)
       Window to_window = fl_xevent->xclient.window;
       if (Fl::handle(FL_DND_RELEASE, window)) {
 	fl_selection_requestor = Fl::belowmouse();
-	XConvertSelection(fl_display, fl_XdndSelection, fl_dnd_type, XA_SECONDARY,
+	XConvertSelection(fl_display, fl_XdndSelection,
+			  fl_dnd_type, XA_SECONDARY,
 			  to_window, fl_event_time);
       } else {
 	// Send the finished message if I refuse the drop.
@@ -644,23 +646,20 @@ int fl_handle(const XEvent& xevent)
 		   xevent.xexpose.width, xevent.xexpose.height);
     return 1;
 
-  case ButtonPress:
-    Fl::e_keysym = FL_Button + xevent.xbutton.button;
+  case ButtonPress: {
+    unsigned n = xevent.xbutton.button;
+    Fl::e_keysym = FL_Button + n;
     set_event_xy(); checkdouble();
-    if (xevent.xbutton.button == fl_mousewheel_up &&
-        Fl_Style::mousewheel_delta != 0)
-    {
-      Fl::e_dy = -Fl_Style::mousewheel_delta;
-      event = FL_VIEWCHANGE;
-    } else if (xevent.xbutton.button == fl_mousewheel_down &&
-               Fl_Style::mousewheel_delta != 0)
-    {
-      Fl::e_dy = +Fl_Style::mousewheel_delta;
-      event = FL_VIEWCHANGE;
+    if (n == wheel_up_button) {
+      Fl::e_dy = +1;
+      event = FL_MOUSEWHEEL;
+    } else if (n == wheel_down_button) {
+      Fl::e_dy = -1;
+      event = FL_MOUSEWHEEL;
     } else {
-      Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
+      Fl::e_state |= (FL_BUTTON1 << (n-1));
       event = FL_PUSH;
-    }
+    }}
     break;
 
   case MotionNotify:
@@ -673,14 +672,14 @@ int fl_handle(const XEvent& xevent)
     break;
 #endif
 
-  case ButtonRelease:
-    Fl::e_keysym = FL_Button + xevent.xbutton.button;
+  case ButtonRelease: {
+    unsigned n = xevent.xbutton.button;
+    Fl::e_keysym = FL_Button + n;
     set_event_xy();
-    if (xevent.xbutton.button == fl_mousewheel_up ||
-	xevent.xbutton.button == fl_mousewheel_down) break;
-    Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
+    if (n == wheel_up_button || n == wheel_down_button) break;
+    Fl::e_state &= ~(FL_BUTTON1 << (n-1));
     event = FL_RELEASE;
-    break;
+    break;}
 
   case FocusIn:
     xfocus = window;
@@ -1157,8 +1156,20 @@ void fl_get_system_colors() {
   // does not appear to be anything there for setting the tooltips...
   // Maybe I should just add Tooltip,back/foreground.
 
+  // Mousewheel stuff is read from the XDefaults database but there
+  // are no standards for these. We should change these to match any
+  // standards that arise:
+
+  const char* w = get_default("wheel_scroll_lines");
+  if (w) Fl_Style::wheel_scroll_lines = atoi(w);
+
+  w = get_default("wheel_up_button");
+  if (w) wheel_up_button = atoi(w);
+
+  w = get_default("wheel_down_button");
+  if (w) wheel_down_button = atoi(w);
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.107 2001/03/09 02:40:10 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.108 2001/03/12 00:49:03 spitzak Exp $".
 //

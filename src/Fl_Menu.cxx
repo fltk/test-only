@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.106 2001/03/09 03:45:36 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.107 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -175,6 +175,7 @@ public:
   int ypos(int);
   Fl_Widget* get_widget(int i);
   int is_parent(int i);
+  int handle(int);
 };
 
 // return any widget at a given level:
@@ -442,11 +443,11 @@ static int backward(MenuState& p, int menu) {
 
 static int last_event;
 
-static int handle(int e, void* data) {
-  MenuState &p = *((MenuState*)data);
+int MenuWindow::handle(int event) {
+  MenuState &p = *menustate;
   Fl_Widget* widget = 0;
-  last_event = e;
-  switch (e) {
+  last_event = event;
+  switch (event) {
 
   case FL_KEYBOARD:
   case FL_SHORTCUT: {
@@ -510,7 +511,7 @@ static int handle(int e, void* data) {
       if (item >= 0) break;
       if (menu <= 0) {menu = p.nummenus-1; item = -1; break;}
     }
-    if (e == FL_PUSH) {
+    if (event == FL_PUSH) {
       p.state = PUSH_STATE;
       if (item >= 0) {
   	if (p.menus[menu]->is_parent(item) // this is a submenu title
@@ -558,11 +559,12 @@ static int handle(int e, void* data) {
     }
     return 1;
   }
-  return 0;
+  return Fl_Menu_Window::handle(event);
 }
 
 static void autoscroll_timeout(void* data) {
-  if (last_event == FL_DRAG || last_event == FL_MOVE) handle(FL_MOVE, data);
+  if (last_event == FL_DRAG || last_event == FL_MOVE)
+    ((MenuState*)data)->menus[0]->handle(FL_MOVE);
 }
 
 int Fl_Menu_::popup(int X, int Y, const char* title) {
@@ -599,12 +601,12 @@ int Fl_Menu_::pulldown(
   p.indexes[1] = -1;
   MenuWindow mw(&p, 0, X, Y, W, H, t);
   p.menus[0] = &mw;
-  //Fl::local_grab(::handle, &p); // use this if testing!
-  Fl::grab(::handle, &p);
+  Fl::local_grab(&mw); // use this if testing!
+  //Fl::grab(::handle, &p);
 
   if (menubar) {
     if (focus() < 0)
-      ::handle(FL_PUSH, &p); // get menu mouse points at to appear
+      mw.handle(FL_PUSH); // get menu mouse points at to appear
   } else {
     // create submenus until we locate the one with selected item
     // in it, positioning them so that one is selected:
@@ -734,5 +736,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.106 2001/03/09 03:45:36 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.107 2001/03/12 00:49:03 spitzak Exp $".
 //

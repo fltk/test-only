@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.143 2001/03/08 23:49:29 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.144 2001/03/12 00:49:03 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -463,7 +463,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 0: // single-click
     Fl::e_clicks = 0;
   J1:
-    if (!(Fl::grab()||Fl::grabbed())) SetCapture(fl_xid(window));
+    if (!Fl::grab()) SetCapture(fl_xid(window));
     Fl::e_keysym = FL_Button + button;
     Fl::e_is_click = 1;
     px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
@@ -472,7 +472,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 2: // release:
     // WAS: this should turn off Fl::e_is_click if more than .2 second passed
     // since the push event!
-    if (!(Fl::grab()||Fl::grabbed())) ReleaseCapture();
+    if (!Fl::grab()) ReleaseCapture();
     Fl::e_keysym = FL_Button + button;
     return Fl::handle(FL_RELEASE,window);
 
@@ -596,7 +596,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    if ((Fl::grab() || Fl::grabbed() || Fl::modal()) && window != Fl::modal())
+    if ((Fl::grab() || Fl::modal()) && window != Fl::modal())
       return 0;
     window->do_callback();
     return 1;
@@ -715,12 +715,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;}
 
   case WM_MOUSEWHEEL: {
-    static int delta = 0;
+    static int delta = 0; // running total of all motion
     delta += (SHORT)(HIWORD(wParam));
-    int sign = (delta < 0) ? 1 : -1; // Windows is backwards
-    Fl::e_dy = Fl_Style::mousewheel_delta*sign;
-    for (; abs(delta) >= WHEEL_DELTA; delta += WHEEL_DELTA*sign)
-      Fl::handle(FL_VIEWCHANGE, window);
+    Fl::e_dy = delta / WHEEL_DELTA;
+    delta -= Fl::e_dy * WHEEL_DELTA;
+    if (Fl::e_dy) Fl::handle(FL_MOUSEWHEEL, window);
     return 0;
   }
 
@@ -1116,6 +1115,14 @@ void Fl_Window::make_current() const {
 
 ////////////////////////////////////////////////////////////////
 
+#ifndef SPI_GETWHEELSCROLLLINES
+#define SPI_GETWHEELSCROLLLINES   104
+#endif
+
+#ifndef WHEEL_PAGESCROLL
+#define WHEEL_PAGESCROLL        (UINT_MAX) /* Scroll one page */
+#endif
+
 static Fl_Color win_color(int wincol) {
   int R = wincol&0xff;
   int G = (wincol >> 8)&0xff;
@@ -1229,7 +1236,7 @@ void fl_get_system_colors() {
   Fl_Widget::default_style->text_size = size;
 
   if ((style = Fl_Style::find("item"))) {
-  // get font info for menu items from LOGFONT structure
+    // get font info for menu items from LOGFONT structure
     //font = fl_font((const char*)ncm.lfMenuFont.lfFaceName);
     font = fl_find_font((const char*)ncm.lfMenuFont.lfFaceName);
     if (ncm.lfMenuFont.lfWeight >= 600) font = font->bold();
@@ -1251,7 +1258,7 @@ void fl_get_system_colors() {
   }
 
   if ((style = Fl_Style::find("tooltip"))) {
-  // get font info for tooltips from LOGFONT structure
+    // get font info for tooltips from LOGFONT structure
     //font = fl_font((const char*)ncm.lfStatusFont.lfFaceName);
     font = fl_find_font((const char*)ncm.lfStatusFont.lfFaceName);
     if (ncm.lfStatusFont.lfWeight >= 600) font = font->bold();
@@ -1262,9 +1269,15 @@ void fl_get_system_colors() {
     style->label_size = style->text_size = size;
   }
 
+  // grab mousewheel stuff from Windows
+  UINT delta;
+  SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
+  if (delta == WHEEL_PAGESCROLL) Fl_Style::wheel_scroll_lines = 10000;
+  else Fl_Style::wheel_scroll_lines = (int)delta;
+
   // CET - FIXME - do encoding stuff
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.143 2001/03/08 23:49:29 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.144 2001/03/12 00:49:03 spitzak Exp $".
 //

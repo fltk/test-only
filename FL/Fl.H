@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.69 2001/03/09 20:39:25 robertk Exp $"
+// "$Id: Fl.H,v 1.70 2001/03/12 00:49:01 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -65,9 +65,8 @@ public: // should be private!
 
   static void damage(int x) {damage_ = x;}
 
-  static int (*grab_)(int, void*);
   static void (*idle)();
-  static Fl_Window *grabbed_;
+  static Fl_Widget *grab_;
 
 public:
 
@@ -113,13 +112,9 @@ public:
   static void first_window(Fl_Window*);
   static Fl_Window* next_window(const Fl_Window*);
   static Fl_Window* modal() {return modal_;}
-  static int (*grab())(int, void*) {return grab_;}
-  static void grab(int (*)(int, void*), void* = 0);
-  static void local_grab(int (*f)(int, void*)) {grab_ = f;}
-  static void local_grab(int (*f)(int, void*), void* v);
-  static void grab(Fl_Window *w) { grabbed_ = w; grab(0, 0); }
-  static void local_grab(Fl_Window *w) { grabbed_ = w; }
-  static Fl_Window *grabbed() { return grabbed_; }
+  static void grab(Fl_Widget *w);
+  static void local_grab(Fl_Widget *w) { grab_ = w; }
+  static Fl_Widget *grab() { return grab_; }
   static void release();
 
   // event information:
@@ -251,5 +246,5 @@ struct FL_API fl_sysinfo {
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.69 2001/03/09 20:39:25 robertk Exp $".
+// End of "$Id: Fl.H,v 1.70 2001/03/12 00:49:01 spitzak Exp $".
 //

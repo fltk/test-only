@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.2 2001/02/28 21:19:50 clip Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -62,25 +62,27 @@ static int dnd_aware(Window& window) {
   return 0;
 }
 
-static int grabfunc(int event, void*) {
+static int grabfunc(int event) {
   if (event == FL_RELEASE) Fl::pushed(0);
   return 0;
 }
 
+extern int (*fl_local_grab)(int); // in Fl.cxx
+
 // send an event to an fltk window belonging to this program:
 static int local_handle(int event, Fl_Window* window) {
-  Fl::local_grab(0, 0);
+  fl_local_grab = 0;
   Fl::e_x = Fl::e_x_root-window->x();
   Fl::e_y = Fl::e_y_root-window->y();
   int ret = Fl::handle(event,window);
-  Fl::local_grab(grabfunc);
+  fl_local_grab = grabfunc;
   return ret;
 }
 
 int Fl::dnd() {
   Fl::first_window()->cursor((Fl_Cursor)21);
   Window source_window = fl_xid(Fl::first_window());
-  local_grab(grabfunc);
+  fl_local_grab = grabfunc;
   Window target_window = 0;
   Fl_Window* local_window = 0;
   int version = 4; int dest_x, dest_y;
@@ -157,12 +159,12 @@ int Fl::dnd() {
     XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
   }
 
-  release();
+  fl_local_grab = 0;
   Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
   return 1;
 }
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.2 2001/02/28 21:19:50 clip Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $".
 //

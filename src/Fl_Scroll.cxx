@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.29 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.30 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -272,8 +272,8 @@ int Fl_Scroll::handle(int event) {
 	(Fl::event_y() >= hscrollbar.y()))
       if (send(event,hscrollbar)) return 1;
     break;
- case FL_VIEWCHANGE:
-   return send(event, scrollbar);
+  case FL_MOUSEWHEEL:
+    return send(event, scrollbar);
 
   }
 
@@ -287,5 +287,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.29 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.30 2001/03/12 00:49:03 spitzak Exp $".
 //

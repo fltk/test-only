@@ -120,6 +120,7 @@ int main(int argc, char **argv) {
   ch.tooltip("This is a choice");
 
   Fl_Input_Browser ib(410,50,100,25,"input_&browser:");
+  ib.type(FL_INDENTED_INPUT_BROWSER);
   ib.callback(callback);
   ib.begin();
   build_hierarchy();

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.51 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.52 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -110,14 +110,6 @@ int Fl_Scrollbar::handle(int event) {
     if (Fl::pushed() != this) highlight_ = which_part;
     if (last_ != highlight_) damage(FL_DAMAGE_EXPOSE);
     return 1;
-  case FL_RELEASE:
-    if (pushed_) Fl::remove_timeout((Fl_Timeout_Handler)timeout_cb, this);
-    highlight_ = which_part;
-    last_ = pushed_; // so that it will unpush without redrawing everything
-    pushed_ = 0;
-    damage(FL_DAMAGE_EXPOSE);
-    handle_release();
-    return 1;
   case FL_PUSH:
     if (pushed_) return 1;
       pushed_ = which_part;
@@ -132,20 +124,28 @@ int Fl_Scrollbar::handle(int event) {
   case FL_DRAG:
     if (pushed_ != 5) return 1;
     return Fl_Slider::handle(event, X,Y,W,H);
+  case FL_RELEASE:
+    if (pushed_) Fl::remove_timeout((Fl_Timeout_Handler)timeout_cb, this);
+    highlight_ = which_part;
+    last_ = pushed_; // so that it will unpush without redrawing everything
+    pushed_ = 0;
+    damage(FL_DAMAGE_EXPOSE);
+    handle_release();
+    return 1;
+  case FL_MOUSEWHEEL: {
+    int n = (horizontal() ? Fl::event_dx() : Fl::event_dy())
+      * Fl_Style::wheel_scroll_lines;
+    int sign = 1; if (n < 0) {n = -n; sign = -1;}
+    n *= linesize();
+    if (n > pagesize()) n = pagesize();
+    handle_drag(clamp(increment(value(), n * sign)));
+    return 1;
+  }
   case FL_KEYBOARD:
     if (!horizontal()) switch(Fl::event_key()) {
     case FL_Home: handle_drag(maximum()); return 1;
     case FL_End:  handle_drag(minimum()); return 1;
     } // else fall through...
-  case FL_VIEWCHANGE: {
-    int delta, sign = (Fl::event_dy() < 0) ? 1 : -1;
-    if (abs(Fl::event_dy()*linesize()) > pagesize() - 2*linesize())
-      delta = pagesize() - 2*linesize();
-    else
-      delta = abs(Fl::event_dy()*linesize());
-    handle_drag(clamp(increment(value(), delta*sign)));
-  }
-
   default:
     return Fl_Slider::handle(event);
   }
@@ -212,5 +212,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.51 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.52 2001/03/12 00:49:03 spitzak Exp $".
 //

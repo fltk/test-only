@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.14 2001/03/08 07:39:06 clip Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.15 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -164,21 +164,11 @@ int Fl_Valuator::handle(int event) {
       }
       return 0;
     }
-    case FL_VIEWCHANGE: {
-      /*
-      // This will do things the "correct" way
-      int delta, sign = (Fl::event_dy() < 0) ? 1 : -1;
-      if (abs(Fl::event_dy()*linesize()) > pagesize() - 2*linesize())
-        delta = pagesize() - 2*linesize();
-      else
-        delta = abs(Fl::event_dy()*linesize());
-      handle_drag(clamp(increment(value(), delta*sign)));
-      */
-
-      // This always scrolls one line at a time.  Maybe best for Fl_Valuator?
-      int sign = (Fl::event_dy() < 0) ? 1 : -1;
-      handle_drag(clamp(increment(value(), sign*linesize())));
-
+    case FL_MOUSEWHEEL: {
+      // Each click on mouse is 1 unit, not the line size.
+      // This is probably best for a valuator:
+      // See Fl_Scrollbar for an example that uses wheel_scroll_lines
+      handle_drag(clamp(increment(value(), Fl::event_dy()*linesize())));
       return 1;
     }
   }
@@ -186,5 +176,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.14 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.15 2001/03/12 00:49:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.37 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Style.H,v 1.38 2001/03/12 00:49:01 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -60,16 +60,16 @@ struct FL_API Fl_Style {
   unsigned      leading;
 
   // various user preferences
-  static int    draw_boxes_inactive;
-  static int    draw_sliders_pushed;
-  static int    scrollbar_width;
-  static int    scrollbar_align;
-  static int    mousewheel_delta;
+  static bool   draw_boxes_inactive;
+  static bool   draw_sliders_pushed;
+  static unsigned scrollbar_width;
+  static Fl_Flags scrollbar_align;
+  static int	wheel_scroll_lines;
 
   const Fl_Style* parent;
 
   void  (*revertfunc)(Fl_Style*);
-  int dynamic() const {return !revertfunc;}
+  bool dynamic() const {return !revertfunc;}
 
   Fl_Style(); // creates a dynamic() style
 
@@ -117,5 +117,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.37 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Style.H,v 1.38 2001/03/12 00:49:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.10 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1927,7 +1927,9 @@ int Fl_Text_Display::handle(int event) {
         return 1;
       }
 
-    case FL_VIEWCHANGE: {
+    case FL_MOUSEWHEEL:
+      return send(event, *mVScrollBar);
+#if 0
         // I shouldn't be using mNVisibleLines or mTopLineNum here in handle()
         // because the values for these might change between now and layout(),
         // but it's OK because I really want the result based on how things
@@ -1936,9 +1938,9 @@ int Fl_Text_Display::handle(int event) {
         int lines, sign = (Fl::event_dy() < 0) ? -1 : 1;
         if (abs(Fl::event_dy()) > mNVisibleLines-2) lines = mNVisibleLines-2;
         else lines = abs(Fl::event_dy());
-        scroll(mTopLineNum + lines*sign, mHorizOffset);
+        scroll(mTopLineNum - lines*sign, mHorizOffset);
         return 1;
-    }
+#endif
   }
 
   return 0;
@@ -1946,5 +1948,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.10 2001/03/12 00:49:03 spitzak Exp $".
 //

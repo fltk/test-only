@@ -1,5 +1,5 @@
 //
-// "$Id: fl_sysinfo_x.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $"
+// "$Id: fl_sysinfo_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Code to get windowing system specific info for FLTK.
 //
@@ -30,8 +30,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-extern unsigned fl_mousewheel_up, fl_mousewheel_down;
-
 void
 fl_sysinfo::update() {
   // we need to open the display for this
@@ -50,25 +48,8 @@ fl_sysinfo::update() {
 		(int)(((float)fl_sysinfo::screen_height / 
 				(float)fl_sysinfo::screen_height_mm) * 25.4)  : 75;
 
-  // grab mousewheel stuff from config file since there's no standard place
-  // for it under X
-  char temp[40];
-  if (!fl_getconf("mouse wheel/delta", temp, sizeof(temp)))
-    Fl_Style::mousewheel_delta = atoi(temp);
-  if (!fl_getconf("mouse wheel/mode", temp, sizeof(temp))) {
-    int m = atoi(temp);
-    if (!m) Fl_Style::mousewheel_delta = 0;
-    else if (m == 2) {
-      int sign = Fl_Style::mousewheel_delta < 0 ? -1 : 1;
-      Fl_Style::mousewheel_delta = INT_MAX*sign;
-    }
-  }
-  if (!fl_getconf("mouse wheel/up button", temp, sizeof(temp)))
-    fl_mousewheel_up = atoi(temp);
-  if (!fl_getconf("mouse wheel/down button", temp, sizeof(temp)))
-    fl_mousewheel_down = atoi(temp);
 }
 
 //
-// End of "$Id: fl_sysinfo_x.cxx,v 1.2 2001/03/09 20:39:26 robertk Exp $".
+// End of "$Id: fl_sysinfo_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.40 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Browser.cxx,v 1.41 2001/03/12 00:49:03 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -140,6 +140,7 @@ int Fl_Browser::is_set(int mark) {
 }
 
 // Move forward to the next visible item (what down-arrow does).
+// This does not move and returns null if we are at the bottom
 Fl_Widget* Fl_Browser::next_visible() {
   if (item()->visible()) {
     item_position[HERE] += item()->height();
@@ -178,6 +179,7 @@ Fl_Widget* Fl_Browser::next_visible() {
 }
 
 // Move backward to previous visible item:
+// This does not move and returns null if we are at the top.
 Fl_Widget* Fl_Browser::previous_visible() {
 
   // there's got to be simpler logic for this loop...
@@ -800,18 +802,16 @@ int Fl_Browser::handle(int event) {
     if (send(event,hscrollbar)) return 1;
     break;
 
-  case FL_VIEWCHANGE: {
-    int lines, forward = (Fl::event_dy() > 0) ? 1 : 0;
-    if (abs(Fl::event_dy()) > last_num_lines-2) lines = last_num_lines-2;
-    else lines = abs(Fl::event_dy());
+  case FL_MOUSEWHEEL:
+    return send(event, scrollbar);
+#if 0
+    int n = Fl::event_dy() * Fl_Style::wheel_scroll_lines;
     goto_mark(FIRST_VISIBLE);
-    for (int i = 0; i < lines; i++) {
-      if (forward) next_visible();
-      else previous_visible();
-    }
+    while (n > 0 && previous_visible()) n--;
+    while (n < 0 && next_visible()) n++;
     set_top();
     return 1;
-  }
+#endif
   }
   return 0;
 }
@@ -959,5 +959,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.40 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.41 2001/03/12 00:49:03 spitzak Exp $".
 //
