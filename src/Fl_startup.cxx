@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_startup.cxx,v 1.4 2001/07/24 16:25:08 clip Exp $"
+// "$Id: Fl_startup.cxx,v 1.5 2001/07/24 21:14:27 robertk Exp $"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
@@ -42,6 +42,10 @@
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
+#endif
+
+#ifdef _MSC_VER	// MSVC++
+#define R_OK	04
 #endif
 
 const char* Fl::scheme_ = 0;
@@ -368,5 +372,5 @@ static struct Startup {
 
 
 //
-// End of "$Id: Fl_startup.cxx,v 1.4 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: Fl_startup.cxx,v 1.5 2001/07/24 21:14:27 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.4 2001/07/24 16:25:08 clip Exp $"
+// "$Id: Fl.h,v 1.5 2001/07/24 21:14:27 robertk Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -239,11 +239,12 @@ public:
 
 };
 
-#endif
 
 FL_API const char* fl_find_config_file(const char* filename, bool create = false);
 FL_API int fl_getconf(const char *key, char *value, int value_length);
 
+#endif
+
 //
-// End of "$Id: Fl.h,v 1.4 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: Fl.h,v 1.5 2001/07/24 21:14:27 robertk Exp $".
 //

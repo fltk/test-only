@@ -184,10 +184,6 @@ SOURCE=..\src\conf_setlong.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\conf_strcasecmp.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\conf_strcnt.c
 # End Source File
 # Begin Source File
@@ -321,6 +317,10 @@ SOURCE=..\src\Fl_Color_Chooser.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_compose.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_conf.cxx
 # End Source File
 # Begin Source File
 
@@ -524,10 +524,6 @@ SOURCE=..\src\Fl_Menu_Window.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_options.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Output.cxx
 # End Source File
 # Begin Source File
@@ -632,6 +628,10 @@ SOURCE=..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_startup.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_String_List.cxx
 # End Source File
 # Begin Source File
@@ -645,10 +645,6 @@ SOURCE=..\src\Fl_Style_start.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_symbols.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_sysinfo.cxx
 # End Source File
 # Begin Source File
 

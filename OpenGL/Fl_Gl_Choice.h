@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.h,v 1.1 2001/07/24 01:20:59 clip Exp $"
+// "$Id: Fl_Gl_Choice.h,v 1.2 2001/07/24 21:14:27 robertk Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ class Fl_Window;
 
 #ifdef WIN32
 
-GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext fl_create_gl_context(const Fl_Window*, const Fl_Gl_Choice*, int layer=0);
 
 #else
 
@@ -102,5 +102,5 @@ void fl_delete_gl_context(GLContext);
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.h,v 1.1 2001/07/24 01:20:59 clip Exp $".
+// End of "$Id: Fl_Gl_Choice.h,v 1.2 2001/07/24 21:14:27 robertk Exp $".
 //

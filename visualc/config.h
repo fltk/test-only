@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.19 2001/02/16 22:55:46 robertk Exp $"
+ * "$Id: config.h,v 1.20 2001/07/24 21:14:27 robertk Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -201,6 +201,14 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define strtok_r(a,b,c) strtok(a,b)
 
 /*
+ * CONFIGDIR
+ *
+ * Global configuration to look for files not in ~/.fltk
+ *
+*/
+#define CONFIGDIR ""
+
+/*
  * CONF_CACHED
  *
  * define this to give reading config files a serious speed boost
@@ -211,5 +219,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.19 2001/02/16 22:55:46 robertk Exp $".
+ * End of "$Id: config.h,v 1.20 2001/07/24 21:14:27 robertk Exp $".
  */
