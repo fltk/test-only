@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.71 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.72 2000/10/18 07:38:54 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1189,7 +1189,7 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
     i->show();
     i->value(((Fl_Slider*)(current_widget->o))->slider_size());
   } else {
-    double n = i->value();
+    int n = int(i->value());
     for_all_selected_widgets() {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -2025,7 +2025,11 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"value") && is_valuator()) {
     ((Fl_Valuator*)o)->value(strtod(read_word(),0));
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
-    ((Fl_Slider*)o)->slider_size(strtod(read_word(),0));
+    double v = strtod(read_word(),0);
+    if (v < 1.0)
+      ((Fl_Slider*)o)->slider_size(v);
+    else
+      ((Fl_Slider*)o)->slider_size(int(v));
 
   } else {
     if (!strncmp(c,"code",4)) {
@@ -2156,5 +2160,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.71 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.72 2000/10/18 07:38:54 spitzak Exp $".
 //

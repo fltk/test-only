@@ -53,39 +53,35 @@ void Drawing_Window::make_window() {
       o->user_data((void*)(this));
       Fl_Group::current()->resizable(o);
     }
-    { Fl_Input* o = x_input = new Fl_Input(30, 15, 125, 30, "x:");
-      o->type(1);
+    { Fl_Input* o = x_input = new Fl_Input(30, 10, 125, 25, "x:");
       o->callback((Fl_Callback*)cb_x_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-    { Fl_Input* o = y_input = new Fl_Input(175, 15, 125, 30, "y:");
-      o->type(1);
+    { Fl_Input* o = y_input = new Fl_Input(175, 10, 125, 25, "y:");
       o->callback((Fl_Callback*)cb_y_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-    { Fl_Input* o = w_input = new Fl_Input(325, 15, 105, 30, "w:");
-      o->type(1);
+    { Fl_Input* o = w_input = new Fl_Input(325, 10, 105, 25, "w:");
       o->callback((Fl_Callback*)cb_w_input);
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
-    { Fl_Slider* o = new Fl_Slider(80, 50, 160, 15, "brightness:");
-      o->type(1);
+    { Fl_Slider* o = new Fl_Slider(80, 38, 160, 20, "brightness:");
+      o->type(5);
+      o->text_box(FL_FLAT_BOX);
       o->step(1);
-      o->slider_size(2560);
       o->callback((Fl_Callback*)cb_brightness);
       o->align(FL_ALIGN_LEFT);
       o->range(0,d->MAX_BRIGHTNESS);
       o->value(d->DEFAULT_BRIGHTNESS);
     }
-    { Fl_Box* o = new Fl_Box(240, 50, 190, 30, "left: click = zoom out, drag = zoom in\nright click: Julia set");
+    { Fl_Box* o = new Fl_Box(240, 44, 190, 30, "left: click = zoom out, drag = zoom in\nright click: Julia set");
       o->label_size(10);
-      o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
-      o->deactivate();
+      o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
     }
-    { Fl_Slider* o = new Fl_Slider(80, 65, 160, 15, "iterations:");
-      o->type(1);
+    { Fl_Slider* o = new Fl_Slider(80, 60, 160, 20, "iterations:");
+      o->type(5);
+      o->text_box(FL_FLAT_BOX);
       o->step(1);
-      o->slider_size(2560);
       o->callback((Fl_Callback*)cb_iterations);
       o->align(FL_ALIGN_LEFT);
       o->range(1,d->MAX_ITERATIONS);

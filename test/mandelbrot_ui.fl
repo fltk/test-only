@@ -28,41 +28,41 @@ class Drawing_Window {open
         label {x:}
         callback {d->X = atof(o->value());;
 d->new_display();}
-        xywh {30 15 125 30} type Float
+        xywh {30 10 125 25}
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Input y_input {
         label {y:}
         callback {d->Y = atof(o->value());
 d->new_display();}
-        xywh {175 15 125 30} type Float
+        xywh {175 10 125 25}
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Input w_input {
         label {w:}
         callback {d->scale = atof(o->value());
 d->new_display();}
-        xywh {325 15 105 30} type Float
+        xywh {325 10 105 25}
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Slider {} {
         label {brightness:}
         callback {d->brightness = int(o->value());
-d->new_display();}
-        xywh {80 50 160 15} type Horizontal align 4 step 1 slider_size 16
+d->new_display();} selected
+        xywh {80 38 160 20} type {Horz Knob} align 4 text_box FLAT_BOX step 1
         code0 {o->range(0,d->MAX_BRIGHTNESS);}
         code2 {o->value(d->DEFAULT_BRIGHTNESS);}
       }
       Fl_Box {} {
         label {left: click = zoom out, drag = zoom in
 right click: Julia set}
-        xywh {240 50 190 30} align 280 deactivate labelsize 10
+        xywh {240 44 190 30} align 16 labelsize 10
       }
       Fl_Slider {} {
         label {iterations:}
         callback {d->iterations = 1<<int(o->value());
 d->new_display();} selected
-        xywh {80 65 160 15} type Horizontal align 4 step 1 slider_size 16
+        xywh {80 60 160 20} type {Horz Knob} align 4 text_box FLAT_BOX step 1
         code0 {o->range(1,d->MAX_ITERATIONS);}
         code2 {o->value(d->DEFAULT_ITERATIONS);}
       }
