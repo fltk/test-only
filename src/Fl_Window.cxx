@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.41 2000/05/30 07:42:17 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.42 2000/06/03 08:49:16 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -195,7 +195,7 @@ extern void fl_fix_focus();
 void Fl_Window::show() {
   if (parent()) {
     set_visible();
-    handle(FL_SHOW);
+    create();
   } else if (!i) {
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
@@ -274,15 +274,35 @@ void Fl_Window::hide() {
   clear_visible();
 }
 
-// Fl_Widget::show()/hide() call this:
+// FL_SHOW and FL_HIDE are called whenever the visibility of this widget
+// or any parent changes.  We must correctly map/unmap the system's window.
+
+// For top-level windows it is assummed the window has already been
+// mapped or unmapped!!!  This is because this should only happen when
+// Fl_Window::show() or Fl_Window::hide() is called, or in response to
+// iconize/deiconize events from the system.
+
 int Fl_Window::handle(int event) {
   if (parent()) switch (event) {
   case FL_SHOW:
-    if (!i) create();
-    else XMapWindow(fl_display, i->xid);
+    if (!shown()) show();
+    else XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
     break;
   case FL_HIDE:
-    if (i && !visible()) XUnmapWindow(fl_display, i->xid);
+    if (shown()) {
+      // Find what really turned invisible, if is was a parent window
+      // we do nothing.  We need to avoid unnecessary unmap calls
+      // because they cause the display to blink when the parent is
+      // remapped.  However if this or any intermediate non-window
+      // widget has really had hide() called directly on it, we must
+      // unmap because when the parent window is remapped we don't
+      // want to reappear.
+      if (visible()) {
+       Fl_Widget* p = parent(); for (;p->visible();p = p->parent()) {}
+       if (p->type() >= FL_WINDOW) break; // don't do the unmap
+      }
+      XUnmapWindow(fl_display, fl_xid(this));
+    }
     break;
   }
   if (Fl_Group::handle(event)) return 1;
@@ -308,5 +328,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.41 2000/05/30 07:42:17 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.42 2000/06/03 08:49:16 bill Exp $".
 //

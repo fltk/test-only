@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.95 2000/06/02 01:56:43 carl Exp $"
+// "$Id: Fl.cxx,v 1.96 2000/06/03 08:49:14 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -294,7 +294,6 @@ void fl_fix_focus() {
     if (w->contains(Fl::focus())) return; // it already has it
     // Give it the focus:
     if (w->takesevents()) {
-      Fl::e_keysym = 0; // make sure it does not look like navigation keystroke
       w->handle(FL_FOCUS);
       if (w->contains(Fl::focus())) return; // it took it
     }
@@ -457,8 +456,7 @@ int Fl::handle(int event, Fl_Window* window)
     xmousewin = window; // this should already be set, but just in case.
     if (window != pushed() && (!modal() || window == modal()))
       send(event, window, window);
-    send(FL_DRAG, pushed(), window);
-    return 1;
+    return send(FL_DRAG, pushed(), window);
 
   case FL_LEAVE:
     belowmouse(0);
@@ -472,7 +470,6 @@ int Fl::handle(int event, Fl_Window* window)
   // only send FL_KEYUP to focus widget since FL_KEY only goes there
   case FL_KEYUP:
     return send(FL_KEYUP, focus(), window);
-    break;
 
   case FL_KEY:
     Fl_Tooltip::enter((Fl_Widget*)0);
@@ -497,15 +494,16 @@ int Fl::handle(int event, Fl_Window* window)
     if (send(event, modal() ? modal() : window, window)) return 1;
     break;
 
+  case 0: // events from system that fltk does not understand
+    break;
   }
 
   // try the chain of global event handlers:
   for (const handler_link *h = handlers; h; h = h->next)
     if (h->handle(event)) return 1;
   return 0;
-
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.95 2000/06/02 01:56:43 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.96 2000/06/03 08:49:14 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.109 2000/06/03 04:24:09 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.110 2000/06/03 08:49:16 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -540,7 +540,7 @@ static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-  static char buffer[2];
+  Fl::e_keysym = 0;
 
 #if 0
   // Not sure what this is, it may be left over from earlier attempts to
@@ -642,29 +642,30 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_DEADCHAR:
   case WM_SYSDEADCHAR:
   case WM_CHAR:
-  case WM_SYSCHAR:
-    {ulong state = Fl::e_state & 0xff000000; // keep the mouse button state
-     // if GetKeyState is expensive we might want to comment some of these out:
-      if (GetKeyState(VK_SHIFT)&~1) state |= FL_SHIFT;
-      if (GetKeyState(VK_CAPITAL)) state |= FL_CAPS_LOCK;
-      if (GetKeyState(VK_CONTROL)&~1) state |= FL_CTRL;
-      // Alt gets reported for the Alt-GR switch on foreign keyboards.
-      // so we need to check the event as well to get it right:
-      if ((lParam&(1<<29)) //same as GetKeyState(VK_MENU)
+  case WM_SYSCHAR: {
+    ulong state = Fl::e_state & 0xff000000; // keep the mouse button state
+    // if GetKeyState is expensive we might want to comment some of these out:
+    if (GetKeyState(VK_SHIFT)&~1) state |= FL_SHIFT;
+    if (GetKeyState(VK_CAPITAL)) state |= FL_CAPS_LOCK;
+    if (GetKeyState(VK_CONTROL)&~1) state |= FL_CTRL;
+    // Alt gets reported for the Alt-GR switch on foreign keyboards.
+    // so we need to check the event as well to get it right:
+    if ((lParam&(1<<29)) //same as GetKeyState(VK_MENU)
 	&& uMsg != WM_CHAR) state |= FL_ALT;
-      if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
-      if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
-	// WIN32 bug?  GetKeyState returns garbage if the user hit the
-	// meta key to pop up start menu.  Sigh.
-	if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	  state |= FL_META;
-      }
-      if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
-      Fl::e_state = state;}
+    if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
+    if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
+      // WIN32 bug?  GetKeyState returns garbage if the user hit the
+      // meta key to pop up start menu.  Sigh.
+      if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
+	state |= FL_META;
+    }
+    if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
+    Fl::e_state = state;
     if (lParam & (1<<31)) { // key up events.
       if (Fl::handle(FL_KEYUP, window)) return 0;
       break;
     }
+    static char buffer[2];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
       Fl::e_length = 1;
@@ -679,7 +680,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // for (int i = lParam&0xff; i--;)
     while (window->parent()) window = window->window();
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
-    break;
+    break;}
 
   case WM_MOUSEWHEEL: {
     // Carl says this moves 3 lines per click.  MicroSoft reports 120 per
@@ -1185,5 +1186,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.109 2000/06/03 04:24:09 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.110 2000/06/03 08:49:16 bill Exp $".
 //

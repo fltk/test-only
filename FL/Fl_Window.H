@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.36 2000/05/30 07:41:58 bill Exp $"
+// "$Id: Fl_Window.H,v 1.37 2000/06/03 08:49:09 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -95,6 +95,7 @@ public:
 protected:
 
   virtual void create();
+  static Fl_Window *current_;
 
 private:
 
@@ -111,7 +112,6 @@ private:
     FL_NOBORDER 	= 0x40000000,
     FL_NON_MODAL 	= 0x10000000
   };
-  static Fl_Window *current_;
   static const char* xclass_;
   void _Fl_Window(); // constructor innards
 };
@@ -119,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.36 2000/05/30 07:41:58 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.37 2000/06/03 08:49:09 bill Exp $".
 //

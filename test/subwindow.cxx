@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.8 2000/01/16 07:44:44 robertk Exp $"
+// "$Id: subwindow.cxx,v 1.9 2000/06/03 08:49:17 bill Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,7 @@ public:
 int EnterExit::handle(int e) {
   if (e == FL_ENTER) {oldcolor = color(); color(FL_RED); redraw(); return 1;}
   else if (e == FL_LEAVE) {color(oldcolor); redraw(); return 1;}
+  else if (e == FL_MOVE) return 1;
   else return 0;
 }
 
@@ -77,15 +78,15 @@ const char *eventnames[] = {
 "FL_DRAG",
 "FL_FOCUS",
 "FL_UNFOCUS",
-"FL_KEYBOARD",
-"9",
+"FL_KEY",
+"FL_KEYUP",
 "FL_MOVE",
 "FL_SHORTCUT",
-"12",
-"FL_DEACTIVATE",
 "FL_ACTIVATE",
-"FL_HIDE",
+"FL_DEACTIVATE",
 "FL_SHOW",
+"FL_HIDE",
+"FL_VIEWCHANGE",
 "FL_PASTE",
 "FL_SELECTIONCLEAR",
 };
@@ -172,5 +173,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.8 2000/01/16 07:44:44 robertk Exp $".
+// End of "$Id: subwindow.cxx,v 1.9 2000/06/03 08:49:17 bill Exp $".
 //

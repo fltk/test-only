@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.74 2000/06/02 09:15:39 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.75 2000/06/03 08:49:16 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -389,6 +389,7 @@ unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
 
 int fl_handle(const XEvent& xevent)
 {
+  Fl::e_keysym = 0;
   fl_xevent = &xevent;
   Window xid = xevent.xany.window;
 
@@ -909,5 +910,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.74 2000/06/02 09:15:39 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.75 2000/06/03 08:49:16 bill Exp $".
 //

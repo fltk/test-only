@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.17 2000/06/02 00:31:41 carl Exp $"
+// "$Id: Fl_Browser.H,v 1.18 2000/06/03 08:49:09 bill Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -125,7 +125,7 @@ public:
   int displayed(int line);
   void display(int line, int value = 1);
   int topline() const {return item_number[FIRST_VISIBLE];}
-  void value(int v) {goto_number(v); set_focus();}
+  void value(int v) {if (goto_number(v)) set_focus();}
   int value() const {return Fl_Menu_::value();}
 
 private:
@@ -166,5 +166,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.17 2000/06/02 00:31:41 carl Exp $".
+// End of "$Id: Fl_Browser.H,v 1.18 2000/06/03 08:49:09 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.45 2000/05/31 19:59:24 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.46 2000/06/03 08:49:15 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,16 +34,16 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
 //	t = top, number of first line
 //	l = length, total number of lines
   if (p+w > t+l) l = p+w-t;
+  if (l <= 0) l = 1;
   int b = l-w+t;
   int X=x(); int Y=y(); int W=this->w(); int H=h(); text_box()->inset(X,Y,W,H);
   if (!horizontal()) {int T = W; W = H; H = T; T = b; b = t; t = T;}
   if (W >= 3*H) W -= 2*H;
-  if (l==0) l = 1;
   int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
   if (S != slider_size() || t != minimum() || b != maximum()) {
     slider_size(S); minimum(t); maximum(b); redraw();
   }
-  pagesize(w-1); if (pagesize() <= 0) pagesize(1);
+  pagesize(w>1 ? w-1 : 1);
   return Fl_Slider::value(p);
 }
 
@@ -202,5 +202,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.45 2000/05/31 19:59:24 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.46 2000/06/03 08:49:15 bill Exp $".
 //

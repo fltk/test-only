@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.23 2000/06/02 00:31:43 carl Exp $"
+// "$Id: Fl_Browser.cxx,v 1.24 2000/06/03 08:49:15 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -242,8 +242,8 @@ Fl_Widget* Fl_Browser::backward() {
 // set current item to one at or before Y pixels from top of browser
 Fl_Widget* Fl_Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
-  if (damage()&FL_DAMAGE_LAYOUT) layout();
-  if (Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
+  if (damage()&FL_DAMAGE_LAYOUT ||
+      Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
@@ -812,8 +812,9 @@ Fl_Widget* Fl_Browser::goto_visible_focus() {
 Fl_Widget* Fl_Browser::goto_number(int number) {
   if (number < 0) number = 0;
   if (number >= children()) number = children()-1;
-  if (damage() & FL_DAMAGE_LAYOUT) layout();
-  if (data[TOPLEVEL].index[HERE] <= 0 || number <= data[TOPLEVEL].index[HERE]/2) {
+  if (damage() & FL_DAMAGE_LAYOUT ||
+      data[TOPLEVEL].index[HERE] <= 0 ||
+      number <= data[TOPLEVEL].index[HERE]/2) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
@@ -902,5 +903,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.23 2000/06/02 00:31:43 carl Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.24 2000/06/03 08:49:15 bill Exp $".
 //
