@@ -8,7 +8,7 @@
 
 namespace fltk {
 
-class FL_API HelpDialog {
+class FL_IMAGES_API HelpDialog {
   int index_;
   int max_;
   int line_[100];

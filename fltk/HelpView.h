@@ -1,5 +1,5 @@
 //
-// "$Id: HelpView.h,v 1.2 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: HelpView.h,v 1.3 2004/07/04 17:43:01 laza2000 Exp $"
 //
 // Help Viewer widget definitions.
 //
@@ -89,7 +89,7 @@ struct HelpTarget {
 // HelpView class...
 //
 
-class FL_API HelpView : public Group    //// Help viewer widget
+class FL_IMAGES_API HelpView : public Group    //// Help viewer widget
 {
   enum { RIGHT = -1, CENTER, LEFT };    // Alignments
 
@@ -219,5 +219,5 @@ public:
 #endif // !HelpView_H
 
 //
-// End of "$Id: HelpView.h,v 1.2 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: HelpView.h,v 1.3 2004/07/04 17:43:01 laza2000 Exp $".
 //
