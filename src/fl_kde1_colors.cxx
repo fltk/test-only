@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.1 1999/11/10 04:48:55 carl Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.2 1999/11/10 14:21:00 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -179,7 +179,7 @@ int fl_kde1_colors() {
   }
 
 /* looks better for dark backgrounds
-  if ((style = Fl_Style::find("scroll bar"))) {
+  if ((style = Fl_Style::find("scrollbar"))) {
     if (foreground) style->set_color(48);
   }
 
@@ -205,5 +205,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.1 1999/11/10 04:48:55 carl Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.2 1999/11/10 14:21:00 carl Exp $".
 //

@@ -45,7 +45,7 @@ FLTK version = 2.0.0
   [widgets/menu title]
     box = motif thick title
 
-#  [widgets/scroll bar]
+#  [widgets/scrollbar]
 #    box = motif thick down
 #    glyph box = motif thick
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.1 1999/11/08 22:21:57 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.2 1999/11/10 14:21:01 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -86,7 +86,7 @@ int fl_windows() {
     s->set_color(FL_WHITE);
   }
 
-  if ((s = Fl_Style::find("scroll bar"))) {
+  if ((s = Fl_Style::find("scrollbar"))) {
     s->set_color(52);
   }
 
@@ -102,5 +102,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.1 1999/11/08 22:21:57 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.2 1999/11/10 14:21:01 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.3 1999/11/10 12:21:55 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.4 1999/11/10 14:21:00 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -219,7 +219,7 @@ int fl_motif() {
     s->set_off_color(FL_GRAY);
   }
 
-  if ((s = Fl_Style::find("scroll bar"))) {
+  if ((s = Fl_Style::find("scrollbar"))) {
     s->set_box(&thin_motif_down_box);
     s->set_color(FL_DARK1);
     s->set_selection_color(FL_DARK1);
@@ -282,5 +282,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.3 1999/11/10 12:21:55 bill Exp $".
+// End of "$Id: fl_motif.cxx,v 1.4 1999/11/10 14:21:00 carl Exp $".
 //
