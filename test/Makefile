@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.42 2000/05/15 05:52:28 bill Exp $"
+# "$Id: Makefile,v 1.43 2000/05/31 00:04:44 carl Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -33,9 +33,9 @@ CPPFILES =\
 	keyboard.cxx label.cxx list_visuals.cxx mandelbrot.cxx menu.cxx \
 	message.cxx navigation.cxx output.cxx overlay.cxx pixmap.cxx \
 	pixmap_browser.cxx radio.cxx resizable.cxx scroll.cxx shape.cxx \
-	subwindow.cxx symbols.cxx tabs.cxx tile.cxx valuators.cxx fast_slow.cxx \
+	subwindow.cxx symbols.cxx tabs.cxx tile.cxx fast_slow.cxx \
 	resize.cxx pack.cxx inactive.cxx sizes.cxx image_file.cxx \
-	layout.cxx threads.cxx fltk_scheme.cxx menubar.cxx line_style.cxx
+	layout.cxx threads.cxx fltk_scheme.cxx menubar.cxx line_style.cxx valuators.cxx
 
 ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	clock color_chooser cube cursor curve demo doublebuffer \
@@ -43,8 +43,8 @@ ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	hello iconize image input keyboard label list_visuals \
 	mandelbrot menu message navigation output overlay pixmap \
 	pixmap_browser radio resizable scroll shape subwindow \
-	symbols tabs tile valuators fast_slow resize pack inactive sizes \
-	image_file layout threads fltk_scheme menubar line_style
+	symbols tabs tile fast_slow resize pack inactive sizes \
+	image_file layout threads fltk_scheme menubar line_style valuators
 
 all:	$(ALL)
 
@@ -105,5 +105,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.42 2000/05/15 05:52:28 bill Exp $".
+# End of "$Id: Makefile,v 1.43 2000/05/31 00:04:44 carl Exp $".
 #

@@ -7,6 +7,6 @@
 
   # Which scheme should we use?  (Loads the themes too)
   # FLTK comes with:
-  #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
+  #   Alternative, Alt2, Classic, Essai, KDE, Motif, OldMotif, Windows
 
   scheme = KDE

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.4 2000/05/30 10:37:52 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.5 2000/05/31 00:04:46 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -140,6 +140,7 @@ my_counter_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 ////////////////////////////////////////////////////////////////
 
 int fl_windows() {
+  // this shouldn't be here, but the tricky glyph functions break without it
   Fl_Style::revert();
 
   Fl_Style::draw_boxes_inactive = 0;
@@ -211,5 +212,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.4 2000/05/30 10:37:52 carl Exp $"
+// End of "$Id: fl_windows.cxx,v 1.5 2000/05/31 00:04:46 carl Exp $"
 //

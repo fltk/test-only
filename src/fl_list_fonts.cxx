@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.4 2000/05/27 01:17:32 carl Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.5 2000/05/31 00:04:43 carl Exp $"
 //
 // Less-used font functions
 //
@@ -52,7 +52,9 @@
 
 // return dash number N, or pointer to ending null if none:
 static const char* font_word(const char* p, int n) {
-  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
+//  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
+  for (; *p; p++) if (*p == '-' && !--n) break; // simpler to follow logic?
+
   return p;
 }
 
@@ -140,7 +142,7 @@ int fl_list_fonts(Fl_Font*& arrayp) {
   qsort(xlist, xlistsize, sizeof(*xlist), sort_function);
 
   Fl_Font_* family = 0; // current family
-  char family_name[128]; family_name[0] = 0; // nice name of current family
+  char family_name[128] = ""; // nice name of current family
 
   int array_size = 0;
   for (int i=0; i<xlistsize;) {
@@ -302,7 +304,7 @@ Fl_Font fl_font(const char* name) {
     font = list[c];
     const char* fontname = font->name();
     int d = strncasecmp(name, fontname, length);
-    if (!d && !fontname[length]) goto GOTIT;
+    if (!d/* && !fontname[length]*/) goto GOTIT;
     if (d > 0) a = c+1;
     else b = c;
   }}
@@ -314,5 +316,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.4 2000/05/27 01:17:32 carl Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.5 2000/05/31 00:04:43 carl Exp $".
 //

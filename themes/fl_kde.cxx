@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.1 2000/05/30 10:37:52 carl Exp $"
+// "$Id: fl_kde.cxx,v 1.2 2000/05/31 00:04:45 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -74,11 +74,11 @@ static int x_event_handler(int) {
       cm->data.l[0] != FontChanged &&
       cm->data.l[0] != StyleChanged)
     return 0; // only interested in some IPC messages
-  if (colors_only && cm->message_type == Style)
-    return 0;
   if (colors_only && cm->message_type == KIPC &&
       cm->data.l[0] != PaletteChanged &&
       cm->data.l[0] != FontChanged)
+    return 0;
+  if (colors_only && cm->message_type == Style)
     return 0;
   // Geez, really need to work on that logic...
   fl_kde(colors_only);
@@ -113,7 +113,6 @@ static void add_event_handler() {
 
 int fl_kde(int co) {
   colors_only = co;
-  Fl_Style::revert();
 
   char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80] = "";
   const char* p = getenv("HOME");
@@ -254,11 +253,8 @@ int fl_kde(int co) {
     if (foreground) style->color = 48;
   }
 */
-printf("here1\n");
   if (button_background) {
-printf("here2\n");
     if ((style = Fl_Style::find("button"))) {
-printf("here3\n");
       style->color = button_background;
       style->label_color = button_foreground;
     }
@@ -368,5 +364,5 @@ printf("here3\n");
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.1 2000/05/30 10:37:52 carl Exp $".
+// End of "$Id: fl_kde.cxx,v 1.2 2000/05/31 00:04:45 carl Exp $".
 //

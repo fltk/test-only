@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.7 2000/05/30 10:37:52 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.8 2000/05/31 00:04:45 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -174,8 +174,6 @@ static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
 
 int fl_motif()
 {
-  Fl_Style::revert();
-
   fl_up_box.data = thin_motif_up_box.data;
   fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
@@ -242,5 +240,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.7 2000/05/30 10:37:52 carl Exp $"
+// End of "$Id: fl_motif.cxx,v 1.8 2000/05/31 00:04:45 carl Exp $"
 //
