@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.39 2004/01/13 06:51:48 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.40 2004/01/18 05:25:33 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -59,6 +59,10 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
     }
   }
 
+  if (w > h) {
+    x += (w-h)/2;
+    w = h;
+  }
   // to draw the shape inactive, draw it twice to get the engraved look:
   int i = 0;
   if (flags & INACTIVE) {
@@ -117,5 +121,5 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.39 2004/01/13 06:51:48 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.40 2004/01/18 05:25:33 spitzak Exp $".
 //

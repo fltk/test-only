@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.68 2004/01/18 05:25:33 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -166,7 +166,7 @@ int TabGroup::handle(int event) {
       if (selected) {
 	int n = selected->handle(FOCUS);
 	if (n) {
-	  if (!selected->contains(fltk::focus())) focus(selected);
+	  if (!selected->contains(fltk::focus())) fltk::focus(selected);
 	  return n;
 	}
       }
@@ -434,5 +434,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.68 2004/01/18 05:25:33 spitzak Exp $".
 //
