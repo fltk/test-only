@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.26 1999/11/19 10:06:54 bill Exp $"
+// "$Id: fl_options.cxx,v 1.27 1999/11/20 04:42:47 vincent Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -502,31 +502,12 @@ const char* fl_find_config_file(const char* fn) {
 int Fl::getconf(const char *key, char *value, int value_length)
 { return ::getconf(fl_find_config_file("flconfig"), key, value, value_length); }
 
-Fl_Style* Fl_Style::find(const char* name) {
-  for (Fl_Style* p = Fl_Style::first; p; p = p->next) {
-    const char* a = p->name;
-    const char* b = name;
-    for (;;) {
-      if (*a == '_') {
-	if (*b == ' ' || *b == '_');
-	else {a++; continue;}
-      } else if (tolower(*a) != tolower(*b)) break;
-      if (!*a && !*b) return p;
-      a++;
-      b++;
-    }
-  }
-  return 0;
-}
-
 static void style_clear(Fl_Style *s) {
   Fl_Style temp = *s;
   memset((void*)s, 0, sizeof(*s));
 
   s->parent = temp.parent;
-  s->name = temp.name;
   s->revertfunc = temp.revertfunc;
-  s->next = temp.next;
 }
 
 extern const char* fl_up_box_revert;
@@ -541,15 +522,17 @@ void Fl_Style::revert() {
   Fl_Style::draw_boxes_inactive = 1;
   Fl_Style::inactive_color_weight = 0.33f;
 
-  for (Fl_Style* p = Fl_Style::first; p; p = p->next) {
-    style_clear(p);
-    p->revertfunc(p);
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    if (p->name) {
+      style_clear(p);
+      p->revertfunc(p);
+    }
   }
   Fl::redraw();
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.26 1999/11/19 10:06:54 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.27 1999/11/20 04:42:47 vincent Exp $".
 //
 
 

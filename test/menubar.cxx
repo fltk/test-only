@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.20 1999/11/18 13:49:34 carl Exp $"
+// "$Id: menubar.cxx,v 1.21 1999/11/20 04:42:49 vincent Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
   menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
   Fl_Box box(0,30,WIDTH,370, "Press right button\nfor a pop-up menu");
-  box.copy_style(&Fl_Output::default_style);
+  box.copy_style(Fl_Output::default_style);
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
   mb1.tooltip("This is a menu button");
@@ -228,5 +228,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.20 1999/11/18 13:49:34 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.21 1999/11/20 04:42:49 vincent Exp $".
 //

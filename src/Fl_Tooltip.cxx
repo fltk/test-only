@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.20 1999/11/18 04:33:21 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.21 1999/11/20 04:42:45 vincent Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -133,8 +133,8 @@ static void revert(Fl_Style* s) {
   s->label_color = FL_BLACK;
 }
 
-Fl_Style Fl_Tooltip::default_style("Tooltip", revert);
+Fl_Style* Fl_Tooltip::default_style = new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.20 1999/11/18 04:33:21 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.21 1999/11/20 04:42:45 vincent Exp $".
 //

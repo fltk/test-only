@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.11 1999/11/19 10:06:57 bill Exp $"
+// "$Id: essai.cxx,v 1.12 1999/11/20 04:42:51 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -108,9 +108,9 @@ int fltk_theme(int, char** argv) {
   Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
-  Fl_Widget::default_style.set_box(box1);
-  Fl_Widget::default_style.set_glyph_box(box1);
-  Fl_Widget::default_style.set_highlight_color(FL_GRAY);
+  Fl_Widget::default_style->set_box(box1);
+  Fl_Widget::default_style->set_glyph_box(box1);
+  Fl_Widget::default_style->set_highlight_color(FL_GRAY);
   Fl_Style* s;
   if ((s = Fl_Style::find("window"))) {
     s->set_box(flat1);
@@ -136,11 +136,11 @@ int fltk_theme(int, char** argv) {
     s->set_selection_text_color(FL_BLACK);
   }
   if ((s = Fl_Style::find("tabs"))) {
-    s->set_box(box2);
+    s->set_box(box1);
   }
   return 0;
 }
 
 //
-// End of "$Id: essai.cxx,v 1.11 1999/11/19 10:06:57 bill Exp $".
+// End of "$Id: essai.cxx,v 1.12 1999/11/20 04:42:51 vincent Exp $".
 //

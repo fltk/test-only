@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.18 1999/11/10 18:05:54 carl Exp $"
+// "$Id: Fl_Counter.H,v 1.19 1999/11/20 04:42:28 vincent Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ protected:
   void draw();
 
 private:
-  static Fl_Style default_style;
+  static Fl_Style* default_style;
   double lstep_;
   uchar mouseobj, highlight, last;
   static void repeat_callback(void *);
@@ -60,5 +60,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.18 1999/11/10 18:05:54 carl Exp $".
+// End of "$Id: Fl_Counter.H,v 1.19 1999/11/20 04:42:28 vincent Exp $".
 //

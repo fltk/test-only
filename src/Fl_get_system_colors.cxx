@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.9 1999/10/27 08:41:00 bill Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.10 1999/11/20 04:42:46 vincent Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,7 @@ void fl_foreground(Fl_Color c) {
 
 #include <FL/Fl_Input.H>
 void fl_text_background(Fl_Color c) {
-  Fl_Style& s = Fl_Input::default_style;
+  Fl_Style& s = *Fl_Input::default_style;
   s.set_color(c);
   s.set_text_color(fl_contrast(s.text_color, c));
   s.set_selection_color(fl_contrast(s.selection_color, c));
@@ -102,5 +102,5 @@ Fl_Color fl_rgb(const char* name) {
 }
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.9 1999/10/27 08:41:00 bill Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.10 1999/11/20 04:42:46 vincent Exp $".
 //

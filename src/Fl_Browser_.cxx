@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.28 1999/11/19 10:06:45 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.29 1999/11/20 04:42:39 vincent Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -656,8 +656,8 @@ static void revert(Fl_Style* s) {
   s->color = FL_LIGHT2;
 }
 
-Fl_Style Fl_Browser_::default_style("Browser", revert);
+Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.28 1999/11/19 10:06:45 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.29 1999/11/20 04:42:39 vincent Exp $".
 //

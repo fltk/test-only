@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.19 1999/11/18 19:32:05 carl Exp $"
+// "$Id: Fl_Style.H,v 1.20 1999/11/20 04:42:31 vincent Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -35,6 +35,8 @@
 typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 typedef int (*Fl_Theme_Handler)(int);
 
+struct Fl_Named_Style;
+
 struct FL_API Fl_Style {
   Fl_Boxtype	box;
   Fl_Boxtype	glyph_box; // needed for all Light Buttons & sliders
@@ -57,15 +59,12 @@ struct FL_API Fl_Style {
   unsigned	text_size;
   unsigned	leading;
 
-  Fl_Style*     parent;
-  const char*   name;
-  void          (*revertfunc)(Fl_Style*);
-  Fl_Style*     next;
-  static Fl_Style* first;
+  Fl_Style* parent;
+
+  void  (*revertfunc)(Fl_Style*);
   int dynamic() const {return !revertfunc;}
 
-  Fl_Style(const char* name, void (*revertfunc)(Fl_Style*)=0);
-  Fl_Style(); // creates a dynamic() one
+  Fl_Style(); // creates a dynamic() style
 
   void setp(const void** p, const void* v) { *p = v; }
   void seti(unsigned* p, unsigned v) { *p = v; }
@@ -91,13 +90,15 @@ struct FL_API Fl_Style {
   void set_text_size(unsigned v)	{seti(&text_size, v);}
   void set_leading(unsigned v)		{seti(&leading, v);}
 
-  // find a default style by its string ID
-  static Fl_Style* find(const char* name);
-
   static void revert(); // reverts the entire world of styles to defaults
 
   static int draw_boxes_inactive; // should boxes ever be drawn inactive?
   static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
+
+  static void start(char* name);	// start a new class of style or use a previously started one
+
+  // find a default style by its string ID
+  static Fl_Named_Style* find(const char* name);
 };
 
 FL_API void fl_theme_handler(Fl_Theme_Handler handler);
@@ -126,8 +127,18 @@ FL_API int fl_kde1_colors();
 FL_API int fl_motif();
 FL_API int fl_windows();
 
+struct FL_API Fl_Named_Style : public Fl_Style {
+  const char* name;
+  Fl_Style** pdefault_style;
+  Fl_Named_Style* next;
+  static Fl_Named_Style* first;
+
+  Fl_Named_Style(const char* name, void (*revertfunc)(Fl_Style*)=0, Fl_Style** pdefault_style = 0);
+  Fl_Named_Style() { }	// Empty constructor used by Fl_Style::start only
+};
+
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.19 1999/11/18 19:32:05 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.20 1999/11/20 04:42:31 vincent Exp $".
 //

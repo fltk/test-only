@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.8 1999/11/19 10:06:57 bill Exp $"
+// "$Id: classic.cxx,v 1.9 1999/11/20 04:42:51 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -55,8 +55,8 @@ int fltk_theme(int, char**) {
     s->set_on_color(FL_GRAY);
     s->set_off_color(FL_GRAY);
   }
-  Fl_Widget::default_style.set_highlight_color(0);
-  Fl_Widget::default_style.set_glyph(fl_glyph);
+  Fl_Widget::default_style->set_highlight_color(0);
+  Fl_Widget::default_style->set_glyph(fl_glyph);
   if ((s = Fl_Style::find("scrollbar"))) {
     s->set_box(FL_FLAT_BOX);
   }
@@ -79,5 +79,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.8 1999/11/19 10:06:57 bill Exp $".
+// End of "$Id: classic.cxx,v 1.9 1999/11/20 04:42:51 vincent Exp $".
 //

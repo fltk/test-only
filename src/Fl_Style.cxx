@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.2 1999/11/18 19:32:10 carl Exp $"
+// "$Id: Fl_Style.cxx,v 1.3 1999/11/20 04:42:44 vincent Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -26,6 +26,33 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <string.h>
+
+Fl_Named_Style* Fl_Named_Style::first;
+
+// Do not change the contents of this ever.  The themes depend on getting
+// a known state initially.
+static void revert(Fl_Style* s) {
+  s->box                   = FL_UP_BOX;
+  s->glyph_box             = FL_UP_BOX;
+  s->glyph                 = fl_glyph;
+  s->label_font            = FL_HELVETICA;
+  s->text_font             = FL_HELVETICA;
+  s->label_type            = FL_NORMAL_LABEL;
+  s->color                 = FL_GRAY;
+  s->label_color           = FL_BLACK;
+  s->selection_color       = FL_LIGHT1;
+  s->selection_text_color  = FL_BLACK;
+  s->off_color             = FL_GRAY;
+  s->highlight_color       = FL_LIGHT1;//FL_NO_COLOR;
+  s->highlight_label_color = FL_BLACK;
+  s->text_color            = FL_BLACK;
+  s->label_size		   = FL_NORMAL_SIZE;
+  s->text_size             = FL_NORMAL_SIZE;
+  s->leading		   = 2;
+  s->parent                = 0;	// this is the topmost style always
+}
+
+Fl_Style* Fl_Widget::default_style;
 
 // Copying a style pointer from another widget is not safe if that
 // style is dynamic() because it may change or be deleted.  This makes
@@ -85,18 +112,24 @@ void Fl_Widget::seti(const unsigned * p, unsigned v) {
 // Named styles provide a list that can be searched by theme plugins.
 // The "revert" function is mostly provided to make it easy to initialize
 // the fields even though C++ does not allow a structure constant.
-// It is alos used to undo theme changes.
-
-Fl_Style* Fl_Style::first = 0;
+// It is also used to undo theme changes.
 
 static void plainrevert(Fl_Style*) {}
 
-Fl_Style::Fl_Style(const char* n, void (*revert)(Fl_Style*)) {
+Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Style** pds) {
+  static bool init = 0;
   memset((void*)this, 0, sizeof(*this));
-  parent = &Fl_Widget::default_style; // revert may want to change this
-  if (n) { name = n; next = first; first = this;}
+  if (!init) {
+    init = 1;
+    Fl_Widget::default_style = new Fl_Named_Style("default", ::revert, &Fl_Widget::default_style);
+  }
+  parent = Fl_Widget::default_style; // revert may want to change this
   if (revert) { revertfunc = revert; revert(this); }
   else revertfunc = plainrevert;
+  next = Fl_Named_Style::first;
+  Fl_Named_Style::first = this;
+  pdefault_style = pds;
+  name = n;
 }
 
 // This constructor is used to create dynamic() styles for widgets that
@@ -108,6 +141,25 @@ Fl_Style::Fl_Style() {
 int Fl_Style::draw_boxes_inactive = 1;
 double Fl_Style::inactive_color_weight = 0.33f;
 
+#include <ctype.h>
+Fl_Named_Style* Fl_Style::find(const char* name) {
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    const char* a = p->name;
+    const char* b = name;
+    if (!a) continue;
+    for (;;) {
+      if (*a == '_') {
+	if (*b == ' ' || *b == '_');
+	else {a++; continue;}
+      } else if (tolower(*a) != tolower(*b)) break;
+      if (!*a && !*b) return p;
+      a++;
+      b++;
+    }
+  }
+  return 0;
+}
+
 //
-// End of "$Id: Fl_Style.cxx,v 1.2 1999/11/18 19:32:10 carl Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.3 1999/11/20 04:42:44 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.22 1999/11/13 03:01:23 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.23 1999/11/20 04:42:41 vincent Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -178,8 +178,8 @@ static void revert(Fl_Style *s) {
   s->color = FL_LIGHT2;
 }
 
-Fl_Style Fl_Counter::default_style("counter", revert);
+Fl_Style* Fl_Counter::default_style = new Fl_Named_Style("counter", revert, &Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.22 1999/11/13 03:01:23 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.23 1999/11/20 04:42:41 vincent Exp $".
 //

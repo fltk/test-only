@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.20 1999/11/10 18:05:53 carl Exp $"
+// "$Id: Fl_Browser_.H,v 1.21 1999/11/20 04:42:27 vincent Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -116,7 +116,7 @@ protected:
   Fl_Browser_(int,int,int,int,const char * = 0);
 
 private:
-  static Fl_Style default_style;
+  static Fl_Style* default_style;
   void* top_;		// which item scrolling position is in
   void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
   void *redraw1,*redraw2; // minimal update pointers
@@ -136,5 +136,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.20 1999/11/10 18:05:53 carl Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.21 1999/11/20 04:42:27 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.64 1999/11/19 15:11:56 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.65 1999/11/20 04:42:43 vincent Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,7 @@ static void mw_revert(Fl_Style* s) {
   s->leading = 4;
 }
 
-static Fl_Style menuwindow_default_style("Menu_Window", mw_revert);
+static Fl_Style* menuwindow_default_style = new Fl_Named_Style("Menu_Window", mw_revert);
 
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
@@ -80,10 +80,10 @@ static void mi_revert(Fl_Style* s) {
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
-  s->parent = &Fl_Widget::default_style;
+  s->parent = Fl_Widget::default_style;
 }
 
-Fl_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
+Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_revert, &Fl_Menu_Item::default_style);
 
 // This style is directly referenced for the menu titles (actually
 // only the box, selection, and highlight colors are used):
@@ -97,13 +97,13 @@ static void mt_revert(Fl_Style* s) {
 //  s->parent = &Fl_Widget::default_style;
 }
 
-Fl_Style Fl_Menu_Item::title_style("Menu_Title", mt_revert);
+Fl_Style* Fl_Menu_Item::title_style = new Fl_Named_Style("Menu_Title", mt_revert, &Fl_Menu_Item::title_style);
 
 extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
 // Return the style to use:
 const Fl_Style* Fl_Menu_Item::style() const {
-  return style_ ? style_ : &default_style;
+  return style_ ? style_ : default_style;
 }
 
 unsigned Fl_Menu_Item::geti(const unsigned* a) const {
@@ -209,23 +209,23 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     break;
   case 2: // title or menubar item when menu popped up
     lflags |= (FL_VALUE|FL_ALIGN_CENTER);
-    lbox = title_style.box;
-    if (title_style.selection_color) 
-      lcolor = title_style.selection_color;
-    if (title_style.selection_text_color) 
-      llabel_color = title_style.selection_text_color;
+    lbox = title_style->box;
+    if (title_style->selection_color) 
+      lcolor = title_style->selection_color;
+    if (title_style->selection_text_color) 
+      llabel_color = title_style->selection_text_color;
     break;
   case 3: // highlighted menubar item
     lflags |= (FL_HIGHLIGHT|FL_ALIGN_CENTER);
-    lbox = title_style.box;
-    lcolor = title_style.highlight_color;
+    lbox = title_style->box;
+    lcolor = title_style->highlight_color;
     if (!lcolor) lcolor = highlight_color();
-    llabel_color = title_style.highlight_label_color;
+    llabel_color = title_style->highlight_label_color;
     if (!llabel_color) llabel_color = highlight_label_color();
     break;
   case 4: // plain menubar item
     lflags |= FL_ALIGN_CENTER;
-    lbox = title_style.box;
+    lbox = title_style->box;
     break;
   case 5: // draw the text in an Fl_Choice
     lflags |= FL_ALIGN_LEFT;
@@ -855,5 +855,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.64 1999/11/19 15:11:56 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.65 1999/11/20 04:42:43 vincent Exp $".
 //

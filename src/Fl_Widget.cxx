@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.42 1999/11/19 10:06:51 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.43 1999/11/20 04:42:46 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,7 @@ Fl_Widget *Fl::readqueue() {
 int Fl_Widget::handle(int e) { return (e == FL_ENTER) ? 1 : 0; }
 
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
-  style_	= &default_style;
+  style_	= default_style;
   parent_	= 0;
   callback_	= default_callback;
   user_data_ 	= 0;
@@ -260,31 +260,6 @@ void Fl_Widget::draw_n_clip()
   fl_clip_out(x(), y(), w(), h());
 }
 
-// Do not change the contents of this ever.  The themes depend on getting
-// a known state initially.
-static void revert(Fl_Style* s) {
-  s->box                   = FL_UP_BOX;
-  s->glyph_box             = FL_UP_BOX;
-  s->glyph                 = fl_glyph;
-  s->label_font            = FL_HELVETICA;
-  s->text_font             = FL_HELVETICA;
-  s->label_type            = FL_NORMAL_LABEL;
-  s->color                 = FL_GRAY;
-  s->label_color           = FL_BLACK;
-  s->selection_color       = FL_LIGHT1;
-  s->selection_text_color  = FL_BLACK;
-  s->off_color             = FL_GRAY;
-  s->highlight_color       = FL_LIGHT1;//FL_NO_COLOR;
-  s->highlight_label_color = FL_BLACK;
-  s->text_color            = FL_BLACK;
-  s->label_size		   = FL_NORMAL_SIZE;
-  s->text_size             = FL_NORMAL_SIZE;
-  s->leading		   = 2;
-  s->parent                = 0;	// this is the topmost style always
-}
-
-Fl_Style Fl_Widget::default_style("default", revert);
-
 //
-// End of "$Id: Fl_Widget.cxx,v 1.42 1999/11/19 10:06:51 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.43 1999/11/20 04:42:46 vincent Exp $".
 //

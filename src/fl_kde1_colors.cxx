@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.6 1999/11/18 14:04:32 carl Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.7 1999/11/20 04:42:47 vincent Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -146,19 +146,19 @@ int fl_kde1_colors() {
     if (font && fontitalic) font = font->italic;
   }
 
-  Fl_Widget::default_style.set_highlight_color(0); // turn off widget highlighting
+  Fl_Widget::default_style->set_highlight_color(0); // turn off widget highlighting
 
   Fl_Style* style;
   if (background) {
     fl_background(background);
-    Fl_Widget::default_style.set_off_color(background);
+    Fl_Widget::default_style->set_off_color(background);
   }
 
   if (foreground) {
-    Fl_Widget::default_style.set_label_color(foreground);
-    Fl_Widget::default_style.set_highlight_label_color(foreground);
-    Fl_Widget::default_style.set_text_color(foreground);
-    Fl_Widget::default_style.set_selection_text_color(foreground);
+    Fl_Widget::default_style->set_label_color(foreground);
+    Fl_Widget::default_style->set_highlight_label_color(foreground);
+    Fl_Widget::default_style->set_text_color(foreground);
+    Fl_Widget::default_style->set_selection_text_color(foreground);
   }
 
   if ((style = Fl_Style::find("input"))) {
@@ -223,10 +223,10 @@ int fl_kde1_colors() {
 */
   if (font) {
     if (*fontencoding) fl_encoding = fontencoding;
-    Fl_Widget::default_style.set_label_font(font);
-    Fl_Widget::default_style.set_text_font(font);
-    Fl_Widget::default_style.set_label_size(fontsize);
-    Fl_Widget::default_style.set_text_size(fontsize);
+    Fl_Widget::default_style->set_label_font(font);
+    Fl_Widget::default_style->set_text_font(font);
+    Fl_Widget::default_style->set_label_size(fontsize);
+    Fl_Widget::default_style->set_text_size(fontsize);
   }
 
 #ifndef WIN32
@@ -257,5 +257,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.6 1999/11/18 14:04:32 carl Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.7 1999/11/20 04:42:47 vincent Exp $".
 //

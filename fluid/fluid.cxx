@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.30 1999/11/18 13:49:32 carl Exp $"
+// "$Id: fluid.cxx,v 1.31 1999/11/20 04:42:34 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -455,6 +455,7 @@ int main(int argc,char **argv) {
     return 1;
   }
   const char *c = argv[i];
+
   make_main_window();
   if (c) set_filename(c);
   read_plugins();
@@ -463,6 +464,8 @@ int main(int argc,char **argv) {
     main_window->callback(exit_cb);
     main_window->show(argc,argv);
   }
+
+  // Go back to "style1" name for edited dialog boxes
   if (c && !read_file(c,0)) {
     if (compile_only) {
       fprintf(stderr,"%s : %s\n", c, strerror(errno));
@@ -479,5 +482,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.30 1999/11/18 13:49:32 carl Exp $".
+// End of "$Id: fluid.cxx,v 1.31 1999/11/20 04:42:34 vincent Exp $".
 //

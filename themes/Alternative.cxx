@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.10 1999/11/19 10:06:56 bill Exp $"
+// "$Id: Alternative.cxx,v 1.11 1999/11/20 04:42:51 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -217,11 +217,11 @@ int fltk_theme(int, char** argv) {
     s->set_glyph_box(FL_NO_BOX);
   }
 
-  Fl_Widget::default_style.set_glyph(alt_glyph);
+  Fl_Widget::default_style->set_glyph(alt_glyph);
 
   return 0;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.10 1999/11/19 10:06:56 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.11 1999/11/20 04:42:51 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.21 1999/08/23 16:43:07 vincent Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.22 1999/11/20 04:42:33 vincent Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -183,6 +183,7 @@ Fl_Function_Type Fl_Function_type;
 extern const char* subclassname(Fl_Type*);
 
 void Fl_Function_Type::write_code1() {
+  const char* rtype = return_type;
   constructor=0;
   havewidgets = 0;
   Fl_Type *child;
@@ -195,7 +196,6 @@ void Fl_Function_Type::write_code1() {
   if (ismain())
     write_c("int main(int argc, char **argv) {\n");
   else {
-    const char* rtype = return_type;
     const char* star = "";
     // from matt: let the user type "static " at the start of type
     // in order to declare a static method;
@@ -229,7 +229,8 @@ void Fl_Function_Type::write_code1() {
       if (!constructor) {
         write_h("%s%s ", rtype, star);
 	write_c("%s%s ", rtype, star);
-      }
+      } else
+	rtype = "Fl_Widget";
 
       // if this is a subclass, only write_h() the part before the ':'
       char s[1024], *sptr = s;
@@ -258,7 +259,7 @@ void Fl_Function_Type::write_code1() {
       write_c("%s%s %s {\n", rtype, star, name());
     }
   }
-  if (havewidgets) write_c("  %s* w;\n",subclassname(child));
+  if (havewidgets) write_c("  %s* w;\n",rtype);
   indentation += 2;
 }
 
@@ -661,5 +662,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.21 1999/08/23 16:43:07 vincent Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.22 1999/11/20 04:42:33 vincent Exp $".
 //

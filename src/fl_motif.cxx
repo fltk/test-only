@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.11 1999/11/19 10:06:53 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.12 1999/11/20 04:42:47 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -156,11 +156,11 @@ int fl_motif() {
   fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
 
-  Fl_Widget::default_style.set_box(&thin_motif_up_box);
-  Fl_Widget::default_style.set_selection_color(FL_DARK1);
-  Fl_Widget::default_style.set_glyph_box(&thin_motif_up_box);
-  Fl_Widget::default_style.set_highlight_color(0);
-  Fl_Widget::default_style.set_glyph(motif_glyph);
+  Fl_Widget::default_style->set_box(&thin_motif_up_box);
+  Fl_Widget::default_style->set_selection_color(FL_DARK1);
+  Fl_Widget::default_style->set_glyph_box(&thin_motif_up_box);
+  Fl_Widget::default_style->set_highlight_color(0);
+  Fl_Widget::default_style->set_glyph(motif_glyph);
 
   Fl_Style* s;
 
@@ -241,5 +241,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.11 1999/11/19 10:06:53 bill Exp $".
+// End of "$Id: fl_motif.cxx,v 1.12 1999/11/20 04:42:47 vincent Exp $".
 //

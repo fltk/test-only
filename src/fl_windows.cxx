@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.14 1999/11/19 15:11:57 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.15 1999/11/20 04:42:47 vincent Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -73,10 +73,10 @@ int fl_windows() {
   Fl_Style::draw_boxes_inactive = 0;
   Fl_Style::inactive_color_weight = 0.30f;
 
-  Fl_Widget::default_style.set_selection_color(FL_GRAY);
-  Fl_Widget::default_style.set_highlight_color(0);
-  Fl_Widget::default_style.set_label_type(&win98_label);
-  Fl_Widget::default_style.set_label_size(12);
+  Fl_Widget::default_style->set_selection_color(FL_GRAY);
+  Fl_Widget::default_style->set_highlight_color(0);
+  Fl_Widget::default_style->set_label_type(&win98_label);
+  Fl_Widget::default_style->set_label_size(12);
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu window"))) {
@@ -152,5 +152,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.14 1999/11/19 15:11:57 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.15 1999/11/20 04:42:47 vincent Exp $".
 //

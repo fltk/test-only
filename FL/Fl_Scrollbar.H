@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.H,v 1.16 1999/11/10 19:27:28 carl Exp $"
+// "$Id: Fl_Scrollbar.H,v 1.17 1999/11/20 04:42:31 vincent Exp $"
 //
 // Scroll bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ public:
 
 private:
 
-  static Fl_Style default_style;
+  static Fl_Style* default_style;
   int linesize_;
   int pagesize_;
   int pushed_, last_, highlight_;
@@ -59,5 +59,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Scrollbar.H,v 1.16 1999/11/10 19:27:28 carl Exp $".
+// End of "$Id: Fl_Scrollbar.H,v 1.17 1999/11/20 04:42:31 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.12 1999/11/10 19:27:28 carl Exp $"
+// "$Id: Fl_Tooltip.H,v 1.13 1999/11/20 04:42:31 vincent Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -47,18 +47,18 @@ public:
   // This is called when a widget is destroyed or hidden:
   static void exit(Fl_Widget *w);
 
-  static Fl_Font font() { return default_style.label_font; }
-  static unsigned size() { return default_style.label_size; }
-  static void font(Fl_Font i) { default_style.label_font = i; }
-  static void size(unsigned s) { default_style.label_size = s; }
-  static void color(Fl_Color c) { default_style.color = c; }
-  static Fl_Color color() { return default_style.color; }
-  static void textcolor(Fl_Color c) { default_style.label_color = c; }
-  static Fl_Color textcolor() { return default_style.label_color; }
-  static void boxtype(Fl_Boxtype b) { default_style.box = b; }
-  static Fl_Boxtype boxtype() { return default_style.box; }
+  static Fl_Font font() { return default_style->label_font; }
+  static unsigned size() { return default_style->label_size; }
+  static void font(Fl_Font i) { default_style->label_font = i; }
+  static void size(unsigned s) { default_style->label_size = s; }
+  static void color(Fl_Color c) { default_style->color = c; }
+  static Fl_Color color() { return default_style->color; }
+  static void textcolor(Fl_Color c) { default_style->label_color = c; }
+  static Fl_Color textcolor() { return default_style->label_color; }
+  static void boxtype(Fl_Boxtype b) { default_style->box = b; }
+  static Fl_Boxtype boxtype() { return default_style->box; }
 
-  static Fl_Style default_style;
+  static Fl_Style* default_style;
 private:
   static float delay_;
   static int enabled_;
@@ -67,5 +67,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.12 1999/11/10 19:27:28 carl Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.13 1999/11/20 04:42:31 vincent Exp $".
 //
