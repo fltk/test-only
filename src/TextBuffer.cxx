@@ -201,7 +201,7 @@ const char * TextBuffer::text_range( int start, int end ) {
 ** Return the character at buffer position "pos".  Positions start at 0.
 */
 char TextBuffer::character( int pos ) {
-  if ( pos < 0 || pos > mLength )
+  if ( pos < 0 || pos >= mLength )
     return '\0';
   if ( pos < mGapStart )
     return mBuf[ pos ];
