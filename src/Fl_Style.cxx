@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.53 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.54 2004/01/25 08:49:52 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -430,7 +430,7 @@ Flags Style::boxcolors(Flags flags, Color& bg, Color& fg) const {
 
   The "revert" function is mostly provided to make it easy to initialize
   the fields even though C++ does not allow a structure constant.
-  It is also used to undo theme changes when fltk::reload_theme()
+  It is also used to undo theme changes when fltk::reset_theme()
   is called.  */
 
 static void plainrevert(Style*) {}
@@ -475,19 +475,19 @@ Style* Style::find(const char* name) {
 
 extern "C" FL_API bool fltk_theme();
 
-/*! \fn fltk::theme(Theme)
-  Set a function that sets all the NamedStyle structures to the
+/*! \typedef Theme
+
+  A Theme is a function called by fltk just before it shows the first
+  window, or by load_theme() or reload_theme(), and also whenever it
+  receives a signal from the operating system that the user's
+  preferences have changed.
+
+  The Theme's job is to set all the NamedStyle structures to the
   correct values for the appearance selected by the user and
-  operating system. This function is called by fltk before the
-  first window is shown, and also whenever it receives a signal
-  from the operating system that the user's preferences have
-  changed.
+  operating system.
 
   The return value is ignored but you should return true for future
   compatability.
-
-  The default version points at a function that calls reset_theme()
-  and then system_theme().
 
   This pointer is declared as a "C" function to make it easier to load
   the correct function by name from a plugin, if you would like to
@@ -495,8 +495,20 @@ extern "C" FL_API bool fltk_theme();
   provides a convienence function to portably load plugins called
   fltk::load_plugin() that you may want to use if you are writing such
   a system.
+*/
 
-  You can also statically override this at compile time. The default
+/*! \fn fltk::theme()
+  Returns the current Theme function. By default this is an internal
+  function that calls reset_theme() and then system_theme().
+*/
+
+/*! \fn fltk::theme(Theme)
+
+  Change what function fltk should call to set the appearance. If you
+  change this while windows are displayed you should call
+  reload_theme() to get it called.
+
+  You can also statically set the theme at compile time. The default
   value is a function called fltk_theme() (not in the fltk namespace).
   You may be able to link your program so your own fltk_theme()
   replaces this. For instance building the fltk library with the
@@ -546,8 +558,8 @@ void fltk::reload_theme() {
   fltk::redraw();
 }
 
-/*! Change the theme to the compiled-in default by calling the reset
-  function for all NamedStyle structures. If your theme() function
+/*! Change the theme to the compiled-in default by calling the revert
+  function of all NamedStyle structures. If your theme() function
   modifies a large or varied set of settings it may be easiest to
   call this first to clear the previous settings.
 */
@@ -615,5 +627,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.53 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.54 2004/01/25 08:49:52 spitzak Exp $".
 //

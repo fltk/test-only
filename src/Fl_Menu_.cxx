@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.54 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.55 2004/01/25 08:49:51 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -281,11 +281,15 @@ void Menu::execute(Widget* widget) {
   if (widget) do_callback();
 }
 
-/*! The default callback for Menu calls item()->do_callback() if item()
-    is not NULL. */
+/*! The default callback for Menu calls item()->do_callback() if
+  item() is not null. However if item()->user_data() is null, the
+  callback is called with the user_data() from the Menu widget
+  instead.
+*/
 void Menu::default_callback(Widget* widget, void*) {
   Widget* item = ((Menu*)widget)->item();
-  if (item) item->do_callback();
+  if (item) item->do_callback(item,
+	   item->user_data() ? item->user_data() : widget->user_data());
 }
 
 /*! Does nothing. This avoids wasting time measuring all the menu items. */
@@ -423,5 +427,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.54 2004/01/25 06:55:05 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.55 2004/01/25 08:49:51 spitzak Exp $"
 //

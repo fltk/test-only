@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.162 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.163 2004/01/25 08:49:52 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1611,18 +1611,6 @@ void Window::make_current() const {
 
 ////////////////////////////////////////////////////////////////
 
-/*! \fn fltk::system_theme()
-  Sets all the NamedStyle structures to correct values for information
-  read from the operating system.
-
-  On X this used to read the xrdb database for colors like "background".
-  As it appears nobody is using this, this is disabled and the current
-  version does nothing.
-
-  On Windows it uses GetSysColor and SystemParametersInfo to set many
-  colors and fonts.
-*/
-
 // I commented out the entire XRDB stuff, use this to get it back:
 #if USE_XRDB
 
@@ -1795,5 +1783,5 @@ bool fltk::system_theme() {return true;}
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.162 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.163 2004/01/25 08:49:52 spitzak Exp $".
 //
