@@ -15,4 +15,4 @@ export PATH
 
 ./configure $*
 
-make clean all
+make clean depend all

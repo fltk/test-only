@@ -10,8 +10,8 @@ version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
 [general]
-  #themes =  Alternative KDE_colors                # theme plugins to load for this scheme
-  themes =  Alternative
+  themes =  Alternative KDE_colors                # theme plugins to load for this scheme
+  #themes =  Alternative syscolors
 
 [widgets]
 

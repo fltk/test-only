@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.30 2001/07/24 01:21:00 clip Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+#include <string.h>
 #include <config.h>
 #include <fltk/Fl_Font.h>
 #include <fltk/fl_draw.h>
@@ -64,5 +65,5 @@ fl_width(uchar c) { return fl_width((char *)&c, 1); }
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.30 2001/07/24 01:21:00 clip Exp $".
 //

@@ -2,14 +2,14 @@
 
 #ifndef tabs_h
 #define tabs_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 extern Fl_Window *foo_window;
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Clock.H>
+#include <fltk/Fl_Tabs.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Clock.h>
 #include <stdlib.h>
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Return_Button.h>
 #endif

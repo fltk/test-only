@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.14 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.15 2001/07/24 01:21:00 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -82,7 +82,8 @@ static int x_event_handler(int) {
     return 0;
   // Geez, really need to work on that logic...
 
-  fl_kde(colors_only);
+  //fl_kde(colors_only);
+  Fl::reload_scheme();
 
   return 1;
 }
@@ -367,5 +368,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.14 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.15 2001/07/24 01:21:00 clip Exp $".
 //

@@ -8,4 +8,4 @@ export CC CXX
 
 ./configure $*
 
-make clean all
+make clean depend all

@@ -45,7 +45,7 @@ int main (int argc, char **argv) {
         o->end();
       }
        {      Fl_Group* o = new Fl_Group(0, 20, 300, 180, "tab4");
-        o->label_font(fl_fonts()+2);
+        o->label_font(fl_fonts+2);
         o->hide();
         new Fl_Button(10, 20, 60, 110, "button2");
         new Fl_Button(70, 20, 60, 110, "button");
@@ -59,7 +59,7 @@ int main (int argc, char **argv) {
          {        Fl_Clock* o = new Fl_Clock(150, 20, 100, 100, "Make sure this clock does not use processor time when this tab is hidden or w\
 indow is iconized");
           o->box(FL_OSHADOW_BOX);
-          o->label_font(fl_fonts()+8);
+          o->label_font(fl_fonts+8);
           o->color((Fl_Color)238);
           o->label_size(10);
           o->align(130);

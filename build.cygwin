@@ -8,4 +8,4 @@ autoconf
 PATH=`pwd`/lib:$PATH
 export PATH
 
-make clean all
+make clean depend all
