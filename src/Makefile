@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.114 2003/01/19 03:27:57 spitzak Exp $"
+# "$Id: Makefile,v 1.115 2003/01/19 09:32:15 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -245,6 +245,12 @@ install: install-lib install-lib$(DSOSUFFIX)
 	$(CP) ../fltk/*.h  $(includedir)/fltk
 	$(CHMOD) 755 $(includedir)/fltk
 	$(CHMOD) 644 $(includedir)/fltk/*
+	echo "Installing FLTK1.1 emulation include files in $(includedir)/FL..."
+	$(RM) -r $(includedir)/FL
+	$(MKDIR) $(includedir)/FL
+	$(CP) ../FL/*.H ../FL/*.h  $(includedir)/FL
+	$(CHMOD) 755 $(includedir)/FL
+	$(CHMOD) 644 $(includedir)/FL/*
 	echo "Installing fltk-config in $(bindir)..."
 	$(MKDIR) $(bindir)
 	$(CP) ../fltk-config $(bindir)
@@ -295,6 +301,8 @@ install-lib_s.a:
 #
 
 uninstall:	uninstall-lib uninstall-lib$(DSOSUFFIX)
+	echo "Removing FLTK1.1 emulation include files from $(includedir)/FL..."
+	$(RM) -r $(includedir)/FL
 	echo "Removing include files from $(includedir)/fltk..."
 	$(RM) -r $(includedir)/fltk
 	echo "Removing fltk-config from $(bindir)..."
@@ -325,5 +333,5 @@ uninstall-lib_s.a:
 
 
 #
-# End of "$Id: Makefile,v 1.114 2003/01/19 03:27:57 spitzak Exp $".
+# End of "$Id: Makefile,v 1.115 2003/01/19 09:32:15 spitzak Exp $".
 #
