@@ -691,7 +691,7 @@ void fltk::flush() {
     difference in sizes is odd, it always rounds up and left.
     Default value for \a flags is to center in both directions.
  */
-fltk::Rectangle::Rectangle(const Rectangle& r, int w, int h, int flags) {
+fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
   if (flags & ALIGN_LEFT) {
     if (flags & ALIGN_RIGHT &&  w > r.w()) x_ = r.r()-w;
     else x_ = r.x();
@@ -713,14 +713,14 @@ fltk::Rectangle::Rectangle(const Rectangle& r, int w, int h, int flags) {
 }
 
 #if 0 // I commented these out because nothing seems to be calling them
-void Rectangle::intersect(const Rectangle& R) {
+void Rectangle::intersect(const fltk::Rectangle& R) {
   if (R.x() > x()) set_x(R.x());
   if (R.r() < r()) set_r(R.r());
   if (R.y() > y()) set_y(R.y());
   if (R.b() < b()) set_b(R.b());
 }
 
-void Rectangle::merge(const Rectangle& R) {
+void Rectangle::merge(const fltk::Rectangle& R) {
   if (R.empty()) return;
   if (empty()) {*this = R; return;}
   if (R.x() < x()) set_x(R.x());
@@ -739,7 +739,7 @@ void Rectangle::merge(const Rectangle& R) {
   than doing your own comparison so you are consistent about edge
   effects.
 */
-bool fltk::event_inside(const Rectangle& r) {
+bool fltk::event_inside(const fltk::Rectangle& r) {
   return r.contains(e_x, e_y);
 }
 

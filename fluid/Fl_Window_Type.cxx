@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.49 2005/01/24 08:07:08 spitzak Exp $"
+// "$Id$"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -121,7 +121,7 @@ void Overlay_Window::draw() {
       for (int x = 0; x < w(); x += CHECKSIZE) {
 	fltk::setcolor(((y/(2*CHECKSIZE))&1) != ((x/(2*CHECKSIZE))&1) ?
 		 fltk::WHITE : fltk::BLACK);
-	fltk::fillrect(Rectangle(x,y,CHECKSIZE,CHECKSIZE));
+	fltk::fillrect(fltk::Rectangle(x,y,CHECKSIZE,CHECKSIZE));
       }
   }
 #ifdef __sgi
@@ -707,5 +707,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.49 2005/01/24 08:07:08 spitzak Exp $".
+// End of "$Id$".
 //
