@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.24 2004/08/25 17:10:36 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.25 2004/10/19 06:19:02 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -224,9 +224,9 @@ Box* const fltk::FLAT_BOX = &flatBox;
     edge, which will reverse exactly which pixels are drawn in
     the corner.
 
-    The normal up box draws the pattern "AAWWMMTT"
+    The normal up box draws the pattern "AAWWHHTT"
 
-    The normal down box draws the pattern "WWMMPPAA"
+    The normal down box draws the pattern "WWHHPPAA"
 
     The VALUE flag will cause the pattern from down() to be used
     instead, allowing you to draw a different bezel when pushed
@@ -294,13 +294,13 @@ FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
 
 const BoxInfo* FrameBox::boxinfo() const {return &boxinfo_;}
 
-static FrameBox downBox("down", "WWMMPPAA");
+static FrameBox downBox("down", "WWHHPPAA");
 /*! \ingroup boxes
   A pushed-down button in fltk's standard theme.
 */
 Box* const fltk::DOWN_BOX = &downBox;
 
-static FrameBox upBox("up", "AAWWMMTT", &downBox);
+static FrameBox upBox("up", "AAWWHHTT", &downBox);
 /*! \ingroup boxes
   A up button in fltk's standard theme.
 */
@@ -397,5 +397,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.24 2004/08/25 17:10:36 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.25 2004/10/19 06:19:02 spitzak Exp $".
 //

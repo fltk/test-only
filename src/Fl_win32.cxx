@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.233 2004/10/09 07:33:35 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.234 2004/10/19 06:19:02 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -2341,5 +2341,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.233 2004/10/09 07:33:35 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.234 2004/10/19 06:19:02 spitzak Exp $".
 //

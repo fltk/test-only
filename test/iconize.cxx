@@ -1,5 +1,5 @@
 //
-// "$Id: iconize.cxx,v 1.9 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: iconize.cxx,v 1.10 2004/10/19 06:19:05 spitzak Exp $"
 //
 // Iconize test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Box.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Box.H>
 #include <stdlib.h>
-#include <stdio.h>
 
 void iconize_cb(Fl_Widget *, void *v) {
   Fl_Window *w = (Fl_Window *)v;
@@ -74,16 +73,9 @@ int main(int argc, char **argv) {
   control.end();
   control.show();
   control.callback(window_cb);
-  int i = 3;
-  while (control.visible()) {
-    int j = mainw.iconic();
-    if (j != i) {printf("iconic %d\n", j); i = j;}
-    Fl::wait();
-  }
-  return 0;
-//  return Fl::run();
+  return Fl::run();
 }
 
 //
-// End of "$Id: iconize.cxx,v 1.9 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: iconize.cxx,v 1.10 2004/10/19 06:19:05 spitzak Exp $".
 //
