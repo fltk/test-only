@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.9 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.10 2003/12/31 16:30:58 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -20,25 +20,50 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-// This user interface design is Copyright (C) 2000-2003 Digital Domain.
-// Patent Pending!
-//
-// License is ONLY granted to implement this algorithim as GPL or LGPL code.
-//
-// License to use this technology in closed source code may be available:
-//
-// Digital Domain
-// Intellectual Property
-// 300 Rose Avenue, Venice, CA 90291, USA
-// (310)314-2800 FAX(310)314-2888
-
 #include <fltk/events.h>
 #include <fltk/NumericInput.h>
 #include <stdio.h>
 
 using namespace fltk;
 
-// Sets the string value to the %g formatted version of v
+/*! \class fltk::NumericInput
+
+  The fltk::NumericInput class is a subclass of fltk::Input that
+  redefines the up and down arrow keys to increment and decrement the
+  digit of the number to the right of the cursor. This makes it very
+  easy to edit numbers.
+
+  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
+  done when the user hits the up/down arrow keys or when the user
+  types the Enter key. This may be more useful than the default
+  setting of fltk::WHEN_CHANGED which can make the callback happen
+  when partially-edited numbers are in the field.
+
+  This version lets the user type any text into the field. This is
+  useful if you run the text through an expression parser so the user
+  can type in math expressions. However if you want to limit the input
+  to text that can be run through strtol() or strtod() you should use
+  the subclasses fltk::IntInput or fltk::FloatInput.
+
+  When you construct the widget the text starts out blank. You may want
+  to set it with value(0) or something.
+
+  <i>This user interface design is Copyright (C) 2000-2003 Digital Domain.
+  Patent Pending!
+
+  License is ONLY granted to implement this algorithim as GPL, LGPL, or
+  FLTK licensed code. Note that by using fltk you may use this in a
+  closed-source program.
+
+  License to use this technology in other cases may be available:<br>
+  D2 Software / Digital Domain<br>
+  300 Rose Avenue, Venice, CA 90291, USA<br>
+  (310)314-2800 FAX(310)314-2888</i>
+*/
+
+/*!  Does a %g sprintf of the value and uses the result to set the
+  string value. Notice that there is no inverse function, you will
+  have to call strtod(widget->value(),0,0) yourself.  */
 void NumericInput::value(double v) {
   char buf[100];
   sprintf(buf, "%g", v);
@@ -51,7 +76,9 @@ void NumericInput::value(double v) {
   Input::value(buf);
 }
 
-// Sets the string value to the %d formatted version of v
+/*!  Does a %d sprintf of the value and uses the result to set the
+  string value. Notice that there is no inverse function, you will
+  have to call strtol(widget->value(),0,0) yourself.  */
 void NumericInput::value(int v) {
   char buf[100];
   sprintf(buf, "%d", v);
@@ -60,6 +87,8 @@ void NumericInput::value(int v) {
 
 static int clickmouse;
 
+/*! Does the up/down arrows and mouse wheel. Alt+drag also adjusts the
+  value. All other points are sent to the Input base class. */
 int NumericInput::handle(int event) {
   switch (event) {
   case KEY:
@@ -89,7 +118,11 @@ int NumericInput::handle(int event) {
   return Input::handle(event);
 }
 
-// Handle and up or down arrow key:
+/*!  Do the work of up-arrow (if direction is greater than zero) or
+  down-arrow if direction is less than zero. This protected method is
+  available so subclasses can change what keys do this, or invert the
+  direction of the arrows.
+*/
 int NumericInput::handle_arrow(int dir)
 {
   // locate the character to change:
