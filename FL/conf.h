@@ -1,9 +1,9 @@
 /*
-   "$Id: conf.h,v 1.4 1999/03/23 14:30:53 carl Exp $"
+   "$Id: conf.h,v 1.5 1999/08/11 10:20:24 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.12
+    Carl Thompson's config file routines version 0.21
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
         file:           conf.h
         author:         Carl Thompson (clip@home.net)
         source type:    Ansi C
-        start date:     16Dec1995
-        last modified:  22Mar1999
+        start date:     16 Dec 1995
+        last modified:  8 Aug 1999
 
         Typical config file format:
 
@@ -54,6 +54,8 @@
 
         Notes:
         - comments may be on a line by themselves or at the end of a line
+	  - for comments at the end of the line, the comment separator
+	    character must followed by whitespace
         - indentation/formatting is handled automatically (sorry!)
 */
 
@@ -80,7 +82,7 @@
 
 
 /* misc defines */
-#  define WHITESPACE		" \t\n\r"	/* all whitespace characters */
+#  define CONF_WHITESPACE	" \t\n\r"	/* all whitespace characters */
 #  define CONF_MAX_LEVEL	10		/* maximum depth of sections in config file */
 #  define CONF_INDENT		2		/* number of spaces to use for indenting */
 #  define CONF_MAX_LINE_LEN	512		/* maximum length of line in config file */
@@ -394,5 +396,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.4 1999/03/23 14:30:53 carl Exp $".
+ * End of "$Id: conf.h,v 1.5 1999/08/11 10:20:24 carl Exp $".
  */

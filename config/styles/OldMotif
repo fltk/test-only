@@ -1,16 +1,16 @@
 description = Ancient Motif Style
 author = Carl Thompson (clip@home.net)
-version = 9
+version = 10
 
 [global]
   widget style = Motif
 
   [global/color]
-    background = 729eff
-    DARK1 = 597ecf
-    DARK2 = 496eb7
-    DARK3 = 394d80
-    LIGHT2 = aeefff
+    background = #729eff
+    DARK1 = #597ecf
+    DARK2 = #496eb7
+    DARK3 = #394d80
+    LIGHT2 = #aeefff
 
 [menu item]
   label type = 0

@@ -1,19 +1,19 @@
 description = SGI Irix 6.5 Motif Style
 author = Carl Thompson (clip@home.net)
-version = 9
+version = 10
 
 [global]
   widget style = SGI
 
   [global/color]
-    background = bdbdbd
-    DARK2 = 8e8e8e
-    DARK3 = 5e5e5e
-    LIGHT1 = d9d9d9
-    LIGHT2 = dedede
-    LIGHT3 = f3f3f3
-    FREE3= e6e6e6
-    FREE4 = d3b5b5
+    background = #bdbdbd
+    DARK2 = #8e8e8e
+    DARK3 = #5e5e5e
+    LIGHT1 = #d9d9d9
+    LIGHT2 = #dedede
+    LIGHT3 = #f3f3f3
+    FREE3= #e6e6e6
+    FREE4 = #d3b5b5
 
 [menu item]
   label type = 0

@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_del.c,v 1.5 1999/04/01 05:15:17 carl Exp $"
+   "$Id: conf_del.c,v 1.6 1999/08/11 10:20:27 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.20
+    Carl Thompson's config file routines version 0.21
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -116,7 +116,11 @@ delconf(const char *configfile, const char *k)
 			
 			comment = "";
 			
-			if ((p2 = strchr(line, conf_comment_sep)))
+			
+			/* if a comment found */
+			if ((p2 = strchr(line, conf_comment_sep)) &&
+			    (p2 == line + strspn(line, CONF_WHITESPACE) ||
+			     strchr(CONF_WHITESPACE, *(p2 + 1))))
 			{
 				*p2 = (char)0;
 				comment = ++p2;
@@ -125,12 +129,12 @@ delconf(const char *configfile, const char *k)
 			
                         endtrim(line);
 
-			p2 = line + strspn(line, WHITESPACE);
+			p2 = line + strspn(line, CONF_WHITESPACE);
 			
 			if (*p2 == '[')
 				fprintf(ifp2, "\n");
 				
-                       if (!strcasecmp(line + strspn(line, WHITESPACE), section2))
+                       if (!strcasecmp(line + strspn(line, CONF_WHITESPACE), section2))
                             break;
 
             		if (!strcmp(line, ""))						/* if there is no key on this line */
@@ -198,7 +202,10 @@ delconf(const char *configfile, const char *k)
 		
 		comment = "";
 		
-		if ((p2 = strchr(line, conf_comment_sep)))                      /* if a comment found */
+		/* if a comment found */
+		if ((p2 = strchr(line, conf_comment_sep)) &&
+		    (p2 == line + strspn(line, CONF_WHITESPACE) ||
+		     strchr(CONF_WHITESPACE, *(p2 + 1))))
 		{
 			*p2 = (char)0;						/* kill the comment */
 			comment = ++p2;						/* but remember it */
@@ -214,7 +221,7 @@ delconf(const char *configfile, const char *k)
 			continue;
 		}
 
-                p = line + strspn(line, WHITESPACE);
+                p = line + strspn(line, CONF_WHITESPACE);
 
                 if ((*p == '['))                                                /* if this is a different section */
 		{
@@ -276,5 +283,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.5 1999/04/01 05:15:17 carl Exp $".
+    End of "$Id: conf_del.c,v 1.6 1999/08/11 10:20:27 carl Exp $".
 */

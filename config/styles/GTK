@@ -1,15 +1,15 @@
 description = GTK (GNOME) Style
 author = Carl Thompson (clip@home.net)
-version = 9
+version = 10
 
 [global]
   widget style = Motif
 
   [global/color]
-    background = d7d7d7
-    DARK1 = c7c3c7
-    DARK2 = 969696
-    LIGHT2 = efebef
+    background = #d7d7d7
+    DARK1 = #c7c3c7
+    DARK2 = #969696
+    LIGHT2 = #efebef
 
 [menu item]
   label type = 0

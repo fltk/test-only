@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_setlong.c,v 1.3 1999/03/23 13:58:21 carl Exp $"
+   "$Id: conf_setlong.c,v 1.4 1999/08/11 10:20:30 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.20
+    Carl Thompson's config file routines version 0.21
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -50,5 +50,5 @@ setconf_long(const char *configfile, const char *key, long lvalue)
 } /* setconf_long() */
 
 /*
-    End of "$Id: conf_setlong.c,v 1.3 1999/03/23 13:58:21 carl Exp $".
+    End of "$Id: conf_setlong.c,v 1.4 1999/08/11 10:20:30 carl Exp $".
 */

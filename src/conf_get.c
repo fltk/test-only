@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_get.c,v 1.5 1999/04/01 05:15:17 carl Exp $"
+   "$Id: conf_get.c,v 1.6 1999/08/11 10:20:28 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.20
+    Carl Thompson's config file routines version 0.21
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -93,7 +93,9 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 
         while (fgets(line, sizeof(line), ifp))                                  /* while there are still lines in the file */
         {
-		if ((p = strchr(line, conf_comment_sep)))
+		if ((p = strchr(line, conf_comment_sep)) &&
+		    (p == line + strspn(line, CONF_WHITESPACE) ||
+		     strchr(CONF_WHITESPACE, *(p + 1))))
 			*p = (char)0;
 		
                 trim(line);                                                     /* remove unnecessary whitespace */
@@ -129,5 +131,5 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 } /* getconf() */
 
 /*
-    End of "$Id: conf_get.c,v 1.5 1999/04/01 05:15:17 carl Exp $".
+    End of "$Id: conf_get.c,v 1.6 1999/08/11 10:20:28 carl Exp $".
 */

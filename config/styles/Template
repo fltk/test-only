@@ -3,19 +3,19 @@
 ##
 description = Same as Alternative, but commented  # description of style
 author = Carl Thompson (clip@home.net)            # author of style
-version = 9                                       # version number of style
+version = 10                                      # version number of style
 
 [global]                                          # global options
   widget style = Motif                            # widget style - SGI or Windows
 
   [global/color]                                  # global color options
-    background = c0c0c0                           # background color in hexidecimal (rrggbb)
-    #LIGHT1 = c0c0c0                              # color for FL_LIGHT1
-    #LIGHT2 = c0c0c0                              # color for FL_LIGHT2
-    #LIGHT3 = c0c0c0                              # color for FL_LIGHT3
-    #DARK1 = c0c0c0                               # color for FL_DARK1
-    #DARK2 = c0c0c0                               # color for FL_DARK2
-    #DARK3 = c0c0c0                               # color for FL_DARK3
+    background = #c0c0c0                          # background color in hexidecimal (rrggbb)
+    #LIGHT1 = #c0c0c0                             # color for FL_LIGHT1
+    #LIGHT2 = #c0c0c0                             # color for FL_LIGHT2
+    #LIGHT3 = #c0c0c0                             # color for FL_LIGHT3
+    #DARK1 = #c0c0c0                              # color for FL_DARK1
+    #DARK2 = #c0c0c0                              # color for FL_DARK2
+    #DARK3 = #c0c0c0                              # color for FL_DARK3
 
 [menu item]                                       # menu item attributes
   label type = 0                                  # type number for label font
