@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.7 2004/07/28 00:53:43 matthiaswm Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.8 2004/10/04 00:22:07 rokan Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -156,14 +156,25 @@ void Fl_Bitmap::label(Fl_Menu_Item* m) {
 }
 
 Fl_Image *Fl_Bitmap::copy(int W, int H) {
+  Fl_Bitmap     *new_image;     // New RGB image
+  uchar         *new_array;     // New array for image data
+  	 
   // Optimize the simple copy where the width and height are the same...
-  if (W == w() && H == h()) return new Fl_Bitmap(array, w(), h());
+  if (W == w() && H == h()) {
+    new_array = new uchar [H * ((W + 7) / 8)];
+    memcpy(new_array, array, H * ((W + 7) / 8));
+
+    new_image = new Fl_Bitmap(new_array, W, H);
+  	new_image->alloc_array = 1;
+  	return new_image;
+  }
+
+
+
   if (W <= 0 || H <= 0) return 0;
 
   // OK, need to resize the image data; allocate memory and 
-  Fl_Bitmap	*new_image;	// New RGB image
-  uchar		*new_array,	// New array for image data
-		*new_ptr,	// Pointer into new array
+    uchar         *new_ptr,       // Pointer into new array
 		new_bit,	// Bit for new array
 		old_bit;	// Bit for old array
   const uchar	*old_ptr;	// Pointer into old array
@@ -181,11 +192,11 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
   ystep  = h() / H;
 
   // Allocate memory for the new image...
-  new_array = new uchar [H * (W + 7) / 8];
+  new_array = new uchar [H * ((W + 7) / 8)];
   new_image = new Fl_Bitmap(new_array, W, H);
   new_image->alloc_array = 1;
 
-  memset(new_array, 0, H * (W + 7) / 8);
+  memset(new_array, 0, H * ((W + 7) / 8));
 
   // Scale the image using a nearest-neighbor algorithm...
   for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
@@ -239,5 +250,5 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.7 2004/07/28 00:53:43 matthiaswm Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.5.2.4.2.18.2.8 2004/10/04 00:22:07 rokan Exp $".
 //

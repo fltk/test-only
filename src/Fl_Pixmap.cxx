@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.6 2004/03/28 10:30:30 rokan Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.7 2004/10/04 00:22:07 rokan Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -152,12 +152,17 @@ void Fl_Pixmap::copy_data() {
 }
 
 Fl_Image *Fl_Pixmap::copy(int W, int H) {
+   Fl_Pixmap     *new_image;     // New pixmap
   // Optimize the simple copy where the width and height are the same...
-  if (W == w() && H == h()) return new Fl_Pixmap(data());
+  if (W == w() && H == h()) {
+    // Make an exact copy of the image and return it...
+    new_image = new Fl_Pixmap(data());
+    new_image->copy_data();
+    return new_image;
+  }
   if (W <= 0 || H <= 0) return 0;
 
   // OK, need to resize the image data; allocate memory and 
-  Fl_Pixmap	*new_image;	// New pixmap
   char		**new_data,	// New array for image data
 		**new_row,	// Pointer to row in image data
 		*new_ptr,	// Pointer into new array
@@ -401,5 +406,5 @@ void Fl_Pixmap::desaturate() {
 
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.6 2004/03/28 10:30:30 rokan Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.7 2004/10/04 00:22:07 rokan Exp $".
 //

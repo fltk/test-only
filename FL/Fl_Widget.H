@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.7 2004/07/27 16:04:25 easysw Exp $"
+// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.8 2004/10/04 00:22:06 rokan Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -95,10 +95,10 @@ protected:
      * value for label(). */
   Fl_Widget(int x,int y,int w,int h,const char *label=0);
 
-  void x(int v) {x_ = v;}
-  void y(int v) {y_ = v;}
-  void w(int v) {w_ = v;}
-  void h(int v) {h_ = v;}
+  void x(int v) {x_ = (short)v;}
+  void y(int v) {y_ = (short)v;}
+  void w(int v) {w_ = (short)v;}
+  void h(int v) {h_ = (short)v;}
 
   int flags() const {return flags_;}
   void set_flag(int c) {flags_ |= c;}
@@ -414,5 +414,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.7 2004/07/27 16:04:25 easysw Exp $".
+// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.8 2004/10/04 00:22:06 rokan Exp $".
 //
