@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_cutpaste_win32.cxx,v 1.8 2000/04/03 17:09:21 bill Exp $"
+// "$Id: Fl_cutpaste_win32.cxx,v 1.9 2000/06/03 05:11:47 carl Exp $"
 //
 // WIN32 cut/paste for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 // has no text editing fields or other things that call cut or paste.
 
 #include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <FL/Fl_Widget.H>
 #include <string.h>
@@ -135,5 +136,5 @@ void Fl::paste(Fl_Widget &receiver) {
 }
 
 //
-// End of "$Id: Fl_cutpaste_win32.cxx,v 1.8 2000/04/03 17:09:21 bill Exp $".
+// End of "$Id: Fl_cutpaste_win32.cxx,v 1.9 2000/06/03 05:11:47 carl Exp $".
 //
