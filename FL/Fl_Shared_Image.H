@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.12 1999/12/06 18:50:07 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.13 2000/05/02 15:20:24 vincent Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -79,6 +79,9 @@ public:
   // Return 1 if it has been really deleted.
   FL_API int remove();
   FL_API static int remove(const char* name);
+
+  // Clear the cache for this image and all of its children in the binary tree
+  FL_API void clear_cache();
 
   // Try to guess the filetype
   // Beware that calling this force you to link in all image types !
@@ -184,5 +187,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.12 1999/12/06 18:50:07 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.13 2000/05/02 15:20:24 vincent Exp $"
 //
