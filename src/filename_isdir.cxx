@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.15 2004/07/07 05:11:03 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.16 2004/07/10 23:48:11 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -46,7 +46,7 @@ static bool fill_stat(const char *name, int new_op) {
 				 strlen(name),
  				 &n);
   if (ucs) {
-    WideCharToMultiByte(GetACP(), 0, ucs, n,
+    WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
  			namebuf, sizeof(namebuf), NULL, 0);
     name = namebuf;
     utf8free(ucs);
@@ -95,5 +95,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.15 2004/07/07 05:11:03 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.16 2004/07/10 23:48:11 laza2000 Exp $".
 //

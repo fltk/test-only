@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.12 2004/06/24 07:05:15 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.13 2004/07/10 23:48:11 laza2000 Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2276,7 +2276,7 @@ TextBuffer::insertfile(const char *name, int pos, int buflen) {
   unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
   if (ucs) {
     ucs[ucslen] = 0;
-    fp = _wfopen(ucs, L"r");
+    fp = _wfopen((const wchar_t*)ucs, L"r");
     utf8free(ucs);
   } else
 #endif
@@ -2303,7 +2303,7 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
   unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
   if (ucs) {
     ucs[ucslen] = 0;
-    fp = _wfopen(ucs, L"w");
+    fp = _wfopen((const wchar_t*)ucs, L"w");
     utf8free(ucs);
   } else
 #endif
@@ -2323,5 +2323,5 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.12 2004/06/24 07:05:15 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.13 2004/07/10 23:48:11 laza2000 Exp $".
 //
