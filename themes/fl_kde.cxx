@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.8 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.9 2000/08/04 10:22:02 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -100,12 +100,10 @@ static void add_event_handler() {
     Style = XInternAtom(fl_display, "KDEChangeStyle", False);
     Palette = XInternAtom(fl_display, "KDEChangePalette", False);
     KIPC = XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
-    Fl::add_handler(x_event_handler);
   }
-}
 
-// WAS: we need to do Fl::remove_handler(x_event_handler) when the
-// theme is replaced.  NYI.
+  fl_theme_handler(x_event_handler);
+}
 
 #endif
 
@@ -368,5 +366,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.8 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.9 2000/08/04 10:22:02 clip Exp $".
 //

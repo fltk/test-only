@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.3 2000/01/16 07:44:41 robertk Exp $"
+// "$Id: editor.cxx,v 1.4 2000/08/04 10:22:01 clip Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -40,14 +40,15 @@
 #include <FL/fl_file_chooser.H>		// FLTK file chooser
 #include <FL/Fl_Menu_Bar.H>		// Fl_Menu_Bar header file
 #include <FL/Fl_Input.H>		// Fl_Input header file
-#include <FL/Fl_Multiline_Input.H>	// Fl_Multiline_Input header file
 #include <FL/Fl_Button.H>		// Fl_Button header file
 #include <FL/Fl_Return_Button.H>	// Fl_Return_Button header file
+#include <FL/Fl_Text_Buffer.H>
+#include <FL/Fl_Text_Editor.H>
 
 
 Fl_Window          *window;
 Fl_Menu_Bar        *menubar;
-Fl_Multiline_Input *input;
+Fl_Text_Editor     *editor;
 Fl_Window          *replace_dlg;
 Fl_Input           *replace_find;
 Fl_Input           *replace_with;
@@ -81,25 +82,19 @@ int check_save(void) {
 void load_file(char *newfile) {
   FILE *fp;
   char buffer[8192];
-  int  nbytes;
-  int  pos;
-
-  input->value("");
 
   fp = fopen(newfile, "r");
   if (fp != NULL) {
     // Was able to open file; let's read from it...
     strcpy(filename, newfile);
-    pos = 0;
-
-    while ((nbytes = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
-      input->replace(pos, pos, buffer, nbytes);
-      pos += nbytes;
-    }
+    editor->buffer()->select(0, editor->buffer()->length());
+    editor->buffer()->remove_selection();
+    while (fgets(buffer, sizeof(buffer), fp))
+      editor->buffer()->append(buffer);
 
     fclose(fp);
-    input->position(0);
     set_changed(0);
+    editor->show_insert_position();
   } else {
     // Couldn't open file - say so...
     fl_alert("Unable to open \'%s\' for reading!");
@@ -114,10 +109,19 @@ void save_file(char *newfile) {
     // Was able to create file; let's write to it...
     strcpy(filename, newfile);
 
-    if (fwrite(input->value(), 1, input->size(), fp) < 1) {
-      fl_alert("Unable to write file!");
-      fclose(fp);
-      return;
+    const char* line;
+    for (int pos = 0;
+         pos < editor->buffer()->length() &&
+         ( line = editor->buffer()->line_text(pos) );
+         pos = editor->buffer()->line_end(pos) + 1)
+    {
+      int r = fprintf(fp, "%s\n", line);
+      free((void*)line);
+      if (r < 1) {
+        fl_alert("Unable to write file!");
+        fclose(fp);
+        return;
+      }
     }
 
     fclose(fp);
@@ -151,21 +155,20 @@ void set_changed(int c) {
   }
 }
 
-void changed_cb(void) {
-  set_changed(1);
+void changed_cb(int, int nInserted, int nDeleted,int, const char*, void*) {
+  if (nInserted || nDeleted) set_changed(1);
 }
 
 void copy_cb(void) {
-  input->copy();
+  Fl_Text_Editor::kf_copy(0, editor);
 }
 
 void cut_cb(void) {
-  input->copy();
-  input->cut();
+  Fl_Text_Editor::kf_cut(0, editor);
 }
 
 void delete_cb(void) {
-  input->cut();
+  editor->buffer()->remove_selection();
 }
 
 void find_cb(void) {
@@ -180,22 +183,19 @@ void find_cb(void) {
 }
 
 void find2_cb(void) {
-  const char *val, *found;
-  int pos;
-
   if (search[0] == '\0') {
     // Search string is blank; get a new one...
     find_cb();
     return;
   }
 
-  val   = input->value() + input->mark();
-  found = strstr(val, search);
-
-  if (found != NULL) {
-    // Found a match; update the position and mark...
-    pos = input->mark() + found - val;
-    input->position(pos, pos + strlen(search));
+  int pos = editor->insert_position();
+  int found = editor->buffer()->search_forward(pos, search, &pos);
+  if (found) {
+    // Found a match; select and update the position...
+    editor->buffer()->select(pos, pos+strlen(search));
+    editor->insert_position(pos+strlen(search));
+    editor->show_insert_position();
   }
   else fl_alert("No occurrences of \'%s\' found!", search);
 }
@@ -205,7 +205,8 @@ void new_cb(void) {
     if (!check_save()) return;
 
   filename[0] = '\0';
-  input->value("");
+  editor->buffer()->select(0, editor->buffer()->length());
+  editor->buffer()->remove_selection();
   set_changed(0);
 }
 
@@ -220,7 +221,7 @@ void open_cb(void) {
 }
 
 void paste_cb(void) {
-  Fl::paste(*input);
+  Fl_Text_Editor::kf_paste(0, editor);
 }
 
 void quit_cb(void) {
@@ -236,10 +237,9 @@ void replace_cb(void) {
 }
 
 void replace2_cb() {
-  const char *find, *val, *found;
-  int pos;
+  const char *find = replace_find->value();
+  const char *replace = replace_with->value();
 
-  find = replace_find->value();
   if (find[0] == '\0') {
     // Search string is blank; get a new one...
     replace_dlg->show();
@@ -248,22 +248,24 @@ void replace2_cb() {
 
   replace_dlg->hide();
 
-  val   = input->value() + input->position();
-  found = strstr(val, find);
+  int pos = editor->insert_position();
+  int found = editor->buffer()->search_forward(pos, find, &pos);
 
-  if (found != NULL) {
+  if (found) {
     // Found a match; update the position and replace text...
-    pos = input->position() + found - val;
-    input->replace(pos, pos + strlen(find), replace_with->value());
-    input->position(pos + strlen(replace_with->value()));
+    editor->buffer()->select(pos, pos+strlen(find));
+    editor->buffer()->remove_selection();
+    editor->buffer()->insert(pos, replace);
+    editor->buffer()->select(pos, pos+strlen(replace));
+    editor->insert_position(pos+strlen(replace));
+    editor->show_insert_position();
   }
   else fl_alert("No occurrences of \'%s\' found!", find);
 }
 
 void replall_cb() {
-  const char *find, *val, *found;
-  int pos;
-  int times;
+  const char *find = replace_find->value();
+  const char *replace = replace_with->value();
 
   find = replace_find->value();
   if (find[0] == '\0') {
@@ -274,24 +276,26 @@ void replall_cb() {
 
   replace_dlg->hide();
 
-  input->position(0);
-  times = 0;
+  editor->insert_position(0);
+  int times = 0;
 
   // Loop through the whole string
-  do {
-    val   = input->value() + input->position();
-    found = strstr(val, find);
+  for (int found = 1; found;) {
+    int pos = editor->insert_position();
+    found = editor->buffer()->search_forward(pos, find, &pos);
 
-    if (found != NULL) {
+    if (found) {
       // Found a match; update the position and replace text...
-      times ++;
-      pos = input->position() + found - val;
-      input->replace(pos, pos + strlen(find), replace_with->value());
-      input->position(pos + strlen(replace_with->value()));
+      editor->buffer()->select(pos, pos+strlen(find));
+      editor->buffer()->remove_selection();
+      editor->buffer()->insert(pos, replace);
+      editor->insert_position(pos+strlen(replace));
+      editor->show_insert_position();
+      times++;
     }
-  } while (found != NULL);
+  }
 
-  if (times > 0) fl_message("Replaced %d occurrences.", times);
+  if (times) fl_message("Replaced %d occurrences.", times);
   else fl_alert("No occurrences of \'%s\' found!", find);
 }
 
@@ -316,7 +320,7 @@ void saveas_cb(void) {
 }
 
 void undo_cb(void) {
-  input->undo();
+  fl_alert("Undo not implemented!");
 }
 
 Fl_Menu_Item menuitems[] = {
@@ -347,16 +351,18 @@ Fl_Menu_Item menuitems[] = {
 };
 
 int main(int argc, char **argv) {
-  window = new Fl_Window(640, 480, "Untitled");
-    menubar = new Fl_Menu_Bar(0, 0, 640, 30);
+  Fl_Text_Buffer textbuf;
+  textbuf.add_modify_callback(changed_cb, 0);
+
+  window = new Fl_Window(512, 384, "Untitled");
+    menubar = new Fl_Menu_Bar(0, 0, 512, 30);
     menubar->menu(menuitems);
 
-    input = new Fl_Multiline_Input(0, 30, 640, 450);
-    input->callback((Fl_Callback *)changed_cb);
-    input->when(FL_WHEN_CHANGED);
-    input->text_font(FL_COURIER);
+    editor = new Fl_Text_Editor(0, 30, 512, 354);
+    editor->buffer(textbuf);
+    editor->text_font(FL_COURIER);
   window->end();
-  window->resizable(input);
+  window->resizable(editor);
   window->callback((Fl_Callback *)quit_cb);
 
   replace_dlg = new Fl_Window(300, 105, "Replace");
@@ -387,5 +393,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.3 2000/01/16 07:44:41 robertk Exp $".
+// End of "$Id: editor.cxx,v 1.4 2000/08/04 10:22:01 clip Exp $".
 //

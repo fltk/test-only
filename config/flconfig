@@ -10,3 +10,4 @@
   #   Alternative, Alt2, Classic, Essai, KDE, Motif, OldMotif, Windows
 
   scheme = KDE
+  # themes = KDE_colors

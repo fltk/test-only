@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.121 2000/07/31 05:52:46 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.122 2000/08/04 10:22:01 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -329,7 +329,6 @@ void Fl::get_mouse(int &x, int &y) {
 ////////////////////////////////////////////////////////////////
 // code used for selections:
 
-static Fl_Widget *fl_selection_requestor;
 static char *selection_buffer;
 static int selection_length;
 static int selection_buffer_length;
@@ -1243,5 +1242,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.121 2000/07/31 05:52:46 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.122 2000/08/04 10:22:01 clip Exp $".
 //

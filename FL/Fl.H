@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.56 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: Fl.H,v 1.57 2000/08/04 10:21:59 clip Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,6 @@ class FL_API Fl_Widget;
 class FL_API Fl_Window;
 
 typedef void (*Fl_Timeout_Handler)(void*);
-typedef int (*Fl_Theme_Handler)(int);
 
 class FL_API Fl {
   Fl() {}; // no constructor!
@@ -228,8 +227,12 @@ private:
   static const char* scheme_;
 };
 
+FL_API const char* fl_find_config_file(const char* filename, int create = 0);
+FL_API int fl_getconf(const char *key, char *value, int value_length);
+FL_API void fl_startup();
+
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.56 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.57 2000/08/04 10:21:59 clip Exp $".
 //

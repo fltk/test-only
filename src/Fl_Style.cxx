@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.21 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.22 2000/08/04 10:22:01 clip Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -25,6 +25,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
+#include <FL/fl_theme.H>
 #include <string.h>
 
 Fl_Named_Style* Fl_Named_Style::first;
@@ -169,6 +170,7 @@ extern char fl_up_box_revert[];
 extern char fl_down_box_revert[];
 
 void Fl_Style::revert() {
+  fl_theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
   fl_up_box.data = fl_up_box_revert;
   fl_down_box.data = fl_down_box_revert;
@@ -211,5 +213,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.21 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.22 2000/08/04 10:22:01 clip Exp $".
 //

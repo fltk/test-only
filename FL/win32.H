@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.34 2000/07/14 08:34:59 clip Exp $"
+// "$Id: win32.H,v 1.35 2000/08/04 10:21:59 clip Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,10 @@ struct FL_API XRectangle {int x, y, width, height;};
 typedef HRGN Region;
 typedef HBITMAP Pixmap;
 
+FL_API COLORREF fl_wincolor(Fl_Color i);
+
 FL_API void fl_clip_region(Region);
+
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
 }
@@ -125,9 +128,10 @@ public:
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 FL_API Fl_Window* fl_find(Window xid);
 
+
 #endif
 #endif
 
 //
-// End of "$Id: win32.H,v 1.34 2000/07/14 08:34:59 clip Exp $".
+// End of "$Id: win32.H,v 1.35 2000/08/04 10:21:59 clip Exp $".
 //

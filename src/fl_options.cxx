@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.70 2000/07/30 05:59:25 spitzak Exp $"
+// "$Id: fl_options.cxx,v 1.71 2000/08/04 10:22:01 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,43 +59,48 @@ Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 const char* fl_startup_theme = 0; // set by -theme in Fl_arg.cxx
 
 static const char* flconfig = 0;
-extern void fl_get_system_colors();
+
+// This is necessary so that only one theme will process events at a time.
+// It's not as easy as just removing the old theme's handler whenever a new
+// theme is loaded because multiple themes may be loaded but that may not
+// interfere with the use of this by one of them.
+static Fl_Theme_Handler _theme_handler = 0;
+
+void fl_theme_handler(Fl_Theme_Handler handler) {
+  _theme_handler = handler;
+}
+
+static int theme_handler(int e) {
+  return _theme_handler ? _theme_handler(e) : 0;
+}
 
 // this is necessary for future compatibility
 static const char* flconfig_section = "default";
 
-static int load_scheme(const char *s);
-FL_API const char* fl_find_config_file(const char*);
-static int fl_getconf(const char *key, char *value, int value_length);
-
-// one-time startup stuff
+// Startup stuff.  OK to execute more than once.
 static char beenhere;
 void fl_startup() {
-  if (!flconfig) {
-    const char* p = fl_find_config_file("flconfig");
-    if (p) flconfig = strdup(p);
+  // do this only once
+  static int do_once = 0;
+  if (!do_once) {
+    do_once = 1;
+    if (!flconfig) {
+      const char* p = fl_find_config_file("flconfig");
+      if (p) flconfig = strdup(p);
+    }
+    Fl::add_handler(theme_handler);
   }
-  Fl_Style::revert();
-
+  beenhere = 1;
+  conf_clear_cached(); // Force rereading of config files.
   char temp[PATH_MAX];
   const char* s = Fl::scheme();
   if (!s && !fl_getconf("scheme", temp, sizeof(temp))) s = temp;
-  load_scheme(s);
-  beenhere = 1;
+  Fl::scheme(s);
 
   const char *t = fl_startup_theme;
-  if (!t && !fl_getconf("theme", temp, sizeof(temp))) t = temp;
+  if (!t && !fl_getconf("themes", temp, sizeof(temp))) t = temp;
   if (t) Fl::theme(t);
   if (fl_bg_switch) fl_background(fl_bg_switch);
-}
-
-// When we change the scheme we automatically call load_scheme if needed:
-int Fl::scheme(const char* s) {
-  if (scheme_ == s) return 0;
-  if (s && scheme_ && !strcmp(s,scheme_)) return 0;
-  scheme_ = s;
-  if (beenhere) load_scheme(s);
-  return 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -126,10 +131,9 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
 }
 
 static int load_scheme(const char *s) {
-
   Fl_Style::revert();
-  if (!s || !*s || !strcasecmp(s, "none")) {
-    fl_get_system_colors(); // WAS: I think this should be done always
+  if (!s || !*s) {
+    fl_get_system_colors();
     return 0;
   }
 
@@ -194,7 +198,6 @@ static int load_scheme(const char *s) {
       // box type
       if (!getconf_list(key_list, "box", valstr, sizeof(valstr)))
         if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
-
 
       // glyph box type
       if (!getconf_list(key_list, "text box", valstr, sizeof(valstr)))
@@ -261,9 +264,34 @@ static int load_scheme(const char *s) {
   return 0;
 }
 
+// When we change the scheme we automatically call load_scheme if needed:
+int Fl::scheme(const char* s) {
+  if (s) {
+    if (!strcasecmp(s, "none")) s = 0;
+    else s = strdup(s);
+  }
+  if (scheme_) free((void*)scheme_);
+  scheme_ = s;
+  if (beenhere) return load_scheme(s);
+  return 1;
+}
+
+void Fl::reload_scheme() {
+  char s[80];
+  const char* scheme = Fl::scheme();
+  conf_clear_cached(); // Force rereading of config files.
+  if (!fl_getconf("scheme", s, sizeof(s))) scheme = s;
+  Fl::scheme(scheme);
+}
+
 static int load_theme(const char *t) {
 // don't try to load themes if not linked to shared libraries
-#if 1 // def FL_SHARED // I temporarily enabled this for testing
+//#ifdef FL_SHARED
+#if 1
+// WAS - I temporarily enabled this for testing.
+// CET - OK, but we should let people know that all themes will  not
+// necessarily work when not linked dynamically to to save ourselves
+// a support headache.
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
   if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
@@ -315,63 +343,47 @@ int Fl::theme(const char* t) {
 #define CONFIGDIR "/fltk"
 #endif
 
-// WAS: This is public so the essai plugin can get at it.  This should be
-// fixed by having the essai plugin use relative pathnames and passing it's
-// location to it somehow.
-const char* fl_find_config_file(const char* fn) {
+// This should stay public so that programs can locate their config files
+// easily.
+const char* fl_find_config_file(const char* fn, int cflag) {
   static char path[PATH_MAX];
 
   if (conf_is_path_rooted(fn)) {
     strcpy(path, fn);
-    return (!access(path, R_OK)) ? path : 0;
+    return (cflag || !access(path, R_OK)) ? path : 0;
   }
   char *cptr = getenv("HOME");
   if (cptr) {
     snprintf(path, sizeof(path), "%s%s%s", cptr, "/.fltk/", fn);
-    if (!access(path, R_OK)) return path;
+    if (cflag || !access(path, R_OK)) return path;
   }
 #ifdef WIN32
   cptr = getenv("HOMEPATH");
   if (cptr) {
     snprintf(path, sizeof(path), "%s%s%s", cptr, "/fltk/", fn);
-    if (!access(path, R_OK)) return path;
+    if (cflag || !access(path, R_OK)) return path;
   }
   cptr = getenv("USERPROFILE");
   if (cptr) {
     snprintf(path, sizeof(path), "%s/Application Data/fltk/%s", cptr, fn);
-    if (!access(path, R_OK)) return path;
+    if (cflag || !access(path, R_OK)) return path;
   }
 #endif
 
   snprintf(path, sizeof(path), CONFIGDIR "/%s", fn);
-  return (!access(path, R_OK)) ? path : 0;
-}
-
-void Fl::reload_scheme() {
-#ifdef WIN32
-  // reload windows colors only if we haven't forced a scheme
-  // WAS: This means a scheme will disable windows color changes, which
-  // seems kind of wrong to me.  The schemes as implemented above will
-  // allow the system colors to be used.  I think it should always
-  // call get_system_colors and them load the scheme.
-  if (!Fl::scheme()) { fl_get_system_colors(); window->redraw(); }
-#else
-  // Not clear what this is doing.  It will not handle the creation or
-  // deletion of the flconfig file, or changes to the xrdb database.
-  char scheme[80];
-  if (!fl_getconf("scheme", scheme, sizeof(scheme))) load_scheme(scheme);
-#endif
+  return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
 // flconfig_section is always "default".
-static int fl_getconf(const char *key, char *value, int value_length) {
+// For now... - CET
+int fl_getconf(const char *key, char *value, int value_length) {
   char temp[80];
   snprintf(temp, sizeof(temp), "%s/%s", flconfig_section, key);
   return ::getconf(flconfig, temp, value, value_length);
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.70 2000/07/30 05:59:25 spitzak Exp $".
+// End of "$Id: fl_options.cxx,v 1.71 2000/08/04 10:22:01 clip Exp $".
 //
 
 

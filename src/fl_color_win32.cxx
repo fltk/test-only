@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.23 2000/07/21 00:31:52 clip Exp $"
+// "$Id: fl_color_win32.cxx,v 1.24 2000/08/04 10:22:01 clip Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -49,9 +49,8 @@ FL_API HPEN	fl_pen;
 FL_API HBRUSH	fl_brush;
 HPALETTE	fl_palette;
 
-void fl_color(Fl_Color i) {
-  fl_color_ = i;
-  int index;
+COLORREF fl_wincolor(Fl_Color i) {
+  int index = i;
   COLORREF rgb;
   // this is the same as fl_nearest_color(i) but it also sets rgb:
   if (i & 0xFFFFFF00) {
@@ -65,13 +64,18 @@ void fl_color(Fl_Color i) {
       index =
          fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
   } else {
-    index = i;
     unsigned c = fl_cmap[i];
     rgb = RGB(uchar(c>>24), uchar(c>>16), uchar(c>>8));
   }
 #if USE_COLORMAP
   if (fl_palette) rgb = PALETTEINDEX(index);
 #endif
+  return rgb;
+}
+
+void fl_color(Fl_Color i) {
+  fl_color_ = i;
+  COLORREF rgb = fl_wincolor(i);
 
   HPEN newpen = CreatePen(PS_SOLID, 1, rgb);
   if (!newpen) {
@@ -148,5 +152,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.23 2000/07/21 00:31:52 clip Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.24 2000/08/04 10:22:01 clip Exp $".
 //

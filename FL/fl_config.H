@@ -1,5 +1,5 @@
 //
-//  "$Id: fl_config.H,v 1.12 2000/07/30 03:46:04 spitzak Exp $"
+//  "$Id: fl_config.H,v 1.13 2000/08/04 10:21:59 clip Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ class FL_API Fl_Config
     // get/set the name of the config file
     const char *config_file() { return _configFile; }
     void config_file(const char *configFile)
-        { _configFile = configFile ? strdup(configFile) : 0; }
+        { _configFile = configFile ? strdup(fl_find_config_file(configFile, 1)) : 0; }
     
     // get sections in configuration file
     int sections(const char *section)
@@ -134,5 +134,5 @@ class FL_API Fl_Config
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.12 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: fl_config.H,v 1.13 2000/08/04 10:21:59 clip Exp $".
 //

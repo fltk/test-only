@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.49 2000/07/20 05:28:32 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.50 2000/08/04 10:22:01 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -266,6 +266,7 @@ void Fl_Window::flush() {
   make_current();
 //if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
   fl_clip_region(i->region); i->region = 0;
+  if (damage()&FL_DAMAGE_LAYOUT) layout();
   draw();
 }
 
@@ -331,5 +332,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.49 2000/07/20 05:28:32 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.50 2000/08/04 10:22:01 clip Exp $".
 //
