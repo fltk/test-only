@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.11 2000/01/09 08:17:30 bill Exp $"
+// "$Id: fl_draw.cxx,v 1.12 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -83,19 +83,7 @@ expand(const char* from, char* buf, int maxw, int& n, int &width, int wrap) {
       if (*(p+1) == '&') {p++; *o++ = '&';}
       else if (fl_draw_shortcut != 2) underline_at = o;
 
-    } else if (c&0xE0) { // this test skips all characters < ' '
-      *o++ = c;
-
-#if 0 // expand tabs, does anybody use this for labels?
-    } else if (c == '\t') {
-      for (c = (o-buf)%8; c<8 && o<e; c++) *o++ = ' ';
-#endif
-
-    } else { // ^X
-      *o++ = '^';
-      *o++ = c ^ 0x40;
-
-    }
+    } else *o++ = c;
   }
 
   width = w + fl_width(word_end, o-word_end);
@@ -193,5 +181,5 @@ void fl_measure(const char* str, int& w, int& h) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.11 2000/01/09 08:17:30 bill Exp $".
+// End of "$Id: fl_draw.cxx,v 1.12 2000/08/06 07:39:44 spitzak Exp $".
 //

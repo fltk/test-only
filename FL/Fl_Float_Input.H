@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.H,v 1.5 1999/10/17 20:40:03 vincent Exp $"
+// "$Id: Fl_Float_Input.H,v 1.6 2000/08/06 07:39:43 spitzak Exp $"
 //
 // Floating point input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,18 @@
 #define Fl_Float_Input_H
 
 #include "Fl_Input.H"
+#define FL_FLOAT_INPUT 0
+#define FL_INT_INPUT 1 // used by the integer subclass
 
 class FL_API Fl_Float_Input : public Fl_Input {
+  virtual int replace(int, int, const char*, int);
 public:
-    Fl_Float_Input(int x,int y,int w,int h,const char *l = 0)
-	: Fl_Input(x,y,w,h,l) {type(FL_FLOAT_INPUT);}
+  Fl_Float_Input(int x,int y,int w,int h,const char *l = 0)
+    : Fl_Input(x,y,w,h,l) {}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Float_Input.H,v 1.5 1999/10/17 20:40:03 vincent Exp $".
+// End of "$Id: Fl_Float_Input.H,v 1.6 2000/08/06 07:39:43 spitzak Exp $".
 //

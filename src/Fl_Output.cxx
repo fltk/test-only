@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.26 2000/07/31 05:52:46 spitzak Exp $"
+// "$Id: Fl_Output.cxx,v 1.27 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -24,53 +24,23 @@
 //
 
 // This subclass of Fl_Input_ does not allow user to edit the output.
-// Used to display output.
+// This is done by making the replace() function refuse all changes.
 
 #include <FL/Fl.H>
 #include <FL/Fl_Output.H>
 #include <FL/fl_draw.H>
 
-void Fl_Output::draw() {
-  if (damage() & FL_DAMAGE_ALL) draw_text_frame();
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
-  Fl_Input_::drawtext(X,Y,W,H);
-}
-
-int Fl_Output::handle(int event) {
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
-  switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
-  case FL_MOVE:
-    return 1; // For tooltips
-
-  case FL_PUSH:
-    take_focus();
-    mouse_position(X, Y, W, H, Fl::event_state(FL_SHIFT));
-    return 1;
-
-  case FL_DRAG:
-    mouse_position(X, Y, W, H, 1);
-    return 1;
-
-  case FL_RELEASE:
-//  mouse_position(X, Y, W, H, 1);
-    // copy drag-selected text to the clipboard.
-    copy();
-    return 1;
-
-  default:
-    return 0;
-  }
+int Fl_Output::replace(int, int, const char*, int) {
+  return 0;
 }
 
 #include <FL/Fl_Input.H>
 Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
-  : Fl_Input_(x, y, w, h, l)
+  : Fl_Input(x, y, w, h, l)
 {
   style(default_style);
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.26 2000/07/31 05:52:46 spitzak Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.27 2000/08/06 07:39:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -163,50 +163,7 @@ Fl_Text_Editor::add_key_binding(int key, int state, Key_Func function,
   *list = kb;
 }
 
-static const char* const compose_pairs =
-  "  ! % # $ y=| & : c a <<~ - r _ * +-2 3 ' u p . , 1 o >>141234? "
-  "A`A'A^A~A:A*AEC,E`E'E^E:I`I'I^I:D-N~O`O'O^O~O:x O/U`U'U^U:Y'DDss"
-  "a`a'a^a~a:a*aec,e`e'e^e:i`i'i^i:d-n~o`o'o^o~o:-:o/u`u'u^u:y'ddy:";
-
-int fl_compose(int state, char c, int& del, char* buffer, int& ins) {
-  del = 0; ins = 1; buffer[ 0 ] = c;
-
-  if (c == '"') c = ':';
-
-  if ( !state ) {     // first character
-    if (c == ' ') {
-      buffer[0] = char(0xA0); return 0x100;
-    } // space turns into nbsp
-    // see if it is either character of any pair:
-    state = 0;
-    for (const char * p = compose_pairs; *p; p += 2)
-      if (p[0] == c || p[1] == c) {
-        if (p[1] == ' ') buffer[0] = (p - compose_pairs) / 2 + 0xA0;
-        state = c;
-      }
-    return state;
-
-  } else if (state == 0x100) { // third character
-    return 0;
-
-  } else { // second character
-    char c1 = char(state);   // first character
-    // now search for the pair in either order:
-    for (const char * p = compose_pairs; *p; p += 2) {
-      if (p[0] == c && p[1] == c1 || p[1] == c && p[0] == c1) {
-        buffer[0] = (p - compose_pairs) / 2 + 0xA0;
-        ins = del = 1;
-        return 0x100;
-      }
-    }
-    return 0;
-  }
-}
-
 ////////////////////////////////////////////////////////////////
-
-static int compose;   // compose state (# of characters so far + 1)
-
 
 #define NORMAL_INPUT_MOVE 0
 
@@ -231,7 +188,6 @@ int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
 int Fl_Text_Editor::kf_ignore(int, Fl_Text_Editor*) {
   return 0; // don't handle
 }
-
 
 int Fl_Text_Editor::kf_backspace(int, Fl_Text_Editor* e) {
   if (!e->buffer()->primary_selection()->selected() && e->move_left())
@@ -337,31 +293,31 @@ int Fl_Text_Editor::kf_home(int, Fl_Text_Editor* e) {
   return kf_move(FL_Home, e);
 }
 
-int Fl_Text_Editor::kf_end(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_end(int, Fl_Text_Editor* e) {
   return kf_move(FL_End, e);
 }
 
-int Fl_Text_Editor::kf_left(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_left(int, Fl_Text_Editor* e) {
   return kf_move(FL_Left, e);
 }
 
-int Fl_Text_Editor::kf_up(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_up(int, Fl_Text_Editor* e) {
   return kf_move(FL_Up, e);
 }
 
-int Fl_Text_Editor::kf_right(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_right(int, Fl_Text_Editor* e) {
   return kf_move(FL_Right, e);
 }
 
-int Fl_Text_Editor::kf_down(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_down(int, Fl_Text_Editor* e) {
   return kf_move(FL_Down, e);
 }
 
-int Fl_Text_Editor::kf_page_up(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_page_up(int, Fl_Text_Editor* e) {
   return kf_move(FL_Page_Up, e);
 }
 
-int Fl_Text_Editor::kf_page_down(int c, Fl_Text_Editor* e) {
+int Fl_Text_Editor::kf_page_down(int, Fl_Text_Editor* e) {
   return kf_move(FL_Page_Down, e);
 }
 
@@ -382,7 +338,7 @@ int Fl_Text_Editor::kf_delete(int, Fl_Text_Editor* e) {
 int Fl_Text_Editor::kf_copy(int, Fl_Text_Editor* e) {
   if (!e->buffer()->primary_selection()->selected()) return 1;
   const char *copy = e->buffer()->selection_text();
-  if (*copy) Fl::selection(*e, copy, strlen(copy));
+  if (*copy) Fl::copy(copy, strlen(copy));
   free((void*)copy);
   e->show_insert_position();
   return 1;
@@ -407,6 +363,26 @@ int Fl_Text_Editor::kf_select_all(int, Fl_Text_Editor* e) {
 }
 
 int Fl_Text_Editor::handle_key() {
+
+  // Call fltk's rules to try to turn this into a printing character.
+  // This uses the right-hand ctrl key as a "compose prefix" and returns
+  // the changes that should be made to the text, as a number of
+  // bytes to delete and a string to insert:
+  int del;
+  if (Fl::compose(del)) {
+    if (del) {
+      if (!buffer()->primary_selection()->selected() && move_left())
+	buffer()->select(insert_position(), insert_position()+1);
+    }
+    kill_selection(this);
+    if (Fl::event_length()) {
+      if (insert_mode()) insert(Fl::event_text());
+      else overstrike(Fl::event_text());
+    }
+    show_insert_position();
+    return 1;
+  }
+
   int key = Fl::event_key(), state = Fl::event_state(), c = Fl::event_text()[0];
   Key_Func f;
   f = bound_key_function(key, state, global_key_bindings);
@@ -418,6 +394,7 @@ int Fl_Text_Editor::handle_key() {
 }
 
 int Fl_Text_Editor::handle(int event) {
+
   if (event == FL_PUSH && Fl::event_button() == 2) {
     dragType = -1;
     Fl::paste(*this);
@@ -432,7 +409,6 @@ int Fl_Text_Editor::handle(int event) {
 
     case FL_UNFOCUS:
       show_cursor(mCursorOn); // redraws the cursor
-      compose = 0;
       return 1;
 
     case FL_KEYBOARD:
@@ -457,5 +433,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $".
 //

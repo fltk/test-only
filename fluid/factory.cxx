@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.13 2000/02/14 11:32:42 bill Exp $"
+// "$Id: factory.cxx,v 1.14 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -191,8 +191,10 @@ static Fl_Menu_Item input_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
   {"Secret",0,0,(void*)FL_SECRET_INPUT},
+#if 0 // WAS: This needs to be fixed for back compatability!
   {"Int",0,0,(void*)FL_INT_INPUT},
   {"Float",0,0,(void*)FL_FLOAT_INPUT},
+#endif
   {0}};
 class Fl_Input_Type : public Fl_Widget_Type {
   int is_input() const {return 1;}
@@ -644,5 +646,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.13 2000/02/14 11:32:42 bill Exp $".
+// End of "$Id: factory.cxx,v 1.14 2000/08/06 07:39:44 spitzak Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Int_Input.H,v 1.6 2000/08/06 07:39:43 spitzak Exp $"
+// "$Id: Fl_Wordwrap_Output.H,v 1.1 2000/08/06 07:39:43 spitzak Exp $"
 //
-// Integer input header file for the Fast Light Tool Kit (FLTK).
+// Multi line output header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,19 +23,19 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Int_Input_H
-#define Fl_Int_Input_H
+#ifndef Fl_Wordwrap_Output_H
+#define Fl_Wordwrap_Output_H
 
-#include "Fl_Float_Input.H"
+#include "Fl_Output.H"
 
-class FL_API Fl_Int_Input : public Fl_Float_Input {
+class FL_API Fl_Wordwrap_Output : public Fl_Output {
 public:
-  Fl_Int_Input(int x,int y,int w,int h,const char *l = 0)
-    : Fl_Float_Input(x,y,w,h,l) {type(FL_INT_INPUT);}
+    Fl_Wordwrap_Output(int x,int y,int w,int h,const char *l = 0)
+	: Fl_Output(x,y,w,h,l) {type(FL_WORDWRAP_INPUT);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Int_Input.H,v 1.6 2000/08/06 07:39:43 spitzak Exp $".
+// End of "$Id: Fl_Wordwrap_Output.H,v 1.1 2000/08/06 07:39:43 spitzak Exp $".
 //

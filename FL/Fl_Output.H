@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.H,v 1.18 2000/05/30 07:41:57 bill Exp $"
+// "$Id: Fl_Output.H,v 1.19 2000/08/06 07:39:43 spitzak Exp $"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,15 +26,13 @@
 #ifndef Fl_Output_H
 #define Fl_Output_H
 
-#include "Fl_Input_.H"
+#include "Fl_Input.H"
 
-class FL_API Fl_Output : public Fl_Input_ {
-  friend class Fl_Value_Output;
-
+class FL_API Fl_Output : public Fl_Input {
+  virtual int replace(int, int, const char*, int); // does nothing
 public:
   // the style is public because some other widgets directly refer to it:
   static Fl_Named_Style* default_style;
-  int handle(int);
   Fl_Output(int x, int y, int w, int h, const char *l = 0);
 
 #if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
@@ -43,13 +41,10 @@ public:
   Fl_Color color() const {return text_background();}
   void color(Fl_Color c) {text_background(c);}
 #endif
-
-protected:
-  void draw();
 };
 
 #endif 
 
 //
-// End of "$Id: Fl_Output.H,v 1.18 2000/05/30 07:41:57 bill Exp $".
+// End of "$Id: Fl_Output.H,v 1.19 2000/08/06 07:39:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.57 2000/08/04 10:21:59 clip Exp $"
+// "$Id: Fl.H,v 1.58 2000/08/06 07:39:43 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,6 @@ public: // should be private!
   static Fl_Widget* belowmouse_;
   static Fl_Widget* pushed_;
   static Fl_Widget* focus_;
-  static Fl_Widget* selection_owner_;
   static Fl_Window* modal_;
   static int compose_state;
 
@@ -112,7 +111,7 @@ public:
   static Fl_Window* next_window(const Fl_Window*);
   static Fl_Window* modal() {return modal_;}
   static int (*grab())(int, void*) {return grab_;}
-  static void grab(int (*)(int, void*), void*);
+  static void grab(int (*)(int, void*), void* = 0);
   static void grab(Fl_Widget*);
   static void grab(Fl_Widget& w) { grab(&w); }
   static void release();
@@ -158,10 +157,9 @@ public:
   static void focus(Fl_Widget& w) {focus(&w);}
 
   // cut/paste:
-  static Fl_Widget* selection_owner() {return selection_owner_;}
-  static void selection_owner(Fl_Widget*);
-  static void selection(Fl_Widget &owner, const char* stuff, int len);
+  static void copy(const char* stuff, int len);
   static void paste(Fl_Widget &receiver);
+  static int dnd();
 
   // screen size:
   static int x();
@@ -234,5 +232,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.57 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: Fl.H,v 1.58 2000/08/06 07:39:43 spitzak Exp $".
 //

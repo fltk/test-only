@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.85 2000/07/31 05:52:46 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.86 2000/08/06 07:39:44 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -270,12 +270,14 @@ static Atom TARGETS;
 static Atom XdndAware;
 static Atom XdndSelection;
 static Atom XdndEnter;
+static Atom XdndTypeList;
 static Atom XdndPosition;
 static Atom XdndLeave;
 static Atom XdndDrop;
 static Atom XdndStatus;
 static Atom XdndActionCopy;
 static Atom XdndFinished;
+static Atom XdndProxy;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
@@ -314,12 +316,14 @@ void fl_open_display(Display* d) {
   XdndAware		= XInternAtom(d, "XdndAware",		0);
   XdndSelection		= XInternAtom(d, "XdndSelection",	0);
   XdndEnter		= XInternAtom(d, "XdndEnter",		0);
+  XdndTypeList		= XInternAtom(d, "XdndTypeList",	0);
   XdndPosition		= XInternAtom(d, "XdndPosition",	0);
   XdndLeave		= XInternAtom(d, "XdndLeave",		0);
   XdndDrop		= XInternAtom(d, "XdndDrop",		0);
   XdndStatus		= XInternAtom(d, "XdndStatus",		0);
   XdndActionCopy	= XInternAtom(d, "XdndActionCopy",	0);
   XdndFinished		= XInternAtom(d, "XdndFinished",	0);
+  XdndProxy		= XInternAtom(d, "XdndProxy",		0);
 
   fl_screen = DefaultScreen(fl_display);
   // construct an XVisualInfo that matches the default Visual:
@@ -396,16 +400,17 @@ void Fl::get_mouse(int &x, int &y) {
 }
 
 ////////////////////////////////////////////////////////////////
-// code used for selections:
+// Code used for paste and DnD into the program:
 
 static Fl_Widget *fl_selection_requestor;
 static char *selection_buffer;
 static int selection_length;
 static int selection_buffer_length;
+static char i_own_selection;
 
 // Call this when a "paste" operation happens:
 void Fl::paste(Fl_Widget &receiver) {
-  if (selection_owner()) {
+  if (i_own_selection) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
     // called in response to FL_PASTE!
@@ -420,23 +425,10 @@ void Fl::paste(Fl_Widget &receiver) {
 		    fl_xid(Fl::first_window()), fl_event_time);
 }
 
-// call this when you create a selection:
-void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
-  if (!stuff || len<0) return;
-  if (len+1 > selection_buffer_length) {
-    delete[] selection_buffer;
-    selection_buffer = new char[len+100];
-    selection_buffer_length = len+100;
-  }
-  memcpy(selection_buffer, stuff, len);
-  selection_buffer[len] = 0; // needed for direct paste
-  selection_length = len;
-  selection_owner(&owner);
-  XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
-}
-
-Atom fl_dnd_types[4]; // null-terminated list of data types being supplied
-Atom fl_dnd_action_request;
+Window fl_dnd_source_window;
+Atom *fl_dnd_source_types; // null-terminated list of data types being supplied
+Atom fl_dnd_type;
+Atom fl_dnd_source_action;
 Atom fl_dnd_action;
 
 static void sendClientMessage(Window window, Atom message,
@@ -456,6 +448,139 @@ static void sendClientMessage(Window window, Atom message,
   e.data.l[3] = d3;
   e.data.l[4] = d4;
   XSendEvent(fl_display, window, 0, 0, (XEvent*)&e);
+}
+
+////////////////////////////////////////////////////////////////
+// Code for copying to clipboard and DnD out of the program:
+
+void Fl::copy(const char *stuff, int len) {
+  if (!stuff || len<0) return;
+  if (len+1 > selection_buffer_length) {
+    delete[] selection_buffer;
+    selection_buffer = new char[len+100];
+    selection_buffer_length = len+100;
+  }
+  memcpy(selection_buffer, stuff, len);
+  selection_buffer[len] = 0; // needed for direct paste
+  selection_length = len;
+  i_own_selection = 1;
+  XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
+}
+
+static int grabfunc(int event, void*) {
+  if (event == FL_RELEASE) Fl::pushed(0);
+  return 0;
+}
+
+// return version # of Xdnd this window supports.  Also change the
+// window the the proxy if it uses a proxy:
+static int dnd_aware(Window& window) {
+  Atom actual; int format; unsigned long count, remaining;
+  unsigned char *data = 0;
+  XGetWindowProperty(fl_display, window, XdndAware,
+		     0, 4, False, XA_ATOM, 
+		     &actual, &format, 
+		     &count, &remaining, &data);
+  if (actual == XA_ATOM && format==32 && count && data) {
+    int version = *(Atom*)data; if (version > 4) version = 4;
+    return version;
+  }
+  return 0;
+}
+
+// send an event to an fltk window belonging to this program:
+static int local_handle(int event, Fl_Window* window) {
+  Fl::grab_ = 0;
+  Fl::e_x = Fl::e_x_root-window->x();
+  Fl::e_y = Fl::e_y_root-window->y();
+  int ret = Fl::handle(event,window);
+  Fl::grab_ = grabfunc;
+  return ret;
+}
+
+int Fl::dnd() {
+  Fl::first_window()->cursor((Fl_Cursor)21);
+  Window source_window = fl_xid(Fl::first_window());
+  grab_ = grabfunc;
+  Window target_window = 0;
+  Fl_Window* local_window = 0;
+  int version = 4; int dest_x, dest_y;
+  XSetSelectionOwner(fl_display, XdndSelection, fl_message_window, fl_event_time);
+
+  while (Fl::pushed()) {
+
+    // figure out what window we are pointing at:
+    Window new_window = 0; int new_version = 0;
+    Fl_Window* new_local_window = 0;
+    for (Window child = RootWindow(fl_display, fl_screen);;) {
+      Window root; unsigned int junk3;
+      XQueryPointer(fl_display, child, &root, &child,
+		    &e_x_root, &e_y_root, &dest_x, &dest_y, &junk3);
+      if (!child) {
+	if (!new_window && (new_version = dnd_aware(root))) new_window = root;
+	break;
+      }
+      new_window = child;
+      if ((new_local_window = fl_find(child))) break;
+      if ((new_version = dnd_aware(new_window))) break;
+    }
+
+    if (new_window != target_window) {
+      if (local_window) {
+	local_handle(FL_DND_LEAVE, local_window);
+      } else if (version) {
+	sendClientMessage(target_window, XdndLeave, source_window);
+      }
+      version = new_version;
+      target_window = new_window;
+      local_window = new_local_window;
+      if (local_window) {
+	local_handle(FL_DND_ENTER, local_window);
+      } else if (version) {
+	sendClientMessage(target_window, XdndEnter, source_window,
+			  version<<24, XA_STRING, 0, 0);
+      }
+    }
+    if (local_window) {
+      local_handle(FL_DND_DRAG, local_window);
+    } else if (version) {
+      sendClientMessage(target_window, XdndPosition, source_window,
+			0, (e_x_root<<16)|e_y_root, fl_event_time,
+			XdndActionCopy);
+    }
+    Fl::wait();
+  }
+
+  if (local_window) {
+    i_own_selection = 1;
+    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse());
+  } else if (version) {
+    sendClientMessage(target_window, XdndDrop, source_window,
+		      0, fl_event_time);
+  } else if (target_window) {
+    // fake a drop by clicking the middle mouse button:
+    XButtonEvent msg;
+    msg.type = ButtonPress;
+    msg.window = target_window;
+    msg.root = RootWindow(fl_display, fl_screen);
+    msg.subwindow = 0;
+    msg.time = fl_event_time+1;
+    msg.x = dest_x;
+    msg.y = dest_y;
+    msg.x_root = Fl::e_x_root;
+    msg.y_root = Fl::e_y_root;
+    msg.state = 0x0;
+    msg.button = Button2;
+    XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
+    msg.time++;
+    msg.state = 0x200;
+    msg.type = ButtonRelease;
+    XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
+  }
+
+  grab_ = 0;
+  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
+  return 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -540,13 +665,37 @@ int fl_handle(const XEvent& xevent)
       return 1;
 
     } else if (message == XdndEnter) {
+      fl_dnd_source_window = data[0];
       // version number is data[1]>>24
-      // data[1]&1 indicates that XdndTypeList has all types, else:
-      for (int i = 2; i < 5; i++) fl_dnd_types[i-2] = data[i];
+      if (data[1]&1) {
+	// get list of data types:
+	Atom actual; int format; unsigned long count, remaining;
+	unsigned char *buffer = 0;
+	XGetWindowProperty(fl_display, fl_dnd_source_window, XdndTypeList,
+			   0, 0x8000000L, False, XA_ATOM, &actual, &format,
+			   &count, &remaining, &buffer);
+	if (actual != XA_ATOM || format != 32 || count<4 || !buffer)
+	  goto FAILED;
+	delete [] fl_dnd_source_types;
+	fl_dnd_source_types = new Atom[count+1];
+	for (unsigned i = 0; i < count; i++)
+	  fl_dnd_source_types[i] = ((Atom*)buffer)[i];
+	fl_dnd_source_types[count] = 0;
+      } else {
+      FAILED:
+	// less than four data types, or if the above messes up:
+	if (!fl_dnd_source_types) fl_dnd_source_types = new Atom[4];
+	fl_dnd_source_types[0] = data[2];
+	fl_dnd_source_types[1] = data[3];
+	fl_dnd_source_types[2] = data[4];
+	fl_dnd_source_types[3] = 0;
+      }
+      fl_dnd_type = fl_dnd_source_types[0]; // should pick text or url
       event = FL_DND_ENTER;
       break;
 
     } else if (message == XdndPosition) {
+      fl_dnd_source_window = data[0];
       Fl::e_x_root = data[2]>>16;
       Fl::e_y_root = data[2]&0xFFFF;
       if (window) {
@@ -554,7 +703,7 @@ int fl_handle(const XEvent& xevent)
 	Fl::e_y = Fl::e_y_root-window->y();
       }
       fl_event_time = data[3];
-      fl_dnd_action_request = data[4];
+      fl_dnd_source_action = data[4];
       fl_dnd_action = XdndActionCopy;
       int accept = Fl::handle(FL_DND_DRAG, window);
       sendClientMessage(data[0], XdndStatus,
@@ -566,19 +715,26 @@ int fl_handle(const XEvent& xevent)
       return 1;
 
     } else if (message == XdndLeave) {
+      fl_dnd_source_window = 0; // don't send a finished message to it
       event = FL_DND_LEAVE;
       break;
 
     } else if (message == XdndDrop) {
+      fl_dnd_source_window = data[0];
       fl_event_time = data[2];
       Window to_window = fl_xevent->xclient.window;
-      Window from_window = data[0];
       if (Fl::handle(FL_DND_RELEASE, window)) {
 	fl_selection_requestor = Fl::belowmouse();
-	XConvertSelection(fl_display,XdndSelection,fl_dnd_types[0],XA_PRIMARY,
+	XConvertSelection(fl_display, XdndSelection, fl_dnd_type, XA_SECONDARY,
 			  to_window, fl_event_time);
+      } else {
+	// Send the finished message if I refuse the drop.
+	// It is not clear whether I can just send finished always,
+	// or if I have to wait for the SelectionNotify event as the	
+	// code is currently doing.
+	sendClientMessage(fl_dnd_source_window, XdndFinished, to_window);
+	fl_dnd_source_window = 0;
       }
-      sendClientMessage(from_window, XdndFinished, to_window);
       return 1;
 
     }
@@ -756,24 +912,48 @@ int fl_handle(const XEvent& xevent)
 
   case SelectionNotify: {
     if (!fl_selection_requestor) return 0;
-    static char *pastebuffer;
-    if (pastebuffer) {XFree(pastebuffer); pastebuffer = 0;}
-    if (fl_xevent->xselection.property != 0) {
-      Atom a; int f; unsigned long n,b;
-      if (!XGetWindowProperty(fl_display,
-			      fl_xevent->xselection.requestor,
-			      fl_xevent->xselection.property,
-			      0,100000,1,0,&a,&f,&n,&b,
-			      (unsigned char**)&pastebuffer)) {
-	Fl::e_text = pastebuffer;
-	Fl::e_length = int(n);
-	fl_selection_requestor->handle(FL_PASTE);
+    static unsigned char* buffer;
+    if (buffer) XFree(buffer);
+    unsigned long read = 0;
+    if (fl_xevent->xselection.property) for (;;) {
+      // The Xdnd code pastes 64K chunks together, possibly to avoid
+      // bugs in X servers, or maybe to avoid an extra round-trip to
+      // get the property length.  I copy this here:
+      Atom actual; int format; unsigned long count, remaining;
+      unsigned char* portion;
+      if (XGetWindowProperty(fl_display,
+			     fl_xevent->xselection.requestor,
+			     fl_xevent->xselection.property,
+			     read/4, 65536, 1, 0,
+			     &actual, &format, &count, &remaining,
+			     &portion)) break; // quit on error
+      if (read) { // append to the accumulated buffer
+	buffer = (unsigned char*)realloc(buffer, read+count*format/8+remaining);
+	memcpy(buffer+read, portion, count*format/8);
+	XFree(portion);
+      } else {	// Use the first section without moving the memory:
+	buffer = portion;
       }
-    }}
-    return 1;
+      read += count*format/8;
+      if (!remaining) break;
+    }
+    Fl::e_text = (char*)buffer;
+    Fl::e_length = read;
+    fl_selection_requestor->handle(FL_PASTE);
+    // Detect if this paste is due to Xdnd by the property name (I use
+    // XA_SECONDARY for that) and send an XdndFinished message. It is not
+    // clear if this has to be delayed until now or if it can be done
+    // immediatly after calling XConvertSelection.
+    if (fl_xevent->xselection.property == XA_SECONDARY &&
+	fl_dnd_source_window) {
+      sendClientMessage(fl_dnd_source_window, XdndFinished,
+			fl_xevent->xselection.requestor);
+      fl_dnd_source_window = 0; // don't send a second time
+    }
+    return 1;}
 
   case SelectionClear:
-    Fl::selection_owner(0);
+    i_own_selection = 0;
     return 1;
 
   case SelectionRequest: {
@@ -1104,5 +1284,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.85 2000/07/31 05:52:46 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.86 2000/08/06 07:39:44 spitzak Exp $".
 //

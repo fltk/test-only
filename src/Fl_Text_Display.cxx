@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -596,6 +596,7 @@ int Fl_Text_Display::in_selection( int X, int Y ) {
   xy_to_rowcol( X, Y, &row, &column, CHARACTER_POS );
   if ( rangeTouchesRectSel( buf->primary_selection(), mFirstChar, mLastChar ) )
     return buf->primary_selection()->includes(pos, buf->line_start( pos ), column);
+  return 0; // WAS: I added this, is this correct?
 }
 
 /*
@@ -1793,7 +1794,7 @@ int Fl_Text_Display::vline_length( int visLineNum ) {
 ** Finds both the end of the current line and the start of the next line.
 */
 void Fl_Text_Display::line_end(int startPos, int *lineEnd, int *nextLineStart,
-                               int startPosIsLineStart) {
+                               int /*startPosIsLineStart*/) {
   *lineEnd = mBuffer->line_end( startPos );
   *nextLineStart = min( mBuffer->length(), *lineEnd + 1 );
   return;
@@ -2034,7 +2035,7 @@ int Fl_Text_Display::handle(int event) {
         dragType = DRAG_CHAR;
 
         const char* copy = buffer()->selection_text();
-        if (*copy) Fl::selection(*this, copy, strlen(copy));
+        if (*copy) Fl::copy(copy, strlen(copy));
         free((void*)copy);
         return 1;
       }
@@ -2045,5 +2046,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $".
 //

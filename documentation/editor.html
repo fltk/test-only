@@ -163,9 +163,9 @@ void copy_cb(void) {
 </PRE>
 </UL>
 <H3>cut_cb()</H3>
- This callback function will call <A href=Fl_Input_.html#Fl_Input_.copy><TT>
+ This callback function will call <A href=Fl_Input.html#Fl_Input.copy><TT>
 input-&gt;copy()</TT></A> to copy the currently selected text to the 
-clipboard and then <A href=Fl_Input_.html#Fl_Input_.cut><TT>input-&gt;cut()</TT>
+clipboard and then <A href=Fl_Input.html#Fl_Input.cut><TT>input-&gt;cut()</TT>
 </A> to delete it: 
 <UL>
 <PRE>
@@ -176,7 +176,7 @@ void cut_cb(void) {
 </PRE>
 </UL>
 <H3>delete_cb()</H3>
- This callback function will call <A href=Fl_Input_.html#Fl_Input_.cut><TT>
+ This callback function will call <A href=Fl_Input.html#Fl_Input.cut><TT>
 input-&gt;cut()</TT></A> to delete the selected text: 
 <UL>
 <PRE>
@@ -413,7 +413,7 @@ void saveas_cb(void) {
  The <TT>save_file()</TT> function saves the current file to the 
 specified filename. 
 <H3>undo_cb()</H3>
- The undo callback just calls the <A href=Fl_Input_.html#Fl_Input_.undo><TT>
+ The undo callback just calls the <A href=Fl_Input.html#Fl_Input.undo><TT>
 undo()</TT></A> method: 
 <UL>
 <PRE>
@@ -477,7 +477,7 @@ void load_file(char *newfile) {
 }
 </PRE>
 </UL>
- When loading the file we use the <A href=Fl_Input_.html#Fl_Input_.replace>
+ When loading the file we use the <A href=Fl_Input.html#Fl_Input.replace>
 <TT>input-&gt;replace()</TT></A> method to &quot;replace&quot; the text at the end 
 of the buffer.  The <TT>pos</TT> variable keeps track of the end of the 
 buffer. 

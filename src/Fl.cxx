@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.105 2000/07/31 05:52:46 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.106 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,8 +40,7 @@
 
 Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
-		*Fl::focus_,
-		*Fl::selection_owner_;
+		*Fl::focus_;
 int		(*Fl::grab_)(int, void*);
 static void* grab_data;
 Fl_Window	*Fl::modal_;	// topmost modal() window
@@ -294,13 +293,16 @@ void Fl::focus(Fl_Widget *o) {
   }
 }
 
+static char dnd_flag = 0; // makes belowmouse send DND_LEAVE instead of LEAVE
+
 void Fl::belowmouse(Fl_Widget *o) {
-  Fl_Tooltip::enter(o);
+  if (!dnd_flag) Fl_Tooltip::enter(o);
   Fl_Widget *p = belowmouse_;
   if (o != p) {
     event_is_click(0);
     belowmouse_ = o;
-    for (; p && !p->contains(o); p = p->parent()) p->handle(FL_LEAVE);
+    for (; p && !p->contains(o); p = p->parent())
+      p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
   }
 }
 
@@ -348,7 +350,6 @@ void fl_fix_focus() {
 
 void Fl_Widget::throw_focus() {
   if (contains(Fl::pushed())) Fl::pushed_ = 0;
-  if (contains(Fl::selection_owner())) Fl::selection_owner_ = 0;
 #ifndef WIN32
   if (contains(fl_selection_requestor)) fl_selection_requestor = 0;
 #endif
@@ -358,15 +359,6 @@ void Fl_Widget::throw_focus() {
   if (this == xmousewin) xmousewin = 0;
   Fl_Tooltip::exit(this);
   fl_fix_focus();
-}
-
-// call this to free a selection (or change the owner):
-void Fl::selection_owner(Fl_Widget *owner) {
-  if (selection_owner_ && owner != selection_owner_)
-    selection_owner_->handle(FL_SELECTIONCLEAR);
-  if (focus_ && owner != focus_ && focus_ != selection_owner_)
-    focus_->handle(FL_SELECTIONCLEAR); // clear non-X-selection highlight
-  selection_owner_ = owner;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -468,19 +460,25 @@ int Fl::handle(int event, Fl_Window* window)
     to = pushed();
     break;
 
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    if (modal() && window != modal()) return 1;
+    dnd_flag = 1;
+    break;
+
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
     xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {to = pushed_; event = FL_DRAG;}
     else if (modal() && window != modal()) return 1;
     break;
 
-  case FL_LEAVE:
   case FL_DND_LEAVE:
+    dnd_flag = 1;
+  case FL_LEAVE:
     if (!pushed_) belowmouse(0);
+    dnd_flag = 0;
     if (window) return 1;
     break;
 
@@ -534,10 +532,10 @@ int Fl::handle(int event, Fl_Window* window)
       return 0;
 
       // rejected mouse events produce FL_LEAVE events:
-    case FL_ENTER:
-    case FL_MOVE:
     case FL_DND_ENTER:
     case FL_DND_DRAG:
+    case FL_ENTER:
+    case FL_MOVE:
       belowmouse(0);
       break;
     }
@@ -546,6 +544,7 @@ int Fl::handle(int event, Fl_Window* window)
     for (const handler_link *h = handlers; h; h = h->next)
       if (h->handle(event)) {ret = 1; break;}
   }
+  dnd_flag = 0;
 
   if (event == FL_RELEASE && !pushed_ && xmousewin) {
     // send a dummy move event when the user releases the mouse:
@@ -556,5 +555,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.105 2000/07/31 05:52:46 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.106 2000/08/06 07:39:44 spitzak Exp $".
 //

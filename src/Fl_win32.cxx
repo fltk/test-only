@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.122 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.123 2000/08/06 07:39:44 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -333,9 +333,10 @@ static char *selection_buffer;
 static int selection_length;
 static int selection_buffer_length;
 static char ignore_destroy;
+static char i_own_selection;
 
 // call this when you create a selection:
-void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
+void Fl::copy(const char *stuff, int len) {
   if (!stuff || len<0) return;
   if (len+1 > selection_buffer_length) {
     delete[] selection_buffer;
@@ -352,12 +353,12 @@ void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
     CloseClipboard();
   }
   ignore_destroy = 0;
-  selection_owner(&owner);
+  i_own_selection = 1;
 }
 
 // Call this when a "paste" operation happens:
 void Fl::paste(Fl_Widget &receiver) {
-  if (selection_owner()) {
+  if (i_own_selection) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
     // called in response to FL_PASTE!
@@ -382,6 +383,27 @@ void Fl::paste(Fl_Widget &receiver) {
     }
     CloseClipboard();
   }
+}
+
+// Dummy version of dnd for now, it waits until the FL_RELEASE and
+// then does nothing.  The real version should drag the ascii text stored
+// in selection_buffer (length = selection_length) and drop it on the
+// target. It should either not return until the mouse is released
+// or it should cause the DRAG+RELEASE events to not be passed to the
+// program somehow. I'm pretty sure this is a simple call in WIN32:
+
+static int grabfunc(int event, void*) {
+  if (event == FL_RELEASE) Fl::pushed(0);
+  return 0;
+}
+
+int Fl::dnd() {
+  Fl::first_window()->cursor(FL_CURSOR_HAND);
+  grab_ = grabfunc;
+  while (Fl::pushed()) Fl::wait();
+  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
+  grab_ = 0;
+  return 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -800,7 +822,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_DESTROYCLIPBOARD:
     if (!ignore_destroy) {
-      Fl::selection_owner(0);
+      i_own_selection = 1;
       Fl::flush(); // get the redraw to happen
     }
     return 1;
@@ -1242,5 +1264,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.122 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.123 2000/08/06 07:39:44 spitzak Exp $".
 //

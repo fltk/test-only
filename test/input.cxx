@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.21 2000/05/30 07:42:19 bill Exp $"
+// "$Id: input.cxx,v 1.22 2000/08/06 07:39:44 spitzak Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Secret_Input.H>
-#include <FL/Fl_Multiline_Input.H>
+#include <FL/Fl_Wordwrap_Input.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Toggle_Button.H>
 #include <FL/fl_show_colormap.H>
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
   input[1] = new Fl_Float_Input(70,y,300,23,"Float:"); y += 27;
   input[2] = new Fl_Int_Input(70,y,300,23,"Int:"); y += 27;
   input[3] = new Fl_Secret_Input(70,y,300,23,"Secret:"); y += 27;
-  input[4] = new Fl_Multiline_Input(70,y,300,100,"Multiline:"); y += 105;
+  input[4] = new Fl_Wordwrap_Input(70,y,300,100,"Wordwrap:"); y += 105;
 
   for (int i = 0; i < 4; i++) {
     input[i]->when(0); input[i]->callback(cb);
@@ -127,5 +127,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.21 2000/05/30 07:42:19 bill Exp $".
+// End of "$Id: input.cxx,v 1.22 2000/08/06 07:39:44 spitzak Exp $".
 //
