@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.57 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.58 2004/08/02 05:11:58 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -471,7 +471,7 @@ Style* Style::find(const char* name) {
 ////////////////////////////////////////////////////////////////
 // Themes:
 
-extern "C" FL_API bool fltk_theme();
+//extern "C" FL_API bool fltk_theme();
 
 /*! \typedef Theme
 
@@ -610,5 +610,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.57 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.58 2004/08/02 05:11:58 laza2000 Exp $".
 //
