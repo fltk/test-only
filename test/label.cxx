@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.20 2004/06/19 23:02:27 spitzak Exp $"
+// "$Id$"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -48,9 +48,9 @@ void button_cb(Widget *,void *) {
   if (topb->value()) i |= ALIGN_TOP;
   if (bottomb->value()) i |= ALIGN_BOTTOM;
   if (insideb->value()) i |= ALIGN_INSIDE;
-  if (clipb->value()) i |= ALIGN_CLIP;
+  if (clipb->value()) i |= ALIGN_CLIP|NOTACTIVE;
   if (wrapb->value()) i |= ALIGN_WRAP;
-  textbox->align(i);
+  textbox->flags(i);
   window->redraw();
 }
 
@@ -168,5 +168,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.20 2004/06/19 23:02:27 spitzak Exp $".
+// End of "$Id$".
 //

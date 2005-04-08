@@ -84,7 +84,7 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
       t->bg = bg;
       goto REDRAW;
     }
-  }      
+  }
   if (!drawn()) {
   REDRAW:
     if (this->w() < 0) {
@@ -96,7 +96,8 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
 #ifdef __APPLE__
     const_cast<xpmImage*>(this)->rgb = create_quartz_bitmap_from_xpm(data);
 #else
-    ImageDraw idraw(const_cast<xpmImage*>(this));
+    GSave gsave;
+    const_cast<xpmImage*>(this)->make_current();
     uchar *bitmap = 0;
     set_mask_bitmap(&bitmap);
     fg_kludge = fg;

@@ -384,7 +384,8 @@ void gifImage::read()
 
   data[Height+2] = 0; // null to end string array
 
-  ImageDraw idraw(this);
+  {GSave gsave;
+  make_current();
   uchar *bitmap = 0;
   set_mask_bitmap(&bitmap);
   draw_xpm(data, 0, 0, BLACK);
@@ -392,7 +393,7 @@ void gifImage::read()
   if (bitmap) {
     set_alpha_bitmap(bitmap, w(), h());
     delete[] bitmap;
-  }
+  }}
 
   delete[] Image;
   delete[] data[0];

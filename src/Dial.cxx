@@ -66,8 +66,9 @@ using namespace fltk;
 void Dial::draw() {
   Rectangle r(w(),h());
   if (type()!=FILL || box() != OVAL_BOX) {
+    update_flags();
     if (damage()&DAMAGE_ALL) draw_box();
-    box()->inset(r);
+    box()->inset(r, style(), flags());
   }
   Color fillcolor = selection_color();
   Color linecolor = textcolor();
@@ -131,7 +132,7 @@ int Dial::handle(int event) {
     handle_push();
   case DRAG: {
     Rectangle r(w(),h());
-    box()->inset(r);
+    box()->inset(r, style(), flags());
     int mx = event_x()-r.center_x();
     int my = event_y()-r.center_y();
     if (!mx && !my) return 1;

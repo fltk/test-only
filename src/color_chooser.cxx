@@ -173,7 +173,7 @@ int ccHueBox::handle(int e) {
     ih = c->h();
   case DRAG: {
     float Xf, Yf, H, S;
-    Rectangle r(w(),h()); box()->inset(r);
+    Rectangle r(w(),h()); box()->inset(r,style(),0);
     Xf = (event_x()-r.x())/float(r.w());
     Yf = (event_y()-r.y())/float(r.h());
     tohs(Xf, Yf, H, S);
@@ -189,7 +189,7 @@ int ccHueBox::handle(int e) {
 
 static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
   ccHueBox* v = (ccHueBox*)vv;
-  Rectangle r(v->w(),v->h()); v->box()->inset(r);
+  Rectangle r(v->w(),v->h()); v->box()->inset(r,v->style(),0);
   float Yf = float(Y)/r.h();
 #ifdef UPDATE_HUE_BOX
   const float V = ((ColorChooser*)(v->parent()))->v();
@@ -210,8 +210,9 @@ static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
 }
 
 void ccHueBox::draw() {
+  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r,style(),0);
   if (damage() == DAMAGE_VALUE) {
     push_clip(Rectangle(r.x()+px,r.y()+py,6,6));
   }
@@ -247,7 +248,7 @@ int ccValueBox::handle(int e) {
     iv = is_alpha() ? c->a() : c->v();
   case DRAG: {
     float Yf;
-    Rectangle r(w(),h()); box()->inset(r);
+    Rectangle r(w(),h()); box()->inset(r,style(),flags());
     Yf = 1-(event_y()-r.y())/float(r.h());
     if (fabsf(Yf-iv)<(3*1.0f/h())) Yf = iv;
     if (is_alpha()) {
@@ -296,10 +297,11 @@ static const uchar* generate_vimage(void* vv, int X, int Y, int W, uchar* p) {
 }
 
 void ccValueBox::draw() {
+  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
   ColorChooser* c = (ColorChooser*)parent();
   Idata i;
-  i.wh.set(0,0,w(),h()); box()->inset(i.wh);
+  i.wh.set(0,0,w(),h()); box()->inset(i.wh,style(),flags());
   float v;
   if (is_alpha()) {
     i.r = c->r(); i.g = c->g(); i.b = c->b();

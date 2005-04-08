@@ -91,7 +91,7 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
     if (m->labelcolor_) o->labelcolor(m->labelcolor_);
     // these flags have been cleverly assigned so this shift and mask
     // converts from the old values to the new ones:
-    o->set_flag((m->flags<<8)&(INACTIVE|VALUE|INVISIBLE));
+    o->set_flag((m->flags<<8)&(NOTACTIVE|VALUE|INVISIBLE));
     if (m->flags & FL_MENU_DIVIDER) new Divider();
     m = next;
   }

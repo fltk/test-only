@@ -1,5 +1,5 @@
 //
-// "$Id: Input.h,v 1.6 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // One-line text input field.
 //
@@ -57,7 +57,10 @@ public:
   bool static_value(const char*);
   bool static_value(const char*, int);
   const char* value() const {return value_;}
+  char at(int i) const {return value_[i];}
+#ifdef FLTK_1_WIDGET  // back-compatability section:
   char index(int i) const {return value_[i];}
+#endif
   int size() const {return size_;}
   void reserve(int newsize);
 
@@ -118,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Input.h,v 1.6 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

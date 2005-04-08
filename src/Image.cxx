@@ -169,7 +169,7 @@ void Image::destroy_cache() {
   This is designed to be called outside of drawing code, as it will
   replace the current drawing state. To draw into an Image while you
   are drawing a widget (or drawing another Image) you must use a
-  ImageDraw object to save the state.
+  GSave object to save the state.
 */
 void Image::make_current() {
   if (!rgb) {
@@ -231,7 +231,8 @@ void Image::make_current() {
     \code
     MyImage::draw(x,y,w,h,style,flags) {
       if (!drawn()) {
-        ImageDraw(const_cast<Image*>(this));
+        GSave gsave;
+	(const_cast<Image*>(this))->make_current();
 	draw_rgb_part();
         uchar* data = generate_ae_bitmap();
 	const_cast<Image*>(this)->set_alpha_bitmap(bitmap, w, h);
@@ -289,59 +290,6 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   alpha = (void*)id;
 #else
 #endif
-}
-
-/*! \class fltk::ImageDraw
-  The constructor of this class saves enough information so that the
-  current location graphics are being drawn can be restored by the
-  destructor. It then does image->make_current(). Typical usage:
-
-  \code
-  if (!image.drawn()) {
-    ImageDraw x(image);
-    draw_graphics_for_image();
-    // destructor of the ImageDraw happens here
-  }
-  // we can now draw our image into the window:
-  image.draw(x,y,w,h);
-  \endcode
-*/
-
-#ifdef _WIN32
-extern HDC fl_bitmap_dc;
-#endif
-
-ImageDraw::ImageDraw(Image* image) {
-  push_matrix();
-#if USE_X11
-  data[0] = (void*)(xwindow);
-#elif defined(_WIN32)
-  // make it not destroy the previous dc:
-  data[0] = (void*)dc;
-  data[1] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
-#elif defined(__APPLE__)
-  data[0] = (void*)quartz_window;
-  data[1] = (void*)quartz_gc;
-#else
-# error
-#endif
-  image->make_current();
-  push_no_clip();
-}
-
-ImageDraw::~ImageDraw() {
-#if USE_X11
-  xwindow = (XWindow)(data[0]);
-#elif defined(_WIN32)
-  dc = (HDC)(data[0]);
-  DeleteDC(fl_bitmap_dc);
-  fl_bitmap_dc = (HDC)(data[1]);
-#elif defined(__APPLE__)
-  quartz_window = data[0];
-  quartz_gc = data[1];
-#endif
-  pop_clip();
-  pop_matrix();
 }
 
 void fl_restore_clip(); // in rect.C

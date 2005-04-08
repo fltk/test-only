@@ -79,11 +79,11 @@ void PopupMenu::draw() {
       || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
     draw_background();
   }
-  Flags flags = current_flags_highlight();
+  Flags flags = update_flags();
   if (::pushed == this) flags |= VALUE|HIGHLIGHT;
   Rectangle r(w(),h());
   box->draw(r, style(), flags);
-  box->inset(r);
+  box->inset(r, style(), flags);
   draw_label(r, style(), flags);
   // draw the little mark at the right:
 //    int w1 = int(textsize());

@@ -91,7 +91,9 @@ void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) cons
   pop_clip();
 }
 
-void TiledImage::inset(Rectangle& r) const {if (image_) image_->inset(r);}
+void TiledImage::inset(Rectangle& r, const Style* style, Flags flags) const {
+  if (image_) image_->inset(r,style,flags);
+}
 
 //
 // End of "$Id$".

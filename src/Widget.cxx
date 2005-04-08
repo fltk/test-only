@@ -607,11 +607,8 @@ void Widget::redraw() {
 void Widget::redraw(uchar flags) {
   if (!(flags & ~damage_)) return;
   damage_ |= flags;
-  if (!is_window())
-    for (Widget* widget = parent(); widget; widget = widget->parent()) {
-      widget->damage_ |= DAMAGE_CHILD;
-      if (widget->is_window()) break;
-    }
+  for (Widget* widget = parent(); widget; widget = widget->parent())
+    widget->damage_ |= DAMAGE_CHILD;
   fltk::damage(1); // make flush() do something
 }
 
@@ -672,6 +669,7 @@ extern Widget* fl_did_clipping;
 */
 void Widget::draw()
 {
+  update_flags();
   if (box() == NO_BOX) {
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
@@ -720,10 +718,10 @@ int Widget::handle(int event) {
     // work if this is a group and some child has the belowmouse because
     // send() will not change the belowmouse then. Setting belowmouse
     // directly fixes this.
-    // The check for is_window is there to fix problems with a large
+    // The check for !parent() is there to fix problems with a large
     // number of older fltk programs that set NO_BOX on windows to
     // stop them from blinking (this is not necessary in fltk2.0):
-    if (box()!=NO_BOX || is_window()) {fltk::belowmouse(this); return true;}
+    if (box()!=NO_BOX || !parent()) {fltk::belowmouse(this); return true;}
     return 0;
   case HIDE:
   case DEACTIVATE:
@@ -896,7 +894,7 @@ bool Widget::active_r() const {
   send() an fltk::ACTIVATE event. */
 void Widget::activate() {
   if (!active()) {
-    clear_flag(INACTIVE);
+    clear_flag(NOTACTIVE);
     if (active_r()) {
       redraw_label(); redraw();
       handle(ACTIVATE);
@@ -909,11 +907,11 @@ void Widget::activate() {
   send() an fltk::DEACTIVATE event. */
 void Widget::deactivate() {
   if (active_r()) {
-    set_flag(INACTIVE);
+    set_flag(NOTACTIVE|INACTIVE);
     redraw_label(); redraw();
     handle(DEACTIVATE);
   } else {
-    set_flag(INACTIVE);
+    set_flag(NOTACTIVE|INACTIVE);
   }
 }
 

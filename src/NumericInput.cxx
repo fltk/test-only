@@ -112,6 +112,7 @@ int NumericInput::handle(int event) {
     }
     break;
   case MOUSEWHEEL:
+    if (!focused()) return 0;
     return handle_arrow(event_dy());
   case PUSH:
     if (event_state(ALT|META)) {
@@ -145,24 +146,23 @@ int NumericInput::handle(int event) {
 */
 int NumericInput::handle_arrow(int dir)
 {
+  int save_when = when(); when(0);
+
   // locate the character to change:
   int p; char c;
   int q = position();
   if (mark() > q) q = mark() - 1;
   else if (mark() < q) q = q - 1;
-  const char* v = value();
 
   // make insertion after decimal point work:
-  if (v[q] == '.') q++;
-
-  int save_when = when(); when(0);
+  if (at(q) == '.') q++;
 
   // add trailing ".0" if cursor is on end of number:
-  if (v[q] < '0' || v[q] > '9') {
+  if (at(q) < '0' || at(q) > '9') {
     for (int g = q-1;;g--) {
       // search to see if decimal point is already there:
-      if (g >= 0 && v[g] == '.') break;
-      if (g < 0 || v[g] < '0' || v[g] > '9') {
+      if (g >= 0 && at(g) == '.') break;
+      if (g < 0 || at(g) < '0' || at(g) > '9') {
 	// if no digits before cursor, assumme we are not pointing at a number:
 	if (g >= q-1) goto DONE;
 	// if it does not like period edit the last digit instead:
@@ -177,7 +177,7 @@ int NumericInput::handle_arrow(int dir)
 
   // if it's a negative number we reverse direction:
   for (p = q-1; p >= 0; p--) {
-    c = v[p];
+    c = at(p);
     if (c == '-') {dir = -dir; break;}
     if (c != '.' && (c < '0' || c > '9')) break;
   }
@@ -186,7 +186,7 @@ int NumericInput::handle_arrow(int dir)
   UP_CASE:
     // up to a larger absolute value, which is much simpler:
     for (p = q; p >= 0; p--) {
-      c = v[p];
+      c = at(p);
       if (c == '.') continue;
       if (c < '0' || c > '9') break;
       if (c < '9') {
@@ -202,8 +202,8 @@ int NumericInput::handle_arrow(int dir)
     // down to a smaller absolute value:
     // first check if all the digits are zero, if so we reverse the sign:
     for (p = q; ; p--) {
-      if (p < 0 || (v[p] < '0' || v[p] > '9') && v[p] != '.') {
-	if (p >= 0 && v[p] == '-') {
+      if (p < 0 || (at(p) < '0' || at(p) > '9') && at(p) != '.') {
+	if (p >= 0 && at(p) == '-') {
 	  Input::replace(p, p+1, 0,0);
 	  q--;
 	} else {
@@ -212,18 +212,18 @@ int NumericInput::handle_arrow(int dir)
 	}
 	goto UP_CASE;
       }
-      if (v[p] != '.' && v[p] != '0') break;
+      if (at(p) != '.' && at(p) != '0') break;
     }
 
     for (p = q; p >= 0; p--) {
-      c = v[p];
+      c = at(p);
       if (c == '.') continue;
       if (c < '0' || c > '9') break;
       if (c == '1') {
 	// delete leading zeros:
 	int g = p;
-	while (g > 0 && v[g-1]=='0') g--;
-	if (!(g > 0 && (v[g-1]>='0' && v[g-1]<='9' || v[g-1]=='.'))) {
+	while (g > 0 && at(g-1)=='0') g--;
+	if (!(g > 0 && (at(g-1)>='0' && at(g-1)<='9' || at(g-1)=='.'))) {
 	  if (p < q) {
 	    Input::replace(g, p+1, 0, 0);
 	    q -= p-g+1;

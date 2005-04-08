@@ -173,7 +173,8 @@ void xpmFileImage::read()
   int w, h;
   measure_xpm(ldata, w, h);
 
-  ImageDraw idraw(const_cast<xpmFileImage*>(this));
+  GSave gsave;
+  const_cast<xpmFileImage*>(this)->make_current();
 
   uchar *bitmap = 0;
   set_mask_bitmap(&bitmap);

@@ -42,7 +42,7 @@ protected:
 public:
   const char* data() const {return data_;}
   void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&) const;
+  void inset(Rectangle&, const Style*, Flags) const;
   bool fills_rectangle() const;
   bool is_frame() const;
   FrameBox(const char* n, const char* c, const FrameBox* d=0);
@@ -60,7 +60,7 @@ class FL_API HighlightBox : public FlatBox {
   const Box* down;
 public:
   void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&) const;
+  void inset(Rectangle&, const Style*, Flags) const;
   bool fills_rectangle() const;
   bool is_frame() const;
   HighlightBox(const char* n, const Box* d);

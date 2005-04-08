@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.20 2005/01/24 08:07:10 spitzak Exp $"
+// "$Id$"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -246,13 +246,12 @@ void fltk::pngImage::read()
     d=4; //    png_set_strip_alpha(png_ptr); 
   // png_set_strip_alpha doesn't seem to work ... too bad
  
-  { // We use a block because ImageDraw creates a local
+  { // We use a block because GSave creates a local
     // and we have 'goto error' before this point
-    ImageDraw idraw(this);
+    GSave gsave;
+    make_current();
     drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height), d);
-    if(d == 4) {
-      alpha = rgb;
-    }
+    if(d == 4) alpha = rgb;
   }
 
   png_read_end(png_ptr, NULL);
@@ -265,5 +264,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.20 2005/01/24 08:07:10 spitzak Exp $"
+// End of "$Id$"
 //

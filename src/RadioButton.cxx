@@ -55,7 +55,7 @@ static void default_glyph(int glyph, const Rectangle& R, const Style* style, Fla
   box->draw(R, style, flags);
   if (flags & VALUE) {
     Rectangle r(R);
-    box->inset(r);
+    box->inset(r, style, flags);
     // use the selection color only if they directly set it:
     Color c = style->selection_color_;
     if (!c) c = style->textcolor();

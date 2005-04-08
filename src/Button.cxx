@@ -180,7 +180,7 @@ void Button::draw(int glyph, int glyph_width) const
 
   Box* box = style->buttonbox();
 
-  Flags box_flags = current_flags_highlight();
+  Flags box_flags = flags()&~(VALUE|PUSHED);
   Flags glyph_flags = box_flags;
   if (glyph_width) {
     if (value()) glyph_flags |= VALUE;
@@ -227,7 +227,7 @@ void Button::draw(int glyph, int glyph_width) const
     }
     // Draw the box:
     box->draw(r, style, box_flags);
-    box->inset(r);
+    box->inset(r, style, box_flags);
   }
 
   if (glyph_width) {
@@ -254,6 +254,7 @@ void Button::draw() {
     fl_did_clipping = this;
     return;
   }
+  update_flags();
   draw(0,0);
 }
 

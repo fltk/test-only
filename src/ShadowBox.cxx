@@ -46,7 +46,7 @@ public:
     setcolor(fg);
     strokerect(r);
   }
-  void inset(Rectangle& r) const {
+  void inset(Rectangle& r, const Style*, Flags) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-(2+SIZE));

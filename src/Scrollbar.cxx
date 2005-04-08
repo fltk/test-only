@@ -80,7 +80,7 @@ int Scrollbar::value(int p, int w, int t, int l) {
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;
-  Rectangle r(this->w(),this->h()); box()->inset(r);
+  Rectangle r(this->w(),this->h()); box()->inset(r, style(), flags());
   int W,H;
   if (vertical()) {
     W = r.h(); H = r.w(); int T = b; b = t; t = T;
@@ -122,7 +122,7 @@ void Scrollbar::increment_cb() {
 
 int Scrollbar::handle(int event) {
   // area of scrollbar:
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r, style(), flags());
 
   // adjust slider area to be inside the arrow buttons:
   if (vertical()) {
@@ -241,9 +241,10 @@ int Scrollbar::handle(int event) {
 }
 
 void Scrollbar::draw() {
+  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
 
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r, style(), flags());
 
   char pushed_ = pushed() ? which_pushed : NOTHING;
   char highlight_ = belowmouse() ? which_highlight : NOTHING;

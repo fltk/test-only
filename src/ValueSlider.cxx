@@ -39,8 +39,9 @@ using namespace fltk;
 void ValueSlider::draw() {
 
   // figure out the inner size of the box:
+  Flags flags = update_flags();
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
+  Rectangle r(w(),h()); box->inset(r, style(), flags);
   Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
@@ -60,7 +61,6 @@ void ValueSlider::draw() {
     }
   }
 
-  Flags flags = current_flags_highlight();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
@@ -131,14 +131,14 @@ void ValueSlider::draw() {
     setfont(textfont(), textsize());
     setcolor(inactive(textcolor(),flags));
     drawtext(buf, tr, 0);
-    pop_clip();    
-  }  
+    pop_clip();
+  }
 }
 
 int ValueSlider::handle(int event) {
   // figure out the inner size of the slider and text areas:
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
+  Rectangle r(w(),h()); box->inset(r,style(),flags());
   if (horizontal()) {
     int tw = 35; r.move_x(tw);
   } else {

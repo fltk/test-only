@@ -89,14 +89,15 @@ static char which_highlight = 0;
 static char which_pushed = 0;
 
 void ValueInput::draw() {
-  Rectangle r(w(),h()); box()->inset(r);
+  update_flags();
+  Rectangle r(w(),h()); box()->inset(r, style(), flags());
   const int bw = r.h()/2; r.move_r(-bw);
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     input.set_damage(DAMAGE_ALL);
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
-    Flags ff = current_flags_highlight();
+    Flags ff = flags();
     Flags f[2];
     f[0] = f[1] = ff & ~HIGHLIGHT;
     if (which_highlight)
@@ -127,7 +128,7 @@ void ValueInput::increment_cb() {
 #define REPEAT .1f
 
 int ValueInput::handle(int event) {
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r, style(), flags());
   const int bw = r.h()/2; r.move_r(-bw);
   int n;
   switch (event) {

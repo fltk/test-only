@@ -85,7 +85,7 @@ void PackedGroup::layout() {
 
     // This is the rectangle to lay out the remaining widgets in:
     Rectangle r(w(),h());
-    box()->inset(r);
+    box()->inset(r, style(), 0);
 
     bool saw_horizontal = false;
     bool saw_vertical = false;

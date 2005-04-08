@@ -1,5 +1,5 @@
 //
-// "$Id: ValueOutput.cxx,v 1.3 2005/01/24 08:07:52 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 
@@ -28,8 +28,9 @@ using namespace fltk;
 // keystrokes do not do anything.
 
 void ValueOutput::draw() {
+  update_flags();
   if (damage() & DAMAGE_ALL) draw_box();
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r, style(), flags());
   push_clip(r);
   setfont(textfont(), textsize());
   char buf[40];

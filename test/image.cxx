@@ -275,5 +275,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.27 2005/01/27 08:50:42 spitzak Exp $".
+// End of "$Id$".
 //

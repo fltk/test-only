@@ -192,7 +192,7 @@ void TextDisplay::layout() {
 	//printf("TextDisplay::layout\n");
   //if (!buffer() || !visible_r()) return; // why is this test here?
   Rectangle r(w(),h());
-  box()->inset(r);
+  box()->inset(r, style(), 0);
   text_area.set(r.x()+LEFT_MARGIN,
 		r.y()+TOP_MARGIN,
 		r.w()-LEFT_MARGIN-RIGHT_MARGIN,
@@ -1867,6 +1867,7 @@ void TextDisplay::draw(void) {
   if (damage() & DAMAGE_ALL) {
 //printf("drawing rectangles\n");
     // draw the box()
+    update_flags();
     draw_frame();
 
     setcolor(color());

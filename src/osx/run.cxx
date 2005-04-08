@@ -1395,14 +1395,24 @@ void Widget::make_current() const {
   int x = 0;
   int y = 0;
   const Widget* widget = this;
-  while (!widget->is_window()) {
+  while (!widget->parent()) {
     x += widget->x();
     y += widget->y();
     widget = widget->parent();
   }
   const Window* window = (const Window*)widget;
-  release_quartz_context();
-  Window::drawing_window_ = window;
+  if (Window::drawing_window_ != window) {
+    release_quartz_context();
+    Window::drawing_window_ = window;
+    quartz_window = xid(window);
+    SetPort(GetWindowPort(quartz_window));
+    CreatedWindow* i = CreatedWindow::find(window);
+    QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
+    quartz_gc = i->gc;
+    CGContextSaveGState(quartz_gc);
+    fill_quartz_context();
+  }
+#if 0
   // Find the root window and our position in it:
   int X = 0;
   int Y = 0;
@@ -1452,7 +1462,7 @@ void Widget::make_current() const {
   quartz_gc = CreatedWindow::find(root)->gc = i->gc;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
-
+#endif
   load_identity();
   translate(x,y);
 }

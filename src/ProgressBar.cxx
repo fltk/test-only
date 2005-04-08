@@ -18,9 +18,10 @@ ProgressBar::ProgressBar(int x, int y, int w, int h, const char *lbl)
 }
 
 void ProgressBar::draw() {
+  update_flags();
   if (damage() & DAMAGE_ALL) draw_box();
   Rectangle r(w(),h());
-  box()->inset(r);
+  box()->inset(r, style(), flags());
   if (mPresent > mMax) mPresent = mMax;
   if (mPresent < mMin) mPresent = mMin;
   double pct = (mPresent - mMin) / mMax;

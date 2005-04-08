@@ -315,11 +315,13 @@ void Symbol::_measure(int& w, int& h) const {}
 
 /** Move the edges of \a r to be the "interior" of the symbol. If
     this symbol is used as a Widget::box() then this method is used
-    to determine where to put the widget interior.
+    to determine where to put the widget interior. \a style and \a flags
+    can be used to make the border change depending on them (for
+    instance a button can have different borders when up verses down)
 
     The default implementation returns \a r unchanged.
 */
-void Symbol::inset(Rectangle& r) const {}
+void Symbol::inset(Rectangle& r, const Style* style, Flags flags) const {}
 
 /** Return true if the symbol will completely fill all the pixels
     in the Rectangle passed to draw(). Widgets use this to test

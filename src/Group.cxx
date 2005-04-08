@@ -55,7 +55,7 @@ and the items in them are widgets.
 */
 
 #include <config.h>
-#include <fltk/Group.h>
+#include <fltk/Window.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <fltk/events.h>
@@ -378,14 +378,9 @@ int Group::handle(int event) {
       if (event_y() >= child->y()+child->h()) continue;
       // see if it wants the event:
       if (child->send(event)) return true;
-#if 0
-      // quit when we reach a widget that claims mouse points at it,
-      // so we don't pass the events to widgets "hidden" behind that one.
-      if (event != ENTER && event != MOVE &&
-	  child->contains(fltk::belowmouse())) return false;
-#endif
     }
-    return Widget::handle(event);
+    if (event != MOUSEWHEEL) return Widget::handle(event);
+    // else fall through to send MOUSEWHEEL to the focus:
 
   default:
     // Try to give any other event to the focus:
@@ -625,10 +620,12 @@ void Group::layout(const Rectangle& r, int layout_damage) {
   Widget*const* a = array_;
   Widget*const* e = a+children_;
   int extradamage = layout_damage & LAYOUT_DAMAGE;
+#if USE_X11 || !defined(__APPLE__)
   // If this is not a Window and the xy position is changed, we must
   // call layout() on every child. This is necessary so that child
   // Windows will move to their new positions:
   if ((layout_damage & LAYOUT_XY) && !is_window()) extradamage |= LAYOUT_XY;
+#endif
   while (a < e) {
     Widget* widget = *a++;
     widget->layout_damage(widget->layout_damage()|extradamage);
@@ -650,6 +647,7 @@ Widget* fl_did_clipping;
 void Group::draw() {
   int numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
+    update_flags(); clear_flag(HIGHLIGHT);
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
@@ -729,14 +727,18 @@ void Widget::draw_background() const {
   drawing coordinates is the upper-left corner. It's damage is then set to 0.
 */
 void Group::draw_child(Widget& w) const {
-  if (w.visible() && !w.is_window()) {
-    if (!not_clipped(w)) return;
-    push_matrix();
-    translate(w.x(), w.y());
+  if (w.visible() && not_clipped(w)) {
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-    w.draw();
+    if (w.is_window()) {
+      GSave gsave;
+      ((Window*)&w)->flush();
+    } else {
+      push_matrix();
+      translate(w.x(), w.y());
+      w.draw();
+      pop_matrix();
+    }
     w.set_damage(0);
-    pop_matrix();
   }
 }
 
@@ -745,13 +747,17 @@ void Group::draw_child(Widget& w) const {
   coordinates is the upper-left corner. It's damage is then set to 0.
 */
 void Group::update_child(Widget& w) const {
-  if (w.damage() && w.visible() && !w.is_window()) {
-    if (!not_clipped(w)) return;
-    push_matrix();
-    translate(w.x(), w.y());
-    w.draw();
+  if (w.damage() && w.visible() && not_clipped(w)) {
+    if (w.is_window()) {
+      GSave gsave;
+      ((Window*)&w)->flush();
+    } else {
+      push_matrix();
+      translate(w.x(), w.y());
+      w.draw();
+      pop_matrix();
+    }
     w.set_damage(0);
-    pop_matrix();
   }
 }
 

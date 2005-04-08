@@ -83,10 +83,30 @@ LabelType* const fltk::NO_LABEL = &noLabel;
 ////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
+/** Change some of the flags() to represent the current state. This
+    is typically done by draw() so that all boxes and labels are
+    drawn with the correct attributes.
+    - INACTIVE is set to !active_r()
+    - HIGHLIGHT is set if active_r() and this == belowmouse()
+    - FOCUSED is set if focused()
+    The resulting new value for flags() is returned.
+    In the future this function may become a no-op, and the correct
+    flags will be tracked as things change in the widgets.
+*/
+Flags Widget::update_flags() {
+  Flags f = flags_ & ~(INACTIVE|HIGHLIGHT|FOCUSED);
+  if (!active_r()) f |= INACTIVE;
+  else if (takesevents() && belowmouse()) f |= HIGHLIGHT;
+  if (focused()) f |= FOCUSED;
+  flags_ = f;
+  return f;
+}
+
 /** Draw the widget's box() such that it fills the entire area of the
     widget. If the box is not rectangluar, this also draws the area
     of the parent widget that is exposed. The box drawing routine is
     passed the style() and current_flags() of the widget.
+    This also does update_flags().
 */
 void Widget::draw_box() const {
   Box* box = this->box();
@@ -94,7 +114,7 @@ void Widget::draw_box() const {
   if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle() && parent())
     draw_background();
 #endif
-  box->draw(Rectangle(w(),h()), style(), current_flags()|OUTPUT);
+  box->draw(Rectangle(w(),h()), style(), flags_ | OUTPUT);
   // draw a big x to show where image will be drawn:
 //    setcolor(BLACK);
 //    drawline(0,0,w(),h());
@@ -108,49 +128,19 @@ void Widget::draw_box() const {
     redrawing them anyway (ie anything displaying text).
 */
 void Widget::draw_frame() const {
-  box()->draw(Rectangle(w(),h()), style(), current_flags()|INVISIBLE|OUTPUT);
-}
-
-/** Return the flags that should be passed to drawing functions.
-
-    This differs from the value of flags() in these ways:
-
-    VALUE, PUSHED, and HIGHLIGHT are turned off
-
-    INACTIVE is set to !active_r().
-
-    FOCUSED is set to focused().
-*/
-Flags Widget::current_flags() const {
-  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT|FOCUSED);
-  if (!active_r()) f |= INACTIVE;
-  if (focused()) f |= FOCUSED;
-  return f;
-}
-
-/** Return the flags that should be passed to drawing functions.
-
-    Same as current_flags() but HIGHLIGHT is turned on if the
-    widget is active and belowmouse() is true.
-*/
-Flags Widget::current_flags_highlight() const {
-  Flags f = flags() & ~(VALUE|INACTIVE|HIGHLIGHT|FOCUSED);
-  if (!active_r()) f |= INACTIVE;
-  else if (takesevents() && belowmouse()) f |= HIGHLIGHT;
-  if (focused()) f |= FOCUSED;
-  return f;
+  box()->draw(Rectangle(w(),h()), style(), flags_ | (INVISIBLE|OUTPUT));
 }
 
 /** Calls draw_label() with the area inside the box() and with
     the style() and flags().
 */
 void Widget::draw_label() const {
-  Flags flags = current_flags();
+  Flags flags = this->flags();
   // Do a quick test to see if we don't want to draw anything:
   if (!image() && (!label() || !*label() ||
 		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r,style(),flags);
   // and draw it:
   draw_label(r, style(), flags);
 }
@@ -303,7 +293,7 @@ void Group::draw_outside_label(Widget& w) const {
     r.x(r.r()+3);
     r.set_r(this->w());
   }
-  if (!w.active_r()) align |= INACTIVE;
+  align &= ~OUTPUT;
   //push_clip(X, Y, W, H); // this will break some old fltk programs
   w.labeltype()->draw(w.label(), r, w.style(), align);
   //pop_clip();

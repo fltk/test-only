@@ -265,9 +265,10 @@ InputBrowser::handle(int e) {
 
 void
 InputBrowser::draw() {
+  Flags f = update_flags();
   minw_ = w();
   if (damage()&DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r,style(),f);
   int W1 = r.h()*4/5;
   if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
     input.resize(r.x(), r.y(), r.w()-W1, r.h());
@@ -282,7 +283,6 @@ InputBrowser::draw() {
     input.set_damage(0);
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
-    Flags f = current_flags_highlight();
     if (ib == this) f |= VALUE;
     // draw the little mark at the right:
     r.x(r.x()+r.w()-W1); r.w(W1);

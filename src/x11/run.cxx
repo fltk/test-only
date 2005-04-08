@@ -267,7 +267,7 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     change = 1;
   }
 
-  w->style()->boxcolors(w->current_flags()|OUTPUT,background,textcolor);
+  w->style()->boxcolors(w->flags()|OUTPUT,background,textcolor);
   if (background_orig != background || textcolor_orig != textcolor) {
     background_orig = background;
     textcolor_orig = textcolor;

@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.8 2004/09/30 06:08:28 spitzak Exp $"
+// "$Id$"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -80,11 +80,11 @@ enum {
   ALIGN_WRAP		= 0x00000080, //!< The label is word-wrapped
   ALIGN_MASK		= 0x000000FF, //!< Used to split align() from flags()
 
-  INACTIVE		= 0x00000100, //!< does not get events, gray it out
+  NOTACTIVE		= 0x00000100, //!< !active()
   OUTPUT		= 0x00000200, //!< does not get events, draw text colors
   VALUE			= 0x00000400, //!< true/on state
   SELECTED		= 0x00000800, //!< chosen in browser/menu, draw selected colors
-  INVISIBLE		= 0x00001000, //!< !visible(), draw empty
+  INVISIBLE		= 0x00001000, //!< !visible(), draw_frame()
   HIGHLIGHT		= 0x00002000, //!< draw highlighted
   CHANGED		= 0x00004000, //!< value() changed since last callback
   COPIED_LABEL		= 0x00008000, //!< copy_label() was called
@@ -92,8 +92,9 @@ enum {
   LAYOUT_VERTICAL	= 0x00020000, //!< fltk::Pack puts this widget vertical
   TAB_TO_FOCUS		= 0x00040000, //!< Widget::tab_to_focus();
   CLICK_TO_FOCUS	= 0x00080000, //!< Widget::click_to_focus()
-  FOCUSED		= 0x00040000, //!< draw with keyboard focus
-  PUSHED		= 0x00080000  //!< draw pushed-in
+  INACTIVE		= 0x00100000, //!< draw it grayed-out
+  FOCUSED		= 0x00200000, //!< draw with keyboard focus
+  PUSHED		= 0x00400000  //!< draw pushed-in
 };
 /*! \} */
 
@@ -102,5 +103,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Flags.h,v 1.8 2004/09/30 06:08:28 spitzak Exp $".
+// End of "$Id$".
 //

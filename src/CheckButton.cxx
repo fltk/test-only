@@ -59,7 +59,7 @@ static void default_glyph(int glyph,
   // inside it:
   box->draw(R, style, flags);
   if (flags&VALUE) {
-    Rectangle r(R); box->inset(r);
+    Rectangle r(R); box->inset(r, style, flags);
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(fg);
     if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
@@ -76,6 +76,7 @@ static void default_glyph(int glyph,
 }
 
 void CheckButton::draw() {
+  update_flags();
   Button::draw(0, int(textsize())+2);
 }
 

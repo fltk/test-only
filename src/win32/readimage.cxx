@@ -1,4 +1,5 @@
 
+
 using namespace fltk;
 
 uchar *				// O - Pixel buffer or NULL if failed
@@ -12,6 +13,7 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
   int   Y = r.y();
   int   w = r.w();
   int   h = r.h();
+
   int	x, y;			// Looping vars
 
   // None of these read alpha yet, so set the alpha to 1 everywhere.
@@ -21,6 +23,7 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
       for (int x = 0; x < w; x++) {*line = 0xff; line += delta;}
     }
   }
+
 
   // Grab all of the pixels in the image, one at a time...
   // MRS: there has to be a better way than this!

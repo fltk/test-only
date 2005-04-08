@@ -119,7 +119,7 @@ void MenuTitle::draw() {
 
     {Rectangle r(w(),h());
     box->draw(r, style, VALUE|OUTPUT|HIGHLIGHT);
-    box->inset(r);
+    box->inset(r, style,  VALUE|OUTPUT|HIGHLIGHT);
     push_clip(r);}
     // Get the Item directly from the menubar and draw it:
     Item::set_style(menustate->widget);
@@ -266,7 +266,8 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   }
   Item::clear_style();
 
-  Rectangle r(W,H); box->inset(r);
+  Rectangle r(W,H);
+  box->inset(r, widget->style(), OUTPUT);
   W += hotKeysW + (W-r.w());
   if (W > widget->w()) widget->w(W);
   widget->h(H + (H-r.h()));
@@ -292,7 +293,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 
   Rectangle r(widget->w(), widget->h());
   if (damage != DAMAGE_CHILD) box->draw(r, widget->style(), OUTPUT);
-  box->inset(r);
+  box->inset(r, widget->style(), OUTPUT);
 
   int children = this->children(indexes,level);
   if (children<1) return;
@@ -327,7 +328,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       Flags flags = item->flags();
       bool clipped = false;
 
-      if (i == selected && !(flags & (OUTPUT|INACTIVE))) {
+      if (i == selected && !(flags & (OUTPUT|NOTACTIVE))) {
 	if (widget->parent()) { // special code for highlight of menu bars
 	  flags &= ~SELECTED;
 	  flags |= HIGHLIGHT;
@@ -401,7 +402,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
     if (mx >= widget->w()) return -1;
   }
   Rectangle r(widget->w(),widget->h());
-  menubox(widget)->inset(r);
+  menubox(widget)->inset(r, widget->style(), OUTPUT);
 
   int children = this->children(indexes,level);
   int array[20];
@@ -440,7 +441,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
 			     int index) const
 {
   Rectangle r(widget->w(), widget->h());
-  menubox(widget)->inset(r);
+  menubox(widget)->inset(r, widget->style(), OUTPUT);
 
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
@@ -496,7 +497,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   }
 
   Rectangle temprect(100,100);
-  menubox(this)->inset(temprect);
+  menubox(this)->inset(temprect, style(), 0);
   const int dh = 100-temprect.h();
   int Wtitle = 0;
   int Htitle = 0;

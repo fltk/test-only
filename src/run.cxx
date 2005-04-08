@@ -672,16 +672,25 @@ void fltk::flush() {
   if (damage_) {
     damage_ = false; // turn it off so Window::flush() can turn it back on
     for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
-      if (x->wait_for_expose) {damage_ = true; continue;}
       Window* window = x->window;
-      if (window->visible_r() && window->w()>0 && window->h()>0) {
+      if (window->parent()) {
+	// Expose events from the os set the region but do not set any
+	// damage bits. We have to handle these directly because otherwise
+	// this window will not be found and updated:
+	if (x->region && !window->damage() && !window->parent()->damage()) {
+	  window->flush();
+	  window->set_damage(0);
+	} else
+	  continue; // otherwise child windows are drawn by parent
+      } else {
+	if (x->wait_for_expose) {damage_ = true; continue;}
 	if (window->layout_damage()) window->layout();
 	if (window->damage() || x->region) {
 	  window->flush();
 	  window->set_damage(0);
 	}
       }
-      // destroy damage regions for windows that don't use them:
+      // After we are done with the window, destroy any unused region:
       if (x->region) {
 #if USE_X11
 	XDestroyRegion(x->region);

@@ -40,7 +40,7 @@ public:
   void image(const Symbol* i) {image_ = i;}
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&) const;
+  void inset(Rectangle&, const Style*, Flags) const;
 };
 
 }

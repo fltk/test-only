@@ -78,9 +78,10 @@ int ThumbWheel::handle(int event) {
 }
 
 void ThumbWheel::draw() {
+  update_flags();
   if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) draw_box();
   Rectangle r(w(),h());
-  box()->inset(r);
+  box()->inset(r, style(), flags());
   if (r.empty()) return;
 
   double s = step();

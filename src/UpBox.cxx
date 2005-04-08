@@ -274,60 +274,76 @@ void FrameBox::_draw(const fltk::Rectangle& R, const Style* style, Flags flags) 
 FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
   : Box(n), data_(s), down(d ? d : this)
 {
-  int i = strlen(s)/2;
-  dw = dh = i;
-  i /= 2;
-  dx = dy = i;
+  if (*s == '2') {
+    int i = (strlen(s)-1)/2;
+    dw = dh = i;
+    i = (i+1)/2;
+    dx = dy = i;
+  } else {
+    int i = strlen(s)/2;
+    dw = dh = i;
+    i /= 2;
+    dx = dy = i;
+  }
 }
 
-void FrameBox::inset(fltk::Rectangle& r) const {
-  r.x(r.x()+dx);
-  r.y(r.y()+dy);
-  r.w(r.w()-dw);
-  r.h(r.h()-dh);
+void FrameBox::inset(fltk::Rectangle& r, const Style*, Flags flags) const {
+  if (flags & VALUE) {
+    r.x(r.x()+down->dx);
+    r.y(r.y()+down->dy);
+    r.w(r.w()-down->dw);
+    r.h(r.h()-down->dh);
+  } else {
+    r.x(r.x()+dx);
+    r.y(r.y()+dy);
+    r.w(r.w()-dw);
+    r.h(r.h()-dh);
+  }
 }
 
 bool FrameBox::fills_rectangle() const {return true;}
 bool FrameBox::is_frame() const {return true;}
 
-static FrameBox downBox("down", "WWHHPPAA");
+static FrameBox downBox("down", "WWLLRRAA");
 /*! \ingroup boxes
-  A pushed-down button in fltk's standard theme.
+  Inset box in fltk's standard theme
 */
 Box* const fltk::DOWN_BOX = &downBox;
 
-static FrameBox upBox("up", "AAWWHHTT", &downBox);
+// The normal pushable button:
+static FrameBox downBox2("down", "2LLWWAA");
+static FrameBox upBox("up", "AAWWLL", &downBox2);
 /*! \ingroup boxes
   A up button in fltk's standard theme.
 */
 Box* const fltk::UP_BOX = &upBox;
 
-static FrameBox thinDownBox("thin_down", "WWHH");
+static FrameBox thinDownBox("thin_down", "WWLL");
 /*! \ingroup boxes
   1-pixel-thick inset box.
 */
 Box* const fltk::THIN_DOWN_BOX = &thinDownBox;
 
-static FrameBox thinUpBox("thin_up", "HHWW", &thinDownBox);
+static FrameBox thinUpBox("thin_up", "LLWW", &thinDownBox);
 /*! \ingroup boxes
   1-pixel-thick raised box.
 */
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down" version:
-static FrameBox engravedBox("engraved", "2HHWWWWHH", &downBox);
+static FrameBox engravedBox("engraved", "2LLWWWWLL", &downBox);
 /*! \ingroup boxes
   2-pixel thick engraved line around edge.
 */
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
-static FrameBox embossedBox("embossed", "2WWHHHHWW", &downBox);
+static FrameBox embossedBox("embossed", "LLWWWWLL", &downBox);
 /*! \ingroup boxes
   2-pixel thick raised line around edge.
 */
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
-static FrameBox borderBox("border", "HHHH", &downBox);
+static FrameBox borderBox("border", "LLLL", &downBox);
 /*! \ingroup boxes
   1-pixel thick gray line around rectangle.
 */
@@ -343,12 +359,7 @@ public:
     setcolor(style->textcolor());
     strokerect(r);
   }
-  void inset(fltk::Rectangle& r) const {
-    r.x(r.x()+1);
-    r.y(r.y()+1);
-    r.w(r.w()-2);
-    r.h(r.h()-2);
-  }
+  void inset(fltk::Rectangle& r, const Style*, Flags) const {r.inset(1);}
   BorderFrame(const char* n) : Box(n) {}
 };
 static BorderFrame borderFrame("border_frame");
@@ -374,7 +385,9 @@ void HighlightBox::_draw(const fltk::Rectangle& r, const Style* style, Flags fla
     FlatBox::_draw(r, style, flags);
   }
 }
-void HighlightBox::inset(fltk::Rectangle& r) const {down->inset(r);}
+void HighlightBox::inset(fltk::Rectangle& r, const Style* s, Flags flags) const {
+  if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) down->inset(r,s,flags);
+}
 bool HighlightBox::fills_rectangle() const {return true;}
 bool HighlightBox::is_frame() const {return down->is_frame();}
 

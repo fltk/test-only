@@ -487,8 +487,9 @@ void bmpImage::read()
     }
   }
 
-  ImageDraw idraw(this);
-  drawimage(array, PixelType(bDepth), Rectangle(w_, h_), bDepth);
+  {GSave gsave;
+  make_current();
+  drawimage(array, PixelType(bDepth), Rectangle(w_, h_), bDepth);}
 
   // Close the file and return...
   if (!datas) fclose(bmpFile);

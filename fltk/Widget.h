@@ -143,7 +143,7 @@ public:
   void	hide()			;
   void	set_visible()		{ flags_ &= ~INVISIBLE; }
   void	clear_visible()		{ flags_ |= INVISIBLE; }
-  bool	active() const		{ return !(flags_&INACTIVE); }
+  bool	active() const		{ return !(flags_&NOTACTIVE); }
   bool	active_r() const	;
   void	activate()		;
   void	activate(int b)		{ if (b) activate(); else deactivate(); }
@@ -151,7 +151,7 @@ public:
   bool	output() const		{ return (flags_&OUTPUT)!=0; }
   void	set_output()		{ flags_ |= OUTPUT; }
   void	clear_output()		{ flags_ &= ~OUTPUT; }
-  bool	takesevents() const	{ return !(flags_&(OUTPUT|INVISIBLE|INACTIVE)); }
+  bool	takesevents() const	{ return !(flags_&(OUTPUT|INVISIBLE|NOTACTIVE)); }
   bool	changed() const		{ return (flags_&CHANGED)!=0; }
   void	set_changed()		{ flags_ |= CHANGED; }
   void	clear_changed()		{ flags_ &= ~CHANGED; }
@@ -192,9 +192,8 @@ public:
   void	repeat_timeout(float)	;
   void  remove_timeout()	;
 
-  Flags current_flags() const	;
-  Flags current_flags_highlight() const	;
   void	make_current() const	;
+  Flags update_flags()		;
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;

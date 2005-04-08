@@ -31,6 +31,13 @@ namespace fltk {
 
 struct Font;
 
+class FL_API GSave {
+  void* data[4]; // hopefully big enough for everybody...
+ public:
+  GSave();
+  ~GSave();
+};
+
 /*! \addtogroup transformation
   \{ */
 FL_API void push_matrix();

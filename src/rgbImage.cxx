@@ -34,7 +34,8 @@ using namespace fltk;
 void rgbImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   if (!drawn()) {
-    ImageDraw idraw(const_cast<rgbImage*>(this));
+    GSave gsave;
+    const_cast<rgbImage*>(this)->make_current();
     drawimage(data, PixelType(depth), fltk::Rectangle(w(),h()), depth);
     if (depth == 4) const_cast<rgbImage*>(this)->alpha = rgb;
   }

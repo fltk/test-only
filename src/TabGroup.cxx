@@ -148,7 +148,7 @@ int TabGroup::tab_height() {
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
   H2 = h()-H2;
-  Rectangle r(0,0); box()->inset(r);
+  Rectangle r(0,0); box()->inset(r, style(), 0);
   if (H2 > H) {
     H = H2-r.y();
     return (H <= 0) ? 0 : -H-1;

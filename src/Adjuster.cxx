@@ -75,7 +75,7 @@ void Adjuster::draw() {
     dy = H = h()/3;
   }
 
-  Flags flags = current_flags();
+  Flags flags = update_flags() & ~(VALUE|PUSHED|HIGHLIGHT);
   Flags f[4];
   for (int i = 1; i < 4; i++) {
     f[i] = flags;

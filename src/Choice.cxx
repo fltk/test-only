@@ -74,13 +74,13 @@ extern bool fl_hide_underscore;
   to your own function that draws whatever you want.
 */
 void Choice::draw() {
+  Flags flags = update_flags();
   if (damage() & DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r);
+  Rectangle r(w(),h()); box()->inset(r, style(), flags);
   int w1 = r.h()*4/5;
   r.move_r(-w1);
   // draw the little mark at the right:
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
-    Flags flags = current_flags_highlight();
     Rectangle gr(r.r(), r.y(), w1, r.h());
     draw_glyph(GLYPH_DOWN_BUTTON, gr, flags & ~FOCUSED);
   }
@@ -98,7 +98,7 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
-      if (!active_r()) o->set_flag(INACTIVE);
+      if (!active_r()) o->set_flag(NOTACTIVE|INACTIVE);
       r.move_x(2);
       push_clip(r);
       push_matrix();

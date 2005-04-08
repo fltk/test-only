@@ -290,9 +290,10 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 
 void Slider::draw()
 {
+  Flags flags = update_flags();
   // figure out the inner size of the box:
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
+  Rectangle r(w(),h()); box->inset(r, style(), flags);
   Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
@@ -312,7 +313,6 @@ void Slider::draw()
     }
   }
 
-  Flags flags = current_flags_highlight();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
@@ -476,7 +476,7 @@ int Slider::handle(int event, const Rectangle& r) {
     // figure out the space the slider moves in and where the event is:
     int w,mx;
     Rectangle r1(r);
-    box()->inset(r1);
+    box()->inset(r1, style(), flags());
     if (horizontal()) {
       w = r1.w();
       mx = event_x()-r1.x();

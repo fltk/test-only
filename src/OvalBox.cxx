@@ -40,12 +40,7 @@ public:
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  void inset(Rectangle& r) const {
-    r.x(r.x()+1);
-    r.y(r.y()+1);
-    r.w(r.w()-2);
-    r.h(r.h()-2);
-  }
+  void inset(Rectangle& r, const Style*, Flags) const {r.inset(1);}
   OvalBox(const char* n) : Box(n) {}
 };
 static OvalBox ovalBox("oval");
@@ -67,7 +62,7 @@ public:
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  void inset(Rectangle& r) const {
+  void inset(Rectangle& r, const Style*, Flags) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-5);

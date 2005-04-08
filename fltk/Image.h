@@ -104,13 +104,6 @@ public:
 #endif // 0
 };
 
-class FL_API ImageDraw {
-  void* data[4]; // hopefully big enough for everybody...
- public:
-  ImageDraw(Image* i);
-  ~ImageDraw();
-};
-
 }
 
 #endif

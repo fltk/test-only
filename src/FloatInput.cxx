@@ -59,8 +59,8 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
     // This is complex to allow "0xff12" hex to be typed:
     if (b+n==0 && (ascii == '+' || ascii == '-') ||
 	(ascii >= '0' && ascii <= '9') ||
-	(b+n==1 && (index(0)=='0'||text[0]=='0') && (ascii=='x' || ascii == 'X')) ||
-	(b+n>1 && (index(0)=='0'||text[0]=='0') && ((index(1)=='x'||text[1]=='x')||(index(1)=='X'||text[1]=='X'))
+	(b+n==1 && (at(0)=='0'||text[0]=='0') && (ascii=='x' || ascii == 'X')) ||
+	(b+n>1 && (at(0)=='0'||text[0]=='0') && ((at(1)=='x'||text[1]=='x')||(at(1)=='X'||text[1]=='X'))
 	 && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) ||
 	type()==FLOAT && ascii && strchr(".eE+-", ascii))
       continue; // it's ok;    

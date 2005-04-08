@@ -57,7 +57,7 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
   default: {
     box = style->buttonbox();
     box->draw(r, style, flags);
-    box->inset(r);
+    box->inset(r, style, flags);
     }
   }
 

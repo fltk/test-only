@@ -54,7 +54,7 @@ public:
   bool static_value(const char *txt, int n)
 	{ return text_changed_(input_->static_value(txt, n)); }
   const char* value() const { return input_->value();}
-  char index(int i) const { return input_->index(i); }
+  char at(int i) const { return input_->at(i); }
   
   int size(bool ofText) const 
 	{ return ofText ? input_->size() : Choice::size(); }

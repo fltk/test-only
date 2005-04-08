@@ -847,7 +847,7 @@ void Browser::layout() {
   // figure out the visible area:
   const int sw = scrollbar_width();
   interior.set(0,0,w(),h());
-  box()->inset(interior);
+  box()->inset(interior, style(), 0);
   if (scrollbar.visible()) interior.move_r(-sw);
   if (hscrollbar.visible()) interior.move_b(-sw);
 

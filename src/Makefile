@@ -65,6 +65,7 @@ CPPFILES = \
 	FloatInput.cxx \
 	Font.cxx \
 	Group.cxx \
+	GSave.cxx \
 	HighlightButton.cxx \
 	Image.cxx \
 	Input.cxx \

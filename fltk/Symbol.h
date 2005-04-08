@@ -61,7 +61,7 @@ class FL_API Symbol {
   uchar* readimage(uchar*, const Rectangle&, const Style*, Flags, int delta, int linedelta) const;
 
   // Hints for widgets:
-  virtual void inset(Rectangle& r) const;
+  virtual void inset(Rectangle& r, const Style*, Flags) const;
   virtual bool fills_rectangle() const;
   virtual bool is_frame() const;
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.104 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -301,7 +301,7 @@ static unsigned oldtooltiplen;
 
 void tooltip_cb(fltk::WordwrapInput* i, void *v) {
   if (v == LOAD) {
-    if (current_widget->o->is_window()) { i->hide(); return; }
+    //if (current_widget->o->is_window()) { i->hide(); return; }
     i->show();
     i->static_value(current_widget->tooltip());
     if (strlen(i->value()) >= oldtooltiplen) {
@@ -326,7 +326,7 @@ void x_cb(fltk::ValueInput* i, void *v) {
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
       q->o->position(x, q->o->y());
-      q->redraw();      
+      q->redraw();
     }
   } else {
     x = current_widget ? current_widget->o->x() : 0;
@@ -392,9 +392,7 @@ void height_cb(fltk::ValueInput* i, void *v) {
 
 void set_xy_cb(fltk::CheckButton* i, void *v) {
   if (v == LOAD) {
-    if (current_widget->is_window())
-      i->show();
-    else i->hide();
+    if (current_widget->is_window()) i->hide(); else i->show();
     i->value(current_widget->set_xy);
   } else {
     modflag = 1;
@@ -1812,9 +1810,9 @@ void WidgetType::write_properties() {
   } else {
     if (o->vertical()) write_string("vertical");
   }
-  if (set_xy && is_window()) {
-    write_string("set_xy");  
-  }
+  if (set_xy && is_window())
+    write_string("set_xy");
+
   if (o->align() != tplate->align())
     write_string("align %d", o->align());
   if (o->when() != tplate->when())
@@ -2094,7 +2092,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 	FluidType *p;
 	for (p = parent; p && !p->is_window(); p = p->parent);
 	if (p && p->is_widget()) y = ((WidgetType*)p)->o->h()-(y+h);
-      }	  
+      }
       x += pasteoffset;
       y += pasteoffset;
       o->resize(int(x),int(y),int(w),int(h));
@@ -2180,5 +2178,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.104 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

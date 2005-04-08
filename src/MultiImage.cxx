@@ -47,8 +47,15 @@ void MultiImage::_measure(int& w, int& h) const {
   images[0]->measure(w,h);
 }
 
-/*! Returns the info from the first image given to the constructor. */
-void MultiImage::inset(Rectangle& r) const {images[0]->inset(r);}
+/*! Calls the same image that _draw() will call to get the inset. */
+void MultiImage::inset(Rectangle& r, const Style* style, Flags f) const {
+  int which = 0;
+  //Flags passed_flags = f;
+  for (int i = 1; i < MAXIMAGES && images[i]; i++) {
+    if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
+  }
+  images[which]->inset(r, style, f);
+}
 
 /*! Returns the info from the first image given to the constructor. */
 bool MultiImage::fills_rectangle() const {return images[0]->fills_rectangle();}

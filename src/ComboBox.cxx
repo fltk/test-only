@@ -43,8 +43,8 @@ static void revert(Style* s) {
 static NamedStyle style("ComboBox", revert, &ComboBox::default_style);
 NamedStyle* ComboBox::default_style = &::style;
 
-ComboBox::ComboBox(int x,int y,int w,int h, const char *l) : 
-  Choice(x,y,w,h,l) 
+ComboBox::ComboBox(int x,int y,int w,int h, const char *l) :
+  Choice(x,y,w,h,l)
 {
   style(default_style);
   int w1 = h*4/5;
@@ -62,11 +62,12 @@ ComboBox::~ComboBox() {
 
 void ComboBox::draw() {
   if (damage() & DAMAGE_ALL) {
+    Flags flags = update_flags();
     draw_frame();
     Rectangle r(w(),h());
     r.set_x(w()-h()*4/5);
-    box()->inset(r);
-    draw_glyph(GLYPH_DOWN_BUTTON, r, current_flags_highlight());
+    box()->inset(r, style(), flags);
+    draw_glyph(GLYPH_DOWN_BUTTON, r, flags);
   }
   input_->set_damage(damage()|input_->damage());
   if (input_->damage()) {
@@ -83,7 +84,7 @@ void ComboBox::layout() {
   Choice::layout();
   int w1 = h()*4/5;
   Rectangle r(w()-w1,h());
-  box()->inset(r);
+  box()->inset(r, style(), flags());
   input_->resize(r.x(),r.y(),r.w(),r.h());
 }
 
@@ -92,7 +93,7 @@ int ComboBox::handle(int event) {
   static bool want_mouse_drag = false;
   int ret = 0;
   switch (event) {
-  case PUSH: 
+  case PUSH:
 	if (event_x()<w()-h()*4/5) {
 	  mouse_on_input = true;
 	  ret = input_->handle(event);
@@ -155,15 +156,15 @@ int ComboBox::handle(int event) {
 	ret = input_->handle(event);
 	break;
   // events that both widgets should receive
-  case FOCUS: 
-	input_->take_focus(); 
+  case FOCUS:
+	input_->take_focus();
   case ACTIVATE:
   case ENTER:
   case SHOW:
 	ret = Choice::handle(event);
     ret |= input_->handle(event);
 	break;
-  case UNFOCUS: 
+  case UNFOCUS:
   case DEACTIVATE:
   case HIDE:
   case LEAVE:
@@ -187,12 +188,12 @@ int ComboBox::choice(int v) {
   return ret;
 }
 
-int ComboBox::choice() const { 
+int ComboBox::choice() const {
   ComboBox *This = (ComboBox*)this;
   Widget *f = This->get_item();
   if (!f) return -1;
   if (strcmp(input_->value(), f->label())==0)
-	return Choice::value(); 
+	return Choice::value();
   return -1;
 }
 
@@ -209,7 +210,7 @@ int ComboBox::find_choice() const {
 }
 
 bool ComboBox::text_changed_(bool ret) {
-  if (input_->damage()) {	
+  if (input_->damage()) {
     redraw(input_->damage());
   }
   // we should also update the current choice

@@ -42,7 +42,7 @@ public:
   const char* data;
   const DiamondBox* down;
   void _draw(const Rectangle& r, const Style*, Flags=0) const;
-  void inset(Rectangle& r) const {r.inset(5);}
+  void inset(Rectangle& r, const Style*, Flags) const {r.inset(5);}
   DiamondBox(const char* n, const char* s, const DiamondBox* d=0)
     : Box(n), data(s), down(d) {}
 };

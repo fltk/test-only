@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.7 2005/01/24 08:07:10 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -64,7 +64,7 @@ void CycleButton::draw() {
   // this code is copied from Button, but simplified as a lot of
   // back-compatability and the glyphs are eliminated:
 
-  Flags flags = current_flags_highlight();
+  Flags flags = update_flags();
   if (this == held_down) flags |= VALUE|PUSHED;
 
   Style style = *(this->style());
@@ -87,14 +87,14 @@ void CycleButton::draw() {
     }
   }
   box->draw(r, &style, flags);
-  box->inset(r);
+  box->inset(r, &style, flags);
 
   // This portion of the code is copied from Choice:
   Widget* o = get_item();
   if (o) {
     Item::set_style(&style);
     Flags saved = o->flags();
-    o->set_flag(flags&(INACTIVE|VALUE|HIGHLIGHT));
+    o->set_flag(flags&(NOTACTIVE|VALUE|HIGHLIGHT));
     push_clip(r);
     push_matrix();
     translate(r.x(),r.y());
@@ -120,7 +120,7 @@ static bool try_item(CycleButton* choice, int i) {
   choice->value(i);
   choice->execute(w);
   return true;
-}  
+}
 
 int CycleButton::handle(int e) {
   int children = this->children(0,0);
@@ -211,5 +211,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.7 2005/01/24 08:07:10 spitzak Exp $".
+// End of "$Id$".
 //

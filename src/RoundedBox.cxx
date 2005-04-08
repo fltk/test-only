@@ -51,12 +51,7 @@ public:
     Color bg, fg; style->boxcolors(f, bg, fg);
     rbox(r, bg, fg);
   }
-  void inset(Rectangle& r) const {
-    r.x(r.x()+1);
-    r.y(r.y()+1);
-    r.w(r.w()-2);
-    r.h(r.h()-2);
-  }
+  void inset(Rectangle& r, const Style*, Flags) const {r.inset(1);}
   RoundedBox(const char* n) : Box(n) {}
 };
 static RoundedBox roundedBox("rounded");
@@ -77,7 +72,7 @@ public:
     r.move(-3,-3);
     roundedBox.draw(r, style, f);
   }
-  void inset(Rectangle& r) const {
+  void inset(Rectangle& r, const Style*, Flags) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-5);
@@ -97,12 +92,7 @@ public:
     Color bg, fg; style->boxcolors(f, bg, fg);
     rbox(r, bg, bg);
   }
-  void inset(Rectangle& r) const {
-    r.x(r.x()+7);
-    r.y(r.y()+7);
-    r.w(r.w()-14);
-    r.h(r.h()-14);
-  }
+  void inset(Rectangle& r, const Style*, Flags) const {r.inset(7);}
   RFlatBox(const char* n) : Box(n) {}
 };
 static RFlatBox rflatBox("rflat");

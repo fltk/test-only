@@ -39,7 +39,7 @@ class FL_API MultiImage : public Symbol
 public:
   void _measure(int&, int&) const;
   void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&) const;
+  void inset(Rectangle&, const Style*, Flags) const;
   bool fills_rectangle() const;
   bool is_frame() const;
 

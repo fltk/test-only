@@ -223,8 +223,9 @@ static float line_ascent(float leading) {
   left of the text.
 */
 void Input::draw() {
+  update_flags();
   Rectangle r(w(),h());
-  box()->inset(r);
+  box()->inset(r, style(), flags());
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     // draw and measure the inside label:
@@ -271,7 +272,7 @@ void Input::draw(const Rectangle& r)
   float desc = line_ascent(leading);
 
   Color background, textcolor;
-  Flags flags = current_flags()|OUTPUT;
+  Flags flags = update_flags()|OUTPUT;
   style()->boxcolors(flags, background,textcolor);
 
   bool erase_cursor_only =
@@ -473,16 +474,16 @@ static int isword(char c) {
 /*! Returns the location of the next word boundary at or after position. */
 int Input::word_end(int i) const {
   if (type() == SECRET) return size();
-  while (!i || !isword(index(i-1))) i++;
-  while (i < size() && isword(index(i))) i++;
+  while (!i || !isword(at(i-1))) i++;
+  while (i < size() && isword(at(i))) i++;
   return i;
 }
 
 /*! Returns the location of the first word boundary at or before position. */
 int Input::word_start(int i) const {
   if (type() == SECRET) return 0;
-  while (!isword(index(i))) i--;
-  while (i > 0 && isword(index(i-1))) i--;
+  while (!isword(at(i))) i--;
+  while (i > 0 && isword(at(i-1))) i--;
   return i;
 }
 
@@ -492,9 +493,9 @@ int Input::line_end(int i) const {
   if (type() >= WORDWRAP) {
     // go to the start of the paragraph:
     int j = i;
-    while (j > 0 && index(j-1) != '\n') j--;
+    while (j > 0 && at(j-1) != '\n') j--;
     // now measure lines until we get past i, end of that line is real eol:
-    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r, style(), flags()); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -503,7 +504,7 @@ int Input::line_end(int i) const {
       p++;
     }
   } else if (type() >= MULTILINE) {
-    while (i < size() && index(i) != '\n') i++;
+    while (i < size() && at(i) != '\n') i++;
     return i;
   } else {
     return size();
@@ -514,10 +515,10 @@ int Input::line_end(int i) const {
 int Input::line_start(int i) const {
   if (type() < MULTILINE) return 0;
   int j = i;
-  while (j > 0 && index(j-1) != '\n') j--;
+  while (j > 0 && at(j-1) != '\n') j--;
   if (type() >= WORDWRAP) {
     // now measure lines until we get past i, start of that line is real eol:
-    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r, style(), flags()); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -638,7 +639,7 @@ void Input::up_down_position(int i, bool keepmark) {
   setfont();
   int wordwrap;
   if (type() > MULTILINE) {
-    Rectangle r(w(),h()); box()->inset(r); wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r, style(), flags()); wordwrap = r.w()-6;
   } else {
     wordwrap = 0;
   }
@@ -807,7 +808,7 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
   // but it is too hard to figure out for now...
   if (type() > MULTILINE) {
     int c = b - 1;
-    while (c > 0 && !isspace(index(c))) c--;
+    while (c > 0 && !isspace(at(c))) c--;
     if (c > 0) b = c;
   }
 
@@ -951,7 +952,7 @@ Input::Input(int x, int y, int w, int h, const char* l)
   string.
 */
 
-/*! \fn char Input::index(int i) const
+/*! \fn char Input::at(int i) const
   Same as value()[n], but may be faster in plausible
   implementations. No bounds checking is done.
 */
@@ -1373,7 +1374,7 @@ bool Input::handle_key() {
 /*! Calls handle(x,y,w,h) with the area inside the box(). */
 int Input::handle(int event) {
   Rectangle r(w(),h());
-  box()->inset(r);
+  box()->inset(r, style(), flags());
   r.move_x(label_width);
   return handle(event, r);
 }

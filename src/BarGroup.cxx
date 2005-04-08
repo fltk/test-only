@@ -132,8 +132,8 @@ void BarGroup::draw()
   } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
     draw_box();
     Rectangle r(w(),h());
-    box()->inset(r);
-    Flags flags = current_flags();
+    Flags flags = this->flags();
+    box()->inset(r, style(), flags);
     if (horizontal()) {
       r.x(saved_size); r.w(r.w()-saved_size);
       flags &= ~(ALIGN_TOP|ALIGN_BOTTOM);
