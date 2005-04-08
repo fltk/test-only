@@ -1160,6 +1160,27 @@ DEP_CPP_GROUP=\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\GSave.cxx
+DEP_CPP_GSAVE=\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\group.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\style.h"\
+	"..\..\fltk\widget.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\window.h"\
+	"..\..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File

@@ -386,7 +386,7 @@ void
   tmp.x(X);
   tmp.y(Y);
   //old: b->inset(X, Y, W, H);
-  b->inset(tmp);
+  b->inset(tmp, style(), 0);
   //old: push_clip (X, Y, W, H);
   fltk::push_clip(tmp);
 
