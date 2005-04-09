@@ -786,6 +786,15 @@ void Rectangle::merge(const fltk::Rectangle& R) {
 ////////////////////////////////////////////////////////////////
 // Event handling:
 
+Widget* fl_pending_callback = 0; // used by fltk::Input
+static void call_pending_if_not(Widget* i) {
+  Widget* w = fl_pending_callback;
+  if (w && w != i) {
+    fl_pending_callback = 0;
+    w->do_callback();
+  }
+}
+
 /*!
   Returns true if the current fltk::event_x() and fltk::event_y()
   put it inside the Rectangle. You should always call this rather
@@ -814,6 +823,7 @@ bool fltk::event_inside(const fltk::Rectangle& r) {
 void fltk::focus(Widget *o) {
   Widget *p = focus_;
   if (o != p) {
+    call_pending_if_not(o);
     compose_reset();
     focus_ = o;
     for (; p && !p->contains(o); p = p->parent()) p->handle(UNFOCUS);
@@ -864,6 +874,7 @@ void fltk::belowmouse(Widget *o) {
   Change the fltk::pushed() widget. This sends no events.
 */
 void fltk::pushed(Widget *o) {
+  call_pending_if_not(o);
   pushed_ = o;
 }
 

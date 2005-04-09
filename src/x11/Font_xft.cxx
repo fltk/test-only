@@ -57,7 +57,7 @@
 typedef struct _XftMatrix {
     double xx, xy, yx, yy;
 } XftMatrix;
-#endif                                                        
+#endif
 #include <stdlib.h>
 
 using namespace fltk;
@@ -172,26 +172,26 @@ XFontStruct* fltk::xfont() {
     char *myname, xname[1024];
     int slo = 0;
     if (strncmp(name, "sans", 4)==0) {
-      myname = "-*-helvetica-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
+      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
     } else if (strncmp(name, "mono", 4)==0) {
-      myname = "-*-courier-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
+      myname = "-*-courier-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
     } else if (strncmp(name, "serif", 5)==0) {
-      myname = "-*-times-%s-%s-normal-*-*-%d-*-*-*-*-*-*"; slo = 2;
+      myname = "-*-times-%s-%s-normal-*-%d-*-*-*-*-*-*-*"; slo = 2;
     } else if (strncmp(name, "symbol", 6)==0) {
-      myname = "-*-symbol-%s-%s-*-*-*-%d-*-*-*-*-*-*";
+      myname = "-*-symbol-%s-%s-*-*-%d-*-*-*-*-*-*-*";
     } else if (strncmp(name, "screen", 6)==0) {
-      myname = "-*-clean-%s-%s-*-*-*-%d-*-*-*-*-*-*"; slo = 2;
+      myname = "-*-clean-%s-%s-*-*-%d-*-*-*-*-*-*-*"; slo = 2;
     } else if (strncmp(name, "dingbats", 8)==0) {
-      myname = "-*-*zapf dingbats-%s-%s-*-*-*-%d-*-*-*-*-*-*";
+      myname = "-*-*zapf dingbats-%s-%s-*-*-%d-*-*-*-*-*-*-*";
     } else {
-      myname = "-*-helvetica-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
+      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
     }
     static char *wghtLUT[] = { "medium", "bold" };
     static char *slantLUT[] = { "r", "o", "r", "i" };
-    sprintf(xname, myname, 
+    sprintf(xname, myname,
 	    wghtLUT[(current_font_->attributes_&BOLD)!=0],
 	    slantLUT[slo+((current_font_->attributes_&ITALIC)!=0)],
-	    int(current_size_*10+0.5));
+	    int(current_size_+0.5));
     XFontStruct *myFont = XLoadQueryFont(xdisplay, xname);
     if (!myFont) {
       static XFontStruct* some_font = 0;
@@ -296,7 +296,7 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 
 #if 0
   XftDrawStringUtf8(xft_gc, &color, current->font,
-		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		    int(floorf(x+.5f)), int(floorf(y+.5f)),
 		    (XftChar8*)str, n);
 #else
   wchar_t localbuffer[WCBUFLEN];
@@ -311,7 +311,7 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   if ((count&255)==253) buffer[count++] = ' ';
   if ((count&255)==254) buffer[count++] = ' ';
   XftDrawString32(xft_gc, &color, current->font,
-		  int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		  int(floorf(x+.5f)), int(floorf(y+.5f)),
 		  (XftChar32*)buffer, count);
   delete[] mallocbuffer;
 #endif
@@ -352,15 +352,15 @@ static IFont fonts [] = {
   {{"dingbats",	0},	0,	0}
 };
 
-fltk::Font* const fltk::HELVETICA 		= &(fonts[0].f);
+fltk::Font* const fltk::HELVETICA		= &(fonts[0].f);
 fltk::Font* const fltk::HELVETICA_BOLD		= &(fonts[1].f);
 fltk::Font* const fltk::HELVETICA_ITALIC	= &(fonts[2].f);
 fltk::Font* const fltk::HELVETICA_BOLD_ITALIC	= &(fonts[3].f);
-fltk::Font* const fltk::COURIER 		= &(fonts[4].f);
+fltk::Font* const fltk::COURIER		= &(fonts[4].f);
 fltk::Font* const fltk::COURIER_BOLD		= &(fonts[5].f);
 fltk::Font* const fltk::COURIER_ITALIC		= &(fonts[6].f);
 fltk::Font* const fltk::COURIER_BOLD_ITALIC	= &(fonts[7].f);
-fltk::Font* const fltk::TIMES 			= &(fonts[8].f);
+fltk::Font* const fltk::TIMES			= &(fonts[8].f);
 fltk::Font* const fltk::TIMES_BOLD		= &(fonts[9].f);
 fltk::Font* const fltk::TIMES_ITALIC		= &(fonts[10].f);
 fltk::Font* const fltk::TIMES_BOLD_ITALIC	= &(fonts[11].f);

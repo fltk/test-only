@@ -36,6 +36,16 @@ using namespace fltk;
 
 extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 
+extern Widget* fl_pending_callback;
+
+static void set_pending_callback(Input* i) {
+  i->set_changed();
+  Widget* w = fl_pending_callback;
+  if (i == w) return;
+  if (w) {fl_pending_callback = 0; w->do_callback();}
+  fl_pending_callback = i;
+}
+
 ////////////////////////////////////////////////////////////////
 
 /*! \class fltk::Input
@@ -46,14 +56,9 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
   (even '\\0'). The characters 0..31 are displayed in ^X notation, the
   appearance of other characters will depend on your operating system.
 
-  By default the callback() is done when the widget loses focus. This
-  is a useful value for text fields in a panel where doing the
-  callback on every change is wasteful. However the callback will also
-  happen if the mouse is moved out of the window, which means it
-  should not do anything visible (like pop up an error message). You
-  might do better setting when() to WHEN_NEVER, and scanning all the
-  items for changed() when the OK button on a panel is pressed. Other
-  value for when():
+  By default the callback() is done when a change has been made and
+  the user clicks on a different widget, or navigates the focus to
+  a different widget. Other values for when():
 
   - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on.
   - fltk::WHEN_CHANGED: The callback is done each time the text is
@@ -820,7 +825,8 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
 
   mark_ = position_ = undoat;
 
-  if (when()&WHEN_CHANGED) do_callback(); else set_changed();
+  if (when()&WHEN_CHANGED) do_callback();
+  else if (when() & WHEN_RELEASE) set_pending_callback(this);
   return true;
 }
 
@@ -898,7 +904,8 @@ bool Input::undo() {
   undo_is_redo = !undo_is_redo;
 
   minimal_update(b1);
-  if (when()&WHEN_CHANGED) do_callback(); else set_changed();
+  if (when()&WHEN_CHANGED) do_callback();
+  else if (when() & WHEN_RELEASE) set_pending_callback(this);
   return true;
 }
 
@@ -915,7 +922,9 @@ bool Input::yank() {
   point you think you should generate a callback. */
 void Input::maybe_do_callback() {
   if (changed() || (when()&WHEN_NOT_CHANGED)) {
-    clear_changed(); do_callback();}
+    if (fl_pending_callback == this) fl_pending_callback = 0;
+    clear_changed(); do_callback();
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1001,6 +1010,7 @@ void Input::reserve(int len) {
   saved.
 */
 bool Input::static_value(const char* str, int len) {
+  if (fl_pending_callback == this) fl_pending_callback = 0;
   clear_changed();
   if (undowidget == this) undowidget = 0;
   bool ret = true;
@@ -1054,6 +1064,7 @@ bool Input::value(const char* str) {
 
 /*! The destructor destroys the memory used by value() */
 Input::~Input() {
+  if (fl_pending_callback == this) fl_pending_callback = 0;
   if (undowidget == this) undowidget = 0;
   delete[] buffer;
 }
@@ -1455,8 +1466,8 @@ int Input::handle(int event, const Rectangle& r) {
     if (mark_ != position_) minimal_update(mark_, position_);
     // else make the cursor disappear:
     else erase_cursor_at(position_);
-    if ((when()&WHEN_RELEASE) && ((Widget*)window())->contains(fltk::focus()))
-      maybe_do_callback();
+//     if ((when()&WHEN_RELEASE) && ((Widget*)window())->contains(fltk::focus()))
+//       maybe_do_callback();
     return 1;
 
   case HIDE:
