@@ -642,7 +642,7 @@ case $uname in
 	fi
 
 	dnl X11 multithreading
-	AC_ARG_ENABLE(multithread, [  --enable-x11multithread use XLockDisplay for X11 (default=no)])
+	AC_ARG_ENABLE(x11multithread, [  --enable-x11multithread use XLockDisplay for X11 (default=no)])
 	if test x$enable_x11multithread = xyes; then
 	    AC_DEFINE(USE_X11_MULTITHREADING)
 	fi
