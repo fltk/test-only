@@ -641,6 +641,12 @@ case $uname in
 	    LIBS="-lcairo $LIBS"
 	fi
 
+	dnl X11 multithreading
+	AC_ARG_ENABLE(multithread, [  --enable-x11multithread use XLockDisplay for X11 (default=no)])
+	if test x$enable_x11multithread = xyes; then
+	    AC_DEFINE(USE_X11_MULTITHREADING)
+	fi
+
 	dnl Check for the Xft library unless disabled...
         AC_ARG_ENABLE(xft, [  --enable-xft            turn on Xft support (default=yes)])
 

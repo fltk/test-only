@@ -1,4 +1,4 @@
-/* "$Id: configh.in,v 1.67 2005/01/26 22:35:25 matthiaswm Exp $"
+/* "$Id$"
  *
  * Configuration file for compiling the Fast Light Tool Kit (FLTK).
  *
@@ -52,6 +52,12 @@
    colormaps, this will save a good deal of code (especially for
    fl_draw_image), but FLTK will only work on TrueColor visuals. */
 #define USE_COLORMAP		1
+
+/* If USE_X11 is on, this also uses XLockDisplay() to implement
+   fltk::lock()/unlock(). This is NOT recommended, see the file
+   src/x11/lock.cxx for details.
+*/
+#define USE_X11_MULTITHREADING	0
 
 /* Use the new Xft library to draw fonts, which is how you get
    anti-aliasing. (ignored if !USE_X11) */
@@ -236,4 +242,4 @@
    program to actually use the keypad, and is recommended. */
 #define IGNORE_NUMLOCK		1
 
-/* End of "$Id: configh.in,v 1.67 2005/01/26 22:35:25 matthiaswm Exp $". */
+/* End of "$Id$". */

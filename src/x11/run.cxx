@@ -1113,7 +1113,13 @@ bool fltk::handle()
   int event = 0;
 
  KEYPRESS:
+#if USE_X11_MULTITHREADING
+  fl_unlock_function();
+  if (XFilterEvent((XEvent *)&xevent, 0)) {fl_lock_function(); return 1;}
+  fl_lock_function();
+#else
   if (XFilterEvent((XEvent *)&xevent, 0)) return 1;
+#endif
 
   switch (xevent.type) {
 

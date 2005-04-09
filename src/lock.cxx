@@ -1,14 +1,28 @@
 /*! \defgroup multithreading Multithreaded FLTK Applications
 
   Fltk has no multithreaded support unless the main thread calls
-  fltk::lock().
+  fltk::lock(). It should call this very early, such as the first
+  line in main(). After that parallel threads should call fltk::lock()
+  and fltk::unlock() around any fltk calls.
 
-  You must have a "main" thread. Only this thread is allowed to wait
-  for events by calling fltk::wait() or fltk::run() or any similar
-  call.  From then on fltk will be locked except when the main thread
-  is actually waiting for events from the user. Other threads must
-  call fltk::lock() and fltk::unlock() to surround \e all calls
-  to fltk (such as to change widgets or redraw them).
+  The "main" thread is the one that calls fltk::wait(). It should call
+  fltk::lock() immediately and then never call fltk::unlock().  Though
+  it appears that fltk is then locked all the time, it is in fact
+  unlocked while fltk::wait() is waiting for events, which is really
+  the majority of the time.
+
+  If non-main threads cause any fltk::Widget::redraw() calls, they
+  should call fltk::awake() just before fltk::unlock(). Otherwise the
+  drawing may not be done until the next event.
+
+  Non-main threads cannot call all fltk functions. In particular any
+  functions that wait for events (including fltk::Window::exec() and
+  fltk::ask()) do not work. On Windows fltk::Window::show() does not
+  work either. It it likely we will be fixing these in the future.  To
+  make these broken calls you will have to store the fact that you
+  want them called in static memory locations, then call fltk::awake()
+  to make the main thread return, and have it check the static
+  locations and do the calls.
 
   FLTK provides the file <fltk/Threads.h> which defines some
   convenience portability wrappers around the native threads
@@ -54,20 +68,20 @@
 
 /*! \fn void fltk::lock()
 
-  The main thread must call this before the first call to wait() or
-  run() to initialize the thread system.  The lock is locked all the
-  time except when wait() is waiting for events.
+  A multi-threaded fltk program must surround all calls to any fltk
+  functions with lock() and unlock() pairs. This is a "recursive
+  lock", a thread can call lock() n times, and it must call
+  unlock() n times before it really is unlocked.
 
-  Child threads should call this method prior to making any fltk
-  calls.  Blocks the current thread until it can safely access FLTK
-  widgets and data.  Child threads must call fltk::unlock() when they
-  are done accessing FLTK. They may want to call fltk::awake() first
-  if the display needs to change.
+  If another thread calls lock() while it is locked, it will block
+  (not return from lock()) until the first thread unlocks.
 
-  This is a "recursive lock". If you call fltk::lock() more than once,
-  the subsequent calls return immediately. But you must call
-  fltk::unlock() the same number of times as you called fltk::lock()
-  before the lock is released.
+  The main thread must call lock() once before \e any call to fltk to
+  initialize the thread system.
+
+  The X11 version of fltk uses XInitThreads(), XLockDisplay(), and
+  XUnlockDisplay(). This should allow an fltk program to cooperate
+  with other packages updating the display using Xlib calls.
 */
 
 /*! \fn void fltk::unlock()
@@ -110,152 +124,82 @@
 #include <fltk/run.h>
 #include <config.h>
 
-////////////////////////////////////////////////////////////////
-#if defined(_WIN32)
+// Define the mutex-init value needed by fltk::RecursiveMutex:
+#if HAVE_PTHREAD && !defined(_WIN32)
+# ifndef __USE_GNU
+#  define __USE_GNU // makes the RECURSIVE stuff appear on Linux
+# endif
+# include <pthread.h>
+# if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
+namespace fltk {pthread_mutexattr_t Mutex_attrib={PTHREAD_MUTEX_RECURSIVE_NP};}
+# elif defined(PTHREAD_MUTEX_RECURSIVE)
+namespace fltk {pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE};}
+# endif
+#endif
 
-#include <windows.h>
-#include <process.h>
+#if USE_X11 && USE_X11_MULTITHREADING
 
-// these pointers are in win32.cxx:
-extern void (*fl_lock_function)();
-extern void (*fl_unlock_function)();
+// This is NOT normally done, instead the HAVE_PTHREAD case is done
+# include "x11/lock.cxx"
 
-static DWORD main_thread;
+#elif defined(_WIN32)
 
-CRITICAL_SECTION cs;
+# include "win32/lock.cxx"
 
-static void unlock_function() {
-  LeaveCriticalSection(&cs);
-}
-
-static void lock_function() {
-  EnterCriticalSection(&cs);
-}
-
-void fltk::lock() {
-  if (!main_thread)
-    InitializeCriticalSection(&cs);
-  lock_function();
-  if (!main_thread) {
-    fl_lock_function = lock_function;
-    fl_unlock_function = unlock_function;
-    main_thread = GetCurrentThreadId();
-  }
-}
-
-void fltk::unlock() {
-  unlock_function();
-}
-
-extern UINT fl_wake_msg;
-
-//
-// 'Fl::awake()' - Let the main thread know an update is pending.
-//
-// When called from a thread, it causes FLTK to awake from Fl::wait()...
-//
-void fltk::awake(void* msg) {
-  PostThreadMessage( main_thread, fl_wake_msg, (WPARAM)msg, 0);
-}
-
-////////////////////////////////////////////////////////////////
 #elif HAVE_PTHREAD
+
+// Use our RecursiveLock for lock/unlock, and a pipe for awake():
+
+#include <fltk/Threads.h>
 #include <unistd.h>
 #include <fcntl.h>
-#ifndef __USE_GNU
-#define __USE_GNU // makes the RECURSIVE stuff appear on Linux
-#endif
-#include <pthread.h>
 
-#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
-
-namespace fltk {pthread_mutexattr_t Mutex_attrib={PTHREAD_MUTEX_RECURSIVE_NP};}
-
-static pthread_mutex_t fltk_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
-#define _DO_INIT 0
-
-static void lock_function() {pthread_mutex_lock(&fltk_mutex);}
-
-void fltk::unlock() {pthread_mutex_unlock(&fltk_mutex);}
-
-#elif defined(PTHREAD_MUTEX_RECURSIVE)
-
-namespace fltk {pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE};}
-
-static pthread_mutex_t fltk_mutex;
-#define _DO_INIT 1
-
-static void lock_function() {pthread_mutex_lock(&fltk_mutex);}
-
-void fltk::unlock() {pthread_mutex_unlock(&fltk_mutex);}
-
-#else
-// Make a recursive lock out of the pthread mutex:
-
-#define _DO_INIT 0
-
-static pthread_mutex_t fltk_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_t fltk_owner;
-static int fltk_counter;
-
-static void lock_function() {
-  pthread_t self = pthread_self();
-  if (!fltk_counter || !pthread_equal(fltk_owner,self)) {
-    pthread_mutex_lock(&fltk_mutex);
-    //assert(!fltk_owner);
-    fltk_owner = self;
-    fltk_counter = 1;
-  } else {
-    //assert(pthread_equal(fltk_owner,self));
-    ++fltk_counter;
-  }
-}
-
-void fltk::unlock() {
-  //pthread_t self = pthread_self();
-  //assert(fltk_counter > 0 && pthread_equal(fltk_owner,self));
-  if (!--fltk_counter) {
-    //fltk_owner = 0;
-    pthread_mutex_unlock(&fltk_mutex);
-  }
-}
-
-#endif
-
-static int thread_filedes[2];
-
-// these pointers are in Fl_x.cxx:
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
+static void init_function();
+static void (*init_or_lock_function)() = init_function;
+
+static fltk::RecursiveMutex fltkmutex;
+
+static void lock_function() {fltkmutex.lock();}
+static void unlock_function() {fltkmutex.unlock();}
 
 static void* thread_message_;
+static void thread_awake_cb(int fd, void*) {
+  while (read(fd, &thread_message_, sizeof(void*)) > 0);
+}
+static int thread_filedes[2];
+
+static void init_function() {
+  // Init threads communication pipe to let threads awake FLTK from wait
+  pipe(thread_filedes);
+  fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
+  fltk::add_fd(thread_filedes[0], fltk::READ, thread_awake_cb);
+  fl_lock_function = init_or_lock_function = lock_function;
+  fl_unlock_function = unlock_function;
+  lock_function();
+}
+
+void fltk::lock() {init_or_lock_function();}
+
+void fltk::unlock() {fl_unlock_function();}
+
+void fltk::awake(void* msg) {
+  if (!in_main_thread())
+    write(thread_filedes[1], &msg, sizeof(void*));
+}
+
 void* fltk::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
 }
 
-static void thread_awake_cb(int fd, void*) {
-  while (read(fd, &thread_message_, sizeof(void*)) > 0);
-}
+#else
 
-void fltk::lock() {
-  if (!thread_filedes[1]) { // initialize the mt support
-    // Init threads communication pipe to let threads awake FLTK from wait
-    pipe(thread_filedes);
-    fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
-    add_fd(thread_filedes[0], READ, thread_awake_cb);
-    fl_lock_function = lock_function;
-    fl_unlock_function = unlock;
-#if _DO_INIT
-    pthread_mutex_init(&fltk_mutex, &Mutex_attrib);
-#endif
-  }
-  lock_function();
-}
-
-void fltk::awake(void* msg) {
-  write(thread_filedes[1], &msg, sizeof(void*));
-}
+// If no lock is supported, the fltk::lock() and similar functions are
+// missing.
 
 #endif
+
+// end of lock.cxx

@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.14 2005/01/24 12:03:32 matthiaswm Exp $"
+// "$Id$"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+
+#include <config.h>
 
 #if !(USE_X11)
 #include <fltk/error.h>
@@ -221,5 +223,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.14 2005/01/24 12:03:32 matthiaswm Exp $".
+// End of "$Id$".
 //

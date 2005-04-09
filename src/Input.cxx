@@ -39,7 +39,6 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 extern Widget* fl_pending_callback;
 
 static void set_pending_callback(Input* i) {
-  i->set_changed();
   Widget* w = fl_pending_callback;
   if (i == w) return;
   if (w) {fl_pending_callback = 0; w->do_callback();}
@@ -825,6 +824,7 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
 
   mark_ = position_ = undoat;
 
+  set_changed();
   if (when()&WHEN_CHANGED) do_callback();
   else if (when() & WHEN_RELEASE) set_pending_callback(this);
   return true;
@@ -904,6 +904,7 @@ bool Input::undo() {
   undo_is_redo = !undo_is_redo;
 
   minimal_update(b1);
+  set_changed();
   if (when()&WHEN_CHANGED) do_callback();
   else if (when() & WHEN_RELEASE) set_pending_callback(this);
   return true;
