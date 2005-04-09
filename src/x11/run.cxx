@@ -363,6 +363,7 @@ void fltk::add_fd(int fd, FileHandler cb, void* v) {
 */
 void fltk::remove_fd(int n, int events) {
   int i,j;
+  maxfd = 0;
   for (i=j=0; i<nfds; i++) {
 #if USE_POLL
     if (pollfds[i].fd == n) {
@@ -384,6 +385,7 @@ void fltk::remove_fd(int n, int events) {
       pollfds[j] = pollfds[i];
 #endif
     }
+    if (fd[j].fd > maxfd) maxfd = fd[j].fd;
     j++;
   }
   nfds = j;
@@ -391,7 +393,6 @@ void fltk::remove_fd(int n, int events) {
   if (events & POLLIN) FD_CLR(n, &fdsets[0]);
   if (events & POLLOUT) FD_CLR(n, &fdsets[1]);
   if (events & POLLERR) FD_CLR(n, &fdsets[2]);
-  if (n == maxfd) maxfd--;
 #endif
 }
 
