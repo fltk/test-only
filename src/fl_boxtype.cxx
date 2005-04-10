@@ -200,6 +200,29 @@ void fl_border_frame(int x, int y, int w, int h, Fl_Color c) {
   fl_rect(x, y, w, h);
 }
 
+
+
+FL_EXPORT void fl_return_arrow(int x, int y, int w, int h, Fl_Color c) {
+  int size = w; if (h<size) size = h;
+  int d = (size+2)/4; if (d<3) d = 3;
+  int t = (size+9)/12; if (t<1) t = 1;
+  int x0 = x+(w-2*d-2*t-1)/2;
+  int x1 = x0+d;
+  int y0 = y+h/2;
+  fl_color(FL_LIGHT3);
+  fl_line(x0, y0, x1, y0+d);
+  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
+  fl_yxline(x1, y0-t, y0-d);
+  fl_color(fl_gray_ramp(0));
+  fl_line(x0, y0, x1, y0-d);
+  fl_color(FL_DARK3);
+  fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
+}
+
+
+
+
+
 ////////////////////////////////////////////////////////////////
 /*
 static struct {
@@ -293,6 +316,8 @@ FL_EXPORT Fl_Symbol fl_symbol_table[256]={
   Fl_Symbol(fl_down_frame,	2,2,4,4), // _FL_PLASTIC_DOWN_FRAME,
   Fl_Symbol(fl_up_box,		2,2,4,4), // _FL_PLASTIC_THIN_UP_BOX,
   Fl_Symbol(fl_down_box,		2,2,4,4), // _FL_PLASTIC_THIN_DOWN_BOX,
+  Fl_Symbol(fl_return_arrow, 0,0,0,0), // FL_RETURN_ARROW
+
   Fl_Symbol(fl_up_box,		3,3,6,6), // FL_FREE_BOX+0
   Fl_Symbol(fl_down_box,		3,3,6,6), // FL_FREE_BOX+1
   Fl_Symbol(fl_up_box,		3,3,6,6), // FL_FREE_BOX+2
@@ -342,7 +367,11 @@ Fl_Boxtype  _FL_PLASTIC_UP_FRAME = fl_symbol_table + 32;
 Fl_Boxtype  _FL_PLASTIC_DOWN_FRAME = fl_symbol_table + 33;
 Fl_Boxtype  _FL_PLASTIC_THIN_UP_BOX = fl_symbol_table + 34;
 Fl_Boxtype  _FL_PLASTIC_THIN_DOWN_BOX = fl_symbol_table + 35;
-Fl_Boxtype  FL_FREE_BOXTYPE = fl_symbol_table + 36;
+
+Fl_Boxtype FL_RETURN_ARROW = fl_symbol_table+36;
+
+Fl_Boxtype  FL_FREE_BOXTYPE = fl_symbol_table + 37;
+
 
 int Fl::box_dx(Fl_Boxtype t) {if (t) return t->dx(); else return 0;}
 int Fl::box_dy(Fl_Boxtype t) {if (t) return t->dy(); else return 0;}
@@ -366,17 +395,13 @@ int Fl::box_index(Fl_Boxtype t){
   int index = t - fl_symbol_table;
   if(index >=0 && index < 256)
     return index;
-  else
-    int a = index;
   return 0;
 
 }
 
 Fl_Boxtype Fl::box(int index){ 
-  if(index<0 || index >256){
-    int a = index;
-  }
-  if(index) return fl_symbol_table + index; else return 0;
+  if(index<=0 || index >256)  return 0;
+  return fl_symbol_table + index;
 }
 
 

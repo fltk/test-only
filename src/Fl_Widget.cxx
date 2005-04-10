@@ -164,15 +164,15 @@ void Fl_Widget::labelsize(uchar a) {
 
 
 
-Fl_Style_List::Fl_Style_List(Fl_Widget::Style * parent, Fl_Widget::Style * style)
-  :children_(0),
+Fl_Style_List::Fl_Style_List(Fl_Widget::Style * parent, Fl_Widget::Style * style):
+  parent_(0),
+  children_(0),
   normal_(style),
   highlight_(0),
   prev_(0),
-  parent_(0),
+  next_(0),
   mask_(0),
-  parent_mask_(0),
-  next_(0)
+  parent_mask_(0)
 {
   if(parent){
     parent_ = parent->list();
@@ -333,7 +333,7 @@ void Fl_Widget::Style::update_(Fl_Widget::Style * s1, Fl_Widget::Style * s, unsi
     if(SELECTION_COLOR & what) s->selection_color_ = s1->selection_color_;
   }
 };
-
+/*
 void Fl_Widget::Style::clear(){
   color(FL_GRAY);
   box(FL_NO_BOX);
@@ -343,6 +343,7 @@ void Fl_Widget::Style::clear(){
   labelsize(FL_NORMAL_SIZE);
   selection_color(FL_GRAY);
 };
+*/
 
 
 
@@ -397,11 +398,6 @@ void Fl_Widget::Style::box(Fl_Boxtype b) {
 
 
 
-
-
-
-
-
   
 
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
@@ -411,10 +407,7 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   label_	 = L;
   image_   = 0;
   deimage_ = 0;
-
   style_ =  default_style();
-
-
   tooltip_       = 0;
   callback_	 = default_callback;
   user_data_ 	 = 0;
@@ -423,8 +416,6 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
 
   align_	 = FL_ALIGN_CENTER;
   when_		 = FL_WHEN_RELEASE;
-
-
 
   parent_ = 0;
   if (Fl_Group::current()) Fl_Group::current()->add(this);

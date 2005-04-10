@@ -30,31 +30,8 @@
 #include <FL/Fl_Style_List.H>
 
 
-int fl_return_arrow(int x, int y, int w, int h) {
-  int size = w; if (h<size) size = h;
-  int d = (size+2)/4; if (d<3) d = 3;
-  int t = (size+9)/12; if (t<1) t = 1;
-  int x0 = x+(w-2*d-2*t-1)/2;
-  int x1 = x0+d;
-  int y0 = y+h/2;
-  fl_color(FL_LIGHT3);
-  fl_line(x0, y0, x1, y0+d);
-  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
-  fl_yxline(x1, y0-t, y0-d);
-  fl_color(fl_gray_ramp(0));
-  fl_line(x0, y0, x1, y0-d);
-  fl_color(FL_DARK3);
-  fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
-  return 1;
-}
 
-static void fl_return_arrow_(int x, int y, int w, int h, Fl_Color c){fl_return_arrow(x,y,w,h);}
-
-
-Fl_Symbol FL_RETURN_ARROW_(fl_return_arrow_);
-FL_EXPORT Fl_Boxtype FL_RETURN_ARROW = &FL_RETURN_ARROW_;
-
-void Fl_Cancel_Button::draw() {
+void Fl_Tool_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
   draw_box(value() ? fl_down(box()) : box(),
 	   value() ? selection_color() : color());
@@ -119,50 +96,62 @@ int Fl_Return_Button::handle(int event) {
 
 
 
-uchar Fl_Cancel_Button::symbol_align() const{
-  return ((Fl_Cancel_Button::Style *)style_)->symbol_align();
+uchar Fl_Tool_Button::symbol_align() const{
+  return ((Fl_Tool_Button::Style *)style_)->symbol_align();
 }
-void Fl_Cancel_Button::symbol_align(uchar a){
+void Fl_Tool_Button::symbol_align(uchar a){
   dynamic_style();
-  ((Fl_Cancel_Button::Style *)style_)->symbol_align_ = a;
-  ((Fl_Cancel_Button::Style *)style_)->set_flag(Style::SYMBOL_ALIGN);
+  ((Fl_Tool_Button::Style *)style_)->symbol_align_ = a;
+  ((Fl_Tool_Button::Style *)style_)->set_flag(Style::SYMBOL_ALIGN);
 }
 
 
-Fl_Cancel_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Button::Style(parent,BASE){
-  symbol_align_ = FL_ALIGN_RIGHT;
+Fl_Tool_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Button::Style(parent,BASE){
+  symbol_align_ = FL_ALIGN_TOP;
   clear_flag(SYMBOL_ALIGN);
   init(parent,mode);
 }
 
 
 
-void Fl_Cancel_Button::Style::cancel_button_update(Fl_Widget::Style * s, unsigned what){
+void Fl_Tool_Button::Style::update_(Fl_Tool_Button::Style *s1,Fl_Widget::Style * s, unsigned what){
   if(!s) return;
-  Fl_Button_Style::update_(this, s, what);
-  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Cancel_Button::Style *)s)->symbol_align_ = symbol_align_;
+  Fl_Button::Style::update_(s1, s, what);
+  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Tool_Button::Style *)s)->symbol_align_ = s1->symbol_align();
 };
 
-void Fl_Cancel_Button::Style::symbol_align(uchar a) {
+void Fl_Tool_Button::Style::symbol_align(uchar a) {
   symbol_align_= a;
   set_flag (SYMBOL_ALIGN);
   fl_update_styles(symbol_align,SYMBOL_ALIGN,a);
 }
 
-Fl_Cancel_Button::Style * Fl_Cancel_Button::default_style(){
-  static Fl_Cancel_Button::Style * s = 0;
+Fl_Tool_Button::Style * Fl_Tool_Button::default_style(){
+  static Fl_Tool_Button::Style * s = 0;
   if(!s){ // not yet initialized
-    s = new Fl_Cancel_Button::Style(Fl_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
+    s = new Fl_Tool_Button::Style(Fl_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
+    s->down_box(0);
+    s->symbol_align(FL_ALIGN_BOTTOM);
+  }
+  return s;
+}
+
+
+Fl_Tool_Button::Style * Fl_Cancel_Button::default_style(){
+  static Fl_Tool_Button::Style * s = 0;
+  if(!s){ // not yet initialized
+    s = new Fl_Tool_Button::Style(Fl_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
     s->symbol_align(FL_ALIGN_RIGHT);
   }
   return s;
 }
 
 
-Fl_Cancel_Button::Style * Fl_Return_Button::default_style(){
-  static Fl_Cancel_Button::Style * s = 0;
+
+Fl_Tool_Button::Style * Fl_Return_Button::default_style(){
+  static Fl_Tool_Button::Style * s = 0;
   if(!s){ // not yet initialized
-    s = new Fl_Cancel_Button::Style(Fl_Cancel_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
+    s = new Fl_Tool_Button::Style(Fl_Cancel_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
     s->down_box(FL_RETURN_ARROW);
   }
   return s;

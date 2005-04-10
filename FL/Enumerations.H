@@ -444,7 +444,14 @@ extern Fl_Boxtype
   _FL_PLASTIC_UP_BOX,	_FL_PLASTIC_DOWN_BOX,
   _FL_PLASTIC_UP_FRAME,	_FL_PLASTIC_DOWN_FRAME,
   _FL_PLASTIC_THIN_UP_BOX,	_FL_PLASTIC_THIN_DOWN_BOX,
-  FL_FREE_BOXTYPE;
+  FL_RETURN_ARROW,
+
+  FL_FREE_BOXTYPE,
+
+
+  FL_CHECK_BOX, ///< used for Fl_Check_Button 
+  FL_ROUND_BOX  ///< used for Fl_Round_Button
+  ;
 
 
 /*

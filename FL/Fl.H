@@ -346,6 +346,7 @@ public:
   static int box_dw(Fl_Boxtype);
   static int box_dh(Fl_Boxtype);
   static int draw_box_active();
+  static int draw_box_value();
   static int box_index(Fl_Boxtype);
   static Fl_Boxtype box(int index);
 

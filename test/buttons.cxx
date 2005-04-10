@@ -47,15 +47,16 @@ int main(int argc, char ** argv) {
   Fl_Button::default_style()->highlight()->color(fl_lighter(fl_lighter(fl_lighter(Fl_Button::default_style()->color()))));
   Fl_Round_Button::default_style()->labelcolor(FL_RED);
   Fl_Round_Button::default_style()->highlight()->box(FL_THIN_DOWN_BOX);
-  Fl_Button::default_style()->highlight()->color(fl_lighter(Fl_Button::default_style()->color()));
+  Fl_Button::default_style()->highlight()->color(FL_WHITE);
   Fl_Window *window = new Fl_Window(320,130);
+  window->deactivate();
   (new Fl_Button(10, 10, 130, 30, "Fl_Button"))->tooltip("This is a Tooltip.");
-  Fl_Return_Button * ret = new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
-  ret->symbol_align(FL_ALIGN_RIGHT);
+  new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
   new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");
   new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
-  Fl_Round_Button * r = new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
-  r->deactivate();
+  new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
+
+
 
 
   new Fl_Check_Button(150,90,160,30,"Fl_Check_Button");

@@ -1616,6 +1616,7 @@ void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
   case FL_DARK_MAGENTA:		color_name = "FL_DARK_MAGENTA";		break;
   case FL_DARK_CYAN:		color_name = "FL_DARK_CYAN";		break;
   case FL_WHITE:		color_name = "FL_WHITE";		break;
+  case FL_NO_COLOR:		color_name = "FL_NO_COLOR";		break;
   }
   if (color_name) {
     write_c("%so->%s(%s);\n", indent(), field, color_name);

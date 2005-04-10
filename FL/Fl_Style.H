@@ -85,7 +85,7 @@ class FL_EXPORT Fl_Widget::Style {
 
  
     // Following virtual functions must be overriden for each Style subclass
-    void clear();
+    //void clear();
     // clears style s using this as a template
     // Funny stuff: using this function in the constructor can ""emulate"" the use of virtual function :-)
     
@@ -139,7 +139,7 @@ class FL_EXPORT Fl_Widget::Style {
     void box(Fl_Boxtype b);
   };
 
-typedef Fl_Widget::Style Fl_Widget_Style;
+//typedef Fl_Widget::Style Fl_Widget_Style;
 
 #endif // Fl_Widget_Style_H
 
@@ -154,12 +154,12 @@ class FL_EXPORT Fl_Button::Style : public Fl_Widget::Style {
   Fl_Boxtype down_box_;
   //uchar down_box_;
 public:
-    static void update_(Style* s1,  Fl_Widget::Style * s, unsigned what);
+  static void update_(Fl_Button::Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
 protected:
   Style(Style * s):Fl_Widget::Style(s){};
 
   //reimplementation of virtual functions for new style
-  void clear();
+  //void clear();
   Fl_Widget::Style * clone(){return new Style(this);} 
 
 
@@ -175,30 +175,32 @@ public:
   Style(Fl_Widget::Style * parent, unsigned mode);
 };
 
-typedef Fl_Button::Style Fl_Button_Style;
+//typedef Fl_Button::Style Fl_Button_Style;
 
 
 #endif  // Fl_Button_Style_H
 
 
 
-///////////////////////  Fl_Cancel_Button::Style  //////////////////////
+///////////////////////  Fl_Tool_Button::Style  //////////////////////
 
-#if defined(Fl_Cancel_Button_H) && !defined(Fl_Cancel_Button_Style_H)
-# define Fl_Cancel_Button_Style_H
+#if defined(Fl_Tool_Button_H) && !defined(Fl_Tool_Button_Style_H)
+# define Fl_Tool_Button_Style_H
 
-class FL_EXPORT Fl_Cancel_Button::Style : public Fl_Button::Style {
-  friend class Fl_Cancel_Button;
+class FL_EXPORT Fl_Tool_Button::Style : public Fl_Button::Style {
+  friend class Fl_Tool_Button;
   uchar symbol_align_;
+public:
+    Fl_Widget::Style * clone(){return new Style(this);} 
 
 protected:
   Style(Style * s):Fl_Button::Style(s){};
 
   //reimplementation of virtual functions for new style
-  void clear();
-  Fl_Widget::Style * clone(){return new Style(this);} 
-  void cancel_button_update(Fl_Widget::Style * s, unsigned what);
-  void update(Fl_Widget::Style * s, unsigned what){cancel_button_update(s,what);}
+  //void clear();
+
+  static void update_(Fl_Tool_Button::Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
+  void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);};
 public:
   enum {SYMBOL_ALIGN = 0x2000};
   Style * highlight(){return (Style *)highlight_();}
@@ -206,12 +208,12 @@ public:
 
 
 
-  uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Cancel_Button::Style *)next())->symbol_align_);};
+  uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Tool_Button::Style *)next())->symbol_align_);};
   void symbol_align(uchar a);
   Style(Fl_Widget::Style * parent, unsigned mode);
 };
 
-typedef Fl_Cancel_Button::Style Fl_Cancel_Style;
+//typedef Fl_Tool_Button::Style Fl_Tool_Button_Style;
 
 
 #endif  // Fl_Button_Style_H

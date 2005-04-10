@@ -1,9 +1,10 @@
 //
 // "$Id$"
 //
-// Lighted button header file for the Fast Light Tool Kit (FLTK).
+// Hash table implementation used in various places in fltk.
+// It is used for Symbools (Boxtypes) and other fltk obljects
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,36 +23,27 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+// Implementation temporartly in fl_symbols.cxx
 
-#ifndef Fl_Tool_Button_H
-#define Fl_Tool_Button_H
-
-#include "Fl_Button.H"
-
-// Tool button only implements new style, by default it has flat_box
-
-class FL_EXPORT Fl_Tool_Button : public Fl_Button {
-protected:
-  void draw();
-public:
-  class Style;
-  static Style * default_style();
-  void style(Style *s ){Fl_Button::style((Fl_Button::Style *)s);}
-  Style * style(){return (Style *) Fl_Widget::style();}
-
-  uchar symbol_align() const; 
-  void symbol_align(uchar a);
-
-
-
-    /** Creates a new Fl_Return_Button widget using the given \a position, 
-     * \a size, and \a label string. The default boxtype is \c FL_UP_BOX . */
-  Fl_Tool_Button(int X, int Y, int W, int H,const char *label=0)
-    : Fl_Button(X,Y,W,H,label){style(default_style());}
-
+struct Fl_Hash_Item{
+  const char * name;
+  void * data;
 };
 
-#endif
+
+class Fl_Hash_Table{
+  int size;
+  int no_items;
+  Fl_Hash_Item * table;
+  unsigned index(const char *name, unsigned n, bool delok);
+  void double_table();
+public:
+  void * set(const char * name, void * data);
+  void * remove(const char* name);
+  void * find(const char *name);
+  Fl_Hash_Table(int size = 113);
+};
+
 
 //
 // End of "$Id$".

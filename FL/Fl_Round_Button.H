@@ -40,7 +40,7 @@
  */
 class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
 protected:
-  void draw();
+//  void draw();
 public:
   static Style * default_style();
 

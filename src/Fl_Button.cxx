@@ -212,13 +212,7 @@ void Fl_Button::draw_box_(Fl_Boxtype b, int X, int Y, int W, int H, Fl_Color c) 
   Fl_Widget::draw_box_(b, X, Y, W, H, c);
 }
 
-
-
-Fl_Tool_Button::Fl_Tool_Button(int x,int y,int w,int h,const char *label):
-  Fl_Button(x,y,w,h,label)
-{
-  box(FL_NO_BOX);
-}
+int Fl::draw_box_value() { return Fl_Widget::draw_box_flags() & Fl_Button::DRAW_BOX_VALUE; }
 
 
 //

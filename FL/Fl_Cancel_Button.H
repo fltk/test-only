@@ -26,32 +26,23 @@
 
 #ifndef Fl_Cancel_Button_H
 #define Fl_Cancel_Button_H
-#include "Fl_Button.H"
+#include "Fl_Tool_Button.H"
 
 /** The Fl_Return_Button is a subclass of Fl_Button that generates a
  * callback when it is pressed or when the user presses the \a Enter key. 
  * A carriage-return symbol is drawn next to the button label.
  *   \image html Fl_Return_Button.gif
  */
-class FL_EXPORT Fl_Cancel_Button : public Fl_Button {
-protected:
-  void draw();
+class FL_EXPORT Fl_Cancel_Button : public Fl_Tool_Button {
+
 public:
 
-  class Style;
   static Style * default_style();
-  void style(Style *s ){Fl_Button::style((Fl_Button::Style *)s);}
-  Style * style(){return (Style *) Fl_Widget::style();}
-
-  uchar symbol_align() const; 
-  void symbol_align(uchar a);
-
-
 
     /** Creates a new Fl_Return_Button widget using the given \a position, 
      * \a size, and \a label string. The default boxtype is \c FL_UP_BOX . */
   Fl_Cancel_Button(int X, int Y, int W, int H,const char *label=0)
-    : Fl_Button(X,Y,W,H,label){style(default_style());align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);}
+    : Fl_Tool_Button(X,Y,W,H,label){style(default_style());}
 };
 
 #endif
