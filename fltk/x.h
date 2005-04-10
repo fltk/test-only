@@ -74,6 +74,7 @@
 
 # if USE_CAIRO
 #  include <cairo.h>
+#  include <cairo-xlib.h>
 # else
  typedef struct cairo cairo_t;
 # endif
