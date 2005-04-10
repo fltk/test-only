@@ -27,7 +27,7 @@ static void init_function() {
   main_thread = GetCurrentThreadId();
 }
 
-static void (*init_or_lock_function)() = init_function;
+//static void (*init_or_lock_function)() = init_function;
 
 void fltk::lock() {init_or_lock_function();}
 
