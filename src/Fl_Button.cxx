@@ -172,6 +172,8 @@ void Fl_Button::down_box(Fl_Boxtype a) {
 }
 
 
+/////////////////  Fl_Button::Style ////////////////////////////
+
 Fl_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Style(parent,BASE){
   down_box_ = FL_NO_BOX;
   clear_flag(DOWN_BOX);
@@ -189,7 +191,7 @@ void Fl_Button::Style::update_(Fl_Button::Style *s1, Fl_Widget::Style * s, unsig
 void Fl_Button::Style::down_box(Fl_Boxtype b) {
   down_box_= b;
   set_flag (DOWN_BOX);
-  fl_update_styles(down_box,DOWN_BOX,b);
+  fl_update_styles(Style, down_box,DOWN_BOX,b);
 }
 
 Fl_Button::Style * Fl_Button::default_style(){
@@ -202,7 +204,7 @@ Fl_Button::Style * Fl_Button::default_style(){
   return s;
 }
 
-
+///////////////////////////////////////////////////////////////////////
 
 //static fl_widget_value = 1;
 

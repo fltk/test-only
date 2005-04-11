@@ -542,17 +542,7 @@ typedef void (* Fl_Draw_Symbol_0)(int, int, int, int, int);
 typedef void (* Fl_Draw_Symbol_1)(int);
 typedef void (* Fl_Draw_Symbol_2)(int, int, int);
 
-extern FL_EXPORT Fl_Symbol * fl_symbol_table;
-
-Fl_Symbol * Fl_Symbol::down() {
-  if (down_) return down_;
-  int index = this - fl_symbol_table;
-  index |= 1;
-  if(index >=0 && index < 256)
-    return fl_symbol_table + index;
-  else
-    return this;
-}
+//extern FL_EXPORT Fl_Symbol * fl_symbol_table;
 
 
 

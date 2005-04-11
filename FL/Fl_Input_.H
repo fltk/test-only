@@ -48,6 +48,7 @@
  * interfaces, but lacks the handle() and draw() method. You may want to
  * subclass it if you are one of those people who likes to change how the
  * editing keys work. */
+class Fl_Text_Style;
 class FL_EXPORT Fl_Input_ : public Fl_Widget {
 
   const char* value_;
@@ -62,9 +63,9 @@ class FL_EXPORT Fl_Input_ : public Fl_Widget {
   int maximum_size_;
 
   uchar erase_cursor_only;
-  uchar textfont_;
-  uchar textsize_;
-  unsigned textcolor_;
+  //uchar textfont_;
+  //uchar textsize_;
+  //unsigned textcolor_;
   unsigned cursor_color_;
 
   const char* expand(const char*, char*) const;
@@ -109,6 +110,10 @@ protected:
   int yscroll() const {return yscroll_;}
 
 public:
+  typedef Fl_Text_Style Style;
+
+  void style(Style *s ){Fl_Widget::style((Fl_Widget::Style *)s);}
+  Style * style(){return (Style *) Fl_Widget::style();}
 
   void resize(int x, int y, int width, int height);
 
@@ -215,17 +220,17 @@ public:
   int copy_cuts();
 
     /** Gets the font of the text in the input field. */
-  Fl_Font textfont() const {return (Fl_Font)textfont_;}
+  Fl_Font textfont() const ;
     /** Sets the font of the text in the input field. */
-  void textfont(uchar s) {textfont_ = s;}
+  void textfont(uchar s);
     /** Gets the size of the text in the input field. */
-  uchar textsize() const {return textsize_;}
+  uchar textsize() const;
     /** Sets the size of the text in the input field. */
-  void textsize(uchar s) {textsize_ = s;}
+  void textsize(uchar s);
     /** Gets the color of the text in the input field. */
-  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+  Fl_Color textcolor() const;
     /** Sets the color of the text in the input field. */
-  void textcolor(unsigned n) {textcolor_ = n;}
+  void textcolor(unsigned n);
     /** Get the color of the cursor. */
   Fl_Color cursor_color() const {return (Fl_Color)cursor_color_;}
     /** Set the color of the cursor. This is black by default. */

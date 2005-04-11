@@ -45,6 +45,7 @@ class FL_EXPORT Fl_Input : public Fl_Input_ {
   int shift_up_down_position(int p);
   void handle_mouse(int keepmark=0);
 public:
+  static Style * default_style();
   void draw();
   int handle(int);
     /** Creates a new Fl_Input widget using the given position, size, and

@@ -49,11 +49,11 @@ public:
 };
 
 
-#define fl_update_styles(FL_STYLE_FUNCTION, FL_STYLE_FLAG, FL_STYLE_VALUE) \
+#define fl_update_styles(FL_STYLE_CLASS, FL_STYLE_FUNCTION, FL_STYLE_FLAG, FL_STYLE_VALUE) \
 { \
   if (!(flags() & STATIC)) return; \
   if(list()->highlight_ && !(flags() & HIGHLIGHT)){ \
-    Style * h = (Style *)(list()->highlight_); \
+    FL_STYLE_CLASS * h = (FL_STYLE_CLASS *)(list()->highlight_); \
     if(FL_STYLE_FLAG & ~(h->flags()) & ~(list()->parent_mask_)){ \
       h->FL_STYLE_FUNCTION(FL_STYLE_VALUE); \
       h->clear_flag(FL_STYLE_FLAG); \
@@ -61,13 +61,13 @@ public:
   } \
   Fl_Style_List * child_list = list()->children_; \
   while(child_list){ \
-    Style * child = 0; \
+    FL_STYLE_CLASS * child = 0; \
     if(flags() & HIGHLIGHT){ \
-      child = (Style *)(child_list->highlight_); \
+      child = (FL_STYLE_CLASS *)(child_list->highlight_); \
       if(child && !(FL_STYLE_FLAG & child_list->parent_mask_)) \
        child = 0; \
     }else \
-      child = (Style *)(child_list->normal_); \
+      child = (FL_STYLE_CLASS *)(child_list->normal_); \
     if(child && !(FL_STYLE_FLAG & child->flags())){ \
       child->FL_STYLE_FUNCTION(FL_STYLE_VALUE); \
       child->clear_flag(FL_STYLE_FLAG); \

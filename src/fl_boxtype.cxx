@@ -389,6 +389,19 @@ void fl_internal_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f) {
   }
 }
 
+
+Fl_Symbol * Fl_Symbol::down() {
+  if (down_) return down_;
+  unsigned index = this - fl_symbol_table;
+
+  if(index >=0 && index < 256){
+    index |= 1;
+    return fl_symbol_table + index;
+  }else
+    return this;
+}
+
+
 int Fl::box_index(Fl_Boxtype t){
   if(!t) return 0;
 

@@ -37,6 +37,9 @@
 #include "flstring.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <FL/Fl_Style.H>
+#include <FL/Fl_Style_List.H>
+#include <FL/Fl_Input.H>
 
 #define MAXBUF 1024
 
@@ -758,12 +761,9 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
 Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 : Fl_Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  style_ = Fl_Input::default_style();
+
   align(FL_ALIGN_LEFT);
-  textsize_ = (uchar)FL_NORMAL_SIZE;
-  textfont_ = FL_HELVETICA;
-  textcolor_ = FL_FOREGROUND_COLOR;
   cursor_color_ = FL_FOREGROUND_COLOR; // was FL_BLUE
   mark_ = position_ = size_ = 0;
   bufsize = 0;
@@ -853,6 +853,82 @@ Fl_Input_::~Fl_Input_() {
   if (undowidget == this) undowidget = 0;
   if (bufsize) free((void*)buffer);
 }
+
+
+
+
+/////////////////  Fl_Text_Style  //////////////////////
+
+Fl_Text_Style::Fl_Text_Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Style(parent,BASE){
+
+  textfont_ = FL_HELVETICA;
+  textsize_ = (uchar)FL_NORMAL_SIZE;
+  textcolor_ = FL_FOREGROUND_COLOR;
+  clear_flag(TEXTSIZE|TEXTFONT|TEXTCOLOR);
+  init(parent,mode);
+}
+
+
+
+void Fl_Text_Style::update_(Fl_Text_Style *s1, Fl_Widget::Style * s, unsigned what){
+  if(!s) return;
+  Fl_Widget::Style::update_(s1, s, what);
+  if(TEXTCOLOR & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textcolor_ = s1->textcolor_;
+  if(TEXTFONT & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textfont_ = s1->textfont_;
+  if(TEXTSIZE & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textsize_ = s1->textsize_;
+};
+
+void Fl_Text_Style::textcolor(unsigned c) {
+  textcolor_= c;
+  set_flag(TEXTCOLOR);
+  fl_update_styles(Fl_Text_Style, textcolor,TEXTCOLOR,c);
+}
+
+void Fl_Text_Style::textfont(uchar f) {
+  textfont_= f;
+  set_flag(TEXTFONT);
+  fl_update_styles(Fl_Text_Style, textfont,TEXTFONT,f);
+}
+
+void Fl_Text_Style::textsize(uchar s) {
+  textfont_= s;
+  set_flag(TEXTSIZE);
+  fl_update_styles(Fl_Text_Style, textfont,TEXTSIZE,s);
+}
+
+
+
+
+Fl_Color Fl_Input_::textcolor()  const{
+  return ((Fl_Text_Style *)style_)->textcolor();
+}
+
+void Fl_Input_::textcolor(unsigned a)  {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textcolor(a);
+}
+
+Fl_Font Fl_Input_::textfont() const {
+  return ((Fl_Text_Style *)style_)->textfont();
+}
+
+void Fl_Input_::textfont(uchar a)  {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textfont(a);
+}
+
+uchar Fl_Input_::textsize() const {
+  return ((Fl_Text_Style *)style_)->textsize();
+}
+
+void Fl_Input_::textsize(uchar a) {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textsize(a);
+}
+
+ 
+
+
 
 //
 // End of "$Id$".

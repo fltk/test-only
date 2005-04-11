@@ -28,6 +28,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Adjuster.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Style.H>
 
 void adjcb(Fl_Widget *o, void *v) {
   Fl_Adjuster *a = (Fl_Adjuster*)o;
@@ -37,6 +38,7 @@ void adjcb(Fl_Widget *o, void *v) {
 }
 
 int main(int, char ** argv) {
+  Fl_Adjuster::default_style()->highlight()->color(FL_RED);
    Fl_Window window(320,100,argv[0]);
 
    char buf1[100];

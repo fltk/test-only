@@ -56,12 +56,11 @@
  * object requires accessing image data or doing stat() on a file or doing some other slow
  * operation. 
  */
-class FL_EXPORT Fl_Browser_ : public Fl_Group {
-  uchar style_flags2_;
-protected:
-  enum {TEXTCOLOR = 1, TEXTFONT = 2, TEXTSIZE = 3};
 
-private:
+class Fl_Text_Style;
+
+class FL_EXPORT Fl_Browser_ : public Fl_Group {
+
   int position_;	// where user wants it scrolled to
   int real_position_;	// the current vertical scrolling position
   int hposition_;	// where user wants it panned to
@@ -69,8 +68,8 @@ private:
   int offset_;		// how far down top_ item the real_position is
   int max_width;	// widest object seen so far
   uchar has_scrollbar_;	// which scrollbars are enabled
-  uchar textfont_, textsize_;
-  unsigned textcolor_;
+  //uchar textfont_, textsize_;
+  //unsigned textcolor_;
   void* top_;		// which item scrolling position is in
   void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
   void *redraw1,*redraw2; // minimal update pointers
@@ -170,6 +169,12 @@ protected:
 
 public:
 
+  typedef Fl_Text_Style Style;
+  Style * default_style();
+  
+  void style(Style *s ){Fl_Widget::style((Fl_Widget::Style *)s);}
+  Style * style(){return (Style *) Fl_Widget::style();}
+
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
 
@@ -224,17 +229,17 @@ public:
   };
 
     /** Gets the default text font for the lines in the browser. */
-  Fl_Font textfont() const {return (Fl_Font)textfont_;}
+  Fl_Font textfont() const ;
     /** Sets the default text font to \a font */
-  void textfont(uchar font) {textfont_ = font; style_flags2_ |= TEXTFONT;}
+  void textfont(uchar font);
     /** Gets the default text size for the lines in the browser. */
-  uchar textsize() const {return textsize_;}
+  uchar textsize() const;
     /** Sets the default text size to \a size */
-  void textsize(uchar size) {textsize_ = size; style_flags2_ |= TEXTSIZE;}
+  void textsize(uchar size);
     /** Gets the default text color for the lines in the browser. */
-  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+  Fl_Color textcolor() const;
     /** Sets the default text color to \c color */
-  void textcolor(unsigned color) {textcolor_ = color; style_flags2_ |= TEXTCOLOR;}
+  void textcolor(unsigned color);
 
   static void scrollbar_width(int b) {scrollbar_width_ = b;}
   static int scrollbar_width() {return scrollbar_width_;}
@@ -244,10 +249,6 @@ public:
     /** \deprecated This method moves the vertical scrollbar to the lefthand side of the list. */
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
 
-
-  char try_textcolor(unsigned c){if ((style_flags2_ & TEXTCOLOR) ||(c == textcolor_)) return 0;  textcolor_ = c; return 1;}
-  char try_textfont(uchar f){if ((style_flags2_ & TEXTFONT) || (f == textfont_)) return 0; textfont_ = f; return 1;}
-  char try_textsize(uchar s){if ((style_flags2_ & TEXTSIZE) || (textsize_ == s)) return 0; textsize_ = s; return 1;}
 
 };
 

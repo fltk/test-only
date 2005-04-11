@@ -49,7 +49,7 @@ int main(int argc, char ** argv) {
   Fl_Round_Button::default_style()->highlight()->box(FL_THIN_DOWN_BOX);
   Fl_Button::default_style()->highlight()->color(FL_WHITE);
   Fl_Window *window = new Fl_Window(320,130);
-  window->deactivate();
+  //window->deactivate();
   (new Fl_Button(10, 10, 130, 30, "Fl_Button"))->tooltip("This is a Tooltip.");
   new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
   new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");

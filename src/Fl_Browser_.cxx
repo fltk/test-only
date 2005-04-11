@@ -30,6 +30,8 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Browser_.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Style.H>
+#include <FL/Fl_Style_List.H>
 
 
 // This is the base class for browsers.  To be useful it must be
@@ -712,7 +714,8 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* l)
     scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
     hscrollbar(0, 0, 0, 0, 0)
 {
-  box(FL_NO_BOX);
+  style_ = default_style();
+  //box(FL_NO_BOX);
   align(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
@@ -720,15 +723,15 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* l)
   top_ = 0;
   when(FL_WHEN_RELEASE_ALWAYS);
   selection_ = 0;
-  color(FL_BACKGROUND2_COLOR);
-  selection_color(FL_SELECTION_COLOR);
+  //color(FL_BACKGROUND2_COLOR);
+  //selection_color(FL_SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);
 //scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatability?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(FL_HORIZONTAL);
-  textfont_ = FL_HELVETICA;
-  textsize_ = (uchar)FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  //textfont_ = FL_HELVETICA;
+  //textsize_ = (uchar)FL_NORMAL_SIZE;
+  //textcolor_ = FL_FOREGROUND_COLOR;
   has_scrollbar_ = BOTH;
   max_width = 0;
   max_width_item = 0;
@@ -760,6 +763,63 @@ int Fl_Browser_::full_width() const {
 void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
+
+
+
+
+
+
+
+
+
+Fl_Color Fl_Browser_::textcolor()  const{
+  return ((Fl_Text_Style *)style_)->textcolor();
+}
+
+void Fl_Browser_::textcolor(unsigned a)  {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textcolor(a);
+}
+
+Fl_Font Fl_Browser_::textfont() const {
+  return ((Fl_Text_Style *)style_)->textfont();
+}
+
+void Fl_Browser_::textfont(uchar a)  {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textfont(a);
+}
+
+uchar Fl_Browser_::textsize() const {
+  return ((Fl_Text_Style *)style_)->textsize();
+}
+
+void Fl_Browser_::textsize(uchar a) {
+  dynamic_style();
+  ((Fl_Text_Style *)style_)->textsize(a);
+}
+
+ 
+
+
+
+Fl_Browser_::Style * Fl_Browser_::default_style(){
+  static Fl_Browser_::Style * s = 0;
+  if(!s){ // not yet initialized
+    s = new Fl_Browser_::Style(Fl_Widget::default_style(), Fl_Widget::Style::NO_HIGHLIGHT);
+    s->box(FL_NO_BOX);
+    s->color(FL_BACKGROUND2_COLOR);
+    s->selection_color(FL_SELECTION_COLOR);
+
+  }
+  return s;
+}
+
+
+///////////////////////////////////////////////////////////
+
+
+
 
 
 

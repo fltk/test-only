@@ -28,6 +28,9 @@
 #include <FL/Fl_Adjuster.H>
 #include <FL/Fl_Bitmap.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Style.H>
+#include <FL/Fl_Style_List.H>
+#include <FL/Fl_Button.H>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -40,6 +43,7 @@ static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 void Fl_Adjuster::value_damage() {}
 
 void Fl_Adjuster::draw() {
+
   int dx, dy, W, H;
   if (w()>=h()) {
     dx = W = w()/3;
@@ -48,17 +52,52 @@ void Fl_Adjuster::draw() {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  draw_box(drag==1?FL_DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
-  draw_box(drag==2?FL_DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
-  draw_box(drag==3?FL_DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
-  if (active_r())
-    fl_color(selection_color());
+  normal_();
+  if(highlight__ == 1) highlight_();
+  draw_box(drag==1?fl_down(box()):box(), x(),  y()+2*dy, W, H, color());
+  if(highlight__ == 1) normal_();
+  if(highlight__ == 2) highlight_();
+  draw_box(drag==2?fl_down(box()):box(), x()+dx, y()+dy, W, H, color());
+  if(highlight__ == 2) normal_();
+  if(highlight__ == 3) highlight_();
+  draw_box(drag==3?fl_down(box()):box(), x()+2*dx,  y(), W, H, color());
+  if(highlight__ == 3) normal_();
+  
+  Fl_Color c_norm;
+  Fl_Color c_highl;
+  if (active_r()){
+    c_norm = selection_color();
+    if(highlight__){
+      highlight_();
+      c_highl = selection_color();
+    }
+  }else{
+    c_norm = fl_inactive(selection_color());
+    if(highlight__){
+      highlight_();
+      c_highl = selection_color();
+    }
+  }
+
+
+  if(highlight__ ==1)
+    fl_color(c_highl);
   else
-    fl_color(fl_inactive(selection_color()));
+    fl_color(c_norm);
   fastarrow.draw(x()+(W-fastarrow_width)/2,
 		 y()+2*dy+(H-fastarrow_height)/2, W, H);
+  
+  if(highlight__ ==2)
+    fl_color(c_highl);
+  else
+    fl_color(c_norm);
   mediumarrow.draw(x()+dx+(W-mediumarrow_width)/2,
 		   y()+dy+(H-mediumarrow_height)/2, W, H);
+
+  if(highlight__ ==2)
+    fl_color(c_highl);
+  else
+    fl_color(c_norm);
   slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
 		 y()+(H-slowarrow_width)/2, W, H);
   if (Fl::focus() == this) draw_focus();
@@ -66,9 +105,52 @@ void Fl_Adjuster::draw() {
 
 int Fl_Adjuster::handle(int event) {
   double v;
+  int old_highlight_ = highlight__;
   int delta;
   int mx = Fl::event_x();
+  int my = Fl::event_y();
   switch (event) {
+
+
+    case FL_LEAVE:
+//      highlight();
+      normal();
+      highlight__ = 0;
+//      if(highlight__){
+ //       highlight__ = 0;
+ //     }
+      return 1;
+
+    case FL_ENTER:
+      highlight();
+      normal_();
+    case FL_MOVE:
+
+      if((mx<x()) || (mx>(x()+w())) || (my < y()) || (my > (y()+h()))){
+        if(highlight__){
+          highlight();
+          normal_();
+          highlight__ = 0;
+          return 1;
+        }
+        return 0;
+      }
+      if (w()>=h())
+      	highlight__ = 3*(mx-x())/w() + 1;
+      else
+        highlight__ = 3-3*(my-y()-1)/h();
+      if(old_highlight_ != highlight__) redraw();
+      return 1;
+
+
+
+
+
+
+
+
+
+
     case FL_PUSH:
       if (Fl::visible_focus()) Fl::focus(this);
       ix = mx;
@@ -148,21 +230,49 @@ int Fl_Adjuster::handle(int event) {
         return 1;
       } else return 0;
 
-    case FL_ENTER :
-    case FL_LEAVE :
-      return 1;
+
+
   }
   return 0;
 }
 
+
+
+void Fl_Adjuster::highlight_(){
+  Fl_Widget::Style * s = style()->highlight();
+  if(s) style(s);
+}
+
+void Fl_Adjuster::normal_(){
+  style(style()->normal());
+}
+
+
+
+
 Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
   : Fl_Valuator(X, Y, W, H, l) {
-  box(FL_UP_BOX);
+  highlight__ = 0;
+  style_ = default_style();
+  //box(FL_UP_BOX);
   step(1, 10000);
-  selection_color(FL_BLACK);
+  //selection_color(FL_BLACK);
   drag = 0;
   soft_ = 1;
 }
+
+
+Fl_Adjuster::Style * Fl_Adjuster::default_style(){
+  static Fl_Adjuster::Style * s = 0;
+  if(!s){ // not yet initialized
+    s = new Fl_Adjuster::Style(Fl_Button::default_style(), Style::ALL & ~Style::SELECTION_COLOR);
+    s->selection_color(FL_FOREGROUND_COLOR);
+  }
+  return s;
+}
+
+
+
 
 //
 // End of "$Id$".

@@ -35,6 +35,7 @@
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
 #include "flstring.h"
+#include <FL/Fl_Style.H>
 
 void Fl_Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
@@ -412,6 +413,21 @@ int Fl_Input::handle(int event) {
 Fl_Input::Fl_Input(int X, int Y, int W, int H, const char *l)
 : Fl_Input_(X, Y, W, H, l) {
 }
+
+
+
+Fl_Input::Style * Fl_Input::default_style(){
+  static Fl_Input::Style * s = 0;
+  if(!s){ // not yet initialized
+    s = new Fl_Input::Style(Fl_Widget::default_style(), Fl_Widget::Style::NO_HIGHLIGHT);
+    s->box(FL_DOWN_BOX);
+    s->color(FL_BACKGROUND2_COLOR);
+    s->selection_color(FL_SELECTION_COLOR);
+  }
+  return s;
+}
+
+
 
 //
 // End of "$Id$".

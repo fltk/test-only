@@ -258,7 +258,7 @@ void Fl_Widget::Style::init(Fl_Widget::Style * parent, unsigned mode){
   l->highlight_->next_ = l;
   update(l->highlight_, ALL);
   if(parent && parent->list()->highlight_){
-    l->parent_mask_ = mode & l->mask_;
+    l->parent_mask_ = mode & l->mask_ & parent->list()->mask_;
     parent->list()->highlight_->update(list()->highlight_, mode); //updating according to parent highlight
   }
 }
@@ -352,44 +352,44 @@ void Fl_Widget::Style::clear(){
 void Fl_Widget::Style::color(unsigned c){
   color_ = c;
   flags_ |=COLOR;
-  fl_update_styles(color, COLOR, c);
+  fl_update_styles(Style,color, COLOR, c);
 }
 
 
 void Fl_Widget::Style::labeltype(Fl_Labeltype t){
   labeltype_=t;
   flags_|= LABELTYPE;
-  fl_update_styles(labeltype,LABELTYPE, t);
+  fl_update_styles(Style,labeltype,LABELTYPE, t);
 }
 
 
 void Fl_Widget::Style::labelcolor(unsigned c){ 
   labelcolor_ = c; 
   flags_ |= LABELCOLOR;
-  fl_update_styles(labelcolor, LABELCOLOR, c);
+  fl_update_styles(Style,labelcolor, LABELCOLOR, c);
 }
 
 void Fl_Widget::Style::labelfont(uchar f){
   labelfont_ = f; 
   flags_ |= LABELFONT;
-  fl_update_styles(labelfont, LABELFONT, f);
+  fl_update_styles(Style,labelfont, LABELFONT, f);
 }
 
 void Fl_Widget::Style::labelsize(uchar s){
   labelsize_ = s; 
   flags_ |= LABELSIZE;
-  fl_update_styles(labelsize, LABELSIZE, s);
+  fl_update_styles(Style,labelsize, LABELSIZE, s);
 }
 void Fl_Widget::Style::selection_color(unsigned c){
   selection_color_ = c;
   flags_ |= SELECTION_COLOR;
-  fl_update_styles(selection_color, SELECTION_COLOR, c);
+  fl_update_styles(Style,selection_color, SELECTION_COLOR, c);
 
 }
 void Fl_Widget::Style::box(Fl_Boxtype b) {
   box_= b;
   flags_ |= BOX;
-  fl_update_styles(box,BOX,b);
+  fl_update_styles(Style,box,BOX,b);
 }
 
 

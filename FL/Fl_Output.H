@@ -44,6 +44,7 @@
  */
 class Fl_Output : public Fl_Input {
 public:
+  class Style;
     /** Creates a new Fl_Output widget using the given position, size, and
      * label string. The default boxtype is \c FL_DOWN_BOX. */
   Fl_Output(int X,int Y,int W,int H, const char *l = 0)

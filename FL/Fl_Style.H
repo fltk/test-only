@@ -100,11 +100,22 @@ class FL_EXPORT Fl_Widget::Style {
   protected:
 
   public:
-    enum  {STATIC = 1,  HIGHLIGHT = 2, LABELTYPE=0x10, LABELCOLOR=0x20,
+    enum  {STATIC = 1,  HIGHLIGHT = 2,
+      LABELTYPE=0x10, LABELCOLOR=0x20,
       LABELFONT=0x40, LABELSIZE=0x80, 
-      COLOR=0x200, SELECTION_COLOR=0x400, BOX=0x800, 
-      REDRAW_LABEL = 0x1F0, REDRAW = 0xFFFFFE00, ALL = 0xFFFFFFF0, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
-      BASE = 1, };
+      COLOR=0x200, SELECTION_COLOR=0x400,
+      BOX=0x800,   DOWN_BOX = 0x1000,
+      SYMBOL_ALIGN = 0x2000,
+      TEXTCOLOR = 0x4000, TEXT_COLOR = TEXTCOLOR,
+      TEXTFONT = 0x8000, TEXT_FONT = TEXTFONT, 
+      TEXTSIZE = 0x10000, TEXT_SIZE = TEXTSIZE,
+
+       // masks to calculate damage to perform redwaw() and/or redraw_label() for highlighting
+      REDRAW_LABEL = 0x1F0, REDRAW = 0xFFFFFE00,
+      // constructor patameters for highlighting and its inheritance
+      ALL = ~0xF, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
+      BASE = 1 // BASE should be always used for initialization of base class within the constructor
+    };
     static void update_(Style * s1, Style * s, unsigned what=ALL);
   protected:
 
@@ -139,7 +150,7 @@ class FL_EXPORT Fl_Widget::Style {
     void box(Fl_Boxtype b);
   };
 
-//typedef Fl_Widget::Style Fl_Widget_Style;
+typedef Fl_Widget::Style Fl_Widget_Style;
 
 #endif // Fl_Widget_Style_H
 
@@ -165,7 +176,7 @@ protected:
 
   void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);}
 public:
-  enum {DOWN_BOX = 0x1000};
+
   Style * highlight(){return (Style *)highlight_();}
   Style * normal(){return (Style *)normal_();}
 
@@ -175,7 +186,7 @@ public:
   Style(Fl_Widget::Style * parent, unsigned mode);
 };
 
-//typedef Fl_Button::Style Fl_Button_Style;
+typedef Fl_Button::Style Fl_Button_Style;
 
 
 #endif  // Fl_Button_Style_H
@@ -202,21 +213,71 @@ protected:
   static void update_(Fl_Tool_Button::Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
   void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);};
 public:
-  enum {SYMBOL_ALIGN = 0x2000};
+
   Style * highlight(){return (Style *)highlight_();}
   Style * normal(){return (Style *)normal_();}
 
-
-
   uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Tool_Button::Style *)next())->symbol_align_);};
   void symbol_align(uchar a);
+
   Style(Fl_Widget::Style * parent, unsigned mode);
 };
 
-//typedef Fl_Tool_Button::Style Fl_Tool_Button_Style;
+typedef Fl_Tool_Button::Style Fl_Tool_Button_Style;
 
 
-#endif  // Fl_Button_Style_H
+#endif  // Fl_Tool_Button_Style_H
+
+
+
+///////////////////////  Fl_Text_Style  //////////////////////
+// 
+// This is a base style class not only for blowser but wor many text widgets
+
+
+#if (defined(Fl_Input__H) || defined(Fl_Browser__H)) && !defined(Fl_Text_Style_H)
+# define Fl_Text_Style_H
+
+
+class FL_EXPORT Fl_Text_Style : public Fl_Widget::Style {
+  unsigned textcolor_;
+  uchar textfont_;
+  uchar textsize_;
+public:
+  Fl_Widget::Style * clone(){return new Fl_Text_Style(this);} 
+
+protected:
+  Fl_Text_Style(Fl_Text_Style * s):Fl_Widget::Style(s){};
+
+  //reimplementation of virtual functions for new style
+
+  static void update_(Fl_Text_Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
+  void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);};
+public:
+  Fl_Text_Style * highlight(){return (Fl_Text_Style *)highlight_();}
+  Fl_Text_Style * normal(){return (Fl_Text_Style *)normal_();}
+
+
+  Fl_Color textcolor() const  {return ((STATIC|TEXTCOLOR) & flags()) ? (Fl_Color)textcolor_ : (Fl_Color)(((Fl_Text_Style *)next())->textcolor_);}
+  Fl_Font textfont() const  {return ((STATIC|TEXTFONT) & flags()) ? (Fl_Font)textfont_ : (Fl_Font)(((Fl_Text_Style *)next())->textfont_);}
+  uchar textsize() const  {return ((STATIC|TEXTSIZE) & flags()) ? textsize_ : ((Fl_Text_Style * )next())->textsize_;}
+
+  void textcolor(unsigned c);
+  void textfont(uchar f);
+  void textsize(uchar s);
+
+
+  Fl_Text_Style(Fl_Widget::Style * parent, unsigned mode);
+};
+
+
+
+#endif  // Fl_Text_Style_H
+
+//#if defined(Fl_Adjuster_H) && !defined(Fl_Adjuster_Style_H)
+//#endif
+
+
 
 
 

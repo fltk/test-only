@@ -25,6 +25,9 @@
 //
 // Implementation temporartly in fl_symbols.cxx
 
+#ifndef Fl_Hash_Table_H
+#define Fl_Hash_Table_H
+
 struct Fl_Hash_Item{
   const char * name;
   void * data;
@@ -44,6 +47,8 @@ public:
   Fl_Hash_Table(int size = 113);
 };
 
+
+#endif
 
 //
 // End of "$Id$".
