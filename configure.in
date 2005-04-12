@@ -184,7 +184,7 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	Linux* | *BSD*)
-#            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+#           DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
             DSOCOMMAND="\$(CXX) \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "$libdir" != "/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
@@ -218,7 +218,7 @@ if test x$enable_shared = xyes; then
 	    ;;
     esac
 
-#    LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../forms -lfltk_forms$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
+#   LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../forms -lfltk_forms$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
     LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
 else
     DSOCOMMAND="echo"
@@ -634,12 +634,15 @@ case $uname in
 	    GLDEMOS=""
 	fi
 
-	dnl Check for Cairo library unless disabled...
-	AC_ARG_ENABLE(cairo,[  --enable-cairo          use Cairo graphics (default=no)])
-	if test x$enable_cairo = xyes; then
-	    AC_DEFINE(USE_CAIRO)
-	    LIBS="-lcairo $LIBS"
-	fi
+  dnl Check for Cairo library unless disabled...
+  AC_ARG_ENABLE(cairo,[  --enable-cairo          use Cairo graphics (default=no)])
+  if test x$enable_cairo = xyes; then
+    AC_DEFINE(USE_CAIRO)
+#   FIXME This part should be fixed so configure do not depend on
+#   we do not rely on pkg-config . 
+    LIBS="$LIBS `pkg-config --cflags cairo`"
+    CXXFLAGS="$CXXFLAGS `pkg-config --cflags cairo`" 
+  fi
 
 	dnl X11 multithreading
 	AC_ARG_ENABLE(x11multithread, [  --enable-x11multithread use XLockDisplay for X11 (default=no)])
