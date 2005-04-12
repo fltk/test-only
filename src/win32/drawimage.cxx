@@ -127,18 +127,16 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
+extern bool fl_drawing_offscreen;
+
 static void innards(const uchar *buf, PixelType type,
 		    const fltk::Rectangle& r1,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-#if USE_COLORMAP
-  char indexed = (xpalette != 0);
-#endif
-
   fltk::Rectangle r(r1); transform(r);
   fltk::Rectangle cr(r); if (!intersect_with_clip(cr)) return;
-  if (!linedelta) linedelta = r1.w()*delta;
+
   int x = cr.x();
   int y = cr.y();
   int w = cr.w();
@@ -148,66 +146,20 @@ static void innards(const uchar *buf, PixelType type,
   int W = r1.w();
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
 
-  static U32 bmibuffer[256+12];
-  BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
-  if (!bmi.bmiHeader.biSize) {
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biCompression = BI_RGB;
-    bmi.bmiHeader.biXPelsPerMeter = 0;
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-    bmi.bmiHeader.biClrUsed = 0;
-    bmi.bmiHeader.biClrImportant = 0;
-  }
-
-  // -1 == none
-  // 0  == indexed
-  // 1  == mono
-  static int current_cmap = -1;
-
-#if USE_COLORMAP
-  if (indexed) {
-    if(current_cmap != 0) {
-      current_cmap = 0;
-      for (short i=0; i<256; i++) {
-        *((short*)(bmi.bmiColors)+i) = i;
-      }
-    }
-  } else
-#endif
-    bool mono = (type == LUMINANCE);
-  if (mono) {
-    if(current_cmap != 1) {
-      current_cmap = 1;
-      for (int i=0; i<256; i++) {
-        bmi.bmiColors[i].rgbBlue = (uchar)i;
-        bmi.bmiColors[i].rgbGreen = (uchar)i;
-        bmi.bmiColors[i].rgbRed = (uchar)i;
-        bmi.bmiColors[i].rgbReserved = (uchar)i;
-      }
-    }
-  }
-  
-#if USE_COLORMAP
-  int pixelsize = mono|indexed ? 1 : 4;
-#else
-  int pixelsize = mono ? 1 : 4;
-#endif
-
-  int linesize = pixelsize * w;
-  if ((linesize % 4) != 0) {
-    linesize += 4 - (linesize % 4);
-  }
-
+  BITMAPINFO bmi;
+  memset(&bmi, 0, sizeof(BITMAPINFO));
+  bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
   bmi.bmiHeader.biWidth = w;
-  bmi.bmiHeader.biBitCount = pixelsize*8;
+  bmi.bmiHeader.biPlanes = 1;
+  bmi.bmiHeader.biBitCount = 32;
+  bmi.bmiHeader.biCompression = BI_RGB;
 
   static U32* buffer;
   int blocking = h;
-  {int size = linesize*h;
+  {int size = 4*w*h;
   if (size > MAXBUFFER) {
     size = MAXBUFFER;
-    blocking = MAXBUFFER/linesize;
+    blocking = MAXBUFFER/(4*w);
   }
   static long buffer_size;
   if (size > buffer_size) {
@@ -227,6 +179,10 @@ static void innards(const uchar *buf, PixelType type,
     }
   }
 
+  // needed for MASK:
+  uchar mr,mg,mb;
+  fltk::split_color(fltk::getcolor(),mr,mg,mb);
+
   int ypos = y;
   for (int j=0; j<h; ) {
     int k;
@@ -239,80 +195,83 @@ static void innards(const uchar *buf, PixelType type,
         from = buf;
         buf += linedelta;
       }
-#if USE_COLORMAP
-      if (indexed) {
-        if (mono)
-          monodither(to, from, w, delta);
-        else 
-          dither(to, from, w, delta);
-        to += w;
-      } else
-#endif
-        if (mono) {
-          for (int i=w; i--; from += delta) *to++ = *from;
-        } else {
-          for (int i=w; i--; from += delta, to += pixelsize) {
-            if(delta == 4) {
-              // Premultiply for AlphaBlend
-              int a = from[3];
-              float afactor = (float)a / (float)0xff;
-              to[0] = (uchar)(float(from[2]) * afactor);
-	      to[1] = (uchar)(float(from[1]) * afactor);
-	      to[2] = (uchar)(float(from[0]) * afactor);
-	      to[3] = a;
-            } else {
-	      to[0] = from[2];
-	      to[1] = from[1];
-	      to[2] = from[0];
-              to[3] = 0xFF; // alpha channel is totally opaque
-            }
-          }
-        }
+      int i;
+      switch (type) {
+      case LUMINANCE:
+	for (i=w; i--; from += delta, to += 4) {
+	  to[0] = to[1] = to[2] = *from; to[3] = 0xff;
+	}
+	break;
+      case MASK:
+	for (i=w; i--; from += delta, to += 4) {
+	  uchar v = *from;
+	  to[0] = (mb*v)>>8;
+	  to[1] = (mg*v)>>8;
+	  to[2] = (mr*v)>>8;
+	  to[3] = v;
+	}
+	break;
+      case BGR:
+	for (i=w; i--; from += delta, to += 4) {
+	  to[0] = from[0];
+	  to[1] = from[1];
+	  to[2] = from[2];
+	  to[3] = 0xff;
+	}
+	break;
+      case RGB:
+	for (i=w; i--; from += delta, to += 4) {
+	  to[0] = from[2];
+	  to[1] = from[1];
+	  to[2] = from[0];
+	  to[3] = 0xff;
+	}
+	break;
+      case RGBA:
+	for (int i=w; i--; from += delta, to += 4) {
+	  to[0] = from[2];
+	  to[1] = from[1];
+	  to[2] = from[0];
+	  to[3] = from[3];
+	}
+	break;
+      case ABGR:
+	for (int i=w; i--; from += delta, to += 4) {
+	  to[0] = from[1];
+	  to[1] = from[2];
+	  to[2] = from[3];
+	  to[3] = from[0];
+	}
+	break;
+      }
     }
     bmi.bmiHeader.biHeight = -k;
-    bmi.bmiHeader.biSizeImage = k*linesize;
-#if 1
-    SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
-		      (LPSTR)buffer,
-		      &bmi,
-# if USE_COLORMAP
-		      indexed ? DIB_PAL_COLORS : DIB_RGB_COLORS
-# else
-		      DIB_RGB_COLORS
-# endif
-		      );
-#else
-    // We have to do all this conversion stuff because SetDIBitsToDevice does 
-    // not do alpha blending. The easiest way to use the win32 alpha blending 
-    // is to use the DrawIconEx function. It does all the things necessary to 
-    // draw alpha blended images.
-      // This code was contributed to fltk but I have not seen it do any
-      // actual alpha compositing. Maybe somebody can figure out what is
-      // wrong?
-    HBITMAP b = CreateDIBitmap(dc,
-			       (BITMAPINFOHEADER*)&head,
-			       CBM_INIT,
-			       (LPSTR)buffer,
-			       (BITMAPINFO*)&head,
-			       DIB_RGB_COLORS); 
-
-    // we must create a temporary single bit bitmap to satisfy the icon 
-    // creating constraints, even though it isn't used.
-    HBITMAP hMonoBitmap = CreateBitmap(w,h,1,1,NULL);
-
-    ICONINFO ii;
-    ii.fIcon = TRUE;
-    ii.xHotspot = 0;
-    ii.yHotspot = 0;
-    ii.hbmMask = b; //hMonoBitmap;
-    ii.hbmColor = b;
-    HICON imageIcon = ::CreateIconIndirect(&ii);
-    DrawIconEx(dc, x, ypos, imageIcon, w, k, 0, NULL, DI_NORMAL);
-    // Clean up all the mess
-    ::DestroyIcon(imageIcon);
-    ::DeleteObject(hMonoBitmap);
-    ::DeleteObject(b);
-#endif
+    bmi.bmiHeader.biSizeImage = k*4*w;
+    if (fl_drawing_offscreen || type == LUMINANCE || type == RGB || type == BGR) {
+      SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
+			(LPSTR)buffer,
+			&bmi,
+			DIB_RGB_COLORS
+			);
+    } else {
+      HBITMAP rgb = CreateDIBSection(dc, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
+      HDC new_dc = CreateCompatibleDC(dc);
+      SelectObject(new_dc, rgb);
+      SetDIBitsToDevice(new_dc, 0, 0, w, k, 0, 0, 0, k,
+			(LPSTR)buffer,
+			&bmi,
+			DIB_RGB_COLORS
+			);
+      BLENDFUNCTION m_bf;
+      m_bf.BlendOp = AC_SRC_OVER;
+      m_bf.BlendFlags = 0;
+      m_bf.AlphaFormat = AC_SRC_ALPHA; //1;
+      m_bf.SourceConstantAlpha = 0xFF;
+      AlphaBlend(dc, x, ypos, w, k,
+		 new_dc, 0, 0, w, k, m_bf);
+      DeleteDC(new_dc);
+      DeleteObject(rgb);
+    }
     ypos += k;
   }
 }

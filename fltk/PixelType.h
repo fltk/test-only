@@ -38,22 +38,25 @@ namespace fltk {
   warned that some graphics software written for little-endian machines
   may describe the bytes in the opposite order, as they are describing
   the bytes in a 4-byte integer.
+
+  Warning: not all types work. See test/image to see the tests.
+  Also it is unclear if alpha is premultiplied or not. When we decide
+  what the default is we will add symbols for the opposite setting.
 */
 enum PixelType {
   // Commented out ones are nyi and will only be done as people need them
   MASK	= 0,	//!< 1 byte: 0xff = fltk::getcolor(), 0 = transparent
   LUMINANCE=1,	//!< 1 byte: 0xff = white, 0 = black
-  //BGR = 2,	//!< 3 bytes: b,g,r
+  BGR 	= 2,	//!< 3 bytes: b,g,r
   RGB	= 3, 	//!< 3 bytes: r,g,b
-  RGBA	= 4	//!< 4 bytes: r,g,b,a.
-  //ABGR= 5,	//!< 4 bytes: a,b,g,r.
-  //ARGB= 6,	//!< 4 bytes: a,r,g,b.
-  //BGRA= 7,	//!< 4 bytes: b,g,r,a.
-  //RGBM=8,	//!< 4 bytes: r,g,b,a. Unpremultiplied (M means "mask")
-  //MBGR=9,	//!< 4 bytes: a,b,g,r. Unpremultiplied.
-  //MRGB=10,	//!< 4 bytes: a,r,g,b. Unpremultiplied.
-  //BGRM=11,	//!< 4 bytes: b,g,r,a. Unpremultiplied.
+  RGBA	= 4,	//!< 4 bytes: r,g,b,a.
+  ABGR	= 5	//!< 4 bytes: a,b,g,r.
 };
+
+/**
+   Turn a PixelType into the number of bytes needed to hold a pixel.
+*/
+inline int depth(PixelType t) {return (t<2 ? 1 : t < 4 ? 3 : 4);}
 
 /*! \} */
 

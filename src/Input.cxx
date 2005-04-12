@@ -38,11 +38,15 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 
 extern Widget* fl_pending_callback;
 
-static void set_pending_callback(Input* i) {
-  Widget* w = fl_pending_callback;
-  if (i == w) return;
-  if (w) {fl_pending_callback = 0; w->do_callback();}
-  fl_pending_callback = i;
+static void changed_stuff(Input* i) {
+  i->set_changed();
+  if (i->when() & WHEN_CHANGED) {i->do_callback(); return;}
+  if (i->when() & WHEN_RELEASE) {
+    Widget* w = fl_pending_callback;
+    if (i == w) return;
+    if (w) {fl_pending_callback = 0; w->do_callback();}
+    fl_pending_callback = i;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -824,9 +828,7 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
 
   mark_ = position_ = undoat;
 
-  set_changed();
-  if (when()&WHEN_CHANGED) do_callback();
-  else if (when() & WHEN_RELEASE) set_pending_callback(this);
+  changed_stuff(this);
   return true;
 }
 
@@ -904,9 +906,7 @@ bool Input::undo() {
   undo_is_redo = !undo_is_redo;
 
   minimal_update(b1);
-  set_changed();
-  if (when()&WHEN_CHANGED) do_callback();
-  else if (when() & WHEN_RELEASE) set_pending_callback(this);
+  changed_stuff(this);
   return true;
 }
 
@@ -918,11 +918,11 @@ bool Input::yank() {
 }
 #endif
 
-/*!  Does the callback if changed() is true or if when()
-  fltk::WHEN_NOT_CHANGED is non-zero. You should call this at any
-  point you think you should generate a callback. */
+/*! Does the callback if there were any changes and when() does not
+  have WHEN_CHANGED set. To keep track of this it clears changed().
+*/
 void Input::maybe_do_callback() {
-  if (changed() || (when()&WHEN_NOT_CHANGED)) {
+  if (changed() && !(when()&WHEN_CHANGED) || (when()&WHEN_NOT_CHANGED)) {
     if (fl_pending_callback == this) fl_pending_callback = 0;
     clear_changed(); do_callback();
   }

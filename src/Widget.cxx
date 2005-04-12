@@ -718,11 +718,8 @@ int Widget::handle(int event) {
     // work if this is a group and some child has the belowmouse because
     // send() will not change the belowmouse then. Setting belowmouse
     // directly fixes this.
-    // The check for !parent() is there to fix problems with a large
-    // number of older fltk programs that set NO_BOX on windows to
-    // stop them from blinking (this is not necessary in fltk2.0):
-    if (box()!=NO_BOX || !parent()) {fltk::belowmouse(this); return true;}
-    return 0;
+    fltk::belowmouse(this);
+    return true;
   case HIDE:
   case DEACTIVATE:
     throw_focus();

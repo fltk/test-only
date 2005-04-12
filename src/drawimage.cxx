@@ -193,7 +193,7 @@ void fltk::drawimage(DrawImageCallback cb,
 void fltk::drawimage(DrawImageCallback cb,
 		     void* data, fltk::PixelType type,
 		     const Rectangle& r) {
-  innards(0, type, r, type&3, 0, cb, data);
+  innards(0, type, r, depth(type), 0, cb, data);
 }
 
 #if 0

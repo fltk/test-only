@@ -21,10 +21,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 #include <config.h>
-#include <fltk/events.h>
-#include <fltk/x.h>
-#include <fltk/draw.h>
 #include <fltk/xbmImage.h>
+#include <fltk/Style.h>
+#include <fltk/draw.h>
 using namespace fltk;
 
 /*! \class fltk::xbmImage

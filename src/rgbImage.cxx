@@ -36,13 +36,13 @@ void rgbImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
   if (!drawn()) {
     GSave gsave;
     const_cast<rgbImage*>(this)->make_current();
-    drawimage(data, PixelType(depth), fltk::Rectangle(w(),h()), depth);
-    if (depth == 4) const_cast<rgbImage*>(this)->alpha = rgb;
+    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), depth_);
+    if (depth_ == 4) const_cast<rgbImage*>(this)->alpha = rgb;
   }
   Image::_draw(r, style, flags);
 }
 
-#if WRITE_JPEG
+#if 0 //WRITE_JPEG
 
 // This function should be somewhere else!
 // For temporary purposes it is conditiallly compiled here for use in

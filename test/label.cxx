@@ -32,6 +32,7 @@
 #include <fltk/Input.h>
 #include <fltk/Choice.h>
 #include <fltk/draw.h>
+#include <fltk/xpmImage.h>
 using namespace fltk;
 
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
@@ -48,9 +49,9 @@ void button_cb(Widget *,void *) {
   if (topb->value()) i |= ALIGN_TOP;
   if (bottomb->value()) i |= ALIGN_BOTTOM;
   if (insideb->value()) i |= ALIGN_INSIDE;
-  if (clipb->value()) i |= ALIGN_CLIP|NOTACTIVE;
+  if (clipb->value()) i |= ALIGN_CLIP;
   if (wrapb->value()) i |= ALIGN_WRAP;
-  textbox->flags(i);
+  textbox->align(i);
   window->redraw();
 }
 
@@ -107,24 +108,57 @@ Fl_Menu_Item choices[] = {
   {"EMBOSSED_LABEL",0,embossed_cb},
   {0}};
 
+#include "porsche.xpm"
+xpmImage theimage(porsche_xpm);
+void image_cb(Widget* w, void*) {
+  textbox->image(w->value() ? &theimage : 0);
+  window->redraw();
+}
+
+void inactive_cb(Widget* w, void*) {
+  if (w->value()) textbox->deactivate(); else textbox->activate();
+  window->redraw();
+}
+
+const char* const initial = "The quick brown fox jumps over the lazy dog.";
+
 int main(int argc, char **argv) {
   window = new Window(400,400);
   window->set_double_buffer();
   window->begin();
 
-  input = new Input(50,375,350,25);
-  input->static_value("The quick brown fox jumps over the lazy dog.");
-  input->when(WHEN_CHANGED);
-  input->callback(input_cb);
+  textbox= new Widget(100,75,200,100,initial);
+  textbox->box(ENGRAVED_BOX);
+  textbox->clear_flag(ALIGN_MASK);
+  textbox->set_flag(ALIGN_CENTER);
 
-  sizes= new ValueSlider(50,350,350,25,"Size:");
-  sizes->type(Slider::TICK_ABOVE);
-  sizes->clear_flag(ALIGN_MASK);
-  sizes->set_flag(ALIGN_LEFT);
-  sizes->range(1,64);
-  sizes->step(1);
-  sizes->value(14);
-  sizes->callback(size_cb);
+  Choice *c = new Choice(50,275,200,25);
+  c->menu(choices);
+
+  ToggleButton* b = new ToggleButton(250,275,50,25,"image");
+  b->callback(image_cb);
+
+  b = new ToggleButton(300,275,50,25,"inactive");
+  b->callback(inactive_cb);
+
+  Group *g = new Group(0,300,400,25);
+  g->resizable(g);
+  g->begin();
+  leftb = new ToggleButton(50,0,50,25,"left");
+  leftb->callback(button_cb);
+  rightb = new ToggleButton(100,0,50,25,"right");
+  rightb->callback(button_cb);
+  topb = new ToggleButton(150,0,50,25,"top");
+  topb->callback(button_cb);
+  bottomb = new ToggleButton(200,0,50,25,"bottom");
+  bottomb->callback(button_cb);
+  insideb = new ToggleButton(250,0,50,25,"inside");
+  insideb->callback(button_cb);
+  wrapb = new ToggleButton(300,0,50,25,"wrap");
+  wrapb->callback(button_cb);
+  clipb = new ToggleButton(350,0,50,25,"clip");
+  clipb->callback(button_cb);
+  g->end();
 
   fontslider=new ValueSlider(50,325,350,25,"Font:");
   fontslider->type(Slider::TICK_ABOVE);
@@ -135,32 +169,20 @@ int main(int argc, char **argv) {
   fontslider->value(0);
   fontslider->callback(font_cb);
 
-  Group *g = new Group(50,300,350,25);
-  g->begin();
-  leftb = new ToggleButton(50,300,50,25,"left");
-  leftb->callback(button_cb);
-  rightb = new ToggleButton(100,300,50,25,"right");
-  rightb->callback(button_cb);
-  topb = new ToggleButton(150,300,50,25,"top");
-  topb->callback(button_cb);
-  bottomb = new ToggleButton(200,300,50,25,"bottom");
-  bottomb->callback(button_cb);
-  insideb = new ToggleButton(250,300,50,25,"inside");
-  insideb->callback(button_cb);
-  wrapb = new ToggleButton(300,300,50,25,"wrap");
-  wrapb->callback(button_cb);
-  clipb = new ToggleButton(350,300,50,25,"clip");
-  clipb->callback(button_cb);
-  g->fix_old_positions();
-  g->end();
+  sizes= new ValueSlider(50,350,350,25,"Size:");
+  sizes->type(Slider::TICK_ABOVE);
+  sizes->clear_flag(ALIGN_MASK);
+  sizes->set_flag(ALIGN_LEFT);
+  sizes->range(1,64);
+  sizes->step(1);
+  sizes->value(14);
+  sizes->callback(size_cb);
 
-  Choice *c = new Choice(50,275,200,25);
-  c->menu(choices);
+  input = new Input(50,375,350,25);
+  input->static_value(initial);
+  input->when(WHEN_CHANGED);
+  input->callback(input_cb);
 
-  textbox= new Widget(100,75,200,100,input->value());
-  textbox->box(ENGRAVED_BOX);
-  textbox->clear_flag(ALIGN_MASK);
-  textbox->set_flag(ALIGN_CENTER);
   window->resizable(textbox);
   window->end();
   window->show(argc,argv);

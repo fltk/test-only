@@ -163,6 +163,8 @@ void Image::destroy_cache() {
   any more setup.
 */
 
+extern bool fl_drawing_offscreen;
+
 /*! Make all the \ref drawing functions draw into the offscreen image,
   possibly creating the arrays used to store it.
 
@@ -203,6 +205,7 @@ void Image::make_current() {
     rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut, kCGImageAlphaNoneSkipLast);
     CGColorSpaceRelease(lut);
 #endif
+    fl_drawing_offscreen = true;
   }
 #if USE_X11
   draw_into((XWindow)rgb);
@@ -365,7 +368,7 @@ void Image::copy(const fltk::Rectangle& r1, int src_x, int src_y) const {
 void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
 
   // Draw bitmaps as documented, the rgb pretends to be black:
-  if (!rgb) { setcolor(BLACK); fill(r1, src_x, src_y); return; }
+  if (!rgb) { /*setcolor(BLACK);*/ fill(r1, src_x, src_y); return; }
 
   // Don't waste time for solid white alpha:  
   if (!alpha) { copy(r1, src_x, src_y); return; }
@@ -392,7 +395,7 @@ void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
     BLENDFUNCTION m_bf;
     m_bf.BlendOp = AC_SRC_OVER;
     m_bf.BlendFlags = 0;
-    m_bf.AlphaFormat = 0x1;
+    m_bf.AlphaFormat = AC_SRC_ALPHA; //1;
     m_bf.SourceConstantAlpha = 0xFF;
     AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(),
 	       new_dc, src_x, src_y, R.w(), R.h(), m_bf);

@@ -1396,23 +1396,14 @@ void Widget::make_current() const {
   int x = 0;
   int y = 0;
   const Widget* widget = this;
-  while (!widget->parent()) {
+  while (widget->parent()) {
     x += widget->x();
     y += widget->y();
     widget = widget->parent();
   }
   const Window* window = (const Window*)widget;
-  if (Window::drawing_window_ != window) {
-    release_quartz_context();
-    Window::drawing_window_ = window;
-    quartz_window = xid(window);
-    SetPort(GetWindowPort(quartz_window));
-    CreatedWindow* i = CreatedWindow::find(window);
-    QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
-    quartz_gc = i->gc;
-    CGContextSaveGState(quartz_gc);
-    fill_quartz_context();
-  }
+  release_quartz_context();
+  Window::drawing_window_ = window;
 #if 0
   // Find the root window and our position in it:
   int X = 0;
@@ -1424,8 +1415,11 @@ void Widget::make_current() const {
     Y += o->y();
   }
   quartz_window = xid(root);
+#else
+  quartz_window = xid(window);
+#endif
   SetPort(GetWindowPort(quartz_window));
-  SetOrigin(-X, -Y);
+//SetOrigin(-X, -Y);
   // We force a clip region to handle child windows. To speed things up
   // we only recalculate the clip region when children are shown, hidden,
   // or moved or resized.
@@ -1435,6 +1429,7 @@ void Widget::make_current() const {
     if (i->subRegion) DisposeRgn(i->subRegion);
     i->subRegion = NewRgn();
     SetRectRgn(i->subRegion, 0, 0, window->w(), window->h());
+#if 0
     for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
       RgnHandle r = NewRgn();
       Window* cw = cx->window;
@@ -1457,13 +1452,13 @@ void Widget::make_current() const {
       DiffRgn(i->subRegion, r, i->subRegion);
       DisposeRgn(r);
     }
+#endif
   }
   SetPortClipRegion( GetWindowPort(quartz_window), i->subRegion );
   QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
-  quartz_gc = CreatedWindow::find(root)->gc = i->gc;
+  quartz_gc = /*CreatedWindow::find(root)->gc =*/ i->gc;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
-#endif
   load_identity();
   translate(x,y);
 }

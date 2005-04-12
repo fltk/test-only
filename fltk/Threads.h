@@ -20,7 +20,7 @@ typedef pthread_t Thread;
 
 /** Fork a new thread and make it run \a f(p). Returns negative number
   on error, otherwise \a t is set to the new thread. */
-int create_thread(Thread& t, void *(*f) (void *), void* p) {
+inline int create_thread(Thread& t, void *(*f) (void *), void* p) {
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 

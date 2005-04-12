@@ -472,7 +472,7 @@ static void innards(const uchar *buf, PixelType type,
   // This can set bytes_per_line negative if image is bottom-to-top
   // I tested it on Linux, but it may fail on other Xlib implementations:
   if (buf && (
-#if 0	// set this to 1 to allow 32-bit shortcut
+#if 1	// set this to 1 to allow 32-bit shortcut
       delta == 4 &&
 #if WORDS_BIGENDIAN
       conv == rgbx_converter

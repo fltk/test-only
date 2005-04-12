@@ -1,38 +1,13 @@
-//
-// "$Id:"
-//
-// Test of Fltk::Image types for the Fast Light Tool Kit (FLTK).
-//
-// Notice that Fltk::Image is for a static, multiple-reuse image, such
-// as an icon or postage stamp.  Use fltk::draw_image to go directly
-// from an buffered image that changes often.
-//
-// Copyright 1998-2001 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+// Lame test of all types of image drawings.
 
 #include <fltk/run.h>
 #include <fltk/Window.h>
-#include <fltk/Button.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <fltk/draw.h>
+#include <fltk/rgbImage.h>
+#include <fltk/xpmImage.h>
+#include <fltk/xbmImage.h>
+#include <fltk/Slider.h>
+#include <fltk/CheckButton.h>
 
 #include <config.h>
 #if USE_X11
@@ -40,124 +15,139 @@
 #include <fltk/visual.h>
 #endif
 
-
 using namespace fltk;
 
-////////////////////////////////////////////////////////////////
+const char cdata[16*16+1] =
+"                "
+"  R RR    GGG   "
+"  RRrrR  GgggG  "
+"  Rrrrrr GgggGg "
+"  Rrrrrrr GGGGgg"
+"  Rrrrrrrr ggGgg"
+"  Rrrrrrrrr gGgg"
+"   rBrrrrrGGGggg"
+"    Bbrrrrrggggg"
+"    BBBBrrrrgggg"
+"    BbbbBrrrrggg"
+"    BbbbBbrrrrgg"
+"    BbbbBbbrrrrg"
+"    BBBBbbbbrrrr"
+"     bbbbbbbbrrr"
+"      bbbbbbbbrr";
 
-#include <fltk/xbmImage.h>
+#define SCALE 4
 
-#include "escherknot.xbm"
-xbmImage bitmap(escherknot_bits, escherknot_width, escherknot_height);
+// Tester for drawimage() call:
+class Dtest : public Widget {
+public:
+  fltk::PixelType pixeltype;
+  int delta;
+  const unsigned char* data;
+  void draw() {
+    drawimage(data, pixeltype, Rectangle(16*SCALE,16*SCALE), delta);
+  }
+  Dtest(PixelType pt, int dt, int x, int y, const char* l, const unsigned char* d) :
+    Widget(x,y,16*SCALE,16*SCALE,l), pixeltype(pt), delta(dt), data(d) {
+    box(NO_BOX);
+    align(ALIGN_BOTTOM);
+    labelsize(10);
+  }
+};
 
-////////////////////////////////////////////////////////////////
+// Tester for rgbImage subclass:
+class Itest : public Widget {
+public:
+  Itest(PixelType pt, int dt, int x, int y, const char* l, const unsigned char* d) :
+    Widget(x,y,16*SCALE,16*SCALE,l) {
+    image(new rgbImage(d, pt, 16*SCALE, 16*SCALE, dt));
+    box(NO_BOX);
+    align(ALIGN_BOTTOM);
+    labelsize(10);
+  }
+};
 
-#include <fltk/xpmImage.h>
+// Bitmap tester:
+#include "sorceress.xbm"
+class Btest : public Widget {
+public:
+  Btest(int x, int y, const char* l)
+    : Widget(x,y,16*SCALE,16*SCALE,l) {
+    image(new xbmImage(sorceress_bits, sorceress_width, sorceress_height));
+    box(NO_BOX);
+    align(ALIGN_BOTTOM|ALIGN_CLIP);
+    labelsize(10);
+  }
+};
 
+// Monochrome xpm tester:
+#include "recycle.xpm"
 #include "porsche.xpm"
-xpmImage pixmap(porsche_xpm);
+class Xtest : public Widget {
+public:
+  Xtest(int x, int y, const char* l, const char* const* data)
+    : Widget(x,y,16*SCALE,16*SCALE,l) {
+    image(new xpmImage(data,0));
+    box(NO_BOX);
+    align(ALIGN_BOTTOM|ALIGN_CLIP);
+    labelsize(10);
+  }
+};
 
-////////////////////////////////////////////////////////////////
-
-#include <fltk/rgbImage.h>
-
-#define WIDTH 75
-#define HEIGHT 75
-uchar* make_image(int n) {
-  uchar* image = new uchar[n*WIDTH*HEIGHT];
-  uchar *p = image;
-  for (int y = 0; y < HEIGHT; y++) {
-    int yint = y*8/HEIGHT;
-    for (int x = 0; x < WIDTH; x++) {
-      int a = (x-WIDTH/4)*255*2/WIDTH;
-      if (a > 255) a = 255;
-      if (a < 0) a = 0;
-      if (n > 3) {
-	*p++ = (yint&1 ? 255 : 127);
-	*p++ = (yint&2 ? 255 : 127);
-	*p++ = (yint&4 ? 255 : 127);
-	*p++ = a;
-      } else {
-	*p++ = (yint&1 ? a : a/2);
-	*p++ = (yint&2 ? a : a/2);
-	*p++ = (yint&4 ? a : a/2);
+unsigned char* builddata(int depth, const unsigned char* pixels) {
+  unsigned char* b = new unsigned char[SCALE*SCALE*16*16*depth];
+  unsigned char* p = b;
+  for (int y = 0; y < 16; y++) {
+    for (int y1 = 0; y1 < SCALE; y1++) {
+      const char* s = cdata+y*16;
+      for (int x = 0; x < 16; x++) {
+	int n;
+	bool d2 = false;
+	switch (*s++) {
+	case 'R': n = 1; break;
+	case 'G': n = 2; break;
+	case 'B': n = 3; break;
+	case 'r': n = 1; d2 = true; break;
+	case 'g': n = 2; d2 = true; break;
+	case 'b': n = 3; d2 = true; break;
+	default: n = 0; break;
+	}
+	for (int xx = 0; xx < SCALE; xx++) {
+	  const unsigned char* pp = pixels+depth*n;
+	  for (int k=0; k < depth; k++)
+	    if (d2) *p++ = *pp++ >> 1;
+	    else *p++ = *pp++;
+	}
       }
     }
   }
-  return image;
+  return b;
 }
 
-rgbImage rgb_image(make_image(3), WIDTH, HEIGHT, 3);
-uchar* rgbadata;
-rgbImage rgba_image((rgbadata=make_image(4)), WIDTH, HEIGHT, 4);
+unsigned char rgbpixels[4*3] = {
+  0, 0, 0,
+  255,0,0,
+  0, 255, 0,
+  0, 0, 255};
 
-class ImageTest : public Widget {
-  void draw() {
-    setcolor(RED);
-    fillrect(Rectangle(w(),h()));
-    setcolor(BLACK);
-    addvertex(0,0);
-    addvertex(w(),h());
-    strokepath();
-    drawimage(rgbadata, RGBA, Rectangle(WIDTH, HEIGHT), 4);
-  }
-public:
-  ImageTest(int x, int y, int w, int h) : Widget(x,y,w,h) {}
-};
+unsigned char rgbapixels[4*4] = {
+  0, 0, 0, 0,
+  255,0,0,255,
+  0, 255, 0,255,
+  0, 0, 255,255};
 
-////////////////////////////////////////////////////////////////
+unsigned char bgrpixels[4*3] = {
+  0, 0, 0,
+  0, 0, 255,
+  0, 255, 0,
+  255,0,0};
 
-#include <fltk/ToggleButton.h>
-#include <fltk/CheckButton.h>
-#include <fltk/Choice.h>
-#include <fltk/Item.h>
+unsigned char abgrpixels[4*4] = {
+  0, 0, 0, 0,
+  255, 0, 0, 255,
+  255, 0, 255, 0,
+  255, 255, 0, 0};
 
-CheckButton *leftb,*rightb,*topb,*bottomb,*insideb,
-  *clipb, *wrapb, *inactiveb, *tileb;
-Button *b;
-Window *w;
-
-void button_cb(Widget *,void *) {
-  int i = 0;
-  if (leftb->value()) i |= ALIGN_LEFT;
-  if (rightb->value()) i |= ALIGN_RIGHT;
-  if (topb->value()) i |= ALIGN_TOP;
-  if (bottomb->value()) i |= ALIGN_BOTTOM;
-  if (insideb->value()) i |= ALIGN_INSIDE;
-  if (clipb->value()) i |= ALIGN_CLIP;
-  if (wrapb->value()) i |= ALIGN_WRAP;
-  b->clear_flag(ALIGN_MASK);
-  b->set_flag(i);
-  if (inactiveb->value()) b->deactivate(); else b->activate();
-  w->redraw();
-}
-
-#include <fltk/TiledImage.h>
-
-TiledImage* tiledimage = 0;
-
-void tile_cb(Widget* button, void*) {
-  if (button->value()) {
-    if (!tiledimage) tiledimage = new TiledImage(0);
-    tiledimage->image((Image*)(b->image()));
-    b->image(0);
-    b->box(tiledimage);
-  } else {
-    b->image(tiledimage->image());
-    b->box(0);
-  }
-  w->redraw();
-}
-
-void choice_cb(Widget* item, void* data) {
-  b->label(item->label());
-  if (tileb->value()) {
-    tiledimage->image((Image*)data);
-  } else {
-    b->image((Image*)data);
-  }
-  w->redraw();
-}
+unsigned char lumpixels[4] = {0, 60, 160, 40};
 
 #if USE_X11
 int visid = -1;
@@ -172,7 +162,25 @@ int arg(int argc, char **argv, int &i) {
 }
 #endif
 
-int main(int argc, char **argv) {
+void bgcallback(Widget* w, void *v) {
+  fltk::Color c = fltk::Color(((Slider*)w)->value());
+  ((Window*)v)->color(c);
+  fltk::Widget::default_style->buttoncolor(c);
+  fltk::redraw();
+}
+
+void fgcallback(Widget* w, void *v) {
+  fltk::Color c = fltk::Color(((Slider*)w)->value());
+  fltk::Widget::default_style->labelcolor(c);
+  fltk::redraw();
+}
+
+void activecallback(Widget* w, void* v) {
+  if (w->value()) ((Widget*)v)->activate();
+  else ((Widget*)v)->deactivate();
+}
+
+int main(int argc, char** argv) {
 
 #if USE_X11
   int i = 1;
@@ -199,81 +207,95 @@ int main(int argc, char **argv) {
   }
 #endif
 
-  Window window(300,300); ::w = &window;
+  Window window(3*16*SCALE+40,10+5*(16*SCALE+15)+60);
   window.begin();
-  ToggleButton b(100,55,100,100,"Pixmap"); ::b = &b;
-  b.image(pixmap);
-  b.tooltip("This ToggleButton has:\n"
-	    "image() set to the Image class selected below.\n"
-	    "label() set to the name of that class.\n"
-	    "align() set to the flags selected below.\n"
-	    "Be sure to resize the window to see how it lays out");
-  ImageTest it(0,0,100,100);
-#define BWIDTH 60
-#define BHEIGHT 21
+  Group group(0,0,3*16*SCALE+40,10+5*(16*SCALE+15));
+  window.resizable(group);
+  group.resizable(group);
+  group.begin();
 
-  Group controls(10, 300-3*BHEIGHT-20, 280, 3*BHEIGHT+10);
-  controls.box(ENGRAVED_BOX);
-  controls.begin();
+  int y = 10;
+  int x1 = 10;
+  int x2 = 20+16*SCALE;
+  int x3 = 30+32*SCALE;
 
-  Choice choice(5, 5, 110, BHEIGHT);
-  choice.begin();
-  Item i1("xbmImage");
-  i1.callback(choice_cb, &bitmap);
-  Item i2("xpmImage");
-  i2.callback(choice_cb, &pixmap);
-  Item i3("rgbImage");
-  i3.callback(choice_cb, &rgb_image);
-  Item i4("rgbaImage");
-  i4.callback(choice_cb, &rgba_image);
-  choice.end();
-  choice.value(1); // set it to pixmap
-  choice.tooltip("Subclass of Image to use");
+  Widget* w;
 
-  tileb= new CheckButton(115, 5, BWIDTH, BHEIGHT, "tiled");
-  tileb->callback(tile_cb);
-  tileb->tooltip("Use a TiledImage object around the Image");
+  w = new Dtest(fltk::RGB, 3, x1, y, "RGB", builddata(3, rgbpixels));
+  w->tooltip("drawimage() of a 3-byte/pixel rgb image");
+  w = new Dtest(fltk::RGB, 4, x2, y, "RGB,4", builddata(4, rgbapixels));
+  w->tooltip("drawimage() of an rgb image except the pixels are 4 apart, "
+	      "some drivers will screw up and not skip the 4th byte");
+  w = new Itest(fltk::RGB, 3, x3, y, "RGB image", builddata(3, rgbpixels));
+  w->tooltip("rgbImage() used as widget->image()");
+  y += 16*SCALE+15;
 
-  int y = 5+BHEIGHT;
-  int x = 5;
-  topb = new CheckButton(x, y, BWIDTH, BHEIGHT, "top"); x += BWIDTH;
-  topb->callback(button_cb);
-  topb->tooltip("ALIGN_TOP");
-  bottomb= new CheckButton(x, y, BWIDTH, BHEIGHT, "bottom");x += BWIDTH;
-  bottomb->callback(button_cb);
-  bottomb->tooltip("ALIGN_BOTTOM");
-  leftb = new CheckButton(x, y, BWIDTH, BHEIGHT, "left"); x += BWIDTH;
-  leftb->callback(button_cb);
-  leftb->tooltip("ALIGN_LEFT");
-  rightb = new CheckButton(x, y, BWIDTH, BHEIGHT, "right"); x += BWIDTH;
-  rightb->callback(button_cb);
-  rightb->tooltip("ALIGN_RIGHT");
-  y += BHEIGHT;
-  x = 5;
-  insideb= new CheckButton(x, y, BWIDTH, BHEIGHT, "inside");x += BWIDTH;
-  insideb->callback(button_cb);
-  insideb->tooltip("ALIGN_INSIDE");
-  clipb= new CheckButton(x, y, BWIDTH, BHEIGHT, "clip"); x += BWIDTH;
-  clipb->callback(button_cb);
-  clipb->tooltip("ALIGN_CLIP");
-  wrapb= new CheckButton(x, y, BWIDTH, BHEIGHT, "wrap"); x += BWIDTH;
-  wrapb->callback(button_cb);
-  wrapb->tooltip("ALIGN_WRAP");
-  inactiveb= new CheckButton(x, y, BWIDTH, BHEIGHT, "inactive"); x += BWIDTH;
-  inactiveb->callback(button_cb);
-  inactiveb->tooltip("deactivate()");
+  w = new Dtest(fltk::RGBA, 4, x1, y, "RGBA", builddata(4, rgbapixels));
+  w->tooltip("drawimage() of 4-byte rgba. Should be transparent, not black");
+  w = new Dtest(fltk::ABGR, 4, x2, y, "ABGR", builddata(4, abgrpixels));
+  w->tooltip("drawimage() of 4-byte abgr. NYI!");
+  w = new Itest(fltk::RGBA, 4, x3, y, "RGBAimage", builddata(4, rgbapixels));
+  w->tooltip("rgbImage() with alpha used as widget->image()");
+  y += 16*SCALE+15;
 
-  controls.end();
+  w = new Dtest(fltk::BGR, 3, x1, y, "BGR", builddata(3, bgrpixels));
+  w->tooltip("drawimage() of 3-byte bgr. NYI!");
+  w = new Dtest(fltk::LUMINANCE, 1, x2, y, "LUMINANCE", builddata(1, lumpixels));
+  w->tooltip("drawimage() of 1-byte b&&w image");
+  w = new Itest(fltk::LUMINANCE, 1, x3, y, "LUMimage", builddata(1, lumpixels));
+  w->tooltip("1-byte b&&w image used as widget->image()");
+  y += 16*SCALE+15;
 
-  Widget box(10,0,290,controls.y());
-  box.hide();
-  window.resizable(box);
+  w = new Dtest(fltk::LUMINANCE, 3, x1, y, "LUM,3", builddata(3, rgbpixels));
+  w->tooltip("1-byte b&&w with 3-pixel seperation between pixels. This "
+	      "can be used to show the user one channel of an image");
+  w = new Dtest(fltk::MASK, 1, x2, y, "MASK", builddata(1, lumpixels));
+  w->tooltip("1-byte opacity image. This should be transparent with the "
+	      "foreground drawn in the current color. See maskXPM for what "
+	      "it should look like.");
+  w = new Itest(fltk::MASK, 1, x3, y, "MASKimage", builddata(1, lumpixels));
+  w->tooltip("1-byte opacity image used as widget->image(). Should look "
+	      "identical to left one and match colors of maskXPM");
+  y += 16*SCALE+15;
+
+  w = new Xtest(x1, y, "XPM", porsche_xpm);
+  w->tooltip("Older FLTK special-cased the XPM's 1-bit alpha. This is "
+	      "what the RGBA sample above should look like.");
+  w = new Xtest(x2, y, "maskXPM", recycle_xpm);
+  w->tooltip("FLTK recognizes some XPM's as being 8-bit masks. Older "
+	      "FLTK special-cases them. The MASK "
+	      "samples above should be colored just like this.");
+  w = new Btest(x3, y, "Bitmap");
+  w->tooltip("The only transparent image FLTK originally drew was the "
+	      "xpmImage object. This is still maintained for compatability "
+	      "and the colors used here, by maskXPM, and MASK, should all "
+	      "match. If they don't, maskXPM is the one that works right.");
+  y += 16*SCALE+15;
+
+  group.end();
+  CheckButton* b = new CheckButton(20,y,100,20,"active");
+  b->tooltip("activate()/deactivate() the widgets. The ones using an Image "
+	     "will redraw to show the grayed-out state.");
+  b->set();
+  b->callback(activecallback, &group);
+  y += 20;
+
+  Slider* s = new Slider(20,y,window.w()-30,20,"bg");
+  s->tooltip("background color, change this to see transparency");
+  s->range(1,255);
+  s->step(1);
+  s->value(fltk::GRAY75);
+  s->align(ALIGN_LEFT);
+  s->callback(bgcallback, &window);
+  s = new Slider(20,y+20,window.w()-30,20,"fg");
+  s->tooltip("labelcolor, change this to see if MASK works");
+  s->range(1,255);
+  s->step(1);
+  s->value(fltk::BLACK);
+  s->callback(fgcallback, &window);
+  s->align(ALIGN_LEFT);
 
   window.end();
   window.show(argc, argv);
-  return run();
+  return fltk::run();
 }
-
-//
-// End of "$Id$".
-//

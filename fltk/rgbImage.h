@@ -1,5 +1,5 @@
 //
-// "$Id: rgbImage.h,v 1.11 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Image subclass that draws uncompressed 8-bit rgb data from memory.
 //
@@ -31,13 +31,31 @@
 namespace fltk {
 
 class FL_API rgbImage : public Image {
-  int depth;
-  const uchar* data;
+  const uchar* pixels_;
+  PixelType pixeltype_;
+  int depth_;
+  int linedelta_;
 public:
-  rgbImage(const uchar* d, int W, int H, int D=3)
-    : Image(W,H), depth(D), data(d) {}
+  PixelType pixeltype() const {return pixeltype_;}
+  int depth() const {return depth_;}
+  int linedelta() const {return linedelta_;}
+  const uchar* pixels() const {return pixels_;}
+
   void _draw(const Rectangle&, const Style*, Flags) const;
-  bool write_jpeg(const char *filename, int quality=75, int dpi=150);
+  //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
+
+  rgbImage(const uchar* d, PixelType p, int W, int H) :
+    Image(W,H), pixels_(d), pixeltype_(p), depth_(fltk::depth(p)) {linedelta_=W*depth_;}
+
+  rgbImage(const uchar* d, PixelType p, int W, int H, int delta) :
+    Image(W,H), pixels_(d), pixeltype_(p), depth_(delta), linedelta_(W*delta) {}
+
+  rgbImage(const uchar* d, PixelType p, int W, int H, int delta, int ld) :
+    Image(W,H), pixels_(d), pixeltype_(p), depth_(delta), linedelta_(ld) {}
+
+  rgbImage(const uchar* d, int W, int H, int D = 3) :
+    Image(W,H), pixels_(d), pixeltype_(RGB), depth_(D), linedelta_(W*D) {}
+
 };
 
 }
@@ -45,5 +63,5 @@ public:
 #endif
 
 //
-// End of "$Id: rgbImage.h,v 1.11 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

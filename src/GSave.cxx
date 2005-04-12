@@ -59,6 +59,7 @@ using namespace fltk;
 #ifdef _WIN32
 extern HDC fl_bitmap_dc;
 #endif
+bool fl_drawing_offscreen = false;
 
 GSave::GSave() {
   push_matrix();
@@ -76,6 +77,7 @@ GSave::GSave() {
 #else
 # error
 #endif
+  data[3] = (void*)fl_drawing_offscreen;
 }
 
 GSave::~GSave() {
@@ -90,6 +92,7 @@ GSave::~GSave() {
   quartz_window = data[1];
   quartz_gc = data[2];
 #endif
+  fl_drawing_offscreen = data[3]!=0;
   pop_clip();
   pop_matrix();
 }
