@@ -640,7 +640,7 @@ case $uname in
     AC_DEFINE(USE_CAIRO)
 #   FIXME This part should be fixed so configure do not depend on
 #   we do not rely on pkg-config . 
-    LIBS="$LIBS `pkg-config --cflags cairo`"
+    LIBS="$LIBS `pkg-config --libs cairo`"
     CXXFLAGS="$CXXFLAGS `pkg-config --cflags cairo`" 
   fi
 
