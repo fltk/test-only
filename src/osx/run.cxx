@@ -614,7 +614,7 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
     if ( e_dx) handle( MOUSEWHEEL, window );
   } else if ( axis == kEventMouseWheelAxisY ) {
     e_dx = 0;
-    e_dy = -delta;
+    e_dy = delta;
     if ( e_dy) handle( MOUSEWHEEL, window );
   } else {
     ret = eventNotHandledErr;
@@ -815,7 +815,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( sym >= Keypad0 && sym <= KeypadLast ||
+    if ( sym >= Keypad && sym <= KeypadLast ||
 	 (sym&0xff00) == 0 ||
 	 sym == BackSpaceKey ||
 	 sym == TabKey ||
@@ -1504,25 +1504,6 @@ void fltk::release_quartz_context(CreatedWindow *x) {
   CGContextRestoreGState(quartz_gc);
   if (quartz_window) QDEndCGContext(GetWindowPort(quartz_window), &quartz_gc);
   quartz_gc = 0;
-}
-
-void fltk::begin_quartz_image(CGRect &rect, const Rectangle &c) {
-  CGContextSaveGState(quartz_gc);
-  CGAffineTransform mx = CGContextGetCTM(quartz_gc);
-  CGRect r2 = rect;
-  r2.origin.x -= 0.5f;
-  r2.origin.y -= 0.5f;
-  CGContextClipToRect(quartz_gc, r2);
-  mx.d = -1.0; mx.tx = -mx.tx;
-  CGContextConcatCTM(quartz_gc, mx);
-  rect.origin.x = rect.origin.x - c.x();
-  rect.origin.y = (mx.ty+0.5f) - rect.origin.y - c.h() + c.y();
-  rect.size.width = c.w();
-  rect.size.height = c.h();
-}
-
-void fltk::end_quartz_image() {
-  CGContextRestoreGState(quartz_gc);
 }
 
 ////////////////////////////////////////////////////////////////

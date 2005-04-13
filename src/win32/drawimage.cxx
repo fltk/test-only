@@ -189,7 +189,7 @@ static void innards(const uchar *buf, PixelType type,
     uchar *to = (uchar*)buffer;
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
-      if (!buf) { // run the converter:		  
+      if (!buf) { // run the converter:
         from = cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
       } else {
         from = buf;

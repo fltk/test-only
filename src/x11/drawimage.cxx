@@ -452,7 +452,7 @@ static void innards(const uchar *buf, PixelType type,
 {
   Rectangle r(r1); transform(r);
   Rectangle cr(r); if (!intersect_with_clip(cr)) return;
-  if (!linedelta) linedelta = r1.w()*delta;
+
   int dx = cr.x()-r.x();
   int dy = cr.y()-r.y();
   int w = cr.w();

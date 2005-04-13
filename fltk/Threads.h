@@ -104,8 +104,10 @@ public:
     if (!counter || owner != pthread_self()) {
       Mutex::lock();
       owner = pthread_self();
+      counter = 1;
+    } else {
+      ++counter;
     }
-    counter++;
   }
   bool trylock() {
     if (!counter || owner != pthread_self()) {

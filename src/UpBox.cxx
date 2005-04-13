@@ -50,12 +50,10 @@ public:
   void _draw(const fltk::Rectangle& r1, const Style* s, Flags flags) const {
     if (!(flags & FOCUSED)) return;
     fltk::Rectangle r(r1);
-    if (r.w() > 4) {r.move_x(1); r.move_r(-1);}
-    else if (r.w() > 3) r.move_r(-1);
-    else return;
-    if (r.h() > 4) {r.move_y(1); r.move_b(-1);}
-    else if (r.h() > 3) r.move_b(-1);
-    else return;
+    if (r.w() > 12) {r.move_x(1); r.move_r(-1);}
+    else if (r.w() <= 3) return;
+    if (r.h() > 15) {r.move_y(1); r.move_b(-1);}
+    else if (r.h() <= 3) return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
     setcolor(fg);
 

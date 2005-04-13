@@ -149,8 +149,9 @@ void Image::destroy_cache() {
   if (alpha && alpha != rgb) {DeleteObject((HBITMAP)alpha); alpha = 0;}
   if (rgb) {DeleteObject((HBITMAP)rgb); rgb = 0;}
 #elif USE_QUARTZ
-  stop_drawing((CGImageRef)rgb);
-  if (rgb) CGImageRelease((CGImageRef)rgb);
+  //stop_drawing((CGImageRef)rgb);
+  //if (alpha && alpha != rgb) {CGImageRelease((CGImageRef)alpha); alpha = 0;}
+  if (rgb) {CGImageRelease((CGImageRef)rgb); rgb = 0;}
 #else
 #error
 #endif
@@ -164,6 +165,9 @@ void Image::destroy_cache() {
 */
 
 extern bool fl_drawing_offscreen;
+#if USE_QUARTZ
+CGImageRef* fl_put_image_here;
+#endif
 
 /*! Make all the \ref drawing functions draw into the offscreen image,
   possibly creating the arrays used to store it.
@@ -174,6 +178,13 @@ extern bool fl_drawing_offscreen;
   GSave object to save the state.
 */
 void Image::make_current() {
+#if USE_QUARTZ
+  // Current kludge is to rely on drawimage() creating the CGImageRef
+  // object and stashing it here
+  if (rgb) {CGImageRelease((CGImage*)rgb); rgb = 0;}
+  fl_put_image_here = (CGImageRef*)(&rgb);
+  fl_drawing_offscreen = true;
+#else
   if (!rgb) {
     open_display();
     if (w_<1) w_ = 1;
@@ -198,12 +209,15 @@ void Image::make_current() {
     bmi.bmiHeader.biCompression = BI_RGB;
     bmi.bmiHeader.biSizeImage = w_ * h_ * 4;
 
-    rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
+    rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);
 #elif USE_QUARTZ
-    void *data = new char[w_*h_*4];
-    CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
-    rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut, kCGImageAlphaNoneSkipLast);
-    CGColorSpaceRelease(lut);
+    // seems to be an attempt to create a drawing area, but no sign it works..
+    // Also is data freed, or is this a huge memory leak?
+    static CGColorSpaceRef lut = 0;
+    if (!lut) lut = CGColorSpaceCreateDeviceRGB();
+    void* data = new char[w_*h_*4];
+    rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut,
+				kCGImageAlphaPremultipliedLast);
 #endif
     fl_drawing_offscreen = true;
   }
@@ -213,6 +227,7 @@ void Image::make_current() {
   draw_into((HBITMAP)rgb);
 #elif USE_QUARTZ
   draw_into((CGContextRef)rgb);
+#endif
 #endif
 }
 
@@ -275,7 +290,8 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   }
   alpha = (void*)CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
+  if (rgb) return;
   // 1 bit mask code:
   static uchar reverse[16] = /* Bit reversal lookup table */
     { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
@@ -334,7 +350,7 @@ void Image::copy(const fltk::Rectangle& r1, int src_x, int src_y) const {
   SelectObject(new_dc, (HBITMAP)rgb);
   BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCCOPY);
   DeleteDC(new_dc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGRect rect = { R.x(), R.y(), R.w(), R.h() };
   fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
   if (rgb) {
@@ -441,9 +457,15 @@ void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
   DeleteDC(new_dc);
 # endif
 # endif
-#elif defined(__APPLE__)
-  // OSX version nyi
-  setcolor(BLACK); fill(r1, src_x, src_y); return;
+#elif USE_QUARTZ
+  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
+  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
+  if (rgb) {
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
+  } else {
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
+  }
+  fltk::end_quartz_image();
 #else
 #error
 #endif
@@ -507,11 +529,10 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
     BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, src_x, src_y, MASKPAT);
   }
   DeleteDC(tempdc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGRect rect = { R.x(), R.y(), R.w(), R.h() };
   fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
   if (rgb) {
-    // \todo Draw with the correct alpha mask!
     CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
   } else {
     CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);

@@ -59,13 +59,6 @@ void xpmImage::_measure(int& w, int& h) const {
 
 extern Color fg_kludge;
 
-#ifdef __APPLE__
-// On Apple, we take a kludgy shortcut to create the xpm's.
-// This code should eventually be removed and replaced with more general code
-// matching the other platform implementations.
-extern void *create_quartz_bitmap_from_xpm(const char*const*);
-#endif
-
 void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
 {
   Color bg = NO_COLOR;
@@ -93,9 +86,6 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
       const_cast<xpmImage*>(this)->setsize(w,h);
     }
     if (this->w() <= 0 || this->h() <= 0) return;
-#ifdef __APPLE__
-    const_cast<xpmImage*>(this)->rgb = create_quartz_bitmap_from_xpm(data);
-#else
     GSave gsave;
     const_cast<xpmImage*>(this)->make_current();
     uchar *bitmap = 0;
@@ -108,7 +98,6 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
       (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
       delete[] bitmap;
     }
-#endif
   }
   Image::_draw(r, style, flags);
 }
