@@ -251,51 +251,51 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
     drawn inside the widget.
 */
 void Group::draw_outside_label(Widget& w) const {
-  if (!w.visible()) return;
+  Flags flags = w.flags();
+  if (flags & INVISIBLE) return;
   // skip any labels that are inside the widget:
-  if (!(w.flags()&15) || (w.flags() & ALIGN_INSIDE)) return;
+  if (!(flags&15) || (flags & ALIGN_INSIDE)) return;
   if (!w.label() || !*w.label()) return;
   // invent a box that is outside the widget:
-  Flags align = w.flags();
   Rectangle r(w);
-  if (align & ALIGN_TOP) {
-    if (align & ALIGN_BOTTOM) {
+  if (flags & ALIGN_TOP) {
+    if (flags & ALIGN_BOTTOM) {
       // special cases to align on left or right side at top/bottom
-      if (align & ALIGN_LEFT) {
-	align &= ~(ALIGN_TOP|ALIGN_LEFT);
+      if (flags & ALIGN_LEFT) {
+	flags &= ~(ALIGN_TOP|ALIGN_LEFT);
       } else {
-	align &= ~ALIGN_BOTTOM;
+	flags &= ~ALIGN_BOTTOM;
       }
-      if (align & ALIGN_RIGHT) {
+      if (flags & ALIGN_RIGHT) {
 	r.x(r.r()+3);
 	r.set_r(this->w());
-	align = align&~ALIGN_RIGHT | ALIGN_LEFT;
+	flags = flags&~ALIGN_RIGHT | ALIGN_LEFT;
       } else {
 	r.x(0);
 	r.w(w.x()-3);
-	align = align | ALIGN_RIGHT;
+	flags = flags | ALIGN_RIGHT;
       }
     } else {
-      align ^= (ALIGN_BOTTOM|ALIGN_TOP);
+      flags ^= (ALIGN_BOTTOM|ALIGN_TOP);
       r.y(0);
       r.h(w.y());
     }
-  } else if (align & ALIGN_BOTTOM) {
-    align ^= (ALIGN_BOTTOM|ALIGN_TOP);
+  } else if (flags & ALIGN_BOTTOM) {
+    flags ^= (ALIGN_BOTTOM|ALIGN_TOP);
     r.y(r.b());
     r.set_b(h());
-  } else if (align & ALIGN_LEFT) {
-    align ^= (ALIGN_LEFT|ALIGN_RIGHT);
+  } else if (flags & ALIGN_LEFT) {
+    flags ^= (ALIGN_LEFT|ALIGN_RIGHT);
     r.x(0);
     r.w(w.x()-3);
-  } else if (align & ALIGN_RIGHT) {
-    align ^= (ALIGN_LEFT|ALIGN_RIGHT);
+  } else if (flags & ALIGN_RIGHT) {
+    flags ^= (ALIGN_LEFT|ALIGN_RIGHT);
     r.x(r.r()+3);
     r.set_r(this->w());
   }
-  align &= ~OUTPUT;
+  flags &= ~(HIGHLIGHT|SELECTED|PUSHED|OUTPUT);
   //push_clip(X, Y, W, H); // this will break some old fltk programs
-  w.labeltype()->draw(w.label(), r, w.style(), align);
+  w.labeltype()->draw(w.label(), r, w.style(), flags);
   //pop_clip();
 }
 

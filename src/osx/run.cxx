@@ -546,11 +546,9 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     breakMacEventLoop();
     break;
   case kEventWindowBoundsChanged: {
-    Rect currentBounds;
-    GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &currentBounds );
-    int X = currentBounds.left, W = currentBounds.right-X;
-    int Y = currentBounds.top, H = currentBounds.bottom-Y;
-    if (window->resize(X, Y, W, H)) {
+    Rect r;
+    GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
+    if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top)) {
       resize_from_system = window;
       if (window->layout_damage()&LAYOUT_WH) fltk::flush();
     }
@@ -561,6 +559,10 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
 //       handle( FOCUS, window);
 //       activeWindow = window;
 //     }
+//     Rect r;
+//     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
+//     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top))
+//       resize_from_system = window;
     handle( SHOW, window);
     break; }
   case kEventWindowHidden:
@@ -790,7 +792,6 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
 {
   static char buffer[5];
   int sendEvent = 0;
-  Window *window = (Window*)userData;
   
   UInt32 keyCode;
   GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
@@ -848,6 +849,9 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     mods_to_e_state( mods );
     break; }
   }
+  // apparently for floating windows it calls the parent window's handler
+  // and thus userData is wrong:
+  Window *window = fltk::focus() ? fltk::focus()->window() : (Window*)userData;
   while (window->parent()) window = window->window();
   if (sendEvent && handle(sendEvent,window)) {
     return noErr; // return noErr if FLTK handled the event
@@ -1240,13 +1244,14 @@ void Window::create()
 	winattr = kWindowStandardHandlerAttribute |
 	          kWindowCloseBoxAttribute;
 	where = kWindowAlertPositionOnParentWindowScreen;
-#if 0
       } else if (child_of()) {
 	// Major kludge: this is to have the regular look, but stay
 	// above the document windows
-	SetWindowClass(x->xid, kFloatingWindowClass );
+	//SetWindowClass(x->xid, kFloatingWindowClass );
+	winclass = kFloatingWindowClass;
+	winattr = kWindowStandardHandlerAttribute |
+	          kWindowCloseBoxAttribute;
 	where = kWindowCenterOnParentWindowScreen;
-#endif
       } else {
 	winclass = kDocumentWindowClass;
 	winattr = kWindowStandardHandlerAttribute |
@@ -1259,17 +1264,16 @@ void Window::create()
     }
 
     bool autoplace = (this->x() == USEDEFAULT || this->y()== USEDEFAULT);
-    Rect wRect;
-    wRect.left   = this->x();
-    wRect.top    = this->y(); 
     if (autoplace) {
       // this is a kludge in case system autoplace does not work
       static int xyPos = 50;
-      wRect.top = wRect.left = xyPos;
       this->x(xyPos); this->y(xyPos);
       xyPos += 25;
       if (xyPos >= 200) xyPos -= 170;
     }
+    Rect wRect;
+    wRect.left   = this->x();
+    wRect.top    = this->y(); 
     wRect.right  = wRect.left+w();
     wRect.bottom = wRect.top+h();
 
@@ -1282,11 +1286,14 @@ void Window::create()
       WindowRef pw =
 	(child_of() && child_of()->shown()) ? child_of()->i->xid : 0;
       RepositionWindow(x->xid, pw, where);
+      Rect r; GetWindowBounds(x->xid, kWindowContentRgn, &r);
+      this->resize(r.left, r.top, r.right-r.left, r.bottom-r.top);
     }
 
-    x->wait_for_expose = true;
+    x->wait_for_expose = false;//true;
     x->next = CreatedWindow::first;
     CreatedWindow::first = x;
+    //this->flush();
 
     { // Install Carbon Event handlers 
       OSStatus ret;
@@ -1526,10 +1533,8 @@ void Window::flush() {
     set_damage(DAMAGE_EXPOSE); draw();
     clip_region(0);
   }
-  if (minw < maxw || minh < maxh) DrawGrowIcon(i->xid);
-  if (i->gc) {
-    CGContextFlush(i->gc);
-  }
+  if (i->gc) CGContextFlush(i->gc);
+  DrawGrowIcon(i->xid);
 }
 
 //+++ verify port to FLTK2

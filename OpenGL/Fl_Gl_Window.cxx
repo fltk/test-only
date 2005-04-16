@@ -73,7 +73,7 @@ void GlWindow::create() {
   }
 #ifdef WIN32
   Window::create();
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   Window::create();
 #else
   CreatedWindow::create(this, gl_choice->vis, gl_choice->colormap, -1);
@@ -86,7 +86,7 @@ void GlWindow::invalidate() {
   valid(0);
 #ifdef WIN32
   ;
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   ;
 #else
   if (overlay) ((GlWindow*)overlay)->valid(0);
@@ -109,6 +109,12 @@ bool GlWindow::mode(int m) {
 #define NON_LOCAL_CONTEXT 0x80000000
 
 void GlWindow::make_current() {
+#if USE_QUARTZ
+  if (!gl_choice) {
+    gl_choice = GlChoice::find(mode_);
+    if (!gl_choice) {error("Insufficient GL support"); return;}
+  }
+#endif
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = create_gl_context(this, gl_choice);
@@ -140,7 +146,7 @@ void GlWindow::swap_buffers() {
 #else
   SwapBuffers(CreatedWindow::find(this)->dc);
 #endif
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   aglSwapBuffers((AGLContext)context_);
 #else
   glXSwapBuffers(xdisplay, xid(this));
@@ -286,7 +292,7 @@ void GlWindow::flush() {
 void GlWindow::layout() {
   if (layout_damage() & LAYOUT_WH) {
     valid(0);
-#ifdef __APPLE__
+#if USE_QUARTZ
     no_gl_context(); // because the BUFFER_RECT may change
 #endif
 #ifndef _WIN32

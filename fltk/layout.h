@@ -17,6 +17,7 @@ enum {
   LAYOUT_WH	= 0x0C, /*!< Same as LAYOUT_W|LAYOUT_H */
   LAYOUT_XYWH	= 0x0F, /*!< Same as LAYOUT_XY|LAYOUT_WH */
   LAYOUT_CHILD	= 0x10, /*!< Widget::layout() needs to be called on a child of this group widget. */
+  LAYOUT_USER   = 0x20, /*!< The moving/resizing is being caused by the user and not internal code. */
   LAYOUT_DAMAGE	= 0x80	/*!< Widget::relayout() was called. */
 };
 /*! \} */

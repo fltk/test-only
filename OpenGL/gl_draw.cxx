@@ -41,7 +41,7 @@ extern GLContext fl_current_glcontext;
 #if USE_X11
 #undef HFONT
 #define HFONT XFontStruct*
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 #define HFONT ATSFontRef
 #endif
 
@@ -50,6 +50,9 @@ struct FontSize {
   HFONT xfont;
   FontSize* left, *right;
   int listbase;
+#if USE_QUARTZ
+  int size;
+#endif
 };
 static FontSize* root, *current;
 static HFONT current_xfont;
@@ -58,11 +61,19 @@ void fltk::glsetfont(fltk::Font* font, float size) {
   setfont(font, size); // necessary so measure() works
   current_xfont = fltk::xfont();
   if (!fl_current_glcontext) return;
-  if (!current || current->xfont != current_xfont) {
+  if (!current || current->xfont != current_xfont
+#if USE_QUARTZ
+      || current->size != int(size)
+#endif
+      ) {
     FontSize** p = &root;
     while (*p) {
       if (current_xfont < (*p)->xfont) p = &((*p)->left);
       else if (current_xfont > (*p)->xfont) p = &((*p)->right);
+#if USE_QUARTZ
+      else if (int(size) < (*p)->size) p = &((*p)->left);
+      else if (int(size) > (*p)->size) p = &((*p)->right);
+#endif
       else {current = *p; goto GOTIT;}
     }
     *p = current = new FontSize;
@@ -85,13 +96,14 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
     SelectObject(hdc, oldFid);
 #elif defined(__APPLE__)
-   CFStringRef aname;
-   ATSFontGetName(current_xfont, kATSOptionFlagsDefault, &aname);
-   unsigned char pname[256];
-   CFStringGetPascalString(aname, pname, 256, kCFStringEncodingMacRoman);
-   short cfont;
-   GetFNum(pname, &cfont);
-   aglUseFont(aglGetCurrentContext(), cfont, 0, (int)size, 0, 256, current->listbase);
+    current->size = int(size);
+    CFStringRef aname;
+    ATSFontGetName(current_xfont, kATSOptionFlagsDefault, &aname);
+    unsigned char pname[256];
+    CFStringGetPascalString(aname, pname, 256, kCFStringEncodingMacRoman);
+    short cfont;
+    GetFNum(pname, &cfont);
+    aglUseFont(aglGetCurrentContext(), cfont, 0, (int)size, 0, 256, current->listbase);
 #else
 #error
 #endif

@@ -232,8 +232,9 @@ static float line_ascent(float leading) {
 */
 void Input::draw() {
   update_flags();
+  clear_flag(HIGHLIGHT); // don't change color when mouse points at it
   Rectangle r(w(),h());
-  box()->inset(r, style(), flags());
+  box()->inset(r, style(), flags()|OUTPUT);
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     // draw and measure the inside label:
@@ -280,7 +281,7 @@ void Input::draw(const Rectangle& r)
   float desc = line_ascent(leading);
 
   Color background, textcolor;
-  Flags flags = update_flags()|OUTPUT;
+  Flags flags = this->flags()|OUTPUT;
   style()->boxcolors(flags, background,textcolor);
 
   bool erase_cursor_only =

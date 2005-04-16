@@ -30,6 +30,7 @@
 
 #include <config.h>
 #include <fltk/events.h>
+#include <fltk/layout.h>
 #include <fltk/Window.h>
 #include <fltk/Style.h>
 #include <fltk/win32.h>
@@ -435,41 +436,40 @@ static inline int fl_ready() {
 ////////////////////////////////////////////////////////////////
 
 static bool reload_info = true;
-
+static Monitor allMonitors;
 /** Return a "monitor" that surrounds all the monitors.
     If you have a single monitor, this returns a monitor structure that
     defines it. If you have multiple monitors this returns a fake monitor
     that surrounds all of them.
 */
 const Monitor& Monitor::all() {
-  static Monitor monitor;
   if (reload_info) {
     reload_info = false;
 
     DEVMODE mode;
     EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
 #if USE_MULTIMONITOR
-    monitor.set(GetSystemMetrics(SM_XVIRTUALSCREEN),
+    allMonitors.set(GetSystemMetrics(SM_XVIRTUALSCREEN),
 		GetSystemMetrics(SM_YVIRTUALSCREEN),
 		GetSystemMetrics(SM_CXVIRTUALSCREEN),
 		GetSystemMetrics(SM_CYVIRTUALSCREEN));
 #else
-    monitor.set(0, 0, mode.dmPelsWidth, mode.dmPelsHeight);
+    allMonitors.set(0, 0, mode.dmPelsWidth, mode.dmPelsHeight);
 #endif
 
-    monitor.depth_ = mode.dmBitsPerPel;
+    allMonitors.depth_ = mode.dmBitsPerPel;
     HDC screen = GetDC(0);
-    monitor.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
-    monitor.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
+    allMonitors.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
+    allMonitors.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
 
     // This is wrong, we should get the work area from the union of
     // all the monitors in monitor list:
     RECT r;
     SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    monitor.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    allMonitors.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
   }
-  return monitor;
+  return allMonitors;
 }
 
 static Monitor* monitors = 0;
@@ -1660,13 +1660,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       }
 
       if ( window->resize( newRect.x(), newRect.y(), newRect.w(), newRect.h() ) ) {
-	// FIXME do we need the line below??
-	// resize_from_system = window;
-	window->layout();
-	pos->x = window->x()+r.x();
-	pos->y = window->y()+r.y();
-	pos->cx = window->w()+r.w();
-	pos->cy = window->h()+r.h();
+        // FIXME do we need the line below??
+        // resize_from_system = window;
+        window->layout_damage( window->layout_damage() | LAYOUT_USER );
+        window->layout();
+        pos->x = window->x()+r.x();
+        pos->y = window->y()+r.y();
+        pos->cx = window->w()+r.w();
+        pos->cy = window->h()+r.h();
       }
     }
     break;
@@ -1744,9 +1745,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SETTINGCHANGE:
     reload_info = true;
 #if USE_MULTIMONITOR
-    delete[] monitors;
+    if ( monitors != &allMonitors ) {
+      delete[] monitors;
+    }
 #else
-    if (num_monitors > 1) delete[] monitors;
+    if (num_monitors > 1 && monitors != &allMonitors) delete[] monitors;
 #endif
     monitors = 0;
     num_monitors = 0;
