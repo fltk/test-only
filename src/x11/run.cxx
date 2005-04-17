@@ -2123,11 +2123,11 @@ void fltk::stop_drawing(XWindow window) {
 
 static bool use_xdbe = false; // true if we are using the XDBE extension
 
-static bool can_xdbe() { // figure out use_xdbe.
+// Figure out if the current visual can use XDBE and set use_xdbe.
+static bool can_xdbe() {
   static bool tried = false;
   if (!tried) {
     tried = true;
-#if DISABLE_XDBE
     int event_base, error_base;
     if (!XdbeQueryExtension(xdisplay, &event_base, &error_base)) return false;
     XWindow root = RootWindow(xdisplay, xscreen);
@@ -2139,7 +2139,6 @@ static bool can_xdbe() { // figure out use_xdbe.
 	    /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = true; break;}
       XdbeFreeVisualInfo(a);
     }
-#endif
   }
   return use_xdbe;
 }
@@ -2151,8 +2150,7 @@ void Window::flush() {
 
   unsigned char damage = this->damage();
 
-  if (this->double_buffer() || i->overlay) {
-    // double-buffer drawing
+  if (this->double_buffer() || i->overlay) {  // double-buffer drawing
 
     bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
     if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
@@ -2186,67 +2184,62 @@ void Window::flush() {
       } else
 #endif
 	i->backbuffer = XCreatePixmap(xdisplay,frontbuffer,w(),h(),xvisual->depth);
-      i->backbuffer_bad = true;
+      set_damage(DAMAGE_ALL); damage = DAMAGE_ALL;
+      i->backbuffer_bad = false;
+    } else if (i->backbuffer_bad) {
+      // the previous draw left garbage in back buffer, so we must redraw:
+      set_damage(DAMAGE_ALL); damage = DAMAGE_ALL;
+      i->backbuffer_bad = false;
     }
 
     // draw the back buffer if it needs anything:
-    if (damage
-	|| i->backbuffer_bad
-#if USE_XDBE
-	//	|| (use_xdbe && i->region)
-#endif
-	) {
+    if (damage) {
       // set the graphics context to draw into back buffer:
       draw_into(i->backbuffer);
-      if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
-	set_damage(DAMAGE_ALL);
+      if (damage & DAMAGE_ALL) {
 	draw();
       } else {
-      // draw all the changed widgets:
+	// draw all the changed widgets:
 	if (damage & ~DAMAGE_EXPOSE) {
 	  set_damage(damage & ~DAMAGE_EXPOSE);
 	  draw();
 	}
-	// draw for any expose events (this will only happen for
-	// redraw(x,y,w,h) calls):
+	// redraw(rectangle) will cause this to be executed:
 	if (i->region) {
 	  clip_region(i->region); i->region = 0;
 	  set_damage(DAMAGE_EXPOSE); draw();
-	  // hack to only copy the damage region from back to front:
-	  if (!(damage & ~DAMAGE_EXPOSE) && !eraseoverlay) {
-	    draw_into(frontbuffer);
-	    goto ALREADY_CLIPPED;
-	  }
-	  clip_region(0);
+	  // keep the clip for the back->front copy if no other damage:
+	  if ((damage & ~DAMAGE_EXPOSE) || eraseoverlay) clip_region(0);
 	}
       }
 #if USE_XDBE
       // use the faster Xdbe swap command for all normal redraw():
       if (use_xdbe && !eraseoverlay && (damage&~DAMAGE_EXPOSE)) {
-	i->backbuffer_bad = true;
 	XdbeSwapInfo s;
 	s.swap_window = frontbuffer;
 	s.swap_action = XdbeUndefined;
 	XdbeSwapBuffers(xdisplay, &s, 1);
+	// XDBE documentation claims back buffer is trashed, but I have
+	// not seen this:
+	// i->backbuffer_bad = true;
 	return;
       }
 #endif
+      draw_into(frontbuffer);
+    } else {
+      // if damage is zero then expose events were done, just copy
+      // the back buffer to the front:
+      draw_into(frontbuffer);
+      if (!eraseoverlay) {
+	clip_region(i->region); i->region = 0;
+      }
     }
 
-    draw_into(frontbuffer);
-
-    // Clip the copying of the pixmap to the damage area,
-    // this makes it faster, especially if the damage area is small:
-    if (!damage && !eraseoverlay) {
-      clip_region(i->region); i->region = 0;
-    }
-
-  ALREADY_CLIPPED:
-    // Must be an implementation problem in the server, but on Irix (at least)
-    // it is much faster if I clip the rectangle requested down:
+    // Copy the backbuffer to the window:
+    // On Irix, at least, it is much slower unless you cut the rectangle
+    // down to the clipped area. Seems to be a pretty bad implementation:
     Rectangle r(w(),h());
     intersect_with_clip(r);
-    // Copy the backbuffer to the window:
     XCopyArea(xdisplay, i->backbuffer, frontbuffer, gc,
 	      r.x(), r.y(), r.w(), r.h(), r.x(), r.y());
     if (i->overlay) draw_overlay();
@@ -2256,6 +2249,7 @@ void Window::flush() {
 
     // Single buffer drawing
     draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
+    unsigned char damage = this->damage();
     if (damage & ~DAMAGE_EXPOSE) {
       set_damage(damage & ~DAMAGE_EXPOSE);
       draw();
