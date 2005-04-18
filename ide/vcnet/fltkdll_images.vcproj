@@ -45,7 +45,7 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="fltkdll_imagesd.pdb"
 				SubSystem="2"
-				ImportLibrary="../../lib/fltkdll_images.lib"
+				ImportLibrary="../../lib/fltkdlld_images.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -78,7 +78,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../lib"
+			OutputDirectory="../../lib"
 			IntermediateDirectory=".\fltkdll_imagesd"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -103,7 +103,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkdlld.lib opengl32.lib wsock32.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib"
-				OutputFile="../../lib/fltkdll_imagesd.dll"
+				OutputFile="../../lib/fltkdlld_images.dll"
 				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -111,7 +111,7 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="fltkdll_imagesd.pdb"
 				SubSystem="2"
-				ImportLibrary="../../lib/fltkdll_images.lib"
+				ImportLibrary="../../lib/fltkdlld_images.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -312,72 +312,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_Help_Dialog.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_DEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\src\Fl_Help_View.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_DEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="..\..\images\fl_jpeg.cxx">
 			<FileConfiguration
 				Name="Debug MinSize|Win32">
@@ -444,37 +378,13 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\fl_xpm.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_DEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
-			</FileConfiguration>
+			RelativePath="..\..\src\HelpDialog.cxx">
+		</File>
+		<File
+			RelativePath="..\..\src\HelpView.cxx">
+		</File>
+		<File
+			RelativePath="..\..\src\xpmFileImage.cxx">
 		</File>
 	</Files>
 	<Globals>

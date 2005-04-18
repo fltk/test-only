@@ -21,7 +21,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../..,../../test,../visualc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="_WIN32;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\boxtype_/boxtype.pch"
@@ -36,14 +36,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkd.lib wsock32.lib"
-				OutputFile="../../test/boxtype.exe"
+				OutputFile="../../test/boxtyped.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\boxtype_/boxtyped.pdb"
-				SubSystem="2"
+				SubSystem="0"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
