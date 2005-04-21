@@ -174,7 +174,7 @@ void Fl_Button::down_box(Fl_Boxtype a) {
 
 /////////////////  Fl_Button::Style ////////////////////////////
 
-Fl_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Style(parent,BASE){
+Fl_Button_Style::Fl_Button_Style(Fl_Widget_Style * parent, unsigned mode):Fl_Widget_Style(parent,BASE){
   down_box_ = FL_NO_BOX;
   clear_flag(DOWN_BOX);
   init(parent,mode);
@@ -182,22 +182,22 @@ Fl_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Sty
 
 
 
-void Fl_Button::Style::update_(Fl_Button::Style *s1, Fl_Widget::Style * s, unsigned what){
+void Fl_Button_Style::update_(Fl_Button::Style *s1, Fl_Widget_Style * s, unsigned what){
   if(!s) return;
-  Fl_Widget::Style::update_(s1, s, what);
-  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button::Style *)s)->down_box_ = s1->down_box_;
+  Fl_Widget_Style::update_(s1, s, what);
+  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button_Style *)s)->down_box_ = s1->down_box_;
 };
 
-void Fl_Button::Style::down_box(Fl_Boxtype b) {
+void Fl_Button_Style::down_box(Fl_Boxtype b) {
   down_box_= b;
   set_flag (DOWN_BOX);
-  fl_update_styles(Style, down_box,DOWN_BOX,b);
+  fl_update_styles(Fl_Button_Style, down_box,DOWN_BOX,b);
 }
 
-Fl_Button::Style * Fl_Button::default_style(){
-  static Fl_Button::Style * s = 0;
+Fl_Button_Style * Fl_Button::default_style(){
+  static Fl_Button_Style * s = 0;
   if(!s){ // not yet initialized
-    s = new Fl_Button::Style(Fl_Widget::default_style(), Fl_Widget::Style::NORMAL_HIGHLIGHT);
+    s = new Fl_Button_Style(Fl_Widget::default_style(), Fl_Widget_Style::NORMAL_HIGHLIGHT);
     s->box(FL_UP_BOX);
     s->down_box(FL_NO_BOX);
   }

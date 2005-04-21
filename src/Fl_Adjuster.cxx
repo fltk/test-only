@@ -238,18 +238,6 @@ int Fl_Adjuster::handle(int event) {
 
 
 
-void Fl_Adjuster::highlight_(){
-  Fl_Widget::Style * s = style()->highlight();
-  if(s) style(s);
-}
-
-void Fl_Adjuster::normal_(){
-  style(style()->normal());
-}
-
-
-
-
 Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
   : Fl_Valuator(X, Y, W, H, l) {
   highlight__ = 0;

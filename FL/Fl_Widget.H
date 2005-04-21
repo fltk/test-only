@@ -93,15 +93,11 @@ struct FL_EXPORT Fl_Label {
  * It is up to the user code to call redraw() after these. 
  */
 
+class Fl_Widget_Style;
 
 class FL_EXPORT Fl_Widget {
  friend class Fl_Group;
 
-public:
-  class Style;
-
-protected:
-  Style * style_;
 
 private:
   static int draw_box_flags_;
@@ -173,6 +169,12 @@ protected:
   void draw_label() const;
   void draw_label(int, int, int, int) const;
 
+  void highlight_();
+  void normal_();
+
+  void highlight();
+  void normal();
+
   /** Creates widget-specific style if not allready made */
 
 public:
@@ -233,11 +235,16 @@ public:
   void size(int W,int H) {resize(x_,y_,W,H);}
     /// \}
 
+public:
+  typedef Fl_Widget_Style  Style;
+
+protected:
+  Style * style_;
+public:
 
   Style * style() const;
   void style(Style * s); // it is "shadowed" subclassess 
-  void highlight();
-  void normal();
+
 
     /// \{ \name Visuals
 

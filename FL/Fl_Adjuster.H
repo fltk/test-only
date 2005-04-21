@@ -42,21 +42,19 @@
  * by 10 times the amount dragging by a pixel does. Shift + click decrements by 10 times
  * the amount. */
 
-class Fl_Widget::Style;
+class Fl_Widget_Style;
 
 class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
   int drag;
   int ix;
   int soft_;
   uchar highlight__; // indicates that particular button should be highlighted
-  void highlight_();
-  void normal_();
+
 protected:
   void draw();
   int handle(int);
   void value_damage();
 public:
-  typedef Fl_Widget::Style Style;
   static Style * default_style();
     /** Creates a new Fl_Adjuster widget using the given position, size, and label string. 
      * It looks best if one of the dimensions is 3 times the other. */

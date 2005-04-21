@@ -35,7 +35,7 @@
 # define Fl_Widget_Style_H
 
 
-class FL_EXPORT Fl_Widget::Style {
+class FL_EXPORT Fl_Widget_Style {
     friend class Fl_Widget;
     friend class Fl_Style_List;
 
@@ -60,14 +60,74 @@ class FL_EXPORT Fl_Widget::Style {
     unsigned selection_color_;
 
   public:
+
+    enum  {STATIC = 1,  HIGHLIGHT = 2,
+      LABELTYPE=0x10, LABELCOLOR=0x20,
+      LABELFONT=0x40, LABELSIZE=0x80, 
+      COLOR=0x200, SELECTION_COLOR=0x400,
+      BOX=0x800,   DOWN_BOX = 0x1000,
+      SYMBOL_ALIGN = 0x2000,
+      TEXTCOLOR = 0x4000, TEXT_COLOR = TEXTCOLOR,
+      TEXTFONT = 0x8000, TEXT_FONT = TEXTFONT, 
+      TEXTSIZE = 0x10000, TEXT_SIZE = TEXTSIZE,
+      ARROWS =   0x20000,
+
+       // masks to calculate damage to perform redwaw() and/or redraw_label() for highlighting
+      REDRAW_LABEL = 0x1F0, REDRAW = 0xFFFFFE00,
+      // constructor patameters for highlighting and its inheritance
+      ALL = ~0xF, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
+      BASE = 1 // BASE should be always used for initialization of base class within the constructor
+    };
+
+
     unsigned  flags() const {return flags_;}
-    Style * highlight() const;
-    Style * normal() const;
+    Fl_Widget_Style * highlight() const;
+    Fl_Widget_Style * normal() const;
 
 
   protected:
-    Style * highlight_() const { return highlight();}
-    Style * normal_() const {return normal();}
+
+    void init(Fl_Widget_Style * parent, unsigned mode); // for use in constructors 
+
+    Fl_Widget_Style(Fl_Widget_Style * s): flags_(0), next_(s){};
+    void next(Fl_Widget_Style * n){next_ = n;}
+    Fl_Widget_Style * next() const {return (Fl_Widget_Style *)next_;}
+    int damage(); // returns what needs to be redrawn when highlight is changed.
+    Fl_Style_List * list() const {return (flags_ & STATIC) ? (Fl_Style_List *)next_ : 0;}
+
+
+    // "Text" parameters are comolly used in various classes.
+    // Unfortunately they do not have the same base class with
+    // the same implementation of textfont textcolor and textsize. To overcome this we have 
+    // a text virtual function which should be overriden in a style subclass which uses a text 
+    // and which should return an address of Text structure placement. Also protected members 
+    // textfont(), textcolor()m textsize()  should be "published" using "using" parameter.
+    // Particular widget "text" methods should be implemented as usual.
+    
+    struct Text{
+        unsigned color_;
+        uchar font_;
+        uchar size_;
+    };
+    // This should be reimplemented in a style introducting "text" visuals and returning a pointer
+    // to particular placement of "text" structure
+    virtual const Text * text() const {return 0;};
+
+    // Following should be just made public
+
+    Fl_Color textcolor() const  {return ((STATIC|TEXTCOLOR) & flags_) ? (Fl_Color)(text()->color_) : (Fl_Color)(((Fl_Widget_Style * )next_)->text()->color_);}
+    Fl_Font textfont() const  {return ((STATIC|TEXTFONT) & flags_) ? (Fl_Font)(text()->font_) : (Fl_Font)(((Fl_Widget_Style * )next_)->text()->font_);}
+    uchar textsize() const  {return ((STATIC|TEXTSIZE) & flags_) ? text()->size_ : next()->text()->size_;}
+
+    void textcolor(unsigned c);
+    void textfont(uchar f);
+    void textsize(uchar s);
+
+
+
+
+    Fl_Widget_Style * highlight_() const { return highlight();}
+    Fl_Widget_Style * normal_() const {return normal();}
     
 
 
@@ -75,13 +135,6 @@ class FL_EXPORT Fl_Widget::Style {
     void clear_flag(unsigned c){flags_ &= ~c;}
 
 
-    // for use with clone()
-    void init(Style * parent, unsigned mode); // for use in constructors 
-    Style(Style * s): flags_(0), next_(s){};
-    void next(Style * n){next_ = n;}
-    Style * next() const {return (Style *)next_;}
-    int damage(); // returns what needs to be redrawn when highlight is changed.
-    Fl_Style_List * list() const {return (flags_ & STATIC) ? (Fl_Style_List *)next_ : 0;}
 
  
     // Following virtual functions must be overriden for each Style subclass
@@ -94,52 +147,40 @@ class FL_EXPORT Fl_Widget::Style {
 
     /* "Virtual" constructor for making dynamic styles 
     * Must be overriden in every new subclass of Fl_Widget::Style */
-    virtual Style * clone(){return new Style(this);} 
+    virtual Fl_Widget_Style * clone(){return new Fl_Widget_Style(this);} 
 
 
-  protected:
+
+
+
 
   public:
-    enum  {STATIC = 1,  HIGHLIGHT = 2,
-      LABELTYPE=0x10, LABELCOLOR=0x20,
-      LABELFONT=0x40, LABELSIZE=0x80, 
-      COLOR=0x200, SELECTION_COLOR=0x400,
-      BOX=0x800,   DOWN_BOX = 0x1000,
-      SYMBOL_ALIGN = 0x2000,
-      TEXTCOLOR = 0x4000, TEXT_COLOR = TEXTCOLOR,
-      TEXTFONT = 0x8000, TEXT_FONT = TEXTFONT, 
-      TEXTSIZE = 0x10000, TEXT_SIZE = TEXTSIZE,
 
-       // masks to calculate damage to perform redwaw() and/or redraw_label() for highlighting
-      REDRAW_LABEL = 0x1F0, REDRAW = 0xFFFFFE00,
-      // constructor patameters for highlighting and its inheritance
-      ALL = ~0xF, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
-      BASE = 1 // BASE should be always used for initialization of base class within the constructor
-    };
-    static void update_(Style * s1, Style * s, unsigned what=ALL);
+    static void update_(Fl_Widget_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
   protected:
 
-    virtual void update(Style * s, unsigned what){update_(this, s, what);};
+    virtual void update(Fl_Widget_Style * s, unsigned what){update_(this, s, what);};
   public:
 
-    Style(Fl_Widget::Style * parent, unsigned highlight_parent);
+    Fl_Widget_Style(Fl_Widget_Style * parent, unsigned highlight_parent);
  
 
     
 
   // for hacking
 
-    virtual ~Style();
+    virtual ~Fl_Widget_Style();
 
   // These are inlined and fast - max one level digging...
 
-    Fl_Labeltype labeltype() const {return ((STATIC|LABELTYPE) & flags_) ? (Fl_Labeltype)labeltype_ : (Fl_Labeltype)(((Style *)next_)->labeltype_);}
-    Fl_Color labelcolor() const  {return ((STATIC|LABELCOLOR) & flags_) ? (Fl_Color)labelcolor_ : (Fl_Color)(((Style *)next_)->labelcolor_);}
-    Fl_Font labelfont() const  {return ((STATIC|LABELFONT) & flags_) ? (Fl_Font)labelfont_ : (Fl_Font)(((Style *)next_)->labelfont_);}
-    uchar labelsize() const  {return ((STATIC|LABELSIZE) & flags_) ? labelsize_ : ((Style * )next_)->labelsize_;}
-    Fl_Color color()const {return ((STATIC|COLOR) & flags_) ? (Fl_Color)color_ : (Fl_Color)(((Style *)next_)->color_);}
-    Fl_Color selection_color() const  {return ((STATIC|SELECTION_COLOR) & flags_) ? (Fl_Color)selection_color_ : (Fl_Color)(((Style *)next_)->selection_color_);}
-    Fl_Boxtype box() const {return ((STATIC|BOX) & flags_) ? (Fl_Boxtype)box_ : (Fl_Boxtype)(((Style *)next_)->box_);}
+    Fl_Labeltype labeltype() const {return ((STATIC|LABELTYPE) & flags_) ? (Fl_Labeltype)labeltype_ : (Fl_Labeltype)(next()->labeltype_);}
+    Fl_Color labelcolor() const  {return ((STATIC|LABELCOLOR) & flags_) ? (Fl_Color)labelcolor_ : (Fl_Color)(next()->labelcolor_);}
+    Fl_Font labelfont() const  {return ((STATIC|LABELFONT) & flags_) ? (Fl_Font)labelfont_ : (Fl_Font)(next()->labelfont_);}
+    uchar labelsize() const  {return ((STATIC|LABELSIZE) & flags_) ? labelsize_ : next()->labelsize_;}
+
+    Fl_Color color()const {return ((STATIC|COLOR) & flags_) ? (Fl_Color)color_ : (Fl_Color)(next()->color_);}
+    Fl_Color selection_color() const  {return ((STATIC|SELECTION_COLOR) & flags_) ? (Fl_Color)selection_color_ : (Fl_Color)(next()->selection_color_);}
+    Fl_Boxtype box() const {return ((STATIC|BOX) & flags_) ? (Fl_Boxtype)box_ : (Fl_Boxtype)(next()->box_);}
 
     void labeltype(Fl_Labeltype t);
     void labelcolor(unsigned c);
@@ -150,43 +191,39 @@ class FL_EXPORT Fl_Widget::Style {
     void box(Fl_Boxtype b);
   };
 
-typedef Fl_Widget::Style Fl_Widget_Style;
 
 #endif // Fl_Widget_Style_H
 
 
-///////////////////////  Fl_Button::Style  //////////////////////
+///////////////////////  Fl_Button_Style  //////////////////////
 
 #if defined(Fl_Button_H) && !defined(Fl_Button_Style_H)
 # define Fl_Button_Style_H
 
-class FL_EXPORT Fl_Button::Style : public Fl_Widget::Style {
+class FL_EXPORT Fl_Button_Style : public Fl_Widget_Style {
   friend class Fl_Button;
   Fl_Boxtype down_box_;
   //uchar down_box_;
 public:
-  static void update_(Fl_Button::Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
+  static void update_(Fl_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
 protected:
-  Style(Style * s):Fl_Widget::Style(s){};
+  Fl_Button_Style(Fl_Button_Style * s):Fl_Widget_Style(s){};
 
   //reimplementation of virtual functions for new style
-  //void clear();
-  Fl_Widget::Style * clone(){return new Style(this);} 
+  Fl_Widget_Style * clone(){return new Fl_Button_Style(this);} 
 
 
-  void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);}
+  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);}
 public:
 
-  Style * highlight(){return (Style *)highlight_();}
-  Style * normal(){return (Style *)normal_();}
+  Fl_Button_Style * highlight(){return (Fl_Button_Style *)highlight_();}
+  Fl_Button_Style * normal(){return (Fl_Button_Style *)normal_();}
 
 
-  Fl_Boxtype down_box() const {return ((STATIC|DOWN_BOX) & flags()) ? down_box_ : (Fl_Boxtype)(((Fl_Button::Style *)next())->down_box_);};
+  Fl_Boxtype down_box() const {return ((STATIC|DOWN_BOX) & flags()) ? down_box_ : (Fl_Boxtype)(((Fl_Button_Style *)next())->down_box_);};
   void down_box(Fl_Boxtype b);
-  Style(Fl_Widget::Style * parent, unsigned mode);
+  Fl_Button_Style(Fl_Widget::Style * parent, unsigned mode);
 };
-
-typedef Fl_Button::Style Fl_Button_Style;
 
 
 #endif  // Fl_Button_Style_H
@@ -198,41 +235,42 @@ typedef Fl_Button::Style Fl_Button_Style;
 #if defined(Fl_Tool_Button_H) && !defined(Fl_Tool_Button_Style_H)
 # define Fl_Tool_Button_Style_H
 
-class FL_EXPORT Fl_Tool_Button::Style : public Fl_Button::Style {
+class FL_EXPORT Fl_Tool_Button_Style : public Fl_Button_Style {
   friend class Fl_Tool_Button;
   uchar symbol_align_;
 public:
-    Fl_Widget::Style * clone(){return new Style(this);} 
+    Fl_Widget_Style * clone(){return new Fl_Tool_Button_Style(this);} 
 
 protected:
-  Style(Style * s):Fl_Button::Style(s){};
+  Fl_Tool_Button_Style(Fl_Tool_Button_Style * s):Fl_Button_Style(s){};
 
   //reimplementation of virtual functions for new style
   //void clear();
 
-  static void update_(Fl_Tool_Button::Style * s1, Fl_Widget::Style * s, unsigned what=ALL);
-  void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);};
+  static void update_(Fl_Tool_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);};
 public:
 
-  Style * highlight(){return (Style *)highlight_();}
-  Style * normal(){return (Style *)normal_();}
+  Fl_Tool_Button_Style * highlight(){return (Fl_Tool_Button_Style *)highlight_();}
+  Fl_Tool_Button_Style * normal(){return (Fl_Tool_Button_Style *)normal_();}
 
-  uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Tool_Button::Style *)next())->symbol_align_);};
+  uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Tool_Button_Style *)next())->symbol_align_);};
   void symbol_align(uchar a);
 
-  Style(Fl_Widget::Style * parent, unsigned mode);
+  Fl_Tool_Button_Style(Fl_Widget_Style * parent, unsigned mode);
 };
 
-typedef Fl_Tool_Button::Style Fl_Tool_Button_Style;
+typedef Fl_Tool_Button_Style Fl_Tool_Button_Style;
 
 
 #endif  // Fl_Tool_Button_Style_H
 
 
+/*
 
 ///////////////////////  Fl_Text_Style  //////////////////////
 // 
-// This is a base style class not only for blowser but wor many text widgets
+// This is a base style class not only for browser but wor many text widgets
 
 
 #if (defined(Fl_Input__H) || defined(Fl_Browser__H)) && !defined(Fl_Text_Style_H)
@@ -272,7 +310,99 @@ public:
 
 
 
+
+
 #endif  // Fl_Text_Style_H
+
+*/
+
+
+
+
+///////////////////////  Fl_Text_Style  //////////////////////
+
+#if !defined(Fl_Text_Style_H) && (defined(Fl_Browser__H) || defined (Fl_Input_H))
+# define Fl_Text_Style_H
+
+class FL_EXPORT Fl_Text_Style : public Fl_Widget_Style {
+  Text text_;
+protected:
+  const Text * text() const {return &text_;};
+public:
+  using Fl_Widget_Style::textcolor;
+  using Fl_Widget_Style::textsize;
+  using Fl_Widget_Style::textfont;
+
+    Fl_Widget_Style * clone(){return new Fl_Text_Style(this);} 
+
+protected:
+  Fl_Text_Style(Fl_Text_Style * s):Fl_Widget_Style(s){};
+
+  //reimplementation of virtual functions for new style
+
+
+//  static void update_(Fl_Text_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+//  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);};
+public:
+
+  Fl_Text_Style * highlight(){return (Fl_Text_Style *)highlight_();}
+  Fl_Text_Style * normal(){return (Fl_Text_Style *)normal_();}
+
+
+  Fl_Text_Style(Fl_Widget_Style * parent, unsigned mode);
+};
+
+
+
+#endif  // Fl_Tool_Button_Style_H
+
+
+
+
+
+#if defined(Fl_Valuator_H) && !defined(Fl_Valuator_Style_H)
+# define Fl_Valuator_Style_H
+
+
+class FL_EXPORT Fl_Valuator_Style : public Fl_Widget_Style {
+  Fl_Boxtype arrows_;
+  //uchar down_box_;
+public:
+  static void update_(Fl_Valuator_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+protected:
+  Fl_Valuator_Style(Fl_Valuator_Style * s):Fl_Widget_Style(s){};
+
+  //reimplementation of virtual functions for new style
+  //void clear();
+  Fl_Widget_Style * clone(){return new Fl_Valuator_Style(this);} 
+
+
+  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);}
+public:
+
+  Fl_Valuator_Style * highlight(){return (Fl_Valuator_Style *)highlight_();}
+  Fl_Valuator_Style * normal(){return (Fl_Valuator_Style *)normal_();}
+
+
+  Fl_Boxtype arrows() const {return ((STATIC|ARROWS) & flags()) ? arrows_ : (Fl_Boxtype)(((Fl_Valuator_Style *)next())->arrows_);};
+  void arrows(Fl_Boxtype b);
+  Fl_Valuator_Style(Fl_Widget::Style * parent, unsigned mode);
+};
+
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
 
 //#if defined(Fl_Adjuster_H) && !defined(Fl_Adjuster_Style_H)
 //#endif

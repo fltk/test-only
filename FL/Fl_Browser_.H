@@ -170,7 +170,7 @@ protected:
 public:
 
   typedef Fl_Text_Style Style;
-  Style * default_style();
+  static Style * default_style();
   
   void style(Style *s ){Fl_Widget::style((Fl_Widget::Style *)s);}
   Style * style(){return (Style *) Fl_Widget::style();}

@@ -69,6 +69,7 @@ That was a blank line above this.
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <FL/Fl_Style.H>
 
 Fl_Select_Browser *browser;
 Fl_Button	*top,
@@ -122,6 +123,7 @@ int main(int argc, char **argv) {
   Fl_Window window(400,400,fname);
   browser = new Fl_Select_Browser(0,0,400,350,0);
   browser->type(FL_MULTI_BROWSER);
+  Fl_Browser::default_style()->textsize(30);
   //browser->type(FL_HOLD_BROWSER);
   //browser->color(42);
   browser->callback(b_cb);

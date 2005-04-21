@@ -52,6 +52,8 @@ extern FL_EXPORT int fl_old_shortcut(const char*);
  */
 
 
+class Fl_Button_Style;
+
 class FL_EXPORT Fl_Button : public Fl_Widget {
 
 
@@ -70,7 +72,8 @@ protected:
 public:
   enum {DRAW_BOX_VALUE = 2};
 
-  class Style;
+
+  typedef Fl_Button_Style Style;
   static Style * default_style();
   void style(Style *s ){Fl_Widget::style((Fl_Widget::Style *)s);}
   Style * style(){return (Style *) Fl_Widget::style();}

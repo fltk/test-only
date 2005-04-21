@@ -203,7 +203,7 @@ Fl_Style_List::~Fl_Style_List(){
   }
 }
 
-///////////////////// Fl_Widget::Style ///////////////////////
+///////////////////// Fl_Widget_Style ///////////////////////
 
 void Fl_Widget::style(Style * s){
   if(!(Style::STATIC & s->flags())) return;
@@ -228,23 +228,23 @@ void Fl_Widget::dynamic_style(){
   if (Style::STATIC & style_->flags()) style_ = style_->clone();
 }
 
-Fl_Widget::Style * Fl_Widget::Style::highlight() const {
+Fl_Widget_Style * Fl_Widget_Style::highlight() const {
   return list()->highlight_;
 }
 
-Fl_Widget::Style * Fl_Widget::Style::normal() const {
+Fl_Widget_Style * Fl_Widget_Style::normal() const {
   return list()->normal_;
 }
 
 
 
-Fl_Widget::Style::~Style(){
+Fl_Widget_Style::~Fl_Widget_Style(){
   if((flags_ & STATIC) && !(flags_ & HIGHLIGHT)) delete (Fl_Style_List *)next_;
 }
 
 
 
-void Fl_Widget::Style::init(Fl_Widget::Style * parent, unsigned mode){
+void Fl_Widget_Style::init(Fl_Widget_Style * parent, unsigned mode){
   if(mode == BASE) return;  // not calling init at this stage
   Fl_Style_List * l = new Fl_Style_List(parent, this);
   next_ = l;
@@ -262,6 +262,22 @@ void Fl_Widget::Style::init(Fl_Widget::Style * parent, unsigned mode){
     parent->list()->highlight_->update(list()->highlight_, mode); //updating according to parent highlight
   }
 }
+
+
+
+
+void Fl_Widget::highlight_(){
+  Fl_Widget::Style * s = style()->highlight();
+  if(s) style(s);
+}
+
+void Fl_Widget::normal_(){
+  style(style()->normal());
+}
+
+
+
+
 
 void Fl_Widget::highlight(){
   if(!takesevents() || !active_r()) return;
@@ -301,7 +317,7 @@ void Fl_Widget::normal(){
 
 
 
-Fl_Widget::Style::Style(Fl_Widget::Style * parent, unsigned  mode){
+Fl_Widget_Style::Fl_Widget_Style(Fl_Widget_Style * parent, unsigned  mode){
   flags_ =  (~(COLOR|BOX|LABELTYPE|LABELCOLOR|LABELFONT|LABELSIZE|SELECTION_COLOR) & 0xFFFFFFF0) | STATIC;
   color_ = FL_GRAY;
   box_ = FL_NO_BOX;
@@ -321,7 +337,7 @@ Fl_Widget::Style * Fl_Widget::default_style(){
 }
 
 
-void Fl_Widget::Style::update_(Fl_Widget::Style * s1, Fl_Widget::Style * s, unsigned what){
+void Fl_Widget_Style::update_(Fl_Widget_Style * s1, Fl_Widget_Style * s, unsigned what){
   if(s1 && s){
     what &= ~s->flags();
     if(COLOR & what) s->color_ = s1->color_;
@@ -331,6 +347,15 @@ void Fl_Widget::Style::update_(Fl_Widget::Style * s1, Fl_Widget::Style * s, unsi
     if(LABELFONT & what) s->labelfont_ = s1->labelfont_;
     if(LABELSIZE & what) s->labelsize_ = s1->labelsize_;
     if(SELECTION_COLOR & what) s->selection_color_ = s1->selection_color_;
+    Text * t1 = (Text *) s1->text();
+    Text * t = (Text *) s->text();
+    if(t1 && t){
+      if(TEXTCOLOR & what) t->color_ = t1->color_;
+      if(TEXTFONT & what) t->font_ = t1->font_;
+      if(TEXTSIZE & what) t->size_ = t1->size_;
+    }
+
+
   }
 };
 /*
@@ -349,47 +374,69 @@ void Fl_Widget::Style::clear(){
 
 
 
-void Fl_Widget::Style::color(unsigned c){
+void Fl_Widget_Style::textcolor(unsigned c){ 
+  ((Text *)text())->color_ = c; 
+  flags_ |= TEXTCOLOR;
+  fl_update_styles(Fl_Widget_Style,textcolor, TEXTCOLOR, c);
+}
+
+void Fl_Widget_Style::textfont(uchar f){
+  ((Text *)text())->font_ = f; 
+  flags_ |= TEXTFONT;
+  fl_update_styles(Fl_Widget_Style,textfont, TEXTFONT, f);
+}
+
+void Fl_Widget_Style::textsize(uchar s){
+  ((Text *)text())->size_ = s; 
+  flags_ |= TEXTSIZE;
+  fl_update_styles(Fl_Widget_Style,textsize, TEXTSIZE, s);
+}
+
+///////////////
+
+
+
+void Fl_Widget_Style::color(unsigned c){
   color_ = c;
   flags_ |=COLOR;
-  fl_update_styles(Style,color, COLOR, c);
+  fl_update_styles(Fl_Widget_Style,color, COLOR, c);
 }
 
 
-void Fl_Widget::Style::labeltype(Fl_Labeltype t){
+void Fl_Widget_Style::labeltype(Fl_Labeltype t){
   labeltype_=t;
   flags_|= LABELTYPE;
-  fl_update_styles(Style,labeltype,LABELTYPE, t);
+  fl_update_styles(Fl_Widget_Style,labeltype,LABELTYPE, t);
 }
 
 
-void Fl_Widget::Style::labelcolor(unsigned c){ 
+void Fl_Widget_Style::labelcolor(unsigned c){ 
   labelcolor_ = c; 
   flags_ |= LABELCOLOR;
-  fl_update_styles(Style,labelcolor, LABELCOLOR, c);
+  fl_update_styles(Fl_Widget_Style,labelcolor, LABELCOLOR, c);
 }
 
-void Fl_Widget::Style::labelfont(uchar f){
+void Fl_Widget_Style::labelfont(uchar f){
   labelfont_ = f; 
   flags_ |= LABELFONT;
-  fl_update_styles(Style,labelfont, LABELFONT, f);
+  fl_update_styles(Fl_Widget_Style,labelfont, LABELFONT, f);
 }
 
-void Fl_Widget::Style::labelsize(uchar s){
+void Fl_Widget_Style::labelsize(uchar s){
   labelsize_ = s; 
   flags_ |= LABELSIZE;
-  fl_update_styles(Style,labelsize, LABELSIZE, s);
+  fl_update_styles(Fl_Widget_Style,labelsize, LABELSIZE, s);
 }
-void Fl_Widget::Style::selection_color(unsigned c){
+void Fl_Widget_Style::selection_color(unsigned c){
   selection_color_ = c;
   flags_ |= SELECTION_COLOR;
-  fl_update_styles(Style,selection_color, SELECTION_COLOR, c);
+  fl_update_styles(Fl_Widget_Style,selection_color, SELECTION_COLOR, c);
 
 }
-void Fl_Widget::Style::box(Fl_Boxtype b) {
+void Fl_Widget_Style::box(Fl_Boxtype b) {
   box_= b;
   flags_ |= BOX;
-  fl_update_styles(Style,box,BOX,b);
+  fl_update_styles(Fl_Widget_Style,box,BOX,b);
 }
 
 

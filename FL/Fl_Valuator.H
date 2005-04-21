@@ -46,6 +46,8 @@
  * the widget. The ones labelled "0" are the default versions with a type(0). For 
  * consistency the symbol \c FL_VERTICAL is defined as zero. 
  */
+class Fl_Valuator_Style;
+
 class FL_EXPORT Fl_Valuator : public Fl_Widget {
 
   double value_;
@@ -69,6 +71,7 @@ protected:
   void set_value(double v) {value_ = v;}
 
 public:
+  typedef Fl_Valuator_Style Style; 
 
     /** Sets the minimum (\c a) and maximum (\c b) values for the valuator widget. */
   void bounds(double a, double b) {min=a; max=b;}

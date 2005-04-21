@@ -30,11 +30,14 @@
 
 // Tool button only implements new style, by default it has flat_box
 
+
+class Fl_Tool_Button_Style;
+
 class FL_EXPORT Fl_Tool_Button : public Fl_Button {
 protected:
   void draw();
 public:
-  class Style;
+  typedef Fl_Tool_Button_Style Style;
   static Style * default_style();
   void style(Style *s ){Fl_Button::style((Fl_Button::Style *)s);}
   Style * style(){return (Style *) Fl_Widget::style();}

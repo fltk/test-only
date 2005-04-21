@@ -37,9 +37,10 @@
 #include "flstring.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include <FL/Fl_Style.H>
+
 #include <FL/Fl_Style_List.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Style.H>
 
 #define MAXBUF 1024
 
@@ -761,7 +762,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
 Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 : Fl_Widget(X, Y, W, H, l) {
-  style_ = Fl_Input::default_style();
+  style_ = (Fl_Widget_Style *) Fl_Input::default_style();
 
   align(FL_ALIGN_LEFT);
   cursor_color_ = FL_FOREGROUND_COLOR; // was FL_BLUE
@@ -859,21 +860,21 @@ Fl_Input_::~Fl_Input_() {
 
 /////////////////  Fl_Text_Style  //////////////////////
 
-Fl_Text_Style::Fl_Text_Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Style(parent,BASE){
+Fl_Text_Style::Fl_Text_Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget_Style(parent,BASE){
 
-  textfont_ = FL_HELVETICA;
-  textsize_ = (uchar)FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  text_.font_ = FL_HELVETICA;
+  text_.size_ = (uchar)FL_NORMAL_SIZE;
+  text_.color_ = FL_FOREGROUND_COLOR;
   clear_flag(TEXTSIZE|TEXTFONT|TEXTCOLOR);
   init(parent,mode);
 }
 
-
+/*
 
 void Fl_Text_Style::update_(Fl_Text_Style *s1, Fl_Widget::Style * s, unsigned what){
   if(!s) return;
   Fl_Widget::Style::update_(s1, s, what);
-  if(TEXTCOLOR & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textcolor_ = s1->textcolor_;
+  if(TEXTCOLOR & ~(s->flags()) & what) ((Fl_Text_Style *)s)->text.color_ = s1->text.color_;
   if(TEXTFONT & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textfont_ = s1->textfont_;
   if(TEXTSIZE & ~(s->flags()) & what) ((Fl_Text_Style *)s)->textsize_ = s1->textsize_;
 };
@@ -895,7 +896,7 @@ void Fl_Text_Style::textsize(uchar s) {
   set_flag(TEXTSIZE);
   fl_update_styles(Fl_Text_Style, textfont,TEXTSIZE,s);
 }
-
+*/
 
 
 

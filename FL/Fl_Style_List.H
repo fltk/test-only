@@ -31,20 +31,20 @@
 #ifndef Fl_Style_List_H
 #define Fl_Style_List_H
 
-class Fl_Widget::Style;
+class Fl_Widget_Style;
 
 class Fl_Style_List{
 public:
   Fl_Style_List * parent_;
   Fl_Style_List * children_;
-  Fl_Widget::Style * normal_;
-  Fl_Widget::Style * highlight_;
+  Fl_Widget_Style * normal_;
+  Fl_Widget_Style * highlight_;
   Fl_Style_List * prev_; // for easy deleting;
   Fl_Style_List * next_;
   unsigned mask_;
   unsigned parent_mask_;
 public:
-  Fl_Style_List(Fl_Widget::Style * parent, Fl_Widget::Style * style);
+  Fl_Style_List(Fl_Widget_Style * parent, Fl_Widget_Style * style);
   ~Fl_Style_List();
 };
 

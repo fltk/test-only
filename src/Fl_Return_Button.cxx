@@ -97,16 +97,16 @@ int Fl_Return_Button::handle(int event) {
 
 
 uchar Fl_Tool_Button::symbol_align() const{
-  return ((Fl_Tool_Button::Style *)style_)->symbol_align();
+  return ((Fl_Tool_Button_Style *)style_)->symbol_align();
 }
 void Fl_Tool_Button::symbol_align(uchar a){
   dynamic_style();
-  ((Fl_Tool_Button::Style *)style_)->symbol_align_ = a;
-  ((Fl_Tool_Button::Style *)style_)->set_flag(Style::SYMBOL_ALIGN);
+  ((Fl_Tool_Button_Style *)style_)->symbol_align_ = a;
+  ((Fl_Tool_Button_Style *)style_)->set_flag(Fl_Tool_Button_Style::SYMBOL_ALIGN);
 }
 
 
-Fl_Tool_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Button::Style(parent,BASE){
+Fl_Tool_Button_Style::Fl_Tool_Button_Style(Fl_Widget_Style * parent, unsigned mode):Fl_Button_Style(parent,BASE){
   symbol_align_ = FL_ALIGN_TOP;
   clear_flag(SYMBOL_ALIGN);
   init(parent,mode);
@@ -114,22 +114,22 @@ Fl_Tool_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Button
 
 
 
-void Fl_Tool_Button::Style::update_(Fl_Tool_Button::Style *s1,Fl_Widget::Style * s, unsigned what){
+void Fl_Tool_Button_Style::update_(Fl_Tool_Button_Style *s1,Fl_Widget::Style * s, unsigned what){
   if(!s) return;
-  Fl_Button::Style::update_(s1, s, what);
-  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Tool_Button::Style *)s)->symbol_align_ = s1->symbol_align();
+  Fl_Button_Style::update_(s1, s, what);
+  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Tool_Button_Style *)s)->symbol_align_ = s1->symbol_align();
 };
 
-void Fl_Tool_Button::Style::symbol_align(uchar a) {
+void Fl_Tool_Button_Style::symbol_align(uchar a) {
   symbol_align_= a;
   set_flag (SYMBOL_ALIGN);
-  fl_update_styles(Style, symbol_align,SYMBOL_ALIGN,a);
+  fl_update_styles(Fl_Tool_Button_Style, symbol_align,SYMBOL_ALIGN,a);
 }
 
-Fl_Tool_Button::Style * Fl_Tool_Button::default_style(){
+Fl_Tool_Button_Style * Fl_Tool_Button::default_style(){
   static Fl_Tool_Button::Style * s = 0;
   if(!s){ // not yet initialized
-    s = new Fl_Tool_Button::Style(Fl_Button::default_style(), Style::ALL & ~Style::DOWN_BOX);
+    s = new Fl_Tool_Button_Style(Fl_Button::default_style(), Style::ALL & ~Fl_Tool_Button_Style::DOWN_BOX);
     s->down_box(0);
     s->symbol_align(FL_ALIGN_BOTTOM);
   }
