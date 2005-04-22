@@ -51,17 +51,18 @@
 #include <stdio.h>
 
 extern int main(int, char *[]);
-#ifdef BORLAND5
-#define __argc _argc
-#define __argv _argv
+#ifdef BORLAND5 // FIXME : or __BORLANDC__ ??
+# define __argc _argc
+# define __argv _argv
 #endif
 #if defined(_MSC_VER) && defined(_MSC_DLL)
 	int __argc = 1;
 	static char *args[2] = { "", NULL };
 	char **__argv = &args[0];
 #else
-	extern int  __argc;
-	extern char **__argv;
+# include <stdlib.h>
+//extern int  __argc;
+//extern char **__argv;
 #endif
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
