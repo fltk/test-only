@@ -1313,7 +1313,7 @@ void TextBuffer::insert_column_( int column, int startPos, const char *insText,
 */
 void TextBuffer::remove_rectangular_( int start, int end, int rectStart,
     int rectEnd, int *replaceLen, int *endPos ) {
-  int nLines, lineStart, lineEnd, len, endOffset;
+  int nLines, lineStart, lineEnd, len, endOffset = 0;
   char *outStr, *outPtr, *expText;
   const char *text, *line;
 

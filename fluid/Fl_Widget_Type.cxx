@@ -1321,7 +1321,7 @@ inline Fluid_Plugin** next_panel(Fluid_Plugin** pp, Fluid_Plugin* &p)
 void set_cb(fltk::Button*, void*) {
   haderror = 0;
   propagate_group(the_panel, 0);
-  Fluid_Plugin *p, **pp;
+  Fluid_Plugin *p = 0, **pp;
   for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
     if(p->panel_is_orphan) propagate_group(p->panel, 0);
 }
@@ -1354,7 +1354,7 @@ void revert_cb(fltk::Button*, void*) {
   // but for now only the first label works...
   if (numselected == 1) current_widget->label(oldlabel);
   propagate_group(the_panel, LOAD);
-  Fluid_Plugin *p, **pp;
+  Fluid_Plugin *p = 0, **pp;
   for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
     if(p->panel_is_orphan) propagate_group(p->panel, LOAD);
 }
@@ -1385,7 +1385,7 @@ static void load_panel() {
     }
   }
   if (numselected) {
-    Fluid_Plugin *p, **pp;
+    Fluid_Plugin *p = 0, **pp;
     for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
       p->please_show_panel = 0;
     propagate_group(the_panel, LOAD);
@@ -1420,7 +1420,7 @@ static void load_panel() {
 void WidgetType::open() {
   if (!the_panel) {
     the_panel = make_widget_panel();
-    Fluid_Plugin *p, **pp;
+    Fluid_Plugin *p = 0, **pp;
     for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
     {
       p->make_panel();
