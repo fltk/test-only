@@ -1,5 +1,5 @@
 //
-// "$Id: LabelType.h,v 1.5 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // A LabelType determines how to draw the text of the label. This
 // is not used very much, it can be used to draw engraved or shadowed
@@ -44,6 +44,8 @@ public:
   static LabelType* first;
   LabelType(const char* n) : name(n), next(first) {first = this;}
   static LabelType* find(const char* name);
+  
+  virtual ~LabelType() {}
 };
 
 // You can use this to draw overlapping patterns

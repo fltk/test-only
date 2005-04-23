@@ -71,6 +71,8 @@ class FL_API Symbol {
   static const Symbol* iterate(int& index);
   static void text(const char* s) {text_=s;}
   static const char* text() {return text_;}
+  
+  virtual ~Symbol() {}
 };
 
 // Back-compatability constructor:

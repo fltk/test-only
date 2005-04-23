@@ -512,7 +512,7 @@ void when_cb(fltk::Choice* i, void *v) {
     i->value(e ? e-whenmenu : 0);
   } else {
     int m = i->value();
-    int n = int(whenmenu[m].compiled);
+    int n = *(int*)(whenmenu[m].compiled);
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
@@ -1267,13 +1267,13 @@ void subtype_cb(fltk::Choice* i, void* v) {
     i->redraw();
   } else {
     const Enumeration* table = current_widget->subtypes();
-    int n = int(table[i->value()].compiled);
+    int n = *(int*)(table[i->value()].compiled);
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
       if (q->subtypes()==table) {
-	q->o->type(n);
-	q->redraw();
+        q->o->type(n);
+        q->redraw();
       }
     }
   }

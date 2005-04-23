@@ -1,4 +1,4 @@
-// "$Id: Rectangle.h,v 1.1 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -99,6 +99,8 @@ class FL_API Rectangle {
 
   /*! True if rectangle contains the pixel who's upper-left corner is at x,y */
   bool contains(int x, int y) const {return x>=x_ && y>=y_ && x<x_+w_ && y<y_+h_;}
+  
+  virtual ~Rectangle() {}
 };
 
 }
