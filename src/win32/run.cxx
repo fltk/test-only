@@ -2177,7 +2177,11 @@ void fltk::draw_into(HBITMAP bitmap) {
 
 void fltk::stop_drawing(HWND window) {}
 
+// Following fixes Borland C++ Builder "error"
+// "Body has already been defined for function 'stop_drawing(void*)'"
+#if !defined(__BORLANDC__)
 void fltk::stop_drawing(HBITMAP bitmap) {}
+#endif
 
 static HDC screen_dc = 0;
 

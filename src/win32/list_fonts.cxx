@@ -91,7 +91,11 @@ int Font::sizes(int*& sizep) {
   if (has_unicode()) {
     wchar_t ucs[1024];
     utf8towc(name_, strlen(name_), ucs, 1024);
+#if defined(__BORLANDC__)
+    EnumFontFamiliesW(dc, ucs, (FONTENUMPROCA)EnumSizeCb, 0);
+#else
     EnumFontFamiliesW(dc, ucs, EnumSizeCb, 0);
+#endif
   } else {
     EnumFontFamiliesA(dc, name_, (FONTENUMPROCA)EnumSizeCb, 0);
   }

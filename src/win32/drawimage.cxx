@@ -53,7 +53,16 @@
 #include <config.h>
 #include <stdio.h>
 #include <windows.h>
+
 using namespace fltk;
+
+#if defined(__MINGW32__) || defined(__CYGWIN__) // || defined(__BORLANDC__)
+// AlphaBlend IS declared in these but only when WINVER is >= 500
+extern "C" {
+  WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
+}
+# define AC_SRC_ALPHA		  0x01
+#endif
 
 #define MAXBUFFER 0x40000 // 256k
 

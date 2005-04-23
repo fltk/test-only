@@ -30,6 +30,7 @@
 #include <fltk/draw.h>
 #include <fltk/x.h>
 
+
 #if !USE_X11 && defined(_WIN32)
 // Extra bitblt functions:
 #define NOTSRCAND       0x00220326 /* dest = (NOT source) AND dest */
@@ -40,12 +41,13 @@
 #define COPYFG          0x00CA0749 /* dest = (pat & src) | (!pat & dst) */
 #define COPYBG          0x00AC0744 /* dest = (!pat & src) | (pat & dst) */
 
-#if defined(__MINGW32__) || defined(__CYGWIN__)
-// MinGW headers does not declare AlphaBlend..
+# if defined(__MINGW32__) || defined(__CYGWIN__) // || defined(__BORLANDC__)
+// AlphaBlend IS declared in these but only when WINVER is >= 500
 extern "C" {
   WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
 }
-#endif
+#  define AC_SRC_ALPHA		  0x01
+# endif
 #endif
 
 /*

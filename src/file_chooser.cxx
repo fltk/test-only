@@ -43,6 +43,9 @@ void fltk::use_system_file_chooser(bool useit) {use_system_fc = useit;}
 #   define OPENFILENAME_SIZE_VERSION_400 sizeof(OPENFILENAME)
 #  endif
 # endif
+# if defined(__BORLANDC__)
+#  include <dos.h> // _getdrive()
+# endif
 #endif
 
 static void default_callback(const char*) {}
