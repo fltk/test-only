@@ -64,22 +64,23 @@ using namespace fltk;
 */
 
 void Dial::draw() {
+  update_flags();
   Rectangle r(w(),h());
   if (type()!=FILL || box() != OVAL_BOX) {
-    update_flags();
     if (damage()&DAMAGE_ALL) draw_box();
-    box()->inset(r, style(), flags());
+    box()->inset(r);
   }
+  drawstyle(style(), flags());
   Color fillcolor = selection_color();
   Color linecolor = textcolor();
-  if (!active_r()) {
+  if (flags()&INACTIVE) {
     fillcolor = inactive(fillcolor);
     linecolor = inactive(linecolor);
   }
   float angle = (a2-a1)*float((value()-minimum())/(maximum()-minimum())) + a1;
   if (type() == FILL) {
     if (damage()&DAMAGE_EXPOSE && box() == OVAL_BOX) draw_background();
-    setcolor(color());
+    setcolor(getbgcolor());
     addpie(r, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
     fillpath();
     setcolor(fillcolor);
@@ -94,7 +95,7 @@ void Dial::draw() {
     if (!(damage()&DAMAGE_ALL)) {
       // erase interior without erasing any box edge:
       Rectangle r1(r); r1.inset(1);
-      setcolor(color());
+      setcolor(getbgcolor());
       addchord(r1, 0, 360);
       fillpath();
     }
@@ -132,7 +133,7 @@ int Dial::handle(int event) {
     handle_push();
   case DRAG: {
     Rectangle r(w(),h());
-    box()->inset(r, style(), flags());
+    box()->inset(r);
     int mx = event_x()-r.center_x();
     int my = event_y()-r.center_y();
     if (!mx && !my) return 1;
@@ -161,7 +162,6 @@ int Dial::handle(int event) {
 static void revert(Style* s) {
   s->box_ = OVAL_BOX;
   s->selection_color_ = GRAY60;
-  s->highlight_color_ = BLACK;
 }
 static NamedStyle style("Dial", revert, &Dial::default_style);
 NamedStyle* Dial::default_style = &::style;

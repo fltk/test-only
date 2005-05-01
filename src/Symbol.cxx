@@ -260,6 +260,10 @@ const char* Symbol::text_ = "";
     you \e want to draw the symbol, many Symbols can scale and will
     return without changing these values. Or they may alter the values to
     preserve aspect ratio. Or they may just return constant sizes.
+
+    The most recent values sent to fltk::setcolor(),
+    fltk::setbgcolor(), fltk::setdrawflags(), fltk::setfont(), etc,
+    may influence the value that this returns.
 */
 
 /** This is the actual virtual function that measure() calls.
@@ -271,33 +275,23 @@ const char* Symbol::text_ = "";
 */
 void Symbol::_measure(int& w, int& h) const {}
 
-/** \fn void Symbol::draw(const Rectangle& r, const Style*, Flags=0) const;
+/** \fn void Symbol::draw(const Rectangle& r) const;
 
     Draw the symbol in the Rectangley \a r. Depending on the actual
     symbol it may scale to fit this rectangle, or just draw in the
     upper-left corner, in most cases clipping to the rectangle if
     too big.
 
-    The \a Style may be used to color in the symbol. Many symbols
-    will use color() for blank areas and textcolor() for labels.
-
-    The \a Flags can be used to control how the symbol is drawn. Useful
-    flags are:
-
-    - INACTIVE : Draw the image in inactive version of the colors from
-    the \a style.
-    - OUTPUT: Instead of color() and textcolor(), use boxcolor() and
-    labelcolor() from the style.
-    - VALUE: Draw turned on or checked
-    - SELECTED: Draw as though selected in a browser or menu.
-    - HIGHLIGHT: Draw with highlight colors from \a style.
-    - PUSHED: Indicates that the mouse is pushing this button. This also
-    inverts VALUE.
-    - FOCUSED: Indicates that the current object has keyboard focus.
-
+    The most recent values sent to fltk::setcolor(),
+    fltk::setbgcolor(), fltk::setdrawflags(), fltk::setfont(), etc,
+    may be used by the symbol to change how it draws. The symbol
+    should not change any of these values, if it needs to it should
+    save and restore the original value (some fake built-in symbols
+    will change these to affect the color used to draw the rest of
+    a string of text).
 */
 
-/** \fn void Symbol::_draw(const Rectangle& r, const Style* style, Flags flags) const;
+/** \fn void Symbol::_draw(const Rectangle& r) const;
 
     Virtual function to draw the symbol. This is named with an
     underscore so that a subclass can define it without hiding
@@ -315,13 +309,16 @@ void Symbol::_measure(int& w, int& h) const {}
 
 /** Move the edges of \a r to be the "interior" of the symbol. If
     this symbol is used as a Widget::box() then this method is used
-    to determine where to put the widget interior. \a style and \a flags
-    can be used to make the border change depending on them (for
-    instance a button can have different borders when up verses down)
+    to determine where to put the widget interior.
+
+    The most recent values sent to fltk::setcolor(),
+    fltk::setbgcolor(), fltk::setdrawflags(), fltk::setfont(), etc,
+    may influence the value that this returns (such as to return
+    a different edge for a pushed button).
 
     The default implementation returns \a r unchanged.
 */
-void Symbol::inset(Rectangle& r, const Style* style, Flags flags) const {}
+void Symbol::inset(Rectangle& r) const {}
 
 /** Return true if the symbol will completely fill all the pixels
     in the Rectangle passed to draw(). Widgets use this to test
@@ -331,8 +328,9 @@ void Symbol::inset(Rectangle& r, const Style* style, Flags flags) const {}
 bool Symbol::fills_rectangle() const {return false;}
 
 /** Return true to indicate that the area returned by inset() is
-    filled with a solid rectangle of the color() from the Style
-    passed to draw(). Many widgets assumme this is true of their box().
+    solidly filled with the value from fltk::getbgcolor(). Many widgets
+    will use this fact (or assumme it) in order to accelerate
+    drawing.
 
     If the INVISIBLE flag is passed to draw(), this symbol is allowed
     to skip drawing the interior. This is used by widgets to indicate
@@ -343,6 +341,16 @@ bool Symbol::fills_rectangle() const {return false;}
 */
 bool Symbol::is_frame() const {return false;}
 
+/** This function is for back-compatability only. It does
+    drawstyle(style, flags^OUTPUT) and then draw(r).
+*/
+void Symbol::draw(const Rectangle& r, const Style* style, Flags flags) const
+{
+  drawstyle(style, flags^OUTPUT);
+  draw(r);
+}
+
+
 /**************** The routines seen by the user *************************/
 
 // Internal class to define scalable square symbols:
@@ -350,7 +358,7 @@ class SymbolSymbol : public Symbol {
   void (*drawit)(Color);
 public:
   SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
-  void _draw(const Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
 };
 
 /*! \ingroup symbols
@@ -394,7 +402,7 @@ void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
   new SymbolSymbol(name,drawit);
 }
 
-void SymbolSymbol::_draw(const Rectangle& r, const Style*, Flags) const
+void SymbolSymbol::_draw(const Rectangle& r) const
 {
   const char* p = text();
   if (*p == '#') p++; // ignore equalscale indicator from fltk1.1

@@ -43,7 +43,6 @@
 #include <fltk/xpmImage.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Style.h>
 #include <fltk/string.h>
 using namespace fltk;
 
@@ -59,27 +58,21 @@ void xpmImage::_measure(int& w, int& h) const {
 
 extern Color fg_kludge;
 
-void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
+void xpmImage::_draw(const fltk::Rectangle& r) const
 {
-  Color bg = NO_COLOR;
-  Color fg = NO_COLOR;
   // detect our kludge for monochrome xpm images of letters:
   if (!strcmp(data[1]," \tc #FFFFFF")) {
     // it is monochrome...
-    style->boxcolors(flags, bg, fg);
-    flags &= ~INACTIVE;
-    bg = get_color_index(bg); if (!bg) bg = BLACK;
-    fg = get_color_index(fg); if (!fg) fg = BLACK;
-    if (fg != this->fg || bg != this->bg) {
+    if (getcolor() != this->fg || getbgcolor() != this->bg) {
       xpmImage* t = const_cast<xpmImage*>(this);
       t->destroy_cache();
-      t->fg = fg;
-      t->bg = bg;
-      goto REDRAW;
+      fg_kludge = t->fg = getcolor();
+      t->bg = getbgcolor();
     }
+    // clear this so Image does not draw a gray box for inactive image:
+    setdrawflags(drawflags()&~INACTIVE);
   }
   if (!drawn()) {
-  REDRAW:
     if (this->w() < 0) {
       int w,h;
       measure_xpm(data,w,h);
@@ -90,8 +83,7 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
     const_cast<xpmImage*>(this)->make_current();
     uchar *bitmap = 0;
     set_mask_bitmap(&bitmap);
-    fg_kludge = fg;
-    draw_xpm(data, 0, 0, bg);
+    draw_xpm(data, 0, 0, getbgcolor());
     fg_kludge = 0;
     set_mask_bitmap(0);
     if (bitmap) {
@@ -99,7 +91,7 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
       delete[] bitmap;
     }
   }
-  Image::_draw(r, style, flags);
+  Image::_draw(r);
 }
 
 //

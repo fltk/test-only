@@ -206,7 +206,7 @@ static void innards(const uchar *buf, PixelType type,
       }
       int i;
       switch (type) {
-      case LUMINANCE:
+      case MONO:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = to[1] = to[2] = *from; to[3] = 0xff;
 	}
@@ -237,7 +237,7 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case RGBA:
-	for (int i=w; i--; from += delta, to += 4) {
+	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[2];
 	  to[1] = from[1];
 	  to[2] = from[0];
@@ -245,7 +245,7 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case ABGR:
-	for (int i=w; i--; from += delta, to += 4) {
+	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[1];
 	  to[1] = from[2];
 	  to[2] = from[3];
@@ -256,7 +256,7 @@ static void innards(const uchar *buf, PixelType type,
     }
     bmi.bmiHeader.biHeight = -k;
     bmi.bmiHeader.biSizeImage = k*4*w;
-    if (fl_drawing_offscreen || type == LUMINANCE || type == RGB || type == BGR) {
+    if (fl_drawing_offscreen || type == MONO || type == RGB || type == BGR) {
       SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 			(LPSTR)buffer,
 			&bmi,
@@ -274,7 +274,7 @@ static void innards(const uchar *buf, PixelType type,
       BLENDFUNCTION m_bf;
       m_bf.BlendOp = AC_SRC_OVER;
       m_bf.BlendFlags = 0;
-      m_bf.AlphaFormat = AC_SRC_ALPHA; //1;
+      m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
       m_bf.SourceConstantAlpha = 0xFF;
       AlphaBlend(dc, x, ypos, w, k,
 		 new_dc, 0, 0, w, k, m_bf);

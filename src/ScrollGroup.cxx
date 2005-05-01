@@ -127,7 +127,7 @@ void ScrollGroup::draw_clip(void* v, const Rectangle& r) {
   space needed for any visible scrollbars.
 */
 void ScrollGroup::bbox(Rectangle& r) {
-  r.set(0,0,w(),h()); box()->inset(r, style(), 0);
+  r.set(0,0,w(),h()); box()->inset(r);
   if (scrollbar.visible()) {
     if (scrollbar_align() & ALIGN_LEFT) r.move_x(scrollbar.w());
     else r.move_r(-scrollbar.w());

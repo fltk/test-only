@@ -192,7 +192,7 @@ void TextDisplay::layout() {
 	//printf("TextDisplay::layout\n");
   //if (!buffer() || !visible_r()) return; // why is this test here?
   Rectangle r(w(),h());
-  box()->inset(r, style(), 0);
+  box()->inset(r);
   text_area.set(r.x()+LEFT_MARGIN,
 		r.y()+TOP_MARGIN,
 		r.w()-LEFT_MARGIN-RIGHT_MARGIN,

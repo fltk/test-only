@@ -78,10 +78,12 @@ int ThumbWheel::handle(int event) {
 }
 
 void ThumbWheel::draw() {
-  update_flags();
+  drawstyle(style(), update_flags()|OUTPUT);
+  const Color fg = getcolor();
+
   if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) draw_box();
   Rectangle r(w(),h());
-  box()->inset(r, style(), flags());
+  box()->inset(r);
   if (r.empty()) return;
 
   double s = step();
@@ -93,7 +95,7 @@ void ThumbWheel::draw() {
   if (horizontal()) {
     // draw shaded ends of wheel:
     int h1 = r.w()/4+1; // distance from end that shading starts
-    setcolor(buttoncolor()); fillrect(Rectangle(r.x()+h1,r.y(),r.w()-2*h1,r.h()));
+    setcolor(getbgcolor()); fillrect(Rectangle(r.x()+h1,r.y(),r.w()-2*h1,r.h()));
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
@@ -130,7 +132,7 @@ void ThumbWheel::draw() {
     offset = (1-offset);
     // draw shaded ends of wheel:
     int h1 = r.h()/4+1; // distance from end that shading starts
-    setcolor(buttoncolor()); fillrect(Rectangle(r.x(),r.y()+h1,r.w(),r.h()-2*h1));
+    setcolor(getbgcolor()); fillrect(Rectangle(r.x(),r.y()+h1,r.w(),r.h()-2*h1));
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
@@ -164,9 +166,8 @@ void ThumbWheel::draw() {
       drawline(r.r(),r.y()+h1,r.r(),r.y());
     }
   }
-  if (focused()) {
-    focusbox()->draw(r, style(), FOCUSED);
-  }
+  setcolor(fg);
+  focusbox()->draw(r);
 }
 
 ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H,L) {

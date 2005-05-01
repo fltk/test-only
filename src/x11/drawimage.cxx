@@ -463,7 +463,7 @@ static void innards(const uchar *buf, PixelType type,
   i.height = h;
 
   void (*conv)(const uchar *from, uchar *to, int w, int delta) = converter;
-  if (type == LUMINANCE) conv = mono_converter;
+  if (type == MONO) conv = mono_converter;
 
   // See if the data is already in the right format.  Unfortunately
   // some 32-bit x servers (XFree86) care about the unknown 8 bits

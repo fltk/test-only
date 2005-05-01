@@ -78,21 +78,28 @@ using namespace fltk;
   This subclass of Symbol draws a very common thing: a fixed-size
   "offscreen" image, possibly with alpha information.
 
-  The base class lets the program draw into this offscreen image, and
-  then copy or composite the resulting image into the windows that are
-  visible to the user. There are also many subclasses that take
-  in-memory data such as a jpeg image, and in draw() they copy that
-  data to the offscreen image if it has not been done before, before
-  calling this base class to draw the image into the window.
-
   <i>If you are changing the image a lot (for instance a movie
   playback or a painting program) you probably don't want to use
   this.</i> Just call fltk::drawimage() directly with your image buffer.
 
-  Treatment of alpha is seriously primitive on X11 and GDI32. About
-  the only thing that works is fltk::drawimage() with a 4-channel
-  image (and even then it is reduced to a horrible "screen door"
-  alpha), and calling set_alpha_bitmap().
+  In theory, you create the offscreen image by using setsize() to set
+  the dimensions and then use make_current(), then draw using any fltk
+  drawing calls.  After that doing draw() will composite the image,
+  with scaling, into the output. In reality, due to the primitive
+  nature of most drawing libraries, the alpha channel will only work
+  if you limit your drawing to a single fltk::drawimage().
+
+  In addition some systems cannot correctly handle changes to
+  fltk::getcolor() or fltk::getbgcolor() without redrawing. The
+  is_correct_color() method will return false in this case, if you
+  then call draw() it will either do nothing or draw the wrong thing.
+
+  There are many subclasses that take in-memory data such as a jpeg
+  image. They implement draw() to correctly call the above so the
+  offscreen image is always drawn correctly.
+
+  Call destroy_cache() to get rid of the memory and system resources
+  used by the offscreen image.
 
   <i>There is no destructor</i> due to C++'s lame insistence
   that it be called on static objects. An fltk program may contain
@@ -413,7 +420,7 @@ void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
     BLENDFUNCTION m_bf;
     m_bf.BlendOp = AC_SRC_OVER;
     m_bf.BlendFlags = 0;
-    m_bf.AlphaFormat = AC_SRC_ALPHA; //1;
+    m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
     m_bf.SourceConstantAlpha = 0xFF;
     AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(),
 	       new_dc, src_x, src_y, R.w(), R.h(), m_bf);
@@ -547,16 +554,16 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
 
 /** Virtual method from Symbol baseclass, draws the image.
 
-  If the INACTIVE flag is on, this tries to draw the image inactive
+  If drawflags(INACTIVE) is on, this tries to draw the image inactive
   by calling fill() twice with gray colors. Otherwise it calls over().
 */
-void Image::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
-{  
-  if (flags & INACTIVE) {
-    Color bg, fg; style->boxcolors(flags, bg, fg);
+void Image::_draw(const fltk::Rectangle& r) const
+{
+  if (drawflags(INACTIVE)) {
+    Color saved_color = getcolor();
     setcolor(GRAY90);
     fill(r,-1,-1);
-    setcolor(fg);
+    setcolor(saved_color);
     fill(r,0,0);
   } else {
     over(r,0,0);

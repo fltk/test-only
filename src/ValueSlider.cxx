@@ -39,9 +39,8 @@ using namespace fltk;
 void ValueSlider::draw() {
 
   // figure out the inner size of the box:
-  Flags flags = update_flags();
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r, style(), flags);
+  Rectangle r(w(),h()); box->inset(r);
   Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
@@ -61,6 +60,7 @@ void ValueSlider::draw() {
     }
   }
 
+  Flags flags = update_flags();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
@@ -79,57 +79,46 @@ void ValueSlider::draw() {
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
   bool drawslot = r.y() == 0;
-#if USE_CLIPOUT
-  if (Slider::draw(sr, f2, drawslot)) {
-#endif
 
-    // draw the box or the visible parts of the window
-    if (!box->fills_rectangle()) draw_background();
-    box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
+  // draw the box or the visible parts of the window
+  if (!box->fills_rectangle()) draw_background();
+  drawstyle(style(), flags);
+  box->draw(Rectangle(w(), h()));
+  focusbox()->draw(r);
 
-    // draw the focus indicator inside the box:
-    focusbox()->draw(r, style(), flags|OUTPUT);
-
-    if (type() & TICK_BOTH) {
-      Rectangle tr(sr);
-      if (horizontal()) {
-	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: tr.y(r.y()); tr.set_b(sr.center_y()); break;
-	case TICK_BELOW: tr.y(sr.center_y()+(drawslot?3:0)); tr.set_b(r.b()-1); break;
-	}
-      } else {
-	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: tr.x(r.x()); tr.set_r(sr.center_x()); break;
-	case TICK_BELOW: tr.x(sr.center_x()+(drawslot?3:0)); tr.set_r(r.r()-1); break;
-	}
+  if (type() & TICK_BOTH) {
+    Rectangle tr(sr);
+    if (horizontal()) {
+      switch (type()&TICK_BOTH) {
+      case TICK_ABOVE: tr.y(r.y()); tr.set_b(sr.center_y()); break;
+      case TICK_BELOW: tr.y(sr.center_y()+(drawslot?3:0)); tr.set_b(r.b()-1); break;
       }
-      Color color = textcolor();
-      if (flags&INACTIVE) color = inactive(color);
-      setcolor(color);
-      draw_ticks(tr, (slider_size()+1)/2);
+    } else {
+      switch (type()&TICK_BOTH) {
+      case TICK_ABOVE: tr.x(r.x()); tr.set_r(sr.center_x()); break;
+      case TICK_BELOW: tr.x(sr.center_x()+(drawslot?3:0)); tr.set_r(r.r()-1); break;
+      }
     }
-
-#if !USE_CLIPOUT
-    Slider::draw(sr, f2, drawslot);
-#else
-    pop_clip();
+    Color color = textcolor();
+    if (flags&INACTIVE) color = inactive(color);
+    setcolor(color);
+    draw_ticks(tr, (slider_size()+1)/2);
   }
-#endif
+  Slider::draw(sr, f2, drawslot);
 
   // draw the text:
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
+    drawstyle(style(), flags);
     push_clip(tr);
     // erase the background if not already done:
     if (!(damage()&DAMAGE_ALL)) {
       if (!box->fills_rectangle()) draw_background();
-      box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
-      focusbox()->draw(r, style(), flags|OUTPUT);
+      box->draw(Rectangle(w(), h()));
+      focusbox()->draw(r);
     }
     // now draw the text:
     char buf[128];
     format(buf);
-    setfont(textfont(), textsize());
-    setcolor(inactive(textcolor(),flags));
     drawtext(buf, tr, 0);
     pop_clip();
   }
@@ -138,7 +127,7 @@ void ValueSlider::draw() {
 int ValueSlider::handle(int event) {
   // figure out the inner size of the slider and text areas:
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r,style(),flags());
+  Rectangle r(w(),h()); box->inset(r);
   if (horizontal()) {
     int tw = 35; r.move_x(tw);
   } else {

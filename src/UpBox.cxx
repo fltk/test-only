@@ -47,15 +47,13 @@ using namespace fltk;
 
 class FL_API DottedFrame : public Box {
 public:
-  void _draw(const fltk::Rectangle& r1, const Style* s, Flags flags) const {
-    if (!(flags & FOCUSED)) return;
+  void _draw(const fltk::Rectangle& r1) const {
+    if (!drawflags(FOCUSED)) return;
     fltk::Rectangle r(r1);
     if (r.w() > 12) {r.move_x(1); r.move_r(-1);}
     else if (r.w() <= 3) return;
     if (r.h() > 15) {r.move_y(1); r.move_b(-1);}
     else if (r.h() <= 3) return;
-    Color bg, fg; s->boxcolors(flags, bg, fg);
-    setcolor(fg);
 
 #if USE_X11
     // X version uses stipple pattern because there seem to be too many
@@ -158,7 +156,7 @@ Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
 class NoBox : public Box {
 public:
-  void _draw(const fltk::Rectangle&, const Style* s, Flags) const {}
+  void _draw(const fltk::Rectangle&) const {}
   NoBox(const char* name) : Box(name) {}
 };
 static NoBox noBox("none");
@@ -174,16 +172,17 @@ Box* const fltk::NO_BOX = &noBox;
 ////////////////////////////////////////////////////////////////
 
 /*! \class fltk::FlatBox
-  Draws a rectangle filled with style->color(). This is a useful
+  Draws a rectangle filled with getbgcolor(). This is a useful
   base class for some box types.
 */
-void FlatBox::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
+void FlatBox::_draw(const fltk::Rectangle& r) const
 {
-  if (flags & INVISIBLE) return;
+  if (drawflags(INVISIBLE)) return;
   if (r.empty()) return;
-  Color bg, fg; style->boxcolors(flags, bg, fg);
-  setcolor(bg);
+  const Color fg = getcolor();
+  setcolor(getbgcolor());
   fillrect(r);
+  setcolor(fg);
 }
 bool FlatBox::fills_rectangle() const {return true;}
 bool FlatBox::is_frame() const {return true;}
@@ -191,7 +190,7 @@ FlatBox::FlatBox(const char* name) : Box(name) {}
 static FlatBox flatBox("flat");
 
 /*! \ingroup boxes
-  Draws a flat rectangle of style->color().
+  Draws a flat rectangle of getbgcolor().
 */
 Box* const fltk::FLAT_BOX = &flatBox;
 
@@ -229,41 +228,42 @@ void fl_to_inactive(const char* s, char* to) {
   *to = 0;
 }
 
-void FrameBox::_draw(const fltk::Rectangle& R, const Style* style, Flags flags) const
+void FrameBox::_draw(const fltk::Rectangle& R) const
 {
-  if (R.empty()) return;
   fltk::Rectangle r(R);
+  if (r.empty()) return;
+  const Color fg = getcolor();
   const char* s = data();
-  if (flags & VALUE) s = down->data();
-  char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
+  if (drawflags(VALUE)) s = down->data();
+  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   if (*s == '2') {s++; goto HACK;}
   for (;;) {
     // draw bottom line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(r.x(), r.b()-1, r.r()-1, r.b()-1);
-    r.move_b(-1); if (r.h() <= 0) return;
+    r.move_b(-1); if (r.h() <= 0) break;
     // draw right line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(r.r()-1, r.y(), r.r()-1, r.b()-1);
-    r.move_r(-1); if (r.w() <= 0) return;
+    r.move_r(-1); if (r.w() <= 0) break;
     if (!*s) break;
   HACK:
     // draw top line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(r.x(), r.y(), r.r()-1, r.y());
-    r.move_y(1); if (r.h() <= 0) return;
+    r.move_y(1); if (r.h() <= 0) break;
     // draw left line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(r.x(), r.y(), r.x(), r.b()-1);
-    r.move_x(1); if (r.w() <= 0) return;
+    r.move_x(1); if (r.w() <= 0) break;
     if (!*s) break;
   }
-  if (!(flags & INVISIBLE)) {
-    Color bg, fg; style->boxcolors(flags, bg, fg);
-    setcolor(bg);
+  if (!drawflags(INVISIBLE)) {
+    setcolor(getbgcolor());
     fillrect(r);
   }
+  setcolor(fg);
 }
 
 #ifdef _MSC_VER
@@ -285,8 +285,8 @@ FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
   }
 }
 
-void FrameBox::inset(fltk::Rectangle& r, const Style*, Flags flags) const {
-  if (flags & VALUE) {
+void FrameBox::inset(fltk::Rectangle& r) const {
+  if (drawflags(VALUE)) {
     r.x(r.x()+down->dx);
     r.y(r.y()+down->dy);
     r.w(r.w()-down->dw);
@@ -352,12 +352,11 @@ Box* const fltk::BORDER_BOX = &borderBox;
 
 class BorderFrame : public Box {
 public:
-  void _draw(const fltk::Rectangle& r, const Style* style,Flags flags) const
+  void _draw(const fltk::Rectangle& r) const
   {
-    setcolor(style->textcolor());
     strokerect(r);
   }
-  void inset(fltk::Rectangle& r, const Style*, Flags) const {r.inset(1);}
+  void inset(fltk::Rectangle& r) const {r.inset(1);}
   BorderFrame(const char* n) : Box(n) {}
 };
 static BorderFrame borderFrame("border_frame");
@@ -375,16 +374,15 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
-void HighlightBox::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
+void HighlightBox::_draw(const fltk::Rectangle& r) const
 {
-  if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) {
-    down->draw(r, style, flags);
-  } else {
-    FlatBox::_draw(r, style, flags);
-  }
+  if (drawflags(HIGHLIGHT|SELECTED|VALUE|PUSHED))
+    down->draw(r);
+  else
+    FlatBox::_draw(r);
 }
-void HighlightBox::inset(fltk::Rectangle& r, const Style* s, Flags flags) const {
-  if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) down->inset(r,s,flags);
+void HighlightBox::inset(fltk::Rectangle& r) const {
+  if (drawflags(HIGHLIGHT|SELECTED|VALUE|PUSHED)) down->inset(r);
 }
 bool HighlightBox::fills_rectangle() const {return true;}
 bool HighlightBox::is_frame() const {return down->is_frame();}

@@ -151,7 +151,7 @@ using namespace fltk;
   Return pointer to Widget in column \a col, starting from index 0.
   If column \a col is invalid, NULL is returned.
 */
-  
+
 /*! \fn int Browser::nheader() const
   Return number of columns in browser.
 */
@@ -530,11 +530,8 @@ enum {
 #define BOXSIZE 9
 
 void
-browser_glyph(int glyph, const Rectangle& r, const Style* style, Flags f)
+browser_glyph(int glyph, const Rectangle& r)
 {
-  Color bg, fg; style->boxcolors(f|OUTPUT, bg, fg);
-  //if (fg == BLACK) fg = GRAY33;
-  setcolor(fg);
   int lx = r.center_x();
   int ly = r.y()+(r.h()-1)/2; // slightly higher than center_y() for some reason
   switch (glyph) {
@@ -638,17 +635,20 @@ void Browser::draw_item() {
       else
 	g += ELL;
     }
+    drawstyle(style(),flags);
+    // if (getcolor()==BLACK) setcolor(GRAY33);
     Rectangle gr(r.x()-xposition_, r.y(), arrow_size, r.h());
-    draw_glyph(g, gr, flags);
+    draw_glyph(g, gr);
     r.move(arrow_size,0);
     col_shift += arrow_size;
   }
 
   if (focused() && is_focus) {
-    focusbox()->draw(r, style(), flags|(FOCUSED|OUTPUT));
+    drawstyle(style(),flags|FOCUSED);
+    focusbox()->draw(r);
   }
 
-  // Shift image width 
+  // Shift image width
   if (widget->image()) {
     int iw,ih; widget->image()->measure(iw,ih);
     col_shift += iw;
@@ -658,9 +658,9 @@ void Browser::draw_item() {
   int saved_colw = 0;
   int *cols = (int *)column_widths_p;
   if(cols) {
-    saved_colw = cols[0];    
+    saved_colw = cols[0];
     cols[0] -= col_shift;
-    if (cols[0]==0) cols[0]--;    
+    if (cols[0]==0) cols[0]--;
   }
 
   push_matrix();
@@ -764,7 +764,7 @@ void Browser::draw() {
     }
     if (header_) {
       for (int i=0; i<nHeader; i++) {
-        header_[i]->set_damage(DAMAGE_ALL);
+	header_[i]->set_damage(DAMAGE_ALL);
       }
     }
   }
@@ -785,7 +785,7 @@ void Browser::draw() {
       fillrect(r);
     }
     pop_clip();
-  }  
+  }
   Item::clear_style();
 }
 
@@ -847,7 +847,7 @@ void Browser::layout() {
   // figure out the visible area:
   const int sw = scrollbar_width();
   interior.set(0,0,w(),h());
-  box()->inset(interior, style(), 0);
+  box()->inset(interior);
   if (scrollbar.visible()) interior.move_r(-sw);
   if (hscrollbar.visible()) interior.move_b(-sw);
 
@@ -894,9 +894,9 @@ void Browser::layout() {
       int itemwidth = (i<nColumn)?column_widths_i[i]:0;
       if (itemwidth==0) itemwidth = -1;
       if (itemwidth<0)
-        has_flex = true;
+	has_flex = true;
       else
-        col_width += itemwidth;
+	col_width += itemwidth;
     }
     //if (col_width > width_)
     // Always set to headers width
@@ -956,15 +956,15 @@ void Browser::layout() {
   hscrollbar.linesize(scrollbar.linesize());
 
   if (header_) {
-    // first, calculate the combined column width    
+    // first, calculate the combined column width
     int width = 0, nflex = 0, i;
     for (i=0; i<nHeader; i++) {
       int itemwidth = (i<nColumn)?column_widths_i[i]:0;
       if (itemwidth==0) itemwidth = -1;
       if (itemwidth<0)
-        nflex -= itemwidth;
+	nflex -= itemwidth;
       else
-        width += itemwidth;
+	width += itemwidth;
     }
     int space = interior.w()-width; // number of pixels that will fill the flex columns
     int hx = interior.x();          // current x position for this column
@@ -974,17 +974,17 @@ void Browser::layout() {
       int itemwidth = (i<nColumn)?column_widths_i[i]:0;
       if (itemwidth==0) itemwidth = -1;
       if (itemwidth<0)
-        itemwidth = -itemwidth*space/nflex;
+	itemwidth = -itemwidth*space/nflex;
       int ww = itemwidth;
       if (ww<0) ww = 0;
       if (column_widths_p)
-        column_widths_p[i] = itemwidth;
-      hi->resize(-xposition_+hx, interior.y()-headerh, ww, headerh);	  
+	column_widths_p[i] = itemwidth;
+      hi->resize(-xposition_+hx, interior.y()-headerh, ww, headerh);
       hi->layout();
       hx += itemwidth;
     }
   }
-  
+
   layout_damage(0); // resize of scrollbars may have turned this on
 
   // Now that we got the sizes of everything, scroll to show current item:
@@ -1007,8 +1007,8 @@ void Browser::hscrollbar_cb(Widget* o, void*) {
 void Browser::xposition(int X) {
   int dx = xposition_-X;
   if (dx) {
-    xposition_ = X; 
-    scrolldx += dx; 
+    xposition_ = X;
+    scrolldx += dx;
     if (nHeader) relayout();
     redraw(DAMAGE_VALUE);
   }
@@ -1069,7 +1069,7 @@ bool Browser::set_focus() {
   vertically in the browser. If it is fltk::Browser::BOTTOM then the
   item is put at the bottom of the browser.
 
-  This does nothing if the current item is null.  
+  This does nothing if the current item is null.
 */
 bool Browser::make_item_visible(linepos where) {
   if (!item()) return false;
@@ -1215,7 +1215,7 @@ int Browser::handle(int event) {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
     if (scrollbar.visible() &&
-        (event_y() >= scrollbar.y()) && 
+	(event_y() >= scrollbar.y()) &&
 	(scrollbar_align()&ALIGN_LEFT ?
 	 (event_x() < scrollbar.x()+scrollbar.w()) :
 	 (event_x() >= scrollbar.x())))
@@ -1227,7 +1227,7 @@ int Browser::handle(int event) {
       return hscrollbar.send(event);
     if (header_ && nHeader && event_y()<header_[0]->y()+header_[0]->h()) {
       for (int i=0; i<nHeader; i++) {
-        Widget *hi = header_[i];
+	Widget *hi = header_[i];
 	if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
 	return hi->send(event);
       }
@@ -1344,7 +1344,7 @@ int Browser::handle(int event) {
 	set_focus();
       } else {
 	bool did_callback = when()&WHEN_CHANGED;
-        select_only_this(WHEN_CHANGED);
+	select_only_this(WHEN_CHANGED);
 	// allow selection of item to destroy the browser:
 	if (did_callback) return 1;
       }
@@ -1478,12 +1478,12 @@ Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
 
 /*!  Sets the horizontal locations that each '\\t' character in an item
   should start printing text at. These are measured from the left edge
-  of the browser, including any area for the open/close + glyphs.  
+  of the browser, including any area for the open/close + glyphs.
 
   \li Array must end with 0 (zero) always
-  
+
   \li You can define flexible column by setting column width to -1.
-      If you have flexible column in browser, all columns are resized to 
+      If you have flexible column in browser, all columns are resized to
       match width of the browser, by resizing flexible column.
 
 \code
@@ -1534,7 +1534,7 @@ int Browser::set_column_start(int col, int x) {
   bool has_flex = false;
   // find the current column x and calculate the desired delta
   int ox = 0;
-  for (int i=0; i<col; i++) { 
+  for (int i=0; i<col; i++) {
     ox += column_widths_p[i];
     if (column_widths_i[i]==-1) has_flex = true;
   }
@@ -1582,9 +1582,9 @@ void Browser::column_click_cb_(Widget *ww, void *d) {
 class BButton : public Button {
   uchar sides; // bit 0 set: user can drag left side, bit 1: right side
 public:
-  BButton(uchar s, const char *l=0) 
-  : Button(0,0,0,0, l) 
-  { 
+  BButton(uchar s, const char *l=0)
+  : Button(0,0,0,0, l)
+  {
     sides = s;
     align(ALIGN_INSIDE|ALIGN_CLIP);
   }
@@ -1593,47 +1593,47 @@ public:
     static bool left = true;
     static bool enter_before_leave = false;
     switch (event) {
-      case fltk::LEAVE: 
-        if (!enter_before_leave) cursor(fltk::CURSOR_DEFAULT);
-        enter_before_leave = false;
-        break;
+      case fltk::LEAVE:
+	if (!enter_before_leave) cursor(fltk::CURSOR_DEFAULT);
+	enter_before_leave = false;
+	break;
       case fltk::ENTER:
-        enter_before_leave = true;
-        // fall through
+	enter_before_leave = true;
+	// fall through
       case fltk::MOVE:
-        if (sides&1 && fltk::event_x()<=2) {
-          cursor(fltk::CURSOR_WE);
-        } else if (sides&2 && fltk::event_x()>=w()-2) {
-          cursor(fltk::CURSOR_WE);
-        } else {
-          cursor(fltk::CURSOR_DEFAULT);
-        }
-        if (event==fltk::ENTER) { Button::handle(event); return 1; }
-        break;
+	if (sides&1 && fltk::event_x()<=2) {
+	  cursor(fltk::CURSOR_WE);
+	} else if (sides&2 && fltk::event_x()>=w()-2) {
+	  cursor(fltk::CURSOR_WE);
+	} else {
+	  cursor(fltk::CURSOR_DEFAULT);
+	}
+	if (event==fltk::ENTER) { Button::handle(event); return 1; }
+	break;
       case fltk::PUSH:
-        if (sides&1 && fltk::event_x()<=2) {
-          left = true;
-          ox = fltk::event_x_root() - x();
-          return 1;
-        } else if (sides&2 && fltk::event_x()>=w()-2) {
-          left = false;
-          ox = fltk::event_x_root() - x() - w();
-          return 1;
-        }
-        break;
+	if (sides&1 && fltk::event_x()<=2) {
+	  left = true;
+	  ox = fltk::event_x_root() - x();
+	  return 1;
+	} else if (sides&2 && fltk::event_x()>=w()-2) {
+	  left = false;
+	  ox = fltk::event_x_root() - x() - w();
+	  return 1;
+	}
+	break;
       case fltk::DRAG: {
-        if (ox==-1) break;
-        Browser *w = (Browser*)(parent());
-        int col = *(int*)(user_data());
-        if (left)
-          w->set_column_start(col, fltk::event_x_root()-ox);
-        else
-          w->set_column_start(col+1, fltk::event_x_root()-ox);
-        return 1; }
+	if (ox==-1) break;
+	Browser *w = (Browser*)(parent());
+	int col = (int)(user_data());
+	if (left)
+	  w->set_column_start(col, fltk::event_x_root()-ox);
+	else
+	  w->set_column_start(col+1, fltk::event_x_root()-ox);
+	return 1; }
       case fltk::RELEASE:
-        if (ox==-1) break;
-        ox = -1;
-        return 1;
+	if (ox==-1) break;
+	ox = -1;
+	return 1;
     }
     return Button::handle(event);
   }
@@ -1655,7 +1655,7 @@ void Browser::column_labels(const char **t) {
   column_labels_ = t;
   int i;
   if (header_) {
-    for (i=0; i<nHeader; i++) delete header_[i];  
+    for (i=0; i<nHeader; i++) delete header_[i];
     delete[] header_;
   }
   nHeader = 0; header_ = 0;
@@ -1805,7 +1805,7 @@ Browser::~Browser() {
   delete[] column_widths_p;
   delete[] column_widths_i;
   if (header_) {
-    for (i=0; i<nHeader; i++) delete header_[i];  
+    for (i=0; i<nHeader; i++) delete header_[i];
     delete[] header_;
   }
 }

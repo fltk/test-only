@@ -44,25 +44,17 @@ LabelType* LabelType::first = 0;
 
 ////////////////////////////////////////////////////////////////
 
-extern bool fl_drawing_shadow;
-
 void LabelType::draw(const char* label,
 		     const Rectangle& r,
-		     const Style* style, Flags flags) const
+		     Flags flags) const
 {
-  if (flags&OUTPUT)
-    setfont(style->textfont(), style->textsize());
-  else
-    setfont(style->labelfont(), style->labelsize());
-  Color bg, fg; style->boxcolors(flags, bg, fg);
-  if (flags & INACTIVE) {
-    fl_drawing_shadow = true;
+  if (drawflags(INACTIVE)) {
+    Color fg = getcolor();
     setcolor(GRAY90);
     Rectangle r1(r); r1.move(1,1);
     drawtext(label, r1, flags);
-    fl_drawing_shadow = false;
+    setcolor(fg);
   }
-  setcolor(fg);
   drawtext(label, r, flags);
 }
 
@@ -74,7 +66,7 @@ LabelType* const fltk::SYMBOL_LABEL = &normalLabel;
 
 class FL_API NoLabel : public LabelType {
 public:
-  void draw(const char*, const Rectangle&, const Style*, Flags) const {}
+  void draw(const char*, const Rectangle&, Flags) const {}
   NoLabel(const char * n) : LabelType(n) {}
 };
 static NoLabel noLabel("none");
@@ -104,17 +96,18 @@ Flags Widget::update_flags() {
 
 /** Draw the widget's box() such that it fills the entire area of the
     widget. If the box is not rectangluar, this also draws the area
-    of the parent widget that is exposed. The box drawing routine is
-    passed the style() and current_flags() of the widget.
-    This also does update_flags().
+    of the parent widget that is exposed.
+
+    This also does drawstyle(style(),flags()&~OUTPUT) and thus the
+    colors and font are set up for drawing text in the widget.
 */
 void Widget::draw_box() const {
-  Box* box = this->box();
 #if USE_CLIPOUT
-  if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle() && parent())
+  if (damage()&DAMAGE_EXPOSE && !box()->fills_rectangle() && parent())
     draw_background();
 #endif
-  box->draw(Rectangle(w(),h()), style(), flags_ | OUTPUT);
+  drawstyle(style(), flags_ & ~OUTPUT);
+  box()->draw(Rectangle(w(),h()));
   // draw a big x to show where image will be drawn:
 //    setcolor(BLACK);
 //    drawline(0,0,w(),h());
@@ -128,11 +121,15 @@ void Widget::draw_box() const {
     redrawing them anyway (ie anything displaying text).
 */
 void Widget::draw_frame() const {
-  box()->draw(Rectangle(w(),h()), style(), flags_ | (INVISIBLE|OUTPUT));
+  drawstyle(style(), flags_ & ~OUTPUT | INVISIBLE);
+  box()->draw(Rectangle(w(),h()));
+  setdrawflags(flags_);
 }
 
-/** Calls draw_label() with the area inside the box() and with
-    the style() and flags().
+/** Calls draw_label() with the area inside the box() and with the
+    alignment stored in flags(). The labelfont() and labelcolor()
+    are used. For historic reasons if the OUTPUT flag is on then
+    the textfont() and textcolor() are used.
 */
 void Widget::draw_label() const {
   Flags flags = this->flags();
@@ -140,14 +137,15 @@ void Widget::draw_label() const {
   if (!image() && (!label() || !*label() ||
 		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
-  Rectangle r(w(),h()); box()->inset(r,style(),flags);
+  Rectangle r(w(),h()); box()->inset(r);
   // and draw it:
-  draw_label(r, style(), flags);
+  drawstyle(style(), this->flags() ^ OUTPUT);
+  draw_label(r, flags);
 }
 
-/** Draws labels inside the widget. \a XYWH is the bounding box to
-    fit the label into. \a style and \a flags are used to decide what
-    color to draw the label.
+/** Draws labels inside the widget using the current font and color
+    settings. \a XYWH is the bounding box to
+    fit the label into, \a flags is used to align in that box.
 
     If the flags contain any ALIGN flags and don't have ALIGN_INSIDE
     then the label() is not drawn. Instead the image() is drawn to
@@ -157,7 +155,7 @@ void Widget::draw_label() const {
     box in a nice way. The image() is put against the side that any
     ALIGN flags say, and then the label() is put next to that.
 */
-void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) const
+void Widget::draw_label(const Rectangle& ir, Flags flags) const
 {
   // If label is drawn outside, draw the image only:
   if ((flags&15) && !(flags & ALIGN_INSIDE)) {
@@ -167,7 +165,7 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
     image_->measure(fw, fh);
     if (flags & ALIGN_CLIP) push_clip(ir);
     Rectangle cr(ir,fw,fh);
-    image_->draw(cr, style, flags);
+    image_->draw(cr);
     if (flags & ALIGN_CLIP) pop_clip();
     return;
   }
@@ -188,11 +186,6 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
 	// put the image atop the text
 	r.move_y(d); flags |= ALIGN_TOP;
       } else if (w < r.w()) {
-	// put image to left
-	if (flags&OUTPUT)
-	  setfont(textfont(), textsize());
-	else
-	  setfont(labelfont(), labelsize());
 	int text_w = r.w(); int text_h = r.h();
 	measure(label_, text_w, text_h, flags);
 	int d = (r.w()-(w+text_w))>>1;
@@ -206,7 +199,7 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
     if (flags & ALIGN_CLIP) push_clip(r);
 
     Rectangle ir(r, w, h, flags);
-    image_->draw(ir, style, flags);
+    image_->draw(ir);
 
     // figure out the rectangle that remains for text:
     if (flags & ALIGN_TOP) r.set_y(ir.b());
@@ -227,7 +220,7 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
       else r.w(6);
     }
     if (!image_ && (flags & ALIGN_CLIP)) push_clip(r);
-    labeltype()->draw(label_, r, style, flags);
+    labeltype()->draw(label_, r, flags);
   } else {
     if (!image_) return; // don't call pop_clip if push_clip was not called
   }
@@ -235,20 +228,21 @@ void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) co
   if (flags & ALIGN_CLIP) pop_clip();
 }
 
-/** Groups normally call this to draw the label() outside a widget.
-    This uses the flags() to determine where to put the label. If
-    the ALIGN flags are all zero, or if ALIGN_INSIDE is turned
-    on, then nothing is done. Otherwise the align is used to select
-    a rectangle outside the widget and the widget's label() is
-    formatted into that area.
+/**
+  Groups normally call this to draw the label() outside a widget.
+  This uses the flags() to determine where to put the label. If
+  the ALIGN flags are all zero, or if ALIGN_INSIDE is turned
+  on, then nothing is done. Otherwise the align is used to select
+  a rectangle outside the widget and the widget's label() is
+  formatted into that area.
 
-    The font is set to labelfont()/labelsize(), and labelcolor()
-    is used to color the text. The flags are passed to the draw()
-    function, but with the alignment changed to put the text against
-    the widget, and INACTIVE is added if active_r() is false.
+  The font is set to labelfont()/labelsize(), and labelcolor()
+  is used to color the text. The flags are passed to the draw()
+  function, but with the alignment changed to put the text against
+  the widget, and INACTIVE is added if active_r() is false.
 
-    The image() of the widget is not drawn by this. It is always
-    drawn inside the widget.
+  The image() of the widget is not drawn by this. It is always
+  drawn inside the widget.
 */
 void Group::draw_outside_label(Widget& w) const {
   Flags flags = w.flags();
@@ -293,9 +287,10 @@ void Group::draw_outside_label(Widget& w) const {
     r.x(r.r()+3);
     r.set_r(this->w());
   }
-  flags &= ~(HIGHLIGHT|SELECTED|PUSHED|OUTPUT);
+  flags = flags & ~(HIGHLIGHT|SELECTED|PUSHED) | OUTPUT;
+  drawstyle(w.style(), flags);
   //push_clip(X, Y, W, H); // this will break some old fltk programs
-  w.labeltype()->draw(w.label(), r, w.style(), flags);
+  w.labeltype()->draw(w.label(), r, flags);
   //pop_clip();
 }
 

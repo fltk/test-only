@@ -36,13 +36,15 @@ using namespace fltk;
   The arguments are exactly the same as for a Symbol, with an added
   index number to say which glyph to draw. Ideally you should just
   call the correct Symbol or Image with the same arguments.
+
+  The style is also passed, this is used to extract the buttonbox()
+  or perhaps some other color info. I may eliminate this.
 */
 
 /*! This is the glyph() function put into the default_style. See
   \ref glyphs for what it does. */
-void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, Flags flags)
+void Widget::default_glyph(int glyph, const Rectangle& rr)
 {
-  Color bg, fg; style->boxcolors(flags, bg, fg);
   Box* box = 0;
   Rectangle r(rr);
 
@@ -55,9 +57,10 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
     // these glyphs do not have a box
     break;
   default: {
-    box = style->buttonbox();
-    box->draw(r, style, flags);
-    box->inset(r, style, flags);
+    box = drawstyle()->buttonbox();
+    box->draw(r);
+    if (glyph <= GLYPH_BOX) return;
+    box->inset(r);
     }
   }
 
@@ -66,14 +69,11 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
     r.w(r.h());
   }
   // to draw the shape inactive, draw it twice to get the engraved look:
+  const Color saved_color = getcolor();
   int i = 0;
-  if (flags & INACTIVE) {
-    i = 1;
-    fg = inactive(fg);
-  }
-  for ( /*i*/ ; i >= 0; i--) {
-    Color color = i ? Color(GRAY99) : fg;
-    setcolor(color);
+  if (drawflags(INACTIVE)) {i = 1; setcolor(GRAY99);}
+
+  for (;;) {
 
     int w1 = (r.w()+2)/3; int x1,y1;
     switch(glyph) {
@@ -85,7 +85,6 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
       addvertex(x1, y1+w1);
       addvertex(x1+2*w1, y1+w1);
       addvertex(x1+w1, y1);
-      fillstrokepath(color);
       break;
 
     case GLYPH_DOWN_BUTTON:
@@ -95,7 +94,6 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1+2*w1, y1);
-      fillstrokepath(color);
       break;
 
     case GLYPH_LEFT_BUTTON:
@@ -105,22 +103,24 @@ void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, F
       addvertex(x1, y1+w1);
       addvertex(x1+w1, y1+2*w1);
       addvertex(x1+w1, y1);
-      fillstrokepath(color);
       break;
 
     case GLYPH_RIGHT_BUTTON:
     case GLYPH_RIGHT:
+    default:
       x1 = r.x()+(r.w()-w1)/2+i;
       y1 = r.y()+(r.h()-1)/2-w1+i;
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1, y1+2*w1);
-      fillstrokepath(color);
       break;
 
     }
+    fillstrokepath(getcolor());
+    if (i) {i = 0; setcolor(saved_color);}
+    else break;
   }
-  if (box) style->focusbox()->draw(r, style, flags);
+  if (box) drawstyle()->focusbox()->draw(r);
 }
 
 //

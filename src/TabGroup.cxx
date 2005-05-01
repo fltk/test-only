@@ -148,7 +148,7 @@ int TabGroup::tab_height() {
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
   H2 = h()-H2;
-  Rectangle r(0,0); box()->inset(r, style(), 0);
+  Rectangle r(0,0); box()->inset(r);
   if (H2 > H) {
     H = H2-r.y();
     return (H <= 0) ? 0 : -H-1;
@@ -525,8 +525,9 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
 		H<0 ? this->h()+H-1 : 2,
 		W-(TABSLOPE+EXTRASPACE/2),
 		abs(H)-1);
-    o->draw_label(r, o->style(), ALIGN_CENTER);
-    if (sel && focused()) focusbox()->draw(r, style(), FOCUSED);
+    drawstyle(o->style(), sel && focused() ? FOCUSED|OUTPUT : OUTPUT);
+    o->draw_label(r, ALIGN_CENTER);
+    if (sel && focused()) focusbox()->draw(r);
   }
 }
 

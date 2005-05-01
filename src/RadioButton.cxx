@@ -47,19 +47,17 @@ using namespace fltk;
   your interface so it is clear to the user that they are radio buttons.
 */
 
-static void default_glyph(int glyph, const Rectangle& R, const Style* style, Flags flags)
+static void default_glyph(int glyph, const Rectangle& R)
 {
   // Use the white rather than the gray color:
-  flags = flags&~(SELECTED|HIGHLIGHT)|OUTPUT;
-  Box* box = style->box();
-  box->draw(R, style, flags);
-  if (flags & VALUE) {
+  Box* box = drawstyle()->box();
+  box->draw(R);
+  if (drawflags(VALUE)) {
     Rectangle r(R);
-    box->inset(r, style, flags);
+    box->inset(r);
     // use the selection color only if they directly set it:
-    Color c = style->selection_color_;
-    if (!c) c = style->textcolor();
-    setcolor(inactive(c, flags));
+    if (drawstyle()->selection_color_)
+      setcolor(inactive(drawstyle()->selection_color_, drawflags()));
     r.inset((r.h()+1)/6);
     addchord(r, 0, 360);
     fillpath();

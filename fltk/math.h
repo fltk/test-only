@@ -58,7 +58,7 @@
 #if 1 // All systems seem to be missing rintf:
 # define rintf(v)	floorf((v)+.5f)
 #endif
-#if defined(__APPLE__) || defined(__sun__)
+#if defined(__APPLE__) || defined(__sun__) || defined(__BORLANDC__)
 # define floorf(a)	((float)floor(a))
 # define ceilf(a)	((float)ceil(a))
 # define fmodf(a,b)	((float)fmod(a,b))

@@ -53,8 +53,9 @@ void AlignGroup::layout() {
     for (i = 0; i < numchildren; i++) {
       Widget* o = child(i);
       setfont(o->labelfont(),o->labelsize());
+      setdrawflags(o->flags());
       int w = this->w()-o->w(),h = this->h()-o->h();
-      measure(o->label(),w,h,o->flags());
+      measure(o->label(), w, h);
       if (variable_is_y) w = h;
       int which = (variable_is_y == vertical()) ? u : v; 
       if (label_space[which] < w) label_space[which] = w;

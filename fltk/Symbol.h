@@ -27,14 +27,13 @@
 #define fltk_Symbol_h
 
 #include "FL_API.h"
-#include "Flags.h"
 #include "Color.h"
 #include "Rectangle.h"
 #include "PixelType.h"
 
 namespace fltk {
 
-class FL_API Style;
+class Style;
 
 class FL_API Symbol {
   const char* name_;
@@ -53,15 +52,16 @@ class FL_API Symbol {
   virtual void _measure(int& w, int& h) const;
   void measure(int& w, int& h) const {_measure(w,h);}
 
-  virtual void _draw(const Rectangle&, const Style*,Flags) const = 0;
-  void draw(const Rectangle& r, const Style* s, Flags f = 0) const {_draw(r,s,f);}
+  virtual void _draw(const Rectangle&) const = 0;
+  void draw(const Rectangle& r) const {_draw(r);}
+  void draw(const Rectangle& r, const Style*, Flags) const;
 
-  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags) const;
-  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags, int delta) const;
-  uchar* readimage(uchar*, const Rectangle&, const Style*, Flags, int delta, int linedelta) const;
+  uchar* readimage(uchar*, const Rectangle&) const;
+  uchar* readimage(uchar*, const Rectangle&, int delta) const;
+  uchar* readimage(uchar*, const Rectangle&, int delta, int linedelta) const;
 
   // Hints for widgets:
-  virtual void inset(Rectangle& r, const Style*, Flags) const;
+  virtual void inset(Rectangle& r) const;
   virtual bool fills_rectangle() const;
   virtual bool is_frame() const;
 
@@ -72,7 +72,7 @@ class FL_API Symbol {
   static void text(const char* s) {text_=s;}
   static const char* text() {return text_;}
   
-  virtual ~Symbol() {}
+  // virtual ~Symbol() {}  // not done as it slows program exit
 };
 
 // Back-compatability constructor:

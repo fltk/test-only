@@ -32,11 +32,12 @@ using namespace fltk;
 
 class ShadowBox : public Box {
 public:
-  void _draw(const Rectangle& r1, const Style* style, Flags f) const
+  void _draw(const Rectangle& r1) const
   {
-    Color bg, fg; style->boxcolors(f, bg, fg);
+    const Color bg = getbgcolor();
+    const Color fg = getcolor();
     Rectangle r(r1); r.move_r(-SIZE); r.move_b(-SIZE);
-    if (r.w() > 2 && r.h() > 2 && !(f & INVISIBLE)) {
+    if (r.w() > 2 && r.h() > 2 && !drawflags(INVISIBLE)) {
       setcolor(bg);
       fillrect(Rectangle(r.x()+1,r.y()+1,r.w()-2,r.h()-2));
     }
@@ -46,7 +47,7 @@ public:
     setcolor(fg);
     strokerect(r);
   }
-  void inset(Rectangle& r, const Style*, Flags) const {
+  void inset(Rectangle& r) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-(2+SIZE));

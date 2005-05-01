@@ -232,14 +232,12 @@ static float line_ascent(float leading) {
 */
 void Input::draw() {
   update_flags();
-  clear_flag(HIGHLIGHT); // don't change color when mouse points at it
   Rectangle r(w(),h());
-  box()->inset(r, style(), flags()|OUTPUT);
+  box()->inset(r);
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&ALIGN_INSIDE))) {
-      setfont();
       const float leading = this->leading();
       int height = line_spacing(leading);
       float desc = line_ascent(leading);
@@ -255,7 +253,6 @@ void Input::draw() {
       float y = r.y()+((r.h()-height)>>1)+desc;
       drawtext(label(), r.x()+2, y);
       drawtext(":", r.x()+2+width, y);
-      setfont();
     } else {
       label_width = 0;
     }
@@ -275,14 +272,16 @@ void Input::draw() {
 */
 void Input::draw(const Rectangle& r)
 {
-  setfont();
+
+  // ignore HIGHLIGHT so it does not change color when mouse points at it:
+  Flags flags = this->flags()&~HIGHLIGHT;
+  drawstyle(style(), flags);
+
+  const Color background = getbgcolor();
+  const Color textcolor = getcolor();
   const float leading = this->leading();
   int height = line_spacing(leading);
   float desc = line_ascent(leading);
-
-  Color background, textcolor;
-  Flags flags = this->flags()|OUTPUT;
-  style()->boxcolors(flags, background,textcolor);
 
   bool erase_cursor_only =
     this == ::erase_cursor_only &&
@@ -424,8 +423,9 @@ void Input::draw(const Rectangle& r)
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      Color bg, fg; style()->boxcolors(flags ^ SELECTED, bg, fg);
-      setcolor(bg);
+      drawstyle(style(), flags ^ SELECTED);
+      Color fg = getcolor();
+      setcolor(getbgcolor());
       int xx=int(x1);
       fillrect(Rectangle(xx, r.y()+ypos, int(x2+.5)-xx, height));
       setcolor(fg);
@@ -504,7 +504,7 @@ int Input::line_end(int i) const {
     int j = i;
     while (j > 0 && at(j-1) != '\n') j--;
     // now measure lines until we get past i, end of that line is real eol:
-    Rectangle r(w(),h()); box()->inset(r, style(), flags()); int wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -527,7 +527,7 @@ int Input::line_start(int i) const {
   while (j > 0 && at(j-1) != '\n') j--;
   if (type() >= WORDWRAP) {
     // now measure lines until we get past i, start of that line is real eol:
-    Rectangle r(w(),h()); box()->inset(r, style(), flags()); int wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -648,7 +648,7 @@ void Input::up_down_position(int i, bool keepmark) {
   setfont();
   int wordwrap;
   if (type() > MULTILINE) {
-    Rectangle r(w(),h()); box()->inset(r, style(), flags()); wordwrap = r.w()-6;
+    Rectangle r(w(),h()); box()->inset(r); wordwrap = r.w()-6;
   } else {
     wordwrap = 0;
   }
@@ -1387,7 +1387,7 @@ bool Input::handle_key() {
 /*! Calls handle(x,y,w,h) with the area inside the box(). */
 int Input::handle(int event) {
   Rectangle r(w(),h());
-  box()->inset(r, style(), flags());
+  box()->inset(r);
   r.move_x(label_width);
   return handle(event, r);
 }

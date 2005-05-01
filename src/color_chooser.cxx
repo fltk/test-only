@@ -173,7 +173,7 @@ int ccHueBox::handle(int e) {
     ih = c->h();
   case DRAG: {
     float Xf, Yf, H, S;
-    Rectangle r(w(),h()); box()->inset(r,style(),0);
+    Rectangle r(w(),h()); box()->inset(r);
     Xf = (event_x()-r.x())/float(r.w());
     Yf = (event_y()-r.y())/float(r.h());
     tohs(Xf, Yf, H, S);
@@ -189,7 +189,7 @@ int ccHueBox::handle(int e) {
 
 static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
   ccHueBox* v = (ccHueBox*)vv;
-  Rectangle r(v->w(),v->h()); v->box()->inset(r,v->style(),0);
+  Rectangle r(v->w(),v->h()); v->box()->inset(r);
   float Yf = float(Y)/r.h();
 #ifdef UPDATE_HUE_BOX
   const float V = ((ColorChooser*)(v->parent()))->v();
@@ -212,7 +212,7 @@ static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
 void ccHueBox::draw() {
   update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r,style(),0);
+  Rectangle r(w(),h()); box()->inset(r);
   if (damage() == DAMAGE_VALUE) {
     push_clip(Rectangle(r.x()+px,r.y()+py,6,6));
   }
@@ -229,7 +229,8 @@ void ccHueBox::draw() {
   if (X < 0) X = 0; else if (X > r.w()-6) X = r.w()-6;
   if (Y < 0) Y = 0; else if (Y > r.h()-6) Y = r.h()-6;
   //  color(c->v()>.75 ? BLACK : WHITE);
-  buttonbox()->draw(Rectangle(r.x()+X, r.y()+Y, 6, 6), style(), 0);
+  drawstyle(style(),OUTPUT);
+  buttonbox()->draw(Rectangle(r.x()+X, r.y()+Y, 6, 6));
   px = X; py = Y;
 }
 
@@ -248,7 +249,7 @@ int ccValueBox::handle(int e) {
     iv = is_alpha() ? c->a() : c->v();
   case DRAG: {
     float Yf;
-    Rectangle r(w(),h()); box()->inset(r,style(),flags());
+    Rectangle r(w(),h()); box()->inset(r);
     Yf = 1-(event_y()-r.y())/float(r.h());
     if (fabsf(Yf-iv)<(3*1.0f/h())) Yf = iv;
     if (is_alpha()) {
@@ -301,7 +302,7 @@ void ccValueBox::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
   ColorChooser* c = (ColorChooser*)parent();
   Idata i;
-  i.wh.set(0,0,w(),h()); box()->inset(i.wh,style(),flags());
+  i.wh.set(0,0,w(),h()); box()->inset(i.wh);
   float v;
   if (is_alpha()) {
     i.r = c->r(); i.g = c->g(); i.b = c->b();
@@ -319,7 +320,8 @@ void ccValueBox::draw() {
   if (damage() == DAMAGE_VALUE) pop_clip();
   int Y = int((1-v) * (i.wh.h()-6));
   if (Y < 0) Y = 0; else if (Y > i.wh.h()-6) Y = i.wh.h()-6;
-  buttonbox()->draw(Rectangle(i.wh.x(), i.wh.y()+Y, i.wh.w(), 6), style(), 0);
+  drawstyle(style(),OUTPUT);
+  buttonbox()->draw(Rectangle(i.wh.x(), i.wh.y()+Y, i.wh.w(), 6));
   py = Y;
 }
 
@@ -345,7 +347,8 @@ void ccCellBox::draw() {
     for (int X = 0; X < COLS; X++) {
       int ww = (X+1)*w()/COLS - xx;
       Rectangle r(xx,yy,ww,hh);
-      THIN_DOWN_BOX->draw(r, style(), 0);
+      drawstyle(style(),OUTPUT);
+      THIN_DOWN_BOX->draw(r);
       r.inset(1);
       setcolor(fl_color_cells[Y*COLS+X]);
       fillrect(r);

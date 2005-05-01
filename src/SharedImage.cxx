@@ -209,7 +209,7 @@ int SharedImage::remove(const char* name)
   else return 0;
 }
 
-void SharedImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void SharedImage::_draw(const Rectangle& r) const
 {
   if (this->w() < 0) { int W = r.w(); int H = r.h(); measure(W,H); }
   if (this->w() == 0) return;
@@ -227,7 +227,7 @@ void SharedImage::_draw(const Rectangle& r, const Style* style, Flags flags) con
       return; 
     }
   }
-  Image::_draw(r, style, flags);
+  Image::_draw(r);
 }
 
 //

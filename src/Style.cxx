@@ -25,6 +25,7 @@
 #include <fltk/string.h>
 #include <fltk/math.h>
 #include <fltk/run.h>
+#include <fltk/draw.h>
 #include <stdlib.h>
 #include <config.h>
 #include <ctype.h>
@@ -370,49 +371,57 @@ void Widget::highlight_textcolor(Color v) {
 }
 #endif
 
-/*! Calculate the colors to draw a box and labels inside that box.
+const Style* fltk::drawstyle_ = Widget::default_style;
 
-    This is the standard function used by all the built-in fltk
-    Symbols and boxes to select the colors to draw. It provides a
-    somewhat Windows-like coloring scheme. The calling Widget
-    picks what flags to pass to the Symbols so that when they
-    call this they get the correct colors for each part of the
-    widget.
+/** \fn const Style* fltk::drawstyle()
+  Return the last style sent to drawstyle(s,f). Some drawing functions
+  (such as glyphs) look in this for box types. If this has not been
+  called it is Widget::default_style.
+*/
+
+/**
+  Draw using this style.  Set drawstyle() to this, drawflags() to \a
+  flags, calls setcolor() and setbgcolor() with appropriate colors for
+  this style and the given flags, and calls setfont().  This is called
+  by the draw() methods on most fltk widgets. The calling Widget picks
+  what flags to pass to the Symbols so that when they call this they
+  get the correct colors for each part of the widget.
 
     Flags that are understood:
     - HIGHLIGHT: if highlight_color() is non-zero, set bg to
       highlight_color() and fg to highlight_textcolor().
     - SELECTED: if selection_color() is non-zero, set bg to
       selection_color() and fg to selection_textcolor().
-    - OUTPUT: Set bg to color(), fg to textcolor(). If false bg is set
-      to buttoncolor() and fg to labelcolor().  Widgets set this true
-      for their main box, and false for any buttons inside themselves.
+    - OUTPUT: Normally color(), textcolor(), textfont(), and textsize()
+      are used. If this flag is set buttoncolor(), labelcolor(),
+      labelfont(), and labelsize() are used. Widgets will set
+      this true for any internal buttons, but false for the
+      main area.
     - INACTIVE: Change the fg to a gray color.
 
     It then further modifies fg so that it contrasts with the bg.
-
-    Return value is \a flags with unused flags turned off. Currently
-    HIGHLIGHT is turned off if not usable due to a missing highlight_color().
 */
-Flags Style::boxcolors(Flags flags, Color& bg, Color& fg) const {
+void fltk::drawstyle(const Style* style, Flags flags) {
+  drawstyle_ = style;
+  drawflags_ = flags;
   // this is not correct! It should search the styles in order and
   // decide what to do as it searches. For instance highligh_textcolor
   // should only be used if set before or at the highlight_color style.
-  if ((flags & HIGHLIGHT) && (bg = highlight_color())) {
-    fg = contrast(highlight_textcolor(), bg);
+  Color bg, fg;
+  if ((flags & HIGHLIGHT) && (bg = style->highlight_color())) {
+    fg = contrast(style->highlight_textcolor(), bg);
+  } else if ((flags & SELECTED) && (bg = style->selection_color())) {
+    fg = contrast(style->selection_textcolor(), bg);
   } else {
-    flags &= ~HIGHLIGHT;
-    if ((flags & SELECTED) && (bg = selection_color())) {
-      fg = contrast(selection_textcolor(), bg);
-    } else {
-      flags &= ~SELECTED;
-      if (flags & OUTPUT) {bg = color(); fg = textcolor();}
-      else {bg = buttoncolor(); fg = labelcolor();}
-      // fg = contrast(fg, bg);this messes up things
-    }
+    if (flags & OUTPUT) {bg = style->buttoncolor(); fg = style->labelcolor();}
+    else {bg = style->color(); fg = style->textcolor();}
+    // fg = contrast(fg, bg);this messes up things
   }
   if (flags & INACTIVE) fg = inactive(fg);
-  return flags;
+  setcolor(fg);
+  setbgcolor(bg);
+  if (flags & OUTPUT) setfont(style->labelfont(), style->labelsize());
+  else setfont(style->textfont(), style->textsize());
 }
 
 /*! \class fltk::NamedStyle

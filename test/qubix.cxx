@@ -278,9 +278,8 @@ void PSlineto(double x, double y) {
 }
 
 void PSstroke() {
-  int i;
   if (nPathPtr<2) return;
-  for (i=0; i<nPathPtr; i++) {
+  for (int i=0; i<nPathPtr; i++) {
     addvertex(float(PSpath[i].x), float(PSpath[i].y));
   }
   strokepath();
@@ -288,43 +287,25 @@ void PSstroke() {
 }
 
 void PSthickstroke() {
-  double x1,x2,y1,y2;
-  double dx,dy;
-  int i, steps=32;
-
-  // this is very simple, we assume the path is only 2 elements long!
-  // as FLTK does not have a linewidth, we draw using circles
-
   if (nPathPtr<2) return;
-
-  x1=PSpath[0].x;
-  x2=PSpath[1].x;
-  y1=PSpath[0].y;
-  y2=PSpath[1].y;
-
-  // find out how much steps we need to make it look good
-
-  steps = int(sqrt(((fabs(x1-x2)*fabs(x1-x2))+(fabs(y1-y2)*fabs(y1-y2)))) * 15);
-
-  dx = (x2-x1)/steps;
-  dy = (y2-y1)/steps;
-
-  // draw in yellow
-
-  setcolor(YELLOW);
-
-  for (i=0;i<(steps);i++) {
-    addcircle(x1, y1, 0.15);
-    fillpath();
-    x1+=dx;
-    y1+=dy;
+  for (int i=0; i<nPathPtr; i++) {
+    addvertex(float(PSpath[i].x), float(PSpath[i].y));
   }
+  setcolor(YELLOW);
+  float dx = .3, dy = 0; fltk::transform_distance(dx,dy);
+  line_style(JOIN_ROUND|CAP_ROUND,int(sqrt(dx*dx+dy*dy)+.9));
+  strokepath();
+  line_style(0);
   PSsetgray(grayvalue);
   nPathPtr=0;
 }
 
 #define RADIUS 0.25
 #define SOLARSIZE 0.2
+
+inline void addcircle(float x, float y, float r) {
+  addarc(x-r, y-r, 2*r, 2*r, 0, 360);
+}
 
 void darkblob( void ) {
   if (!nPathPtr) return;
@@ -838,9 +819,9 @@ int makemove() {
 
 class QubixView : public Widget {
   void draw() {
-    push_clip(0,0,w(),h());
+    push_clip(Rectangle(w(),h()));
     setcolor(WHITE);
-    fillrect(0,0,w(),h());
+    fillrect(Rectangle(w(),h()));
     push_matrix();
     drawfrom(0,0, this);
     pop_matrix();

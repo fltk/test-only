@@ -175,6 +175,27 @@ FL_API const char *filename_name(const char *name) {
 
 bool fltk::in_main_thread_ = true;
 
+/*! Tries to make this widget be the keyboard focus widget, by first
+  sending it an fltk::FOCUS event, and if it returns non-zero, setting
+  fltk::focus() to this widget. You should use this method to assign
+  the focus to a widget. Returns true if the widget accepted the
+  focus.
+
+  On current systems fltk does not force the window system to set
+  the focus. If the window does not have focus it will usually switch
+  back to the previous window.
+*/
+bool Widget::take_focus() {
+  if (focused()) return true;
+  Widget* w = xfocus;
+  // Modal overrides whatever the system says the focus is:
+  if (grab_ || w && modal_) w = modal_;
+  if (!w || !w->contains(this)) return false;
+  if (!takesevents() || !handle(FOCUS)) return false;
+  if (!contains(fltk::focus())) fltk::focus(this);
+  return true;
+}
+
 #if USE_X11
 # include "x11/run.cxx"
 #elif defined(_WIN32)

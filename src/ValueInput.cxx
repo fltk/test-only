@@ -26,6 +26,7 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
 #include <stdlib.h>
 using namespace fltk;
@@ -89,30 +90,33 @@ static char which_highlight = 0;
 static char which_pushed = 0;
 
 void ValueInput::draw() {
-  update_flags();
-  Rectangle r(w(),h()); box()->inset(r, style(), flags());
+  drawstyle(style(),update_flags());
+  Rectangle r(w(),h()); box()->inset(r);
   const int bw = r.h()/2; r.move_r(-bw);
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     input.set_damage(DAMAGE_ALL);
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
-    Flags ff = flags();
+    Flags ff = flags() | OUTPUT;
     Flags f[2];
     f[0] = f[1] = ff & ~HIGHLIGHT;
-    if (which_highlight)
+    if (which_highlight && (ff&HIGHLIGHT))
       f[which_highlight-1] = ff;
     if (which_pushed && pushed())
-      f[which_pushed-1] = VALUE | HIGHLIGHT;
+      f[which_pushed-1] = VALUE | HIGHLIGHT | OUTPUT;
     Rectangle gr(r.r(),r.y(),bw,bw);
-    draw_glyph(GLYPH_UP_BUTTON, gr, f[0]);
+    drawstyle(style(),f[0]);
+    draw_glyph(GLYPH_UP_BUTTON, gr);
     gr.move_y(bw);
     gr.h(r.h()-bw);
-    draw_glyph(GLYPH_DOWN_BUTTON, gr, f[1]);
+    drawstyle(style(),f[1]);
+    draw_glyph(GLYPH_DOWN_BUTTON, gr);
   }
   input.label(label());
   input.align(align());
   input.copy_style(style());
+  input.flags(flags());
   input.draw(r);
   input.set_damage(0);
 }
@@ -128,7 +132,7 @@ void ValueInput::increment_cb() {
 #define REPEAT .1f
 
 int ValueInput::handle(int event) {
-  Rectangle r(w(),h()); box()->inset(r, style(), flags());
+  Rectangle r(w(),h()); box()->inset(r);
   const int bw = r.h()/2; r.move_r(-bw);
   int n;
   switch (event) {
@@ -150,10 +154,7 @@ int ValueInput::handle(int event) {
     }
     return 1;
   case LEAVE:
-    if (which_highlight) {
-      which_highlight = 0;
-      redraw_highlight();
-    }
+    if (highlight_color()) redraw_highlight();
     return 1;
   case PUSH:
   case DRAG:

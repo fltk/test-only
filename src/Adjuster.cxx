@@ -55,11 +55,11 @@ enum {
   GLYPH_SLOWARROW
 };
 
-static void glyph(int t, const Rectangle& r, const Style* s, Flags flags)
+static void glyph(int t, const Rectangle& r)
 {
-  s->buttonbox()->draw(r,s,flags);
+  drawstyle()->buttonbox()->draw(r);
   xbmImage* b = arrows[t-GLYPH_FASTARROW];
-  b->draw(Rectangle(r, b->width(), b->height()), s, flags);
+  b->draw(Rectangle(r, b->width(), b->height()));
 }
 
 // changing the value does not change the appearance:
@@ -75,22 +75,18 @@ void Adjuster::draw() {
     dy = H = h()/3;
   }
 
-  Flags flags = update_flags() & ~(VALUE|PUSHED|HIGHLIGHT);
-  Flags f[4];
-  for (int i = 1; i < 4; i++) {
-    f[i] = flags;
-    if (drag == i) f[i] |= VALUE|PUSHED;
-    else if (highlight == i) f[i] |= HIGHLIGHT;
-  }
-
   Rectangle r(W,H);
-  if (damage()&DAMAGE_ALL || last == 1 || highlight == 1) {
-    r.y(2*dy); draw_glyph(GLYPH_FASTARROW, r, f[1]);}
-  if (damage()&DAMAGE_ALL || last == 2 || highlight == 2) {
-    r.x(dx); r.y(dy); draw_glyph(GLYPH_MEDIUMARROW, r, f[2]);}
-  if (damage()&DAMAGE_ALL || last == 3 || highlight == 3) {
-    r.x(2*dx); r.y(0); draw_glyph(GLYPH_SLOWARROW, r, f[3]);}
-
+  Flags flags = update_flags() & ~(VALUE|PUSHED|HIGHLIGHT) | OUTPUT;
+  for (int i = 1; i < 4; i++) {
+    Flags f = flags;
+    if (drag == i) f |= VALUE|PUSHED;
+    else if (highlight == i) f |= HIGHLIGHT;
+    if (damage()&DAMAGE_ALL || last==i || highlight==i) {
+      r.x((i-1)*dx); r.y((3-i)*dy);
+      drawstyle(style(),f);
+      draw_glyph(i-i, r);
+    }
+  }
   last = highlight;
 }
 

@@ -669,7 +669,7 @@ extern Widget* fl_did_clipping;
 */
 void Widget::draw()
 {
-  update_flags();
+  update_flags(); clear_flag(HIGHLIGHT);
   if (box() == NO_BOX) {
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
@@ -833,18 +833,6 @@ int Widget::send(int event) {
 
   e_x = save_x; e_y = save_y;
   return ret;
-}
-
-/*! Tries to make this widget be the keyboard focus widget, by first
-  sending it an fltk::FOCUS event, and if it returns non-zero, setting
-  fltk::focus() to this widget. You should use this method to assign
-  the focus to a widget. Returns true if the widget accepted the
-  focus.  */
-bool Widget::take_focus() {
-  if (focused()) return true;
-  if (!takesevents() || !handle(FOCUS)) return false;
-  if (!contains(fltk::focus())) fltk::focus(this);
-  return true;
 }
 
 static void widget_timeout(void* data) {

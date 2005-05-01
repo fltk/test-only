@@ -2,7 +2,7 @@
  * because the old "const double" definition would not allow for conditional
  * compilation...
 
- * FL_VERSION is a float that describes the major, minor, and patch version
+ * FL_VERSION is a double that describes the major, minor, and patch version
  * numbers.  Version 1.1 is actually stored as 1.01 to allow for more than 9
  * minor releases.  Similarly, version 1.0.5 is stored as 1.0005.
 
@@ -14,8 +14,8 @@
 #ifndef FL_VERSION
 
 # define FL_MAJOR_VERSION	2
-# define FL_MINOR_VERSION	0
-# define FL_PATCH_VERSION	2
-# define FL_VERSION		2.0002f
+# define FL_MINOR_VERSION	1
+# define FL_PATCH_VERSION	0
+# define FL_VERSION		2.0100
 
 #endif

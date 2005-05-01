@@ -51,8 +51,8 @@ void Drawing::draw() {
     char buf[20];
     sprintf(buf, "U+%03Xx", base>>4);
     Rectangle r(0, y, w()*2/18, itemh);
-    style.color_ = (base&0x100) ? GRAY80 : WHITE;
-    box->draw(r, &style, OUTPUT);
+    setbgcolor((base&0x100) ? GRAY80 : WHITE);
+    box->draw(r);
     setcolor(labelcolor());
     setfont(labelfont(),labelsize());
     drawtext(buf, r, 0);
@@ -63,8 +63,8 @@ void Drawing::draw() {
       // if (base < 0x100) *p++ = base+z; else // demonstrate cp1252 emulation
       p += utf8encode(base+z,p);
       *p = 0;
-      style.color_ = code_color(base+z);
-      box->draw(r, &style, OUTPUT);
+      setbgcolor(code_color(base+z));
+      box->draw(r);
       setcolor(labelcolor());
       drawtext(buf, r, 0);
     }

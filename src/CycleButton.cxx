@@ -64,15 +64,15 @@ void CycleButton::draw() {
   // this code is copied from Button, but simplified as a lot of
   // back-compatability and the glyphs are eliminated:
 
-  Flags flags = update_flags();
+  Flags flags = update_flags()|OUTPUT;
   if (this == held_down) flags |= VALUE|PUSHED;
 
   Style style = *(this->style());
-  if (!style.color_) style.color_ = buttoncolor();
-  if (!style.box_) style.box_ = buttonbox();
-  if (!style.textcolor_) style.textcolor_ = labelcolor();
+  if (style.color_) style.buttoncolor_ = style.color_;
+  if (style.box_) style.buttonbox_ = style.box_;
+  if (style.textcolor_) style.labelcolor_ = style.textcolor_;
 
-  Box* box = style.box();
+  Box* box = style.buttonbox();
   Rectangle r(w(),h());
 
   if (!box->fills_rectangle()) {
@@ -86,8 +86,9 @@ void CycleButton::draw() {
       draw_background();
     }
   }
-  box->draw(r, &style, flags);
-  box->inset(r, &style, flags);
+  drawstyle(&style,flags);
+  box->draw(r);
+  box->inset(r);
 
   // This portion of the code is copied from Choice:
   Widget* o = get_item();
@@ -111,7 +112,7 @@ void CycleButton::draw() {
     pop_clip();
   }
 
-  focusbox()->draw(r, &style, flags);
+  focusbox()->draw(r);
 }
 
 static bool try_item(CycleButton* choice, int i) {

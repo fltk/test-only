@@ -177,12 +177,12 @@ inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk
 inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta,ldelta);}
 inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
 
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta,ldelta);}
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta,ldelta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta);}
 
 typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
 inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
-inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta);}
+inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta);}
 
 inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, fltk::Rectangle(x,y,w,h), alpha?4:3);}
 
@@ -200,5 +200,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.38 2005/01/27 08:50:20 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Slider.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Slider value control. By default it moves vertically with the
 // minimum number at the bottom. See HorizontalSlider for one that
@@ -78,7 +78,7 @@ public:
   void slider_size(double v) {slider_size(int(v*w()));}
 #endif
 
-protected:
+  //protected:
 
   int slider_position(double value, int w);
   double position_value(int x, int w);
@@ -92,5 +92,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Slider.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

@@ -41,22 +41,23 @@ class DiamondBox : public Box {
 public:
   const char* data;
   const DiamondBox* down;
-  void _draw(const Rectangle& r, const Style*, Flags=0) const;
-  void inset(Rectangle& r, const Style*, Flags) const {r.inset(5);}
+  void _draw(const Rectangle& r) const;
+  void inset(Rectangle& r) const {r.inset(5);}
   DiamondBox(const char* n, const char* s, const DiamondBox* d=0)
     : Box(n), data(s), down(d) {}
 };
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void DiamondBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void DiamondBox::_draw(const Rectangle& r) const
 {
+  Color saved_color = getcolor();
   int x1 = r.center_x();
   int x = r.x(); int w = r.w(); if (w&1) w--; else {w -= 2; x++;}
   int y1 = r.center_y();
   int y = r.y(); int h = r.h(); if (h&1) h--; else {h -= 2; y++;}
-  const char* s = (flags & VALUE) ? down->data : data;
-  char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
+  const char* s = drawflags(VALUE) ? down->data : data;
+  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
@@ -77,8 +78,7 @@ void DiamondBox::_draw(const Rectangle& r, const Style* style, Flags flags) cons
     t += 2;
     x++; y++; w -= 2; h -= 2;
   }
-  if (w > 0 && h > 0 && !(flags & INVISIBLE)) {
-    Color bg, fg; style->boxcolors(flags, bg, fg);
+  if (w > 0 && h > 0 && !drawflags(INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     newpath();
@@ -86,9 +86,10 @@ void DiamondBox::_draw(const Rectangle& r, const Style* style, Flags flags) cons
     addvertex(x1, y);
     addvertex(x+w,y1);
     addvertex(x1,y+h);
-    setcolor(bg);
-    fillstrokepath(bg);
+    setcolor(getbgcolor());
+    fillstrokepath(getbgcolor());
   }
+  setcolor(saved_color);
 }
 
 static DiamondBox diamondDownBox("diamond_down", "2WWMMPPAA");

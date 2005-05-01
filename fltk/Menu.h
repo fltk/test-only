@@ -42,8 +42,7 @@ public:
   virtual int children(const Menu*, const int* indexes, int level);
   virtual Widget* child(const Menu*, const int* indexes, int level);
   virtual void flags_changed(const Menu*, Widget*);
-  
-  virtual ~List() {}
+  //virtual ~List() {} // not done as it slows program exit
 };
 
 enum { // Special flag values for add(), you can also use Flags.h values

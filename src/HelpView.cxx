@@ -1948,17 +1948,8 @@ Color                        // O - Color value
     return (BLACK);
   else if (strcasecmp (n, "red") == 0)
     return (RED);
-#ifdef __BORLANDC__             // Workaround for compiler bug...
-  else if (strcasecmp (n, "green") == 0) {
-    r = 0;
-    g = 0x80;
-    b = 0;
-    return (fl_rgb_color (r, g, b));
-  }
-#else
   else if (strcasecmp (n, "green") == 0)
     return (fltk::color (0, 0x80, 0));
-#endif // __BORLANDC__
   else if (strcasecmp (n, "yellow") == 0)
     return (YELLOW);
   else if (strcasecmp (n, "blue") == 0)

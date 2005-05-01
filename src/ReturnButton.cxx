@@ -35,7 +35,7 @@ using namespace fltk;
 */
 
 // this is public so draw_symbol can call it:
-void fl_glyph_return(int, const Rectangle& r, const Style* style, Flags)
+void fl_glyph_return(int, const Rectangle& r)
 {
   int size = r.w(); if (r.h()<size) size = r.h();
   int d = (size+2)/4; if (d<3) d = 3;
@@ -71,6 +71,7 @@ void fl_glyph_return(int, const Rectangle& r, const Style* style, Flags)
 }
 
 void ReturnButton::draw() {
+  update_flags();
   Button::draw(0,-2*int(textsize()));
 }
 

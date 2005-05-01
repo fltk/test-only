@@ -31,7 +31,7 @@
 
 using namespace fltk;
 
-void rgbImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
+void rgbImage::_draw(const fltk::Rectangle& r) const
 {
   if (!drawn()) {
     GSave gsave;
@@ -39,7 +39,7 @@ void rgbImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
     drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), depth_);
     if (depth_ == 4) const_cast<rgbImage*>(this)->alpha = rgb;
   }
-  Image::_draw(r, style, flags);
+  Image::_draw(r);
 }
 
 #if 0 //WRITE_JPEG

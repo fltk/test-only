@@ -41,7 +41,7 @@ public:
   int linedelta() const {return linedelta_;}
   const uchar* pixels() const {return pixels_;}
 
-  void _draw(const Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 
   rgbImage(const uchar* d, PixelType p, int W, int H) :

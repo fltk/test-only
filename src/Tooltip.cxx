@@ -97,9 +97,10 @@ void Tooltip::layout() {
 }
 
 void Tooltip::draw() {
+  drawstyle(style(),flags());
   draw_box();
   Rectangle r(w(),h()); //box()->inset(r);
-  draw_label(r, style(), flags());
+  draw_label(r, flags());
 }
 
 static void recent_timeout(void*) {
@@ -194,7 +195,7 @@ static const char* text_generator(Widget*, void* data) {return (const char*)data
   Same as the previous enter() except the tooltip is defined by the
   string constant passed as \a text. The \a text must be in a static
   location that will still exist when the tooltip pops up!
- 
+
   If \a widget or \a text is NULL then exit() is done instead and no tooltip
   appears.
 */

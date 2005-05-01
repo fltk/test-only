@@ -180,8 +180,8 @@ void Button::draw(int glyph, int glyph_width) const
 
   Box* box = style->buttonbox();
 
-  Flags box_flags = flags()&~(VALUE|PUSHED);
-  Flags glyph_flags = box_flags;
+  Flags box_flags = flags() & ~(VALUE|PUSHED) | OUTPUT;
+  Flags glyph_flags = box_flags & ~(SELECTED|HIGHLIGHT|OUTPUT);
   if (glyph_width) {
     if (value()) glyph_flags |= VALUE;
     if (this == pushed_button) {
@@ -226,12 +226,13 @@ void Button::draw(int glyph, int glyph_width) const
       draw_background();
     }
     // Draw the box:
-    box->draw(r, style, box_flags);
-    box->inset(r, style, box_flags);
+    drawstyle(style,box_flags);
+    box->draw(r);
+    box->inset(r);
   }
 
+  Rectangle lr(r);
   if (glyph_width) {
-    Rectangle lr(r);
     int g = abs(glyph_width);
     Rectangle gr(lr, g, g);
     if (glyph_width < 0) {
@@ -241,12 +242,12 @@ void Button::draw(int glyph, int glyph_width) const
       gr.x(lr.x()+3);
       lr.set_x(gr.r());
     }
-    (this->glyph())(glyph, gr, style, glyph_flags);
-    if (draw_label) this->draw_label(lr, style, box_flags);
-  } else {
-    if (draw_label) this->draw_label(r, style, box_flags);
+    drawstyle(style,glyph_flags);
+    (this->glyph())(glyph, gr);
   }
-  focusbox()->draw(r, style, box_flags);
+  drawstyle(style,box_flags);
+  if (draw_label) this->draw_label(lr, box_flags);
+  focusbox()->draw(r);
 }
 
 void Button::draw() {

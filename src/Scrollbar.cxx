@@ -80,7 +80,7 @@ int Scrollbar::value(int p, int w, int t, int l) {
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;
-  Rectangle r(this->w(),this->h()); box()->inset(r, style(), flags());
+  Rectangle r(this->w(),this->h()); box()->inset(r);
   int W,H;
   if (vertical()) {
     W = r.h(); H = r.w(); int T = b; b = t; t = T;
@@ -122,7 +122,7 @@ void Scrollbar::increment_cb() {
 
 int Scrollbar::handle(int event) {
   // area of scrollbar:
-  Rectangle r(w(),h()); box()->inset(r, style(), flags());
+  Rectangle r(w(),h()); box()->inset(r);
 
   // adjust slider area to be inside the arrow buttons:
   if (vertical()) {
@@ -158,18 +158,14 @@ int Scrollbar::handle(int event) {
   switch (event) {
   case FOCUS:
     return 0;
-  case ENTER:
   case MOVE:
-    if (which_part != which_highlight) {
-      which_highlight = which_part;
-      redraw_highlight();
-    }
+    if (which_part == which_highlight) return 1;
+  case ENTER:
+    which_highlight = which_part;
+    redraw_highlight();
     return 1;
   case LEAVE:
-    if (which_highlight) {
-      which_highlight = 0;
-      redraw_highlight();
-    }
+    if (last_) redraw_highlight();
     return 1;
   case PUSH:
     // Clicking on the slider or middle or right click on the trough
@@ -244,62 +240,60 @@ void Scrollbar::draw() {
   update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
 
-  Rectangle r(w(),h()); box()->inset(r, style(), flags());
+  Rectangle r(w(),h()); box()->inset(r);
 
   char pushed_ = pushed() ? which_pushed : NOTHING;
-  char highlight_ = belowmouse() ? which_highlight : NOTHING;
+  char highlight_ = pushed_;
+  if (!pushed_ && belowmouse()) highlight_ = which_highlight;
+  last_ = highlight_;
 
   // 1 = left/top   2 = right/bottom   5 = slider button
-  Flags f1 = 0, f2 = 0, f5 = 0;
-  if (!active_r()) {
-    f1 = f2 = f5 = INACTIVE;
-  } else {
-    if (pushed_ == UP_ARROW) f1 = VALUE|HIGHLIGHT;
-    else if (highlight_ == UP_ARROW) f1 = HIGHLIGHT;
-    if (pushed_ == DOWN_ARROW) f2 = VALUE|HIGHLIGHT;
-    else if (highlight_ == DOWN_ARROW) f2 = HIGHLIGHT;
-    if (pushed_ == SLIDER) f5 = VALUE|HIGHLIGHT;
-    else if (highlight_ == SLIDER) f5 = HIGHLIGHT;
-  }
+  Flags f1, f2, f5;
+  f1 = f2 = f5 = flags() | OUTPUT;
+  if (pushed_ == UP_ARROW) f1 |= VALUE;
+  if (pushed_ == DOWN_ARROW) f2 |= VALUE;
+  if (pushed_ == SLIDER) f5 |= VALUE;
+  if (highlight_ == UP_ARROW) f5 &=~HIGHLIGHT; else f1 &= ~HIGHLIGHT;
+  if (highlight_ == DOWN_ARROW) f5 &=~HIGHLIGHT; else f2 &= ~HIGHLIGHT; 
 
   Rectangle ir(r); // interior after removing arrow buttons
   if (vertical() && r.h() >= 3*r.w()) {
     Rectangle br(r); br.h(r.w());
-    if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(GLYPH_UP_BUTTON, br, f1);
+    if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
+      drawstyle(style(),f1);
+      draw_glyph(GLYPH_UP_BUTTON, br);
+    }
     br.y(r.b()-r.w());
-    if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(GLYPH_DOWN_BUTTON, br, f2);
+    if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
+      drawstyle(style(),f2);
+      draw_glyph(GLYPH_DOWN_BUTTON, br);
+    }
     ir.move_y(r.w()); ir.move_b(-r.w());
 
   } else if (r.w() >= 3*r.h()) { // horizontal:
     Rectangle br(r); br.w(r.h());
-    if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(GLYPH_LEFT_BUTTON, br, f1);
+    if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
+      drawstyle(style(),f1);
+      draw_glyph(GLYPH_LEFT_BUTTON, br);
+    }
     br.x(r.r()-r.h());
-    if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(GLYPH_RIGHT_BUTTON, br, f2);
+    if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
+      drawstyle(style(),f2);
+      draw_glyph(GLYPH_RIGHT_BUTTON, br);
+    }
     ir.move_x(r.h()); ir.move_r(-r.h());
   }
-  last_ = highlight_;
 
-#if USE_CLIPOUT
-  if (Slider::draw(ir, f5, false)) {
-    setcolor(color());
-    fillrect(ir);
-    pop_clip();
-  }
-#else
   setcolor(color());
   fillrect(ir);
   Slider::draw(ir, f5, false);
-#endif
 }
 
-static void glyph(int glyph, const Rectangle& r, const Style* style, Flags flags)
+static void glyph(int glyph, const Rectangle& r)
 {
-  if (glyph<100) flags &= ~VALUE;
-  Widget::default_glyph(glyph, r, style, flags);
+  // this stops the scrollbar from being pushed-in:
+  if (glyph<100) setdrawflags(drawflags()&~VALUE);
+  Widget::default_glyph(glyph, r);
 }
 
 static void revert(Style* s) {

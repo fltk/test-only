@@ -112,14 +112,13 @@ void MenuTitle::draw() {
   const Style* style = menustate->widget->style();
   if (style->hide_underscore()) fl_hide_underscore = true;
   Box* box = style->buttonbox();
-  // popup menus may have no box set:
-  if (box == NO_BOX) box = Widget::default_style->buttonbox();
 
   if (menustate->menubar) {
 
-    {Rectangle r(w(),h());
-    box->draw(r, style, VALUE|OUTPUT|HIGHLIGHT);
-    box->inset(r, style,  VALUE|OUTPUT|HIGHLIGHT);
+    {drawstyle(style,VALUE|HIGHLIGHT);
+    Rectangle r(w(),h());
+    box->draw(r);
+    box->inset(r);
     push_clip(r);}
     // Get the Item directly from the menubar and draw it:
     Item::set_style(menustate->widget);
@@ -144,7 +143,7 @@ void MenuTitle::draw() {
 	menustate->widget->children(menustate->indexes,1)>=0) {
       // Use the item's fontsize for the size of the arrow, rather than h:
       int nh = int(item->textsize());
-      draw_glyph(GLYPH_RIGHT, Rectangle(w()-nh, ((h()-nh)>>1), nh, nh), flags);
+      draw_glyph(GLYPH_RIGHT, Rectangle(w()-nh, ((h()-nh)>>1), nh, nh));
     }
 
     pop_matrix();
@@ -153,9 +152,10 @@ void MenuTitle::draw() {
 
   } else {
     // a title on a popup menu is drawn like a button
+    drawstyle(style, 0);
     Rectangle r(w(),h());
-    box->draw(r, style, OUTPUT);
-    draw_label(r, style, OUTPUT);
+    box->draw(r);
+    draw_label(r, 0);
   }
   fl_hide_underscore = false;
 }
@@ -267,7 +267,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   Item::clear_style();
 
   Rectangle r(W,H);
-  box->inset(r, widget->style(), OUTPUT);
+  box->inset(r);
   W += hotKeysW + (W-r.w());
   if (W > widget->w()) widget->w(W);
   widget->h(H + (H-r.h()));
@@ -292,8 +292,9 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   const unsigned char damage = widget->damage();
 
   Rectangle r(widget->w(), widget->h());
-  if (damage != DAMAGE_CHILD) box->draw(r, widget->style(), OUTPUT);
-  box->inset(r, widget->style(), OUTPUT);
+  drawstyle(widget->style(),0);
+  if (damage != DAMAGE_CHILD) box->draw(r);
+  box->inset(r);
 
   int children = this->children(indexes,level);
   if (children<1) return;
@@ -326,6 +327,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     // for minimal update, only draw the items that changed selection:
     if (damage != DAMAGE_CHILD || i==selected || i==drawn_selected) {
       Flags flags = item->flags();
+      if (flags&NOTACTIVE) flags |= INACTIVE;
       bool clipped = false;
 
       if (i == selected && !(flags & (OUTPUT|NOTACTIVE))) {
@@ -334,7 +336,8 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 	  flags |= HIGHLIGHT;
 	  Rectangle R(ir);
 	  if (widget->horizontal()) {R.move_y(1); R.move_b(-1);}
-	  widget->buttonbox()->draw(R,widget->style(),(flags&~VALUE)|OUTPUT);
+	  drawstyle(widget->style(), flags&~VALUE);
+	  widget->buttonbox()->draw(R);
 	  R.inset(1);
 	  push_clip(R); clipped = true;
 	} else {
@@ -348,7 +351,8 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 	// clipping so background pixmaps will work:
 	if (damage == DAMAGE_CHILD) {
 	  push_clip(ir);
-	  box->draw(Rectangle(widget->w(), widget->h()), style(), OUTPUT);
+	  drawstyle(widget->style(), flags&~VALUE);
+	  box->draw(Rectangle(widget->w(), widget->h()));
 	  pop_clip();
 	}
       }
@@ -370,14 +374,13 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       else if (this->children(array,level+1)>=0) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
 	int nh = int(item->textsize());
-	draw_glyph(GLYPH_RIGHT, Rectangle(ir.r()-nh, ir.y()+((ir.h()-nh)>>1), nh, nh), flags);
+	draw_glyph(GLYPH_RIGHT, Rectangle(ir.r()-nh, ir.y()+((ir.h()-nh)>>1), nh, nh));
       } else if (!widget->parent()) {
 	unsigned hotkey = item->shortcut();
 	if (hotkey)
 	  item->labeltype()->draw(key_name(hotkey),
 				  Rectangle(ir.x(), ir.y(), ir.w()-3, ir.h()),
-				  item->style(),
-				  flags|ALIGN_RIGHT|OUTPUT);
+				  ALIGN_RIGHT);
       }
       item->flags(save_flags);
       if (clipped) pop_clip();
@@ -402,7 +405,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
     if (mx >= widget->w()) return -1;
   }
   Rectangle r(widget->w(),widget->h());
-  menubox(widget)->inset(r, widget->style(), OUTPUT);
+  menubox(widget)->inset(r);
 
   int children = this->children(indexes,level);
   int array[20];
@@ -441,7 +444,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
 			     int index) const
 {
   Rectangle r(widget->w(), widget->h());
-  menubox(widget)->inset(r, widget->style(), OUTPUT);
+  menubox(widget)->inset(r);
 
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
@@ -497,7 +500,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   }
 
   Rectangle temprect(100,100);
-  menubox(this)->inset(temprect, style(), 0);
+  menubox(this)->inset(temprect);
   const int dh = 100-temprect.h();
   int Wtitle = 0;
   int Htitle = 0;
@@ -512,7 +515,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     // label title
     setfont(labelfont(), labelsize());
     Wtitle = Htitle = 300; // rather arbitrary choice for maximum wrap width
-    measure(t, Wtitle, Htitle, OUTPUT|ALIGN_WRAP);
+    measure(t, Wtitle, Htitle, ALIGN_WRAP);
     Wtitle += 16;
     Htitle += dh;
     title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, t);
@@ -527,11 +530,13 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   // (which indicates we are trying to line up with some widget):
   if (!Wp) {
     if (selected >= 0) X -= w()/2;
-    if (X < MENUAREA.x()) X = MENUAREA.x();
-    if (X > MENUAREA.r()-w()) {
-      if (rightedge) X = rightedge-w();
-      else X = MENUAREA.r()-w();
-    }
+  }
+
+  // Restrict to monitor area:
+  if (X < MENUAREA.x()) X = MENUAREA.x();
+  if (X > MENUAREA.r()-w()) {
+    if (rightedge) X = rightedge-w();
+    else X = MENUAREA.r()-w();
   }
 
   x(X);

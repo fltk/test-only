@@ -272,5 +272,6 @@ e colors affect.");
     o->resizable(o);
   }
   w->show(argc, argv);
+  fltk::Widget::default_style->highlight_color(fltk::YELLOW);
   return  fltk::run();
 }

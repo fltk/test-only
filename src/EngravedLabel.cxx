@@ -30,34 +30,25 @@
 #include <fltk/draw.h>
 using namespace fltk;
 
-extern bool fl_drawing_shadow;
-
 // data is dx, dy, color triples
 
-void EngravedLabel::draw(const char* label,
-			 const Rectangle& r,
-			 const Style* style, Flags flags) const
+void EngravedLabel::draw(const char* label, const Rectangle& r, Flags align) const
 {
-  if (flags&OUTPUT)
-    setfont(style->textfont(), style->textsize());
-  else
-    setfont(style->labelfont(), style->labelsize());
-  fl_drawing_shadow = true;
+  Color saved_color = getcolor();
+  Flags saved_flags = drawflags();
+  setdrawflags(saved_flags|INACTIVE);
   Rectangle r1(r);
   for (const int *data = this->data; ; data += 3) {
     r1.x(r.x()+data[0]);
     r1.y(r.y()+data[1]);
     Color fg = (Color)(data[2]);
-    if (!fg) {
-      fl_drawing_shadow = false;
-      Color bg; style->boxcolors(flags, bg, fg);
-      setcolor(fg);
-      drawtext(label, r1, flags);
-      break;
-    }
+    if (!fg) break;
     setcolor(fg);
-    drawtext(label, r1, flags);
+    drawtext(label, r1, align);
   }
+  setdrawflags(saved_flags);
+  setcolor(saved_color);
+  drawtext(label, r1, align);
 }
 
 static const int shadow_data[2][3] = {{2,2,GRAY33},{0,0,0}};

@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.19 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Style structure used by Widgets
 //
@@ -99,9 +99,7 @@ class Style;
 
 /*! \addtogroup glyphs
   \{ */
-typedef void (*GlyphStyle)(int number,
-			   const Rectangle&, const Style*,
-			   Flags);
+typedef void (*GlyphStyle)(int number, const Rectangle&);
 /*! Numbers understood by fltk::Widget::default_glyph(). All other numbers
   draw the same as GLYPH_BOX. The numbers
   0-99 are reserved for per-Widget glyphs, for instance for parts
@@ -176,8 +174,6 @@ class FL_API Style {
   bool		draw_boxes_inactive() const {return draw_boxes_inactive_;}
   int		wheel_scroll_lines() const {return wheel_scroll_lines_;}
 
-  Flags boxcolors(Flags flags, Color& bg, Color& fg) const;
-
   // Set functions:
   void box		(Box* v)	{box_ = v;		}
   void buttonbox	(Box* v)	{buttonbox_ = v;	}
@@ -241,5 +237,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.19 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

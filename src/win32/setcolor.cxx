@@ -26,7 +26,6 @@
 // This file does not compile independently, it is included by color.cxx
 
 // The current color:
-Color		fltk::current_color_;
 COLORREF	fltk::current_xpixel;
 HPALETTE	fltk::xpalette;
 

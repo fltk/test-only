@@ -65,7 +65,10 @@ void ColorMenu::drawbox(Color C) {
   fillrect(r);
   if (c == which) {
     r.move_x(1); r.move_y(1);
-    DOWN_BOX->draw(r, style(), INVISIBLE);
+    // draw down-box frame:
+    setdrawflags(INVISIBLE);
+    DOWN_BOX->draw(r);
+    setdrawflags(0);
   }
 }
 

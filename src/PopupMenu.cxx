@@ -79,16 +79,17 @@ void PopupMenu::draw() {
       || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
     draw_background();
   }
-  Flags flags = update_flags();
+  Flags flags = update_flags()|OUTPUT;
   if (::pushed == this) flags |= VALUE|HIGHLIGHT;
+  drawstyle(style(), flags);
   Rectangle r(w(),h());
-  box->draw(r, style(), flags);
-  box->inset(r, style(), flags);
-  draw_label(r, style(), flags);
+  box->draw(r);
+  box->inset(r);
+  draw_label(r, flags);
   // draw the little mark at the right:
 //    int w1 = int(textsize());
 //    draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
-  focusbox()->draw(r, style(), flags);
+  focusbox()->draw(r);
 }
 
 /*! Wrapper for Menu::popup(). For NORMAL PopupMenu this places the

@@ -47,11 +47,8 @@ static void rbox(const Rectangle& r, Color fill, Color line) {
 
 class RoundedBox : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Color bg, fg; style->boxcolors(f, bg, fg);
-    rbox(r, bg, fg);
-  }
-  void inset(Rectangle& r, const Style*, Flags) const {r.inset(1);}
+  void _draw(const Rectangle& r) const {rbox(r, getbgcolor(), getcolor());}
+  void inset(Rectangle& r) const {r.inset(1);}
   RoundedBox(const char* n) : Box(n) {}
 };
 static RoundedBox roundedBox("rounded");
@@ -62,7 +59,8 @@ Box* const fltk::ROUNDED_BOX = &roundedBox;
 
 class RShadowBox : public Box {
 public:
-  void _draw(const Rectangle& r1, const Style* style, Flags f) const {
+  void _draw(const Rectangle& r1) const {
+    const Color fg = getcolor();
     Rectangle r(r1);
     // draw shadow, in lower-right of r1:
     r.move_x(3);
@@ -70,9 +68,10 @@ public:
     rbox(r, GRAY33, GRAY33);
     // draw the box in upper-left of r1:
     r.move(-3,-3);
-    roundedBox.draw(r, style, f);
+    setcolor(fg);
+    roundedBox.draw(r);
   }
-  void inset(Rectangle& r, const Style*, Flags) const {
+  void inset(Rectangle& r) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-5);
@@ -88,11 +87,12 @@ Box* const fltk::RSHADOW_BOX = &rshadowBox;
 
 class RFlatBox : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Color bg, fg; style->boxcolors(f, bg, fg);
-    rbox(r, bg, bg);
+  void _draw(const Rectangle& r) const {
+    const Color fg = getcolor();
+    rbox(r, getbgcolor(), getbgcolor());
+    setcolor(fg);
   }
-  void inset(Rectangle& r, const Style*, Flags) const {r.inset(7);}
+  void inset(Rectangle& r) const {r.inset(7);}
   RFlatBox(const char* n) : Box(n) {}
 };
 static RFlatBox rflatBox("rflat");

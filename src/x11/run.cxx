@@ -231,7 +231,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static Widget *spotw = NULL;
   static XPoint	spot, spot_set;
   static Color background_orig, textcolor_orig;
-  static Color background, textcolor;
   XFontSet fs = NULL;
 
   if (!fl_xim_ic || !fl_is_over_the_spot) return;
@@ -267,7 +266,8 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     change = 1;
   }
 
-  w->style()->boxcolors(w->flags()|OUTPUT,background,textcolor);
+  static Color background = w->color();
+  static Color textcolor = w->textcolor();
   if (background_orig != background || textcolor_orig != textcolor) {
     background_orig = background;
     textcolor_orig = textcolor;

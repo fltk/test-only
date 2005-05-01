@@ -54,7 +54,7 @@ void TiledImage::_measure(int& w, int& h) const {
   corner at \a x,y. This checks the current clip region and does
   minimal drawing of only the visible portions of the image.
 */
-void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
+void TiledImage::_draw(const Rectangle& r) const
 {
   if (!image_) return;
   int iw = r.w();
@@ -82,7 +82,7 @@ void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) cons
     ir.y(cr.x()-cy);
     while (-cx < cr.w()) {
       ir.x(cr.x()-cx);
-      image_->draw(ir, style, flags);
+      image_->draw(ir);
       cx -= iw;
     }
     cy -= ih;
@@ -91,8 +91,8 @@ void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) cons
   pop_clip();
 }
 
-void TiledImage::inset(Rectangle& r, const Style* style, Flags flags) const {
-  if (image_) image_->inset(r,style,flags);
+void TiledImage::inset(Rectangle& r) const {
+  if (image_) image_->inset(r);
 }
 
 //

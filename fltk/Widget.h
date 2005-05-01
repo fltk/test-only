@@ -62,7 +62,7 @@ public:
   void	style(const Style& s) { style_ = &s; }
   bool	copy_style(const Style* s);
   static NamedStyle* default_style;
-  static void default_glyph(int,const Rectangle&,const Style*,Flags);
+  static void default_glyph(int, const Rectangle&);
 
   Group* parent() const	{ return parent_; }
   void	parent(Group* w)	{ parent_ = w; }
@@ -197,9 +197,9 @@ public:
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;
-  void  draw_glyph(int t, const Rectangle& r, Flags f) const {glyph()(t,r,style_,f);}
+  void  draw_glyph(int t, const Rectangle& r) const {glyph()(t,r);}
   void	draw_label() const	;
-  void  draw_label(const Rectangle&, const Style*, Flags) const ;
+  void  draw_label(const Rectangle&, Flags) const ;
   void	cursor(Cursor*) const	;
 
   void	measure_label(int&, int&) const ;

@@ -93,15 +93,16 @@ void Item::set_style(const Style* style) {
     but this functionality may be removed.
 */
 void Item::draw() {
+  drawstyle(style(), flags());
   //if (buttonbox() != NO_BOX) draw_buttonbox();
   Rectangle r(w(),h());
   //box()->inset(r);
   if (type()) {
     int gw = int(textsize())+2;
-    draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw), flags());
+    draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw));
     r.move_x(gw+3);
   }
-  draw_label(r, style(), flags()|OUTPUT);
+  draw_label(r, flags());
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -111,7 +112,7 @@ void Item::layout() {
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(textfont(), textsize());
   int w = 250, h = 250;
-  measure(label(), w, h, flags());
+  measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
   if (type()) w += 15;
   if (image()) {
@@ -169,10 +170,11 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 
 void ItemGroup::draw() {
   if (damage()&~DAMAGE_CHILD) {
+    drawstyle(style(), flags());
     //if (box() != NO_BOX) draw_box();
     Rectangle r(w(),h());
     //box()->inset(r);
-    draw_label(r, style(), flags()|OUTPUT);
+    draw_label(r, flags());
   }
 }
 
@@ -181,7 +183,7 @@ void ItemGroup::layout() {
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(textfont(), textsize());
   int w = 250, h = 250;
-  measure(label(), w, h, flags());
+  measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
   if (image()) {
     int W,H;

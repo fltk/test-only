@@ -60,7 +60,7 @@ public:
   void destroy_cache();
 
   // implementation as Symbol subclass:
-  void _draw(const Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
   void _measure(int& W, int& H) const;
   bool fills_rectangle() const;
 
@@ -96,8 +96,8 @@ public:
   virtual void	color_average(Fl_Color c, float i);
   void		inactive() { color_average(FL_GRAY, .33f); }
   virtual void	desaturate();
-  virtual void	draw(int X, int W, int W, int H, Flags F = 0);
-  void		draw(int X, int Y, Flags F = 0) { draw(X, Y, w(), h(), F); }
+  virtual void	draw(int X, int W, int W, int H);
+  void		draw(int X, int Y) { draw(X, Y, w(), h()); }
   virtual void	measure(int& W, int& H);
   virtual void	uncache();
 

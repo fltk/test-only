@@ -28,16 +28,17 @@ using namespace fltk;
 // keystrokes do not do anything.
 
 void ValueOutput::draw() {
-  update_flags();
-  if (damage() & DAMAGE_ALL) draw_box();
-  Rectangle r(w(),h()); box()->inset(r, style(), flags());
+  drawstyle(style(),update_flags());
+  if (damage() & DAMAGE_ALL) draw_frame();
+  Rectangle r(w(),h()); box()->inset(r);
   push_clip(r);
-  setfont(textfont(), textsize());
   char buf[40];
   format(buf);
   if (!(damage() & DAMAGE_ALL)) {
-    setcolor(color());
+    Color fg = getcolor();
+    setcolor(getbgcolor());
     fillrect(r);
+    setcolor(fg);
   }
 //    if (focused()) {
 //      setcolor(selection_color());
@@ -45,7 +46,6 @@ void ValueOutput::draw() {
 //      fillrect(ir);
 //	setcolor(selection_textcolor());
 //    } else
-  setcolor(textcolor());
   drawtext(buf, r.x()+3, r.y()+(int(r.h()+getascent()-getdescent()) >> 1));
   pop_clip();
 }
@@ -73,4 +73,3 @@ int ValueOutput::handle(int event) {
     return Valuator::handle(event);
   }
 }
- 

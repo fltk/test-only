@@ -1,4 +1,4 @@
-// "$Id: SharedImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -108,7 +108,7 @@ public:
   /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);
 
-  void _draw(const Rectangle&, const Style*, Flags = 0) const;
+  void _draw(const Rectangle&) const;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -204,4 +204,4 @@ public:
 
 #endif
 
-// End of "$Id: SharedImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
+// End of "$Id$"

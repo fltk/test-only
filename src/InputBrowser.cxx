@@ -91,7 +91,8 @@ class ComboBrowser : public Browser {
     ComboBrowser(int x, int y, int w, int h);
 };
 
-extern void browser_glyph(int glyph, const Rectangle&, const Style* style, Flags f);
+extern void browser_glyph(int glyph, const Rectangle&);
+
 static void revert_combostyle(Style *s) {
   s->box_ = BORDER_BOX;
   s->glyph_ = browser_glyph;
@@ -265,12 +266,12 @@ InputBrowser::handle(int e) {
 
 void
 InputBrowser::draw() {
-  Flags f = update_flags();
+  drawstyle(style(),update_flags());
   minw_ = w();
-  if (damage()&DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r,style(),f);
+  Rectangle r(w(),h()); box()->inset(r);
   int W1 = r.h()*4/5;
   if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
+    if (damage()&DAMAGE_ALL) draw_frame();
     input.resize(r.x(), r.y(), r.w()-W1, r.h());
     input.set_damage(DAMAGE_ALL);
     input.copy_style(style()); // force it to use this style
@@ -283,10 +284,12 @@ InputBrowser::draw() {
     input.set_damage(0);
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
+    Flags f = flags() & ~FOCUSED | OUTPUT;
     if (ib == this) f |= VALUE;
+    drawstyle(style(),f);
     // draw the little mark at the right:
     r.x(r.x()+r.w()-W1); r.w(W1);
-    draw_glyph(GLYPH_DOWN_BUTTON, r, f);
+    draw_glyph(GLYPH_DOWN_BUTTON, r);
   }
 }
 

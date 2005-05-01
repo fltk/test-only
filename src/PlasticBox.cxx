@@ -38,18 +38,19 @@ static inline Color shade_color(uchar gc, Color bc) {
 
 class PlasticBox : public FrameBox {
 public:
-  void _draw(const Rectangle&, const Style*, Flags=0) const;
+  void _draw(const Rectangle&) const;
   PlasticBox(const char* n, const char* s, const FrameBox* d=0)
     : FrameBox(n, s, d) {}
 };
 
-void PlasticBox::_draw(const Rectangle& r, const Style* style, Flags f) const
+void PlasticBox::_draw(const Rectangle& r) const
 {
-  const char* c = (f & VALUE) ? down->data() : data();
-  char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
+  const char* c = drawflags(VALUE) ? down->data() : data();
+  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(c, buf); c = buf;}
 
-  Color bc, fg; style->boxcolors(f, bc, fg);
+  const Color bc = getbgcolor();
+  const Color fg = getcolor();
 
   int		i, j;
   int		clen = strlen(c) - 1;
@@ -124,6 +125,7 @@ void PlasticBox::_draw(const Rectangle& r, const Style* style, Flags f) const
     drawline(x + i, y, x + w - i, y);
     drawline(x + i, y + h - 1, x + w - i, y + h);
   }
+  setcolor(fg);
 }
 
 static PlasticBox plasticDownBox(0, "STUVWWWVT");

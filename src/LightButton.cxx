@@ -23,6 +23,7 @@
 
 #include <fltk/LightButton.h>
 #include <fltk/Box.h>
+#include <fltk/draw.h>
 
 using namespace fltk;
 
@@ -39,18 +40,20 @@ using namespace fltk;
   When off the light is color(), when on the light is selection_color().
 */
 
-static void glyph(int/*t*/, const Rectangle& r, const Style* style, Flags f)
+static void glyph(int/*t*/, const Rectangle& r)
 {
+  Color saved = getbgcolor();
+  Flags f = drawflags();
   if (f & VALUE) {
-    f |= SELECTED;
-  } else if (style->color_) {
-    // if user set the color of the button draw that color
-    f |= OUTPUT;
-  } else {
-    f |= INVISIBLE; // draw frame only
+    setbgcolor(drawstyle()->selection_color());
+  } else if (!drawstyle()->color_) {
+    // if user did not set color make the interior invisible
+    setdrawflags(INVISIBLE);
   }
   int ww = r.w()/2+1; // we will center box of this width in area
-  THIN_DOWN_BOX->draw(Rectangle(r, ww, r.h()), style, f);
+  THIN_DOWN_BOX->draw(Rectangle(r, ww, r.h()));
+  drawflags(f);
+  setbgcolor(saved);
 }
 
 static void revert(Style* s) {

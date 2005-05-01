@@ -34,13 +34,13 @@ using namespace fltk;
 
 class OvalBox : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Color bg, fg; style->boxcolors(f,bg,fg);
-    setcolor(bg);
+  void _draw(const Rectangle& r) const {
+    Color fg = getcolor();
+    setcolor(getbgcolor());
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  void inset(Rectangle& r, const Style*, Flags) const {r.inset(1);}
+  void inset(Rectangle& r) const {r.inset(1);}
   OvalBox(const char* n) : Box(n) {}
 };
 static OvalBox ovalBox("oval");
@@ -51,18 +51,19 @@ Box* const fltk::OVAL_BOX = &ovalBox;
 
 class OvalShadowBox : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Rectangle r1(r); 
+  void _draw(const Rectangle& r) const {
+    const Color bg = getbgcolor();
+    const Color fg = getcolor();
+    Rectangle r1(r);
     r1.move(3, 3);
     setcolor(GRAY33);
     addchord(r1, 0, 360);
     fillpath();
-    Color bg, fg; style->boxcolors(f,bg,fg);
     setcolor(bg);
     addchord(r, 0, 360);
     fillstrokepath(fg);
   }
-  void inset(Rectangle& r, const Style*, Flags) const {
+  void inset(Rectangle& r) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-5);
@@ -78,11 +79,12 @@ Box* const fltk::OSHADOW_BOX = &ovalShadowBox;
 
 class OvalFlatBox : public Box {
 public:
-  void _draw(const Rectangle& r, const Style* style, Flags f) const {
-    Color bg, fg; style->boxcolors(f,bg,fg);
-    setcolor(bg);
+  void _draw(const Rectangle& r) const {
+    const Color fg = getcolor();
+    setcolor(getbgcolor());
     addchord(r, 0, 360);
     fillpath();
+    setcolor(fg);
   }
   OvalFlatBox(const char* n) : Box(n) {}
 };

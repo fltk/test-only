@@ -38,21 +38,20 @@ class Style;
 
 class FL_API LabelType {
 public:
-  virtual void draw(const char*, const Rectangle&, const Style*, Flags) const;
+  virtual void draw(const char*, const Rectangle&, Flags) const;
   const char* name;
   LabelType* next;
   static LabelType* first;
   LabelType(const char* n) : name(n), next(first) {first = this;}
   static LabelType* find(const char* name);
-  
-  virtual ~LabelType() {}
+  // virtual ~LabelType() {} // not done as it slows program exit
 };
 
 // You can use this to draw overlapping patterns
 class FL_API EngravedLabel : public LabelType {
   const int* data;
 public:
-  void draw(const char*, const Rectangle&, const Style*, Flags) const;
+  void draw(const char*, const Rectangle&, Flags) const;
   EngravedLabel(const char * n, const int p[][3])
     : LabelType(n), data((const int*)p) {}
 };

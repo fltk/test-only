@@ -40,28 +40,25 @@ using namespace fltk;
   set in an inherited style()).
 */
 
-static void default_glyph(int glyph,
-			  const Rectangle& R, const Style* style, Flags flags)
+static void default_glyph(int glyph, const Rectangle& R)
 {
-  Box* box = style->box();
-  // Use the white rather than the gray color:
-  flags = flags&~(SELECTED|HIGHLIGHT)|OUTPUT;
+  Box* box = drawstyle()->box();
   // for back compatability with some programs that changed the
   // square into a diamond or circle, where the checkmark does
   // not look too good. Draw the box colored in with the
   // selected color instead:
   if (!box->fills_rectangle()) {
-    if (flags&VALUE) flags |= SELECTED;
-    box->draw(R, style, flags);
+    Color saved = getbgcolor();
+    if (drawflags()&VALUE) setbgcolor(drawstyle()->selection_color());
+    box->draw(R);
+    setbgcolor(saved);
     return;
   }
   // Otherwise draw the box with normal colors and then draw checkmark
   // inside it:
-  box->draw(R, style, flags);
-  if (flags&VALUE) {
-    Rectangle r(R); box->inset(r, style, flags);
-    Color bg, fg; style->boxcolors(flags, bg, fg);
-    setcolor(fg);
+  box->draw(R);
+  if (drawflags()&VALUE) {
+    Rectangle r(R); box->inset(r);
     if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
     int x = r.x()+1;
     int w = r.h()-2;

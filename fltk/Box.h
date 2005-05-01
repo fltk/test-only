@@ -41,8 +41,8 @@ protected:
   int dx, dy, dw, dh;
 public:
   const char* data() const {return data_;}
-  void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
+  void inset(Rectangle&) const;
   bool fills_rectangle() const;
   bool is_frame() const;
   FrameBox(const char* n, const char* c, const FrameBox* d=0);
@@ -50,7 +50,7 @@ public:
 
 class FL_API FlatBox : public Box {
 public:
-  void _draw(const Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
   bool fills_rectangle() const;
   bool is_frame() const;
   FlatBox(const char* n);
@@ -59,8 +59,8 @@ public:
 class FL_API HighlightBox : public FlatBox {
   const Box* down;
 public:
-  void _draw(const Rectangle&, const Style*, Flags) const;
-  void inset(Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
+  void inset(Rectangle&) const;
   bool fills_rectangle() const;
   bool is_frame() const;
   HighlightBox(const char* n, const Box* d);

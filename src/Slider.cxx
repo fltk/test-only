@@ -290,10 +290,9 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 
 void Slider::draw()
 {
-  Flags flags = update_flags();
   // figure out the inner size of the box:
   Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r, style(), flags);
+  Rectangle r(w(),h()); box->inset(r);
   Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
@@ -313,6 +312,7 @@ void Slider::draw()
     }
   }
 
+  Flags flags = update_flags();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
@@ -321,54 +321,37 @@ void Slider::draw()
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
   bool drawslot = r.y() == 0;
-#if USE_CLIPOUT
-  if (draw(sr, f2, drawslot)) {
-#endif
 
-    // draw the box or the visible parts of the window
-    if (!box->fills_rectangle()) draw_background();
-    box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
+  // draw the box or the visible parts of the window
+  if (!box->fills_rectangle()) draw_background();
+  drawstyle(style(),flags);
+  box->draw(Rectangle(w(), h()));
 
-    // draw the focus indicator inside the box:
-    focusbox()->draw(r, style(), flags|OUTPUT);
+  // draw the focus indicator inside the box:
+  focusbox()->draw(r);
 
-    if (type() & TICK_BOTH) {
-      if (horizontal()) {
-	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: r.set_b(sr.center_y()); break;
-	case TICK_BELOW: r.set_y(sr.center_y()+(drawslot?3:0)); r.move_b(-1); break;
-	}
-      } else {
-	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: r.set_r(sr.center_x()); break;
-	case TICK_BELOW: r.set_x(sr.center_x()+(drawslot?3:0)); r.move_r(-1); break;
-	}
+  if (type() & TICK_BOTH) {
+    if (horizontal()) {
+      switch (type()&TICK_BOTH) {
+      case TICK_ABOVE: r.set_b(sr.center_y()); break;
+      case TICK_BELOW: r.set_y(sr.center_y()+(drawslot?3:0)); r.move_b(-1); break;
       }
-      Color color = textcolor();
-      if (flags&INACTIVE) color = inactive(color);
-      setcolor(color);
-      draw_ticks(r, (slider_size()+1)/2);
+    } else {
+      switch (type()&TICK_BOTH) {
+      case TICK_ABOVE: r.set_r(sr.center_x()); break;
+      case TICK_BELOW: r.set_x(sr.center_x()+(drawslot?3:0)); r.move_r(-1); break;
+      }
     }
-
-#if !USE_CLIPOUT
-    draw(sr, f2, drawslot);
-#else
-    pop_clip();
+    setcolor(inactive(textcolor(), flags));
+    draw_ticks(r, (slider_size()+1)/2);
   }
-#endif
+
+  draw(sr, f2, drawslot);
 }
 
 /*!
-  If fltk was compiled with USE_CLIPOUT this will draw the moving
-  parts of the slider and then remove them from the clip. You then
-  can draw the background and do pop_clip() if this returns true.
-  Don't draw anything if this returns false.
-
-  If fltk was compiled without USE_CLIPOUT (the default) then this
-  draws the moving parts and you should have \e already drawn the
-  background. Do not do pop_clip! Maybe this should be changed so
-  these are two different functions, to surround the draw-background
-  code.
+  Draw the moving parts and the "slot". You should already have drawn
+  the background of the slider.
 */
 
 bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
@@ -378,6 +361,8 @@ bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
 
   // if user directly set selected_color we use it:
   if (style()->selection_color_) flags |= SELECTED;
+
+  drawstyle(style(),flags|OUTPUT);
 
   // figure out where the slider should be:
   Rectangle s(r);
@@ -395,38 +380,6 @@ bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
     else sglyph=16;
   }
 
-#if USE_CLIPOUT
-  if (damage()&DAMAGE_ALL) {
-
-    push_clip(Rectangle(w(), h()));
-    draw_glyph(sglyph, s, flags); // draw the slider
-    clipout(s); // clip out the area of the slider
-
-  } else if (sp != old_position) {
-
-    // update a moving slider:
-    draw_glyph(sglyph, s, flags); // draw slider in new position
-    // clip to the region the old slider was in:
-    Rectangle os(s);
-    if (horizontal()) {
-      if (slider_size_) os.x(old_position);
-      else os.w(old_position);
-    } else {
-      if (slider_size_) os.y(old_position);
-      else os.set_x(old_position);
-    }
-    push_clip(os);
-    clipout(s); // don't erase new slider
-    
-  } else {
-
-    // update for the highlight turning on/off
-    if (damage() & DAMAGE_HIGHLIGHT) draw_glyph(sglyph, s, flags);
-    // otherwise no changes
-    return false;
-
-  }
-#endif
   old_position = sp;
 
   // we draw a slot if it seems the box has no border:
@@ -445,18 +398,13 @@ bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
       sl.x(r.x()+(r.w()-slot_size_+1)/2);
       sl.w(slot_size_);
     }
-    THIN_DOWN_BOX->draw(sl, style(), flags&INACTIVE|INVISIBLE);
-    Rectangle ir(sl); ir.inset(1);
-    setcolor(BLACK);
-    fillrect(ir);
-#if USE_CLIPOUT
-    sl.inset(-1);
-    clipout(sl);
-#endif
+    const Color saved = getbgcolor();
+    setbgcolor(BLACK);
+    THIN_DOWN_BOX->draw(sl);
+    setbgcolor(saved);
   }
-#if !USE_CLIPOUT
-  draw_glyph(sglyph, s, flags); // draw slider in new position
-#endif
+
+  draw_glyph(sglyph, s); // draw slider in new position
   return true;
 }
 
@@ -476,7 +424,7 @@ int Slider::handle(int event, const Rectangle& r) {
     // figure out the space the slider moves in and where the event is:
     int w,mx;
     Rectangle r1(r);
-    box()->inset(r1, style(), flags());
+    box()->inset(r1);
     if (horizontal()) {
       w = r1.w();
       mx = event_x()-r1.x();
@@ -544,10 +492,12 @@ int Slider::handle(int event, const Rectangle& r) {
 
 int Slider::handle(int event) {return handle(event,Rectangle(w(),h()));}
 
-static void glyph(int glyph, const Rectangle& r, const Style* style, Flags flags)
+static void glyph(int glyph, const Rectangle& r)
 {
-  if (glyph<100) flags &= ~VALUE;
-  Widget::default_glyph(glyph, r, style, flags);
+  const Color saved = getcolor();
+  // this stops the scrollbar from being pushed-in:
+  if (glyph<100) setdrawflags(drawflags()&~VALUE);
+  Widget::default_glyph(glyph, r);
   // draw the divider line into slider:
   if (r.w() < 4 || r.h() < 4) return;
   if (glyph==17) { // horizontal
@@ -563,6 +513,7 @@ static void glyph(int glyph, const Rectangle& r, const Style* style, Flags flags
     setcolor(WHITE);
     drawline(r.x()+1, y, r.r()-2, y);
   }
+  setcolor(saved);
 }
 
 static void revert(Style *s) {

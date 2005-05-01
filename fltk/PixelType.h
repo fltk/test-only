@@ -31,26 +31,29 @@ namespace fltk {
   that is a pixel. This is used as an argument for fltk::drawimage(),
   fltk::readimage(), and fltk::Symbol::readimage().
 
-  The bytes are described in the order they are in memory: RGB means
-  red is stored at the first memory address, green at the second, and
-  blue at the third. Most image processing software uses this scheme,
-  since it is easily extended to data larger than bytes. However be
-  warned that some graphics software written for little-endian machines
-  may describe the bytes in the opposite order, as they are describing
-  the bytes in a 4-byte integer.
+  The types are described by the order the bytes are in memory. Thus
+  RGB means R is stored at a byte with an address of one less than
+  where G is stored. Warning: some Windows and X software describes
+  the pixels backwards from this. I use this standard because it
+  works for arrays of data larger than bytes.
 
-  Warning: not all types work. See test/image to see the tests.
-  Also it is unclear if alpha is premultiplied or not. When we decide
-  what the default is we will add symbols for the opposite setting.
+  The Mask types are not supported except on OS/X, they render the
+  same as the premultiplied versions on other platforms. This may be
+  fixed in the future.
 */
 enum PixelType {
-  // Commented out ones are nyi and will only be done as people need them
   MASK	= 0,	//!< 1 byte: 0xff = fltk::getcolor(), 0 = transparent
-  LUMINANCE=1,	//!< 1 byte: 0xff = white, 0 = black
-  BGR 	= 2,	//!< 3 bytes: b,g,r
-  RGB	= 3, 	//!< 3 bytes: r,g,b
-  RGBA	= 4,	//!< 4 bytes: r,g,b,a.
-  ABGR	= 5	//!< 4 bytes: a,b,g,r.
+  MONO	= 1,	//!< 1 byte: 0xff = fltk::getbgcolor(), 0 = fltk::getcolor() ("inverted" so that a b&w image looks correct in black color)
+  BGR 	= 2,	//!< often used by Windows software
+  RGB	= 3, 	//!< normal method of storing 3-channel color
+  RGBA	= 4,	//!< normal method of storing 4-channel color, array of fltk::Color on a big-endian machine
+  ABGR	= 5,	//!< array of fltk::Color on a little-endian machine
+  ARGB	= 6,	//!< some Windows software on a big-endian machine
+  BGRA	= 7,	//!< often used by Windows software
+  RGBM	= 8,	//!< RGBA but not premultiplied (M stands for "mask")
+  MBGR	= 9,	//!< ABGR but not premultiplied
+  MRGB	=10,	//!< ARGB but not premultiplied
+  BGRM	=11	//!< BRGA but not premultiplied
 };
 
 /**

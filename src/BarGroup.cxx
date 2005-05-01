@@ -27,6 +27,7 @@
 #include <fltk/Box.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
+#include <fltk/draw.h>
 using namespace fltk;
 
 static void revert(Style *s) {
@@ -133,7 +134,8 @@ void BarGroup::draw()
     draw_box();
     Rectangle r(w(),h());
     Flags flags = this->flags();
-    box()->inset(r, style(), flags);
+    drawstyle(style(), flags|OUTPUT);
+    box()->inset(r);
     if (horizontal()) {
       r.x(saved_size); r.w(r.w()-saved_size);
       flags &= ~(ALIGN_TOP|ALIGN_BOTTOM);
@@ -141,14 +143,15 @@ void BarGroup::draw()
     } else {
       r.y(saved_size); r.h(r.h()-saved_size);
     }
-    draw_label(r, style(), flags);
+    draw_label(r, flags);
   }
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT|DAMAGE_ALL)) {
-    Flags flags = 0;
+    Flags flags = OUTPUT;
     if (pushed) flags |= VALUE;
     if (highlighted) flags |= HIGHLIGHT;
+    drawstyle(style(),flags);
     Rectangle r; glyph_box(r);
-    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON, r,flags);
+    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON, r);
   }
 }
 

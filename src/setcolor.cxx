@@ -46,11 +46,13 @@ using namespace fltk;
   byte is ignored, or may be treated as "alpha" by some code.
 
   If the rgb is zero, the N is the color "index". This index is used
-  to look up an fltk::Color in an internal table of 255 colors:
+  to look up an fltk::Color in an internal table of 255 colors shown
+  here.  All the indexed colors may be changed by using
+  set_color_index().  However fltk uses the ones between 32 and 255
+  and assummes they are not changed from their default values.
 
   \image html fl_show_colormap.gif
-
-  Notice: this table is \e not the X colormap used by fltk.
+  (this is \e not the X colormap used by fltk)
 
   A Color of zero (fltk::NO_COLOR) will draw black but is
   ambiguous. It is returned as an error value or to indicate portions
@@ -58,13 +60,6 @@ using namespace fltk;
   default label color for everything so that changing color zero can
   be used by the -fg switch. You should use fltk::BLACK (56) to get
   black.
-
-  The entries 1-31 in the colormap are settable by the user
-  program. The advantage of using these over fltk::rgb(r,g,b) is that
-  they are reproduced exactly on 8-bit screens (normal rgb colors are
-  selected on 8-bit screens by using fltk::nearest_index()). Colors
-  1-15 are preset for back compatability but fltk no longer uses these
-  so you can change them.
 
 */
 
@@ -134,9 +129,6 @@ Color fltk::contrast(Color fg, Color bg) {
     return WHITE;
 }
 
-// Include the code for setting colors on the system and for managing
-// system colormaps:
-
 #if USE_X11
 # include "x11/setcolor.cxx"
 #elif defined(_WIN32)
@@ -144,7 +136,7 @@ Color fltk::contrast(Color fg, Color bg) {
 #elif USE_QUARTZ
 # include "osx/setcolor.cxx"
 #else
-#error
+# error
 #endif
 
 /*! Set one of the indexed colors to the given rgb color. \a i must be
@@ -170,6 +162,99 @@ Color fltk::get_color_index(Color color) {
 /*! \fn Color color(unsigned char gray)
   Makes a gray-scale color using an 8-bit gray level. This is
   done by multiplying \a gray by 0x1010100. */
+
+Color fltk::current_color_;
+Color fltk::current_bgcolor_;
+Flags fltk::drawflags_;
+
+/*! \fn void fltk::setcolor(Color)
+  Set the color for all subsequent drawing operations.
+*/
+
+/*! \fn Color fltk::getcolor()
+  Returns the last Color passed to setcolor().
+*/
+
+/*! \fn void fltk::setbgcolor(Color)
+  Set the "background" color. This is not used by the drawing functions,
+  but many box and image types will refer to it by calling getbgcolor().
+*/
+
+/*! \fn Color fltk::getbgcolor()
+  Returns the last Color passed to setbgcolor().
+  To actually draw in the bg color, do this:
+\code
+  Color saved = getcolor();
+  setcolor(getbgcolor());
+  draw_stuff();
+  setcolor(saved)
+\endcode
+*/
+
+/*! \fn void fltk::setdrawflags(Flags)
+
+  Store a set of bit flags that may influence the drawing of some
+  fltk::Symbol subclasses, such as boxes. Generally you must also
+  use setcolor() and setbgcolor() to set the color you expect
+  as not all symbols draw differently depending on the flags.
+
+  The flags are usually copied from the flags() on a Widget.
+
+  Some commonly-used flags:
+    - INACTIVE : Draw inactive, fill images with solid fg color
+    - VALUE: Draw turned on or checked
+    - SELECTED: Draw as though selected in a browser or menu.
+    - HIGHLIGHT: Draw as though highlighted with the mouse pointing at it
+    - PUSHED: The mouse is pushing this button. This also inverts VALUE.
+    - FOCUSED: Indicates that the current object has keyboard focus.
+    - INVISIBLE: Some boxes don't draw their interior if this is set
+
+  \see fltk::drawstyle()
+*/
+
+/*! \fn Flags fltk::getdrawflags()
+  Return the last flags passed to setdrawflags().
+*/
+
+/*! \fn Flags fltk::getdrawflags(Flags f)
+  Same as (drawflags() & f), returns true if any of the flags in \a f
+  are set.
+*/
+
+/*! \fn void fltk::line_style(int style, int width, char* dashes)
+
+  Set how to draw lines (the "pen"). If you change this it is your
+  responsibility to set it back to the default with
+  fltk::line_style(0).
+
+  \a style is a bitmask in which you 'or' the following values. If you
+  don't specify a dash type you will get a solid line. If you don't
+  specify a cap or join type you will get a system-defined default of
+  whatever value is fastest.
+  - fltk::SOLID      -------
+  - fltk::DASH       - - - -
+  - fltk::DOT        ·········
+  - fltk::DASHDOT    - · - ·
+  - fltk::DASHDOTDOT - ·· - ··
+  - fltk::CAP_FLAT
+  - fltk::CAP_ROUND
+  - fltk::CAP_SQUARE (extends past end point 1/2 line width)
+  - fltk::JOIN_MITER (pointed)
+  - fltk::JOIN_ROUND
+  - fltk::JOIN_BEVEL (flat)
+
+  \a width is the number of pixels thick to draw the lines. Zero
+  results in the system-defined default, which on both X and Windows
+  is somewhat different and nicer than 1.
+
+  \a dashes is a pointer to an array of dash lengths, measured in
+  pixels. The first location is how long to draw a solid portion, the
+  next is how long to draw the gap, then the solid, etc. It is
+  terminated with a zero-length entry. A null pointer or a zero-length
+  array results in a solid line. Odd array sizes are not supported and
+  result in undefined behavior. <i>The dashes array is ignored on
+  Windows 95/98.</i>
+*/
 
 //
 // End of "$Id$".

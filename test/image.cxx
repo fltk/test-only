@@ -240,13 +240,13 @@ int main(int argc, char** argv) {
 
   w = new Dtest(fltk::BGR, 3, x1, y, "BGR", builddata(3, bgrpixels));
   w->tooltip("drawimage() of 3-byte bgr. NYI!");
-  w = new Dtest(fltk::LUMINANCE, 1, x2, y, "LUMINANCE", builddata(1, lumpixels));
+  w = new Dtest(fltk::MONO, 1, x2, y, "MONO", builddata(1, lumpixels));
   w->tooltip("drawimage() of 1-byte b&&w image");
-  w = new Itest(fltk::LUMINANCE, 1, x3, y, "LUMimage", builddata(1, lumpixels));
+  w = new Itest(fltk::MONO, 1, x3, y, "MONOimage", builddata(1, lumpixels));
   w->tooltip("1-byte b&&w image used as widget->image()");
   y += 16*SCALE+15;
 
-  w = new Dtest(fltk::LUMINANCE, 3, x1, y, "LUM,3", builddata(3, rgbpixels));
+  w = new Dtest(fltk::MONO, 3, x1, y, "MONO,3", builddata(3, rgbpixels));
   w->tooltip("1-byte b&&w with 3-pixel seperation between pixels. This "
 	      "can be used to show the user one channel of an image");
   w = new Dtest(fltk::MASK, 1, x2, y, "MASK", builddata(1, lumpixels));

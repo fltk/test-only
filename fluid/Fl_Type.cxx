@@ -70,7 +70,7 @@ const Enumeration* from_value(void* data, const Enumeration* table)
 const Enumeration* from_value(int data, const Enumeration* table)
 {
   for (;table->menu_entry; table++)
-    if (*(int *)(table->compiled) == data) return table;
+    if ((int)(table->compiled) == data) return table;
   return 0;
 }
 

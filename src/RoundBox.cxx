@@ -37,7 +37,7 @@ using namespace fltk;
 class RoundBox : public FrameBox {
 public:
   RoundBox(const char* n, const char* s, const FrameBox* d=0) : FrameBox(n, s, d) {}
-  void _draw(const Rectangle&, const Style*, Flags) const;
+  void _draw(const Rectangle&) const;
   bool fills_rectangle() const {return false;}
   bool is_frame() const {return false;}
 };
@@ -92,17 +92,18 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void RoundBox::_draw(const Rectangle& r, const Style* style, Flags f) const
+void RoundBox::_draw(const Rectangle& r) const
 {
-  const char* s = (f & VALUE) ? down->data() : data();
-  char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
+  const char* s = drawflags(VALUE) ? down->data() : data();
+  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
-  Color bg, fg; style->boxcolors(f, bg, fg);
+  const Color fg = getcolor();
+  const Color bg = getbgcolor();
   int x = r.x();
   int y = r.y();
   int w = r.w();
   int h = r.h();
-  if (!(f & INVISIBLE)) {
+  if (!drawflags(INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     int d = strlen(s)/4;
@@ -120,6 +121,7 @@ void RoundBox::_draw(const Rectangle& r, const Style* style, Flags f) const
     lozenge(LOWER_RIGHT, x,   y,   w,   h, c2);
     x++; y++; w -= 2; h -= 2;
   }
+  setcolor(fg); // restore fg color
 }
 
 static RoundBox roundDownBox("round_down", "WWMMPPAA");

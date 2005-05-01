@@ -9,6 +9,7 @@
 */
 
 #include <fltk/MultiImage.h>
+#include <fltk/draw.h>
 
 using namespace fltk;
 
@@ -48,13 +49,13 @@ void MultiImage::_measure(int& w, int& h) const {
 }
 
 /*! Calls the same image that _draw() will call to get the inset. */
-void MultiImage::inset(Rectangle& r, const Style* style, Flags f) const {
+void MultiImage::inset(Rectangle& r) const {
   int which = 0;
-  //Flags passed_flags = f;
+  const Flags f = drawflags();
   for (int i = 1; i < MAXIMAGES && images[i]; i++) {
     if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->inset(r, style, f);
+  images[which]->inset(r);
 }
 
 /*! Returns the info from the first image given to the constructor. */
@@ -67,12 +68,12 @@ bool MultiImage::is_frame() const {return images[0]->is_frame();}
   flags specified for it turned on will be drawn. If none of them match
   then Image0 is drawn.
 */
-void MultiImage::_draw(const Rectangle& r, const Style* style, Flags f) const
+void MultiImage::_draw(const Rectangle& r) const
 {
   int which = 0;
-  //Flags passed_flags = f;
+  const Flags f = drawflags();
   for (int i = 1; i < MAXIMAGES && images[i]; i++) {
     if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->draw(r, style, f);
+  images[which]->draw(r);
 }

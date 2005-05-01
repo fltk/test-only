@@ -46,8 +46,6 @@ void restore_quartz_line_style() {
 // Because carbon has a 'current color' in the drawing context this
 // is really simple.
 
-Color fltk::current_color_;
-
 void fltk::setcolor(Color i) {
   current_color_ = i;
   // get fltk indexed color:

@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -47,7 +47,7 @@ public:
     Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
 
   void _measure(int&, int&) const;
-  void _draw(const Rectangle&, const Style*, Flags = 0) const;
+  void _draw(const Rectangle&) const;
 
 };
 
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //

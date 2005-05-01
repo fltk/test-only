@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include <fltk/xbmImage.h>
-#include <fltk/Style.h>
 #include <fltk/draw.h>
 using namespace fltk;
 
@@ -37,13 +36,11 @@ using namespace fltk;
   single color as another argument? You can also call the draw(x,y)
   method which will use the current color.
 */
-void xbmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) const
+void xbmImage::_draw(const fltk::Rectangle& r) const
 {
   if (!drawn())
     (const_cast<xbmImage*>(this))->set_alpha_bitmap(array,this->w(),this->h());
-  Color bg, fg; style->boxcolors(flags, bg, fg);
-  setcolor(fg);
-  Image::_draw(r, style, flags);
+  Image::_draw(r);
 }
 
 /** Draw the bitmap filled with the current color.
