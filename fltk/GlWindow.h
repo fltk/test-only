@@ -1,5 +1,5 @@
 //
-// "$Id: GlWindow.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id$"
 //
 // OpenGL window. You must subclass this and implement draw() if
 // you want this to work.
@@ -42,7 +42,7 @@ enum {
   NO_ERASE_OVERLAY = 2048
 };
 
-class FL_API GlWindow : public Window {
+class FL_GL_API GlWindow : public Window {
 
 public:
 
@@ -98,5 +98,5 @@ private:
 #endif
 
 //
-// End of "$Id: GlWindow.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id$".
 //
