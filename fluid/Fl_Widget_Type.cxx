@@ -1469,6 +1469,7 @@ void selection_changed(FluidType *p) {
   for (FluidType *o = FluidType::first; o; o = o->walk())
     o->selected = o->new_selected;
   if (p && p->new_selected) FluidType::current = p;
+  else FluidType::current = NULL;
   redraw_overlays();
   // load the panel with the new settings:
   load_panel();
