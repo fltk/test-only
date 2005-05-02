@@ -103,8 +103,7 @@ enum {NOTHING = 0, UP_ARROW, DOWN_ARROW, ABOVE_SLIDER, BELOW_SLIDER, SLIDER};
 static char which_highlight = 0;
 // For the pushed() widget, which button is pushed:
 static char which_pushed = 0;
-// How belowmouse() widget was last drawn:
-static char last_;
+
 
 void Scrollbar::increment_cb() {
   double i;
@@ -165,7 +164,7 @@ int Scrollbar::handle(int event) {
     redraw_highlight();
     return 1;
   case LEAVE:
-    if (last_) redraw_highlight();
+    redraw_highlight();
     return 1;
   case PUSH:
     // Clicking on the slider or middle or right click on the trough
@@ -245,7 +244,6 @@ void Scrollbar::draw() {
   char pushed_ = pushed() ? which_pushed : NOTHING;
   char highlight_ = pushed_;
   if (!pushed_ && belowmouse()) highlight_ = which_highlight;
-  last_ = highlight_;
 
   // 1 = left/top   2 = right/bottom   5 = slider button
   Flags f1, f2, f5;

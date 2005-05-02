@@ -148,13 +148,13 @@ int ValueInput::handle(int event) {
     } else {
       n = 0;
     }
-    if (n != which_highlight) {
+    if (n != which_highlight || event==ENTER) {
       which_highlight = n;
       redraw_highlight();
     }
     return 1;
   case LEAVE:
-    if (highlight_color()) redraw_highlight();
+    redraw_highlight();
     return 1;
   case PUSH:
   case DRAG:
