@@ -87,7 +87,7 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   children_(0),
   focus_index_(-1),
   array_(0),
-  resizable_(0), // fltk 1.0 used (this)
+  resizable_(this),
   resize_align_(ALIGN_TOPLEFT|ALIGN_BOTTOMRIGHT),
   sizes_(0)
 {

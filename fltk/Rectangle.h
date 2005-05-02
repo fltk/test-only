@@ -76,7 +76,7 @@ class FL_API Rectangle {
   /*! True if w() or h() are less or equal to zero. */
   bool empty() const {return w_ <= 0 || h_ <= 0;}
   /*! Same as !empty(), true if w() and h() are both greater than zero. */
-  bool notempty() const {return w_ > 0 && h_ > 0;}
+  bool not_empty() const {return w_ > 0 && h_ > 0;}
   /*! Integer center position. Rounded to the left if w() is odd. */
   int center_x() const {return x_+(w_>>1);}
   /*! Integer center position. Rounded to lower y if h() is odd. */

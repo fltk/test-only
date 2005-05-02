@@ -119,7 +119,7 @@ void Window::_Window() {
   i = 0;
   icon_ = 0;
   iconlabel_ = 0;
-  //resizable(0); // new default for group
+  resizable(0);
   minw = minh = maxw = maxh = 0;
   size_range_set = 0;
   child_of_ = 0;
