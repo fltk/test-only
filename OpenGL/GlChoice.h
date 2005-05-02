@@ -78,7 +78,7 @@
 namespace fltk {
 
 // Describes crap needed to create a GLContext.
-class GlChoice {
+class FL_GL_API GlChoice {
   int mode;
   GlChoice *next;
 public:
