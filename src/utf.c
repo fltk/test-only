@@ -27,6 +27,33 @@
 extern "C" {
 #endif
 
+/* Set to 1 to turn bad UTF8 bytes into ISO-8859-1. If this is to zero
+   they are instead turned into the Unicode REPLACEMENT CHARACTER, of
+   value 0xfffd.
+   If this is on utf8decode will correctly map most (perhaps all)
+   human-readable text that is in ISO-8859-1. This may allow you
+   to completely ignore character sets in your code because virtually
+   everything is either ISO-8859-1 or UTF-8.
+*/
+#define ERRORS_TO_ISO8859_1 1
+
+/* Set to 1 to turn bad UTF8 bytes in the 0x80-0x9f range into the
+   Unicode index for Microsoft's CP1252 character set. You should
+   also set ERRORS_TO_ISO8859_1. With this a huge amount of more
+   available text (such as all web pages) are correctly converted
+   to Unicode.
+*/
+#define ERRORS_TO_CP1252 1
+
+/* A number of Unicode code points are in fact illegal and should not
+   be produced by a UTF-8 converter. Turn this on will replace the
+   bytes in those encodings with errors. If you do this then converting
+   arbitrary 16-bit data to UTF-8 and then back is not an identity,
+   which will probably break a lot of software.
+*/
+#define STRICT_RFC3629 0
+
+#if ERRORS_TO_CP1252
 // Codes 0x80..0x9f from the Microsoft CP1252 character set, translated
 // to Unicode:
 static unsigned short cp1252[32] = {
@@ -35,6 +62,7 @@ static unsigned short cp1252[32] = {
   0x0090, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014,
   0x02dc, 0x2122, 0x0161, 0x203a, 0x0153, 0x009d, 0x017e, 0x0178
 };
+#endif
 
 /*! Decode a single UTF-8 encoded character starting at \e p. The
     resulting Unicode value (in the range 0-0x10ffff) is returned,
@@ -74,12 +102,13 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   if (c < 0x80) {
     *len = 1;
     return c;
+#if ERRORS_TO_CP1252
   } else if (c < 0xa0) {
     *len = 1;
     return cp1252[c-0x80];
+#endif
   } else if (c < 0xc2) {
-    *len = 1;
-    return c;
+    goto FAIL;
   }
   if (p+1 >= end || (p[1]&0xc0) != 0x80) goto FAIL;
   if (c < 0xe0) {
@@ -90,16 +119,13 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   } else if (c == 0xe0) {
     if (((unsigned char*)p)[1] < 0xa0) goto FAIL;
     goto UTF8_3;
-#if 0
+#if STRICT_RFC3629
   } else if (c == 0xed) {
     // RFC 3629 says surrogate chars are illegal.
-    // I don't check this so that all 16-bit values are preserved
-    // when going through utf8encode/utf8decode.
     if (((unsigned char*)p)[1] >= 0xa0) goto FAIL;
     goto UTF8_3;
   } else if (c == 0xef) {
     // 0xfffe and 0xffff are also illegal characters
-    // Again I don't check this so 16-bit values are preserved
     if (((unsigned char*)p)[1]==0xbf &&
 	((unsigned char*)p)[2]>=0xbe) goto FAIL;
     goto UTF8_3;
@@ -119,7 +145,7 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   UTF8_4:
     if (p+3 >= end || (p[2]&0xc0) != 0x80 || (p[3]&0xc0) != 0x80) goto FAIL;
     *len = 4;
-#if 0
+#if STRICT_RFC3629
     // RFC 3629 says all codes ending in fffe or ffff are illegal:
     if ((p[1]&0xf)==0xf &&
 	((unsigned char*)p)[2] == 0xbf &&
@@ -136,7 +162,11 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   } else {
   FAIL:
     *len = 1;
+#if ERRORS_TO_ISO8859_1
     return c;
+#else
+    return 0xfffd; // Unicode REPLACEMENT CHARACTER
+#endif
   }
 }
 
@@ -316,7 +346,7 @@ int utf8encode(unsigned ucs, char* buf) {
 */
 unsigned utf8towc(const char* src, unsigned srclen,
 		  wchar_t* dst, unsigned dstlen)
-{		  
+{
   const char* p = src;
   const char* e = src+srclen;
   unsigned count = 0;
@@ -400,7 +430,7 @@ unsigned utf8toa(const char* src, unsigned srclen,
       else dst[count] = '?';
     }
     if (++count >= dstlen) {dst[count-1] = 0; break;}
-  }	
+  }
   // we filled dst, measure the rest:
   while (p < e) {
     if (!(*p & 0x80)) p++;
@@ -485,7 +515,7 @@ unsigned utf8fromwc(char* dst, unsigned dstlen,
       dst[count++] = 0x80 | ((ucs >> 6) & 0x3F);
       dst[count++] = 0x80 | (ucs & 0x3F);
     }
-  }	
+  }
   // we filled dst, measure the rest:
   while (i < srclen) {
     unsigned ucs = src[i++];
@@ -546,7 +576,7 @@ unsigned utf8froma(char* dst, unsigned dstlen,
       dst[count++] = 0xc0 | (ucs >> 6);
       dst[count++] = 0x80 | (ucs & 0x3F);
     }
-  }	
+  }
   // we filled dst, measure the rest:
   while (p < e) {
     unsigned char ucs = *(unsigned char*)p++;
@@ -666,7 +696,7 @@ unsigned utf8tomb(const char* src, unsigned srclen,
 
   return srclen;
 }
-  
+
 /*! Convert a filename from the locale-specific multibyte encoding
     used by Windows to UTF-8 as used by FLTK.
 
