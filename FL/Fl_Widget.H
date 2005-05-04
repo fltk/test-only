@@ -243,6 +243,10 @@ protected:
 public:
 
   Style * style() const;
+  void default_visual(int v);
+  int default_visual() const;
+  Style * get_style() const {return style_;};
+
   void style(Style * s); // it is "shadowed" subclassess 
 
 

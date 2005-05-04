@@ -132,21 +132,17 @@ class FL_EXPORT Fl_Widget_Style {
 
 
     void set_flag(unsigned c){flags_ |=c;}
-    void clear_flag(unsigned c){flags_ &= ~c;}
+    
 
 
 
  
     // Following virtual functions must be overriden for each Style subclass
-    //void clear();
-    // clears style s using this as a template
-    // Funny stuff: using this function in the constructor can ""emulate"" the use of virtual function :-)
-    
 
 
 
     /* "Virtual" constructor for making dynamic styles 
-    * Must be overriden in every new subclass of Fl_Widget::Style */
+    * Must be overriden in every new subclass of Fl_Widget_Style */
     virtual Fl_Widget_Style * clone(){return new Fl_Widget_Style(this);} 
 
 
@@ -155,6 +151,7 @@ class FL_EXPORT Fl_Widget_Style {
 
 
   public:
+    void clear_flag(unsigned c){flags_ &= ~c;}
 
     static void update_(Fl_Widget_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
   protected:
@@ -356,7 +353,7 @@ public:
 
 #endif  // Fl_Tool_Button_Style_H
 
-
+/*
 
 
 
@@ -393,7 +390,7 @@ public:
 #endif
 
 
-
+*/
 
 
 

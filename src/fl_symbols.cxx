@@ -49,6 +49,7 @@
 
 Fl_Hash_Table::Fl_Hash_Table(int s){
   size = s;
+  no_items = 0;
   table = new Fl_Hash_Item[s];
   memset(table, 0, s * sizeof(Fl_Hash_Item));
 }
@@ -157,7 +158,7 @@ static double rotangle = 0;
 int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {  
   const char *p = label;
   if (*p++ != '@') return 0;
-//  fl_init_symbols();
+  fl_init_symbols();
   int equalscale = 0;
   if (*p == '#') {equalscale = 1; p++;}
   if (*p == '-' && p[1]>='1' && p[1]<='9') {
@@ -449,8 +450,9 @@ static void draw_menu(Fl_Color col)
 
 
 static void fl_init_symbols(void) {
-  static char beenhere;
+  static char beenhere = 0;
   if (beenhere) return;
+  beenhere = 1;
   symbol_table = new Fl_Hash_Table();
 
 

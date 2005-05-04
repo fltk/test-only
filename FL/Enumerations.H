@@ -423,7 +423,7 @@ typedef void(Fl_Box_Draw_F)(int, int, int, int, Fl_Color);
 
 typedef Fl_Symbol * Fl_Boxtype;
 
-extern Fl_Boxtype
+extern FL_EXPORT Fl_Boxtype
 
   FL_NO_BOX ,	FL_FLAT_BOX,
 

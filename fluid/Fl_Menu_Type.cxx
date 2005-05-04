@@ -26,7 +26,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -187,7 +189,7 @@ void Fl_Menu_Item_Type::write_static() {
     const char* cn = callback_name();
     const char* k = class_name(1);
     if (k) {
-      write_c("\ninline void %s::%s_i(Fl_Menu_*", k, cn);
+      write_c("\nvoid %s::%s_i(Fl_Menu_*", k, cn);
     } else {
       write_c("\nstatic void %s(Fl_Menu_*", cn);
     }
@@ -343,7 +345,7 @@ void Fl_Menu_Item_Type::write_code1() {
       const char* cn = callback_name();
       const char* ut = user_data_type() ? user_data_type() : "void*";
       write_public(0);
-      write_h("  inline void %s_i(Fl_Menu_*, %s);\n", cn, ut);
+      write_h("  void %s_i(Fl_Menu_*, %s);\n", cn, ut);
       write_h("  static void %s(Fl_Menu_*, %s);\n", cn, ut);
     }
   }

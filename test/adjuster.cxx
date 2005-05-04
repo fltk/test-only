@@ -39,7 +39,7 @@ void adjcb(Fl_Widget *o, void *v) {
 
 int main(int, char ** argv) {
   Fl_Adjuster::default_style()->highlight()->color(FL_RED);
-  Fl_Adjuster::default_style()->highlight()->box(FL_FLAT_BOX);
+  //Fl_Adjuster::default_style()->highlight()->box(FL_FLAT_BOX);
 
    Fl_Window window(320,100,argv[0]);
 

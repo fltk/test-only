@@ -224,6 +224,21 @@ Fl_Widget::Style * Fl_Widget::style() const {
 }
 
 
+void Fl_Widget::default_visual(int visuals){
+  //return style_;
+  if(Style::STATIC & style_->flags()) return;
+  style_->clear_flag(visuals &  style()->list()->mask_ );
+}
+
+
+int Fl_Widget::default_visual() const {
+  //return style_;
+  if(Style::STATIC & style_->flags()) return style()->list()->mask_;
+  return ~(style_->flags()) &  style()->list()->mask_;
+}
+
+
+
 void Fl_Widget::dynamic_style(){
   if (Style::STATIC & style_->flags()) style_ = style_->clone();
 }

@@ -32,7 +32,7 @@
 #include "flstring.h"
 
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
-  : Fl_Widget(X,Y,W,H,L) {
+  : Fl_Button(X,Y,W,H,L) {
   align(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   value_ = 0;

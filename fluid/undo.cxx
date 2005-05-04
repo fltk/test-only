@@ -31,8 +31,9 @@
 #include <FL/Fl_Preferences.H>
 #include "../src/flstring.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
+#  include <io.h>
 #  include <windows.h>
-#  define getpid GetCurrentProcessId
+#  define getpid (int)GetCurrentProcessId
 #else
 #  include <unistd.h>
 #endif // WIN32 && !__CYGWIN__

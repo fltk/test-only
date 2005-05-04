@@ -24,7 +24,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -1342,7 +1344,7 @@ void Fl_Widget_Class_Type::write_code1() {
     write_h("  void _%s();\n", name());
     write_h("public:\n");
     write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
-    write_h("  %s(int W, int H, const char *L = 0);\n");
+    write_h("  %s(int W, int H, const char *L = 0);\n", name());
 
     write_c("%s::%s(int X, int Y, int W, int H, const char *L)\n", name(), name());
     write_c("  : %s(X, Y, W, H, L) {\n", c);

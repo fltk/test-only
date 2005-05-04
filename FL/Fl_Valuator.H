@@ -26,8 +26,8 @@
 #ifndef Fl_Valuator_H
 #define Fl_Valuator_H
 
-#ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#ifndef Fl_Button_H
+#include "Fl_Button.H"
 #endif
 
 // shared type() values for classes that work in both directions:
@@ -48,7 +48,7 @@
  */
 class Fl_Valuator_Style;
 
-class FL_EXPORT Fl_Valuator : public Fl_Widget {
+class FL_EXPORT Fl_Valuator : public Fl_Button {
 
   double value_;
   double previous_value_;
@@ -71,7 +71,7 @@ protected:
   void set_value(double v) {value_ = v;}
 
 public:
-  typedef Fl_Valuator_Style Style; 
+
 
     /** Sets the minimum (\c a) and maximum (\c b) values for the valuator widget. */
   void bounds(double a, double b) {min=a; max=b;}

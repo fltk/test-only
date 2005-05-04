@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0105 
+version 1.0200 
 header_name {../FL/Fl_File_Chooser.H} 
 code_name {.cxx}
 class FL_EXPORT Fl_File_Chooser {open
@@ -30,13 +30,13 @@ class FL_EXPORT Fl_File_Chooser {open
 fileList->deselect();
 Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 window->hide();} open
-      private xywh {153 80 490 380} type Double resizable
+      private xywh {153 80 490 380} type Double hide resizable
       code0 {if (title) window->label(title);}
       code1 {\#include <stdio.h>}
       code2 {\#include <stdlib.h>}
-      code3 {\#include <string.h>} modal visible
+      code3 {\#include <string.h>} modal
     } {
-      Fl_Group {} {
+      Fl_Group {} {open
         private xywh {65 10 415 25}
       } {
         Fl_Choice showChoice {
@@ -59,7 +59,7 @@ window->hide();} open
         }
       }
       Fl_Tile {} {
-        callback {update_preview();}
+        callback {update_preview();} open
         private xywh {10 45 470 225} resizable
       } {
         Fl_File_Browser fileList {
@@ -75,13 +75,13 @@ window->hide();} open
       Fl_Group {} {open
         private xywh {0 275 480 95}
       } {
-        Fl_Group {} {
+        Fl_Group {} {open
           private xywh {10 275 470 20}
         } {
           Fl_Check_Button previewButton {
             label Preview
-            callback {preview(previewButton->value());}
-            xywh {10 275 170 20} down_box DOWN_BOX shortcut 0x80070 value 1
+            callback {preview(previewButton->value());} selected
+            xywh {10 275 170 20} shortcut 0x80070 value 1
             code0 {previewButton->label(preview_label);}
           }
           Fl_Box {} {
@@ -107,7 +107,7 @@ window->hide();} open
 if (callback_)
   (*callback_)(this, data_);
 
-window->hide();} selected
+window->hide();}
             private xywh {300 345 85 25}
             code0 {\#include <FL/fl_ask.H>}
             code1 {okButton->label(fl_ok);}
@@ -184,15 +184,16 @@ preview(e);} {}
 delete window;
 delete favWindow;} {}
   }
-  Function {callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0)} {return_type void
+  Function {callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0)} {open return_type void
   } {
     code {callback_ = cb;
 data_     = d;} {}
   }
-  Function {color(Fl_Color c)} {} {
+  Function {color(Fl_Color c)} {open
+  } {
     code {fileList->color(c);} {}
   }
-  Function {color()} {return_type Fl_Color
+  Function {color()} {open return_type Fl_Color
   } {
     code {return (fileList->color());} {}
   }
@@ -200,42 +201,42 @@ data_     = d;} {}
   }
   decl {void directory(const char *d);} {public
   }
-  Function {directory()} {return_type {char *}
+  Function {directory()} {open return_type {char *}
   } {
     code {return directory_;} {}
   }
   decl {void filter(const char *p);} {public
   }
-  Function {filter()} {return_type {const char *}
+  Function {filter()} {open return_type {const char *}
   } {
     code {return (fileList->filter());} {}
   }
-  Function {filter_value()} {return_type int
+  Function {filter_value()} {open return_type int
   } {
     code {return showChoice->value();} {}
   }
-  Function {filter_value(int f)} {return_type void
+  Function {filter_value(int f)} {open return_type void
   } {
     code {showChoice->value(f);
 showChoiceCB();} {}
   }
-  Function {hide()} {return_type void
+  Function {hide()} {open return_type void
   } {
     code {window->hide();} {}
   }
-  Function {iconsize(uchar s)} {return_type void
+  Function {iconsize(uchar s)} {open return_type void
   } {
     code {fileList->iconsize(s);} {}
   }
-  Function {iconsize()} {return_type uchar
+  Function {iconsize()} {open return_type uchar
   } {
     code {return (fileList->iconsize());} {}
   }
-  Function {label(const char *l)} {return_type void
+  Function {label(const char *l)} {open return_type void
   } {
     code {window->label(l);} {}
   }
-  Function {label()} {return_type {const char *}
+  Function {label()} {open return_type {const char *}
   } {
     code {return (window->label());} {}
   }
@@ -245,37 +246,37 @@ showChoiceCB();} {}
   }
   decl {void rescan();} {public
   }
-  Function {show()} {return_type void
+  Function {show()} {open return_type void
   } {
     code {window->hotspot(fileList);
 window->show();
 fileName->take_focus();} {}
   }
-  Function {shown()} {return_type int
+  Function {shown()} {open return_type int
   } {
     code {return window->shown();} {}
   }
-  Function {textcolor(Fl_Color c)} {return_type void
+  Function {textcolor(Fl_Color c)} {open return_type void
   } {
     code {fileList->textcolor(c);} {}
   }
-  Function {textcolor()} {return_type Fl_Color
+  Function {textcolor()} {open return_type Fl_Color
   } {
     code {return (fileList->textcolor());} {}
   }
-  Function {textfont(uchar f)} {return_type void
+  Function {textfont(uchar f)} {open return_type void
   } {
     code {fileList->textfont(f);} {}
   }
-  Function {textfont()} {return_type uchar
+  Function {textfont()} {open return_type uchar
   } {
     code {return (fileList->textfont());} {}
   }
-  Function {textsize(uchar s)} {return_type void
+  Function {textsize(uchar s)} {open return_type void
   } {
     code {fileList->textsize(s);} {}
   }
-  Function {textsize()} {return_type uchar
+  Function {textsize()} {open return_type uchar
   } {
     code {return (fileList->textsize());} {}
   }
@@ -295,7 +296,7 @@ if (t & DIRECTORY)
 else
   fileList->filetype(Fl_File_Browser::FILES);} {}
   }
-  Function {type()} {return_type int
+  Function {type()} {open return_type int
   } {
     code {return (type_);} {}
   }
@@ -303,7 +304,7 @@ else
   }
   decl {void value(const char *filename);} {public
   }
-  Function {visible()} {return_type int
+  Function {visible()} {open return_type int
   } {
     code {return window->visible();} {}
   }

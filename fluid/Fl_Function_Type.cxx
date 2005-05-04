@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -549,13 +551,13 @@ void Fl_Decl_Type::write_code1() {
   while (e>c && e[-1]==';') e--;
   if (class_name(1)) {
     write_public(public_);
-    write_h("  %.*s;\n", e-c, c);
+    write_h("  %.*s;\n", (int)(e-c), c);
   } else {
     if (public_) {
-      write_h("extern %.*s;\n", e-c, c);
-      write_c("%.*s;\n", e-c, c);
+      write_h("extern %.*s;\n", (int)(e-c), c);
+      write_c("%.*s;\n", (int)(e-c), c);
     } else {
-      write_c("static %.*s;\n", e-c, c);
+      write_c("static %.*s;\n", (int)(e-c), c);
     }
   }
 }
@@ -681,7 +683,7 @@ void Fl_Comment_Type::read_property(const char *c) {
 #include "comments.h"
 
 static void load_comments_preset(Fl_Preferences &menu) {
-  static char *predefined_comment[] = {
+  static const char * const predefined_comment[] = {
     "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
     "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
     "FLTK/Header", "FLTK/Footer" };

@@ -52,33 +52,29 @@ void Fl_Adjuster::draw() {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  normal_();
-  if(highlight__ == 1) highlight_();
-  draw_box(drag==1?fl_down(box()):box(), x(),  y()+2*dy, W, H, color());
-  if(highlight__ == 1) normal_();
-  if(highlight__ == 2) highlight_();
-  draw_box(drag==2?fl_down(box()):box(), x()+dx, y()+dy, W, H, color());
-  if(highlight__ == 2) normal_();
-  if(highlight__ == 3) highlight_();
-  draw_box(drag==3?fl_down(box()):box(), x()+2*dx,  y(), W, H, color());
-  if(highlight__ == 3) normal_();
+
   
-  Fl_Color c_norm;
-  Fl_Color c_highl;
+  normal_();
+  Fl_Color col, col_highl, c_norm, c_highl;
+  Fl_Boxtype box_ = box();
+  Fl_Boxtype box_highl_ = box_;
   if (active_r()){
-    c_norm = selection_color();
+    col = col_highl = color();
+    c_norm = c_highl =selection_color();
     if(highlight__){
       highlight_();
+      col_highl = color();
       c_highl = selection_color();
+      box_highl_ = box();
     }
   }else{
-    c_norm = fl_inactive(selection_color());
-    if(highlight__){
-      highlight_();
-      c_highl = selection_color();
-    }
-  }
+    col = col_highl = fl_inactive(color());
+    c_norm = c_highl =  fl_inactive(selection_color());
 
+  }
+  draw_box(drag==1?fl_down(highlight__ == 1? box_highl_ : box_):highlight__ == 1? box_highl_ : box_, x(),  y()+2*dy, W, H, highlight__ == 1? col_highl : col);
+  draw_box(drag==2?fl_down(highlight__ == 2? box_highl_ : box_):highlight__ == 2? box_highl_ : box_, x()+dx, y()+dy, W, H, highlight__ == 2? col_highl : col);
+  draw_box(drag==3?fl_down(highlight__ == 3? box_highl_ : box_):highlight__ == 3? box_highl_ : box_, x()+2*dx,  y(), W, H, highlight__ == 3? col_highl : col);
 
   if(highlight__ ==1)
     fl_color(c_highl);
@@ -100,6 +96,7 @@ void Fl_Adjuster::draw() {
     fl_color(c_norm);
   slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
 		 y()+(H-slowarrow_width)/2, W, H);
+  if(highlight__) highlight_(); else normal_();
   if (Fl::focus() == this) draw_focus();
 }
 
@@ -115,6 +112,7 @@ int Fl_Adjuster::handle(int event) {
     case FL_LEAVE:
 //      highlight();
       normal();
+      //redraw();
       highlight__ = 0;
 //      if(highlight__){
  //       highlight__ = 0;
@@ -123,31 +121,26 @@ int Fl_Adjuster::handle(int event) {
 
     case FL_ENTER:
       highlight();
-      normal_();
+      highlight__ = 4;
+      //normal_();
     case FL_MOVE:
 
-      if((mx<x()) || (mx>(x()+w())) || (my < y()) || (my > (y()+h()))){
-        if(highlight__){
-          highlight();
-          normal_();
-          highlight__ = 0;
-          return 1;
-        }
-        return 0;
-      }
+      //if((mx<x()) || (mx>(x()+w())) || (my < y()) || (my > (y()+h()))){
+      //  if(highlight__){
+          //highlight();
+          //normal_();
+       //   highlight__ = 0;
+       //   return 1;
+       // }
+       // return 0;
+        //}
+      if (! highlight__) return 0;
       if (w()>=h())
       	highlight__ = 3*(mx-x())/w() + 1;
       else
         highlight__ = 3-3*(my-y()-1)/h();
       if(old_highlight_ != highlight__) redraw();
       return 1;
-
-
-
-
-
-
-
 
 
 

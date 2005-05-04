@@ -32,7 +32,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -721,7 +723,7 @@ void Fl_Type::move_before(Fl_Type* g) {
   l->next = g;
   if (prev) prev->next = this; else Fl_Type::first = this;
   g->prev = l;
-  if (parent) parent->move_child(this,g);
+  if (parent && is_widget()) parent->move_child(this,g);
   widget_browser->redraw();
 }
 

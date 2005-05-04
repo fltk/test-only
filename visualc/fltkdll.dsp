@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I "." /I ".." /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I "." /I ".." /I "../jpeg" /I "../zlib" /I "../png" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /GX /ZI /Od /I "." /I ".." /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /c
+# ADD CPP /nologo /MDd /GX /ZI /Od /I "." /I ".." /I "../jpeg" /I "../zlib" /I "../png" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -186,6 +186,8 @@ DEP_CPP_FL_CX=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tooltip.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -203,6 +205,7 @@ DEP_CPP_FL_AB=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -214,6 +217,7 @@ DEP_CPP_FL_AD=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -224,10 +228,14 @@ DEP_CPP_FL_ADJ=\
 	"..\fl\fl.h"\
 	"..\fl\fl_adjuster.h"\
 	"..\fl\fl_bitmap.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\fastarrow.h"\
@@ -244,6 +252,8 @@ DEP_CPP_FL_AR=\
 	"..\fl\fl_display.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\FL\math.h"\
 	
@@ -261,6 +271,8 @@ DEP_CPP_FL_ARC=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -289,6 +301,8 @@ DEP_CPP_FL_ARG=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tooltip.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -311,6 +325,7 @@ DEP_CPP_FL_AS=\
 	"..\fl\fl_ask.h"\
 	"..\fl\fl_box.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -319,6 +334,9 @@ DEP_CPP_FL_AS=\
 	"..\fl\fl_input_.h"\
 	"..\fl\fl_return_button.h"\
 	"..\fl\fl_secret_input.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -342,6 +360,8 @@ DEP_CPP_FL_BI=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -365,6 +385,7 @@ DEP_CPP_FL_BM=\
 	"..\fl\fl_bmp_image.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_symbol.h"\
 	".\config.h"\
 	
 # End Source File
@@ -375,6 +396,8 @@ DEP_CPP_FL_BO=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl_box.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -387,6 +410,8 @@ DEP_CPP_FL_BOX=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	".\config.h"\
 	
@@ -399,12 +424,15 @@ DEP_CPP_FL_BR=\
 	"..\fl\fl.h"\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
@@ -418,6 +446,7 @@ DEP_CPP_FL_BRO=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -425,6 +454,8 @@ DEP_CPP_FL_BRO=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
 	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -437,10 +468,13 @@ DEP_CPP_FL_BROW=\
 	"..\fl\fl.h"\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -455,6 +489,9 @@ DEP_CPP_FL_BU=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -469,6 +506,8 @@ DEP_CPP_FL_CH=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\FL\math.h"\
 	"..\src\flstring.h"\
@@ -485,6 +524,7 @@ DEP_CPP_FL_CHE=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_check_browser.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
@@ -492,6 +532,8 @@ DEP_CPP_FL_CHE=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
@@ -506,8 +548,13 @@ DEP_CPP_FL_CHEC=\
 	"..\fl\fl.h"\
 	"..\fl\fl_button.h"\
 	"..\fl\fl_check_button.h"\
+	"..\fl\fl_device.h"\
+	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_light_button.h"\
+	"..\fl\fl_round_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -524,6 +571,8 @@ DEP_CPP_FL_CHO=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -537,6 +586,8 @@ DEP_CPP_FL_CL=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -551,6 +602,8 @@ DEP_CPP_FL_CO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -575,6 +628,7 @@ DEP_CPP_FL_COL=\
 	"..\fl\fl.h"\
 	"..\fl\fl_box.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_choice.h"\
 	"..\fl\fl_color_chooser.h"\
 	"..\fl\fl_device.h"\
@@ -587,6 +641,9 @@ DEP_CPP_FL_COL=\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_return_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_input.h"\
 	"..\fl\fl_widget.h"\
@@ -604,6 +661,7 @@ DEP_CPP_FL_COM=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -612,10 +670,13 @@ SOURCE=..\src\Fl_Counter.cxx
 DEP_CPP_FL_COU=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_counter.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -630,6 +691,8 @@ DEP_CPP_FL_CU=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -646,6 +709,8 @@ DEP_CPP_FL_CUR=\
 	"..\fl\fl_display.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -660,6 +725,8 @@ DEP_CPP_FL_DE=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -676,10 +743,13 @@ SOURCE=..\src\Fl_Dial.cxx
 DEP_CPP_FL_DI=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_dial.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\FL\math.h"\
@@ -697,6 +767,8 @@ DEP_CPP_FL_DIA=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -707,6 +779,7 @@ DEP_CPP_FL_DIS=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -719,6 +792,8 @@ DEP_CPP_FL_DN=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -742,6 +817,8 @@ DEP_CPP_FL_DO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -759,6 +836,8 @@ DEP_CPP_FL_DR=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -775,6 +854,8 @@ DEP_CPP_FL_DRA=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -801,6 +882,8 @@ DEP_CPP_FL_DRAW=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -819,6 +902,8 @@ DEP_CPP_FL_EN=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -831,6 +916,7 @@ DEP_CPP_FL_FI=\
 	"..\fl\fl.h"\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -839,6 +925,8 @@ DEP_CPP_FL_FI=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
@@ -861,6 +949,7 @@ DEP_CPP_FL_FIL=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
 	"..\fl\fl_double_window.h"\
@@ -879,9 +968,13 @@ DEP_CPP_FL_FIL=\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_preferences.h"\
 	"..\fl\fl_return_button.h"\
+	"..\fl\fl_round_button.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -902,6 +995,7 @@ DEP_CPP_FL_FILE=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
 	"..\fl\fl_double_window.h"\
@@ -920,10 +1014,14 @@ DEP_CPP_FL_FILE=\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_preferences.h"\
 	"..\fl\fl_return_button.h"\
+	"..\fl\fl_round_button.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_shared_image.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -949,6 +1047,7 @@ DEP_CPP_FL_FILE_=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
 	"..\fl\fl_double_window.h"\
@@ -967,9 +1066,13 @@ DEP_CPP_FL_FILE_=\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_preferences.h"\
 	"..\fl\fl_return_button.h"\
+	"..\fl\fl_round_button.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -991,6 +1094,8 @@ DEP_CPP_FL_FILE_I=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_File_Icon.H"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -1012,6 +1117,8 @@ DEP_CPP_FL_FILE_IC=\
 	"..\FL\Fl_File_Icon.H"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_shared_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\FL\math.h"\
 	"..\src\flstring.h"\
@@ -1035,6 +1142,8 @@ DEP_CPP_FL_FILE_IN=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_input.h"\
 	"..\fl\fl_input_.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\src\flstring.h"\
@@ -1052,6 +1161,8 @@ DEP_CPP_FL_FO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1078,6 +1189,8 @@ DEP_CPP_FL_GE=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1100,6 +1213,8 @@ DEP_CPP_FL_GET=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_pixmap.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tiled_image.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -1125,6 +1240,7 @@ DEP_CPP_FL_GI=\
 	"..\fl\fl_gif_image.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_pixmap.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -1137,6 +1253,8 @@ DEP_CPP_FL_GL=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
@@ -1158,6 +1276,8 @@ DEP_CPP_FL_GL_=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_gl_window.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
@@ -1177,6 +1297,8 @@ DEP_CPP_FL_GL_W=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_gl_window.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
@@ -1196,6 +1318,8 @@ DEP_CPP_FL_GR=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1214,6 +1338,8 @@ DEP_CPP_FL_GRO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -1239,6 +1365,8 @@ DEP_CPP_FL_HE=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_shared_image.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -1252,6 +1380,7 @@ SOURCE=..\src\Fl_Help_View.cxx
 DEP_CPP_FL_HEL=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -1262,6 +1391,8 @@ DEP_CPP_FL_HEL=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_shared_image.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
@@ -1281,6 +1412,8 @@ DEP_CPP_FL_IM=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1310,6 +1443,7 @@ DEP_CPP_FL_IMA=\
 	"..\fl\fl_png_image.h"\
 	"..\fl\fl_pnm_image.h"\
 	"..\fl\fl_shared_image.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -1326,6 +1460,8 @@ DEP_CPP_FL_IN=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_input.h"\
 	"..\fl\fl_input_.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -1342,7 +1478,11 @@ DEP_CPP_FL_INP=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_input.h"\
 	"..\fl\fl_input_.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\src\flstring.h"\
@@ -1357,6 +1497,12 @@ DEP_CPP_FL_JP=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_jpeg_image.h"\
+	"..\fl\fl_symbol.h"\
+	"..\jpeg\jconfig.h"\
+	"..\jpeg\jerror.h"\
+	"..\jpeg\jmorecfg.h"\
+	"..\jpeg\jpegint.h"\
+	"..\jpeg\jpeglib.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1372,6 +1518,8 @@ DEP_CPP_FL_LA=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_input_.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1386,6 +1534,8 @@ DEP_CPP_FL_LI=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_light_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1400,6 +1550,8 @@ DEP_CPP_FL_LIN=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1423,6 +1575,8 @@ DEP_CPP_FL_LO=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1446,6 +1600,8 @@ DEP_CPP_FL_ME=\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_menu_window.h"\
 	"..\fl\fl_single_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -1460,6 +1616,8 @@ DEP_CPP_FL_MEN=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -1474,6 +1632,8 @@ DEP_CPP_FL_MENU=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -1492,6 +1652,8 @@ DEP_CPP_FL_MENU_=\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_bar.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1508,6 +1670,8 @@ DEP_CPP_FL_MENU_B=\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_button.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1521,6 +1685,8 @@ DEP_CPP_FL_MENU_G=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1536,6 +1702,8 @@ DEP_CPP_FL_MENU_W=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_menu_window.h"\
 	"..\fl\fl_single_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1554,6 +1722,8 @@ DEP_CPP_FL_MU=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_multi_label.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1566,6 +1736,8 @@ DEP_CPP_FL_OV=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1578,6 +1750,8 @@ DEP_CPP_FL_OVE=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1593,6 +1767,8 @@ DEP_CPP_FL_OVER=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1613,6 +1789,8 @@ DEP_CPP_FL_OVERL=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_overlay_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1629,6 +1807,8 @@ DEP_CPP_FL_OW=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1648,6 +1828,8 @@ DEP_CPP_FL_PA=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_pack.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1665,6 +1847,8 @@ DEP_CPP_FL_PI=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_item.h"\
 	"..\fl\fl_pixmap.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1689,6 +1873,8 @@ DEP_CPP_FL_PL=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -1703,7 +1889,15 @@ DEP_CPP_FL_PN=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_png_image.h"\
+	"..\fl\fl_symbol.h"\
+	"..\png\png.h"\
+	"..\png\pngconf.h"\
+	"..\zlib\zconf.h"\
+	"..\zlib\zlib.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_PN=\
+	"..\png\pngusr.h"\
 	
 # End Source File
 # Begin Source File
@@ -1715,6 +1909,7 @@ DEP_CPP_FL_PNM=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_pnm_image.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -1729,6 +1924,8 @@ DEP_CPP_FL_PO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_positioner.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1741,6 +1938,7 @@ DEP_CPP_FL_PR=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_preferences.h"\
+	"..\fl\fl_symbol.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -1758,6 +1956,8 @@ DEP_CPP_FL_PRI=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_printer.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1771,23 +1971,46 @@ DEP_CPP_FL_PRO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_progress.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_read_image.cxx
+DEP_CPP_FL_RE=\
+	"..\fl\enumerations.h"\
+	"..\fl\fl_device.h"\
+	"..\fl\fl_draw.h"\
+	"..\fl\fl_export.h"\
+	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
+	"..\fl\fl_widget.h"\
+	"..\fl\fl_window.h"\
+	"..\fl\mac.H"\
+	"..\fl\win32.h"\
+	"..\fl\x.h"\
+	"..\src\carbon\read_image.cxx"\
+	"..\src\flstring.h"\
+	"..\src\win\read_image.cxx"\
+	"..\src\xlib\read_image.cxx"\
+	".\config.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rect.cxx
-DEP_CPP_FL_RE=\
+DEP_CPP_FL_REC=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_display.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1810,6 +2033,8 @@ DEP_CPP_FL_REP=\
 	"..\fl\fl_button.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_repeat_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1820,10 +2045,15 @@ DEP_CPP_FL_RET=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_return_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1833,10 +2063,13 @@ SOURCE=..\src\Fl_Roller.cxx
 DEP_CPP_FL_RO=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_roller.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -1850,6 +2083,8 @@ DEP_CPP_FL_ROU=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1860,9 +2095,13 @@ DEP_CPP_FL_ROUN=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_device.h"\
+	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_light_button.h"\
 	"..\fl\fl_round_button.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1875,6 +2114,8 @@ DEP_CPP_FL_ROUND=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1884,6 +2125,7 @@ SOURCE=..\src\Fl_Scroll.cxx
 DEP_CPP_FL_SC=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -1892,6 +2134,8 @@ DEP_CPP_FL_SC=\
 	"..\fl\fl_scroll.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tiled_image.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
@@ -1905,6 +2149,8 @@ DEP_CPP_FL_SCR=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1918,11 +2164,14 @@ SOURCE=..\src\Fl_Scrollbar.cxx
 DEP_CPP_FL_SCRO=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -1935,6 +2184,8 @@ DEP_CPP_FL_SE=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1953,6 +2204,8 @@ DEP_CPP_FL_SET=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -1976,6 +2229,8 @@ DEP_CPP_FL_SH=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -1990,6 +2245,7 @@ DEP_CPP_FL_SHA=\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_pixmap.h"\
 	"..\fl\fl_shared_image.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_xbm_image.h"\
 	"..\fl\fl_xpm_image.h"\
 	"..\src\flstring.h"\
@@ -2007,6 +2263,8 @@ DEP_CPP_FL_SHO=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2028,6 +2286,8 @@ DEP_CPP_FL_SHOW=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_show_colormap.h"\
 	"..\fl\fl_single_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	".\config.h"\
@@ -2041,6 +2301,8 @@ DEP_CPP_FL_SI=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_single_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -2051,10 +2313,13 @@ SOURCE=..\src\Fl_Slider.cxx
 DEP_CPP_FL_SL=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -2068,6 +2333,10 @@ DEP_CPP_FL_SY=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_hash_table.h"\
+	"..\fl\fl_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -2083,6 +2352,8 @@ DEP_CPP_FL_TA=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tabs.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -2094,6 +2365,7 @@ DEP_CPP_FL_TE=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_text_buffer.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -2105,12 +2377,15 @@ SOURCE=..\src\Fl_Text_Display.cxx
 DEP_CPP_FL_TEX=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_text_buffer.h"\
 	"..\fl\fl_text_display.h"\
 	"..\fl\fl_valuator.h"\
@@ -2127,12 +2402,15 @@ DEP_CPP_FL_TEXT=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
 	"..\fl\fl_ask.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_text_buffer.h"\
 	"..\fl\fl_text_display.h"\
 	"..\fl\fl_text_editor.h"\
@@ -2150,6 +2428,8 @@ DEP_CPP_FL_TI=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -2165,6 +2445,8 @@ DEP_CPP_FL_TIL=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tiled_image.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -2181,6 +2463,8 @@ DEP_CPP_FL_TO=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_menu_window.h"\
 	"..\fl\fl_single_window.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tooltip.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
@@ -2192,7 +2476,10 @@ SOURCE=..\src\Fl_Valuator.cxx
 DEP_CPP_FL_VA=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	"..\FL\math.h"\
@@ -2209,10 +2496,13 @@ SOURCE=..\src\Fl_Value_Input.cxx
 DEP_CPP_FL_VAL=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_input.h"\
 	"..\fl\fl_input_.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_input.h"\
 	"..\fl\fl_widget.h"\
@@ -2228,9 +2518,12 @@ SOURCE=..\src\Fl_Value_Output.cxx
 DEP_CPP_FL_VALU=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_output.h"\
 	"..\fl\fl_widget.h"\
@@ -2242,10 +2535,13 @@ SOURCE=..\src\Fl_Value_Slider.cxx
 DEP_CPP_FL_VALUE=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_slider.h"\
 	"..\fl\fl_widget.h"\
@@ -2261,6 +2557,8 @@ DEP_CPP_FL_VE=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2286,6 +2584,8 @@ DEP_CPP_FL_VI=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2303,20 +2603,15 @@ SOURCE=..\src\Fl_Widget.cxx
 DEP_CPP_FL_WI=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
-	"..\fl\fl_scheme.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
 	"..\fl\fl_style.h"\
+	"..\fl\fl_style_list.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tooltip.h"\
-	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
-	"..\src\fl_scheme.cxx"\
 	"..\src\flstring.h"\
 	".\config.h"\
 	
@@ -2329,6 +2624,8 @@ DEP_CPP_FL_WIN=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -2341,6 +2638,8 @@ DEP_CPP_FL_WIND=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2356,6 +2655,8 @@ DEP_CPP_FL_WINDO=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2370,6 +2671,8 @@ DEP_CPP_FL_WINDOW=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\mac.H"\
@@ -2386,6 +2689,8 @@ DEP_CPP_FL_WIZ=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\fl_wizard.h"\
@@ -2406,6 +2711,8 @@ DEP_CPP_FL_X_=\
 	"..\fl\fl_menu_.h"\
 	"..\fl\fl_menu_bar.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\FL\Fl_Sys_Menu_Bar.H"\
 	"..\fl\fl_tooltip.h"\
 	"..\fl\fl_widget.h"\
@@ -2432,6 +2739,7 @@ DEP_CPP_FL_XB=\
 	"..\fl\fl_bitmap.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_xbm_image.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -2446,6 +2754,7 @@ DEP_CPP_FL_XP=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_pixmap.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_xpm_image.h"\
 	"..\src\flstring.h"\
 	".\config.h"\
@@ -2473,6 +2782,7 @@ DEP_CPP_FORMS=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_chart.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
@@ -2506,8 +2816,11 @@ DEP_CPP_FORMS=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_show_colormap.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
 	"..\fl\fl_timer.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_slider.h"\
 	"..\fl\fl_widget.h"\
@@ -2531,6 +2844,7 @@ DEP_CPP_FORMS_=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_chart.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
@@ -2565,8 +2879,11 @@ DEP_CPP_FORMS_=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_show_colormap.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
 	"..\fl\fl_timer.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_slider.h"\
 	"..\fl\fl_widget.h"\
@@ -2585,6 +2902,8 @@ DEP_CPP_FORMS_F=\
 	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_free.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	
 # End Source File
@@ -2601,6 +2920,7 @@ DEP_CPP_FORMS_FS=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_chart.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
@@ -2634,8 +2954,11 @@ DEP_CPP_FORMS_FS=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_show_colormap.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
 	"..\fl\fl_timer.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_slider.h"\
 	"..\fl\fl_widget.h"\
@@ -2661,6 +2984,7 @@ DEP_CPP_FORMS_P=\
 	"..\fl\fl_browser.h"\
 	"..\fl\fl_browser_.h"\
 	"..\fl\fl_button.h"\
+	"..\fl\fl_cancel_button.h"\
 	"..\fl\fl_chart.h"\
 	"..\fl\fl_check_button.h"\
 	"..\fl\fl_choice.h"\
@@ -2694,8 +3018,11 @@ DEP_CPP_FORMS_P=\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_show_colormap.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_tile.h"\
 	"..\fl\fl_timer.h"\
+	"..\FL\Fl_Tool_Button.H"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_value_slider.h"\
 	"..\fl\fl_widget.h"\
@@ -2715,6 +3042,8 @@ DEP_CPP_FORMS_T=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_timer.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -2729,6 +3058,8 @@ DEP_CPP_GL_DR=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
@@ -2751,6 +3082,8 @@ DEP_CPP_GL_ST=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
@@ -2772,6 +3105,8 @@ DEP_CPP_GLUT_=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_menu_item.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\fl\glut.h"\
@@ -2787,6 +3122,8 @@ DEP_CPP_GLUT_F=\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_gl_window.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\

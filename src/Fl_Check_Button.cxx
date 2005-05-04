@@ -61,7 +61,7 @@ static void fl_check_box(int x, int y, int w, int h, Fl_Color c){
 }
 
 Fl_Symbol FL_CHECK_BOX_(&fl_check_box, 3, 3, 6, 6);
-FL_EXPORT Fl_Symbol * FL_CHECK_BOX = &FL_CHECK_BOX_;
+FL_EXPORT Fl_Boxtype FL_CHECK_BOX = &FL_CHECK_BOX_;
 
 
 
