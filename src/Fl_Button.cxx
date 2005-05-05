@@ -182,10 +182,10 @@ Fl_Button_Style::Fl_Button_Style(Fl_Widget_Style * parent, unsigned mode):Fl_Wid
 
 
 
-void Fl_Button_Style::update_(Fl_Button::Style *s1, Fl_Widget_Style * s, unsigned what){
+void Fl_Button_Style::update(Fl_Widget_Style * s, unsigned what){
   if(!s) return;
-  Fl_Widget_Style::update_(s1, s, what);
-  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button_Style *)s)->down_box_ = s1->down_box_;
+  Fl_Widget_Style::update(s, what);
+  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button_Style *)s)->down_box_ = down_box_;
 };
 
 void Fl_Button_Style::down_box(Fl_Boxtype b) {

@@ -110,13 +110,8 @@ int Fl_Adjuster::handle(int event) {
 
 
     case FL_LEAVE:
-//      highlight();
       normal();
-      //redraw();
       highlight__ = 0;
-//      if(highlight__){
- //       highlight__ = 0;
- //     }
       return 1;
 
     case FL_ENTER:
@@ -125,15 +120,6 @@ int Fl_Adjuster::handle(int event) {
       //normal_();
     case FL_MOVE:
 
-      //if((mx<x()) || (mx>(x()+w())) || (my < y()) || (my > (y()+h()))){
-      //  if(highlight__){
-          //highlight();
-          //normal_();
-       //   highlight__ = 0;
-       //   return 1;
-       // }
-       // return 0;
-        //}
       if (! highlight__) return 0;
       if (w()>=h())
       	highlight__ = 3*(mx-x())/w() + 1;
@@ -148,28 +134,28 @@ int Fl_Adjuster::handle(int event) {
       if (Fl::visible_focus()) Fl::focus(this);
       ix = mx;
       if (w()>=h())
-	drag = 3*(mx-x())/w() + 1;
+      	drag = 3*(mx-x())/w() + 1;
       else
-	drag = 3-3*(Fl::event_y()-y()-1)/h();
+	      drag = 3-3*(Fl::event_y()-y()-1)/h();
       handle_push();
       redraw();
       return 1;
     case FL_DRAG:
       if (w() >= h()) {
-	delta = x()+(drag-1)*w()/3;	// left edge of button
-	if (mx < delta)
-	  delta = mx-delta;
-	else if (mx > (delta+w()/3)) // right edge of button
-	  delta = mx-delta-w()/3;
-	else
-	  delta = 0;
+	      delta = x()+(drag-1)*w()/3;	// left edge of button
+	      if (mx < delta)
+	        delta = mx-delta;
+	      else if (mx > (delta+w()/3)) // right edge of button
+	        delta = mx-delta-w()/3;
+	      else
+	        delta = 0;
       } else {
-	if (mx < x())
-	  delta = mx-x();
-	else if (mx > (x()+w()))
-	  delta = mx-x()-w();
-	else
-	  delta = 0;
+	      if (mx < x())
+	        delta = mx-x();
+	      else if (mx > (x()+w()))
+	        delta = mx-x()-w();
+	      else
+	        delta = 0;
       }
       switch (drag) {
       case 3: v = increment(previous_value(), delta); break;
@@ -180,14 +166,14 @@ int Fl_Adjuster::handle(int event) {
       return 1;
     case FL_RELEASE:
       if (Fl::event_is_click()) { // detect click but no drag
-	if (Fl::event_state()&0xF0000) delta = -10;
-	else delta = 10;
-	switch (drag) {
-	case 3: v = increment(previous_value(), delta); break;
-	case 2: v = increment(previous_value(), delta*10); break;
-	default:v = increment(previous_value(), delta*100); break;
-	}
-	handle_drag(soft() ? softclamp(v) : clamp(v));
+	      if (Fl::event_state()&0xF0000) delta = -10;
+	      else delta = 10;
+	      switch (drag) {
+	        case 3: v = increment(previous_value(), delta); break;
+	        case 2: v = increment(previous_value(), delta*10); break;
+	        default:v = increment(previous_value(), delta*100); break;
+	      }
+	      handle_drag(soft() ? softclamp(v) : clamp(v));
       }
       drag = 0;
       redraw();
@@ -195,23 +181,23 @@ int Fl_Adjuster::handle(int event) {
       return 1;
     case FL_KEYBOARD :
       switch (Fl::event_key()) {
-	case FL_Up:
+	      case FL_Up:
           if (w() > h()) return 0;
-	  handle_drag(clamp(increment(value(),-1)));
-	  return 1;
-	case FL_Down:
+	        handle_drag(clamp(increment(value(),-1)));
+	        return 1;
+	      case FL_Down:
           if (w() > h()) return 0;
-	  handle_drag(clamp(increment(value(),1)));
-	  return 1;
-	case FL_Left:
+	        handle_drag(clamp(increment(value(),1)));
+	        return 1;
+	      case FL_Left:
           if (w() < h()) return 0;
-	  handle_drag(clamp(increment(value(),-1)));
-	  return 1;
-	case FL_Right:
+	        handle_drag(clamp(increment(value(),-1)));
+	        return 1;
+	      case FL_Right:
           if (w() < h()) return 0;
-	  handle_drag(clamp(increment(value(),1)));
-	  return 1;
-	default:
+	        handle_drag(clamp(increment(value(),1)));
+	        return 1;
+	      default:
           return 0;
       }
       // break not required because of switch...
@@ -222,8 +208,6 @@ int Fl_Adjuster::handle(int event) {
         redraw();
         return 1;
       } else return 0;
-
-
 
   }
   return 0;

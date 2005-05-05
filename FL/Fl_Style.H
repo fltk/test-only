@@ -153,10 +153,10 @@ class FL_EXPORT Fl_Widget_Style {
   public:
     void clear_flag(unsigned c){flags_ &= ~c;}
 
-    static void update_(Fl_Widget_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+//    static void update_(Fl_Widget_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
   protected:
 
-    virtual void update(Fl_Widget_Style * s, unsigned what){update_(this, s, what);};
+    virtual void update(Fl_Widget_Style * s, unsigned what);//{update_(this, s, what);};
   public:
 
     Fl_Widget_Style(Fl_Widget_Style * parent, unsigned highlight_parent);
@@ -202,7 +202,7 @@ class FL_EXPORT Fl_Button_Style : public Fl_Widget_Style {
   Fl_Boxtype down_box_;
   //uchar down_box_;
 public:
-  static void update_(Fl_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+  //static void update_(Fl_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
 protected:
   Fl_Button_Style(Fl_Button_Style * s):Fl_Widget_Style(s){};
 
@@ -210,7 +210,7 @@ protected:
   Fl_Widget_Style * clone(){return new Fl_Button_Style(this);} 
 
 
-  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);}
+  void update(Fl_Widget_Style * s, unsigned what);//{update_(this, s,what);}
 public:
 
   Fl_Button_Style * highlight(){return (Fl_Button_Style *)highlight_();}
@@ -244,8 +244,8 @@ protected:
   //reimplementation of virtual functions for new style
   //void clear();
 
-  static void update_(Fl_Tool_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
-  void update(Fl_Widget_Style * s, unsigned what){update_(this, s,what);};
+  //static void update_(Fl_Tool_Button_Style * s1, Fl_Widget_Style * s, unsigned what=ALL);
+  void update(Fl_Widget_Style * s, unsigned what);//{update_(this, s,what);};
 public:
 
   Fl_Tool_Button_Style * highlight(){return (Fl_Tool_Button_Style *)highlight_();}

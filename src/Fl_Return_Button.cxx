@@ -114,10 +114,10 @@ Fl_Tool_Button_Style::Fl_Tool_Button_Style(Fl_Widget_Style * parent, unsigned mo
 
 
 
-void Fl_Tool_Button_Style::update_(Fl_Tool_Button_Style *s1,Fl_Widget::Style * s, unsigned what){
+void Fl_Tool_Button_Style::update(Fl_Widget::Style * s, unsigned what){
   if(!s) return;
-  Fl_Button_Style::update_(s1, s, what);
-  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Tool_Button_Style *)s)->symbol_align_ = s1->symbol_align();
+  Fl_Button_Style::update(s, what);
+  if(SYMBOL_ALIGN & ~(s->flags()) & what) ((Fl_Tool_Button_Style *)s)->symbol_align_ = symbol_align();
 };
 
 void Fl_Tool_Button_Style::symbol_align(uchar a) {
