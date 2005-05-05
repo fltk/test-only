@@ -453,6 +453,8 @@ extern FL_EXPORT Fl_Boxtype
   FL_ROUND_BOX  ///< used for Fl_Round_Button
   ;
 
+extern Fl_Symbol ADJUSTER_ARROWS[];
+
 
 /*
 enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):

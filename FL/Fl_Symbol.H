@@ -103,6 +103,7 @@ public:
   Fl_Symbol(void (* draw)(int x, int y, int w, int h, Fl_Color c), int dx = 0, int dy = 0, int dw = 0, int dh = 0, bool resize = 0){
     set(draw, dx, dy, dw, dh, resize);}
   Fl_Symbol(void (* draw)(int x, int y, int w, int h, Fl_Color c)){set(draw,0,0,0,0);}
+  Fl_Symbol(Fl_Image * i){set(i);}
 
 };
 

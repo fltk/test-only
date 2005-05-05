@@ -588,6 +588,7 @@ void Fl_Symbol::draw(int x, int y, int w, int h, Fl_Color color) const{
 
   case 3:
     Fl_Image * i = (Fl_Image *)draw_;
+    fl_color(color); // setting current color for bitmaps
     i->draw(x+w/2 - i->w()/2, y+h/2 - i->h()/2);
     break;
 

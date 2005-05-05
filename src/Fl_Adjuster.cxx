@@ -31,6 +31,7 @@
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Style_List.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Symbol.H>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -38,6 +39,15 @@ static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
 static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
 #include "slowarrow.h"
 static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
+
+
+Fl_Symbol ADJUSTER_ARROWS[] ={
+  Fl_Symbol(&slowarrow),
+  Fl_Symbol(&mediumarrow),
+  Fl_Symbol(&fastarrow)
+};
+
+
 
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
@@ -77,25 +87,20 @@ void Fl_Adjuster::draw() {
   draw_box(drag==3?fl_down(highlight__ == 3? box_highl_ : box_):highlight__ == 3? box_highl_ : box_, x()+2*dx,  y(), W, H, highlight__ == 3? col_highl : col);
 
   if(highlight__ ==1)
-    fl_color(c_highl);
+    (down_box()+2)->draw(x(), y()+2*dy, W, H, c_highl);
   else
-    fl_color(c_norm);
-  fastarrow.draw(x()+(W-fastarrow_width)/2,
-		 y()+2*dy+(H-fastarrow_height)/2, W, H);
-  
-  if(highlight__ ==2)
-    fl_color(c_highl);
-  else
-    fl_color(c_norm);
-  mediumarrow.draw(x()+dx+(W-mediumarrow_width)/2,
-		   y()+dy+(H-mediumarrow_height)/2, W, H);
+    (down_box()+2)->draw(x(), y()+2*dy, W, H, c_norm);
 
   if(highlight__ ==2)
-    fl_color(c_highl);
+    (down_box()+1)->draw(x()+dx, y()+ dy, W, H, c_highl);
   else
-    fl_color(c_norm);
-  slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
-		 y()+(H-slowarrow_width)/2, W, H);
+    (down_box()+1)->draw(x()+dx, y()+ dy, W, H, c_norm);
+
+  if(highlight__ ==3)
+    down_box()->draw(x() + 2*dx, y(), W, H, c_highl);
+  else
+    down_box()->draw(x()+2*dx, y(), W, H, c_norm);
+
   if(highlight__) highlight_(); else normal_();
   if (Fl::focus() == this) draw_focus();
 }
@@ -230,8 +235,9 @@ Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
 Fl_Adjuster::Style * Fl_Adjuster::default_style(){
   static Fl_Adjuster::Style * s = 0;
   if(!s){ // not yet initialized
-    s = new Fl_Adjuster::Style(Fl_Button::default_style(), Style::ALL & ~Style::SELECTION_COLOR);
+    s = new Fl_Adjuster::Style(Fl_Button::default_style(), Style::ALL & ~(Style::SELECTION_COLOR | Style::DOWN_BOX));
     s->selection_color(FL_FOREGROUND_COLOR);
+    s->down_box(ADJUSTER_ARROWS);
   }
   return s;
 }
