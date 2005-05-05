@@ -83,6 +83,7 @@ LINK32=link.exe
 # ADD LINK32 fltkd.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../test/deviced.exe" /pdbtype:sept /libpath:"..\lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
+
 !ENDIF 
 
 # Begin Target
