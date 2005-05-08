@@ -668,10 +668,11 @@ void Browser::draw_item() {
   widget->y(r.y()+(int(leading())-1)/2);
   translate(widget->x(), widget->y());
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-  int save_w = widget->w();
-  if (!save_w) widget->w(interior.r()-r.x());
+//   int save_w = widget->w();
+//   if (!save_w)
+  widget->w(interior.r()-r.x());
   widget->draw();
-  widget->w(save_w);
+  //  widget->w(save_w);
   widget->set_damage(0);
   pop_matrix();
 
@@ -1234,16 +1235,16 @@ int Browser::handle(int event) {
     }
     // find the item we are pointing at:
     if (!goto_position(event_y()-interior.y()+yposition_) && !item()) return 0;
-    // set xx to how far to left of widget they clicked:
+    // set x to left edge of item:
     int arrow_size = int(textsize())|1;
-    int xx = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_-event_x();
+    int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
     // see if they are inside the widget and it takes the event:
-    if (xx <= 0 && item()->send(event));
+    if (event_x() >= x && item()->send(event));
     else fltk::belowmouse(this);
     // accept enter/move events so the browser's tooltip appears:
     if (event != PUSH) return 1;
     // drag must start & end in open/close box for it to work:
-    openclose_drag = (xx > 0 && xx < arrow_size && item_is_parent());
+    openclose_drag = (event_x()<x && event_x()>=x-arrow_size && item_is_parent());
     if (openclose_drag) {
       set_focus();
       damage_item(HERE);
@@ -1276,10 +1277,10 @@ int Browser::handle(int event) {
     if (!goto_position(event_y()-interior.y()+yposition_) && !item()) break;
     if (openclose_drag) {
       set_focus();
-      // set xx to how far to left of widget they clicked:
+      // set x to left edge of item:
       int arrow_size = int(textsize())|1;
-      int xx = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_-event_x();
-      if (xx > 0 && xx < arrow_size && item_is_parent()) {
+      int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
+      if (event_x()<x && event_x()>=x-arrow_size && item_is_parent()) {
 	if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
       } else {
 	if (openclose_drag == 1) {openclose_drag = 2; damage_item(HERE);}

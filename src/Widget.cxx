@@ -741,7 +741,11 @@ int Widget::handle(int event) {
 int Widget::send(int event) {
 
   int dx = x(); int dy = y();
-  for (Widget* p = parent(); p; p = p->parent()) {dx += p->x(); dy += p->y();}
+  // WAS: I don't sum the positions of parents that don't seem to contain
+  // the widget vertically. This is a hack so that items in hierarchial
+  // browsers work. A different fix is forthcoming, I hope:
+  for (Widget* p = parent(); p; p = p->parent())
+    if (dy < p->h()) {dx += p->x(); dy += p->y();}
   int save_x = e_x;
   int save_y = e_y;
   e_x = e_x_root-dx;
