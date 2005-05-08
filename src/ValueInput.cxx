@@ -219,7 +219,7 @@ void ValueInput::layout() {
   input.resize(0, 0, w(), h());
   input.layout();
   // I'm not sure why this is here, may be a mistake:
-  value_damage();
+  if (!input.value()[0]) value_damage();
 }
 
 void ValueInput::value_damage() {

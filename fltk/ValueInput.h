@@ -1,5 +1,5 @@
 //
-// "$Id: ValueInput.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id$"
 //
 // Text field for inputing a floating-point number
 //
@@ -42,9 +42,9 @@ public:
 
 protected:
   void layout();
+  virtual void value_damage(); // cause damage() due to value() changing
 
 private:
-  virtual void value_damage(); // cause damage() due to value() changing
   static void input_cb(Widget*,void*);
   void increment_cb();
   static void repeat_callback(void* v);
@@ -54,5 +54,5 @@ private:
 #endif
 
 //
-// End of "$Id: ValueInput.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id$".
 //

@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,139 +18,189 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#include <config.h>
 #include <fltk/ValueSlider.h>
+#include <fltk/Group.h>
+#include <fltk/events.h>
 #include <fltk/damage.h>
-#include <fltk/draw.h>
 #include <fltk/Box.h>
+#include <fltk/draw.h>
+#include <fltk/math.h>
+#include <stdlib.h>
 using namespace fltk;
 
 /*! \class fltk::ValueSlider
 
-  The fltk::ValueSlider widget is a fltk::Slider widget with an area
-  to the left or bottom displaying the current value.
+  Controls a single floating point value through a combination of a
+  FloatInput and a Slider.
 
-  \image html value_slider.gif
+  \image html Fl_Value_Slider.gif
+
+  As this is a subclass of Slider, all slider methods work, for
+  setting the slider size, tick marks, etc.
+
+  The user can type a new value into the input area.  If step() is
+  greater or equal to 1.0 an IntInput is used, this prevents the user
+  from typing anything other than digits. If step() is less than one
+  then the user can type floating point values with decimal points and
+  exponents.
+
+  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
+  done when the user moves the slider, uses the up/down arrows, or
+  types the Enter key. This may be more useful than the default
+  setting of fltk::WHEN_CHANGED which can make the callback happen
+  when partially-edited numbers are in the field.
+
+  You can get at the input field by using the public "input" instance
+  variable. For instance you can clobber the text to a word with
+  value_input->input.static_value("word"). You can also set the size
+  of it (call layout() first).
 */
 
-void ValueSlider::draw() {
+/* IMPLEMENTATION NOTE:
 
-  // figure out the inner size of the box:
-  Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
-  Rectangle sr(r);
+  This is *not* an Group even though it has a "child" widget, this
+  appears to be a good idea and fltk should support it.  However
+  Widget::parent() returns an Group, not an Widget like it did in fltk
+  1.1 so this may not be proper C++.
+*/
 
-  // figure out where to draw the slider, leaving room for tick marks:
-  if (tick_size() && (type()&TICK_BOTH)) {
-    if (horizontal()) {
-      sr.move_b(-tick_size());
-      switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sr.y(sr.y()+tick_size()/2); break;
-      case TICK_ABOVE: sr.y(sr.y()+tick_size()); break;
-      }
+void ValueSlider::input_cb(Widget*, void* v) {
+  ValueSlider& t = *(ValueSlider*)v;
+  double nv;
+  if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
+  else nv = strtod(t.input.value(), 0);
+  if (nv != t.value() || t.when() & WHEN_NOT_CHANGED) {
+    t.set_value(nv);
+    t.Slider::value_damage();
+    if (t.when()) {
+      t.clear_changed();
+      t.do_callback();
     } else {
-      sr.move_r(-tick_size());
-      switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sr.x(sr.x()+tick_size()/2); break;
-      case TICK_ABOVE: sr.x(sr.x()+tick_size()); break;
-      }
+      t.set_changed();
     }
-  }
-
-  Flags flags = this->flags();
-  Flags f2 = flags & ~FOCUSED;
-  if (pushed()) f2 |= VALUE|PUSHED;
-  flags &= ~HIGHLIGHT;
-
-  // figure out where to draw the text:
-  Rectangle tr(sr);
-  if (horizontal()) {
-    tr.w(35); sr.move_x(35);
-    if (r.y()) {tr.y(r.y()); tr.h(r.h());} // if box has border, center text
-  } else {
-    tr.h(int(textsize())); sr.move_b(-tr.h()); tr.y(sr.b());
-    if (r.x()) {tr.x(r.x()); tr.w(r.w());} // if box has border, center text
-  }
-
-  // minimal-update the slider, if it indicates the background needs
-  // to be drawn, draw that. We draw the slot if the current box type
-  // has no border:
-  bool drawslot = r.y() == 0;
-
-  // draw the box or the visible parts of the window
-  if (!box->fills_rectangle()) draw_background();
-  drawstyle(style(), flags);
-  box->draw(Rectangle(w(), h()));
-  focusbox()->draw(r);
-
-  if (type() & TICK_BOTH) {
-    Rectangle tr(sr);
-    if (horizontal()) {
-      switch (type()&TICK_BOTH) {
-      case TICK_ABOVE: tr.y(r.y()); tr.set_b(sr.center_y()); break;
-      case TICK_BELOW: tr.y(sr.center_y()+(drawslot?3:0)); tr.set_b(r.b()-1); break;
-      }
-    } else {
-      switch (type()&TICK_BOTH) {
-      case TICK_ABOVE: tr.x(r.x()); tr.set_r(sr.center_x()); break;
-      case TICK_BELOW: tr.x(sr.center_x()+(drawslot?3:0)); tr.set_r(r.r()-1); break;
-      }
-    }
-    Color color = textcolor();
-    if (flags&INACTIVE) color = inactive(color);
-    setcolor(color);
-    draw_ticks(tr, (slider_size()+1)/2);
-  }
-  Slider::draw(sr, f2, drawslot);
-
-  // draw the text:
-  if (damage() & (DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
-    drawstyle(style(), flags);
-    push_clip(tr);
-    // erase the background if not already done:
-    if (!(damage()&DAMAGE_ALL)) {
-      if (!box->fills_rectangle()) draw_background();
-      box->draw(Rectangle(w(), h()));
-      focusbox()->draw(r);
-    }
-    // now draw the text:
-    char buf[128];
-    format(buf);
-    drawtext(buf, tr, 0);
-    pop_clip();
   }
 }
+
+void ValueSlider::draw() {
+  if (damage() & ~DAMAGE_CHILD) {
+    input.set_damage(DAMAGE_ALL);
+    Flags f2 = flags() & ~FOCUSED;
+    if (pushed()) f2 |= VALUE|PUSHED;
+    Box* box = this->box();
+    if (!box->fills_rectangle()) draw_background();
+    drawstyle(style(),flags()&~HIGHLIGHT);
+    Rectangle r(w(),h()); box->draw(r);
+    slider_rect(r);
+    Slider::draw(r, f2, r.y()==0);
+  }
+  input.label(label());
+  input.align(align());
+  //input.copy_style(style());
+  input.flags(flags());
+  push_matrix();
+  translate(input.x(),input.y());
+  input.draw();
+  pop_matrix();
+  input.set_damage(0);
+}
+
+#define INITIALREPEAT .5f
+#define REPEAT .1f
 
 int ValueSlider::handle(int event) {
-  // figure out the inner size of the slider and text areas:
-  Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
-  if (horizontal()) {
-    int tw = 35; r.move_x(tw);
-  } else {
-    int th = int(textsize()); r.move_b(-th);
+  Rectangle r; slider_rect(r);
+  switch (event) {
+  case FOCUS:
+    focus(&input);
+    break;
+  case PUSH:
+    if (!event_inside(r)) break;
+  case DRAG:
+  case RELEASE:
+  case ENTER:
+  case MOVE:
+  case LEAVE:
+    return Slider::handle(event, r);
+  // make any drop replace all the text:
+  case DND_ENTER:
+  case DND_DRAG:
+  case DND_LEAVE:
+    // we return false if input has focus so drag-out works:
+    return (!input.focused());
+  case DND_RELEASE:
+    take_focus();
+    return 1;
+  case PASTE:
+    // dropped text produces this, replace all input text with it:
+    input.position(0, input.size());
+    break;
   }
-  return Slider::handle(event, r);
+  input.type(step()>=1.0 ? FloatInput::INT : FloatInput::FLOAT);
+  input.when(when());
+  int ret = input.send(event);
+  if (!ret) ret = Slider::handle(event, r);
+  return ret;
 }
 
-static void revert(Style *s) {
-  s->color_ = GRAY75;
-  s->box_ = FLAT_BOX;
-  //s->glyph_ = ::glyph;
-}
-static NamedStyle style("ValueSlider", revert, &ValueSlider::default_style);
-NamedStyle* ValueSlider::default_style = &::style;
-
-ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
-: Slider(x, y, w, h, l) {
-  if (!default_style->glyph_) default_style->glyph_ = style()->glyph_;
-  style(default_style);
-  step(.01);
-  //set_click_to_focus();
+// Return the area to draw the slider in:
+void ValueSlider::slider_rect(Rectangle& r) {
+  r.set(0,0,w(),h()); box()->inset(r);
+  if (vertical()) r.move_b(-input.h());
+  else r.move_x(input.w());
 }
 
-//
+// Resize the input field and put it at the edge:
+void ValueSlider::layout() {
+  Slider::layout();
+  Rectangle r(w(),h()); box()->inset(r);
+  if (vertical()) {
+    int h = int(input.textsize())+8;
+    input.resize(r.x(),r.b()-h,r.w(),h);
+  } else {
+    int w = r.w()/4;
+    if (w < 35) w = 35;
+    else if (w > 80) w = 80;
+    input.resize(r.x(),r.y(),w,r.h());
+  }
+  input.layout();
+  if (!input.value()[0]) value_damage();
+}
+
+void ValueSlider::value_damage() {
+  // Only redraw the text if the numeric value is different..
+  if (input.value()[0]) {
+    if (step() >= 1) {
+      if (strtol(input.value(), 0, 0) == long(value())) return;
+    } else {
+      // parse the existing text:
+      double oldv = strtod(input.value(), 0);
+      if (!oldv) {
+	if (!value()) return;
+      } else {
+	if (fabs(fabs(value()/oldv)-1) < 1.2e-7) return;
+      }
+    }
+  }
+  char buf[128];
+  format(buf);
+  input.value(buf);
+  //input.position(0, input.size()); // highlight it all
+  Slider::value_damage();
+}
+
+static inline int nogroup(int x) {Group::current(0); return x;}
+
+ValueSlider::ValueSlider(int x, int y, int w, int h, const char* l)
+: Slider(x, y, w, h, l), input(nogroup(x), y, w, h, 0) {
+  input.parent((Group*)this); // kludge!
+  input.callback(input_cb, this);
+  set_click_to_focus();
+  Group::current(parent());
+}
+
+ValueSlider::~ValueSlider() {
+  input.parent(0); // keep it from calling Group::remove(&input) on this
+}
+
 // End of "$Id$".
-//

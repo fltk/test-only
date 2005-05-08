@@ -209,10 +209,10 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
   int x1, y1, x2, y2, dx, dy, w;
   if (horizontal()) {
     x1 = x2 = r.x()+(slider_size_-1)/2; dx = 1;
-    y1 = r.y(); y2 = r.b(); dy = 0;
+    y1 = r.y(); y2 = r.b()-1; dy = 0;
     w = r.w();
   } else {
-    x1 = r.x(); x2 = r.r(); dx = 0;
+    x1 = r.x(); x2 = r.r()-1; dx = 0;
     y1 = y2 = r.y()+(slider_size_-1)/2; dy = 1;
     w = r.h();
   }
@@ -290,78 +290,76 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 
 void Slider::draw()
 {
-  // figure out the inner size of the box:
-  Box* box = this->box();
-  Rectangle r(w(),h()); box->inset(r);
-  Rectangle sr(r);
-
-  // figure out where to draw the slider, leaving room for tick marks:
-  if (tick_size_ && (type()&TICK_BOTH)) {
-    if (horizontal()) {
-      sr.move_b(-tick_size_);
-      switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sr.y(sr.y()+tick_size_/2); break;
-      case TICK_ABOVE: sr.y(sr.y()+tick_size_); break;
-      }
-    } else {
-      sr.move_r(-tick_size_);
-      switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sr.x(sr.x()+tick_size_/2); break;
-      case TICK_ABOVE: sr.x(sr.x()+tick_size_); break;
-      }
-    }
-  }
-
   Flags flags = this->flags();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
 
-  // minimal-update the slider, if it indicates the background needs
-  // to be drawn, draw that. We draw the slot if the current box type
-  // has no border:
-  bool drawslot = r.y() == 0;
-
-  // draw the box or the visible parts of the window
+  Box* box = this->box();
   if (!box->fills_rectangle()) draw_background();
   drawstyle(style(),flags);
-  box->draw(Rectangle(w(), h()));
+  Rectangle r(w(),h()); box->draw(r); box->inset(r);
+
+  // we draw the slot if box() has a zero-sized border:
+  draw(r, f2, r.y()==0);
 
   // draw the focus indicator inside the box:
+  drawstyle(style(),flags);
   focusbox()->draw(r);
-
-  if (type() & TICK_BOTH) {
-    if (horizontal()) {
-      switch (type()&TICK_BOTH) {
-      case TICK_ABOVE: r.set_b(sr.center_y()); break;
-      case TICK_BELOW: r.set_y(sr.center_y()+(drawslot?3:0)); r.move_b(-1); break;
-      }
-    } else {
-      switch (type()&TICK_BOTH) {
-      case TICK_ABOVE: r.set_r(sr.center_x()); break;
-      case TICK_BELOW: r.set_x(sr.center_x()+(drawslot?3:0)); r.move_r(-1); break;
-      }
-    }
-    setcolor(inactive(textcolor(), flags));
-    draw_ticks(r, (slider_size()+1)/2);
-  }
-
-  draw(sr, f2, drawslot);
 }
 
 /*!
-  Draw the moving parts and the "slot". You should already have drawn
-  the background of the slider.
+  Subclasses can use this to redraw the moving part.
+  Draw everything that is inside the box, such as the tick marks,
+  the moving slider, and the "slot". The slot only drawn if \a slot
+  is true. You should already have drawn the background of the slider.
 */
 
-bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
+bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
 {
   // for back compatability, use type flag to set slider size:
   if (type()&16/*FILL*/) slider_size(0);
 
+  Rectangle r = sr;
+
+  // draw the tick marks and inset the slider drawing area to clear them:
+  if (tick_size_ && (type()&TICK_BOTH)) {
+    Rectangle tr = r;
+    if (horizontal()) {
+      r.move_b(-tick_size_);
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH:
+	r.y(r.y()+tick_size_/2);
+	break;
+      case TICK_ABOVE:
+	r.y(r.y()+tick_size_);
+	tr.set_b(r.center_y());
+	break;
+      case TICK_BELOW:
+	tr.set_y(r.center_y()+(slot?3:0));
+	break;
+      }
+    } else {
+      r.move_r(-tick_size_);
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH:
+	r.x(r.x()+tick_size_/2);
+	break;
+      case TICK_ABOVE:
+	r.x(r.x()+tick_size_);
+	tr.set_r(r.center_x());
+	break;
+      case TICK_BELOW:
+	tr.set_x(r.center_x()+(slot?3:0));
+	break;
+      }
+    }
+    setcolor(inactive(contrast(textcolor(),color()),flags));
+    draw_ticks(tr, (slider_size()+1)/2);
+  }
+
   // if user directly set selected_color we use it:
   if (style()->selection_color_) flags |= SELECTED;
-
   drawstyle(style(),flags|OUTPUT);
 
   // figure out where the slider should be:
@@ -382,7 +380,6 @@ bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
 
   old_position = sp;
 
-  // we draw a slot if it seems the box has no border:
   if (slot) {
     const int slot_size_ = 6;
     Rectangle sl;
@@ -423,14 +420,12 @@ int Slider::handle(int event, const Rectangle& r) {
   case DRAG: {
     // figure out the space the slider moves in and where the event is:
     int w,mx;
-    Rectangle r1(r);
-    box()->inset(r1);
     if (horizontal()) {
-      w = r1.w();
-      mx = event_x()-r1.x();
+      w = r.w();
+      mx = event_x()-r.x();
     } else {
-      w = r1.h();
-      mx = event_y()-r1.y();
+      w = r.h();
+      mx = event_y()-r.y();
     }
     if (w <= slider_size_) return 1;
     static int offcenter;
@@ -490,7 +485,11 @@ int Slider::handle(int event, const Rectangle& r) {
   }
 }
 
-int Slider::handle(int event) {return handle(event,Rectangle(w(),h()));}
+int Slider::handle(int event) {
+  Rectangle r(w(),h());
+  box()->inset(r);
+  return handle(event,r);
+}
 
 static void glyph(int glyph, const Rectangle& r)
 {

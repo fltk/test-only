@@ -1,5 +1,5 @@
 //
-// "$Id: ValueSlider.h,v 1.4 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -25,20 +25,29 @@
 #define fltk_Value_Slider_h
 
 #include "Slider.h"
+#include "FloatInput.h"
 
 namespace fltk {
 
 class FL_API ValueSlider : public Slider {
 public:
-  void draw();
+  FloatInput input;
   int handle(int);
+  void draw();
   ValueSlider(int x,int y,int w,int h, const char *l = 0);
-  static NamedStyle* default_style;
+  ~ValueSlider();
+ protected:
+  void layout();
+  virtual void value_damage(); // cause damage() due to value() changing
+
+private:
+  static void input_cb(Widget*,void*);
+  void slider_rect(Rectangle&);
 };
 
 }
 #endif
 
 //
-// End of "$Id: ValueSlider.h,v 1.4 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id$".
 //
