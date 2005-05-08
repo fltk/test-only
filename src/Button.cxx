@@ -90,6 +90,10 @@ static Button* pushed_button;
 static bool initial_value;
 
 int Button::handle(int event) {
+  return handle(event, Rectangle(w(),h()));
+}
+
+int Button::handle(int event, const Rectangle& rectangle) {
   switch (event) {
   case ENTER:
   case LEAVE:
@@ -101,7 +105,7 @@ int Button::handle(int event) {
     initial_value = value();
   case DRAG: {
     bool new_value;
-    if (event_inside(Rectangle(0,0,w(),h()))) {
+    if (event_inside(rectangle)) {
       pushed_button = this;
       // if (type() == RADIO) new_value = true; else
       new_value = !initial_value;

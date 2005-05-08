@@ -117,7 +117,7 @@ Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
   add_to(&menu);
   //menu.user_data(data);
   if (picked) menu.value(picked-this);
-  if (menu.Menu::popup(X, Y, W, H, title))
+  if (menu.Menu::popup(Rectangle(X, Y, W, H), title))
     return this + menu.value();
   return 0;
 }

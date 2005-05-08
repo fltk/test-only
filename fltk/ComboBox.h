@@ -40,7 +40,7 @@ public:
   void draw();
   void layout();
   int handle(int);
-  int popup(int x,int y,int w=0,int h=0,const char* title=0,bool menubar=false);
+  int popup(const Rectangle&,const char* title=0,bool menubar=false);
 
   int choice(int v);
   int choice() const;

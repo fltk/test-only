@@ -171,7 +171,7 @@ public:
   MenuTitle* title;
   bool is_menubar;
   int drawn_selected;	// last redraw has this selected
-  MWindow(MenuState*, int level, int X,int Y,int W,int H, const char* title, int rightedge);
+  MWindow(MenuState*, int level, const Rectangle& R, const char* title, int rightedge);
   ~MWindow();
   int find_selected(int mx, int my);
   int titlex(int);
@@ -479,9 +479,9 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
 
 ////////////////////////////////////////////////////////////////
 
-MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
+MWindow::MWindow(MenuState* m, int l, const Rectangle& rectangle,
 		 const char* t, int rightedge)
-  : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
+  : MenuWindow(rectangle.x(), rectangle.y(), rectangle.w(), rectangle.h(), 0), menustate(m), level(l)
 {
   box_from_menuwindow = style()->box();
   style(menustate->widget->style());
@@ -525,6 +525,11 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
 
   menustate->widget->layout_in(this, menustate->indexes, level);
   if (Wtitle > w()) w(Wtitle);
+
+  int X = rectangle.x();
+  int Y = rectangle.y();
+  int Wp = rectangle.w();
+  int Hp = rectangle.h();
 
   // Move horizontally to center it, if we did not give an inital width
   // (which indicates we are trying to line up with some widget):
@@ -867,22 +872,18 @@ int MWindow::handle(int event) {
   Exactly the same as popup() except the selected child widget is
   returned, rather than execute() being called. This is probably
   more useful in most cases...  */
-Widget* Menu::try_popup(
-    int X, int Y, int W, int H,
-    const char* title,
-    bool menubar)
+Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
 {
   Group::current(0); // fix possible programmer error...
 
   // figure out where to pop up in screen coordinates:
+  Rectangle rectangle(r);
   if (parent()) {
-    for (Widget* w = this; w; w = w->parent()) {
-      X += w->x();
-      Y += w->y();
-    }
+    for (Widget* w = this; w; w = w->parent())
+      rectangle.move(w->x(), w->y());
   } else {
-    X += event_x_root()-event_x();
-    Y += event_y_root()-event_y();
+    rectangle.move(event_x_root()-event_x(),
+		   event_y_root()-event_y());
   }
   if (fltk::event() == fltk::PUSH)
     monitor = &Monitor::find(event_x_root(), event_y_root());
@@ -899,7 +900,7 @@ Widget* Menu::try_popup(
   p.indexes[0] = value();
   p.indexes[1] = -1;
 
-  MWindow toplevel(&p, 0, X, Y, W, H, title, 0);
+  MWindow toplevel(&p, 0, rectangle, title, 0);
   toplevel.child_of(Window::first());
   p.menus[0] = &toplevel;
   p.fakemenu = 0;
@@ -931,7 +932,7 @@ Widget* Menu::try_popup(
       p.level++;
       p.indexes[p.level] = item;
       p.indexes[p.level+1] = -1;
-      mw = new MWindow(&p, p.level, X,Y,W,H, 0,0);
+      mw = new MWindow(&p, p.level, rectangle, 0,0);
       p.menus[p.nummenus++] = mw;
       // move all earlier menus to line up with this new one:
       int dy = mw->y()-nY;
@@ -989,7 +990,7 @@ Widget* Menu::try_popup(
       int my = r.y();
       if (p.hmenubar) {my += r.h(); r.move_y(1); r.move_b(-1);}
       else mx += r.w();
-      mw = new MWindow(&p, 1, mx, my, 0, 0, 0, 0);
+      mw = new MWindow(&p, 1, Rectangle(mx, my, 0, 0), 0, 0);
       *(Rectangle*)(mw->title) = r;
       mw->title->show(p.menus[0]->child_of());
       if (widget->takesevents() && p.current_children()>=0) {
@@ -1006,7 +1007,7 @@ Widget* Menu::try_popup(
       // Create a normal submenu:
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(index) - mw->ypos(0);
-      mw = new MWindow(&p, p.nummenus, nX, nY, 0, 0, 0,
+      mw = new MWindow(&p, p.nummenus, Rectangle(nX, nY, 0, 0), 0,
 		       p.nummenus ? p.menus[p.nummenus-1]->x() : 0);
       p.menus[p.nummenus++] = mw;
       mw->show(p.menus[0]->child_of());
@@ -1062,12 +1063,9 @@ Widget* Menu::try_popup(
 
   \a menubar is for internal use by menubars and should be left false.
 */
-int Menu::popup(
-    int X, int Y, int W, int H,
-    const char* title,
-    bool menubar)
+int Menu::popup(const Rectangle& rectangle, const char* title, bool menubar)
 {
-  Widget *selected = try_popup(X, Y, W, H, title, menubar);
+  Widget *selected = try_popup(rectangle, title, menubar);
   if (selected) {
     if (checkmark(selected)) selected->invert_flag(VALUE);
     execute(selected);

@@ -101,7 +101,7 @@ int ComboBox::handle(int event) {
 	  mouse_on_input = false;
 	  if (click_to_focus()) take_focus();
 	EXECUTE:
-	  if (popup(0, 0, w(), h(), 0)) redraw(DAMAGE_VALUE);
+	  if (popup(Rectangle(w(), h()), 0)) redraw(DAMAGE_VALUE);
 	}
 	want_mouse_drag = ret!=0;
 	ret = 1;
@@ -223,12 +223,9 @@ void ComboBox::input_callback_(Widget *w,void *d) {
   This->do_callback();
 }
 
-int ComboBox::popup(
-    int X, int Y, int W, int H,
-    const char* title,
-    bool menubar)
+int ComboBox::popup(const Rectangle& r,  const char* title, bool menubar)
 {
-  Widget *selected = try_popup(X, Y, W, H, title, menubar);
+  Widget *selected = try_popup(r, title, menubar);
   if (selected) {
     if (selected->label())
       input_->value(selected->label());

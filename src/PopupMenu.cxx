@@ -98,13 +98,9 @@ void PopupMenu::draw() {
 */
 int PopupMenu::popup() {
   if (type()&7) {
-    if (label()) {
-      return Menu::popup(event_x(), event_y(), 0,0, label());
-    } else {
-      return Menu::popup(event_x(), event_y());
-    }
+    return Menu::popup(Rectangle(event_x(), event_y(), 0, 0), label());
   } else {
-    return Menu::popup(0, 0, w(), h());
+    return Menu::popup(Rectangle(w(), h()));
   }
 }
 

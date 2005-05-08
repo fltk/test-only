@@ -38,14 +38,16 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 
 extern Widget* fl_pending_callback;
 
+// Called by any changes to the text, this correctly triggers callbacks:
 static void changed_stuff(Input* i) {
   i->set_changed();
-  if (i->when() & WHEN_CHANGED) {i->do_callback(); return;}
-  if (i->when() & WHEN_RELEASE) {
+  if (i->when() & (WHEN_RELEASE|WHEN_ENTER_KEY)) {
     Widget* w = fl_pending_callback;
     if (i == w) return;
     if (w) {fl_pending_callback = 0; w->do_callback();}
     fl_pending_callback = i;
+  } else {
+    if (i->when()) i->do_callback();
   }
 }
 
@@ -54,46 +56,42 @@ static void changed_stuff(Input* i) {
 /*! \class fltk::Input
 
   This is the FLTK text input widget. It displays a single line of
-  text and lets the user edit it. Normally it is drawn with an inset
-  box and a white background. The text may contain any characters
-  (even '\\0'). The characters 0..31 are displayed in ^X notation, the
-  appearance of other characters will depend on your operating system.
+  text and lets the user edit it. The text may contain any bytes
+  (even '\\0'). The bytes 0..31 are displayed in ^X notation, the
+  rest are interpreted as UTF-8 (see fltk::utf8decode()).
 
-  By default the callback() is done when a change has been made and
-  the user clicks on a different widget, or navigates the focus to
-  a different widget. Other values for when():
+  By default the callback() is done each time the text is changed
+  by the user. Other values for when():
 
   - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on.
-  - fltk::WHEN_CHANGED: The callback is done each time the text is
-    changed by the user.
-  - fltk::WHEN_RELEASE: This is the default. The callback is done when
-    the widget loses focus to another widget in the same window, or
-    the window is hidden.
+  - fltk::WHEN_CHANGED: The default, if set and no other flags are set the
+    callback is done each time the text is changed by the user.
   - fltk::WHEN_ENTER_KEY: If the user types the Enter key, the entire
     text is selected, and if the value has changed, the callback is
-    done. Notice that this will block any widget that has Enter key as
-    a shortcut.
+    done. The callback will also be done if the value has changed
+    and the user clicks on another widget or the focus moves away
+    (to another widget or program). If another widget (such as an OK button
+    on a panel) has Enter as a shortcut, that widget will take precendence.
+    If that widget hides or destroys the Input widget because it is
+    dismissing a panel, the callback will be done then.
   - fltk::WHEN_ENTER_KEY_ALWAYS: The Enter key will do the callback
     even if the text has not changed. Useful for command fields.
-  - fltk::WHEN_ENTER_KEY_CHANGED: The Enter key will do the callback
-    even if the text has not changed, and the callback is done on each
-    change. Test fltk::event_key() to see why the callback was done.
+    The callback will also be done for other reasons described above,
+    test fltk::event_key()==fltk::EnterKey to ignore these.
+  - fltk::WHEN_RELEASE: Depreciated. The callback is done if the
+    text has changed and the user clicks on another widget or the
+    focus moves away. But no special treatment of ENTER.
 
-  Most useful changes of behavior (such as allowing numbers only) can
-  be accomplished by making a subclass and overriding the replace()
-  function, to make a version that rejects changes you don't want to
-  allow. If you don't like the keybindings you can override handle()
-  to change them.
+  If you wish to restrict the text the user can type (such as limiting
+  it to numbers, a particular length, etc), you should subclass this
+  and override the replace() function with a version that rejects
+  changes you don't want to allow.
 
-  Warning: although UTF-8 is understood by the text editor, all positions
-  are measured in \e bytes, not in "characters". For some reason some
-  people are under the mistaken impression that there is some reason
-  to store all lengths in "characters", which is totally wrong, as the
-  "characters" are only used at the very last moment to decide how to
-  draw the string. It makes as much sense as storing the length of the
-  string as a count of the words in it. Please understand that \e bytes
-  are important, and maybe we will get working I18N in the 21st century...
+  If you don't like the keybindings you can override handle() to
+  change them.
 
+  All arguments that are lengths or offsets into the strings are in
+  bytes, not the UTF-8 characters they represent.
 */
 
 #define MAXBUF 1024
@@ -726,9 +724,8 @@ static void undobuffersize(int n) {
   between \a b and \a e (either one may be less or equal to the other), and
   then inserts \a ilen (which may be zero) characters from the string
   \a text at that point and leaves the mark() and position() after the
-  insertion. If the text is changed this does the callback() if
-  when()&WHEN_CHANGED is true. The changes are also recorded so that
-  a call to undo() can undo them.
+  insertion. If the text is changed the callback is done if the when()
+  flags indicate it should be done.
 
   Subclasses of Input can override this method to control what
   characters can be inserted into the text. A typical implementation
@@ -917,16 +914,6 @@ bool Input::yank() {
   return yankcut && change(position(), position(), undobuffer, yankcut);
 }
 #endif
-
-/*! Does the callback if there were any changes and when() does not
-  have WHEN_CHANGED set. To keep track of this it clears changed().
-*/
-void Input::maybe_do_callback() {
-  if (changed() && !(when()&WHEN_CHANGED) || (when()&WHEN_NOT_CHANGED)) {
-    if (fl_pending_callback == this) fl_pending_callback = 0;
-    clear_changed(); do_callback();
-  }
-}
 
 ////////////////////////////////////////////////////////////////
 
@@ -1262,22 +1249,14 @@ bool Input::handle_key() {
 
   case ReturnKey:
   case KeypadEnter:
-    // if (try_shortcut()) return true;
     if (ctrl || shift) return false;
+    if (try_shortcut()) return true;
     if (when() & WHEN_ENTER_KEY) {
-#if 1
       position(size(), 0);
-#else
-      // Throw away the focus so the user won't accidentally change the
-      // value when they think they are typing shortcuts. Suggested by
-      // the behavior of Shake:
-      // redraw the highlight area:
-      if (mark_ != position_) minimal_update(mark_, position_);
-      // else make the cursor disappear:
-      else erase_cursor_at(position_);
-      throw_focus();
-#endif
-      maybe_do_callback();
+      if (fl_pending_callback==this || (when()&WHEN_NOT_CHANGED)) {
+	if (fl_pending_callback == this) fl_pending_callback = 0;
+	do_callback();
+      }
       return true;
     }
     if (type() < MULTILINE) return false;
@@ -1467,12 +1446,9 @@ int Input::handle(int event, const Rectangle& r) {
     if (mark_ != position_) minimal_update(mark_, position_);
     // else make the cursor disappear:
     else erase_cursor_at(position_);
-//     if ((when()&WHEN_RELEASE) && ((Widget*)window())->contains(fltk::focus()))
-//       maybe_do_callback();
     return 1;
 
   case HIDE:
-    if (when()&WHEN_RELEASE) maybe_do_callback();
     return 1;
 
 #if 0

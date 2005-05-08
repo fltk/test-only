@@ -125,6 +125,10 @@ static bool try_item(Choice* choice, int i) {
 }
 
 int Choice::handle(int e) {
+  return handle(e,Rectangle(w(),h()));
+}
+
+int Choice::handle(int e, const Rectangle& rectangle) {
   int children = this->children(0,0);
   if (!children) return 0;
   switch (e) {
@@ -149,7 +153,7 @@ int Choice::handle(int e) {
 //  event_is_click(0);
     if (click_to_focus()) take_focus();
   EXECUTE:
-    if (popup(0, 0, w(), h(), 0)) redraw(DAMAGE_VALUE);
+    if (popup(rectangle, 0)) redraw(DAMAGE_VALUE);
     return 1;
 
   case SHORTCUT:

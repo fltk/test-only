@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/ValueInput.h>
 #include <fltk/Group.h>
@@ -34,7 +32,7 @@ using namespace fltk;
 /*! \class fltk::ValueInput
 
   Controls a single floating point value through a combination of a
-  FloatInput and two buttons. Other toolkits call this a "Spin
+  FloatInput and two up/down buttons. Other toolkits call this a "Spin
   Box".
 
   \image html Fl_Value_Input.gif
@@ -43,21 +41,27 @@ using namespace fltk;
   linesize(). Holding down any shift key and clicking
   increments/decrements by the pagesize().
 
-  If step() is greater or equal to 1.0 an IntInput is used
-  instead. This prevents the user from typing anything other than
-  digits. If step() is less than one then the user can type floating
-  point values with decimal points and exponents.
+  The user can type a new value into the input area.  If step() is
+  greater or equal to 1.0 an IntInput is used, this prevents the user
+  from typing anything other than digits. If step() is less than one
+  then the user can type floating point values with decimal points and
+  exponents.
 
-  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
-  done when the user hits the up/down arrow keys or when the user
-  types the Enter key. This may be more useful than the default
-  setting of fltk::WHEN_CHANGED which can make the callback happen
-  when partially-edited numbers are in the field.
+  The user can type \e any value they want into the text field, including
+  ones outside the range() or non-multiples of the step(). If you want
+  to prevent this, make the callback function reset the value to
+  one you allow.
+
+  By default the callback is done when the user moves the slider, when
+  they use up/down keys to change the number in the text, or if they
+  edit the text, when they hit the Enter key or they click on another
+  widget or put the focus on another widget. Changing when() to
+  fltk::WHEN_CHANGED will make it do the callback on every edit
+  of the text.
 
   You can get at the input field by using the public "input" instance
   variable. For instance you can clobber the text to a word with
   value_input->input.static_value("word").
-
 */
 
 /* IMPLEMENTATION NOTE:
@@ -253,6 +257,7 @@ ValueInput::ValueInput(int x, int y, int w, int h, const char* l)
   set_flag(ALIGN_LEFT);
   set_click_to_focus();
   Group::current(parent());
+  when(WHEN_CHANGED|WHEN_ENTER_KEY);
 }
 
 ValueInput::~ValueInput() {

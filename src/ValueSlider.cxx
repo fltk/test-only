@@ -45,11 +45,17 @@ using namespace fltk;
   then the user can type floating point values with decimal points and
   exponents.
 
-  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
-  done when the user moves the slider, uses the up/down arrows, or
-  types the Enter key. This may be more useful than the default
-  setting of fltk::WHEN_CHANGED which can make the callback happen
-  when partially-edited numbers are in the field.
+  The user can type \e any value they want into the text field, including
+  ones outside the range() or non-multiples of the step(). If you want
+  to prevent this, make the callback function reset the value to
+  one you allow.
+
+  By default the callback is done when the user moves the slider, when
+  they use up/down keys to change the number in the text, or if they
+  edit the text, when they hit the Enter key or they click on another
+  widget or put the focus on another widget. Changing when() to
+  fltk::WHEN_CHANGED will make it do the callback on every edit
+  of the text.
 
   You can get at the input field by using the public "input" instance
   variable. For instance you can clobber the text to a word with
@@ -197,6 +203,8 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char* l)
   input.callback(input_cb, this);
   set_click_to_focus();
   Group::current(parent());
+  step(.01);
+  when(WHEN_CHANGED|WHEN_ENTER_KEY);
 }
 
 ValueSlider::~ValueSlider() {

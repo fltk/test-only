@@ -1,5 +1,5 @@
 //
-// "$Id: Choice.h,v 1.3 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id$"
 //
 // Popup list of items that the user can choose one of. Based on Motif
 // but modern equivalent is the OS/X popup choices.
@@ -37,9 +37,9 @@ namespace fltk {
 class FL_API Choice : public Menu {
 public:
   int handle(int);
+  int handle(int, const Rectangle&);
   Choice(int,int,int,int,const char * = 0);
   static NamedStyle* default_style;
-protected:
   void draw();
 };
 
@@ -48,5 +48,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Choice.h,v 1.3 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Button.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id$"
 //
 // Push button widget
 //
@@ -45,11 +45,11 @@ public:
   bool	set();
   bool	clear();
   void	setonly();
-  virtual int handle(int);
+  int handle(int);
+  int handle(int event, const Rectangle&);
   Button(int,int,int,int,const char * = 0);
   static NamedStyle* default_style;
 
-protected:
   virtual void draw();
   void draw(int glyph, int glyph_width) const;
 };
@@ -59,5 +59,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Button.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id$".
 //

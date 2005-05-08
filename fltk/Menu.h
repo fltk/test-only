@@ -1,14 +1,6 @@
-//
 // "$Id$"
 //
-// Base class for MenuBar, Choice, Browser. This manages a set
-// of child Item widgets, and handles a "List" object that can
-// generate the Item widgets on the fly (allowing the menu or
-// browser to show program-defined data). It also provides a
-// popup method for widgets to call so they can use this to
-// implement their own popup menus.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_Menu_h
 #define fltk_Menu_h
@@ -84,7 +75,7 @@ public:
   int find_selected(Widget*,const int* indexes, int level, int, int) const;
   Rectangle get_location(Widget*,const int* indexes, int level, int) const;
 
-  int popup(int x,int y,int w=0,int h=0, const char* title=0,bool menubar=false);
+  int popup(const Rectangle&, const char* title=0,bool menubar=false);
   int handle_shortcut();
   static void default_callback(Widget*, void*);
   void execute(Widget*);
@@ -143,7 +134,7 @@ public:
 #endif
 
 protected:
-  Widget *try_popup(int x,int y,int w=0,int h=0,const char* title=0,bool menubar=false);
+  Widget *try_popup(const Rectangle&,const char* title=0,bool menubar=false);
 	
 private:
   List* list_;

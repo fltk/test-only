@@ -842,9 +842,9 @@ bool fltk::event_inside(const fltk::Rectangle& r) {
   fltk::Widget::take_focus() instead, it will test first.
 */
 void fltk::focus(Widget *o) {
+  call_pending_if_not(o);
   Widget *p = focus_;
   if (o != p) {
-    call_pending_if_not(o);
     compose_reset();
     focus_ = o;
     for (; p && !p->contains(o); p = p->parent()) {

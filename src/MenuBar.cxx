@@ -76,7 +76,7 @@ J2:
     value(-1);
 J1:
     highlight_ = -1; redraw(DAMAGE_CHILD);
-    popup(0, 0, w(), h(), 0, true);
+    popup(Rectangle(w(), h()), 0, true);
     if (lastfocus_) lastfocus_->take_focus();
     lastfocus_ = 0;
     return 1;
