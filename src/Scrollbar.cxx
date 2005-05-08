@@ -236,7 +236,6 @@ int Scrollbar::handle(int event) {
 }
 
 void Scrollbar::draw() {
-  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
 
   Rectangle r(w(),h()); box()->inset(r);

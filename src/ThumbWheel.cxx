@@ -78,7 +78,7 @@ int ThumbWheel::handle(int event) {
 }
 
 void ThumbWheel::draw() {
-  drawstyle(style(), update_flags()|OUTPUT);
+  drawstyle(style(), flags()|OUTPUT);
   const Color fg = getcolor();
 
   if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) draw_box();
@@ -103,7 +103,7 @@ void ThumbWheel::draw() {
       fillrect(Rectangle(r.r()-h1,r.y(),h1-h2,r.h()));
       h1 = h2;
     }
-    if (active_r()) {
+    if (!(flags()&INACTIVE)) {
       // draw ridges:
       double junk;
       for (double y = -ARC+modf(offset*sin(ARC)/(r.w()/2)/delta,&junk)*delta;;
@@ -140,7 +140,7 @@ void ThumbWheel::draw() {
       fillrect(Rectangle(r.x(),r.b()-h1,r.w(),h1-h2));
       h1 = h2;
     }
-    if (active_r()) {
+    if (!(flags()&INACTIVE)) {
       // draw ridges:
       double junk;
       for (double y = -ARC+modf(offset*sin(ARC)/(r.h()/2)/delta,&junk)*delta;

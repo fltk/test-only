@@ -90,7 +90,7 @@ static char which_highlight = 0;
 static char which_pushed = 0;
 
 void ValueInput::draw() {
-  drawstyle(style(),update_flags());
+  drawstyle(style(),flags());
   Rectangle r(w(),h()); box()->inset(r);
   const int bw = r.h()/2; r.move_r(-bw);
   if (damage() & DAMAGE_ALL) {
@@ -98,13 +98,12 @@ void ValueInput::draw() {
     input.set_damage(DAMAGE_ALL);
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
-    Flags ff = flags() | OUTPUT;
     Flags f[2];
-    f[0] = f[1] = ff & ~HIGHLIGHT;
-    if (which_highlight && (ff&HIGHLIGHT))
-      f[which_highlight-1] = ff;
+    f[0] = f[1] = flags() & ~(HIGHLIGHT|FOCUSED) | OUTPUT;
+    if (which_highlight && (flags()&HIGHLIGHT))
+      f[which_highlight-1] |= HIGHLIGHT;
     if (which_pushed && pushed())
-      f[which_pushed-1] = VALUE | HIGHLIGHT | OUTPUT;
+      f[which_pushed-1] |= VALUE;
     Rectangle gr(r.r(),r.y(),bw,bw);
     drawstyle(style(),f[0]);
     draw_glyph(GLYPH_UP_BUTTON, gr);

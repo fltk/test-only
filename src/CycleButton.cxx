@@ -64,7 +64,7 @@ void CycleButton::draw() {
   // this code is copied from Button, but simplified as a lot of
   // back-compatability and the glyphs are eliminated:
 
-  Flags flags = update_flags()|OUTPUT;
+  Flags flags = this->flags()|OUTPUT;
   if (this == held_down) flags |= VALUE|PUSHED;
 
   Style style = *(this->style());
@@ -112,6 +112,7 @@ void CycleButton::draw() {
     pop_clip();
   }
 
+  drawstyle(&style,flags);
   focusbox()->draw(r);
 }
 

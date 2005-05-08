@@ -71,7 +71,6 @@ void fl_glyph_return(int, const Rectangle& r)
 }
 
 void ReturnButton::draw() {
-  update_flags();
   Button::draw(0,-2*int(textsize()));
 }
 

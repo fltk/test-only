@@ -255,7 +255,6 @@ void Button::draw() {
     fl_did_clipping = this;
     return;
   }
-  update_flags();
   draw(0,0);
 }
 

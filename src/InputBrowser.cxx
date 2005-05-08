@@ -266,7 +266,7 @@ InputBrowser::handle(int e) {
 
 void
 InputBrowser::draw() {
-  drawstyle(style(),update_flags());
+  drawstyle(style(),flags());
   minw_ = w();
   Rectangle r(w(),h()); box()->inset(r);
   int W1 = r.h()*4/5;

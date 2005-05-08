@@ -847,12 +847,19 @@ void fltk::focus(Widget *o) {
     call_pending_if_not(o);
     compose_reset();
     focus_ = o;
-    for (; p && !p->contains(o); p = p->parent()) p->handle(UNFOCUS);
+    for (; p && !p->contains(o); p = p->parent()) {
+      p->clear_flag(FOCUSED);
+      p->handle(UNFOCUS);
+    }
     if (o) {
       unsigned saved = e_keysym;
       e_keysym = 0; // make widgets not think a keystroke moved focus
       o->handle(FOCUS);
-      for (; (o = o->parent()); ) o->handle(FOCUS_CHANGE);
+      o->set_flag(FOCUSED);
+      for (; (o = o->parent()); ) {
+	o->set_flag(FOCUSED);
+	o->handle(FOCUS_CHANGE);
+      }
       e_keysym = saved;
     }
   }
@@ -880,8 +887,10 @@ void fltk::belowmouse(Widget *o) {
   Widget *p = belowmouse_;
   if (o != p) {
     belowmouse_ = o;
-    for (; p && !p->contains(o); p = p->parent())
+    for (; p && !p->contains(o); p = p->parent()) {
+      p->clear_flag(HIGHLIGHT);
       p->handle(dnd_flag ? DND_LEAVE : LEAVE);
+    }
   }
 }
 
@@ -907,6 +916,7 @@ void fltk::pushed(Widget *o) {
   fltk, no events (i.e. fltk::LEAVE or fltk::UNFOCUS) are sent to the
   widget.  */
 void Widget::throw_focus() {
+  clear_flag(HIGHLIGHT|FOCUSED);
   if (contains(fltk::pushed())) pushed_ = 0;
 #if USE_X11
   if (contains(selection_requestor)) selection_requestor = 0;

@@ -193,7 +193,6 @@ public:
   void  remove_timeout()	;
 
   void	make_current() const	;
-  Flags update_flags()		;
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;

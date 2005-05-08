@@ -74,7 +74,6 @@ extern bool fl_hide_underscore;
   to your own function that draws whatever you want.
 */
 void Choice::draw() {
-  update_flags();
   if (damage() & DAMAGE_ALL) draw_frame();
   Rectangle r(w(),h()); box()->inset(r);
   int w1 = r.h()*4/5;
@@ -99,7 +98,7 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
-      if (!active_r()) o->set_flag(NOTACTIVE|INACTIVE);
+      if (flags()&INACTIVE) o->set_flag(NOTACTIVE|INACTIVE);
       r.move_x(2);
       push_clip(r);
       push_matrix();

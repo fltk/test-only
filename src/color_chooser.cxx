@@ -210,7 +210,6 @@ static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
 }
 
 void ccHueBox::draw() {
-  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
   Rectangle r(w(),h()); box()->inset(r);
   if (damage() == DAMAGE_VALUE) {
@@ -298,7 +297,6 @@ static const uchar* generate_vimage(void* vv, int X, int Y, int W, uchar* p) {
 }
 
 void ccValueBox::draw() {
-  update_flags();
   if (damage()&DAMAGE_ALL) draw_frame();
   ColorChooser* c = (ColorChooser*)parent();
   Idata i;

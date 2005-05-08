@@ -645,9 +645,9 @@ void Group::layout(const Rectangle& r, int layout_damage) {
 Widget* fl_did_clipping;
 
 void Group::draw() {
+  clear_flag(HIGHLIGHT); // we never draw the box with highlight colors
   int numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
-    update_flags(); clear_flag(HIGHLIGHT);
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:

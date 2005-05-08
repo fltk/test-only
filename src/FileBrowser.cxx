@@ -213,21 +213,11 @@ FileBrowser::item_draw(void *p,	// I - List item data
 		          int  w,	// I - Width of item
 		          int  h) const	// I - Height of item
 {
-  Color	c;			// Color of text
-  BLINE	*line;			// Pointer to line
-
-
-  puts("FileBrowser::item_draw()");
+  //puts("FileBrowser::item_draw()");
   // Draw the list item text...
-  line = (BLINE *)p;
+  BLINE* line = (BLINE *)p;
 
-  setfont(textfont(), textsize());
-  if (line->flags & SELECTED)
-    c = contrast(textcolor(), selection_color());
-  else
-    c = textcolor();
-
-  setcolor(active_r() ? c : inactive(c));
+  drawstyle(style(), flags()|line->flags);
 
   if (FileIcon::first() == NULL)
   {
@@ -246,7 +236,7 @@ FileBrowser::item_draw(void *p,	// I - List item data
       ((FileIcon *)line->data)->draw(x, y, icon_size_, icon_size_,
 				     (line->flags & SELECTED) ? YELLOW :
 				     GRAY90,
-				     active_r());
+				     !(flags()&INACTIVE));
   }
 }
 

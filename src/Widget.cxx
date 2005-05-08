@@ -638,13 +638,13 @@ void Widget::redraw_label() {
 
 /** Causes a redraw if highlighting changes.
 
-    Calls redraw(DAMAGE_HIGHLIGHT) if this widget is active
-    and has a non-zero highlight_color(). This is designed to be
-    called in response to ENTER and EXIT events.
+    Calls redraw(DAMAGE_HIGHLIGHT) if this widget
+    has a non-zero highlight_color(). This is designed to be
+    called in response to ENTER and EXIT events and not redraw
+    the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (takesevents() && active_r() && highlight_color())
-    redraw(DAMAGE_HIGHLIGHT);
+  if (highlight_color()) redraw(DAMAGE_HIGHLIGHT);
 }
 
 // If a draw() method sets this then the calling group assummes it
@@ -669,7 +669,7 @@ extern Widget* fl_did_clipping;
 */
 void Widget::draw()
 {
-  update_flags(); clear_flag(HIGHLIGHT);
+  clear_flag(HIGHLIGHT);
   if (box() == NO_BOX) {
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
@@ -698,32 +698,27 @@ void Widget::draw()
 /*! Handle an \ref events(event). Returns non-zero if the
   widget understood and used the event.
 
-  The default version returns true for
-  fltk::ENTER, fltk::LEAVE, and fltk::MOVE over any opaque widgets
-  (ones where box() is not NO_BOX). This is done so you can put tooltips
-  on the base widget.
+  The default version returns true for fltk::ENTER and fltk::MOVE
+  events, this is done so you can put tooltips on the base widget. All
+  other events return zero.
 
   Information on how to write your own version of handle() is can
   be found under \ref events.
 
-  If you want to send an event to a widget you do not want to call
-  this, you probably want to call send() which will do some extra
-  processing before and after the event is handled.
+  If you want to send an event to a widget you probably want to call
+  send(), not handle(). Send will do extra work with each event before
+  calling this, such as turning HIGHLIGHT and FOCUSED flags on/off.
 */
 int Widget::handle(int event) {
   switch (event) {
   case ENTER:
   case MOVE:
-    // Though returning true will work for normal widgets, it will not
-    // work if this is a group and some child has the belowmouse because
-    // send() will not change the belowmouse then. Setting belowmouse
-    // directly fixes this.
+    // Setting belowmouse directly is not needed by most widgets, as
+    // send() will do it if this returns true. However if this widget
+    // has children and one of them is the belowmouse, send will not
+    // change it, so I have to call this here.
     fltk::belowmouse(this);
     return true;
-  case HIDE:
-  case DEACTIVATE:
-    throw_focus();
-    return 0;
   default:
     return 0;
   }
@@ -759,6 +754,7 @@ int Widget::send(int event) {
     if (!takesevents()) break;
     ret = handle(event);
     if (ret) {
+      set_flag(FOCUSED);
       // If it returns true then this is the focus() widget, but only
       // set this if handle() did not pass this on to a child:
       if (!contains(fltk::focus())) fltk::focus(this);
@@ -768,6 +764,7 @@ int Widget::send(int event) {
   case ENTER:
   case MOVE:
     if (!visible()) break;
+    set_flag(HIGHLIGHT);
     // figure out correct type of event:
     event = (contains(fltk::belowmouse())) ? MOVE : ENTER;
     ret = handle(event);
@@ -778,9 +775,15 @@ int Widget::send(int event) {
     }
     break;
 
+  case LEAVE:
+    clear_flag(HIGHLIGHT);
+    ret = handle(event);
+    break;
+
   case DND_ENTER:
   case DND_DRAG:
     if (!takesevents()) break;
+    set_flag(HIGHLIGHT);
     // figure out correct type of event:
     event = (contains(fltk::belowmouse())) ? DND_DRAG : DND_ENTER;
     // see if it wants the event:
@@ -810,15 +813,19 @@ int Widget::send(int event) {
     break;
 
   case SHOW:
-  case HIDE:
     if (visible()) handle(event);
-    // we always return zero as we want this event sent to every child
+    break;
+
+  case HIDE:
+    if (visible()) {throw_focus(); handle(event);}
     break;
 
   case ACTIVATE:
+    if (takesevents()) {clear_flag(INACTIVE); handle(event);}
+    break;
+
   case DEACTIVATE:
-    if (takesevents()) handle(event);
-    // we always return zero as we want this event sent to every child
+    if (takesevents()) {throw_focus(); set_flag(INACTIVE); handle(event);}
     break;
 
   case SHORTCUT:
@@ -862,11 +869,15 @@ void Widget::remove_timeout() {
 ////////////////////////////////////////////////////////////////
 
 /*! \fn bool Widget::active() const
-  Returns the active state of this widget. The widget is only really
-  active if all parents are active, use active_r() to test this.
+  Returns true if deactivate() has not been called, or activate()
+  has been called since then.
+
+  Parents may also be deactivated, in which case this widget will
+  not get events even if this is true. You can test for this with
+  !active_r(). Or inside draw() events you can test flags()&INACTIVE.
 */
 
-/*! Returns whether the widget is active. THis is true if active() is
+/*! Returns whether the widget is active. This is true if active() is
   true for this and all parent widgets. An inactive widget does not
   get any events, but it does get redrawn. */
 bool Widget::active_r() const {
@@ -893,6 +904,7 @@ void Widget::activate() {
 void Widget::deactivate() {
   if (active_r()) {
     set_flag(NOTACTIVE|INACTIVE);
+    throw_focus();
     redraw_label(); redraw();
     handle(DEACTIVATE);
   } else {
@@ -939,6 +951,7 @@ void Widget::show() {
 void Widget::hide() {
   if (visible_r()) {
     set_flag(INVISIBLE);
+    throw_focus();
     relayout();
     // we must redraw the enclosing group that has an opaque box:
     for (Widget *p = parent(); p; p = p->parent()) {

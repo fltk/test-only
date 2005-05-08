@@ -18,7 +18,7 @@ ProgressBar::ProgressBar(int x, int y, int w, int h, const char *lbl)
 }
 
 void ProgressBar::draw() {
-  drawstyle(style(),update_flags());
+  drawstyle(style(),flags());
   if (damage() & DAMAGE_ALL) draw_box();
   Rectangle r(w(),h());
   box()->inset(r);

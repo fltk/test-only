@@ -62,7 +62,7 @@ ComboBox::~ComboBox() {
 
 void ComboBox::draw() {
   if (damage() & DAMAGE_ALL) {
-    drawstyle(style(), update_flags()|OUTPUT);
+    drawstyle(style(), flags()|OUTPUT);
     draw_frame();
     Rectangle r(w(),h());
     r.set_x(w()-h()*4/5);

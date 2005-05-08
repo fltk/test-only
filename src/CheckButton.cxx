@@ -73,7 +73,6 @@ static void default_glyph(int glyph, const Rectangle& R)
 }
 
 void CheckButton::draw() {
-  update_flags();
   Button::draw(0, int(textsize())+2);
 }
 

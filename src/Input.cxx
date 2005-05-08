@@ -231,7 +231,6 @@ static float line_ascent(float leading) {
   left of the text.
 */
 void Input::draw() {
-  update_flags();
   Rectangle r(w(),h());
   box()->inset(r);
   if (damage() & DAMAGE_ALL) {
@@ -248,7 +247,7 @@ void Input::draw() {
       Rectangle lr(r); lr.w(label_width);
       fillrect(lr);
       Color color = labelcolor();
-      if (!active_r()) color = inactive(color);
+      if (flags()&INACTIVE) color = inactive(color);
       setcolor(color);
       float y = r.y()+((r.h()-height)>>1)+desc;
       drawtext(label(), r.x()+2, y);

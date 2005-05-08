@@ -64,7 +64,6 @@ using namespace fltk;
 */
 
 void Dial::draw() {
-  update_flags();
   Rectangle r(w(),h());
   if (type()!=FILL || box() != OVAL_BOX) {
     if (damage()&DAMAGE_ALL) draw_box();

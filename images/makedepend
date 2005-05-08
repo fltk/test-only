@@ -1,12 +1,13 @@
 # DO NOT DELETE
 
 Fl_Guess_Image.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-Fl_Guess_Image.o: ../fltk/FL_API.h ../fltk/SharedImage.h ../fltk/Image.h
-Fl_Guess_Image.o: ../fltk/Symbol.h ../fltk/xbmImage.h ../fltk/x.h
-Fl_Guess_Image.o: ../fltk/draw.h
+Fl_Guess_Image.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
+Fl_Guess_Image.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
+Fl_Guess_Image.o: ../fltk/xbmImage.h ../fltk/x.h ../fltk/draw.h
 fl_jpeg.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-fl_jpeg.o: ../fltk/FL_API.h ../fltk/SharedImage.h ../fltk/Image.h
-fl_jpeg.o: ../fltk/Symbol.h
+fl_jpeg.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
+fl_jpeg.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
 fl_png.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-fl_png.o: ../fltk/FL_API.h ../fltk/x.h ../fltk/draw.h ../fltk/SharedImage.h
-fl_png.o: ../fltk/Image.h ../fltk/Symbol.h
+fl_png.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
+fl_png.o: ../fltk/x.h ../fltk/draw.h ../fltk/SharedImage.h ../fltk/Image.h
+fl_png.o: ../fltk/Symbol.h

@@ -76,7 +76,7 @@ void Adjuster::draw() {
   }
 
   Rectangle r(W,H);
-  Flags flags = update_flags() & ~(VALUE|PUSHED|HIGHLIGHT) | OUTPUT;
+  Flags flags = this->flags() & ~(VALUE|PUSHED|HIGHLIGHT) | OUTPUT;
   for (int i = 1; i < 4; i++) {
     Flags f = flags;
     if (drag == i) f |= VALUE|PUSHED;

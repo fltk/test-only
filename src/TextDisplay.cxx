@@ -1867,7 +1867,6 @@ void TextDisplay::draw(void) {
   if (damage() & DAMAGE_ALL) {
 //printf("drawing rectangles\n");
     // draw the box()
-    update_flags();
     draw_frame();
 
     setcolor(color());

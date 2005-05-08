@@ -28,7 +28,7 @@ using namespace fltk;
 // keystrokes do not do anything.
 
 void ValueOutput::draw() {
-  drawstyle(style(),update_flags());
+  drawstyle(style(),flags());
   if (damage() & DAMAGE_ALL) draw_frame();
   Rectangle r(w(),h()); box()->inset(r);
   push_clip(r);

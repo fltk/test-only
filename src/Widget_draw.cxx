@@ -75,25 +75,6 @@ LabelType* const fltk::NO_LABEL = &noLabel;
 ////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
-/** Change some of the flags() to represent the current state. This
-    is typically done by draw() so that all boxes and labels are
-    drawn with the correct attributes.
-    - INACTIVE is set to !active_r()
-    - HIGHLIGHT is set if active_r() and this == belowmouse()
-    - FOCUSED is set if focused()
-    The resulting new value for flags() is returned.
-    In the future this function may become a no-op, and the correct
-    flags will be tracked as things change in the widgets.
-*/
-Flags Widget::update_flags() {
-  Flags f = flags_ & ~(INACTIVE|HIGHLIGHT|FOCUSED);
-  if (!active_r()) f |= INACTIVE;
-  else if (takesevents() && belowmouse()) f |= HIGHLIGHT;
-  if (focused()) f |= FOCUSED;
-  flags_ = f;
-  return f;
-}
-
 /** Draw the widget's box() such that it fills the entire area of the
     widget. If the box is not rectangluar, this also draws the area
     of the parent widget that is exposed.

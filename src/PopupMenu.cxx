@@ -79,7 +79,7 @@ void PopupMenu::draw() {
       || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
     draw_background();
   }
-  Flags flags = update_flags()|OUTPUT;
+  Flags flags = this->flags()|OUTPUT;
   if (::pushed == this) flags |= VALUE|HIGHLIGHT;
   drawstyle(style(), flags);
   Rectangle r(w(),h());
@@ -139,9 +139,11 @@ int PopupMenu::handle(int e) {
     }
   EXECUTE:
     ::pushed = this;
+    clear_flag(HIGHLIGHT);
     //if (!(type()&7)) value(-1); // make it pull down below the button...
     popup();
     ::pushed = 0;
+    redraw();
     return 1;
 
   case SHORTCUT:

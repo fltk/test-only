@@ -60,7 +60,7 @@ void ValueSlider::draw() {
     }
   }
 
-  Flags flags = update_flags();
+  Flags flags = this->flags();
   Flags f2 = flags & ~FOCUSED;
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
