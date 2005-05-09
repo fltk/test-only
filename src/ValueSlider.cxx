@@ -34,7 +34,7 @@ using namespace fltk;
   Controls a single floating point value through a combination of a
   FloatInput and a Slider.
 
-  \image html Fl_Value_Slider.gif
+  \image html value_slider.gif
 
   As this is a subclass of Slider, all slider methods work, for
   setting the slider size, tick marks, etc.

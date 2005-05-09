@@ -212,11 +212,11 @@ Flags fltk::drawflags_;
   \see fltk::drawstyle()
 */
 
-/*! \fn Flags fltk::getdrawflags()
+/*! \fn Flags fltk::drawflags()
   Return the last flags passed to setdrawflags().
 */
 
-/*! \fn Flags fltk::getdrawflags(Flags f)
+/*! \fn Flags fltk::drawflags(Flags f)
   Same as (drawflags() & f), returns true if any of the flags in \a f
   are set.
 */
