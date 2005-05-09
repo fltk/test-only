@@ -3,7 +3,7 @@
 //
 // MacOS system menu bar widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 /**
@@ -142,6 +144,8 @@ static void setMenuShortcut( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
   SetMenuItemModifiers( mh, miCnt, macMod );
 }
 
+#if 0
+// this function needs to be verified before we compile it back in.
 static void catMenuShortcut( const Fl_Menu_Item *m, char *dst )
 {
   if ( !m->shortcut_ ) 
@@ -158,6 +162,7 @@ static void catMenuShortcut( const Fl_Menu_Item *m, char *dst )
   //if ( isalnum( mm->shortcut_ ) && !( mm->flags & FL_SUBMENU ) )
   //sprintf( buf+strlen(buf), "/%c", mm->shortcut_ );
 }
+#endif
 
 static void setMenuFlags( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
 {
@@ -188,7 +193,7 @@ static void createSubMenu( MenuHandle mh, int &cnt, pFl_Menu_Item &mm )
   int miCnt = 1;
   while ( mm->text )
   {
-    MenuHandle smh;
+    MenuHandle smh = 0;
     buf[1] = 0;
     catMenuFont( mm, buf+1 );
     //catMenuShortcut( mm, buf+1 );

@@ -3,7 +3,7 @@
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <config.h>
@@ -121,12 +123,16 @@ void fl_copy_offscreen(int x,int y,int w,int h,GWorldPtr gWorld,int srcx,int src
   Rect dst;
   GrafPtr dstPort; GetPort(&dstPort);
   dst.top = y; dst.left = x; dst.bottom = y+h; dst.right = x+w;
-  RGBColor rgb;
+  RGBColor rgb, oldbg, oldfg;
+  GetForeColor(&oldfg);
+  GetBackColor(&oldbg);
   rgb.red = 0xffff; rgb.green = 0xffff; rgb.blue = 0xffff;
   RGBBackColor( &rgb );
   rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
   RGBForeColor( &rgb );
   CopyBits(GetPortBitMapForCopyBits(gWorld), GetPortBitMapForCopyBits(dstPort), &src, &dst, srcCopy, 0L);
+  RGBBackColor(&oldbg);
+  RGBForeColor(&oldfg);
 }
 
 /**

@@ -3,7 +3,7 @@
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Implementation of fl_draw(const char*,int,int,int,int,Fl_Align)
@@ -295,12 +297,12 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
          *symptr++ = *str++);
     *symptr = '\0';
     if (isspace(*str)) str++;
-    symwidth[0] = min(w,h);
+    symwidth[0] = h;
   }
 
   if (str && (p = strrchr(str, '@')) != NULL && p > (str + 1)) {
     strlcpy(symbol[1], p, sizeof(symbol[1]));
-    symwidth[1] = min(w,h);
+    symwidth[1] = h;
   }
 
   symtotal = symwidth[0] + symwidth[1];

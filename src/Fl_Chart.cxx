@@ -3,7 +3,7 @@
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/math.h>
@@ -187,9 +189,9 @@ static void draw_piechart(int x,int y,int w,int h,
   double txc,tyc;	/* temporary center */
   double lh = fl_height();
   /* compute center and radius */
-  xc = x+w/2.0; yc = y+h/2.0;
-  rad = h/2.0 - lh;
-  if (special) { yc += 0.1*rad; rad = 0.9*rad;}
+  double h_denom = (special ? 2.3 : 2.0);
+  rad = (h - 2*lh)/h_denom/1.1;
+  xc = x+w/2.0; yc = y+h-1.1*rad-lh;
   /* compute sum of values */
   tot = 0.0;
   for (i=0; i<numb; i++)

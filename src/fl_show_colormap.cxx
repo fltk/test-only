@@ -3,7 +3,7 @@
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Select a color from the colormap.
@@ -116,8 +118,12 @@ int ColorMenu::handle(int e) {
     int by = (c/8)*BOXSIZE+BORDER;
     int px = x();
     int py = y();
-    if (px+bx+BOXSIZE+BORDER >= Fl::w()) px = Fl::w()-bx-BOXSIZE-BORDER;
-    if (py+by+BOXSIZE+BORDER >= Fl::h()) py = Fl::h()-by-BOXSIZE-BORDER;
+    int scr_x, scr_y, scr_w, scr_h;
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+    if (px < scr_x) px = scr_x;
+    if (px+bx+BOXSIZE+BORDER >= scr_x+scr_w) px = scr_x+scr_w-bx-BOXSIZE-BORDER;
+    if (py < scr_y) py = scr_y;
+    if (py+by+BOXSIZE+BORDER >= scr_y+scr_h) py = scr_y+scr_h-by-BOXSIZE-BORDER;
     if (px+bx < BORDER) px = BORDER-bx;
     if (py+by < BORDER) py = BORDER-by;
     position(px,py);

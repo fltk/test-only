@@ -75,6 +75,15 @@
 #define USE_COLORMAP 1
 
 /*
+ * HAVE_XINERAMA
+ *
+ * Do we have the Xinerama library to support multi-head displays?
+ */
+
+#define HAVE_XINERAMA 0
+
+
+/*
  * USE_XFT
  *
  * Use the new Xft library to draw anti-aliased text.

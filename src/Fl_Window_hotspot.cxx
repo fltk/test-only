@@ -3,7 +3,7 @@
 //
 // Common hotspot routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -46,6 +48,9 @@ void Fl_Window::hotspot(int X, int Y, int offscreen) {
     //force FL_FORCE_POSITION to be set in Fl_Window::resize()
     if (X==x()) x(X-1);
 #else
+    int scr_x, scr_y, scr_w, scr_h;
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+
     if (border()) {
       // Ensure border is on screen; these values are generic enough
       // to work with many window managers, and are based on KDE defaults.
@@ -53,16 +58,16 @@ void Fl_Window::hotspot(int X, int Y, int offscreen) {
       const int left = 4;
       const int right = 4;
       const int bottom = 8;
-      if (X+w()+right > Fl::w()-Fl::x()) X = Fl::w()-Fl::x()-right-w();
-      if (X-left < Fl::x()) X = left;
-      if (Y+h()+bottom > Fl::h()-Fl::y()) Y = Fl::h()-Fl::y()-bottom-h();
-      if (Y-top < Fl::y()) Y = top;
+      if (X+w()+right > scr_w-scr_x) X = scr_w-scr_x-right-w();
+      if (X-left < scr_x) X = left;
+      if (Y+h()+bottom > scr_h-scr_y) Y = scr_h-scr_y-bottom-h();
+      if (Y-top < scr_y) Y = top;
     }
     // now insure contents are on-screen (more important than border):
-    if (X+w() > Fl::w()-Fl::x()) X = Fl::w()-Fl::x()-w();
-    if (X < Fl::x()) X = Fl::x();
-    if (Y+h() > Fl::h()-Fl::y()) Y = Fl::h()-Fl::y()-h();
-    if (Y < Fl::y()) Y = Fl::y();
+    if (X+w() > scr_w-scr_x) X = scr_w-scr_x-w();
+    if (X < scr_x) X = scr_x;
+    if (Y+h() > scr_h-scr_y) Y = scr_h-scr_y-h();
+    if (Y < scr_y) Y = scr_y;
 #endif
   }
 

@@ -2004,6 +2004,7 @@ DEP_CPP_FL_RE=\
 SOURCE=..\src\fl_rect.cxx
 DEP_CPP_FL_REC=\
 	"..\fl\enumerations.h"\
+	"..\fl\fl.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_display.h"\
 	"..\fl\fl_draw.h"\
@@ -2628,6 +2629,8 @@ DEP_CPP_FL_WIN=\
 	"..\fl\fl_symbol.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
+	"..\src\flstring.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -3155,6 +3158,24 @@ DEP_CPP_SCAND=\
 	
 NODEP_CPP_SCAND=\
 	"..\..\..\usr\include\dirent.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\screen_xywh.cxx
+DEP_CPP_SCREE=\
+	"..\fl\enumerations.h"\
+	"..\fl\fl.h"\
+	"..\fl\fl_export.h"\
+	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
+	"..\fl\fl_symbol.h"\
+	"..\fl\fl_widget.h"\
+	"..\fl\fl_window.h"\
+	"..\fl\mac.H"\
+	"..\fl\win32.h"\
+	"..\fl\x.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File

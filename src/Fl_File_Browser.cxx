@@ -3,7 +3,7 @@
 //
 // Fl_File_Browser routines.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -584,34 +586,32 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
     if (num_files <= 0)
       return (0);
 
-    for (i = 0, num_dirs = 0; i < num_files; i ++)
-    {
+    for (i = 0, num_dirs = 0; i < num_files; i ++) {
       if (strcmp(files[i]->d_name, ".") &&
-          strcmp(files[i]->d_name, "./"))
-      {
+          strcmp(files[i]->d_name, "./")) {
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
 
-#if defined(WIN32) && !defined(__CYGWIN__)
-	if (files[i]->d_name[strlen(files[i]->d_name) - 1] == '/')
-	{
+        icon = Fl_File_Icon::find(filename);
+	if ((icon && icon->type() == Fl_File_Icon::DIRECTORY) ||
+	     fl_filename_isdir(filename)) {
           num_dirs ++;
-          insert(num_dirs, files[i]->d_name, Fl_File_Icon::find(filename));
-	}
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+	  // WIN32 already has the trailing slash... :)
+          insert(num_dirs, files[i]->d_name, icon);
 #else
-	if (fl_filename_isdir(filename))
-	{
+	  // Add a trailing slash to directory names...
 	  char name[1024]; // Temporary directory name
 
 	  snprintf(name, sizeof(name), "%s/", files[i]->d_name);
 
-          num_dirs ++;
-          insert(num_dirs, name, Fl_File_Icon::find(filename));
-	}
+          insert(num_dirs, name, icon);
 #endif // WIN32 && !__CYGWIN__
-	else if (filetype_ == FILES &&
-	         fl_filename_match(files[i]->d_name, pattern_))
-          add(files[i]->d_name, Fl_File_Icon::find(filename));
+	} else if (filetype_ == FILES &&
+	           fl_filename_match(files[i]->d_name, pattern_)) {
+          add(files[i]->d_name, icon);
+	}
       }
 
       free(files[i]);
@@ -636,9 +636,6 @@ Fl_File_Browser::filter(const char *pattern)	// I - Pattern string
     pattern_ = pattern;
   else
     pattern_ = "*";
-
-  // Reload the current directory...
-  load(directory_);
 }
 
 

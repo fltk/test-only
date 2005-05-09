@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <stdio.h>
@@ -158,7 +160,7 @@ int numb2but(int inumb, int maxnumb)
 /* Pushing and Popping menus */
 
 char stack[64][32];
-char stsize = 0;
+int stsize = 0;
 
 void push_menu(const char* nnn)
 /* Pushes a menu to be visible */
@@ -313,7 +315,7 @@ int load_the_menu(const char* fname)
 }
 
 int main(int argc, char **argv) {
-  putenv("FLTK_DOCDIR=../documentation");
+  putenv((char *)"FLTK_DOCDIR=../documentation");
   create_the_forms();
   char buf[256];
   strcpy(buf, argv[0]);

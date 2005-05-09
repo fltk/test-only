@@ -3,7 +3,7 @@
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Box drawing code for the common box types and the table of
@@ -116,7 +118,8 @@ void fl_thin_down_frame(int x, int y, int w, int h, Fl_Color) {
 void fl_thin_down_box(int x, int y, int w, int h, Fl_Color c) {
   fl_thin_down_frame(x,y,w,h,c);
   if(!c) return;
-  fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
+  fl_rectf(x+1, y+1, w-2, h-2);
 }
 
 void fl_thin_up_frame(int x, int y, int w, int h, Fl_Color) {
@@ -126,7 +129,8 @@ void fl_thin_up_frame(int x, int y, int w, int h, Fl_Color) {
 void fl_thin_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_thin_up_frame(x,y,w,h,c);
   if(!c) return;
-  fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
+  fl_rectf(x+1, y+1, w-2, h-2);
 }
 
 void fl_up_frame(int x, int y, int w, int h, Fl_Color) {
@@ -147,7 +151,8 @@ void fl_up_frame(int x, int y, int w, int h, Fl_Color) {
 void fl_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_up_frame(x,y,w,h,c);
   if(!c) return;
-  fl_color(c); fl_rectf(x+D1, y+D1, w-D2, h-D2);
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
+  fl_rectf(x+D1, y+D1, w-D2, h-D2);
 }
 
 void fl_down_frame(int x, int y, int w, int h, Fl_Color) {
@@ -174,8 +179,9 @@ void fl_engraved_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_engraved_box(int x, int y, int w, int h, Fl_Color c) {
   fl_engraved_frame(x,y,w,h,c);
-  if(!c) return;
-  fl_color(c); fl_rectf(x+2, y+2, w-4, h-4);
+  if(!c)return;
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
+  fl_rectf(x+2, y+2, w-4, h-4);
 }
 
 void fl_embossed_frame(int x, int y, int w, int h, Fl_Color) {
@@ -185,18 +191,21 @@ void fl_embossed_frame(int x, int y, int w, int h, Fl_Color) {
 void fl_embossed_box(int x, int y, int w, int h, Fl_Color c) {
   fl_embossed_frame(x,y,w,h,c);
   if(!c) return;
-  fl_color(c); fl_rectf(x+2, y+2, w-4, h-4);
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
+  fl_rectf(x+2, y+2, w-4, h-4);
 }
 
 void fl_rectbound(int x, int y, int w, int h, Fl_Color bgcolor) {
-  fl_color(FL_BLACK); fl_rect(x, y, w, h);
+  fl_color(Fl::draw_box_active() ? FL_BLACK : fl_inactive(FL_BLACK));
+  fl_rect(x, y, w, h);
   if(!bgcolor) return;
-  fl_color(bgcolor); fl_rectf(x+1, y+1, w-2, h-2);
+  fl_color(Fl::draw_box_active() ? bgcolor : fl_inactive(bgcolor));
+  fl_rectf(x+1, y+1, w-2, h-2);
 }
 #define fl_border_box fl_rectbound
 
 void fl_border_frame(int x, int y, int w, int h, Fl_Color c) {
-  fl_color(c);
+  fl_color(Fl::draw_box_active() ? c : fl_inactive(c));
   fl_rect(x, y, w, h);
 }
 
@@ -246,9 +255,9 @@ static struct {
   {fl_engraved_frame,	2,2,4,4,1},
   {fl_embossed_frame,	2,2,4,4,1},
   {fl_border_box,	1,1,2,2,1},
-  {fl_border_box,	1,1,2,2,0}, // _FL_SHADOW_BOX,
+  {fl_border_box,	1,1,5,5,0}, // _FL_SHADOW_BOX,
   {fl_border_frame,	1,1,2,2,1},
-  {fl_border_frame,	1,1,2,2,0}, // _FL_SHADOW_FRAME,
+  {fl_border_frame,	1,1,5,5,0}, // _FL_SHADOW_FRAME,
   {fl_border_box,	1,1,2,2,0}, // _FL_ROUNDED_BOX,
   {fl_border_box,	1,1,2,2,0}, // _FL_RSHADOW_BOX,
   {fl_border_frame,	1,1,2,2,0}, // _FL_ROUNDED_FRAME
@@ -315,8 +324,11 @@ FL_EXPORT Fl_Symbol fl_symbol_table[256]={
   Fl_Symbol(fl_up_frame,		2,2,4,4), // _FL_PLASTIC_UP_FRAME,
   Fl_Symbol(fl_down_frame,	2,2,4,4), // _FL_PLASTIC_DOWN_FRAME,
   Fl_Symbol(fl_up_box,		2,2,4,4), // _FL_PLASTIC_THIN_UP_BOX,
-  Fl_Symbol(fl_down_box,		2,2,4,4), // _FL_PLASTIC_THIN_DOWN_BOX,
-  Fl_Symbol(fl_return_arrow, 0,0,0,0), // FL_RETURN_ARROW
+  Fl_Symbol(fl_down_box,	2,2,4,4), // _FL_PLASTIC_THIN_DOWN_BOX,
+  Fl_Symbol(fl_up_box,		2,2,4,4), // _FL_PLASTIC_ROUND_UP_BOX,
+  Fl_Symbol(fl_down_box,	2,2,4,4), // _FL_PLASTIC_ROUND_DOWN_BOX,
+
+
 
   Fl_Symbol(fl_up_box,		3,3,6,6), // FL_FREE_BOX+0
   Fl_Symbol(fl_down_box,		3,3,6,6), // FL_FREE_BOX+1
@@ -367,10 +379,15 @@ Fl_Boxtype  _FL_PLASTIC_UP_FRAME = fl_symbol_table + 32;
 Fl_Boxtype  _FL_PLASTIC_DOWN_FRAME = fl_symbol_table + 33;
 Fl_Boxtype  _FL_PLASTIC_THIN_UP_BOX = fl_symbol_table + 34;
 Fl_Boxtype  _FL_PLASTIC_THIN_DOWN_BOX = fl_symbol_table + 35;
+Fl_Boxtype  _FL_PLASTIC_ROUND_UP_BOX = fl_symbol_table + 36;
+Fl_Boxtype  _FL_PLASTIC_ROUND_DOWN_BOX = fl_symbol_table + 37;
 
-Fl_Boxtype FL_RETURN_ARROW = fl_symbol_table+36;
+Fl_Boxtype  FL_FREE_BOXTYPE = fl_symbol_table + 38;
 
-Fl_Boxtype  FL_FREE_BOXTYPE = fl_symbol_table + 37;
+Fl_Symbol FL_RETURN_ARROW_(fl_return_arrow, 0,0,0,0); // FL_RETURN_ARROW
+Fl_Boxtype FL_RETURN_ARROW = &FL_RETURN_ARROW_;
+
+
 
 
 int Fl::box_dx(Fl_Boxtype t) {if (t) return t->dx(); else return 0;}

@@ -3,7 +3,7 @@
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -30,8 +32,6 @@
 // Emulates the Forms choice widget.  This is almost exactly the same
 // as an Fl_Menu_Button.  The only difference is the appearance of the
 // button: it draws the text of the current pick and a down-arrow.
-
-extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
   int dx = Fl::box_dx(FL_DOWN_BOX);
@@ -134,7 +134,6 @@ int Fl_Choice::handle(int e) {
         (Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
   case FL_PUSH:
     if (Fl::visible_focus()) Fl::focus(this);
-    Fl::event_is_click(0);
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     if (!v || v->submenu()) return 1;

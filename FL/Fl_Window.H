@@ -3,7 +3,7 @@
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #ifndef Fl_Window_H
@@ -189,6 +191,7 @@ public:
     /** Sets the icon label. */
   void iconlabel(const char *icon);
   void label(const char* label, const char* iconlabel);
+  void copy_label(const char* a);
   const char* xclass() const	{return xclass_;}
     /** A string used to tell the system what type of window this is. Mostly this identifies 
      * the picture to draw in the icon. Under X, this is turned into a \c XA_WM_CLASS pair by

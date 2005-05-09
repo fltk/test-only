@@ -3,7 +3,7 @@
 //
 // Fl_BMP_Image routines.
 //
-// Copyright 1997-2004 by Easy Software Products.
+// Copyright 1997-2005 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -21,7 +21,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -82,7 +84,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 		byte;		// Byte in image
   uchar		*ptr;		// Pointer into pixels
   uchar		colormap[256][3];// Colormap
-  uchar		mask = 0;	// single bit mask follows image data
+  uchar		havemask = 0;	// single bit mask follows image data
 
   // Open the file...
   if ((fp = fopen(bmp, "rb")) == NULL) return;
@@ -134,7 +136,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
       int Bpp = depth/8;
       int maskSize = (((w()*Bpp+3)&~3)*h()) + (((((w()+7)/8)+3)&~3)*h());
       if (maskSize==2*dataSize) {
-        mask = 1;
+        havemask = 1;
 	h(h()/2);
 	bDepth = 4;
       }
@@ -329,7 +331,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 	    *ptr++ = colormap[temp][2];
 	    *ptr++ = colormap[temp][1];
 	    *ptr++ = colormap[temp][0];
-	    if (mask) ptr++;
+	    if (havemask) ptr++;
 	  }
 
 	  if (!compression) {
@@ -375,7 +377,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
     }
   }
   
-  if (mask) {
+  if (havemask) {
     for (y = h() - 1; y >= 0; y --) {
       ptr = (uchar *)array + y * w() * d() + 3;
       for (x = w(), bit = 128; x > 0; x --, ptr+=bDepth) {

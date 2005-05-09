@@ -3,7 +3,7 @@
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #define DISPLAY_SEARCH_BOTH_WAYS_AT_ONCE
@@ -364,7 +366,8 @@ J1:
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
       if (l == selection_ && Fl::focus() == this) {
-	draw_focus(FL_NO_BOX, X, yy+Y+1, W, hh);
+	draw_box(FL_BORDER_FRAME, X, yy+Y, W, hh, color());
+	draw_focus(FL_NO_BOX, X, yy+Y, W+1, hh+1);
       }
       int ww = item_width(l);
       if (ww > max_width) {max_width = ww; max_width_item = l;}

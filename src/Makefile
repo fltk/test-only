@@ -20,7 +20,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#      http://www.fltk.org/str.php
 #
 
 CPPFILES = \
@@ -148,7 +150,8 @@ CPPFILES = \
 	fl_shortcut.cxx \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
-	fl_vertex.cxx
+	fl_vertex.cxx \
+	screen_xywh.cxx
 
 FLCPPFILES = \
 	forms_compatability.cxx \
@@ -178,8 +181,6 @@ IMGCPPFILES = \
 	Fl_PNM_Image.cxx
 
 CFILES = fl_call_main.c flstring.c scandir.c numericsort.c vsnprintf.c
-
-CLEAN =	core* cmap
 
 ################################################################
 INCLUDES = -I..
@@ -333,15 +334,16 @@ libfltk_images_s.a: $(IMGOBJECTS)
 	$(CHMOD) +x libfltk_images_s.a
 
 
-clean :
-	-@ $(RM) *.o $(DSONAME) $(FLDSONAME) $(GLDSONAME) $(IMGDSONAME) \
+clean:
+	-$(RM) *.o core.* *~ *.bck *.bck
+	-$(RM) $(DSONAME) $(FLDSONAME) $(GLDSONAME) $(IMGDSONAME) \
 		../lib/$(LIBNAME) ../lib/$(FLLIBNAME) ../lib/$(GLLIBNAME) \
 		../lib/$(IMGLIBNAME) \
 		libfltk.so libfltk_forms.so libfltk_gl.so libfltk_images.so \
 		libfltk.sl libfltk_forms.sl libfltk_gl.sl libfltk_images.sl \
 		libfltk.dylib libfltk_forms.dylib \
 		libfltk_gl.dylib libfltk_images.dylib \
-		$(CLEAN)
+		cmap core
 
 depend:	$(CPPFILES) $(FLCPPFILES) $(GLCPPFILES) $(IMGCPPFILES) $(CFILES)
 	makedepend -Y -I.. -f makedepend $(CPPFILES) $(FLCPPFILES) \

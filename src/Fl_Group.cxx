@@ -3,7 +3,7 @@
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // The Fl_Group is the only defined container type in FLTK.
@@ -162,7 +164,7 @@ int Fl_Group::handle(int event) {
 	if (o->contains(Fl::belowmouse())) {
 	  return send(o,FL_MOVE);
 	} else {
-	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
+	  Fl::belowmouse(o);
 	  if (send(o,FL_ENTER)) return 1;
 	}
       }
@@ -210,6 +212,19 @@ int Fl_Group::handle(int event) {
 	  if (send(o,event)) return 1;
 	}
       }
+    }
+    return 0;
+
+  case FL_MOUSEWHEEL:
+    for (i = children(); i--;) {
+      o = a[i];
+      if (o->takesevents() && Fl::event_inside(o) && send(o,FL_MOUSEWHEEL))
+	return 1;
+    }
+    for (i = children(); i--;) {
+      o = a[i];
+      if (o->takesevents() && !Fl::event_inside(o) && send(o,FL_MOUSEWHEEL))
+	return 1;
     }
     return 0;
 

@@ -20,7 +20,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#      http://www.fltk.org/str.php
 #
 
 INCLUDES = -I..
@@ -62,6 +64,7 @@ CPPFILES =\
 	image.cxx \
 	inactive.cxx \
 	input.cxx \
+	input_choice.cxx \
 	keyboard.cxx \
 	label.cxx \
 	line_style.cxx \
@@ -119,6 +122,7 @@ ALL =	\
 	image$(EXEEXT) \
 	inactive$(EXEEXT) \
 	input$(EXEEXT) \
+	input_choice$(EXEEXT) \
 	keyboard$(EXEEXT) \
 	label$(EXEEXT) \
 	line_style$(EXEEXT) \
@@ -166,14 +170,18 @@ depend:	$(CPPFILES)
 include makedepend
 
 clean:
-	-@ rm -f $(ALL) $(GLALL) *.o core *~
+	-$(RM) $(ALL) $(GLALL) core
+	-$(RM) *.o core.* *~ *.bck *.bak
 
 install:
-	@echo Nothing to install in test directory.
+	echo "Installing example programs to $(DESTDIR)$(docdir)/examples..."
+	-$(MKDIR) $(DESTDIR)$(docdir)/examples
+	$(CP) *.h *.cxx *.fl demo.menu *.xbm *.xpm $(DESTDIR)$(docdir)/examples
+	$(CHMOD) 644 $(DESTDIR)$(docdir)/examples/*.*
 
 uninstall:
-	@echo Nothing to uninstall in test directory.
-
+	echo "Removing examples programs from $(DESTDIR)$(docdir)/examples..."
+	-$(RMDIR) $(DESTDIR)$(docdir)/examples
 
 # FLUID file rules
 .fl.cxx .fl.h:	../fluid/fluid$(EXEEXT)
@@ -262,6 +270,8 @@ inactive$(EXEEXT): inactive.o
 inactive.cxx:	inactive.fl
 
 input$(EXEEXT): input.o
+
+input_choice$(EXEEXT): input_choice.o
 
 keyboard$(EXEEXT): keyboard_ui.o keyboard.o
 	echo Linking $@...

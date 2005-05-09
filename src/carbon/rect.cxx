@@ -28,6 +28,7 @@
 // Also all fl_clip routines, since they are always linked in so
 // that minimal update works.
 
+#include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
@@ -209,12 +210,14 @@ void Fl_Carbon_Display::push_clip(int x, int y, int w, int h) {
     SetEmptyRgn(r);
   }
   if (rstackptr < STACK_MAX) rstack[++rstackptr] = r;
+  else Fl::warning("fl_push_clip: clip stack overflow!\n");
   fl_restore_clip();
 }
 
 // make there be no clip (used by fl_begin_offscreen() only!)
 void Fl_Carbon_Display::push_no_clip() {
   if (rstackptr < STACK_MAX) rstack[++rstackptr] = 0;
+  else Fl::warning("fl_push_clip: clip stack overflow!\n");
   fl_restore_clip();
 }
 
@@ -223,14 +226,13 @@ void Fl_Carbon_Display::pop_clip() {
   if (rstackptr > 0) {
     Fl_Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
-  }
+  } else Fl::warning("fl_pop_clip: clip stack underflow!\n");
   fl_restore_clip();
 }
 
 // does this rectangle intersect current clip?
 int Fl_Carbon_Display::not_clipped(int x, int y, int w, int h) {
-  if (x+w <= 0 || y+h <= 0 || x > Fl_Window::current()->w()
-      || y > Fl_Window::current()->h()) return 0;
+  if (x+w <= 0 || y+h <= 0) return 0;
   Fl_Region r = rstack[rstackptr];
 
   if (!r) return 1;

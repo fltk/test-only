@@ -3,7 +3,7 @@
 //
 // Fl_Help_View widget routines.
 //
-// Copyright 1997-2004 by Easy Software Products.
+// Copyright 1997-2005 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -21,7 +21,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -1631,6 +1633,8 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
   max_width   = 0;
   pre         = 0;
   needspace   = 0;
+  font        = fonts_[nfonts_][0];
+  fsize       = fonts_[nfonts_][1];
 
   // Scan the table...
   for (ptr = table, column = -1, width = 0, s = buf, incell = 0; *ptr;)

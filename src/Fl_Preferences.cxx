@@ -3,7 +3,7 @@
 //
 // Preferences methods for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2002-2004 by Matthias Melcher.
+// Copyright 2002-2005 by Matthias Melcher.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 
@@ -616,7 +618,11 @@ Fl_Preferences::RootNode::RootNode( Fl_Preferences *prefs, Root root, const char
 	nn = FL_PATH_MAX - appDataLen;
 	err = RegQueryValueEx( key, "AppData", 0L, &type, (BYTE*)filename, &nn );
 	if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
-	  filename[0] = 0;
+	{
+	  err = RegQueryValueEx( key, "Personal", 0L, &type, (BYTE*)filename, &nn );
+	  if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
+	    filename[0] = 0;
+	}
         RegCloseKey(key);
       }
       break;
@@ -877,7 +883,7 @@ Fl_Preferences::Node *Fl_Preferences::Node::addChild( const char *path )
 {
   sprintf( nameBuffer, "%s/%s", path_, path );
   char *name = strdup( nameBuffer );
-  Node *nd = find( nameBuffer );
+  Node *nd = find( name );
   free( name );
   dirty_ = 1;
   return nd;

@@ -3,7 +3,7 @@
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #ifndef Fl_Enumerations_H
@@ -444,43 +446,18 @@ extern FL_EXPORT Fl_Boxtype
   _FL_PLASTIC_UP_BOX,	_FL_PLASTIC_DOWN_BOX,
   _FL_PLASTIC_UP_FRAME,	_FL_PLASTIC_DOWN_FRAME,
   _FL_PLASTIC_THIN_UP_BOX,	_FL_PLASTIC_THIN_DOWN_BOX,
-  FL_RETURN_ARROW,
-
+  _FL_PLASTIC_ROUND_UP_BOX, _FL_PLASTIC_ROUND_DOWN_BOX,
   FL_FREE_BOXTYPE,
 
-
+  FL_RETURN_ARROW, ///<used for Fl_Return_Button
   FL_CHECK_BOX, ///< used for Fl_Check_Button 
   FL_ROUND_BOX  ///< used for Fl_Round_Button
   ;
 
-extern Fl_Symbol ADJUSTER_ARROWS[];
+extern FL_EXPORT Fl_Symbol ADJUSTER_ARROWS[];
 
 
-/*
-enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
-  FL_NO_BOX = 0,	FL_FLAT_BOX,
 
-  FL_UP_BOX,		FL_DOWN_BOX,
-  FL_UP_FRAME,		FL_DOWN_FRAME,
-  FL_THIN_UP_BOX,	FL_THIN_DOWN_BOX,
-  FL_THIN_UP_FRAME,	FL_THIN_DOWN_FRAME,
-  FL_ENGRAVED_BOX,	FL_EMBOSSED_BOX,
-  FL_ENGRAVED_FRAME,	FL_EMBOSSED_FRAME,
-  FL_BORDER_BOX,	_FL_SHADOW_BOX,
-  FL_BORDER_FRAME,	_FL_SHADOW_FRAME,
-  _FL_ROUNDED_BOX,	_FL_RSHADOW_BOX,
-  _FL_ROUNDED_FRAME,	_FL_RFLAT_BOX,
-  _FL_ROUND_UP_BOX,	_FL_ROUND_DOWN_BOX,
-  _FL_DIAMOND_UP_BOX,	_FL_DIAMOND_DOWN_BOX,
-  _FL_OVAL_BOX,		_FL_OSHADOW_BOX,
-  _FL_OVAL_FRAME,	_FL_OFLAT_BOX,
-  _FL_PLASTIC_UP_BOX,	_FL_PLASTIC_DOWN_BOX,
-  _FL_PLASTIC_UP_FRAME,	_FL_PLASTIC_DOWN_FRAME,
-  _FL_PLASTIC_THIN_UP_BOX,	_FL_PLASTIC_THIN_DOWN_BOX,
-  FL_FREE_BOXTYPE
-};
-
-*/
 
 /** \cond */
 
@@ -516,6 +493,8 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
 #define FL_PLASTIC_DOWN_FRAME ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3))
 #define FL_PLASTIC_THIN_UP_BOX ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4))
 #define FL_PLASTIC_THIN_DOWN_BOX ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5))
+#define FL_PLASTIC_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
+#define FL_PLASTIC_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
 
 
 /// Converts "up" dersion of a boxtype to "down" one

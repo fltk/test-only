@@ -3,7 +3,7 @@
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Implementation of fl_message, fl_ask, fl_choice, fl_input
@@ -59,6 +61,11 @@ static Fl_Window *makeform() {
    message_form->size(410,103);
    return message_form;
  }
+ // make sure that the dialog does not become the child of some 
+ // current group
+ Fl_Group *previously_current_group = Fl_Group::current();
+ Fl_Group::current(0);
+ // create a new top level window
  Fl_Window *w = message_form = new Fl_Window(410,103,"");
  // w->clear_border();
  // w->box(FL_UP_BOX);
@@ -82,6 +89,7 @@ static Fl_Window *makeform() {
  w->resizable(new Fl_Box(60,10,110-60,27));
  w->end();
  w->set_modal();
+ Fl_Group::current(previously_current_group);
  return w;
 }
 
@@ -267,7 +275,7 @@ void fl_message(const char *fmt, ...) {
 
   va_start(ap, fmt);
   iconlabel = "i";
-  innards(fmt, ap, 0, fl_ok, 0);
+  innards(fmt, ap, 0, fl_close, 0);
   va_end(ap);
   iconlabel = "?";
 }
@@ -279,7 +287,7 @@ void fl_alert(const char *fmt, ...) {
 
   va_start(ap, fmt);
   iconlabel = "!";
-  innards(fmt, ap, 0, fl_ok, 0);
+  innards(fmt, ap, 0, fl_close, 0);
   va_end(ap);
   iconlabel = "?";
 }

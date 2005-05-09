@@ -3,7 +3,7 @@
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -300,8 +302,6 @@ int Fl::check() {
   wait(0.0);
   return Fl_X::first != 0; // return true if there is a window
 }
-
-extern int fl_ready();
 
 int Fl::ready() {
   if (first_timeout) {
@@ -689,7 +689,7 @@ int Fl::handle(int e, Fl_Window* window)
 
     // and then try a shortcut with the case of the text swapped, by
     // changing the text and falling through to FL_SHORTCUT case:
-    {char* c = (char*)event_text(); // cast away const
+    {unsigned char* c = (unsigned char*)event_text(); // cast away const
     if (!isalpha(*c)) return 0;
     *c = isupper(*c) ? tolower(*c) : toupper(*c);}
     e_number = e = FL_SHORTCUT;
@@ -730,9 +730,11 @@ int Fl::handle(int e, Fl_Window* window)
   case FL_MOUSEWHEEL:
     fl_xfocus = window; // this should not happen!  But maybe it does:
 
-    // Try it as keystroke, sending it to focus and all parents:
-    for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
-      if (send(FL_MOUSEWHEEL, wi, window)) return 1;
+    // Try sending it to the grab and then the window:
+    if (grab()) {
+      if (send(FL_MOUSEWHEEL, grab(), window)) return 1;
+    }
+    if (send(FL_MOUSEWHEEL, window, window)) return 1;
   default:
     break;
   }
@@ -795,6 +797,8 @@ void Fl_Window::hide() {
   handle(FL_HIDE);
 
 #ifdef WIN32
+  // Send a message to myself so that I'll get out of the event loop...
+  PostMessage(ip->xid, WM_APP, 0, 0);
   if (ip->private_dc) ReleaseDC(ip->xid,ip->private_dc);
   if (ip->xid == fl_window && fl_gc) {
     ReleaseDC(fl_window, fl_gc);
@@ -804,9 +808,9 @@ void Fl_Window::hide() {
 #elif defined(__APPLE__)
   if ( ip->xid == fl_window )
     fl_window = 0;
-#else
-  if (ip->region) XDestroyRegion(ip->region);
 #endif
+  if (ip->region) XDestroyRegion(ip->region);
+
 
 #ifdef __APPLE__
   if ( !parent() ) // don't destroy shared windows!
@@ -1031,8 +1035,8 @@ static int		num_dwidgets = 0, alloc_dwidgets = 0;
 static Fl_Widget	**dwidgets = 0;
 
 void
-Fl::delete_widget(Fl_Widget *w) {
-  if (!w) return;
+Fl::delete_widget(Fl_Widget *wi) {
+  if (!wi) return;
 
   if (num_dwidgets >= alloc_dwidgets) {
     Fl_Widget	**temp;
@@ -1047,7 +1051,7 @@ Fl::delete_widget(Fl_Widget *w) {
     alloc_dwidgets += 10;
   }
 
-  dwidgets[num_dwidgets] = w;
+  dwidgets[num_dwidgets] = wi;
   num_dwidgets ++;
 }
 

@@ -3,7 +3,7 @@
 //
 // Tooltip source file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl_Tooltip.H>
@@ -75,15 +77,17 @@ void Fl_TooltipBox::layout() {
     //ox += p->x();
     oy += p->y();
   }
-  if (ox+ww > Fl::w()) ox = Fl::w() - ww;
-  if (ox < 0) ox = 0;
+  int scr_x, scr_y, scr_w, scr_h;
+  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+  if (ox+ww > scr_x+scr_w) ox = scr_x+scr_w - ww;
+  if (ox < scr_x) ox = scr_x;
   if (H > 30) {
     oy = Fl::event_y_root()+13;
-    if (oy+hh > Fl::h()) oy -= 23+hh;
+    if (oy+hh > scr_y+scr_h) oy -= 23+hh;
   } else {
-    if (oy+hh > Fl::h()) oy -= (4+hh+H);
+    if (oy+hh > scr_y+scr_h) oy -= (4+hh+H);
   }
-  if (oy < 0) oy = 0;
+  if (oy < scr_y) oy = scr_y;
 
   resize(ox, oy, ww, hh);
 }

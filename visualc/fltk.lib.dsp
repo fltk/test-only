@@ -595,6 +595,10 @@ SOURCE=..\src\scandir.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\screen_xywh.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\vsnprintf.c
 # End Source File
 # End Target

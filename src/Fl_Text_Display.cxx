@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 2001-2004 by Bill Spitzak and others.
+// Copyright 2001-2005 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <stdio.h>
@@ -2880,13 +2882,12 @@ void Fl_Text_Display::draw(void) {
 //    printf("drawing all (box = %d)\n", box());
     // draw the box()
     int W = w(), H = h();
+    draw_box(box(), x(), y(), W, H, color());
 
     if (mHScrollBar->visible())
       W -= scrollbar_width();
     if (mVScrollBar->visible())
       H -= scrollbar_width();
-
-    draw_box(box(), x(), y(), W, H, color());
 
     // left margin
     fl_rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,

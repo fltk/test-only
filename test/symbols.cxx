@@ -3,7 +3,7 @@
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <stdio.h>
@@ -36,7 +38,7 @@
 int N = 0;
 #define W 70
 #define H 70
-#define ROWS 7
+#define ROWS 8
 #define COLS 4
 
 Fl_Window *window;
@@ -49,24 +51,21 @@ void slider_cb(Fl_Widget *w, void *) {
   int sze = (int)size->value();
   for (int i = window->children(); i--; ) {          // all window children
     Fl_Widget *wc = window->child(i);
-    const char *l = wc->label();
-    if ( *l == '@' ) {                            // all children with '@'
-      if ( *(++l) == '@' ) {                      // ascii legend?
-        l++;
-	while (isdigit(*l)||(*l=='+'&&l[1])||*l=='-') { l++; }
+    const char *l = (const char *)(wc->user_data());
+    if ( l && *l == '@' ) {                       // all children with '@'
+      l ++;
+      if ( wc->box() == FL_NO_BOX ) {             // ascii legend?
         if (val&&sze) sprintf(buf, "@@%+d%d%s", sze, val, l);
         else if (val) sprintf(buf, "@@%d%s", val, l);
         else if (sze) sprintf(buf, "@@%+d%s", sze, l);
         else          sprintf(buf, "@@%s", l);
       } else {                                    // box with symbol
-        while (isdigit(*l)||(*l=='+'&&l[1])||*l=='-') { l++; }
         if (val&&sze) sprintf(buf, "@%+d%d%s", sze, val, l);
         else if (val) sprintf(buf, "@%d%s", val, l);
         else if (sze) sprintf(buf, "@%+d%s", sze, l);
         else          sprintf(buf, "@%s", l);
       }
-      free((void*)(wc->label()));
-      wc->label(strdup(buf));
+      wc->copy_label(buf);
     }
   }
   window->redraw();
@@ -80,11 +79,17 @@ void bt(const char *name) {
   x = x*W+10;
   y = y*H+10;
   sprintf(buf, "@%s", name);
-  Fl_Box *a = new Fl_Box(FL_NO_BOX,x,y,W-20,H-20,strdup(buf));
+  Fl_Box *a = new Fl_Box(x,y,W-20,H-20);
+  a->box(FL_NO_BOX);
+  a->copy_label(buf);
   a->align(FL_ALIGN_BOTTOM);
   a->labelsize(11);
-  Fl_Box *b = new Fl_Box(FL_UP_BOX,x,y,W-20,H-20,strdup(name));
+  a->user_data((void *)name);
+  Fl_Box *b = new Fl_Box(x,y,W-20,H-20);
+  b->box(FL_UP_BOX);
+  b->copy_label(name);
   b->labelcolor(FL_DARK3);
+  b->user_data((void *)name);
 }
 
 int main(int argc, char ** argv) {
@@ -116,6 +121,11 @@ bt("@UpArrow");
 bt("@DnArrow");
 bt("@search");
 bt("@FLTK");
+bt("@filenew");
+bt("@fileopen");
+bt("@filesave");
+bt("@filesaveas");
+bt("@fileprint");
 
   orientation = new Fl_Value_Slider(
     (int)(window->w()*.05+.5), window->h()-40,

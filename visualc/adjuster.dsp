@@ -93,5 +93,9 @@ LINK32=link.exe
 
 SOURCE=..\test\adjuster.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=..\src\screen_xywh.cxx
+# End Source File
 # End Target
 # End Project

@@ -3,7 +3,7 @@
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // These are small graphics drawn by the normal label-drawing
@@ -449,6 +451,207 @@ static void draw_menu(Fl_Color col)
 
 
 
+// Standard UI icons...
+static void draw_filenew(Fl_Color c) {
+  fl_color(c);
+  BCP;
+    vv(-0.7, -1.0);
+    vv(0.1, -1.0);
+    vv(0.1, -0.4);
+    vv(0.7, -0.4);
+    vv(0.7, 1.0);
+    vv(-0.7, 1.0);
+  ECP;
+
+  fl_color(fl_lighter(c));
+  BP;
+    vv(0.1, -1.0);
+    vv(0.1, -0.4);
+    vv(0.7, -0.4);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(-0.7, -1.0);
+    vv(0.1, -1.0);
+    vv(0.1, -0.4);
+    vv(0.7, -0.4);
+    vv(0.7, 1.0);
+    vv(-0.7, 1.0);
+  EC;
+
+  BL;
+    vv(0.1, -1.0);
+    vv(0.7, -0.4);
+  EL;
+}
+
+static void draw_fileopen(Fl_Color c) {
+  fl_color(c);
+  BP;
+    vv(-1.0, -0.7);
+    vv(-0.9, -0.8);
+    vv(-0.4, -0.8);
+    vv(-0.3, -0.7);
+    vv(0.6, -0.7);
+    vv(0.6, 0.7);
+    vv(-1.0, 0.7);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(-1.0, -0.7);
+    vv(-0.9, -0.8);
+    vv(-0.4, -0.8);
+    vv(-0.3, -0.7);
+    vv(0.6, -0.7);
+    vv(0.6, 0.7);
+    vv(-1.0, 0.7);
+  EC;
+
+  fl_color(fl_lighter(c));
+  BP;
+    vv(-1.0, 0.7);
+    vv(-0.6, -0.3);
+    vv(1.0, -0.3);
+    vv(0.6, 0.7);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(-1.0, 0.7);
+    vv(-0.6, -0.3);
+    vv(1.0, -0.3);
+    vv(0.6, 0.7);
+  EC;
+}
+
+static void draw_filesave(Fl_Color c) {
+  fl_color(c);
+  BP;
+    vv(-0.9, -1.0);
+    vv(0.9, -1.0);
+    vv(1.0, -0.9);
+    vv(1.0, 0.9);
+    vv(0.9, 1.0);
+    vv(-0.9, 1.0);
+    vv(-1.0, 0.9);
+    vv(-1.0, -0.9);
+  EP;
+
+  fl_color(fl_lighter(c));
+  BP;
+    vv(-0.7, -1.0);
+    vv(0.7, -1.0);
+    vv(0.7, -0.4);
+    vv(-0.7, -0.4);
+  EP;
+
+  BP;
+    vv(-0.7, 0.0);
+    vv(0.7, 0.0);
+    vv(0.7, 1.0);
+    vv(-0.7, 1.0);
+  EP;
+
+  fl_color(c);
+  BP;
+    vv(-0.5, -0.9);
+    vv(-0.3, -0.9);
+    vv(-0.3, -0.5);
+    vv(-0.5, -0.5);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(-0.9, -1.0);
+    vv(0.9, -1.0);
+    vv(1.0, -0.9);
+    vv(1.0, 0.9);
+    vv(0.9, 1.0);
+    vv(-0.9, 1.0);
+    vv(-1.0, 0.9);
+    vv(-1.0, -0.9);
+  EC;
+}
+
+static void draw_filesaveas(Fl_Color c) {
+  draw_filesave(c);
+
+  fl_color(fl_color_average(c, FL_WHITE, 0.25f));
+  BP;
+    vv(0.6, -0.8);
+    vv(1.0, -0.4);
+    vv(0.0, 0.6);
+    vv(-0.4, 0.6);
+    vv(-0.4, 0.2);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(0.6, -0.8);
+    vv(1.0, -0.4);
+    vv(0.0, 0.6);
+    vv(-0.4, 0.6);
+    vv(-0.4, 0.2);
+  EC;
+
+  BP;
+    vv(-0.1, 0.6);
+    vv(-0.4, 0.6);
+    vv(-0.4, 0.3);
+  EP;
+}
+
+static void draw_fileprint(Fl_Color c) {
+  fl_color(c);
+  BP;
+    vv(-0.8, 0.0);
+    vv(0.8, 0.0);
+    vv(1.0, 0.2);
+    vv(1.0, 1.0);
+    vv(-1.0, 1.0);
+    vv(-1.0, 0.2);
+  EP;
+
+  fl_color(fl_color_average(c, FL_WHITE, 0.25f));
+  BP;
+    vv(-0.6, 0.0);
+    vv(-0.6, -1.0);
+    vv(0.6, -1.0);
+    vv(0.6, 0.0);
+  EP;
+
+  fl_color(fl_lighter(c));
+  BP;
+    vv(-0.6, 0.6);
+    vv(0.6, 0.6);
+    vv(0.6, 1.0);
+    vv(-0.6, 1.0);
+  EP;
+
+  fl_color(fl_darker(c));
+  BC;
+    vv(-0.8, 0.0);
+    vv(-0.6, 0.0);
+    vv(-0.6, -1.0);
+    vv(0.6, -1.0);
+    vv(0.6, 0.0);
+    vv(0.8, 0.0);
+    vv(1.0, 0.2);
+    vv(1.0, 1.0);
+    vv(-1.0, 1.0);
+    vv(-1.0, 0.2);
+  EC;
+
+  BC;
+    vv(-0.6, 0.6);
+    vv(0.6, 0.6);
+    vv(0.6, 1.0);
+    vv(-0.6, 1.0);
+  EC;
+}
+
 static void fl_init_symbols(void) {
   static char beenhere = 0;
   if (beenhere) return;
@@ -485,6 +688,13 @@ static void fl_init_symbols(void) {
   symbol_table->set("||",		new Fl_Symbol(draw_doublebar));
   symbol_table->set("search",       new Fl_Symbol(draw_search));
   symbol_table->set("FLTK",         new Fl_Symbol(draw_fltk));
+   
+  symbol_table->set("filenew",      new Fl_Symbol(draw_filenew));
+  symbol_table->set("fileopen",     new Fl_Symbol(draw_fileopen));
+  symbol_table->set("filesave",     new Fl_Symbol(draw_filesave));
+  symbol_table->set("filesaveas",   new Fl_Symbol(draw_filesaveas));
+  symbol_table->set("fileprint",    new Fl_Symbol(draw_fileprint));
+ 
   fl_set_symbol("returnarrow", FL_RETURN_ARROW); // for backward compatibility
 }
 

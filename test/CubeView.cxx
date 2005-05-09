@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include "CubeView.h"
@@ -147,7 +149,7 @@ void CubeView::draw() {
     if (!valid()) {
         glLoadIdentity();
         glViewport(0,0,w(),h());
-        glOrtho(-10,10,-10,10,-20030,10000);
+        glOrtho(-10,10,-10,10,-20050,10000);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }

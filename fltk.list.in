@@ -30,8 +30,14 @@
 %vendor FLTK Development Team
 %license COPYING
 %readme README
-%version @FL_FULL_VERSION@
-%description FLTK is a cross-platform GUI toolkit for C++.
+%version @FL_MAJOR_VERSION@.@FL_MINOR_VERSION@.@FL_PATCH_VERSION@@FL_RELEASE_VERSION@
+%description << EOF
+The Fast Light Tool Kit ("FLTK", pronounced "fulltick") is a
+cross-platform C++ GUI toolkit for UNIX(r)/Linux(r) (X11),
+Microsoft(r) Windows(r), and MacOS(r) X.  FLTK provides modern
+GUI functionality without the bloat and supports 3D graphics via
+OpenGL(r) and its built-in GLUT emulation.
+EOF
 
 $prefix=@prefix@
 $exec_prefix=@exec_prefix@
@@ -40,6 +46,7 @@ $datadir=@datadir@
 $includedir=@includedir@
 $libdir=@libdir@
 $mandir=@mandir@
+$docdir=@docdir@
 
 $CAT1EXT=@CAT1EXT@
 $CAT3EXT=@CAT3EXT@
@@ -179,6 +186,7 @@ l 0000 root sys $includedir/FL/Fl_Choice.h Fl_Choice.H
 l 0000 root sys $includedir/FL/Fl_Clock.h Fl_Clock.H
 l 0000 root sys $includedir/FL/Fl_Color_Chooser.h Fl_Color_Chooser.H
 l 0000 root sys $includedir/FL/Fl_Counter.h Fl_Counter.H
+l 0000 root sys $includedir/FL/Fl_Device.h Fl_Device.H
 l 0000 root sys $includedir/FL/Fl_Dial.h Fl_Dial.H
 l 0000 root sys $includedir/FL/Fl_Double_Window.h Fl_Double_Window.H
 l 0000 root sys $includedir/FL/Fl_File_Browser.h Fl_File_Browser.H
@@ -242,6 +250,8 @@ l 0000 root sys $includedir/FL/Fl_Select_Browser.h Fl_Select_Browser.H
 l 0000 root sys $includedir/FL/Fl_Simple_Counter.h Fl_Simple_Counter.H
 l 0000 root sys $includedir/FL/Fl_Single_Window.h Fl_Single_Window.H
 l 0000 root sys $includedir/FL/Fl_Slider.h Fl_Slider.H
+l 0000 root sys $includedir/FL/Fl_Style.h Fl_Style.H
+l 0000 root sys $includedir/FL/Fl_Symbol.h Fl_Symbol.H
 l 0000 root sys $includedir/FL/Fl_Tabs.h Fl_Tabs.H
 l 0000 root sys $includedir/FL/Fl_Tile.h Fl_Tile.H
 l 0000 root sys $includedir/FL/Fl_Timer.h Fl_Timer.H
@@ -278,6 +288,13 @@ f 0444 root sys $datadir/doc/fltk/ documentation/*.html
 f 0444 root sys $datadir/doc/fltk/ documentation/*.jpg
 f 0444 root sys $datadir/doc/fltk/COPYING COPYING
 f 0444 root sys $datadir/doc/fltk/CHANGES CHANGES
+
+# Examples
+d 0555 root sys $docdir/examples
+f 0444 root sys $docdir/examples/config.h config.h
+f 0444 root sys $docdir/examples/ test/*.cxx
+f 0444 root sys $docdir/examples/ test/*.fl
+f 0444 root sys $docdir/examples/ test/*.h
 
 #
 # End of "$Id$".

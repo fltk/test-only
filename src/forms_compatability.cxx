@@ -3,7 +3,7 @@
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Forms library compatability functions.
@@ -95,8 +97,11 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
   if (place & FL_PLACE_MOUSE) f->hotspot(f);
 
-  if (place & FL_PLACE_CENTER)
-    f->position((Fl::w()-f->w())/2, (Fl::h()-f->h())/2);
+  if (place & FL_PLACE_CENTER) {
+    int scr_x, scr_y, scr_w, scr_h;
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+    f->position(scr_x+(scr_w-f->w())/2, scr_y+(scr_h-f->h())/2);
+  }
 
   if (place & FL_PLACE_FULLSCREEN)
     f->fullscreen();
@@ -182,7 +187,7 @@ void fl_show_alert(const char *q1,const char *q2,const char *q3,int) {
 }
 
 int fl_show_question(const char *q1,const char *q2,const char *q3) {
-  return fl_ask("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
+  return fl_choice("%s\n%s\n%s", "No", "Yes", 0L, q1?q1:"", q2?q2:"", q3?q3:"");
 }
 
 int fl_show_choice(

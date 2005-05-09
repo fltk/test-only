@@ -3,7 +3,7 @@
 //
 // Progress bar widget routines.
 //
-// Copyright 2000-2004 by Michael Sweet.
+// Copyright 2000-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -69,22 +71,26 @@ void Fl_Progress::draw()
   else
     progress = 0;
 
-  // Draw the box...
-  if (progress > 0)
-  {
+  // Draw the box and label...
+  if (progress > 0) {
+    Fl_Color c = labelcolor();
+    labelcolor(fl_contrast(labelcolor(), color2()));
+
     fl_clip(x(), y(), progress + bx, h());
       draw_box(box(), x(), y(), w(), h(), active_r() ? color2() : fl_inactive(color2()));
+      draw_label(tx, y() + by, tw, h() - bh);
     fl_pop_clip();
+
+    labelcolor(c);
 
     fl_clip(tx + progress, y(), w() - progress, h());
       draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fl_inactive(color()));
+      draw_label(tx, y() + by, tw, h() - bh);
     fl_pop_clip();
-  }
-  else
+  } else {
     draw_box(box(), x(), y(), w(), h(), color());
-
-  // Finally, the label...
-  draw_label(tx, y() + by, tw, h() - bh);
+    draw_label(tx, y() + by, tw, h() - bh);
+  }
 }
 
 

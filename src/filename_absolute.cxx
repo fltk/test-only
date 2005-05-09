@@ -3,7 +3,7 @@
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 /* expand a file name by prepending current directory, deleting . and
@@ -137,7 +139,7 @@ fl_filename_relative(char       *to,	// O - Relative filename
     return (1);
   }
 
-  if (*from != *cwd) {
+  if (tolower(*from & 255) != tolower(*cwd & 255)) {
     // Not the same drive...
     strlcpy(to, from, tolen);
     return 0;
@@ -155,7 +157,7 @@ fl_filename_relative(char       *to,	// O - Relative filename
        slash ++, newslash ++)
     if (isdirsep(*slash) && isdirsep(*newslash)) continue;
 #if defined(WIN32) || defined(__EMX__) || defined(__APPLE__)
-    else if (tolower(*slash) != tolower(*newslash)) break;
+    else if (tolower(*slash & 255) != tolower(*newslash & 255)) break;
 #else
     else if (*slash != *newslash) break;
 #endif // WIN32 || __EMX__ || __APPLE__

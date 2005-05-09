@@ -3,7 +3,7 @@
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // This is the "user interface", it decodes user actions into what to
@@ -109,13 +111,15 @@ int Fl_Input::handle_key() {
   case FL_Right:
     ascii = ctrl('F'); break;
   case FL_Page_Up:
-    repeat_num=5; //temporary hack
-                  //TODO: find number of lines in window and use it instead 5
+    fl_font(textfont(),textsize()); //ensure current font is set to ours
+    repeat_num=h()/fl_height(); // number of lines to scroll
+    if (!repeat_num) repeat_num=1;
   case FL_Up:
     ascii = ctrl('P'); break;
   case FL_Page_Down:
-    repeat_num=5; //temporary hack
-                  //TODO: find number of lines in window and use it instead 5
+    fl_font(textfont(),textsize());
+    repeat_num=h()/fl_height();
+    if (!repeat_num) repeat_num=1;
   case FL_Down:
     ascii = ctrl('N'); break;
   case FL_Home:
@@ -203,18 +207,20 @@ int Fl_Input::handle_key() {
     return copy_cuts();
   case ctrl('N'):
     i = position();
+    if (line_end(i) >= size()) return NORMAL_INPUT_MOVE;
     while (repeat_num--) {  
       i = line_end(i);
-      if (i >= size()) return NORMAL_INPUT_MOVE;
+      if (i >= size()) break;
       i++;
     }
     shift_up_down_position(i);
     return 1;
   case ctrl('P'):
     i = position();
+    if (!line_start(i)) return NORMAL_INPUT_MOVE;
     while(repeat_num--) {
       i = line_start(i);
-      if (!i) return NORMAL_INPUT_MOVE;
+      if (!i) break;
       i--;
     }
     shift_up_down_position(line_start(i));

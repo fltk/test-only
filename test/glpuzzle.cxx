@@ -23,11 +23,13 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // this block added for fltk's distribtion so it will compile w/o OpenGL:
-#include <config.h>
+#include "config.h"
 #if !HAVE_GL || !HAVE_GL_GLU_H
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
@@ -154,7 +156,7 @@ hash(Config config)
   value = 0;
   for (i = 0; i < HEIGHT; i++) {
     for (j = 0; j < WIDTH; j++) {
-      value = value + convert[(unsigned char)config[i][j]];
+      value = value + convert[(int)config[i][j]];
       value *= 6;
     }
   }
@@ -521,8 +523,8 @@ addConfig(Config config, struct puzzle *back)
 
       for (i = 0; i < WIDTH; i++) {
         for (j = 0; j < HEIGHT; j++) {
-          if (convert[(unsigned char)config[j][i]] !=
-            convert[(unsigned char)newpiece->pieces[j][i]])
+          if (convert[(int)config[j][i]] !=
+            convert[(int)newpiece->pieces[j][i]])
             goto nomatch;
         }
       }

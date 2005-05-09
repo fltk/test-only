@@ -70,7 +70,9 @@ void Fl_Carbon_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx
     src.top = cy; src.bottom = cy+H;
     dst.left = X; dst.right = X+W;
     dst.top = Y; dst.bottom = Y+H;
-    RGBColor rgb;
+    RGBColor rgb, oldfg, oldbg;
+    GetForeColor(&oldfg);
+    GetBackColor(&oldbg);
     rgb.red = 0xffff; rgb.green = 0xffff; rgb.blue = 0xffff;
     RGBBackColor(&rgb);
     rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
@@ -79,6 +81,8 @@ void Fl_Carbon_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx
 	     GetPortBitMapForCopyBits((GrafPtr)(cache->mask)),
 	     GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
              &src, &src, &dst);
+     RGBBackColor(&oldbg);
+     RGBForeColor(&oldfg);
   } else {
     fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)(cache->id), cx, cy);
   }

@@ -3,7 +3,7 @@
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -30,15 +32,15 @@
 
 static void fl_shadow_frame(int x, int y, int w, int h, Fl_Color c) {
   fl_color(FL_DARK3);
-  fl_rectf(x+BW, y+h,  w, BW);
-  fl_rectf(x+w,  y+BW, BW,  h);
+  fl_rectf(x+BW, y+h-BW,  w, BW);
+  fl_rectf(x+w-BW,  y+BW, BW,  h - BW);
   fl_color(c);
-  fl_rect(x,y,w,h);
+  fl_rect(x,y,w-BW,h-BW);
 }
 
 static void fl_shadow_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c);
-  fl_rectf(x+1,y+1,w-2,h-2);
+  fl_rectf(x+1,y+1,w-2-BW,h-2-BW);
   fl_shadow_frame(x,y,w,h,FL_GRAY0);
 }
 

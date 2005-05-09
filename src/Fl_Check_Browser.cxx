@@ -3,7 +3,7 @@
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <stdio.h>
@@ -118,11 +120,11 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	cb_item *i = (cb_item *)v;
 	char *s = i->text;
 	int tsize = textsize();
-	Fl_Color col = textcolor();
+	Fl_Color col = active_r() ? textcolor() : fl_inactive(textcolor());
 	int cy = Y + (tsize + 1 - CHECK_SIZE) / 2;
 	X += 2;
 
-	fl_color(FL_BLACK);
+	fl_color(active_r() ? FL_BLACK : fl_inactive(FL_BLACK));
 	fl_loop(X, cy, X, cy + CHECK_SIZE,
 	        X + CHECK_SIZE, cy + CHECK_SIZE, X + CHECK_SIZE, cy);
 	if (i->checked) {

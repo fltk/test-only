@@ -3,7 +3,7 @@
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // The Fl_Window is a window in the fltk library.
@@ -30,6 +32,8 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
+#include <stdlib.h>
+#include "flstring.h"
 
 void Fl_Window::_Fl_Window() {
   type(FL_WINDOW);
@@ -92,6 +96,7 @@ int Fl_Window::y_root() const {
 
 void Fl_Window::draw() {
   const char *savelabel = label();
+  uchar saveflags = flags();
   int savex = x(); x(0);
   int savey = y(); y(0);
   // Make sure we don't draw the window title in the window background...
@@ -99,13 +104,29 @@ void Fl_Window::draw() {
   Fl_Group::draw();
   // Restore the label...
   Fl_Widget::label(savelabel);
+  set_flag(saveflags);
   y(savey);
   x(savex);
 }
 
 void Fl_Window::label(const char *name) {label(name, iconlabel());}
 
-void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
+void Fl_Window::copy_label(const char *a) {
+  if (flags() & COPIED_LABEL) {
+    free((void *)label());
+    clear_flag(COPIED_LABEL);
+  }
+  if (a) a = strdup(a);
+  label(a, iconlabel());
+  set_flag(COPIED_LABEL);
+}
+
+
+void Fl_Window::iconlabel(const char *iname) {
+  uchar saveflags = flags();
+  label(label(), iname);
+  set_flag(saveflags);
+}
 
 // the Fl::atclose pointer is provided for back compatability.  You
 // can now just change the callback for the window instead.

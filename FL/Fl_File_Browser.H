@@ -3,7 +3,7 @@
 //
 // FileBrowser definitions.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 //
@@ -90,7 +92,7 @@ public:
     /** Sets the file browser type, \c FILES or \c DIRECTORIES. When set to
      * \c FILES, both files and directories are shown. Otherwise only
      * directories are shown. */
-  void		filetype(int t) { filetype_ = t; load(directory_); };
+  void		filetype(int t) { filetype_ = t;};
 };
 
 #endif // !_Fl_File_Browser_H_

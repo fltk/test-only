@@ -5,7 +5,7 @@
 //
 // KDE icon code donated by Maarten De Boer.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,7 +22,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -193,8 +195,10 @@ Fl_File_Icon::find(const char *filename,// I - Name of file */
   // Get file information if needed...
   if (filetype == ANY)
   {
-#ifdef WIN32 
-    if (fl_filename_isdir(filename))
+#ifdef WIN32
+    if (filename[strlen(filename) - 1] == '/')
+      filetype = DIRECTORY;
+    else if (fl_filename_isdir(filename))
       filetype = DIRECTORY;
     else
       filetype = PLAIN;

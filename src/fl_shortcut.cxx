@@ -3,7 +3,7 @@
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Code to test and parse fltk shortcut numbers.
@@ -153,7 +155,7 @@ const char * fl_shortcut_label(int shortcut) {
       *p++ = uchar(key & 127);
     } else {
       // if none found, use the keystroke as a match:
-      *p++ = uchar(key);
+      *p++ = uchar(toupper(key & 255));
     }
   }
   *p = 0;
@@ -163,7 +165,7 @@ const char * fl_shortcut_label(int shortcut) {
   if (key == FL_Enter || key == '\r') q="Enter";  // don't use Xlib's "Return":
   else if (key > 32 && key < 0x100) q = 0;
   else q = XKeysymToString(key);
-  if (!q) {*p++ = uchar(key); *p = 0; return buf;}
+  if (!q) {*p++ = uchar(toupper(key & 255)); *p = 0; return buf;}
   if (p > buf) {strcpy(p,q); return buf;} else return q;
 #endif
 }

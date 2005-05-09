@@ -3,7 +3,7 @@
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -642,8 +644,13 @@ Fl_Widget::label(const char *a) {
 void
 Fl_Widget::copy_label(const char *a) {
   if (flags() & COPIED_LABEL) free((void *)(label_));
-  set_flag(COPIED_LABEL);
-  label_=strdup(a);
+  if (a) {
+    set_flag(COPIED_LABEL);
+    label_=strdup(a);
+  } else {
+    clear_flag(COPIED_LABEL);
+    label_=(char *)0;
+  }
   redraw_label();
 }
 

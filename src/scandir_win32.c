@@ -3,7 +3,7 @@
  *
  * WIN32 scandir function for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2005 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "fltk-bugs@fltk.org".
+ * Please report all bugs and problems on the following page:
+ *
+ *     http://www.fltk.org/str.php
  */
 
 #ifndef __CYGWIN__
@@ -43,7 +45,7 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
   unsigned long ret;
 
   len    = strlen(dirname);
-  findIn = malloc(len+5);
+  findIn = (char *)malloc((size_t)(len+5));
 
   if (!findIn) return -1;
 
@@ -72,7 +74,7 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
     }
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
-	struct dirent **tempDir = calloc(sizeof(struct dirent*), NDir+33);
+	struct dirent **tempDir = (struct dirent **)calloc(sizeof(struct dirent*), (size_t)(NDir+33));
 	if (NDir) memcpy(tempDir, dir, sizeof(struct dirent*)*NDir);
 	if (dir) free(dir);
 	dir = tempDir;
@@ -94,8 +96,8 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
 
   free (findIn);
 
-  if (compar) qsort (dir, nDir, sizeof(*dir),
-		     (int(*)(const void*, const void*))compar);
+  if (compar) qsort(dir, (size_t)nDir, sizeof(*dir),
+		    (int(*)(const void*, const void*))compar);
 
   *namelist = dir;
   return nDir;

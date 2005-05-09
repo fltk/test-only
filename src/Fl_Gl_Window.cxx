@@ -3,7 +3,7 @@
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include "flstring.h"
@@ -95,8 +97,10 @@ int Fl_Gl_Window::mode(int m, const int *a) {
   if (m == mode_ && a == alist) return 0;
 #ifndef __APPLE__
   int oldmode = mode_;
+#endif // !__APPLE__
+#if !defined(WIN32) && !defined(__APPLE__)
   Fl_Gl_Choice* oldg = g;
-#endif
+#endif // !WIN32 && !__APPLE__
   context(0);
   mode_ = m; alist = a;
   if (shown()) {
@@ -307,7 +311,7 @@ void Fl_Gl_Window::flush() {
 
       } else {
 	damage1_ = damage();
-	clear_damage(~0); draw();
+	clear_damage(0xff); draw();
 	swap_buffers();
       }
 

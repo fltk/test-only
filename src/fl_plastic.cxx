@@ -6,7 +6,7 @@
 // These box types provide a cross between Aqua and KDE buttons; kindof
 // like translucent plastic buttons...
 //
-// Copyright 2001-2004 by Michael Sweet.
+// Copyright 2001-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,7 +23,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Box drawing code for an obscure box type.
@@ -77,7 +79,7 @@ inline Fl_Color shade_color(uchar gc, Fl_Color bc) {
 }
 
 
-static void shade_frame(int x, int y, int w, int h, const char *c, Fl_Color bc) {
+static void frame_rect(int x, int y, int w, int h, const char *c, Fl_Color bc) {
   uchar *g = fl_gray_ramp();
   int b = strlen(c) / 4 + 1;
 
@@ -97,8 +99,27 @@ static void shade_frame(int x, int y, int w, int h, const char *c, Fl_Color bc) 
 }
 
 
-static void shade_rect(int x, int y, int w, int h, const char *c, Fl_Color bc)
-{
+static void frame_round(int x, int y, int w, int h, const char *c, Fl_Color bc) {
+  uchar *g = fl_gray_ramp();
+  int b = strlen(c) / 4 + 1;
+
+  for (; b > 1; b --, x ++, y ++, w -= 2, h -= 2)
+  {
+    // Draw arcs around the perimeter of the button, 4 colors per
+    // circuit.
+    fl_color(shade_color(g[*c++], bc));
+    fl_arc(x, y, w, h, 45.0, 135.0);
+    fl_color(shade_color(g[*c++], bc));
+    fl_arc(x, y, w, h, 315.0, 405.0);
+    fl_color(shade_color(g[*c++], bc));
+    fl_arc(x, y, w, h, 225.0, 315.0);
+    fl_color(shade_color(g[*c++], bc));
+    fl_arc(x, y, w, h, 135.0, 225.0);
+  }
+}
+
+
+static void shade_rect(int x, int y, int w, int h, const char *c, Fl_Color bc) {
   uchar		*g = fl_gray_ramp();
   int		i, j;
   int		clen = strlen(c) - 1;
@@ -170,9 +191,54 @@ static void shade_rect(int x, int y, int w, int h, const char *c, Fl_Color bc)
   }
 }
 
+static void shade_round(int x, int y, int w, int h, const char *c, Fl_Color bc) {
+  uchar		*g = fl_gray_ramp();
+  int		i, j, k;
+  int		clen = strlen(c) - 1;
+  int		chalf = clen / 2;
+  int		cstep = 1;
+  static const int kvals[] = { 5, 3, 2, 1 };
+  if (clen >= h) cstep = 2;
+
+  for (i = 0, j = 0; j < chalf; i ++, j += cstep) {
+    // Indent k inside a circle...
+    k = kvals[i];
+
+    // Draw the top line and points...
+    fl_color(shade_color(g[c[i]], bc));
+    fl_xyline(x + k, y + i, x + w - k);
+
+    fl_color(shade_color(g[c[i] - 2], bc));
+    fl_point(x + k - 1, y + i + 1);
+    fl_point(x + k - 2, y + i + 2);
+    fl_point(x + w - k, y + i + 1);
+    fl_point(x + w - k - 1, y + i + 2);
+
+    // Draw the bottom line and points...
+    fl_color(shade_color(g[c[clen - i]], bc));
+    fl_xyline(x + k, y + h - i, x + w - k);
+
+    fl_color(shade_color(g[c[clen - i] - 2], bc));
+    fl_point(x + k - 1, y + h - i);
+    fl_point(x + k - 2, y + h - i - 1);
+    fl_point(x + w - k, y + h - i);
+    fl_point(x + w - k - 1, y + h - i - 1);
+  }
+
+  // Draw the interior and sides...
+  i = chalf / cstep;
+
+  fl_color(shade_color(g[c[chalf]], bc));
+  fl_rectf(x + 1, y + i, w - 2, h - 2 * i + 1);
+
+  fl_color(shade_color(g[c[chalf] - 2], bc));
+  fl_yxline(x, y + i, y + h - i);
+  fl_yxline(x + w - 1, y + i, y + h - i);
+}
+
 
 static void up_frame(int x, int y, int w, int h, Fl_Color c) {
-  shade_frame(x, y, w, h - 1, "KLDIIJLM", c);
+  frame_rect(x, y, w, h - 1, "KLDIIJLM", c);
 }
 
 
@@ -182,7 +248,7 @@ static void up_box(int x, int y, int w, int h, Fl_Color c) {
   up_frame(x, y, w, h, c);
 #else
   shade_rect(x + 1, y + 1, w - 2, h - 3, "RVQNOPQRSTUVWVQ", c);
-  shade_frame(x, y, w, h - 1, "IJLM", c);
+  frame_rect(x, y, w, h - 1, "IJLM", c);
 #endif // USE_OLD_PLASTIC_BOX
 }
 
@@ -193,20 +259,31 @@ static void thin_up_box(int x, int y, int w, int h, Fl_Color c) {
   up_frame(x, y, w, h, c);
 #else
   shade_rect(x + 1, y + 1, w - 2, h - 3, "RQOQSUWQ", c);
-  shade_frame(x, y, w, h - 1, "IJLM", c);
+  frame_rect(x, y, w, h - 1, "IJLM", c);
 #endif // USE_OLD_PLASTIC_BOX
 }
 
 
+static void up_round(int x, int y, int w, int h, Fl_Color c) {
+  shade_round(x + 1, y + 1, w - 2, h - 3, "RVQNOPQRSTUVWVQ", c);
+  frame_round(x, y, w, h - 1, "IJLM", c);
+}
+
+
 static void down_frame(int x, int y, int w, int h, Fl_Color c) {
-  shade_frame(x, y, w, h - 1, "LLRRTTLL", c);
+  frame_rect(x, y, w, h - 1, "LLRRTTLL", c);
 }
 
 
 static void down_box(int x, int y, int w, int h, Fl_Color c) {
   shade_rect(x + 2, y + 2, w - 4, h - 5, "STUVWWWVT", c);
-
   down_frame(x, y, w, h, c);
+}
+
+
+static void down_round(int x, int y, int w, int h, Fl_Color c) {
+  shade_round(x + 2, y + 2, w - 4, h - 5, "STUVWWWVT", c);
+  frame_round(x, y, w, h - 1, "MLJI", c);
 }
 
 
@@ -220,6 +297,8 @@ Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX() {
   fl_internal_boxtype(_FL_PLASTIC_DOWN_FRAME, down_frame);
   fl_internal_boxtype(_FL_PLASTIC_THIN_UP_BOX, thin_up_box);
   fl_internal_boxtype(_FL_PLASTIC_THIN_DOWN_BOX, down_box);
+  fl_internal_boxtype(_FL_PLASTIC_ROUND_UP_BOX, up_round);
+  fl_internal_boxtype(_FL_PLASTIC_ROUND_DOWN_BOX, down_round);
 
   return _FL_PLASTIC_UP_BOX;
 }

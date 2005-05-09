@@ -23,7 +23,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 const char* copyright = 
@@ -56,7 +58,7 @@ const char* copyright =
 #define FLTK
 //#define VT100
 
-#include "../src/flstring.h"
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -221,7 +223,7 @@ void evaluateboard(node *n,int print) {
 
   if (!n->who) tb = b;	// move was black's
   else {
-    for (int i=0; i<45; i++) flipboard[44-i] = flip[(unsigned char)b[i]];
+    for (int i=0; i<45; i++) flipboard[44-i] = flip[(int)b[i]];
     tb = flipboard;
   }
 
@@ -413,7 +415,7 @@ void movepiece(node* f, int i, node* jnode) {
   static char jumphappened;
 
   for (int k=0; k<4; k++) {
-    int direction = offset[(unsigned char)b[i]][k];
+    int direction = offset[(int)b[i]][k];
     if (!direction) break;
     int j = i+direction;
     if (b[j] == EMPTY) {

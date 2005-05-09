@@ -3,7 +3,7 @@
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // This is a base class for all items that have a menu:
@@ -52,10 +54,10 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
     for ( int t=0; t<size(); t++ ) {
         const Fl_Menu_Item *m = &(menu()[t]);
 	if ( m->submenu() ) {				// submenu? descend
-	    if ( *name ) SAFE_STRCAT("/");
-	    SAFE_STRCAT(m->label());
+	    if (*name) SAFE_STRCAT("/");
+	    if (m->label()) SAFE_STRCAT(m->label());
 	} else {
-	    if ( m->label() ) {				// menu item?
+	    if (m->label()) {				// menu item?
 		if ( m == finditem ) {			// found? tack on itemname, done.
 		    SAFE_STRCAT("/");
 		    SAFE_STRCAT(m->label());

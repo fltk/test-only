@@ -1,7 +1,7 @@
 /*
  * "$Id$"
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2005 by Bill Spitzak and others.
  *
  * fl_call_main() calls main() for you Windows people.  Needs to be done in C
  * because Borland C++ won't let you call main() from C++.
@@ -21,7 +21,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "fltk-bugs@fltk.org".
+ * Please report all bugs and problems on the following page:
+ *
+ *     http://www.fltk.org/str.php
  */
 
 /*

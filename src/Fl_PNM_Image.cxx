@@ -3,7 +3,7 @@
 //
 // Fl_PNM_Image routines.
 //
-// Copyright 1997-2004 by Easy Software Products.
+// Copyright 1997-2005 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
@@ -83,7 +85,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
   format = atoi(lineptr);
   while (isdigit(*lineptr)) lineptr ++;
 
-  if (format == 7) lineptr = "";
+  if (format == 7) lineptr = (char *)"";
 
   while (lineptr != NULL && w() == 0) {
     if (*lineptr == '\0' || *lineptr == '#') {

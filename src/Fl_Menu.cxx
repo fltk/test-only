@@ -3,7 +3,7 @@
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Warning: this menu code is quite a mess!
@@ -119,7 +121,8 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : (uchar)FL_NORMAL_SIZE;
   l.color   = FL_FOREGROUND_COLOR; // was:FL_BLACK // this makes no difference? - only with FL_BLACK!
   fl_draw_shortcut = 1;
-  int w = 0; int h = 0; l.measure(w, hp ? *hp : h);
+  int w = 0; int h = 0;
+  l.measure(w, hp ? *hp : h);
   fl_draw_shortcut = 0;
   if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) w += 14;
   return w;
@@ -235,27 +238,11 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
 		       int menubar, int menubar_title, int right_edge)
   : Fl_Menu_Window(X, Y, Wp, Hp, 0)
 {
-  int scr_right = Fl::x() + Fl::w();
-  int scr_x = Fl::x();
-#ifdef __APPLE__
-  GDHandle gd = 0L;
-  for ( gd = GetDeviceList(); gd; gd = GetNextDevice(gd) ) {
-    GDPtr gp = *gd;
-    if (    X >= gp->gdRect.left && X <= gp->gdRect.right
-         && Y >= gp->gdRect.top  && Y <= gp->gdRect.bottom)
-      break;
-  }
-  if ( !gd ) gd = GetMainDevice();
-  if ( gd ) {
-    // since the menu pops over everything, we use the screen
-    // bounds, right across the dock and menu bar
-    GDPtr gp = *gd;
-    scr_right = gp->gdRect.right;
-    scr_x = gp->gdRect.left;
-  }
-#endif
-
-  if (!right_edge) right_edge = scr_right;
+  int scr_x, scr_y, scr_w, scr_h;
+  int tx = X, ty = Y;
+  
+  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+  if (!right_edge || right_edge > scr_x+scr_w) right_edge = scr_x+scr_w;
   
   end();
   set_modal();
@@ -311,7 +298,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (Wp > W) W = Wp;
   if (Wtitle > W) W = Wtitle;
   
-  if (!Wp) {if (X < scr_x) X = scr_x; if (X > scr_right-W) X= right_edge-W;}
+  if (X < scr_x) X = scr_x; if (X > scr_x+scr_w-W) X= scr_x+scr_w-W;  
   x(X); w(W);
   h((numitems ? itemheight*numitems-LEADING : 0)+2*BW+3);
   if (selected >= 0)
@@ -323,7 +310,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (t) {
     int dy = menubar_title ? Fl::box_dy(button->box())+1 : 2;
     int ht = menubar_title ? button->h()-dy*2 : Htitle+2*BW+3;
-    title = new menutitle(X, Y-ht-dy, Wtitle, ht, t);
+    title = new menutitle(tx, ty-ht-dy, Wtitle, ht, t);
   } else
     title = 0;
 }
@@ -340,24 +327,10 @@ void menuwindow::position(int X, int Y) {
 
 // scroll so item i is visible on screen
 void menuwindow::autoscroll(int n) {
-  int scr_y = Fl::y(), scr_h = Fl::h();
+  int scr_x, scr_y, scr_w, scr_h;
   int Y = y()+Fl::box_dx(box())+2+n*itemheight;
-#ifdef __APPLE__
-  GDHandle gd = 0L;
-  for ( gd = GetDeviceList(); gd; gd = GetNextDevice(gd) ) {
-    GDPtr gp = *gd;
-    if (    x() >= gp->gdRect.left && x() <= gp->gdRect.right
-         && Y >= gp->gdRect.top    && Y <= gp->gdRect.bottom)
-      break;
-  }
-  if ( !gd ) gd = GetMainDevice();
-  if ( gd ) {
-    // since the menu pops over everything, we use the screen
-    // bounds, right across the dock and menu bar
-    GDPtr gp = *gd;
-    scr_y = gp->gdRect.top; scr_h = gp->gdRect.bottom - gp->gdRect.top + 1;
-  }
-#endif
+
+  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
   if (Y <= scr_y) Y = scr_y-Y+10;
   else {
     Y = Y+itemheight-scr_h-scr_y;
@@ -393,7 +366,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
     int sz = (hh-7)&-2;
     int y1 = yy+(hh-sz)/2;
     int x1 = xx+ww-sz-3;
-    fl_polygon(x1, y1, x1, y1+sz, x1+sz/2, y1+sz/2);
+    fl_polygon(x1+2, y1, x1+2, y1+sz, x1+sz/2+2, y1+sz/2);
   } else if (m->shortcut_) {
     Fl_Font f = m->labelsize_ || m->labelfont_ ? (Fl_Font)m->labelfont_ :
                     button ? button->textfont() : FL_HELVETICA;
@@ -594,6 +567,11 @@ int menuwindow::handle(int e) {
   case FL_MOVE:
   case FL_PUSH:
   case FL_DRAG: {
+#ifdef __QNX__
+    // STR 704: workaround QNX X11 bug - in QNX an event FL_MOVE is sent
+    // right after FL_RELEASE...
+    if (pp.state == DONE_STATE) return 1;
+#endif // __QNX__
     int mx = Fl::event_x_root();
     int my = Fl::event_y_root();
     int item=0; int mymenu;

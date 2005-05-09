@@ -3,7 +3,7 @@
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <FL/Fl.H>
@@ -300,8 +302,8 @@ int Fl::reload_scheme() {
     set_boxtype(FL_DOWN_BOX,        FL_PLASTIC_DOWN_BOX);
     set_boxtype(FL_THIN_UP_BOX,     FL_PLASTIC_THIN_UP_BOX);
     set_boxtype(FL_THIN_DOWN_BOX,   FL_PLASTIC_THIN_DOWN_BOX);
-    set_boxtype(_FL_ROUND_UP_BOX,   FL_PLASTIC_UP_BOX);
-    set_boxtype(_FL_ROUND_DOWN_BOX, FL_PLASTIC_UP_BOX);
+    set_boxtype(_FL_ROUND_UP_BOX,   FL_PLASTIC_ROUND_UP_BOX);
+    set_boxtype(_FL_ROUND_DOWN_BOX, FL_PLASTIC_ROUND_UP_BOX);
   } else {
     // Use the standard FLTK look-n-feel...
     if (scheme_bg_) {

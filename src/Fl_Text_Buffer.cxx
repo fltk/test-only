@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 2001-2004 by Bill Spitzak and others.
+// Copyright 2001-2005 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include <stdio.h>
@@ -1538,6 +1540,7 @@ void Fl_Text_Buffer::remove_rectangular_( int start, int end, int rectStart,
      the text between rectStart and rectEnd and padding appropriately */
   lineStart = start;
   outPtr = outStr;
+  endOffset = 0;
   while ( lineStart <= mLength && lineStart <= end ) {
     lineEnd = line_end( lineStart );
     line = text_range( lineStart, lineEnd );

@@ -3,7 +3,7 @@
  *
  * BSD string functions for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2005 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,12 +20,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "fltk-bugs@fltk.org".
+ * Please report all bugs and problems on the following page:
+ *
+ *     http://www.fltk.org/str.php
  */
 
 #include "flstring.h"
 
-#  if !HAVE_STRLCAT
+
 /*
  * 'fl_strlcat()' - Safely concatenate two strings.
  */
@@ -64,9 +66,8 @@ fl_strlcat(char       *dst,	/* O - Destination string */
 
   return (dstlen + srclen);
 }
-#  endif /* !HAVE_STRLCAT */
 
-#  if !HAVE_STRLCPY
+
 /*
  * 'fl_strlcpy()' - Safely copy two strings.
  */
@@ -97,7 +98,6 @@ fl_strlcpy(char       *dst,	/* O - Destination string */
 
   return (srclen);
 }
-#  endif /* !HAVE_STRLCPY */
 
 
 /*

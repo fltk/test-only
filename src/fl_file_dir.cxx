@@ -3,7 +3,7 @@
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,26 +20,39 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 #include "flstring.h"
 #include <FL/filename.H>
 #include <FL/Fl_File_Chooser.H>
-#include <FL/Fl_File_Chooser.H>
+#include <FL/fl_ask.H>
+
 
 static Fl_File_Chooser	*fc = (Fl_File_Chooser *)0;
 static void		(*current_callback)(const char*) = 0;
+static const char	*current_label = fl_ok;
 
 
+// Do a file chooser callback...
 static void callback(Fl_File_Chooser *, void*) {
   if (current_callback && fc->value())
     (*current_callback)(fc->value());
 }
 
 
+// Set the file chooser callback
 void fl_file_chooser_callback(void (*cb)(const char*)) {
   current_callback = cb;
+}
+
+
+// Set the "OK" button label
+void fl_file_chooser_ok_label(const char *l) {
+  if (l) current_label = l;
+  else current_label = fl_ok;
 }
 
 
@@ -89,6 +102,7 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
       fc->value(fname);
   }
 
+  fc->ok_label(current_label);
   fc->show();
 
   while (fc->shown())

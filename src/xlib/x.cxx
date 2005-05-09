@@ -3,7 +3,7 @@
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -876,7 +876,26 @@ int fl_handle(const XEvent& thisevent)
 	fl_dnd_source_types[2] = data[4];
 	fl_dnd_source_types[3] = 0;
       }
-      fl_dnd_type = fl_dnd_source_types[0]; // should pick text or url
+       
+      // Loop through the source types and pick the first text type...
+      int i;
+
+      for (i = 0; fl_dnd_source_types[i]; i ++)
+      {
+//        printf("fl_dnd_source_types[%d] = %ld (%s)\n", i,
+//	       fl_dnd_source_types[i],
+//	       XGetAtomName(fl_display, fl_dnd_source_types[i]));
+
+        if (!strncmp(XGetAtomName(fl_display, fl_dnd_source_types[i]),
+	             "text/", 5))
+	  break;
+      }
+
+      if (fl_dnd_source_types[i])
+        fl_dnd_type = fl_dnd_source_types[i];
+      else
+        fl_dnd_type = fl_dnd_source_types[0];
+
       event = FL_DND_ENTER;
       break;
 
@@ -1260,13 +1279,16 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
     // center windows in case window manager does not do anything:
 #ifdef FL_CENTER_WINDOWS
     if (!(win->flags() & Fl_Window::FL_FORCE_POSITION)) {
-      win->x(X = (Fl::w()-W)/2);
-      win->y(Y = (Fl::h()-H)/2);
+      win->x(X = scr_x+(scr_w-W)/2);
+      win->y(Y = scr_y+(scr_h-H)/2);
     }
 #endif // FL_CENTER_WINDOWS
 
     // force the window to be on-screen.  Usually the X window manager
     // does this, but a few don't, so we do it here for consistency:
+    int scr_x, scr_y, scr_w, scr_h;
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+
     if (win->border()) {
       // ensure border is on screen:
       // (assumme extremely minimal dimensions for this border)
@@ -1274,16 +1296,16 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
       const int left = 1;
       const int right = 1;
       const int bottom = 1;
-      if (X+W+right > Fl::w()) X = Fl::w()-right-W;
-      if (X-left < 0) X = left;
-      if (Y+H+bottom > Fl::h()) Y = Fl::h()-bottom-H;
-      if (Y-top < 0) Y = top;
+      if (X+W+right > scr_x+scr_w) X = scr_x+scr_w-right-W;
+      if (X-left < scr_x) X = scr_x+left;
+      if (Y+H+bottom > scr_y+scr_h) Y = scr_y+scr_h-bottom-H;
+      if (Y-top < scr_y) Y = scr_y+top;
     }
     // now insure contents are on-screen (more important than border):
-    if (X+W > Fl::w()) X = Fl::w()-W;
-    if (X < 0) X = 0;
-    if (Y+H > Fl::h()) Y = Fl::h()-H;
-    if (Y < 0) Y = 0;
+    if (X+W > scr_x+scr_w) X = scr_x+scr_w-W;
+    if (X < scr_x) X = scr_x;
+    if (Y+H > scr_y+scr_h) Y = scr_y+scr_h-H;
+    if (Y < scr_y) Y = scr_y;
   }
 
   ulong root = win->parent() ?
