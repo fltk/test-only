@@ -1575,7 +1575,7 @@ RETURN:
 
 void Browser::column_click_cb_(Widget *ww, void *d) {
   Browser *w = (Browser*)(ww->parent());
-  w->selected_column_ = (int)d;
+  w->selected_column_ = *(int*)d;
   w->do_callback();
   w->selected_column_ = -1;
 }
@@ -1625,7 +1625,7 @@ public:
       case fltk::DRAG: {
 	if (ox==-1) break;
 	Browser *w = (Browser*)(parent());
-	int col = (int)(user_data());
+	int col = *(int*)(user_data());
 	if (left)
 	  w->set_column_start(col, fltk::event_x_root()-ox);
 	else
