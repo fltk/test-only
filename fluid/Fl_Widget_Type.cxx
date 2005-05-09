@@ -512,7 +512,7 @@ void when_cb(fltk::Choice* i, void *v) {
     i->value(e ? e-whenmenu : 0);
   } else {
     int m = i->value();
-    int n = (int)(whenmenu[m].compiled);
+    int n = *(int*)(whenmenu[m].compiled);
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
@@ -1267,7 +1267,7 @@ void subtype_cb(fltk::Choice* i, void* v) {
     i->redraw();
   } else {
     const Enumeration* table = current_widget->subtypes();
-    int n = (int)(table[i->value()].compiled);
+    int n = *(int*)(table[i->value()].compiled);
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
@@ -1279,12 +1279,11 @@ void subtype_cb(fltk::Choice* i, void* v) {
   }
 }
 
-////////////////////////////////////////////////////////////////
-
-// Groups in the panel send LOAD to all widgets, send any other
-// callback to only the changed widgets, and recursively call
-// themselves:
-
+/**
+ * Groups in the panel send LOAD to all widgets, send any other
+ * callback to only the changed widgets, and recursively call
+ * themselves:
+ */
 void propagate_group(fltk::Group* g, void* v) {
   if (v == LOAD) {
     for (int i=g->children(); i--;) {
@@ -1305,8 +1304,10 @@ void propagate_group(fltk::Group* g, void* v) {
   }    
 }
 
-// Fluid insists on giving the correct type to arguments so we need
-// a different call for the tabs:
+/**
+ * Fluid insists on giving the correct type to arguments so we need
+ * a different call for the tabs:
+ */
 void propagate_tabs(fltk::TabGroup* g, void* v) {
   propagate_group(g, v);
 }
@@ -1369,7 +1370,9 @@ void overlay_cb(fltk::CheckButton*o,void *v) {
   toggle_overlays(o,v);
 }
 
-// update the panel according to current widget set:
+/**
+ * Update the panel according to current widget set:
+ */
 static void load_panel() {
   if (!the_panel) return;
 
@@ -1416,7 +1419,9 @@ static void load_panel() {
   }
 }
 
-// This is called when user double-clicks an item, open or update the panel:
+/**
+ * This is called when user double-clicks an item, open or update the panel:
+ */
 void WidgetType::open() {
   if (!the_panel) {
     the_panel = make_widget_panel();
@@ -1442,9 +1447,10 @@ void WidgetType::open() {
 
 extern void redraw_overlays();
 
-// Called when the select value on the passed object changes, or when
-// objects are deleted (in which case the passed object is null).
-
+/**
+ * Called when the select value on the passed object changes, or when
+ * objects are deleted (in which case the passed object is null).
+ */
 void selection_changed(FluidType *p) {
   if (p && the_panel && the_panel->visible()) {
     // store all changes to the current selected objects:
@@ -1475,10 +1481,12 @@ void selection_changed(FluidType *p) {
   load_panel();
 }
 
-////////////////////////////////////////////////////////////////
-// Writing the C code:
-
-// test to see if user named a function, or typed in code:
+/**
+ *
+ * Writing the C code:
+ *
+ * test to see if user named a function, or typed in code:
+ */
 int is_name(const char *c) {
   for (; *c; c++) if (ispunct(*c) && *c!='_' && *c!=':') return 0;
   return 1;
