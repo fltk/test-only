@@ -1,5 +1,5 @@
 //
-// "$Id: Valuator.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id$"
 //
 // Base class for all the widgets that control a single floating-point
 // value.
@@ -68,7 +68,7 @@ public:
   }
 #endif
 
-protected:
+//protected:
 
   Valuator(int X, int Y, int W, int H, const char* L);
   double previous_value() const {return previous_value_;}
@@ -95,5 +95,5 @@ private:
 #endif
 
 //
-// End of "$Id: Valuator.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id$".
 //
