@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.53 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id$"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -197,7 +197,7 @@ InputBrowserType InputBrowsertype;
 #include <fltk/Browser.h>
 static const Enumeration browser_type_menu[] = {
   {"Single",	0,	(void*)fltk::Browser::NORMAL},
-  {"Multi",	0,	(void*)fltk::Browser::MULTI, "fltk::Multi_Browser"},
+  {"Multi",	"MULTI",	(void*)fltk::Browser::MULTI, "fltk::MultiBrowser"},
   {0}};
 class BrowserType : public MenuType {
   int is_browser() const {return 1;}
@@ -280,5 +280,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.53 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id$".
 //

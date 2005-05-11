@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.32 2004/07/04 17:38:08 laza2000 Exp $"
+// "$Id$"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -464,14 +464,21 @@ static void read_children(FluidType *p, int paste) {
 extern void deselect();
 
 int read_file(const char *filename, int merge) {
+  FluidType* curType = 0;
   read_version = 0.0;
   if (!open_read(filename)) return 0;
-  if (merge) deselect(); 
+  if (merge) {
+    curType = FluidType::current;
+    deselect();
+    FluidType::current = curType;
+  }
   else delete_all();
   read_children(FluidType::current, merge);
-  FluidType::current = 0;
+  FluidType::current = curType;
   for (FluidType *o = FluidType::first; o; o = o->walk())
-    if (o->selected) {FluidType::current = o; break;}
+    if (o->selected) {
+      FluidType::current = o; break;
+    }
   return close_read();
 }
 
@@ -647,5 +654,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.32 2004/07/04 17:38:08 laza2000 Exp $".
+// End of "$Id$".
 //

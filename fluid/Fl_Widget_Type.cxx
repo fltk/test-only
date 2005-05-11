@@ -1272,8 +1272,8 @@ void subtype_cb(fltk::Choice* i, void* v) {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
       if (q->subtypes()==table) {
-	q->o->type(n);
-	q->redraw();
+        q->o->type(n);
+        q->redraw();
       }
     }
   }
@@ -1461,8 +1461,8 @@ void selection_changed(FluidType *p) {
       // back to the previous values:
       FluidType *q = 0;
       for (FluidType *o = FluidType::first; o; o = o->walk()) {
-	o->new_selected = o->selected;
-	if (!q && o->selected) q = o;
+        o->new_selected = o->selected;
+        if (!q && o->selected) q = o;
       }
       if (!p || !p->selected) p = q;
       FluidType::current = p;
@@ -1472,10 +1472,12 @@ void selection_changed(FluidType *p) {
 #endif
   }
   // update the selected flags to new set:
-  for (FluidType *o = FluidType::first; o; o = o->walk())
+  FluidType::current = 0;
+  for (FluidType* o = FluidType::first; o; o = o->walk()) {
     o->selected = o->new_selected;
+    if (o->selected) FluidType::current = o;
+  }
   if (p && p->new_selected) FluidType::current = p;
-  else FluidType::current = NULL;
   redraw_overlays();
   // load the panel with the new settings:
   load_panel();
