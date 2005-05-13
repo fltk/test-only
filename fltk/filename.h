@@ -49,7 +49,7 @@ FL_API long int filename_mtime(const char *); // return modification time
 # include <sys/types.h>
 # include "direct.h"
 
-#elif defined(_WIN32) && !defined(__CYGWIN__)
+#elif defined(_WIN32) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 // Dummy version used on win32 that just holds a name:
 
 struct dirent {char d_name[1];};
