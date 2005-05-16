@@ -1472,10 +1472,9 @@ void selection_changed(FluidType *p) {
 #endif
   }
   // update the selected flags to new set:
-  FluidType::current = 0;
   for (FluidType* o = FluidType::first; o; o = o->walk()) {
     o->selected = o->new_selected;
-    if (o->selected) FluidType::current = o;
+    //if (o->selected) FluidType::current = o;
   }
   if (p && p->new_selected) FluidType::current = p;
   redraw_overlays();

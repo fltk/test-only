@@ -464,17 +464,13 @@ static void read_children(FluidType *p, int paste) {
 extern void deselect();
 
 int read_file(const char *filename, int merge) {
-  FluidType* curType = 0;
+  FluidType* parent = merge ? FluidType::current : 0;
   read_version = 0.0;
   if (!open_read(filename)) return 0;
-  if (merge) {
-    curType = FluidType::current;
-    deselect();
-    FluidType::current = curType;
-  }
+  if (merge) deselect();
   else delete_all();
-  read_children(FluidType::current, merge);
-  FluidType::current = curType;
+  read_children(parent, merge);
+  FluidType::current = parent;
   for (FluidType *o = FluidType::first; o; o = o->walk())
     if (o->selected) {
       FluidType::current = o; break;

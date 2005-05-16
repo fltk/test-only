@@ -322,7 +322,7 @@ void cut_cb(fltk::Widget *, void *) {
 extern int force_parent, gridx, gridy;
 
 void paste_cb(fltk::Widget*, void*) {
-  //if (ipasteoffset) force_parent = 1;
+  if (ipasteoffset) force_parent = 1;
   pasteoffset = ipasteoffset;
   if (gridx>1) pasteoffset = ((pasteoffset-1)/gridx+1)*gridx;
   if (gridy>1) pasteoffset = ((pasteoffset-1)/gridy+1)*gridy;
