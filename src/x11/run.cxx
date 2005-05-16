@@ -2086,17 +2086,27 @@ void fltk::draw_into(XWindow window) {
   // xft text is drawn the first time.
   load_identity();
 #if USE_CAIRO
+  static cairo_surface_t* surface;
+  static unsigned cairo_window_id;
   // Cairo context created as well:
   if (cc) {
     if (cairo_status(cc)) {
       warning("Cairo: %s", cairo_status_string(cc));
-      // reset it somehow?
+      cairo_destroy(cc);
+      cairo_surface_destroy(surface);
+    } else if (cairo_window_id != window) {
+      cairo_destroy(cc);
+      cairo_surface_destroy(surface);
+    } else {
+      return; // cc is already set to this window
     }
-  } else {
-    cc = cairo_create();
-    cairo_set_line_width(cc,1);
   }
-  cairo_set_target_drawable (cc, xdisplay, window);
+  cairo_window_id = window;
+  surface = cairo_xlib_surface_create_with_visual(xdisplay, window, xvisual->visual);
+  if (Window::drawing_window())
+    cairo_xlib_surface_set_size(surface, Window::drawing_window()->w(),
+				Window::drawing_window()->h());
+  cc = cairo_create(surface);
 #endif
 }
 

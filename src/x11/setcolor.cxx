@@ -246,7 +246,7 @@ void fltk::setcolor(Color i) {
   current_color_ = i;
 #if USE_CAIRO
   uchar r,g,b; split_color(i,r,g,b);
-  cairo_set_rgb_color(cc,r/255.0,g/255.0,b/255.0);
+  cairo_set_source_rgb(cc,r/255.0,g/255.0,b/255.0);
 #endif
   current_xpixel = xpixel(i);
   XSetForeground(xdisplay, gc, current_xpixel);
