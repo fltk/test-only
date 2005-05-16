@@ -34,7 +34,7 @@ void* dlopen(const char* path, int mode) {
 
 void* dlsym(void* handle, const char *symbol) {
   NSSymbol nss_symbol =
-    NSLookupSymbolInModule(handle, symbol);
+    NSLookupSymbolInModule((NSModule)handle, symbol);
   if (nss_symbol) return NSAddressOfSymbol(nss_symbol);
   return 0;
 }
@@ -43,12 +43,12 @@ int dlclose(void* handle) {
 
   /* call the fini function of the bundle */
   NSSymbol bundle_fini_nssymbol =
-    NSLookupSymbolInModule(handle, "__fini");
+    NSLookupSymbolInModule((NSModule)handle, "__fini");
   if (bundle_fini_nssymbol != 0) {
     void (*bundle_fini)(void) =
       (void(*)())NSAddressOfSymbol(bundle_fini_nssymbol);
     bundle_fini();
   }
 
-  return (int)NSUnLinkModule(handle, 0);
+  return (int)NSUnLinkModule((NSModule)handle, 0);
 }

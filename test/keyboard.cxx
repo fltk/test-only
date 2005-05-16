@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.17 2005/01/24 08:34:34 spitzak Exp $"
+// "$Id$"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@
 void key_cb(fltk::Button*, void*) {}
 void shift_cb(fltk::Button*, void*) {}
 
-struct {int n; const char* text;} table[] = {
+static struct {int n; const char* text;} table[] = {
   {fltk::EscapeKey, "fltk::EscapeKey"},
   {fltk::BackSpaceKey, "fltk::BackSpaceKey"},
   {fltk::TabKey, "fltk::TabKey"},
@@ -146,5 +146,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.17 2005/01/24 08:34:34 spitzak Exp $".
+// End of "$Id$".
 //

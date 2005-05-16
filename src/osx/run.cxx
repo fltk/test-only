@@ -849,15 +849,20 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     mods_to_e_state( mods );
     break; }
   }
-  // apparently for floating windows it calls the parent window's handler
-  // and thus userData is wrong:
-  Window *window = fltk::focus() ? fltk::focus()->window() : (Window*)userData;
-  while (window->parent()) window = window->window();
-  if (sendEvent && handle(sendEvent,window)) {
-    return noErr; // return noErr if FLTK handled the event
-  } else {
-    return CallNextEventHandler( nextHandler, event );
+  if (sendEvent) {
+    // apparently for floating windows it calls the parent window's handler
+    // and thus userData is wrong:
+    Window* window;
+    if (fltk::focus()) {
+      window = fltk::focus()->window();
+      if (!window) window = (Window*)userData;
+    } else {
+      window = (Window*)userData;
+    }
+    while (window->parent()) window = window->window();
+    if (handle(sendEvent,window)) return noErr;
   }
+  return CallNextEventHandler( nextHandler, event );
 }
 
 // Text editors tell the system where the insertion point is by using

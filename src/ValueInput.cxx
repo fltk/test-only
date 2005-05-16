@@ -119,7 +119,7 @@ void ValueInput::draw() {
   input.label(label());
   input.align(align());
   input.copy_style(style());
-  input.flags(flags());
+  input.flags(flags()|CLICK_TO_FOCUS);
   input.draw(r);
   input.set_damage(0);
 }
@@ -255,7 +255,6 @@ ValueInput::ValueInput(int x, int y, int w, int h, const char* l)
   input.callback(input_cb, this);
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_LEFT);
-  set_click_to_focus();
   Group::current(parent());
   when(WHEN_CHANGED|WHEN_ENTER_KEY);
 }

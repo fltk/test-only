@@ -236,7 +236,7 @@ void GlWindow::flush() {
     } else {
 
       damage1_ = save_damage;
-      set_damage(~0);
+      set_damage(DAMAGE_ALL);
       draw();
       if (overlay == this) draw_overlay();
       if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();

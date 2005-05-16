@@ -103,7 +103,7 @@ void ValueSlider::draw() {
   input.label(label());
   input.align(align());
   //input.copy_style(style());
-  input.flags(flags());
+  input.flags(flags()|CLICK_TO_FOCUS);
   push_matrix();
   translate(input.x(),input.y());
   input.draw();
@@ -201,7 +201,6 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char* l)
 : Slider(x, y, w, h, l), input(nogroup(x), y, w, h, 0) {
   input.parent((Group*)this); // kludge!
   input.callback(input_cb, this);
-  set_click_to_focus();
   Group::current(parent());
   step(.01);
   when(WHEN_CHANGED|WHEN_ENTER_KEY);

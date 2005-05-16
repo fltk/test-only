@@ -106,7 +106,7 @@ fltk::Cursor *fltk::cursor(void *raw) {
 
 static fltk::Cursor arrow = {0,35};
 static fltk::Cursor cross = {0,66};
-static fltk::Cursor wait = {0,76};
+static fltk::Cursor wait_c = {0,76};
 static fltk::Cursor insert = {0,77};
 static fltk::Cursor hand = {0,31};
 static fltk::Cursor help = {0,47};
@@ -236,7 +236,7 @@ fltk::Cursor *fltk::cursor(void *raw) {
 
 static fltk::Cursor arrow = {TEXT(IDC_ARROW)};
 static fltk::Cursor cross = {TEXT(IDC_CROSS)};
-static fltk::Cursor wait = {TEXT(IDC_WAIT)};
+static fltk::Cursor wait_c = {TEXT(IDC_WAIT)};
 static fltk::Cursor insert = {TEXT(IDC_IBEAM)};
 #ifndef IDC_HAND
 # define IDC_HAND IDC_UPARROW
@@ -377,7 +377,7 @@ static ::Cursor crsrARROW =
 static fltk::Cursor arrow = {&crsrARROW};
 
 static fltk::Cursor cross = {0, crossCursor};
-static fltk::Cursor wait  = {0, watchCursor};
+static fltk::Cursor wait_c  = {0, watchCursor};
 static fltk::Cursor insert= {0, iBeamCursor};
 
 static ::Cursor crsrNO =
@@ -414,7 +414,7 @@ void Widget::cursor(fltk::Cursor* c) const {
 fltk::Cursor* const fltk::CURSOR_DEFAULT= 0;
 fltk::Cursor* const fltk::CURSOR_ARROW	= &arrow;
 fltk::Cursor* const fltk::CURSOR_CROSS	= &cross;
-fltk::Cursor* const fltk::CURSOR_WAIT	= &wait;
+fltk::Cursor* const fltk::CURSOR_WAIT	= &wait_c;
 fltk::Cursor* const fltk::CURSOR_INSERT	= &insert;
 fltk::Cursor* const fltk::CURSOR_HAND	= &hand;
 fltk::Cursor* const fltk::CURSOR_HELP	= &help;

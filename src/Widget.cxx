@@ -897,6 +897,7 @@ void Widget::activate() {
     clear_flag(NOTACTIVE);
     if (active_r()) {
       redraw_label(); redraw();
+      clear_flag(INACTIVE);
       handle(ACTIVATE);
       if (inside(focus())) focus()->take_focus();
     }

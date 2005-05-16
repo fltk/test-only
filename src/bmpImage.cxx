@@ -47,7 +47,7 @@ static uchar GETC()
   else return fgetc(bmpFile);
 }
 
-
+#undef FREAD
 static int FREAD(void *buf, int size)
 {
   if (bmpDatas) {

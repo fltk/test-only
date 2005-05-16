@@ -89,8 +89,8 @@ GSave::~GSave() {
   DeleteDC(fl_bitmap_dc);
   fl_bitmap_dc = (HDC)(data[2]);
 #elif defined(__APPLE__)
-  quartz_window = data[1];
-  quartz_gc = data[2];
+  quartz_window = (WindowPtr)data[1];
+  quartz_gc = (CGContextRef)data[2];
 #endif
   fl_drawing_offscreen = data[3]!=0;
   pop_clip();

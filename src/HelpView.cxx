@@ -134,17 +134,6 @@ static const char *broken_xpm[] = {
 
 static xpmImage broken_image(broken_xpm);
 
-// FIXME This should be moved somewhere...
-extern "C" {
-  const char* newstring(const char *from) {
-    if (!from) return 0;
-    unsigned n = strlen(from)+1;
-    char* ret = new char[n];
-    strcpy(ret, from);
-    return ret;
-  }
-}
-
 //
 // 'HelpView::add_block()' - Add a text block to the list.
 //
@@ -338,7 +327,6 @@ void
   int head, pre,                // Flags for text
     needspace;                  // Do we need whitespace?
   Box *b = box ()? box () : DOWN_BOX;
-  Rectangle tmp;
 
   // Box to draw...
 
@@ -359,21 +347,12 @@ void
     i++;
   }
   if (i == 2) {
-    tmp.w(ww);
-    tmp.h(ww);
-    tmp.x(17);
-    tmp.y(17);
     setcolor (GRAY50);
-    fillrect(tmp);
-	//old: fillrect(ww, hh, 17, 17);
+    fillrect(Rectangle(ww,hh,17,17));
   }
 
-  tmp.w(ww);
-  tmp.h(ww);
-  tmp.x(0);
-  tmp.y(0);
-  //old: b->draw(0, 0, ww, hh, style(), OUTPUT);
-  b->draw(tmp, style());
+  drawstyle(style(), 0);
+  b->draw(Rectangle(ww,hh));
 
   if (!value_)
     return;
@@ -381,13 +360,8 @@ void
   // Clip the drawing to the inside of the box...
   int X = 0, Y = 0, W = ww, H = hh;
 
-  tmp.w(W);
-  tmp.h(H);
-  tmp.x(X);
-  tmp.y(Y);
-  //old: b->inset(X, Y, W, H);
-  b->inset(tmp, style(), 0);
-  //old: push_clip (X, Y, W, H);
+  Rectangle tmp(X,Y,W,H);
+  b->inset(tmp);
   fltk::push_clip(tmp);
 
   setcolor (textcolor_);
@@ -678,7 +652,7 @@ void
               tmp.h (hh);
               tmp.x (xx - leftline_);
               tmp.y (yy - (int)(getascent()+.5f) + 2);
-			  img->draw (tmp, style());
+			  img->draw (tmp);
               //old: img->draw (xx - leftline_,
               //           yy - (int)(getascent()+.5f) + 2,
 			  //ww, hh, style(), OUTPUT);
