@@ -65,8 +65,8 @@ using namespace fltk;
 
 PackedGroup::PackedGroup(int x,int y,int w ,int h,const char *l)
 : Group(x, y, w, h, l) {
+  resizable(0);
   spacing_ = 0;
-  //resizable(0);
 }
 
 void PackedGroup::layout() {

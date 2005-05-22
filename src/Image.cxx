@@ -231,11 +231,11 @@ void Image::make_current() {
     fl_drawing_offscreen = true;
   }
 #if USE_X11
-  draw_into((XWindow)rgb);
+  draw_into((XWindow)rgb, w_, h_);
 #elif defined(_WIN32)
-  draw_into((HBITMAP)rgb);
+  draw_into((HBITMAP)rgb, w_, h_);
 #elif USE_QUARTZ
-  draw_into((CGContextRef)rgb);
+  draw_into((CGContextRef)rgb, w_, h_);
 #endif
 #endif
 }

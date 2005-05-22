@@ -666,13 +666,10 @@ void Browser::draw_item() {
   push_matrix();
   widget->x(r.x()-xposition_);
   widget->y(r.y()+(int(leading())-1)/2);
+  widget->w(interior.r()-r.x());
   translate(widget->x(), widget->y());
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-//   int save_w = widget->w();
-//   if (!save_w)
-  widget->w(interior.r()-r.x());
   widget->draw();
-  //  widget->w(save_w);
   widget->set_damage(0);
   pop_matrix();
 
@@ -869,7 +866,8 @@ void Browser::layout() {
     if (item_position[HERE]+item()->height() > yposition_) break;
     //if (!indented_ && item_is_parent()) indented_ = true;
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
-    int w = item()->width()+arrow_size*item_level[HERE];
+    int border = arrow_size*item_level[HERE];
+    int w = item()->width()+border;
     if (w > width_) width_ = w;
     if (!next_visible()) {goto_top(); yposition_ = 0; break;}
   }
@@ -877,8 +875,13 @@ void Browser::layout() {
   // count all the rest of the items:
   if (item()) for (;;) {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
-    int w = item()->width()+arrow_size*item_level[HERE];
+    int border = arrow_size*item_level[HERE];
+    int w = item()->width()+border;
     if (w > width_) width_ = w;
+    item()->x(interior.x()+border);
+    item()->w(interior.w()-border);
+    item()->layout_damage(LAYOUT_X|LAYOUT_W);
+    item()->layout();
     //if (!indented_ && item_is_parent()) indented_ = true;
     if (!next_visible()) break;
   }

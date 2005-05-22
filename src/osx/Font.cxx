@@ -1,9 +1,6 @@
-//
 // "$Id$"
 //
-// MacOS font selection routines for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,9 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+// It appears that "ATSUI" is the correct interface to use to get
+// Unicode. Unfortunatly the API is complex...
 
 #include <fltk/x.h>
 #include <fltk/Font.h>
@@ -173,51 +172,46 @@ const char* fltk::Font::current_name() {
   return current_font_->name_;
 }
 
-// we need to decode the encoding somehow!
-//static int charset = DEFAULT_CHARSET;
-
 void fltk::setfont(Font* font, float psize) {
 
   // only integers supported right now, perphaps Quartz does any size:
   psize = int(psize+.5);
   unsigned size = unsigned(psize);
 
-  FontSize* f;
-  bool getmetrics = false;
-  if (font == current_font_ && psize == current_size_
-      /* && current->charset == charset */) f = current;
-  else {
+  if (font != current_font_ || psize != current_size_) {
     current_font_ = font; current_size_ = psize;
     // search the fontsizes we have generated already:
+    FontSize* f;
     for (f = ((IFont*)font)->first; f; f = f->next)
       if (f->size == (int)size /*&& f->charset == charset*/) break;
     if (!f) {
       f = new FontSize(font->name_, size);
       f->next = ((IFont*)font)->first;
       ((IFont*)font)->first = f;
-      getmetrics = true;
+      //getmetrics = true;
     }
     current = f;
   }
+  if (current && quartz_gc)
+    CGContextSelectFont(quartz_gc, current->q_name, (float)current->size, 
+			kCGEncodingMacRoman);
   /* //+++
-  TextFont(f->font);	//: select font into current QuickDraw GC
-  TextFace(f->face);
-  TextSize(f->size);
-  if (getmetrics) {
-    //: get the true metrics for the currnet GC. This fails on multiple
-    // monitors with different dpi's!, but actually it should work because
-    // we should be selecting font sizes by pixels, not points!
-    GetFontInfo(&(f->fi));
-    //FontMetrics(&(f->mr));
-  } */
-  if (f) {
-    CGContextSelectFont(quartz_gc, f->q_name, (float)f->size, 
-                        kCGEncodingMacRoman);
-  }
+     TextFont(f->font);	//: select font into current QuickDraw GC
+     TextFace(f->face);
+     TextSize(f->size);
+     if (getmetrics) {
+     //: get the true metrics for the currnet GC. This fails on multiple
+     // monitors with different dpi's!, but actually it should work because
+     // we should be selecting font sizes by pixels, not points!
+     GetFontInfo(&(f->fi));
+     //FontMetrics(&(f->mr));
+     } */
 }
 
 float fltk::getascent()  { return current->ascent; }
 float fltk::getdescent() { return current->descent; }
+
+#include "utf8tomac.cxx"
 
 #define WCBUFLEN 256
 
@@ -225,18 +219,37 @@ float fltk::getwidth(const char* text, int n) {
   if (!quartz_gc) {
     Window *w = Window::first();
     if (w) w->make_current();
-    if (!quartz_gc) return -1;
+    if (!quartz_gc || !current) return -1;
+    CGContextSelectFont(quartz_gc, current->q_name, (float)current->size, 
+			kCGEncodingMacRoman);
+  }
+  char localbuffer[WCBUFLEN];
+  char* buffer = localbuffer;
+  char* mallocbuffer = 0;
+  int count = utf8tomac(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new char[count+1];
+    count = utf8toa(text, n, buffer, count+1);
   }
   CGContextSetTextDrawingMode(quartz_gc, kCGTextInvisible);
-  CGContextShowTextAtPoint(quartz_gc, 0, 0, text, n);
+  CGContextShowTextAtPoint(quartz_gc, 0, 0, buffer, count);
   CGContextSetTextDrawingMode(quartz_gc, kCGTextFill);
   CGPoint p = CGContextGetTextPosition(quartz_gc);
+  delete[] mallocbuffer;
   return p.x;
 }
 
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
-  //+++ convert font encoding into Mac text
-  CGContextShowTextAtPoint(quartz_gc, x, y, text, n);
+  char localbuffer[WCBUFLEN];
+  char* buffer = localbuffer;
+  char* mallocbuffer = 0;
+  int count = utf8tomac(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new char[count+1];
+    count = utf8toa(text, n, buffer, count+1);
+  }
+  CGContextShowTextAtPoint(quartz_gc, x, y, buffer, count);
+  delete[] mallocbuffer;
 }
 
 //

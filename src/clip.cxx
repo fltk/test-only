@@ -226,6 +226,8 @@ void fltk::pop_clip() {
 ////////////////////////////////////////////////////////////////
 // clipping tests:
 
+extern int fl_clip_w, fl_clip_h;
+
 /**
   Returns true if any or all of \a rectangle is inside the clip region.
 */
@@ -233,8 +235,8 @@ bool fltk::not_clipped(const Rectangle& rectangle) {
   Rectangle r(rectangle); transform(r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
-  if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::drawing_window()->w()
-      || r.y() >= Window::drawing_window()->h()) return false;
+  if (r.r() <= 0 || r.b() <= 0 || r.x() >= fl_clip_w || r.y() >= fl_clip_h)
+    return false;
   Region region = rstack[rstackptr];
   if (!region) return true;
 #if USE_X11
@@ -263,19 +265,15 @@ bool fltk::not_clipped(const Rectangle& rectangle) {
 */
 int fltk::intersect_with_clip(Rectangle& r) {
   Region region = rstack[rstackptr];
-  // If no clip region, claim it is not clipped. This is wrong because the
-  // rectangle may be clipped by the window itself, but this test would
-  // break the current draw-image-into-buffer code. This needs to be fixed
-  // by replacing Window::drawing_window() below:
-  if (!region) return 1;
   // Test against the window to get 16-bit values:
   int ret = 1;
   if (r.x() < 0) {r.set_x(0); ret = 2;}
-  int t = Window::drawing_window()->w(); if (r.r() > t) {r.set_r(t); ret = 2;}
+  int t = fl_clip_w; if (r.r() > t) {r.set_r(t); ret = 2;}
   if (r.y() < 0) {r.set_y(0); ret = 2;}
-  t = Window::drawing_window()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
+  t = fl_clip_h; if (r.b() > t) {r.set_b(t); ret = 2;}
   // check for total clip (or for empty rectangle):
   if (r.empty()) return 0;
+  if (!region) return ret;
 #if USE_X11
   switch (XRectInRegion(region, r.x(), r.y(), r.w(), r.h())) {
   case 0: // completely outside

@@ -24,7 +24,6 @@
 //
 
 #include <config.h>
-#include <fltk/Window.h>
 #include <fltk/x.h>
 using namespace fltk;
 
@@ -60,39 +59,42 @@ using namespace fltk;
 extern HDC fl_bitmap_dc;
 #endif
 bool fl_drawing_offscreen = false;
+extern int fl_clip_w, fl_clip_h;
 
 GSave::GSave() {
   push_matrix();
   push_no_clip();
-  data[0] = (void*)Window::drawing_window_;
 #if USE_X11
-  data[1] = (void*)(xwindow);
+  data[0] = (void*)(xwindow);
 #elif defined(_WIN32)
   // make it not destroy the previous dc:
-  data[1] = (void*)dc;
-  data[2] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
+  data[0] = (void*)dc;
+  data[1] = (void*)(fl_bitmap_dc); fl_bitmap_dc = 0;
 #elif defined(__APPLE__)
-  data[1] = (void*)quartz_window;
-  data[2] = (void*)quartz_gc;
+  data[0] = (void*)quartz_window;
+  data[1] = (void*)quartz_gc;
 #else
 # error
 #endif
-  data[3] = (void*)fl_drawing_offscreen;
+  data[2] = (void*)(fl_drawing_offscreen ? -fl_clip_w : fl_clip_w);
+  data[3] = (void*)fl_clip_h;
 }
 
 GSave::~GSave() {
-  Window::drawing_window_ = (Window*)(data[0]);
 #if USE_X11
-  xwindow = (XWindow)(data[1]);
+  xwindow = (XWindow)(data[0]);
 #elif defined(_WIN32)
-  dc = (HDC)(data[1]);
+  dc = (HDC)(data[0]);
   DeleteDC(fl_bitmap_dc);
-  fl_bitmap_dc = (HDC)(data[2]);
+  fl_bitmap_dc = (HDC)(data[1]);
 #elif defined(__APPLE__)
-  quartz_window = (WindowPtr)data[1];
-  quartz_gc = (CGContextRef)data[2];
+  quartz_window = (WindowPtr)data[0];
+  quartz_gc = (CGContextRef)data[1];
 #endif
-  fl_drawing_offscreen = data[3]!=0;
+  fl_clip_w = int((long)data[2]);
+  fl_drawing_offscreen = fl_clip_w < 0;
+  if (fl_drawing_offscreen) fl_clip_w = -fl_clip_w;
+  fl_clip_h = int((long)data[3]);
   pop_clip();
   pop_matrix();
 }

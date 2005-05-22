@@ -2036,10 +2036,13 @@ void Window::label(const char *name, const char *iname) {
   make_current(). It will already be set when draw() is called.
 */
 const Window *Window::drawing_window_;
+int fl_clip_w, fl_clip_h;
 XWindow fltk::xwindow;
 GC fltk::gc;
 #if USE_CAIRO
 cairo_t* fltk::cc;
+static cairo_surface_t* surface;
+static unsigned cairo_window_id;
 #endif
 
 /** Make the fltk drawing functions draw into this widget.
@@ -2066,19 +2069,25 @@ void Widget::make_current() const {
   const Window* window = (const Window*)widget;
   Window::drawing_window_ = window;
   CreatedWindow* i = CreatedWindow::find(window);
-  draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
+  draw_into(i->frontbuffer ? i->frontbuffer : i->xid, window->w(), window->h());
   translate(x,y);
 }
 
-/*! Fltk can draw into any X window or pixmap that uses the fltk::xvisual.
-  Calling this will make all drawing functions go there. Before you destroy
-  the window or pixmap you must call fltk::stop_drawing() so that it can
-  destroy any temporary structures pointing to it.
-  This call also resets the transformation matrix to the identity, even
-  if this is the same drawable as before.
+/**
+  Fltk can draw into any X window or pixmap that uses the
+  fltk::xvisual.  This will reset the transformation and clip region
+  and leave the font, color, etc at unpredictable values. The \a w and
+  \a h arguments must be the size of the window and are used by
+  fltk::not_clipped().
+
+  Before you destroy the window or pixmap you must call
+  fltk::stop_drawing() so that it can destroy any temporary structures
+  that were created by this.
 */
-void fltk::draw_into(XWindow window) {
+void fltk::draw_into(XWindow window, int w, int h) {
   xwindow = window;
+  fl_clip_w = w;
+  fl_clip_h = h;
   // in X the gc structure can be reused for every window:
   if (!fltk::gc) fltk::gc = XCreateGC(xdisplay, window, 0, 0);
   // The XFT context is not changed here, to avoid wasting time
@@ -2086,26 +2095,20 @@ void fltk::draw_into(XWindow window) {
   // xft text is drawn the first time.
   load_identity();
 #if USE_CAIRO
-  static cairo_surface_t* surface;
-  static unsigned cairo_window_id;
   // Cairo context created as well:
   if (cc) {
     if (cairo_status(cc)) {
       warning("Cairo: %s", cairo_status_string(cc));
-      cairo_destroy(cc);
-      cairo_surface_destroy(surface);
-    } else if (cairo_window_id != window) {
-      cairo_destroy(cc);
-      cairo_surface_destroy(surface);
-    } else {
-      return; // cc is already set to this window
+    } else if (cairo_window_id == window) {
+      cairo_xlib_surface_set_size(surface, w, h);
+      return;
     }
+    cairo_destroy(cc);
+    cairo_surface_destroy(surface);
   }
   cairo_window_id = window;
   surface = cairo_xlib_surface_create_with_visual(xdisplay, window, xvisual->visual);
-  if (Window::drawing_window())
-    cairo_xlib_surface_set_size(surface, Window::drawing_window()->w(),
-				Window::drawing_window()->h());
+  cairo_xlib_surface_set_size(surface, w, h);
   cc = cairo_create(surface);
 #endif
 }
@@ -2160,12 +2163,12 @@ void Window::flush() {
 
   unsigned char damage = this->damage();
 
+  XWindow frontbuffer = i->frontbuffer ? i->frontbuffer : i->xid;
+
   if (this->double_buffer() || i->overlay) {  // double-buffer drawing
 
     bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
     if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
-
-    XWindow frontbuffer = i->frontbuffer ? i->frontbuffer : i->xid;
 
     if (!i->backbuffer) { // we need to create back buffer
 #if USE_XDBE
@@ -2205,7 +2208,7 @@ void Window::flush() {
     // draw the back buffer if it needs anything:
     if (damage) {
       // set the graphics context to draw into back buffer:
-      draw_into(i->backbuffer);
+      draw_into(i->backbuffer, w(), h());
       if (damage & DAMAGE_ALL) {
 	draw();
       } else {
@@ -2235,11 +2238,11 @@ void Window::flush() {
 	return;
       }
 #endif
-      draw_into(frontbuffer);
+      draw_into(frontbuffer, w(), h());
     } else {
       // if damage is zero then expose events were done, just copy
       // the back buffer to the front:
-      draw_into(frontbuffer);
+      draw_into(frontbuffer, w(), h());
       if (!eraseoverlay) {
 	clip_region(i->region); i->region = 0;
       }
@@ -2258,7 +2261,7 @@ void Window::flush() {
   }  else {
 
     // Single buffer drawing
-    draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
+    draw_into(frontbuffer, w(), h());
     unsigned char damage = this->damage();
     if (damage & ~DAMAGE_EXPOSE) {
       set_damage(damage & ~DAMAGE_EXPOSE);

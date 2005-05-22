@@ -242,6 +242,7 @@ NamedStyle* Menu::default_style = &::style;
 
 Menu::Menu(int x,int y,int w, int h,const char* l)
   : Group(x,y,w,h,l), list_(&default_list), item_(0) {
+  resizable(0);
   callback(default_callback);
   style(default_style);
 }

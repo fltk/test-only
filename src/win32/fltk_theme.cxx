@@ -73,8 +73,9 @@ extern "C" bool fltk_theme() {
   Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
   Color text_background = win_color(GetSysColor(COLOR_WINDOW));
   Color text_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
-  Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
-  Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
+// These colors are incorrect on XP with it's default scheme:
+//   Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
+//   Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
   Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
   Color tooltip_foreground = win_color(GetSysColor(COLOR_INFOTEXT));
 // Windows doesn't seem to honor this one
@@ -95,14 +96,14 @@ extern "C" bool fltk_theme() {
     style->color_ = lerp(background, text_background, .5);
   }
 
-  if (menuitem_background != background || menuitem_foreground != foreground) {
-    if ((style = Style::find("Menu"))) {
-      style->color_ = menuitem_background;
-      style->textcolor_ = menuitem_foreground;
-//    style->selection_color_ = select_background;
-//    style->selection_textcolor_ = select_foreground;
-    }
-  }
+//   if (menuitem_background != background || menuitem_foreground != foreground) {
+//     if ((style = Style::find("Menu"))) {
+//       style->color_ = menuitem_background;
+//       style->textcolor_ = menuitem_foreground;
+// //    style->selection_color_ = select_background;
+// //    style->selection_textcolor_ = select_foreground;
+//     }
+//   }
 
 /* This is the same as the defaults:
   if ((style = Style::find("menu title"))) {

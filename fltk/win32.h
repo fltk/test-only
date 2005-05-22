@@ -103,7 +103,7 @@ extern FL_API HBRUSH	setbrush();
 extern FL_API void	clip_region(HRGN);
 extern FL_API HRGN	clip_region();
 
-extern FL_API void	draw_into(HBITMAP);
+extern FL_API void	draw_into(HBITMAP, int w, int h);
 extern FL_API void	stop_drawing(HBITMAP);
 extern FL_API void	stop_drawing(HWND);
 

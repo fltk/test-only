@@ -41,6 +41,7 @@
 #include <fltk/x.h>
 #include <fltk/Window.h>
 #include <fltk/Style.h>
+#include <fltk/utf.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -535,8 +536,6 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   OSStatus ret = eventNotHandledErr;
   Window *window = (Window*)userData;
 
-  static Window *activeWindow = 0;
-  
   switch ( kind )
   {
   case kEventWindowBoundsChanging:
@@ -556,8 +555,8 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   case kEventWindowShown: {
 //     GetWindowClass( xid( window ), &winClass );
 //     if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-//       handle( FOCUS, window);
-//       activeWindow = window;
+//       xfocus = window;
+//       fix_focus();
 //     }
 //     Rect r;
 //     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
@@ -570,19 +569,20 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     break;
   case kEventWindowActivated: {
     WindowClass winClass;
-    if ( window!=activeWindow ) {
+    if ( window != xfocus ) {
       GetWindowClass( xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        handle( FOCUS, window);
-        activeWindow = window;
+        xfocus = window;
+	fix_focus();
+	//	breakMacEventLoop();
       }
     }
     break; }
   case kEventWindowDeactivated:
-    if ( window==activeWindow ) 
-    {
-      handle( UNFOCUS, window);
-      activeWindow = 0;
+    if ( window == xfocus ) {
+      xfocus = 0;
+      fix_focus();
+      breakMacEventLoop();
     }
     break;
   case kEventWindowClose:
@@ -667,10 +667,14 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   case kEventMouseDown:
     part = FindWindow( pos, &tempXid );
     if ( part != inContent ) {
-      return CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
+      CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
+      if ( xfocus != window ) { xfocus = window; fix_focus(); }
+      break;
     }
     if ( !IsWindowActive( xid ) )
       CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
+    // allow the focus to be put on child windows:
+    if ( xfocus != window ) { xfocus = window; fix_focus(); }
     // normal handling of mouse-down follows
     os_capture = xid;
     sendEvent = PUSH;
@@ -784,6 +788,8 @@ static unsigned short macKeyLookUp[128] =
     F2Key, PageDownKey, F1Key, LeftKey, RightKey, DownKey, UpKey, 0,
 };
 
+#include "mactoutf8.cxx"
+
 /**
  * handle carbon keyboard events
  */
@@ -795,8 +801,8 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   
   UInt32 keyCode;
   GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
-  unsigned char key;
-  GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &key );
+  unsigned char macchar;
+  GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macchar );
   unsigned short sym;
 
   switch ( GetEventKind( event ) )
@@ -815,15 +821,20 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     sym = macKeyLookUp[ keyCode & 0x7f ];
     if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
-    if ( keyCode==0x4c ) key=0x0d;
+    if ( keyCode==0x4c ) macchar=0x0d;
     if ( sym >= Keypad && sym <= KeypadLast ||
 	 (sym&0xff00) == 0 ||
 	 sym == BackSpaceKey ||
 	 sym == TabKey ||
 	 sym == ReturnKey ||
 	 sym == EscapeKey) {
-      buffer[0] = key;
-      e_length = 1;
+      if (macchar < 0x80) {
+	buffer[0] = macchar;
+	e_length = 1;
+      } else {
+	e_length = utf8encode(mactoutf8[macchar-0x80],buffer);
+	buffer[e_length] = 0;
+      }
     } else {
       buffer[0] = 0;
       e_length = 0;
@@ -849,19 +860,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     mods_to_e_state( mods );
     break; }
   }
-  if (sendEvent) {
-    // apparently for floating windows it calls the parent window's handler
-    // and thus userData is wrong:
-    Window* window;
-    if (fltk::focus()) {
-      window = fltk::focus()->window();
-      if (!window) window = (Window*)userData;
-    } else {
-      window = (Window*)userData;
-    }
-    while (window->parent()) window = window->window();
-    if (handle(sendEvent,window)) return noErr;
-  }
+  if (sendEvent && handle(sendEvent, (Window*)userData)) return noErr;
   return CallNextEventHandler( nextHandler, event );
 }
 
@@ -1208,6 +1207,7 @@ void Window::create()
   x->need_new_subRegion = true;
   x->children = x->brother = 0;
   x->overlay = 0;
+  x->gc = 0;
 
   if (parent()) {
     // Apparently Mac does not have child windows, this shows that there
@@ -1233,17 +1233,14 @@ void Window::create()
     CreatedWindow::first = x;
   } else {
     // create a desktop window
-    int dx, dy, dw, dh; // border thickness
     int winclass, winattr, where;
     if (!border() || override()) {
       // used by menus and tooltips
-      dx = dy = dw = dh = 0;
       winclass = kHelpWindowClass;
       winattr = 0;
       where = kWindowCascadeOnParentWindowScreen;
     } else {
       // a normal window with a border
-      dx = dw = 0; dy = dh = 22;
       if (contains(modal())) {
 	winclass = kMovableModalWindowClass;
 	winattr = kWindowStandardHandlerAttribute |
@@ -1274,8 +1271,10 @@ void Window::create()
       static int xyPos = 50;
       this->x(xyPos); this->y(xyPos);
       xyPos += 25;
-      if (xyPos >= 200) xyPos -= 170;
+      if (xyPos >= 200) xyPos -= (200-44);
     }
+    // stop it from putting title under menubar:
+    if (winattr && this->y()<44) this->y(44);
     Rect wRect;
     wRect.left   = this->x();
     wRect.top    = this->y(); 
@@ -1284,7 +1283,7 @@ void Window::create()
 
     winattr &= GetAvailableWindowAttributes(winclass);	// make sure that the window will open
     CreateNewWindow(winclass, winattr, &wRect, &(x->xid));
-    MoveWindow(x->xid, wRect.left, wRect.top, 1); // avoid Carbon Bug on old OS
+    //MoveWindow(x->xid, wRect.left, wRect.top, 1); // avoid Carbon Bug on old OS
     label(label(), iconlabel());
 
     if (autoplace) {
@@ -1381,18 +1380,18 @@ void Window::label(const char *name, const char * iname) {
 const Window *Window::drawing_window_;
 static CGContextRef prev_gc = 0;
 static WindowPtr prev_window = 0;
+int fl_clip_w, fl_clip_h;
 
-// this call relates to fltk1 fl_begin_offscreen
-void fltk::draw_into(CGContextRef gc) {
+void fltk::draw_into(CGContextRef gc, int w, int h) {
   prev_gc = quartz_gc;
   prev_window = quartz_window;
   quartz_window = 0;
   quartz_gc = gc;
+  fl_clip_w = w; fl_clip_h = h;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
 }
 
-// this call relates to fltk1 fl_end_offscreen
 void fltk::stop_drawing(CGImageRef) {
   release_quartz_context();
   quartz_gc = prev_gc;

@@ -139,7 +139,7 @@ extern FL_API ulong	xpixel(Color i);
 extern FL_API void	clip_region(Region);
 extern FL_API Region	clip_region();
 
-extern FL_API void	draw_into(XWindow);
+extern FL_API void	draw_into(XWindow, int w, int h);
 extern FL_API void	stop_drawing(XWindow);
 
 extern FL_API XFontStruct*	xfont();

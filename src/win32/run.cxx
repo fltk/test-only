@@ -2142,6 +2142,7 @@ void Window::label(const char *name,const char *iname) {
 // ImageDraw creates a temporary DC. See Image.cxx
 
 const Window *Window::drawing_window_;
+int fl_clip_w, fl_clip_h;
 HDC fltk::dc;
 
 void Widget::make_current() const {
@@ -2155,6 +2156,8 @@ void Widget::make_current() const {
   }
   const Window* window = (const Window*)widget;
   Window::drawing_window_ = window;
+  fl_clip_w = window->w();
+  fl_clip_h = window->h();
   dc = CreatedWindow::find( window )->dc;
   fl_select_palette(dc);
   load_identity();
@@ -2163,7 +2166,7 @@ void Widget::make_current() const {
 
 HDC fl_bitmap_dc;
 
-void fltk::draw_into(HBITMAP bitmap) {
+void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   if (!fl_bitmap_dc) {
     fl_bitmap_dc = CreateCompatibleDC(getDC());
     SetTextAlign(fl_bitmap_dc, TA_BASELINE|TA_LEFT);
@@ -2173,6 +2176,8 @@ void fltk::draw_into(HBITMAP bitmap) {
   dc = fl_bitmap_dc;
   fl_select_palette(dc);
   load_identity();
+  fl_clip_w = w;
+  fl_clip_h = h;
 }
 
 void fltk::stop_drawing(HWND window) {}
@@ -2202,6 +2207,8 @@ HDC fltk::getDC() {
 void Window::flush() {
 
   drawing_window_ = this;
+  fl_clip_w = w();
+  fl_clip_h = h();
 
   unsigned char damage = this->damage();
 

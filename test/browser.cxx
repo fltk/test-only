@@ -7,6 +7,7 @@
 #include <fltk/CheckButton.h>
 #include <fltk/RadioButton.h>
 #include <fltk/Input.h>
+#include <fltk/ValueSlider.h>
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/xpmImage.h>
@@ -267,6 +268,9 @@ int main(int argc,char** argv) {
 	 b->type(), fltk::Widget::GROUP_TYPE, b->is_group());
   b->callback(button_cb);
   new fltk::Input(0,0,200,23,"Input:");
+  new fltk::ValueSlider(0,0,200,23,"Input:");
+  new fltk::ValueSlider(0,0,200,23,"Input:");
+  new fltk::ValueSlider(0,0,200,23,"Input:");
   tree.end();
 
 #if 0
