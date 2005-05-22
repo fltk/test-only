@@ -157,18 +157,19 @@ void bmpImage::read()
 		bDepth = 3,	// Depth of image (bytes)
 		compression,	// Type of compression
 		colors_used,	// Number of colors used
-		x, y,		// Looping vars
 		color,		// Color of RLE pixel
 		repcount,	// Number of times to repeat
 		temp,		// Temporary color
 		align,		// Alignment bytes
-		dataSize;	// number of bytes in image data set
+		dataSize,	// number of bytes in image data set
+		row_order=1;    // 1 = normal, -1 = flipped
   long		offbits;	// Offset to image data
   uchar		bit,		// Bit in image
 		byte;		// Byte in image
   uchar		*ptr;		// Pointer into pixels
   uchar		colormap[256][3];// Colormap
   uchar		mask = 0;	// single bit mask follows image data
+  bool		use_5_6_5 = false; // Use 565 instead of 555 for 16-bit data
 
   if (!datas) {
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
@@ -210,6 +211,7 @@ void bmpImage::read()
     // New BMP header...
     int W = read_long();
     int H = read_long();
+    if (H < 0) {row_order = -1; H = -H;}
     this->setsize(W,H);
     read_word();
     depth = read_word();
@@ -261,6 +263,10 @@ void bmpImage::read()
     if (info_size > 12) GETC();
   }
 
+  // Read first dword of colormap. It tells us if 5:5:5 or 5:6:5 for 16 bit
+  if (depth == 16)
+    use_5_6_5 = (read_dword() == 0xf800);
+
   // Setup image and buffers...
   if (offbits) FSEEK(offbits);
 
@@ -274,8 +280,10 @@ void bmpImage::read()
   byte  = 0;
   temp  = 0;
 
-  for (y = h() - 1; y >= 0; y --) {
-    ptr = (uchar *)array + y * w() * bDepth;
+  for (int y = 0; y < h(); y++) {
+    ptr = (uchar *)array + (row_order>0?h()-y-1:y) * w() * bDepth;
+
+    int x;
 
     switch (depth)
     {
@@ -435,15 +443,15 @@ void bmpImage::read()
       case 16 : // 16-bit 5:5:5 RGB
 	  for (x = w(); x > 0; x --, ptr += bDepth) {
 	    uchar b = GETC(), a = GETC() ;
-#ifdef USE_5_6_5 // Green as the brightest color should have one bit more 5:6:5
-	    ptr[0] = (uchar)(( b << 3 ) & 0xf8);
-	    ptr[1] = (uchar)(((a << 5) & 0xe0) | ((b >> 3) & 0x1c));
-	    ptr[2] = (uchar)(a & 0xf8);
-#else // this is the default wasting one bit: 5:5:5
-	    ptr[2] = (uchar)((b << 3) & 0xf8);
-	    ptr[1] = (uchar)(((a << 6) & 0xc0) | ((b >> 2) & 0x38));
-	    ptr[0] = (uchar)((a<<1) & 0xf8);
-#endif
+	    if (use_5_6_5) {
+	      ptr[0] = (uchar)(( b << 3 ) & 0xf8);
+	      ptr[1] = (uchar)(((a << 5) & 0xe0) | ((b >> 3) & 0x1c));
+	      ptr[2] = (uchar)(a & 0xf8);
+	    } else {
+	      ptr[2] = (uchar)((b << 3) & 0xf8);
+	      ptr[1] = (uchar)(((a << 6) & 0xc0) | ((b >> 2) & 0x38));
+	      ptr[0] = (uchar)((a<<1) & 0xf8);
+	    }
 	  }
 
 	  // Read remaining bytes to align to 32 bits...
@@ -468,9 +476,9 @@ void bmpImage::read()
   }
 
   if (mask) {
-    for (y = h() - 1; y >= 0; y --) {
-      ptr = (uchar *)array + y * w() * bDepth + 3;
-      for (x = w(), bit = 128; x > 0; x --, ptr+=bDepth) {
+    for (int y = 0; y < h(); y++) {
+      ptr = (uchar *)array + (row_order>0?h()-y-1:y) * w() * bDepth + 3;
+      for (int x = w(), bit = 128; x > 0; x --, ptr+=bDepth) {
 	if (bit == 128) byte = (uchar)GETC();
 	if (byte & bit)
 	  *ptr = 0;
