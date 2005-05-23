@@ -78,8 +78,6 @@ public:
   bool	is_group() const	{ return type_ >= GROUP_TYPE; }
   bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
 
-  int	width()			;
-  int	height()		;
   bool  resize(int x,int y,int w,int h);
   bool	position(int x, int y)	;
   bool	resize(int w, int h)	;

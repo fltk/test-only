@@ -370,19 +370,19 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
 
 /*! \class fltk::HighlightBox
   Draws as fltk::FLAT_BOX normally, this can draw as any other box
-  (passed to the constructor) when HIGHLIGHT, SELECTED, VALUE, or PUSHED
+  (passed to the constructor) when HIGHLIGHT, VALUE, or PUSHED
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
 void HighlightBox::_draw(const fltk::Rectangle& r) const
 {
-  if (drawflags(HIGHLIGHT|SELECTED|VALUE|PUSHED))
+  if (drawflags(HIGHLIGHT|VALUE|PUSHED))
     down->draw(r);
   else
     FlatBox::_draw(r);
 }
 void HighlightBox::inset(fltk::Rectangle& r) const {
-  if (drawflags(HIGHLIGHT|SELECTED|VALUE|PUSHED)) down->inset(r);
+  if (drawflags(HIGHLIGHT|VALUE|PUSHED)) down->inset(r);
 }
 bool HighlightBox::fills_rectangle() const {return true;}
 bool HighlightBox::is_frame() const {return down->is_frame();}

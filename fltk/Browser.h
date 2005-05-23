@@ -127,7 +127,7 @@ private:
   int scrolldx, scrolldy;
   static void hscrollbar_cb(Widget*, void*);
   static void scrollbar_cb(Widget*, void*);
-  void draw_item();
+  void draw_item(int);
   void draw_clip(const Rectangle&);
   static void draw_clip_cb(void*,const Rectangle&);
   Rectangle interior; // inside box edges and scrollbars

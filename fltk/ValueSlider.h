@@ -36,7 +36,6 @@ public:
   void draw();
   ValueSlider(int x,int y,int w,int h, const char *l = 0);
   ~ValueSlider();
- protected:
   void layout();
   virtual void value_damage(); // cause damage() due to value() changing
 

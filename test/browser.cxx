@@ -38,7 +38,7 @@ cb_remove(fltk::Widget*, void* ptr) {
   if (tree->type() & fltk::Browser::MULTI) {
     fltk::Widget* w = tree->goto_top();
     while (w) {
-      if (w->selected()) {
+      if (w->value()) {
 	fltk::Group* g = w->parent();
 	g->remove(w);
 	delete w;

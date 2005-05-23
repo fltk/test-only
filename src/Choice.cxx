@@ -102,8 +102,9 @@ void Choice::draw() {
       r.move_x(2);
       push_clip(r);
       push_matrix();
-      translate(r.x(), r.y()+((r.h()-o->height())>>1));
-      int save_w = o->w(); o->w(r.r());
+      if (!o->h()) o->layout();
+      translate(r.x(), r.y()+((r.h()-o->h())>>1));
+      int save_w = o->w(); o->w(r.w());
       fl_hide_underscore = true;
       o->draw();
       fl_hide_underscore = false;

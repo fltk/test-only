@@ -31,28 +31,21 @@ using namespace fltk;
 
 /*! \class fltk::Item
 
-  This widget is designed to be put into fltk::Menu and fltk::Browser widgets.
+  This widget is designed to be put into fltk::Menu and fltk::Browser widgets
+  and draw plain-text items. All events are ignored, thus causing
+  the menu and browser to set/clear the SELECTED flag on these
+  widgets. If they are selected they draw in the selection_color(),
+  otherwise in the color().
 
-  Windows is unfortunatly inconsistent about how it draws menu and
-  browser items, so to duplicate this the draw() method assummes
-  the background has already been drawn by the caller. It does not
-  erase it, but draws the text atop it. More inconsistencies have
-  forced us to add the set_style() call so this may change...
-
-  The browser draws the focus dotted box and the hierarchy indicators,
-  and the shortcut key assigments in menus is drawn by the menu
-  code. You cannot turn these off or modify them, unfortunately I was
-  unable to get these into the child widgets and still replicate the
-  standard Windows UI appearance.
-
-  In a MultiBrowser, selected() indicates if the widget is
-  currently turned on in the browser.
 */
 
-static NamedStyle style("Item", 0, &Item::default_style);
-/*! The default style is entirely blank and interits from whatever
-  the parent is. Normally this is Widget::default_style, but if
-  you call set_style() it will be that style. */
+static void revert(Style* s) {s->box_ = FLAT_BOX;}
+static NamedStyle style("Item", revert, &Item::default_style);
+/*! The default style sets FLAT_BOX. Changing this will mess up the
+  appearance of both menus and browsers. All the rest of the style
+  is blank, and normally it inherits from the current browser or
+  menu, which should call set_style() before drawing any items.
+*/
 NamedStyle* Item::default_style = &::style;
 
 /*! Unlike other widgets the constructor does not take any dimensions,
@@ -85,24 +78,31 @@ void Item::set_style(const Style* style) {
   ::style.parent_ = style;
 }
 
-/** By default an item just draws it's label using the textcolor.
-    If flags() has SELECTED on it uses selection_textcolor. This
-    assummes the caller has already drawn the background.
+/** The SELECTED flag will cause it to draw using the selected colors.
+    Focusbox is also drawn if FOCUSED is on.
 
     The current version can also draw check or radio buttons
     but this functionality may be removed.
 */
 void Item::draw() {
-  drawstyle(style(), flags());
-  //if (buttonbox() != NO_BOX) draw_buttonbox();
+  drawstyle(style(), flags() & ~OUTPUT);
+  if (flags() & SELECTED) {
+    setbgcolor(selection_color());
+    setcolor(contrast(selection_textcolor(), getbgcolor()));
+  }
+  box()->draw(Rectangle(w(),h()));
   Rectangle r(w(),h());
-  //box()->inset(r);
+  box()->inset(r);
   if (type()) {
     int gw = int(textsize())+2;
+    Rectangle lr(r);
+    lr.move_x(gw+3);
+    draw_label(lr, flags());
     draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw));
-    r.move_x(gw+3);
+  } else {
+    draw_label(r, flags());
   }
-  draw_label(r, flags());
+  focusbox()->draw(r);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -169,13 +169,16 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 // implementation of draw & layout should be identical to Item type()==0
 
 void ItemGroup::draw() {
-  if (damage()&~DAMAGE_CHILD) {
-    drawstyle(style(), flags());
-    //if (box() != NO_BOX) draw_box();
-    Rectangle r(w(),h());
-    //box()->inset(r);
-    draw_label(r, flags());
+  drawstyle(style(), flags() & ~OUTPUT);
+  if (flags() & SELECTED) {
+    setbgcolor(selection_color());
+    setcolor(contrast(selection_textcolor(), getbgcolor()));
   }
+  box()->draw(Rectangle(w(),h()));
+  Rectangle r(w(),h());
+  box()->inset(r);
+  draw_label(r, flags());
+  focusbox()->draw(r);
 }
 
 void ItemGroup::layout() {

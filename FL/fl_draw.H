@@ -9,11 +9,16 @@ inline void fl_color(uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,
 inline fltk::Color fl_color() {return fltk::getcolor();}
 
 // clip:
-#define fl_push_clip	fltk::push_clip
-#define	fl_clip		fltk::push_clip
+inline void fl_push_clip(int x, int y, int w, int h) {fltk::push_clip(fltk::Rectangle(x,y,w,h));}
+#define fl_clip		fl_push_clip
 #define fl_pop_clip	fltk::pop_clip
-#define	fl_not_clipped	fltk::not_clipped
-#define fl_clip_box	fltk::clip_box
+inline int fl_not_clipped(int x, int y, int w, int h) {return fltk::not_clipped(fltk::Rectangle(x,y,w,h));}
+inline int fl_clip_box(int X, int Y, int W, int H, int& x, int& y, int& w, int& h) {
+  fltk::Rectangle r(X,Y,W,H);
+  int i = intersect_with_clip(r);
+  x = r.x(); y = r.y(); w = r.w(); h = r.h();
+  return i;
+}
 
 // points:
 inline void fl_point(int x, int y) {fltk::addvertex(x,y); fltk::drawpoints();}

@@ -727,7 +727,8 @@ void fltk::flush() {
 #if USE_X11
   if (xmousewin && !pushed() && !grab()) {
     CreatedWindow* i = CreatedWindow::find(xmousewin);
-    if (i->cursor != None && !i->cursor_for->contains(belowmouse_)) {
+    if (i->cursor != None && i->cursor_for != xmousewin
+	&& !i->cursor_for->contains(belowmouse_)) {
       i->cursor = None;
       XDefineCursor(xdisplay, i->xid, None);
     }

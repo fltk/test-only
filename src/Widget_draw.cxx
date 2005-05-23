@@ -268,7 +268,7 @@ void Group::draw_outside_label(Widget& w) const {
     r.x(r.r()+3);
     r.set_r(this->w());
   }
-  flags = flags & ~(HIGHLIGHT|SELECTED|PUSHED) | OUTPUT;
+  flags = flags & ~(HIGHLIGHT|PUSHED) | OUTPUT;
   drawstyle(w.style(), flags);
   //push_clip(X, Y, W, H); // this will break some old fltk programs
   w.labeltype()->draw(w.label(), r, flags);

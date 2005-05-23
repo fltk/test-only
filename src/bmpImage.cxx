@@ -200,6 +200,7 @@ void bmpImage::read()
     // Old Windows/OS2 BMP header...
     int W = read_word();
     int H = read_word();
+    //if (H < 0) {row_order = -1; H = -H;}
     this->setsize(W,H);
     read_word();
     depth = read_word();

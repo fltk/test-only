@@ -353,24 +353,8 @@ void Widget::copy_label(const char* s) {
   class version sets layout_damage() to zero.
 */
 void Widget::layout() {
-  if (layout_damage_ & LAYOUT_XYWH) redraw();
+  if (layout_damage_ & LAYOUT_WH) redraw();
   layout_damage_ = 0;
-}
-
-/*! Returns h() but if the current value is zero it calls layout()
-  before returning the value.  Using these calls allows a widget to
-  delay the calculation of size until it is needed. */
-int Widget::height() {
-  if (!h()) layout();
-  return h();
-}
-
-/*! Returns w() but if the current value is zero it calls layout()
-  before returning the value.  Using these calls allows a widget to
-  delay the calculation of size until it is needed. */
-int Widget::width() {
-  if (!w()) layout();
-  return w();
 }
 
 /*! Change the size or position of the widget. Nothing is done if the

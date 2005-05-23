@@ -420,9 +420,9 @@ void Input::draw(const Rectangle& r)
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      drawstyle(style(), flags ^ SELECTED);
-      Color fg = getcolor();
-      setcolor(getbgcolor());
+      Color bg = selection_color();
+      Color fg = contrast(selection_textcolor(), bg);
+      setcolor(bg);
       int xx=int(x1);
       fillrect(Rectangle(xx, r.y()+ypos, int(x2+.5)-xx, height));
       setcolor(fg);

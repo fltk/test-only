@@ -358,9 +358,12 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
     draw_ticks(tr, (slider_size()+1)/2);
   }
 
-  // if user directly set selected_color we use it:
-  if (style()->selection_color_) flags |= SELECTED;
   drawstyle(style(),flags|OUTPUT);
+  // if user directly set selected_color we use it:
+  if (style()->selection_color_) {
+    setbgcolor(style()->selection_color_);
+    setcolor(contrast(selection_textcolor(), style()->selection_color_));
+  }
 
   // figure out where the slider should be:
   Rectangle s(r);

@@ -185,7 +185,7 @@ void Button::draw(int glyph, int glyph_width) const
   Box* box = style->buttonbox();
 
   Flags box_flags = flags() & ~(VALUE|PUSHED) | OUTPUT;
-  Flags glyph_flags = box_flags & ~(SELECTED|HIGHLIGHT|OUTPUT);
+  Flags glyph_flags = box_flags & ~(HIGHLIGHT|OUTPUT);
   if (glyph_width) {
     if (value()) glyph_flags |= VALUE;
     if (this == pushed_button) {
@@ -194,11 +194,7 @@ void Button::draw(int glyph, int glyph_width) const
       else if (!(when()&WHEN_CHANGED)) glyph_flags ^= VALUE;
     }
   } else {
-    if (value()) {
-      box_flags |= VALUE;
-      // back-compatability with user-set selection color on Toggle button:
-      if (style->selection_color_) box_flags |= SELECTED;
-    }
+    if (value()) box_flags |= VALUE;
     if (this == pushed_button) box_flags |= PUSHED;
   }
 
@@ -229,28 +225,41 @@ void Button::draw(int glyph, int glyph_width) const
       // Erase the area behind non-square boxes
       draw_background();
     }
-    // Draw the box:
-    drawstyle(style,box_flags);
-    box->draw(r);
-    box->inset(r);
   }
 
-  Rectangle lr(r);
+  // Draw the box:
+  drawstyle(style,box_flags);
+  // For back-compatability we use any directly-set selection_color()
+  // to color the box:
+  if (!glyph_width && value() && style->selection_color_) {
+    setbgcolor(style->selection_color_);
+    setcolor(contrast(style->selection_textcolor(),style->selection_color_));
+  }
+  box->draw(r);
+  box->inset(r);
+
+  if (draw_label) {
+    Rectangle lr(r);
+    if (glyph_width) {
+      if (glyph_width < 0)
+	lr.w(lr.w()+glyph_width-3);
+      else
+	lr.set_x(glyph_width+3);
+    }
+    this->draw_label(lr, box_flags);
+  }
+
   if (glyph_width) {
     int g = abs(glyph_width);
-    Rectangle gr(lr, g, g);
-    if (glyph_width < 0) {
-      gr.x(lr.r()-g-3);
-      lr.set_r(gr.x());
-    } else {
-      gr.x(lr.x()+3);
-      lr.set_x(gr.r());
-    }
+    Rectangle gr(r, g, g);
+    if (glyph_width < 0)
+      gr.x(r.r()-g-3);
+    else
+      gr.x(r.x()+3);
     drawstyle(style,glyph_flags);
     (this->glyph())(glyph, gr);
+    // drawstyle(style,box_flags); // not sure this is necessary
   }
-  drawstyle(style,box_flags);
-  if (draw_label) this->draw_label(lr, box_flags);
   focusbox()->draw(r);
 }
 

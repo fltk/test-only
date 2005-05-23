@@ -390,8 +390,6 @@ const Style* fltk::drawstyle_ = Widget::default_style;
     Flags that are understood:
     - HIGHLIGHT: if highlight_color() is non-zero, set bg to
       highlight_color() and fg to highlight_textcolor().
-    - SELECTED: if selection_color() is non-zero, set bg to
-      selection_color() and fg to selection_textcolor().
     - OUTPUT: Normally color(), textcolor(), textfont(), and textsize()
       are used. If this flag is set buttoncolor(), labelcolor(),
       labelfont(), and labelsize() are used. Widgets will set
@@ -410,8 +408,6 @@ void fltk::drawstyle(const Style* style, Flags flags) {
   Color bg, fg;
   if ((flags & HIGHLIGHT) && (bg = style->highlight_color())) {
     fg = contrast(style->highlight_textcolor(), bg);
-  } else if ((flags & SELECTED) && (bg = style->selection_color())) {
-    fg = contrast(style->selection_textcolor(), bg);
   } else {
     if (flags & OUTPUT) {bg = style->buttoncolor(); fg = style->labelcolor();}
     else {bg = style->color(); fg = style->textcolor();}

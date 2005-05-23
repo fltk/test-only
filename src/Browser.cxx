@@ -314,7 +314,7 @@ bool Browser::item_is_open() const {
   This does not move and returns null if we are at the bottom. */
 Widget* Browser::next_visible() {
   if (item_is_visible()) {
-    if (!layout_damage()) item_position[HERE] += item()->height();
+    item_position[HERE] += item()->h();
     // If we are on an open group title with children, go to first item in group
     if (item_is_open() && item_is_parent()) {
       int n = item_level[HERE]+1;
@@ -398,7 +398,7 @@ Widget* Browser::previous_visible() {
     if (item()->visible()) break;
   }
 
-  if (!layout_damage()) item_position[HERE] -= item()->height();
+  item_position[HERE] -= item()->h();
   return item();
 }
 
@@ -449,8 +449,7 @@ Widget* Browser::goto_position(int Y) {
   }
   // move forward to the item:
   if (item()) for (;;) {
-    int h = item()->height();
-    if (item_position[HERE]+h > Y) break;
+    if (item_position[HERE]+item()->h() > Y) break;
     if (!next_visible()) {previous_visible(); return 0;}
   }
   return item();
@@ -488,8 +487,7 @@ void Browser::damage_item(int mark) {
 
 /*! \fn int Browser::current_position() const
   Return the y position, in pixels, of the top edge of the current
-  item. You may also want the height, which is in
-  item()->height().
+  item. You may also want the height, which is in item()->h().
 */
 
 /*! \fn int Browser::focus_level() const
@@ -505,7 +503,7 @@ void Browser::damage_item(int mark) {
 /*! \fn int Browser::focus_position() const
   Return the y position, in pixels, of the top edge of the focus
   item. You may also want the height, which is in
-  goto_focus(); item()->height().
+  goto_focus(); item()->h().
 */
 
 /*! \fn void Browser::value(int v)
@@ -578,99 +576,67 @@ browser_glyph(int glyph, const Rectangle& r)
 static char openclose_drag;
 
 // Draws the current item:
-void Browser::draw_item() {
+// If damage is non-zero it draws the left-hand glyphs and or's that damage
+// into the item.
+void Browser::draw_item(int damage) {
 
-  Widget* widget = item();
-  Rectangle r(interior.x(), interior.y()+item_position[HERE]-yposition_,
-	      interior.w(), widget->height());
-
-  Flags flags;
-
-  int is_focus = at_mark(FOCUS);
-
-  if (multi() ? widget->selected() : is_focus) {
-    setcolor(selection_color());
-    fillrect(r);
-    widget->set_selected();
-    flags = SELECTED;
-  } else {
-    widget->clear_selected();
-    flags = 0;
-#if DRAW_STRIPES
-    Color c0 = color();
-    Color c1 = buttoncolor();
-    int x=1; for (int j=0; j<=item_level[HERE]; j++) x ^= item_index[HERE][j]+1;
-    if (x & 1 && c1 != c0) {
-      // draw odd-numbered items with a dark stripe, plus contrast-enhancing
-      // pixel rows on top and bottom:
-      setcolor(c1);
-      Rectangle ir(r); ir.inset(0,1,0,1); fillrect(ir);
-      setcolor(c0 <= GRAY85 ? c1 : GRAY85);
-      //setcolor(lerp(c1, c0, 1.9));
-      drawline(r.x(), r.y(), r.r(), r.y());
-      drawline(r.x(), r.b()-1, r.r(), r.b()-1);
-    } else {
-      setcolor(c0);
-      fillrect(r);
-    }
-#else
-    setcolor(color());
-    fillrect(r);
-#endif
-  }
-
-  int col_shift = interior.x();
+  int x = interior.x()-xposition_;
+  int y = interior.y()+item_position[HERE]-yposition_;
   int arrow_size = int(textsize())|1;
-  bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
+  int inset = (item_level[HERE]+indented())*arrow_size;
 
-  // draw the glyphs, one for each nesting level:
-  for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
-    int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
-    if (j == item_level[HERE]) {
-      if (children(item_index[HERE],j+1)>=0)
-	if (item_is_open() != preview_open)
-	  g += OPEN_ELL;
+  // draw the open/close glyphs at the left:
+  if (damage && inset > xposition_) {
+    drawstyle(style(), 0);
+    Color fg = getcolor();
+    setcolor(getbgcolor());
+    fillrect(Rectangle(x, y, inset-xposition_, item()->h()));
+    setcolor(fg);
+    bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
+    for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
+      int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
+      if (j == item_level[HERE]) {
+	if (children(item_index[HERE],j+1)>=0)
+	  if (item_is_open() != preview_open)
+	    g += OPEN_ELL;
+	  else
+	    g += CLOSED_ELL;
 	else
-	  g += CLOSED_ELL;
-      else
-	g += ELL;
+	  g += ELL;
+      }
+      // if (getcolor()==BLACK) setcolor(GRAY33);
+      draw_glyph(g, Rectangle(x, y, arrow_size, item()->h()));
+      x += arrow_size;
     }
-    drawstyle(style(),flags);
-    // if (getcolor()==BLACK) setcolor(GRAY33);
-    Rectangle gr(r.x()-xposition_, r.y(), arrow_size, r.h());
-    draw_glyph(g, gr);
-    r.move(arrow_size,0);
-    col_shift += arrow_size;
-  }
-
-  if (focused() && is_focus) {
-    drawstyle(style(),flags|FOCUSED);
-    focusbox()->draw(r);
-  }
-
-  // Shift image width
-  if (widget->image()) {
-    int iw,ih; widget->image()->measure(iw,ih);
-    col_shift += iw;
+  } else {
+    x += inset;
   }
 
   // Shift first column width, so labels after 1. column are lined up correctly.
   int saved_colw = 0;
   int *cols = (int *)column_widths_p;
-  if(cols) {
+  if (cols) {
     saved_colw = cols[0];
-    cols[0] -= col_shift;
+    cols[0] -= x;
     if (cols[0]==0) cols[0]--;
   }
 
   push_matrix();
-  widget->x(r.x()-xposition_);
-  widget->y(r.y()+(int(leading())-1)/2);
-  widget->w(interior.r()-r.x());
-  translate(widget->x(), widget->y());
-  widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-  widget->draw();
-  widget->set_damage(0);
+  item()->x(x);
+  item()->y(y+(int(leading())-1)/2);
+  item()->w(interior.w()-inset);
+  translate(x, y);
+  if (at_mark(FOCUS)) {
+    if (flags() & FOCUSED) item()->set_flag(FOCUSED);
+    else item()->clear_flag(FOCUSED);
+    if (!multi()) item()->set_flag(SELECTED);
+  } else {
+    item()->clear_flag(FOCUSED);
+    if (!multi()) item()->clear_flag(SELECTED);
+  }
+  if (damage) item()->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
+  item()->draw();
+  item()->set_damage(0);
   pop_matrix();
 
   // Restore column width
@@ -689,7 +655,7 @@ void Browser::draw_clip(const Rectangle& r) {
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
     int item_y = interior.y()+item_position[HERE]-yposition_;
     if (item_y >= r.b()) break;
-    if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
+    if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item(DAMAGE_ALL);
     if (!next_visible()) break;
   }
 
@@ -719,26 +685,19 @@ void Browser::draw() {
     if (scrolldx || scrolldy) {
       scrollrect(interior, scrolldx, scrolldy, draw_clip_cb, this);
     }
-    int clipped = 0;
+    bool clipped = false;
     for (int n = REDRAW_0; n <= REDRAW_1; n++) {
       if (goto_mark(n)) {
-	if (!clipped) {push_clip(interior); clipped = 1;}
-	draw_item();
+	if (!clipped) {push_clip(interior); clipped = true;}
+	draw_item(DAMAGE_ALL);
       }
     }
     if (d & DAMAGE_CHILD) {
       if (goto_mark(FIRST_VISIBLE)) for (;;) {
-	int y = interior.y()+item_position[HERE]-yposition_+(int(leading())-1)/2;
-	if (y >= interior.b()) break;
+	if (item_position[HERE]-yposition_ > interior.h()) break;
 	if (item()->damage()) {
-	  if (!clipped) {push_clip(interior); clipped = 1;}
-	  int arrow_size = int(textsize())|1;
-	  int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
-	  push_matrix();
-	  translate(x, y);
-	  item()->draw();
-	  item()->set_damage(0);
-	  pop_matrix();
+	  if (!clipped) {push_clip(interior); clipped = true;}
+	  draw_item(0);
 	}
 	if (!next_visible()) break;
       }
@@ -856,35 +815,27 @@ void Browser::layout() {
     interior.move_y(headerh);
   }
 
-  // Measure the height of all items and find widest one
+  // Measure the height of all items and find widest one, also
+  // find vertical position of focus & first visible.
   width_ = 0;
-
-  // count all the items scrolled off the top:
   int arrow_size = int(textsize())|1;
-  if (!goto_top()) yposition_ = 0;
-  else for (;;) {
-    if (item_position[HERE]+item()->height() > yposition_) break;
-    //if (!indented_ && item_is_parent()) indented_ = true;
-    if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
+  bool saw_first_visible = false;
+  for (goto_top(); item(); next_visible()) {
     int border = arrow_size*item_level[HERE];
-    int w = item()->width()+border;
-    if (w > width_) width_ = w;
-    if (!next_visible()) {goto_top(); yposition_ = 0; break;}
-  }
-  set_mark(FIRST_VISIBLE, HERE);
-  // count all the rest of the items:
-  if (item()) for (;;) {
-    if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
-    int border = arrow_size*item_level[HERE];
-    int w = item()->width()+border;
-    if (w > width_) width_ = w;
     item()->x(interior.x()+border);
     item()->w(interior.w()-border);
     item()->layout_damage(LAYOUT_X|LAYOUT_W);
     item()->layout();
     //if (!indented_ && item_is_parent()) indented_ = true;
-    if (!next_visible()) break;
+    int w = item()->w()+border;
+    if (w > width_) width_ = w;
+    if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
+    if (!saw_first_visible && item_position[HERE]+item()->h() > yposition_) {
+      saw_first_visible = true;
+      set_mark(FIRST_VISIBLE, HERE);
+    }
   }
+  if (!saw_first_visible) set_mark(FIRST_VISIBLE, HERE);
   if (indented()) width_ += arrow_size;
   height_ = item_position[HERE];
 
@@ -1093,7 +1044,7 @@ bool Browser::make_item_visible(linepos where) {
     relayout(LAYOUT_CHILD);
   } else if (!layout_damage()) {
     set_mark(TEMP,HERE);
-    int h = item()->height();
+    int h = item()->h();
     int p = item_position[HERE];
     switch (where) {
     case 0:

@@ -69,6 +69,7 @@ void CycleButton::draw() {
 
   Style style = *(this->style());
   if (style.color_) style.buttoncolor_ = style.color_;
+  else style.color_ = style.buttoncolor();
   if (style.box_) style.buttonbox_ = style.box_;
   if (style.textcolor_) style.labelcolor_ = style.textcolor_;
 

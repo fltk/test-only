@@ -250,10 +250,9 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
     if (!item->visible()) continue;
     // force items with @ commands in label to re-layout:
     if (item->label() && item->label()[0]=='@') item->w(0);
-    int ih = item->height();
-    H += ih;
-    int iw = item->width();
-    if (iw > W) W = iw;
+    if (!item->w()) item->layout();
+    H += item->h();
+    if (item->w() > W) W = item->w();
     if (this->children(array,level+1)>=0) {
       if (16 > hotKeysW) hotKeysW = 16;
     } else {
@@ -318,10 +317,11 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     array[level] = i;
     Widget* item = child(array, level);
     if (!item->visible()) continue;
+    if (!item->w()) item->layout();
     if (horizontal) {
-      ir.w(item->width() + spacing);
+      ir.w(item->w() + spacing);
     } else {
-      ir.h(item->height());
+      ir.h(item->h());
     }
 
     // for minimal update, only draw the items that changed selection:
@@ -342,19 +342,9 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 	  push_clip(R); clipped = true;
 	} else {
 	  flags |= SELECTED;
-	  setcolor(widget->selection_color());
-	  fillrect(ir);
 	}
       } else {
 	flags &= ~(SELECTED|HIGHLIGHT);
-	// erase the background if only doing partial update. This uses
-	// clipping so background pixmaps will work:
-	if (damage == DAMAGE_CHILD) {
-	  push_clip(ir);
-	  drawstyle(widget->style(), flags&~VALUE);
-	  box->draw(Rectangle(widget->w(), widget->h()));
-	  pop_clip();
-	}
       }
 
       push_matrix();
@@ -420,7 +410,8 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      x += item->width()+spacing;
+      if (!item->w()) item->layout();
+      x += item->w()+spacing;
       if (x > mx) {/*if (item->takesevents())*/ ret = i; break;}
     }
   } else {
@@ -429,7 +420,8 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      y += item->height(); // find bottom edge
+      if (!item->h()) item->layout();
+      y += item->h(); // find bottom edge
       if (y > my) {/*if (item->takesevents())*/ ret = i; break;}
     }
   }
@@ -457,21 +449,25 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      r.move(item->width()+spacing,0);
+      if (!item->w()) item->layout();
+      r.move(item->w()+spacing,0);
     }
     array[level] = index;
     Widget* item = child(array, level);
-    r.w(item->width()+spacing);
+    if (!item->w()) item->layout();
+    r.w(item->w()+spacing);
   } else {
     for (int i = 0; i < index; i++) {
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      r.move(0,item->height());
+      if (!item->h()) item->layout();
+      r.move(0,item->h());
     }
     array[level] = index;
     Widget* item = child(array, level);
-    r.h(item->height());
+    if (!item->h()) item->layout();
+    r.h(item->h());
   }
   Item::clear_style();
   return r;
@@ -508,8 +504,9 @@ MWindow::MWindow(MenuState* m, int l, const Rectangle& rectangle,
   if (menustate->menubar && level==1) {
     // Widget title
     Widget* widget = menustate->widget->child(menustate->indexes[0]);
-    Wtitle = widget->width()+int(this->leading());
-    Htitle = widget->height()+dh;
+    if (!widget->w()) widget->layout();
+    Wtitle = widget->w()+int(this->leading());
+    Htitle = widget->h()+dh;
     title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, 0);
   } else if (t) {
     // label title
@@ -624,7 +621,8 @@ int MWindow::autoscroll(int i) {
       Y = h();
     } else {
       Widget* widget = get_widget(i);
-      Y += widget->height();
+      if (!widget->h()) widget->layout();
+      Y += widget->h();
     }
     if (newy+Y >= MENUAREA.b()) newy = MENUAREA.b()-Y-BORDER;
     else return 0;

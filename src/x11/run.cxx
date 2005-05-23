@@ -1366,7 +1366,7 @@ bool fltk::handle()
   case EnterNotify:
     set_event_xy(false);
     e_state = xevent.xcrossing.state << 16;
-    if (xevent.xcrossing.detail == NotifyInferior) break;
+    if (xevent.xcrossing.detail == NotifyInferior) {event=MOVE; break;}
 //      printf("EnterNotify window %s, xmousewin %s\n",
 //	   window ? window->label() : "NULL",
 //	   xmousewin ? xmousewin->label() : "NULL");
@@ -1387,7 +1387,7 @@ bool fltk::handle()
   case LeaveNotify:
     set_event_xy(false);
     e_state = xevent.xcrossing.state << 16;
-    if (xevent.xcrossing.detail == NotifyInferior) break;
+    if (xevent.xcrossing.detail == NotifyInferior) {event=MOVE; break;}
 //      printf("LeaveNotify window %s, xmousewin %s\n",
 //	   window ? window->label() : "NULL",
 //	   xmousewin ? xmousewin->label() : "NULL");
