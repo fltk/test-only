@@ -71,6 +71,7 @@ public:
   bool item_is_visible() const;
   bool item_is_parent() const;
   bool item_is_open() const;
+  int item_h() const;
 
   bool set_focus();
   bool set_item_selected(bool value = true, int do_callback = 0);

@@ -397,13 +397,13 @@ bool fl_hide_underscore; // set by Choice
 
 // The amount returned here should exactly match the ascent returned by setsa:
 int Rectangle::baseline_y() const {
-  return y_+(int(h_+getascent()-getdescent()+1)>>1);
+  return y_ + (int(h_ + getascent() - getdescent() + 1.5) >> 1);
 }
 
 static inline void setsa(int& spacing, int& ascent) {
   float H = getsize()+Widget::default_style->leading();
   spacing = int(H+.5);
-  ascent = int(H + getascent() - getdescent() + 1) >> 1;
+  ascent = int(H + getascent() - getdescent() + 1.5) >> 1;
 }
 
 // Find all the segments in a section of raw text and arrange them as

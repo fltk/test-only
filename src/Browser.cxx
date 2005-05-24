@@ -310,6 +310,11 @@ bool Browser::item_is_open() const {
   return true;
 }
 
+int Browser::item_h() const {
+  if (!item()->h()) item()->layout();
+  return item()->h();
+}
+
 /*! Move forward to the next visible item (what down-arrow does).
   This does not move and returns null if we are at the bottom. */
 Widget* Browser::next_visible() {
@@ -449,7 +454,7 @@ Widget* Browser::goto_position(int Y) {
   }
   // move forward to the item:
   if (item()) for (;;) {
-    if (item_position[HERE]+item()->h() > Y) break;
+    if (item_position[HERE]+item_h() > Y) break;
     if (!next_visible()) {previous_visible(); return 0;}
   }
   return item();
@@ -487,7 +492,7 @@ void Browser::damage_item(int mark) {
 
 /*! \fn int Browser::current_position() const
   Return the y position, in pixels, of the top edge of the current
-  item. You may also want the height, which is in item()->h().
+  item. You may also want the height, which is in item_h().
 */
 
 /*! \fn int Browser::focus_level() const
@@ -503,7 +508,7 @@ void Browser::damage_item(int mark) {
 /*! \fn int Browser::focus_position() const
   Return the y position, in pixels, of the top edge of the focus
   item. You may also want the height, which is in
-  goto_focus(); item()->h().
+  goto_focus(); item_h().
 */
 
 /*! \fn void Browser::value(int v)
@@ -590,7 +595,7 @@ void Browser::draw_item(int damage) {
     drawstyle(style(), 0);
     Color fg = getcolor();
     setcolor(getbgcolor());
-    fillrect(Rectangle(x, y, inset-xposition_, item()->h()));
+    fillrect(Rectangle(x, y, inset-xposition_, item_h()));
     setcolor(fg);
     bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
     for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
@@ -605,7 +610,7 @@ void Browser::draw_item(int damage) {
 	  g += ELL;
       }
       // if (getcolor()==BLACK) setcolor(GRAY33);
-      draw_glyph(g, Rectangle(x, y, arrow_size, item()->h()));
+      draw_glyph(g, Rectangle(x, y, arrow_size, item_h()));
       x += arrow_size;
     }
   } else {
@@ -1044,7 +1049,7 @@ bool Browser::make_item_visible(linepos where) {
     relayout(LAYOUT_CHILD);
   } else if (!layout_damage()) {
     set_mark(TEMP,HERE);
-    int h = item()->h();
+    int h = item_h();
     int p = item_position[HERE];
     switch (where) {
     case 0:
