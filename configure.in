@@ -806,7 +806,9 @@ if test -n "$GCC"; then
 	    ;;
     esac
 
-    CXX="$CC"
+    if test x$uname != xDarwin; then
+        CXX="$CC"
+    fi
 
     AC_ARG_ENABLE(exceptions, [  --enable-exceptions     turn on GCC exceptions (default=yes)])
     if test x$enable_exceptions != xno; then

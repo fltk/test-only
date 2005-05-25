@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $"
+// "$Id$"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@ int CursorBox::handle(int event) {
   return Widget::handle(event);
 }
 
-struct {const char* name; Cursor* cursor;} table[] = {
+struct gcc4_bug_workaround {const char* name; Cursor* cursor;} table[] = {
   {"0", 0},
   {"CURSOR_ARROW",	CURSOR_ARROW},
   {"CURSOR_CROSS",	CURSOR_CROSS},
@@ -63,7 +63,7 @@ struct {const char* name; Cursor* cursor;} table[] = {
   {"CURSOR_NO",		CURSOR_NO},
   {"CURSOR_NONE",	CURSOR_NONE},
 };
-#define COUNT (sizeof(table)/sizeof(*table))
+#define COUNT (sizeof(table)/sizeof(table[0]))
 #define W 200
 #define H 25
 #define GAP 5
@@ -79,5 +79,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id$".
 //
