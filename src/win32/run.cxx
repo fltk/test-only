@@ -839,8 +839,13 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
 	SetClipboardData(CF_TEXT, NULL);
       }
       CloseClipboard();
+      // we should be able to set this true here, but for some reason
+      // some changes by other programs do not send the events that
+      // makes this turn off:
+      i_own_selection = false;
+    } else {
+      i_own_selection = true;
     }
-    i_own_selection = true;
   }
 }
 
