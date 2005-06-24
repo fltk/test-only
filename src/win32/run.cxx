@@ -1859,9 +1859,9 @@ void Window::layout() {
   UINT flags;
   if (layout_damage() & LAYOUT_WH) {
     free_backbuffer();
-    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
+    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE;
   } else if (layout_damage() & LAYOUT_XY) {
-    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE;
+    flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE | SWP_NOSIZE;
   } else {
     flags = 0;
   }
