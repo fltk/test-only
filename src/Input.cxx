@@ -1250,7 +1250,6 @@ bool Input::handle_key() {
   case ReturnKey:
   case KeypadEnter:
     if (ctrl || shift) return false;
-    if (try_shortcut()) return true;
     if (when() & WHEN_ENTER_KEY) {
       position(size(), 0);
       if (fl_pending_callback==this || (when()&WHEN_NOT_CHANGED)) {
@@ -1259,9 +1258,9 @@ bool Input::handle_key() {
       }
       return true;
     }
-    if (type() < MULTILINE) return false;
-    return replace(position(), mark(), '\n');
-
+    if (type() >= MULTILINE)
+      return replace(position(), mark(), '\n');
+    return false;
   case TabKey:
     /*if (type() < MULTILINE || ctrl || shift)*/ return false;
     //return replace(position(), mark(), event_text(), 1);
@@ -1334,6 +1333,7 @@ bool Input::handle_key() {
   case '/': // Emacs undo
     if (!ctrl || try_shortcut()) return true;
   case 'z':
+  case EscapeKey:
     // For undo we undo local typing first. Only if this fails do
     // we run some appliation menu item for undo:
     return !undo_is_redo && undo();

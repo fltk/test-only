@@ -439,7 +439,7 @@ static void figure_out_visual() {
   default:
     fatal("Can't do %d bits_per_pixel",i.bits_per_pixel);
   }
-
+  //printf("bytes per pixel %d, byte order %d\n",bytes_per_pixel,::i.byte_order);
 }
 
 #define MAXBUFFER 0x40000 // 256k
@@ -464,6 +464,10 @@ static void innards(const uchar *buf, PixelType type,
 
   void (*conv)(const uchar *from, uchar *to, int w, int delta) = converter;
   if (type == MONO) conv = mono_converter;
+
+//   bool flip_order =
+//     type==BGR || type==ABGR || type==BGRA || type==MBGR || type==BGRM;
+//   if (flip_order) i.byte_order = !i.byte_order;
 
   // See if the data is already in the right format.  Unfortunately
   // some 32-bit x servers (XFree86) care about the unknown 8 bits
@@ -530,6 +534,7 @@ static void innards(const uchar *buf, PixelType type,
       delete[] linebuf;
     }
   }
+  //  if (flip_order) i.byte_order = !i.byte_order;
 }
 
 #define DITHER_FILLRECT (xvisual->depth <= 16)

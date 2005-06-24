@@ -55,14 +55,14 @@ void Window::hotspot(int cx, int cy, bool offscreen) {
   if (!offscreen) {
     Rectangle r; borders(&r);
     const Monitor& monitor = Monitor::find(X,Y);
-    if (X+w()+r.r() > monitor.r()) X = monitor.r()-r.r()-w();
-    if (X+r.x() < monitor.x()) X = monitor.x()-r.x();
-    if (X+w() > monitor.r()) X = monitor.r()-w();
-    if (X < monitor.x()) X = monitor.x();
-    if (Y+h()+r.b() > monitor.h()) Y = monitor.h()-r.b()-h();
-    if (Y+r.y() < monitor.y()) Y = monitor.y()-r.y();
-    if (Y+h() > monitor.h()) Y = monitor.h()-h();
-    if (Y < monitor.y()) Y = monitor.y();
+    if (X+w()+r.r() > monitor.work.r()) X = monitor.work.r()-r.r()-w();
+    if (X+r.x() < monitor.work.x()) X = monitor.work.x()-r.x();
+    if (X+w() > monitor.work.r()) X = monitor.work.r()-w();
+    if (X < monitor.work.x()) X = monitor.work.x();
+    if (Y+h()+r.b() > monitor.work.h()) Y = monitor.work.h()-r.b()-h();
+    if (Y+r.y() < monitor.work.y()) Y = monitor.work.y()-r.y();
+    if (Y+h() > monitor.work.h()) Y = monitor.work.h()-h();
+    if (Y < monitor.work.y()) Y = monitor.work.y();
   }
   position(X,Y);
 }

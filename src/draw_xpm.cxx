@@ -132,61 +132,53 @@ static const uchar* cb2(void*v, int x, int y, int w, uchar* buf) {
 
 #endif
 
-static uchar **mask_bitmap;
+#if !USE_QUARTZ
+bool fl_did_monochrome;
+#if USE_X11
+uchar **fl_mask_bitmap;
+#endif
+#endif
 
-void fltk::set_mask_bitmap(uchar **ppBitmap)
-{
-	mask_bitmap = ppBitmap;
-}
-
-Color fg_kludge;
-
-int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
+int fltk::draw_xpm(const char*const* di, int x, int y) {
   xpm_data d;
   if (!measure_xpm(di, d.w, d.h)) return 0;
   const uchar*const* data = (const uchar*const*)(di+1);
   int transparent_index = -1;
+  bool monochrome = true;
 
   if (ncolors < 0) {	// fltk (non standard) compressed colormap
     ncolors = -ncolors;
     const uchar *p = *data++;
     // if first color is ' ' it is transparent (put it later to make
     // it not be transparent):
-    if (*p == ' ') {
-      uchar* c = (uchar*)&d.colors[32];
-#ifdef U64
-      *(U64*)c = 0;
-#if WORDS_BIGENDIAN
-      c += 4;
-#endif
-#endif
+    if (p[0] == ' ') {
+      d.colors[32] = 0;
       transparent_index = ' ';
-      split_color(bg, c[0], c[1], c[2]); c[3] = 0;
-      p += 4;
       ncolors--;
+      monochrome = false;
+      p += 4;
     }
     // read all the rest of the colors:
     for (int i=0; i < ncolors; i++) {
-      uchar* c = (uchar*)&d.colors[*p++];
+      uchar* c = (uchar*)&d.colors[p[0]];
 #ifdef U64
       *(U64*)c = 0;
 #if WORDS_BIGENDIAN
       c += 4;
 #endif
 #endif
-      *c++ = *p++;
-      *c++ = *p++;
-      *c++ = *p++;
-      *c = 0xff;
+      if (p[0]!=p[1] || p[1]!=p[2]) monochrome = false;
+      c[0] = p[1];
+      c[1] = p[2];
+      c[2] = p[3];
+      c[3] = 0xff;
+      p += 4;
     }
   } else {	// normal XPM colormap with names
-    uchar f[3];
-    uchar b[3];
-    if (fg_kludge) {
-      split_color(fg_kludge, f[0], f[1], f[2]);
-      split_color(bg, b[0], b[1], b[2]);
+    if (chars_per_pixel>1) {
+      memset(d.byte1, 0, sizeof(d.byte1));
+      monochrome = false;
     }
-    if (chars_per_pixel>1) memset(d.byte1, 0, sizeof(d.byte1));
     for (int i=0; i<ncolors; i++) {
       const uchar* p = *data++;
       // the first 1 or 2 characters are the color index:
@@ -236,27 +228,50 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 	c[0] = uchar(C>>24);
 	c[1] = uchar(C>>16);
 	c[2] = uchar(C>>8);
-	if (fg_kludge) {
-	  c[0] = (c[0]*b[0]+(255-c[0])*f[0])/255;
-	  c[1] = (c[1]*b[1]+(255-c[1])*f[1])/255;
-	  c[2] = (c[2]*b[2]+(255-c[2])*f[2])/255;
-	}
+	if (c[0] != c[1] || c[0] != c[2]) monochrome = false;
 	c[3] = 0xff;
       } else { // assume "None" or "#transparent" for any errors
 	// this should be transparent...
 	transparent_index = index;
 	c[0] = c[1] = c[2] = c[3] = 0;
+	monochrome = false;
       }
     }
   }
+#if !USE_QUARTZ
+  // MONO image is nyi on anything other than Quartz
+  if (monochrome) {
+    fl_did_monochrome = true;
+#if USE_X11
+    // Can't even do transparent on X11 yet...
+    uchar f[3];
+    uchar b[3];
+    split_color(getcolor(), f[0], f[1], f[2]);
+    split_color(getbgcolor(), b[0], b[1], b[2]);
+    for (int i = 0; i < 256; i++) {
+      uchar* c = (uchar*)&d.colors[i];
+#ifdef U64
+#if WORDS_BIGENDIAN
+      c += 4;
+#endif
+#endif
+      c[0] = (c[0]*b[0]+(255-c[0])*f[0])/255;
+      c[1] = (c[1]*b[1]+(255-c[1])*f[1])/255;
+      c[2] = (c[2]*b[2]+(255-c[2])*f[2])/255;
+    }
+    monochrome = false; // draw using RGB
+#endif
+  }
+#endif
   d.data = data;
-#if USE_QUARTZ
-  // actually this is what should be done on *all* systems, the bitmap
-  // mask code is a kludge!
-  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, RGB, Rectangle(x, y, d.w, d.h), 4);
+#if !USE_X11
+  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d,
+	    monochrome ? MASK : transparent_index >= 0 ? RGBA : RGB,
+	    Rectangle(x, y, d.w, d.h), 4);
 #else
+  // Transarent drawimage() nyi on X11...
   // build the mask bitmap used by xpmImage:
-  if (mask_bitmap && transparent_index >= 0) {
+  if (fl_mask_bitmap && transparent_index >= 0) {
     // search for usage of the transparent index, if none we act like
     // the image is opaque (which avoids some buggy code on X/Win32):
     int y;
@@ -277,7 +292,7 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   GOTIT:
     int W = (d.w+7)/8;
     uchar* bitmap = new uchar[W * d.h];
-    *mask_bitmap = bitmap;
+    *fl_mask_bitmap = bitmap;
     for (y = 0; y < d.h; y++) {
       const uchar* p = data[y];
       if (chars_per_pixel <= 1) {

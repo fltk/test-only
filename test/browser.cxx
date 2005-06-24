@@ -260,7 +260,7 @@ int main(int argc,char** argv) {
   add_paper(&tree, "zzz", 0, fileSmall);
 
   // add some widgets:
-  g->begin();
+  //g->begin();
   fltk::Button * b = new fltk::Button(0,0,100,23,"button");
   b->callback(button_cb);
   b = new fltk::CheckButton(0,0,100,23,"CheckButton");

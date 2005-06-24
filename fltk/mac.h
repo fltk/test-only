@@ -66,7 +66,8 @@ extern FL_API void	clip_region(RgnHandle);
 extern FL_API RgnHandle	clip_region();
 extern FL_API void	draw_into(CGContextRef xid, int w, int h);
 extern FL_API void	stop_drawing(CGImageRef xid);
-extern FL_API ATSFontRef xfont();
+#define HFONT const char* // points at name of font!
+extern FL_API HFONT	xfont();
 
 extern FL_API void clear_quartz_clipping();
 extern FL_API void begin_quartz_image(CGRect&, const Rectangle&);

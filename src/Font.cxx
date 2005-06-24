@@ -175,8 +175,8 @@ const char* fltk::Font::name() const {
   if (!attributes_) return name_;
   static char *buffer; if (!buffer) buffer = new char[128];
   strcpy(buffer, name_);
-  if (attributes_ & BOLD) strcat(buffer, " bold");
-  if (attributes_ & ITALIC) strcat(buffer, " italic");
+  if (attributes_ & BOLD) strcat(buffer, " Bold");
+  if (attributes_ & ITALIC) strcat(buffer, " Italic");
   return buffer;
 }
 

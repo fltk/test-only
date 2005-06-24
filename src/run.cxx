@@ -1241,7 +1241,6 @@ bool fltk::handle(int event, Window* window)
 
   case KEY:
     Tooltip::exit();
-    xfocus = window; // this should already be set, but just in case.
     // Send to focus widget, then each parent so that keyboard navigation
     // can be done:
     to = focus();

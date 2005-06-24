@@ -1898,8 +1898,28 @@ void CreatedWindow::create(Window* window,
       fl_show_iconic = false;
     }
     if (window->icon()) {
+#if 0
+      // FLTK1 put a pixmap id here. This is no longer supported, but
+      // perhaps could be by setting the low bit to 1 so it cannot be
+      // an unsigned data pointer!
       hints->icon_pixmap = (Pixmap)window->icon();
       hints->flags       |= IconPixmapHint;
+#else
+      // FLTK2 uses the freedesktop.org new-style icons. This is an
+      // array of 32-bit unsigned values: w,h,(w*h)*argb, repeated
+      // for multiple sizes of image. Currently only a single image
+      // is allowed since otherwise the size of the data cannot be
+      // figured out...
+      // warning: this code assumes sizeof(unsigned)==4!
+      unsigned* data = (unsigned*)(window->icon());
+      unsigned size = data[0]*data[1]+2;
+      static Atom _NET_WM_ICON = 0;
+      if (!_NET_WM_ICON) _NET_WM_ICON =
+			   XInternAtom(xdisplay, "_NET_WM_ICON", 0);
+      XChangeProperty(xdisplay, x->xid, _NET_WM_ICON,
+		      XA_CARDINAL, 32, PropModeReplace,
+		      (uchar*)data, size);
+#endif
     }
     XSetWMHints(xdisplay, x->xid, hints);
     XFree(hints);

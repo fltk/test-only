@@ -191,12 +191,12 @@ FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta);
 FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta, int ldelta);
 /*! \} */
 
-// depreciated:
-FL_API int draw_xpm(const char*const* data, int x, int y, Color=GRAY75);
-FL_API int measure_xpm(const char*const* data, int &w, int &h);
-FL_API void set_mask_bitmap(uchar **ppBitmap);
 FL_API void scrollrect(const Rectangle&, int dx, int dy,
 		       void (*draw_area)(void*, const Rectangle&), void*);
+
+// depreciated:
+FL_API int draw_xpm(const char*const* data, int x, int y);
+FL_API int measure_xpm(const char*const* data, int &w, int &h);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
 //FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);

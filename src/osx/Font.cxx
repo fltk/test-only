@@ -35,23 +35,13 @@
 
 using namespace fltk;
 
-// One of these is made for each combination of size + encoding:
-struct FontSize {
-  FontSize *next;	// linked list for a single Font
-  const char *q_name;
-  int size, minsize, maxsize;
-  short ascent, descent, q_width;
-  ATSFontRef font;
-  FontSize(const char* xfontname, int size);
-  ~FontSize();
-};
-
 // The public-visible fltk::Font structures are actually imbedded in
 // this larger structure which points at the the above list
 struct IFont {
   fltk::Font f;
   int attribute_mask; // all attributes that can be turned on
-  FontSize* first;
+  const char* name;
+  float ascent, descent;
 };
 
 // We store the attributes in neat blocks of 2^n:
@@ -62,62 +52,34 @@ fltk::Font* fltk::Font::plus(int x) {
 }
 
 const char* fltk::Font::system_name() {
-  return name_;
+  IFont* ifont = (IFont*)this;
+  if (!ifont->name) ifont->name = newstring(name());
+  return ifont->name;
 }
 
-static FontSize* current;
+const char* fltk::xfont() { return current_font_->system_name(); }
 
-ATSFontRef fltk::xfont() { return current->font; }
-
-// face = italic, bold, 0, italic|bold
-
-FontSize::FontSize(const char* name, int Size) {
-  current = this;
-  next = 0;
-  q_name = newstring(name);
-  size = Size;
-  ascent = Size*3/4;
-  descent = Size-ascent;
-  q_width = Size*2/3;
-  minsize = maxsize = Size;
-  // Using ATS to get the genral Glyph size information
-  CFStringRef cfname = CFStringCreateWithCString(0L, q_name, kCFStringEncodingASCII);
-  font = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
-  if (font) {
-    ATSFontMetrics m = { 0 };
-    ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &m);
-    if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*size);
-    // playing with the offsets a little to make standard sizes fit
-    if (m.ascent) ascent  = int(m.ascent*size-0.5f);
-    if (m.descent) descent = -int(m.descent*size-1.5f);
-  }
-  CFRelease(cfname);
-}
-
-FontSize::~FontSize() {
-  if (current == this) current = 0;
-  delete[] q_name;
-}
+const char* fltk::Font::current_name() { return current_font_->name_; }
 
 ////////////////////////////////////////////////////////////////
 
 // The predefined fonts that fltk has:
 static IFont fonts [] = {
   {{"Arial",	0},	3,	0},
-  {{"Arial Bold",	1},	3,	0},
-  {{"Arial Italic",	2},	3,	0},
-  {{"Arial Bold Italic",	3},	3,	0},
+  {{"Arial",	1},	3,	0},
+  {{"Arial",	2},	3,	0},
+  {{"Arial",	3},	3,	0},
   {{"Courier New",0},	3,	0},
-  {{"Courier New Bold",1},	3,	0},
-  {{"Courier New Italic",2},	3,	0},
-  {{"Courier New Bold Italic",3},	3,	0},
+  {{"Courier New",1},	3,	0},
+  {{"Courier New",2},	3,	0},
+  {{"Courier New",3},	3,	0},
   {{"Times New Roman",	0},	3,	0},
-  {{"Times New Roman Bold",	1},	3,	0},
-  {{"Times New Roman Italic",	2},	3,	0},
-  {{"Times New Roman Bold Italic",	3},	3,	0},
+  {{"Times New Roman",	1},	3,	0},
+  {{"Times New Roman",	2},	3,	0},
+  {{"Times New Roman",	3},	3,	0},
   {{"Symbol",	0},	0,	0},
   {{"Monaco",	0},	1,	0},
-  {{"Andale Mono",	1},	1,	0},
+  {{"Monaco",	1},	1,	0},
   {{"Webdings",	0},	0,	0}
 };
 
@@ -158,7 +120,8 @@ Font* fl_make_font(const char* name, int attrib) {
     newfont[j].f.name_ = newfont[0].f.name_;
     newfont[j].f.attributes_ = attrib|j;
     newfont[j].attribute_mask = 3;
-    newfont[j].first = 0;
+    newfont[j].name = 0;
+    newfont[j].ascent = 0;
   }
   return &(newfont[0].f);
 }
@@ -166,50 +129,39 @@ Font* fl_make_font(const char* name, int attrib) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-// int fltk::xfont() {return current->font;}
-
-const char* fltk::Font::current_name() {
-  return current_font_->name_;
-}
-
 void fltk::setfont(Font* font, float psize) {
+  psize = rint(psize*10)/10.0f;
 
-  // only integers supported right now, perphaps Quartz does any size:
-  psize = int(psize+.5);
-  unsigned size = unsigned(psize);
+  IFont* ifont = (IFont*)font;
 
-  if (font != current_font_ || psize != current_size_) {
-    current_font_ = font; current_size_ = psize;
-    // search the fontsizes we have generated already:
-    FontSize* f;
-    for (f = ((IFont*)font)->first; f; f = f->next)
-      if (f->size == (int)size /*&& f->charset == charset*/) break;
-    if (!f) {
-      f = new FontSize(font->name_, size);
-      f->next = ((IFont*)font)->first;
-      ((IFont*)font)->first = f;
-      //getmetrics = true;
+  if (!ifont->ascent) {
+    // Using ATS to get the general Glyph size information
+    ifont->ascent = .75;
+    ifont->descent = .25;
+    CFStringRef cfname = CFStringCreateWithCString(0L, font->system_name(), kCFStringEncodingASCII);
+    ATSFontRef afont = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
+    CFRelease(cfname);
+    if (!afont) return; // we lose...
+    ATSFontMetrics m = { 0 };
+    ATSFontGetHorizontalMetrics(afont, kATSOptionFlagsDefault, &m);
+    //if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*size);
+    if (m.ascent) {
+      ifont->ascent = m.ascent+m.descent;
+      ifont->descent = -m.descent;
     }
-    current = f;
+    // does the ATSFontRef need to be freed somehow?
   }
-  if (current && quartz_gc)
-    CGContextSelectFont(quartz_gc, current->q_name, (float)current->size, 
-			kCGEncodingMacRoman);
-  /* //+++
-     TextFont(f->font);	//: select font into current QuickDraw GC
-     TextFace(f->face);
-     TextSize(f->size);
-     if (getmetrics) {
-     //: get the true metrics for the currnet GC. This fails on multiple
-     // monitors with different dpi's!, but actually it should work because
-     // we should be selecting font sizes by pixels, not points!
-     GetFontInfo(&(f->fi));
-     //FontMetrics(&(f->mr));
-     } */
+
+  current_font_ = font; current_size_ = psize;
+
+  if (quartz_gc) {
+    CGContextSelectFont(quartz_gc, ((IFont*)current_font_)->name,
+			current_size_, kCGEncodingMacRoman);
+  }
 }
 
-float fltk::getascent()  { return current->ascent; }
-float fltk::getdescent() { return current->descent; }
+float fltk::getascent()  { return ((IFont*)current_font_)->ascent*current_size_; }
+float fltk::getdescent() { return ((IFont*)current_font_)->descent*current_size_; }
 
 #include "utf8tomac.cxx"
 
@@ -219,9 +171,9 @@ float fltk::getwidth(const char* text, int n) {
   if (!quartz_gc) {
     Window *w = Window::first();
     if (w) w->make_current();
-    if (!quartz_gc || !current) return -1;
-    CGContextSelectFont(quartz_gc, current->q_name, (float)current->size, 
-			kCGEncodingMacRoman);
+    if (!quartz_gc || !current_font_) return -1;
+    CGContextSelectFont(quartz_gc, ((IFont*)current_font_)->name,
+			current_size_, kCGEncodingMacRoman);
   }
   char localbuffer[WCBUFLEN];
   char* buffer = localbuffer;

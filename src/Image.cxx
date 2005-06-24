@@ -151,16 +151,19 @@ void Image::setsize(int w, int h) {
 void Image::destroy_cache() {
 #if USE_X11
   stop_drawing((XWindow)rgb);
-  if (alpha && alpha!=rgb) {XFreePixmap(xdisplay, (Pixmap)alpha); alpha = 0;}
-  if (rgb) {XFreePixmap(xdisplay, (Pixmap)rgb); rgb = 0;}
+  if (alpha && alpha!=rgb) XFreePixmap(xdisplay, (Pixmap)alpha);
+  if (rgb) XFreePixmap(xdisplay, (Pixmap)rgb);
+  alpha = rgb = 0;
 #elif defined(_WIN32)
   stop_drawing((HBITMAP)rgb);
-  if (alpha && alpha != rgb) {DeleteObject((HBITMAP)alpha); alpha = 0;}
-  if (rgb) {DeleteObject((HBITMAP)rgb); rgb = 0;}
+  if (alpha && alpha != rgb) DeleteObject((HBITMAP)alpha);
+  if (rgb) DeleteObject((HBITMAP)rgb);
+  alpha = rgb = 0;
 #elif USE_QUARTZ
   //stop_drawing((CGImageRef)rgb);
   //if (alpha && alpha != rgb) {CGImageRelease((CGImageRef)alpha); alpha = 0;}
   if (rgb) {CGImageRelease((CGImageRef)rgb); rgb = 0;}
+  alpha = 0;
 #else
 #error
 #endif
@@ -220,6 +223,7 @@ void Image::make_current() {
 
     rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);
 #elif USE_QUARTZ
+#if 0
     // seems to be an attempt to create a drawing area, but no sign it works..
     // Also is data freed, or is this a huge memory leak?
     static CGColorSpaceRef lut = 0;
@@ -228,12 +232,14 @@ void Image::make_current() {
     rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut,
 				kCGImageAlphaPremultipliedLast);
 #endif
+#endif
     fl_drawing_offscreen = true;
   }
 #if USE_X11
   draw_into((XWindow)rgb, w_, h_);
 #elif defined(_WIN32)
   draw_into((HBITMAP)rgb, w_, h_);
+  alpha = rgb;
 #elif USE_QUARTZ
   draw_into((CGContextRef)rgb, w_, h_);
 #endif
@@ -553,21 +559,12 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
 }
 
 /** Virtual method from Symbol baseclass, draws the image.
-
-  If drawflags(INACTIVE) is on, this tries to draw the image inactive
-  by calling fill() twice with gray colors. Otherwise it calls over().
+    This may use drawflags(INACTIVE) to gray out the image. Currently
+    NYI as this may be system-specific.
 */
 void Image::_draw(const fltk::Rectangle& r) const
 {
-  if (drawflags(INACTIVE)) {
-    Color saved_color = getcolor();
-    setcolor(GRAY90);
-    fill(r,-1,-1);
-    setcolor(saved_color);
-    fill(r,0,0);
-  } else {
-    over(r,0,0);
-  }
+  over(r,0,0);
 }
 
 /*! By default Image assummes the constructor set the w_ and h_

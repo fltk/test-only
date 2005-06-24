@@ -250,13 +250,20 @@ void fltk::set_gl_context(const Window* window, GLContext context) {
     wglMakeCurrent(CreatedWindow::find(window)->dc, context);
 #elif defined(__APPLE__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-    if ( window->parent() ) { //: resize our GL buffer rectangle
+    if ( window->parent() ) {
+      // Calculate rectangle for the subwindow
+      // Unfortunatly this controls the origin as well as the drawable
+      // area, so only clipping on the top and right is supported.
       //++ this gets called a lot if we have more than one GL buffer... .
       fltk::Rectangle r(*window);
-      for (Widget* p = window->parent(); p->parent(); p = p->parent())
+      Widget* p = window->parent();
+      for (;; p = p->parent()) {
+	if (r.y() < 0) r.set_y(0); // clip top
+	if (r.r() > p->w()) r.set_r(p->w()); // clip right
+	if (!p->parent()) break;
 	r.move(p->x(), p->y());
-      Rect wrect; GetWindowPortBounds( xid(window), &wrect );
-      GLint rect[] = { r.x(), wrect.bottom-wrect.top-r.b(), r.w(), r.h() };
+      }
+      GLint rect[] = { r.x(), p->h()-r.b(), r.w(), r.h() };
       aglSetInteger( context, AGL_BUFFER_RECT, rect );
       aglEnable( context, AGL_BUFFER_RECT );
     }
@@ -288,7 +295,6 @@ void fltk::delete_gl_context(GLContext context) {
     wglDeleteContext(context);
 #elif defined(__APPLE__)
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-    aglSetCurrentContext( NULL );
     aglSetDrawable( context, NULL );
     aglDestroyContext( context );
 #endif

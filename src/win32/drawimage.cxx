@@ -50,6 +50,7 @@
 #include <fltk/Color.h>
 #include <fltk/Font.h>
 #include <fltk/draw.h>
+#include <fltk/Image.h>
 #include <config.h>
 #include <stdio.h>
 #include <windows.h>
@@ -213,7 +214,7 @@ static void innards(const uchar *buf, PixelType type,
 	break;
       case MASK:
 	for (i=w; i--; from += delta, to += 4) {
-	  uchar v = *from;
+	  uchar v = 255-*from;
 	  to[0] = (mb*v)>>8;
 	  to[1] = (mg*v)>>8;
 	  to[2] = (mr*v)>>8;
@@ -237,6 +238,7 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case RGBA:
+      case RGBM:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[2];
 	  to[1] = from[1];
@@ -245,6 +247,7 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case ABGR:
+      case MBGR:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[1];
 	  to[1] = from[2];
@@ -252,8 +255,27 @@ static void innards(const uchar *buf, PixelType type,
 	  to[3] = from[0];
 	}
 	break;
+      case BGRA:
+      case BGRM:
+	for (i=w; i--; from += delta, to += 4) {
+	  to[0] = from[0];
+	  to[1] = from[1];
+	  to[2] = from[2];
+	  to[3] = from[3];
+	}
+	break;
+      case ARGB:
+      case MRGB:
+	for (i=w; i--; from += delta, to += 4) {
+	  to[0] = from[3];
+	  to[1] = from[2];
+	  to[2] = from[1];
+	  to[3] = from[0];
+	}
+	break;
       }
     }
+
     bmi.bmiHeader.biHeight = -k;
     bmi.bmiHeader.biSizeImage = k*4*w;
     if (fl_drawing_offscreen || type == MONO || type == RGB || type == BGR) {

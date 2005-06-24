@@ -256,6 +256,9 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
     //if (derivative > num) {num *= 5; smallmod = powincr = nummod = 2;}
   }
 
+  Color textcolor = getcolor();
+  Color linecolor = lerp(getbgcolor(), textcolor, .66666);
+  setcolor(linecolor);
   for (int n = 0; ; n++) {
     // every ten they get further apart for log slider:
     if (n > powincr) {mul *= 10; n = (n-1)/10+1;}
@@ -270,7 +273,9 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 	char* p = buffer;
 	while (p[0]=='0' && p[1]) p++;
 	setfont(textfont(), textsize());
+	setcolor(textcolor);
 	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
+	setcolor(linecolor);
       }
     }
     if (v && -v >= A && -v <= B) {
@@ -282,7 +287,9 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 	while (p[0]=='0' && p[1]) p++;
 	p--; p[0] = '-';
 	setfont(textfont(), textsize());
+	setcolor(textcolor);
 	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
+	setcolor(linecolor);
       }
     }
   }
@@ -520,7 +527,7 @@ static void glyph(int glyph, const Rectangle& r)
 
 static void revert(Style *s) {
   s->color_ = GRAY75;
-  s->textcolor_ = GRAY33;
+  //s->textcolor_ = GRAY15;
   s->textsize_ = 8;
   s->box_ = FLAT_BOX;
   s->glyph_ = ::glyph;

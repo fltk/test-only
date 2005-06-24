@@ -35,6 +35,10 @@ using namespace fltk;
 extern bool fl_drawing_offscreen;
 extern CGImageRef* fl_put_image_here;
 
+static void releaser(void*, const void* data, size_t size) {
+  delete[] (U32*)data;
+}
+
 static void innards(const uchar *buf,
 		    fltk::PixelType pixeltype,
 		    const fltk::Rectangle &r1,
@@ -65,24 +69,63 @@ static void innards(const uchar *buf,
       const uchar* ret = cb(userdata, dx, dy+i, w, dest);
       if (ret != dest) memcpy(dest, ret, w*delta);
     }
+  } else if (fl_drawing_offscreen && fl_put_image_here) {
+    // assist the big memory leak listed below!
+    int n = (linedelta*h+3)/4;
+    tmpBuf = new U32[n];
+    memcpy(tmpBuf, array, 4*n);
+    array = (uchar*)tmpBuf;
   }
 
   // create an image context
-  static CGColorSpaceRef lut = 0;
-  if (!lut) lut = CGColorSpaceCreateDeviceRGB();
-  CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, linedelta*h, 0L);
-  CGImageAlphaInfo cgtype = kCGImageAlphaNone;
+  static CGColorSpaceRef rgbcolorspace = 0;
+  static CGColorSpaceRef graycolorspace = 0;
+  if (!rgbcolorspace) rgbcolorspace = CGColorSpaceCreateDeviceRGB();
+  CGColorSpaceRef colorspace = rgbcolorspace;
+  CGDataProviderRef src =
+    CGDataProviderCreateWithData( 0L, array, linedelta*h,
+				  tmpBuf ? releaser : 0);
+  CGImageAlphaInfo bitmapInfo = kCGImageAlphaNone;
   switch (pixeltype) {
-  case MASK: cgtype = kCGImageAlphaOnly; break;
-  case RGBA: cgtype = kCGImageAlphaPremultipliedLast; break;
-//   case ARGB: cgtype = kCGImageAlphaPremultipliedFirst; break;
-//   case RGBM: cgtype = kCGImageAlphaLast; break;
-//   case MRGB: cgtype = kCGImageAlphaFirst; break;
+  case MASK:
+    bitmapInfo = kCGImageAlphaOnly;
+    break;
+  case MONO:
+    bitmapInfo = kCGImageAlphaNone;
+    if (!graycolorspace) graycolorspace = CGColorSpaceCreateDeviceGray();
+    colorspace = graycolorspace;
+    break;
+  case BGR: bitmapInfo = kCGImageAlphaNone; break;
+  case RGB: bitmapInfo = kCGImageAlphaNone; break;
+  case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
+  case ABGR: bitmapInfo = kCGImageAlphaPremultipliedLast; break;// wrong!
+  case BGRA: bitmapInfo = kCGImageAlphaPremultipliedFirst; break; // wrong!
+  case ARGB: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
+  case RGBM: bitmapInfo = kCGImageAlphaLast; break;
+  case MBGR: bitmapInfo = kCGImageAlphaLast; break; // wrong!
+  case BGRM: bitmapInfo = kCGImageAlphaFirst; break; // wrong!
+  case MRGB: bitmapInfo = kCGImageAlphaFirst; break;
   }
-  CGImageRef        img = CGImageCreate( w, h, 8, 8*delta, linedelta,
-					 lut, cgtype,
-					 src, 0L, false,
-					 kCGRenderingIntentDefault);
+  CGImageRef img;
+  if (pixeltype==MASK)
+    img = CGImageMaskCreate( w, h,
+			 8, // bitsPerComponent
+			 8*delta, // bitsPerPixel
+			 linedelta, // bytesPerRow
+			 src, // provider
+			 0L, // decode array (?)
+			 false); // shouldInterpolate
+  else
+    img = CGImageCreate( w, h,
+			 8, // bitsPerComponent
+			 8*delta, // bitsPerPixel
+			 linedelta, // bytesPerRow
+			 colorspace,
+			 bitmapInfo, // bitmapInfo
+			 src, // provider
+			 0L, // decode array (?)
+			 false, // shouldInterpolate
+			 kCGRenderingIntentDefault);
   // draw the image into the destination context
   if (fl_drawing_offscreen && fl_put_image_here) {
     // If we are making an Image, we have to remember the CGImage so we
@@ -119,9 +162,6 @@ static void innards(const uchar *buf,
 #endif
   }
   CGDataProviderRelease(src);
-  // ARRGH! Huge memory leak! I need a way to copy the image to the
-  // CGImageRef, so this can be deleted at all times!
-  if (!(fl_drawing_offscreen && fl_put_image_here)) delete[] tmpBuf;
 }
 
 void fltk::begin_quartz_image(CGRect &rect, const Rectangle &c) {

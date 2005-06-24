@@ -372,9 +372,25 @@ int ScrollGroup::handle(int event) {
   switch (event) {
 
   case FOCUS_CHANGE: {
-    //    return Group::handle(event);
+    return Group::handle(event);
     // The event indicates that the focus changed to a different child,
     // auto-scroll to show it:
+
+    // NO !!!!   FORTY TIMES NO!!!
+    // NO DO NOT SCROLL TO THE FOCUSSED CHILD
+    // NO DO NOT DO IT
+    // IT BREAKS THE CONTROL PANELS IN NUKE
+    // DO NOT ATTEMPT EVER TO KEEP THE FOCUSSED WIDGET IN THE SCROLL
+    // DO NOT DO IT
+    // IT DOES NOT WORK
+    // PLEASE PLEASE STOP PUTTING THIS CODE BACK BILL
+    // IF YOU SCROLL SO THAT THE FOCUSSED WIDGET GOES OFFSCREEN, CLICK THE FOCUS
+    // OFF THE CONTROL PANEL TO THE DAG WINDOW, THEN ANY CLICK IN THE CONTROL PANEL
+    // WILL ZIP THE SCROLLGROUP AWAY FROM WHAT YOU CLICKED ON, AND IT IS EXTREMELY
+    // ANNOYING AND A BUG.  PLEASE TALK TO ME BEFORE MAKING ANY CHANGES TO
+    // SCROLLGROUP OR PACKEDGROUP.  NOTHING IS MORE FRUSTRATING THAN DESIGNING CODE
+    // SPECIFIC TO A UI LIBRARY AND HAVING THAT LIBRARY CONSTANTLY CHANGE FROM UNDER YOU.
+
     Widget* w = fltk::focus();
     int x = w->x();
     int y = w->y();

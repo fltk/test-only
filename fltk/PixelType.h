@@ -34,26 +34,29 @@ namespace fltk {
   The types are described by the order the bytes are in memory. Thus
   RGB means R is stored at a byte with an address of one less than
   where G is stored. Warning: some Windows and X software describes
-  the pixels backwards from this. I use this standard because it
-  works for arrays of data larger than bytes.
+  the pixels backwards from this. I use this standard because the
+  symbols and code can be reused for pixels made of data larger
+  than a byte.
 
-  The Mask types are not supported except on OS/X, they render the
-  same as the premultiplied versions on other platforms. This may be
+  The non-premultiplied versions currently only works for drawimage() on
+  OS/X. In other cases it is treated as premultiplied. This may be
   fixed in the future.
 */
 enum PixelType {
-  MASK	= 0,	//!< 1 byte: 0xff = fltk::getcolor(), 0 = transparent
-  MONO	= 1,	//!< 1 byte: 0xff = fltk::getbgcolor(), 0 = fltk::getcolor() ("inverted" so that a b&w image looks correct in black color)
-  BGR 	= 2,	//!< often used by Windows software
-  RGB	= 3, 	//!< normal method of storing 3-channel color
-  RGBA	= 4,	//!< normal method of storing 4-channel color, array of fltk::Color on a big-endian machine
-  ABGR	= 5,	//!< array of fltk::Color on a little-endian machine
-  ARGB	= 6,	//!< some Windows software on a big-endian machine
-  BGRA	= 7,	//!< often used by Windows software
+  MASK	= 0,	//!< 1 byte for A, RGB are set to zero
+  MONO	= 1,	//!< 1 byte used for all of RGB, A set to 1.0
+  BGR 	= 2,	//!< used by Windows software, sometimes called RGB24.
+  RGB	= 3, 	//!< normal method of storing 3-channel color, A set to 1.0
+
+  RGBA	= 4,	//!< normal method of storing 4-channel color, fltk::Color on a big-endian machine
+  ABGR	= 5,	//!< fltk::Color on a little-endian machine
+  BGRA	= 6,	//!< common on little-endian machines, sometimes called ARGB32
+  ARGB	= 7,	//!< ARGB32 on a big-endian machine
+
   RGBM	= 8,	//!< RGBA but not premultiplied (M stands for "mask")
   MBGR	= 9,	//!< ABGR but not premultiplied
-  MRGB	=10,	//!< ARGB but not premultiplied
-  BGRM	=11	//!< BRGA but not premultiplied
+  BGRM	=10,	//!< BRGA but not premultiplied
+  MRGB	=11	//!< ARGB but not premultiplied
 };
 
 /**

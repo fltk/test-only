@@ -189,7 +189,7 @@ void bmpImage::read()
   // Then the bitmap information...
   unsigned info_size = read_dword();
 
-//  printf("offbits = %ld, info_size = %d\n", offbits, info_size);
+  //printf("offbits = %u, info_size = %d\n", offbits, info_size);
 
   if (info_size < 40) {
     // Old Windows/OS2 BMP header...
@@ -230,7 +230,7 @@ void bmpImage::read()
     }
   }
 
-  //  printf("w %d, h %d, bitsperpixel %d, compression %d, colors_used %d, repcount %d\n", w(), h(), bitsperpixel, compression, colors_used, repcount);
+  //printf("w %d, h %d, bitsperpixel %d, compression %d, colors_used %d, repcount %d\n", w(), h(), bitsperpixel, compression, colors_used, repcount);
 
   // Skip remaining header bytes...
   while (repcount > 0) {

@@ -376,21 +376,6 @@ static pascal void timerProcCB( EventLoopTimerRef, void* )
 }
 
 /**
- * Break the current event loop so that wait() returns, hopefully
- * after any events that already exist.
- */
-//+++ verify port to FLTK2
-static void breakMacEventLoop()
-{
-  EventRef breakEvent;
-  CreateEvent( 0, kEventClassFLTK, kEventFLTKBreakLoop, 0,
-	       kEventAttributeUserEvent, &breakEvent );
-  PostEventToQueue( GetCurrentEventQueue(), breakEvent,
-		    kEventPriorityLow /*kEventPriorityStandard*/ );
-  ReleaseEvent( breakEvent );
-}
-
-/**
  * Wait up to the given time for any events or sockets to become ready,
  * do the callbacks for the events and sockets. Returns non-zero if
  * anything happened during the time period.
@@ -458,7 +443,7 @@ static inline int fl_wait(double time)
   if ( time > 0.0 )
     SetEventLoopTimerNextFireTime( timer, time );
   else
-    breakMacEventLoop();
+    QuitApplicationEventLoop();
 
   RunApplicationEventLoop(); // will return after the previously set time
   fl_lock_function();
@@ -508,11 +493,19 @@ static inline int fl_ready() {
 //+++ verify port to FLTK2
 static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* reply, UInt32 refcon )
 {
-  while (!modal() && CreatedWindow::first ) {
-    CreatedWindow *x = CreatedWindow::first;
-    if (!x->window->parent()) x->window->do_callback();
-    // quit if callback did not close the window:
-    if ( CreatedWindow::first == x ) break;
+  if (modal()) {
+    exit_modal();
+  } else {
+    CreatedWindow* px = 0;
+    while (!modal()) {
+      CreatedWindow *x = CreatedWindow::first;
+      while (x && (x->window->parent()
+		   || x->window->child_of()
+		   || !x->window->visible())) x = x->next;
+      if (!x || x==px) break;
+      px = x;
+      x->window->do_callback();
+    }
   }
   QuitApplicationEventLoop();
   return noErr;
@@ -526,6 +519,19 @@ static void recursive_expose(CreatedWindow* i) {
   for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
 }
 
+static void fix_xfocus(Window* window) {
+  if (window == xfocus) return;
+  if (window) {
+    // help windows can't get the focus!
+    WindowClass winClass;
+    GetWindowClass( xid( window ), &winClass );
+    if ( winClass == kHelpWindowClass ) return;
+  }
+  xfocus = window;
+  fix_focus();
+  QuitApplicationEventLoop();
+}
+
 /* Carbon Window handler
  * This needs to be linked into all new window event handlers
  */
@@ -533,61 +539,57 @@ static void recursive_expose(CreatedWindow* i) {
 static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   UInt32 kind = GetEventKind( event );
-  OSStatus ret = eventNotHandledErr;
+  OSStatus ret = noErr;
   Window *window = (Window*)userData;
 
   switch ( kind )
   {
   case kEventWindowBoundsChanging:
-    break;
-  case kEventWindowDrawContent:
-    recursive_expose(CreatedWindow::find( window ));
-    breakMacEventLoop();
-    break;
-  case kEventWindowBoundsChanged: {
-    Rect r;
+    {Rect r;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top)) {
       resize_from_system = window;
-      if (window->layout_damage()&LAYOUT_WH) fltk::flush();
+      window->layout_damage( window->layout_damage() | LAYOUT_USER );
+      window->layout();
+      r.left = window->x();
+      r.top = window->y();
+      r.right = r.left+window->w();
+      r.bottom = r.top+window->h();
+      SetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, sizeof(Rect), &r );
     }
-    break; }
-  case kEventWindowShown: {
-//     GetWindowClass( xid( window ), &winClass );
-//     if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-//       xfocus = window;
-//       fix_focus();
-//     }
-//     Rect r;
-//     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
-//     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top))
-//       resize_from_system = window;
+    break;}
+  case kEventWindowDrawContent:
+    recursive_expose(CreatedWindow::find( window ));
+    QuitApplicationEventLoop();
+    break;
+  case kEventWindowBoundsChanged:
+#if 0
+    {Rect r;
+    GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
+    window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top);
+    resize_from_system = window;}
+#endif
+    fltk::flush();
+    break;
+  case kEventWindowShown:
     handle( SHOW, window);
-    break; }
+    break;
   case kEventWindowHidden:
     handle( HIDE, window);
     break;
-  case kEventWindowActivated: {
-    WindowClass winClass;
-    if ( window != xfocus ) {
-      GetWindowClass( xid( window ), &winClass );
-      if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        xfocus = window;
-	fix_focus();
-	//	breakMacEventLoop();
-      }
-    }
-    break; }
+  case kEventWindowActivated:
+    if (!xfocus) fix_xfocus(window);
+    ret = eventNotHandledErr; // without this it blocks until mouse moves?
+    break;
   case kEventWindowDeactivated:
-    if ( window == xfocus ) {
-      xfocus = 0;
-      fix_focus();
-      breakMacEventLoop();
-    }
+    if ( window == xfocus ) fix_xfocus(0);
+    ret = eventNotHandledErr;
     break;
   case kEventWindowClose:
     window->do_callback(); // this might or might not close the window
-    ret = noErr; // returning noErr tells Carbon to stop following up on this event
+    break;
+  default:
+    ret = eventNotHandledErr;
     break;
   }
 
@@ -665,16 +667,14 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   switch ( GetEventKind( event ) )
   {
   case kEventMouseDown:
+    fix_xfocus(window);
     part = FindWindow( pos, &tempXid );
     if ( part != inContent ) {
       CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
-      if ( xfocus != window ) { xfocus = window; fix_focus(); }
       break;
     }
     if ( !IsWindowActive( xid ) )
       CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
-    // allow the focus to be put on child windows:
-    if ( xfocus != window ) { xfocus = window; fix_focus(); }
     // normal handling of mouse-down follows
     os_capture = xid;
     sendEvent = PUSH;
@@ -805,6 +805,8 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macchar );
   unsigned short sym;
 
+  if (!xfocus) fix_xfocus((Window*)userData);
+
   switch ( GetEventKind( event ) )
   {
   case kEventRawKeyDown:
@@ -860,7 +862,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     mods_to_e_state( mods );
     break; }
   }
-  if (sendEvent && handle(sendEvent, (Window*)userData)) return noErr;
+  if (sendEvent && handle(sendEvent, xfocus)) return noErr;
   return CallNextEventHandler( nextHandler, event );
 }
 
@@ -880,7 +882,7 @@ void fltk::open_display() {
     
     FlushEvents(everyEvent,0);
 
-    MoreMasters(); // \todo Carbon suggests MoreMasterPointers()
+    //MoreMasters(); // \todo Carbon suggests MoreMasterPointers()
     AEInstallEventHandler( kCoreEventClass, kAEQuitApplication,
 	NewAEEventHandlerUPP((AEEventHandlerProcPtr)QuitAppleEventHandler),
 			   0, false );
@@ -891,9 +893,9 @@ void fltk::open_display() {
     default_cursor  = &default_cursor_ptr;
     current_cursor = default_cursor;
 
-    ClearMenuBar();
-    AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
-    DrawMenuBar();
+    //    ClearMenuBar();
+    //AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
+    //DrawMenuBar();
   }
 }
 
@@ -913,14 +915,14 @@ const Monitor& Monitor::all() {
     reload_info = false;
     BitMap r;
     GetQDGlobalsScreenBits(&r);
-    monitor.set(r.bounds.left, r.bounds.top, 
-                r.bounds.right - r.bounds.left, 
+    monitor.set(r.bounds.left, r.bounds.top,
+                r.bounds.right - r.bounds.left,
                 r.bounds.bottom - r.bounds.top);
     //++ there is a wonderful call in Carbon that will return exactly 
     //++ this information...
-    monitor.work.set(r.bounds.left, r.bounds.top+20, 
-                     r.bounds.right - r.bounds.left, 
-                     r.bounds.bottom - r.bounds.top - 20);
+    monitor.work.set(r.bounds.left, r.bounds.top+22,
+                     r.bounds.right - r.bounds.left,
+                     r.bounds.bottom - r.bounds.top - 22);
     //++ I don't know if this scale info is available...
     monitor.depth_ = 32;
     monitor.dpi_x_ = 100;
@@ -1033,7 +1035,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    breakMacEventLoop();
+    QuitApplicationEventLoop();
     return noErr;
   case kDragTrackingInWindow:
     GetDragMouse( dragRef, &mp, 0 );
@@ -1050,7 +1052,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    breakMacEventLoop();
+    QuitApplicationEventLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
@@ -1061,7 +1063,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
       handle( DND_LEAVE, dnd_target_window );
       dnd_target_window = 0;
     }
-    breakMacEventLoop();
+    QuitApplicationEventLoop();
     return noErr;
   }
   return noErr;
@@ -1144,20 +1146,26 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   free(buffer);
   
   dnd_target_window = 0L;
-  breakMacEventLoop();
+  QuitApplicationEventLoop();
   return noErr;
 }
 
 ////////////////////////////////////////////////////////////////
 
 void Window::borders( fltk::Rectangle *r ) const {
-  // dummy implementation that guesses, made this match Gnome...
   if (!this->border() || this->override() || this->parent()) {
     r->set(0,0,0,0);
-  } else if (maxw != minw || maxh != minh) { // resizable
-    r->set(-4,-21,4+4,21+4);
+  } else if (shown()) {
+    Rect inside; GetWindowBounds(i->xid, kWindowContentRgn, &inside);
+    Rect outside; GetWindowBounds(i->xid, kWindowStructureRgn, &outside);
+    r->set(outside.left-inside.left,
+	   outside.top-inside.top,
+	   (outside.right-outside.left)-(inside.right-inside.left),
+	   (outside.bottom-outside.top)-(inside.bottom-inside.top));
+  } else if (child_of() && !contains(modal())) {
+    r->set(0,-16,0,16);
   } else {
-    r->set(-4,-21,4+4,21+4);
+    r->set(0,-22,0,22);
   }
 }
 
@@ -1178,12 +1186,12 @@ void Window::layout() {
     // Ignore changes that came from the system
     resize_from_system = 0;
   } else if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
-    MoveWindow(i->xid, x(), y(), 0);
-    if (layout_damage() & LAYOUT_WH) {
-      SizeWindow(i->xid, w()>0 ? w() : 1, h()>0 ? h() : 1, 0);
-      Rect all; all.top=-32000; all.bottom=32000; all.left=-32000; all.right=32000;
-      InvalWindowRect( i->xid, &all );    
-    }
+    Rect rect;
+    rect.left = x();
+    rect.top = y();
+    rect.right = r();
+    rect.bottom = b();
+    SetWindowBounds(i->xid, kWindowContentRgn, &rect);
   }
   if (i) i->need_new_subRegion = true;
   Group::layout();
@@ -1273,8 +1281,6 @@ void Window::create()
       xyPos += 25;
       if (xyPos >= 200) xyPos -= (200-44);
     }
-    // stop it from putting title under menubar:
-    if (winattr && this->y()<44) this->y(44);
     Rect wRect;
     wRect.left   = this->x();
     wRect.top    = this->y(); 
@@ -1292,6 +1298,10 @@ void Window::create()
       RepositionWindow(x->xid, pw, where);
       Rect r; GetWindowBounds(x->xid, kWindowContentRgn, &r);
       this->resize(r.left, r.top, r.right-r.left, r.bottom-r.top);
+    } else if (border() && !override()) {
+      // stop it from putting title bar under the menubar:
+      Rect r; GetWindowBounds(x->xid, kWindowStructureRgn, &r);
+      if (r.top < 22) {y(y()+22-r.top); MoveWindow(x->xid, 0, y(), true);}
     }
 
     x->wait_for_expose = false;//true;
@@ -1495,7 +1505,7 @@ void fltk::fill_quartz_context() {
   CGContextScaleCTM(quartz_gc, 1.0f, -1.0f);
   static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
   CGContextSetTextMatrix(quartz_gc, font_mx);
-  setfont(current_font_, current_size_);
+  if (current_font_) setfont(current_font_, current_size_);
   setcolor(current_color_);
   restore_quartz_line_style();
 }
@@ -1537,8 +1547,20 @@ void Window::flush() {
     set_damage(DAMAGE_EXPOSE); draw();
     clip_region(0);
   }
-  if (i->gc) CGContextFlush(i->gc);
-  DrawGrowIcon(i->xid);
+  //DrawGrowIcon(i->xid);
+  if (border() && (minw != maxw || minh != maxh)) {
+    setcolor(color());
+    int s = child_of() && !contains(modal()) ? 12 : 15;
+    int x = w()-s;
+    int y = h()-s;
+    fillrect(Rectangle(x,y,s,s));
+    setcolor(GRAY15);
+    int d = s-12;
+    drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
+    drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
+    drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
+  }
+  CGContextFlush(i->gc);
 }
 
 //+++ verify port to FLTK2

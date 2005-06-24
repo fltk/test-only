@@ -30,6 +30,7 @@
 #if HAVE_GL
 
 #include <fltk/draw.h>
+#include <fltk/Font.h>
 #include <fltk/gl.h>
 #include <fltk/utf.h>
 #include <string.h>
@@ -38,32 +39,28 @@ using namespace fltk;
 
 extern GLContext fl_current_glcontext;
 
-#if USE_X11
-#undef HFONT
-#define HFONT XFontStruct*
-#elif USE_QUARTZ
-#define HFONT ATSFontRef
-#endif
-
 // Binary tree of all the glListBase assignments we have made so far:
 struct FontSize {
-  HFONT xfont;
   FontSize* left, *right;
   int listbase;
+  HFONT xfont;
 #if USE_QUARTZ
-  int size;
+  float size;
 #endif
 };
 static FontSize* root, *current;
 static HFONT current_xfont;
 
 void fltk::glsetfont(fltk::Font* font, float size) {
+#if USE_QUARTZ
+  size = int(size);
+#endif
   setfont(font, size); // necessary so measure() works
-  current_xfont = fltk::xfont();
+  current_xfont = xfont();
   if (!fl_current_glcontext) return;
   if (!current || current->xfont != current_xfont
 #if USE_QUARTZ
-      || current->size != int(size)
+      || current->size != size
 #endif
       ) {
     FontSize** p = &root;
@@ -71,8 +68,8 @@ void fltk::glsetfont(fltk::Font* font, float size) {
       if (current_xfont < (*p)->xfont) p = &((*p)->left);
       else if (current_xfont > (*p)->xfont) p = &((*p)->right);
 #if USE_QUARTZ
-      else if (int(size) < (*p)->size) p = &((*p)->left);
-      else if (int(size) > (*p)->size) p = &((*p)->right);
+      else if (size < (*p)->size) p = &((*p)->left);
+      else if (size > (*p)->size) p = &((*p)->right);
 #endif
       else {current = *p; goto GOTIT;}
     }
@@ -96,14 +93,13 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
     SelectObject(hdc, oldFid);
 #elif defined(__APPLE__)
-    current->size = int(size);
-    CFStringRef aname;
-    ATSFontGetName(current_xfont, kATSOptionFlagsDefault, &aname);
-    unsigned char pname[256];
-    CFStringGetPascalString(aname, pname, 256, kCFStringEncodingMacRoman);
+    current->size = size;
+    int attrib; const char* name = font->name(&attrib);
+    CFStringRef cfname = CFStringCreateWithCString(0L, name, kCFStringEncodingASCII);
     short cfont;
-    GetFNum(pname, &cfont);
-    aglUseFont(aglGetCurrentContext(), cfont, 0, (int)size, 0, 256, current->listbase);
+    GetFNum(CFStringGetPascalStringPtr(cfname, kCFStringEncodingMacRoman),&cfont);
+    CFRelease(cfname);
+    aglUseFont(aglGetCurrentContext(), cfont, attrib, (int)size, 0, 256, current->listbase);
 #else
 #error
 #endif

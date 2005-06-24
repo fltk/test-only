@@ -56,40 +56,59 @@ void xpmImage::_measure(int& w, int& h) const {
   }
 }
 
-extern Color fg_kludge;
+#if !USE_QUARTZ
+extern bool fl_did_monochrome;
+#if USE_X11
+extern uchar **fl_mask_bitmap;
+#endif
+#endif
 
 void xpmImage::_draw(const fltk::Rectangle& r) const
 {
+#if !USE_QUARTZ
   // detect our kludge for monochrome xpm images of letters:
-  if (!strcmp(data[1]," \tc #FFFFFF")) {
-    // it is monochrome...
-    if (getcolor() != this->fg || getbgcolor() != this->bg) {
-      xpmImage* t = const_cast<xpmImage*>(this);
-      t->destroy_cache();
-      fg_kludge = t->fg = getcolor();
-      t->bg = getbgcolor();
-    }
-    // clear this so Image does not draw a gray box for inactive image:
-    setdrawflags(drawflags()&~INACTIVE);
+  if (this->fg || this->bg) {
+#if USE_X11
+    if (getcolor() != this->fg || getbgcolor() != this->bg)
+#else
+    if (getcolor() != this->fg)
+#endif
+      (const_cast<xpmImage*>(this))->destroy_cache();
   }
+#endif
   if (!drawn()) {
+    xpmImage* t = const_cast<xpmImage*>(this);
     if (this->w() < 0) {
       int w,h;
       measure_xpm(data,w,h);
-      const_cast<xpmImage*>(this)->setsize(w,h);
+      t->setsize(w,h);
     }
     if (this->w() <= 0 || this->h() <= 0) return;
     GSave gsave;
-    const_cast<xpmImage*>(this)->make_current();
+    t->make_current();
+#if USE_QUARTZ
+    draw_xpm(data, 0, 0);
+#else
+    fl_did_monochrome = false;
+# if USE_X11
     uchar *bitmap = 0;
-    set_mask_bitmap(&bitmap);
-    draw_xpm(data, 0, 0, getbgcolor());
-    fg_kludge = 0;
-    set_mask_bitmap(0);
+    fl_mask_bitmap = &bitmap;
+# endif
+    draw_xpm(data, 0, 0);
+    if (fl_did_monochrome) {
+      t->fg = getcolor();
+      t->bg = getbgcolor();
+    } else {
+      t->fg = t->bg = 0;
+    }
+# if USE_X11
+    fl_mask_bitmap = 0;
     if (bitmap) {
       (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
       delete[] bitmap;
     }
+# endif
+#endif
   }
   Image::_draw(r);
 }

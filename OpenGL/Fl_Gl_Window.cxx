@@ -295,7 +295,7 @@ void GlWindow::layout() {
 #if USE_QUARTZ
     no_gl_context(); // because the BUFFER_RECT may change
 #endif
-#ifndef _WIN32
+#if USE_X11
     if (!resizable() && overlay && overlay != this)
       ((GlWindow*)overlay)->resize(0,0,w(),h());
 #endif
