@@ -1820,7 +1820,6 @@ void Window::borders( fltk::Rectangle *r ) const
     return;
   }
   // Request the border sizes using new API:
-  int bt = GetSystemMetrics(SM_CYCAPTION);
   if (shown()) {
     HWND hwnd = i->xid;
     // request the style flags of this window, as WIN32 sees them
@@ -1834,23 +1833,24 @@ void Window::borders( fltk::Rectangle *r ) const
     // get the decoration rectangle for the desired client rectangle
     BOOL ok = AdjustWindowRectEx(&rect, style, FALSE, exstyle);
     if (ok) {
-      r->set(rect.left-x(), rect.top-bt-y(),
+      r->set(rect.left-x(), rect.top-y(),
 	     rect.right-rect.left-w(),
-	     rect.bottom-rect.top+bt-h());
+	     rect.bottom-rect.top-h());
       return;
     }
   }
   // If window is not shown or it fails, use older api, which apparently
   // does not return correct sizes on XP?
+  int bt = GetSystemMetrics(SM_CYCAPTION);
+  int dx, by;
   if (maxw != minw || maxh != minh) { // resizable
-    int dx = GetSystemMetrics(SM_CXSIZEFRAME);
-    int by = GetSystemMetrics(SM_CYSIZEFRAME);
-    r->set(-dx, -(bt+by), 2*dx, bt+2*by);
+    dx = GetSystemMetrics(SM_CXSIZEFRAME);
+    by = GetSystemMetrics(SM_CYSIZEFRAME);
   } else { // fixed-size
-    int dx = GetSystemMetrics(SM_CXFIXEDFRAME);
-    int by = GetSystemMetrics(SM_CYFIXEDFRAME);
-    r->set(-dx, -(bt+by), 2*dx, bt+2*by);
+    dx = GetSystemMetrics(SM_CXFIXEDFRAME);
+    by = GetSystemMetrics(SM_CYFIXEDFRAME);
   }
+  r->set(-dx, -(bt+by), 2*dx, bt+2*by);
 }
 
 ////////////////////////////////////////////////////////////////
