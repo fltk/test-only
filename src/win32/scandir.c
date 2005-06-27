@@ -27,7 +27,11 @@
 #include <stdlib.h>
 #include <fltk/utf.h>
 
-struct dirent { char d_name[1]; };
+#if defined(__MINGW32__) || defined(__CYGWIN__)
+# include <dirent.h>
+#else
+  struct dirent { char d_name[1]; };
+#endif
 
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
