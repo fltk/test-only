@@ -251,7 +251,6 @@ void fltk::pngImage::read()
     GSave gsave;
     make_current();
     drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height), d);
-    if(d == 4) alpha = rgb;
   }
 
   png_read_end(png_ptr, NULL);

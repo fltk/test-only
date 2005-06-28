@@ -25,6 +25,7 @@
 
 #include <config.h>
 #include <fltk/x.h>
+namespace fltk {class Picture;}
 using namespace fltk;
 
 /*! \class fltk::GSave
@@ -35,9 +36,8 @@ using namespace fltk;
 
   To improve speed on some backends this may not preserve the font,
   color, path, or line settings, since these are usually changed
-  afterwards anyway. The matrix, clip, and what surface is being drawn
-  to are preserved. Also on some surfaces gsave() will clear the clip,
-  to avoid expensive duplicating of it.
+  afterwards anyway. GSave may also clear the clip, though it
+  will be restored by the destructor.
 
   \code
   if (!image.drawn()) {
@@ -58,7 +58,7 @@ using namespace fltk;
 #ifdef _WIN32
 extern HDC fl_bitmap_dc;
 #endif
-bool fl_drawing_offscreen = false;
+extern fltk::Picture* fl_current_picture;
 extern int fl_clip_w, fl_clip_h;
 
 GSave::GSave() {
@@ -76,8 +76,8 @@ GSave::GSave() {
 #else
 # error
 #endif
-  data[2] = (void*)(fl_drawing_offscreen ? -fl_clip_w : fl_clip_w);
-  data[3] = (void*)fl_clip_h;
+  data[2] = fl_current_picture;
+  data[3] = (void*)((fl_clip_w<<16)+(fl_clip_h&0xffff));
 }
 
 GSave::~GSave() {
@@ -91,10 +91,10 @@ GSave::~GSave() {
   quartz_window = (WindowPtr)data[0];
   quartz_gc = (CGContextRef)data[1];
 #endif
-  fl_clip_w = int((long)data[2]);
-  fl_drawing_offscreen = fl_clip_w < 0;
-  if (fl_drawing_offscreen) fl_clip_w = -fl_clip_w;
-  fl_clip_h = int((long)data[3]);
+  fl_current_picture = (fltk::Picture*)data[2];
+  unsigned v = (unsigned)data[3];
+  fl_clip_w = v >> 16;
+  fl_clip_h = v & 0xffff;
   pop_clip();
   pop_matrix();
 }

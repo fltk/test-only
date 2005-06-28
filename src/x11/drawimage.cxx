@@ -27,6 +27,7 @@
 
 #include <fltk/error.h>
 #include "XColorMap.h"
+#include "Picture.h"
 using namespace fltk;
 
 // A list of assumptions made about the X display:
@@ -442,6 +443,19 @@ static void figure_out_visual() {
   //printf("bytes per pixel %d, byte order %d\n",bytes_per_pixel,::i.byte_order);
 }
 
+static uchar fg[3];
+static uchar bg[3];
+static void mask_converter(const uchar* from, uchar* to, int w, int delta) {
+  uchar buffer[3*w];
+  uchar* bp = buffer;
+  for (int i = 0; i < w; i++) {
+    uchar c = *from; from += delta;
+    for (int j = 0; j < 3; j++)
+      *bp++ = (c*bg[j]+(255-c)*fg[j])>>8;
+  }
+  converter(buffer, to, w, 3);
+}
+
 #define MAXBUFFER 0x40000 // 256k
 
 // Combines both the callback and buffer image drawing functions
@@ -464,6 +478,16 @@ static void innards(const uchar *buf, PixelType type,
 
   void (*conv)(const uchar *from, uchar *to, int w, int delta) = converter;
   if (type == MONO) conv = mono_converter;
+  else if (type == MASK) {
+    split_color(getcolor(), fg[0],fg[1],fg[2]);
+    split_color(getbgcolor(), bg[0],bg[1],bg[2]);
+    if (fl_current_picture) {
+      fl_current_picture->mask = true;
+      fl_current_picture->fg = getcolor();
+      fl_current_picture->bg = getbgcolor();
+    }
+    conv = mask_converter;
+  }
 
 //   bool flip_order =
 //     type==BGR || type==ABGR || type==BGRA || type==MBGR || type==BGRM;

@@ -46,10 +46,6 @@ static int hexdigit(int x) {
   return 20;
 }
 
-#if USE_X11
-extern uchar **fl_mask_bitmap;
-#endif
-
 #define MAXSIZE 2048
 #define INITIALLINES 1024
 
@@ -180,18 +176,7 @@ void xpmFileImage::read()
   GSave gsave;
   const_cast<xpmFileImage*>(this)->make_current();
 
-#if USE_X11
-  uchar *bitmap = 0;
-  fl_mask_bitmap = &bitmap;
-#endif
   draw_xpm(ldata, 0, 0);
-#if USE_X11
-  fl_mask_bitmap = 0;
-  if (bitmap) {
-    (const_cast<xpmFileImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
-    delete[] bitmap;
-  }
-#endif
 
   if (loaded) {
     char* const* p = ldata;

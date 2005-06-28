@@ -73,7 +73,7 @@ void SharedImage::check_mem_usage()
     first_image->find_less_used();
     if (limage->drawn()) {
       mem_used -= limage->w() * limage->h();
-      limage->destroy_cache();
+      limage->destroy();
     } else return;
   } while(mem_used >= mem_usage_limit);
 }
@@ -95,7 +95,7 @@ void SharedImage::clear_cache()
 {
   if (drawn()) {
     mem_used -= w()*h();
-    destroy_cache();
+    destroy();
   }
   if (l1) l1->clear_cache();
   if (l2) l2->clear_cache();
@@ -171,7 +171,7 @@ void SharedImage::reload(const uchar* pdatas)
 {
   if (drawn()) {
     mem_used -= w()*h();
-    destroy_cache();
+    destroy();
   }
   if (pdatas) datas = pdatas;
 }

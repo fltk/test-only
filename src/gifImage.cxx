@@ -94,10 +94,6 @@ void gifImage::_measure(int &W, int &H) const
   if (!datas) fclose(GifFile);
 }
 
-#if USE_X11
-extern uchar **fl_mask_bitmap;
-#endif
-
 void gifImage::read()
 {
   const uchar* dat = datas;
@@ -390,18 +386,7 @@ void gifImage::read()
 
   {GSave gsave;
   make_current();
-#if USE_X11
-  uchar *bitmap = 0;
-  fl_mask_bitmap = &bitmap;
-#endif
   draw_xpm(data, 0, 0);
-#if USE_X11
-  fl_mask_bitmap = 0;
-  if (bitmap) {
-    set_alpha_bitmap(bitmap, w(), h());
-    delete[] bitmap;
-  }
-#endif
   }
 
   delete[] Image;

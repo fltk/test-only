@@ -1,9 +1,6 @@
-//
 // "$Id$"
 //
-// RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,23 +18,30 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <config.h>
 #include <fltk/rgbImage.h>
 #include <fltk/events.h>
 #include <fltk/draw.h>
-#include <fltk/x.h>
 
 using namespace fltk;
 
+/*! \class fltk::rgbImage
+
+  This can draw any style of pixel data that fltk::drawimage()
+  can draw. If you are drawing the same image repeatedly then this
+  is faster than using drawimage(). However this is slower if you
+  only draw the image once without changing it.
+
+  If you change the data in the buffer passed to the constructor,
+  you must call redraw() so that it knows to update the cached image.
+*/
 void rgbImage::_draw(const fltk::Rectangle& r) const
 {
   if (!drawn()) {
     GSave gsave;
     const_cast<rgbImage*>(this)->make_current();
-    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), depth_);
-    if (depth_ == 4) const_cast<rgbImage*>(this)->alpha = rgb;
+    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), depth_, linedelta_);
   }
   Image::_draw(r);
 }

@@ -36,9 +36,7 @@ public:
   const unsigned char *array;
   xbmImage(const unsigned char *bits, int w,int h) : Image(w,h), array(bits) {}
   xbmImage(const char *bits, int w, int h) : Image(w,h), array((const unsigned char *)bits) {}
-  void draw(int, int) const;
   void _draw(const Rectangle&) const;
-  void draw(const Rectangle& r) const {_draw(r);}
 };
 
 }

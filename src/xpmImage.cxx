@@ -1,6 +1,6 @@
 // "$Id$"
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,10 +39,8 @@
 // Implemented without using the xpm library (which I can't use because
 // it interferes with the color cube used by drawimage).
 
-#include <config.h>
 #include <fltk/xpmImage.h>
 #include <fltk/draw.h>
-#include <fltk/x.h>
 #include <fltk/string.h>
 using namespace fltk;
 
@@ -56,26 +54,8 @@ void xpmImage::_measure(int& w, int& h) const {
   }
 }
 
-#if !USE_QUARTZ
-extern bool fl_did_monochrome;
-#if USE_X11
-extern uchar **fl_mask_bitmap;
-#endif
-#endif
-
 void xpmImage::_draw(const fltk::Rectangle& r) const
 {
-#if !USE_QUARTZ
-  // detect our kludge for monochrome xpm images of letters:
-  if (this->fg || this->bg) {
-#if USE_X11
-    if (getcolor() != this->fg || getbgcolor() != this->bg)
-#else
-    if (getcolor() != this->fg)
-#endif
-      (const_cast<xpmImage*>(this))->destroy_cache();
-  }
-#endif
   if (!drawn()) {
     xpmImage* t = const_cast<xpmImage*>(this);
     if (this->w() < 0) {
@@ -86,29 +66,7 @@ void xpmImage::_draw(const fltk::Rectangle& r) const
     if (this->w() <= 0 || this->h() <= 0) return;
     GSave gsave;
     t->make_current();
-#if USE_QUARTZ
     draw_xpm(data, 0, 0);
-#else
-    fl_did_monochrome = false;
-# if USE_X11
-    uchar *bitmap = 0;
-    fl_mask_bitmap = &bitmap;
-# endif
-    draw_xpm(data, 0, 0);
-    if (fl_did_monochrome) {
-      t->fg = getcolor();
-      t->bg = getbgcolor();
-    } else {
-      t->fg = t->bg = 0;
-    }
-# if USE_X11
-    fl_mask_bitmap = 0;
-    if (bitmap) {
-      (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
-      delete[] bitmap;
-    }
-# endif
-#endif
   }
   Image::_draw(r);
 }

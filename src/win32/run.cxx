@@ -2190,6 +2190,8 @@ void Widget::make_current() const {
 }
 
 HDC fl_bitmap_dc;
+namespace fltk {class Picture;}
+fltk::Picture* fl_current_picture;
 
 void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   if (!fl_bitmap_dc) {
@@ -2203,6 +2205,7 @@ void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   load_identity();
   fl_clip_w = w;
   fl_clip_h = h;
+  fl_current_picture = 0;
 }
 
 void fltk::stop_drawing(HWND window) {}

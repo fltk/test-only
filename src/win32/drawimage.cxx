@@ -54,6 +54,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <windows.h>
+#include "Picture.h"
 
 using namespace fltk;
 
@@ -137,8 +138,6 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
-extern bool fl_drawing_offscreen;
-
 static void innards(const uchar *buf, PixelType type,
 		    const fltk::Rectangle& r1,
 		    int delta, int linedelta,
@@ -191,7 +190,13 @@ static void innards(const uchar *buf, PixelType type,
 
   // needed for MASK:
   uchar mr,mg,mb;
-  fltk::split_color(fltk::getcolor(),mr,mg,mb);
+  if (type == MASK) {
+    fltk::split_color(fltk::getcolor(),mr,mg,mb);
+    if (fl_current_picture) {
+      fl_current_picture->mask = true;
+      fl_current_picture->fg = fltk::getcolor();
+    }
+  }
 
   int ypos = y;
   for (int j=0; j<h; ) {
@@ -278,7 +283,15 @@ static void innards(const uchar *buf, PixelType type,
 
     bmi.bmiHeader.biHeight = -k;
     bmi.bmiHeader.biSizeImage = k*4*w;
-    if (fl_drawing_offscreen || type == MONO || type == RGB || type == BGR) {
+    if (fl_current_picture) {
+      SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
+			(LPSTR)buffer,
+			&bmi,
+			DIB_RGB_COLORS
+			);
+      fl_current_picture->opaque =
+	type == MONO || type == RGB || type == BGR;
+    } else if (type == MONO || type == RGB || type == BGR) {
       SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 			(LPSTR)buffer,
 			&bmi,
@@ -286,9 +299,9 @@ static void innards(const uchar *buf, PixelType type,
 			);
     } else {
       HBITMAP rgb = CreateDIBSection(dc, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-      HDC new_dc = CreateCompatibleDC(dc);
-      SelectObject(new_dc, rgb);
-      SetDIBitsToDevice(new_dc, 0, 0, w, k, 0, 0, 0, k,
+      HDC tempdc = CreateCompatibleDC(dc);
+      SelectObject(tempdc, rgb);
+      SetDIBitsToDevice(tempdc, 0, 0, w, k, 0, 0, 0, k,
 			(LPSTR)buffer,
 			&bmi,
 			DIB_RGB_COLORS
@@ -299,8 +312,8 @@ static void innards(const uchar *buf, PixelType type,
       m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
       m_bf.SourceConstantAlpha = 0xFF;
       AlphaBlend(dc, x, ypos, w, k,
-		 new_dc, 0, 0, w, k, m_bf);
-      DeleteDC(new_dc);
+		 tempdc, 0, 0, w, k, m_bf);
+      DeleteDC(tempdc);
       DeleteObject(rgb);
     }
     ypos += k;

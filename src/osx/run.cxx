@@ -1392,6 +1392,9 @@ static CGContextRef prev_gc = 0;
 static WindowPtr prev_window = 0;
 int fl_clip_w, fl_clip_h;
 
+namespace fltk {class Picture;}
+fltk::Picture* fl_current_picture;
+
 void fltk::draw_into(CGContextRef gc, int w, int h) {
   prev_gc = quartz_gc;
   prev_window = quartz_window;
@@ -1400,6 +1403,7 @@ void fltk::draw_into(CGContextRef gc, int w, int h) {
   fl_clip_w = w; fl_clip_h = h;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
+  fl_current_picture = 0;
 }
 
 void fltk::stop_drawing(CGImageRef) {

@@ -28,12 +28,10 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+#include "Picture.h"
 using namespace fltk;
 
 #define MAXBUFFER 0x40000 // 256k
-
-extern bool fl_drawing_offscreen;
-extern CGImageRef* fl_put_image_here;
 
 static void releaser(void*, const void* data, size_t size) {
   delete[] (U32*)data;
@@ -69,7 +67,7 @@ static void innards(const uchar *buf,
       const uchar* ret = cb(userdata, dx, dy+i, w, dest);
       if (ret != dest) memcpy(dest, ret, w*delta);
     }
-  } else if (fl_drawing_offscreen && fl_put_image_here) {
+  } else if (fl_current_picture) {
     // assist the big memory leak listed below!
     int n = (linedelta*h+3)/4;
     tmpBuf = new U32[n];
@@ -127,12 +125,14 @@ static void innards(const uchar *buf,
 			 false, // shouldInterpolate
 			 kCGRenderingIntentDefault);
   // draw the image into the destination context
-  if (fl_drawing_offscreen && fl_put_image_here) {
+  if (fl_current_picture) {
     // If we are making an Image, we have to remember the CGImage so we
     // can use it to draw the Image later. If there is a way to update
     // an existing CGImage this would be less of a kludge.
-    if (*fl_put_image_here) CGImageRelease(*fl_put_image_here);
-    *fl_put_image_here = img;
+    if (fl_current_picture->rgb) CGImageRelease(fl_current_picture->rgb);
+    fl_current_picture->rgb = img;
+    fl_current_picture->opaque =
+      pixeltype == MONO || pixeltype == RGB || pixeltype == BGR;
   } else if (img) {
     CGRect rect = { x, y, w, h };
     fltk::begin_quartz_image(rect, Rectangle(0, 0, w, h));

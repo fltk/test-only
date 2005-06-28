@@ -84,8 +84,8 @@ using namespace fltk;
 
   - \a pointer points at the first byte of the top-left pixel.
   - \a type describes how to interpret the bytes of each pixel.
-  - \a the image is put in the top-left corner of the rectangle,
-  possibly clipped by the rectangle's bottom and right edge.
+  - \a rectangle: the image is put in the top-left corner
+  and the width and height declare how many pixels the image has.
   - \a delta is how much to add to \a pointer to go 1 pixel to the right
   - \a line_delta is how much to add to \a pointer to go 1 pixel down
 

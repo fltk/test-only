@@ -1,9 +1,6 @@
-//
 // "$Id$"
 //
-// Image drawing code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <config.h>
 #include <fltk/Image.h>
@@ -30,83 +26,84 @@
 #include <fltk/draw.h>
 #include <fltk/x.h>
 
-
-#if !USE_X11 && defined(_WIN32)
-// Extra bitblt functions:
-#define NOTSRCAND       0x00220326 /* dest = (NOT source) AND dest */
-#define NOTSRCINVERT    0x00990066 /* dest = (NOT source) XOR dest */
-#define SRCORREVERSE    0x00DD0228 /* dest = source OR (NOT dest) */
-#define SRCNAND         0x007700E6 /* dest = NOT (source AND dest) */
-#define MASKPAT         0x00E20746 /* dest = (src & pat) | (!src & dst) */
-#define COPYFG          0x00CA0749 /* dest = (pat & src) | (!pat & dst) */
-#define COPYBG          0x00AC0744 /* dest = (!pat & src) | (pat & dst) */
-
-# if defined(__MINGW32__) || defined(__CYGWIN__) // || defined(__BORLANDC__)
-// AlphaBlend IS declared in these but only when WINVER is >= 500
-extern "C" {
-  WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
-}
-#  define AC_SRC_ALPHA		  0x01
-# endif
-#endif
-
-/*
-We support both "old" 1-bit alpha in a seperate object, and "new"
-8-bit alpha merged in with the rgb data. This is stored in the following
-way:
-
-if (rgb) {
-  if (alpha == rgb) {
-    rgb = 4-channel 8-bit image, do not use alpha independently
-  } else if (alpha) {
-    rgb = 3-channel 8-bit image, alpha = 1-bit image
-  } else {
-    rgb = 3-channel image, pretend alpha == 1 everywhere
-  }
-} else if (alpha) {
-  act like rgb==0, alpha = 1-bit alpha image (bitmap)
-} else {
-  image has not been set, don't draw anything
-}
-
-*/
-
 using namespace fltk;
 
 /*! \class fltk::Image
 
   This subclass of Symbol draws a very common thing: a fixed-size
-  "offscreen" image, possibly with alpha information.
+  "offscreen" image, containing color and alpha information for
+  a rectangle of pixels.
 
-  <i>If you are changing the image a lot (for instance a movie
-  playback or a painting program) you probably don't want to use
-  this.</i> Just call fltk::drawimage() directly with your image buffer.
+  This is for \e static images. If your image is changing (ie a movie
+  playback, or the image in a painting program) then you <i>do not
+  want to use this</i>. Just call fltk::drawimage() directly with your
+  image buffer. Notice that fltk1 had numerous calls for messing with
+  the image, these have been deleted in fltk2 to prevent misuse of
+  this object.
 
-  In theory, you create the offscreen image by using setsize() to set
-  the dimensions and then use make_current(), then draw using any fltk
-  drawing calls.  After that doing draw() will composite the image,
-  with scaling, into the output. In reality, due to the primitive
-  nature of most drawing libraries, the alpha channel will only work
-  if you limit your drawing to a single fltk::drawimage().
+  The theoretical API is that you can draw anything using fltk calls
+  into the image:
 
-  In addition some systems cannot correctly handle changes to
-  fltk::getcolor() or fltk::getbgcolor() without redrawing. The
-  is_correct_color() method will return false in this case, if you
-  then call draw() it will either do nothing or draw the wrong thing.
+\code
+  static fltk::Image image;
+  if (!image.drawn()) { // have we been here before?
+    // no, draw the image's contents:
+    fltk::GSave gsave;
+    image.setsize(w,h);
+    image.make_current();
+    fltk::drawtext(...); // any fltk drawing code you want
+  }
+  // now draw a lot of copies quickly:
+  for (int i=0; i<100; i++)
+    image.over(x+(i%10)*w, y+(i/10)*h);
+\endcode
 
-  There are many subclasses that take in-memory data such as a jpeg
-  image. They implement draw() to correctly call the above so the
-  offscreen image is always drawn correctly.
+  The unfortunate reality is that, due to the limits of the underlying
+  graphics API's, the only drawing that is guaranteed to work is to
+  do a single fltk::drawimage() with the rectangle exactly equal to
+  0,0,w(),h(). Also if you pask fltk::MASK as the pixeltype to
+  drawimage(), this is remembered, and over() will fill with the
+  current color.
 
-  Call destroy_cache() to get rid of the memory and system resources
-  used by the offscreen image.
+  In theory the current transformation is applied to the image when
+  drawing it. Again the unfortunate reality is that on some systems
+  anything other than the translation is ignored (however on most
+  systems of interest scaling but not rotation works).
+
+  Because Image is a subclass of Symbol, it may be used as a
+  Widget::image() or as the box() in a Style. If you give it a name it
+  can be drawn with "@name;" in a label. The draw() method will set
+  the scale so that the image is scaled to fill the rectangle. Unless
+  you have done make_current() it will draw as nothing, so you may
+  want to do a subclass where draw() is implemented like this:
+
+\code
+  void MyImage::_draw(const Rectangle& r) const {
+    if (!drawn()) {
+      fltk::GSave gsave;
+      (const_cast<MyImage*>(this))->make_current();
+      fltk::drawimage(...);
+    }
+    fltk::Image::_draw(r);
+  }
+\endcode
+
+  There are a number of subclasses that use the above method to
+  draw jpeg or png images, either from in-memory data buffers
+  or from files.
+
+  For use as a Style::box(), you can subclass and override the
+  inset() method. The draw() function will take the inset at
+  the unscaled size and the inset of the drawing rectangle, and
+  cut the image into 9 parts, scaling each of them so that the
+  inset edges line up.
 
   <i>There is no destructor</i> due to C++'s lame insistence
   that it be called on static objects. An fltk program may contain
   many static instances and this destruction is a waste of time on
   program exit, plus work must be done to avoid losing the display
   connection before the destruction. If you do want to destroy an
-  Image, you must call destroy_cache() before doing so.
+  Image, you must call destroy() before doing so.
 */
 
 /*! \fn Image::Image(const char* name)
@@ -131,57 +128,35 @@ using namespace fltk;
   Return the width of the image in pixels. You can change this with
   setsize().
 */
+
 /*! \fn int Image::height() const
   Return the height of the image in pixels. You can change this with
   setsize().
 */
 
 /*! Change the size of the stored image. If it is different then
-  destroy_cache() is called. */
+  destroy() is called. */
 void Image::setsize(int w, int h) {
   if (w == w_ && h == h_) return;
-  destroy_cache();
+  destroy();
   w_ = w;
   h_ = h;
 }
 
-/*! Throw away any drawn data, restoring back to a transparent rectangle.
-  You must subsequently to make_current() to start drawing it again.
+/*! \fn void Image::redraw() {
+  Delete any cached data, reverting to a transparent rectangle, and
+  make drawn() return false.
 */
-void Image::destroy_cache() {
-#if USE_X11
-  stop_drawing((XWindow)rgb);
-  if (alpha && alpha!=rgb) XFreePixmap(xdisplay, (Pixmap)alpha);
-  if (rgb) XFreePixmap(xdisplay, (Pixmap)rgb);
-  alpha = rgb = 0;
-#elif defined(_WIN32)
-  stop_drawing((HBITMAP)rgb);
-  if (alpha && alpha != rgb) DeleteObject((HBITMAP)alpha);
-  if (rgb) DeleteObject((HBITMAP)rgb);
-  alpha = rgb = 0;
-#elif USE_QUARTZ
-  //stop_drawing((CGImageRef)rgb);
-  //if (alpha && alpha != rgb) {CGImageRelease((CGImageRef)alpha); alpha = 0;}
-  if (rgb) {CGImageRelease((CGImageRef)rgb); rgb = 0;}
-  alpha = 0;
-#else
-#error
-#endif
-}
 
 /*! \fn bool Image::drawn() const
   Returns true if make_current() has been called since the Image
-  was constructed or since destroy_cache() was called. Subclasses
+  was constructed or since redraw() was called. Subclasses
   use this to decide if they can call the base class _draw() without
   any more setup.
 */
 
-extern bool fl_drawing_offscreen;
-#if USE_QUARTZ
-CGImageRef* fl_put_image_here;
-#endif
-
-/*! Make all the \ref drawing functions draw into the offscreen image,
+/*! \fn void Image::make_current();
+  Make all the \ref drawing functions draw into the offscreen image,
   possibly creating the arrays used to store it.
 
   This is designed to be called outside of drawing code, as it will
@@ -189,385 +164,9 @@ CGImageRef* fl_put_image_here;
   are drawing a widget (or drawing another Image) you must use a
   GSave object to save the state.
 */
-void Image::make_current() {
-#if USE_QUARTZ
-  // Current kludge is to rely on drawimage() creating the CGImageRef
-  // object and stashing it here
-  if (rgb) {CGImageRelease((CGImage*)rgb); rgb = 0;}
-  fl_put_image_here = (CGImageRef*)(&rgb);
-  fl_drawing_offscreen = true;
-#else
-  if (!rgb) {
-    open_display();
-    if (w_<1) w_ = 1;
-    if (h_<1) h_ = 1;
-#if USE_X11
-    rgb = (void*)(XCreatePixmap(xdisplay, xwindow, w_, h_, xvisual->depth));
-#elif defined(_WIN32)
-    //rgb = (void*)(CreateCompatibleBitmap(getDC(), w_, h_));
 
-    // Use CreateDIBSection instead, it seems to be only reliable way to
-    // make AlphaBlend function working correctly always..
-
-    BITMAPINFO bmi;
-    // zero the memory for the bitmap info
-    memset(&bmi, 0, sizeof(BITMAPINFO));
-    // setup bitmap info 
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = w_;
-    bmi.bmiHeader.biHeight = h_;
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;         // four 8-bit components
-    bmi.bmiHeader.biCompression = BI_RGB;
-    bmi.bmiHeader.biSizeImage = w_ * h_ * 4;
-
-    rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);
-#elif USE_QUARTZ
-#if 0
-    // seems to be an attempt to create a drawing area, but no sign it works..
-    // Also is data freed, or is this a huge memory leak?
-    static CGColorSpaceRef lut = 0;
-    if (!lut) lut = CGColorSpaceCreateDeviceRGB();
-    void* data = new char[w_*h_*4];
-    rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut,
-				kCGImageAlphaPremultipliedLast);
-#endif
-#endif
-    fl_drawing_offscreen = true;
-  }
-#if USE_X11
-  draw_into((XWindow)rgb, w_, h_);
-#elif defined(_WIN32)
-  draw_into((HBITMAP)rgb, w_, h_);
-  alpha = rgb;
-#elif USE_QUARTZ
-  draw_into((CGContextRef)rgb, w_, h_);
-#endif
-#endif
-}
-
-/** Set the alpha channel directly to a 1-bit alpha mask.
-
-    This method provides direct access to the primitive alpha channel
-    setting code that is on X11 and GDI32. Any existing alpha channel
-    is directly replaced with the 1-bit mask, and the image size is
-    set to w,h.
-
-    Each bit of the data is a pixel of alpha, where 1 indicates
-    opaque and 0 indicates clear. Each byte supplies 8 bits, the
-    high bit being the left-most one. Rows are padded out to the
-    next multiple of 8, so the left-most column of every row is
-    the high bit of the mask.
-
-    Subclasses can use this if they have a 1-bit mask:
-
-    \code
-    MyImage::draw(x,y,w,h,style,flags) {
-      if (!drawn()) {
-        GSave gsave;
-	(const_cast<Image*>(this))->make_current();
-	draw_rgb_part();
-        uchar* data = generate_ae_bitmap();
-	const_cast<Image*>(this)->set_alpha_bitmap(bitmap, w, h);
-	delete[] data;
-      }
-      Image::_draw(x,y,w,h,style,flags);
-    }
-    \endcode
-*/
-void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
-  if (!rgb) {w_ = w; h_ = h;}
-#if USE_X11
-  if (alpha && alpha != rgb) XFreePixmap(xdisplay, (Pixmap)alpha);
-  alpha = (void*)XCreateBitmapFromData(xdisplay, xwindow, (char*)bitmap, (w+7)&-8, h);
-#elif defined(_WIN32)
-  if (alpha && alpha != rgb) DeleteObject((HBITMAP)alpha);
-  // this won't work when the user changes display mode during run or
-  // has two screens with differnet depths
-  static uchar hiNibble[16] =
-  { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
-    0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
-  static uchar loNibble[16] =
-  { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
-    0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
-  int Bpr = (w+7)/8;			//: bytes per row
-  int pad = Bpr&1, w1 = (w+7)/8; //shr = ((w-1)&7)+1;
-  uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray;
-  const uchar* src = bitmap;
-  for (int i=0; i<h; i++) {
-    //: this is slooow, but we do it only once per pixmap
-    for (int j=w1; j>0; j--) {
-      uchar b = *src++;
-      *dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
-    }
-    if (pad)
-      *dst++ = 0;
-  }
-  alpha = (void*)CreateBitmap(w, h, 1, 1, newarray);
-  delete[] newarray;
-#elif USE_QUARTZ
-  if (rgb) return;
-  // 1 bit mask code:
-  static uchar reverse[16] = /* Bit reversal lookup table */
-    { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
-      0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
-  int rowBytes = (w+7)>>3 ;
-  uchar *bmask = new uchar[rowBytes*h];
-  uchar *dst = bmask;
-  const uchar *src = bitmap;
-  for ( int i=rowBytes*h; i>0; i--,src++ ) {
-    *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
-  }
-  CGDataProviderRef srcp = CGDataProviderCreateWithData( 0L, bmask, rowBytes*h, 0L);
-  CGImageRef id = CGImageMaskCreate( w, h, 1, 1, rowBytes, srcp, 0L, false);
-  CGDataProviderRelease(srcp);
-  alpha = (void*)id;
-#else
-#endif
-}
-
-void fl_restore_clip(); // in rect.C
-
-// This macro creates rectangle R and modifies src_x,src_y to a region
-// that is visible and clipped to the size of the image. It will call
-// return if it is invisible.
-#define clip_code() \
-  fltk::Rectangle ir(r1); transform(ir); \
-  fltk::Rectangle R(ir); if (!intersect_with_clip(R)) return; \
-  src_x += R.x()-ir.x(); \
-  if (src_x < 0) {R.move_x(-src_x); src_x = 0;} \
-  if (src_x >= w_) return; \
-  if (src_x+R.w() > w_) R.w(w_-src_x); \
-  if (R.w() <= 0) return; \
-  src_y += R.y()-ir.y(); \
-  if (src_y < 0) {R.move_y(-src_y); src_y = 0;} \
-  if (src_y >= h_) return; \
-  if (src_y+R.h() > h_) R.h(h_-src_y); \
-  if (R.h() <= 0) return
-
-/*! Copy a rectangle of rgb from the cached image to the current output.
-  This is the same as over() except it pretends the alpha is all 1's.
-
-  The image is positioned so the pixel at src_x, src_y is placed at
-  the top-left of the rectangle \a r (or the equivalent if src_x,src_y
-  are outside the image). The part of the image that then intersects
-  \a r is then drawn.
-*/
-void Image::copy(const fltk::Rectangle& r1, int src_x, int src_y) const {
-  // handle undrawn images like the documentation says, as black:
-  if (!rgb) {setcolor(BLACK); fillrect(r1); return;}
-  clip_code();
-#if USE_X11
-  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc,
-	    src_x, src_y, R.w(), R.h(), R.x(), R.y());
-#elif defined(_WIN32)
-  HDC new_dc = CreateCompatibleDC(dc);
-  SelectObject(new_dc, (HBITMAP)rgb);
-  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCCOPY);
-  DeleteDC(new_dc);
-#elif USE_QUARTZ
-  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
-  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
-  if (rgb) {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
-  } else {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
-  }
-  fltk::end_quartz_image();
-#else
-#error
-#endif
-}
-
-// Link against msimg32 lib to get the AlphaBlend function:
-#if defined(_MSC_VER)
-# pragma comment(lib, "msimg32.lib")
-#endif
-
-/*! Merge the image over whatever is in the current output. If this
-  image has no alpha this is the same as copy. If there is an alpha
-  channel then pixels are replaced as a "non premultiplied over"
-  operation. If A is the Image's pixel, a is the alpha normalized
-  to 0-1, and B is the pixel already in the output, the new output
-  pixel is A*a+B*(1-a).
-
-  The image is positioned so the pixel at src_x, src_y is placed at
-  the top-left of the rectangle \a r (or the equivalent if src_x,src_y
-  are outside the image). The part of the image that then intersects
-  \a r is then drawn.
-*/
-void Image::over(const fltk::Rectangle& r1, int src_x, int src_y) const {
-
-  // Draw bitmaps as documented, the rgb pretends to be black:
-  if (!rgb) { /*setcolor(BLACK);*/ fill(r1, src_x, src_y); return; }
-
-  // Don't waste time for solid white alpha:  
-  if (!alpha) { copy(r1, src_x, src_y); return; }
-
-  // okay now we know we have rgb and alpha, draw it:
-  clip_code();
-#if USE_X11
-  // I can't figure out how to combine a mask with existing region,
-  // so the mask replaces the region instead. This can draw some of
-  // the image outside the current clip region if it is not rectangular.
-  if (alpha != rgb) XSetClipMask(xdisplay, gc, (Pixmap)alpha);
-  // alpha == rgb indicates a real alpha is in the source pixmap. I think
-  // the Render extension is needed to draw that...
-  XSetClipOrigin(xdisplay, gc, R.x()-src_x, R.y()-src_y);
-  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc,
-	    src_x, src_y, R.w(), R.h(), R.x(), R.y());
-  // put the old clip region back:
-  XSetClipOrigin(xdisplay, gc, 0, 0);
-  fl_restore_clip();
-#elif defined(_WIN32)
-  if (alpha == rgb) {
-    HDC new_dc = CreateCompatibleDC(dc);
-    SelectObject(new_dc, (HGDIOBJ)rgb);	
-    BLENDFUNCTION m_bf;
-    m_bf.BlendOp = AC_SRC_OVER;
-    m_bf.BlendFlags = 0;
-    m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
-    m_bf.SourceConstantAlpha = 0xFF;
-    AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(),
-	       new_dc, src_x, src_y, R.w(), R.h(), m_bf);
-    DeleteDC(new_dc);
-    return;
-  }
-  // Various attempts to get GDI32 to obey 1-bit mask channel. ARRGH!
-# if 1
-  HDC new_dc = CreateCompatibleDC(dc);
-  // Old version, are we sure this does not work?
-  SetTextColor(dc, 0);
-  SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, NOTSRCAND);
-  SelectObject(new_dc, (HBITMAP)rgb);
-  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCPAINT);
-  DeleteDC(new_dc);
-# else
-# if 0
-  // I found this in the documentation. It works, but (unbelivable!) it
-  // blinks worse than the more complicated code below. Darn you, Gates!
-  HDC new_dc = CreateCompatibleDC(dc);
-  SelectObject(new_dc, (HBITMAP)rgb);
-  MaskBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y,
-	  (HBITMAP)alpha, src_x, src_y,
-	  MAKEROP4(SRCCOPY,0xEE0000));
-  DeleteDC(new_dc);
-# else
-  // VP : new code to draw masked image under windows.
-  // Maybe not optimal, but works for win2k/95 and probably 98
-  // WAS: This can probably be fixed by having set_bitmap_alpha mangle
-  // the rgb buffer to do this "premultiply". However I really suspect
-  // there is a direct method of doing this...
-  //setbrush();
-  SetTextColor(dc, 0);
-  HDC new_dc = CreateCompatibleDC(dc);
-  SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, NOTSRCAND);
-  HDC new_dc2 = CreateCompatibleDC(dc);
-  SelectObject(new_dc2, (HBITMAP)rgb);
-  BitBlt(new_dc2, 0, 0, w_, h_, new_dc, 0, 0, SRCAND); // This should be done only once for performance
-  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc2, src_x, src_y, SRCPAINT);
-  DeleteDC(new_dc2);
-  DeleteDC(new_dc);
-# endif
-# endif
-#elif USE_QUARTZ
-  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
-  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
-  if (rgb) {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
-  } else {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
-  }
-  fltk::end_quartz_image();
-#else
-#error
-#endif
-}
-
-/** Draw the alpha channel in the current color.
-
-  The alpha is used to mix each output pixel between it's current
-  color and the color set with fltk::setcolor(). Another way to state
-  this is that it acts like the rgb data is a solid rectangle of the
-  current color, and then draws the image, including any alpha
-  channel.
-
-  This is very useful for making a 1-channel image that works just like
-  an anti-aliased character in a font, and can be drawn in any color.
-  It is also used to draw inactive images.
-*/
-void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
-{
-  // If there is no alpha channel then act like it is all white
-  // and thus a rectangle should be drawn:
-  if (!alpha) {fillrect(r1); return;}
-
-  clip_code();
-#if USE_X11
-  // alpha == rgb indicates a real alpha is in the source pixmap. I think
-  // the Render extension is needed to draw that, this draws a solid rectangle:
-  if (alpha != rgb) {
-    XSetStipple(xdisplay, gc, (Pixmap)alpha);
-    int ox = R.x()-src_x; if (ox < 0) ox += w_;
-    int oy = R.y()-src_y; if (oy < 0) oy += h_;
-    XSetTSOrigin(xdisplay, gc, ox, oy);
-    XSetFillStyle(xdisplay, gc, FillStippled);
-  }
-  XFillRectangle(xdisplay, xwindow, gc, R.x(), R.y(), R.w(), R.h());
-  XSetFillStyle(xdisplay, gc, FillSolid);
-#elif defined(_WIN32)
-  HDC tempdc = CreateCompatibleDC(dc);
-  if (alpha == rgb) {
-    // This is still not correct.. According to:
-    //   "if C is the current color set with fltk::setcolor(),
-    //   A is the alpha, and the current display is B,
-    //   replace each pixel with B*(1-A)+A*C."
-    // (ie ignore the rgb and act like the current color is a solid rectangle
-    //fillrect(X,Y,w,h);
-    SelectObject(tempdc, (HGDIOBJ)rgb);	
-    BLENDFUNCTION m_bf;
-    m_bf.BlendOp = AC_SRC_OVER;
-    m_bf.BlendFlags = 0;
-    m_bf.AlphaFormat = 0x1;
-    m_bf.SourceConstantAlpha = 50;
-    AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(), tempdc,
-	       src_x, src_y, R.w(), R.h(), m_bf);
-  } else {
-    // 1-bit alpha
-    SetTextColor(dc, 0); // VP : seems necessary at least under win95
-    setbrush();
-    SelectObject(tempdc, (HBITMAP)alpha);
-    // On my machine this does not draw the right color! But lots of
-    // documentation indicates that this should work:
-    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, src_x, src_y, MASKPAT);
-  }
-  DeleteDC(tempdc);
-#elif USE_QUARTZ
-  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
-  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
-  if (rgb) {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
-  } else {
-    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
-  }
-  fltk::end_quartz_image();
-#else
-# error
-#endif
-}
-
-/** Virtual method from Symbol baseclass, draws the image.
-    This may use drawflags(INACTIVE) to gray out the image. Currently
-    NYI as this may be system-specific.
-*/
-void Image::_draw(const fltk::Rectangle& r) const
-{
-  over(r,0,0);
-}
-
-/*! By default Image assummes the constructor set the w_ and h_
+/**
+  By default Image assummes the constructor set the w_ and h_
   fields, and returns them.
 
   For many subclasses (such as ones that read a file!) you certainly
@@ -578,10 +177,10 @@ void Image::_draw(const fltk::Rectangle& r) const
 */
 void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
 
-/*! If the image has no alpha, it claims to fill the box. This is
-  only true if you draw the size it returned from measure() or
-  smaller. */
-bool Image::fills_rectangle() const {return rgb && !alpha;}
+/*! \fn bool Image::fills_rectangle() const
+  Peeks into the internal data and returns true if it knows that
+  the alpha is solid 1 everywhere in the rectangle.
+*/
 
 #include <fltk/Widget.h>
 
@@ -591,6 +190,50 @@ bool Image::fills_rectangle() const {return rgb && !alpha;}
 void Image::label(Widget* o) {
   o->image(this);
   o->label(0);
+}
+
+/**
+  This does measure() and then draw(Rectangle(x,y,w(),h()). Thus it
+  draws it without any scaling and with the top-left corner at the x,y
+  position.
+*/
+void Image::draw(int x, int y) const {
+  int w,h; measure(w,h);
+  draw(Rectangle(x,y,w,h));
+}
+
+#if USE_X11
+# include "x11/Image.cxx"
+#elif defined(_WIN32)
+# include "win32/Image.cxx"
+#elif USE_QUARTZ
+# include "osx/Image.cxx"
+#else
+# error
+#endif
+
+/**
+  Virtual method from Symbol baseclass, calls over() after
+  setting the transform to scale it to fill the rectangle. (If
+  you override inset() then this will do a much more complex
+  scale and clipping and multiple calls to over() to scale
+  the borders and interior to match).
+
+  It is possible this will use drawflags(INACTIVE) to gray out
+  the image is a system-specific way. NYI.
+*/
+void Image::_draw(const fltk::Rectangle& r) const
+{
+  if (!drawn() || r.empty()) return;
+  over(r.x(), r.y());
+}
+
+/**
+  Same as redraw() but it also deallocates as much memory as possible.
+*/
+void Image::destroy() {
+  delete picture;
+  picture = 0;
 }
 
 //
