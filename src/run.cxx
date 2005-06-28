@@ -256,6 +256,21 @@ static void elapse_timeouts() {
 // time interval:
 static float missed_timeout_by;
 
+static void _add_timeout(float time, TimeoutHandler cb, void *arg) {
+  if (time < -.05f) time = 0; // prevent missed_timeout_by from accumulating
+  Timeout* t = free_timeout;
+  if (t) free_timeout = t->next;
+  else t = new Timeout;
+  t->time = time;
+  t->cb = cb;
+  t->arg = arg;
+  // insert-sort the new timeout:
+  Timeout** p = &first_timeout;
+  while (*p && (*p)->time <= time) p = &((*p)->next);
+  t->next = *p;
+  *p = t;
+}
+
 /*!
   Add a one-shot timeout callback. The function will be called by
   fltk::wait() at t seconds after this function is called. The
@@ -263,19 +278,17 @@ static float missed_timeout_by;
 */
 void fltk::add_timeout(float time, TimeoutHandler cb, void *arg) {
   elapse_timeouts();
-  repeat_timeout(time, cb, arg);
+  _add_timeout(time, cb, arg);
 }
 
 /*!
-
-  Inside a timeout callback you can call this to add another
-  timeout. Rather than the time being measured from "now", it is
-  measured from when the system call elapsed that caused this timeout
-  to be called. This will result in far more accurate spacing of the
-  timeout callbacks, it also has slightly less system call
-  overhead. (It will also use all your machine time if your timeout
-  code and fltk's overhead take more than t seconds, as the real
-  timeout will be reduced to zero).
+  Similar to add_timeout(), but rather than the time being measured
+  from "now", it is measured from when the system call elapsed that
+  caused this timeout to be called. This will result in far more
+  accurate spacing of the timeout callbacks, it also has slightly less
+  system call overhead. (It will also use all your machine time if
+  your timeout code and fltk's overhead take more than t seconds, as
+  the real timeout will be reduced to zero).
 
   Outside a timeout callback this acts like add_timeout().
 
@@ -294,18 +307,7 @@ main() {
 \endcode 
 */
 void fltk::repeat_timeout(float time, TimeoutHandler cb, void *arg) {
-  time += missed_timeout_by; if (time < -.05f) time = 0;
-  Timeout* t = free_timeout;
-  if (t) free_timeout = t->next;
-  else t = new Timeout;
-  t->time = time;
-  t->cb = cb;
-  t->arg = arg;
-  // insert-sort the new timeout:
-  Timeout** p = &first_timeout;
-  while (*p && (*p)->time <= time) p = &((*p)->next);
-  t->next = *p;
-  *p = t;
+  _add_timeout(time+missed_timeout_by, cb, arg);
 }
 
 /*!
@@ -505,8 +507,6 @@ int fltk::wait(float time_to_wait) {
     Timeout *t;
     while ((t = first_timeout)) {
       if (t->time > 0) break;
-      // The first timeout in the array has expired.
-      missed_timeout_by = t->time;
       // We must remove timeout from array before doing the callback:
       void (*cb)(void*) = t->cb;
       void *arg = t->arg;
@@ -514,6 +514,7 @@ int fltk::wait(float time_to_wait) {
       t->next = free_timeout;
       free_timeout = t;
       // Now it is safe for the callback to do add_timeout:
+      missed_timeout_by = t->time; // make repeat_timeout more accurate
       cb(arg);
       // return true because something was done:
       ret = 1;
