@@ -1,4 +1,4 @@
-// "$Id: visual.h,v 1.5 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -47,7 +47,7 @@ enum {
 
 extern FL_API bool visual(int);
 
-extern FL_API bool glVisual(int);
+extern FL_GL_API bool glVisual(int);
 
 extern FL_API void own_colormap();
 
