@@ -1548,62 +1548,64 @@ public:
     sides = s;
     align(ALIGN_INSIDE|ALIGN_CLIP);
   }
+
   int handle(int event) {
     static int ox = -1;
     static bool left = true;
     static bool enter_before_leave = false;
     switch (event) {
       case fltk::LEAVE:
-	if (!enter_before_leave) cursor(fltk::CURSOR_DEFAULT);
-	enter_before_leave = false;
-	break;
+        if (!enter_before_leave) cursor(fltk::CURSOR_DEFAULT);
+        enter_before_leave = false;
+        break;
       case fltk::ENTER:
-	enter_before_leave = true;
-	// fall through
+        enter_before_leave = true;
+        // fall through
       case fltk::MOVE:
-	if (sides&1 && fltk::event_x()<=2) {
-	  cursor(fltk::CURSOR_WE);
-	} else if (sides&2 && fltk::event_x()>=w()-2) {
-	  cursor(fltk::CURSOR_WE);
-	} else {
-	  cursor(fltk::CURSOR_DEFAULT);
-	}
-	if (event==fltk::ENTER) { Button::handle(event); return 1; }
-	break;
+        if (sides&1 && fltk::event_x()<=2) {
+          cursor(fltk::CURSOR_WE);
+        } else if (sides&2 && fltk::event_x()>=w()-2) {
+          cursor(fltk::CURSOR_WE);
+        } else {
+          cursor(fltk::CURSOR_DEFAULT);
+        }
+        if (event==fltk::ENTER) { Button::handle(event); return 1; }
+        break;
       case fltk::PUSH:
-	if (sides&1 && fltk::event_x()<=2) {
-	  left = true;
-	  ox = fltk::event_x_root() - x();
-	  return 1;
-	} else if (sides&2 && fltk::event_x()>=w()-2) {
-	  left = false;
-	  ox = fltk::event_x_root() - x() - w();
-	  return 1;
-	}
-	break;
+        if (sides&1 && fltk::event_x()<=2) {
+          left = true;
+          ox = fltk::event_x_root() - x();
+          return 1;
+        } else if (sides&2 && fltk::event_x()>=w()-2) {
+          left = false;
+          ox = fltk::event_x_root() - x() - w();
+          return 1;
+        }
+        break;
       case fltk::DRAG: {
-	if (ox==-1) break;
-	Browser *w = (Browser*)(parent());
-	int col = (int)(user_data());
-	if (left)
-	  w->set_column_start(col, fltk::event_x_root()-ox);
-	else
-	  w->set_column_start(col+1, fltk::event_x_root()-ox);
-	return 1; }
+        if (ox==-1) break;
+          Browser *w = (Browser*)(parent());
+          int col = (int)(user_data());
+          if (left)
+            w->set_column_start(col, fltk::event_x_root()-ox);
+          else
+            w->set_column_start(col+1, fltk::event_x_root()-ox);
+          return 1; 
+        }
       case fltk::RELEASE:
-	if (ox==-1) break;
-	ox = -1;
-	return 1;
-    }
+        if (ox==-1) break;
+        ox = -1;
+        return 1;
+    } // switch (event)
     return Button::handle(event);
-  }
+  } // handle() method
 
   void layout() {
     setfont(labelfont(),labelsize());
     h(int(getascent()+getdescent()+leading()+2));
     Button::layout();
   }
-};
+}; // BButton class
 
 /*! Set an array of labels to put at the top of the browser. The initial
   sizes of them are set with column_widths(). Items in the browser can
