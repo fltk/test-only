@@ -19,12 +19,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#include <config.h>
-#include <fltk/xbmImage.h>
-#include <fltk/draw.h>
-
-using namespace fltk;
-
 /*! \class fltk::xbmImage
 
   Image based on a 1-bit bitmap from memory. This matches the very
@@ -37,12 +31,7 @@ using namespace fltk;
   not a multiple of 8 each line starts at the start of the next byte.
 */
 
-void xbmImage::_draw(const fltk::Rectangle& r) const
-{
-  if (!drawn())
-    (const_cast<xbmImage*>(this))->set_alpha_bitmap(array,this->w(),this->h());
-  Image::_draw(r);
-}
+// Implementation is in system/Image.cxx!
 
 //
 // End of "$Id$".

@@ -228,13 +228,9 @@ void Image::_draw(const fltk::Rectangle& r) const
   over(r.x(), r.y());
 }
 
-/**
+/** \fn void Image::destroy();
   Same as redraw() but it also deallocates as much memory as possible.
 */
-void Image::destroy() {
-  delete picture;
-  picture = 0;
-}
 
 //
 // End of "$Id$".

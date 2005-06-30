@@ -27,20 +27,23 @@
 namespace fltk {
 
 class FL_API Widget;
-class Picture;
+class FL_API xbmImage;
+class DrawImageHelper;
 
 class FL_API Image : public Symbol {
 
-  friend class fltk::Picture; // system-specific data for drawn image
-  fltk::Picture* picture;
+  void* picture;	// system-specific data for the drawn image
+  int flags;		// flags indicating the state of picture
+  friend class xbmImage;
+  friend class DrawImageHelper;
+  enum {DRAWN=1, OPAQUE=2, MASK=4, USES_FG=8, USES_BG=16};
+
 protected:
   int w_, h_;
-  void set_alpha_bitmap(const uchar* bitmap, int w, int h);
 
 public:
-
-  Image(const char* name=0) : Symbol(name), picture(0), w_(-1), h_(-1) {}
-  Image(int w, int h, const char* name=0) : Symbol(name), picture(0), w_(w), h_(h) {}
+  Image(const char* name=0) : Symbol(name), picture(0), flags(0), w_(-1), h_(-1) {}
+  Image(int w, int h, const char* name=0) : Symbol(name), picture(0), flags(0), w_(w), h_(h) {}
 
   int w() const {return w_;}
   int width() const {return w_;}
@@ -48,7 +51,7 @@ public:
   int height() const {return h_;}
 
   bool drawn() const;
-  void redraw();
+  void redraw() {flags &= ~DRAWN;}
   void destroy();
   void setsize(int w, int h);
   void make_current();

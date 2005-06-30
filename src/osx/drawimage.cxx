@@ -28,8 +28,24 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include "Picture.h"
+#include <fltk/Image.h>
 using namespace fltk;
+
+extern fltk::Image* fl_current_Image;
+class fltk::DrawImageHelper {
+public:
+  static void setimage(CGImageRef img, fltk::PixelType pixeltype) {
+    // If we are making an Image, we have to remember the CGImage so we
+    // can use it to draw the Image later. If there is a way to update
+    // an existing CGImage this would be less of a kludge.
+    if (fl_current_Image->picture)
+      CGImageRelease((CGImageRef)(fl_current_Image->picture));
+    fl_current_Image->picture = img;
+    fl_current_Image->flags =
+      (pixeltype == MONO || pixeltype == RGB || pixeltype == BGR) ?
+      (Image::OPAQUE|Image::DRAWN) : Image::DRAWN;
+  }
+};
 
 #define MAXBUFFER 0x40000 // 256k
 
@@ -55,6 +71,8 @@ static void innards(const uchar *buf,
   int h = cr.h();
   if (buf) buf += dx*delta + dy*linedelta;
 
+  static char flip[12] = {0,0,1,0,0,1,1,0,0,1,1,0};
+
   const uchar *array = buf;
   U32* tmpBuf = 0;
   if (cb) {
@@ -67,12 +85,21 @@ static void innards(const uchar *buf,
       const uchar* ret = cb(userdata, dx, dy+i, w, dest);
       if (ret != dest) memcpy(dest, ret, w*delta);
     }
-  } else if (fl_current_picture) {
-    // assist the big memory leak listed below!
+  } else if (fl_current_Image || flip[pixeltype]) {
+    // We must dup the memory in case the source image is temporary...
     int n = (linedelta*h+3)/4;
     tmpBuf = new U32[n];
     memcpy(tmpBuf, array, 4*n);
     array = (uchar*)tmpBuf;
+  }
+  if (flip[pixeltype]) {
+    uchar* p = (uchar*)array;
+    if (pixeltype>RGBA && (pixeltype&1)) p++;
+    for (int y=0; y<h; y++) {
+      uchar* q = p; p += linedelta;
+      uchar* e = q+w*delta;
+      while (q < e) {uchar t = q[0]; q[0] = q[2]; q[2] = t; q += delta;}
+    }
   }
 
   // create an image context
@@ -96,12 +123,12 @@ static void innards(const uchar *buf,
   case BGR: bitmapInfo = kCGImageAlphaNone; break;
   case RGB: bitmapInfo = kCGImageAlphaNone; break;
   case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
-  case ABGR: bitmapInfo = kCGImageAlphaPremultipliedLast; break;// wrong!
-  case BGRA: bitmapInfo = kCGImageAlphaPremultipliedFirst; break; // wrong!
+  case ABGR: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
+  case BGRA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
   case ARGB: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
   case RGBM: bitmapInfo = kCGImageAlphaLast; break;
-  case MBGR: bitmapInfo = kCGImageAlphaLast; break; // wrong!
-  case BGRM: bitmapInfo = kCGImageAlphaFirst; break; // wrong!
+  case MBGR: bitmapInfo = kCGImageAlphaFirst; break;
+  case BGRM: bitmapInfo = kCGImageAlphaLast; break;
   case MRGB: bitmapInfo = kCGImageAlphaFirst; break;
   }
   CGImageRef img;
@@ -125,14 +152,8 @@ static void innards(const uchar *buf,
 			 false, // shouldInterpolate
 			 kCGRenderingIntentDefault);
   // draw the image into the destination context
-  if (fl_current_picture) {
-    // If we are making an Image, we have to remember the CGImage so we
-    // can use it to draw the Image later. If there is a way to update
-    // an existing CGImage this would be less of a kludge.
-    if (fl_current_picture->rgb) CGImageRelease(fl_current_picture->rgb);
-    fl_current_picture->rgb = img;
-    fl_current_picture->opaque =
-      pixeltype == MONO || pixeltype == RGB || pixeltype == BGR;
+  if (fl_current_Image) {
+    DrawImageHelper::setimage(img, pixeltype);
   } else if (img) {
     CGRect rect = { x, y, w, h };
     fltk::begin_quartz_image(rect, Rectangle(0, 0, w, h));

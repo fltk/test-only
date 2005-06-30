@@ -2093,8 +2093,8 @@ void Widget::make_current() const {
   translate(x,y);
 }
 
-namespace fltk {class Picture;}
-fltk::Picture* fl_current_picture;
+namespace fltk {class Image;}
+fltk::Image* fl_current_Image;
 
 /**
   Fltk can draw into any X window or pixmap that uses the
@@ -2109,7 +2109,7 @@ fltk::Picture* fl_current_picture;
 */
 void fltk::draw_into(XWindow window, int w, int h) {
   xwindow = window;
-  fl_current_picture = 0;
+  fl_current_Image = 0;
   fl_clip_w = w;
   fl_clip_h = h;
   // in X the gc structure can be reused for every window:

@@ -49,12 +49,11 @@
 
 #include <fltk/Color.h>
 #include <fltk/Font.h>
-#include <fltk/draw.h>
 #include <fltk/Image.h>
+#include <fltk/draw.h>
 #include <config.h>
 #include <stdio.h>
 #include <windows.h>
-#include "Picture.h"
 
 using namespace fltk;
 
@@ -138,6 +137,19 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
+extern fltk::Image* fl_current_Image;
+class fltk::DrawImageHelper {
+public:
+  static void setmask() {
+    // special MASK detector, must be drawing the same color as last time:
+    Color c = get_color_index(fltk::getcolor());
+    fl_current_Image->flags = ((int)(c&0xffffff00)|Image::DRAWN|Image::USES_FG);
+  }
+  static void clear_opaque() {
+    fl_current_Image->flags = fltk::Image::DRAWN;
+  }
+};
+
 static void innards(const uchar *buf, PixelType type,
 		    const fltk::Rectangle& r1,
 		    int delta, int linedelta,
@@ -190,13 +202,8 @@ static void innards(const uchar *buf, PixelType type,
 
   // needed for MASK:
   uchar mr,mg,mb;
-  if (type == MASK) {
+  if (type == MASK)
     fltk::split_color(fltk::getcolor(),mr,mg,mb);
-    if (fl_current_picture) {
-      fl_current_picture->mask = true;
-      fl_current_picture->fg = fltk::getcolor();
-    }
-  }
 
   int ypos = y;
   for (int j=0; j<h; ) {
@@ -243,7 +250,6 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case RGBA:
-      case RGBM:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[2];
 	  to[1] = from[1];
@@ -252,7 +258,6 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case ABGR:
-      case MBGR:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[1];
 	  to[1] = from[2];
@@ -261,7 +266,6 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case BGRA:
-      case BGRM:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[0];
 	  to[1] = from[1];
@@ -270,7 +274,6 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case ARGB:
-      case MRGB:
 	for (i=w; i--; from += delta, to += 4) {
 	  to[0] = from[3];
 	  to[1] = from[2];
@@ -278,19 +281,53 @@ static void innards(const uchar *buf, PixelType type,
 	  to[3] = from[0];
 	}
 	break;
+      case RGBM:
+	for (i=w; i--; from += delta, to += 4) {
+	  uchar a = to[3] = from[3];
+	  to[0] = (from[2]*a)>>8;
+	  to[1] = (from[1]*a)>>8;
+	  to[2] = (from[0]*a)>>8;
+	}
+	break;
+      case MBGR:
+	for (i=w; i--; from += delta, to += 4) {
+	  uchar a = to[3] = from[0];
+	  to[0] = (from[1]*a)>>8;
+	  to[1] = (from[2]*a)>>8;
+	  to[2] = (from[3]*a)>>8;
+	}
+	break;
+      case BGRM:
+	for (i=w; i--; from += delta, to += 4) {
+	  uchar a = to[3] = from[3];
+	  to[0] = (from[0]*a)>>8;
+	  to[1] = (from[1]*a)>>8;
+	  to[2] = (from[2]*a)>>8;
+	}
+	break;
+      case MRGB:
+	for (i=w; i--; from += delta, to += 4) {
+	  uchar a = to[3] = from[0];
+	  to[0] = (from[3]*a)>>8;
+	  to[1] = (from[2]*a)>>8;
+	  to[2] = (from[1]*a)>>8;
+	}
+	break;
       }
     }
 
     bmi.bmiHeader.biHeight = -k;
     bmi.bmiHeader.biSizeImage = k*4*w;
-    if (fl_current_picture) {
+    if (fl_current_Image) {
       SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 			(LPSTR)buffer,
 			&bmi,
 			DIB_RGB_COLORS
 			);
-      fl_current_picture->opaque =
-	type == MONO || type == RGB || type == BGR;
+      if (type == MASK)
+	DrawImageHelper::setmask();
+      else if (!(type == MONO || type == RGB || type == BGR))
+	DrawImageHelper::clear_opaque();
     } else if (type == MONO || type == RGB || type == BGR) {
       SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 			(LPSTR)buffer,

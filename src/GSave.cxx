@@ -25,7 +25,7 @@
 
 #include <config.h>
 #include <fltk/x.h>
-namespace fltk {class Picture;}
+namespace fltk {class Image;}
 using namespace fltk;
 
 /*! \class fltk::GSave
@@ -58,7 +58,7 @@ using namespace fltk;
 #ifdef _WIN32
 extern HDC fl_bitmap_dc;
 #endif
-extern fltk::Picture* fl_current_picture;
+extern fltk::Image* fl_current_Image;
 extern int fl_clip_w, fl_clip_h;
 
 GSave::GSave() {
@@ -76,7 +76,7 @@ GSave::GSave() {
 #else
 # error
 #endif
-  data[2] = fl_current_picture;
+  data[2] = fl_current_Image;
   data[3] = (void*)((fl_clip_w<<16)+(fl_clip_h&0xffff));
 }
 
@@ -91,7 +91,7 @@ GSave::~GSave() {
   quartz_window = (WindowPtr)data[0];
   quartz_gc = (CGContextRef)data[1];
 #endif
-  fl_current_picture = (fltk::Picture*)data[2];
+  fl_current_Image = (fltk::Image*)data[2];
   unsigned v = (unsigned)data[3];
   fl_clip_w = v >> 16;
   fl_clip_h = v & 0xffff;
