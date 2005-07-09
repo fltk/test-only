@@ -1,18 +1,16 @@
-
-
 using namespace fltk;
 
 uchar *				// O - Pixel buffer or NULL if failed
 fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
 	PixelType type,		// Type of pixels to store (RGB and RGBA only now)
 	const Rectangle& r,	// area to read
-	int delta,
 	int linedelta
 ) {
   int   X = r.x();
   int   Y = r.y();
   int   w = r.w();
   int   h = r.h();
+  int delta = depth(type);
 
   int	x, y;			// Looping vars
 
@@ -41,3 +39,4 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
 
   return p;
 }
+

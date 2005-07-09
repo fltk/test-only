@@ -31,38 +31,30 @@ namespace fltk {
   that is a pixel. This is used as an argument for fltk::drawimage(),
   fltk::readimage(), and fltk::Symbol::readimage().
 
-  The types are described by the order the bytes are in memory. Thus
-  RGB means R is stored at a byte with an address of one less than
-  where G is stored. Warning: some Windows and X software describes
-  the pixels backwards from this. I use this standard because the
-  symbols and code can be reused for pixels made of data larger
-  than a byte.
+  Notice that the order of the bytes in memory of ARGB32 or RGB32 is
+  a,r,g,b on a little-endian machine and b,g,r,a on a big-endian
+  machine. Due to the use of these types by Windows, this is often
+  the fastest form of data, if you have a choice. To convert an
+  fltk::Color to RGB32, shift it right by 8 (for ARGB32 shift the
+  alpha left 24 and or it in).
 
-  The non-premultiplied versions currently only works for drawimage() on
-  OS/X. In other cases it is treated as premultiplied. This may be
-  fixed in the future.
+  More types may be added in the future. The set is as minimal as
+  possible while still covering the types I have actually encountered.
 */
 enum PixelType {
-  MASK	= 0,	//!< 1 byte for A, RGB are set to zero
-  MONO	= 1,	//!< 1 byte used for all of RGB, A set to 1.0
-  BGR 	= 2,	//!< used by Windows software, sometimes called RGB24.
-  RGB	= 3, 	//!< normal method of storing 3-channel color, A set to 1.0
-
-  RGBA	= 4,	//!< normal method of storing 4-channel color, fltk::Color on a big-endian machine
-  ABGR	= 5,	//!< fltk::Color on a little-endian machine
-  BGRA	= 6,	//!< common on little-endian machines, sometimes called ARGB32
-  ARGB	= 7,	//!< ARGB32 on a big-endian machine
-
-  RGBM	= 8,	//!< RGBA but not premultiplied (M stands for "mask")
-  MBGR	= 9,	//!< ABGR but not premultiplied
-  BGRM	=10,	//!< BRGA but not premultiplied
-  MRGB	=11	//!< ARGB but not premultiplied
+  MASK	= 0,	//!< 1 byte of inverted mask, filled with current color
+  MONO	= 1,	//!< 1 byte of gray scale
+  RGBx	= 2,	//!< bytes in r,g,b,a,r,g,b,a... order, a byte is ignored
+  RGB	= 3, 	//!< bytes in r,g,b,r,g,b... order
+  RGBA	= 4,	//!< bytes in r,g,b,a,r,g,b,a... order
+  RGB32 = 5,	//!< 32-bit words containiing 0xaarrggbb (aa is ignored)
+  ARGB32= 6	//!< 32-bit words containing 0xaarrggbb
 };
 
 /**
    Turn a PixelType into the number of bytes needed to hold a pixel.
 */
-inline int depth(PixelType t) {return (t<2 ? 1 : t < 4 ? 3 : 4);}
+inline int depth(PixelType t) {return (t<2 ? 1 : t==3 ? 3 : 4);}
 
 /*! \} */
 

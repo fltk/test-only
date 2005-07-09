@@ -33,11 +33,10 @@ namespace fltk {
 class FL_API rgbImage : public Image {
   const uchar* pixels_;
   PixelType pixeltype_;
-  int depth_;
   int linedelta_;
 public:
   PixelType pixeltype() const {return pixeltype_;}
-  int depth() const {return depth_;}
+  int depth() const {return fltk::depth(pixeltype_);}
   int linedelta() const {return linedelta_;}
   const uchar* pixels() const {return pixels_;}
 
@@ -45,16 +44,10 @@ public:
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 
   rgbImage(const uchar* d, PixelType p, int W, int H) :
-    Image(W,H), pixels_(d), pixeltype_(p), depth_(fltk::depth(p)) {linedelta_=W*depth_;}
+    Image(W,H), pixels_(d), pixeltype_(p) {linedelta_=W*depth();}
 
-  rgbImage(const uchar* d, PixelType p, int W, int H, int delta) :
-    Image(W,H), pixels_(d), pixeltype_(p), depth_(delta), linedelta_(W*delta) {}
-
-  rgbImage(const uchar* d, PixelType p, int W, int H, int delta, int ld) :
-    Image(W,H), pixels_(d), pixeltype_(p), depth_(delta), linedelta_(ld) {}
-
-  rgbImage(const uchar* d, int W, int H, int D = 3) :
-    Image(W,H), pixels_(d), pixeltype_(RGB), depth_(D), linedelta_(W*D) {}
+  rgbImage(const uchar* d, PixelType p, int W, int H, int linedelta) :
+    Image(W,H), pixels_(d), pixeltype_(p), linedelta_(linedelta) {}
 
 };
 

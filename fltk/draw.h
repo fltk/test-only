@@ -179,16 +179,13 @@ inline void column_widths(const int* i) {column_widths_ = i;}
 /*! \addtogroup images
   \{ */
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&);
-FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta);
-FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta, int ldelta);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int linedelta);
 
 typedef const uchar* (*DrawImageCallback)(void* data, int x, int y, int w, uchar* buffer);
 FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&);
-FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&, int delta);
 
 FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&);
-FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta);
-FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta, int ldelta);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int linedelta);
 /*! \} */
 
 FL_API void scrollrect(const Rectangle&, int dx, int dy,

@@ -110,7 +110,7 @@ int main(int argc, char ** argv) {
   b2.callback(cb2,&box);
   fltk::Widget image_box(140,200,120,120,0);
   make_image();
-  (new fltk::rgbImage(image, width, height))->label(&image_box);
+  (new fltk::rgbImage(image, fltk::RGB, width, height))->label(&image_box);
   fltk::Widget b(140,320,120,0,"Example of fltk::draw_image()");
   Pens p(80,200,3*8,120,"lines");
   p.set_flag(fltk::ALIGN_TOP);

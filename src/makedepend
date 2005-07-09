@@ -124,9 +124,9 @@ Group.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Group.o: ../fltk/Rectangle.h ../fltk/Box.h ../fltk/Symbol.h
 Group.o: ../fltk/PixelType.h ../fltk/draw.h ../fltk/events.h ../fltk/layout.h
 Group.o: ../fltk/damage.h
-GSave.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-GSave.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-GSave.o: ../fltk/Rectangle.h ../fltk/x.h ../fltk/draw.h ../fltk/PixelType.h
+GSave.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
+GSave.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h
+GSave.o: ../fltk/PixelType.h
 HighlightButton.o: ../fltk/events.h ../fltk/FL_API.h
 HighlightButton.o: ../fltk/HighlightButton.h ../fltk/Button.h
 HighlightButton.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
@@ -135,6 +135,7 @@ Image.o: ../config.h ../fltk/Image.h ../fltk/Symbol.h ../fltk/FL_API.h
 Image.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h
 Image.o: ../fltk/PixelType.h ../fltk/Widget.h ../fltk/Style.h
 Image.o: ../fltk/events.h ../fltk/draw.h ../fltk/x.h ../fltk/draw.h
+Image.o: x11/Image.cxx ../fltk/xbmImage.h ../fltk/Image.h
 Input.o: ../fltk/Input.h ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
 Input.o: ../fltk/Box.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Symbol.h
 Input.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/draw.h
@@ -339,11 +340,13 @@ ValueOutput.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 ValueOutput.o: ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/events.h
 ValueOutput.o: ../fltk/damage.h ../fltk/draw.h ../fltk/PixelType.h
 ValueOutput.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/run.h
-ValueSlider.o: ../config.h ../fltk/ValueSlider.h ../fltk/Slider.h
-ValueSlider.o: ../fltk/Valuator.h ../fltk/Widget.h ../fltk/Style.h
-ValueSlider.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-ValueSlider.o: ../fltk/Rectangle.h ../fltk/damage.h ../fltk/draw.h
-ValueSlider.o: ../fltk/PixelType.h ../fltk/Box.h ../fltk/Symbol.h
+ValueSlider.o: ../fltk/ValueSlider.h ../fltk/Slider.h ../fltk/Valuator.h
+ValueSlider.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
+ValueSlider.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
+ValueSlider.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
+ValueSlider.o: ../fltk/Group.h ../fltk/events.h ../fltk/damage.h
+ValueSlider.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/PixelType.h
+ValueSlider.o: ../fltk/draw.h ../fltk/math.h
 Widget.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 Widget.o: ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/events.h
 Widget.o: ../fltk/damage.h ../fltk/layout.h ../fltk/Group.h ../fltk/Widget.h
@@ -417,7 +420,8 @@ draw_xpm.o: ../config.h
 drawimage.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 drawimage.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h
 drawimage.o: ../fltk/PixelType.h ../fltk/events.h ../fltk/draw.h
-drawimage.o: x11/drawimage.cxx ../fltk/error.h x11/XColorMap.h
+drawimage.o: x11/drawimage.cxx ../fltk/error.h ../fltk/Image.h
+drawimage.o: ../fltk/Symbol.h x11/XColorMap.h
 drawtext.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
 drawtext.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/math.h
 drawtext.o: ../fltk/Font.h ../fltk/Style.h ../fltk/Widget.h ../fltk/Style.h
@@ -486,7 +490,7 @@ readimage.o: ../fltk/string.h
 rgbImage.o: ../config.h ../fltk/rgbImage.h ../fltk/Image.h ../fltk/Symbol.h
 rgbImage.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
 rgbImage.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/events.h
-rgbImage.o: ../fltk/draw.h ../fltk/x.h ../fltk/draw.h
+rgbImage.o: ../fltk/draw.h
 run.o: ../config.h ../fltk/run.h ../fltk/FL_API.h ../fltk/events.h
 run.o: ../fltk/error.h ../fltk/damage.h ../fltk/layout.h ../fltk/Window.h
 run.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
@@ -514,17 +518,14 @@ show_colormap.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 show_colormap.o: ../fltk/Rectangle.h ../fltk/Monitor.h ../fltk/Box.h
 show_colormap.o: ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/draw.h
 show_colormap.o: ../fltk/events.h ../fltk/damage.h
-xbmImage.o: ../config.h ../fltk/xbmImage.h ../fltk/Image.h ../fltk/Symbol.h
-xbmImage.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
-xbmImage.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/draw.h
 xpmFileImage.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
 xpmFileImage.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
 xpmFileImage.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/xpmImage.h
 xpmFileImage.o: ../fltk/events.h ../fltk/draw.h ../fltk/x.h ../fltk/draw.h
-xpmImage.o: ../config.h ../fltk/xpmImage.h ../fltk/Image.h ../fltk/Symbol.h
+xpmImage.o: ../fltk/xpmImage.h ../fltk/Image.h ../fltk/Symbol.h
 xpmImage.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
 xpmImage.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/draw.h
-xpmImage.o: ../fltk/x.h ../fltk/draw.h ../fltk/string.h
+xpmImage.o: ../fltk/string.h
 scandir.o: ../config.h
 string.o: ../config.h ../fltk/string.h ../fltk/FL_API.h
 utf.o: ../fltk/utf.h ../fltk/FL_API.h

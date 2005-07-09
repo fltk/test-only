@@ -41,13 +41,15 @@ const char cdata[16*16+1] =
 class Dtest : public Widget {
 public:
   fltk::PixelType pixeltype;
-  int delta;
   const unsigned char* data;
   void draw() {
-    drawimage(data, pixeltype, Rectangle(16*SCALE,16*SCALE), delta);
+    push_matrix();
+    scale(float(w())/(16*SCALE),float(h())/(16*SCALE));
+    drawimage(data, pixeltype, Rectangle(16*SCALE,16*SCALE));
+    pop_matrix();
   }
-  Dtest(PixelType pt, int dt, int x, int y, const char* l, const unsigned char* d) :
-    Widget(x,y,16*SCALE,16*SCALE,l), pixeltype(pt), delta(dt), data(d) {
+  Dtest(PixelType pt, int x, int y, const char* l, const unsigned char* d) :
+    Widget(x,y,16*SCALE,16*SCALE,l), pixeltype(pt), data(d) {
     box(NO_BOX);
     align(ALIGN_BOTTOM);
     labelsize(10);
@@ -58,10 +60,10 @@ public:
 // Tester for rgbImage subclass:
 class Itest : public Widget {
 public:
-  Itest(PixelType pt, int dt, int x, int y, const char* l, const unsigned char* d) :
+  Itest(PixelType pt, int x, int y, const char* l, const unsigned char* d) :
     Widget(x,y,16*SCALE,16*SCALE,l) {
-    image(new rgbImage(d, pt, 16*SCALE, 16*SCALE, dt));
     box(NO_BOX);
+    image(new rgbImage(d, pt, 16*SCALE, 16*SCALE));
     align(ALIGN_BOTTOM);
     labelsize(10);
     tooltip("Instance of fltk::rgbImage used as widget->image()");
@@ -74,8 +76,8 @@ class Btest : public Widget {
 public:
   Btest(int x, int y, const char* l)
     : Widget(x,y,16*SCALE,16*SCALE,l) {
-    image(new xbmImage(sorceress_bits, sorceress_width, sorceress_height));
     box(NO_BOX);
+    image(new xbmImage(sorceress_bits, sorceress_width, sorceress_height));
     align(ALIGN_BOTTOM|ALIGN_CLIP);
     labelsize(10);
   }
@@ -88,8 +90,8 @@ class Xtest : public Widget {
 public:
   Xtest(int x, int y, const char* l, const char* const* data)
     : Widget(x,y,16*SCALE,16*SCALE,l) {
-    image(new xpmImage(data,0));
     box(NO_BOX);
+    image(new xpmImage(data,0));
     align(ALIGN_BOTTOM|ALIGN_CLIP);
     labelsize(10);
   }
@@ -124,15 +126,6 @@ unsigned char* builddata(int depth, const unsigned char* pixels) {
 
 unsigned char monopixels[7] = {0, 60, 160, 40, 30, 130, 20};
 
-unsigned char bgrpixels[7*3] = {
-  0, 0, 0,
-  0, 0, 255,
-  0, 255, 0,
-  255,0,0,
-  0, 0, 127,
-  0, 127, 0,
-  127,0,0};
-
 unsigned char rgbpixels[7*3] = {
   0, 0, 0,
   255,0,0,
@@ -151,73 +144,15 @@ unsigned char rgbapixels[7*4] = {
   0, 127, 0,127,
   0, 0, 127,127};
 
-unsigned char abgrpixels[7*4] = {
-  0, 0, 0, 0,
-  255, 0, 0, 255,
-  255, 0, 255, 0,
-  255, 255, 0, 0,
-  127, 0, 0, 127,
-  127, 0, 127, 0,
-  127, 127, 0, 0
-};
-
-unsigned char bgrapixels[7*4] = {
-  0, 0, 0, 0,
-  0, 0, 255, 255,
-  0, 255, 0, 255,
-  255, 0, 0, 255,
-  0, 0, 127, 127,
-  0, 127, 0, 127,
-  127, 0, 0, 127
-};
-
-unsigned char argbpixels[7*4] = {
-  0, 0, 0, 0,
-  255, 255, 0, 0,
-  255, 0, 255, 0,
-  255, 0, 0, 255,
-  127, 127, 0, 0,
-  127, 0, 127, 0,
-  127, 0, 0, 127,
-};
-
-unsigned char rgbmpixels[7*4] = {
-  0, 0, 0, 0,
-  255,0,0,255,
-  0, 255, 0,255,
-  0, 0, 255,255,
-  255,0,0,127,
-  0, 255, 0,127,
-  0, 0, 255,127};
-
-unsigned char mbgrpixels[7*4] = {
-  0, 0, 0, 0,
-  255, 0, 0, 255,
-  255, 0, 255, 0,
-  255, 255, 0, 0,
-  127, 0, 0, 255,
-  127, 0, 255, 0,
-  127, 255, 0, 0
-};
-
-unsigned char bgrmpixels[7*4] = {
-  0, 0, 0, 0,
-  0, 0, 255, 255,
-  0, 255, 0, 255,
-  255, 0, 0, 255,
-  0, 0, 255, 127,
-  0, 255, 0, 127,
-  255, 0, 0, 127
-};
-
-unsigned char mrgbpixels[7*4] = {
-  0, 0, 0, 0,
-  255, 255, 0, 0,
-  255, 0, 255, 0,
-  255, 0, 0, 255,
-  127, 255, 0, 0,
-  127, 0, 255, 0,
-  127, 0, 0, 255,
+// Warning assummes sizeof(unsigned)==4!
+unsigned argbpixels[7] = {
+  0x0,
+  0xffff0000,
+  0xff00ff00,
+  0xff0000ff,
+  0x7f7f0000,
+  0x7f007f00,
+  0x7f00007f
 };
 
 #if USE_X11
@@ -251,6 +186,30 @@ void activecallback(Widget* w, void* v) {
   else ((Widget*)v)->deactivate();
 }
 
+bool checker = false;
+
+void checkercallback(Widget* w, void*) {
+  checker = w->value();
+  fltk::redraw();
+}
+
+class CheckGroup : public Group {
+public:
+  void draw() {
+    if (checker) {
+      fltk::setcolor(GRAY50);
+      int x1 = 0;
+      for (int y = 0; y < h(); y += 10) {
+	x1 = 10-x1;
+	for (int x = x1; x < w(); x += 20)
+	  fltk::fillrect(Rectangle(x,y,10,10));
+      }
+    }
+    Group::draw();
+  }
+  CheckGroup(int x, int y, int w, int h) : Group(x,y,w,h) {}
+};
+
 int main(int argc, char** argv) {
 
 #if USE_X11
@@ -283,7 +242,7 @@ int main(int argc, char** argv) {
 
   Window window(COLS*(16*SCALE+10)+10, 10+ROWS*(16*SCALE+15)+60+150);
   window.begin();
-  Group group(0,0,window.w(),window.h()-60-150);
+  CheckGroup group(0,0,window.w(),window.h()-60-150);
   window.resizable(group);
   group.resizable(group);
   group.begin();
@@ -294,92 +253,52 @@ int main(int argc, char** argv) {
 
   Widget* w;
 
-  w = new Dtest(fltk::BGR, 3, x, y, "BGR", builddata(3, bgrpixels));
+  w = new Dtest(fltk::MONO, x, y, "MONO", builddata(1, monopixels));
   nextxy();
 
-  w = new Dtest(fltk::RGB, 3, x, y, "RGB", builddata(3, rgbpixels));
+  w = new Itest(fltk::MONO, x, y, "MONOimage", builddata(1, monopixels));
   nextxy();
 
-  w = new Dtest(fltk::RGB, 4, x, y, "RGB,4", builddata(4, rgbapixels));
+  w = new Dtest(fltk::RGB, x, y, "RGB", builddata(3, rgbpixels));
+  nextxy();
+
+  w = new Itest(fltk::RGB, x, y, "RGB image", builddata(3, rgbpixels));
+  nextxy();
+
+  w = new Dtest(fltk::RGB32, x, y, "RGB32", builddata(4, (uchar*)argbpixels));
+  nextxy();
+
+  w = new Itest(fltk::RGB32, x, y, "RGB32image", builddata(4, (uchar*)argbpixels));
+  nextxy();
+
+  w = new Dtest(fltk::RGBx, x, y, "RGBx", builddata(4, rgbapixels));
   w->tooltip("drawimage() of an rgb image except the pixels are 4 apart, "
 	      "some drivers will screw up and not skip the 4th byte");
   nextxy();
 
-  w = new Itest(fltk::RGB, 3, x, y, "RGB image", builddata(3, rgbpixels));
+  w = new Itest(fltk::RGBx, x, y, "RGBx image", builddata(4, rgbapixels));
   nextxy();
 
-  w = new Dtest(fltk::RGBA, 4, x, y, "RGBA", builddata(4, rgbapixels));
+  w = new Dtest(fltk::RGBA, x, y, "RGBA", builddata(4, rgbapixels));
   w->tooltip("drawimage() of 4-byte rgba. Should be transparent, not black");
   nextxy();
 
-  w = new Itest(fltk::RGBA, 4, x, y, "RGBAimage", builddata(4, rgbapixels));
+  w = new Itest(fltk::RGBA, x, y, "RGBAimage", builddata(4, rgbapixels));
   nextxy();
 
-  w = new Dtest(fltk::ABGR, 4, x, y, "ABGR", builddata(4, abgrpixels));
+  w = new Dtest(fltk::ARGB32, x, y, "ARGB32", builddata(4, (uchar*)argbpixels));
   nextxy();
 
-  w = new Itest(fltk::ABGR, 4, x, y, "ABGRimage", builddata(4, abgrpixels));
+  w = new Itest(fltk::ARGB32, x, y, "ARGB32image", builddata(4, (uchar*)argbpixels));
   nextxy();
 
-  w = new Dtest(fltk::BGRA, 4, x, y, "BGRA", builddata(4, bgrapixels));
+  w = new Dtest(fltk::MASK, x, y, "MASK", builddata(1, monopixels));
   nextxy();
 
-  w = new Itest(fltk::BGRA, 4, x, y, "BGRAimage", builddata(4, bgrapixels));
+  w = new Itest(fltk::MASK, x, y, "MASKimage", builddata(1, monopixels));
   nextxy();
 
-  w = new Dtest(fltk::ARGB, 4, x, y, "ARGB", builddata(4, argbpixels));
-  nextxy();
-
-  w = new Itest(fltk::ARGB, 4, x, y, "ARGBimage", builddata(4, argbpixels));
-  nextxy();
-
-  w = new Dtest(fltk::RGBM, 4, x, y, "RGBM", builddata(4, rgbmpixels));
-  nextxy();
-
-  w = new Itest(fltk::RGBM, 4, x, y, "RGBMimage", builddata(4, rgbmpixels));
-  nextxy();
-
-  w = new Dtest(fltk::MBGR, 4, x, y, "MBGR", builddata(4, mbgrpixels));
-  nextxy();
-
-  w = new Itest(fltk::MBGR, 4, x, y, "MBGRimage", builddata(4, mbgrpixels));
-  nextxy();
-
-  w = new Dtest(fltk::BGRM, 4, x, y, "BGRM", builddata(4, bgrmpixels));
-  nextxy();
-
-  w = new Itest(fltk::BGRM, 4, x, y, "BGRMimage", builddata(4, bgrmpixels));
-  nextxy();
-
-  w = new Dtest(fltk::MRGB, 4, x, y, "MRGB", builddata(4, mrgbpixels));
-  nextxy();
-
-  w = new Itest(fltk::MRGB, 4, x, y, "MRGBimage", builddata(4, mrgbpixels));
-  nextxy();
-
-  w = new Dtest(fltk::MONO, 1, x, y, "MONO", builddata(1, monopixels));
-  nextxy();
-
-  w = new Itest(fltk::MONO, 1, x, y, "MONOimage", builddata(1, monopixels));
-  nextxy();
-
-  w = new Dtest(fltk::MASK, 1, x, y, "MASK", builddata(1, monopixels));
-  nextxy();
-
-  w = new Itest(fltk::MASK, 1, x, y, "MASKimage", builddata(1, monopixels));
-  nextxy();
-
-  w = new Dtest(fltk::MONO, 3, x, y, "MONO,3", builddata(3, rgbpixels));
-  w->tooltip("3-byte seperation between pixels. This "
-	      "can be used to show the user one channel of an image");
-  nextxy();
-
-  w = new Xtest(x, y, "xpmImage", porsche_xpm);
-  w->tooltip("In older versions of FLTK, the only transparency available "
-	     "was from XPM and GIF images. This should continue to work.");
-  nextxy();
-
-  w = new Xtest(x, y, "MASK xpmImage", recycle_xpm);
+  w = new Xtest(x, y, "mask xpmImage", recycle_xpm);
   w->tooltip("In some versions of FLTK2, the only MASK style image was "
 	     "special monochrome XPM files. These should continue to work.");
   nextxy();
@@ -391,12 +310,21 @@ int main(int argc, char** argv) {
 	     "as maskXPM and MASK.");
   nextxy();
 
+  w = new Xtest(x, y, "xpmImage", porsche_xpm);
+  w->tooltip("In older versions of FLTK, the only transparency available "
+	     "was from XPM and GIF images. This should continue to work.");
+  nextxy();
+
   group.end(); y = group.h();
   CheckButton* b = new CheckButton(20,y,100,20,"active");
   b->tooltip("activate()/deactivate() the widgets. The ones using an Image "
 	     "will redraw to show the grayed-out state.");
   b->set();
   b->callback(activecallback, &group);
+
+  b = new CheckButton(100,y,100,20,"checker");
+  b->tooltip("Draw a checkerboard to test transparency.");
+  b->callback(checkercallback, &group);
   y += 20;
 
   Slider* s = new Slider(20,y,window.w()-30,20,"bg");
@@ -427,7 +355,7 @@ int main(int argc, char** argv) {
 
 #if USE_X11
   // try to set the icon on X
-  uchar* data = builddata(4, bgrapixels);
+  uchar* data = builddata(4, (uchar*)argbpixels);
   const unsigned width = 16*SCALE;
   const unsigned height = 16*SCALE;
   unsigned* icon = new unsigned[width*height+2];

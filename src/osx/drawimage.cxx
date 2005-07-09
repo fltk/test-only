@@ -42,7 +42,7 @@ public:
       CGImageRelease((CGImageRef)(fl_current_Image->picture));
     fl_current_Image->picture = img;
     fl_current_Image->flags =
-      (pixeltype == MONO || pixeltype == RGB || pixeltype == BGR) ?
+      (pixeltype == MONO || pixeltype == RGB || pixeltype == RGB32) ?
       (Image::OPAQUE|Image::DRAWN) : Image::DRAWN;
   }
 };
@@ -56,50 +56,31 @@ static void releaser(void*, const void* data, size_t size) {
 static void innards(const uchar *buf,
 		    fltk::PixelType pixeltype,
 		    const fltk::Rectangle &r1,
-		    int delta, int linedelta,
+		    int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  fltk::Rectangle r(r1); transform(r);
-  fltk::Rectangle cr(r); if (!intersect_with_clip(cr)) return;
-
-
-  int dx = cr.x()-r.x();
-  int dy = cr.y()-r.y();
-  int x = cr.x();
-  int y = cr.y();
-  int w = cr.w();
-  int h = cr.h();
-  if (buf) buf += dx*delta + dy*linedelta;
-
-  static char flip[12] = {0,0,1,0,0,1,1,0,0,1,1,0};
+  const int w = r1.w();
+  const int h = r1.h();
+  const int delta = depth(pixeltype);
 
   const uchar *array = buf;
   U32* tmpBuf = 0;
   if (cb) {
     linedelta = (w*delta+3)&-4;
-    int n = (linedelta*h+(r1.w()*delta-linedelta)+3)/4;
+    int n = (linedelta*h+(w*delta-linedelta)+3)/4;
     tmpBuf = new U32[n];
     array = (uchar*)tmpBuf;
     for (int i=0; i<h; i++) {
       uchar* dest = (uchar*)array+i*linedelta;
-      const uchar* ret = cb(userdata, dx, dy+i, w, dest);
+      const uchar* ret = cb(userdata, 0, i, w, dest);
       if (ret != dest) memcpy(dest, ret, w*delta);
     }
-  } else if (fl_current_Image || flip[pixeltype]) {
+  } else if (fl_current_Image) {
     // We must dup the memory in case the source image is temporary...
     int n = (linedelta*h+3)/4;
     tmpBuf = new U32[n];
     memcpy(tmpBuf, array, 4*n);
     array = (uchar*)tmpBuf;
-  }
-  if (flip[pixeltype]) {
-    uchar* p = (uchar*)array;
-    if (pixeltype>RGBA && (pixeltype&1)) p++;
-    for (int y=0; y<h; y++) {
-      uchar* q = p; p += linedelta;
-      uchar* e = q+w*delta;
-      while (q < e) {uchar t = q[0]; q[0] = q[2]; q[2] = t; q += delta;}
-    }
   }
 
   // create an image context
@@ -120,16 +101,18 @@ static void innards(const uchar *buf,
     if (!graycolorspace) graycolorspace = CGColorSpaceCreateDeviceGray();
     colorspace = graycolorspace;
     break;
-  case BGR: bitmapInfo = kCGImageAlphaNone; break;
+  case RGBx: bitmapInfo = kCGImageAlphaNone; break;
   case RGB: bitmapInfo = kCGImageAlphaNone; break;
   case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
-  case ABGR: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
-  case BGRA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
-  case ARGB: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
-  case RGBM: bitmapInfo = kCGImageAlphaLast; break;
-  case MBGR: bitmapInfo = kCGImageAlphaFirst; break;
-  case BGRM: bitmapInfo = kCGImageAlphaLast; break;
-  case MRGB: bitmapInfo = kCGImageAlphaFirst; break;
+#if WORDS_BIGENDIAN
+  case RGB32: bitmapInfo = kCGImageAlphaNoneSkipFirst; break;
+  case ARGB32: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
+#else
+    // These *may* be wrong on little-endian (Intel). Probably Apple will
+    // add some way of specifying these patterns on Intel:
+# error Little-endian not supported
+#endif
+
   }
   CGImageRef img;
   if (pixeltype==MASK)
@@ -139,7 +122,7 @@ static void innards(const uchar *buf,
 			 linedelta, // bytesPerRow
 			 src, // provider
 			 0L, // decode array (?)
-			 false); // shouldInterpolate
+			 true); // shouldInterpolate
   else
     img = CGImageCreate( w, h,
 			 8, // bitsPerComponent
@@ -149,55 +132,32 @@ static void innards(const uchar *buf,
 			 bitmapInfo, // bitmapInfo
 			 src, // provider
 			 0L, // decode array (?)
-			 false, // shouldInterpolate
+			 true, // shouldInterpolate
 			 kCGRenderingIntentDefault);
   // draw the image into the destination context
   if (fl_current_Image) {
     DrawImageHelper::setimage(img, pixeltype);
   } else if (img) {
-    CGRect rect = { x, y, w, h };
-    fltk::begin_quartz_image(rect, Rectangle(0, 0, w, h));
+    CGRect rect; begin_quartz_image(rect, r1);
     CGContextDrawImage(quartz_gc, rect, img);
-    fltk::end_quartz_image();
-    // release all allocated resources
     CGImageRelease(img);
-  } else {
-#if 0
-    // Otherwise creating the image did not work, just draw all the pixels (!)
-    CGContextSetShouldAntialias(quartz_gc, false);
-    for ( int i=0; i<h; i++ ) {
-      const uchar *src = array+i*linedelta;
-      for ( int j=0; j<w; j++ ) {
-        if ( pixeltype==LUMINANCE )
-          color( src[0], src[0], src[0] );
-        else
-          color( src[0], src[1], src[2] );
-        CGContextMoveToPoint(quartz_gc, x+j, y+i);
-        CGContextAddLineToPoint(quartz_gc, x+j, y+i);
-        CGContextStrokePath(quartz_gc);
-        src += delta;
-
-      }
-    }
-    CGContextSetShouldAntialias(quartz_gc, true);
-#endif
+    end_quartz_image();
   }
   CGDataProviderRelease(src);
 }
 
 void fltk::begin_quartz_image(CGRect &rect, const Rectangle &c) {
   CGContextSaveGState(quartz_gc);
-  CGAffineTransform mx = CGContextGetCTM(quartz_gc);
-  CGRect r2 = rect;
-  r2.origin.x -= 0.5f;
-  r2.origin.y -= 0.5f;
-  CGContextClipToRect(quartz_gc, r2);
-  mx.d = -1.0; mx.tx = -mx.tx;
+  CGAffineTransform mx = {1,0,0,-1,.5f,.5f};
   CGContextConcatCTM(quartz_gc, mx);
-  rect.origin.x = rect.origin.x - c.x();
-  rect.origin.y = (mx.ty+0.5f) - rect.origin.y - c.h() + c.y();
+  rect.origin.x = c.x();
+  rect.origin.y = c.y();
+  transform(rect.origin.x, rect.origin.y);
   rect.size.width = c.w();
   rect.size.height = c.h();
+  transform_distance(rect.size.width, rect.size.height);
+  rect.origin.y = -rect.origin.y;
+  rect.size.height = -rect.size.height;
 }
 
 void fltk::end_quartz_image() {

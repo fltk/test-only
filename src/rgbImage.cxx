@@ -41,7 +41,7 @@ void rgbImage::_draw(const fltk::Rectangle& r) const
   if (!drawn()) {
     GSave gsave;
     const_cast<rgbImage*>(this)->make_current();
-    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), depth_, linedelta_);
+    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), linedelta_);
   }
   Image::_draw(r);
 }

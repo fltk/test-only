@@ -179,17 +179,18 @@ inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk
 //  inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
 
 // images:
-inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta,ldelta);}
-inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
+static inline fltk::PixelType fromdelta(int d) {return d==1?fltk::MONO:d==3?fltk::RGB:fltk::RGBx;}
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fromdelta(delta),fltk::Rectangle(x,y,w,h),ldelta);}
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fromdelta(delta),fltk::Rectangle(x,y,w,h));}
 
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta,ldelta);}
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h),ldelta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::MONO,fltk::Rectangle(x,y,w,h));}
 
 typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
-inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
-inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::MONO,fltk::Rectangle(x,y,w,h),delta);}
+inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fromdelta(delta),fltk::Rectangle(x,y,w,h));}
+inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::MONO,fltk::Rectangle(x,y,w,h));}
 
-inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, fltk::Rectangle(x,y,w,h), alpha?4:3);}
+inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, fltk::Rectangle(x,y,w,h));}
 
 inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(fltk::Rectangle(x,y,w,h));}
 

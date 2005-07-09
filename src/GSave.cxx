@@ -81,8 +81,11 @@ GSave::GSave() {
 }
 
 GSave::~GSave() {
+  unsigned v = (unsigned)data[3];
+  fl_clip_w = v >> 16;
+  fl_clip_h = v & 0xffff;
 #if USE_X11
-  xwindow = (XWindow)(data[0]);
+  if (data[0]) draw_into((XWindow)(data[0]), fl_clip_w, fl_clip_h);
 #elif defined(_WIN32)
   dc = (HDC)(data[0]);
   DeleteDC(fl_bitmap_dc);
@@ -92,9 +95,6 @@ GSave::~GSave() {
   quartz_gc = (CGContextRef)data[1];
 #endif
   fl_current_Image = (fltk::Image*)data[2];
-  unsigned v = (unsigned)data[3];
-  fl_clip_w = v >> 16;
-  fl_clip_h = v & 0xffff;
   pop_clip();
   pop_matrix();
 }

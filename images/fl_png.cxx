@@ -250,7 +250,7 @@ void fltk::pngImage::read()
     // and we have 'goto error' before this point
     GSave gsave;
     make_current();
-    drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height), d);
+    drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height));
   }
 
   png_read_end(png_ptr, NULL);

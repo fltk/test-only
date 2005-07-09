@@ -55,21 +55,22 @@ void Image::make_current() {
 # pragma comment(lib, "msimg32.lib")
 #endif
 
-void Image::over(int x, int y) const {
+void Image::over(int px, int py) const {
   if (!picture || w_ < 1 || h_ < 1) return;
-  transform(x,y);
+  fltk::Rectangle R(px,py,w_,h_);
+  fltk::transform(R);
   HDC tempdc = CreateCompatibleDC(dc);
   SelectObject(tempdc, (HBITMAP)picture);
   if (!(flags&USES_BG)) { // not a bitmap
-    if (flags&OPAQUE) {
-      BitBlt(dc, x, y, w_, h_, tempdc, 0, 0, SRCCOPY);
+    if ((flags&OPAQUE) && R.w()==w_ && R.h()==h_) {
+      BitBlt(dc, R.x(), R.y(), w_, h_, tempdc, 0, 0, SRCCOPY);
     } else {
       BLENDFUNCTION m_bf;
       m_bf.BlendOp = AC_SRC_OVER;
       m_bf.BlendFlags = 0;
-      m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
+      m_bf.AlphaFormat = (flags&OPAQUE) ? 0 : 1; //AC_SRC_ALPHA;
       m_bf.SourceConstantAlpha = 0xFF;
-      AlphaBlend(dc, x, y, w_, h_, tempdc, 0, 0, w_, h_, m_bf);
+      AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(), tempdc, 0, 0, w_, h_, m_bf);
     }
   } else {
     // Bitmap implementation:
@@ -79,7 +80,7 @@ void Image::over(int x, int y) const {
     // Possibly this is a bug in our Nvidia driver?
     setbrush();
     SetTextColor(dc, 0); //current_xpixel^xpixel(getbgcolor()));
-    BitBlt(dc, x, y, w_, h_, tempdc, 0, 0, MASKPAT);
+    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, 0, 0, MASKPAT);
   }
   DeleteDC(tempdc);
 }

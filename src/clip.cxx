@@ -110,6 +110,9 @@ void fl_restore_clip() {
 #elif USE_X11
   if (r) XSetRegion(xdisplay, gc, r);
   else XSetClipMask(xdisplay, gc, 0);
+#if USE_XFT
+  XftDrawSetClip(xftc, r);
+#endif
 #elif defined(_WIN32)
   SelectClipRgn(dc, r); //if r is NULL, clip is automatically cleared
 #else

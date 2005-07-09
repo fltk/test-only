@@ -23,10 +23,13 @@
 
 // This file is not independently compiled, it is included by drawimage.cxx
 
-// Only a limited set of possible X servers is supported:
-// Pixmaps must have 8, 16, or 32 bits_per_pixel (visual depth may be less)
-// If display is not TrueColor, only 8 bits is supported
-// 32 bits must be arranged rgba, argb, bgra, or abgr.
+// Only a limited set of possible X servers is supported, as I have
+// not encountered other versions, and the old code that supported more
+// was unnecessarily complex:
+//
+// Anything with a 8 bits_per_pixel bitmaps (visual depth may be less)
+// 16-bit TrueColor with arbitrary layout
+// 32-bit TrueColor with ARGB32 layout
 
 #include <fltk/error.h>
 #include <fltk/Image.h>
@@ -34,6 +37,7 @@
 using namespace fltk;
 
 /// Converter functions:
+static void (*converter[7])(const uchar *from, uchar *to, int w);
 
 static int dir;		// direction-alternator
 static int ri,gi,bi;	// saved error-diffusion value
@@ -42,7 +46,36 @@ static int ri,gi,bi;	// saved error-diffusion value
 ////////////////////////////////////////////////////////////////
 // 8-bit converter with error diffusion
 
-static void rgb_to_8(const uchar *from, uchar *to, int w, int delta) {
+static void mono_to_8(const uchar *from, uchar *to, int w) {
+  int r=ri, g=gi, b=bi;
+  int d, td;
+  if (dir) {
+    dir = 0;
+    from = from+(w-1);
+    to = to+(w-1);
+    d = -1;
+    td = -1;
+  } else {
+    dir = 1;
+    d = 1;
+    td = 1;
+  }
+  for (;; from += d, to += td) {
+    r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
+    g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
+    b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
+    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
+    r -= xmap.r;
+    g -= xmap.g;
+    b -= xmap.b;
+    *to = uchar(xmap.pixel);
+    if (!--w) break;
+  }
+  ri = r; gi = g; bi = b;
+}
+
+static void rgb_to_8d(const uchar *from, uchar *to, int w, int delta) {
   int r=ri, g=gi, b=bi;
   int d, td;
   if (dir) {
@@ -71,18 +104,29 @@ static void rgb_to_8(const uchar *from, uchar *to, int w, int delta) {
   ri = r; gi = g; bi = b;
 }
 
-static void bgr_to_8(const uchar *from, uchar *to, int w, int delta) {
+static void rgb_to_8(const uchar *from, uchar *to, int w) {
+  rgb_to_8d(from, to, w, 3);
+}
+
+static void rgba_to_8(const uchar *from, uchar *to, int w) {
+  rgb_to_8d(from, to, w, 4);
+}
+
+static void argb32_to_8(const uchar *from, uchar *to, int w) {
+#if WORDS_BIGENDIAN
+  rgb_to_8d(from+1, to, w, 4);
+#else
   int r=ri, g=gi, b=bi;
   int d, td;
   if (dir) {
     dir = 0;
-    from = from+(w-1)*delta;
+    from = from+(w-1)*4;
     to = to+(w-1);
-    d = -delta;
+    d = -4;
     td = -1;
   } else {
     dir = 1;
-    d = delta;
+    d = 4;
     td = 1;
   }
   for (;; from += d, to += td) {
@@ -98,35 +142,7 @@ static void bgr_to_8(const uchar *from, uchar *to, int w, int delta) {
     if (!--w) break;
   }
   ri = r; gi = g; bi = b;
-}
-
-static void mono_to_8(const uchar *from, uchar *to, int w, int delta) {
-  int r=ri, g=gi, b=bi;
-  int d, td;
-  if (dir) {
-    dir = 0;
-    from = from+(w-1)*delta;
-    to = to+(w-1);
-    d = -delta;
-    td = -1;
-  } else {
-    dir = 1;
-    d = delta;
-    td = 1;
-  }
-  for (;; from += d, to += td) {
-    r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
-    b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
-    XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
-    r -= xmap.r;
-    g -= xmap.g;
-    b -= xmap.b;
-    *to = uchar(xmap.pixel);
-    if (!--w) break;
-  }
-  ri = r; gi = g; bi = b;
+#endif
 }
 
 #endif
@@ -146,7 +162,36 @@ static void mono_to_8(const uchar *from, uchar *to, int w, int delta) {
 #define OUTASSIGN(v) int tt=v; t[0] = uchar(tt>>8); t[1] = uchar(tt)
 #endif
 
-static void rgb_to_16(const uchar *from, uchar *to, int w, int delta) {
+static void mono_to_16(const uchar *from,uchar *to,int w) {
+  OUTTYPE *t = (OUTTYPE *)to;
+  int d, td;
+  if (dir) {
+    dir = 0;
+    from = from+(w-1);
+    t = t+(w-1)*OUTSIZE;
+    d = -1;
+    td = -OUTSIZE;
+  } else {
+    dir = 1;
+    d = 1;
+    td = OUTSIZE;
+  }
+  uchar mask = fl_redmask & fl_greenmask & fl_bluemask;
+  int r=ri;
+  for (;; from += d, t += td) {
+    r = (r&~mask) + *from; if (r > 255) r = 255;
+    uchar m = r&mask;
+    OUTASSIGN((
+      (m<<fl_redshift)+
+      (m<<fl_greenshift)+
+      (m<<fl_blueshift)
+      ) >> fl_extrashift);
+    if (!--w) break;
+  }
+  ri = r;
+}
+
+static void rgb_to_16d(const uchar *from, uchar *to, int w, int delta) {
   OUTTYPE *t = (OUTTYPE *)to;
   int d, td;
   if (dir) {
@@ -175,18 +220,29 @@ static void rgb_to_16(const uchar *from, uchar *to, int w, int delta) {
   ri = r; gi = g; bi = b;
 }
 
-static void bgr_to_16(const uchar *from, uchar *to, int w, int delta) {
+static void rgb_to_16(const uchar *from, uchar *to, int w) {
+  rgb_to_16d(from, to, w, 3);
+}
+
+static void rgba_to_16(const uchar *from, uchar *to, int w) {
+  rgb_to_16d(from, to, w, 4);
+}
+
+static void argb32_to_16(const uchar *from, uchar *to, int w) {
+#if WORDS_BIGENDIAN
+  rgb_to_16d(from+1, to, w, 4);
+#else
   OUTTYPE *t = (OUTTYPE *)to;
   int d, td;
   if (dir) {
     dir = 0;
-    from = from+(w-1)*delta;
+    from = from+(w-1)*4;
     t = t+(w-1)*OUTSIZE;
-    d = -delta;
+    d = -4;
     td = -OUTSIZE;
   } else {
     dir = 1;
-    d = delta;
+    d = 4;
     td = OUTSIZE;
   }
   int r=ri, g=gi, b=bi;
@@ -202,40 +258,35 @@ static void bgr_to_16(const uchar *from, uchar *to, int w, int delta) {
     if (!--w) break;
   }
   ri = r; gi = g; bi = b;
+#endif
 }
 
-static void mono_to_16(const uchar *from,uchar *to,int w, int delta) {
+// special-case the 5r6g5b layout used by XFree86:
+
+static void mono_to_565(const uchar *from,uchar *to,int w) {
   OUTTYPE *t = (OUTTYPE *)to;
   int d, td;
   if (dir) {
     dir = 0;
-    from = from+(w-1)*delta;
+    from = from+(w-1);
     t = t+(w-1)*OUTSIZE;
-    d = -delta;
+    d = -1;
     td = -OUTSIZE;
   } else {
     dir = 1;
-    d = delta;
+    d = 1;
     td = OUTSIZE;
   }
-  uchar mask = fl_redmask & fl_greenmask & fl_bluemask;
   int r=ri;
   for (;; from += d, t += td) {
-    r = (r&~mask) + *from; if (r > 255) r = 255;
-    uchar m = r&mask;
-    OUTASSIGN((
-      (m<<fl_redshift)+
-      (m<<fl_greenshift)+
-      (m<<fl_blueshift)
-      ) >> fl_extrashift);
+    r = (r&7) + *from; if (r > 255) r = 255;
+    OUTASSIGN((r>>3) * 0x841);
     if (!--w) break;
   }
   ri = r;
 }
 
-// special-case the 5r6g5b layout used by XFree86:
-
-static void rgb_to_565(const uchar *from, uchar *to, int w, int delta) {
+static void rgb_to_565d(const uchar *from, uchar *to, int w, int delta) {
   OUTTYPE *t = (OUTTYPE *)to;
   int d, td;
   if (dir) {
@@ -260,18 +311,29 @@ static void rgb_to_565(const uchar *from, uchar *to, int w, int delta) {
   ri = r; gi = g; bi = b;
 }
 
-static void bgr_to_565(const uchar *from, uchar *to, int w, int delta) {
+static void rgb_to_565(const uchar *from, uchar *to, int w) {
+  rgb_to_565d(from, to, w, 3);
+}
+
+static void rgba_to_565(const uchar *from, uchar *to, int w) {
+  rgb_to_565d(from, to, w, 4);
+}
+
+static void argb32_to_565(const uchar *from, uchar *to, int w) {
+#if WORDS_BIGENDIAN
+  rgb_to_565d(from+1, to, w, 4);
+#else
   OUTTYPE *t = (OUTTYPE *)to;
   int d, td;
   if (dir) {
     dir = 0;
-    from = from+(w-1)*delta;
+    from = from+(w-1)*4;
     t = t+(w-1)*OUTSIZE;
-    d = -delta;
+    d = -4;
     td = -OUTSIZE;
   } else {
     dir = 1;
-    d = delta;
+    d = 4;
     td = OUTSIZE;
   }
   int r=ri, g=gi, b=bi;
@@ -283,97 +345,170 @@ static void bgr_to_565(const uchar *from, uchar *to, int w, int delta) {
     if (!--w) break;
   }
   ri = r; gi = g; bi = b;
-}
-
-static void mono_to_565(const uchar *from,uchar *to,int w, int delta) {
-  OUTTYPE *t = (OUTTYPE *)to;
-  int d, td;
-  if (dir) {
-    dir = 0;
-    from = from+(w-1)*delta;
-    t = t+(w-1)*OUTSIZE;
-    d = -delta;
-    td = -OUTSIZE;
-  } else {
-    dir = 1;
-    d = delta;
-    td = OUTSIZE;
-  }
-  int r=ri;
-  for (;; from += d, t += td) {
-    r = (r&7) + *from; if (r > 255) r = 255;
-    OUTASSIGN((r>>3) * 0x841);
-    if (!--w) break;
-  }
-  ri = r;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
 // 32bit TrueColor converters on a 32 or 64-bit machine:
+// I have only seen rgbx32 and xrgb32 orders, or the byte-swapped
+// version of them, which is done by flipping the byte order in Image
 
-#ifdef U64
-#define STORETYPE U64
-#if WORDS_BIGENDIAN
-#define INNARDS32(f) \
-  U64 *t = (U64*)to; \
-  int w1 = (w+1)/2; \
-  for (;;from += delta) {U64 i = f; from += delta; *t++ = (i<<32)|(f); if (!--w1) break;}
-#else
-#define INNARDS32(f) \
-  U64 *t = (U64*)to; \
-  int w1 = (w+1)/2; \
-  for (;; from += delta) {U64 i = f; from += delta; *t++ = ((U64)(f)<<32)|i; if (!--w1) break;}
+static void mono_to_32(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;;) {
+    *t++ = *from++ * 0x1010101U;
+    if (!--w) break;
+  }
+}
+
+static void rgb_to_rgbx(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;; from += 3) {
+    *t++ = (from[0]<<24)+(from[1]<<16)+(from[2]<<8)+(from[3]);
+    if (!--w) break;
+  }
+}
+
+#if !WORDS_BIGENDIAN
+static void rgba_to_rgbx(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;; from += 4) {
+    *t++ = (from[0]<<24)+(from[1]<<16)+(from[2]<<8)+(from[3]);
+    if (!--w) break;
+  }
+}
 #endif
-#else
-#define STORETYPE U32
-#define INNARDS32(f) \
-  U32 *t = (U32*)to; for (; w--; from += delta) *t++ = f
-#endif
 
-// These are named as though the source is rgb order.
-
-static void to_rgbx(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32((unsigned(from[0])<<24)+(from[1]<<16)+(from[2]<<8));
+static void argb32_to_rgbx(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  const U32* f = (U32*)from;
+  for (;;) {
+    unsigned x = *f++;
+    *t++ = (x<<8)|((x>>24)&255);
+    if (!--w) break;
+  }
 }
 
-static void to_xbgr(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32((from[0])+(from[1]<<8)+(from[2]<<16));
+////////////////////////////////////////////////////////////////
+
+static void rgb_to_xrgb(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;; from += 3) {
+    *t++ = (from[0]<<16)+(from[1]<<8)+(from[2]);
+    if (!--w) break;
+  }
 }
 
-static void to_xrgb(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32((from[0]<<16)+(from[1]<<8)+(from[2]));
+static void rgba_to_xrgb(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;; from += 4) {
+    *t++ = (from[0]<<16)+(from[1]<<8)+(from[2])+(from[3]<<24);
+    if (!--w) break;
+  }
 }
 
-static void to_bgrx(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32((from[0]<<8)+(from[1]<<16)+(unsigned(from[2])<<24));
+static void direct_32(const uchar *from, uchar *to, int w) {
+  memcpy(to, from, w*4);
 }
 
-static void to_rrrx(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32(unsigned(*from) * 0x1010100U);
+////////////////////////////////////////////////////////////////
+// alpha pre-processing:
+// These assumme that argb32 is the best intermediate form for image.
+
+// the current colors:
+static uchar fg[3];
+static uchar bg[3];
+
+// Currently MASK just interpolates the fg/bg, producing a solid rectangle.
+// It could instead produce the alpha channel for the transparent part,
+// but I needed this fast and I was not drawing except on plain backgrounds.
+static void mask_converter(const uchar* from, uchar* to, int w)
+{
+  U32 buffer[w];
+  U32* bp = buffer;
+  for (int i = 0; i < w; i++) {
+    uchar c = *from++;
+    uchar r = (c*bg[0]+(255-c)*fg[0])>>8;
+    uchar g = (c*bg[1]+(255-c)*fg[1])>>8;
+    uchar b = (c*bg[2]+(255-c)*fg[2])>>8;
+    *bp++ = (r<<16)|(g<<8)|b;
+  }
+  converter[RGB32]((uchar*)buffer, to, w);
 }
 
-static void to_xrrr(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32(*from * 0x10101U);
+static uchar* alphabuffer;
+static int alphabuffersize;
+static uchar* alphapointer;
+static int alpha_increment;
+static bool mixbg;
+
+static void rgba_converter(const uchar* from, uchar* to, int w) {
+  U32 buffer[w];
+  U32* bp = buffer;
+  uchar* ap = alphapointer;
+  uchar aaccum = 0;
+  uchar amask = 1;
+  for (int i = 0; i < w; i++) {
+    uchar r = *from++;
+    uchar g = *from++;
+    uchar b = *from++;
+    uchar a = *from++;
+    if (!a) {
+      *bp++ = 0;
+    } else {
+      aaccum |= amask;
+      if (a != 255) {
+	r = r+((bg[0]*(255-a))>>8);
+	g = g+((bg[1]*(255-a))>>8);
+	b = b+((bg[2]*(255-a))>>8);
+	mixbg = true;
+      }
+      *bp++ = (r<<16)|(g<<8)|b;
+    }
+    if (amask == 0x80) {
+      *ap++ = aaccum; aaccum = 0; amask = 1;
+    } else {
+      amask <<= 1;
+    }
+  }
+  *ap = aaccum;
+  alphapointer += alpha_increment;
+  converter[RGB32]((const uchar*)buffer, to, w);
 }
 
-// arbitrary bitmasks, are there any systems that need this?
-
-static void
-rgb_to_32(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32(
-    (from[0]<<fl_redshift)+(from[1]<<fl_greenshift)+(from[2]<<fl_blueshift));
-}
-
-static void
-bgr_to_32(const uchar *from, uchar *to, int w, int delta) {
-  INNARDS32(
-    (from[2]<<fl_redshift)+(from[1]<<fl_greenshift)+(from[0]<<fl_blueshift));
-}
-
-static void
-mono_to_32(const uchar *from,uchar *to,int w, int delta) {
-  INNARDS32(
-    (*from << fl_redshift)+(*from << fl_greenshift)+(*from << fl_blueshift));
+static void argb32_converter(const uchar* from, uchar* to, int w) {
+  U32 buffer[w];
+  U32* bp = buffer;
+  const U32* f = (const U32*)from;
+  uchar* ap = alphapointer;
+  uchar aaccum = 0;
+  uchar amask = 1;
+  for (int i = 0; i < w; i++) {
+    U32 c = *f++;
+    uchar a = c>>24;
+    if (!a) {
+      *bp++ = 0;
+    } else {
+      aaccum |= amask;
+      if (a == 255) {
+	*bp++ = c;
+      } else {
+	uchar r = (c>>16)+((bg[0]*(255-a))>>8);
+	uchar g = (c>>8)+((bg[1]*(255-a))>>8);
+	uchar b = c+((bg[2]*(255-a))>>8);
+	*bp++ = (r<<16)|(g<<8)|b;
+	mixbg = true;
+      }
+    }
+    if (amask == 0x80) {
+      *ap++ = aaccum; aaccum = 0; amask = 1;
+    } else {
+      amask <<= 1;
+    }
+  }
+  *ap = aaccum;
+  alphapointer += alpha_increment;
+  converter[RGB32]((const uchar*)buffer, to, w);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -382,9 +517,6 @@ static XImage i;	// template used to pass info to X
 static int bytes_per_pixel;
 static int scanline_add;
 static int scanline_mask;
-static void (*rgb_converter)(const uchar *from, uchar *to, int w, int delta);
-static void (*bgr_converter)(const uchar *from, uchar *to, int w, int delta);
-static void (*mono_converter)(const uchar *from, uchar *to, int w, int delta);
 
 static void figure_out_visual() {
 
@@ -410,15 +542,19 @@ static void figure_out_visual() {
   unsigned int n = pfv->scanline_pad/8;
   if (pfv->scanline_pad & 7 || (n&(n-1)))
     fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
-  if (n < sizeof(STORETYPE)) n = sizeof(STORETYPE);
   scanline_add = n-1;
   scanline_mask = -n;
 
+  converter[MASK] = mask_converter;
+  converter[RGBA] = rgba_converter;
+  converter[ARGB32] = argb32_converter;
+
 #if USE_COLORMAP
   if (bytes_per_pixel == 1) {
-    rgb_converter = rgb_to_8;
-    bgr_converter = bgr_to_8;
-    mono_converter = mono_to_8;
+    converter[MONO] = mono_to_8;
+    converter[RGB] = rgb_to_8;
+    converter[RGBx] = rgba_to_8;
+    converter[RGB32] = argb32_to_8;
     return;
   }
   if (!xvisual->red_mask)
@@ -442,152 +578,59 @@ static void figure_out_visual() {
     ::i.byte_order = 1;
 #endif
     if (rs == 11 && gs == 6 && bs == 0 && fl_extrashift == 3) {
-      rgb_converter = rgb_to_565;
-      bgr_converter = bgr_to_565;
-      mono_converter = mono_to_565;
+      converter[MONO] = mono_to_565;
+      converter[RGB] = rgb_to_565;
+      converter[RGBx] = rgba_to_565;
+      converter[RGB32] = argb32_to_565;
     } else {
-      rgb_converter = rgb_to_16;
-      bgr_converter = bgr_to_16;
-      mono_converter = mono_to_16;
+      converter[MONO] = mono_to_16;
+      converter[RGB] = rgb_to_16;
+      converter[RGBx] = rgba_to_16;
+      converter[RGB32] = argb32_to_16;
     }
     break;
 
   case 4:
-    if ((::i.byte_order!=0) != WORDS_BIGENDIAN)
-      {rs = 24-rs; gs = 24-gs; bs = 24-bs;}
+    converter[MONO] = mono_to_32;
     if (rs == 0 && gs == 8 && bs == 16) {
-      rgb_converter = to_xbgr;
-      bgr_converter = to_xrgb;
-      mono_converter = to_xrrr;
-    } else if (rs == 16 && gs == 8 && bs == 0) {
-      rgb_converter = to_xrgb;
-      bgr_converter = to_xbgr;
-      mono_converter = to_xrrr;
-    } else if (rs == 24 && gs == 16 && bs == 8) {
-      rgb_converter = to_rgbx;
-      bgr_converter = to_bgrx;
-      mono_converter = to_rrrx;
-    } else if (rs == 8 && gs == 16 && bs == 24) {
-      rgb_converter = to_bgrx;
-      bgr_converter = to_rgbx;
-      mono_converter = to_rrrx;
-    } else {
-      ::i.byte_order = WORDS_BIGENDIAN;
-      rgb_converter = rgb_to_32;
-      bgr_converter = bgr_to_32;
-      mono_converter = mono_to_32;
+      ::i.byte_order = !WORDS_BIGENDIAN;
+      printf("A\n");
+      goto RGBX;
     }
-    break;
-
+    if (rs == 24 && gs == 16 && bs == 8) {
+      ::i.byte_order = WORDS_BIGENDIAN;
+      printf("B\n");
+    RGBX:
+      converter[RGB] = rgb_to_rgbx;
+#if WORDS_BIGENDIAN
+      converter[RGBx] = direct_32;
+#else
+      converter[RGBx] = rgba_to_rgbx;
+#endif
+      converter[RGB32] = argb32_to_rgbx;
+      break;
+    }
+    if (rs == 8 && gs == 16 && bs == 24) {
+      ::i.byte_order = !WORDS_BIGENDIAN;
+      printf("C\n");
+      goto XRGB;
+    }
+    if (rs == 16 && gs == 8 && bs == 0) {
+      ::i.byte_order = WORDS_BIGENDIAN;
+      printf("D\n");
+    XRGB:
+      converter[RGB] = rgb_to_xrgb;
+      converter[RGBx] = rgba_to_xrgb;
+      converter[RGB32] = direct_32;
+      break;
+    }
+    // else fallthrough to failure case:
   default:
-    fatal("Can't do %d bits_per_pixel",i.bits_per_pixel);
+    fatal("Can't do %d-bit 0x%x 0x%x 0x%x visual",
+	  i.bits_per_pixel, xvisual->red_mask,
+	  xvisual->green_mask, xvisual->blue_mask);
   }
   //printf("bytes per pixel %d, byte order %d\n",bytes_per_pixel,::i.byte_order);
-}
-
-////////////////////////////////////////////////////////////////
-// alpha pre-processing:
-
-// call this second...
-static void (*final_convert)(const uchar *from, uchar *to, int w, int delta);
-
-// the current colors, swapped to be in the same order as the source:
-static uchar fg[3];
-static uchar bg[3];
-
-// Mask just interpolates the fg/bg. It could use the mask but it does
-// not because I need it to be fast...
-static void mask_convert(const uchar* from, uchar* to, int w, int delta)
-{
-  uchar buffer[3*w];
-  uchar* bp = buffer;
-  for (int i = 0; i < w; i++) {
-    uchar c = *from; from += delta;
-    for (int j = 0; j < 3; j++)
-      *bp++ = (c*bg[j]+(255-c)*fg[j])>>8;
-  }
-  final_convert(buffer, to, w, 3);
-}
-
-static uchar* alphabuffer;
-static int alphabuffersize;
-static uchar* alphapointer;
-static int alpha_increment;
-static bool mixbg;
-
-static void doalpha(const uchar* alpha, const uchar* from, uchar* to, int w, int delta) {
-  uchar buffer[3*w];
-  uchar* bp = buffer;
-  uchar* ap = alphapointer;
-  uchar aaccum = 0;
-  uchar amask = 1;
-  for (int i = 0; i < w; i++, from+=delta, alpha += delta) {
-    uchar a = *alpha;
-    if (a == 255) {
-      *bp++ = from[0];
-      *bp++ = from[1];
-      *bp++ = from[2];
-      aaccum |= amask;
-    } else if (a) {
-      *bp++ = from[0]+((bg[0]*(255-a))>>8);
-      *bp++ = from[1]+((bg[1]*(255-a))>>8);
-      *bp++ = from[2]+((bg[2]*(255-a))>>8);
-      aaccum |= amask;
-      mixbg = true;
-    } else {
-      *bp++ = 0;
-      *bp++ = 0;
-      *bp++ = 0;
-    }
-    if (amask == 0x80) {
-      *ap++ = aaccum; aaccum = 0; amask = 1;
-    } else {
-      amask <<= 1;
-    }
-  }
-  *ap = aaccum;
-  alphapointer += alpha_increment;
-  final_convert(buffer, to, w, 3);
-}
-
-static void prealpha(const uchar* from, uchar* to, int w, int delta) {
-  doalpha(from, from+1, to, w, delta);
-}
-
-static void postalpha(const uchar* from, uchar* to, int w, int delta) {
-  doalpha(from+3, from, to, w, delta);
-}
-
-static void domask(const uchar* alpha, const uchar* from, uchar* to, int w, int delta) {
-  static int aerror;
-  uchar* ap = alphapointer;
-  uchar aaccum = 0;
-  uchar amask = 1;
-  int a = aerror;
-  for (int i = 0; i < w; i++, alpha += delta) {
-    a += *alpha;
-    if (a > 127) {
-      aaccum |= amask;
-      a -= 255;
-    }
-    if (amask == 0x80) {
-      *ap++ = aaccum; aaccum = 0; amask = 1;
-    } else {
-      amask <<= 1;
-    }
-  }
-  aerror = a;
-  *ap = aaccum;
-  alphapointer += alpha_increment;
-  final_convert(from, to, w, delta);
-}
-
-static void premask(const uchar* from, uchar* to, int w, int delta) {
-  domask(from, from+1, to, w, delta);
-}
-
-static void postmask(const uchar* from, uchar* to, int w, int delta) {
-  domask(from+3, from, to, w, delta);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -615,8 +658,8 @@ public:
 };
 
 extern void fl_restore_clip();
-static void putimage(int x, int y, int w, int h, bool bitmask) {
-  if (bitmask) {
+static void putimage(int x, int y, int w, int h) {
+  if (alphapointer && !fl_current_Image) {
     XWindow alpha =
       XCreateBitmapFromData(xdisplay, xwindow,
 			    (char*)alphabuffer, (w+7)&-8, h);
@@ -635,7 +678,7 @@ static void putimage(int x, int y, int w, int h, bool bitmask) {
 // Combines both the callback and buffer image drawing functions
 static void innards(const uchar *buf, PixelType type,
 		    const Rectangle& r1,
-		    int delta, int linedelta,
+		    int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
   Rectangle r(r1); transform(r);
@@ -645,44 +688,22 @@ static void innards(const uchar *buf, PixelType type,
   int dy = cr.y()-r.y();
   int w = cr.w();
   int h = cr.h();
+  const int delta = depth(type);
+  if (buf) buf += dx*delta + dy*linedelta;
 
   if (!bytes_per_pixel) figure_out_visual();
   i.width = w;
   i.height = h;
 
-  void (*conv)(const uchar *from, uchar *to, int w, int delta);
+  void (*conv)(const uchar *from, uchar *to, int w) = converter[type];
 
-  static char flip[12] = {0,0,1,0,0,1,1,0,0,1,1,0};
-
-  switch (type) {
-  case MONO:
-    conv = mono_converter;
-    break;
-  case BGR:
-    conv = bgr_converter;
-    break;
-  case RGB:
-    conv = rgb_converter;
-    break;
-  case MASK:
-    conv = mask_convert;
-    final_convert = rgb_converter;
-    goto J1;
-  default:
-    if (type >= RGBM)
-      conv = (type&1) ? premask : postmask;
-    else
-      conv = (type&1) ? prealpha : postalpha;
-  J1:
-    if (flip[type]) {
-      final_convert = bgr_converter;
-      split_color(getcolor(), fg[2],fg[1],fg[0]);
-      split_color(getbgcolor(), bg[2],bg[1],bg[0]);
-    } else {
-      final_convert = rgb_converter;
-      split_color(getcolor(), fg[0],fg[1],fg[2]);
-      split_color(getbgcolor(), bg[0],bg[1],bg[2]);
-    }
+  if (type==MASK) {
+    split_color(getcolor(), fg[0],fg[1],fg[2]);
+    split_color(getbgcolor(), bg[0],bg[1],bg[2]);
+    alphapointer = 0;
+  } else if (type==RGBA || type==ARGB32) {
+    split_color(getcolor(), fg[0],fg[1],fg[2]);
+    split_color(getbgcolor(), bg[0],bg[1],bg[2]);
     alpha_increment = (w+7)>>3;
     if (alpha_increment*h > alphabuffersize) {
       delete[] alphabuffer;
@@ -691,34 +712,25 @@ static void innards(const uchar *buf, PixelType type,
     }
     alphapointer = alphabuffer;
     mixbg = false;
-    break;
+  } else {
+    alphapointer = 0;
   }
 
-#if 1
   // Direct-dump RGB or BGR data if it is already laid out correctly.
   // This assummes the server will ignore the 4th byte,
   // that it works when the image is not word-aligned,
   // and it works if bytes_per_line is negative.
   // This seems to all work on my XFree86 setup
-  if (buf &&
-      delta == 4 &&
-#if WORDS_BIGENDIAN
-      (conv == to_rgbx || conv == to_xrgb)
-#else
-      (conv == to_xbgr || conv == to_bgrx)
-#endif
-      && !(linedelta&scanline_add)) {
+  if (buf && conv==direct_32 && !(linedelta&scanline_add)) {
     i.data = (char *)(buf+delta*dx+linedelta*dy);
-    if (conv == to_xrgb || conv == to_bgrx) i.data++;
     i.bytes_per_line = linedelta;
     XPutImage(xdisplay,xwindow,gc, &i, 0, 0, cr.x(), cr.y(), w, h);
     return;
   }
-#endif
 
-  int linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/sizeof(STORETYPE);
+  int linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
   int blocking = h;
-  static STORETYPE *buffer;	// our storage, always word aligned
+  static U32* buffer;	// our storage, always word aligned
   static long buffer_size;
   {int size = linesize*h;
   if (size > MAXBUFFER) {
@@ -728,33 +740,33 @@ static void innards(const uchar *buf, PixelType type,
   if (size > buffer_size) {
     delete[] buffer;
     buffer_size = size;
-    buffer = new STORETYPE[size];
+    buffer = new U32[size];
   }}
   i.data = (char *)buffer;
-  i.bytes_per_line = linesize*sizeof(STORETYPE);
+  i.bytes_per_line = linesize*4;
   if (buf) {
     buf += delta*dx+linedelta*dy;
     for (int j=0; j<h; ) {
-      STORETYPE *to = buffer;
+      U32 *to = buffer;
       int k;
       for (k = 0; j<h && k<blocking; k++, j++) {
-	conv(buf, (uchar*)to, w, delta);
+	conv(buf, (uchar*)to, w);
 	buf += linedelta;
 	to += linesize;
       }
-      putimage(cr.x(), cr.y()+j-k, w, k, type >= RGBA);
+      putimage(cr.x(), cr.y()+j-k, w, k);
     }
   } else {
-    STORETYPE* linebuf = new STORETYPE[(r1.w()*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
+    U32* linebuf = new U32[(r1.w()*delta+3)/4];
     for (int j=0; j<h; ) {
-      STORETYPE *to = buffer;
+      U32* to = buffer;
       int k;
       for (k = 0; j<h && k<blocking; k++, j++) {
 	const uchar* ret = cb(userdata, dx, dy+j, w, (uchar*)linebuf);
-	conv(ret, (uchar*)to, w, delta);
+	conv(ret, (uchar*)to, w);
 	to += linesize;
       }
-      putimage(cr.x(), cr.y()+j-k, w, k, type >= RGBA);
+      putimage(cr.x(), cr.y()+j-k, w, k);
     }
     delete[] linebuf;
   }
@@ -762,7 +774,7 @@ static void innards(const uchar *buf, PixelType type,
   if (fl_current_Image) {
     if (type==MASK) {
       DrawImageHelper::setmaskflags();
-    } else if (type >= RGBA) {
+    } else if (alphapointer) {
       DrawImageHelper::setalpha(w,h);
     }
   }

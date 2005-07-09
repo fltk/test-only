@@ -141,13 +141,7 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const
   // If label is drawn outside, draw the image only:
   if ((flags&15) && !(flags & ALIGN_INSIDE)) {
     if (!image_) return;
-    int fw = ir.w();
-    int fh = ir.h();
-    image_->measure(fw, fh);
-    if (flags & ALIGN_CLIP) push_clip(ir);
-    Rectangle cr(ir,fw,fh);
-    image_->draw(cr);
-    if (flags & ALIGN_CLIP) pop_clip();
+    image_->draw(ir);
     return;
   }
 

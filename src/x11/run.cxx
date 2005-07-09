@@ -2056,13 +2056,23 @@ void Window::label(const char *name, const char *iname) {
   make_current(). It will already be set when draw() is called.
 */
 const Window *Window::drawing_window_;
+
 int fl_clip_w, fl_clip_h;
+
+// Which window we are drawing into. If this changes we will destroy
+// and recreate all the graphics context objects:
 XWindow fltk::xwindow;
+
+// This may be removed if we use Cairo or XRender only:
 GC fltk::gc;
+
 #if USE_CAIRO
 cairo_t* fltk::cc;
 static cairo_surface_t* surface;
-static unsigned cairo_window_id;
+#endif
+
+#if USE_XFT
+XftDraw* fltk::xftc;
 #endif
 
 /** Make the fltk drawing functions draw into this widget.
@@ -2108,47 +2118,63 @@ fltk::Image* fl_current_Image;
   that were created by this.
 */
 void fltk::draw_into(XWindow window, int w, int h) {
-  xwindow = window;
   fl_current_Image = 0;
   fl_clip_w = w;
   fl_clip_h = h;
-  // in X the gc structure can be reused for every window:
-  if (!fltk::gc) fltk::gc = XCreateGC(xdisplay, window, 0, 0);
-  // The XFT context is not changed here, to avoid wasting time
-  // if no text is drawn into this window. It is created when the
-  // xft text is drawn the first time.
-  load_identity();
-#if USE_CAIRO
-  // Cairo context created as well:
-  if (cc) {
-    if (cairo_status(cc)) {
-      warning("Cairo: %s", cairo_status_string(cc));
-    } else if (cairo_window_id == window) {
-      cairo_xlib_surface_set_size(surface, w, h);
-      return;
-    }
-    cairo_destroy(cc);
-    cairo_surface_destroy(surface);
-  }
-  cairo_window_id = window;
-  surface = cairo_xlib_surface_create_with_visual(xdisplay, window, xvisual->visual);
-  cairo_xlib_surface_set_size(surface, w, h);
-  cc = cairo_create(surface);
+
+  if (xwindow != window) {
+    xwindow = window;
+
+    // The X11 GC structure does not contain the drawable, so only
+    // one is needed and it can be reused all we want:
+    if (!fltk::gc) fltk::gc = XCreateGC(xdisplay, window, 0, 0);
+
+#if USE_XFT
+    // It appears that Xft contexts can be reused for different drawables:
+    if (!fltk::xftc)
+      xftc = XftDrawCreate(xdisplay, window, xvisual->visual, xcolormap);
+    else
+      XftDrawChange(xftc, window);
 #endif
+
+#if USE_CAIRO
+    if (cc) {
+      if (cairo_status(cc))
+	warning("Cairo: %s", cairo_status_string(cc));
+      cairo_destroy(cc);
+      cairo_surface_destroy(surface);
+    }
+    surface = cairo_xlib_surface_create_with_visual(xdisplay, window, xvisual->visual);
+    cc = cairo_create(surface);
+#endif
+  }
+
+#if USE_CAIRO
+  cairo_xlib_surface_set_size(surface, w, h);
+#endif
+
+  load_identity();
 }
 
-/*! \fn void fltk::stop_drawing(XWindow window);
-  If you are destroying a window or pixmap that you (may have)
-  previous called draw_into() on, you should call this before
-  destroying it. This will destroy any temporary stuctures ("gc"s)
-  that fltk had to create to draw on it. This will do nothing if
-  you have not called draw_into() on this.
+/**
+  Destroy any "graphics context" structures that point at this window
+  or Pixmap. They will be recreated if you call draw_into() again.
+
+  Unfortunately some graphics libraries will crash if you don't do this.
+  Even if the graphics context is not used, destroying it after destroying
+  it's target will cause a crash. Sigh.
 */
-#if !USE_XFT
 void fltk::stop_drawing(XWindow window) {
-  if (xwindow == window) xwindow = 0;
-}
+  if (xwindow == window) {
+    xwindow = 0;
+#if USE_CAIRO
+    cairo_destroy(cc); cc = 0;
 #endif
+#if USE_XFT
+    XftDrawDestroy(xftc); xftc = 0;
+#endif
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 // Window update, double buffering, and overlay:

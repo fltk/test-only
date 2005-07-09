@@ -225,7 +225,17 @@ void Image::draw(int x, int y) const {
 void Image::_draw(const fltk::Rectangle& r) const
 {
   if (!drawn() || r.empty()) return;
-  over(r.x(), r.y());
+  const float sx = float(r.w())/w();
+  const float sy = float(r.h())/h();
+  if (sx != 1 || sy != 1) {
+    push_matrix();
+    translate(r.x(), r.y());
+    scale(sx, sy);
+    over(0,0);
+    pop_matrix();
+  } else {
+    over(r.x(), r.y());
+  }
 }
 
 /** \fn void Image::destroy();

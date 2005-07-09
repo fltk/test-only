@@ -363,7 +363,7 @@ void fltk::jpegImage::read()
 
   {GSave gsave;
   make_current();
-  drawimage(drawimage_cb, &cinfo, RGB, Rectangle(cinfo.output_width, cinfo.output_height), cinfo.output_components);}
+  drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
 
   jpeg_finish_decompress(&cinfo);
 

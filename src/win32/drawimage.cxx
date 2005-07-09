@@ -23,22 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// I hope a simple and portable method of drawing color and monochrome
-// images.  To keep this simple, only a single storage type is
-// supported: 8 bit unsigned data, byte order RGB, and pixels are
-// stored packed into rows with the origin at the top-left.  It is
-// possible to alter the size of pixels with the "delta" argument, to
-// add alpha or other information per pixel.  It is also possible to
-// change the origin and direction of the image data by messing with
-// the "delta" and "linedelta", making them negative, though this may
-// defeat some of the shortcuts in translating the image for X.
-
-// Unbelievably (since it conflicts with how most PC software works)
-// MicroSoft picked a bottom-up and BGR storage format for their
-// DIB images.  I'm pretty certain there is a way around this, but
-// I can't find any other than the brute-force method of drawing
-// each line as a seperate image.  This may also need to be done
-// if the delta is any amount other than 1, 3, or 4.
+// This needs improvement so that ARGB32 and RGB32 formats don't waste
+// time copying the image to temporary storage!
 
 ////////////////////////////////////////////////////////////////
 //
@@ -62,80 +48,9 @@ using namespace fltk;
 extern "C" {
   WINGDIAPI BOOL  WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
 }
-# define AC_SRC_ALPHA		  0x01
 #endif
 
 #define MAXBUFFER 0x40000 // 256k
-
-#undef USE_COLORMAP
-#define USE_COLORMAP 0
-#if USE_COLORMAP
-
-// error-diffusion dither into the fltk colormap
-static void dither(uchar* to, const uchar* from, int w, int delta) {
-  static int ri, gi, bi, dir;
-  int r=ri, g=gi, b=bi;
-  int d, td;
-  if (dir) {
-    dir = 0;
-    from = from+(w-1)*delta;
-    to = to+(w-1);
-    d = -delta;
-    td = -1;
-  } else {
-    dir = 1;
-    d = delta;
-    td = 1;
-  }
-  for (;; from += d, to += td) {
-    r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*5/256;
-    r -= rr*255/4;
-    g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
-    int gg = g*8/256;
-    g -= gg*255/7;
-    b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    int bb = b*5/256;
-    b -= bb*255/4;
-    *to = uchar(BLACK+(bb*5+rr)*8+gg);
-    if (!--w) break;
-  }
-  ri = r; gi = g; bi = b;
-}
-
-// error-diffusion dither into the fltk colormap
-static void monodither(uchar* to, const uchar* from, int w, int delta) {
-  static int ri, gi, bi, dir;
-  int r=ri, g=gi, b=bi;
-  int d, td;
-  if (dir) {
-    dir = 0;
-    from = from+(w-1)*delta;
-    to = to+(w-1);
-    d = -delta;
-    td = -1;
-  } else {
-    dir = 1;
-    d = delta;
-    td = 1;
-  }
-  for (;; from += d, to += td) {
-    r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*5/256;
-    r -= rr*255/4;
-    g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
-    int gg = g*8/256;
-    g -= gg*255/7;
-    b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    int bb = b*5/256;
-    b -= bb*255/4;
-    *to = uchar(BLACK+(bb*5+rr)*8+gg);
-    if (!--w) break;
-  }
-  ri = r;
-}
-
-#endif // USE_COLORMAP
 
 extern fltk::Image* fl_current_Image;
 class fltk::DrawImageHelper {
@@ -152,67 +67,62 @@ public:
 
 static void innards(const uchar *buf, PixelType type,
 		    const fltk::Rectangle& r1,
-		    int delta, int linedelta,
+		    int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
   fltk::Rectangle r(r1); transform(r);
-  fltk::Rectangle cr(r); if (!intersect_with_clip(cr)) return;
 
-  int x = cr.x();
-  int y = cr.y();
-  int w = cr.w();
-  int h = cr.h();
-  int X = r.x();
-  int Y = r.y();
-  int W = r1.w();
-  if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
+  const int W = r1.w();
+  const int H = r1.h();
+  const int delta = depth(type);
 
   BITMAPINFO bmi;
   memset(&bmi, 0, sizeof(BITMAPINFO));
   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = w;
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 32;
   bmi.bmiHeader.biCompression = BI_RGB;
 
-  static U32* buffer;
-  int blocking = h;
-  {int size = 4*w*h;
-  if (size > MAXBUFFER) {
-    size = MAXBUFFER;
-    blocking = MAXBUFFER/(4*w);
-  }
-  static long buffer_size;
-  if (size > buffer_size) {
-    delete[] buffer;
-    buffer_size = size;
-    buffer = new U32[(size+3)/4];
-  }}
-
-  static U32* line_buffer;
-  if (!buf) {
-    int size = W*delta;
-    static int line_buf_size;
-    if (size > line_buf_size) {
-      delete[] line_buffer;
-      line_buf_size = size;
-      line_buffer = new U32[(size+3)/4];
+  if (buf && (type == RGB32 || type == ARGB32)) {
+    if (linedelta >= 0) {
+      bmi.bmiHeader.biWidth = linedelta/4;
+      bmi.bmiHeader.biHeight = -H;
+      bmi.bmiHeader.biSizeImage = linedelta*H;
+    } else {
+      bmi.bmiHeader.biWidth = -linedelta/4;
+      bmi.bmiHeader.biHeight = H;
+      buf += linedelta*(H-1);
+      bmi.bmiHeader.biSizeImage = -linedelta*H;
     }
-  }
+  } else {
+    static U32* buffer;
+    int size = 4*W*H;
+    static long buffer_size;
+    if (size > buffer_size) {
+      delete[] buffer;
+      buffer_size = size;
+      buffer = new U32[(size+3)/4];
+    }
+    static U32* line_buffer;
+    if (!buf) {
+      int size = W*delta;
+      static int line_buf_size;
+      if (size > line_buf_size) {
+	delete[] line_buffer;
+	line_buf_size = size;
+	line_buffer = new U32[(size+3)/4];
+      }
+    }
+    // needed for MASK:
+    uchar mr,mg,mb;
+    if (type == MASK)
+      fltk::split_color(fltk::getcolor(),mr,mg,mb);
 
-  // needed for MASK:
-  uchar mr,mg,mb;
-  if (type == MASK)
-    fltk::split_color(fltk::getcolor(),mr,mg,mb);
-
-  int ypos = y;
-  for (int j=0; j<h; ) {
-    int k;
-    uchar *to = (uchar*)buffer;
-    for (k = 0; j<h && k<blocking; k++, j++) {
+    for (int y=0; y<H; y++) {
+      uchar* to = (uchar*)buffer+W*(H-y-1)*4;
       const uchar* from;
       if (!buf) { // run the converter:
-        from = cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
+        from = cb(userdata, 0, y, W, (uchar*)line_buffer);
       } else {
         from = buf;
         buf += linedelta;
@@ -220,12 +130,12 @@ static void innards(const uchar *buf, PixelType type,
       int i;
       switch (type) {
       case MONO:
-	for (i=w; i--; from += delta, to += 4) {
+	for (i=W; i--; from += delta, to += 4) {
 	  to[0] = to[1] = to[2] = *from; to[3] = 0xff;
 	}
 	break;
       case MASK:
-	for (i=w; i--; from += delta, to += 4) {
+	for (i=W; i--; from += delta, to += 4) {
 	  uchar v = 255-*from;
 	  to[0] = (mb*v)>>8;
 	  to[1] = (mg*v)>>8;
@@ -233,16 +143,9 @@ static void innards(const uchar *buf, PixelType type,
 	  to[3] = v;
 	}
 	break;
-      case BGR:
-	for (i=w; i--; from += delta, to += 4) {
-	  to[0] = from[0];
-	  to[1] = from[1];
-	  to[2] = from[2];
-	  to[3] = 0xff;
-	}
-	break;
+      case RGBx:
       case RGB:
-	for (i=w; i--; from += delta, to += 4) {
+	for (i=W; i--; from += delta, to += 4) {
 	  to[0] = from[2];
 	  to[1] = from[1];
 	  to[2] = from[0];
@@ -250,118 +153,65 @@ static void innards(const uchar *buf, PixelType type,
 	}
 	break;
       case RGBA:
-	for (i=w; i--; from += delta, to += 4) {
+	for (i=W; i--; from += delta, to += 4) {
 	  to[0] = from[2];
 	  to[1] = from[1];
 	  to[2] = from[0];
 	  to[3] = from[3];
 	}
 	break;
-      case ABGR:
-	for (i=w; i--; from += delta, to += 4) {
-	  to[0] = from[1];
-	  to[1] = from[2];
-	  to[2] = from[3];
-	  to[3] = from[0];
-	}
-	break;
-      case BGRA:
-	for (i=w; i--; from += delta, to += 4) {
-	  to[0] = from[0];
-	  to[1] = from[1];
-	  to[2] = from[2];
-	  to[3] = from[3];
-	}
-	break;
-      case ARGB:
-	for (i=w; i--; from += delta, to += 4) {
-	  to[0] = from[3];
-	  to[1] = from[2];
-	  to[2] = from[1];
-	  to[3] = from[0];
-	}
-	break;
-      case RGBM:
-	for (i=w; i--; from += delta, to += 4) {
-	  uchar a = to[3] = from[3];
-	  to[0] = (from[2]*a)>>8;
-	  to[1] = (from[1]*a)>>8;
-	  to[2] = (from[0]*a)>>8;
-	}
-	break;
-      case MBGR:
-	for (i=w; i--; from += delta, to += 4) {
-	  uchar a = to[3] = from[0];
-	  to[0] = (from[1]*a)>>8;
-	  to[1] = (from[2]*a)>>8;
-	  to[2] = (from[3]*a)>>8;
-	}
-	break;
-      case BGRM:
-	for (i=w; i--; from += delta, to += 4) {
-	  uchar a = to[3] = from[3];
-	  to[0] = (from[0]*a)>>8;
-	  to[1] = (from[1]*a)>>8;
-	  to[2] = (from[2]*a)>>8;
-	}
-	break;
-      case MRGB:
-	for (i=w; i--; from += delta, to += 4) {
-	  uchar a = to[3] = from[0];
-	  to[0] = (from[3]*a)>>8;
-	  to[1] = (from[2]*a)>>8;
-	  to[2] = (from[1]*a)>>8;
-	}
+      case RGB32:
+      case ARGB32:
+	memcpy(to, from, 4*W);
 	break;
       }
     }
 
-    bmi.bmiHeader.biHeight = -k;
-    bmi.bmiHeader.biSizeImage = k*4*w;
-    if (fl_current_Image) {
-      SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
-			(LPSTR)buffer,
-			&bmi,
-			DIB_RGB_COLORS
-			);
-      if (type == MASK)
-	DrawImageHelper::setmask();
-      else if (!(type == MONO || type == RGB || type == BGR))
-	DrawImageHelper::clear_opaque();
-    } else if (type == MONO || type == RGB || type == BGR) {
-      SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
-			(LPSTR)buffer,
-			&bmi,
-			DIB_RGB_COLORS
-			);
-    } else {
-      HBITMAP rgb = CreateDIBSection(dc, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-      HDC tempdc = CreateCompatibleDC(dc);
-      SelectObject(tempdc, rgb);
-      SetDIBitsToDevice(tempdc, 0, 0, w, k, 0, 0, 0, k,
-			(LPSTR)buffer,
-			&bmi,
-			DIB_RGB_COLORS
-			);
-      BLENDFUNCTION m_bf;
-      m_bf.BlendOp = AC_SRC_OVER;
-      m_bf.BlendFlags = 0;
-      m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
-      m_bf.SourceConstantAlpha = 0xFF;
-      AlphaBlend(dc, x, ypos, w, k,
-		 tempdc, 0, 0, w, k, m_bf);
-      DeleteDC(tempdc);
-      DeleteObject(rgb);
-    }
-    ypos += k;
+    bmi.bmiHeader.biWidth = W;
+    bmi.bmiHeader.biHeight = H;
+    bmi.bmiHeader.biSizeImage = size;
+    buf = (uchar*)buffer;
+  }
+
+  bool hasalpha = type != MONO && type != RGB && type != RGB32;
+  if (fl_current_Image) {
+    SetDIBitsToDevice(dc, r.x(), r.y(), W, H, 0, 0, 0, H,
+		      (LPSTR)buf,
+		      &bmi,
+		      DIB_RGB_COLORS
+		      );
+    if (type == MASK	)
+      DrawImageHelper::setmask();
+    else if (hasalpha)
+      DrawImageHelper::clear_opaque();
+  } else if (!hasalpha && r.w()==W && r.h()==H) {
+    SetDIBitsToDevice(dc, r.x(), r.y(), W, H, 0, 0, 0, H,
+		      (LPSTR)buf,
+		      &bmi,
+		      DIB_RGB_COLORS
+		      );
+  } else {
+    HBITMAP rgb = CreateDIBSection(dc, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
+    HDC tempdc = CreateCompatibleDC(dc);
+    SelectObject(tempdc, rgb);
+    SetDIBitsToDevice(tempdc, 0, 0, W, H, 0, 0, 0, H,
+		      (LPSTR)buf,
+		      &bmi,
+		      DIB_RGB_COLORS
+		      );
+    BLENDFUNCTION m_bf;
+    m_bf.BlendOp = AC_SRC_OVER;
+    m_bf.BlendFlags = 0;
+    m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
+    m_bf.SourceConstantAlpha = 0xFF;
+    AlphaBlend(dc, r.x(), r.y(), r.w(), r.h(),
+	       tempdc, 0, 0, W, H, m_bf);
+    DeleteDC(tempdc);
+    DeleteObject(rgb);
   }
 }
 
-#if USE_COLORMAP
-#define DITHER_FILLRECT (xpalette!=0)
-#else
 #define DITHER_FILLRECT false
-#endif
 
 //
 // End of "$Id$".

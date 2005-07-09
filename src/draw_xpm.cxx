@@ -118,6 +118,15 @@ static const uchar* cb1(void*v, int x, int y, int w, uchar* buf) {
   return buf;
 }
 
+// callback for monochrome 1 byte per pixel:
+static const uchar* mcb1(void*v, int x, int y, int w, uchar* buf) {
+  xpm_data& d = *(xpm_data*)v;
+  const uchar* p = d.data[y]+x;
+  uchar* b = buf;
+  for (int X=w; X--;) *b++ = *(uchar*)(d.colors+*p++);//>>24;
+  return buf;
+}
+
 // callback for 2 bytes per pixel:
 static const uchar* cb2(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
@@ -214,7 +223,7 @@ int fltk::draw_xpm(const char*const* di, int x, int y) {
 	memcpy(buf, previous_word, p-previous_word);
 	buf[p-previous_word] = 0;
 	C = color(buf);
-      } else {	
+      } else {
 	C = color((const char*)previous_word);
       }
       if (C) {
@@ -224,7 +233,6 @@ int fltk::draw_xpm(const char*const* di, int x, int y) {
 	if (c[0] != c[1] || c[0] != c[2]) monochrome = false;
 	c[3] = 0xff;
       } else { // assume "None" or "#transparent" for any errors
-	// this should be transparent...
 	transparent_index = index;
 	c[0] = c[1] = c[2] = c[3] = 0;
 	monochrome = false;
@@ -232,9 +240,12 @@ int fltk::draw_xpm(const char*const* di, int x, int y) {
     }
   }
   d.data = data;
-  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d,
-	    monochrome ? MASK : transparent_index >= 0 ? RGBA : RGB,
-	    Rectangle(x, y, d.w, d.h), 4);
+  if (monochrome)
+    drawimage(mcb1, &d, MASK, Rectangle(x, y, d.w, d.h));
+  else
+    drawimage(chars_per_pixel==1 ? cb1 : cb2, &d,
+	      transparent_index >= 0 ? RGBA : RGBx,
+	      Rectangle(x, y, d.w, d.h));
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }

@@ -41,13 +41,13 @@ uchar *				// O - Pixel buffer or NULL if failed
 fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
 	PixelType type,		// Type of pixels to store (RGB and RGBA only now)
 	const Rectangle& r,	// area to read
-		int d,		// pointer increment per pixel
 		int linedelta	// pointer increment per line
 ) {
   int X = r.x();
   int Y = r.y();
   int w = r.w();
   int h = r.h();
+  int d = depth(type);		// pointer increment per pixel
   XImage	*image;		// Captured image
   int		i, maxindex;	// Looping vars
   int           x, y;		// Current X & Y in image

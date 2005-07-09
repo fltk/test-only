@@ -28,16 +28,6 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 
-// I hope a simple and portable method of drawing color and monochrome
-// images.  To keep this simple, only a single storage type is
-// supported: 8 bit unsigned data, byte order RGB, and pixels are
-// stored packed into rows with the origin at the top-left.  It is
-// possible to alter the size of pixels with the "delta" argument, to
-// add alpha or other information per pixel.  It is also possible to
-// change the origin and direction of the image data by messing with
-// the "delta" and "linedelta", making them negative, though this may
-// defeat some of the shortcuts in translating the image for X.
-
 // These files define "innards" and the "DITHER_FILLRECT" macro:
 #if USE_X11
 # include "x11/drawimage.cxx"
@@ -86,49 +76,28 @@ using namespace fltk;
   - \a type describes how to interpret the bytes of each pixel.
   - \a rectangle: the image is put in the top-left corner
   and the width and height declare how many pixels the image has.
-  - \a delta is how much to add to \a pointer to go 1 pixel to the right
-  - \a line_delta is how much to add to \a pointer to go 1 pixel down
-
-  By setting \a line_delta to larger than \a delta*r.w() you can crop a
-  picture out of a larger buffer. By setting \a delta to larger than
-  the size of the pixel data you can skip extra bytes, such as alpha
-  information you don't want, or draw one channel of an rgb image as a
-  gray-scale iamge. By setting \a line_delta and/or \a delta negative
-  you can get 90 degree rotations and mirror images of the data.
+  - \a line_delta is how much to add to \a pointer to go 1 pixel down.
+  By setting \a line_delta to larger than \a depth(type)*r.w() you can
+  crop a picture out of a larger buffer. You can also set it negative
+  for images that are stored with bottom-to-top in memory,
+  notice that in this case \a pointer still points at the top-left
+  pixel, which is at the \e end of your buffer minus one line_delta.
 
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 		     const Rectangle& r,
-		     int delta, int line_delta) {
-  innards(pointer, type, r, delta, line_delta, 0, 0);
+		     int line_delta) {
+  innards(pointer, type, r, line_delta, 0, 0);
 }
 
 /*!
-  Same except \a line_delta is set to \a r.w() times \a delta, indicating
-  the rows are packed together one after another with no gap.
-
-  If you use fltk::RGB make sure your source data really is packed,
-  if each row starts word-aligned then you must use the version where
-  you pass the line_delta
-*/
-void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
-		     const Rectangle& r,
-		     int delta) {
-  innards(pointer, type, r, delta, delta*r.w(), 0, 0);
-}
-
-/*!
-  Same except \a delta is set to the number of bytes used by \a type,
-  and \a line_delta is set to \a r.w() times \a delta, indicating
-  the rows are packed together one after another with no gap.
-
-  If you use fltk::RGB make sure your source data really is packed,
-  if each row starts word-aligned then you must use the version where
-  you pass the line_delta
+  Same except \a line_delta is set to <i>r</i>.w() times
+  depth(<i>type</i>), indicating the rows are packed together one
+  after another with no gap.
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 		     const Rectangle& r) {
-  innards(pointer, type, r, type&3, (type&3)*r.w(), 0, 0);
+  innards(pointer, type, r, depth(type)*r.w(), 0, 0);
 }
 
 /*! \typedef fltk::DrawImageCallback
@@ -144,24 +113,17 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   This can be used to point at a structure of information about
   the image.
 
-  The passed \a buffer contains room for at least the number of
-  pixels specified by the width passed to drawimage(). You can use
-  this as temporary storage to construct a row of the image, and
-  return a pointer to it (or offset \a x into it if desired).
-
   Due to cropping, less than the whole image may be requested. So the
   callback may get an \a x greater than zero, the first \a y passed to
   it may be greater than zero, and \a x+w may be less than the width
-  of the image. The passed buffer is long enough to store the entire
-  \a w * \a delta bytes, this is for convienence with some
-  decompression schemes where you must decompress the entire line at
-  once: decompress it into the buffer, and then if x is not zero,
-  shift the data over so the x'th pixel is at the start of the buffer.
+  of the image.  The passed \a buffer contains room for at least the
+  number of pixels specified by the width passed to drawimage(). You
+  can use this as temporary storage to construct a row of the image,
+  and return a pointer offset by \a x into it.
 
 */
 
-/*!
-
+/**
   Call the passed function to provide each scan line of the
   image. This lets you generate the image as it is being drawn, or do
   arbitrary decompression of stored data (provided it can be
@@ -176,7 +138,7 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   a pointer to this buffer, or to somewhere inside it.
 
   The callback must return n pixels of the format described by \a
-  type, \a delta apart from each other.
+  type.
 
   The \a xywh rectangle describes the area to draw. The callback is
   called with y values between \a y and \a y+h-1. Due to cropping not
@@ -185,31 +147,9 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 */
 void fltk::drawimage(DrawImageCallback cb,
 		     void* data, fltk::PixelType type,
-		     const Rectangle& r, int delta) {
-  innards(0, type, r, delta, 0, cb, data);
-}
-
-/*! Same except the \a delta is figured out from the \a type. */
-void fltk::drawimage(DrawImageCallback cb,
-		     void* data, fltk::PixelType type,
 		     const Rectangle& r) {
-  innards(0, type, r, depth(type), 0, cb, data);
+  innards(0, type, r, 0, cb, data);
 }
-
-#if 0
-// obsolete method that used the image dithering to get better color
-// chips on 8-bit displays.
-void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
-  if (!DITHER_FILLRECT) {
-    setcolor(C);
-    fillrect(x,y,w,h);
-  } else {
-    uchar c[3];
-    split_color(C, c[0], c[1], c[2]);
-    innards(c,x,y,w,h,0,0,0,0,0);
-  }
-}
-#endif
 
 //
 // End of "$Id$".

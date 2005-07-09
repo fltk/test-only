@@ -16,9 +16,8 @@ void Image::make_current() {
 
 void Image::over(int x, int y) const {
   if (!(flags&DRAWN) || !picture || w_ < 1 || h_ < 1) return;
-  transform(x,y);
-  CGRect rect = { x,y,w_,h_ };
-  fltk::begin_quartz_image(rect, Rectangle(0,0,w_,h_));
+  CGRect rect;
+  fltk::begin_quartz_image(rect, Rectangle(x,y,w_,h_));
   CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)picture);
   fltk::end_quartz_image();
 }
@@ -55,7 +54,7 @@ void xbmImage::_draw(const fltk::Rectangle& r) const
       *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
     }
     CGDataProviderRef srcp = CGDataProviderCreateWithData( 0L, bmask, rowBytes*h_, 0L);
-    i->picture = CGImageMaskCreate( w_, h_, 1, 1, rowBytes, srcp, 0L, false);
+    i->picture = CGImageMaskCreate( w_, h_, 1, 1, rowBytes, srcp, 0L, true);
     CGDataProviderRelease(srcp);
     i->flags = DRAWN;
   }

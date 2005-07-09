@@ -132,6 +132,7 @@ extern FL_API Atom dnd_action;
 // drawing functions:
 
 extern FL_API cairo_t*	cc;
+extern FL_API XftDraw*	xftc;
 extern FL_API GC	gc;
 extern FL_API XWindow	xwindow;
 extern FL_API ulong	current_xpixel;

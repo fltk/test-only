@@ -254,35 +254,8 @@ float fltk::getwidth(const char *str, int n) {
 
 ////////////////////////////////////////////////////////////////
 
-#if USE_OVERLAY
-// Currently Xft does not work with colormapped visuals, so this probably
-// does not work unless you have a true-color overlay.
-extern bool fl_overlay;
-extern Colormap fl_overlay_colormap;
-extern XVisualInfo* fl_overlay_visual;
-#endif
-
-static XftDraw* xft_gc = 0;
-static XWindow xftwindow;
-extern int fl_clip_state_number;
-static int clip_state_number = 0; // which clip we did last
 
 void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
-  if (!xft_gc) {
-  NEW_XFT_GC:
-    xft_gc =
-      XftDrawCreate(xdisplay, xwindow, xvisual->visual, xcolormap);
-    Region region = clip_region();
-    if (region) XftDrawSetClip(xft_gc, region);
-    xftwindow = xwindow;
-    clip_state_number = fl_clip_state_number;
-  } else if (xwindow != xftwindow) {
-    XftDrawDestroy(xft_gc);
-    goto NEW_XFT_GC;
-  } else if (clip_state_number!=fl_clip_state_number) {
-    clip_state_number = fl_clip_state_number;
-    XftDrawSetClip(xft_gc, clip_region());
-  }
 
   // Use fltk's color allocator, copy the results to match what
   // XftCollorAllocValue returns:
@@ -295,7 +268,7 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.alpha = 0xffff;
 
 #if 0
-  XftDrawStringUtf8(xft_gc, &color, current->font,
+  XftDrawStringUtf8(xftc, &color, current->font,
 		    int(floorf(x+.5f)), int(floorf(y+.5f)),
 		    (XftChar8*)str, n);
 #else
@@ -310,24 +283,11 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   // fix some lengths that cause older Xft to crash (!):
   if ((count&255)==253) buffer[count++] = ' ';
   if ((count&255)==254) buffer[count++] = ' ';
-  XftDrawString32(xft_gc, &color, current->font,
+  XftDrawString32(xftc, &color, current->font,
 		  int(floorf(x+.5f)), int(floorf(y+.5f)),
 		  (XftChar32*)buffer, count);
   delete[] mallocbuffer;
 #endif
-}
-
-void fltk::stop_drawing(XWindow window) {
-  if (xwindow == window) {
-#if USE_CAIRO
-    if (cc) {cairo_destroy(cc); cc = 0;}
-#endif
-    xwindow = 0;
-  }
-  if (xftwindow == window && xft_gc) {
-    XftDrawDestroy(xft_gc);
-    xft_gc = 0;
-  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -356,7 +316,7 @@ fltk::Font* const fltk::HELVETICA		= &(fonts[0].f);
 fltk::Font* const fltk::HELVETICA_BOLD		= &(fonts[1].f);
 fltk::Font* const fltk::HELVETICA_ITALIC	= &(fonts[2].f);
 fltk::Font* const fltk::HELVETICA_BOLD_ITALIC	= &(fonts[3].f);
-fltk::Font* const fltk::COURIER		= &(fonts[4].f);
+fltk::Font* const fltk::COURIER			= &(fonts[4].f);
 fltk::Font* const fltk::COURIER_BOLD		= &(fonts[5].f);
 fltk::Font* const fltk::COURIER_ITALIC		= &(fonts[6].f);
 fltk::Font* const fltk::COURIER_BOLD_ITALIC	= &(fonts[7].f);
