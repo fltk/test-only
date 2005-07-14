@@ -84,6 +84,34 @@ static Matrix* stack;
 static int stacksize = 0;
 static int sptr = 0;
 
+// Returns true if transformation is an integer translate only
+bool fl_trivial_transform() {return m.trivial;}
+
+#if USE_XFT
+bool fl_get_invert_matrix(XTransform& i) {
+  i.matrix[2][0] = 0;
+  i.matrix[2][1] = 0;
+  i.matrix[2][2] = XDoubleToFixed(1);
+  if (m.trivial) {
+  FAILURE:
+    i.matrix[0][1] = i.matrix[1][0] = 0;
+    i.matrix[0][0] = i.matrix[1][1] = XDoubleToFixed(1);
+    i.matrix[0][2] = XDoubleToFixed(-m.x);
+    i.matrix[1][2] = XDoubleToFixed(-m.y);
+    return false;
+  }
+  const float d = m.a*m.d-m.b*m.c; // determinant
+  if (!d) goto FAILURE;
+  i.matrix[0][0] = XDoubleToFixed(m.d / d);
+  i.matrix[0][1] = XDoubleToFixed(-m.c / d);
+  i.matrix[0][2] = XDoubleToFixed((m.c*m.y - m.x*m.d) / d);
+  i.matrix[1][0] = XDoubleToFixed(-m.b / d);
+  i.matrix[1][1] = XDoubleToFixed(m.a / d);
+  i.matrix[1][2] = XDoubleToFixed((m.x*m.b - m.a*m.y) / d);
+  return true;
+}
+#endif
+
 /*! Save the current transformation on a stack, so you can restore it
   with pop_matrix(). */
 void fltk::push_matrix() {

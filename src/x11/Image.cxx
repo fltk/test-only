@@ -30,20 +30,36 @@ void Image::make_current() {
     XFreePixmap(xdisplay, picture->alpha);
     picture->alpha = 0;
   }
-  if (!picture->rgb) {
-    picture->rgb = XCreatePixmap(xdisplay, xwindow, w_, h_, xvisual->depth);
-  }
+//   if (!picture->rgb) {
+//     picture->rgb = XCreatePixmap(xdisplay, xwindow, w_, h_, xvisual->depth);
+//   }
   picture->fg = fltk::getcolor();
   picture->bg = fltk::getbgcolor();
-  flags = DRAWN | OPAQUE;
-  draw_into(picture->rgb, w_, h_);
+  flags = 0; //DRAWN | OPAQUE;
+  //  draw_into(picture->rgb, w_, h_);
   fl_current_Image = this;
 }
 
 void fl_restore_clip(); // in rect.C
 
+#if USE_XFT
+XRenderPictFormat* fl_rgba_xrender_format;
+void fl_xrender_draw_image(XWindow target,
+			   const fltk::Rectangle& r1, bool alpha);
+extern bool fl_trivial_transform();
+#endif
+
 void Image::over(int x, int y) const {
   if (!(flags&DRAWN) || w_ < 1 || h_ < 1) return;
+  PixmapPair* picture = (PixmapPair*)(this->picture);
+#if USE_XFT
+  if (fl_rgba_xrender_format && picture->rgb) {
+    fl_xrender_draw_image(picture->rgb, fltk::Rectangle(x,y,w_,h_),
+			  !(flags&OPAQUE));
+    return;
+  }
+#endif
+  // XLib version:
   // unfortunately scaling does not work, so I just center and clip
   // to the transformed rectangle.
   // This is the rectangle I want to fill:
@@ -54,30 +70,28 @@ void Image::over(int x, int y) const {
   Rectangle r(r1);
   if (w_ >= r2.w()) {r.x(r2.x()); r.w(r2.w());}
   if (h_ >= r2.h()) {r.y(r2.y()); r.h(r2.h());}
+  // We must clip it because otherwise we can't do the alpha:
   if (!intersect_with_clip(r)) return;
-  PixmapPair* picture = (PixmapPair*)(this->picture);
-  if (picture->alpha) {
-    if (picture->rgb) {
-      // There seems to be no way to combine a mask with a clip region,
-      // so I just replace it. This will be incorrect if the current
-      // clip is not a rectangle
-      XSetClipMask(xdisplay, gc, picture->alpha);
-      XSetClipOrigin(xdisplay, gc, r1.x(), r1.y());
-      XCopyArea(xdisplay, picture->rgb, xwindow, gc,
-		r.x()-r1.x(), r.y()-r1.y(), r.w(), r.h(), r.x(), r.y());
-      XSetClipOrigin(xdisplay, gc, 0, 0);
-      fl_restore_clip();
-    } else {
-      // bitmap with only the alpha...
-      XSetStipple(xdisplay, gc, picture->alpha);
-      XSetTSOrigin(xdisplay, gc, r1.x(), r1.y());
-      XSetFillStyle(xdisplay, gc, FillStippled);
-      XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
-      XSetFillStyle(xdisplay, gc, FillSolid);
-    }
-  } else {
+  if (flags & OPAQUE) {
     XCopyArea(xdisplay, picture->rgb, xwindow, gc,
 	      r.x()-r1.x(), r.y()-r1.y(), r.w(), r.h(), r.x(), r.y());
+  } else if (picture->rgb) {
+    // There seems to be no way to combine a mask with a clip region,
+    // so I just replace it. This will be incorrect if the current
+    // clip is not a rectangle
+    XSetClipMask(xdisplay, gc, picture->alpha);
+    XSetClipOrigin(xdisplay, gc, r1.x(), r1.y());
+    XCopyArea(xdisplay, picture->rgb, xwindow, gc,
+	      r.x()-r1.x(), r.y()-r1.y(), r.w(), r.h(), r.x(), r.y());
+    XSetClipOrigin(xdisplay, gc, 0, 0);
+    fl_restore_clip();
+  } else if (picture->alpha) {
+    // bitmap with only the alpha...
+    XSetStipple(xdisplay, gc, picture->alpha);
+    XSetTSOrigin(xdisplay, gc, r1.x(), r1.y());
+    XSetFillStyle(xdisplay, gc, FillStippled);
+    XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
+    XSetFillStyle(xdisplay, gc, FillSolid);
   }
 }
 

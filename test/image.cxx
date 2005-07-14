@@ -343,12 +343,14 @@ int main(int argc, char** argv) {
   s->align(ALIGN_LEFT);
 
   Widget text(0,y+40,window.w(),window.h()-y-40,
-	     "All the colored images should look alike, except the "
-	     "top row has black squares for the background.\n\n"
-	     "The MASK images in the bottom, and the xpm and bitmap "
-	     "images, should draw using identical foreground color and "
-	     "gray out when inactive is checked.\n\n"
-	     "The MONO images should be black & white.");
+	      "All images should scale to fill their rectangle.\n"
+	      "MONO images should be black & white.\n"
+	      "All color images should have r red, g green, b blue.\n"
+	      "The background should show through the A images in the 3rd row "
+	      "and through the MASK and around the xpm image.\n"
+	      "All the Mask and xbm images in the fourth row should change "
+	      "to match the fg and bg colors.\n"
+	      "Currently only the OS/X version has no errors.");
   text.align(ALIGN_LEFT|ALIGN_INSIDE|ALIGN_WRAP);
 
   window.end();

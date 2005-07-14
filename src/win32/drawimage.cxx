@@ -173,14 +173,14 @@ static void innards(const uchar *buf, PixelType type,
     buf = (uchar*)buffer;
   }
 
-  bool hasalpha = type != MONO && type != RGB && type != RGB32;
+  bool hasalpha = type==MASK || type==RGBA || type==ARGB32;
   if (fl_current_Image) {
     SetDIBitsToDevice(dc, r.x(), r.y(), W, H, 0, 0, 0, H,
 		      (LPSTR)buf,
 		      &bmi,
 		      DIB_RGB_COLORS
 		      );
-    if (type == MASK	)
+    if (type == MASK)
       DrawImageHelper::setmask();
     else if (hasalpha)
       DrawImageHelper::clear_opaque();

@@ -33,6 +33,7 @@
 
 #include <fltk/error.h>
 #include <fltk/Image.h>
+#include <fltk/math.h>
 #include "XColorMap.h"
 using namespace fltk;
 
@@ -419,28 +420,66 @@ static void direct_32(const uchar *from, uchar *to, int w) {
 static uchar fg[3];
 static uchar bg[3];
 
-// Currently MASK just interpolates the fg/bg, producing a solid rectangle.
-// It could instead produce the alpha channel for the transparent part,
-// but I needed this fast and I was not drawing except on plain backgrounds.
-static void mask_converter(const uchar* from, uchar* to, int w)
+#if USE_XFT
+// Mask with XRender can be done by multiplying fg color by alpha:
+static void mask_to_argb32(const uchar* from, uchar* to, int w)
 {
-  U32 buffer[w];
-  U32* bp = buffer;
+  U32* bp = (U32*)to;
   for (int i = 0; i < w; i++) {
-    uchar c = *from++;
-    uchar r = (c*bg[0]+(255-c)*fg[0])>>8;
-    uchar g = (c*bg[1]+(255-c)*fg[1])>>8;
-    uchar b = (c*bg[2]+(255-c)*fg[2])>>8;
-    *bp++ = (r<<16)|(g<<8)|b;
+    uchar c = 255-*from++;
+    *bp++ =
+      (c<<24) |
+      (((fg[0]*c)<<8)&0xff0000u) |
+      ((fg[1]*c)&0xff00u) |
+      ((fg[2]*c)>>8);
   }
-  converter[RGB32]((uchar*)buffer, to, w);
 }
+#endif
+
+// For old Xlib, we build a binary alpha mask, opaque for any non-zero
+// alpha, and guess a mixture with the current getbgcolor() is acceptable:
 
 static uchar* alphabuffer;
 static int alphabuffersize;
 static uchar* alphapointer;
 static int alpha_increment;
+
+// true for any transparency other than 255 and 0:
 static bool mixbg;
+
+static void mask_converter(const uchar* from, uchar* to, int w)
+{
+  U32 buffer[w];
+  U32* bp = buffer;
+  uchar* ap = alphapointer;
+  uchar aaccum = 0;
+  uchar amask = 1;
+  for (int i = 0; i < w; i++) {
+    uchar c = *from++;
+    if (c==255) {
+      *bp++ = 0;
+    } else {
+      aaccum |= amask;
+      if (c) {
+	uchar r = (c*bg[0]+(255-c)*fg[0])>>8;
+	uchar g = (c*bg[1]+(255-c)*fg[1])>>8;
+	uchar b = (c*bg[2]+(255-c)*fg[2])>>8;
+	*bp++ = (r<<16)|(g<<8)|b;
+	mixbg = true;
+      } else {
+	*bp++ = (fg[0]<<16)|(fg[1]<<8)|fg[2];
+      }
+    }
+    if (amask == 0x80) {
+      *ap++ = aaccum; aaccum = 0; amask = 1;
+    } else {
+      amask <<= 1;
+    }
+  }
+  *ap = aaccum;
+  alphapointer += alpha_increment;
+  converter[RGB32]((const uchar*)buffer, to, w);
+}
 
 static void rgba_converter(const uchar* from, uchar* to, int w) {
   U32 buffer[w];
@@ -513,14 +552,95 @@ static void argb32_converter(const uchar* from, uchar* to, int w) {
 
 ////////////////////////////////////////////////////////////////
 
-static XImage i;	// template used to pass info to X
+static XImage i;	// this is reused to draw an images
 static int bytes_per_pixel;
 static int scanline_add;
 static int scanline_mask;
 
+#if USE_XFT
+extern XRenderPictFormat* fl_rgba_xrender_format;
+extern bool fl_get_invert_matrix(XTransform&);
+extern bool fl_trivial_transform();
+
+Picture p;
+XWindow prevtarget;
+
+void fl_xrender_draw_image(XWindow target,
+			   const fltk::Rectangle& r1, bool alpha) {
+  if (target != prevtarget) {
+    prevtarget = target;
+    if (p) XRenderFreePicture(xdisplay, p);
+    p = XRenderCreatePicture(xdisplay, target, fl_rgba_xrender_format, 0, 0);
+  }
+  XTransform xtransform;
+  const bool scaling = fl_get_invert_matrix(xtransform);
+  xtransform.matrix[0][2] -= XDoubleToFixed(r1.x());
+  xtransform.matrix[1][2] -= XDoubleToFixed(r1.y());
+  XRenderSetPictureTransform(xdisplay, p, &xtransform);
+  int x,y,r,b; // box to draw
+  if (scaling) {
+    float X,Y,R,B,tx,ty;
+    tx = r1.x(); ty = r1.y(); transform(tx, ty);
+    X = R = tx; Y = B = ty;
+    tx = r1.r(); ty = r1.b(); transform(tx, ty);
+    if (tx < X) X = tx; else R = tx;
+    if (ty < Y) Y = ty; else B = ty;
+    if (xtransform.matrix[0][1]||xtransform.matrix[1][0]) {
+      tx = r1.x(); ty = r1.b(); transform(tx, ty);
+      if (tx < X) X = tx; else if (tx > R) R = tx;
+      if (ty < Y) Y = ty; else if (ty > B) B = ty;
+      tx = r1.r(); ty = r1.y(); transform(tx, ty);
+      if (tx < X) X = tx; else if (tx > R) R = tx;
+      if (ty < Y) Y = ty; else if (ty > B) B = ty;
+    }
+    x = int(floorf(X));
+    y = int(floorf(Y));
+    r = int(ceilf(R));
+    b = int(ceilf(B));
+    XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
+  } else {
+    x = r1.x(); y = r1.y(); transform(x,y);
+    r = x+r1.w(); b = y+r1.h();
+  }
+  XRenderComposite(xdisplay, alpha ? PictOpOver : PictOpSrc,
+		   p, 0, XftDrawPicture(xftc), // src, mask, dest
+		   x, y, // src xy
+		   0, 0, // mask xy
+		   x, y, r-x, b-y); // dest rectangle
+}
+
+#else
+# define fl_rgba_xrender_format 0
+#endif
+
 static void figure_out_visual() {
 
   xpixel(BLACK); // make sure figure_out_visual in color.cxx is called
+
+  i.format = ZPixmap;
+//i.bitmap_unit = 8;
+//i.bitmap_bit_order = MSBFirst;
+//i.bitmap_pad = 8;
+
+  converter[MASK] = mask_converter;
+  converter[RGBA] = rgba_converter;
+  converter[ARGB32] = argb32_converter;
+
+#if USE_XFT
+  // See if XRender is going to work.
+  // RGBA is run through the generic ARGB32 bitmap format.
+  // I run RGB through whatever format it says is for this visual. This
+  // code assumes that is the same as the bitmap ListPixmapFormats finds.
+//   fl_rgb_xrender_format =
+//     XRenderFindVisualFormat(xdisplay, xvisual->visual);
+  fl_rgba_xrender_format =
+    XRenderFindStandardFormat(xdisplay, PictStandardARGB32);
+  if (fl_rgba_xrender_format) {
+    converter[MASK] = mask_to_argb32;
+    converter[RGBA] = rgba_to_xrgb;
+    converter[ARGB32] = direct_32;
+  }
+#endif
 
   static XPixmapFormatValues *pfvlist;
   static int NUM_pfv;
@@ -528,12 +648,6 @@ static void figure_out_visual() {
   XPixmapFormatValues *pfv;
   for (pfv = pfvlist; pfv < pfvlist+NUM_pfv; pfv++)
     if (pfv->depth == xvisual->depth) break;
-  i.format = ZPixmap;
-  i.byte_order = ImageByteOrder(xdisplay);
-//i.bitmap_unit = 8;
-//i.bitmap_bit_order = MSBFirst;
-//i.bitmap_pad = 8;
-  i.depth = xvisual->depth;
   i.bits_per_pixel = pfv->bits_per_pixel;
 
   if (i.bits_per_pixel & 7) bytes_per_pixel = 0; // produce fatal error
@@ -545,12 +659,9 @@ static void figure_out_visual() {
   scanline_add = n-1;
   scanline_mask = -n;
 
-  converter[MASK] = mask_converter;
-  converter[RGBA] = rgba_converter;
-  converter[ARGB32] = argb32_converter;
-
 #if USE_COLORMAP
   if (bytes_per_pixel == 1) {
+    i.byte_order = ImageByteOrder(xdisplay);
     converter[MONO] = mono_to_8;
     converter[RGB] = rgb_to_8;
     converter[RGBx] = rgba_to_8;
@@ -645,20 +756,36 @@ struct PixmapPair {
 extern fltk::Image* fl_current_Image;
 class fltk::DrawImageHelper {
 public:
+  static XWindow create_pixmap(int depth) {
+    fl_current_Image->flags = Image::DRAWN|Image::OPAQUE;
+    PixmapPair* picture = (PixmapPair*)(fl_current_Image->picture);
+    if (!picture->rgb)
+      picture->rgb = XCreatePixmap(xdisplay, xwindow,
+				   fl_current_Image->w_,
+				   fl_current_Image->h_,
+				   depth);
+    return picture->rgb;
+  }
   static void setalpha(int w, int h) {
-    fl_current_Image->flags = mixbg ? (Image::USES_BG|Image::DRAWN) : Image::DRAWN;
+    fl_current_Image->flags =
+      mixbg ? (Image::USES_BG|Image::DRAWN) : Image::DRAWN;
     PixmapPair* picture = (PixmapPair*)(fl_current_Image->picture);
     if (picture->alpha) XFreePixmap(xdisplay, picture->alpha);
     picture->alpha =
       XCreateBitmapFromData(xdisplay, xwindow, (char*)alphabuffer, (w+7)&-8, h);
   }
+  static void setalphaflags() {
+    fl_current_Image->flags = Image::DRAWN;
+  }
   static void setmaskflags() {
-    fl_current_Image->flags = Image::MASK|Image::USES_FG|Image::USES_BG|Image::DRAWN;
+    fl_current_Image->flags =
+      mixbg ? Image::USES_FG|Image::USES_BG|Image::DRAWN :
+	      Image::USES_FG|Image::DRAWN;
   }
 };
 
 extern void fl_restore_clip();
-static void putimage(int x, int y, int w, int h) {
+static void putimage(int x, int y, int w, int h, XWindow target, GC gc) {
   if (alphapointer && !fl_current_Image) {
     XWindow alpha =
       XCreateBitmapFromData(xdisplay, xwindow,
@@ -666,12 +793,12 @@ static void putimage(int x, int y, int w, int h) {
     alphapointer = alphabuffer;
     XSetClipMask(xdisplay, gc, alpha);
     XSetClipOrigin(xdisplay, gc, x, y);
-    XPutImage(xdisplay,xwindow,gc, &i, 0, 0, x, y, w, h);
+    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
     XSetClipOrigin(xdisplay, gc, 0, 0);
     fl_restore_clip();
     XFreePixmap(xdisplay, alpha);
   } else {
-    XPutImage(xdisplay,xwindow,gc, &i, 0, 0, x, y, w, h);
+    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
   }
 }
 
@@ -681,27 +808,84 @@ static void innards(const uchar *buf, PixelType type,
 		    int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  Rectangle r(r1); transform(r);
-  Rectangle cr(r); if (!intersect_with_clip(cr)) return;
+  if (!bytes_per_pixel) figure_out_visual();
 
-  int dx = cr.x()-r.x();
-  int dy = cr.y()-r.y();
-  int w = cr.w();
-  int h = cr.h();
+  const bool hasalpha = type==MASK || type==RGBA || type==ARGB32;
+
+  int dx,dy,x,y,w,h;
+  XWindow target;
+  i.depth = xvisual->depth;
+  GC gc = fltk::gc;
+
+#if USE_XFT
+  const bool scaling = !fl_trivial_transform();
+  const bool use_xrender = fl_rgba_xrender_format &&
+    (fl_current_Image || hasalpha || scaling);
+  static GC gc32;
+#endif
+
+  if (fl_current_Image) {
+    dx = dy = x = y = 0;
+    w = r1.w();
+    h = r1.h();
+#if USE_XFT
+    if (use_xrender) {
+      i.depth = 32;
+      target = DrawImageHelper::create_pixmap(32);
+      if (hasalpha) DrawImageHelper::setalphaflags();
+      if (!gc32) gc32 = XCreateGC(xdisplay, target, 0, 0);
+      gc = gc32;
+    } else
+#endif
+      target = DrawImageHelper::create_pixmap(i.depth);
+#if USE_XFT
+  } else if (use_xrender) {
+    dx = dy = x = y = 0;
+    w = r1.w();
+    h = r1.h();
+    i.depth = 32;
+    static XWindow ptarget;
+    static int pw, ph;
+    if (w != pw || h != ph) {
+      if (ptarget) XFreePixmap(xdisplay, ptarget);
+      ptarget = XCreatePixmap(xdisplay, xwindow, w, h, 32);
+      pw = w; ph = h;
+    }
+    target = ptarget;
+    if (!gc32) gc32 = XCreateGC(xdisplay, target, 0, 0);
+    gc = gc32;
+#endif
+  } else {
+    target = fltk::xwindow;
+    // because scaling is not supported, I just draw the image centered:
+    // This is the rectangle I want to fill:
+    Rectangle tr(r1); transform(tr);
+    // Center the image in that rectangle:
+    Rectangle r(tr, r1.w(), r1.h());
+    // Clip image if it is bigger than destination rectangle:
+    Rectangle cr(r);
+    if (r1.w() >= tr.w()) {cr.x(tr.x()); cr.w(tr.w());}
+    if (r1.h() >= tr.h()) {cr.y(tr.y()); cr.h(tr.h());}
+    // Clip with current clip region,
+    // otherwise the alpha mask will allow it to draw outside:
+    if (!intersect_with_clip(cr)) return;
+    x = cr.x();
+    y = cr.y();
+    w = cr.w();
+    h = cr.h();
+    dx = x-r.x();
+    dy = y-r.y();
+  }
+
   const int delta = depth(type);
   if (buf) buf += dx*delta + dy*linedelta;
 
-  if (!bytes_per_pixel) figure_out_visual();
   i.width = w;
   i.height = h;
 
   void (*conv)(const uchar *from, uchar *to, int w) = converter[type];
 
-  if (type==MASK) {
-    split_color(getcolor(), fg[0],fg[1],fg[2]);
-    split_color(getbgcolor(), bg[0],bg[1],bg[2]);
-    alphapointer = 0;
-  } else if (type==RGBA || type==ARGB32) {
+  if (hasalpha && !fl_rgba_xrender_format) {
     split_color(getcolor(), fg[0],fg[1],fg[2]);
     split_color(getbgcolor(), bg[0],bg[1],bg[2]);
     alpha_increment = (w+7)>>3;
@@ -713,6 +897,7 @@ static void innards(const uchar *buf, PixelType type,
     alphapointer = alphabuffer;
     mixbg = false;
   } else {
+    if (type==MASK) {split_color(getcolor(), fg[0],fg[1],fg[2]); mixbg=false;}
     alphapointer = 0;
   }
 
@@ -722,61 +907,60 @@ static void innards(const uchar *buf, PixelType type,
   // and it works if bytes_per_line is negative.
   // This seems to all work on my XFree86 setup
   if (buf && conv==direct_32 && !(linedelta&scanline_add)) {
-    i.data = (char *)(buf+delta*dx+linedelta*dy);
+    i.data = (char *)buf;
     i.bytes_per_line = linedelta;
-    XPutImage(xdisplay,xwindow,gc, &i, 0, 0, cr.x(), cr.y(), w, h);
-    return;
-  }
-
-  int linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
-  int blocking = h;
-  static U32* buffer;	// our storage, always word aligned
-  static long buffer_size;
-  {int size = linesize*h;
-  if (size > MAXBUFFER) {
-    size = MAXBUFFER;
-    blocking = MAXBUFFER/linesize;
-  }
-  if (size > buffer_size) {
-    delete[] buffer;
-    buffer_size = size;
-    buffer = new U32[size];
-  }}
-  i.data = (char *)buffer;
-  i.bytes_per_line = linesize*4;
-  if (buf) {
-    buf += delta*dx+linedelta*dy;
-    for (int j=0; j<h; ) {
-      U32 *to = buffer;
-      int k;
-      for (k = 0; j<h && k<blocking; k++, j++) {
-	conv(buf, (uchar*)to, w);
-	buf += linedelta;
-	to += linesize;
-      }
-      putimage(cr.x(), cr.y()+j-k, w, k);
-    }
+    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
   } else {
-    U32* linebuf = new U32[(r1.w()*delta+3)/4];
-    for (int j=0; j<h; ) {
-      U32* to = buffer;
-      int k;
-      for (k = 0; j<h && k<blocking; k++, j++) {
-	const uchar* ret = cb(userdata, dx, dy+j, w, (uchar*)linebuf);
-	conv(ret, (uchar*)to, w);
-	to += linesize;
-      }
-      putimage(cr.x(), cr.y()+j-k, w, k);
+    int linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
+    int blocking = h;
+    static U32* buffer;	// our storage, always word aligned
+    static long buffer_size;
+    {int size = linesize*h;
+    if (size > MAXBUFFER) {
+      size = MAXBUFFER;
+      blocking = MAXBUFFER/linesize;
     }
-    delete[] linebuf;
+    if (size > buffer_size) {
+      delete[] buffer;
+      buffer_size = size;
+      buffer = new U32[size];
+    }}
+    i.data = (char *)buffer;
+    i.bytes_per_line = linesize*4;
+    if (buf) {
+      for (int j=0; j<h; ) {
+	U32 *to = buffer;
+	int k;
+	for (k = 0; j<h && k<blocking; k++, j++) {
+	  conv(buf, (uchar*)to, w);
+	  buf += linedelta;
+	  to += linesize;
+	}
+	putimage(x, y+j-k, w, k, target, gc);
+      }
+    } else {
+      U32* linebuf = new U32[(r1.w()*delta+3)/4];
+      for (int j=0; j<h; ) {
+	U32* to = buffer;
+	int k;
+	for (k = 0; j<h && k<blocking; k++, j++) {
+	  const uchar* ret = cb(userdata, dx, dy+j, w, (uchar*)linebuf);
+	  conv(ret, (uchar*)to, w);
+	  to += linesize;
+	}
+	putimage(x, y+j-k, w, k, target, gc);
+      }
+      delete[] linebuf;
+    }
   }
 
   if (fl_current_Image) {
-    if (type==MASK) {
-      DrawImageHelper::setmaskflags();
-    } else if (alphapointer) {
-      DrawImageHelper::setalpha(w,h);
-    }
+    if (alphapointer) DrawImageHelper::setalpha(w,h);
+    if (type==MASK) DrawImageHelper::setmaskflags();
+#if USE_XFT
+  } else if (use_xrender) {
+    fl_xrender_draw_image(target, r1, hasalpha);
+#endif
   }
 }
 
