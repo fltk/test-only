@@ -209,24 +209,22 @@ int SharedImage::remove(const char* name)
   else return 0;
 }
 
-void SharedImage::_draw(const Rectangle& r) const
+void SharedImage::update()
 {
-  if (this->w() < 0) { int W = r.w(); int H = r.h(); measure(W,H); }
+  if (this->w() < 0) {int w=0,h=0; measure(w,h);}
   if (this->w() == 0) return;
-  const_cast<SharedImage*>(this)->used =
-    image_used++; // do this before check_mem_usage
-  if (!drawn()) // Need to uncompress the image ?
-  {
-    mem_used += this->w()*this->h();
-    check_mem_usage();
-
-    const_cast<SharedImage*>(this)->read();
-    if (!drawn()) { // could not read the image for some reason ?
-      mem_used -= this->w()*this->h();
-      const_cast<SharedImage*>(this)->setsize(0,0); // Will never try again ...
-      return; 
-    }
+  mem_used += this->w()*this->h();
+  check_mem_usage();
+  const_cast<SharedImage*>(this)->read();
+  if (!drawn()) { // could not read the image for some reason ?
+    mem_used -= this->w()*this->h();
+    const_cast<SharedImage*>(this)->setsize(0,0); // Will never try again ...
+    return; 
   }
+}
+
+void SharedImage::_draw(const Rectangle& r) const {
+  const_cast<SharedImage*>(this)->used = image_used++; // do this before check_mem_usage
   Image::_draw(r);
 }
 

@@ -565,31 +565,31 @@ extern bool fl_trivial_transform();
 Picture p;
 XWindow prevtarget;
 
-void fl_xrender_draw_image(XWindow target,
-			   const fltk::Rectangle& r1, bool alpha) {
+void fl_xrender_draw_image(XWindow target, bool alpha,
+			   const fltk::Rectangle& from,
+			   const fltk::Rectangle& to)
+{
   if (target != prevtarget) {
     prevtarget = target;
     if (p) XRenderFreePicture(xdisplay, p);
     p = XRenderCreatePicture(xdisplay, target, fl_rgba_xrender_format, 0, 0);
+    XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
   }
   XTransform xtransform;
   const bool scaling = fl_get_invert_matrix(xtransform);
-  xtransform.matrix[0][2] -= XDoubleToFixed(r1.x());
-  xtransform.matrix[1][2] -= XDoubleToFixed(r1.y());
-  XRenderSetPictureTransform(xdisplay, p, &xtransform);
   int x,y,r,b; // box to draw
   if (scaling) {
     float X,Y,R,B,tx,ty;
-    tx = r1.x(); ty = r1.y(); transform(tx, ty);
+    tx = to.x(); ty = to.y(); transform(tx, ty);
     X = R = tx; Y = B = ty;
-    tx = r1.r(); ty = r1.b(); transform(tx, ty);
+    tx = to.r(); ty = to.b(); transform(tx, ty);
     if (tx < X) X = tx; else R = tx;
     if (ty < Y) Y = ty; else B = ty;
     if (xtransform.matrix[0][1]||xtransform.matrix[1][0]) {
-      tx = r1.x(); ty = r1.b(); transform(tx, ty);
+      tx = to.x(); ty = to.b(); transform(tx, ty);
       if (tx < X) X = tx; else if (tx > R) R = tx;
       if (ty < Y) Y = ty; else if (ty > B) B = ty;
-      tx = r1.r(); ty = r1.y(); transform(tx, ty);
+      tx = to.r(); ty = to.y(); transform(tx, ty);
       if (tx < X) X = tx; else if (tx > R) R = tx;
       if (ty < Y) Y = ty; else if (ty > B) B = ty;
     }
@@ -597,16 +597,29 @@ void fl_xrender_draw_image(XWindow target,
     y = int(floorf(Y));
     r = int(ceilf(R));
     b = int(ceilf(B));
-    XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
   } else {
-    x = r1.x(); y = r1.y(); transform(x,y);
-    r = x+r1.w(); b = y+r1.h();
+    x = to.x(); y = to.y(); transform(x,y);
+    r = x+to.w(); b = y+to.h();
   }
+  if (to.w() != from.w() || to.h() != from.h()) {
+    const float scalex = float(from.w())/to.w();
+    const float scaley = float(from.h())/to.h();
+    for (int i=0;i<3;i++) {
+      xtransform.matrix[0][i] = int(scalex*xtransform.matrix[0][i]);
+      xtransform.matrix[1][i] = int(scaley*xtransform.matrix[1][i]);
+    }
+    xtransform.matrix[0][2] += XDoubleToFixed(from.x()-to.x()*scalex);
+    xtransform.matrix[1][2] += XDoubleToFixed(from.y()-to.y()*scaley);
+  } else {
+    xtransform.matrix[0][2] += XDoubleToFixed(from.x()-to.x());
+    xtransform.matrix[1][2] += XDoubleToFixed(from.y()-to.y());
+  }
+  XRenderSetPictureTransform(xdisplay, p, &xtransform);
   XRenderComposite(xdisplay, alpha ? PictOpOver : PictOpSrc,
 		   p, 0, XftDrawPicture(xftc), // src, mask, dest
-		   x, y, // src xy
+		   x, y, // src xy (in destination space!)
 		   0, 0, // mask xy
-		   x, y, r-x, b-y); // dest rectangle
+		   x, y, r-x, b-y); // rectangle to fill
 }
 
 #else
@@ -959,7 +972,7 @@ static void innards(const uchar *buf, PixelType type,
     if (type==MASK) DrawImageHelper::setmaskflags();
 #if USE_XFT
   } else if (use_xrender) {
-    fl_xrender_draw_image(target, r1, hasalpha);
+    fl_xrender_draw_image(target, hasalpha, Rectangle(0,0,w,h), r1);
 #endif
   }
 }

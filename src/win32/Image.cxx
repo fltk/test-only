@@ -55,22 +55,25 @@ void Image::make_current() {
 # pragma comment(lib, "msimg32.lib")
 #endif
 
-void Image::over(int px, int py) const {
-  if (!picture || w_ < 1 || h_ < 1) return;
-  fltk::Rectangle R(px,py,w_,h_);
-  fltk::transform(R);
+void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
+  if (!drawn()) {
+    const_cast<Image*>(this)->update();
+    if (!picture || w_ < 1 || h_ < 1) return;
+  }
+  fltk::Rectangle R(to); fltk::transform(R);
   HDC tempdc = CreateCompatibleDC(dc);
   SelectObject(tempdc, (HBITMAP)picture);
   if (!(flags&USES_BG)) { // not a bitmap
-    if ((flags&OPAQUE) && R.w()==w_ && R.h()==h_) {
-      BitBlt(dc, R.x(), R.y(), w_, h_, tempdc, 0, 0, SRCCOPY);
+    if ((flags&OPAQUE) && R.w()==from.w() && R.h()==from.h()) {
+      BitBlt(dc, R.x(), R.y(), from.w(), from.h(), tempdc, from.x(), from.y(), SRCCOPY);
     } else {
       BLENDFUNCTION m_bf;
       m_bf.BlendOp = AC_SRC_OVER;
       m_bf.BlendFlags = 0;
       m_bf.AlphaFormat = (flags&OPAQUE) ? 0 : 1; //AC_SRC_ALPHA;
       m_bf.SourceConstantAlpha = 0xFF;
-      AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(), tempdc, 0, 0, w_, h_, m_bf);
+      AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(), tempdc,
+		 from.x(), from.y(), from.w(), from.h(), m_bf);
     }
   } else {
     // Bitmap implementation:
@@ -80,7 +83,7 @@ void Image::over(int px, int py) const {
     // Possibly this is a bug in our Nvidia driver?
     setbrush();
     SetTextColor(dc, 0); //current_xpixel^xpixel(getbgcolor()));
-    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, 0, 0, MASKPAT);
+    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, from.x(), from.y(), MASKPAT);
   }
   DeleteDC(tempdc);
 }
@@ -101,33 +104,29 @@ void Image::destroy() {
 
 #include <fltk/xbmImage.h>
 
-void xbmImage::_draw(const fltk::Rectangle& r) const
+void xbmImage::update()
 {
-  if (!drawn()) {
-    Image* i = const_cast<xbmImage*>(this);
-    i->destroy();
-    static uchar hiNibble[16] =
-      { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
-	0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
-    static uchar loNibble[16] =
-      { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
-	0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
-    int Bpr = (w_+7)/8;			//: bytes per row
-    int pad = Bpr&1, w1 = (w_+7)/8; //shr = ((w-1)&7)+1;
-    uchar *newarray = new uchar[(Bpr+pad)*h_], *dst = newarray;
-    const uchar* src = array;
-    for (int y=0; y<h_; y++) {
-      //: this is slooow, but we do it only once per pixmap
-      for (int j=w1; j>0; j--) {
-	uchar b = *src++;
-	*dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
-      }
-      if (pad)
-	*dst++ = 0;
+  destroy();
+  static uchar hiNibble[16] =
+    { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
+      0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
+  static uchar loNibble[16] =
+    { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
+      0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
+  int Bpr = (w_+7)/8;			//: bytes per row
+  int pad = Bpr&1, w1 = (w_+7)/8; //shr = ((w-1)&7)+1;
+  uchar *newarray = new uchar[(Bpr+pad)*h_], *dst = newarray;
+  const uchar* src = array;
+  for (int y=0; y<h_; y++) {
+    //: this is slooow, but we do it only once per pixmap
+    for (int j=w1; j>0; j--) {
+      uchar b = *src++;
+      *dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
     }
-    i->picture = CreateBitmap(w_, h_, 1, 1, newarray);
-    delete[] newarray;
-    i->flags = Image::DRAWN|Image::USES_BG;
+    if (pad)
+      *dst++ = 0;
   }
-  Image::_draw(r);
+  picture = CreateBitmap(w_, h_, 1, 1, newarray);
+  delete[] newarray;
+  flags = Image::DRAWN|Image::USES_BG;
 }

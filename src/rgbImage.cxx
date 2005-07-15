@@ -36,14 +36,12 @@ using namespace fltk;
   If you change the data in the buffer passed to the constructor,
   you must call redraw() so that it knows to update the cached image.
 */
-void rgbImage::_draw(const fltk::Rectangle& r) const
+
+void rgbImage::update()
 {
-  if (!drawn()) {
-    GSave gsave;
-    const_cast<rgbImage*>(this)->make_current();
-    drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), linedelta_);
-  }
-  Image::_draw(r);
+  GSave gsave;
+  make_current();
+  drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), linedelta_);
 }
 
 #if 0 //WRITE_JPEG

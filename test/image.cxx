@@ -70,6 +70,26 @@ public:
   }
 };
 
+// Tester for inset:
+class Insetimage : public rgbImage {
+public:
+  Insetimage(const unsigned char* d, PixelType pt, int w, int h) :
+    rgbImage(d,pt,w,h) {}
+  void inset(fltk::Rectangle& r) const {r.inset(16);}
+};
+
+class Insettest : public Widget {
+public:
+  Insettest(PixelType pt,int x, int y, const char* l, const unsigned char* d) :
+    Widget(x,y,16*SCALE,16*SCALE,l) {
+    box(NO_BOX);
+    image(new Insetimage(d, pt, 16*SCALE, 16*SCALE));
+    align(ALIGN_BOTTOM);
+    labelsize(10);
+    tooltip("Edges are not scaled in this image.");
+  }
+};
+
 // Bitmap tester:
 #include "sorceress.xbm"
 class Btest : public Widget {
@@ -313,6 +333,9 @@ int main(int argc, char** argv) {
   w = new Xtest(x, y, "xpmImage", porsche_xpm);
   w->tooltip("In older versions of FLTK, the only transparency available "
 	     "was from XPM and GIF images. This should continue to work.");
+  nextxy();
+
+  w = new Insettest(fltk::RGBx, x, y, "Insetimage", builddata(4, rgbapixels));
   nextxy();
 
   group.end(); y = group.h();

@@ -202,7 +202,7 @@ static void innards(const uchar *buf, PixelType type,
     BLENDFUNCTION m_bf;
     m_bf.BlendOp = AC_SRC_OVER;
     m_bf.BlendFlags = 0;
-    m_bf.AlphaFormat = 1; //AC_SRC_ALPHA;
+    m_bf.AlphaFormat = hasalpha ? 1 /*AC_SRC_ALPHA*/ : 0;
     m_bf.SourceConstantAlpha = 0xFF;
     AlphaBlend(dc, r.x(), r.y(), r.w(), r.h(),
 	       tempdc, 0, 0, W, H, m_bf);

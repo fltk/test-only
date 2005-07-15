@@ -108,7 +108,9 @@ public:
   /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);
 
+  void update();
   void _draw(const Rectangle&) const;
+
 };
 
 ////////////////////////////////////////////////////////////////

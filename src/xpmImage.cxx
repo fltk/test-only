@@ -54,21 +54,17 @@ void xpmImage::_measure(int& w, int& h) const {
   }
 }
 
-void xpmImage::_draw(const fltk::Rectangle& r) const
+void xpmImage::update()
 {
-  if (!drawn()) {
-    xpmImage* t = const_cast<xpmImage*>(this);
-    if (this->w() < 0) {
-      int w,h;
-      measure_xpm(data,w,h);
-      t->setsize(w,h);
-    }
-    if (this->w() <= 0 || this->h() <= 0) return;
-    GSave gsave;
-    t->make_current();
-    draw_xpm(data, 0, 0);
+  if (this->w() < 0) {
+    int w,h;
+    measure_xpm(data,w,h);
+    setsize(w,h);
   }
-  Image::_draw(r);
+  if (this->w() <= 0 || this->h() <= 0) return;
+  GSave gsave;
+  make_current();
+  draw_xpm(data, 0, 0);
 }
 
 //

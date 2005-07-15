@@ -50,12 +50,13 @@ public:
   int h() const {return h_;}
   int height() const {return h_;}
 
+  virtual void update() = 0;
   bool drawn() const;
   void redraw() {flags &= ~DRAWN;}
   void destroy();
   void setsize(int w, int h);
   void make_current();
-  void over(int x, int y) const;
+  void over(const Rectangle& from, const Rectangle& to) const;
 
   // implementation as Symbol subclass:
   void _draw(const Rectangle&) const;

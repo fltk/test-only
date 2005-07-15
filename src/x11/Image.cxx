@@ -21,6 +21,7 @@ bool Image::drawn() const {
 }
 
 void Image::make_current() {
+  //  printf("make_current %p\n",this);
   if (!picture) {
     open_display();
     picture = new PixmapPair;
@@ -44,18 +45,20 @@ void fl_restore_clip(); // in rect.C
 
 #if USE_XFT
 XRenderPictFormat* fl_rgba_xrender_format;
-void fl_xrender_draw_image(XWindow target,
-			   const fltk::Rectangle& r1, bool alpha);
-extern bool fl_trivial_transform();
+void fl_xrender_draw_image(XWindow, bool alpha,
+			   const fltk::Rectangle& from,
+			   const fltk::Rectangle& to);
 #endif
 
-void Image::over(int x, int y) const {
-  if (!(flags&DRAWN) || w_ < 1 || h_ < 1) return;
+void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
+  if (!drawn()) {
+    const_cast<Image*>(this)->update();
+    if (!(flags&DRAWN) || w_ < 1 || h_ < 1) return;
+  }
   PixmapPair* picture = (PixmapPair*)(this->picture);
 #if USE_XFT
   if (fl_rgba_xrender_format && picture->rgb) {
-    fl_xrender_draw_image(picture->rgb, fltk::Rectangle(x,y,w_,h_),
-			  !(flags&OPAQUE));
+    fl_xrender_draw_image(picture->rgb, !(flags&OPAQUE), from, to);
     return;
   }
 #endif
@@ -63,32 +66,35 @@ void Image::over(int x, int y) const {
   // unfortunately scaling does not work, so I just center and clip
   // to the transformed rectangle.
   // This is the rectangle I want to fill:
-  Rectangle r2(x,y,w_,h_); transform(r2);
+  Rectangle r2(to); transform(r2);
   // Center the image in that rectangle:
-  Rectangle r1(r2,w_,h_);
+  Rectangle r1(r2,from.w(),from.h());
   // now figure out what area we will draw:
   Rectangle r(r1);
-  if (w_ >= r2.w()) {r.x(r2.x()); r.w(r2.w());}
-  if (h_ >= r2.h()) {r.y(r2.y()); r.h(r2.h());}
+  if (r.w() >= r2.w()) {r.x(r2.x()); r.w(r2.w());}
+  if (r.h() >= r2.h()) {r.y(r2.y()); r.h(r2.h());}
   // We must clip it because otherwise we can't do the alpha:
   if (!intersect_with_clip(r)) return;
+  // figure out top-left corner of source:
+  const int sx = r.x()-r1.x()+from.x();
+  const int sy = r.y()-r1.y()+from.y();
   if (flags & OPAQUE) {
     XCopyArea(xdisplay, picture->rgb, xwindow, gc,
-	      r.x()-r1.x(), r.y()-r1.y(), r.w(), r.h(), r.x(), r.y());
+	      sx, sy, r.w(), r.h(), r.x(), r.y());
   } else if (picture->rgb) {
     // There seems to be no way to combine a mask with a clip region,
     // so I just replace it. This will be incorrect if the current
     // clip is not a rectangle
     XSetClipMask(xdisplay, gc, picture->alpha);
-    XSetClipOrigin(xdisplay, gc, r1.x(), r1.y());
+    XSetClipOrigin(xdisplay, gc, r.x()-sx, r.y()-sy);
     XCopyArea(xdisplay, picture->rgb, xwindow, gc,
-	      r.x()-r1.x(), r.y()-r1.y(), r.w(), r.h(), r.x(), r.y());
+	      sx, sy, r.w(), r.h(), r.x(), r.y());
     XSetClipOrigin(xdisplay, gc, 0, 0);
     fl_restore_clip();
   } else if (picture->alpha) {
     // bitmap with only the alpha...
     XSetStipple(xdisplay, gc, picture->alpha);
-    XSetTSOrigin(xdisplay, gc, r1.x(), r1.y());
+    XSetTSOrigin(xdisplay, gc, r.x()-sx, r.y()-sy);
     XSetFillStyle(xdisplay, gc, FillStippled);
     XFillRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h());
     XSetFillStyle(xdisplay, gc, FillSolid);
@@ -108,20 +114,16 @@ void Image::destroy() {
 
 #include <fltk/xbmImage.h>
 
-void xbmImage::_draw(const fltk::Rectangle& r) const
-{
-  if (!drawn()) {
-    Image* i = const_cast<xbmImage*>(this);
-    if (!i->picture) {
-      open_display();
-      i->picture = new PixmapPair;
-    }
-    PixmapPair* picture = (PixmapPair*)(i->picture);
-    if (picture->alpha) XFreePixmap(xdisplay, picture->alpha);
-    picture->alpha =
-      XCreateBitmapFromData(xdisplay, xwindow, (char*)array, (w()+7)&-8, h());
-    i->flags = DRAWN;
+void xbmImage::update() {
+  Image* i = this;
+  if (!i->picture) {
+    open_display();
+    i->picture = new PixmapPair;
   }
-  Image::_draw(r);
+  PixmapPair* picture = (PixmapPair*)(i->picture);
+  if (picture->alpha) XFreePixmap(xdisplay, picture->alpha);
+  picture->alpha =
+    XCreateBitmapFromData(xdisplay, xwindow, (char*)array, (w()+7)&-8, h());
+  i->flags = DRAWN;
 }
 

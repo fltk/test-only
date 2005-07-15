@@ -53,6 +53,10 @@ static void releaser(void*, const void* data, size_t size) {
   delete[] (U32*)data;
 }
 
+extern void fl_quartz_draw_image(CGImageRef img, int w, int h,
+				 const fltk::Rectangle& from,
+				 const fltk::Rectangle& to);
+
 static void innards(const uchar *buf,
 		    fltk::PixelType pixeltype,
 		    const fltk::Rectangle &r1,
@@ -138,29 +142,29 @@ static void innards(const uchar *buf,
   if (fl_current_Image) {
     DrawImageHelper::setimage(img, pixeltype);
   } else if (img) {
-    CGRect rect; begin_quartz_image(rect, r1);
-    CGContextDrawImage(quartz_gc, rect, img);
+    fl_quartz_draw_image(img, w, h, fltk::Rectangle(w,h), r1);
     CGImageRelease(img);
-    end_quartz_image();
   }
   CGDataProviderRelease(src);
 }
 
-void fltk::begin_quartz_image(CGRect &rect, const Rectangle &c) {
-  CGContextSaveGState(quartz_gc);
-  CGAffineTransform mx = {1,0,0,-1,.5f,.5f};
-  CGContextConcatCTM(quartz_gc, mx);
-  rect.origin.x = c.x();
-  rect.origin.y = c.y();
-  transform(rect.origin.x, rect.origin.y);
-  rect.size.width = c.w();
-  rect.size.height = c.h();
-  transform_distance(rect.size.width, rect.size.height);
-  rect.origin.y = -rect.origin.y;
-  rect.size.height = -rect.size.height;
-}
+extern void fl_set_quartz_ctm();
 
-void fltk::end_quartz_image() {
+void fl_quartz_draw_image(CGImageRef img, int w, int h,
+			  const fltk::Rectangle& from,
+			  const fltk::Rectangle& to) {
+  CGContextSaveGState(quartz_gc);
+  fl_set_quartz_ctm();
+  if (!from.x() && !from.y() && from.w()==w && from.h()==h) {
+    CGRect rect = {to.x(), -to.y(), to.w(), -to.h()};
+    CGContextDrawImage(quartz_gc, rect, img);
+  } else {
+    CGRect irect = {from.x(), from.y(), from.w(), from.h()};
+    CGImageRef clip = CGImageCreateWithImageInRect(img, irect);
+    CGRect rect = {to.x(), -to.y(), to.w(), -to.h()};
+    CGContextDrawImage(quartz_gc, rect, clip);
+    CGImageRelease(clip);
+  }
   CGContextRestoreGState(quartz_gc);
 }
 

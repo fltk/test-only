@@ -87,6 +87,14 @@ static int sptr = 0;
 // Returns true if transformation is an integer translate only
 bool fl_trivial_transform() {return m.trivial;}
 
+#if USE_QUARTZ
+extern int fl_clip_h;
+void fl_set_quartz_ctm() {
+  CGAffineTransform mx = {m.a, -m.c, m.b, -m.d, m.x-.5f, -fl_clip_h+m.y-.5f};
+  CGContextConcatCTM(quartz_gc, mx);
+}
+#endif
+
 #if USE_XFT
 bool fl_get_invert_matrix(XTransform& i) {
   i.matrix[2][0] = 0;

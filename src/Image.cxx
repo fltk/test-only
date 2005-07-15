@@ -32,7 +32,8 @@ using namespace fltk;
 
   This subclass of Symbol draws a very common thing: a fixed-size
   "offscreen" image, containing color and alpha information for
-  a rectangle of pixels.
+  a rectangle of pixels. Call over() or draw(rectangle) to composite
+  a copy on the screen, transformed by the current transform.
 
   This is for \e static images. If your image is changing (ie a movie
   playback, or the image in a painting program) then you <i>do not
@@ -41,62 +42,19 @@ using namespace fltk;
   the image, these have been deleted in fltk2 to prevent misuse of
   this object.
 
-  The theoretical API is that you can draw anything using fltk calls
-  into the image:
-
-\code
-  static fltk::Image image;
-  if (!image.drawn()) { // have we been here before?
-    // no, draw the image's contents:
-    fltk::GSave gsave;
-    image.setsize(w,h);
-    image.make_current();
-    fltk::drawtext(...); // any fltk drawing code you want
-  }
-  // now draw a lot of copies quickly:
-  for (int i=0; i<100; i++)
-    image.over(x+(i%10)*w, y+(i/10)*h);
-\endcode
-
-  The unfortunate reality is that, due to the limits of the underlying
-  graphics API's, the only drawing that is guaranteed to work is to
-  do a single fltk::drawimage() with the rectangle exactly equal to
-  0,0,w(),h(). Also if you pask fltk::MASK as the pixeltype to
-  drawimage(), this is remembered, and over() will fill with the
-  current color.
-
-  In theory the current transformation is applied to the image when
-  drawing it. Again the unfortunate reality is that on some systems
-  anything other than the translation is ignored (however on most
-  systems of interest scaling but not rotation works).
+  Subclasses must implement the update() method. In \e theory this can
+  use any fltk drawing functions to draw the contents of the image. In
+  reality on most platforms the only thing that works is a single
+  fltk::drawimage().
 
   Because Image is a subclass of Symbol, it may be used as a
   Widget::image() or as the box() in a Style. If you give it a name it
-  can be drawn with "@name;" in a label. The draw() method will set
-  the scale so that the image is scaled to fill the rectangle. Unless
-  you have done make_current() it will draw as nothing, so you may
-  want to do a subclass where draw() is implemented like this:
+  can be drawn with "@name;" in a label. Overriding the inset() method
+  can produce very useful images for buttons with fixed-thickness
+  edges.
 
-\code
-  void MyImage::_draw(const Rectangle& r) const {
-    if (!drawn()) {
-      fltk::GSave gsave;
-      (const_cast<MyImage*>(this))->make_current();
-      fltk::drawimage(...);
-    }
-    fltk::Image::_draw(r);
-  }
-\endcode
-
-  There are a number of subclasses that use the above method to
-  draw jpeg or png images, either from in-memory data buffers
-  or from files.
-
-  For use as a Style::box(), you can subclass and override the
-  inset() method. The draw() function will take the inset at
-  the unscaled size and the inset of the drawing rectangle, and
-  cut the image into 9 parts, scaling each of them so that the
-  inset edges line up.
+  There are a number of subclasses that draw jpeg or png images,
+  either from in-memory data buffers or from files.
 
   <i>There is no destructor</i> due to C++'s lame insistence
   that it be called on static objects. An fltk program may contain
@@ -149,20 +107,40 @@ void Image::setsize(int w, int h) {
 */
 
 /*! \fn bool Image::drawn() const
-  Returns true if make_current() has been called since the Image
-  was constructed or since redraw() was called. Subclasses
-  use this to decide if they can call the base class _draw() without
-  any more setup.
+  Returns true if make_current() has been called. On some platforms this will
+  return false if the platform is incabable of compositing the stored
+  data without update() being called again.
 */
 
 /*! \fn void Image::make_current();
-  Make all the \ref drawing functions draw into the offscreen image,
-  possibly creating the arrays used to store it.
 
-  This is designed to be called outside of drawing code, as it will
-  replace the current drawing state. To draw into an Image while you
-  are drawing a widget (or drawing another Image) you must use a
-  GSave object to save the state.
+  Make all the \ref drawing functions draw into the offscreen image.
+  Or so we wish. On all current platforms the only call that works
+  is a single fltk::drawimage() with the rectangle set to 0,0,w(),h().
+
+  To draw into an Image while you are drawing a widget (or drawing
+  another Image) you must use a GSave object to save the state. See
+  update() for sample code.
+*/
+
+/*! \fn void Image::update();
+
+  Subclasses must implement this function to draw the offscreen image.
+  It will be called if drawn() is false.
+
+  Sample implementation:
+\code
+  void MyImage::update() {
+    set_size(figure_out_width(),figure_out_height());
+    GSave gsave;
+    make_current();
+    drawimage(imagebuffer(), RGB, Rectangle(0,0,w(),h()));
+  }
+\endcode
+
+  If you don't call make_current(), then nothing will be drawn. This
+  is useful if you encounter an error, such as a non-existent image
+  file.
 */
 
 /**
@@ -173,7 +151,8 @@ void Image::setsize(int w, int h) {
   want to defer this calculation until first use. The way to do this
   is to put zero into the w_ and h_ in the constructor, and override this
   method with your own which calculates the values and sets them if
-  it has not done so already.
+  it has not done so already. Typically this is done by calling update()
+  on the assumption that the image will be needed soon.
 */
 void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
 
@@ -184,7 +163,8 @@ void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
 
 #include <fltk/Widget.h>
 
-/*! This is a 1.1 back-compatability function. It is the same as
+/**
+  This is a 1.1 back-compatability function. It is the same as
   doing widget->image(this) and widget->label(0).
 */
 void Image::label(Widget* o) {
@@ -202,6 +182,25 @@ void Image::draw(int x, int y) const {
   draw(Rectangle(x,y,w,h));
 }
 
+/*! \fn void Image::over(const Rectangle& from, const Rectangle& to) const
+
+  Draws the subrectangle \a from of the image, transformed to fill
+  the rectangle \a to (as transformed by the CTM). If the image has
+  an alpha channel, an "over" operation is done.
+
+  Due to lame graphics systems, this is not fully operational on all
+  systems:
+  * X11 without XRender extension: no transformations are done, the
+  image is centered in the output area.
+  * X11 with XRender: rotations fill the bounding box of the destination
+  rectangle, drawing extra triangular areas outside the source rectangle.
+  Somewhat bad filtering when making images smaller. xbmImage does
+  not transform.
+  * Windows: Only scaling, no rotations. Bad filtering. xbmImage does
+  not do any transformations.
+  * OS/X: works well in all cases.
+*/
+
 #if USE_X11
 # include "x11/Image.cxx"
 #elif defined(_WIN32)
@@ -213,28 +212,41 @@ void Image::draw(int x, int y) const {
 #endif
 
 /**
-  Virtual method from Symbol baseclass, calls over() after
-  setting the transform to scale it to fill the rectangle. (If
-  you override inset() then this will do a much more complex
-  scale and clipping and multiple calls to over() to scale
-  the borders and interior to match).
+  Virtual method from Symbol baseclass, calls over() to resize
+  the source image to fill the destination rectangle.
+
+  If you override inset() then this will call inset() for the
+  original and the output rectangle. The source and destination
+  are diced into 9 rectangles in a 3x3 grid by the insets, and
+  each piece is scaled individually. This is very useful for
+  scaling paintings of buttons.
 
   It is possible this will use drawflags(INACTIVE) to gray out
   the image is a system-specific way. NYI.
 */
 void Image::_draw(const fltk::Rectangle& r) const
 {
-  if (!drawn() || r.empty()) return;
-  const float sx = float(r.w())/w();
-  const float sy = float(r.h())/h();
-  if (sx != 1 || sy != 1) {
-    push_matrix();
-    translate(r.x(), r.y());
-    scale(sx, sy);
-    over(0,0);
-    pop_matrix();
-  } else {
-    over(r.x(), r.y());
+  if (r.empty()) return;
+  if (!(flags&DRAWN)) const_cast<Image*>(this)->update(); // get the size right
+  // quickly handle no-scaling:
+  if (r.w()==w_ && r.h()==h_) {
+  NOINSETS:
+    over(fltk::Rectangle(0,0,w_,h_), r);
+    return;
+  }
+  // now check the insets and use them to scale pieces individually:
+  fltk::Rectangle in(0,0,w_,h_); this->inset(in);
+  if (!in.x() && !in.y() && in.w()==w_ && in.h()==h_) goto NOINSETS;
+  int fx[4]; fx[0]=0; fx[1]=in.x(); fx[2]=in.r(); fx[3]=w_;
+  int fy[4]; fy[0]=0; fy[1]=in.y(); fy[2]=in.b(); fy[3]=h_;
+  fltk::Rectangle out(r); this->inset(out);
+  int tx[4]; tx[0]=r.x(); tx[1]=out.x(); tx[2]=out.r(); tx[3]=r.r();
+  int ty[4]; ty[0]=r.y(); ty[1]=out.y(); ty[2]=out.b(); ty[3]=r.b();
+  for (int y=0; y<3; y++) if (fy[y+1]>fy[y] && ty[y+1]>ty[y]) {
+    for (int x=0; x<3; x++) if (fx[x+1]>fx[x] && tx[x+1]>tx[x]) {
+      over(fltk::Rectangle(fx[x],fy[y],fx[x+1]-fx[x],fy[y+1]-fy[y]),
+	   fltk::Rectangle(tx[x],ty[y],tx[x+1]-tx[x],ty[y+1]-ty[y]));
+    }
   }
 }
 

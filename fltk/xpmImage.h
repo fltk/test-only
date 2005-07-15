@@ -47,7 +47,7 @@ public:
     Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
 
   void _measure(int&, int&) const;
-  void _draw(const Rectangle&) const;
+  void update();
 
 };
 
