@@ -1892,14 +1892,15 @@ void Window::create() {
 const Window* fl_mdi_window = 0; // set by show_inside()
 HCURSOR fltk::default_cursor;
 
-static void register_unicode(HICON icon)
+static void register_unicode(HICON smallicon, HICON bigicon)
 {
   static WNDCLASSEXW wc;
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
   wc.lpfnWndProc = (WNDPROC)WndProc;
   wc.cbClsExtra = wc.cbWndExtra = 0;
   wc.hInstance = xdisplay;
-  wc.hIcon = wc.hIconSm = icon;
+  wc.hIcon = bigicon;
+  wc.hIconSm = smallicon;
   if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
   wc.hCursor = default_cursor;
   //uchar r,g,b; get_color(GRAY,r,g,b);
@@ -1916,14 +1917,15 @@ static void register_unicode(HICON icon)
   fl_wake_msg = RegisterWindowMessageW(L"fltk::ThreadWakeup");
 }
 
-static void register_ansi(HICON icon)
+static void register_ansi(HICON smallicon, HICON bigicon)
 {
   static WNDCLASSEXA wc;
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
   wc.lpfnWndProc = (WNDPROC)WndProc;
   wc.cbClsExtra = wc.cbWndExtra = 0;
   wc.hInstance = xdisplay;
-  wc.hIcon = wc.hIconSm = icon;
+  wc.hIcon = bigicon;
+  wc.hIconSm = smallicon;
   if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
   wc.hCursor = default_cursor;
   //uchar r,g,b; get_color(GRAY,r,g,b);
@@ -1947,15 +1949,20 @@ void CreatedWindow::create(Window* window) {
     registered = true;
 
     HICON icon = (HICON)window->icon();
+    HICON bigicon = icon;
     if (!icon) {
-      icon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(101),
+      icon = (HICON)LoadImage(GetModuleHandle(0), MAKEINTRESOURCE(101),
 			      IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
-      if (!icon) icon = LoadIcon(NULL, IDI_APPLICATION);
+      bigicon = (HICON)LoadImage(GetModuleHandle(0), MAKEINTRESOURCE(101),
+				 IMAGE_ICON, 32, 32,LR_DEFAULTCOLOR|LR_SHARED);
+      if (!icon) icon = bigicon;
+      if (!bigicon) bigicon = icon;
+      if (!icon) icon = bigicon = LoadIcon(NULL, IDI_APPLICATION);
     }
     if(has_unicode()) {
-      register_unicode(icon);
+      register_unicode(icon, bigicon);
     } else {
-      register_ansi(icon);
+      register_ansi(icon, bigicon);
     }
 
 #if USE_DRAGDROP
@@ -2052,6 +2059,11 @@ void CreatedWindow::create(Window* window) {
   x->wait_for_expose = true;
   x->next = CreatedWindow::first;
   CreatedWindow::first = x;
+
+  // How to set the icon:
+  //SendMessage(x->xid, WM_SETICON, ICON_BIG, (LPARAM)bigicon);
+  //SendMessage(x->xid, WM_SETICON, ICON_SMALL, (LPARAM)smallicon);
+  // where bigicon & small icon are HICON
 
 #if USE_DRAGDROP
   RegisterDragDrop(x->xid, &flDropTarget);

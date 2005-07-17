@@ -13,6 +13,13 @@ struct PixmapPair {
 
 extern fltk::Image* fl_current_Image;
 
+#if USE_XFT
+XRenderPictFormat* fl_rgba_xrender_format;
+void fl_xrender_draw_image(XWindow, fltk::PixelType type,
+			   const fltk::Rectangle& from,
+			   const fltk::Rectangle& to);
+#endif
+
 bool Image::drawn() const {
   if (!(flags&DRAWN)) return false;
   if ((flags&USES_FG) && ((PixmapPair*)picture)->fg != getcolor()) return false;
@@ -21,7 +28,7 @@ bool Image::drawn() const {
 }
 
 void Image::make_current() {
-  //  printf("make_current %p\n",this);
+//  printf("make_current %p\n",this);
   if (!picture) {
     open_display();
     picture = new PixmapPair;
@@ -43,13 +50,6 @@ void Image::make_current() {
 
 void fl_restore_clip(); // in rect.C
 
-#if USE_XFT
-XRenderPictFormat* fl_rgba_xrender_format;
-void fl_xrender_draw_image(XWindow, bool alpha,
-			   const fltk::Rectangle& from,
-			   const fltk::Rectangle& to);
-#endif
-
 void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   if (!drawn()) {
     const_cast<Image*>(this)->update();
@@ -58,7 +58,9 @@ void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   PixmapPair* picture = (PixmapPair*)(this->picture);
 #if USE_XFT
   if (fl_rgba_xrender_format && picture->rgb) {
-    fl_xrender_draw_image(picture->rgb, !(flags&OPAQUE), from, to);
+    fl_xrender_draw_image(picture->rgb,
+			  (flags&OPAQUE) ? RGB : (flags&Image::MASK) ? fltk::MASK : RGBA,
+			  from, to);
     return;
   }
 #endif

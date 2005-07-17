@@ -421,6 +421,8 @@ static uchar fg[3];
 static uchar bg[3];
 
 #if USE_XFT
+
+#if 0
 // Mask with XRender can be done by multiplying fg color by alpha:
 static void mask_to_argb32(const uchar* from, uchar* to, int w)
 {
@@ -432,6 +434,15 @@ static void mask_to_argb32(const uchar* from, uchar* to, int w)
       (((fg[0]*c)<<8)&0xff0000u) |
       ((fg[1]*c)&0xff00u) |
       ((fg[2]*c)>>8);
+  }
+}
+#endif
+
+static void mask_to_32(const uchar *from, uchar *to, int w) {
+  U32* t = (U32*)to;
+  for (;;) {
+    *t++ = ~(*from++ * 0x1010101U);
+    if (!--w) break;
   }
 }
 #endif
@@ -563,16 +574,16 @@ extern bool fl_get_invert_matrix(XTransform&);
 extern bool fl_trivial_transform();
 
 Picture p;
-XWindow prevtarget;
+XWindow prevsource;
 
-void fl_xrender_draw_image(XWindow target, bool alpha,
+void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
 			   const fltk::Rectangle& from,
 			   const fltk::Rectangle& to)
 {
-  if (target != prevtarget) {
-    prevtarget = target;
+  if (source != prevsource) {
+    prevsource = source;
     if (p) XRenderFreePicture(xdisplay, p);
-    p = XRenderCreatePicture(xdisplay, target, fl_rgba_xrender_format, 0, 0);
+    p = XRenderCreatePicture(xdisplay, source, fl_rgba_xrender_format, 0, 0);
     XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
   }
   XTransform xtransform;
@@ -615,11 +626,33 @@ void fl_xrender_draw_image(XWindow target, bool alpha,
     xtransform.matrix[1][2] += XDoubleToFixed(from.y()-to.y());
   }
   XRenderSetPictureTransform(xdisplay, p, &xtransform);
-  XRenderComposite(xdisplay, alpha ? PictOpOver : PictOpSrc,
-		   p, 0, XftDrawPicture(xftc), // src, mask, dest
-		   x, y, // src xy (in destination space!)
-		   0, 0, // mask xy
-		   x, y, r-x, b-y); // rectangle to fill
+  if (type == MASK) {
+    XftColor color;
+    {color.pixel = current_xpixel;
+    uchar r,g,b; split_color(getcolor(), r,g,b);
+    color.color.red   = r*0x101;
+    color.color.green = g*0x101;
+    color.color.blue  = b*0x101;
+    color.color.alpha = 0xffff;}
+    Picture solid = XftDrawSrcPicture(xftc, &color);
+    XRenderComposite(xdisplay, PictOpOver,
+		     solid, p, XftDrawPicture(xftc), // src, mask, dest
+		     x, y, // src xy (in destination space!)
+		     x, y, // mask xy
+		     x, y, r-x, b-y); // rectangle to fill
+  } else if (type==RGBA || type==ARGB32) {
+    XRenderComposite(xdisplay, PictOpOver,
+		     p, 0, XftDrawPicture(xftc), // src, mask, dest
+		     x, y, // src xy (in destination space!)
+		     0, 0, // mask xy
+		     x, y, r-x, b-y); // rectangle to fill
+  } else {
+    XRenderComposite(xdisplay, PictOpSrc,
+		     p, 0, XftDrawPicture(xftc), // src, mask, dest
+		     x, y, // src xy (in destination space!)
+		     0, 0, // mask xy
+		     x, y, r-x, b-y); // rectangle to fill
+  }
 }
 
 #else
@@ -641,15 +674,14 @@ static void figure_out_visual() {
 
 #if USE_XFT
   // See if XRender is going to work.
-  // RGBA is run through the generic ARGB32 bitmap format.
-  // I run RGB through whatever format it says is for this visual. This
-  // code assumes that is the same as the bitmap ListPixmapFormats finds.
-//   fl_rgb_xrender_format =
-//     XRenderFindVisualFormat(xdisplay, xvisual->visual);
+  // RGBA is run through the generic ARGB32 bitmap format. To allow
+  // RGB images to be drawn with XCopyArea or XPutImage I use the
+  // bitmap format that matches the visual. This code assummes that
+  // format is laid out exactly the same as RGBA.
   fl_rgba_xrender_format =
     XRenderFindStandardFormat(xdisplay, PictStandardARGB32);
   if (fl_rgba_xrender_format) {
-    converter[MASK] = mask_to_argb32;
+    converter[MASK] = mask_to_32;
     converter[RGBA] = rgba_to_xrgb;
     converter[ARGB32] = direct_32;
   }
@@ -791,9 +823,12 @@ public:
     fl_current_Image->flags = Image::DRAWN;
   }
   static void setmaskflags() {
+    fl_current_Image->flags = Image::DRAWN|Image::MASK;
+  }
+  static void setfgbgflags() {
     fl_current_Image->flags =
-      mixbg ? Image::USES_FG|Image::USES_BG|Image::DRAWN :
-	      Image::USES_FG|Image::DRAWN;
+      mixbg ? Image::USES_FG|Image::USES_BG|Image::DRAWN|Image::MASK :
+	      Image::USES_FG|Image::DRAWN|Image::MASK;
   }
 };
 
@@ -845,7 +880,8 @@ static void innards(const uchar *buf, PixelType type,
     if (use_xrender) {
       i.depth = 32;
       target = DrawImageHelper::create_pixmap(32);
-      if (hasalpha) DrawImageHelper::setalphaflags();
+      if (type==MASK) DrawImageHelper::setmaskflags();
+      else if (hasalpha) DrawImageHelper::setalphaflags();
       if (!gc32) gc32 = XCreateGC(xdisplay, target, 0, 0);
       gc = gc32;
     } else
@@ -967,13 +1003,16 @@ static void innards(const uchar *buf, PixelType type,
     }
   }
 
+#if USE_XFT
+  if (use_xrender) {
+    if (!fl_current_Image)
+      fl_xrender_draw_image(target, type, Rectangle(0,0,w,h), r1);
+    return;
+  }
+#endif
   if (fl_current_Image) {
     if (alphapointer) DrawImageHelper::setalpha(w,h);
-    if (type==MASK) DrawImageHelper::setmaskflags();
-#if USE_XFT
-  } else if (use_xrender) {
-    fl_xrender_draw_image(target, hasalpha, Rectangle(0,0,w,h), r1);
-#endif
+    if (type==MASK) DrawImageHelper::setfgbgflags();
   }
 }
 
