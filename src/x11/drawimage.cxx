@@ -31,10 +31,15 @@
 // 16-bit TrueColor with arbitrary layout
 // 32-bit TrueColor with ARGB32 layout
 
+// STD C
+#include <stdlib.h>
+#include <stdio.h>
+// FLTK
 #include <fltk/error.h>
 #include <fltk/Image.h>
 #include <fltk/math.h>
 #include "XColorMap.h"
+
 using namespace fltk;
 
 /// Converter functions:
