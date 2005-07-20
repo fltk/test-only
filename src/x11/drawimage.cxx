@@ -32,8 +32,8 @@
 // 32-bit TrueColor with ARGB32 layout
 
 // STD C
-#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 // FLTK
 #include <fltk/error.h>
 #include <fltk/Image.h>
