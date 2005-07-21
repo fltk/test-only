@@ -195,14 +195,6 @@ static List default_list;
 static void revert(Style *s) {
   s->box_ = FLAT_BOX;
   s->color_ = GRAY75;
-#if 0
-  // NT 4.0 style
-  s->buttonbox_ = FLAT_BOX;
-  s->highlight_color_ = WINDOWS_BLUE;
-#else
-  // Windows98 style:
-  s->buttonbox_ = HIGHLIGHT_UP_BOX;
-#endif
   s->leading_ = 4;
 }
 static NamedStyle style("Menu", revert, &Menu::default_style);
@@ -213,26 +205,21 @@ static NamedStyle style("Menu", revert, &Menu::default_style);
     Widget::default_style, and the usage of the fields is somewhat
     unusual:
 
-    - The box() around the actual popup menu windows is in
-      MenuWindow::default_style. It is not possible (or at least
-      not easy) to make popups have different borders.
-    - The box() is also used by default around any checkmarks
-      put on menu items. This is set to FLAT_BOX so that MenuBar
-      looks correct, and just happens to make checkmarks look like
-      Windows. You can change the box() on each checkmark item
-      to fix this.
-    - The color() is also used for the interior of the popup menu.
-      It defaults here to GRAY75 rather than WHITE.
-    - The textfont(), textsize(), textcolor() are used by the menu
-      items, unless they set their own values.
-    - The leading() is used to space apart the menu items unless
-      the items set their own values. It defaults to the larger
-      value of 4 here to make the menus look more like Windows.
-    - The buttonbox() is drawn around the "title" of popup menus
-      and around the titles of pull-down menus in a menubar. It
-      defaults to HIGHLIGHT_UP_BOX.
-    - buttoncolor(), labelfont(), labelsize() and labelcolor()
-      are \e not used. They can be used to draw the actual widget.
+    - The color(), textfont(), textsize(), textcolor() are
+      used to draw each Item in the menu, unless the items set
+      their own preferences. box() defaults to FLAT_BOX and color()
+      defaults to GRAY75 to replicate Windows.
+    - The popup menu window itself uses the box() that is stored
+      in MenuWindow::default_style. It is not possible (or at least
+      not easy) to make different popups have different borders.
+    - However that box is colored by color(). Thus you can make
+      the color different for each popup menu. This will only be
+      visible if the items have transparent boxes.
+    - The leading() is used to space apart the menu items. It
+      defaults to 4 to replicate Windows.
+    - buttonbox(), buttoncolor(), labelfont(), labelsize() and
+      labelcolor() are \e not used. They can be used to draw the
+      actual widget.
 
     The Browser subclass sets the style back to
     Widget::default_style, so that they appear more like a text editor

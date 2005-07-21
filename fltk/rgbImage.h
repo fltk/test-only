@@ -43,8 +43,8 @@ public:
   void update();
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 
-  rgbImage(const uchar* d, PixelType p, int W, int H) :
-    Image(W,H), pixels_(d), pixeltype_(p) {linedelta_=W*depth();}
+  rgbImage(const uchar* d, PixelType p, int W, int H, const char* name=0) :
+    Image(W,H,name), pixels_(d), pixeltype_(p) {linedelta_=W*depth();}
 
   rgbImage(const uchar* d, PixelType p, int W, int H, int linedelta) :
     Image(W,H), pixels_(d), pixeltype_(p), linedelta_(linedelta) {}

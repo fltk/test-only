@@ -94,7 +94,7 @@ void CycleButton::draw() {
   // This portion of the code is copied from Choice:
   Widget* o = get_item();
   if (o) {
-    Item::set_style(&style);
+    Item::set_style(&style,false);
     Flags saved = o->flags();
     o->set_flag(flags&(NOTACTIVE|VALUE|HIGHLIGHT));
     push_clip(r);

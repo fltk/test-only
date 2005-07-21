@@ -585,16 +585,10 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
 			   const fltk::Rectangle& from,
 			   const fltk::Rectangle& to)
 {
-  if (source != prevsource) {
-    prevsource = source;
-    if (p) XRenderFreePicture(xdisplay, p);
-    p = XRenderCreatePicture(xdisplay, source, fl_rgba_xrender_format, 0, 0);
-    XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
-  }
   XTransform xtransform;
-  const bool scaling = fl_get_invert_matrix(xtransform);
+  if (!fl_get_invert_matrix(xtransform)) return; // give up if we can't invert
   int x,y,r,b; // box to draw
-  if (scaling) {
+  if (!fl_trivial_transform()) {
     float X,Y,R,B,tx,ty;
     tx = to.x(); ty = to.y(); transform(tx, ty);
     X = R = tx; Y = B = ty;
@@ -629,6 +623,17 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
   } else {
     xtransform.matrix[0][2] += XDoubleToFixed(from.x()-to.x());
     xtransform.matrix[1][2] += XDoubleToFixed(from.y()-to.y());
+  }
+  // Adjust due to XRender sampling pixels at the corners:
+  xtransform.matrix[0][2] +=
+    (xtransform.matrix[0][0]+xtransform.matrix[0][1]-0x10000)>>1;
+  xtransform.matrix[1][2] +=
+    (xtransform.matrix[1][0]+xtransform.matrix[1][1]-0x10000)>>1;
+  if (source != prevsource) {
+    prevsource = source;
+    if (p) XRenderFreePicture(xdisplay, p);
+    p = XRenderCreatePicture(xdisplay, source, fl_rgba_xrender_format, 0, 0);
+    XRenderSetPictureFilter(xdisplay, p, "best", 0, 0);
   }
   XRenderSetPictureTransform(xdisplay, p, &xtransform);
   if (type == MASK) {

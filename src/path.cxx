@@ -101,15 +101,14 @@ bool fl_get_invert_matrix(XTransform& i) {
   i.matrix[2][1] = 0;
   i.matrix[2][2] = XDoubleToFixed(1);
   if (m.trivial) {
-  FAILURE:
     i.matrix[0][1] = i.matrix[1][0] = 0;
     i.matrix[0][0] = i.matrix[1][1] = XDoubleToFixed(1);
     i.matrix[0][2] = XDoubleToFixed(-m.x);
     i.matrix[1][2] = XDoubleToFixed(-m.y);
-    return false;
+    return true;
   }
   const float d = m.a*m.d-m.b*m.c; // determinant
-  if (!d) goto FAILURE;
+  if (!d) return false;
   i.matrix[0][0] = XDoubleToFixed(m.d / d);
   i.matrix[0][1] = XDoubleToFixed(-m.c / d);
   i.matrix[0][2] = XDoubleToFixed((m.c*m.y - m.x*m.d) / d);

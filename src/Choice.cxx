@@ -94,7 +94,7 @@ void Choice::draw() {
     Widget* o = get_item();
     //if (!o && children()) o = child(0);
     if (o) {
-      Item::set_style(this);
+      Item::set_style(this,false);
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);

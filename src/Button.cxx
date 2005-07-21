@@ -221,7 +221,7 @@ void Button::draw(int glyph, int glyph_width) const
     // this allows these buttons to be put into browser/menus:
     //fg = fl_item_labelcolor(this);
   } else {
-    if ((damage()&DAMAGE_EXPOSE) && !box->fills_rectangle()) {
+    if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT)) && !box->fills_rectangle()) {
       // Erase the area behind non-square boxes
       draw_background();
     }

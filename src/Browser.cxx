@@ -677,7 +677,7 @@ void Browser::draw() {
   const int *last_columns = fltk::column_widths();
   fltk::column_widths(column_widths_p);
   uchar d = damage();
-  Item::set_style(this);
+  Item::set_style(this,false);
   if (d & DAMAGE_ALL) { // full redraw
     //printf("full redraw damage %x\n", d);
     draw_frame();
@@ -802,7 +802,7 @@ void Browser::layout() {
   // the widgets:
   Widget::layout();
 
-  Item::set_style(this);
+  Item::set_style(this,false);
   const int *last_columns = fltk::column_widths();
   fltk::column_widths(column_widths_p);
 

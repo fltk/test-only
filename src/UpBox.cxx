@@ -58,7 +58,7 @@ public:
 #if USE_X11
     // X version uses stipple pattern because there seem to be too many
     // servers with bugs when drawing dotted lines:
-    static const char pattern[] 
+    static const char pattern[]
       = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
     static Pixmap evenstipple, oddstipple;
     if (!evenstipple) {
@@ -87,7 +87,7 @@ public:
     //
     // WAS: Can we do something with a pattern brush here, like the X
     // version uses?
-  
+
 /*
     // Draw using WIN32 API function (since 95)
     transform(r);
@@ -369,7 +369,7 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
 // draw a box only when highlighted or selected:
 
 /*! \class fltk::HighlightBox
-  Draws as fltk::FLAT_BOX normally, this can draw as any other box
+  Draws nothing normally, this can draw as any other box
   (passed to the constructor) when HIGHLIGHT, VALUE, or PUSHED
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
@@ -378,27 +378,25 @@ void HighlightBox::_draw(const fltk::Rectangle& r) const
 {
   if (drawflags(HIGHLIGHT|VALUE|PUSHED))
     down->draw(r);
-  else
-    FlatBox::_draw(r);
+//   else
+//     FlatBox::_draw(r);
 }
-void HighlightBox::inset(fltk::Rectangle& r) const {
-  if (drawflags(HIGHLIGHT|VALUE|PUSHED)) down->inset(r);
-}
-bool HighlightBox::fills_rectangle() const {return true;}
-bool HighlightBox::is_frame() const {return down->is_frame();}
+void HighlightBox::inset(fltk::Rectangle& r) const {down->inset(r);}
+bool HighlightBox::fills_rectangle() const {return false;}
+bool HighlightBox::is_frame() const {return false;}
 
 HighlightBox::HighlightBox(const char* n, const Box* b)
   : FlatBox(n), down(b) {}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
 /*! \ingroup boxes
-  Draws like FLAT_BOX normally, and as THIN_UP_BOX when the mouse
+  Draws nothing normally, and as THIN_UP_BOX when the mouse
   pointer points at it or the value of the widget is turned on.
 */
 Box* const fltk::HIGHLIGHT_UP_BOX = &highlightUpBox;
 static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 /*! \ingroup boxes
-  Draws like FLAT_BOX normally, and as THIN_DOWN_BOX when the mouse
+  Draws nothing normally, and as THIN_DOWN_BOX when the mouse
   pointer points at it or the value of the widget is turned on.
 */
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;

@@ -72,13 +72,8 @@ void PopupMenu::draw() {
   // set_item() does not cause a redraw:
   if (damage() == DAMAGE_VALUE) return;
 
-  Box* box /*= style()->box; if (!box) box*/ = this->buttonbox();
-  // We need to erase the focus rectangle on DAMAGE_HIGHTLIGHT for
-  // NO_BOX buttons such as checkmarks:
-  if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle()
-      || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
-    draw_background();
-  }
+  Box* box = this->buttonbox();
+  if (!box->fills_rectangle()) draw_background();
   Flags flags = this->flags()|OUTPUT;
   if (::pushed == this) flags |= VALUE|HIGHLIGHT;
   drawstyle(style(), flags);

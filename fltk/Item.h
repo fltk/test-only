@@ -1,5 +1,5 @@
 //
-// "$Id: Item.h,v 1.5 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id$"
 //
 // Widget designed to be a menu or browser item.
 //
@@ -44,9 +44,9 @@ public:
   int handle(int);
   Item(const char* label = 0);
   static NamedStyle* default_style;
-  static void set_style(const Style*);
-  static void set_style(const Widget* w) {set_style(w->style());}
-  static void clear_style() {set_style(Widget::default_style);}
+  static void set_style(const Style*, bool menubar);
+  static void set_style(const Widget* w, bool f) {set_style(w->style(),f);}
+  static void clear_style() {set_style(Widget::default_style,false);}
 };
 
 }

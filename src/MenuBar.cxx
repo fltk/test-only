@@ -39,6 +39,9 @@ using namespace fltk;
 void MenuBar::draw() {
   // set_item() does not cause a redraw:
   if (damage() == DAMAGE_VALUE) return;
+  // annoying kludge: copy the buttonbox and highlight color into the
+  // items so that they draw like Windows. If this is not done it looks
+  // like Windows 95 with blue highlighting.
   Menu::draw_in(this, 0, 0, highlight_, last_);
   last_ = highlight_;
 }
@@ -195,7 +198,20 @@ J4:
   return 0;
 }
 
-static NamedStyle style("MenuBar", 0, &MenuBar::default_style);
+static void revert(Style *s) {
+  // This is for MenuBar only, the buttonbox and highlight color are used
+  // around the menu titles:
+#if 0
+  // NT 4.0 style
+  s->buttonbox_ = FLAT_BOX;
+  s->highlight_color_ = WINDOWS_BLUE;
+#else
+  // Windows98 style:
+  s->buttonbox_ = HIGHLIGHT_UP_BOX;
+#endif
+}
+
+static NamedStyle style("MenuBar", revert, &MenuBar::default_style);
 NamedStyle* MenuBar::default_style = &::style;
 
 MenuBar::MenuBar(int x,int y,int w,int h,const char *l)

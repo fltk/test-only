@@ -111,17 +111,11 @@ void MenuTitle::draw() {
 
   const Style* style = menustate->widget->style();
   if (style->hide_underscore()) fl_hide_underscore = true;
-  Box* box = style->buttonbox();
 
   if (menustate->menubar) {
 
-    {drawstyle(style,VALUE|HIGHLIGHT);
-    Rectangle r(w(),h());
-    box->draw(r);
-    box->inset(r);
-    push_clip(r);}
     // Get the Item directly from the menubar and draw it:
-    Item::set_style(menustate->widget);
+    Item::set_style(menustate->widget, true);
     Widget* item = menustate->widget->child(menustate->indexes[0]);
 
     push_matrix();
@@ -131,7 +125,7 @@ void MenuTitle::draw() {
     Flags flags = save_flags;
     if (menustate->hmenubar) flags &= ~ALIGN_MASK;
 
-    item->flags(flags|HIGHLIGHT);
+    item->flags(flags|SELECTED|HIGHLIGHT|VALUE);
     item->w(w());
     item->h(h());
     item->draw();
@@ -147,14 +141,13 @@ void MenuTitle::draw() {
     }
 
     pop_matrix();
-    pop_clip();
     Item::clear_style();
 
   } else {
     // a title on a popup menu is drawn like a button
     drawstyle(style, 0);
     Rectangle r(w(),h());
-    box->draw(r);
+    style->buttonbox()->draw(r);
     draw_label(r, 0);
   }
   fl_hide_underscore = false;
@@ -241,7 +234,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   int hotKeysW = 0;
   int H = 0;
   int children = this->children(indexes,level);
-  Item::set_style(widget);
+  Item::set_style(widget,widget->parent());
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
   for (i = 0; i < children; i++) {
@@ -300,7 +293,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget);
+  Item::set_style(widget, widget->parent());
   if (widget->style()->hide_underscore() &&
       !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
     fl_hide_underscore = true;
@@ -309,7 +302,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   int spacing = 0;
   if (horizontal) {
     spacing = int(widget->leading());
-    r.move(spacing,0);
+    r.move(spacing,1); r.h(r.h()-2);
   }
 
   Rectangle ir(r);
@@ -326,25 +319,24 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 
     // for minimal update, only draw the items that changed selection:
     if (damage != DAMAGE_CHILD || i==selected || i==drawn_selected) {
+
       Flags flags = item->flags();
       if (flags&NOTACTIVE) flags |= INACTIVE;
-      bool clipped = false;
-
       if (i == selected && !(flags & (OUTPUT|NOTACTIVE))) {
-	if (widget->parent()) { // special code for highlight of menu bars
-	  flags &= ~SELECTED;
-	  flags |= HIGHLIGHT;
-	  Rectangle R(ir);
-	  if (widget->horizontal()) {R.move_y(1); R.move_b(-1);}
-	  drawstyle(widget->style(), flags&~VALUE);
-	  widget->buttonbox()->draw(R);
-	  R.inset(1);
-	  push_clip(R); clipped = true;
-	} else {
-	  flags |= SELECTED;
-	}
+	flags |= (SELECTED|HIGHLIGHT);
       } else {
 	flags &= ~(SELECTED|HIGHLIGHT);
+      }
+      if (damage==DAMAGE_CHILD) {
+	// see if we need to erase background
+	Box* b = item->box();
+	if (!b->fills_rectangle()) {
+	  push_clip(ir);
+	  Rectangle r(widget->w(), widget->h());
+	  drawstyle(widget->style(),0);
+	  box->draw(r);
+	  pop_clip();
+	}
       }
 
       push_matrix();
@@ -373,7 +365,6 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 				  ALIGN_RIGHT);
       }
       item->flags(save_flags);
-      if (clipped) pop_clip();
     }
     if (horizontal) ir.move(ir.w(),0);
     else ir.move(0,ir.h());
@@ -401,7 +392,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget);
+  Item::set_style(widget, widget->parent());
   int ret = -1;
   if (widget->horizontal()) {
     int spacing = int(widget->leading());
@@ -441,7 +432,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget);
+  Item::set_style(widget, widget->parent());
   if (widget->horizontal()) {
     int spacing = int(widget->leading());
     r.move(spacing,0);

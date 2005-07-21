@@ -83,16 +83,10 @@ LabelType* const fltk::NO_LABEL = &noLabel;
     colors and font are set up for drawing text in the widget.
 */
 void Widget::draw_box() const {
-#if USE_CLIPOUT
-  if (damage()&DAMAGE_EXPOSE && !box()->fills_rectangle() && parent())
-    draw_background();
-#endif
+  Box* box = this->box();
+  if (!box->fills_rectangle()) draw_background();
   drawstyle(style(), flags_ & ~OUTPUT);
-  box()->draw(Rectangle(w(),h()));
-  // draw a big x to show where image will be drawn:
-//    setcolor(BLACK);
-//    drawline(0,0,w(),h());
-//    drawline(0,h(),w(),0);
+  box->draw(Rectangle(w(),h()));
 }
 
 /** Same as draw_box() but draws only the boundary of the box() by
