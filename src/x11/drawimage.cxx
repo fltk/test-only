@@ -32,7 +32,6 @@
 // 32-bit TrueColor with ARGB32 layout
 
 // STD C
-#include <stdio.h>
 #include <string.h>
 // FLTK
 #include <fltk/error.h>
@@ -760,12 +759,10 @@ static void figure_out_visual() {
     converter[MONO] = mono_to_32;
     if (rs == 0 && gs == 8 && bs == 16) {
       ::i.byte_order = !WORDS_BIGENDIAN;
-      printf("A\n");
       goto RGBX;
     }
     if (rs == 24 && gs == 16 && bs == 8) {
       ::i.byte_order = WORDS_BIGENDIAN;
-      printf("B\n");
     RGBX:
       converter[RGB] = rgb_to_rgbx;
 #if WORDS_BIGENDIAN
@@ -778,12 +775,10 @@ static void figure_out_visual() {
     }
     if (rs == 8 && gs == 16 && bs == 24) {
       ::i.byte_order = !WORDS_BIGENDIAN;
-      printf("C\n");
       goto XRGB;
     }
     if (rs == 16 && gs == 8 && bs == 0) {
       ::i.byte_order = WORDS_BIGENDIAN;
-      printf("D\n");
     XRGB:
       converter[RGB] = rgb_to_xrgb;
       converter[RGBx] = rgba_to_xrgb;
