@@ -36,7 +36,7 @@ all: makeinclude
 install: makeinclude
 	for dir in $(DIRS) documentation; do\
 		echo "=== installing $$dir ===";\
-		(cd $$dir; $(MAKE) $(MFLAGS) install) || exit $$?;\
+		(cd $$dir; $(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) install) || exit $$?;\
 	done
 
 uninstall: makeinclude

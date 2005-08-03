@@ -255,39 +255,48 @@ libfltk_s.a: $(OBJECTS)
 
 install:
 	echo "Installing include files in $(includedir)/fltk..."
-	$(RMDIR) $(includedir)/fltk
-	$(MKDIR) $(includedir)/fltk
-	$(CP) ../fltk/*.h  $(includedir)/fltk
-	$(CHMOD) 755 $(includedir)/fltk
-	$(CHMOD) 644 $(includedir)/fltk/*
+	if [ -z $(DESTDIR) ]; then                          \
+	  echo "DESTDIR not specified";                     \
+	else                                                \
+	  if [ -d $(DESTDIR) ]; then                        \
+	    echo "$(DESTDIR) exists - will be overwritten"; \
+	  else                                              \
+	    mkdir $(DESTDIR);                               \
+	  fi                                                \
+	fi
+	$(RMDIR) $(DESTDIR)$(includedir)/fltk
+	$(MKDIR) $(DESTDIR)$(includedir)/fltk
+	$(CP) ../fltk/*.h  $(DESTDIR)$(includedir)/fltk
+	$(CHMOD) 755 $(DESTDIR)$(includedir)/fltk
+	$(CHMOD) 644 $(DESTDIR)$(includedir)/fltk/*
 	echo "Installing FLTK1.1 emulation include files in $(includedir)/FL..."
-	$(RMDIR) $(includedir)/FL
-	$(MKDIR) $(includedir)/FL
-	$(CP) ../FL/*.H ../FL/*.h  $(includedir)/FL
-	$(CHMOD) 755 $(includedir)/FL
-	$(CHMOD) 644 $(includedir)/FL/*
+	$(RMDIR) $(DESTDIR)$(includedir)/FL
+	$(MKDIR) $(DESTDIR)$(includedir)/FL
+	$(CP) ../FL/*.H ../FL/*.h  $(DESTDIR)$(includedir)/FL
+	$(CHMOD) 755 $(DESTDIR)$(includedir)/FL
+	$(CHMOD) 644 $(DESTDIR)$(includedir)/FL/*
         ifneq (,$(wildcard ../fltk-config))
 	echo "Installing fltk-config in $(bindir)..."
-	$(MKDIR) $(bindir)
-	$(CP) ../fltk-config $(bindir)
-	$(CHMOD) 755 $(bindir)/fltk-config
+	$(MKDIR) $(DESTDIR)$(bindir)
+	$(CP) ../fltk-config $(DESTDIR)$(bindir)
+	$(CHMOD) 755 $(DESTDIR)$(bindir)/fltk-config
         endif
         ifneq (,$(wildcard ../lib/$(LIBNAME)))
 	echo "Installing static core library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(LIBNAME)
-	$(CP) ../lib/$(LIBNAME) $(libdir)
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
+	$(CP) ../lib/$(LIBNAME) $(DESTDIR)$(libdir)
         endif
         ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared core library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(DSONAME)
-	$(RM) $(libdir)/$(DSOLINK)
-	$(CP) ../lib/$(DSONAME) $(libdir)
-	$(LN) $(DSONAME) $(libdir)/$(DSOLINK)
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(DSONAME)
+	$(RM) $(DESTDIR)$(libdir)/$(DSOLINK)
+	$(CP) ../lib/$(DSONAME) $(DESTDIR)$(libdir)
+	$(LN) $(DSONAME) $(DESTDIR)$(libdir)/$(DSOLINK)
         endif
         ifeq ($(DSONAME), fltk.dll)
-	$(CP) lib$(DSONAME).a $(libdir)
+	$(CP) lib$(DSONAME).a $(DESTDIR)$(libdir)
         endif
 
 #

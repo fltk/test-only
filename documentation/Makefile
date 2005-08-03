@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.28 2004/12/05 19:28:47 spitzak Exp $"
+# "$Id$"
 #
 # Copyright 1998-2004 by Bill Spitzak and others.
 #
@@ -42,13 +42,13 @@ install:
 # 	$(CP) $(HTMLFILES) *.gif *.jpg index.html $(docdir)
 # 	$(CHMOD) 644 $(docdir)/*
 	echo "Installing man pages in $(mandir)"
-	-$(MKDIR) -p $(mandir)/man1
+	-$(MKDIR) -p $(DESTDIR)$(mandir)/man1
 	for file in $(MAN1FILES); do \
-		$(CP) $$file $(mandir)/man1/`basename $$file .man`.1; \
+		$(CP) $$file $(DESTDIR)$(mandir)/man1/`basename $$file .man`.1; \
 	done
-	-$(MKDIR) -p $(mandir)/man3
+	-$(MKDIR) -p $(DESTDIR)$(mandir)/man3
 	for file in $(MAN3FILES); do \
-		$(CP) $$file $(mandir)/man3/`basename $$file .man`.3; \
+		$(CP) $$file $(DESTDIR)$(mandir)/man3/`basename $$file .man`.3; \
 	done
 
 uninstall:
@@ -71,4 +71,4 @@ fltk.pdf: $(HTMLFILES)
 	@rm -f fltk.pdf
 	@$(HTMLDOC) -f fltk.pdf $(MEDIA) --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage fltk.gif $(HTMLFILES)
 
-# End of "$Id: Makefile,v 1.28 2004/12/05 19:28:47 spitzak Exp $".
+# End of "$Id$".

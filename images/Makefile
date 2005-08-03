@@ -119,20 +119,20 @@ include makedepend
 install:
         ifneq (,$(wildcard ../lib/$(LIBNAME)))
 	echo "Installing static images library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(LIBNAME)
-	$(CP) ../lib/$(LIBNAME) $(libdir)
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
+	$(CP) ../lib/$(LIBNAME) $(DESTDIR)$(libdir)
         endif
         ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared images library in $(libdir)"
-	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(DSONAME)
-	$(RM) $(libdir)/$(DSOLINK)
-	$(CP) ../lib/$(DSONAME) $(libdir)
-	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(DSONAME)
+	$(RM) $(DESTDIR)$(libdir)/$(DSOLINK)
+	$(CP) ../lib/$(DSONAME) $(DESTDIR)$(libdir)
+	$(LN) -s $(DSONAME) $(DESTDIR)$(libdir)/$(DSOLINK)
         endif
         ifeq ($(DSONAME), fltk_images.dll)
-	$(CP) lib$(DSONAME).a $(libdir)
+	$(CP) lib$(DSONAME).a $(DESTDIR)$(libdir)
         endif
 #
 # Uninstall the libraries...
