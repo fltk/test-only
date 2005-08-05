@@ -1208,12 +1208,17 @@ bool fltk::handle(int event, Window* window)
     if (to->contains(belowmouse())) return 0;
   case MOVE:
   case DRAG: // does not happen from system code, but user code may send this
-    if (pushed()) {e_type = DRAG; return pushed()->send(DRAG) != 0;}
-    {Widget* pbm = belowmouse();
-    if (outside_modal(to)) to = modal_;
-    bool ret = to && to->send(MOVE);
-    if (pbm != belowmouse()) Tooltip::enter(belowmouse());
-    return ret;}
+    if (pushed()) {
+      e_type = DRAG;
+      return pushed()->send(DRAG) != 0;
+    }
+    { 
+      Widget* pbm = belowmouse();
+      if (outside_modal(to)) to = modal_;
+      bool ret = to && to->send(MOVE);
+      if (pbm != belowmouse()) Tooltip::enter(belowmouse());
+      return ret;
+    }
 
   case RELEASE:
     to = pushed();
