@@ -1283,8 +1283,8 @@ bool fltk::handle()
     XWindow root = XRootWindow(xdisplay, xscreen);
     if (xevent.xreparent.parent != root) {
       int X, Y; XWindow junk;
-      //ReparentNotify gives the new position of the window relative to
-      //the new parent. FLTK cares about the position on the root window.
+      //ReparentNotifygivesthenewpositionofthewindowrelativeto
+      //thenewparent.FLTKcaresaboutthepositionontherootwindow.
       XTranslateCoordinates(xdisplay, xid(window), root, 0, 0, &X, &Y, &junk);
       window->x(X);
       window->y(Y);
@@ -2138,13 +2138,21 @@ void fltk::draw_into(XWindow window, int w, int h) {
 #endif
 
 #if USE_CAIRO
+    cairo_status_t cstatus;
     if (cc) {
-      if (cairo_status(cc))
-	warning("Cairo: %s", cairo_status_string(cc));
+      if (cstatus = cairo_status(cc))
+        warning("Cairo: %s", cairo_status_to_string(cstatus));
       cairo_destroy(cc);
       cairo_surface_destroy(surface);
     }
-    surface = cairo_xlib_surface_create_with_visual(xdisplay, window, xvisual->visual);
+/*
+cairo_surface_t* cairo_xlib_surface_create  (Display *dpy,
+                                             Drawable drawable,
+                                             Visual *visual,
+                                             int width,
+                                             int height);
+*/
+    surface = cairo_xlib_surface_create(xdisplay, window, xvisual->visual, w, h);
     cc = cairo_create(surface);
 #endif
   }

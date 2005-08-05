@@ -316,9 +316,9 @@ void fltk::line_style(int style, int width, char* dashes) {
 #if USE_CAIRO
   cairo_set_line_width(cc, width ? width : 1);
   int c = (style>>8)&3; if (c) c--;
-  cairo_set_line_cap(cc, (cairo_line_cap)c);
+  cairo_set_line_cap(cc, (cairo_line_cap_t)c);
   int j = (style>>12)&3; if (j) j--;
-  cairo_set_line_join(cc, (cairo_line_join)j);
+  cairo_set_line_join(cc, (cairo_line_join_t)j);
   if (ndashes) {
     double dash[20];
     for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
