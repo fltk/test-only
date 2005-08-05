@@ -1,11 +1,11 @@
 //
-// "$Id: TextDisplay.h,v 1.2 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
-// Scrolling text display. I am not sure if this can be used by
-// itself, or if this is just a private class used to create TextEditor.
+// Header file for TextDisplay class.
 //
-// Copyright Mark Edel.  Permission to distribute under the LGPL for
-// the FLTK library granted by Mark Edel.
+// Copyright 2001-2005 by Bill Spitzak and others.
+// Original code Copyright Mark Edel.  Permission to distribute under
+// the LGPL for the FLTK library granted by Mark Edel.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,15 +22,20 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
-#ifndef fltk_TextDisplay_h
-#define fltk_TextDisplay_h
+#ifndef TEXT_DISPLAY_H
+#define TEXT_DISPLAY_H
 
+#include "draw.h"
 #include "Group.h"
+#include "Widget.h"
 #include "Scrollbar.h"
 #include "TextBuffer.h"
+#include "Font.h"
 
 namespace fltk {
 
@@ -52,20 +57,26 @@ class FL_API TextDisplay: public Group {
       DRAG_CHAR = 0, DRAG_WORD = 1, DRAG_LINE = 2
     };
 
-    typedef void (*UnfinishedStyleCb)();
+    typedef void (*UnfinishedStyleCb)(int, void *);
 
-    struct FL_API StyleTableEntry {
+    // style attributes - currently not implemented!
+    enum {
+      ATTR_NONE = 0,
+      ATTR_UNDERLINE = 1,
+      ATTR_HIDDEN = 2
+    };
+
+    struct StyleTableEntry {
       Color	color;
       Font*	font;
       int	size;
+      unsigned	attr;
     };
 
     TextDisplay(int X, int Y, int W, int H, const char *l = 0);
     ~TextDisplay();
-    static NamedStyle* default_style;
 
     virtual int handle(int e);
-    void drag_me(int pos);
     void buffer(TextBuffer* buf);
     void buffer(TextBuffer& buf) { buffer(&buf); }
     TextBuffer* buffer() { return mBuffer; }
@@ -81,14 +92,26 @@ class FL_API TextDisplay: public Group {
     int move_left();
     int move_up();
     int move_down();
+    int count_lines(int start, int end, bool start_pos_is_line_start);
+    int line_start(int pos);
+    int line_end(int pos, bool start_pos_is_line_start);
+    int skip_lines(int startPos, int nLines, bool startPosIsLineStart);
+    int rewind_lines(int startPos, int nLines);
     void next_word(void);
     void previous_word(void);
     void show_cursor(int b = 1);
     void hide_cursor() { show_cursor(0); }
     void cursor_style(int style);
+    Color cursor_color() const {return mCursor_color;}
+    void cursor_color(Color n) {mCursor_color = n;}
+    int scrollbar_width() { return scrollbar_width_; }
+    Align scrollbar_align() { return scrollbar_align_; }
+    void scrollbar_width(int W) { scrollbar_width_ = W; }
+    void scrollbar_align(Align a) { scrollbar_align_ = a; }
     int word_start(int pos) { return buffer()->word_start(pos); }
     int word_end(int pos) { return buffer()->word_end(pos); }
 
+    
     void highlight_data(TextBuffer *styleBuffer,
                         StyleTableEntry *styleTable,
                         int nStyles, char unfinishedStyle,
@@ -97,17 +120,30 @@ class FL_API TextDisplay: public Group {
 
     int position_style(int lineStartPos, int lineLen, int lineIndex,
                        int dispIndex);
-    
-    virtual void layout();
-    virtual void draw();
+
+    //Font textfont() const {return (Font)textfont_;}
+    //void textfont(uchar s) {textfont_ = s;}
+    uchar textsize() const {return textsize_;}
+    void textsize(uchar s) {textsize_ = s;}
+    Color textcolor() const {return (Color)textcolor_;}
+    void textcolor(unsigned n) {textcolor_ = n;}
+
+    int wrapped_column(int row, int column);
+    int wrapped_row(int row);
+    void wrap_mode(int wrap, int wrap_margin);
+
+    //virtual void resize(int X, int Y, int W, int H);
 
   protected:
-    // Most (all?) of this stuff should only be called from layout() or
+    // Most (all?) of this stuff should only be called from resize() or
     // draw().
     // Anything with "vline" indicates thats it deals with currently
     // visible lines.
 
-    void draw_text(const Rectangle&);
+    virtual void draw();
+    virtual void layout();
+
+    void draw_text(int X, int Y, int W, int H);
     void draw_range(int start, int end);
     void draw_cursor(int, int);
 
@@ -117,7 +153,9 @@ class FL_API TextDisplay: public Group {
     void draw_vline(int visLineNum, int leftClip, int rightClip,
                     int leftCharIndex, int rightCharIndex);
 
-    void clear_rect(int style, const Rectangle&);
+    void draw_line_numbers(bool clearAll);
+
+    void clear_rect(int style, int x, int y, int width, int height);
     void display_insert();
 
     void offset_line_starts(int newTopLineNum);
@@ -132,6 +170,7 @@ class FL_API TextDisplay: public Group {
     int position_to_line( int pos, int* lineNum );
     int string_width(const char* string, int length, int style);
 
+    static void buffer_predelete_cb(int pos, int nDeleted, void* cbArg);
     static void buffer_modified_cb(int pos, int nInserted, int nDeleted,
                                    int nRestyled, const char* deletedText,
                                    void* cbArg);
@@ -150,11 +189,32 @@ class FL_API TextDisplay: public Group {
                       int PosType = CHARACTER_POS);
 
     int position_to_xy(int pos, int* x, int* y);
+    void maintain_absolute_top_line_number(int state);
+    int get_absolute_top_line_number();
+    void absolute_top_line_number(int oldFirstChar);
+    int maintaining_absolute_top_line_number();
+    void reset_absolute_top_line_number();
     int position_to_linecol(int pos, int* lineNum, int* column);
     void scroll_(int topLineNum, int horizOffset);
 
     void extend_range_for_styles(int* start, int* end);
 
+    void find_wrap_range(const char *deletedText, int pos, int nInserted,
+                           int nDeleted, int *modRangeStart, int *modRangeEnd,
+                           int *linesInserted, int *linesDeleted);
+    void measure_deleted_lines(int pos, int nDeleted);
+    void wrapped_line_counter(TextBuffer *buf, int startPos, int maxPos,
+                               int maxLines, bool startPosIsLineStart,
+                               int styleBufOffset, int *retPos, int *retLines,
+                               int *retLineStart, int *retLineEnd,
+                               bool countLastLineMissingNewLine = true);
+    void find_line_end(int pos, bool start_pos_is_line_start, int *lineEnd,
+                         int *nextLineStart);
+    int measure_proportional_character(char c, int colNum, int pos);
+    int wrap_uses_character(int lineEndPos);
+    int range_touches_selection(TextSelection *sel, int rangeStart,
+                                 int rangeEnd);
+    void text_drag_me(int pos);
 
     int damage_range1_start, damage_range1_end;
     int damage_range2_start, damage_range2_end;
@@ -175,17 +235,25 @@ class FL_API TextDisplay: public Group {
                                    displayed character (lastChar points
                                    either to a newline or one character
                                    beyond the end of the buffer) */
+    int mContinuousWrap;     	  /* Wrap long lines when displaying */
+    int mWrapMargin; 	    	  /* Margin in # of char positions for
+    	    	    	    	    	   wrapping in continuousWrap mode */
     int* mLineStarts;
     int mTopLineNum;            /* Line number of top displayed line
                                    of file (first line of file is 1) */
+    int mAbsTopLineNum;			/* In continuous wrap mode, the line
+    					   number of the top line if the text
+					   were not wrapped (note that this is
+					   only maintained as needed). */
+    int mNeedAbsTopLineNum;	/* Externally settable flag to continue
+    					   maintaining absTopLineNum even if
+					   it isn't needed for line # display */
     int mHorizOffset;           /* Horizontal scroll pos. in pixels */
     int mTopLineNumHint;        /* Line number of top displayed line
                                    of file (first line of file is 1) */
     int mHorizOffsetHint;       /* Horizontal scroll pos. in pixels */
-    int mVisibility;            /* Window visibility (see XVisibility
-                                   event) */
     int mNStyles;               /* Number of entries in styleTable */
-    StyleTableEntry *mStyleTable; /* Table of fonts and colors for
+    const StyleTableEntry *mStyleTable; /* Table of fonts and colors for
                                    coloring/syntax-highlighting */
     char mUnfinishedStyle;      /* Style buffer entry which triggers
                                    on-the-fly reparsing of region */
@@ -197,20 +265,40 @@ class FL_API TextDisplay: public Group {
 
     int mFixedFontWidth;        /* Font width if all current fonts are
                                    fixed and match in width, else -1 */
+    int mSuppressResync;		/* Suppress resynchronization of line
+                                           starts during buffer updates */
+    int mNLinesDeleted;			/* Number of lines deleted during
+					   buffer modification (only used
+				           when resynchronization is suppressed) */
+    int mModifyingTabDistance;	/* Whether tab distance is being
+    					   modified */
 
     Color mCursor_color;
 
     Scrollbar* mHScrollBar;
     Scrollbar* mVScrollBar;
+    int scrollbar_width_;
+    Align scrollbar_align_;
     int dragPos, dragType, dragging;
     int display_insert_position_hint;
+    //struct { int x, y, w, h; } text_area;
     Rectangle text_area;
+
+    uchar textfont_;
+    uchar textsize_;
+    unsigned textcolor_;
+
+	 // The following are not presently used from the original NEdit code,
+	 // but are being put here so that future versions of TextDisplay
+	 // can implement line numbers without breaking binary compatibility.
+    int mLineNumLeft, mLineNumWidth;
+				/* Line number margin and width */
 };
 
 }
-
 #endif
 
 //
-// End of "$Id: TextDisplay.h,v 1.2 2005/01/24 08:07:07 spitzak Exp $".
+// End of "$Id$".
 //
+

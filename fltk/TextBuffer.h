@@ -1,11 +1,11 @@
 //
-// "$Id: TextBuffer.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id$"
 //
-// Innards of the TextEditor Widget. It's not clear if this header
-// file needs to be public.
+// Header file for TextBuffer class.
 //
-// Copyright Mark Edel.  Permission to distribute under the LGPL for
-// the FLTK library granted by Mark Edel.
+// Copyright 2001-2005 by Bill Spitzak and others.
+// Original code Copyright Mark Edel.  Permission to distribute under
+// the LGPL for the FLTK library granted by Mark Edel.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,15 +22,21 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
-#ifndef fltk_TextBuffer_h
-#define fltk_TextBuffer_h
+#ifndef TEXT_BUFFER_H
+#define TEXT_BUFFER_H
 
 #include "FL_API.h"
 
 namespace fltk {
+
+/* Maximum length in characters of a tab or control character expansion
+   of a single buffer character */
+#define TEXT_MAX_EXP_CHAR_LEN 20
 
 class FL_API TextSelection {
   friend class TextBuffer;
@@ -60,28 +66,29 @@ class FL_API TextSelection {
     int mRectEnd;
 };
 
-typedef void (*TextModifyCb)(int pos, int nInserted, int nDeleted,
+typedef void (*Text_Modify_Cb)(int pos, int nInserted, int nDeleted,
                                   int nRestyled, const char* deletedText,
                                   void* cbArg);
+typedef void (*Text_Predelete_Cb)(int pos, int nDeleted, void* cbArg);
 
 class FL_API TextBuffer {
   public:
     TextBuffer(int requestedSize = 0);
     ~TextBuffer();
 
-    enum {MAX_EXP_CHAR_LEN = 20};
-
     int length() { return mLength; }
-    const char* text();
+    char* text();
     void text(const char* text);
-    const char* text_range(int start, int end);
+    char* text_range(int start, int end);
     char character(int pos);
-    const char* text_in_rectangle(int start, int end, int rectStart, int rectEnd);
+    char* text_in_rectangle(int start, int end, int rectStart, int rectEnd);
     void insert(int pos, const char* text);
-    void append(const char* text) { insert(length(), text); }
+    void append(const char* t) { insert(length(), t); }
     void remove(int start, int end);
     void replace(int start, int end, const char *text);
     void copy(TextBuffer* fromBuf, int fromStart, int fromEnd, int toPos);
+    int undo(int *cp=0);
+    void canUndo(char flag=1);
     int insertfile(const char *file, int pos, int buflen = 128*1024);
     int appendfile(const char *file, int buflen = 128*1024)
       { return insertfile(file, length(), buflen); }
@@ -114,7 +121,7 @@ class FL_API TextBuffer {
     int selection_position(int* start, int* end, int* isRect, int* rectStart,
                            int* rectEnd);
 
-    const char* selection_text();
+    char* selection_text();
     void remove_selection();
     void replace_selection(const char* text);
     void secondary_select(int start, int end);
@@ -126,7 +133,7 @@ class FL_API TextBuffer {
     int secondary_selection_position(int* start, int* end, int* isRect,
                                      int* rectStart, int* rectEnd);
 
-    const char* secondary_selection_text();
+    char* secondary_selection_text();
     void remove_secondary_selection();
     void replace_secondary_selection(const char* text);
     void highlight(int start, int end);
@@ -136,13 +143,18 @@ class FL_API TextBuffer {
     int highlight_position(int* start, int* end, int* isRect, int* rectStart,
                            int* rectEnd);
 
-    const char* highlight_text();
-    void add_modify_callback(TextModifyCb bufModifiedCB, void* cbArg);
-    void remove_modify_callback(TextModifyCb bufModifiedCB, void* cbArg);
+    char* highlight_text();
+    void add_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
+    void remove_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
 
     void call_modify_callbacks() { call_modify_callbacks(0, 0, 0, 0, 0); }
 
-    const char* line_text(int pos);
+    void add_predelete_callback(Text_Predelete_Cb bufPredelCB, void* cbArg);
+    void remove_predelete_callback(Text_Predelete_Cb predelCB, void* cbArg);
+
+    void call_predelete_callbacks() { call_predelete_callbacks(0, 0); }
+
+    char* line_text(int pos);
     int line_start(int pos);
     int line_end(int pos);
     int word_start(int pos);
@@ -179,6 +191,7 @@ class FL_API TextBuffer {
   protected:
     void call_modify_callbacks(int pos, int nDeleted, int nInserted,
                                int nRestyled, const char* deletedText);
+    void call_predelete_callbacks(int pos, int nDeleted);
 
     int insert_(int pos, const char* text);
     void remove_(int start, int end);
@@ -198,7 +211,7 @@ class FL_API TextBuffer {
 
     void move_gap(int pos);
     void reallocate_with_gap(int newGapStart, int newGapLen);
-    const char* selection_text(TextSelection* sel);
+    char* selection_text_(TextSelection* sel);
     void remove_selection_(TextSelection* sel);
     void replace_selection_(TextSelection* sel, const char* text);
 
@@ -223,9 +236,13 @@ class FL_API TextBuffer {
     int mUseTabs;               /* True if buffer routines are allowed to use
                                    tabs for padding in rectangular operations */
     int mNModifyProcs;          /* number of modify-redisplay procs attached */
-    TextModifyCb*          /* procedures to call when buffer is */
+    Text_Modify_Cb*          /* procedures to call when buffer is */
     mNodifyProcs;               /* modified to redisplay contents */
     void** mCbArgs;             /* caller arguments for modifyProcs above */
+    int mNPredeleteProcs;	/* number of pre-delete procs attached */
+    Text_Predelete_Cb*	/* procedure to call before text is deleted */
+	 mPredeleteProcs;	/* from the buffer; at most one is supported. */
+    void **mPredeleteCbArgs;	/* caller argument for pre-delete proc above */
     int mCursorPosHint;         /* hint for reasonable cursor position after
                                    a buffer modification operation */
     char mNullSubsChar;         /* NEdit is based on C null-terminated strings,
@@ -233,12 +250,14 @@ class FL_API TextBuffer {
                                    with something else.  This is the else, but
                                    of course, things get quite messy when you
                                    use it */
+    char mCanUndo;		/* if this buffer is used for attributes, it must
+				   not do any undo calls */
 };
 
 }
-
 #endif
 
 //
-// End of "$Id: TextBuffer.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id$".
 //
+

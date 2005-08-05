@@ -1,10 +1,11 @@
 //
-// "$Id: TextEditor.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id$"
 //
-// Text editor. Useful for composing email.
+// Header file for TextEditor class.
 //
-// Copyright Mark Edel.  Permission to distribute under the LGPL for
-// the FLTK library granted by Mark Edel.
+// Copyright 2001-2005 by Bill Spitzak and others.
+// Original code Copyright Mark Edel.  Permission to distribute under
+// the LGPL for the FLTK library granted by Mark Edel.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,25 +22,31 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
-#ifndef fltk_TextEditor_h
-#define fltk_TextEditor_h
+
+#ifndef TEXT_EDITOR_H
+#define TEXT_EDITOR_H
 
 #include "TextDisplay.h"
 
 namespace fltk {
 
+// key will match in any state
+#define TEXT_EDITOR_ANY_STATE  (-1L)
+
 class FL_API TextEditor : public TextDisplay {
   public:
-    typedef int (*KeyFunc)(int key, TextEditor* editor);
+    typedef int (*Key_Func)(int key, TextEditor* editor);
 
-    struct FL_API KeyBinding {
+    struct Key_Binding {
       int          key;
       int          state;
-      KeyFunc     function;
-      KeyBinding* next;
+      Key_Func     function;
+      Key_Binding* next;
     };
 
     TextEditor(int X, int Y, int W, int H, const char* l = 0);
@@ -49,19 +56,19 @@ class FL_API TextEditor : public TextDisplay {
     void insert_mode(int b) { insert_mode_ = b; }
     int insert_mode() { return insert_mode_; }
 
-    void add_key_binding(int key, int state, KeyFunc f, KeyBinding** list);
-    void add_key_binding(int key, int state, KeyFunc f)
+    void add_key_binding(int key, int state, Key_Func f, Key_Binding** list);
+    void add_key_binding(int key, int state, Key_Func f)
       { add_key_binding(key, state, f, &key_bindings); }
-    void remove_key_binding(int key, int state, KeyBinding** list);
+    void remove_key_binding(int key, int state, Key_Binding** list);
     void remove_key_binding(int key, int state)
       { remove_key_binding(key, state, &key_bindings); }
-    void remove_all_key_bindings(KeyBinding** list);
+    void remove_all_key_bindings(Key_Binding** list);
     void remove_all_key_bindings() { remove_all_key_bindings(&key_bindings); }
-    void add_default_key_bindings(KeyBinding** list);
-    KeyFunc bound_key_function(int key, int state, KeyBinding* list);
-    KeyFunc bound_key_function(int key, int state)
+    void add_default_key_bindings(Key_Binding** list);
+    Key_Func bound_key_function(int key, int state, Key_Binding* list);
+    Key_Func bound_key_function(int key, int state)
       { return bound_key_function(key, state, key_bindings); }
-    void default_key_function(KeyFunc f) { default_key_function_ = f; }
+    void default_key_function(Key_Func f) { default_key_function_ = f; }
 
     // functions for the built in default bindings
     static int kf_default(int c, TextEditor* e);
@@ -86,13 +93,16 @@ class FL_API TextEditor : public TextDisplay {
     static int kf_cut(int c, TextEditor* e);
     static int kf_paste(int c, TextEditor* e);
     static int kf_select_all(int c, TextEditor* e);
+    static int kf_undo(int c, TextEditor* e);
 
   protected:
     int handle_key();
+    void maybe_do_callback();
+
     int insert_mode_;
-    KeyBinding* key_bindings;
-    static KeyBinding* global_key_bindings;
-    KeyFunc default_key_function_;
+    Key_Binding* key_bindings;
+    static Key_Binding* global_key_bindings;
+    Key_Func default_key_function_;
 };
 
 }
@@ -100,6 +110,7 @@ class FL_API TextEditor : public TextDisplay {
 #endif
 
 //
-// End of "$Id: TextEditor.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id$".
 //
+
 

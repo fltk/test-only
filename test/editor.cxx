@@ -320,8 +320,10 @@ void saveas_cb() {
   if (newfile != NULL) save_file(newfile);
 }
 
-void undo_cb(Widget*, void*) {
-  alert("Undo not implemented!");
+void undo_cb(Widget*, void* v) {
+  EditorWindow* e = (EditorWindow*)v;
+  TextEditor::kf_undo(0, e->editor);
+  //alert("Undo not implemented!");
 }
 
 Window* new_view() {
@@ -365,6 +367,12 @@ EditorWindow::EditorWindow(int w, int h, TextBuffer* textbuffer, const char* t)
 
    editor = new TextEditor(0, 25, 512, 354+5);
    editor->buffer(textbuf);
+   editor->textfont(COURIER);
+   // TODO Let's play with colors and cursor styles - just to show how it can be changed
+   editor->cursor_color(GRAY85);
+   editor->textcolor(CYAN);
+   editor->color(BLACK);
+   editor->cursor_style(TextDisplay::DIM_CURSOR); // Can be one of these: NORMAL_CURSOR, CARET_CURSOR, DIM_CURSOR, BLOCK_CURSOR, HEAVY_CURSOR
    textbuf->add_modify_callback(changed_cb, this);
    //textbuf->call_modify_callbacks();
    Input* i = new Input(0, 384, 512, 22);
@@ -387,5 +395,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.17 2004/03/05 08:17:01 spitzak Exp $".
+// End of "$Id$".
 //
