@@ -121,11 +121,11 @@ fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk$(DSOSUFFIX) \
 
 install:
 	echo "Installing FLUID in $(bindir)..."
-	-$(MKDIR) $(bindir)
-	$(CP) $(FLUID) $(bindir)/fluid$(EXEEXT)
-	$(STRIP) $(bindir)/fluid$(EXEEXT)
-	$(bindir)/fltk-config --post $(bindir)/fluid$(EXEEXT)
-	$(CHMOD) 755 $(bindir)/fluid$(EXEEXT)
+	-$(MKDIR) $(DESTDIR)$(bindir)
+	$(CP) $(FLUID) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(bindir)/fltk-config --post $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid$(EXEEXT)
 
 
 uninstall:
