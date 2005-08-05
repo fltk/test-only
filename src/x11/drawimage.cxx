@@ -33,6 +33,7 @@
 
 // STD C
 #include <stdlib.h>
+#include <string.h>  // On some platforms this is necessary in order to get memcpy() declaration
 // FLTK
 #include <fltk/error.h>
 #include <fltk/Image.h>
