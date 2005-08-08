@@ -258,7 +258,7 @@ void Button::draw(int glyph, int glyph_width) const
       gr.x(r.x()+3);
     drawstyle(style,glyph_flags);
     (this->glyph())(glyph, gr);
-    // drawstyle(style,box_flags); // not sure this is necessary
+    drawstyle(style,box_flags);
   }
   focusbox()->draw(r);
 }

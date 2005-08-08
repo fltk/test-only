@@ -32,8 +32,7 @@
 // 32-bit TrueColor with ARGB32 layout
 
 // STD C
-#include <stdlib.h>
-#include <string.h>  // On some platforms this is necessary in order to get memcpy() declaration
+#include <string.h>
 // FLTK
 #include <fltk/error.h>
 #include <fltk/Image.h>
@@ -665,6 +664,9 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
   }
 }
 
+static void (*xrender_converter[7])(const uchar *from, uchar *to, int w);
+static XImage xrenderi;
+
 #else
 # define fl_rgba_xrender_format 0
 #endif
@@ -672,11 +674,6 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
 static void figure_out_visual() {
 
   xpixel(BLACK); // make sure figure_out_visual in color.cxx is called
-
-  i.format = ZPixmap;
-//i.bitmap_unit = 8;
-//i.bitmap_bit_order = MSBFirst;
-//i.bitmap_pad = 8;
 
   converter[MASK] = mask_converter;
   converter[RGBA] = rgba_converter;
@@ -691,11 +688,30 @@ static void figure_out_visual() {
   fl_rgba_xrender_format =
     XRenderFindStandardFormat(xdisplay, PictStandardARGB32);
   if (fl_rgba_xrender_format) {
-    converter[MASK] = mask_to_32;
-    converter[RGBA] = rgba_to_xrgb;
-    converter[ARGB32] = direct_32;
+    // fill in the xrender converters
+    xrender_converter[MASK] = mask_to_32;
+    xrender_converter[MONO] = mono_to_32;
+    xrender_converter[RGBx] = rgba_to_xrgb;
+    xrender_converter[RGB] = rgb_to_xrgb;
+    xrender_converter[RGBA] = rgba_to_xrgb;
+    xrender_converter[RGB32] = direct_32;
+    xrender_converter[ARGB32] = direct_32;
+    xrenderi.format = ZPixmap;
+    xrenderi.depth = 32;
+    xrenderi.bits_per_pixel = 32;
+    xrenderi.byte_order = WORDS_BIGENDIAN;
+    // make any attempt to use xlib for alpha crash:
+    converter[MASK] = 0;
+    converter[RGBA] = 0;
+    converter[ARGB32] = 0;
   }
 #endif
+
+  i.format = ZPixmap;
+  i.depth = xvisual->depth;
+//i.bitmap_unit = 8;
+//i.bitmap_bit_order = MSBFirst;
+//i.bitmap_pad = 8;
 
   static XPixmapFormatValues *pfvlist;
   static int NUM_pfv;
@@ -839,7 +855,7 @@ public:
 };
 
 extern void fl_restore_clip();
-static void putimage(int x, int y, int w, int h, XWindow target, GC gc) {
+static void putimage(int x, int y, int w, int h, XWindow target, GC gc, XImage* i) {
   if (alphapointer && !fl_current_Image) {
     XWindow alpha =
       XCreateBitmapFromData(xdisplay, xwindow,
@@ -847,12 +863,12 @@ static void putimage(int x, int y, int w, int h, XWindow target, GC gc) {
     alphapointer = alphabuffer;
     XSetClipMask(xdisplay, gc, alpha);
     XSetClipOrigin(xdisplay, gc, x, y);
-    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
+    XPutImage(xdisplay, target, gc, i, 0, 0, x, y, w, h);
     XSetClipOrigin(xdisplay, gc, 0, 0);
     fl_restore_clip();
     XFreePixmap(xdisplay, alpha);
   } else {
-    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
+    XPutImage(xdisplay, target, gc, i, 0, 0, x, y, w, h);
   }
 }
 
@@ -868,48 +884,49 @@ static void innards(const uchar *buf, PixelType type,
 
   int dx,dy,x,y,w,h;
   XWindow target;
-  i.depth = xvisual->depth;
   GC gc = fltk::gc;
+  XImage* i = &::i;
+  int linesize;
 
 #if USE_XFT
   const bool scaling = !fl_trivial_transform();
   const bool use_xrender = fl_rgba_xrender_format &&
     (fl_current_Image || hasalpha || scaling);
   static GC gc32;
+#else
+  const bool use_xrender = false;
 #endif
 
-  if (fl_current_Image) {
+  if (use_xrender) {
+#if USE_XFT
     dx = dy = x = y = 0;
     w = r1.w();
     h = r1.h();
-#if USE_XFT
-    if (use_xrender) {
-      i.depth = 32;
+    linesize = w;
+    i = &xrenderi;
+    if (fl_current_Image) {
       target = DrawImageHelper::create_pixmap(32);
       if (type==MASK) DrawImageHelper::setmaskflags();
       else if (hasalpha) DrawImageHelper::setalphaflags();
-      if (!gc32) gc32 = XCreateGC(xdisplay, target, 0, 0);
-      gc = gc32;
-    } else
-#endif
-      target = DrawImageHelper::create_pixmap(i.depth);
-#if USE_XFT
-  } else if (use_xrender) {
-    dx = dy = x = y = 0;
-    w = r1.w();
-    h = r1.h();
-    i.depth = 32;
-    static XWindow ptarget;
-    static int pw, ph;
-    if (w != pw || h != ph) {
-      if (ptarget) XFreePixmap(xdisplay, ptarget);
-      ptarget = XCreatePixmap(xdisplay, xwindow, w, h, 32);
-      pw = w; ph = h;
+    } else {
+      static XWindow ptarget;
+      static int pw, ph;
+      if (w != pw || h != ph) {
+	if (ptarget) XFreePixmap(xdisplay, ptarget);
+	ptarget = XCreatePixmap(xdisplay, xwindow, w, h, 32);
+	pw = w; ph = h;
+      }
+      target = ptarget;
     }
-    target = ptarget;
     if (!gc32) gc32 = XCreateGC(xdisplay, target, 0, 0);
     gc = gc32;
 #endif
+  } else if (fl_current_Image) {
+    dx = dy = x = y = 0;
+    w = r1.w();
+    h = r1.h();
+    target = DrawImageHelper::create_pixmap(xvisual->depth);
+    linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
   } else {
     target = fltk::xwindow;
     // because scaling is not supported, I just draw the image centered:
@@ -930,17 +947,23 @@ static void innards(const uchar *buf, PixelType type,
     h = cr.h();
     dx = x-r.x();
     dy = y-r.y();
+    linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
   }
 
   const int delta = depth(type);
   if (buf) buf += dx*delta + dy*linedelta;
 
-  i.width = w;
-  i.height = h;
+  i->width = w;
+  i->height = h;
 
+#if USE_XFT
+  void (*conv)(const uchar *from, uchar *to, int w) =
+    (use_xrender ? xrender_converter : converter)[type];
+#else
   void (*conv)(const uchar *from, uchar *to, int w) = converter[type];
+#endif
 
-  if (hasalpha && !fl_rgba_xrender_format) {
+  if (hasalpha && !use_xrender) {
     split_color(getcolor(), fg[0],fg[1],fg[2]);
     split_color(getbgcolor(), bg[0],bg[1],bg[2]);
     alpha_increment = (w+7)>>3;
@@ -961,12 +984,11 @@ static void innards(const uchar *buf, PixelType type,
   // that it works when the image is not word-aligned,
   // and it works if bytes_per_line is negative.
   // This seems to all work on my XFree86 setup
-  if (buf && conv==direct_32 && !(linedelta&scanline_add)) {
-    i.data = (char *)buf;
-    i.bytes_per_line = linedelta;
-    XPutImage(xdisplay, target, gc, &i, 0, 0, x, y, w, h);
+  if (!use_xrender && buf && conv==direct_32 && !(linedelta&scanline_add)) {
+    i->data = (char *)buf;
+    i->bytes_per_line = linedelta;
+    XPutImage(xdisplay, target, gc, i, 0, 0, x, y, w, h);
   } else {
-    int linesize = ((w*bytes_per_pixel+scanline_add)&scanline_mask)/4;
     int blocking = h;
     static U32* buffer;	// our storage, always word aligned
     static long buffer_size;
@@ -980,8 +1002,8 @@ static void innards(const uchar *buf, PixelType type,
       buffer_size = size;
       buffer = new U32[size];
     }}
-    i.data = (char *)buffer;
-    i.bytes_per_line = linesize*4;
+    i->data = (char *)buffer;
+    i->bytes_per_line = linesize*4;
     if (buf) {
       for (int j=0; j<h; ) {
 	U32 *to = buffer;
@@ -991,7 +1013,7 @@ static void innards(const uchar *buf, PixelType type,
 	  buf += linedelta;
 	  to += linesize;
 	}
-	putimage(x, y+j-k, w, k, target, gc);
+	putimage(x, y+j-k, w, k, target, gc, i);
       }
     } else {
       U32* linebuf = new U32[(r1.w()*delta+3)/4];
@@ -1003,7 +1025,7 @@ static void innards(const uchar *buf, PixelType type,
 	  conv(ret, (uchar*)to, w);
 	  to += linesize;
 	}
-	putimage(x, y+j-k, w, k, target, gc);
+	putimage(x, y+j-k, w, k, target, gc, i);
       }
       delete[] linebuf;
     }

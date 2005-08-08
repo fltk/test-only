@@ -197,7 +197,7 @@ void gifImage::read()
       Interlace = ((ch & 0x40) != 0);
       if (ch&0x80) {
 	// read local color map
-	int n = 1<<((ch&7)+1); // does this replace ColorMapSize ??
+	int n = 2 << (ch&7);
 	for (i=0; i < n; i++) {
 	  Red[i] = NEXTBYTE;
 	  Green[i] = NEXTBYTE;
@@ -205,7 +205,6 @@ void gifImage::read()
 	}
       }
       CodeSize = NEXTBYTE+1;
-
       if (!inumber--) break; // okay, this is the image we want
       blocklen = NEXTBYTE;
 
@@ -216,6 +215,12 @@ void gifImage::read()
 
     // skip the data:
     while (blocklen>0) {while (blocklen--) {NEXTBYTE;} blocklen=NEXTBYTE;}
+  }
+
+  if (BitsPerPixel >= CodeSize) {
+    // Workaround for broken GIF files...
+    BitsPerPixel = CodeSize - 1;
+    ColorMapSize = 1 << BitsPerPixel;
   }
 
   uchar *Image = new uchar[Width*Height];

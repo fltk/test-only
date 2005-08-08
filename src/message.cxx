@@ -198,13 +198,13 @@ static int innards(
 }
 
 /*! You can change this string to convert fltk to a foreign language. */
-const char* fltk::no = "No";
+const char* fltk::no = "&No";
 /*! You can change this string to convert fltk to a foreign language. */
-const char* fltk::yes= "Yes";
+const char* fltk::yes= "&Yes";
 /*! You can change this string to convert fltk to a foreign language. */
-const char* fltk::ok = "OK";
+const char* fltk::ok = "&OK";
 /*! You can change this string to convert fltk to a foreign language. */
-const char* fltk::cancel= "Cancel";
+const char* fltk::cancel= "&Cancel";
 
 /*!
   \image html fl_message.gif
