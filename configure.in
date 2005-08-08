@@ -415,7 +415,7 @@ IMAGELIBS=""
 
 AC_SUBST(IMAGELIBS)
 
-AC_ARG_ENABLE(zlib, [  --enable-jpeg           turn on JPEG support: auto,no,local (default=auto)])
+AC_ARG_ENABLE(jpeg, [  --enable-jpeg           turn on JPEG support: auto,no,local (default=auto)])
 if test x$enable_jpeg != xno; then
 	if test x$enable_jpeg != xlocal; then
 		AC_CHECK_HEADER(jpeglib.h,[
@@ -433,6 +433,29 @@ if test x$enable_jpeg != xno; then
         fi
 fi
 
+dnl First check for existence of zlib
+dnl -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+AC_ARG_ENABLE(zlib, [  --enable-zlib           turn on ZLIB support: auto,no,local (default=auto)])
+if test x$enable_zlib != xno; then
+	if test x$enable_zlib != xlocal; then
+		AC_CHECK_HEADER(zlib.h,[
+		    AC_CHECK_LIB(z, gzopen,[
+	            	HAVE_LIBZ=1
+			AC_DEFINE(HAVE_LIBZ)
+			IMAGELIBS="$IMAGELIBS -lz"
+			LIBS="$LIBS -lz"
+        	        ])])
+        fi
+        if test x$HAVE_LIBZ != x1; then
+        	AC_DEFINE(HAVE_LIBZ)
+        	ZLIBINC="../zlib"
+		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_z.a"
+        	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/zlib"
+        fi
+fi
+
+dnl After zlib check for existence of libpng
+dnl -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 AC_ARG_ENABLE(png, [  --enable-png            turn on PNG support: auto,no,local (default=auto)])
 if test x$enable_png != xno; then
 	if test x$enable_png != xlocal; then
@@ -452,25 +475,6 @@ if test x$enable_png != xno; then
         	AC_DEFINE(HAVE_LOCAL_PNG_H)
 		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_png.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/libpng"
-        fi
-fi
-
-AC_ARG_ENABLE(zlib, [  --enable-zlib           turn on ZLIB support: auto,no,local (default=auto)])
-if test x$enable_zlib != xno; then
-	if test x$enable_zlib != xlocal; then
-		AC_CHECK_HEADER(zlib.h,[
-		    AC_CHECK_LIB(z, gzopen,[
-	            	HAVE_LIBZ=1
-			AC_DEFINE(HAVE_LIBZ)
-			IMAGELIBS="$IMAGELIBS -lz"
-			LIBS="$LIBS -lz"
-        	        ])])
-        fi
-        if test x$HAVE_LIBZ != x1; then
-        	AC_DEFINE(HAVE_LIBZ)
-        	ZLIBINC="../zlib"
-		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_z.a"
-        	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/zlib"
         fi
 fi
 
@@ -1018,7 +1022,7 @@ echo System image libs: $IMAGELIBS
 echo Local image libs:  $LOCAL_IMAGELIBS
 echo OpenGL libs:       $GLLIB
 echo 
-echo Build targets: $LIBTARGET $DSOTARGET
+echo Build targets:     $LIBTARGET $DSOTARGET
 echo
 
 dnl
