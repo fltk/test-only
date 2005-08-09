@@ -78,6 +78,15 @@ static const uchar* cb1(void*v, int x, int y, int w, uchar* buf) {
   return buf;
 }
 
+// callback for monochrome 1 byte per pixel:
+static const uchar* mcb1(void*v, int x, int y, int w, uchar* buf) {
+  xpm_data& d = *(xpm_data*)v;
+  const uchar* p = d.data[y]+x;
+  uchar* b = buf;
+  for (int X=w; X--;) *b++ = *(uchar*)(d.colors+*p++);//>>24;
+  return buf;
+}
+
 // callback for 2 bytes per pixel:
 static const uchar* cb2(void*v, int x, int y, int w, uchar* buf) {
   xpm_data& d = *(xpm_data*)v;
