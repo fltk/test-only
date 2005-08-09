@@ -367,6 +367,7 @@ EditorWindow::EditorWindow(int w, int h, TextBuffer* textbuffer, const char* t)
 
    editor = new TextEditor(0, 25, 512, 354+5);
    editor->buffer(textbuf);
+#if 0
    editor->textfont(COURIER);
    // TODO Let's play with colors and cursor styles - just to show how it can be changed
    editor->cursor_color(GRAY85);
@@ -375,6 +376,7 @@ EditorWindow::EditorWindow(int w, int h, TextBuffer* textbuffer, const char* t)
    editor->cursor_style(TextDisplay::DIM_CURSOR); // Can be one of these: NORMAL_CURSOR, CARET_CURSOR, DIM_CURSOR, BLOCK_CURSOR, HEAVY_CURSOR
    textbuf->add_modify_callback(changed_cb, this);
    //textbuf->call_modify_callbacks();
+#endif
    Input* i = new Input(0, 384, 512, 22);
    i->value("Click here to test focus navigation");
   end();

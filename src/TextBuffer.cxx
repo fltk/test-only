@@ -68,11 +68,13 @@ static char *unexpandTabs( char *text, int startIndent, int tabDist,
 static int max( int i1, int i2 );
 static int min( int i1, int i2 );
 
+#if 0
 static const char *ControlCodeTable[ 32 ] = {
   "nul", "soh", "stx", "etx", "eot", "enq", "ack", "bel",
   "bs", "ht", "nl", "vt", "np", "cr", "so", "si",
   "dle", "dc1", "dc2", "dc3", "dc4", "nak", "syn", "etb",
   "can", "em", "sub", "esc", "fs", "gs", "rs", "us"};
+#endif
 
 static char* undobuffer;
 static int undobufferlength;
@@ -945,6 +947,8 @@ int TextBuffer::expand_character( char c, int indent, char *outStr, int tabDist,
 
   /* Convert control codes to readable character sequences */
   /*... is this safe with international character sets? */
+  // WAS: yes it is safe with UTF-8
+#if 0
   if ( ( ( unsigned char ) c ) <= 31 ) {
     sprintf( outStr, "<%s>", ControlCodeTable[ ( unsigned char ) c ] );
     return strlen( outStr );
@@ -955,6 +959,17 @@ int TextBuffer::expand_character( char c, int indent, char *outStr, int tabDist,
     sprintf( outStr, "<nul>" );
     return 5;
   }
+#else
+  if ((unsigned char)c < 32 || c == 127) {
+    outStr[0] = '^';
+    outStr[1] = c^0x40;
+    return 2;
+  } else if (c == nullSubsChar) {
+    outStr[0] = '^';
+    outStr[1] = '@';
+    return 2;
+  }
+#endif
 
   /* Otherwise, just return the character */
   *outStr = c;
@@ -973,11 +988,11 @@ int TextBuffer::character_width( char c, int indent, int tabDist, char nullSubsC
   if ( c == '\t' )
     return tabDist - ( indent % tabDist );
   else if ( ( ( unsigned char ) c ) <= 31 )
-    return strlen( ControlCodeTable[ ( unsigned char ) c ] ) + 2;
+    return 2; //strlen( ControlCodeTable[ ( unsigned char ) c ] ) + 2;
   else if ( c == 127 )
-    return 5;
+    return 2; //5;
   else if ( c == nullSubsChar )
-    return 5;
+    return 2; //5;
   return 1;
 }
 

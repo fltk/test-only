@@ -421,6 +421,7 @@ void Input::draw(const Rectangle& r)
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
       Color bg = selection_color();
+      //if (!focused()) bg = lerp(color(), bg, 0.5f);
       Color fg = contrast(selection_textcolor(), bg);
       setcolor(bg);
       int xx=int(x1);
