@@ -870,28 +870,29 @@ void Browser::layout() {
   for (int z = 0; z<2; z++) {
     if (height_ > interior.h() || yposition_) {
       if (!scrollbar.visible()) {
-	scrollbar.set_visible();
-	interior.move_r(-sw);
-	redraw(DAMAGE_ALL);
+        scrollbar.set_visible();
+        interior.move_r(-sw);
+        redraw(DAMAGE_ALL);
       }
+      width_ -= scrollbar_width();
     } else {
       if (scrollbar.visible()) {
-	scrollbar.clear_visible();
-	interior.move_r(sw);
-	redraw(DAMAGE_ALL);
+        scrollbar.clear_visible();
+        interior.move_r(sw);
+        redraw(DAMAGE_ALL);
       }
     }
     if (width_ > interior.w() || xposition_) {
       if (!hscrollbar.visible()) {
-	hscrollbar.set_visible();
-	interior.move_b(-sw);
-	redraw(DAMAGE_ALL);
+        hscrollbar.set_visible();
+        interior.move_b(-sw);
+        redraw(DAMAGE_ALL);
       }
     } else {
       if (hscrollbar.visible()) {
-	hscrollbar.clear_visible();
-	interior.move_b(sw);
-	redraw(DAMAGE_ALL);
+        hscrollbar.clear_visible();
+        interior.move_b(sw);
+        redraw(DAMAGE_ALL);
       }
     }
   }
