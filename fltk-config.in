@@ -87,24 +87,20 @@ if test -e "$selfdir/fltk/Window.h"; then
   includedir="$selfdir"
   libdir="$selfdir/lib"
   prefix="$selfdir"
+	if test -f "$libdir/libfltk_jpeg.a"; then
+		CFLAGS="-I$includedir/images/jpeg $CFLAGS"
+		CXXFLAGS="-I$includedir/images/jpeg $CXXFLAGS"
+	fi
 
-###
-# FIXME - Need to fix this for local image-libs.
-# ----------------------------------------------
-#	if test -e "$libdir/libfltk_jpeg.a"; then
-#		CFLAGS="-I$includedir/jpeg $CFLAGS"
-#		CXXFLAGS="-I$includedir/jpeg $CXXFLAGS"
-#	fi
-#
-#	if test -e "$libdir/libfltk_z.a"; then
-#		CFLAGS="-I$includedir/zlib $CFLAGS"
-#		CXXFLAGS="-I$includedir/zlib $CXXFLAGS"
-#	fi
-#
-#	if test -e "$libdir/libfltk_png.a"; then
-#		CFLAGS="-I$includedir/png $CFLAGS"
-#		CXXFLAGS="-I$includedir/png $CXXFLAGS"
-#	fi
+	if test -f "$libdir/libfltk_z.a"; then
+		CFLAGS="-I$includedir/images/zlib $CFLAGS"
+		CXXFLAGS="-I$includedir/images/zlib $CXXFLAGS"
+	fi
+
+	if test -f "$libdir/libfltk_png.a"; then
+		CFLAGS="-I$includedir/images/png $CFLAGS"
+		CXXFLAGS="-I$includedir/images/png $CXXFLAGS"
+	fi
 fi
 
 usage ()
@@ -251,6 +247,22 @@ else
     libs=
 fi
 
+###
+# Some MinGW variants still need -I/usr/include and -L/usr/lib ...
+#
+case `uname -s` in
+    MINGW*)
+	if test "$includedir" == /usr/include; then
+	  includes=-I$includedir
+	fi
+	if test "$libdir" == /usr/lib; then
+	  libs=-L$libdir
+	fi
+	;;
+esac
+LDSTATIC_PATHS=$libs
+LDLIBS_PATHS=$libs 
+
 # Calculate needed libraries
 LDSTATIC="$libdir/libfltk.a $LDLIBS"
 LDLIBS="$libs -lfltk$SHAREDSUFFIX $LDLIBS"
@@ -268,11 +280,11 @@ if test x$use_gl = xyes; then
 fi
 if test x$use_images = xyes; then
     LDLIBS="-lfltk_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
-    LDSTATIC="$libdir/libfltk_images.a $IMAGELIBS $LDSTATIC"
+    LDSTATIC="$libdir/libfltk_images.a $LDSTATIC $IMAGELIBS"
 fi
 
 LDLIBS="$DSOLINK $LDLIBS"
-LDSTATIC="$LDSTATIC"
+LDSTATIC="$LDSTATIC_PATHS $LDSTATIC"
 
 # Answer to user requests
 if test -n "$echo_help"; then

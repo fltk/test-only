@@ -413,8 +413,6 @@ dnl Check for image libraries...
 SAVELIBS="$LIBS"
 IMAGELIBS=""
 
-AC_SUBST(IMAGELIBS)
-
 AC_ARG_ENABLE(jpeg, [  --enable-jpeg           turn on JPEG support: auto,no,local (default=auto)])
 if test x$enable_jpeg != xno; then
 	if test x$enable_jpeg != xlocal; then
@@ -430,6 +428,7 @@ if test x$enable_jpeg != xno; then
         	AC_DEFINE(HAVE_LOCAL_JPEG_H)                
 		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_jpeg.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/libjpeg"
+		IMAGELIBS="$IMAGELIBS -lfltk_jpeg"
         fi
 fi
 
@@ -451,6 +450,8 @@ if test x$enable_zlib != xno; then
         	ZLIBINC="../zlib"
 		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_z.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/zlib"
+		# fltk_z should go before fltk_jpeg and after fltk_png
+		IMAGELIBS="-lfltk_z $IMAGELIBS"
         fi
 fi
 
@@ -475,12 +476,14 @@ if test x$enable_png != xno; then
         	AC_DEFINE(HAVE_LOCAL_PNG_H)
 		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_png.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/libpng"
+		IMAGELIBS=" -lfltk_png $IMAGELIBS "
         fi
 fi
 
 AC_SUBST(ZLIBINC)
 AC_SUBST(LOCAL_IMAGELIBS)
 AC_SUBST(LOCAL_IMAGETARGETS)
+AC_SUBST(IMAGELIBS)
 
 dnl Restore original LIBS settings...
 LIBS="$SAVELIBS"
