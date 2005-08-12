@@ -125,7 +125,9 @@ install:
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk_z$(LIBSUFFIX)
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk_png$(LIBSUFFIX)
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk_jpeg$(LIBSUFFIX)
-	$(CP) $(LOCAL_IMAGELIBS) $(DESTDIR)$(libdir)
+  ifneq (,$(LOCAL_IMAGELIBS))
+	  $(CP) $(LOCAL_IMAGELIBS) $(DESTDIR)$(libdir)
+  endif
         endif
         ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared images library in $(libdir)"
