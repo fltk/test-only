@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
+// "$Id$"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -171,8 +171,14 @@ enum {
   BUTTON1	= 0x01000000,	/*!< Left mouse button held down */
   BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
-  ANY_BUTTON	= 0x7f000000	/*!< Any mouse button (up to 8) */
+  ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
+#ifdef __APPLE__
+  COMMAND = META /*!< On Apple it is the same as META, on other platforms CTRL. */
+#else
+  COMMAND = CTRL /*!< On Apple it is the same as META, on other platforms CTRL. */
+#endif // __APPLE__
 };
+
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
 
 /*! Device identifier returned by event_device(). This enumeration
