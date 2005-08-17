@@ -142,7 +142,7 @@ namespace fltk {
 
 typedef unsigned long Thread;
 
-int create_thread(Thread& t, void *(*f) (void *), void* p) {
+inline int create_thread(Thread& t, void *(*f) (void *), void* p) {
   return t = (Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
