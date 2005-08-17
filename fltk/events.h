@@ -307,3 +307,7 @@ inline bool exit_modal_flag()		{return exit_modal_;}
 }
 
 #endif
+
+//
+// $Id$
+//
