@@ -316,12 +316,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\HelpDialog.cxx">
-		</File>
-		<File
-			RelativePath="..\..\src\HelpView.cxx">
-		</File>
-		<File
 			RelativePath="..\..\src\xpmFileImage.cxx">
 		</File>
 	</Files>

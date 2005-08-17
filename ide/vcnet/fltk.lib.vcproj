@@ -385,6 +385,12 @@
 			RelativePath="..\..\src\GSave.cxx">
 		</File>
 		<File
+			RelativePath="..\..\src\HelpDialog.cxx">
+		</File>
+		<File
+			RelativePath="..\..\src\HelpView.cxx">
+		</File>
+		<File
 			RelativePath="..\..\src\HighlightButton.cxx">
 		</File>
 		<File

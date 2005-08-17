@@ -41,7 +41,17 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <time.h>
-#include <winsock.h>
+#include <windows.h>
+
+// FIXME - Following block fixes weird problem with compiling FLTK
+//   inside Visual C++ (.NET 2003 Enterprise Architect)
+#ifdef _MSC_VER 
+# define IN
+# define OUT
+#endif
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 #include <commctrl.h>
 #include <ctype.h>
 #include <wchar.h>
