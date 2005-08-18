@@ -230,24 +230,10 @@ include makedepend
 	$(RANLIB) $@
 
 ../lib/$(DSONAME): $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	echo $(DSOCOMMAND) $@ $(OBJECTS) -L../lib $(IMAGELIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS) $(LDLIBS)
 	$(RM) ../lib/$(DSOLINK)
-	$(LN) $(DSONAME) ../lib/$(DSOLINK)
-
-../lib/fltk.dll: $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LDLIBS)
-	cp ../lib/fltk.dll ./
-
-libfltk_s.a: $(OBJECTS)
-	echo $(DSOCOMMAND) libfltk_s.o ...
-	$(DSOCOMMAND) libfltk_s.o $(OBJECTS) $(IMAGELIBS)
-	echo $(LIBCOMMAND) libfltk_s.a libfltk_s.o
-	$(RM) $@
-	$(LIBCOMMAND) libfltk_s.a libfltk_s.o
-	$(CHMOD) +x libfltk_s.a
-
+	$(LN) ../lib/$(DSONAME) ../lib/$(DSOLINK)
 
 #
 # Install everything...
