@@ -1,5 +1,5 @@
 // Lame test of all types of image drawings.
-
+#include <string.h>      // memcpy
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/draw.h>
