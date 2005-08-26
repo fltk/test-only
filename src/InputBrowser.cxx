@@ -462,13 +462,12 @@ InputBrowser::popup() {
 }
 
 Widget* InputBrowser::item() const {
-	return list->item();
+  if (list) return list->item(); else return 0;
 }
 
 Widget* InputBrowser::item(Widget* v) const {
-	return list->item(v);
+  if (list) return list->item(v); else return 0;
 }
-
 
 //222
 // End of "$Id$".
