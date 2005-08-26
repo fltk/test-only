@@ -33,25 +33,35 @@
 #include <fltk/draw.h>
 
 #include <stdio.h>
+#include <string.h>
 
 using namespace fltk;
+static Input *ibinput;
 
 static NamedStyle style("InputBrowser", 0, &InputBrowser::default_style);
 NamedStyle* InputBrowser::default_style = &::style;
 
 InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
   : Menu(x, y, w, h, l),
-    input(x, y, w, h)
+    m_input(x, y, w, h)
 {
   align(ALIGN_LEFT);
   style(default_style);
-  if (input.parent()) input.parent()->remove(input);
-  input.parent(this);
-  input.callback((Callback_p)input_cb, this);
-  input.when(fltk::WHEN_ENTER_KEY_CHANGED | fltk::WHEN_RELEASE);
+
+  if (m_input.parent()) m_input.parent()->remove(m_input);
+  m_input.parent(this);
+  m_input.callback((Callback_p)input_cb, this);
+  m_input.when(fltk::WHEN_ENTER_KEY_CHANGED | fltk::WHEN_RELEASE); // FL_WHEN_CHANGED FL_WHEN_ENTER_KEY_ALWAYS
+  
+  over_now = false; over_last = true;
+  
   minh_ = 10;
   maxw_ = 600;
   maxh_ = 400;
+  
+  win = 0; list = 0;
+  
+  ibinput = &m_input;
 }
 
 void
@@ -59,7 +69,6 @@ InputBrowser::input_cb(Input *w, InputBrowser *ib)
 {
   ib->do_callback();
 }
-
 
 // these are only used when in grabbed state so only one exists at once
 static MenuWindow *mw;
@@ -69,7 +78,8 @@ static Browser *browser;
 class ComboWindow : public MenuWindow {
   public:
     int handle(int);
-    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
+//    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
+    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { ; }
 };
 
 int
@@ -78,10 +88,20 @@ ComboWindow::handle(int event) {
   case MOVE:
   case DRAG:
   case RELEASE:
+  case KEY:
     return browser->handle(event);
   }
   return MenuWindow::handle(event);
 }
+
+
+// Destructor needs to be after declaration of ComboWindow win
+InputBrowser::~InputBrowser()
+{
+    m_input.parent(0);    
+    if(win) delete win;
+}
+
 
 class ComboBrowser : public Browser {
   public:
@@ -89,6 +109,7 @@ class ComboBrowser : public Browser {
 
     int handle(int);
     ComboBrowser(int x, int y, int w, int h);
+    static void browser_cb(Widget *w, void *data);
 };
 
 extern void browser_glyph(int glyph, const Rectangle&);
@@ -109,46 +130,70 @@ ComboBrowser::ComboBrowser(int x, int y, int w, int h)
 
 int
 ComboBrowser::handle(int event) {
-  switch (event) {
-  case KEY:
-    if (event_key() == EscapeKey) {
-      exit_modal();
-      return 1;
+    if(event_key()==DownKey && (!item() || children()==1)) {
+        item(child(0));
+        fltk::focus(item());
+    }   
+
+    if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
+        if( (event_key()!=EscapeKey) &&
+                (event_key()!=UpKey) &&
+                (event_key()!=DownKey) &&
+                (event_key()!=ReturnKey && !item()) )
+            return ibinput->handle(KEY);
     }
-    break;
-  case PUSH:
-    if (!event_inside(Rectangle(0, 0, w(), h()))) {
-      exit_modal();
-      return 0;
+
+    static bool was_wheel=false;
+    if(was_wheel) {
+        was_wheel=false;
+        return 1;
     }
-    break;
-  case MOVE:
-    event = DRAG;
-  case RELEASE:
-  case DRAG:
-    // this causes a drag-in to the widget to work:
-    if (event_inside(Rectangle(0, 0, w(), h()))) fltk::pushed(this);
-    else return 0;
-  }
-#if 0
-  // vertical scrollbar event
-  int vse = scrollbar.visible() && event_inside(scrollbar.x(),
-            scrollbar.y(), scrollbar.w(), h());
 
-  // horizontal scrollbar event
-  int hse = hscrollbar.visible() && event_inside(hscrollbar.x(),
-            hscrollbar.y(), w(), hscrollbar.h());
+    switch (event) {
+        case MOUSEWHEEL: {
+                was_wheel=true;
+                break;
+            }
 
-//  int X = x(), Y = y(), W = w(), H = h(); box()->inset(X, Y, W, H);
-//  if (!event_inside(X, Y, W, H)) return 0;
-  if (!event_inside(0, 0, w(), h())) return 0;
+        case KEY:
+        case SHORTCUT:
+            if(event_key() == EscapeKey) {
+                ib->hide_popup();
+                return 1;
+            }
+            break;
 
-  if (event == MOVE && !vse && !hse) event = DRAG;
-#endif
+        case PUSH: {
+		if (!event_inside(Rectangle(0, 0, w(), h()))) {
+			ib->hide_popup();
+			// Rectangle below is InputBrowser area 
+			if (event_inside(Rectangle(0, -ib->h(), ib->w(), 0))) ib->send(PUSH);
+			return 1;
+		}
+		break;
+
+            }
+
+        case MOVE:
+            event = DRAG;
+
+        case RELEASE:
+        case DRAG:
+        // this causes a drag-in to the widget to work:
+            if (event_inside(Rectangle(0, 0, w(), h()))) fltk::pushed(this);
+	    else {
+	    	fltk::pushed(this);
+		return 0;
+	    }
+
+        default:
+            break;
+    }
+
   return Browser::handle(event);
 }
 
-static void ComboBrowser_cb(Widget*, void*) {
+void ComboBrowser::browser_cb(Widget*, void*) {
   // we get callbacks for all keys?
   if (event() != KEY && event() != RELEASE) return;
   if (event() == KEY
@@ -157,12 +202,16 @@ static void ComboBrowser_cb(Widget*, void*) {
       && event_key() != ' ')
     return;
   Widget *item = browser->item();
+  
+  if (!item) return;
   if (item->is_group()) return; // can't select a group!
+  
   ib->item(item);
   ib->value(item->label());
   ib->redraw(DAMAGE_VALUE);
+  ib->hide_popup();
+  
   ib->do_callback();
-  mw->hide();
 }
 
 // CET - FIXME - this doesn't seem to be working
@@ -181,83 +230,94 @@ public:
   }
 } share_list; // only one instance of this.
 
+
 int
 InputBrowser::handle(int e) {
-  if (e == FOCUS) fltk::focus(input);
+  int TX, TY = 0, TW, TH = h();
+  if(type()&NONEDITABLE) {
+      TX = 0;
+      TW = w();
+  } else {
+      TX = m_input.x()+m_input.w();
+      TW = w()-(m_input.x()+m_input.w());
+  }
+  if (event_inside(Rectangle(TX,TY,TW,TH)))
+      over_now = true;
+  else
+      over_now = false;
+  if((over_now != over_last) && highlight_color())
+      redraw_highlight();
+  //if (e == ENTER || e == LEAVE) redraw_highlight();
 
-  if (e == ENTER || e == LEAVE) redraw_highlight();
+  if (e == FOCUS) fltk::focus(m_input);
 
-  if ((event_inside(input) || e == KEY)
-    && !(type()&NONEDITABLE) && !pushed())
+  // Scroll using arrow keys
+  if ((e == KEY) && (event_key() == UpKey || event_key() == DownKey)) {
+    if (!win || !win->visible())
+        popup();
+//    else
+    return win->handle(e);
+  
+  // all other keys should be sent to Input
+  } else if ((event_inside(m_input) || e == KEY)
+    && !(type()&NONEDITABLE) && !pushed() && e != MOUSEWHEEL)
   {
-    if (e == PUSH) fltk::pushed(input);
-    return input.handle(e);
+    if (e == PUSH) { fltk::pushed(m_input); fltk::focus(m_input); }
+    return m_input.handle(e); // if this doesn't work, try send(e)
   }
 
   switch (e) {
+    // Mouse wheel support
+    case MOUSEWHEEL: {
+      
+      // prevent double events
+      static bool was_wheel=false;
+      if(was_wheel) {
+          was_wheel=false;
+          return 1;
+      } else {
+          was_wheel=true;
+      }
+      
+      // horizontal wheel
+      if (event_dy() == 0)
+          break;
+      
+      // find next item in the list and replace the current
+      int found=-1;
+      for (int i=0; i<children(); i++) {
+          Widget* w=child(i);
+          if (!strncmp(value(), w->label(), strlen(value()))) {
+              found=i; break;
+          }
+      }
+      if (event_dy() < 0) {
+          if (found==-1 || found==children()-1)
+              found=0;
+          else
+              found++;
+      } else if (event_dy() > 0) {
+          if (found==-1 || found==0)
+              found=children()-1;
+          else
+              found--;
+      }
+          m_input.value(child(found)->label());
+      break;
+    }
+    
     case PUSH: {
-      redraw(DAMAGE_VALUE);
-      if (!children()) return 1;
-      ib = this;
-      // dummy W,H used -- will be replaced.
-      Group::current(0);
-      mw = new ComboWindow(event_x_root()-event_x(),
-                           event_y_root()-event_y()+h(),
-                           200,400);
-      mw->begin();
-      // dummy W,H used -- will be replaced.
-      browser = new ComboBrowser(0,0,200,400);
-      browser->indented((type()&INDENTED) != 0);
-      share_list.other = this;
-      browser->list(&share_list);
-      browser->when(WHEN_RELEASE_ALWAYS);
-      browser->callback(ComboBrowser_cb);
-      mw->end();
-      browser->layout(); // (WAS: it is ok to do this)
-      int W = browser->width()+browser->scrollbar.w();
-      int H = browser->height();
-      if (W > maxw_) W = maxw_;
-      if (H > maxh_) H = maxh_;
-      if (W < minw_) W = minw_;
-      if (H < minh_) H = minh_;
-      int X = mw->x();
-      int Y = mw->y();
-      const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
-      int down = monitor.h() - Y;
-      int up = event_y_root() - event_y();
-      if (H > down) {
-        if (up > down) {
-          Y = event_y_root() - event_y() - H;
-          if (Y < 0) { Y = 0; H = up; }
-        } else {
-          H = down;
-        }
-      }
-      if (X + W > monitor.r()) {
-        X = monitor.r() - W;
-        if (X < 0) { X = 0; W = monitor.r(); }
-      }
-      mw->resize(X, Y, W, H);
-      browser->Widget::resize(W, H);
-
-      browser->value(item() ? browser->Group::find(item()) : 0);
-      browser->make_item_visible();
-
-      mw->exec(0, true);
-
-      delete mw;
-      if (type()&NONEDITABLE) throw_focus();
-      else fltk::focus(input);
-
-      ib = 0;
-      redraw(DAMAGE_VALUE);
+      if (!win || !win->visible())
+          popup();
+      else
+          hide_popup();
       return 1;
     }
 
     case FOCUS:
     case UNFOCUS:
       if (type()&NONEDITABLE) break;
-      return input.handle(e);
+      return m_input.handle(e);
 
     case ENTER: case MOVE: return 1;
   }
@@ -272,27 +332,144 @@ InputBrowser::draw() {
   int W1 = r.h()*4/5;
   if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
     if (damage()&DAMAGE_ALL) draw_frame();
-    input.resize(r.x(), r.y(), r.w()-W1, r.h());
-    input.set_damage(DAMAGE_ALL);
-    input.copy_style(style()); // force it to use this style
-    input.box(FLAT_BOX);
+    m_input.resize(r.x(), r.y(), r.w()-W1, r.h());
+    m_input.set_damage(DAMAGE_ALL);
+    m_input.copy_style(style()); // force it to use this style
+    m_input.box(FLAT_BOX);
+    
     // fix for relative coordinates
     push_matrix();
     translate(r.x(),r.y());
-    input.draw();
+    
+    m_input.draw();
+    
     pop_matrix();
-    input.set_damage(0);
+    m_input.set_damage(0);
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
     Flags f = flags() & ~FOCUSED | OUTPUT;
-    if (ib == this) f |= VALUE;
+    if (win && win->visible()) f |= VALUE;
+    if (over_now) f |= HIGHLIGHT;
     drawstyle(style(),f);
+    
     // draw the little mark at the right:
     r.x(r.x()+r.w()-W1); r.w(W1);
     draw_glyph(GLYPH_DOWN_BUTTON, r);
+    over_last = over_now;
   }
 }
 
-//
+void
+InputBrowser::hide_popup() {
+  if (win && win->visible()) {
+      fltk::exit_modal();
+  }
+}
+
+void
+InputBrowser::popup() {
+    bool resize_only = false;
+
+    if(!win || !win->visible()) 
+    {
+        Group::current(0);
+
+        if(!win) {
+            win = new ComboWindow(0,0,0,0); // this will be moved later
+            win->set_override();
+
+            win->begin();
+            list = new ComboBrowser(0,0,0,0);
+            list->box(UP_BOX);
+            list->callback(ComboBrowser::browser_cb, this);
+            list->when(WHEN_CHANGED | WHEN_RELEASE_ALWAYS | WHEN_ENTER_KEY_ALWAYS);        
+            list->end();
+
+            win->end();
+            win->box(UP_BOX);
+
+            mw = win;
+            browser = list;
+	    ib = this;
+        }        
+
+        share_list.other = this;
+        list->list(&share_list);
+
+        list->indented((type()&INDENTED) != 0);
+        win->color(list->color());
+
+    } else
+        resize_only = true;
+
+    list->layout();
+    
+      int W = list->width(); //+list->scrollbar.w();
+      // magic constant 4 = border width/height (is there a way to calculate it?)
+      int H = list->height() + 4;
+      
+      if (W > maxw_) W = maxw_;
+      if (H > maxh_) H = maxh_;
+      if (W < minw_) W = minw_;
+      if (H < minh_) H = minh_;
+      int X = event_x_root()-event_x();
+      int Y = event_y_root()-event_y()+h();
+      
+      // I don't know what this code does, but it doesn't work
+/*      const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
+      int down = monitor.h() - Y;
+      int up = event_y_root() - event_y();
+      if (H > down) {
+        if (up > down) {
+          Y = event_y_root() - event_y() - H;
+          if (Y < 0) { Y = 0; H = up; }
+        } else {
+          H = down;
+        }
+      }
+      if (X + W > monitor.r()) {
+        X = monitor.r() - W;
+        if (X < 0) { X = 0; W = monitor.r(); }
+      }*/
+      
+      win->resize(X, Y, W, H);
+      list->Widget::resize(W, H);
+
+      // find the currently selected item in the list
+      list->value(0);
+      for (int i=0; i<list->children(); i++) {
+          Widget* w=list->child(i);
+          if (!strncmp(value(), w->label(), strlen(value()))) {
+              list->value(i);
+              list->make_item_visible();
+              break;
+          }
+      }
+
+    if(resize_only) return;
+
+    set_value();
+    redraw(DAMAGE_VALUE);
+
+    win->exec(0, true);
+    win->hide();
+
+    if(type()&NONEDITABLE) throw_focus();
+    else fltk::focus(m_input);
+
+    clear_value();
+    redraw(DAMAGE_VALUE);
+}
+
+Widget* InputBrowser::item() const {
+	return list->item();
+}
+
+Widget* InputBrowser::item(Widget* v) const {
+	return list->item(v);
+}
+
+
+//222
 // End of "$Id$".
 //
