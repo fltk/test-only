@@ -78,7 +78,7 @@ void GlWindow::create() {
 #else
   CreatedWindow::create(this, gl_choice->vis, gl_choice->colormap, -1);
   //if (overlay && overlay != this) ((GlWindow*)overlay)->show();
-  fltk::flush(); glXWaitGL(); glXWaitX();
+  //fltk::flush(); glXWaitGL(); glXWaitX();
 #endif
 }
 
@@ -125,7 +125,7 @@ void GlWindow::make_current() {
 
 void GlWindow::ortho() {
 // Alpha NT seems to have a broken OpenGL that does not like negative coords:
-#ifdef _M_ALPHA
+#if defined(_M_ALPHA) || USE_QUARTZ
   glLoadIdentity();
   glViewport(0, 0, w(), h());
   glOrtho(0, w(), 0, h(), -1, 1);
@@ -301,6 +301,9 @@ void GlWindow::layout() {
 #endif
   }
   Window::layout();
+#if USE_X11
+  glXWaitX();
+#endif
 }
 
 void GlWindow::context(void* v, bool destroy_flag) {
@@ -308,7 +311,7 @@ void GlWindow::context(void* v, bool destroy_flag) {
   context_ = (GLContext)v;
   if (destroy_flag) mode_ &= ~NON_LOCAL_CONTEXT;
   else mode_ |= NON_LOCAL_CONTEXT;
-}    
+}
 
 void GlWindow::destroy() {
   context(0);

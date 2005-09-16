@@ -60,6 +60,7 @@ public:
   void remove(int index);
   void remove(Widget& o) {remove(find(o));}
   void remove(Widget* o) {remove(find(*o));}
+  void remove_all();
   void replace(int index, Widget&);
   void replace(Widget& old, Widget& o) {replace(find(old),o);}
   void swap(int indexA, int indexB);

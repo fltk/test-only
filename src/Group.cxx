@@ -202,6 +202,17 @@ void Group::remove(int index) {
   Removes a widget from the group. This does nothing if the widget is
   not currently a child of this group. */
 
+/*! \fn void Group::remove_all()
+  Removes all widgets from the group.  This does not call the destructor
+  on the child widget (see clear()). */
+void Group::remove_all()
+{
+  int count = children();
+  while ( count-- ) {
+    remove( count );
+  }
+}
+
 /*! Remove the indexed widget and insert the passed widget in it's place. */
 void Group::replace(int index, Widget& o) {
   if (index >= children_) {add(o); return;}
@@ -722,6 +733,8 @@ void Widget::draw_background() const {
   pop_clip();
 }
 
+extern void fl_window_flush(Window* window);
+
 /*! Force a child to draw, by turning on DAMAGE_ALL and DAMAGE_EXPOSE,
   and calling it's draw() after temporarily translating so 0,0 in
   drawing coordinates is the upper-left corner. It's damage is then set to 0.
@@ -731,7 +744,7 @@ void Group::draw_child(Widget& w) const {
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
     if (w.is_window()) {
       GSave gsave;
-      ((Window*)&w)->flush();
+      fl_window_flush((Window*)&w);
     } else {
       push_matrix();
       translate(w.x(), w.y());

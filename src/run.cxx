@@ -673,6 +673,37 @@ void fltk::redraw() {
 extern void fl_do_deferred_calls(); // in Fl_Window.cxx:
 #endif
 
+// This is extra code that probably should be in Window::flush():
+void fl_window_flush(Window* window) {
+  CreatedWindow* x = CreatedWindow::find(window);
+#if !USE_X11 && USE_QUARTZ
+  // handle child windows, which are not really windows on Quartz:
+  if (!x) {
+    if (window->damage()) {
+      window->flush();
+      window->set_damage(0);
+    }
+    return;
+  }
+#endif
+  if (x->wait_for_expose) {damage_ = true; return;}
+  if (window->layout_damage()) window->layout();
+  if (window->damage() || x->region) {
+    window->flush();
+    window->set_damage(0);
+    if (x->region) {
+#if USE_X11
+      XDestroyRegion(x->region);
+#elif defined(_WIN32)
+      DeleteObject(x->region);
+#elif USE_QUARTZ
+      DisposeRgn(x->region);
+#endif
+      x->region = 0;
+    }
+  }
+}
+
 /*!
   Get the display up to date. This is done by calling layout() on
   all Window objects with layout_damage() and then calling draw()
@@ -694,34 +725,7 @@ void fltk::flush() {
     damage_ = false; // turn it off so Window::flush() can turn it back on
     for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
       Window* window = x->window;
-      if (window->parent()) {
-	// Expose events from the os set the region but do not set any
-	// damage bits. We have to handle these directly because otherwise
-	// this window will not be found and updated:
-	if (x->region && !window->damage() && !window->parent()->damage()) {
-	  window->flush();
-	  window->set_damage(0);
-	} else
-	  continue; // otherwise child windows are drawn by parent
-      } else {
-	if (x->wait_for_expose) {damage_ = true; continue;}
-	if (window->layout_damage()) window->layout();
-	if (window->damage() || x->region) {
-	  window->flush();
-	  window->set_damage(0);
-	}
-      }
-      // After we are done with the window, destroy any unused region:
-      if (x->region) {
-#if USE_X11
-	XDestroyRegion(x->region);
-#elif defined(_WIN32)
-	DeleteObject(x->region);
-#elif USE_QUARTZ
-	DisposeRgn(x->region);
-#endif
-	x->region = 0;
-      }
+      fl_window_flush(window);
     }
   }
 #if USE_X11

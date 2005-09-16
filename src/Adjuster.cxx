@@ -84,7 +84,7 @@ void Adjuster::draw() {
     if (damage()&DAMAGE_ALL || last==i || highlight==i) {
       r.x((i-1)*dx); r.y((3-i)*dy);
       drawstyle(style(),f);
-      draw_glyph(i-i, r);
+      draw_glyph(i-1, r);
     }
   }
   last = highlight;

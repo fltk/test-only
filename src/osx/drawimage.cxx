@@ -159,11 +159,13 @@ void fl_quartz_draw_image(CGImageRef img, int w, int h,
     CGRect rect = {to.x(), -to.y(), to.w(), -to.h()};
     CGContextDrawImage(quartz_gc, rect, img);
   } else {
+#if 0 // does not work before Tiger!!!
     CGRect irect = {from.x(), from.y(), from.w(), from.h()};
     CGImageRef clip = CGImageCreateWithImageInRect(img, irect);
     CGRect rect = {to.x(), -to.y(), to.w(), -to.h()};
     CGContextDrawImage(quartz_gc, rect, clip);
     CGImageRelease(clip);
+#endif
   }
   CGContextRestoreGState(quartz_gc);
 }

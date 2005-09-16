@@ -23,6 +23,7 @@
 #define fltk_Image_h
 
 #include "Symbol.h"
+# undef OPAQUE // fix for windows.h
 
 namespace fltk {
 
