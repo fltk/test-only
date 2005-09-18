@@ -41,6 +41,10 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <time.h>
+
+#if 1
+#include <winsock.h>
+#else
 #include <windows.h>
 
 // FIXME - Following block fixes weird problem with compiling FLTK
@@ -51,6 +55,7 @@
 #endif
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#endif
 
 #include <commctrl.h>
 #include <ctype.h>

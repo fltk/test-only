@@ -95,7 +95,11 @@ const char* fltk::key_name(unsigned hotkey) {
   static char buf[20];
   char *p = buf;
   if (!hotkey) {*p = 0; return buf;}
+#ifdef __APPLE__
+  if (hotkey & META) {strcpy(p,"Command+"); p += 5;}
+#else
   if (hotkey & META) {strcpy(p,"Meta+"); p += 5;}
+#endif
   if (hotkey & ALT) {strcpy(p,"Alt+"); p += 4;}
   if (hotkey & SHIFT) {strcpy(p,"Shift+"); p += 6;}
   if (hotkey & CTRL) {strcpy(p,"Ctrl+"); p += 5;}
@@ -177,13 +181,17 @@ unsigned fltk::key(const char* name) {
     } else if (*name == '+') {
       shifts |= fltk::SHIFT; name++;
     } else if (*name == '^') {
-      shifts |= fltk::CTRL; name++;
-    } else if (!strncasecmp(name, "alt", 3)  && (name[3]=='-'||name[3]=='+')) {
+      shifts |= fltk::COMMAND; name++;
+    } else if (!strncasecmp(name, "alt",  3) && (name[3]=='-'||name[3]=='+')) {
       shifts |= fltk::ALT; name += 4;
     } else if (!strncasecmp(name, "shift",5) && (name[5]=='-'||name[5]=='+')) {
       shifts |= fltk::SHIFT; name += 6;
     } else if (!strncasecmp(name, "ctrl", 4) && (name[4]=='-'||name[4]=='+')) {
       shifts |= fltk::CTRL; name += 5;
+    } else if (!strncasecmp(name, "meta", 4) && (name[4]=='-'||name[4]=='+')) {
+      shifts |= fltk::META; name += 5;
+    } else if (!strncasecmp(name,"command",7)&& (name[7]=='-'||name[7]=='+')) {
+      shifts |= fltk::COMMAND; name += 8;
     } else break;
   }
   if (!*name) return 0;

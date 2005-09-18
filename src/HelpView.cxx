@@ -70,12 +70,7 @@
 #  include <unistd.h>
 #endif // WIN32
 
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
-
 #define MAX_COLUMNS	200
-
 
 #define FOREGROUND_COLOR (Color(0))
 #define BACKGROUND_COLOR (Color(49))
