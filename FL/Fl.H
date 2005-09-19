@@ -19,13 +19,13 @@ namespace fltk {
 
   class Widget;
 
-  // These are for back-compatability only:
+  // fltk2 does not keep track of selection owner:
   inline fltk::Widget* selection_owner() {return 0;}
   inline void selection_owner(fltk::Widget*) {}
-  inline void selection(fltk::Widget &owner, const char* b, int len) {
-    copy(b,len,false);}
+  inline void selection(fltk::Widget &owner, const char* b, int len) {copy(b,len,false);}
 
-  // These are in fltk/Monitor.h but I did not want to include that:
+  inline void visible_focus(int) {} // fltk2 always acts like this is off
+
   inline int x() {return Monitor::all().x();}
   inline int y() {return Monitor::all().y();}
   inline int w() {return Monitor::all().w();}
