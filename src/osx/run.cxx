@@ -300,6 +300,7 @@ OSStatus HandleMenu( HICommand *cmd )
   return ret;
 }
 
+#define QuitLoop() //QuitApplicationEventLoop()
 
 /**
  * We can make every event pass through this function
@@ -358,21 +359,12 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   }
   if ( ret == eventNotHandledErr )
     ret = CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
-  QuitApplicationEventLoop();
+  QuitLoop();
 
   in_main_thread_ = false;
   fl_unlock_function();
 
   return ret;
-}
-
-/**
- * This callback quits the loop immediately so that wait() will
- * return after the pending time happens.
- */
-static pascal void timerProcCB( EventLoopTimerRef, void* )
-{
-  QuitApplicationEventLoop();
 }
 
 /**
@@ -385,7 +377,7 @@ static inline int fl_wait(double time)
 {
   OSStatus ret;
   static EventTargetRef target = 0;
-  static EventLoopTimerRef timer = 0;
+//   static EventLoopTimerRef timer = 0;
   if ( !target ) {
     target = GetEventDispatcherTarget();
     EventHandlerUPP dispatchHandler =
@@ -415,9 +407,9 @@ static inline int fl_wait(double time)
     ret = InstallApplicationEventHandler( dispatchHandler,
 					  GetEventTypeCount(appEvents),
 					  appEvents, 0, 0L );
-    ret = InstallEventLoopTimer( GetMainEventLoop(), 0, 0,
-				 NewEventLoopTimerUPP( timerProcCB ), 0,
-				 &timer );
+//     ret = InstallEventLoopTimer( GetMainEventLoop(), 0, 0,
+// 				 NewEventLoopTimerUPP( timerProcCB ), 0,
+// 				 &timer );
   }
 
   got_events = 0;
@@ -440,12 +432,12 @@ static inline int fl_wait(double time)
   in_main_thread_ = false;
   fl_unlock_function();
 
-  if ( time > 0.0 )
-    SetEventLoopTimerNextFireTime( timer, time );
-  else
-    QuitApplicationEventLoop();
-
-  RunApplicationEventLoop(); // will return after the previously set time
+  EventRef event;
+  if (!ReceiveNextEvent(0, NULL, time, true, &event)) {
+    got_events = 1;
+    SendEventToEventTarget( event, target);
+    ReleaseEvent(event);
+  }
   fl_lock_function();
   in_main_thread_ = true;
 
@@ -476,11 +468,10 @@ static inline int fl_wait(double time)
 
 /**
  * ready() is just like wait(0.0) except no callbacks are done.
- * \todo nyi, check if there is actually a message pending!
  */
-//+++ verify port to FLTK2
 static inline int fl_ready() {
-  return 1;
+  EventRef event;
+  return !ReceiveNextEvent(0, NULL, 0.0, false, &event);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -507,7 +498,7 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
       x->window->do_callback();
     }
   }
-  QuitApplicationEventLoop();
+  QuitLoop();
   return noErr;
 }
 
@@ -529,7 +520,7 @@ static void fix_xfocus(Window* window) {
   }
   xfocus = window;
   fix_focus();
-  QuitApplicationEventLoop();
+  QuitLoop();
 }
 
 /* Carbon Window handler
@@ -560,7 +551,7 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     break;}
   case kEventWindowDrawContent:
     recursive_expose(CreatedWindow::find( window ));
-    QuitApplicationEventLoop();
+    QuitLoop();
     break;
   case kEventWindowBoundsChanged:
 #if 0
@@ -1035,7 +1026,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    QuitApplicationEventLoop();
+    QuitLoop();
     return noErr;
   case kDragTrackingInWindow:
     GetDragMouse( dragRef, &mp, 0 );
@@ -1052,7 +1043,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    QuitApplicationEventLoop();
+    QuitLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
@@ -1063,7 +1054,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
       handle( DND_LEAVE, dnd_target_window );
       dnd_target_window = 0;
     }
-    QuitApplicationEventLoop();
+    QuitLoop();
     return noErr;
   }
   return noErr;
@@ -1146,7 +1137,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   free(buffer);
   
   dnd_target_window = 0L;
-  QuitApplicationEventLoop();
+  QuitLoop();
   return noErr;
 }
 

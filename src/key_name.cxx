@@ -96,7 +96,7 @@ const char* fltk::key_name(unsigned hotkey) {
   char *p = buf;
   if (!hotkey) {*p = 0; return buf;}
 #ifdef __APPLE__
-  if (hotkey & META) {strcpy(p,"Command+"); p += 5;}
+  if (hotkey & META) {strcpy(p,"Cmd+"); p += 4;}
 #else
   if (hotkey & META) {strcpy(p,"Meta+"); p += 5;}
 #endif
