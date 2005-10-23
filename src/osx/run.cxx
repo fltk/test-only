@@ -435,7 +435,19 @@ static inline int fl_wait(double time)
   EventRef event;
   if (!ReceiveNextEvent(0, NULL, time, true, &event)) {
     got_events = 1;
-    SendEventToEventTarget( event, target);
+    OSErr ret = SendEventToEventTarget( event, target );
+    // This is needed to make the Mac menubar work:
+    if (   ret==eventNotHandledErr
+	   && GetEventClass(event)==kEventClassMouse
+	   && GetEventKind(event)==kEventMouseDown ) {
+      Point pos;
+      GetEventParameter(event, kEventParamMouseLocation, typeQDPoint,
+			NULL, sizeof(pos), NULL, &pos);
+      WindowRef win;
+      if (MacFindWindow(pos, &win)==inMenuBar) {
+	MenuSelect(pos);
+      }
+    }
     ReleaseEvent(event);
   }
   fl_lock_function();
