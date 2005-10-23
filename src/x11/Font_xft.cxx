@@ -74,7 +74,7 @@ struct FontSize {
 // The xft font implementation adds the xft name and the above list:
 struct IFont {
   fltk::Font f;
-  int attribute_mask; // all attributes that can be turned on
+  int attribute_mask; // attributes that can still be turned on
   unsigned numsizes;
   FontSize* fontsizes;
 };
@@ -82,7 +82,7 @@ struct IFont {
 // We store the attributes in neat blocks of 2^n:
 fltk::Font* fltk::Font::plus(int x) {
   IFont* font = (IFont*)this;
-  x &= font->attribute_mask & ~attributes_;
+  x &= font->attribute_mask;
   return &((font+x)->f);
 }
 
@@ -160,8 +160,8 @@ FontSize::~FontSize() {
 }
 #endif
 
-// This call is used by gl_setfont to get a bitmapped font. Xft actually does
-// a pretty good job of selecting X fonts. Unfortunatlye Xft2 seems to have
+// This call is used by gl_setfont to get a bitmapped font. Xft actually did
+// a pretty good job of selecting X fonts. Unfortunately Xft2 seems to have
 // completely hidden or removed this interface...
 XFontStruct* fltk::xfont() {
   if (!current->xfont) {
@@ -254,7 +254,6 @@ float fltk::getwidth(const char *str, int n) {
 
 ////////////////////////////////////////////////////////////////
 
-
 void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 
   // Use fltk's color allocator, copy the results to match what
@@ -295,20 +294,20 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 // The predefined fonts that fltk has:
 static IFont fonts [] = {
   {{"sans",	0},	3,	0},
-  {{"sans",	1},	3,	0},
-  {{"sans",	2},	3,	0},
-  {{"sans",	3},	3,	0},
+  {{"sans",	1},	2,	0},
+  {{"sans",	2},	1,	0},
+  {{"sans",	3},	0,	0},
   {{"mono",	0},	3,	0},
-  {{"mono",	1},	3,	0},
-  {{"mono",	2},	3,	0},
-  {{"mono",	3},	3,	0},
+  {{"mono",	1},	2,	0},
+  {{"mono",	2},	1,	0},
+  {{"mono",	3},	0,	0},
   {{"serif",	0},	3,	0},
-  {{"serif",	1},	3,	0},
-  {{"serif",	2},	3,	0},
-  {{"serif",	3},	3,	0},
+  {{"serif",	1},	2,	0},
+  {{"serif",	2},	1,	0},
+  {{"serif",	3},	0,	0},
   {{"symbol",	0},	0,	0},
   {{"screen",	0},	1,	0},
-  {{"screen",	1},	1,	0},
+  {{"screen",	1},	0,	0},
   {{"dingbats",	0},	0,	0}
 };
 
@@ -343,35 +342,60 @@ static int sort_function(const void *aa, const void *bb) {
   return a->attributes_ - b->attributes_;
 }}
 
+// Apparently the 2nd name is more interesting than the first (?)
+static const char* getfamily(FcPattern* p) {
+  FcChar8* s;
+  if (FcPatternGetString(p, FC_FAMILY, 1, &s) != 0)
+    FcPatternGetString(p, FC_FAMILY, 0, &s);
+  return (const char*)s;
+}
+
 int fltk::list_fonts(fltk::Font**& arrayp) {
   static fltk::Font** font_array = 0;
   static int num_fonts = 0;
-
   if (font_array) { arrayp = font_array; return num_fonts; }
 
-  XftFontSet *fs;
-  char *name;
-  open_display();
-  fs = XftListFonts(xdisplay, xscreen, 0, XFT_FAMILY, 0);
-  num_fonts = fs->nfont;
-  font_array = (fltk::Font**)calloc(num_fonts, sizeof(fltk::Font *));
+  // Make sure fontconfig is ready... is this necessary? The docs say it is
+  // safe to call it multiple times, so just go for it anyway!
+  FcInit();
+
+  // Create a search pattern that will match every font name - I think
+  // this does the Right Thing... but am not certain...
+  FcPattern* fnt_pattern = FcPatternCreate ();
+  // Now list all the families:
+  FcObjectSet* fnt_obj_set = FcObjectSetBuild (FC_FAMILY, 0);
+  // This gives more info, but it is a pain to deal with:
+  //FcObjectSet* fnt_obj_set = FcObjectSetBuild (FC_FAMILY, FC_WEIGHT, FC_SLANT, 0);
+
+  // Hopefully, this is a set of all the fonts...
+  FcFontSet* fnt_set = FcFontList (0, fnt_pattern, fnt_obj_set);
+  
+  // We don't need the fnt_pattern any more, release it
+  FcPatternDestroy (fnt_pattern);
+
+  num_fonts = fnt_set->nfont;
+  font_array = new (fltk::Font*)[num_fonts];
+
+  // For each family we make 4 fonts for bold,italic combinations
+  // The families could be smaller if there is no bold or italic, but
+  // that is a pain to figure out. Besides this is what Windows
+  // version does:
+  IFont* fonts = new IFont[num_fonts*4];
   for (int i = 0; i < num_fonts; i++) {
-    if (XftPatternGetString(fs->fonts[i], XFT_FAMILY, 0, &name)
-	== XftResultMatch) {
-      // Make a block of 4 for bold, italic combinations
-      IFont* newfont = new IFont[4];
-      newfont[0].f.name_ = newstring(name);
-      for (int j = 0; j < 4; j++) {
-	newfont[j].f.name_ = newfont[0].f.name_;
-	newfont[j].f.attributes_ = j;
-	newfont[j].attribute_mask = 3;
-	newfont[j].numsizes = 0;
-	newfont[j].fontsizes = 0;
-      }
-      font_array[i] = &(newfont->f);
+    IFont* newfont = fonts+4*i;
+    font_array[i] = &(newfont->f);
+    FcPattern* p = fnt_set->fonts[i];
+    const char* name = strdup(getfamily(p));
+    for (int j = 0; j < 4; j++) {
+      newfont[j].f.name_ = name;
+      newfont[j].f.attributes_ = j;
+      newfont[j].attribute_mask = 3-j;
+      newfont[j].numsizes = 0;
+      newfont[j].fontsizes = 0;
     }
   }
-  XftFontSetDestroy(fs);
+  // Release the fnt_set - we don't need it any more
+  FcFontSetDestroy (fnt_set);
 
   qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
 
@@ -401,14 +425,18 @@ int fltk::Font::sizes(int*& sizep) {
     delete[] array;
     array = new int[array_size = fs->nfont+1];
   }
-  array[0] = 0; int j = 1; // claim all fonts are scalable by putting a 0 in
+  int j = 0;
   for (int i = 0; i < fs->nfont; i++) {
     double v;
     if (XftPatternGetDouble(fs->fonts[i], XFT_PIXEL_SIZE, 0, &v)
 	== XftResultMatch)
       array[j++] = int(v);
   }
-  qsort(array+1, j-1, sizeof(int), int_sort);
+  if (j) {
+    qsort(array, j, sizeof(int), int_sort);
+  } else {
+    array[0] = 0; j = 1; // claim all fonts are scalable by putting a 0 in
+  }
   XftFontSetDestroy(fs);
   sizep = array;
   return j;
