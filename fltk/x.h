@@ -76,7 +76,7 @@
 #  include <cairo.h>
 #  include <cairo-xlib.h>
 # else
- typedef struct cairo cairo_t;
+ typedef struct _cairo cairo_t;
 # endif
 
 #include <X11/extensions/XInput.h>
