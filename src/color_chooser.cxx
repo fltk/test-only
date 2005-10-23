@@ -90,8 +90,8 @@ void ColorChooser::rgb2hsv(
 }
 
 bool ColorChooser::rgb(float r, float g, float b) {
-  if (r == r_ && g == g_ && b == b_) return false;
-  r_ = r; g_ = g; b_ = b;
+  if (r == r_ && g == g_ && b == b_ && !no_value_) return false;
+  r_ = r; g_ = g; b_ = b; no_value_ = false;
   float ph = hue_;
   float ps = saturation_;
   float pv = value_;
@@ -115,7 +115,7 @@ bool ColorChooser::hsv(float h, float s, float v) {
   h = fmodf(h,6.0f); if (h < 0) h += 6;
   if (s < 0) s = 0; else if (s > 1) s = 1;
   if (v < 0) v = 0; else if (v > 1) v = 1;
-  if (h == hue_ && s == saturation_ && v == value_) return false;
+  if (h == hue_ && s == saturation_ && v == value_ && !no_value_) return false;
   float ph = hue_;
   float ps = saturation_;
   float pv = value_;
@@ -133,19 +133,34 @@ bool ColorChooser::hsv(float h, float s, float v) {
     alphabox.redraw(DAMAGE_CONTENTS);
   }
   hsv2rgb(h,s,v,r_,g_,b_);
+  no_value_ = false;
   return 1;
 }
 
 bool ColorChooser::a(float a) {
   alphabox.show();
-  if (a == a_) return false;
-  a_ = a;
+  if (a == a_ && !no_value_) return false;
+  a_ = a; no_value_ = false;
   alphabox.redraw(DAMAGE_VALUE);
   return true;
 }
 
 void ColorChooser::hide_a() {
   alphabox.hide();
+}
+
+bool ColorChooser::no_value(bool v) {
+  support_no_value = true;
+  if (v == no_value_) return false;
+  if (v) {
+    // Set the color pickers to the gray window color. It appears to be
+    // more user-friendly to always go to a certain color.
+    uchar r,g,b;
+    split_color(color(),r,g,b);
+    rgb(r/255.0f,g/255.0f,b/255.0f);
+  }
+  no_value_ = v;
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -346,10 +361,16 @@ void ccCellBox::draw() {
       int ww = (X+1)*w()/COLS - xx;
       Rectangle r(xx,yy,ww,hh);
       drawstyle(style(),OUTPUT);
-      THIN_DOWN_BOX->draw(r);
-      r.inset(1);
-      setcolor(fl_color_cells[Y*COLS+X]);
-      fillrect(r);
+      if (X || Y || !((ColorChooser*)parent())->support_no_value) {
+	setbgcolor(fl_color_cells[Y*COLS+X]);
+	THIN_DOWN_BOX->draw(r);
+      } else {
+	THIN_DOWN_BOX->draw(r);
+	r.inset(1);
+	push_clip(r);
+	drawtext("@7+",r,0);
+	pop_clip();
+      }
       xx += ww;
     }
     yy += hh;
@@ -368,10 +389,14 @@ int ccCellBox::handle(int e) {
     X = X+Y*COLS;
     ColorChooser* c = (ColorChooser*)parent();
     if (event_button() > 1) {
-      fl_color_cells[X] = c->value();
-      redraw();
+      if (X) {
+	fl_color_cells[X] = c->value();
+	redraw();
+      }
     } else {
-      if (c->value(fl_color_cells[X])) c->do_callback();
+      Color color = fl_color_cells[X];
+      if (!color && !c->support_no_value) color = BLACK;
+      if (c->value(color)) c->do_callback();
     }
     return 1;}
   }
@@ -413,7 +438,8 @@ ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
   valuebox.tooltip("Drag to change value (brightness)");
   alphabox.tooltip("Drag to change alpha");
   cellbox.tooltip("Left-click to select color from cell.\n"
-		  "Right-click to put current color into cell.");
+		  "Right-click to put current color into cell.\n"
+		  "Click X to use default value");
   end();
 //    resizable(huebox);
 //    sizes();
@@ -423,17 +449,23 @@ ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
   hue_ = 0.0;
   saturation_ = 0.0;
   value_ = 0.0;
+  no_value_ = support_no_value = false;
 }
 
 Color ColorChooser::value() const {
+  if (no_value_) return 0;
   Color ret =
     fltk::color(uchar(255*r()+.5f), uchar(255*g()+.5f), uchar(255*b()+.5f));
   return ret ? ret : BLACK;
 }
 
 bool ColorChooser::value(Color c) {
-  uchar r,g,b; split_color(c,r,g,b);
-  return rgb(r/255.0f, g/255.0f, b/255.0f);
+  if (!c) {
+    return no_value(true);
+  } else {
+    uchar r,g,b; split_color(c,r,g,b);
+    return rgb(r/255.0f, g/255.0f, b/255.0f);
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -534,11 +566,9 @@ static void mode_cb(Widget* o, long int v) {
   set_valuators(chooser);
 }
 
-// this location is used to preserve index Color values:
-static Color picked_color;
-
 static void chooser_cb(Widget*, void*) {
-  ok_color->color(picked_color = chooser->value());
+  ok_color->color(chooser->value());
+  ok_color->label(chooser->no_value() ? "@7+" : 0);
   ok_color->redraw();
   set_valuators(chooser);
 }
@@ -552,54 +582,54 @@ static void cancel_cb(Widget* w, void*) {
   w->window()->hide();
 }
 
-static int run_it(const char* name, bool alpha,
-		  float r, float g, float b, float a)
+static void make_it() {
+  if (window) return;
+  window = new Window(210, 160+5+26+21+21+5);
+  window->begin();
+  chooser = new ColorChooser(5, 5, 200, 155);
+  chooser->callback(chooser_cb);
+  int y = 165;
+  int x = 5;
+  rvalue = new ccValueInput(x,y,50,21); x += 50;
+  rvalue->callback(input_cb);
+  gvalue = new ccValueInput(x,y,50,21); x += 50;
+  gvalue->callback(input_cb);
+  bvalue = new ccValueInput(x,y,50,21); x += 50;
+  bvalue->callback(input_cb);
+  avalue = new ccValueInput(x,y,50,21); x += 50;
+  avalue->callback(input_cb);
+  PopupMenu* choice = new PopupMenu(5,y,200,21); x+=40;
+  choice->type(PopupMenu::POPUP3);
+  choice->begin();
+  (new Item("rgb"))->callback(mode_cb,M_RGB);
+  (new Item("byte"))->callback(mode_cb,M_BYTE);
+  (new Item("hex"))->callback(mode_cb,M_HEX);
+  (new Item("hsv"))->callback(mode_cb,M_HSV);
+  choice->end();
+  choice->value(0);
+  choice->tooltip("Right-click to change type of data entered here");
+  y += 26;
+  ok_color = new Widget(5, y, 95, 21);
+  ok_color->box(ENGRAVED_BOX);
+  ok_button = new ReturnButton(5, y+21, 95, 21, ok);
+  ok_button->callback(ok_cb);
+  cancel_color = new Widget(110, y, 95, 21);
+  cancel_color->box(ENGRAVED_BOX);
+  cancel_button = new Button(110, y+21, 95, 21, cancel);
+  cancel_button->callback(cancel_cb);
+  // window->size_range(210, 240); // minimum usable size?
+  window->resizable(chooser);
+  window->end();
+}
+
+static int run_it(const char* name)
 {
-  if (!window) {
-    window = new Window(210, 160+5+26+21+21+5);
-    window->begin();
-    chooser = new ColorChooser(5, 5, 200, 155);
-    chooser->callback(chooser_cb);
-    int y = 165;
-    int x = 5;
-    rvalue = new ccValueInput(x,y,50,21); x += 50;
-    rvalue->callback(input_cb);
-    gvalue = new ccValueInput(x,y,50,21); x += 50;
-    gvalue->callback(input_cb);
-    bvalue = new ccValueInput(x,y,50,21); x += 50;
-    bvalue->callback(input_cb);
-    avalue = new ccValueInput(x,y,50,21); x += 50;
-    avalue->callback(input_cb);
-    PopupMenu* choice = new PopupMenu(5,y,200,21); x+=40;
-    choice->type(PopupMenu::POPUP3);
-    choice->begin();
-    (new Item("rgb"))->callback(mode_cb,M_RGB);
-    (new Item("byte"))->callback(mode_cb,M_BYTE);
-    (new Item("hex"))->callback(mode_cb,M_HEX);
-    (new Item("hsv"))->callback(mode_cb,M_HSV);
-    choice->end();
-    choice->value(0);
-    choice->tooltip("Right-click to change type of data entered here");
-    y += 26;
-    ok_color = new Widget(5, y, 95, 21);
-    ok_color->box(ENGRAVED_BOX);
-    ok_button = new ReturnButton(5, y+21, 95, 21, ok);
-    ok_button->callback(ok_cb);
-    cancel_color = new Widget(110, y, 95, 21);
-    cancel_color->box(ENGRAVED_BOX);
-    cancel_button = new Button(110, y+21, 95, 21, cancel);
-    cancel_button->callback(cancel_cb);
-    // window->size_range(210, 240); // minimum usable size?
-    window->resizable(chooser);
-    window->end();
-  }
   window->label(name);
-  chooser->rgb(r,g,b);
-  if (alpha) {avalue->show(); chooser->a(a);}
-  else {chooser->hide_a(); avalue->hide();}
   set_valuators(chooser);
   ok_color->color(chooser->value());
+  ok_color->label(chooser->no_value() ? "@7+" : 0);
   cancel_color->color(chooser->value());
+  cancel_color->label(chooser->no_value() ? "@7+" : 0);
   window->hotspot(window);
   return window->exec();
 }
@@ -630,7 +660,11 @@ static int run_it(const char* name, bool alpha,
   a color chooser into another control panel.
 */
 bool fltk::color_chooser(const char* name, float& r, float& g, float& b) {
-  if (!run_it(name, false, r,g,b,1)) return false;
+  make_it();
+  chooser->rgb(r,g,b);
+  chooser->hide_a(); avalue->hide();
+  chooser->hide_no_value();
+  if (!run_it(name)) return false;
   r = chooser->r();
   g = chooser->g();
   b = chooser->b();
@@ -640,7 +674,11 @@ bool fltk::color_chooser(const char* name, float& r, float& g, float& b) {
 /*! Same but user can also select an alpha value. Currently the color
   chips do not remember or set the alpha! */
 bool fltk::color_chooser(const char* name, float&r, float&g, float&b, float&a) {
-  if (!run_it(name, true, r,g,b,a)) return false;
+  make_it();
+  chooser->rgb(r,g,b);
+  chooser->a(a); avalue->show();
+  chooser->hide_no_value();
+  if (!run_it(name)) return false;
   r = chooser->r();
   g = chooser->g();
   b = chooser->b();
@@ -650,7 +688,11 @@ bool fltk::color_chooser(const char* name, float&r, float&g, float&b, float&a) {
 
 /*! Same but it takes and returns 8-bit numbers for the rgb arguments. */
 bool fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
-  if (!run_it(name,false,r/255.0f, g/255.0f, b/255.0f, 1)) return false;
+  make_it();
+  chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
+  chooser->hide_a(); avalue->hide();
+  chooser->hide_no_value();
+  if (!run_it(name)) return false;
   r = uchar(255*chooser->r()+.5f);
   g = uchar(255*chooser->g()+.5f);
   b = uchar(255*chooser->b()+.5f);
@@ -659,7 +701,11 @@ bool fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
 
 /*! Same but with 8-bit alpha chosen by the user. */
 bool fltk::color_chooser(const char* name, uchar&r, uchar&g, uchar&b, uchar&a) {
-  if (!run_it(name,true,r/255.0f, g/255.0f, b/255.0f, a/255.0f)) return false;
+  make_it();
+  chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
+  chooser->a(a/255.0f); avalue->show();
+  chooser->hide_no_value();
+  if (!run_it(name)) return false;
   r = uchar(255*chooser->r()+.5f);
   g = uchar(255*chooser->g()+.5f);
   b = uchar(255*chooser->b()+.5f);
@@ -669,10 +715,18 @@ bool fltk::color_chooser(const char* name, uchar&r, uchar&g, uchar&b, uchar&a) {
 
 /*! Same but it takes and returns an fltk::Color number. No alpha. */
 bool fltk::color_chooser(const char* name, Color& c) {
-  picked_color = c;
-  uchar r,g,b; split_color(c,r,g,b);
-  if (!run_it(name,false,r/255.0f, g/255.0f, b/255.0f,1)) return false;
-  c = picked_color;
+  make_it();
+  uchar r,g,b;
+  if (c) {
+    split_color(c,r,g,b);
+    chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
+    chooser->no_value(false);
+  } else {
+    chooser->no_value(true);
+  }
+  chooser->hide_a(); avalue->hide();
+  if (!run_it(name)) return false;
+  c = chooser->value();
   return true;
 }
 

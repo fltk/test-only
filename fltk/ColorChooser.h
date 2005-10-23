@@ -1,5 +1,5 @@
 //
-// "$Id: ColorChooser.h,v 1.4 2004/08/07 20:48:34 spitzak Exp $"
+// "$Id$"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -65,12 +65,15 @@ public:
 class FL_API ColorChooser : public Group {
   friend class ccHueBox;
   friend class ccValueBox;
+  friend class ccCellBox;
   ccHueBox huebox;
   ccValueBox valuebox;
   ccValueBox alphabox;
   ccCellBox cellbox;
   float hue_, saturation_, value_;
   float r_, g_, b_, a_;
+  bool no_value_;
+  bool support_no_value;
 public:
   float h() const {return hue_;}
   float s() const {return saturation_;}
@@ -79,12 +82,15 @@ public:
   float g() const {return g_;}
   float b() const {return b_;}
   float a() const {return a_;}
+  bool no_value() const {return no_value_;}
+  bool no_value(bool);
   Color value() const;
   bool value(Color);
   bool hsv(float,float,float);
   bool rgb(float,float,float);
   bool a(float);
   void hide_a();
+  void hide_no_value() {support_no_value = false;}
   static void hsv2rgb(float, float, float,float&,float&,float&);
   static void rgb2hsv(float, float, float,float&,float&,float&);
   ColorChooser(int,int,int,int,const char* = 0);
@@ -106,5 +112,5 @@ FL_API bool color_chooser(const char* name, Color& c);
 #endif
 
 //
-// End of "$Id: ColorChooser.h,v 1.4 2004/08/07 20:48:34 spitzak Exp $".
+// End of "$Id$".
 //
