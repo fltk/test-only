@@ -349,11 +349,10 @@ void Widget::copy_label(const char* s) {
 
   You can look at layout_damage() to find out why this is being called.
 
-  If you subclass this, you must call the base class version! The base
-  class version sets layout_damage() to zero.
+  The base class redraws the widget and sets layout_damage() to zero.
 */
 void Widget::layout() {
-  if (layout_damage_ & LAYOUT_WH) redraw();
+  redraw();
   layout_damage_ = 0;
 }
 

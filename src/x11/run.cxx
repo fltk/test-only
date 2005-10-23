@@ -547,7 +547,6 @@ void fltk::open_display() {
 
   Display *d = XOpenDisplay(0);
   if (!d) fatal("Can't open display \"%s\"",XDisplayName(0));
-
   open_display(d);
 }
 
@@ -1295,7 +1294,7 @@ bool fltk::handle()
     break;}
 
   case UnmapNotify:
-    window = find(xevent.xmapping.window);
+    //window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
     // turning this flag makes iconic() return true:
@@ -2243,9 +2242,11 @@ void Window::flush() {
 	    | EnterWindowMask | LeaveWindowMask
 	    | PointerMotionMask;
 	  int mask = CWBorderPixel|CWColormap|CWEventMask|CWBitGravity;
-	  i->frontbuffer = XCreateWindow(xdisplay, i->xid, 0,0,w(),h(),
-					 0, xvisual->depth, InputOutput,
-					 xvisual->visual, mask, &attr);
+	  i->frontbuffer =
+	    XCreateWindow(xdisplay, i->xid,
+			  0, 0, w(), h(),
+			  0, xvisual->depth, InputOutput,
+			  xvisual->visual, mask, &attr);
 	  XLowerWindow(xdisplay, i->frontbuffer);
 	  XMapWindow(xdisplay, i->frontbuffer);
 	  frontbuffer = i->frontbuffer;
@@ -2254,7 +2255,8 @@ void Window::flush() {
 	  XdbeAllocateBackBufferName(xdisplay, frontbuffer, XdbeUndefined);
       } else
 #endif
-	i->backbuffer = XCreatePixmap(xdisplay,frontbuffer,w(),h(),xvisual->depth);
+	i->backbuffer =
+	  XCreatePixmap(xdisplay, frontbuffer, w(), h(), xvisual->depth);
       set_damage(DAMAGE_ALL); damage = DAMAGE_ALL;
       i->backbuffer_bad = false;
     } else if (i->backbuffer_bad) {
@@ -2364,22 +2366,12 @@ void Window::borders( fltk::Rectangle *r ) const {
  * the program.
  */
 void Window::layout() {
-  if (i && (layout_damage() & LAYOUT_WH)) {
-#if USE_XDBE
-    if (use_xdbe) {
-      if (i->frontbuffer) {
-	XResizeWindow(xdisplay, i->frontbuffer, w()>0?w():1, h()>0?h():1);
-# if USE_XFT
-	// It appears XFT does not like the size changes:
-	stop_drawing(i->backbuffer);
-#endif
-      }
-    } else
-#endif
-      free_backbuffer();
-  }
-  if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
-    // figure out where the window should be in it's parent:
+  if (i && (layout_damage()&LAYOUT_XYWH)) {
+    // Fix the size/position we recorded for the X window if it is not
+    // the same as the fltk window. If we received CONFIGURE_NOTIFY
+    // events and the application did not make any further changes to the
+    // window size, this will already be correct and no X calls will
+    // be made.
     int x = this->x(); int y = this->y();
     for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
       x += p->x(); y += p->y();
@@ -2395,11 +2387,29 @@ void Window::layout() {
 	i->wait_for_expose = true;
       }
       XMoveResizeWindow(xdisplay, i->xid, x, y, w, h);
+      i->current_size.set(x,y,w,h);
     } else if (x != i->current_size.x() || y != i->current_size.y()) {
       XMoveWindow(xdisplay, i->xid, x, y);
+      i->current_size.x(x);
+      i->current_size.y(y);
     }
-    i->current_size.set(x,y,w,h);
+    // resize the windows used for double-buffering:
+    if (layout_damage() & LAYOUT_WH) {
+#if USE_XDBE
+      if (use_xdbe) {
+	if (i->frontbuffer) {
+	  XResizeWindow(xdisplay, i->frontbuffer, w, h);
+# if USE_XFT
+	  // It appears XFT does not like the size changes:
+	  stop_drawing(i->backbuffer);
+#endif
+	}
+      } else
+#endif
+	free_backbuffer();
+    }
   }
+  // don't redraw if only the xy position changed:
   if (layout_damage() & ~LAYOUT_XY) Group::layout();
   else layout_damage(0);
 }
