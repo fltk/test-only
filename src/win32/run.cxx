@@ -112,6 +112,9 @@ using namespace fltk;
 // like GUI programs on more sensible operating systems
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
 
+// This is so fltk::awake() in lock.cxx can get at message number:
+UINT fl_wake_msg = WM_MAKEWAITRETURN;
+
 #if USE_IMM
 #define IMM_DYNAMIC_LOADING 1
 
@@ -329,8 +332,6 @@ void* fltk::thread_message() {
 
 MSG fltk::msg;
 
-UINT fl_wake_msg = 0;
-
 // Wait up to the given time for any events or sockets to become ready,
 // do the callbacks for the events and sockets.
 // It *should* return negative on error, 0 if nothing happens before
@@ -374,26 +375,17 @@ static inline int fl_wait(double time_to_wait) {
 
   in_main_thread_ = false;
   fl_unlock_function();
-  if (time_to_wait < 2147483.648) {
-    have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
-    if (!have_message) {
-      int t = (int)(time_to_wait * 1000.0 + .5);
-      if (t <= 0) { // too short to measure
-	have_message = false;
-      } else {
-	timerid = SetTimer(NULL, 0, t, NULL);
-	have_message = __GetMessage(&msg, NULL, 0, 0);
-	KillTimer(NULL, timerid);
-      }
-    }
-  } else {
-    have_message = __GetMessage(&msg, NULL, 0, 0);
-  }
+  int t_msec =
+    time_to_wait < 2147483.647 ? int(time_to_wait*1000+.5) : 0x7fffffff;
+  int ret_val =
+    MsgWaitForMultipleObjects(0, NULL, false, t_msec, QS_ALLINPUT);
   fl_lock_function();
   in_main_thread_ = true;
 
-  // Execute the message we got, and all other pending messages:
-  while (have_message) {
+  // Execute all pending messages:
+  int ret = 0;
+  while (__PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0) {
+    ret++;
 #ifdef USE_ASYNC_SELECT
     if (msg.message == WM_FLSELECT) {
       // Got notification for socket
@@ -403,31 +395,28 @@ static inline int fl_wait(double time_to_wait) {
 	  break;
 	}
       // looks like it is best to do the dispatch-message anyway:
-    }
+    } else
 #endif
-    if (msg.message == fl_wake_msg) {
-      // This is used by awake() and by WndProc() in an attempt
-      // to get wait() to return. That does not always work
-      // unfortunately, as Windoze calls WndProc directly sometimes.
-      // If that happens it gives up and calls flush()
+    if (msg.message == WM_MAKEWAITRETURN) {
+      // save any data from fltk::awake() call:
       if (msg.wParam) thread_message_ = (void*)msg.wParam;
-    }
-    // WM_MAKEWAITRETURN is used by WndProc to try to make wait()
-    // return so the main loop recovers and can flush the display. We
-    // purposely do not dispatch this message, as the desired result
-    // has happened: this function will return.  For who knows what
-    // reason, sometimes Windoze will call WndProc directly in
-    // response to the Post, so it never gets here. This is detected
-    // and at that point I give up and call flush().
-    if (msg.message != WM_MAKEWAITRETURN) {
+      // WM_MAKEWAITRETURN is used by WndProc to try to make wait()
+      // return so the main loop recovers and can flush the display. We
+      // purposely do not dispatch this message, as the desired result
+      // has happened: this function will return.  For who knows what
+      // reason, sometimes Windoze will call WndProc directly in
+      // response to the Post, so it never gets here. This is detected
+      // by the WndProc and at that point I give up and call flush().
+    } else {
       TranslateMessage(&msg);
       __DispatchMessage(&msg);
     }
-    have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
   }
 
-  // This should return 0 if only timer events were handled:
-  return 1;
+  // This should return 0 for timeout, positive for events, and
+  // negative for errors.
+  // ret_val is probably useful, what is in it?
+  return ret;
 }
 
 // ready() is just like wait(0.0) except no callbacks are done:
@@ -1649,6 +1638,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_MAKEWAITRETURN:
+    // save any data from fltk::awake() call:
+    if (wParam) thread_message_ = (void*)wParam;
     // This will be called if MakeWaitReturn fails because Stoopid Windows
     // called the WndProc directly. Instead do the best we can, which is
     // to flush the display.
@@ -1696,12 +1687,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // it all.
   case WM_MOVE:
     if (!window || window->parent()) break; // ignore child windows
-#if 1
+# if 1
     if (window->resize((signed short)LOWORD(lParam),
 		       (signed short)HIWORD(lParam),
 		       window->w(), window->h()))
       resize_from_system = window;
-#else
+# else
     // Faster version that does not bother with calling resize as the
     // user drags the window around. This was what most Win32 versions
     // of fltk did. This breaks programs that want to track the current
@@ -1709,7 +1700,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // is called.
     window->x((signed short)LOWORD(lParam));
     window->y((signed short)HIWORD(lParam));
-#endif
+# endif
     MakeWaitReturn();
     break;
 
@@ -1927,8 +1918,6 @@ static void register_unicode(HICON smallicon, HICON bigicon)
   // This is needed or multiple DLL's get confused (?):
   // No, doing this makes none of the windows appear:
   //UnregisterClass(wc.lpszClassName, xdisplay);
-
-  fl_wake_msg = RegisterWindowMessageW(L"fltk::ThreadWakeup");
 }
 
 static void register_ansi(HICON smallicon, HICON bigicon)
@@ -1952,8 +1941,6 @@ static void register_ansi(HICON smallicon, HICON bigicon)
   // This is needed or multiple DLL's get confused (?):
   // No, doing this makes none of the windows appear:
   //UnregisterClass(wc.lpszClassName, xdisplay);
-
-  fl_wake_msg = RegisterWindowMessageA("fltk::ThreadWakeup");
 }
 
 void CreatedWindow::create(Window* window) {
