@@ -49,8 +49,10 @@
 # undef max
 # undef min
 # undef near
+FL_GL_API void glWindowPos2i(int x, int y);
 #elif defined(__APPLE__)
 # include <OpenGL/gl.h>
+# include <OpenGL/glext.h>
 #else
 # ifndef APIENTRY
 #  if defined(__CYGWIN__)
@@ -60,6 +62,8 @@
 #  endif
 # endif
 # include <GL/gl.h>
+# define GL_GLEXT_PROTOTYPES
+# include <GL/glext.h>
 #endif
 
 namespace fltk {
@@ -89,6 +93,7 @@ FL_GL_API void gldrawtext(const char*, float x, float y, float z = 0);
 FL_GL_API void gldrawtext(const char*, int n, float x, float y, float z = 0);
 
 FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+
 /*! \} */
 
 }

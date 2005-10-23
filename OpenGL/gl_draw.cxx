@@ -90,7 +90,7 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     int size = last-base+1;
     HDC hdc = GetDC(0);
     HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
-    wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
+    wglUseFontBitmaps(hdc, base, size, current->listbase+base);
     SelectObject(hdc, oldFid);
 #elif defined(__APPLE__)
     current->size = size;
@@ -110,6 +110,10 @@ void fltk::glsetfont(fltk::Font* font, float size) {
 
 #define WCBUFLEN 256
 
+/*! Draw text at the current glRasterPos in the current font selected
+  with fltk::glsetfont(). You can use glRasterPos2f() or similar calls
+  to set the position before calling this.
+*/
 void fltk::gldrawtext(const char* text, int n) {
   char localbuffer[WCBUFLEN];
   char* buffer = localbuffer;
@@ -202,19 +206,32 @@ void fltk::glsetcolor(Color i) {
       glIndexi(i ? i : BLACK);
     }
     return;
-  }   
+  }
 #endif
 #endif
   uchar r,g,b; split_color(i,r,g,b);
   glColor3ub(r,g,b);
 }
-  
+
 void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   if (!ld) ld = w*d;
   glPixelStorei(GL_UNPACK_ROW_LENGTH, ld/d);
   glRasterPos2i(x, y);
   glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const unsigned long*)b);
 }
+
+#ifdef _WIN32
+// Emulate glWindowPos2i on Windows. Unfortunatly this is rather lame
+// and only works if ortho() has already been done.
+void glWindowPos2i(int x, int y) {
+  if (x < 0 || y < 0) {
+    glRasterPos2i(0,0);
+    glBitmap(0,0,0,0,x,y,0);
+  } else {
+    glRasterPos2i(x,y);
+  }
+}
+#endif
 
 #endif
 

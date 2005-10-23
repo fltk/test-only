@@ -124,12 +124,14 @@ void GlWindow::make_current() {
 }
 
 void GlWindow::ortho() {
-// Alpha NT seems to have a broken OpenGL that does not like negative coords:
-#if defined(_M_ALPHA) || USE_QUARTZ
+#if 1
+  // simple version
   glLoadIdentity();
   glViewport(0, 0, w(), h());
   glOrtho(0, w(), 0, h(), -1, 1);
 #else
+  // this makes glRasterPos off the edge much less likely to clip,
+  // but a lot of OpenGL drivers do not like it.
   GLint v[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, v);
   glLoadIdentity();
