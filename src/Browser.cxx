@@ -951,7 +951,8 @@ void Browser::layout() {
   // Now that we got the sizes of everything, scroll to show current item:
   if (scroll_to_item) {
     goto_mark(FOCUS);
-    make_item_visible(NOSCROLL);
+    if (!item()) yposition(0);
+    else make_item_visible(NOSCROLL);
   }
 
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
