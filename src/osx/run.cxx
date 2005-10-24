@@ -300,15 +300,12 @@ OSStatus HandleMenu( HICommand *cmd )
   return ret;
 }
 
-#define QuitLoop() //QuitApplicationEventLoop()
-
 /**
- * We can make every event pass through this function
- * - mouse events need to be manipulated to use a mouse focus window
- * - keyboard, mouse and some window events need to quit the Apple Event Loop
- *   so FLTK can continue its own management
- */
-//+++ verify port to FLTK2
+ It appears that every event passes through this function. This can
+ probably be rewritten so all the "Handle" functions are instead right
+ here in a single case statement, which would match the other platform
+ implementations of fltk much more.
+*/
 static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   OSStatus ret = eventNotHandledErr;
@@ -359,7 +356,6 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   }
   if ( ret == eventNotHandledErr )
     ret = CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
-  QuitLoop();
 
   in_main_thread_ = false;
   fl_unlock_function();
@@ -377,7 +373,6 @@ static inline int fl_wait(double time)
 {
   OSStatus ret;
   static EventTargetRef target = 0;
-//   static EventLoopTimerRef timer = 0;
   if ( !target ) {
     target = GetEventDispatcherTarget();
     EventHandlerUPP dispatchHandler =
@@ -407,9 +402,6 @@ static inline int fl_wait(double time)
     ret = InstallApplicationEventHandler( dispatchHandler,
 					  GetEventTypeCount(appEvents),
 					  appEvents, 0, 0L );
-//     ret = InstallEventLoopTimer( GetMainEventLoop(), 0, 0,
-// 				 NewEventLoopTimerUPP( timerProcCB ), 0,
-// 				 &timer );
   }
 
   got_events = 0;
@@ -449,13 +441,14 @@ static inline int fl_wait(double time)
       }
     }
     ReleaseEvent(event);
+    time = 0.0; // just peek for pending events
   }
   fl_lock_function();
   in_main_thread_ = true;
 
   if ( dataready_tid != 0 ) {
     DEBUGMSG("*** CANCEL THREAD: ");
-    pthread_cancel(dataready_tid);		// cancel first
+    pthread_cancel(dataready_tid);	// cancel first
     write(G_pipe[1], "x", 1);		// then wakeup thread from select
     pthread_join(dataready_tid, NULL);	// wait for thread to finish
     if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
@@ -503,14 +496,13 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
     while (!modal()) {
       CreatedWindow *x = CreatedWindow::first;
       while (x && (x->window->parent()
-		   || x->window->child_of()
+		   // || x->window->child_of()
 		   || !x->window->visible())) x = x->next;
       if (!x || x==px) break;
       px = x;
       x->window->do_callback();
     }
   }
-  QuitLoop();
   return noErr;
 }
 
@@ -532,7 +524,6 @@ static void fix_xfocus(Window* window) {
   }
   xfocus = window;
   fix_focus();
-  QuitLoop();
 }
 
 /* Carbon Window handler
@@ -553,7 +544,7 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top)) {
       resize_from_system = window;
       window->layout_damage( window->layout_damage() | LAYOUT_USER );
-      window->layout();
+      window->layout(); // this is allowed to change the window size!
       r.left = window->x();
       r.top = window->y();
       r.right = r.left+window->w();
@@ -563,15 +554,17 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     break;}
   case kEventWindowDrawContent:
     recursive_expose(CreatedWindow::find( window ));
-    QuitLoop();
     break;
   case kEventWindowBoundsChanged:
-#if 0
+#if 0 // This is not needed, as the BoundsChanging event above did it already:
     {Rect r;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
     window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top);
     resize_from_system = window;}
 #endif
+    // But we do seem to need this, OS/X has the Windows-like bug of
+    // calling the event handler directly without ever returning from
+    // ReceiveNextEvent().
     fltk::flush();
     break;
   case kEventWindowShown:
@@ -630,19 +623,25 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   return ret;
 }
 
-
-/**
- * convert the current mouse chord into the FLTK modifier state
+/*
+ * convert the mouse button to fltk's keysym and state flags
  */
-static void chord_to_e_state( UInt32 chord )
-{
-  static int state[] = 
-  { 
+static void button_to_keysym( EventRef event ) {
+  EventMouseButton btn;
+  GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL, sizeof(EventMouseButton), NULL, &btn );
+  if (btn == 2) btn = 3;
+  else if (btn == 3) btn = 2;
+  e_keysym = btn;
+  static const int state[] = { 
     0, BUTTON1, BUTTON3, BUTTON1|BUTTON3, BUTTON2,
     BUTTON2|BUTTON1, BUTTON2|BUTTON3, BUTTON2|BUTTON1|BUTTON3
   };
+  UInt32 chord;
+  GetEventParameter( event, kEventParamMouseChord,
+		     typeUInt32, NULL, sizeof(UInt32), NULL, &chord );
   e_state = ( e_state & 0xff0000 ) | state[ chord & 0x07 ];
 }
+
 
 EventRef os_event;		// last (mouse) event
 
@@ -652,82 +651,63 @@ EventRef os_event;		// last (mouse) event
 //+++ verify port to FLTK2
 static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
-  static int keysym[] = { 0, 1, 3, 2};
-  static int px, py;
 
   os_event = event;
   Window *window = (Window*)userData;
   Point pos;
-  GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &pos );
-  EventMouseButton btn;
-  GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL, sizeof(EventMouseButton), NULL, &btn );
-  UInt32 clickCount;
-  GetEventParameter( event, kEventParamClickCount, typeUInt32, NULL, sizeof(UInt32), NULL, &clickCount );
-  UInt32 chord;
-  GetEventParameter( event, kEventParamMouseChord, typeUInt32, NULL, sizeof(UInt32), NULL, &chord );
-  WindowRef xid = fltk::xid(window), tempXid;
-  int sendEvent = 0, part;
-  switch ( GetEventKind( event ) )
-  {
+  GetEventParameter( event, kEventParamMouseLocation,
+		     typeQDPoint, NULL, sizeof(Point), NULL, &pos );
+  e_x_root = e_x = pos.h;
+  e_y_root = e_y = pos.v;
+  for (Group* w = window; w; w = w->parent()) {
+    e_x -= w->x();
+    e_y -= w->y();
+  }
+
+  static int px, py;
+
+  switch ( GetEventKind( event ) ) {
+
   case kEventMouseDown:
     fix_xfocus(window);
-    part = FindWindow( pos, &tempXid );
-    if ( part != inContent ) {
-      CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
+    if ( FindWindow( pos, 0 ) != inContent ) {
+      // let the OS handle clicks in the title bar
+      CallNextEventHandler( nextHandler, event );
       break;
     }
-    if ( !IsWindowActive( xid ) )
-      CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
-    // normal handling of mouse-down follows
-    os_capture = xid;
-    sendEvent = PUSH;
+    if ( !IsWindowActive( fltk::xid(window) ) ) {
+      // let the OS handle the activation,
+      // but continue to get a click-through effect
+      CallNextEventHandler( nextHandler, event );
+    }
+    os_capture = fltk::xid(window); // make all mouse events go to this window
     e_is_click = 1; px = pos.h; py = pos.v;
-    e_clicks = clickCount-1;
-    // fall through
+    {UInt32 clickCount;
+    GetEventParameter( event, kEventParamClickCount,
+		       typeUInt32, NULL, sizeof(UInt32), NULL, &clickCount );
+    e_clicks = clickCount-1;}
+    button_to_keysym( event );
+    handle( PUSH, window );
+    break;
+
   case kEventMouseUp:
-    if ( !window ) break;
-    if ( !sendEvent ) {
-      sendEvent = RELEASE; 
-    }
-    e_keysym = keysym[ btn ];
-    // fall through
+    button_to_keysym( event );
+    handle( RELEASE, window );
+    break;
+
   case kEventMouseMoved:
-    if ( !sendEvent ) { 
-      sendEvent = MOVE; chord = 0; 
-    }
-    // fall through
   case kEventMouseDragged:
-    if ( !sendEvent ) {
-      sendEvent = MOVE; // handle will convert into DRAG
-      if (abs(pos.h-px)>5 || abs(pos.v-py)>5) 
-        e_is_click = 0;
-    }
-    chord_to_e_state( chord );
-    e_x_root = pos.h;
-    e_y_root = pos.v;
-#if 0
-    GrafPtr oldPort;
-    GetPort( &oldPort );
-    SetPort( GetWindowPort(xid) ); // \todo replace this! There must be some GlobalToLocal call that has a port as an argument
-    // WAS: we could also use window->x(),y() and do it ourselves
-    SetOrigin(0, 0);
-    GlobalToLocal( &pos );
-    SetPort( oldPort );
-#else
-    for (Group* w = window; w; w = w->parent()) {
-      pos.h -= w->x();
-      pos.v -= w->y();
-    }
-#endif
-    e_x = pos.h;
-    e_y = pos.v;
-    handle( sendEvent, window );
+    if (abs(pos.h-px)>5 || abs(pos.v-py)>5) e_is_click = 0;
+    handle( MOVE, window ); // handle will convert into DRAG
     break;
   }
 
   return noErr;
 }
 
+// WAS: I never see the "right" bits turn on. It always turns on
+// only the normal ones. Possibly a different call is needed to
+// get the right-hand bits.
 
 /**
  * convert the current mouse chord into the FLTK modifier state
@@ -753,12 +733,12 @@ static unsigned mods_to_e_keysym( UInt32 mods )
 {
   if ( mods & cmdKey ) return LeftMetaKey;
   else if ( mods & kEventKeyModifierNumLockMask ) return NumLockKey;
-  else if ( mods & optionKey ) return LeftAltKey;
   else if ( mods & rightOptionKey ) return RightAltKey;
-  else if ( mods & controlKey ) return LeftCtrlKey;
+  else if ( mods & optionKey ) return LeftAltKey;
   else if ( mods & rightControlKey ) return RightCtrlKey;
-  else if ( mods & shiftKey ) return LeftShiftKey;
+  else if ( mods & controlKey ) return LeftCtrlKey;
   else if ( mods & rightShiftKey ) return RightShiftKey;
+  else if ( mods & shiftKey ) return LeftShiftKey;
   else if ( mods & alphaLock ) return CapsLockKey;
   else return 0;
 }
@@ -785,9 +765,9 @@ static unsigned short macKeyLookUp[128] =
     Keypad6, Keypad7, 0, Keypad8, Keypad9, 0, 0, 0,
 
     F5Key, F6Key, F7Key, F3Key, F8Key, F9Key, 0, F11Key,
-    0, PrintKey, 0, ScrollLockKey, 0, F10Key, fltk::MenuKey, F12Key,
+    0, F0Key+13, F0Key+16, F0Key+14, 0, F10Key, fltk::MenuKey, F12Key,
 
-    0, PauseKey, InsertKey, HomeKey, PageUpKey, DeleteKey, F4Key, EndKey,
+    0, F0Key+15, HelpKey, HomeKey, PageUpKey, DeleteKey, F4Key, EndKey,
     F2Key, PageDownKey, F1Key, LeftKey, RightKey, DownKey, UpKey, 0,
 };
 
@@ -851,18 +831,15 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     UInt32 mods;
     static UInt32 prevMods = 0;
     GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &mods );
-    UInt32 tMods = prevMods ^ mods;
-    if ( tMods ) {
-      sym = mods_to_e_keysym( tMods );
-      if (sym) {
-	e_keysym = sym;
-        sendEvent = ( prevMods<mods ) ? KEY : KEYUP;
-	e_length = 0;
-	buffer[0] = 0;
-      }
-      prevMods = mods;
-    }
     mods_to_e_state( mods );
+    sym = mods_to_e_keysym( prevMods ^ mods );
+    if (sym) {
+      e_keysym = sym;
+      sendEvent = ( prevMods<mods ) ? KEY : KEYUP;
+      e_length = 0;
+      buffer[0] = 0;
+    }
+    prevMods = mods;
     break; }
   }
   if (sendEvent && handle(sendEvent, xfocus)) return noErr;
@@ -1038,7 +1015,6 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    QuitLoop();
     return noErr;
   case kDragTrackingInWindow:
     GetDragMouse( dragRef, &mp, 0 );
@@ -1055,7 +1031,6 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
 #endif
-    QuitLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
@@ -1066,7 +1041,6 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
       handle( DND_LEAVE, dnd_target_window );
       dnd_target_window = 0;
     }
-    QuitLoop();
     return noErr;
   }
   return noErr;
@@ -1149,7 +1123,6 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   free(buffer);
   
   dnd_target_window = 0L;
-  QuitLoop();
   return noErr;
 }
 
@@ -1310,7 +1283,6 @@ void Window::create()
     x->wait_for_expose = false;//true;
     x->next = CreatedWindow::first;
     CreatedWindow::first = x;
-    //this->flush();
 
     { // Install Carbon Event handlers 
       OSStatus ret;
@@ -1432,20 +1404,7 @@ void Widget::make_current() const {
   const Window* window = (const Window*)widget;
   release_quartz_context();
   Window::drawing_window_ = window;
-#if 0
-  // Find the root window and our position in it:
-  int X = 0;
-  int Y = 0;
-  const Window* root = window;
-  for (const Widget* o = window; ; o = o->parent()) {
-    if (!o->parent()) {root = (Window*)o; break;}
-    X += o->x();
-    Y += o->y();
-  }
-  quartz_window = xid(root);
-#else
   quartz_window = xid(window);
-#endif
   SetPort(GetWindowPort(quartz_window));
 //SetOrigin(-X, -Y);
   // We force a clip region to handle child windows. To speed things up
@@ -1457,30 +1416,6 @@ void Widget::make_current() const {
     if (i->subRegion) DisposeRgn(i->subRegion);
     i->subRegion = NewRgn();
     SetRectRgn(i->subRegion, 0, 0, window->w(), window->h());
-#if 0
-    for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
-      RgnHandle r = NewRgn();
-      Window* cw = cx->window;
-      int x = cw->x();
-      int y = cw->y();
-      for (Widget* p = cw->parent(); p != this; p = p->parent()) {
-	x += p->x();
-	y += p->y();
-      }
-      SetRectRgn(r, x, y, x+cw->w(), y+cw->h());
-      DiffRgn(i->subRegion, r, i->subRegion);
-      DisposeRgn(r);
-    }
-    for (CreatedWindow* cx = i->brother; cx; cx = cx->brother) {
-      RgnHandle r = NewRgn();
-      Window* cw = cx->window;
-      int x = X+cw->x()-window->x();
-      int y = Y+cw->y()-window->y();
-      SetRectRgn(r, x, y, x+cw->w(), y+cw->h());
-      DiffRgn(i->subRegion, r, i->subRegion);
-      DisposeRgn(r);
-    }
-#endif
   }
   SetPortClipRegion( GetWindowPort(quartz_window), i->subRegion );
   QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
@@ -1554,6 +1489,7 @@ void Window::flush() {
     set_damage(DAMAGE_EXPOSE); draw();
     clip_region(0);
   }
+#if 0
   //DrawGrowIcon(i->xid);
   if (border() && (minw != maxw || minh != maxh)) {
     setcolor(color());
@@ -1567,6 +1503,7 @@ void Window::flush() {
     drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
     drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
   }
+#endif
   CGContextFlush(i->gc);
 }
 

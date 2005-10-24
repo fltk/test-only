@@ -275,7 +275,7 @@ float fltk::getwidth(const char* text, int n) {
 
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
-  HGDIOBJ oldfont = SelectObject(dc, current->font);
+  SelectObject(dc, current->font);
   wchar_t localbuffer[WCBUFLEN];
   wchar_t* buffer = localbuffer;
   wchar_t* mallocbuffer = 0;
@@ -286,8 +286,6 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   }
   TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), buffer, count);
   delete[] mallocbuffer;
-  // Why are we setting the font back every time?
-  SelectObject(dc, oldfont);
 }
 
 //
