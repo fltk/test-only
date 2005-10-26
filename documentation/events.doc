@@ -1,5 +1,5 @@
 //
-// "$Id: events.doc,v 1.2 2004/11/21 07:44:57 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -318,14 +318,9 @@ using namespace fltk;
 */
 
 /*! \fn int  fltk::event_clicks()
-  Returns the number of times the last mouse button
-  was pushed while fltk::event_is_click() was true.
-  For a normal fltk::PUSH this is zero, if the user "double-clicks"
-  this is 1, and it is N-1 for each subsequent click.
-
-  This is also used to indicate if fltk::KEY events are caused by
-  the key repeating. Zero means the user pushed the key down, non-zero
-  means it is being held down and is repeating.
+  Returns the number of extra times the mouse was clicked.  For a
+  normal fltk::PUSH this is zero, if the user "double-clicks" this is
+  1, and it is N-1 for each subsequent click.
 */
 
 /*! \fn void fltk::event_clicks(int i)
@@ -334,21 +329,34 @@ using namespace fltk;
 */
 
 /*! \fn bool fltk::event_is_click()
-  This is true if the time and mouse movement since the last
-  fltk::PUSH or fltk::KEY is short enough that the user is intending
-  to "click". After enough time or after enough mouse movement this
-  turns off.
+  This is true for a short time after the mouse key is pressed.
+  You test this on the RELEASE events to decide if the user
+  "clicked" or "held" the mouse. It is very useful to do different
+  actions depending on this.
 
-  The main use of this is to decide whether to increment
-  fltk::event_clicks() when the user clicks the mouse. But you can
-  also test this on a fltk::RELEASE or fltk::KEYUP event to decide if
-  the user clicked quickly, versus holding the mouse or key down.
+  This turns off after a timeout (implemented on X only, currently),
+  when the mouse is moved more than 5 pixels, and when the user
+  presses other mouse or keyboard buttons while the mouse is down.
+
+  On X this is used to decide if a click is a double-click, it is
+  if this is still on during the next mouse press. On Windows and
+  OS/X the system's indication is used for double-click.
 */
 
 /*! \fn void fltk::event_is_click(bool)
   You can set this to zero with fltk::event_is_click(0), this can be
   used to prevent the next mouse click from being considered a double
   click. Only false works, attempts to set this true are ignored.
+*/
+
+/*! \fn unsigned fltk::event_key_repeated()
+  True if the most recent KEY event was caused by a repeating
+  held-down key on the keyboard. The value increments for each repeat.
+
+  Note: older versions of fltk reused event_clicks() for this. This
+  made it impossible to design a GUI where the user holds down
+  keyboard keys while clicking the mouse, as well as being pretty
+  hard to understand. So we had to change it for fltk 2.
 */
 
 /*! \fn unsigned fltk::event_state()
