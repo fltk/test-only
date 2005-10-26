@@ -681,17 +681,19 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
       CallNextEventHandler( nextHandler, event );
     }
     os_capture = fltk::xid(window); // make all mouse events go to this window
-    e_is_click = 1; px = pos.h; py = pos.v;
+    px = pos.h; py = pos.v;
     {UInt32 clickCount;
     GetEventParameter( event, kEventParamClickCount,
 		       typeUInt32, NULL, sizeof(UInt32), NULL, &clickCount );
     e_clicks = clickCount-1;}
     button_to_keysym( event );
+    e_is_click = e_keysym;
     handle( PUSH, window );
     break;
 
   case kEventMouseUp:
     button_to_keysym( event );
+    if (e_is_click != e_keysym) e_is_click = 0;
     handle( RELEASE, window );
     break;
 
@@ -793,15 +795,18 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   switch ( GetEventKind( event ) )
   {
   case kEventRawKeyDown:
-    e_clicks = 0;
     sendEvent = KEY;
+    e_key_repeated = 0;
+    e_is_click = keyCode;
     goto GET_KEYSYM;
   case kEventRawKeyRepeat:
     sendEvent = KEY;
-    e_clicks++;
+    e_key_repeated++;
+    e_is_click = 0;
     goto GET_KEYSYM;
   case kEventRawKeyUp:
     sendEvent = KEYUP;
+    if (e_is_click != keyCode) e_is_click = 0;
   GET_KEYSYM:
     sym = macKeyLookUp[ keyCode & 0x7f ];
     if (!sym) sym = keyCode|0x8000;
@@ -840,6 +845,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
       buffer[0] = 0;
     }
     prevMods = mods;
+    e_is_click = 0;
     break; }
   }
   if (sendEvent && handle(sendEvent, xfocus)) return noErr;

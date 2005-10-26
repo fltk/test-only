@@ -353,7 +353,7 @@ int Window::handle(int event) {
     // See if the user hit Escape (or whatever the shortcut is)
     // and close the window:
     if (test_shortcut()) {
-      if (!event_clicks())// make repeating key not close everything
+      if (!event_key_repeated())// make repeating key not close everything
 	do_callback();
       return 1;
     }

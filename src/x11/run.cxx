@@ -1426,7 +1426,7 @@ bool fltk::handle()
     unsigned keycode = xevent.xkey.keycode;
     // Make repeating keys increment the click counter:
     if (fl_key_vector[keycode/8]&(1<<(keycode%8))) {
-      e_clicks++;
+      e_key_repeated++;
       e_is_click = 0;
     } else {
       e_clicks = 0;

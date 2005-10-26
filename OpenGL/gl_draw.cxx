@@ -220,9 +220,13 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
   glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const unsigned long*)b);
 }
 
-#ifdef _WIN32
-// Emulate glWindowPos2i on Windows. Unfortunatly this is rather lame
-// and only works if ortho() has already been done.
+#ifndef GL_VERSION_1_4
+/*!
+  Emulate glWindowPos2i on Windows. This emulation is extremely simple
+  and only produces the correct result if ortho() has been called (i.e.
+  the current transform is such that 0,0 is the lower-left of the
+  window and each unit is the size of a pixel).
+*/
 void glWindowPos2i(int x, int y) {
   if (x < 0 || y < 0) {
     glRasterPos2i(0,0);

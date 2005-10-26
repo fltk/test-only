@@ -216,6 +216,7 @@ extern FL_API unsigned e_is_click;
 extern FL_API unsigned e_keysym;
 extern FL_API unsigned e_length;
 extern FL_API const char* e_text;
+extern FL_API unsigned e_key_repeated;
 extern FL_API float e_pressure;
 extern FL_API float e_x_tilt;
 extern FL_API float e_y_tilt;
@@ -252,10 +253,11 @@ inline unsigned event_button()		{return e_keysym;}
 FL_API bool event_key_state(unsigned);
 inline const char* event_text() 	{return e_text;}
 inline unsigned event_length() 		{return e_length;}
-inline float event_pressure() 	{return e_pressure;}
-inline float event_x_tilt()     {return e_x_tilt;}
-inline float event_y_tilt()     {return e_y_tilt;}
-inline int  event_device()      {return e_device;}
+inline unsigned event_key_repeated()	{return e_key_repeated;}
+inline float event_pressure()	 	{return e_pressure;}
+inline float event_x_tilt()     	{return e_x_tilt;}
+inline float event_y_tilt()     	{return e_y_tilt;}
+inline int  event_device()      	{return e_device;}
 
 // tests on current event:
 FL_API bool event_inside(const Rectangle&);

@@ -220,6 +220,7 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
   double A = minimum();
   double B = maximum();
   if (A > B) {A = B; B = minimum();}
+  //if (!finite(A) || !finite(B)) return;
 
   if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
   // Figure out approximate size of min_spacing at zero:

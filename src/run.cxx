@@ -102,7 +102,8 @@ int	  fltk::e_type,
 unsigned  fltk::e_state,
 	  fltk::e_keysym,
 	  fltk::e_is_click,
-	  fltk::e_length;
+	  fltk::e_length,
+	  fltk::e_key_repeated;
 float     fltk::e_pressure,
           fltk::e_x_tilt,
           fltk::e_y_tilt;

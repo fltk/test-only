@@ -1252,13 +1252,12 @@ static bool mouse_event(Window *window, int what, int button,
   switch (what) {
   case 1: // double-click
     // This is not detecting triple-clicks, does anybody know how to fix?
-    if (e_is_click) {e_clicks++; goto J1;}
+    if (e_is_click==button) {e_clicks++; goto J1;}
   case 0: // single-click
     e_clicks = 0;
   J1:
     if (!grab_) SetCapture(xid(window));
-    e_keysym = button;
-    e_is_click = 1;
+    e_keysym = e_is_click = button;
     px = pmx = e_x_root; py = pmy = e_y_root;
     if (handle(PUSH, window)) return true;
     // If modal is on and 0 is returned, we should turn off modal and
@@ -1548,20 +1547,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // Alt gets reported for the Alt-GR switch on foreign keyboards,
     // so we ignore it for WM_CHAR messages:
     e_state = (e_state & 0xff000000) | shiftflags(uMsg==WM_CHAR);
-    static unsigned lastkeysym;
     if (lParam & (1<<31)) { // key up events.
-      e_is_click = (e_keysym == lastkeysym);
-      lastkeysym = 0;
+      if (e_is_click != e_keysym) e_is_click = 0;
       if (handle(KEYUP, window)) return 0;
       break;
     }
     // if same as last key, increment repeat count:
     if (lParam & (1<<30)) {
-      e_clicks++;
+      e_key_repeated++;
+      e_is_click = 0;
     } else {
-      e_clicks = 0;
+      e_key_repeated = 0;
+      e_is_click = e_keysym;
     }
-    lastkeysym = e_keysym;
 
     // translate to text:
     static char buffer[31]; // must be big enough for fltk::compose() output

@@ -98,7 +98,7 @@ J1:
       }
     }
     if (event_key()==LeftAltKey || event_key()==RightAltKey) {
-      if (style()->hide_underscore() && !event_clicks()) redraw();
+      if (style()->hide_underscore() && !event_key_repeated()) redraw();
     }
     return 0;
   case KEYUP:
@@ -108,7 +108,7 @@ J1:
     if (event_key() != LeftAltKey && event_key() != RightAltKey) break;
     if (style()->hide_underscore()) redraw();
     if (shortcut() != LeftAltKey && shortcut() != RightAltKey) break;
-    // checking for event_clicks insures that the keyup matches the
+    // checking for event_is_click insures that the keyup matches the
     // keydown that preceeded it, so Alt was pressed & released without
     // any intermediate values.  On X it is false if Alt is held down
     // for a long time, too:

@@ -437,7 +437,7 @@ static Widget* shortcut_search(Group* g) {
   multiple copies of the item in, where only the first is visible.
 */
 int Menu::handle_shortcut() {
-  //if (event_clicks()) return 0; // ignore repeating keys
+  //if (event_key_repeated()) return 0; // ignore repeating keys
   int children = this->children();
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
