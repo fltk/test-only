@@ -36,9 +36,9 @@
 #include "Color.h"
 #include "Flags.h"
 
+#define GL_GLEXT_PROTOTYPES 1
 #ifdef _WIN32
 # include <windows.h>
-# include <GL/gl.h>
 # undef OPAQUE
 # undef DELETE
 # undef ERROR
@@ -49,21 +49,15 @@
 # undef max
 # undef min
 # undef near
-FL_GL_API void glWindowPos2i(int x, int y);
+# include <GL/gl.h>
 #elif defined(__APPLE__)
 # include <OpenGL/gl.h>
-# include <OpenGL/glext.h>
 #else
-# ifndef APIENTRY
-#  if defined(__CYGWIN__)
-#   define APIENTRY __attribute__ ((__stdcall__))
-#  else
-#   define APIENTRY
-#  endif
-# endif
 # include <GL/gl.h>
-# define GL_GLEXT_PROTOTYPES
-# include <GL/glext.h>
+#endif
+
+#ifndef GL_VERSION_1_4
+FL_GL_API void glWindowPos2i(int x, int y);
 #endif
 
 namespace fltk {
