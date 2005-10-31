@@ -1,5 +1,5 @@
 //
-// "$Id: $"
+// "$Id: list_fonts.cxx 1043 2005-02-09 17:44:15Z spitzak $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //

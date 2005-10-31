@@ -166,9 +166,12 @@ FL_API void drawtext(const char*, int length, float x, float y);
 
 // the label text formatter:
 FL_API void measure(const char*, int& w, int& h, Flags = 0);
-FL_API void measure(const char*, int length, int& w, int& h, Flags);
+FL_API void measure(float (*getwidth)(const char*, int),const char*, float& w, float& h, Flags = 0);
 FL_API void drawtext(const char*, const Rectangle&, Flags);
-FL_API void drawtext(const char*, int length, const Rectangle&, Flags);
+FL_API void drawtext(void (*textfunction)(const char*,int,float,float),
+		     float (*getwidth)(const char*, int),
+		     const char* str, const Rectangle& r, Flags flags);
+
 // set where \t characters go in label text formatter:
 extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}

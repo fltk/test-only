@@ -129,11 +129,23 @@
 # ifndef __USE_GNU
 #  define __USE_GNU // makes the RECURSIVE stuff appear on Linux
 # endif
-# include <pthread.h>
+#include <fltk/Threads.h>
+
 # if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
-namespace fltk {pthread_mutexattr_t Mutex_attrib={PTHREAD_MUTEX_RECURSIVE_NP};}
+static pthread_mutexattr_t recursive_attrib={PTHREAD_MUTEX_RECURSIVE_NP};
+fltk::RecursiveMutex::RecursiveMutex() : Mutex(&recursive_attrib) {}
 # elif defined(PTHREAD_MUTEX_RECURSIVE)
-namespace fltk {pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE};}
+static pthread_mutexattr_t* recursive_attrib() {
+  static pthread_mutexattr_t a;
+  static bool beenhere;
+  if (!beenhere) {
+    pthread_mutexattr_init(&a);
+    pthread_mutexattr_settype(&a,PTHREAD_MUTEX_RECURSIVE);
+    beenhere=true;
+  }
+  return &a;
+}
+fltk::RecursiveMutex::RecursiveMutex() : Mutex(recursive_attrib()) {}
 # endif
 #endif
 
@@ -150,7 +162,6 @@ namespace fltk {pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE};}
 
 // Use our RecursiveLock for lock/unlock, and a pipe for awake():
 
-#include <fltk/Threads.h>
 #include <unistd.h>
 #include <fcntl.h>
 

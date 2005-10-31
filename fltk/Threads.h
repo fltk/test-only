@@ -78,11 +78,9 @@ public:
 // Linux supports recursive locks, use them directly, with some cheating:
 #if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) || defined(PTHREAD_MUTEX_RECURSIVE)
 
-extern pthread_mutexattr_t Mutex_attrib;
-
 class RecursiveMutex : public Mutex {
 public:
-  RecursiveMutex() : Mutex(&Mutex_attrib) {}
+  RecursiveMutex();
 };
 
 #else // standard pthread mutexes need a bit of work to be recursive:

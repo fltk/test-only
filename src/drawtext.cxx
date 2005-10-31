@@ -414,7 +414,8 @@ static inline void setsa(int& spacing, int& ascent) {
 static void wrap(
   const char* start,
   const char* end,
-  float ix, float y, float w
+  float ix, float y, float w,
+  float (*getwidth)(const char*, int) // lets you change the width function
   )
 {
   float x = ix; // accumulated position if we don't wrap
@@ -543,7 +544,8 @@ static void wrap(
 static float split(
     const char* str,
     int W, int /*H*/,
-    Flags flags
+    Flags flags,
+    float (*getwidth)(const char*, int) // lets you change the width function
     )
 {
   normal_font = getfont();
@@ -571,7 +573,7 @@ static float split(
       p++;
       continue;
     }
-    wrap(str, p, x, y, w);
+    wrap(str, p, x, y, w, getwidth);
     if (!*p) {
       return max_y;
     } else if (*p == '\n') {
@@ -612,9 +614,36 @@ void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
 {
   if (!str || !*str) return; // speeds up very common widgets
   Rectangle r(r1); transform(r);
+  push_matrix();
+  load_identity();
+  drawtext(drawtext_transformed, getwidth, str, r, flags);
+  pop_matrix();
+  setfont(normal_font, normal_size);
+  setcolor(normal_color);
+}
+
+/*!
+  Provides access to \e some of the @-string formatting for another
+  graphics API. Most symbols will not work, but you will be able to
+  access the line break and justifications, and commands that change
+  the font, size, and color. I use this to format labels for that
+  are drawn in OpenGL.
+
+  \a textfunction is called to draw all text.  It's arguments are
+  a pointer to a UTF-8 string, the length in bytes of that string, and
+  two float numbers for the x and y to draw the text at.
+
+  \a textfunction may use getfont(), getsize(), and getcolor() to
+  find out the settings and recreate them on the output device.
+*/
+
+void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
+		    float (*getwidth)(const char*, int),
+		    const char* str, const Rectangle& r, Flags flags)
+{
   bgboxcolor = 0;
   normal_color = getcolor();
-  int h = int(split(str, r.w(), r.h(), flags)+.5);
+  int h = int(split(str, r.w(), r.h(), flags, getwidth)+.5);
   int dy;
   if (flags & ALIGN_BOTTOM) {
     dy = r.b()-h;
@@ -625,8 +654,6 @@ void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
     dy = r.y()+((r.h()-h)>>1);
   }
   setfont(normal_font, normal_size);
-  push_matrix();
-  load_identity();
   if (bgboxcolor && !drawflags(INACTIVE)) {
     setcolor(bgboxcolor);
     int w = int(max_x+.5);
@@ -656,7 +683,7 @@ void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
 	Symbol::text(s.start);
 	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)));
       } else {
-	drawtext_transformed(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
+	textfunction(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
       }
     }
     pop_clip();
@@ -667,14 +694,11 @@ void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
 	Symbol::text(s.start);
 	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)));
       } else {
-	drawtext_transformed(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
+	textfunction(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
       }
     }
   }
   Symbol::text("");
-  pop_matrix();
-  setfont(normal_font, normal_size);
-  setcolor(normal_color);
 }
 
 /**
@@ -687,8 +711,20 @@ void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
 */
 void fltk::measure(const char* str, int& w, int& h, Flags flags) {
   if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
-  h = int(split(str, w, h, flags)+.5);
+  h = int(split(str, w, h, flags, getwidth)+.5);
   w = int(max_x+.5);
+  setfont(normal_font, normal_size);
+}
+
+/**
+  This lets you pass your own measurement function to measure the widths
+  of printed text. Also returns floating point sizes.
+*/
+void fltk::measure(float (*getwidth)(const char*, int),
+		   const char* str, float& w, float& h, Flags flags)
+{
+  h = split(str, w, h, flags, getwidth);
+  w = max_x;
   setfont(normal_font, normal_size);
 }
 
