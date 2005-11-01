@@ -39,8 +39,11 @@
 #include <fltk/TextDisplay.h>
 #include <fltk/Window.h>
 #include <fltk/layout.h>
+#include <fltk/utf.h>
 
 using namespace fltk;
+
+extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 
 #undef min
 #undef max
@@ -798,11 +801,22 @@ int TextDisplay::position_to_xy( int pos, int* X, int* Y) {
     xStep = text_area.x() - mHorizOffset;
     outIndex = 0;
     for ( charIndex = 0; charIndex < lineLen && charIndex < pos - lineStartPos; charIndex++) {
-	charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
-						mBuffer->tab_distance(), mBuffer->null_substitution_character());
+	const char *currStr = lineStr+charIndex;
+	const char *nextStr = utf8fwd(currStr+1, currStr, lineStr+lineLen);
+	bool utf8 = false;
+	if ((nextStr - currStr) <= 1)
+	  charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
+		mBuffer->tab_distance(), mBuffer->null_substitution_character());
+	else {
+	  charLen = (nextStr - currStr);
+	  memcpy(expandedChar, currStr, charLen);
+	  expandedChar[charLen] = 0;
+	  utf8 = true;
+	}
 	charStyle = position_style( lineStartPos, lineLen, charIndex,
 				    outIndex);
 	xStep += string_width( expandedChar, charLen, charStyle);
+	if (utf8) charIndex += (charLen-1);
 	outIndex += charLen;
     }
     *X = xStep;
@@ -948,14 +962,34 @@ void TextDisplay::show_insert_position() {
 int TextDisplay::move_right() {
     if (mCursorPos >= mBuffer->length())
 	return 0;
-    insert_position( mCursorPos + 1);
+	int lineStartPos, visLineNum;
+    if (position_to_line( mCursorPos, &visLineNum))
+	lineStartPos = mLineStarts[ visLineNum ];
+    else {
+	lineStartPos = buffer()->line_start( mCursorPos);
+    }
+	char *line = buffer()->line_text(mCursorPos);
+	const char *curr = line+mCursorPos-lineStartPos;
+    const char *next = utf8fwd(curr+1, curr, curr+8);
+	free(line);
+    insert_position( mCursorPos + (next-curr));
     return 1;
 }
 
 int TextDisplay::move_left() {
     if (mCursorPos <= 0)
 	return 0;
-    insert_position( mCursorPos - 1);
+	int lineStartPos, visLineNum;
+    if (position_to_line( mCursorPos, &visLineNum))
+	lineStartPos = mLineStarts[ visLineNum ];
+    else {
+	lineStartPos = buffer()->line_start( mCursorPos);
+    }
+    char *line = buffer()->line_text(mCursorPos);
+	const char *curr = line+mCursorPos-lineStartPos;
+    const char *prev = utf8back(curr-1, line, curr+8);
+	free(line);
+    insert_position( mCursorPos + (prev-curr));
     return 1;
 }
 
@@ -986,6 +1020,12 @@ int TextDisplay::move_up() {
     if (mContinuousWrap)
 	newPos = min(newPos, line_end(prevLineStartPos, true));
 
+    char *line = buffer()->line_text(mCursorPos);
+	const char *curr = line+mCursorPos-lineStartPos;
+    const char *next = utf8fwd(curr+1, curr, line+8);
+	free(line);
+	if ((next-line) > 1) newPos += (next-curr);
+
     /* move the cursor */
     insert_position( newPos);
 
@@ -1011,6 +1051,12 @@ int TextDisplay::move_down() {
     newPos = mBuffer->skip_displayed_characters( nextLineStartPos, column);
     if (mContinuousWrap)
 	newPos = min(newPos, line_end(nextLineStartPos, true));
+
+    char *line = buffer()->line_text(mCursorPos);
+	const char *curr = line+mCursorPos-lineStartPos;
+    const char *next = utf8fwd(curr+1, curr, line+8);
+	free(line);
+	if ((next-line) > 1) newPos += (next-curr);
 
     insert_position( newPos);
     mCursorPreferredCol = column;
@@ -1492,9 +1538,18 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     X = text_area.x() - mHorizOffset;
     outIndex = 0;
     for ( charIndex = 0; ; charIndex++) {
-	charLen = charIndex >= lineLen ? 1 :
-	    TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
-					  expandedChar, buf->tab_distance(), buf->null_substitution_character());
+	const char *currStr = lineStr + charIndex;
+	const char *nextStr = lineStr ? utf8fwd(currStr+1, currStr, lineStr+lineLen) : lineStr+1;
+	bool utf8 = false;
+	if ((nextStr - currStr) <= 1)
+		charLen = charIndex >= lineLen ? 1 :
+		TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
+						expandedChar, buf->tab_distance(), buf->null_substitution_character());
+	else {
+		charLen = (nextStr - currStr);
+		memcpy(expandedChar, currStr, charLen);
+		expandedChar[charLen] = 0;
+	}
 	style = position_style( lineStartPos, lineLen, charIndex,
 				outIndex + dispIndexOffset);
 	charWidth = charIndex >= lineLen ? stdCharWidth :
@@ -1506,6 +1561,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 	    break;
 	}
 	X += charWidth;
+	if (utf8) charIndex += (charLen-1);
 	outIndex += charLen;
     }
 
@@ -1520,9 +1576,19 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     outIndex = outStartIndex;
     X = startX;
     for ( charIndex = startIndex; charIndex < rightCharIndex; charIndex++) {
-	charLen = charIndex >= lineLen ? 1 :
-	    TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
-					  buf->tab_distance(), buf->null_substitution_character());
+	const char *currStr = lineStr + charIndex;
+	const char *nextStr = lineStr ? utf8fwd(currStr+1, currStr, lineStr+rightCharIndex) : lineStr+1;
+	bool utf8 = false;
+	if ((nextStr - currStr) <= 1)
+		charLen = charIndex >= lineLen ? 1 :
+		TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
+					buf->tab_distance(), buf->null_substitution_character());
+	else {
+		charLen = (nextStr - currStr);
+		memcpy(expandedChar, currStr, charLen);
+		expandedChar[charLen] = 0;
+		utf8 = true;
+	}
 	charStyle = position_style( lineStartPos, lineLen, charIndex,
 				    outIndex + dispIndexOffset);
 	for ( i = 0; i < charLen; i++) {
@@ -1535,17 +1601,27 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 		sX = X;
 		style = charStyle;
 	    }
-	    if (charIndex < lineLen) {
-		*outPtr = expandedChar[ i ];
-		charWidth = string_width( &expandedChar[ i ], 1, charStyle);
-	    } else
-		charWidth = stdCharWidth;
-	    outPtr++;
-	    X += charWidth;
-	    outIndex++;
+		if (!utf8) {
+			if (charIndex < lineLen) {
+			*outPtr = expandedChar[ i ];
+			charWidth = string_width( &expandedChar[ i ], 1, charStyle);
+			} else
+			charWidth = stdCharWidth;
+			outPtr++;
+			X += charWidth;
+			outIndex++;
+		} else {
+			memcpy(outPtr, expandedChar, charLen);
+			charWidth = string_width( expandedChar, charLen, charStyle);
+			outPtr += charLen;
+			X += charWidth;
+			outIndex += charLen;
+			i += (charLen - 1);
+		}
 	}
 	if (outPtr - outStr + TEXT_MAX_EXP_CHAR_LEN >= MAX_DISP_LINE_LEN || X >= rightClip)
 	    break;
+	if (utf8) charIndex += (charLen-1);
     }
     draw_string( style|BG_ONLY_MASK, sX, Y, X, outStr, outPtr - outStr);
 
@@ -1554,9 +1630,20 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     outIndex = outStartIndex;
     X = startX;
     for ( charIndex = startIndex; charIndex < rightCharIndex; charIndex++) {
-	charLen = charIndex >= lineLen ? 1 :
-	    TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
-					  buf->tab_distance(), buf->null_substitution_character());
+	if (lineStr == NULL) break;
+	const char *currStr = lineStr+charIndex;
+	const char *nextStr = lineStr ? utf8fwd(currStr+1, currStr, lineStr+lineLen) : lineStr+1;
+	bool utf8 = false;
+	if ((nextStr - currStr) <= 1)
+		charLen = charIndex >= lineLen ? 1 :
+		TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
+					buf->tab_distance(), buf->null_substitution_character());
+	else {
+		charLen = (nextStr - currStr);
+		memcpy(expandedChar, currStr, charLen);
+		expandedChar[charLen] = 0;
+		utf8 = true;
+	}
 	charStyle = position_style( lineStartPos, lineLen, charIndex,
 				    outIndex + dispIndexOffset);
 	for ( i = 0; i < charLen; i++) {
@@ -1569,17 +1656,27 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 		startX = X;
 		style = charStyle;
 	    }
-	    if (charIndex < lineLen) {
-		*outPtr = expandedChar[ i ];
-		charWidth = string_width( &expandedChar[ i ], 1, charStyle);
-	    } else
-		charWidth = stdCharWidth;
-	    outPtr++;
-	    X += charWidth;
-	    outIndex++;
+	    if (!utf8) {
+		if (charIndex < lineLen) {
+		    *outPtr = expandedChar[ i ];
+		    charWidth = string_width( &expandedChar[ i ], 1, charStyle);
+		} else
+		    charWidth = stdCharWidth;
+		outPtr++;
+		X += charWidth;
+		outIndex++;
+	    } else {
+			memcpy(outPtr, expandedChar, charLen);
+			charWidth = string_width( expandedChar, charLen, charStyle);
+			outPtr += charLen;
+			X += charWidth;
+			outIndex += charLen;
+			i += (charLen - 1);
+	    }
 	}
 	if (outPtr - outStr + TEXT_MAX_EXP_CHAR_LEN >= MAX_DISP_LINE_LEN || X >= rightClip)
 	    break;
+	if (utf8) charIndex += (charLen-1);
     }
 
     /* Draw the remaining style segment */
@@ -1795,6 +1892,13 @@ void TextDisplay::draw_cursor( int X, int Y) {
     for ( int k = 0; k < nSegs; k++) {
 	drawline( segs[ k ].x1, segs[ k ].y1, segs[ k ].x2, segs[ k ].y2);
     }
+  if (focused()) {
+    int spot_x, spot_y;
+    if (position_to_xy( mCursorPos, &spot_x, &spot_y)) {
+      transform(spot_x, spot_y);
+      fl_set_spot(textfont(), this, spot_x, spot_y);
+    }
+  }
 }
 
 /*
@@ -1905,8 +2009,18 @@ int TextDisplay::xy_to_position( int X, int Y, int posType) {
     xStep = text_area.x() - mHorizOffset;
     outIndex = 0;
     for ( charIndex = 0; charIndex < lineLen; charIndex++) {
-	charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
+	const char *currStr = lineStr+charIndex;
+	const char *nextStr = utf8fwd(currStr+1, currStr, lineStr+lineLen);
+	bool utf8 = false;
+	if ((nextStr - currStr) <= 1)
+		charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
 						mBuffer->tab_distance(), mBuffer->null_substitution_character());
+	else {
+		charLen = (nextStr - currStr);
+		memcpy(expandedChar, currStr, charLen);
+		expandedChar[charLen] = 0;
+		utf8 = true;
+	}
 	charStyle = position_style( lineStart, lineLen, charIndex, outIndex);
 	charWidth = string_width( expandedChar, charLen, charStyle);
 	if (X < xStep + ( posType == CURSOR_POS ? charWidth / 2 : charWidth)) {
@@ -1914,6 +2028,7 @@ int TextDisplay::xy_to_position( int X, int Y, int posType) {
 	    return lineStart + charIndex;
 	}
 	xStep += charWidth;
+	if (utf8) charIndex += (charLen-1);
 	outIndex += charLen;
     }
 
@@ -2336,17 +2451,38 @@ int TextDisplay::measure_vline( int visLineNum) {
 
     if (lineStartPos < 0 || lineLen == 0) return 0;
     if (mStyleBuffer == NULL) {
+	char *lineStr = mBuffer->line_text(lineStartPos);
 	for ( i = 0; i < lineLen; i++) {
-	    len = mBuffer->expand_character( lineStartPos + i,
-					     charCount, expandedChar);
+	    const char *currStr = lineStr+i;
+	    const char *nextStr = utf8fwd(currStr+1, currStr, currStr+8);
+	    if ((nextStr - currStr) <= 1)
+		    len = mBuffer->expand_character( lineStartPos + i,
+						 charCount, expandedChar);
+	    else {
+		    len = (nextStr - currStr);
+		    memcpy(expandedChar, currStr, len);
+		    expandedChar[len] = 0;
+		    i += (len-1);
+	    }
 	    setfont( textfont(), textsize());
 	    width += ( int) getwidth( expandedChar, len);
 	    charCount += len;
 	}
+	free(lineStr);
     } else {
+	char *lineStr = mBuffer->line_text(lineStartPos);
 	for ( i = 0; i < lineLen; i++) {
-	    len = mBuffer->expand_character( lineStartPos + i,
-					     charCount, expandedChar);
+	    const char *currStr = lineStr+i;
+	    const char *nextStr = utf8fwd(currStr+1, currStr, currStr+8);
+	    if ((nextStr - currStr) <= 1)
+		len = mBuffer->expand_character( lineStartPos + i,
+						 charCount, expandedChar);
+	    else {
+		    len = (nextStr - currStr);
+		    memcpy(expandedChar, currStr, len);
+		    expandedChar[len] = 0;
+		    i += (len-1);
+	    }
 	    style = ( unsigned char) mStyleBuffer->character(lineStartPos + i) - 'A';
 	    if (style < 0) {
 		style = 0;
@@ -2357,6 +2493,7 @@ int TextDisplay::measure_vline( int visLineNum) {
 	    width += ( int) getwidth( expandedChar, len);
 	    charCount += len;
 	}
+	free(lineStr);
     }
     return width;
 }

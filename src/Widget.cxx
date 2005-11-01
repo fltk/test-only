@@ -732,7 +732,7 @@ int Widget::send(int event) {
   // scrolling the group with the scroll wheel.  Removed.  - chuckies
 
   for (Widget* p = parent(); p; p = p->parent())
-    /*if (dy < p->h())*/ {dx += p->x(); dy += p->y();}
+    if (dy < p->h()) {dx += p->x(); dy += p->y();}
   int save_x = e_x;
   int save_y = e_y;
   e_x = e_x_root-dx;

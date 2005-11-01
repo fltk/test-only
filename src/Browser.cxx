@@ -595,7 +595,7 @@ void Browser::draw_item(int damage) {
     drawstyle(style(), 0);
     Color fg = getcolor();
     setcolor(getbgcolor());
-    fillrect(Rectangle(x, y, inset-xposition_, item_h()));
+    fillrect(Rectangle(0, y, inset-xposition_+arrow_size, item_h()));
     setcolor(fg);
     bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
     for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
@@ -622,14 +622,19 @@ void Browser::draw_item(int damage) {
   int *cols = (int *)column_widths_p;
   if (cols) {
     saved_colw = cols[0];
-    cols[0] -= x;
+    cols[0] -= inset;
+    if (item()->image()) {
+      int image_w = 0, image_h = 0;
+      item()->image()->_measure(image_w, image_h);
+      cols[0] -= image_w;
+    }
     if (cols[0]==0) cols[0]--;
   }
 
   push_matrix();
   item()->x(x);
   item()->y(y+(int(leading())-1)/2);
-  item()->w(interior.w()-inset);
+  item()->w(interior.w()+xposition_-inset);
   translate(x, y);
   if (at_mark(FOCUS)) {
     if (flags() & FOCUSED) item()->set_flag(FOCUSED);

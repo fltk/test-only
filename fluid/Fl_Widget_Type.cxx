@@ -1526,7 +1526,8 @@ const char* WidgetType::array_name() const {
 
 void WidgetType::write_static() {
   const char* subclass = this->subclass();
-  if (!user_class()) ::write_declare("#include <fltk/%s.h>", subclass+6);
+  if (!user_class() || !strncmp(subclass, "fltk::", 6)) 
+    ::write_declare("#include <fltk/%s.h>", subclass+6);
   if (extra_code()) write_includes_from_code((char*)extra_code());
   if (callback()) {
     if (is_name(callback()))

@@ -677,7 +677,10 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
 	int i, xx = r.x();
 	for (i=0; i<current_column; i++) xx += column_widths_[i];
 	pop_clip();
-	push_clip(Rectangle(xx, r.y(), column_widths_[current_column], r.h()));
+	if (segment_count > 1)
+	  push_clip(Rectangle(xx, r.y(), column_widths_[current_column], r.h()));
+	else
+	  push_clip(Rectangle(xx, r.y(), r.w(), r.h()));
       }
       if (s.symbol) {
 	Symbol::text(s.start);
