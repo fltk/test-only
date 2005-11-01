@@ -374,7 +374,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
   FcPatternDestroy (fnt_pattern);
 
   num_fonts = fnt_set->nfont;
-  font_array = new (fltk::Font*)[num_fonts];
+  font_array = new fltk::Font*[num_fonts];
 
   // For each family we make 4 fonts for bold,italic combinations
   // The families could be smaller if there is no bold or italic, but
