@@ -75,12 +75,16 @@ static MenuWindow *mw;
 static InputBrowser *ib;
 static Browser *browser;
 
+namespace fltk {
+
 class ComboWindow : public MenuWindow {
   public:
     int handle(int);
 //    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
     ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { ; }
 };
+
+}
 
 int
 ComboWindow::handle(int event) {
@@ -102,8 +106,9 @@ InputBrowser::~InputBrowser()
     if(win) delete win;
 }
 
+namespace fltk {
 
-class ComboBrowser : public Browser {
+class FL_API ComboBrowser : public Browser {
   public:
     static NamedStyle *default_style;
 
@@ -111,6 +116,8 @@ class ComboBrowser : public Browser {
     ComboBrowser(int x, int y, int w, int h);
     static void browser_cb(Widget *w, void *data);
 };
+
+}
 
 extern void browser_glyph(int glyph, const Rectangle&);
 

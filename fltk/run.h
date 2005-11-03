@@ -35,7 +35,7 @@ namespace fltk {
 
 /*! \addtogroup startup
   \{ */
-FL_API float version();
+FL_API double version();
 FL_API void display(const char*);
 FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);

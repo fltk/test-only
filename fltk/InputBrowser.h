@@ -35,10 +35,10 @@
 #include <fltk/Menu.h>
 #include <fltk/Input.h>
 
+namespace fltk {
+
 class ComboBrowser;
 class ComboWindow;
-
-namespace fltk {
 
 class FL_API InputBrowser : public Menu {
 public:
@@ -56,9 +56,9 @@ public:
   void popup();
   void hide_popup();
   virtual int popup(int x, int y, int w, int h) { InputBrowser::popup(); return Menu::popup(Rectangle(x,y,w,h)); }
-  
+
   virtual int handle(int);
-  
+
   Widget* item() const ;
   Widget* item(Widget* v) const ;
 
@@ -75,14 +75,13 @@ protected:
   static void input_cb(Input *w, InputBrowser *ib);
 
   Input m_input;
-  
-    ComboWindow *win;
-    ComboBrowser *list;
 
-    friend class ComboWindow;
-    friend class ComboBrowser;
+  ComboWindow *win;
+  ComboBrowser *list;
 
-  
+  friend class ComboWindow;
+  friend class ComboBrowser;
+
   int minw_, minh_, maxw_, maxh_;
   int over_now, over_last;
 };

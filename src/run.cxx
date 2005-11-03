@@ -80,7 +80,7 @@ using namespace fltk;
     form M.mmpp where M is the major number, mm is the minor number,
     and pp is the patch number, currently 2.0001.
 */
-float fltk::version() {return FL_VERSION;}
+double fltk::version() {return FL_VERSION;}
 
 //
 // Globals...

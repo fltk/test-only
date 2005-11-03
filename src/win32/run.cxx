@@ -330,6 +330,23 @@ void* fltk::thread_message() {
   return r;
 }
 
+// ready() is just like wait(0.0) except no callbacks are done:
+static inline int fl_ready() {
+  if (__PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
+#ifdef USE_ASYNC_SELECT
+  return 0;
+#else
+  timeval t;
+  t.tv_sec = 0;
+  t.tv_usec = 0;
+  fd_set fdt[3];
+  fdt[0] = fdsets[0];
+  fdt[1] = fdsets[1];
+  fdt[2] = fdsets[2];
+  return ::select(0,&fdt[0],&fdt[1],&fdt[2],&t);
+#endif // USE_ASYNC_SELECT
+}
+
 MSG fltk::msg;
 
 // Wait up to the given time for any events or sockets to become ready,
@@ -373,14 +390,16 @@ static inline int fl_wait(double time_to_wait) {
   }
 #endif // USE_ASYNC_SELECT
 
-  in_main_thread_ = false;
-  fl_unlock_function();
-  int t_msec =
-    time_to_wait < 2147483.647 ? int(time_to_wait*1000+.5) : 0x7fffffff;
-  int ret_val =
-    MsgWaitForMultipleObjects(0, NULL, false, t_msec, QS_ALLINPUT);
-  fl_lock_function();
-  in_main_thread_ = true;
+  if (!fl_ready()) {
+    in_main_thread_ = false;
+    fl_unlock_function();
+    int t_msec =
+      time_to_wait < 2147483.647 ? int(time_to_wait*1000+.5) : 0x7fffffff;
+    int ret_val =
+      MsgWaitForMultipleObjects(0, NULL, false, t_msec, QS_ALLINPUT);
+    fl_lock_function();
+    in_main_thread_ = true;
+  }
 
   // Execute all pending messages:
   int ret = 0;
@@ -417,23 +436,6 @@ static inline int fl_wait(double time_to_wait) {
   // negative for errors.
   // ret_val is probably useful, what is in it?
   return ret;
-}
-
-// ready() is just like wait(0.0) except no callbacks are done:
-static inline int fl_ready() {
-  if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
-#ifdef USE_ASYNC_SELECT
-  return 0;
-#else
-  timeval t;
-  t.tv_sec = 0;
-  t.tv_usec = 0;
-  fd_set fdt[3];
-  fdt[0] = fdsets[0];
-  fdt[1] = fdsets[1];
-  fdt[2] = fdsets[2];
-  return ::select(0,&fdt[0],&fdt[1],&fdt[2],&t);
-#endif // USE_ASYNC_SELECT
 }
 
 ////////////////////////////////////////////////////////////////
