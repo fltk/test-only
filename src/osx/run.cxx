@@ -428,6 +428,14 @@ static inline int fl_wait(double time)
   if (!ReceiveNextEvent(0, NULL, time, true, &event)) {
     got_events = 1;
     OSErr ret = SendEventToEventTarget( event, target );
+    if (ret!=noErr) {
+      EventRecord clevent;
+      ConvertEventRefToEventRecord(event, &clevent);
+      if (clevent.what==kHighLevelEvent) {
+	ret = AEProcessAppleEvent(&clevent);
+      }
+    }
+#if 0 // WAS: I'm guessing this i not necessary with above AEProcess code 
     // This is needed to make the Mac menubar work:
     if (   ret==eventNotHandledErr
 	   && GetEventClass(event)==kEventClassMouse
@@ -440,6 +448,7 @@ static inline int fl_wait(double time)
 	MenuSelect(pos);
       }
     }
+#endif
     ReleaseEvent(event);
     time = 0.0; // just peek for pending events
   }
@@ -685,7 +694,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     {UInt32 clickCount;
     GetEventParameter( event, kEventParamClickCount,
 		       typeUInt32, NULL, sizeof(UInt32), NULL, &clickCount );
-    e_clicks = clickCount-1;}
+    if (clickCount>1) e_clicks++; else e_clicks = 0;}
     button_to_keysym( event );
     e_is_click = e_keysym;
     handle( PUSH, window );

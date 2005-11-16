@@ -726,7 +726,7 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 void fltk::measure(float (*getwidth)(const char*, int),
 		   const char* str, float& w, float& h, Flags flags)
 {
-  h = split(str, w, h, flags, getwidth);
+  h = split(str, int(w), int(h), flags, getwidth);
   w = max_x;
   setfont(normal_font, normal_size);
 }

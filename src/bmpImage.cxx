@@ -489,7 +489,7 @@ void bmpImage::read()
 
   {GSave gsave;
   make_current();
-  drawimage(array, PixelType(depth), Rectangle(w_, h_), depth);}
+  drawimage(array, PixelType(depth), Rectangle(w_, h_), depth*w_);}
 
   // Close the file and return...
   if (!datas) fclose(bmpFile);

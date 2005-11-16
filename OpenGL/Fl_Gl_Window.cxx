@@ -109,6 +109,7 @@ bool GlWindow::mode(int m) {
 #define NON_LOCAL_CONTEXT 0x80000000
 
 void GlWindow::make_current() {
+  Window::make_current(); // so gc is correct for non-OpenGL calls
 #if USE_QUARTZ
   if (!gl_choice) {
     gl_choice = GlChoice::find(mode_);

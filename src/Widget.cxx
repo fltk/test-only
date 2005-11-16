@@ -724,15 +724,13 @@ int Widget::handle(int event) {
 int Widget::send(int event) {
 
   int dx = x(); int dy = y();
-  // WAS: I don't sum the positions of parents that don't seem to contain
-  // the widget vertically. This is a hack so that items in hierarchial
-  // browsers work. A different fix is forthcoming, I hope:
 
-  // This hack breaks attempts to drag items within a scroll group while
-  // scrolling the group with the scroll wheel.  Removed.  - chuckies
-
-  for (Widget* p = parent(); p; p = p->parent())
-    if (dy < p->h()) {dx += p->x(); dy += p->y();}
+  for (Widget* p = parent(); p; p = p->parent()) {
+    // we may want to ignore hiearchy parents in a browser. Not figured
+    // out how to do this yet.
+    dx += p->x();
+    dy += p->y();
+  }
   int save_x = e_x;
   int save_y = e_y;
   e_x = e_x_root-dx;

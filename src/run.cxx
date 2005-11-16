@@ -677,6 +677,7 @@ extern void fl_do_deferred_calls(); // in Fl_Window.cxx:
 // This is extra code that probably should be in Window::flush():
 void fl_window_flush(Window* window) {
   CreatedWindow* x = CreatedWindow::find(window);
+  if (x->wait_for_expose || !window->visible_r()) return;
 #if !USE_X11 && USE_QUARTZ
   // handle child windows, which are not really windows on Quartz:
   if (!x) {
@@ -687,7 +688,6 @@ void fl_window_flush(Window* window) {
     return;
   }
 #endif
-  if (x->wait_for_expose) {damage_ = true; return;}
   if (window->layout_damage()) window->layout();
   if (window->damage() || x->region) {
     window->flush();
