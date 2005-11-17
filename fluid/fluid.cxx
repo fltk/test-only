@@ -67,11 +67,8 @@ const char *copyright =
 #include <ctype.h>
 #include <errno.h>
 
-#ifdef WIN32
-#include <fltk/win32.h>	// for MAX_PATH definition
-#endif
-
 #if defined(_WIN32) && !defined(__CYGWIN__)
+# include <fltk/win32.h>	// for MAX_PATH definition
 # include <direct.h>
 #else
 # include <unistd.h>

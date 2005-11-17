@@ -61,8 +61,8 @@
 # include <unistd.h>
 # include <pwd.h>
 #endif
-#if (__MINGW32__)
-#  include <ctype.h> // needed for isalpha()
+#if __MINGW32__
+# include <ctype.h> // needed for isalpha()
 #endif
 
 using namespace fltk;

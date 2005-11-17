@@ -134,6 +134,8 @@ static void fix_focus() {
 
 extern "C" {
 // This function is here because Window::label() uses it:
+// Make sure fltk/string.h is included above. Without it it appears
+// that VC++ will be unable to link to this. Adding FL_API does not fix it.
 /**
   Equivalent to strdup() except the C++ new[] operator is used. A
   block of memory strlen(from)+1 is allocated and the \a from
@@ -146,7 +148,7 @@ extern "C" {
   replacement new-handler to work. FLTK uses this for all strings
   that it copies internally.
 */
-FL_API const char* newstring(const char *from) {
+const char* newstring(const char *from) {
   if (!from) return 0;
   unsigned n = strlen(from)+1;
   char* ret = new char[n];

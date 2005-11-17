@@ -209,12 +209,7 @@ void Button::draw(int glyph, int glyph_width) const
       fillrect(r);
     } else if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
       // erase the background so we can redraw the label in the new color:
-      if (damage()&(DAMAGE_EXPOSE)) {
-        setcolor(getbgcolor());
-        fillrect(r);
-      } else {
-        draw_background();
-      }      
+      draw_background();
     } else if (!label()) {
       // Assumme this is a button with an animated image label.
       // we must redraw the image so it changes depending on state.

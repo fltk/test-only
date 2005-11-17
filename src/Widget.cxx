@@ -35,11 +35,6 @@
 
 using namespace fltk;
 
-// This fixes linkage problem in VC++ 6.0
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
-
 /*! \class fltk::Widget
 
   The base class for all widgets in FLTK. The basic Widget draws an

@@ -154,7 +154,7 @@ fltk::RecursiveMutex::RecursiveMutex() : Mutex(recursive_attrib()) {}
 // This is NOT normally done, instead the HAVE_PTHREAD case is done
 # include "x11/lock.cxx"
 
-#elif defined(_WIN32)
+#elif defined(_WIN32) && !defined(__CYGWIN__)
 
 # include "win32/lock.cxx"
 

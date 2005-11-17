@@ -27,28 +27,23 @@
 #include <fltk/filename.h>
 #include <fltk/utf.h>
 #include <fltk/string.h>
+#include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>
-#include <stdlib.h>
-#ifdef _WIN32
-#include <windows.h>
-#include <fltk/x.h>
+#if defined(_WIN32) && !defined(__CYGWIN__)
+# include <io.h>
+#else
+# include <unistd.h>
 #endif
 
-// This fixes linkage problem in VC++ 6.0
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
+// This function makes sure that 'stat' is only called once if the users
+// queries different aspects on the same file. 'stat' can be relatively slow.
 
 static struct stat last_stat;
 static const char *last_statname = 0;
 static bool last_result = false;
-static int last_op = 0;
 
-// This function makes sure that 'stat' is only called once if the users
-// queries different aspects on the same file. 'stat' can be relatively slow.
-static bool fill_stat(const char *name, int new_op) {
-  if (last_op!=new_op && last_statname && strcmp(last_statname, name)==0) return last_result;
+static bool fill_stat(const char *name) {
+  if (last_statname && strcmp(last_statname, name)==0) return last_result;
   delete[] const_cast<char *>( last_statname ); // otherwize VC++ will scream
   last_statname = newstring(name);
   char namebuf[PATH_MAX];
@@ -71,22 +66,23 @@ static bool fill_stat(const char *name, int new_op) {
 
 /** Returns true if the file exists and is a directory. */
 bool filename_isdir(const char* name) {
-  if (fill_stat(name, 1)==false) return false;
+  if (!fill_stat(name)) return false;
   return (last_stat.st_mode&0170000)==0040000;
 }
 
 /** Returns the size of the file in bytes. Returns zero if it does not exist.*/
 double filename_size(const char* name) {
-  if (fill_stat(name, 2)==false) return 0.0;
+  if (!fill_stat(name)) return 0.0;
   return (double)last_stat.st_size;
 }
 
 /**
   Returns the modification time of the file as a Unix timestamp
-  (number of seconds since the start of 1970 in GMT).
+  (number of seconds since the start of 1970 in GMT). Returns 0
+  if the file does not exist.
 */
 long int filename_mtime(const char *name) {
-  if (fill_stat(name, 3)==false) return 0;
+  if (!fill_stat(name)) return 0;
   if (last_stat.st_mtime) return last_stat.st_mtime;
   if (last_stat.st_atime) return last_stat.st_atime;
   return last_stat.st_ctime;

@@ -428,6 +428,7 @@ static inline int fl_wait(double time)
   if (!ReceiveNextEvent(0, NULL, time, true, &event)) {
     got_events = 1;
     OSErr ret = SendEventToEventTarget( event, target );
+    // Not sure what this does, but it makes some UI actions work:
     if (ret!=noErr) {
       EventRecord clevent;
       ConvertEventRefToEventRecord(event, &clevent);
@@ -435,7 +436,6 @@ static inline int fl_wait(double time)
 	ret = AEProcessAppleEvent(&clevent);
       }
     }
-#if 0 // WAS: I'm guessing this i not necessary with above AEProcess code 
     // This is needed to make the Mac menubar work:
     if (   ret==eventNotHandledErr
 	   && GetEventClass(event)==kEventClassMouse
@@ -448,7 +448,6 @@ static inline int fl_wait(double time)
 	MenuSelect(pos);
       }
     }
-#endif
     ReleaseEvent(event);
     time = 0.0; // just peek for pending events
   }

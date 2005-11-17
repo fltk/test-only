@@ -29,11 +29,6 @@
 #include <fltk/x.h>
 #include <fltk/string.h>
 
-// This fixes linkage problem in VC++ 6.0
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
-
 /*! \class fltk::Font
 
 Identifies a font. You can create these with fltk::font(name) or

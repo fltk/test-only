@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <config.h>
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 
 # include <fltk/x.h>
 # include <fltk/utf.h>

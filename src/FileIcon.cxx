@@ -37,17 +37,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__CYGWIN__)
 # include <io.h>
 # define F_OK 0
 #else
 # include <unistd.h>
 #endif
-
 #include <fltk/FileIcon.h>
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
