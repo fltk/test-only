@@ -51,7 +51,7 @@ public:
   static NamedStyle* default_style;
 
   virtual void draw();
-  void draw(int glyph, int glyph_width) const;
+  void draw(int glyph_width) const;
 };
 
 }

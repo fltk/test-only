@@ -82,7 +82,7 @@ void Choice::draw() {
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
     drawstyle(style(), flags() & ~FOCUSED | OUTPUT);
     Rectangle gr(r.r(), r.y(), w1, r.h());
-    draw_glyph(GLYPH_DOWN_BUTTON, gr);
+    draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
   }
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
     setcolor(color());
@@ -98,7 +98,7 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
-      if (flags()&INACTIVE) o->set_flag(NOTACTIVE|INACTIVE);
+      if (flags()&(INACTIVE|NOTACTIVE)) o->set_flag(INACTIVE);
       r.move_x(2);
       push_clip(r);
       push_matrix();

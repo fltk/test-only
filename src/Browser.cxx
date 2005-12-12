@@ -532,11 +532,14 @@ enum {
 
 #define BOXSIZE 9
 
-void
-browser_glyph(int glyph, const Rectangle& r)
+class BrowserGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& r) const
 {
   int lx = r.center_x();
   int ly = r.y()+(r.h()-1)/2; // slightly higher than center_y() for some reason
+  int glyph = drawflags()&15;
+
   switch (glyph) {
   case NONE:
     break;
@@ -560,8 +563,8 @@ browser_glyph(int glyph, const Rectangle& r)
   case OPEN_ELL:
     drawline(lx, r.y(), lx, ly);
   J1:
-    Widget::default_glyph(glyph < OPEN_ELL ? GLYPH_RIGHT : GLYPH_DOWN,
-	     r, style, f);
+    setdrawflags(drawflags()&15 | (glyph<OPEN_ELL? ALIGN_RIGHT: ALIGN_BOTTOM));
+    Widget::default_glyph.draw(r);
     break;
 #else
   default: {
@@ -576,6 +579,9 @@ browser_glyph(int glyph, const Rectangle& r)
 #endif
   }
 }
+  BrowserGlyph() : Symbol("browser") {}
+};
+static BrowserGlyph glyph;
 
 // this is non-zero if a drag was started in a group open/close box:
 static char openclose_drag;
@@ -1719,7 +1725,7 @@ bool Browser::display(int line, bool value) {
 #define SLIDER_WIDTH 16
 
 static void revert(Style* s) {
-  s->glyph_ = ::browser_glyph;
+  s->glyph_ = &::glyph;
 }
 static NamedStyle style("Browser", revert, &Browser::default_style);
 /*! This style mostly serves to set the parenting back to

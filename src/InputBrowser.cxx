@@ -110,8 +110,6 @@ namespace fltk {
 
 class FL_API ComboBrowser : public Browser {
   public:
-    static NamedStyle *default_style;
-
     int handle(int);
     ComboBrowser(int x, int y, int w, int h);
     static void browser_cb(Widget *w, void *data);
@@ -121,19 +119,8 @@ class FL_API ComboBrowser : public Browser {
 
 extern void browser_glyph(int glyph, const Rectangle&);
 
-static void revert_combostyle(Style *s) {
-  s->box_ = BORDER_BOX;
-  s->glyph_ = browser_glyph;
-}
-
-static NamedStyle combostyle("InputBrowserPopup", revert_combostyle, &Browser::default_style);
-NamedStyle* ComboBrowser::default_style = &::combostyle;
-
 ComboBrowser::ComboBrowser(int x, int y, int w, int h)
-: Browser(x, y, w, h, 0)
-{
-  style(default_style);
-}
+: Browser(x, y, w, h, 0) {}
 
 int
 ComboBrowser::handle(int event) {
@@ -361,7 +348,7 @@ InputBrowser::draw() {
 
     // draw the little mark at the right:
     r.x(r.x()+r.w()-W1); r.w(W1);
-    draw_glyph(GLYPH_DOWN_BUTTON, r);
+    draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, r);
     over_last = over_now;
   }
 }

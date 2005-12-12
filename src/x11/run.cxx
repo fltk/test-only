@@ -2139,7 +2139,7 @@ void fltk::draw_into(XWindow window, int w, int h) {
 #if USE_CAIRO
     cairo_status_t cstatus;
     if (cc) {
-      if (cstatus = cairo_status(cc))
+      if ((cstatus = cairo_status(cc)))
         warning("Cairo: %s", cairo_status_to_string(cstatus));
       cairo_destroy(cc);
       cairo_surface_destroy(surface);

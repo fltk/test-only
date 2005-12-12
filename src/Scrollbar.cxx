@@ -258,12 +258,12 @@ void Scrollbar::draw() {
     Rectangle br(r); br.h(r.w());
     if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
       drawstyle(style(),f1);
-      draw_glyph(GLYPH_UP_BUTTON, br);
+      draw_glyph(ALIGN_TOP|ALIGN_INSIDE, br);
     }
     br.y(r.b()-r.w());
     if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
       drawstyle(style(),f2);
-      draw_glyph(GLYPH_DOWN_BUTTON, br);
+      draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, br);
     }
     ir.move_y(r.w()); ir.move_b(-r.w());
 
@@ -271,12 +271,12 @@ void Scrollbar::draw() {
     Rectangle br(r); br.w(r.h());
     if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
       drawstyle(style(),f1);
-      draw_glyph(GLYPH_LEFT_BUTTON, br);
+      draw_glyph(ALIGN_LEFT|ALIGN_INSIDE, br);
     }
     br.x(r.r()-r.h());
     if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
       drawstyle(style(),f2);
-      draw_glyph(GLYPH_RIGHT_BUTTON, br);
+      draw_glyph(ALIGN_RIGHT|ALIGN_INSIDE, br);
     }
     ir.move_x(r.h()); ir.move_r(-r.h());
   }
@@ -286,17 +286,20 @@ void Scrollbar::draw() {
   Slider::draw(ir, f5, false);
 }
 
-static void glyph(int glyph, const Rectangle& r)
-{
-  // this stops the scrollbar from being pushed-in:
-  if (glyph<100) setdrawflags(drawflags()&~VALUE);
-  Widget::default_glyph(glyph, r);
-}
+// this stops the scrollbar from being pushed-in:
+static class ScrollBarGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& r) const {
+    if (!drawflags()&ALIGN_MASK) setdrawflags(drawflags()&~VALUE);
+    Widget::default_glyph->draw(r);
+  }
+  ScrollBarGlyph() : Symbol() {}
+} glyph;
 
 static void revert(Style* s) {
   s->box_ = FLAT_BOX;
   s->color_ = GRAY60;
-  s->glyph_ = ::glyph;
+  s->glyph_ = &glyph;
 }
 static NamedStyle style("Scrollbar", revert, &Scrollbar::default_style);
 NamedStyle* Scrollbar::default_style = &::style;

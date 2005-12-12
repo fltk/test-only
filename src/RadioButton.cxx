@@ -47,29 +47,32 @@ using namespace fltk;
   your interface so it is clear to the user that they are radio buttons.
 */
 
-static void default_glyph(int glyph, const Rectangle& R)
-{
-  // Use the white rather than the gray color:
-  Box* box = drawstyle()->box();
-  box->draw(R);
-  if (drawflags(VALUE)) {
-    Rectangle r(R);
-    box->inset(r);
-    // use the selection color only if they directly set it:
-    if (drawstyle()->selection_color_)
-      setcolor(inactive(drawstyle()->selection_color_, drawflags()));
-    r.inset((r.h()+1)/6);
-    addchord(r, 0, 360);
-    fillpath();
+static class RadioButtonGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& R) const {
+    // Use the white rather than the gray color:
+    Box* box = drawstyle()->box();
+    box->draw(R);
+    if (drawflags(VALUE)) {
+      Rectangle r(R);
+      box->inset(r);
+      // use the selection color only if they directly set it:
+      if (drawstyle()->selection_color_)
+	setcolor(inactive(drawstyle()->selection_color_, drawflags()));
+      r.inset((r.h()+1)/6);
+      addchord(r, 0, 360);
+      fillpath();
+    }
   }
-}
+  RadioButtonGlyph() : Symbol("radio") {}
+} glyph;
 
 static void revert(Style* s) {
   s->buttonbox_ = NO_BOX;
   s->box_ = ROUND_DOWN_BOX;
-  s->glyph_ = ::default_glyph;
+  s->glyph_ = &glyph;
 }
-static NamedStyle style("Radio_Button", revert, &RadioButton::default_style);
+static NamedStyle style("RadioButton", revert, &RadioButton::default_style);
 NamedStyle* RadioButton::default_style = &::style;
 
 RadioButton::RadioButton(int x, int y, int w, int h, const char *l)

@@ -40,27 +40,30 @@ using namespace fltk;
   When off the light is color(), when on the light is selection_color().
 */
 
-static void glyph(int/*t*/, const Rectangle& r)
-{
-  Color saved = getbgcolor();
-  Flags f = drawflags();
-  if (f & VALUE) {
-    setbgcolor(drawstyle()->selection_color());
-  } else if (!drawstyle()->color_) {
-    // if user did not set color make the interior invisible
-    setdrawflags(INVISIBLE);
+static class LightButtonGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& r) const {
+    Color saved = getbgcolor();
+    Flags f = drawflags();
+    if (f & VALUE) {
+      setbgcolor(drawstyle()->selection_color());
+    } else if (!drawstyle()->color_) {
+      // if user did not set color make the interior invisible
+      setdrawflags(INVISIBLE);
+    }
+    int ww = r.w()/2+1; // we will center box of this width in area
+    THIN_DOWN_BOX->draw(Rectangle(r, ww, r.h()));
+    drawflags(f);
+    setbgcolor(saved);
   }
-  int ww = r.w()/2+1; // we will center box of this width in area
-  THIN_DOWN_BOX->draw(Rectangle(r, ww, r.h()));
-  drawflags(f);
-  setbgcolor(saved);
-}
+  LightButtonGlyph() : Symbol("light") {}
+} glyph;
 
 static void revert(Style* s) {
   s->selection_color_ = YELLOW;
-  s->glyph_ = glyph;
+  s->glyph_ = &glyph;
 }
-static NamedStyle style("Light_Button", revert, &LightButton::default_style);
+static NamedStyle style("LightButton", revert, &LightButton::default_style);
 NamedStyle* LightButton::default_style = &::style;
 
 LightButton::LightButton(int x, int y, int w, int h, const char *l)

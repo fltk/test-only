@@ -70,11 +70,13 @@ using namespace fltk;
   is textfont() and textsize() (which defaults to 8).
 
   You can change the glyph() function to change how the moving part is
-  drawn. The number 16 is passed to draw the horizontal slider, the
-  number 17 is passed to draw the vertical slider. Other numbers are
-  passed by the ScrollBar subclass to draw the arrows at the end. The
-  glyph() defaults to a function that draws the buttonbox() in the
-  buttoncolor() and then draws a divider line across it.
+  drawn. The drawflags() determines what part of the slider is being
+  drawn. The ScrollBar subclass turns on ALIGN_TOP/LEFT/RIGHT/BOTTOM
+  to draw the buttons at the end (this is the same as Widget::default_glyph()
+  takes and the default slider glyph just calls that). The moving part
+  has bit 16 turned on, unless this is a fill slider in which case
+  bit 16 is off. You can check the LAYOUT_VERTICAL flag to see which
+  direction the slider is going in.
 
   \image html logslider.gif
   "Log" sliders have a non-uniform scale. This diagram shows some
@@ -381,7 +383,7 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
     s.x(sp = r.x()+slider_position(value(),r.w()));
     s.w(slider_size_);
     if (!s.w()) {s.w(s.x()-r.x()); s.x(r.x());} // fill slider
-    else sglyph=17;
+    else sglyph=16;
   } else {
     s.y(sp = r.y()+slider_position(value(),r.h()));
     s.h(slider_size_);
@@ -502,36 +504,48 @@ int Slider::handle(int event) {
   return handle(event,r);
 }
 
-static void glyph(int glyph, const Rectangle& r)
-{
-  const Color saved = getcolor();
-  // this stops the scrollbar from being pushed-in:
-  if (glyph<100) setdrawflags(drawflags()&~VALUE);
-  Widget::default_glyph(glyph, r);
-  // draw the divider line into slider:
-  if (r.w() < 4 || r.h() < 4) return;
-  if (glyph==17) { // horizontal
-    int x = r.x()+(r.w()+1)/2;
-    setcolor(GRAY33);
-    drawline(x-1, r.y()+1, x-1, r.b()-2);
-    setcolor(WHITE);
-    drawline(x, r.y()+1, x, r.b()-2);
-  } else if (glyph==16) { // vertical
-    int y = r.y()+(r.h()+1)/2;
-    setcolor(GRAY33);
-    drawline(r.x()+1, y-1, r.r()-2, y-1);
-    setcolor(WHITE);
-    drawline(r.x()+1, y, r.r()-2, y);
+static class SliderGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& rr) const {
+    // this stops the scrollbar from being pushed-in:
+    if (!(drawflags()&15)) setdrawflags(drawflags()&~VALUE);
+
+    // See if anything other than the slider is being drawn, if so
+    // call the Widget::default_glyph:
+    if ((drawflags()&31) != 16) {
+      Widget::default_glyph->draw(rr);
+      return;
+    }
+
+    Symbol* box = drawstyle()->buttonbox();
+    box->draw(rr);
+    Rectangle r = rr; box->inset(r);
+
+    // draw the divider line into slider:
+    if (r.w() < 4 || r.h() < 4) return;
+    if (!(drawflags()&LAYOUT_VERTICAL)) { // horizontal
+      int x = r.x()+r.w()/2;
+      setcolor(GRAY33);
+      drawline(x, r.y(), x, r.b());
+      setcolor(WHITE);
+      drawline(x+1, r.y(), x+1, r.b());
+    } else { // vertical
+      int y = r.y()+r.h()/2;
+      setcolor(GRAY33);
+      drawline(r.x(), y, r.r(), y);
+      setcolor(WHITE);
+      drawline(r.x(), y+1, r.r(), y+1);
+    }
   }
-  setcolor(saved);
-}
+  SliderGlyph() : Symbol() {}
+} glyph;
 
 static void revert(Style *s) {
   s->color_ = GRAY75;
   //s->textcolor_ = GRAY15;
   s->textsize_ = 8;
   s->box_ = FLAT_BOX;
-  s->glyph_ = ::glyph;
+  s->glyph_ = &glyph;
 }
 static NamedStyle style("Slider", revert, &Slider::default_style);
 NamedStyle* Slider::default_style = &::style;

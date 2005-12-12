@@ -97,27 +97,6 @@ extern FL_API LabelType* const EMBOSSED_LABEL;
 
 class Style;
 
-/*! \addtogroup glyphs
-  \{ */
-typedef void (*GlyphStyle)(int number, const Rectangle&);
-/*! Numbers understood by fltk::Widget::default_glyph(). All other numbers
-  draw the same as GLYPH_BOX. The numbers
-  0-99 are reserved for per-Widget glyphs, for instance for parts
-  of the fltk::Slider or for the checkmark drawn by fltk::CheckButton.
-*/
-enum GlyphNumber {
-  GLYPH_BOX = 100,	//!< Draw an empty buttonbox
-  GLYPH_UP,		//!< draw an up arrow
-  GLYPH_DOWN,		//!< draw a down arrow
-  GLYPH_LEFT,		//!< draw a left arrow
-  GLYPH_RIGHT,		//!< draw a right arrow
-  GLYPH_UP_BUTTON,	//!< draw an up arrow in a buttonbox
-  GLYPH_DOWN_BUTTON,	//!< draw a down arrow in a buttonbox
-  GLYPH_LEFT_BUTTON,	//!< draw a left arrow in a buttonbox
-  GLYPH_RIGHT_BUTTON	//!< draw a right arrow in a buttonbox
-};
-/*! \} */
-
 class FL_API Style {
  public:
   // Everything is public for various back-compatability hacks:
@@ -125,7 +104,7 @@ class FL_API Style {
   Box*		box_;
   Box*		buttonbox_;
   Box*		focusbox_;
-  GlyphStyle	glyph_;
+  Symbol*	glyph_;
   Font*		labelfont_;
   Font*		textfont_;
   LabelType*	labeltype_;
@@ -152,7 +131,7 @@ class FL_API Style {
   Box*		box()		const;
   Box*		buttonbox()	const;
   Box*		focusbox()	const;
-  GlyphStyle	glyph()		const;
+  Symbol*	glyph()		const;
   Font*		labelfont()	const;
   Font*		textfont()	const;
   LabelType*	labeltype()	const;
@@ -178,7 +157,7 @@ class FL_API Style {
   void box		(Box* v)	{box_ = v;		}
   void buttonbox	(Box* v)	{buttonbox_ = v;	}
   void focusbox		(Box* v)	{focusbox_ = v;		}
-  void glyph		(GlyphStyle v)	{glyph_ = v; 		}
+  void glyph		(Symbol* v)	{glyph_ = v; 		}
   void labelfont	(Font* v)	{labelfont_ = v;	}
   void textfont		(Font* v)	{textfont_ = v;		}
   void labeltype	(LabelType* v)	{labeltype_ = v; 	}

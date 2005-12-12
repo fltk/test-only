@@ -55,12 +55,16 @@ enum {
   GLYPH_SLOWARROW
 };
 
-static void glyph(int t, const Rectangle& r)
-{
-  drawstyle()->buttonbox()->draw(r);
-  xbmImage* b = arrows[t-GLYPH_FASTARROW];
-  b->draw(Rectangle(r, b->width(), b->height()));
-}
+class AdjusterGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& r) const {
+    drawstyle()->buttonbox()->draw(r);
+    xbmImage* b = arrows[drawflags()&3];
+    b->draw(Rectangle(r, b->width(), b->height()));
+  }
+  AdjusterGlyph() : Symbol("adjuster") {}
+};
+static AdjusterGlyph glyph;
 
 // changing the value does not change the appearance:
 void Adjuster::value_damage() {}
@@ -82,8 +86,8 @@ void Adjuster::draw() {
     if (drag == i) f |= VALUE|PUSHED;
     else if (highlight == i) f |= HIGHLIGHT;
     if (damage()&DAMAGE_ALL || last==i || highlight==i) {
+      drawstyle(style(), f);
       r.x((i-1)*dx); r.y((3-i)*dy);
-      drawstyle(style(),f);
       draw_glyph(i-1, r);
     }
   }
@@ -164,7 +168,7 @@ int Adjuster::handle(int event) {
 
 static void revert(Style* s) {
   s->box_ = NO_BOX; // for compatability if in the future it draws the box
-  s->glyph_ = glyph;
+  s->glyph_ = &glyph;
 }
 static NamedStyle style("Adjuster", revert, &Adjuster::default_style);
 

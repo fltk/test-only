@@ -40,8 +40,9 @@ using namespace fltk;
   set in an inherited style()).
 */
 
-static void default_glyph(int glyph, const Rectangle& R)
-{
+static class CheckBox : public Symbol {
+public:
+  void _draw(const Rectangle& R) const {
   Box* box = drawstyle()->box();
   // for back compatability with some programs that changed the
   // square into a diamond or circle, where the checkmark does
@@ -71,15 +72,17 @@ static void default_glyph(int glyph, const Rectangle& R)
     }
   }
 }
+  CheckBox() : Symbol("checkbox") {}
+} glyph;
 
 void CheckButton::draw() {
-  Button::draw(0, int(textsize())+2);
+  Button::draw(int(textsize())+2);
 }
 
 static void revert(Style* s) {
   s->buttonbox_ = NO_BOX;
   //s->box_ = DOWN_BOX;
-  s->glyph_ = ::default_glyph;
+  s->glyph_ = &glyph;
 }
 static NamedStyle style("Check_Button", revert, &CheckButton::default_style);
 NamedStyle* CheckButton::default_style = &::style;

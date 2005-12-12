@@ -592,17 +592,17 @@ static void draw_plus(Color col)
 }
 
 // These last two are probably obsolete:
-static void draw_arrow(Color col)
-{
-  BP; vv(0.6f,0.2f); vv(1.0f,0.0f); vv(0.6f,-0.2f); EF(col);
-  drawline(-1.0f,0.0f,0.65f,0.0f);
-}
+// static void draw_arrow(Color col)
+// {
+//   BP; vv(0.6f,0.2f); vv(1.0f,0.0f); vv(0.6f,-0.2f); EF(col);
+//   drawline(-1.0f,0.0f,0.65f,0.0f);
+// }
 
-static void draw_menu(Color col)
-{
-  rectangle(-0.65f, 0.85f, 0.65f, -0.25f, col);
-  rectangle(-0.65f, -0.6f, 0.65f, -1.0f, col);
-}
+// static void draw_menu(Color col)
+// {
+//   rectangle(-0.65f, 0.85f, 0.65f, -0.25f, col);
+//   rectangle(-0.65f, -0.6f, 0.65f, -1.0f, col);
+// }
 
 static void init_symbols(void) {
   init_hashtable();
@@ -621,17 +621,16 @@ static void init_symbols(void) {
   add_symbol("[]<",		draw_0arrowbox,		1);
   add_symbol("<|",		draw_0bararrow,		1);
   add_symbol("<->",		draw_doublearrow,	1);
-  add_symbol("-->",		draw_arrow,		1);
+//  add_symbol("-->",		draw_arrow,		1);
   add_symbol("+",		draw_plus,		1);
   add_symbol("->|",		draw_arrow1bar,		1);
   add_symbol("[]",		draw_box,		1);
-  add_symbol("arrow",		draw_arrow,		1);
-  //add_symbol("returnarrow",	0,			3);
+//  add_symbol("arrow",		draw_arrow,		1);
   add_symbol("square",		draw_square,		1);
   add_symbol("circle",		draw_circle,		1);
   add_symbol("line",		draw_line,		1);
   add_symbol("plus",		draw_plus,		1);
-  add_symbol("menu",		draw_menu,		1);
+//  add_symbol("menu",		draw_menu,		1);
   add_symbol("UpArrow",		draw_uparrow,		1);
   add_symbol("DnArrow",		draw_downarrow,		1);
   add_symbol("||",		draw_doublebar,		1);

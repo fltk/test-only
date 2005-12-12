@@ -298,7 +298,7 @@ void Widget::FIELD(TYPE v) {		\
 style_functions(Symbol*,	box		)
 style_functions(Symbol*,	buttonbox	)
 style_functions(Symbol*,	focusbox	)
-style_functions(GlyphStyle,	glyph		)
+style_functions(Symbol*,	glyph		)
 style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)
 style_functions(LabelType*,	labeltype	)
@@ -403,7 +403,7 @@ void fltk::drawstyle(const Style* style, Flags flags) {
   drawstyle_ = style;
   drawflags_ = flags;
   // this is not correct! It should search the styles in order and
-  // decide what to do as it searches. For instance highligh_textcolor
+  // decide what to do as it searches. For instance highlight_textcolor
   // should only be used if set before or at the highlight_color style.
   Color bg, fg;
   if ((flags & HIGHLIGHT) && (bg = style->highlight_color())) {

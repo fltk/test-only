@@ -150,9 +150,9 @@ void BarGroup::draw()
     Flags flags = OUTPUT;
     if (pushed) flags |= VALUE;
     if (highlighted) flags |= HIGHLIGHT;
-    drawstyle(style(),flags);
+    drawstyle(style(), flags);
     Rectangle r; glyph_box(r);
-    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON, r);
+    draw_glyph(ALIGN_INSIDE|(horizontal()?ALIGN_RIGHT:ALIGN_BOTTOM), r);
   }
 }
 

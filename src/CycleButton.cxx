@@ -96,7 +96,8 @@ void CycleButton::draw() {
   if (o) {
     Item::set_style(&style,false);
     Flags saved = o->flags();
-    o->set_flag(flags&(NOTACTIVE|VALUE|HIGHLIGHT));
+    o->clear_flag(SELECTED);
+    if (flags&(INACTIVE|NOTACTIVE)) o->set_flag(INACTIVE);
     push_clip(r);
     push_matrix();
     translate(r.x(),r.y());

@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,55 +18,57 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/Widget.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 using namespace fltk;
 
-/*! \typedef fltk::GlyphStyle
+static class DefaultGlyph : public Symbol {
+public:
+  void _draw(const Rectangle&) const;
+  DefaultGlyph() : Symbol("widget") {}
+} glyph;
 
-  This type of function that is placed into Style::glyph().  A
-  Widget::draw() method would call this to draw various portions of
-  itself. A \ref themes(theme) can modify the glyph function to change
-  the appearance of those parts of the widget.
+/**
+  This is the value of glyph() in the Widget::default_style. It is
+  an internal symbol called "@widget;".  It draws a
+  number of small buttons with arrows on them. The direction of the
+  arrows are determined by the align values in fltk::setflags():
 
-  The arguments are exactly the same as for a Symbol, with an added
-  index number to say which glyph to draw. Ideally you should just
-  call the correct Symbol or Image with the same arguments.
+  - fltk::ALIGN_LEFT draws left-pointing arrow
+  - fltk::ALIGN_RIGHT draws right-pointing arrow
+  - fltk::ALIGN_TOP draws up-pointing arrow
+  - fltk::ALIGN_BOTTOM draws right-pointing arrow
+  - fltk::ALIGN_INSIDE draws the current drawstyle() buttonbox() around
+  the arrow. This will usually use the fltk::PUSHED or other flags
+  to decide to draw pushed in or out.
+  - fltk::INACTIVE draws it grayed out.
 
-  The style is also passed, this is used to extract the buttonbox()
-  or perhaps some other color info. I may eliminate this.
+  Only one arrow direction at a time is currently supported. This
+  may be improved in the future.
 */
+Symbol* Widget::default_glyph = &::glyph;
 
-/*! This is the glyph() function put into the default_style. See
-  \ref glyphs for what it does. */
-void Widget::default_glyph(int glyph, const Rectangle& rr)
+void DefaultGlyph::_draw(const Rectangle& rr) const
 {
   Box* box = 0;
   Rectangle r(rr);
 
-  // handle special glyphs that don't draw the box:
-  switch (glyph) {
-  case GLYPH_UP:
-  case GLYPH_DOWN:
-  case GLYPH_LEFT:
-  case GLYPH_RIGHT:
-    // these glyphs do not have a box
-    break;
-  default: {
+  // draw the box:
+  if (drawflags(ALIGN_INSIDE)) {
     box = drawstyle()->buttonbox();
     box->draw(r);
-    if (glyph <= GLYPH_BOX) return;
+    if (!(drawflags()&15)) return; // return if no arrow wanted
     box->inset(r);
-    }
   }
 
+  // make the rectangle square:
   if (r.w() > r.h()) {
     r.x(r.x()+(r.w()-r.h())/2);
     r.w(r.h());
   }
+
   // to draw the shape inactive, draw it twice to get the engraved look:
   const Color saved_color = getcolor();
   int i = 0;
@@ -76,10 +77,9 @@ void Widget::default_glyph(int glyph, const Rectangle& rr)
   for (;;) {
 
     int w1 = (r.w()+2)/3; int x1,y1;
-    switch(glyph) {
+    switch(drawflags()&15) {
 
-    case GLYPH_UP_BUTTON:
-    case GLYPH_UP:
+    case ALIGN_TOP:
       x1 = r.x()+(r.w()-1)/2-w1+i;
       y1 = r.y()+(r.h()-w1-1)/2+i;
       addvertex(x1, y1+w1);
@@ -87,8 +87,7 @@ void Widget::default_glyph(int glyph, const Rectangle& rr)
       addvertex(x1+w1, y1);
       break;
 
-    case GLYPH_DOWN_BUTTON:
-    case GLYPH_DOWN:
+    case ALIGN_BOTTOM:
       x1 = r.x()+(r.w()-1)/2-w1+i;
       y1 = r.y()+(r.h()-w1)/2+i;
       addvertex(x1, y1);
@@ -96,8 +95,7 @@ void Widget::default_glyph(int glyph, const Rectangle& rr)
       addvertex(x1+2*w1, y1);
       break;
 
-    case GLYPH_LEFT_BUTTON:
-    case GLYPH_LEFT:
+    case ALIGN_LEFT:
       x1 = r.x()+(r.w()-w1-1)/2+i;
       y1 = r.y()+(r.h()-1)/2-w1+i;
       addvertex(x1, y1+w1);
@@ -105,9 +103,7 @@ void Widget::default_glyph(int glyph, const Rectangle& rr)
       addvertex(x1+w1, y1);
       break;
 
-    case GLYPH_RIGHT_BUTTON:
-    case GLYPH_RIGHT:
-    default:
+    case ALIGN_RIGHT:
       x1 = r.x()+(r.w()-w1)/2+i;
       y1 = r.y()+(r.h()-1)/2-w1+i;
       addvertex(x1, y1);
@@ -121,6 +117,23 @@ void Widget::default_glyph(int glyph, const Rectangle& rr)
     else break;
   }
   if (box) drawstyle()->focusbox()->draw(r);
+}
+
+/**
+  Changes the lower 5 bits (the "align" bits) of drawflags() to be the
+  value of \a which, then draws the glyph(), then put drawflags()
+  back. This is a convienence function for widgets that actually need
+  to draw several different glyphs. They have to define a glyph whicy
+  draws a different image depending on the align flags.  This allows
+  the style to be changed by replacing the glyph function, though the
+  replacement should draw the same things for the align flags, perhaps
+  by being an fltk::MultiImage.
+*/
+void Widget::draw_glyph(int which, const Rectangle& rectangle) const {
+  int savedflags = drawflags_;
+  drawflags_ = savedflags&~ALIGN_MASK | which;
+  glyph()->draw(rectangle);
+  drawflags_ = savedflags;
 }
 
 //

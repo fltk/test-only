@@ -137,7 +137,7 @@ void MenuTitle::draw() {
 	menustate->widget->children(menustate->indexes,1)>=0) {
       // Use the item's fontsize for the size of the arrow, rather than h:
       int nh = int(item->textsize());
-      draw_glyph(GLYPH_RIGHT, Rectangle(w()-nh, ((h()-nh)>>1), nh, nh));
+      draw_glyph(ALIGN_RIGHT, Rectangle(w()-nh, ((h()-nh)>>1), nh, nh));
     }
 
     pop_matrix();
@@ -356,7 +356,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       else if (this->children(array,level+1)>=0) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
 	int nh = int(item->textsize());
-	draw_glyph(GLYPH_RIGHT, Rectangle(ir.r()-nh, ir.y()+((ir.h()-nh)>>1), nh, nh));
+	draw_glyph(ALIGN_RIGHT, Rectangle(ir.r()-nh, ir.y()+((ir.h()-nh)>>1), nh, nh));
       } else if (!widget->parent()) {
 	unsigned hotkey = item->shortcut();
 	if (hotkey)

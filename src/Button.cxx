@@ -92,7 +92,7 @@ static bool initial_value;
 int Button::handle(int event) {
   return handle(event, Rectangle(w(),h()));
 }
-
+#include <stdio.h>
 int Button::handle(int event, const Rectangle& rectangle) {
   switch (event) {
   case ENTER:
@@ -101,7 +101,7 @@ int Button::handle(int event, const Rectangle& rectangle) {
   case MOVE:
     return 1;
   case PUSH:
-    if (pushed_button == this) return 1; /* this is pushed already, don't change value */
+    if (pushed()) return 1; /* this is pushed already, don't change value */
     initial_value = value();
   case DRAG: {
     bool new_value;
@@ -113,10 +113,9 @@ int Button::handle(int event, const Rectangle& rectangle) {
       pushed_button = 0;
       new_value = initial_value;
     }
-    if (value(new_value) && when()&WHEN_CHANGED) do_callback();
+    if (value(new_value) && (when()&WHEN_CHANGED)) do_callback();
     return 1;}
   case RELEASE:
-    pushed_button = 0;
     if (value() == initial_value) return 1;
     redraw(DAMAGE_VALUE);
     if (type() == RADIO)
@@ -163,11 +162,16 @@ int Button::handle(int event, const Rectangle& rectangle) {
 
 extern Widget* fl_did_clipping;
 
-/*! Draw button-like widgets with an optional glyph. The glyph is given
-  a size (negative to put it on the right). Subclasses such as CheckButton
-  use this to draw the checkmark.
+/*!
+  This function provides a mess of back-compatabilty and Windows
+  emulation to subclasses of Button to draw with. It will draw the
+  button according to the current state of being pushed and it's
+  value. If non-zero is passed for \a glyph_width then the glyph()
+  is drawn in that space on the left (or on the right if negative),
+  and it assummes the glyph indicates the value, so the box is only
+  used to indicate the pushed state.
 */
-void Button::draw(int glyph, int glyph_width) const
+void Button::draw(int glyph_width) const
 {
   // For back-compatability, setting color() or box() directly on a plain
   // button will cause it to act like buttoncolor() or buttonbox() are
@@ -188,14 +192,14 @@ void Button::draw(int glyph, int glyph_width) const
   Flags glyph_flags = box_flags & ~(HIGHLIGHT|OUTPUT);
   if (glyph_width) {
     if (value()) glyph_flags |= VALUE;
-    if (this == pushed_button) {
+    if (this == pushed_button && pushed()) {
       box_flags |= VALUE|PUSHED;
       if (box == NO_BOX) glyph_flags |= PUSHED;
       else if (!(when()&WHEN_CHANGED)) glyph_flags ^= VALUE;
     }
   } else {
     if (value()) box_flags |= VALUE;
-    if (this == pushed_button) box_flags |= PUSHED;
+    if (this == pushed_button && pushed()) box_flags |= PUSHED;
   }
 
   // only draw "inside" labels:
@@ -257,7 +261,7 @@ void Button::draw(int glyph, int glyph_width) const
     else
       gr.x(r.x()+3);
     drawstyle(style,glyph_flags);
-    (this->glyph())(glyph, gr);
+    this->glyph()->draw(gr);
     drawstyle(style,box_flags);
   }
   focusbox()->draw(r);
@@ -268,7 +272,7 @@ void Button::draw() {
     fl_did_clipping = this;
     return;
   }
-  draw(0,0);
+  draw(0);
 }
 
 ////////////////////////////////////////////////////////////////

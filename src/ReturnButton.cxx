@@ -24,6 +24,7 @@
 #include <fltk/ReturnButton.h>
 #include <fltk/events.h>
 #include <fltk/draw.h>
+#include <fltk/Symbol.h>
 using namespace fltk;
 
 /*! \class fltk::ReturnButton
@@ -34,48 +35,50 @@ using namespace fltk;
 
 */
 
-// this is public so draw_symbol can call it:
-void fl_glyph_return(int, const Rectangle& r)
-{
-  int size = r.w(); if (r.h()<size) size = r.h();
-  int d = (size+2)/4; if (d<3) d = 3;
-  int t = (size+9)/12; if (t<1) t = 1;
-  int x0 = r.x()+((r.w()-2*d-2*t-1)>>1);
-  int x1 = x0+d;
-  int y0 = r.center_y();
+static class ReturnButtonGlyph : public Symbol {
+public:
+  void _draw(const Rectangle& r) const {
+    int size = r.w(); if (r.h()<size) size = r.h();
+    int d = (size+2)/4; if (d<3) d = 3;
+    int t = (size+9)/12; if (t<1) t = 1;
+    int x0 = r.x()+((r.w()-2*d-2*t-1)>>1);
+    int x1 = x0+d;
+    int y0 = r.center_y();
 #if 1
-  setcolor(WHITE);
-  newpath();
-  addvertex(x0, y0);
-  addvertex(x1, y0+d);
-  addvertex(x1, y0+t);
-  addvertex(x1+d+2*t, y0+t);
-  addvertex(x1+d+2*t, y0-d);
-  strokepath();
-  drawline(x1, y0-t, x1, y0-d);
-  setcolor(GRAY00);
-  drawline(x0, y0, x1, y0-d);
-  newpath();
-  addvertex(x1+1, y0-t);
-  addvertex(x1+d, y0-t);
-  addvertex(x1+d, y0-d);
-  addvertex(x1+d+2*t, y0-d);
-  setcolor(GRAY33);
-  strokepath();
+    setcolor(WHITE);
+    newpath();
+    addvertex(x0, y0);
+    addvertex(x1, y0+d);
+    addvertex(x1, y0+t);
+    addvertex(x1+d+2*t, y0+t);
+    addvertex(x1+d+2*t, y0-d);
+    strokepath();
+    drawline(x1, y0-t, x1, y0-d);
+    setcolor(GRAY00);
+    drawline(x0, y0, x1, y0-d);
+    newpath();
+    addvertex(x1+1, y0-t);
+    addvertex(x1+d, y0-t);
+    addvertex(x1+d, y0-d);
+    addvertex(x1+d+2*t, y0-d);
+    setcolor(GRAY33);
+    strokepath();
 #else // solid arrow written by Carl
-  setcolor(inactive(fc, f));
-  polygon(x0,y0, x1,y0+d, x1, y0-d);
-  fillrect(x1,y0-t,d,2*t+1);
-  fillrect(x1+d,y0-d,2*t+1,d+t+1);
+    setcolor(inactive(fc, f));
+    polygon(x0,y0, x1,y0+d, x1, y0-d);
+    fillrect(x1,y0-t,d,2*t+1);
+    fillrect(x1+d,y0-d,2*t+1,d+t+1);
 #endif
-}
+  }
+  ReturnButtonGlyph() : Symbol("returnarrow") {}
+} glyph;
 
 void ReturnButton::draw() {
-  Button::draw(0,-2*int(textsize()));
+  Button::draw(-2*int(textsize()));
 }
 
 static void revert(Style* s) {
-  s->glyph_ = fl_glyph_return;
+  s->glyph_ = &glyph;
 }
 static NamedStyle style("ReturnButton", revert, &ReturnButton::default_style);
 NamedStyle* ReturnButton::default_style = &::style;

@@ -132,9 +132,11 @@ static fltk::Font* grok_font(char* s, float& fontsize, char* fontencoding)
   }
 
   // Read point size field:
+  // as far as I can tell, any dpi other than 96 is a mistake by XFree86:
   fontsize = 12;
   if ( (p = strtok_r(0, ",", &sv)) )
-    fontsize = atoi(p) * Monitor::all().dpi()/72;
+    //fontsize = atoi(p) * Monitor::all().dpi()/72;
+    fontsize = atoi(p) * 96/72;
 
   // If it is bad, guess that the next is pixelsize:
   p = strtok_r(0, ",", &sv);

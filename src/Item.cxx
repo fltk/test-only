@@ -71,7 +71,7 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
     The \a menubar flag causes it to mangle the style so that the
     buttonbox of \a style is used as the box, and the highlight_color
     is used as the selection_color. This is done to replicate the
-    rather inconsistent appearance on Windows of menus.
+    rather inconsistent appearance on Windows of menubars.
 
     Use Item::clear_style() to put this back so that \a style can
     be deleted. This is the same as setting it to Widget::default_style.
@@ -84,20 +84,26 @@ void Item::set_style(const Style* style, bool menubar) {
 
   static Box* savedbox;
   static Color savedcolor;
+  static Color savedtextcolor;
   static bool savedmenubar;
   if (menubar) {
     if (!savedmenubar) {
       savedbox = ::style.box_;
       savedcolor = ::style.selection_color_;
+      savedtextcolor = ::style.selection_textcolor_;
       savedmenubar = true;
     }
     ::style.box_ = style->buttonbox();
     ::style.selection_color_ = style->highlight_color();
-    if (!::style.selection_color_) ::style.selection_color_ = style->color();
+    if (!::style.selection_color_) {
+      ::style.selection_color_ = style->color();
+      ::style.selection_textcolor_ = style->textcolor();
+    }
   } else {
     if (savedmenubar) {
       ::style.box_ = savedbox;
       ::style.selection_color_ = savedcolor;
+      ::style.selection_textcolor_ = savedtextcolor;
       savedmenubar = false;
     }
   }
@@ -111,13 +117,12 @@ void Item::set_style(const Style* style, bool menubar) {
 */
 void Item::draw() {
   drawstyle(style(), flags() & ~OUTPUT);
-  Box* box;
-  box = this->box();
   if (flags() & SELECTED) {
     setbgcolor(selection_color());
     setcolor(contrast(selection_textcolor(), getbgcolor()));
   }
   Rectangle r(w(),h());
+  Box* box = this->box();
   box->draw(r);
   box->inset(r);
   if (type()) {
@@ -197,13 +202,12 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 
 void ItemGroup::draw() {
   drawstyle(style(), flags() & ~OUTPUT);
-  Box* box;
-  box = this->box();
   if (flags() & SELECTED) {
     setbgcolor(selection_color());
     setcolor(contrast(selection_textcolor(), getbgcolor()));
   }
   Rectangle r(w(),h());
+  Box* box = this->box();
   box->draw(r);
   box->inset(r);
   draw_label(r, flags());

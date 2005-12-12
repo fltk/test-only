@@ -98,7 +98,6 @@ Color fltk::lerp(Color color0, Color color1, float weight) {
   if (weight >= 1) return color1;
   Color rgb0 = get_color_index(color0);
   Color rgb1 = get_color_index(color1);
-  if (rgb0 == rgb1) return color0;
   return color(
 	(uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb0>>24))*(1-weight)),
 	(uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb0>>16))*(1-weight)),
@@ -119,11 +118,17 @@ Color fltk::inactive(Color c, Flags f) {
 /*! Returns \a fg if fltk decides it can be seen well when drawn against
   \a bg. Otherwise it returns either fltk::BLACK or fltk::WHITE. */
 Color fltk::contrast(Color fg, Color bg) {
-  Color c1 = get_color_index(fg);
-  Color c2 = get_color_index(bg);
-  if ((c1^c2)&0x80800000)
+  uchar r1,g1,b1; split_color(fg, r1,g1,b1);
+  uchar r2,g2,b2; split_color(bg, r2,g2,b2);
+  int t = int(r1)-int(r2);
+  int r = t*t*3;
+  t = int(g1)-int(g2);
+  r += t*t*10;
+//   t = int(b1)-int(b2); // difference in blue is ignored
+//   r += t*t;
+  if (2*r > r1*g1+0xD8*0xD8)
     return fg;
-  else if (c2&0x80800000)
+  if (r2>0xA0 || g2>0x50)
     return BLACK;
   else
     return WHITE;

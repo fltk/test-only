@@ -110,11 +110,11 @@ void ValueInput::draw() {
       f[which_pushed-1] |= VALUE;
     Rectangle gr(r.r(),r.y(),bw,bw);
     drawstyle(style(),f[0]);
-    draw_glyph(GLYPH_UP_BUTTON, gr);
+    draw_glyph(ALIGN_TOP|ALIGN_INSIDE, gr);
     gr.move_y(bw);
     gr.h(r.h()-bw);
     drawstyle(style(),f[1]);
-    draw_glyph(GLYPH_DOWN_BUTTON, gr);
+    draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
   }
   input.label(label());
   input.align(align());

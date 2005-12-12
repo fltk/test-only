@@ -67,7 +67,7 @@ void ComboBox::draw() {
     Rectangle r(w(),h());
     r.set_x(w()-h()*4/5);
     box()->inset(r);
-    draw_glyph(GLYPH_DOWN_BUTTON, r);
+    draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, r);
   }
   input_->set_damage(damage()|input_->damage());
   if (input_->damage()) {
