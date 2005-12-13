@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.16 2004/08/22 15:55:01 leka Exp $"
+// "$Id$"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@ int sort(const void* a, const void* b) {
   return strcasecmp(A->name(), B->name());
 }
 
-struct {const char* name; const char* text;} specialtable[] = {
+struct fl_char_table {const char* name; const char* text;} specialtable[] = {
   {"b", "@t@@b;\t@n@b;bold"},
   {"B", "@t@@B#;\t@n@B11;bg color"},
   {"C", "@t@@C#;\t@n@C11;color"},
@@ -113,5 +113,5 @@ int main(int argc, char** argv) {
 }
 
 /*
- * End of "$Id: symbols.cxx,v 1.16 2004/08/22 15:55:01 leka Exp $".
+ * End of "$Id$".
  */
