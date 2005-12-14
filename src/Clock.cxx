@@ -153,10 +153,10 @@ void ClockOutput::value(int h, int m, int s) {
 /*! Set the clock to a Unix timestamp. The value is passed through
   the localtime() library function and used to get the hour, minute,
   and second */
-void ClockOutput::value(unsigned long v) {
+void ClockOutput::value(time_t v) {
   value_ = v;
   struct tm *timeofday;
-  timeofday = localtime((const time_t *)&v);
+  timeofday = localtime(&v);
   value(timeofday->tm_hour, timeofday->tm_min, timeofday->tm_sec);
 }
 
