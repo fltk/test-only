@@ -1,6 +1,6 @@
 #!/bin/python
 #
-# "$Id$"
+# "$Id: $"
 # 
 # fltofltk.py -- convert FLTK 1.x code to FLTK 2.x
 #
@@ -616,5 +616,5 @@ main()
 # 0.1 - October 2005
 # * Initial version
 #
-# End of $Id: cfg.pm,v 1.27 2005/12/15 03:54:15 chriwarr Exp $"
+# End of $Id: $"
 
