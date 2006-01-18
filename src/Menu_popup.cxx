@@ -944,7 +944,7 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
 
   Widget* saved_modal = modal(); bool saved_grab = grab();
   p.state = INITIAL_STATE;
-  track_mouse = event_state(ANY_BUTTON);
+  track_mouse = true; //event_state(ANY_BUTTON);
 #ifdef DEBUG
 #define MODAL false
 #else

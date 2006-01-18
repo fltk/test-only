@@ -43,6 +43,8 @@ public:
   - fltk::ALIGN_INSIDE draws the current drawstyle() buttonbox() around
   the arrow. This will usually use the fltk::PUSHED or other flags
   to decide to draw pushed in or out.
+  - if left/right/top/bottom are all off it draws a box as well. This
+  is so zero will draw something.
   - fltk::INACTIVE draws it grayed out.
 
   Only one arrow direction at a time is currently supported. This
@@ -56,17 +58,10 @@ void DefaultGlyph::_draw(const Rectangle& rr) const
   Rectangle r(rr);
 
   // draw the box:
-  if (drawflags(ALIGN_INSIDE)) {
+  if (drawflags(ALIGN_INSIDE) || !(drawflags()&15)) {
     box = drawstyle()->buttonbox();
     box->draw(r);
-    if (!(drawflags()&15)) return; // return if no arrow wanted
     box->inset(r);
-  }
-
-  // make the rectangle square:
-  if (r.w() > r.h()) {
-    r.x(r.x()+(r.w()-r.h())/2);
-    r.w(r.h());
   }
 
   // to draw the shape inactive, draw it twice to get the engraved look:
@@ -76,7 +71,7 @@ void DefaultGlyph::_draw(const Rectangle& rr) const
 
   for (;;) {
 
-    int w1 = (r.w()+2)/3; int x1,y1;
+    int w1 = ((r.h()<r.w()?r.h():r.w())+2)/3; int x1,y1;
     switch(drawflags()&15) {
 
     case ALIGN_TOP:

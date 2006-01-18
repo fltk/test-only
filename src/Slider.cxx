@@ -368,31 +368,6 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
     draw_ticks(tr, (slider_size()+1)/2);
   }
 
-  drawstyle(style(),flags|OUTPUT);
-  // if user directly set selected_color we use it:
-  if (style()->selection_color_) {
-    setbgcolor(style()->selection_color_);
-    setcolor(contrast(selection_textcolor(), style()->selection_color_));
-  }
-
-  // figure out where the slider should be:
-  Rectangle s(r);
-  int sp;
-  int sglyph = 0;
-  if (horizontal()) {
-    s.x(sp = r.x()+slider_position(value(),r.w()));
-    s.w(slider_size_);
-    if (!s.w()) {s.w(s.x()-r.x()); s.x(r.x());} // fill slider
-    else sglyph=16;
-  } else {
-    s.y(sp = r.y()+slider_position(value(),r.h()));
-    s.h(slider_size_);
-    if (!s.h()) {s.h(r.b()-s.y());} // fill slider
-    else sglyph=16;
-  }
-
-  old_position = sp;
-
   if (slot) {
     const int slot_size_ = 6;
     Rectangle sl;
@@ -408,12 +383,31 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
       sl.x(r.x()+(r.w()-slot_size_+1)/2);
       sl.w(slot_size_);
     }
-    const Color saved = getbgcolor();
     setbgcolor(BLACK);
     THIN_DOWN_BOX->draw(sl);
-    setbgcolor(saved);
   }
 
+  drawstyle(style(),flags|OUTPUT);
+  // if user directly set selected_color we use it:
+  if (style()->selection_color_) {
+    setbgcolor(style()->selection_color_);
+    setcolor(contrast(selection_textcolor(), style()->selection_color_));
+  }
+
+  // figure out where the slider should be:
+  Rectangle s(r);
+  int sglyph = ALIGN_INSIDE; // draw a box
+  if (horizontal()) {
+    s.x(r.x()+slider_position(value(),r.w()));
+    s.w(slider_size_);
+    if (!s.w()) {s.w(s.x()-r.x()); s.x(r.x());} // fill slider
+    else sglyph=0; // draw our own special glyph
+  } else {
+    s.y(r.y()+slider_position(value(),r.h()));
+    s.h(slider_size_);
+    if (!s.h()) {s.h(r.b()-s.y());} // fill slider
+    else sglyph=0; // draw our own special glyph
+  }
   draw_glyph(sglyph, s); // draw slider in new position
   return true;
 }
@@ -507,12 +501,14 @@ int Slider::handle(int event) {
 static class SliderGlyph : public Symbol {
 public:
   void _draw(const Rectangle& rr) const {
-    // this stops the scrollbar from being pushed-in:
+
+    // this stops the scroller from being pushed-in, while leaving the flag
+    // set so that an alternative glyph can draw differently when pushed:
     if (!(drawflags()&15)) setdrawflags(drawflags()&~VALUE);
 
     // See if anything other than the slider is being drawn, if so
     // call the Widget::default_glyph:
-    if ((drawflags()&31) != 16) {
+    if (drawflags()&31) {
       Widget::default_glyph->draw(rr);
       return;
     }

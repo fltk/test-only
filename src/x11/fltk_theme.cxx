@@ -92,15 +92,15 @@ static void add_event_handler() {
   if (!done) {
     done = true;
     open_display();
-    Atom kde_atom = XInternAtom(xdisplay, "KDE_DESKTOP_WINDOW", False);
+    Atom kde_atom = XInternAtom(xdisplay, "KDE_DESKTOP_WINDOW", false);
     long data = 1;
     XChangeProperty(xdisplay, message_window, kde_atom, kde_atom, 32,
 		    PropModeReplace, (unsigned char *)&data, 1);
 
-    ChangeGeneral = XInternAtom(xdisplay, "KDEChangeGeneral", False);
-    //ChangeStyle = XInternAtom(xdisplay, "KDEChangeStyle", False);
-    ChangePalette = XInternAtom(xdisplay, "KDEChangePalette", False);
-    KIPC = XInternAtom(xdisplay, "KIPC_COMM_ATOM", False);
+    ChangeGeneral = XInternAtom(xdisplay, "KDEChangeGeneral", false);
+    //ChangeStyle = XInternAtom(xdisplay, "KDEChangeStyle", false);
+    ChangePalette = XInternAtom(xdisplay, "KDEChangePalette", false);
+    KIPC = XInternAtom(xdisplay, "KIPC_COMM_ATOM", false);
     fltk::add_event_handler(x_event_handler);
   }
 }

@@ -38,7 +38,6 @@ class FL_API Slider : public Valuator {
 
   unsigned short slider_size_;
   unsigned short tick_size_;
-  unsigned short old_position;
 
 public:
 

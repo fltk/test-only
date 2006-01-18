@@ -290,7 +290,8 @@ void Scrollbar::draw() {
 static class ScrollBarGlyph : public Symbol {
 public:
   void _draw(const Rectangle& r) const {
-    if (!drawflags()&ALIGN_MASK) setdrawflags(drawflags()&~VALUE);
+    // If the box is being drawn, don't draw pushed in and turn on the box:
+    if (!(drawflags()&ALIGN_MASK)) setdrawflags(drawflags()&~VALUE);
     Widget::default_glyph->draw(r);
   }
   ScrollBarGlyph() : Symbol() {}

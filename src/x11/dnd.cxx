@@ -66,7 +66,7 @@ static int dnd_aware(XWindow xwindow) {
   Atom actual; int format; unsigned long count, remaining;
   unsigned char *data = 0;
   XGetWindowProperty(xdisplay, xwindow, XdndAware,
-		     0, 4, False, XA_ATOM,
+		     0, 4, false, XA_ATOM,
 		     &actual, &format,
 		     &count, &remaining, &data);
   if (actual == XA_ATOM && format==32 && count && data)
@@ -218,11 +218,11 @@ bool fltk::dnd() {
     msg.y_root = e_y_root;
     msg.state = 0x0;
     msg.button = Button2;
-    XSendEvent(xdisplay, target_window, False, 0L, (XEvent*)&msg);
+    XSendEvent(xdisplay, target_window, false, 0L, (XEvent*)&msg);
     msg.time++;
     msg.state = 0x200;
     msg.type = ButtonRelease;
-    XSendEvent(xdisplay, target_window, False, 0L, (XEvent*)&msg);
+    XSendEvent(xdisplay, target_window, false, 0L, (XEvent*)&msg);
 #endif
   }
 

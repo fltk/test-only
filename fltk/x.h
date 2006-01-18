@@ -69,25 +69,25 @@
 # if USE_XFT
 #  include <X11/Xft/Xft.h>
 # else
- typedef struct _XftDraw XftDraw;
+   typedef struct _XftDraw XftDraw;
 # endif
 
 # if USE_CAIRO
 #  include <cairo.h>
 #  include <cairo-xlib.h>
 # else
- typedef struct _cairo cairo_t;
+   typedef struct _cairo cairo_t;
 # endif
 
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/XI.h>
+# include <X11/extensions/XInput.h>
+# include <X11/extensions/XI.h>
 
 # undef Window
 
 # if defined(__FreeBSD__) || defined(__APPLE__) || defined(__CYGWIN__)
-typedef unsigned long	ulong;
-typedef unsigned int	uint;
-typedef unsigned char	uchar;
+   typedef unsigned long	ulong;
+   typedef unsigned int		uint;
+   typedef unsigned char	uchar;
 # endif
 
 #endif
