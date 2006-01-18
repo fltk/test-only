@@ -1057,6 +1057,9 @@ char fl_key_vector[32]; // used by get_key()
 // Records shift keys that X does not handle:
 static int extra_state;
 
+// allows is_click() to be set for KEYUP events:
+static unsigned recent_keycode;
+
 // Record event mouse position and state from an XEvent.
 static void set_event_xy(bool push) {
 #if CONSOLIDATE_MOTION
@@ -1072,8 +1075,10 @@ static void set_event_xy(bool push) {
   static int px, py;
   static ulong ptime;
   if (abs(e_x_root-px)+abs(e_y_root-py) > 3
-      || event_time >= ptime+(push?1000:200))
+      || event_time >= ptime+(push?1000:200)) {
     e_is_click = 0;
+    recent_keycode = 0;
+  }
   if (push) {
     px = e_x_root;
     py = e_y_root;
@@ -1155,7 +1160,7 @@ bool fltk::handle()
 	Atom actual; int format; unsigned long count, remaining;
 	unsigned char *buffer = 0;
 	XGetWindowProperty(xdisplay, dnd_source_window, XdndTypeList,
-			   0, 0x8000000L, False, XA_ATOM, &actual, &format,
+			   0, 0x8000000L, false, XA_ATOM, &actual, &format,
 			   &count, &remaining, &buffer);
 	if (actual != XA_ATOM || format != 32 || count<4 || !buffer)
 	  goto FAILED;
@@ -1427,10 +1432,10 @@ bool fltk::handle()
     // Make repeating keys increment the click counter:
     if (fl_key_vector[keycode/8]&(1<<(keycode%8))) {
       e_key_repeated++;
-      e_is_click = 0;
+      recent_keycode = 0;
     } else {
       e_clicks = 0;
-      e_is_click = keycode+100;
+      recent_keycode = keycode;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
     static char* buffer = 0;
@@ -1491,7 +1496,8 @@ bool fltk::handle()
     unsigned keycode = xevent.xkey.keycode;
     fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
     // Leave event_is_click() on only if this is the last key pressed:
-    if (e_is_click != keycode+100) e_is_click = 0;
+    e_is_click = (recent_keycode == keycode);
+    recent_keycode = 0;
     event = KEYUP;
     goto GET_KEYSYM;}
 
@@ -1883,7 +1889,7 @@ void CreatedWindow::create(Window* window,
     // Set up the icon and initial icon state:
     XWMHints *hints = XAllocWMHints();
     hints->flags = InputHint;
-    hints->input = True; // some window managers require this to be sent?
+    hints->input = true; // some window managers require this to be sent?
 #if 0
     // not clear if this does anything useful. I have not seen any effect
     // on KDE or Gnome:

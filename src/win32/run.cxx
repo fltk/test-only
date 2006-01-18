@@ -356,8 +356,6 @@ MSG fltk::msg;
 // returns zero if nothing happens during a 0.0 timeout, otherwise
 // it returns 1.
 static inline int fl_wait(double time_to_wait) {
-  int have_message = 0;
-  int timerid;
 
 #ifndef USE_ASYNC_SELECT
   if (nfds) {
@@ -1208,6 +1206,8 @@ static unsigned long shiftflags(bool ignorealt=false) {
   return state;
 }
 
+static int recent_keysym = 0;
+
 static bool mouse_event(Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
@@ -1260,6 +1260,7 @@ static bool mouse_event(Window *window, int what, int button,
   J1:
     if (!grab_) SetCapture(xid(window));
     e_keysym = e_is_click = button;
+    recent_keysym = 0;
     px = pmx = e_x_root; py = pmy = e_y_root;
     if (handle(PUSH, window)) return true;
     // If modal is on and 0 is returned, we should turn off modal and
@@ -1279,7 +1280,10 @@ static bool mouse_event(Window *window, int what, int button,
     // MSWindows produces extra events even if mouse does not move, ignore em:
     if (e_x_root == pmx && e_y_root == pmy) return true;
     pmx = e_x_root; pmy = e_y_root;
-    if (abs(e_x_root-px)>5 || abs(e_y_root-py)>5) e_is_click = 0;
+    if (abs(e_x_root-px)>5 || abs(e_y_root-py)>5) {
+      e_is_click = 0;
+      recent_keysym = 0;
+    }
     return handle(MOVE,window);
   }
 }
@@ -1550,17 +1554,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // so we ignore it for WM_CHAR messages:
     e_state = (e_state & 0xff000000) | shiftflags(uMsg==WM_CHAR);
     if (lParam & (1<<31)) { // key up events.
-      if (e_is_click != e_keysym) e_is_click = 0;
+      e_is_click = (recent_keysym == e_keysym);
+      recent_keysym = 0;
       if (handle(KEYUP, window)) return 0;
       break;
     }
     // if same as last key, increment repeat count:
     if (lParam & (1<<30)) {
       e_key_repeated++;
-      e_is_click = 0;
+      recent_keysym = 0;
     } else {
       e_key_repeated = 0;
-      e_is_click = e_keysym;
+      recent_keysym = e_keysym;
     }
 
     // translate to text:
@@ -1876,7 +1881,6 @@ void Window::layout() {
     resize_from_system = 0;
   } else if (i && flags) {
      int real_x = this->x(); int real_y = this->y();
-     // this should not treat x,y differently from any other widget
      for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
        real_x += p->x(); real_y += p->y();
      }
