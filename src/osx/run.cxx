@@ -46,7 +46,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-// #define DEBUG_SELECT		// UNCOMMENT FOR SELECT()/THREAD DEBUGGING
+//#define DEBUG_SELECT		// UNCOMMENT FOR SELECT()/THREAD DEBUGGING
 #ifdef DEBUG_SELECT
 #include <stdio.h>	// testing
 #define DEBUGMSG(msg)		fprintf(stderr, msg);
@@ -85,8 +85,12 @@ static struct FD {
   void (*cb)(int, void*);
   void* arg;
 } *fd = 0;
-static int G_pipe[2] = { 0,0 };		// work around pthread_cancel() problem
+static pthread_t select_thread = 0;	// parallel thread running select()
+static int G_pipe[2] = { 0,0 };		// for waking up that thread
 static pthread_mutex_t select_mutex;	// lock for above data
+static inline void wake_select_thread() {
+  if (select_thread) write(G_pipe[1], "x", 1);
+}
 
 //+++ verify port to FLTK2
 void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
@@ -105,6 +109,7 @@ void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   if (events & POLLOUT) FD_SET(n, &fdsets[1]);
   if (events & POLLERR) FD_SET(n, &fdsets[2]);
   if (n > maxfd) maxfd = n;
+  wake_select_thread();
   pthread_mutex_unlock(&select_mutex);
 }
 
@@ -135,82 +140,84 @@ void fltk::remove_fd(int n, int events) {
   if (events & POLLIN) FD_CLR(n, &fdsets[0]);
   if (events & POLLOUT) FD_CLR(n, &fdsets[1]);
   if (events & POLLERR) FD_CLR(n, &fdsets[2]);
+  wake_select_thread();
   pthread_mutex_unlock(&select_mutex);
 }
 
 enum { kEventClassFLTK = 'fltk' };
 enum { kEventFLTKBreakLoop = 1, kEventFLTKDataReady };
 
-// DATA READY THREAD
+// select_thread
 //    Separate thread, watches for changes in user's file descriptors.
 //    Sends a 'data ready event' to the main thread if any change.
-//+++ verify port to FLTK2
-static void *dataready_thread(void *userdata)
+// WAS: This new one locks and does the callback. Without this it is
+// impossible to call select() again. Wonko was killing this thread
+// on every event to stop it.
+static void *select_thread_proc(void *userdata)
 {
-  EventRef drEvent;
-  CreateEvent( 0, kEventClassFLTK, kEventFLTKDataReady,
-               0, kEventAttributeUserEvent, &drEvent);
   EventQueueRef eventqueue = (EventQueueRef)userdata;
 
-  // Thread safe local copy
-  pthread_mutex_lock(&select_mutex);
-  int maxfd = ::maxfd;
-  fd_set r = fdsets[0];
-  fd_set w = fdsets[1];
-  fd_set x = fdsets[2];
-  pthread_mutex_unlock(&select_mutex);
+  while (1) {
+    // Thread safe local copy
+    pthread_mutex_lock(&select_mutex);
+    int maxfd = ::maxfd;
+    fd_set r = fdsets[0];
+    fd_set w = fdsets[1];
+    fd_set x = fdsets[2];
+    pthread_mutex_unlock(&select_mutex);
+    // TACK ON FD'S FOR 'CANCEL PIPE'
+    FD_SET(G_pipe[0], &r);
+    if ( G_pipe[0] > maxfd ) maxfd = G_pipe[0];
 
-  // TACK ON FD'S FOR 'CANCEL PIPE'
-  FD_SET(G_pipe[0], &r);
-  if ( G_pipe[0] > maxfd ) maxfd = G_pipe[0];
-
-  // FOREVER UNTIL THREAD CANCEL OR ERROR
-  while ( 1 )
-  {
-    timeval t = { 1000, 0 };	// 1000 seconds;
-    int ret = ::select(maxfd+1, &r, &w, &x, &t);
-    pthread_testcancel();	// OSX 10.0.4 and under: need to do this
+    DEBUGMSG("Calling select\n");
+    //    timeval t = { 1000, 0 };	// 1000 seconds;
+    int ret = ::select(maxfd+1, &r, &w, &x, 0 /*&t*/);
+    //pthread_testcancel();	// OSX 10.0.4 and under: need to do this
                           // so parent can cancel us :(
-    switch ( ret )
-    {
-      case  0:	// NO DATA
-        continue;
-      case -1:	// ERROR
-      {
-        DEBUGPERRORMSG("CHILD THREAD: select() failed");
-        return(NULL);		// error? exit thread
+    if (ret > 0) {
+      DEBUGMSG("Select returned non-zero\n");
+      fltk::lock();
+      for (int i=0; i<nfds; i++) {
+	//fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
+	int f = fd[i].fd;
+	short revents = 0;
+	if (FD_ISSET(f, &r)) revents |= POLLIN;
+	if (FD_ISSET(f, &w)) revents |= POLLOUT;
+	if (FD_ISSET(f, &x)) revents |= POLLERR;
+	if (fd[i].events & revents) {
+	  DEBUGMSG("DOING CALLBACK: ");
+	  fd[i].cb(f, fd[i].arg);
+	  DEBUGMSG("DONE\n");
+	}
       }
-      default:	// DATA READY
-      {
-        DEBUGMSG("DATA READY EVENT: SENDING\n");
-        PostEventToQueue(eventqueue, drEvent, kEventPriorityStandard );
-        return(NULL);		// done with thread
+      fltk::unlock();
+      // see if we need to copy fd_sets again:
+      if (FD_ISSET(G_pipe[0], &r)) {
+	DEBUGMSG("reading from G_pipe\n");
+	char buf[1]; read(G_pipe[0],buf,1);
       }
+      // wake up the main thread with a message:
+      EventRef drEvent;
+      CreateEvent( 0, kEventClassFLTK, kEventFLTKDataReady,
+ 		   0, kEventAttributeUserEvent, &drEvent);
+      PostEventToQueue(eventqueue, drEvent, kEventPriorityStandard);
     }
   }
 }
 
 // Main thread calls this when it gets the above data-ready message:
-// Check to see what's ready, and invoke user's cb's
-//+++ verify port to FLTK2
+// This does nothing right now because above code did the callbacks:
 static void HandleDataReady()
 {
-  DEBUGMSG("DATA READY EVENT: RECEIVED\n");
-  pthread_mutex_lock(&select_mutex);
-  int maxfd = ::maxfd;
+#if 0
+  timeval t = { 0, 0 };		// quick check
   fd_set r = fdsets[0];
   fd_set w = fdsets[1];
   fd_set x = fdsets[2];
-  pthread_mutex_unlock(&select_mutex);
-  timeval t = { 0, 1 };		// quick check
-  switch (::select(maxfd+1, &r, &w, &x, &t)) {
-  case 0:		// NO DATA
-    break;
-  case -1:	// ERROR
-    break;
-  default:	// DATA READY
+  if (::select(maxfd+1, &r, &w, &x, &t) > 0) {
+    //DEBUGMSG("DATA READY EVENT: RECEIVED\n");
     for (int i=0; i<nfds; i++) {
-      // fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
+      //fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
       int f = fd[i].fd;
       short revents = 0;
       if (FD_ISSET(f, &r)) revents |= POLLIN;
@@ -223,6 +230,7 @@ static void HandleDataReady()
       }
     }
   }
+#endif
 }
 
 // these pointers are set by the lock() function:
@@ -406,19 +414,14 @@ static inline int fl_wait(double time)
 
   got_events = 0;
   // START A THREAD TO WATCH FOR DATA READY
-  static pthread_t dataready_tid = 0;
-  if ( nfds ) {
-    void *userdata = (void*)GetCurrentEventQueue();
-
-    // PREPARE INTER-THREAD DATA
+  if ( nfds && !select_thread) {
+    // detect if calling program did not do fltk::lock() and do it:
+    if (fl_lock_function == nothing) fltk::lock();
     pthread_mutex_init(&select_mutex, NULL);
-
-    if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
-    if ( G_pipe[1] ) { close(G_pipe[1]); G_pipe[1] = 0; }
     pipe(G_pipe);
-
     DEBUGMSG("*** START THREAD\n");
-    pthread_create(&dataready_tid, NULL, dataready_thread, userdata);
+    pthread_create(&select_thread, NULL, select_thread_proc,
+		   (void*)GetCurrentEventQueue());
   }
 
   in_main_thread_ = false;
@@ -443,6 +446,7 @@ static inline int fl_wait(double time)
       Point pos;
       GetEventParameter(event, kEventParamMouseLocation, typeQDPoint,
 			NULL, sizeof(pos), NULL, &pos);
+
       WindowRef win;
       if (MacFindWindow(pos, &win)==inMenuBar) {
 	MenuSelect(pos);
@@ -453,17 +457,6 @@ static inline int fl_wait(double time)
   }
   fl_lock_function();
   in_main_thread_ = true;
-
-  if ( dataready_tid != 0 ) {
-    DEBUGMSG("*** CANCEL THREAD: ");
-    pthread_cancel(dataready_tid);	// cancel first
-    write(G_pipe[1], "x", 1);		// then wakeup thread from select
-    pthread_join(dataready_tid, NULL);	// wait for thread to finish
-    if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
-    if ( G_pipe[1] ) { close(G_pipe[1]); G_pipe[1] = 0; }
-    dataready_tid = 0;
-    DEBUGMSG("OK\n");
-  }
 
   // we send LEAVE only if the mouse did not enter some other window:
   // I'm not sure if this is needed or if it works...
@@ -652,6 +645,7 @@ static void button_to_keysym( EventRef event ) {
 
 
 EventRef os_event;		// last (mouse) event
+static UInt32 recent_keycode = 0;
 
 /**
  * Carbon Mouse Button Handler
@@ -696,10 +690,12 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     if (clickCount>1) e_clicks++; else e_clicks = 0;}
     button_to_keysym( event );
     e_is_click = e_keysym;
+    recent_keycode = 0;
     handle( PUSH, window );
     break;
 
   case kEventMouseUp:
+    recent_keycode = 0;
     button_to_keysym( event );
     if (e_is_click != e_keysym) e_is_click = 0;
     handle( RELEASE, window );
@@ -707,7 +703,10 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
 
   case kEventMouseMoved:
   case kEventMouseDragged:
-    if (abs(pos.h-px)>5 || abs(pos.v-py)>5) e_is_click = 0;
+    if (abs(pos.h-px)>5 || abs(pos.v-py)>5) {
+      e_is_click = 0;
+      recent_keycode = 0;
+    }
     handle( MOVE, window ); // handle will convert into DRAG
     break;
   }
@@ -805,16 +804,17 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   case kEventRawKeyDown:
     sendEvent = KEY;
     e_key_repeated = 0;
-    e_is_click = keyCode;
+    recent_keycode = keyCode;
     goto GET_KEYSYM;
   case kEventRawKeyRepeat:
     sendEvent = KEY;
     e_key_repeated++;
-    e_is_click = 0;
+    recent_keycode = 0;
     goto GET_KEYSYM;
   case kEventRawKeyUp:
     sendEvent = KEYUP;
-    if (e_is_click != keyCode) e_is_click = 0;
+    e_is_click = (recent_keycode == keyCode);
+    recent_keycode = 0;
   GET_KEYSYM:
     sym = macKeyLookUp[ keyCode & 0x7f ];
     if (!sym) sym = keyCode|0x8000;
@@ -848,12 +848,18 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     sym = mods_to_e_keysym( prevMods ^ mods );
     if (sym) {
       e_keysym = sym;
-      sendEvent = ( prevMods<mods ) ? KEY : KEYUP;
+      if (prevMods < mods) {
+	sendEvent = KEY;
+	recent_keycode = sym;
+      } else {
+	sendEvent = KEYUP;
+	e_is_click = (recent_keycode == sym);
+	recent_keycode = 0;
+      }
       e_length = 0;
       buffer[0] = 0;
     }
     prevMods = mods;
-    e_is_click = 0;
     break; }
   }
   if (sendEvent && handle(sendEvent, xfocus)) return noErr;
@@ -1233,9 +1239,13 @@ void Window::create()
     // create a desktop window
     int winclass, winattr, where;
     if (!border() || override()) {
-      // used by menus and tooltips
-      winclass = kHelpWindowClass;
-      winattr = 0;
+      if (contains(modal()) || override()) {
+	// used by menus and tooltips
+	winclass = kHelpWindowClass;
+	winattr = 0;
+      } else {
+	winattr = 512; // kWindowNoTitleBarAttribute;
+      }
       where = kWindowCascadeOnParentWindowScreen;
     } else {
       // a normal window with a border
