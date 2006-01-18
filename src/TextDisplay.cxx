@@ -512,8 +512,6 @@ void TextDisplay::layout() {
   update_v_scrollbar();
   update_h_scrollbar();
 
-  redraw();
-
   // clear the layout flag
   Widget::layout();
 }
@@ -3169,21 +3167,16 @@ void TextDisplay::text_drag_me(int pos) {
 
 int TextDisplay::handle(int event) {
   if (!buffer()) return 0;
-  // This isn't very elegant!
-  if (!event_inside(Rectangle(text_area.x(), text_area.y(), text_area.w(), text_area.h())) &&
-      !dragging && event != LEAVE && event != ENTER &&
-      event != MOVE && event != FOCUS && event != UNFOCUS) {
-    return Group::handle(event);
-  }
 
   switch (event) {
   case ENTER:
   case MOVE:
     if (active_r()) {
       if (event_inside(Rectangle(text_area.x(), text_area.y(), text_area.w(), text_area.h()))) {
-        window()->cursor(CURSOR_INSERT);
+        cursor(CURSOR_INSERT);
       } else {
-        window()->cursor(CURSOR_DEFAULT);
+        cursor(CURSOR_DEFAULT);
+	return Group::handle(event);
       }
       return 1;
     } else {
@@ -3201,6 +3194,10 @@ int TextDisplay::handle(int event) {
     }
 
   case PUSH: {
+
+    if (!event_inside(Rectangle(text_area.x(), text_area.y(), text_area.w(), text_area.h()))) {
+      return Group::handle(event);
+    }
     if (focus() != this) {
       focus(this);
       handle(FOCUS);
