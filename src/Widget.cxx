@@ -347,7 +347,7 @@ void Widget::copy_label(const char* s) {
   The base class redraws the widget and sets layout_damage() to zero.
 */
 void Widget::layout() {
-  redraw();
+  if (layout_damage_&~LAYOUT_CHILD) redraw();
   layout_damage_ = 0;
 }
 
