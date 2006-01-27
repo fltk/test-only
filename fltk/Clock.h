@@ -25,7 +25,6 @@
 #define fltk_Clock_h
 
 #include <fltk/Widget.h>
-#include <time.h>
 
 namespace fltk {
 
@@ -35,9 +34,9 @@ class FL_API ClockOutput : public Widget {
 public:
   enum {SQUARE = 0, ANALOG = 0, ROUND, DIGITAL};
   ClockOutput(int x,int y,int w,int h, const char *l = 0);
-  void value(time_t v);	// set to this Unix time
+  void value(unsigned long v);	// set to this Unix time
   void value(int,int,int);	// set hour, minute, second
-  time_t value() const {return value_;}
+  unsigned long value() const {return value_;}
   int hour() const {return hour_;}
   int minute() const {return minute_;}
   int second() const {return second_;}
@@ -46,7 +45,7 @@ protected:
   void draw();
 private:
   int hour_, minute_, second_;
-  time_t value_;
+  unsigned long value_;
   void drawhands(Color, Color); // part of draw
 };
 
