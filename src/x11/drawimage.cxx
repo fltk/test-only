@@ -462,9 +462,21 @@ static int alpha_increment;
 // true for any transparency other than 255 and 0:
 static bool mixbg;
 
+static U32* getbuffer(int w) {
+  static U32* b = 0;
+  static int len = 0;
+  if (w > len) {
+    delete[] b;
+    len = 2*len;
+    if (len < w) len = w;
+    b = new U32[len];
+  }
+  return b;
+}
+
 static void mask_converter(const uchar* from, uchar* to, int w)
 {
-  U32 buffer[w];
+  U32* buffer = getbuffer(w);
   U32* bp = buffer;
   uchar* ap = alphapointer;
   uchar aaccum = 0;
@@ -497,7 +509,7 @@ static void mask_converter(const uchar* from, uchar* to, int w)
 }
 
 static void rgba_converter(const uchar* from, uchar* to, int w) {
-  U32 buffer[w];
+  U32* buffer = getbuffer(w);
   U32* bp = buffer;
   uchar* ap = alphapointer;
   uchar aaccum = 0;
@@ -531,7 +543,7 @@ static void rgba_converter(const uchar* from, uchar* to, int w) {
 }
 
 static void argb32_converter(const uchar* from, uchar* to, int w) {
-  U32 buffer[w];
+  U32* buffer = getbuffer(w);
   U32* bp = buffer;
   const U32* f = (const U32*)from;
   uchar* ap = alphapointer;
