@@ -104,118 +104,106 @@ static XRectangle status_area;
 
 static void fl_new_ic()
 {
-  XVaNestedList preedit_attr;
-  XVaNestedList status_attr;
-  char          **missing_list;
-  int           missing_count;
-  char          *def_string;
-  int predit = 0;
-  int sarea = 0;
-  XIMStyles* xim_styles = NULL;
-
+  // Give up if this failed earlier:
   if (!fl_xim_im)
-      return;
+    return;
+
+  if (fl_xim_ic)
+    XDestroyIC(fl_xim_ic);
+  fl_xim_ic = NULL;
 
   if (!fl_xim_fs) {
+    char          **missing_list;
+    int           missing_count;
+    char          *def_string;
     fl_xim_fs = XCreateFontSet(xdisplay,
 			       "-misc-fixed-medium-r-normal--14-*",
 			       &missing_list, &missing_count, &def_string);
   }
 
-  XPoint	spot;
-  spot.x = 0;
-  spot.y = 0;
-  preedit_attr = XVaCreateNestedList(0,
-				     XNSpotLocation, &spot,
-				     XNFontSet, fl_xim_fs, NULL);
-  status_attr = XVaCreateNestedList(0,
-				    XNAreaNeeded, &status_area,
-				    XNFontSet, fl_xim_fs, NULL);
-
-  if (!XGetIMValues (fl_xim_im, XNQueryInputStyle,
-		     &xim_styles, NULL, NULL)) {
-    int i;
-    XIMStyle *style;
-    for (i = 0, style = xim_styles->supported_styles;
-	 i < xim_styles->count_styles; i++, style++) {
-      if (*style == (XIMPreeditPosition | XIMStatusArea)) {
-	sarea = 1;
-	predit = 1;
-      } else if (*style == (XIMPreeditPosition | XIMStatusNothing)) {
-	predit = 1;
-      }
-    }
-  }
-  XFree(xim_styles);
-
-  if (fl_xim_ic)
-    XDestroyIC(fl_xim_ic);
-  fl_xim_ic = NULL;
-  if (sarea)
-    fl_xim_ic = XCreateIC(fl_xim_im,
-			  XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
-			  XNPreeditAttributes, preedit_attr,
-			  XNStatusAttributes, status_attr,
-			  NULL);
-
-  if (!fl_xim_ic && predit)
-    fl_xim_ic = XCreateIC(fl_xim_im,
-			  XNInputStyle,(XIMPreeditPosition | XIMStatusNothing),
-			  XNPreeditAttributes, preedit_attr,
-			  NULL);
-
-  XFree(preedit_attr);
-  XFree(status_attr);
-
-  if (!fl_xim_ic) {
-    fl_is_over_the_spot = 0;
-    fl_xim_ic = XCreateIC(fl_xim_im,
-			  XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
-			  NULL);
-  } else {
-    fl_is_over_the_spot = 1;
-    XVaNestedList status_attr;
-    status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
-    if (status_area.height != 0)
-      XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
-    XFree(status_attr);
-  }
-}
-
-static void fl_init_xim()
-{
-  XIMStyles *xim_styles;
-  if (!xdisplay) return;
-  if (fl_xim_im) return;
-
-  XSetLocaleModifiers("");
-  fl_xim_im = XOpenIM(xdisplay, NULL, NULL, NULL);
-  xim_styles = NULL;
-  fl_xim_ic = NULL;
-
-  if (fl_xim_im) {
-    XGetIMValues (fl_xim_im, XNQueryInputStyle,
-		  &xim_styles, NULL, NULL);
-  } else {
-    warning("XOpenIM() failed\n");
-    return;
-  }
-
-  if (xim_styles && xim_styles->count_styles) {
-    fl_new_ic();
-  } else {
+  XIMStyles* xim_styles = NULL;
+  if (XGetIMValues(fl_xim_im, XNQueryInputStyle,
+		   &xim_styles, NULL, NULL) ||
+      !xim_styles || !xim_styles->count_styles) {
     warning("No XIM style found\n");
     XCloseIM(fl_xim_im);
     fl_xim_im = NULL;
     return;
   }
 
+  bool predit = false;
+  bool sarea = false;
+  for (int i = 0; i < xim_styles->count_styles; ++i) {
+    XIMStyle* style = xim_styles->supported_styles+i;
+    if (*style == (XIMPreeditPosition | XIMStatusArea)) {
+      sarea = true;
+      predit = true;
+    } else if (*style == (XIMPreeditPosition | XIMStatusNothing)) {
+      predit = true;
+    }
+  }
+  XFree(xim_styles);
+
+  if (predit) {
+    XPoint	spot;
+    spot.x = 0;
+    spot.y = 0;
+    XVaNestedList preedit_attr =
+      XVaCreateNestedList(0,
+			  XNSpotLocation, &spot,
+			  XNFontSet, fl_xim_fs, NULL);
+
+    if (sarea) {
+      XVaNestedList status_attr =
+	XVaCreateNestedList(0,
+			    XNAreaNeeded, &status_area,
+			    XNFontSet, fl_xim_fs, NULL);
+      fl_xim_ic = XCreateIC(fl_xim_im,
+			    XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
+			    XNPreeditAttributes, preedit_attr,
+			    XNStatusAttributes, status_attr,
+			    NULL);
+      XFree(status_attr);
+    }
+    if (!fl_xim_ic)
+      fl_xim_ic = XCreateIC(fl_xim_im,
+			    XNInputStyle,XIMPreeditPosition | XIMStatusNothing,
+			    XNPreeditAttributes, preedit_attr,
+			    NULL);
+    XFree(preedit_attr);
+    if (fl_xim_ic) {
+      fl_is_over_the_spot = 1;
+      XVaNestedList status_attr;
+      status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
+      if (status_area.height != 0)
+	XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
+      XFree(status_attr);
+      return;
+    }
+  }
+
+  // create a non-preedit one:
+  fl_is_over_the_spot = 0;
+  fl_xim_ic = XCreateIC(fl_xim_im,
+			XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
+			NULL);
   if (!fl_xim_ic) {
     warning("XCreateIC() failed\n");
     XCloseIM(fl_xim_im);
-    XFree(xim_styles);
     fl_xim_im = NULL;
   }
+}
+
+static void fl_init_xim()
+{
+  if (!xdisplay) return;
+  if (fl_xim_im) return;
+
+  XSetLocaleModifiers("");
+  fl_xim_im = XOpenIM(xdisplay, NULL, NULL, NULL);
+
+  if (!fl_xim_im)
+    warning("XOpenIM() failed\n");
 }
 
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
@@ -231,7 +219,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static Widget *spotw = NULL;
   static XPoint	spot, spot_set;
   static Color background_orig, textcolor_orig;
-  XFontSet fs = NULL;
 
   if (!fl_xim_ic || !fl_is_over_the_spot) return;
   if (w != spotw) {
@@ -247,15 +234,14 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     spotf = f;
     if (f) {
       fnt = f->system_name();
-      if (fnt)
-	fs = XCreateFontSet(xdisplay, fnt, &missing_list,
-			    &missing_count, &def_string);
-      else
-	return;
-      if (fs) {
-	XFreeFontSet(xdisplay, fl_xim_fs);
-	fl_xim_fs = fs;
-	change = 1;
+      if (fnt) {
+	XFontSet fs = XCreateFontSet(xdisplay, fnt, &missing_list,
+				     &missing_count, &def_string);
+	if (fs) {
+	  XFreeFontSet(xdisplay, fl_xim_fs);
+	  fl_xim_fs = fs;
+	  change = 1;
+	}
       }
     } else {
       change = 1;
@@ -298,8 +284,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     XUnsetICFocus(fl_xim_ic);
   }
 }
-
-static XWindow xim_win = 0; // which window we set xim to last
 
 #else // !USE_XIM
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
@@ -1406,28 +1390,28 @@ bool fltk::handle()
 
   case FocusIn:
 #if USE_XIM
-    if (xim_win != xevent.xclient.window) {
-      xim_win = xevent.xclient.window;
-      if (fl_xim_ic)
-	XDestroyIC(fl_xim_ic);
-      fl_xim_ic = NULL;
-      fl_new_ic();
-      if (fl_xim_ic)
-	XSetICValues(fl_xim_ic,
-		     XNClientWindow, xim_win,
-		     NULL);
+    // For some reason, always destroying & recreating seems to help this work:
+    /*if (!fl_xim_ic)*/ fl_new_ic();
+    if (fl_xim_ic) {
+      XSetICValues(fl_xim_ic,
+		   XNClientWindow, xevent.xclient.window,
+		   NULL);
+      XSetICFocus(fl_xim_ic);
     }
-    if (fl_xim_ic) XSetICFocus(fl_xim_ic);
 #endif
     xfocus = window;
     if (window) {fix_focus(); return true;}
     break;
 
   case FocusOut:
+    if (window && window == xfocus) {
+      xfocus = 0;
+      fix_focus();
 #if USE_XIM
-    if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
+      if (fl_xim_ic && !focus()) XUnsetICFocus(fl_xim_ic);
 #endif
-    if (window && window == xfocus) {xfocus = 0; fix_focus(); return true;}
+      return true;
+    }
     break;
 
   case KeyPress: {
@@ -1475,11 +1459,11 @@ bool fltk::handle()
     NO_XIM:
 #endif
       len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
-      // Make ctrl+dash produce ^_ like it used to:
-      if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
 #if USE_XIM
     }
 #endif
+    // Make ctrl+dash produce ^_ like it used to:
+    if (len==1 && xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
     buffer[len] = 0;
     e_text = buffer;
     e_length = len;
@@ -1554,30 +1538,52 @@ bool fltk::handle()
 #endif
       }
     } else {
-      // WHY, OH WHY, do they keep changing the Alt + Meta keys!
-      // Detect all the assignments I have seen and try to map them
-      // back. And now some of them are not setting the shift flags,
-      // so I have to kludge that as well...
+      // Update shift flags to show the results *after* the key. If
+      // this is wrong, the next event will fix them to really what
+      // the X server has.
+      // Also detect the many different assignments that have been done
+      // to the Alt, Meta, and Menu keys. As new arrangments are
+      // discovered they will be added here. Some of the assignments
+      // set the shift keys, some do not.
       switch (keysym) {
+
       case F0Key+13: // F13, wtf? Use this only if F14 does not exist
 	if (XKeysymToKeycode(xdisplay, F0Key+14)) break;
 	// otherwise fall through
       case 0xffeb: // XK_Super_L
 	keysym = LeftMetaKey;
-	break;
+	if (event==KEY) extra_state |= META; else extra_state &= ~META;
+	goto GET_STATE;
+
       case 0xffec: // XK_Super_R
-	keysym = RightMetaKey;
-	break;
       case 0xff20: // XK_Multi_key
 	keysym = RightMetaKey;
-	if (event==KEY) extra_state |= META;
-	else extra_state &= ~META;
-	break;
+	if (event==KEY) extra_state |= META; else extra_state &= ~META;
+	goto GET_STATE;
+
       case 0xff7e: // XK_Mode_switch
 	keysym = RightAltKey;
-	if (event==KEY) extra_state |= ALT;
-	else extra_state &= ~ALT;
-	break;
+	if (event==KEY) extra_state |= ALT; else extra_state &= ~ALT;
+	goto GET_STATE;
+
+      case LeftShiftKey:
+      case RightShiftKey:
+      case LeftCtrlKey:
+      case RightCtrlKey:
+      case CapsLockKey:
+      case LeftMetaKey:
+      case RightMetaKey:
+      case LeftAltKey:
+      case RightAltKey:
+      case NumLockKey:
+      case ScrollLockKey:
+      GET_STATE: {
+	XWindow root = RootWindow(xdisplay, xscreen);
+	XWindow c; int mx,my,cx,cy; unsigned int mask;
+	XQueryPointer(xdisplay,root,&root,&c,&mx,&my,&cx,&cy,&mask);
+	e_state = (mask<<16) | extra_state;
+	break;}
+
       }
     }
     e_keysym = int(keysym);
