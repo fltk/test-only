@@ -115,12 +115,12 @@ static Widget* innards(
   ARRAY(char, buf, bufsize);
 
   int flags1 = 0;
-  const char* item;
-  if (what & FLAT) item = label;
+  const char* item_label;
+  if (what & FLAT) item_label = label;
   else for (;;) {    /* do all the supermenus: */
 
     // leading slash makes us assumme it is a filename:
-    if (*label == '/') {item = label; break;}
+    if (*label == '/') {item_label = label; break;}
 
     // leading underscore causes divider line:
     if (*label=='_' || *label=='-') {label++; flags1 = MENU_DIVIDER;}
@@ -130,7 +130,7 @@ static Widget* innards(
     const char* p;
     for (p=label; *p && *p != '/'; *q++ = *p++) if (p[0]=='\\' && p[1]) p++;
     *q = 0;
-    item = buf;
+    item_label = buf;
 
     // if not followed by slash it is not a menu title:
     if (*p != '/') break;
@@ -143,15 +143,15 @@ static Widget* innards(
       if (!n) { // create a new menu
 	if (what & FIND) {
 	  // give up on hierarchy search and find flat item:
-	  item = label;
+	  item_label = label;
 	  group = top;
 	  goto BREAK1;
 	}
-	group = (Group*)append(group, item, SUBMENU|flags1, 0);
+	group = (Group*)append(group, item_label, SUBMENU|flags1, 0);
 	break;
       }
       Widget* w = group->child(--n);
-      if (w->is_group() && w->label() && !compare(w->label(), item)) {
+      if (w->is_group() && w->label() && !compare(w->label(), item_label)) {
 	group = (Group*)w;
 	break;
       }
@@ -160,43 +160,47 @@ static Widget* innards(
   }
  BREAK1:
 
-  Widget* o = 0;
+  Widget* item = 0;
+
   // names ending in '/' create an empty menu or return the menu title:
-  if (!*item) {
-    o = group;
-    if (what & FIND) return o;
-    if (flags1 & MENU_DIVIDER) {
+  if (!*item_label && (group != top || flags1)) {
+    item = group;
+    // hack so "/_" adds a divider line
+    if (flags1 && !(what & FIND)) {
       Group* saved = Group::current();
       Group::current(0);
       group->add(new Divider());
       Group::current(saved);
-      return o;
+      return item;
     }
+
+  } else {
+
+    // find a matching menu item:
+    if (what & (REPLACE|FIND)) for (int n = group->children(); n--;) {
+      Widget* w = group->child(n);
+      if (w->label() && !compare(w->label(), item_label) && !w->is_group()) {
+	item = w;
+	break;
+      }
+    }
+  }
+
+  if (item) {
+    if (what & FIND) return item;
     fl_menu_replaced = true;
-    goto REPLACED;
+  } else {
+    if (what & FIND) return 0;
+    item = append(group, item_label, flags|flags1, insert_here);
+    fl_menu_replaced = false;
   }
 
-  // find a matching menu item:
-  if (what & (REPLACE|FIND)) for (int n = group->children(); n--;) {
-    Widget* w = group->child(n);
-    if (w->label() && !compare(w->label(), item) && !w->is_group()) {
-      o = w;
-      if (what & FIND) return o;
-      fl_menu_replaced = true;
-      goto REPLACED;
-    }
-  }
-  if (what & FIND) return 0;
-  o = append(group, item, flags|flags1, insert_here);
-  fl_menu_replaced = false;
-
- REPLACED:
   /* fill it in */
-  o->shortcut(shortcut);
-  if (callback) o->callback(callback);
-  o->user_data(data);
+  item->shortcut(shortcut);
+  if (callback) item->callback(callback);
+  item->user_data(data);
   top->relayout();
-  return o;
+  return item;
 }
 
 /*! Split label at '/' characters and add a hierachial Item.
