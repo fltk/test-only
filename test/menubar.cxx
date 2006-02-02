@@ -40,7 +40,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <fltk/string.h>
 
 fltk::Window *window;
 
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
   for (int i=0; i<99; i++) {
     char buf[100];
     sprintf(buf,"item %d",i);
-    hugemenu[i].text = strdup(buf);
+    hugemenu[i].text = newstring(buf);
   }
 
   fltk::Window window(WIDTH,400);

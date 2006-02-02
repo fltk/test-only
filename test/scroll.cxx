@@ -29,7 +29,6 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Box.H>
-#include <string.h>
 #include <stdio.h>
 #include <FL/fl_draw.H>
 #include <FL/math.h>
@@ -110,7 +109,8 @@ int main(int argc, char** argv) {
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
     char buf[20]; sprintf(buf,"%d",n++);
-    Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25,strdup(buf));
+    Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25);
+    b->copy_label(buf);
     b->color(n);
     b->labelcolor(FL_WHITE);
   }

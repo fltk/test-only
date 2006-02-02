@@ -385,7 +385,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
     IFont* newfont = fonts+4*i;
     font_array[i] = &(newfont->f);
     FcPattern* p = fnt_set->fonts[i];
-    const char* name = strdup(getfamily(p));
+    const char* name = newstring(getfamily(p));
     for (int j = 0; j < 4; j++) {
       newfont[j].f.name_ = name;
       newfont[j].f.attributes_ = j;

@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <ctype.h>
 #include <fltk/events.h>
 #include <fltk/ask.h>
@@ -365,10 +365,10 @@ int TextBuffer::undo(int *cursorPos) {
   if (xlen && ilen) {
     undobuffersize(ilen+1);
     undobuffer[ilen] = 0;
-    char *tmp = strdup(undobuffer);
+    const char *tmp = newstring(undobuffer);
     replace(b, undoat, tmp);
     if (cursorPos) *cursorPos = mCursorPosHint;
-    free(tmp);
+    delete[] tmp;
   }
   else if (xlen) {
     remove(b, undoat);
