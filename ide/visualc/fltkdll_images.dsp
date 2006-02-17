@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "..\.." /I "../visualc" /I "../../images/zlib" /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "../.." /I "../visualc" /I "../../images/zlib" /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -245,6 +245,8 @@ DEP_CPP_HELPD=\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
+	
+NODEP_CPP_HELPD=\
 	".\fltk\string.h"\
 	
 # End Source File
@@ -273,6 +275,8 @@ DEP_CPP_HELPV=\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\xpmimage.h"\
+	
+NODEP_CPP_HELPV=\
 	".\fltk\string.h"\
 	
 # End Source File

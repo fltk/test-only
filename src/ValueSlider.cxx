@@ -76,15 +76,25 @@ void ValueSlider::input_cb(Widget*, void* v) {
   double nv;
   if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
   else nv = strtod(t.input.value(), 0);
+  bool valid_value = (nv >= t.minimum() && nv <= t.maximum());
   if (nv != t.value() || t.when() & WHEN_NOT_CHANGED) {
-    t.set_value(nv);
-    t.Slider::value_damage();
+    if (nv != t.value() && valid_value) { 
+      // Set new value and redraw
+      t.set_value(nv);
+      t.Slider::value_damage();
+    } else if (nv != t.value()) {
+      // Restore old value
+      t.input.value(t.value());
+    }
     if (t.when()) {
       t.clear_changed();
       t.do_callback();
     } else {
       t.set_changed();
     }
+  } else if (nv != t.value()) {
+    // Restore old value
+    t.input.value(t.value());
   }
 }
 
@@ -115,6 +125,9 @@ void ValueSlider::draw() {
 #define REPEAT .1f
 
 int ValueSlider::handle(int event) {
+if (event == MOUSEWHEEL) {
+	int a = 0;
+}
   Rectangle r; slider_rect(r);
   switch (event) {
   case FOCUS:
@@ -141,6 +154,8 @@ int ValueSlider::handle(int event) {
     // dropped text produces this, replace all input text with it:
     input.position(0, input.size());
     break;
+  case MOUSEWHEEL:
+    return Slider::handle(event, r);
   }
   input.type(step()>=1.0 ? FloatInput::INT : FloatInput::FLOAT);
   input.when(when());

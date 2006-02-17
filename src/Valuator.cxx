@@ -94,7 +94,9 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
 */
 int Valuator::value(double v) {
   clear_changed();
-  if (v == value_) return 0;
+  double min = (minimum_ < maximum_ ? minimum_ : maximum_);
+  double max = (minimum_ > maximum_ ? minimum_ : maximum_);
+  if (v == value_ || v < min || v > max) return 0;
   value_ = v;
   value_damage();
   return 1;
@@ -196,9 +198,7 @@ void Valuator::handle_drag(double v) {
   if (v < A && previous_value_ >= A) v = A;
   else if (v > B && previous_value_ <= B) v = B;
   // store the value, redraw the widget, and do callback:
-  if (v != value_) {
-    value_ = v;
-    value_damage();
+  if (value(v)) {
     if (when() & WHEN_CHANGED || !pushed()) do_callback();
     else set_changed();
   }
@@ -291,7 +291,7 @@ int Valuator::handle(int event) {
       }
       return 0;
     }
-    case MOUSEWHEEL: if (vertical()) {
+    case MOUSEWHEEL: /*if (vertical())*/ {
       handle_drag(value()+event_dy()*linesize());
       return 1;
     }

@@ -1,5 +1,5 @@
 //
-// "$Id: CubeView.cxx,v 1.7 2002/12/10 02:01:03 easysw Exp $"
+// "$Id$"
 //
 // CubeView class implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -26,13 +26,12 @@
 #include "CubeView.h"
 #include <math.h>
 
-
 #if HAVE_GL
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
-            : Fl_Gl_Window(x,y,w,h,l)
+            : GlWindow(x,y,w,h,l)
 #else
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
-            : Fl_Box(x,y,w,h,l)
+            : Widget(x,y,w,h,l)
 #endif /* HAVE_GL */
 {
     vAng = 0.0;
@@ -53,14 +52,18 @@ CubeView::CubeView(int x,int y,int w,int h,const char *l)
 
 #if !HAVE_GL
     label("OpenGL is required for this demo to operate.");
-    align(FL_ALIGN_WRAP | FL_ALIGN_INSIDE);
+    align(fltk::ALIGN_WRAP | fltk::ALIGN_INSIDE);
+    box(fltk::NO_BOX);
+    labelcolor(fltk::WHITE);
 #endif /* !HAVE_GL */
 }
 
 #if HAVE_GL
-void CubeView::drawCube() {
-/* Draw a colored cube */
-#define ALPHA 0.5
+void CubeView::drawCube() 
+{
+    /* Draw a colored cube */
+    #define ALPHA 0.5
+    
     glShadeModel(GL_FLAT);
 
     glBegin(GL_QUADS);
@@ -139,9 +142,10 @@ void CubeView::drawCube() {
       glVertex3fv(boxv3);
       glVertex3fv(boxv7);
     glEnd();
-}//drawCube
+}
 
-void CubeView::draw() {
+void CubeView::draw() 
+{
     if (!valid()) {
         glLoadIdentity();
         glViewport(0,0,w(),h());
@@ -165,5 +169,5 @@ void CubeView::draw() {
 #endif /* HAVE_GL */
 
 //
-// End of "$Id: CubeView.cxx,v 1.7 2002/12/10 02:01:03 easysw Exp $".
+// End of "$Id$".
 //
