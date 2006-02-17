@@ -118,7 +118,7 @@ void ThumbWheel::draw() {
       // draw edges:
       h1 = r.w()/8+1; // distance from end the color inverts
       setcolor(GRAY60);
-      //drawline(r.x()+h1,r.b()-1,r.r()-h1,r.b()-1);
+      drawline(r.x()+h1,r.b()-1,r.r()-h1,r.b()-1);
       setcolor(GRAY33);
       drawline(r.x(),r.b(),r.x(),r.y());
       drawline(r.x(),r.y(),r.x()+h1,r.y());
