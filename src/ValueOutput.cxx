@@ -46,7 +46,7 @@ void ValueOutput::draw() {
 //      fillrect(ir);
 //	setcolor(selection_textcolor());
 //    } else
-  drawtext(buf, r.x()+3, r.y()+(int(r.h()+getascent()-getdescent()) >> 1));
+  drawtext(buf, float(r.x()+3), float(r.y()+(int(r.h()+getascent()-getdescent()) >> 1)));
   pop_clip();
 }
 

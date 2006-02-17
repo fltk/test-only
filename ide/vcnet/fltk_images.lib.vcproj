@@ -22,7 +22,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories="../..,../../images/zlib"
+				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
 				PreprocessorDefinitions="NDEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -31,6 +31,7 @@
 				AssemblerListingLocation=".\fltk_images___Win32_Release_MinSize/"
 				ObjectFile=".\fltk_images___Win32_Release_MinSize/"
 				ProgramDataBaseFileName=".\fltk_images___Win32_Release_MinSize/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -69,7 +70,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../../ide/visualc,../../images/zlib"
+				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
 				PreprocessorDefinitions="_POSIX_;_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
@@ -79,6 +80,7 @@
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
@@ -120,7 +122,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../../ide/visualc,../../images/zlib"
+				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
 				PreprocessorDefinitions="_POSIX_;NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
 				RuntimeLibrary="0"
 				RuntimeTypeInfo="TRUE"
@@ -129,6 +131,7 @@
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -167,7 +170,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../../ide/visualc,../../images/zlib"
+				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
 				PreprocessorDefinitions="_DEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -177,6 +180,7 @@
 				ObjectFile=".\fltk_images___Win32_Debug_MinSize/"
 				ProgramDataBaseFileName=".\fltk_images___Win32_Debug_MinSize/"
 				BrowseInformation="1"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>

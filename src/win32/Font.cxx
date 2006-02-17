@@ -217,7 +217,7 @@ void fltk::setfont(Font* font, float psize) {
 
   // only integers supported right now, I think there is a newer
   // interface that takes arbitrary sizes, though...
-  psize = int(psize+.5);
+  psize = float(int(psize+.5));
   unsigned size = unsigned(psize);
 
   if (font == current_font_ && current->size == size &&
@@ -251,8 +251,8 @@ void fltk::setfont(Font* font, float psize) {
   current = array[a] = new FontSize(font->name_, font->attributes_, size, charset);
 }
 
-float fltk::getascent()  { return current->metr.tmAscent; }
-float fltk::getdescent() { return current->metr.tmDescent; }
+float fltk::getascent()  { return float(current->metr.tmAscent); }
+float fltk::getdescent() { return float(current->metr.tmDescent); }
 
 #define WCBUFLEN 256
 

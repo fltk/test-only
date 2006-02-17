@@ -247,7 +247,7 @@ bool fltk::not_clipped(const Rectangle& rectangle) {
 #elif defined(_WIN32)
   RECT rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
-  return RectInRegion(region,&rect);
+  return RectInRegion(region,&rect)==TRUE;
 #endif
 }
 

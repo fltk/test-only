@@ -45,7 +45,8 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MT /W3 /GR /GX /Os /Ob2 /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
+# SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -55,7 +56,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
@@ -72,7 +73,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "..\..\.." /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "." /I "..\.." /I "..\..\.." /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -82,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../../lib/fltkdlld.dll" /pdbtype:sept
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../../lib/fltkdlld.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug MinSize"
@@ -100,7 +101,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I "..\.." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "..\..\.." /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I "..\.." /I "..\..\.." /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -111,7 +112,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../../lib/fltkdlld.dll" /pdbtype:sept
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../../lib/fltkdlld.dll" /implib:"../../lib/fltkdlld.lib" /pdbtype:sept
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"../../lib/fltkdlld.dll" /implib:"../../lib/fltkdlld.lib" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Release MinSize"
@@ -129,8 +130,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /MT /W3 /GR /GX /Os /Ob2 /Gf /Gy /I "..\..\.." /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# SUBTRACT CPP /nologo /Fr
+# ADD CPP /MD /W3 /GR /GX /Os /Ob2 /Gf /Gy /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /Fr /c
+# SUBTRACT CPP /nologo /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -141,7 +142,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"../../lib/fltkdll.dll" /implib:"../../lib/fltkdll.lib"
+# ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"../../lib/fltkdll.dll" /implib:"../../lib/fltkdll.lib"
 # SUBTRACT LINK32 /pdb:none /force
 
 !ENDIF 
@@ -271,6 +272,7 @@ DEP_CPP_BARGR=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\color.h"\
 	"..\..\fltk\damage.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
@@ -406,6 +408,7 @@ DEP_CPP_CLIP_=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\win32.h"\
@@ -413,7 +416,6 @@ DEP_CPP_CLIP_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\clip.cxx"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -505,10 +507,10 @@ DEP_CPP_COMBO=\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\widget.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -651,11 +653,8 @@ DEP_CPP_DRAW_=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
-	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\win32.h"\
-	"..\..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -670,10 +669,13 @@ DEP_CPP_DRAWI=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\font.h"\
+	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\math.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
+	"..\..\fltk\symbol.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\drawimage.cxx"\
@@ -731,10 +733,10 @@ DEP_CPP_ERROR=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -809,12 +811,12 @@ DEP_CPP_FILEB=\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -841,13 +843,13 @@ DEP_CPP_FILEC=\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\xbmimage.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -874,13 +876,13 @@ DEP_CPP_FILECH=\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -895,6 +897,7 @@ DEP_CPP_FILEI=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	
@@ -911,8 +914,8 @@ DEP_CPP_FILEIC=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -942,19 +945,11 @@ DEP_CPP_FILEN=\
 
 SOURCE=..\..\src\filename_isdir.cxx
 DEP_CPP_FILENA=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\mac.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
-	"..\..\fltk\win32.h"\
-	"..\..\fltk\x.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 
 !IF  "$(CFG)" == "fltkdll - Win32 Release"
@@ -965,7 +960,7 @@ DEP_CPP_FILENA=\
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Release MinSize"
 
-# ADD CPP /YX
+# SUBTRACT CPP /YX
 
 !ENDIF 
 
@@ -994,7 +989,7 @@ SOURCE=..\..\src\filename_normalize.cxx
 DEP_CPP_FILENAME_=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
-	".\fltk\string.h"\
+	"..\..\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1080,6 +1075,7 @@ DEP_CPP_FLTK_=\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\widget.h"\
@@ -1088,7 +1084,6 @@ DEP_CPP_FLTK_=\
 	"..\..\src\win32\fltk_theme.cxx"\
 	"..\..\src\x11\fltk_theme.cxx"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1107,6 +1102,7 @@ DEP_CPP_FONT_=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\widget.h"\
@@ -1114,13 +1110,13 @@ DEP_CPP_FONT_=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\Font.cxx"\
+	"..\..\src\osx\utf8tomac.cxx"\
 	"..\..\src\win32\Font.cxx"\
 	"..\..\src\x11\Font.cxx"\
 	"..\..\src\x11\Font_xft.cxx"\
 	"..\..\src\x11\Font_xlfd.cxx"\
 	"..\..\src\x11\IFont.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1172,14 +1168,10 @@ DEP_CPP_GSAVE=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
-	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\style.h"\
-	"..\..\fltk\widget.h"\
 	"..\..\fltk\win32.h"\
-	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
 	
@@ -1217,6 +1209,10 @@ DEP_CPP_IMAGE=\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
+	"..\..\fltk\xbmimage.h"\
+	"..\..\src\osx\Image.cxx"\
+	"..\..\src\win32\Image.cxx"\
+	"..\..\src\x11\Image.cxx"\
 	".\config.h"\
 	
 # End Source File
@@ -1318,12 +1314,12 @@ DEP_CPP_KEY_N=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1334,6 +1330,7 @@ DEP_CPP_LIGHT=\
 	"..\..\fltk\button.h"\
 	"..\..\fltk\checkbutton.h"\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\lightbutton.h"\
@@ -1357,6 +1354,7 @@ DEP_CPP_LIST_=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\win32.h"\
@@ -1367,7 +1365,6 @@ DEP_CPP_LIST_=\
 	"..\..\src\x11\list_fonts.cxx"\
 	"..\..\src\x11\list_fonts_xlfd.cxx"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1393,8 +1390,19 @@ DEP_CPP_LOAD_=\
 
 SOURCE=..\..\src\lock.cxx
 DEP_CPP_LOCK_=\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
+	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
+	"..\..\fltk\Threads.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
+	"..\..\src\win32\lock.cxx"\
+	"..\..\src\x11\lock.cxx"\
 	".\config.h"\
 	
 # End Source File
@@ -1543,10 +1551,10 @@ DEP_CPP_MESSA=\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\secretinput.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1554,6 +1562,7 @@ DEP_CPP_MESSA=\
 SOURCE=..\..\src\MultiImage.cxx
 DEP_CPP_MULTI=\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\multiimage.h"\
@@ -1574,9 +1583,9 @@ DEP_CPP_NUMER=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\numericinput.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1674,10 +1683,10 @@ DEP_CPP_PATH_=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1765,13 +1774,13 @@ DEP_CPP_READI=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\readimage.cxx"\
 	"..\..\src\win32\readimage.cxx"\
 	"..\..\src\x11\readimage.cxx"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -1803,6 +1812,7 @@ DEP_CPP_RETUR=\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\style.h"\
+	"..\..\fltk\symbol.h"\
 	"..\..\fltk\widget.h"\
 	
 # End Source File
@@ -1816,13 +1826,10 @@ DEP_CPP_RGBIM=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\rgbimage.h"\
 	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
-	"..\..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1892,6 +1899,7 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
+	"..\..\src\osx\mactoutf8.cxx"\
 	"..\..\src\osx\run.cxx"\
 	"..\..\src\win32\pktdef.h"\
 	"..\..\src\win32\run.cxx"\
@@ -2076,10 +2084,10 @@ DEP_CPP_SHARE=\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2091,10 +2099,10 @@ DEP_CPP_SHORT=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2151,8 +2159,8 @@ SOURCE=..\..\src\slowarrow.h
 SOURCE=..\..\src\string.c
 DEP_CPP_STRIN=\
 	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\string.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2176,15 +2184,17 @@ DEP_CPP_STRING=\
 SOURCE=..\..\src\Style.cxx
 DEP_CPP_STYLE=\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2244,9 +2254,14 @@ DEP_CPP_TABGR=\
 
 SOURCE=..\..\src\TextBuffer.cxx
 DEP_CPP_TEXTB=\
+	"..\..\fltk\ask.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\string.h"\
+	"..\..\fltk\style.h"\
 	"..\..\fltk\textbuffer.h"\
-	"..\..\fltk\utf.h"\
 	
 # End Source File
 # Begin Source File
@@ -2255,12 +2270,15 @@ SOURCE=..\..\src\TextDisplay.cxx
 DEP_CPP_TEXTD=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\cursor.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\font.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\layout.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
@@ -2272,17 +2290,22 @@ DEP_CPP_TEXTD=\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\TextEditor.cxx
 DEP_CPP_TEXTE=\
+	"..\..\fltk\ask.h"\
 	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\font.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -2384,13 +2407,13 @@ DEP_CPP_UPBOX=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2424,6 +2447,7 @@ DEP_CPP_VALUE=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\color.h"\
 	"..\..\fltk\damage.h"\
+	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
@@ -2470,8 +2494,14 @@ DEP_CPP_VALUES=\
 	"..\..\fltk\color.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\draw.h"\
+	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\floatinput.h"\
+	"..\..\fltk\group.h"\
+	"..\..\fltk\input.h"\
+	"..\..\fltk\math.h"\
+	"..\..\fltk\numericinput.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\slider.h"\
@@ -2480,7 +2510,6 @@ DEP_CPP_VALUES=\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\valueslider.h"\
 	"..\..\fltk\widget.h"\
-	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -2488,8 +2517,8 @@ DEP_CPP_VALUES=\
 SOURCE=..\..\src\vsnprintf.c
 DEP_CPP_VSNPR=\
 	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\string.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2505,10 +2534,10 @@ DEP_CPP_WIDGE=\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2526,12 +2555,12 @@ DEP_CPP_WIDGET=\
 	"..\..\fltk\labeltype.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
 	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2628,22 +2657,6 @@ SOURCE=..\..\src\win32\WinMain.cxx
 # Begin Source File
 
 SOURCE=..\..\src\xbmImage.cxx
-DEP_CPP_XBMIM=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
-	"..\..\fltk\x.h"\
-	"..\..\fltk\xbmimage.h"\
-	".\config.h"\
-	
 # End Source File
 # Begin Source File
 
@@ -2654,16 +2667,11 @@ DEP_CPP_XPMIM=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
 	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\style.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
-	"..\..\fltk\x.h"\
 	"..\..\fltk\xpmimage.h"\
-	".\config.h"\
-	".\fltk\string.h"\
 	
 # End Source File
 # End Target

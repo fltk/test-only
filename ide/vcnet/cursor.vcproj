@@ -22,7 +22,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../.."
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;_MSC_DLL"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -30,6 +30,7 @@
 				AssemblerListingLocation=".\cursor___Win32_Release_MinSize/"
 				ObjectFile=".\cursor___Win32_Release_MinSize/"
 				ProgramDataBaseFileName=".\cursor___Win32_Release_MinSize/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -84,7 +85,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..,../visualc"
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;_MSC_DLL"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -92,6 +93,7 @@
 				AssemblerListingLocation=".\cursor___Win32_Debug_MinSize/"
 				ObjectFile=".\cursor___Win32_Debug_MinSize/"
 				ProgramDataBaseFileName=".\cursor___Win32_Debug_MinSize/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				CompileAs="0"/>
@@ -148,7 +150,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..,../visualc"
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
@@ -156,6 +158,7 @@
 				AssemblerListingLocation=".\cursor_/"
 				ObjectFile=".\cursor_/"
 				ProgramDataBaseFileName=".\cursor_/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				CompileAs="0"/>
@@ -214,7 +217,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,.."
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
@@ -222,6 +225,7 @@
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool

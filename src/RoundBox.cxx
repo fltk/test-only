@@ -56,21 +56,21 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
   Rectangle r1(x+w-d, y, d, d);
   if (which >= CLOSED) {
-    addpie(r1, w<=h ? 0 : -90, w<=h ? 180 : 90);
+    addpie(r1, float(w<=h ? 0 : -90), float(w<=h ? 180 : 90));
   } else if (which == UPPER_LEFT) {
-    addpie(r1, 45, w<=h ? 180 : 90);
+    addpie(r1, float(45), float(w<=h ? 180 : 90));
   } else { // LOWER_RIGHT
-    addpie(r1, w<=h ? 360 : 270, 360+45);
+    addpie(r1, float(w<=h ? 360 : 270), float(360+45));
   }
   which==FILL ? fillpath() : strokepath();
 
   Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
-    addpie(r2, w<=h ? 180 : 90, w<=h ? 360 : 270);
+    addpie(r2, float(w<=h ? 180 : 90), float(w<=h ? 360 : 270));
   } else if (which == UPPER_LEFT) {
-    addpie(r2, w<=h ? 180 : 90, 225);
+    addpie(r2, float(w<=h ? 180 : 90), float(225));
   } else { // LOWER_RIGHT
-    addpie(r2, 225, w<=h ? 360 : 270);
+    addpie(r2, float(225), float(w<=h ? 360 : 270));
   }
   which==FILL ? fillpath() : strokepath();
 

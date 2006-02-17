@@ -27,17 +27,20 @@
 //
 
 #include <config.h>
-#include <fltk/run.h>
-#include <fltk/Window.h>
-#include <fltk/filename.h>
-#include <fltk/error.h>
-#include <fltk/Monitor.h>
+
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
 
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/filename.h>
+#include <fltk/error.h>
+#include <fltk/Monitor.h>
+
 #include <fltk/x.h>
+
 #if !USE_X11
 int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #define NoValue		0x0000
@@ -54,7 +57,7 @@ using namespace fltk;
 
 // This fixes linkage problem in VC++ 6.0
 #if defined(_MSC_VER)
-  extern FL_API const char *filename_name(const char *);
+  //extern FL_API const char *filename_name(const char *);
 #endif
 
 /*! \addtogroup startup

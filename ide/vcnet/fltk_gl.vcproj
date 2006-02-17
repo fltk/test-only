@@ -19,14 +19,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..\.."
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="WIN32,DEBUG,NDEBUG,_MBCS,_LIB,_POSIX_,_WINDOWS,WIN32_LEAN_AND_MEAN,VC_EXTRA_LEAN,WIN32_EXTRA_LEAN,USE_CONF"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -60,12 +60,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".,..\.."
+				AdditionalIncludeDirectories=".,../..,../visualc"
 				PreprocessorDefinitions="WIN32,NDEBUG,_MBCS,_LIB,_POSIX_,_WINDOWS,WIN32_LEAN_AND_MEAN,VC_EXTRA_LEAN,WIN32_EXTRA_LEAN,USE_CONF"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>

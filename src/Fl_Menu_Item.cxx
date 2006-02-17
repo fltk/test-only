@@ -87,7 +87,7 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
     }
     if (m->labeltype_) o->labeltype(m->labeltype_);
     if (m->labelfont_) o->labelfont(m->labelfont_);
-    if (m->labelsize_) o->labelsize(m->labelsize_);
+    if (m->labelsize_) o->labelsize((float)m->labelsize_);
     if (m->labelcolor_) o->labelcolor(m->labelcolor_);
     // these flags have been cleverly assigned so this shift and mask
     // converts from the old values to the new ones:

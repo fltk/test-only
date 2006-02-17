@@ -1206,7 +1206,7 @@ static unsigned long shiftflags(bool ignorealt=false) {
   return state;
 }
 
-static int recent_keysym = 0;
+static unsigned recent_keysym = 0;
 
 static bool mouse_event(Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
@@ -1254,7 +1254,7 @@ static bool mouse_event(Window *window, int what, int button,
   switch (what) {
   case 1: // double-click
     // This is not detecting triple-clicks, does anybody know how to fix?
-    if (e_is_click==button) {e_clicks++; goto J1;}
+    if (e_is_click==(unsigned)button) {e_clicks++; goto J1;}
   case 0: // single-click
     e_clicks = 0;
   J1:

@@ -443,8 +443,8 @@ void SymbolSymbol::_draw(const Rectangle& r) const
   }
   push_matrix();
   translate(x, y);
-  scale(w,h);
-  rotate(rotangle);
+  scale(float(w), float(h));
+  rotate(float(rotangle));
   drawit(getcolor());
   pop_matrix();
 }

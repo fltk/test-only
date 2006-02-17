@@ -15,18 +15,18 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
-			CharacterSet="2">
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../.."
-				PreprocessorDefinitions="DEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;_WIN32"
+				AdditionalIncludeDirectories=".,../..,../visualc"
+				PreprocessorDefinitions="DEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -68,21 +68,22 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
-			CharacterSet="2">
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".,../.."
-				PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;_WIN32"
-				RuntimeLibrary="2"
+				Optimization="1"
+				AdditionalIncludeDirectories=".,../..,../visualc"
+				PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib opengl32.lib wsock32.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib"
+				AdditionalDependencies="fltkdll.lib opengl32.lib wsock32.lib"
 				OutputFile="../../lib/fltkdll_gl.dll"
 				Version="2.0"
 				LinkIncremental="1"

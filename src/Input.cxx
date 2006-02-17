@@ -248,7 +248,7 @@ void Input::draw() {
       if (flags()&INACTIVE) color = inactive(color);
       setcolor(color);
       float y = r.y()+((r.h()-height)>>1)+desc;
-      drawtext(label(), r.x()+2, y);
+      drawtext(label(), float(r.x()+2), y);
       drawtext(":", r.x()+2+width, y);
     } else {
       label_width = 0;
@@ -314,7 +314,7 @@ void Input::draw(const Rectangle& r)
     e = expand(p, buf, wordwrap);
     if (cursor_position >= p-value() && cursor_position <= e-value()) {
       curx = int(expandpos(p, value()+cursor_position, buf, 0)+.5);
-      if (focused() && !was_up_down) up_down_pos = curx;
+      if (focused() && !was_up_down) up_down_pos = float(curx);
       cury = lines*height;
       int newscroll = xscroll_;
       if (curx > newscroll+r.w()-20) {
@@ -407,16 +407,16 @@ void Input::draw(const Rectangle& r)
     if (selstart < selend && selstart <= e-value() && selend > p-value()) {
       const char* pp = value()+selstart;
       // draw unselected text before the selection:
-      float x1 = xpos;
+      float x1 = float(xpos);
       int offset1 = 0;
       if (pp > p) {
 	setcolor(textcolor);
 	x1 += expandpos(p, pp, buf, &offset1);
-	drawtext(buf, offset1, xpos, r.y()+ypos+desc);
+	drawtext(buf, offset1, float(xpos), float(r.y()+ypos+desc));
       }
       // draw selected text for this line:
       pp = value()+selend;
-      float x2 = r.r();
+      float x2 = float(r.r());
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
@@ -436,7 +436,7 @@ void Input::draw(const Rectangle& r)
     } else {
       // draw unselected text:
       setcolor(textcolor);
-      drawtext(buf, xpos, r.y()+ypos+desc);
+      drawtext(buf, float(xpos), float(r.y()+ypos+desc));
     }
 
     if (!(damage()&DAMAGE_ALL)) pop_clip();
@@ -578,12 +578,12 @@ int Input::mouse_position(const Rectangle& r) const
 
   // Do a binary search for the character that starts before this position:
   int xpos = r.x()-xscroll_; if (r.w() > 12) xpos += 3;
-  const char *a, *b; float f0 = event_x()-xpos;
+  const char *a, *b; float f0 = float(event_x()-xpos);
   for (a = p, b = e; a<b; ) {
     const char* t = a+(b-a+1)/2;
     if (t < b) t = utf8fwd(t, a, b);
     int f = xpos+int(expandpos(p, t, buf, 0)+.5);
-    if (f <= event_x()) {a = t; f0 = event_x()-f;}
+    if (f <= event_x()) {a = t; f0 = float(event_x()-f); }
     else b = utf8back(t-1,a,b);
   }
   // see if closer to character on the right:

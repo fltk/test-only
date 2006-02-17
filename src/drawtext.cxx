@@ -514,13 +514,13 @@ static void wrap(
 	// it may have changed the font or dx,dy:
 	setsa(spacing, ascent);
 	//if (dy > 0) spacing += dy; else ascent -= dy;
-	add(symbol, p+1, q, x, y+ascent, symbol_w, symbol_h, 0, 0);
+	add(symbol, p+1, q, x, y+ascent, float(symbol_w), float(symbol_h), 0, 0);
 	dy = nextdy;
       } else {
 	// center the symbol in the vertical size of current font:
 	//int a = ascent-((spacing-int(H+1.5f))>>1);
 	int a = int(getascent()-getdescent()+symbol_h+1)>>1;
-	add(symbol, p+1, q, x, y, symbol_w, symbol_h, a, symbol_h);
+	add(symbol, p+1, q, x, y, float(symbol_w), float(symbol_h), a, symbol_h);
 	x += symbol_w;
       }
       // skip the terminating space or semicolon:

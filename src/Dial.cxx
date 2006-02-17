@@ -80,10 +80,10 @@ void Dial::draw() {
   if (type() == FILL) {
     if (damage()&DAMAGE_EXPOSE && box() == OVAL_BOX) draw_background();
     setcolor(getbgcolor());
-    addpie(r, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    addpie(r, float(270-a1), float(angle > a1 ? 360+270-angle : 270-360-angle));
     fillpath();
     setcolor(fillcolor);
-    addpie(r, 270-angle, 270-a1);
+    addpie(r, float(270-angle), float(270-a1));
     fillpath();
     if (box() == OVAL_BOX) {
       setcolor(linecolor);
@@ -100,7 +100,7 @@ void Dial::draw() {
     }
     push_matrix();
     translate(r.center_x()-.5f, r.center_y()-.5f);
-    scale(r.w()-1, r.h()-1);
+    scale(float(r.w()-1), float(r.h()-1));
     rotate(45-angle);
     setcolor(fillcolor);
     if (type() == LINE) {

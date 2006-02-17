@@ -397,7 +397,7 @@ void
               hh = 0;
             }
 
-            drawtext (buf, xx - leftline_, yy);
+            drawtext (buf, float(xx - leftline_), float(yy));
 
             xx += ww;
             if ((fsize + 2) > hh)
@@ -410,7 +410,7 @@ void
                 *s = '\0';
                 s = buf;
 
-                drawtext (buf, xx - leftline_, yy);
+                drawtext (buf, float(xx - leftline_), float(yy));
 
                 if (line < 31)
                   line++;
@@ -434,7 +434,7 @@ void
               *s = '\0';
               s = buf;
 
-              drawtext (buf, xx - leftline_, yy);
+              drawtext (buf, float(xx - leftline_), float(yy));
               xx += (int) getwidth (buf);
             }
 
@@ -525,8 +525,8 @@ void
               drawtext ("\267", xx - fsize - leftline_, yy);
 #else
 	      // symbol font encoding is all f**ked up on XFT
-              setfont (HELVETICA_BOLD, fsize*2);
-              drawtext ("\267", xx - fsize - leftline_, yy+fsize/3);
+              setfont (HELVETICA_BOLD, float(fsize*2));
+              drawtext ("\267", float(xx - fsize - leftline_), float(yy+fsize/3));
 #endif
             }
 
@@ -667,7 +667,7 @@ void
           *s = '\0';
           s = buf;
 
-          drawtext (buf, xx - leftline_, yy);
+          drawtext (buf, float(xx - leftline_), float(yy));
 
           if (line < 31)
             line++;
@@ -730,7 +730,7 @@ void
       }
 
       if (s > buf && !head)
-        drawtext (buf, xx - leftline_, yy);
+        drawtext (buf, float(xx - leftline_), float(yy));
     }
 
   pop_clip ();

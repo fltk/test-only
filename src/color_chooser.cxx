@@ -503,7 +503,7 @@ static void set_valuators(ColorChooser* c) {
   if (recursion) return;
   switch (mode) {
   case M_RGB:
-    setstep(.001);
+    setstep(.001f);
     rvalue->range(0,1); rvalue->value(c->r());
     gvalue->range(0,1); gvalue->value(c->g());
     bvalue->range(0,1); bvalue->value(c->b());
@@ -518,7 +518,7 @@ static void set_valuators(ColorChooser* c) {
     avalue->range(0,255); avalue->value(int(255*c->a()+.5f));
     break;
   case M_HSV:
-    setstep(.001);
+    setstep(.001f);
     rvalue->range(0,360); rvalue->step(1); rvalue->linesize(1); rvalue->value(c->h()*60);
     gvalue->range(0,1); gvalue->value(c->s());
     bvalue->range(0,1); bvalue->value(c->v());

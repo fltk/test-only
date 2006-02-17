@@ -315,8 +315,8 @@ void fltk::transform(Rectangle& R) {
   float x = R.x()+R.w()*.5f;
   float y = R.y()+R.h()*.5f;
   transform(x,y);
-  float d1x,d1y; d1x = R.w(); d1y = 0; transform_distance(d1x, d1y);
-  float d2x,d2y; d2x = 0; d2y = R.h(); transform_distance(d2x, d2y);
+  float d1x,d1y; d1x = float(R.w()); d1y = 0; transform_distance(d1x, d1y);
+  float d2x,d2y; d2x = 0; d2y = float(R.h()); transform_distance(d2x, d2y);
   float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
   x = floorf(x - (w+1)/2);
   float h = rintf(sqrtf(d1y*d1y+d2y*d2y));

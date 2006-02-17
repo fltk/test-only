@@ -807,7 +807,7 @@ bool Browser::set_item_visible(bool value)
 
 void Browser::layout() {
   // This flag is used by relayout() to indicate that autoscroll is needed:
-  bool scroll_to_item = layout_damage()&LAYOUT_CHILD;
+  bool scroll_to_item = (layout_damage()&LAYOUT_CHILD) != 0;
 
   // clear the flags first so the other methods know it is ok to measure
   // the widgets:

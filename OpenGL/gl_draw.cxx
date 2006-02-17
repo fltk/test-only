@@ -230,7 +230,7 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 void glWindowPos2i(int x, int y) {
   if (x < 0 || y < 0) {
     glRasterPos2i(0,0);
-    glBitmap(0,0,0,0,x,y,0);
+    glBitmap(0,0,0,0,(GLfloat)x,(GLfloat)y,0);
   } else {
     glRasterPos2i(x,y);
   }

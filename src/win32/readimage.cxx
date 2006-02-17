@@ -29,11 +29,11 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
     uchar *ptr = p + y*linedelta;
     for (x = 0; x < w; x ++, ptr += delta) {
       COLORREF c = GetPixel(dc, X + x, Y + y);
-      ptr[0] = c;
+      ptr[0] = (uchar)c;
       c >>= 8;
-      ptr[1] = c;
+      ptr[1] = (uchar)c;
       c >>= 8;
-      ptr[2] = c;
+      ptr[2] = (uchar)c;
     }
   }
 

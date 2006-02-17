@@ -62,7 +62,7 @@ void font_cb(Widget *,void *) {
 }
 
 void size_cb(Widget *,void *) {
-  textbox->labelsize(int(sizes->value()));
+  textbox->labelsize((float)sizes->value());
   window->redraw();
 }
 

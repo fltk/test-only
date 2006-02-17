@@ -234,7 +234,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   int hotKeysW = 0;
   int H = 0;
   int children = this->children(indexes,level);
-  Item::set_style(widget,widget->parent());
+  Item::set_style(widget,widget->parent()!=0);
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
   for (i = 0; i < children; i++) {
@@ -293,7 +293,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget, widget->parent());
+  Item::set_style(widget, widget->parent()!=0);
   if (widget->style()->hide_underscore() &&
       !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
     fl_hide_underscore = true;
@@ -392,7 +392,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget, widget->parent());
+  Item::set_style(widget, widget->parent()!=0);
   int ret = -1;
   if (widget->horizontal()) {
     int spacing = int(widget->leading());
@@ -432,7 +432,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  Item::set_style(widget, widget->parent());
+  Item::set_style(widget, widget->parent()!=0);
   if (widget->horizontal()) {
     int spacing = int(widget->leading());
     r.move(spacing,0);

@@ -239,7 +239,7 @@ FileIcon::draw(int      x,		// I - Upper-lefthand X
     return;
 
   // Setup the transform matrix as needed...
-  scale = w < h ? w : h;
+  scale = float(w < h ? w : h);
 
   push_matrix();
   translate(x + 0.5f * (w - scale),

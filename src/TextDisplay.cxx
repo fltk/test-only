@@ -1772,8 +1772,8 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
   }
   if (!(style & BG_ONLY_MASK)) {
     setcolor(foreground);
-    setfont(font, fsize);
-    drawtext(string, nChars, X, Y + mMaxsize - getdescent());
+    setfont(font, float(fsize));
+    drawtext(string, nChars, float(X), float(Y + mMaxsize - getdescent()));
   }
 
   // CET - FIXME
@@ -1969,8 +1969,8 @@ int TextDisplay::string_width( const char *string, int length, int style) {
     font  = textfont();
     fsize = textsize();
   }
-  setfont( font, fsize);
-  return ( int) ( getwidth( string, length));
+  setfont(font, float(fsize));
+  return (int)(getwidth( string, length));
 }
 
 /*
@@ -2490,7 +2490,7 @@ int TextDisplay::measure_vline( int visLineNum) {
       } else if (style >= mNStyles) {
 	style = mNStyles - 1;
       }
-      setfont(mStyleTable[ style ].font, mStyleTable[ style ].size);
+      setfont(mStyleTable[style].font, float(mStyleTable[ style ].size));
       width += ( int) getwidth( expandedChar, len);
       charCount += len;
     }

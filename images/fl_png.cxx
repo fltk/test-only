@@ -61,7 +61,7 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 #if !HAVE_LIBPNG
   return 0;
 #else
-  return png_check_sig((png_byte*)datas, size);
+  return png_check_sig((png_byte*)datas, (int)size)!=0;
 #endif
 }
 

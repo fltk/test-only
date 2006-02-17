@@ -260,7 +260,7 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
   }
 
   Color textcolor = getcolor();
-  Color linecolor = lerp(getbgcolor(), textcolor, .66666);
+  Color linecolor = lerp(getbgcolor(), textcolor, .66666f);
   setcolor(linecolor);
   for (int n = 0; ; n++) {
     // every ten they get further apart for log slider:
@@ -277,7 +277,7 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 	while (p[0]=='0' && p[1]) p++;
 	setfont(textfont(), textsize());
 	setcolor(textcolor);
-	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
+	drawtext(p, float(x1+dx*t), float(y1+dy*t+getsize()-getdescent()));
 	setcolor(linecolor);
       }
     }
@@ -291,7 +291,7 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 	p--; p[0] = '-';
 	setfont(textfont(), textsize());
 	setcolor(textcolor);
-	drawtext(p, x1+dx*t, y1+dy*t+getsize()-getdescent());
+	drawtext(p, float(x1+dx*t), float(y1+dy*t+getsize()-getdescent()));
 	setcolor(linecolor);
       }
     }
