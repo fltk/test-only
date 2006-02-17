@@ -365,7 +365,7 @@ int TextBuffer::undo(int *cursorPos) {
   if (xlen && ilen) {
     undobuffersize(ilen+1);
     undobuffer[ilen] = 0;
-    const char *tmp = newstring(undobuffer);
+    char *tmp = newstring(undobuffer);
     replace(b, undoat, tmp);
     if (cursorPos) *cursorPos = mCursorPosHint;
     delete[] tmp;

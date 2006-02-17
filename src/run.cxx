@@ -148,14 +148,14 @@ extern "C" {
   replacement new-handler to work. FLTK uses this for all strings
   that it copies internally.
 */
-const char* newstring(const char *from) {
+FL_API char* newstring(const char *from) {
   if (!from) return 0;
   unsigned n = strlen(from)+1;
   char* ret = new char[n];
   strcpy(ret, from);
   return ret;
 }
-}
+} /* extern "C" */
 
 // This function is here because Window::label() uses it:
 /**

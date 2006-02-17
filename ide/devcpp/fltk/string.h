@@ -86,7 +86,7 @@ extern "C" {
 
 #include "FL_API.h"
 
-FL_API extern const char* newstring(const char *);
+FL_API extern char* newstring(const char *);
 
 #if defined(DOXYGEN) || defined(__MWERKS__)
 FL_API extern int strcasecmp(const char *, const char *);

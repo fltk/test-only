@@ -62,9 +62,6 @@
 #include <fltk/string.h>
 #include <ctype.h>
 #include <errno.h>
-#  if defined(_MSC_VER) && defined(__cplusplus)
-     extern "C" const char* newstring(const char *from);
-#  endif
 
 #if defined(WIN32) && ! defined(__CYGWIN__)
 #  include <io.h>
@@ -72,10 +69,6 @@
 #else
 #  include <unistd.h>
 #endif // WIN32
-
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
 
 #define MAX_COLUMNS	200
 
