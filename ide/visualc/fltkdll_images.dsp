@@ -54,8 +54,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /libpath:"../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
+# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /nodefaultlib:"libc" /libpath:"../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
@@ -81,8 +81,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug MinSize"
@@ -109,9 +109,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
+# ADD BASE LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /implib:"../../lib/fltkdll_imagesd.lib" /pdbtype:sept /libpath:"../../lib"
+# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /implib:"../../lib/fltkdll_imagesd.lib" /pdbtype:sept /libpath:"../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Release MinSize"
@@ -139,9 +139,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /libpath:"../../lib"
+# ADD BASE LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /libpath:"../../lib"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /out:"../../lib/fltkdll_images.dll" /implib:"../../lib/fltkdll_images.lib" /libpath:"../../lib"
+# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /out:"../../lib/fltkdll_images.dll" /implib:"../../lib/fltkdll_images.lib" /libpath:"../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 

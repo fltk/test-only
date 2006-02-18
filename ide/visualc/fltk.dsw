@@ -128,6 +128,27 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name image
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CubeView
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_opengl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fonts
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libjpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libpng
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name zlib
+    End Project Dependency
 }}}
 
 ###############################################################################
