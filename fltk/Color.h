@@ -1,11 +1,11 @@
 //
-// "$Id: Color.h,v 1.5 2004/01/25 06:55:04 spitzak Exp $"
+// "$Id$"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
 // for back compatabilty, or as an "alpha", depending on context.
 //
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,7 +22,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems to:
+//
+//     http://www.fltk.org/str.php
 //
 
 #ifndef fltk_Color_h
@@ -54,6 +56,9 @@ typedef unsigned Color;
 */
 enum {
   NO_COLOR	= 0, /*!< Black, empty place holder in Style */
+
+  FREE_COLOR	= 16, /*!< Starting from index 16 is the FREE_COLOR area */
+  NUM_FREE_COLOR= 16, /*!< Number of free color slots starting from index FREE_COLOR */
 
 		      // Hex   Decimal FrameBox Old names
   GRAY00	= 32, /*!< 00	.00	A       fltk1: GRAY0 GRAY_RAMP */
@@ -94,9 +99,9 @@ enum {
 };
 
 inline Color color(unsigned char r, unsigned char g, unsigned char b) {
-  return Color((r<<24)+(g<<16)+(b<<8));}
+  return Color((r<<24)+(g<<16)+(b<<8)); }
 inline Color color(unsigned char g) {
-  return Color(g*0x1010100u);}
+  return Color(g*0x1010100u); }
 FL_API Color color(const char*);
 FL_API Color lerp(Color c0, Color c1, float f);
 FL_API Color inactive(Color);
@@ -114,5 +119,5 @@ FL_API Color nearest_index(Color);
 #endif
 
 //
-// End of "$Id: Color.h,v 1.5 2004/01/25 06:55:04 spitzak Exp $".
+// End of "$Id$".
 //
