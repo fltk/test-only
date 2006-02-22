@@ -293,10 +293,6 @@ void TextDisplay::layout() {
   // try without scrollbars first
   vscrollbar->clear_visible();
 
-  // did we have scrollbars initially?
-  int hscrollbarvisible = hscrollbar->visible();
-  int vscrollbarvisible = vscrollbar->visible();
-
   // try without scrollbars first
   vscrollbar->clear_visible();
   hscrollbar->clear_visible();
@@ -1573,7 +1569,8 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
  */
 void TextDisplay::draw_string( int style, int X, int Y, int toX,
 			       const char *string, int nChars) {
-  const StyleTableEntry *styleRec;
+  const StyleTableEntry *styleRec = NULL;
+  unsigned attr = 0; 
 
   /* Draw blank area rather than text, if that was the request */
   if (style & FILL_MASK) {
@@ -1609,6 +1606,7 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
       si = numstyles_ - 1;
     }
     styleRec = styletable_ + si;
+    attr  = styleRec->attr;
     font  = styleRec->font;
     fsize = styleRec->size;
     foreground = contrast(styleRec->color, background);
@@ -1621,14 +1619,14 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
   fltk::setcolor(background);
   fltk::fillrect(Rectangle(X, Y, toX - X, maxsize_));
   
-  if (!(style & BG_ONLY_MASK) && !(styleRec->attr & ATTR_HIDDEN)) {
+  if (!(style & BG_ONLY_MASK) && !(attr & ATTR_HIDDEN)) {
     fltk::setcolor(foreground);
     fltk::setfont(font, fsize);
     fltk::drawtext(string, nChars, (float)X, (float)(Y + maxsize_ - fltk::getdescent()));
   }
 
   /* Underline if style is secondary TextSelection */
-  if (style & SECONDARY_MASK || (styleRec->attr & ATTR_UNDERLINE)) {
+  if (style & SECONDARY_MASK || (attr & ATTR_UNDERLINE)) {
     fltk::setcolor(foreground);
     fltk::drawline((int)X, (int)(Y + ascent_), (int)(toX - 1), (int)(Y + fltk::getascent()));
   }
