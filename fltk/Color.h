@@ -95,6 +95,13 @@ enum {
   CYAN		= 0xdf, /*!< Corner of color cube */
   WHITE		= 0xff, /*!< Corner of color cube */
 
+  DARK_RED	= 72,
+  DARK_GREEN	= 60,
+  DARK_YELLOW	= 76,
+  DARK_BLUE	= 136,
+  DARK_MAGENTA	= 152,
+  DARK_CYAN	= 140,
+
   WINDOWS_BLUE	= 0x88 /*!< default selection_color */
 };
 
