@@ -12,18 +12,18 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory=".\fltkdlld"
+			IntermediateDirectory=".\fltkdlld"
 			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="DEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="WIN32;_DEBUG;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
@@ -32,13 +32,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdlld.lib opengl32.lib wsock32.lib fltkd_z.lib fltkd_png.lib fltkd_jpeg.lib"
-				OutputFile="../../lib/fltkdlld_gl.dll"
+				AdditionalDependencies="fltkdlld.lib opengl32.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../lib/fltkdll_gld.dll"
 				Version="2.0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../../lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/fltkdll_gl.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)d.pdb"
 				SubSystem="2"
 				ImportLibrary="../../lib/fltkdlld_gl.lib"
 				TargetMachine="1"/>
@@ -65,30 +65,30 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory=".\fltkdll"
+			IntermediateDirectory=".\fltkdll"
 			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
+				Optimization="4"
+				InlineFunctionExpansion="2"
+				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="WIN32;NDEBUG;FL_SHARED;FL_GL_LIBRARY;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib opengl32.lib wsock32.lib"
+				AdditionalDependencies="fltkdll.lib opengl32.lib ws2_32.lib"
 				OutputFile="../../lib/fltkdll_gl.dll"
 				Version="2.0"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../lib"
-				GenerateDebugInformation="TRUE"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

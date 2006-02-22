@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=fltkdll_images - Win32 Debug MinSize
+CFG=FLTKDLL_IMAGES - WIN32 DEBUG MINSIZE
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,14 +13,12 @@ CFG=fltkdll_images - Win32 Debug MinSize
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fltkdll_images.mak" CFG="fltkdll_images - Win32 Debug MinSize"
+!MESSAGE NMAKE /f "fltkdll_images.mak" CFG="FLTKDLL_IMAGES - WIN32 DEBUG MINSIZE"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fltkdll_images - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "fltkdll_images - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "fltkdll_images - Win32 Debug MinSize" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "fltkdll_images - Win32 Release MinSize" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -40,12 +38,13 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../lib"
-# PROP Intermediate_Dir "fltkdll_images"
+# PROP Output_Dir "..\..\lib\"
+# PROP Intermediate_Dir "fltkdll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "../.." /I "../visualc" /I "../../images/zlib" /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MT /W3 /GR- /GX /Os /Ob2 /I "." /I "../.." /I "../visualc" /I "../../images/zlib" /D "NDEBUG" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
+# SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -67,12 +66,13 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../lib"
-# PROP Intermediate_Dir "fltkdll_imagesd"
+# PROP Output_Dir "..\..\lib\"
+# PROP Intermediate_Dir "fltkdlld"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR- /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
+# SUBTRACT CPP /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -82,67 +82,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
-# SUBTRACT LINK32 /pdb:none
-
-!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug MinSize"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "fltkdll_images___Win32_Debug_MinSize"
-# PROP BASE Intermediate_Dir "fltkdll_images___Win32_Debug_MinSize"
-# PROP BASE Ignore_Export_Lib 0
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "fltkdll_images___Win32_Debug_MinSize"
-# PROP Intermediate_Dir "fltkdll_images___Win32_Debug_MinSize"
-# PROP Ignore_Export_Lib 0
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I "..\.." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
-# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
-# SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /out:"../../lib/fltkdll_imagesd.dll" /implib:"../../lib/fltkdll_imagesd.lib" /pdbtype:sept /libpath:"../../lib"
-# SUBTRACT LINK32 /pdb:none
-
-!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Release MinSize"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "fltkdll_images___Win32_Release_MinSize"
-# PROP BASE Intermediate_Dir "fltkdll_images___Win32_Release_MinSize"
-# PROP BASE Ignore_Export_Lib 0
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "fltkdll_images___Win32_Release_MinSize"
-# PROP Intermediate_Dir "fltkdll_images___Win32_Release_MinSize"
-# PROP Ignore_Export_Lib 0
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
-# ADD CPP /nologo /MD /GR /GX /Os /Ob2 /I "." /I "..\.." /I "../visualc" /I "../../images/zlib" /D "NDEBUG" /D "FL_DLL" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /c
-# SUBTRACT CPP /YX
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /libpath:"../../lib"
-# SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 fltkdll.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_images.pdb" /machine:I386 /out:"../../lib/fltkdll_images.dll" /implib:"../../lib/fltkdll_images.lib" /libpath:"../../lib"
-# SUBTRACT LINK32 /pdb:none
+# ADD LINK32 fltkdlld.lib opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll_imagesd.pdb" /debug /machine:I386 /nodefaultlib:"libcd" /out:"..\..\lib\fltkdll_imagesd.dll" /pdbtype:sept /libpath:"../../lib"
+# SUBTRACT LINK32 /pdb:none /incremental:no
 
 !ENDIF 
 
@@ -150,8 +91,6 @@ LINK32=link.exe
 
 # Name "fltkdll_images - Win32 Release"
 # Name "fltkdll_images - Win32 Debug"
-# Name "fltkdll_images - Win32 Debug MinSize"
-# Name "fltkdll_images - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\..\images\Fl_Guess_Image.cxx
@@ -171,7 +110,6 @@ DEP_CPP_FL_GU=\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
 	
-# SUBTRACT CPP /D "FL_DLL"
 # End Source File
 # Begin Source File
 
@@ -240,14 +178,12 @@ DEP_CPP_HELPD=\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\slider.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
-	
-NODEP_CPP_HELPD=\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -270,14 +206,12 @@ DEP_CPP_HELPV=\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\slider.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\valuator.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\xpmimage.h"\
-	
-NODEP_CPP_HELPV=\
-	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File

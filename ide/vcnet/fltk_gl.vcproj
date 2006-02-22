@@ -12,18 +12,18 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="fltkd"
+			IntermediateDirectory="fltkd"
 			ConfigurationType="4"
-			CharacterSet="2">
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="WIN32,DEBUG,NDEBUG,_MBCS,_LIB,_POSIX_,_WINDOWS,WIN32_LEAN_AND_MEAN,VC_EXTRA_LEAN,WIN32_EXTRA_LEAN,USE_CONF"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
@@ -32,7 +32,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltkd_gl.lib"/>
+				OutputFile="..\..\lib\fltk_gld.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -54,19 +54,22 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="fltk"
+			IntermediateDirectory="fltk"
 			ConfigurationType="4"
-			CharacterSet="2">
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="4"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="FALSE"
+				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="WIN32,NDEBUG,_MBCS,_LIB,_POSIX_,_WINDOWS,WIN32_LEAN_AND_MEAN,VC_EXTRA_LEAN,WIN32_EXTRA_LEAN,USE_CONF"
-				RuntimeLibrary="4"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool

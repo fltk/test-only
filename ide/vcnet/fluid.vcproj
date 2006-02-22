@@ -11,142 +11,9 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Debug MinSize|Win32"
-			OutputDirectory=".\fluid___Win32_Debug_MinSize"
-			IntermediateDirectory=".\fluid___Win32_Debug_MinSize"
-			ConfigurationType="1"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="FL_SHARED;_DEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
-				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\fluid___Win32_Debug_MinSize/fluid.pch"
-				AssemblerListingLocation=".\fluid___Win32_Debug_MinSize/"
-				ObjectFile=".\fluid___Win32_Debug_MinSize/"
-				ProgramDataBaseFileName=".\fluid___Win32_Debug_MinSize/"
-				BrowseInformation="1"
-				WarningLevel="1"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
-				CompileAs="0"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdlld.lib fltkdll_imagesd.lib wsock32.lib"
-				OutputFile=".\fluid___Win32_Debug_MinSize/fluid.exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames=""
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\fluid___Win32_Debug_MinSize/fluid.pdb"
-				SubSystem="2"
-				EntryPointSymbol="mainCRTStartup"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\fluid___Win32_Debug_MinSize/fluid.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
-			Name="Release MinSize|Win32"
-			OutputDirectory=".\fluid___Win32_Release_MinSize"
-			IntermediateDirectory=".\fluid___Win32_Release_MinSize"
-			ConfigurationType="1"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="FL_SHARED;NDEBUG;_MSC_DLL;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\fluid___Win32_Release_MinSize/fluid.pch"
-				AssemblerListingLocation=".\fluid___Win32_Release_MinSize/"
-				ObjectFile=".\fluid___Win32_Release_MinSize/"
-				ProgramDataBaseFileName=".\fluid___Win32_Release_MinSize/"
-				BrowseInformation="1"
-				WarningLevel="1"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib fltkdll_images.lib wsock32.lib"
-				OutputFile="../../fluid/fluid.exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames=""
-				ProgramDatabaseFile=".\fluid___Win32_Release_MinSize/fluid.pdb"
-				SubSystem="2"
-				EntryPointSymbol="mainCRTStartup"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\fluid___Win32_Release_MinSize/fluid.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\fluid__0"
-			IntermediateDirectory=".\fluid__0"
+			OutputDirectory=".\fluidd"
+			IntermediateDirectory=".\fluidd"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -154,28 +21,27 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="FL_SHARED;_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				MinimalRebuild="TRUE"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\fluid__0/fluid.pch"
-				AssemblerListingLocation=".\fluid__0/"
-				ObjectFile=".\fluid__0/"
-				ProgramDataBaseFileName=".\fluid__0/"
+				PrecompiledHeaderFile=""
 				WarningLevel="1"
 				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdlld.lib fltkdll_imagesd.lib wsock32.lib"
+				AdditionalDependencies="fltkd.lib fltk_imagesd.lib ws2_32.lib"
 				OutputFile="../../fluid/fluidd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\fluid__0/fluid.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)d.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -210,8 +76,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\fluid___"
-			IntermediateDirectory=".\fluid___"
+			OutputDirectory=".\fluid"
+			IntermediateDirectory=".\fluid"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -221,13 +87,10 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="FL_SHARED;NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\fluid___/fluid.pch"
-				AssemblerListingLocation=".\fluid___/"
-				ObjectFile=".\fluid___/"
-				ProgramDataBaseFileName=".\fluid___/"
 				WarningLevel="1"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -235,15 +98,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib fltkdll_images.lib wsock32.lib"
+				AdditionalDependencies="fltk.lib fltk_images.lib ws2_32.lib"
 				OutputFile="../../fluid/fluid.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames=""
-				ProgramDatabaseFile=".\fluid___/fluid.pdb"
 				SubSystem="2"
-				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -281,23 +142,6 @@
 		<File
 			RelativePath="..\..\fluid\about_panel.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -315,23 +159,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\alignment_panel.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -351,23 +178,6 @@
 		<File
 			RelativePath="..\..\fluid\code.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -385,23 +195,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\coding_style.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -421,23 +214,6 @@
 		<File
 			RelativePath="..\..\fluid\coding_style_func.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -455,23 +231,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\factory.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -491,23 +250,6 @@
 		<File
 			RelativePath="..\..\fluid\file.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -525,23 +267,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\Fl_Function_Type.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -561,23 +286,6 @@
 		<File
 			RelativePath="..\..\fluid\Fl_Group_Type.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -595,23 +303,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\Fl_Menu_Type.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -631,23 +322,6 @@
 		<File
 			RelativePath="..\..\fluid\Fl_Type.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -665,23 +339,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\Fl_Widget_Type.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -701,23 +358,6 @@
 		<File
 			RelativePath="..\..\fluid\Fl_Window_Type.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -735,23 +375,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\fluid.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -771,23 +394,6 @@
 		<File
 			RelativePath="..\..\fluid\Fluid_Image.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -805,23 +411,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\Fluid_Plugins.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
@@ -841,23 +430,6 @@
 		<File
 			RelativePath="..\..\fluid\function_panel.cxx">
 			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
@@ -875,23 +447,6 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\widget_panel.cxx">
-			<FileConfiguration
-				Name="Debug MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinSize|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool

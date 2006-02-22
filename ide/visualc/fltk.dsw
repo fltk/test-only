@@ -153,6 +153,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "editor"=.\editor.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "file_chooser"=.\file_chooser.dsp - Package Owner=<4>
 
 Package=<5>
@@ -278,6 +293,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name fltkdll
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltkdll_images
+    End Project Dependency
 }}}
 
 ###############################################################################
