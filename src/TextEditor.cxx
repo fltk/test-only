@@ -219,7 +219,7 @@ int TextEditor::kf_move(int c, TextEditor* e) {
   int i;
   int selected = e->buffer()->selected();
   if (!selected)
-      e->dragPos = e->insert_position();
+      e->dragpos_ = e->insert_position();
   e->buffer()->unselect();
   switch (c) {
   case HomeKey:
@@ -259,7 +259,7 @@ int TextEditor::kf_shift_move(int c, TextEditor* e) {
 
 int TextEditor::kf_ctrl_move(int c, TextEditor* e) {
   if (!e->buffer()->selected())
-    e->dragPos = e->insert_position();
+    e->dragpos_ = e->insert_position();
   if (c != UpKey && c != DownKey) {
     e->buffer()->unselect();
     e->show_insert_position();
@@ -433,10 +433,11 @@ void TextEditor::maybe_do_callback() {
 int TextEditor::handle(int event) {
   if (!buffer()) return 0;
 
+  // Handle middle button text paste
   if (event == PUSH && event_button() == 2) {
-    dragType = -1;
-    paste(*this, 0);
-    focus(this);
+    dragtype_ = -1;
+    fltk::paste(*this, 0);
+    fltk::focus(this);
     set_changed();
     if (when()&WHEN_CHANGED) {
       do_callback();
@@ -450,13 +451,13 @@ int TextEditor::handle(int event) {
     if (buffer()->selected()) {
       redraw(); // Redraw selections...
     }
-    focus(this);
+    fltk::focus(this);
     return 1;
 
   case UNFOCUS:
     show_cursor(cursor_on()); // redraws the cursor
     if (buffer()->selected()) {
-        redraw(); // Redraw selections...
+      redraw(); // Redraw selections...
     }
   case HIDE:
     if (when() & WHEN_RELEASE) {
@@ -497,4 +498,3 @@ int TextEditor::handle(int event) {
 //
 // End of "$Id$".
 //
-

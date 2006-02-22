@@ -60,7 +60,6 @@ public:
     DRAG_CHAR = 0, DRAG_WORD = 1, DRAG_LINE = 2
   };
 
-  // style attributes - currently not implemented!
   enum {
     ATTR_NONE = 0,
     ATTR_UNDERLINE = 1,
@@ -134,7 +133,7 @@ public:
   /** Set line number area width */
   void linenumber_width(int width);
   /** Return line number area width */
-  int linenumber_width() const { return mLineNumWidth; }
+  int linenumber_width() const { return linenumwidth_; }
 
   /** Set new highlight data */
   void highlight_data(TextBuffer *styleBuffer,
@@ -188,12 +187,14 @@ public:
    */
   int find_prev_char(int pos);
 
-protected:
-  // Most (all?) of this stuff should only be called from resize() or
-  // draw().
-  // Anything with "vline" indicates thats it deals with currently
-  // visible lines.
+  int xy_to_position(int X, int Y, int PosType = CHARACTER_POS);
 
+  void xy_to_rowcol(int X, int Y, int *row, int *column, int PosType = CHARACTER_POS);
+
+  bool position_to_xy(int pos, int *X, int *Y);
+
+
+protected:
   void draw_text(int X, int Y, int W, int H);
   void draw_range(int start, int end);
   void draw_cursor(int, int);
@@ -244,12 +245,7 @@ protected:
   int longest_vline();
   int empty_vlines();
   int vline_length(int visLineNum);
-  int xy_to_position(int x, int y, int PosType = CHARACTER_POS);
-
-  void xy_to_rowcol(int x, int y, int* row, int* column,
-                    int PosType = CHARACTER_POS);
-
-  bool position_to_xy(int pos, int *x, int *y);
+  
   void maintain_absolute_top_line_number(bool state);
   int get_absolute_top_line_number();
   void absolute_top_line_number(int oldFirstChar);
@@ -281,15 +277,15 @@ protected:
   
   int cursor_pos_;
   bool cursor_on_;
-  int cursor_oldx_;            /* X pos. of cursor for blanking */
-  int cursor_oldy_;            /* Y pos. of cursor for blanking */
-  int cursor_hint_;          /* Tells the buffer modified callback
+  int cursor_oldx_;           /* X pos. of cursor for blanking */
+  int cursor_oldy_;           /* Y pos. of cursor for blanking */
+  int cursor_hint_;           /* Tells the buffer modified callback
                                  where to move the cursor, to reduce
                                  the number of redraw calls */
-  int cursor_style_;           /* One of enum cursorStyles above */
-  int cursor_preferred_col_;    /* Column for vert. cursor movement */
-  int visiblelines_cnt_;         /* # of visible (displayed) lines */
-  int bufferlines_cnt_;          /* # of newlines in the buffer */
+  int cursor_style_;          /* One of enum cursorStyles above */
+  int cursor_preferred_col_;  /* Column for vert. cursor movement */
+  int visiblelines_cnt_;      /* # of visible (displayed) lines */
+  int bufferlines_cnt_;       /* # of newlines in the buffer */
   TextBuffer *buffer_;        /* Contains text to be displayed */
   TextBuffer *stylebuffer_;   /* Optional parallel buffer containing
                                  color and font information */
@@ -297,29 +293,29 @@ protected:
                                  displayed character (lastChar points
                                  either to a newline or one character
                                  beyond the end of the buffer) */
-  bool continuous_wrap_;       /* Wrap long lines when displaying */
+  bool continuous_wrap_;      /* Wrap long lines when displaying */
   int wrapmargin_;            /* Margin in # of char positions for
                                  wrapping in continuousWrap mode */
   int *linestarts_;
-  int topline_num_;            /* Line number of top displayed line
+  int topline_num_;           /* Line number of top displayed line
                                  of file (first line of file is 1) */
-  int abs_topline_num_;         /* In continuous wrap mode, the line
+  int abs_topline_num_;       /* In continuous wrap mode, the line
                                  number of the top line if the text
                                  were not wrapped (note that this is
                                  only maintained as needed). */
-  bool need_abs_topline_num_;     /* Externally settable flag to continue
+  bool need_abs_topline_num_; /* Externally settable flag to continue
                                  maintaining absTopLineNum even if
                                  it isn't needed for line # display */
-  int horiz_offset_;           /* Horizontal scroll pos. in pixels */
-  int numstyles_;               /* Number of entries in styleTable */
+  int horiz_offset_;          /* Horizontal scroll pos. in pixels */
+  int numstyles_;             /* Number of entries in styleTable */
   const StyleTableEntry *styletable_; /* Table of fonts and colors for
-                                 coloring/syntax-highlighting */
-  char unfinished_style_;      /* Style buffer entry which triggers
+                                         coloring/syntax-highlighting */
+  char unfinished_style_;     /* Style buffer entry which triggers
                                  on-the-fly reparsing of region */
   UnfinishedStyleCb unfinished_highlight_cb_; /* Callback to parse "unfinished" */
-                              /* regions */
-  void *highlight_cbarg_;      /* Arg to unfinishedHighlightCB */
-  int fixed_fontwidth_;        /* Font width if all current fonts are
+                                              /* regions */
+  void *highlight_cbarg_;     /* Arg to unfinishedHighlightCB */
+  int fixed_fontwidth_;       /* Font width if all current fonts are
                                  fixed and match in width, else -1 */
   bool suppressresync_;       /* Suppress resynchronization of line
                                  starts during buffer updates */
@@ -339,8 +335,8 @@ protected:
 
   Rectangle text_area;
 
-  int dragPos, dragType, dragging;
-  int mLineNumLeft, mLineNumWidth; /* Line number margin and width */
+  int dragpos_, dragtype_, dragging_;
+  int linenumleft_, linenumwidth_; /* Line number margin and width */
 };
 
 } /* namespace fltk */

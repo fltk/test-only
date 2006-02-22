@@ -82,7 +82,7 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
 
   damage_range1_start = damage_range1_end = -1;
   damage_range2_start = damage_range2_end = -1;
-  dragPos = dragType = dragging = 0;
+  dragpos_ = dragtype_ = dragging_ = 0;
 
   begin();
   vscrollbar = new Scrollbar(0,0,0,0);
@@ -131,7 +131,7 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
   wrapmargin_ = 0;
   nlinesdeleted_ = 0;
 
-  mLineNumLeft = mLineNumWidth = 0;
+  linenumleft_ = linenumwidth_ = 0;
 }
 
 /*
@@ -244,10 +244,10 @@ void TextDisplay::layout() {
   maxDescent = (int)fltk::getdescent();
   stdfontwidth_ = (int)fltk::getwidth("W"); /* 'W' as standard font */
 
-  if (mLineNumWidth != 0) {
-    mLineNumLeft = text_area.x();
-    area.move_x(mLineNumWidth);
-    text_area.move_x(mLineNumWidth);
+  if (linenumwidth_ != 0) {
+    linenumleft_ = text_area.x();
+    area.move_x(linenumwidth_);
+    text_area.move_x(linenumwidth_);
   }
 
   /* If there is a (syntax highlighting) style table in use, find the new
@@ -557,8 +557,8 @@ void TextDisplay::cursor_style(int style) {
 
 void TextDisplay::linenumber_width(int width)
 {
-  if (mLineNumWidth != width) {
-    mLineNumWidth = width;
+  if (linenumwidth_ != width) {
+    linenumwidth_ = width;
     relayout();
     redraw();
   }
@@ -664,7 +664,7 @@ void TextDisplay::overstrike(const char *text) {
     delete[] paddedText;
 }
 
-/*
+/**
  * Translate a buffer text position to the XY location where the top left
  * of the cursor would be positioned to point to that character.  Returns
  * 0 if the position is not displayed because it is VERTICALLY out
@@ -692,7 +692,7 @@ bool TextDisplay::position_to_xy(int pos, int *X, int *Y) {
   }
 
   fontHeight = maxsize_;
-  *Y = text_area.y() + visLineNum * fontHeight + fontHeight/2;
+  *Y = text_area.y() + visLineNum * fontHeight;
 
   /* Get the text, length, and  buffer position of the line. If the position
      is beyond the end of the buffer and should be at the first position on
@@ -1324,7 +1324,7 @@ void TextDisplay::absolute_top_line_number(int oldFirstChar) {
  */
 int TextDisplay::maintaining_absolute_top_line_number() {
   return continuous_wrap_ &&
-         (mLineNumWidth != 0 || need_abs_topline_num_);
+         (linenumwidth_ != 0 || need_abs_topline_num_);
 }
 
 /*
@@ -1618,17 +1618,18 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
     foreground = textcolor();
   }
 
-  setcolor(background);
-  fillrect(Rectangle(X, Y, toX - X, maxsize_));
+  fltk::setcolor(background);
+  fltk::fillrect(Rectangle(X, Y, toX - X, maxsize_));
   
-  if (!(style & BG_ONLY_MASK)) {
-    setcolor(foreground);
-    setfont(font, fsize);
-    drawtext(string, nChars, (float)X, (float)(Y + maxsize_ - fltk::getdescent()));
+  if (!(style & BG_ONLY_MASK) && !(styleRec->attr & ATTR_HIDDEN)) {
+    fltk::setcolor(foreground);
+    fltk::setfont(font, fsize);
+    fltk::drawtext(string, nChars, (float)X, (float)(Y + maxsize_ - fltk::getdescent()));
   }
 
   /* Underline if style is secondary TextSelection */
   if (style & SECONDARY_MASK || (styleRec->attr & ATTR_UNDERLINE)) {
+    fltk::setcolor(foreground);
     fltk::drawline((int)X, (int)(Y + ascent_), (int)(toX - 1), (int)(Y + fltk::getascent()));
   }
 }
@@ -1738,11 +1739,8 @@ void TextDisplay::draw_cursor(int X, int Y) {
   cursor_oldy_ = Y;
 
   if (focused()) {
-    int spot_x, spot_y;
-    if (position_to_xy(cursor_pos_, &spot_x, &spot_y)) {
-      transform(spot_x, spot_y);
-      fl_set_spot(textfont(), this, spot_x, spot_y);
-    }
+    transform(X, Y);
+    fl_set_spot(textfont(), this, X, Y);
   }
 }
 
@@ -1818,7 +1816,7 @@ int TextDisplay::string_width(const char *string, int length, int style) {
   return (int)fltk::getwidth(string, length);
 }
 
-/*
+/**
  * Translate window coordinates to the nearest (insert cursor or character
  * cell) text position.  The parameter posType specifies how to interpret the
  * position: CURSOR_POS means translate the coordinates to the nearest cursor
@@ -1884,7 +1882,7 @@ int TextDisplay::xy_to_position(int X, int Y, int posType) {
   return lineStart + lineLen;
 }
 
-/*
+/**
  * Translate window coordinates to the nearest row and column number for
  * positioning the cursor.  This, of course, makes no sense when the font is
  * proportional, since there are no absolute columns.  The parameter posType
@@ -2225,15 +2223,15 @@ void TextDisplay::draw_line_numbers(bool clearAll) {
     
   /* Don't draw if lineNumWidth == 0 (line numbers are hidden), or widget is
      not yet realized */
-  if (mLineNumWidth == 0)
+  if (linenumwidth_ == 0)
       return;
   
   /* Make sure we reset the clipping range for the line numbers GC, because
      the GC may be shared (eg, if the line numbers and text have the same
      color) and therefore the clipping ranges may be invalid. */
-  Rectangle clipRect(mLineNumWidth, h());
+  Rectangle clipRect(linenumwidth_, h());
   box()->inset(clipRect);
-  clipRect.w(mLineNumWidth);
+  clipRect.w(linenumwidth_);
   
   fltk::push_clip(clipRect);
   
@@ -2250,14 +2248,14 @@ void TextDisplay::draw_line_numbers(bool clearAll) {
   fltk::setfont(textfont(), textsize());
 
   /* Draw the line numbers, aligned to the text */
-  nCols = mLineNumWidth / charWidth - 1;
+  nCols = linenumwidth_ / charWidth - 1;
   Y = clipRect.y();
   line = get_absolute_top_line_number();
   for (visLine=0; visLine < visiblelines_cnt_; visLine++) {
     lineStart = linestarts_[visLine];
     if (lineStart != -1 && (lineStart==0 || buffer()->character(lineStart-1)=='\n')) {
       int lineNumStringLen = sprintf(lineNumString, "%*d", nCols, line);
-      fltk::drawtext(lineNumString, lineNumStringLen, (float)mLineNumLeft, (float)(Y + ascent_));
+      fltk::drawtext(lineNumString, lineNumStringLen, (float)linenumleft_, (float)(Y + ascent_));
       line++;
     } else {
       if (visLine == 0)
@@ -2965,7 +2963,7 @@ void TextDisplay::draw(void) {
     fltk::pop_clip();
 
     // draw the line numbers if exposed area includes them
-    if (mLineNumWidth != 0) {
+    if (linenumwidth_ != 0) {
       draw_line_numbers(false);
     }
   }
@@ -2986,30 +2984,30 @@ void TextDisplay::draw(void) {
 // also drags due to cursor movement with shift held down for
 // TextEditor
 void TextDisplay::text_drag_me(int pos) {
-  if (dragType == TextDisplay::DRAG_CHAR) {
-    if (pos >= dragPos) {
-      buffer()->select(dragPos, pos);
+  if (dragtype_ == TextDisplay::DRAG_CHAR) {
+    if (pos >= dragpos_) {
+      buffer()->select(dragpos_, pos);
     } else {
-      buffer()->select(pos, dragPos);
+      buffer()->select(pos, dragpos_);
     }
     insert_position(pos);
-  } else if (dragType == TextDisplay::DRAG_WORD) {
-    if (pos >= dragPos) {
+  } else if (dragtype_ == TextDisplay::DRAG_WORD) {
+    if (pos >= dragpos_) {
       insert_position(word_end(pos));
-      buffer()->select(word_start(dragPos), word_end(pos));
+      buffer()->select(word_start(dragpos_), word_end(pos));
     } else {
       insert_position(word_start(pos));
-      buffer()->select(word_start(pos), word_end(dragPos));
+      buffer()->select(word_start(pos), word_end(dragpos_));
     }
-  } else if (dragType == TextDisplay::DRAG_LINE) {
-    if (pos >= dragPos) {
+  } else if (dragtype_ == TextDisplay::DRAG_LINE) {
+    if (pos >= dragpos_) {
       insert_position(buffer()->line_end(pos)+1);
-      buffer()->select(buffer()->line_start(dragPos),
+      buffer()->select(buffer()->line_start(dragpos_),
 		       buffer()->line_end(pos)+1);
     } else {
       insert_position(buffer()->line_start(pos));
       buffer()->select(buffer()->line_start(pos),
-		       buffer()->line_end(dragPos)+1);
+		       buffer()->line_end(dragpos_)+1);
     }
   }
 }
@@ -3051,15 +3049,15 @@ int TextDisplay::handle(int event) {
       handle(FOCUS);
     }
     if (event_state()&SHIFT) return handle(DRAG);
-    dragging = 1;
+    dragging_ = 1;
     int pos = xy_to_position(event_x(), event_y(), CURSOR_POS);
-    dragType = event_clicks();
-    dragPos = pos;
-    if (dragType == DRAG_CHAR)
+    dragtype_ = event_clicks();
+    dragpos_ = pos;
+    if (dragtype_ == DRAG_CHAR)
       buffer()->unselect();
-    else if (dragType == DRAG_WORD)
+    else if (dragtype_ == DRAG_WORD)
       buffer()->select(word_start(pos), word_end(pos));
-    else if (dragType == DRAG_LINE)
+    else if (dragtype_ == DRAG_LINE)
       buffer()->select(buffer()->line_start(pos), buffer()->line_end(pos)+1);
 
     if (buffer()->primary_selection()->selected())
@@ -3071,7 +3069,7 @@ int TextDisplay::handle(int event) {
   }
 
   case DRAG: {
-    if (dragType < 0) return 1;
+    if (dragtype_ < 0) return 1;
     int X = event_x(), Y = event_y(), pos;
     if (Y < text_area.y()) {
       move_up();
@@ -3088,15 +3086,15 @@ int TextDisplay::handle(int event) {
   }
 
   case RELEASE: {
-    dragging = 0;
+    dragging_ = 0;
 
     // convert from WORD or LINE selection to CHAR
-    if (insert_position() >= dragPos) {
-      dragPos = buffer()->primary_selection()->start();
+    if (insert_position() >= dragpos_) {
+      dragpos_ = buffer()->primary_selection()->start();
     } else {
-      dragPos = buffer()->primary_selection()->end();
+      dragpos_ = buffer()->primary_selection()->end();
     }
-    dragType = DRAG_CHAR;
+    dragtype_ = DRAG_CHAR;
 
     char *copy = buffer()->selection_text();
     if (*copy) {
@@ -3111,6 +3109,8 @@ int TextDisplay::handle(int event) {
 
   case FOCUS:
   case UNFOCUS:
+    // disable input method
+    fl_set_spot(NULL, this, 0, 0);
     if (buffer()->selected()) redraw();
     return 1;
 

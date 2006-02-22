@@ -2409,7 +2409,7 @@ bool TextSelection::includes(int pos, int linestartpos, int dispindex) {
  * Update an individual selection for changes in the corresponding text
  */
 void TextSelection::update(int pos, int ndeleted, int ninserted) {
-  if (!selected_ || pos > end_)
+  if ((!selected_ && !zerowidth_) || pos > end_)
     return;
   if (pos + ndeleted <= start_) {
     start_ += ninserted - ndeleted;
@@ -2418,6 +2418,7 @@ void TextSelection::update(int pos, int ndeleted, int ninserted) {
     start_ = pos;
     end_ = pos;
     selected_ = false;
+    zerowidth_ = false;
   } else if (pos <= start_ && pos + ndeleted < end_) {
     start_ = pos;
     end_ = ninserted + end_ - ndeleted;
