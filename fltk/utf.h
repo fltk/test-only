@@ -46,6 +46,7 @@ FL_API unsigned utf8frommb(char*, unsigned, const char*, unsigned);
 FL_API unsigned utf8froma (char*, unsigned, const char*, unsigned);
 FL_API int utf8locale();
 FL_API int utf8test(const char*, unsigned);
+FL_API int utf8seqlen(char c);
 
 #ifdef __cplusplus
 }

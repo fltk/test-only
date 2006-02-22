@@ -32,24 +32,25 @@
 #include <fltk/events.h>
 #include <fltk/TextEditor.h>
 #include <fltk/ask.h>
+
 using namespace fltk;
 
-static void revert(Style* s) {}
-static NamedStyle style("Text_Editor", revert, &TextEditor::default_style);
+static void revert(Style* s) { }
+static NamedStyle style("TextEditor", revert, &TextEditor::default_style);
 NamedStyle* TextEditor::default_style = &::style;
 
-TextEditor::TextEditor(int X, int Y, int W, int H,  const char* l)
+TextEditor::TextEditor(int X, int Y, int W, int H, const char* l)
     : TextDisplay(X, Y, W, H, l) {
-    style(default_style);
-    mCursorOn = 1;
-    insert_mode_ = 1;
-    key_bindings = 0;
+  style(default_style);
+  cursor_on_ = true;
+  insert_mode_ = true;
+  key_bindings = 0;
 
-    // handle the default key bindings
-    add_default_key_bindings(&key_bindings);
+  // handle the default key bindings
+  add_default_key_bindings(&key_bindings);
 
-    // handle everything else
-    default_key_function(kf_default);
+  // handle everything else
+  default_key_function(kf_default);
 }
 
 TextEditor::Key_Binding* TextEditor::global_key_bindings = 0;
@@ -121,55 +122,51 @@ static struct {
 };
 
 void TextEditor::add_default_key_bindings(Key_Binding** list) {
-    for (int i = 0; default_key_bindings[i].key; i++) {
-        add_key_binding(default_key_bindings[i].key,
-                        default_key_bindings[i].state,
-                        default_key_bindings[i].func,
-                        list);
-    }
+  for (int i = 0; default_key_bindings[i].key; i++) {
+    add_key_binding(default_key_bindings[i].key,
+                    default_key_bindings[i].state,
+                    default_key_bindings[i].func,
+                    list);
+  }
 }
 
-TextEditor::Key_Func
-    TextEditor::bound_key_function(int key, int state, Key_Binding* list) {
-    Key_Binding* cur;
-    for (cur = list; cur; cur = cur->next)
-        if (cur->key == key)
-            if (cur->state == TEXT_EDITOR_ANY_STATE || cur->state == state)
-                break;
-    if (!cur) return 0;
-    return cur->function;
+TextEditor::Key_Func TextEditor::bound_key_function(int key, int state, Key_Binding* list) {
+  Key_Binding* cur;
+  for (cur = list; cur; cur = cur->next)
+    if (cur->key == key)
+      if (cur->state == TEXT_EDITOR_ANY_STATE || cur->state == state)
+        break;
+  if (!cur) return 0;
+  return cur->function;
 }
 
-void
-    TextEditor::remove_all_key_bindings(Key_Binding** list) {
-    Key_Binding *cur, *next;
-    for (cur = *list; cur; cur = next) {
-        next = cur->next;
-        delete cur;
-    }
-    *list = 0;
+void TextEditor::remove_all_key_bindings(Key_Binding** list) {
+  Key_Binding *cur, *next;
+  for (cur = *list; cur; cur = next) {
+      next = cur->next;
+      delete cur;
+  }
+  *list = 0;
 }
 
-void
-    TextEditor::remove_key_binding(int key, int state, Key_Binding** list) {
-    Key_Binding *cur, *last = 0;
-    for (cur = *list; cur; last = cur, cur = cur->next)
-        if (cur->key == key && cur->state == state) break;
-    if (!cur) return;
-    if (last) last->next = cur->next;
-    else *list = cur->next;
-    delete cur;
+void TextEditor::remove_key_binding(int key, int state, Key_Binding** list) {
+  Key_Binding *cur, *last = 0;
+  for (cur = *list; cur; last = cur, cur = cur->next)
+      if (cur->key == key && cur->state == state) break;
+  if (!cur) return;
+  if (last) last->next = cur->next;
+  else *list = cur->next;
+  delete cur;
 }
 
-void
-    TextEditor::add_key_binding(int key, int state, Key_Func function,
+void TextEditor::add_key_binding(int key, int state, Key_Func function,
                                 Key_Binding** list) {
-    Key_Binding* kb = new Key_Binding;
-    kb->key = key;
-    kb->state = state;
-    kb->function = function;
-    kb->next = *list;
-    *list = kb;
+  Key_Binding* kb = new Key_Binding;
+  kb->key = key;
+  kb->state = state;
+  kb->function = function;
+  kb->next = *list;
+  *list = kb;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -177,325 +174,324 @@ void
 #define NORMAL_INPUT_MOVE 0
 
 static void kill_selection(TextEditor* e) {
-    if (e->buffer()->selected()) {
-        e->insert_position(e->buffer()->primary_selection()->start());
-        e->buffer()->remove_selection();
-    }
+  if (e->buffer()->selected()) {
+    e->insert_position(e->buffer()->primary_selection()->start());
+    e->buffer()->remove_selection();
+  }
 }
 
 int TextEditor::kf_default(int c, TextEditor* e) {
-    if (!c || (!isprint(c) && c != '\t')) return 0;
-    char s[2] = "\0";
-    s[0] = (char)c;
-    kill_selection(e);
-    if (e->insert_mode()) e->insert(s);
-    else e->overstrike(s);
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  if (!c || (!isprint(c) && c != '\t')) return 0;
+  char s[2] = { c, '\0' };
+  kill_selection(e);
+  if (e->insert_mode()) e->insert(s);
+  else e->overstrike(s);
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_ignore(int, TextEditor*) {
-    return 0; // don't handle
+  return 0; // don't handle
 }
 
 int TextEditor::kf_backspace(int, TextEditor* e) {
-    if (!e->buffer()->selected() && e->move_left())
-        e->buffer()->select(e->insert_position(), e->insert_position()+1);
-    kill_selection(e);
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  if (!e->buffer()->selected() && e->move_left())
+    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+  kill_selection(e);
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_enter(int, TextEditor* e) {
-    kill_selection(e);
-    e->insert("\n");
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  kill_selection(e);
+  e->insert("\n");
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_move(int c, TextEditor* e) {
-    int i;
-    int selected = e->buffer()->selected();
-    if (!selected)
-        e->dragPos = e->insert_position();
-    e->buffer()->unselect();
-    switch (c) {
-    case HomeKey:
-        e->insert_position(e->buffer()->line_start(e->insert_position()));
-        break;
-    case EndKey:
-        e->insert_position(e->buffer()->line_end(e->insert_position()));
-        break;
-    case LeftKey:
-        e->move_left();
-        break;
-    case RightKey:
-        e->move_right();
-        break;
-    case UpKey:
-        e->move_up();
-        break;
-    case DownKey:
-        e->move_down();
-        break;
-    case PageUpKey:
-        for (i = 0; i < e->mNVisibleLines - 1; i++) e->move_up();
-        break;
-    case PageDownKey:
-        for (i = 0; i < e->mNVisibleLines - 1; i++) e->move_down();
-        break;
-    }
-    e->show_insert_position();
-    return 1;
+  int i;
+  int selected = e->buffer()->selected();
+  if (!selected)
+      e->dragPos = e->insert_position();
+  e->buffer()->unselect();
+  switch (c) {
+  case HomeKey:
+    e->insert_position(e->buffer()->line_start(e->insert_position()));
+    break;
+  case EndKey:
+    e->insert_position(e->buffer()->line_end(e->insert_position()));
+    break;
+  case LeftKey:
+    e->move_left();
+    break;
+  case RightKey:
+    e->move_right();
+    break;
+  case UpKey:
+    e->move_up();
+    break;
+  case DownKey:
+    e->move_down();
+    break;
+  case PageUpKey:
+    for (i = 0; i < e->visible_lines() - 1; i++) e->move_up();
+    break;
+  case PageDownKey:
+    for (i = 0; i < e->visible_lines() - 1; i++) e->move_down();
+    break;
+  }
+  e->show_insert_position();
+  return 1;
 }
 
 int TextEditor::kf_shift_move(int c, TextEditor* e) {
-    kf_move(c, e);
-    e->text_drag_me(e->insert_position());
-    return 1;
+  kf_move(c, e);
+  e->text_drag_me(e->insert_position());
+  return 1;
 }
 
 int TextEditor::kf_ctrl_move(int c, TextEditor* e) {
-    if (!e->buffer()->selected())
-        e->dragPos = e->insert_position();
-    if (c != UpKey && c != DownKey) {
-        e->buffer()->unselect();
-        e->show_insert_position();
-    }
-    switch (c) {
-    case HomeKey:
-        e->insert_position(0);
-        e->scroll(0, 0);
-        break;
-    case EndKey:
-        e->insert_position(e->buffer()->length());
-        e->scroll(e->count_lines(0, e->buffer()->length(), 1), 0);
-        break;
-    case LeftKey:
-        e->previous_word();
-        break;
-    case RightKey:
-        e->next_word();
-        break;
-    case UpKey:
-        e->scroll(e->mTopLineNum-1, e->mHorizOffset);
-        break;
-    case DownKey:
-        e->scroll(e->mTopLineNum+1, e->mHorizOffset);
-        break;
-    case PageUpKey:
-        e->insert_position(e->mLineStarts[0]);
-        break;
-    case PageDownKey:
-        e->insert_position(e->mLineStarts[e->mNVisibleLines-2]);
-        break;
-    }
-    return 1;
+  if (!e->buffer()->selected())
+    e->dragPos = e->insert_position();
+  if (c != UpKey && c != DownKey) {
+    e->buffer()->unselect();
+    e->show_insert_position();
+  }
+  switch (c) {
+  case HomeKey:
+    e->insert_position(0);
+    e->scroll(0, 0);
+    break;
+  case EndKey:
+    e->insert_position(e->buffer()->length());
+    e->scroll(e->count_lines(0, e->buffer()->length(), 1), 0);
+    break;
+  case LeftKey:
+    e->previous_word();
+    break;
+  case RightKey:
+    e->next_word();
+    break;
+  case UpKey:
+    e->scroll(e->top_line()-1, e->hor_offset());
+    break;
+  case DownKey:
+    e->scroll(e->top_line()+1, e->hor_offset());
+    break;
+  case PageUpKey:
+    e->insert_position(e->linestarts_[0]);
+    break;
+  case PageDownKey:
+    e->insert_position(e->linestarts_[e->visible_lines()-2]);
+    break;
+  }
+  e->show_insert_position();
+  return 1;
 }
 
 int TextEditor::kf_c_s_move(int c, TextEditor* e) {
-    kf_ctrl_move(c, e);
-    e->text_drag_me(e->insert_position());
-    return 1;
+  kf_ctrl_move(c, e);
+  e->text_drag_me(e->insert_position());
+  return 1;
 }
 
 int TextEditor::kf_home(int, TextEditor* e) {
-    return kf_move(HomeKey, e);
+  return kf_move(HomeKey, e);
 }
 
 int TextEditor::kf_end(int, TextEditor* e) {
-    return kf_move(EndKey, e);
+  return kf_move(EndKey, e);
 }
 
 int TextEditor::kf_left(int, TextEditor* e) {
-    return kf_move(LeftKey, e);
+  return kf_move(LeftKey, e);
 }
 
 int TextEditor::kf_up(int, TextEditor* e) {
-    return kf_move(UpKey, e);
+  return kf_move(UpKey, e);
 }
 
 int TextEditor::kf_right(int, TextEditor* e) {
-    return kf_move(RightKey, e);
+  return kf_move(RightKey, e);
 }
 
 int TextEditor::kf_down(int, TextEditor* e) {
-    return kf_move(DownKey, e);
+  return kf_move(DownKey, e);
 }
 
 int TextEditor::kf_page_up(int, TextEditor* e) {
-    return kf_move(PageUpKey, e);
+  return kf_move(PageUpKey, e);
 }
 
 int TextEditor::kf_page_down(int, TextEditor* e) {
-    return kf_move(PageDownKey, e);
+  return kf_move(PageDownKey, e);
 }
 
-
 int TextEditor::kf_insert(int, TextEditor* e) {
-    e->insert_mode(e->insert_mode() ? 0 : 1);
-    return 1;
+  e->insert_mode(e->insert_mode() ? 0 : 1);
+  return 1;
 }
 
 int TextEditor::kf_delete(int, TextEditor* e) {
-    if (!e->buffer()->selected())
-        e->buffer()->select(e->insert_position(), e->insert_position()+1);
-    kill_selection(e);
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  if (!e->buffer()->selected())
+    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+  kill_selection(e);
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_copy(int, TextEditor* e) {
-    if (!e->buffer()->selected()) return 1;
-    const char *copy = e->buffer()->selection_text();
-    if (*copy) {
-        fltk::copy(copy, strlen(copy), 1);
-    }
-    free((void*)copy);
-    e->show_insert_position();
-    return 1;
+  if (!e->buffer()->selected()) return 1;
+  char *copy = e->buffer()->selection_text();
+  if (*copy) {
+    fltk::copy(copy, strlen(copy), 1);
+  }
+  free(copy);
+  e->show_insert_position();
+  return 1;
 }
 
 int TextEditor::kf_cut(int c, TextEditor* e) {
-    kf_copy(c, e);
-    kill_selection(e);
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  kf_copy(c, e);
+  kill_selection(e);
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_paste(int, TextEditor* e) {
-    kill_selection(e);
-    paste(*e, 1);
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return 1;
+  kill_selection(e);
+  paste(*e, 1);
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return 1;
 }
 
 int TextEditor::kf_select_all(int, TextEditor* e) {
-    e->buffer()->select(0, e->buffer()->length());
-    return 1;
+  e->buffer()->select(0, e->buffer()->length());
+  return 1;
 }
 
 int TextEditor::kf_undo(int , TextEditor* e) {
-    e->buffer()->unselect();
-    int crsr;
-    int ret = e->buffer()->undo(&crsr);
-    e->insert_position(crsr);
-    e->show_insert_position();
-    e->set_changed();
-    if (e->when()&WHEN_CHANGED) e->do_callback();
-    return ret;
+  e->buffer()->unselect();
+  int crsr;
+  int ret = e->buffer()->undo(&crsr);
+  e->insert_position(crsr);
+  e->show_insert_position();
+  e->set_changed();
+  if (e->when()&WHEN_CHANGED) e->do_callback();
+  return ret;
 }
 
 int TextEditor::handle_key() {
-    // Call FLTK's rules to try to turn this into a printing character.
-    // This uses the right-hand ctrl key as a "compose prefix" and returns
-    // the changes that should be made to the text, as a number of
-    // bytes to delete and a string to insert:
-    int del;
-    if (compose(del)) {
-        if (del) buffer()->select(insert_position()-del, insert_position());
-        kill_selection(this);
-        if (event_length()) {
-            if (insert_mode()) insert(event_text());
-            else overstrike(event_text());
-        }
-        show_insert_position();
-        set_changed();
-        if (when()&WHEN_CHANGED) do_callback();
-        return 1;
+  // Call FLTK's rules to try to turn this into a printing character.
+  // This uses the right-hand ctrl key as a "compose prefix" and returns
+  // the changes that should be made to the text, as a number of
+  // bytes to delete and a string to insert:
+  int del;
+  if (fltk::compose(del)) {
+    if (del) buffer()->select(insert_position()-del, insert_position());
+    kill_selection(this);
+    if (event_length()) {
+      if (insert_mode()) insert(event_text());
+      else overstrike(event_text());
     }
+    show_insert_position();
+    set_changed();
+    if (when()&WHEN_CHANGED) do_callback();
+    return 1;
+  }
 
-    int key = event_key(), state = event_state(), c = event_text()[0];
-    state &= SHIFT|CTRL|ALT|META; // only care about these states
-    Key_Func f;
-    f = bound_key_function(key, state, global_key_bindings);
-    if (!f) f = bound_key_function(key, state, key_bindings);
-    if (f) return f(key, this);
-    if (default_key_function_ && !state) return default_key_function_(c, this);
-    return 0;
+  int key = event_key(), state = event_state(), c = event_text()[0];
+  state &= SHIFT|CTRL|ALT|META; // only care about these states
+  Key_Func f;
+  f = bound_key_function(key, state, global_key_bindings);
+  if (!f) f = bound_key_function(key, state, key_bindings);
+  if (f) return f(key, this);
+  if (default_key_function_ && !state) return default_key_function_(c, this);
+  return 0;
 }
 
 void TextEditor::maybe_do_callback() {
-    //  printf("TextEditor::maybe_do_callback()\n");
-    //  printf("changed()=%d, when()=%x\n", changed(), when());
-    if (changed() || (when()&WHEN_NOT_CHANGED)) {
-        do_callback();
-    }
+  //  printf("TextEditor::maybe_do_callback()\n");
+  //  printf("changed()=%d, when()=%x\n", changed(), when());
+  if (changed() || (when()&WHEN_NOT_CHANGED)) {
+    do_callback();
+  }
 }
 
 int TextEditor::handle(int event) {
-    if (!buffer()) return 0;
+  if (!buffer()) return 0;
 
-    if (event == PUSH && event_button() == 2) {
-        dragType = -1;
-        paste(*this, 0);
-        focus(this);
-        set_changed();
-        if (when()&WHEN_CHANGED) {
-            do_callback();
-        }
-        return 1;
+  if (event == PUSH && event_button() == 2) {
+    dragType = -1;
+    paste(*this, 0);
+    focus(this);
+    set_changed();
+    if (when()&WHEN_CHANGED) {
+      do_callback();
     }
+    return 1;
+  }
 
-    switch (event) {
-    case FOCUS:
-        show_cursor(mCursorOn); // redraws the cursor
-        if (buffer()->selected()) {
-            redraw(); // Redraw selections...
-        }
-        focus(this);
-        return 1;
-
-    case UNFOCUS:
-        show_cursor(mCursorOn); // redraws the cursor
-        if (buffer()->selected()) {
-            redraw(); // Redraw selections...
-        }
-    case HIDE:
-        if (when() & WHEN_RELEASE) {
-            maybe_do_callback();
-        }
-        return 1;
-
-    case KEY:
-        return handle_key();
-
-    case PASTE:
-        if (!event_text()) {
-            return 1;
-        }
-        buffer()->remove_selection();
-        if (insert_mode()) {
-            insert(event_text());
-        } else {
-            overstrike(event_text());
-        }
-        show_insert_position();
-        set_changed();
-        if (when()&WHEN_CHANGED) {
-            do_callback();
-        }
-        return 1;
-
-    case ENTER:
-        // MRS: WIN32 only?  Need to test!
-        //    case MOVE:
-        show_cursor(mCursorOn);
-        return 1;
+  switch (event) {
+  case FOCUS:
+    show_cursor(cursor_on()); // redraws the cursor
+    if (buffer()->selected()) {
+      redraw(); // Redraw selections...
     }
+    focus(this);
+    return 1;
 
-    return TextDisplay::handle(event);
+  case UNFOCUS:
+    show_cursor(cursor_on()); // redraws the cursor
+    if (buffer()->selected()) {
+        redraw(); // Redraw selections...
+    }
+  case HIDE:
+    if (when() & WHEN_RELEASE) {
+      maybe_do_callback();
+    }
+    return 1;
+
+  case KEY:
+    return handle_key();
+
+  case PASTE:
+    if (!event_text()) {
+      return 1;
+    }
+    buffer()->remove_selection();
+    if (insert_mode()) {
+      insert(event_text());
+    } else {
+      overstrike(event_text());
+    }
+    show_insert_position();
+    set_changed();
+    if (when()&WHEN_CHANGED) {
+      do_callback();
+    }
+    return 1;
+
+  case ENTER:
+    // MRS: WIN32 only?  Need to test!
+    //    case MOVE:
+    show_cursor(cursor_on());
+    return 1;
+  }
+
+  return TextDisplay::handle(event);
 }
 
 //

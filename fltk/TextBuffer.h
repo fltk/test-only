@@ -27,8 +27,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef TEXT_BUFFER_H
-#define TEXT_BUFFER_H
+#ifndef _fltk_TextBuffer_h_
+#define _fltk_TextBuffer_h_
 
 #include "FL_API.h"
 
@@ -39,222 +39,244 @@ namespace fltk {
 #define TEXT_MAX_EXP_CHAR_LEN 20
 
 class FL_API TextSelection {
-  friend class TextBuffer;
+public:
+  TextSelection();
 
-  public:
-    void set(int start, int end);
-    void set_rectangular(int start, int end, int rectStart, int rectEnd);
-    void update(int pos, int nDeleted, int nInserted);
-    char rectangular() { return mRectangular; }
-    int start() { return mStart; }
-    int end() { return mEnd; }
-    int rect_start() { return mRectStart; }
-    int rect_end() { return mRectEnd; }
-    char selected() { return mSelected; }
-    void selected(char b) { mSelected = b; }
-    int includes(int pos, int lineStartPos, int dispIndex);
-    int position(int* start, int* end);
-    int position(int* start, int* end, int* isRect, int* rectStart, int* rectEnd);
+  void set(int start, int end);
+  void set_rectangular(int start, int end, int rectstart, int rectend);
+  void update(int pos, int ndeleted, int ninserted);
+  bool rectangular() const { return rectangular_; }
+  int start() const	    { return start_; }
+  int end() const	      { return end_; }
+  int rectstart() const { return rectstart_; }
+  int rectend() const   { return rectend_; }
+  bool selected() const { return selected_; }
+  void selected(bool b) { selected_ = b; }
+  bool zerowidth() const { return zerowidth_; }
+  void zerowidth(bool b) { zerowidth_ = b; }
+  bool includes(int pos, int lineStartPos, int dispIndex);
+  int position(int* start, int* end);
+  int position(int* start, int* end, int* isrect, int* rectstart, int* rectend);
 
-
-  protected:
-    char mSelected;
-    char mRectangular;
-    int mStart;
-    int mEnd;
-    int mRectStart;
-    int mRectEnd;
+protected:
+  bool selected_;	/*!< True if the selection is active */
+  bool rectangular_;	/*!< True if the selection is rectangular */
+  bool zerowidth_;	/*!< Width 0 selections aren't "real" selections, but
+                             they can be useful when creating rectangular
+                             selections from the keyboard. */
+  int start_;		/*!< Pos. of start of selection, or if rectangular
+                             start of line containing it. */
+  int end_;		/*!< Pos. of end of selection, or if rectangular
+                             end of line containing it. */
+  int rectstart_;	/*!< Indent of left edge of rect. selection */
+  int rectend_;		/*!< Indent of right edge of rect. selection */
 };
 
-typedef void (*Text_Modify_Cb)(int pos, int nInserted, int nDeleted,
-                                  int nRestyled, const char* deletedText,
-                                  void* cbArg);
+
+typedef void (*Text_Modify_Cb)(	int pos, int nInserted, int nDeleted,
+				int nRestyled, const char* deletedText,
+				void* cbArg);
+
 typedef void (*Text_Predelete_Cb)(int pos, int nDeleted, void* cbArg);
 
+/** TextBuffer */
 class FL_API TextBuffer {
-  public:
-    TextBuffer(int requestedSize = 0);
-    ~TextBuffer();
+public:
+  TextBuffer(int requestedsize = 0);
+  ~TextBuffer();
 
-    int length() { return mLength; }
-    char* text();
-    void text(const char* text);
-    char* text_range(int start, int end);
-    char character(int pos);
-    char* text_in_rectangle(int start, int end, int rectStart, int rectEnd);
-    void insert(int pos, const char* text);
-    void append(const char* t) { insert(length(), t); }
-    void remove(int start, int end);
-    void replace(int start, int end, const char *text);
-    void copy(TextBuffer* fromBuf, int fromStart, int fromEnd, int toPos);
-    int undo(int *cp=0);
-    void canUndo(char flag=1);
-    int insertfile(const char *file, int pos, int buflen = 128*1024);
-    int appendfile(const char *file, int buflen = 128*1024)
-      { return insertfile(file, length(), buflen); }
-    int loadfile(const char *file, int buflen = 128*1024)
-      { select(0, length()); remove_selection(); return appendfile(file, buflen); }
-    int outputfile(const char *file, int start, int end, int buflen = 128*1024);
-    int savefile(const char *file, int buflen = 128*1024)
-      { return outputfile(file, 0, length(), buflen); }
+  int length() const { return length_; }
 
-    void insert_column(int column, int startPos, const char* text,
-                       int* charsInserted, int* charsDeleted);
+  char *text();
+  void text(const char* text);
 
-    void replace_rectangular(int start, int end, int rectStart, int rectEnd,
-                             const char* text);
+  char character(int pos);
+  char *text_range(int start, int end);
+  char *text_in_rectangle(int start, int end, int rectStart, int rectEnd);
 
-    void overlay_rectangular(int startPos, int rectStart, int rectEnd,
-                             const char* text, int* charsInserted,
-                             int* charsDeleted);
+  void insert(int pos, const char *text);
+  void append(const char *t) { insert(length(), t); }
+  void remove(int start, int end);
+  void replace(int start, int end, const char *text);
+  void copy(TextBuffer *from_buf, int from_start, int from_end, int to_pos);
 
-    void remove_rectangular(int start, int end, int rectStart, int rectEnd);
-    void clear_rectangular(int start, int end, int rectStart, int rectEnd);
-    int tab_distance() { return mTabDist; }
-    void tab_distance(int tabDist);
-    void select(int start, int end);
-    int selected() { return mPrimary.selected(); }
-    void unselect();
-    void select_rectangular(int start, int end, int rectStart, int rectEnd);
-    int selection_position(int* start, int* end);
+  int undo(int *cp = 0);
+  void canUndo(char flag = 1);
 
-    int selection_position(int* start, int* end, int* isRect, int* rectStart,
-                           int* rectEnd);
+  int insertfile(const char *file, int pos, int buflen = 128*1024);
+  int appendfile(const char *file, int buflen = 128*1024)
+        { return insertfile(file, length(), buflen); }
+  int loadfile(const char *file, int buflen = 128*1024)
+        { select(0, length()); remove_selection(); return appendfile(file, buflen); }
+  int outputfile(const char *file, int start, int end, int buflen = 128*1024);
+  int savefile(const char *file, int buflen = 128*1024)
+        { return outputfile(file, 0, length(), buflen); }
 
-    char* selection_text();
-    void remove_selection();
-    void replace_selection(const char* text);
-    void secondary_select(int start, int end);
-    void secondary_unselect();
+  void insert_column(int column, int startpos, const char *text,
+                     int *chars_inserted, int *chars_deleted);
 
-    void secondary_select_rectangular(int start, int end, int rectStart,
-                                      int rectEnd);
+  void replace_rectangular(int start, int end, int rectstart, int rectend,
+                           const char *text);
 
-    int secondary_selection_position(int* start, int* end, int* isRect,
-                                     int* rectStart, int* rectEnd);
+  void overlay_rectangular(int startpos, int rectStart, int rectEnd,
+                           const char* text, int* charsInserted,
+                           int* charsDeleted);
 
-    char* secondary_selection_text();
-    void remove_secondary_selection();
-    void replace_secondary_selection(const char* text);
-    void highlight(int start, int end);
-    void unhighlight();
-    void highlight_rectangular(int start, int end, int rectStart, int rectEnd);
+  void remove_rectangular(int start, int end, int rectStart, int rectEnd);
+  void clear_rectangular(int start, int end, int rectStart, int rectEnd);
+  int tab_distance() const { return tabdist_; }
+  void tab_distance(int tabDist);
+  
+  void select(int start, int end);
+  bool selected() const { return primary_.selected(); }
+  void unselect();
+  
+  void select_rectangular(int start, int end, int rectStart, int rectEnd);
+  int selection_position(int* start, int* end);
 
-    int highlight_position(int* start, int* end, int* isRect, int* rectStart,
-                           int* rectEnd);
+  int selection_position(int* start, int* end, int* isRect, int* rectStart,
+                         int* rectEnd);
 
-    char* highlight_text();
-    void add_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
-    void remove_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
+  char *selection_text();
+  void remove_selection();
+  void replace_selection(const char* text);
+  void secondary_select(int start, int end);
+  void secondary_unselect();
 
-    void call_modify_callbacks() { call_modify_callbacks(0, 0, 0, 0, 0); }
+  void secondary_select_rectangular(int start, int end, int rectStart,
+                                    int rectEnd);
 
-    void add_predelete_callback(Text_Predelete_Cb bufPredelCB, void* cbArg);
-    void remove_predelete_callback(Text_Predelete_Cb predelCB, void* cbArg);
+  int secondary_selection_position(int* start, int* end, int* isRect,
+                                   int* rectStart, int* rectEnd);
 
-    void call_predelete_callbacks() { call_predelete_callbacks(0, 0); }
+  char *secondary_selection_text();
+  void remove_secondary_selection();
+  void replace_secondary_selection(const char* text);
+  void highlight(int start, int end);
+  void unhighlight();
+  void highlight_rectangular(int start, int end, int rectStart, int rectEnd);
 
-    char* line_text(int pos);
-    int line_start(int pos);
-    int line_end(int pos);
-    int word_start(int pos);
-    int word_end(int pos);
-    int expand_character(int pos, int indent, char *outStr);
+  int highlight_position(int* start, int* end, int* isRect, int* rectStart,
+                         int* rectEnd);
 
-    static int expand_character(char c, int indent, char* outStr, int tabDist,
-                                char nullSubsChar);
+  char *highlight_text();
+  void add_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
+  void remove_modify_callback(Text_Modify_Cb bufModifiedCB, void* cbArg);
 
-    static int character_width(char c, int indent, int tabDist, char nullSubsChar);
-    int count_displayed_characters(int lineStartPos, int targetPos);
-    int skip_displayed_characters(int lineStartPos, int nChars);
-    int count_lines(int startPos, int endPos);
-    int skip_lines(int startPos, int nLines);
-    int rewind_lines(int startPos, int nLines);
-    int findchar_forward(int startPos, char searchChar, int* foundPos);
-    int findchar_backward(int startPos, char searchChar, int* foundPos);
-    int findchars_forward(int startPos, const char* searchChars, int* foundPos);
-    int findchars_backward(int startPos, const char* searchChars, int* foundPos);
+  void call_modify_callbacks() { call_modify_callbacks(0, 0, 0, 0, 0); }
 
-    int search_forward(int startPos, const char* searchString, int* foundPos,
-                       int matchCase = 0);
+  void add_predelete_callback(Text_Predelete_Cb bufPredelCB, void* cbArg);
+  void remove_predelete_callback(Text_Predelete_Cb predelCB, void* cbArg);
 
-    int search_backward(int startPos, const char* searchString, int* foundPos,
-                        int matchCase = 0);
+  void call_predelete_callbacks() { call_predelete_callbacks(0, 0); }
 
-    int substitute_null_characters(char* string, int length);
-    void unsubstitute_null_characters(char* string);
-    char null_substitution_character() { return mNullSubsChar; }
-    TextSelection* primary_selection() { return &mPrimary; }
-    TextSelection* secondary_selection() { return &mSecondary; }
-    TextSelection* highlight_selection() { return &mHighlight; }
+  char* line_text(int pos);
+  int line_start(int pos);
+  int line_end(int pos);
+  int word_start(int pos);
+  int word_end(int pos);
+  int expand_character(int pos, int indent, char *outStr);
 
-  protected:
-    void call_modify_callbacks(int pos, int nDeleted, int nInserted,
-                               int nRestyled, const char* deletedText);
-    void call_predelete_callbacks(int pos, int nDeleted);
+  static int expand_character(char c, int indent, char* outStr, int tabDist,
+                              char nullSubsChar);
 
-    int insert_(int pos, const char* text);
-    void remove_(int start, int end);
+  static int character_width(char c, int indent, int tabDist, char nullSubsChar);
+  int count_displayed_characters(int lineStartPos, int targetPos);
+  int count_displayed_characters_utf(int lineStartPos, int targetPos);
+  int skip_displayed_characters(int lineStartPos, int nChars);
+  int skip_displayed_characters_utf(int lineStartPos, int nChars);
+  int count_lines(int startPos, int endPos);
+  int skip_lines(int startPos, int nLines);
+  int rewind_lines(int startPos, int nLines);
+  
+  bool findchar_forward(int startPos, char searchChar, int* foundPos);
+  bool findchar_backward(int startPos, char searchChar, int* foundPos);
 
-    void remove_rectangular_(int start, int end, int rectStart, int rectEnd,
-                             int* replaceLen, int* endPos);
+  bool findchars_forward(int startpos, const char *searchChars, int *foundPos);
+  bool findchars_backward(int startpos, const char *searchChars, int *foundPos);
 
-    void insert_column_(int column, int startPos, const char* insText,
-                        int* nDeleted, int* nInserted, int* endPos);
+  bool search_forward(int startPos, const char* searchString, int* foundPos,
+                      bool matchCase = false);
 
-    void overlay_rectangular_(int startPos, int rectStart, int rectEnd,
-                              const char* insText, int* nDeleted,
-                              int* nInserted, int* endPos);
+  bool search_backward(int startPos, const char* searchString, int* foundPos,
+                       bool matchCase = false);
 
-    void redisplay_selection(TextSelection* oldSelection,
-                             TextSelection* newSelection);
+  char null_substitution_character() { return nullsubschar_; }
+  TextSelection* primary_selection() { return &primary_; }
+  TextSelection* secondary_selection() { return &secondary_; }
+  TextSelection* highlight_selection() { return &highlight_; }
 
-    void move_gap(int pos);
-    void reallocate_with_gap(int newGapStart, int newGapLen);
-    char* selection_text_(TextSelection* sel);
-    void remove_selection_(TextSelection* sel);
-    void replace_selection_(TextSelection* sel, const char* text);
+protected:
+  void call_modify_callbacks(int pos, int nDeleted, int nInserted,
+                             int nRestyled, const char* deletedText);
+  void call_predelete_callbacks(int pos, int nDeleted);
 
-    void rectangular_selection_boundaries(int lineStartPos, int rectStart,
-                                          int rectEnd, int* selStart,
-                                          int* selEnd);
+  int insert_(int pos, const char* text);
+  void remove_(int start, int end);
 
-    void update_selections(int pos, int nDeleted, int nInserted);
+  void remove_rectangular_(int start, int end, int rectStart, int rectEnd,
+                           int* replaceLen, int* endPos);
 
-    TextSelection mPrimary; /* highlighted areas */
-    TextSelection mSecondary;
-    TextSelection mHighlight;
-    int mLength;                /* length of the text in the buffer (the length
-                                   of the buffer itself must be calculated:
-                                   gapEnd - gapStart + length) */
-    char* mBuf;                 /* allocated memory where the text is stored */
-    int mGapStart;              /* points to the first character of the gap */
-    int mGapEnd;                /* points to the first char after the gap */
-    // The hardware tab distance used by all displays for this buffer,
-    // and used in computing offsets for rectangular selection operations.
-    int mTabDist;               /* equiv. number of characters in a tab */
-    int mUseTabs;               /* True if buffer routines are allowed to use
-                                   tabs for padding in rectangular operations */
-    int mNModifyProcs;          /* number of modify-redisplay procs attached */
-    Text_Modify_Cb*          /* procedures to call when buffer is */
-    mNodifyProcs;               /* modified to redisplay contents */
-    void** mCbArgs;             /* caller arguments for modifyProcs above */
-    int mNPredeleteProcs;	/* number of pre-delete procs attached */
-    Text_Predelete_Cb*	/* procedure to call before text is deleted */
-	 mPredeleteProcs;	/* from the buffer; at most one is supported. */
-    void **mPredeleteCbArgs;	/* caller argument for pre-delete proc above */
-    int mCursorPosHint;         /* hint for reasonable cursor position after
-                                   a buffer modification operation */
-    char mNullSubsChar;         /* NEdit is based on C null-terminated strings,
-                                   so ascii-nul characters must be substituted
-                                   with something else.  This is the else, but
-                                   of course, things get quite messy when you
-                                   use it */
-    char mCanUndo;		/* if this buffer is used for attributes, it must
-				   not do any undo calls */
+  void insert_column_(int column, int startPos, const char* insText,
+                      int* nDeleted, int* nInserted, int* endPos);
+
+  void overlay_rectangular_(int startPos, int rectStart, int rectEnd,
+                            const char* insText, int* nDeleted,
+                            int* nInserted, int* endPos);
+
+  void redisplay_selection(TextSelection* oldSelection,
+                           TextSelection* newSelection);
+
+  void move_gap(int pos);
+  void reallocate_with_gap(int newGapStart, int newGapLen);
+  char *selection_text_(TextSelection *sel);
+  void remove_selection_(TextSelection *sel);
+  void replace_selection_(TextSelection *sel, const char* text);
+
+  void rectangular_selection_boundaries(int lineStartPos, int rectStart,
+                                        int rectEnd, int* selStart,
+                                        int* selEnd);
+
+  void update_selections(int pos, int nDeleted, int nInserted);
+
+  TextSelection primary_;		/* highlighted areas */
+  TextSelection secondary_;
+  TextSelection highlight_;
+
+  int length_;    /*!< length of the text in the buffer (the length
+                       of the buffer itself must be calculated:
+                       gapend - gapstart + length) */
+  char *buf_;     /*!< allocated memory where the text is stored */
+  int gapstart_;  /*!< points to the first character of the gap */
+  int gapend_;    /*!< points to the first char after the gap */
+  
+  int tabdist_;		/*!< equiv. number of characters in a tab */
+  bool usetabs_;	/*!< True if buffer routines are allowed to use
+    				           tabs for padding in rectangular operations */
+  
+  int nmodifyprocs_;            /*!< number of modify-redisplay procs attached */
+  Text_Modify_Cb *modifyprocs_;	/*   modified to redisplay contents */
+  void **modifycbargs_;		  /*!< caller arguments for modifyprocs_ above */
+
+  int npredeleteprocs_;	              /*!< number of pre-delete procs attached */
+  Text_Predelete_Cb	*predeleteprocs_; /*   procedure to call before text is deleted */
+ 	                                    /*   from the buffer; at most one is supported. */
+  void **prepeletecbargs_;	          /*!< caller argument for pre-delete proc above */
+  
+  int cursorposhint_; /*!< hint for reasonable cursor position after
+    				               a buffer modification operation */
+  char nullsubschar_;	/*!< TextBuffer is based on C null-terminated strings,
+    	    	    	    	   so ascii-nul characters must be substituted
+				                   with something else.  This is the else, but
+				                   of course, things get quite messy when you
+				                   use it */
+
+  char mCanUndo;		  /*!< if this buffer is used for attributes, it must
+				                   not do any undo calls */
 };
 
-}
+} /* namespace fltk */
+
 #endif
 
 //
