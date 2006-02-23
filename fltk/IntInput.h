@@ -1,5 +1,5 @@
 //
-// "$Id: IntInput.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,12 +31,12 @@ namespace fltk {
 class FL_API IntInput : public FloatInput {
 public:
   IntInput(int x,int y,int w,int h,const char *l = 0)
-    : FloatInput(x,y,w,h,l) {type(INT);}
+    : FloatInput(x,y,w,h,l) { type(INT); }
 };
 
 }
 #endif
 
 //
-// End of "$Id: IntInput.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id$".
 //

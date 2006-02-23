@@ -56,6 +56,12 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
   for (int n = 0; n < ilen; n++) {
     char ascii = text[n];
     compose_reset(); // ignore any foreign letters...
+    
+    // Allow only one '.' in FLOAT inputs
+    if (type()==FLOAT && ascii=='.') {
+      if (!strchr(value(), ascii))
+        continue;
+    } else
     // This is complex to allow "0xff12" hex to be typed:
     if (b+n==0 && (ascii == '+' || ascii == '-') ||
 	(ascii >= '0' && ascii <= '9') ||

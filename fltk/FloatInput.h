@@ -1,5 +1,5 @@
 //
-// "$Id: FloatInput.h,v 1.4 2004/01/18 18:35:29 spitzak Exp $"
+// "$Id$"
 //
 // NumericInput modified to only allow floating point to by
 // typed. Currently this is implemented by the base class by checking
@@ -35,11 +35,11 @@ namespace fltk {
 class FL_API FloatInput : public NumericInput {
   virtual bool replace(int, int, const char*, int);
 public:
-  enum {FLOAT = 0, INT = 1};
+  enum { FLOAT = 1, INT = 2 };
   FloatInput(int x,int y,int w,int h,const char *l = 0)
-    : NumericInput(x,y,w,h,l) {}
+    : NumericInput(x,y,w,h,l) { type(FLOAT); }
   long lvalue() const;
-  int ivalue() const {return int(lvalue());}
+  int ivalue() const { return int(lvalue()); }
   double fvalue() const;
 };
 
@@ -47,5 +47,5 @@ public:
 #endif
 
 //
-// End of "$Id: FloatInput.h,v 1.4 2004/01/18 18:35:29 spitzak Exp $".
+// End of "$Id$".
 //
