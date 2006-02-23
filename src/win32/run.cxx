@@ -48,12 +48,11 @@
 # define IN
 # define OUT
 #endif
-#if 1
+
+#if 0
 # include <winsock.h>
 #else
-# include <windows.h>
 # include <winsock2.h>
-# include <ws2tcpip.h>
 #endif
 
 #include <commctrl.h>
