@@ -40,6 +40,7 @@
 #include <fltk/Button.h>
 #include <fltk/filename.h>
 #include <fltk/error.h>
+#include <cctype> // tolower
 
 /* The form description */
 
@@ -321,7 +322,9 @@ int main(int argc, char **argv) {
   char buf[256];
   if (argv[0] && *argv[0]) strcpy(buf, argv[0]);
   else                     strcpy(buf, "demo");
-  strcpy((char*)filename_ext(buf),".menu");
+  char *epos = (char*)filename_ext(buf);
+  if (tolower(*(epos-1))=='d') epos--; // Handle the debug 'demod' case
+  strcpy(epos,".menu");
   const char *fname = buf;
   int i = 0;
   if (!fltk::args(argc,argv,i) || i < argc-1)
