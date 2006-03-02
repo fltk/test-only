@@ -1,5 +1,5 @@
 //
-// "$Id: FluidType.h,v 1.4 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id$"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,9 @@ class FLUID_API FluidType {
   friend class WindowType;
   virtual void setlabel(const char *); // virtual part of label(char*)
 
+public:
+  virtual void prefix(const char* p) {}
+  virtual const char*  prefix() const {return 0;}
 protected:
 
   FluidType();
@@ -347,5 +350,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern bool include_H_from_C;
 
 //
-// End of "$Id: FluidType.h,v 1.4 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id$".
 //

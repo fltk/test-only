@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.45 2002/12/15 10:42:49 spitzak Exp $"
+// "$Id$"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 #include "coding_style.h"
 
 ////////////////////////////////////////////////////////////////
@@ -716,6 +717,13 @@ public:
   int is_class() const {return 1;}
   void write_properties();
   void read_property(const char *);
+   
+  // fc: added for FL_API prefixing and others prefix capability
+  // class prefix attribute access
+  void prefix(const char* p);
+  const char*  prefix() const {return class_prefix;}
+private:
+  const char* class_prefix;
 };
 
 // Return the class that this is a member of, or null if this is not
@@ -742,11 +750,17 @@ const char* FluidType::member_of(bool need_nest) const {
   return 0;
 }
 
+void ClassType::prefix(const char*p) {
+  free((void*) class_prefix);
+  class_prefix=strdup(p ? p : "" );
+}
+
 FluidType *ClassType::make() {
   FluidType *p = FluidType::current;
   while (p && !p->is_decl_block()) p = p->parent;
   ClassType *o = new ClassType();
   o->name("UserInterface");
+  o->class_prefix = 0;
   o->subclass_of = 0;
   o->public_ = true;
   o->add(p);
@@ -779,24 +793,50 @@ void ClassType::open() {
     c_panel_ok->callback(ok_callback);
     c_panel_cancel->callback(cancel_callback);
   }
-  c_name_input->static_value(name());
+  char fullname[1024]="";
+  if (prefix() && strlen(prefix())) 
+    sprintf(fullname,"%s %s",prefix(),name());
+  else 
+    strcpy(fullname, name());
+  c_name_input->static_value(fullname);
+
   c_subclass_input->static_value(subclass_of);
   c_public_button->value(public_);
   const char* message = 0;
+ char *na=0,*pr=0,*p=0; // name and prefix substrings
+
   for (;;) { // repeat as long as there are errors
     if (message) fltk::alert(message);
     if (!class_panel->exec()) break;
     const char*c = c_name_input->value();
-    while (isspace(*c)) c++;
-    if (!*c) goto OOPS;
-    while (is_id(*c)) c++;
-    while (isspace(*c)) c++;
-    if (*c) {OOPS: message = "class name must be C++ identifier"; continue;}
+    char *s = strdup(c);
+    size_t len = strlen(s);
+    if (!*s) goto OOPS;
+    p = (char*) (s+len-1);
+    while (p>=s && isspace(*p)) *(p--)='\0';
+    if (p<s) goto OOPS;
+    while (p>=s && is_id(*p)) p--;
+    if ( (p<s && !is_id(*(p+1))) || !*(p+1) ) {
+      OOPS: message = "class name must be C++ identifier";
+      free((void*)s);
+      continue;
+    }
+    na=p+1; // now we have the name
+    if(p>s) *p--='\0';
+    while (p>=s && isspace(*p)) *(p--)='\0';
+    while (p>=s && is_id(*p))   p--;
+    if (p<s)                    p++;
+    if (is_id(*p) && p<na)      pr=p; // prefix detected
     c = c_subclass_input->value();
-    message = c_check(c); if (message) continue;
-    name(c_name_input->value());
+    message = c_check(c); 
+    if (message) { free((void*)s);continue;}
+    name(na);
+    prefix(pr);
+    free((void*)s);
     storestring(c, subclass_of);
-    public_ = c_public_button->value();
+    if (public_ != c_public_button->value()) {
+      public_ = c_public_button->value();
+    }
     break;
   }
   class_panel->hide();
@@ -819,7 +859,10 @@ void ClassType::write_code() {
   parent_class = current_class;
   current_class = this;
   write_public_state = 0;
-  write_h("\nclass %s ", name());
+  if (prefix() && strlen(prefix()))
+      write_h("\nclass %s %s ", prefix(), name());
+  else
+      write_h("\nclass %s ", name());
   if (subclass_of) write_h(": %s ", subclass_of);
   write_h("%s", get_opening_brace(1));
   for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
@@ -828,5 +871,5 @@ void ClassType::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.45 2002/12/15 10:42:49 spitzak Exp $".
+// End of "$Id$".
 //

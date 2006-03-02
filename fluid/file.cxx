@@ -437,6 +437,13 @@ static void read_children(FluidType *p, int paste) {
     t->name(read_word());
 
     c = read_word(1);
+    
+	if (strcmp(c,"{") && t->is_class()) {   // <prefix> <name>
+      t->prefix(t->name());
+      t->name(c);
+      c = read_word(1);
+    }
+
     if (strcmp(c,"{")) {
       read_error("Missing property list for %s\n",t->title());
       goto REUSE_C;

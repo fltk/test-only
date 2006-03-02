@@ -58,7 +58,7 @@ ation so that the definition of your class is included in the fluid output.");
          {fltk::Button* o = new fltk::Button(80, 55, 220, 22, "Image name");
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+		  o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
           o->tooltip("Select an image to label the widget");
         }
          {fltk::CheckButton* o = include_image_button = new fltk::CheckButton(305, 55, 50, 22, "inline");

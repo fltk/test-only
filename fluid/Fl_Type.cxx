@@ -584,6 +584,12 @@ void FluidType::write() {
   for (FluidType* p = parent; p; p = p->parent) level++;
   write_indent(level);
   write_word(type_name());
+  if (is_class()) {
+    const char * p = prefix();
+	  if (p &&	strlen(p))
+	write_word(p);
+  }
+
   write_word(name());
   write_open(level);
   write_properties();

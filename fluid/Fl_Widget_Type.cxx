@@ -2032,9 +2032,9 @@ void WidgetType::read_property(const char *c) {
   } else if (!strcmp(c,"textcolor") || !strcmp(c,"text_color")) {
     o->textcolor((fltk::Color)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"labelsize") || !strcmp(c,"label_size")) {
-    o->labelsize((int)strtoul(read_word(),0,0));
+    o->labelsize((float)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"textsize") || !strcmp(c,"text_size")) {
-    o->textsize((int)strtoul(read_word(),0,0));
+    o->textsize((float)strtoul(read_word(),0,0));
 
   } else if (!strcmp(c,"minimum") && is_valuator()) {
     ((fltk::Valuator*)o)->minimum(strtod(read_word(),0));
@@ -2130,7 +2130,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
     o->labelfont(fltk::font(v)); o->labeltype((fltk::LabelType*)(v>>8));
   } else if (!strcmp(name,"size")) {
     if (!lookup_symbol(value,v,1)) return 0;
-    o->labelsize(v);
+    o->labelsize((float)v);
   } else if (!strcmp(name,"type")) {
     if (!strncmp(value,"NORMAL",6)) return 1;
     if (lookup_symbol(value,v,1)) {o->type(v); return 1;}
