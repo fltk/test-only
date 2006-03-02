@@ -364,6 +364,7 @@ static BarGroupType BarGrouptype;
 
 ////////////////////////////////////////////////////////////////
 
+
 extern class FunctionType Functiontype;
 extern class CodeType Codetype;
 extern class CodeBlockType CodeBlocktype;
@@ -500,6 +501,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"submenu",		"fltk::ItemGroup"},
   {"menuitem",		"fltk::Item"},
   {"Fl_Counter",	"fltk::ValueInput"},
+  {"Fl_Spinner",	"fltk::ValueInput"},
   {"Fl_Tabs",		"fltk::TabGroup"},
   {"Fl_Return_Button",	"fltk::ReturnButton"},
   {"fltk::EnterButton",	"fltk::ReturnButton"},
