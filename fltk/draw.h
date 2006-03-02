@@ -74,15 +74,16 @@ FL_API int intersect_with_clip(Rectangle&);
 FL_API void setcolor(Color);
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
+
 extern FL_API Color current_bgcolor_;
 inline void setbgcolor(Color c) {current_bgcolor_ = c;}
 inline Color getbgcolor() {return current_bgcolor_;}
 
-extern const Style* drawstyle_;
+extern FL_API const Style* drawstyle_;
 void FL_API drawstyle(const Style* s, Flags);
 inline const Style* drawstyle() {return drawstyle_;}
 
-extern Flags drawflags_;
+extern FL_API Flags drawflags_;
 inline void setdrawflags(Flags f) {drawflags_ = f;}
 inline Flags drawflags() {return drawflags_;}
 inline Flags drawflags(Flags f) {return drawflags_ & f;}
