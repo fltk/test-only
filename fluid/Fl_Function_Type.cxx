@@ -33,9 +33,9 @@
 #include <stdlib.h>
 #include "coding_style.h"
 
+
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message
-
 static char buffer[128]; // for error messages
 
 const char *strip_default_args(const char *name) {
@@ -699,7 +699,6 @@ void DeclBlockType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-
 class ClassType : public FluidType {
   const char* subclass_of;
   bool public_;
@@ -859,8 +858,11 @@ void ClassType::write_code() {
   parent_class = current_class;
   current_class = this;
   write_public_state = 0;
-  if (prefix() && strlen(prefix()))
+  if (prefix() && strlen(prefix())) {
+	  if (strcmp(prefix(),"FL_EXPORT")==0) // convert it to FL_API
+		  prefix("FL_API");
       write_h("\nclass %s %s ", prefix(), name());
+  }
   else
       write_h("\nclass %s ", name());
   if (subclass_of) write_h(": %s ", subclass_of);
@@ -869,6 +871,118 @@ void ClassType::write_code() {
   write_h("};\n");
   current_class = parent_class;
 }
+
+////////////////////////////////////////////////////////////////
+#if 1
+class NamespaceType : public FluidType {
+public:
+  // state variables for output:
+  NamespaceType* parent_namespace; // save namespace if nested
+//
+  FluidType *make();
+  void write_code();
+  void open();
+  virtual const char *type_name() const {return "namespace";}
+  int is_parent() const {return 1;}
+  int is_decl_block() const {return 1;} // namespace can contain namespace(s) | class(es)
+  int is_class() const {return 0;}
+  void write_properties();
+  void read_property(const char *);
+protected:
+  const char * get_full_string() const ;
+};
+
+// Return the class that this is a member of, or null if this is not
+// a member of a class. If need_nest is true then a fully-qualified
+// name (ie foo::bar::baz) of nested classes is returned, you need this
+// if you actually want to print the class.
+FluidType *NamespaceType::make() {
+  FluidType *p = FluidType::current;
+  while (p && (!p->is_decl_block() || p->is_class())) p = p->parent;
+  NamespaceType *o = new NamespaceType();
+  o->parent_namespace = 0;
+  o->name("fltk");
+  o->add(p);
+  o->factory = this;
+  return o;
+}
+
+void NamespaceType::write_properties() {
+  FluidType::write_properties();
+	//TODO
+}
+
+// read declaration property when loading the file
+void NamespaceType::read_property(const char *c) {
+    FluidType::read_property(c);
+}
+
+void NamespaceType::open() {
+  if (!namespace_panel) {
+    make_namespace_panel();
+    namespace_panel_ok->callback(ok_callback);
+    namespace_panel_cancel->callback(cancel_callback);
+  }
+  namespace_input->static_value(name());
+
+  // scan the input field for namespace string and check it
+  const char* message = 0;
+  for (;;) { // repeat as long as there are errors
+    if (message) fltk::alert(message);
+    if (!namespace_panel->exec()) break;
+    const char*c = namespace_input->value();
+    while (isspace(*c)) c++;
+    message = c_check(c);
+    if (message) continue;
+    name(c && *c ? c : "fltk");
+    break;
+  }
+
+  namespace_panel->hide();
+  delete namespace_panel;
+  namespace_panel = NULL;
+}
+
+NamespaceType Namespacetype;
+
+static NamespaceType *current_namespace;
+extern int varused_test;
+
+// get the full path from root to most imbricated namespace
+const char * NamespaceType::get_full_string() const {
+    static char sFull[256];
+    const int cMaxImbNs=16;
+    const char *list[cMaxImbNs];
+    int nlist=0,i;
+
+    if (name()) {
+	const NamespaceType * parent=this;
+	do {
+	    if (nlist<cMaxImbNs) list[nlist++]=parent->name();
+	    parent=parent->parent_namespace;
+	} while (parent);
+
+	strncpy(sFull,list[nlist-1],sizeof(sFull));
+	for (i=nlist-2; i>=0;i--) {
+	    if (i<nlist-1) strncat(sFull,"::",sizeof(sFull));
+	    strncat(sFull,list[i],sizeof(sFull));
+	}
+    }
+    return sFull;
+}
+
+void NamespaceType::write_code() {
+  parent_namespace = current_namespace;
+  current_namespace = this;
+
+  write_h("\nnamespace %s ", name());
+  write_h("%s", get_opening_brace(1));
+  write_c("using namespace %s;\n",get_full_string());
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
+  write_h("}\n");
+  current_namespace = parent_namespace;
+}
+#endif
 
 //
 // End of "$Id$".

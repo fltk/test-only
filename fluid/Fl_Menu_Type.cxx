@@ -182,6 +182,7 @@ static const Enumeration input_browser_type_menu[] = {
   {"Indented",	"INDENTED",	(void*)fltk::InputBrowser::INDENTED},
   {"Non-Editable Indented","NONEDITABLE_INDENTED",(void*)fltk::InputBrowser::NONEDITABLE_INDENTED},
   {0}};
+
 class InputBrowserType : public MenuType {
   int is_input_browser() const {return 1;}
   const Enumeration *subtypes() const {return input_browser_type_menu;}
@@ -193,6 +194,7 @@ public:
   WidgetType *_make() {return new InputBrowserType();}
 };
 InputBrowserType InputBrowsertype;
+
 
 #include <fltk/Browser.h>
 static const Enumeration browser_type_menu[] = {
@@ -210,6 +212,18 @@ public:
   WidgetType *_make() {return new BrowserType();}
 };
 BrowserType Browsertype;
+
+#include <fltk/FileBrowser.h>
+class FileBrowserType : public WidgetType {
+  const Enumeration *subtypes() const {return browser_type_menu;}
+public:
+  virtual const char *type_name() const {return "fltk::FileBrowser";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::FileBrowser(x,y,w,h);
+  }
+  WidgetType *_make() {return new FileBrowserType();}
+};
+FileBrowserType FileBrowsertype;
 
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:

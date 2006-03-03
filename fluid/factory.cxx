@@ -30,7 +30,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include <string.h>
@@ -371,6 +370,7 @@ extern class CodeBlockType CodeBlocktype;
 extern class DeclType Decltype;
 extern class DeclBlockType DeclBlocktype;
 extern class ClassType Classtype;
+extern class NamespaceType Namespacetype;
 extern class WindowType Windowtype;
 extern class GroupType Grouptype;
 extern class PackType Packtype;
@@ -385,6 +385,7 @@ extern class DividerType Dividertype;
 extern class SubmenuType Submenutype;
 extern class BrowserType Browsertype;
 extern class InputBrowserType InputBrowsertype;
+extern class FileBrowserType FileBrowsertype;
 
 extern void select(FluidType *,int);
 extern void select_only(FluidType *);
@@ -404,6 +405,7 @@ Fl_Menu_Item New_Menu[] = {
   {"declaration",0,cb,(void*)&Decltype},
   {"declaration block",0,cb,(void*)&DeclBlocktype},
   {"class",0,cb,(void*)&Classtype},
+  {"namespace",0,cb,(void*)&Namespacetype},
 {0},
 {"group",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Windowtype},
@@ -443,6 +445,7 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Choicetype},
   {0,0,cb,(void*)&Browsertype},
   {0,0,cb,(void*)&InputBrowsertype},
+  {0,0,cb,(void*)&FileBrowsertype},
   {0,0,cb, (void*)&Submenutype},
   {0,0,cb, (void*)&Itemtype},
   {0,0,cb, (void*)&Dividertype},
@@ -490,7 +493,9 @@ static FluidType *FluidType_make(const char *tn, Fl_Menu_Item* menu) {
       if(r = FluidType_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
     } else {
       FluidType *t = (FluidType*)(m->user_data());
-      if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
+      if (!strcasecmp(tn,t->type_name())) {
+	  r = t->make(); break;
+      }
     }
   }
   reading_file = 0;
@@ -511,7 +516,9 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Tabs",		"fltk::TabGroup"},
   {"Fl_Scroll",		"fltk::ScrollGroup"},
   {"Fl_Bar",		"fltk::BarGroup"},
-  {"Fl_Roller",		"fltk::ThumbWheel"}
+  {"Fl_Roller",		"fltk::ThumbWheel"},
+  {"Fl_File_Browser", "fltk::FileBrowser"},
+  {"Fl_Tile", "fltk::TiledGroup"}
 };
 
 // Create a new type by name:

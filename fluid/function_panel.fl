@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0002 
+version 2.0100 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -10,7 +10,7 @@ Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
     label {function/method} open
-    xywh {296 145 400 208} resizable modal visible
+    xywh {488 131 400 208} resizable modal visible
   } {
     {fltk::CheckButton} f_public_button {
       label public
@@ -63,23 +63,23 @@ Function {make_function_panel()} {open
       }
       {fltk::Item} {} {
         label export
-        callback {f_attributes_input->value("export");} selected
+        callback {f_attributes_input->value("export");}
         buttonbox THIN_UP_BOX
       }
       {fltk::Item} {} {
         label {__declspec(dllexport)}
         callback {f_attributes_input->value("__declspec(dllexport)");}
-        buttonbox THIN_UP_BOX
+        vertical buttonbox THIN_UP_BOX
       }
       {fltk::Item} {} {
         label {__declspec(dllimport)}
         callback {f_attributes_input->value("__declspec(dllimport)");}
-        buttonbox THIN_UP_BOX
+        vertical buttonbox THIN_UP_BOX
       }
       {fltk::Item} {} {
         label __stdcall
         callback {f_attributes_input->value("__stdcall");}
-        buttonbox THIN_UP_BOX
+        vertical buttonbox THIN_UP_BOX
       }
     }
     {fltk::Button} {} {
@@ -117,7 +117,7 @@ Function {make_code_panel()} {open
 Function {make_codeblock_panel()} {open
 } {
   {fltk::Window} codeblock_panel {
-    label codeblock open
+    label codeblock
     xywh {539 470 290 131} hide resizable modal
   } {
     {fltk::Input} code_before_input {
@@ -141,8 +141,7 @@ Function {make_codeblock_panel()} {open
   }
 } 
 
-Function {make_declblock_panel()} {open
-} {
+Function {make_declblock_panel()} {} {
   {fltk::Window} declblock_panel {
     label {declaration block} open
     xywh {371 299 290 131} hide resizable modal
@@ -168,11 +167,10 @@ Function {make_declblock_panel()} {open
   }
 } 
 
-Function {make_decl_panel()} {open
-} {
+Function {make_decl_panel()} {} {
   {fltk::Window} decl_panel {
     label declaration open
-    xywh {276 412 290 175} resizable visible
+    xywh {389 376 290 175} resizable visible
   } {
     {fltk::CheckButton} decl_public_button {
       label public
@@ -196,8 +194,7 @@ or a comment like "//foo" or "/*foo*/"}
   }
 } 
 
-Function {make_class_panel()} {open
-} {
+Function {make_class_panel()} {} {
   {fltk::Window} class_panel {
     label class
     xywh {356 324 280 164} hide resizable modal
@@ -221,6 +218,26 @@ Function {make_class_panel()} {open
     {fltk::Button} c_panel_cancel {
       label Cancel
       xywh {190 132 80 22} shortcut 0xff1b
+    }
+  }
+} 
+
+Function {make_namespace_panel()} {} {
+  {fltk::Window} namespace_panel {
+    label namespace open
+    xywh {688 464 298 140} resizable visible
+  } {
+    {fltk::Input} namespace_input {
+      label {default is  "fltk", can be declared at the root or  imbricated into another namespace}
+      xywh {21 10 270 22} align 134 when NEVER resizable
+    }
+    {fltk::ReturnButton} namespace_panel_ok {
+      label OK
+      xywh {112 96 83 22} hotspot shortcut 0xff0d
+    }
+    {fltk::Button} namespace_panel_cancel {
+      label Cancel
+      xywh {205 96 83 22} shortcut 0xff1b
     }
   }
 } 
