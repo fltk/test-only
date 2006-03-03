@@ -35,10 +35,16 @@ namespace fltk {
 typedef Symbol Box;
 
 class FL_API FrameBox : public Box {
+public: // fabien  add a way to access these dimensions, is there another way to do it in fltk2 ?
+    int dx() const {return dx_;}
+    int dy() const {return dy_;}
+    int dw() const {return dw_;}
+    int dh() const {return dh_;}
+
 protected:
   const char* data_;
-  const FrameBox* down;
-  int dx, dy, dw, dh;
+  const FrameBox* down_;
+  int dx_, dy_, dw_, dh_;
 public:
   const char* data() const {return data_;}
   void _draw(const Rectangle&) const;
@@ -57,7 +63,7 @@ public:
 };
 
 class FL_API HighlightBox : public FlatBox {
-  const Box* down;
+  const Box* down_;
 public:
   void _draw(const Rectangle&) const;
   void inset(Rectangle&) const;

@@ -511,6 +511,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Return_Button",	"fltk::ReturnButton"},
   {"fltk::EnterButton",	"fltk::ReturnButton"},
   {"Fl_Box",		"fltk::InvisibleBox"},
+  {"Fl_Boxtype",	"fltk::InvisibleBoxType"},
   {"Fl_Round_Button",	"fltk::RadioButton"},
   {"Fl_Pack",		"fltk::PackedGroup"},
   {"Fl_Tabs",		"fltk::TabGroup"},

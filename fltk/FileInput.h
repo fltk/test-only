@@ -1,9 +1,10 @@
 //
-// "$Id: FileInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id$"
 //
-// Fl_FileInput definitions for the Fast Light Tool Kit (FLTK).
+// File_Input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1997-1999 by Easy Software Products.
+// Copyright 1998-2005 by Bill Spitzak and others.
+// Original version Copyright 1998 by Curtis Edwards.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,26 +21,50 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
-#ifndef fltk_FileInput_h
-#define fltk_FileInput_h
+#ifndef fltk_FileInput_H
+#  define fltk_FileInput_H
 
-#include <fltk/Input.h>
+#  include "Input.h"
+#  include "Box.h"
 
 namespace fltk {
 
 class FL_API FileInput : public Input {
- public:
-  FileInput(int x, int y, int w, int h, const char *l = 0) :
-      Input(x, y, w, h, l) {}
-  int handle(int);
+  Color	errorcolor_;
+  char		ok_entry_;
+  FrameBox* 	down_box_;
+  short		buttons_[200];
+  short		pressed_;
+
+  void		draw_buttons();
+  int		handle_button(int event);
+  void		update_buttons();
+
+public:
+
+  FileInput(int,int,int,int,const char *t=0);
+
+  virtual int handle(int);
+  virtual void draw();
+
+  FrameBox*  		down_box() const { return down_box_; }
+  FrameBox*			down_box(Box* b) { down_box_ = (FrameBox*) b; return down_box_; }
+  Color			errorcolor() const { return errorcolor_; }
+  void			errorcolor(Color c) { errorcolor_ = c; }
+  int			value(const char*);
+  int			value(const char*, int);
+  const char *		value() { return Input::value(); }
 };
 
 }
-#endif
+#endif // !Fl_File_Input_H
+
 
 //
-// End of "$Id: FileInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id$".
 //

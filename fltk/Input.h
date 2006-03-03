@@ -36,7 +36,9 @@ class FL_API Input : public Widget {
 public:
   enum { // values for type()
     NORMAL = 0,
-    // this hole was used by float & int types
+	// float and int inputs restored from 1.1.x for new Spinner object
+	FLOAT_INPUT = 		1,
+	INT_INPUT = 		2,
     SECRET = 3,
     MULTILINE = 4,
     WORDWRAP = 5

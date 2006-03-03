@@ -212,9 +212,9 @@ Box* const fltk::FLAT_BOX = &flatBox;
 
     The normal up box draws the pattern "AAWWHHTT"
 
-    The normal down box draws the pattern "WWHHPPAA"
+    The normal down_ box draws the pattern "WWHHPPAA"
 
-    The VALUE flag will cause the pattern from down() to be used
+    The VALUE flag will cause the pattern from down_() to be used
     instead, allowing you to draw a different bezel when pushed
     in.
 
@@ -234,7 +234,7 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
   if (r.empty()) return;
   const Color fg = getcolor();
   const char* s = data();
-  if (drawflags(VALUE)) s = down->data();
+  if (drawflags(VALUE)) s = down_->data();
   char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   if (*s == '2') {s++; goto HACK;}
@@ -270,46 +270,46 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
 #pragma warning(disable: 4355) // quiet warning about using this as base class init
 #endif
 FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
-  : Box(n), data_(s), down(d ? d : this)
+  : Box(n), data_(s), down_(d ? d : this)
 {
   if (*s == '2') {
     int i = (strlen(s)-1)/2;
-    dw = dh = i;
+    dw_ = dh_ = i;
     i = (i+1)/2;
-    dx = dy = i;
+    dx_ = dy_ = i;
   } else {
     int i = strlen(s)/2;
-    dw = dh = i;
+    dw_ = dh_ = i;
     i /= 2;
-    dx = dy = i;
+    dx_ = dy_ = i;
   }
 }
 
 void FrameBox::inset(fltk::Rectangle& r) const {
   if (drawflags(VALUE)) {
-    r.x(r.x()+down->dx);
-    r.y(r.y()+down->dy);
-    r.w(r.w()-down->dw);
-    r.h(r.h()-down->dh);
+    r.x(r.x()+down_->dx_);
+    r.y(r.y()+down_->dy_);
+    r.w(r.w()-down_->dw_);
+    r.h(r.h()-down_->dh_);
   } else {
-    r.x(r.x()+dx);
-    r.y(r.y()+dy);
-    r.w(r.w()-dw);
-    r.h(r.h()-dh);
+    r.x(r.x()+dx_);
+    r.y(r.y()+dy_);
+    r.w(r.w()-dw_);
+    r.h(r.h()-dh_);
   }
 }
 
 bool FrameBox::fills_rectangle() const {return true;}
 bool FrameBox::is_frame() const {return true;}
 
-static FrameBox downBox("down", "WWLLRRAA");
+static FrameBox downBox("down_", "WWLLRRAA");
 /*! \ingroup boxes
   Inset box in fltk's standard theme
 */
 Box* const fltk::DOWN_BOX = &downBox;
 
 // The normal pushable button:
-static FrameBox downBox2("down", "2LLWWAA");
+static FrameBox downBox2("down_", "2LLWWAA");
 static FrameBox upBox("up", "AAWWLL", &downBox2);
 /*! \ingroup boxes
   A up button in fltk's standard theme.
@@ -328,7 +328,7 @@ static FrameBox thinUpBox("thin_up", "LLWW", &thinDownBox);
 */
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
-// in fltk 1.0 these used to point at each other as a "down" version:
+// in fltk 1.0 these used to point at each other as a "down_" version:
 static FrameBox engravedBox("engraved", "2LLWWWWLL", &downBox);
 /*! \ingroup boxes
   2-pixel thick engraved line around edge.
@@ -377,16 +377,16 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
 void HighlightBox::_draw(const fltk::Rectangle& r) const
 {
   if (drawflags(HIGHLIGHT|VALUE|PUSHED))
-    down->draw(r);
+    down_->draw(r);
 //   else
 //     FlatBox::_draw(r);
 }
-void HighlightBox::inset(fltk::Rectangle& r) const {down->inset(r);}
+void HighlightBox::inset(fltk::Rectangle& r) const {down_->inset(r);}
 bool HighlightBox::fills_rectangle() const {return false;}
 bool HighlightBox::is_frame() const {return false;}
 
 HighlightBox::HighlightBox(const char* n, const Box* b)
-  : FlatBox(n), down(b) {}
+  : FlatBox(n), down_(b) {}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
 /*! \ingroup boxes
