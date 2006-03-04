@@ -881,6 +881,7 @@ public:
 //
   FluidType *make();
   void write_code();
+  void write_static(); // for c file "using namespace .." gen.
   void open();
   virtual const char *type_name() const {return "namespace";}
   int is_parent() const {return 1;}
@@ -971,13 +972,15 @@ const char * NamespaceType::get_full_string() const {
     return sFull;
 }
 
+void NamespaceType::write_static() {
+  write_c("using namespace %s;\n",get_full_string());
+}
 void NamespaceType::write_code() {
   parent_namespace = current_namespace;
   current_namespace = this;
 
   write_h("\nnamespace %s ", name());
   write_h("%s", get_opening_brace(1));
-  write_c("using namespace %s;\n",get_full_string());
   for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
   write_h("}\n");
   current_namespace = parent_namespace;

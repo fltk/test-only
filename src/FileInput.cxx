@@ -36,6 +36,8 @@
 #include <fltk/run.h>
 #include "flstring.h"
 
+// temporary for new 1.1.x button FileInput features to come
+//#define DIR_HEIGHT	10
 
 //
 // Height of directory buttons...
@@ -62,7 +64,7 @@ FileInput::FileInput(int X, int Y, int W, int H, const char *l)
   errorcolor_ = RED;
   ok_entry_   = 1;
   pressed_    = -1;
-
+  fltk::damage(DAMAGE_ALL);
   down_box(UP_BOX);
 }
 
@@ -169,6 +171,7 @@ FileInput::value(const char *str) {		// I - New string value
 
 void
 FileInput::draw() {
+#ifdef NEW_BTNS
   FrameBox* b = (FrameBox*)box();
   if (fltk::damage() & (DAMAGE_BAR | DAMAGE_ALL)) draw_buttons();
   // this flag keeps Input_::drawtext from drawing a bogus box!
@@ -178,10 +181,11 @@ FileInput::draw() {
     Rectangle r = Rectangle(x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT);
     b->draw (r);
   }
-    Rectangle r = Rectangle(x() + b->dx()+3, y()+b->dy()+DIR_HEIGHT,
+  
+  Rectangle r = Rectangle(x() + b->dx()+3, y()+b->dy()+DIR_HEIGHT,
 		        w()-b->dw()-6, h()-b->dh()-DIR_HEIGHT);
-  //if (!must_trick_Input_) 
-  if (value() && strlen(value()))
+  if (!must_trick_Input_) 
+#endif
       Input::draw();
 }
 
@@ -193,7 +197,8 @@ FileInput::draw() {
 int						// O - TRUE if we handled event
 FileInput::handle(int event) 		// I - Event
 {
-//  printf("handle(event = %d)\n", event);
+#ifdef NEW_BTN
+    //  printf("handle(event = %d)\n", event);
 
   switch (event) {
     case MOVE :
@@ -220,6 +225,10 @@ FileInput::handle(int event) 		// I - Event
 
       return 0;
   }
+#else
+  return Input::handle(event);
+#endif
+
 }
 
 
