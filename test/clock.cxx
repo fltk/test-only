@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.14 2004/08/02 07:35:18 spitzak Exp $"
+// "$Id$"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,11 @@ int main(int argc, char **argv) {
   // don't show window manager border-- some window managers do this for you
   // if an arbitrary shape is assigned to the window.
   //window.clear_border();
-  Clock clock(10,10,200,200);
+#ifdef WIN32
+  Clock clock(0,0,220,220);
+#else
+  Clock clock(10,10,200,200); // Fabien : why ?
+#endif
   clock.type(ClockOutput::ROUND);
   clock.box(fltk::OVAL_BOX);
   clock.align(fltk::ALIGN_BOTTOM|fltk::ALIGN_WRAP);
@@ -93,5 +97,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.14 2004/08/02 07:35:18 spitzak Exp $".
+// End of "$Id$".
 //
