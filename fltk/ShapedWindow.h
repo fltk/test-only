@@ -1,4 +1,4 @@
-// "$Id: ShapedWindow.h,v 1.5 2004/08/02 07:35:17 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -29,14 +29,13 @@ namespace fltk {
 
 class FL_API ShapedWindow : public Window {
   public:
-    ShapedWindow(int W, int H, const char *l = 0)
-      : Window(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0;}
-    ShapedWindow(int X, int Y, int W, int H, const char *l = 0)
-      : Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0;}
+    ShapedWindow(int W, int H, const char *l = 0)  : Window(W,H,l) { init();}
+    ShapedWindow(int X, int Y, int W, int H, const char *l = 0): Window(X,Y,W,H,l) { init();}
     void shape(xbmImage* b) { shape_ = b; changed = 1; }
     void shape(xbmImage& b) { shape_ =&b; changed = 1; }
 
   protected:
+    void init();
     virtual void draw();
     xbmImage* shape_;
     int lw, lh;
@@ -47,5 +46,5 @@ class FL_API ShapedWindow : public Window {
 #endif
 
 //
-// End of "$Id: ShapedWindow.h,v 1.5 2004/08/02 07:35:17 spitzak Exp $"
+// End of "$Id$"
 //

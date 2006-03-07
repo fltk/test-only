@@ -1,5 +1,5 @@
 //
-// "$Id: message.cxx,v 1.10 2002/12/10 02:01:06 easysw Exp $"
+// "$Id$"
 //
 // Message test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,38 +23,37 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/fl_ask.h>
+#include <fltk/ask.h>
+#include <fltk/run.h>
 #include <stdio.h>
 
 int main(int argc, char **argv) {
 
-  Fl::args(argc, argv);
+  fltk::args(argc, argv);
 
-  fl_message("Spelling check sucessfull, %d errors found with %g%% confidence",
+  fltk::message("Spelling check sucessfull, %d errors found with %g%% confidence",
 	     1002, 100*(15/77.0));
 
-  fl_alert("Quantum fluctuations in the space-time continuum detected, "
+  fltk::alert("Quantum fluctuations in the space-time continuum detected, "
 	   "you have %g seconds to comply.", 10.0);
 
-  printf("fl_ask returned %d\n",
-    fl_ask("Do you really want to %s?", "continue"));
+  printf("fltk::ask returned %d\n",
+    fltk::ask("Do you really want to %s?", "continue"));
 
-  printf("fl_choice returned %d\n",
-    fl_choice("Choose one of the following:","choice0","choice1","choice2"));
+  printf("fltk::choice returned %d\n",
+    fltk::choice("Choose one of the following:","choice0","choice1","choice2"));
   const char *r;
 
-  r = fl_input("Please enter a string for '%s':", "this is the default value",
+  r = fltk::input("Please enter a string for '%s':", "this is the default value",
 	       "testing");
-  printf("fl_input returned \"%s\"\n", r ? r : "NULL");
+  printf("fltk::input returned \"%s\"\n", r ? r : "NULL");
 
-  r = fl_password("Enter %s's password:", 0, "somebody");
-  printf("fl_password returned \"%s\"\n", r ? r : "NULL");
+  r = fltk::password("Enter %s's password:", 0, "somebody");
+  printf("fltk::password returned \"%s\"\n", r ? r : "NULL");
 
   return 0;
 }
 
 //
-// End of "$Id: message.cxx,v 1.10 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id$".
 //
