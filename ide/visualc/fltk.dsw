@@ -21,6 +21,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "arc"=.\arc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ask"=.\ask.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "boxtype"=.\boxtype.dsp - Package Owner=<4>
 
 Package=<5>
@@ -92,6 +122,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name fltk
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "curve"=.\curve.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -399,6 +441,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "keyboard"=.\keyboard.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "label"=.\label.dsp - Package Owner=<4>
 
 Package=<5>
@@ -438,6 +492,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "line_style"=.\line_style.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "mandelbrot"=.\mandelbrot.dsp - Package Owner=<4>
 
 Package=<5>
@@ -464,6 +533,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "navigation"=.\navigation.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
 }}}
 
 ###############################################################################

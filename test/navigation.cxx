@@ -1,5 +1,5 @@
 //
-// "$Id: navigation.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $"
+// "$Id$"
 //
 // Navigation test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,17 +28,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Input.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Input.h>
 
 #define WIDTH 600
 #define HEIGHT 300
 #define GRID 25
 
+using namespace fltk;
+
 int main(int argc, char **argv) {
   if (argc > 1) srand(atoi(argv[1]));
-  Fl_Window window(WIDTH,HEIGHT,argv[0]);
+  Window window(WIDTH,HEIGHT,argv[0]);
   window.end(); // don't auto-add children
   for (int i = 0; i<10000; i++) {
     // make up a random size of widget:
@@ -50,22 +52,22 @@ int main(int argc, char **argv) {
     if (h < y) {h = y-h; y-=h;} else {h = h-y;}
     if (w < GRID || h < GRID || w < h) continue;
     // find where to insert it and see if it intersects something:
-    Fl_Widget *j = 0;
+    Widget *j = 0;
     int n; for (n=0; n < window.children(); n++) {
-      Fl_Widget *o = window.child(n);
+      Widget *o = window.child(n);
       if (x<o->x()+o->w() && x+w>o->x() &&
 	  y<o->y()+o->h() && y+h>o->y()) break;
       if (!j && (y < o->y() || y == o->y() && x < o->x())) j = o;
     }
     // skip if intersection:
     if (n < window.children()) continue;
-    window.insert(*(new Fl_Input(x,y,w,h)),j);
+    window.insert(*(new Input(x,y,w,h)),j);
   }
   window.resizable(window);
   window.show();
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: navigation.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id$".
 //
