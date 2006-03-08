@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.13 2004/02/05 08:05:35 spitzak Exp $"
+// "$Id$"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -45,22 +45,22 @@
 using namespace fltk;
 
 #define MAXWINDOWS 32
-static Fl_Glut_Window *windows[MAXWINDOWS+1];
+static GlutWindow *windows[MAXWINDOWS+1];
 
-Fl_Glut_Window *glut_window;
+GlutWindow *glut_window;
 int glut_menu;
 void (*glut_menustate_function)(int);
 void (*glut_menustatus_function)(int,int,int);
 
 static void default_reshape(int w, int h) {glViewport(0,0,w,h);}
 
-void Fl_Glut_Window::make_current() {
+void GlutWindow::make_current() {
   glut_window = this;
   if (shown()) GlWindow::make_current();
 }
 
 static int indraw;
-void Fl_Glut_Window::draw() {
+void GlutWindow::draw() {
   glut_window = this;
   indraw = 1;
   if (!valid()) {reshape(w(),h()); valid(1);}
@@ -72,7 +72,7 @@ void glutSwapBuffers() {
   if (!indraw) glut_window->swap_buffers();
 }
 
-void Fl_Glut_Window::draw_overlay() {
+void GlutWindow::draw_overlay() {
   glut_window = this;
   if (!valid()) {reshape(w(),h()); valid(1);}
   overlaydisplay();
@@ -80,7 +80,7 @@ void Fl_Glut_Window::draw_overlay() {
 
 static void domenu(int, int, int);
 
-int Fl_Glut_Window::handle(int event) {
+int GlutWindow::handle(int event) {
   make_current();
   int ex = event_x();
   int ey = event_y();
@@ -163,7 +163,7 @@ int Fl_Glut_Window::handle(int event) {
 
 static int glut_mode = GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH;
 
-void Fl_Glut_Window::_init() {
+void GlutWindow::_init() {
   for (number=1; number<MAXWINDOWS; number++) if (!windows[number]) break;
   windows[number] = this;
   menu[0] = menu[1] = menu[2] = 0;
@@ -179,10 +179,10 @@ void Fl_Glut_Window::_init() {
   mode(glut_mode);
 }
 
-Fl_Glut_Window::Fl_Glut_Window(int w, int h, const char *t) :
+GlutWindow::GlutWindow(int w, int h, const char *t) :
   GlWindow(w,h,t) {_init();}
 
-Fl_Glut_Window::Fl_Glut_Window(int x,int y,int w,int h, const char *t) :
+GlutWindow::GlutWindow(int x,int y,int w,int h, const char *t) :
   GlWindow(x,y,w,h,t) {_init();}
 
 static int initargc;
@@ -220,12 +220,12 @@ void glutInitWindowSize(int w, int h) {
 }
 
 int glutCreateWindow(const char *title) {
-  Fl_Glut_Window *W;
+  GlutWindow *W;
   if (initpos) {
-    W = new Fl_Glut_Window(initx,inity,initw,inith,title);
+    W = new GlutWindow(initx,inity,initw,inith,title);
     initpos = 0;
   } else {
-    W = new Fl_Glut_Window(initw,inith,title);
+    W = new GlutWindow(initw,inith,title);
   }
   W->resizable(W);
   if (initargc) {
@@ -239,13 +239,13 @@ int glutCreateWindow(const char *title) {
 }
 
 int glutCreateSubWindow(int win, int x, int y, int w, int h) {
-  Fl_Glut_Window *W = new Fl_Glut_Window(x,y,w,h,0);
+  GlutWindow *W = new GlutWindow(x,y,w,h,0);
   windows[win]->add(W);
   if (windows[win]->shown()) {W->show(); W->make_current();}
   return W->number;
 }
 
-Fl_Glut_Window::~Fl_Glut_Window() {
+GlutWindow::~GlutWindow() {
   if (glut_window == this) glut_window = 0;
   windows[number] = 0;
 }
@@ -272,7 +272,7 @@ static void domenu(int n, int ex, int ey) {
   glut_menu = n;
   if (glut_menustate_function) glut_menustate_function(1);
   if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
-  menus[n]->popup(event_x(), event_y(), 0);
+  menus[n]->popup(fltk::Rectangle(event_x(), event_y(),0,0), 0);
   if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
   if (glut_menustate_function) glut_menustate_function(0);
 }
@@ -334,7 +334,7 @@ int glutGet(GLenum type) {
   case GLUT_WINDOW_HEIGHT: return glut_window->h();
   case GLUT_WINDOW_PARENT:
     if (glut_window->parent())
-      return ((Fl_Glut_Window *)(glut_window->parent()))->number;
+      return ((GlutWindow *)(glut_window->parent()))->number;
     else
       return 0;
 //case GLUT_WINDOW_NUM_CHILDREN:
@@ -378,5 +378,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.13 2004/02/05 08:05:35 spitzak Exp $".
+// End of "$Id$".
 //

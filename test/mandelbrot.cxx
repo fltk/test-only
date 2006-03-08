@@ -24,7 +24,7 @@
 //
 
 #include "mandelbrot_ui.h"
-#include <FL/fl_draw.H>
+#include <fltk/draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -75,7 +75,8 @@ int Drawing_Area::idle() {
     make_current(); // deleted window-> from this for fltk2.0
     int yy = drawn+4;
     if (yy >= sy && yy <= sy+sh) erase_box();
-    fl_draw_image_mono(buffer+drawn*W, 3,yy,W,1,1,W);
+    fltk::drawimage(buffer+drawn*W,fltk::MONO,fltk::Rectangle(3,yy,W,1),W);
+    //fltk::draw_image_mono(buffer+drawn*W, 3,yy,W,1,1,W);
     drawn++;
     return 1;
   }
@@ -110,7 +111,7 @@ int Drawing_Area::idle() {
 
 void Drawing_Area::erase_box() {
   make_current();
-  fl_overlay_clear();
+  fltk::overlay_clear();
 }
 
 // For fltk2.0, all the occurances of x() and y() were replaced by 0:
@@ -137,7 +138,7 @@ int Drawing_Area::handle(int event) {
     if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
     if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
     make_current();
-    fl_overlay_rect(sx,sy,sw,sh);
+    fltk::overlay_rect(sx,sy,sw,sh);
     return 1;
   case FL_RELEASE:
     if (button == 1) {

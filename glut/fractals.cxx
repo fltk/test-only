@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.10 2002/12/10 02:00:36 easysw Exp $"
+// "$Id$"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -81,6 +81,8 @@ int Rebuild = 1,        /* Rebuild display list in next display? */
     Level   = 4;        /* levels of recursion for fractals */     
 
 int DrawAxes = 0;       
+
+using namespace fltk;
 
 /***************************************************************/
 /************************* VECTOR JUNK *************************/
@@ -314,7 +316,7 @@ void FractalTree(int level)
     glTranslatef(0, 1, 0);
     glScalef(0.7, 0.7, 0.7);
 
-      savedseed = (long)((ulong)drand48()*ULONG_MAX);
+      savedseed = (long)((unsigned long )drand48()*ULONG_MAX);
       glPushMatrix();    
         glRotatef(110 + drand48()*40, 0, 1, 0);
         glRotatef(30 + drand48()*20, 0, 0, 1);
@@ -322,7 +324,7 @@ void FractalTree(int level)
       glPopMatrix();
 
       srand48(savedseed);
-      savedseed = (long)((ulong)drand48()*ULONG_MAX);
+      savedseed = (long)((unsigned long)drand48()*ULONG_MAX);
       glPushMatrix();
         glRotatef(-130 + drand48()*40, 0, 1, 0);
         glRotatef(30 + drand48()*20, 0, 0, 1);
@@ -727,49 +729,49 @@ void MenuInit(void)
 /***************************************************************/
 
 // fltk-style callbacks to Glut menu callback translators:
-void setlevel(Fl_Widget*, void *value) {setlevel(long(value));}
+void setlevel(Widget*, void *value) {setlevel(long(value));}
 
-void choosefract(Fl_Widget*, void *value) {choosefract(long(value));}
+void choosefract(Widget*, void *value) {choosefract(long(value));}
 
-void handlemenu(Fl_Widget*, void *value) {handlemenu(long(value));}
+void handlemenu(Widget*, void *value) {handlemenu(long(value));}
 
-#include <fltk/Fl_Radio_Button.h>
-#include <fltk/Fl_Group.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/RadioButton.h>
+#include <fltk/Group.h>
+#include <fltk/Window.h>
 
 int main(int argc, char** argv)
 {
 //  glutInit(&argc, argv); // this line removed for fltk
 
   // create fltk window:
-  Fl_Window window(512+20, 512+110);
+  Window window(512+20, 512+110);
   window.resizable(window);
 
   // create a bunch of buttons:
-  Fl_Group *g = new Fl_Group(50,50,400-110,30,"Level:");
-  g->clear_flag(FL_ALIGN_MASK);
-  g->set_flag(FL_ALIGN_LEFT);
+  Group *g = new Group(50,50,400-110,30,"Level:");
+  g->clear_flag(fltk::ALIGN_MASK);
+  g->set_flag(fltk::ALIGN_LEFT);
   g->begin();
-  Fl_Button *b;
-  b = new Fl_Radio_Button(  0,0,30,25,"0"); b->callback(setlevel,(void*)0);
-  b = new Fl_Radio_Button( 30,0,30,25,"1"); b->callback(setlevel,(void*)1);
-  b = new Fl_Radio_Button( 60,0,30,25,"2"); b->callback(setlevel,(void*)2);
-  b = new Fl_Radio_Button( 90,0,30,25,"3"); b->callback(setlevel,(void*)3);
-  b = new Fl_Radio_Button(120,0,30,25,"4"); b->callback(setlevel,(void*)4);
+  Button *b;
+  b = new RadioButton(  0,0,30,25,"0"); b->callback(setlevel,(void*)0);
+  b = new RadioButton( 30,0,30,25,"1"); b->callback(setlevel,(void*)1);
+  b = new RadioButton( 60,0,30,25,"2"); b->callback(setlevel,(void*)2);
+  b = new RadioButton( 90,0,30,25,"3"); b->callback(setlevel,(void*)3);
+  b = new RadioButton(120,0,30,25,"4"); b->callback(setlevel,(void*)4);
   b->set();
-  b = new Fl_Radio_Button(150,0,30,25,"5"); b->callback(setlevel,(void*)5);
-  b = new Fl_Radio_Button(180,0,30,25,"6"); b->callback(setlevel,(void*)6);
-  b = new Fl_Radio_Button(210,0,30,25,"7"); b->callback(setlevel,(void*)7);
-  b = new Fl_Radio_Button(240,0,30,25,"8"); b->callback(setlevel,(void*)8);
+  b = new RadioButton(150,0,30,25,"5"); b->callback(setlevel,(void*)5);
+  b = new RadioButton(180,0,30,25,"6"); b->callback(setlevel,(void*)6);
+  b = new RadioButton(210,0,30,25,"7"); b->callback(setlevel,(void*)7);
+  b = new RadioButton(240,0,30,25,"8"); b->callback(setlevel,(void*)8);
   g->end();
 
-  b = new Fl_Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
+  b = new Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
   
-  b = new Fl_Radio_Button( 10,10,100,25,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
-  b = new Fl_Radio_Button(110,10,100,25,"Tree"); b->callback(choosefract,(void*)TREE);
+  b = new RadioButton( 10,10,100,25,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
+  b = new RadioButton(110,10,100,25,"Tree"); b->callback(choosefract,(void*)TREE);
   b->set();
-  b = new Fl_Radio_Button(210,10,100,25,"Island"); b->callback(choosefract,(void*)ISLAND);
-  b = new Fl_Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
+  b = new RadioButton(210,10,100,25,"Island"); b->callback(choosefract,(void*)ISLAND);
+  b = new Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
 
 
   window.show(argc,argv); // glut will die unless parent window visible
@@ -799,5 +801,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.10 2002/12/10 02:00:36 easysw Exp $".
+// End of "$Id$".
 //

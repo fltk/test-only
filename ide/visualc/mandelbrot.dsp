@@ -93,5 +93,9 @@ LINK32=link.exe
 
 SOURCE=..\..\test\mandelbrot.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\test\mandelbrot_ui.cxx
+# End Source File
 # End Target
 # End Project
