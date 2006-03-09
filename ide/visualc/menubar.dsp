@@ -153,7 +153,7 @@ LINK32=link.exe
 # Name "menubar - Win32 Release MinSize"
 # Begin Source File
 
-SOURCE=..\..\test\menubar.cxx
+SOURCE=..\..\test\menu.cxx
 # End Source File
 # End Target
 # End Project

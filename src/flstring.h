@@ -29,6 +29,7 @@
 #  define flstring_h
 
 #  include <fltk/FL_API.h>
+#  include <fltk/string.h>
 #  include <config.h>
 #  include <stdio.h>
 #  include <stdarg.h>
@@ -49,8 +50,6 @@
 #  endif /* index */
 
 #  if defined(WIN32) && !defined(__CYGWIN__)
-#    define strcasecmp(s,t)	_stricmp((s), (t))
-#    define strncasecmp(s,t,n)	_strnicmp((s), (t), (n))
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
 // on Windows, which is supposed to be POSIX compliant...  Some of these functions
 // are also defined in ISO C99...

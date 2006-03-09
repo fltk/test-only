@@ -41,7 +41,7 @@
   - all other characters must match exactly
  
 */
-bool filename_match(const char *s, const char *p) {
+bool fltk::filename_match(const char *s, const char *p) {
   int nesting;
 
   for (;;) {

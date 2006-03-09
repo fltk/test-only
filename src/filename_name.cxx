@@ -1,4 +1,4 @@
-// "$Id$"
+// "$Id: filename_ext.cxx 4115 2005-03-14 04:48:51Z spitzak $"
 
 /* Copyright 1998-2005 by Bill Spitzak and others.
  *
@@ -24,19 +24,26 @@
   pointer to the trailing nul if none. Notice that this points \e at
   the period, not after it!
 */
-const char *fltk::filename_ext(const char *buf) {
-  const char *q = 0;
-  const char *p = buf;
-  for (p=buf; *p; p++) {
-    if (*p == '/') q = 0;
+// returns pointer to the filename, or null if name ends with '/'
 #if defined(_WIN32) || defined(__EMX__)
-    else if (*p == '\\') q = 0;
-#endif
-    else if (*p == '.') q = p;
-  }
-  return q ? q : p;
+const char *fltk::filename_name(const char *name) {
+  const char *p,*q;
+  if (!name) return (0);
+  q = name;
+  if (q[0] && q[1]==':') q += 2; // skip leading drive letter
+  for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
+  return q;
 }
+#else
+// returns pointer to the filename, or null if name ends with '/'
+const char *fltk::filename_name(const char *name) {
+  const char *p,*q;
+  if (!name) return (0);
+  for (p=q=name; *p;) if (*p++ == '/') q = p;
+  return q;
+}
+#endif
 
 //
-// End of "$Id$".
+// End of "$Id: filename_ext.cxx 4115 2005-03-14 04:48:51Z spitzak $".
 //

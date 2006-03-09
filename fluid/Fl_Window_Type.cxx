@@ -34,17 +34,17 @@
 #include <fltk/draw.h>
 #include <fltk/Box.h>
 #include <fltk/layout.h>
+#include <fltk/Preferences.h>
 #include "FluidType.h"
 #include <math.h>
 #include <stdlib.h>
 #include "alignment_panel.h"
 #include <stdio.h>
 
-int gridx = 5;
-int gridy = 5;
-int snap = 3;
 
 bool include_H_from_C = true;
+
+extern int gridx, gridy, snap;
 
 void alignment_cb(fltk::Input *i, long v) {
   int n = (int)strtol(i->value(),0,0);

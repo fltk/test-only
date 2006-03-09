@@ -39,14 +39,21 @@ public:
     TOGGLE = RESERVED_TYPE+1,
     RADIO  = RESERVED_TYPE+2
   };
+  
   void draw();
   void layout();
   int handle(int);
+  
   Item(const char* label = 0);
+  Item(const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);  
+
   static NamedStyle* default_style;
   static void set_style(const Style*, bool menubar);
   static void set_style(const Widget* w, bool f) {set_style(w->style(),f);}
   static void clear_style() {set_style(Widget::default_style,false);}
+
+private:
+    void init(); // common constructor initialization
 };
 
 }

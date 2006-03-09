@@ -724,6 +724,10 @@ SOURCE=..\..\src\FileInput.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\filename_absolute.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\filename_ext.cxx
 # End Source File
 # Begin Source File
@@ -737,6 +741,10 @@ SOURCE=..\..\src\filename_list.cxx
 # Begin Source File
 
 SOURCE=..\..\src\filename_match.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\filename_name.cxx
 # End Source File
 # Begin Source File
 

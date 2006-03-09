@@ -28,6 +28,7 @@
 /*! \addtogroup utilities
   \{ */
 
+namespace fltk {
 FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory=0);
 inline char* filename_normalize(char* o, int l, char* i, const char* d=0) {return (char*)(filename_normalize(o,l,(const char*)i,d));}
 FL_API const char *filename_name(const char *);
@@ -39,6 +40,12 @@ FL_API bool filename_isdir(const char*);
 FL_API double filename_size(const char *); // return size of file
 FL_API long int filename_mtime(const char *); // return modification time
 
+FL_API int filename_absolute(char *to, int tolen, const char *from);
+FL_API int filename_relative(char *to, int tolen, const char *from);
+// for prev fltk2 decl. in use :
+FL_API bool filename_absolute(char *output, const char *input, const char* pwd);
+FL_API bool filename_expand(char *output, const char *input);
+}
 /*! \} */
 
 ////////////////////////////////////////////////////////////////

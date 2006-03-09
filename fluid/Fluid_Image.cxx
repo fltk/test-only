@@ -109,7 +109,7 @@ void generic_image::write_static() {
     goto_images_dir();
     if (filetype->name && !strcasecmp(filetype->name, "xpm")) {
       write_c("static const char *%s[] = {\n",
-	      unique_id(this, "datas", filename_name(name()), 0));
+	      unique_id(this, "datas", fltk::filename_name(name()), 0));
       FILE* fp = fopen(name(), "rb");
       if(fp) {
 	indentation += 2;
@@ -129,7 +129,7 @@ void generic_image::write_static() {
       d = store_datas_from_file(name(), l);
       if(d) {
 #if 1
-	write_c("static const unsigned char %s[%d] = {\n", unique_id(this, "datas", filename_name(name()), 0), l);
+	write_c("static const unsigned char %s[%d] = {\n", unique_id(this, "datas", fltk::filename_name(name()), 0), l);
 	write_carray((const char*)d, l);
 	write_c("};\n");
 #else
@@ -150,7 +150,7 @@ void generic_image::write_code() {
   write_c("%so->image(fltk::%sImage::get(\"%s\"", indent(), filetype->name, name());
   if (inlined)
     write_c(", %s%s", (filetype->name && !strcasecmp(filetype->name, "xpm")) ? 
-		"(uchar*)" : "", unique_id(this, "datas", filename_name(name()), 0));
+    "(uchar*)" : "", unique_id(this, "datas", fltk::filename_name(name()), 0));
   write_c("));\n");
 }
 
@@ -200,25 +200,25 @@ void bitmap_image::write_static() {
   int n = ((w+7)/8)*h;
 #if 1 // older one
   write_c("static const unsigned char %s[%d] = {\n",
-	  unique_id(this, "bits", filename_name(name()), 0), n);
+	  unique_id(this, "bits", fltk::filename_name(name()), 0), n);
   write_carray((const char*)(p->array), n);
   write_c("};\n");
 #else // this seems to produce slightly shorter c++ files
   write_c("static const unsigned char %s[] =\n",
-	  unique_id(this, "bits", filename_name(name()), 0));
+	  unique_id(this, "bits", fltk::filename_name(name()), 0));
   write_cstring((const char*)(p->array), n);
   write_c(";\n");
 #endif
   write_c("static fltk::xbmImage %s(%s, %d, %d);\n",
-	  unique_id(this, "xbmImage", filename_name(name()), 0),
-	  unique_id(this, "bits", filename_name(name()), 0),
+	  unique_id(this, "xbmImage", fltk::filename_name(name()), 0),
+	  unique_id(this, "bits", fltk::filename_name(name()), 0),
 	  w, h);
 }
 
 void bitmap_image::write_code() {
   if (!p) return;
   write_c("%so->image(%s);\n", indent(),
-	  unique_id(this, "bitmap", filename_name(name()), 0));
+	  unique_id(this, "bitmap", fltk::filename_name(name()), 0));
 }
 
 #define ns_width 16

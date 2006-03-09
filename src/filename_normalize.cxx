@@ -75,7 +75,7 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
   you must start it with "./~".
 */
 const char*
-filename_normalize(char* output, int length, const char* input, const char* pwd)
+fltk::filename_normalize(char* output, int length, const char* input, const char* pwd)
 {
   const char* prefix = 0;
   int prefixlen = 0;
@@ -131,10 +131,10 @@ filename_normalize(char* output, int length, const char* input, const char* pwd)
   copy in the common case that there was no change in the name.
   It also did not do the home-directory prefix.
 */
-bool fl_filename_absolute(char *output, const char *input, const char* pwd) {
+bool fltk::filename_absolute(char *output, const char *input, const char* pwd) {
   char temp[PATH_MAX];
   if (input == output) {strlcpy(temp, input, PATH_MAX); input = temp;}
-  const char* t = filename_normalize(output, PATH_MAX, input, pwd);
+  const char* t = fltk::filename_normalize(output, PATH_MAX, input, pwd);
   if (t != output) {
     strlcpy(output, input, PATH_MAX);
     return false;
@@ -147,8 +147,8 @@ bool fl_filename_absolute(char *output, const char *input, const char* pwd) {
   would also expand $environment variables, but that is no longer
   supported).
 */
-bool fl_filename_expand(char *output, const char *input) {
-  if (*input == '~') return fl_filename_absolute(output, input, 0);
+bool fltk::filename_expand(char *output, const char *input) {
+    if (*input == '~') return fltk::filename_absolute(output, input, 0);
   if (output != input) strlcpy(output, input, PATH_MAX);
   return false;
 }

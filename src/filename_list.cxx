@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.23 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id$"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -98,5 +98,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.23 2004/07/29 09:07:54 spitzak Exp $".
+// End of "$Id$".
 //

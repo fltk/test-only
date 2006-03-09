@@ -553,7 +553,7 @@ Preferences::Name::Name( const char *format, ... )
   data_ = (char*)malloc(1024);
   va_list args;
   va_start(args, format);
-  fl_vsnprintf(data_, 1024, format, args);
+  vsnprintf(data_, 1024, format, args);
   va_end(args);
 }
 
@@ -645,7 +645,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
     strcpy(filename, "C:\\FLTK");
   }
 
-  fl_snprintf(filename + strlen(filename), sizeof(filename) - strlen(filename),
+  snprintf(filename + strlen(filename), sizeof(filename) - strlen(filename),
            "/%s/%s.prefs", vendor, application);
   for (char *s = filename; *s; s++) if (*s == '\\') *s = '/';
 #elif defined ( __APPLE__ )
@@ -704,7 +704,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, const char *path, const cha
 {
   char filename[ FL_PATH_MAX ]; filename[0] = 0;
 
-  fl_snprintf(filename, sizeof(filename), "%s/%s.prefs", path, application);
+  snprintf(filename, sizeof(filename), "%s/%s.prefs", path, application);
 
   prefs_       = prefs;
   filename_    = strdup(filename);

@@ -1,5 +1,5 @@
 //
-// "$Id: ItemGroup.h,v 1.4 2003/04/20 03:17:47 easysw Exp $"
+// "$Id$"
 //
 // Widget designed to be a nested list in a menu or browser. This
 // copies the drawing and style code from Item. I did not modify the
@@ -39,6 +39,10 @@ public:
   void layout();
   int handle(int);
   ItemGroup(const char* label = 0);
+  ItemGroup(const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);
+
+private:
+  void init();
 };
 
 }

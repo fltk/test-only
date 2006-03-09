@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.22 2004/07/04 17:38:08 laza2000 Exp $"
+// "$Id$"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,8 @@
 
 static FILE *code_file;
 static FILE *header_file;
+
+using namespace fltk;
 
 // return true if c can be in a C identifier.  I needed this so
 // it is not messed up by locale settings:
@@ -327,5 +329,5 @@ void FluidType::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.22 2004/07/04 17:38:08 laza2000 Exp $".
+// End of "$Id$".
 //

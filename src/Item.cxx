@@ -52,16 +52,28 @@ NamedStyle* Item::default_style = &::style;
   since it is assummed the container widget will size this
   correctly.
 */
-Item::Item(const char* l) : Widget(0,0,0,0,l) {
-  // we need to defer setting the glyph to here because C++ has no way
-  // to make sure the check button style is constructed before this style:
+void Item::init() {
   if (!default_style->glyph_)
     default_style->glyph_ = CheckButton::default_style->glyph_;
   style(default_style);
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-/** Modify the parent of the Item::default_style to this style.
+Item::Item(const char* l) : Widget(0,0,0,0,l) {
+  // we need to defer setting the glyph to here because C++ has no way
+  // to make sure the check button style is constructed before this style:
+  init();
+}
+
+Item::Item(const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
+  shortcut(s);
+  callback(cb);
+  user_data(ud);
+  flags(f);
+  init();
+}
+
+  /** Modify the parent of the Item::default_style to this style.
     If no style settings have been done to an Item, it will use the
     textfont, textsize, textcolor, and possibly other settings
     inherited from this style to draw itself. This is used by menus
@@ -191,13 +203,26 @@ int Item::handle(int) {return 0;}
 /*! Unlike other widgets the constructor does not take any dimensions,
   since it is assummed the container widget will size this
   correctly. */
-ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
+void ItemGroup::init() {
   style(Item::default_style);
   align(ALIGN_LEFT|ALIGN_INSIDE);
+}
+
+ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
+  init();
   // Undo the Menu class changing default_callback:
   callback(Widget::default_callback);
 }
 
+
+ItemGroup::ItemGroup(const char* l,int s,Callback *cb,void *ud, int f) : Menu(0,0,0,0,l)  {
+  init();
+  callback(cb);
+  shortcut(s);
+  user_data(ud);
+  flags(f);
+  this->begin();
+}
 // implementation of draw & layout should be identical to Item type()==0
 
 void ItemGroup::draw() {

@@ -27,6 +27,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <string.h>
 #include <fltk/MenuWindow.h>
 #include <fltk/Menu.h>
 #include <fltk/Box.h>
@@ -346,7 +347,10 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       int save_flags = item->flags();
       if (horizontal) flags &= ~ALIGN_MASK; // make it center them
       item->flags(flags);
+      if (item->label() && strcmp(item->label(),"Write code")==0)
+	  flags=flags;
       item->draw();
+
       item->w(save_w);
       item->h(save_h);
       pop_matrix();

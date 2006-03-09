@@ -64,14 +64,15 @@ static bool fill_stat(const char *name) {
   return last_result;
 }
 
+
 /** Returns true if the file exists and is a directory. */
-bool filename_isdir(const char* name) {
+bool fltk::filename_isdir(const char* name) {
   if (!fill_stat(name)) return false;
   return (last_stat.st_mode&0170000)==0040000;
 }
 
 /** Returns the size of the file in bytes. Returns zero if it does not exist.*/
-double filename_size(const char* name) {
+double fltk::filename_size(const char* name) {
   if (!fill_stat(name)) return 0.0;
   return (double)last_stat.st_size;
 }
@@ -81,7 +82,7 @@ double filename_size(const char* name) {
   (number of seconds since the start of 1970 in GMT). Returns 0
   if the file does not exist.
 */
-long int filename_mtime(const char *name) {
+long int fltk::filename_mtime(const char *name) {
   if (!fill_stat(name)) return 0;
   if (last_stat.st_mtime) return last_stat.st_mtime;
   if (last_stat.st_atime) return last_stat.st_atime;

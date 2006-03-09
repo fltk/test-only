@@ -32,6 +32,10 @@
 //
 #include <fltk/run.h>
 #include <fltk/Group.h>
+#include <fltk/ItemGroup.h>
+#include <fltk/Item.h>
+#include <fltk/Divider.h>
+
 #include <string.h>
 #ifdef _WIN32
 # define strcasecmp(a,b) stricmp(a,b)
@@ -396,6 +400,75 @@ static void cb(fltk::Widget *, void *v) {
 }
 
 #include <FL/Fl_Menu_Item.H>
+
+//////////////////////////////////////////////////////////////////////
+void fill_in_New_Menu(fltk::ItemGroup* menu) {
+    fltk::ItemGroup *submenu;
+    menu->begin();
+	submenu=new fltk::ItemGroup("code",0,0);
+	  new fltk::Item("function/method",0,cb,(void*)&Functiontype);
+	  new fltk::Item("code",0,cb,(void*)&Codetype);
+	  new fltk::Item("code block",0,cb,(void*)&CodeBlocktype);
+	  new fltk::Item("declaration",0,cb,(void*)&Decltype);
+	  new fltk::Item("declaration block",0,cb,(void*)&DeclBlocktype);
+	  new fltk::Item("class",0,cb,(void*)&Classtype);
+	  new fltk::Item("namespace",0,cb,(void*)&Namespacetype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("group",0,0);
+	  new fltk::Item(Windowtype.type_name(),0,cb,(void*)&Windowtype);
+	  new fltk::Item(Grouptype.type_name(),0,cb,(void*)&Grouptype);
+	  new fltk::Item((*(WidgetType*)&Packtype).type_name(),0,cb,(void*)&Packtype);
+	  new fltk::Item((*(WidgetType*)&Tabstype).type_name(),0,cb,(void*)&Tabstype);
+	  new fltk::Item((*(WidgetType*)&Scrolltype).type_name(),0,cb,(void*)&Scrolltype);
+	  new fltk::Item((*(WidgetType*)&Tiletype).type_name(),0,cb,(void*)&Tiletype);
+	  new fltk::Item((*(WidgetType*)&BarGrouptype).type_name(),0,cb,(void*)&BarGrouptype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("buttons",0,0);
+	  new fltk::Item((*(WidgetType*)&Buttontype).type_name(),0,cb,(void*)&Buttontype);
+	  new fltk::Item((*(WidgetType*)&ReturnButtontype).type_name(),0,cb,(void*)&ReturnButtontype);
+	  new fltk::Item((*(WidgetType*)&LightButtontype).type_name(),0,cb,(void*)&LightButtontype);
+	  new fltk::Item((*(WidgetType*)&CheckButtontype).type_name(),0,cb,(void*)&CheckButtontype);
+	  new fltk::Item((*(WidgetType*)&RadioButtontype).type_name(),0,cb,(void*)&RadioButtontype);
+	  new fltk::Item((*(WidgetType*)&RepeatButtontype).type_name(),0,cb,(void*)&RepeatButtontype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("valuators",0,0);
+	  new fltk::Item((*(WidgetType*)&Slidertype).type_name(),0,cb,(void*)&Slidertype);
+	  new fltk::Item((*(WidgetType*)&ValueSlidertype).type_name(),0,cb,(void*)&ValueSlidertype);
+	  new fltk::Item((*(WidgetType*)&ValueInputtype).type_name(),0,cb,(void*)&ValueInputtype);
+	  new fltk::Item((*(WidgetType*)&ValueOutputtype).type_name(),0,cb,(void*)&ValueOutputtype);
+	  new fltk::Item((*(WidgetType*)&Scrollbartype).type_name(),0,cb,(void*)&Scrollbartype);
+	  new fltk::Item((*(WidgetType*)&Adjustertype).type_name(),0,cb,(void*)&Adjustertype);
+	  new fltk::Item((*(WidgetType*)&Dialtype).type_name(),0,cb,(void*)&Dialtype);
+	  new fltk::Item((*(WidgetType*)&ThumbWheeltype).type_name(),0,cb,(void*)&ThumbWheeltype);
+	  new fltk::Item((*(WidgetType*)&ProgressBartype).type_name(),0,cb,(void*)&ProgressBartype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("text",0,0);
+	  new fltk::Item((*(WidgetType*)&Inputtype).type_name(),0,cb,(void*)&Inputtype);
+	  new fltk::Item((*(WidgetType*)&Outputtype).type_name(),0,cb,(void*)&Outputtype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("menus",0,0);
+	  new fltk::Item((*(WidgetType*)&MenuBartype).type_name(),0,cb,(void*)&MenuBartype);
+	  new fltk::Item((*(WidgetType*)&PopupMenutype).type_name(),0,cb,(void*)&PopupMenutype);
+	  new fltk::Item((*(WidgetType*)&Choicetype).type_name(),0,cb,(void*)&Choicetype);
+	  new fltk::Item((*(WidgetType*)&Browsertype).type_name(),0,cb,(void*)&Browsertype);
+	  new fltk::Item((*(WidgetType*)&InputBrowsertype).type_name(),0,cb,(void*)&InputBrowsertype);
+	  new fltk::Item((*(WidgetType*)&FileBrowsertype).type_name(),0,cb,(void*)&FileBrowsertype);
+	  new fltk::Item((*(WidgetType*)&Submenutype).type_name(),0,cb, (void*)&Submenutype);
+	  new fltk::Item((*(WidgetType*)&Itemtype).type_name(),0,cb, (void*)&Itemtype);
+	  new fltk::Item((*(WidgetType*)&Dividertype).type_name(),0,cb, (void*)&Dividertype);
+	submenu->end();
+	submenu=new fltk::ItemGroup("other",0,0);
+	  new fltk::Item((*(WidgetType*)&Widgettype).type_name(),0,cb,(void*)&Widgettype);
+	  new fltk::Item((*(WidgetType*)&InvisibleBoxtype).type_name(),0,cb,(void*)&InvisibleBoxtype);
+	  new fltk::Item((*(WidgetType*)&Clocktype).type_name(),0,cb,(void*)&Clocktype);
+	submenu->end();
+/* fabien: is it necessary or redondant with the 'Plugins' submenu before 'Help' ?
+	submenu=new fltk::ItemGroup("plugins",0,0);
+	submenu->end();
+*/
+	menu->end();
+}
+//////////////////////////////////////////////////////////////////////
 
 Fl_Menu_Item New_Menu[] = {
 {"code",0,0,0,FL_SUBMENU},
