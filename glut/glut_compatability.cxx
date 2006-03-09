@@ -92,9 +92,15 @@ int GlutWindow::handle(int event) {
     button = event_button()-1;
     if (button<0) button = 0;
     if (button>2) button = 2;
-    if (menu[button]) {domenu(menu[button],ex,ey); return 1;}
+    if (menu[button]) {
+	domenu(menu[button],ex,ey); 
+	return 1;
+    }
     mouse_down |= 1<<button;
-    if (mouse) {mouse(button,GLUT_DOWN,ex,ey); return 1;}
+    if (mouse) {
+	mouse(button,GLUT_DOWN,ex,ey); 
+	return 1;
+    }
     if (motion) return 1;
     break;
 
@@ -265,17 +271,25 @@ void glutSetWindow(int win) {
 static Menu* menus[MAXMENUS+1];
 
 static void item_cb(Widget* w, long v) {
-  ((void(*)(int))(w->parent()->user_data()))(int(v));
+    ItemGroup* m = (ItemGroup* )w;
+    Item* i = (Item*)m->get_item();
+    int num_item= (int) (long) i->user_data();
+    ( (void(*)(int)) v) (num_item);
 }
 
 static void domenu(int n, int ex, int ey) {
   glut_menu = n;
-  if (glut_menustate_function) glut_menustate_function(1);
-  if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
+  if (glut_menustate_function) 
+      glut_menustate_function(1);
+  if (glut_menustatus_function) 
+      glut_menustatus_function(1,ex,ey);
   menus[n]->popup(fltk::Rectangle(event_x(), event_y(),0,0), 0);
-  if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
-  if (glut_menustate_function) glut_menustate_function(0);
+  if (glut_menustatus_function) 
+      glut_menustatus_function(0,ex,ey);
+  if (glut_menustate_function) 
+      glut_menustate_function(0);
 }
+
 
 int glutCreateMenu(void (*cb)(int)) {
   Group::current(0); // don't add it to any window
@@ -284,6 +298,7 @@ int glutCreateMenu(void (*cb)(int)) {
   Menu* m = new ItemGroup("menu");
   // store the callback in the user_data, the child widgets will
   // look here for it:
+  m->callback(item_cb); 
   m->user_data((void*)cb);
   menus[i] = m;
   return glut_menu = i;
@@ -297,7 +312,7 @@ void glutDestroyMenu(int n) {
 void glutAddMenuEntry(const char *label, int value) {
   menus[glut_menu]->begin();
   Item* m = new Item(label);
-  m->callback(item_cb, long(value));
+  m->callback( menus[glut_menu]->callback()/*item_cb*/,(void*)(long)value);
 }
 
 void glutAddSubMenu(const char *label, int submenu) {
@@ -343,7 +358,8 @@ int glutGet(GLenum type) {
   case GLUT_SCREEN_HEIGHT: return Monitor::all().h();
 //case GLUT_SCREEN_WIDTH_MM:
 //case GLUT_SCREEN_HEIGHT_MM:
-  case GLUT_MENU_NUM_ITEMS: return menus[glut_menu]->children();
+  case GLUT_MENU_NUM_ITEMS: 
+      return menus[glut_menu]->children();
   case GLUT_DISPLAY_MODE_POSSIBLE: return GlWindow::can_do(glut_mode);
   case GLUT_INIT_WINDOW_X: return initx;
   case GLUT_INIT_WINDOW_Y: return inity;

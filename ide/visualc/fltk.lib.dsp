@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "fltk"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "..\.." /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Os /Ob2 /I "..\.." /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -82,7 +82,7 @@ LIB32=link.exe -lib
 
 # Name "fltk - Win32 Release"
 # Name "fltk - Win32 Debug"
-# Begin Group "headers"
+# Begin Group "header"
 
 # PROP Default_Filter "h"
 # Begin Source File
@@ -244,6 +244,10 @@ SOURCE=..\..\fltk\gl2opengl.h
 # Begin Source File
 
 SOURCE=..\..\fltk\glut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fltk\glut0.h
 # End Source File
 # Begin Source File
 

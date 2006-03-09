@@ -18,7 +18,7 @@
 	@x:TiledGroup:tile
 	@x:ScrollGroup:scroll
 	@x:PackedGroup:pack
-	@x:Menu:menu
+	@x:Menu:menubar
 
 @main:Window\nTests:@w
 	@w:overlay:overlay

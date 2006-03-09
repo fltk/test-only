@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.18 2004/02/05 08:05:36 spitzak Exp $"
+// "$Id$"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 //
@@ -28,11 +28,15 @@
 
 // this block added for fltk's distribtion so it will compile w/o OpenGL:
 #include <config.h>
+
+
 #if !HAVE_GL || !HAVE_GL_GLU_H
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
+#include <fltk/run.h>
+#include <fltk/message.h>
+
+
 int main(int, char**) {
-  fl_alert("This demo does not work without GL and GLU");
+    alert("This demo does not work without GL and GLU");
   return 1;
 }
 #else
@@ -44,7 +48,7 @@ int main(int, char**) {
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <FL/glut.H>	// changed for fltk
+#include <fltk/glut.h>	// changed for fltk
 #ifdef __APPLE__
 # include <OpenGL/glu.h>
 #else
@@ -71,7 +75,7 @@ struct puzzle {
 
 #define HASHSIZE 10691
 
-struct puzzlelist {
+  struct puzzlelist {
   struct puzzle *puzzle;
   struct puzzlelist *next;
 };
@@ -146,9 +150,8 @@ static GLint viewport[4];
 #define srandom srand
 #define random() (rand() >> 2)
 
-unsigned
-hash(Config config)
-{
+
+unsigned hash(Config config) {
   int i, j, value;
 
   value = 0;
@@ -1484,5 +1487,5 @@ main(int argc, char **argv)
 #endif // added for fltk's distribution
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.18 2004/02/05 08:05:36 spitzak Exp $".
+// End of "$Id$".
 //

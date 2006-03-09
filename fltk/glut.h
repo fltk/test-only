@@ -138,9 +138,9 @@ inline int glutGetWindow() {return glut_window->number;}
 
 FL_GLUT_API void glutSetWindow(int win);
 
-inline void glutSetWindowTitle(char *t) {glut_window->label(t);}
+inline void glutSetWindowTitle(const char *t) {glut_window->label(t);}
 
-inline void glutSetIconTitle(char *t) {glut_window->iconlabel(t);}
+inline void glutSetIconTitle(const char *t) {glut_window->iconlabel(t);}
 
 inline void glutPositionWindow(int x, int y) {glut_window->position(x,y);}
 
@@ -160,30 +160,30 @@ inline void glutFullScreen() {glut_window->fullscreen();}
 
 inline void glutSetCursor(fltk::Cursor* cursor) {glut_window->cursor(cursor);}
 // notice that the numeric values are different than glut:
-#  define GLUT_CURSOR_RIGHT_ARROW		((Cursor)2)
-#  define GLUT_CURSOR_LEFT_ARROW		((Cursor)67)
-#  define GLUT_CURSOR_INFO			FL_CURSOR_HAND
-#  define GLUT_CURSOR_DESTROY			((Cursor)45)
-#  define GLUT_CURSOR_HELP			FL_CURSOR_HELP
-#  define GLUT_CURSOR_CYCLE			((Cursor)26)
-#  define GLUT_CURSOR_SPRAY			((Cursor)63)
-#  define GLUT_CURSOR_WAIT			FL_CURSOR_WAIT
-#  define GLUT_CURSOR_TEXT			FL_CURSOR_INSERT
-#  define GLUT_CURSOR_CROSSHAIR			FL_CURSOR_CROSS
-#  define GLUT_CURSOR_UP_DOWN			FL_CURSOR_NS
-#  define GLUT_CURSOR_LEFT_RIGHT		FL_CURSOR_WE
-#  define GLUT_CURSOR_TOP_SIDE			FL_CURSOR_N
-#  define GLUT_CURSOR_BOTTOM_SIDE		FL_CURSOR_S
-#  define GLUT_CURSOR_LEFT_SIDE			FL_CURSOR_W
-#  define GLUT_CURSOR_RIGHT_SIDE		FL_CURSOR_E
-#  define GLUT_CURSOR_TOP_LEFT_CORNER		FL_CURSOR_NW
-#  define GLUT_CURSOR_TOP_RIGHT_CORNER		FL_CURSOR_NE
-#  define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	FL_CURSOR_SE
-#  define GLUT_CURSOR_BOTTOM_LEFT_CORNER	FL_CURSOR_SW
-#  define GLUT_CURSOR_INHERIT			FL_CURSOR_DEFAULT
-#  define GLUT_CURSOR_NONE			FL_CURSOR_NONE
-#  define GLUT_CURSOR_FULL_CROSSHAIR		FL_CURSOR_CROSS
 
+//#define GLUT_CURSOR_RIGHT_ARROW
+//#define GLUT_CURSOR_LEFT_ARROW
+#define GLUT_CURSOR_INFO	fltk::CURSOR_HAND
+//#define GLUT_CURSOR_DESTROY
+#define GLUT_CURSOR_HELP	fltk::CURSOR_HELP
+//#define GLUT_CURSOR_CYCLE
+//#define GLUT_CURSOR_SPRAY
+#define GLUT_CURSOR_WAIT	fltk::CURSOR_WAIT
+#define GLUT_CURSOR_TEXT	fltk::CURSOR_INSERT
+#define GLUT_CURSOR_CROSSHAIR	fltk::CURSOR_CROSS
+#define GLUT_CURSOR_UP_DOWN	fltk::CURSOR_NS
+#define GLUT_CURSOR_TOP_SIDE	fltk::CURSOR_NS
+#define GLUT_CURSOR_BOTTOM_SIDE	fltk::CURSOR_NS
+#define GLUT_CURSOR_LEFT_RIGHT	fltk::CURSOR_WE
+#define GLUT_CURSOR_LEFT_SIDE	fltk::CURSOR_WE
+#define GLUT_CURSOR_RIGHT_SIDE	fltk::CURSOR_WE
+#define GLUT_CURSOR_TOP_LEFT_CORNER	fltk::CURSOR_NWSE
+#define GLUT_CURSOR_TOP_RIGHT_CORNER	fltk::CURSOR_NESW
+#define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	fltk::CURSOR_NWSE
+#define GLUT_CURSOR_BOTTOM_LEFT_CORNER	fltk::CURSOR_NESW
+#define GLUT_CURSOR_INHERIT		fltk::CURSOR_DEFAULT
+#define GLUT_CURSOR_NONE		fltk::CURSOR_NONE
+#define GLUT_CURSOR_FULL_CROSSHAIR	fltk::CURSOR_CROSS
 //inline void glutWarpPointer(int x, int y);
 
 inline void glutEstablishOverlay() {glut_window->make_overlay_current();}
@@ -212,9 +212,9 @@ FL_GLUT_API void glutAddMenuEntry(const char *label, int value);
 
 FL_GLUT_API void glutAddSubMenu(const char *label, int submenu);
 
-FL_GLUT_API void glutChangeToMenuEntry(int item, char *label, int value);
+FL_GLUT_API void glutChangeToMenuEntry(int item, const char *label, int value);
 
-FL_GLUT_API void glutChangeToSubMenu(int item, char *label, int submenu);
+FL_GLUT_API void glutChangeToSubMenu(int item, const char *label, int submenu);
 
 FL_GLUT_API void glutRemoveMenuItem(int item);
 
@@ -231,11 +231,13 @@ inline void glutKeyboardFunc(void (*f)(uchar key, int x, int y)) {
 
 inline void glutMouseFunc(void (*f)(int b, int state, int x, int y)) {
   glut_window->mouse = f;}
-#  define GLUT_LEFT_BUTTON		0
-#  define GLUT_MIDDLE_BUTTON		1
-#  define GLUT_RIGHT_BUTTON		2
-#  define GLUT_DOWN			0
-#  define GLUT_UP			1
+enum {
+  GLUT_LEFT_BUTTON	= 0,
+  GLUT_MIDDLE_BUTTON	= 1,
+  GLUT_RIGHT_BUTTON	= 2,
+  GLUT_DOWN		= 0,
+  GLUT_UP		= 1
+};
 
 inline void glutMotionFunc(void (*f)(int x, int y)) {glut_window->motion= f;}
 
@@ -264,29 +266,30 @@ enum {GLUT_MENU_NOT_IN_USE, GLUT_MENU_IN_USE};
 
 inline void glutSpecialFunc(void (*f)(int key, int x, int y)) {
   glut_window->special = f;}
-#  define GLUT_KEY_F1			1
-#  define GLUT_KEY_F2			2
-#  define GLUT_KEY_F3			3
-#  define GLUT_KEY_F4			4
-#  define GLUT_KEY_F5			5
-#  define GLUT_KEY_F6			6
-#  define GLUT_KEY_F7			7
-#  define GLUT_KEY_F8			8
-#  define GLUT_KEY_F9			9
-#  define GLUT_KEY_F10			10
-#  define GLUT_KEY_F11			11
-#  define GLUT_KEY_F12			12
-// WARNING: Different values than GLUT uses:
-#  define GLUT_KEY_LEFT			FL_Left
-#  define GLUT_KEY_UP			FL_Up
-#  define GLUT_KEY_RIGHT		FL_Right
-#  define GLUT_KEY_DOWN			FL_Down
-#  define GLUT_KEY_PAGE_UP		FL_Page_Up
-#  define GLUT_KEY_PAGE_DOWN		FL_Page_Down
-#  define GLUT_KEY_HOME			FL_Home
-#  define GLUT_KEY_END			FL_End
-#  define GLUT_KEY_INSERT		FL_Insert
-
+enum {
+  GLUT_KEY_F1		= 1,
+  GLUT_KEY_F2		= 2,
+  GLUT_KEY_F3		= 3,
+  GLUT_KEY_F4		= 4,
+  GLUT_KEY_F5		= 5,
+  GLUT_KEY_F6		= 6,
+  GLUT_KEY_F7		= 7,
+  GLUT_KEY_F8		= 8,
+  GLUT_KEY_F9		= 9,
+  GLUT_KEY_F10		= 10,
+  GLUT_KEY_F11		= 11,
+  GLUT_KEY_F12		= 12,
+// WARNING: Different values than Glut uses:
+  GLUT_KEY_LEFT		= fltk::LeftKey,
+  GLUT_KEY_UP		= fltk::UpKey,
+  GLUT_KEY_RIGHT	= fltk::RightKey,
+  GLUT_KEY_DOWN		= fltk::DownKey,
+  GLUT_KEY_PAGE_UP	= fltk::PageUpKey,
+  GLUT_KEY_PAGE_DOWN	= fltk::PageDownKey,
+  GLUT_KEY_HOME		= fltk::HomeKey,
+  GLUT_KEY_END		= fltk::EndKey,
+  GLUT_KEY_INSERT	= fltk::InsertKey
+};
 //inline void glutSpaceballMotionFunc(void (*)(int x, int y, int z));
 
 //inline void glutSpaceballRotateFunc(void (*)(int x, int y, int z));

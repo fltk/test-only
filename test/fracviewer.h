@@ -57,7 +57,7 @@ void agvSetAllowIdle(int allowidle);
  /*
   * Set which movement mode you are in.
   */
-typedef enum { FLYING, POLAR } MovementType;
+typedef enum { FLYING=1000, POLAR } MovementType;
 void agvSwitchMoveMode(int move);
 
  /*

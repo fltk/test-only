@@ -134,6 +134,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -205,6 +208,45 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name zlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name arc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ask
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name clock
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name curve
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name editor
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fractals
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name keyboard
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name line_style
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mandelbrot
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name navigation
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name valuators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name menubar
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name tabs
     End Project Dependency
 }}}
 
@@ -393,6 +435,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "glpuzzle"=.\glpuzzle.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_opengl
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "hello"=.\hello.dsp - Package Owner=<4>
 
 Package=<5>
@@ -449,6 +509,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -515,17 +578,11 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltk_opengl
-    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "message"=.\message.dsp - Package Owner=<4>
+Project: "menubar"=.\menubar.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -533,6 +590,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -553,6 +613,21 @@ Package=<4>
 ###############################################################################
 
 Project: "pack"=.\pack.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "tabs"=.\tabs.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
