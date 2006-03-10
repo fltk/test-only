@@ -322,7 +322,7 @@ int main(int argc, char **argv) {
   char buf[256];
   if (argv[0] && *argv[0]) strcpy(buf, argv[0]);
   else                     strcpy(buf, "demo");
-  char *epos = (char*)filename_ext(buf);
+  char *epos = (char*)fltk::filename_ext(buf);
   if (tolower(*(epos-1))=='d') epos--; // Handle the debug 'demod' case
   strcpy(epos,".menu");
   const char *fname = buf;
@@ -332,7 +332,7 @@ int main(int argc, char **argv) {
   if (i < argc) fname = argv[i];
   if (!load_the_menu(fname)) fltk::fatal("Can't open %s",fname);
   strcpy(buf,fname);
-  const char *c = filename_name(buf);
+  const char *c = fltk::filename_name(buf);
   if (c > buf) {buf[c-buf] = 0; chdir(buf);}
   push_menu("@main");
   form->show(argc,argv);

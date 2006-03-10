@@ -35,7 +35,7 @@
 #include <sys/stat.h>
 
 #include <fltk/Preferences.h>
-#include <fltk/filename.H>
+#include <fltk/filename.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>

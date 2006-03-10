@@ -86,6 +86,7 @@ CPPFILES = \
 	PackedGroup.cxx \
 	PlasticBox.cxx \
 	PopupMenu.cxx \
+	Preferences.cxx \
 	ProgressBar.cxx \
 	RadioButton.cxx \
 	RepeatButton.cxx \
@@ -138,10 +139,12 @@ CPPFILES = \
 	error.cxx \
 	event_key_state.cxx \
 	file_chooser.cxx \
+	filename_absolute.cxx \
 	filename_ext.cxx \
 	filename_isdir.cxx \
 	filename_list.cxx \
 	filename_match.cxx \
+	filename_name.cxx \
 	filename_normalize.cxx \
 	fillrect.cxx \
 	fltk_theme.cxx \
@@ -168,6 +171,7 @@ CPPFILES = \
 
 CFILES	= \
 	scandir.c \
+	flstring.c \
 	string.c \
 	utf.c \
 	vsnprintf.c

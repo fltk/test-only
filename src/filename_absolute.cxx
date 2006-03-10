@@ -31,7 +31,7 @@
    Returns true if any changes were made.
 */
 
-#include <fltk/filename.H>
+#include <fltk/filename.h>
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>

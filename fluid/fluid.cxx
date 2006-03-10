@@ -350,7 +350,7 @@ static char* cutfname() {
     return name;
 #else
     static char name[1024] = "";
-    if (!name[0]) filename_normalize(name, 1024, "~/.fluid_cut_buffer", 0);
+    if (!name[0]) fltk::filename_normalize(name, 1024, "~/.fluid_cut_buffer", 0);
     return name;
 #endif
 }
