@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.32 2005/01/24 08:07:59 spitzak Exp $"
+// "$Id$"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.32 2005/01/24 08:07:59 spitzak Exp $".
+// End of "$Id$".
 //

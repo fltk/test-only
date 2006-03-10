@@ -23,16 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <FL/Fl_Menu_Item.H>
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Box.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/ToggleButton.h>
 #include <fltk/Input.h>
+#include <fltk/MenuBuild.h>
 #include <fltk/Choice.h>
 #include <fltk/draw.h>
 #include <fltk/xpmImage.h>
+
 using namespace fltk;
 
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
@@ -100,13 +101,15 @@ void engraved_cb(Widget *,void *) {
   window->redraw();
 }
 
-Fl_Menu_Item choices[] = {
-  {"NORMAL_LABEL",0,normal_cb},
-  {"SYMBOL_LABEL",0,symbol_cb},
-  {"SHADOW_LABEL",0,shadow_cb},
-  {"ENGRAVED_LABEL",0,engraved_cb},
-  {"EMBOSSED_LABEL",0,embossed_cb},
-  {0}};
+static void load_menu(Choice* c) {
+  c->begin();
+      new fltk::Item("NORMAL_LABEL",0,normal_cb);
+      new fltk::Item("SYMBOL_LABEL",0,symbol_cb);
+      new fltk::Item("SHADOW_LABEL",0,shadow_cb);
+      new fltk::Item("ENGRAVED_LABEL",0,engraved_cb);
+      new fltk::Item("EMBOSSED_LABEL",0,embossed_cb);
+  c->end();
+}
 
 #include "porsche.xpm"
 xpmImage theimage(porsche_xpm);
@@ -133,7 +136,7 @@ int main(int argc, char **argv) {
   textbox->set_flag(ALIGN_CENTER);
 
   Choice *c = new Choice(50,275,200,25);
-  c->menu(choices);
+  load_menu(c);
 
   ToggleButton* b = new ToggleButton(250,275,50,25,"image");
   b->callback(image_cb);

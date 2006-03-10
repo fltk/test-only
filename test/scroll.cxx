@@ -23,123 +23,133 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Box.H>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/ScrollGroup.h>
+#include <fltk/LightButton.h>
+#include <fltk/Choice.h>
+#include <fltk/Box.h>
 #include <stdio.h>
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk/draw.h>
+#include <fltk/math.h>
+#include <fltk/InvisibleBox.h>
 
-class Drawing : public Fl_Widget {
+#include <fltk/MenuBuild.h>
+
+using namespace fltk;
+
+class Drawing : public Widget {
   void draw();
 public:
-  Drawing(int X,int Y,int W,int H,const char* L) : Fl_Widget(X,Y,W,H,L) {
-    align(FL_ALIGN_TOP);
-    box(FL_FLAT_BOX);
-    color(FL_WHITE);
+  Drawing(int X,int Y,int W,int H,const char* L) : Widget(X,Y,W,H,L) {
+    align(fltk::ALIGN_TOP);
+    box(fltk::FLAT_BOX);
+    color(fltk::WHITE);
   }
 };
 
 void Drawing::draw() {
   draw_box();
-  fl_push_matrix();
+  fltk::push_matrix();
   // Change from fltk1 to 2: removed translation by x(),y():
-  fl_translate(w()/2, h()/2);
-  fl_scale(w()/2, h()/2);
-  fl_color(FL_BLACK);
+  fltk::translate(w()/2, h()/2);
+  fltk::scale(w()/2, h()/2);
+  fltk::color(fltk::BLACK);
   for (int i = 0; i < 20; i++) {
     for (int j = i+1; j < 20; j++) {
-      fl_begin_line();
       // Change from fltk1 to 2: added 'f' to make arguments float:
-      fl_vertex(cosf(M_PI*i/10+.1), sinf(M_PI*i/10+.1));
-      fl_vertex(cosf(M_PI*j/10+.1), sinf(M_PI*j/10+.1));
-      fl_end_line();
+      fltk::newpath();
+      fltk::addvertex(cosf(M_PI*i/10+.1), sinf(M_PI*i/10+.1));
+      fltk::addvertex(cosf(M_PI*j/10+.1), sinf(M_PI*j/10+.1));
+      fltk::closepath();
+      fltk::strokepath();
+      // you must reset the line type when done:
+      line_style(SOLID);
     }
   }
-  fl_pop_matrix();
+  fltk::pop_matrix();
 }
 
-Fl_Scroll* thescroll;
+ScrollGroup* thescroll;
 
-void box_cb(Fl_Widget* o, void*) {
-  thescroll->box(((Fl_Button*)o)->value() ? FL_DOWN_FRAME : FL_NO_BOX);
+void box_cb(Widget* o, void*) {
+  thescroll->box(((Button*)o)->value() ? fltk::DOWN_BOX : fltk::NO_BOX);
   thescroll->relayout(); // added for fltk2
   thescroll->redraw();
 }
 
-void type_cb(Fl_Widget*, void* v) {
+void type_cb(Widget*, void* v) {
   thescroll->type(int(v));
   thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 
-Fl_Menu_Item choices[] = {
-  {"0", 0, type_cb, (void*)0},
-  {"HORIZONTAL", 0, type_cb, (void*)Fl_Scroll::HORIZONTAL},
-  {"VERTICAL", 0, type_cb, (void*)Fl_Scroll::VERTICAL},
-  {"BOTH", 0, type_cb, (void*)Fl_Scroll::BOTH},
-  {"HORIZONTAL_ALWAYS", 0, type_cb, (void*)Fl_Scroll::HORIZONTAL_ALWAYS},
-  {"VERTICAL_ALWAYS", 0, type_cb, (void*)Fl_Scroll::VERTICAL_ALWAYS},
-  {"BOTH_ALWAYS", 0, type_cb, (void*)Fl_Scroll::BOTH_ALWAYS},
-  {0}
-};
+void load_menu_choice (Choice* c)  {
+ c->begin();
+  new Item("0", 0, type_cb, (void*)0);
+  new Item("HORIZONTAL", 0, type_cb, (void*)ScrollGroup::HORIZONTAL);
+  new Item("VERTICAL", 0, type_cb, (void*)ScrollGroup::VERTICAL);
+  new Item("BOTH", 0, type_cb, (void*)ScrollGroup::BOTH);
+  new Item("HORIZONTAL_ALWAYS", 0, type_cb, (void*)ScrollGroup::HORIZONTAL_ALWAYS);
+  new Item("VERTICAL_ALWAYS", 0, type_cb, (void*)ScrollGroup::VERTICAL_ALWAYS);
+  new Item("BOTH_ALWAYS", 0, type_cb, (void*)ScrollGroup::BOTH_ALWAYS);
+ c->end();
+}
 
-void align_cb(Fl_Widget*, void* v) {
+void align_cb(Widget*, void* v) {
   thescroll->scrollbar_align(int(v));
   //thescroll->scrollbar.align(int(v)); // fltk1 version
   thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 
-Fl_Menu_Item align_choices[] = {
-  {"left+top", 0, align_cb, (void*)(FL_ALIGN_LEFT+FL_ALIGN_TOP)},
-  {"left+bottom", 0, align_cb, (void*)(FL_ALIGN_LEFT+FL_ALIGN_BOTTOM)},
-  {"right+top", 0, align_cb, (void*)(FL_ALIGN_RIGHT+FL_ALIGN_TOP)},
-  {"right+bottom", 0, align_cb, (void*)(FL_ALIGN_RIGHT+FL_ALIGN_BOTTOM)},
-  {0}
-};
+void load_menu_achoice (Choice* c)  {
+ c->begin();
+  new Item("left+top", 0, align_cb, (void*)(fltk::ALIGN_LEFT+fltk::ALIGN_TOP));
+  new Item("left+bottom", 0, align_cb, (void*)(fltk::ALIGN_LEFT+fltk::ALIGN_BOTTOM));
+  new Item("right+top", 0, align_cb, (void*)(fltk::ALIGN_RIGHT+fltk::ALIGN_TOP));
+  new Item("right+bottom", 0, align_cb, (void*)(fltk::ALIGN_RIGHT+fltk::ALIGN_BOTTOM));
+ c->end();
+}
 
 int main(int argc, char** argv) {
-  Fl_Window window(5*75,400);
+  Window window(5*75,400);
   //window.clear_double_buffer(); // use this to test scroll_area()
-  window.box(FL_NO_BOX);
-  Fl_Scroll scroll(0,0,5*75,300);
+  window.box(fltk::NO_BOX);
+  ScrollGroup scroll(0,0,5*75,300);
 
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
     char buf[20]; sprintf(buf,"%d",n++);
-    Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25);
+    Button* b = new Button(x*75,y*25+(y>=8?5*75:0),75,25);
     b->copy_label(buf);
     b->color(n);
-    b->labelcolor(FL_WHITE);
+    b->labelcolor(fltk::WHITE);
   }
   Drawing drawing(0,8*25,5*75,5*75,0);
   scroll.end();
   scroll.type(scroll.VERTICAL);
   window.resizable(scroll);
 
-  Fl_Box box(0,300,5*75,window.h()-300); // gray area below the scroll
-  box.box(FL_FLAT_BOX);
+  FrameBox box("box", "", (FrameBox*) fltk::FLAT_BOX);
+  box.inset (Rectangle(0,300,5*75,window.h()-300));
 
-  Fl_Light_Button but1(150, 310, 200, 25, "box");
+  LightButton but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);
 
-  Fl_Choice choice(150, 335, 200, 25, "type():");
-  choice.menu(choices);
+  Choice choice(150, 335, 200, 25, "type():");
+  load_menu_choice(&choice);
   choice.value(3);
 
-  Fl_Choice achoice(150, 360, 200, 25, "scrollbar_align():");
-  achoice.menu(align_choices);
+  Choice achoice(150, 360, 200, 25, "scrollbar_align():");
+  load_menu_achoice(&achoice);
   achoice.value(3);
 
   thescroll = &scroll;
 
-  //scroll.box(FL_DOWN_BOX);
-  //scroll.type(Fl_Scroll::VERTICAL);
+  //scroll.box(fltk::DOWN_BOX);
+  //scroll.type(ScrollGroup::VERTICAL);
   window.end();
   window.show(argc,argv);
-  return Fl::run();
+  return fltk::run();
 }
 
 //

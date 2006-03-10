@@ -55,6 +55,7 @@
 	@e:Fractals:fractals
 	@e:Puzzle:glpuzzle
 	@e:Checkers:checkers
+	@e:Qubix:qubix
 
 @main:Other\nTests:@o
 	@o:color choosers:color_chooser r

@@ -73,6 +73,15 @@ Item::Item(const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)
   init();
 }
 
+Item::Item(MenuItemType t, const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
+  shortcut(s);
+  callback(cb);
+  user_data(ud);
+  flags(f);
+  init();
+  type(t);
+}
+
   /** Modify the parent of the Item::default_style to this style.
     If no style settings have been done to an Item, it will use the
     textfont, textsize, textcolor, and possibly other settings
@@ -216,11 +225,11 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 
 
 ItemGroup::ItemGroup(const char* l,int s,Callback *cb,void *ud, int f) : Menu(0,0,0,0,l)  {
-  init();
   callback(cb);
   shortcut(s);
   user_data(ud);
   flags(f);
+  init();
   this->begin();
 }
 // implementation of draw & layout should be identical to Item type()==0

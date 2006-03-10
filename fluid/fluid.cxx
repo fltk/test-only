@@ -61,9 +61,7 @@ const char *copyright =
 #include <fltk/filename.h>
 #include <fltk/FileIcon.h>
 #include <fltk/Preferences.h>
-#include <fltk/ItemGroup.h>
-#include <fltk/Item.h>
-#include <fltk/Divider.h>
+#include <fltk/MenuBuild.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,11 +91,15 @@ fltk::Preferences fluid_prefs(fltk::Preferences::USER, "fltk.org", "fluid");
 int gridx;
 int gridy;
 int snap;
+int show_tooltip;
 
 static int  read_alignement_prefs() {
     fluid_prefs.get("snap", snap, 3);
     fluid_prefs.get("gridx", gridx, 5);
     fluid_prefs.get("gridy", gridy, 5);
+    fluid_prefs.get("show_tooltips", show_tooltip, 1);
+    fltk::Tooltip::enable(show_tooltip ? true : false);
+
     return 0;
 }
 static int dummy = read_alignement_prefs();
@@ -415,7 +417,10 @@ void about_cb(fltk::Widget *, void *) {
 }
 
 void tt_cb(fltk::Widget *w, void *) {
-    fltk::Tooltip::enable(w->value());
+    show_tooltip = w->value(); 
+    fltk::Tooltip::enable(show_tooltip ? true : false);
+    fluid_prefs.set("show_tooltips", show_tooltip );
+
 }
 
 #include <string.h>
@@ -458,22 +463,18 @@ void theme_cb(fltk::Widget *, void *) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Menu_Item.H>
-
-extern Fl_Menu_Item New_Menu[];
-
-
-////////////////////////////////////////////////////////////////
 // New fltk2 menu generation
 ////////////////////////////////////////////////////////////////
-#define NEWM
 
+fltk::MenuBar* Main_Menu;
 static fltk::Item*  history_item[10];
 extern void fill_in_New_Menu(fltk::ItemGroup* menu);
 
 static void build_hierarchy(fltk::MenuBar* menubar) {
   fltk::ItemGroup* g;
   fltk::Item* o; 
+  
+  Main_Menu = menubar;
 
   menubar->begin();
     g=new fltk::ItemGroup("&File",0,0);
@@ -502,7 +503,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 	new fltk::Item("Cut", fltk::CTRL+'x', cut_cb);
 	new fltk::Item("Copy", fltk::CTRL+'c', copy_cb);
 	new fltk::Item("Paste", fltk::CTRL+'v', paste_cb);
-	new fltk::Item("Select All", fltk::CTRL+'a', select_all_cb, 0, FL_MENU_DIVIDER);
+	new fltk::Item("Select All", fltk::CTRL+'a', select_all_cb);
 	new fltk::Item("Edit this widget", fltk::ReturnKey, openwidget_cb);
 	new fltk::Item("Sort these widgets", 0, sort_cb);
 	new fltk::Item("Move widget earlier", fltk::F2Key, earlier_cb);
@@ -513,7 +514,8 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 	new fltk::Item("Ungroup", fltk::F8Key, ungroup_cb,0);
 	//new fltk::Item("Deactivate", 0, nyi);
 	//new fltk::Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
-	new fltk::Item("Show Overlays",fltk::ALT+'o',toggle_overlays,0,FL_MENU_TOGGLE|FL_MENU_VALUE);
+	new fltk::Item(fltk::Item::TOGGLE,"Show Overlays",fltk::ALT+'o',toggle_overlays);
+
 	new fltk::Item("Preferences",fltk::CTRL+'p',show_alignment_cb);
 	new fltk::Item("Coding Style", 0, show_coding_style_cb);
 	new fltk::Item("Theme", 0, theme_cb);
@@ -529,65 +531,13 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     
     g=new fltk::ItemGroup("&Help",0,0);
 	new fltk::Item("About fluid",0,about_cb);
-	o= new fltk::Item("Tooltips", 0, tt_cb, 0);
-	o->type(fltk::Item::TOGGLE);
+	o= new fltk::Item(fltk::Item::TOGGLE,"Tooltips", 0, tt_cb, 0);
+	if (show_tooltip) o->set_value();
 	//new fltk::Item("Manual",0,nyi);
     g->end();
   menubar->end();
 }
 
-#define HISTORY_ITEM 7
-Fl_Menu_Item Main_Menu[] = {
-    {"&File",0,0,0,FL_SUBMENU},
-    {"New", 0, new_cb, 0},
-    {"Open...", fltk::CTRL+'o', open_cb, 0},
-    {"Save", fltk::CTRL+'s', save_cb, 0},
-    {"Save As...", fltk::CTRL+'S', save_cb, (void*)1},
-    {"Merge...", fltk::CTRL+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
-    {"Write code", fltk::CTRL+'w', write_cb, 0},
-    {relative_history[0], fltk::CTRL+'0', open_history_cb, absolute_history[0]},
-    {relative_history[1], fltk::CTRL+'1', open_history_cb, absolute_history[1]},
-    {relative_history[2], fltk::CTRL+'2', open_history_cb, absolute_history[2]},
-    {relative_history[3], fltk::CTRL+'3', open_history_cb, absolute_history[3]},
-    {relative_history[4], fltk::CTRL+'4', open_history_cb, absolute_history[4]},
-    {relative_history[5], fltk::CTRL+'5', open_history_cb, absolute_history[5]},
-    {relative_history[6], fltk::CTRL+'6', open_history_cb, absolute_history[6]},
-    {relative_history[7], fltk::CTRL+'7', open_history_cb, absolute_history[7]},
-    {relative_history[8], fltk::CTRL+'8', open_history_cb, absolute_history[8]},
-    {relative_history[9], fltk::CTRL+'9', open_history_cb, absolute_history[9], FL_MENU_DIVIDER},
-    {"Quit", fltk::CTRL+'q', exit_cb},
-    {0},
-    {"&Edit",0,0,0,FL_SUBMENU},
-    //  {"Undo", fltk::ALT+'z', nyi},
-    {"Cut", fltk::CTRL+'x', cut_cb},
-    {"Copy", fltk::CTRL+'c', copy_cb},
-    {"Paste", fltk::CTRL+'v', paste_cb},
-    {"Select All", fltk::CTRL+'a', select_all_cb, 0, FL_MENU_DIVIDER},
-    {"Edit this widget", fltk::ReturnKey, openwidget_cb},
-    {"Sort these widgets", 0, sort_cb},
-    {"Move widget earlier", fltk::F2Key, earlier_cb},
-    {"Move widget later", fltk::F3Key, later_cb},
-    //{"Show", fltk::F5Key, show_cb},
-    //{"Hide", fltk::F6Key, hide_cb},
-    {"Group", fltk::F7Key, group_cb},
-    {"Ungroup", fltk::F8Key, ungroup_cb,0, FL_MENU_DIVIDER},
-    //{"Deactivate", 0, nyi},
-    //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
-    {"Show Overlays",fltk::ALT+'o',toggle_overlays,0,FL_MENU_TOGGLE|FL_MENU_VALUE},
-    {"Preferences",fltk::CTRL+'p',show_alignment_cb},
-    {"Coding Style", 0, show_coding_style_cb},
-    {"Theme", 0, theme_cb},
-    {"Set images root directory", fltk::CTRL+'d', set_images_dir_cb},
-    {0},
-    {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
-    {"&Plugins", 0, 0, (void *)Plugins_Options_Menu, FL_SUBMENU_POINTER},
-    {"&Help",0,0,0,FL_SUBMENU},
-    {"About fluid",0,about_cb},
-    {"Tooltips", 0, tt_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
-    //{"Manual",0,nyi},
-    {0},
-    {0}};
-    
 #define BROWSERWIDTH 300
 #define BROWSERHEIGHT 500
 #define WINWIDTH 300
@@ -611,12 +561,7 @@ Fl_Menu_Item Main_Menu[] = {
 	    menubar = new fltk::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
 	    menubar->box(fltk::FLAT_BOX);
 	    
-#ifdef NEWM
 	    build_hierarchy(menubar);
-#else
-	    fill_in_New_Menu();
-	    Main_Menu->add_to(menubar);
-#endif
 	    // this is removed because the new ctrl+bindings mess up emacs in
 	    // the text fields:
 	    //    menubar->global();
@@ -658,22 +603,12 @@ Fl_Menu_Item Main_Menu[] = {
 		// Make a relative version of the filename for the menu...
 		fltk::filename_relative(relative_history[i], sizeof(relative_history[i]),
 		    absolute_history[i]);
-#ifdef NEWM
 		history_item[i]->show();
-#else
-		if (i == 9) (*(fltk::Item*)&Main_Menu[i + HISTORY_ITEM]).flags = FL_MENU_DIVIDER;
-		else Main_Menu[i + HISTORY_ITEM].flags = 0;
-#endif
 	    } else break;
 	}
 	
 	for (; i < 10; i ++) {
-#ifdef NEWM
 	    history_item[i]->hide();
-#else
-	    if (i) Main_Menu[i + HISTORY_ITEM - 1].flags |= FL_MENU_DIVIDER;
-	    Main_Menu[i + HISTORY_ITEM].hide();
-#endif
 	}
 	menubar->redraw();
     }
@@ -716,16 +651,12 @@ Fl_Menu_Item Main_Menu[] = {
 	    // Update the menu items as needed...
 	    for (i = 0; i < max_files; i ++) {
 		fluid_prefs.set( fltk::Preferences::Name("file%d", i), absolute_history[i]);
-		if (absolute_history[i][0]) {
-		    //if (i == 9) Main_Menu[i + HISTORY_ITEM].flags = FL_MENU_DIVIDER;
-		    //else Main_Menu[i + HISTORY_ITEM].flags = 0;
-		} else break;
+		if (!absolute_history[i][0]) break;
 	    }
 	    
 	    for (; i < 10; i ++) {
 		fluid_prefs.set( fltk::Preferences::Name("file%d", i), "");
-		//if (i) Main_Menu[i + HISTORY_ITEM - 1].flags |= FL_MENU_DIVIDER;
-		Main_Menu[i + HISTORY_ITEM].hide();
+		history_item[i]->show();
 	    }
     }
     ////////////////////////////////////////////////////////////////

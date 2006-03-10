@@ -32,9 +32,8 @@
 //
 #include <fltk/run.h>
 #include <fltk/Group.h>
-#include <fltk/ItemGroup.h>
-#include <fltk/Item.h>
-#include <fltk/Divider.h>
+#include <fltk/MenuBuild.h>
+#include <fltk/MenuBar.h>
 
 #include <string.h>
 #ifdef _WIN32
@@ -399,20 +398,22 @@ static void cb(fltk::Widget *, void *v) {
   if (t) {select_only(t); modflag = 1; t->open();}
 }
 
-#include <FL/Fl_Menu_Item.H>
+fltk::ItemGroup* newMenu;
 
 //////////////////////////////////////////////////////////////////////
 void fill_in_New_Menu(fltk::ItemGroup* menu) {
-    fltk::ItemGroup *submenu;
-    menu->begin();
+  fltk::ItemGroup* submenu;
+  newMenu= menu;
+
+    newMenu->begin();
 	submenu=new fltk::ItemGroup("code",0,0);
-	  new fltk::Item("function/method",0,cb,(void*)&Functiontype);
-	  new fltk::Item("code",0,cb,(void*)&Codetype);
-	  new fltk::Item("code block",0,cb,(void*)&CodeBlocktype);
-	  new fltk::Item("declaration",0,cb,(void*)&Decltype);
-	  new fltk::Item("declaration block",0,cb,(void*)&DeclBlocktype);
-	  new fltk::Item("class",0,cb,(void*)&Classtype);
-	  new fltk::Item("namespace",0,cb,(void*)&Namespacetype);
+	  new fltk::Item((*(WidgetType*)&Functiontype).type_name(),0,cb,(void*)&Functiontype);
+	  new fltk::Item((*(WidgetType*)&Codetype).type_name(),0,cb,(void*)&Codetype);
+	  new fltk::Item((*(WidgetType*)&CodeBlocktype).type_name(),0,cb,(void*)&CodeBlocktype);
+	  new fltk::Item((*(WidgetType*)&Decltype).type_name(),0,cb,(void*)&Decltype);
+	  new fltk::Item((*(WidgetType*)&DeclBlocktype).type_name(),0,cb,(void*)&DeclBlocktype);
+	  new fltk::Item((*(WidgetType*)&Classtype).type_name(),0,cb,(void*)&Classtype);
+	  new fltk::Item((*(WidgetType*)&Namespacetype).type_name(),0,cb,(void*)&Namespacetype);
 	submenu->end();
 	submenu=new fltk::ItemGroup("group",0,0);
 	  new fltk::Item(Windowtype.type_name(),0,cb,(void*)&Windowtype);
@@ -466,112 +467,29 @@ void fill_in_New_Menu(fltk::ItemGroup* menu) {
 	submenu=new fltk::ItemGroup("plugins",0,0);
 	submenu->end();
 */
-	menu->end();
+      newMenu->end();
 }
 //////////////////////////////////////////////////////////////////////
-
-Fl_Menu_Item New_Menu[] = {
-{"code",0,0,0,FL_SUBMENU},
-  {"function/method",0,cb,(void*)&Functiontype},
-  {"code",0,cb,(void*)&Codetype},
-  {"code block",0,cb,(void*)&CodeBlocktype},
-  {"declaration",0,cb,(void*)&Decltype},
-  {"declaration block",0,cb,(void*)&DeclBlocktype},
-  {"class",0,cb,(void*)&Classtype},
-  {"namespace",0,cb,(void*)&Namespacetype},
-{0},
-{"group",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Windowtype},
-  {0,0,cb,(void*)&Grouptype},
-  {0,0,cb,(void*)&Packtype},
-  {0,0,cb,(void*)&Tabstype},
-  {0,0,cb,(void*)&Scrolltype},
-  {0,0,cb,(void*)&Tiletype},
-  {0,0,cb,(void*)&BarGrouptype},
-{0},
-{"buttons",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Buttontype},
-  {0,0,cb,(void*)&ReturnButtontype},
-  {0,0,cb,(void*)&LightButtontype},
-  {0,0,cb,(void*)&CheckButtontype},
-  {0,0,cb,(void*)&RadioButtontype},
-  {0,0,cb,(void*)&RepeatButtontype},
-{0},
-{"valuators",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Slidertype},
-  {0,0,cb,(void*)&ValueSlidertype},
-  {0,0,cb,(void*)&ValueInputtype},
-  {0,0,cb,(void*)&ValueOutputtype},
-  {0,0,cb,(void*)&Scrollbartype},
-  {0,0,cb,(void*)&Adjustertype},
-  {0,0,cb,(void*)&Dialtype},
-  {0,0,cb,(void*)&ThumbWheeltype},
-  {0,0,cb,(void*)&ProgressBartype},
-{0},
-{"text",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Inputtype},
-  {0,0,cb,(void*)&Outputtype},
-{0},
-{"menus",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&MenuBartype},
-  {0,0,cb,(void*)&PopupMenutype},
-  {0,0,cb,(void*)&Choicetype},
-  {0,0,cb,(void*)&Browsertype},
-  {0,0,cb,(void*)&InputBrowsertype},
-  {0,0,cb,(void*)&FileBrowsertype},
-  {0,0,cb, (void*)&Submenutype},
-  {0,0,cb, (void*)&Itemtype},
-  {0,0,cb, (void*)&Dividertype},
-{0},
-{"other",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Widgettype},
-  {0,0,cb,(void*)&InvisibleBoxtype},
-  {0,0,cb,(void*)&Clocktype},
-{0},
-{"plugins",0,0,Plugins_New_Menu,FL_SUBMENU_POINTER},
-{0}};
-
-void fill_in_New_Menu(Fl_Menu_Item* menu) {
-  int level = 0;
-  for (unsigned i = 0; level || menu[i].user_data() || menu[i].text; i++) {
-    Fl_Menu_Item *m = menu+i;
-    if (m->flags & FL_SUBMENU) level++;
-    if (!m->text && !m->user_data()) level--;
-    if (m->user_data() && !m->flags && !m->text) {
-      const char *n = ((FluidType*)(m->user_data()))->type_name();
-      //if (!strncmp(n,"fltk::",3)) n += 6;
-      m->text = n;
-      m->callback_ = cb;
-    }
-  }
-}
-
-void fill_in_New_Menu() {
-  fill_in_New_Menu(New_Menu);
-}
 
 int reading_file;
 
 // Recursive function for searching submenus:
-static FluidType *FluidType_make(const char *tn, Fl_Menu_Item* menu) {
-  int level = 0;
-  reading_file = 1; // makes labels be null
+static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   FluidType *r = 0;
-  for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
-    Fl_Menu_Item *m = menu+i;
-    if (m->flags & FL_SUBMENU) level++;
-    if (!m->text && !m->user_data()) level--;
-    if (!m->user_data()) continue;
-    if(m->flags & FL_SUBMENU_POINTER) {
-      if(r = FluidType_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
-    } else {
-      FluidType *t = (FluidType*)(m->user_data());
-      if (!strcasecmp(tn,t->type_name())) {
-	  r = t->make(); break;
+  fltk::Item * m;
+  char menuName[128];
+  int n;
+
+  for (n = menu->children(); n--;) {
+    fltk::Widget* w = menu->child(n);
+    if (w->label() && w->is_group()) {
+	sprintf(menuName,"%s/%s",w->label(),tn);
+	m = (fltk::Item *) menu->find(menuName);
+	if (m)  break;
       }
-    }
   }
-  reading_file = 0;
+  if (m && m->user_data())
+    r = ((FluidType*)(m->user_data()))->make();
   return r;
 }
 
@@ -613,7 +531,7 @@ FluidType *FluidType_make(const char *tn) {
   } else if (!p) {
     p = tn;
   }
-  return FluidType_make(p, New_Menu);
+  return FluidType_make(p, newMenu);
 }
 
 #include <fltk/Browser.h>

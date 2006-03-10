@@ -248,6 +248,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name tabs
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name glpuzzle
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name qubix
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -623,6 +629,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name fltk
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "qubix"=.\qubix.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

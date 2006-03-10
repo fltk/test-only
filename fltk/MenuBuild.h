@@ -1,12 +1,6 @@
+// "$Id: MenuBuild.h 4319 2005-05-08 19:18:50Z spitzak $"
 //
-// "$Id$"
-//
-// Widget designed to be a nested list in a menu or browser. This
-// copies the drawing and style code from Item. I did not modify the
-// base Menu class this way because the style inheritance would mess
-// up the styles of MenuButton and MenuBar. Code is in Item.cxx
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,27 +18,16 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#ifndef fltk_ItemGroup_h
-#define fltk_ItemGroup_h
+#ifndef fltk_Menu_Build_h
+#define fltk_Menu_Build_h
 
-#include "Menu.h"
-
-namespace fltk {
-
-class FL_API ItemGroup : public Menu {
-public:
-  void draw();
-  void layout();
-  int handle(int);
-  ItemGroup(const char* label = 0);
-  ItemGroup(const char* label,int shortcut,Callback *callback=0,void *user_data_=0, int flags=0);
-
-private:
-  void init();
-};
-
-}
-
+// include facility for building dynamic fltk2 menus
+#include "ItemGroup.h"
+#include "Item.h"
+#include "Divider.h"
 #endif
+
+//
+// End of "$Id: Menu.h 4319 2005-05-08 19:18:50Z spitzak $".
+//

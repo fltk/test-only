@@ -50,7 +50,6 @@
 #include <math.h>
 #include <time.h>
 
-#include <FL/Fl_Menu_Item.H>
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/Widget.h>
@@ -59,6 +58,7 @@
 #include <fltk/Window.h>
 #include <fltk/ask.h>
 #include <fltk/draw.h>
+#include <fltk/MenuBuild.h>
 
 using namespace fltk;
 
@@ -71,19 +71,22 @@ Slider *x_silder=(Slider *)0;
 
 MenuBar *main_menu=(MenuBar *)0;
 
-Fl_Menu_Item menu_main_menu[] = {
- {"Info", 0,  0, 0, 64, 0, 0, 14, 0},
- {"About", 0,  0, 0, 0, 0, 0, 14, 0},
- {0},
- {"Game", 0,  0, 0, 64, 0, 0, 14, 0},
- {"New Game", 0,  0, 0, 0, 0, 0, 14, 0},
- {"Flip Sides", 0,  0, 0, 0, 0, 0, 14, 0},
- {"Undo Last Move", 0,  0, 0, 0, 0, 0, 14, 0},
- {0},
- {"System", 0,  0, 0, 64, 0, 0, 14, 0},
- {"Quit", 0,  0, 0, 0, 0, 0, 14, 0},
- {0},
- {0}
+void load_menu(MenuBar* menu) {
+    ItemGroup* g;
+
+    menu->begin();
+     g = new ItemGroup("Info", 0);
+     new Item("About");
+     g->end();
+     g = new ItemGroup("Game", 0);
+     new Item("New Game");
+     new Item("Flip Sides");
+     new Item("Undo Last Move");
+     g->end();
+     g = new ItemGroup("System",0);
+     new Item("Quit");
+     g->end();
+    menu->end();
 };
 
 // taken directly from NeXTSTEP Qubix
@@ -292,7 +295,7 @@ void PSthickstroke() {
     addvertex(float(PSpath[i].x), float(PSpath[i].y));
   }
   setcolor(YELLOW);
-  float dx = .3, dy = 0; fltk::transform_distance(dx,dy);
+  float dx = .3f, dy = 0; fltk::transform_distance(dx,dy);
   line_style(JOIN_ROUND|CAP_ROUND,int(sqrt(dx*dx+dy*dy)+.9));
   strokepath();
   line_style(0);
@@ -303,8 +306,8 @@ void PSthickstroke() {
 #define RADIUS 0.25
 #define SOLARSIZE 0.2
 
-inline void addcircle(float x, float y, float r) {
-  addarc(x-r, y-r, 2*r, 2*r, 0, 360);
+inline void addcircle(double x, double y, double r) {
+  addarc((float) (x-r), (float) (y-r), (float) (2*r), (float) (2*r), 0, 360);
 }
 
 void darkblob( void ) {
@@ -410,7 +413,7 @@ void drawfrom(int ifrom, int instance, fltk::Widget* widget) {
   double x,y,z,l1;
   int a,b,c,i,from;
   from = ifrom;
-  PSscale(widget->w()/6.0, widget->h()/6.0);
+  PSscale(widget->w()/6.0f, widget->h()/6.0f);
   PStranslate(3.0,3.0);
   PSsetlinewidth(0.0);
   if (!from) {
@@ -827,7 +830,7 @@ class QubixView : public Widget {
     pop_matrix();
     if (remark) {
       setfont(HELVETICA,12);
-      drawtext(remark, 3, h()-13);
+      drawtext(remark, 3, (float) h()-13);
     }
     pop_clip();
   }
@@ -957,7 +960,7 @@ Window* make_gamewin() {
 	  o->callback(updatedSlider);
     }
     { MenuBar* o = main_menu = new MenuBar(10, 5, 170, 25);
-      o->menu(menu_main_menu);
+      load_menu(main_menu);
 	  o->callback(menu_callback);
     }
     { QubixView* o = new QubixView(10, 35, 370, 370);
