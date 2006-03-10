@@ -130,7 +130,8 @@ int main(int argc, char** argv) {
   window.resizable(scroll);
 
   FrameBox box("box", "", (FrameBox*) fltk::FLAT_BOX);
-  box.inset (Rectangle(0,300,5*75,window.h()-300));
+  Rectangle tmpRect(0,300,5*75,window.h()-300);
+  box.inset(tmpRect);
 
   LightButton but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);
