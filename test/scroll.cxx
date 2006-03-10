@@ -33,7 +33,6 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <fltk/InvisibleBox.h>
-
 #include <fltk/MenuBuild.h>
 
 using namespace fltk;
@@ -114,6 +113,7 @@ int main(int argc, char** argv) {
   Window window(5*75,400);
   //window.clear_double_buffer(); // use this to test scroll_area()
   window.box(fltk::NO_BOX);
+  window.begin();
   ScrollGroup scroll(0,0,5*75,300);
 
   int n = 0;
@@ -146,8 +146,8 @@ int main(int argc, char** argv) {
 
   thescroll = &scroll;
 
-  //scroll.box(fltk::DOWN_BOX);
-  //scroll.type(ScrollGroup::VERTICAL);
+  scroll.box(fltk::DOWN_BOX);
+  scroll.type(ScrollGroup::VERTICAL);
   window.end();
   window.show(argc,argv);
   return fltk::run();
