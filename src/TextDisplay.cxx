@@ -228,12 +228,20 @@ void TextDisplay::layout() {
     Widget::layout(); 
     return;
   }
+  
+
 
   // printf("ldamage %x\n", ldamage);
 
   Rectangle area(w(), h());
   box()->inset(area);
     
+  
+  if (!buffer()) {
+    Widget::layout(); 
+    return;
+  }
+
   text_area.set(area.x()+LEFT_MARGIN,
                 area.y()+TOP_MARGIN, 
                 area.w()-LEFT_MARGIN-RIGHT_MARGIN,
@@ -2063,7 +2071,7 @@ void TextDisplay::update_line_starts(int pos, int charsInserted,
  * "startLine" and "endLine" are acceptable.
  */
 void TextDisplay::calc_line_starts(int startLine, int endLine) {
-  int startPos, bufLen = buffer_->length();
+    int startPos, bufLen = buffer_ ? buffer_->length() : 0;
   int line, lineEnd, nextLineStart, nVis = visiblelines_cnt_;
   int *lineStarts = linestarts_;
 

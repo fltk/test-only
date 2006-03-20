@@ -792,6 +792,10 @@ SOURCE=..\..\src\GSave.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\HelpView.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\HighlightButton.cxx
 # End Source File
 # Begin Source File

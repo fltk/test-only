@@ -30,7 +30,7 @@
 
 #  include <fltk/FL_API.h>
 #  include <fltk/string.h>
-#  include <config.h>
+#  include "config.h"
 #  include <stdio.h>
 #  include <stdarg.h>
 #  include <string.h>

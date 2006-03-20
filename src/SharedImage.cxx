@@ -91,8 +91,8 @@ void SharedImage::clear_cache()
     mem_used -= w()*h();
     destroy();
   }
-  if (l1) l1->clear_cache();
-  if (l2) l2->clear_cache();
+  if (l1 && l1!=this) l1->clear_cache();
+  if (l2&& l2!=this) l2->clear_cache();
 }
 
 void SharedImage::set_root_directory(const char *d) {
@@ -104,8 +104,10 @@ void SharedImage::insert(SharedImage*& p, SharedImage* image) {
     p = image;
   else {
     int c = strcmp(image->name, p->name);
-    if(c<0) insert(p->l1, image);
-    else insert(p->l2, image);
+    if(c<0 &&p->l1!=p) insert(p->l1, image);
+    else {
+	if (p->l2!=p) insert(p->l2, image);
+    }
   }
 }
 
@@ -113,8 +115,8 @@ SharedImage* SharedImage::find(SharedImage* image, const char* name) {
   if(image == 0) return 0;
   int c = strcmp(name, image->name);
   if(c == 0) return image;
-  else if(c<0) return find(image->l1, name);
-  else return find(image->l2, name);
+  else if(c<0) return image->l1!= image ? find(image->l1, name) : 0;
+  else return image->l2!= image ? find(image->l2, name) : 0;
 }
 
 

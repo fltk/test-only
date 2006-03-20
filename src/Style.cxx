@@ -295,9 +295,9 @@ void Widget::FIELD(TYPE v) {		\
   unique_style(style_)->FIELD##_ = v;	\
 }
 
-style_functions(Symbol*,	box		)
-style_functions(Symbol*,	buttonbox	)
-style_functions(Symbol*,	focusbox	)
+style_functions(Box*,	box		)
+style_functions(Box*,	buttonbox	)
+style_functions(Box*,	focusbox	)
 style_functions(Symbol*,	glyph		)
 style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)

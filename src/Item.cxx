@@ -22,7 +22,7 @@
 //
 
 #include <fltk/Item.h>
-#include <fltk/Symbol.h>
+#include <fltk/Box.h>
 #include <fltk/CheckButton.h>
 #include <fltk/draw.h>
 #include <string.h>

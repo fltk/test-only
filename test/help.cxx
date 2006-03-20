@@ -1,5 +1,5 @@
 //
-// "$Id: help.cxx,v 1.3 2003/04/20 03:17:51 easysw Exp $"
+// "$Id$"
 //
 // Fl_Help_Dialog test program.
 //
@@ -63,5 +63,5 @@ main(int  argc,			// I - Number of command-line arguments
 
 
 //
-// End of "$Id: help.cxx,v 1.3 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id$".
 //

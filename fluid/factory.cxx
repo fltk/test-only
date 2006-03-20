@@ -200,6 +200,7 @@ public:
 };
 static AdjusterType Adjustertype;
 
+#include <fltk/Box.h>
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Dial.h>
@@ -365,6 +366,85 @@ public:
 static BarGroupType BarGrouptype;
 
 ////////////////////////////////////////////////////////////////
+#include <fltk/TextDisplay.h>
+class TextDisplayType : public WidgetType {
+    int textstuff(int w, fltk::Font* f, int& s, fltk::Color& c);
+public:
+  virtual void ideal_size(int &w, int &h) {
+    fltk::TextDisplay *myo = (fltk::TextDisplay *)o;
+    fltk::setfont(myo->textfont(), myo->textsize());
+    h -= fltk::box_dh(o->box());
+    w -= fltk::box_dw(o->box());
+    int ww = (int) fltk::getwidth("m");
+    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+    h = ((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
+        fltk::box_dh(o->box());
+    if (h < 30) h = 30;
+    if (w < 50) w = 50;
+  }
+  virtual const char *type_name() const {return "fltk::TextDisplay";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::TextDisplay *myo = new fltk::TextDisplay(x,y,w,h);
+    myo->box(fltk::DOWN_BOX);
+    return myo;
+  }
+  WidgetType *_make() {return new TextDisplayType();}
+  int pixmapID() { return 28; }
+};
+static TextDisplayType TextDisplaytype;
+
+int TextDisplayType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
+  fltk::TextDisplay *myo = (fltk::TextDisplay*)(w==4 ? ((WidgetType*)factory)->o : o);
+  switch (w) {
+    case 4:
+    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 1: myo->textfont(f); break;
+    case 2: myo->textsize((float)s); break;
+    case 3: myo->textcolor(c); break;
+  }
+  return 1;
+}
+////////////////////////////////////////////////////////////////
+#include <fltk/TextEditor.h>
+
+class TextEditorType : public WidgetType {
+  int textstuff(int w, fltk::Font* f, int& s, fltk::Color& c);
+public:
+  virtual void ideal_size(int &w, int &h) {
+    fltk::TextEditor *myo = (fltk::TextEditor *)o;
+    fltk::setfont(myo->textfont(), myo->textsize());
+    h -= fltk::box_dh(o->box());
+    w -= fltk::box_dw(o->box());
+    int ww = (int)fltk::getwidth("m");
+    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+    h = ((h + fltk::getascent() - 1) / fltk::getascent()) * fltk::getascent() +
+        fltk::box_dh(o->box());
+    if (h < 30) h = 30;
+    if (w < 50) w = 50;
+  }
+  virtual const char *type_name() const {return "fltk::TextEditor";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::TextEditor *myo = new fltk::TextEditor(x,y,w,h);
+    return myo;
+  }
+  WidgetType *_make() {return new TextEditorType();}
+  int pixmapID() { return 29; }
+};
+static TextEditorType TextEditortype;
+
+int TextEditorType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
+    fltk::TextEditor *myo = (fltk::TextEditor*)(w==4 ? ((WidgetType*)factory)->o : o);
+  switch (w) {
+    case 4:
+    case 0: f = myo->textfont(); s = (int) myo->textsize(); c = myo->textcolor(); break;
+    case 1: myo->textfont(f); break;
+    case 2: myo->textsize((float)s); break;
+    case 3: myo->textcolor(c); break;
+  }
+  return 1;
+}
+
+////////////////////////////////////////////////////////////////
 
 
 extern class FunctionType Functiontype;
@@ -448,6 +528,8 @@ void fill_in_New_Menu(fltk::ItemGroup* menu) {
 	submenu=new fltk::ItemGroup("text",0,0);
 	  new fltk::Item((*(WidgetType*)&Inputtype).type_name(),0,cb,(void*)&Inputtype);
 	  new fltk::Item((*(WidgetType*)&Outputtype).type_name(),0,cb,(void*)&Outputtype);
+	  new fltk::Item((*(WidgetType*)&TextDisplaytype).type_name(),0,cb,(void*)&TextDisplaytype);
+	  new fltk::Item((*(WidgetType*)&TextEditortype).type_name(),0,cb,(void*)&TextEditortype);
 	submenu->end();
 	submenu=new fltk::ItemGroup("menus",0,0);
 	  new fltk::Item((*(WidgetType*)&MenuBartype).type_name(),0,cb,(void*)&MenuBartype);
@@ -515,6 +597,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Bar",		"fltk::BarGroup"},
   {"Fl_Roller",		"fltk::ThumbWheel"},
   {"Fl_File_Browser", "fltk::FileBrowser"},
+  {"Fl_Text_Display", "fltk::TextDisplay"},
   {"Fl_Text_Editor", "fltk::TextEditor"},
   {"Fl_Tile", "fltk::TiledGroup"}
 };

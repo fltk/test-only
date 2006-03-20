@@ -1,5 +1,5 @@
 //
-// "$Id: HelpView.h,v 1.3 2004/07/04 17:43:01 laza2000 Exp $"
+// "$Id$"
 //
 // Help Viewer widget definitions.
 //
@@ -136,6 +136,7 @@ class FL_IMAGES_API HelpView : public Group    //// Help viewer widget
   static int compare_targets (const HelpTarget * t0,
                               const HelpTarget * t1);
   int do_align (HelpBlock * block, int line, int xx, int a, int &l);
+  void write_text (const char * buf, const char * ptr, int X, int Y, int X1, int underline);
   void draw ();
   void format ();
   void format_table (int *table_width, int *columns, const char *table);
@@ -212,6 +213,7 @@ public:
   int leftline () const { return (leftline_); } 
   void value (const char *v);
   const char *value () const { return (value_); }
+  int find (const char *s,int p);
 };
 
 } // namespace fltk
@@ -219,5 +221,5 @@ public:
 #endif // !HelpView_H
 
 //
-// End of "$Id: HelpView.h,v 1.3 2004/07/04 17:43:01 laza2000 Exp $".
+// End of "$Id$".
 //
