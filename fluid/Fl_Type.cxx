@@ -177,7 +177,7 @@ class Widget_List : public fltk::List {
 
 static Widget_List widgetlist;
 
-static fltk::Browser *widget_browser;
+extern fltk::Browser *widget_browser;
 
 static void Widget_Browser_callback(fltk::Widget *,void *) {
   if (FluidType::current) FluidType::current->open();

@@ -547,6 +547,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     extern void fill_in_New_Menu();
 
     fltk::MenuBar* menubar;
+    fltk::Browser *widget_browser;
     
     ////////////////////////////////////////////////////////////////
     void make_main_window() {
@@ -555,7 +556,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 	    main_window = new fltk::Window(WINWIDTH,WINHEIGHT,"fluid");
 	    main_window->box(fltk::NO_BOX);
 	    main_window->begin();
-	    o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
+	    o = widget_browser = (fltk::Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
 	    //  o->text_box(fltk::FLAT_BOX);
 	    main_window->resizable(o);
 	    menubar = new fltk::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
@@ -574,6 +575,8 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     void set_filename(const char *c) {
 	if (filename) free((void *)filename);
 	filename = strdup(c);
+	if (c && strlen(c)) update_history(c);
+
 	if (main_window) main_window->label(filename);
 	
 	/* Change directory to .fl file directory
@@ -656,7 +659,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 	    
 	    for (; i < 10; i ++) {
 		fluid_prefs.set( fltk::Preferences::Name("file%d", i), "");
-		history_item[i]->show();
+		history_item[i]->hide();
 	    }
     }
     ////////////////////////////////////////////////////////////////

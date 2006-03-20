@@ -194,6 +194,7 @@ public:
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;
+  void  draw_box(const Rectangle& r) const ; // multiple boxes drawing for a single Widget
   void	draw_label() const	;
   void  draw_label(const Rectangle&, Flags) const ;
   void  draw_glyph(int, const Rectangle&) const ;

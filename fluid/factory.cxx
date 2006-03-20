@@ -389,6 +389,7 @@ extern class SubmenuType Submenutype;
 extern class BrowserType Browsertype;
 extern class InputBrowserType InputBrowsertype;
 extern class FileBrowserType FileBrowsertype;
+extern class CommentType Commenttype;
 
 extern void select(FluidType *,int);
 extern void select_only(FluidType *);
@@ -414,6 +415,7 @@ void fill_in_New_Menu(fltk::ItemGroup* menu) {
 	  new fltk::Item((*(WidgetType*)&DeclBlocktype).type_name(),0,cb,(void*)&DeclBlocktype);
 	  new fltk::Item((*(WidgetType*)&Classtype).type_name(),0,cb,(void*)&Classtype);
 	  new fltk::Item((*(WidgetType*)&Namespacetype).type_name(),0,cb,(void*)&Namespacetype);
+	  new fltk::Item((*(WidgetType*)&Commenttype).type_name(),0,cb,(void*)&Commenttype);
 	submenu->end();
 	submenu=new fltk::ItemGroup("group",0,0);
 	  new fltk::Item(Windowtype.type_name(),0,cb,(void*)&Windowtype);
@@ -479,10 +481,13 @@ static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   fltk::Item * m;
   char menuName[128];
   int n;
+  
+  if (!tn || strlen(tn)==0) 
+      return 0;
 
   for (n = menu->children(); n--;) {
     fltk::Widget* w = menu->child(n);
-    if (w->label() && w->is_group()) {
+    if (w->label() && w->is_group() && tn && *tn) {
 	sprintf(menuName,"%s/%s",w->label(),tn);
 	m = (fltk::Item *) menu->find(menuName);
 	if (m)  break;
@@ -510,6 +515,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Bar",		"fltk::BarGroup"},
   {"Fl_Roller",		"fltk::ThumbWheel"},
   {"Fl_File_Browser", "fltk::FileBrowser"},
+  {"Fl_Text_Editor", "fltk::TextEditor"},
   {"Fl_Tile", "fltk::TiledGroup"}
 };
 

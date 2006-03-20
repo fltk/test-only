@@ -30,15 +30,13 @@
 #  define fltk_FileInput_H
 
 #  include "Input.h"
-#  include "Box.h"
 
 namespace fltk {
 
 class FL_API FileInput : public Input {
   Color	errorcolor_;
   char		ok_entry_;
-  FrameBox* 	down_box_;
-  short		buttons_[200];
+  short		buttons_[120];
   short		pressed_;
 
   void		draw_buttons();
@@ -49,11 +47,10 @@ public:
 
   FileInput(int,int,int,int,const char *t=0);
 
+  void draw_boxes(Box* b,const Rectangle& r);
   virtual int handle(int);
   virtual void draw();
 
-  FrameBox*  		down_box() const { return down_box_; }
-  FrameBox*			down_box(Box* b) { down_box_ = (FrameBox*) b; return down_box_; }
   Color			errorcolor() const { return errorcolor_; }
   void			errorcolor(Color c) { errorcolor_ = c; }
   int			value(const char*);

@@ -10,7 +10,7 @@ Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
     label {function/method} open
-    xywh {488 131 400 208} resizable modal visible
+    xywh {488 131 400 208} hide resizable modal
   } {
     {fltk::CheckButton} f_public_button {
       label public
@@ -101,6 +101,7 @@ Function {make_code_panel()} {open
     xywh {171 177 290 175} hide resizable modal
   } {
     {fltk::Input} code_input {
+      label {input:}
       xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
     }
     {fltk::ReturnButton} code_panel_ok {
@@ -121,6 +122,7 @@ Function {make_codeblock_panel()} {open
     xywh {539 470 290 131} hide resizable modal
   } {
     {fltk::Input} code_before_input {
+      label {input:}
       xywh {10 11 270 22} align 5 when NEVER
     }
     {fltk::Widget} {} {
@@ -128,6 +130,7 @@ Function {make_codeblock_panel()} {open
       xywh {10 33 270 33} align 20 box NO_BOX
     }
     {fltk::Input} code_after_input {
+      label {input:}
       xywh {10 65 270 23} align 5 when NEVER
     }
     {fltk::ReturnButton} codeblock_panel_ok {
@@ -147,6 +150,7 @@ Function {make_declblock_panel()} {} {
     xywh {371 299 290 131} hide resizable modal
   } {
     {fltk::Input} decl_before_input {
+      label {input:}
       xywh {10 11 270 22} align 5 when NEVER
     }
     {fltk::Widget} {} {
@@ -154,6 +158,7 @@ Function {make_declblock_panel()} {} {
       xywh {10 33 270 33} align 20 box NO_BOX
     }
     {fltk::Input} decl_after_input {
+      label {input:}
       xywh {10 66 270 22} align 5 when NEVER
     }
     {fltk::ReturnButton} declblock_panel_ok {
@@ -170,7 +175,7 @@ Function {make_declblock_panel()} {} {
 Function {make_decl_panel()} {} {
   {fltk::Window} decl_panel {
     label declaration open
-    xywh {389 376 290 175} resizable visible
+    xywh {389 376 290 175} hide resizable
   } {
     {fltk::CheckButton} decl_public_button {
       label public
@@ -225,7 +230,7 @@ Function {make_class_panel()} {} {
 Function {make_namespace_panel()} {} {
   {fltk::Window} namespace_panel {
     label namespace open
-    xywh {688 464 298 140} resizable visible
+    xywh {688 464 298 140} hide resizable
   } {
     {fltk::Input} namespace_input {
       label {default is  "fltk", can be declared at the root or  imbricated into another namespace}
@@ -238,6 +243,63 @@ Function {make_namespace_panel()} {} {
     {fltk::Button} namespace_panel_cancel {
       label Cancel
       xywh {205 96 83 22} shortcut 0xff1b
+    }
+  }
+} 
+
+Function {make_comment_panel()} {open
+} {
+  {fltk::Window} comment_panel {
+    label {Comment Properties}
+    callback {o->hide();} open selected
+    xywh {417 146 550 320} type Double resizable labelsize 11
+    extra_code {o->size_range(320, 180);} modal visible
+  } {
+    {fltk::Input} comment_input {
+      label input
+      xywh {110 10 430 266} type Multiline align 6 when NEVER
+      extra_code {o->when(fltk::WHEN_ENTER_KEY_CHANGED|fltk::WHEN_RELEASE);}
+    }
+    {fltk::Group} {} {open
+      xywh {0 -1 550 320} labelsize 11
+    } {
+      {fltk::ReturnButton} comment_panel_ok {
+        label OK
+        xywh {371 286 80 23} hotspot labelsize 11 shortcut 0xff0d
+      }
+      {fltk::Button} comment_panel_cancel {
+        label Cancel
+        callback {comment_panel->hide();}
+        xywh {460 286 79 23} labelsize 11 shortcut 0xff1b
+      }
+      {fltk::InvisibleBox} {} {
+        xywh {110 285 244 23} resizable labelsize 11
+      }
+    }
+    {fltk::Group} {} {open
+      xywh {7 10 103 293} resizable labelsize 11
+    } {
+      {fltk::LightButton} comment_in_source {
+        label {In Source}
+        tooltip {Put the comment into the source (.cxx) file.}
+        xywh {0 10 90 20} when NEVER labelsize 11
+      }
+      {fltk::LightButton} comment_in_header {
+        label {In Header}
+        tooltip {Put the comment into the header (.h) file.}
+        xywh {0 40 90 20} when NEVER labelsize 11
+      }
+      {fltk::PopupMenu} comment_predefined {
+        label Predefined open
+        xywh {0 69 90 20} labelsize 11 textsize 11
+      } {}
+      {fltk::Button} comment_load {
+        label {Import...}
+        xywh {0 100 90 20} labelsize 11
+      }
+      {fltk::InvisibleBox} {} {
+        xywh {0 132 93 133} resizable labelsize 11
+      }
     }
   }
 } 

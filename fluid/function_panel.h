@@ -55,4 +55,18 @@ extern fltk::Input* namespace_input;
 extern fltk::ReturnButton* namespace_panel_ok;
 extern fltk::Button* namespace_panel_cancel;
 fltk::Window* make_namespace_panel();
+#include <fltk/DoubleBufferWindow.h>
+extern fltk::DoubleBufferWindow* comment_panel;
+extern fltk::MultiLineInput* comment_input;
+#include <fltk/Group.h>
+extern fltk::ReturnButton* comment_panel_ok;
+extern fltk::Button* comment_panel_cancel;
+#include <fltk/InvisibleBox.h>
+#include <fltk/LightButton.h>
+extern fltk::LightButton* comment_in_source;
+extern fltk::LightButton* comment_in_header;
+#include <fltk/PopupMenu.h>
+extern fltk::PopupMenu* comment_predefined;
+extern fltk::Button* comment_load;
+fltk::DoubleBufferWindow* make_comment_panel();
 #endif

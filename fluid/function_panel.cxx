@@ -157,7 +157,7 @@ fltk::Window* make_code_panel() {
    {fltk::Window* o = code_panel = new fltk::Window(290, 175, "code");
     w = o;
     o->begin();
-     {fltk::MultiLineInput* o = code_input = new fltk::MultiLineInput(6, 5, 280, 138);
+     {fltk::MultiLineInput* o = code_input = new fltk::MultiLineInput(6, 5, 280, 138, "input:");
       o->type(4);
       o->align(fltk::ALIGN_CENTER);
       o->when(fltk::WHEN_NEVER);
@@ -191,7 +191,7 @@ fltk::Window* make_codeblock_panel() {
    {fltk::Window* o = codeblock_panel = new fltk::Window(290, 131, "codeblock");
     w = o;
     o->begin();
-     {fltk::Input* o = code_before_input = new fltk::Input(10, 11, 270, 22);
+     {fltk::Input* o = code_before_input = new fltk::Input(10, 11, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -199,7 +199,7 @@ fltk::Window* make_codeblock_panel() {
       o->box(fltk::NO_BOX);
       o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
-     {fltk::Input* o = code_after_input = new fltk::Input(10, 65, 270, 23);
+     {fltk::Input* o = code_after_input = new fltk::Input(10, 65, 270, 23, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -232,7 +232,7 @@ fltk::Window* make_declblock_panel() {
    {fltk::Window* o = declblock_panel = new fltk::Window(290, 131, "declaration block");
     w = o;
     o->begin();
-     {fltk::Input* o = decl_before_input = new fltk::Input(10, 11, 270, 22);
+     {fltk::Input* o = decl_before_input = new fltk::Input(10, 11, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -240,7 +240,7 @@ fltk::Window* make_declblock_panel() {
       o->box(fltk::NO_BOX);
       o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
-     {fltk::Input* o = decl_after_input = new fltk::Input(10, 66, 270, 22);
+     {fltk::Input* o = decl_after_input = new fltk::Input(10, 66, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -364,6 +364,99 @@ fltk::Window* make_namespace_panel() {
       o->shortcut(0xff1b);
     }
     o->end();
+  }
+  return  w;
+}
+
+fltk::DoubleBufferWindow* comment_panel;
+
+static void cb_comment_panel(fltk::DoubleBufferWindow* o, void*) {
+  o->hide();
+}
+
+fltk::MultiLineInput* comment_input;
+
+fltk::ReturnButton* comment_panel_ok;
+
+fltk::Button* comment_panel_cancel;
+
+static void cb_comment_panel_cancel(fltk::Button*, void*) {
+  comment_panel->hide();
+}
+
+fltk::LightButton* comment_in_source;
+
+fltk::LightButton* comment_in_header;
+
+fltk::PopupMenu* comment_predefined;
+
+fltk::Button* comment_load;
+
+fltk::DoubleBufferWindow* make_comment_panel() {
+  fltk::DoubleBufferWindow* w;
+   {fltk::DoubleBufferWindow* o = comment_panel = new fltk::DoubleBufferWindow(550, 320, "Comment Properties");
+    w = o;
+    o->type(241);
+    o->labelsize(11);
+    o->callback((fltk::Callback*)cb_comment_panel);
+    o->begin();
+     {fltk::MultiLineInput* o = comment_input = new fltk::MultiLineInput(110, 10, 430, 266, "input");
+      o->type(4);
+      o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT);
+      o->when(fltk::WHEN_NEVER);
+      o->when(fltk::WHEN_ENTER_KEY_CHANGED|fltk::WHEN_RELEASE);
+    }
+     {fltk::Group* o = new fltk::Group(0, -1, 550, 320);
+      o->labelsize(11);
+      o->begin();
+       {fltk::ReturnButton* o = comment_panel_ok = new fltk::ReturnButton(371, 286, 80, 23, "OK");
+        o->labelsize(11);
+        o->shortcut(0xff0d);
+        ((fltk::Window*)(o->parent()->parent()))->hotspot(o);
+      }
+       {fltk::Button* o = comment_panel_cancel = new fltk::Button(460, 286, 79, 23, "Cancel");
+        o->labelsize(11);
+        o->shortcut(0xff1b);
+        o->callback((fltk::Callback*)cb_comment_panel_cancel);
+      }
+       {fltk::InvisibleBox* o = new fltk::InvisibleBox(110, 285, 244, 23);
+        o->labelsize(11);
+        fltk::Group::current()->resizable(o);
+      }
+      o->end();
+    }
+     {fltk::Group* o = new fltk::Group(7, 10, 103, 293);
+      o->set_vertical();
+      o->labelsize(11);
+      o->begin();
+       {fltk::LightButton* o = comment_in_source = new fltk::LightButton(0, 10, 90, 20, "In Source");
+        o->labelsize(11);
+        o->when(fltk::WHEN_NEVER);
+        o->tooltip("Put the comment into the source (.cxx) file.");
+      }
+       {fltk::LightButton* o = comment_in_header = new fltk::LightButton(0, 40, 90, 20, "In Header");
+        o->labelsize(11);
+        o->when(fltk::WHEN_NEVER);
+        o->tooltip("Put the comment into the header (.h) file.");
+      }
+       {fltk::PopupMenu* o = comment_predefined = new fltk::PopupMenu(0, 69, 90, 20, "Predefined");
+        o->labelsize(11);
+        o->textsize(11);
+      }
+       {fltk::Button* o = comment_load = new fltk::Button(0, 100, 90, 20, "Import...");
+        o->labelsize(11);
+      }
+       {fltk::InvisibleBox* o = new fltk::InvisibleBox(0, 132, 93, 133);
+        o->set_vertical();
+        o->labelsize(11);
+        fltk::Group::current()->resizable(o);
+      }
+      o->end();
+      fltk::Group::current()->resizable(o);
+    }
+    o->end();
+    o->size_range(320, 180);
+    o->set_modal();
   }
   return  w;
 }
