@@ -757,17 +757,17 @@ void CommentType::read_property(const char *c) {
     }
 }
 
-#include "comments.h"
+// FIXME: this is a fast-fix - following array should be set to proper values
+//#include "comments.h"
 
-static void load_comments_preset(fltk::Preferences &menu) {
-    static const char * const predefined_comment[] = {
-	"GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
-	    "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
-	    "FLTK/Header", "FLTK/Footer" };
-    // FIXME: this is a fast-fix - following array should be set to proper values
-    static const char * const comment_text[] = {"-",  "-",
-	    "-", "-",
-	    "-", "-" };
+static void load_comments_preset(fltk::Preferences &menu) 
+{
+  static const char * const predefined_comment[] = {
+	  "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
+	  "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
+	  "FLTK/Header", "FLTK/Footer" };
+  // FIXME: this is a fast-fix - following array should be set to proper values
+  static const char * const comment_text[] = {"-", "-", "-", "-", "-", "-"};
 	int i;
 	menu.set("n", 6);
 	fltk::Preferences db(fltk::Preferences::USER, "fltk.org", "fluid_comments");
