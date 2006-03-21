@@ -5,7 +5,7 @@
 #include <fltk/Scrollbar.h>
 #include <fltk/draw.h>
 #include <fltk/string.h>
-#include <fltk/Symbol.h>
+#include <fltk/Box.h>
 #include <fltk/Choice.h>
 #include <fltk/Font.h>
 #include <fltk/utf.h>
@@ -45,7 +45,7 @@ void Drawing::draw() {
   unsigned itemh = unsigned(textsize()+8);
   unsigned base = scroll*16;
   int y = 0;
-  Symbol* box = this->box();
+  Box* box = this->box();
   Style style = *(this->style());
   for (; y < h(); y+=itemh, base+=16) {
     char buf[20];
