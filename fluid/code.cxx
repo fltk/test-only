@@ -297,8 +297,12 @@ int write_code(const char *s, const char *t) {
   fprintf(header_file, "#define %s\n", define_name);
   }  
 
-  if (t && include_H_from_C)
+  if (*t == '.' && strchr(t, '/') == NULL) {
     write_c("#include \"%s\"\n", filename_name(t));
+  } else {
+    write_c("#include \"%s\"\n", t);
+  }
+
   for (FluidType* p = FluidType::first; p; p = p->next_brother) {
     // write all static data for this & all children first
     p->write_static();
