@@ -591,6 +591,21 @@ static void draw_plus(Color col)
 #endif
 }
 
+static void draw_search(Color col) 
+{
+  setcolor(col);
+  BP; vv(-.4f, .13f); vv(-1.0f, .73f); vv(-.73f, 1.0f); vv(-.13f, .4f); EP;
+  //set_outline_color(col);
+  line_style(SOLID,2);
+  BC; 
+  addarc(-.2f, -0.8f, 1.2f,1.2f, -180.0f,180.0f); 
+  EC;
+  line_style(SOLID,1);
+  BC; vv(-.4f, .13f); vv(-1.0f, .73f); vv(-.73f, 1.0f); vv(-.13f, .4f); EC;
+
+}
+
+
 // These last two are probably obsolete:
 // static void draw_arrow(Color col)
 // {
@@ -630,6 +645,7 @@ static void init_symbols(void) {
   add_symbol("circle",		draw_circle,		1);
   add_symbol("line",		draw_line,		1);
   add_symbol("plus",		draw_plus,		1);
+  add_symbol("search",		draw_search,		1);
 //  add_symbol("menu",		draw_menu,		1);
   add_symbol("UpArrow",		draw_uparrow,		1);
   add_symbol("DnArrow",		draw_downarrow,		1);
