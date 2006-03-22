@@ -368,7 +368,7 @@ static BarGroupType BarGrouptype;
 ////////////////////////////////////////////////////////////////
 #include <fltk/TextDisplay.h>
 class TextDisplayType : public WidgetType {
-    int textstuff(int w, fltk::Font* f, int& s, fltk::Color& c);
+    int textstuff(int w, fltk::Font* f, int& s, fltk::Color c);
 public:
   virtual void ideal_size(int &w, int &h) {
     fltk::TextDisplay *myo = (fltk::TextDisplay *)o;
@@ -393,7 +393,7 @@ public:
 };
 static TextDisplayType TextDisplaytype;
 
-int TextDisplayType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
+int TextDisplayType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
   fltk::TextDisplay *myo = (fltk::TextDisplay*)(w==4 ? ((WidgetType*)factory)->o : o);
   switch (w) {
     case 4:
@@ -408,7 +408,7 @@ int TextDisplayType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
 #include <fltk/TextEditor.h>
 
 class TextEditorType : public WidgetType {
-  int textstuff(int w, fltk::Font* f, int& s, fltk::Color& c);
+  int textstuff(int w, fltk::Font* f, int& s, fltk::Color c);
 public:
   virtual void ideal_size(int &w, int &h) {
     fltk::TextEditor *myo = (fltk::TextEditor *)o;
@@ -432,7 +432,7 @@ public:
 };
 static TextEditorType TextEditortype;
 
-int TextEditorType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
+int TextEditorType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
     fltk::TextEditor *myo = (fltk::TextEditor*)(w==4 ? ((WidgetType*)factory)->o : o);
   switch (w) {
     case 4:

@@ -29,10 +29,16 @@
 
 #include <config.h>
 #include <fltk/filename.h>
+#include <fltk/string.h>
 #include <fltk/utf.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
+
+/* fabien: should be obsoleted by new fltk::xxx_sort() functions) see numericsort.cxx
+    remove this code after having checked :
+    that the new c++ fltk namespaced sort func works fine with scandir 'C' decl below
+    on all concerned platforms (check the fltk::numericsort parameter to scandir)
 
 extern "C" {
 static int
@@ -51,8 +57,8 @@ numericsort(dirent **A, dirent **B)
       magdiff = 0;
       while (isdigit((uchar)*a)) {magdiff++; a++;}
       while (isdigit((uchar)*b)) {magdiff--; b++;}
-      if (magdiff) {ret = magdiff; break;} /* compare # of significant digits*/
-      if (diff) {ret = diff; break;}	/* compare first non-zero digit */
+      if (magdiff) {ret = magdiff; break;} * compare # of significant digits*
+      if (diff) {ret = diff; break;}	* compare first non-zero digit *
     } else {
       // compare case-insensitive:
       int t = tolower((uchar)*a)-tolower((uchar)*b);
@@ -68,6 +74,7 @@ numericsort(dirent **A, dirent **B)
   else return (ret < 0) ? -1 : 1;
 }
 }
+*/
 
 #if ! HAVE_SCANDIR
 extern "C" int
@@ -76,7 +83,7 @@ scandir (const char *dir, dirent ***namelist,
 	 int (*compar)(dirent **, dirent **));
 #endif
 
-int filename_list(const char *d, dirent ***list) {
+int fltk::filename_list(const char *d, dirent ***list) {
   // Nobody defines the comparison function prototype correctly!
   // It should be "const dirent* const*". I don't seem to be able to
   // do this even for our own internal version because some compilers
@@ -84,7 +91,7 @@ int filename_list(const char *d, dirent ***list) {
   // use if's to go to what the various systems use:
 #if defined(__hpux) || defined(__CYGWIN__)
   // HP-UX seems to be partially const-correct:
-  return scandir(d, list, 0, (int(*)(const dirent **, const dirent **))numericsort);
+    return scandir(d, list, 0, (int(*)(const dirent **, const dirent **))fltk::numericsort);
 #elif !HAVE_SCANDIR || defined(__sgi) || defined(__osf__)
   // When we define our own scandir (_WIN32 and perhaps some Unix systems)
   // and also some existing Unix systems take it the way we define it:
@@ -93,8 +100,68 @@ int filename_list(const char *d, dirent ***list) {
   // The vast majority of Unix systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
   // changes:
-  return scandir(d, list, 0, (int(*)(const void*,const void*))numericsort);
+  return scandir(d, list, 0, (int(*)(const void*,const void*))fltk::numericsort);
 #endif
+}
+
+int fltk::alphasort(struct dirent **a, struct dirent **b) {
+  return strcmp((*a)->d_name, (*b)->d_name);
+}
+
+int fltk::casealphasort(struct dirent **a, struct dirent **b) {
+  return strcasecmp((*a)->d_name, (*b)->d_name);
+}
+
+int fltk::filename_list(const char *d, dirent ***list,
+                     File_Sort_F *sort) {
+#ifndef HAVE_SCANDIR
+  int n = scandir(d, list, 0, sort);
+#elif defined(__hpux) || defined(__CYGWIN__)
+  // HP-UX, Cygwin define the comparison function like this:
+  int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
+#elif defined(__osf__)
+  // OSF, DU 4.0x
+  int n = scandir(d, list, 0, (int(*)(dirent **, dirent **))sort);
+#elif defined(_AIX)
+  // AIX is almost standard...
+  int n = scandir(d, list, 0, (int(*)(void*, void*))sort);
+#elif !defined(__sgi)
+  // The vast majority of UNIX systems want the sort function to have this
+  // prototype, most likely so that it can be passed to qsort without any
+  // changes:
+  int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
+#else
+  // This version is when we define our own scandir (WIN32 and perhaps
+  // some Unix systems) and apparently on IRIX:
+  int n = scandir(d, list, 0, sort);
+#endif
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+  // we did this already during fl_scandir/win32
+#else
+  // append a '/' to all filenames that are directories
+  int i, dirlen = strlen(d);
+  char *fullname = (char*)malloc(dirlen+FL_PATH_MAX+3); // Add enough extra for two /'s and a nul
+  // Use memcpy for speed since we already know the length of the string...
+  memcpy(fullname, d, dirlen+1);
+  char *name = fullname + dirlen;
+  if (name!=fullname && name[-1]!='/') *name++ = '/';
+  for (i=0; i<n; i++) {
+    dirent *de = (*list)[i];
+    int len = strlen(de->d_name);
+    if (de->d_name[len-1]=='/' || len>FL_PATH_MAX) continue;
+    // Use memcpy for speed since we already know the length of the string...
+    memcpy(name, de->d_name, len+1);
+    if (fl_filename_isdir(fullname)) {
+      (*list)[i] = de = (dirent*)realloc(de, de->d_name - (char*)de + len + 2);
+      char *dst = de->d_name + len;
+      *dst++ = '/';
+      *dst = 0;
+    }
+  }
+  free(fullname);
+#endif
+  return n;
 }
 
 //

@@ -91,8 +91,18 @@ struct dirent {char d_name[1];};
 
 #endif
 
-/*! \addtogroup utilities */
-FL_API int filename_list(const char *d, struct dirent ***);
+namespace fltk {
+    /*! \addtogroup utilities */
+    FL_API int alphasort(struct dirent **, struct dirent **);
+    FL_API int casealphasort(struct dirent **, struct dirent **);
+    FL_API int casenumericsort(struct dirent **, struct dirent **);
+    FL_API int numericsort(struct dirent **, struct dirent **);
+    
+    typedef int (File_Sort_F)(struct dirent **, struct dirent **);
+
+    FL_API int filename_list(const char *d, dirent ***list,File_Sort_F *sort);
+    FL_API int filename_list(const char *d, struct dirent ***);
+}
 
 #ifndef PATH_MAX
 # ifdef _MAX_PATH
