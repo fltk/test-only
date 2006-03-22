@@ -79,6 +79,7 @@ public:
   void hotspot(const Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
     { minw=(short)a; minh=(short)b; maxw=(short)c; maxh=(short)d; dw=(uchar)e; dh=(uchar)f; size_range_(); }
+  bool get_size_range( int *min_w, int *min_h, int *max_w, int *max_h );
 
   bool shown() const {return i != 0;}
   void show();

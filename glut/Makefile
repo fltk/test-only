@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.22 2004/02/05 08:05:35 spitzak Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -113,5 +113,19 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.22 2004/02/05 08:05:35 spitzak Exp $".
+# End of "$Id$".
 #
+# DO NOT DELETE
+
+glut_compatability.o: ../config.h ../fltk/glut.h ../fltk/gl.h ../fltk/Color.h
+glut_compatability.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/run.h
+glut_compatability.o: ../fltk/events.h ../fltk/GlWindow.h ../fltk/Window.h
+glut_compatability.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
+glut_compatability.o: ../fltk/Rectangle.h ../fltk/Cursor.h ../fltk/visual.h
+glut_compatability.o: ../fltk/Menu.h ../fltk/Item.h ../fltk/ItemGroup.h
+glut_compatability.o: ../fltk/Menu.h ../fltk/Monitor.h
+glut_font.o: ../config.h ../fltk/glut.h ../fltk/gl.h ../fltk/Color.h
+glut_font.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/run.h ../fltk/events.h
+glut_font.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/Group.h
+glut_font.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Rectangle.h
+glut_font.o: ../fltk/Cursor.h ../fltk/visual.h ../fltk/gl.h

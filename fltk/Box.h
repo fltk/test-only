@@ -34,44 +34,46 @@ namespace fltk {
 
 ///////////////////////////////////////////////////////////////////
 class FL_API Box : public Symbol {
+protected:
+  int dx_, dy_, dw_, dh_;
 public:
-    Box(const char* name=0) : Symbol(name){init();}
+  Box(const char* name=0) : Symbol(name), dx_(0), dy_(0), dw_(0), dh_(0) {};
+  Box(const char* name, int dx, int dy, int dw, int dh) : Symbol(name), dx_(dx), dy_(dy), dw_(dw), dh_(dh) {};
     
 // fabien:  IMPORTANT IMPLEMENTATION CHANGE NOTE:
 // add a way to access these important border FRAME dimensions int the Box class
 // As all default boxes are not FrameBox but are Box* we NEED to determine 
 // these from the Box class level and NOT frome the FrameBox level
-// 
-    int dx() const {return dx_;}
-    int dy() const {return dy_;}
-    int dw() const {return dw_;}
-    int dh() const {return dh_;}
-
-protected:
-    void init() {dx_=dy_=dw_=dh_=0;} // default non-framed box has border dims to 0
-  int dx_, dy_, dw_, dh_;
+// WAS: My intent was that Symbol::inset() does this. However it may make
+// sense to move these variables from FrameBox to the Symbol base class,
+// so the common case where the insets are constant works.
+  int dx() const {return dx_;}
+  int dy() const {return dy_;}
+  int dw() const {return dw_;}
+  int dh() const {return dh_;}
 };
 
 // fabien: let's add those facilities as in fltk1.1x but done the fltk2 way ...
-
-inline int box_dx(const Box *b) {return b ? b->dx() : 0;}
-inline int box_dy(const Box *b) {return b ? b->dy() : 0;}
-inline int box_dw(const Box *b) {return b ? b->dw() : 0;}
-inline int box_dh(const Box *b) {return b ? b->dh() : 0;}
+// WAS: null is not allowed for boxes
+inline int box_dx(const Box *b) {return b->dx();}
+inline int box_dy(const Box *b) {return b->dy();}
+inline int box_dw(const Box *b) {return b->dw();}
+inline int box_dh(const Box *b) {return b->dh();}
 
 class FL_API FrameBox : public Box {
-public: 
 protected:
   const char* data_;
   const FrameBox* down_;
-
 public:
   const char* data() const {return data_;}
   void _draw(const Rectangle&) const;
   void inset(Rectangle&) const;
   bool fills_rectangle() const;
   bool is_frame() const;
-  FrameBox(const char* n, const char* c, const FrameBox* d=0);
+  FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern)
+    : Box(name,dx,dy,dw,dh), data_(pattern) {down_ = this;}
+  FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const FrameBox* down)
+    : Box(name,dx,dy,dw,dh), data_(pattern), down_(down) {}
 };
 
 class FL_API FlatBox : public Box {

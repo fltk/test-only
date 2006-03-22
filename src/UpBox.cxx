@@ -266,24 +266,9 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
   setcolor(fg);
 }
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4355) // quiet warning about using this as base class init
-#endif
-FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
-  : Box(n), data_(s), down_(d ? d : this)
-{
-  if (*s == '2') {
-    int i = (strlen(s)-1)/2;
-    dw_ = dh_ = i;
-    i = (i+1)/2;
-    dx_ = dy_ = i;
-  } else {
-    int i = strlen(s)/2;
-    dw_ = dh_ = i;
-    i /= 2;
-    dx_ = dy_ = i;
-  }
-}
+/** \fn FrameBox::FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const FrameBox* down)
+    Constructor where you give the thickness of the borders used by inset().
+*/
 
 void FrameBox::inset(fltk::Rectangle& r) const {
   if (drawflags(VALUE)) {
@@ -302,46 +287,46 @@ void FrameBox::inset(fltk::Rectangle& r) const {
 bool FrameBox::fills_rectangle() const {return true;}
 bool FrameBox::is_frame() const {return true;}
 
-static FrameBox downBox("down_", "WWLLRRAA");
+static FrameBox downBox("down_", 2,2,4,4, "WWLLRRAA");
 /*! \ingroup boxes
   Inset box in fltk's standard theme
 */
 Box* const fltk::DOWN_BOX = &downBox;
 
 // The normal pushable button:
-static FrameBox downBox2("down_", "2LLWWAA");
-static FrameBox upBox("up", "AAWWLL", &downBox2);
+static FrameBox downBox2("down_", 2,2,3,3, "2LLWWAA");
+static FrameBox upBox("up", 1,1,3,3, "AAWWLL", &downBox2);
 /*! \ingroup boxes
   A up button in fltk's standard theme.
 */
 Box* const fltk::UP_BOX = &upBox;
 
-static FrameBox thinDownBox("thin_down", "WWLL");
+static FrameBox thinDownBox("thin_down", 1,1,2,2, "WWLL");
 /*! \ingroup boxes
   1-pixel-thick inset box.
 */
 Box* const fltk::THIN_DOWN_BOX = &thinDownBox;
 
-static FrameBox thinUpBox("thin_up", "LLWW", &thinDownBox);
+static FrameBox thinUpBox("thin_up", 1,1,2,2, "LLWW", &thinDownBox);
 /*! \ingroup boxes
   1-pixel-thick raised box.
 */
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down_" version:
-static FrameBox engravedBox("engraved", "2LLWWWWLL", &downBox);
+static FrameBox engravedBox("engraved", 2,2,4,4, "2LLWWWWLL", &downBox);
 /*! \ingroup boxes
   2-pixel thick engraved line around edge.
 */
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
-static FrameBox embossedBox("embossed", "LLWWWWLL", &downBox);
+static FrameBox embossedBox("embossed", 2,2,4,4, "LLWWWWLL", &downBox);
 /*! \ingroup boxes
   2-pixel thick raised line around edge.
 */
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
-static FrameBox borderBox("border", "LLLL", &downBox);
+static FrameBox borderBox("border", 1,1,1,1, "LLLL", &downBox);
 /*! \ingroup boxes
   1-pixel thick gray line around rectangle.
 */

@@ -40,7 +40,7 @@ class PlasticBox : public FrameBox {
 public:
   void _draw(const Rectangle&) const;
   PlasticBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) {}
+    : FrameBox(n, 2,2,4,4, s, d) {}
 };
 
 void PlasticBox::_draw(const Rectangle& r) const

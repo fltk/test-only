@@ -45,7 +45,6 @@ include ../makeinclude
 CPPFILES = \
 	CubeMain.cxx \
 	CubeView.cxx \
-	adjuster.cxx \
 	arc.cxx \
 	ask.cxx \
 	bitmap.cxx \
@@ -107,7 +106,7 @@ CPPFILES = \
 	line_style.cxx \
 	utf.cxx \
 	valuators.cxx
-	
+
 CFILES	=
 
 # only some of the demos have been changed to use namespaces:
@@ -117,8 +116,10 @@ TARGETS = \
 	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
+	clock$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cube$(EXEEXT) \
+	CubeView$(EXEEXT) \
 	cursor$(EXEEXT) \
 	curve$(EXEEXT) \
 	demo$(EXEEXT) \
@@ -128,6 +129,8 @@ TARGETS = \
 	exception$(EXEEXT) \
 	file_chooser$(EXEEXT) \
 	fonts$(EXEEXT) \
+	fractals$(EXEEXT) \
+	glpuzzle$(EXEEXT) \
 	gl_overlay$(EXEEXT) \
 	hello$(EXEEXT) \
 	image$(EXEEXT) \
@@ -138,12 +141,17 @@ TARGETS = \
 	line_style$(EXEEXT) \
 	list_visuals$(EXEEXT) \
 	logslider$(EXEEXT) \
+	mandelbrot$(EXEEXT) \
 	menu$(EXEEXT) \
+	message$(EXEEXT) \
+	navigation$(EXEEXT) \
 	pack$(EXEEXT) \
 	pixmap$(EXEEXT) \
 	progress$(EXEEXT) \
+	qubix$(EXEEXT) \
 	resizable$(EXEEXT) \
 	resizealign$(EXEEXT) \
+	scroll$(EXEEXT) \
 	shape$(EXEEXT) \
 	sizes$(EXEEXT) \
 	slider$(EXEEXT) \

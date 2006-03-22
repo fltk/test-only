@@ -780,7 +780,11 @@ int Widget::send(int event) {
     break;
 
   case PUSH:
-    if (!takesevents()) break;
+    if (!takesevents()) {
+      // inactive (but not invisible/output) widgets eat the mouse clicks:
+      if (!(flags_&(OUTPUT|INVISIBLE))) ret = 1;
+      break;
+    }
     // see if it wants the event:
     ret = handle(event);
     if (ret) {

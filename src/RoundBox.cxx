@@ -36,7 +36,7 @@ using namespace fltk;
 // Circle with an edge pattern like FrameBox:
 class RoundBox : public FrameBox {
 public:
-  RoundBox(const char* n, const char* s, const FrameBox* d=0) : FrameBox(n, s, d) {}
+  RoundBox(const char* n, const char* s, const FrameBox* d=0) : FrameBox(n, 2,2,4,4, s, d) {}
   void _draw(const Rectangle&) const;
   bool fills_rectangle() const {return false;}
   bool is_frame() const {return false;}

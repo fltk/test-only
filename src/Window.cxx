@@ -298,6 +298,15 @@ void fl_prune_deferred_calls(HWND window) {
 
 extern Window* fl_actual_window; // in Fl.cxx
 
+bool Window::get_size_range( int *min_w, int *min_h, int *max_w, int *max_h )
+{
+  if ( min_w ) { *min_w = minw; }
+  if ( min_h ) { *min_h = minh; }
+  if ( max_w ) { *max_w = maxw; }
+  if ( max_h ) { *max_h = maxh; }
+  return bool( size_range_set );
+}
+
 //+++ verify port to FLTK2
 int Window::handle(int event) {
   switch (event) {

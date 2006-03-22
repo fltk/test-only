@@ -90,7 +90,7 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   resize_align_(ALIGN_TOPLEFT|ALIGN_BOTTOMRIGHT),
   sizes_(0)
 {
-  resizable_ = this; /* FIX: warning C4355: 'this' : used in base member initializer list */
+  resizable_ = this;
   type(GROUP_TYPE);
   style(::group_style);
   align(ALIGN_TOP);
@@ -119,7 +119,7 @@ void Group::clear() {
 }
 
 /*! Calls clear(), and thus <i>deletes all child widgets</i> */
-Group::~Group() {clear();}
+Group::~Group() {current_ = 0; clear();}
 
 /*! \fn Widget * Group::child(int n) const
   Returns a child, n >= 0 && n < children(). <i>No range checking is done!</i>

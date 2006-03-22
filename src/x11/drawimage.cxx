@@ -592,6 +592,8 @@ extern bool fl_trivial_transform();
 Picture p;
 XWindow prevsource;
 
+#define XRENDER_SAMPLING_BUG 1
+
 void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
 			   const fltk::Rectangle& from,
 			   const fltk::Rectangle& to)
@@ -635,11 +637,13 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
     xtransform.matrix[0][2] += XDoubleToFixed(from.x()-to.x());
     xtransform.matrix[1][2] += XDoubleToFixed(from.y()-to.y());
   }
-  // Adjust due to XRender sampling pixels at the corners:
-  xtransform.matrix[0][2] +=
-    (xtransform.matrix[0][0]+xtransform.matrix[0][1]-0x10000)>>1;
-  xtransform.matrix[1][2] +=
-    (xtransform.matrix[1][0]+xtransform.matrix[1][1]-0x10000)>>1;
+  if (XRENDER_SAMPLING_BUG) {
+    // Adjust due to XRender sampling pixels at the corners:
+    xtransform.matrix[0][2] +=
+      (xtransform.matrix[0][0]+xtransform.matrix[0][1]-0x10000)>>1;
+    xtransform.matrix[1][2] +=
+      (xtransform.matrix[1][0]+xtransform.matrix[1][1]-0x10000)>>1;
+  }
   if (source != prevsource) {
     prevsource = source;
     if (p) XRenderFreePicture(xdisplay, p);
@@ -697,6 +701,9 @@ static void figure_out_visual() {
   // RGB images to be drawn with XCopyArea or XPutImage I use the
   // bitmap format that matches the visual. This code assummes that
   // format is laid out exactly the same as RGBA.
+//   {int major, minor; major = minor = -1;
+//   int status = XRenderQueryVersion(xdisplay, &major, &minor);
+//   printf("status = %d, version = %d.%d\n", status, major, minor);}
   fl_rgba_xrender_format =
     XRenderFindStandardFormat(xdisplay, PictStandardARGB32);
   if (fl_rgba_xrender_format) {

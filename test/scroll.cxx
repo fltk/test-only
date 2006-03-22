@@ -115,6 +115,7 @@ int main(int argc, char** argv) {
   window.box(fltk::NO_BOX);
   window.begin();
   ScrollGroup scroll(0,0,5*75,300);
+  scroll.begin();
 
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
@@ -128,10 +129,6 @@ int main(int argc, char** argv) {
   scroll.end();
   scroll.type(scroll.VERTICAL);
   window.resizable(scroll);
-
-  FrameBox box("box", "", (FrameBox*) fltk::FLAT_BOX);
-  Rectangle tmpRect(0,300,5*75,window.h()-300);
-  box.inset(tmpRect);
 
   LightButton but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);

@@ -19,9 +19,9 @@ Fl_Gl_Window.o: ../fltk/error.h ../fltk/visual.h ../fltk/layout.h
 Fl_Gl_Window.o: ../fltk/run.h
 gl_draw.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 gl_draw.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
-gl_draw.o: ../fltk/gl.h ../fltk/utf.h GlChoice.h ../fltk/Window.h
-gl_draw.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/x.h
-gl_draw.o: ../fltk/draw.h
+gl_draw.o: ../fltk/Font.h ../fltk/Style.h ../fltk/gl.h ../fltk/utf.h
+gl_draw.o: GlChoice.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
+gl_draw.o: ../fltk/x.h ../fltk/draw.h
 gl_start.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 gl_start.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 gl_start.o: ../fltk/Rectangle.h GlChoice.h ../fltk/x.h ../fltk/draw.h

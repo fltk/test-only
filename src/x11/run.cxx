@@ -2368,13 +2368,50 @@ void Window::free_backbuffer() {
 ////////////////////////////////////////////////////////////////
 
 void Window::borders( fltk::Rectangle *r ) const {
-  // dummy implementation that guesses, made this match Gnome...
+
   if (!this->border() || this->override() || this->parent()) {
     r->set(0,0,0,0);
-  } else if (maxw != minw || maxh != minh) { // resizable
-    r->set(-4,-21,4+4,21+4);
+    return;
+  }
+
+  bool resizable = this->resizable() || maxw != minw || maxh != minh;
+  static Rectangle guess_fixed(-4,-21,4+4,21+4);
+  static Rectangle guess_resizable(-4,-21,4+4,21+4);
+
+  if ( shown() ) {
+    XWindow parent, root, *children=0;
+    unsigned int nchildren;
+    if ( XQueryTree( xdisplay, xid(this), &root, &parent,
+		     &children, &nchildren ) ) {
+      if ( children ) XFree( children );
+    } else {
+      parent = None;
+    }
+    if (parent != None && parent != root) {
+      // Get X and Y relative to parent.
+      int tx, ty;
+      unsigned int tw,th,bw,wd;
+      if ( XGetGeometry( xdisplay, xid(this), &root, &tx, &ty,
+			 &tw, &th, &bw, &wd ) ) {
+	int wx,wy;
+	unsigned int ww,wh;
+	if ( XGetGeometry( xdisplay, parent, &root, &wx, &wy,
+			   &ww, &wh, &bw, &wd ) ) {
+	  r->set( -tx, -ty, ww-tw, wh-th );
+	  if (resizable)
+	    guess_resizable = *r;
+	  else
+	    guess_fixed = *r;
+	  return;
+        }
+      }
+    }
+  }
+
+  if (resizable) {
+    *r = guess_resizable;
   } else {
-    r->set(-4,-21,4+4,21+4);
+    *r = guess_fixed;
   }
 }
 

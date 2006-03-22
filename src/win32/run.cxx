@@ -1653,6 +1653,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_WINDOWPOSCHANGING:
     {
       if (!window || window->parent()) break; // ignore child windows
+      if ( window->iconic() ) break;
       fltk::Rectangle r; window->borders(&r);
 
       WINDOWPOS *pos = (WINDOWPOS*)lParam;
@@ -1829,27 +1830,34 @@ void Window::borders( fltk::Rectangle *r ) const
     return;
   }
   // Request the border sizes using new API:
+  LONG style;
+  LONG styleEx;
   if (shown()) {
-    HWND hwnd = i->xid;
-    // request the style flags of this window, as WIN32 sees them
-    LONG style = GetWindowLong(hwnd, GWL_STYLE);
-    LONG exstyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-    RECT rect;
-    rect.left = x();
-    rect.top = y();
-    rect.right = this->r();
-    rect.bottom = b();
-    // get the decoration rectangle for the desired client rectangle
-    BOOL ok = AdjustWindowRectEx(&rect, style, FALSE, exstyle);
-    if (ok) {
-      r->set(rect.left-x(), rect.top-y(),
-	     rect.right-rect.left-w(),
-	     rect.bottom-rect.top-h());
-      return;
-    }
+    // get the style flags that were used to create the window:
+    style = GetWindowLong(i->xid, GWL_STYLE);
+    styleEx = GetWindowLong(i->xid, GWL_EXSTYLE);
+  } else {
+    // generate the values that window->show() would use:
+    if (resizable() || maxw != minw || maxh != minh) // resizable
+      style = WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION;
+    else
+      style = WS_DLGFRAME | WS_CAPTION;
+    style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    if (!contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
   }
-  // If window is not shown or it fails, use older api, which apparently
-  // does not return correct sizes on XP?
+  RECT rect;
+  rect.left = x();
+  rect.top = y();
+  rect.right = this->r();
+  rect.bottom = b();
+  // get the decoration rectangle for the desired client rectangle
+  AdjustWindowRectEx(&rect, style, FALSE, styleEx);
+  r->set(rect.left-x(), rect.top-y(),
+	 rect.right-rect.left-w(),
+	 rect.bottom-rect.top-h());
+#if 0
+  // The older api, which apparently does not return correct sizes on XP?
   int bt = GetSystemMetrics(SM_CYCAPTION);
   int dx, by;
   if (maxw != minw || maxh != minh) { // resizable
@@ -1860,6 +1868,7 @@ void Window::borders( fltk::Rectangle *r ) const
     by = GetSystemMetrics(SM_CYFIXEDFRAME);
   }
   r->set(-dx, -(bt+by), 2*dx, bt+2*by);
+#endif
 }
 
 ////////////////////////////////////////////////////////////////

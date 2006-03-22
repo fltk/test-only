@@ -419,7 +419,7 @@ int glutLayerGet(GLenum);
 // Emulated GLUT drawing functions:
 
 // Font argument must be a void* for compatability, so...
-extern FL_GLUT_API struct Glut_Bitmap_Font {uchar font; int size;}
+extern FL_GLUT_API struct Glut_Bitmap_Font {fltk::Font* font; int size;}
   glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
   glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
   glutBitmapHelvetica18;
