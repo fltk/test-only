@@ -41,6 +41,13 @@ int		SharedImage::image_used=0;
 unsigned	SharedImage::mem_usage_limit=0;
 unsigned	SharedImage::mem_used=0;
 
+////////////////////////////
+// static module variables
+////////////////////////////
+SharedImage::Handler *SharedImage::handlers_ = 0;// Additional format handlers
+int	SharedImage::num_handlers_ = 0;	// Number of format handlers
+int	SharedImage::alloc_handlers_ = 0;	// Allocated format handlers
+
 // static unsigned mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache
 // WARNING : this is updated incrementally, so beware that it keeps balanced
@@ -163,6 +170,43 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
   return image;
 }
 
+//
+// 'SharedImage::get()' - Get a shared image whatever the type is...
+//
+SharedImage * SharedImage::get(const char *n) {
+  SharedImage *img=SharedImage::find(first_image, n);
+
+  if (img!=NULL) return img;
+    
+    // Load image from disk...
+  int		i;		// Looping var
+  FILE		*fp;		// File pointer
+  uchar		header[64];	// Buffer for auto-detecting files
+
+
+  if (n  && (*n) && (fp = fopen(n, "rb")) != NULL) {
+    fread(header, 1, sizeof(header), fp);
+    fclose(fp);
+  } else {
+    return NULL;
+  }
+
+  // Load the image as appropriate...
+  if (memcmp(header, "BM", 2) == 0)	// BMP file
+      img = bmpImage::get(n);
+  else if (memcmp(header, "GIF87a", 6) == 0 ||
+      memcmp(header, "GIF89a", 6) == 0)	// GIF file
+    img = gifImage::get(n);
+  else {
+    // Not a standard format; try an image handler...
+    for (i = 0, img = 0; i < num_handlers_; i ++) {
+      img = (handlers_[i])(n, header, sizeof(header));
+      if (img) break;
+    }
+  }
+  return img;
+}
+
 void SharedImage::reload(const uchar* pdatas)
 {
   if (drawn()) {
@@ -222,6 +266,59 @@ void SharedImage::update()
 void SharedImage::_draw(const Rectangle& r) const {
   const_cast<SharedImage*>(this)->used = image_used++; // do this before check_mem_usage
   Image::_draw(r);
+}
+
+//
+// 'SharedImage::add_handler()' - Add a shared image handler.
+//
+void SharedImage::add_handler(SharedImage::Handler f) {
+  int			i;		// Looping var...
+  SharedImage::Handler 	*temp;		// New image handler array...
+
+  // First see if we have already added the handler...
+  for (i = 0; i < num_handlers_; i ++) {
+    if (handlers_[i] == f) return;
+  }
+
+  if (num_handlers_ >= alloc_handlers_) {
+    // Allocate more memory...
+    temp = new SharedImage::Handler  [alloc_handlers_ + 32];
+
+    if (alloc_handlers_) {
+      memcpy(temp, handlers_, alloc_handlers_ * sizeof(SharedImage::Handler ));
+
+      delete[] handlers_;
+    }
+
+    handlers_       = temp;
+    alloc_handlers_ += 32;
+  }
+
+  handlers_[num_handlers_] = f;
+  num_handlers_ ++;
+}
+
+//
+// 'SharedImage::remove_handler()' - Remove a shared image handler.
+//
+void SharedImage::remove_handler(SharedImage::Handler  f) {
+  int	i;				// Looping var...
+
+  // First see if the handler has been added...
+  for (i = 0; i < num_handlers_; i ++) {
+    if (handlers_[i] == f) break;
+  }
+
+  if (i >= num_handlers_) return;
+
+  // OK, remove the handler from the array...
+  num_handlers_ --;
+
+  if (i < num_handlers_) {
+    // Shift later handlers down 1...
+    memmove(handlers_ + i, handlers_ + i + 1,
+           (num_handlers_ - i) * sizeof(SharedImage::Handler));
+  }
 }
 
 //

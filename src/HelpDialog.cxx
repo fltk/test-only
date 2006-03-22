@@ -198,7 +198,7 @@ HelpDialog::HelpDialog() {
   max_      = 0;
   find_pos_ = 0;
   window_->resizable(view_);
-  /*fl_register_images();*/
+  fltk::register_images();
 }
 
 HelpDialog::~HelpDialog() {

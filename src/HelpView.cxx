@@ -755,6 +755,7 @@ HelpView::draw()
 	    }
 
 	    ww = width;
+	    hh = height;
 
 	    if (needspace && xx > block->x)
 	      xx += (int)getwidth(" ",1);
@@ -769,10 +770,11 @@ HelpView::draw()
 	      hh = 0;
 	    }
 
-	    if (img) {
-              tmp.set(xx - leftline_, yy - (int)(getascent()+.5f) + 2, ww, hh);
-	      img->draw (tmp);
-	    }
+	    if (img) 
+	      img->draw(
+		  Rectangle(xx - leftline_,yy - (textsize()+leading()) + getdescent() + 2,
+		    ww,hh)
+		);
 	    xx += ww;
 	    if ((height + 2) > hh)
 	      hh = height + 2;
@@ -2318,18 +2320,6 @@ HelpView::get_color(const char *n,	// I - Color name
   }
 }
 
-static const char *sharedImageName;
-static SharedImage *sharedImageLoad() {
-  ImageType *it = guess_image( sharedImageName );
-  if (!it) return 0;
-  return it->get( sharedImageName, 0 );
-}
-static SharedImage *sharedImageGet(const char *name, int w, int h) {
-  sharedImageName = name;
-  SharedImage *img = SharedImage::get( sharedImageLoad, name, 0 );
-  return img;
-}
-
 //
 // 'HelpView::get_image()' - Get an inline image.
 //
@@ -2374,7 +2364,7 @@ HelpView::get_image(const char *name, int W, int H) {
 
   if (strncmp(localname, "file:", 5) == 0) localname += 5;
 
-  if ((ip = sharedImageGet (localname, W, H)) == NULL)
+  if ((ip = SharedImage::get(localname /*, W, H*/)) == NULL)
     ip = (SharedImage *) & broken_image;
 
   return ip;

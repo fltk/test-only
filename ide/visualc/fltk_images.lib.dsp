@@ -100,6 +100,10 @@ SOURCE=..\..\src\HelpDialog.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\images_core.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xpmFileImage.cxx
 # End Source File
 # End Target

@@ -40,7 +40,28 @@ namespace fltk {
 
 struct FL_IMAGES_API ImageType;
 
+
 class FL_API SharedImage : public Image {
+// fabien : introducing SharedImage handlers and uniform loading api inspired from 1.1.x
+public:
+    /*! get an image of this name and dimensions , can be already loaded or not */
+  static SharedImage *get(const char *n); // future impl. should care about W,H dims
+
+    /*! a SharedImageHandler accepts handling a filename 
+	by analizing its extension and/or eventually its header,
+	if it handles it it returns a non null pointer on the loaded concrete image
+    */
+  typedef SharedImage *(*Handler)(const char * filename, uchar *header, int headerlen);
+    /*! adds a new handler for hanling a concrete type of image, typically one handler per image type should be registered */
+  static void add_handler(Handler f);
+    /*! removes a concrete handler */
+  static void remove_handler(Handler f);
+
+private:
+  static Handler *handlers_;		// Additional format handlers
+  static int	num_handlers_;		// Number of format handlers
+  static int	alloc_handlers_;	// Allocated format handlers
+
 protected:
   static const char* shared_image_root;
 
@@ -202,6 +223,8 @@ public:
   }
 };
 
+  extern FL_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick
+  extern FL_API void unregister_images();
 }
 
 #endif
