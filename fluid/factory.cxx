@@ -445,7 +445,46 @@ int TextEditorType::textstuff(int w, fltk::Font* f, int& s, fltk::Color& c) {
 }
 
 ////////////////////////////////////////////////////////////////
+#include <fltk/FileInput.h>
+class FileInputType: public WidgetType {
+    fltk::Item *subtypes() {return 0;}
+    int textstuff(int w,fltk::Font* f, int& s, fltk::Color c);
+public:
+  virtual void ideal_size(int &w, int &h) {
+    fltk::FileInput *myo = (fltk::FileInput *)o;
+    fltk::setfont(myo->textfont(), myo->textsize());
+    h = fltk::getdescent() + myo->textsize() + 4;
+    w -= fltk::box_dw(o->box());
+    int ww = (int)fltk::getwidth("m",1);
+    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+    if (h < 20) h = 20;
+    if (w < 50) w = 50;
+  }
+  virtual const char *type_name() const {return "fltk::FileInput";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::FileInput *myo = new fltk::FileInput(x,y,w,h,"file:");
+    myo->value("/now/is/the/time/for/a/filename.ext");
+    return myo;
+  }
+  WidgetType *_make() {      return new FileInputType();  }
+  int pixmapID() { return 30; }
+};
 
+static FileInputType FileInputtype;
+ 
+int FileInputType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
+    fltk::FileInput *myo = (fltk::FileInput*)(w==4 ? ((WidgetType*)factory)->o : o);
+  switch (w) {
+    case 4:
+    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 1: myo->textfont(f); break;
+    case 2: myo->textsize((float)s); break;
+    case 3: myo->textcolor(c); break;
+  }
+  return 1;
+}
+
+////////////////////////////////////////////////////////////////
 
 extern class FunctionType Functiontype;
 extern class CodeType Codetype;
@@ -530,6 +569,7 @@ void fill_in_New_Menu(fltk::ItemGroup* menu) {
 	  new fltk::Item((*(WidgetType*)&Outputtype).type_name(),0,cb,(void*)&Outputtype);
 	  new fltk::Item((*(WidgetType*)&TextDisplaytype).type_name(),0,cb,(void*)&TextDisplaytype);
 	  new fltk::Item((*(WidgetType*)&TextEditortype).type_name(),0,cb,(void*)&TextEditortype);
+	  new fltk::Item((*(WidgetType*)&FileInputtype).type_name(),0,cb,(void*)&FileInputtype);
 	submenu->end();
 	submenu=new fltk::ItemGroup("menus",0,0);
 	  new fltk::Item((*(WidgetType*)&MenuBartype).type_name(),0,cb,(void*)&MenuBartype);
@@ -588,6 +628,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Tabs",		"fltk::TabGroup"},
   {"Fl_Return_Button",	"fltk::ReturnButton"},
   {"fltk::EnterButton",	"fltk::ReturnButton"},
+  {"Fl_Menu_Button",	"fltk::PopupMenu"},
   {"Fl_Box",		"fltk::InvisibleBox"},
   {"Fl_Boxtype",	"fltk::InvisibleBoxType"},
   {"Fl_Round_Button",	"fltk::RadioButton"},

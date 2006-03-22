@@ -218,7 +218,7 @@ void bitmap_image::write_static() {
 void bitmap_image::write_code() {
   if (!p) return;
   write_c("%so->image(%s);\n", indent(),
-	  unique_id(this, "bitmap", fltk::filename_name(name()), 0));
+	  unique_id(this, "xbmImage", fltk::filename_name(name()), 0));
 }
 
 #define ns_width 16
