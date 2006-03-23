@@ -51,13 +51,6 @@
 #  include <unistd.h>
 #endif
 
-// temporary stuff
-#ifndef FL_PATH_MAX
-# define FL_PATH_MAX 256
-#endif
-
-// end temporary stuff
-
 using namespace fltk;
 
 char Preferences::nameBuffer[128];
@@ -494,7 +487,7 @@ int Preferences::size( const char *key )
  * - 'path' must be large enough to receive a complete file path
  * example:
  *   Preferences prefs( USER, "matthiasm.com", "test" );
- *   char path[FL_PATH_MAX];
+ *   char path[PATH_MAX];
  *   prefs.getUserdataPath( path );
  * sample returns:
  *   Win32: c:/Documents and Settings/matt/Application Data/matthiasm.com/test/
@@ -606,7 +599,7 @@ static void makePathForFile( const char *path )
 // - construct the name of the file that will hold our preferences
 Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vendor, const char *application )
 {
-  char filename[ FL_PATH_MAX ]; filename[0] = 0;
+  char filename[ PATH_MAX ]; filename[0] = 0;
 #ifdef _WIN32
 #  define FLPREFS_RESOURCE	"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
   int appDataLen = strlen(vendor) + strlen(application) + 8;
@@ -618,7 +611,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
     case SYSTEM:
       err = RegOpenKey( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCE, &key );
       if (err == ERROR_SUCCESS) {
-	nn = FL_PATH_MAX - appDataLen;
+	nn = PATH_MAX - appDataLen;
 	err = RegQueryValueEx( key, "Common AppData", 0L, &type, (BYTE*)filename, &nn );
 	if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
 	  filename[0] = 0;
@@ -628,7 +621,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
     case USER:
       err = RegOpenKey( HKEY_CURRENT_USER, FLPREFS_RESOURCE, &key );
       if (err == ERROR_SUCCESS) {
-	nn = FL_PATH_MAX - appDataLen;
+	nn = PATH_MAX - appDataLen;
 	err = RegQueryValueEx( key, "AppData", 0L, &type, (BYTE*)filename, &nn );
 	if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
 	{
@@ -663,7 +656,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
       break;
   }
   FSpMakeFSRef( &spec, &ref );
-  FSRefMakePath( &ref, (UInt8*)filename, FL_PATH_MAX );
+  FSRefMakePath( &ref, (UInt8*)filename, PATH_MAX );
   snprintf(filename + strlen(filename), sizeof(filename) - strlen(filename),
            "/%s/%s.prefs", vendor, application );
 #else
@@ -702,7 +695,7 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
 // - construct the name of the file that will hold our preferences
 Preferences::RootNode::RootNode( Preferences *prefs, const char *path, const char *vendor, const char *application )
 {
-  char filename[ FL_PATH_MAX ]; filename[0] = 0;
+  char filename[ PATH_MAX ]; filename[0] = 0;
 
   snprintf(filename, sizeof(filename), "%s/%s.prefs", path, application);
 

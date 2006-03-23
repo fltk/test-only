@@ -106,10 +106,7 @@ int fltk::filename_absolute(char *to, int tolen, const char *from) {
   return 1;
 }
 
-/*
- * 'fl_filename_relative()' - Make a filename relative to the current working directory.
- */
-
+//! Make a filename relative to the current working directory.
 int					// O - 0 if no change, 1 if changed
 fltk::filename_relative(char       *to,	// O - Relative filename
                      int        tolen,	// I - Size of "to" buffer

@@ -141,7 +141,7 @@ int fltk::filename_list(const char *d, dirent ***list,
 #else
   // append a '/' to all filenames that are directories
   int i, dirlen = strlen(d);
-  char *fullname = (char*)malloc(dirlen+FL_PATH_MAX+3); // Add enough extra for two /'s and a nul
+  char *fullname = (char*)malloc(dirlen+PATH_MAX+3); // Add enough extra for two /'s and a nul
   // Use memcpy for speed since we already know the length of the string...
   memcpy(fullname, d, dirlen+1);
   char *name = fullname + dirlen;
@@ -149,10 +149,10 @@ int fltk::filename_list(const char *d, dirent ***list,
   for (i=0; i<n; i++) {
     dirent *de = (*list)[i];
     int len = strlen(de->d_name);
-    if (de->d_name[len-1]=='/' || len>FL_PATH_MAX) continue;
+    if (de->d_name[len-1]=='/' || len>PATH_MAX) continue;
     // Use memcpy for speed since we already know the length of the string...
     memcpy(name, de->d_name, len+1);
-    if (fl_filename_isdir(fullname)) {
+    if (fltk::filename_isdir(fullname)) {
       (*list)[i] = de = (dirent*)realloc(de, de->d_name - (char*)de + len + 2);
       char *dst = de->d_name + len;
       *dst++ = '/';

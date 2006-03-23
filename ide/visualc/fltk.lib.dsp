@@ -880,6 +880,10 @@ SOURCE=..\..\src\NumericInput.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\numericsort.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\Output.cxx
 # End Source File
 # Begin Source File
