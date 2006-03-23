@@ -71,9 +71,13 @@ public:
   bool fills_rectangle() const;
   bool is_frame() const;
   FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern)
-    : Box(name,dx,dy,dw,dh), data_(pattern) {down_ = this;}
+    : Box(name,dx,dy,dw,dh), data_(pattern) {
+      down_ = this; // fabien: cannot be null
+  }
   FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const FrameBox* down)
-    : Box(name,dx,dy,dw,dh), data_(pattern), down_(down) {}
+      : Box(name,dx,dy,dw,dh), data_(pattern) {
+      down_ = down ? down : this; // fabien: cannot be null
+  }
 };
 
 class FL_API FlatBox : public Box {
