@@ -1089,6 +1089,16 @@ bool Browser::make_item_visible(linepos where) {
   return changed;
 }
 
+/*! defines the way cb are handled in the browser */
+void Browser::handle_callback(int do_callback) {
+    if (when() & do_callback) {
+      clear_changed();
+      this->do_callback();
+    } else if (do_callback) {
+      set_changed();
+    }
+}
+
 /*! This is for use by the MultiBrowser subclass.
   Turn the fltk::SELECTED flag on or off in the current item (use
   goto_index() to set the current item before calling this).
@@ -1111,12 +1121,7 @@ bool Browser::set_item_selected(bool value, int do_callback) {
     }
     list()->flags_changed(this, item());
     damage_item(HERE);
-    if (when() & do_callback) {
-      clear_changed();
-      this->do_callback();
-    } else if (do_callback) {
-      set_changed();
-    }
+    handle_callback(do_callback);
     return true;
   } else {
     if (value) return (select_only_this(do_callback));
@@ -1145,29 +1150,27 @@ bool Browser::deselect(int do_callback) {
   for this one and also set the focus here. If the selection
   changes and when()&do_callback is non-zero, the callback is done. */
 bool Browser::select_only_this(int do_callback) {
-  if (multi()) {
+  if (multi() ) {
     set_focus();
     bool ret = false;
     // Turn off all other items and set damage:
-    if (goto_top()) do {
-      if (set_item_selected(at_mark(FOCUS), do_callback)) ret = true;
+    if (goto_top()) do { 
+    // fabien: don't do callback cb yet: this action can be a deselection 
+    // so let a chance to the callback to handle this with an item() value to 0
+      if (set_item_selected(at_mark(FOCUS), 0 /*do_callback*/)) ret = true;
     } while (next_visible());
     // turn off any invisible ones:
     nodamage = true;
     if (goto_top()) do {
-      if (set_item_selected(at_mark(FOCUS), do_callback)) ret = true;
+      if (set_item_selected(at_mark(FOCUS), 0 /*do_callback*/)) ret = true;
     } while (next());
     nodamage = false;
     goto_mark(FOCUS);
+    if (do_callback) handle_callback(do_callback);
     return ret;
   } else {
     if (!set_focus()) return false;
-    if (when() & do_callback) {
-      clear_changed();
-      this->do_callback();
-    } else if (do_callback) {
-      set_changed();
-    }
+    handle_callback(do_callback);
     return true;
   }
 }
@@ -1187,6 +1190,8 @@ int Browser::handle(int event) {
   case MOVE: {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
+    if (event==PUSH)
+	event=event; // debug 
     if (scrollbar.visible() &&
 	(event_y() >= scrollbar.y()) &&
 	(scrollbar_align()&ALIGN_LEFT ?
@@ -1206,7 +1211,11 @@ int Browser::handle(int event) {
       }
     }
     // find the item we are pointing at:
-    if (!goto_position(event_y()-interior.y()+yposition_) && !item()) return 0;
+    if (!goto_position(event_y()-interior.y()+yposition_)) {
+	if (event==PUSH )  // fabien: as in 1.1.x clicking ouside a tree node deselect any current selection
+	    deselect(1);
+	if (!item()) return 0;
+    }
     // set x to left edge of item:
     int arrow_size = int(textsize())|1;
     int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;

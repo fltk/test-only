@@ -45,6 +45,8 @@
 #include <fltk/MultiBrowser.h>
 #include <fltk/Item.h>
 #include <fltk/draw.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -179,15 +181,23 @@ static Widget_List widgetlist;
 
 extern fltk::Browser *widget_browser;
 
-static void Widget_Browser_callback(fltk::Widget *,void *) {
-  if (FluidType::current) FluidType::current->open();
+extern void deselect();
+static void Widget_Browser_callback(fltk::Widget * w,void *) {
+    if (fltk::event()==fltk::PUSH )  {
+	if ( ( (fltk::Browser*) w)->item()==0) 
+	    deselect();
+	    widget_browser->redraw();
+    }
+    else if (fltk::event()==fltk::WHEN_ENTER_KEY || fltk::event_clicks()) { // double_click open the widget editor
+	if (FluidType::current) FluidType::current->open();
+    }
 }
 
 fltk::Widget *make_widget_browser(int x,int y,int w,int h) {
   widget_browser = new fltk::MultiBrowser(x,y,w,h);
   widget_browser->list(&widgetlist);
   widget_browser->callback(Widget_Browser_callback);
-  widget_browser->when(fltk::WHEN_ENTER_KEY);
+  widget_browser->when(fltk::WHEN_ENTER_KEY|fltk::WHEN_CHANGED);
   widget_browser->indented(1);
   return widget_browser;
 }
@@ -238,10 +248,11 @@ void Widget_List::flags_changed(const fltk::Menu*, fltk::Widget* w) {
   if (item->new_selected != item->selected) selection_changed(item);
 }
 
-void select(FluidType* item, int value) {
-  item->new_selected = value != 0;
-  if (item->new_selected != item->selected) {
-    selection_changed(item);
+void select(FluidType* it, int value) {
+  it->new_selected = value != 0;
+  if (it->new_selected != it->selected) {
+    selection_changed(it);
+    widget_browser->goto_focus();
     widget_browser->redraw();
   }
 }
@@ -265,6 +276,7 @@ void select_only(FluidType* i) {
 void deselect() {
   for (FluidType* item = FluidType::first; item; item = item->walk())
     select(item,0);
+  FluidType::current = 0;
 }
 
 // Generate a descriptive text for this item, to put in browser & window

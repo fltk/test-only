@@ -254,6 +254,7 @@ int main(int argc,char** argv) {
   g = add_folder(&tree, "uuu", 1, folderSmall);
   add_paper(g, "vvv", 0, fileSmall);
 
+#if 0
   add_paper(&tree, "www", 0, fileSmall);
   add_paper(&tree, "xxx", 0, fileSmall);
   add_paper(&tree, "yyy", 0, fileSmall);
@@ -272,6 +273,7 @@ int main(int argc,char** argv) {
   new fltk::ValueSlider(0,0,200,23,"Input:");
   new fltk::ValueSlider(0,0,200,23,"Input:");
   tree.end();
+#endif
 
 #if 0
   // Examples of removing items (successfully, and unsuccessfully)
