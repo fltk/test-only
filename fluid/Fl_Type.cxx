@@ -47,6 +47,7 @@
 #include <fltk/draw.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
+#include <fltk/filename.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -214,6 +215,17 @@ int Widget_List::children(const fltk::Menu*, const int* indexes, int level) {
   return n;
 }
 
+static const char * get_item_fullname(FluidType* item) {
+    static char buffer[PATH_MAX];
+    if (strcmp(item->type_name(),"namespace") ==0) 
+	sprintf(buffer, "%s %s", "namespace", item->title());
+    else if (strcmp(item->type_name(),"class") ==0) 
+	sprintf(buffer, "%s %s", "class", item->title());
+    else 
+	strncpy(buffer, item->title(), sizeof(buffer));
+    return buffer;
+}
+
 fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int level) {
   FluidType* item = FluidType::first;
   if (!item) return 0;
@@ -234,7 +246,7 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
   if (item->is_parent() && item->open_) widget->set_value();
   else widget->clear_value();
 
-  widget->label(item->title());
+  widget->label(get_item_fullname(item));
   widget->w(0);
   widget->h(0);
 
