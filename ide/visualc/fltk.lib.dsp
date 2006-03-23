@@ -748,10 +748,6 @@ SOURCE=..\..\src\filename_name.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_normalize.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fillarc.cxx
 # End Source File
 # Begin Source File
@@ -956,7 +952,7 @@ SOURCE=..\..\src\run.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\scandir.c
+SOURCE=..\..\src\scandir.cxx
 # End Source File
 # Begin Source File
 

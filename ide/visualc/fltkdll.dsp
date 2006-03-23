@@ -910,15 +910,6 @@ DEP_CPP_FILENAME=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_normalize.cxx
-DEP_CPP_FILENAME_=\
-	"..\..\fltk\filename.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\string.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fillarc.cxx
 DEP_CPP_FILLA=\
 	"..\..\fltk\color.h"\
@@ -1852,13 +1843,7 @@ DEP_CPP_RUN_C=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\scandir.c
-DEP_CPP_SCAND=\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\utf.h"\
-	"..\..\src\win32\scandir.c"\
-	".\config.h"\
-	
+SOURCE=..\..\src\scandir.cxx
 # End Source File
 # Begin Source File
 
