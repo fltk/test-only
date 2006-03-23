@@ -36,10 +36,9 @@
 #include <stdio.h>
 
 #if ! HAVE_SCANDIR
-extern "C" int
-scandir (const char *dir, dirent ***namelist,
+int scandir (const char *dir, dirent ***namelist,
 	 int (*select)(dirent *),
-	 int (*compar)(dirent **, dirent **));
+	 int (*compar)(const dirent*const*, const dirent*const*));
 #endif
 
 int fltk::alphasort(const dirent*const*a, const dirent*const*b) {
@@ -57,7 +56,7 @@ int fltk::filename_list(const char *d, dirent ***list,
   // do this even for our own internal version because some compilers
   // will not cast it to the non-const version! Egad. So we have to
   // use if's to go to what the various systems use:
-#ifndef HAVE_SCANDIR
+#if HAVE_SCANDIR
   int n = scandir(d, list, 0, sort);
 #elif defined(__hpux) || defined(__CYGWIN__)
   // HP-UX, Cygwin define the comparison function like this:
@@ -68,7 +67,7 @@ int fltk::filename_list(const char *d, dirent ***list,
 #elif defined(_AIX)
   // AIX is almost standard...
   int n = scandir(d, list, 0, (int(*)(void*, void*))sort);
-#elif !defined(__sgi)
+#elif !defined(__sgi) && !defined(WIN32)
   // The vast majority of UNIX systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
   // changes:

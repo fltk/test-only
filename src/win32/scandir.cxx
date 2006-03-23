@@ -1,4 +1,4 @@
-// "$Id$"
+// "$Id: scandir.c 4401 2005-06-27 16:42:26Z dejan $"
 //
 // Copyright 1998-2005 by Bill Spitzak and others.
 //
@@ -35,7 +35,7 @@
 
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
-    int (*compar)(struct dirent **, struct dirent **)) {
+    int (*compar)(const dirent*const*, const dirent*const*)) {
   char *d;
   WIN32_FIND_DATA find;
   HANDLE h;
@@ -91,5 +91,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id$".
+// End of "$Id: scandir.c 4401 2005-06-27 16:42:26Z dejan $".
 //

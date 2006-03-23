@@ -29,7 +29,7 @@ linking) can be used on all such machines.
 #include <config.h>
 #if ! HAVE_SCANDIR
 # if defined(_WIN32) && !defined(__CYGWIN__)
-#  include "win32/scandir.c"
+#  include "win32/scandir.cxx"
 # else
 
 #include <ctype.h>

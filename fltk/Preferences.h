@@ -103,6 +103,10 @@ private:
 
   class Node;
   class RootNode;
+
+  friend class RootNode; // fabien: must be friend as well cause they use private node
+  friend class Node;
+
   Node *node;
   RootNode *rootNode;
 

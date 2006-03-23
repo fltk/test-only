@@ -175,7 +175,7 @@ fltk::filename_relative(char *to, int tolen, const char* from, const char* cwd) 
     slash = from+2;
     newslash = cwd+2;
   } else {
-    if (!isdiresep(*cwd)) // to starts with drive but from does not
+    if (!isdirsep(*cwd)) // to starts with drive but from does not
       return strlcpy(to, from, tolen);
   }
 #endif

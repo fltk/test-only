@@ -39,6 +39,7 @@
 #include <ctype.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
+#  include <windows.h>
 #  include <direct.h>
 #  include <io.h>
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
@@ -197,7 +198,7 @@ const char *Preferences::group( int ix )
  */
 bool Preferences::groupExists( const char *key )
 {
-  return node->search( key );
+    return node->search( key ) ? true : false ;
 }
 
 
@@ -833,7 +834,7 @@ bool Preferences::RootNode::getPath( char *path, int pathlen )
   s = strrchr( path, '.' );
   if ( !s ) return 0;
   *s = 0;
-  bool ret = makePath( path );
+  bool ret = makePath( path ) ? true : false;
   strcpy( s, "/" );
   return ret;
 }
@@ -977,7 +978,7 @@ void Preferences::Node::set( const char *line )
 {
   // hmm. If we assume that we always read this file in the beginning,
   // we can handle the dirty flag 'quick and dirty'
-  char dirt = dirty_;
+  bool dirt = dirty_;
   if ( line[0]==';' || line[0]==0 || line[0]=='#' )
   {
     set( line, 0 );
