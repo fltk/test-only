@@ -39,8 +39,10 @@
     remove this code after having checked :
     that the new c++ fltk namespaced sort func works fine with scandir 'C' decl below
     on all concerned platforms (check the fltk::numericsort parameter to scandir)
-*/
-int fltk::numericsort(struct dirent **A, struct dirent **B)
+
+extern "C" {
+static int
+numericsort(dirent **A, dirent **B)
 {
   const char* a = (*A)->d_name;
   const char* b = (*B)->d_name;
@@ -55,8 +57,8 @@ int fltk::numericsort(struct dirent **A, struct dirent **B)
       magdiff = 0;
       while (isdigit((uchar)*a)) {magdiff++; a++;}
       while (isdigit((uchar)*b)) {magdiff--; b++;}
-      if (magdiff) {ret = magdiff; break;} // compare # of significant digits
-      if (diff) {ret = diff; break;}	// compare first non-zero digit
+      if (magdiff) {ret = magdiff; break;} * compare # of significant digits*
+      if (diff) {ret = diff; break;}	* compare first non-zero digit *
     } else {
       // compare case-insensitive:
       int t = tolower((uchar)*a)-tolower((uchar)*b);
@@ -70,8 +72,9 @@ int fltk::numericsort(struct dirent **A, struct dirent **B)
   }
   if (!ret) return 0;
   else return (ret < 0) ? -1 : 1;
-} // numericsort() function
-
+}
+}
+*/
 
 #if ! HAVE_SCANDIR
 extern "C" int

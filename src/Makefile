@@ -81,6 +81,7 @@ CPPFILES = \
 	Menu_popup.cxx \
 	MultiImage.cxx \
 	NumericInput.cxx \
+	numericsort.cxx \
 	Output.cxx \
 	OvalBox.cxx \
 	PackedGroup.cxx \
