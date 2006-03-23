@@ -243,8 +243,9 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
   widget->user_data(item);
   if (item->selected) widget->set_selected();
   else widget->clear_selected();
-  if (item->is_parent() && item->open_) widget->set_value();
-  else widget->clear_value();
+  // force the hierarchy to be open/closed:
+  if (item->is_parent() && item->open_) widget->set_flag(fltk::VALUE);
+  else widget->clear_flag(fltk::VALUE);
 
   widget->label(get_item_fullname(item));
   widget->w(0);
@@ -255,7 +256,7 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
 
 void Widget_List::flags_changed(const fltk::Menu*, fltk::Widget* w) {
   FluidType* item = (FluidType*)(w->user_data());
-  item->open_ = w->value();
+  item->open_ = (w->flags()&fltk::VALUE) != 0;
   item->new_selected = w->selected();
   if (item->new_selected != item->selected) selection_changed(item);
 }
@@ -610,8 +611,7 @@ void FluidType::write() {
   write_word(type_name());
   if (is_class()) {
     const char * p = prefix();
-	  if (p &&	strlen(p))
-	write_word(p);
+    if (p && *p) write_word(p);
   }
 
   write_word(name());

@@ -8,8 +8,6 @@ snap 3
 decl {\#include "mandelbrot.h"} {public
 } 
 
-decl {\#include <stdlib.h>} {} 
-
 class Drawing_Window {open
 } {
   Function {make_window()} {open return_type void
@@ -28,7 +26,7 @@ Right-click will create the Julia set viewer and set it to that point.}
       }
       {fltk::Input} x_input {
         label x
-        callback {d->X = atof(o->value());;
+        callback {d->X = o->fvalue();
 d->new_display();}
         tooltip {x coordinate of window center}
         xywh {10 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10
@@ -36,7 +34,7 @@ d->new_display();}
       }
       {fltk::Input} y_input {
         label y
-        callback {d->Y = atof(o->value());
+        callback {d->Y = o->fvalue();
 d->new_display();}
         tooltip {y coordinate of window center}
         xywh {150 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10
@@ -44,7 +42,7 @@ d->new_display();}
       }
       {fltk::Input} w_input {
         label w
-        callback {d->scale = atof(o->value());
+        callback {d->scale = o->fvalue();
 d->new_display();}
         tooltip {width of the window}
         xywh {290 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10

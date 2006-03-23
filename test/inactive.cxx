@@ -76,7 +76,7 @@ int main (int argc, char **argv) {
           o->set_vertical();
         }
         o->end();
-        o->value("Shemp");
+        o->text("Shemp");
       }
        {fltk::Widget* o = new fltk::Widget(215, 134, 145, 86, "Fl_Box");
         o->box(fltk::ENGRAVED_BOX);
@@ -100,7 +100,7 @@ int main (int argc, char **argv) {
     }
      {fltk::Button* o = new fltk::Button(5, 244, 190, 25, "active");
       o->type(fltk::Button::RADIO);
-      o->set_value();
+      o->set();
       o->callback((fltk::Callback*)cb_active);
     }
      {fltk::Button* o = new fltk::Button(205, 244, 184, 25, "inactive");

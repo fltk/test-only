@@ -219,12 +219,11 @@ void FunctionType::read_property(const char *c) {
 #include <fltk/ask.h>
 
 static void ok_callback(fltk::Widget* w, void*) {
-    w->window()->set_value();
-    w->window()->hide();
+  w->window()->make_exec_return(true);
 }
 
 static void cancel_callback(fltk::Widget* w, void*) {
-    w->window()->hide();
+  w->window()->make_exec_return(false);
 }
 
 void FunctionType::open() {

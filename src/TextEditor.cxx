@@ -42,7 +42,7 @@ NamedStyle* TextEditor::default_style = &::style;
 TextEditor::TextEditor(int X, int Y, int W, int H, const char* l)
     : TextDisplay(X, Y, W, H, l) {
   style(default_style);
-  cursor_on_ = true;
+  cursor_on_ = false;
   insert_mode_ = true;
   key_bindings = 0;
 
@@ -52,6 +52,8 @@ TextEditor::TextEditor(int X, int Y, int W, int H, const char* l)
   // handle everything else
   default_key_function(kf_default);
 }
+
+TextEditor::~TextEditor() { remove_all_key_bindings(); }
 
 TextEditor::Key_Binding* TextEditor::global_key_bindings = 0;
 
@@ -187,8 +189,7 @@ int TextEditor::kf_default(int c, TextEditor* e) {
   if (e->insert_mode()) e->insert(s);
   else e->overstrike(s);
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -201,8 +202,7 @@ int TextEditor::kf_backspace(int, TextEditor* e) {
     e->buffer()->select(e->insert_position(), e->insert_position()+1);
   kill_selection(e);
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -210,8 +210,7 @@ int TextEditor::kf_enter(int, TextEditor* e) {
   kill_selection(e);
   e->insert("\n");
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -344,8 +343,7 @@ int TextEditor::kf_delete(int, TextEditor* e) {
     e->buffer()->select(e->insert_position(), e->insert_position()+1);
   kill_selection(e);
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -363,8 +361,7 @@ int TextEditor::kf_copy(int, TextEditor* e) {
 int TextEditor::kf_cut(int c, TextEditor* e) {
   kf_copy(c, e);
   kill_selection(e);
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -372,8 +369,7 @@ int TextEditor::kf_paste(int, TextEditor* e) {
   kill_selection(e);
   paste(*e, 1);
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return 1;
 }
 
@@ -388,8 +384,7 @@ int TextEditor::kf_undo(int , TextEditor* e) {
   int ret = e->buffer()->undo(&crsr);
   e->insert_position(crsr);
   e->show_insert_position();
-  e->set_changed();
-  if (e->when()&WHEN_CHANGED) e->do_callback();
+  e->maybe_do_callback();
   return ret;
 }
 
@@ -407,8 +402,7 @@ int TextEditor::handle_key() {
       else overstrike(event_text());
     }
     show_insert_position();
-    set_changed();
-    if (when()&WHEN_CHANGED) do_callback();
+    maybe_do_callback();
     return 1;
   }
 
@@ -422,11 +416,18 @@ int TextEditor::handle_key() {
   return 0;
 }
 
+extern Widget* fl_pending_callback;
+
+// Called by any changes to the text, this correctly triggers callbacks:
 void TextEditor::maybe_do_callback() {
-  //  printf("TextEditor::maybe_do_callback()\n");
-  //  printf("changed()=%d, when()=%x\n", changed(), when());
-  if (changed() || (when()&WHEN_NOT_CHANGED)) {
-    do_callback();
+  set_changed();
+  if (when() & (WHEN_RELEASE|WHEN_ENTER_KEY)) {
+    Widget* w = fl_pending_callback;
+    if (w == this) return;
+    if (w) {fl_pending_callback = 0; w->do_callback();}
+    fl_pending_callback = this;
+  } else {
+    if (when()) do_callback();
   }
 }
 
@@ -438,16 +439,13 @@ int TextEditor::handle(int event) {
     dragtype_ = -1;
     fltk::paste(*this, 0);
     fltk::focus(this);
-    set_changed();
-    if (when()&WHEN_CHANGED) {
-      do_callback();
-    }
+    maybe_do_callback();
     return 1;
   }
 
   switch (event) {
   case FOCUS:
-    show_cursor(cursor_on()); // redraws the cursor
+    show_cursor(true);
     if (buffer()->selected()) {
       redraw(); // Redraw selections...
     }
@@ -455,14 +453,11 @@ int TextEditor::handle(int event) {
     return 1;
 
   case UNFOCUS:
-    show_cursor(cursor_on()); // redraws the cursor
+    show_cursor(false);
     if (buffer()->selected()) {
       redraw(); // Redraw selections...
     }
   case HIDE:
-    if (when() & WHEN_RELEASE) {
-      maybe_do_callback();
-    }
     return 1;
 
   case KEY:
@@ -479,10 +474,7 @@ int TextEditor::handle(int event) {
       overstrike(event_text());
     }
     show_insert_position();
-    set_changed();
-    if (when()&WHEN_CHANGED) {
-      do_callback();
-    }
+    maybe_do_callback();
     return 1;
 
   case ENTER:

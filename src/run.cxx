@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -39,7 +37,7 @@
 #include <fltk/filename.h>
 
 #if defined(_WIN32) && USE_MULTIMONITOR && WINVER<0x0500
-// Why??
+// Make the headers declare the functions needed for multimonitor:
 # undef WINVER
 # define WINVER 0x0500
 #endif
@@ -159,24 +157,6 @@ FL_API char* newstring(const char *from) {
   return ret;
 }
 } /* extern "C" */
-
-// This function is here because Window::label() uses it:
-/**
-  Returns a pointer to after the last slash in \a name. If the name
-  ends with a slash then this returns a pointer to the NUL. If there
-  is no slash this returns a pointer to the start of \a name.
-*/
-FL_API const char *filename_name(const char *name) {
-  const char *p,*q;
-  q = name;
-#ifdef _WIN32
-  if (q[0] && q[1]==':') q += 2; // skip leading drive letter
-  for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
-#else
-  for (p = q; *p;) if (*p++ == '/') q = p;
-#endif
-  return q;
-}
 
 bool fltk::in_main_thread_ = true;
 
@@ -1081,7 +1061,7 @@ void fltk::modal(Widget* widget, bool grab) {
 
 /*! \fn void fltk::exit_modal()
   Turns on exit_modal_flag(). This may be used by user callbacks to
-  cancel modal state.
+  cancel modal state. See also fltk::Window::make_exec_return().
 */
 
 /*! \fn bool fltk::exit_modal_flag()

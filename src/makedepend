@@ -84,31 +84,16 @@ FileChooser.o: ../fltk/FileIcon.h ../fltk/FileInput.h ../fltk/Input.h
 FileChooser.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/string.h
 FileChooser.o: ../fltk/xbmImage.h ../fltk/Image.h ../fltk/Symbol.h
 FileChooser.o: ../fltk/PixelType.h
-FileChooser2.o: ../fltk/FileChooser.h ../fltk/Window.h ../fltk/Group.h
-FileChooser2.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-FileChooser2.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-FileChooser2.o: ../fltk/Choice.h ../fltk/Menu.h ../fltk/Button.h
-FileChooser2.o: ../fltk/filename.h ../fltk/FileBrowser.h ../fltk/Browser.h
-FileChooser2.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
-FileChooser2.o: ../fltk/FileIcon.h ../fltk/FileInput.h ../fltk/Input.h
-FileChooser2.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/filename.h
-FileChooser2.o: ../fltk/ask.h ../fltk/string.h ../fltk/events.h ../config.h
-FileChooser2.o: ../fltk/utf.h
 FileIcon.o: ../fltk/string.h ../fltk/FL_API.h ../fltk/FileIcon.h
 FileIcon.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Widget.h ../fltk/Style.h
 FileIcon.o: ../fltk/Rectangle.h ../fltk/draw.h ../fltk/PixelType.h
 FileIcon.o: ../fltk/filename.h
-FileIcon2.o: ../fltk/FileIcon.h ../fltk/FL_API.h ../fltk/Color.h
-FileIcon2.o: ../fltk/Flags.h ../fltk/filename.h ../fltk/draw.h
-FileIcon2.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../config.h
-FileIcon2.o: ../fltk/string.h
 FileInput.o: ../fltk/FileInput.h ../fltk/Input.h ../fltk/Window.h
 FileInput.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 FileInput.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
 FileInput.o: ../fltk/draw.h ../fltk/PixelType.h ../fltk/damage.h
 FileInput.o: ../fltk/events.h ../fltk/Cursor.h ../fltk/Rectangle.h
-FileInput.o: ../fltk/run.h flstring.h ../fltk/FL_API.h ../fltk/string.h
-FileInput.o: ../config.h
+FileInput.o: ../fltk/run.h ../fltk/string.h
 Fl_Menu_Item.o: ../FL/Fl_Menu_Item.H ../fltk/Widget.h ../fltk/Style.h
 Fl_Menu_Item.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Menu_Item.o: ../fltk/Rectangle.h ../fltk/Menu.h ../fltk/Group.h
@@ -218,8 +203,8 @@ PopupMenu.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 PopupMenu.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
 PopupMenu.o: ../fltk/events.h ../fltk/damage.h ../fltk/Box.h ../fltk/Symbol.h
 PopupMenu.o: ../fltk/PixelType.h ../fltk/draw.h ../fltk/Item.h
-Preferences.o: flstring.h ../fltk/FL_API.h ../fltk/string.h ../fltk/FL_API.h
-Preferences.o: ../config.h ../fltk/Preferences.h ../fltk/filename.h
+Preferences.o: ../fltk/Preferences.h ../fltk/FL_API.h ../fltk/filename.h
+Preferences.o: ../fltk/FL_API.h ../fltk/string.h
 ProgressBar.o: ../fltk/ProgressBar.h ../fltk/Widget.h ../fltk/Style.h
 ProgressBar.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 ProgressBar.o: ../fltk/Rectangle.h ../fltk/damage.h ../fltk/Box.h
@@ -297,16 +282,16 @@ TabGroup.o: ../fltk/PixelType.h ../fltk/draw.h ../fltk/Tooltip.h
 TabGroup.o: ../fltk/MenuWindow.h ../fltk/Window.h
 TextBuffer.o: ../fltk/string.h ../fltk/FL_API.h ../fltk/events.h
 TextBuffer.o: ../fltk/ask.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
-TextBuffer.o: ../fltk/error.h ../fltk/utf.h ../fltk/TextBuffer.h
+TextBuffer.o: ../fltk/error.h ../fltk/TextBuffer.h
 TextDisplay.o: ../fltk/error.h ../fltk/FL_API.h ../fltk/draw.h
 TextDisplay.o: ../fltk/Flags.h ../fltk/Color.h ../fltk/Rectangle.h
 TextDisplay.o: ../fltk/PixelType.h ../fltk/events.h ../fltk/damage.h
-TextDisplay.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/Cursor.h
-TextDisplay.o: ../fltk/TextBuffer.h ../fltk/TextDisplay.h ../fltk/draw.h
-TextDisplay.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
-TextDisplay.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
-TextDisplay.o: ../fltk/TextBuffer.h ../fltk/Font.h ../fltk/Window.h
-TextDisplay.o: ../fltk/layout.h ../fltk/utf.h
+TextDisplay.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/TextBuffer.h
+TextDisplay.o: ../fltk/TextDisplay.h ../fltk/draw.h ../fltk/Group.h
+TextDisplay.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Scrollbar.h
+TextDisplay.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/TextBuffer.h
+TextDisplay.o: ../fltk/Font.h ../fltk/Window.h ../fltk/layout.h ../fltk/utf.h
+TextDisplay.o: ../fltk/Input.h
 TextEditor.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/TextEditor.h
 TextEditor.o: ../fltk/TextDisplay.h ../fltk/draw.h ../fltk/Flags.h
 TextEditor.o: ../fltk/Color.h ../fltk/Rectangle.h ../fltk/PixelType.h
@@ -452,8 +437,7 @@ file_chooser.o: ../fltk/FileBrowser.h ../fltk/Browser.h ../fltk/Scrollbar.h
 file_chooser.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/FileIcon.h
 file_chooser.o: ../fltk/FileInput.h ../fltk/Input.h ../fltk/ReturnButton.h
 file_chooser.o: ../fltk/Button.h
-filename_absolute.o: ../fltk/filename.h ../fltk/FL_API.h flstring.h
-filename_absolute.o: ../fltk/FL_API.h ../fltk/string.h ../config.h
+filename_absolute.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/string.h
 filename_ext.o: ../fltk/filename.h ../fltk/FL_API.h
 filename_isdir.o: ../config.h ../fltk/filename.h ../fltk/FL_API.h
 filename_isdir.o: ../fltk/utf.h ../fltk/string.h
@@ -461,7 +445,6 @@ filename_list.o: ../config.h ../fltk/filename.h ../fltk/FL_API.h
 filename_list.o: ../fltk/utf.h
 filename_match.o: ../fltk/filename.h ../fltk/FL_API.h
 filename_name.o: ../fltk/filename.h ../fltk/FL_API.h
-filename_normalize.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/string.h
 fillrect.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 fillrect.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
 fillrect.o: ../fltk/x.h ../fltk/draw.h ../fltk/math.h
@@ -542,8 +525,6 @@ xpmImage.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
 xpmImage.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/draw.h
 xpmImage.o: ../fltk/string.h
 scandir.o: ../config.h
-flstring.o: flstring.h ../fltk/FL_API.h ../fltk/string.h ../fltk/FL_API.h
-flstring.o: ../config.h
 string.o: ../config.h ../fltk/string.h ../fltk/FL_API.h
 utf.o: ../fltk/utf.h ../fltk/FL_API.h
 vsnprintf.o: ../config.h ../fltk/string.h ../fltk/FL_API.h

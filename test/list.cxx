@@ -39,7 +39,7 @@ public:
     widget->label(buffer);
     // We must clear flags so it does not accidentally think the item
     // is selected or (if a parent) is opened:
-    widget->clear_value();
+    widget->clear_flag(fltk::VALUE);
     // This indicates we have no idea what the dimensions are:
     widget->w(0);
     return widget;

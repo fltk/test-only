@@ -1055,7 +1055,7 @@ bool Browser::make_item_visible(linepos where) {
       if (item_index[HERE][n] >= children) break;
       Widget* i = child(item_index[HERE], n);
       i->set_visible();
-      i->set_value();
+      i->set_flag(VALUE);
       list()->flags_changed(this, item());
     }
     changed = true;

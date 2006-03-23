@@ -113,14 +113,15 @@ fluid.o: ../fltk/MenuBar.h ../fltk/Input.h ../fltk/Tooltip.h
 fluid.o: ../fltk/MenuWindow.h ../fltk/Window.h ../fltk/ask.h ../fltk/draw.h
 fluid.o: ../fltk/file_chooser.h ../fltk/filename.h ../fltk/FileIcon.h
 fluid.o: ../fltk/Preferences.h ../fltk/FL_API.h ../fltk/MenuBuild.h
-fluid.o: ../fltk/ItemGroup.h ../fltk/Item.h ../fltk/Divider.h about_panel.h
-fluid.o: ../fltk/DoubleBufferWindow.h ../fltk/Group.h ../fltk/Widget.h
-fluid.o: ../fltk/ReturnButton.h ../fltk/Button.h Fluid_Plugins.h FluidType.h
-fluid.o: Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h coding_style.h
+fluid.o: ../fltk/ItemGroup.h ../fltk/Item.h ../fltk/Divider.h
+fluid.o: ../fltk/string.h about_panel.h ../fltk/DoubleBufferWindow.h
+fluid.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/ReturnButton.h
+fluid.o: ../fltk/Button.h Fluid_Plugins.h FluidType.h Fluid_Image.h
+fluid.o: ../fltk/SharedImage.h ../fltk/Image.h coding_style.h
 fluid.o: ../fltk/TabGroup.h ../fltk/RadioButton.h ../fltk/CheckButton.h
 fluid.o: ../fltk/CheckButton.h ../fltk/ValueInput.h ../fltk/Valuator.h
 fluid.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
-fluid.o: ../src/flstring.h ../fltk/string.h ../config.h ../fltk/StyleSet.h
+fluid.o: ../fltk/StyleSet.h
 Fluid_Image.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Widget.h FluidType.h
 Fluid_Image.o: Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h
 Fluid_Image.o: ../fltk/Image.h ../fltk/Symbol.h ../fltk/Color.h

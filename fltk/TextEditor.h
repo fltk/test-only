@@ -53,7 +53,7 @@ public:
   static NamedStyle* default_style;
 
   TextEditor(int X, int Y, int W, int H, const char* l = 0);
-  ~TextEditor() { remove_all_key_bindings(); }
+  ~TextEditor();
 
   virtual int handle(int e);
 

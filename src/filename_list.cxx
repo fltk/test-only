@@ -35,47 +35,6 @@
 #include <string.h>
 #include <stdio.h>
 
-/* fabien: should be obsoleted by new fltk::xxx_sort() functions) see numericsort.cxx
-    remove this code after having checked :
-    that the new c++ fltk namespaced sort func works fine with scandir 'C' decl below
-    on all concerned platforms (check the fltk::numericsort parameter to scandir)
-
-extern "C" {
-static int
-numericsort(dirent **A, dirent **B)
-{
-  const char* a = (*A)->d_name;
-  const char* b = (*B)->d_name;
-  int ret = 0;
-  for (;;) {
-    if (isdigit((uchar)*a) && isdigit((uchar)*b)) {
-      int diff,magdiff;
-      while (*a == '0') a++;
-      while (*b == '0') b++;
-      while (isdigit((uchar)*a) && *a == *b) {a++; b++;}
-      diff = (isdigit((uchar)*a) && isdigit((uchar)*b)) ? *a - *b : 0;
-      magdiff = 0;
-      while (isdigit((uchar)*a)) {magdiff++; a++;}
-      while (isdigit((uchar)*b)) {magdiff--; b++;}
-      if (magdiff) {ret = magdiff; break;} * compare # of significant digits*
-      if (diff) {ret = diff; break;}	* compare first non-zero digit *
-    } else {
-      // compare case-insensitive:
-      int t = tolower((uchar)*a)-tolower((uchar)*b);
-      if (t) {ret = t; break;}
-      // see if we reached the end:
-      if (!*a) break;
-      // remember the case-sensitive comparison, use it if no other diffs:
-      if (!ret) ret = *a-*b;
-      a++; b++;
-    }
-  }
-  if (!ret) return 0;
-  else return (ret < 0) ? -1 : 1;
-}
-}
-*/
-
 #if ! HAVE_SCANDIR
 extern "C" int
 scandir (const char *dir, dirent ***namelist,
@@ -83,37 +42,21 @@ scandir (const char *dir, dirent ***namelist,
 	 int (*compar)(dirent **, dirent **));
 #endif
 
-int fltk::filename_list(const char *d, dirent ***list) {
-  // Nobody defines the comparison function prototype correctly!
-  // It should be "const dirent* const*". I don't seem to be able to
-  // do this even for our own internal version because some compilers
-  // will not cast it to the non-const version! Egad. So we have to
-  // use if's to go to what the various systems use:
-#if defined(__hpux) || defined(__CYGWIN__)
-  // HP-UX seems to be partially const-correct:
-    return scandir(d, list, 0, (int(*)(const dirent **, const dirent **))fltk::numericsort);
-#elif !HAVE_SCANDIR || defined(__sgi) || defined(__osf__)
-  // When we define our own scandir (_WIN32 and perhaps some Unix systems)
-  // and also some existing Unix systems take it the way we define it:
-  return scandir(d, list, 0, numericsort);
-#else
-  // The vast majority of Unix systems want the sort function to have this
-  // prototype, most likely so that it can be passed to qsort without any
-  // changes:
-  return scandir(d, list, 0, (int(*)(const void*,const void*))fltk::numericsort);
-#endif
-}
-
-int fltk::alphasort(struct dirent **a, struct dirent **b) {
+int fltk::alphasort(const dirent*const*a, const dirent*const*b) {
   return strcmp((*a)->d_name, (*b)->d_name);
 }
 
-int fltk::casealphasort(struct dirent **a, struct dirent **b) {
+int fltk::casealphasort(const dirent*const*a, const dirent*const*b) {
   return strcasecmp((*a)->d_name, (*b)->d_name);
 }
 
 int fltk::filename_list(const char *d, dirent ***list,
                      File_Sort_F *sort) {
+  // Nobody defines the comparison function prototype correctly!
+  // It should be "const dirent* const*". I don't seem to be able to
+  // do this even for our own internal version because some compilers
+  // will not cast it to the non-const version! Egad. So we have to
+  // use if's to go to what the various systems use:
 #ifndef HAVE_SCANDIR
   int n = scandir(d, list, 0, sort);
 #elif defined(__hpux) || defined(__CYGWIN__)

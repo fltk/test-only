@@ -45,7 +45,11 @@ public:
 
 void PlasticBox::_draw(const Rectangle& r) const
 {
-  const char* c = drawflags(VALUE) ? down_->data() : data();
+  if (drawflags(VALUE) && down_) {
+    down_->draw(r);
+    return;
+  }
+  const char* c = data();
   char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(c, buf); c = buf;}
 

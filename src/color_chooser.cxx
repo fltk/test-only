@@ -574,12 +574,11 @@ static void chooser_cb(Widget*, void*) {
 }
 
 static void ok_cb(Widget* w, void*) {
-  w->window()->set_value();
-  w->window()->hide();
+  w->window()->make_exec_return(true);
 }
 
 static void cancel_cb(Widget* w, void*) {
-  w->window()->hide();
+  w->window()->make_exec_return(false);
 }
 
 static void make_it() {

@@ -65,7 +65,7 @@ const char *copyright =
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <ctype.h>
 #include <errno.h>
 
@@ -81,8 +81,6 @@ const char *copyright =
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
 #include "coding_style.h"
-#include "../src/flstring.h"
-
 
 /////////////////////////////////////////
 // Read preferences file 
@@ -342,17 +340,14 @@ static int ipasteoffset;
 static char* cutfname() {
 #ifdef _WIN32
     static char name[MAX_PATH+16] = "";
-    
     if (!name[0]) {
 	if (!GetTempPath(sizeof(name), name)) strcpy(name,"\\"); // failure
-	
 	strcat(name, ".fluidcutbuffer");
     }
-    
     return name;
 #else
     static char name[1024] = "";
-    if (!name[0]) fltk::filename_normalize(name, 1024, "~/.fluid_cut_buffer", 0);
+    if (!name[0]) fltk::filename_absolute(name, 1024, "~/.fluid_cut_buffer");
     return name;
 #endif
 }
@@ -417,10 +412,9 @@ void about_cb(fltk::Widget *, void *) {
 }
 
 void tt_cb(fltk::Widget *w, void *) {
-    show_tooltip = w->value(); 
+    show_tooltip = ((fltk::Button*)w)->value(); 
     fltk::Tooltip::enable(show_tooltip ? true : false);
     fluid_prefs.set("show_tooltips", show_tooltip );
-
 }
 
 #include <string.h>
@@ -532,7 +526,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     g=new fltk::ItemGroup("&Help",0,0);
 	new fltk::Item("About fluid",0,about_cb);
 	o= new fltk::Item(fltk::Item::TOGGLE,"Tooltips", 0, tt_cb, 0);
-	if (show_tooltip) o->set_value();
+	if (show_tooltip) o->set_flag(fltk::VALUE);
 	//new fltk::Item("Manual",0,nyi);
     g->end();
   menubar->end();

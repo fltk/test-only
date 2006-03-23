@@ -43,7 +43,6 @@ Widget* StringList::child(const Menu* group, const int* indexes, int level) {
   }
   widget->type(0);
   widget->label(array[n]);
-  widget->clear_value();
   widget->w(0);
   return widget;
 }

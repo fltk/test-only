@@ -145,8 +145,8 @@ static const char compose_pairs[] = {
   "c'"
   "C^"
   "c^"
-  "C*" // dot?
-  "c*"
+  "C."
+  "c."
   "Cv"
   "cv"
   "D'" // has a 'v' over a D
@@ -157,8 +157,8 @@ static const char compose_pairs[] = {
   "e-"
   "Eu"
   "eu"
-  "E*"
-  "e*"
+  "E."
+  "e."
   "E,"
   "e,"
   "Ev"
@@ -167,8 +167,8 @@ static const char compose_pairs[] = {
   "g^"
   "Gu"
   "gu"
-  "G*" // U+0120
-  "g*"
+  "G." // U+0120
+  "g."
   "G,"
   "g'"
   "H^"
@@ -183,8 +183,8 @@ static const char compose_pairs[] = {
   "iu"
   "I,"
   "i,"
-  "I*" // U+0130
-  "i*" // dot-less i?
+  "I." // U+0130
+  "i " // dot-less i?
   "IJ"
   "ij"
   "J^"
@@ -197,9 +197,9 @@ static const char compose_pairs[] = {
   "L,"
   "l,"
   "L'"
-  "l'" // U+0140
-  "L*"
-  "l*"
+  "l'"
+  "L."
+  "l." // U+0140
   "L/"
   "l/"
   "N'"
@@ -235,7 +235,7 @@ static const char compose_pairs[] = {
   "sv"
   "T,"
   "t,"
-  "T'" // has a 'v' over it
+  "Tv" // has a 'v' over it
   "t'" // has a quote
   "T-"
   "t-"
@@ -258,8 +258,8 @@ static const char compose_pairs[] = {
   "Y:"
   "Z'"
   "z'"
-  "Z*"
-  "z*"
+  "Z."
+  "z."
   "Zv"
   "zv"
 };

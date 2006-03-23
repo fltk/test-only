@@ -383,9 +383,9 @@ void browse_dir_cb();
 
 void browse_dir_cb()
 {
-  char *f = fltk::file_chooser("Images directory","",
-			    images_dir_input->value());
-  if(f) images_dir_input->value(f);
+  const char *f = fltk::file_chooser("Images directory","",
+				     images_dir_input->value());
+  if (f) images_dir_input->value(f);
 }
 
 void set_images_dir_cb(fltk::Widget *, void *) {

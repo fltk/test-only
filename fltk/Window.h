@@ -86,6 +86,7 @@ public:
   void show(int, char**);
   void show(const Window* parent);
   bool exec(const Window* parent = 0, bool grab = false);
+  void make_exec_return(bool);
   void show_inside(const Window* parent);
   void iconize();
   bool iconic() const;

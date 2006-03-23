@@ -183,7 +183,7 @@ int ComboBox::handle(int event) {
 int ComboBox::choice(int v) {
   int ret = Choice::value(v);
   Widget *f = get_item();
-  if (f) input_->value(f->label());
+  if (f) input_->text(f->label());
   text_changed_();
   return ret;
 }
@@ -191,14 +191,14 @@ int ComboBox::choice(int v) {
 int ComboBox::choice() const {
   ComboBox *This = (ComboBox*)this;
   Widget *f = This->get_item();
-  if (!f) return -1;
-  if (strcmp(input_->value(), f->label())==0)
-	return Choice::value();
+  if (!f || !f->label()) return -1;
+  if (strcmp(input_->text(), f->label())==0)
+    return Choice::value();
   return -1;
 }
 
 int ComboBox::find_choice() const {
-  const char *t = input_->value();
+  const char *t = input_->text();
   int n = children();
   for (int i=0;i<n;i++) {
     const char *m = child(i)->label();
@@ -227,10 +227,7 @@ int ComboBox::popup(const Rectangle& r,  const char* title, bool menubar)
 {
   Widget *selected = try_popup(r, title, menubar);
   if (selected) {
-    if (selected->label())
-      input_->value(selected->label());
-    else
-      input_->value("");
+    input_->text(selected->label());
     execute(selected);
     return 1;
   }

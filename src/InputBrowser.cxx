@@ -124,65 +124,65 @@ ComboBrowser::ComboBrowser(int x, int y, int w, int h)
 
 int
 ComboBrowser::handle(int event) {
-    if(event_key()==DownKey && (!item() || children()==1)) {
-	item(child(0));
-	fltk::focus(item());
+  if(event_key()==DownKey && (!item() || children()==1)) {
+    item(child(0));
+    fltk::focus(item());
+  }
+
+  if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
+    if( (event_key()!=EscapeKey) &&
+	(event_key()!=UpKey) &&
+	(event_key()!=DownKey) &&
+	(event_key()!=ReturnKey && !item()) )
+      return ibinput->handle(KEY);
+  }
+
+  static bool was_wheel=false;
+  if(was_wheel) {
+    was_wheel=false;
+    return 1;
+  }
+
+  switch (event) {
+  case MOUSEWHEEL: {
+    was_wheel=true;
+    break;
+  }
+
+  case KEY:
+  case SHORTCUT:
+    if(event_key() == EscapeKey) {
+      ib->hide_popup();
+      return 1;
+    }
+    break;
+
+  case PUSH: {
+    if (!event_inside(Rectangle(0, 0, w(), h()))) {
+      ib->hide_popup();
+      // Rectangle below is InputBrowser area
+      if (event_inside(Rectangle(0, -ib->h(), ib->w(), 0))) ib->send(PUSH);
+      return 1;
+    }
+    break;
+
+  }
+
+  case MOVE:
+    event = DRAG;
+
+  case RELEASE:
+  case DRAG:
+    // this causes a drag-in to the widget to work:
+    if (event_inside(Rectangle(0, 0, w(), h()))) fltk::pushed(this);
+    else {
+      fltk::pushed(this);
+      return 0;
     }
 
-    if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
-	if( (event_key()!=EscapeKey) &&
-		(event_key()!=UpKey) &&
-		(event_key()!=DownKey) &&
-		(event_key()!=ReturnKey && !item()) )
-	    return ibinput->handle(KEY);
-    }
-
-    static bool was_wheel=false;
-    if(was_wheel) {
-	was_wheel=false;
-	return 1;
-    }
-
-    switch (event) {
-	case MOUSEWHEEL: {
-		was_wheel=true;
-		break;
-	    }
-
-	case KEY:
-	case SHORTCUT:
-	    if(event_key() == EscapeKey) {
-		ib->hide_popup();
-		return 1;
-	    }
-	    break;
-
-	case PUSH: {
-		if (!event_inside(Rectangle(0, 0, w(), h()))) {
-			ib->hide_popup();
-			// Rectangle below is InputBrowser area
-			if (event_inside(Rectangle(0, -ib->h(), ib->w(), 0))) ib->send(PUSH);
-			return 1;
-		}
-		break;
-
-	    }
-
-	case MOVE:
-	    event = DRAG;
-
-	case RELEASE:
-	case DRAG:
-	// this causes a drag-in to the widget to work:
-	    if (event_inside(Rectangle(0, 0, w(), h()))) fltk::pushed(this);
-	    else {
-		fltk::pushed(this);
-		return 0;
-	    }
-
-	default:
-	    break;
-    }
+  default:
+    break;
+  }
 
   return Browser::handle(event);
 }
@@ -201,7 +201,7 @@ void ComboBrowser::browser_cb(Widget*, void*) {
   if (item->is_group()) return; // can't select a group!
 
   ib->item(item);
-  ib->value(item->label());
+  ib->text(item->label());
   ib->redraw(DAMAGE_VALUE);
   ib->hide_popup();
 
@@ -281,7 +281,7 @@ InputBrowser::handle(int e) {
       int found=-1;
       for (int i=0; i<children(); i++) {
 	  Widget* w=child(i);
-	  if (!strncmp(value(), w->label(), strlen(value()))) {
+	  if (!strncmp(text(), w->label(), size())) {
 	      found=i; break;
 	  }
       }
@@ -296,7 +296,7 @@ InputBrowser::handle(int e) {
 	  else
 	      found--;
       }
-	  m_input.value(child(found)->label());
+	  m_input.text(child(found)->label());
       break;
     }
 
@@ -435,7 +435,7 @@ InputBrowser::popup() {
   list->value(0);
   for (int i=0; i<list->children(); i++) {
     Widget* w=list->child(i);
-    if (!strncmp(value(), w->label(), strlen(value()))) {
+    if (!strncmp(text(), w->label(), size())) {
       list->value(i);
       list->make_item_visible();
       break;
@@ -444,16 +444,15 @@ InputBrowser::popup() {
 
   if(resize_only) return;
 
-  set_value();
+  set_flag(VALUE);
   redraw(DAMAGE_VALUE);
 
   win->exec(0, true);
-  win->hide();
 
   if(type()&NONEDITABLE) throw_focus();
   else fltk::focus(m_input);
 
-  clear_value();
+  clear_flag(VALUE);
   redraw(DAMAGE_VALUE);
 }
 

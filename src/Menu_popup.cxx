@@ -234,8 +234,8 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   int W = 0;
   int hotKeysW = 0;
   int H = 0;
-  int children = this->children(indexes,level);
-  Item::set_style(widget,widget->parent()!=0);
+  int children = this->children(indexes, level);
+  Item::set_style(widget, widget->parent()!=0);
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
   for (i = 0; i < children; i++) {
@@ -347,10 +347,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       int save_flags = item->flags();
       if (horizontal) flags &= ~ALIGN_MASK; // make it center them
       item->flags(flags);
-      if (item->label() && strcmp(item->label(),"Write code")==0)
-	  flags=flags;
       item->draw();
-
       item->w(save_w);
       item->h(save_h);
       pop_matrix();

@@ -146,7 +146,6 @@ CPPFILES = \
 	filename_list.cxx \
 	filename_match.cxx \
 	filename_name.cxx \
-	filename_normalize.cxx \
 	fillrect.cxx \
 	fltk_theme.cxx \
 	gifImage.cxx \
@@ -172,7 +171,6 @@ CPPFILES = \
 
 CFILES	= \
 	scandir.c \
-	flstring.c \
 	string.c \
 	utf.c \
 	vsnprintf.c

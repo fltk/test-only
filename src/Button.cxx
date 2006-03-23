@@ -56,14 +56,14 @@ using namespace fltk;
 /*! Same as value(1). */
 bool Button::set() {
   clear_changed();
-  if (!value()) {set_value(); redraw(); return true;}
+  if (!value()) {set_flag(VALUE); redraw(); return true;}
   return false;
 }
 
 /*! Same as value(0). */
 bool Button::clear() {
   clear_changed();
-  if (value()) {clear_value(); redraw(); return true;}
+  if (value()) {clear_flag(VALUE); redraw(); return true;}
   return false;
 }
 

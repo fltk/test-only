@@ -40,7 +40,7 @@ public:
     RADIO  = RESERVED_TYPE+2,
     HIDDEN = 3
   };
-  bool  value() const {return Widget::value();}
+  bool	value() const { return (flags()&VALUE)!=0; }
   bool	value(bool);
   bool	set();
   bool	clear();

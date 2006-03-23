@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.16 2005/01/24 08:07:59 spitzak Exp $"
+// "$Id$"
 //
 // Test of double_buffer and overlay of Windows.
 // This demo shows how double buffering helps, by drawing the
@@ -97,14 +97,14 @@ public:
 } *blinkwindow;
 
 void db_cb(Widget* o) {
-  if (o->value()) blinkwindow->set_double_buffer();
+  if (((Button*)o)->value()) blinkwindow->set_double_buffer();
   else blinkwindow->clear_double_buffer();
 }
 
 bool overlay = false;
 
 void ovl_cb(Widget* o) {
-  overlay = o->value();
+  overlay = ((Button*)o)->value();
   if (overlay) blinkwindow->redraw_overlay();
   else blinkwindow->erase_overlay();
 }
@@ -171,5 +171,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.16 2005/01/24 08:07:59 spitzak Exp $".
+// End of "$Id$".
 //

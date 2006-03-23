@@ -109,9 +109,9 @@ const char* Input::expand(const char* p, char* buf,int wordwrap) const {
   int word_count = 0;
 
   if (type() == SECRET) {
-    while (o<e && p < value_+size_) {*o++ = '*'; p++;}
+    while (o<e && p < text_+size_) {*o++ = '*'; p++;}
   } else while (o<e) {
-    if (wordwrap && (p >= value_+size_ || isspace(*p))) {
+    if (wordwrap && (p >= text_+size_ || isspace(*p))) {
       width_to_lastspace += (int)getwidth(lastspace_out, o-lastspace_out);
       if (p > lastspace+1) {
 	if (word_count && width_to_lastspace > wordwrap) {
@@ -122,7 +122,7 @@ const char* Input::expand(const char* p, char* buf,int wordwrap) const {
       lastspace = p;
       lastspace_out = o;
     }
-    if (p >= value_+size_) break;
+    if (p >= text_+size_) break;
     int c = *p++;
     if (c & 0xE0) {
       *o++ = c;
@@ -310,10 +310,10 @@ void Input::draw(const Rectangle& r)
   int lines;
   int curx, cury;
   int cursor_position = (this==dnd_target) ? dnd_target_position : position();
-  for (p=value(), curx=cury=lines=0; ;) {
+  for (p=text_, curx=cury=lines=0; ;) {
     e = expand(p, buf, wordwrap);
-    if (cursor_position >= p-value() && cursor_position <= e-value()) {
-      curx = int(expandpos(p, value()+cursor_position, buf, 0)+.5);
+    if (cursor_position >= p-text_ && cursor_position <= e-text_) {
+      curx = int(expandpos(p, text_+cursor_position, buf, 0)+.5);
       if (focused() && !was_up_down) up_down_pos = float(curx);
       cury = lines*height;
       int newscroll = xscroll_;
@@ -335,7 +335,7 @@ void Input::draw(const Rectangle& r)
       }
     }
     lines++;
-    if (e >= value_+size_) break;
+    if (e >= text_+size_) break;
     if (*e == '\n' || *e == ' ') e++;
     p = e;
   }
@@ -372,7 +372,7 @@ void Input::draw(const Rectangle& r)
   int ypos = -yscroll_;
 
   // visit each line and draw it:
-  p = value();
+  p = text_;
   int spot_x = r.x();
   int spot_y = r.y();
   for (; ypos < r.h();) {
@@ -383,15 +383,15 @@ void Input::draw(const Rectangle& r)
     if (ypos <= -height) goto CONTINUE; // clipped off top
 
     if (!(damage()&DAMAGE_ALL)) {	// for minimal update:
-      const char* pp = value()+mu_p; // pointer to where minimal update starts
+      const char* pp = text_+mu_p; // pointer to where minimal update starts
       if (e < pp) goto CONTINUE2; // this line is before the changes
       if (erase_cursor_only && p > pp) goto CONTINUE2; // this line is after
       // calculate area to erase:
       Rectangle er(r.x(), r.y()+ypos, r.w(), height);
       if (p >= pp) {
-	if (erase_cursor_only) er.set_r(xpos+2);
+	if (erase_cursor_only) er.set_r(xpos+1);
       } else {
-	er.set_x(xpos+int(expandpos(p, pp, buf, 0)));
+	er.set_x(xpos+int(expandpos(p, pp, buf, 0))-1);
 	if (erase_cursor_only) er.w(2);
       }
       // clip to and erase it:
@@ -404,8 +404,8 @@ void Input::draw(const Rectangle& r)
     }
 
     // Draw selection area if required:
-    if (selstart < selend && selstart <= e-value() && selend > p-value()) {
-      const char* pp = value()+selstart;
+    if (selstart < selend && selstart <= e-text_ && selend > p-text_) {
+      const char* pp = text_+selstart;
       // draw unselected text before the selection:
       float x1 = float(xpos);
       int offset1 = 0;
@@ -415,7 +415,7 @@ void Input::draw(const Rectangle& r)
 	drawtext(buf, offset1, float(xpos), float(r.y()+ypos+desc));
       }
       // draw selected text for this line:
-      pp = value()+selend;
+      pp = text_+selend;
       float x2 = float(r.r());
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
@@ -444,23 +444,23 @@ void Input::draw(const Rectangle& r)
   CONTINUE2:
     // draw the cursor:
     if ((this==dnd_target || focused() && selstart == selend) &&
-	cursor_position >= p-value() && cursor_position <= e-value()) {
+	cursor_position >= p-text_ && cursor_position <= e-text_) {
       setcolor(textcolor);
-      fillrect(Rectangle(xpos+curx, r.y()+ypos, 2, height));
+      fillrect(Rectangle(xpos+curx-1, r.y()+ypos, 2, height));
       spot_x = xpos+curx;
       spot_y = r.y()+ypos;
     }
 
   CONTINUE:
     ypos += height;
-    if (e >= value_+size_) break;
+    if (e >= text_+size_) break;
     if (*e == '\n' || *e == ' ') e++;
     p = e;
   }
 
   // for minimal update, erase all lines below last one if necessary:
   if (!(damage()&DAMAGE_ALL) && type() >= MULTILINE && ypos<r.h()
-      && (!erase_cursor_only || p <= value()+mu_p)) {
+      && (!erase_cursor_only || p <= text_+mu_p)) {
     if (ypos < 0) ypos = 0;
     setcolor(background);
     Rectangle er(r); er.move_y(ypos);
@@ -504,10 +504,10 @@ int Input::line_end(int i) const {
     // now measure lines until we get past i, end of that line is real eol:
     Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
-    for (const char* p=value()+j; ;) {
+    for (const char* p=text_+j; ;) {
       char buf[MAXBUF];
       p = expand(p, buf, wordwrap);
-      if (p-value() >= i) return p-value();
+      if (p-text_ >= i) return p-text_;
       p++;
     }
   } else if (type() >= MULTILINE) {
@@ -527,10 +527,10 @@ int Input::line_start(int i) const {
     // now measure lines until we get past i, start of that line is real eol:
     Rectangle r(w(),h()); box()->inset(r); int wordwrap = r.w()-6;
     setfont();
-    for (const char* p=value()+j; ;) {
+    for (const char* p=text_+j; ;) {
       char buf[MAXBUF];
       const char* e = expand(p, buf, wordwrap);
-      if (e-value() >= i) return p-value();
+      if (e-text_ >= i) return p-text_;
       p = e+1;
     }
   }
@@ -568,12 +568,12 @@ int Input::mouse_position(const Rectangle& r) const
   // Expand the lines to printed representation into the buffer:
   const char *p, *e;
   char buf[MAXBUF];
-  for (p=value();; ) {
+  for (p=text_;; ) {
     e = expand(p, buf, wordwrap);
     theline--; if (theline < 0) break;
     if (*e == '\n' || *e == ' ') e++;
     p = e;
-    if (e >= value_+size_) break;
+    if (e >= text_+size_) break;
   }
 
   // Do a binary search for the character that starts before this position:
@@ -592,7 +592,7 @@ int Input::mouse_position(const Rectangle& r) const
     int f1 = xpos+int(expandpos(p, t, buf, 0)+.5)-event_x();
     if (f1 < f0) a = t;
   }
-  return a-value();
+  return a-text_;
 }
 
 /*! \fn void Input::position(int n)
@@ -651,7 +651,7 @@ void Input::up_down_position(int i, bool keepmark) {
     wordwrap = 0;
   }
   char buf[MAXBUF];
-  const char* p = value()+i;
+  const char* p = text_+i;
   const char* e = expand(p, buf, wordwrap);
   const char *l, *r, *t;
   for (l = p, r = e; l<r; ) {
@@ -661,7 +661,7 @@ void Input::up_down_position(int i, bool keepmark) {
     if (f <= up_down_pos) l = t;
     else r = utf8back(t-1,l,r);
   }
-  int j = l-value();
+  int j = l-text_;
   position(j, keepmark ? mark_ : j);
   was_up_down = true;
 }
@@ -686,7 +686,7 @@ bool Input::copy(bool clipboard) {
   if (b != e) {
     if (b > e) {b = mark(); e = position();}
     if (type() == SECRET) e = b;
-    fltk::copy(value()+b, e-b, clipboard);
+    fltk::copy(text_+b, e-b, clipboard);
     return true;
   }
   return false;
@@ -771,18 +771,18 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
   if (e>b) {
     if (undowidget == this && b == undoat) {
       undobuffersize(undocut+(e-b));
-      memcpy(undobuffer+undocut, value_+b, e-b);
+      memcpy(undobuffer+undocut, text_+b, e-b);
       undocut += e-b;
     } else if (undowidget == this && e == undoat && !undoinsert) {
       undobuffersize(undocut+(e-b));
       memmove(undobuffer+(e-b), undobuffer, undocut);
-      memcpy(undobuffer, value_+b, e-b);
+      memcpy(undobuffer, text_+b, e-b);
       undocut += e-b;
     } else if (undowidget == this && e == undoat && (e-b)<undoinsert) {
       undoinsert -= e-b;
     } else {
       undobuffersize(e-b);
-      memcpy(undobuffer, value_+b, e-b);
+      memcpy(undobuffer, text_+b, e-b);
       undocut = e-b;
       undoinsert = 0;
     }
@@ -937,73 +937,81 @@ Input::Input(int x, int y, int w, int h, const char* l)
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;
-  value_ = "";
+  text_ = "";
   xscroll_ = yscroll_ = 0;
   style(default_style);
   label_width = 0;
 }
 
-/*! \fn const char* Input::value() const
-  The current value, which is a pointer to the internal buffer and <i>is
-  valid only until the next event is handled</i>. This is always a legal
-  value, if you set the string to NULL this will return a zero-length
-  string.
+/*! \fn const char* Input::text() const
+  The current string, as edited by the user. There is an extra NUL
+  character at the end, so this returned pointer can be used directly
+  by C functions. size() returns how many bytes are in the string,
+  which is useful if you want to look at embedded NUL characters.
+
+  Pointer is to an internal buffer and is only value until the next
+  event is handled by the Input widget.
 */
 
 /*! \fn char Input::at(int i) const
-  Same as value()[n], but may be faster in plausible
+  Same as text()[n], but may be faster in plausible
   implementations. No bounds checking is done.
 */
 
 /*! \fn int Input::size() const
-  Returns the number of characters in value(). This may be greater
-  than strlen(value()) if there are nul characters in it.
+  Returns the number of characters in text(). This may be greater
+  than strlen(text()) if there are NUL characters in it.
 */
 
-/*! Make value() be a writable private buffer of at least \a len bytes. */
+/*! Reserve the interal private buffer of at least \a len bytes, even
+  if the current text() is not that long. Can be used to avoid unnecessary
+  memory reallocations if you know you will be replacing the text() with
+  a longer one later.
+*/
 void Input::reserve(int len) {
   if (!bufsize) {
     bufsize = (len > size_) ? len+9 : size_+1;
     buffer = new char[bufsize];
-    memcpy(buffer, value_, size_);
+    memcpy(buffer, text_, size_);
   } else if (bufsize <= len) {
     int newsize = (len > size_) ? len*2 : size_+1;
     // we may need to move old value in case it points into buffer:
-    if (value_ >= buffer && value_ < buffer+bufsize) {
+    if (text_ >= buffer && text_ < buffer+bufsize) {
       char* nbuffer = new char[newsize];
-      memcpy(nbuffer, value_, size_);
+      memcpy(nbuffer, text_, size_);
       delete[] buffer;
       buffer = nbuffer;
     } else {
       delete[] buffer;
       buffer = new char[newsize];
-      memcpy(buffer, value_, size_);
+      memcpy(buffer, text_, size_);
     }
     bufsize = newsize;
-  } else if (value_ != buffer) {
-    memmove(buffer, value_, size_);
+  } else if (text_ != buffer) {
+    memmove(buffer, text_, size_);
   }
   buffer[size_] = 0;
-  value_ = buffer;
+  text_ = buffer;
 }
 
-/*!  Change the text and set the mark and the point to the end of
-  it. The string is not copied. If the user edits the string it is
-  copied to the internal buffer then. This can save a great deal of
-  time and memory if your program is rapidly changing the values of
-  text fields, but this will only work if \a str remains
-  unchanged until either the fltk::Input is destroyed or value() is
-  called again.
+/*!
+  Same as text(str,len), except it does not copy the string, instead
+  it makes text() return a pointer to \a str (unless \a len is 0, in
+  which case it makes it point to a zero-length string).
 
-  If \a len is zero then \a str may be null and the pointer is not
-  saved.
+  \a str must point to static memory that will not be altered until at
+  least the Input widget is destroyed or the text() is changed
+  again. If the user attempts to edit the string it is then copied to
+  the internal buffer and the editing done there. This can save a lot
+  of time and memory if your program is changing the string to various
+  constants a lot but the user rarely edits it.
 */
-bool Input::static_value(const char* str, int len) {
+bool Input::static_text(const char* str, int len) {
   if (fl_pending_callback == this) fl_pending_callback = 0;
   clear_changed();
   if (undowidget == this) undowidget = 0;
   bool ret = true;
-  if (str == value_ && len == size_) {
+  if (str == text_ && len == size_) {
     ret = false;
   } else if (len) { // non-empty new value:
     if (xscroll_ || (type() >= MULTILINE && yscroll_)) {
@@ -1012,17 +1020,17 @@ bool Input::static_value(const char* str, int len) {
     }
     int i = 0;
     // find first different character:
-    if (value_) {
-      for (; i<size_ && i<len && str[i]==value_[i]; i++);
+    if (text_) {
+      for (; i<size_ && i<len && str[i]==text_[i]; i++);
       if (i==size_ && i==len) ret = false;
     }
     if (ret) minimal_update(i);
-    value_ = str;
+    text_ = str;
     size_ = len;
   } else { // empty new value:
     if (!size_) return false; // both old and new are empty.
     size_ = 0;
-    value_ = "";
+    text_ = "";
     xscroll_ = yscroll_ = 0;
     minimal_update(0);
   }
@@ -1030,28 +1038,31 @@ bool Input::static_value(const char* str, int len) {
   return ret;
 }
 
-/*! Same as static_value(str, str ? strlen(str) : 0) */
-bool Input::static_value(const char* str) {
-  return static_value(str, str ? strlen(str) : 0);
+/*! Same as static_text(str, str ? strlen(str) : 0) */
+bool Input::static_text(const char* str) {
+  return static_text(str, str ? strlen(str) : 0);
 }
 
-/*! Change the value() and set the mark and the point to the end of
-  it. If \a len is zero then the pointer is ignored (and thus may
-  be NULL). This returns true if the new value is different than
-  the current one.
+/*!
+  Change the text() to return the first \a len bytes of \a str and
+  size() to return \a len, and set the position() to \a len and the
+  mark() to zero (thus highlighting the entire value).
+
+  Returns true if the bytes in the new string are different than the
+  old string.
 */
-bool Input::value(const char* str, int len) {
-  bool ret = static_value(str, len);
+bool Input::text(const char* str, int len) {
+  bool ret = static_text(str, len);
   if (len) reserve(len);
   return ret;
 }
 
-/*! Same as value(str, str ? strlen(str) : 0) */
-bool Input::value(const char* str) {
-  return value(str, str ? strlen(str) : 0);
+/*! Same as text(str, str ? strlen(str) : 0) */
+bool Input::text(const char* str) {
+  return text(str, str ? strlen(str) : 0);
 }
 
-/*! The destructor destroys the memory used by value() */
+/*! The destructor destroys the memory used by text() */
 Input::~Input() {
   if (fl_pending_callback == this) fl_pending_callback = 0;
   if (undowidget == this) undowidget = 0;
@@ -1140,7 +1151,7 @@ bool Input::handle_key() {
     if (!shift && mark_<position_) i = mark_;
     else {
       i = position_-1;
-      if (i > 0) i = utf8back(value_+i,value_,value_+size_)-value_;
+      if (i > 0) i = utf8back(text_+i,text_,text_+size_)-text_;
     }
     shift_position(ctrl ? word_start(i) : i);
     return true;
@@ -1152,7 +1163,7 @@ bool Input::handle_key() {
     if (!shift && mark_>position_) i = mark_;
     else {
       i = position_+1;
-      if (i < size_) i = utf8fwd(value_+i,value_,value_+size_)-value_;
+      if (i < size_) i = utf8fwd(text_+i,text_,text_+size_)-text_;
     }
     shift_position(ctrl ? word_end(i) : i);
     return true;
@@ -1231,7 +1242,7 @@ bool Input::handle_key() {
     if (shift) copy();
     if (mark() != position()) cut();
     else if (position() < size()) {
-      i = utf8fwd(value_+position_+1,value_,value_+size_)-value_;
+      i = utf8fwd(text_+position_+1,text_,text_+size_)-text_;
       cut(ctrl ? word_end(i)-position() : i-position());
     }
     return true;
@@ -1243,7 +1254,7 @@ bool Input::handle_key() {
     // I don't know what CUA does with ctrl+backspace, I made it delete words
     if (mark() != position()) cut();
     else if (position()>0) {
-      i = utf8back(value_+position_-1,value_,value_+size_)-value_;
+      i = utf8back(text_+position_-1,text_,text_+size_)-text_;
       cut(ctrl ? word_start(i)-position() : i-position());
     }
     return true;
@@ -1292,11 +1303,11 @@ bool Input::handle_key() {
     if (try_shortcut()) return true;
     if (size()<2) return 1;
     i = position();
-    if (i <= 0 || value_[i-1]=='\n') i++;
-    if (i >= size() || value_[i]=='\n') i--;
+    if (i <= 0 || text_[i-1]=='\n') i++;
+    if (i >= size() || text_[i]=='\n') i--;
     // just punt on utf-8 characters:
-    if ((value_[i-1]|value_[i])&0x80) return 1;
-    {char t[2]; t[0] = value_[i]; t[1] = value_[i-1];
+    if ((text_[i-1]|text_[i])&0x80) return 1;
+    {char t[2]; t[0] = text_[i]; t[1] = text_[i-1];
     if (!replace(i-1,i+1,t,2)) break;}
     position(i+1);
     return 1;
@@ -1401,8 +1412,8 @@ int Input::handle(int event, const Rectangle& r) {
   switch (event) {
 
   case ENTER:
-  case LEAVE:
   case MOVE:
+  case LEAVE:
     return 1; // For tooltips
 
   case FOCUS:
@@ -1452,25 +1463,6 @@ int Input::handle(int event, const Rectangle& r) {
   case HIDE:
     return 1;
 
-#if 0
-  case SHORTCUT:
-    // If the user types text to a widget that does not want it, it will
-    // call here eventually. Take the focus on the assumption they are
-    // trying to type into this text field:
-# if 1
-    if (event_text()[0] < ' ' && event_key() != BackSpaceKey) return 0;
-    if (event_state(ALT|META)) return 0;
-# else
-    // attempt to see if nobody else interested in key. This did not
-    // work as keys that did nothing still moved the focus.
-    {static bool recursion;
-    if (recursion) return 0;
-    recursion = true; bool r = try_shortcut(); recursion = false;
-    if (r) return 0;}
-# endif
-    position(size());
-    take_focus();
-#endif
   case KEY:
     return handle_key();
 

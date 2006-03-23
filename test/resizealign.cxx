@@ -1,5 +1,5 @@
 //
-// "$Id: resizealign.cxx,v 1.2 2005/01/24 08:07:59 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -35,7 +35,7 @@ Window *window;
 int flags = 0;
 
 void b_cb(Widget *b,long w) {
-  if (b->value()) flags |= int(w);
+  if (((Button*)b)->value()) flags |= int(w);
   else flags &= ~int(w);
   window->resize_align(flags);
   window->relayout();
@@ -91,5 +91,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: resizealign.cxx,v 1.2 2005/01/24 08:07:59 spitzak Exp $".
+// End of "$Id$".
 //

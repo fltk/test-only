@@ -58,9 +58,9 @@ int main(int argc, char **argv) {
 
 void Drawing_Window::update_label() {
   char buffer[128];
-  sprintf(buffer, "%+.10f", d->X); x_input->value(buffer);
-  sprintf(buffer, "%+.10f", d->Y); y_input->value(buffer);
-  sprintf(buffer, "%.2g", d->scale); w_input->value(buffer);
+  sprintf(buffer, "%+.10f", d->X); x_input->text(buffer);
+  sprintf(buffer, "%+.10f", d->Y); y_input->text(buffer);
+  sprintf(buffer, "%.2g", d->scale); w_input->text(buffer);
 }
 
 void Drawing_Area::draw() {

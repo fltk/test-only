@@ -28,6 +28,7 @@
 namespace fltk {
 
 class FL_API ShapedWindow : public Window {
+    void init() { shape_ = 0; lw = lh = 0; changed = 0; }
   public:
     ShapedWindow(int W, int H, const char *l = 0)  : Window(W,H,l) { init();}
     ShapedWindow(int X, int Y, int W, int H, const char *l = 0): Window(X,Y,W,H,l) { init();}
@@ -35,7 +36,6 @@ class FL_API ShapedWindow : public Window {
     void shape(xbmImage& b) { shape_ =&b; changed = 1; }
 
   protected:
-    void init();
     virtual void draw();
     xbmImage* shape_;
     int lw, lh;

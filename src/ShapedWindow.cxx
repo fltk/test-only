@@ -71,10 +71,6 @@ layout() method that draws a new image and calls shape().
 // when the window resized
 static xbmImage* resize_bitmap(xbmImage*, int, int);
 
-void ShapedWindow::init() {
-    shape_ = 0; lw = lh = 0; changed = 0;
-}
-
 void ShapedWindow::draw() {
   if ((lw != w() || lh != h() || changed) && shape_) {
     // size of window has change since last time

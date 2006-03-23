@@ -26,28 +26,21 @@
 //
 
 #ifndef Preferences_H
-#  define Preferences_H
+#define Preferences_H
 
-#  ifdef WIN32
-#    include <windows.h>
-#  endif // WIN32
-
-#  include <stdio.h>
-#  include <fltk/FL_API.h>
-
+#include <fltk/FL_API.h>
 
 namespace fltk {
 
 /**
  * Preferences are a data tree containing a root, branches and leafs
  */
-class FL_API Preferences 
+class FL_API Preferences
 {
 
 public:
 
   enum Root { SYSTEM=0, USER };
-  // enum Type { win32, macos, fltk };
 
   Preferences( Root root, const char *vendor, const char *application );
   Preferences( const char *path, const char *vendor, const char *application );
@@ -57,35 +50,35 @@ public:
 
   int groups();
   const char *group( int );
-  char groupExists( const char *group );
-  char deleteGroup( const char *group );
+  bool groupExists( const char *group );
+  bool deleteGroup( const char *group );
 
   int entries();
   const char *entry( int );
-  char entryExists( const char *entry );
-  char deleteEntry( const char *entry );
+  bool entryExists( const char *entry );
+  bool deleteEntry( const char *entry );
 
-  char set( const char *entry, int value );
-  char set( const char *entry, float value );
-  char set( const char *entry, double value );
-  char set( const char *entry, const char *value );
-  char set( const char *entry, const void *value, int size ); 
+  bool set( const char *entry, int value );
+  bool set( const char *entry, float value );
+  bool set( const char *entry, double value );
+  bool set( const char *entry, const char *value );
+  bool set( const char *entry, const void *value, int size );
 
-  char get( const char *entry, int &value,    int defaultValue );
-  char get( const char *entry, float &value,  float defaultValue );
-  char get( const char *entry, double &value, double defaultValue );
-  char get( const char *entry, char *&value,  const char *defaultValue );
-  char get( const char *entry, char *value,   const char *defaultValue, int maxSize );
-  char get( const char *entry, void *&value,  const void *defaultValue, int defaultSize );
-  char get( const char *entry, void *value,   const void *defaultValue, int defaultSize, int maxSize );
+  bool get( const char *entry, int &value,    int defaultValue );
+  bool get( const char *entry, float &value,  float defaultValue );
+  bool get( const char *entry, double &value, double defaultValue );
+  bool get( const char *entry, char *&value,  const char *defaultValue );
+  bool get( const char *entry, char *value,   const char *defaultValue, int maxSize );
+  bool get( const char *entry, void *&value,  const void *defaultValue, int defaultSize );
+  bool get( const char *entry, void *value,   const void *defaultValue, int defaultSize, int maxSize );
   int size( const char *entry );
 
-  char getUserdataPath( char *path, int pathlen );
+  bool getUserdataPath( char *path, int pathlen );
 
   void flush();
 
-  // char export( const char *filename, Type fileFormat );
-  // char import( const char *filename );
+  // bool export( const char *filename, Type fileFormat );
+  // bool import( const char *filename );
 
   class FL_API Name {
     char *data_;
@@ -104,63 +97,15 @@ public:
 private:
 
   // make the following functions unavailable
-  Preferences(); 
-  Preferences(const Preferences&); 
+  Preferences();
+  Preferences(const Preferences&);
   Preferences &operator=(const Preferences&);
 
-  static char nameBuffer[128];
-
-  class FL_API Node // a node contains a list to all its entries 
-  {          // and all means to manage the tree structure
-    Node *child_, *next_, *parent_;
-    char *path_;
-    char dirty_;
-  public:
-    Node( const char *path );
-    ~Node();
-    // node methods
-    int write( FILE *f );
-    Node *find( const char *path );
-    Node *search( const char *path, int offset=0 );
-    Node *addChild( const char *path );
-    void setParent( Node *parent );
-    Node *parent() { return parent_; }
-    char remove();
-    char dirty();
-    // entry methods
-    int nChildren();
-    const char *child( int ix );
-    void set( const char *name, const char *value );
-    void set( const char *line );
-    void add( const char *line );
-    const char *get( const char *name );
-    int getEntry( const char *name );
-    char deleteEntry( const char *name );
-    // public values
-    Entry *entry;
-    int nEntry, NEntry;
-    static int lastEntrySet;
-  };
-  friend class Node;
-
-  class FL_API RootNode  // the root node manages file paths and basic reading and writing
-  {
-    Preferences *prefs_;
-    char *filename_;
-    char *vendor_, *application_;
-  public:
-    RootNode( Preferences *, Root root, const char *vendor, const char *application );
-    RootNode( Preferences *, const char *path, const char *vendor, const char *application );
-    ~RootNode();
-    int read();
-    int write();
-    char getPath( char *path, int pathlen );
-  };
-  friend class RootNode;
-
+  class Node;
+  class RootNode;
   Node *node;
   RootNode *rootNode;
-  
+
 };
 
 }

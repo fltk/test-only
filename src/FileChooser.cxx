@@ -7,7 +7,7 @@ using namespace fltk;
 
 inline void FileChooser::cb_window_i(Window*, void*) {
   fileList->deselect();
-  fileName->value("");
+  fileName->text(0);
   window->hide();
 }
 void FileChooser::cb_window(Window* o, void* v) {
@@ -77,7 +77,7 @@ inline void FileChooser::cb_okButton_i(ReturnButton*, void*) {
   char pathname[1024];
 
   snprintf(pathname, sizeof(pathname), "%s/%s",
-	   fileList->directory(), fileName->value());
+	   fileList->directory(), fileName->text());
   if (filename_isdir(pathname))
     directory(pathname);
   else
@@ -90,7 +90,7 @@ void FileChooser::cb_okButton(ReturnButton* o, void* v) {
 
 inline void FileChooser::cb_Cancel_i(Button*, void*) {
   fileList->deselect();
-  fileName->value("");
+  fileName->text(0);
   window->hide();
 }
 void FileChooser::cb_Cancel(Button* o, void* v) {
@@ -155,7 +155,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
   window->size_range(345, 270, 345);
   fileList->filter(p);
   type(t);
-  value(d);
+  text(d);
 }
 
 void FileChooser::color(Color c) {

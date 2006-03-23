@@ -45,10 +45,10 @@ using namespace fltk;
   then the user can type floating point values with decimal points and
   exponents.
 
-  The user can type \e any value they want into the text field, including
-  ones outside the range() or non-multiples of the step(). If you want
-  to prevent this, make the callback function reset the value to
-  one you allow.
+  The user can type \e any value they want into the text field,
+  <i>including ones outside the range() or non-multiples of the
+  step()</i>. If you want to prevent this, make the callback function
+  reset the value to a legal one.
 
   By default the callback is done when the user moves the slider, when
   they use up/down keys to change the number in the text, or if they
@@ -59,7 +59,7 @@ using namespace fltk;
 
   You can get at the input field by using the public "input" instance
   variable. For instance you can clobber the text to a word with
-  value_input->input.static_value("word"). You can also set the size
+  value_input->input.static_text("word"). You can also set the size
   of it (call layout() first).
 */
 
@@ -74,27 +74,17 @@ using namespace fltk;
 void ValueSlider::input_cb(Widget*, void* v) {
   ValueSlider& t = *(ValueSlider*)v;
   double nv;
-  if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
-  else nv = strtod(t.input.value(), 0);
-  bool valid_value = (nv >= t.minimum() && nv <= t.maximum());
+  if (t.step()>=1.0) nv = strtol(t.input.text(), 0, 0);
+  else nv = strtod(t.input.text(), 0);
   if (nv != t.value() || t.when() & WHEN_NOT_CHANGED) {
-    if (nv != t.value() && valid_value) { 
-      // Set new value and redraw
-      t.set_value(nv);
-      t.Slider::value_damage();
-    } else if (nv != t.value()) {
-      // Restore old value
-      t.input.value(t.value());
-    }
+    t.set_value(nv);
+    t.Slider::value_damage();
     if (t.when()) {
       t.clear_changed();
       t.do_callback();
     } else {
       t.set_changed();
     }
-  } else if (nv != t.value()) {
-    // Restore old value
-    t.input.value(t.value());
   }
 }
 
@@ -125,9 +115,6 @@ void ValueSlider::draw() {
 #define REPEAT .1f
 
 int ValueSlider::handle(int event) {
-if (event == MOUSEWHEEL) {
-	int a = 0;
-}
   Rectangle r; slider_rect(r);
   switch (event) {
   case FOCUS:
@@ -185,17 +172,18 @@ void ValueSlider::layout() {
     input.resize(r.x(),r.y(),w,r.h());
   }
   input.layout();
-  if (!input.value()[0]) value_damage();
+  // Make it initialize any blank text fields:
+  if (!input.text()[0]) value_damage();
 }
 
 void ValueSlider::value_damage() {
   // Only redraw the text if the numeric value is different..
-  if (input.value()[0]) {
+  if (input.text()[0]) {
     if (step() >= 1) {
-      if (strtol(input.value(), 0, 0) == long(value())) return;
+      if (strtol(input.text(), 0, 0) == long(value())) return;
     } else {
       // parse the existing text:
-      double oldv = strtod(input.value(), 0);
+      double oldv = strtod(input.text(), 0);
       if (!oldv) {
 	if (!value()) return;
       } else {
@@ -205,7 +193,7 @@ void ValueSlider::value_damage() {
   }
   char buf[128];
   format(buf);
-  input.value(buf);
+  input.text(buf);
   //input.position(0, input.size()); // highlight it all
   Slider::value_damage();
 }

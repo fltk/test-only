@@ -84,16 +84,15 @@ void NumericInput::value(double A) {
       s[1] = 0;
     }
   }
-  Input::value(buf);
+  Input::text(buf);
 }
 
 /*!  Does a %%d sprintf of the value and uses the result to set the
   string value. Notice that there is no inverse function, you will
-  have to call strtol(widget->value(),0,0) yourself.  */
+  have to call strtol(widget->text(),0,0) yourself.  */
 void NumericInput::value(int v) {
   char buf[100];
-  sprintf(buf, "%d", v);
-  Input::value(buf);
+  Input::text(buf, sprintf(buf, "%d", v));
 }
 
 static int clickmouse;

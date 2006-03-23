@@ -76,6 +76,13 @@ public:
   TextDisplay(int X, int Y, int W, int H, const char *l = 0);
   ~TextDisplay();
 
+  // Emulation of Input widget:
+  int size() const { return buffer_->length(); }
+  const char* text() const { return buffer_->text(); }
+  void text( const char* v) { buffer_->text(v); }
+  void static_text( const char* v) { buffer_->text(v); }
+  char at(int i) const { return buffer_->character(i); }
+
   virtual int handle(int e);
   virtual void draw();
   virtual void layout();
@@ -90,7 +97,7 @@ public:
   /** Return attached buffer */
   const TextBuffer* buffer() const { return buffer_; }
 
-  /** Append text to the ned of the buffer */
+  /** Append text to the end of the buffer */
   void append(const char *text) { insert_position(buffer()->length()); insert(text); }
   /** Insert text to current cursor position */
   void insert(const char *text);
@@ -103,7 +110,7 @@ public:
   int insert_position() const { return cursor_pos_; }
   /** Make cursor position visible in screen */
   void show_insert_position();
-  
+
   /** Show cursor */
   void show_cursor(bool b = true);
   /** Hide cursor */
@@ -112,7 +119,7 @@ public:
   bool cursor_on() const { return cursor_on_; }
   /** Set cursor style */
   void cursor_style(int style);
-  
+
   /** Return cursor color */
   Color cursor_color() const { return cursor_color_;}
   /** Set cursor color */
@@ -126,10 +133,10 @@ public:
   void next_word(void);
   /** Go to previous word */
   void previous_word(void);
-  
-  /** Set wrapping mode */
-  void wrap_mode(bool wrap, int wrap_margin);
-  
+
+  /** Set wrapping mode. wrap_margin is width to wrap at, zero means use w() */
+  void wrap_mode(bool wrap, int wrap_margin=0);
+
   /** Set line number area width */
   void linenumber_width(int width);
   /** Return line number area width */
@@ -137,10 +144,10 @@ public:
 
   /** Set new highlight data */
   void highlight_data(TextBuffer *styleBuffer,
-                      StyleTableEntry *styleTable,
-                      int nStyles, char unfinishedStyle,
-                      UnfinishedStyleCb unfinishedHighlightCB,
-                      void *cbArg);
+		      StyleTableEntry *styleTable,
+		      int nStyles, char unfinishedStyle,
+		      UnfinishedStyleCb unfinishedHighlightCB,
+		      void *cbArg);
 
   /** Move cursor right */
   bool move_right();
@@ -175,13 +182,13 @@ public:
   /** Return current horizontal offset */
   int hor_offset() const { return horiz_offset_; }
 
-  /** Find start of the next character, starting from 'pos' 
+  /** Find start of the next character, starting from 'pos'
    * If 'pos' points to start of character already, it is returned.
    * This is mainly used with UTF-8 strings
    */
   int find_next_char(int pos);
 
-  /** Find start of the previous character, starting from 'pos' 
+  /** Find start of the previous character, starting from 'pos'
    * If 'pos' points to start of character already, it is returned.
    * This is mainly used with UTF-8 strings
    */
@@ -200,10 +207,10 @@ protected:
   void draw_cursor(int, int);
 
   void draw_string(int style, int x, int y, int toX, const char *string,
-                   int nChars);
+		   int nChars);
 
   void draw_vline(int visLineNum, int leftClip, int rightClip,
-                  int leftCharIndex, int rightCharIndex);
+		  int leftCharIndex, int rightCharIndex);
 
   void draw_line_numbers(bool clearAll);
 
@@ -223,7 +230,7 @@ protected:
   void calc_line_starts(int startLine, int endLine);
 
   void update_line_starts(int pos, int charsInserted, int charsDeleted,
-                          int linesInserted, int linesDeleted, bool *scrolled);
+			  int linesInserted, int linesDeleted, bool *scrolled);
 
   void calc_last_char();
 
@@ -232,8 +239,8 @@ protected:
 
   static void buffer_predelete_cb(int pos, int nDeleted, void* cbArg);
   static void buffer_modified_cb(int pos, int nInserted, int nDeleted,
-                                 int nRestyled, const char* deletedText,
-                                 void* cbArg);
+				 int nRestyled, const char* deletedText,
+				 void* cbArg);
 
   static void h_scrollbar_cb(Scrollbar* w, TextDisplay* d);
   static void v_scrollbar_cb( Scrollbar* w, TextDisplay* d);
@@ -245,7 +252,7 @@ protected:
   int longest_vline();
   int empty_vlines();
   int vline_length(int visLineNum);
-  
+
   void maintain_absolute_top_line_number(bool state);
   int get_absolute_top_line_number();
   void absolute_top_line_number(int oldFirstChar);
@@ -257,16 +264,16 @@ protected:
   void extend_range_for_styles(int* start, int* end);
 
   void find_wrap_range(const char *deletedText, int pos, int nInserted,
-                         int nDeleted, int *modRangeStart, int *modRangeEnd,
-                         int *linesInserted, int *linesDeleted);
+			 int nDeleted, int *modRangeStart, int *modRangeEnd,
+			 int *linesInserted, int *linesDeleted);
   void measure_deleted_lines(int pos, int nDeleted);
   void wrapped_line_counter(TextBuffer *buf, int startPos, int maxPos,
-                             int maxLines, bool startPosIsLineStart,
-                             int styleBufOffset, int *retPos, int *retLines,
-                             int *retLineStart, int *retLineEnd,
-                             bool countLastLineMissingNewLine = true);
+			     int maxLines, bool startPosIsLineStart,
+			     int styleBufOffset, int *retPos, int *retLines,
+			     int *retLineStart, int *retLineEnd,
+			     bool countLastLineMissingNewLine = true);
   void find_line_end(int pos, bool start_pos_is_line_start, int *lineEnd,
-                       int *nextLineStart);
+		       int *nextLineStart);
   int measure_proportional_character(TextBuffer *buf, int bufpos, int colNum, int pos);
   int wrap_uses_character(int lineEndPos);
   int range_touches_selection(TextSelection *sel, int rangeStart, int rangeEnd);
@@ -274,54 +281,55 @@ protected:
 
   int damage_range1_start, damage_range1_end;
   int damage_range2_start, damage_range2_end;
-  
+
   int cursor_pos_;
   bool cursor_on_;
   int cursor_oldx_;           /* X pos. of cursor for blanking */
   int cursor_oldy_;           /* Y pos. of cursor for blanking */
   int cursor_hint_;           /* Tells the buffer modified callback
-                                 where to move the cursor, to reduce
-                                 the number of redraw calls */
+				 where to move the cursor, to reduce
+				 the number of redraw calls */
   int cursor_style_;          /* One of enum cursorStyles above */
   int cursor_preferred_col_;  /* Column for vert. cursor movement */
   int visiblelines_cnt_;      /* # of visible (displayed) lines */
   int bufferlines_cnt_;       /* # of newlines in the buffer */
   TextBuffer *buffer_;        /* Contains text to be displayed */
   TextBuffer *stylebuffer_;   /* Optional parallel buffer containing
-                                 color and font information */
+				 color and font information */
   int firstchar_, lastchar_;  /* Buffer positions of first and last
-                                 displayed character (lastChar points
-                                 either to a newline or one character
-                                 beyond the end of the buffer) */
+				 displayed character (lastChar points
+				 either to a newline or one character
+				 beyond the end of the buffer) */
+  bool own_buffer;	      /* True if buffer_ created by constructor */
   bool continuous_wrap_;      /* Wrap long lines when displaying */
   int wrapmargin_;            /* Margin in # of char positions for
-                                 wrapping in continuousWrap mode */
+				 wrapping in continuousWrap mode */
   int *linestarts_;
   int topline_num_;           /* Line number of top displayed line
-                                 of file (first line of file is 1) */
+				 of file (first line of file is 1) */
   int abs_topline_num_;       /* In continuous wrap mode, the line
-                                 number of the top line if the text
-                                 were not wrapped (note that this is
-                                 only maintained as needed). */
+				 number of the top line if the text
+				 were not wrapped (note that this is
+				 only maintained as needed). */
   bool need_abs_topline_num_; /* Externally settable flag to continue
-                                 maintaining absTopLineNum even if
-                                 it isn't needed for line # display */
+				 maintaining absTopLineNum even if
+				 it isn't needed for line # display */
   int horiz_offset_;          /* Horizontal scroll pos. in pixels */
   int numstyles_;             /* Number of entries in styleTable */
   const StyleTableEntry *styletable_; /* Table of fonts and colors for
-                                         coloring/syntax-highlighting */
+					 coloring/syntax-highlighting */
   char unfinished_style_;     /* Style buffer entry which triggers
-                                 on-the-fly reparsing of region */
+				 on-the-fly reparsing of region */
   UnfinishedStyleCb unfinished_highlight_cb_; /* Callback to parse "unfinished" */
-                                              /* regions */
+					      /* regions */
   void *highlight_cbarg_;     /* Arg to unfinishedHighlightCB */
   int fixed_fontwidth_;       /* Font width if all current fonts are
-                                 fixed and match in width, else -1 */
+				 fixed and match in width, else -1 */
   bool suppressresync_;       /* Suppress resynchronization of line
-                                 starts during buffer updates */
+				 starts during buffer updates */
   int nlinesdeleted_;         /* Number of lines deleted during
-                                 buffer modification (only used
-                                 when resynchronization is suppressed) */
+				 buffer modification (only used
+				 when resynchronization is suppressed) */
 
   int stdfontwidth_;
   int ascent_;

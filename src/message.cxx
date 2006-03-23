@@ -77,7 +77,7 @@ NamedStyle* fltk::icon_style = &i_style;
 static int button_number;
 static void set_button_number(Widget* w, long a) {
   button_number = a;
-  w->window()->hide();
+  w->window()->make_exec_return(false);
 }
 
 #define ICON_W 50
@@ -127,7 +127,7 @@ static int innards(
     textfield->w(INPUT_W);
     message.h(textfield->y());
     textfield->type(itype);
-    textfield->value(istr);
+    textfield->text(istr);
     window.set_focus(textfield);
   }
 
@@ -275,7 +275,7 @@ static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
   int r = innards("?", defstr ? defstr : "", type,
 		  fmt, ap, cancel, ok, 0);
-  return r ? textfield->value() : 0;
+  return r ? textfield->text() : 0;
 }
 
 /*!

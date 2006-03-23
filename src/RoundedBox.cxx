@@ -30,11 +30,11 @@ using namespace fltk;
 
 static void rbox(const Rectangle& r, Color fill, Color line) {
   // figure out diameter of circles for corners:
-  float d = float(r.w()|1);
-  if (r.h() < r.w()) d = float(r.h()|1);
-  if (d > 31) d = 31;
+  int D = r.w()|1;
+  if (r.h() < r.w()) D = r.h()|1;
+  if (D > 31) D = 31;
 
-  //d -= .5;
+  float d = float(D); // -.5f
   float X = float(r.x());
   float Y = float(r.y());
   addarc(X, Y, d, d, 90, 180);

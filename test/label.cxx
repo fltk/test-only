@@ -114,12 +114,12 @@ static void load_menu(Choice* c) {
 #include "porsche.xpm"
 xpmImage theimage(porsche_xpm);
 void image_cb(Widget* w, void*) {
-  textbox->image(w->value() ? &theimage : 0);
+  textbox->image(((Button*)w)->value() ? &theimage : 0);
   window->redraw();
 }
 
 void inactive_cb(Widget* w, void*) {
-  if (w->value()) textbox->deactivate(); else textbox->activate();
+  if (((Button*)w)->value()) textbox->deactivate(); else textbox->activate();
   window->redraw();
 }
 

@@ -75,8 +75,8 @@ public:
   uchar textsize();
   void type(int t);
   int type();
-  const char *value(int f = 1);
-  void value(const char *filename);
+  const char *text(int f = 1);
+  void text(const char *filename);
   int visible();
 };
 

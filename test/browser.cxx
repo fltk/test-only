@@ -38,7 +38,7 @@ cb_remove(fltk::Widget*, void* ptr) {
   if (tree->type() & fltk::Browser::MULTI) {
     fltk::Widget* w = tree->goto_top();
     while (w) {
-      if (w->value()) {
+      if (w->selected()) { // test for parent being open
 	fltk::Group* g = w->parent();
 	g->remove(w);
 	delete w;
@@ -60,7 +60,7 @@ cb_remove(fltk::Widget*, void* ptr) {
 }
 
 void
-cb_multi(fltk::Widget* w, void* ptr) {
+cb_multi(fltk::Button* w, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*) ptr;
   tree->type(w->value() ? fltk::Browser::MULTI : fltk::Browser::NORMAL);
   tree->relayout();
@@ -105,7 +105,7 @@ cb_add_paper(fltk::Widget*, void* ptr) {
   tree->relayout();
 }
 
-void cb_when_changed(fltk::Widget* b, void* ptr) {
+void cb_when_changed(fltk::Button* b, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_CHANGED);
@@ -113,7 +113,7 @@ void cb_when_changed(fltk::Widget* b, void* ptr) {
     tree->when(tree->when()&~fltk::WHEN_CHANGED);
 }
 
-void cb_when_release(fltk::Widget* b, void* ptr) {
+void cb_when_release(fltk::Button* b, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_RELEASE);
@@ -121,7 +121,7 @@ void cb_when_release(fltk::Widget* b, void* ptr) {
     tree->when(tree->when()&~fltk::WHEN_RELEASE);
 }
 
-void cb_when_not_changed(fltk::Widget* b, void* ptr) {
+void cb_when_not_changed(fltk::Button* b, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_NOT_CHANGED);
@@ -129,7 +129,7 @@ void cb_when_not_changed(fltk::Widget* b, void* ptr) {
     tree->when(tree->when()&~fltk::WHEN_NOT_CHANGED);
 }
 
-void cb_when_enter_key(fltk::Widget* b, void* ptr) {
+void cb_when_enter_key(fltk::Button* b, void* ptr) {
   fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_ENTER_KEY);
@@ -145,7 +145,7 @@ const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
 int widths[]   = {100, 70, 50, 0};
 
 fltk::Browser *browser;
-void change_resize(fltk::Widget *w, long arg) {
+void change_resize(fltk::Button *w, long arg) {
   if (w->value()) 
     widths[1] = -1;
   else
@@ -188,20 +188,20 @@ int main(int argc,char** argv) {
   multi_button.callback((fltk::Callback*)cb_multi, (void *)&tree);
 
   fltk::CheckButton when_changed_button(80, 220, 160, 20, "fltk::WHEN_CHANGED");
-  when_changed_button.callback(cb_when_changed, (void *)&tree);
+  when_changed_button.callback((fltk::Callback*)cb_when_changed, (void *)&tree);
 
   fltk::CheckButton when_not_changed_button(80, 240, 160, 20, "fltk::WHEN_NOT_CHANGED");
-  when_not_changed_button.callback(cb_when_not_changed, (void *)&tree);
+  when_not_changed_button.callback((fltk::Callback*)cb_when_not_changed, (void *)&tree);
 
   fltk::CheckButton when_release_button(80, 260, 160, 20, "fltk::WHEN_RELEASE");
-  when_release_button.callback(cb_when_release, (void *)&tree);
-  when_release_button.set_value();
+  when_release_button.callback((fltk::Callback*)cb_when_release, (void *)&tree);
+  when_release_button.set_flag(fltk::VALUE);
 
   fltk::CheckButton when_enter_key_button(80, 280, 160, 20, "fltk::WHEN_ENTER_KEY");
-  when_enter_key_button.callback(cb_when_enter_key, (void *)&tree);
+  when_enter_key_button.callback((fltk::Callback*)cb_when_enter_key, (void *)&tree);
 
   fltk::CheckButton resize(80, 310, 160, 20, "Make 2. column flexible");
-  resize.callback(change_resize, 3);
+  resize.callback((fltk::Callback*)change_resize);
 
   win.resizable(tree);
   win.end();

@@ -102,6 +102,7 @@ const char         *code_keywords[] = {	// List of known C/C++ keywords...
 		     "throw",
 		     "true",
 		     "try",
+		     "using",
 		     "while",
 		     "xor",
 		     "xor_eq"
@@ -483,7 +484,7 @@ int check_save(void) {
 }
 
 int loading = 0;
-void load_file(char *newfile, int ipos) {
+void load_file(const char *newfile, int ipos) {
   loading = 1;
   int insert = (ipos != -1);
   changed = insert;
@@ -499,7 +500,7 @@ void load_file(char *newfile, int ipos) {
   textbuf->call_modify_callbacks();
 }
 
-void save_file(char *newfile) {
+void save_file(const char *newfile) {
   if (textbuf->savefile(newfile))
     fltk::alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
   else
@@ -590,12 +591,12 @@ void new_cb(fltk::Widget*, void*) {
 void open_cb(fltk::Widget*, void*) {
   if (!check_save()) return;
 
-  char *newfile = fltk::file_chooser("Open File?", "*", filename);
+  const char *newfile = fltk::file_chooser("Open File?", "*", filename);
   if (newfile != NULL) load_file(newfile, -1);
 }
 
 void insert_cb(fltk::Widget*, void *v) {
-  char *newfile = fltk::file_chooser("Insert File?", "*", filename);
+  const char *newfile = fltk::file_chooser("Insert File?", "*", filename);
   EditorWindow *w = (EditorWindow *)v;
   if (newfile != NULL) load_file(newfile, w->editor->insert_position());
 }
@@ -634,8 +635,8 @@ void replace_cb(fltk::Widget*, void* v) {
 
 void replace2_cb(fltk::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  const char *find = e->replace_find->value();
-  const char *replace = e->replace_with->value();
+  const char *find = e->replace_find->text();
+  const char *replace = e->replace_with->text();
 
   if (find[0] == '\0') {
     // Search string is blank; get a new one...
@@ -662,10 +663,10 @@ void replace2_cb(fltk::Widget*, void* v) {
 
 void replall_cb(fltk::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  const char *find = e->replace_find->value();
-  const char *replace = e->replace_with->value();
+  const char *find = e->replace_find->text();
+  const char *replace = e->replace_with->text();
 
-  find = e->replace_find->value();
+  find = e->replace_find->text();
   if (find[0] == '\0') {
     // Search string is blank; get a new one...
     e->replace_dlg->show();
@@ -712,9 +713,7 @@ void save_cb() {
 }
 
 void saveas_cb() {
-  char *newfile;
-
-  newfile = fltk::file_chooser("Save File As?", "*", filename);
+  const char *newfile = fltk::file_chooser("Save File As?", "*", filename);
   if (newfile != NULL) save_file(newfile);
 }
 
@@ -761,20 +760,20 @@ static void build_menus(fltk::MenuBar * menu, fltk::Widget *w) {
 fltk::Window* new_view() {
   EditorWindow* w = new EditorWindow(660, 400, title);
     w->begin();
-    fltk::MenuBar* m = new fltk::MenuBar(0, 0, 660, 30);
+    fltk::MenuBar* m = new fltk::MenuBar(0, 0, 660, 21);
     build_menus(m,w);
-    w->editor = new fltk::TextEditor(0, 30, 660, 370);
+    w->editor = new fltk::TextEditor(0, 21, 660, 379);
     w->editor->buffer(textbuf);
-    w->editor->highlight_data(stylebuf, styletable,
-                              sizeof(styletable) / sizeof(styletable[0]),
-			      'A', style_unfinished_cb, 0);
-    w->editor->textfont(fltk::COURIER);
+//     w->editor->highlight_data(stylebuf, styletable,
+//                               sizeof(styletable) / sizeof(styletable[0]),
+// 			      'A', style_unfinished_cb, 0);
+    //w->editor->textfont(fltk::COURIER);
   w->end();
   w->resizable(w->editor);
   w->callback((fltk::Callback *)close_cb, w);
 
   w->editor->linenumber_width(60);
-  //w->editor->wrap_mode(true, 0);
+  w->editor->wrap_mode(true, 0);
   //w->editor->cursor_style(fltk::TextDisplay::BLOCK_CURSOR);
   //w->editor->insert_mode(false);
 

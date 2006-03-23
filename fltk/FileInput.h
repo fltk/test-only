@@ -53,9 +53,9 @@ public:
 
   Color			errorcolor() const { return errorcolor_; }
   void			errorcolor(Color c) { errorcolor_ = c; }
-  int			value(const char*);
-  int			value(const char*, int);
-  const char *		value() { return Input::value(); }
+  int			text(const char*);
+  int			text(const char*, int);
+  const char *		text() { return Input::text(); }
 };
 
 }

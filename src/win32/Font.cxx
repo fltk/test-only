@@ -217,7 +217,7 @@ void fltk::setfont(Font* font, float psize) {
 
   // only integers supported right now, I think there is a newer
   // interface that takes arbitrary sizes, though...
-  psize = float(int(psize+.5));
+  psize = rintf(psize);
   unsigned size = unsigned(psize);
 
   if (font == current_font_ && current->size == size &&

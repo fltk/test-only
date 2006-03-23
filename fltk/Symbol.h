@@ -65,6 +65,11 @@ class FL_API Symbol {
   virtual bool fills_rectangle() const;
   virtual bool is_frame() const;
 
+  int dx() const;
+  int dy() const;
+  int dw() const;
+  int dh() const;
+
   // hash table lookup:
   static const Symbol* find(const char* name);
   static const Symbol* find(const char* start, const char* end);

@@ -33,7 +33,7 @@ namespace fltk {
 class FL_API Widget;
 class FL_API Rectangle;
 class FL_API Symbol;
-class FL_API Box;
+typedef Symbol Box;
 
 extern FL_API Box* const UP_BOX;
 extern FL_API Box* const DOWN_BOX;

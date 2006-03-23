@@ -82,11 +82,11 @@ enum {
 
   NOTACTIVE		= 0x00000100, //!< !active()
   OUTPUT		= 0x00000200, //!< does not get events, draw text colors
-  VALUE			= 0x00000400, //!< true/on state
+  VALUE			= 0x00000400, //!< true/on state for buttons
   SELECTED		= 0x00000800, //!< chosen in browser/menu, draw selected colors
   INVISIBLE		= 0x00001000, //!< !visible(), draw_frame()
   HIGHLIGHT		= 0x00002000, //!< draw highlighted
-  CHANGED		= 0x00004000, //!< value() changed since last callback
+  CHANGED		= 0x00004000, //!< value changed since last callback
   COPIED_LABEL		= 0x00008000, //!< copy_label() was called
   RAW_LABEL		= 0x00010000, //!< don't interpret & or @ in label
   LAYOUT_VERTICAL	= 0x00020000, //!< fltk::Pack puts this widget vertical

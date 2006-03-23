@@ -230,11 +230,14 @@ void fl_to_inactive(const char* s, char* to) {
 
 void FrameBox::_draw(const fltk::Rectangle& R) const
 {
+  if (drawflags(VALUE) && down_) {
+    down_->draw(R);
+    return;
+  }
   fltk::Rectangle r(R);
   if (r.empty()) return;
   const Color fg = getcolor();
   const char* s = data();
-  if (drawflags(VALUE)) s = down_->data();
   char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   if (*s == '2') {s++; goto HACK;}
@@ -271,11 +274,8 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
 */
 
 void FrameBox::inset(fltk::Rectangle& r) const {
-  if (drawflags(VALUE)) {
-    r.x(r.x()+down_->dx_);
-    r.y(r.y()+down_->dy_);
-    r.w(r.w()-down_->dw_);
-    r.h(r.h()-down_->dh_);
+  if (drawflags(VALUE) && down_) {
+    down_->inset(r);
   } else {
     r.x(r.x()+dx_);
     r.y(r.y()+dy_);

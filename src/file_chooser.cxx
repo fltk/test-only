@@ -82,10 +82,10 @@ void fltk::file_chooser_callback(void (*cb)(const char*)) {
   The returned value points at a static buffer that is only good until
   the next time the file_chooser() is called.
 */
-char* fltk::file_chooser(const char* message,
-			 const char* pattern,
-			 const char* fname,
-			 bool save)
+const char* fltk::file_chooser(const char* message,
+			       const char* pattern,
+			       const char* fname,
+			       bool save)
 {
 #if defined( _WIN32 ) && !defined( __CYGWIN__ )
   if (use_system_fc) {
@@ -116,11 +116,11 @@ char* fltk::file_chooser(const char* message,
     fc = new FileChooser(fname, pattern, FileChooser::CREATE, message);
   else {
     fc->filter(pattern);
-    fc->value(fname);
+    fc->text(fname);
     fc->label(message);
   }
   fc->exec();
-  return ((char *)fc->value());
+  return fc->text();
 }
 
 //

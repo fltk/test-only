@@ -184,6 +184,9 @@ input.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 input.o: ../fltk/Rectangle.h ../fltk/Input.h ../fltk/FloatInput.h
 input.o: ../fltk/NumericInput.h ../fltk/Input.h ../fltk/IntInput.h
 input.o: ../fltk/FloatInput.h ../fltk/SecretInput.h ../fltk/WordwrapInput.h
+input.o: ../fltk/TextEditor.h ../fltk/TextDisplay.h ../fltk/draw.h
+input.o: ../fltk/PixelType.h ../fltk/Scrollbar.h ../fltk/Slider.h
+input.o: ../fltk/Valuator.h ../fltk/TextBuffer.h ../fltk/Font.h
 input.o: ../fltk/Button.h ../fltk/ToggleButton.h ../fltk/Button.h
 input.o: ../fltk/show_colormap.h
 keyboard.o: keyboard_ui.cxx keyboard_ui.h ../fltk/Window.h ../fltk/Group.h

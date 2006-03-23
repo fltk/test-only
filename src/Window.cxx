@@ -561,21 +561,36 @@ void Window::show(const Window* parent) {
   show();
 }
 
-/*! Simple description: the window is popped up and this function
-  waits until the user closes it, this then returns a true if the user
-  hit ok, false if the user cancelled or closed the window in some
-  other way. During this time events to other windows in this
-  application are either thrown away or redirected to this window.
+/*!
+  If exec() is currently being called, make it hide this window and
+  return \a return_value.
 
-  This does child_of(parent) (using first() if parent is
-  null). It then does show() to make this window visible and raise
-  it. It then uses fltk::modal(this,grab) to make all events go to
-  this window, and waits until fltk::exit_modal() is called (typically
-  by the window being hidden or destroyed).
+  Does nothing if exec() is not being called.
 
-  The return value is value() of the window, which is true only if
-  some callback does window->set(). To use this, make an OK button
-  with a callback that does this.
+  Results are undefined if the innermost exec() is being called on a
+  window \e other than this one. Current behavior is to cause that
+  exec to return false.
+*/
+void Window::make_exec_return(bool return_value) {
+  if (return_value) set_flag(VALUE);
+  fltk::exit_modal();
+}
+
+/*!
+
+  The window is popped up and this function does not return until
+  make_exec_return() is called, or the window is destroyed or hide()
+  is called, or fltk::exit_modal() is called.  During this time events
+  to other windows in this application are either thrown away or
+  redirected to this window.
+
+  This does child_of(parent) (using first() if parent is null), so
+  this window is a floating panel that is kept above the parent.  It
+  then uses fltk::modal(this,grab) to make all events go to this
+  window.
+
+  The return value is the argument to make_exec_return(), or false
+  if any other method is used to exit the loop.
 
   If parent is null the window that last received an event is used as
   the parent. This is convenient for popups that appear in response to
@@ -584,7 +599,7 @@ void Window::show(const Window* parent) {
   See fltk::modal() for what grab does. This is useful for popup menus.
 */
 bool Window::exec(const Window* parent, bool grab) {
-  clear_value();
+  clear_flag(VALUE);
   child_of(parent ? parent : first());
   Widget* saved_modal = fltk::modal(); bool saved_grab = fltk::grab();
   fltk::modal(this, grab);
@@ -592,7 +607,7 @@ bool Window::exec(const Window* parent, bool grab) {
   while (modal() && !exit_modal_flag()) wait();
   hide();
   modal(saved_modal, saved_grab);
-  return value();
+  return (flags()&VALUE)!=0;
 }
 
 /*! Make the window with a normal system border and behavior, but

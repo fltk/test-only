@@ -1,8 +1,7 @@
-//
-// "$Id: file_chooser.h,v 1.5 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id$"
 //
 // Popup file chooser.
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +19,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_file_chooser_h
 #define fltk_file_chooser_h
@@ -33,10 +31,10 @@ namespace fltk {
 
 FL_API void use_system_file_chooser(bool = true);
 
-FL_API char *file_chooser(const char *message,
-			  const char *pattern,
-			  const char *filename,
-			  bool save = true);
+FL_API const char *file_chooser(const char *message,
+				const char *pattern,
+				const char *filename,
+				bool save = true);
 FL_API void file_chooser_callback(void (*cb)(const char *));
 
 /* \} */
@@ -45,5 +43,5 @@ FL_API void file_chooser_callback(void (*cb)(const char *));
 #endif
 
 //
-// End of "$Id: file_chooser.h,v 1.5 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id$".
 //

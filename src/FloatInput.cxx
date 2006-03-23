@@ -37,9 +37,8 @@ using namespace fltk;
   editing the text the user can use the up/down arrow keys to change
   the digits.
 
-  You may want a ValueInput widget instead. It has value() methods
-  that take and return double values rather than strings, and has
-  up/down buttons on it.
+  You may want a ValueInput widget instead. It has up/down buttons
+  (what is called a "Spinner" in some toolkits).
 
   If you change when() to fltk::WHEN_ENTER_KEY the callback is only
   done when the user hits the up/down arrow keys or when the user
@@ -59,7 +58,7 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
     
     // Allow only one '.' in FLOAT inputs
     if (type()==FLOAT && ascii=='.') {
-      if (!strchr(value(), ascii))
+      if (!strchr(this->text(), ascii))
         continue;
     } else
     // This is complex to allow "0xff12" hex to be typed:
@@ -85,12 +84,12 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
 
 /*! Convert the string to a long using strtol() */
 long FloatInput::lvalue() const {
-  return strtol(value(), 0, 0);
+  return strtol(text(), 0, 0);
 }
 
 /*! Convert the string to a double using strtod() */
 double FloatInput::fvalue() const {
-  return strtod(value(), 0);
+  return strtod(text(), 0);
 }
 
 //

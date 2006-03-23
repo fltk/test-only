@@ -94,9 +94,7 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
 */
 int Valuator::value(double v) {
   clear_changed();
-  double min = (minimum_ < maximum_ ? minimum_ : maximum_);
-  double max = (minimum_ > maximum_ ? minimum_ : maximum_);
-  if (v == value_ || v < min || v > max) return 0;
+  if (v == value_) return 0;
   value_ = v;
   value_damage();
   return 1;
@@ -219,12 +217,19 @@ void Valuator::handle_release() {
 }
 
 /*!
-  Format the passed value to show enough digits for the current
-  step value. If the step has been set to zero then it does a %g
-  format. If step is an integer it does %d format. Otherwise it does a
-  %.nf format where n is enough digits to show the step, maximum of
-  8. The characters are written into the passed buffer (which must be
-  long enough, 40 characters is safe).
+  Print the current value into the passed buffer as a user-readable
+  and editable string. Returns the number of bytes (not counting the
+  terminating nul) written to the buffer. Calling code can assumme that
+  the written string is never longer than 20 characters.
+
+  This is used by subclasses that let the user edit the value in a
+  textfield. Since this is a virtual function, you can override this
+  in a subclass of those and change how the numbers are displayed.
+
+  The default version prints enough digits for the current step()
+  value. If step() is zero it does a %g format.  If step is an integer
+  it does %d format. Otherwise it does a %.nf format where n is enough
+  digits to show the step, maximum of 8.
  */
 int Valuator::format(char* buffer) {
   double v = value();

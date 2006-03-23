@@ -53,14 +53,20 @@ public:
   int handle(int event, const Rectangle&);
   bool handle_key();
 
-  bool value(const char*);
-  bool value(const char*, int);
-  bool static_value(const char*);
-  bool static_value(const char*, int);
-  const char* value() const {return value_;}
-  char at(int i) const {return value_[i];}
+  bool text(const char*);
+  bool text(const char*, int);
+  bool static_text(const char*);
+  bool static_text(const char*, int);
+  const char* text() const {return text_;}
+  char at(int i) const {return text_[i];}
 #ifdef FLTK_1_WIDGET  // back-compatability section:
-  char index(int i) const {return value_[i];}
+  char index(int i) const {return text_[i];}
+#endif
+#ifndef SKIP_DEPRECIATED
+  bool value(const char* v) {return text(v);}
+  bool value(const char* v, int n) {return text(v,n);}
+  bool static_value(const char* v) {return static_text(v);}
+  const char* value() const {return text_;}
 #endif
   int size() const {return size_;}
   void reserve(int newsize);
@@ -93,7 +99,7 @@ public:
 
 private:
 
-  const char* value_;
+  const char* text_;
   char* buffer;
 
   int size_;

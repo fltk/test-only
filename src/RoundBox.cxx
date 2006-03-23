@@ -56,21 +56,21 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
   Rectangle r1(x+w-d, y, d, d);
   if (which >= CLOSED) {
-    addpie(r1, float(w<=h ? 0 : -90), float(w<=h ? 180 : 90));
+    addpie(r1, w<=h ? 0.0f : -90.0f, w<=h ? 180.0f : 90.0f);
   } else if (which == UPPER_LEFT) {
-    addpie(r1, float(45), float(w<=h ? 180 : 90));
+    addpie(r1, 45.0f, w<=h ? 180.0f : 90.0f);
   } else { // LOWER_RIGHT
-    addpie(r1, float(w<=h ? 360 : 270), float(360+45));
+    addpie(r1, w<=h ? 360.0f : 270.0f, 360.0f+45.0f);
   }
   which==FILL ? fillpath() : strokepath();
 
   Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
-    addpie(r2, float(w<=h ? 180 : 90), float(w<=h ? 360 : 270));
+    addpie(r2, w<=h ? 180.0f : 90.0f, w<=h ? 360.0f : 270.0f);
   } else if (which == UPPER_LEFT) {
-    addpie(r2, float(w<=h ? 180 : 90), float(225));
+    addpie(r2, w<=h ? 180.0f : 90.0f, 225.0f);
   } else { // LOWER_RIGHT
-    addpie(r2, float(225), float(w<=h ? 360 : 270));
+    addpie(r2, 225.0f, w<=h ? 360.0f : 270.0f);
   }
   which==FILL ? fillpath() : strokepath();
 
@@ -94,7 +94,11 @@ extern void fl_to_inactive(const char* s, char* to);
 
 void RoundBox::_draw(const Rectangle& r) const
 {
-  const char* s = drawflags(VALUE) ? down_->data() : data();
+  if (drawflags(VALUE) && down_) {
+    down_->draw(r);
+    return;
+  }
+  const char* s = data();
   char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   const Color fg = getcolor();

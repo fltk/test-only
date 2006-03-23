@@ -320,6 +320,40 @@ void Symbol::_measure(int& w, int& h) const {}
 */
 void Symbol::inset(Rectangle& r) const {}
 
+/** Back-compatability function. This returns the amount that inset()
+    moves the left edge, but this only works if inset() moves that
+    edge by a constant amount no matter what rectangle is used and
+    no matter what fltk::drawflags() or any other graphics state is
+    set to. Notice also that dx() is overridden in the fltk::FrameBox
+    subclass, both produce the same result but that one is inline.
+*/
+int Symbol::dx() const {
+  Rectangle r(128,128);
+  inset(r);
+  return r.x();
+}
+
+/** See dx(). Returns the inset of the top edge. */
+int Symbol::dy() const {
+  Rectangle r(128,128);
+  inset(r);
+  return r.y();
+}
+
+/** See dx(). Returns the change in width (positive means smaller) */
+int Symbol::dw() const {
+  Rectangle r(128,128);
+  inset(r);
+  return 128-r.w();
+}
+
+/** See dx(). Returns the change in height (positive means smaller) */
+int Symbol::dh() const {
+  Rectangle r(128,128);
+  inset(r);
+  return 128-r.h();
+}
+
 /** Return true if the symbol will completely fill all the pixels
     in the Rectangle passed to draw(). Widgets use this to test
     whether they need to erase their area before drawing the box.

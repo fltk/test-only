@@ -202,14 +202,14 @@ void fgcallback(Widget* w, void *v) {
 }
 
 void activecallback(Widget* w, void* v) {
-  if (w->value()) ((Widget*)v)->activate();
+  if (((Button*)w)->value()) ((Widget*)v)->activate();
   else ((Widget*)v)->deactivate();
 }
 
 bool checker = false;
 
 void checkercallback(Widget* w, void*) {
-  checker = w->value();
+  checker = ((Button*)w)->value();
   fltk::redraw();
 }
 

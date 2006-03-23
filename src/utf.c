@@ -170,23 +170,6 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   }
 }
 
-/*! Return the length of a legal UTF-8 encoding that starts with
-    this byte. Returns 1 for illegal bytes (0xc0, 0xc1, 0xf5 to 0xff).
-
-    <i>This function is depreciated</i>. If the following bytes are
-    not legal UTF-8 then using this to step forward to the next
-    character will produce different positions than utf8decode()
-    will produce.
-*/
-int utf8len(char cc) {
-  unsigned char c = (unsigned char)cc;
-  if (c < 0xc2) return 1;
-  else if (c < 0xe0) return 2;
-  else if (c < 0xf0) return 3;
-  else if (c < 0xf5) return 4;
-  else return 1;
-}
-
 /*! Move \a p forward until it points to the start of a UTF-8
   character. If it already points at the start of one then it
   is returned unchanged. Any UTF-8 errors are treated as though each
@@ -800,42 +783,6 @@ int utf8test(const char* src, unsigned srclen) {
     }
   }
   return ret;
-}
-
-/*! Returns UTF-8 sequence length in bytes for character 'c', returns 0 if 'c' is inside sequence */
-int utf8seqlen(char c)
-{
-// UTF-8 sequence table from "http://www.cl.cam.ac.uk/~mgk25/unicode.html"
-//
-// U-00000000 | U-0000007F: 	0xxxxxxx
-// U-00000080 | U-000007FF: 	110xxxxx 10xxxxxx
-// U-00000800 | U-0000FFFF: 	1110xxxx 10xxxxxx 10xxxxxx
-// U-00010000 | U-001FFFFF: 	11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-// U-00200000 | U-03FFFFFF: 	111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-// U-04000000 | U-7FFFFFFF: 	1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-
-  // Check for bit7
-  if (!(c & 0x80)) 
-    return 1;
-  
-  // Ok, we have valid UTF-8 sequence
-  if (c & 0x40) { // bit6
-    if (c & 0x20) { // bit5
-      if (c & 0x10) { // bit4
-        if (c & 0x08) { // bit3
-          if (c & 0x04) { // bit2
-            return 6;
-          }
-          return 5;
-        }
-        return 4;
-      }
-      return 3;
-    }
-    return 2;
-  }
-  // Bit7 is 1, but bit6 is 0.. We're definetely inside sequence
-  return 0;
 }
 
 #ifdef __cplusplus

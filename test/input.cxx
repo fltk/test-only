@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.32 2004/12/18 19:03:15 spitzak Exp $"
+// "$Id$"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <fltk/IntInput.h>
 #include <fltk/SecretInput.h>
 #include <fltk/WordwrapInput.h>
+#include <fltk/TextEditor.h>
 #include <fltk/Button.h>
 #include <fltk/ToggleButton.h>
 #include <fltk/show_colormap.h>
@@ -37,26 +38,36 @@
 using namespace fltk;
 
 void cb(Widget *ob) {
-  printf("Callback for %s '%s'\n",ob->label(),((Input*)ob)->value());
-  ob->window()->label(((Input*)ob)->value());
+  printf("Callback for %s '%s'\n",ob->label(),((Input*)ob)->text());
+}
+
+void editor_cb(Widget *ob) {
+  printf("Callback for %s '%s'\n",ob->label(),((TextEditor*)ob)->text());
 }
 
 int when = 0;
 Input *input[5];
+TextEditor* editor;
 
 void toggle_cb(Widget *o, long v) {
   if (((ToggleButton*)o)->value()) when |= v; else when &= ~v;
   for (int i=0; i<5; i++) input[i]->when(when);
+  editor->when(when);
 }
 
 void test(Input *i) {
   if (i->changed()) {
-    i->clear_changed(); printf("%s '%s'\n",i->label(),i->value());
+    i->clear_changed();
+    printf("%s '%s'\n",i->label(),i->text());
   }
 }
 
 void button_cb(Widget *,void *) {
   for (int i=0; i<5; i++) test(input[i]);
+  if (editor->changed()) {
+    editor->clear_changed();
+    printf("%s '%s'\n",editor->label(),editor->text());
+  }
 }
 
 void color_cb(Widget* button, void* v) {
@@ -81,29 +92,37 @@ void color_cb(Widget* button, void* v) {
 }
 
 int main(int argc, char **argv) {
-  Window *window = new Window(400,350);
+  Window *window = new Window(400,350+105);
   //window->clear_double_buffer();
 
   window->begin();
   int y = 10;
-  input[0] = new Input(70,y,300,23,"Normal:"); y += 27;
+  input[0] = new Input(70,y,300,23,"Normal"); y += 27;
   input[0]->tooltip("Normal input field");
   // input[0]->cursor_color(SELECTION_COLOR);
   //  input[0]->maximum_size(20);
-  // input[0]->static_value("this is a testgarbage");
-  input[1] = new FloatInput(70,y,300,23,"Float:"); y += 27;
+  input[0]->static_text("this is the initial text");
+  input[1] = new FloatInput(70,y,300,23,"Float"); y += 27;
   input[1]->tooltip("Input field for floating-point number");
-  input[2] = new IntInput(70,y,300,23,"Int:"); y += 27;
+  input[2] = new IntInput(70,y,300,23,"Int"); y += 27;
   input[2]->tooltip("Input field for integer number");
-  input[3] = new SecretInput(70,y,300,23,"Secret:"); y += 27;
+  input[3] = new SecretInput(70,y,300,23,"Secret"); y += 27;
   input[3]->tooltip("Input field for password");
-  input[4] = new WordwrapInput(70,y,300,100,"Wordwrap:"); y += 105;
-  input[4]->tooltip("Input field for short text with newlines");
+  input[4] = new WordwrapInput(70,y,300,100,"Wordwrap"); y += 105;
+  input[4]->tooltip("Input field for short multi-line text. Use TextEditor for anything more than a few lines!");
 
-  for (int i = 0; i < 4; i++) {
+  editor = new TextEditor(70,y,300,100,"TextEditor"); y += 105;
+  editor->tooltip("TextEditor, designed for editing email and programs. "
+		  "wrap_mode(true) has been done to this one.");
+  editor->wrap_mode(true);
+  window->resizable(editor);
+
+  for (int i = 0; i < 5; i++) {
     input[i]->when(0); input[i]->callback(cb);
   }
   int y1 = y;
+  editor->when(0);
+  editor->callback(editor_cb);
 
   Button *b;
   b = new ToggleButton(10,y,200,23,"WHEN_&CHANGED");
@@ -136,12 +155,11 @@ int main(int argc, char **argv) {
   b->labelcolor(contrast(BLACK,b->color()));
   b->tooltip("Color of the text");
 
-  window->resizable(window);
   window->end();
   window->show(argc,argv);
   return run();
 }
 
 //
-// End of "$Id: input.cxx,v 1.32 2004/12/18 19:03:15 spitzak Exp $".
+// End of "$Id$".
 //

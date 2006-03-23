@@ -32,8 +32,18 @@
 #include <fltk/events.h>
 #include <fltk/ask.h>
 #include <fltk/error.h>
-#include <fltk/utf.h>
 #include <fltk/TextBuffer.h>
+
+// Return number of bytes that a legal UTF-8 encoding starting with cc
+// will use. Returns 1 if cc cannot start an encoding.
+static int utf8len(char cc) {
+  unsigned char c = (unsigned char)cc;
+  if (c < 0xc2) return 1;
+  else if (c < 0xe0) return 2;
+  else if (c < 0xf0) return 3;
+  else if (c < 0xf5) return 4;
+  else return 1;
+}
 
 using namespace fltk;
 
@@ -997,7 +1007,7 @@ int TextBuffer::count_displayed_characters_utf(int linestartpos, int targetpos) 
   pos = linestartpos;
   while (pos < targetpos) {
     char_count += expand_character(pos, char_count, expandedChar);
-    pos += utf8seqlen(character(pos));
+    pos += utf8len(character(pos));
   }
   return char_count;
 }
@@ -1017,7 +1027,7 @@ int TextBuffer::skip_displayed_characters(int linestartpos, int nchars) {
     if (c == '\n')
       return pos;
     char_count += character_width(c, char_count, tabdist_, nullsubschar_);
-    pos += utf8seqlen(c);
+    pos += utf8len(c);
   }
   return pos;
 }
@@ -1032,7 +1042,7 @@ int TextBuffer::skip_displayed_characters_utf(int linestartpos, int nchars) {
     if (c == '\n')
       return pos;
     char_count += character_width(c, char_count, tabdist_, nullsubschar_);
-    pos += utf8seqlen(c);
+    pos += utf8len(c);
   }
   return pos;
 }

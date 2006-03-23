@@ -35,12 +35,26 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
-#include <fltk/Cursor.h>
 #include <fltk/TextBuffer.h>
 #include <fltk/TextDisplay.h>
 #include <fltk/Window.h>
 #include <fltk/layout.h>
 #include <fltk/utf.h>
+#include <fltk/Input.h>
+
+// Similar to utf8len in TextBuffer except it returns zero for characters
+// that are illegal. Code here seems to rely on this and does not work
+// without it. All this is depreciated, it should be testing for legal
+// utf8 sequences by using utf8fwd and other such calls.
+static int utf8seqlen(char cc) {
+  unsigned char c = (unsigned char)cc;
+  if (c < 0x80) return 1;
+  else if (c < 0xc2) return 0; // this returns 1 in utf8len
+  else if (c < 0xe0) return 2;
+  else if (c < 0xf0) return 3;
+  else if (c < 0xf5) return 4;
+  else return 1;
+}
 
 using namespace fltk;
 
@@ -103,7 +117,10 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
   cursor_hint_ = NO_HINT;
   cursor_style_ = NORMAL_CURSOR;
   cursor_preferred_col_ = -1;
-  buffer_ = 0;
+  own_buffer = true;
+  buffer_ = new TextBuffer();
+  buffer_->add_modify_callback(buffer_modified_cb, this);
+  buffer_->add_predelete_callback(buffer_predelete_cb, this);
   firstchar_ = 0;
   lastchar_ = 0;
   bufferlines_cnt_ = 0;
@@ -132,6 +149,12 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
   nlinesdeleted_ = 0;
 
   linenumleft_ = linenumwidth_ = 0;
+
+  // Copied from Input:
+  style(Input::default_style);
+  clear_flag(ALIGN_MASK);
+  set_flag(ALIGN_LEFT);
+  set_click_to_focus();
 }
 
 /*
@@ -140,7 +163,9 @@ TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
 ** freed, nor are the style buffer or style table.
 */
 TextDisplay::~TextDisplay() {
-  if (buffer_) {
+  if (own_buffer) {
+    delete buffer_;
+  } else if (buffer_) {
     buffer_->remove_modify_callback(buffer_modified_cb, this);
     buffer_->remove_predelete_callback(buffer_predelete_cb, this);
   }
@@ -155,7 +180,11 @@ void TextDisplay::buffer(TextBuffer *buf) {
 
   /* If the text display is already displaying a buffer, clear it off
      of the display and remove our callback from it */
-  if (buffer_ != 0) {
+  if (own_buffer) {
+    delete buffer_;
+    own_buffer = 0;
+    buffer_ = 0;
+  } else if (buffer_ != 0) {
     buffer_modified_cb(0, 0, buffer_->length(), 0, 0, this);
     buffer_->remove_modify_callback(buffer_modified_cb, this);
     buffer_->remove_predelete_callback(buffer_predelete_cb, this);
@@ -1679,10 +1708,6 @@ void TextDisplay::draw_cursor(int X, int Y) {
     int x1, y1, x2, y2;
   } Segment;
 
-  Segment segs[5];
-  int left, right, cursorWidth, midY;
-  int fontWidth = stdfontwidth_;
-  int nSegs = 0;
   int fontHeight = maxsize_;
   int bot = Y + fontHeight - 1;
 
@@ -1691,12 +1716,23 @@ void TextDisplay::draw_cursor(int X, int Y) {
   if (Y < text_area.y() - 1 || bot > text_area.y() + text_area.h())
     return;
 
+  fltk::setcolor(cursor_color_);
+
+  fltk::push_no_clip();
+#if 1
+  fltk::fillrect(Rectangle(X, Y, 2, bot-Y));
+#else
+
   /* For cursors other than the block, make them around 2/3 of a character
      width, rounded to an even number of pixels so that X will draw an
      odd number centered on the stem at x. */
-  cursorWidth = (fontWidth/3) * 2;
-  left = X - cursorWidth / 2;
-  right = left + cursorWidth;
+  Segment segs[5];
+  int nSegs = 0;
+  int fontWidth = stdfontwidth_;
+  int cursorWidth = (fontWidth/3) * 2;
+  int left = X - cursorWidth / 2;
+  int right = left + cursorWidth;
+  int midY;
 
   /* Create segments and draw cursor */
   if (cursor_style_ == CARET_CURSOR) {
@@ -1732,22 +1768,19 @@ void TextDisplay::draw_cursor(int X, int Y) {
     segs[ 3 ].x1 = X; segs[ 3 ].y1 = bot; segs[ 3 ].x2 = X; segs[ 3 ].y2 = Y;
     nSegs = 4;
   }
-  fltk::setcolor(cursor_color_);
 
-  fltk::push_no_clip();
   for (int k = 0; k < nSegs; k++) {
     drawline(segs[k].x1, segs[k].y1, segs[k].x2, segs[k].y2);
   }
+#endif
+
   fltk::pop_clip();
 
   /* Save the last position drawn */
   cursor_oldx_ = X;
   cursor_oldy_ = Y;
-
-  if (focused()) {
-    transform(X, Y);
-    fl_set_spot(textfont(), this, X, Y);
-  }
+  transform(X, Y);
+  fl_set_spot(textfont(), this, X, Y);
 }
 
 /*
@@ -2350,7 +2383,7 @@ void TextDisplay::blank_cursor_protrusions()
   int fontWidth = stdfontwidth_;  
   int fontHeight = maxsize_;
   int cursorWidth, left = text_area.x(), right = text_area.r();
-  
+
   cursorWidth = (fontWidth/3) * 2;
   if (cursorX >= left-1 && cursorX <= left + cursorWidth/2 - 1) {
       X = cursorX - cursorWidth/2;
@@ -2362,7 +2395,11 @@ void TextDisplay::blank_cursor_protrusions()
       return;
 
   fltk::setcolor(color());
+#if 1
+  fltk::fillrect(Rectangle(cursorX-1, cursorY, 2, fontHeight));
+#else
   fltk::fillrect(Rectangle(X, cursorY, width, fontHeight));
+#endif
   cursor_oldx_ = cursor_oldy_ = -100;
 }
 
@@ -3025,34 +3062,13 @@ int TextDisplay::handle(int event) {
   switch (event) {
   case ENTER:
   case MOVE:
-    if (active_r()) {
-      if (event_inside(Rectangle(text_area.x(), text_area.y(), text_area.w(), text_area.h()))) {
-	cursor(CURSOR_INSERT);
-      } else {
-	cursor(CURSOR_DEFAULT);
-	return Group::handle(event);
-      }
-      return 1;
-    } else {
-      return 0;
-    }
-
-  case LEAVE:
-  case HIDE:
-    if (active_r() && window()) {
-      cursor(CURSOR_DEFAULT);
-      return 1;
-    } else {
-      return 0;
-    }
+    //if (active_r()) cursor(CURSOR_INSERT);
+    return Group::handle(event);
 
   case PUSH: {
+    if (Group::handle(event)) return true;
     if (!event_inside(Rectangle(text_area.x(), text_area.y(), text_area.w(), text_area.h()))) {
       return Group::handle(event);
-    }
-    if (!focused()) {
-      focus(this);
-      handle(FOCUS);
     }
     if (event_state()&SHIFT) return handle(DRAG);
     dragging_ = 1;

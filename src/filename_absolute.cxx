@@ -1,9 +1,8 @@
-//
 // "$Id: filename_absolute.cxx 4660 2005-11-27 14:45:48Z mike $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,18 +22,26 @@
 // Please report all bugs and problems on the following page:
 //
 //     http://www.fltk.org/str.php
-//
 
-/* expand a file name by prepending current directory, deleting . and
-   .. (not really correct for symbolic links) between the prepended
-   current directory.  Use $PWD if it exists.
-   Returns true if any changes were made.
+/** \addtogroup utilities
+
+  FLTK provides some functions that it uses internally that are
+  necessary for portablity, or convienent for writing code. We
+  are trying to eliminate the fltk-specific ones, instead replacing
+  them with functions from the gnuc and bsd standards, providing
+  emulations of these functions on Windows or wherever they are
+  missing.
+
+  Note to money-grubbing capitalists: the source code for the
+  utility functions is PUBLIC DOMAIN and may be reused for any purpose
+  whatsoever (such as, I hope, putting them in your system's libraries!)
+
 */
 
 #include <fltk/filename.h>
+#include <fltk/string.h>
 #include <stdlib.h>
-#include "flstring.h"
-#include <ctype.h>
+#include <assert.h>
 #if defined(WIN32) && !defined(__CYGWIN__)
 # include <direct.h>
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
@@ -48,115 +55,131 @@
 #endif
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-inline int isdirsep(char c) {return c=='/' || c=='\\';}
+static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
 
-int fltk::filename_absolute(char *to, int tolen, const char *from) {
-  if (isdirsep(*from) || *from == '|'
-#if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-      || from[1]==':'
+/**
+  Return the filename \a from expanded to a full "absolute" path name
+  by prepending the current directory:
+  - \a output is a pointer to a buffer that the result is written to.
+  - \a length is the size of \a output. No more than \a length-1 bytes
+    are written, plus a trailing nul.
+  - \a input is the initial filename. Must be different than output!
+  - \a cwd is the directory that filename is relative to. If
+    this is NULL then the result of getcwd() is used.
+
+  The return value is the number of bytes this \e wants to write
+  to \a output. If this value is greater or equal to \a length, then
+  you know the output has been truncated, and you can call this again
+  with a buffer of n+1 bytes.
+
+  Leading "./" sequences in \a input are removed, and "../" sequences
+  are removed as well as the matching trailing part of the prefixed
+  directory.  Technically this is incorrect if symbolic links are used
+  but this matches the behavior of most programs.
+
+  If the \a pwd argument is null, this also expands names starting
+  with '~' to the user or another user's HOME directory.  To expand a
+  filename starting with ~ in the current directory you must start it
+  with "./~".
+
+  If input is a zero-length string then the pwd is returned with a
+  slash added to the end.
+*/
+int
+fltk::filename_absolute(char *output, int length, const char *input, const char* pwd)
+{
+  assert(output > input || output+length <= input);
+  const char* prefix = 0;
+  int prefixlen = 0;
+  if (!pwd && input[0] == '~') {
+    prefix = getenv("HOME");
+    if (prefix && *prefix) {
+      prefixlen = strlen(prefix);
+      input++;
+      if (isdirsep(*input)) {
+	input++;
+      } else if (*input) {
+	// another user. Fake it for now by assumming it is at the same
+	// level as the current user and has that user's name. The real
+	// real way is to call getpwnam(name):
+	while (prefixlen > 0 && !isdirsep(prefix[--prefixlen]));
+      }
+    }
+  } else if (isdirsep(input[0]) /*|| input[0] == '|' // for tcl pipes? */
+#if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
+	     || input[0] && input[1]==':'
 #endif
-      ) {
-    strlcpy(to, from, tolen);
-    return 0;
+	     ) {
+    ;
+  } else {
+    // current directory
+    if (pwd) prefix = pwd;
+    else {
+      prefix = getenv("PWD");
+      if (!prefix) prefix = getcwd(output, length);
+    }
+    prefixlen = strlen(prefix);
   }
-
-  char *a;
-  char *temp = new char[tolen];
-  const char *start = from;
-
-  a = getcwd(temp, tolen);
-  if (!a) {
-    strlcpy(to, from, tolen);
-    delete[] temp;
-    return 0;
+  while (*input == '.') {
+    if (isdirsep(input[1])) {
+      input += 2;
+    } else if (input[1] == '.' && isdirsep(input[2])) {
+      if (!prefixlen) break;
+      while (prefixlen > 0 && !isdirsep(prefix[--prefixlen]));
+      input += 3;
+    } else break;
   }
-#if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-  for (a = temp; *a; a++) if (*a=='\\') *a = '/'; // ha ha
-#else
-  a = temp+strlen(temp);
-#endif
-  if (isdirsep(*(a-1))) a--;
-  /* remove intermediate . and .. names: */
-  while (*start == '.') {
-    if (start[1]=='.' && isdirsep(start[2])) {
-      char *b;
-      for (b = a-1; b >= temp && !isdirsep(*b); b--);
-      if (b < temp) break;
-      a = b;
-      start += 3;
-    } else if (isdirsep(start[1])) {
-      start += 2;
-    } else if (!start[1]) {
-      start ++; // Skip lone "."
-      break;
-    } else
-      break;
-  }
-
-  *a++ = '/';
-  strlcpy(a,start,tolen - (a - temp));
-
-  strlcpy(to, temp, tolen);
-
-  delete[] temp;
-
-  return 1;
+  if (!prefix) return strlcpy(output, input, length);
+  if (prefixlen > length-2) prefixlen = length-2;
+  if (prefix != output) memcpy(output, prefix, prefixlen);
+  if (!prefixlen || !isdirsep(prefix[prefixlen-1])) output[prefixlen++] = '/';
+  return prefixlen+strlcpy(output+prefixlen, input, length-prefixlen);
 }
 
-//! Make a filename relative to the current working directory.
-int					// O - 0 if no change, 1 if changed
-fltk::filename_relative(char       *to,	// O - Relative filename
-                     int        tolen,	// I - Size of "to" buffer
-                     const char *from) {// I - Absolute filename
-  char		*newslash;		// Directory separator
-  const char	*slash;			// Directory separator
-  char		cwd[1024];		// Current directory
+/**
+Does the opposite of filename_absolute(). Produces the shortest possible
+name in \a output that is relative to the current directory. If the
+filename does not start with any text that matches the current directory
+then it is returned unchanged.
 
+Return value is the number of characters it wants to write to \a output.
+*/
+int
+fltk::filename_relative(char *to, int tolen, const char* from, const char* cwd) {
+  assert(to > from || to+tolen <= from);
 
+  if (!isdirsep(*from)
+#if defined(_WIN32) || defined(__EMX__)
+      && !(from[0] && from[1]==':')
+#endif
+      ) {
+    return strlcpy(to, from, tolen);
+  }
+
+  if (!cwd) {
+    cwd = getenv("PWD");
+    if (!cwd) cwd = getcwd(to, tolen);
+  }
+
+  const char* slash = from;
+  const char* newslash = cwd;
 #if defined(WIN32) || defined(__EMX__)
-  if (from[0] == '\0' ||
-      (!isdirsep(*from) && !isalpha(*from) && from[1] != ':' &&
-       !isdirsep(from[2]))) {
-#else
-  if (from[0] == '\0' || !isdirsep(*from)) {
-#endif // WIN32 || __EMX__
-    strlcpy(to, from, tolen);
-    return 0;
+  if (!isdirsep(*from)) { // from starts with drive letter
+    if (tolower(*from & 255) != tolower(*cwd & 255)) {
+      // Not the same drive...
+      return strlcpy(to, from, tolen);
+    }
+    slash = from+2;
+    newslash = cwd+2;
+  } else {
+    if (!isdiresep(*cwd)) // to starts with drive but from does not
+      return strlcpy(to, from, tolen);
   }
-
-  if (!getcwd(cwd, sizeof(cwd))) {
-    strlcpy(to, from, tolen);
-    return 0;
-  }
-
-#if defined(WIN32) || defined(__EMX__)
-  for (newslash = strchr(cwd, '\\'); newslash; newslash = strchr(newslash + 1, '\\'))
-    *newslash = '/';
-
-  if (!strcasecmp(from, cwd)) {
-    strlcpy(to, ".", tolen);
-    return (1);
-  }
-
-  if (tolower(*from & 255) != tolower(*cwd & 255)) {
-    // Not the same drive...
-    strlcpy(to, from, tolen);
-    return 0;
-  }
-  for (slash = from + 2, newslash = cwd + 2;
-#else
-  if (!strcmp(from, cwd)) {
-    strlcpy(to, ".", tolen);
-    return (1);
-  }
-
-  for (slash = from, newslash = cwd;
-#endif // WIN32 || __EMX__
-       *slash != '\0' && *newslash != '\0';
-       slash ++, newslash ++)
+#endif
+  for (; *slash && *newslash; slash ++, newslash ++)
     if (isdirsep(*slash) && isdirsep(*newslash)) continue;
 #if defined(WIN32) || defined(__EMX__) || defined(__APPLE__)
     else if (tolower(*slash & 255) != tolower(*newslash & 255)) break;
@@ -175,17 +198,13 @@ fltk::filename_relative(char       *to,	// O - Relative filename
     while (!isdirsep(*newslash) && newslash > cwd) newslash --;
 
   to[0]         = '\0';
-  to[tolen - 1] = '\0';
 
   while (*newslash != '\0') {
     if (isdirsep(*newslash)) strlcat(to, "../", tolen);
-
     newslash ++;
   }
 
-  strlcat(to, slash, tolen);
-
-  return 1;
+  return strlcat(to, slash, tolen);
 }
 
 

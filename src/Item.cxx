@@ -41,28 +41,28 @@ using namespace fltk;
 
 static void revert(Style* s) {s->box_ = FLAT_BOX;}
 static NamedStyle style("Item", revert, &Item::default_style);
-/*! The default style sets FLAT_BOX. Changing this will mess up the
-  appearance of both menus and browsers. All the rest of the style
-  is blank, and normally it inherits from the current browser or
-  menu, which should call set_style() before drawing any items.
+/** The default style sets FLAT_BOX. Changing this will mess up the
+    appearance of both menus and browsers. All the rest of the style
+    is blank, and normally it inherits from the current browser or
+    menu, which should call set_style() before drawing any items.
 */
 NamedStyle* Item::default_style = &::style;
 
-/*! Unlike other widgets the constructor does not take any dimensions,
-  since it is assummed the container widget will size this
-  correctly.
+/** Unlike other widgets the constructor does not take any dimensions,
+    since it is assummed the container widget will size this
+    correctly.
 */
+Item::Item(const char* l) : Widget(0,0,0,0,l) {
+  init();
+}
+
 void Item::init() {
+  // we need to defer setting the glyph to here because C++ has no way
+  // to make sure the check button style is constructed before this style:
   if (!default_style->glyph_)
     default_style->glyph_ = CheckButton::default_style->glyph_;
   style(default_style);
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
-}
-
-Item::Item(const char* l) : Widget(0,0,0,0,l) {
-  // we need to defer setting the glyph to here because C++ has no way
-  // to make sure the check button style is constructed before this style:
-  init();
 }
 
 Item::Item(const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
@@ -82,7 +82,7 @@ Item::Item(MenuItemType t, const char* l,int s,Callback *cb,void *ud, int f) : W
   type(t);
 }
 
-  /** Modify the parent of the Item::default_style to this style.
+/** Modify the parent of the Item::default_style to this style.
     If no style settings have been done to an Item, it will use the
     textfont, textsize, textcolor, and possibly other settings
     inherited from this style to draw itself. This is used by menus
@@ -179,8 +179,8 @@ void Item::layout() {
   Widget::layout();
 }
 
-/*! Returns 0 always. Items do not accept \e any events. Any results
-  of clicking on them is handled by the parent Menu or Browser. */
+/** Returns 0 always. Items do not accept \e any events. Any results
+    of clicking on them is handled by the parent Menu or Browser. */
 int Item::handle(int) {return 0;}
 
 ////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ int Item::handle(int) {return 0;}
 #include <fltk/ItemGroup.h>
 #include <fltk/damage.h>
 
-/*! Unlike other widgets the constructor does not take any dimensions,
+/** Unlike other widgets the constructor does not take any dimensions,
   since it is assummed the container widget will size this
   correctly. */
 void ItemGroup::init() {
@@ -266,7 +266,7 @@ void ItemGroup::layout() {
   Widget::layout();
 }
 
-/*! Returns 0 always. Items do not accept \e any events. Any results
+/** Returns 0 always. Items do not accept \e any events. Any results
   of clicking on them is handled by the parent Menu or Browser. */
 int ItemGroup::handle(int) {return 0;}
 
@@ -280,7 +280,7 @@ int ItemGroup::handle(int) {return 0;}
 
 #include <fltk/Divider.h>
 
-/*! Unlike other widgets the constructor does not take any dimensions,
+/** Unlike other widgets the constructor does not take any dimensions,
   since it is assummed the container widget will size this
   correctly. */
 Divider::Divider() : Widget(0,0,0,0) {
@@ -303,12 +303,12 @@ void Divider::draw() {
   }
 }
 
-/*! Resizes to a 2x2 square */
+/** Resizes to a 2x2 square */
 void Divider::layout() {
   if (!w()) w(2);
   if (!h()) h(2);
 }
 
-/*! Returns 0 always. Items do not accept \e any events. Any results
+/** Returns 0 always. Items do not accept \e any events. Any results
   of clicking on them is handled by the parent Menu or Browser. */
 int Divider::handle(int) {return 0;}

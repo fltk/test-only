@@ -18,35 +18,14 @@
  *
  * These functions are not in the fltk namespace because they really
  * should not be part of fltk. They are used by the file chooser.
+ * THESE FUNCTIONS MAY BE CHANGED OR DELETED IN FUTURE VERSIONS. DO
+ * NOT USE THEM, AS THEY ARE NOT AN OFFICIAL PART OF fltk!
  */
 
 #ifndef fltk_filename_h
 #define fltk_filename_h
 
 #include "FL_API.h"
-
-/*! \addtogroup utilities
-  \{ */
-
-namespace fltk {
-FL_API const char* filename_normalize(char* output, int length, const char* input, const char* directory=0);
-inline char* filename_normalize(char* o, int l, char* i, const char* d=0) {return (char*)(filename_normalize(o,l,(const char*)i,d));}
-FL_API const char *filename_name(const char *);
-inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a));}
-FL_API const char *filename_ext(const char *);
-inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a));}
-FL_API bool filename_match(const char *, const char *pattern); // glob match
-FL_API bool filename_isdir(const char*);
-FL_API double filename_size(const char *); // return size of file
-FL_API long int filename_mtime(const char *); // return modification time
-
-FL_API int filename_absolute(char *to, int tolen, const char *from);
-FL_API int filename_relative(char *to, int tolen, const char *from);
-// for prev fltk2 decl. in use :
-FL_API bool filename_absolute(char *output, const char *input, const char* pwd);
-FL_API bool filename_expand(char *output, const char *input);
-}
-/*! \} */
 
 ////////////////////////////////////////////////////////////////
 // dirent (what a pain)...
@@ -91,19 +70,6 @@ struct dirent {char d_name[1];};
 
 #endif
 
-namespace fltk {
-    /*! \addtogroup utilities */
-    FL_API int alphasort(struct dirent **, struct dirent **);
-    FL_API int casealphasort(struct dirent **, struct dirent **);
-    FL_API int casenumericsort(struct dirent **, struct dirent **);
-    FL_API int numericsort(struct dirent **, struct dirent **);
-    
-    typedef int (File_Sort_F)(struct dirent **, struct dirent **);
-
-    FL_API int filename_list(const char *d, dirent ***list,File_Sort_F *sort);
-    FL_API int filename_list(const char *d, struct dirent ***);
-}
-
 #ifndef PATH_MAX
 # ifdef _MAX_PATH
 #  define PATH_MAX _MAX_PATH
@@ -111,6 +77,34 @@ namespace fltk {
 #  define PATH_MAX 1024
 # endif
 #endif
+
+////////////////////////////////////////////////////////////////
+
+namespace fltk {
+/*! \addtogroup utilities
+  \{ */
+
+FL_API int filename_absolute(char *to, int tolen, const char *from, const char* cwd=0);
+FL_API int filename_relative(char *to, int tolen, const char *from, const char* cwd=0);
+FL_API const char *filename_name(const char *);
+inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a));}
+FL_API const char *filename_ext(const char *);
+inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a));}
+FL_API bool filename_match(const char *, const char *pattern); // glob match
+FL_API bool filename_isdir(const char*);
+FL_API double filename_size(const char *); // return size of file
+FL_API long int filename_mtime(const char *); // return modification time
+
+typedef int (File_Sort_F)(const dirent*const*, const dirent*const*);
+FL_API int alphasort(const dirent*const*, const dirent*const*);
+FL_API int casealphasort(const dirent*const*, const dirent*const*);
+FL_API int casenumericsort(const dirent*const*, const dirent*const*);
+FL_API int numericsort(const dirent*const*, const dirent*const*);
+FL_API int filename_list(const char *d, dirent ***list, File_Sort_F *sort);
+FL_API int filename_list(const char *d, dirent ***list); // uses numericsort
+
+/*! \} */
+}
 
 #endif
 

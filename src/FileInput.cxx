@@ -34,7 +34,7 @@
 #include <fltk/Cursor.h>
 #include <fltk/Rectangle.h>
 #include <fltk/run.h>
-#include "flstring.h"
+#include <fltk/string.h>
 
 // temporary for new 1.1.x button FileInput features to come
 //#define DIR_HEIGHT	10
@@ -52,7 +52,7 @@
 
 #define DAMAGE_BAR	0x10
 
-// TEMPORARY : 
+// TEMPORARY :
 // activate the following to allow new 1.1.x FileInput func
 //#define NEW_BTNS
 
@@ -83,31 +83,31 @@ void FileInput::draw_boxes(Box* b,const Rectangle& r) {
 void FileInput::draw_buttons() {
     int	i,					// Looping var
 	X;					// Current X position
-    
-    
+
+
     if (damage() & (DAMAGE_BAR | DAMAGE_ALL)) {
 	update_buttons();
     }
-    Color c = color();    
+    Color c = color();
     color(buttoncolor());
     for (X = 0, i = 0; buttons_[i]; i ++)
     {
-	
-	
+
+
 	Rectangle r;
 	if ((X + buttons_[i]) > xscroll()) {
-	    if (X < xscroll()) 
+	    if (X < xscroll())
 		r = Rectangle(0,0,X + buttons_[i] - xscroll(), DIR_HEIGHT);
-	    else if ((X + buttons_[i] - xscroll()) > w()) 
+	    else if ((X + buttons_[i] - xscroll()) > w())
 		r = Rectangle(X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT);
-	    else 
+	    else
 		r = Rectangle( X - xscroll(), 0, buttons_[i], DIR_HEIGHT);
-	    draw_boxes(pressed_==i ? fltk::DOWN_BOX : fltk::UP_BOX,r);    
+	    draw_boxes(pressed_==i ? fltk::DOWN_BOX : fltk::UP_BOX,r);
 	}
-	
+
 	X += buttons_[i];
     }
-    
+
     if (X < w()) {
 	Rectangle r = Rectangle(X - xscroll(),0, w() - X + xscroll(), DIR_HEIGHT);
 	draw_boxes(pressed_==i ? fltk::DOWN_BOX : fltk::UP_BOX, r);
@@ -125,16 +125,16 @@ FileInput::update_buttons() {
     int		i;				// Looping var
     const char	*start,				// Start of path component
 	*end;				// End of path component
-    
-    
+
+
     //  puts("update_buttons()");
-    
+
     // Set the current font & size...
     labelfont(textfont());
     labelsize(textsize());
-    
+
     // Loop through the value string, setting widths...
-    for (i = 0, start = value();
+    for (i = 0, start = text();
     start && i < (int)(sizeof(buttons_) / sizeof(buttons_[0]) - 1);
     start = end, i ++) {
 	//    printf("    start = \"%s\"\n", start);
@@ -143,39 +143,39 @@ FileInput::update_buttons() {
 	    if ((end = strchr(start, '\\')) == NULL)
 #endif // WIN32 || __EMX__
 		break;
-	    
+
 	    end ++;
-	    
+
 	    buttons_[i] = (short)getwidth(start, end - start);
 	    if (!i) buttons_[i] += 6;
     }
-    
+
     printf("    found %d components/buttons...\n", i);
-    
+
     buttons_[i] = 0;
-#endif 
+#endif
 }
 
 
 //
-// 'FileInput::value()' - Set the value of the widget...
+// 'FileInput::text()' - Set the string stored in the widget...
 //
 
 int						// O - TRUE on success
-FileInput::value(const char *str,		// I - New string value
-		 int        len) {		// I - Length of value
+FileInput::text(const char *str,		// I - New string value
+		int        len) {		// I - Length of value
     set_damage(DAMAGE_BAR);
-    int ret = Input::value( str,len);
+    int ret = Input::text( str,len);
     update_buttons();
     return ret;
 }
 
 
 int						// O - TRUE on success
-FileInput::value(const char *str) {		// I - New string value
+FileInput::text(const char *str) {		// I - New string value
     set_damage(DAMAGE_BAR);
     update_buttons();
-    int ret = Input::value(str);
+    int ret = Input::text(str);
     update_buttons();
     return ret;
 }
@@ -195,10 +195,10 @@ static float line_ascent(float leading) {
 
 void FileInput::draw() {
 #ifdef NEWBTNS
-    if (damage() & (DAMAGE_BAR | DAMAGE_ALL)) 
+    if (damage() & (DAMAGE_BAR | DAMAGE_ALL))
 	draw_buttons();
     // this flag keeps Input_::drawtext from drawing a bogus box!
-    char must_trick_Input_ = 
+    char must_trick_Input_ =
 	fltk::focus()!=this && !size() && !(damage()&DAMAGE_ALL);
 
     if (!must_trick_Input_) {
@@ -242,11 +242,11 @@ void FileInput::draw() {
 //
 
 int						// O - TRUE if we handled event
-FileInput::handle(int event) 		// I - Event
+FileInput::handle(int event)		// I - Event
 {
 #ifdef NEW_BTN
     //  printf("handle(event = %d)\n", event);
-    
+
     switch (event) {
     case MOVE :
     case ENTER :
@@ -254,22 +254,22 @@ FileInput::handle(int event) 		// I - Event
 	    if (event_y() < (y() + DIR_HEIGHT)) window()->cursor(CURSOR_DEFAULT);
 	    else window()->cursor(CURSOR_INSERT);
 	}
-	
+
 	return 1;
-	
+
     case PUSH :
     case RELEASE :
     case DRAG :
 	if (event_y() < (y() + DIR_HEIGHT) || pressed_ >= 0) return handle_button(event);
-	
+
 	return Input::handle(event);
-	
+
     default :
 	if (Input::handle(event)) {
 	    damage(DAMAGE_BAR);
 	    return 1;
 	}
-	
+
 	return 0;
     }
 #else
@@ -285,58 +285,57 @@ FileInput::handle(int event) 		// I - Event
 int						// O - TRUE if we handled event
 FileInput::handle_button(int event)		// I - Event
 {
-    int		i,				// Looping var
-	X;				// Current X position
-    char		*start,				// Start of path component
-	*end;				// End of path component
-    char		newvalue[1024];			// New value
-    
-    
+    int	i;
+    int X;	// Current X position
+    char *start;// Start of path component
+    char *end;	// End of path component
+    char newtext[1024];
+
     // Figure out which button is being pressed...
     for (X = 0, i = 0; buttons_[i]; i ++)
     {
 	X += buttons_[i];
-	
+
 	if (X > xscroll() && event_x() < (x() + X - xscroll())) break;
     }
-    
+
     //  printf("handle_button(event = %d), button = %d\n", event, i);
-    
+
     // Redraw the directory bar...
     if (event == RELEASE) pressed_ = -1;
     else pressed_ = (short)i;
-    
+
     window()->make_current();
     draw_buttons();
-    
+
     // Return immediately if the user is clicking on the last button or
     // has not released the mouse button...
     if (!buttons_[i] || event != RELEASE) return 1;
-    
+
     // Figure out where to truncate the path...
-    strlcpy(newvalue, value(), sizeof(newvalue));
-    
-    for (start = newvalue, end = start; start && i >= 0; start = end, i --) {
+    strlcpy(newtext, text(), sizeof(newtext));
+
+    for (start = newtext, end = start; start && i >= 0; start = end, i --) {
 	//    printf("    start = \"%s\"\n", start);
 	if ((end = strchr(start, '/')) == NULL)
 #if defined(WIN32) || defined(__EMX__)
 	    if ((end = strchr(start, '\\')) == NULL)
 #endif // WIN32 || __EMX__
 		break;
-	    
+
 	    end ++;
     }
-    
+
     if (i < 0) {
-	// Found the end; truncate the value and update the buttons...
+	// Found the end; truncate the text and update the buttons...
 	*start = '\0';
-	value(newvalue, start - newvalue);
-	
+	text(newtext, start - newtext);
+
 	// Then do the callbacks, if necessary...
 	set_changed();
 	if (when() & WHEN_CHANGED) do_callback();
     }
-    
+
     return 1;
 }
 

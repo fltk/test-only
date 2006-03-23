@@ -26,7 +26,7 @@
 //
 //   FileChooser::directory()  - Set the directory in the file chooser.
 //   FileChooser::count()      - Return the number of selected files.
-//   FileChooser::value()      - Return a selected filename.
+//   FileChooser::text()       - Return a selected filename.
 //   FileChooser::up()         - Go up one directory.
 //   FileChooser::newdir()     - Make a new directory.
 //   FileChooser::rescan()     - Rescan the current directory.
@@ -80,34 +80,16 @@ FileChooser::directory(const char *d)	// I - Directory to change to
   int		levels;				// Number of levels in directory
 
 
-  // NULL == current directory
-  if (d == NULL)
-    d = ".";
+  if (!d) d = ""; // NULL == current directory
 
-  if (d[0] != '\0')
-  {
-    // Make the directory absolute...
-#if defined(_WIN32) || defined(__EMX__)
-    if (d[0] != '/' && d[0] != '\\' && d[1] != ':')
-#else
-    if (d[0] != '/' && d[0] != '\\')
-#endif /* _WIN32 || __EMX__ */
-      filename_normalize(directory_, sizeof(directory_), d, 0);
-    else
-    {
-      strncpy(directory_, d, sizeof(directory_) - 1);
-      directory_[sizeof(directory_) - 1] = '\0';
-    }
+  filename_absolute(directory_, sizeof(directory_), d, 0);
 
-    // Strip any trailing slash and/or period...
-    dirptr = directory_ + strlen(directory_) - 1;
-    if (*dirptr == '.')
-      *dirptr-- = '\0';
-    if ((*dirptr == '/' || *dirptr == '\\') && dirptr > directory_)
-      *dirptr = '\0';
-  }
-  else
-    directory_[0] = '\0';
+  // Strip any trailing slash and/or period...
+  dirptr = directory_ + strlen(directory_) - 1;
+  if (*dirptr == '.')
+    *dirptr-- = '\0';
+  if ((*dirptr == '/' || *dirptr == '\\') && dirptr > directory_)
+    *dirptr = '\0';
 
   // Clear the directory menu and fill it as needed...
   dirMenu->clear();
@@ -168,7 +150,7 @@ FileChooser::count()
   if (type_ != MULTI)
   {
     // Check to see if the file name input field is blank...
-    filename = fileName->value();
+    filename = fileName->text();
     if (filename == NULL || filename[0] == '\0')
       return (0);
 
@@ -209,11 +191,11 @@ FileChooser::count()
 
 
 //
-// 'FileChooser::value()' - Return a selected filename.
+// 'FileChooser::text()' - Return a selected filename.
 //
 
 const char *			// O - Filename or NULL
-FileChooser::value(int f)	// I - File number
+FileChooser::text(int f)	// I - File number
 {
   int		i;		// Looping var
   int		count;		// Number of selected files
@@ -223,7 +205,7 @@ FileChooser::value(int f)	// I - File number
 
   if (type_ != MULTI)
   {
-    name = fileName->value();
+    name = fileName->text();
     if (name[0] == '\0')
       return (NULL);
 
@@ -252,11 +234,11 @@ FileChooser::value(int f)	// I - File number
 
 
 //
-// 'FileChooser::value()' - Set the current filename.
+// 'FileChooser::text()' - Set the current filename.
 //
 
 void
-FileChooser::value(const char *filename)	// I - Filename + directory
+FileChooser::text(const char *filename)		// I - Filename + directory
 {
   int	i,					// Looping var
   	count;					// Number of items in list
@@ -303,7 +285,7 @@ FileChooser::value(const char *filename)	// I - Filename + directory
   }
 
   // Set the input field to the remaining portion
-  fileName->value(slash);
+  fileName->text(slash);
   fileName->position(0, strlen(slash));
   okButton->activate();
 
@@ -402,7 +384,7 @@ void
 FileChooser::rescan()
 {
   // Clear the current filename
-  fileName->value("");
+  fileName->text(0);
   okButton->deactivate();
 
   // Build the file list...
@@ -453,13 +435,13 @@ FileChooser::fileListCB()
       directory(pathname);
       upButton->activate();
     } else {
-      fileName->value(filename);
+      fileName->text(filename);
       window->hide();
     }
   }
   else
   {
-    fileName->value(filename);
+    fileName->text(filename);
     okButton->activate();
   }
 }
@@ -484,7 +466,7 @@ FileChooser::fileNameCB()
 
 
   // Get the filename from the text field...
-  filename = (char *)fileName->value();
+  filename = (char *)fileName->text();
 
   if (filename == NULL || filename[0] == '\0')
   {
@@ -591,7 +573,7 @@ FileChooser::fileNameCB()
         return;
 
       // Otherwise copy the remainder and proceed...
-      fileName->value(slash);
+      fileName->text(slash);
       fileName->position(strlen(slash));
       filename = slash;
     }
@@ -671,7 +653,7 @@ FileChooser::fileNameCB()
     }
 
     // See if we need to enable the OK button...
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, fileName->value());
+    snprintf(pathname, sizeof(pathname), "%s/%s",directory_,fileName->text());
 
     if (type_ == CREATE || access(pathname, R_OK) == 0)
       okButton->activate();

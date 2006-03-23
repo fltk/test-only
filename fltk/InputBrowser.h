@@ -67,8 +67,8 @@ public:
   int maxw() { return maxw_; }
   int maxh() { return maxh_; }
 
-  void value(const char *v) { m_input.value(v); }
-  const char *value() { return m_input.value(); }
+  void text(const char *v) { m_input.text(v); }
+  const char *text() const { return m_input.text(); }
 
 protected:
   virtual void draw();

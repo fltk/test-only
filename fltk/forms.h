@@ -1,5 +1,5 @@
 //
-// "$Id: forms.h,v 1.6 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id$"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -691,7 +691,7 @@ FL_FORMS_API char*	fl_get_filename();
 #include <fltk/Fl_Input.h>
 forms_constructor(Fl_Input, fl_add_input)
 inline void fl_set_input(Fl_Widget* o, const char* v) {
-    ((Fl_Input*)o)->value(v);}
+    ((Fl_Input*)o)->text(v);}
 inline void fl_set_input_return(Fl_Widget* o, int x) {
     ((Fl_Input*)o)->when(x | FL_WHEN_RELEASE);}
 inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned /*b*/) {
@@ -716,7 +716,7 @@ inline int fl_get_input_cursorpos(Fl_Widget* o, int*x, int*y) {
   *x = ((Fl_Input*)o)->position(); *y = 0; return *x;}
 // inline int fl_get_input_numberoflines(Fl_Widget*);
 // inline void fl_get_input_format(Fl_Widget*, int*, int*);
-inline const char* fl_get_input(Fl_Widget* o) {return ((Fl_Input*)o)->value();}
+inline const char* fl_get_input(Fl_Widget* o) {return ((Fl_Input*)o)->text();}
 
 #include <fltk/Fl_Menu_Button.h>
 
@@ -850,5 +850,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.6 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id$".
 //

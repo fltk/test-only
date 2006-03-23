@@ -1,6 +1,6 @@
-// "$Id: filename_ext.cxx 4115 2005-03-14 04:48:51Z spitzak $"
+// "$Id: filename_name.cxx 4115 2005-03-14 04:48:51Z spitzak $"
 
-/* Copyright 1998-2005 by Bill Spitzak and others.
+/* Copyright 2004-2006 by Bill Spitzak and others.
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -19,31 +19,23 @@
 
 #include <fltk/filename.h>
 
-/*!
-  Returns a pointer to the last period in filename_name(f), or a
-  pointer to the trailing nul if none. Notice that this points \e at
-  the period, not after it!
+/**
+  Returns a pointer to after the last slash in \a name. If the name
+  ends with a slash then this returns a pointer to the NUL. If there
+  is no slash this returns a pointer to the start of \a name.
 */
-// returns pointer to the filename, or null if name ends with '/'
-#if defined(_WIN32) || defined(__EMX__)
-const char *fltk::filename_name(const char *name) {
+FL_API const char *fltk::filename_name(const char *name) {
   const char *p,*q;
-  if (!name) return (0);
   q = name;
+#ifdef _WIN32
   if (q[0] && q[1]==':') q += 2; // skip leading drive letter
   for (p = q; *p; p++) if (*p == '/' || *p == '\\') q = p+1;
-  return q;
-}
 #else
-// returns pointer to the filename, or null if name ends with '/'
-const char *fltk::filename_name(const char *name) {
-  const char *p,*q;
-  if (!name) return (0);
-  for (p=q=name; *p;) if (*p++ == '/') q = p;
+  for (p = q; *p;) if (*p++ == '/') q = p;
+#endif
   return q;
 }
-#endif
 
 //
-// End of "$Id: filename_ext.cxx 4115 2005-03-14 04:48:51Z spitzak $".
+// End of "$Id: filename_name.cxx 4115 2005-03-14 04:48:51Z spitzak $".
 //

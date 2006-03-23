@@ -384,9 +384,9 @@ extern fltk::MenuBar* menubar;
 
 void toggle_overlays(fltk::Widget *,void *) {
   if (overlays_invisible)
-    menubar->find("&Edit/Show Overlays")->set_value();
+    menubar->find("&Edit/Show Overlays")->set_flag(fltk::VALUE);
   else
-    menubar->find("&Edit/Show Overlays")->clear_value();
+    menubar->find("&Edit/Show Overlays")->clear_flag(fltk::VALUE);
   if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
   for (FluidType *o=FluidType::first; o; o=o->walk())

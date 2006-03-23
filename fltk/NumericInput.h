@@ -1,5 +1,5 @@
 //
-// "$Id: NumericInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
+// "$Id$"
 //
 // One-line text input field, which handles up/down arrows to
 // change the digit to the right of the cursor. This still allows
@@ -41,8 +41,6 @@ class FL_API NumericInput : public Input {
     Input(x,y,w,h,l) {when(WHEN_ENTER_KEY|WHEN_RELEASE);}
   void value(double);
   void value(int);
-  void value(const char* s) {Input::value(s);}
-  const char* value() const {return Input::value();}
   int handle(int);
 };
 
@@ -50,5 +48,5 @@ class FL_API NumericInput : public Input {
 #endif
 
 //
-// End of "$Id: NumericInput.h,v 1.3 2003/04/20 03:17:48 easysw Exp $"
+// End of "$Id$"
 //

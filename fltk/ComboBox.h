@@ -45,15 +45,15 @@ public:
   int choice(int v);
   int choice() const;
   int find_choice() const;
-  bool value(const char *txt)
-	{ return text_changed_(input_->value(txt)); }
-  bool value(const char *txt, int n)
-	{ return text_changed_(input_->value(txt, n)); }
-  bool static_value(const char *txt)
-	{ return text_changed_(input_->static_value(txt)); }
-  bool static_value(const char *txt, int n)
-	{ return text_changed_(input_->static_value(txt, n)); }
-  const char* value() const { return input_->value();}
+  bool text(const char *txt)
+	{ return text_changed_(input_->text(txt)); }
+  bool text(const char *txt, int n)
+	{ return text_changed_(input_->text(txt, n)); }
+  bool static_text(const char *txt)
+	{ return text_changed_(input_->static_text(txt)); }
+  bool static_text(const char *txt, int n)
+	{ return text_changed_(input_->static_text(txt, n)); }
+  const char* text() const { return input_->text();}
   char at(int i) const { return input_->at(i); }
   
   int size(bool ofText) const 
