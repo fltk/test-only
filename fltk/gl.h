@@ -51,6 +51,9 @@
 # undef near
 # include <GL/gl.h>
 #elif defined(__APPLE__)
+#  ifndef APIENTRY
+#      define APIENTRY
+#  endif
 # include <OpenGL/gl.h>
 #else
 # include <GL/gl.h>
