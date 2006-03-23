@@ -170,7 +170,7 @@ CPPFILES = \
 	xpmImage.cxx
 
 CFILES	= \
-	scandir.c \
+	scandir.cxx \
 	string.c \
 	utf.c \
 	vsnprintf.c

@@ -59,6 +59,9 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
+#if defined(__APPLE__)
+#  include <ctype.h>
+#endif
 
 /**
   Return the filename \a from expanded to a full "absolute" path name
