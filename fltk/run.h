@@ -100,10 +100,10 @@ inline bool in_main_thread() {return in_main_thread_;}
 
 /*! \addtogroup Monitor access Facility
   \{ */
-  FL_API int x();
-  FL_API int y();
-  FL_API int w();
-  FL_API int h();
+  FL_API int monitor_x();
+  FL_API int monitor_y();
+  FL_API int monitor_w();
+  FL_API int monitor_h();
 /*! \} */
 }
 
