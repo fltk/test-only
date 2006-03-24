@@ -47,7 +47,6 @@
 #  define __glut_h__
 
 #  include "gl.h"
-//#  include <GL/glu.h>
 
 ////////////////////////////////////////////////////////////////
 // GLUT is emulated using this window class and these static variables

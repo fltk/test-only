@@ -143,7 +143,7 @@
 /* Do you have the OpenGL Utility Library header file?
    (many broken Mesa RPMs do not...). This is only used by demo
    programs. */
-#define HAVE_GL_GLU_H		1
+#undef HAVE_GL_GLU_H
 
 /* Does OpenGL have the ability to draw into the overlay? Currently
    this uses the same code as X for finding the overlay visual,

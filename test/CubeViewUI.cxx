@@ -3,7 +3,7 @@
 #include "CubeViewUI.h"
 
 inline void CubeViewUI::cb_zoom_i(fltk::ValueSlider* o, void*) {
-  cube->setsize(o->value());
+  cube->setsize((float) o->value());
   cube->redraw();
 }
 void CubeViewUI::cb_zoom(fltk::ValueSlider* o, void* v) {
@@ -11,7 +11,7 @@ void CubeViewUI::cb_zoom(fltk::ValueSlider* o, void* v) {
 }
 
 inline void CubeViewUI::cb_vrot_i(fltk::ThumbWheel* o, void*) {
-  cube->v_angle(o->value());
+  cube->v_angle((float) o->value());
   cube->redraw();
 }
 void CubeViewUI::cb_vrot(fltk::ThumbWheel* o, void* v) {
@@ -19,7 +19,7 @@ void CubeViewUI::cb_vrot(fltk::ThumbWheel* o, void* v) {
 }
 
 inline void CubeViewUI::cb_ypan_i(fltk::Slider* o, void*) {
-  cube->pany(o->value());
+  cube->pany((float) o->value());
   cube->redraw();
 }
 void CubeViewUI::cb_ypan(fltk::Slider* o, void* v) {
@@ -27,7 +27,7 @@ void CubeViewUI::cb_ypan(fltk::Slider* o, void* v) {
 }
 
 inline void CubeViewUI::cb_xpan_i(fltk::Slider* o, void*) {
-  cube->panx(o->value());
+  cube->panx((float) o->value());
   cube->redraw();
 }
 void CubeViewUI::cb_xpan(fltk::Slider* o, void* v) {
@@ -35,7 +35,7 @@ void CubeViewUI::cb_xpan(fltk::Slider* o, void* v) {
 }
 
 inline void CubeViewUI::cb_hrot_i(fltk::ThumbWheel* o, void*) {
-  cube->h_angle(o->value());
+  cube->h_angle((float) o->value());
   cube->redraw();
 }
 void CubeViewUI::cb_hrot(fltk::ThumbWheel* o, void* v) {

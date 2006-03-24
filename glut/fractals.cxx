@@ -53,7 +53,11 @@
  */
 
 #include <fltk/glut.h> // changed for fltk
-#include <GL/glu.h> // added for fltk
+#ifdef __APPLE__
+#  include <OpenGL/glu.h>
+#else
+#  include <GL/glu.h> // added for FLTK
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
