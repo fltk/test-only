@@ -42,7 +42,7 @@
 #include <fltk/FileBrowser.h>
 #include <fltk/Browser.h>
 #include <fltk/draw.h>
-#include <fltk/color.h>
+#include <fltk/Color.h>
 #include <fltk/Flags.h>
 #include <fltk/Font.h>
 #include <fltk/string.h>
