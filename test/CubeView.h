@@ -33,7 +33,6 @@
 #if HAVE_GL
 #  include <fltk/GlWindow.h>
 #  include <fltk/gl.h>
-#  include <GL/glu.h>
 #else
 #  include <fltk/Widget.h>
 #endif /* HAVE_GL */

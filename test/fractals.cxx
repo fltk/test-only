@@ -30,9 +30,9 @@
 #include <config.h>
 #if !HAVE_GL || !HAVE_GL_GLU_H
 #include <fltk/run.h>
-#include <fltk/message.h>
+#include <fltk/ask.h>
 int main(int, char**) {
-  alert("This demo does not work without GL and GLU (%d)");
+  fltk::alert("This demo does not work without GL and GLU");
   return 1;
 }
 #else
