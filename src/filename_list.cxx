@@ -27,7 +27,7 @@
 // a "user friendly" sorting function that puts numbered files into the
 // order the user expects.
 
-#include "../config.h"
+#include <config.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>

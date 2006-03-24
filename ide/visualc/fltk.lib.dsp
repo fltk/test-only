@@ -764,10 +764,6 @@ SOURCE=..\..\src\FloatInput.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\flstring.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fltk_theme.cxx
 # End Source File
 # Begin Source File
