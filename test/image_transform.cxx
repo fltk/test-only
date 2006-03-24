@@ -88,7 +88,8 @@ void noalpha_cb(Widget* o, void*) {
 }
 
 void alpha_cb(Widget* o, void*) {
-  alpha = o->value(); image = false;
+  
+  alpha = reinterpret_cast<Button*>(o)->value(); image = false;
   d->redraw();
 }
 

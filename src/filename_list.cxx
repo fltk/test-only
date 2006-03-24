@@ -27,13 +27,13 @@
 // a "user friendly" sorting function that puts numbered files into the
 // order the user expects.
 
-#include <config.h>
-#include <fltk/filename.h>
-#include <fltk/string.h>
-#include <fltk/utf.h>
+#include "../config.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
+#include <fltk/string.h>
+#include <fltk/utf.h>
+#include <fltk/filename.h>
 
 #if ! HAVE_SCANDIR
 int scandir (const char *dir, dirent ***namelist,
@@ -56,8 +56,10 @@ int fltk::filename_list(const char *d, dirent ***list,
   // do this even for our own internal version because some compilers
   // will not cast it to the non-const version! Egad. So we have to
   // use if's to go to what the various systems use:
-#if HAVE_SCANDIR && !defined(__APPLE__)
+#if HAVE_SCANDIR && !defined(__APPLE__) && !defined(__linux)
   int n = scandir(d, list, 0, sort);
+#elif HAVE_SCANDIR && defined(__linux)
+  int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
 #elif defined(__hpux) || defined(__CYGWIN__)
   // HP-UX, Cygwin define the comparison function like this:
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
