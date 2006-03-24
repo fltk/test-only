@@ -52,7 +52,7 @@ class FL_API FileIcon
     FIFO,			// Only named pipes
     DEVICE,			// Only character and block devices
     LINK,			// Only symbolic links
-    DIR 			// Only directories
+    DIRECTORY 			// Only directories
   };
 
   enum				// Data opcodes

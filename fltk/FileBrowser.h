@@ -1,9 +1,9 @@
 //
-// "$Id: FileBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id$"
 //
-// Fl_FileBrowser definitions for the Fast Light Tool Kit (FLTK).
+// FileBrowser definitions.
 //
-// Copyright 1997-1999 by Easy Software Products.
+// Copyright 1999-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 //
@@ -32,39 +34,53 @@
 
 #include <fltk/Browser.h>
 #include <fltk/FileIcon.h>
+#include <fltk/filename.h>
 
 namespace fltk {
 
+
+//
+// FileBrowser class...
+//
+
 class FL_API FileBrowser : public Browser
 {
+  int		filetype_;
   const char	*directory_;
   uchar		icon_size_;
   const char	*pattern_;
 
+  int		full_height() const;
   int		item_height(void *) const;
   int		item_width(void *) const;
   void		item_draw(void *, int, int, int, int) const;
   int		incr_height() const { return (item_height(0)); }
 
 public:
+  enum { FILES, DIRECTORIES };
+
   FileBrowser(int, int, int, int, const char * = 0);
 
   uchar		icon_size() const { return (icon_size_); };
   void		icon_size(uchar s) { icon_size_ = s; redraw(); };
 
-  void		directory(const char *directory) { load(directory); }
-  const char	*directory(void) const { return (directory_); }
-
-  void		filter(const char *pattern);
+  void	filter(const char *pattern);
   const char	*filter() const { return (pattern_); };
 
-  int		load(const char *directory);
+  int		load(const char *directory, File_Sort_F *sort = (File_Sort_F*) fltk::numericsort);
 
+  float		textsize() const { return (Browser::textsize()); };
+  void		textsize(float s) { Browser::textsize(s); icon_size_ = (uchar)(3 * s / 2); };
+
+  int		filetype() const { return (filetype_); };
+  void		filetype(int t) { filetype_ = t; };
+  const char *  directory() const {return directory_;}
 };
 
 }
-#endif
+
+#endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: FileBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id$".
 //

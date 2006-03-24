@@ -187,7 +187,7 @@ FileIcon::find(const char *filename,	// I - Name of file */
     if (!stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
-	filetype = DIR;
+	filetype = DIRECTORY;
 #ifdef S_IFIFO
       else if (S_ISFIFO(fileinfo.st_mode))
 	filetype = FIFO;

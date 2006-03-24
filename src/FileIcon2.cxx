@@ -588,7 +588,7 @@ FileIcon::load_system_icons(void)
       icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_xpm("/usr/share/icons/page.xpm");
 
-      icon = new FileIcon("*", FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIRECTORY);
       icon->load_xpm("/usr/share/icons/folder.xpm");
     }
     else if (!access("/usr/dt/appconfig/icons", F_OK))
@@ -597,7 +597,7 @@ FileIcon::load_system_icons(void)
       icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtdata.m.pm");
 
-      icon = new FileIcon("*", FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIRECTORY);
       icon->load_xpm("/usr/dt/appconfig/icons/C/DtdirB.m.pm");
 
       icon = new FileIcon("core", FileIcon::PLAIN);
@@ -618,7 +618,7 @@ FileIcon::load_system_icons(void)
       icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 
-      icon = new FileIcon("*", FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIRECTORY);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.folder.closed.fti");
 
       icon = new FileIcon("core", FileIcon::PLAIN);
@@ -660,7 +660,7 @@ FileIcon::load_system_icons(void)
       new FileIcon("*", FileIcon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
       new FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", FileIcon::PLAIN,
                    sizeof(image) / sizeof(image[0]), image);
-      new FileIcon("*", FileIcon::DIR, sizeof(dir) / sizeof(dir[0]), dir);
+      new FileIcon("*", FileIcon::DIRECTORY, sizeof(dir) / sizeof(dir[0]), dir);
     }
 
     // Mark things as initialized...
@@ -740,7 +740,7 @@ load_kde_mimelnk(const char *filename)
       sprintf(full_iconfilename, "/usr/share/icons/%s", iconfilename);
 
       if (strcmp(mimetype, "inode/directory") == 0)
-	icon = new FileIcon("*", FileIcon::DIR);
+	icon = new FileIcon("*", FileIcon::DIRECTORY);
       else
         icon = new FileIcon(kde_to_fltk_pattern(pattern), FileIcon::PLAIN);
 

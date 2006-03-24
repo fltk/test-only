@@ -98,6 +98,13 @@ FL_API void* thread_message();
 inline bool in_main_thread() {return in_main_thread_;}
 /*! \} */
 
+/*! \addtogroup Monitor access Facility
+  \{ */
+  FL_API int x();
+  FL_API int y();
+  FL_API int w();
+  FL_API int h();
+/*! \} */
 }
 
 #endif
