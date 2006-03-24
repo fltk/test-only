@@ -4,7 +4,7 @@
 
 using namespace fltk;
 
-Window* w;
+Window* win;
 
 static void ptimer(void *o)
 {
@@ -15,14 +15,14 @@ static void ptimer(void *o)
 		add_timeout(0.1, ptimer, (void *)pbar);
 	}
 	else
-		w->hide();
+		win->hide();
 }
 
 int main(int argc, char **argv) {
   ProgressBar* pbar;
   { Window* o = new Window(400, 100);
     o->begin();
-    w = o;
+    win = o;
     { ProgressBar* o = new ProgressBar(25, 25, 330, 25, "Simple Progress Bar");
 	  pbar = o;
 	  //pbar->set_vertical();
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     o->end();
   }
   add_timeout(0.1, ptimer, (void *)pbar);
-  w->show(argc, argv);
+  win->show(argc, argv);
 
   return run();
 }

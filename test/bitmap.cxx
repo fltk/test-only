@@ -23,21 +23,19 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <fltk/ToggleButton.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Button.h>
 #include <fltk/xbmImage.h>
 #include <stdio.h>
-
 #include "escherknot.xbm"
-
-#include <fltk/ToggleButton.h>
 
 using namespace fltk;
 
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*inactb;
 Button *b;
-Window *w;
+Window *win;
 
 void button_cb(Widget *,void *) {
   int i = 0;
@@ -49,12 +47,12 @@ void button_cb(Widget *,void *) {
   b->align(i);
   if (inactb->value()) b->deactivate();
   else b->activate();
-  w->redraw();
+  win->redraw();
 }
 
 int main(int argc, char **argv) {
-  w = new Window(400,400);
-  w->begin();
+  win = new Window(400,400);
+  win->begin();
   b = new Button(140,160,120,120,"Bitmap");
   b->image(new xbmImage(escherknot_bits,escherknot_width,escherknot_height));
   leftb = new ToggleButton(25,50,50,25,"left");
@@ -69,9 +67,9 @@ int main(int argc, char **argv) {
   insideb->callback(button_cb);
   inactb = new ToggleButton(125,75,100,25,"inactive");
   inactb->callback(button_cb);
-  w->resizable(w);
-  w->end();
-  w->show(argc, argv);
+  win->resizable(win);
+  win->end();
+  win->show(argc, argv);
   return fltk::run();
 }
 

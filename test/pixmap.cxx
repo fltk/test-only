@@ -37,7 +37,7 @@ using namespace fltk;
 
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*inactb;
 Button *b;
-Window *w;
+Window *win;
 
 void button_cb(Widget *,void *) {
   int i = 0;
@@ -49,7 +49,7 @@ void button_cb(Widget *,void *) {
   b->align(i);
   if (inactb->value()) b->deactivate();
   else b->activate();
-  w->redraw();
+  win->redraw();
 }
 
 int dvisual = 0;
@@ -59,7 +59,7 @@ int arg(int, char **argv, int &i) {
 }
 
 int main(int argc, char **argv) {
-  Window window(400,400); ::w = &window;
+  Window window(400,400); win = &window;
   window.begin();
   Button b(140,160,120,120,"Pixmap"); ::b = &b;
   xpmImage *pixmap = new xpmImage(porsche_xpm);
