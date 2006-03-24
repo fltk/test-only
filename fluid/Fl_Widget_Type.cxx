@@ -1710,7 +1710,7 @@ void WidgetType::write_widget_code() {
 
   if (is_button()) {
     fltk::Button* b = (fltk::Button*)o;
-    if (b->value()) write_c("%so->set_value();\n", indent());
+    if (b->value()) write_c("%so->set_flags(VALUE);\n", indent());
     if (b->shortcut())
       write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
   }
