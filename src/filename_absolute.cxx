@@ -59,7 +59,7 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__MINGW32__)
 #  include <ctype.h>
 #endif
 

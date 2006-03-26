@@ -160,6 +160,7 @@ CPPFILES = \
 	readimage.cxx \
 	rgbImage.cxx \
 	run.cxx \
+	scandir.cxx \
 	scrollrect.cxx \
 	setcolor.cxx \
 	setdisplay.cxx \
@@ -169,9 +170,7 @@ CPPFILES = \
 	xpmFileImage.cxx \
 	xpmImage.cxx
 
-CFILES	= \
-	scandir.cxx \
-	string.c \
+CFILES	= string.c \
 	utf.c \
 	vsnprintf.c
 
