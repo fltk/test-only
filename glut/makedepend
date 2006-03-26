@@ -1,0 +1,16 @@
+glut_compatability.o: glut_compatability.cxx ../config.h ../fltk/glut.h \
+  ../fltk/gl.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h \
+  /usr/include/GL/gl.h \
+  /usr/lib/gcc/i386-redhat-linux/4.0.0/include/stddef.h \
+  /usr/include/GL/glext.h ../fltk/run.h ../fltk/events.h \
+  ../fltk/GlWindow.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h \
+  ../fltk/Style.h ../fltk/Rectangle.h ../fltk/Cursor.h ../fltk/visual.h \
+  ../fltk/Menu.h ../fltk/Item.h ../fltk/ItemGroup.h ../fltk/Menu.h \
+  ../fltk/Monitor.h
+glut_font.o: glut_font.cxx ../config.h ../fltk/glut.h ../fltk/gl.h \
+  ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h /usr/include/GL/gl.h \
+  /usr/lib/gcc/i386-redhat-linux/4.0.0/include/stddef.h \
+  /usr/include/GL/glext.h ../fltk/run.h ../fltk/events.h \
+  ../fltk/GlWindow.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h \
+  ../fltk/Style.h ../fltk/Rectangle.h ../fltk/Cursor.h ../fltk/visual.h \
+  ../fltk/gl.h

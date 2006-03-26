@@ -777,9 +777,8 @@ fi
 
 dnl Define the command used to update the dependencies (this option
 dnl mainly for FLTK core developers - not necessary for users)
-AC_PATH_PROG(MAKEDEPEND, makedepend)
-#MAKEDEPEND="\$(CXX) -M"
-#AC_SUBST(MAKEDEPEND)
+MAKEDEPEND="\$(CXX) -M"
+AC_SUBST(MAKEDEPEND)
 
 dnl Add warnings to compiler switches:
 dnl do this last so messing with switches does not break tests

@@ -50,7 +50,7 @@ STRIP		= strip
 # compiler names:
 CC		= @CC@
 CXX		= @CXX@
-MAKEDEPEND	= @MAKEDEPEND@ -Y
+MAKEDEPEND	= @MAKEDEPEND@
 
 # flags for C++ compiler:
 OPTIM		= @OPTIM@
