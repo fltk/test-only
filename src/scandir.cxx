@@ -1,3 +1,6 @@
+//
+// "$Id$"
+//
 // scandir.c
 // Implementation of Posix scandir() command on systems that do not have it.
 
