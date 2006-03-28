@@ -169,6 +169,10 @@ SOURCE=..\..\fluid\file.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\FileInput.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\Fl_Function_Type.cxx
 # End Source File
 # Begin Source File

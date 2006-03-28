@@ -89,7 +89,7 @@ struct HelpTarget {
 // HelpView class...
 //
 
-class FL_IMAGES_API HelpView : public Group    //// Help viewer widget
+class FL_API HelpView : public Group    //// Help viewer widget
 {
   enum { RIGHT = -1, CENTER, LEFT };    // Alignments
 
@@ -147,24 +147,9 @@ class FL_IMAGES_API HelpView : public Group    //// Help viewer widget
   int get_length (const char *l);
   int handle (int);
 
-  void initfont (Font *&f, int &s) {
-    nfonts_ = 0;
-	f = fonts_[0] = textfont_;
-	s = fontsizes_[0] = textsize_;
-    setfont (f, (float)s-1);
-  } 
-  void pushfont (Font *f, int s) {
-    if (nfonts_ < 99) nfonts_++;
-	fonts_[nfonts_] = f;
-	fontsizes_[nfonts_] = s;
-    setfont (f, (float)s-1);
-  }
-  void popfont (Font *&f, int &s) {
-    if (nfonts_ > 0) nfonts_--;
-    f = fonts_[nfonts_];
-	s = fontsizes_[nfonts_];
-    setfont(f, (float)s-1);
-  }
+  void initfont (Font *&f, int &s);
+  void pushfont (Font *f, int s);
+  void popfont (Font *&f, int &s);
 
 public:
 
@@ -189,21 +174,13 @@ public:
   void resize (int, int, int, int);
   void layout();
   int size () const { return (size_); } 
-  void textcolor (Color c) {
-    if (textcolor_ == defcolor_)
-      textcolor_ = c;
-    defcolor_ = c;
-  }
+
+  void textcolor (Color c);
+  void textfont (Font *f);
+  void textsize (int s);
+
   Color textcolor () const { return (defcolor_); } 
-  void textfont (Font *f) {
-    textfont_ = f;
-    format();
-  }
   Font *textfont () const { return (textfont_); } 
-  void textsize (int s) {
-    textsize_ = s;
-    format ();
-  }
   int textsize () const { return (textsize_); } 
   const char *title () { return (title_); }
   void topline (const char *n);

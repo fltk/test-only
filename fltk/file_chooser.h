@@ -31,10 +31,9 @@ namespace fltk {
 
 FL_API void use_system_file_chooser(bool = true);
 
-FL_API const char *file_chooser(const char *message,
-				const char *pattern,
-				const char *filename,
-				bool save = true);
+FL_API const char *dir_chooser(const char *message,const char *fname,int relative=0);
+FL_API const char *file_chooser(const char *message,const char *pattern,
+				const char *filename, int relative = 0);
 FL_API void file_chooser_callback(void (*cb)(const char *));
 
 /* \} */

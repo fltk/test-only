@@ -85,6 +85,7 @@ using namespace fltk;
 #define SELECTED 1
 #define NOTDISPLAYED 2
 
+/*
 struct BLINE			// data is in a linked list of these
 {
   BLINE	*prev;		// Previous item in list
@@ -94,168 +95,169 @@ struct BLINE			// data is in a linked list of these
   char		flags;		// selected, displayed
   char		txt[1];		// start of allocated array
 };
-
+*/
 
 //
 // 'FileBrowser::full_height()' - Return the height of the list.
 //
 
-int					// O - Height in pixels
-FileBrowser::full_height() const
-{
-  int	i,				// Looping var
-	th;				// Total height of list.
-
-  for (i = 0, th = 0; i < size(); i ++)
-    th += (int) (textsize()+leading()) ; //item_height(find_line(i));
-  return (th);
-}
+//DEL int					// O - Height in pixels
+//DEL FileBrowser::full_height() const
+//DEL {
+//DEL   int	i,				// Looping var
+//DEL 	th;				// Total height of list.
+//DEL 
+//DEL   for (i = 0, th = 0; i < size(); i ++)
+//DEL     th += (int) (textsize()+leading()) ; //item_height(find_line(i));
+//DEL   return (th);
+//DEL }
 
 
 //
 // 'FileBrowser::item_height()' - Return the height of a list item.
 //
 
-int					// O - Height in pixels
-FileBrowser::item_height(void *p) const	// I - List item data
-{
-  BLINE	*line;			// Pointer to line
-  char		*t;			// Pointer into text
-  int		height;			// Width of line
-  int		textheight;		// Height of text
-
-
-  // Figure out the standard text height...
-  setfont(textfont(), textsize());
-  textheight = int(textsize()+leading());
-
-  // We always have at least 1 line...
-  height = textheight;
-
-  // Scan for newlines...
-  line = (BLINE *)p;
-
-  if (line != NULL)
-    for (t = line->txt; *t != '\0'; t ++)
-      if (*t == '\n')
-	height += textheight;
-
-  // If we have enabled icons then add space for them...
-  if (FileIcon::first() != NULL && height < icon_size_)
-    height = icon_size_;
-
-  // Add space for the selection border..
-  height += 2;
-
-  // Return the height
-  return (height);
-}
+//DEL int					// O - Height in pixels
+//DEL FileBrowser::item_height(void *p) const	// I - List item data
+//DEL {
+//DEL   BLINE	*line;			// Pointer to line
+//DEL   char		*t;			// Pointer into text
+//DEL   int		height;			// Width of line
+//DEL   int		textheight;		// Height of text
+//DEL 
+//DEL 
+//DEL   // Figure out the standard text height...
+//DEL   setfont(textfont(), textsize());
+//DEL   textheight = int(textsize()+leading());
+//DEL 
+//DEL   // We always have at least 1 line...
+//DEL   height = textheight;
+//DEL 
+//DEL   // Scan for newlines...
+//DEL   line = (BLINE *)p;
+//DEL 
+//DEL   if (line != NULL)
+//DEL     for (t = line->txt; *t != '\0'; t ++)
+//DEL       if (*t == '\n')
+//DEL 	height += textheight;
+//DEL 
+//DEL   // If we have enabled icons then add space for them...
+//DEL   if (FileIcon::first() != NULL && height < icon_size_)
+//DEL     height = icon_size_;
+//DEL 
+//DEL   // Add space for the selection border..
+//DEL   height += 2;
+//DEL 
+//DEL   // Return the height
+//DEL   return (height);
+//DEL }
 
 
 //
 // 'FileBrowser::item_width()' - Return the width of a list item.
 //
 
-int					// O - Width in pixels
-FileBrowser::item_width(void *p) const	// I - List item data
-{
-  int		i;			// Looping var
-  BLINE	*line;			// Pointer to line
-  char		*t,			// Pointer into text
-		*ptr,			// Pointer into fragment
-		fragment[10240];	// Fragment of text
-  int		width,			// Width of line
-		tempwidth;		// Width of fragment
-  int		column;			// Current column
-  const int	*columns;		// Columns
-
-
-  // Set the font and size...
-  setfont(textfont(), textsize());
-
-  // Scan for newlines...
-  line    = (BLINE *)p;
-  columns = column_widths();
-
-  if (strchr(line->txt, '\n') == NULL &&
-      strchr(line->txt, '\t') == NULL)
-  {
-    // Do a fast width calculation...
-    width = (int) getwidth(line->txt);
-  }
-  else
-  {
-    // More than 1 line or have columns; find the maximum width...
-    width     = 0;
-    tempwidth = 0;
-    column    = 0;
-
-    for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
-      if (*t == '\n')
-      {
-        // Newline - nul terminate this fragment and get the width...
-        *ptr = '\0';
-
-	tempwidth += (int)getwidth(fragment);
-
-        // Update the max width as needed...
-	if (tempwidth > width)
-	  width = tempwidth;
-
-        // Point back to the start of the fragment...
-	ptr       = fragment;
-	tempwidth = 0;
-	column    = 0;
-      }
-      else if (*t == '\t')
-      {
-        // Advance to the next column...
-        column ++;
-	if (columns)
-	{
-	  for (i = 0, tempwidth = 0; i < column && columns[i]; i ++)
-	    tempwidth += columns[i];
-	}
-	else
-          tempwidth = column * (int)((textsize()+leading()) * 0.6 * 8.0);
-
-        if (tempwidth > width)
-	  width = tempwidth;
-
-	ptr = fragment;
-      }
-      else
-        *ptr++ = *t;
-
-    if (ptr > fragment)
-    {
-      // Nul terminate this fragment and get the width...
-      *ptr = '\0';
-
-      tempwidth += (int)getwidth(fragment);
-
-      // Update the max width as needed...
-      if (tempwidth > width)
-	width = tempwidth;
-    }
-  }
-
-  // If we have enabled icons then add space for them...
-  if (FileIcon::first() != NULL)
-    width += icon_size_ + 8;
-
-  // Add space for the selection border..
-  width += 2;
-
-  // Return the width
-  return (width);
-}
+//DEL int					// O - Width in pixels
+//DEL FileBrowser::item_width(void *p) const	// I - List item data
+//DEL {
+//DEL   int		i;			// Looping var
+//DEL   BLINE	*line;			// Pointer to line
+//DEL   char		*t,			// Pointer into text
+//DEL 		*ptr,			// Pointer into fragment
+//DEL 		fragment[10240];	// Fragment of text
+//DEL   int		width,			// Width of line
+//DEL 		tempwidth;		// Width of fragment
+//DEL   int		column;			// Current column
+//DEL   const int	*columns;		// Columns
+//DEL 
+//DEL 
+//DEL   // Set the font and size...
+//DEL   setfont(textfont(), textsize());
+//DEL 
+//DEL   // Scan for newlines...
+//DEL   line    = (BLINE *)p;
+//DEL   columns = column_widths();
+//DEL 
+//DEL   if (strchr(line->txt, '\n') == NULL &&
+//DEL       strchr(line->txt, '\t') == NULL)
+//DEL   {
+//DEL     // Do a fast width calculation...
+//DEL     width = (int) getwidth(line->txt);
+//DEL   }
+//DEL   else
+//DEL   {
+//DEL     // More than 1 line or have columns; find the maximum width...
+//DEL     width     = 0;
+//DEL     tempwidth = 0;
+//DEL     column    = 0;
+//DEL 
+//DEL     for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
+//DEL       if (*t == '\n')
+//DEL       {
+//DEL         // Newline - nul terminate this fragment and get the width...
+//DEL         *ptr = '\0';
+//DEL 
+//DEL 	tempwidth += (int)getwidth(fragment);
+//DEL 
+//DEL         // Update the max width as needed...
+//DEL 	if (tempwidth > width)
+//DEL 	  width = tempwidth;
+//DEL 
+//DEL         // Point back to the start of the fragment...
+//DEL 	ptr       = fragment;
+//DEL 	tempwidth = 0;
+//DEL 	column    = 0;
+//DEL       }
+//DEL       else if (*t == '\t')
+//DEL       {
+//DEL         // Advance to the next column...
+//DEL         column ++;
+//DEL 	if (columns)
+//DEL 	{
+//DEL 	  for (i = 0, tempwidth = 0; i < column && columns[i]; i ++)
+//DEL 	    tempwidth += columns[i];
+//DEL 	}
+//DEL 	else
+//DEL           tempwidth = column * (int)((textsize()+leading()) * 0.6 * 8.0);
+//DEL 
+//DEL         if (tempwidth > width)
+//DEL 	  width = tempwidth;
+//DEL 
+//DEL 	ptr = fragment;
+//DEL       }
+//DEL       else
+//DEL         *ptr++ = *t;
+//DEL 
+//DEL     if (ptr > fragment)
+//DEL     {
+//DEL       // Nul terminate this fragment and get the width...
+//DEL       *ptr = '\0';
+//DEL 
+//DEL       tempwidth += (int)getwidth(fragment);
+//DEL 
+//DEL       // Update the max width as needed...
+//DEL       if (tempwidth > width)
+//DEL 	width = tempwidth;
+//DEL     }
+//DEL   }
+//DEL 
+//DEL   // If we have enabled icons then add space for them...
+//DEL   if (FileIcon::first() != NULL)
+//DEL     width += icon_size_ + 8;
+//DEL 
+//DEL   // Add space for the selection border..
+//DEL   width += 2;
+//DEL 
+//DEL   // Return the width
+//DEL   return (width);
+//DEL }
 
 
 //
 // 'FileBrowser::item_draw()' - Draw a list item.
 //
 
+/*
 void
 FileBrowser::item_draw(void *p,	// I - List item data
                  	   int  X,	// I - Upper-lefthand X coordinate
@@ -387,7 +389,7 @@ FileBrowser::item_draw(void *p,	// I - List item data
 	fltk::ALIGN_LEFT | fltk::ALIGN_CLIP);
   }
 }
-
+*/
 
 //
 // 'FileBrowser::FileBrowser()' - Create a FileBrowser widget.

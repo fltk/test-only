@@ -164,18 +164,16 @@ SOURCE=..\..\src\HelpDialog.cxx
 DEP_CPP_HELPD=\
 	"..\..\fltk\ask.h"\
 	"..\..\fltk\DoubleBufferWindow.h"\
-	"..\..\fltk\HelpDialog.h"\
 	"..\..\fltk\HelpView.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
-	"..\..\src\flstring.h"\
-	".\config.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\HelpDialog.h"\
 	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\input.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -187,6 +185,21 @@ DEP_CPP_HELPD=\
 	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\images_core.cxx
+DEP_CPP_IMAGE=\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\string.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File

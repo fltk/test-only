@@ -219,7 +219,6 @@ FileIcon::find(const char *filename,	// I - Name of file */
 //
 // 'FileIcon::draw()' - Draw an icon.
 //
-
 void
 FileIcon::draw(int      x,		// I - Upper-lefthand X
 		  int      y,		// I - Upper-lefthand Y

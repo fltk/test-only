@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "CubeView"=.\CubeView.dsp - Package Owner=<4>
+Project: "CubeView"=".\CubeView.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -21,7 +21,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "arc"=.\arc.dsp - Package Owner=<4>
+Project: "arc"=".\arc.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -36,7 +36,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ask"=.\ask.dsp - Package Owner=<4>
+Project: "ask"=".\ask.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -51,7 +51,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "bitmap"=.\bitmap.dsp - Package Owner=<4>
+Project: "bitmap"=".\bitmap.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -66,7 +66,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "boxtype"=.\boxtype.dsp - Package Owner=<4>
+Project: "boxtype"=".\boxtype.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -81,7 +81,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "browser"=.\browser.dsp - Package Owner=<4>
+Project: "browser"=".\browser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -96,7 +96,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "button"=.\button.dsp - Package Owner=<4>
+Project: "button"=".\button.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -108,22 +108,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "buttons"=.\buttons.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "checkers"=.\checkers.dsp - Package Owner=<4>
+Project: "buttons"=".\buttons.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -138,7 +123,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "clock"=.\clock.dsp - Package Owner=<4>
+Project: "checkers"=".\checkers.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -153,7 +138,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "color_chooser"=.\color_chooser.dsp - Package Owner=<4>
+Project: "clock"=".\clock.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -168,7 +153,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "cursor"=.\cursor.dsp - Package Owner=<4>
+Project: "color_chooser"=".\color_chooser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -183,7 +168,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "curve"=.\curve.dsp - Package Owner=<4>
+Project: "cursor"=".\cursor.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -198,7 +183,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "demo"=.\demo.dsp - Package Owner=<4>
+Project: "curve"=".\curve.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "demo"=".\demo.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -326,11 +326,17 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name buttons
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltkdll
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltkdll_images
+    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "editor"=.\editor.dsp - Package Owner=<4>
+Project: "editor"=".\editor.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -345,7 +351,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "file_chooser"=.\file_chooser.dsp - Package Owner=<4>
+Project: "file_chooser"=".\file_chooser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -360,7 +366,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk"=.\fltk.lib.dsp - Package Owner=<4>
+Project: "fltk"=".\fltk.lib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -372,7 +378,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_images"=.\fltk_images.lib.dsp - Package Owner=<4>
+Project: "fltk_images"=".\fltk_images.lib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -393,7 +399,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_opengl"=.\fltk_opengl.dsp - Package Owner=<4>
+Project: "fltk_opengl"=".\fltk_opengl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -408,7 +414,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltkdll"=.\fltkdll.dsp - Package Owner=<4>
+Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -420,7 +426,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltkdll_images"=.\fltkdll_images.dsp - Package Owner=<4>
+Project: "fltkdll_images"=".\fltkdll_images.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -444,7 +450,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fluid"=.\fluid.dsp - Package Owner=<4>
+Project: "fluid"=".\fluid.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -462,7 +468,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fluid_wdll"=.\fluid_wdll.dsp - Package Owner=<4>
+Project: "fluid_wdll"=".\fluid_wdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -480,7 +486,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fonts"=.\fonts.dsp - Package Owner=<4>
+Project: "fonts"=".\fonts.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -495,25 +501,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fractals"=.\fractals.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltk_opengl
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "glpuzzle"=.\glpuzzle.dsp - Package Owner=<4>
+Project: "fractals"=".\fractals.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -531,7 +519,25 @@ Package=<4>
 
 ###############################################################################
 
-Project: "hello"=.\hello.dsp - Package Owner=<4>
+Project: "glpuzzle"=".\glpuzzle.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_opengl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "hello"=".\hello.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -546,7 +552,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "help"=.\help.dsp - Package Owner=<4>
+Project: "help"=".\help.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -564,7 +570,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "image"=.\image.dsp - Package Owner=<4>
+Project: "image"=".\image.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -582,7 +588,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "input"=.\input.dsp - Package Owner=<4>
+Project: "input"=".\input.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -597,7 +603,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "keyboard"=.\keyboard.dsp - Package Owner=<4>
+Project: "keyboard"=".\keyboard.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -612,7 +618,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "label"=.\label.dsp - Package Owner=<4>
+Project: "label"=".\label.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -627,7 +633,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libjpeg"=.\libjpeg.dsp - Package Owner=<4>
+Project: "libjpeg"=".\libjpeg.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -639,7 +645,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libpng"=.\libpng.dsp - Package Owner=<4>
+Project: "libpng"=".\libpng.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -651,34 +657,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "line_style"=.\line_style.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "mandelbrot"=.\mandelbrot.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "menubar"=.\menubar.dsp - Package Owner=<4>
+Project: "line_style"=".\line_style.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -693,7 +672,19 @@ Package=<4>
 
 ###############################################################################
 
-Project: "navigation"=.\navigation.dsp - Package Owner=<4>
+Project: "mandelbrot"=".\mandelbrot.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "menubar"=".\menubar.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -708,7 +699,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "pack"=.\pack.dsp - Package Owner=<4>
+Project: "navigation"=".\navigation.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -723,19 +714,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "qubix"=.\qubix.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "tabs"=.\tabs.dsp - Package Owner=<4>
+Project: "pack"=".\pack.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -750,7 +729,19 @@ Package=<4>
 
 ###############################################################################
 
-Project: "tile"=.\tile.dsp - Package Owner=<4>
+Project: "qubix"=".\qubix.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tabs"=".\tabs.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -765,7 +756,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "valuators"=.\valuators.dsp - Package Owner=<4>
+Project: "tile"=".\tile.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -780,7 +771,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "zlib"=.\zlib.dsp - Package Owner=<4>
+Project: "valuators"=".\valuators.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "zlib"=".\zlib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

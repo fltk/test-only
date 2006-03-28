@@ -34,6 +34,7 @@
 #include <fltk/Cursor.h>
 #include <fltk/Rectangle.h>
 #include <fltk/run.h>
+#include <fltk/Box.h>
 #include <fltk/string.h>
 
 // temporary for new 1.1.x button FileInput features to come
@@ -51,10 +52,6 @@
 //
 
 #define DAMAGE_BAR	0x10
-
-// TEMPORARY :
-// activate the following to allow new 1.1.x FileInput func
-//#define NEW_BTNS
 
 using namespace fltk;
 //
@@ -75,44 +72,45 @@ FileInput::FileInput(int X, int Y, int W, int H, const char *l)
 // 'FileInput::draw_buttons()' - Draw directory buttons.
 //
 
-void FileInput::draw_boxes(Box* b,const Rectangle& r) {
-    box(b);
+void FileInput::draw_boxes(bool pressed,const Rectangle& r) {
+    box(pressed ? fltk::DOWN_BOX : fltk::UP_BOX);
     draw_box(r);
 }
 
 void FileInput::draw_buttons() {
-    int	i,					// Looping var
+  int	i,					// Looping var
 	X;					// Current X position
 
+  if (damage() & (DAMAGE_BAR | DAMAGE_ALL)) {
+    update_buttons();
+  }
 
-    if (damage() & (DAMAGE_BAR | DAMAGE_ALL)) {
-	update_buttons();
-    }
-    Color c = color();
-    color(buttoncolor());
-    for (X = 0, i = 0; buttons_[i]; i ++)
-    {
+  Color c = color();
+  color(buttoncolor());
 
-
-	Rectangle r;
-	if ((X + buttons_[i]) > xscroll()) {
-	    if (X < xscroll())
-		r = Rectangle(0,0,X + buttons_[i] - xscroll(), DIR_HEIGHT);
-	    else if ((X + buttons_[i] - xscroll()) > w())
-		r = Rectangle(X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT);
-	    else
-		r = Rectangle( X - xscroll(), 0, buttons_[i], DIR_HEIGHT);
-	    draw_boxes(pressed_==i ? fltk::DOWN_BOX : fltk::UP_BOX,r);
-	}
-
-	X += buttons_[i];
+  for (X = 0, i = 0; buttons_[i]; i ++)
+  {
+    if ((X + buttons_[i]) > xscroll()) {
+      if (X < xscroll()) {
+        draw_boxes(pressed_ == i ,
+                 Rectangle(0, 0, X + buttons_[i] - xscroll(), DIR_HEIGHT));
+      } else if ((X + buttons_[i] - xscroll()) > w()) {
+	draw_boxes(pressed_ == i ,
+        	 Rectangle(0 + X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT));
+      } else {
+        draw_boxes(pressed_ == i ,
+	         Rectangle(0 + X - xscroll(), 0, buttons_[i], DIR_HEIGHT));
+      }
     }
 
-    if (X < w()) {
-	Rectangle r = Rectangle(X - xscroll(),0, w() - X + xscroll(), DIR_HEIGHT);
-	draw_boxes(pressed_==i ? fltk::DOWN_BOX : fltk::UP_BOX, r);
-    }
-    color(c);
+    X += buttons_[i];
+  }
+
+  if (X < w()) {
+    draw_boxes(pressed_==i,
+             Rectangle(0 + X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT));
+  }
+  color(c);
 }
 
 //
@@ -121,18 +119,18 @@ void FileInput::draw_buttons() {
 
 void
 FileInput::update_buttons() {
-#ifdef NEWBTNS
     int		i;				// Looping var
     const char	*start,				// Start of path component
 	*end;				// End of path component
-
+    Box * b = box();
 
     //  puts("update_buttons()");
 
     // Set the current font & size...
-    labelfont(textfont());
-    labelsize(textsize());
-
+    float  ts = textsize();
+    Font * f = textfont();
+    //textfont(f);  textsize(ts);
+    fltk::setfont(f,ts);
     // Loop through the value string, setting widths...
     for (i = 0, start = text();
     start && i < (int)(sizeof(buttons_) / sizeof(buttons_[0]) - 1);
@@ -147,19 +145,19 @@ FileInput::update_buttons() {
 	    end ++;
 
 	    buttons_[i] = (short)getwidth(start, end - start);
-	    if (!i) buttons_[i] += 6;
+	    if (!i) buttons_[i] += fltk::box_dx(b) + 6;
     }
 
     printf("    found %d components/buttons...\n", i);
 
     buttons_[i] = 0;
-#endif
 }
 
 
 //
 // 'FileInput::text()' - Set the string stored in the widget...
 //
+static int idbg=0;
 
 int						// O - TRUE on success
 FileInput::text(const char *str,		// I - New string value
@@ -174,12 +172,10 @@ FileInput::text(const char *str,		// I - New string value
 int						// O - TRUE on success
 FileInput::text(const char *str) {		// I - New string value
     set_damage(DAMAGE_BAR);
-    update_buttons();
     int ret = Input::text(str);
     update_buttons();
     return ret;
 }
-
 
 //
 // 'FileInput::draw()' - Draw the file input widget...
@@ -194,7 +190,8 @@ static float line_ascent(float leading) {
 
 
 void FileInput::draw() {
-#ifdef NEWBTNS
+    Box *b = box();
+
     if (damage() & (DAMAGE_BAR | DAMAGE_ALL))
 	draw_buttons();
     // this flag keeps Input_::drawtext from drawing a bogus box!
@@ -202,8 +199,8 @@ void FileInput::draw() {
 	fltk::focus()!=this && !size() && !(damage()&DAMAGE_ALL);
 
     if (!must_trick_Input_) {
-      Rectangle r(1,DIR_HEIGHT+1,w()-2,h()-DIR_HEIGHT-2);
-      //Input::box()->inset(r);
+      Rectangle r(box_dx(b),DIR_HEIGHT+box_dy(b),w()-box_dw(b),h()-DIR_HEIGHT-box_dh(b));
+      //Input::b->inset(r);
       int label_width ;
       if (1 || damage() & DAMAGE_ALL) {
 	draw_frame();
@@ -231,9 +228,6 @@ void FileInput::draw() {
       r.move_x(label_width);
       Input::draw(r);
     }
-#else
-    Input::draw();
-#endif // NEW BTNS
 }
 
 
@@ -244,14 +238,13 @@ void FileInput::draw() {
 int						// O - TRUE if we handled event
 FileInput::handle(int event)		// I - Event
 {
-#ifdef NEW_BTN
     //  printf("handle(event = %d)\n", event);
 
     switch (event) {
     case MOVE :
     case ENTER :
 	if (active_r()) {
-	    if (event_y() < (y() + DIR_HEIGHT)) window()->cursor(CURSOR_DEFAULT);
+	    if (event_y() < DIR_HEIGHT) window()->cursor(CURSOR_DEFAULT);
 	    else window()->cursor(CURSOR_INSERT);
 	}
 
@@ -260,21 +253,30 @@ FileInput::handle(int event)		// I - Event
     case PUSH :
     case RELEASE :
     case DRAG :
-	if (event_y() < (y() + DIR_HEIGHT) || pressed_ >= 0) return handle_button(event);
+	if (event_y() < DIR_HEIGHT || pressed_ >= 0) 
+	    return handle_button(event);
 
 	return Input::handle(event);
+    break;
 
+    case KEY:
+    case KEYUP:
+	if (Input::handle(event)) {
+	    fltk::damage(DAMAGE_BAR);
+	    if (when()&(WHEN_CHANGED|WHEN_ENTER_KEY_ALWAYS |WHEN_ENTER_KEY_ALWAYS) ) {
+		clear_changed(); do_callback();
+	    }
+	    return 1;
+	}
+      return 0;
     default :
 	if (Input::handle(event)) {
-	    damage(DAMAGE_BAR);
+	    fltk::damage(DAMAGE_BAR);
 	    return 1;
 	}
 
 	return 0;
     }
-#else
-    return Input::handle(event);
-#endif
 }
 
 
@@ -296,7 +298,8 @@ FileInput::handle_button(int event)		// I - Event
     {
 	X += buttons_[i];
 
-	if (X > xscroll() && event_x() < (x() + X - xscroll())) break;
+	if (X > xscroll() && event_x() < (X - xscroll())) 
+	    break;
     }
 
     //  printf("handle_button(event = %d), button = %d\n", event, i);
@@ -305,7 +308,7 @@ FileInput::handle_button(int event)		// I - Event
     if (event == RELEASE) pressed_ = -1;
     else pressed_ = (short)i;
 
-    window()->make_current();
+    this->make_current();
     draw_buttons();
 
     // Return immediately if the user is clicking on the last button or

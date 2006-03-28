@@ -2500,6 +2500,43 @@ HelpView::handle(int event)	// I - Event to handle
   return (1);
 }
 
+// externalize the font manips non trivial methods as it would be inlined otherwise at  the cost of lib size
+void HelpView::initfont (Font *&f, int &s) {
+    nfonts_ = 0;
+	f = fonts_[0] = textfont_;
+	s = fontsizes_[0] = textsize_;
+    setfont (f, (float)s-1);
+} 
+
+void HelpView::pushfont (Font *f, int s) {
+    if (nfonts_ < 99) nfonts_++;
+	fonts_[nfonts_] = f;
+	fontsizes_[nfonts_] = s;
+    setfont (f, (float)s-1);
+}
+
+void HelpView::popfont (Font *&f, int &s) {
+    if (nfonts_ > 0) nfonts_--;
+    f = fonts_[nfonts_];
+	s = fontsizes_[nfonts_];
+    setfont(f, (float)s-1);
+}
+
+void HelpView::textcolor (Color c) {
+if (textcolor_ == defcolor_)
+  textcolor_ = c;
+defcolor_ = c;
+}
+
+void HelpView::textfont (Font *f) {
+textfont_ = f;
+format();
+}
+
+void HelpView::textsize (int s) {
+textsize_ = s;
+format ();
+}
 
 //
 // 'HelpView::HelpView()' - Build a HelpView widget.
@@ -2958,7 +2995,6 @@ hscrollbar_callback(Widget *s, void *)
 {
   ((HelpView *)(s->parent()))->leftline(int(((Scrollbar*)s)->value()));
 }
-
 
 //
 // End of "$Id$".

@@ -48,7 +48,7 @@ static SharedImage *check(const char *name, uchar *header, int headerlen) {
 
 /*! Makes it so SharedImage can identify image files of the types
   compiled into fltk. These are XPM, PNG, and Jpeg images. */
-void fltk::register_images() {
+FL_IMAGES_API void fltk::register_images() {
   static bool been_here = false;
   if (been_here) return ;
   been_here = true;

@@ -47,7 +47,7 @@ public:
 
   FileInput(int,int,int,int,const char *t=0);
 
-  void draw_boxes(Box* b,const Rectangle& r);
+  void draw_boxes(bool pressed, const Rectangle& r);
   virtual int handle(int);
   virtual void draw();
 

@@ -1,9 +1,9 @@
 //
 // "$Id$"
 //
-// More FileChooser routines for the Fast Light Tool Kit (FLTK).
+// More FileChooser routines.
 //
-// Copyright 1997-2000 by Easy Software Products.
+// Copyright 1999-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,118 +20,101 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 // Contents:
 //
-//   FileChooser::directory()  - Set the directory in the file chooser.
-//   FileChooser::count()      - Return the number of selected files.
-//   FileChooser::text()       - Return a selected filename.
-//   FileChooser::up()         - Go up one directory.
-//   FileChooser::newdir()     - Make a new directory.
-//   FileChooser::rescan()     - Rescan the current directory.
-//   FileChooser::fileListCB() - Handle clicks (and double-clicks) in the
-//                                  FileBrowser.
-//   FileChooser::fileNameCB() - Handle text entry in the FileBrowser.
+//   FileChooser::count()             - Return the number of selected files.
+//   FileChooser::directory()         - Set the directory in the file chooser.
+//   FileChooser::filter()            - Set the filter(s) for the chooser.
+//   FileChooser::newdir()            - Make a new directory.
+//   FileChooser::value()             - Return a selected filename.
+//   FileChooser::rescan()            - Rescan the current directory.
+//   FileChooser::favoritesButtonCB() - Handle favorites selections.
+//   FileChooser::fileListCB()        - Handle clicks (and double-clicks)
+//                                          in the Fl_File_Browser.
+//   FileChooser::fileNameCB()        - Handle text entry in the FileBrowser.
+//   FileChooser::showChoiceCB()      - Handle show selections.
+//   compare_dirnames()                   - Compare two directory names.
+//   quote_pathname()                     - Quote a pathname for a menu.
+//   unquote_pathname()                   - Unquote a pathname from a menu.
 //
 
 //
 // Include necessary headers.
 //
-
 #include <fltk/FileChooser.h>
 #include <fltk/filename.h>
 #include <fltk/ask.h>
-#include <fltk/string.h>
 #include <fltk/events.h>
-#include <config.h>
+#include <fltk/run.h>
+#include <fltk/Cursor.h>
+#include <fltk/SharedImage.h>
+#include <fltk/Item.h>
+#include <fltk/string.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fltk/utf.h>
-#if defined(_WIN32) && !defined(__CYGWIN__)
-# include <windows.h>
-# include <fltk/utf.h>
-# undef _POSIX_
-# include <direct.h>
-# include <io.h>
-# define access(a,b) _access(a,b)
-# define R_OK 4
+
+#if defined(WIN32) && ! defined (__CYGWIN__)
+#  include <direct.h>
+#  include <io.h>
+// Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
+// on Windows, which is supposed to be POSIX compliant...
+#  define access _access
+#  define mkdir _mkdir
+// Apparently Borland C++ defines DIRECTORY in <direct.h>, which
+// interfers with the FileIcon enumeration of the same name.
+#  ifdef DIRECTORY
+#    undef DIRECTORY
+#  endif // DIRECTORY
 #else
-# include <unistd.h>
-# include <pwd.h>
-#endif
-#if __MINGW32__
-# include <ctype.h> // needed for isalpha()
-#endif
+#  include <unistd.h>
+#  include <pwd.h>
+#endif /* WIN32 */
+
 
 using namespace fltk;
 
 //
-// 'FileChooser::directory()' - Set the directory in the file chooser.
+// File chooser label strings and sort function...
 //
 
-void
-FileChooser::directory(const char *d)	// I - Directory to change to
-{
-  char		pathname[1024],			// Full path of directory
-		*pathptr,			// Pointer into full path
-		*dirptr;			// Pointer into directory
-  int		levels;				// Number of levels in directory
+Preferences	FileChooser::prefs_(Preferences::USER, "fltk.org", "filechooser");
 
-
-  if (!d) d = ""; // NULL == current directory
-
-  filename_absolute(directory_, sizeof(directory_), d, 0);
-
-  // Strip any trailing slash and/or period...
-  dirptr = directory_ + strlen(directory_) - 1;
-  if (*dirptr == '.')
-    *dirptr-- = '\0';
-  if ((*dirptr == '/' || *dirptr == '\\') && dirptr > directory_)
-    *dirptr = '\0';
-
-  // Clear the directory menu and fill it as needed...
-  dirMenu->clear();
-#if defined(_WIN32) || defined(__EMX__)
-  dirMenu->add("My Computer");
+const char	*FileChooser::add_favorites_label = "Add to Favorites";
+const char	*FileChooser::all_files_label = "All Files (*)";
+const char	*FileChooser::custom_filter_label = "Custom Filter";
+const char	*FileChooser::existing_file_label = "Please choose an existing file!";
+const char	*FileChooser::favorites_label = "Favorites";
+const char	*FileChooser::filename_label = "Filename:";
+#ifdef WIN32
+const char	*FileChooser::filesystems_label = "My Computer";
 #else
-  dirMenu->add("File Systems");
-#endif /* _WIN32 || __EMX__ */
+const char	*FileChooser::filesystems_label = "File Systems";
+#endif // WIN32
+const char	*FileChooser::manage_favorites_label = "Manage Favorites";
+const char	*FileChooser::new_directory_label = "New Directory?";
+const char	*FileChooser::new_directory_tooltip = "Create a new directory.";
+const char	*FileChooser::preview_label = "Preview";
+const char	*FileChooser::save_label = "Save";
+const char	*FileChooser::show_label = "Show:";
+File_Sort_F	*FileChooser::sort = fltk::numericsort;
 
-  levels = 0;
-  for (dirptr = directory_, pathptr = pathname; *dirptr != '\0';)
-  {
-    if (*dirptr == '/' || *dirptr == '\\')
-    {
-      // Need to quote the slash first, and then add it to the menu...
-      // Quoting is no longer needed with new menu->add() code, which
-      // was changed to match fltk1.1
-      // *pathptr++ = '\\';
-      *pathptr++ = '/';
-      *pathptr   = '\0';
-      dirptr ++;
 
-      dirMenu->add(pathname);
-      levels ++;
-    }
-    else
-      *pathptr++ = *dirptr++;
-  }
+//
+// Local functions...
+//
 
-  if (pathptr > pathname)
-  {
-    *pathptr = '\0';
-    dirMenu->add(pathname);
-    levels ++;
-  }
-
-  dirMenu->value(levels);
-  dirMenu->redraw();
-
-  // Rescan the directory...
-  rescan();
-}
+static int	compare_dirnames(const char *a, const char *b);
+static void	quote_pathname(char *, const char *, int);
+static void	unquote_pathname(char *, const char *, int);
 
 
 //
@@ -139,193 +122,626 @@ FileChooser::directory(const char *d)	// I - Directory to change to
 //
 
 int				// O - Number of selected files
-FileChooser::count()
-{
+FileChooser::count() {
   int		i;		// Looping var
-  int		count;		// Number of selected files
+  int		fcount;		// Number of selected files
   const char	*filename;	// Filename in input field or list
-  char		pathname[1024];	// Full path to file
 
 
-  if (type_ != MULTI)
-  {
+  filename = fileName->text();
+
+  if (!(type_ & MULTI)) {
     // Check to see if the file name input field is blank...
-    filename = fileName->text();
-    if (filename == NULL || filename[0] == '\0')
-      return (0);
-
-    // Is the file name a directory?
-    if (directory_[0] != '\0')
-      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-    else
-    {
-      strncpy(pathname, filename, sizeof(pathname) - 1);
-      pathname[sizeof(pathname) - 1] = '\0';
-    }
-
-    if (filename_isdir(pathname))
-      return (0);
-    else
-      return (1);
+    if (!filename || !filename[0]) return 0;
+    else return 1;
   }
 
-  for (i = 0, count = 0; i < fileList->size(); i ++)
-    if (fileList->selected(i))
-    {
+  for (i = 1, fcount = 0; i <= fileList->size(); i ++)
+    if (fileList->selected(i)) {
       // See if this file is a directory...
-      filename = (char *)fileList->child(i)->label();
-      if (directory_[0] != '\0')
-	snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-      else
-      {
-        strncpy(pathname, filename, sizeof(pathname) - 1);
-        pathname[sizeof(pathname) - 1] = '\0';
-      }
+      filename = (char *)fileList->child(i-1)->label();
 
-      if (!filename_isdir(pathname))
-	count ++;
+      if (filename[strlen(filename) - 1] != '/')
+	fcount ++;
     }
 
-  return (count);
+  if (fcount) return fcount;
+  else if (!filename || !filename[0]) return 0;
+  else return 1;
 }
 
 
 //
-// 'FileChooser::text()' - Return a selected filename.
-//
-
-const char *			// O - Filename or NULL
-FileChooser::text(int f)	// I - File number
-{
-  int		i;		// Looping var
-  int		count;		// Number of selected files
-  const char	*name;		// Current filename
-  static char	pathname[1024];	// Filename + directory
-
-
-  if (type_ != MULTI)
-  {
-    name = fileName->text();
-    if (name[0] == '\0')
-      return (NULL);
-
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
-    return ((const char *)pathname);
-  }
-
-  for (i = 0, count = 0; i < fileList->size(); i ++)
-    if (fileList->selected(i))
-    {
-      // See if this file is a directory...
-      name = fileList->child(i)->label();
-      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
-
-      if (!filename_isdir(pathname))
-      {
-        // Nope, see if this this is "the one"...
-	count ++;
-	if (count == f)
-          return ((const char *)pathname);
-      }
-    }
-
-  return (NULL);
-}
-
-
-//
-// 'FileChooser::text()' - Set the current filename.
+// 'FileChooser::directory()' - Set the directory in the file chooser.
 //
 
 void
-FileChooser::text(const char *filename)		// I - Filename + directory
+FileChooser::directory(const char *d)// I - Directory to change to
 {
-  int	i,					// Looping var
-  	count;					// Number of items in list
-  char	*slash;					// Directory separator
-  char	pathname[1024];				// Local copy of filename
+  char	*dirptr;			// Pointer into directory
 
 
-  // See if the filename is actually a directory...
-  if (filename == NULL || filename_isdir(filename))
-  {
-    // Yes, just change the current directory...
-    directory(filename);
-    return;
+//  printf("FileChooser::directory(\"%s\")\n", d == NULL ? "(null)" : d);
+
+  // NULL == current directory
+  if (d == NULL)
+    d = ".";
+
+#ifdef WIN32
+  // See if the filename contains backslashes...
+  char	*slash;				// Pointer to slashes
+  char	fixpath[1024];			// Path with slashes converted
+  if (strchr(d, '\\')) {
+    // Convert backslashes to slashes...
+    strlcpy(fixpath, d, sizeof(fixpath));
+
+    for (slash = strchr(fixpath, '\\'); slash; slash = strchr(slash + 1, '\\'))
+      *slash = '/';
+
+    d = fixpath;
   }
+#endif // WIN32
 
-  if (!filename[0])
+  if (d[0] != '\0')
   {
-    // Just show the current directory...
-    directory(NULL);
-    return;
+    // Make the directory absolute...
+#if (defined(WIN32) && ! defined(__CYGWIN__))|| defined(__EMX__)
+    if (d[0] != '/' && d[0] != '\\' && d[1] != ':')
+#else
+    if (d[0] != '/' && d[0] != '\\')
+#endif /* WIN32 || __EMX__ */
+      fltk::filename_absolute(directory_, sizeof(directory_), d);
+    else
+      strlcpy(directory_, d, sizeof(directory_));
+
+    // Strip any trailing slash...
+    dirptr = directory_ + strlen(directory_) - 1;
+    if ((*dirptr == '/' || *dirptr == '\\') && dirptr > directory_)
+      *dirptr = '\0';
+
+    // See if we have a trailing .. or . in the filename...
+    dirptr = directory_ + strlen(directory_) - 3;
+    if (dirptr >= directory_ && strcmp(dirptr, "/..") == 0) {
+      // Yes, we have "..", so strip the trailing path...
+      *dirptr = '\0';
+      while (dirptr > directory_) {
+        if (*dirptr == '/') break;
+	dirptr --;
+      }
+
+      if (dirptr >= directory_ && *dirptr == '/')
+        *dirptr = '\0';
+    } else if ((dirptr + 1) >= directory_ && strcmp(dirptr + 1, "/.") == 0) {
+      // Strip trailing "."...
+      dirptr[1] = '\0';
+    }
   }
+  else
+    directory_[0] = '\0';
 
-  // Switch to single-selection mode as needed
-  if (type_ == MULTI)
-    type(SINGLE);
+  if (shown()) {
+    // Rescan the directory...
+    rescan();
+  }
+}
 
-  // See if there is a directory in there...
-  strncpy(pathname, filename, sizeof(pathname) - 1);
-  pathname[sizeof(pathname) - 1] = '\0';
 
-  if ((slash = strrchr(pathname, '/')) == NULL)
-    slash = strrchr(pathname, '\\');
+//
+// 'FileChooser::favoritesButtonCB()' - Handle favorites selections.
+//
 
-  if (slash != NULL)
-  {
-    // Yes, change the display to the directory... 
-    *slash++ = '\0';
+void
+FileChooser::favoritesButtonCB()
+{
+  int		v;			// Current selection
+  char		pathname[1024],		// Pathname
+		menuname[2048];		// Menu name
+
+
+  v = favoritesButton->value();
+
+  if (!v) {
+    // Add current directory to favorites...
+    if (getenv("HOME")) v = favoritesButton->size() - 5;
+    else v = favoritesButton->size() - 4;
+
+    sprintf(menuname, "favorite%02d", v);
+
+    prefs_.set(menuname, directory_);
+
+    quote_pathname(menuname, directory_, sizeof(menuname));
+    favoritesButton->add(menuname);
+
+    if (favoritesButton->size() > 104) {
+      favoritesButton->child(0)->deactivate();
+    }
+  } else if (v == 1) {
+    // Manage favorites...
+    favoritesCB(0);
+  } else if (v == 2) {
+    // Filesystems/My Computer
+    directory("");
+  } else {
+    unquote_pathname(pathname, favoritesButton->child(v)->label(), sizeof(pathname));
     directory(pathname);
   }
-  else
-  {
-    directory(NULL);
-    slash = pathname;
-  }
-
-  // Set the input field to the remaining portion
-  fileName->text(slash);
-  fileName->position(0, strlen(slash));
-  okButton->activate();
-
-  // Then find the file in the file list and select it...
-  count = fileList->size();
-
-  for (i = 0; i < count; i ++)
-    if (strcmp(fileList->child(i)->label(), slash) == 0)
-    {
-      fileList->select(i);
-      break;
-    }
 }
 
 
 //
-// 'FileChooser::up()' - Go up one directory.
+// 'FileChooser::favoritesCB()' - Handle favorites dialog.
 //
 
 void
-FileChooser::up()
+FileChooser::favoritesCB(Widget *w)
+					// I - Widget
 {
-  char *slash;		// Trailing slash
+  int		i;			// Looping var
+  char		name[32],		// Preference name
+		pathname[1024];		// Directory in list
 
 
-  if ((slash = strrchr(directory_, '/')) == NULL)
-    slash = strrchr(directory_, '\\');
+  if (!w) {
+    // Load the favorites list...
+    favList->clear();
+    favList->deselect();
 
-  if (directory_[0] != '\0')
-    dirMenu->value(dirMenu->value() - 1);
+    for (i = 0; i < 100; i ++) {
+      // Get favorite directory 0 to 99...
+      sprintf(name, "favorite%02d", i);
 
-  if (slash != NULL)
-    *slash = '\0';
-  else
-  {
-    upButton->deactivate();
-    directory_[0] = '\0';
+      prefs_.get(name, pathname, "", sizeof(pathname));
+
+      // Stop on the first empty favorite...
+      if (!pathname[0]) break;
+
+      // Add the favorite to the list...
+      favList->add(pathname,
+                   FileIcon::find(pathname, FileIcon::DIRECTORY));
+    }
+
+    favUpButton->deactivate();
+    favDeleteButton->deactivate();
+    favDownButton->deactivate();
+    favOkButton->deactivate();
+
+    favWindow->hotspot(favList);
+    favWindow->show();
+  } else if (w == favList) {
+    i = favList->value();
+    if (i) {
+      if (i > 1) favUpButton->activate();
+      else favUpButton->deactivate();
+
+      favDeleteButton->activate();
+
+      if (i < favList->size()) favDownButton->activate();
+      else favDownButton->deactivate();
+    } else {
+      favUpButton->deactivate();
+      favDeleteButton->deactivate();
+      favDownButton->deactivate();
+    }
+  } else if (w == favUpButton) {
+    i = favList->value();
+
+    favList->insert(i - 1, favList->child(i)->label(), favList->child(i)->user_data());
+    favList->remove(i + 1);
+    favList->select(i - 1);
+
+    if (i == 2) favUpButton->deactivate();
+
+    favDownButton->activate();
+
+    favOkButton->activate();
+  } else if (w == favDeleteButton) {
+    i = favList->value();
+
+    favList->remove(i);
+
+    if (i > favList->size()) i --;
+    favList->select(i);
+
+    if (i < favList->size()) favDownButton->activate();
+    else favDownButton->deactivate();
+
+    if (i > 1) favUpButton->activate();
+    else favUpButton->deactivate();
+
+    if (!i) favDeleteButton->deactivate();
+
+    favOkButton->activate();
+  } else if (w == favDownButton) {
+    i = favList->value();
+
+    favList->insert(i + 2, favList->child(i)->label(), favList->child(i)->user_data());
+    favList->remove(i);
+    favList->select(i + 1);
+
+    if ((i + 1) == favList->size()) favDownButton->deactivate();
+
+    favUpButton->activate();
+
+    favOkButton->activate();
+  } else if (w == favOkButton) {
+    // Copy the new list over...
+    for (i = 0; i < favList->size(); i ++) {
+      // Set favorite directory 0 to 99...
+      sprintf(name, "favorite%02d", i);
+
+      prefs_.set(name, favList->child(i+1)->label());
+    }
+
+    // Clear old entries as necessary...
+    for (; i < 100; i ++) {
+      // Clear favorite directory 0 to 99...
+      sprintf(name, "favorite%02d", i);
+
+      prefs_.get(name, pathname, "", sizeof(pathname));
+
+      if (pathname[0]) prefs_.set(name, "");
+      else break;
+    }
+
+    update_favorites();
+
+    favWindow->hide();
+  }
+}
+
+
+//
+// 'FileChooser::fileListCB()' - Handle clicks (and double-clicks) in the
+//                                   FileBrowser.
+//
+
+void
+FileChooser::fileListCB()
+{
+  char	*filename,			// New filename
+	pathname[1024];			// Full pathname to file
+
+
+ filename = (char *)fileList->child(fileList->value())->label();
+   if (!filename)
+    return;
+
+  if (!directory_[0]) {
+    strlcpy(pathname, filename, sizeof(pathname));
+  } else if (strcmp(directory_, "/") == 0) {
+    snprintf(pathname, sizeof(pathname), "/%s", filename);
+  } else {
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   }
 
-  rescan();
+  if (fltk::event_clicks()) {
+#if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
+    if ((strlen(pathname) == 2 && pathname[1] == ':') ||
+        fltk::filename_isdir(pathname))
+#else
+    if (fltk::filename_isdir(pathname))
+#endif /* WIN32 || __EMX__ */
+    {
+      // Change directories...
+      directory(pathname);
+
+      // Reset the click count so that a click in the same spot won't
+      // be treated as a triple-click.  We use a value of -1 because
+      // the next click will increment click count to 0, which is what
+      // we really want...
+      fltk::event_clicks(-1);
+    }
+    else
+    {
+      // Hide the window - picked the file...
+      window->hide();
+    }
+  }
+  else
+  {
+    // Check if the user clicks on a directory when picking files;
+    // if so, make sure only that item is selected...
+    filename = pathname + strlen(pathname) - 1;
+
+    if ((type_ & MULTI) && !(type_ & DIRECTORY)) {
+      if (*filename == '/') {
+	// Clicked on a directory, deselect everything else...
+	int i = fileList->value();
+	fileList->deselect();
+	fileList->select(i);
+      } else {
+        // Clicked on a file - see if there are other directories selected...
+        int i;
+	const char *temp;
+	for (i = 1; i <= fileList->size(); i ++) {
+	  if (i != fileList->value() && fileList->selected(i)) {
+	    temp = fileList->child(i-1)->label();
+	    temp += strlen(temp) - 1;
+	    if (*temp == '/') break;	// Yes, selected directory
+	  }
+	}
+
+        if (i <= fileList->size()) {
+	  i = fileList->value();
+	  fileList->deselect();
+	  fileList->select(i);
+	}
+      }
+    }
+    // Strip any trailing slash from the directory name...
+    if (*filename == '/') *filename = '\0';
+
+//    puts("Setting fileName from fileListCB...");
+    fileName->value(pathname);
+
+    // Update the preview box...
+    fltk::remove_timeout((TimeoutHandler)previewCB, this);
+    fltk::add_timeout(1.0, (TimeoutHandler)previewCB, this);
+
+    // Do any callback that is registered...
+    if (callback_) (*callback_)(this, data_);
+
+    // Activate the OK button as needed...
+    if (!fltk::filename_isdir(pathname) || (type_ & DIRECTORY))
+      okButton->activate();
+    else
+      okButton->deactivate();
+  }
+}
+
+
+//
+// 'FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
+//
+
+void
+FileChooser::fileNameCB()
+{
+  char		*filename,	// New filename
+		*slash,		// Pointer to trailing slash
+		pathname[1024],	// Full pathname to file
+		matchname[256];	// Matching filename
+  int		i,		// Looping var
+		min_match,	// Minimum number of matching chars
+		max_match,	// Maximum number of matching chars
+		num_files,	// Number of files in directory
+		first_line;	// First matching line
+  const char	*file;		// File from directory
+
+
+//  puts("fileNameCB()");
+
+  // Get the filename from the text field...
+  filename = (char *)fileName->text();
+
+  if (!filename || !filename[0]) {
+    okButton->deactivate();
+    return;
+  }
+
+  // Expand ~ and $ variables as needed...
+  if (strchr(filename, '~') || strchr(filename, '$')) {
+    fltk::filename_absolute(pathname, sizeof(pathname), filename);
+    filename = pathname;
+    value(pathname);
+  }
+
+  // Make sure we have an absolute path...
+#if (defined(WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
+  if (directory_[0] != '\0' && filename[0] != '/' &&
+      filename[0] != '\\' &&
+      !(isalpha(filename[0] & 255) && (!filename[1] || filename[1] == ':'))) {
+#else
+  if (directory_[0] != '\0' && filename[0] != '/') {
+#endif /* WIN32 || __EMX__ */
+    fltk::filename_absolute(pathname, sizeof(pathname), filename);
+    value(pathname);
+    fileName->mark(fileName->position()); // no selection after expansion
+  } else if (filename != pathname) {
+    // Finally, make sure that we have a writable copy...
+    strlcpy(pathname, filename, sizeof(pathname));
+  }
+
+  filename = pathname;
+
+  // Now process things according to the key pressed...
+  if (fltk::event_key() == ReturnKey || fltk::event_key() == KeypadEnter) {
+    // Enter pressed - select or change directory...
+#if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
+    if ((isalpha(pathname[0] & 255) && pathname[1] == ':' && !pathname[2]) ||
+        fltk::filename_isdir(pathname) &&
+	compare_dirnames(pathname, directory_)) {
+#else
+    if (fltk::filename_isdir(pathname) &&
+	compare_dirnames(pathname, directory_)) {
+#endif /* WIN32 || __EMX__ */
+      directory(pathname);
+    } else if ((type_ & CREATE) || access(pathname, 0) == 0) {
+      if (!fltk::filename_isdir(pathname) || (type_ & DIRECTORY)) {
+	// Update the preview box...
+	update_preview();
+
+	// Do any callback that is registered...
+	if (callback_) (*callback_)(this, data_);
+
+	// Hide the window to signal things are done...
+	window->hide();
+      }
+    } else {
+      // File doesn't exist, so beep at and alert the user...
+      fltk::alert(existing_file_label);
+    }
+  }
+    else if (fltk::event_key() != fltk::DeleteKey &&
+           fltk::event_key() != fltk::BackSpaceKey) {
+    // Check to see if the user has entered a directory...
+    if ((slash = strrchr(pathname, '/')) == NULL)
+      slash = strrchr(pathname, '\\');
+
+    if (!slash) return;
+
+    // Yes, change directories if necessary...
+    *slash++ = '\0';
+    filename = slash;
+
+#if defined(WIN32) || defined(__EMX__)
+    if (strcasecmp(pathname, directory_) &&
+        (pathname[0] || strcasecmp("/", directory_))) {
+#else
+    if (strcmp(pathname, directory_) &&
+        (pathname[0] || strcasecmp("/", directory_))) {
+#endif // WIN32 || __EMX__
+      int p = fileName->position();
+      int m = fileName->mark();
+
+      directory(pathname);
+
+      if (filename[0]) {
+	char tempname[1024];
+
+	snprintf(tempname, sizeof(tempname), "%s/%s", directory_, filename);
+	fileName->text(tempname);
+	strlcpy(pathname, tempname, sizeof(pathname));
+      }
+
+      fileName->position(p, m);
+    }
+
+    // Other key pressed - do filename completion as possible...
+    num_files  = fileList->size();
+    min_match  = strlen(filename);
+    max_match  = min_match + 1;
+    first_line = 0;
+
+    for (i = 1; i <= num_files && max_match > min_match; i ++) {
+      file = fileList->child(i-1)->label();
+
+#if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
+      if (strncasecmp(filename, file, min_match) == 0) {
+#else
+      if (strncmp(filename, file, min_match) == 0) {
+#endif // WIN32 || __EMX__
+        // OK, this one matches; check against the previous match
+	if (!first_line) {
+	  // First match; copy stuff over...
+	  strlcpy(matchname, file, sizeof(matchname));
+	  max_match = strlen(matchname);
+
+          // Strip trailing /, if any...
+	  if (matchname[max_match - 1] == '/') {
+	    max_match --;
+	    matchname[max_match] = '\0';
+	  }
+
+	  // And then make sure that the item is visible
+          fileList->topline(i);
+	  first_line = i;
+	} else {
+	  // Succeeding match; compare to find maximum string match...
+	  while (max_match > min_match)
+#if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
+	    if (strncasecmp(file, matchname, max_match) == 0)
+#else
+	    if (strncmp(file, matchname, max_match) == 0)
+#endif // WIN32 || __EMX__
+	      break;
+	    else
+	      max_match --;
+
+          // Truncate the string as needed...
+          matchname[max_match] = '\0';
+	}
+      }
+    }
+
+    // If we have any matches, add them to the input field...
+    if (first_line > 0 && min_match == max_match &&
+        max_match == (int)strlen(fileList->child(first_line-1)->label())) {
+      // This is the only possible match...
+      fileList->deselect(0);
+      fileList->select(first_line);
+      fileList->redraw();
+    } else if (max_match > min_match && first_line) {
+      // Add the matching portion...
+      fileName->replace(filename - pathname, filename - pathname + min_match,
+                        matchname,strlen(matchname));
+
+      // Highlight it with the cursor at the end of the selection so
+      // s/he can press the right arrow to accept the selection
+      // (Tab and End also do this for both cases.)
+      fileName->position(filename - pathname + max_match,
+	                 filename - pathname + min_match);
+    } else if (max_match == 0) {
+      fileList->deselect(0);
+      fileList->redraw();
+    }
+
+    // See if we need to enable the OK button...
+    if (((type_ & CREATE) || !access(fileName->text(), 0)) &&
+        (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY))) {
+      okButton->activate();
+    } else {
+      okButton->deactivate();
+    }
+  } else {
+    // fltk::DeleteKey or fltk::BackSpace
+    fileList->deselect(0);
+    fileList->redraw();
+    if (((type_ & CREATE) || !access(fileName->text(), 0)) &&
+        (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY))) {
+      okButton->activate();
+    } else {
+      okButton->deactivate();
+    }
+  }
+}
+
+
+//
+// 'FileChooser::filter()' - Set the filter(s) for the chooser.
+//
+
+void
+FileChooser::filter(const char *p)		// I - Pattern(s)
+{
+  char		*copyp,				// Copy of pattern
+		*start,				// Start of pattern
+		*end;				// End of pattern
+  int		allfiles;			// Do we have a "*" pattern?
+  char		temp[1024];			// Temporary pattern string
+
+
+  // Make sure we have a pattern...
+  if (!p || !*p) p = "*";
+
+  // Copy the pattern string...
+  copyp = strdup(p);
+
+  // Separate the pattern string as necessary...
+  showChoice->clear();
+
+  for (start = copyp, allfiles = 0; start && *start; start = end) {
+    end = strchr(start, '\t');
+    if (end) *end++ = '\0';
+
+    if (strcmp(start, "*") == 0) {
+      showChoice->add(all_files_label);
+      allfiles = 1;
+    } else {
+      quote_pathname(temp, start, sizeof(temp));
+      showChoice->add(temp);
+      if (strstr(start, "(*)") != NULL) allfiles = 1;
+    }
+  }
+
+  free(copyp);
+
+  if (!allfiles) showChoice->add(all_files_label);
+
+  showChoice->add(custom_filter_label);
+
+  showChoice->value(0);
+  showChoiceCB();
 }
 
 
@@ -341,38 +757,75 @@ FileChooser::newdir()
 
 
   // Get a directory name from the user
-  if ((dir = input("New Directory?")) == NULL)
+  if ((dir = fltk::input(new_directory_label, NULL)) == NULL)
     return;
 
   // Make it relative to the current directory as needed...
-#if defined(_WIN32) || defined(__EMX__)
+#if (defined(WIN32) && ! defined (__CYGWIN__)) || defined(__EMX__)
   if (dir[0] != '/' && dir[0] != '\\' && dir[1] != ':')
 #else
   if (dir[0] != '/' && dir[0] != '\\')
-#endif /* _WIN32 || __EMX__ */
+#endif /* WIN32 || __EMX__ */
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, dir);
   else
-  {
-    strncpy(pathname, dir, sizeof(pathname) - 1);
-    pathname[sizeof(pathname) - 1] = '\0';
-  }
+    strlcpy(pathname, dir, sizeof(pathname));
 
   // Create the directory; ignore EEXIST errors...
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  char namebuf[PATH_MAX];
-  utf8tomb(pathname, strlen(pathname), namebuf, PATH_MAX);
-  if (mkdir(namebuf))
+#if defined(WIN32) && ! defined (__CYGWIN__)
+  if (mkdir(pathname))
 #else
   if (mkdir(pathname, 0777))
-#endif /* _WIN32 || __EMX__ */
+#endif /* WIN32 */
     if (errno != EEXIST)
     {
-      alert("Unable to create directory!");
+      fltk::alert("%s", strerror(errno));
       return;
     }
 
   // Show the new directory...
   directory(pathname);
+}
+
+
+//
+// 'FileChooser::preview()' - Enable or disable the preview tile.
+//
+
+void
+FileChooser::preview(int e)// I - 1 = enable preview, 0 = disable preview
+{
+    previewButton->value(e ? true : false);
+  prefs_.set("preview", e);
+
+  Group *p = previewBox->parent();
+  if (e) {
+    int w = p->w() * 2 / 3;
+    fileList->resize(fileList->x(), fileList->y(),
+                     w, fileList->h());
+    previewBox->resize(fileList->x()+w, previewBox->y(),
+                       p->w()-w, previewBox->h());
+    previewBox->show();
+    update_preview();
+  } else {
+    fileList->resize(fileList->x(), fileList->y(),
+                     p->w(), fileList->h());
+    previewBox->resize(p->x()+p->w(), previewBox->y(),
+                       0, previewBox->h());
+    previewBox->hide();
+  }
+  p->init_sizes();
+
+  fileList->parent()->redraw();
+}
+
+
+//
+// 'FileChooser::previewCB()' - Timeout handler for the preview box.
+//
+
+void
+FileChooser::previewCB(FileChooser *fc) {	// I - File chooser
+  fc->update_preview();
 }
 
 
@@ -383,283 +836,420 @@ FileChooser::newdir()
 void
 FileChooser::rescan()
 {
+  char	pathname[1024];		// New pathname for filename field
+
+
   // Clear the current filename
-  fileName->text(0);
-  okButton->deactivate();
+  strlcpy(pathname, directory_, sizeof(pathname));
+  if (pathname[0] && pathname[strlen(pathname) - 1] != '/') {
+    strlcat(pathname, "/", sizeof(pathname));
+  }
+//  puts("Setting fileName in rescan()");
+  fileName->text(pathname);
+
+  if (type_ & DIRECTORY)
+    okButton->activate();
+  else
+    okButton->deactivate();
 
   // Build the file list...
-  fileList->load(directory_);
-  fileList->redraw();
+  fileList->load(directory_, sort);
+
+  // Update the preview box...
+  update_preview();
 }
 
 
 //
-// 'FileChooser::fileListCB()' - Handle clicks (and double-clicks) in the
-//                               FileBrowser.
+// 'FileChooser::showChoiceCB()' - Handle show selections.
 //
 
 void
-FileChooser::fileListCB()
+FileChooser::showChoiceCB()
 {
-  char	filename[1024],		// New filename
-	pathname[1024];		// Full pathname to file
+  const char	*item,			// Selected item
+		*patstart;		// Start of pattern
+  char		*patend;		// End of pattern
+  char		temp[1024];		// Temporary string for pattern
 
 
-  strncpy(filename, fileList->item()->label(), sizeof(filename) - 1);
-  filename[sizeof(filename) - 1] = '\0';
+  item = showChoice->child(showChoice->value())->label();
 
-#if defined(_WIN32) || defined(__EMX__)
-  if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
-      !(isalpha((uchar)filename[0]) && filename[1] == ':'))
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-  else
-  {
-    strncpy(pathname, filename, sizeof(pathname) - 1);
-    pathname[sizeof(pathname) - 1] = '\0';
+  if (strcmp(item, custom_filter_label) == 0) {
+    if ((item = fltk::input(custom_filter_label, pattern_)) != NULL) {
+      strlcpy(pattern_, item, sizeof(pattern_));
+
+      quote_pathname(temp, item, sizeof(temp));
+      showChoice->add(temp);
+      showChoice->value(showChoice->size() - 2);
+    }
+  } else if ((patstart = strchr(item, '(')) == NULL) {
+    strlcpy(pattern_, item, sizeof(pattern_));
+  } else {
+    strlcpy(pattern_, patstart + 1, sizeof(pattern_));
+    if ((patend = strrchr(pattern_, ')')) != NULL) *patend = '\0';
   }
-#else
-  if (directory_[0] != '\0' && filename[0] != '/')
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-  else
-  {
-    strncpy(pathname, filename, sizeof(pathname) - 1);
-    pathname[sizeof(pathname) - 1] = '\0';
-  }
-#endif /* _WIN32 || __EMX__ */
 
-  if (event_clicks() || event_key() == ReturnKey || event_key()==KeypadEnter)
-  {
-    if (filename_isdir(pathname))
-    {
-      fileList->deselect();
-      directory(pathname);
-      upButton->activate();
-    } else {
-      fileName->text(filename);
-      window->hide();
+  fileList->filter(pattern_);
+
+  if (shown()) {
+    // Rescan the directory...
+    rescan();
+  }
+}
+
+
+//
+// 'FileChooser::update_favorites()' - Update the favorites menu.
+//
+
+void
+FileChooser::update_favorites()
+{
+  int		i;			// Looping var
+  char		pathname[1024],		// Pathname
+		menuname[2048];		// Menu name
+  const char	*home;			// Home directory
+
+
+  favoritesButton->clear();
+  favoritesButton->add("bla");
+  favoritesButton->clear();
+  favoritesButton->add(add_favorites_label, fltk::ALT + 'a', 0);
+  favoritesButton->add(manage_favorites_label, fltk::ALT + 'm', 0, 0, fltk::MENU_DIVIDER);
+  favoritesButton->add(filesystems_label, fltk::ALT + 'f', 0);
+    
+  if ((home = getenv("HOME")) != NULL) {
+    quote_pathname(menuname, home, sizeof(menuname));
+    favoritesButton->add(menuname, fltk::ALT + 'h', 0);
+  }
+
+  for (i = 0; i < 100; i ++) {
+    sprintf(menuname, "favorite%02d", i);
+    prefs_.get(menuname, pathname, "", sizeof(pathname));
+    if (!pathname[0]) break;
+
+    quote_pathname(menuname, pathname, sizeof(menuname));
+
+    if (i < 10) favoritesButton->add(menuname, fltk::ALT + '0' + i, 0);
+    else favoritesButton->add(menuname);
+  }
+
+  if (i == 100) favoritesButton->child(0)->deactivate(); // disable Add to Favorites
+}
+
+
+//
+// 'FileChooser::update_preview()' - Update the preview box...
+//
+
+void
+FileChooser::update_preview()
+{
+  const char		*filename;	// Current filename
+  SharedImage	*image,		// New image
+			*oldimage;	// Old image
+  int			pbw, pbh;	// Width and height of preview box
+  int			w, h;		// Width and height of preview image
+
+
+  if (!previewButton->value()) return;
+
+  if ((filename = value()) == NULL || fltk::filename_isdir(filename)) image = NULL;
+  else {
+    window->cursor(fltk::CURSOR_WAIT);
+    fltk::check();
+
+    image = SharedImage::get(filename);
+
+    if (image) {
+      window->cursor(fltk::CURSOR_DEFAULT);
+      fltk::check();
     }
   }
-  else
-  {
-    fileName->text(filename);
-    okButton->activate();
+
+  oldimage = (SharedImage *)previewBox->image();
+
+  if (oldimage) oldimage->remove();
+
+  previewBox->image(0);
+
+  if (!image) {
+    FILE	*fp;
+    int		bytes;
+    char	*ptr;
+
+    if (filename) fp = fopen(filename, "rb");
+    else fp = NULL;
+
+    if (fp != NULL) {
+      // Try reading the first 1k of data for a label...
+      bytes = fread(preview_text_, 1, sizeof(preview_text_) - 1, fp);
+      preview_text_[bytes] = '\0';
+      fclose(fp);
+    } else {
+      // Assume we can't read any data...
+      preview_text_[0] = '\0';
+    }
+
+    window->cursor(fltk::CURSOR_DEFAULT);
+    fltk::check();
+
+    // Scan the buffer for printable chars...
+    for (ptr = preview_text_;
+         *ptr && (isprint(*ptr & 255) || isspace(*ptr & 255));
+	 ptr ++);
+
+    if (*ptr || ptr == preview_text_) {
+      // Non-printable file, just show a big ?...
+      previewBox->label(filename ? "?" : 0);
+      previewBox->align(fltk::ALIGN_CLIP);
+      previewBox->labelsize(100);
+      previewBox->labelfont(fltk::HELVETICA);
+    } else {
+      // Show the first 1k of text...
+      int size = previewBox->h() / 20;
+      if (size < 6) size = 6;
+      else if (size > 14) size = 14;
+
+      previewBox->label(preview_text_);
+      previewBox->align((fltk::ALIGN_CLIP | fltk::ALIGN_INSIDE |
+                                   fltk::ALIGN_LEFT | fltk::ALIGN_TOP));
+      previewBox->labelsize((uchar)size);
+      previewBox->labelfont(fltk::COURIER);
+    }
+  } else {
+    pbw = previewBox->w() - 20;
+    pbh = previewBox->h() - 20;
+
+    if (image->w() > pbw || image->h() > pbh) {
+      w   = pbw;
+      h   = w * image->h() / image->w();
+
+      if (h > pbh) {
+	h = pbh;
+	w = h * image->w() / image->h();
+      }
+
+/* FIXME
+      oldimage = (SharedImage *)image->copy(w, h);
+      previewBox->image((Image *)oldimage);
+*/
+
+      image->remove();
+    } else {
+      previewBox->image((Image *)image);
+    }
+
+    previewBox->align(fltk::ALIGN_CLIP);
+    previewBox->label(0);
   }
+
+  previewBox->redraw();
 }
 
 
 //
-// 'FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
+// 'FileChooser::value()' - Return a selected filename.
+//
+
+const char *			// O - Filename or NULL
+FileChooser::value(int f)	// I - File number
+{
+  int		i;		// Looping var
+  int		fcount;		// Number of selected files
+  const char	*name;		// Current filename
+  static char	pathname[1024];	// Filename + directory
+
+
+  name = fileName->text();
+
+  if (!(type_ & MULTI)) {
+    // Return the filename in the filename field...
+    if (!name || !name[0]) return NULL;
+    else return name;
+  }
+
+  // Return a filename from the list...
+  for (i = 1, fcount = 0; i <= fileList->size(); i ++)
+    if (fileList->selected(i)) {
+      // See if this file is a selected file/directory...
+      name = fileList->child(i-1)->label();
+
+      fcount ++;
+
+      if (fcount == f) {
+	if (directory_[0]) {
+	  snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
+	} else {
+	  strlcpy(pathname, name, sizeof(pathname));
+	}
+
+	return pathname;
+      }
+    }
+
+  // If nothing is selected, use the filename field...
+  if (!name || !name[0]) return NULL;
+  else return name;
+}
+
+
+//
+// 'FileChooser::value()' - Set the current filename.
 //
 
 void
-FileChooser::fileNameCB()
+FileChooser::value(const char *filename)
+					// I - Filename + directory
 {
-  char		*filename,	// New filename
-		*slash,		// Pointer to trailing slash
-		pathname[1024];	// Full pathname to file
-  int		i,		// Looping var
-		min_match,	// Minimum number of matching chars
-		max_match,	// Maximum number of matching chars
-		num_files,	// Number of files in directory
-		first_line;	// First matching line
-  const char	*file;		// File from directory
+  int	i,				// Looping var
+  	fcount;				// Number of items in list
+  char	*slash;				// Directory separator
+  char	pathname[1024];			// Local copy of filename
 
 
-  // Get the filename from the text field...
-  filename = (char *)fileName->text();
+//  printf("FileChooser::value(\"%s\")\n", filename == NULL ? "(null)" : filename);
 
-  if (filename == NULL || filename[0] == '\0')
-  {
+  // See if the filename is the "My System" directory...
+  if (filename == NULL || !filename[0]) {
+    // Yes, just change the current directory...
+    directory(filename);
+    fileName->value("");
     okButton->deactivate();
     return;
   }
 
-#if defined(_WIN32) || defined(__EMX__)
-  if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
-      !(isalpha((uchar)filename[0]) && filename[1] == ':'))
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-  else
-  {
-    strncpy(pathname, filename, sizeof(pathname) - 1);
-    pathname[sizeof(pathname) - 1] = '\0';
+#ifdef WIN32
+  // See if the filename contains backslashes...
+  char	fixpath[1024];			// Path with slashes converted
+  if (strchr(filename, '\\')) {
+    // Convert backslashes to slashes...
+    strlcpy(fixpath, filename, sizeof(fixpath));
+
+    for (slash = strchr(fixpath, '\\'); slash; slash = strchr(slash + 1, '\\'))
+      *slash = '/';
+
+    filename = fixpath;
   }
+#endif // WIN32
+
+  // See if there is a directory in there...
+  fltk::filename_absolute(pathname, sizeof(pathname), filename);
+
+  if ((slash = strrchr(pathname, '/')) != NULL) {
+    // Yes, change the display to the directory... 
+    if (!fltk::filename_isdir(pathname)) *slash++ = '\0';
+
+    directory(pathname);
+    if (*slash == '/') slash = pathname;
+  } else {
+    directory(".");
+    slash = pathname;
+  }
+
+  // Set the input field to the absolute path...
+  if (slash > pathname) slash[-1] = '/';
+
+  fileName->value(pathname);
+  fileName->position(0, strlen(pathname));
+  okButton->activate();
+
+  // Then find the file in the file list and select it...
+  fcount = fileList->size();
+
+  fileList->deselect(0);
+  fileList->redraw();
+
+  for (i = 1; i <= fcount; i ++)
+#if defined(WIN32) || defined(__EMX__)
+    if (strcasecmp(fileList->child(i-1)->label(), slash) == 0) {
 #else
-  if (filename[0] == '~')
-  {
-    // Lookup user...
-    struct passwd	*pwd;
-
-    if (!filename[1] || filename[1] == '/')
-      pwd = getpwuid(getuid());
-    else
-    {
-      strncpy(pathname, filename + 1, sizeof(pathname) - 1);
-      pathname[sizeof(pathname) - 1] = '\0';
-
-      i = strlen(pathname) - 1;
-      if (pathname[i] == '/')
-        pathname[i] = '\0';
-
-      pwd = getpwnam(pathname);
+    if (strcmp(fileList->child(i-1)->label(), slash) == 0) {
+#endif // WIN32 || __EMX__
+//      printf("Selecting line %d...\n", i);
+      fileList->topline(i);
+      fileList->select(i);
+      break;
     }
+}
 
-    if (pwd)
-    {
-      strncpy(pathname, pwd->pw_dir, sizeof(pathname) - 1);
-      pathname[sizeof(pathname) - 1] = '\0';
 
-      if (filename[strlen(filename) - 1] == '/')
-        strncat(pathname, "/", sizeof(pathname) - strlen(pathname) - 1);
-    }
-    else
-      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
+//
+// 'compare_dirnames()' - Compare two directory names.
+//
 
-    endpwent();
-  }
-  else if (directory_[0] != '\0' && filename[0] != '/')
-    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
-  else
-  {
-    strncpy(pathname, filename, sizeof(pathname) - 1);
-    pathname[sizeof(pathname) - 1] = '\0';
-  }
-#endif /* _WIN32 || __EMX__ */
+static int
+compare_dirnames(const char *a, const char *b) {
+  int alen, blen;
 
-  if (event_key() == ReturnKey || event_key()==KeypadEnter)
-  {
-    // Enter pressed - select or change directory...
-    if (filename_isdir(pathname))
-      directory(pathname);
-    else //if (type_ == CREATE || access(pathname, R_OK) == 0)
-    {
-      // New file or file exists...  If we are in multiple selection mode,
-      // switch to single selection mode...
-      if (type_ == MULTI)
-        type(SINGLE);
+  // Get length of each string...
+  alen = strlen(a) - 1;
+  blen = strlen(b) - 1;
 
-      // Hide the window to signal things are done...
-      window->hide();
-    }
-//  else
-//  {
-//    // File doesn't exist, so alert the user...
-//    alert("Please choose an existing file!");
-//   }
-  }
-  else if (event_key() != DeleteKey)
-  {
-    // Check to see if the user has entered a directory...
-    if ((slash = strrchr(filename, '/')) == NULL)
-      slash = strrchr(filename, '\\');
+  if (alen < 0 || blen < 0) return alen - blen;
 
-    if (slash != NULL)
-    {
-      // Yes, change directories and update the file name field...
-      if ((slash = strrchr(pathname, '/')) == NULL)
-	slash = strrchr(pathname, '\\');
+  // Check for trailing slashes...
+  if (a[alen] != '/') alen ++;
+  if (b[blen] != '/') blen ++;
 
-      if (slash > pathname)		// Special case for "/"
-        *slash++ = '\0';
-      else
-        slash++;
+  // If the lengths aren't the same, then return the difference...
+  if (alen != blen) return alen - blen;
 
-      if (strcmp(filename, "../") == 0)	// Special case for "../"
-        up();
-      else
-        directory(pathname);
-
-      // If the string ended after the slash, we're done for now...
-      if (*slash == '\0')
-        return;
-
-      // Otherwise copy the remainder and proceed...
-      fileName->text(slash);
-      fileName->position(strlen(slash));
-      filename = slash;
-    }
-
-    // Other key pressed - do filename completion as possible...
-    num_files  = fileList->size();
-    min_match  = strlen(filename);
-    max_match  = 100000;
-    first_line = 0;
-
-    for (i = 0; i < num_files && max_match > min_match; i ++)
-    {
-      file = fileList->child(i)->label();
-
-#if defined(_WIN32) || defined(__EMX__)
-      if (strnicmp(filename, file, min_match) == 0)
+  // Do a comparison of the first N chars (alen == blen at this point)...
+#ifdef WIN32
+  return strncasecmp(a, b, alen);
 #else
-      if (strncmp(filename, file, min_match) == 0)
-#endif // _WIN32 || __EMX__
-      {
-        // OK, this one matches; check against the previous match
-	if (max_match == 100000)
-	{
-	  // First match; copy stuff over...
-	  strncpy(pathname, file, sizeof(pathname) - 1);
-	  pathname[sizeof(pathname) - 1] = '\0';
-	  max_match = strlen(pathname);
+  return strncmp(a, b, alen);
+#endif // WIN32
+}
 
-	  // And then make sure that the item is visible
-          fileList->topline(i);
-	  first_line = i;
-	}
-	else
-	{
-	  // Succeeding match; compare to find maximum string match...
-	  while (max_match > min_match)
-#if defined(_WIN32) || defined(__EMX__)
-	    if (strnicmp(file, pathname, max_match) == 0)
-#else
-	    if (strncmp(file, pathname, max_match) == 0)
-#endif // _WIN32 || __EMX__
-	      break;
-	    else
-	      max_match --;
 
-          // Truncate the string as needed...
-          pathname[max_match] = '\0';
-	}
-      }
+//
+// 'quote_pathname()' - Quote a pathname for a menu.
+//
+
+static void
+quote_pathname(char       *dst,		// O - Destination string
+               const char *src,		// I - Source string
+	       int        dstsize)	// I - Size of destination string
+{
+  dstsize --;
+
+  while (*src && dstsize > 1) {
+    if (*src == '\\') {
+      // Convert backslash to forward slash...
+      *dst++ = '\\';
+      *dst++ = '/';
+      src ++;
+    } else {
+      if (*src == '/') *dst++ = '\\';
+
+      *dst++ = *src++;
     }
-
-    fileList->deselect(0);
-    fileList->redraw();
-
-    // If we have any matches, add them to the input field...
-    if (first_line > 0 && min_match == max_match &&
-        max_match == (int)strlen(fileList->child(first_line)->label()))
-      fileList->select(first_line);
-    else if (max_match > min_match && max_match != 100000)
-    {
-      // Add the matching portion...
-      fileName->replace(0, min_match, pathname, strlen(pathname));
-
-      // Highlight it; if the user just pressed the backspace
-      // key, position the cursor at the start of the selection.
-      // Otherwise, put the cursor at the end of the selection so
-      // s/he can press the right arrow to accept the selection
-      // (Tab and End also do this for both cases.)
-      const char *back, *end;
-      end = pathname + strlen(pathname);
-      back = utf8back(pathname + min_match - 1, pathname, end);
-      //      if (back == pathname + min_match - 1) back--;
-      if (event_key() == BackSpaceKey)
-        fileName->position(back-pathname, max_match);
-      else
-        fileName->position(max_match, min_match);
-    }
-
-    // See if we need to enable the OK button...
-    snprintf(pathname, sizeof(pathname), "%s/%s",directory_,fileName->text());
-
-    if (type_ == CREATE || access(pathname, R_OK) == 0)
-      okButton->activate();
-    else
-      okButton->deactivate();
   }
+
+  *dst = '\0';
+}
+
+
+//
+// 'unquote_pathname()' - Unquote a pathname from a menu.
+//
+
+static void
+unquote_pathname(char       *dst,	// O - Destination string
+                 const char *src,	// I - Source string
+	         int        dstsize)	// I - Size of destination string
+{
+  dstsize --;
+
+  while (*src && dstsize > 1) {
+    if (*src == '\\') src ++;
+    *dst++ = *src++;
+  }
+
+  *dst = '\0';
 }
 
 

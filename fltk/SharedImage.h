@@ -223,8 +223,8 @@ public:
   }
 };
 
-  extern FL_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick
-  extern FL_API void unregister_images();
+  extern FL_IMAGES_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick
+  extern FL_IMAGES_API void unregister_images();
 }
 
 #endif

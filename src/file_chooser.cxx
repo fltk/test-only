@@ -26,6 +26,165 @@
 #include <config.h>
 #include <fltk/file_chooser.h>
 #include <fltk/FileChooser.h>
+#include <fltk/run.h>
+#include <fltk/string.h>
+
+using namespace fltk;
+
+static FileChooser	*fc = (FileChooser *)0;
+static void		(*current_callback)(const char*) = 0;
+static const char	*current_label = "Ok";
+
+
+// Do a file chooser callback...
+static void callback(FileChooser *, void*) {
+  if (current_callback && fc->value())
+    (*current_callback)(fc->value());
+}
+
+
+// Set the file chooser callback
+void fltk::file_chooser_callback(void (*cb)(const char*)) {
+  current_callback = cb;
+}
+
+
+// Set the "OK" button label
+void fltk::file_chooser_ok_label(const char *l) {
+  if (l) current_label = l;
+  else current_label = "Ok";
+}
+
+
+//
+// 'fl_file_chooser()' - Show a file chooser dialog and get a filename.
+//
+
+const char *					// O - Filename or NULL
+fltk::file_chooser(const char *message,	// I - Message in titlebar
+                const char *pat,	// I - Filename pattern
+		const char *fname,	// I - Initial filename selection
+		int        relative) {	// I - 0 for absolute path
+  static char	retname[1024];		// Returned filename
+
+  if (!fc) {
+    if (!fname || !*fname) fname = ".";
+
+    fc = new FileChooser(fname, pat, FileChooser::CREATE, message);
+    fc->callback(callback, 0);
+  } else {
+    fc->type(FileChooser::CREATE);
+    fc->filter(pat);
+    fc->label(message);
+
+    if (!fname || !*fname) {
+      if (fc->filter() != pat && (!pat || !fc->filter() ||
+          strcmp(pat, fc->filter())) && fc->value()) {
+	// if pattern is different, remove name but leave old directory:
+	strlcpy(retname, fc->value(), sizeof(retname));
+
+	char *p = strrchr(retname, '/');
+
+        if (p) {
+	  // If the filename is "/foo", then the directory will be "/", not
+	  // ""...
+	  if (p == retname)
+	    retname[1] = '\0';
+	  else
+	    *p = '\0';
+	}
+
+	// Set the directory...
+	fc->directory(retname);
+      }
+    }
+    else
+      fc->value(fname);
+  }
+
+  fc->ok_label(current_label);
+  fc->show();
+
+  while (fc->visible())
+    fltk::check();
+
+  if (fc->value() && relative) {
+      fltk::filename_relative(retname, sizeof(retname), fc->value());
+
+    return retname;
+  } else if (fc->value()) return (char *)fc->value();
+  else return 0;
+}
+
+
+//
+// 'fl_dir_chooser()' - Show a file chooser dialog and get a directory.
+//
+
+const char *					// O - Directory or NULL
+fltk::dir_chooser(const char *message,	// I - Message for titlebar
+               const char *fname,	// I - Initial directory name
+	       int        relative)	// I - 0 for absolute
+{
+  static char	retname[1024];		// Returned directory name
+
+  if (!fc) {
+    if (!fname || !*fname) fname = ".";
+
+    fc = new FileChooser(fname, "*", FileChooser::CREATE |
+                                         FileChooser::DIRECTORY, message);
+    fc->callback(callback, 0);
+  } else {
+    fc->type(FileChooser::CREATE | FileChooser::DIRECTORY);
+    fc->filter("*");
+    if (fname && *fname) fc->value(fname);
+    fc->label(message);
+  }
+
+  fc->show();
+
+  while (fc->shown())
+    fltk::wait();
+
+  if (fc->value() && relative) {
+      fltk::filename_relative(retname, sizeof(retname), fc->value());
+
+    return retname;
+  } else if (fc->value()) return (char *)fc->value();
+  else return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
+
+
+
+
+
+
 
 static bool use_system_fc = false;
 /*! On Windows this makes file_chooser() call the Win32 file chooser
@@ -119,9 +278,12 @@ const char* fltk::file_chooser(const char* message,
     fc->text(fname);
     fc->label(message);
   }
-  fc->exec();
+  fc->show();
+  while(fc->shown()) fltk::check();
   return fc->text();
 }
+
+#endif
 
 //
 // End of "$Id$".

@@ -397,7 +397,7 @@ int TextDisplayType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
   fltk::TextDisplay *myo = (fltk::TextDisplay*)(w==4 ? ((WidgetType*)factory)->o : o);
   switch (w) {
     case 4:
-    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 0: f = myo->textfont(); s = (int) myo->textsize(); c = myo->textcolor(); break;
     case 1: myo->textfont(f); break;
     case 2: myo->textsize((float)s); break;
     case 3: myo->textcolor(c); break;
@@ -453,7 +453,7 @@ public:
   virtual void ideal_size(int &w, int &h) {
     fltk::FileInput *myo = (fltk::FileInput *)o;
     fltk::setfont(myo->textfont(), myo->textsize());
-    h = fltk::getdescent() + myo->textsize() + 4;
+    h = (int) (fltk::getdescent() + myo->textsize() + 4);
     w -= fltk::box_dw(o->box());
     int ww = (int)fltk::getwidth("m",1);
     w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
@@ -476,7 +476,7 @@ int FileInputType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
     fltk::FileInput *myo = (fltk::FileInput*)(w==4 ? ((WidgetType*)factory)->o : o);
   switch (w) {
     case 4:
-    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 0: f = myo->textfont(); s = (int) myo->textsize(); c = myo->textcolor(); break;
     case 1: myo->textfont(f); break;
     case 2: myo->textsize((float)s); break;
     case 3: myo->textcolor(c); break;
@@ -603,7 +603,9 @@ static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   fltk::Item * m;
   char menuName[128];
   int n;
-  
+
+  reading_file = 1; // makes labels be null
+
   if (!tn || strlen(tn)==0) 
       return 0;
 
@@ -617,6 +619,9 @@ static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   }
   if (m && m->user_data())
     r = ((FluidType*)(m->user_data()))->make();
+
+  reading_file = 0; // makes labels be null
+
   return r;
 }
 

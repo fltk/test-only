@@ -50,11 +50,9 @@ class FL_API FileBrowser : public Browser
   uchar		icon_size_;
   const char	*pattern_;
 
-  int		full_height() const;
-  int		item_height(void *) const;
-  int		item_width(void *) const;
-  void		item_draw(void *, int, int, int, int) const;
-  int		incr_height() const { return (item_height(0)); }
+  // following is obsolete: has to be replaced by adequate fltk drawing :
+  // void		item_draw(void *, int, int, int, int) const;
+//DEL   int		incr_height() const { return (item_height(0)); }
 
 public:
   enum { FILES, DIRECTORIES };

@@ -25,9 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -52,6 +49,8 @@
 #else
 #  include <unistd.h>
 #endif
+
+
 
 using namespace fltk;
 
