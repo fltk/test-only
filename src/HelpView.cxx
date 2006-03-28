@@ -772,8 +772,9 @@ HelpView::draw()
 
 	    if (img) 
 	      img->draw(
-		  Rectangle(xx - leftline_,yy - (textsize()+leading()) + getdescent() + 2,
-		    ww,hh)
+		  Rectangle(xx - leftline_,
+			    yy - int(textsize()+leading()-getdescent()) + 2,
+			    ww,hh)
 		);
 	    xx += ww;
 	    if ((height + 2) > hh)

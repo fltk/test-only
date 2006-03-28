@@ -1239,9 +1239,9 @@ void Window::create()
     // create a desktop window
     int winclass, winattr, where;
     if (!border() || override()) {
+      winclass = kHelpWindowClass;
       if (contains(modal()) || override()) {
 	// used by menus and tooltips
-	winclass = kHelpWindowClass;
 	winattr = 0;
       } else {
 	winattr = 512; // kWindowNoTitleBarAttribute;

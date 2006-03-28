@@ -49,7 +49,7 @@
 # define OUT
 #endif
 
-#if 0
+#if 1
 # include <winsock.h>
 #else
 # include <winsock2.h>
