@@ -827,9 +827,7 @@ void CommentType::open() {
     comment_in_header->value(in_h_ ? true : false);
     comment_panel_ok->callback(comment_ok_cb);
     comment_panel->show();
-    const char* message = 0;
     char itempath[256]; itempath[0] = 0;
-    int last_selected_item = 0;
 
     do { // read events
 	fltk::check();

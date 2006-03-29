@@ -377,8 +377,8 @@ public:
     w -= fltk::box_dw(o->box());
     int ww = (int) fltk::getwidth("m");
     w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
-    h = ((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
-        fltk::box_dh(o->box());
+    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
+        fltk::box_dh(o->box()));
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -417,8 +417,8 @@ public:
     w -= fltk::box_dw(o->box());
     int ww = (int)fltk::getwidth("m");
     w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
-    h = ((h + fltk::getascent() - 1) / fltk::getascent()) * fltk::getascent() +
-        fltk::box_dh(o->box());
+    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent()) * fltk::getascent() +
+        fltk::box_dh(o->box()));
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -600,7 +600,7 @@ int reading_file;
 // Recursive function for searching submenus:
 static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   FluidType *r = 0;
-  fltk::Item * m;
+  fltk::Item * m=0;
   char menuName[128];
   int n;
 

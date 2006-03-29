@@ -304,7 +304,7 @@ bool Window::get_size_range( int *min_w, int *min_h, int *max_w, int *max_h )
   if ( min_h ) { *min_h = minh; }
   if ( max_w ) { *max_w = maxw; }
   if ( max_h ) { *max_h = maxh; }
-  return bool( size_range_set );
+  return size_range_set ? true : false;
 }
 
 //+++ verify port to FLTK2

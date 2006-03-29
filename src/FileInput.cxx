@@ -157,7 +157,6 @@ FileInput::update_buttons() {
 //
 // 'FileInput::text()' - Set the string stored in the widget...
 //
-static int idbg=0;
 
 int						// O - TRUE on success
 FileInput::text(const char *str,		// I - New string value
