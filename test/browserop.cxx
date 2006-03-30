@@ -1,9 +1,9 @@
 //
-// "$Id: browserop.cxx,v 1.6 2002/12/10 02:01:04 easysw Exp $"
+// "$Id$"
 //
 // Browser operation test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -104,5 +104,5 @@ main(int argc, char *argv[])
 }
 
 //
-// End of "$Id: browserop.cxx,v 1.6 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id$".
 //

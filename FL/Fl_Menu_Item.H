@@ -1,11 +1,11 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.45 2003/01/19 07:54:59 spitzak Exp $"
+// "$Id$"
 //
 // Back-compatability menu items for FLTK.  The new fltk::Menu class
 // converts these tables into child fltk::Item and fltk::ItemGroup widgets.
 // You should not use this for new programs.
 //
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -159,5 +159,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.45 2003/01/19 07:54:59 spitzak Exp $".
+// End of "$Id$".
 //

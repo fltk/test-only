@@ -4,7 +4,7 @@
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

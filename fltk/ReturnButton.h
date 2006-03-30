@@ -1,6 +1,6 @@
-// "$Id: ReturnButton.h,v 1.4 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id$"
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,4 +38,4 @@ protected:
 
 #endif
 
-// End of "$Id: ReturnButton.h,v 1.4 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id$".

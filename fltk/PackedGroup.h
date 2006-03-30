@@ -1,12 +1,12 @@
 //
-// "$Id: PackedGroup.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id$"
 //
 // Group that places all it's child widgets packed against the
 // edges. The edge is decided by the PACK_VERTICAL flag stored on
 // the child and by whether the child is before or after the
 // resizable() child.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -51,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: PackedGroup.h,v 1.4 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id$".
 //

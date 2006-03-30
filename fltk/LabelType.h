@@ -6,7 +6,7 @@
 // labels. You could also put in code that interprets the text of
 // the label and draws anything you want with it.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

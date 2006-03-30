@@ -1,4 +1,4 @@
-// "$Id: FL_API.h,v 1.5 2004/10/01 07:07:52 spitzak Exp $"
+// "$Id$"
 //
 // Stuff needed to compile DLL's on Windows. These symbols pollute all
 // the header files. Make sure you put them on anything you want to go
@@ -6,7 +6,7 @@
 //
 // I also put here some typedefs that fltk uses everywhere.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -66,5 +66,5 @@ typedef unsigned char uchar;
 #endif
 
 //
-// End of "$Id: FL_API.h,v 1.5 2004/10/01 07:07:52 spitzak Exp $".
+// End of "$Id$".
 //

@@ -6,7 +6,7 @@
 // Vastly simplified from the 1.0 version, since 2.0 uses real child
 // widgets to represent menu items.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

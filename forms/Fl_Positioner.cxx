@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.15 2002/12/10 02:00:34 easysw Exp $"
+// "$Id$"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -135,5 +135,5 @@ Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.15 2002/12/10 02:00:34 easysw Exp $".
+// End of "$Id$".
 //

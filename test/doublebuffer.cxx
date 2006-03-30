@@ -9,7 +9,7 @@
 // double buffered one will not.  It will take just as long
 // (or longer) to update, but often it will appear to be faster.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

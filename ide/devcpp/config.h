@@ -1,9 +1,9 @@
 /*
- * "$Id: config.h,v 1.1 2004/09/25 01:51:24 leka Exp $"
+ * "$Id$"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2006 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -223,5 +223,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.1 2004/09/25 01:51:24 leka Exp $".
+ * End of "$Id$".
  */

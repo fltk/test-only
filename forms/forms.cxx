@@ -1,5 +1,5 @@
 //
-// "$Id: forms.cxx,v 1.7 2002/12/10 02:00:35 easysw Exp $"
+// "$Id$"
 //
 // Another forms demo for the Fast Light Tool Kit (FLTK).
 //
@@ -9,7 +9,7 @@
 // This demo show the different boxtypes. Note that some
 // boxtypes are not appropriate for some objects
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -230,5 +230,5 @@ main (int argc, char *argv[])
 }
 
 //
-// End of "$Id: forms.cxx,v 1.7 2002/12/10 02:00:35 easysw Exp $".
+// End of "$Id$".
 //

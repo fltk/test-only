@@ -1,11 +1,11 @@
 //
-// "$Id: TiledGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id$"
 //
 // The child widgets are expected to be all laid out to touch each other
 // and fill this group. The user can then move the boundaries between
 // them by grabbing the junctions between the children.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: TiledGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id$".
 //

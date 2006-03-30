@@ -1,11 +1,11 @@
 //
-// "$Id: StyleSet.h,v 1.4 2003/06/24 07:10:47 spitzak Exp $"
+// "$Id$"
 //
 // Saves and restores all the styles used by Widget constructors. Fluid
 // uses this so you can preview a style without fluid's own control
 // panels changing. I think this is broken, anybody want to fix it?
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

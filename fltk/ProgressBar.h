@@ -1,10 +1,10 @@
 //
-// "$Id: ProgressBar.h,v 1.4 2003/04/20 03:17:48 easysw Exp $"
+// "$Id$"
 //
 // Progress indicator with bar that fills up and text showing the
 // job being done and expected time to go. Not fully implemented yet.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

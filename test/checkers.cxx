@@ -6,7 +6,7 @@
 // Hours of fun: the FLTK checkers game!
 // Based on a very old algorithim, but it still works!
 //
-// Copyright 1998-2001 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

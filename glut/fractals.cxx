@@ -7,7 +7,7 @@
 // demonstrate how to add fltk controls to a glut program.   The glut
 // code is unchanged except for the end (search for fltk to find changes).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

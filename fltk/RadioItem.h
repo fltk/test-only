@@ -1,10 +1,10 @@
 //
-// "$Id: RadioItem.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id$"
 //
 // This widget makes a radio item in a popup or pulldown Menu.
 // It's behavior in a Browser or other group is undefined.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.15 2005/01/24 12:03:30 matthiaswm Exp $"
+// "$Id$"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,7 @@
 // can avoid this by making the Fl_Gl_Window a child of a normal
 // window.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -281,5 +281,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.15 2005/01/24 12:03:30 matthiaswm Exp $".
+// End of "$Id$".
 //

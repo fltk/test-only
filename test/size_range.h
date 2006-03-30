@@ -1,6 +1,8 @@
 //
 // "$Id$"
 //
+// size_range demo : constraining the window dimensions
+//
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -21,38 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Undocumented valuator provided for back-compatability.
-// This may be removed before the final version.
-// 3-button "slider", made for Nuke
+#ifndef size_range_h
+#define size_range_h
+// Header for //\n// "$Id"\n//\n// HelpDialog dialog for the Fa...
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/LightButton.h>
 
-#ifndef fltk_Adjuster_h
-#define fltk_Adjuster_h
-
-#include "Valuator.h"
-
-namespace fltk {
-
-class FL_API Adjuster : public Valuator {
+class UI  {
 public:
-  Adjuster(int x, int y, int w, int h, const char *l=0);
-  static NamedStyle* default_style;
-  void soft(int x) {soft_ = x;}
-  int soft() const {return soft_;}
-  int handle(int);
-
-protected:
-  void draw();
-  void value_damage();
-
-private:
-  int drag, highlight, last;
-  int ix;
-  int soft_;
+  UI();
+  fltk::DoubleBufferWindow *window;
 };
-
-}
+int main();
 #endif
 
-//
-// End of "$Id$".
-//
+// End of "$Id"

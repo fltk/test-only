@@ -1,9 +1,9 @@
 //
-// "$Id: glut_font.cxx,v 1.8 2004/02/05 08:05:35 spitzak Exp $"
+// "$Id$"
 //
 // GLUT bitmap font routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -56,5 +56,5 @@ int glutBitmapWidth(void* font, int character) {
 #endif
 
 //
-// End of "$Id: glut_font.cxx,v 1.8 2004/02/05 08:05:35 spitzak Exp $".
+// End of "$Id$".
 //

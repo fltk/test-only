@@ -1,9 +1,9 @@
 //
-// "$Id: buttons.cxx,v 1.20 2004/08/01 22:28:24 spitzak Exp $"
+// "$Id$"
 //
 // Draws the image for the manual
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -82,5 +82,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.20 2004/08/01 22:28:24 spitzak Exp $".
+// End of "$Id$".
 //

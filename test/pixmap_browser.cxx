@@ -1,12 +1,12 @@
 //
-// "$Id: pixmap_browser.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $"
+// "$Id$"
 //
 // Another pixmap test program for the Fast Light Tool Kit (FLTK).
 //
 // On purpose, I do NOT provide a fltk method to turn a file
 // into a pixmap.  This program uses a rather simplistic one.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -165,5 +165,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pixmap_browser.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id$".
 //

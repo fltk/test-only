@@ -1,7 +1,7 @@
 //
-// "$Id: LineDial.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: LineDial.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id$".
 //

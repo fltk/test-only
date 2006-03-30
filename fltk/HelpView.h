@@ -3,7 +3,7 @@
 //
 // Help Viewer widget definitions.
 //
-// Copyright 1997-2003 by Easy Software Products.
+// Copyright 1997-2006 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or

@@ -1,7 +1,7 @@
 //
 // "$Id: readimage.cxx,v 1.1 2005/02/05 00:26:10 spitzak Exp $"
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

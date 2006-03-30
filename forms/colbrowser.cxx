@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.10 2003/04/20 03:17:50 easysw Exp $"
+// "$Id$"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -8,7 +8,7 @@
 // using fltk's Forms emulation.  Search for "fltk" to find all the
 // changes
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -341,5 +341,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.10 2003/04/20 03:17:50 easysw Exp $".
+// End of "$Id$".
 //

@@ -1,12 +1,12 @@
 //
-// "$Id: PopupMenu.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
+// "$Id$"
 //
 // Setting the type to POPUP* will make an invisible widget that can
 // overlap any other widgets and provides a popup menu. The default
 // type gives you something similar to a Choice except it does not
 // display the current value.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,5 +52,5 @@ protected:
 #endif
 
 //
-// End of "$Id: PopupMenu.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id$".
 //

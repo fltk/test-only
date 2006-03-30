@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -61,7 +61,7 @@ using namespace fltk;
 #endif
 
 /*! \addtogroup startup
-
+\{
   Warning: most of these functions will not work (and may crash) after
   Window::show() has been called the first time. Calling
   Window::show() will call any necessary setup that you have not
@@ -424,8 +424,8 @@ int XParseGeometry(const char* string, int* x, int* y,
     *height = tempHeight;
   return (mask);
 }
-
 #endif // if !USE_X11
+/* \} */
 
 //
 // End of "$Id$".

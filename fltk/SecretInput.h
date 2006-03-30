@@ -1,11 +1,11 @@
 //
-// "$Id: SecretInput.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id$"
 //
 // One-line text input field that draws asterisks instead of the
 // letters. It also prevents the user from cutting or copying the
 // text and then pasting it somewhere.
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: SecretInput.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id$".
 //
