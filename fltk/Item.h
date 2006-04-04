@@ -44,11 +44,16 @@ public:
   void layout();
   int handle(int);
   
-  Item(const char* label = 0);
-  // constructor for normal item type decl
-  Item(const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);  
-  // constructor for custom item type decl
+
+  //!default  constructor for normal item type decl
+  Item(const char* label=0,int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0);  
+  
+  //! constructor for custom item type decl
   Item(MenuItemType t,const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);  
+
+  // constructor for adding a tree like item with a name, an image, and eventuallly an alignement. 
+  Item(const Symbol* img, const char* label, int custom_alignment=-1);
+
 
   static NamedStyle* default_style;
   static void set_style(const Style*, bool menubar);
@@ -59,7 +64,7 @@ private:
     void init(); // common constructor initialization
 };
 
-// Toggle item decl facility
+//! Toggle item declarations facility
 class FL_API ItemToggle : public Item {
 public:
   ItemToggle(const char* label = 0) : Item(label) {type(Item::TOGGLE);}

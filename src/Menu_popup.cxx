@@ -322,8 +322,8 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     if (damage != DAMAGE_CHILD || i==selected || i==drawn_selected) {
 
       Flags flags = item->flags();
-      if (flags&NOTACTIVE) flags |= INACTIVE;
-      if (i == selected && !(flags & (OUTPUT|NOTACTIVE))) {
+      // fabien: obsolete: if (flags&NOTACTIVE) flags |= INACTIVE;
+      if (i == selected && !(flags & (OUTPUT|INACTIVE))) {
 	flags |= (SELECTED|HIGHLIGHT);
       } else {
 	flags &= ~(SELECTED|HIGHLIGHT);

@@ -87,7 +87,7 @@ window->hide();} open
           {fltk::PopupMenu} favoritesButton {
             label Favorites
             callback {favoritesButtonCB();} open
-            private xywh {280 0 155 25} align 20
+            private xywh {280 0 155 25} align 48
             extra_code {favoritesButton->label(favorites_label);}
           } {}
           {fltk::Button} newButton {

@@ -73,6 +73,11 @@ public:
   int		filetype() const { return (filetype_); };
   void		filetype(int t) { filetype_ = t; };
   const char *  directory() const {return directory_;}
+
+  // adding or inserting a line into the fileBrowser
+  void insert(int n, const char* label, FileIcon* icon);
+  void insert(int n, const char* label, void* data){Menu::insert(n, label,data);}
+  void add(const char * line, FileIcon* icon);
 };
 
 }

@@ -134,21 +134,33 @@ void Widget::draw_label() const {
     box in a nice way. The image() is put against the side that any
     ALIGN flags say, and then the label() is put next to that.
 */
-void Widget::draw_label(const Rectangle& ir, Flags flags) const
-{
-  // If label is drawn outside, draw the image only:
-  if ((flags&15) && !(flags & ALIGN_INSIDE)) {
-    if (!image_) return;
-    image_->draw(ir);
-    return;
-  }
+const Symbol * Widget::context_image() const  {
+    const Symbol * img;
+    bool bMouseImg = (image4_ && belowmouse());
+    if (!active())  img = image2_  ? image2_ : image_;
+    else if (pushed() || ( (flags() & fltk::OPENED) && !bMouseImg) ) 
+	img = image3_  ? image3_ : image_;
+    else if (bMouseImg) 
+	img = image4_ ? image4_ : image_;
+    else img = image_;
+    return img;
+}
+
+void Widget::draw_label(const Rectangle& ir, Flags flags) const {
+    const Symbol* img = context_image();
+    
+    // If label is drawn outside, draw the image only:
+    if ((flags  & fltk::ALIGN_POSITIONMASK) && !(flags & fltk::ALIGN_INSIDE)) {
+	if (img) img->draw(ir);
+	return;
+    }
 
   Rectangle r(ir);
-  if (image_) {
+  if (img) {
 
     int w = r.w();
     int h = r.h();
-    image_->measure(w, h);
+    img->measure(w, h);
 
     // If all flags including ALIGN_INSIDE are off it changes how
     // label and image are printed so they are both centered "nicely"
@@ -172,7 +184,7 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const
     if (flags & ALIGN_CLIP) push_clip(r);
 
     Rectangle ir(r, w, h, flags);
-    image_->draw(ir);
+    img->draw(ir);
 
     // figure out the rectangle that remains for text:
     if (flags & ALIGN_TOP) r.set_y(ir.b());
@@ -192,10 +204,10 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const
       if (r.w() > 9) r.move_r(-6);
       else r.w(6);
     }
-    if (!image_ && (flags & ALIGN_CLIP)) push_clip(r);
+    if (!img && (flags & ALIGN_CLIP)) push_clip(r);
     labeltype()->draw(label_, r, flags);
   } else {
-    if (!image_) return; // don't call pop_clip if push_clip was not called
+    if (!img) return; // don't call pop_clip if push_clip was not called
   }
 
   if (flags & ALIGN_CLIP) pop_clip();

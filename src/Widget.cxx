@@ -68,7 +68,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   callback_	= default_callback;
   user_data_	= 0;
   label_	= L;
-  image_	= 0;
+  image_	= image2_ = image3_ = image4_ = 0;
   tooltip_	= 0;
 #if CLICK_MOVES_FOCUS
   flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
@@ -622,7 +622,8 @@ void Widget::redraw_label() {
     the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (highlight_color()) redraw(DAMAGE_HIGHLIGHT);
+  if (highlight_color() || image(fltk::BELOWMOUSE)) 
+      redraw(DAMAGE_HIGHLIGHT);
 }
 
 // If a draw() method sets this then the calling group assummes it
@@ -689,6 +690,10 @@ void Widget::draw()
 */
 int Widget::handle(int event) {
   switch (event) {
+  case LEAVE:
+	if (image(fltk::BELOWMOUSE)) 
+	    redraw_highlight();
+	return 0;
   case ENTER:
   case MOVE:
     // Setting belowmouse directly is not needed by most widgets, as
@@ -696,7 +701,9 @@ int Widget::handle(int event) {
     // has children and one of them is the belowmouse, send will not
     // change it, so I have to call this here.
     fltk::belowmouse(this);
-    return true;
+    if (image(fltk::BELOWMOUSE)) redraw_highlight();
+
+    return 1;
   default:
     return 0;
   }
@@ -878,7 +885,7 @@ bool Widget::active_r() const {
   send() an fltk::ACTIVATE event. */
 void Widget::activate() {
   if (!active()) {
-    clear_flag(NOTACTIVE);
+    clear_flag(INACTIVE);
     if (active_r()) {
       redraw_label(); redraw();
       clear_flag(INACTIVE);
@@ -892,12 +899,12 @@ void Widget::activate() {
   send() an fltk::DEACTIVATE event. */
 void Widget::deactivate() {
   if (active_r()) {
-    set_flag(NOTACTIVE|INACTIVE);
+    set_flag(INACTIVE);
     throw_focus();
     redraw_label(); redraw();
     handle(DEACTIVATE);
   } else {
-    set_flag(NOTACTIVE|INACTIVE);
+    set_flag(INACTIVE);
   }
 }
 
@@ -1022,6 +1029,26 @@ bool Widget::focused() const {return this == fltk::focus();}
   sent to this widget. Using this function avoids the need to include
   the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
+
+// images manip
+
+const Symbol* Widget::image(Flags flags) const	{ 
+    if (flags & fltk::INACTIVE) // reads the image for pushed button or open
+	return image2_;
+    else if ((flags & fltk::OPENED) || (flags & fltk::PUSHED)) // reads the image for pushed button or open
+	return image3_;
+    else if ( (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget
+    	return image4_;
+    return image_; 
+}
+
+void Widget::image(const Symbol* a, Flags flags)	{ 
+    if (flags & fltk::INACTIVE)  image2_ = a; 
+    else if ( (flags & fltk::OPENED) || (flags & fltk::PUSHED) )  image3_ = a; 
+    else if ( (flags & fltk::BELOWMOUSE)) image4_ = a; 
+    else image_ = a; 
+}
+
 
 //
 // End of "$Id$".

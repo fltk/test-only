@@ -28,13 +28,14 @@
 
 #include "FL_API.h"
 #include "Color.h"
+#include "Symbol.h"
 
 namespace fltk {
 
-  // This should be some kind of subclass of Image
+class Item;
+  // It is now a subclass of Image
 
-class FL_API FileIcon
-{
+class FL_API FileIcon : public Symbol {
   static FileIcon *first_;	// Pointer to first icon/filetype
   FileIcon	*next_;		// Pointer to next icon/filetype
   const char	*pattern_;	// Pattern string
@@ -42,8 +43,8 @@ class FL_API FileIcon
   int		num_data_;	// Number of data elements
   int		alloc_data_;	// Number of allocated elements
   short		*data_;		// Icon data
-
-  public:
+  int		w_,h_;
+public:
 
   enum				// File types
   {
@@ -78,7 +79,6 @@ class FL_API FileIcon
 		{ short *d = add(VERTEX); add((int)(x * 10000.0));
 		  add((int)(y * 10000.0)); return (d); }
   void		clear() { num_data_ = 0; }
-  void		draw(int x, int y, int w, int h, Color ic, int active = 1);
   //  void		label(Widget *w);
 //  static void	labeltype(const Label *o, int x, int y, int w, int h, Align a);
   void		load(const char *f);
@@ -92,6 +92,16 @@ class FL_API FileIcon
   static FileIcon *find(const char *filename, int filetype = ANY);
   static FileIcon *first() { return (first_); }
   static void	load_system_icons(void);
+
+  
+  Item *	get_item() const {return item_;} // return connected item
+  void		set_item(Item * i);
+
+  // virtual image overloads
+  void _measure(int& w, int& h) const;
+  void _draw(const Rectangle& r) const;
+private:
+    Item* item_;
 };
 
 }

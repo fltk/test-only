@@ -38,8 +38,10 @@ public:
   void draw();
   void layout();
   int handle(int);
-  ItemGroup(const char* label = 0);
-  ItemGroup(const char* label,int shortcut,Callback *callback=0,void *user_data_=0, int flags=0);
+  // default constructor and convenient constructor for menus/browsers
+  ItemGroup(const char* label,int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0);
+  // convenient constructor for menus/browsers 
+  ItemGroup(const Symbol * img=0, const char* label=0, int custom_align=-1);
 
 private:
   void init();

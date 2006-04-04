@@ -41,6 +41,7 @@
 
 #include <fltk/FileBrowser.h>
 #include <fltk/Browser.h>
+#include <fltk/Item.h>
 #include <fltk/draw.h>
 #include <fltk/Color.h>
 #include <fltk/Flags.h>
@@ -85,312 +86,6 @@ using namespace fltk;
 #define SELECTED 1
 #define NOTDISPLAYED 2
 
-/*
-struct BLINE			// data is in a linked list of these
-{
-  BLINE	*prev;		// Previous item in list
-  BLINE	*next;		// Next item in list
-  void		*data;		// Pointer to data (function)
-  short		length;		// sizeof(txt)-1, may be longer than string
-  char		flags;		// selected, displayed
-  char		txt[1];		// start of allocated array
-};
-*/
-
-//
-// 'FileBrowser::full_height()' - Return the height of the list.
-//
-
-//DEL int					// O - Height in pixels
-//DEL FileBrowser::full_height() const
-//DEL {
-//DEL   int	i,				// Looping var
-//DEL 	th;				// Total height of list.
-//DEL 
-//DEL   for (i = 0, th = 0; i < size(); i ++)
-//DEL     th += (int) (textsize()+leading()) ; //item_height(find_line(i));
-//DEL   return (th);
-//DEL }
-
-
-//
-// 'FileBrowser::item_height()' - Return the height of a list item.
-//
-
-//DEL int					// O - Height in pixels
-//DEL FileBrowser::item_height(void *p) const	// I - List item data
-//DEL {
-//DEL   BLINE	*line;			// Pointer to line
-//DEL   char		*t;			// Pointer into text
-//DEL   int		height;			// Width of line
-//DEL   int		textheight;		// Height of text
-//DEL 
-//DEL 
-//DEL   // Figure out the standard text height...
-//DEL   setfont(textfont(), textsize());
-//DEL   textheight = int(textsize()+leading());
-//DEL 
-//DEL   // We always have at least 1 line...
-//DEL   height = textheight;
-//DEL 
-//DEL   // Scan for newlines...
-//DEL   line = (BLINE *)p;
-//DEL 
-//DEL   if (line != NULL)
-//DEL     for (t = line->txt; *t != '\0'; t ++)
-//DEL       if (*t == '\n')
-//DEL 	height += textheight;
-//DEL 
-//DEL   // If we have enabled icons then add space for them...
-//DEL   if (FileIcon::first() != NULL && height < icon_size_)
-//DEL     height = icon_size_;
-//DEL 
-//DEL   // Add space for the selection border..
-//DEL   height += 2;
-//DEL 
-//DEL   // Return the height
-//DEL   return (height);
-//DEL }
-
-
-//
-// 'FileBrowser::item_width()' - Return the width of a list item.
-//
-
-//DEL int					// O - Width in pixels
-//DEL FileBrowser::item_width(void *p) const	// I - List item data
-//DEL {
-//DEL   int		i;			// Looping var
-//DEL   BLINE	*line;			// Pointer to line
-//DEL   char		*t,			// Pointer into text
-//DEL 		*ptr,			// Pointer into fragment
-//DEL 		fragment[10240];	// Fragment of text
-//DEL   int		width,			// Width of line
-//DEL 		tempwidth;		// Width of fragment
-//DEL   int		column;			// Current column
-//DEL   const int	*columns;		// Columns
-//DEL 
-//DEL 
-//DEL   // Set the font and size...
-//DEL   setfont(textfont(), textsize());
-//DEL 
-//DEL   // Scan for newlines...
-//DEL   line    = (BLINE *)p;
-//DEL   columns = column_widths();
-//DEL 
-//DEL   if (strchr(line->txt, '\n') == NULL &&
-//DEL       strchr(line->txt, '\t') == NULL)
-//DEL   {
-//DEL     // Do a fast width calculation...
-//DEL     width = (int) getwidth(line->txt);
-//DEL   }
-//DEL   else
-//DEL   {
-//DEL     // More than 1 line or have columns; find the maximum width...
-//DEL     width     = 0;
-//DEL     tempwidth = 0;
-//DEL     column    = 0;
-//DEL 
-//DEL     for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
-//DEL       if (*t == '\n')
-//DEL       {
-//DEL         // Newline - nul terminate this fragment and get the width...
-//DEL         *ptr = '\0';
-//DEL 
-//DEL 	tempwidth += (int)getwidth(fragment);
-//DEL 
-//DEL         // Update the max width as needed...
-//DEL 	if (tempwidth > width)
-//DEL 	  width = tempwidth;
-//DEL 
-//DEL         // Point back to the start of the fragment...
-//DEL 	ptr       = fragment;
-//DEL 	tempwidth = 0;
-//DEL 	column    = 0;
-//DEL       }
-//DEL       else if (*t == '\t')
-//DEL       {
-//DEL         // Advance to the next column...
-//DEL         column ++;
-//DEL 	if (columns)
-//DEL 	{
-//DEL 	  for (i = 0, tempwidth = 0; i < column && columns[i]; i ++)
-//DEL 	    tempwidth += columns[i];
-//DEL 	}
-//DEL 	else
-//DEL           tempwidth = column * (int)((textsize()+leading()) * 0.6 * 8.0);
-//DEL 
-//DEL         if (tempwidth > width)
-//DEL 	  width = tempwidth;
-//DEL 
-//DEL 	ptr = fragment;
-//DEL       }
-//DEL       else
-//DEL         *ptr++ = *t;
-//DEL 
-//DEL     if (ptr > fragment)
-//DEL     {
-//DEL       // Nul terminate this fragment and get the width...
-//DEL       *ptr = '\0';
-//DEL 
-//DEL       tempwidth += (int)getwidth(fragment);
-//DEL 
-//DEL       // Update the max width as needed...
-//DEL       if (tempwidth > width)
-//DEL 	width = tempwidth;
-//DEL     }
-//DEL   }
-//DEL 
-//DEL   // If we have enabled icons then add space for them...
-//DEL   if (FileIcon::first() != NULL)
-//DEL     width += icon_size_ + 8;
-//DEL 
-//DEL   // Add space for the selection border..
-//DEL   width += 2;
-//DEL 
-//DEL   // Return the width
-//DEL   return (width);
-//DEL }
-
-
-//
-// 'FileBrowser::item_draw()' - Draw a list item.
-//
-
-/*
-void
-FileBrowser::item_draw(void *p,	// I - List item data
-                 	   int  X,	// I - Upper-lefthand X coordinate
-		 	   int  Y,	// I - Upper-lefthand Y coordinate
-		 	   int  W,	// I - Width of item
-			   int) const	// I - Height of item
-{
-  int		i;			// Looping var
-  BLINE	*line;			// Pointer to line
-  Color	c;			// Text color
-  char		*t,			// Pointer into text
-		*ptr,			// Pointer into fragment
-		fragment[10240];	// Fragment of text
-  int		width,			// Width of line
-		height;			// Height of line
-  int		column;			// Current column
-  const int	*columns;		// Columns
-
-
-  // Draw the list item text...
-  line = (BLINE *)p;
-
-  if (line->txt[strlen(line->txt) - 1] == '/')
-    setfont(textfont()->bold(), textsize());
-  else
-    setfont(textfont(), textsize());
-
-  if (line->flags & SELECTED)
-      c = fltk::contrast(textcolor(), selection_color());
-  else
-    c = textcolor();
-
-  if (FileIcon::first() == NULL)
-  {
-    // No icons, just draw the text...
-    X ++;
-    W -= 2;
-  }
-  else
-  {
-    // Draw the icon if it is set...
-    if (line->data)
-      ((FileIcon *)line->data)->draw(X, Y, icon_size_, icon_size_,
-                                	(line->flags & SELECTED) ? fltk::YELLOW :
-				                                   fltk::GRAY90,
-					active_r());
-
-    // Draw the text offset to the right...
-    X += icon_size_ + 9;
-    W -= icon_size_ - 10;
-
-    // Center the text vertically...
-    height = (int) (textsize()+leading());
-
-    for (t = line->txt; *t != '\0'; t ++)
-      if (*t == '\n')
-	height += (int) (textsize()+leading());
-
-    if (height < icon_size_)
-      Y += (icon_size_ - height) / 2;
-  }
-
-  // Draw the text...
-  line    = (BLINE *)p;
-  columns = column_widths();
-  width   = 0;
-  column  = 0;
-
-  if (active_r())
-    setcolor(c);
-  else
-    setcolor(inactive(c));
-
-  for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
-    if (*t == '\n')
-    {
-      // Newline - nul terminate this fragment and draw it...
-      *ptr = '\0';
-
-      drawtext(fragment, Rectangle(X + width, Y, W - width, (int) (textsize()+leading())),
-	fltk::ALIGN_LEFT | fltk::ALIGN_CLIP);
-
-      // Point back to the start of the fragment...
-      ptr    = fragment;
-      width  = 0;
-      Y      += (int) (textsize()+leading());
-      column = 0;
-    }
-    else if (*t == '\t')
-    {
-      // Tab - nul terminate this fragment and draw it...
-      *ptr = '\0';
-
-      int cW = W - width; // Clip width...
-
-      if (columns)
-      {
-        // Try clipping inside this column...
-	for (i = 0; i < column && columns[i]; i ++);
-
-        if (columns[i])
-          cW = columns[i];
-      }
-
-      drawtext(fragment, Rectangle(X + width, Y, cW, (int) (textsize()+leading())),
-              fltk::ALIGN_LEFT | fltk::ALIGN_CLIP);
-
-      // Advance to the next column...
-      column ++;
-      if (columns)
-      {
-	for (i = 0, width = 0; i < column && columns[i]; i ++)
-	  width += columns[i];
-      }
-      else
-        width = column * (int)((textsize()+leading()) * 0.6 * 8.0);
-
-      ptr = fragment;
-    }
-    else
-      *ptr++ = *t;
-
-  if (ptr > fragment)
-  {
-    // Nul terminate this fragment and draw it...
-    *ptr = '\0';
-
-    drawtext(fragment, Rectangle(X + width, Y, W - width, (int) (textsize()+leading())),
-	fltk::ALIGN_LEFT | fltk::ALIGN_CLIP);
-  }
-}
-*/
-
 //
 // 'FileBrowser::FileBrowser()' - Create a FileBrowser widget.
 //
@@ -400,15 +95,13 @@ FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
 				 int        W,  // I - Width in pixels
 				 int        H,  // I - Height in pixels
 				 const char *l)	// I - Label text
- : Browser(X, Y, W, H, l)
-{
+ : Browser(X, Y, W, H, l) {
   // Initialize the filter pattern, current directory, and icon size...
   pattern_   = "*";
   directory_ = "";
   icon_size_  = (uchar)(3 * textsize() / 2);
   filetype_  = FILES;
 }
-
 
 //
 // 'FileBrowser::load()' - Load a directory into the browser.
@@ -600,11 +293,14 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
 
+        bool ft = true;
+	if (ft) {FileIcon::load_system_icons(); ft=false;}
+
         icon = FileIcon::find(filename);
 	if ((icon && icon->type() == FileIcon::DIRECTORY) ||
 	     fltk::filename_isdir(filename)) {
           num_dirs ++;
-          insert(num_dirs-1, files[i]->d_name, icon);
+          this->insert(num_dirs-1, files[i]->d_name, icon);
 	} else if (filetype_ == FILES &&
 	           fltk::filename_match(files[i]->d_name, pattern_)) {
           add(files[i]->d_name, icon);
@@ -624,18 +320,51 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 //
 // 'FileBrowser::filter()' - Set the filename filter.
 //
-
-void
-FileBrowser::filter(const char *pattern)	// I - Pattern string
-{
+// I - Pattern string
+void FileBrowser::filter(const char *pattern)	{
   // If pattern is NULL set the pattern to "*"...
-  if (pattern)
-    pattern_ = pattern;
-  else
-    pattern_ = "*";
+  if (pattern) pattern_ = pattern;
+  else pattern_ = "*";
 }
 
+////////////////////////////////////////////////////////////////
+//#include "../test/file_small.xpm"
+//#include <fltk/xpmImage.h>
+class FileItem : public Item {
+public:
+    FileItem(const char * label, FileIcon * icon);
+    void draw();
+private:
+    FileIcon* fileIcon_;
+};
+
+FileItem::FileItem(const char * label, FileIcon * icon) : Item(label) {
+    fileIcon_=icon;
+}
+void FileItem::draw()  {
+    if (fileIcon_) fileIcon_->set_item(this);
+    Item::draw();
+}
+////////////////////////////////////////////////////////////////
+
+void FileBrowser::add(const char *line, FileIcon *icon) {
+    this->begin();
+    FileItem * i = new FileItem(strdup(line),icon);
+    i->image(icon);
+    i->textsize(14);
+    this->end();
+}
+
+void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
+    current(0);
+    FileItem * i = new FileItem(strdup(label),icon);
+    i->image(icon);
+    i->textsize(14);
+    Menu::insert(*i,n);
+}
 
 //
 // End of "$Id$".
 //
+
+

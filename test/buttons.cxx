@@ -36,7 +36,23 @@
 #include <fltk/LightButton.h>
 #include <fltk/HighlightButton.h>
 
+#include <fltk/xpmImage.h>
+#include "folder_small.xpm"
+#include "folder_small2.xpm"
+#include "folder_small3.xpm"
+
 using namespace fltk;
+
+Button * abutton=0;
+
+void cb_active_butt(Widget*, void*) {
+    static bool flip = true;
+    if (flip) abutton->activate(); else abutton->deactivate();
+    abutton->label(flip ? "Active" : "Inactive");
+    flip = !flip;
+
+  abutton->redraw();
+}
 
 void rb_cb(Widget*, void*) {
 //  Fl::theme("essai");
@@ -44,14 +60,14 @@ void rb_cb(Widget*, void*) {
   redraw();
 }
 
-const int W = 130;
+const int W = 150;
 const int H = 24;
 const int B = 10;
 const int X0 = B;
 const int X1 = (B+W+B);
 
 int main(int argc, char ** argv) {
-  Window window(X1+W+B, B+5*(H+B));
+  Window window(X1+W+B, B+6*(H+B));
   window.begin();
 
   int Y = B;
@@ -69,12 +85,31 @@ int main(int argc, char ** argv) {
   (void) new LightButton(X0, Y, W, H, "LightButton");
   (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
-  (void) new HighlightButton(X0, Y, W, H, "HighlightButton");
-  (void) new CheckButton(X1, Y, W, H, "CheckButton");
-  
+  // The box of the higlight button will appear when belowmouse
+  // when combined with image() as below, you get the border + the image appearing when belowmouse()
+
+  //HighlightButton* hb = 
+      new HighlightButton(X0, Y, W, H, "HighlightButton");
+  //hb->image(new xpmImage(folder_small),fltk::BELOWMOUSE);
+
+  new CheckButton(X1, Y, W, H, "CheckButton");
+
+  Y += H+B;
+  Button * b = new HighlightButton(X0, Y, W, H, "Everything !");
+  b->image(new xpmImage(folder_small2), fltk::NO_FLAGS);
+  // to remove the  belowmouse changing image comment this line:
+  b->image(new xpmImage(folder_small3), fltk::BELOWMOUSE);
+  b->image(new xpmImage(folder_small), fltk::PUSHED);
+  b->callback(cb_active_butt);
+
+  abutton = b = new Button(X1, Y, W, H, "Inactive");
+  b->image(new xpmImage(folder_small3), fltk::NO_FLAGS);
+  b->image(new xpmImage(folder_small2), fltk::INACTIVE);
+  b->activate(0);  
   window.resizable(window);
   window.end();
   window.show(argc,argv);
+  // Default Style handling for changing the scheme of all widget at once
   Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
   Button::default_style->color_ = 256-36;
   Widget::default_style->highlight_color(3);

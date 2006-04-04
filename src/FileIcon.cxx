@@ -38,6 +38,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fltk/string.h>
+#include <fltk/Item.h>
+#include <fltk/Browser.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -87,15 +89,12 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   type_    = t;
 
   // Copy icon data as needed...
-  if (nd)
-  {
+  if (nd)  {
     num_data_   = nd;
     alloc_data_ = nd + 1;
     data_       = (short *)calloc(sizeof(short), nd + 1);
     memcpy(data_, d, nd * sizeof(short));
-  }
-  else
-  {
+  }  else  {
     num_data_   = 0;
     alloc_data_ = 0;
   }
@@ -103,6 +102,8 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   // And add the icon to the list of icons...
   next_  = first_;
   first_ = this;
+  item_ = NULL;
+  w_= h_=16;
 }
 
 
@@ -135,7 +136,18 @@ FileIcon::~FileIcon()
     free(data_);
 }
 
+void FileIcon::_measure(int& w, int& h) const {
+    Item * i= get_item();
+    if (!i) {w = 16; h = 16;}
+    else {
+	w = h = (int) (getascent()+getdescent()+2);
+    }
 
+}
+
+void FileIcon::set_item(Item* i)  {
+    item_=i; // connect to i
+} 
 //
 // 'FileIcon::add()' - Add data to an icon.
 //
@@ -219,15 +231,10 @@ FileIcon::find(const char *filename,	// I - Name of file */
 //
 // 'FileIcon::draw()' - Draw an icon.
 //
-void
-FileIcon::draw(int      x,		// I - Upper-lefthand X
-		  int      y,		// I - Upper-lefthand Y
-		  int      w,		// I - Width of bounding box
-		  int      h,		// I - Height of bounding box
-		  Color ic,		// I - Icon color...
-		  int      active)	// I - Active or inactive?
-{
-  Color	c;		// Current color
+//Color ic,		// I - Icon color...
+//int      active)	// I - Active or inactive?
+
+void FileIcon::_draw(const Rectangle& r) const {
   short		*d;		// Pointer to data
   short		*prim;		// Pointer to start of primitive...
   float		scale;		// Scale of icon
@@ -238,23 +245,26 @@ FileIcon::draw(int      x,		// I - Upper-lefthand X
     return;
 
   // Setup the transform matrix as needed...
-  scale = float(w < h ? w : h);
+  scale = float(r.w() < r.h() ? r.w() : r.h());
 
   push_matrix();
-  translate(x + 0.5f * (w - scale),
-	       y + 0.5f * (h + scale));
+  translate(0.5f * (r.w() - scale),
+	       0.5f * (r.h() + scale));
   fltk::scale(scale, -scale);
 
   // Loop through the array until we see an unmatched END...
   d    = data_;
   prim = NULL;
-  c    = ic;
-
-  if (active)
-    setcolor(c);
+  
+  Item * i = get_item();
+  Color	c, ic;
+  Browser * b = ((fltk::Browser*)i->parent());
+  if (i->selected()) 
+	ic = fltk::YELLOW;
   else
-    setcolor(inactive(c));
-
+	ic = fltk::GRAY90 /* light2 */; 
+  bool active = true; // i && i->active() ? true : false;
+  setcolor(ic);
   while (*d != END || prim)
     switch (*d)
     {
@@ -319,6 +329,9 @@ FileIcon::draw(int      x,		// I - Upper-lefthand X
 
   // Restore the transform matrix
   pop_matrix();
+
+  // Restore the item color from text part drawing
+  if (i) setcolor(i->selected() ? i->color() : i->selection_color());
 }
 
 

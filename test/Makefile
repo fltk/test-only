@@ -117,6 +117,7 @@ TARGETS = \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
+	buttons$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cube$(EXEEXT) \
 	CubeView$(EXEEXT) \

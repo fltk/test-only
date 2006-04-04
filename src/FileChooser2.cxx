@@ -972,7 +972,7 @@ FileChooser::update_preview()
 
   if (oldimage) oldimage->remove();
 
-  previewBox->image(0);
+  previewBox->image(fltk::NoSymbol);
 
   if (!image) {
     FILE	*fp;

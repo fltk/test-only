@@ -29,6 +29,9 @@
 
 namespace fltk {
 
+class ItemGroup;
+class Item;
+
 class FL_API Browser : public Menu {
 public:
 
@@ -39,7 +42,7 @@ public:
   Browser(int X,int Y,int W,int H,const char*l=0);
   static NamedStyle* default_style;
   ~Browser();
-
+  
   enum { // values for type()
     NORMAL = 0,
     MULTI = 1
@@ -115,7 +118,10 @@ public:
   int nheader() const { return nHeader; }
 
   int load(const char *filename);
-
+  // ! empty the browsr from items and rest scrollbars
+  void clear() { Group::clear(); scrollbar.handle_drag(0); hscrollbar.handle_drag(0); }
+  
+ 
 protected:
   void handle_callback(int doit); // defines how cb are handled in the browser
 
@@ -150,8 +156,10 @@ private:
     REDRAW_0,	// item that needs to be redrawn
     REDRAW_1,	// a second item that needs to be redrawn
     OPEN,	// this and all parents are open
-    TEMP,	// scratch space
-    TEMP2,	// scratch space, currently unused
+    TEMP,	// scratch space reserved for fltk only
+	TREE_TRAVERSAL, // this volatile mark is available for all tree traversal usage fltk+applications
+    USER1,	// all purpose scratch space 1, for applications only
+    USER2,	// all purpose scratch space 2, for applications only
     NUMMARKS
   };
   Widget* goto_mark(int mark); // set HERE to mark
@@ -172,6 +180,40 @@ private:
   void set_level(int); // increases levels by reallocating the arrays
 
   static void column_click_cb_(Widget*, void*);
+
+public:  
+  //
+  // tree construction high level API
+  //   dramatically improves tree construction in an easy and elegant way
+  // 
+  enum NodeType { // values for tree node types
+    GROUP= 0,
+    LEAF = 1
+  };
+  
+  /** sets default(s) symbol(s) for the group or leaf node type, 
+      the state can be OPEN or CLOSE, 
+      NoSymbol for img means no img
+      you can choose to setup a set of images up to three different states/events for a group node
+  */
+  void set_symbol(NodeType nodetype, 
+      const Symbol* imgClosed=NoSymbol, // default (and closed if open not null) img
+      const Symbol* imgFocus=NoSymbol,  // img when mouse comes on it
+      const Symbol* imgOpen=NoSymbol);  // img when node open (for group nodes only)
+  //! tell what image is affected to a particlar event/state
+  const Symbol* get_symbol(NodeType nodetype, Flags f=fltk::NO_FLAGS) const;  
+
+  //! create a group node in the tree, if img is not 0 then custom img is set, otherwise default img is set if any
+  ItemGroup* add_group(const char *label, Group* parent=0, int state=OPENED, 
+      const Symbol* imgClosed=NoSymbol, const Symbol* imgFocus=NoSymbol, const Symbol* imgOpen=NoSymbol);
+  //! create a leaf node in the tree, if img is not 0 then custom img is set, otherwise default img is set if any
+  Item* add_leaf(const char *label, Group* parent=0,  
+      const Symbol* img=NoSymbol, const Symbol* imgFocus=NoSymbol);
+
+private:
+  const Symbol *defGroupSymbol1, *defGroupSymbol2, *defGroupSymbol3;
+  const Symbol *defLeafSymbol1,*defLeafSymbol2,*defLeafSymbol3;
+
 };
 
 }

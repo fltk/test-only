@@ -42,6 +42,8 @@ typedef Callback* Callback_p; // needed for BORLAND
 typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
 
+const Symbol* const NoSymbol= ((const Symbol* ) 0);
+
 class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
@@ -88,9 +90,16 @@ public:
   void	label(const char* a);
   void	copy_label(const char* a);
 
-  const Symbol* image() const	{ return image_; }
-  void	image(const Symbol* a)	{ image_ = a; }
-  void	image(const Symbol& a)	{ image_ = &a; }
+  // image manips
+  //!  get the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  const Symbol* image(Flags flags=NO_FLAGS) const;
+  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  void	image(const Symbol* a, Flags flags=NO_FLAGS);	
+  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  void	image(const Symbol& a,Flags flags=NO_FLAGS) {  image(&a, flags); }
+  //! get the image relative to a particular event/state 
+  const Symbol * context_image() const; // return the context dependant image
+
 
   const char *tooltip() const	{ return tooltip_; }
   void	tooltip(const char *t)	{ tooltip_ = t; }
@@ -118,9 +127,9 @@ public:
   void	when(uchar i)		{ when_ = i; }
 
   static void default_callback(Widget*, void*);
-  void	do_callback()		{ callback_(this,user_data_); }
-  void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
-  void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
+  void	do_callback()		{ if(callback_) callback_(this,user_data_); }
+  void	do_callback(Widget* o,void* arg=0) { if(callback_) callback_(o,arg); }
+  void	do_callback(Widget* o,long arg) { if(callback_) callback_(o,(void*)arg); }
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;
@@ -141,7 +150,7 @@ public:
   void	hide()			;
   void	set_visible()		{ flags_ &= ~INVISIBLE; }
   void	clear_visible()		{ flags_ |= INVISIBLE; }
-  bool	active() const		{ return !(flags_&NOTACTIVE); }
+  bool	active() const		{ return !(flags_&INACTIVE); }
   bool	active_r() const	;
   void	activate()		;
   void	activate(int b)		{ if (b) activate(); else deactivate(); }
@@ -149,7 +158,7 @@ public:
   bool	output() const		{ return (flags_&OUTPUT)!=0; }
   void	set_output()		{ flags_ |= OUTPUT; }
   void	clear_output()		{ flags_ &= ~OUTPUT; }
-  bool	takesevents() const	{ return !(flags_&(OUTPUT|INVISIBLE|NOTACTIVE)); }
+  bool	takesevents() const	{ return !(flags_&(OUTPUT|INVISIBLE|INACTIVE)); }
   bool	changed() const		{ return (flags_&CHANGED)!=0; }
   void	set_changed()		{ flags_ |= CHANGED; }
   void	clear_changed()		{ flags_ &= ~CHANGED; }
@@ -276,7 +285,10 @@ public:
 private:
 
   const char*		label_;
-  const Symbol*		image_;
+  const Symbol*		image_,	  // DEFAULT image_
+			*image2_, // INACTIVE optional image
+			*image3_, // PUSHED / OPEN optional image
+			*image4_; // FOCUSED optional image
   unsigned		flags_;
   const Style*		style_;
   Callback*		callback_;

@@ -21,6 +21,8 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 #include <fltk/Browser.h>
+#include <fltk/ItemGroup.h>
+#include <fltk/Item.h>
 #include <fltk/Button.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
@@ -302,7 +304,7 @@ bool Browser::item_is_parent() const {
 /** If item_is_parent() is true, return true if this item is open.
     If this is not a parent the result is undefined. */
 bool Browser::item_is_open() const {
-  if (item()->flags()&VALUE) return true;
+    if (item()->flags() & fltk::OPENED) return true;
   for (int i = 0; i <= item_level[HERE]; i++) {
     if (i > item_level[OPEN]) return false;
     if (item_index[HERE][i] != item_index[OPEN][i]) return false;
@@ -629,9 +631,11 @@ void Browser::draw_item(int damage) {
   if (cols) {
     saved_colw = cols[0];
     cols[0] -= inset;
-    if (item()->image()) {
+    const Symbol * img = item()->context_image();
+
+    if (img) {
       int image_w = 0, image_h = 0;
-      item()->image()->_measure(image_w, image_h);
+      img->_measure(image_w, image_h);
       cols[0] -= image_w;
     }
     if (cols[0]==0) cols[0]--;
@@ -773,10 +777,10 @@ bool Browser::set_item_opened(bool open)
 {
   if (!item() || item_is_open()==open || !item_is_parent()) return false;
   if (open) {
-    item()->set_flag(VALUE);
+      item()->set_flag(fltk::OPENED);
     set_mark(OPEN, HERE);
   } else {
-    item()->clear_flag(VALUE);
+      item()->clear_flag(fltk::OPENED);
     if (item_is_open()) {
       if (item_level[HERE]) item_level[OPEN] = item_level[HERE]-1;
       else unset_mark(OPEN);
@@ -1055,7 +1059,7 @@ bool Browser::make_item_visible(linepos where) {
       if (item_index[HERE][n] >= children) break;
       Widget* i = child(item_index[HERE], n);
       i->set_visible();
-      i->set_flag(VALUE);
+      i->set_flag(fltk::OPENED);
       list()->flags_changed(this, item());
     }
     changed = true;
@@ -1177,6 +1181,7 @@ bool Browser::select_only_this(int do_callback) {
 
 int Browser::handle(int event) {
   static bool drag_type; // for multibrowser
+  static Widget* prev_item = 0; // used for belowmouse (fltk::BELOWMOUSE) image draw
 
   switch (event) {
   case fltk::FOCUS:
@@ -1185,6 +1190,9 @@ int Browser::handle(int event) {
     damage_item(FOCUS);
     return 1;
 
+  case LEAVE:
+    if(prev_item) {prev_item->redraw_label();prev_item = 0;}
+    break;
   case PUSH:
   case ENTER:
   case MOVE: {
@@ -1214,6 +1222,8 @@ int Browser::handle(int event) {
     if (!goto_position(event_y()-interior.y()+yposition_)) {
 	if (event==PUSH )  // fabien: as in 1.1.x clicking ouside a tree node deselect any current selection
 	    deselect(1);
+	if(prev_item) {prev_item->redraw_label();prev_item=0;}
+
 	if (!item()) return 0;
     }
     // set x to left edge of item:
@@ -1221,7 +1231,16 @@ int Browser::handle(int event) {
     int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
     // see if they are inside the widget and it takes the event:
     if (event_x() >= x && item()->send(event));
-    else fltk::belowmouse(this);
+    else {
+	if (item()!=prev_item &&  item()->image(fltk::BELOWMOUSE)) {
+	    if(prev_item) prev_item->redraw_label();
+	    prev_item = item();
+	    fltk::belowmouse(item());
+	    damage_item();
+	}
+	else
+	    fltk::belowmouse(this);
+    }
     // accept enter/move events so the browser's tooltip appears:
     if (event != PUSH) return 1;
     // drag must start & end in open/close box for it to work:
@@ -1769,6 +1788,8 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   selected_column_ = -1;
   nColumn = 0;
   nHeader = 0; header_ = 0;
+  defGroupSymbol1 = defGroupSymbol2 = defGroupSymbol3 =0;
+  defLeafSymbol1 = defLeafSymbol2 = defLeafSymbol3 = 0;
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
@@ -1819,6 +1840,75 @@ Browser::~Browser() {
   - selected()
 
 */
+
+//
+// Tree construction high level API
+//
+ItemGroup* Browser::add_group(const char *label, Group* parent, int state, 
+      const Symbol* img1, const Symbol* img2, const Symbol* img3) {
+    if (parent) parent->begin();
+    img1 = img1 ? img1 : defGroupSymbol1;
+    img2 = img2 ? img2 : defGroupSymbol2;
+    img3 = img3 ? img3 : defGroupSymbol3;
+    ItemGroup * i = new ItemGroup(img1,label,fltk::ALIGN_BROWSER | state);
+    if (img2) i->image (img2, fltk::BELOWMOUSE); 
+    if (img3) i->image (img3, fltk::OPENED);// last parameter because leaves have open images
+    return i;
+}
+
+Item* Browser::add_leaf(const char *label,  Group* parent, 
+      const Symbol* img1, const Symbol* img2) {
+    if (parent) parent->begin();
+    img1 = img1 ? img1 : defLeafSymbol1;
+    img2 = img2 ? img2 : defLeafSymbol2;
+    Item* i = new Item(img1, label, fltk::ALIGN_BROWSER);
+    if (img2) i->image (img2, fltk::BELOWMOUSE);
+    return i;
+}
+
+// tell what image is affected to a particlar event
+const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  f) const {
+    switch(f) {
+    case fltk::NO_FLAGS:    return nodetype== Browser::GROUP ? defGroupSymbol1 : defLeafSymbol1;
+    case fltk::BELOWMOUSE:	    return nodetype== Browser::GROUP ? defGroupSymbol2 : defLeafSymbol2;
+    case fltk::OPENED:	    return nodetype== Browser::GROUP ? defGroupSymbol3 : 0;
+    default : return 0;
+    }
+}
+
+void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1, 
+			 const Symbol* img2, const Symbol* img3) {
+   const Symbol *old1= 0, *old2= 0, *old3= 0;
+   bool sel = (nodetype == Browser::GROUP) ? true : false;
+
+    switch(nodetype) {
+	case Browser::GROUP:	
+		old1 = defGroupSymbol1; old2 = defGroupSymbol2;old3 = defGroupSymbol3;
+		defGroupSymbol1 = img1; defGroupSymbol2 = img2; defGroupSymbol3 = img3; 
+		break;
+	case Browser::LEAF:	
+		old1 = defLeafSymbol1; old2 = defLeafSymbol2;
+		defLeafSymbol1 = img1; defLeafSymbol2 = img2; 
+		break;
+    }
+	// now let's change dynamically the look of the tree symbols !
+	if ( (img1!=old1) || 
+	     (img2!=old2) || 
+	     (img3!=old3) ) {
+		set_mark(TREE_TRAVERSAL, HERE); // memorize current
+		for (Widget* it=goto_top(); it ; it = next()) {
+		    if ((it->is_group() ? true : false) == sel) {
+			if (it->image()==old1) 
+			    it->image(img1);
+			if (it->image(fltk::BELOWMOUSE)==old2) 
+			    it->image(img2, fltk::BELOWMOUSE);
+			if (it->is_group() && it->image(fltk::OPENED)==old3) 
+			    it->image(img3, fltk::OPENED);
+		    }
+		}
+		goto_mark(TREE_TRAVERSAL); // memorize current
+	}
+}
 
 //
 // End of "$Id$".

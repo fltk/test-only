@@ -64,7 +64,7 @@ static Widget* append(
   else if (flags & MENU_TOGGLE) o->type(Item::TOGGLE);
   // these flags have been cleverly assigned so this shift and mask
   // converts from the old values to the new ones:
-  o->set_flag((flags<<8)&(NOTACTIVE|VALUE|INVISIBLE));
+  o->set_flag((flags<<8)&(INACTIVE|VALUE|INVISIBLE));
   if (insert_here) g->insert(*o, insert_here-1);
   else g->add(o);
   if (flags & MENU_DIVIDER) {
@@ -229,7 +229,7 @@ static Widget* innards(
     \a data : second argument passed to the callback.
 
     \a flags : useful flags are:
-    - NOTACTIVE makes the item grayed out and unpickable
+    - INACTIVE makes the item grayed out and unpickable
     - INVISIBLE makes it not visible to the user, as though it was
       not there. This is most useful for making extra shortcuts that do
       the same thing.

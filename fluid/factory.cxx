@@ -292,7 +292,7 @@ static ScrollbarType Scrollbartype;
 #include <fltk/Output.h>
 static const Enumeration output_type_menu[] = {
   {"Normal",	0,	(void*)fltk::Output::NORMAL},
-  {"Multiline",	0,	(void*)fltk::Output::MULTILINE, "fltk::MultilineOutput"},
+  {"Multiline",	0,	(void*)fltk::Output::MULTILINE, "fltk::MultiLineOutput"},
   {"Wordwrap",	0,	(void*)fltk::Output::WORDWRAP, "fltk::WordwrapOutput"},
   {0}};
 class OutputType : public InputType {

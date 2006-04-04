@@ -77,7 +77,12 @@ void
 FileIcon::load(const char *f)	// I - File to read from
 {
   const char	*ext;			// File extension
-
+  
+  static bool first_time = true;
+  if (first_time) { 
+      load_system_icons(); 
+      first_time = false;
+  }
 
   if ((ext = filename_ext(f)) == NULL)
     load_xpm(f);

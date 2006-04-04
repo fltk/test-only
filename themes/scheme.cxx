@@ -1,10 +1,10 @@
 //
-// "$Id: scheme.cxx,v 1.4 2002/12/10 02:01:07 easysw Exp $"
+// "$Id$"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -233,5 +233,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: scheme.cxx,v 1.4 2002/12/10 02:01:07 easysw Exp $".
+// End of "$Id$".
 //

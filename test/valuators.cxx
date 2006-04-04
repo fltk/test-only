@@ -20,7 +20,7 @@ int main (int argc, char **argv) {
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
       o->color((fltk::Color)49);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
     }
      {fltk::Slider* o = new fltk::Slider(25, 49, 20, 157, "VERTICAL");
       o->set_vertical();
@@ -86,7 +86,7 @@ int main (int argc, char **argv) {
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
       o->color((fltk::Color)49);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
     }
      {fltk::ValueInput* o = new fltk::ValueInput(360, 35, 180, 22, "outside label");
       o->color((fltk::Color)10);
@@ -99,7 +99,7 @@ int main (int argc, char **argv) {
       o->selection_color((fltk::Color)1);
       o->labelsize(8);
       o->callback((fltk::Callback*)callback);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::ValueInput* o = new fltk::ValueInput(410, 63, 65, 22, "x");
       o->color((fltk::Color)10);
@@ -107,7 +107,7 @@ int main (int argc, char **argv) {
       o->maximum(100);
       o->step(0.1);
       o->callback((fltk::Callback*)callback);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::ValueInput* o = new fltk::ValueInput(475, 63, 65, 22, "y");
       o->color((fltk::Color)10);
@@ -115,7 +115,7 @@ int main (int argc, char **argv) {
       o->maximum(100);
       o->step(0.1);
       o->callback((fltk::Callback*)callback);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::ValueInput* o = new fltk::ValueInput(360, 93, 180, 32, "larger");
       o->color((fltk::Color)10);
@@ -126,13 +126,13 @@ int main (int argc, char **argv) {
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
       o->color((fltk::Color)49);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
     }
      {fltk::Widget* o = new fltk::Widget(295, 141, 145, 131, "   Fl_Scrollbar");
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
       o->color((fltk::Color)49);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::Scrollbar* o = new fltk::Scrollbar(300, 240, 105, 20, "HORIZONTAL");
       o->color((fltk::Color)10);
@@ -211,7 +211,7 @@ int main (int argc, char **argv) {
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
       o->color((fltk::Color)49);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
     }
      {fltk::ThumbWheel* o = new fltk::ThumbWheel(305, 340, 90, 20, "HORIZONTAL");
       o->color((fltk::Color)0xe6e7e600);
@@ -230,7 +230,7 @@ int main (int argc, char **argv) {
       o->set_vertical();
       o->box(fltk::ENGRAVED_BOX);
       o->labelfont(fltk::HELVETICA_BOLD);
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
       o->begin();
        {fltk::Dial* o = new fltk::Dial(23, 24, 63, 65, "NORMAL");
         o->set_vertical();

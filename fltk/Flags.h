@@ -46,55 +46,58 @@ typedef int Flags;
 
 /*! For back compatability with fltk1.1 */
 typedef Flags Align; // for back compatability
-
 enum {
-  NO_FLAGS		= 0,
+  NO_FLAGS		= 0x00000000,
 
   // from Align, values are comptable with fltk 1.0:
   // These control the location and appearance of labels:
   // Warning: unused numbers may change behavior!
-  ALIGN_CENTER		= 0,	//!< (0) The label is centered inside widget
-  ALIGN_TOP		= 1,	//!< Label is centered above widget
-  ALIGN_BOTTOM		= 2,	//!< Label is centered below widget
-  ALIGN_LEFTTOP		= 3,	//!< Label is left of widget at top
-  ALIGN_LEFT		= 4,	//!< Label is to left of widget
-  ALIGN_TOPLEFT		= 5,	//!< Label is left-justified above widget
-  ALIGN_BOTTOMLEFT	= 6,	//!< Label is left-justified below widget
-  ALIGN_LEFTBOTTOM	= 7,	//!< Label is left of widget at bottom
-  ALIGN_RIGHT		= 8,	//!< Label is to right of widget
-  ALIGN_TOPRIGHT	= 9,	//!< Label is right-justified above widget
-  ALIGN_BOTTOMRIGHT	= 10,	//!< Label is right-justified below widget
-  ALIGN_RIGHTTOP	= 11,	//!< Label is right of widget at top
-  ALIGN_CENTERLEFT	= 12,	//!< Label is centered in space left of widget
-  ALIGN_RIGHTBOTTOM	= 15,	//!< Label is right of widget at bottom
-  ALIGN_INSIDE		= 16,	//!< Label is inside widget, image centered
-  ALIGN_INSIDE_TOP	= 17,	//!< Label is inside widget at top
-  ALIGN_INSIDE_BOTTOM	= 18,	//!< Label is inside widget at bottom
-  ALIGN_INSIDE_LEFT	= 20,	//!< Label is inside widget at left
-  ALIGN_INSIDE_TOPLEFT	= 21,	//!< Label is inside widget at top left
-  ALIGN_INSIDE_BOTTOMLEFT=22,	//!< Label is inside widget at bottom left
-  ALIGN_INSIDE_RIGHT	= 24,	//!< Label is inside widget at right
-  ALIGN_INSIDE_TOPRIGHT	= 25,	//!< Label is inside widget at top right
-  ALIGN_INSIDE_BOTTOMRIGHT=26,	//!< Label is inside widget bottom right
-  ALIGN_CLIP		= 0x00000040, //!< The label is clipped to the widget
-  ALIGN_WRAP		= 0x00000080, //!< The label is word-wrapped
-  ALIGN_MASK		= 0x000000FF, //!< Used to split align() from flags()
+  ALIGN_TOP		  = 0x00000001,	//!< Label is centered above widget
+  ALIGN_BOTTOM		  = 0x00000002,	//!< Label is centered below widget
+  ALIGN_LEFT		  = 0x00000004,	//!< Label is to left of widget
+  ALIGN_RIGHT		  = 0x00000008,	//!< Label is to right of widget
+  ALIGN_CENTER		  = 0x00000010,	//!< (0) The label is centered inside widget
+  ALIGN_INSIDE		  = 0x00000020,	//!< Label is inside widget, image centered
+  ALIGN_CLIP		  = 0x00000040, //!< The label is clipped to the widget
+  ALIGN_WRAP		  = 0x00000080, //!< The label is word-wrapped
+  ALIGN_MASK		  = 0x000000FF, //!< Used to split align() from flags()
+  ALIGN_POSITIONMASK      = 0x0000000F, //!< Used to split align() from flags()
 
-  NOTACTIVE		= 0x00000100, //!< !active()
-  OUTPUT		= 0x00000200, //!< does not get events, draw text colors
-  VALUE			= 0x00000400, //!< true/on state for buttons
-  SELECTED		= 0x00000800, //!< chosen in browser/menu, draw selected colors
-  INVISIBLE		= 0x00001000, //!< !visible(), draw_frame()
-  HIGHLIGHT		= 0x00002000, //!< draw highlighted
-  CHANGED		= 0x00004000, //!< value changed since last callback
-  COPIED_LABEL		= 0x00008000, //!< copy_label() was called
-  RAW_LABEL		= 0x00010000, //!< don't interpret & or @ in label
-  LAYOUT_VERTICAL	= 0x00020000, //!< fltk::Pack puts this widget vertical
-  TAB_TO_FOCUS		= 0x00040000, //!< Widget::tab_to_focus();
-  CLICK_TO_FOCUS	= 0x00080000, //!< Widget::click_to_focus()
-  INACTIVE		= 0x00100000, //!< draw it grayed-out
-  FOCUSED		= 0x00200000, //!< draw with keyboard focus
-  PUSHED		= 0x00400000  //!< draw pushed-in
+  ALIGN_TOPLEFT		  = (ALIGN_TOP|ALIGN_LEFT),	    //!< Label is left-justified above widget
+  ALIGN_BOTTOMLEFT	  = (ALIGN_BOTTOM|ALIGN_LEFT),	    //!< Label is left-justified below widget
+  ALIGN_TOPRIGHT	  = (ALIGN_TOP|ALIGN_RIGHT),	    //!< Label is right-justified above widget
+  ALIGN_BOTTOMRIGHT	  = (ALIGN_BOTTOM|ALIGN_RIGHT),	    //!< Label is right-justified below widget
+  ALIGN_CENTERLEFT	  = (ALIGN_CENTER|ALIGN_LEFT),	    //!< Label is centered in space left of widget
+  ALIGN_CENTERRIGHT	  = (ALIGN_CENTER|ALIGN_RIGHT),	    //!< Label is centered in space left of widget
+  ALIGN_INSIDE_TOP	  = (ALIGN_INSIDE|ALIGN_TOP),	    //!< Label is inside widget at top
+  ALIGN_INSIDE_BOTTOM	  = (ALIGN_INSIDE|ALIGN_BOTTOM),    //!< Label is inside widget at bottom
+  ALIGN_INSIDE_LEFT	  = (ALIGN_INSIDE|ALIGN_LEFT),	    //!< Label is inside widget at left
+  ALIGN_INSIDE_TOPLEFT	  = (ALIGN_INSIDE|ALIGN_TOPLEFT),   //!< Label is inside widget at top left
+  ALIGN_INSIDE_BOTTOMLEFT = (ALIGN_INSIDE|ALIGN_BOTTOMLEFT),//!< Label is inside widget at bottom left
+  ALIGN_INSIDE_RIGHT	  = (ALIGN_INSIDE|ALIGN_RIGHT),	    //!< Label is inside widget at right
+  ALIGN_INSIDE_TOPRIGHT	  = (ALIGN_INSIDE|ALIGN_TOPRIGHT),  //!< Label is inside widget at top right
+  ALIGN_INSIDE_BOTTOMRIGHT= (ALIGN_INSIDE|ALIGN_BOTTOMRIGHT),//!< Label is inside widget bottom right
+  ALIGN_MENU		  = (ALIGN_INSIDE_LEFT|ALIGN_CLIP), //!< Label is inside widget bottom right
+  ALIGN_BROWSER		  = ALIGN_MENU,			    //!< Label is inside widget bottom right
+
+  // fabien: NOTACTIVE should not exist, it is redondant with INACTIVE
+  // NOTACTIVE		  = 0x00000100, //!< !active()
+  OUTPUT		  = 0x00000200, //!< does not get events, draw text colors
+  VALUE			  = 0x00000400, //!< true/on state for buttons 
+  SELECTED		  = 0x00000800, //!< chosen in browser/menu, draw selected colors
+  INVISIBLE		  = 0x00001000, //!< !visible(), draw_frame()
+  HIGHLIGHT		  = 0x00002000, //!< draw highlighted
+  CHANGED		  = 0x00004000, //!< value changed since last callback
+  COPIED_LABEL		  = 0x00008000, //!< copy_label() was called
+  RAW_LABEL		  = 0x00010000, //!< don't interpret & or @ in label
+  LAYOUT_VERTICAL	  = 0x00020000, //!< fltk::Pack puts this widget vertical
+  TAB_TO_FOCUS		  = 0x00040000, //!< Widget::tab_to_focus();
+  CLICK_TO_FOCUS	  = 0x00080000, //!< Widget::click_to_focus()
+  INACTIVE		  = 0x00100000, //!< draw it grayed-out
+  FOCUSED		  = 0x00200000, //!< draw with keyboard focus also used for belowmouse widget image (image3_) 
+  PUSHED		  = 0x00400000, //!< draw pushed-in 
+  BELOWMOUSE		  = FOCUSED,	//!< used by image() and set_symbol() for state corresponding to widget below mouse
+  OPENED		  = VALUE,	//!< used by image() and set_symbol() for state corresponding to widget open (i.e group node)
 };
 /*! \} */
 

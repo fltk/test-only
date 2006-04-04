@@ -588,10 +588,6 @@ SOURCE=..\..\src\args.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\array.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\BarGroup.cxx
 # End Source File
 # Begin Source File
@@ -629,10 +625,6 @@ SOURCE=..\..\src\Color.cxx
 # Begin Source File
 
 SOURCE=..\..\src\color_chooser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\colormap.h
 # End Source File
 # Begin Source File
 
@@ -689,10 +681,6 @@ SOURCE=..\..\src\error.cxx
 # Begin Source File
 
 SOURCE=..\..\src\event_key_state.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fastarrow.h
 # End Source File
 # Begin Source File
 
@@ -829,10 +817,6 @@ SOURCE=..\..\src\load_plugin.cxx
 # Begin Source File
 
 SOURCE=..\..\src\lock.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\mediumarrow.h
 # End Source File
 # Begin Source File
 
@@ -997,10 +981,6 @@ SOURCE=..\..\src\show_colormap.cxx
 # Begin Source File
 
 SOURCE=..\..\src\Slider.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\slowarrow.h
 # End Source File
 # Begin Source File
 

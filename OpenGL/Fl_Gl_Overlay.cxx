@@ -72,7 +72,7 @@ public:
   void create();
   GlOverlay(int x, int y, int w, int h) :
     GlWindow(x,y,w,h) {
-    set_flag(NOTACTIVE);
+    set_flag(INACTIVE);
   }
 };
 }
