@@ -258,7 +258,6 @@ void FileIcon::_draw(const Rectangle& r) const {
   
   Item * i = get_item();
   Color	c, ic;
-  Browser * b = ((fltk::Browser*)i->parent());
   if (i->selected()) 
 	ic = fltk::YELLOW;
   else
