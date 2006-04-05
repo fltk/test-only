@@ -13,6 +13,7 @@
 	@x:Browser:browser
 	@x:Input:input
 	@x:Output:output
+	@x:Buttons:buttons
 	@x:Button\n&&\nTooltip:radio
 	@x:TabGroup:tabs
 	@x:TiledGroup:tile

@@ -149,6 +149,7 @@ TARGETS = \
 	pack$(EXEEXT) \
 	pixmap$(EXEEXT) \
 	progress$(EXEEXT) \
+	radio$(EXEEXT) \
 	qubix$(EXEEXT) \
 	resizable$(EXEEXT) \
 	resizealign$(EXEEXT) \
