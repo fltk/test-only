@@ -11,22 +11,22 @@ CORE DEVELOPERS
 
     The following people do the day-to-day development of FLTK:
 
-        Craig P. Earls
-	Curtis Edwards (trilex@users.sf.net)
-	Gustavo Hime (hime@users.sf.net)
-	Talbot Hughes
-	Robert Kesterson (robertk@users.sf.net)
-	Mikko Lahteenmaki (laza2000@users.sf.net)
-	Dejan Lekic (dejan@nu6.org)
-	Matthias Melcher (matthias@users.sf.net)
-	James Dean Palmer (jamespalmer@users.sf.net)
-	Martin Pekar (cortex@users.sf.net)
-	Vincent Penne (vincentp@users.sf.net)
-	Bill Spitzak (spitzak@users.sf.net)
-        Michael Sweet (easysw@users.sf.net)
-	Carl Thompson (clip@users.sf.net)
-	Nafees Bin Zafar (nafees@users.sf.net)
-
+  Bill Spitzak (spitzak@users.sf.net)
+  Carl Thompson (clip@users.sf.net)
+  Craig P. Earls
+  Curtis Edwards (trilex@users.sf.net)
+  Dejan Lekic (dejan@nu6.org)
+  Fabien Costantini
+  Gustavo Hime (hime@users.sf.net)
+  James Dean Palmer (jamespalmer@users.sf.net)
+  Martin Pekar (cortex@users.sf.net)
+  Matthias Melcher (matthias@users.sf.net)
+  Michael Sweet (easysw@users.sf.net)
+  Mikko Lahteenmaki (laza2000@users.sf.net)
+  Nafees Bin Zafar (nafees@users.sf.net)
+  Robert Kesterson (robertk@users.sf.net)
+  Talbot Hughes
+  Vincent Penne (vincentp@users.sf.net)
 
 OTHER CONTRIBUTORS
 
@@ -35,7 +35,6 @@ OTHER CONTRIBUTORS
 
 	Teun Burgers
 	Peter Burns
-	Fabien Costantini
 	Stephen Davies
 	Greg Ercolano
 	Yuri Fedorchenko
