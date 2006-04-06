@@ -313,7 +313,7 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 /*!
   Generates a simple beep message 
 */
-void beep(int type) {
+void fltk::beep(int type) {
 #ifdef WIN32
   switch (type) {
     case BEEP_QUESTION :

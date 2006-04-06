@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 
   fltk::args(argc, argv);
 
+  fltk::beep(fltk::BEEP_QUESTION);
   fltk::message("Spelling check sucessfull, %d errors found with %g%% confidence",
 	     1002, 100*(15/77.0));
 
