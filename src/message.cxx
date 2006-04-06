@@ -38,6 +38,7 @@
 #ifdef WIN32
 # include <windows.h>
 #endif
+#include <fltk/x.h>
 
 using namespace fltk;
 
