@@ -335,6 +335,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name size_range
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name output
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name symbols
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -717,6 +723,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "output"=.\output.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "pack"=.\pack.dsp - Package Owner=<4>
 
 Package=<5>
@@ -740,6 +761,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "radio"=.\radio.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
 }}}
 
 ###############################################################################

@@ -77,6 +77,8 @@ public:
   void hotspot(int x, int y, bool offscreen = false);
   void hotspot(const Widget*, bool offscreen = false);
   void hotspot(const Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
+  bool resize(int x, int y, int w, int h); // handle the resize at the Window level
+  bool resize(int W, int H) { return resize(x(), y(), W, H); }
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
     { minw=(short)a; minh=(short)b; maxw=(short)c; maxh=(short)d; dw=(uchar)e; dh=(uchar)f; size_range_(); }
   bool get_size_range( int *min_w, int *min_h, int *max_w, int *max_h );
@@ -128,11 +130,12 @@ private:
   void size_range_();
   // values for flags():
   enum {
-    MODAL	= 0x80000000,
-    NOBORDER 	= 0x40000000,
-    OVERRIDE	= 0x20000000,
-    NON_MODAL	= 0x10000000,
-    DOUBLE	= 0x08000000
+    MODAL	    = 0x80000000,
+    NOBORDER 	    = 0x40000000,
+    OVERRIDE	    = 0x20000000,
+    NON_MODAL	    = 0x10000000,
+    DOUBLE	    = 0x08000000,
+    FORCE_POSITION  = 0x04000000
   };
   static const char* xclass_;
   void _Window(); // constructor innards

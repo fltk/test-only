@@ -64,6 +64,7 @@ If you don't change it then that key will close the window.
 #include <fltk/x.h>
 using namespace fltk;
 
+
 /*! Return a pointer to the fltk::Window this widget is in.
   (it will skip any and all parent widgets between this and
   the window).  Returns NULL if none.  Note: for an
@@ -870,8 +871,13 @@ Window::~Window() {
   are typically positive. To get the actual rectangle around your
   window, add these values to the window's size.
 */
+// resize port from fltk1
 // Implementation in the system-specific code
-
+#if !defined(WIN32)
+bool Window::resize(int X, int Y, int W, int H) {
+  return Group::resize(X, Y, W, H);
+}
+#endif
 //
 // End of "$Id$".
 //

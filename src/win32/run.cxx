@@ -1387,6 +1387,47 @@ extern void fl_prune_deferred_calls(HWND);
 
 #define MakeWaitReturn() __PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
 
+
+bool Window::resize(int X, int Y, int W, int H) {
+  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER  | SWP_NOACTIVATE | SWP_NOOWNERZORDER;
+  int is_a_resize = (W != w() || H != h());
+  int resize_from_program = (this != resize_from_system);
+  if (!resize_from_program) resize_from_system= 0;
+  if (X != x() || Y != y()) {
+    set_flag(FORCE_POSITION);
+  } else {
+    if (!is_a_resize) return false;
+    flags |= SWP_NOMOVE;
+  }
+  if (is_a_resize) {
+    Group::resize(X,Y,W,H);
+    if (shown()) {redraw(); i->wait_for_expose = 1;}
+  } else {
+    x(X); y(Y);
+    flags |= SWP_NOSIZE;
+  }
+  if (!border()) flags |= SWP_NOACTIVATE;
+  if (resize_from_program ) {
+    if (!resizable()) size_range(w(),h(),w(),h());
+    //Ignore window managing when resizing, so that windows (and more
+    //specifically menus) can be moved offscreen.
+    // does this code should still apply ?
+    /*
+    int dummy_x, dummy_y, bt, bx, by;
+    if (fake_X_wm(this, dummy_x, dummy_y, bt, bx, by)) {
+      X -= bx;
+      Y -= by+bt;
+      W += 2*bx;
+      H += 2*by+bt;
+    }
+    */
+  }
+  if (shown() && resize_from_program ) {
+    SetWindowPos(i->xid, 0, X, Y, W, H, flags);
+  }
+  return true;
+}
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   //printf("Window %x msg %x\n", hWnd, uMsg);
@@ -1632,8 +1673,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       POINT wul = { 0, 0 }; ClientToScreen(xid(window), &wul);
 
       // tell Window about it
+      resize_from_system = window;
       if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
-	resize_from_system = window;
 
       MakeWaitReturn();
     } else { // Unmap event
@@ -1675,8 +1716,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       }
 
       if ( window->resize( newRect.x(), newRect.y(), newRect.w(), newRect.h() ) ) {
-        // FIXME do we need the line below??
-        // resize_from_system = window;
+        resize_from_system = window;
         window->layout_damage( window->layout_damage() | LAYOUT_USER );
         window->layout();
         pos->x = window->x()+r.x();
