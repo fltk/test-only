@@ -84,6 +84,7 @@ public:
   void		load(const char *f);
   void		load_fti(const char *fti);
   void		load_xpm(const char *xpm);
+  int 		load_image(const char *img);
   const char	*pattern() { return (pattern_); }
   int		size() { return (num_data_); }
   int		type() { return (type_); }

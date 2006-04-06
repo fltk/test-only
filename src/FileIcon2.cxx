@@ -37,6 +37,7 @@
 #include <fltk/FileIcon.h>
 #include <fltk/filename.h>
 #include <fltk/draw.h>
+#include <fltk/SharedImage.h>
 #include <config.h>
 
 #include <stdio.h>
@@ -81,20 +82,270 @@ FileIcon::load(const char *f)	// I - File to read from
   
   static bool first_time = true;
   if (first_time) { 
-      load_system_icons(); 
       first_time = false;
+      load_system_icons(); 
   }
 
   if ((ext = filename_ext(f)) == NULL)
     load_xpm(f);
   else if (strcmp(ext, ".fti") == 0)
     load_fti(f);
-#if 0
-  else if (strcmp(ext, ".png") == 0)
-    load_png(f);
-#endif /* 0 */
   else
-    load_xpm(f);
+    load_image(f);
+}
+//
+// 'Fl_File_Icon::load_image()' - Load an image icon file...
+//
+
+int					// O - 0 on success, non-0 on error
+FileIcon::load_image(const char *ifile)	// I - File to read from
+{
+  SharedImage	*img;		// Image file
+
+
+  img = SharedImage::get(ifile);
+  if (!img  || !img->w() || !img->h()) return -1;
+
+  /*
+    TO BE CONTINUED :
+    What have to be done:
+     1. make Image having a virtual data() method to access its buffer
+     2. if such a data() buffer is available then  decode as below
+  */
+     
+#if 0
+  if (true) {
+    int		x, y;		// X & Y in image
+    int		startx;		// Starting X coord
+    Color	c,		// Current color
+		temp;		// Temporary color
+    const uchar *row;		// Pointer into image
+
+
+    // Loop through grayscale or RGB image...
+    for (y = 0, row = (const uchar *)(*(img->data())); y < img->h(); y ++, row += img->ld())
+    {
+      for (x = 0, startx = 0, c = (Fl_Color)-1;
+           x < img->w();
+	   x ++, row += img->d())
+      {
+	switch (img->d())
+	{
+          case 1 :
+              temp = fl_rgb_color(row[0], row[0], row[0]);
+	      break;
+          case 2 :
+	      if (row[1] > 127)
+        	temp = fl_rgb_color(row[0], row[0], row[0]);
+	      else
+		temp = (Fl_Color)-1;
+	      break;
+	  case 3 :
+              temp = fl_rgb_color(row[0], row[1], row[2]);
+	      break;
+	  default :
+	      if (row[3] > 127)
+        	temp = fl_rgb_color(row[0], row[1], row[2]);
+	      else
+		temp = (Fl_Color)-1;
+	      break;
+	}
+
+	if (temp != c)
+	{
+	  if (x > startx && c != (Fl_Color)-1)
+	  {
+	    add_color(c);
+	    add(POLYGON);
+	    add_vertex(startx * 9000 / img->w() + 1000, 9500 - y * 9000 / img->h());
+	    add_vertex(x * 9000 / img->w() + 1000,      9500 - y * 9000 / img->h());
+	    add_vertex(x * 9000 / img->w() + 1000,      9500 - (y + 1) * 9000 / img->h());
+	    add_vertex(startx * 9000 / img->w() + 1000, 9500 - (y + 1) * 9000 / img->h());
+	    add(END);
+	  }
+
+          c      = temp;
+	  startx = x;
+	}
+      }
+
+      if (x > startx && c != (Fl_Color)-1)
+      {
+	add_color(c);
+	add(POLYGON);
+	add_vertex(startx * 9000 / img->w() + 1000, 9500 - y * 9000 / img->h());
+	add_vertex(x * 9000 / img->w() + 1000,      9500 - y * 9000 / img->h());
+	add_vertex(x * 9000 / img->w() + 1000,      9500 - (y + 1) * 9000 / img->h());
+	add_vertex(startx * 9000 / img->w() + 1000, 9500 - (y + 1) * 9000 / img->h());
+	add(END);
+      }
+    }
+  } else {
+    int		i, j;			// Looping vars
+    int		ch;			// Current character
+    int		newch;			// New character
+    int		bg;			// Background color
+    char	val[16];		// Color value
+    const char	*lineptr,		// Pointer into line
+		*const*ptr;		// Pointer into data array
+    int		ncolors,		// Number of colors
+		chars_per_color;	// Characters per color
+    Fl_Color	*colors;		// Colors
+    int		red, green, blue;	// Red, green, and blue values
+    int		x, y;			// X & Y in image
+    int		startx;			// Starting X coord
+
+
+    // Get the pixmap data...
+    ptr = img->data();
+    sscanf(*ptr, "%*d%*d%d%d", &ncolors, &chars_per_color);
+
+    colors = new Fl_Color[1 << (chars_per_color * 8)];
+
+    // Read the colormap...
+    memset(colors, 0, sizeof(Fl_Color) << (chars_per_color * 8));
+    bg = ' ';
+
+    ptr ++;
+
+    if (ncolors < 0) {
+      // Read compressed colormap...
+      const uchar *cmapptr;
+
+      ncolors = -ncolors;
+
+      for (i = 0, cmapptr = (const uchar *)*ptr; i < ncolors; i ++, cmapptr += 4)
+        colors[cmapptr[0]] = fl_rgb_color(cmapptr[1], cmapptr[2], cmapptr[3]);
+
+      ptr ++;
+    } else {
+      for (i = 0; i < ncolors; i ++, ptr ++) {
+	// Get the color's character
+	lineptr = *ptr;
+	ch      = *lineptr++;
+
+        if (chars_per_color > 1) ch = (ch << 8) | *lineptr++;
+
+	// Get the color value...
+	if ((lineptr = strstr(lineptr, "c ")) == NULL) {
+	  // No color; make this black...
+	  colors[ch] = FL_BLACK;
+	} else if (lineptr[2] == '#') {
+	  // Read the RGB triplet...
+	  lineptr += 3;
+	  for (j = 0; j < 12; j ++)
+            if (!isxdigit(lineptr[j]))
+	      break;
+
+	  switch (j) {
+            case 0 :
+		bg = ch;
+	    default :
+		red = green = blue = 0;
+		break;
+
+            case 3 :
+		val[0] = lineptr[0];
+		val[1] = '\0';
+		red = 255 * strtol(val, NULL, 16) / 15;
+
+		val[0] = lineptr[1];
+		val[1] = '\0';
+		green = 255 * strtol(val, NULL, 16) / 15;
+
+		val[0] = lineptr[2];
+		val[1] = '\0';
+		blue = 255 * strtol(val, NULL, 16) / 15;
+		break;
+
+            case 6 :
+            case 9 :
+            case 12 :
+		j /= 3;
+
+		val[0] = lineptr[0];
+		val[1] = lineptr[1];
+		val[2] = '\0';
+		red = strtol(val, NULL, 16);
+
+		val[0] = lineptr[j + 0];
+		val[1] = lineptr[j + 1];
+		val[2] = '\0';
+		green = strtol(val, NULL, 16);
+
+		val[0] = lineptr[2 * j + 0];
+		val[1] = lineptr[2 * j + 1];
+		val[2] = '\0';
+		blue = strtol(val, NULL, 16);
+		break;
+	  }
+
+	  colors[ch] = fl_rgb_color((uchar)red, (uchar)green, (uchar)blue);
+	} else {
+	  // Read a color name...
+	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = FL_WHITE;
+	  else if (strncasecmp(lineptr + 2, "black", 5) == 0) colors[ch] = FL_BLACK;
+	  else if (strncasecmp(lineptr + 2, "none", 4) == 0) {
+            colors[ch] = FL_BLACK;
+	    bg = ch;
+	  } else colors[ch] = FL_GRAY;
+	}
+      }
+    }
+
+    // Read the image data...
+    for (y = 0; y < img->h(); y ++, ptr ++) {
+      lineptr = *ptr;
+      startx  = 0;
+      ch      = bg;
+
+      for (x = 0; x < img->w(); x ++) {
+	newch = *lineptr++;
+
+        if (chars_per_color > 1) newch = (newch << 8) | *lineptr++;
+
+	if (newch != ch) {
+	  if (ch != bg) {
+            add_color(colors[ch]);
+	    add(POLYGON);
+	    add_vertex(startx * 9000 / img->w() + 1000, 9500 - y * 9000 / img->h());
+	    add_vertex(x * 9000 / img->w() + 1000,      9500 - y * 9000 / img->h());
+	    add_vertex(x * 9000 / img->w() + 1000,      9500 - (y + 1) * 9000 / img->h());
+	    add_vertex(startx * 9000 / img->w() + 1000, 9500 - (y + 1) * 9000 / img->h());
+	    add(END);
+          }
+
+	  ch     = newch;
+	  startx = x;
+	}
+      }
+
+      if (ch != bg) {
+	add_color(colors[ch]);
+	add(POLYGON);
+	add_vertex(startx * 9000 / img->w() + 1000, 9500 - y * 9000 / img->h());
+	add_vertex(x * 9000 / img->w() + 1000,      9500 - y * 9000 / img->h());
+	add_vertex(x * 9000 / img->w() + 1000,      9500 - (y + 1) * 9000 / img->h());
+	add_vertex(startx * 9000 / img->w() + 1000, 9500 - (y + 1) * 9000 / img->h());
+	add(END);
+      }
+    }
+
+    // Free the colormap...
+    delete[] colors;
+  }
+
+  img->release();
+
+#ifdef DEBUG
+  printf("Icon File \"%s\":\n", xpm);
+  for (i = 0; i < num_data_; i ++)
+    printf("    %d,\n", data_[i]);
+#endif // DEBUG
+
+#endif
+
+  return 0;
 }
 
 
@@ -590,6 +841,16 @@ FileIcon::load_system_icons(void)
   // Add symbols if they haven't been added already...
   if (!init)
   {
+    // fltk::register_images();
+    if (!kdedir) {
+      // Figure out where KDE is installed...
+      if ((kdedir = getenv("KDEDIR")) == NULL) {
+        if (!access("/opt/kde", F_OK)) kdedir = "/opt/kde";
+	else if (!access("/usr/local/share/mimelnk", F_OK)) kdedir = "/usr/local";
+        else kdedir = "/usr";
+      }
+    }
+
     if (!access("/usr/share/mimelnk", F_OK))
     {
       // Load KDE icons...
