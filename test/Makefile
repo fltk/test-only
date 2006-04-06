@@ -146,6 +146,7 @@ TARGETS = \
 	menu$(EXEEXT) \
 	message$(EXEEXT) \
 	navigation$(EXEEXT) \
+	output$(EXEEXT) \
 	pack$(EXEEXT) \
 	pixmap$(EXEEXT) \
 	progress$(EXEEXT) \

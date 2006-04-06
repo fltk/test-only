@@ -112,7 +112,7 @@ Function {} {open selected
     }
     {fltk::LightButton} ttlb {
       label {Show Tooltips}
-      callback {Tooltip::enable(ttlb->value());}
+      callback {Tooltip::enable(ttlb->value() ? true : false);}
       tooltip {This button enables or disables tooltips}
       xywh {120 230 130 30} value 1
       extra_code {\#include <fltk/Tooltip.h>}

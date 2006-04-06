@@ -307,23 +307,27 @@ int main(int argc,char** argv) {
   tree.add_leaf("vvv", g);
   tree.add_leaf("www", g);
 
-#if 0
   tree.add_leaf("yyy", g);
   tree.add_leaf("zzz", g);
 
   // add some widgets:
   fltk::Button * b = new fltk::Button(0,0,100,23,"button");
   b->callback(button_cb);
+#if 1
+  // fabien: creating the CheckButton below will still mess up the drawing ... 
+  //   have to be fixed, but not in the browser i think.
   b = new fltk::CheckButton(0,0,100,23,"CheckButton");
+
   printf("b->type = %d, group = %d, is_group = %d\n",
 	 b->type(), fltk::Widget::GROUP_TYPE, b->is_group());
   b->callback(button_cb);
-  new fltk::Input(0,0,200,23,"Input:");
-  new fltk::ValueSlider(0,0,200,23,"Input:");
-  new fltk::ValueSlider(0,0,200,23,"Input:");
-  new fltk::ValueSlider(0,0,200,23,"Input:");
-  tree.end();
 #endif
+  new fltk::Input(0,0,200,23,"Input:");
+  new fltk::ValueSlider(0,0,200,23,"Input1:");
+  new fltk::ValueSlider(0,0,200,23,"Input2:");
+  new fltk::ValueSlider(0,0,200,23,"Input3:");
+  tree.end();
+
 
 #if 0
   // Examples of removing items (successfully, and unsuccessfully)

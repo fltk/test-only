@@ -6,7 +6,7 @@ using namespace fltk;
 fltk::LightButton* ttlb;
 
 static void cb_ttlb(fltk::LightButton*, void*) {
-  Tooltip::enable(ttlb->value());
+  Tooltip::enable(ttlb->value() ? true : false);
 }
 
 #include <fltk/run.h>

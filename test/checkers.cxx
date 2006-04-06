@@ -991,7 +991,7 @@ void Board::draw() {
       int y2 = squarey(n->to)+BOXSIZE/2-5;
       fltk::drawline(x1,y1,x2,y2);
       fltk::push_matrix();
-      fltk::concat(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
+      fltk::concat(float(x2-x1),float(y2-y1),float(y1-y2),float(x2-x1),float(x2),float(y2));
       fltk::addvertex(0,0);
       fltk::addvertex(-.3f,  .1f);
       fltk::addvertex(-.3f, -.1f);
@@ -1007,7 +1007,7 @@ void Board::draw() {
       int x2 = squarex(n->to)+BOXSIZE/2-5;
       int y2 = squarey(n->to)+BOXSIZE/2-5;
       char buf[20]; sprintf(buf,"%d",num);
-      fltk::drawtext(buf, x1+int((x2-x1)*.85)-3, y1+int((y2-y1)*.85)+5);
+      fltk::drawtext(buf, float(x1+int((x2-x1)*.85)-3), float(y1+int((y2-y1)*.85)+5));
       num++;
     }
   }

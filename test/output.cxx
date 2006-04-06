@@ -23,39 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Value_Input.h> // necessary for bug in mingw32?
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Hor_Value_Slider.h>
-#include <fltk/Fl_Toggle_Button.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Output.h>
-#include <fltk/Fl_Multiline_Output.h>
+#include <fltk/run.h>
+#include <fltk/ValueInput.h> // necessary for bug in mingw32?
+#include <fltk/Window.h>
+#include <fltk/Box.h>
+#include <fltk/ToggleButton.h>
+#include <fltk/Input.h>
+#include <fltk/draw.h>
+#include <fltk/Output.h>
+#include <fltk/MultiLineOutput.h>
+#include <fltk/ValueSlider.h>
 
-Fl_Output *text;
-Fl_Multiline_Output *text2;
-Fl_Input *input;
-Fl_Value_Slider *fonts;
-Fl_Value_Slider *sizes;
-Fl_Window *window;
+using namespace fltk;
 
-void font_cb(Fl_Widget *,void *) {
-  text->text_font(fl_fonts + int(fonts->value()));
+Output *text;
+MultiLineOutput *text2;
+Input *input;
+ValueSlider *fonts;
+ValueSlider *sizes;
+Window *window;
+
+void font_cb(Widget *,void *) {
+  text->textfont(font(int(fonts->value())));
   text->redraw();
-  text2->text_font(fl_fonts + int(fonts->value()));
+  text2->textfont(font(int(fonts->value())));
   text2->redraw();
 }
 
-void size_cb(Fl_Widget *,void *) {
-  text->text_size(int(sizes->value()));
+void size_cb(Widget *,void *) {
+  text->textsize(int(sizes->value()));
   text->redraw();
-  text2->text_size(int(sizes->value()));
+  text2->textsize(int(sizes->value()));
   text2->redraw();
 }
 
-void input_cb(Fl_Widget *,void *) {
+void input_cb(Widget *,void *) {
   text->value(input->value());
   text2->value(input->value());
 }
@@ -64,43 +66,43 @@ static const char* const initial_value =
 "The quick brown fox\njumps over\nthe lazy dog.";
 
 int main(int argc, char **argv) {
-  window = new Fl_Window(400,400);
-
-  text = new Fl_Output(100,90,200,30,"Fl_Output");
+  window = new Window(400,400);
+  window->begin();
+  text = new Output(100,90,200,30,"Output");
   text->value(initial_value);
-  text->clear_flag(FL_ALIGN_MASK);
-  text->set_flag(FL_ALIGN_BOTTOM);
+  text->clear_flag(fltk::ALIGN_MASK);
+  text->set_flag(fltk::ALIGN_BOTTOM);
 
-  text2 = new Fl_Multiline_Output(100,150,200,100,"Fl_Multiline_Output");
+  text2 = new MultiLineOutput(100,150,200,100,"MultiLineOutput");
   text2->value(initial_value);
-  text2->clear_flag(FL_ALIGN_MASK);
-  text2->set_flag(FL_ALIGN_BOTTOM);
+  text2->clear_flag(fltk::ALIGN_MASK);
+  text2->set_flag(fltk::ALIGN_BOTTOM);
   window->resizable(text2);
 
-  fonts = new Fl_Hor_Value_Slider(50,325,350,25,"Font");
-  fonts->clear_flag(FL_ALIGN_MASK);
-  fonts->set_flag(FL_ALIGN_LEFT);
+  fonts = new ValueSlider(50,325,350,25,"Font");
+  fonts->clear_flag(fltk::ALIGN_MASK);
+  fonts->set_flag(fltk::ALIGN_LEFT);
   fonts->range(0,15);
   fonts->step(1);
   fonts->value(0);
   fonts->callback(font_cb);
 
-  sizes = new Fl_Hor_Value_Slider(50,350,350,25,"Size");
-  sizes->clear_flag(FL_ALIGN_MASK);
-  sizes->set_flag(FL_ALIGN_LEFT);
+  sizes = new ValueSlider(50,350,350,25,"Size");
+  sizes->clear_flag(fltk::ALIGN_MASK);
+  sizes->set_flag(fltk::ALIGN_LEFT);
   sizes->range(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 
-  input = new Fl_Input(50,375,350,25);
+  input = new Input(50,375,350,25);
   input->static_value(initial_value);
-  input->when(FL_WHEN_CHANGED);
+  input->when(fltk::WHEN_CHANGED);
   input->callback(input_cb);
 
   window->end();
   window->show(argc,argv);
-  return Fl::run();
+  return fltk::run();
 }
 
 //
