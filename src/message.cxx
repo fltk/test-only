@@ -35,6 +35,10 @@
 #include <fltk/SecretInput.h>
 #include <fltk/string.h>
 
+#ifdef WIN32
+# include <windows.h>
+#endif
+
 using namespace fltk;
 
 /*! \addtogroup dialogs
@@ -304,6 +308,55 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
   const char* r = input_innards(fmt, ap, defstr, Input::SECRET);
   va_end(ap);
   return r;
+}
+
+/*!
+  Generates a simple beep message 
+*/
+void beep(int type) {
+#ifdef WIN32
+  switch (type) {
+    case BEEP_QUESTION :
+    case BEEP_PASSWORD :
+      MessageBeep(MB_ICONQUESTION);
+      break;
+    case BEEP_MESSAGE :
+      MessageBeep(MB_ICONASTERISK);
+      break;
+    case BEEP_NOTIFICATION :
+      MessageBeep(MB_ICONASTERISK);
+      break;
+    case BEEP_ERROR :
+      MessageBeep(MB_ICONERROR);
+      break;
+    default :
+      MessageBeep(0xFFFFFFFF);
+      break;
+  }
+#elif defined(__APPLE__)
+  switch (type) {
+    case BEEP_DEFAULT :
+    case BEEP_ERROR :
+      SysBeep(30);
+      break;
+    default :
+      break;
+  }
+#else
+  switch (type) {
+    case BEEP_DEFAULT :
+    case BEEP_ERROR :
+      if (!fltk::xdisplay) fltk::open_display();
+
+      XBell(fltk::xdisplay, 100);
+      break;
+    default :
+      if (!fltk::xdisplay) fltk::open_display();
+
+      XBell(fltk::xdisplay, 50);
+      break;
+  }
+#endif // WIN32
 }
 
 //

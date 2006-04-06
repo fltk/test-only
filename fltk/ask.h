@@ -1,5 +1,5 @@
 //
-// "$Id: ask.h,v 1.5 2004/10/29 06:42:54 spitzak Exp $"
+// "$Id$"
 //
 // Utility pop-up windows for fltk
 //
@@ -32,6 +32,15 @@ namespace fltk {
 
 class Widget;
 
+enum {
+  BEEP_DEFAULT = 0,
+  BEEP_MESSAGE,
+  BEEP_ERROR,
+  BEEP_QUESTION,
+  BEEP_PASSWORD,
+  BEEP_NOTIFICATION
+};
+
 /*! \addtogroup dialogs
   \{ */
 FL_API void message(const char *, ...);
@@ -43,6 +52,7 @@ FL_API int choice_alert(const char *q,
 		  const char *b0, const char *b1, const char *b2, ...);
 FL_API const char *input(const char *label, const char *deflt = 0, ...);
 FL_API const char *password(const char *label, const char *deflt = 0, ...);
+FL_API void beep(int type = BEEP_DEFAULT);
 
 extern FL_API NamedStyle* icon_style;
 extern FL_API NamedStyle* message_style;
@@ -60,5 +70,5 @@ extern FL_API const char* cancel;
 #endif
 
 //
-// End of "$Id: ask.h,v 1.5 2004/10/29 06:42:54 spitzak Exp $".
+// End of "$Id$".
 //
