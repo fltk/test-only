@@ -79,7 +79,6 @@
 #  include <pwd.h>
 #endif /* WIN32 */
 
-
 using namespace fltk;
 
 //

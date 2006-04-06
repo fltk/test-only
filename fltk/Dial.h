@@ -1,5 +1,5 @@
 //
-// "$Id: Dial.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id$"
 //
 // Rotating value control
 //
@@ -60,5 +60,5 @@ private:
 #endif
 
 //
-// End of "$Id: Dial.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id$".
 //

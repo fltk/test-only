@@ -1,5 +1,5 @@
 //
-// "$Id: FillDial.h,v 1.4 2004/08/21 19:33:02 leka Exp $"
+// "$Id$"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -40,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: FillDial.h,v 1.4 2004/08/21 19:33:02 leka Exp $".
+// End of "$Id$".
 //

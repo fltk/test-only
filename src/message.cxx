@@ -217,12 +217,12 @@ static bool sBeepOnDlg = false;
 /*! You get the state enable beep on default message dialog 
     (like ask, choice, input, ...) 
     by  using this function with true (default is false) */
-bool fltk::beep_on_dlg() {return sBeepOnDlg;}
+bool fltk::beep_on_dialog() {return sBeepOnDlg;}
 
 /*! You can enable beep on default message dialog 
     (like ask, choice, input, ...) 
     by  using this function with true (default is false) */
-void fltk::beep_on_dlg(bool b) {sBeepOnDlg=b;}
+void fltk::beep_on_dialog(bool b) {sBeepOnDlg=b;}
 
 /*!
   \image html fl_message.gif
@@ -232,7 +232,7 @@ void fltk::beep_on_dlg(bool b) {sBeepOnDlg=b;}
   it. The enter key is a shortcut for the OK button.
 */
 void fltk::message(const char *fmt, ...) {
-  if (fltk::beep_on_dlg()) (fltk::beep(BEEP_MESSAGE));
+  if (fltk::beep_on_dialog()) (fltk::beep(BEEP_MESSAGE));
   va_list ap;
   va_start(ap, fmt);
   innards("i", 0, 0, fmt, ap, ok, 0, 0);
@@ -245,7 +245,7 @@ void fltk::message(const char *fmt, ...) {
   Same as fltk::message() except for the "!" symbol. 
 */
 void fltk::alert(const char *fmt, ...) {
-    if (fltk::beep_on_dlg()) (fltk::beep(fltk::BEEP_ERROR));
+    if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_ERROR));
   va_list ap;
   va_start(ap, fmt);
   innards("!", 0, 0, fmt, ap, ok, 0, 0);
@@ -260,7 +260,7 @@ void fltk::alert(const char *fmt, ...) {
   shortcut for Yes and ESC is a shortcut for No.
 */
 int fltk::ask(const char *fmt, ...) {
-  if (fltk::beep_on_dlg()) (fltk::beep(BEEP_QUESTION));
+  if (fltk::beep_on_dialog()) (fltk::beep(BEEP_QUESTION));
   va_list ap;
   va_start(ap, fmt);
   int r = innards("?", 0, 0, fmt, ap, no, yes, 0);
@@ -277,7 +277,7 @@ int fltk::ask(const char *fmt, ...) {
   when the enter key is pressed. ESC is a shortcut for b2.
 */
 int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
-    if (fltk::beep_on_dlg()) (fltk::beep(fltk::BEEP_QUESTION));
+    if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_QUESTION));
   va_list ap;
   va_start(ap, b2);
   int r = innards("?", 0, 0, fmt, ap, b2, b1, b0);
@@ -287,7 +287,7 @@ int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...
 
 /*! Same as choice() except a "!" icon is used instead of a "?" */
 int fltk::choice_alert(const char*fmt,const char *b0,const char *b1,const char *b2,...){
-  if (fltk::beep_on_dlg()) (fltk::beep(fltk::BEEP_QUESTION));
+  if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_QUESTION));
   va_list ap;
   va_start(ap, b2);
   int r = innards("!", 0, 0, fmt, ap, b2, b1, b0);
@@ -311,7 +311,7 @@ static const char* input_innards(const char* fmt, va_list ap,
   commands in the label are after the default value.
 */
 const char* fltk::input(const char *fmt, const char *defstr, ...) {
-  if (fltk::beep_on_dlg()) (fltk::beep(fltk::BEEP_QUESTION));
+  if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_QUESTION));
   va_list ap;
   va_start(ap, defstr);
   const char* r = input_innards(fmt, ap, defstr, Input::NORMAL);
@@ -324,7 +324,7 @@ const char* fltk::input(const char *fmt, const char *defstr, ...) {
   Same as fltk::input() except an fltk::SecretInput field is used. 
 */
 const char *fltk::password(const char *fmt, const char *defstr, ...) {
-  if (fltk::beep_on_dlg()) (fltk::beep(fltk::BEEP_PASSWORD));
+  if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_PASSWORD));
   va_list ap;
   va_start(ap, defstr);
   const char* r = input_innards(fmt, ap, defstr, Input::SECRET);

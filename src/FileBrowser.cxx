@@ -101,6 +101,7 @@ FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
   directory_ = "";
   icon_size_  = (uchar)(3 * textsize() / 2);
   filetype_  = FILES;
+  show_hidden_ = false;
 }
 
 //
@@ -297,6 +298,10 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 	if (ft) {FileIcon::load_system_icons(); ft=false;}
 
         icon = FileIcon::find(filename);
+	printf("%s\n",files[i]->d_name);
+	if (!show_hidden_ &&  files[i]->d_name[0]=='.' 
+	    &&  strcmp(files[i]->d_name,"../")) //  &&  strcmp(files[i]->d_name,"./") )
+	  continue;
 	if ((icon && icon->type() == FileIcon::DIRECTORY) ||
 	     fltk::filename_isdir(filename)) {
           num_dirs ++;
@@ -366,5 +371,3 @@ void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
 //
 // End of "$Id$".
 //
-
-

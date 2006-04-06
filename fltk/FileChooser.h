@@ -2,7 +2,7 @@
 
 #ifndef FileChooser_h
 #define FileChooser_h
-// Header for //\n// "$Id: FileChooser.fl 4886 2006-03-30 09:55...
+// Header for //\n// "$Id: FileChooser.fl 4899 2006-04-04 13:53...
 #include <fltk/DoubleBufferWindow.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,6 +70,11 @@ public:
 private:
         inline void cb_previewButton_i(fltk::CheckButton*, void*);
         static void cb_previewButton(fltk::CheckButton*, void*);
+public:
+        fltk::CheckButton *showHiddenButton;
+private:
+        inline void cb_showHiddenButton_i(fltk::CheckButton*, void*);
+        static void cb_showHiddenButton(fltk::CheckButton*, void*);
       fltk::FileInput *fileName;
       inline void cb_fileName_i(fltk::FileInput*, void*);
       static void cb_fileName(fltk::FileInput*, void*);
@@ -152,5 +157,5 @@ public:
 };
 extern FL_API void file_chooser_ok_label(const char*l);
 }
-// Header for //\n// End of "$Id: FileChooser.fl 4886 2006-03-3...
+// Header for //\n// End of "$Id: FileChooser.fl 4899 2006-04-0...
 #endif

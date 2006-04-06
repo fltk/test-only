@@ -1,5 +1,5 @@
 //
-// "$Id: BarGroup.h,v 1.4 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // The BarGroup is a closable strip that can be put in the edges of a Pack,
 // usually it contains toolbars or buttons.
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: BarGroup.h,v 1.4 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

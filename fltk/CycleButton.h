@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.h,v 1.2 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id$"
 //
 // Popup list of items that the user can choose one of. Based on Motif
 // but modern equivalent is the OS/X popup choices.
@@ -48,5 +48,5 @@ protected:
 #endif
 
 //
-// End of "$Id: CycleButton.h,v 1.2 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Font.h,v 1.3 2004/01/25 06:55:04 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //

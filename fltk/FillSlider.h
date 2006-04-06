@@ -1,5 +1,5 @@
 //
-// "$Id: FillSlider.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 2003 by Bill Spitzak and others.
 //
@@ -40,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: FillSlider.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id$".
 //

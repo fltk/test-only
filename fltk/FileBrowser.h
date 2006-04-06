@@ -50,10 +50,6 @@ class FL_API FileBrowser : public Browser
   uchar		icon_size_;
   const char	*pattern_;
 
-  // following is obsolete: has to be replaced by adequate fltk drawing :
-  // void		item_draw(void *, int, int, int, int) const;
-//DEL   int		incr_height() const { return (item_height(0)); }
-
 public:
   enum { FILES, DIRECTORIES };
 
@@ -78,6 +74,14 @@ public:
   void insert(int n, const char* label, FileIcon* icon);
   void insert(int n, const char* label, void* data){Menu::insert(n, label,data);}
   void add(const char * line, FileIcon* icon);
+
+  // Showing or not showing the hidden files, that's the question:
+public:
+  // sets this flag if you want to see the hidden files in the browser
+  void	    show_hidden(bool show) { show_hidden_= show; }
+  bool	    show_hidden() const {return show_hidden_;}
+private:
+    bool		show_hidden_;
 };
 
 }

@@ -53,8 +53,8 @@ FL_API int  choice_alert(const char *q,
 FL_API const char *input(const char *label, const char *deflt = 0, ...);
 FL_API const char *password(const char *label, const char *deflt = 0, ...);
 FL_API void beep(int type = BEEP_DEFAULT);
-FL_API void beep_on_dlg(bool);
-FL_API bool beep_on_dlg();
+FL_API void beep_on_dialog(bool);
+FL_API bool beep_on_dialog();
 
 extern FL_API NamedStyle* icon_style;
 extern FL_API NamedStyle* message_style;

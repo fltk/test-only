@@ -69,13 +69,13 @@ namespace fltk {open
 fileList->deselect();
 fltk::remove_timeout((TimeoutHandler)previewCB, this);
 window->hide();} open
-        private xywh {482 261 490 380} type Double resizable
+        private xywh {375 275 490 380} type Double resizable
         extra_code {if (title) window->label(title);
 \#include <stdio.h>
 \#include <stdlib.h>
 \#include <string.h>} modal visible
       } {
-        {fltk::Group} {} {
+        {fltk::Group} {} {open
           private xywh {10 10 470 25}
         } {
           {fltk::Choice} showChoice {
@@ -92,13 +92,13 @@ window->hide();} open
           } {}
           {fltk::Button} newButton {
             callback {newdir();}
-            xywh {445 0 25 25} image not_inlined {C:/DEVL/fltk/trunk/src/new.xbm} labelsize 8
+            xywh {445 0 25 25} image not_inlined {./new.xbm} labelsize 8
             extra_code {\#include <fltk/Preferences.h>
 o->tooltip(new_directory_tooltip);}
           }
         }
         {fltk::TiledGroup} {} {
-          callback {update_preview();} open selected
+          callback {update_preview();} open
           private xywh {10 45 470 225} resizable
           extra_code {//window->resizable(o);}
         } {
@@ -112,11 +112,11 @@ o->tooltip(new_directory_tooltip);}
             private xywh {295 0 175 225} align 80 box DOWN_BOX labelsize 100
           }
         }
-        {fltk::Group} {} {
+        {fltk::Group} {} {open
           private xywh {10 275 470 95}
         } {
           {fltk::Group} {} {open
-            private xywh {0 0 470 20}
+            private xywh {0 0 470 40}
           } {
             {fltk::CheckButton} previewButton {
               label Preview
@@ -124,8 +124,15 @@ o->tooltip(new_directory_tooltip);}
               xywh {0 0 73 20} shortcut 0x80070 value 1
               extra_code {previewButton->label(preview_label);}
             }
+            {fltk::CheckButton} showHiddenButton {
+              label {Show &Hidden}
+              callback {fileList->show_hidden(showHiddenButton->value() ? true: false);
+  			fileList->load(fileList->directory());} selected
+              xywh {80 0 100 20} shortcut 0x80070 value 1
+              extra_code {o->value(fileList->show_hidden() ? 1 : 0);}
+            }
             {fltk::InvisibleBox} {} {
-              private xywh {105 0 365 20}
+              private xywh {180 0 290 20}
             }
           }
           {fltk::FileInput} fileName {
@@ -134,8 +141,8 @@ o->tooltip(new_directory_tooltip);}
             extra_code {fileName->when(fltk::WHEN_CHANGED | fltk::WHEN_ENTER_KEY_ALWAYS);}
           }
           {fltk::InvisibleBox} {} {
-            label {Filename:}
-            private xywh {0 35 105 25} align 24 labelfont 1
+            label Filename
+            private xywh {0 35 95 25} align 56 labelfont 1
             extra_code {o->label(filename_label);}
           }
           {fltk::Group} {} {

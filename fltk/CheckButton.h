@@ -1,5 +1,5 @@
 //
-// "$Id: CheckButton.h,v 1.3 2004/12/28 19:06:03 laza2000 Exp $"
+// "$Id$"
 //
 // Button with a checkmark to the left of it.
 //
@@ -42,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: CheckButton.h,v 1.3 2004/12/28 19:06:03 laza2000 Exp $".
+// End of "$Id$".
 //
