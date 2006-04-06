@@ -45,14 +45,16 @@ enum {
   \{ */
 FL_API void message(const char *, ...);
 FL_API void alert(const char *, ...);
-FL_API int ask(const char *, ...);
-FL_API int choice(const char *q,
+FL_API int  ask(const char *, ...);
+FL_API int  choice(const char *q,
 		  const char *b0, const char *b1, const char *b2, ...);
-FL_API int choice_alert(const char *q,
+FL_API int  choice_alert(const char *q,
 		  const char *b0, const char *b1, const char *b2, ...);
 FL_API const char *input(const char *label, const char *deflt = 0, ...);
 FL_API const char *password(const char *label, const char *deflt = 0, ...);
 FL_API void beep(int type = BEEP_DEFAULT);
+FL_API void beep_on_dlg(bool);
+FL_API bool beep_on_dlg();
 
 extern FL_API NamedStyle* icon_style;
 extern FL_API NamedStyle* message_style;
