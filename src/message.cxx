@@ -38,7 +38,11 @@
 #ifdef WIN32
 # include <windows.h>
 #endif
-#include <fltk/x.h>
+
+#ifndef __APPLE__
+// FIXME OS X : the following will break the compilation if declared
+# include <fltk/x.h>
+#endif
 
 using namespace fltk;
 
@@ -359,7 +363,10 @@ void fltk::beep(int type) {
   switch (type) {
     case BEEP_DEFAULT :
     case BEEP_ERROR :
+#if 0
+      // FIXME
       SysBeep(30);
+#endif
       break;
     default :
       break;
