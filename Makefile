@@ -90,7 +90,8 @@ portable-dist:
 native-dist:
 	epm -v -f native fltk
 
-
+etags: 
+	etags fltk/*.h src/*.cxx src/*.c images/*.cxx fluid/*.cxx fluid/*.h test/*.cxx test/*.h 
 #
 # End of "$Id$".
 #

@@ -83,7 +83,7 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
 			 int	t,	/* I - File type */
 			 int	nd,	/* I - Number of data values */
 			 short      *d)	/* I - Data values */
-{
+  : Symbol(0) {
   // Initialize the pattern and type...
   pattern_ = p;
   type_    = t;
@@ -104,9 +104,27 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   first_ = this;
   item_ = NULL;
   w_= h_=16;
+  on_select_ = false;
 }
 
+//! deep copy implementation
+FileIcon::FileIcon(const FileIcon& f) {
+  name( f.name());
+  text(f.text());
+  pattern_=f.pattern_;
+  type_ = f.type_;
+  next_=first_=this;
+  item_=f.item_;
+  w_ = f.w_; 
+  h_ = f.h_;
+  on_select_=f.on_select_;
+  num_data_ = f.num_data_;
 
+  if (f.alloc_data_ && f.data_) {
+    this->data_=(short*) calloc(sizeof(short),f.alloc_data_);
+    memcpy(data_, f.data_, f.alloc_data_);
+  }
+}
 //
 // 'FileIcon::~FileIcon()' - Remove a file icon.
 //
@@ -145,8 +163,9 @@ void FileIcon::_measure(int& w, int& h) const {
 
 }
 
-void FileIcon::value(Widget* i)  {
+void FileIcon::value(Widget* i, bool on_sel)  {
     item_=i; // connect to i
+    on_select_ = on_sel;
     i->image(this);
 } 
 //
@@ -259,10 +278,10 @@ void FileIcon::_draw(const Rectangle& r) const {
   
   Widget * i = value();
   Color	c, ic;
-  if (i->selected()) 
-	ic = fltk::YELLOW;
+  if (i->active() && (!on_select_ ||i->selected())  ) 
+    ic = fltk::YELLOW;
   else
-	ic = fltk::GRAY90 /* light2 */; 
+    ic = fltk::GRAY90 /* light2 */; 
   bool active = true; // i && i->active() ? true : false;
   setcolor(ic);
   while (*d != END || prim)

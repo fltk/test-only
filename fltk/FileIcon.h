@@ -44,6 +44,7 @@ class FL_API FileIcon : public Symbol {
   int		alloc_data_;	// Number of allocated elements
   short		*data_;		// Icon data
   int		w_,h_;
+  bool          on_select_;     // true if in browser or menu
 public:
 
   enum				// File types
@@ -68,6 +69,7 @@ public:
   };
 
   FileIcon(const char *p, int t, int nd = 0, short *d = 0);
+  FileIcon(const FileIcon& f) ; 
   ~FileIcon();
 
   short		*add(short d);
@@ -96,7 +98,7 @@ public:
 
   
   Widget *	value() const {return item_;} // return connected item
-  void		value(Widget* i);
+  void		value(Widget* i, bool on_select=false);
 
   // virtual image overloads
   void _measure(int& w, int& h) const;

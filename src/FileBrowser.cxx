@@ -346,7 +346,7 @@ FileItem::FileItem(const char * label, FileIcon * icon) : Item(label) {
     fileIcon_=icon;
 }
 void FileItem::draw()  {
-    if (fileIcon_) fileIcon_->value(this);
+  if (fileIcon_) fileIcon_->value(this,true);
     Item::draw();
 }
 ////////////////////////////////////////////////////////////////
@@ -354,7 +354,7 @@ void FileItem::draw()  {
 void FileBrowser::add(const char *line, FileIcon *icon) {
     this->begin();
     FileItem * i = new FileItem(strdup(line),icon);
-    icon->value(i);
+    icon->value(i,true);
     i->textsize(14);
     this->end();
 }
@@ -362,7 +362,7 @@ void FileBrowser::add(const char *line, FileIcon *icon) {
 void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
     current(0);
     FileItem * i = new FileItem(strdup(label),icon);
-    icon->value(i);
+    icon->value(i,true);
     i->textsize(14);
     Menu::insert(*i,n);
 }
