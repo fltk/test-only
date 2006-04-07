@@ -362,7 +362,7 @@ void FileBrowser::add(const char *line, FileIcon *icon) {
 void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
     current(0);
     FileItem * i = new FileItem(strdup(label),icon);
-    i->image(icon);
+    icon->value(i);
     i->textsize(14);
     Menu::insert(*i,n);
 }
