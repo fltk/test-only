@@ -125,7 +125,7 @@ void xbmImage::update() {
   PixmapPair* picture = (PixmapPair*)(i->picture);
   if (picture->alpha) XFreePixmap(xdisplay, picture->alpha);
   picture->alpha =
-    XCreateBitmapFromData(xdisplay, xwindow, (char*)array, (w()+7)&-8, h());
+    XCreateBitmapFromData(xdisplay, xwindow, (char*)pixels(), (w()+7)&-8, h());
   i->flags = DRAWN;
 }
 
