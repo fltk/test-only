@@ -137,16 +137,17 @@ FileIcon::~FileIcon()
 }
 
 void FileIcon::_measure(int& w, int& h) const {
-    Item * i= get_item();
-    if (!i) {w = 16; h = 16;}
+    Widget * i= value();
+    if (i) {w = i->h()-2; h = i->h()-2;}
     else {
 	w = h = (int) (getascent()+getdescent()+2);
     }
 
 }
 
-void FileIcon::set_item(Item* i)  {
+void FileIcon::value(Widget* i)  {
     item_=i; // connect to i
+    i->image(this);
 } 
 //
 // 'FileIcon::add()' - Add data to an icon.
@@ -256,7 +257,7 @@ void FileIcon::_draw(const Rectangle& r) const {
   d    = data_;
   prim = NULL;
   
-  Item * i = get_item();
+  Widget * i = value();
   Color	c, ic;
   if (i->selected()) 
 	ic = fltk::YELLOW;

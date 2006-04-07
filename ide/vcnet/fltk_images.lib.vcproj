@@ -20,17 +20,20 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				AdditionalIncludeDirectories="../visualc,.,..\..,../../images/zlib"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
+				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
+				EnableFunctionLevelLinking="TRUE"
+				PrecompiledHeaderFile=".\fltkd/fltk_images.lib.pch"
+				AssemblerListingLocation=".\fltkd/"
+				ObjectFile=".\fltkd/"
+				ProgramDataBaseFileName=".\fltkd/"
 				BrowseInformation="1"
+				BrowseInformationFile=".\fltkd/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
@@ -71,11 +74,13 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				AdditionalIncludeDirectories=".,..\..,../visualc,../../images/zlib"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
+				PrecompiledHeaderFile=".\fltk/fltk_images.lib.pch"
+				AssemblerListingLocation=".\fltk/"
+				ObjectFile=".\fltk/"
+				ProgramDataBaseFileName=".\fltk/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -109,6 +114,32 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="headers"
+			Filter="h">
+			<File
+				RelativePath="..\..\fltk\pnmImage.h">
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\images\FileIcon2.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""/>
+			</FileConfiguration>
+		</File>
 		<File
 			RelativePath="..\..\images\Fl_Guess_Image.cxx">
 			<FileConfiguration
@@ -167,13 +198,80 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\HelpDialog.cxx">
+			RelativePath="..\..\images\HelpDialog.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""/>
+			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\HelpView.cxx">
+			RelativePath="..\..\images\images_core.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""/>
+			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\xpmFileImage.cxx">
+			RelativePath="..\..\images\pnmImage.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\images\xpmFileImage.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

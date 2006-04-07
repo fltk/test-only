@@ -65,8 +65,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "fltkd"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FD /c
-# SUBTRACT CPP /Fr /YX
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /Fr /FD /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -82,6 +82,18 @@ LIB32=link.exe -lib
 
 # Name "fltk_images - Win32 Release"
 # Name "fltk_images - Win32 Debug"
+# Begin Group "headers"
+
+# PROP Default_Filter "h"
+# Begin Source File
+
+SOURCE=..\..\fltk\pnmImage.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\images\FileIcon2.cxx
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\images\Fl_Guess_Image.cxx
@@ -96,15 +108,19 @@ SOURCE=..\..\images\fl_png.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\HelpDialog.cxx
+SOURCE=..\..\images\HelpDialog.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\images_core.cxx
+SOURCE=..\..\images\images_core.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\xpmFileImage.cxx
+SOURCE=..\..\images\pnmImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\images\xpmFileImage.cxx
 # End Source File
 # End Target
 # End Project

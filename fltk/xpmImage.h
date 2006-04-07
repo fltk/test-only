@@ -36,15 +36,14 @@ namespace fltk {
 class FL_API xpmImage : public Image {
   Color fg, bg; // what color monochrome ones were drawn in
 public:
-  const char * const * data;
   // XPM files define the data all kinds of ways, so the constructor
   // is overloaded to accept all the ones we have seen:
   xpmImage(const char * const * d, const char* name = 0) :
-    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
+    Image(-1,0,name, d), fg(NO_COLOR), bg(NO_COLOR) {}
   xpmImage(const unsigned char* const * d, const char* name = 0) :
-    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data((char**)d) {}
+    Image(-1,0,name, ((const char* const*) d)), fg(NO_COLOR), bg(NO_COLOR) {}
   xpmImage(char ** d, const char* name = 0) :
-    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
+    Image(-1,0,name, d), fg(NO_COLOR), bg(NO_COLOR) {}
 
   void _measure(int&, int&) const;
   void update();

@@ -91,14 +91,14 @@ void fltk::pngImage::_measure(int &W, int &H) const
   info_ptr = png_create_info_struct(png_ptr);
   FILE *fp=0;
   declare_now(&fp);
-  if(datas)
+  if(pixels())
   {
-    cur_datas=(png_bytep)datas;
+    cur_datas=(png_bytep)pixels();
     png_set_read_fn(png_ptr, NULL, read_data_fn);
   }
   else
      fp = fopen(get_filename(), "rb");
-  if (info_ptr == NULL || (datas == NULL && fp == NULL))
+  if (info_ptr == NULL || (pixels()== NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
     const_cast<pngImage*>(this)->setsize(0,0);
@@ -106,9 +106,9 @@ void fltk::pngImage::_measure(int &W, int &H) const
     return;
   }
 
-  if(datas)
+  if(pixels())
   {
-    if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
+    if (png_sig_cmp((uchar*)pixels(), (png_size_t)0, 8))
       goto error;
   }
   else
@@ -174,14 +174,14 @@ void fltk::pngImage::read()
 
   FILE *fp=0;
   declare_now(&fp);
-  if(datas)
+  if(pixels())
   {
-    cur_datas=(png_bytep)datas;
+    cur_datas=(png_bytep)pixels();
     png_set_read_fn(png_ptr, cur_datas, read_data_fn);
   }
   else
      fp = fopen(get_filename(), "rb");
-  if (info_ptr == NULL || (datas == NULL && fp == NULL))
+  if (info_ptr == NULL || (pixels() == NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
     return;
@@ -191,9 +191,9 @@ void fltk::pngImage::read()
   int d=3;
   declare_now(&d);
 
-  if(datas)
+  if(pixels())
   {
-    if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
+    if (png_sig_cmp((uchar*)pixels(), (png_size_t)0, 8))
       goto error;
   }
   else

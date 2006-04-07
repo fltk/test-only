@@ -92,6 +92,17 @@ using namespace fltk;
   setsize().
 */
 
+/*! \fn int Image::depth() const
+  Return the depth of the image = number of bytes per pixel.
+*/
+/*! \fn int Image::line_size() const
+  Size in bytes of a horiz. line,  generally equals (but not always) = w() * d() 
+*/
+
+/*! \fn int Image::count() const
+  Number of raster images data inside this Image (generally 1)
+*/
+
 /*! Change the size of the stored image. If it is different then
   destroy() is called. */
 void Image::setsize(int w, int h) {
@@ -248,6 +259,27 @@ void Image::_draw(const fltk::Rectangle& r) const
 	   fltk::Rectangle(tx[x],ty[y],tx[x+1]-tx[x],ty[y+1]-ty[y]));
     }
   }
+}
+
+// Image Allocation / DeAllocation
+//! alloc data, sets the pixel type,  and make owned data destroyed automatically
+uchar * Image::alloc_data(int w,int h, PixelType p=UNDEFINED) { 
+    return (p!= UNDEFINED) ? alloc_data(w*h*fltk::depth(p)) : 
+	p_ !=UNDEFINED ? alloc_data(w*h*fltk::depth(p_)) : 0 ;
+}
+
+//! alloc data, sets the pixel type,  and make owned data destroyed automatically
+uchar * Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
+    dealloc_data();
+    owned_ = true;
+    return (uchar*) (data_ = ((const char* const*) new uchar[size] ));
+}
+
+// dealloc potentially owned data, harmless if called more than once
+void Image::dealloc_data() { 
+    if (owned_ && data_) delete [] ((uchar*)data_);
+    data_ = 0;
+    owned_ = false;
 }
 
 /** \fn void Image::destroy();

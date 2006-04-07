@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /I "..\.." /I "..\..\.." /D "_DEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /Fr /c
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "." /I "..\.." /I "..\..\.." /D "_DEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /Fr /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
@@ -254,6 +254,7 @@ DEP_CPP_BROWS=\
 	"..\..\fltk\error.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\item.h"\
+	"..\..\fltk\itemgroup.h"\
 	"..\..\fltk\layout.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
@@ -731,10 +732,12 @@ DEP_CPP_FILE_=\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\input.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
 	{$(INCLUDE)}"fltk\style.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\window.h"\
@@ -748,6 +751,7 @@ DEP_CPP_FILEB=\
 	"..\..\fltk\filebrowser.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\filename.h"\
+	"..\..\fltk\item.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -761,6 +765,7 @@ DEP_CPP_FILEB=\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
 	{$(INCLUDE)}"fltk\style.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	
@@ -855,33 +860,25 @@ DEP_CPP_FILECH=\
 
 SOURCE=..\..\src\FileIcon.cxx
 DEP_CPP_FILEI=\
+	"..\..\fltk\browser.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\filename.h"\
+	"..\..\fltk\item.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\scrollbar.h"\
+	{$(INCLUDE)}"fltk\slider.h"\
 	{$(INCLUDE)}"fltk\style.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\FileIcon2.cxx
-DEP_CPP_FILEIC=\
-	"..\..\fltk\fileicon.h"\
-	"..\..\fltk\filename.h"\
-	"..\..\fltk\string.h"\
-	".\config.h"\
-	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\fl_api.h"\
-	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\PixelType.h"\
-	{$(INCLUDE)}"fltk\rectangle.h"\
 	
 # End Source File
 # Begin Source File
@@ -1544,6 +1541,7 @@ DEP_CPP_MESSA=\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\secretinput.h"\
 	"..\..\fltk\string.h"\
+	"..\..\fltk\x.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -1551,10 +1549,12 @@ DEP_CPP_MESSA=\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\mac.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
+	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
 	
 # End Source File

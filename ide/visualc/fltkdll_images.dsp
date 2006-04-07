@@ -71,8 +71,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
-# SUBTRACT CPP /Fr /YX
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "../../images/zlib" /D "_DEBUG" /D "FL_SHARED" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /Fr /c
+# SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -91,6 +91,25 @@ LINK32=link.exe
 
 # Name "fltkdll_images - Win32 Release"
 # Name "fltkdll_images - Win32 Debug"
+# Begin Source File
+
+SOURCE=..\..\images\FileIcon2.cxx
+DEP_CPP_FILEI=\
+	"..\..\fltk\fileicon.h"\
+	"..\..\fltk\filename.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\string.h"\
+	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\images\Fl_Guess_Image.cxx
@@ -160,10 +179,11 @@ NODEP_CPP_FL_PN=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\HelpDialog.cxx
+SOURCE=..\..\images\HelpDialog.cxx
 DEP_CPP_HELPD=\
 	"..\..\fltk\ask.h"\
 	"..\..\fltk\DoubleBufferWindow.h"\
+	"..\..\fltk\HelpDialog.h"\
 	"..\..\fltk\HelpView.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
@@ -173,7 +193,6 @@ DEP_CPP_HELPD=\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\HelpDialog.h"\
 	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\input.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -189,7 +208,7 @@ DEP_CPP_HELPD=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\images_core.cxx
+SOURCE=..\..\images\images_core.cxx
 DEP_CPP_IMAGE=\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
@@ -204,7 +223,25 @@ DEP_CPP_IMAGE=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\xpmFileImage.cxx
+SOURCE=..\..\images\pnmImage.cxx
+DEP_CPP_PNMIM=\
+	"..\..\fltk\error.h"\
+	"..\..\fltk\pnmImage.h"\
+	"..\..\fltk\run.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\string.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\images\xpmFileImage.cxx
 DEP_CPP_XPMFI=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\sharedimage.h"\

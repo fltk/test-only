@@ -42,8 +42,12 @@ endif
 CPPFILES = \
 	Fl_Guess_Image.cxx \
 	fl_jpeg.cxx\
-	fl_png.cxx
-
+	fl_png.cxx \
+	pnmImage.cxx \
+	xpmFileImage.cxx \
+	images_core.cxx \
+	FileIcon2.cxx \
+	HelpDialog.cxx
 CFILES	=
 
 LIBNAME	=	$(LIBPREFIX)fltk_images$(LIBSUFFIX)
@@ -111,7 +115,7 @@ include makedepend
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(LDLIBS)
 	cp ../lib/fltk_images.dll ./
-	
+
 #
 # Install everything...
 #

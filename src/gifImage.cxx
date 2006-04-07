@@ -71,7 +71,7 @@ void gifImage::_measure(int &W, int &H) const
     return; 
   }
 
-  const uchar* dat = datas;
+  const uchar* dat = pixels();
   FILE *GifFile=0;
 
   if (dat) {
@@ -91,12 +91,12 @@ void gifImage::_measure(int &W, int &H) const
   const_cast<gifImage*>(this)->setsize(w,h);
   W = w; 
   H = h;
-  if (!datas) fclose(GifFile);
+  if (!pixels()) fclose(GifFile);
 }
 
 void gifImage::read()
 {
-  const uchar* dat = datas;
+  const uchar* dat = pixels();
   FILE *GifFile=0;
 
   if (dat) {
@@ -399,7 +399,7 @@ void gifImage::read()
   delete[] data[1];
   delete[] data;
   delete[] length;
-  if(!datas) fclose(GifFile);
+  if(!pixels()) fclose(GifFile);
 }
 
 //

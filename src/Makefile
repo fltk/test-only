@@ -59,7 +59,6 @@ CPPFILES = \
 	FileChooser.cxx \
 	FileChooser2.cxx \
 	FileIcon.cxx \
-	FileIcon2.cxx \
 	FileInput.cxx \
 	Fl_Menu_Item.cxx \
 	FloatInput.cxx \
@@ -167,7 +166,6 @@ CPPFILES = \
 	setvisual.cxx \
 	show_colormap.cxx \
 	xbmImage.cxx \
-	xpmFileImage.cxx \
 	xpmImage.cxx
 
 CFILES	= string.c \

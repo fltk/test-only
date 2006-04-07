@@ -38,8 +38,8 @@
 using namespace fltk;
 
 static FILE *bmpFile;
-static uchar* bmpDatasStart;
-static uchar* bmpDatas;
+static const uchar* bmpDatasStart;
+static const uchar* bmpDatas;
 
 static uchar GETC()
 {
@@ -100,10 +100,10 @@ void bmpImage::_measure(int &W, int &H) const
     return;
   }
 
-  bmpDatas = (uchar*)datas;
+  bmpDatas = pixels();
   bmpDatasStart = bmpDatas;
 
-  if (!datas) {
+  if (!pixels()) {
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
       fltk::warning("Cannot open BMP file '%s'", get_filename());
       const_cast<bmpImage*>(this)->setsize(0,0);
@@ -115,7 +115,7 @@ void bmpImage::_measure(int &W, int &H) const
   uchar byte = GETC();	// Check "BM" sync chars
   uchar bit  = GETC();
   if (byte != 'B' || bit != 'M') {
-    if (!datas) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -142,7 +142,7 @@ void bmpImage::_measure(int &W, int &H) const
   }
   const_cast<bmpImage*>(this)->setsize((int)W,(int)H);
 
-  if (!datas) fclose(bmpFile);
+  if (!pixels()) fclose(bmpFile);
 }
 
 //
@@ -150,9 +150,9 @@ void bmpImage::_measure(int &W, int &H) const
 //
 void bmpImage::read()
 {
-  bmpDatas = (uchar*)datas;
+  bmpDatas = (uchar*)pixels();
   bmpDatasStart = bmpDatas;
-  if (!datas) {
+  if (!pixels()) {
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
       fltk::warning("Cannot open BMP file '%s'", get_filename());
       return;
@@ -177,7 +177,7 @@ void bmpImage::read()
   uchar byte = GETC();	// Check "BM" sync chars
   uchar bit  = GETC();
   if (byte != 'B' || bit != 'M') {
-    if (!datas) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -240,7 +240,7 @@ void bmpImage::read()
 
   // Check header data...
   if (!w() || !h() || !bitsperpixel) {
-    if (!datas) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -492,7 +492,7 @@ void bmpImage::read()
   drawimage(array, PixelType(depth), Rectangle(w_, h_), depth*w_);}
 
   // Close the file and return...
-  if (!datas) fclose(bmpFile);
+  if (!pixels()) fclose(bmpFile);
 
   delete []array;
 }

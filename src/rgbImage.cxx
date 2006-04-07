@@ -41,7 +41,7 @@ void rgbImage::update()
 {
   GSave gsave;
   make_current();
-  drawimage(pixels_, pixeltype_, fltk::Rectangle(w(),h()), linedelta_);
+  drawimage(pixels(), pixel_type(), fltk::Rectangle(w(),h()), linedelta_);
 }
 
 #if 0 //WRITE_JPEG

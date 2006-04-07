@@ -32,7 +32,7 @@
 
 namespace fltk {
 
-class Item;
+class Widget;
   // It is now a subclass of Image
 
 class FL_API FileIcon : public Symbol {
@@ -95,14 +95,14 @@ public:
   static void	load_system_icons(void);
 
   
-  Item *	get_item() const {return item_;} // return connected item
-  void		set_item(Item * i);
+  Widget *	value() const {return item_;} // return connected item
+  void		value(Widget* i);
 
   // virtual image overloads
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle& r) const;
 private:
-    Item* item_;
+    Widget* item_;
 };
 
 }

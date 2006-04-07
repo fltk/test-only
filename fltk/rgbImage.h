@@ -26,29 +26,23 @@
 #ifndef fltk_rgbImage_h
 #define fltk_rgbImage_h
 
-#include "Image.h"
+#include <fltk/FL_API.h>
+#include <fltk/Image.h>
 
 namespace fltk {
 
 class FL_API rgbImage : public Image {
-  const uchar* pixels_;
-  PixelType pixeltype_;
   int linedelta_;
 public:
-  PixelType pixeltype() const {return pixeltype_;}
-  int depth() const {return fltk::depth(pixeltype_);}
-  int linedelta() const {return linedelta_;}
-  const uchar* pixels() const {return pixels_;}
+    rgbImage(const uchar * d, PixelType p, int W, int H, const char* name=0) 
+	: Image(W,H,name, (const char* const*) d) {p_=p;  linedelta_=W*this->depth();}
 
-  void update();
+    rgbImage(const uchar * d, PixelType p, int W, int H, int linedelta)
+	: Image(W,H, 0, (const char* const*) d),  linedelta_(linedelta) {p_=p;}
+
+    int linedelta() const {return linedelta_;}
+    void update();
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
-
-  rgbImage(const uchar* d, PixelType p, int W, int H, const char* name=0) :
-    Image(W,H,name), pixels_(d), pixeltype_(p) {linedelta_=W*depth();}
-
-  rgbImage(const uchar* d, PixelType p, int W, int H, int linedelta) :
-    Image(W,H), pixels_(d), pixeltype_(p), linedelta_(linedelta) {}
-
 };
 
 }

@@ -116,7 +116,7 @@ void xbmImage::update()
   int Bpr = (w_+7)/8;			//: bytes per row
   int pad = Bpr&1, w1 = (w_+7)/8; //shr = ((w-1)&7)+1;
   uchar *newarray = new uchar[(Bpr+pad)*h_], *dst = newarray;
-  const uchar* src = array;
+  const uchar* src = pixels();
   for (int y=0; y<h_; y++) {
     //: this is slooow, but we do it only once per pixmap
     for (int j=w1; j>0; j--) {

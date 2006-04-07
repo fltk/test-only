@@ -298,8 +298,8 @@ void fltk::jpegImage::_measure(int &W, int &H) const
 
   jpeg_create_decompress(&cinfo);
 
-  if (datas) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
+  if (pixels()) {
+    jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
   } else {
     if ((infile = fopen(get_filename(), "rb")) == NULL) {
       const_cast<jpegImage*>(this)->setsize(0,0);
@@ -349,8 +349,8 @@ void fltk::jpegImage::read()
 
   jpeg_create_decompress(&cinfo);
 
-  if (datas) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
+  if (pixels()) {
+    jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
   } else {
     if ((infile = fopen(get_filename(), "rb")) == NULL)
       return;

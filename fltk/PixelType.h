@@ -42,6 +42,7 @@ namespace fltk {
   possible while still covering the types I have actually encountered.
 */
 enum PixelType {
+  UNDEFINED	= -1,	//!< for dynamic Image construction purpose
   MASK	= 0,	//!< 1 byte of inverted mask, filled with current color
   MONO	= 1,	//!< 1 byte of gray scale
   RGBx	= 2,	//!< bytes in r,g,b,a,r,g,b,a... order, a byte is ignored
@@ -54,7 +55,7 @@ enum PixelType {
 /**
    Turn a PixelType into the number of bytes needed to hold a pixel.
 */
-inline int depth(PixelType t) {return (t<2 ? 1 : t==3 ? 3 : 4);}
+inline int depth(PixelType t) {return (t<0 ? 0 :  t<2 ? 1 : t==3 ? 3 : 4);}
 
 /*! \} */
 

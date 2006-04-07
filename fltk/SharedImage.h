@@ -73,7 +73,7 @@ protected:
   SharedImage* l1;    // Left leaf in the binary tree
   SharedImage* l2;    // Right leaf in the binary tree
   const char* 	   name;  // Used to indentify the image, and as filename
-  const uchar* datas; // If non zero, pointers on inlined compressed datas
+  //const uchar* datas; // If non zero, pointers on inlined compressed datas
   unsigned int     used;  // Last time used, for cache handling purpose
   int              refcount; // Number of time this image has been get
 

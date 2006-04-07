@@ -20,28 +20,34 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				AdditionalIncludeDirectories="..\..,../visualc"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
+				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=""
-				WarningLevel="1"
+				EnableFunctionLevelLinking="TRUE"
+				PrecompiledHeaderFile=".\fluidd/fluid.pch"
+				AssemblerListingLocation=".\fluidd/"
+				ObjectFile=".\fluidd/"
+				ProgramDataBaseFileName=".\fluidd/"
+				BrowseInformation="1"
+				BrowseInformationFile=".\fluidd/"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_imagesd.lib ws2_32.lib"
+				AdditionalDependencies="fltkd.lib fltk_imagesd.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../fluid/fluidd.exe"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(ProjectName)d.pdb"
+				ProgramDatabaseFile=".\fluidd/fluidd.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -51,7 +57,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\fluid__0/fluid.tlb"
+				TypeLibraryName=".\fluidd/fluid.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -86,25 +92,30 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../visualc"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				AdditionalIncludeDirectories="..\..,..\visualc"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fluid___/fluid.pch"
-				WarningLevel="1"
+				PrecompiledHeaderFile=".\fluid/fluid.pch"
+				AssemblerListingLocation=".\fluid/"
+				ObjectFile=".\fluid/"
+				ProgramDataBaseFileName=".\fluid/"
+				BrowseInformation="1"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_images.lib ws2_32.lib"
+				AdditionalDependencies="fltk.lib fltk_images.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../fluid/fluid.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="libc"
+				ProgramDatabaseFile=".\fluid/fluid.pdb"
 				SubSystem="2"
+				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -112,7 +123,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\fluid___/fluid.tlb"
+				TypeLibraryName=".\fluid/fluid.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -139,6 +150,43 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="headers"
+			Filter="h">
+			<File
+				RelativePath="..\..\fluid\about_panel.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\alignment_panel.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\coding_style.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\Fluid_Image.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\Fluid_Plugins.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\FluidType.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\function_panel.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\image_file_panel.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\keyboard_ui.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\Shortcut_Button.h">
+			</File>
+			<File
+				RelativePath="..\..\fluid\widget_panel.h">
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\fluid\about_panel.cxx">
 			<FileConfiguration
@@ -147,14 +195,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -165,14 +215,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -183,14 +235,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -201,14 +255,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -219,14 +275,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -237,14 +295,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -255,14 +315,36 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\src\FileInput.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -273,14 +355,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -291,14 +375,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -309,14 +395,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -327,14 +415,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -345,14 +435,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -363,14 +455,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -381,14 +475,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -399,14 +495,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -417,14 +515,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -435,14 +535,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -453,14 +555,16 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
+					PreprocessorDefinitions=""
+					BrowseInformation="1"/>
 			</FileConfiguration>
 		</File>
 	</Files>

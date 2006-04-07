@@ -140,7 +140,7 @@ void xpmFileImage::_measure(int &W, int &H) const
     return; 
   }
   int loaded=0;
-  char *const* ldata = (char *const*)datas;
+  char *const* ldata = (char *const*)data();
   if (!ldata) {
     ldata = ::read((char *)get_filename(), 1);
     if (!ldata) {
@@ -164,7 +164,7 @@ void xpmFileImage::read()
 {
   //id = mask = 0;
   int loaded=0;
-  char *const* ldata = (char *const*)datas;
+  char *const* ldata = (char *const*)data();
   if (!ldata) {
     ldata = ::read((char *)get_filename());
     if (!ldata) return;

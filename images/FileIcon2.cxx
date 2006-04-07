@@ -1,5 +1,5 @@
 //
-// "$Id$"
+// "$Id: FileIcon2.cxx 4911 2006-04-06 21:05:16Z fabien $"
 //
 // FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -841,7 +841,7 @@ FileIcon::load_system_icons(void)
   // Add symbols if they haven't been added already...
   if (!init)
   {
-    // fltk::register_images();
+    fltk::register_images();
     if (!kdedir) {
       // Figure out where KDE is installed...
       if ((kdedir = getenv("KDEDIR")) == NULL) {
@@ -1181,5 +1181,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id$".
+// End of "$Id: FileIcon2.cxx 4911 2006-04-06 21:05:16Z fabien $".
 //

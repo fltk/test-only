@@ -266,6 +266,10 @@ shape$(EXEEXT): shape.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
+file_chooser$(EXEEXT): file_chooser.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
+	$(POSTBUILD) $@ ../FL/mac.r
 image_file$(EXEEXT): image_file.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@

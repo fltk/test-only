@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\fltkdlld"
+			OutputDirectory=".\..\..\lib"
 			IntermediateDirectory=".\fltkdlld"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -20,32 +20,37 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				AdditionalIncludeDirectories="../visualc,.,..\..,../../images/zlib"
+				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="TRUE"
+				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltkdll_imagesd/fltkdll_images.pch"
+				EnableFunctionLevelLinking="TRUE"
+				PrecompiledHeaderFile=".\fltkdlld/fltkdll_images.pch"
+				AssemblerListingLocation=".\fltkdlld/"
+				ObjectFile=".\fltkdlld/"
+				ProgramDataBaseFileName=".\fltkdlld/"
+				BrowseInformation="1"
+				BrowseInformationFile=".\fltkdlld/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdlld.lib opengl32.lib ws2_32.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib"
-				OutputFile="../../lib/fltkdll_imagesd.dll"
-				Version="2.0"
+				AdditionalDependencies="fltkdlld.lib opengl32.lib ws2_32.lib msimg32.lib fltk_zd.lib fltk_pngd.lib fltk_jpegd.lib"
+				OutputFile="..\..\lib\fltkdll_imagesd.dll"
+				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../lib"
+				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(ProjectName)d.pdb"
+				ProgramDatabaseFile="fltkdll_imagesd.pdb"
 				SubSystem="2"
-				ImportLibrary="../../lib/fltkdlld_images.lib"
+				ImportLibrary=".\..\..\lib/fltkdll_imagesd.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -53,7 +58,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../lib/fltkdll_images.tlb"
+				TypeLibraryName=".\..\..\lib/fltkdll_images.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -78,7 +83,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\fltkdll"
+			OutputDirectory=".\..\..\lib"
 			IntermediateDirectory=".\fltkdll"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -89,11 +94,12 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../visualc,../../images/zlib"
-				PreprocessorDefinitions="WIN32;NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltkdll_images/fltkdll_images.pch"
+				PrecompiledHeaderFile=".\fltkdll/fltkdll_images.pch"
+				AssemblerListingLocation=".\fltkdll/"
+				ObjectFile=".\fltkdll/"
+				ProgramDataBaseFileName=".\fltkdll/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -101,14 +107,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib opengl32.lib ws2_32.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib"
-				OutputFile="../../lib/fltkdll_images.dll"
-				Version="2.0"
+				AdditionalDependencies="fltkdll.lib opengl32.lib ws2_32.lib msimg32.lib fltk_z.lib fltk_png.lib fltk_jpeg.lib"
+				OutputFile=".\..\..\lib/fltkdll_images.dll"
+				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../lib"
+				IgnoreDefaultLibraryNames="libc"
+				ProgramDatabaseFile="fltkdll_images.pdb"
 				SubSystem="2"
-				ImportLibrary="../../lib/fltkdll_images.lib"
+				ImportLibrary=".\..\..\lib/fltkdll_images.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -116,7 +124,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../lib/fltkdll_images.tlb"
+				TypeLibraryName=".\..\..\lib/fltkdll_images.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -144,6 +152,25 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\images\FileIcon2.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath="..\..\images\Fl_Guess_Image.cxx">
 			<FileConfiguration
 				Name="Debug|Win32">
@@ -151,14 +178,15 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -169,14 +197,15 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -187,24 +216,92 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;FL_DLL;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;USE_CONF;$(NoInherit)"/>
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\HelpDialog.cxx">
+			RelativePath="..\..\images\HelpDialog.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\HelpView.cxx">
+			RelativePath="..\..\images\images_core.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\xpmFileImage.cxx">
+			RelativePath="..\..\images\pnmImage.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\images\xpmFileImage.cxx">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"
+					BrowseInformation="1"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

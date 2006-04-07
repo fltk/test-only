@@ -131,7 +131,7 @@ static HRGN bitmap2region(xbmImage* bitmap) {
   SetRect(&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
   const int bpl = (bitmap->width()+7)/8; // number of bytes per line of pixels
-  BYTE* p8 = (BYTE*)bitmap->array;
+  BYTE* p8 = (BYTE*)bitmap->data();
   BYTE* p;
   for (int y = 0; y < bitmap->height(); y++) {
     /* Scan each bitmap row from left to right*/

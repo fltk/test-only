@@ -290,17 +290,16 @@ FileBrowser::load(const char     *directory,// I - Directory to load
       return (0);
 
     for (i = 0, num_dirs = 0; i < num_files; i ++) {
-      if (strcmp(files[i]->d_name, "./")) {
+      if (strcmp(files[i]->d_name, "./") ) {
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
 
-        bool ft = true;
-	if (ft) {FileIcon::load_system_icons(); ft=false;}
+        //bool ft = true;	if (ft) {FileIcon::load_system_icons(); ft=false;}
 
         icon = FileIcon::find(filename);
 	printf("%s\n",files[i]->d_name);
-	if (!show_hidden_ &&  files[i]->d_name[0]=='.' 
-	    &&  strcmp(files[i]->d_name,"../")) //  &&  strcmp(files[i]->d_name,"./") )
+	if (!strcmp(files[i]->d_name, ".") || !strcmp(files[i]->d_name, "./") || 
+	    !show_hidden_ &&  files[i]->d_name[0]=='.' &&  strncmp(files[i]->d_name,"../",2)) 
 	  continue;
 	if ((icon && icon->type() == FileIcon::DIRECTORY) ||
 	     fltk::filename_isdir(filename)) {
@@ -347,7 +346,7 @@ FileItem::FileItem(const char * label, FileIcon * icon) : Item(label) {
     fileIcon_=icon;
 }
 void FileItem::draw()  {
-    if (fileIcon_) fileIcon_->set_item(this);
+    if (fileIcon_) fileIcon_->value(this);
     Item::draw();
 }
 ////////////////////////////////////////////////////////////////
@@ -355,7 +354,7 @@ void FileItem::draw()  {
 void FileBrowser::add(const char *line, FileIcon *icon) {
     this->begin();
     FileItem * i = new FileItem(strdup(line),icon);
-    i->image(icon);
+    icon->value(i);
     i->textsize(14);
     this->end();
 }
