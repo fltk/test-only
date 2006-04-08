@@ -1029,13 +1029,14 @@ FileChooser::update_preview()
 	h = pbh;
 	w = h * image->w() / image->h();
       }
-
+      image->setsize(w,h);
+      previewBox->image((Image *)image);
 /* FIXME
       oldimage = (SharedImage *)image->copy(w, h);
       previewBox->image((Image *)oldimage);
+      image->remove();
 */
 
-      image->remove();
     } else {
       previewBox->image((Image *)image);
     }

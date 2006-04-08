@@ -38,6 +38,7 @@
 #include <fltk/filename.h>
 #include <fltk/draw.h>
 #include <fltk/SharedImage.h>
+#include <fltk/Color.h>
 #include <config.h>
 
 #include <stdio.h>
@@ -104,17 +105,18 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 
 
   img = SharedImage::get(ifile);
+ 
   if (!img  || !img->w() || !img->h()) return -1;
-
   /*
     TO BE CONTINUED :
     What have to be done:
+     //  we should fetch the buffer if no data() yet loaded
      1. make Image having a virtual data() method to access its buffer
      2. if such a data() buffer is available then  decode as below
   */
      
 #if 0
-  if (true) {
+  if (img->data()) {
     int		x, y;		// X & Y in image
     int		startx;		// Starting X coord
     Color	c,		// Current color
@@ -125,35 +127,35 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
     // Loop through grayscale or RGB image...
     for (y = 0, row = (const uchar *)(*(img->data())); y < img->h(); y ++, row += img->ld())
     {
-      for (x = 0, startx = 0, c = (Fl_Color)-1;
+      for (x = 0, startx = 0, c = (Color)-1;
            x < img->w();
 	   x ++, row += img->d())
       {
 	switch (img->d())
 	{
           case 1 :
-              temp = fl_rgb_color(row[0], row[0], row[0]);
+              temp = fltk::color(row[0], row[0], row[0]);
 	      break;
           case 2 :
 	      if (row[1] > 127)
-        	temp = fl_rgb_color(row[0], row[0], row[0]);
+        	temp = fltk::color(row[0], row[0], row[0]);
 	      else
-		temp = (Fl_Color)-1;
+		temp = (Color)-1;
 	      break;
 	  case 3 :
-              temp = fl_rgb_color(row[0], row[1], row[2]);
+              temp = fltk::color(row[0], row[1], row[2]);
 	      break;
 	  default :
 	      if (row[3] > 127)
-        	temp = fl_rgb_color(row[0], row[1], row[2]);
+        	temp = fltk::color(row[0], row[1], row[2]);
 	      else
-		temp = (Fl_Color)-1;
+		temp = (Color)-1;
 	      break;
 	}
 
 	if (temp != c)
 	{
-	  if (x > startx && c != (Fl_Color)-1)
+	  if (x > startx && c != (Color)-1)
 	  {
 	    add_color(c);
 	    add(POLYGON);
@@ -169,7 +171,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 	}
       }
 
-      if (x > startx && c != (Fl_Color)-1)
+      if (x > startx && c != (Color)-1)
       {
 	add_color(c);
 	add(POLYGON);
@@ -190,7 +192,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 		*const*ptr;		// Pointer into data array
     int		ncolors,		// Number of colors
 		chars_per_color;	// Characters per color
-    Fl_Color	*colors;		// Colors
+    Color	*colors;		// Colors
     int		red, green, blue;	// Red, green, and blue values
     int		x, y;			// X & Y in image
     int		startx;			// Starting X coord
@@ -200,10 +202,10 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
     ptr = img->data();
     sscanf(*ptr, "%*d%*d%d%d", &ncolors, &chars_per_color);
 
-    colors = new Fl_Color[1 << (chars_per_color * 8)];
+    colors = new Color[1 << (chars_per_color * 8)];
 
     // Read the colormap...
-    memset(colors, 0, sizeof(Fl_Color) << (chars_per_color * 8));
+    memset(colors, 0, sizeof(Color) << (chars_per_color * 8));
     bg = ' ';
 
     ptr ++;
@@ -215,7 +217,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
       ncolors = -ncolors;
 
       for (i = 0, cmapptr = (const uchar *)*ptr; i < ncolors; i ++, cmapptr += 4)
-        colors[cmapptr[0]] = fl_rgb_color(cmapptr[1], cmapptr[2], cmapptr[3]);
+        colors[cmapptr[0]] = fltk::color(cmapptr[1], cmapptr[2], cmapptr[3]);
 
       ptr ++;
     } else {
@@ -229,7 +231,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 	// Get the color value...
 	if ((lineptr = strstr(lineptr, "c ")) == NULL) {
 	  // No color; make this black...
-	  colors[ch] = FL_BLACK;
+	  colors[ch] = fltk::BLACK;
 	} else if (lineptr[2] == '#') {
 	  // Read the RGB triplet...
 	  lineptr += 3;
@@ -280,15 +282,15 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 		break;
 	  }
 
-	  colors[ch] = fl_rgb_color((uchar)red, (uchar)green, (uchar)blue);
+	  colors[ch] = fltk::color((uchar)red, (uchar)green, (uchar)blue);
 	} else {
 	  // Read a color name...
-	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = FL_WHITE;
-	  else if (strncasecmp(lineptr + 2, "black", 5) == 0) colors[ch] = FL_BLACK;
+	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = fltk::WHITE;
+	  else if (strncasecmp(lineptr + 2, "black", 5) == 0) colors[ch] = fltk::BLACK;
 	  else if (strncasecmp(lineptr + 2, "none", 4) == 0) {
-            colors[ch] = FL_BLACK;
+            colors[ch] = fltk::BLACK;
 	    bg = ch;
-	  } else colors[ch] = FL_GRAY;
+	  } else colors[ch] = fltk::GRAY33;
 	}
       }
     }
@@ -335,7 +337,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
     delete[] colors;
   }
 
-  img->release();
+  img->remove();
 
 #ifdef DEBUG
   printf("Icon File \"%s\":\n", xpm);
@@ -530,7 +532,6 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     else if (strcmp(command, "vertex") == 0)
     {
       float x, y;		// Coordinates of vertex
-
 
       if (sscanf(params, "%f,%f", &x, &y) != 2)
         break;
