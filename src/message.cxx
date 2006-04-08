@@ -26,8 +26,8 @@
 // mostly.  In most cases it is easier to get a multi-line message
 // by putting newlines in the message.
 
-#include <fltk/x.h>
 #include <fltk/Window.h>
+#include <fltk/x.h>
 
 #include <fltk/ask.h>
 #include <fltk/ReturnButton.h>
