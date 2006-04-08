@@ -109,20 +109,17 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
 
 //! deep copy implementation
 FileIcon::FileIcon(const FileIcon& f) {
-  name( f.name());
-  text(f.text());
-  pattern_=f.pattern_;
-  type_ = f.type_;
-  next_=first_=this;
-  item_=f.item_;
-  w_ = f.w_; 
-  h_ = f.h_;
-  on_select_=f.on_select_;
-  num_data_ = f.num_data_;
+  char n[1024]="";
+  memcpy(this, &f, sizeof(FileIcon));
+  // change the name so that know it's a copy
+  sprintf(n, "%s%s", f.name() ? f.name() : "", "(copy)");
+  name(strdup(n));
+  sprintf(n, "%s%s", f.text() ? f.text() : "", "(copy)");
+  text(strdup(n));
 
   if (f.alloc_data_ && f.data_) {
     this->data_=(short*) calloc(sizeof(short),f.alloc_data_);
-    memcpy(data_, f.data_, f.alloc_data_);
+    memcpy(data_, f.data_, f.alloc_data_*sizeof(short));
   }
 }
 //

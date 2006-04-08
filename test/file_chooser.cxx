@@ -22,7 +22,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-#if 1
 //
 // Contents:
 //
@@ -111,13 +110,14 @@ main(int  argc,		// I - Number of command-line arguments
     filter->value("PDF Files (*.pdf)\t"
                   "PostScript Files (*.ps)\t"
 		  "Image Files (*.{bmp,gif,jpg,png})\t"
-		  "C/C++ Source Files (*.{c,C,cc,cpp,cxx})");
+		  "C/C++ Source Files (*.{c,C,cc,cpp,cxx,h,H})");
 
   button = new Button(365, 10, 25, 25);
   button->labelcolor(fltk::YELLOW);
   button->callback((Callback *)show_callback);
 
   icon   = FileIcon::find(".", FileIcon::DIRECTORY);
+  icon = new FileIcon(*icon);
   icon->value(button);
 
   button = new LightButton(50, 45, 80, 25, "MULTI");
@@ -342,50 +342,6 @@ show_callback(void)
   }
 }
 
-
-//
-// End of "$Id$".
-//
-#else
-
-#include <fltk/run.h>
-#include <fltk/Button.h>
-#include <fltk/Window.h>
-#include <fltk/Input.h>
-#include <fltk/file_chooser.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
-
-fltk::Input *pattern, *current;
-
-void pickfile(fltk::Widget *) {
-  const char *p;
-  p = fltk::file_chooser("Pick a file", pattern->text(), current->text());
-  if (p) current->text(p);
-}
-
-void thecb(const char *name) {
-  printf("Callback '%s'\n",name);
-}
-
-int main(int argc, char **argv) {
-  fltk::Window window(200,115);
-  window.begin();
-  pattern = new fltk::Input(60,10,130,25,"Pattern: ");
-  pattern->static_text("*");
-  current = new fltk::Input(60,45,130,25,"Current: ");
-  fltk::Button button(110,80,80,25,"&Choose file");
-  button.callback(pickfile);
-  window.end();
-  window.show(argc, argv);
-  //  FileIcon::load_system_icons();
-  fltk::file_chooser_callback(thecb);
-  return fltk::run();
-}
-#endif
 //
 // End of "$Id$".
 //
