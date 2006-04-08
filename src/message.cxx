@@ -26,22 +26,16 @@
 // mostly.  In most cases it is easier to get a multi-line message
 // by putting newlines in the message.
 
-#include <fltk/draw.h>
-#include <fltk/ask.h>
-#include <fltk/Button.h>
-#include <fltk/ReturnButton.h>
+#include <fltk/x.h>
 #include <fltk/Window.h>
-#include <fltk/Input.h>
+
+#include <fltk/ask.h>
+#include <fltk/ReturnButton.h>
 #include <fltk/SecretInput.h>
 #include <fltk/string.h>
 
 #ifdef WIN32
 # include <windows.h>
-#endif
-
-#ifndef __APPLE__
-// FIXME OS X : the following will break the compilation if declared
-# include <fltk/x.h>
 #endif
 
 using namespace fltk;
@@ -182,7 +176,7 @@ static int innards(
   }
 
   for (i = 3; i--;) if (blabels[i]) {
-    Button* button;
+    fltk::Button* button;
     if (i == default_button) {
       button = new ReturnButton(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
@@ -190,7 +184,7 @@ static int innards(
       window.hotspot(button);
       if (!istr) window.set_focus(button);
     } else {
-      button = new Button(
+      button = new fltk::Button(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
 	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
     }
@@ -302,7 +296,7 @@ int fltk::choice_alert(const char*fmt,const char *b0,const char *b1,const char *
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
   int r = innards("?", defstr ? defstr : "", type,
-		  fmt, ap, cancel, ok, 0);
+		  fmt, ap, fltk::cancel, fltk::ok, 0);
   return r ? textfield->text() : 0;
 }
 
@@ -340,41 +334,34 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
   Generates a simple beep message 
 */
 void fltk::beep(int type) {
-#ifdef WIN32
   switch (type) {
-    case BEEP_QUESTION :
-    case BEEP_PASSWORD :
+#if defined(WIN32)
+    case fltk::BEEP_QUESTION :
+    case fltk::BEEP_PASSWORD :
       MessageBeep(MB_ICONQUESTION);
       break;
-    case BEEP_MESSAGE :
+    case fltk::BEEP_MESSAGE :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case BEEP_NOTIFICATION :
+    case fltk::BEEP_NOTIFICATION :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case BEEP_ERROR :
+    case fltk::BEEP_ERROR :
       MessageBeep(MB_ICONERROR);
       break;
     default :
       MessageBeep(0xFFFFFFFF);
       break;
-  }
 #elif defined(__APPLE__)
-  switch (type) {
-    case BEEP_DEFAULT :
-    case BEEP_ERROR :
-#if 0
-      // FIXME
-      SysBeep(30);
-#endif
-      break;
+      //    case fltk::BEEP_DEFAULT :
+      //    case fltk::BEEP_ERROR :
+      //      break;
     default :
+      SysBeep(30); // this is the only simple beep available so use it for all
       break;
-  }
 #else
-  switch (type) {
-    case BEEP_DEFAULT :
-    case BEEP_ERROR :
+    case fltk::BEEP_DEFAULT :
+    case fltk::BEEP_ERROR :
       if (!fltk::xdisplay) fltk::open_display();
 
       XBell(fltk::xdisplay, 100);
@@ -384,8 +371,8 @@ void fltk::beep(int type) {
 
       XBell(fltk::xdisplay, 50);
       break;
-  }
 #endif // WIN32
+  }
 }
 
 //

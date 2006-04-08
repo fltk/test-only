@@ -34,63 +34,62 @@
 // compilation of fltk.
 
 #ifndef fltk_x_h
-#define fltk_x_h
+# define fltk_x_h
 
-#include "draw.h"
+# include <config.h>
+# include "draw.h"
 
-#if defined(_WIN32) && !USE_X11
-# include "win32.h"
+# if defined(_WIN32) && !USE_X11
+#  include "win32.h"
 
-#elif defined(__APPLE__) && !USE_X11
-# define USE_QUARTZ 1
-# include "mac.h"
-
-#else
-#define USE_X11 1
+# elif defined(__APPLE__) && !USE_X11
+#  include "mac.h"
+# else
+#  define USE_X11 1
 
 ////////////////////////////////////////////////////////////////
 // Try to get the parts of Xlib.h included while avoiding warnings:
 
-#ifndef DOXYGEN
-# define Window XWindow
+#  ifndef DOXYGEN
+#   define Window XWindow
 
 // pragmas are to fix the broken SGI Irix Xlib header files:
-# if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
-#  pragma set woff 3322
-# endif
-# include <X11/Xlib.h>
-# include <X11/Xutil.h>
-# if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
-#  pragma reset woff 3322
-# endif
+#   if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
+#    pragma set woff 3322
+#   endif
+#   include <X11/Xlib.h>
+#   include <X11/Xutil.h>
+#   if !defined(__GNUC__) && (defined(_ABIN32) || defined(_ABI64))
+#    pragma reset woff 3322
+#   endif
 
-# include <X11/Xatom.h>
+#   include <X11/Xatom.h>
 
-# if USE_XFT
-#  include <X11/Xft/Xft.h>
-# else
-   typedef struct _XftDraw XftDraw;
-# endif
+#   if USE_XFT
+#    include <X11/Xft/Xft.h>
+#   else
+     typedef struct _XftDraw XftDraw;
+#   endif
 
-# if USE_CAIRO
-#  include <cairo.h>
-#  include <cairo-xlib.h>
-# else
-   typedef struct _cairo cairo_t;
-# endif
+#   if USE_CAIRO
+#    include <cairo.h>
+#    include <cairo-xlib.h>
+#   else
+     typedef struct _cairo cairo_t;
+#   endif
 
-# include <X11/extensions/XInput.h>
-# include <X11/extensions/XI.h>
+#   include <X11/extensions/XInput.h>
+#   include <X11/extensions/XI.h>
 
-# undef Window
+#   undef Window
 
-# if defined(__FreeBSD__) || defined(__APPLE__) || defined(__CYGWIN__)
-   typedef unsigned long	ulong;
-   typedef unsigned int		uint;
-   typedef unsigned char	uchar;
-# endif
+#   if defined(__FreeBSD__) || defined(__APPLE__) || defined(__CYGWIN__)
+     typedef unsigned long	ulong;
+     typedef unsigned int      	uint;
+     typedef unsigned char	uchar;
+#   endif
 
-#endif
+#  endif // !DOXYGEN
 
 extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
 
@@ -143,12 +142,12 @@ extern FL_API Region	clip_region();
 extern FL_API void	draw_into(XWindow, int w, int h);
 extern FL_API void	stop_drawing(XWindow);
 
-#define HFONT XFontStruct*
+#  define HFONT XFontStruct*
 extern FL_API HFONT	xfont();
 
 ////////////////////////////////////////////////////////////////
 // only include this if <fltk/Window.h> was included:
-#if defined(fltk_Window_h) || defined(DOXYGEN)
+#  if defined(fltk_Window_h) || defined(DOXYGEN)
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
@@ -182,12 +181,12 @@ public:
 inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
 Window* find(XWindow xid);
 
-#endif // Window_h
+#  endif // Window_h
 ////////////////////////////////////////////////////////////////
 
-}
+} // namespace fltk
 
-#endif	// not _WIN32
+# endif	// not _WIN32
 #endif
 
 //

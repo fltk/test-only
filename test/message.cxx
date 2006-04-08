@@ -31,7 +31,8 @@ int main(int argc, char **argv) {
 
   fltk::args(argc, argv);
 
-  fltk::beep(fltk::BEEP_QUESTION);
+  if(!fltk::ask("Do you want to disable beep sounds ?", "continue"))
+      fltk::beep_on_dialog(true);
   fltk::message("Spelling check sucessfull, %d errors found with %g%% confidence",
 	     1002, 100*(15/77.0));
 
