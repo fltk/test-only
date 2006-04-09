@@ -257,7 +257,7 @@ FileChooser::favoritesButtonCB()
   } else if (v == 1) {
     // Manage favorites...
     favoritesCB(0);
-  } else if (v == 2) {
+  } else if (v == 3) {
     // Filesystems/My Computer
     directory("");
   } else {

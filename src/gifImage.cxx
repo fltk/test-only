@@ -57,45 +57,7 @@ using namespace fltk;
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
-/*! Tests block of data to see if it looks like the start of a .gif file. */
-bool gifImage::test(const uchar *datas, unsigned size)
-{
-  return !strncmp((char*) datas,"GIF", 3);
-}
-
-void gifImage::_measure(int &W, int &H) const
-{
-  if (w() >= 0) { 
-    W = w(); 
-    H = h(); 
-    return; 
-  }
-
-  const uchar* dat = pixels();
-  FILE *GifFile=0;
-
-  if (dat) {
-    dat += 6;
-  } else { // set up to read from file, return 0x0 for any errors:
-    GifFile=fopen(get_filename(), "rb");
-    char b[6];
-    if (!GifFile || fread(b,1,6,GifFile) < 6 ||
-	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      fclose(GifFile);
-      const_cast<gifImage*>(this)->setsize(0,0);
-      return;
-    }
-  }
-
-  int w,h; GETSHORT(w); GETSHORT(h);
-  const_cast<gifImage*>(this)->setsize(w,h);
-  W = w; 
-  H = h;
-  if (!pixels()) fclose(GifFile);
-}
-
-void gifImage::read()
-{
+bool gifImage::fetch() {
   const uchar* dat = pixels();
   FILE *GifFile=0;
 
@@ -107,7 +69,7 @@ void gifImage::read()
     if (!GifFile || fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
       fclose(GifFile);
-      return;
+      return false;
     }
   }
 
@@ -147,7 +109,7 @@ void gifImage::read()
   for (;;) {
 
     int i = NEXTBYTE;
-    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return;}
+    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return false;}
     int blocklen;
 
     //  if (i == 0x3B) return;  eof code
@@ -226,7 +188,7 @@ void gifImage::read()
   uchar *Image = new uchar[Width*Height];
   if (!Image) {
     //fprintf (stderr, "Insufficient memory\n");
-    return;
+    return false;
   }
   int YC = 0, Pass = 0; /* Used to de-interlace the picture */
   uchar *p = Image;
@@ -329,7 +291,7 @@ void gifImage::read()
   // We are done reading the file, now convert to xpm:
 
   // allocate line pointer arrays:
-  char** data = new char*[Height+3];
+  char** data = (char**) alloc_data(sizeof(char*)*(Height+3));
   int* length = new int[Height+2];
 
   // transparent pixel must be zero, swap if it isn't:
@@ -389,17 +351,66 @@ void gifImage::read()
 
   data[Height+2] = 0; // null to end string array
 
-  {GSave gsave;
-  make_current();
-  draw_xpm(data, 0, 0);
+  //  delete[] Image;
+  // update info for this buffer 
+  pixel_type(MONO);
+  h(Height);
+  w(Width);
+
+  //delete[] Image;
+  //delete[] data[0];  delete[] data[1];  delete[] data;
+  delete[] length;
+  
+  fclose(GifFile);
+
+  return true;
+}
+
+/*! Tests block of data to see if it looks like the start of a .gif file. */
+bool gifImage::test(const uchar *datas, unsigned size)
+{
+  return !strncmp((char*) datas,"GIF", 3);
+}
+
+void gifImage::_measure(int &W, int &H) const
+{
+  if (w() >= 0) { 
+    W = w(); 
+    H = h(); 
+    return; 
   }
 
-  delete[] Image;
-  delete[] data[0];
-  delete[] data[1];
-  delete[] data;
-  delete[] length;
-  if(!pixels()) fclose(GifFile);
+  const uchar* dat = pixels();
+  FILE *GifFile=0;
+
+  if (dat) {
+    dat += 6;
+  } else { // set up to read from file, return 0x0 for any errors:
+    GifFile=fopen(get_filename(), "rb");
+    char b[6];
+    if (!GifFile || fread(b,1,6,GifFile) < 6 ||
+	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
+      fclose(GifFile);
+      const_cast<gifImage*>(this)->setsize(0,0);
+      return;
+    }
+  }
+
+  int w,h; GETSHORT(w); GETSHORT(h);
+  const_cast<gifImage*>(this)->setsize(w,h);
+  W = w; 
+  H = h;
+  if (!pixels()) fclose(GifFile);
+}
+
+void gifImage::read()
+{
+  fetch();
+
+  {GSave gsave;
+  make_current();
+  draw_xpm(data(), 0, 0);
+  }
 }
 
 //

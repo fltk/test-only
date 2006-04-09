@@ -52,11 +52,13 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 static void declare_now(void*) { }
 #endif
 
-#include <fltk/draw.h>
 #include <fltk/x.h>
+#include <fltk/error.h>
 #include <fltk/SharedImage.h>
 
-bool fltk::pngImage::test(const uchar* datas, unsigned size)
+using namespace fltk;
+
+bool pngImage::test(const uchar* datas, unsigned size)
 {
 #if !HAVE_LIBPNG
   return 0;
@@ -65,8 +67,8 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 #endif
 }
 
-void fltk::pngImage::_measure(int &W, int &H) const
-{
+void fltk::pngImage::_measure(int &W, int &H) const {
+
 #if !HAVE_LIBPNG
   const_cast<pngImage*>(this)->setsize(0,0);
   W = H = 0;
@@ -260,6 +262,95 @@ void fltk::pngImage::read()
   if (fp) fclose(fp);
   if (buffer) free(buffer);
 #endif
+}
+
+//! fetch a pngImage in a pixel buffer and update imaage info consequently
+bool pngImage::fetch() {
+  int		i;			// Looping var
+  FILE		*fp;			// File pointer
+  int		channels;		// Number of color channels
+  png_structp	pp;			// PNG read pointer
+  png_infop	info;			// PNG info pointers
+  png_bytep	*rows;			// PNG row pointers
+
+  const char * png = get_filename();
+
+  // Open the PNG file...
+  if ((fp = fopen(png, "rb")) == NULL) return false;
+
+  // Setup the PNG data structures...
+  pp   = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+  info = png_create_info_struct(pp);
+
+  if (setjmp(pp->jmpbuf))
+  {
+    fltk::warning("PNG file \"%s\" contains errors!\n", png);
+    return false;
+  }
+
+  // Initialize the PNG read "engine"...
+  png_init_io(pp, fp);
+
+  // Get the image dimensions and convert to grayscale or RGB...
+  png_read_info(pp, info);
+
+  if (info->color_type == PNG_COLOR_TYPE_PALETTE)
+    png_set_expand(pp);
+
+  if (info->color_type & PNG_COLOR_MASK_COLOR)
+    channels = 3;
+  else
+    channels = 1;
+
+  if ((info->color_type & PNG_COLOR_MASK_ALPHA) || info->num_trans)
+    channels ++;
+
+  w((int)(info->width));
+  h((int)(info->height));
+  pixel_type(channels ==4 ? ARGB32 : channels ==3 ? RGB : MONO );
+
+  if (info->bit_depth < 8)
+  {
+    png_set_packing(pp);
+    png_set_expand(pp);
+  }
+  else if (info->bit_depth == 16)
+    png_set_strip_16(pp);
+
+  // Handle transparency...
+  if (png_get_valid(pp, info, PNG_INFO_tRNS))
+    png_set_tRNS_to_alpha(pp);
+
+  uchar * array = alloc_pixels(w(),h(),pixel_type()); // this unified array is automatically deallocated
+
+  // Allocate pointers...
+  rows = new png_bytep[h()];
+  // initialize rows to point on the new allocated buffer
+  for (i = 0; i < h(); i ++) rows[i] = (png_bytep)(array + i * ld());
+
+  // Read the image, handling interlacing as needed...
+  for (i = png_set_interlace_handling(pp); i > 0; i --)
+    png_read_rows(pp, rows, NULL, h());
+
+#ifdef WIN32
+  // Some Windows graphics drivers don't honor transparency when RGB == white
+  if (channels == 4) {
+    // Convert RGB to 0 when alpha == 0...
+    uchar *ptr = array;
+    for (i = w() * h(); i > 0; i --, ptr += 4)
+      if (!ptr[3]) ptr[0] = ptr[1] = ptr[2] = 0;
+  }
+#endif // WIN32
+
+  // Free memory and return...
+  delete[] rows;
+
+  png_read_end(pp, info);
+  png_destroy_read_struct(&pp, &info, NULL);
+
+  fclose(fp);
+
+  return true;
 }
 
 //

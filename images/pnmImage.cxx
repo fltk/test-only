@@ -46,13 +46,7 @@ using namespace fltk;
 //
 // 'pnmImage::pnmImage()' - Load a PNM image...
 //
-
-pnmImage::pnmImage(const char *n) : SharedImage() {
-  name = n;
-  read();
-}
-
-void pnmImage::read() {
+bool pnmImage::fetch() {
   FILE		*fp;		// File pointer
   int		x, y;		// Looping vars
   char		line[1024],	// Input line
@@ -64,7 +58,7 @@ void pnmImage::read() {
 		val,		// Pixel value
 		maxval;		// Maximum pixel value
   
-  if (pixels() || (fp = fopen(name, "rb")) == NULL) return;
+  if (pixels() || (fp = fopen(name, "rb")) == NULL) return false;
 
   //
   // Read the file header in the format:
@@ -83,7 +77,7 @@ void pnmImage::read() {
   if (!lineptr) {
     fclose(fp);
     fltk::error("Early end-of-file in PNM file \"%s\"!", name);
-    return;
+    return false;
   }
 
   lineptr ++;
@@ -125,7 +119,7 @@ void pnmImage::read() {
   if (format == 1 || format == 2 || format == 4 || format == 5) pixel_type(MONO);
   else pixel_type(RGB);
 
-  uchar * array  = alloc_data(w(),h(),pixel_type()); // data is owned by object so will destoyed with it
+  uchar * array  = alloc_pixels(w(),h(),pixel_type()); // data is owned by object so will destoyed with it
 
   // Read the image file ...
   for (y = 0; y < h(); y ++) {
@@ -176,6 +170,16 @@ void pnmImage::read() {
     }
   }
   fclose(fp);
+  return true;
+}
+
+pnmImage::pnmImage(const char *n) : SharedImage() {
+  name = n;
+  fetch();
+}
+
+void pnmImage::read() {
+    fetch();
 }
 
 //

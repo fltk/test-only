@@ -160,28 +160,34 @@ void xpmFileImage::_measure(int &W, int &H) const
   }
 }
 
-void xpmFileImage::read()
-{
+bool xpmFileImage::fetch() {
   //id = mask = 0;
-  int loaded=0;
-  char *const* ldata = (char *const*)data();
+  const char *const* ldata = data();
   if (!ldata) {
     ldata = ::read((char *)get_filename());
-    if (!ldata) return;
-    loaded=1;
+    if (!ldata) return false;
+    data(ldata);
   }
-  int w, h;
-  measure_xpm(ldata, w, h);
+
+  int W, H;
+  measure_xpm(data(), W, H);
+  w(W); h(H); pixel_type(MONO);
+  return true;
+}
+
+void xpmFileImage::read() {
+  bool loaded = (data() == 0); // does this image need to be loaded
+  if (!fetch()) return;
 
   GSave gsave;
   const_cast<xpmFileImage*>(this)->make_current();
+  draw_xpm(data(), 0, 0);
 
-  draw_xpm(ldata, 0, 0);
-
-  if (loaded) {
-    char* const* p = ldata;
-    while (*p) delete[] *p++;
-    free((void*)ldata);
+  if (loaded) { // if we are responsible for this buffer then remove it
+    const char* const* p = data();
+    while (*p) delete[] const_cast<char*>(*p++);
+    free((void*)data());
+    data(0);
   }
 
   return;

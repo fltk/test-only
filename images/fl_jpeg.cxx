@@ -41,6 +41,7 @@ extern "C" {
 }
 #include <setjmp.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
@@ -262,7 +263,9 @@ static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b
 static void declare_now(void*) { }
 #endif
 
-void fltk::jpegImage::_measure(int &W, int &H) const
+using namespace fltk; 
+
+void jpegImage::_measure(int &W, int &H) const
 {
 #if !HAVE_LIBJPEG
   const_cast<jpegImage*>(this)->setsize(0,0);
@@ -323,8 +326,101 @@ void fltk::jpegImage::_measure(int &W, int &H) const
 #endif
 }
 
-void fltk::jpegImage::read()
-{
+//! fetch a jpegImage into a generic pixel buffer
+
+bool jpegImage::fetch() {
+
+#ifdef HAVE_LIBJPEG
+  FILE				*fp;	// File pointer
+  jpeg_decompress_struct	cinfo;	// Decompressor info
+  my_error_mgr			jerr;	// Error handler info
+  JSAMPROW			row;	// Sample row pointer
+
+  // the following variables are pointers allocating some private space that
+  // is not reset by 'setjmp()'
+  char* max_finish_decompress_err;      // count errors and give up afer a while
+  char* max_destroy_decompress_err;     // to avoid recusion and deadlock
+
+  // Clear data...
+  const uchar * array = 0;
+
+  // Open the image file...
+  const char * jpeg = get_filename();
+  if ((fp = fopen(jpeg, "rb")) == NULL) return false;
+
+  // Setup the decompressor info and read the header...
+  cinfo.err = jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = my_error_exit;
+  jerr.pub.output_message = output_message;
+
+  // Setup error loop variables
+  max_finish_decompress_err = (char*)malloc(1);   // allocate space on the frame for error counters
+  max_destroy_decompress_err = (char*)malloc(1);  // otherwise, the variables are reset on the longjmp
+  *max_finish_decompress_err=10;
+  *max_destroy_decompress_err=10;
+
+  if (setjmp(jerr.setjmp_buffer))
+  {
+    // JPEG error handling...
+    // if any of the cleanup routines hits another error, we would end up 
+    // in a loop. So instead, we decrement max_err for some upper cleanup limit.
+    if ( ((*max_finish_decompress_err)-- > 0) && array)
+      jpeg_finish_decompress(&cinfo);
+    if ( (*max_destroy_decompress_err)-- > 0)
+      jpeg_destroy_decompress(&cinfo);
+
+    fclose(fp);
+
+    w(0);
+    h(0);
+    pixel_type(fltk::UNDEFINED);
+
+    free(max_destroy_decompress_err);
+    free(max_finish_decompress_err);
+    
+    return false;
+  }
+
+  jpeg_create_decompress(&cinfo);
+  jpeg_stdio_src(&cinfo, fp);
+  jpeg_read_header(&cinfo, 1);
+
+  cinfo.quantize_colors      = (boolean)FALSE;
+  cinfo.out_color_space      = JCS_RGB;
+  cinfo.out_color_components = 3;
+  cinfo.output_components    = 3;
+
+  jpeg_calc_output_dimensions(&cinfo);
+  
+  // set image info for generic reuse
+  w(cinfo.output_width); 
+  h(cinfo.output_height);
+  pixel_type(cinfo.output_components ==4 ? 
+    ARGB32 : cinfo.output_components == 3 ? RGB : MONO );
+
+  array = alloc_pixels(w(),h(),pixel_type()); // this unified array is automatically deallocated
+
+  jpeg_start_decompress(&cinfo);
+
+  while (cinfo.output_scanline < cinfo.output_height) {
+    row = (JSAMPROW)(array +
+                     cinfo.output_scanline * cinfo.output_width *
+                     cinfo.output_components);
+    jpeg_read_scanlines(&cinfo, &row, (JDIMENSION)1);
+  }
+
+  jpeg_finish_decompress(&cinfo);
+  jpeg_destroy_decompress(&cinfo);
+
+  free(max_destroy_decompress_err);
+  free(max_finish_decompress_err);
+
+  fclose(fp);
+#endif // HAVE_LIBJPEG
+  return true;
+}
+
+void jpegImage::read() {
 #if HAVE_LIBJPEG
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
@@ -373,7 +469,7 @@ void fltk::jpegImage::read()
 #endif
 }
 
-bool fltk::jpegImage::test(const uchar* datas, unsigned size)
+bool jpegImage::test(const uchar* datas, unsigned size)
 {
 #if !HAVE_LIBJPEG
   return 0;

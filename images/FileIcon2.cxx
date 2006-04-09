@@ -114,24 +114,24 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
      1. make Image having a virtual data() method to access its buffer
      2. if such a data() buffer is available then  decode as below
   */
-     
-#if 0
-  if (img->data()) {
+  if (!img->data() && !img->fetch()) return 0;     
+#if 0 // activate this to finish the fileicon implementation
+  if (img->count()==1) {
     int		x, y;		// X & Y in image
     int		startx;		// Starting X coord
     Color	c,		// Current color
 		temp;		// Temporary color
     const uchar *row;		// Pointer into image
 
-
+    int depth = img->d();
     // Loop through grayscale or RGB image...
-    for (y = 0, row = (const uchar *)(*(img->data())); y < img->h(); y ++, row += img->ld())
+    for (y = 0, row = img->pixels(); y < img->h(); y ++, row += img->ld())
     {
       for (x = 0, startx = 0, c = (Color)-1;
            x < img->w();
-	   x ++, row += img->d())
+	   x ++, row += depth)
       {
-	switch (img->d())
+	switch (depth)
 	{
           case 1 :
               temp = fltk::color(row[0], row[0], row[0]);
@@ -851,8 +851,9 @@ FileIcon::load_system_icons(void)
         else kdedir = "/usr";
       }
     }
-
-    if (!access("/usr/share/mimelnk", F_OK))
+    // fix : get a chance to use the relocated kdedir
+    snprintf(icondir, sizeof(icondir), "%s/share/mimelnk", kdedir);
+    if (!access(icondir, F_OK))
     {
       // Load KDE icons...
       icon = new FileIcon("*", FileIcon::PLAIN);

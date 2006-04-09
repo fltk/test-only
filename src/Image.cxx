@@ -263,19 +263,27 @@ void Image::_draw(const fltk::Rectangle& r) const
 
 // Image Allocation / DeAllocation
 //! alloc data, sets the pixel type,  and make owned data destroyed automatically
-uchar * Image::alloc_data(int w,int h, PixelType p=UNDEFINED) { 
-    return (p!= UNDEFINED) ? alloc_data(w*h*fltk::depth(p)) : 
-	p_ !=UNDEFINED ? alloc_data(w*h*fltk::depth(p_)) : 0 ;
+uchar * Image::alloc_pixels(int w,int h, PixelType p=UNDEFINED) { 
+    return (p!= UNDEFINED) ? (uchar*) alloc_data(w*h*fltk::depth(p)) : 
+	p_ !=UNDEFINED ? (uchar*) alloc_data(w*h*fltk::depth(p_)) : 0 ;
 }
 
 //! alloc data, sets the pixel type,  and make owned data destroyed automatically
-uchar * Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
+const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
     dealloc_data();
     owned_ = true;
-    return (uchar*) (data_ = ((const char* const*) new uchar[size] ));
+    return (const char**) (data_ = (const char**) new uchar[size] );
 }
 
-// dealloc potentially owned data, harmless if called more than once
+//! dealloc potentially owned data, harmless if called more than once
+// fabien: this implementation is too naive, in effect :
+//   we need to also deallocate the content of each char[] data row 
+//   if we have a const char* const* type buffer (like for xpm data)
+//   so we should also add a flag that keeps track of what type of buffer we have
+//   and use this type to know how to deallocate the rows when necessary
+//   this flag should be set when assigning the data buffer 
+//   depending on the pixels() or data() method called to set/allocate the buffer
+//   should be done in a second increment ...
 void Image::dealloc_data() { 
     if (owned_ && data_) delete [] ((uchar*)data_);
     data_ = 0;

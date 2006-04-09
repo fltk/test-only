@@ -116,8 +116,12 @@ main(int  argc,		// I - Number of command-line arguments
   button->labelcolor(fltk::YELLOW);
   button->callback((Callback *)show_callback);
 
-  icon   = FileIcon::find(".", FileIcon::DIRECTORY);
-  icon = new FileIcon(*icon);
+#if TEST_FETCH_PNG
+  icon = new FileIcon("butt", FileIcon::DIRECTORY);
+  icon->load_image("./images/doxygen.png");
+#else
+  icon   = new FileIcon(*FileIcon::find(".", FileIcon::DIRECTORY));
+#endif
   icon->value(button);
 
   button = new LightButton(50, 45, 80, 25, "MULTI");

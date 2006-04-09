@@ -110,7 +110,11 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
 //! deep copy implementation
 FileIcon::FileIcon(const FileIcon& f) {
   char n[1024]="";
-  memcpy(this, &f, sizeof(FileIcon));
+  if (&f==0) {
+      memset(this, 0, sizeof(FileIcon));
+      return;
+  }
+      memcpy(this, &f, sizeof(FileIcon));
   // change the name so that know it's a copy
   sprintf(n, "%s%s", f.name() ? f.name() : "", "(copy)");
   name(strdup(n));

@@ -62,11 +62,11 @@ public:
   //   any image allocation / deallocation should be done only here
   //   because we decided not to use a virtual destructor for Symbol 
   //   so there must only one way to achieve that
-  uchar * alloc_data(int w,int h, PixelType p); // alloc data, sets the pixel type,  and will destroy owned data
-  uchar * alloc_data(int size ); 
+  uchar * alloc_pixels(int w,int h, PixelType p); // alloc data, sets the pixel type,  and will destroy owned data
+  const char ** alloc_data(int size ); 
 
   // Image Attributes definition
-  int w() const {return w_;}
+  int w() const { return w_;}
   int width() const {return w_;}
   void w(int W) {w_=W;}
   void width(int W) {w_=W;}
@@ -87,13 +87,13 @@ public:
   int ld() const {return ld_ ? ld_ : w() * d() ;}
   int line_size() const {return ld();}
 
-  void data(const char * const *p, int c=1) {data_ = p; count_ = c; owned_= false;}
+  void data(const char * const *p, int c=0) {data_ = p; count_ = c; owned_= false;}
   void pixels(const uchar*p, int c=1) {data_ = (const char* const *)p; count_ = c; owned_= false;}
-  void own_data(const char * const *p, int c=1) {data(p,c); owned_= true;}
+  void own_data(const char * const *p, int c=0) {data(p,c); owned_= true;}
   void own_pixels(const uchar *p, int c=1) {pixels(p,c); owned_= true;}
   const char * const * data() const {return (const char * const * ) data_;}
   const uchar * pixels() const { return ((const uchar*) data_); }
-  int count() const {return count_;}
+  int count() const {return count_;} // count = 0 means that a data buffer is used
 
   // Common image methods
   virtual void update() = 0;

@@ -33,7 +33,10 @@ namespace fltk {
     class FL_IMAGES_API pnmImage : public SharedImage {
       public:
       pnmImage(const char* filename);
+
+      // virtual function overrides
       void read(); 
+      bool fetch(); 
     };
 }
 #endif

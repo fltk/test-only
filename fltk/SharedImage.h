@@ -51,6 +51,12 @@ public:
 	by analizing its extension and/or eventually its header,
 	if it handles it it returns a non null pointer on the loaded concrete image
     */
+  /** fetch to the data/pixels unified buffer the image, return true if success. 
+	this method() does NOT draw the image, it only prepares
+	a generic buffer and its info, this method  should be used by all 
+	non-progresive-reading read() methods so that we avoid redondant code
+  */
+  virtual bool fetch() {return false;}
   typedef SharedImage *(*Handler)(const char * filename, uchar *header, int headerlen);
     /*! adds a new handler for hanling a concrete type of image, typically one handler per image type should be registered */
   static void add_handler(Handler f);
@@ -166,6 +172,7 @@ public:
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
+  bool fetch();
 };
 
 class FL_API bmpImage : public SharedImage {
@@ -177,6 +184,7 @@ public:
   void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
+  bool fetch();
   }
 };
 
@@ -191,6 +199,7 @@ public:
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
+  bool fetch();
 };
 
 // 
@@ -207,10 +216,12 @@ public:
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
+  bool fetch();
 };
 
 class FL_IMAGES_API pngImage : public SharedImage {
   void read();		// Uncompress PNG datas
+  bool fetch();
   pngImage() { }
   static SharedImage* create() { return new pngImage; } // Instantiate
 public:
