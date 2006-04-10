@@ -52,6 +52,7 @@
 #include <fltk/FileIcon.h>
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
+#include <fltk/Box.h>
 #include <fltk/filename.h>
 
 //
@@ -157,7 +158,7 @@ FileIcon::~FileIcon()
 
 void FileIcon::_measure(int& w, int& h) const {
     Widget * i= value();
-    if (i) {w = i->h()-2; h = i->h()-2;}
+    if (i) {w = i->h()-box_dh(i->box()); h = i->h()-box_dh(i->box());}
     else {
 	w = h = (int) (getascent()+getdescent()+2);
     }

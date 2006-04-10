@@ -99,7 +99,7 @@ FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
   // Initialize the filter pattern, current directory, and icon size...
   pattern_   = "*";
   directory_ = "";
-  icon_size_  = (uchar)(3 * textsize() / 2);
+  icon_size_  = -1.0f;
   filetype_  = FILES;
   show_hidden_ = false;
 }
@@ -344,6 +344,8 @@ private:
 
 FileItem::FileItem(const char * label, FileIcon * icon) : Item(label) {
     fileIcon_=icon;
+    textsize(14);
+    icon->value(this,true);
 }
 void FileItem::draw()  {
   if (fileIcon_) fileIcon_->value(this,true);
@@ -354,16 +356,14 @@ void FileItem::draw()  {
 void FileBrowser::add(const char *line, FileIcon *icon) {
     this->begin();
     FileItem * i = new FileItem(strdup(line),icon);
-    icon->value(i,true);
-    i->textsize(14);
+    i->w((int) icon_size());  i->h(i->w());
     this->end();
 }
 
 void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
     current(0);
     FileItem * i = new FileItem(strdup(label),icon);
-    icon->value(i,true);
-    i->textsize(14);
+    i->w((int) icon_size());  i->h(i->w());
     Menu::insert(*i,n);
 }
 

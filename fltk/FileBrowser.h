@@ -47,7 +47,7 @@ class FL_API FileBrowser : public Browser
 {
   int		filetype_;
   const char	*directory_;
-  uchar		icon_size_;
+  float		icon_size_;
   const char	*pattern_;
 
 public:
@@ -55,8 +55,10 @@ public:
 
   FileBrowser(int, int, int, int, const char * = 0);
 
-  uchar		icon_size() const { return (icon_size_); };
-  void		icon_size(uchar s) { icon_size_ = s; redraw(); };
+  float		icon_size() const { 
+    return (icon_size_ <0?  (2.0f* textsize()) : icon_size_); 
+  }
+  void 		icon_size(float f) { icon_size_ = f; redraw(); };
 
   void	filter(const char *pattern);
   const char	*filter() const { return (pattern_); };
