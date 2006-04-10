@@ -97,22 +97,22 @@ include makedepend
 # Build FLUID...
 #
 
-fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk$(LIBSUFFIX) \
-		../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX) \
+		../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKFLTKIMG) $(LDLIBS) $(LOCAL_IMAGELIBS)
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 
 #
 # Build shared FLUID...
 #
 
-fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk$(DSOSUFFIX) \
-		../images/$(DSOPREFIX)fltk_images$(DSOSUFFIX)
+fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk2$(DSOSUFFIX) \
+		../images/$(DSOPREFIX)fltk2_images$(DSOSUFFIX)
 	echo Linking $@...
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LIBS) $(LDLIBS)
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 
 #

@@ -172,9 +172,9 @@ CFILES	= string.c \
 	utf.c \
 	vsnprintf.c
 
-LIBNAME	=	$(LIBPREFIX)fltk$(LIBSUFFIX)
-DSONAME	=	$(DSOPREFIX)fltk$(DSOSUFFIX)
-DSOLINK = 	$(DSOPREFIX)fltk$(DSOSYMLINK)
+LIBNAME	=	$(LIBPREFIX)fltk2$(LIBSUFFIX)
+DSONAME	=	$(DSOPREFIX)fltk2$(DSOSUFFIX)
+DSOLINK = 	$(DSOPREFIX)fltk2$(DSOSYMLINK)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 
@@ -256,11 +256,11 @@ install:
 	$(CHMOD) 755 $(DESTDIR)$(includedir)/fltk
 	$(CHMOD) 644 $(DESTDIR)$(includedir)/fltk/*
 	echo "Installing FLTK1.1 emulation include files in $(includedir)/FL..."
-	$(RMDIR) $(DESTDIR)$(includedir)/FL
-	$(MKDIR) $(DESTDIR)$(includedir)/FL
-	$(CP) ../FL/*.H ../FL/*.h  $(DESTDIR)$(includedir)/FL
-	$(CHMOD) 755 $(DESTDIR)$(includedir)/FL
-	$(CHMOD) 644 $(DESTDIR)$(includedir)/FL/*
+	$(RMDIR) $(DESTDIR)$(includedir)/fltk/compat/FL
+	$(MKDIR) $(DESTDIR)$(includedir)/fltk/compat/FL
+	$(CP) ../fltk/compat/FL/*.H ../fltk/compat/FL/*.h  $(DESTDIR)$(includedir)/fltk/compat/FL
+	$(CHMOD) 755 $(DESTDIR)$(includedir)/fltk/compat/FL
+	$(CHMOD) 644 $(DESTDIR)$(includedir)/fltk/compat/FL/*
         ifneq (,$(wildcard ../fltk-config))
 	echo "Installing fltk-config in $(bindir)..."
 	$(MKDIR) $(DESTDIR)$(bindir)
@@ -291,17 +291,17 @@ install:
 
 uninstall:
 	echo "Removing FLTK1.1 emulation include files from $(includedir)/FL..."
-	$(RMDIR) $(includedir)/FL
+	$(RMDIR) $(includedir)/fltk/compat/FL
 	echo "Removing include files from $(includedir)/fltk..."
 	$(RMDIR) $(includedir)/fltk
 	echo "Removing fltk-config from $(bindir)..."
 	$(RM) $(bindir)/fltk-config
 	echo "Removing static core library from $(libdir)"
-	$(RM) $(libdir)/$(LIBPREFIX)fltk$(LIBSUFFIX)
+	$(RM) $(libdir)/$(LIBPREFIX)fltk2$(LIBSUFFIX)
 	echo "Removing shared core library from $(libdir)"
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
-        ifeq ($(DSONAME), fltk.dll)
+        ifeq ($(DSONAME), fltk2.dll)
 	$(RM) $(libdir)/lib$(DSONAME).a
         endif
 

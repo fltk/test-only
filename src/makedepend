@@ -94,7 +94,7 @@ FileInput.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
 FileInput.o: ../fltk/draw.h ../fltk/PixelType.h ../fltk/damage.h
 FileInput.o: ../fltk/events.h ../fltk/Cursor.h ../fltk/Rectangle.h
 FileInput.o: ../fltk/run.h ../fltk/string.h
-Fl_Menu_Item.o: ../FL/Fl_Menu_Item.H ../fltk/Widget.h ../fltk/Style.h
+Fl_Menu_Item.o: ../fltk/compat/FL/Fl_Menu_Item.H ../fltk/Widget.h ../fltk/Style.h
 Fl_Menu_Item.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Menu_Item.o: ../fltk/Rectangle.h ../fltk/Menu.h ../fltk/Group.h
 Fl_Menu_Item.o: ../fltk/Widget.h ../fltk/Item.h ../fltk/ItemGroup.h

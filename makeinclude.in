@@ -81,9 +81,9 @@ LDLIBS = @LDFLAGS@ @LIBS@
 GLDLIBS = @LDFLAGS@ @GLLIB@ @LIBS@
 LINKFLTK = -L../lib @LINKFLTK@
 LINKFLTKGL = -L../lib @LINKFLTKGL@ @LINKFLTK@
-LINKFLTKFORMS = -L../lib -lfltk_forms @LINKFLTK@
+LINKFLTKFORMS = -L../lib -lfltk2_forms @LINKFLTK@
 LOCAL_IMAGELIBS = @LOCAL_IMAGELIBS@
-LINKFLTKIMG = -L../lib -lfltk_images @LINKFLTK@ $(LOCAL_IMAGELIBS) $(IMAGELIBS)
+LINKFLTKIMG = -L../lib -lfltk2_images @LINKFLTK@ $(LOCAL_IMAGELIBS) $(IMAGELIBS)
 LINKSHARED = @DSOLINK@ @LINKSHARED@ $(IMAGELIBS)
 IMAGELIBS = @IMAGELIBS@
 
@@ -122,16 +122,16 @@ CAT3EXT		= @CAT3EXT@
 
 .o$(EXEEXT):
 	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(CXX) -I.. -I../fltk/compat $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 .c.o:
 	echo Compiling $<...
-	$(CC) -I.. $(CFLAGS) -c $<
+	$(CC) -I.. -I../fltk/compat $(CFLAGS) -c $<
 
 .cxx.o:
 	echo Compiling $<...
-	$(CXX) -I.. $(CXXFLAGS) -c $<
+	$(CXX) -I.. -I../fltk/compat $(CXXFLAGS) -c $<
 
 .man.0 .man.1 .man.3:
 	echo Formatting $<...

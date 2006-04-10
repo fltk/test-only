@@ -39,7 +39,7 @@ DSOCFLAGS += -DFL_GLUT_LIBRARY
 DSOCXXFLAGS += -DFL_GLUT_LIBRARY
 LDLIBS := $(GLUTLIBS) $(LDLIBS)
 
-LIBNAME	= ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)
+LIBNAME	= ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
@@ -91,7 +91,8 @@ include makedepend
 ################################################################
 
 install: $(INSTALLTARGETS)
-
+uninstall:
+	# echo nothing to do ?
 install_static: static
 	@echo "Installing static libraries..."
 	@mkdir -p $(libdir)

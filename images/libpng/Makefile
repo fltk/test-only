@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 2004/08/13 07:57:54 laza2000 Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -42,7 +42,7 @@ CFILES	= png.c pngset.c pngget.c pngrutil.c pngtrans.c pngwutil.c \
 		pngread.c pngrio.c pngwio.c pngwrite.c pngrtran.c \
 		pngwtran.c pngmem.c pngerror.c pngpread.c
 
-LIBNAME	=	$(LIBPREFIX)fltk_png$(LIBSUFFIX)
+LIBNAME	=	$(LIBPREFIX)fltk2_png$(LIBSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 #
@@ -104,5 +104,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.2 2004/08/13 07:57:54 laza2000 Exp $".
+# End of "$Id$".
 #

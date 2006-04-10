@@ -136,7 +136,7 @@
 #define HAVE_ICONV		0
 
 /* Set this to 0 if your system does not have OpenGL. This will
-   disable all the code in libfltk_gl and disable the demo programs
+   disable all the code in libfltk2_gl and disable the demo programs
    that use OpenGL. */
 #define HAVE_GL			0
 

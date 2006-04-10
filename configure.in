@@ -89,9 +89,9 @@ GLDEMOS="gldemos"
 
 AC_SUBST(GLDEMOS)
 
-LINKFLTK="-lfltk"
-LINKFLTKGL="-lfltk_gl"
-LINKFLTKIMG="-lfltk_images"
+LINKFLTK="-lfltk2"
+LINKFLTKGL="-lfltk2_gl"
+LINKFLTKIMG="-lfltk2_images"
 
 AC_SUBST(LINKFLTK)
 AC_SUBST(LINKFLTKGL)
@@ -218,16 +218,16 @@ if test x$enable_shared = xyes; then
 	    ;;
     esac
 
-#   LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../forms -lfltk_forms$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
-    LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
+#   LINKSHARED="-L../images -lfltk2_images$SHAREDSUFFIX -L../forms -lfltk2_forms$SHAREDSUFFIX -L../src -lfltk2$SHAREDSUFFIX"
+    LINKSHARED="-L../images -lfltk2_images$SHAREDSUFFIX -L../src -lfltk2$SHAREDSUFFIX"
 else
     DSOCOMMAND="echo"
     DSOLINK=""
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
-#    LINKSHARED="-L../lib -lfltk_images -lfltk_forms -lfltk"
-    LINKSHARED="-L../lib -lfltk_images -lfltk"
+#    LINKSHARED="-L../lib -lfltk2_images -lfltk2_forms -lfltk2"
+    LINKSHARED="-L../lib -lfltk2_images -lfltk2"
 fi
 
 AC_SUBST(DSOCOMMAND)
@@ -426,9 +426,9 @@ if test x$enable_jpeg != xno; then
         if test x$HAVE_LIBJPEG != x1; then
         	AC_DEFINE(HAVE_LIBJPEG)
         	AC_DEFINE(HAVE_LOCAL_JPEG_H)                
-		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_jpeg.a"
+		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk2_jpeg.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/libjpeg"
-		IMAGELIBS="$IMAGELIBS -lfltk_jpeg"
+		IMAGELIBS="$IMAGELIBS -lfltk2_jpeg"
         fi
 fi
 
@@ -448,10 +448,10 @@ if test x$enable_zlib != xno; then
         if test x$HAVE_LIBZ != x1; then
         	AC_DEFINE(HAVE_LIBZ)
         	ZLIBINC="../zlib"
-		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_z.a"
+		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk2_z.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/zlib"
-		# fltk_z should go before fltk_jpeg and after fltk_png
-		IMAGELIBS="-lfltk_z $IMAGELIBS"
+		# fltk_z should go before fltk2_jpeg and after fltk2_png
+		IMAGELIBS="-lfltk2_z $IMAGELIBS"
         fi
 fi
 
@@ -474,9 +474,9 @@ if test x$enable_png != xno; then
         if test x$HAVE_LIBPNG != x1; then
         	AC_DEFINE(HAVE_LIBPNG)
         	AC_DEFINE(HAVE_LOCAL_PNG_H)
-		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk_png.a"
+		LOCAL_IMAGELIBS="$LOCAL_IMAGELIBS ../lib/libfltk2_png.a"
         	LOCAL_IMAGETARGETS="$LOCAL_IMAGETARGETS images/libpng"
-		IMAGELIBS=" -lfltk_png $IMAGELIBS "
+		IMAGELIBS=" -lfltk2_png $IMAGELIBS "
         fi
 fi
 

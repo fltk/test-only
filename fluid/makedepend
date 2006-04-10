@@ -132,7 +132,7 @@ Fluid_Image.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Input.h
 Fluid_Image.o: ../fltk/Button.h ../fltk/ReturnButton.h ../fltk/Button.h
 Fluid_Image.o: image_file_panel.cxx
 Fluid_Plugins.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h
-Fluid_Plugins.o: Fluid_Plugins.h ../FL/Fl_Menu_Item.H ../fltk/Widget.h
+Fluid_Plugins.o: Fluid_Plugins.h ../fltk/compat/FL/Fl_Menu_Item.H ../fltk/Widget.h
 Fluid_Plugins.o: ../fltk/load_plugin.h
 Fl_Widget_Type.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h
 Fl_Widget_Type.o: Fluid_Plugins.h FluidType.h ../fltk/Widget.h Fluid_Image.h

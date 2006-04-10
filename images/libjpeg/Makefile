@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1 2004/08/04 20:44:16 laza2000 Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,7 +46,7 @@ CFILES	= jmemnobs.c \
 		jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
 		jquant2.c jutils.c jmemmgr.c
 
-LIBNAME	=	$(LIBPREFIX)fltk_jpeg$(LIBSUFFIX)
+LIBNAME	=	$(LIBPREFIX)fltk2_jpeg$(LIBSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 #
@@ -108,5 +108,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1 2004/08/04 20:44:16 laza2000 Exp $".
+# End of "$Id$".
 #

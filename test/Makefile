@@ -209,7 +209,7 @@ include makedepend
 # All demo programs depend on the static library.
 #
 
-$(TARGETS):	../lib/$(LIBPREFIX)fltk$(LIBSUFFIX)
+$(TARGETS):	../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX)
 
 
 #
@@ -220,65 +220,65 @@ cairo$(EXEEXT): cairo.o
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -lcairo -o $@
 
-CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o \
 		$(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-cube$(EXEEXT): cube.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+cube$(EXEEXT): cube.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-fullscreen$(EXEEXT): fullscreen.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+fullscreen$(EXEEXT): fullscreen.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-fractals$(EXEEXT): fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+fractals$(EXEEXT): fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(CXX) -I.. $(CXXFLAGS) fractals.o fracviewer.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)  ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) glpuzzle.o ../lib/$(LIBPREFIX)fltk_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(CXX) -I.. $(CXXFLAGS) glpuzzle.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX) $(LINKFLTKGL) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-gl_overlay$(EXEEXT): gl_overlay.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+gl_overlay$(EXEEXT): gl_overlay.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 keyboard$(EXEEXT): keyboard.o keyboard_ui.o
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 mandelbrot$(EXEEXT): mandelbrot.o mandelbrot_ui.o
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) mandelbrot.o mandelbrot_ui.o $(LINKFLTK) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-shape$(EXEEXT): shape.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+shape$(EXEEXT): shape.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-file_chooser$(EXEEXT): file_chooser.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+file_chooser$(EXEEXT): file_chooser.o ../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
-image_file$(EXEEXT): image_file.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+	$(POSTBUILD) $@ ../fltk/mac.r
+image_file$(EXEEXT): image_file.o ../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-help$(EXEEXT): help.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+help$(EXEEXT): help.o ../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
-	$(POSTBUILD) $@ ../FL/mac.r
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 
 install:

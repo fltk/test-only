@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.37 2004/03/10 07:41:46 spitzak Exp $"
+# "$Id$"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -56,7 +56,7 @@ $(LIBRARY).a: $(OBJECTS)
 
 ESSAI_OBJ = essai.o
 essai.theme : $(ESSAI_OBJ)
-	$(THEMECOMMAND) $@ $(ESSAI_OBJ) ../lib/libfltk_images.so.2 -ljpeg -lpng $(DSOLIBS)
+	$(THEMECOMMAND) $@ $(ESSAI_OBJ) ../lib/libfltk2_images.so.2 -ljpeg -lpng $(DSOLIBS)
 
 MOTIF_OBJ = motif.o
 motif.theme : $(MOTIF_OBJ)
@@ -111,5 +111,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.37 2004/03/10 07:41:46 spitzak Exp $".
+# End of "$Id$".
 #

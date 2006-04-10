@@ -43,11 +43,10 @@ CPPFILES = \
 
 CFILES	=
 
-LIBNAME	=	$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
-DSONAME	=	$(DSOPREFIX)fltk_gl$(DSOSUFFIX)
-DSOLINK = 	$(DSOPREFIX)fltk_gl$(DSOSYMLINK)
+LIBNAME	=	$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
+DSONAME	=	$(DSOPREFIX)fltk2_gl$(DSOSUFFIX)
+DSOLINK = 	$(DSOPREFIX)fltk2_gl$(DSOSYMLINK)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
-
 
 #
 # Make everything...
@@ -70,7 +69,7 @@ clean:
 	$(RM) core*
 	$(RM) ../lib/$(LIBNAME)
 	$(RM) ../lib/$(DSONAME)
-        ifeq ($(DSONAME), fltk_gl.dll)
+        ifeq ($(DSONAME), fltk2_gl.dll)
 	$(RM) lib$(DSONAME).a $(DSONAME)
         endif
 
@@ -105,10 +104,10 @@ include makedepend
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
-../lib/fltk_gl.dll: $(OBJECTS)
+../lib/fltk2_gl.dll: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(GLDLIBS)
-	cp ../lib/fltk_gl.dll ./
+	cp ../lib/fltk2_gl.dll ./
 
 #
 # Install everything...
@@ -129,7 +128,7 @@ install:
 	$(CP) ../lib/$(DSONAME) $(DESTDIR)$(libdir)
 	$(LN) -s $(DSONAME) $(DESTDIR)$(libdir)/$(DSOLINK)
         endif
-        ifeq ($(DSONAME), fltk_gl.dll)
+        ifeq ($(DSONAME), fltk2_gl.dll)
 	$(CP) lib$(DSONAME).a $(DESTDIR)$(libdir)
         endif
 	
@@ -143,7 +142,7 @@ uninstall:
 	echo "Removing shared OpenGL library from $(libdir)"
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
-        ifeq ($(DSONAME), fltk_gl.dll)
+        ifeq ($(DSONAME), fltk2_gl.dll)
 	$(RM) $(libdir)/lib$(DSONAME).a
         endif
 
