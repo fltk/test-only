@@ -32,7 +32,7 @@ PATCH_VERSION=@FL_PATCH_VERSION@
 VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
 APIVERSION="$MAJOR_VERSION.$MINOR_VERSION"
 
-### BEGIN fltk-config
+### BEGIN fltk2-config
 
 # First, we need to figure out where we are, in case we are in a non-installed invocation
 # BUT to do that we need to check if we were called via a symlink or not...
@@ -87,17 +87,17 @@ if test -e "$selfdir/fltk/Window.h"; then
   includedir="$selfdir"
   libdir="$selfdir/lib"
   prefix="$selfdir"
-	if test -f "$libdir/libfltk_jpeg.a"; then
+	if test -f "$libdir/libfltk2_jpeg.a"; then
 		CFLAGS="-I$includedir/images/jpeg $CFLAGS"
 		CXXFLAGS="-I$includedir/images/jpeg $CXXFLAGS"
 	fi
 
-	if test -f "$libdir/libfltk_z.a"; then
+	if test -f "$libdir/libfltk2_z.a"; then
 		CFLAGS="-I$includedir/images/zlib $CFLAGS"
 		CXXFLAGS="-I$includedir/images/zlib $CXXFLAGS"
 	fi
 
-	if test -f "$libdir/libfltk_png.a"; then
+	if test -f "$libdir/libfltk2_png.a"; then
 		CFLAGS="-I$includedir/images/png $CFLAGS"
 		CXXFLAGS="-I$includedir/images/png $CXXFLAGS"
 	fi
@@ -105,7 +105,7 @@ fi
 
 usage ()
 {
-    echo "Usage: fltk-config [OPTIONS]
+    echo "Usage: fltk2-config [OPTIONS]
 Options:
 	[--prefix[=DIR]]  return/set where FLTK is installed
 	[--exec-prefix[=DIR]]
@@ -164,7 +164,7 @@ do
               exec_prefix=$optarg
 	    fi
 ## FIXME
-#     This fixes --prefix=<path> bug - fltk-config didn't return proper stuff
+#     This fixes --prefix=<path> bug - fltk2-config didn't return proper stuff
       bindir=${exec_prefix}
       includedir=${prefix}/include
       libdir=${prefix}/lib
@@ -264,23 +264,23 @@ LDSTATIC_PATHS=$libs
 LDLIBS_PATHS=$libs 
 
 # Calculate needed libraries
-LDSTATIC="$libdir/libfltk.a $LDLIBS"
-LDLIBS="$libs -lfltk$SHAREDSUFFIX $LDLIBS"
-LIBS="$LIBS $libdir/libfltk.a"
+LDSTATIC="$libdir/libfltk2.a $LDLIBS"
+LDLIBS="$libs -lfltk2$SHAREDSUFFIX $LDLIBS"
+LIBS="$LIBS $libdir/libfltk2.a"
 
 if test x$use_forms = xyes; then
-    LDLIBS="-lfltk_forms$SHAREDSUFFIX $LDLIBS"
-    LDSTATIC="$libdir/libfltk_forms.a $LDSTATIC"
-    LIBS="$LIBS $libdir/libfltk_forms.a"
+    LDLIBS="-lfltk2_forms$SHAREDSUFFIX $LDLIBS"
+    LDSTATIC="$libdir/libfltk2_forms.a $LDSTATIC"
+    LIBS="$LIBS $libdir/libfltk2_forms.a"
 fi
 if test x$use_gl = xyes; then
-    LDLIBS="-lfltk_gl$SHAREDSUFFIX @GLLIB@ $LDLIBS"
-    LDSTATIC="$libdir/libfltk_gl.a @GLLIB@ $LDSTATIC"
-    LIBS="$LIBS $libdir/libfltk_gl.a"
+    LDLIBS="-lfltk2_gl$SHAREDSUFFIX @GLLIB@ $LDLIBS"
+    LDSTATIC="$libdir/libfltk2_gl.a @GLLIB@ $LDSTATIC"
+    LIBS="$LIBS $libdir/libfltk2_gl.a"
 fi
 if test x$use_images = xyes; then
-    LDLIBS="-lfltk_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
-    LDSTATIC="$libdir/libfltk_images.a $LDSTATIC $IMAGELIBS"
+    LDLIBS="-lfltk2_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
+    LDSTATIC="$libdir/libfltk2_images.a $LDSTATIC $IMAGELIBS"
 fi
 
 LDLIBS="$DSOLINK $LDLIBS"
