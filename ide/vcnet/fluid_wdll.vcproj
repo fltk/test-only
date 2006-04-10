@@ -22,7 +22,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories="..\.."
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="FL_SHARED;NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fluid_wdll/fluid_wdll.pch"
@@ -36,13 +36,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdll.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../fluid/fluid_wdll.exe"
+				AdditionalDependencies="fltk2dll.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../fluid/fluid2_wdll.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\fluid_wdll/fluid_wdll.pdb"
+				ProgramDatabaseFile=".\fluid_wdll/fluid2_wdll.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -85,12 +85,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..,../visualc"
+				AdditionalIncludeDirectories="../visualc,.,../..,../../fltk/compat"
 				PreprocessorDefinitions="FL_SHARED;_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\fluid_wdlld/fluid_wdll.pch"
 				AssemblerListingLocation=".\fluid_wdlld/"
 				ObjectFile=".\fluid_wdlld/"
@@ -105,9 +102,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkdlld.lib fltkdll_imagesd.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2dlld.lib fltk2dll_imagesd.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../fluid/fluid_wdlld.exe"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"

@@ -22,7 +22,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,..\..,..\..\.."
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_LIBRARY;FL_GL_LIBRARY;FL_GLUT_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fltkdll/fltkdll.pch"
@@ -37,7 +37,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="opengl32.lib ws2_32.lib msimg32.lib"
-				OutputFile=".\..\..\lib/fltkdll.dll"
+				OutputFile="..\..\lib\fltk2dll.dll"
 				Version="2.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -45,7 +45,7 @@
 				IgnoreDefaultLibraryNames="libc"
 				ProgramDatabaseFile="fltkdll.pdb"
 				SubSystem="2"
-				ImportLibrary=".\..\..\lib/fltkdll.lib"
+				ImportLibrary=".\..\..\lib/fltk2dll.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -86,12 +86,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..\..,..\..\.."
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_LIBRARY;FL_GL_LIBRARY;FL_GLUT_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\fltkdlld/fltkdll.pch"
 				AssemblerListingLocation=".\fltkdlld/"
 				ObjectFile=".\fltkdlld/"
@@ -107,7 +104,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="opengl32.lib ws2_32.lib msimg32.lib"
-				OutputFile="..\..\lib\fltkdlld.dll"
+				OutputFile="..\..\lib\fltk2dlld.dll"
 				Version="2.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -116,7 +113,7 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="fltkdlld.pdb"
 				SubSystem="2"
-				ImportLibrary=".\..\..\lib/fltkdlld.lib"
+				ImportLibrary=".\..\..\lib/fltk2dlld.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"

@@ -22,7 +22,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,..\.."
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\Release/tile.pch"
@@ -36,7 +36,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/tile.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -84,12 +84,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..\..,../visualc"
+				AdditionalIncludeDirectories="../visualc,.,../..,../../fltk/compat"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\Debug/tile.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -104,9 +101,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/tiled.exe"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"

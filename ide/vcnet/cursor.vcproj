@@ -20,12 +20,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..\..,../visualc"
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\Debug/cursor.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -40,9 +37,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/cursord.exe"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
@@ -91,7 +88,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,..\.."
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\Release/cursor.pch"
@@ -105,7 +102,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/cursor.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

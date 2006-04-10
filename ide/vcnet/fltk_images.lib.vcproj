@@ -20,12 +20,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../visualc,.,..\..,../../images/zlib"
+				AdditionalIncludeDirectories="../../images/zlib,.,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\fltkd/fltk_images.lib.pch"
 				AssemblerListingLocation=".\fltkd/"
 				ObjectFile=".\fltkd/"
@@ -40,7 +37,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_imagesd.lib"
+				OutputFile="..\..\lib\fltk2_imagesd.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -74,7 +71,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,..\..,../visualc,../../images/zlib"
+				AdditionalIncludeDirectories="../../images/zlib,../visualc,.,../..,../../fltk/compat"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fltk/fltk_images.lib.pch"
@@ -88,7 +85,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_images.lib"
+				OutputFile="..\..\lib\fltk2_images.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>

@@ -20,12 +20,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..,../visualc"
+				AdditionalIncludeDirectories="../visualc,.,../..,../../fltk/compat"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
 				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				PrecompiledHeaderFile=".\fluidd/fluid.pch"
 				AssemblerListingLocation=".\fluidd/"
 				ObjectFile=".\fluidd/"
@@ -40,14 +37,14 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_imagesd.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../fluid/fluidd.exe"
-				LinkIncremental="2"
+				AdditionalDependencies="fltk2d.lib fltk2_imagesd.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../fluid/fluid2d.exe"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\fluidd/fluidd.pdb"
+				ProgramDatabaseFile=".\fluidd/fluid2d.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -92,7 +89,7 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories="..\..,..\visualc"
+				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fluid/fluid.pch"
@@ -107,13 +104,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_images.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../fluid/fluid.exe"
+				AdditionalDependencies="fltk2.lib fltk2_images.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../fluid/fluid2.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\fluid/fluid.pdb"
+				ProgramDatabaseFile=".\fluid/fluid2.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
