@@ -22,9 +22,9 @@ mkdir usr/man/man1
 cp ../../fluid/fluid usr/bin/X11
 strip usr/bin/X11/fluid
 
-cp ../../lib/libfltk.a usr/lib
-cp ../../src/libfltk.so.1 usr/lib
-ln -sf libfltk.so.1 usr/lib/libfltk.so
+cp ../../lib/libfltk2.a usr/lib
+cp ../../src/libfltk2.so.1 usr/lib
+ln -sf libfltk2.so.1 usr/lib/libfltk2.so
 
 cp ../../documentation/*.html usr/info/fltk
 cp ../../documentation/*.gif usr/info/fltk

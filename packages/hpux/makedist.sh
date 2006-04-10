@@ -21,7 +21,7 @@ for file in `cd ../../FL; ls *.H`; do
 done
 
 ln -sf FL links/Fl
-ln -sf libfltk.sl.1 links/libfltk.sl
+ln -sf libfltk2.sl.1 links/libfltk2.sl
 
 cd ../..
 

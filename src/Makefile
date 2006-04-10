@@ -261,11 +261,11 @@ install:
 	$(CP) ../fltk/compat/FL/*.H ../fltk/compat/FL/*.h  $(DESTDIR)$(includedir)/fltk/compat/FL
 	$(CHMOD) 755 $(DESTDIR)$(includedir)/fltk/compat/FL
 	$(CHMOD) 644 $(DESTDIR)$(includedir)/fltk/compat/FL/*
-        ifneq (,$(wildcard ../fltk-config))
-	echo "Installing fltk-config in $(bindir)..."
+        ifneq (,$(wildcard ../fltk2-config))
+	echo "Installing fltk2-config in $(bindir)..."
 	$(MKDIR) $(DESTDIR)$(bindir)
-	$(CP) ../fltk-config $(DESTDIR)$(bindir)
-	$(CHMOD) 755 $(DESTDIR)$(bindir)/fltk-config
+	$(CP) ../fltk2-config $(DESTDIR)$(bindir)
+	$(CHMOD) 755 $(DESTDIR)$(bindir)/fltk2-config
         endif
         ifneq (,$(wildcard ../lib/$(LIBNAME)))
 	echo "Installing static core library in $(libdir)"
@@ -294,8 +294,8 @@ uninstall:
 	$(RMDIR) $(includedir)/fltk/compat/FL
 	echo "Removing include files from $(includedir)/fltk..."
 	$(RMDIR) $(includedir)/fltk
-	echo "Removing fltk-config from $(bindir)..."
-	$(RM) $(bindir)/fltk-config
+	echo "Removing fltk2-config from $(bindir)..."
+	$(RM) $(bindir)/fltk2-config
 	echo "Removing static core library from $(libdir)"
 	$(RM) $(libdir)/$(LIBPREFIX)fltk2$(LIBSUFFIX)
 	echo "Removing shared core library from $(libdir)"

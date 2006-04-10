@@ -105,7 +105,7 @@ THREADS		= @THREADS@
 
 # Name of FLUID executable we install
 #FLUID		= @FLUID@$(EXEEXT)
-FLUID		= fluid$(EXEEXT)
+FLUID		= fluid2$(EXEEXT)
 
 # Possible steps after linking...
 POSTBUILD	= @POSTBUILD@

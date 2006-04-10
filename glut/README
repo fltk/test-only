@@ -26,10 +26,10 @@ To compile Glut source code:
 
    Modify it so that <glut.h> is replaced with <fltk/glut.h>
 
-   Compile and link with -lfltk_glut -lfltk
+   Compile and link with -lfltk2_glut -lfltk2
 
    You may also need -lglut to get functions like the teapot.  Put
-   this *after* -lfltk.
+   this *after* -lfltk2.
 
    You may have to modify the code to get it to compile with C++.
 

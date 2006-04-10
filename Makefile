@@ -61,7 +61,7 @@ clean:
 
 distclean: clean
 	$(RM) config.*
-	$(RM) fltk-config fltk.list makeinclude
+	$(RM) fltk2-config fltk.list makeinclude
 	$(RM) FL/Makefile
 	$(RM) documentation/*.$(CAT1EXT)
 	$(RM) documentation/*.$(CAT3EXT)

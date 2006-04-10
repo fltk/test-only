@@ -1,5 +1,5 @@
 #
-# "$Id: fltk.spec,v 1.3 2003/04/20 03:17:45 easysw Exp $"
+# "$Id$"
 #
 # RPM spec file for FLTK.
 #
@@ -78,7 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %dir %{prefix}/lib
-%{prefix}/lib/libfltk*.so.*
+%{prefix}/lib/libfltk2*.so.*
 
 %files devel
 %defattr(-,root,root)
@@ -87,13 +87,13 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{prefix}/include/fltk
 %{prefix}/include/fltk/*
 %dir %{prefix}/lib
-%{prefix}/lib/libfltk*.so
-%{prefix}/lib/libfltk*.a
+%{prefix}/lib/libfltk2*.so
+%{prefix}/lib/libfltk2*.a
 %dir %{_mandir}
 %{_mandir}/*
 %dir %{prefix}/share/doc/fltk
 %{prefix}/share/doc/fltk/*
 
 #
-# End of "$Id: fltk.spec,v 1.3 2003/04/20 03:17:45 easysw Exp $".
+# End of "$Id$".
 #

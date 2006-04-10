@@ -216,7 +216,7 @@ test/editor.cxx source file. Both the Makefile and Visual C++
 workspace include the necessary rules to build the editor. You can
 also compile it using a standard compiler with:
 
-CC -o editor editor.cxx -lfltk -lXext -lX11 -lm
+CC -o editor editor.cxx -lfltk2 -lXext -lX11 -lm
 
 As noted in Fltk Basics Chapter, you may need to include compiler and
 linker options to tell them where to find the FLTK library. Also, the

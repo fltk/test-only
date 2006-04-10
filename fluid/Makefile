@@ -57,7 +57,7 @@ CPPFILES = \
 CFILES	=
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.cxx=.o)
-TARGETS	= fluid$(EXEEXT) $(FLUID)
+TARGETS	= fluid2$(EXEEXT) $(FLUID)
 
 
 #
@@ -97,7 +97,7 @@ include makedepend
 # Build FLUID...
 #
 
-fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX) \
+fluid2$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX) \
 		../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKFLTKIMG) $(LDLIBS) $(LOCAL_IMAGELIBS)
@@ -108,7 +108,7 @@ fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX) \
 # Build shared FLUID...
 #
 
-fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk2$(DSOSUFFIX) \
+fluid2-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk2$(DSOSUFFIX) \
 		../images/$(DSOPREFIX)fltk2_images$(DSOSUFFIX)
 	echo Linking $@...
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LIBS) $(LDLIBS)
@@ -120,16 +120,16 @@ fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk2$(DSOSUFFIX) \
 #
 
 install:
-	echo "Installing FLUID in $(bindir)..."
+	echo "Installing FLUID2 in $(bindir)..."
 	-$(MKDIR) $(DESTDIR)$(bindir)
-	$(CP) $(FLUID) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
-	$(STRIP) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
-	$(bindir)/fltk-config --post $(DESTDIR)$(bindir)/fluid$(EXEEXT)
-	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(CP) $(FLUID) $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
+	$(bindir)/fltk2-config --post $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
+	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
 
 
 uninstall:
-	$(RM) $(bindir)/fluid
+	$(RM) $(bindir)/fluid2
 
 
 #
@@ -138,11 +138,11 @@ uninstall:
 #
 
 rebuild:
-	./fluid$(EXEEXT) -c about_panel.fl
-	./fluid$(EXEEXT) -c alignment_panel.fl
-	./fluid$(EXEEXT) -c function_panel.fl
-	./fluid$(EXEEXT) -c widget_panel.fl
-	./fluid$(EXEEXT) -c coding_style.fl
+	./fluid2$(EXEEXT) -c about_panel.fl
+	./fluid2$(EXEEXT) -c alignment_panel.fl
+	./fluid2$(EXEEXT) -c function_panel.fl
+	./fluid2$(EXEEXT) -c widget_panel.fl
+	./fluid2$(EXEEXT) -c coding_style.fl
 
 
 #

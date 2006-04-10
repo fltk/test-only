@@ -142,7 +142,7 @@ if test x$enable_shared = xyes; then
 
     PICFLAG=1
     SHAREDSUFFIX=""
-    FLUID="fluid-shared"
+    FLUID="fluid2-shared"
 
     BUILDTARGETS="shared $BUILDTARGETS"
     INSTALLTARGETS="install_shared $INSTALLTARGETS"
@@ -225,7 +225,7 @@ else
     DSOLINK=""
     PICFLAG=0
     SHAREDSUFFIX=""
-    FLUID="fluid"
+    FLUID="fluid2"
 #    LINKSHARED="-L../lib -lfltk2_images -lfltk2_forms -lfltk2"
     LINKSHARED="-L../lib -lfltk2_images -lfltk2"
 fi
@@ -885,7 +885,7 @@ if test -n "$GCC"; then
     # bugs in the X headers up through Solaris 7.
     #
     # Unlike the other compiler/optimization settings, this one is placed
-    # in CFLAGS and CXXFLAGS so that fltk-config will provide the option
+    # in CFLAGS and CXXFLAGS so that fltk2-config will provide the option
     # to clients - otherwise client apps will not compile properly...
     if test "$uname" = SunOS; then
 	AC_MSG_CHECKING(if GCC supports -fpermissive)
@@ -1013,10 +1013,10 @@ fi
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
 dnl AC_CONFIG_HEADER(fltk/string.h)
-AC_OUTPUT(makeinclude fltk.list fltk-config)
+AC_OUTPUT(makeinclude fltk.list fltk2-config)
 
-dnl Make sure the fltk-config script is executable...
-chmod +x fltk-config
+dnl Make sure the fltk2-config script is executable...
+chmod +x fltk2-config
 
 echo
 echo Libs:              $LIBS

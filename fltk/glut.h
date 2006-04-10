@@ -39,7 +39,7 @@
 // glutWireTeapot()) or the stroke fonts but the declarations for the
 // drawing functions are included here because otherwise there is no
 // way to get them along with this.  To use them you will have to
-// link in the original GLUT library, put -lglut *after* -lfltk.
+// link in the original GLUT library, put -lglut *after* -lfltk2.
 
 // Commented out lines indicate parts of GLUT that are not emulated.
 

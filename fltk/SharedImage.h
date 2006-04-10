@@ -159,7 +159,7 @@ FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* datas=0);
 ////////////////////////////////////////////////////////////////
 
 // 
-// bmp and gif classes are build in libfltk so they are FL_API
+// bmp and gif classes are build in libfltk2 so they are FL_API
 //
 
 class FL_API gifImage : public SharedImage {
@@ -203,7 +203,7 @@ public:
 };
 
 // 
-// jpeg and png classes are in libfltk_images so they are FL_IMAGES_API
+// jpeg and png classes are in libfltk2_images so they are FL_IMAGES_API
 //
 
 class FL_IMAGES_API jpegImage : public SharedImage {

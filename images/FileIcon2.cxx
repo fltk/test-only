@@ -468,7 +468,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
       //     shadowcolor    GRAY33
       //     outlinecolor   BLACK
       if (strcmp(params, "iconcolor") == 0)
-        add_color(-1);
+        add_color((Color) -1);
       else if (strcmp(params, "shadowcolor") == 0)
         add_color(GRAY33);
       else if (strcmp(params, "outlinecolor") == 0)
@@ -507,7 +507,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
 
       // Set the outline color; see above for valid values...
       if (strcmp(params, "iconcolor") == 0)
-        cval = -1;
+        cval = (Color) -1;
       else if (strcmp(params, "shadowcolor") == 0)
         cval = GRAY33;
       else if (strcmp(params, "outlinecolor") == 0)
