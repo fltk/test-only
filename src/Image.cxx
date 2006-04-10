@@ -264,15 +264,28 @@ void Image::_draw(const fltk::Rectangle& r) const
 // Image Allocation / DeAllocation
 //! alloc data, sets the pixel type,  and make owned data destroyed automatically
 uchar * Image::alloc_pixels(int w,int h, PixelType p=UNDEFINED) { 
-    return (p!= UNDEFINED) ? (uchar*) alloc_data(w*h*fltk::depth(p)) : 
-	p_ !=UNDEFINED ? (uchar*) alloc_data(w*h*fltk::depth(p_)) : 0 ;
+    int size= (p!= UNDEFINED) ? (w*h*fltk::depth(p)) : 
+	p_ !=UNDEFINED ? (w*h*fltk::depth(p_)) : 0 ;
+    if (!size) return 0;
+    dealloc_data();
+    owned_ = true;
+    count_=1; // force the buffer to be a pixels buffer
+    nb_data_ = 0;
+    data_ = (const char**) new uchar[size] ;
+    // we dont need to 0 the buffer for pixels buffer
+    return (uchar*) data_;
 }
 
 //! alloc data, sets the pixel type,  and make owned data destroyed automatically
 const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
     dealloc_data();
     owned_ = true;
-    return (const char**) (data_ = (const char**) new uchar[size] );
+    count_=0; // force the buffer to be a data buffer
+    nb_data_ = size /(sizeof(const char *));
+    data_ = (const char**) new uchar[size] ;
+    memset((const char**) data_,0,size);   // 0 the buffer so we can delete the allocated lines 
+			    // later in a safer way
+    return (const char**) data_;
 }
 
 //! dealloc potentially owned data, harmless if called more than once
@@ -285,9 +298,18 @@ const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type
 //   depending on the pixels() or data() method called to set/allocate the buffer
 //   should be done in a second increment ...
 void Image::dealloc_data() { 
-    if (owned_ && data_) delete [] ((uchar*)data_);
+    if (owned_ && data_ ) {
+	if (count_==0 && nb_data_>0) {
+	// data buffers need more care than pixels buffers
+	    int i;
+	    for (i=0; i<nb_data_; i++) delete [] const_cast<char*>(data_[i]);
+	}
+	delete [] ((uchar*)data_); // deletes data or pixels buffers
+    }
     data_ = 0;
+    nb_data_ = 0;
     owned_ = false;
+    count_=0;
 }
 
 /** \fn void Image::destroy();

@@ -237,4 +237,11 @@
    program to actually use the keypad, and is recommended. */
 #define IGNORE_NUMLOCK		1
 
+/* Progressive image draw (as for jpeg and png images)
+	sets to 1 for enabling this feature (default)
+	sets to 0 for disabling this
+		and favorising fetch() image code  reuse
+*/
+#define USE_PROGRESSIVE_DRAW 1
+
 /* End of "$Id: configh.in 3970 2005-01-26 22:35:28Z matthiaswm $". */

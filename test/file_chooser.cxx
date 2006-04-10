@@ -48,6 +48,8 @@
 #include <fltk/LightButton.h>
 #include <fltk/run.h>
 #include <string.h>
+#include <fltk/file_chooser.h>
+#include <fltk/ask.h>
 
 using namespace fltk;
 
@@ -78,19 +80,19 @@ void		show_callback(void);
 //
 // 'main()' - Create a file chooser and wait for a selection to be made.
 //
-
+#define SIMPLE_IMPL 1
 int			// O - Exit status
 main(int  argc,		// I - Number of command-line arguments
      char *argv[])	// I - Command-line arguments
 {
-  Window	*window;// Main window
-  Button	*button;// Buttons
-  FileIcon	*icon;	// New file icon
-
-
   // Make the file chooser...
   //fltk::scheme(NULL);
   FileIcon::load_system_icons();
+
+#if !SIMPLE_IMPL
+  Window	*window;// Main window
+  Button	*button;// Buttons
+  FileIcon	*icon;	// New file icon
 
   fc = new FileChooser(".", "*", FileChooser::SINGLE, "FileChooser Test");
   fc->callback(fc_callback);
@@ -138,12 +140,15 @@ main(int  argc,		// I - Number of command-line arguments
 
   button = new Button(340, 165, 50, 25, "Close");
   button->callback((Callback*)close_callback);
-
   window->resizable(files);
   window->end();
   window->show(1, argv);
-
   fltk::run();
+
+#else
+  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", 0);
+  fltk::message("File selected is : %s", name && strlen(name) ? name : "<no_selection>");
+#endif
 
   return (0);
 }

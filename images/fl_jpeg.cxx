@@ -422,6 +422,7 @@ bool jpegImage::fetch() {
 
 void jpegImage::read() {
 #if HAVE_LIBJPEG
+# if USE_PROGRESSIVE_DRAW
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile = 0;
@@ -466,6 +467,12 @@ void jpegImage::read() {
   jpeg_destroy_decompress(&cinfo);
 
   if (infile) fclose(infile);
+# else
+  fetch(); // reuse fetch code
+  GSave gsave;
+  make_current();
+  drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+# endif //USE_PROGRESSIVE_DRAW
 #endif
 }
 

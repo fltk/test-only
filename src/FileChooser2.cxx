@@ -1074,7 +1074,7 @@ FileChooser::value(int f)	// I - File number
   for (i = 1, fcount = 0; i <= fileList->size(); i ++)
     if (fileList->selected(i)) {
       // See if this file is a selected file/directory...
-      name = fileList->child(i-1)->label();
+      name = fileList->child(i)->label();
 
       fcount ++;
 

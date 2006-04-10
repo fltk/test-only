@@ -161,6 +161,7 @@ static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b
 void fltk::pngImage::read()
 {
 #if HAVE_LIBPNG
+# if USE_PROGRESSIVE_DRAW
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
   png_infop info_ptr;
@@ -261,6 +262,12 @@ void fltk::pngImage::read()
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if (fp) fclose(fp);
   if (buffer) free(buffer);
+# else
+  fetch(); // reuse fetch code
+  GSave gsave;
+  make_current();
+  drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+# endif //USE_PROGRESSIVE_DRAW
 #endif
 }
 
