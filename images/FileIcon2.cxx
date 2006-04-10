@@ -115,7 +115,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
      2. if such a data() buffer is available then  decode as below
   */
   if (!img->data() && !img->fetch()) return 0;     
-#if 0 // activate this to finish the fileicon implementation
+#if 1 // activate this to finish the fileicon implementation
   if (img->count()==1) {
     int		x, y;		// X & Y in image
     int		startx;		// Starting X coord
@@ -125,7 +125,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 
     int depth = img->d();
     // Loop through grayscale or RGB image...
-    for (y = 0, row = img->pixels(); y < img->h(); y ++, row += img->ld())
+    for (y = 0, row = img->pixels(); y < img->h(); y ++)
     {
       for (x = 0, startx = 0, c = (Color)-1;
            x < img->w();
@@ -181,7 +181,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
 	add_vertex(startx * 9000 / img->w() + 1000, 9500 - (y + 1) * 9000 / img->h());
 	add(END);
       }
-    }
+    } // for
   } else {
     int		i, j;			// Looping vars
     int		ch;			// Current character
@@ -468,7 +468,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
       //     shadowcolor    GRAY33
       //     outlinecolor   BLACK
       if (strcmp(params, "iconcolor") == 0)
-        add_color(256);
+        add_color(-1);
       else if (strcmp(params, "shadowcolor") == 0)
         add_color(GRAY33);
       else if (strcmp(params, "outlinecolor") == 0)
@@ -499,33 +499,41 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       add(OUTLINEPOLYGON);
       outline = add(0) - data_;
+      add(0);
     }
     else if (strcmp(command, "endoutlinepolygon") == 0 && outline)
     {
+       unsigned cval; // Color value
+
       // Set the outline color; see above for valid values...
       if (strcmp(params, "iconcolor") == 0)
-        data_[outline] = 256;
+        cval = -1;
       else if (strcmp(params, "shadowcolor") == 0)
-	data_[outline] = GRAY33;
+        cval = GRAY33;
       else if (strcmp(params, "outlinecolor") == 0)
-        data_[outline] = BLACK;
+        cval = BLACK;
       else
       {
-        short c = atoi(params);	// Color value
+        int c = atoi(params);	// Color value
 
 
         if (c < 0)
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  data_[outline] = lerp((Color)(c >> 4), (Color)(c & 15), 0.5);
+	  cval = lerp((Color)(c >> 4), (Color)(c & 15), 0.5);
 	}
 	else
-	  data_[outline] = c;
+	  cval = c;
       }
+
+      // Store outline color...
+      data_[outline]     = cval >> 16;
+      data_[outline + 1] = cval;
 
       outline = 0;
       add(END);
+
     }
     else if (strncmp(command, "end", 3) == 0)
       add(END);
@@ -775,13 +783,13 @@ FileIcon::load_system_icons(void)
 		};
   static short	plain[] =	// Plain file icon
 		{
-		  COLOR, 256, OUTLINEPOLYGON, GRAY75,
+		  COLOR, -1,-1, OUTLINEPOLYGON, 0, GRAY75,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, GRAY75,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0, GRAY75,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, 0,BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END, LINE, VERTEX, 3000, 7000,
 		  VERTEX, 5000, 7000, END, LINE, VERTEX, 3000, 6000,
@@ -794,26 +802,26 @@ FileIcon::load_system_icons(void)
 		};
   static short	image[] =	// Image file icon
 		{
-		  COLOR, 256, OUTLINEPOLYGON, GRAY75,
+		  COLOR, -1,-1, OUTLINEPOLYGON, 0, GRAY75,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, GRAY75,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0,GRAY75,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, 0,BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END,
-		  COLOR, RED, POLYGON, VERTEX, 3500, 2500,
+		  COLOR, 0,RED, POLYGON, VERTEX, 3500, 2500,
 		  VERTEX, 3000, 3000, VERTEX, 3000, 4000,
 		  VERTEX, 3500, 4500, VERTEX, 4500, 4500,
 		  VERTEX, 5000, 4000, VERTEX, 5000, 3000,
 		  VERTEX, 4500, 2500, END,
-		  COLOR, GREEN, POLYGON, VERTEX, 5500, 2500,
+		  COLOR, 0,GREEN, POLYGON, VERTEX, 5500, 2500,
 		  VERTEX, 5000, 3000, VERTEX, 5000, 4000,
 		  VERTEX, 5500, 4500, VERTEX, 6500, 4500,
 		  VERTEX, 7000, 4000, VERTEX, 7000, 3000,
 		  VERTEX, 6500, 2500, END,
-		  COLOR, BLUE, POLYGON, VERTEX, 4500, 3500,
+		  COLOR, 0,BLUE, POLYGON, VERTEX, 4500, 3500,
 		  VERTEX, 4000, 4000, VERTEX, 4000, 5000,
 		  VERTEX, 4500, 5500, VERTEX, 5500, 5500,
 		  VERTEX, 6000, 5000, VERTEX, 6000, 4000,
@@ -822,16 +830,16 @@ FileIcon::load_system_icons(void)
 		};
   static short	dir[] =		// Directory icon
 		{
-		  COLOR, 256, POLYGON, VERTEX, 1000, 1000,
+		  COLOR, -1,-1, POLYGON, VERTEX, 1000, 1000,
 		  VERTEX, 1000, 7500,  VERTEX, 9000, 7500,
 		  VERTEX, 9000, 1000, END,
 		  POLYGON, VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500, END,
-		  COLOR, WHITE, LINE, VERTEX, 1500, 1500,
+		  COLOR, 0,WHITE, LINE, VERTEX, 1500, 1500,
 		  VERTEX, 1500, 7000, VERTEX, 9000, 7000, END,
-		  COLOR, BLACK, LINE, VERTEX, 9000, 7500,
+		  COLOR, 0,BLACK, LINE, VERTEX, 9000, 7500,
 		  VERTEX, 9000, 1000, VERTEX, 1000, 1000, END,
-		  COLOR, GRAY75, LINE, VERTEX, 1000, 1000,
+		  COLOR, 0,GRAY75, LINE, VERTEX, 1000, 1000,
 		  VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500,
 		  VERTEX, 9000, 7500, END,

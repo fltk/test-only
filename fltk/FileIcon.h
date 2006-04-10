@@ -73,8 +73,8 @@ public:
   ~FileIcon();
 
   short		*add(short d);
-  short		*add_color(short c)
-		{ short *d = add(COLOR); add(c); return (d); }
+  short		*add_color(Color c)
+		{ short *d = add((short)COLOR); add((short)(c >> 16)); add((short)c); return (d); }
   short		*add_vertex(int x, int y)
 		{ short *d = add(VERTEX); add(x); add(y); return (d); }
   short		*add_vertex(float x, float y)

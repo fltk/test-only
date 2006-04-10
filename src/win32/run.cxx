@@ -478,6 +478,10 @@ static Monitor* monitors = 0;
 static int num_monitors=0;
 
 #if USE_MULTIMONITOR
+#ifndef MONITORINFOF_PRIMARY
+#define MONITORINFOF_PRIMARY        0x00000001
+#endif
+
 static int monitor_index;
 static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
 				HDC hdcMonitor,

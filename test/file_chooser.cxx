@@ -78,83 +78,6 @@ void		show_callback(void);
 
 
 //
-// 'main()' - Create a file chooser and wait for a selection to be made.
-//
-#define SIMPLE_IMPL 1
-int			// O - Exit status
-main(int  argc,		// I - Number of command-line arguments
-     char *argv[])	// I - Command-line arguments
-{
-  // Make the file chooser...
-  //fltk::scheme(NULL);
-  FileIcon::load_system_icons();
-
-#if !SIMPLE_IMPL
-  Window	*window;// Main window
-  Button	*button;// Buttons
-  FileIcon	*icon;	// New file icon
-
-  fc = new FileChooser(".", "*", FileChooser::SINGLE, "FileChooser Test");
-  fc->callback(fc_callback);
-
-  // Register the PS and PDF image types...
-  SharedImage::add_handler(pdf_check);
-  SharedImage::add_handler(ps_check);
-
-  // Make the main window...
-  window = new Window(400, 200, "File Chooser Test");
-  window->begin();
-
-  filter = new Input(50, 10, 315, 25, "Filter:");
-  if (argc > 1)
-    filter->value(argv[1]);
-  else
-    filter->value("PDF Files (*.pdf)\t"
-                  "PostScript Files (*.ps)\t"
-		  "Image Files (*.{bmp,gif,jpg,png})\t"
-		  "C/C++ Source Files (*.{c,C,cc,cpp,cxx,h,H})");
-
-  button = new Button(365, 10, 25, 25);
-  button->labelcolor(fltk::YELLOW);
-  button->callback((Callback *)show_callback);
-
-#if TEST_FETCH_PNG
-  icon = new FileIcon("butt", FileIcon::DIRECTORY);
-  icon->load_image("./images/doxygen.png");
-#else
-  icon   = new FileIcon(*FileIcon::find(".", FileIcon::DIRECTORY));
-#endif
-  icon->value(button);
-
-  button = new LightButton(50, 45, 80, 25, "MULTI");
-  button->callback((Callback*)multi_callback);
-
-  button = new LightButton(140, 45, 90, 25, "CREATE");
-  button->callback((Callback*)create_callback);
-
-  button = new LightButton(240, 45, 115, 25, "DIRECTORY");
-  button->callback((Callback*)dir_callback);
-
-  files = new FileBrowser(50, 80, 340, 75, "Files:");
-  files->align(fltk::ALIGN_LEFT);
-
-  button = new Button(340, 165, 50, 25, "Close");
-  button->callback((Callback*)close_callback);
-  window->resizable(files);
-  window->end();
-  window->show(1, argv);
-  fltk::run();
-
-#else
-  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", 0);
-  fltk::message("File selected is : %s", name && strlen(name) ? name : "<no_selection>");
-#endif
-
-  return (0);
-}
-
-
-//
 // 'close_callback()' - Close the main window...
 //
 
@@ -349,6 +272,85 @@ show_callback(void)
 
     files->redraw();
   }
+}
+
+//
+// 'main()' - Create a file chooser and wait for a selection to be made.
+//
+#define SIMPLE_IMPL 0
+int			// O - Exit status
+main(int  argc,		// I - Number of command-line arguments
+     char *argv[])	// I - Command-line arguments
+{
+  // Make the file chooser...
+  //fltk::scheme(NULL);
+  FileIcon::load_system_icons();
+
+#if !SIMPLE_IMPL
+  Window	*window;// Main window
+  Button	*button;// Buttons
+  FileIcon	*icon;	// New file icon
+
+  fc = new FileChooser(".", "*", FileChooser::SINGLE, "FileChooser Test");
+  fc->callback(fc_callback);
+
+  // Register the PS and PDF image types...
+  SharedImage::add_handler(pdf_check);
+  SharedImage::add_handler(ps_check);
+
+  // Make the main window...
+  window = new Window(400, 200, "File Chooser Test");
+  window->begin();
+
+  filter = new Input(50, 10, 315, 25, "Filter:");
+  if (argc > 1)
+    filter->value(argv[1]);
+  else
+    filter->value(
+		  "Image Files (*.{bmp,gif,jpg,png})\t"
+		  "PDF Files (*.pdf)\t"
+                  "PostScript Files (*.ps)\t"
+		  "C/C++ Source Files (*.{c,C,cc,cpp,cxx,h,H})"
+		  );
+
+  button = new Button(365, 10, 25, 25);
+  button->labelcolor(fltk::YELLOW);
+  button->callback((Callback *)show_callback);
+
+#define TEST_FETCH_PNG 0
+#if TEST_FETCH_PNG
+  icon = new FileIcon("butt", FileIcon::DIRECTORY);
+  icon->load_image("./images/folder.png");
+#else
+  icon   = new FileIcon(*FileIcon::find(".", FileIcon::DIRECTORY));
+#endif
+  icon->value(button);
+
+  button = new LightButton(50, 45, 80, 25, "MULTI");
+  button->callback((Callback*)multi_callback);
+
+  button = new LightButton(140, 45, 90, 25, "CREATE");
+  button->callback((Callback*)create_callback);
+
+  button = new LightButton(240, 45, 115, 25, "DIRECTORY");
+  button->callback((Callback*)dir_callback);
+
+  files = new FileBrowser(50, 80, 340, 75, "Files:");
+  files->align(fltk::ALIGN_LEFT);
+
+  button = new Button(340, 165, 50, 25, "Close");
+  button->callback((Callback*)close_callback);
+  window->resizable(files);
+  window->end();
+  window->show(1, argv);
+  fltk::run();
+
+#else
+  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", 0);
+  fltk::message("File selected is : %s", name && strlen(name) ? name : "<no_selection>");
+#endif
+
+  return (0);
 }
 
 //

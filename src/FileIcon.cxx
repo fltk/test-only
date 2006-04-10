@@ -283,7 +283,8 @@ void FileIcon::_draw(const Rectangle& r) const {
     ic = fltk::YELLOW;
   else
     ic = fltk::GRAY90 /* light2 */; 
-  bool active = true; // i && i->active() ? true : false;
+  bool active = i && i->active() ? true : false;
+  c = ic;
   setcolor(ic);
   while (*d != END || prim)
     switch (*d)
@@ -304,11 +305,13 @@ void FileIcon::_draw(const Rectangle& r) const {
 		fillpath();
 		break;
 
-	    case OUTLINEPOLYGON : {
-		Color color = prim[1]==256 ? ic : (Color)prim[1];
-		if (!active) color = inactive(color);
-		fillstrokepath(color);
-		break;}
+	    case OUTLINEPOLYGON : 
+		c= prim[1]==-1 ? ic : 
+		    (Color)((((unsigned short *)prim)[1] << 16) | 
+	                	  ((unsigned short *)prim)[2]);
+		if (!active) c = inactive(c);
+		fillstrokepath(c);
+		break;
 	  }
 
 	  prim = NULL;
@@ -316,16 +319,15 @@ void FileIcon::_draw(const Rectangle& r) const {
 	  break;
 
       case COLOR :
-	  if (d[1] == 256)
+	  if (d[1] == -1)
 	    c = ic;
 	  else
-	    c = (Color)d[1];
-
+          c = (Color)((((unsigned short *)d)[1] << 16) | ((unsigned short *)d)[2]);
 	  if (!active)
 	    c = inactive(c);
 
 	  setcolor(c);
-	  d += 2;
+	  d += 3;
 	  break;
 
       case LINE :
@@ -337,7 +339,7 @@ void FileIcon::_draw(const Rectangle& r) const {
 
       case OUTLINEPOLYGON :
 	  prim = d;
-	  d += 2;
+	  d += 3;
 	  break;
 
       case VERTEX :
@@ -347,6 +349,31 @@ void FileIcon::_draw(const Rectangle& r) const {
 	  break;
     }
 
+  // If we still have an open primitive, close it...
+  if (prim)
+    switch (*prim)
+    {
+	case LINE :
+	    strokepath();
+	    break;
+
+	case CLOSEDLINE :
+	    closepath();
+	    strokepath();
+	    break;
+
+	case POLYGON :
+	    fillpath();
+	    break;
+
+	case OUTLINEPOLYGON : {
+	    Color color = prim[1]==-1 ? ic : 
+		(Color)((((unsigned short *)prim)[1] << 16) | 
+	                      ((unsigned short *)prim)[2]);
+	    if (!active) color = inactive(color);
+	    fillstrokepath(color);
+	    break;}
+    }
   // Restore the transform matrix
   pop_matrix();
 
