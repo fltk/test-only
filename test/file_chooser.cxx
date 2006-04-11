@@ -1,5 +1,5 @@
 //
-// "$Id$"
+// " $Id$"
 //
 // File chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -277,13 +277,15 @@ show_callback(void)
 //
 // 'main()' - Create a file chooser and wait for a selection to be made.
 //
-#define SIMPLE_IMPL 0
+#define SIMPLE_IMPL 1
 int			// O - Exit status
 main(int  argc,		// I - Number of command-line arguments
      char *argv[])	// I - Command-line arguments
 {
   // Make the file chooser...
   //fltk::scheme(NULL);
+
+  // if you decide not to link with images lib you must comment this:
   FileIcon::load_system_icons();
 
 #if !SIMPLE_IMPL

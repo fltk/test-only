@@ -345,7 +345,7 @@ private:
 FileItem::FileItem(const char * label, FileIcon * icon) : Item(label) {
     fileIcon_=icon;
     textsize(14);
-    icon->value(this,true);
+    if(icon) icon->value(this,true);
 }
 void FileItem::draw()  {
   if (fileIcon_) fileIcon_->value(this,true);
