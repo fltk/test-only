@@ -30,6 +30,8 @@
 #include <fltk/Group.h>
 #include <fltk/run.h>
 #include <fltk/string.h> // for newstring
+#include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
 #include <stdlib.h> // for free
 #include <config.h>
 
@@ -75,7 +77,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
 #else
   flags_	= TAB_TO_FOCUS;
 #endif
-  type_		= 0;
+  type_		= NORMAL;
   damage_	= DAMAGE_ALL;
   layout_damage_= LAYOUT_DAMAGE;
   when_		= WHEN_RELEASE;
@@ -1030,6 +1032,27 @@ bool Widget::focused() const {return this == fltk::focus();}
   the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
+//! sets the type of the current item and updates its defaultstyle glyph
+void Widget::type(int t) { 
+    type_ = t;
+}
+//! sets the VALUE to only one on the widget, other widgets in the same group get VALUE cleared
+void Widget::setonly() {
+  clear_changed();
+  if(flags() & VALUE) return;
+  set_flag(VALUE);
+  set_changed();
+  if (!parent()) return;
+  for (int i = parent()->children(); i--;) {
+    Widget* o = parent()->child(i);
+    if (o != this && o->type() == Widget::RADIO) {
+	if (o->flags(VALUE)) {
+	    o->clear_flag(VALUE);
+	    o->set_changed(); 
+	}
+    }
+  }
+}
 // images manip
 
 const Symbol* Widget::image(Flags flags) const	{ 

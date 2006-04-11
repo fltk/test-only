@@ -581,20 +581,20 @@ void Group::layout(const Rectangle& r, int layout_damage) {
       if (layout_damage & LAYOUT_W) {
 	if (X >= IR) X += dw;
 	else if (X > IX) {
-	  switch (resize_align_&12) {
+	  switch (resize_align_&(ALIGN_LEFT|ALIGN_RIGHT)) {
 	  case 0: X = X + dw/2; break; // ALIGN_CENTER
-	  case 4: break; // ALIGN_LEFT
-	  case 8: X = X+dw; break; // ALIGN_RIGHT
-	  case 12: X = X + dw * (X-IX)/(IR-IX); break; // both
+	  case ALIGN_LEFT: break; // ALIGN_LEFT
+	  case ALIGN_RIGHT: X = X+dw; break; // ALIGN_RIGHT
+	  case ALIGN_LEFT|ALIGN_RIGHT: X = X + dw * (X-IX)/(IR-IX); break; // both
 	  }
 	}
 	if (R >= IR) R += dw;
 	else if (R > IX) {
-	  switch (resize_align_&12) {
+	  switch (resize_align_&(ALIGN_LEFT|ALIGN_RIGHT)) {
 	  case 0: R = R + dw/2; break; // ALIGN_CENTER
-	  case 4: break; // ALIGN_LEFT
-	  case 8: R = R+dw; break; // ALIGN_RIGHT
-	  case 12: R = R + dw * (R-IX)/(IR-IX); // both
+	  case ALIGN_LEFT: break; // ALIGN_LEFT
+	  case ALIGN_RIGHT: R = R+dw; break; // ALIGN_RIGHT
+	  case ALIGN_LEFT|ALIGN_RIGHT: R = R + dw * (R-IX)/(IR-IX); // both
 	  }
 	}
 	if (R-X != o->w()) {flags |= LAYOUT_W; o->w(R-X);}
@@ -604,20 +604,20 @@ void Group::layout(const Rectangle& r, int layout_damage) {
       if (layout_damage & LAYOUT_H) {
 	if (Y >= IB) Y += dh;
 	else if (Y > IY) {
-	  switch (resize_align_&3) {
+	  switch (resize_align_&(ALIGN_TOP|ALIGN_BOTTOM)) {
 	  case 0: Y = Y + dh/2; break; // ALIGN_CENTER
-	  case 1: break; // ALIGN_TOP
-	  case 2: Y = Y+dh; break; // ALIGN_BOTTOM
-	  case 3: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
+	  case ALIGN_TOP: break; // ALIGN_TOP
+	  case ALIGN_BOTTOM: Y = Y+dh; break; // ALIGN_BOTTOM
+	  case ALIGN_TOP|ALIGN_BOTTOM: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
 	  }
 	}
 	if (B >= IB) B += dh;
 	else if (B > IY) {
-	  switch (resize_align_&3) {
+	  switch (resize_align_&(ALIGN_TOP|ALIGN_BOTTOM)) {
 	  case 0: B = B + dh/2; break; // ALIGN_CENTER
-	  case 1: break; // ALIGN_TOP
-	  case 2: B = B+dh; break; // ALIGN_BOTTOM
-	  case 3: B = B + dh*(B-IY)/(IB-IY); break; //both;
+	  case ALIGN_TOP: break; // ALIGN_TOP
+	  case ALIGN_BOTTOM: B = B+dh; break; // ALIGN_BOTTOM
+	  case ALIGN_TOP|ALIGN_BOTTOM: B = B + dh*(B-IY)/(IB-IY); break; //both;
 	  }
 	}
 	if (B-Y != o->h()) {flags |= LAYOUT_H; o->h(B-Y);}

@@ -29,13 +29,14 @@
 
 #include "Item.h"
 
+/* obsolete see Item.h
 namespace fltk {
 
 class RadioItem : public Item {
 public:
   RadioItem(const char* l = 0) : Item(l) {type(RADIO);}
 };
-
 }
+*/
 
 #endif

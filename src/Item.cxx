@@ -22,8 +22,10 @@
 //
 
 #include <fltk/Item.h>
+#include <fltk/ItemGroup.h>
 #include <fltk/Box.h>
 #include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
 #include <fltk/draw.h>
 #include <string.h>
 
@@ -61,12 +63,23 @@ Item::Item(const Symbol* img, const char* l, int custom_alignment)
   if (custom_alignment!=-1)  align(custom_alignment);
 }
 
+void Item::type(int t) { 
+    Widget::type(t);
+    if (t!=Widget::RADIO && t!=Widget::TOGGLE) return;
+    if (t==RADIO )
+	 default_style->glyph_= RadioButton::default_style->glyph_; 
+    else 
+    	default_style->glyph_ = CheckButton::default_style->glyph_;
+    this->style(default_style);
+    set_flag(ALIGN_LEFT|ALIGN_INSIDE);
+}
+
 void Item::init() {
   // we need to defer setting the glyph to here because C++ has no way
   // to make sure the check button style is constructed before this style:
   if (!default_style->glyph_)
     default_style->glyph_ = CheckButton::default_style->glyph_;
-  style(default_style);
+  this->style(default_style);
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
@@ -78,7 +91,7 @@ Item::Item(const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)
   init();
 }
 
-Item::Item(MenuItemType t, const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
+Item::Item(WidgetVisualType t, const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
   shortcut(s);
   callback(cb);
   user_data(ud);
@@ -155,6 +168,7 @@ void Item::draw() {
     int gw = int(textsize())+2;
     Rectangle lr(r);
     lr.move_x(gw+3);
+    type(type()); // don't now why but glyph_ seems to be forced somewhere
     draw_label(lr, flags());
     draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw));
   } else {
@@ -187,6 +201,7 @@ void Item::layout() {
 /** Returns 0 always. Items do not accept \e any events. Any results
     of clicking on them is handled by the parent Menu or Browser. */
 int Item::handle(int) {return 0;}
+
 
 ////////////////////////////////////////////////////////////////
 

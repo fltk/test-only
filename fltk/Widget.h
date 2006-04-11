@@ -50,7 +50,6 @@ class FL_API Widget : public Rectangle {
   Widget(const Widget &);
 
 public:
-
   Widget(int,int,int,int,const char* =0);
   virtual ~Widget();
 
@@ -75,8 +74,16 @@ public:
     GROUP_TYPE		= 0xe0,
     WINDOW_TYPE		= 0xf0
   };
-  uchar	type() const		{ return type_; }
-  void	type(uchar t)		{ type_ = t; }
+
+  enum WidgetVisualType { // generic values so NOT redundant anymore with Button enum
+    NORMAL = 0,		  // as this notion are already shared by Item and Button it makes sense to generalize it
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2,
+    HIDDEN
+  };
+
+  int   type() const		{ return type_; }
+  void	type(int t); 
   bool	is_group() const	{ return type_ >= GROUP_TYPE; }
   bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
 
@@ -141,7 +148,7 @@ public:
   Flags set_flag(int c)		{ return flags_ |= c; }
   Flags clear_flag(int c)	{ return flags_ &= ~c; }
   Flags invert_flag(int c)	{ return flags_ ^= c; }
-
+  void  setonly(); // any widget can have use of this if it has a parent
   Flags align() const		{ return flags_&ALIGN_MASK; }
   void	align(unsigned a)	{ flags_ = (flags_ & (~ALIGN_MASK)) | a; }
   bool	visible() const		{ return !(flags_&INVISIBLE); }
@@ -295,7 +302,7 @@ private:
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
   Group*		parent_;
-  uchar			type_;
+  int 			type_;
   uchar			damage_;
   uchar			layout_damage_;
   uchar			when_;

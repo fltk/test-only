@@ -322,7 +322,6 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     if (damage != DAMAGE_CHILD || i==selected || i==drawn_selected) {
 
       Flags flags = item->flags();
-      // fabien: obsolete: if (flags&NOTACTIVE) flags |= INACTIVE;
       if (i == selected && !(flags & (OUTPUT|INACTIVE))) {
 	flags |= (SELECTED|HIGHLIGHT);
       } else {
@@ -1057,7 +1056,10 @@ int Menu::popup(const Rectangle& rectangle, const char* title, bool menubar)
 {
   Widget *selected = try_popup(rectangle, title, menubar);
   if (selected) {
-    if (checkmark(selected)) selected->invert_flag(VALUE);
+    if (selected->type()==Widget::TOGGLE)
+      selected->invert_flag(VALUE);
+    else if (selected->type()==Widget::RADIO)
+      selected->setonly();
     execute(selected);
     return 1;
   }

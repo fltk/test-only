@@ -41,7 +41,7 @@ Widget* StringList::child(const Menu* group, const int* indexes, int level) {
     Group::current(0);
     widget = new Item();
   }
-  widget->type(0);
+  widget->type(Widget::NORMAL);
   widget->label(array[n]);
   widget->w(0);
   return widget;

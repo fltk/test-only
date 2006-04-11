@@ -98,7 +98,6 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
-      // fabien : that's why NOTACTIVE has been removed : if (flags()&(INACTIVE|NOTACTIVE)) o->set_flag(INACTIVE);
       r.move_x(2);
       push_clip(r);
       push_matrix();

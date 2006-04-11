@@ -34,26 +34,20 @@ namespace fltk {
 
 class FL_API Item : public Widget {
 public:
-  enum MenuItemType { // values for type(), should match Button
-    NORMAL = 0,
-    TOGGLE = RESERVED_TYPE+1,
-    RADIO  = RESERVED_TYPE+2
-  };
   
   void draw();
   void layout();
   int handle(int);
-  
-
+  void type(int);
+  int type() const {return Widget::type();}
   //!default  constructor for normal item type decl
   Item(const char* label=0,int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0);  
   
   //! constructor for custom item type decl
-  Item(MenuItemType t,const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);  
+  Item(WidgetVisualType t,const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0);  
 
   // constructor for adding a tree like item with a name, an image, and eventuallly an alignement. 
   Item(const Symbol* img, const char* label, int custom_alignment=-1);
-
 
   static NamedStyle* default_style;
   static void set_style(const Style*, bool menubar);
@@ -73,6 +67,16 @@ public:
 
 };
 
+//! Radio item declarations facility
+class FL_API ItemRadio : public Item {
+public:
+  ItemRadio(const char* label = 0) : Item(label) {type(Item::TOGGLE);}
+  ItemRadio(const char* label,int shortcut,Callback *callback,void *user_data=0, int flags=0)
+      : Item(label,shortcut,callback,user_data, flags) {type(Item::TOGGLE);}
+
+};
+// compatibility definition : is it used ?
+typedef ItemRadio RadioItem;
 }
 
 #endif
