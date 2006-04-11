@@ -93,7 +93,7 @@ native-dist:
 etags: 
 	etags fltk/*.h src/*.cxx src/*.c images/*.cxx fluid/*.cxx fluid/*.h test/*.cxx test/*.h Makefile */Makefile
 dos2unix: 
-	dos2unix fltk/*.h src/*.cxx src/*.c images/*.cxx fluid/*.cxx fluid/*.h test/*.cxx test/*.h 
+	dos2unix fltk/*.h src/*.cxx src/win32/*.cxx src/*.c images/*.cxx fluid/*.cxx fluid/*.h test/*.cxx test/*.h 
 #
 # End of "$Id$".
 #

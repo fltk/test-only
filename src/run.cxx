@@ -974,7 +974,7 @@ void fltk::modal(Widget* widget, bool grab) {
 #endif
     // because we "pushed back" the PUSH, make it think no buttons are down:
     e_state &= 0xffffff;
-    e_keysym = 0;
+    //e_keysym = 0;
   }
 
   // start the new grab:

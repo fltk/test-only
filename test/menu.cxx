@@ -31,6 +31,7 @@ void callback(Widget* w, void*) {
 	 menu->label() ? menu->label() : "menu bar",
 	 item ? item->label() ? item->label() : "unnamed" : "none");
   if (item) item->do_callback();
+  printf("event_button = %d\n", fltk::event_button());
 }
 
 const char* const strings[] = {

@@ -38,6 +38,7 @@
 #include <fltk/utf.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <limits.h>
 #include <time.h>
