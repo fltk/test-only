@@ -1427,8 +1427,9 @@ bool Window::resize(int X, int Y, int W, int H) {
     }
     */
   }
-  if (shown() && resize_from_program ) {
-    SetWindowPos(i->xid, 0, X, Y, W, H, flags);
+  if (shown() && !resize_from_program ) { 
+      // must be only used by sytem to prevent flickering effect when resize
+      SetWindowPos(i->xid, 0, X, Y, W, H, flags);
   }
   return true;
 }
