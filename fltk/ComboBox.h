@@ -103,7 +103,7 @@ private:
 	ComboBox *combo_;
   };  
   ComboInput *input_;
-#ifdef _WIN32
+#if defined (_WIN32) || (defined( __GNUC__ ) && __GNUC__ < 3) 
  public:
 #endif
   static void input_callback_(Widget*,void*);
