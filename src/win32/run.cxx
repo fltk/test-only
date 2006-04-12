@@ -1733,9 +1733,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     break;
 
-#if 0
+#if 1
     // This was here before the WM_WINDOWPOSCHANGING case took care of
     // it all.
+    // fabien : No this is code is still useful since resize  bug in Win32 STR #1180 and
+    // and STR #1237 flickering correction otherwise you loose mouse click event in the children
+    // if no system move or resize is made
   case WM_MOVE:
     if (!window || window->parent()) break; // ignore child windows
 # if 1
