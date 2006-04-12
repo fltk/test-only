@@ -78,7 +78,7 @@ void box_cb(Widget* o, void*) {
 }
 
 void type_cb(Widget*, void* v) {
-  thescroll->type(int(v));
+  thescroll->type(int((long)v));
   thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 
@@ -95,8 +95,8 @@ void load_menu_choice (Choice* c)  {
 }
 
 void align_cb(Widget*, void* v) {
-  thescroll->scrollbar_align(int(v));
-  //thescroll->scrollbar.align(int(v)); // fltk1 version
+  thescroll->scrollbar_align(int((long)v));
+  //thescroll->scrollbar.align(int((long)v)); // fltk1 version
   thescroll->relayout(); // changed from fltk1 setting of redraw()
 }
 

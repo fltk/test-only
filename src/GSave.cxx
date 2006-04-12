@@ -81,7 +81,7 @@ GSave::GSave() {
 }
 
 GSave::~GSave() {
-  unsigned v = (unsigned)data[3];
+  unsigned v = (unsigned) (unsigned long)data[3];
   fl_clip_w = v >> 16;
   fl_clip_h = v & 0xffff;
 #if USE_X11

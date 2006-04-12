@@ -73,7 +73,7 @@ void Drawing::draw() {
 }
 
 const char* generator(Widget*, void* data) {
-  unsigned ucs = (unsigned)data;
+  unsigned ucs = (unsigned)(unsigned long)data;
   static char buffer[20];
   sprintf(buffer,"U+%04x",ucs);
   return buffer;
