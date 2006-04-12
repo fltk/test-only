@@ -27,9 +27,9 @@ void test_box::draw() {
   buf[3] = char(sliders[7]->value());
   buf[4] = 0;
   fl_line_style(
-    (int)(choice[0]->mvalue()->user_data()) +
-    (int)(choice[1]->mvalue()->user_data()) +
-    (int)(choice[2]->mvalue()->user_data()),
+    (int)(choice[0]->mvalue()->argument()) +
+    (int)(choice[1]->mvalue()->argument()) +
+    (int)(choice[2]->mvalue()->argument()),
     (int)(sliders[3]->value()),
     buf);
   fl_rect(10,10,w()-20,h()-20);

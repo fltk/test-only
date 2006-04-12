@@ -106,12 +106,12 @@ int main(int argc, char** argv) {
     for (int i = 0; i < window->children(); i++) {
       fltk::Widget* b = window->child(i);
       if (b->callback() == (fltk::Callback*)key_cb) {
-	unsigned i = (unsigned)b->user_data();
+	unsigned i = (unsigned)b->argument();
 	if (!i) i = tolower(b->label()[0]);
 	((fltk::Button*)b)->value(fltk::event_key_state(i));
 	if (i == fltk::event_key()) ((fltk::Button*)b)->take_focus();
       } else if (b->callback() == (fltk::Callback*)shift_cb) {
-	unsigned i = (unsigned)b->user_data();
+	unsigned i = (unsigned) b->argument();
 	((fltk::Button*)b)->value(fltk::event_state(i));
       }
     }

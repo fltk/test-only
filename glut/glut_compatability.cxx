@@ -273,7 +273,7 @@ static Menu* menus[MAXMENUS+1];
 static void item_cb(Widget* w, long v) {
     ItemGroup* m = (ItemGroup* )w;
     Item* i = (Item*)m->get_item();
-    int num_item= (int) (long) i->user_data();
+    int num_item= (int) i->argument();
     ( (void(*)(int)) v) (num_item);
 }
 

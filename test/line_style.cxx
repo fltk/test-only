@@ -29,9 +29,9 @@ void test_box::draw() {
   buf[3] = char(sliders[7]->value());
   buf[4] = 0;
   line_style(
-    (int)(choice[0]->get_item()->user_data()) +
-    (int)(choice[1]->get_item()->user_data()) +
-    (int)(choice[2]->get_item()->user_data()),
+    (int)(choice[0]->get_item()->argument()) +
+    (int)(choice[1]->get_item()->argument()) +
+    (int)(choice[2]->get_item()->argument()),
     (int)(sliders[3]->value()),
     buf);
   strokerect(Rectangle(10,10,w()-20,h()-20));

@@ -1626,7 +1626,7 @@ public:
       case fltk::DRAG: {
         if (ox==-1) break;
           Browser *w = (Browser*)(parent());
-          int col = (int)(user_data());
+          int col = (int) argument();
           if (left)
             w->set_column_start(col, fltk::event_x_root()-ox);
           else
