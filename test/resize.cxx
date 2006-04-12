@@ -76,6 +76,7 @@ er should not go into fits echoing resizes back and forth!");
     }
     o->end();
   }
+  //w->resize(600, 600);
   w->show(argc, argv);
   return  fltk::run();
 }

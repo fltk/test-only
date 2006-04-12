@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
 
   box0.begin();
   fltk::Button but(20, 20, 100, 30, "Button");
+  but.set_flag(fltk::ALIGN_CLIP);
   box0.end();
 
   fltk::Window w1(150,0,150,150,"1");
