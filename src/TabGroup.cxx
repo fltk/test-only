@@ -453,12 +453,12 @@ void TabGroup::set_draw_outline( bool draw_outline )
 void TabGroup::draw_tab_background()
 {
   draw_background();
-  if ( _drawOutline ) {
+  if ((box()!= NO_BOX) || _drawOutline ) {
     int x1 = 0;
     int th = tab_height();
     int y1 = th >= 0 ? th : 0;
     int x2 = w()-1;
-    int y2 = h()-1 + ( th<0 ? th : 0 );
+    int y2 = h()-1+ ( th<0 ? th : 0 );
     if ( w() > 3 ) {
       setcolor( Color(GRAY95) );
       drawline( x1, y1, x1, y2 );

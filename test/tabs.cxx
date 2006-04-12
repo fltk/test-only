@@ -21,6 +21,9 @@ int main (int argc, char **argv) {
     w = o;
     o->begin();
      {fltk::TabGroup* o = new fltk::TabGroup(10, 10, 300, 200);
+     // uncomment this remove the border
+     //o->box(fltk::NO_BOX);
+
       o->begin();
        {fltk::Group* o = new fltk::Group(0, 20, 300, 180, "Label1");
         o->begin();
