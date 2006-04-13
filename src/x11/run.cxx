@@ -1561,6 +1561,9 @@ bool fltk::handle()
 	if (event==KEY) extra_state |= META; else extra_state &= ~META;
 	goto GET_STATE;
 
+#if defined(__linux) || defined(__FreeBSD__)
+      case 0xfe03: // XK_ISO_Level3_Shift (AltGr on my portuguese keyboard)
+#endif
       case 0xff7e: // XK_Mode_switch
 	keysym = RightAltKey;
 	if (event==KEY) extra_state |= ALT; else extra_state &= ~ALT;

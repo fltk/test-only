@@ -27,6 +27,10 @@ bool fltk::event_key_state(unsigned keysym) {
     keycode = XKeysymToKeycode(xdisplay, 0xff20); // try XK_Multi_key
     if (keycode) goto DONE;
   } else if (keysym == RightAltKey) {
+#if defined(__linux) || defined(__FreeBSD__)
+    keycode = XKeysymToKeycode(xdisplay, 0xfe03); // AltGr european iso
+    if (keycode) goto DONE;
+#endif
     keycode = XKeysymToKeycode(xdisplay, 0xff7e); // try XK_Mode_switch
     if (keycode) goto DONE;
   }    
