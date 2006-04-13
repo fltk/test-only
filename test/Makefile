@@ -117,6 +117,7 @@ TARGETS = \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
+	button$(EXEEXT) \
 	buttons$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cube$(EXEEXT) \
@@ -215,6 +216,11 @@ $(TARGETS):	../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX)
 #
 # Other programs needing special "help"...
 #
+
+button$(EXEEXT): button.o
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 cairo$(EXEEXT): cairo.o
 	echo Linking $@...

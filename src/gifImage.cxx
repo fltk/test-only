@@ -68,7 +68,7 @@ bool gifImage::fetch() {
     char b[6];
     if (!GifFile || fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      fclose(GifFile);
+      if (GifFile) fclose(GifFile);
       return false;
     }
   }
@@ -390,7 +390,7 @@ void gifImage::_measure(int &W, int &H) const
     char b[6];
     if (!GifFile || fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      fclose(GifFile);
+      if (GifFile) fclose(GifFile);
       const_cast<gifImage*>(this)->setsize(0,0);
       return;
     }

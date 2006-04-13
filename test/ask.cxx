@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
 
 // this is a test to make sure automatic destructors work.  Pop up
 // the question dialog several times and make sure it don't crash.
-
   Fl_Window window(200, 55);
   Fl_Return_Button b(20, 10, 160, 35, buffer); b.callback(rename_me);
   window.add(b);
