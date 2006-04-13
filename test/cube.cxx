@@ -38,17 +38,12 @@
 using namespace fltk;
 
 #if !HAVE_GL
-class cube_box : public Box {
-public:	
-  double lasttime;
-  int wire;
-  double size;
-  double speed;
-  cube_box(int x,int y,int w,int h,const char *l=0)
-    :Box(DOWN_BOX,x,y,w,h,l){
-      label("This demo does\nnot work without GL");
-  }
-};
+#include <fltk/ask.h>
+
+int main(int, char**) {
+  fltk::alert("This demo does not work without OpenGL");
+  return 1;
+}
 #else
 #include <fltk/GlWindow.h>
 #include <fltk/gl.h>
@@ -123,8 +118,6 @@ void cube_box::draw() {
   gldrawtext(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
   glEnable(GL_DEPTH_TEST);
 }
-
-#endif
 
 Window *form;
 Slider *speed, *size;
@@ -201,6 +194,8 @@ int main(int argc, char **argv) {
   fltk::run();
   return 0;
 }
+
+#endif
 
 //
 // End of "$Id$".
