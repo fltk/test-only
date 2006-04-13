@@ -685,11 +685,13 @@ static bool backward(MenuState& p, int menu) {
 
 static bool track_mouse;
 
+//#include <stdio.h>
+
 int MWindow::handle(int event) {
   MenuState &p = *menustate;
   Widget* widget = 0;
+  //printf("event %08x  key %08x\n", event, event_key());
   switch (event) {
-
   case KEY:
     track_mouse = event_state(ANY_BUTTON);
     switch (event_key()) {
@@ -762,7 +764,7 @@ int MWindow::handle(int event) {
       lastkey = event_text()[0];
       if (nextitem >= 0) {
 	setitem(p, menu, nextitem);
-	return 1;
+	goto EXECUTE; // now menu items autoexecute see STR#980	return 1;
       }
     }}
     return 1; // always eat all the keystrokes
