@@ -184,6 +184,13 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
     if (flags & ALIGN_CLIP) push_clip(r);
 
     Rectangle ir(r, w, h, flags);
+    // avoid the img to draw outside its box if a border is drawn
+    if (box()!=NO_BOX) { 
+	if (ir.x()<box_dx(box())) ir.x( box_dx(box()) ); // don't overwrite the left border
+	if (ir.y()<box_dy(box())) ir.y( box_dy(box()) ); // don't overwrite the top border
+	if (ir.w()>this->w()-box_dw(box())) ir.w(this->w()-box_dw(box())-box_dx(box())/2); // dont go outside horizontally
+	if (ir.h()>this->h()-box_dh(box())) ir.h(this->h()-box_dh(box())-box_dy(box())/2); // dont go outside vertically
+    } // after that
     img->draw(ir);
 
     // figure out the rectangle that remains for text:

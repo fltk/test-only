@@ -95,84 +95,84 @@ LINK32=link.exe
 
 SOURCE=..\..\images\FileIcon2.cxx
 DEP_CPP_FILEI=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\symbol.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\Fl_Guess_Image.cxx
 DEP_CPP_FL_GU=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\win32.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\fl_jpeg.cxx
 DEP_CPP_FL_JP=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\images\libjpeg\jconfig.h"\
-	"..\..\images\libjpeg\jerror.h"\
-	"..\..\images\libjpeg\jmorecfg.h"\
-	"..\..\images\libjpeg\jpegint.h"\
 	"..\..\images\libjpeg\jpeglib.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"images\libjpeg\jconfig.h"\
+	{$(INCLUDE)}"images\libjpeg\jerror.h"\
+	{$(INCLUDE)}"images\libjpeg\jmorecfg.h"\
+	{$(INCLUDE)}"images\libjpeg\jpegint.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\fl_png.cxx
 DEP_CPP_FL_PN=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\images\libpng\png.h"\
-	"..\..\images\libpng\pngconf.h"\
-	"..\..\images\zlib\zconf.h"\
 	"..\..\images\zlib\zlib.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"images\libpng\pngconf.h"\
+	{$(INCLUDE)}"images\zlib\zconf.h"\
 	
 NODEP_CPP_FL_PN=\
 	"..\..\images\libpng\alloc.h"\
@@ -183,82 +183,82 @@ NODEP_CPP_FL_PN=\
 SOURCE=..\..\images\HelpDialog.cxx
 DEP_CPP_HELPD=\
 	"..\..\fltk\ask.h"\
-	"..\..\fltk\button.h"\
-	"..\..\fltk\color.h"\
 	"..\..\fltk\DoubleBufferWindow.h"\
-	"..\..\fltk\draw.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\group.h"\
 	"..\..\fltk\HelpDialog.h"\
 	"..\..\fltk\HelpView.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\input.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
-	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\sharedimage.h"\
-	"..\..\fltk\slider.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\style.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\fltk\valuator.h"\
-	"..\..\fltk\widget.h"\
-	"..\..\fltk\window.h"\
+	{$(INCLUDE)}"fltk\button.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\scrollbar.h"\
+	{$(INCLUDE)}"fltk\slider.h"\
+	{$(INCLUDE)}"fltk\style.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\valuator.h"\
+	{$(INCLUDE)}"fltk\widget.h"\
+	{$(INCLUDE)}"fltk\window.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\images_core.cxx
 DEP_CPP_IMAGE=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\pnmImage.cxx
 DEP_CPP_PNMIM=\
-	"..\..\fltk\color.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\pnmImage.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\xpmFileImage.cxx
 DEP_CPP_XPMFI=\
-	"..\..\fltk\color.h"\
-	"..\..\fltk\draw.h"\
 	"..\..\fltk\events.h"\
-	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\flags.h"\
-	"..\..\fltk\image.h"\
-	"..\..\fltk\mac.h"\
-	"..\..\fltk\PixelType.h"\
-	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
-	"..\..\fltk\symbol.h"\
-	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\fltk\xpmimage.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\win32.h"\
 	
 # End Source File
 # End Target

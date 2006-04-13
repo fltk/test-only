@@ -92,6 +92,7 @@ ComboWindow::handle(int event) {
   case MOVE:
   case DRAG:
   case RELEASE:
+    return browser->handle(event);
   case KEY:
     return browser->handle(event);
   }
@@ -129,10 +130,14 @@ ComboBrowser::handle(int event) {
     fltk::focus(item());
   }
 
-  if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
+  if ((event == KEY) &&  event_key()!=LeftAltKey && (event_state() | fltk::ALT) ) {
+      return Browser::handle(event); // delegate to the Menu handler
+  } else if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
     if( (event_key()!=EscapeKey) &&
 	(event_key()!=UpKey) &&
 	(event_key()!=DownKey) &&
+	(event_key()!=LeftAltKey) && // give a chance to the browser to handle the menu shortcuts
+	(event_key()!=RightAltKey) &&
 	(event_key()!=ReturnKey && !item()) )
       return ibinput->handle(KEY);
   }
@@ -246,16 +251,16 @@ InputBrowser::handle(int e) {
   if (e == FOCUS) fltk::focus(m_input);
 
   // Scroll using arrow keys
-  if ((e == KEY) && (event_key() == UpKey || event_key() == DownKey)) {
+  if ((e == KEY) && (event_key() == UpKey || event_key() == DownKey )) {
     if (!win || !win->visible())
 	popup();
 //    else
     return win->handle(e);
-
+  } else if ((e == KEY) &&  (event_state() | fltk::ALT) ) {
+      return list ? list->handle(e) : Menu::handle(e); // delegate to the Menu handler
   // all other keys should be sent to Input
   } else if ((event_inside(m_input) || e == KEY)
-    && !(type()&NONEDITABLE) && !pushed() && e != MOUSEWHEEL)
-  {
+    && !(type()&NONEDITABLE) && !pushed() && e != MOUSEWHEEL) {
     if (e == PUSH) { fltk::pushed(m_input); fltk::focus(m_input); }
     return m_input.handle(e); // if this doesn't work, try send(e)
   }

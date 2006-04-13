@@ -29,7 +29,9 @@
 */
 
 #include <fltk/TiledImage.h>
+#include <fltk/SharedImage.h>
 #include <fltk/draw.h>
+
 using namespace fltk;
 
 /*! \fn TiledImage::TiledImage(Symbol*)
@@ -37,6 +39,10 @@ using namespace fltk;
   A pointer to the image must be provided to the constructor. If it
   is null then the TiledImage draws nothing.
 */
+
+TiledImage::TiledImage(const char * name): Symbol(0) {
+    if (name) image(SharedImage::get(name));
+}
 
 /*! Returns the maximum of the passed size and the size of the image.
   This makes the alignment code center the tiled image if desired.

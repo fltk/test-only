@@ -763,7 +763,9 @@ fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
   } else if (flags & ALIGN_RIGHT) {
     x_ = r.r()-w;
   } else {
-    x_ = r.x()+((r.w()-w)>>1);
+    x_ = r.x()+((r.w()-w)>>1); 
+    // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
+    // if (x_<0) x_=0; 
   }
   if (flags & ALIGN_TOP) {
     if (flags & ALIGN_BOTTOM && h > r.h()) y_ = r.b()-h;
@@ -771,7 +773,9 @@ fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
   } else if (flags & ALIGN_BOTTOM) {
     y_ = r.b()-h;
   } else {
-    y_ = r.y()+((r.h()-h)>>1);
+    y_ = r.y()+((r.h()-h)>>1); 
+    // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
+    // if (y_<0) y_=0; 
   }
   w_ = w;
   h_ = h;

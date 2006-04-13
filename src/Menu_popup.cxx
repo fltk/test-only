@@ -810,19 +810,30 @@ int MWindow::handle(int event) {
     }
     if (setitem(p, menu,item)) return 1;
     if (item < 0) return 1;
-    if (event == PUSH) {
-      // redraw checkboxes so they preview the state they will be in:
-      Widget* widget = p.menus[menu]->get_widget(item);
-      if (checkmark(widget)) p.menus[menu]->redraw(DAMAGE_CHILD);
-    } else if (p.level || !p.hmenubar) {
-      // item didn't change on drag/move, check for autoscroll:
-      if (event_y_root() <= MENUAREA.y()) {
-	if (!p.menus[menu]->autoscroll(item)) backward(p, p.level);
-      } else if (event_y_root() >= MENUAREA.b()-1) {
+	    if (event == PUSH) {
+		// redraw checkboxes so they preview the state they will be in:
+		Widget* widget = p.menus[menu]->get_widget(item);
+		if (checkmark(widget)) p.menus[menu]->redraw(DAMAGE_CHILD);
+	    } else if (p.level || !p.hmenubar) {
+		// item didn't change on drag/move, check for autoscroll:
+		if (event_y_root() <= MENUAREA.y()) {
+		    if (!p.menus[menu]->autoscroll(item)) backward(p, p.level);
+		} else if (event_y_root() >= MENUAREA.b()-1) {
 	if (!p.menus[menu]->autoscroll(item)) forward(p, p.level);
       }
     }
-    return 1;}
+    if (event==DRAG){
+	Widget* w= p.menus[menu]->get_widget(item);
+	if (w && w->takesevents() ) {
+	    //w->resize(p.menus[menu]->w(),w->h());
+	    int ret = w->handle(event);
+	    if (ret) {
+		p.menus[menu]->redraw(DAMAGE_CHILD);
+		return ret;
+	    }
+	}
+    }
+return 1;}
 
   case RELEASE:
     pushed_ = 0;
