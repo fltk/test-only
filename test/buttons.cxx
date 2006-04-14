@@ -67,8 +67,13 @@ const int X0 = B;
 const int X1 = (B+W+B);
 
 int main(int argc, char ** argv) {
-  Window window(X1+W+B, B+6*(H+B));
+  Window window(X1+W+B, B+7*(H+B));
   window.begin();
+  
+  xpmImage fold1(folder_small);
+  xpmImage fold2(folder_small2);
+  xpmImage fold3(folder_small3);
+
 
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
@@ -95,20 +100,30 @@ int main(int argc, char ** argv) {
   new CheckButton(X1, Y, W, H, "CheckButton");
 
   Y += H+B;
-  Button * b = new HighlightButton(X0, Y, W, H, "Everything !");
-  b->image(new xpmImage(folder_small2), fltk::NO_FLAGS);
+  
+  Button * b = new Button(X0, Y, W, H, "push/release img");
+  b->image(&fold2, 0, 0, &fold3); // use default & pushed img
+
+  b = new Button(X1, Y, W, H, "push/rel noborder");
+  b->box(NO_BOX);
+  b->image(&fold2, 0, 0, &fold3); // use default & pushed img
+  
+  Y += H+B;
+
+  b = new HighlightButton(X0, Y, W, H, "Everything !");
+  b->image(&fold2,0 ,0, &fold3); // demonstrate the different ways to affect images
   // to remove the  belowmouse changing image comment this line:
-  b->image(new xpmImage(folder_small3), fltk::BELOWMOUSE);
-  b->image(new xpmImage(folder_small), fltk::PUSHED);
+  b->image(fold1, fltk::BELOWMOUSE);
   b->callback(cb_active_butt);
 
   abutton = b = new Button(X1, Y, W, H, "Inactive");
-  b->image(new xpmImage(folder_small3), fltk::NO_FLAGS);
-  b->image(new xpmImage(folder_small2), fltk::INACTIVE);
+  b->image(&fold3,&fold2);
   b->activate(0);  
+
   window.resizable(window);
   window.end();
   window.show(argc,argv);
+  
   // Default Style handling for changing the scheme of all widget at once
   Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
   Button::default_style->color_ = 256-36;

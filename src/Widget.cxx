@@ -1055,6 +1055,14 @@ void Widget::setonly() {
 }
 // images manip
 
+void	Widget::image(const Symbol* noflags, const Symbol* disabled, 
+	      const Symbol* belowmouse, const Symbol* pushedopen) {
+    image(noflags);
+    image(disabled,   fltk::INACTIVE);
+    image(belowmouse, fltk::BELOWMOUSE);
+    image(pushedopen, fltk::PUSHED);
+
+}
 const Symbol* Widget::image(Flags flags) const	{ 
     if (flags & fltk::INACTIVE) // reads the image for pushed button or open
 	return image2_;

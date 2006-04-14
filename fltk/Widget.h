@@ -105,6 +105,8 @@ public:
   //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
   void	image(const Symbol& a,Flags flags=NO_FLAGS) {  image(&a, flags); }
   //! get the image relative to a particular event/state 
+  //!  convenient way to set several images at once
+  void	image(const Symbol* noflags, const Symbol* disabled, const Symbol* belowmouse=0, const Symbol* pushedopen=0);
   const Symbol * context_image() const; // return the context dependant image
 
 
