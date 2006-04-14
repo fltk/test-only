@@ -1031,12 +1031,6 @@ FileChooser::update_preview()
       }
       image->setsize(w,h);
       previewBox->image((Image *)image);
-/* FIXME
-      oldimage = (SharedImage *)image->copy(w, h);
-      previewBox->image((Image *)oldimage);
-      image->remove();
-*/
-
     } else {
       previewBox->image((Image *)image);
     }
@@ -1163,15 +1157,16 @@ FileChooser::value(const char *filename)
   fileList->deselect(0);
   fileList->redraw();
 
-  for (i = 1; i <= fcount; i ++)
+  for (i = 0; i < fcount; i ++)
 #if defined(WIN32) || defined(__EMX__)
-    if (strcasecmp(fileList->child(i-1)->label(), slash) == 0) {
+    if (strcasecmp(fileList->child(i)->label(), slash) == 0) {
 #else
-    if (strcmp(fileList->child(i-1)->label(), slash) == 0) {
+    if (strcmp(fileList->child(i)->label(), slash) == 0) {
 #endif // WIN32 || __EMX__
 //      printf("Selecting line %d...\n", i);
       fileList->topline(i);
       fileList->select(i);
+      update_preview();
       okButton->activate();
       break;
     }
