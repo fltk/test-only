@@ -1147,7 +1147,7 @@ FileChooser::value(const char *filename)
   // Set the input field to the absolute path...
   if (slash > dir) slash[-1] = '/';
 
-  if (slash && *slash) fileName->value(slash);
+  if (slash && *slash) fileName->value(pathname);
   fileName->position(0, strlen(dir));
   okButton->activate();
 
