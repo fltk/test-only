@@ -95,7 +95,6 @@ int main(int argc, char ** argv) {
 
   //HighlightButton* hb = 
       new HighlightButton(X0, Y, W, H, "HighlightButton");
-  //hb->image(new xpmImage(folder_small),fltk::BELOWMOUSE);
 
   new CheckButton(X1, Y, W, H, "CheckButton");
 

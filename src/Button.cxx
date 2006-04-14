@@ -218,6 +218,8 @@ void Button::draw(int glyph_width) const
       // Assumme this is a button with an animated image label.
       // we must redraw the image so it changes depending on state.
       // Partially-transparent pixels will not draw right!
+    } else if (context_image()) {
+	draw_background();
     } else {
       // Don't draw the label unnecessarily:
       draw_label = false;

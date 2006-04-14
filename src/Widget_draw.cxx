@@ -154,7 +154,6 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
 	if (img) img->draw(ir);
 	return;
     }
-
   Rectangle r(ir);
   if (img) {
 
