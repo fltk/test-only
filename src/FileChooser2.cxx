@@ -1136,23 +1136,25 @@ FileChooser::value(const char *filename)
 
   // See if there is a directory in there...
   fltk::filename_absolute(pathname, sizeof(pathname), filename);
-
-  if ((slash = strrchr(pathname, '/')) != NULL) {
+  char dir[1024]="";
+  if (pathname) strncpy(dir,pathname,sizeof(dir));
+  if ((slash = strrchr(dir, '/')) != NULL) {
     // Yes, change the display to the directory... 
-    if (!fltk::filename_isdir(pathname)) *slash++ = '\0';
+    if (!fltk::filename_isdir(dir)) *slash++ = '\0';
 
-    directory(pathname);
-    if (*slash == '/') slash = pathname;
+    directory(dir);
+    if (!shown()) fileList->load(dir);
+    if (*slash == '/') slash = dir;
   } else {
     directory(".");
-    slash = pathname;
+    slash = dir;
   }
 
   // Set the input field to the absolute path...
-  if (slash > pathname) slash[-1] = '/';
+  if (slash > dir) slash[-1] = '/';
 
-  fileName->value(pathname);
-  fileName->position(0, strlen(pathname));
+  if (slash && *slash) fileName->value(slash);
+  fileName->position(0, strlen(dir));
   okButton->activate();
 
   // Then find the file in the file list and select it...
@@ -1170,6 +1172,7 @@ FileChooser::value(const char *filename)
 //      printf("Selecting line %d...\n", i);
       fileList->topline(i);
       fileList->select(i);
+      okButton->activate();
       break;
     }
 }

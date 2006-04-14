@@ -348,7 +348,8 @@ main(int  argc,		// I - Number of command-line arguments
   fltk::run();
 
 #else
-  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", 0);
+  const char *defaultname = "images/coucou.png";
+  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", defaultname );
   fltk::message("File selected is : %s", name && strlen(name) ? name : "<no_selection>");
 #endif
 

@@ -99,22 +99,18 @@ int main(int argc, char ** argv) {
   new CheckButton(X1, Y, W, H, "CheckButton");
 
   Y += H+B;
-  
   Button * b = new Button(X0, Y, W, H, "push/release img");
   b->image(&fold2, 0, 0, &fold3); // use default & pushed img
-
   b = new Button(X1, Y, W, H, "push/rel noborder");
-  b->box(NO_BOX);
   b->image(&fold2, 0, 0, &fold3); // use default & pushed img
+  b->box(NO_BOX);
   
   Y += H+B;
-
   b = new HighlightButton(X0, Y, W, H, "Everything !");
   b->image(&fold2,0 ,0, &fold3); // demonstrate the different ways to affect images
   // to remove the  belowmouse changing image comment this line:
   b->image(fold1, fltk::BELOWMOUSE);
   b->callback(cb_active_butt);
-
   abutton = b = new Button(X1, Y, W, H, "Inactive");
   b->image(&fold3,&fold2);
   b->activate(0);  

@@ -293,8 +293,8 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
   type(t);
   filter(p);
   update_favorites();
-  value(d);
   type(t);
+  value(d);
   int e;
   prefs_.get("preview", e, 1);
   preview(e);
@@ -374,7 +374,7 @@ void FileChooser::show() {
   window->show();
   fltk::flush();
   fltk::cursor(fltk::CURSOR_WAIT);
-  rescan();
+  if (!fileList->size()) rescan();
   fltk::cursor(fltk::CURSOR_DEFAULT);
   fileName->take_focus();
 }

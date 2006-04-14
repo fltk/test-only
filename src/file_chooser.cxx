@@ -110,7 +110,10 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
       fltk::filename_relative(retname, sizeof(retname), fc->value());
 
     return retname;
-  } else if (fc->value()) return (char *)fc->value();
+  } else if (fc->value()) {
+      fltk::filename_absolute(retname, sizeof(retname), fc->value());
+    return retname;
+  }
   else return 0;
 }
 
