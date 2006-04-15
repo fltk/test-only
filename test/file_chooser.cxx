@@ -249,7 +249,7 @@ show_callback(void)
   if (filter->value()[0])
     fc->filter(filter->value());
 
-  fc->show();
+  fc->show(240,200);
 
   while (fc->visible())
     fltk::wait();
@@ -277,7 +277,7 @@ show_callback(void)
 //
 // 'main()' - Create a file chooser and wait for a selection to be made.
 //
-#define SIMPLE_IMPL 1
+#define SIMPLE_IMPL 0
 int			// O - Exit status
 main(int  argc,		// I - Number of command-line arguments
      char *argv[])	// I - Command-line arguments

@@ -127,7 +127,7 @@ o->tooltip(new_directory_tooltip);}
             {fltk::CheckButton} showHiddenButton {
               label {Show &Hidden}
               callback {fileList->show_hidden(showHiddenButton->value() ? true: false);
-  			fileList->load(fileList->directory());} selected
+  			fileList->load(fileList->directory());}
               xywh {80 0 100 20} shortcut 0x80070 value 1
               extra_code {o->value(fileList->show_hidden() ? 1 : 0);}
             }
@@ -175,7 +175,7 @@ window->hide();}
         }
       }
       {fltk::Window} favWindow {
-        label {Manage Favorites} open
+        label {Manage Favorites}
         private xywh {440 69 355 150} type Double resizable
         extra_code {favWindow->label(manage_favorites_label);} modal visible
       } {
@@ -325,7 +325,18 @@ rescan();
 fltk::cursor(fltk::CURSOR_DEFAULT);
 fileName->take_focus();} {}
     }
-    Function {shown()} {return_type int
+    Function {show(int x, int y)} {open return_type void
+    } {
+      code {window->show();
+window->resize(x, y,window->w(),window->h());
+fltk::flush();
+fltk::cursor(fltk::CURSOR_WAIT);
+rescan();
+fltk::cursor(fltk::CURSOR_DEFAULT);
+fileName->take_focus();} {selected
+      }
+    }
+    Function {shown()} {open return_type int
     } {
       code {return window->shown();} {}
     }

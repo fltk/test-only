@@ -148,7 +148,7 @@ FileInput::update_buttons() {
 	    if (!i) buttons_[i] += fltk::box_dx(b) + 6;
     }
 
-    printf("    found %d components/buttons...\n", i);
+    //printf("    found %d components/buttons...\n", i);
 
     buttons_[i] = 0;
 }
