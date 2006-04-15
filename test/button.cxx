@@ -23,7 +23,7 @@ int main(int argc, char ** argv) {
   Window *window = new Window(320,65);
 
   window->begin();
-  InvisibleBox * ib = new InvisibleBox(0,0,window->w(),window->h());
+  Group* ib = new Group(0,0,window->w(),window->h());
   ib->image(new TiledImage("./images/bg.jpeg"));
   window->resizable(ib);
 

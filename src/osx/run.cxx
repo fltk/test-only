@@ -1528,7 +1528,7 @@ void Window::flush() {
     drawline(x+d,y+s-1,x+s-1,y+d); d += 4;
   }
 #endif
-  CGContextFlush(i->gc);
+  if (i->gc) CGContextFlush(i->gc);
 }
 
 //+++ verify port to FLTK2
