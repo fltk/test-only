@@ -631,7 +631,8 @@ void fltk::closepath() {
 #if USE_CAIRO
   cairo_close_path(cc);
 #elif USE_QUARTZ
-  CGContextClosePath(quartz_gc);
+  if (!first_point) 
+    CGContextClosePath(quartz_gc);
   first_point = true;
 #else
   if (numpoints > loop_start+2) {

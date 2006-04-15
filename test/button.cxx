@@ -24,7 +24,7 @@ int main(int argc, char ** argv) {
 
   window->begin();
   InvisibleBox * ib = new InvisibleBox(0,0,window->w(),window->h());
-  ib->image(new TiledImage("./images/bg.gif"));
+  ib->image(new TiledImage("./images/bg.jpeg"));
   window->resizable(ib);
 
   Button *b1 = new Button(20, 20, 80, 25, "&Beep");

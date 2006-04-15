@@ -318,8 +318,8 @@ if test -n "$compile"; then
 fi
 
 if test -n "$post" -a "$POSTBUILD" != ":"; then
-    echo $POSTBUILD $post $includedir/FL/mac.r
-    $POSTBUILD $post $includedir/FL/mac.r
+    echo $POSTBUILD $post $includedir/fltk/mac.r
+    $POSTBUILD $post $includedir/fltk/mac.r
 fi
 
 if test "$echo_prefix" = "yes"; then
