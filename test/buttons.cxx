@@ -35,6 +35,7 @@
 #include <fltk/RadioButton.h>
 #include <fltk/LightButton.h>
 #include <fltk/HighlightButton.h>
+#include <fltk/MultiImage.h>
 
 #include <fltk/xpmImage.h>
 #include "folder_small.xpm"
@@ -44,6 +45,7 @@
 using namespace fltk;
 
 Button * abutton=0;
+MultiImage* multi;
 
 void cb_active_butt(Widget*, void*) {
     static bool flip = true;
@@ -112,7 +114,9 @@ int main(int argc, char ** argv) {
   b->image(fold1, fltk::BELOWMOUSE);
   b->callback(cb_active_butt);
   abutton = b = new Button(X1, Y, W, H, "Inactive");
-  b->image(&fold3,&fold2);
+  multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, fold1 );
+  b->image(multi); 
+//  b->image(&fold3,&fold2);
   b->activate(0);  
 
   window.resizable(window);

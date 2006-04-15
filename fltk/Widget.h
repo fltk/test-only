@@ -292,12 +292,10 @@ public:
 #endif
 
 private:
-
   const char*		label_;
-  const Symbol*		image_,	  // DEFAULT image_
-			*image2_, // INACTIVE optional image
-			*image3_, // PUSHED / OPEN optional image
-			*image4_; // FOCUSED optional image
+  const Symbol**	image_;	  // images
+  uchar			nimages_;
+
   unsigned		flags_;
   const Style*		style_;
   Callback*		callback_;

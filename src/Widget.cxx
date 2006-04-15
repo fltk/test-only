@@ -70,7 +70,9 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   callback_	= default_callback;
   user_data_	= 0;
   label_	= L;
-  image_	= image2_ = image3_ = image4_ = 0;
+  image_	= 0;
+  nimages_	= 0;
+      //image2_ = image3_ = image4_ = 0;
   tooltip_	= 0;
 #if CLICK_MOVES_FOCUS
   flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
@@ -97,6 +99,7 @@ Widget::~Widget() {
     delete (Style*)style_; // cast away const
   }
   if (flags_&COPIED_LABEL) delete[] const_cast<char*>( label_ );
+  if (nimages_) free(image_); // free the dynamically alloc'd image array
 }
 
 /*! \fn Group* Widget::parent() const
@@ -1054,32 +1057,47 @@ void Widget::setonly() {
   }
 }
 // images manip
+void Widget::image(const Symbol* s,Flags f) {
+    // redim the array and store this new images
+    int n=0;
+    switch(f) {
+    case fltk::NO_FLAGS:    n=1;	break;
+    case fltk::INACTIVE:    n=2;	break;
+    case fltk::BELOWMOUSE:  n=3;	break;
+    case fltk::OPENED: 
+    case fltk::PUSHED:	    n=4;	break;
+    default:				return;
+    }
+    if (n<=nimages_) {image_[n-1]=s; return;  } // array well dimensioned
+    if (!s) return; // no image slot available and value is null no need to allocate anything
+    int a = nimages_ ? (nimages_<<1) : 1;
+    while(a<n) a=(a<<1); // double buffer size each realloc
+    if (!image_ || a>nimages_ ) { // we need to first-alloc or realloc the array
+	 image_ = (const Symbol**) realloc(image_,sizeof(const Symbol*)*a);
+	for (int i=nimages_; i<a-1;i++) image_[i]=0;
+    }
+    image_[n-1]=s;
+    nimages_=a;
+}
 
-void	Widget::image(const Symbol* noflags, const Symbol* disabled, 
+void Widget::image(const Symbol* noflags, const Symbol* disabled, 
 	      const Symbol* belowmouse, const Symbol* pushedopen) {
     image(noflags);
     image(disabled,   fltk::INACTIVE);
     image(belowmouse, fltk::BELOWMOUSE);
     image(pushedopen, fltk::PUSHED);
-
 }
+
 const Symbol* Widget::image(Flags flags) const	{ 
-    if (flags & fltk::INACTIVE) // reads the image for pushed button or open
-	return image2_;
-    else if ((flags & fltk::OPENED) || (flags & fltk::PUSHED)) // reads the image for pushed button or open
-	return image3_;
-    else if ( (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget
-    	return image4_;
-    return image_; 
+    if (nimages_>1 && flags & fltk::INACTIVE) // reads the image for pushed button or open
+	return image_[1];
+    else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget
+    	return image_[2];
+    else if (nimages_>3 && (flags & fltk::OPENED) || (flags & fltk::PUSHED)) // reads the image for pushed button or open
+	return image_[3];
+    else
+	return nimages_>0 ? image_[0] : 0; // default img
 }
-
-void Widget::image(const Symbol* a, Flags flags)	{ 
-    if (flags & fltk::INACTIVE)  image2_ = a; 
-    else if ( (flags & fltk::OPENED) || (flags & fltk::PUSHED) )  image3_ = a; 
-    else if ( (flags & fltk::BELOWMOUSE)) image4_ = a; 
-    else image_ = a; 
-}
-
 
 //
 // End of "$Id$".

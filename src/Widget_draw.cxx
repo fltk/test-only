@@ -134,15 +134,21 @@ void Widget::draw_label() const {
     box in a nice way. The image() is put against the side that any
     ALIGN flags say, and then the label() is put next to that.
 */
+
 const Symbol * Widget::context_image() const  {
+    if (!nimages_) return 0;
+
     const Symbol * img;
-    bool bMouseImg = (image4_ && belowmouse());
-    if (!active())  img = image2_  ? image2_ : image_;
-    else if (pushed() || ( (flags() & fltk::OPENED) && !bMouseImg) ) 
-	img = image3_  ? image3_ : image_;
-    else if (bMouseImg) 
-	img = image4_ ? image4_ : image_;
-    else img = image_;
+    
+    if (!active())  
+	img = nimages_>1 && image_[1]  ? image_[1] : image_[0];
+    else if (pushed() || (flags() & fltk::OPENED) ) 
+	img = nimages_>3 && image_[3]  ? image_[3] : image_[0];
+    else if (nimages_>2 && image_[2] && belowmouse())
+	img = image_[2];
+    else 
+	img = image_[0];
+
     return img;
 }
 
