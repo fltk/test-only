@@ -24,6 +24,7 @@ int main(int argc, char ** argv) {
 
   window->begin();
   Group* ib = new Group(0,0,window->w(),window->h());
+  ib->begin();
   ib->image(new TiledImage("./images/bg.jpeg"));
   window->resizable(ib);
 
@@ -35,6 +36,7 @@ int main(int argc, char ** argv) {
 
   Button *b3 = new Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
+  ib->end();
   window->end();
   window->show(argc,argv);
   return run();
