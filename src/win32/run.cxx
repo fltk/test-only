@@ -1893,6 +1893,8 @@ void Window::borders( fltk::Rectangle *r ) const
       style = WS_DLGFRAME | WS_CAPTION;
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
     if (!contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    else 
+	style |= WS_SYSMENU ; // keep the possibility to close the box as in osx and X11
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
   }
   RECT rect;
@@ -2075,6 +2077,8 @@ void CreatedWindow::create(Window* window) {
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
     fltk::Rectangle r; window->borders(&r);
     if (!window->contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    else
+	style |= WS_SYSMENU ;// keep the possibility to close the box as in osx and X11
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     if (xp != USEDEFAULT) xp += r.x();
     if (yp != USEDEFAULT) yp += r.y();
