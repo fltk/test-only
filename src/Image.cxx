@@ -25,6 +25,7 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+#include <fltk/string.h>
 
 using namespace fltk;
 
