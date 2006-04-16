@@ -57,6 +57,8 @@
 
 using namespace fltk;
 
+static fltk::Window * resize_from_system=0;
+
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
 
@@ -1266,6 +1268,7 @@ bool fltk::handle()
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
     CreatedWindow::find(window)->current_size.set(X,Y,W,H);
+    resize_from_system = window;
     window->resize(X, Y, W, H);
     break;} // allow add_handler to do something too
 
@@ -1285,6 +1288,7 @@ bool fltk::handle()
       window->x(xevent.xreparent.x);
       window->y(xevent.xreparent.y);
     }
+    resize_from_system = window;
     break;}
 
   case UnmapNotify:
@@ -2043,6 +2047,40 @@ bool Window::iconic() const {
   return (i && visible() && i->wait_for_expose);
 }
 
+bool Window::resize(int X,int Y,int W,int H) {
+  int is_a_move = (X != x() || Y != y());
+  int is_a_resize = (W != w() || H != h());
+  int resize_from_program = (this != resize_from_system);
+  
+  if (!resize_from_program) resize_from_system = 0;
+  //if (!is_a_resize && !is_a_move) return false;
+
+  if (is_a_move && resize_from_program) set_flag(FORCE_POSITION);
+
+  if (is_a_resize) {
+    Group::resize(X,Y,W,H);
+    if (visible()) {redraw(); i->wait_for_expose = 1;}
+  } else {
+    x(X); y(Y);
+  }
+
+  if (resize_from_program && is_a_resize && !resizable()) {
+    size_range(w(), h(), w(), h());
+  }
+
+  if (resize_from_program && shown()) {
+    if (is_a_resize) {
+      if (!resizable()) size_range(w(),h(),w(),h());
+      if (is_a_move) {
+	XMoveResizeWindow(xdisplay, i->xid, X, Y, W>0 ? W : 1, H>0 ? H : 1);
+      } else {
+	XResizeWindow(xdisplay, i->xid, W>0 ? W : 1, H>0 ? H : 1);
+      }
+    } else
+      XMoveWindow(xdisplay, i->xid, X, Y);
+  }
+  return true;
+}
 ////////////////////////////////////////////////////////////////
 
 /*! Sets both the label() and the iconlabel() */

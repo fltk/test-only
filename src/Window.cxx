@@ -873,7 +873,7 @@ Window::~Window() {
 */
 // resize port from fltk1
 // Implementation in the system-specific code
-#if !defined(WIN32)
+#if !defined(WIN32) && !USE_X11
 bool Window::resize(int X, int Y, int W, int H) {
   return Group::resize(X, Y, W, H);
 }
