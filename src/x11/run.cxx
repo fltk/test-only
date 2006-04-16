@@ -2048,6 +2048,7 @@ bool Window::iconic() const {
 }
 
 bool Window::resize(int X,int Y,int W,int H) {
+#if 1
   int is_a_move = (X != x() || Y != y());
   int is_a_resize = (W != w() || H != h());
   int resize_from_program = (this != resize_from_system);
@@ -2080,6 +2081,9 @@ bool Window::resize(int X,int Y,int W,int H) {
       XMoveWindow(xdisplay, i->xid, X, Y);
   }
   return true;
+#else
+  return Group::resize(X, Y,W, H);
+#endif
 }
 ////////////////////////////////////////////////////////////////
 
