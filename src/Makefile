@@ -272,6 +272,7 @@ install:
 	$(MKDIR) $(DESTDIR)$(libdir)
 	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
 	$(CP) ../lib/$(LIBNAME) $(DESTDIR)$(libdir)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(LIBNAME)
         endif
         ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared core library in $(libdir)"

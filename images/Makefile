@@ -126,11 +126,13 @@ install:
 	$(MKDIR) $(DESTDIR)$(libdir)
 	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
 	$(CP) ../lib/$(LIBNAME) $(DESTDIR)$(libdir)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(LIBNAME)
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk2_z$(LIBSUFFIX)
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk2_png$(LIBSUFFIX)
 	$(RM) -f $(DESTDIR)$(libdir)/$(LIBPREFIX)fltk2_jpeg$(LIBSUFFIX)
   ifneq (,$(LOCAL_IMAGELIBS))
 	  $(CP) $(LOCAL_IMAGELIBS) $(DESTDIR)$(libdir)
+	  $(RANLIB) $(DESTDIR)$(libdir)/$(LOCAL_IMAGELIBS)
   endif
         endif
         ifneq (,$(wildcard ../lib/$(DSONAME)))
