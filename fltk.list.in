@@ -52,7 +52,7 @@ $GLDEMOS=@GLDEMOS@
 
 %system darwin
 %postinstall $bindir/fltk2-config -post $bindir/fluid
-f 0444 root sys $includedir/FL/mac.r FL/mac.r
+f 0444 root sys $includedir/fltk/mac.r fltk/mac.r
 %system all
 
 # FLUID

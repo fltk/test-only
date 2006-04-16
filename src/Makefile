@@ -252,10 +252,10 @@ install:
 	fi
 	$(RMDIR) $(DESTDIR)$(includedir)/fltk
 	$(MKDIR) $(DESTDIR)$(includedir)/fltk
-	$(CP) ../fltk/*.h  $(DESTDIR)$(includedir)/fltk
+	$(CP) ../fltk/*.h ../fltk/*.r  $(DESTDIR)$(includedir)/fltk
 	$(CHMOD) 755 $(DESTDIR)$(includedir)/fltk
 	$(CHMOD) 644 $(DESTDIR)$(includedir)/fltk/*
-	echo "Installing FLTK1.1 emulation include files in $(includedir)/FL..."
+	echo "Installing FLTK1.1 emulation include files in $(includedir)/fltk..."
 	$(RMDIR) $(DESTDIR)$(includedir)/fltk/compat/FL
 	$(MKDIR) $(DESTDIR)$(includedir)/fltk/compat/FL
 	$(CP) ../fltk/compat/FL/*.H ../fltk/compat/FL/*.h  $(DESTDIR)$(includedir)/fltk/compat/FL
