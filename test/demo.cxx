@@ -29,6 +29,8 @@
 #if defined(_WIN32)
 # if !defined(__CYGWIN__)
 #  include <direct.h>
+# else
+#  include <unistd.h>
 # endif
 # include <windows.h> 
 #else

@@ -338,8 +338,8 @@ extern int pasteoffset;
 static int ipasteoffset;
 
 static char* cutfname() {
-#ifdef _WIN32
-    static char name[MAX_PATH+16] = "";
+#if defined (_WIN32) && !defined(__CYGWIN__)
+    static char name[1024] = "";
     if (!name[0]) {
 	if (!GetTempPath(sizeof(name), name)) strcpy(name,"\\"); // failure
 	strcat(name, ".fluidcutbuffer");

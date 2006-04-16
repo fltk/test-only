@@ -647,7 +647,7 @@ static void makePathForFile( const char *path )
 Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vendor, const char *application )
 {
   char filename[ PATH_MAX ]; filename[0] = 0;
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #  define FLPREFS_RESOURCE	"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
   int appDataLen = strlen(vendor) + strlen(application) + 8;
   DWORD type, nn;

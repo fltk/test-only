@@ -56,7 +56,7 @@ int fltk::filename_list(const char *d, dirent ***list,
   // do this even for our own internal version because some compilers
   // will not cast it to the non-const version! Egad. So we have to
   // use if's to go to what the various systems use:
-#if HAVE_SCANDIR && !defined(__APPLE__) && !defined(__linux) && !defined(__FreeBSD__)
+#if HAVE_SCANDIR && !defined(__APPLE__) && !defined(__linux) && !defined(__FreeBSD__)&& !defined(__CYGWIN__)
   int n = scandir(d, list, 0, sort);
 #elif HAVE_SCANDIR && ( defined(__linux) || defined (__FreeBSD__) )
   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);

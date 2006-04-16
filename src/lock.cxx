@@ -125,13 +125,13 @@
 #include <config.h>
 
 // Define the mutex-init value needed by fltk::RecursiveMutex:
-#if HAVE_PTHREAD && !defined(_WIN32)
+#if HAVE_PTHREAD && (!defined(_WIN32) || defined(__CYGWIN__))
 # ifndef __USE_GNU
 #  define __USE_GNU // makes the RECURSIVE stuff appear on Linux
 # endif
 #include <fltk/Threads.h>
 
-# if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
+# if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) && !defined(__CYGWIN__)
 static pthread_mutexattr_t recursive_attrib={PTHREAD_MUTEX_RECURSIVE_NP};
 fltk::RecursiveMutex::RecursiveMutex() : Mutex(&recursive_attrib) {}
 # elif defined(PTHREAD_MUTEX_RECURSIVE)
@@ -200,11 +200,15 @@ void fltk::awake(void* msg) {
     write(thread_filedes[1], &msg, sizeof(void*));
 }
 
+// the following is already defined in CYGWIN
+// for the common win32/run.cxx part
+#if !defined(__CYGWIN__) 
 void* fltk::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
 }
+#endif
 
 #else
 

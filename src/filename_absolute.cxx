@@ -52,6 +52,7 @@
 #  ifdef __EMX__
 #    define getcwd _getcwd2
 #  endif
+#include <ctype.h>
 #endif
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)

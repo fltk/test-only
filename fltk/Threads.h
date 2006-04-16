@@ -5,7 +5,7 @@
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
 
-#ifndef _WIN32
+#if !defined( _WIN32) || defined(__CYGWIN__)
 // pthreads:
 
 #include <pthread.h>
