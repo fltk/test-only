@@ -47,6 +47,9 @@ public:
     NORMAL = 0,
     MULTI = 1
   };
+  enum { // values selected_column
+    NO_COLUMN_SELECTED = -1 // lets make opaque these constants, user should never rely on their values
+  };
 
   int width() const {return width_;}
   int height() const {return height_;}

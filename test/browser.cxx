@@ -34,9 +34,9 @@
 #include <fltk/ValueSlider.h>
 #include <fltk/run.h>
 #include <fltk/events.h>
+#include <fltk/MenuBuild.h>
+#include <fltk/ask.h>
 #include <fltk/xpmImage.h>
-#include <fltk/Item.h>
-#include <fltk/ItemGroup.h>
 
 #include "folder_small.xpm"
 #include "folder_small2.xpm"
@@ -49,25 +49,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-fltk::xpmImage* folderSmall, *folderSmall2,*folderSmall3;
-fltk::xpmImage* fileSmall, *fileSmall2,*bookImg;
-fltk::xpmImage* customImage;
+using namespace fltk;
 
-void cb_test(fltk::Widget* browser, void*) {
-  fltk::Widget* w = ((fltk::Browser*)browser)->item();
-  printf("Callback, browser->item() = '%s'",
+xpmImage* folderSmall, *folderSmall2,*folderSmall3;
+xpmImage* fileSmall, *fileSmall2,*bookImg;
+xpmImage* customImage;
+
+void cb_test(Widget* browser, void*) {
+  Browser *b = (Browser*)browser;
+  Widget* w = b->item();
+  printf("Callback, b->item() = '%s'",
 	 w && w->label() ? w->label() : "null");
-  if (fltk::event_clicks()) printf(", Double Click");
+  if (event_clicks()) printf(", Double Click");
   printf("\n");
+  if (b->selected_column()!= Browser::NO_COLUMN_SELECTED )
+      fltk::message("Column %d selected\n", b->selected_column()+1);
 }
 
-void cb_remove(fltk::Widget*, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*) ptr;
-  if (tree->type() & fltk::Browser::MULTI) {
-    fltk::Widget* w = tree->goto_top();
+void cb_remove(Widget*, void* ptr) {
+  Browser* tree = (Browser*) ptr;
+  if (tree->type() & Browser::MULTI) {
+    Widget* w = tree->goto_top();
     while (w) {
       if (w->selected()) { // test for parent being open
-	fltk::Group* g = w->parent();
+	Group* g = w->parent();
 	g->remove(w);
 	delete w;
 	g->relayout();
@@ -77,9 +82,9 @@ void cb_remove(fltk::Widget*, void* ptr) {
       }
     }
   } else {
-    fltk::Widget* w = tree->goto_focus();
+    Widget* w = tree->goto_focus();
     if (w) {
-      fltk::Group* g = w->parent();
+      Group* g = w->parent();
       g->remove(w);
       delete w;
       g->relayout();
@@ -87,113 +92,113 @@ void cb_remove(fltk::Widget*, void* ptr) {
   }
 }
 
-void cb_multi(fltk::Button* w, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*) ptr;
-  tree->type(w->value() ? fltk::Browser::MULTI : fltk::Browser::NORMAL);
+void cb_multi(Button* w, void* ptr) {
+  Browser* tree = (Browser*) ptr;
+  tree->type(w->value() ? Browser::MULTI : Browser::NORMAL);
   tree->relayout();
 }
 
-static fltk::Group* current_group(fltk::Browser* tree) {
-  fltk::Widget* w = tree->goto_focus();
+static Group* current_group(Browser* tree) {
+  Widget* w = tree->goto_focus();
   if (!w) return tree;
-  if (w->is_group() && w->flags()&fltk::OPENED) return (fltk::Group*)w;
+  if (w->is_group() && w->flags()&fltk::OPENED) return (Group*)w;
   return w->parent() ? w->parent() : tree;
 }
 
-void cb_add_folder(fltk::Widget*, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*) ptr;
+void cb_add_folder(Widget*, void* ptr) {
+  Browser* tree = (Browser*) ptr;
   tree->add_group("Added folder", current_group(tree));
   tree->relayout();
 }
 
-void cb_add_paper(fltk::Widget*, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*) ptr;
+void cb_add_paper(Widget*, void* ptr) {
+  Browser* tree = (Browser*) ptr;
   tree->add_leaf("New paper\t@rt2.col\t3.col", current_group(tree));
   tree->relayout();
 }
 
-void cb_when_changed(fltk::Button* b, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*)ptr;
+void cb_when_changed(Button* b, void* ptr) {
+  Browser* tree = (Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_CHANGED);
   else
     tree->when(tree->when()&~fltk::WHEN_CHANGED);
 }
 
-void cb_when_release(fltk::Button* b, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*)ptr;
+void cb_when_release(Button* b, void* ptr) {
+  Browser* tree = (Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_RELEASE);
   else
     tree->when(tree->when()&~fltk::WHEN_RELEASE);
 }
 
-void cb_when_not_changed(fltk::Button* b, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*)ptr;
+void cb_when_not_changed(Button* b, void* ptr) {
+  Browser* tree = (Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_NOT_CHANGED);
   else
     tree->when(tree->when()&~fltk::WHEN_NOT_CHANGED);
 }
 
-void cb_when_enter_key(fltk::Button* b, void* ptr) {
-  fltk::Browser* tree = (fltk::Browser*)ptr;
+void cb_when_enter_key(Button* b, void* ptr) {
+  Browser* tree = (Browser*)ptr;
   if (b->value())
     tree->when(tree->when()|fltk::WHEN_ENTER_KEY);
   else
     tree->when(tree->when()&~fltk::WHEN_ENTER_KEY);
 }
 
-void button_cb(fltk::Widget* b, void *) {
+void button_cb(Widget* b, void *) {
   printf("Button %s pushed\n", b->label());
 }
 
 const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
 int widths[]   = {100, 70, 70, 0};
 
-fltk::Browser *browser=0;
-fltk::CheckButton *bm = 0;
+Browser *browser=0;
+CheckButton *bm = 0;
 
 // callback for changing dynamically the look of the tree browser 
-void cb_change_look(fltk::Widget*, void* ptr) {
+void cb_change_look(Widget*, void* ptr) {
   static bool flip = true;
-  fltk::Browser* tree = (fltk::Browser*) ptr;
+  Browser* tree = (Browser*) ptr;
   bm->set();
   bm->do_callback();
 
-  tree->set_symbol(fltk::Browser::GROUP	   // tell if you want to setup Group nodes
+  tree->set_symbol(Browser::GROUP	   // tell if you want to setup Group nodes
       ,flip ? folderSmall : folderSmall2   // node default (closed) image 
       ,flip ? folderSmall3  : folderSmall  // belowmouse image (optional)
       ,flip ? folderSmall : folderSmall3   // group node open image (optional)
       );
-  tree->set_symbol(fltk::Browser::LEAF, // tell you want to setup Leaf nodes
+  tree->set_symbol(Browser::LEAF, // tell you want to setup Leaf nodes
       flip ? fileSmall : fileSmall2,    // node default (closed) image 
-      flip ? fileSmall2 : fileSmall);   // belowmouse image (optional)
+      0); //flip ? fileSmall2 : fileSmall);   // belowmouse image (optional)
   flip = !flip;
   tree->relayout();
 }
 
 // callback for deactivate/activate the belowmouse img change
-void below_mouse_cb(fltk::Button *w, long arg) {
-    static const fltk::Symbol *last1 = 0;
-    static const fltk::Symbol *last2=0;
+void below_mouse_cb(Button *w, long arg) {
+    static const Symbol *last1 = 0;
+    static const Symbol *last2=0;
 
     if (w->value()) {
-	browser->set_symbol(fltk::Browser::GROUP, browser->get_symbol(fltk::Browser::GROUP),last1,
-	    browser->get_symbol(fltk::Browser::GROUP,fltk::OPENED));
-	browser->set_symbol(fltk::Browser::LEAF, browser->get_symbol(fltk::Browser::LEAF),last2);
+	browser->set_symbol(Browser::GROUP, browser->get_symbol(Browser::GROUP),last1,
+	    browser->get_symbol(Browser::GROUP,OPENED));
+	browser->set_symbol(Browser::LEAF, browser->get_symbol(Browser::LEAF),last2);
     } else {
-	last1 = browser->get_symbol(fltk::Browser::GROUP, fltk::BELOWMOUSE);
-	last2 = browser->get_symbol(fltk::Browser::LEAF, fltk::BELOWMOUSE);
-	browser->set_symbol(fltk::Browser::GROUP, 
-	    browser->get_symbol(fltk::Browser::GROUP), 0, 
-	    browser->get_symbol(fltk::Browser::GROUP,fltk::OPENED));
-	browser->set_symbol(fltk::Browser::LEAF, browser->get_symbol(fltk::Browser::LEAF),0);
+	last1 = browser->get_symbol(Browser::GROUP, fltk::BELOWMOUSE);
+	last2 = browser->get_symbol(Browser::LEAF, fltk::BELOWMOUSE);
+	browser->set_symbol(Browser::GROUP, 
+	    browser->get_symbol(Browser::GROUP), 0, 
+	    browser->get_symbol(Browser::GROUP,fltk::OPENED));
+	browser->set_symbol(Browser::LEAF, browser->get_symbol(Browser::LEAF),0);
     }
     browser->relayout();
 }
 
-void change_resize(fltk::Button *w, long arg) {
+void change_resize(Button *w, long arg) {
   if (w->value()) 
     widths[1] = -1;
   else
@@ -203,10 +208,10 @@ void change_resize(fltk::Button *w, long arg) {
 
 int main(int argc,char** argv) {
 
-  fltk::Window win(280, 330, "Browser Example");
+  Window win(280, 330, "Browser Example");
   win.begin();
 
-  fltk::Browser tree(10, 10, 260, 180);
+  Browser tree(10, 10, 260, 180);
   tree.indented(1);
   tree.callback(cb_test);
 
@@ -214,64 +219,64 @@ int main(int argc,char** argv) {
   tree.column_widths(widths);
   tree.column_labels(labels);
   
-  fltk::Button remove_button(5, 200, 80, 22, "Remove");
-  remove_button.callback((fltk::Callback*)cb_remove, (void *)&tree);
+  Button remove_button(5, 200, 80, 22, "Remove");
+  remove_button.callback((Callback*)cb_remove, (void *)&tree);
 
-  fltk::Button add_paper_button(5, 224, 80, 22, "Add Paper");
-  add_paper_button.callback((fltk::Callback*)cb_add_paper, (void *)&tree);
+  Button add_paper_button(5, 224, 80, 22, "Add Paper");
+  add_paper_button.callback((Callback*)cb_add_paper, (void *)&tree);
 
-  fltk::Button add_folder_button(5, 248, 80, 22, "Add Folder");
-  add_folder_button.callback((fltk::Callback*)cb_add_folder, (void *)&tree);
+  Button add_folder_button(5, 248, 80, 22, "Add Folder");
+  add_folder_button.callback((Callback*)cb_add_folder, (void *)&tree);
 
-  fltk::Button change_look_button(5, 272, 80, 22, "Change Look!");
-  change_look_button.callback((fltk::Callback*)cb_change_look , (void *)&tree);
+  Button change_look_button(5, 272, 80, 22, "Change Look!");
+  change_look_button.callback((Callback*)cb_change_look , (void *)&tree);
 
-  fltk::CheckButton multi_button(88, 200, 160, 20, "fltk::Browser::MULTI");
-  multi_button.callback((fltk::Callback*)cb_multi, (void *)&tree);
+  CheckButton multi_button(88, 200, 160, 20, "Browser::MULTI");
+  multi_button.callback((Callback*)cb_multi, (void *)&tree);
 
-  fltk::CheckButton when_changed_button(88, 220, 160, 20, "fltk::WHEN_CHANGED");
-  when_changed_button.callback((fltk::Callback*)cb_when_changed, (void *)&tree);
+  CheckButton when_changed_button(88, 220, 160, 20, "WHEN_CHANGED");
+  when_changed_button.callback((Callback*)cb_when_changed, (void *)&tree);
 
-  fltk::CheckButton when_not_changed_button(88, 240, 160, 20, "fltk::WHEN_NOT_CHANGED");
-  when_not_changed_button.callback((fltk::Callback*)cb_when_not_changed, (void *)&tree);
+  CheckButton when_not_changed_button(88, 240, 160, 20, "WHEN_NOT_CHANGED");
+  when_not_changed_button.callback((Callback*)cb_when_not_changed, (void *)&tree);
 
-  fltk::CheckButton when_release_button(88, 260, 160, 20, "fltk::WHEN_RELEASE");
-  when_release_button.callback((fltk::Callback*)cb_when_release, (void *)&tree);
+  CheckButton when_release_button(88, 260, 160, 20, "WHEN_RELEASE");
+  when_release_button.callback((Callback*)cb_when_release, (void *)&tree);
   when_release_button.set_flag(fltk::VALUE);
 
-  fltk::CheckButton when_enter_key_button(88, 280, 160, 20, "fltk::WHEN_ENTER_KEY");
-  when_enter_key_button.callback((fltk::Callback*)cb_when_enter_key, (void *)&tree);
+  CheckButton when_enter_key_button(88, 280, 160, 20, "WHEN_ENTER_KEY");
+  when_enter_key_button.callback((Callback*)cb_when_enter_key, (void *)&tree);
 
-  fltk::CheckButton resize(88, 310, 160, 20, "Make 2. column flexible");
-  resize.callback((fltk::Callback*)change_resize);
+  CheckButton resize(88, 310, 160, 20, "Make 2. column flexible");
+  resize.callback((Callback*)change_resize);
 
-  bm = new fltk::CheckButton (5, 310, 82, 20, "below mouse");
+  bm = new CheckButton (5, 310, 82, 20, "below mouse");
   bm->set();
-  bm->callback((fltk::Callback*)below_mouse_cb);
+  bm->callback((Callback*)below_mouse_cb);
 
   win.resizable(tree);
   win.end();
 
-  folderSmall = new fltk::xpmImage(folder_small);
-  folderSmall2= new fltk::xpmImage(folder_small2);
-  folderSmall3= new fltk::xpmImage(folder_small3);
+  folderSmall = new xpmImage(folder_small);
+  folderSmall2= new xpmImage(folder_small2);
+  folderSmall3= new xpmImage(folder_small3);
 
-  fileSmall = new fltk::xpmImage(file_small);
-  fileSmall2 = new fltk::xpmImage(file_small2);
-  bookImg = new fltk::xpmImage(book);
-  customImage = new fltk::xpmImage(porsche_xpm);
+  fileSmall = new xpmImage(file_small);
+  fileSmall2 = new xpmImage(file_small2);
+  bookImg = new xpmImage(book);
+  customImage = new xpmImage(porsche_xpm);
 
 #if USE_STRING_LIST
-  //tree.list(new fltk::String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
-  tree.list(new fltk::String_List(strings, sizeof(strings)/sizeof(*strings)));
-  //tree.list(new fltk::String_List(strings));
+  //tree.list(new String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+  tree.list(new String_List(strings, sizeof(strings)/sizeof(*strings)));
+  //tree.list(new String_List(strings));
 #else
 
   // defining default images for nodes
   cb_change_look(0, &tree);
 
   // Add some nodes with icons -- some open, some closed.
-  fltk::Group* g;
+  Group* g;
   g = tree.add_group ("aaa\t2.col\t3.col", &tree);
   tree.add_group ("bbb TWO\t2.col\t3.col", g);
 
@@ -311,21 +316,21 @@ int main(int argc,char** argv) {
   tree.add_leaf("zzz", g);
 
   // add some widgets:
-  fltk::Button * b = new fltk::Button(0,0,100,23,"button");
+  Button * b = new Button(0,0,100,23,"button");
   b->callback(button_cb);
-#if 1
+#if 0
   // fabien: creating the CheckButton below will still mess up the drawing ... 
   //   have to be fixed, but not in the browser i think.
-  b = new fltk::CheckButton(0,0,100,23,"CheckButton");
+  b = new CheckButton(0,0,100,23,"CheckButton");
 
   printf("b->type = %d, group = %d, is_group = %d\n",
-	 b->type(), fltk::Widget::GROUP_TYPE, b->is_group());
+	 b->type(), Widget::GROUP_TYPE, b->is_group());
   b->callback(button_cb);
 #endif
-  new fltk::Input(0,0,200,23,"Input:");
-  new fltk::ValueSlider(0,0,200,23,"Input1:");
-  new fltk::ValueSlider(0,0,200,23,"Input2:");
-  new fltk::ValueSlider(0,0,200,23,"Input3:");
+  new Input(0,0,200,23,"Input:");
+  new ValueSlider(0,0,200,23,"Input1:");
+  new ValueSlider(0,0,200,23,"Input2:");
+  new ValueSlider(0,0,200,23,"Input3:");
   tree.end();
 
 
@@ -346,7 +351,7 @@ int main(int argc,char** argv) {
 
   win.show(argc,argv);
 
-  fltk::run();
+  run();
   return 0;
 }
 
