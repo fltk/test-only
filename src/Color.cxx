@@ -100,10 +100,10 @@ int fltk::parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
 }
 #else
 // Wrapper around XParseColor...
-int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
+int fltk::parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
   XColor x;
-  if (!fl_display) fl_open_display();
-  if (XParseColor(fl_display, fl_colormap, p, &x)) {
+  if (!xdisplay) fltk::open_display();
+  if (XParseColor(xdisplay, xcolormap, p, &x)) {
     r = (uchar)(x.red>>8);
     g = (uchar)(x.green>>8);
     b = (uchar)(x.blue>>8);
