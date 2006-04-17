@@ -56,7 +56,6 @@ public:
 	a generic buffer and its info, this method  should be used by all 
 	non-progresive-reading read() methods so that we avoid redondant code
   */
-  virtual bool fetch() {return false;}
   typedef SharedImage *(*Handler)(const char * filename, uchar *header, int headerlen);
     /*! adds a new handler for hanling a concrete type of image, typically one handler per image type should be registered */
   static void add_handler(Handler f);

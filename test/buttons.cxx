@@ -36,8 +36,9 @@
 #include <fltk/LightButton.h>
 #include <fltk/HighlightButton.h>
 #include <fltk/MultiImage.h>
-
 #include <fltk/xpmImage.h>
+#include <fltk/SharedImage.h>
+
 #include "folder_small.xpm"
 #include "folder_small2.xpm"
 #include "folder_small3.xpm"
@@ -73,10 +74,19 @@ int main(int argc, char ** argv) {
   window.begin();
   
   xpmImage fold1(folder_small);
-  xpmImage fold2(folder_small2);
   xpmImage fold3(folder_small3);
 
+  xpmImage fold2(folder_small2);
+#if !defined(TESTIMAGES)
+  xpmImage ifold2(folder_small2); // use closed folder 2 as inactive image
+#else
+  register_images();
+  SharedImage& ifold2 = *SharedImage::get("images/testimg2.jpg");
+  //SharedImage& ifold2 = *SharedImage::get("images/coucou.png"); 
+#endif
+  ifold2.inactive();
 
+  
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
   ReturnButton* rb = new ReturnButton(X1, Y, W, H, "ReturnButton");
@@ -113,10 +123,15 @@ int main(int argc, char ** argv) {
   // to remove the  belowmouse changing image comment this line:
   b->image(fold1, fltk::BELOWMOUSE);
   b->callback(cb_active_butt);
+#if !defined(TESTIMAGES)
   abutton = b = new Button(X1, Y, W, H, "Inactive");
-  multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, fold1 );
+  multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, ifold2);
   b->image(multi); 
-//  b->image(&fold3,&fold2);
+#else
+  abutton = b = new Button(X1, Y, W, H*2, "Inactive");
+  multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, ifold2);
+  b->image(&fold2,&ifold2);
+#endif
   b->activate(0);  
 
   window.resizable(window);

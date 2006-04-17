@@ -423,50 +423,54 @@ bool jpegImage::fetch() {
 void jpegImage::read() {
 #if HAVE_LIBJPEG
 # if USE_PROGRESSIVE_DRAW
-  struct jpeg_decompress_struct cinfo;
-  struct my_error_mgr jerr;
-  FILE* infile = 0;
-  declare_now(&infile);
+    if (!pixels()) { // if no pixels buffer is already prefetched
+      struct jpeg_decompress_struct cinfo;
+      struct my_error_mgr jerr;
+      FILE* infile = 0;
+      declare_now(&infile);
 
-  INPUT_BUF_SIZE = 4096;
+      INPUT_BUF_SIZE = 4096;
 
-  cinfo.err = jpeg_std_error(&jerr.pub);
-  jerr.pub.error_exit = my_error_exit;
-  jerr.pub.output_message = output_message;
+      cinfo.err = jpeg_std_error(&jerr.pub);
+      jerr.pub.error_exit = my_error_exit;
+      jerr.pub.output_message = output_message;
 
-  /* Establish the setjmp return context for my_error_exit to use. */
-  if (setjmp(jerr.setjmp_buffer)) {
-    /* If we get here, the JPEG code has signaled an error.
-     * We need to clean up the JPEG object, close the input file, and return.
-     */
-    jpeg_destroy_decompress(&cinfo);
-    if (infile) fclose(infile);
-    return;
+      /* Establish the setjmp return context for my_error_exit to use. */
+      if (setjmp(jerr.setjmp_buffer)) {
+	/* If we get here, the JPEG code has signaled an error.
+	 * We need to clean up the JPEG object, close the input file, and return.
+	 */
+	jpeg_destroy_decompress(&cinfo);
+	if (infile) fclose(infile);
+	return;
+      }
+
+      jpeg_create_decompress(&cinfo);
+
+      if (pixels()) {
+	jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
+      } else {
+	if ((infile = fopen(get_filename(), "rb")) == NULL)
+	  return;
+	jpeg_stdio_src(&cinfo, infile);
+      }
+
+      jpeg_read_header(&cinfo, TRUE);
+
+      jpeg_start_decompress(&cinfo);
+      {GSave gsave;
+      make_current();
+      drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
+      jpeg_finish_decompress(&cinfo);
+      jpeg_destroy_decompress(&cinfo);
+      if (infile) fclose(infile);
+  }
+  else {
+      GSave gsave;
+      make_current();
+      drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
   }
 
-  jpeg_create_decompress(&cinfo);
-
-  if (pixels()) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
-  } else {
-    if ((infile = fopen(get_filename(), "rb")) == NULL)
-      return;
-    jpeg_stdio_src(&cinfo, infile);
-  }
-
-  jpeg_read_header(&cinfo, TRUE);
-
-  jpeg_start_decompress(&cinfo);
-
-  {GSave gsave;
-  make_current();
-  drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
-
-  jpeg_finish_decompress(&cinfo);
-
-  jpeg_destroy_decompress(&cinfo);
-
-  if (infile) fclose(infile);
 # else
   fetch(); // reuse fetch code
   GSave gsave;

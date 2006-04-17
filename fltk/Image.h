@@ -66,6 +66,9 @@ public:
   //   so there must only one way to achieve that
   uchar * alloc_pixels(int w,int h, PixelType p); // alloc data, sets the pixel type,  and will destroy owned data
   const char ** alloc_data(int size ); 
+  void copy_data(); // copy the data if not owned, useful with constant pixmap data array before image manip.
+  //!  load the image like in read but no drawing is made thus permitting (generic) buffer parsing
+  virtual bool fetch() {return false;}
 
   // Image Attributes definition
   int w() const { return w_;}
@@ -89,6 +92,7 @@ public:
   int ld() const {return ld_ ? ld_ : w() * d() ;}
   int line_size() const {return ld();}
 
+  // Accessing, allocating a data/pixel buffer
   void data(const char * const *p, int c=0) {data_ = p; count_ = c; owned_= false;}
   void pixels(const uchar*p, int c=1) {data_ = (const char* const *)p; count_ = c; owned_= false;}
   void own_data(const char * const *p, int c=0) {data(p,c); owned_= true;}
@@ -103,6 +107,10 @@ public:
   void setsize(int w, int h);
   void make_current();
   void over(const Rectangle& from, const Rectangle& to) const;
+
+  // Common image algorithms
+  virtual void color_average(Color c, float i);
+  void inactive() { color_average(fltk::GRAY75, .33f); }
 
   // Drawing 
   bool drawn() const;

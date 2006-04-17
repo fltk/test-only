@@ -73,6 +73,45 @@ fltk::Color fltk::color(const char* name) {
   return c;
 }
 
+#if defined(WIN32) || defined(__APPLE__)
+
+#  include <stdio.h>
+//! simulation of XParseColor:
+int fltk::parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
+  if (*p == '#') p++;
+  int n = strlen(p);
+  int m = n/3;
+  const char *pattern = 0;
+  switch(m) {
+  case 1: pattern = "%1x%1x%1x"; break;
+  case 2: pattern = "%2x%2x%2x"; break;
+  case 3: pattern = "%3x%3x%3x"; break;
+  case 4: pattern = "%4x%4x%4x"; break;
+  default: return 0;
+  }
+  int R,G,B; if (sscanf(p,pattern,&R,&G,&B) != 3) return 0;
+  switch(m) {
+  case 1: R *= 0x11; G *= 0x11; B *= 0x11; break;
+  case 3: R >>= 4; G >>= 4; B >>= 4; break;
+  case 4: R >>= 8; G >>= 8; B >>= 8; break;
+  }
+  r = (uchar)R; g = (uchar)G; b = (uchar)B;
+  return 1;
+}
+#else
+// Wrapper around XParseColor...
+int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
+  XColor x;
+  if (!fl_display) fl_open_display();
+  if (XParseColor(fl_display, fl_colormap, p, &x)) {
+    r = (uchar)(x.red>>8);
+    g = (uchar)(x.green>>8);
+    b = (uchar)(x.blue>>8);
+    return 1;
+  } else return 0;
+}
+#endif // WIN32 || __APPLE__
+
 //
 // End of "$Id$".
 //

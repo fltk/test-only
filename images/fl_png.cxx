@@ -162,6 +162,12 @@ void fltk::pngImage::read()
 {
 #if HAVE_LIBPNG
 # if USE_PROGRESSIVE_DRAW
+  if (pixels()) { // already fetched ?
+    GSave gsave;
+    make_current();
+    drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+    return;
+  }
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
   png_infop info_ptr;

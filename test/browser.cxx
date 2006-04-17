@@ -173,7 +173,7 @@ void cb_change_look(Widget*, void* ptr) {
       );
   tree->set_symbol(Browser::LEAF, // tell you want to setup Leaf nodes
       flip ? fileSmall : fileSmall2,    // node default (closed) image 
-      0); //flip ? fileSmall2 : fileSmall);   // belowmouse image (optional)
+      flip ? fileSmall2 : fileSmall);   // belowmouse image (optional)
   flip = !flip;
   tree->relayout();
 }

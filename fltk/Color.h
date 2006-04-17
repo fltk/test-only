@@ -119,6 +119,8 @@ FL_API void set_color_index(Color index, Color);
 FL_API Color get_color_index(Color index);
 FL_API void set_background(Color);
 FL_API Color nearest_index(Color);
+FL_API int parse_color(const char* p, uchar& r, uchar& g, uchar& b);
+
 
 /* \} */
 }
