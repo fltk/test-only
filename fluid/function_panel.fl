@@ -101,7 +101,6 @@ Function {make_code_panel()} {open
     xywh {171 177 290 175} hide resizable modal
   } {
     {fltk::Input} code_input {
-      label {input:}
       xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
     }
     {fltk::ReturnButton} code_panel_ok {

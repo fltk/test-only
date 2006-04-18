@@ -157,7 +157,7 @@ fltk::Window* make_code_panel() {
    {fltk::Window* o = code_panel = new fltk::Window(290, 175, "code");
     w = o;
     o->begin();
-     {fltk::MultiLineInput* o = code_input = new fltk::MultiLineInput(6, 5, 280, 138, "input:");
+     {fltk::MultiLineInput* o = code_input = new fltk::MultiLineInput(6, 5, 280, 138);
       o->type(4);
       o->align(fltk::ALIGN_CENTER);
       o->when(fltk::WHEN_NEVER);
@@ -197,7 +197,7 @@ fltk::Window* make_codeblock_panel() {
     }
      {fltk::Widget* o = new fltk::Widget(10, 33, 270, 33, "\"{...child code...}\" is inserted here");
       o->box(fltk::NO_BOX);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::Input* o = code_after_input = new fltk::Input(10, 65, 270, 23, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
@@ -238,7 +238,7 @@ fltk::Window* make_declblock_panel() {
     }
      {fltk::Widget* o = new fltk::Widget(10, 33, 270, 33, "\"\\n...child code...\\n\" is inserted here");
       o->box(fltk::NO_BOX);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
     }
      {fltk::Input* o = decl_after_input = new fltk::Input(10, 66, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
