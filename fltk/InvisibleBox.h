@@ -12,11 +12,11 @@
 
 namespace fltk {
 
-class FL_API InvisibleBox : public fltk::Widget {
+class FL_API InvisibleBox : public Widget {
 public:
   InvisibleBox(int x, int y, int w, int h, const char *l=0);
-  InvisibleBox(fltk::Box* b, int x, int y, int w, int h, const char *l);
-  static fltk::NamedStyle* default_style;
+  InvisibleBox(Box* b, int x, int y, int w, int h, const char *l);
+  static NamedStyle* default_style;
   void draw();
 };
 

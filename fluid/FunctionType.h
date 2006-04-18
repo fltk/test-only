@@ -24,7 +24,8 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-class FunctionType : public FluidType {
+namespace fltk {
+    class FunctionType : public FluidType {
     const char* return_type;
     const char* attributes;
     bool public_, cdecl_, constructor, havewidgets;
@@ -152,5 +153,6 @@ protected:
     const char * get_full_string() const ;
 };
 
+}
 
 #endif

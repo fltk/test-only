@@ -36,6 +36,7 @@
 #include <stdlib.h>
 #include "coding_style.h"
 
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message

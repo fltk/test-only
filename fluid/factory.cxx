@@ -77,7 +77,30 @@ static ValueOutputType ValueOutputtype;
 static ValueSliderType ValueSlidertype;
 static BarGroupType BarGrouptype;
 static TextDisplayType TextDisplaytype;
-
+////////////////////////////////////////////////////////////////
+extern FunctionType Functiontype;
+extern CodeType Codetype;
+extern CodeBlockType CodeBlocktype;
+extern DeclType Decltype;
+extern DeclBlockType DeclBlocktype;
+extern ClassType Classtype;
+extern NamespaceType Namespacetype;
+extern WindowType Windowtype;
+extern GroupType Grouptype;
+extern PackType Packtype;
+extern TabsType Tabstype;
+extern ScrollType Scrolltype;
+extern TileType Tiletype;
+extern ChoiceType Choicetype;
+extern MenuBarType MenuBartype;
+extern PopupMenuType PopupMenutype;
+extern ItemType Itemtype;
+extern DividerType Dividertype;
+extern SubmenuType Submenutype;
+extern BrowserType Browsertype;
+extern InputBrowserType InputBrowsertype;
+extern FileBrowserType FileBrowsertype;
+extern CommentType Commenttype;
 ////////////////////////////////////////////////////////////////
 const Enumeration fltk::buttontype_menu[] = {
   {"Normal", 0,		(void*)fltk::Button::NORMAL},
@@ -157,29 +180,6 @@ int FileInputType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
 }
 
 ////////////////////////////////////////////////////////////////
-extern class FunctionType Functiontype;
-extern class CodeType Codetype;
-extern class CodeBlockType CodeBlocktype;
-extern class DeclType Decltype;
-extern class DeclBlockType DeclBlocktype;
-extern class ClassType Classtype;
-extern class NamespaceType Namespacetype;
-extern class WindowType Windowtype;
-extern class GroupType Grouptype;
-extern class PackType Packtype;
-extern class TabsType Tabstype;
-extern class ScrollType Scrolltype;
-extern class TileType Tiletype;
-extern class ChoiceType Choicetype;
-extern class MenuBarType MenuBartype;
-extern class PopupMenuType PopupMenutype;
-extern class ItemType Itemtype;
-extern class DividerType Dividertype;
-extern class SubmenuType Submenutype;
-extern class BrowserType Browsertype;
-extern class InputBrowserType InputBrowsertype;
-extern class FileBrowserType FileBrowsertype;
-extern class CommentType Commenttype;
 
 extern void select(FluidType *,int);
 
@@ -187,6 +187,8 @@ static void cb(fltk::Widget *, void *v) {
   FluidType *t = ((FluidType*)v)->make();
   if (t) {select_only(t); modflag = 1; t->open();}
 }
+
+using namespace fltk;
 
 ItemGroup* newMenu;
 
