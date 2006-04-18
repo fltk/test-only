@@ -3,10 +3,16 @@
 #ifndef widget_panel_h
 #define widget_panel_h
 #include <fltk/Window.h>
+#include <fltk/Window.h>
+extern fltk::Window* widgetbin_panel;
+#include <fltk/Group.h>
+#include <fltk/Button.h>
+extern void type_make_cb(fltk::Button*, void*);
+fltk::Window* make_widgetbin();
+void type_make_cb(fltk::Widget*w,void*d);
 #include <fltk/TabGroup.h>
 extern void propagate_tabs(fltk::TabGroup*, void*);
 extern fltk::TabGroup* panel_tabs;
-#include <fltk/Group.h>
 extern void propagate_group(fltk::Group*, void*);
 #include <fltk/Input.h>
 extern void user_class_cb(fltk::Input*, void*);
@@ -15,7 +21,6 @@ extern void subtype_cb(fltk::Choice*, void*);
 extern void label_cb(fltk::Input*, void*);
 #include <fltk/Widget.h>
 extern fltk::Widget* image_label;
-#include <fltk/Button.h>
 extern void image_cb(fltk::Button*, void*);
 extern fltk::Widget* image_label2;
 extern fltk::Widget* image_label3;

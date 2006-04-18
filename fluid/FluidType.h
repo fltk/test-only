@@ -34,6 +34,7 @@
 #define fltk_fluid_type_h
 
 #include <fltk/Widget.h>
+#include <fltk/Preferences.h>
 #include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
 
@@ -354,7 +355,9 @@ FLUID_API const char *c_check(const char *c, int type = 0);
 FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 
 FLUID_API extern bool include_H_from_C;
-
+FLUID_API void select(FluidType* it, int value);
+FLUID_API void select_only(FluidType *);
+extern fltk::Preferences	fluid_prefs;	// FLUID preferences
 #endif
 //
 // End of "$Id$".

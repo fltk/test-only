@@ -62,10 +62,10 @@ const char *copyright =
 #include <fltk/FileIcon.h>
 #include <fltk/Preferences.h>
 #include <fltk/MenuBuild.h>
+#include <fltk/string.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk/string.h>
 #include <ctype.h>
 #include <errno.h>
 
@@ -77,6 +77,8 @@ const char *copyright =
 #endif
 
 #include "about_panel.h"
+#include "alignment_panel.h"
+#include "widget_panel.h"
 
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
@@ -98,7 +100,7 @@ static int  read_alignement_prefs() {
     fluid_prefs.get("gridy", gridy, 5);
     fluid_prefs.get("show_tooltips", show_tooltip, 1);
     fltk::Tooltip::enable(show_tooltip ? true : false);
-
+    
     return 0;
 }
 static int dummy = read_alignement_prefs();
@@ -110,6 +112,7 @@ char	relative_history[10][1024];
 
 void	load_history();
 void	update_history(const char *);
+void	set_alignment_window();
 
 ////////////////////////////////////////////////////////////////
 
@@ -199,6 +202,31 @@ void leave_source_dir() {
 
 fltk::Window *main_window;
 
+char position_window(fltk::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
+    fltk::Preferences pos(fluid_prefs, prefsName);
+    if (prevpos_button && prevpos_button->value() ) {
+	pos.get("x", X, X);
+	pos.get("y", Y, Y);
+	if ( W!=0 ) {
+	    pos.get("w", W, W);
+	    pos.get("h", H, H);
+	    w->resize( X, Y, W, H );
+	}
+	else
+	    w->position( X, Y );
+    }
+    pos.get("visible", Visible, Visible);
+    return Visible;
+}
+void save_position(fltk::Window *w, const char *prefsName) {
+    fltk::Preferences pos(fluid_prefs, prefsName);
+    pos.set("x", w->x());
+    pos.set("y", w->y());
+    pos.set("w", w->w());
+    pos.set("h", w->h());
+    pos.set("visible", (int)(w->shown() && w->visible()));
+}
+
 void save_cb(fltk::Widget *, void *v) {
     const char *c = filename;
     if (v || !c || !*c) {
@@ -222,6 +250,10 @@ void exit_cb(fltk::Widget *,void *) {
 	  if (modflag) return;	// Didn't save!
     }
     
+    if (widgetbin_panel) {
+	save_position(widgetbin_panel,"widgetbin_pos");
+	delete widgetbin_panel;
+    }
     exit(0);
 }
 
@@ -457,6 +489,25 @@ void theme_cb(fltk::Widget *, void *) {
     set_theme(s);
 }
 
+extern fltk::MenuBar* Main_Menu;
+
+void toggle_widgetbin_cb(fltk::Widget *o, void * v) {
+    if (!widgetbin_panel) {
+	make_widgetbin();
+	widgetbin_panel->callback(toggle_widgetbin_cb);
+	if (!position_window(widgetbin_panel,"widgetbin_pos", 1, 320, 30)) return;
+    }
+    
+    if (widgetbin_panel->visible()) {
+	widgetbin_panel->hide();
+	o->label("Show Widget &Bin...");
+    } else {
+	widgetbin_panel->show();
+	o->label("Hide Widget &Bin");
+    }
+}
+
+
 ////////////////////////////////////////////////////////////////
 // New fltk2 menu generation
 ////////////////////////////////////////////////////////////////
@@ -465,55 +516,55 @@ fltk::MenuBar* Main_Menu;
 static fltk::Item*  history_item[10];
 
 static void build_hierarchy(fltk::MenuBar* menubar) {
-  fltk::ItemGroup* g;
-  fltk::Item* o; 
-  
-  Main_Menu = menubar;
-
-  menubar->begin();
+    fltk::ItemGroup* g;
+    fltk::Item* o; 
+    
+    Main_Menu = menubar;
+    
+    menubar->begin();
     g=new fltk::ItemGroup("&File",0,0);
-	new fltk::Item("New", 0, new_cb, 0);
-	new fltk::Item("Open...", fltk::CTRL+'o', open_cb, 0);
-	new fltk::Item("Save", fltk::CTRL+'s', save_cb, 0);
-	new fltk::Item("Save As...", fltk::CTRL+'S', save_cb, (void*)1);
-	new fltk::Item("Merge...", fltk::CTRL+'i', open_cb, (void*)1);
-	new fltk::Divider();
-	new fltk::Item("Write code", fltk::CTRL+'w', write_cb, 0);
-	history_item[0] = new fltk::Item(relative_history[0], fltk::CTRL+'0', open_history_cb, absolute_history[0]);
-	history_item[1] = new fltk::Item(relative_history[1], fltk::CTRL+'1', open_history_cb, absolute_history[1]);
-	history_item[2] = new fltk::Item(relative_history[2], fltk::CTRL+'2', open_history_cb, absolute_history[2]);
-	history_item[3] = new fltk::Item(relative_history[3], fltk::CTRL+'3', open_history_cb, absolute_history[3]);
-	history_item[4] = new fltk::Item(relative_history[4], fltk::CTRL+'4', open_history_cb, absolute_history[4]);
-	history_item[5] = new fltk::Item(relative_history[5], fltk::CTRL+'5', open_history_cb, absolute_history[5]);
-	history_item[6] = new fltk::Item(relative_history[6], fltk::CTRL+'6', open_history_cb, absolute_history[6]);
-	history_item[7] = new fltk::Item(relative_history[7], fltk::CTRL+'7', open_history_cb, absolute_history[7]);
-	history_item[8] = new fltk::Item(relative_history[8], fltk::CTRL+'8', open_history_cb, absolute_history[8]);
-	history_item[9] = new fltk::Item(relative_history[9], fltk::CTRL+'9', open_history_cb, absolute_history[9]);
-	new fltk::Divider();
-	new fltk::Item("Quit", fltk::CTRL+'q', exit_cb);
+    new fltk::Item("New", 0, new_cb, 0);
+    new fltk::Item("Open...", fltk::CTRL+'o', open_cb, 0);
+    new fltk::Item("Save", fltk::CTRL+'s', save_cb, 0);
+    new fltk::Item("Save As...", fltk::CTRL+'S', save_cb, (void*)1);
+    new fltk::Item("Merge...", fltk::CTRL+'i', open_cb, (void*)1);
+    new fltk::Divider();
+    new fltk::Item("Write code", fltk::CTRL+'w', write_cb, 0);
+    history_item[0] = new fltk::Item(relative_history[0], fltk::CTRL+'0', open_history_cb, absolute_history[0]);
+    history_item[1] = new fltk::Item(relative_history[1], fltk::CTRL+'1', open_history_cb, absolute_history[1]);
+    history_item[2] = new fltk::Item(relative_history[2], fltk::CTRL+'2', open_history_cb, absolute_history[2]);
+    history_item[3] = new fltk::Item(relative_history[3], fltk::CTRL+'3', open_history_cb, absolute_history[3]);
+    history_item[4] = new fltk::Item(relative_history[4], fltk::CTRL+'4', open_history_cb, absolute_history[4]);
+    history_item[5] = new fltk::Item(relative_history[5], fltk::CTRL+'5', open_history_cb, absolute_history[5]);
+    history_item[6] = new fltk::Item(relative_history[6], fltk::CTRL+'6', open_history_cb, absolute_history[6]);
+    history_item[7] = new fltk::Item(relative_history[7], fltk::CTRL+'7', open_history_cb, absolute_history[7]);
+    history_item[8] = new fltk::Item(relative_history[8], fltk::CTRL+'8', open_history_cb, absolute_history[8]);
+    history_item[9] = new fltk::Item(relative_history[9], fltk::CTRL+'9', open_history_cb, absolute_history[9]);
+    new fltk::Divider();
+    new fltk::Item("Quit", fltk::CTRL+'q', exit_cb);
     g->end();
     
     g=new fltk::ItemGroup("&Edit",0,0);
-	new fltk::Item("Cut", fltk::CTRL+'x', cut_cb);
-	new fltk::Item("Copy", fltk::CTRL+'c', copy_cb);
-	new fltk::Item("Paste", fltk::CTRL+'v', paste_cb);
-	new fltk::Item("Select All", fltk::CTRL+'a', select_all_cb);
-	new fltk::Item("Edit this widget", fltk::ReturnKey, openwidget_cb);
-	new fltk::Item("Sort these widgets", 0, sort_cb);
-	new fltk::Item("Move widget earlier", fltk::F2Key, earlier_cb);
-	new fltk::Item("Move widget later", fltk::F3Key, later_cb);
-	//new fltk::Item("Show", fltk::F5Key, show_cb);
-	//new fltk::Item("Hide", fltk::F6Key, hide_cb);
-	new fltk::Item("Group", fltk::F7Key, group_cb);
-	new fltk::Item("Ungroup", fltk::F8Key, ungroup_cb,0);
-	//new fltk::Item("Deactivate", 0, nyi);
-	//new fltk::Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
-	new fltk::Item(fltk::Item::TOGGLE,"Show Overlays",fltk::ALT+'o',toggle_overlays);
-
-	new fltk::Item("Preferences",fltk::CTRL+'p',show_alignment_cb);
-	new fltk::Item("Coding Style", 0, show_coding_style_cb);
-	new fltk::Item("Theme", 0, theme_cb);
-	new fltk::Item("Set images root directory", fltk::CTRL+'d', set_images_dir_cb);
+    new fltk::Item("Cut", fltk::CTRL+'x', cut_cb);
+    new fltk::Item("Copy", fltk::CTRL+'c', copy_cb);
+    new fltk::Item("Paste", fltk::CTRL+'v', paste_cb);
+    new fltk::Item("Select All", fltk::CTRL+'a', select_all_cb);
+    new fltk::Item("Edit this widget", fltk::ReturnKey, openwidget_cb);
+    new fltk::Item("Sort these widgets", 0, sort_cb);
+    new fltk::Item("Move widget earlier", fltk::F2Key, earlier_cb);
+    new fltk::Item("Move widget later", fltk::F3Key, later_cb);
+    //new fltk::Item("Show", fltk::F5Key, show_cb);
+    //new fltk::Item("Hide", fltk::F6Key, hide_cb);
+    new fltk::Item("Group", fltk::F7Key, group_cb);
+    new fltk::Item("Ungroup", fltk::F8Key, ungroup_cb,0);
+    //new fltk::Item("Deactivate", 0, nyi);
+    //new fltk::Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
+    new fltk::Item(fltk::Item::TOGGLE,"Show Overlays",fltk::ALT+'o',toggle_overlays);
+    new fltk::Item(fltk::Item::TOGGLE,"Show Widget &Bin",fltk::ALT+'b',toggle_widgetbin_cb);
+    new fltk::Item("Preferences",fltk::CTRL+'p',show_alignment_cb);
+    new fltk::Item("Coding Style", 0, show_coding_style_cb);
+    new fltk::Item("Theme", 0, theme_cb);
+    new fltk::Item("Set images root directory", fltk::CTRL+'d', set_images_dir_cb);
     g->end();
     
     g=new fltk::ItemGroup("&New", 0, 0);
@@ -524,12 +575,12 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     g->end();
     
     g=new fltk::ItemGroup("&Help",0,0);
-	new fltk::Item("About fluid",0,about_cb);
-	o= new fltk::Item(fltk::Item::TOGGLE,"Tooltips", 0, tt_cb, 0);
-	if (show_tooltip) o->set_flag(fltk::VALUE);
-	//new fltk::Item("Manual",0,nyi);
+    new fltk::Item("About fluid",0,about_cb);
+    o= new fltk::Item(fltk::Item::TOGGLE,"Tooltips", 0, tt_cb, 0);
+    if (show_tooltip) o->set_flag(fltk::VALUE);
+    //new fltk::Item("Manual",0,nyi);
     g->end();
-  menubar->end();
+    menubar->end();
 }
 
 #define BROWSERWIDTH 300
@@ -537,145 +588,145 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 #define WINWIDTH 300
 #define MENUHEIGHT 23
 #define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
-    
 
-    fltk::MenuBar* menubar;
-    fltk::Browser *widget_browser;
+
+fltk::MenuBar* menubar;
+fltk::Browser *widget_browser;
+
+////////////////////////////////////////////////////////////////
+void make_main_window() {
+    if (!main_window) {
+	fltk::Widget *o;
+	main_window = new fltk::Window(WINWIDTH,WINHEIGHT,"fluid");
+	main_window->box(fltk::NO_BOX);
+	main_window->begin();
+	o = widget_browser = (fltk::Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
+	//  o->text_box(fltk::FLAT_BOX);
+	main_window->resizable(o);
+	menubar = new fltk::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
+	menubar->box(fltk::FLAT_BOX);
+	
+	build_hierarchy(menubar);
+	// this is removed because the new ctrl+bindings mess up emacs in
+	// the text fields:
+	//    menubar->global();
+	main_window->end();
+	load_history();
+    }
+}
+
+////////////////////////////////////////////////////////////////
+void set_filename(const char *c) {
+    if (filename) free((void *)filename);
+    filename = strdup(c);
+    if (c && strlen(c)) update_history(c);
     
-    ////////////////////////////////////////////////////////////////
-    void make_main_window() {
-	if (!main_window) {
-	    fltk::Widget *o;
-	    main_window = new fltk::Window(WINWIDTH,WINHEIGHT,"fluid");
-	    main_window->box(fltk::NO_BOX);
-	    main_window->begin();
-	    o = widget_browser = (fltk::Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
-	    //  o->text_box(fltk::FLAT_BOX);
-	    main_window->resizable(o);
-	    menubar = new fltk::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
-	    menubar->box(fltk::FLAT_BOX);
-	    
-	    build_hierarchy(menubar);
-	    // this is removed because the new ctrl+bindings mess up emacs in
-	    // the text fields:
-	    //    menubar->global();
-	    main_window->end();
-	    load_history();
-	}
+    if (main_window) main_window->label(filename);
+    
+    /* Change directory to .fl file directory
+    * so generated .h/.cxx files goes there also.
+    */
+    char curdir[1024]; 
+    const char *start = c;
+    const char *end = fltk::filename_name(c);
+    int len = end-start;
+    strncpy(curdir, start, len);
+    curdir[len] = 0;
+    chdir(curdir);
+}
+
+////////////////////////////////////////////////////////////////
+// Load file history from preferences...
+void load_history() {
+    int	i;		// Looping var
+    int	max_files;
+    
+    fluid_prefs.get("recent_files", max_files, 5);
+    if (max_files > 10) max_files = 10;
+    
+    for (i = 0; i < max_files; i ++) {
+	fluid_prefs.get( fltk::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
+	if (absolute_history[i][0]) {
+	    // Make a relative version of the filename for the menu...
+	    fltk::filename_relative(relative_history[i], sizeof(relative_history[i]),
+		absolute_history[i]);
+	    history_item[i]->show();
+	} else break;
     }
     
-    ////////////////////////////////////////////////////////////////
-    void set_filename(const char *c) {
-	if (filename) free((void *)filename);
-	filename = strdup(c);
-	if (c && strlen(c)) update_history(c);
-
-	if (main_window) main_window->label(filename);
-	
-	/* Change directory to .fl file directory
-	* so generated .h/.cxx files goes there also.
-	*/
-	char curdir[1024]; 
-	const char *start = c;
-	const char *end = fltk::filename_name(c);
-	int len = end-start;
-	strncpy(curdir, start, len);
-	curdir[len] = 0;
-	chdir(curdir);
+    for (; i < 10; i ++) {
+	history_item[i]->hide();
     }
+    menubar->redraw();
+}
+
+// Update file history from preferences...
+void update_history(const char *flname) {
+    int	i;		// Looping var
+    char	absolute[1024];
+    int	max_files;
     
-    ////////////////////////////////////////////////////////////////
-    // Load file history from preferences...
-    void load_history() {
-	int	i;		// Looping var
-	int	max_files;
+    
+    fluid_prefs.get("recent_files", max_files, 5);
+    if (max_files > 10) max_files = 10;
+    
+    fltk::filename_absolute(absolute, sizeof(absolute), flname);
+    
+    for (i = 0; i < max_files; i ++)
+#if defined(WIN32) || defined(__APPLE__)
+	if (!strcasecmp(absolute, absolute_history[i])) break;
+#else
+	if (!strcmp(absolute, absolute_history[i])) break;
+#endif // WIN32 || __APPLE__
 	
-	fluid_prefs.get("recent_files", max_files, 5);
-	if (max_files > 10) max_files = 10;
+	if (i == 0) return;
 	
+	if (i >= max_files) i = max_files - 1;
+	
+	// Move the other flnames down in the list...
+	memmove(absolute_history + 1, absolute_history,
+	    i * sizeof(absolute_history[0]));
+	memmove(relative_history + 1, relative_history,
+	    i * sizeof(relative_history[0]));
+	
+	// Put the new file at the top...
+	strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
+	
+	fltk::filename_relative(relative_history[0], sizeof(relative_history[0]),
+	    absolute_history[0]);
+	
+	// Update the menu items as needed...
 	for (i = 0; i < max_files; i ++) {
-	    fluid_prefs.get( fltk::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
-	    if (absolute_history[i][0]) {
-		// Make a relative version of the filename for the menu...
-		fltk::filename_relative(relative_history[i], sizeof(relative_history[i]),
-		    absolute_history[i]);
-		history_item[i]->show();
-	    } else break;
+	    fluid_prefs.set( fltk::Preferences::Name("file%d", i), absolute_history[i]);
+	    if (!absolute_history[i][0]) break;
 	}
 	
 	for (; i < 10; i ++) {
+	    fluid_prefs.set( fltk::Preferences::Name("file%d", i), "");
 	    history_item[i]->hide();
 	}
-	menubar->redraw();
+}
+////////////////////////////////////////////////////////////////
+
+static int arg(int argc, char** argv, int& i) {
+    if (argv[i][1] == 'c' && !argv[i][2]) {compile_only = 1; i++; return 1;}
+    if (argv[i][1] == 'o' && !argv[i][2] && i+1 < argc) {
+	code_file_name = argv[i+1];
+	code_file_set  = 1;
+	i += 2;
+	return 2;
     }
-    
-    // Update file history from preferences...
-    void update_history(const char *flname) {
-	int	i;		// Looping var
-	char	absolute[1024];
-	int	max_files;
-	
-	
-	fluid_prefs.get("recent_files", max_files, 5);
-	if (max_files > 10) max_files = 10;
-	
-	fltk::filename_absolute(absolute, sizeof(absolute), flname);
-	
-	for (i = 0; i < max_files; i ++)
-#if defined(WIN32) || defined(__APPLE__)
-	    if (!strcasecmp(absolute, absolute_history[i])) break;
-#else
-	    if (!strcmp(absolute, absolute_history[i])) break;
-#endif // WIN32 || __APPLE__
-	    
-	    if (i == 0) return;
-	    
-	    if (i >= max_files) i = max_files - 1;
-	    
-	    // Move the other flnames down in the list...
-	    memmove(absolute_history + 1, absolute_history,
-		i * sizeof(absolute_history[0]));
-	    memmove(relative_history + 1, relative_history,
-		i * sizeof(relative_history[0]));
-	    
-	    // Put the new file at the top...
-	    strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
-	    
-	    fltk::filename_relative(relative_history[0], sizeof(relative_history[0]),
-		absolute_history[0]);
-	    
-	    // Update the menu items as needed...
-	    for (i = 0; i < max_files; i ++) {
-		fluid_prefs.set( fltk::Preferences::Name("file%d", i), absolute_history[i]);
-		if (!absolute_history[i][0]) break;
-	    }
-	    
-	    for (; i < 10; i ++) {
-		fluid_prefs.set( fltk::Preferences::Name("file%d", i), "");
-		history_item[i]->hide();
-	    }
+    if (argv[i][1] == 'h' && !argv[i][2]) {
+	header_file_name = argv[i+1];
+	header_file_set  = 1;
+	i += 2;
+	return 2;
     }
-    ////////////////////////////////////////////////////////////////
-    
-    static int arg(int argc, char** argv, int& i) {
-	if (argv[i][1] == 'c' && !argv[i][2]) {compile_only = 1; i++; return 1;}
-	if (argv[i][1] == 'o' && !argv[i][2] && i+1 < argc) {
-	    code_file_name = argv[i+1];
-	    code_file_set  = 1;
-	    i += 2;
-	    return 2;
-	}
-	if (argv[i][1] == 'h' && !argv[i][2]) {
-	    header_file_name = argv[i+1];
-	    header_file_set  = 1;
-	    i += 2;
-	    return 2;
-	}
-	return 0;
-    }
-    
+    return 0;
+}
+
 #ifndef _WIN32
-    
+
 #include <signal.h>
 #ifdef _sigargs
 #define SIGARG _sigargs
@@ -686,57 +737,65 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 #define SIGARG int // you may need to fix this for older systems
 #endif
 #endif
-    
-    extern "C" {
-	static void sigint(SIGARG) {
-	    signal(SIGINT,sigint);
-	    exit_cb(0,0);
-	}
-    }
-#endif
-    
-    int main(int argc,char **argv) {
-	int i = 1;
-	if (!fltk::args(argc,argv,i,arg) || i < argc-1) {
-	    fprintf(stderr,"usage: %s <switches> name.fl\n"
-		" -c : write .cxx and .h and exit\n"
-		" -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
-		" -h <name> : .h output filename, or extension if <name> starts with '.'\n"
-		"%s\n", argv[0], fltk::help);
-	    return 1;
-	}
-	const char *c = argv[i];
-	
-	fluid_style_set = new fltk::StyleSet();
-	style_set = new fltk::StyleSet();
-	
-	read_plugins();
-	make_main_window();
-	load_coding_style();
-	
-	if (c) set_filename(c);
-	if (!compile_only) {
-	    fltk::visual(fltk::DOUBLE_BUFFER|fltk::INDEXED_COLOR);
-	    fltk::FileIcon::load_system_icons();
-	    main_window->callback(exit_cb);
-	    main_window->show(argc,argv);
-	}
-	
-	if (c && !read_file(c,0)) {
-	    if (compile_only) {
-		fprintf(stderr,"%s : %s\n", c, strerror(errno));
-		exit(1);
-	    }
-	    fltk::message("Can't read %s: %s", c, strerror(errno));
-	}
-	if (compile_only) {write_cb(0,0); exit(0);}
-	modflag = 0;
-#ifndef _WIN32
+
+extern "C" {
+    static void sigint(SIGARG) {
 	signal(SIGINT,sigint);
+	exit_cb(0,0);
+    }
+}
 #endif
-	return fltk::run();
+
+int main(int argc,char **argv) {
+    int i = 1;
+    if (!fltk::args(argc,argv,i,arg) || i < argc-1) {
+	fprintf(stderr,"usage: %s <switches> name.fl\n"
+	    " -c : write .cxx and .h and exit\n"
+	    " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
+	    " -h <name> : .h output filename, or extension if <name> starts with '.'\n"
+	    "%s\n", argv[0], fltk::help);
+	return 1;
+    }
+    const char *c = argv[i];
+    
+    fluid_style_set = new fltk::StyleSet();
+    style_set = new fltk::StyleSet();
+    
+    fltk::register_images();
+    read_plugins();
+    make_main_window();
+    load_coding_style();
+    
+    if (c) set_filename(c);
+    if (!compile_only) {
+	fltk::visual(fltk::DOUBLE_BUFFER|fltk::INDEXED_COLOR);
+	fltk::FileIcon::load_system_icons();
+	main_window->callback(exit_cb);
+	main_window->show(argc,argv);
+	set_alignment_window();
+	toggle_widgetbin_cb(0,0);
+	// FIXME NOT IMPLEMENTED: toggle_sourceview_cb(0,0);
+	if (!c && openlast_button->value() && absolute_history[0][0]) {
+	    // Open previous file when no file specified...
+	    open_history_cb(0, absolute_history[0]);
+	}
     }
     
-    //
-    // End of "$Id$".
-    //
+    if (c && !read_file(c,0)) {
+	if (compile_only) {
+	    fprintf(stderr,"%s : %s\n", c, strerror(errno));
+	    exit(1);
+	}
+	fltk::message("Can't read %s: %s", c, strerror(errno));
+    }
+    if (compile_only) {write_cb(0,0); exit(0);}
+    modflag = 0;
+#ifndef _WIN32
+    signal(SIGINT,sigint);
+#endif
+    return fltk::run();
+}
+
+//
+// End of "$Id$".
+//

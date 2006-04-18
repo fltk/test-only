@@ -1,73 +1,92 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0002 
+version 2.0100 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 10 
 gridy 10 
 snap 3
+decl {\#include "FluidType.h"} {selected
+} 
+
 Function {make_alignment_window()} {open
 } {
   {fltk::Window} alignment_window {
     label {fluid Preferences} open
-    xywh {271 271 210 310} resizable non_modal visible
+    xywh {363 225 374 280} resizable non_modal visible
   } {
     {fltk::Group} {} {
       label {Alignment:} open
-      xywh {10 20 190 100} align 5 box ENGRAVED_BOX
+      xywh {17 19 339 110} align 5 box ENGRAVED_BOX
     } {
       {fltk::Input} horizontal_input {
         label {Horizontal:}
         user_data 1 user_data_type long
         callback alignment_cb
-        xywh {80 10 100 22}
+        xywh {67 10 100 22}
         extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
       }
       {fltk::Input} vertical_input {
         label {Vertical:}
         user_data 2 user_data_type long
         callback alignment_cb
-        xywh {80 40 100 22}
+        xywh {230 10 100 22}
         extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
       }
       {fltk::Input} snap_input {
         label {Snap:}
         user_data 3 user_data_type long
         callback alignment_cb
-        xywh {80 70 100 22}
+        xywh {230 38 100 22}
         extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
+      }
+      {fltk::CheckButton} openlast_button {
+        label {Open Previous File on Startup}
+        callback {fluid_prefs.set("open_previous_file", openlast_button->value());}
+        xywh {3 59 193 25}
+        extra_code {int b;
+fluid_prefs.get("open_previous_file", b, 0);
+openlast_button->value(b);}
+      }
+      {fltk::CheckButton} prevpos_button {
+        label {Remember Window Positions}
+        callback {fluid_prefs.set("prev_window_pos", prevpos_button->value());}
+        xywh {3 84 193 25}
+        extra_code {int b;
+fluid_prefs.get("prev_window_pos", b, 1);
+prevpos_button->value(b);}
       }
     }
     {fltk::Group} {} {
       label {Output File Names:} open
-      xywh {10 140 190 130} align 5 box ENGRAVED_BOX
+      xywh {17 145 339 87} align 5 box ENGRAVED_BOX
     } {
       {fltk::Widget} {} {
-        label {Use "name.ext" to set name or just ".ext" to set only extension.} selected
-        xywh {10 10 170 30} align 148 box NO_BOX labelsize 11
+        label {Use "name.ext" to set name or just ".ext" to set only extension.}
+        xywh {6 7 323 25} align 180 box NO_BOX labelsize 11
       }
       {fltk::Input} header_file_input {
         label {Header File:}
         user_data 1 user_data_type {void*}
         callback header_input_cb
-        xywh {90 40 90 22} when CHANGED
+        xywh {86 37 90 22} when CHANGED
       }
       {fltk::Input} code_file_input {
         label {Code File:}
         user_data 1 user_data_type {void*}
         callback code_input_cb
-        xywh {90 70 90 22} when CHANGED
+        xywh {239 37 90 22} when CHANGED
       }
       {fltk::CheckButton} include_H_from_C_button {
         label {\#include "header" in code}
         callback include_H_from_C_button_cb
-        xywh {10 98 170 22} value 1
+        xywh {6 63 170 22} value 1
       }
     }
     {fltk::Button} {} {
       label Close
       callback {alignment_window->hide();}
-      xywh {140 280 60 22}
+      xywh {249 244 107 20}
     }
   }
 } 

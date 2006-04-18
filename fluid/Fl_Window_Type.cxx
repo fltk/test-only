@@ -61,7 +61,7 @@ void alignment_cb(fltk::Input *i, long v) {
 extern const char* header_file_name;
 extern const char* code_file_name;
 
-void show_alignment_cb(fltk::Widget *, void *) {
+void set_alignment_window(){
   if (!alignment_window) make_alignment_window();
   include_H_from_C_button->value(include_H_from_C);
   header_file_input->value(header_file_name);
@@ -70,6 +70,10 @@ void show_alignment_cb(fltk::Widget *, void *) {
   sprintf(buf,"%d",gridx); horizontal_input->value(buf);
   sprintf(buf,"%d",gridy); vertical_input->value(buf);
   sprintf(buf,"%d",snap); snap_input->value(buf);
+}
+
+void show_alignment_cb(fltk::Widget *, void *) {
+  set_alignment_window();
   alignment_window->show();
 }
 

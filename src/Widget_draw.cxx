@@ -113,7 +113,7 @@ void Widget::draw_frame() const {
 void Widget::draw_label() const {
   Flags flags = this->flags();
   // Do a quick test to see if we don't want to draw anything:
-  if (!image() && (!label() || !*label() ||
+  if (!context_image() && (!label() || !*label() ||
 		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
   Rectangle r(w(),h()); box()->inset(r);

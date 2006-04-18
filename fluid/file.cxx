@@ -33,10 +33,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <fltk/FL_VERSION.h>
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
 #include "FluidType.h"
-#include <fltk/FL_VERSION.h>
+#include "factory.h"
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -352,7 +353,6 @@ void read_fdesign();
 
 double read_version;
 
-extern FluidType *FluidType_make(const char *tn);
 extern void set_theme(const char* s);
 
 static void read_children(FluidType *p, int paste) {
@@ -387,7 +387,7 @@ static void read_children(FluidType *p, int paste) {
 
     // back compatability with Vincent Penne's original class code:
     if (!p && !strcmp(c,"define_in_struct")) {
-      FluidType *t = FluidType_make("class");
+	FluidType *t = fltk::FluidType_make("class");
       t->name(read_word());
       FluidType::current = p = t;
       paste = 1; // stops "missing }" error
@@ -429,7 +429,7 @@ static void read_children(FluidType *p, int paste) {
       }
     }
 
-    {FluidType *t = FluidType_make(c);
+    {FluidType *t = fltk::FluidType_make(c);
     if (!t) {
       read_error("Unknown word \"%s\"", c);
       continue;
@@ -607,7 +607,7 @@ void read_fdesign() {
   WidgetType *group = 0;
   WidgetType *widget = 0;
   if (!FluidType::current) {
-    FluidType *t = FluidType_make("Function");
+    FluidType *t = fltk::FluidType_make("Function");
     t->name("create_the_forms()");
     FluidType::current = t;
   }
@@ -618,7 +618,7 @@ void read_fdesign() {
 
     if (!strcmp(name,"Name")) {
 
-      window = (WidgetType*)FluidType_make("fltk::Window");
+	window = (WidgetType*)fltk::FluidType_make("fltk::Window");
       window->name(value);
       window->label(value);
       FluidType::current = widget = window;
@@ -626,7 +626,7 @@ void read_fdesign() {
     } else if (!strcmp(name,"class")) {
 
       if (!strcmp(value,"fltk::BEGIN_GROUP")) {
-	group = widget = (WidgetType*)FluidType_make("fltk::Group");
+	  group = widget = (WidgetType*)fltk::FluidType_make("fltk::Group");
 	FluidType::current = group;
       } else if (!strcmp(value,"fltk::END_GROUP")) {
 	if (group) {
@@ -642,10 +642,10 @@ void read_fdesign() {
 	for (int i = 0; class_matcher[i]; i += 2)
 	  if (!strcmp(value,class_matcher[i])) {
 	    value = class_matcher[i+1]; break;}
-	widget = (WidgetType*)FluidType_make(value);
+	  widget = (WidgetType*)fltk::FluidType_make(value);
 	if (!widget) {
 	  printf("class %s not found, using fltk::Button\n", value);
-	  widget = (WidgetType*)FluidType_make("fltk::Button");
+	  widget = (WidgetType*)fltk::FluidType_make("fltk::Button");
 	}
       }
 

@@ -187,9 +187,9 @@ void Item::layout() {
   measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
   if (type()) w += 15;
-  if (image()) {
+  if (context_image()) {
     int W,H;
-    image()->measure(W, H);
+    context_image()->measure(W, H);
     if (H > h) h = H;
     w += W;
   }
@@ -278,9 +278,9 @@ void ItemGroup::layout() {
   int w = 250, h = 250;
   measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
-  if (image()) {
+  if (context_image()) {
     int W,H;
-    image()->measure(W, H);
+    context_image()->measure(W, H);
     if (H > h) h = H;
     w += W;
   }

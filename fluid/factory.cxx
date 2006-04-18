@@ -182,7 +182,6 @@ extern class FileBrowserType FileBrowsertype;
 extern class CommentType Commenttype;
 
 extern void select(FluidType *,int);
-extern void select_only(FluidType *);
 
 static void cb(fltk::Widget *, void *v) {
   FluidType *t = ((FluidType*)v)->make();
@@ -333,7 +332,7 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
 };
 
 // Create a new type by name:
-FluidType *FluidType_make(const char *tn) {
+FluidType *fltk::FluidType_make(const char *tn) {
   const char* p = 0;
   // First try any of our direct translations:
   for (unsigned n = 0; n < sizeof(ntable)/sizeof(*ntable); n++) {
@@ -350,7 +349,7 @@ FluidType *FluidType_make(const char *tn) {
   } else if (!p) {
     p = tn;
   }
-  return FluidType_make(p, newMenu);
+  return ::FluidType_make(p, newMenu);
 }
 
 #include <fltk/Browser.h>

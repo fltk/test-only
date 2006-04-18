@@ -2322,7 +2322,7 @@ HelpView::get_color(const char *n,	// I - Color name
 }
 
 //
-// 'HelpView::get_image()' - Get an inline image.
+// 'HelpView::image()' - Get an inline image.
 //
 
 SharedImage *

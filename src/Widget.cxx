@@ -600,7 +600,7 @@ void Widget::redraw(uchar flags) {
   the parent() is told to redraw it. Otherwise redraw() is called.
 */
 void Widget::redraw_label() {
-  if (!label() && !image()) return;
+  if (!label() && !context_image()) return;
   // inside label redraws the widget:
   if (!(flags()&15) || (flags() & ALIGN_INSIDE)) redraw();
 #if 0
@@ -658,7 +658,7 @@ void Widget::draw()
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
     // can overlap any other widgets:
-    if (!image() && (!label() ||
+    if (!context_image() && (!label() ||
 		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
       fl_did_clipping = this;
       return;
