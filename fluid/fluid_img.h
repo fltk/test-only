@@ -1,55 +1,44 @@
+//
+// "$Id"
+//
+// fluid_img declaration: all fluid xpm's into one table
+//
+// Type classes for most of the fltk widgets.  Most of the work
+// is done by code in WidgetType.C.  Also a factory instance
+// of each of these type classes.
+//
+// This file also contains the "new" menu, which has a pointer
+// to a factory instance for every class (both the ones defined
+// here and ones in other files)
+//
+// Copyright 1998-2006 by Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
+#ifndef fltk_fluid_img_h
+#define fltk_fluid_img_h
+
 #include <fltk/xpmImage.h>
-#include <pixmaps/fluid/lock.xpm>
-#include <pixmaps/fluid/flWindow.xpm>
-#include <pixmaps/fluid/flButton.xpm>
-#include <pixmaps/fluid/flCheckButton.xpm>
-#include <pixmaps/fluid/flRoundButton.xpm>
-#include <pixmaps/fluid/flBox.xpm>
-#include <pixmaps/fluid/flGroup.xpm>
-#include <pixmaps/fluid/flFunction.xpm>
-#include <pixmaps/fluid/flCode.xpm>
-#include <pixmaps/fluid/flCodeBlock.xpm>
-#include <pixmaps/fluid/flComment.xpm>
-#include <pixmaps/fluid/flDeclaration.xpm>
-#include <pixmaps/fluid/flDeclarationBlock.xpm>
-#include <pixmaps/fluid/flClass.xpm>
-#include <pixmaps/fluid/flNamespace.xpm>
-#include <pixmaps/fluid/flTabs.xpm>
-#include <pixmaps/fluid/flInput.xpm>
-#include <pixmaps/fluid/flChoice.xpm>
-#include <pixmaps/fluid/flMenuitem.xpm>
-#include <pixmaps/fluid/flMenubar.xpm>
-#include <pixmaps/fluid/flSubmenu.xpm>
-#include <pixmaps/fluid/flScroll.xpm>
-#include <pixmaps/fluid/flTile.xpm>
-#include <pixmaps/fluid/flWizard.xpm>
-#include <pixmaps/fluid/flPack.xpm>
-#include <pixmaps/fluid/flReturnButton.xpm>
-#include <pixmaps/fluid/flLightButton.xpm>
-#include <pixmaps/fluid/flRepeatButton.xpm>
-#include <pixmaps/fluid/flMenuButton.xpm>
-#include <pixmaps/fluid/flOutput.xpm>
-#include <pixmaps/fluid/flTextDisplay.xpm>
-#include <pixmaps/fluid/flTextEdit.xpm>
-#include <pixmaps/fluid/flFileInput.xpm>
-#include <pixmaps/fluid/flBrowser.xpm>
-#include <pixmaps/fluid/flCheckBrowser.xpm>
-#include <pixmaps/fluid/flFileBrowser.xpm>
-#include <pixmaps/fluid/flClock.xpm>
-#include <pixmaps/fluid/flHelp.xpm>
-#include <pixmaps/fluid/flProgress.xpm>
-#include <pixmaps/fluid/flSlider.xpm>
-#include <pixmaps/fluid/flScrollBar.xpm>
-#include <pixmaps/fluid/flValueSlider.xpm>
-#include <pixmaps/fluid/flAdjuster.xpm>
-#include <pixmaps/fluid/flCounter.xpm>
-#include <pixmaps/fluid/flDial.xpm>
-#include <pixmaps/fluid/flRoller.xpm>
-#include <pixmaps/fluid/flValueInput.xpm>
-#include <pixmaps/fluid/flValueOutput.xpm>
-#include <pixmaps/fluid/flSpinner.xpm>
-#include <pixmaps/fluid/flWidgetClass.xpm>
 
 namespace fltk {
-    extern xpmImage* fluid_pixmap[];
+  extern xpmImage* fluid_pixmap[];
 }
+
+#endif
+
+// End of "$Id"
