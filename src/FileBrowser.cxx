@@ -332,7 +332,7 @@ void FileBrowser::filter(const char *pattern)	{
 }
 
 ////////////////////////////////////////////////////////////////
-//#include "../test/file_small.xpm"
+//#include <pixmaps/file_small.xpm>
 //#include <fltk/xpmImage.h>
 class FileItem : public Item {
 public:

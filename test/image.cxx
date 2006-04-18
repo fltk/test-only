@@ -104,7 +104,7 @@ public:
 };
 
 // Monochrome xpm tester:
-#include "recycle.xpm"
+#include <pixmaps/recycle.xpm>
 #include "porsche.xpm"
 class Xtest : public Widget {
 public:

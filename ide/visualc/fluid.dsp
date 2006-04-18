@@ -108,7 +108,15 @@ SOURCE=..\..\fluid\coding_style.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\factory.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\Fluid_Image.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\fluid_img.h
 # End Source File
 # Begin Source File
 
@@ -121,6 +129,10 @@ SOURCE=..\..\fluid\FluidType.h
 # Begin Source File
 
 SOURCE=..\..\fluid\function_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\FunctionType.h
 # End Source File
 # Begin Source File
 
@@ -137,6 +149,10 @@ SOURCE=..\..\fluid\Shortcut_Button.h
 # Begin Source File
 
 SOURCE=..\..\fluid\widget_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetType.h
 # End Source File
 # End Group
 # Begin Source File
@@ -202,6 +218,10 @@ SOURCE=..\..\fluid\fluid.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\Fluid_Image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\fluid_img.cxx
 # End Source File
 # Begin Source File
 

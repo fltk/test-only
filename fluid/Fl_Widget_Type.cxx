@@ -36,8 +36,19 @@
 #include <ctype.h>
 
 #include "coding_style.h"
+#include "factory.h"
+
+using namespace fltk;
 
 int WidgetType::is_widget() const {return 1;}
+
+const char *WidgetType::type_name() const {return "fltk::Widget";}
+
+Widget *WidgetType::widget(int x,int y,int w, int h) {
+  return new Widget(x,y,w,h,"label");
+}
+
+WidgetType *WidgetType::_make() {return new WidgetType();}
 
 const char* WidgetType::subclass() const {
   // first return any text class name the user put in:
@@ -693,7 +704,7 @@ void label_size_cb(fltk::ValueInput* i, void *v) {
     { i->textcolor(c); i->redraw();}
 }
 
-void image_cb(fltk::Button *a, void *v) {
+void image_cb(fltk::Button *a, void * v) {
   if (v != LOAD) {
     Fluid_Image *i = ui_find_image(current_widget->image);
     if (i == current_widget->image) return; // user hit "Cancel"
@@ -2092,7 +2103,6 @@ static const Enumeration boxmenu1[] = {
 {0}};
 
 extern int fdesign_flip;
-int lookup_symbol(const char *, int &, int numberok = 0);
 
 int WidgetType::read_fdesign(const char* name, const char* value) {
   int v;
@@ -2126,25 +2136,25 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
     }
   } else if (!strcmp(name,"style")) {
     if (!strncmp(value,"FL_NORMAL",9)) return 1;
-    if (!lookup_symbol(value,v,1)) return 0;
+    if (!fltk::lookup_symbol(value,v,1)) return 0;
     o->labelfont(fltk::font(v)); o->labeltype((fltk::LabelType*)(v>>8));
   } else if (!strcmp(name,"size")) {
-    if (!lookup_symbol(value,v,1)) return 0;
+      if (!fltk::lookup_symbol(value,v,1)) return 0;
     o->labelsize((float)v);
   } else if (!strcmp(name,"type")) {
     if (!strncmp(value,"NORMAL",6)) return 1;
-    if (lookup_symbol(value,v,1)) {o->type(v); return 1;}
+    if (fltk::lookup_symbol(value,v,1)) {o->type(v); return 1;}
     if (!strcmp(value+strlen(value)-5,"FRAME")) goto TRY_BOXTYPE;
     if (!strcmp(value+strlen(value)-3,"BOX")) goto TRY_BOXTYPE;
     return 0;
   } else if (!strcmp(name,"lcol")) {
-    if (!lookup_symbol(value,v,1)) return 0;
+    if (!fltk::lookup_symbol(value,v,1)) return 0;
     o->labelcolor(v);
   } else if (!strcmp(name,"return")) {
-    if (!lookup_symbol(value,v,0)) return 0;
+    if (!fltk::lookup_symbol(value,v,0)) return 0;
     o->when(v|fltk::WHEN_RELEASE);
   } else if (!strcmp(name,"alignment")) {
-    if (!lookup_symbol(value,v)) {
+    if (!fltk::lookup_symbol(value,v)) {
       // convert old numeric values:
       int v1 = strtol(value,0,0); if (v1 <= 0 && strcmp(value,"0")) return 0;
       v = 0;
@@ -2166,7 +2176,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
     while (*p != ' ') {if (!*p) return 0; p++;}
     *p = 0;
     int v1;
-    if (!lookup_symbol(value,v,1) || !lookup_symbol(p+1,v1,1)) {
+    if (!fltk::lookup_symbol(value,v,1) || !fltk::lookup_symbol(p+1,v1,1)) {
       *p=' '; return 0;}
     o->color(v); o->selection_color(v1);
   } else if (!strcmp(name,"resize")) {

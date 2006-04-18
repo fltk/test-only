@@ -6,6 +6,12 @@ fltk::TabGroup* panel_tabs;
 
 fltk::Widget* image_label;
 
+fltk::Widget* image_label2;
+
+fltk::Widget* image_label3;
+
+fltk::Widget* image_label4;
+
 fltk::CheckButton* include_image_button;
 
 fltk::ValueInput* widget_x;
@@ -51,172 +57,204 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("Text displayed on or next to the widget");
           o->take_focus();
         }
-         {fltk::Widget* o = image_label = new fltk::Widget(9, 55, 71, 22, "Image");
+         {fltk::Widget* o = image_label = new fltk::Widget(8, 80, 73, 17, "Img default");
           o->box(fltk::NO_BOX);
-          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(80, 55, 220, 22, "Image name");
+         {fltk::Button* o = new fltk::Button(84, 80, 285, 16);
           o->color((fltk::Color)7);
-          o->callback((fltk::Callback*)image_cb);
-		  o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
+          o->callback((fltk::Callback*)image_cb, (void*)(1));
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
           o->tooltip("Select an image to label the widget");
         }
-         {fltk::CheckButton* o = include_image_button = new fltk::CheckButton(305, 55, 50, 22, "inline");
+         {fltk::Widget* o = image_label2 = new fltk::Widget(8, 95, 73, 17, "inactive");
+          o->box(fltk::NO_BOX);
+          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+        }
+         {fltk::Button* o = new fltk::Button(84, 95, 285, 16);
+          o->color((fltk::Color)7);
+          o->callback((fltk::Callback*)image_cb, (void*)(2));
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+          ((fltk::Window*)(o->parent()->parent()->parent()))->hotspot(o);
+          o->tooltip("Select an image to label the widget");
+        }
+         {fltk::Widget* o = image_label3 = new fltk::Widget(8, 110, 73, 17, "bmouse");
+          o->box(fltk::NO_BOX);
+          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+        }
+         {fltk::Button* o = new fltk::Button(84, 110, 285, 16);
+          o->color((fltk::Color)7);
+          o->callback((fltk::Callback*)image_cb, (void*)(3));
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+          o->tooltip("Select an image to label the widget");
+        }
+         {fltk::Widget* o = image_label4 = new fltk::Widget(8, 125, 73, 17, "pushed");
+          o->box(fltk::NO_BOX);
+          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+        }
+         {fltk::Button* o = new fltk::Button(84, 125, 285, 16);
+          o->color((fltk::Color)7);
+          o->callback((fltk::Callback*)image_cb, (void*)(4));
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+          o->tooltip("Select an image to label the widget");
+        }
+         {fltk::CheckButton* o = include_image_button = new fltk::CheckButton(350, 55, 20, 22, "inline");
+          o->set_vertical();
           o->callback((fltk::Callback*)image_inlined_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_WRAP);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_WRAP);
           o->tooltip("The image data is inserted as inline data into the output C++ code, rather th\
 an generating code to read the image file.");
         }
-         {fltk::Widget* o = new fltk::Widget(10, 77, 70, 22, "Alignment");
+         {fltk::Widget* o = new fltk::Widget(10, 55, 70, 22, "Alignment");
           o->box(fltk::NO_BOX);
-          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(80, 78, 20, 20, "@4->");
+         {fltk::Button* o = new fltk::Button(80, 57, 20, 20, "@4->");
           o->type(fltk::Button::TOGGLE);
           o->labelsize(11);
           o->textsize(11);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_LEFT));
           o->tooltip("Places label on the left of the widget");
         }
-         {fltk::Button* o = new fltk::Button(100, 78, 20, 20, "@6->");
+         {fltk::Button* o = new fltk::Button(100, 57, 20, 20, "@6->");
           o->type(fltk::Button::TOGGLE);
           o->labelsize(11);
           o->textsize(11);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_RIGHT));
           o->tooltip("Places label on the right of the widget");
         }
-         {fltk::Button* o = new fltk::Button(120, 78, 20, 20, "@8->");
+         {fltk::Button* o = new fltk::Button(120, 57, 20, 20, "@8->");
           o->type(fltk::Button::TOGGLE);
           o->labelsize(11);
           o->textsize(11);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_TOP));
           o->tooltip("Places label on the top of the widget");
         }
-         {fltk::Button* o = new fltk::Button(140, 78, 20, 20, "@2->");
+         {fltk::Button* o = new fltk::Button(140, 57, 20, 20, "@2->");
           o->type(fltk::Button::TOGGLE);
           o->labelsize(11);
           o->textsize(11);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_BOTTOM));
           o->tooltip("Places label on the bottom of the widget");
         }
-         {fltk::Button* o = new fltk::Button(165, 78, 40, 20, "inside");
+         {fltk::Button* o = new fltk::Button(165, 57, 40, 20, "inside");
           o->type(fltk::Button::TOGGLE);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_INSIDE));
           o->tooltip("Places label inside the widget");
         }
-         {fltk::Button* o = new fltk::Button(205, 78, 40, 20, "clip");
+         {fltk::Button* o = new fltk::Button(205, 57, 40, 20, "clip");
           o->type(fltk::Button::TOGGLE);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_CLIP));
           o->tooltip("Turn on clipping to the widget's area when drawing label.  This is slower so \
 it should be left off if label will fit");
         }
-         {fltk::Button* o = new fltk::Button(245, 78, 40, 20, "wrap");
+         {fltk::Button* o = new fltk::Button(245, 57, 40, 20, "wrap");
           o->type(fltk::Button::TOGGLE);
           o->callback((fltk::Callback*)align_cb, (void*)(fltk::ALIGN_WRAP));
           o->tooltip("Word-wrap the label");
         }
-         {fltk::ValueInput* o = widget_x = new fltk::ValueInput(80, 105, 55, 22, "x");
+         {fltk::ValueInput* o = widget_x = new fltk::ValueInput(80, 155, 55, 22, "x");
           o->labelsize(11);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((fltk::Callback*)x_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The x coordinate of the widget.");
         }
-         {fltk::ValueInput* o = widget_y = new fltk::ValueInput(135, 105, 55, 22, "y");
+         {fltk::ValueInput* o = widget_y = new fltk::ValueInput(135, 155, 55, 22, "y");
           o->labelsize(11);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((fltk::Callback*)y_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The y coordinate of the widget.");
         }
-         {fltk::ValueInput* o = widget_width = new fltk::ValueInput(190, 105, 55, 22, "w");
+         {fltk::ValueInput* o = widget_width = new fltk::ValueInput(190, 155, 55, 22, "w");
           o->labelsize(11);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((fltk::Callback*)width_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The width of the widget.");
         }
-         {fltk::ValueInput* o = widget_height = new fltk::ValueInput(245, 105, 55, 22, "h");
+         {fltk::ValueInput* o = widget_height = new fltk::ValueInput(245, 155, 55, 22, "h");
           o->labelsize(11);
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((fltk::Callback*)height_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The height of the widget.");
         }
-         {fltk::CheckButton* o = set_xy = new fltk::CheckButton(305, 105, 60, 22, "Set xy");
+         {fltk::CheckButton* o = set_xy = new fltk::CheckButton(305, 155, 60, 22, "Set xy");
           o->callback((fltk::Callback*)set_xy_cb);
           o->tooltip("Window will use this x,y rather than being positioned by the operating system\
 .");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(315, 105, 55, 22, "size");
+         {fltk::ValueInput* o = new fltk::ValueInput(315, 155, 55, 22, "size");
           o->labelsize(11);
           o->callback((fltk::Callback*)slider_size_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The size of the scroller");
         }
-         {fltk::CheckButton* o = new fltk::CheckButton(145, 132, 70, 22, "Border");
+         {fltk::CheckButton* o = new fltk::CheckButton(145, 182, 70, 22, "Border");
           o->callback((fltk::Callback*)border_cb);
           o->tooltip("Enable the window manager border");
         }
-         {fltk::CheckButton* o = new fltk::CheckButton(210, 132, 70, 22, "Modal");
+         {fltk::CheckButton* o = new fltk::CheckButton(210, 182, 70, 22, "Modal");
           o->callback((fltk::Callback*)modal_cb);
           o->tooltip("This window will stay on top of others in the application and will block even\
 ts from going to other windows until it is hidden or closed.");
         }
-         {fltk::CheckButton* o = new fltk::CheckButton(290, 132, 75, 22, "Child");
+         {fltk::CheckButton* o = new fltk::CheckButton(290, 182, 75, 22, "Child");
           o->callback((fltk::Callback*)non_modal_cb);
           o->tooltip("This window will stay on top of others in the application.");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(80, 132, 55, 22, "Value");
+         {fltk::ValueInput* o = new fltk::ValueInput(80, 182, 55, 22, "Value");
           o->callback((fltk::Callback*)value_cb);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The initial value of this widget");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(135, 132, 55, 22, "min");
+         {fltk::ValueInput* o = new fltk::ValueInput(135, 182, 55, 22, "min");
           o->labelsize(11);
           o->callback((fltk::Callback*)min_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The minimum value for this valuator");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(190, 132, 55, 22, "max");
+         {fltk::ValueInput* o = new fltk::ValueInput(190, 182, 55, 22, "max");
           o->labelsize(11);
           o->value(1);
           o->callback((fltk::Callback*)max_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("The maximum value for this valuator");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(245, 132, 60, 22, "step");
+         {fltk::ValueInput* o = new fltk::ValueInput(245, 182, 60, 22, "step");
           o->labelsize(11);
           o->callback((fltk::Callback*)step_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("step:\nRound all movements to multiples of this.\n");
         }
-         {fltk::ValueInput* o = new fltk::ValueInput(305, 132, 65, 22, "line");
+         {fltk::ValueInput* o = new fltk::ValueInput(305, 182, 65, 22, "line");
           o->labelsize(11);
           o->minimum(1);
           o->step(1);
           o->callback((fltk::Callback*)line_cb);
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
           o->tooltip("linesize:\nIncrement/decrement for arrow keys.");
         }
-         {fltk::Group* o = new fltk::Group(80, 158, 280, 22, "Attributes");
+         {fltk::Group* o = new fltk::Group(80, 208, 280, 22, "Attributes");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
@@ -242,7 +280,7 @@ ow() is called.");
           }
           o->end();
         }
-         {Shortcut_Button* o = new Shortcut_Button(80, 181, 290, 22, "Shortcut");
+         {Shortcut_Button* o = new Shortcut_Button(80, 231, 290, 22, "Shortcut");
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)shortcut_in_cb);
           o->align(fltk::ALIGN_LEFT);
@@ -250,7 +288,7 @@ ow() is called.");
 o delete the shortcut:\n   Click here, then type backspace.\nTo get out of sho\
 rtcut-setting mode:\n   Click the mouse on this again, or on some other field.");
         }
-         {fltk::WordwrapInput* o = new fltk::WordwrapInput(80, 209, 290, 78, "Tooltip");
+         {fltk::WordwrapInput* o = new fltk::WordwrapInput(80, 258, 290, 34, "Tooltip");
           o->type(5);
           o->box(fltk::BORDER_BOX);
           o->color((fltk::Color)0xffffe100);
@@ -262,9 +300,9 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
           o->deactivate();
           fltk::Group::current()->resizable(o);
         }
-         {fltk::Widget* o = new fltk::Widget(10, 105, 70, 22, "Dimensions");
+         {fltk::Widget* o = new fltk::Widget(10, 154, 70, 22, "Dimensions");
           o->box(fltk::NO_BOX);
-          o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
         o->end();
       }
@@ -426,20 +464,20 @@ e given below.");
       }
       o->end();
     }
-     {fltk::Group* o = new fltk::Group(95, 340, 275, 25);
+     {fltk::Group* o = new fltk::Group(95, 340, 275, 28);
       o->begin();
-       {fltk::CheckButton* o = overlaybutton = new fltk::CheckButton(0, 0, 120, 22, "&Overlays");
+       {fltk::CheckButton* o = overlaybutton = new fltk::CheckButton(0, 6, 120, 22, "&Overlays");
         o->callback((fltk::Callback*)overlay_cb);
         fltk::Group::current()->resizable(o);
         o->tooltip("Turns the overlays (red outlines) off so you can see the edges better.");
         o->value(!overlays_invisible);
       }
-       {fltk::ReturnButton* o = new fltk::ReturnButton(130, 0, 65, 22, "OK");
+       {fltk::ReturnButton* o = new fltk::ReturnButton(130, 6, 65, 22, "OK");
         o->shortcut(0xff0d);
         o->callback((fltk::Callback*)ok_cb);
         o->tooltip("Closes this attribute window");
       }
-       {fltk::Button* o = new fltk::Button(205, 0, 65, 22, "Cancel");
+       {fltk::Button* o = new fltk::Button(205, 6, 65, 22, "Cancel");
         o->callback((fltk::Callback*)cancel_cb);
         o->tooltip("Sorry, cancel does not really work yet.");
       }

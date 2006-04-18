@@ -344,6 +344,7 @@ FluidType::FluidType() {
   user_data_ = 0;
   user_data_type_ = 0;
   callback_ = 0;
+  pixID_ = -1;
 }
 
 // Calling walk(N) will return every FluidType under N by scanning

@@ -30,6 +30,8 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+#ifndef fltk_fluid_type_h
+#define fltk_fluid_type_h
 
 #include <fltk/Widget.h>
 #include "Fluid_Plugins.h"
@@ -45,6 +47,10 @@ class FLUID_API FluidType {
 public:
   virtual void prefix(const char* p) {}
   virtual const char*  prefix() const {return 0;}
+  int pixmapID() const { return pixID_; }
+  void pixmapID(int id ) { pixID_=id; }
+private:
+  int pixID_;
 protected:
 
   FluidType();
@@ -349,6 +355,7 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 
 FLUID_API extern bool include_H_from_C;
 
+#endif
 //
 // End of "$Id$".
 //

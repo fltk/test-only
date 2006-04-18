@@ -38,12 +38,12 @@
 #include <fltk/ask.h>
 #include <fltk/xpmImage.h>
 
-#include "folder_small.xpm"
-#include "folder_small2.xpm"
-#include "folder_small3.xpm"
-#include "file_small.xpm"
-#include "file_small2.xpm"
-#include "book.xpm"
+#include <pixmaps/folder_small.xpm>
+#include <pixmaps/folder_small2.xpm>
+#include <pixmaps/folder_small3.xpm>
+#include <pixmaps/file_small.xpm>
+#include <pixmaps/file_small2.xpm>
+#include <pixmaps/book.xpm>
 #include "porsche.xpm"
 
 #include <stdio.h>

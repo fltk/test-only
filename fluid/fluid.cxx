@@ -81,6 +81,7 @@ const char *copyright =
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
 #include "coding_style.h"
+#include "factory.h"
 
 /////////////////////////////////////////
 // Read preferences file 
@@ -451,7 +452,7 @@ void set_theme(const char* s) {
 }
 
 void theme_cb(fltk::Widget *, void *) {
-    const char* s = fltk::input("Enter the theme name:", theme);
+    const char* s = fltk::input("Enter the theme name:", ::theme);
     if (!s) return;
     set_theme(s);
 }
@@ -462,7 +463,6 @@ void theme_cb(fltk::Widget *, void *) {
 
 fltk::MenuBar* Main_Menu;
 static fltk::Item*  history_item[10];
-extern void fill_in_New_Menu(fltk::ItemGroup* menu);
 
 static void build_hierarchy(fltk::MenuBar* menubar) {
   fltk::ItemGroup* g;
@@ -517,7 +517,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     g->end();
     
     g=new fltk::ItemGroup("&New", 0, 0);
-      fill_in_New_Menu(g);
+    fltk::fill_in_New_Menu(g);
     g->end();
     
     g=new fltk::ItemGroup("&Plugins", 0, 0, (void *)Plugins_Options_Menu);
@@ -538,7 +538,6 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 #define MENUHEIGHT 23
 #define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
     
-    extern void fill_in_New_Menu();
 
     fltk::MenuBar* menubar;
     fltk::Browser *widget_browser;

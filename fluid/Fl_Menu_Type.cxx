@@ -37,48 +37,24 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "WidgetType.h"
 
-static const Enumeration item_type_menu[] = {
+const Enumeration fltk::item_type_menu[] = {
   {"Normal", "NORMAL", (void*)0},
   {"Toggle", "TOGGLE", (void*)fltk::Item::TOGGLE},
   {"Radio",  "RADIO",  (void*)fltk::Item::RADIO},
   {0}};
 
-class ItemType : public WidgetType {
-public:
-  const Enumeration* subtypes() const {return item_type_menu;}
-  const char* type_name() const {return "fltk::Item";}
-  int is_menu_item() const {return 1;}
-  int is_button() const {return 1;} // this gets shortcut to work
-  fltk::Widget *widget(int x,int y,int w,int h);
-  WidgetType *_make() {return new ItemType();}
-};
-
-class DividerType : public WidgetType {
-public:
-  const Enumeration* subtypes() const {return 0;}
-  const char* type_name() const {return "fltk::Divider";}
-  int is_menu_item() const {return 1;}
-  fltk::Widget *widget(int x,int y,int w,int h) { return new fltk::Divider; }
-  WidgetType *_make() {return new DividerType();}
-};
-
-class SubmenuType : public GroupType {
-public:
-  const Enumeration* subtypes() const {return 0;}
-  const char* type_name() const {return "fltk::ItemGroup";}
-  int is_menu_item() const {return 1;}
-  fltk::Widget *widget(int x,int y,int w,int h);
-  WidgetType *_make() {return new SubmenuType();}
-};
 
 extern int reading_file;
 
-fltk::Widget *ItemType::widget(int,int,int,int) {
+using namespace fltk;
+
+Widget *ItemType::widget(int,int,int,int) {
   return new fltk::Item(reading_file ? 0 : "item");
 }
 
-fltk::Widget *SubmenuType::widget(int,int,int,int) {
+Widget *SubmenuType::widget(int,int,int,int) {
   fltk::ItemGroup *g = new fltk::ItemGroup(reading_file ? 0 : "submenu");
   fltk::Group::current(0);
   return g;
@@ -93,27 +69,19 @@ SubmenuType Submenutype;
 // This is the base class for widgets that contain a menu (ie
 // subclasses of fltk::Menu).
 
-class MenuType : public GroupType {
-public:
-  int is_menu_button() const {return 1;}
-  MenuType() : GroupType() {}
-  ~MenuType() {}
-  FluidType* click_test(int x, int y);
-};
-
 extern FL_API bool fl_dont_execute; // in Menu.cxx
 
 FluidType* MenuType::click_test(int, int) {
   if (selected) return 0; // let user move the widget
   fltk::Menu* w = (fltk::Menu*)o;
   if (!w->size()) return 0;
-  fltk::Widget* save = w->item();
+  Widget* save = w->item();
   w->item(0);
   fl_dont_execute = true;
   fltk::pushed(w);
   w->handle(fltk::PUSH);
   fl_dont_execute = false;
-  const fltk::Widget* m = w->item();
+  const Widget* m = w->item();
   if (m) return (FluidType*)(m->user_data());
   w->item(save);
   return this;
@@ -122,7 +90,7 @@ FluidType* MenuType::click_test(int, int) {
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/PopupMenu.h>
-static const Enumeration button_type_menu[] = {
+const Enumeration fltk::button_type_menu[] = {
   {"normal", 0,		(void*)0},
   {"popup1", "POPUP1",	(void*)fltk::PopupMenu::POPUP1},
   {"popup2", "POPUP2",	(void*)fltk::PopupMenu::POPUP2},
@@ -133,96 +101,36 @@ static const Enumeration button_type_menu[] = {
   {"popup123","POPUP123",(void*)fltk::PopupMenu::POPUP123},
   {0}};
 
-class PopupMenuType : public MenuType {
-  const Enumeration *subtypes() const {return button_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::PopupMenu";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::PopupMenu(x,y,w,h,"menu");}
-  WidgetType *_make() {return new PopupMenuType();}
-};
-
 PopupMenuType PopupMenutype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Choice.h>
-
-class ChoiceType : public MenuType {
-public:
-  int is_choice() const {return 1;}
-  virtual const char *type_name() const {return "fltk::Choice";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    fltk::Choice *o = new fltk::Choice(x,y,w,h,"choice:");
-    return o;
-  }
-  WidgetType *_make() {return new ChoiceType();}
-};
 
 ChoiceType Choicetype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/MenuBar.h>
-
-class MenuBarType : public MenuType {
-public:
-  virtual const char *type_name() const {return "fltk::MenuBar";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::MenuBar(x,y,w,h);}
-  WidgetType *_make() {return new MenuBarType();}
-};
 
 MenuBarType MenuBartype;
 
-#include <fltk/InputBrowser.h>
-static const Enumeration input_browser_type_menu[] = {
+const Enumeration fltk::input_browser_type_menu[] = {
   {"Normal",		0,	(void*)fltk::InputBrowser::NORMAL},
   {"Non-Editable","NONEDITABLE",(void*)fltk::InputBrowser::NONEDITABLE},
   {"Indented",	"INDENTED",	(void*)fltk::InputBrowser::INDENTED},
   {"Non-Editable Indented","NONEDITABLE_INDENTED",(void*)fltk::InputBrowser::NONEDITABLE_INDENTED},
   {0}};
 
-class InputBrowserType : public MenuType {
-  int is_input_browser() const {return 1;}
-  const Enumeration *subtypes() const {return input_browser_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::InputBrowser";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::InputBrowser(x,y,w,h);
-  }
-  WidgetType *_make() {return new InputBrowserType();}
-};
 InputBrowserType InputBrowsertype;
 
 
 #include <fltk/Browser.h>
-static const Enumeration browser_type_menu[] = {
+const Enumeration fltk::browser_type_menu[] = {
   {"Single",	0,	(void*)fltk::Browser::NORMAL},
   {"Multi",	"MULTI",	(void*)fltk::Browser::MULTI, "fltk::MultiBrowser"},
   {0}};
-class BrowserType : public MenuType {
-  int is_browser() const {return 1;}
-  const Enumeration *subtypes() const {return browser_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::Browser";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::Browser(x,y,w,h);
-  }
-  WidgetType *_make() {return new BrowserType();}
-};
 BrowserType Browsertype;
 
 #include <fltk/FileBrowser.h>
-class FileBrowserType : public WidgetType {
-  const Enumeration *subtypes() const {return browser_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::FileBrowser";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    return new fltk::FileBrowser(x,y,w,h);
-  }
-  WidgetType *_make() {return new FileBrowserType();}
-};
 FileBrowserType FileBrowsertype;
 
 ////////////////////////////////////////////////////////////////
@@ -282,7 +190,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
   } else {
     for (FluidType *o = FluidType::first; o; o = o->walk())
       if (o->selected && o->is_widget()) {
-	fltk::Widget* b = ((WidgetType*)o)->o;
+	Widget* b = ((WidgetType*)o)->o;
 	b->shortcut(i->svalue);
 	if (o->is_menu_item()) ((WidgetType*)o)->redraw();
       }

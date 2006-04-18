@@ -28,19 +28,14 @@
 //
 
 
-#include "FluidType.h"
 #include <fltk/events.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include <fltk/ask.h>
+#include "FluidType.h"
+#include "WidgetType.h"
 
-class igroup : public fltk::Group {
-public:
-  igroup(int x,int y,int w,int h) : fltk::Group(x,y,w,h) {
-    fltk::Group::current(0);
-    resizable(0);
-  }
-};
+using namespace fltk;
 
 WidgetType* GroupType::_make() {return new GroupType();}
 
@@ -174,43 +169,15 @@ void GroupType::write_code() {
 
 #if 0
 // I took this out because I don't think it is needed for back-compatability
-static const Enumeration pack_type_menu[] = {
+const fltk::Enumeration pack_type_menu[] = {
   {"normal",		0,		(void*)fltk::PackedGroup::NORMAL},
   {"all-vertical",	"HORIZONTAL",	(void*)fltk::PackedGroup::ALL_CHILDREN_VERTICAL},
   {0}};
 #endif
 
-class PackType : public GroupType {
-  //const Enumeration *subtypes() const {return pack_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::PackedGroup";}
-  WidgetType *_make() {return new PackType();}
-};
-
 PackType Packtype;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
-
-#include <fltk/TabGroup.h>
-
-class itabs : public fltk::TabGroup {
-public:
-  itabs(int x,int y,int w,int h) : fltk::TabGroup(x,y,w,h) {
-    fltk::Group::current(0);
-    resizable(0);
-  }
-};
-
-class TabsType : public GroupType {
-public:
-  virtual const char *type_name() const {return "fltk::TabGroup";}
-  fltk::Widget *widget(int x,int y,int w,int h) {
-    itabs *g = new itabs(x,y,w,h); fltk::Group::current(0); return g;}
-  WidgetType *_make() {return new TabsType();}
-  FluidType* click_test(int,int);
-  void add_child(FluidType*, FluidType*);
-  void remove_child(FluidType*);
-};
 
 TabsType Tabstype;	// the "factory"
 
@@ -274,7 +241,7 @@ void GroupType::move_child(FluidType* cc, FluidType* before) {
 
 #include <fltk/ScrollGroup.h>
 
-static const Enumeration scroll_type_menu[] = {
+const Enumeration fltk::scroll_type_menu[] = {
   {"Both",		"BOTH",		(void*)fltk::ScrollGroup::BOTH},
   {"Horizontal",	"HORIZONTAL",	(void*)fltk::ScrollGroup::HORIZONTAL},
   {"Vertical",		"VERTICAL",	(void*)fltk::ScrollGroup::VERTICAL},
@@ -283,22 +250,9 @@ static const Enumeration scroll_type_menu[] = {
   {"Both Always",	"BOTH_ALWAYS",	(void*)fltk::ScrollGroup::BOTH_ALWAYS},
   {0}};
 
-class ScrollType : public GroupType {
-  const Enumeration *subtypes() const {return scroll_type_menu;}
-public:
-  virtual const char *type_name() const {return "fltk::ScrollGroup";}
-  WidgetType *_make() {return new ScrollType();}
-};
-
 ScrollType Scrolltype;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
-
-class TileType : public GroupType {
-public:
-  virtual const char *type_name() const {return "fltk::TiledGroup";}
-  WidgetType *_make() {return new TileType();}
-};
 
 TileType Tiletype;	// the "factory"
 

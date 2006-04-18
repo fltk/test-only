@@ -44,7 +44,7 @@ browser.o: ../fltk/CheckButton.h ../fltk/Input.h ../fltk/ValueSlider.h
 browser.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
 browser.o: ../fltk/run.h ../fltk/events.h ../fltk/xpmImage.h ../fltk/Image.h
 browser.o: ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/Item.h
-browser.o: ../fltk/ItemGroup.h folder_small.xpm file_small.xpm
+browser.o: ../fltk/ItemGroup.h
 button.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
 button.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 button.o: ../fltk/Rectangle.h ../fltk/Button.h
@@ -178,7 +178,6 @@ image.o: ../fltk/rgbImage.h ../fltk/Image.h ../fltk/Symbol.h
 image.o: ../fltk/xpmImage.h ../fltk/xbmImage.h ../fltk/Slider.h
 image.o: ../fltk/CheckButton.h ../fltk/Button.h ../config.h list_visuals.cxx
 image.o: ../fltk/x.h ../fltk/draw.h ../fltk/visual.h sorceress.xbm
-image.o: recycle.xpm porsche.xpm
 input.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
 input.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 input.o: ../fltk/Rectangle.h ../fltk/Input.h ../fltk/FloatInput.h
@@ -202,7 +201,7 @@ label.o: ../fltk/Valuator.h ../fltk/FloatInput.h ../fltk/NumericInput.h
 label.o: ../fltk/Input.h ../fltk/ToggleButton.h ../fltk/Button.h
 label.o: ../fltk/Input.h ../fltk/MenuBuild.h ../fltk/ItemGroup.h
 label.o: ../fltk/Menu.h ../fltk/Item.h ../fltk/Divider.h ../fltk/Choice.h
-label.o: ../fltk/draw.h ../fltk/xpmImage.h ../fltk/Image.h porsche.xpm
+label.o: ../fltk/draw.h ../fltk/xpmImage.h ../fltk/Image.h
 list_visuals.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 list_visuals.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h
 list_visuals.o: ../fltk/PixelType.h ../fltk/run.h
@@ -247,7 +246,7 @@ overlay.o: ../fltk/Button.h ../fltk/compat/FL/fl_draw.H ../fltk/draw.h
 pixmap.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h ../fltk/Group.h
 pixmap.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 pixmap.o: ../fltk/Rectangle.h ../fltk/Button.h ../fltk/xpmImage.h
-pixmap.o: ../fltk/Image.h ../fltk/Symbol.h ../fltk/PixelType.h porsche.xpm
+pixmap.o: ../fltk/Image.h ../fltk/Symbol.h ../fltk/PixelType.h
 pixmap.o: ../fltk/ToggleButton.h ../fltk/Button.h
 radio.o: radio.h
 resizable.o: resizable.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h

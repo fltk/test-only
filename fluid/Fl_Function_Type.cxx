@@ -25,6 +25,7 @@
 
 #include <fltk/run.h>
 #include "FluidType.h"
+#include "FunctionType.h"
 #include "Fluid_Image.h"
 #include <fltk/ask.h>
 #include <fltk/Preferences.h>
@@ -153,25 +154,6 @@ const char *c_check(const char *c, int type) {
 }
 
 ////////////////////////////////////////////////////////////////
-
-class FunctionType : public FluidType {
-    const char* return_type;
-    const char* attributes;
-    bool public_, cdecl_, constructor, havewidgets;
-public:
-    FluidType *make();
-    void write_code();
-    void open();
-    int ismain() {return name_ == 0;}
-    virtual const char *type_name() const {return "Function";}
-    virtual const char *title() {
-	return name() ? name() : "main()";
-    }
-    int is_parent() const {return 1;}
-    int is_code_block() const {return 1;}
-    void write_properties();
-    void read_property(const char *);
-};
 
 FluidType *FunctionType::make() {
     FluidType *p = FluidType::current;
@@ -378,17 +360,6 @@ void FunctionType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-class CodeType : public FluidType {
-public:
-    FluidType *make();
-    void write_code();
-    void write_static();
-    void open();
-    virtual const char *type_name() const {return "code";}
-    int is_code_block() const {return 0;}
-};
-
 FluidType *CodeType::make() {
     FluidType *p = FluidType::current;
     while (p && !p->is_code_block()) p = p->parent;
@@ -442,20 +413,6 @@ void CodeType::write_static() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-class CodeBlockType : public FluidType {
-    const char* after;
-public:
-    FluidType *make();
-    void write_code();
-    void open();
-    virtual const char *type_name() const {return "codeblock";}
-    int is_code_block() const {return 1;}
-    int is_parent() const {return 1;}
-    void write_properties();
-    void read_property(const char *);
-};
-
 FluidType *CodeBlockType::make() {
     FluidType *p = FluidType::current;
     while (p && !p->is_code_block()) p = p->parent;
@@ -525,18 +482,6 @@ void CodeBlockType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-class DeclType : public FluidType {
-    bool public_;
-public:
-    FluidType *make();
-    void write_code();
-    void open();
-    virtual const char *type_name() const {return "decl";}
-    void write_properties();
-    void read_property(const char *);
-};
-
 FluidType *DeclType::make() {
     FluidType *p = FluidType::current;
     while (p && !p->is_decl_block()) p = p->parent;
@@ -624,19 +569,6 @@ void DeclType::write_code() {
 
 ////////////////////////////////////////////////////////////////
 
-class DeclBlockType : public FluidType {
-    const char* after;
-public:
-    FluidType *make();
-    void write_code();
-    void open();
-    virtual const char *type_name() const {return "declblock";}
-    void write_properties();
-    void read_property(const char *);
-    int is_parent() const {return 1;}
-    int is_decl_block() const {return 1;}
-};
-
 FluidType *DeclBlockType::make() {
     FluidType *p = FluidType::current;
     while (p && !p->is_decl_block()) p = p->parent;
@@ -701,23 +633,6 @@ void DeclBlockType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-class CommentType : public FluidType {
-    char title_buf[64];
-public:
-    bool in_c_, in_h_;
-    FluidType *make();
-    void write_code1();
-    void write_code2();
-    void open();
-    virtual const char *type_name() const {return "comment";}
-    virtual const char *title(); // string for browser
-    void write_properties();
-    void read_property(const char *);
-    virtual int is_public() const { return 1; }
-    virtual int is_comment() const { return 1; }
-    int pixmapID() { return 46; }
-};
-
 CommentType Commenttype;
 
 static CommentType * current_comment=0;
@@ -901,31 +816,6 @@ void CommentType::write_code1() {
 void CommentType::write_code2() {}
 
 ////////////////////////////////////////////////////////////////
-class ClassType : public FluidType {
-    const char* subclass_of;
-    bool public_;
-public:
-    // state variables for output:
-    char write_public_state; // true when public: has been printed
-    ClassType* parent_class; // save class if nested
-    //
-    FluidType *make();
-    void write_code();
-    void open();
-    virtual const char *type_name() const {return "class";}
-    int is_parent() const {return 1;}
-    int is_decl_block() const {return 1;}
-    int is_class() const {return 1;}
-    void write_properties();
-    void read_property(const char *);
-    
-    // fc: added for FL_API prefixing and others prefix capability
-    // class prefix attribute access
-    void prefix(const char* p);
-    const char*  prefix() const {return class_prefix;}
-private:
-    const char* class_prefix;
-};
 
 // Return the class that this is a member of, or null if this is not
 // a member of a class. If need_nest is true then a fully-qualified
@@ -1075,26 +965,6 @@ void ClassType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-#if 1
-class NamespaceType : public FluidType {
-public:
-    // state variables for output:
-    NamespaceType* parent_namespace; // save namespace if nested
-    //
-    FluidType *make();
-    void write_code();
-    void write_static(); // for c file "using namespace .." gen.
-    void open();
-    virtual const char *type_name() const {return "namespace";}
-    int is_parent() const {return 1;}
-    int is_decl_block() const {return 1;} // namespace can contain namespace(s) | class(es)
-    int is_class() const {return 0;}
-    void write_properties();
-    void read_property(const char *);
-protected:
-    const char * get_full_string() const ;
-};
-
 // Return the class that this is a member of, or null if this is not
 // a member of a class. If need_nest is true then a fully-qualified
 // name (ie foo::bar::baz) of nested classes is returned, you need this
@@ -1187,7 +1057,6 @@ void NamespaceType::write_code() {
     write_h("}\n");
     current_namespace = parent_namespace;
 }
-#endif
 
 //
 // End of "$Id$".

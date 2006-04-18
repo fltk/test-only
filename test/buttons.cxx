@@ -39,9 +39,9 @@
 #include <fltk/xpmImage.h>
 #include <fltk/SharedImage.h>
 
-#include "folder_small.xpm"
-#include "folder_small2.xpm"
-#include "folder_small3.xpm"
+#include <pixmaps/folder_small.xpm>
+#include <pixmaps/folder_small2.xpm>
+#include <pixmaps/folder_small3.xpm>
 
 using namespace fltk;
 

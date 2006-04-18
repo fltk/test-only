@@ -17,6 +17,9 @@ extern void label_cb(fltk::Input*, void*);
 extern fltk::Widget* image_label;
 #include <fltk/Button.h>
 extern void image_cb(fltk::Button*, void*);
+extern fltk::Widget* image_label2;
+extern fltk::Widget* image_label3;
+extern fltk::Widget* image_label4;
 #include <fltk/CheckButton.h>
 extern void image_inlined_cb(fltk::CheckButton*, void*);
 extern fltk::CheckButton* include_image_button;
