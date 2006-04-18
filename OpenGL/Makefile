@@ -97,10 +97,10 @@ include makedepend
 	echo $(LIBCOMMAND) $@ ...
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
-	
+
 ../lib/$(DSONAME): $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS)
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
@@ -131,7 +131,7 @@ install:
         ifeq ($(DSONAME), fltk2_gl.dll)
 	$(CP) lib$(DSONAME).a $(DESTDIR)$(libdir)
         endif
-	
+
 #
 # Uninstall the libraries...
 #

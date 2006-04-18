@@ -853,7 +853,7 @@ if test -n "$GCC"; then
     fi
 
     # Show all standard warnings + unused variables when compiling...
-    OPTIM="-Wall -Wunused $OPTIM"
+    OPTIM="-Wall -Wno-non-virtual-dtor -Wunused $OPTIM"
 
     # The following additional warnings are useful for tracking down problems...
     #OPTIM="-Wshadow -Wconversion -Winline $OPTIM"

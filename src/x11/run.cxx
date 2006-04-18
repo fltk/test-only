@@ -989,10 +989,13 @@ bool fl_i_own_selection[2];
 */
 void fltk::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
-  if (len+1 > selection_buffer_length[clipboard]) {
+  if (len >= selection_buffer_length[clipboard]) {
     delete[] selection_buffer[clipboard];
-    selection_buffer[clipboard] = new char[len+100];
-    selection_buffer_length[clipboard] = len+100;
+    int n = selection_buffer_length[clipboard]*2;
+    if (!n) n = 1024;
+    while (len >= n) n *= 2;
+    selection_buffer_length[clipboard] = n;
+    selection_buffer[clipboard] = new char[n];
   }
   memcpy(selection_buffer[clipboard], stuff, len);
   selection_buffer[clipboard][len] = 0; // needed for direct paste

@@ -47,7 +47,8 @@ CPPFILES = \
 	xpmFileImage.cxx \
 	images_core.cxx \
 	FileIcon2.cxx \
-	HelpDialog.cxx
+	HelpDialog.cxx \
+	HelpView.cxx
 CFILES	=
 
 LIBNAME	=	$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
@@ -107,7 +108,7 @@ include makedepend
 
 ../lib/$(DSONAME): $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS)
 	$(RM) ../lib/$(DSOLINK)
 	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 

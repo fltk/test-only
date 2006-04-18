@@ -1555,10 +1555,13 @@ static ScrapRef myScrap = 0;
 //+++ verify port to FLTK2
 void fltk::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
-  if (len+1 > selection_buffer_length[clipboard]) {
+  if (len >= selection_buffer_length[clipboard]) {
     delete[] selection_buffer[clipboard];
-    selection_buffer[clipboard] = new char[len+100];
-    selection_buffer_length[clipboard] = len+100;
+    int n = selection_buffer_length[clipboard]*2;
+    if (!n) n = 1024;
+    while (len >= n) n *= 2;
+    selection_buffer_length[clipboard] = n;
+    selection_buffer[clipboard] = new char[n];
   }
   memcpy(selection_buffer[clipboard], stuff, len);
   selection_buffer[clipboard][len] = 0; // needed for direct paste
@@ -1586,19 +1589,20 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     Size len = 0;
     if (GetCurrentScrap(&scrap) == noErr && scrap != myScrap &&
 	GetScrapFlavorSize(scrap, kScrapFlavorTypeText, &len) == noErr) {
-      if ( len > selection_buffer_length[1] ) {
-	selection_buffer_length[1] = len + 32;
-	delete[] selection_buffer[1];
-	selection_buffer[1] = new char[len];
+      if ( len >= selection_buffer_length[1] ) {
+	delete[] selection_buffer[clipboard];
+	int n = selection_buffer_length[clipboard]*2;
+	if (!n) n = 1024;
+	while (len >= n) n *= 2;
+	selection_buffer_length[clipboard] = n;
+	selection_buffer[clipboard] = new char[n];
       }
       GetScrapFlavorData( scrap, kScrapFlavorTypeText, &len,
-			  selection_buffer[1] );
-      selection_length[1] = len;
+			  selection_buffer[clipboard] );
+      selection_length[clipboard] = len;
       // turn all \r characters into \n:
-      for (int x = 0; x < len; x++) {
-	if (selection_buffer[1][x] == '\r')
-	  selection_buffer[1][x] = '\n';
-      }
+      for (char* p = selection_buffer[clipboard]; *p; ++p)
+	if (*p=='\r') *p = '\n';
     }
   }
   e_text = selection_buffer[clipboard];
