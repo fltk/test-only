@@ -37,7 +37,6 @@ include ../makeinclude
 # The following should be added but they don't work as long as the images
 # library is seperated:
 #	HelpDialog.cxx \
-#	HelpView.cxx \
 
 CPPFILES = \
 	Adjuster.cxx \
@@ -65,6 +64,7 @@ CPPFILES = \
 	Font.cxx \
 	Group.cxx \
 	GSave.cxx \
+	HelpView.cxx \
 	HighlightButton.cxx \
 	Image.cxx \
 	Input.cxx \

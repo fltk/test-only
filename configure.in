@@ -853,8 +853,10 @@ if test -n "$GCC"; then
     fi
 
     # Show all standard warnings + unused variables when compiling...
-    OPTIM="-Wall -Wno-non-virtual-dtor -Wunused $OPTIM"
-
+    OPTIM="-Wall -Wunused $OPTIM"
+    # remove the following gcc warning but only on cxx files
+    # (OPTIM is used by C files and will conflict under cygwin:
+    CXXFLAGS="$CXXFLAGS -Wno-non-virtual-dtor"
     # The following additional warnings are useful for tracking down problems...
     #OPTIM="-Wshadow -Wconversion -Winline $OPTIM"
 

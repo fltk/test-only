@@ -47,8 +47,7 @@ CPPFILES = \
 	xpmFileImage.cxx \
 	images_core.cxx \
 	FileIcon2.cxx \
-	HelpDialog.cxx \
-	HelpView.cxx
+	HelpDialog.cxx 
 CFILES	=
 
 LIBNAME	=	$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
