@@ -104,6 +104,7 @@ static int  read_alignement_prefs() {
     return 0;
 }
 static int dummy = read_alignement_prefs();
+static fltk::Item *mShowWidgetBin =0;
 /////////////////////////////////////////
 
 // File history info...
@@ -500,10 +501,10 @@ void toggle_widgetbin_cb(fltk::Widget *o, void * v) {
     
     if (widgetbin_panel->visible()) {
 	widgetbin_panel->hide();
-	o->label("Show Widget &Bin...");
+	mShowWidgetBin->label("Show Widget &Bin...");
     } else {
 	widgetbin_panel->show();
-	o->label("Hide Widget &Bin");
+	mShowWidgetBin->label("Hide Widget &Bin");
     }
 }
 
@@ -560,7 +561,7 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
     //new fltk::Item("Deactivate", 0, nyi);
     //new fltk::Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
     new fltk::Item(fltk::Item::TOGGLE,"Show Overlays",fltk::ALT+'o',toggle_overlays);
-    new fltk::Item(fltk::Item::TOGGLE,"Show Widget &Bin",fltk::ALT+'b',toggle_widgetbin_cb);
+    mShowWidgetBin = new fltk::Item(fltk::Item::TOGGLE,"Show Widget &Bin",fltk::ALT+'b',toggle_widgetbin_cb);
     new fltk::Item("Preferences",fltk::CTRL+'p',show_alignment_cb);
     new fltk::Item("Coding Style", 0, show_coding_style_cb);
     new fltk::Item("Theme", 0, theme_cb);
