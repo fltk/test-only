@@ -1179,9 +1179,21 @@ bool Browser::select_only_this(int do_callback) {
   }
 }
 
+void Browser::notify_remove(Widget* o) {
+    // if o, one item is removed
+    // if o is null then more than one item is removed
+    if (!o || o==prev_item_) prev_item_=0;
+}
+
+void Browser::clear() { 
+    notify_remove(0);
+    Group::clear(); 
+    scrollbar.handle_drag(0); 
+    hscrollbar.handle_drag(0); 
+}
+
 int Browser::handle(int event) {
   static bool drag_type; // for multibrowser
-  static Widget* prev_item = 0; // used for belowmouse (fltk::BELOWMOUSE) image draw
 
   switch (event) {
   case fltk::FOCUS:
@@ -1191,7 +1203,7 @@ int Browser::handle(int event) {
     return 1;
 
   case LEAVE:
-    if(prev_item) {prev_item->redraw_label();prev_item = 0;}
+    if(prev_item_) {prev_item_->redraw_label();prev_item_ = 0;}
     break;
   case PUSH:
   case ENTER:
@@ -1222,7 +1234,7 @@ int Browser::handle(int event) {
     if (!goto_position(event_y()-interior.y()+yposition_)) {
 	if (event==PUSH )  // fabien: as in 1.1.x clicking ouside a tree node deselect any current selection
 	    deselect(1);
-	if(prev_item) {prev_item->redraw_label();prev_item=0;}
+	if(prev_item_) {prev_item_->redraw_label();prev_item_=0;}
 
 	if (!item()) return 0;
     }
@@ -1232,9 +1244,9 @@ int Browser::handle(int event) {
     // see if they are inside the widget and it takes the event:
     if (event_x() >= x && item()->send(event));
     else {
-	if (item()!=prev_item &&  item()->image(fltk::BELOWMOUSE)) {
-	    if(prev_item) prev_item->redraw_label();
-	    prev_item = item();
+	if (item()!=prev_item_ &&  item()->image(fltk::BELOWMOUSE)) {
+	    if(prev_item_) prev_item_->redraw_label();
+	    prev_item_ = item();
 	    fltk::belowmouse(item());
 	    damage_item();
 	}
@@ -1790,6 +1802,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   nHeader = 0; header_ = 0;
   defGroupSymbol1 = defGroupSymbol2 = defGroupSymbol3 =0;
   defLeafSymbol1 = defLeafSymbol2 = defLeafSymbol3 = 0;
+  prev_item_=0;
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {

@@ -164,6 +164,8 @@ static void innards(const uchar *buf, PixelType type,
       case ARGB32:
 	memcpy(to, from, 4*W);
 	break;
+      default:
+	  break; // please gcc3
       }
     }
 

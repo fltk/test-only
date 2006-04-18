@@ -368,7 +368,7 @@ FileChooser::favoritesCB(Widget *w)
       // Set favorite directory 0 to 99...
       sprintf(name, "favorite%02d", i);
 
-      prefs_.set(name, favList->child(i+1)->label());
+      prefs_.set(name, favList->child(i)->label());
     }
 
     // Clear old entries as necessary...

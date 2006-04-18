@@ -121,9 +121,6 @@ public:
   int nheader() const { return nHeader; }
 
   int load(const char *filename);
-  // ! empty the browsr from items and rest scrollbars
-  void clear() { Group::clear(); scrollbar.handle_drag(0); hscrollbar.handle_drag(0); }
-  
  
 protected:
   void handle_callback(int doit); // defines how cb are handled in the browser
@@ -212,11 +209,22 @@ public:
   //! create a leaf node in the tree, if img is not 0 then custom img is set, otherwise default img is set if any
   Item* add_leaf(const char *label, Group* parent=0,  
       const Symbol* img=NoSymbol, const Symbol* imgFocus=NoSymbol);
+  
+  // override item removal changes to have a notification
+  void replace(Widget& old, Widget& o) {notify_remove(&old);Menu::replace(old,o);}
+  void remove(Widget& o) {notify_remove(&o); Menu::remove(o);}
+  void remove(Widget* o) {notify_remove(o); Menu::remove(o);}
+  void remove(int index) {notify_remove(0); Menu::remove(index);}
+  //! update internals when an item is going to be removed, if null warn that more than one item is removed
+  void notify_remove(Widget* o);
+  // ! empty the browser from items and rest scrollbars
+  void clear();
+  
 
 private:
   const Symbol *defGroupSymbol1, *defGroupSymbol2, *defGroupSymbol3;
   const Symbol *defLeafSymbol1,*defLeafSymbol2,*defLeafSymbol3;
-
+  Widget* prev_item_;
 };
 
 }
