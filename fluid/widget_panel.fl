@@ -17,8 +17,6 @@ decl {\#include "fluid_img.h"} {}
 
 decl {\#include "factory.h"} {} 
 
-decl {fltk::Window *widgetbin_panel=(fltk::Window *)0;} {} 
-
 Function {make_widgetbin()} {} {
   {fltk::Window} widgetbin_panel {
     label {Widget Bin}

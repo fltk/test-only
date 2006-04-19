@@ -544,8 +544,13 @@ void DeclType::write_code() {
 	|| !strncmp(c,"typedef",7) && isspace(c[7])
 	//    || !strncmp(c,"struct",6) && isspace(c[6])
 	) {
-	if (public_)
-	    write_h("%s\n", c);
+	if (public_) {
+	    char * s = strdup(c);
+	    char * p = (char*) strrchr(c,'=');
+	    if (p) {*p++=';';*p='\0';}
+	    write_h("%s\n", s);
+	    free(s);
+	}
 	else
 	    write_c("%s\n", c);
 	return;
@@ -558,7 +563,12 @@ void DeclType::write_code() {
 	write_h("%s%.*s;\n", get_indent_string(1), e-c, c);
     } else {
 	if (public_) {
-	    write_h("extern %.*s;\n", e-c, c);
+	    char * s = strdup(c);
+	    char * p = (char*) strrchr(s,'=');
+	    if (p) {*p++=';';*p='\0';}
+	    //write_h("extern %.*s;\n", e-c, c);
+	    write_h("extern %s\n", s);
+	    free(s);
 	    write_c("%.*s;\n", e-c, c);
 	} else {
 	    write_c("static %.*s;\n", e-c, c);
