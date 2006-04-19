@@ -46,20 +46,15 @@ namespace fltk {
   }
   inline int get_font_sizes(Font* f, int*& sizep) {return f->sizes(sizep);}
 
-#if 0
-  // these could be emulated by making a 0x0 rectangle and calling b->inset
-  inline int box_dx(const Box* b) {return b->dx();}
-  inline int box_dy(const Box* b) {return b->dy();}
-  inline int box_dw(const Box* b) {return b->dw();}
-  inline int box_dh(const Box* b) {return b->dh();}
-#endif
-
   inline int event_key(int k) {return event_key_state(k);}
 
   inline void add_handler(int (*h)(int)) {
     // rather unsafe typecast of function:
     add_event_handler((int(*)(int,Window*))(h));
   }
+
+  inline void delete_widget(fltk::Widget* w) {delete w;}
+  inline void do_widget_deletion() {}
 
 }
 
