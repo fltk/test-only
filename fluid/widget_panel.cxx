@@ -375,11 +375,19 @@ fltk::TabGroup* panel_tabs;
 
 fltk::Widget* image_label;
 
+fltk::Button* image_button1;
+
 fltk::Widget* image_label2;
+
+fltk::Button* image_button2;
 
 fltk::Widget* image_label3;
 
+fltk::Button* image_button3;
+
 fltk::Widget* image_label4;
+
+fltk::Button* image_button4;
 
 fltk::CheckButton* include_image_button;
 
@@ -430,7 +438,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(84, 80, 285, 16);
+         {fltk::Button* o = image_button1 = new fltk::Button(84, 80, 285, 16);
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb, (void*)(1));
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
@@ -440,7 +448,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(84, 95, 285, 16);
+         {fltk::Button* o = image_button2 = new fltk::Button(84, 95, 285, 16);
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb, (void*)(2));
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
@@ -451,7 +459,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(84, 110, 285, 16);
+         {fltk::Button* o = image_button3 = new fltk::Button(84, 110, 285, 16);
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb, (void*)(3));
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
@@ -461,7 +469,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
-         {fltk::Button* o = new fltk::Button(84, 125, 285, 16);
+         {fltk::Button* o = image_button4 = new fltk::Button(84, 125, 285, 16);
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb, (void*)(4));
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);

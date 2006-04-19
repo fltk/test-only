@@ -176,7 +176,7 @@ const Enumeration* from_text(const char* text, const Enumeration* table);
 const char* to_text(void* data, const Enumeration* table);
 int number_from_text(const char* text, const Enumeration* table);
 const char* number_to_text(int number, const Enumeration* table);
-
+const int FLUID_MAX_IMG=4;
 ////////////////////////////////////////////////////////////////
 
 class FLUID_API WidgetType : public FluidType {
@@ -203,8 +203,10 @@ public:
   fltk::Widget *o;
   bool public_;
   
-  Fluid_Image* image;
-  void setimage(Fluid_Image*);
+  Fluid_Image* image[FLUID_MAX_IMG]; // updated image number to four seems enough
+			 // for more han 4 combinations use a MultiImage
+			 // and set the default image to it
+  void set_image(Fluid_Image* i,int num);
 
   WidgetType();
   FluidType *make();

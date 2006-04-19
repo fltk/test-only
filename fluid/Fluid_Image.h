@@ -38,8 +38,10 @@
 class Fluid_Image {
   const char *name_;
   int refcount;
+  int img_number_;
+
 protected:
-  Fluid_Image(const char *name); // no public constructor
+  Fluid_Image(const char *name, int num); // no public constructor
   virtual ~Fluid_Image(); // no public destructor
 public:
   bool inlined;
@@ -51,6 +53,8 @@ public:
   virtual void write_static() = 0;
   virtual void write_code() = 0;
   const char *name() const {return name_;}
+  int img_number() const {return  img_number_;}
+  void img_number(int i ) {img_number_=i;}
 };
 
 // pop up file chooser and return a legal image selected by user,

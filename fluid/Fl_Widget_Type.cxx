@@ -152,11 +152,11 @@ FluidType *WidgetType::make() {
 
 #include "Fluid_Image.h"
 
-void WidgetType::setimage(Fluid_Image *i) {
-  if (i == image) return;
-  if (image) image->decrement();
+void WidgetType::set_image(Fluid_Image *i, int num) {
+  if (i == image[num]) return;
+  if (image[num]) image[num]->decrement();
   if (i) {i->increment(); i->label(o);} else o->image(fltk::NoSymbol);
-  image = i;
+  image[num] = i;
   redraw();
 }
 
@@ -169,8 +169,8 @@ WidgetType::WidgetType() {
   extra_code_ = 0;
   user_class_ = 0;
   hotspot_ = 0;
-  image = 0;
   o = 0;
+  memset(image, 0, sizeof(image));
   public_ = 1;
   set_xy = true;
 }
@@ -704,22 +704,46 @@ void label_size_cb(fltk::ValueInput* i, void *v) {
     { i->textcolor(c); i->redraw();}
 }
 
+static fltk::Widget * img_label(int i) {
+    switch(i) {
+    case 0: 	return image_label;
+    case 1: 	return image_label2;
+    case 2: 	return image_label3;
+    case 3: 	return image_label4;
+    default:	return 0;
+    }
+}
+static fltk::Widget * img_button(int i) {
+    switch(i) {
+    case 0: 	return image_button1;
+    case 1: 	return image_button2;
+    case 2: 	return image_button3;
+    case 3: 	return image_button4;
+    default:	return 0;
+    }
+}
 void image_cb(fltk::Button *a, void * v) {
+  int num = (int) (long)v-1,i;
   if (v != LOAD) {
-    Fluid_Image *i = ui_find_image(current_widget->image);
-    if (i == current_widget->image) return; // user hit "Cancel"
+
+    Fluid_Image *i = ui_find_image(current_widget->image[num]);
+    if (i == current_widget->image[num]) return; // user hit "Cancel"
     for_all_selected_widgets() {
       WidgetType* p = (WidgetType*)o;
-      p->setimage(i);
+      p->set_image(i,num);
     }
     image_inlined_cb(include_image_button, LOAD); // update the button state
   }
-  const char* s = current_widget->image ? current_widget->image->name() : 0;
-  if (s != a->label()) {a->label(s); a->redraw();}
-  fltk::Color c = fltk::BLACK;
-  if (current_widget->image) c = fltk::RED;
-  if (image_label->labelcolor() != c)
-    { image_label->labelcolor(c); image_label->redraw();}
+  for (i=0; i<FLUID_MAX_IMG; i++) {
+      const char* s = current_widget->image[i] ? 
+      current_widget->image[i]->name() : 0;
+      if (s != img_button(i)->label()) 
+	{img_button(i)->label(s); img_button(i)->redraw();}
+      fltk::Color c = fltk::BLACK;
+      if (current_widget->image[i]) c = fltk::RED;
+      if (img_label(i)->labelcolor() != c)
+	{ img_label(i)->labelcolor(c); img_label(i)->redraw();}
+  }
 }
 
 static const Enumeration labelstylemenu[] = {
@@ -1006,18 +1030,24 @@ void align_cb(fltk::Button* i, void *v) {
 }
 
 void image_inlined_cb(fltk::CheckButton* i, void *v) {
-  if (v==LOAD) {
-    if(current_widget->image) {
-      i->value(current_widget->image->inlined);
-      i->activate();
-    } else {
-      i->value(0);
-      i->deactivate();
-    }
+  int num;
+  if (v==LOAD) { // for now all images are inlined or none is.
+      bool bSet=false;
+      for (num=0; num<FLUID_MAX_IMG; num++) {
+	if(current_widget->image[num]) {
+	  i->value(current_widget->image[num]->inlined);
+	  i->activate();
+	  bSet=true;
+	}
+      }
+      if(!bSet) {i->value(0);i->deactivate();}
+
   } else {
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
-      if(q->image) q->image->inlined = i->value();
+      for (num=0; num<FLUID_MAX_IMG; num++) {
+	if(q->image[num]) q->image[num]->inlined = i->value();
+      }
     }
   }
 }
@@ -1598,11 +1628,13 @@ void WidgetType::write_static() {
       write_c("user_data()))->%s_i(o,v);\n}\n", cn);
     }
   }
-  if (image) {
-    if (image->written != write_number) {
-      image->write_static();
-      image->written = write_number;
-    }
+  for (int numImg=0; numImg<FLUID_MAX_IMG; numImg++) {
+      if (image[numImg]) {
+	if (image[numImg]->written != write_number) {
+	  image[numImg]->write_static();
+	  image[numImg]->written = write_number;
+	}
+      }
   }
 }
 
@@ -1674,6 +1706,8 @@ static void write_color(const char* function, fltk::Color c) {
 // this is split from write_code1() for WindowType:
 void WidgetType::write_widget_code() {
   fltk::Widget* tplate = ((WidgetType*)factory)->o;
+  int i;
+
   if (o->type() != tplate->type()) {
     const Enumeration* e = subtypes();
     if (e) e = from_value(o->type(), e);
@@ -1685,7 +1719,7 @@ void WidgetType::write_widget_code() {
 
   if (o->vertical()) write_c("%so->set_vertical();\n", indent());
 
-  if (image) image->write_code();
+  for(i=0; i<FLUID_MAX_IMG;i++) if (image[i]) {image[i]->img_number(i); image[i]->write_code();}
 
   if (o->box() != tplate->box())
     write_c("%so->box(fltk::%s);\n",indent(),to_text((void*)(o->box()),boxmenu));
@@ -1815,7 +1849,8 @@ static void save_color(const char* name, fltk::Color color) {
 
 void WidgetType::write_properties() {
   FluidType::write_properties();
-  int indent = 1;
+  int indent = 1,i;
+
   for (FluidType* p = parent; p; p = p->parent) indent++;
   write_indent(indent);
   if (!public_) write_string("private");
@@ -1856,10 +1891,14 @@ void WidgetType::write_properties() {
     write_string("labeltype");
     write_word(to_text((void*)(o->labeltype()),labelstylemenu));
   }
-  if (image) {
-    write_string("image");
-    if (!image->inlined) write_string("not_inlined");
-    write_word(image->name());
+  for (i=0; i<FLUID_MAX_IMG; i++) {
+      if (image[i]) {
+	write_indent(indent);
+	if (i>0) write_string("image%d",i+1);// stay compatible with backward version 
+	else write_string("image");  // when only one image is required
+	if (!image[i]->inlined) write_string("not_inlined");
+	write_word(image[i]->name());
+      }
   }
   if (o->color() != tplate->color())
     save_color("color", o->color());
@@ -1993,10 +2032,15 @@ void WidgetType::read_property(const char *c) {
 	     || !strcmp(c,"label_style")) {
     c = read_word();
     // back compatability with 1.0 and Vincent's original graphical patch
-    if (!strcmp(c,"image") || !strcmp(c, "image_file")) { 
+    if (!strncmp(c,"image",5) || !strcmp(c, "image_file")) { 
+      int numImage;
+      // ensure backward compatibility and new image[1-4] notation
+      if (!strncmp(c,"image",5) && strlen(c)==6 && c[5]>='0' && (c[5]-0x30)<=FLUID_MAX_IMG)  numImage=(c[5]-0x30)-1;
+      else numImage=0; // old notations
+
       Fluid_Image *i = Fluid_Image::find(label());
       if (!i) read_error("Image file '%s' not found", label());
-      setimage(i); label(0);
+      set_image(i, numImage); label(0);
       if (!strcmp(c,"image_file")) {
 	c = read_word();
 	if (i && c[0]=='d') i->inlined = 0;
@@ -2006,8 +2050,13 @@ void WidgetType::read_property(const char *c) {
       const Enumeration* e = from_text(c, labelstylemenu);
       if (e) o->labeltype((fltk::LabelType*)(e->compiled));
     }
-  } else if (!strcmp(c, "image")) {
+  } else if (!strncmp(c, "image",5)) {
     int inlined = 1;
+    int numImage;
+    // ensure backward compatibility and new image[1-4] notation
+    if (!strncmp(c,"image",5) && strlen(c)==6 && c[5]>='0' && (c[5]-0x30)<=FLUID_MAX_IMG)  numImage=(c[5]-0x30)-1;
+    else numImage=0; // old notations
+
     c = read_word();
     if (!strcmp(c, "inlined")) c = read_word(); // for back compatability
     if (!strcmp(c, "not_inlined")) {
@@ -2017,7 +2066,7 @@ void WidgetType::read_property(const char *c) {
     Fluid_Image *i = Fluid_Image::find(c);
     if(!inlined) i->inlined = 0;
     if (!i) read_error("Image file '%s' not found", c);
-    setimage(i);
+    else set_image(i, numImage);
   } else if (!strcmp(c,"color") || !strcmp(c,"text_background")
 	     || !strcmp(c,"off_color") || !strcmp(c,"window_color")) {
     char* p;

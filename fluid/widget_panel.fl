@@ -65,7 +65,7 @@ Function {make_widgetbin()} {} {
       {fltk::Button} {} {
         user_data {"Namespace"}
         callback type_make_cb
-        tooltip {Namespace}
+        tooltip Namespace
         xywh {52 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[49]);}
       }
@@ -417,7 +417,7 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
   }} {}
 } 
 
-Function {make_widget_panel()} {open selected
+Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
     xywh {405 230 380 373} resizable hotspot visible
@@ -454,7 +454,7 @@ Function {make_widget_panel()} {open selected
           label {Image default}
           xywh {10 80 73 17} align 56 box NO_BOX
         }
-        {fltk::Button} {} {
+        {fltk::Button} image_button1 {
           user_data 1 user_data_type {void*}
           callback image_cb
           tooltip {Select an image to label the widget}
@@ -464,7 +464,7 @@ Function {make_widget_panel()} {open selected
           label inactive
           xywh {10 95 73 17} align 56 box NO_BOX
         }
-        {fltk::Button} {} {
+        {fltk::Button} image_button2 {
           user_data 2 user_data_type {void*}
           callback image_cb
           tooltip {Select an image to label the widget}
@@ -474,7 +474,7 @@ Function {make_widget_panel()} {open selected
           label {mouse on}
           xywh {10 110 73 17} align 56 box NO_BOX
         }
-        {fltk::Button} {} {
+        {fltk::Button} image_button3 {
           user_data 3 user_data_type {void*}
           callback image_cb
           tooltip {Select an image to label the widget}
@@ -484,7 +484,7 @@ Function {make_widget_panel()} {open selected
           label pushed
           xywh {10 125 73 17} align 56 box NO_BOX
         }
-        {fltk::Button} {} {
+        {fltk::Button} image_button4 {
           user_data 4 user_data_type {void*}
           callback image_cb
           tooltip {Select an image to label the widget}
@@ -873,7 +873,7 @@ o->value(!overlays_invisible);}
       }
       {fltk::ReturnButton} {} {
         label OK
-        callback ok_cb
+        callback ok_cb selected
         tooltip {Closes this attribute window}
         xywh {130 6 65 22} shortcut 0xff0d
       }
