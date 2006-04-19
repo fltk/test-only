@@ -34,12 +34,9 @@
 #include <fltk/Group.h>
 #include <fltk/MenuBuild.h>
 #include <fltk/MenuBar.h>
+#include <fltk/string.h>
 
 #include <string.h>
-#ifdef _WIN32
-# define strcasecmp(a,b) stricmp(a,b)
-# define strncasecmp(a,b,c) strnicmp(a,b,c)
-#endif
 #include <stdio.h>
 
 #include "FluidType.h"
@@ -297,7 +294,7 @@ static FluidType *FluidType_make(const char *tn, fltk::ItemGroup * menu) {
   for (n = menu->children(); n--;) {
     fltk::Widget* w = menu->child(n);
     if (w->label() && w->is_group() && tn && *tn) {
-	sprintf(menuName,"%s/%s",w->label(),tn);
+	snprintf(menuName,sizeof(menuName),"%s/%s",w->label(),tn);
 	m = (fltk::Item *) menu->find(menuName);
 	if (m)  break;
       }
