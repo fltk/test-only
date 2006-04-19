@@ -32,7 +32,7 @@
 #endif
 
 namespace fltk {
-
+class Widget;
 /*! \addtogroup startup
   \{ */
 FL_API double version();
@@ -53,6 +53,10 @@ FL_API int check();
 FL_API int ready();
 FL_API int run();
 FL_API void flush();
+  // Widget deletion:
+FL_API void delete_widget(Widget *w);
+FL_API void do_widget_deletion();
+
 FL_API void redraw();
 extern FL_API int damage_;
 inline void damage(int d) {damage_ = d;}
