@@ -208,6 +208,7 @@ void WindowType::open() {
     WidgetType::open();
   } else {
     w->size_range(10, 10, 0, 0, gridx, gridy);
+    w->resizable(w);
     w->show();
   }
 }

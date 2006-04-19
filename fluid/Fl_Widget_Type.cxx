@@ -536,42 +536,39 @@ void when_cb(fltk::Choice* i, void *v) {
 void when_button_cb(fltk::CheckButton*, void *) {} // delete this!
 
 bool WidgetType::resizable() const {
-  if (is_group()) if (!((fltk::Group*)o)->resizable()) return false;
-  fltk::Group* group = o->parent();
-  if (group && group->resizable() != o) return false;
-  return true;
+  if (is_window()) return ((Window*)o)->resizable() != 0;
+  Group* p = (Group*)o->parent();
+  return p ? p->resizable() == o : false;
 }
 
-void WidgetType::resizable(bool value) {
-  if (value) {
-    fltk::Widget* child = o;
-    fltk::Group* group = is_group() ? (fltk::Group*)o : o->parent();
-    while (group) {
-      if (group->resizable() != child) {
-	group->resizable(child);
-	group->init_sizes();
-      }
-      child = group;
-      group = group->parent();
+void WidgetType::resizable(bool v) {
+  if (v) {
+    if (resizable()) return;
+    if (is_window()) ((Window*)o)->resizable(o);
+    else {
+      Group* p = (Group*)o->parent();
+      if (p) p->resizable(o);
     }
   } else {
-    fltk::Group* group = is_group() ? (fltk::Group*)o : o->parent();
-    while (group) {
-      group->resizable(0);
-      group = group->parent();
+    if (!resizable()) return;
+    if (is_window()) {
+      ((Window*)o)->resizable(0);
+    } else {
+      Group* p = (Group*)o->parent();
+      if (p) p->resizable(0);
     }
   }
 }
 
 void resizable_cb(fltk::CheckButton* i,void* v) {
   if (v == LOAD) {
-    if (current_widget->is_menu_item()) {i->hide(); return;}
-    if (numselected > 1) {i->hide(); return;}
-    i->show();
+    if (current_widget->is_menu_item()) {i->deactivate(); return;}
+    if (numselected > 1) {i->deactivate(); return;}
+    i->activate();
     i->value(current_widget->resizable());
   } else {
     current_widget->resizable(i->value());
-    modflag = 1;
+    modflag=1;
   }
   if (current_widget->resizable()) i->labelcolor(fltk::RED);
   else i->labelcolor(fltk::BLACK);
