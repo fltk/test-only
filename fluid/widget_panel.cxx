@@ -5,6 +5,7 @@
 #include "FluidType.h"
 #include "fluid_img.h"
 #include "factory.h"
+
 fltk::Window *widgetbin_panel=(fltk::Window *)0;
 
 fltk::Window* make_widgetbin() {
@@ -345,7 +346,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(2, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Progress"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ProgressBar"));
         o->tooltip("Progress");
         o->image(fltk::fluid_pixmap[36]);
       }
@@ -353,6 +354,7 @@ fltk::Window* make_widgetbin() {
     }
     o->end();
     o->set_non_modal();
+    o->resizable(o);
   }
   return  w;
 }
@@ -371,39 +373,39 @@ void type_make_cb(fltk::Widget*w,void*d) {
     }
 }
 
-fltk::TabGroup* panel_tabs;
+fltk::TabGroup *panel_tabs=(fltk::TabGroup *)0;
 
-fltk::Widget* image_label;
+fltk::Widget *image_label=(fltk::Widget *)0;
 
-fltk::Button* image_button1;
+fltk::Button *image_button1=(fltk::Button *)0;
 
-fltk::Widget* image_label2;
+fltk::Widget *image_label2=(fltk::Widget *)0;
 
-fltk::Button* image_button2;
+fltk::Button *image_button2=(fltk::Button *)0;
 
-fltk::Widget* image_label3;
+fltk::Widget *image_label3=(fltk::Widget *)0;
 
-fltk::Button* image_button3;
+fltk::Button *image_button3=(fltk::Button *)0;
 
-fltk::Widget* image_label4;
+fltk::Widget *image_label4=(fltk::Widget *)0;
 
-fltk::Button* image_button4;
+fltk::Button *image_button4=(fltk::Button *)0;
 
-fltk::CheckButton* include_image_button;
+fltk::CheckButton *include_image_button=(fltk::CheckButton *)0;
 
-fltk::ValueInput* widget_x;
+fltk::ValueInput *widget_x=(fltk::ValueInput *)0;
 
-fltk::ValueInput* widget_y;
+fltk::ValueInput *widget_y=(fltk::ValueInput *)0;
 
-fltk::ValueInput* widget_width;
+fltk::ValueInput *widget_width=(fltk::ValueInput *)0;
 
-fltk::ValueInput* widget_height;
+fltk::ValueInput *widget_height=(fltk::ValueInput *)0;
 
-fltk::CheckButton* set_xy;
+fltk::CheckButton *set_xy=(fltk::CheckButton *)0;
 
-fltk::MultiLineInput* extra_code_input;
+fltk::MultiLineInput *extra_code_input=(fltk::MultiLineInput *)0;
 
-fltk::CheckButton* overlaybutton;
+fltk::CheckButton *overlaybutton=(fltk::CheckButton *)0;
 
 fltk::Window* make_widget_panel() {
   fltk::Window* w;

@@ -1580,7 +1580,9 @@ void WidgetType::write_static() {
     write_c("\n");
     if (!public_) write_c("static ");
     else write_h("extern %s* %s;\n", subclass, array_name);
-    write_c("%s* %s;\n", subclass, array_name);
+    //write_c("%s* %s;\n", subclass, array_name);
+    if (strchr(array_name, '[') == NULL) write_c("%s *%s=(%s *)0;\n", subclass, array_name, subclass);
+    else write_c("%s *%s={(%s *)0};\n", subclass, array_name, subclass);
   }
   if (callback() && !is_name(callback())) {
     // see if 'o' or 'v' used, to prevent unused argument warnings:

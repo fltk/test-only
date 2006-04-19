@@ -17,10 +17,11 @@ decl {\#include "fluid_img.h"} {}
 
 decl {\#include "factory.h"} {} 
 
-Function {make_widgetbin()} {} {
+Function {make_widgetbin()} {open
+} {
   {fltk::Window} widgetbin_panel {
-    label {Widget Bin}
-    xywh {394 100 520 85} non_modal visible
+    label {Widget Bin} open
+    xywh {394 100 520 85} resizable non_modal visible
   } {
     {fltk::Group} {} {
       xywh {3 3 79 79} box THIN_DOWN_BOX
@@ -365,7 +366,7 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[33]);}
       }
     }
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {463 3 54 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -390,8 +391,8 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[35]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Progress"}
-        callback type_make_cb
+        user_data {"fltk::ProgressBar"}
+        callback type_make_cb selected
         tooltip Progress
         xywh {2 52 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[36]);}
@@ -871,7 +872,7 @@ o->value(!overlays_invisible);}
       }
       {fltk::ReturnButton} {} {
         label OK
-        callback ok_cb selected
+        callback ok_cb
         tooltip {Closes this attribute window}
         xywh {130 6 65 22} shortcut 0xff0d
       }
