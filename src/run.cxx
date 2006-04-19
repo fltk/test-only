@@ -731,43 +731,6 @@ void fltk::flush() {
 #endif
 }
 
-//
-// The following methods allow callbacks to schedule the deletion of
-// widgets at "safe" times.
-//
-
-static int num_dwidgets = 0, alloc_dwidgets = 0;
-static Widget	**dwidgets = 0;
-
-//! schedule deletion at safe times (i.e: in wait())
-void fltk::delete_widget(Widget *wi) {
-  if (!wi) return;
-
-  if (num_dwidgets >= alloc_dwidgets) {
-    Widget	**temp;
-
-    temp = new Widget *[alloc_dwidgets + 10];
-    if (alloc_dwidgets) {
-      memcpy(temp, dwidgets, alloc_dwidgets * sizeof(Widget *));
-      delete[] dwidgets;
-    }
-
-    dwidgets = temp;
-    alloc_dwidgets += 10;
-  }
-
-  dwidgets[num_dwidgets] = wi;
-  num_dwidgets ++;
-}
-
-//! execute the previously scheduled deletion
-void fltk::do_widget_deletion() {
-  if (!num_dwidgets) return;
-  for (int i = 0; i < num_dwidgets; i ++)
-    delete dwidgets[i];
-  num_dwidgets = 0;
-}
-
 ////////////////////////////////////////////////////////////////
 
 /*! \class fltk::Rectangle
