@@ -63,11 +63,11 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[9]);}
       }
       {fltk::Button} {} {
-        user_data {"widget_class"}
+        user_data {"Namespace"}
         callback type_make_cb
-        tooltip {Widget Class}
+        tooltip {Namespace}
         xywh {52 27 25 25} box THIN_UP_BOX
-        extra_code {o->image(fltk::fluid_pixmap[48]);}
+        extra_code {o->image(fltk::fluid_pixmap[49]);}
       }
       {fltk::Button} {} {
         user_data {"decl"}
@@ -222,7 +222,7 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[40]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Counter"}
+        user_data {"fltk::ValueInput"}
         callback type_make_cb
         tooltip Counter
         xywh {27 27 25 25} box THIN_UP_BOX
@@ -236,14 +236,14 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[42]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Roller"}
+        user_data {"fltk::ThumbWheel"}
         callback type_make_cb
-        tooltip Roller
+        tooltip ThumbWheel
         xywh {2 52 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[43]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Spinner"}
+        user_data {"fltk::ValueInput"}
         callback type_make_cb
         tooltip Spinner
         xywh {27 52 25 25} box THIN_UP_BOX
@@ -314,7 +314,7 @@ Function {make_widgetbin()} {} {
         extra_code {o->image(fltk::fluid_pixmap[15]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Menu_Button"}
+        user_data {"fltk::PopupMenu"}
         callback type_make_cb
         tooltip {Menu Button}
         xywh {2 27 25 25} box THIN_UP_BOX

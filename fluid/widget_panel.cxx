@@ -7,7 +7,6 @@
 #include "factory.h"
 fltk::Window *widgetbin_panel=(fltk::Window *)0;
 
-
 fltk::Window* make_widgetbin() {
   fltk::Window* w;
    {fltk::Window* o = widgetbin_panel = new fltk::Window(520, 85, "Widget Bin");
@@ -48,9 +47,9 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(52, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("widget_class"));
-        o->tooltip("Widget Class");
-        o->image(fltk::fluid_pixmap[48]);
+        o->callback((fltk::Callback*)type_make_cb, (void*)("Namespace"));
+        o->tooltip("Namespace");
+        o->image(fltk::fluid_pixmap[49]);
       }
        {fltk::Button* o = new fltk::Button(2, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
@@ -190,7 +189,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Counter"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ValueInput"));
         o->tooltip("Counter");
         o->image(fltk::fluid_pixmap[41]);
       }
@@ -202,13 +201,13 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(2, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Roller"));
-        o->tooltip("Roller");
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ThumbWheel"));
+        o->tooltip("ThumbWheel");
         o->image(fltk::fluid_pixmap[43]);
       }
        {fltk::Button* o = new fltk::Button(27, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Spinner"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ValueInput"));
         o->tooltip("Spinner");
         o->image(fltk::fluid_pixmap[47]);
       }
@@ -274,7 +273,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(2, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Menu_Button"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::PopupMenu"));
         o->tooltip("Menu Button");
         o->image(fltk::fluid_pixmap[26]);
       }
@@ -427,7 +426,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("Text displayed on or next to the widget");
           o->take_focus();
         }
-         {fltk::Widget* o = image_label = new fltk::Widget(8, 80, 73, 17, "Img default");
+         {fltk::Widget* o = image_label = new fltk::Widget(10, 80, 73, 17, "Image default");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
@@ -437,7 +436,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
           o->tooltip("Select an image to label the widget");
         }
-         {fltk::Widget* o = image_label2 = new fltk::Widget(8, 95, 73, 17, "inactive");
+         {fltk::Widget* o = image_label2 = new fltk::Widget(10, 95, 73, 17, "inactive");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
@@ -448,7 +447,7 @@ ation so that the definition of your class is included in the fluid output.");
           ((fltk::Window*)(o->parent()->parent()->parent()))->hotspot(o);
           o->tooltip("Select an image to label the widget");
         }
-         {fltk::Widget* o = image_label3 = new fltk::Widget(8, 110, 73, 17, "bmouse");
+         {fltk::Widget* o = image_label3 = new fltk::Widget(10, 110, 73, 17, "mouse on");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
@@ -458,7 +457,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
           o->tooltip("Select an image to label the widget");
         }
-         {fltk::Widget* o = image_label4 = new fltk::Widget(8, 125, 73, 17, "pushed");
+         {fltk::Widget* o = image_label4 = new fltk::Widget(10, 125, 73, 17, "pushed");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }
@@ -670,7 +669,7 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
           o->deactivate();
           fltk::Group::current()->resizable(o);
         }
-         {fltk::Widget* o = new fltk::Widget(10, 154, 70, 22, "Dimensions");
+         {fltk::Widget* o = new fltk::Widget(11, 154, 69, 22, "Dimensions");
           o->box(fltk::NO_BOX);
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         }

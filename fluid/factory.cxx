@@ -351,8 +351,6 @@ FluidType *fltk::FluidType_make(const char *tn) {
   return ::FluidType_make(p, newMenu);
 }
 
-#include <fltk/Browser.h>
-
 ////////////////////////////////////////////////////////////////
 
 // Since I have included all the .h files, do this table here:

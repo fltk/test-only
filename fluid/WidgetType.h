@@ -28,43 +28,38 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+#ifndef fltk_widget_type_h
+#define fltk_widget_type_h
 
-#ifndef fltk_widgetype_h
-#define fltk_widgetype_h
-
-#include <fltk/Divider.h>
-#include <fltk/PopupMenu.h>
-#include <fltk/InputBrowser.h>
-#include <fltk/MenuBar.h>
-#include <fltk/Choice.h>
-#include <fltk/FileBrowser.h>
-#include <fltk/Browser.h>
-#include <fltk/ScrollGroup.h>
-#include <fltk/TabGroup.h>
-#include <fltk/FileInput.h>
-#include <fltk/TextEditor.h>
-#include <fltk/TextDisplay.h>
-#include <fltk/BarGroup.h>
-#include <fltk/ValueSlider.h>
-#include <fltk/ValueOutput.h>
-#include <fltk/ValueInput.h>
-#include <fltk/Output.h>
-#include <fltk/Scrollbar.h>
-#include <fltk/ProgressBar.h>
-#include <fltk/ThumbWheel.h>
-#include <fltk/Dial.h>
 #include <fltk/Box.h>
-#include <fltk/Adjuster.h>
-#include <fltk/Clock.h>
-#include <fltk/Input.h>
-#include <fltk/RadioButton.h>
-#include <fltk/CheckButton.h>
-#include <fltk/LightButton.h>
-#include <fltk/RepeatButton.h>
-#include <fltk/ReturnButton.h>
-#include <fltk/Button.h>
+#include <fltk/TabGroup.h>
+#include <fltk/PopupMenu.h>
+#include <fltk/Choice.h>
+#include <fltk/MenuBar.h>
+#include <fltk/InputBrowser.h>
+#include <fltk/FileBrowser.h>
+#include <fltk/Divider.h>
 #include <fltk/InvisibleBox.h>
-#include "FluidType.h"
+#include <fltk/Button.h>
+#include <fltk/ReturnButton.h>
+#include <fltk/RepeatButton.h>
+#include <fltk/LightButton.h>
+#include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
+#include <fltk/Clock.h>
+#include <fltk/Adjuster.h>
+#include <fltk/Dial.h>
+#include <fltk/ThumbWheel.h>
+#include <fltk/TextDisplay.h>
+#include <fltk/TextEditor.h>
+#include <fltk/FileInput.h>
+#include <fltk/ProgressBar.h>
+#include <fltk/Scrollbar.h>
+#include <fltk/Output.h>
+#include <fltk/ValueInput.h>
+#include <fltk/ValueOutput.h>
+#include <fltk/ValueSlider.h>
+#include <fltk/BarGroup.h>
 
 namespace fltk {
     class InvisibleBoxType : public WidgetType {
@@ -76,13 +71,12 @@ namespace fltk {
     };
     
     extern const Enumeration buttontype_menu[];
-    
     class ButtonType : public WidgetType {
 	const Enumeration *subtypes() const {return buttontype_menu;}
     public:
 	virtual const char *type_name() const {return "fltk::Button";}
 	Widget *widget(int x,int y,int w,int h) {
-	    return new Button(x,y,w,h,"button");}
+	    return new fltk::Button(x,y,w,h,"button");}
 	WidgetType *_make() {return new ButtonType();}
 	int is_button() const {return 1;}
     };
@@ -93,23 +87,14 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new ReturnButton(x,y,w,h,0);}
 	WidgetType *_make() {return new ReturnButtonType();}
-	
-    };  
+    };
+    
     class RepeatButtonType : public WidgetType {
     public:
 	virtual const char *type_name() const {return "fltk::RepeatButton";}
 	Widget *widget(int x,int y,int w,int h) {
-	    return new fltk::RepeatButton(x,y,w,h,0);}
+	    return new RepeatButton(x,y,w,h,0);}
 	WidgetType *_make() {return new RepeatButtonType();}
-    };
-    
-    class LightButtonType : public ButtonType {
-    public:
-	int is_light_button() const {return 1;}
-	virtual const char *type_name() const {return "fltk::LightButton";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new LightButton(x,y,w,h,"button");}
-	WidgetType *_make() {return new LightButtonType();}
     };
     
     class CheckButtonType : public ButtonType {
@@ -121,6 +106,15 @@ namespace fltk {
 	WidgetType *_make() {return new CheckButtonType();}
     };
     
+    class LightButtonType : public ButtonType {
+    public:
+	int is_light_button() const {return 1;}
+	virtual const char *type_name() const {return "fltk::LightButton";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new LightButton(x,y,w,h,"button");}
+	WidgetType *_make() {return new LightButtonType();}
+    };
+    
     class RadioButtonType : public ButtonType {
     public:
 	int is_light_button() const {return 1;}
@@ -130,7 +124,7 @@ namespace fltk {
 	WidgetType *_make() {return new RadioButtonType();}
     };
     
-    extern const Enumeration input_type_menu[];
+    extern const Enumeration input_type_menu[] ;
     class InputType : public WidgetType {
 	int is_input() const {return 1;}
 	const Enumeration *subtypes() const {return input_type_menu;}
@@ -142,6 +136,155 @@ namespace fltk {
 	    return o;
 	}
 	WidgetType *_make() {return new InputType();}
+    };
+    
+    class igroup : public Group {
+    public:
+	igroup(int x,int y,int w,int h) : Group(x,y,w,h) {
+	    Group::current(0);
+	    resizable(0);
+	}
+    };
+    
+    class PackType : public GroupType {
+	//const Enumeration *subtypes() const {return pack_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::PackedGroup";}
+	WidgetType *_make() {return new PackType();}
+    };
+    
+    
+    class itabs : public TabGroup {
+    public:
+	itabs(int x,int y,int w,int h) : TabGroup(x,y,w,h) {
+	    Group::current(0);
+	    resizable(0);
+	}
+    };
+    
+    class TabsType : public GroupType {
+    public:
+	virtual const char *type_name() const {return "fltk::TabGroup";}
+	Widget *widget(int x,int y,int w,int h) {
+	    itabs *g = new itabs(x,y,w,h); Group::current(0); return g;}
+	WidgetType *_make() {return new TabsType();}
+	FluidType* click_test(int,int);
+	void add_child(FluidType*, FluidType*);
+	void remove_child(FluidType*);
+    };
+    
+    extern const Enumeration scroll_type_menu[];
+    class ScrollType : public GroupType {
+	const Enumeration *subtypes() const {return scroll_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::ScrollGroup";}
+	WidgetType *_make() {return new ScrollType();}
+    };
+    
+    class TileType : public GroupType {
+    public:
+	virtual const char *type_name() const {return "fltk::TiledGroup";}
+	WidgetType *_make() {return new TileType();}
+    };
+    
+    class MenuType : public GroupType {
+    public:
+	int is_menu_button() const {return 1;}
+	MenuType() : GroupType() {}
+	~MenuType() {}
+	FluidType* click_test(int x, int y);
+    };
+    
+    extern const Enumeration button_type_menu[];
+    class PopupMenuType : public MenuType {
+	const Enumeration *subtypes() const {return button_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::PopupMenu";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new PopupMenu(x,y,w,h,"menu");}
+	WidgetType *_make() {return new PopupMenuType();}
+    };
+    
+    extern const Enumeration input_browser_type_menu[];
+    class InputBrowserType : public MenuType {
+	int is_input_browser() const {return 1;}
+	const Enumeration *subtypes() const {return input_browser_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::InputBrowser";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new InputBrowser(x,y,w,h);
+	}
+	WidgetType *_make() {return new InputBrowserType();}
+    };
+    
+    extern const Enumeration browser_type_menu[];
+    class FileBrowserType : public WidgetType {
+	const Enumeration *subtypes() const {return browser_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::FileBrowser";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new FileBrowser(x,y,w,h);
+	}
+	WidgetType *_make() {return new FileBrowserType();}
+    };
+    
+    class MenuBarType : public MenuType {
+    public:
+	virtual const char *type_name() const {return "fltk::MenuBar";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new MenuBar(x,y,w,h);}
+	WidgetType *_make() {return new MenuBarType();}
+    };
+    
+    extern const Enumeration item_type_menu[];
+    class ItemType : public WidgetType {
+    public:
+	const Enumeration* subtypes() const {return item_type_menu;}
+	const char* type_name() const {return "fltk::Item";}
+	int is_menu_item() const {return 1;}
+	int is_button() const {return 1;} // this gets shortcut to work
+	Widget *widget(int x,int y,int w,int h);
+	WidgetType *_make() {return new ItemType();}
+    };
+    
+    class DividerType : public WidgetType {
+    public:
+	const Enumeration* subtypes() const {return 0;}
+	const char* type_name() const {return "fltk::Divider";}
+	int is_menu_item() const {return 1;}
+	Widget *widget(int x,int y,int w,int h) { return new Divider; }
+	WidgetType *_make() {return new DividerType();}
+    };
+    
+    class SubmenuType : public GroupType {
+    public:
+	const Enumeration* subtypes() const {return 0;}
+	const char* type_name() const {return "fltk::ItemGroup";}
+	int is_menu_item() const {return 1;}
+	Widget *widget(int x,int y,int w,int h);
+	WidgetType *_make() {return new SubmenuType();}
+    };
+    
+    class ChoiceType : public MenuType {
+    public:
+	int is_choice() const {return 1;}
+	virtual const char *type_name() const {return "fltk::Choice";}
+	Widget *widget(int x,int y,int w,int h) {
+	    Choice *o = new Choice(x,y,w,h,"choice:");
+	    return o;
+	}
+	WidgetType *_make() {return new ChoiceType();}
+    };
+    
+    class BrowserType : public MenuType {
+	int is_browser() const {return 1;}
+	const Enumeration *subtypes() const {return browser_type_menu;}
+    public:
+	virtual const char *type_name() const {return "fltk::Browser";}
+	Widget *widget(int x,int y,int w,int h) {
+	    return new Browser(x,y,w,h);
+	}
+	WidgetType *_make() {return new BrowserType();}
     };
     
     class ClockType : public WidgetType {
@@ -183,6 +326,76 @@ namespace fltk {
 	WidgetType *_make() {return new ThumbWheelType();}
     };
     
+    class TextDisplayType : public WidgetType {
+	int textstuff(int w, fltk::Font* f, int& s, fltk::Color c);
+    public:
+	virtual void ideal_size(int &w, int &h) {
+	    fltk::TextDisplay *myo = (fltk::TextDisplay *)o;
+	    fltk::setfont(myo->textfont(), myo->textsize());
+	    h -= fltk::box_dh(o->box());
+	    w -= fltk::box_dw(o->box());
+	    int ww = (int) fltk::getwidth("m");
+	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
+		fltk::box_dh(o->box()));
+	    if (h < 30) h = 30;
+	    if (w < 50) w = 50;
+	}
+	virtual const char *type_name() const {return "fltk::TextDisplay";}
+	Widget *widget(int x,int y,int w,int h) {
+	    fltk::TextDisplay *myo = new fltk::TextDisplay(x,y,w,h);
+	    myo->box(fltk::DOWN_BOX);
+	    return myo;
+	}
+	WidgetType *_make() {return new TextDisplayType();}
+    };
+    
+    class TextEditorType : public WidgetType {
+	int textstuff(int w, fltk::Font* f, int& s, fltk::Color c);
+    public:
+	virtual void ideal_size(int &w, int &h) {
+	    fltk::TextEditor *myo = (fltk::TextEditor *)o;
+	    fltk::setfont(myo->textfont(), myo->textsize());
+	    h -= fltk::box_dh(o->box());
+	    w -= fltk::box_dw(o->box());
+	    int ww = (int)fltk::getwidth("m");
+	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent()) * fltk::getascent() +
+		fltk::box_dh(o->box()));
+	    if (h < 30) h = 30;
+	    if (w < 50) w = 50;
+	}
+	virtual const char *type_name() const {return "fltk::TextEditor";}
+	Widget *widget(int x,int y,int w,int h) {
+	    fltk::TextEditor *myo = new fltk::TextEditor(x,y,w,h);
+	    return myo;
+	}
+	WidgetType *_make() {return new TextEditorType();}
+    };
+    
+    class FileInputType: public WidgetType {
+	Item *subtypes() {return 0;}
+	int textstuff(int w,fltk::Font* f, int& s, fltk::Color c);
+    public:
+	virtual void ideal_size(int &w, int &h) {
+	    FileInput *myo = (fltk::FileInput *)o;
+	    setfont(myo->textfont(), myo->textsize());
+	    h = (int) (fltk::getdescent() + myo->textsize() + 4);
+	    w -= fltk::box_dw(o->box());
+	    int ww = (int)fltk::getwidth("m",1);
+	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    if (h < 20) h = 20;
+	    if (w < 50) w = 50;
+	}
+	virtual const char *type_name() const {return "fltk::FileInput";}
+	Widget *widget(int x,int y,int w,int h) {
+	    fltk::FileInput *myo = new fltk::FileInput(x,y,w,h,"file:");
+	    myo->value("/now/is/the/time/for/a/filename.ext");
+	    return myo;
+	}
+	WidgetType *_make() {      return new FileInputType();  }
+    };
+    
     class ProgressBarType : public WidgetType {
     public:
 	virtual const char *type_name() const { return "fltk::ProgressBar"; }
@@ -191,7 +404,6 @@ namespace fltk {
 	}
 	WidgetType *_make() { return new ProgressBarType(); }
     };
-    
     extern const Enumeration slider_type_menu[];
     
     class SliderType : public WidgetType {
@@ -218,23 +430,22 @@ namespace fltk {
     };
     
     extern const Enumeration output_type_menu[];
-    
     class OutputType : public InputType {
 	const Enumeration *subtypes() const {return output_type_menu;}
     public:
 	virtual const char *type_name() const {return "fltk::Output";}
 	Widget *widget(int x,int y,int w,int h) {
-	    Output *o = new fltk::Output(x,y,w,h,"output:");
+	    Output *o = new Output(x,y,w,h,"output:");
 	    o->value("Text Output");
 	    return o;
 	}
 	WidgetType *_make() {return new OutputType();}
     };
-    
+
     class ValueInputType : public WidgetType {
     public:
 	int is_value_input() const {return 1;}
-	virtual const char *type_name() const {return "ValueInput";}
+	virtual const char *type_name() const {return "fltk::ValueInput";}
 	int is_valuator() const {return 1;}
 	Widget *widget(int x,int y,int w,int h) {
 	    ValueInput *o = new ValueInput(x,y,w,h,"value:");
@@ -262,237 +473,14 @@ namespace fltk {
 	}
 	WidgetType *_make() {return new ValueSliderType();}
     };
-    
-    class igroup : public fltk::Group {
-    public:
-      igroup(int x,int y,int w,int h) : fltk::Group(x,y,w,h) {
-	fltk::Group::current(0);
-	resizable(0);
-      }
-    };
 
     class BarGroupType : public WidgetType {
     public:
-	virtual const char *type_name() const { return "fltk::BarGroup"; }
-	Widget *widget(int x, int y, int w, int h) {
-	    return new BarGroup(x, y, w, h);
-	}
-	WidgetType *_make() { return new BarGroupType(); }
-    };
-    
-    class TextDisplayType : public WidgetType {
-	int textstuff(int w, Font* f, int& s, Color c);
-    public:
-	virtual void ideal_size(int &w, int &h) {
-	    TextDisplay *myo = (TextDisplay *)o;
-	    setfont(myo->textfont(), myo->textsize());
-	    h -= box_dh(o->box());
-	    w -= box_dw(o->box());
-	    int ww = (int) getwidth("m");
-	    w = ((w + ww - 1) / ww) * ww + box_dw(o->box());
-	    h = (int) (((h + getascent() - 1) / getascent() ) * getascent() +
-		box_dh(o->box()));
-	    if (h < 30) h = 30;
-	    if (w < 50) w = 50;
-	}
-	virtual const char *type_name() const {return "fltk::TextDisplay";}
-	Widget *widget(int x,int y,int w,int h) {
-	    TextDisplay *myo = new TextDisplay(x,y,w,h);
-	    myo->box(fltk::DOWN_BOX);
-	    return myo;
-	}
-	WidgetType *_make() {return new TextDisplayType();}
-	int pixmapID() { return 28; }
-    };
-    
-    class TextEditorType : public WidgetType {
-	int textstuff(int w, Font* f, int& s, Color c);
-    public:
-	virtual void ideal_size(int &w, int &h) {
-	    TextEditor *myo = (TextEditor *)o;
-	    setfont(myo->textfont(), myo->textsize());
-	    h -= box_dh(o->box());
-	    w -= box_dw(o->box());
-	    int ww = (int)getwidth("m");
-	    w = ((w + ww - 1) / ww) * ww + box_dw(o->box());
-	    h = (int) (((h + getascent() - 1) / getascent()) * getascent() +
-		box_dh(o->box()));
-	    if (h < 30) h = 30;
-	    if (w < 50) w = 50;
-	}
-	virtual const char *type_name() const {return "fltk::TextEditor";}
-	Widget *widget(int x,int y,int w,int h) {
-	    TextEditor *myo = new TextEditor(x,y,w,h);
-	    return myo;
-	}
-	WidgetType *_make() {return new TextEditorType();}
-	int pixmapID() { return 29; }
-    };
-    
-    class FileInputType: public WidgetType {
-	Item *subtypes() {return 0;}
-	int textstuff(int w,Font* f, int& s, Color c);
-    public:
-	virtual void ideal_size(int &w, int &h) {
-	    FileInput *myo = (FileInput *)o;
-	    setfont(myo->textfont(), myo->textsize());
-	    h = (int) (getdescent() + myo->textsize() + 4);
-	    w -= box_dw(o->box());
-	    int ww = (int)getwidth("m",1);
-	    w = ((w + ww - 1) / ww) * ww + box_dw(o->box());
-	    if (h < 20) h = 20;
-	    if (w < 50) w = 50;
-	}
-	virtual const char *type_name() const {return "fltk::FileInput";}
-	Widget *widget(int x,int y,int w,int h) {
-	    FileInput *myo = new FileInput(x,y,w,h,"file:");
-	    myo->value("/now/is/the/time/for/a/filename.ext");
-	    return myo;
-	}
-	WidgetType *_make() {      return new FileInputType();  }
-	int pixmapID() { return 30; }
-    };
-    
-    class PackType : public GroupType {
-	//const Enumeration *subtypes() const {return pack_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::PackedGroup";}
-	WidgetType *_make() {return new PackType();}
-    };
-    
-    
-    class itabs : public fltk::TabGroup {
-    public:
-	itabs(int x,int y,int w,int h) : fltk::TabGroup(x,y,w,h) {
-	    fltk::Group::current(0);
-	    resizable(0);
-	}
-    };
-    
-    class TabsType : public GroupType {
-    public:
-	virtual const char *type_name() const {return "fltk::TabGroup";}
-	Widget *widget(int x,int y,int w,int h) {
-	    itabs *g = new itabs(x,y,w,h); fltk::Group::current(0); return g;}
-	WidgetType *_make() {return new TabsType();}
-	FluidType* click_test(int,int);
-	void add_child(FluidType*, FluidType*);
-	void remove_child(FluidType*);
-    };
-    
-    extern const Enumeration scroll_type_menu[];
-    class ScrollType : public GroupType {
-	const Enumeration *subtypes() const {return scroll_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::ScrollGroup";}
-	WidgetType *_make() {return new ScrollType();}
-    };
-    
-    class TileType : public GroupType {
-    public:
-	virtual const char *type_name() const {return "fltk::TiledGroup";}
-	WidgetType *_make() {return new TileType();}
-    };
-    
-    class MenuType : public GroupType {
-    public:
-	int is_menu_button() const {return 1;}
-	MenuType() : GroupType() {}
-	~MenuType() {}
-	FluidType* click_test(int x, int y);
-    };
-    
-    extern const Enumeration button_type_menu[];
-    class PopupMenuType : public MenuType {
-	const Enumeration *subtypes() const {return button_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::PopupMenu";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new fltk::PopupMenu(x,y,w,h,"menu");}
-	WidgetType *_make() {return new PopupMenuType();}
-    };
-    
-    class ChoiceType : public MenuType {
-    public:
-	int is_choice() const {return 1;}
-	virtual const char *type_name() const {return "fltk::Choice";}
-	Widget *widget(int x,int y,int w,int h) {
-	    fltk::Choice *o = new fltk::Choice(x,y,w,h,"choice:");
-	    return o;
-	}
-	WidgetType *_make() {return new ChoiceType();}
-    };
-    
-    
-    class MenuBarType : public MenuType {
-    public:
-	virtual const char *type_name() const {return "fltk::MenuBar";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new fltk::MenuBar(x,y,w,h);}
-	WidgetType *_make() {return new MenuBarType();}
-    };
-    
-    extern const Enumeration input_browser_type_menu[];
-    class InputBrowserType : public MenuType {
-	int is_input_browser() const {return 1;}
-	const Enumeration *subtypes() const {return input_browser_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::InputBrowser";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new fltk::InputBrowser(x,y,w,h);
-	}
-	WidgetType *_make() {return new InputBrowserType();}
-    };
-    
-    extern const Enumeration browser_type_menu[];
-    class BrowserType : public MenuType {
-	int is_browser() const {return 1;}
-	const Enumeration *subtypes() const {return browser_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::Browser";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new fltk::Browser(x,y,w,h);
-	}
-	WidgetType *_make() {return new BrowserType();}
-    };
-    
-    class FileBrowserType : public WidgetType {
-	const Enumeration *subtypes() const {return browser_type_menu;}
-    public:
-	virtual const char *type_name() const {return "fltk::FileBrowser";}
-	Widget *widget(int x,int y,int w,int h) {
-	    return new FileBrowser(x,y,w,h);
-	}
-	WidgetType *_make() {return new FileBrowserType();}
-    };
-
-    extern const Enumeration item_type_menu[];
-    class ItemType : public WidgetType {
-    public:
-	const Enumeration* subtypes() const {return item_type_menu;}
-	const char* type_name() const {return "fltk::Item";}
-	int is_menu_item() const {return 1;}
-	int is_button() const {return 1;} // this gets shortcut to work
-	Widget *widget(int x,int y,int w,int h);
-	WidgetType *_make() {return new ItemType();}
-    };
-    
-    class DividerType : public WidgetType {
-    public:
-	const Enumeration* subtypes() const {return 0;}
-	const char* type_name() const {return "fltk::Divider";}
-	int is_menu_item() const {return 1;}
-	Widget *widget(int x,int y,int w,int h) { return new Divider; }
-	WidgetType *_make() {return new DividerType();}
-    };
-    
-    class SubmenuType : public GroupType {
-    public:
-	const Enumeration* subtypes() const {return 0;}
-	const char* type_name() const {return "fltk::ItemGroup";}
-	int is_menu_item() const {return 1;}
-	Widget *widget(int x,int y,int w,int h);
-	WidgetType *_make() {return new SubmenuType();}
+      virtual const char *type_name() const { return "fltk::BarGroup"; }
+      Widget *widget(int x, int y, int w, int h) {
+	return new fltk::BarGroup(x, y, w, h);
+      }
+      WidgetType *_make() { return new BarGroupType(); }
     };
 }
 #endif

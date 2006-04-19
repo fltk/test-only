@@ -1,13 +1,7 @@
 //
 // "$Id"
 //
-// WidgetType include file for the Fast Light Tool Kit (FLTK).
-//
-// This class stores the image labels for widgets in fluid.  This is
-// not a class in fltk itself, and this will produce different types of
-// code depending on what the image type is.  There are private subclasses
-// in Fluid_Image.C for each type of image format.  Right now only xpm
-// files are supported.
+// Factory include  for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -31,17 +25,17 @@
 #ifndef fltk_factory_h
 #define fltk_factory_h
 
-
 namespace fltk {
-    class Item;
-    class ItemGroup;
 
-    FluidType *FluidType_make(const char *tn);
-    Item * fluidMenuItem(FluidType& wt,int n) ;
-    ItemGroup * fluidMenuGroup(const char * menu_name,int n) ;
+class Item;
+class ItemGroup;
+
+    Item * fluidMenuItem(FluidType& wt,int n=-1);
+    ItemGroup * fluidMenuGroup(const char * menu_name,int n=-1);
     void fill_in_New_Menu(ItemGroup* menu);
-    int lookup_symbol(const char *name, int &v, int numberok=0);
+    int lookup_symbol(const char *, int &, int numberok = 0);
+    FluidType *FluidType_make(const char *tn);
 }
-#endif
 
+#endif
 // End of "$Id"
