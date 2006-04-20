@@ -618,7 +618,7 @@ void read_fdesign() {
 
     if (!strcmp(name,"Name")) {
 
-	window = (WidgetType*)fltk::FluidType_make("fltk::Window");
+      window = (WidgetType*)fltk::FluidType_make("fltk::Window");
       window->name(value);
       window->label(value);
       FluidType::current = widget = window;

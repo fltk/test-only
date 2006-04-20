@@ -64,6 +64,12 @@ fltk::Window* make_widgetbin() {
         o->tooltip("Declaration Block");
         o->image(fltk::fluid_pixmap[11]);
       }
+       {fltk::Button* o = new fltk::Button(52, 52, 25, 25);
+        o->box(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)type_make_cb, (void*)("WidgetClass"));
+        o->tooltip("Namespace");
+        o->image(fltk::fluid_pixmap[48]);
+      }
       o->end();
     }
      {fltk::Group* o = new fltk::Group(83, 3, 79, 79);
@@ -407,9 +413,11 @@ fltk::MultiLineInput *extra_code_input=(fltk::MultiLineInput *)0;
 
 fltk::CheckButton *overlaybutton=(fltk::CheckButton *)0;
 
+fltk::LightButton *wLiveMode=(fltk::LightButton *)0;
+
 fltk::Window* make_widget_panel() {
   fltk::Window* w;
-   {fltk::Window* o = new fltk::Window(380, 373);
+   {fltk::Window* o = new fltk::Window(380, 380);
     w = o;
     ((fltk::Window*)(o))->hotspot(o);
     o->begin();
@@ -628,6 +636,7 @@ ts from going to other windows until it is hidden or closed.");
           o->labelsize(11);
           o->minimum(1);
           o->step(1);
+          o->value(-4);
           o->callback((fltk::Callback*)line_cb);
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
           o->when(fltk::WHEN_ENTER_KEY);
@@ -843,22 +852,25 @@ e given below.");
       }
       o->end();
     }
-     {fltk::Group* o = new fltk::Group(95, 340, 275, 28);
+     {fltk::Group* o = new fltk::Group(0, 348, 380, 33);
       o->begin();
-       {fltk::CheckButton* o = overlaybutton = new fltk::CheckButton(0, 6, 120, 22, "&Overlays");
+       {fltk::CheckButton* o = overlaybutton = new fltk::CheckButton(20, 2, 120, 24, "&Overlays");
         o->callback((fltk::Callback*)overlay_cb);
         fltk::Group::current()->resizable(o);
         o->tooltip("Turns the overlays (red outlines) off so you can see the edges better.");
         o->value(!overlays_invisible);
       }
-       {fltk::ReturnButton* o = new fltk::ReturnButton(130, 6, 65, 22, "OK");
+       {fltk::ReturnButton* o = new fltk::ReturnButton(235, 3, 65, 23, "OK");
         o->shortcut(0xff0d);
         o->callback((fltk::Callback*)ok_cb);
         o->tooltip("Closes this attribute window");
       }
-       {fltk::Button* o = new fltk::Button(205, 6, 65, 22, "Cancel");
+       {fltk::Button* o = new fltk::Button(310, 3, 65, 23, "Cancel");
         o->callback((fltk::Callback*)cancel_cb);
         o->tooltip("Sorry, cancel does not really work yet.");
+      }
+       {fltk::LightButton* o = wLiveMode = new fltk::LightButton(95, 4, 90, 22, "LiveMode!");
+        o->callback((fltk::Callback*)live_mode_cb);
       }
       o->end();
       fltk::Group::current()->resizable(o);

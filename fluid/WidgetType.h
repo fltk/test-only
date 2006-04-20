@@ -166,11 +166,13 @@ namespace fltk {
     public:
 	virtual const char *type_name() const {return "fltk::TabGroup";}
 	Widget *widget(int x,int y,int w,int h) {
-	    itabs *g = new itabs(x,y,w,h); Group::current(0); return g;}
+	itabs *g = new itabs(x,y,w,h); Group::current(0); return g;}
 	WidgetType *_make() {return new TabsType();}
 	FluidType* click_test(int,int);
 	void add_child(FluidType*, FluidType*);
 	void remove_child(FluidType*);
+	// live mode functionalities
+	Widget *enter_live_mode(int top);
     };
     
     extern const Enumeration scroll_type_menu[];

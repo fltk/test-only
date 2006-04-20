@@ -477,6 +477,9 @@ int fltk::wait(float time_to_wait) {
   run_checks();
   flush();
 
+  // delete all widgets that were listed during callbacks
+  //do_widget_deletion(); // fabien: removed by Bill
+
   if (first_timeout) {
     elapse_timeouts();
     Timeout* t = first_timeout;

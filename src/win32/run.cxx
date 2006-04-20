@@ -482,7 +482,7 @@ const Monitor& Monitor::all() {
     allMonitors.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
     allMonitors.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
 
-if USE_MULTIMONITOR
+#if USE_MULTIMONITOR
     int monitors = GetSystemMetrics(SM_CMONITORS);
     if (monitors > 0) {
       RECT r;

@@ -62,6 +62,7 @@ protected:
   const char *callback_;
   const char *user_data_;
   const char *user_data_type_;
+  fltk::Widget *live_widget;
 
 public:	// things that should not be public:
 
@@ -125,6 +126,11 @@ public:
   // write code, these are called in order:
   virtual void write_static(); // write static stuff to .c file
   virtual void write_code();   // write .h and .c file
+
+  // live mode
+  virtual fltk::Widget *enter_live_mode(int top=0); // build widgets needed for live mode
+  virtual void leave_live_mode(); // free allocated resources
+  virtual void copy_properties(); // copy properties from this type into a potetial live object
 
   // fake rtti:
   virtual int is_parent() const;
@@ -236,6 +242,11 @@ public:
   const char* array_name() const;
 
   virtual const char *type_name() const;
+
+  // live mode functionalities
+  fltk::Widget *enter_live_mode(int top);
+  void leave_live_mode();
+  void copy_properties();
 };
 
 #define LOAD ((void*)9831)
@@ -258,6 +269,11 @@ public:
   void remove_child(FluidType*);
   int is_parent() const;
   int is_group() const;
+
+  // live mode functionalities
+  fltk::Widget *enter_live_mode(int top);
+  void leave_live_mode();
+  void copy_properties();
 };
 
 ////////////////////////////////////////////////////////////////
@@ -271,8 +287,11 @@ class FLUID_API WindowType : public GroupType {
   int x1,y1;		// initial position of selection box
   int bx,by,br,bt;	// bounding box of selection
   int dx,dy;
+  int recalc;		// set by fix_overlay()
+public:
   int drag;		// which parts of bbox are being moved
   int numselected;	// number of children selected
+
   enum {LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
   void draw_overlay();
   void newdx();
@@ -282,12 +301,12 @@ class FLUID_API WindowType : public GroupType {
   void write_code();
   WidgetType *_make() {return 0;} // we don't call this
   fltk::Widget *widget(int,int,int,int) {return 0;}
-  int recalc;		// set by fix_overlay()
   void moveallchildren();
   void move_children(FluidType*, int);
   WidgetType* clicked_widget();
 
 public:
+  WindowType();
 
   bool modal, non_modal, border;
 
@@ -309,7 +328,35 @@ public:
   int is_parent() const {return 1;}
   int is_group() const {return 1;}
   int is_window() const {return 1;}
+
+  // live mode functionalities
+  fltk::Widget *enter_live_mode(int top);
+  void leave_live_mode();
+  void copy_properties();
+  
+  int sr_min_w, sr_min_h, sr_max_w, sr_max_h; // size_range related
+
 };
+
+class FLUID_API WidgetClassType : private WindowType {
+public:
+  WidgetClassType() {write_public_state = false;  wc_relative = false;}
+  // state variables for output:
+  bool write_public_state; // true when public: has been printed
+  bool wc_relative; // if true, reposition all child widgets in an Fl_Group
+
+  virtual void write_properties();
+  virtual void read_property(const char *);
+
+  void write_code();
+  void write_code1();
+  FluidType *make();
+  virtual const char *type_name() const  {return "fltk::WidgetClass";}
+  int is_parent() const {return 1;}
+  int is_decl_block() const {return 1;}
+  int is_class() const {return 1;}
+};
+
 
 ////////////////////////////////////////////////////////////////
 // This header file also declares all the global functions in fluid:

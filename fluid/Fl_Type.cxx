@@ -333,17 +333,7 @@ void redraw_browser() {
 }
 
 FluidType::FluidType() {
-  factory = 0;
-  parent = 0;
-  first_child = 0;
-  next_brother = previous_brother = 0;
-  selected = new_selected = 0;
-  name_ = 0;
-  label_ = 0;
-  tooltip_ = 0;
-  user_data_ = 0;
-  user_data_type_ = 0;
-  callback_ = 0;
+  memset(this, 0, sizeof(FluidType));
   pixID_ = -1;
 }
 
@@ -381,8 +371,14 @@ void FluidType::remove_child(FluidType*) {}
 
 // add as a new child of p:
 void FluidType::add(FluidType *p) {
+  if (p && parent == p) return;
+  // FIXME UNDO:   undo_checkpoint();
   parent = p;
-  FluidType* q = p ? p->first_child : FluidType::first;
+  // calculate level
+  FluidType *end = this;
+  while (end->next_brother) end = end->next_brother;
+  
+  FluidType * q = p ? p->first_child : FluidType::first;
   if (q) {
     // find the last child:
     while (q->next_brother) q = q->next_brother;
@@ -679,6 +675,28 @@ void FluidType::read_property(const char *c) {
 }
 
 int FluidType::read_fdesign(const char*, const char*) {return 0;}
+
+/**
+ * Build widgets and dataset needed in live mode.
+ * \return a widget pointer that the live mode initiator can 'show()'
+ * \see leave_live_mode()
+ */
+fltk::Widget *FluidType::enter_live_mode(int top) {
+  return 0L;
+}
+
+/**
+ * Release all resources created when enetring live mode.
+ * \see enter_live_mode()
+ */
+void FluidType::leave_live_mode() {
+}
+
+/**
+ * Copy all needed properties for this tye into the live object.
+ */
+void FluidType::copy_properties() {
+}
 
 //
 // End of "$Id$".

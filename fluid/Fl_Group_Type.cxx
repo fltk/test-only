@@ -4,7 +4,7 @@
 // fltk::Group object code for the Fast Light Tool Kit (FLTK).
 //
 // Object describing an fltk::Group and links to WindowType.C and
-// the fltk::Tabs widget, with special stuff to select tab items and
+// the fltk::TabGroup widget, with special stuff to select tab items and
 // insure that only one is visible.
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -31,11 +31,18 @@
 #include <fltk/events.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
+#include <fltk/TabGroup.h>
 #include <fltk/ask.h>
 #include "FluidType.h"
 #include "WidgetType.h"
 
 using namespace fltk;
+
+GroupType Grouptype;	// the "factory"
+PackType Packtype;	// the "factory"
+TabsType Tabstype;	// the "factory"
+ScrollType Scrolltype;	// the "factory"
+TileType Tiletype;	// the "factory"
 
 WidgetType* GroupType::_make() {return new GroupType();}
 
@@ -61,7 +68,6 @@ const char* GroupType::type_name() const {return "fltk::Group";}
 int GroupType::is_parent() const {return 1;}
 int GroupType::is_group() const {return 1;}
 
-GroupType Grouptype;	// the "factory"
 
 FluidType *GroupType::make() {
   return WidgetType::make();
@@ -175,11 +181,9 @@ const fltk::Enumeration pack_type_menu[] = {
   {0}};
 #endif
 
-PackType Packtype;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
 
-TabsType Tabstype;	// the "factory"
 
 // This is called when user clicks on a widget in the window.  See
 // if it is a tab title, and adjust visibility and return new selection:
@@ -250,12 +254,46 @@ const Enumeration fltk::scroll_type_menu[] = {
   {"Both Always",	"BOTH_ALWAYS",	(void*)fltk::ScrollGroup::BOTH_ALWAYS},
   {0}};
 
-ScrollType Scrolltype;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
+// live mode support
 
-TileType Tiletype;	// the "factory"
+Widget *GroupType::enter_live_mode(int top) {
+  Group *grp = new Group(o->x(), o->y(), o->w(), o->h());
+  live_widget = grp;
+  if (live_widget) {
+    copy_properties();
+    for (FluidType* n = first_child; n; n = n->next_brother) {
+        n->enter_live_mode();
+    }
+    grp->end();
+  }
+  return live_widget;
+}
 
+Widget *TabsType::enter_live_mode(int top) {
+  TabGroup *grp = new TabGroup(o->x(), o->y(), o->w(), o->h());
+  live_widget = grp;
+  if (live_widget) {
+    copy_properties();
+    for (FluidType* n = first_child; n; n = n->next_brother) {
+        n->enter_live_mode();
+    }
+    grp->end();
+  }
+  grp->value(((TabGroup*)o)->value());
+  return live_widget;
+}
+
+void GroupType::leave_live_mode() {
+}
+
+/**
+ * copy all properties from the edit widget to the live widget
+ */
+void GroupType::copy_properties() {
+  WidgetType::copy_properties();
+}
 //
 // End of "$Id$".
 //

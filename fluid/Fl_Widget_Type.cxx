@@ -30,6 +30,8 @@
 #include <fltk/ask.h>
 #include <fltk/Slider.h>
 #include <fltk/Window.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/InvisibleBox.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -2183,7 +2185,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
       extra_code(buf);
     }
   } else if (!strcmp(name,"style")) {
-    if (!strncmp(value,"FL_NORMAL",9)) return 1;
+    if (!strncmp(value,"fltk::NORMAL",9)) return 1;
     if (!fltk::lookup_symbol(value,v,1)) return 0;
     o->labelfont(fltk::font(v)); o->labeltype((fltk::LabelType*)(v>>8));
   } else if (!strcmp(name,"size")) {
@@ -2228,7 +2230,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
       *p=' '; return 0;}
     o->color(v); o->selection_color(v1);
   } else if (!strcmp(name,"resize")) {
-    return !strcmp(value,"FL_RESIZE_ALL");
+    return !strcmp(value,"fltk::RESIZE_ALL");
   } else if (!strcmp(name,"gravity")) {
     return !strcmp(value,"Fl_NoGravity Fl_NoGravity");
   } else if (!strcmp(name,"boxtype")) {
@@ -2246,6 +2248,154 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
   return 1;
 }
 
+void leave_live_mode_cb(Widget*, void*);
+
+void live_mode_cb(LightButton*o,void *v) {
+  /// \todo live mode should end gracefully when the application quits
+  ///       or when the user closes the live widget
+  static FluidType *live_type = 0L;
+  static Widget *live_widget = 0L;
+  static Window *live_window = 0L;
+  // if 'o' is 0, we must quit live mode
+  if (!o) {
+    o = wLiveMode;
+    o->value(0);
+  }
+  if (o->value()) {
+    if (numselected == 1) {
+      live_widget = current_widget->enter_live_mode(1);
+      if (live_widget) {
+        live_type = current_widget;
+        Group::current(0);
+        int w = live_widget->w();
+        int h = live_widget->h();
+        live_window = new DoubleBufferWindow(w+20, h+55, "Fluid Live Mode Widget");
+        live_window->box(fltk::FLAT_BOX);
+        live_window->color(fltk::GREEN);
+        Group *rsz = new Group(0, h+20, 130, 35);
+        rsz->box(fltk::NO_BOX);
+        InvisibleBox*rsz_dummy = new InvisibleBox(fltk::NO_BOX, 110, h+20, 1, 25,"");
+        rsz->resizable(rsz_dummy);
+        Button *btn = new Button(10, h+20, 100, 25, "Exit Live Mode");
+        btn->labelsize(12);
+        btn->callback(leave_live_mode_cb);
+        live_widget->position(10, 10);
+        live_window->add(live_widget);
+        live_window->resizable(live_widget);
+        live_window->set_modal(); // block all other UI
+        live_window->callback(leave_live_mode_cb);
+        if (current_widget->is_window()) {
+          WindowType *w = (WindowType*)current_widget;
+          int mw = w->sr_min_w; if (mw>0) mw += 20;
+          int mh = w->sr_min_h; if (mh>0) mh += 55;
+          int MW = w->sr_max_w; if (MW>0) MW += 20; 
+          int MH = w->sr_max_h; if (MH>2) MH += 55;
+          if (mw || mh || MW || MH)
+            live_window->size_range(mw, mh, MW, MH);
+        }
+        live_window->show();
+      } else o->value(0);
+    } else o->value(0);
+  } else {
+    if (live_type)
+      live_type->leave_live_mode();
+    if (live_window) {
+      live_window->hide();
+      delete live_window; // delete_widget(live_window);
+    }
+    live_type = 0L;
+    live_widget = 0L;
+    live_window = 0L;
+  }
+}
+
+void leave_live_mode_cb(Widget*, void*) {
+  live_mode_cb(0, 0);
+}
+
+fltk::Widget *WidgetType::enter_live_mode(int top) {
+  live_widget = widget(o->x(), o->y(), o->w(), o->h());
+  if (live_widget)
+    copy_properties();
+  return live_widget;
+}
+
+void WidgetType::leave_live_mode() {
+}
+
+/**
+ * copy all properties from the edit widget to the live widget
+ */
+void WidgetType::copy_properties() {
+  if (!live_widget) 
+    return;
+
+  // copy all attributes common to all widget types
+  Widget *w = live_widget;
+  //memcpy(w,o,sizeof(Widget);
+  w->style(o->style());
+  w->default_style = o->default_style;
+  w->default_glyph= o->default_glyph;
+  w->flags(o->flags());
+  w->label(o->label());
+  w->image(o->image(), o->image(INACTIVE),o->image(BELOWMOUSE),o->image(PUSHED));
+  w->tooltip(tooltip());
+  w->type(o->type());
+  w->box(o->box());
+  w->buttonbox(o->buttonbox());
+  w->focusbox(o->focusbox());
+  w->glyph(o->glyph());
+  w->labelfont(o->labelfont());
+  w->textfont(o->textfont());
+  w->labeltype(o->labeltype());
+  w->color(o->color());
+  w->textcolor(o->textcolor());
+  w->selection_color(o->selection_color());
+  w->selection_textcolor(o->selection_textcolor());
+  w->buttoncolor(o->buttoncolor());
+  w->labelcolor(o->labelcolor());
+  w->highlight_color(o->highlight_color());
+  w->highlight_textcolor(o->highlight_textcolor());
+  w->labelsize(o->labelsize());
+  w->textsize(o->textsize());
+  w->leading(o->leading());
+  w->align(o->align());
+  w->shortcut(o->shortcut());
+
+  // copy all attributes specific to widgets derived from Button
+  if (is_button()) {
+    Button* d = (Button*)live_widget, *s = (Button*)o;
+    d->value(s->value());
+  }
+
+  // copy all attributes specific to Valuator and derived classes
+  if (is_valuator()) {
+    Valuator* d = (Valuator*)live_widget, *s = (Valuator*)o;
+    d->minimum(s->minimum());
+    d->maximum(s->maximum());
+    d->step(s->step());
+    d->value(s->value());
+    if (is_valuator()==2) {
+      Slider *d = (Slider*)live_widget, *s = (Slider*)o;
+      d->slider_size(s->slider_size());
+    }
+  }
+ 
+/* TODO: implement this
+  {Font ff; int fs; Color fc; if (textstuff(4,ff,fs,fc)) {
+    Font f; int s; Color c; textstuff(0,f,s,c);
+    if (f != ff) write_string("textfont %d", f);
+    if (s != fs) write_string("textsize %d", s);
+    if (c != fc) write_string("textcolor %d", c);
+  }}*/
+
+  if (!o->visible()) 
+    w->hide();
+  if (!o->active()) 
+    w->deactivate();
+  if (resizable() && w->parent()) 
+    w->parent()->resizable(o);
+}
 //
 // End of "$Id$".
 //

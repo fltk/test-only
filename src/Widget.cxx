@@ -1080,6 +1080,8 @@ void Widget::image(const Symbol* noflags, const Symbol* disabled,
 }
 
 const Symbol* Widget::image(Flags flags) const	{ 
+    if (!image_) return 0;
+
     if (nimages_>1 && flags & fltk::INACTIVE_R) // reads the image for pushed button or open
 	return image_[1];
     else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget

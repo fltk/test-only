@@ -787,6 +787,7 @@ void Group::fix_old_positions() {
   }
 }
 
+
 //
 // End of "$Id$".
 //

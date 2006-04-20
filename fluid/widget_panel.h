@@ -93,5 +93,7 @@ extern fltk::CheckButton* overlaybutton;
 #include <fltk/ReturnButton.h>
 extern void ok_cb(fltk::ReturnButton*, void*);
 extern void cancel_cb(fltk::Button*, void*);
+extern void live_mode_cb(fltk::LightButton*, void*);
+extern fltk::LightButton* wLiveMode;
 fltk::Window* make_widget_panel();
 #endif
