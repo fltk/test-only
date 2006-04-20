@@ -817,9 +817,10 @@ void Window::destroy() {
   i = 0;
 
   // remove from the list of windows:
-  CreatedWindow** pp = &CreatedWindow::first;
-  for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
-  *pp = x->next;
+  CreatedWindow* p=CreatedWindow::first;
+  // Tree cases to handle : x is first, x is not first,x not in the list
+  if (x==p) CreatedWindow::first = p->next;
+  else {while(p && p->next != x) p = p->next;if(p) p->next = x->next;}
 
   // recursively remove any subwindows:
   for (CreatedWindow *x1 = CreatedWindow::first; x1;) {

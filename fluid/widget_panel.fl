@@ -21,7 +21,7 @@ Function {make_widgetbin()} {open
 } {
   {fltk::Window} widgetbin_panel {
     label {Widget Bin} open
-    xywh {382 139 520 85} resizable non_modal visible
+    xywh {401 161 520 85} resizable non_modal visible
   } {
     {fltk::Group} {} {open
       xywh {3 3 79 79} box THIN_DOWN_BOX
@@ -426,7 +426,7 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
-    xywh {383 255 380 380} resizable hotspot visible
+    xywh {401 283 380 380} resizable hotspot visible
   } {
     {fltk::TabGroup} panel_tabs {
       callback propagate_tabs open
@@ -867,7 +867,7 @@ To get out of shortcut-setting mode:
       }
     }
     {fltk::Group} {} {open selected
-      xywh {0 348 380 33} resizable
+      xywh {0 348 380 26} resizable
     } {
       {fltk::CheckButton} overlaybutton {
         label {&Overlays}

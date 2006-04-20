@@ -2303,7 +2303,7 @@ void live_mode_cb(LightButton*o,void *v) {
     if (live_window) {
 	live_window->hide();
       //WILL CRASH: 
-	// delete live_window; // was delete_widget(live_window); but deferred call obsolete in fltk2
+      delete live_window; // was delete_widget(live_window); but deferred call obsolete in fltk2
     }
     live_type = 0L;
     live_widget = 0L;
@@ -2335,7 +2335,7 @@ void WidgetType::copy_properties() {
   // copy all attributes common to all widget types
   Widget *w = live_widget;
   //memcpy(w,o,sizeof(Widget);
-  w->style(o->style());
+  //w->style(o->style());
   w->default_style = o->default_style;
   w->default_glyph= o->default_glyph;
   w->flags(o->flags());
