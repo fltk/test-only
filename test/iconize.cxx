@@ -3,7 +3,7 @@
 //
 // Iconize test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,59 +21,138 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Box.H>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+#include <stdio.h>
 #include <stdlib.h>
+using namespace fltk;
 
-void iconize_cb(Fl_Widget *, void *v) {
-  Fl_Window *w = (Fl_Window *)v;
-  w->iconize();
-}
-
-void show_cb(Fl_Widget *, void *v) {
-  Fl_Window *w = (Fl_Window *)v;
-  w->show();
-}
-
-void hide_cb(Fl_Widget *, void *v) {
-  Fl_Window *w = (Fl_Window *)v;
+void hide_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
   w->hide();
 }
 
-void window_cb(Fl_Widget*, void*) {
+void iconize_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->iconize();
+}
+
+void destroy_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->destroy();
+}
+
+void show_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->show();
+}
+
+void big_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->resize(800,800);
+}
+
+void small_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->resize(200,200);
+}
+
+void fson_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->fullscreen();
+}
+
+void fsoff_cb(Widget *, void *v) {
+  Window *w = (Window *)v;
+  w->fullscreen_off(100,100,200,200);
+}
+
+void window_cb(Widget*, void*) {
   exit(0);
 }
 
 int main(int argc, char **argv) {
 
-  Fl_Window mainw(200,200);
-  mainw.end();
+  Window mainw(200,200);
+  mainw.resizable(mainw);
+  Window child(50,50,100,100);
+  child.color(1);
+  mainw.add(child);
+  mainw.resizable(child);
   mainw.show(argc,argv);
 
-  Fl_Window control(120,120);
+  Window control(120,9*30,"Window actions");
+  control.begin();
 
-  Fl_Button hide_button(0,0,120,30,"hide()");
+  int y = 0;
+  Button hide_button(0,y,120,30,"&hide()");
   hide_button.callback(hide_cb, &mainw);
+  y += 30;
 
-  Fl_Button iconize_button(0,30,120,30,"iconize()");
+  Button iconize_button(0,y,120,30,"&iconize()");
   iconize_button.callback(iconize_cb, &mainw);
+  y += 30;
 
-  Fl_Button show_button(0,60,120,30,"show()");
+  Button destroy_button(0,y,120,30,"&destroy()");
+  destroy_button.callback(destroy_cb, &mainw);
+  y += 30;
+
+  Button show_button(0,y,120,30,"&show()");
   show_button.callback(show_cb, &mainw);
+  y += 30;
 
-  Fl_Button show_button2(0,90,120,30,"show this");
+  Button big_button(0,y,120,30,"resize(&big)");
+  big_button.callback(big_cb, &mainw);
+  y += 30;
+
+  Button small_button(0,y,120,30,"resize(&little)");
+  small_button.callback(small_cb, &mainw);
+  y += 30;
+
+  Button fson_button(0,y,120,30,"fullscreen()");
+  fson_button.callback(fson_cb, &mainw);
+  y += 30;
+
+  Button fsoff_button(0,y,120,30,"&fullscreen_off()");
+  fsoff_button.callback(fsoff_cb, &mainw);
+  y += 30;
+
+  Button show_button2(0,y,120,30,"show this");
   show_button2.callback(show_cb, &control);
+  y += 30;
 
-  //  Fl_Box box(FL_NO_BOX,0,60,120,30,"Also try running\nwith -i switch");
+  control.tooltip("Push these buttons to cause actions to the main window.\n\n"
+		  "Also you should try running this with -i to iconize "
+		  "the window on startup, and -g WxH+X+Y to position "
+		  "the window on startup.");
 
   control.end();
   control.show();
   control.callback(window_cb);
-  return Fl::run();
+  while (fltk::wait()) {
+    static int oldarray[6] = {0,0,0,0,0,0};
+    int array[6];
+    array[0] = mainw.x();
+    array[1] = mainw.y();
+    array[2] = mainw.w();
+    array[3] = mainw.h();
+    array[4] = mainw.visible();
+    array[5] = mainw.iconic();
+    bool print = false;
+    for (int i = 0; i < 6; i++) {
+      if (array[i] != oldarray[i]) print = true;
+      oldarray[i] = array[i];
+    }
+    if (print) {
+      printf("window is %d %d %d %d, visible %d, iconic %d\n",
+	     array[0], array[1], array[2], array[3], array[4], array[5]);
+//       fltk::Rectangle r; mainw.borders(&r);
+//       printf("borders %d %d %d %d\n", r.x(),r.y(),r.r(),r.b());
+    }
+  }
+  return 0;
 }
 
 //
