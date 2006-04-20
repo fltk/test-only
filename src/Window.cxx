@@ -64,7 +64,6 @@ If you don't change it then that key will close the window.
 #include <fltk/x.h>
 using namespace fltk;
 
-
 /*! Return a pointer to the fltk::Window this widget is in.
   (it will skip any and all parent widgets between this and
   the window).  Returns NULL if none.  Note: for an
@@ -249,9 +248,14 @@ static void deferred_call(DeferredCallType what, HWND window, int arg=0) {
   ++deferred_queue_size;
 }
 
+extern HWND ignore_size_change_window;
+
 // Programs that never call wait() (because they are using another GUI
 // toolkit along with fltk) may need to call this occasionally:
 void fl_do_deferred_calls() {
+  static bool recurse = false;
+  if (recurse) return;
+  recurse = true;
   // Notice that WndProc may be called and put *more* things on the queue.
   // Be sure to handle this. Yuck.
   HWND keep_active = 0;
@@ -259,6 +263,8 @@ void fl_do_deferred_calls() {
     DeferredCall& c = deferred_queue[n];
     switch (c.what) {
     case SHOW_WINDOW:
+      if (c.argument == SW_RESTORE)
+        ignore_size_change_window = c.window;
       ShowWindow(c.window, c.argument);
       keep_active = 0;
       break;
@@ -266,6 +272,7 @@ void fl_do_deferred_calls() {
       keep_active = c.window;
       break;
     case OPEN_ICON:
+      ignore_size_change_window = c.window;
       OpenIcon(c.window);
       keep_active = 0;
       break;
@@ -288,6 +295,7 @@ void fl_do_deferred_calls() {
     //BringWindowToTop(keep_active);
     SetActiveWindow(keep_active);
   }
+  recurse = false;
 }
 
 void fl_prune_deferred_calls(HWND window) {
@@ -305,7 +313,7 @@ bool Window::get_size_range( int *min_w, int *min_h, int *max_w, int *max_h )
   if ( min_h ) { *min_h = minh; }
   if ( max_w ) { *max_w = maxw; }
   if ( max_h ) { *max_h = maxh; }
-  return size_range_set ? true : false;
+  return size_range_set != 0;
 }
 
 //+++ verify port to FLTK2
@@ -481,7 +489,7 @@ void Window::show() {
 #elif defined(_WIN32)
     int showtype;
     if (parent())
-      showtype = SW_RESTORE;
+      showtype = SW_SHOWNORMAL; //SW_RESTORE;
     else if (!modal() && fl_show_iconic)
       showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
     // If we've captured the mouse, we don't want do activate any
@@ -871,13 +879,8 @@ Window::~Window() {
   are typically positive. To get the actual rectangle around your
   window, add these values to the window's size.
 */
-// resize port from fltk1
 // Implementation in the system-specific code
-#if !defined(WIN32) && !USE_X11
-bool Window::resize(int X, int Y, int W, int H) {
-  return Group::resize(X, Y, W, H);
-}
-#endif
+
 //
 // End of "$Id$".
 //

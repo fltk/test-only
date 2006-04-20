@@ -57,8 +57,6 @@
 
 using namespace fltk;
 
-static fltk::Window * resize_from_system=0;
-
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
 
@@ -1263,36 +1261,65 @@ bool fltk::handle()
     if (!window) break;
     if (window->parent()) break; // ignore child windows
     if (xevent.xconfigure.window != xid(window)) break; // ignore frontbuffer
+    //if (!xevent.xconfigure.send_event) break; // ignore non-wm messages
 
-    // figure out where OS really put window
+    // figure out where Window Manager really put window:
     XWindowAttributes actual;
     XGetWindowAttributes(xdisplay, xid(window), &actual);
     XWindow junk; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
-    CreatedWindow::find(window)->current_size.set(X,Y,W,H);
-    resize_from_system = window;
-    window->resize(X, Y, W, H);
-    break;} // allow add_handler to do something too
+    Rectangle& current = CreatedWindow::find(window)->current_size;
+    if (!CreatedWindow::find(window)->wait_for_expose &&
+	(X != current.x() || Y != current.y() || W != current.w() || H != current.h())) {
+      window->resize(X, Y, W, H);
+    }
+    current.set(X,Y,W,H);
+    break;}
 
   case ReparentNotify: {
-    if (!window) break;
-    if (window->parent()) break; // ignore child windows
-    if (xevent.xreparent.window != xid(window)) break; // ignore frontbuffer
-    XWindow root = XRootWindow(xdisplay, xscreen);
-    if (xevent.xreparent.parent != root) {
-      int X, Y; XWindow junk;
-      //ReparentNotifygivesthenewpositionofthewindowrelativeto
-      //thenewparent.FLTKcaresaboutthepositionontherootwindow.
-      XTranslateCoordinates(xdisplay, xid(window), root, 0, 0, &X, &Y, &junk);
-      window->x(X);
-      window->y(Y);
-    } else {
-      window->x(xevent.xreparent.x);
-      window->y(xevent.xreparent.y);
+    if (!window || window->parent()) break;
+    // Fix stoopid MetaCity! When you hide a window it reparents it but
+    // it trashes the window position. It then uses this bad position
+    // when you restore the window:
+    // If we have hidden a window and it reparents it to nothing:
+    if (!window->visible() &&
+	xevent.xreparent.parent == XRootWindow(xdisplay, xscreen)) {
+      int X = xevent.xreparent.x;
+      int Y = xevent.xreparent.y;
+      Rectangle& current = CreatedWindow::find(window)->current_size;
+      // If the x/y seem to be wrong, fix them:
+      if (X != current.x() || Y != current.y())
+	XMoveWindow(xdisplay, xid(window), current.x(), current.y());
     }
-    resize_from_system = window;
     break;}
+
+  case Expose:
+  case GraphicsExpose:
+    if (!window) break;
+    // If this window completely fills it's parent, parent will not get
+    // an expose event and the wait flag will not turn off. So force this:
+    {for (Window* w = window; ;) {
+      CreatedWindow::find(w)->wait_for_expose = false;
+      if (!w->parent() && (w->x()==USEDEFAULT || w->y()==USEDEFAULT)) {
+	// figure out where Window Manager really put window:
+	XWindowAttributes actual;
+	XGetWindowAttributes(xdisplay, xid(w), &actual);
+	XWindow junk; int X, Y, W = actual.width, H = actual.height;
+	XTranslateCoordinates(xdisplay, xid(w), actual.root,
+			      0, 0, &X, &Y, &junk);
+	CreatedWindow::find(w)->current_size.set(X,Y,W,H);
+	window->x(X); window->y(Y);
+	// Turn on the user-specified position hint so MetaCity won't move it!!
+	CreatedWindow::find(w)->sendxjunk();
+      }
+      w = w->window();
+      if (!w) break;
+    }}
+    // Inside of Xexpose event is exactly the same as Rectangle structure,
+    // so we pass a pointer.
+    CreatedWindow::find(window)->expose(*(Rectangle*)(&xevent.xexpose.x));
+    return true;
 
   case UnmapNotify:
     //window = find(xevent.xmapping.window);
@@ -1301,21 +1328,6 @@ bool fltk::handle()
     // turning this flag makes iconic() return true:
     CreatedWindow::find(window)->wait_for_expose = true;
     break; // allow add_handler to do something too
-
-  case Expose:
-  case GraphicsExpose:
-    if (!window) break;
-    // If this window completely fills it's parent, parent will not get
-    // an expose event and the wait flag will not turn off. So force this:
-    {for (Window* w = window;;) {
-      CreatedWindow::find(w)->wait_for_expose = false;
-      w = w->window();
-      if (!w) break;
-    }}
-    // Inside of Xexpose event is exactly the same as Rectangle structure,
-    // so we pass a pointer.
-    CreatedWindow::find(window)->expose(*(Rectangle*)(&xevent.xexpose.x));
-    return true;
 
   case ButtonPress: {
     unsigned n = xevent.xbutton.button;
@@ -2050,44 +2062,6 @@ bool Window::iconic() const {
   return (i && visible() && i->wait_for_expose);
 }
 
-bool Window::resize(int X,int Y,int W,int H) {
-#if 1
-  int is_a_move = (X != x() || Y != y());
-  int is_a_resize = (W != w() || H != h());
-  int resize_from_program = (this != resize_from_system);
-  
-  if (!resize_from_program) resize_from_system = 0;
-  //if (!is_a_resize && !is_a_move) return false;
-
-  if (is_a_move && resize_from_program) set_flag(FORCE_POSITION);
-
-  if (is_a_resize) {
-    Group::resize(X,Y,W,H);
-    if (visible()) {redraw(); i->wait_for_expose = 1;}
-  } else {
-    x(X); y(Y);
-  }
-
-  if (resize_from_program && is_a_resize && !resizable()) {
-    size_range(w(), h(), w(), h());
-  }
-
-  if (resize_from_program && shown()) {
-    if (is_a_resize) {
-      if (!resizable()) size_range(w(),h(),w(),h());
-      if (is_a_move) {
-	XMoveResizeWindow(xdisplay, i->xid, X, Y, W>0 ? W : 1, H>0 ? H : 1);
-      } else {
-	XResizeWindow(xdisplay, i->xid, W>0 ? W : 1, H>0 ? H : 1);
-      }
-    } else
-      XMoveWindow(xdisplay, i->xid, X, Y);
-  }
-  return true;
-#else
-  return Group::resize(X, Y,W, H);
-#endif
-}
 ////////////////////////////////////////////////////////////////
 
 /*! Sets both the label() and the iconlabel() */

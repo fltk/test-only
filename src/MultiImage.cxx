@@ -20,7 +20,7 @@ using namespace fltk;
   is destroyed (usually all of these are static variables).
 
   The flags select when the image is drawn. Useful flags are:
-  - INACTIVE
+  - INACTIVE_R
   - VALUE True for button that is turned on
   - HIGHLIGHT True when the mouse is over widget or pushing it (you
   must also set highlight_color() to non-zero or most widgets will
@@ -36,8 +36,8 @@ using namespace fltk;
 		HIGHLIGHT, BrightOffImage,
 		VALUE, OnImage,
 		HIGHLIGHT|VALUE, BrightOnImage,
-		INACTIVE, DimOffImage,
-		INACTIVE|VALUE, DimOnImage);
+		INACTIVE_R, DimOffImage,
+		INACTIVE_R|VALUE, DimOnImage);
 \endcode
 */
 

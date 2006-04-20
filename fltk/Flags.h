@@ -80,8 +80,7 @@ enum {
   ALIGN_MENU		  = (ALIGN_INSIDE_LEFT|ALIGN_CLIP), //!< Label is inside widget bottom right
   ALIGN_BROWSER		  = ALIGN_MENU,			    //!< Label is inside widget bottom right
 
-  // fabien: NOTACTIVE should not exist, it is redondant with INACTIVE
-  // NOTACTIVE		  = 0x00000100, //!< !active()
+  INACTIVE		  = 0x00000100, //!< !active()
   OUTPUT		  = 0x00000200, //!< does not get events, draw text colors
   VALUE			  = 0x00000400, //!< true/on state for buttons 
   SELECTED		  = 0x00000800, //!< chosen in browser/menu, draw selected colors
@@ -93,7 +92,7 @@ enum {
   LAYOUT_VERTICAL	  = 0x00020000, //!< fltk::Pack puts this widget vertical
   TAB_TO_FOCUS		  = 0x00040000, //!< Widget::tab_to_focus();
   CLICK_TO_FOCUS	  = 0x00080000, //!< Widget::click_to_focus()
-  INACTIVE		  = 0x00100000, //!< draw it grayed-out
+  INACTIVE_R		  = 0x00100000, //!< draw it grayed-out
   FOCUSED		  = 0x00200000, //!< draw with keyboard focus also used for belowmouse widget image (image3_) 
   PUSHED		  = 0x00400000, //!< draw pushed-in 
   BELOWMOUSE		  = FOCUSED,	//!< used by image() and set_symbol() for state corresponding to widget below mouse

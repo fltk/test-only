@@ -38,7 +38,6 @@
 #include <fltk/utf.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <limits.h>
 #include <time.h>
@@ -438,6 +437,24 @@ static inline int fl_wait(double time_to_wait) {
 
 ////////////////////////////////////////////////////////////////
 
+#if USE_MULTIMONITOR
+static BOOL CALLBACK monitor_union_cb(HMONITOR hMonitor,
+				      HDC hdcMonitor,
+				      LPRECT lprcMonitor,
+				      LPARAM dwData)
+{
+  MONITORINFO mi;
+  mi.cbSize = sizeof(mi);
+  GetMonitorInfo(hMonitor, &mi);
+  RECT *r = (RECT*)dwData;
+  if ( r->left  > mi.rcWork.left )  r->left   = mi.rcWork.left;
+  if ( r->top   > mi.rcWork.top  )  r->top    = mi.rcWork.top;
+  if ( r->right < mi.rcWork.right ) r->right  = mi.rcWork.right;
+  if ( r->bottom< mi.rcWork.bottom) r->bottom = mi.rcWork.bottom;
+  return TRUE;
+}
+#endif
+
 static bool reload_info = true;
 static Monitor allMonitors;
 /** Return a "monitor" that surrounds all the monitors.
@@ -465,12 +482,23 @@ const Monitor& Monitor::all() {
     allMonitors.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
     allMonitors.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
 
-    // This is wrong, we should get the work area from the union of
-    // all the monitors in monitor list:
-    RECT r;
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    allMonitors.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
-
+if USE_MULTIMONITOR
+    int monitors = GetSystemMetrics(SM_CMONITORS);
+    if (monitors > 0) {
+      RECT r;
+      r.left = 100000;
+      r.top  = 100000;
+      r.right = -100000;
+      r.bottom = -100000;
+      EnumDisplayMonitors(0,0,monitor_union_cb,(LPARAM)&r);
+      allMonitors.work.set( r.left, r.top,
+			    r.right-r.left, r.bottom-r.top );
+    } else {
+      allMonitors.work = allMonitors;
+    }
+#else
+    allMonitors.work = allMonitors;
+#endif
   }
   return allMonitors;
 }
@@ -479,9 +507,9 @@ static Monitor* monitors = 0;
 static int num_monitors=0;
 
 #if USE_MULTIMONITOR
-#ifndef MONITORINFOF_PRIMARY
-#define MONITORINFOF_PRIMARY        0x00000001
-#endif
+# ifndef MONITORINFOF_PRIMARY
+#  define MONITORINFOF_PRIMARY        0x00000001
+# endif
 
 static int monitor_index;
 static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
@@ -508,7 +536,7 @@ static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
     m = t;
   }
   monitor_index++;
-  return 0;
+  return TRUE;
 }
 #endif
 
@@ -1392,50 +1420,9 @@ static Window* resize_from_system;
 //  static PAINTSTRUCT paint;
 
 extern void fl_prune_deferred_calls(HWND);
+HWND ignore_size_change_window;
 
 #define MakeWaitReturn() __PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
-
-
-bool Window::resize(int X, int Y, int W, int H) {
-  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER  | SWP_NOACTIVATE | SWP_NOOWNERZORDER;
-  int is_a_resize = (W != w() || H != h());
-  int resize_from_program = (this != resize_from_system);
-  if (!resize_from_program) resize_from_system= 0;
-  if (X != x() || Y != y()) {
-    set_flag(FORCE_POSITION);
-  } else {
-    if (!is_a_resize) return false;
-    flags |= SWP_NOMOVE;
-  }
-  if (is_a_resize) {
-    Group::resize(X,Y,W,H);
-    if (shown()) {redraw(); i->wait_for_expose = 1;}
-  } else {
-    x(X); y(Y);
-    flags |= SWP_NOSIZE;
-  }
-  if (!border()) flags |= SWP_NOACTIVATE;
-  if (resize_from_program ) {
-    if (!resizable()) size_range(w(),h(),w(),h());
-    //Ignore window managing when resizing, so that windows (and more
-    //specifically menus) can be moved offscreen.
-    // does this code should still apply ?
-    /*
-    int dummy_x, dummy_y, bt, bx, by;
-    if (fake_X_wm(this, dummy_x, dummy_y, bt, bx, by)) {
-      X -= bx;
-      Y -= by+bt;
-      W += 2*bx;
-      H += 2*by+bt;
-    }
-    */
-  }
-  if (shown() && !resize_from_program ) { 
-      // must be only used by sytem to prevent flickering effect when resize
-      SetWindowPos(i->xid, 0, X, Y, W, H, flags);
-  }
-  return true;
-}
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1676,15 +1663,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (!window) break;
     if (wParam) { // Map event
       if (window->parent()) break; // ignore child windows
-
-      // figure out where OS really put window
-      RECT wr; GetClientRect(xid(window), &wr);
-      POINT wul = { 0, 0 }; ClientToScreen(xid(window), &wul);
-
-      // tell Window about it
-      resize_from_system = window;
-      if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
-
+      if (window->x()==USEDEFAULT || window->y()==USEDEFAULT) {
+	// figure out where OS really put window
+	POINT wul = { 0, 0 }; ClientToScreen(xid(window), &wul);
+	// tell Window about it
+	window->x(wul.x);
+	window->y(wul.y);
+	//RECT wr; GetClientRect(xid(window), &wr);
+	//if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
+	//   resize_from_system = window;
+      }
       MakeWaitReturn();
     } else { // Unmap event
       CreatedWindow::find(window)->wait_for_expose = true;
@@ -1705,43 +1693,50 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (!window || window->parent()) break; // ignore child windows
       if ( window->iconic() ) break;
       fltk::Rectangle r; window->borders(&r);
-
       WINDOWPOS *pos = (WINDOWPOS*)lParam;
-
-      fltk::Rectangle newRect;
-      if ( pos->flags & SWP_NOMOVE ) {
-	newRect.x( window->x() );
-	newRect.y( window->y() );
+      if (hWnd == ignore_size_change_window) {
+	ignore_size_change_window = 0;
+	if (window->x()==USEDEFAULT)
+	  window->x(pos->x-r.x());
+	else
+	  pos->x = window->x()+r.x();
+	if (window->y()==USEDEFAULT)
+	  window->y(pos->y-r.y());
+	else
+	  pos->y = window->y()+r.y();
+	pos->cx = window->w()+r.w();
+	pos->cy = window->h()+r.h();
       } else {
-	newRect.x( pos->x-r.x() );
-	newRect.y( pos->y-r.y() );
-      }
-      if ( pos->flags & SWP_NOSIZE ) {
-	newRect.w( window->w() );
-	newRect.h( window->h() );
-      } else {
-	newRect.w( pos->cx-r.w() );
-	newRect.h( pos->cy-r.h() );
-      }
-
-      if ( window->resize( newRect.x(), newRect.y(), newRect.w(), newRect.h() ) ) {
-        resize_from_system = window;
-        window->layout_damage( window->layout_damage() | LAYOUT_USER );
-        window->layout();
-        pos->x = window->x()+r.x();
-        pos->y = window->y()+r.y();
-        pos->cx = window->w()+r.w();
-        pos->cy = window->h()+r.h();
+	fltk::Rectangle newRect;
+	if ( pos->flags & SWP_NOMOVE ) {
+	  newRect.x( window->x() );
+	  newRect.y( window->y() );
+	} else {
+	  newRect.x( pos->x-r.x() );
+	  newRect.y( pos->y-r.y() );
+	}
+	if ( pos->flags & SWP_NOSIZE ) {
+	  newRect.w( window->w() );
+	  newRect.h( window->h() );
+	} else {
+	  newRect.w( pos->cx-r.w() );
+	  newRect.h( pos->cy-r.h() );
+	}
+	if ( window->resize( newRect.x(), newRect.y(), newRect.w(), newRect.h() ) ) {
+	  window->layout_damage( window->layout_damage() | LAYOUT_USER );
+	  window->layout();
+	  pos->x = window->x()+r.x();
+	  pos->y = window->y()+r.y();
+	  pos->cx = window->w()+r.w();
+	  pos->cy = window->h()+r.h();
+	}
       }
     }
     break;
 
-#if 1
+#if 0
     // This was here before the WM_WINDOWPOSCHANGING case took care of
     // it all.
-    // fabien : No this is code is still useful since resize  bug in Win32 STR #1180 and
-    // and STR #1237 flickering correction otherwise you loose mouse click event in the children
-    // if no system move or resize is made
   case WM_MOVE:
     if (!window || window->parent()) break; // ignore child windows
 # if 1
@@ -1895,9 +1890,10 @@ void Window::borders( fltk::Rectangle *r ) const
     else
       style = WS_DLGFRAME | WS_CAPTION;
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    if (!contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    if (!contains(modal()))
+      style |= WS_SYSMENU | WS_MINIMIZEBOX;
     else 
-	style |= WS_SYSMENU ; // keep the possibility to close the box as in osx and X11
+      style |= WS_SYSMENU ; // keep the possibility to close the box as in osx and X11
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
   }
   RECT rect;
@@ -1942,14 +1938,16 @@ void Window::layout() {
   if (this == resize_from_system) {
     resize_from_system = 0;
   } else if (i && flags) {
-     int real_x = this->x(); int real_y = this->y();
-     for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-       real_x += p->x(); real_y += p->y();
-     }
-     fltk::Rectangle r;
-     borders(&r);
-     SetWindowPos(i->xid, 0, real_x+r.x(), real_y+r.y(), w()+r.w(), h()+r.h(), flags);
-     if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
+    fltk::Rectangle r(*this);
+    borders(&r);
+    r.x(r.x()+x());
+    r.y(r.y()+y());
+    r.w(r.w()+w());
+    r.h(r.h()+h());
+    for (Widget* p = parent(); p && !p->is_window(); p = p->parent())
+      r.move(p->x(), p->y());
+    SetWindowPos(i->xid, 0, r.x(), r.y(), r.w(), r.h(), flags);
+    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
   }
 }
 
@@ -2079,9 +2077,10 @@ void CreatedWindow::create(Window* window) {
       style = WS_DLGFRAME | WS_CAPTION;
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
     fltk::Rectangle r; window->borders(&r);
-    if (!window->contains(modal())) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    if (!window->contains(modal()))
+      style |= WS_SYSMENU | WS_MINIMIZEBOX;
     else
-	style |= WS_SYSMENU ;// keep the possibility to close the box as in osx and X11
+      style |= WS_SYSMENU ;// keep the possibility to close the box as in osx and X11
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     if (xp != USEDEFAULT) xp += r.x();
     if (yp != USEDEFAULT) yp += r.y();
@@ -2201,18 +2200,19 @@ void CreatedWindow::set_minmax(LPMINMAXINFO minmax)
 
   minmax->ptMinTrackSize.x = window->minw + r.w();
   minmax->ptMinTrackSize.y = window->minh + r.h();
-
   if (window->maxw) {
-    minmax->ptMaxTrackSize.x = window->maxw + r.w();
-    minmax->ptMaxSize.x = window->maxw + r.w();
+    minmax->ptMaxTrackSize.x =
+      minmax->ptMaxSize.x = window->maxw + r.w();
   }
   if (window->maxh) {
-    minmax->ptMaxTrackSize.y = window->maxh + r.h();
-    minmax->ptMaxSize.y = window->maxh + r.h();
-  }
-  else { // taking in account the windows desktop taskbar
+    minmax->ptMaxTrackSize.y =
+      minmax->ptMaxSize.y = window->maxh + r.h();
+  } else { // taking in account the windows desktop taskbar
+    // WAS: monitor_h() is the screen, not the taskbar!
+    // Use Monitor::all().work.h() for area above taskbar.
+    // Also is there a reason we don't just leave the Windows default?
     minmax->ptMaxTrackSize.y = 
-	minmax->ptMaxSize.y = fltk::monitor_h()-r.h();
+      minmax->ptMaxSize.y = fltk::monitor_h()-r.h();
   }
 }
 

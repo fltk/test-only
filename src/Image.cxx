@@ -234,7 +234,7 @@ void Image::draw(int x, int y) const {
   each piece is scaled individually. This is very useful for
   scaling paintings of buttons.
 
-  It is possible this will use drawflags(INACTIVE) to gray out
+  It is possible this will use drawflags(INACTIVE_R) to gray out
   the image is a system-specific way. NYI.
 */
 void Image::_draw(const fltk::Rectangle& r) const

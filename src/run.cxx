@@ -704,8 +704,6 @@ void fl_window_flush(Window* window) {
 void fltk::flush() {
 #if USE_X11
   if (!xdisplay) return; // ignore if no windows created yet
-#elif defined(_WIN32)
-  fl_do_deferred_calls();
 #endif
   if (damage_) {
     damage_ = false; // turn it off so Window::flush() can turn it back on
@@ -726,6 +724,7 @@ void fltk::flush() {
   XFlush(xdisplay);
 #elif defined(_WIN32)
   GdiFlush();
+  fl_do_deferred_calls();
 #elif USE_QUARTZ
   //+++ QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #endif
@@ -765,6 +764,8 @@ fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
   } else {
     x_ = r.x()+((r.w()-w)>>1); 
     // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
+    // WAS: no, it is supposed to center at all times. The right-shift
+    // instead of divide-by-2 is to avoid shifting as it goes negative.
     // if (x_<0) x_=0; 
   }
   if (flags & ALIGN_TOP) {
@@ -774,7 +775,7 @@ fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
     y_ = r.b()-h;
   } else {
     y_ = r.y()+((r.h()-h)>>1); 
-    // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
+    // see above
     // if (y_<0) y_=0; 
   }
   w_ = w;
@@ -978,7 +979,6 @@ void fltk::modal(Widget* widget, bool grab) {
 #endif
     // because we "pushed back" the PUSH, make it think no buttons are down:
     e_state &= 0xffffff;
-    //e_keysym = 0;
   }
 
   // start the new grab:
@@ -1261,17 +1261,16 @@ bool fltk::handle(int event, Window* window)
     to = focus();
     break;
 
-  case 0:
-    goto CALL_GLOBAL_HANDLERS;
 //default: break;
   }
 
-  // restrict to modal widgets (except SHOW and HIDE):
-  if (event!=SHOW && event!=HIDE && outside_modal(to)) to = modal_;
-  if (to && to->send(event)) {dnd_flag = false; return true;}
-  dnd_flag = false;
+  if (event) {
+    // restrict to modal widgets (except SHOW and HIDE):
+    if (event!=SHOW && event!=HIDE && outside_modal(to)) to = modal_;
+    if (to && to->send(event)) {dnd_flag = false; return true;}
+    dnd_flag = false;
+  }
 
- CALL_GLOBAL_HANDLERS:
   // try the chain of global event handlers:
   for (const handler_link *h = handlers; h; h = h->next)
     if (h->handle(event, window)) return true;
@@ -1279,10 +1278,16 @@ bool fltk::handle(int event, Window* window)
   return false;
 }
 
+/*! Same as fltk::Monitor::all().x(), this function is provides so you don't
+  have to include fltk/Monitor.h just to get this information. */
 int fltk::monitor_x() {return Monitor::all().x();}
+/*! Same as fltk::Monitor::all().y(); */
 int fltk::monitor_y() {return Monitor::all().y();}
+/*! Same as fltk::Monitor::all().w(); */
 int fltk::monitor_w() {return Monitor::all().w();}
+/*! Same as fltk::Monitor::all().h(); */
 int fltk::monitor_h() {return Monitor::all().h();}
+
 //
 // End of "$Id$".
 //

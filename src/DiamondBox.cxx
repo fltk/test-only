@@ -57,7 +57,7 @@ void DiamondBox::_draw(const Rectangle& r) const
   int y1 = r.center_y();
   int y = r.y(); int h = r.h(); if (h&1) h--; else {h -= 2; y++;}
   const char* s = drawflags(VALUE) ? down->data : data;
-  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
+  char buf[26]; if (drawflags(INACTIVE_R) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}

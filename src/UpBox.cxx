@@ -238,7 +238,7 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
   if (r.empty()) return;
   const Color fg = getcolor();
   const char* s = data();
-  char buf[26]; if (drawflags(INACTIVE) && Style::draw_boxes_inactive_) {
+  char buf[26]; if (drawflags(INACTIVE_R) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   if (*s == '2') {s++; goto HACK;}
   for (;;) {

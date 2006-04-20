@@ -237,7 +237,7 @@ int Style::wheel_scroll_lines_ = 3;
 
 /*! \fn bool Style::draw_boxes_inactive() const
   If false then most of the built-in box types draw the same even if
-  fltk::INACTIVE is passed to them. This repliates Windows appearance.
+  fltk::INACTIVE_R is passed to them. This repliates Windows appearance.
   If true (the default) then the boxes themselves gray out.
 */
 
@@ -395,7 +395,7 @@ const Style* fltk::drawstyle_ = Widget::default_style;
       labelfont(), and labelsize() are used. Widgets will set
       this true for any internal buttons, but false for the
       main area.
-    - INACTIVE: Change the fg to a gray color.
+    - INACTIVE_R: Change the fg to a gray color.
 
     It then further modifies fg so that it contrasts with the bg.
 */
@@ -413,7 +413,7 @@ void fltk::drawstyle(const Style* style, Flags flags) {
     else {bg = style->color(); fg = style->textcolor();}
     // fg = contrast(fg, bg);this messes up things
   }
-  if (flags & INACTIVE) fg = inactive(fg);
+  if (flags & INACTIVE_R) fg = inactive(fg);
   setcolor(fg);
   setbgcolor(bg);
   if (flags & OUTPUT) setfont(style->labelfont(), style->labelsize());

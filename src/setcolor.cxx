@@ -109,9 +109,9 @@ Color fltk::inactive(Color c) {
   return lerp(c, GRAY75, 0.70f);
 }
 
-/*! Same as (f&INACTIVE) ? inactive(c) : c */
+/*! Same as (f&INACTIVE_R) ? inactive(c) : c */
 Color fltk::inactive(Color c, Flags f) {
-  if (f&INACTIVE) return lerp(c, GRAY75, 0.70f);
+  if (f&INACTIVE_R) return lerp(c, GRAY75, 0.70f);
   return c;
 }
 
@@ -206,7 +206,7 @@ Flags fltk::drawflags_;
   The flags are usually copied from the flags() on a Widget.
 
   Some commonly-used flags:
-    - INACTIVE : Draw inactive, fill images with solid fg color
+    - INACTIVE_R : Draw inactive, fill images with solid fg color
     - VALUE: Draw turned on or checked
     - SELECTED: Draw as though selected in a browser or menu.
     - HIGHLIGHT: Draw as though highlighted with the mouse pointing at it

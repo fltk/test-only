@@ -130,7 +130,7 @@ class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
   void _draw(const Rectangle&) const {
-    if (!drawflags(INACTIVE)) setcolor((Color)strtoul(text()+1,0,0));
+    if (!drawflags(INACTIVE_R)) setcolor((Color)strtoul(text()+1,0,0));
   }
   void _measure(int& w, int& h) const {
     w = 0;
@@ -654,7 +654,7 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
     dy = r.y()+((r.h()-h)>>1);
   }
   setfont(normal_font, normal_size);
-  if (bgboxcolor && !drawflags(INACTIVE)) {
+  if (bgboxcolor && !drawflags(INACTIVE_R)) {
     setcolor(bgboxcolor);
     int w = int(max_x+.5);
     int dx = 0;

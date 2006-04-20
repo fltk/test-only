@@ -9,7 +9,6 @@
 #include <fltk/Box.h>
 #include <fltk/error.h>
 #include <fltk/visual.h>
-#include <fltk/Monitor.h>
 
 namespace Fl = fltk;
 
@@ -26,10 +25,10 @@ namespace fltk {
 
   inline void visible_focus(int) {} // fltk2 always acts like this is off
 
-  inline int x() {return Monitor::all().x();}
-  inline int y() {return Monitor::all().y();}
-  inline int w() {return Monitor::all().w();}
-  inline int h() {return Monitor::all().h();}
+  inline int x() {return monitor_x();}
+  inline int y() {return monitor_y();}
+  inline int w() {return monitor_w();}
+  inline int h() {return monitor_h();}
 
   inline void set_color(Color c, uchar r, uchar g, uchar b) {
     set_color_index(c,color(r,g,b));

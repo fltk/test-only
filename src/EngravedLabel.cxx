@@ -36,7 +36,7 @@ void EngravedLabel::draw(const char* label, const Rectangle& r, Flags align) con
 {
   Color saved_color = getcolor();
   Flags saved_flags = drawflags();
-  setdrawflags(saved_flags|INACTIVE);
+  setdrawflags(saved_flags|INACTIVE_R);
   Rectangle r1(r);
   for (const int *data = this->data; ; data += 3) {
     r1.x(r.x()+data[0]);

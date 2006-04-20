@@ -30,8 +30,6 @@
 #include <fltk/Group.h>
 #include <fltk/run.h>
 #include <fltk/string.h> // for newstring
-#include <fltk/CheckButton.h>
-#include <fltk/RadioButton.h>
 #include <stdlib.h> // for free
 #include <config.h>
 
@@ -45,8 +43,9 @@ using namespace fltk;
   tooltip().
 */
 
-/*! This turns on the changed() flag in the widget. callback() is
-  initialized to this.
+/*! This is the initial value for callback(). It does set_changed()
+  on the widget, thus recording the fact that the callback was done.
+  Do not set the callback to zero, use this if you want no action.
 */
 void Widget::default_callback(Widget* w, void*) {w->set_changed();}
 
@@ -821,11 +820,11 @@ int Widget::send(int event) {
     break;
 
   case ACTIVATE:
-    if (takesevents()) {clear_flag(INACTIVE); handle(event);}
+    if (takesevents()) {clear_flag(INACTIVE_R); handle(event);}
     break;
 
   case DEACTIVATE:
-    if (takesevents()) {throw_focus(); set_flag(INACTIVE); handle(event);}
+    if (takesevents()) {throw_focus(); set_flag(INACTIVE_R); handle(event);}
     break;
 
   case SHORTCUT:
@@ -874,7 +873,7 @@ void Widget::remove_timeout() {
 
   Parents may also be deactivated, in which case this widget will
   not get events even if this is true. You can test for this with
-  !active_r(). Or inside draw() events you can test flags()&INACTIVE.
+  !active_r(). Or inside draw() events you can test flags()&INACTIVE_R.
 */
 
 /*! Returns whether the widget is active. This is true if active() is
@@ -893,9 +892,9 @@ void Widget::activate() {
     clear_flag(INACTIVE);
     if (active_r()) {
       redraw_label(); redraw();
-      clear_flag(INACTIVE);
-      handle(ACTIVATE);
+      clear_flag(INACTIVE_R);
       if (inside(focus())) focus()->take_focus();
+      handle(ACTIVATE);
     }
   }
 }
@@ -904,12 +903,12 @@ void Widget::activate() {
   send() an fltk::DEACTIVATE event. */
 void Widget::deactivate() {
   if (active_r()) {
-    set_flag(INACTIVE);
+    set_flag(INACTIVE|INACTIVE_R);
     throw_focus();
     redraw_label(); redraw();
     handle(DEACTIVATE);
   } else {
-    set_flag(INACTIVE);
+    set_flag(INACTIVE|INACTIVE_R);
   }
 }
 
@@ -1035,34 +1034,26 @@ bool Widget::focused() const {return this == fltk::focus();}
   the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
-//! sets the type of the current item and updates its defaultstyle glyph
-void Widget::type(int t) { 
-    type_ = t;
-}
 //! sets the VALUE to only one on the widget, other widgets in the same group get VALUE cleared
 void Widget::setonly() {
   clear_changed();
-  if(flags() & VALUE) return;
-  set_flag(VALUE);
-  set_changed();
-  if (!parent()) return;
-  for (int i = parent()->children(); i--;) {
+  if (!flags(VALUE)) {set_flag(VALUE); redraw();}
+  if (parent()) for (int i = parent()->children(); i--;) {
     Widget* o = parent()->child(i);
     if (o != this && o->type() == Widget::RADIO) {
-	if (o->flags(VALUE)) {
-	    o->clear_flag(VALUE);
-	    o->set_changed(); 
-	}
+      o->clear_changed();
+      if (o->flags(VALUE)) {o->clear_flag(VALUE); o->redraw();}
     }
   }
 }
+
 // images manip
 void Widget::image(const Symbol* s,Flags f) {
     // redim the array and store this new images
     int n=0;
     switch(f) {
     case fltk::NO_FLAGS:    n=1;	break;
-    case fltk::INACTIVE:    n=2;	break;
+    case fltk::INACTIVE_R:  n=2;	break;
     case fltk::BELOWMOUSE:  n=3;	break;
     case fltk::OPENED: 
     case fltk::PUSHED:	    n=4;	break;
@@ -1084,12 +1075,12 @@ void Widget::image(const Symbol* noflags, const Symbol* disabled,
 	      const Symbol* belowmouse, const Symbol* pushedopen) {
     image(pushedopen, fltk::PUSHED);
     image(belowmouse, fltk::BELOWMOUSE);
-    image(disabled,   fltk::INACTIVE);
+    image(disabled,   fltk::INACTIVE_R);
     image(noflags);
 }
 
 const Symbol* Widget::image(Flags flags) const	{ 
-    if (nimages_>1 && flags & fltk::INACTIVE) // reads the image for pushed button or open
+    if (nimages_>1 && flags & fltk::INACTIVE_R) // reads the image for pushed button or open
 	return image_[1];
     else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget
     	return image_[2];

@@ -45,7 +45,7 @@ public:
   to decide to draw pushed in or out.
   - if left/right/top/bottom are all off it draws a box as well. This
   is so zero will draw something.
-  - fltk::INACTIVE draws it grayed out.
+  - fltk::INACTIVE_R draws it grayed out.
 
   Only one arrow direction at a time is currently supported. This
   may be improved in the future.
@@ -67,7 +67,7 @@ void DefaultGlyph::_draw(const Rectangle& rr) const
   // to draw the shape inactive, draw it twice to get the engraved look:
   const Color saved_color = getcolor();
   int i = 0;
-  if (drawflags(INACTIVE)) {i = 1; setcolor(GRAY99);}
+  if (drawflags(INACTIVE_R)) {i = 1; setcolor(GRAY99);}
 
   for (;;) {
 

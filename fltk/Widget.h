@@ -42,14 +42,13 @@ typedef Callback* Callback_p; // needed for BORLAND
 typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
 
-const Symbol* const NoSymbol= ((const Symbol* ) 0);
-
 class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
   Widget(const Widget &);
 
 public:
+
   Widget(int,int,int,int,const char* =0);
   virtual ~Widget();
 
@@ -69,21 +68,18 @@ public:
   void	parent(Group* w)	{ parent_ = w; }
   Window* window() const	;
 
-  enum { // values for type():
+  enum WidgetVisualType {
+    // Values for type() shared by Button and menu Item, and for fake RTTI:
+    NORMAL = 0,
     RESERVED_TYPE	= 0x64,
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2,
     GROUP_TYPE		= 0xe0,
     WINDOW_TYPE		= 0xf0
   };
 
-  enum WidgetVisualType { // generic values so NOT redundant anymore with Button enum
-    NORMAL = 0,		  // as this notion are already shared by Item and Button it makes sense to generalize it
-    TOGGLE = RESERVED_TYPE+1,
-    RADIO  = RESERVED_TYPE+2,
-    HIDDEN
-  };
-
-  int   type() const		{ return type_; }
-  void	type(int t); 
+  uchar type() const		{ return type_; }
+  void	type(uchar t)		{ type_ = t; }
   bool	is_group() const	{ return type_ >= GROUP_TYPE; }
   bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
 
@@ -136,9 +132,9 @@ public:
   void	when(uchar i)		{ when_ = i; }
 
   static void default_callback(Widget*, void*);
-  void	do_callback()		{ if(callback_) callback_(this,user_data_); }
-  void	do_callback(Widget* o,void* arg=0) { if(callback_) callback_(o,arg); }
-  void	do_callback(Widget* o,long arg) { if(callback_) callback_(o,(void*)arg); }
+  void	do_callback()		{ callback_(this,user_data_); }
+  void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
+  void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;
@@ -150,7 +146,8 @@ public:
   Flags set_flag(int c)		{ return flags_ |= c; }
   Flags clear_flag(int c)	{ return flags_ &= ~c; }
   Flags invert_flag(int c)	{ return flags_ ^= c; }
-  void  setonly(); // any widget can have use of this if it has a parent
+  void  setonly();
+
   Flags align() const		{ return flags_&ALIGN_MASK; }
   void	align(unsigned a)	{ flags_ = (flags_ & (~ALIGN_MASK)) | a; }
   bool	visible() const		{ return !(flags_&INVISIBLE); }
@@ -292,17 +289,17 @@ public:
 #endif
 
 private:
-  const char*		label_;
-  const Symbol**	image_;	  // images
-  uchar			nimages_;
 
+  const char*		label_;
+  const Symbol**	image_;
+  uchar			nimages_;
   unsigned		flags_;
   const Style*		style_;
   Callback*		callback_;
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
   Group*		parent_;
-  int 			type_;
+  uchar			type_;
   uchar			damage_;
   uchar			layout_damage_;
   uchar			when_;

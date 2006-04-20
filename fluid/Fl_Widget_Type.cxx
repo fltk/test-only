@@ -155,7 +155,7 @@ FluidType *WidgetType::make() {
 void WidgetType::set_image(Fluid_Image *i, int num) {
   if (i == image[num]) return;
   if (image[num]) image[num]->decrement();
-  if (i) {i->increment(); i->label(o);} else o->image(fltk::NoSymbol);
+  if (i) {i->increment(); i->label(o);} else o->image((Symbol*)0);
   image[num] = i;
   redraw();
 }
