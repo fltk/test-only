@@ -142,7 +142,7 @@ const Symbol * Widget::context_image() const  {
     
     if (!active())  
 	img = nimages_>1 && image_[1]  ? image_[1] : image_[0];
-    else if (nimages_>2 && image_[2] && belowmouse())
+    else if (nimages_>2 && image_[2] && belowmouse() && !pushed())
 	img = image_[2];
     else if (pushed() || (flags() & fltk::OPENED) ) 
 	img = nimages_>3 && image_[3]  ? image_[3] : image_[0];

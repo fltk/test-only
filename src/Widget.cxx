@@ -1084,7 +1084,7 @@ const Symbol* Widget::image(Flags flags) const	{
 
     if (nimages_>1 && flags & fltk::INACTIVE_R) // reads the image for pushed button or open
 	return image_[1];
-    else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  ) // reads the image for focused widget
+    else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  && !pushed() ) // reads the image for focused widget
     	return image_[2];
     else if (nimages_>3 && (flags & fltk::OPENED) || (flags & fltk::PUSHED)) // reads the image for pushed button or open
 	return image_[3];
