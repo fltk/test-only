@@ -23,13 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <fltk/Window.h>
+#include <fltk/x.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
 #include <fltk/ask.h>
 #include <fltk/Slider.h>
-#include <fltk/Window.h>
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/InvisibleBox.h>
 #include <string.h>
@@ -2250,12 +2251,12 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 
 void leave_live_mode_cb(Widget*, void*);
 
+Window *live_window = 0L;
 void live_mode_cb(LightButton*o,void *v) {
   /// \todo live mode should end gracefully when the application quits
   ///       or when the user closes the live widget
   static FluidType *live_type = 0L;
   static Widget *live_widget = 0L;
-  static Window *live_window = 0L;
   // if 'o' is 0, we must quit live mode
   if (!o) {
     o = wLiveMode;
@@ -2300,9 +2301,9 @@ void live_mode_cb(LightButton*o,void *v) {
     if (live_type)
       live_type->leave_live_mode();
     if (live_window) {
-      live_window->hide();
-      while(live_window->visible()) fltk::wait();
-      delete live_window; // delete_widget(live_window);
+	live_window->hide();
+      //WILL CRASH: 
+	// delete live_window; // was delete_widget(live_window); but deferred call obsolete in fltk2
     }
     live_type = 0L;
     live_widget = 0L;
@@ -2349,11 +2350,11 @@ void WidgetType::copy_properties() {
   w->labelfont(o->labelfont());
   w->textfont(o->textfont());
   w->labeltype(o->labeltype());
-  w->color(o->color());
+  //w->color(o->color());
   w->textcolor(o->textcolor());
   w->selection_color(o->selection_color());
   w->selection_textcolor(o->selection_textcolor());
-  //w->buttoncolor(o->buttoncolor());
+  w->buttoncolor(o->buttoncolor());
   w->labelcolor(o->labelcolor());
   w->highlight_color(o->highlight_color());
   w->highlight_textcolor(o->highlight_textcolor());
