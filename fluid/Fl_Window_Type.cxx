@@ -839,6 +839,7 @@ void WidgetClassType::write_code1() {
 Widget *WindowType::enter_live_mode(int top) {
   Window *win = new Window(o->x(), o->y(), o->w(), o->h());
   live_widget = win;
+  win->begin();
   if (live_widget) {
     copy_properties();
     for (FluidType* n = first_child; n; n = n->next_brother) {

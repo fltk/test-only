@@ -261,6 +261,7 @@ const Enumeration fltk::scroll_type_menu[] = {
 Widget *GroupType::enter_live_mode(int top) {
   Group *grp = new Group(o->x(), o->y(), o->w(), o->h());
   live_widget = grp;
+  grp->begin();
   if (live_widget) {
     copy_properties();
     for (FluidType* n = first_child; n; n = n->next_brother) {

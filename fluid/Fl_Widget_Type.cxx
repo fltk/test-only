@@ -2301,6 +2301,7 @@ void live_mode_cb(LightButton*o,void *v) {
       live_type->leave_live_mode();
     if (live_window) {
       live_window->hide();
+      while(live_window->visible()) fltk::wait();
       delete live_window; // delete_widget(live_window);
     }
     live_type = 0L;
@@ -2352,7 +2353,7 @@ void WidgetType::copy_properties() {
   w->textcolor(o->textcolor());
   w->selection_color(o->selection_color());
   w->selection_textcolor(o->selection_textcolor());
-  w->buttoncolor(o->buttoncolor());
+  //w->buttoncolor(o->buttoncolor());
   w->labelcolor(o->labelcolor());
   w->highlight_color(o->highlight_color());
   w->highlight_textcolor(o->highlight_textcolor());
@@ -2361,6 +2362,7 @@ void WidgetType::copy_properties() {
   w->leading(o->leading());
   w->align(o->align());
   w->shortcut(o->shortcut());
+  w->set(o->x(), o->y(),o->w(),o->h());
 
   // copy all attributes specific to widgets derived from Button
   if (is_button()) {
