@@ -2302,7 +2302,7 @@ void live_mode_cb(LightButton*o,void *v) {
       live_type->leave_live_mode();
     if (live_window) {
 	live_window->hide();
-      //WILL CRASH: 
+	live_window->clear_changed();
       delete live_window; // was delete_widget(live_window); but deferred call obsolete in fltk2
     }
     live_type = 0L;
@@ -2334,33 +2334,19 @@ void WidgetType::copy_properties() {
 
   // copy all attributes common to all widget types
   Widget *w = live_widget;
-  //memcpy(w,o,sizeof(Widget);
-  //w->style(o->style());
+  if (o->style() ) {
+      if (o->style()->dynamic()) w->copy_style(o->style());
+      else w->style(o->style());
+  }
   w->default_style = o->default_style;
   w->default_glyph= o->default_glyph;
-  w->flags(o->flags());
+
+ w->flags(o->flags());
   w->label(o->label());
   w->image(o->image(), o->image(INACTIVE),o->image(BELOWMOUSE),o->image(PUSHED));
   w->tooltip(tooltip());
   w->type(o->type());
-  w->box(o->box());
-  w->buttonbox(o->buttonbox());
-  w->focusbox(o->focusbox());
-  w->glyph(o->glyph());
-  w->labelfont(o->labelfont());
-  w->textfont(o->textfont());
-  w->labeltype(o->labeltype());
-  //w->color(o->color());
-  w->textcolor(o->textcolor());
-  w->selection_color(o->selection_color());
-  w->selection_textcolor(o->selection_textcolor());
-  w->buttoncolor(o->buttoncolor());
-  w->labelcolor(o->labelcolor());
-  w->highlight_color(o->highlight_color());
-  w->highlight_textcolor(o->highlight_textcolor());
-  w->labelsize(o->labelsize());
-  w->textsize(o->textsize());
-  w->leading(o->leading());
+    
   w->align(o->align());
   w->shortcut(o->shortcut());
   w->set(o->x(), o->y(),o->w(),o->h());
