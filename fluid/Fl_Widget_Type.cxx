@@ -24,7 +24,7 @@
 //
 
 #include <fltk/Window.h>
-#include <fltk/x.h>
+//#include <fltk/x.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include "Fluid_Plugins.h"
