@@ -626,7 +626,7 @@ void Widget::redraw_label() {
     the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (highlight_color() || image(fltk::BELOWMOUSE)) 
+  if (active() && (highlight_color() || image(fltk::BELOWMOUSE))) 
       redraw(DAMAGE_HIGHLIGHT);
 }
 
