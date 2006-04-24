@@ -36,11 +36,14 @@ namespace fltk {
     class MenuBar;
     class ItemGroup;
     class Item;
+    class xpmImage;
 
     MenuBar* build_hierarchy(MenuBar* menubar);
     void fill_in_New_Menu(ItemGroup* menu);
     Item * fluidMenuItem(FluidType& wt,int n=-1);
+    Item * fluidMenuItem(FluidType& wt, xpmImage *i);
     ItemGroup * fluidMenuGroup(const char * menu_name,int n=-1);
+    ItemGroup * fluidMenuGroup(const char * menu_name,xpmImage *i);
 }
 
 extern fltk::Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip;

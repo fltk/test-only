@@ -37,6 +37,13 @@
 
 namespace fltk {
   extern xpmImage* fluid_pixmap[];
+  extern xpmImage	open_pixmap;
+  extern xpmImage	new_pixmap;
+  extern xpmImage	save_pixmap;
+  extern xpmImage	saveas_pixmap;
+  extern xpmImage	merge_pixmap;
+  extern xpmImage	write_pixmap;
+  extern xpmImage	exit_pixmap;
 }
 
 #endif

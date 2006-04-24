@@ -138,14 +138,14 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     Main_Menu = menubar;
 
     menubar->begin();
-    g=new ItemGroup("&File",0,0);
-    new Item("New", 0, new_cb, 0);
-    new Item("Open...", CTRL+'o', open_cb, 0);
-    new Item("Save", CTRL+'s', save_cb, 0);
+    g=fluidMenuGroup("&File");
+    new Item("New", CTRL+'n', new_cb, 0);//)->image(new_pixmap);
+    new Item("Open...", CTRL+'o', open_cb, 0);//)->image(open_pixmap);
+    new Item("Save", CTRL+'s', save_cb, 0); //)->image(save_pixmap);
     new Item("Save As...", SHIFT+CTRL+'S', save_cb, (void*)1);
-    new Item("Merge...", CTRL+'i', open_cb, (void*)1);
+    new Item("Merge...", CTRL+'i', open_cb, (void*)1);//)->image(merge_pixmap);
     new Divider();
-    new Item("Write code", CTRL+'w', write_cb, 0);
+    new Item("Write code", CTRL+'w', write_cb, 0);//)->image(write_pixmap);
     history_item[0] = new Item(relative_history[0], CTRL+'0', open_history_cb, absolute_history[0]);
     history_item[1] = new Item(relative_history[1], CTRL+'1', open_history_cb, absolute_history[1]);
     history_item[2] = new Item(relative_history[2], CTRL+'2', open_history_cb, absolute_history[2]);
@@ -284,14 +284,20 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 }
 //////////////////////////////////////////////////////////////////////
 Item * fltk::fluidMenuItem(FluidType& wt,int n) {
+  return fluidMenuItem(wt, n>=0 ?fluid_pixmap[n] : (xpmImage*)0);
+}
+Item * fltk::fluidMenuItem(FluidType& wt,xpmImage*img) {
     fltk::Item * i = new fltk::Item(wt.type_name(),0,cb,(void*)&wt);
-    if (n>=0) {	i->image(fluid_pixmap[n]);}
+    if (img) {	i->image(img);}
     return i;
 }
 //////////////////////////////////////////////////////////////////////
 ItemGroup * fltk::fluidMenuGroup(const char * menu_name,int n) {
+  return fluidMenuGroup(menu_name, n>=0 ?fluid_pixmap[n] : (xpmImage*) 0);
+}
+ItemGroup * fltk::fluidMenuGroup(const char * menu_name,xpmImage* img) {
     fltk::ItemGroup * i = new fltk::ItemGroup(menu_name,0,0);
-    if (n>=0) {	i->image(fluid_pixmap[n]); }
+    if (img) {	i->image(img); }
     return i;
 }
 

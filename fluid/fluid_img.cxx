@@ -81,11 +81,25 @@
 #include <pixmaps/fluid/flValueOutput.xpm>
 #include <pixmaps/fluid/flSpinner.xpm>
 #include <pixmaps/fluid/flWidgetClass.xpm>
+//#include <pixmaps/file_small.xpm>
+#include <pixmaps/folder_save.xpm>
+#include <pixmaps/file_small2.xpm>
+#include <pixmaps/folder_small.xpm>
+#include <pixmaps/book.xpm>
+#include <pixmaps/recycle.xpm>
 
 #include "fluid_img.h"
 #include <fltk/xpmImage.h>
 
 using namespace fltk;
+
+xpmImage	fltk::open_pixmap(folder_small);
+xpmImage	fltk::new_pixmap(file_small2);
+xpmImage	fltk::write_pixmap(book);
+xpmImage	fltk::save_pixmap(book);
+xpmImage	fltk::saveas_pixmap(book);
+xpmImage	fltk::merge_pixmap(recycle_xpm);
+xpmImage	fltk::exit_pixmap(recycle_xpm);
 
 static xpmImage	lock_pixmap(lock_xpm);
 static xpmImage	window_pixmap(flWindow_xpm);
