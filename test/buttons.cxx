@@ -58,8 +58,16 @@ void cb_active_butt(Widget*, void*) {
 }
 
 void rb_cb(Widget*, void*) {
-//  Fl::theme("essai");
-  reset_theme();
+  static bool flip = false;
+  if (flip) { //  Fl::theme("essai");
+      reset_theme();
+  } else {
+    // Default Style handling for changing the scheme of all widget at once
+    Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
+    Button::default_style->color_ = 256-36;
+    Widget::default_style->highlight_color(3);
+  }
+  flip = !flip;
   redraw();
 }
 
@@ -89,7 +97,7 @@ int main(int argc, char ** argv) {
   
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
-  ReturnButton* rb = new ReturnButton(X1, Y, W, H, "ReturnButton");
+  ReturnButton* rb = new ReturnButton(X1, Y, W, H, "Flip theme");
   rb->callback(rb_cb);
   rb->tooltip("Push this to revert style to fltk defaults");
   Y += H+B;
@@ -137,11 +145,9 @@ int main(int argc, char ** argv) {
   window.resizable(window);
   window.end();
   window.show(argc,argv);
-  
-  // Default Style handling for changing the scheme of all widget at once
-  Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
-  Button::default_style->color_ = 256-36;
-  Widget::default_style->highlight_color(3);
+
+  rb_cb(0,0);  // Default Style handling for changing the scheme of all widget at once
+
   return run();
 }
 

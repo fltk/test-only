@@ -759,7 +759,7 @@ int Widget::send(int event) {
   case ENTER:
   case MOVE:
     if (!visible()) break;
-    set_flag(HIGHLIGHT);
+    if(active()) set_flag(HIGHLIGHT);
     // figure out correct type of event:
     event = (contains(fltk::belowmouse())) ? MOVE : ENTER;
     ret = handle(event);
