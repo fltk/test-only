@@ -170,6 +170,14 @@ void Undo::clear() {
   else save = 0;
 }
 
+// remove the last set checkpoint
+void Undo::remove_last() {
+    current --;    
+    last --;
+    if (current <=0)   
+	undo_item[UNDO_ITEM]->deactivate();
+
+}
 
 //
 // End of "$Id$".

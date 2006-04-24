@@ -45,7 +45,7 @@ namespace fltk {
 
 extern fltk::Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip;
 extern fltk::ItemGroup* newMenu;
-
+extern fltk::MenuBar* Main_Menu;
 #endif
 //
 // End of "$Id"

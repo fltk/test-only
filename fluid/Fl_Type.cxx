@@ -226,7 +226,8 @@ static const char * get_item_fullname(FluidType* item) {
     else if (strcmp(item->type_name(),"class") ==0) 
 	sprintf(buffer, "%s %s", "class", item->title());
     else 
-	strncpy(buffer, item->title(), sizeof(buffer));
+	return item->title();
+
     return buffer;
 }
 
@@ -577,30 +578,36 @@ void FluidType::move_before(FluidType* g) {
 
 // move selected widgets in their parent's list:
 void earlier_cb(fltk::Widget*,void*) {
+  bool canundo = false;
   FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
+  Undo::checkpoint();
   for (FluidType* f = parent ? parent->first_child : FluidType::first; f; ) {
     FluidType* next = f->next_brother;
     if (f->selected) {
       FluidType* g = f->previous_brother;
-      if (g && !g->selected) f->move_before(g);
+      if (g && !g->selected) {f->move_before(g); canundo=true;}
     }
     f = next;
   }
+  if (!canundo) Undo::remove_last();
 }
 
 void later_cb(fltk::Widget*,void*) {
+  bool canundo = false;
   FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
   FluidType *f;
+  Undo::checkpoint();
   for (f = parent ? parent->first_child : FluidType::first;f && f->next_brother;)
     f = f->next_brother;
   for (;f;) {
     FluidType* prev = f->previous_brother;
     if (f->selected) {
       FluidType* g = f->next_brother;
-      if (g && !g->selected) g->move_before(f);
+      if (g && !g->selected) {g->move_before(f); canundo=true;}
     }
     f = prev;
   }
+  if (!canundo) Undo::remove_last();
 }
 
 ////////////////////////////////////////////////////////////////

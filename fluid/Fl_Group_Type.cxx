@@ -35,6 +35,7 @@
 #include <fltk/ask.h>
 #include "FluidType.h"
 #include "WidgetType.h"
+#include "undo.h"
 
 using namespace fltk;
 
@@ -103,47 +104,53 @@ void fix_group_size(FluidType *t) {
 extern int force_parent;
 extern GroupType Grouptype;
 void group_cb(fltk::Widget *, void *) {
-  // Find the current widget:
-  FluidType *qq = FluidType::current;
-  while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
-  if (!qq || !qq->parent || !qq->parent->is_widget()) {
-    fltk::message("Please select widgets to group");
-    return;
-  }
-  WidgetType* q = (WidgetType*)qq;
-  force_parent = 1;
-  GroupType *n = (GroupType*)(Grouptype.make());
-  n->move_before(q);
-  n->o->resize(0,0,0,0);
-  for (FluidType *t = q->parent->first_child; t;) {
-    FluidType* next = t->next_brother;
-    if (t->selected && t != n) {
-      t->remove();
-      t->add(n);
+    // Find the current widget:
+    FluidType *qq = FluidType::current;
+    while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
+    if (!qq || !qq->parent || !qq->parent->is_widget()) {
+	fltk::message("Please select widgets to group");
+	return;
     }
-    t = next;
-  }
-  fix_group_size(n);
+    Undo::checkpoint();
+    Undo::suspend();
+    WidgetType* q = (WidgetType*)qq;
+    force_parent = 1;
+    GroupType *n = (GroupType*)(Grouptype.make());
+    n->move_before(q);
+    n->o->resize(0,0,0,0);
+    for (FluidType *t = q->parent->first_child; t;) {
+	FluidType* next = t->next_brother;
+	if (t->selected && t != n) {
+	    t->remove();
+	    t->add(n);
+	}
+	t = next;
+    }
+    fix_group_size(n);
+    Undo::resume();
 }
 
 void ungroup_cb(fltk::Widget *, void *) {
-  // Find the group:
-  FluidType *q = FluidType::current;
-  while (q && (!q->is_widget() || q->is_menu_item())) q = q->parent;
-  if (q) q = q->parent;
-  if (!q || !q->parent->is_widget()) {
-    fltk::message("Please select widgets in a group");
-    return;
-  }
-  for (FluidType* n = q->first_child; n;) {
-    FluidType* next = n->next_brother;
-    if (n->selected) {
-      n->remove();
-      n->insert(q);
+    // Find the group:
+    FluidType *q = FluidType::current;
+    while (q && (!q->is_widget() || q->is_menu_item())) q = q->parent;
+    if (q) q = q->parent;
+    if (!q || !q->parent->is_widget()) {
+	fltk::message("Please select widgets in a group");
+	return;
     }
-    n = next;
-  }
-  if (!q->first_child) delete q;
+    Undo::checkpoint();
+    Undo::suspend();
+    for (FluidType* n = q->first_child; n;) {
+	FluidType* next = n->next_brother;
+	if (n->selected) {
+	    n->remove();
+	    n->insert(q);
+	}
+	n = next;
+    }
+    if (!q->first_child) delete q;
+    Undo::resume();
 }
 
 const Enumeration *GroupType::subtypes() const {return 0;}

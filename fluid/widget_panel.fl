@@ -20,10 +20,10 @@ decl {\#include "factory.h"} {}
 Function {make_widgetbin()} {open
 } {
   {fltk::Window} widgetbin_panel {
-    label {Widget Bin} open
+    label {Widget Bin}
     xywh {495 158 520 85} resizable non_modal visible
   } {
-    {fltk::Group} {} {open
+    {fltk::Group} {} {
       xywh {3 3 79 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {

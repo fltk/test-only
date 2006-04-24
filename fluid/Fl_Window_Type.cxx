@@ -35,8 +35,7 @@
 #include <fltk/Box.h>
 #include <fltk/layout.h>
 #include <fltk/Preferences.h>
-#include <fltk/ItemGroup.h>
-#include <fltk/Item.h>
+#include <fltk/MenuBuild.h>
 
 #include <math.h>
 #include <stdlib.h>
@@ -44,6 +43,7 @@
 
 #include "FluidType.h"
 #include "alignment_panel.h"
+#include "fluid_menus.h"
 #include "undo.h"
 
 using namespace fltk;
@@ -145,7 +145,15 @@ void Overlay_Window::draw_overlay() {
   window->draw_overlay();
 }
 int Overlay_Window::handle(int e) {
-  return window->handle(e);
+    switch(e) {
+    case SHORTCUT: // redirect the key pressed to the Menu
+	if (Main_Menu->handle(e))
+	    return 1;
+	break;
+    default:
+	break;
+    }
+    return window->handle(e);
 }
 
 #include <fltk/StyleSet.h>
@@ -444,10 +452,6 @@ void WindowType::moveallchildren()
   modflag = 1;
   dx = dy = 0;
 }
-
-
-extern fltk::MenuBar * Main_Menu;
-extern fltk::ItemGroup * newMenu;
 
 // find the innermost item clicked on:
 WidgetType* WindowType::clicked_widget() {

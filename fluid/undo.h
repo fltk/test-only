@@ -48,7 +48,7 @@ public:
         static void suspend() {  paused = 1;}	// Suspend undo checkpoints
     
     static const char *filename(int level, char *buf, int bufsize);
-    static void decr() {current --;    last --;}
+    static void remove_last();
 
     static void redo_cb(Widget *, void *);  // Redo menu callback
     static void undo_cb(Widget *, void *);  // Undo menu callback

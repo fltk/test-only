@@ -127,7 +127,7 @@ static void cb(fltk::Widget *, void *v) {
   FluidType *t = ((FluidType*)v)->make();
   if (t) {select_only(t); modflag = 1; t->open();}
   else {
-      Undo::decr();
+      Undo::remove_last();
   }
   Undo::resume();
 }
@@ -142,7 +142,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     new Item("New", 0, new_cb, 0);
     new Item("Open...", CTRL+'o', open_cb, 0);
     new Item("Save", CTRL+'s', save_cb, 0);
-    new Item("Save As...", CTRL+'S', save_cb, (void*)1);
+    new Item("Save As...", SHIFT+CTRL+'S', save_cb, (void*)1);
     new Item("Merge...", CTRL+'i', open_cb, (void*)1);
     new Divider();
     new Item("Write code", CTRL+'w', write_cb, 0);
@@ -162,7 +162,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     
     g=new ItemGroup("&Edit",0,0);
     undo_item[0] = new Item("Undo", CTRL+'z', Undo::undo_cb,0,INACTIVE);
-    undo_item[1] = new Item("Redo", CTRL+'y', Undo::redo_cb,0,INACTIVE);
+    undo_item[1] = new Item("Redo", SHIFT+CTRL+'Z', Undo::redo_cb,0,INACTIVE);
     new Divider();
     new Item("Cut", CTRL+'x', cut_cb);
     new Item("Copy", CTRL+'c', copy_cb);

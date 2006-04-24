@@ -394,6 +394,7 @@ static char* cutfname() {
 
 void copy_cb(Widget*, void*) {
     if (!FluidType::current) return;
+    Undo::checkpoint();
     ipasteoffset = 10;
     if (!write_file(cutfname(),1)) {
 	message("Can't write %s: %s", cutfname(), strerror(errno));
@@ -404,6 +405,7 @@ void copy_cb(Widget*, void*) {
 extern void select_only(FluidType *);
 void cut_cb(Widget *, void *) {
     if (!FluidType::current) return;
+    Undo::checkpoint();
     ipasteoffset = 0;
     FluidType *p = FluidType::current->parent;
     while (p && p->selected) p = p->parent;
@@ -418,6 +420,7 @@ void cut_cb(Widget *, void *) {
 extern int force_parent, gridx, gridy;
 
 void paste_cb(Widget*, void*) {
+    Undo::checkpoint();
     if (ipasteoffset) force_parent = 1;
     pasteoffset = ipasteoffset;
     if (gridx>1) pasteoffset = ((pasteoffset-1)/gridx+1)*gridx;
@@ -431,13 +434,14 @@ void paste_cb(Widget*, void*) {
 }
 
 void earlier_cb(Widget*,void*);
-
 void later_cb(Widget*,void*);
-
 void sort(FluidType *parent); // in WidgetType.cxx
 
 void sort_cb(Widget *,void *) {
-    for (FluidType* f = FluidType::first; f; f = f->next_brother) sort(f);
+    FluidType* f = FluidType::first;
+    if(!f) return;
+    Undo::checkpoint();
+    for (; f; f = f->next_brother) sort(f);
 }
 
 void show_alignment_cb(Widget *, void *);
