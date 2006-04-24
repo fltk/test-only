@@ -285,7 +285,7 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 //////////////////////////////////////////////////////////////////////
 Item * fltk::fluidMenuItem(FluidType& wt,int n) {
     fltk::Item * i = new fltk::Item(wt.type_name(),0,cb,(void*)&wt);
-    if (n>=0) {	i->image(fluid_pixmap[n]);	wt.pixmapID(n); }
+    if (n>=0) {	i->image(fluid_pixmap[n]);}
     return i;
 }
 //////////////////////////////////////////////////////////////////////

@@ -59,6 +59,7 @@
 
 #include "FluidType.h"
 #include "Fluid_Image.h"
+#include "fluid_img.h"
 #include "undo.h"
 
 using namespace fltk;
@@ -251,8 +252,9 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
   else widget->clear_flag(fltk::VALUE);
 
   widget->label(get_item_fullname(item));
-  widget->w(0);
-  widget->h(0);
+  //widget->w(0); widget->h(0);
+  if (item->pixmapID()>0) 
+      widget->image(fluid_pixmap[item->pixmapID()]);
 
   return widget;
 }
@@ -337,7 +339,6 @@ void redraw_browser() {
 
 FluidType::FluidType() {
   memset(this, 0, sizeof(FluidType));
-  pixID_ = -1;
 }
 
 // Calling walk(N) will return every FluidType under N by scanning

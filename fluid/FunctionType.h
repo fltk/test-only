@@ -42,6 +42,7 @@ public:
     int is_code_block() const {return 1;}
     void write_properties();
     void read_property(const char *);
+    int pixmapID() { return 7; }
 };
 
 class CodeType : public FluidType {
@@ -52,6 +53,7 @@ public:
     void open();
     virtual const char *type_name() const {return "code";}
     int is_code_block() const {return 0;}
+    int pixmapID() { return 8; }
 };
 
 class CodeBlockType : public FluidType {
@@ -65,6 +67,7 @@ public:
     int is_parent() const {return 1;}
     void write_properties();
     void read_property(const char *);
+    int pixmapID() { return 9; }
 };
 
 class DeclType : public FluidType {
@@ -76,6 +79,7 @@ public:
     virtual const char *type_name() const {return "decl";}
     void write_properties();
     void read_property(const char *);
+    int pixmapID() { return 10; }
 };
 
 class DeclBlockType : public FluidType {
@@ -89,6 +93,7 @@ public:
     void read_property(const char *);
     int is_parent() const {return 1;}
     int is_decl_block() const {return 1;}
+    int pixmapID() { return 11; }
 };
 
 class CommentType : public FluidType {
@@ -110,6 +115,7 @@ public:
 
 class ClassType : public FluidType {
     const char* subclass_of;
+    const char* class_prefix;
     bool public_;
 public:
     // state variables for output:
@@ -130,11 +136,12 @@ public:
     // class prefix attribute access
     void prefix(const char* p);
     const char*  prefix() const {return class_prefix;}
-private:
-    const char* class_prefix;
+    int pixmapID() { return 12; }
 };
 
 class NamespaceType : public FluidType {
+protected:
+    const char * get_full_string() const ;
 public:
     // state variables for output:
     NamespaceType* parent_namespace; // save namespace if nested
@@ -149,8 +156,8 @@ public:
     int is_class() const {return 0;}
     void write_properties();
     void read_property(const char *);
-protected:
-    const char * get_full_string() const ;
+
+    int pixmapID() { return 49; }
 };
 
 }

@@ -48,10 +48,10 @@ class FLUID_API FluidType {
 public:
   virtual void prefix(const char* p) {}
   virtual const char*  prefix() const {return 0;}
-  int pixmapID() const { return pixID_; }
-  void pixmapID(int id ) { pixID_=id; }
-private:
-  int pixID_;
+  virtual int pixmapID() {
+      return -1;
+  }
+
 protected:
 
   FluidType();
@@ -247,6 +247,7 @@ public:
   fltk::Widget *enter_live_mode(int top);
   void leave_live_mode();
   void copy_properties();
+  int pixmapID() { return 5;}
 };
 
 #define LOAD ((void*)9831)
@@ -274,6 +275,7 @@ public:
   fltk::Widget *enter_live_mode(int top);
   void leave_live_mode();
   void copy_properties();
+  int pixmapID() { return 6; }
 };
 
 ////////////////////////////////////////////////////////////////
@@ -336,6 +338,7 @@ public:
   
   int sr_min_w, sr_min_h, sr_max_w, sr_max_h; // size_range related
 
+  int pixmapID() { return 1; }
 };
 
 class FLUID_API WidgetClassType : private WindowType {
@@ -355,6 +358,7 @@ public:
   int is_parent() const {return 1;}
   int is_decl_block() const {return 1;}
   int is_class() const {return 1;}
+  int pixmapID() { return 48; }
 };
 
 

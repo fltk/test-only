@@ -69,6 +69,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new InvisibleBox(x,y,w,h,0);}
 	WidgetType *_make() {return new InvisibleBoxType();}
+	int pixmapID() { return 5; }
     };
     
     extern const Enumeration buttontype_menu[];
@@ -80,6 +81,7 @@ namespace fltk {
 	    return new fltk::Button(x,y,w,h,"button");}
 	WidgetType *_make() {return new ButtonType();}
 	int is_button() const {return 1;}
+	int pixmapID() { return 2; }
     };
     
     class ReturnButtonType : public ButtonType {
@@ -88,6 +90,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new ReturnButton(x,y,w,h,0);}
 	WidgetType *_make() {return new ReturnButtonType();}
+	int pixmapID() { return 23; }
     };
     
     class RepeatButtonType : public WidgetType {
@@ -96,6 +99,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new RepeatButton(x,y,w,h,0);}
 	WidgetType *_make() {return new RepeatButtonType();}
+	int pixmapID() { return 25; }
     };
     
     class CheckButtonType : public ButtonType {
@@ -105,6 +109,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new CheckButton(x,y,w,h,"button");}
 	WidgetType *_make() {return new CheckButtonType();}
+	int pixmapID() { return 3; }
     };
     
     class LightButtonType : public ButtonType {
@@ -114,6 +119,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new LightButton(x,y,w,h,"button");}
 	WidgetType *_make() {return new LightButtonType();}
+	int pixmapID() { return 24; }
     };
     
     class RadioButtonType : public ButtonType {
@@ -123,9 +129,11 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new RadioButton(x,y,w,h,"button");}
 	WidgetType *_make() {return new RadioButtonType();}
+	int pixmapID() { return  4; }
     };
     
     extern const Enumeration input_type_menu[] ;
+
     class InputType : public WidgetType {
 	int is_input() const {return 1;}
 	const Enumeration *subtypes() const {return input_type_menu;}
@@ -137,6 +145,7 @@ namespace fltk {
 	    return o;
 	}
 	WidgetType *_make() {return new InputType();}
+	int pixmapID() { return  14; }
     };
     
     class igroup : public Group {
@@ -152,6 +161,7 @@ namespace fltk {
     public:
 	virtual const char *type_name() const {return "fltk::PackedGroup";}
 	WidgetType *_make() {return new PackType();}
+	int pixmapID() { return  22; }
     };
     
     
@@ -174,20 +184,24 @@ namespace fltk {
 	void remove_child(FluidType*);
 	// live mode functionalities
 	Widget *enter_live_mode(int top);
+	int pixmapID() { return 13; }
     };
     
     extern const Enumeration scroll_type_menu[];
+
     class ScrollType : public GroupType {
 	const Enumeration *subtypes() const {return scroll_type_menu;}
     public:
 	virtual const char *type_name() const {return "fltk::ScrollGroup";}
 	WidgetType *_make() {return new ScrollType();}
+	int pixmapID() { return 19; }
     };
     
     class TileType : public GroupType {
     public:
 	virtual const char *type_name() const {return "fltk::TiledGroup";}
 	WidgetType *_make() {return new TileType();}
+	int pixmapID() { return 20; }
     };
     
     class MenuType : public GroupType {
@@ -196,9 +210,11 @@ namespace fltk {
 	MenuType() : GroupType() {}
 	~MenuType() {}
 	FluidType* click_test(int x, int y);
+	int pixmapID() { return -1; }
     };
     
     extern const Enumeration button_type_menu[];
+
     class PopupMenuType : public MenuType {
 	const Enumeration *subtypes() const {return button_type_menu;}
     public:
@@ -206,9 +222,11 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new PopupMenu(x,y,w,h,"menu");}
 	WidgetType *_make() {return new PopupMenuType();}
+	int pixmapID() { return 26; }
     };
     
     extern const Enumeration input_browser_type_menu[];
+
     class InputBrowserType : public MenuType {
 	int is_input_browser() const {return 1;}
 	const Enumeration *subtypes() const {return input_browser_type_menu;}
@@ -218,9 +236,11 @@ namespace fltk {
 	    return new InputBrowser(x,y,w,h);
 	}
 	WidgetType *_make() {return new InputBrowserType();}
+	int pixmapID() { return 15; }
     };
     
     extern const Enumeration browser_type_menu[];
+
     class FileBrowserType : public WidgetType {
 	const Enumeration *subtypes() const {return browser_type_menu;}
     public:
@@ -229,6 +249,7 @@ namespace fltk {
 	    return new FileBrowser(x,y,w,h);
 	}
 	WidgetType *_make() {return new FileBrowserType();}
+	int pixmapID() { return 33; }
     };
     
     class MenuBarType : public MenuType {
@@ -237,6 +258,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new MenuBar(x,y,w,h);}
 	WidgetType *_make() {return new MenuBarType();}
+	int pixmapID() { return 17; }
     };
     
     extern const Enumeration item_type_menu[];
@@ -248,6 +270,7 @@ namespace fltk {
 	int is_button() const {return 1;} // this gets shortcut to work
 	Widget *widget(int x,int y,int w,int h);
 	WidgetType *_make() {return new ItemType();}
+	int pixmapID() { return 16; }
     };
     
     class DividerType : public WidgetType {
@@ -257,6 +280,7 @@ namespace fltk {
 	int is_menu_item() const {return 1;}
 	Widget *widget(int x,int y,int w,int h) { return new Divider; }
 	WidgetType *_make() {return new DividerType();}
+	int pixmapID() { return 16; }
     };
     
     class SubmenuType : public GroupType {
@@ -266,6 +290,7 @@ namespace fltk {
 	int is_menu_item() const {return 1;}
 	Widget *widget(int x,int y,int w,int h);
 	WidgetType *_make() {return new SubmenuType();}
+	int pixmapID() { return 18; }
     };
     
     class ChoiceType : public MenuType {
@@ -277,6 +302,7 @@ namespace fltk {
 	    return o;
 	}
 	WidgetType *_make() {return new ChoiceType();}
+	int pixmapID() { return 15; }
     };
     
     class BrowserType : public MenuType {
@@ -288,6 +314,7 @@ namespace fltk {
 	    return new Browser(x,y,w,h);
 	}
 	WidgetType *_make() {return new BrowserType();}
+	int pixmapID() { return 31; }
     };
     
     class ClockType : public WidgetType {
@@ -296,6 +323,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new Clock(x,y,w,h);}
 	WidgetType *_make() {return new ClockType();}
+	int pixmapID() { return 34; }
     };
     
     class AdjusterType : public WidgetType {
@@ -306,9 +334,11 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new Adjuster(x,y,w,h);}
 	WidgetType *_make() {return new AdjusterType();}
+	int pixmapID() { return 40; }
     };
     
     extern const Enumeration dial_type_menu[];
+
     class DialType : public WidgetType {
 	const Enumeration *subtypes() const {return dial_type_menu;}
 	int is_valuator() const {return 1;}
@@ -317,6 +347,7 @@ namespace fltk {
 	Widget *widget(int x,int y,int w,int h) {
 	    return new Dial(x,y,w,h);}
 	WidgetType *_make() {return new DialType();}
+	int pixmapID() { return 42; }
     };
     
     class ThumbWheelType : public WidgetType {
@@ -327,6 +358,7 @@ namespace fltk {
 	    return new ThumbWheel(x,y,w,h);
 	}
 	WidgetType *_make() {return new ThumbWheelType();}
+	int pixmapID() { return 43; }
     };
     
     class TextDisplayType : public WidgetType {
@@ -351,6 +383,7 @@ namespace fltk {
 	    return myo;
 	}
 	WidgetType *_make() {return new TextDisplayType();}
+	int pixmapID() { return 28; }
     };
     
     class TextEditorType : public WidgetType {
@@ -374,6 +407,7 @@ namespace fltk {
 	    return myo;
 	}
 	WidgetType *_make() {return new TextEditorType();}
+	int pixmapID() { return 29; }
     };
     
     class FileInputType: public WidgetType {
@@ -397,6 +431,7 @@ namespace fltk {
 	    return myo;
 	}
 	WidgetType *_make() {      return new FileInputType();  }
+	int pixmapID() { return 30; }
     };
     
     class ProgressBarType : public WidgetType {
@@ -406,7 +441,9 @@ namespace fltk {
 	    return new ProgressBar(x, y, w, h);
 	}
 	WidgetType *_make() { return new ProgressBarType(); }
+	int pixmapID() { return 36; }
     };
+
     extern const Enumeration slider_type_menu[];
     
     class SliderType : public WidgetType {
@@ -419,7 +456,8 @@ namespace fltk {
 	    return new Slider(x,y,w,h);
 	}
 	WidgetType *_make() {return new SliderType();}
-    };
+    	int pixmapID() { return 37; }
+};
     
     class ScrollbarType : public SliderType {
 	const Enumeration *subtypes() const {return 0;}
@@ -430,6 +468,7 @@ namespace fltk {
 	    return new Scrollbar(x,y,w,h);
 	}
 	WidgetType *_make() {return new ScrollbarType();}
+	int pixmapID() { return 19; }
     };
     
     extern const Enumeration output_type_menu[];
@@ -455,6 +494,7 @@ namespace fltk {
 	    return o;
 	}
 	WidgetType *_make() {return new ValueInputType();}
+	int pixmapID() { return 44; }
     };
     
     class ValueOutputType : public WidgetType {
@@ -465,6 +505,7 @@ namespace fltk {
 	    return new ValueOutput(x,y,w,h,"value:");
 	}
 	WidgetType *_make() {return new ValueOutputType();}
+	int pixmapID() { return 45; }
     };
     
     class ValueSliderType : public SliderType {
@@ -475,6 +516,7 @@ namespace fltk {
 	    return new ValueSlider(x,y,w,h);
 	}
 	WidgetType *_make() {return new ValueSliderType();}
+	int pixmapID() { return 39; }
     };
 
     class BarGroupType : public WidgetType {
@@ -484,6 +526,7 @@ namespace fltk {
 	return new fltk::BarGroup(x, y, w, h);
       }
       WidgetType *_make() { return new BarGroupType(); }
+      int pixmapID() { return 17; }
     };
 }
 #endif
