@@ -59,6 +59,9 @@
 
 #include "FluidType.h"
 #include "Fluid_Image.h"
+#include "undo.h"
+
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 // Code to access lists of enuerations:
@@ -372,7 +375,7 @@ void FluidType::remove_child(FluidType*) {}
 // add as a new child of p:
 void FluidType::add(FluidType *p) {
   if (p && parent == p) return;
-  // FIXME UNDO:   undo_checkpoint();
+  Undo::checkpoint();
   parent = p;
   // calculate level
   FluidType *end = this;
@@ -427,6 +430,7 @@ void FluidType::remove() {
 // update a string member:
 int storestring(const char *n, const char * & p, int nostrip) {
   if (n == p) return 0;
+  Undo::checkpoint();
   int length = 0;
   if (n) { // see if blank, strip leading & trailing blanks
     if (!nostrip) while (isspace(*n)) n++;

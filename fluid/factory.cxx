@@ -44,60 +44,12 @@
 #include "WidgetType.h"
 #include "Fluid_Plugins.h"
 #include "factory.h"
-#include "fluid_img.h"
+#include "fluid_menus.h"
+#include "undo.h"
 
 
 using namespace fltk;
 
-////////////////////////////////////////////////////////////////
-static WidgetType Widgettype;
-static InvisibleBoxType InvisibleBoxtype;
-static ButtonType Buttontype;
-static ReturnButtonType ReturnButtontype;
-static RepeatButtonType RepeatButtontype;
-static LightButtonType LightButtontype;
-static CheckButtonType CheckButtontype;
-static RadioButtonType RadioButtontype;
-static InputType Inputtype;
-static DialType Dialtype;
-static ClockType Clocktype;
-static AdjusterType Adjustertype;
-static ThumbWheelType ThumbWheeltype;
-static TextEditorType TextEditortype;
-static FileInputType FileInputtype;
-static ProgressBarType ProgressBartype;
-static SliderType Slidertype;
-static ScrollbarType Scrollbartype;
-static OutputType Outputtype;
-static ValueInputType ValueInputtype;
-static ValueOutputType ValueOutputtype;
-static ValueSliderType ValueSlidertype;
-static BarGroupType BarGrouptype;
-static TextDisplayType TextDisplaytype;
-////////////////////////////////////////////////////////////////
-extern FunctionType Functiontype;
-extern CodeType Codetype;
-extern CodeBlockType CodeBlocktype;
-extern DeclType Decltype;
-extern DeclBlockType DeclBlocktype;
-extern ClassType Classtype;
-extern NamespaceType Namespacetype;
-extern WindowType Windowtype;
-extern GroupType Grouptype;
-extern PackType Packtype;
-extern TabsType Tabstype;
-extern ScrollType Scrolltype;
-extern TileType Tiletype;
-extern ChoiceType Choicetype;
-extern MenuBarType MenuBartype;
-extern PopupMenuType PopupMenutype;
-extern ItemType Itemtype;
-extern DividerType Dividertype;
-extern SubmenuType Submenutype;
-extern BrowserType Browsertype;
-extern InputBrowserType InputBrowsertype;
-extern FileBrowserType FileBrowsertype;
-extern CommentType Commenttype;
 ////////////////////////////////////////////////////////////////
 const Enumeration fltk::buttontype_menu[] = {
   {"Normal", 0,		(void*)fltk::Button::NORMAL},
@@ -180,101 +132,9 @@ int FileInputType::textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
 
 extern void select(FluidType *,int);
 
-static void cb(fltk::Widget *, void *v) {
-  FluidType *t = ((FluidType*)v)->make();
-  if (t) {select_only(t); modflag = 1; t->open();}
-}
-
 using namespace fltk;
 
-ItemGroup* newMenu;
 
-//////////////////////////////////////////////////////////////////////
-Item * fltk::fluidMenuItem(FluidType& wt,int n) {
-    fltk::Item * i = new fltk::Item(wt.type_name(),0,cb,(void*)&wt);
-    if (n>=0) {	i->image(fluid_pixmap[n]);	wt.pixmapID(n); }
-    return i;
-}
-//////////////////////////////////////////////////////////////////////
-ItemGroup * fltk::fluidMenuGroup(const char * menu_name,int n) {
-    fltk::ItemGroup * i = new fltk::ItemGroup(menu_name,0,0);
-    if (n>=0) {	i->image(fluid_pixmap[n]); }
-    return i;
-}
-//////////////////////////////////////////////////////////////////////
-// All Fluid buildable widgets are accesible from the New menu:
-//////////////////////////////////////////////////////////////////////
-void fltk::fill_in_New_Menu(ItemGroup* menu) {
-  fltk::ItemGroup* submenu;
-  newMenu= menu;
-
-    newMenu->begin();
-	submenu=fluidMenuGroup("code",12);
-	  fluidMenuItem(Functiontype,7);
-	  //new fltk::Item((*(WidgetType*)&Functiontype).type_name(),0,cb,(void*)&Functiontype);
-	  fluidMenuItem(Codetype, 8);
-	  fluidMenuItem(CodeBlocktype, 9);
-	  fluidMenuItem(Decltype, 10);
-	  fluidMenuItem(DeclBlocktype, 11);
-	  fluidMenuItem(Classtype, 12);
-	  fluidMenuItem(Namespacetype, 49);
-	  fluidMenuItem(Commenttype, 46);
-	submenu->end();
-	submenu=fluidMenuGroup("group",1);
-	    fluidMenuItem(Windowtype  , 1);
-	    fluidMenuItem(Grouptype  , 6);
-	    fluidMenuItem(Packtype  , 22);
-	    fluidMenuItem(Tabstype  , 13);
-	    fluidMenuItem(Scrolltype  , 19);
-	    fluidMenuItem(Tiletype  , 20);
-	    // WizardType 21
-	    fluidMenuItem(BarGrouptype  , 17);
-	submenu->end();
-	submenu=fluidMenuGroup("buttons",24);
-	    fluidMenuItem(Buttontype  , 2);
-	    fluidMenuItem(ReturnButtontype  , 23);
-	    fluidMenuItem(LightButtontype  , 24);
-	    fluidMenuItem(CheckButtontype  , 3);
-	    fluidMenuItem(RadioButtontype  , 4);
-	    fluidMenuItem(RepeatButtontype  , 25);
-	submenu->end();
-	submenu=fluidMenuGroup("valuators",37);
-	    fluidMenuItem(Slidertype  , 37);
-	    fluidMenuItem(ValueSlidertype  , 39);
-	    fluidMenuItem(ValueInputtype  , 44);
-	    fluidMenuItem(ValueOutputtype  , 45);
-	    fluidMenuItem(Scrollbartype  ,38);
-	    fluidMenuItem(Adjustertype  , 40);
-	    fluidMenuItem(Dialtype  , 42);
-	    fluidMenuItem(ThumbWheeltype  , 43);
-	    fluidMenuItem(ProgressBartype  , 36);
-	submenu->end();
-	submenu=fluidMenuGroup("text",27);
-	    fluidMenuItem(Inputtype  , 14);
-	    fluidMenuItem(Outputtype  ,  27);
-	    fluidMenuItem(TextDisplaytype  , 28);
-	    fluidMenuItem(TextEditortype  , 29);
-	    fluidMenuItem(FileInputtype  , 30);
-	submenu->end();
-	submenu=fluidMenuGroup("menus",17);
-	    fluidMenuItem(MenuBartype  , 17);
-	    fluidMenuItem(PopupMenutype  , 26);
-	    fluidMenuItem(Choicetype  , 15);
-	    fluidMenuItem(Browsertype  , 31);
-	    fluidMenuItem(InputBrowsertype  , 15);
-	    fluidMenuItem(FileBrowsertype  , 33);
-	    fluidMenuItem(Submenutype  ,18);
-	    fluidMenuItem(Itemtype  , 16);
-	    fluidMenuItem(Dividertype  , 16);
-	submenu->end();
-	submenu=fluidMenuGroup("other",5);
-	    fluidMenuItem(Widgettype  , 5);
-	    fluidMenuItem(InvisibleBoxtype  , 5);
-	    fluidMenuItem(Clocktype  , 34);
-	    //helpview 35
-	submenu->end();
-      newMenu->end();
-}
 //////////////////////////////////////////////////////////////////////
 
 int reading_file;

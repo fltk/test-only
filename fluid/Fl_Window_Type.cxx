@@ -35,13 +35,16 @@
 #include <fltk/Box.h>
 #include <fltk/layout.h>
 #include <fltk/Preferences.h>
-#include "FluidType.h"
-#include <math.h>
-#include <stdlib.h>
-#include "alignment_panel.h"
-#include <stdio.h>
 #include <fltk/ItemGroup.h>
 #include <fltk/Item.h>
+
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "FluidType.h"
+#include "alignment_panel.h"
+#include "undo.h"
 
 using namespace fltk;
 
@@ -259,7 +262,6 @@ void WindowType::setlabel(const char *n) {
 }
 
 // make() is called on this widget when user picks window off New menu:
-WindowType Windowtype;
 
 // calculate actual move by moving mouse position (mx,my) to
 // nearest multiple of gridsize, and snap to original position
@@ -415,6 +417,7 @@ extern void fix_group_size(FluidType *t);
 // move the selected children according to current dx,dy,drag state:
 void WindowType::moveallchildren()
 {
+  Undo::checkpoint();
   FluidType *i;
   bool first = true;
   for (i = first_child; i;) {

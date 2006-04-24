@@ -132,9 +132,12 @@ public:
   void	when(uchar i)		{ when_ = i; }
 
   static void default_callback(Widget*, void*);
-  void	do_callback()		{ callback_(this,user_data_); }
-  void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
-  void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
+  
+  // it is legal to set callback_ to 0, so callback_ non nullity *must* be tested
+  void	do_callback()		{ if(callback_) callback_(this,user_data_); }
+  void	do_callback(Widget* o,void* arg=0) { if(callback_) callback_(o,arg); }
+  void	do_callback(Widget* o,long arg) { if(callback_) callback_(o,(void*)arg); }
+  
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;

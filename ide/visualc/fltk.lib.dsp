@@ -335,6 +335,10 @@ SOURCE=..\..\fltk\menubar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fltk\MenuBuild.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fltk\menuwindow.h
 # End Source File
 # Begin Source File

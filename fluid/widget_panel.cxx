@@ -5,6 +5,7 @@
 #include "FluidType.h"
 #include "fluid_img.h"
 #include "factory.h"
+#include "undo.h"
 
 fltk::Window *widgetbin_panel=(fltk::Window *)0;
 
@@ -366,17 +367,13 @@ fltk::Window* make_widgetbin() {
 }
 
 void type_make_cb(fltk::Widget*w,void*d) {
-  /*FIXME NO UNDO YET: undo_checkpoint();*/
     FluidType *t = fltk::FluidType_make((char*)d);
     if (t) {
+      fltk::Undo::checkpoint();
       select_only(t);
       modflag = 1;
       t->open();
-    } else {
-      // FIXME UNDO : 
-      // undo_current --;
-      // undo_last --;
-    }
+    } 
 }
 
 fltk::TabGroup *panel_tabs=(fltk::TabGroup *)0;

@@ -38,11 +38,6 @@
 
 using namespace fltk;
 
-GroupType Grouptype;	// the "factory"
-PackType Packtype;	// the "factory"
-TabsType Tabstype;	// the "factory"
-ScrollType Scrolltype;	// the "factory"
-TileType Tiletype;	// the "factory"
 
 WidgetType* GroupType::_make() {return new GroupType();}
 
@@ -106,7 +101,7 @@ void fix_group_size(FluidType *t) {
 }
 
 extern int force_parent;
-
+extern GroupType Grouptype;
 void group_cb(fltk::Widget *, void *) {
   // Find the current widget:
   FluidType *qq = FluidType::current;

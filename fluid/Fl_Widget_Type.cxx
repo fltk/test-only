@@ -40,6 +40,7 @@
 
 #include "coding_style.h"
 #include "factory.h"
+#include "undo.h"
 
 using namespace fltk;
 
@@ -1015,6 +1016,8 @@ void align_cb(fltk::Button* i, void *v) {
     i->selection_textcolor(d);
     i->selection_color(i->color());
   } else {
+      Undo::checkpoint();
+
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
       int x = q->o->flags() & fltk::ALIGN_MASK;
@@ -1043,6 +1046,8 @@ void image_inlined_cb(fltk::CheckButton* i, void *v) {
       if(!bSet) {i->value(0);i->deactivate();}
 
   } else {
+      Undo::checkpoint();
+
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
       for (num=0; num<FLUID_MAX_IMG; num++) {

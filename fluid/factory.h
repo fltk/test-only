@@ -30,9 +30,6 @@ namespace fltk {
 class Item;
 class ItemGroup;
 
-    Item * fluidMenuItem(FluidType& wt,int n=-1);
-    ItemGroup * fluidMenuGroup(const char * menu_name,int n=-1);
-    void fill_in_New_Menu(ItemGroup* menu);
     int lookup_symbol(const char *, int &, int numberok = 0);
     FluidType *FluidType_make(const char *tn);
 }

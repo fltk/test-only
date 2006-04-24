@@ -120,6 +120,10 @@ SOURCE=..\..\fluid\fluid_img.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\fluid_menus.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\Fluid_Plugins.h
 # End Source File
 # Begin Source File
@@ -145,6 +149,10 @@ SOURCE=..\..\fluid\keyboard_ui.h
 # Begin Source File
 
 SOURCE=..\..\fluid\Shortcut_Button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\undo.h
 # End Source File
 # Begin Source File
 
@@ -225,11 +233,19 @@ SOURCE=..\..\fluid\fluid_img.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\fluid_menus.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\Fluid_Plugins.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\fluid\function_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\undo.cxx
 # End Source File
 # Begin Source File
 

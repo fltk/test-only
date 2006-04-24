@@ -9,14 +9,13 @@
 #include <fltk/Box.h>
 #include <fltk/error.h>
 #include <fltk/visual.h>
+#include <fltk/Widget.h>
 
 namespace Fl = fltk;
 
 typedef fltk::TimeoutHandler Fl_Timeout_Handler;
 
 namespace fltk {
-
-  class Widget;
 
   // fltk2 does not keep track of selection owner:
   inline fltk::Widget* selection_owner() {return 0;}
@@ -52,7 +51,7 @@ namespace fltk {
     add_event_handler((int(*)(int,Window*))(h));
   }
 
-  inline void delete_widget(fltk::Widget* w) {delete w;}
+  inline void delete_widget(Widget* w) {delete w;}
   inline void do_widget_deletion() {}
 
 }

@@ -112,7 +112,7 @@ CubeViewUI::CubeViewUI() {
           o->color((fltk::Color)56);
           o->selection_color((fltk::Color)69);
         }
-         {CubeView* o = cube = new CubeView(2, 2, 329, 329);
+         {cube = new CubeView(2, 2, 329, 329);
         }
         o->end();
       }

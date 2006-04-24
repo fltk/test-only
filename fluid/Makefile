@@ -47,13 +47,15 @@ CPPFILES = \
 	Fl_Menu_Type.cxx \
 	Fl_Type.cxx \
 	fluid.cxx \
+	fluid_menus.cxx \
 	Fluid_Image.cxx \
 	Fluid_Plugins.cxx \
 	Fl_Widget_Type.cxx \
 	Fl_Window_Type.cxx \
 	function_panel.cxx \
 	fluid_img.cxx \
-	widget_panel.cxx
+	widget_panel.cxx \
+	undo.cxx 
 
 CFILES	=
 

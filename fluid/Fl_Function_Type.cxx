@@ -245,7 +245,6 @@ void FunctionType::open() {
     function_panel = NULL;
 }
 
-FunctionType Functiontype;
 
 WidgetType* last_group;
 
@@ -396,7 +395,6 @@ void CodeType::open() {
     code_panel = NULL;
 }
 
-CodeType Codetype;
 
 void CodeType::write_code() {
     const char* c = name();
@@ -470,8 +468,6 @@ void CodeBlockType::open() {
     codeblock_panel = NULL;
 }
 
-CodeBlockType CodeBlocktype;
-
 void CodeBlockType::write_code() {
     const char* c = name();
     write_c("%s%s%s", indent(), c ? c : "", get_opening_brace(0));
@@ -532,7 +528,6 @@ void DeclType::open() {
     decl_panel = NULL;
 }
 
-DeclType Decltype;
 
 void DeclType::write_code() {
     const char* c = name();
@@ -634,7 +629,6 @@ void DeclBlockType::open() {
     declblock_panel = NULL;
 }
 
-DeclBlockType DeclBlocktype;
 
 void DeclBlockType::write_code() {
     const char* c = name();
@@ -644,7 +638,6 @@ void DeclBlockType::write_code() {
 }
 
 ////////////////////////////////////////////////////////////////
-CommentType Commenttype;
 
 static CommentType * current_comment=0;
 
@@ -946,10 +939,9 @@ OOPS: message = "class name must be C++ identifier";
     class_panel = NULL;
 }
 
-ClassType Classtype;
-
 static ClassType *current_class;
 extern int varused_test;
+
 void write_public(int state) {
     if (!current_class || varused_test) return;
     if (current_class->write_public_state == state) return;
@@ -1027,7 +1019,6 @@ void NamespaceType::open() {
     namespace_panel = NULL;
 }
 
-NamespaceType Namespacetype;
 
 static NamespaceType *current_namespace;
 extern int varused_test;

@@ -95,7 +95,7 @@ etags:
 	images/*.cxx fluid/*.cxx fluid/*.h test/*.cxx test/*.h Makefile */Makefile
 dos2unix: 
 	dos2unix fltk/*.h src/*.cxx src/win32/*.cxx src/*.c images/*.cxx \
-		fluid/*.cxx fluid/*.h fluid/*.fl test/*.cxx test/*.h 
+		fluid/*.cxx fluid/*.h fluid/*.fl test/*.cxx test/*.h fltk/compat/FL/*.H
 	chmod -x fltk/*.h src/*.cxx src/win32/*.cxx src/*.c images/*.cxx \
 		fluid/*.cxx fluid/*.h fluid/*.fl test/*.cxx test/*.h 
 #

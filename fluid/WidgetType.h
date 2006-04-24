@@ -60,6 +60,7 @@
 #include <fltk/ValueOutput.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/BarGroup.h>
+#include "FluidType.h"
 
 namespace fltk {
     class InvisibleBoxType : public WidgetType {

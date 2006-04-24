@@ -60,9 +60,6 @@ Widget *SubmenuType::widget(int,int,int,int) {
   return g;
 }
 
-ItemType Itemtype;
-DividerType Dividertype;
-SubmenuType Submenutype;
 
 ////////////////////////////////////////////////////////////////
 
@@ -101,17 +98,12 @@ const Enumeration fltk::button_type_menu[] = {
   {"popup123","POPUP123",(void*)fltk::PopupMenu::POPUP123},
   {0}};
 
-PopupMenuType PopupMenutype;
+////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////
 
 
-ChoiceType Choicetype;
-
-////////////////////////////////////////////////////////////////
-
-
-MenuBarType MenuBartype;
 
 const Enumeration fltk::input_browser_type_menu[] = {
   {"Normal",		0,	(void*)fltk::InputBrowser::NORMAL},
@@ -120,18 +112,13 @@ const Enumeration fltk::input_browser_type_menu[] = {
   {"Non-Editable Indented","NONEDITABLE_INDENTED",(void*)fltk::InputBrowser::NONEDITABLE_INDENTED},
   {0}};
 
-InputBrowserType InputBrowsertype;
-
-
 #include <fltk/Browser.h>
 const Enumeration fltk::browser_type_menu[] = {
   {"Single",	0,	(void*)fltk::Browser::NORMAL},
   {"Multi",	"MULTI",	(void*)fltk::Browser::MULTI, "fltk::MultiBrowser"},
   {0}};
-BrowserType Browsertype;
 
 #include <fltk/FileBrowser.h>
-FileBrowserType FileBrowsertype;
 
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:

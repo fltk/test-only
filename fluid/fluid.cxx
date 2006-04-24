@@ -83,11 +83,14 @@ const char *copyright =
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
 #include "coding_style.h"
+#include "fluid_menus.h"
 #include "factory.h"
+#include "undo.h"
 
+using namespace fltk;
 /////////////////////////////////////////
 // Read preferences file 
-fltk::Preferences fluid_prefs(fltk::Preferences::USER, "fltk.org", "fluid");
+Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
 
 int gridx;
 int gridy;
@@ -99,12 +102,11 @@ static int  read_alignement_prefs() {
     fluid_prefs.get("gridx", gridx, 5);
     fluid_prefs.get("gridy", gridy, 5);
     fluid_prefs.get("show_tooltips", show_tooltip, 1);
-    fltk::Tooltip::enable(show_tooltip ? true : false);
+    Tooltip::enable(show_tooltip ? true : false);
     
     return 0;
 }
 static int dummy = read_alignement_prefs();
-static fltk::Item *mShowWidgetBin =0;
 /////////////////////////////////////////
 
 // File history info...
@@ -117,8 +119,8 @@ void	set_alignment_window();
 
 ////////////////////////////////////////////////////////////////
 
-void nyi(fltk::Widget *,void *) {
-    fltk::message("That's not yet implemented, sorry");
+void nyi(Widget *,void *) {
+    message("That's not yet implemented, sorry");
 }
 
 static const char *filename;
@@ -145,7 +147,7 @@ void goto_source_dir() {
     if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
 	buffer, strerror(errno)); return;}
     in_source_dir = 1;
-    fltk::SharedImage::set_root_directory(buffer);
+    SharedImage::set_root_directory(buffer);
 #endif
 }
 
@@ -155,7 +157,7 @@ void goto_images_dir() {
     if (in_source_dir) return;
     if (!filename || !*filename) return;
     const char *p = filename_name(filename);
-    // This is static since fltk::SharedImage::set_root_directory just copies the pointer
+    // This is static since SharedImage::set_root_directory just copies the pointer
     static char buffer[1024];
     if (p <= filename)
 	strcpy(buffer, images_dir);
@@ -175,7 +177,7 @@ void goto_images_dir() {
 	buffer, strerror(errno)); return;}
     in_source_dir = 1;
     
-    // Call to fltk::set_images_root_directory so that images are corretly displayed in FLUID.
+    // Call to set_images_root_directory so that images are corretly displayed in FLUID.
     // Construct the path name verbosely because images are loaded from draw() function and
     // we do not know what is the cwd at this time
 #ifdef _WIN32
@@ -188,7 +190,7 @@ void goto_images_dir() {
 #ifdef _WIN32
     }
 #endif
-    fltk::SharedImage::set_root_directory(buffer);
+    SharedImage::set_root_directory(buffer);
 #endif
 }
 
@@ -201,10 +203,10 @@ void leave_source_dir() {
 #endif
 }
 
-fltk::Window *main_window;
+Window *main_window;
 
-char position_window(fltk::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
-    fltk::Preferences pos(fluid_prefs, prefsName);
+char position_window(Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
+    Preferences pos(fluid_prefs, prefsName);
     if (prevpos_button && prevpos_button->value() ) {
 	pos.get("x", X, X);
 	pos.get("y", Y, Y);
@@ -219,8 +221,8 @@ char position_window(fltk::Window *w, const char *prefsName, int Visible, int X,
     pos.get("visible", Visible, Visible);
     return Visible;
 }
-void save_position(fltk::Window *w, const char *prefsName) {
-    fltk::Preferences pos(fluid_prefs, prefsName);
+void save_position(Window *w, const char *prefsName) {
+    Preferences pos(fluid_prefs, prefsName);
     pos.set("x", w->x());
     pos.set("y", w->y());
     pos.set("w", w->w());
@@ -228,22 +230,22 @@ void save_position(fltk::Window *w, const char *prefsName) {
     pos.set("visible", (int)(w->shown() && w->visible()));
 }
 
-void save_cb(fltk::Widget *, void *v) {
+void save_cb(Widget *, void *v) {
     const char *c = filename;
     if (v || !c || !*c) {
-	if (!(c=fltk::file_chooser("Save to:", "*.f[ld]", c))) return;
+	if (!(c=file_chooser("Save to:", "*.f[ld]", c))) return;
 	set_filename(c);
     }
     if (!write_file(c)) {
-	fltk::message("Error writing %s: %s", c, strerror(errno));
+	message("Error writing %s: %s", c, strerror(errno));
 	return;
     }
     modflag = 0;
 }
 
-void exit_cb(fltk::Widget *,void *) {
+void exit_cb(Widget *,void *) {
     if (modflag)
-	switch (fltk::choice("Save changes before exiting?", "Yes", "No", "Cancel")) {
+	switch (choice("Save changes before exiting?", "Yes", "No", "Cancel")) {
       case 2 : /* Cancel */
           return;
       case 0 : /* Yes */
@@ -258,22 +260,26 @@ void exit_cb(fltk::Widget *,void *) {
     exit(0);
 }
 
-void open_cb(fltk::Widget *, void *v) {
-    if (!v && modflag && !fltk::ask("Discard changes?")) return;
+void open_cb(Widget *, void *v) {
+    if (!v && modflag && !ask("Discard changes?")) return;
     const char *c;
-    if (!(c = fltk::file_chooser("Open:", "*.f[ld]", filename))) return;
+    if (!(c = file_chooser("Open:", "*.f[ld]", filename))) return;
+    Undo::suspend();
+
     if (!v) set_filename(c);
     if (!read_file(c, v!=0)) {
-	fltk::message("Can't read %s: %s", c, strerror(errno));
-	return;
+	message("Can't read %s: %s", c, strerror(errno));
+    } else {
+	if (!v) modflag = 0;
+	else modflag = 1;
     }
-    if (!v) modflag = 0;
-    else modflag = 1;
+    Undo::resume();
+    Undo::clear();
 }
 
-void open_history_cb(fltk::Widget *, void *v) {
+void open_history_cb(Widget *, void *v) {
     if (modflag) {
-	switch (fltk::choice("Do you want to save changes to this user\n"
+	switch (choice("Do you want to save changes to this user\n"
 	    "interface before opening another one?", "Cancel",
 	    "Save", "Don't Save"))
 	{
@@ -287,26 +293,26 @@ void open_history_cb(fltk::Widget *, void *v) {
     const char *oldfilename = filename;
     filename = NULL;
     set_filename((char *)v);
-    // undo_suspend(); nyi
+    Undo::suspend(); 
     if (!read_file(filename, 0)) {
-	//  undo_resume(); nyi
-	//  undo_clear(); nyi
-	fltk::message("Can't read %s: %s", filename, strerror(errno));
+	Undo::resume();
+	Undo::clear();
+	message("Can't read %s: %s", filename, strerror(errno));
 	free((void *)filename);
 	filename = oldfilename;
 	if (main_window) main_window->label(filename);
 	return;
     }
     modflag = 0;
-    //  undo_resume(); nyi
-    //  undo_clear(); nyi
+    Undo::resume();
+    Undo::clear();
     if (oldfilename) free((void *)oldfilename);
 }
 
-void new_cb(fltk::Widget *, void *v) {
-    if (!v && modflag && !fltk::ask("Discard changes?")) return;
+void new_cb(Widget *, void *v) {
+    if (!v && modflag && !ask("Discard changes?")) return;
     const char *c;
-    if (!(c = fltk::file_chooser("New:", "*.f[ld]", 0))) return;
+    if (!(c = file_chooser("New:", "*.f[ld]", 0))) return;
     delete_all();
     set_filename(c);
     modflag = 0;
@@ -318,7 +324,7 @@ int code_file_set = 0;
 const char* header_file_name = ".h";
 const char* code_file_name = ".cxx";
 
-void write_cb(fltk::Widget *, void *) {
+void write_cb(Widget *, void *) {
     if (!filename) {
 	save_cb(0,0);
 	if (!filename) return;
@@ -326,14 +332,14 @@ void write_cb(fltk::Widget *, void *) {
     char cname[1024];
     char hname[1024];
     if (code_file_name[0] == '.' && isalpha(code_file_name[1])) {
-	strcpy(cname,fltk::filename_name(filename));
-	strcpy((char*)fltk::filename_ext(cname), code_file_name);
+	strcpy(cname,filename_name(filename));
+	strcpy((char*)filename_ext(cname), code_file_name);
     } else {
 	strcpy(cname, code_file_name);
     }
     if (header_file_name[0] == '.' && isalpha(header_file_name[1])) {
-	strcpy(hname,fltk::filename_name(filename));
-	strcpy((char*)fltk::filename_ext(hname), header_file_name);
+	strcpy(hname,filename_name(filename));
+	strcpy((char*)filename_ext(hname), header_file_name);
     } else {
 	strcpy(hname, header_file_name);
     }
@@ -345,28 +351,28 @@ void write_cb(fltk::Widget *, void *) {
 	if (!x) {fprintf(stderr,"%s : %s\n",cname,strerror(errno)); exit(1);}
     } else {
 	if (!x) {
-	    fltk::message("Can't write %s: %s", cname, strerror(errno));
+	    message("Can't write %s: %s", cname, strerror(errno));
 	} else {
-	    fltk::message("Wrote %s", cname, 0);
+	    message("Wrote %s", cname, 0);
 	}
     }
 }
 
-void openwidget_cb(fltk::Widget *, void *) {
+void openwidget_cb(Widget *, void *) {
     if (!FluidType::current) {
-	fltk::message("Please select a widget");
+	message("Please select a widget");
 	return;
     }
     FluidType::current->open();
 }
 
-void toggle_overlays(fltk::Widget *,void *);
+void toggle_overlays(Widget *,void *);
 
-void select_all_cb(fltk::Widget *,void *);
+void select_all_cb(Widget *,void *);
 
-void group_cb(fltk::Widget *, void *);
+void group_cb(Widget *, void *);
 
-void ungroup_cb(fltk::Widget *, void *);
+void ungroup_cb(Widget *, void *);
 
 extern int pasteoffset;
 static int ipasteoffset;
@@ -381,28 +387,28 @@ static char* cutfname() {
     return name;
 #else
     static char name[1024] = "";
-    if (!name[0]) fltk::filename_absolute(name, 1024, "~/.fluid_cut_buffer");
+    if (!name[0]) filename_absolute(name, 1024, "~/.fluid_cut_buffer");
     return name;
 #endif
 }
 
-void copy_cb(fltk::Widget*, void*) {
+void copy_cb(Widget*, void*) {
     if (!FluidType::current) return;
     ipasteoffset = 10;
     if (!write_file(cutfname(),1)) {
-	fltk::message("Can't write %s: %s", cutfname(), strerror(errno));
+	message("Can't write %s: %s", cutfname(), strerror(errno));
 	return;
     }
 }
 
 extern void select_only(FluidType *);
-void cut_cb(fltk::Widget *, void *) {
+void cut_cb(Widget *, void *) {
     if (!FluidType::current) return;
     ipasteoffset = 0;
     FluidType *p = FluidType::current->parent;
     while (p && p->selected) p = p->parent;
     if (!write_file(cutfname(),1)) {
-	fltk::message("Can't write %s: %s", cutfname(), strerror(errno));
+	message("Can't write %s: %s", cutfname(), strerror(errno));
 	return;
     }
     delete_all(1);
@@ -411,43 +417,43 @@ void cut_cb(fltk::Widget *, void *) {
 
 extern int force_parent, gridx, gridy;
 
-void paste_cb(fltk::Widget*, void*) {
+void paste_cb(Widget*, void*) {
     if (ipasteoffset) force_parent = 1;
     pasteoffset = ipasteoffset;
     if (gridx>1) pasteoffset = ((pasteoffset-1)/gridx+1)*gridx;
     if (gridy>1) pasteoffset = ((pasteoffset-1)/gridy+1)*gridy;
     if (!read_file(cutfname(), 1)) {
-	fltk::message("Can't read %s: %s", cutfname(), strerror(errno));
+	message("Can't read %s: %s", cutfname(), strerror(errno));
     }
     pasteoffset = 0;
     ipasteoffset += 10;
     force_parent = 0;
 }
 
-void earlier_cb(fltk::Widget*,void*);
+void earlier_cb(Widget*,void*);
 
-void later_cb(fltk::Widget*,void*);
+void later_cb(Widget*,void*);
 
 void sort(FluidType *parent); // in WidgetType.cxx
 
-static void sort_cb(fltk::Widget *,void *) {
+void sort_cb(Widget *,void *) {
     for (FluidType* f = FluidType::first; f; f = f->next_brother) sort(f);
 }
 
-void show_alignment_cb(fltk::Widget *, void *);
+void show_alignment_cb(Widget *, void *);
 
-void set_images_dir_cb(fltk::Widget *, void *);
+void set_images_dir_cb(Widget *, void *);
 
-void about_cb(fltk::Widget *, void *) {
+void about_cb(Widget *, void *) {
     if (!about_panel) make_about_panel(copyright);
     copyright_box->hide();
     display_group->show();
     about_panel->show();
 }
 
-void tt_cb(fltk::Widget *w, void *) {
-    show_tooltip = ((fltk::Button*)w)->value(); 
-    fltk::Tooltip::enable(show_tooltip ? true : false);
+void tt_cb(Widget *w, void *) {
+    show_tooltip = ((Button*)w)->value(); 
+    Tooltip::enable(show_tooltip ? true : false);
     fluid_prefs.set("show_tooltips", show_tooltip );
 }
 
@@ -455,8 +461,8 @@ void tt_cb(fltk::Widget *w, void *) {
 #include <fltk/ask.h>
 
 #include <fltk/StyleSet.h>
-fltk::StyleSet* fluid_style_set;
-fltk::StyleSet* style_set;
+StyleSet* fluid_style_set;
+StyleSet* style_set;
 char* theme;
 
 void set_theme(const char* s) {
@@ -473,26 +479,25 @@ void set_theme(const char* s) {
 	theme = strdup(s);
     }
     style_set->make_current();
-    fltk::Theme f = fltk::Style::load_theme(theme);
-    fltk::Style::theme(f);
+    Theme f = Style::load_theme(theme);
+    Style::theme(f);
     // set the scheme...
-    fltk::Style::reload_theme();
+    Style::reload_theme();
     fluid_style_set->make_current();
-    fltk::redraw();
-    if (!f) fltk::alert("Error loading theme \"%s\" (plugin not found?)",
+    redraw();
+    if (!f) alert("Error loading theme \"%s\" (plugin not found?)",
 	theme ? theme : "");
 #endif
 }
 
-void theme_cb(fltk::Widget *, void *) {
-    const char* s = fltk::input("Enter the theme name:", ::theme);
+void theme_cb(Widget *, void *) {
+    const char* s = input("Enter the theme name:", ::theme);
     if (!s) return;
     set_theme(s);
 }
 
-extern fltk::MenuBar* Main_Menu;
 
-void toggle_widgetbin_cb(fltk::Widget *o, void * v) {
+void toggle_widgetbin_cb(Widget *o, void * v) {
     if (!widgetbin_panel) {
 	make_widgetbin();
 	widgetbin_panel->callback(toggle_widgetbin_cb);
@@ -501,10 +506,10 @@ void toggle_widgetbin_cb(fltk::Widget *o, void * v) {
     
     if (widgetbin_panel->visible()) {
 	widgetbin_panel->hide();
-	mShowWidgetBin->label("Show Widget &Bin...");
+	iwidget_bin->label("Show Widget &Bin...");
     } else {
 	widgetbin_panel->show();
-	mShowWidgetBin->label("Hide Widget &Bin");
+	iwidget_bin->label("Hide Widget &Bin");
     }
 }
 
@@ -513,76 +518,6 @@ void toggle_widgetbin_cb(fltk::Widget *o, void * v) {
 // New fltk2 menu generation
 ////////////////////////////////////////////////////////////////
 
-fltk::MenuBar* Main_Menu;
-static fltk::Item*  history_item[10];
-
-static void build_hierarchy(fltk::MenuBar* menubar) {
-    fltk::ItemGroup* g;
-    fltk::Item* o; 
-    
-    Main_Menu = menubar;
-    
-    menubar->begin();
-    g=new fltk::ItemGroup("&File",0,0);
-    new fltk::Item("New", 0, new_cb, 0);
-    new fltk::Item("Open...", fltk::CTRL+'o', open_cb, 0);
-    new fltk::Item("Save", fltk::CTRL+'s', save_cb, 0);
-    new fltk::Item("Save As...", fltk::CTRL+'S', save_cb, (void*)1);
-    new fltk::Item("Merge...", fltk::CTRL+'i', open_cb, (void*)1);
-    new fltk::Divider();
-    new fltk::Item("Write code", fltk::CTRL+'w', write_cb, 0);
-    history_item[0] = new fltk::Item(relative_history[0], fltk::CTRL+'0', open_history_cb, absolute_history[0]);
-    history_item[1] = new fltk::Item(relative_history[1], fltk::CTRL+'1', open_history_cb, absolute_history[1]);
-    history_item[2] = new fltk::Item(relative_history[2], fltk::CTRL+'2', open_history_cb, absolute_history[2]);
-    history_item[3] = new fltk::Item(relative_history[3], fltk::CTRL+'3', open_history_cb, absolute_history[3]);
-    history_item[4] = new fltk::Item(relative_history[4], fltk::CTRL+'4', open_history_cb, absolute_history[4]);
-    history_item[5] = new fltk::Item(relative_history[5], fltk::CTRL+'5', open_history_cb, absolute_history[5]);
-    history_item[6] = new fltk::Item(relative_history[6], fltk::CTRL+'6', open_history_cb, absolute_history[6]);
-    history_item[7] = new fltk::Item(relative_history[7], fltk::CTRL+'7', open_history_cb, absolute_history[7]);
-    history_item[8] = new fltk::Item(relative_history[8], fltk::CTRL+'8', open_history_cb, absolute_history[8]);
-    history_item[9] = new fltk::Item(relative_history[9], fltk::CTRL+'9', open_history_cb, absolute_history[9]);
-    new fltk::Divider();
-    new fltk::Item("Quit", fltk::CTRL+'q', exit_cb);
-    g->end();
-    
-    g=new fltk::ItemGroup("&Edit",0,0);
-    new fltk::Item("Cut", fltk::CTRL+'x', cut_cb);
-    new fltk::Item("Copy", fltk::CTRL+'c', copy_cb);
-    new fltk::Item("Paste", fltk::CTRL+'v', paste_cb);
-    new fltk::Item("Select All", fltk::CTRL+'a', select_all_cb);
-    new fltk::Item("Edit this widget", fltk::ReturnKey, openwidget_cb);
-    new fltk::Item("Sort these widgets", 0, sort_cb);
-    new fltk::Item("Move widget earlier", fltk::F2Key, earlier_cb);
-    new fltk::Item("Move widget later", fltk::F3Key, later_cb);
-    //new fltk::Item("Show", fltk::F5Key, show_cb);
-    //new fltk::Item("Hide", fltk::F6Key, hide_cb);
-    new fltk::Item("Group", fltk::F7Key, group_cb);
-    new fltk::Item("Ungroup", fltk::F8Key, ungroup_cb,0);
-    //new fltk::Item("Deactivate", 0, nyi);
-    //new fltk::Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
-    new fltk::Item(fltk::Item::TOGGLE,"Show Overlays",fltk::ALT+'o',toggle_overlays);
-    mShowWidgetBin = new fltk::Item(fltk::Item::TOGGLE,"Show Widget &Bin",fltk::ALT+'b',toggle_widgetbin_cb);
-    new fltk::Item("Preferences",fltk::CTRL+'p',show_alignment_cb);
-    new fltk::Item("Coding Style", 0, show_coding_style_cb);
-    new fltk::Item("Theme", 0, theme_cb);
-    new fltk::Item("Set images root directory", fltk::CTRL+'d', set_images_dir_cb);
-    g->end();
-    
-    g=new fltk::ItemGroup("&New", 0, 0);
-    fltk::fill_in_New_Menu(g);
-    g->end();
-    
-    g=new fltk::ItemGroup("&Plugins", 0, 0, (void *)Plugins_Options_Menu);
-    g->end();
-    
-    g=new fltk::ItemGroup("&Help",0,0);
-    new fltk::Item("About fluid",0,about_cb);
-    o= new fltk::Item(fltk::Item::TOGGLE,"Tooltips", 0, tt_cb, 0);
-    if (show_tooltip) o->set_flag(fltk::VALUE);
-    //new fltk::Item("Manual",0,nyi);
-    g->end();
-    menubar->end();
-}
 
 #define BROWSERWIDTH 300
 #define BROWSERHEIGHT 500
@@ -591,23 +526,23 @@ static void build_hierarchy(fltk::MenuBar* menubar) {
 #define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
 
 
-fltk::MenuBar* menubar;
-fltk::Browser *widget_browser;
+MenuBar* menubar;
+Browser *widget_browser;
 
 ////////////////////////////////////////////////////////////////
 void make_main_window() {
     if (!main_window) {
-	fltk::Widget *o;
-	main_window = new fltk::Window(WINWIDTH,WINHEIGHT,"fluid");
-	main_window->box(fltk::NO_BOX);
+	Widget *o;
+	main_window = new Window(WINWIDTH,WINHEIGHT,"fluid");
+	main_window->box(NO_BOX);
 	main_window->begin();
-	o = widget_browser = (fltk::Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
-	//  o->text_box(fltk::FLAT_BOX);
+	o = widget_browser = (Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
+	//  o->text_box(FLAT_BOX);
 	main_window->resizable(o);
-	menubar = new fltk::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
-	menubar->box(fltk::FLAT_BOX);
-	
+	menubar = new MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
+	menubar->box(FLAT_BOX);
 	build_hierarchy(menubar);
+	if (show_tooltip) itooltip->set_flag(VALUE);
 	// this is removed because the new ctrl+bindings mess up emacs in
 	// the text fields:
 	//    menubar->global();
@@ -629,7 +564,7 @@ void set_filename(const char *c) {
     */
     char curdir[1024]; 
     const char *start = c;
-    const char *end = fltk::filename_name(c);
+    const char *end = filename_name(c);
     int len = end-start;
     strncpy(curdir, start, len);
     curdir[len] = 0;
@@ -646,10 +581,10 @@ void load_history() {
     if (max_files > 10) max_files = 10;
     
     for (i = 0; i < max_files; i ++) {
-	fluid_prefs.get( fltk::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
+	fluid_prefs.get( Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
 	if (absolute_history[i][0]) {
 	    // Make a relative version of the filename for the menu...
-	    fltk::filename_relative(relative_history[i], sizeof(relative_history[i]),
+	    filename_relative(relative_history[i], sizeof(relative_history[i]),
 		absolute_history[i]);
 	    history_item[i]->show();
 	} else break;
@@ -671,7 +606,7 @@ void update_history(const char *flname) {
     fluid_prefs.get("recent_files", max_files, 5);
     if (max_files > 10) max_files = 10;
     
-    fltk::filename_absolute(absolute, sizeof(absolute), flname);
+    filename_absolute(absolute, sizeof(absolute), flname);
     
     for (i = 0; i < max_files; i ++)
 #if defined(WIN32) || defined(__APPLE__)
@@ -693,17 +628,17 @@ void update_history(const char *flname) {
 	// Put the new file at the top...
 	strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
 	
-	fltk::filename_relative(relative_history[0], sizeof(relative_history[0]),
+	filename_relative(relative_history[0], sizeof(relative_history[0]),
 	    absolute_history[0]);
 	
 	// Update the menu items as needed...
 	for (i = 0; i < max_files; i ++) {
-	    fluid_prefs.set( fltk::Preferences::Name("file%d", i), absolute_history[i]);
+	    fluid_prefs.set( Preferences::Name("file%d", i), absolute_history[i]);
 	    if (!absolute_history[i][0]) break;
 	}
 	
 	for (; i < 10; i ++) {
-	    fluid_prefs.set( fltk::Preferences::Name("file%d", i), "");
+	    fluid_prefs.set( Preferences::Name("file%d", i), "");
 	    history_item[i]->hide();
 	}
 }
@@ -749,28 +684,28 @@ extern "C" {
 
 int main(int argc,char **argv) {
     int i = 1;
-    if (!fltk::args(argc,argv,i,arg) || i < argc-1) {
+    if (!args(argc,argv,i,::arg) || i < argc-1) {
 	fprintf(stderr,"usage: %s <switches> name.fl\n"
 	    " -c : write .cxx and .h and exit\n"
 	    " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
 	    " -h <name> : .h output filename, or extension if <name> starts with '.'\n"
-	    "%s\n", argv[0], fltk::help);
+	    "%s\n", argv[0], help);
 	return 1;
     }
     const char *c = argv[i];
     
-    fluid_style_set = new fltk::StyleSet();
-    style_set = new fltk::StyleSet();
+    fluid_style_set = new StyleSet();
+    style_set = new StyleSet();
     
-    fltk::register_images();
+    register_images();
     read_plugins();
     make_main_window();
     load_coding_style();
     
     if (c) set_filename(c);
     if (!compile_only) {
-	fltk::visual(fltk::DOUBLE_BUFFER|fltk::INDEXED_COLOR);
-	fltk::FileIcon::load_system_icons();
+	visual(DOUBLE_BUFFER|INDEXED_COLOR);
+	FileIcon::load_system_icons();
 	main_window->callback(exit_cb);
 	main_window->show(argc,argv);
 	set_alignment_window();
@@ -781,20 +716,22 @@ int main(int argc,char **argv) {
 	    open_history_cb(0, absolute_history[0]);
 	}
     }
-    
+    Undo::suspend();
     if (c && !read_file(c,0)) {
 	if (compile_only) {
+	    Undo::resume();
 	    fprintf(stderr,"%s : %s\n", c, strerror(errno));
 	    exit(1);
 	}
-	fltk::message("Can't read %s: %s", c, strerror(errno));
+	message("Can't read %s: %s", c, strerror(errno));
     }
+    Undo::resume();
     if (compile_only) {write_cb(0,0); exit(0);}
     modflag = 0;
 #ifndef _WIN32
     signal(SIGINT,sigint);
 #endif
-    return fltk::run();
+    return run();
 }
 
 //
