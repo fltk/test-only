@@ -82,6 +82,8 @@ J1:
     popup(Rectangle(w(), h()), 0, true);
     if (lastfocus_) lastfocus_->take_focus();
     lastfocus_ = 0;
+    // redraw in case Choice is in MenuBar
+    redraw(DAMAGE_CHILD);
     return 1;
   case SHORTCUT:
     // Test against the shortcut() of any item in any submenu:

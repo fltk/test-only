@@ -27,6 +27,8 @@
 #include "Item.h"
 #include "Divider.h"
 #include "MenuBar.h"
+#include "Choice.h"
+#include "PopupMenu.h"
 #include "events.h"
 #endif
 
