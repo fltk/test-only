@@ -407,7 +407,7 @@ void height_cb(fltk::ValueInput* i, void *v) {
 
 void set_xy_cb(fltk::CheckButton* i, void *v) {
   if (v == LOAD) {
-    if (current_widget->is_window()) i->hide(); else i->show();
+    if (current_widget->is_window()) i->show(); else i->hide();
     i->value(current_widget->set_xy);
   } else {
     modflag = 1;
