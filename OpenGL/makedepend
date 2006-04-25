@@ -1,28 +1,23 @@
-# DO NOT DELETE
-
-Fl_Gl_Choice.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Choice.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Choice.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Gl_Choice.o: ../fltk/x.h ../fltk/draw.h ../fltk/PixelType.h
-Fl_Gl_Choice.o: ../fltk/visual.h
-Fl_Gl_Overlay.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Overlay.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Overlay.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Gl_Overlay.o: ../fltk/x.h ../fltk/draw.h ../fltk/PixelType.h
-Fl_Gl_Overlay.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
-Fl_Gl_Window.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Window.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Window.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Gl_Window.o: ../fltk/x.h ../fltk/draw.h ../fltk/PixelType.h
-Fl_Gl_Window.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
-Fl_Gl_Window.o: ../fltk/error.h ../fltk/visual.h ../fltk/layout.h
-Fl_Gl_Window.o: ../fltk/run.h
-gl_draw.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-gl_draw.o: ../fltk/FL_API.h ../fltk/Rectangle.h ../fltk/PixelType.h
-gl_draw.o: ../fltk/Font.h ../fltk/Style.h ../fltk/gl.h ../fltk/utf.h
-gl_draw.o: GlChoice.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-gl_draw.o: ../fltk/x.h ../fltk/draw.h
-gl_start.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-gl_start.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-gl_start.o: ../fltk/Rectangle.h GlChoice.h ../fltk/x.h ../fltk/draw.h
-gl_start.o: ../fltk/PixelType.h ../fltk/draw.h ../fltk/visual.h ../fltk/gl.h
+Fl_Gl_Choice.o: Fl_Gl_Choice.cxx ../config.h GlChoice.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/x.h \
+  ../fltk/draw.h ../fltk/PixelType.h ../fltk/visual.h
+Fl_Gl_Overlay.o: Fl_Gl_Overlay.cxx ../config.h GlChoice.h \
+  ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h \
+  ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/x.h ../fltk/draw.h ../fltk/PixelType.h ../fltk/GlWindow.h \
+  ../fltk/damage.h
+Fl_Gl_Window.o: Fl_Gl_Window.cxx ../config.h GlChoice.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/x.h \
+  ../fltk/draw.h ../fltk/PixelType.h ../fltk/GlWindow.h ../fltk/damage.h \
+  ../fltk/error.h ../fltk/visual.h ../fltk/layout.h ../fltk/run.h
+gl_draw.o: gl_draw.cxx ../config.h ../fltk/draw.h ../fltk/Flags.h \
+  ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
+  ../fltk/PixelType.h ../fltk/Font.h ../fltk/Style.h ../fltk/gl.h \
+  ../fltk/utf.h GlChoice.h ../fltk/Window.h ../fltk/Group.h \
+  ../fltk/Widget.h ../fltk/x.h
+gl_start.o: gl_start.cxx ../config.h ../fltk/Window.h ../fltk/Group.h \
+  ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h GlChoice.h ../fltk/x.h \
+  ../fltk/draw.h ../fltk/PixelType.h ../fltk/visual.h ../fltk/gl.h

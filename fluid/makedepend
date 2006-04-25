@@ -1,192 +1,221 @@
-# DO NOT DELETE
-
-about_panel.o: about_panel.h ../fltk/DoubleBufferWindow.h ../fltk/Window.h
-about_panel.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
-about_panel.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-about_panel.o: ../fltk/Rectangle.h ../fltk/Group.h ../fltk/Widget.h
-about_panel.o: ../fltk/Button.h ../fltk/ReturnButton.h ../fltk/Button.h
-alignment_panel.o: alignment_panel.h ../fltk/Window.h ../fltk/Group.h
-alignment_panel.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-alignment_panel.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-alignment_panel.o: ../fltk/Group.h ../fltk/Input.h ../fltk/Widget.h
-alignment_panel.o: ../fltk/CheckButton.h ../fltk/Button.h ../fltk/Button.h
-code.o: ../fltk/run.h ../fltk/FL_API.h FluidType.h ../fltk/Widget.h
-code.o: Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h
-code.o: ../fltk/Symbol.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h
-code.o: ../fltk/PixelType.h alignment_panel.h ../fltk/Window.h
-code.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Group.h
-code.o: ../fltk/Input.h ../fltk/CheckButton.h ../fltk/Button.h
-code.o: ../fltk/Button.h coding_style.h ../fltk/TabGroup.h
-code.o: ../fltk/RadioButton.h ../fltk/CheckButton.h ../fltk/ValueInput.h
-code.o: ../fltk/Valuator.h ../fltk/FloatInput.h ../fltk/NumericInput.h
-code.o: ../fltk/Input.h ../fltk/filename.h ../fltk/ask.h ../fltk/FL_VERSION.h
-coding_style.o: coding_style.h ../fltk/Widget.h ../fltk/Window.h
-coding_style.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
-coding_style.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-coding_style.o: ../fltk/Rectangle.h ../fltk/TabGroup.h ../fltk/Group.h
-coding_style.o: ../fltk/RadioButton.h ../fltk/CheckButton.h
-coding_style.o: ../fltk/CheckButton.h ../fltk/Button.h ../fltk/ValueInput.h
-coding_style.o: ../fltk/Valuator.h ../fltk/FloatInput.h
-coding_style.o: ../fltk/NumericInput.h ../fltk/Input.h ../fltk/Button.h
-coding_style_func.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-coding_style_func.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
-coding_style_func.o: ../fltk/Flags.h ../fltk/Rectangle.h FluidType.h
-coding_style_func.o: ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-coding_style_func.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
-coding_style_func.o: ../fltk/PixelType.h
-factory.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h ../fltk/MenuBuild.h
-factory.o: ../fltk/ItemGroup.h ../fltk/Menu.h ../fltk/Group.h
-factory.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
-factory.o: ../fltk/Rectangle.h ../fltk/Item.h ../fltk/Divider.h
-factory.o: ../fltk/MenuBar.h Fluid_Plugins.h FluidType.h ../fltk/Widget.h
-factory.o: Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h
-factory.o: ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/InvisibleBox.h
-factory.o: ../fltk/Button.h ../fltk/ReturnButton.h ../fltk/Button.h
-factory.o: ../fltk/RepeatButton.h ../fltk/LightButton.h ../fltk/CheckButton.h
-factory.o: ../fltk/CheckButton.h ../fltk/RadioButton.h ../fltk/Input.h
-factory.o: ../fltk/Clock.h ../fltk/Adjuster.h ../fltk/Valuator.h
-factory.o: ../fltk/Box.h ../fltk/Dial.h ../fltk/ThumbWheel.h
-factory.o: ../fltk/ProgressBar.h ../fltk/Scrollbar.h ../fltk/Slider.h
-factory.o: ../fltk/Output.h ../fltk/Input.h ../fltk/ValueInput.h
-factory.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/ValueOutput.h
-factory.o: ../fltk/Valuator.h ../fltk/ValueSlider.h ../fltk/BarGroup.h
-factory.o: ../fltk/TextDisplay.h ../fltk/draw.h ../fltk/Scrollbar.h
-factory.o: ../fltk/TextBuffer.h ../fltk/Font.h ../fltk/TextEditor.h
-factory.o: ../fltk/TextDisplay.h ../fltk/Browser.h
-file.o: alignment_panel.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-file.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-file.o: ../fltk/Rectangle.h ../fltk/Group.h ../fltk/Input.h ../fltk/Widget.h
-file.o: ../fltk/CheckButton.h ../fltk/Button.h ../fltk/Button.h Fluid_Image.h
-file.o: Fluid_Plugins.h ../fltk/SharedImage.h ../fltk/Image.h
-file.o: ../fltk/Symbol.h ../fltk/PixelType.h FluidType.h ../fltk/FL_VERSION.h
-file.o: ../fltk/ask.h
-Fl_Function_Type.o: ../fltk/run.h ../fltk/FL_API.h FluidType.h
-Fl_Function_Type.o: ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-Fl_Function_Type.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
-Fl_Function_Type.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Function_Type.o: ../fltk/PixelType.h ../fltk/ask.h ../fltk/Style.h
-Fl_Function_Type.o: ../fltk/Preferences.h ../fltk/FL_API.h ../fltk/Browser.h
-Fl_Function_Type.o: ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h
-Fl_Function_Type.o: ../fltk/Scrollbar.h coding_style.h ../fltk/Window.h
-Fl_Function_Type.o: ../fltk/TabGroup.h ../fltk/Group.h ../fltk/RadioButton.h
-Fl_Function_Type.o: ../fltk/CheckButton.h ../fltk/CheckButton.h
-Fl_Function_Type.o: ../fltk/Button.h ../fltk/ValueInput.h ../fltk/Valuator.h
-Fl_Function_Type.o: ../fltk/FloatInput.h ../fltk/NumericInput.h
-Fl_Function_Type.o: ../fltk/Input.h ../fltk/Button.h function_panel.h
-Fl_Function_Type.o: ../fltk/Input.h ../fltk/ReturnButton.h ../fltk/Choice.h
-Fl_Function_Type.o: ../fltk/Item.h ../fltk/MultiLineInput.h
-Fl_Function_Type.o: ../fltk/DoubleBufferWindow.h ../fltk/Window.h
-Fl_Function_Type.o: ../fltk/InvisibleBox.h ../fltk/LightButton.h
-Fl_Function_Type.o: ../fltk/PopupMenu.h comments.h
-Fl_Group_Type.o: FluidType.h ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-Fl_Group_Type.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
-Fl_Group_Type.o: ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h
-Fl_Group_Type.o: ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/events.h
-Fl_Group_Type.o: ../fltk/run.h ../fltk/Group.h ../fltk/ask.h ../fltk/Style.h
-Fl_Group_Type.o: ../fltk/PackedGroup.h ../fltk/Group.h ../fltk/Widget.h
-Fl_Group_Type.o: ../fltk/TabGroup.h ../fltk/ScrollGroup.h ../fltk/Scrollbar.h
-Fl_Menu_Type.o: ../fltk/events.h ../fltk/FL_API.h FluidType.h
-Fl_Menu_Type.o: ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-Fl_Menu_Type.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
-Fl_Menu_Type.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Menu_Type.o: ../fltk/PixelType.h ../fltk/ask.h ../fltk/Style.h
-Fl_Menu_Type.o: ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h
-Fl_Menu_Type.o: ../fltk/Item.h ../fltk/ItemGroup.h ../fltk/Menu.h
-Fl_Menu_Type.o: ../fltk/Divider.h ../fltk/Button.h ../fltk/PopupMenu.h
-Fl_Menu_Type.o: ../fltk/Choice.h ../fltk/MenuBar.h ../fltk/InputBrowser.h
-Fl_Menu_Type.o: ../fltk/Input.h ../fltk/Browser.h ../fltk/Scrollbar.h
-Fl_Menu_Type.o: ../fltk/FileBrowser.h ../fltk/FileIcon.h ../fltk/Output.h
-Fl_Menu_Type.o: ../fltk/Input.h Shortcut_Button.h ../fltk/draw.h
-Fl_Type.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/MultiBrowser.h
-Fl_Type.o: ../fltk/Browser.h ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h
-Fl_Type.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
-Fl_Type.o: ../fltk/Rectangle.h ../fltk/Scrollbar.h ../fltk/Item.h
-Fl_Type.o: ../fltk/draw.h ../fltk/PixelType.h FluidType.h ../fltk/Widget.h
-Fl_Type.o: Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h
-Fl_Type.o: ../fltk/Image.h ../fltk/Symbol.h
-fluid.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/visual.h ../fltk/events.h
-fluid.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
-fluid.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Box.h
-fluid.o: ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/Button.h
-fluid.o: ../fltk/Browser.h ../fltk/Menu.h ../fltk/Scrollbar.h
-fluid.o: ../fltk/MenuBar.h ../fltk/Input.h ../fltk/Tooltip.h
-fluid.o: ../fltk/MenuWindow.h ../fltk/Window.h ../fltk/ask.h ../fltk/draw.h
-fluid.o: ../fltk/file_chooser.h ../fltk/filename.h ../fltk/FileIcon.h
-fluid.o: ../fltk/Preferences.h ../fltk/FL_API.h ../fltk/MenuBuild.h
-fluid.o: ../fltk/ItemGroup.h ../fltk/Item.h ../fltk/Divider.h
-fluid.o: ../fltk/string.h about_panel.h ../fltk/DoubleBufferWindow.h
-fluid.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/ReturnButton.h
-fluid.o: ../fltk/Button.h Fluid_Plugins.h FluidType.h Fluid_Image.h
-fluid.o: ../fltk/SharedImage.h ../fltk/Image.h coding_style.h
-fluid.o: ../fltk/TabGroup.h ../fltk/RadioButton.h ../fltk/CheckButton.h
-fluid.o: ../fltk/CheckButton.h ../fltk/ValueInput.h ../fltk/Valuator.h
-fluid.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
-fluid.o: ../fltk/StyleSet.h
-Fluid_Image.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Widget.h FluidType.h
-Fluid_Image.o: Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h
-Fluid_Image.o: ../fltk/Image.h ../fltk/Symbol.h ../fltk/Color.h
-Fluid_Image.o: ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/PixelType.h
-Fluid_Image.o: ../fltk/filename.h ../fltk/xbmImage.h ../fltk/file_chooser.h
-Fluid_Image.o: image_file_panel.h ../fltk/Window.h ../fltk/Group.h
-Fluid_Image.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Input.h
-Fluid_Image.o: ../fltk/Button.h ../fltk/ReturnButton.h ../fltk/Button.h
-Fluid_Image.o: image_file_panel.cxx
-Fluid_Plugins.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h
-Fluid_Plugins.o: Fluid_Plugins.h ../fltk/compat/FL/Fl_Menu_Item.H ../fltk/Widget.h
-Fluid_Plugins.o: ../fltk/load_plugin.h
-Fl_Widget_Type.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h
-Fl_Widget_Type.o: Fluid_Plugins.h FluidType.h ../fltk/Widget.h Fluid_Image.h
-Fl_Widget_Type.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
-Fl_Widget_Type.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h
-Fl_Widget_Type.o: ../fltk/PixelType.h ../fltk/ask.h ../fltk/Style.h
-Fl_Widget_Type.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/Window.h
-Fl_Widget_Type.o: ../fltk/Group.h ../fltk/Widget.h coding_style.h
-Fl_Widget_Type.o: ../fltk/TabGroup.h ../fltk/RadioButton.h
-Fl_Widget_Type.o: ../fltk/CheckButton.h ../fltk/CheckButton.h
-Fl_Widget_Type.o: ../fltk/Button.h ../fltk/ValueInput.h ../fltk/FloatInput.h
-Fl_Widget_Type.o: ../fltk/NumericInput.h ../fltk/Input.h ../fltk/Button.h
-Fl_Widget_Type.o: ../fltk/StyleSet.h widget_panel.h ../fltk/Input.h
-Fl_Widget_Type.o: ../fltk/Choice.h ../fltk/Menu.h Shortcut_Button.h
-Fl_Widget_Type.o: ../fltk/WordwrapInput.h ../fltk/LightButton.h
-Fl_Widget_Type.o: ../fltk/MultiLineInput.h ../fltk/ReturnButton.h
-Fl_Widget_Type.o: ../fltk/ColorChooser.h
-Fl_Window_Type.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
-Fl_Window_Type.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-Fl_Window_Type.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
-Fl_Window_Type.o: ../fltk/Rectangle.h ../fltk/ask.h ../fltk/draw.h
-Fl_Window_Type.o: ../fltk/PixelType.h ../fltk/Box.h ../fltk/Symbol.h
-Fl_Window_Type.o: ../fltk/layout.h ../fltk/Preferences.h ../fltk/FL_API.h
-Fl_Window_Type.o: FluidType.h ../fltk/Widget.h Fluid_Plugins.h Fluid_Image.h
-Fl_Window_Type.o: ../fltk/SharedImage.h ../fltk/Image.h alignment_panel.h
-Fl_Window_Type.o: ../fltk/Group.h ../fltk/Input.h ../fltk/CheckButton.h
-Fl_Window_Type.o: ../fltk/Button.h ../fltk/Button.h ../fltk/ItemGroup.h
-Fl_Window_Type.o: ../fltk/Menu.h ../fltk/Item.h ../fltk/StyleSet.h
-Fl_Window_Type.o: widget_panel.h ../fltk/TabGroup.h ../fltk/Choice.h
-Fl_Window_Type.o: ../fltk/ValueInput.h ../fltk/Valuator.h
-Fl_Window_Type.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
-Fl_Window_Type.o: Shortcut_Button.h ../fltk/WordwrapInput.h
-Fl_Window_Type.o: ../fltk/LightButton.h ../fltk/CheckButton.h
-Fl_Window_Type.o: ../fltk/MultiLineInput.h ../fltk/ReturnButton.h
-Fl_Window_Type.o: ../fltk/MenuBar.h
-function_panel.o: function_panel.h ../fltk/Window.h ../fltk/Group.h
-function_panel.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-function_panel.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-function_panel.o: ../fltk/CheckButton.h ../fltk/Button.h ../fltk/Input.h
-function_panel.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/Choice.h
-function_panel.o: ../fltk/Menu.h ../fltk/Item.h ../fltk/MultiLineInput.h
-function_panel.o: ../fltk/Input.h ../fltk/Widget.h
-function_panel.o: ../fltk/DoubleBufferWindow.h ../fltk/Window.h
-function_panel.o: ../fltk/Group.h ../fltk/InvisibleBox.h
-function_panel.o: ../fltk/LightButton.h ../fltk/CheckButton.h
-function_panel.o: ../fltk/PopupMenu.h
-widget_panel.o: widget_panel.h ../fltk/Window.h ../fltk/Group.h
-widget_panel.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-widget_panel.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h
-widget_panel.o: ../fltk/TabGroup.h ../fltk/Group.h ../fltk/Input.h
-widget_panel.o: ../fltk/Choice.h ../fltk/Menu.h ../fltk/Widget.h
-widget_panel.o: ../fltk/Button.h ../fltk/CheckButton.h ../fltk/Button.h
-widget_panel.o: ../fltk/ValueInput.h ../fltk/Valuator.h ../fltk/FloatInput.h
-widget_panel.o: ../fltk/NumericInput.h ../fltk/Input.h Shortcut_Button.h
-widget_panel.o: ../fltk/WordwrapInput.h ../fltk/LightButton.h
-widget_panel.o: ../fltk/CheckButton.h ../fltk/MultiLineInput.h
-widget_panel.o: ../fltk/ReturnButton.h
+about_panel.o: about_panel.cxx about_panel.h ../fltk/DoubleBufferWindow.h \
+  ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h \
+  ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/Button.h ../fltk/ReturnButton.h
+alignment_panel.o: alignment_panel.cxx alignment_panel.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Input.h \
+  ../fltk/CheckButton.h ../fltk/Button.h FluidType.h \
+  ../fltk/Preferences.h Fluid_Plugins.h Fluid_Image.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h
+code.o: code.cxx ../fltk/run.h ../fltk/FL_API.h FluidType.h \
+  ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h \
+  ../fltk/Rectangle.h ../fltk/Preferences.h Fluid_Plugins.h Fluid_Image.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h alignment_panel.h ../fltk/Window.h ../fltk/Group.h \
+  ../fltk/Input.h ../fltk/CheckButton.h ../fltk/Button.h coding_style.h \
+  ../fltk/TabGroup.h ../fltk/RadioButton.h ../fltk/ValueInput.h \
+  ../fltk/Valuator.h ../fltk/FloatInput.h ../fltk/NumericInput.h \
+  ../fltk/filename.h ../fltk/ask.h ../fltk/FL_VERSION.h
+coding_style.o: coding_style.cxx coding_style.h ../fltk/Widget.h \
+  ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h \
+  ../fltk/Rectangle.h ../fltk/Window.h ../fltk/Group.h ../fltk/TabGroup.h \
+  ../fltk/RadioButton.h ../fltk/CheckButton.h ../fltk/Button.h \
+  ../fltk/ValueInput.h ../fltk/Valuator.h ../fltk/FloatInput.h \
+  ../fltk/NumericInput.h ../fltk/Input.h
+coding_style_func.o: coding_style_func.cxx ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h FluidType.h \
+  ../fltk/Preferences.h Fluid_Plugins.h Fluid_Image.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h
+factory.o: factory.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Group.h \
+  ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h \
+  ../fltk/Rectangle.h ../fltk/MenuBuild.h ../fltk/ItemGroup.h \
+  ../fltk/Menu.h ../fltk/Item.h ../fltk/Divider.h ../fltk/MenuBar.h \
+  ../fltk/string.h FluidType.h ../fltk/Preferences.h Fluid_Plugins.h \
+  Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h FunctionType.h WidgetType.h ../fltk/Box.h \
+  ../fltk/TabGroup.h ../fltk/PopupMenu.h ../fltk/Choice.h \
+  ../fltk/InputBrowser.h ../fltk/Input.h ../fltk/FileBrowser.h \
+  ../fltk/Browser.h ../fltk/Scrollbar.h ../fltk/Slider.h \
+  ../fltk/Valuator.h ../fltk/FileIcon.h ../fltk/filename.h \
+  ../fltk/InvisibleBox.h ../fltk/Button.h ../fltk/ReturnButton.h \
+  ../fltk/RepeatButton.h ../fltk/LightButton.h ../fltk/CheckButton.h \
+  ../fltk/RadioButton.h ../fltk/Clock.h ../fltk/Adjuster.h ../fltk/Dial.h \
+  ../fltk/ThumbWheel.h ../fltk/TextDisplay.h ../fltk/draw.h \
+  ../fltk/TextBuffer.h ../fltk/Font.h ../fltk/TextEditor.h \
+  ../fltk/FileInput.h ../fltk/ProgressBar.h ../fltk/Output.h \
+  ../fltk/ValueInput.h ../fltk/FloatInput.h ../fltk/NumericInput.h \
+  ../fltk/ValueOutput.h ../fltk/ValueSlider.h ../fltk/BarGroup.h \
+  factory.h fluid_img.h ../fltk/xpmImage.h
+file.o: file.cxx ../fltk/FL_VERSION.h alignment_panel.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Input.h \
+  ../fltk/CheckButton.h ../fltk/Button.h Fluid_Image.h Fluid_Plugins.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h FluidType.h ../fltk/Preferences.h factory.h \
+  ../fltk/ask.h
+Fl_Function_Type.o: Fl_Function_Type.cxx ../fltk/run.h ../fltk/FL_API.h \
+  FluidType.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Preferences.h \
+  Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h \
+  ../fltk/Symbol.h ../fltk/PixelType.h FunctionType.h ../fltk/ask.h \
+  ../fltk/Browser.h ../fltk/Menu.h ../fltk/Group.h ../fltk/Scrollbar.h \
+  ../fltk/Slider.h ../fltk/Valuator.h coding_style.h ../fltk/Window.h \
+  ../fltk/TabGroup.h ../fltk/RadioButton.h ../fltk/CheckButton.h \
+  ../fltk/Button.h ../fltk/ValueInput.h ../fltk/FloatInput.h \
+  ../fltk/NumericInput.h ../fltk/Input.h function_panel.h \
+  ../fltk/ReturnButton.h ../fltk/Choice.h ../fltk/Item.h \
+  ../fltk/MultiLineInput.h ../fltk/DoubleBufferWindow.h \
+  ../fltk/InvisibleBox.h ../fltk/LightButton.h ../fltk/PopupMenu.h \
+  comments.h
+Fl_Group_Type.o: Fl_Group_Type.cxx ../fltk/events.h ../fltk/FL_API.h \
+  ../fltk/run.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h \
+  ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/ask.h \
+  FluidType.h ../fltk/Preferences.h Fluid_Plugins.h Fluid_Image.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h WidgetType.h ../fltk/Box.h ../fltk/TabGroup.h \
+  ../fltk/PopupMenu.h ../fltk/Menu.h ../fltk/Choice.h ../fltk/MenuBar.h \
+  ../fltk/InputBrowser.h ../fltk/Input.h ../fltk/FileBrowser.h \
+  ../fltk/Browser.h ../fltk/Scrollbar.h ../fltk/Slider.h \
+  ../fltk/Valuator.h ../fltk/FileIcon.h ../fltk/filename.h \
+  ../fltk/Divider.h ../fltk/InvisibleBox.h ../fltk/Button.h \
+  ../fltk/ReturnButton.h ../fltk/RepeatButton.h ../fltk/LightButton.h \
+  ../fltk/CheckButton.h ../fltk/RadioButton.h ../fltk/Clock.h \
+  ../fltk/Adjuster.h ../fltk/Dial.h ../fltk/ThumbWheel.h \
+  ../fltk/TextDisplay.h ../fltk/draw.h ../fltk/TextBuffer.h \
+  ../fltk/Font.h ../fltk/TextEditor.h ../fltk/FileInput.h \
+  ../fltk/ProgressBar.h ../fltk/Output.h ../fltk/ValueInput.h \
+  ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/ValueOutput.h \
+  ../fltk/ValueSlider.h ../fltk/BarGroup.h ../fltk/PackedGroup.h \
+  ../fltk/ScrollGroup.h
+Fl_Menu_Type.o: Fl_Menu_Type.cxx ../fltk/events.h ../fltk/FL_API.h \
+  FluidType.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Preferences.h \
+  Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h \
+  ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/ask.h ../fltk/Menu.h \
+  ../fltk/Group.h ../fltk/Item.h ../fltk/ItemGroup.h ../fltk/Divider.h \
+  ../fltk/Button.h WidgetType.h ../fltk/Box.h ../fltk/TabGroup.h \
+  ../fltk/PopupMenu.h ../fltk/Choice.h ../fltk/MenuBar.h \
+  ../fltk/InputBrowser.h ../fltk/Input.h ../fltk/FileBrowser.h \
+  ../fltk/Browser.h ../fltk/Scrollbar.h ../fltk/Slider.h \
+  ../fltk/Valuator.h ../fltk/FileIcon.h ../fltk/filename.h \
+  ../fltk/InvisibleBox.h ../fltk/ReturnButton.h ../fltk/RepeatButton.h \
+  ../fltk/LightButton.h ../fltk/CheckButton.h ../fltk/RadioButton.h \
+  ../fltk/Clock.h ../fltk/Adjuster.h ../fltk/Dial.h ../fltk/ThumbWheel.h \
+  ../fltk/TextDisplay.h ../fltk/draw.h ../fltk/TextBuffer.h \
+  ../fltk/Font.h ../fltk/TextEditor.h ../fltk/FileInput.h \
+  ../fltk/ProgressBar.h ../fltk/Output.h ../fltk/ValueInput.h \
+  ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/ValueOutput.h \
+  ../fltk/ValueSlider.h ../fltk/BarGroup.h Shortcut_Button.h
+Fl_Type.o: Fl_Type.cxx ../fltk/run.h ../fltk/FL_API.h \
+  ../fltk/MultiBrowser.h ../fltk/Browser.h ../fltk/Menu.h ../fltk/Group.h \
+  ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h \
+  ../fltk/Rectangle.h ../fltk/Scrollbar.h ../fltk/Slider.h \
+  ../fltk/Valuator.h ../fltk/Item.h ../fltk/draw.h ../fltk/PixelType.h \
+  ../fltk/events.h ../fltk/damage.h ../fltk/filename.h FluidType.h \
+  ../fltk/Preferences.h Fluid_Plugins.h Fluid_Image.h \
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
+fluid.o: fluid.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/visual.h \
+  ../fltk/events.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h \
+  ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/Box.h ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/Button.h \
+  ../fltk/Browser.h ../fltk/Menu.h ../fltk/Scrollbar.h ../fltk/Slider.h \
+  ../fltk/Valuator.h ../fltk/MenuBar.h ../fltk/Input.h ../fltk/Tooltip.h \
+  ../fltk/MenuWindow.h ../fltk/ask.h ../fltk/draw.h \
+  ../fltk/file_chooser.h ../fltk/filename.h ../fltk/FileIcon.h \
+  ../fltk/Preferences.h ../fltk/MenuBuild.h ../fltk/ItemGroup.h \
+  ../fltk/Item.h ../fltk/Divider.h ../fltk/string.h about_panel.h \
+  ../fltk/DoubleBufferWindow.h ../fltk/ReturnButton.h alignment_panel.h \
+  ../fltk/CheckButton.h widget_panel.h ../fltk/TabGroup.h \
+  ../fltk/Choice.h ../fltk/ValueInput.h ../fltk/FloatInput.h \
+  ../fltk/NumericInput.h Shortcut_Button.h ../fltk/WordwrapInput.h \
+  ../fltk/LightButton.h ../fltk/MultiLineInput.h Fluid_Plugins.h \
+  FluidType.h Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h \
+  coding_style.h ../fltk/RadioButton.h factory.h ../fltk/StyleSet.h
+Fluid_Image.o: Fluid_Image.cxx ../fltk/run.h ../fltk/FL_API.h \
+  ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h \
+  ../fltk/Rectangle.h FluidType.h ../fltk/Preferences.h Fluid_Plugins.h \
+  Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/PixelType.h ../fltk/filename.h ../fltk/xbmImage.h \
+  ../fltk/file_chooser.h image_file_panel.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Input.h ../fltk/Button.h ../fltk/ReturnButton.h \
+  image_file_panel.cxx
+Fluid_Plugins.o: Fluid_Plugins.cxx ../fltk/run.h ../fltk/FL_API.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h Fluid_Plugins.h \
+  ../fltk/load_plugin.h
+Fl_Widget_Type.o: Fl_Widget_Type.cxx ../fltk/run.h ../fltk/FL_API.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h Fluid_Plugins.h FluidType.h \
+  ../fltk/Preferences.h Fluid_Image.h ../fltk/SharedImage.h \
+  ../fltk/Image.h ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/ask.h \
+  ../fltk/Slider.h ../fltk/Valuator.h ../fltk/Window.h coding_style.h \
+  ../fltk/TabGroup.h ../fltk/RadioButton.h ../fltk/CheckButton.h \
+  ../fltk/Button.h ../fltk/ValueInput.h ../fltk/FloatInput.h \
+  ../fltk/NumericInput.h ../fltk/Input.h factory.h ../fltk/StyleSet.h \
+  widget_panel.h ../fltk/Choice.h ../fltk/Menu.h Shortcut_Button.h \
+  ../fltk/WordwrapInput.h ../fltk/LightButton.h ../fltk/MultiLineInput.h \
+  ../fltk/ReturnButton.h ../fltk/ColorChooser.h
+Fl_Window_Type.o: Fl_Window_Type.cxx ../fltk/events.h ../fltk/FL_API.h \
+  ../fltk/damage.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h \
+  ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/ask.h ../fltk/draw.h ../fltk/PixelType.h ../fltk/Box.h \
+  ../fltk/Symbol.h ../fltk/layout.h ../fltk/Preferences.h FluidType.h \
+  Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h ../fltk/Image.h \
+  alignment_panel.h ../fltk/Input.h ../fltk/CheckButton.h \
+  ../fltk/Button.h ../fltk/ItemGroup.h ../fltk/Menu.h ../fltk/Item.h \
+  ../fltk/StyleSet.h widget_panel.h ../fltk/TabGroup.h ../fltk/Choice.h \
+  ../fltk/ValueInput.h ../fltk/Valuator.h ../fltk/FloatInput.h \
+  ../fltk/NumericInput.h Shortcut_Button.h ../fltk/WordwrapInput.h \
+  ../fltk/LightButton.h ../fltk/MultiLineInput.h ../fltk/ReturnButton.h \
+  ../fltk/MenuBar.h
+function_panel.o: function_panel.cxx function_panel.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/CheckButton.h ../fltk/Button.h ../fltk/Input.h \
+  ../fltk/ReturnButton.h ../fltk/Choice.h ../fltk/Menu.h ../fltk/Item.h \
+  ../fltk/MultiLineInput.h ../fltk/DoubleBufferWindow.h \
+  ../fltk/InvisibleBox.h ../fltk/LightButton.h ../fltk/PopupMenu.h
+fluid_img.o: fluid_img.cxx ../pixmaps/fluid/lock.xpm \
+  ../pixmaps/fluid/flWindow.xpm ../pixmaps/fluid/flButton.xpm \
+  ../pixmaps/fluid/flCheckButton.xpm ../pixmaps/fluid/flRoundButton.xpm \
+  ../pixmaps/fluid/flBox.xpm ../pixmaps/fluid/flGroup.xpm \
+  ../pixmaps/fluid/flFunction.xpm ../pixmaps/fluid/flCode.xpm \
+  ../pixmaps/fluid/flCodeBlock.xpm ../pixmaps/fluid/flComment.xpm \
+  ../pixmaps/fluid/flDeclaration.xpm \
+  ../pixmaps/fluid/flDeclarationBlock.xpm ../pixmaps/fluid/flClass.xpm \
+  ../pixmaps/fluid/flNamespace.xpm ../pixmaps/fluid/flTabs.xpm \
+  ../pixmaps/fluid/flInput.xpm ../pixmaps/fluid/flChoice.xpm \
+  ../pixmaps/fluid/flMenuitem.xpm ../pixmaps/fluid/flMenubar.xpm \
+  ../pixmaps/fluid/flSubmenu.xpm ../pixmaps/fluid/flScroll.xpm \
+  ../pixmaps/fluid/flTile.xpm ../pixmaps/fluid/flWizard.xpm \
+  ../pixmaps/fluid/flPack.xpm ../pixmaps/fluid/flReturnButton.xpm \
+  ../pixmaps/fluid/flLightButton.xpm ../pixmaps/fluid/flRepeatButton.xpm \
+  ../pixmaps/fluid/flMenuButton.xpm ../pixmaps/fluid/flOutput.xpm \
+  ../pixmaps/fluid/flTextDisplay.xpm ../pixmaps/fluid/flTextEdit.xpm \
+  ../pixmaps/fluid/flFileInput.xpm ../pixmaps/fluid/flBrowser.xpm \
+  ../pixmaps/fluid/flCheckBrowser.xpm ../pixmaps/fluid/flFileBrowser.xpm \
+  ../pixmaps/fluid/flClock.xpm ../pixmaps/fluid/flHelp.xpm \
+  ../pixmaps/fluid/flProgress.xpm ../pixmaps/fluid/flSlider.xpm \
+  ../pixmaps/fluid/flScrollBar.xpm ../pixmaps/fluid/flValueSlider.xpm \
+  ../pixmaps/fluid/flAdjuster.xpm ../pixmaps/fluid/flCounter.xpm \
+  ../pixmaps/fluid/flDial.xpm ../pixmaps/fluid/flRoller.xpm \
+  ../pixmaps/fluid/flValueInput.xpm ../pixmaps/fluid/flValueOutput.xpm \
+  ../pixmaps/fluid/flSpinner.xpm ../pixmaps/fluid/flWidgetClass.xpm \
+  fluid_img.h ../fltk/xpmImage.h ../fltk/Image.h ../fltk/Symbol.h \
+  ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h \
+  ../fltk/PixelType.h
+widget_panel.o: widget_panel.cxx widget_panel.h ../fltk/Window.h \
+  ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Button.h \
+  ../fltk/TabGroup.h ../fltk/Input.h ../fltk/Choice.h ../fltk/Menu.h \
+  ../fltk/CheckButton.h ../fltk/ValueInput.h ../fltk/Valuator.h \
+  ../fltk/FloatInput.h ../fltk/NumericInput.h Shortcut_Button.h \
+  ../fltk/WordwrapInput.h ../fltk/LightButton.h ../fltk/MultiLineInput.h \
+  ../fltk/ReturnButton.h ../fltk/xpmImage.h ../fltk/Image.h \
+  ../fltk/Symbol.h ../fltk/PixelType.h FluidType.h ../fltk/Preferences.h \
+  Fluid_Plugins.h Fluid_Image.h ../fltk/SharedImage.h fluid_img.h \
+  factory.h

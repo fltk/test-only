@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -78,7 +77,7 @@ void ShapedWindow::draw() {
     xbmImage* mask = resize_bitmap(shape_, w(), h());
 #if USE_X11
     Pixmap pmask = XCreateBitmapFromData(xdisplay, xid(this),
-					 (const char*)mask->pixels() , mask->width(), mask->height());
+                  (const char*)mask->array, mask->width(), mask->height());
     hide();
     XShapeCombineMask(xdisplay, xid(this), ShapeBounding, 0, 0,
                       pmask, ShapeSet);
@@ -131,7 +130,7 @@ static HRGN bitmap2region(xbmImage* bitmap) {
   SetRect(&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
   const int bpl = (bitmap->width()+7)/8; // number of bytes per line of pixels
-  BYTE* p8 = (BYTE*)bitmap->data();
+  BYTE* p8 = (BYTE*)bitmap->array;
   BYTE* p;
   for (int y = 0; y < bitmap->height(); y++) {
     /* Scan each bitmap row from left to right*/

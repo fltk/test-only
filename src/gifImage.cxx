@@ -54,29 +54,48 @@
 
 using namespace fltk;
 
+// The callback from drawimage to get a row of data passes this:
+struct Drawimage_data {
+  int w;
+  const uchar* Image;
+  U32 colors[256];
+};
+
+// callback for 1 byte per pixel:
+static const uchar* drawimage_cb(void*v, int x, int y, int w, uchar* buf) {
+  Drawimage_data& d = *(Drawimage_data*)v;
+  const uchar* p = d.Image+y*d.w+x;
+  U32* q = (U32*)buf;
+  for (int X=w; X--;) *q++ = d.colors[*p++];
+  return buf;
+}
+
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
-bool gifImage::fetch() {
-  const uchar* dat = pixels();
+void gifImage::read() {
+
   FILE *GifFile=0;
+  const uchar* dat = inline_data;
 
   if (dat) {
     dat += 6;
   } else { // set up to read from file, quit silently on any errors:
-    GifFile=fopen(get_filename(), "rb");
+    GifFile = fopen(get_filename(), "rb");
+    if (!GifFile) return;
     char b[6];
-    if (!GifFile || fread(b,1,6,GifFile) < 6 ||
+    if (fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      if (GifFile) fclose(GifFile);
-      return false;
+      fclose(GifFile);
+      return;
     }
   }
 
-  int inumber=0; // which image from animated gif file to read
-
+  Drawimage_data d;
   int Width; GETSHORT(Width);
   int Height; GETSHORT(Height);
+
+  int inumber=0; // which image from animated gif file to read
 
   uchar ch = NEXTBYTE;
   char HasColormap = ((ch & 0x80) != 0);
@@ -90,17 +109,21 @@ bool gifImage::fetch() {
   // Read in global colormap:
   uchar transparent_pixel = 0;
   char has_transparent = 0;
-  uchar Red[256], Green[256], Blue[256]; /* color map */
+
   if (HasColormap) {
-    for (int i=0; i < ColorMapSize; i++) {	
-      Red[i] = NEXTBYTE;
-      Green[i] = NEXTBYTE;
-      Blue[i] = NEXTBYTE;
+    for (int i=0; i < ColorMapSize; i++) {
+      uchar red = NEXTBYTE;
+      uchar green = NEXTBYTE;
+      uchar blue = NEXTBYTE;
+      // store ARGB32 color:
+      d.colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
     }
   } else {
     //    fprintf(stderr,"%s does not have a colormap.\n", infname);
-    for (int i = 0; i < ColorMapSize; i++)
-      Red[i] = Green[i] = Blue[i] = (i*256+ColorMapSize-1)/ColorMapSize;
+    for (int i = 0; i < ColorMapSize; i++) {
+      int gray = (i*256+ColorMapSize-1)/ColorMapSize;
+      d.colors[i] = 0xff000000 | (0x10101 * gray);
+    }
   }
 
   int CodeSize;		/* Code size, init from GIF header, increases... */
@@ -109,7 +132,7 @@ bool gifImage::fetch() {
   for (;;) {
 
     int i = NEXTBYTE;
-    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return false;}
+    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return;}
     int blocklen;
 
     //  if (i == 0x3B) return;  eof code
@@ -161,9 +184,11 @@ bool gifImage::fetch() {
 	// read local color map
 	int n = 2 << (ch&7);
 	for (i=0; i < n; i++) {
-	  Red[i] = NEXTBYTE;
-	  Green[i] = NEXTBYTE;
-	  Blue[i] = NEXTBYTE;
+	  uchar red = NEXTBYTE;
+	  uchar green = NEXTBYTE;
+	  uchar blue = NEXTBYTE;
+	  // store ARGB32 color:
+	  d.colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
 	}
       }
       CodeSize = NEXTBYTE+1;
@@ -188,7 +213,7 @@ bool gifImage::fetch() {
   uchar *Image = new uchar[Width*Height];
   if (!Image) {
     //fprintf (stderr, "Insufficient memory\n");
-    return false;
+    return;
   }
   int YC = 0, Pass = 0; /* Used to de-interlace the picture */
   uchar *p = Image;
@@ -287,89 +312,25 @@ bool gifImage::fetch() {
     }
     OldCode = CurCode;
   }
+  if (GifFile) fclose(GifFile);
 
-  // We are done reading the file, now convert to xpm:
+  d.w = Width;
+  d.Image = Image;
+  if (has_transparent) d.colors[transparent_pixel] = 0;
 
-  // allocate line pointer arrays:
-  char** data = (char**) alloc_data(sizeof(char*)*(Height+3));
-  int* length = new int[Height+2];
+  GSave gsave;
+  make_current();
+  drawimage(drawimage_cb, &d,
+	    has_transparent ? ARGB32 : RGB32,
+	    Rectangle(Width, Height));
 
-  // transparent pixel must be zero, swap if it isn't:
-  if (has_transparent && transparent_pixel != 0) {
-    // swap transparent pixel with zero
-    p = Image+Width*Height;
-    while (p-- > Image) {
-      if (*p==transparent_pixel) *p = 0;
-      else if (!*p) *p = transparent_pixel;
-    }
-    uchar t;
-    t = Red[0]; Red[0] = Red[transparent_pixel]; Red[transparent_pixel] = t;
-    t =Green[0];Green[0]=Green[transparent_pixel];Green[transparent_pixel]=t;
-    t =Blue[0];Blue[0] =Blue[transparent_pixel];Blue[transparent_pixel] = t;
-  }
-
-  // find out what colors are actually used:
-  uchar used[256]; uchar remap[256];
-  int i;
-  for (i = 0; i < ColorMapSize; i++) used[i] = 0;
-  p = Image+Width*Height;
-  while (p-- > Image) used[*p] = 1;
-
-  // remap them to start with printing characters:
-  int base = has_transparent && used[0] ? ' ' : ' '+1;
-  int numcolors = 0;
-  for (i = 0; i < ColorMapSize; i++) if (used[i]) {
-    remap[i] = base++;
-    numcolors++;
-  }
-
-  // write the first line of xpm data (use suffix as temp array):
-  length[0] = sprintf((char*)(Suffix),
-		      "%d %d %d %d",Width,Height,-numcolors,1);
-  data[0] = new char[length[0]+1];
-  strcpy(data[0], (char*)Suffix);
-
-  // write the colormap
-  length[1] = 4*numcolors;
-  data[1] = (char*)(p = new uchar[4*numcolors]);
-  for (i = 0; i < ColorMapSize; i++) if (used[i]) {
-    *p++ = remap[i];
-    *p++ = Red[i];
-    *p++ = Green[i];
-    *p++ = Blue[i];
-  }
-
-  // remap the image data:
-  p = Image+Width*Height;
-  while (p-- > Image) *p = remap[*p];
-
-  // split the image data into lines:
-  for (i=0; i<Height; i++) {
-    data[i+2] = (char*)(Image + i*Width);
-    length[i+2] = Width;
-  }
-
-  data[Height+2] = 0; // null to end string array
-
-  //  delete[] Image;
-  // update info for this buffer 
-  pixel_type(MONO);
-  h(Height);
-  w(Width);
-
-  //delete[] Image;
-  //delete[] data[0];  delete[] data[1];  delete[] data;
-  delete[] length;
-  
-  fclose(GifFile);
-
-  return true;
+  delete[] Image;
 }
 
 /*! Tests block of data to see if it looks like the start of a .gif file. */
-bool gifImage::test(const uchar *datas, unsigned size)
+bool gifImage::test(const uchar *file_header, unsigned size)
 {
-  return !strncmp((char*) datas,"GIF", 3);
+  return !strncmp((char*)file_header, "GIF", 3);
 }
 
 void gifImage::_measure(int &W, int &H) const
@@ -380,8 +341,8 @@ void gifImage::_measure(int &W, int &H) const
     return; 
   }
 
-  const uchar* dat = pixels();
   FILE *GifFile=0;
+  const uchar* dat = inline_data;
 
   if (dat) {
     dat += 6;
@@ -400,17 +361,7 @@ void gifImage::_measure(int &W, int &H) const
   const_cast<gifImage*>(this)->setsize(w,h);
   W = w; 
   H = h;
-  if (!pixels()) fclose(GifFile);
-}
-
-void gifImage::read()
-{
-  fetch();
-
-  {GSave gsave;
-  make_current();
-  draw_xpm(data(), 0, 0);
-  }
+  if (GifFile) fclose(GifFile);
 }
 
 //

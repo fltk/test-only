@@ -141,7 +141,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(275, 80, 35, 20, "Bksp");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::BackSpaceKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(325, 80, 20, 20, "Ins ");
       o->labelsize(8);
@@ -174,7 +174,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(15, 100, 27, 20, "Tab");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::TabKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(42, 100, 20, 20, "Q");
       o->labelsize(10);
@@ -227,7 +227,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(282, 100, 28, 20, "\\");
       o->labelsize(10);
       o->callback((fltk::Callback*)key_cb);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(325, 100, 20, 20, "Del ");
       o->labelsize(8);
@@ -257,12 +257,12 @@ fltk::Window* make_window() {
       o->set_vertical();
       o->labelsize(10);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'+'));
-      o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(15, 120, 36, 20, "Lock");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::CapsLockKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(51, 120, 20, 20, "A");
       o->labelsize(10);
@@ -311,7 +311,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(271, 120, 39, 20, "Enter");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::ReturnKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(400, 120, 20, 20, "4");
       o->labelsize(10);
@@ -328,7 +328,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(15, 140, 45, 20, "Shift");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::LeftShiftKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(60, 140, 20, 20, "Z");
       o->labelsize(10);
@@ -373,7 +373,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(260, 140, 50, 20, "Shift");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::RightShiftKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(345, 140, 20, 20, "@8->");
       o->labelsize(10);
@@ -398,7 +398,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(15, 160, 30, 20, "Ctrl");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::LeftCtrlKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(45, 160, 30, 20, "Meta");
       o->labelsize(8);
@@ -427,7 +427,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(280, 160, 30, 20, "Ctrl");
       o->labelsize(8);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::RightCtrlKey));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(325, 160, 20, 20, "@4->");
       o->labelsize(10);
@@ -444,7 +444,7 @@ fltk::Window* make_window() {
      {fltk::Button* o = new fltk::Button(400, 160, 40, 20, "0");
       o->labelsize(10);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'0'));
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
+      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
     }
      {fltk::Button* o = new fltk::Button(440, 160, 20, 20, ".");
       o->labelsize(10);

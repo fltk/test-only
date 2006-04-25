@@ -1,9 +1,8 @@
-//
 // "$Id: pnmImage.h 4288 2005-04-16 00:13:17Z mike $"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,21 +22,23 @@
 // Please report all bugs and problems on the following page:
 //
 //     http://www.fltk.org/str.php
-//
 
 #ifndef fltk_pnm_Image_h
 # define fltk_pnm_Image_h
-# include <fltk/SharedImage.h>
+# include <fltk/Image.h>
 
 namespace fltk {
-    class FL_IMAGES_API pnmImage : public SharedImage {
-      public:
-      pnmImage(const char* filename);
 
-      // virtual function overrides
-      void read(); 
-      bool fetch(); 
-    };
+class FL_IMAGES_API pnmImage : public Image {
+  const char* name_;
+  void update();
+public:
+  const char* get_filename() const { return name_; }
+  pnmImage(const char* n) : name_(n) { }
+  static bool test(const uchar* file_header, unsigned size=0);
+  void _measure(int& W, int& H) const;
+};
+
 }
 #endif
 

@@ -150,20 +150,19 @@ const char* SharedImage::get_filename(const char* name)
 
 
 SharedImage* SharedImage::get(SharedImage* (*create)(),
-				      const char* name, const uchar *datas)
+			      const char* name, const uchar *inline_data)
 {
   SharedImage *image=SharedImage::find(first_image, name);
-  if(!image)
-  {
+  if (!image) {
     image=create();
     image->refcount = 1;
     image->name = newstring(name);
-    image->pixels(datas);
+    image->inline_data = inline_data;
     image->setsize(-1,-1); // We mark the fact the it has never been measured yet
     image->l1 = image->l2 = 0;
     SharedImage::insert(first_image, image);
   } else {
-    if(image->pixels()==NULL) image->pixels(datas);
+    if (!image->inline_data) image->inline_data = inline_data;
     image->refcount++;
   }
   image->used = image_used++;
@@ -207,18 +206,19 @@ SharedImage * SharedImage::get(const char *n) {
   return img;
 }
 
-void SharedImage::reload(const uchar* datas)
+void SharedImage::reload(const uchar* inline_data)
 {
   if (drawn()) {
     mem_used -= w()*h();
     destroy();
   }
-  if (datas) pixels(datas);
+  if (inline_data) this->inline_data = inline_data;
 }
-void SharedImage::reload(const char* name, const uchar* pdatas)
+
+void SharedImage::reload(const char* name, const uchar* inline_data)
 {
   SharedImage *image=SharedImage::find(first_image, name);
-  if (image) image->reload(pdatas);
+  if (image) image->reload(inline_data);
 }
 
 void SharedImage::remove_from_tree(SharedImage*& p, SharedImage* image) {

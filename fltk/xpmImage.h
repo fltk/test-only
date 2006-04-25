@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Image subclass that draws the data from an xpm format file.
@@ -24,7 +23,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_xpmImage_h
 #define fltk_xpmImage_h
@@ -36,14 +34,15 @@ namespace fltk {
 class FL_API xpmImage : public Image {
   Color fg, bg; // what color monochrome ones were drawn in
 public:
+  const char * const * data;
   // XPM files define the data all kinds of ways, so the constructor
   // is overloaded to accept all the ones we have seen:
   xpmImage(const char * const * d, const char* name = 0) :
-    Image(-1,0,name, d), fg(NO_COLOR), bg(NO_COLOR) {}
+    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
   xpmImage(const unsigned char* const * d, const char* name = 0) :
-    Image(-1,0,name, ((const char* const*) d)), fg(NO_COLOR), bg(NO_COLOR) {}
+    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data((char**)d) {}
   xpmImage(char ** d, const char* name = 0) :
-    Image(-1,0,name, d), fg(NO_COLOR), bg(NO_COLOR) {}
+    Image(-1,0,name), fg(NO_COLOR), bg(NO_COLOR), data(d) {}
 
   void _measure(int&, int&) const;
   void update();

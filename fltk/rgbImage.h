@@ -1,7 +1,9 @@
-//
 // "$Id$"
 //
-// Image subclass that draws uncompressed 8-bit rgb data from memory.
+// Image subclass for in-memory raw rgb or rgba data, such as
+// a buffer that is modified by the program. You must call update()
+// when the buffer changes. Recommended that the fltk1 Image methods
+// for messing with the pixels be moved here.
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,28 +23,33 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_rgbImage_h
 #define fltk_rgbImage_h
 
-#include <fltk/FL_API.h>
-#include <fltk/Image.h>
+#include "Image.h"
 
 namespace fltk {
 
 class FL_API rgbImage : public Image {
+  const uchar* pixels_;
+  PixelType pixeltype_;
   int linedelta_;
 public:
-    rgbImage(const uchar * d, PixelType p, int W, int H, const char* name=0) 
-	: Image(W,H,name, (const char* const*) d) {p_=p;  linedelta_=W*this->depth();}
+  PixelType pixeltype() const {return pixeltype_;}
+  int depth() const {return fltk::depth(pixeltype_);}
+  int linedelta() const {return linedelta_;}
+  const uchar* pixels() const {return pixels_;}
 
-    rgbImage(const uchar * d, PixelType p, int W, int H, int linedelta)
-	: Image(W,H, 0, (const char* const*) d),  linedelta_(linedelta) {p_=p;}
-
-    int linedelta() const {return linedelta_;}
-    void update();
+  void update();
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
+
+  rgbImage(const uchar* d, PixelType p, int W, int H, const char* name=0) :
+    Image(W,H,name), pixels_(d), pixeltype_(p) {linedelta_=W*depth();}
+
+  rgbImage(const uchar* d, PixelType p, int W, int H, int linedelta) :
+    Image(W,H), pixels_(d), pixeltype_(p), linedelta_(linedelta) {}
+
 };
 
 }

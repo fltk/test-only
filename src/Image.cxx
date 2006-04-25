@@ -25,8 +25,6 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/string.h>
-#include <ctype.h>
 
 using namespace fltk;
 
@@ -92,17 +90,6 @@ using namespace fltk;
 /*! \fn int Image::height() const
   Return the height of the image in pixels. You can change this with
   setsize().
-*/
-
-/*! \fn int Image::depth() const
-  Return the depth of the image = number of bytes per pixel.
-*/
-/*! \fn int Image::line_size() const
-  Size in bytes of a horiz. line,  generally equals (but not always) = w() * d() 
-*/
-
-/*! \fn int Image::count() const
-  Number of raster images data inside this Image (generally 1)
 */
 
 /*! Change the size of the stored image. If it is different then
@@ -234,7 +221,7 @@ void Image::draw(int x, int y) const {
   each piece is scaled individually. This is very useful for
   scaling paintings of buttons.
 
-  It is possible this will use drawflags(INACTIVE_R) to gray out
+  It is possible this will use drawflags(INACTIVE) to gray out
   the image is a system-specific way. NYI.
 */
 void Image::_draw(const fltk::Rectangle& r) const
@@ -263,235 +250,10 @@ void Image::_draw(const fltk::Rectangle& r) const
   }
 }
 
-// Image Allocation / DeAllocation
-//! alloc data, sets the pixel type,  and make owned data destroyed automatically
-uchar * Image::alloc_pixels(int w,int h, PixelType p=UNDEFINED) { 
-    int size= (p!= UNDEFINED) ? (w*h*fltk::depth(p)) : 
-	p_ !=UNDEFINED ? (w*h*fltk::depth(p_)) : 0 ;
-    if (!size) return 0;
-    dealloc_data();
-    owned_ = true;
-    count_=1; // force the buffer to be a pixels buffer
-    nb_data_ = size;
-    data_ = (const char**) new uchar[size] ;
-    // we dont need to 0 the buffer for pixels buffer
-    return (uchar*) data_;
-}
-
-//! alloc data, sets the pixel type,  and make owned data destroyed automatically
-const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
-    dealloc_data();
-    owned_ = true;
-    count_=0; // force the buffer to be a data buffer
-    nb_data_ = size /(sizeof(const char *));
-    data_ = (const char**) new uchar[size] ;
-    memset((const char**) data_,0,size);   // 0 the buffer so we can delete the allocated lines 
-			    // later in a safer way
-    return (const char**) data_;
-}
-
-//! dealloc potentially owned data, harmless if called more than once
-// fabien: this implementation is too naive, in effect :
-//   we need to also deallocate the content of each char[] data row 
-//   if we have a const char* const* type buffer (like for xpm data)
-//   so we should also add a flag that keeps track of what type of buffer we have
-//   and use this type to know how to deallocate the rows when necessary
-//   this flag should be set when assigning the data buffer 
-//   depending on the pixels() or data() method called to set/allocate the buffer
-//   should be done in a second increment ...
-void Image::dealloc_data() { 
-    if (owned_ && data_ ) {
-	if (count_==0 && nb_data_>0) {
-	// data buffers need more care than pixels buffers
-	    int i;
-	    for (i=0; i<nb_data_; i++) delete [] const_cast<char*>(data_[i]);
-	}
-	delete [] ((uchar*)data_); // deletes data or pixels buffers
-    }
-    data_ = 0;
-    nb_data_ = 0;
-    owned_ = false;
-    count_=0;
-}
-
 /** \fn void Image::destroy();
   Same as redraw() but it also deallocates as much memory as possible.
 */
 
-//! copy the pixels or data buffer if it is not owned, useful for destructive image manip.
-void Image::copy_data() {
-    if (!data() || owned_) return; // don't copy already owned data
-    
-    if (count_==0) { // pixmap data
-	
-	char	**new_data,	// New data array
-		**new_row;	// Current row in image
-	int	i,		// Looping var
-		ncolors,	// Number of colors in image
-		chars_per_pixel,// Characters per color
-		chars_per_line;	// Characters per line 
-	int W,H;
-
-	// Figure out how many colors there are, and how big they are...
-	sscanf(data()[0],"%d %d %d %d", &W, &H,&ncolors, &chars_per_pixel);
-	if (w()==-1) {w(W); h(H);} // use this opportunity to measure on the fly this pixmap
-	chars_per_line = chars_per_pixel * w() + 1;
-	
-	// Allocate memory for the new array...
-	if (ncolors < 0) new_data = new char *[h() + 2];
-	else new_data = new char *[h() + ncolors + 1];
-	
-	new_data[0] = new char[strlen(data()[0]) + 1];
-	strcpy(new_data[0], data()[0]);
-	
-	// Copy colors...
-	if (ncolors < 0) {
-	    // Copy FLTK colormap values...
-	    ncolors = -ncolors;
-	    new_row = new_data + 1;
-	    *new_row = new char[ncolors * 4];
-	    memcpy(*new_row, data()[1], ncolors * 4);
-	    ncolors = 1;
-	    new_row ++;
-	} else {
-	    // Copy standard XPM colormap values...
-	    for (i = 0, new_row = new_data + 1; i < ncolors; i ++, new_row ++) {
-		*new_row = new char[strlen(data()[i + 1]) + 1];
-		strcpy(*new_row, data()[i + 1]);
-	    }
-	}
-	
-	// Copy image data...
-	for (i = 0; i < h(); i ++, new_row ++) {
-	    *new_row = new char[chars_per_line];
-	    memcpy(*new_row, data()[i + ncolors + 1], chars_per_line);
-	}
-	
-	// Update pointers...
-	data((const char **)new_data);
-	nb_data_ =  h() + ncolors + 1;  
-	owned_=true;
-    }
-    else if (count_>=1) {
-	if (w()==-1) {int W=w(),H=h(); _measure(W,H);w(W); h(H);}
-	size_t s = d()*h();
-	uchar* newbuf = new uchar[s];
-	memcpy(newbuf, pixels(), s);
-	pixels(newbuf);
-	nb_data_=(int)s;
-	owned_=true;
-    }
-
-}
-
-//! generic algorithm to set the color average to a buffer
-void Image::color_average(Color c, float i) {
-    // Delete any existing pixmap/mask objects...
-    if (!data()) 
-	fetch();
-    if (!data()) return; // no data() or pixels after fetch: 
-		         // seems that no image is set his object yet
-    copy_data(); // make sure we own the data
-    
-    uchar		r, g, b;
-    unsigned	ia, ir, ig, ib;
-    fltk::split_color(c, r, g, b);
-    if (i < 0.0f) i = 0.0f;
-    else if (i > 1.0f) i = 1.0f;
-    // Get the color to blend with...
-    ia = (unsigned)(256 * i);
-    ir = r * (256 - ia);
-    ig = g * (256 - ia);
-    ib = b * (256 - ia);
-
-    if (count_==0 ) {// pixmap data
-	// Update the colormap to do the blend...
-	char		line[255];	// New colormap line
-	int		color,		// Looping var
-	    ncolors,	// Number of colors in image
-	    chars_per_pixel;// Characters per color
-	sscanf(data()[0],"%*d%*d%d%d", &ncolors, &chars_per_pixel);
-	
-	if (ncolors < 0) {
-	    // Update FLTK colormap...
-	    ncolors = -ncolors;
-	    uchar *cmap = (uchar *)(data()[1]);
-	    for (color = 0; color < ncolors; color ++, cmap += 4) {
-		cmap[1] = (ia * cmap[1] + ir) >> 8;
-		cmap[2] = (ia * cmap[2] + ig) >> 8;
-		cmap[3] = (ia * cmap[3] + ib) >> 8;
-	    }
-	} else {
-	    // Update standard XPM colormap...
-	    for (color = 0; color < ncolors; color ++) {
-		// look for "c word", or last word if none:
-		const char *p = data()[color + 1] + chars_per_pixel + 1;
-		const char *previous_word = p;
-		for (;;) {
-		    while (*p && isspace(*p)) p++;
-		    char what = *p++;
-		    while (*p && !isspace(*p)) p++;
-		    while (*p && isspace(*p)) p++;
-		    if (!*p) {p = previous_word; break;}
-		    if (what == 'c') break;
-		    previous_word = p;
-		    while (*p && !isspace(*p)) p++;
-		}
-		
-		if (fltk::parse_color(p, r, g, b)) {
-		    r = (ia * r + ir) >> 8;
-		    g = (ia * g + ig) >> 8;
-		    b = (ia * b + ib) >> 8;
-		    
-		    if (chars_per_pixel > 1) sprintf(line, "%c%c c #%02X%02X%02X",
-			data()[color + 1][0],
-			data()[color + 1][1], r, g, b);
-		    else sprintf(line, "%c c #%02X%02X%02X", data()[color + 1][0], r, g, b);
-		    
-		    delete[] (char *)data()[color + 1];
-		    ((char **)data())[color + 1] = new char[strlen(line) + 1];
-		    strcpy((char *)data()[color + 1], line);
-		}
-	    }
-	}
-    } 
-    else if (count_>=1) { // pixels data
-	int y, x,l=ld();
-	uchar * pixBuffer = (uchar*) pixels();
-		
-	switch (pixel_type()) {
-	case ARGB32: //aarrggbb
-	case RGB32:  
-	    for (y=0; y<h_; y++) { // for each image row
-		pixBuffer = ((uchar*)pixels())+y*l;
-		for(x=0; x<l; x+=4) {
-		    unsigned * org = ((unsigned *) (&pixBuffer[x]));
-		    unsigned trans = 
-			(pixBuffer[x+3] <<24)	+ 
-			(((ia * pixBuffer[x+2] + ir)>>8) <<16) +
-			(((ia * pixBuffer[x+1] + ig)>>8) <<8) +
-			((ia * pixBuffer[x+0] + ib)>>8);
-		      *org= trans;
-
-		}
-	    }
-	    break;    
-	case RGB:
-	    for (y=0; y<h_; y++) { // for each image row
-		pixBuffer = ((uchar*)pixels())+y*l;
-		for(x=0; x<l; x+=3) {
-		    pixBuffer[x]  = (ia * pixBuffer[x]     + ir) >>8;
-		    pixBuffer[x+1]= (ia * pixBuffer[x+1]   + ig) >>8;
-		    pixBuffer[x+2]= (ia * pixBuffer[x+2]   + ib) >>8;
-		}
-	    }
-	    break;
-	default:
-	    // TODO : MONO
-	    break;
-	}
-    }
-}
 //
 // End of "$Id$".
 //

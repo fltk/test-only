@@ -78,7 +78,7 @@ clean:
 #
 
 depend:
-	$(MAKEDEPEND) -fmakedepend -I.. $(CPPFILES) $(CFILES)
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
 
 
 #

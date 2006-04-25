@@ -51,11 +51,6 @@ public:
 	by analizing its extension and/or eventually its header,
 	if it handles it it returns a non null pointer on the loaded concrete image
     */
-  /** fetch to the data/pixels unified buffer the image, return true if success. 
-	this method() does NOT draw the image, it only prepares
-	a generic buffer and its info, this method  should be used by all 
-	non-progresive-reading read() methods so that we avoid redondant code
-  */
   typedef SharedImage *(*Handler)(const char * filename, uchar *header, int headerlen);
     /*! adds a new handler for hanling a concrete type of image, typically one handler per image type should be registered */
   static void add_handler(Handler f);
@@ -77,11 +72,12 @@ protected:
 
   SharedImage* l1;    // Left leaf in the binary tree
   SharedImage* l2;    // Right leaf in the binary tree
-  const char* 	   name;  // Used to indentify the image, and as filename
-  unsigned int     used;  // Last time used, for cache handling purpose
-  int              refcount; // Number of time this image has been get
+  const char*  name;  // Used to indentify the image, and as filename
+  const uchar* inline_data; // If non zero, pointers on inlined *COMPRESSED* image data
+  unsigned int used;  // Last time used, for cache handling purpose
+  int          refcount; // Number of time this image has been get
 
-  SharedImage() { };  // Constructor is protected on purpose,
+  SharedImage() { };  // Constructor is private on purpose,
                           // use the get function rather
   //~SharedImage();
 
@@ -106,16 +102,30 @@ protected:
 public:
   static SharedImage  *first_image;
 
-  /*! Return an SharedImage, using the create function if an image with
-    the given name doesn't already exist. Use datas, or read from the
-    file with filename name if datas==0. */
-  static SharedImage* get(SharedImage* (*create)(),
-			  const char* name, const uchar* datas=0);
+  /*!
+    Look for a SharedImage created with the same value for \a name,
+    and if not found, use \a create to make a new one.
 
-  /*! Reload the image, useful if it has changed on disk, or if the datas
-    / in memory have changed (you can also give a new pointer on datas) */
-  void reload(const uchar* datas=0);
-  static void reload(const char* name, const uchar* datas=0);
+    If \a inline_data is not NULL, it is assummed to point at a static
+    block of memory containg the image data, in whatever compressed
+    form the actual class can handle.  (some formats can only handle
+    files).
+
+    If \a inline_data is NULL, then the \a name is the filename to read
+    to draw the image.
+  */
+  static SharedImage* get(SharedImage* (*create)(),
+			  const char* name, const uchar* inline_data=0);
+
+  /*!
+    Reload the image, useful if it has changed on disk, or if the
+    inline_data in memory have changed (you can also give a new
+    pointer to inline data by passing a non-zero value here).
+  */
+  void reload(const uchar* inline_data=0);
+
+  /*! Look up an image by name and if found call reload() on it. */
+  static void reload(const char* name, const uchar* inline_data=0);
 
   /*! Remove an image from the database and delete it if its refcount has
     fallen to zero
@@ -145,15 +155,15 @@ struct FL_IMAGES_API ImageType {
   // Name of the filetype as it appear in the source code LOWERCASE!!!
   const char* name;
   // Function to test the filetype
-  bool (*test)(const uchar* datas, unsigned size);
+  bool (*test)(const uchar* file_header, unsigned size);
   // Function to get/create an image of this type
-  SharedImage* (*get)(const char* name, const uchar* datas);
+  SharedImage* (*get)(const char* name, const uchar* inline_data);
 };
 extern FL_IMAGES_API ImageType image_filetypes[];
 
 /*! Try to guess the filetype
   Beware that calling this force you to link in all image types ! */
-FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* datas=0);
+FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* inline_data=0);
 
 ////////////////////////////////////////////////////////////////
 
@@ -166,12 +176,11 @@ class FL_API gifImage : public SharedImage {
   gifImage() { }
   static SharedImage* create() { return new gifImage; }
 public:
-  static bool test(const uchar* datas, unsigned size=0);
+  static bool test(const uchar* file_header, unsigned size=0);
   void _measure(int& W, int& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
+  static SharedImage* get(const char* name, const uchar* inline_data = 0) {
+    return SharedImage::get(create, name, inline_data);
   }
-  bool fetch();
 };
 
 class FL_API bmpImage : public SharedImage {
@@ -179,11 +188,10 @@ class FL_API bmpImage : public SharedImage {
   bmpImage() { }
   static SharedImage* create() { return new bmpImage; }
 public:
-  static bool test(const uchar* datas, unsigned size=0);
+  static bool test(const uchar* file_header, unsigned size=0);
   void _measure(int& W, int& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
-  bool fetch();
+  static SharedImage* get(const char* name, const uchar* inline_data = 0) {
+    return SharedImage::get(create, name, inline_data);
   }
 };
 
@@ -193,12 +201,11 @@ class FL_IMAGES_API xpmFileImage : public SharedImage {
   xpmFileImage() { }
   static SharedImage* create() { return new xpmFileImage; }
 public:
-  static bool test(const uchar* datas, unsigned size=0);
+  static bool test(const uchar* file_header, unsigned size=0);
   void _measure(int& W, int& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
+  static SharedImage* get(const char* name, const uchar* inline_data = 0) {
+    return SharedImage::get(create, name, inline_data);
   }
-  bool fetch();
 };
 
 // 
@@ -210,30 +217,27 @@ class FL_IMAGES_API jpegImage : public SharedImage {
   jpegImage() { }
   static SharedImage* create() { return new jpegImage; }
 public:
-  static bool test(const uchar* datas, unsigned size=0);
+  static bool test(const uchar* file_header, unsigned size=0);
   void _measure(int& W, int& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
+  static SharedImage* get(const char* name, const uchar* inline_data = 0) {
+    return SharedImage::get(create, name, inline_data);
   }
-  bool fetch();
 };
 
 class FL_IMAGES_API pngImage : public SharedImage {
-  void read();		// Uncompress PNG datas
-  bool fetch();
+  void read();
   pngImage() { }
-  static SharedImage* create() { return new pngImage; } // Instantiate
+  static SharedImage* create() { return new pngImage; }
 public:
-// Check the given buffer if it is in PNG format
-  static bool test(const uchar* datas, unsigned size=0);
+  static bool test(const uchar* file_header, unsigned size=0);
   void _measure(int& W, int& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
+  static SharedImage* get(const char* name, const uchar* inline_data = 0) {
+    return SharedImage::get(create, name, inline_data);
   }
 };
 
-  extern FL_IMAGES_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick
-  extern FL_IMAGES_API void unregister_images();
+  extern FL_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick
+  extern FL_API void unregister_images();
 }
 
 #endif

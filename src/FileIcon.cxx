@@ -54,6 +54,8 @@
 #include <fltk/draw.h>
 #include <fltk/Box.h>
 #include <fltk/filename.h>
+#include <fltk/Image.h>
+
 
 //
 // Define missing POSIX/XPG4 macros as needed...
@@ -88,6 +90,7 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   // Initialize the pattern and type...
   pattern_ = p;
   type_    = t;
+  image = 0;
 
   // Copy icon data as needed...
   if (nd)  {
@@ -103,7 +106,6 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   // And add the icon to the list of icons...
   next_  = first_;
   first_ = this;
-  item_ = NULL;
   w_= h_=16;
   on_select_ = false;
 }
@@ -154,26 +156,31 @@ FileIcon::~FileIcon()
   // Free any memory used...
   if (alloc_data_)
     free(data_);
+
+  delete image;
 }
 
 void FileIcon::_measure(int& w, int& h) const {
-    Widget * i= value();
-    if (i) {w = i->h()-box_dh(i->box()); h = i->h()-box_dh(i->box());}
-    else {
-	w = h = (int) (getascent()+getdescent()+2);
-    }
-
+  // always square:
+  if (w < h) h = w; else w = h;
+//   Widget * i= value();
+//   if (i) {
+//     w = i->h()-box_dh(i->box()); h = i->h()-box_dh(i->box());}
+//   else {
+//     w = h = (int) (getascent()+getdescent()+2);
+//   }
 }
 
+/*! For back compatability. Does widget->image(this) and sets a flag
+  to indicate if this widget should draw differently if selected. */
 void FileIcon::value(Widget* i, bool on_sel)  {
-    item_=i; // connect to i
-    on_select_ = on_sel;
-    i->image(this);
-} 
+  on_select_ = on_sel;
+  i->image(this);
+ } 
+
 //
 // 'FileIcon::add()' - Add data to an icon.
 //
-
 short *			// O - Pointer to new data value
 FileIcon::add(short d)	// I - Data to add
 {
@@ -257,14 +264,15 @@ FileIcon::find(const char *filename,	// I - Name of file */
 //int      active)	// I - Active or inactive?
 
 void FileIcon::_draw(const Rectangle& r) const {
-  short		*d;		// Pointer to data
-  short		*prim;		// Pointer to start of primitive...
-  float		scale;		// Scale of icon
-
+  if (image) image->draw(r);
 
   // Don't try to draw a NULL array!
   if (num_data_ == 0)
     return;
+
+  short		*d;		// Pointer to data
+  short		*prim;		// Pointer to start of primitive...
+  float		scale;		// Scale of icon
 
   // Setup the transform matrix as needed...
   scale = float(r.w() < r.h() ? r.w() : r.h());
@@ -278,13 +286,12 @@ void FileIcon::_draw(const Rectangle& r) const {
   d    = data_;
   prim = NULL;
   
-  Widget * i = value();
+  bool active = !drawflags(INACTIVE_R);
   Color	c, ic;
-  if (i->active() && (!on_select_ ||i->selected())  ) 
+  if (active && (!on_select_ || drawflags(SELECTED)))
     ic = fltk::YELLOW;
   else
     ic = fltk::GRAY90 /* light2 */; 
-  bool active = i && i->active() ? true : false;
   c = ic;
   setcolor(ic);
   while (*d != END || prim)
@@ -378,8 +385,6 @@ void FileIcon::_draw(const Rectangle& r) const {
   // Restore the transform matrix
   pop_matrix();
 
-  // Restore the item color from text part drawing
-  if (i) setcolor(i->selected() ? i->color() : i->selection_color());
 }
 
 

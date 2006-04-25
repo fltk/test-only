@@ -32,8 +32,8 @@
 
 namespace fltk {
 
+class Image;
 class Widget;
-  // It is now a subclass of Image
 
 class FL_API FileIcon : public Symbol {
   static FileIcon *first_;	// Pointer to first icon/filetype
@@ -45,6 +45,8 @@ class FL_API FileIcon : public Symbol {
   short		*data_;		// Icon data
   int		w_,h_;
   bool          on_select_;     // true if in browser or menu
+  Image*	image;		// non-vector image file
+
 public:
 
   enum				// File types
@@ -81,11 +83,8 @@ public:
 		{ short *d = add(VERTEX); add((int)(x * 10000.0));
 		  add((int)(y * 10000.0)); return (d); }
   void		clear() { num_data_ = 0; }
-  //  void		label(Widget *w);
-//  static void	labeltype(const Label *o, int x, int y, int w, int h, Align a);
   void		load(const char *f);
   void		load_fti(const char *fti);
-  void		load_xpm(const char *xpm);
   int 		load_image(const char *img);
   const char	*pattern() { return (pattern_); }
   int		size() { return (num_data_); }
@@ -95,16 +94,13 @@ public:
   static FileIcon *find(const char *filename, int filetype = ANY);
   static FileIcon *first() { return (first_); }
   static void	load_system_icons(void);
-
   
-  Widget *	value() const {return item_;} // return connected item
-  void		value(Widget* i, bool on_select=false);
+  void		value(Widget* w, bool on_select=false);
+  void		label(Widget *w) {value(w);}
 
   // virtual image overloads
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle& r) const;
-private:
-    Widget* item_;
 };
 
 }

@@ -134,6 +134,8 @@ public:
   static void default_callback(Widget*, void*);
   
   // it is legal to set callback_ to 0, so callback_ non nullity *must* be tested
+  // WAS: well actually I intended that default_callback be used. But
+  // perhaps the default value of callback should be zero?
   void	do_callback()		{ if(callback_) callback_(this,user_data_); }
   void	do_callback(Widget* o,void* arg=0) { if(callback_) callback_(o,arg); }
   void	do_callback(Widget* o,long arg) { if(callback_) callback_(o,(void*)arg); }

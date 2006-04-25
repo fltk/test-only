@@ -42,14 +42,15 @@ namespace fltk {
   possible while still covering the types I have actually encountered.
 */
 enum PixelType {
-  UNDEFINED	= -1,	//!< for dynamic Image construction purpose
   MASK	= 0,	//!< 1 byte of inverted mask, filled with current color
   MONO	= 1,	//!< 1 byte of gray scale
   RGBx	= 2,	//!< bytes in r,g,b,a,r,g,b,a... order, a byte is ignored
   RGB	= 3, 	//!< bytes in r,g,b,r,g,b... order
   RGBA	= 4,	//!< bytes in r,g,b,a,r,g,b,a... order
   RGB32 = 5,	//!< 32-bit words containiing 0xaarrggbb (aa is ignored)
-  ARGB32= 6	//!< 32-bit words containing 0xaarrggbb
+  ARGB32= 6,	//!< 32-bit words containing 0xaarrggbb
+  RGBM	= 7,	//!< unpremultiplied bytes in r,g,b,a order
+  MRGB32= 8	//!< unpremultiplied 0xaarrggbb
 };
 
 /**
