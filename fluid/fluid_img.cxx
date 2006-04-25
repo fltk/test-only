@@ -82,7 +82,7 @@
 #include <pixmaps/fluid/flSpinner.xpm>
 #include <pixmaps/fluid/flWidgetClass.xpm>
 //#include <pixmaps/file_small.xpm>
-#include <pixmaps/folder_save.xpm>
+//#include <pixmaps/folder_save.xpm>
 #include <pixmaps/file_small2.xpm>
 #include <pixmaps/folder_small.xpm>
 #include <pixmaps/book.xpm>
