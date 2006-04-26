@@ -106,6 +106,7 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   item_ = NULL;
   w_= h_=16;
   on_select_ = false;
+  image_=0;
 }
 
 //! deep copy implementation
