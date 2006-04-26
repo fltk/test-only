@@ -257,6 +257,9 @@ FileIcon::find(const char *filename,	// I - Name of file */
 //int      active)	// I - Active or inactive?
 
 void FileIcon::_draw(const Rectangle& r) const {
+
+  if (image()) {image()->draw(r);return;}
+
   short		*d;		// Pointer to data
   short		*prim;		// Pointer to start of primitive...
   float		scale;		// Scale of icon
