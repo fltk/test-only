@@ -92,7 +92,8 @@ int main(int argc, char ** argv) {
   SharedImage& ifold2 = *SharedImage::get("images/testimg2.jpg");
   //SharedImage& ifold2 = *SharedImage::get("images/coucou.png"); 
 #endif
-  //ifold2.inactive();
+  ifold2.inactive();
+
   
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");

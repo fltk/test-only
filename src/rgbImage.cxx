@@ -28,35 +28,20 @@ using namespace fltk;
 
 /*! \class fltk::rgbImage
 
-  Draws an uncompressed array of pixel data.
   This can draw any style of pixel data that fltk::drawimage()
-  can draw (ie monochrome, rgb, or rgba in various arrangements).
+  can draw. If you are drawing the same image repeatedly then this
+  is faster than using drawimage(). However this is slower if you
+  only draw the image once without changing it.
 
-  You can create one of these directly from an image file, see
-  SharedImage for details.
-
-  When you draw() this image, the data is copied to a system-specific
-  intermediate buffer. If you then change the data and want the
-  displayed image to update, you should call redraw() so that it
-  knows to update the system-specific buffer.
-
-  Notice that this only saves time if draw() is called much more often
-  than redraw(). If you are changing the image continuously (ie video
-  playback) this is just a waste of the memory for the system-specific
-  buffer and of the time needed to create and copy it, you should
-  instead call drawimage(pixels(),pixeltype()) directly.
-
-  Future systems may be smart enough to draw the data directly without
-  an intermediate object. So don't rely on the visible image not
-  changing until redraw() is called.
+  If you change the data in the buffer passed to the constructor,
+  you must call redraw() so that it knows to update the cached image.
 */
 
-/*! Implementation of Image::update() */
 void rgbImage::update()
 {
   GSave gsave;
   make_current();
-  drawimage(pixels(), pixeltype(), fltk::Rectangle(w(),h()), linedelta_);
+  drawimage(pixels(), pixel_type(), fltk::Rectangle(w(),h()), linedelta_);
 }
 
 #if 0 //WRITE_JPEG

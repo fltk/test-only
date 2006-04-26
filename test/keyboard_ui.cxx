@@ -3,9 +3,9 @@
 #include "keyboard_ui.h"
 #include <fltk/events.h>
 
-fltk::Output* key_output;
+fltk::Output *key_output=(fltk::Output *)0;
 
-fltk::Output* text_output;
+fltk::Output *text_output=(fltk::Output *)0;
 
 fltk::Window* make_window() {
   fltk::Window* w;

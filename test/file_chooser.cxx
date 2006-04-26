@@ -72,6 +72,8 @@ void		create_callback(void);
 void		dir_callback(void);
 void		fc_callback(FileChooser *, void *);
 void		multi_callback(void);
+SharedImage	*pdf_check(const char *, uchar *, int);
+SharedImage	*ps_check(const char *, uchar *, int);
 void		show_callback(void);
 
 
@@ -165,9 +167,7 @@ pdf_check(const char *name,	// I - Name of file
 
   if (system(command)) return 0;
 
-  // This bad cast is because the test functions are defined as returning
-  // a SharedImage. This will be changed to plain Image soon, I hope...
-  return (SharedImage*)(new pnmImage(preview));
+  return new pnmImage(preview);
 }
 
 
@@ -230,8 +230,9 @@ ps_check(const char *name,	// I - Name of file
 
   if (system(command)) return 0;
 
-  return (SharedImage*)(new pnmImage(preview));
+  return new pnmImage(preview);
 }
+
 
 //
 // 'show_callback()' - Show the file chooser...

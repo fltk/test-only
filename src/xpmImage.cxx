@@ -46,7 +46,7 @@ using namespace fltk;
 
 void xpmImage::_measure(int& w, int& h) const {
   if (this->w() < 0) {
-    measure_xpm(data, w, h);
+    measure_xpm(data(),w,h);
     const_cast<xpmImage*>(this)->setsize(w,h);
   } else {
     w = this->w();
@@ -58,13 +58,13 @@ void xpmImage::update()
 {
   if (this->w() < 0) {
     int w,h;
-    measure_xpm(data, w, h);
+    measure_xpm(data(),w,h);
     setsize(w,h);
   }
   if (this->w() <= 0 || this->h() <= 0) return;
   GSave gsave;
   make_current();
-  draw_xpm(data, 0, 0);
+  draw_xpm(data(), 0, 0);
 }
 
 //

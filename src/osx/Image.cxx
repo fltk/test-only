@@ -49,7 +49,7 @@ void xbmImage::update()
   int rowBytes = (w_+7)>>3 ;
   uchar *bmask = new uchar[rowBytes*h_];
   uchar *dst = bmask;
-  const uchar *src = (uchar*)array;
+  const uchar *src = pixels();
   for ( int i=rowBytes*h_; i>0; i--,src++ ) {
     *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
   }

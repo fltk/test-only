@@ -1,4 +1,7 @@
+//
 // "$Id$"
+//
+// JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -18,6 +21,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
 // JPEG image decompression. From example code in libjpeg distribution.
 
@@ -37,13 +41,14 @@ extern "C" {
 }
 #include <setjmp.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
 
   JOCTET * buffer;		/* start of buffer */
 
-  JOCTET * inline_data_start, *inline_data_ptr;
+  JOCTET * start_datas, * datas;
 } my_source_mgr;
 
 static int INPUT_BUF_SIZE;
@@ -64,7 +69,7 @@ init_source (j_decompress_ptr cinfo)
    * but we don't clear the input buffer.
    * This is correct behavior for reading a series of images from one source.
    */
-  src->inline_data_ptr = src->inline_data_start;
+  src->datas = src->start_datas;
 }
 
 
@@ -107,8 +112,8 @@ fill_input_buffer (j_decompress_ptr cinfo)
   my_src_ptr src = (my_src_ptr) cinfo->src;
   unsigned nbytes = INPUT_BUF_SIZE;
 
-  memcpy(src->buffer, src->inline_data_ptr, INPUT_BUF_SIZE);
-  src->inline_data_ptr += INPUT_BUF_SIZE;
+  memcpy(src->buffer, src->datas, INPUT_BUF_SIZE);
+  src->datas += INPUT_BUF_SIZE;
 
   src->pub.next_input_byte = src->buffer;
   src->pub.bytes_in_buffer = nbytes;
@@ -182,7 +187,7 @@ term_source (j_decompress_ptr /*cinfo*/)
  */
 
 METHODDEF(void)
-jpeg_rawdatas_src (j_decompress_ptr cinfo, JOCTET * inline_data)
+jpeg_rawdatas_src (j_decompress_ptr cinfo, JOCTET * datas)
 {
   my_src_ptr src;
 
@@ -202,7 +207,7 @@ jpeg_rawdatas_src (j_decompress_ptr cinfo, JOCTET * inline_data)
   src->pub.skip_input_data = skip_input_data;
   src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
   src->pub.term_source = term_source;
-  src->inline_data_start = inline_data;
+  src->start_datas = datas;
   src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
@@ -258,7 +263,9 @@ static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b
 static void declare_now(void*) { }
 #endif
 
-void fltk::jpegImage::_measure(int &W, int &H) const
+using namespace fltk; 
+
+void jpegImage::_measure(int &W, int &H) const
 {
 #if !HAVE_LIBJPEG
   const_cast<jpegImage*>(this)->setsize(0,0);
@@ -294,8 +301,8 @@ void fltk::jpegImage::_measure(int &W, int &H) const
 
   jpeg_create_decompress(&cinfo);
 
-  if (inline_data) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*)inline_data);
+  if (pixels()) {
+    jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
   } else {
     if ((infile = fopen(get_filename(), "rb")) == NULL) {
       const_cast<jpegImage*>(this)->setsize(0,0);
@@ -319,15 +326,170 @@ void fltk::jpegImage::_measure(int &W, int &H) const
 #endif
 }
 
-void fltk::jpegImage::read()
-{
+//! fetch a jpegImage into a generic pixel buffer
+
+bool jpegImage::fetch() {
+
+#ifdef HAVE_LIBJPEG
+  FILE				*fp;	// File pointer
+  jpeg_decompress_struct	cinfo;	// Decompressor info
+  my_error_mgr			jerr;	// Error handler info
+  JSAMPROW			row;	// Sample row pointer
+
+  // the following variables are pointers allocating some private space that
+  // is not reset by 'setjmp()'
+  char* max_finish_decompress_err;      // count errors and give up afer a while
+  char* max_destroy_decompress_err;     // to avoid recusion and deadlock
+
+  // Clear data...
+  const uchar * array = 0;
+
+  // Open the image file...
+  const char * jpeg = get_filename();
+  if ((fp = fopen(jpeg, "rb")) == NULL) return false;
+
+  // Setup the decompressor info and read the header...
+  cinfo.err = jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = my_error_exit;
+  jerr.pub.output_message = output_message;
+
+  // Setup error loop variables
+  max_finish_decompress_err = (char*)malloc(1);   // allocate space on the frame for error counters
+  max_destroy_decompress_err = (char*)malloc(1);  // otherwise, the variables are reset on the longjmp
+  *max_finish_decompress_err=10;
+  *max_destroy_decompress_err=10;
+
+  if (setjmp(jerr.setjmp_buffer))
+  {
+    // JPEG error handling...
+    // if any of the cleanup routines hits another error, we would end up 
+    // in a loop. So instead, we decrement max_err for some upper cleanup limit.
+    if ( ((*max_finish_decompress_err)-- > 0) && array)
+      jpeg_finish_decompress(&cinfo);
+    if ( (*max_destroy_decompress_err)-- > 0)
+      jpeg_destroy_decompress(&cinfo);
+
+    fclose(fp);
+
+    w(0);
+    h(0);
+    pixel_type(fltk::UNDEFINED);
+
+    free(max_destroy_decompress_err);
+    free(max_finish_decompress_err);
+    
+    return false;
+  }
+
+  jpeg_create_decompress(&cinfo);
+  jpeg_stdio_src(&cinfo, fp);
+  jpeg_read_header(&cinfo, 1);
+
+  cinfo.quantize_colors      = (boolean)FALSE;
+  cinfo.out_color_space      = JCS_RGB;
+  cinfo.out_color_components = 3;
+  cinfo.output_components    = 3;
+
+  jpeg_calc_output_dimensions(&cinfo);
+  
+  // set image info for generic reuse
+  w(cinfo.output_width); 
+  h(cinfo.output_height);
+  pixel_type(cinfo.output_components ==4 ? 
+    ARGB32 : cinfo.output_components == 3 ? RGB : MONO );
+
+  array = alloc_pixels(w(),h(),pixel_type()); // this unified array is automatically deallocated
+
+  jpeg_start_decompress(&cinfo);
+
+  while (cinfo.output_scanline < cinfo.output_height) {
+    row = (JSAMPROW)(array +
+                     cinfo.output_scanline * cinfo.output_width *
+                     cinfo.output_components);
+    jpeg_read_scanlines(&cinfo, &row, (JDIMENSION)1);
+  }
+
+  jpeg_finish_decompress(&cinfo);
+  jpeg_destroy_decompress(&cinfo);
+
+  free(max_destroy_decompress_err);
+  free(max_finish_decompress_err);
+
+  fclose(fp);
+#endif // HAVE_LIBJPEG
+  return true;
+}
+
+void jpegImage::read() {
 #if HAVE_LIBJPEG
+# if USE_PROGRESSIVE_DRAW
+    if (!pixels()) { // if no pixels buffer is already prefetched
+      struct jpeg_decompress_struct cinfo;
+      struct my_error_mgr jerr;
+      FILE* infile = 0;
+      declare_now(&infile);
+
+      INPUT_BUF_SIZE = 4096;
+
+      cinfo.err = jpeg_std_error(&jerr.pub);
+      jerr.pub.error_exit = my_error_exit;
+      jerr.pub.output_message = output_message;
+
+      /* Establish the setjmp return context for my_error_exit to use. */
+      if (setjmp(jerr.setjmp_buffer)) {
+	/* If we get here, the JPEG code has signaled an error.
+	 * We need to clean up the JPEG object, close the input file, and return.
+	 */
+	jpeg_destroy_decompress(&cinfo);
+	if (infile) fclose(infile);
+	return;
+      }
+
+      jpeg_create_decompress(&cinfo);
+
+      if (pixels()) {
+	jpeg_rawdatas_src(&cinfo, (JOCTET*) pixels());
+      } else {
+	if ((infile = fopen(get_filename(), "rb")) == NULL)
+	  return;
+	jpeg_stdio_src(&cinfo, infile);
+      }
+
+      jpeg_read_header(&cinfo, TRUE);
+
+      jpeg_start_decompress(&cinfo);
+      {GSave gsave;
+      make_current();
+      drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
+      jpeg_finish_decompress(&cinfo);
+      jpeg_destroy_decompress(&cinfo);
+      if (infile) fclose(infile);
+  }
+  else {
+      GSave gsave;
+      make_current();
+      drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+  }
+
+# else
+  fetch(); // reuse fetch code
+  GSave gsave;
+  make_current();
+  drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+# endif //USE_PROGRESSIVE_DRAW
+#endif
+}
+
+bool jpegImage::test(const uchar* datas, unsigned size)
+{
+#if !HAVE_LIBJPEG
+  return 0;
+#else
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile = 0;
-  declare_now(&infile);
 
-  INPUT_BUF_SIZE = 4096;
+  INPUT_BUF_SIZE = size;
 
   cinfo.err = jpeg_std_error(&jerr.pub);
   jerr.pub.error_exit = my_error_exit;
@@ -340,43 +502,21 @@ void fltk::jpegImage::read()
      */
     jpeg_destroy_decompress(&cinfo);
     if (infile) fclose(infile);
-    return;
+    return 0;
   }
 
   jpeg_create_decompress(&cinfo);
 
-  if (inline_data) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*)inline_data);
-  } else {
-    if ((infile = fopen(get_filename(), "rb")) == NULL)
-      return;
-    jpeg_stdio_src(&cinfo, infile);
-  }
+  jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
 
   jpeg_read_header(&cinfo, TRUE);
-
-  jpeg_start_decompress(&cinfo);
-
-  {GSave gsave;
-  make_current();
-  drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
-
-  jpeg_finish_decompress(&cinfo);
 
   jpeg_destroy_decompress(&cinfo);
 
   if (infile) fclose(infile);
-#endif
-}
 
-// I don't know what the official test for jpeg is. There appears to
-// be some complexity at the start, probably they assumme you will use
-// a jpeg_decompress object. These 3 bytes are the only constant between
-// all the example files I have seen:
-bool fltk::jpegImage::test(const uchar* block, unsigned length) {
-  return block[0] == 0xff && block[1] == 0xd8 && block[2] == 0xff;
-//   return (!strcmp((char*)block+6, "JFIF") ||
-//        !strcmp((char*)block+6, "Exif"));
+  return 1;
+#endif
 }
 
 //

@@ -2,8 +2,6 @@
 
 #include "tabs.h"
 
-fltk::Window* foo_window;
-
 static void cb_cancel(fltk::Button*, void*) {
   exit(1);
 }
@@ -17,13 +15,10 @@ static void cb_OK(fltk::ReturnButton*, void*) {
 int main (int argc, char **argv) {
 
   fltk::Window* w;
-   {fltk::Window* o = foo_window = new fltk::Window(320, 305);
+   {fltk::Window* o = new fltk::Window(320, 305);
     w = o;
     o->begin();
      {fltk::TabGroup* o = new fltk::TabGroup(10, 10, 300, 200);
-     // uncomment this remove the border
-     //o->box(fltk::NO_BOX);
-
       o->begin();
        {fltk::Group* o = new fltk::Group(0, 20, 300, 180, "Label1");
         o->begin();

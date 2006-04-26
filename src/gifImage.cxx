@@ -54,44 +54,39 @@
 
 using namespace fltk;
 
-// The callback from drawimage to get a row of data passes this:
-struct Drawimage_data {
-  int w;
-  const uchar* Image;
-  U32 colors[256];
-};
+#define NEXTBYTE (dat? *dat++ : getc(GifFile))
+#define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
+// The callback from drawimage to get a row of data passes this:
 // callback for 1 byte per pixel:
 static const uchar* drawimage_cb(void*v, int x, int y, int w, uchar* buf) {
-  Drawimage_data& d = *(Drawimage_data*)v;
-  const uchar* p = d.Image+y*d.w+x;
+  const Image& d = *(const Image * )v;
+  const uchar* p = d.pixels()+y*d.width()+x;
+  U32 * colors = d.colors();
   U32* q = (U32*)buf;
-  for (int X=w; X--;) *q++ = d.colors[*p++];
+  for (int X=w; X--;) *q++ = colors[*p++];
   return buf;
 }
 
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
-void gifImage::read() {
+bool gifImage::fetch() {
 
   FILE *GifFile=0;
-  const uchar* dat = inline_data;
+  const uchar* dat = pixels();
+  
+  if (pixels()) return true;
 
-  if (dat) {
-    dat += 6;
-  } else { // set up to read from file, quit silently on any errors:
-    GifFile = fopen(get_filename(), "rb");
-    if (!GifFile) return;
-    char b[6];
-    if (fread(b,1,6,GifFile) < 6 ||
+  GifFile = fopen(get_filename(), "rb");
+  if (!GifFile) return false;
+  char b[6];
+  if (fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      fclose(GifFile);
-      return;
-    }
+    fclose(GifFile);
+    return false;
   }
 
-  Drawimage_data d;
   int Width; GETSHORT(Width);
   int Height; GETSHORT(Height);
 
@@ -108,21 +103,23 @@ void gifImage::read() {
 
   // Read in global colormap:
   uchar transparent_pixel = 0;
-  char has_transparent = 0;
 
+  U32 * colors = new U32[256];
+  set_colors(colors,256);
+  
   if (HasColormap) {
     for (int i=0; i < ColorMapSize; i++) {
       uchar red = NEXTBYTE;
       uchar green = NEXTBYTE;
       uchar blue = NEXTBYTE;
       // store ARGB32 color:
-      d.colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
+      colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
     }
   } else {
     //    fprintf(stderr,"%s does not have a colormap.\n", infname);
     for (int i = 0; i < ColorMapSize; i++) {
       int gray = (i*256+ColorMapSize-1)/ColorMapSize;
-      d.colors[i] = 0xff000000 | (0x10101 * gray);
+      colors[i] = 0xff000000 | (0x10101 * gray);
     }
   }
 
@@ -132,7 +129,7 @@ void gifImage::read() {
   for (;;) {
 
     int i = NEXTBYTE;
-    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return;}
+    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return false;}
     int blocklen;
 
     //  if (i == 0x3B) return;  eof code
@@ -148,7 +145,7 @@ void gifImage::read() {
 	bits = NEXTBYTE;
 	NEXTBYTE; NEXTBYTE; // GETSHORT(delay);
 	transparent_pixel = NEXTBYTE;
-	if (bits & 1) has_transparent = 1;
+	if (bits & 1) transp_index(transparent_pixel);
 	blocklen = NEXTBYTE;
 
       } else if (ch == 0xFF) { // Netscape repeat count
@@ -188,7 +185,7 @@ void gifImage::read() {
 	  uchar green = NEXTBYTE;
 	  uchar blue = NEXTBYTE;
 	  // store ARGB32 color:
-	  d.colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
+	  colors[i] = 0xff000000 | (red<<16) | (green<<8) | blue;
 	}
       }
       CodeSize = NEXTBYTE+1;
@@ -210,13 +207,16 @@ void gifImage::read() {
     ColorMapSize = 1 << BitsPerPixel;
   }
 
-  uchar *Image = new uchar[Width*Height];
-  if (!Image) {
+  alloc_pixels(Width,Height,MONO);
+  width(Width); height(Height);
+  pixel_type(MONO);
+
+  if (!pixels()) {
     //fprintf (stderr, "Insufficient memory\n");
-    return;
+    return false;
   }
   int YC = 0, Pass = 0; /* Used to de-interlace the picture */
-  uchar *p = Image;
+  uchar *p = (uchar*) pixels();
   uchar *eol = p+Width;
 
   int InitCodeSize = CodeSize;
@@ -293,7 +293,7 @@ void gifImage::read() {
 	case 3: YC += 2; break;
 	}
 	if (YC>=Height) YC=0; /* cheap bug fix when excess data */
-	p = Image + YC*Width;
+	p = (uchar*) pixels() + YC*Width;
 	eol = p+Width;
       }
     }
@@ -313,18 +313,9 @@ void gifImage::read() {
     OldCode = CurCode;
   }
   if (GifFile) fclose(GifFile);
+  if (transp_index()>=0) colors[transp_index()] = 0;
 
-  d.w = Width;
-  d.Image = Image;
-  if (has_transparent) d.colors[transparent_pixel] = 0;
-
-  GSave gsave;
-  make_current();
-  drawimage(drawimage_cb, &d,
-	    has_transparent ? ARGB32 : RGB32,
-	    Rectangle(Width, Height));
-
-  delete[] Image;
+  return true;
 }
 
 /*! Tests block of data to see if it looks like the start of a .gif file. */
@@ -342,7 +333,7 @@ void gifImage::_measure(int &W, int &H) const
   }
 
   FILE *GifFile=0;
-  const uchar* dat = inline_data;
+  const uchar* dat = pixels();
 
   if (dat) {
     dat += 6;
@@ -362,6 +353,28 @@ void gifImage::_measure(int &W, int &H) const
   W = w; 
   H = h;
   if (GifFile) fclose(GifFile);
+
+  return ;
+}
+
+
+void gifImage::read()
+{
+  bool modified = pixels()==0;
+  
+  fetch();
+
+  GSave gsave;
+  make_current();
+
+  drawimage(drawimage_cb, this,transp_index()>=0 ? ARGB32 : RGB32,
+	    Rectangle(width(), height())); 
+  // TODO:
+  // we should also be able to draw palette indexed images as opposed to mono without callback
+  // we should handle multi image gifs
+
+  if (modified) dealloc_data();
+
 }
 
 //

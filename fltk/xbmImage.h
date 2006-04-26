@@ -1,9 +1,10 @@
+//
 // "$Id$"
 //
 // Image subclass for in-memory xbm data (you #include the .xbm file
 // and then construct this).
 //
-// Copyright 2006 by Bill Spitzak and others.
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
 #ifndef fltk_xbmImage_h
 #define fltk_xbmImage_h
@@ -31,9 +33,8 @@ namespace fltk {
 
 class FL_API xbmImage : public Image {
 public:
-  const unsigned char *array;
-  xbmImage(const unsigned char *bits, int w,int h) : Image(w,h), array(bits) {}
-  xbmImage(const char *bits, int w, int h) : Image(w,h), array((const unsigned char *)bits) {}
+  xbmImage(const uchar *bits, int w,int h) : Image(w,h, 0, (const char * const*) bits) {}
+  xbmImage(const char *bits, int w, int h) : Image(w,h, 0, (const char * const*) bits) {}
   void update();
 };
 

@@ -1,4 +1,7 @@
+//
 // "$Id$"
+//
+// bmpImage routines.
 //
 // Copyright 1997-2003 by Easy Software Products.
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -20,6 +23,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
 #include <config.h>
 #include <fltk/SharedImage.h> // defines bmpImage.h
@@ -33,30 +37,31 @@
 
 using namespace fltk;
 
-// This can either read a file or from the inline_data block, by setting
-// either the FILE or the block pointers:
 static FILE *bmpFile;
-static const uchar* inline_data_start;
-static const uchar* inline_data_ptr;
+static const uchar* bmpDatasStart;
+static const uchar* bmpDatas;
 
-static uchar GETC() {
-  if (inline_data_ptr) return *inline_data_ptr++;
+static uchar GETC()
+{
+  if (bmpDatas) return *bmpDatas++;
   else return fgetc(bmpFile);
 }
 
 #undef FREAD
-static int FREAD(void *buf, int size) {
-  if (inline_data_ptr) {
-    memcpy(buf, inline_data_ptr, size);
-    inline_data_ptr += size;
+static int FREAD(void *buf, int size)
+{
+  if (bmpDatas) {
+    memcpy(buf, bmpDatas, size);
+    bmpDatas += size;
     return size;
   }
   return fread(buf, 1, size, bmpFile);
 }
 
-static int FSEEK(int offset) {
-  if (inline_data_ptr) {
-    inline_data_ptr = inline_data_start + offset;
+static int FSEEK(int offset)
+{
+  if (bmpDatas) {
+    bmpDatas = bmpDatasStart + offset;
     return offset;
   }
   return fseek(bmpFile, offset, SEEK_SET);
@@ -95,9 +100,10 @@ void bmpImage::_measure(int &W, int &H) const
     return;
   }
 
-  inline_data_start = inline_data_ptr = inline_data;
+  bmpDatas = pixels();
+  bmpDatasStart = bmpDatas;
 
-  if (!inline_data) {
+  if (!pixels()) {
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
       fltk::warning("Cannot open BMP file '%s'", get_filename());
       const_cast<bmpImage*>(this)->setsize(0,0);
@@ -109,7 +115,7 @@ void bmpImage::_measure(int &W, int &H) const
   uchar byte = GETC();	// Check "BM" sync chars
   uchar bit  = GETC();
   if (byte != 'B' || bit != 'M') {
-    if (!inline_data) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -136,7 +142,7 @@ void bmpImage::_measure(int &W, int &H) const
   }
   const_cast<bmpImage*>(this)->setsize((int)W,(int)H);
 
-  if (!inline_data) fclose(bmpFile);
+  if (!pixels()) fclose(bmpFile);
 }
 
 //
@@ -144,16 +150,17 @@ void bmpImage::_measure(int &W, int &H) const
 //
 void bmpImage::read()
 {
-  inline_data_start = inline_data_ptr = inline_data;
-
-  if (!inline_data) {
+  bmpDatas = (uchar*)pixels();
+  bmpDatasStart = bmpDatas;
+  if (!pixels()) {
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL) {
       fltk::warning("Cannot open BMP file '%s'", get_filename());
       return;
     }
   }
 
-  unsigned	bitsperpixel,
+  unsigned
+		bitsperpixel,
 		depth = 3,	// bytes per output pixel
 		compression,	// Type of compression
 		colors_used,	// Number of colors used
@@ -170,7 +177,7 @@ void bmpImage::read()
   uchar byte = GETC();	// Check "BM" sync chars
   uchar bit  = GETC();
   if (byte != 'B' || bit != 'M') {
-    if (!inline_data) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -233,7 +240,7 @@ void bmpImage::read()
 
   // Check header data...
   if (!w() || !h() || !bitsperpixel) {
-    if (!inline_data) fclose(bmpFile);
+    if (!pixels()) fclose(bmpFile);
     return;
   }
 
@@ -485,9 +492,9 @@ void bmpImage::read()
   drawimage(array, PixelType(depth), Rectangle(w_, h_), depth*w_);}
 
   // Close the file and return...
-  if (!inline_data) fclose(bmpFile);
+  if (!pixels()) fclose(bmpFile);
 
-  delete[] array;
+  delete []array;
 }
 
 //
