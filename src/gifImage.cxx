@@ -362,7 +362,7 @@ void gifImage::read()
 {
   bool modified = pixels()==0;
   
-  fetch();
+  if (!fetch()) return; // reuse fetch code
 
   GSave gsave;
   make_current();

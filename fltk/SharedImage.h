@@ -183,8 +183,8 @@ public:
   void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
-  bool fetch();
   }
+  bool fetch();
 };
 
 // Name collision with xpmImage:

@@ -475,7 +475,7 @@ FileChooser::fileListCB()
 
     // Update the preview box...
     fltk::remove_timeout((TimeoutHandler)previewCB, this);
-    fltk::add_timeout(1.0, (TimeoutHandler)previewCB, this);
+    fltk::add_timeout(0.5, (TimeoutHandler)previewCB, this);
 
     // Do any callback that is registered...
     if (callback_) (*callback_)(this, data_);

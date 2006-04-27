@@ -2,11 +2,11 @@
 #include <string.h>      // memcpy
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#include <fltk/Slider.h>
 #include <fltk/draw.h>
 #include <fltk/rgbImage.h>
 #include <fltk/xpmImage.h>
 #include <fltk/xbmImage.h>
-#include <fltk/Slider.h>
 #include <fltk/CheckButton.h>
 
 #include <config.h>

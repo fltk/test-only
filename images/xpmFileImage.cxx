@@ -176,21 +176,14 @@ bool xpmFileImage::fetch() {
 }
 
 void xpmFileImage::read() {
-  bool loaded = (data() == 0); // does this image need to be loaded
+  bool created = (data() == 0); // does this image need to be loaded
   if (!fetch()) return;
 
   GSave gsave;
   const_cast<xpmFileImage*>(this)->make_current();
   draw_xpm(data(), 0, 0);
 
-  if (loaded) { // if we are responsible for this buffer then remove it
-    const char* const* p = data();
-    while (*p) delete[] const_cast<char*>(*p++);
-    free((void*)data());
-    data(0);
-  }
-
-  return;
+  if (created) dealloc_data();
 }
 
 //

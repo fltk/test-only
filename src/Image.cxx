@@ -299,6 +299,8 @@ void Image::dealloc_data() {
 	    for (i=0; i<nb_data_; i++) delete [] const_cast<char*>(data_[i]);
 	}
 	delete [] ((uchar*)data_); // deletes data or pixels buffers
+	if (colors_ && ncolors_>0) delete [] colors_; 
+	colors_ = 0;
     }
     data_ = 0;
     nb_data_ = 0;

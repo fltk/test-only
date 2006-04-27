@@ -65,7 +65,6 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
 		blue_mask,
 		blue_shift;
 
-
   //
   // Under X11 we have the option of the XGetImage() interface or SGI's
   // ReadDisplay extension which does all of the really hard work for

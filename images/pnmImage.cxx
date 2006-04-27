@@ -175,11 +175,12 @@ bool pnmImage::fetch() {
 
 pnmImage::pnmImage(const char *n) : SharedImage() {
   name = n;
-  fetch();
 }
 
 void pnmImage::read() {
-    fetch();
+  bool created = pixels()==0;
+  if (!fetch()) return; // reuse fetch code
+  if (created) dealloc_data();
 }
 
 //

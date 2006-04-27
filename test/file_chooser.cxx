@@ -62,7 +62,6 @@ FileBrowser		*files;
 FileChooser		*fc;
 SharedImage		*image = 0;
 
-
 //
 // Functions...
 //
@@ -75,7 +74,6 @@ void		multi_callback(void);
 SharedImage	*pdf_check(const char *, uchar *, int);
 SharedImage	*ps_check(const char *, uchar *, int);
 void		show_callback(void);
-
 
 //
 // 'close_callback()' - Close the main window...

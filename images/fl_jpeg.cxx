@@ -460,7 +460,7 @@ void jpegImage::read() {
       jpeg_start_decompress(&cinfo);
       {GSave gsave;
       make_current();
-      drawimage(drawimage_cb, &cinfo, (PixelType)cinfo.output_components, Rectangle(cinfo.output_width, cinfo.output_height));}
+      drawimage(drawimage_cb, &cinfo, cinfo.output_components>3 ? RGBA : RGB, Rectangle(cinfo.output_width, cinfo.output_height));}
       jpeg_finish_decompress(&cinfo);
       jpeg_destroy_decompress(&cinfo);
       if (infile) fclose(infile);
@@ -472,10 +472,12 @@ void jpegImage::read() {
   }
 
 # else
-  fetch(); // reuse fetch code
+  bool created = pixels()==0;
+  if (!fetch()) return; // reuse fetch code
   GSave gsave;
   make_current();
   drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+  if (created) dealloc_data();
 # endif //USE_PROGRESSIVE_DRAW
 #endif
 }

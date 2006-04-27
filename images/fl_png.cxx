@@ -259,7 +259,7 @@ void fltk::pngImage::read()
     // and we have 'goto error' before this point
     GSave gsave;
     make_current();
-    drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height));
+    drawimage(drawimage_cb, png_ptr, d>3 ? RGBA : RGB, Rectangle(width, height));
   }
 
   png_read_end(png_ptr, NULL);
@@ -269,10 +269,13 @@ void fltk::pngImage::read()
   if (fp) fclose(fp);
   if (buffer) free(buffer);
 # else
-  fetch(); // reuse fetch code
+  bool created = pixels()==0;
+  if (!fetch()) return; // reuse fetch code
   GSave gsave;
   make_current();
   drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
+  if (created) dealloc_data();
+
 # endif //USE_PROGRESSIVE_DRAW
 #endif
 }

@@ -42,21 +42,29 @@ namespace fltk {
   possible while still covering the types I have actually encountered.
 */
 enum PixelType {
-  UNDEFINED	= -1,	//!< for dynamic Image construction purpose
+  UNDEFINED	= -1,//!< for dynamic Image construction purpose
   MASK	= 0,	//!< 1 byte of inverted mask, filled with current color
   MONO	= 1,	//!< 1 byte of gray scale
-  RGBx	= 2,	//!< bytes in r,g,b,a,r,g,b,a... order, a byte is ignored
-  RGB	= 3, 	//!< bytes in r,g,b,r,g,b... order
-  RGBA	= 4,	//!< bytes in r,g,b,a,r,g,b,a... order
-  RGB32 = 5,	//!< 32-bit words containiing 0xaarrggbb (aa is ignored)
-  ARGB32= 6	//!< 32-bit words containing 0xaarrggbb
+  RGB8	= 2,	//!< 1 byte of color scale with palette
+  RGB15 = 3,	//!< 3x5 bits r/g/b + 1 bit unused
+  RGB16	= 4,	//!< 16 bits r+g+b 
+  RGB	= 5, 	//!< bytes in r,g,b,r,g,b... order
+  RGBx	= 6,	//!< bytes in r,g,b,a,r,g,b,a... order, a byte is ignored
+  RGBA	= 7,	//!< bytes in r,g,b,a,r,g,b,a... order
+  RGB32 = 8,	//!< 32-bit words containiing 0xaarrggbb (aa is ignored)
+  ARGB32= 9	//!< 32-bit words containing 0xaarrggbb
 };
 
 /**
    Turn a PixelType into the number of bytes needed to hold a pixel.
 */
-inline int depth(PixelType t) {return (t<0 ? 0 :  t<2 ? 1 : t==3 ? 3 : 4);}
+  //! depth in byte from a pixeltype
+  inline int depth(PixelType t) {return (t<0? 0 : t<3? 1 : t<5? 2 : t==5? 3 : 4);}
 
+  //! default pixeltype from bpp, note that it returns the most common value that may not be unique
+  inline PixelType pixel_type_bpp(int bpp, bool hasPal=false, bool hasAlpha=false) {
+      return bpp <9  ? hasPal ? RGB8 : MONO : bpp <16 ? bpp==15 ? RGB15 : RGB16 :
+	    bpp <25 ? RGB : hasAlpha ? ARGB32 : RGB32;}
 /*! \} */
 
 }
