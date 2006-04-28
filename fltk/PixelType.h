@@ -54,6 +54,7 @@ enum PixelType {
   RGB32 = 8,	//!< 32-bit words containiing 0xaarrggbb (aa is ignored)
   ARGB32= 9	//!< 32-bit words containing 0xaarrggbb
 };
+#define NBPIXELTYPES  10
 
 /**
    Turn a PixelType into the number of bytes needed to hold a pixel.

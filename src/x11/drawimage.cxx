@@ -42,7 +42,7 @@
 using namespace fltk;
 
 /// Converter functions:
-static void (*converter[7])(const uchar *from, uchar *to, int w);
+static void (*converter[NBPIXELTYPES])(const uchar *from, uchar *to, int w);
 
 static int dir;		// direction-alternator
 static int ri,gi,bi;	// saved error-diffusion value
@@ -680,7 +680,7 @@ void fl_xrender_draw_image(XWindow source, fltk::PixelType type,
   }
 }
 
-static void (*xrender_converter[7])(const uchar *from, uchar *to, int w);
+static void (*xrender_converter[NBPIXELTYPES])(const uchar *from, uchar *to, int w);
 static XImage xrenderi;
 
 #else
