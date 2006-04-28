@@ -22,7 +22,10 @@
 #ifndef fltk_Image_h
 #define fltk_Image_h
 
-#include <config.h>
+#ifndef U32
+# define U32 unsigned
+#endif
+
 #include "Symbol.h"
 # undef OPAQUE // fix for windows.h
 
