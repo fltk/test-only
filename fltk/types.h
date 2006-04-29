@@ -23,13 +23,10 @@
 
 #ifndef fltk_types_h
 # define fltk_types_h
-// 1. minimum declarations should appear here
-// 2. define should be preferred to typedefs and systematically tested 
-//   for avoiding conflicts with config.h in lib internal cxx files use
-// 3. always prefer to include config.h in cxx files
-#ifndef U32
-# define U32 unsigned
-#endif
+// 1. minimum platform dependent declarations should appear here
+namespace fltk {
+  typedef unsigned Unsigned32;
+}
 
 #endif
 //
