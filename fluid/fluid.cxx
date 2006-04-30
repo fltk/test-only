@@ -77,6 +77,7 @@ const char *copyright =
 # include <direct.h>
 #else
 # include <unistd.h>
+# include <sys/stat.h>
 #endif
 
 #include "about_panel.h"
