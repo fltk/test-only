@@ -818,7 +818,7 @@ void make_main_window() {
 ////////////////////////////////////////////////////////////////
 void set_filename(const char *c) {
     if (filename) free((void *)filename);
-    filename = strdup(c);
+    filename = c ? strdup(c) : 0;
     if (c && strlen(c)) update_history(c);
     
     if (main_window) main_window->label(filename);
