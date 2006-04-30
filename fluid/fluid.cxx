@@ -70,6 +70,9 @@ const char *copyright =
 #include <errno.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
+# undef _POSIX_
+# include <io.h>
+# define access(a,b) _access(a,b)
 # include <fltk/win32.h>	// for MAX_PATH definition
 # include <direct.h>
 #else
@@ -78,6 +81,7 @@ const char *copyright =
 
 #include "about_panel.h"
 #include "alignment_panel.h"
+#include "template_panel.h"
 #include "widget_panel.h"
 
 #include "Fluid_Plugins.h"
@@ -243,6 +247,153 @@ void save_cb(Widget *, void *v) {
     modflag = 0;
 }
 
+void save_template_cb(Widget *, void *) {
+  // Setup the template panel...
+  if (!template_panel) make_template_panel();
+
+  template_clear();
+  template_browser->add("New Template");
+  template_load();
+
+  template_name->show();
+  template_name->value("");
+
+  template_instance->hide();
+
+  template_delete->show();
+  template_delete->deactivate();
+
+  template_submit->label("Save");
+  template_submit->deactivate();
+
+  template_panel->label("Save Template");
+
+  // Show the panel and wait for the user to do something...
+  template_panel->show();
+  while (template_panel->visible()) fltk::wait();
+
+  // Get the template name, return if it is empty...
+  const char *c = template_name->value();
+  if (!c || !*c) return;
+
+  // Convert template name to filename_with_underscores
+  char safename[1024], *safeptr;
+  strlcpy(safename, c, sizeof(safename));
+  for (safeptr = safename; *safeptr; safeptr ++) {
+    if (isspace(*safeptr)) *safeptr = '_';
+  }
+
+  // Find the templates directory...
+  char filename[1024];
+  fluid_prefs.getUserdataPath(filename, sizeof(filename));
+
+  strlcat(filename, "templates", sizeof(filename));
+#if defined(WIN32) && !defined(__CYGWIN__)
+  if (access(filename, 0)) mkdir(filename);
+#else
+  if (access(filename, 0)) mkdir(filename, 0777);
+#endif // WIN32 && !__CYGWIN__
+
+  strlcat(filename, "/", sizeof(filename));
+  strlcat(filename, safename, sizeof(filename));
+
+  char *ext = filename + strlen(filename);
+  if (ext >= (filename + sizeof(filename) - 5)) {
+    alert("The template name \"%s\" is too long!", c);
+    return;
+  }
+
+  // Save the .fl file...
+  strcpy(ext, ".fl");
+
+  if (!access(filename, 0)) {
+    if (choice("The template \"%s\" already exists.\n"
+                  "Do you want to replace it?", "Cancel",
+		  "Replace", NULL, c) == 0) return;
+  }
+
+  if (!write_file(filename)) {
+    alert("Error writing %s: %s", filename, strerror(errno));
+    return;
+  }
+
+#if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
+  // Get the screenshot, if any...
+  FluidType *t;
+
+  for (t = FluidType::first; t; t = t->next) {
+    // Find the first window...
+    if (t->is_window()) break;
+  }
+
+  if (!t) return;
+
+  // Grab a screenshot...
+  Fl_Window_Type *wt = (Fl_Window_Type *)t;
+  uchar *pixels;
+  int w, h;
+
+  if ((pixels = wt->read_image(w, h)) == NULL) return;
+
+  // Save to a PNG file...
+  strcpy(ext, ".png");
+
+  FILE *fp;
+
+  if ((fp = fopen(filename, "wb")) == NULL) {
+    delete[] pixels;
+    fl_alert("Error writing %s: %s", filename, strerror(errno));
+    return;
+  }
+
+  png_structp pptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+  png_infop iptr = png_create_info_struct(pptr);
+  png_bytep ptr = (png_bytep)pixels;
+
+  png_init_io(pptr, fp);
+  png_set_IHDR(pptr, iptr, w, h, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+               PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+  png_set_sRGB(pptr, iptr, PNG_sRGB_INTENT_PERCEPTUAL);
+
+  png_write_info(pptr, iptr);
+
+  for (int i = h; i > 0; i --, ptr += w * 3) {
+    png_write_row(pptr, ptr);
+  }
+
+  png_write_end(pptr, iptr);
+  png_destroy_write_struct(&pptr, &iptr);
+
+  fclose(fp);
+
+#  if 0 // The original PPM output code...
+  strcpy(ext, ".ppm");
+  fp = fopen(filename, "wb");
+  fprintf(fp, "P6\n%d %d 255\n", w, h);
+  fwrite(pixels, w * h, 3, fp);
+  fclose(fp);
+#  endif // 0
+
+  delete[] pixels;
+#endif // HAVE_LIBPNG && HAVE_LIBZ
+}
+
+void revert_cb(Widget *,void *) {
+  if (modflag) {
+    if (!choice("This user interface has been changed. Really revert?",
+                   "Cancel", "Revert", NULL)) return;
+  }
+  Undo::suspend();
+  if (!read_file(filename, 0)) {
+      Undo::resume();
+    message("Can't read %s: %s", filename, strerror(errno));
+    return;
+  }
+  Undo::resume();
+  modflag=0;
+  Undo::clear();
+}
+
 void exit_cb(Widget *,void *) {
     if (modflag)
 	switch (choice("Save changes before exiting?", "Yes", "No", "Cancel")) {
@@ -309,7 +460,130 @@ void open_history_cb(Widget *, void *v) {
     if (oldfilename) free((void *)oldfilename);
 }
 
+static char* cutfname(int which = 0) {
+  static char name[2][1024];
+  static char beenhere = 0;
+
+  if (!beenhere) {
+    beenhere = 1;
+    fluid_prefs.getUserdataPath(name[0], sizeof(name[0]));
+    strlcat(name[0], "cut_buffer", sizeof(name[0]));
+    fluid_prefs.getUserdataPath(name[1], sizeof(name[1]));
+    strlcat(name[1], "dup_buffer", sizeof(name[1]));
+  }
+
+  return name[which];
+}
+
+// new_cb() : new (possibly template) fulid file creation from File/New menu
 void new_cb(Widget *, void *v) {
+  // Check if the current file has been modified...
+  if (!v && modflag) {
+    // Yes, ask the user what to do...
+    switch (choice("Do you want to save changes to this user\n"
+                      "interface before creating a new one?", "Cancel",
+                      "Save", "Don't Save"))
+    {
+      case 0 : /* Cancel */
+          return;
+      case 1 : /* Save */
+          save_cb(NULL, NULL);
+	  if (modflag) return;	// Didn't save!
+    }
+  }
+
+  // Setup the template panel...
+  if (!template_panel) make_template_panel();
+
+  template_clear();
+  template_browser->add("Blank");
+  template_load();
+
+  template_name->hide();
+  template_name->value("");
+
+  template_instance->show();
+  template_instance->deactivate();
+  template_instance->value("");
+
+  template_delete->hide();
+
+  template_submit->label("New");
+  template_submit->deactivate();
+
+  template_panel->label("New");
+
+  // Show the panel and wait for the user to do something...
+  template_panel->show();
+  while (template_panel->visible()) fltk::wait();
+
+  // See if the user chose anything...
+  int item = template_browser->value();
+  if (item < 0) return;
+
+  // Clear the current data...
+  delete_all();
+  set_filename(NULL);
+
+  // Load the template, if any...
+  const char *tname = (const char *)template_browser->child(item)->user_data();
+
+  if (tname) {
+    // Grab the instance name...
+    const char *iname = template_instance->value();
+
+    if (iname && *iname) {
+      // Copy the template to a temp file, then read it in...
+      char line[1024], *ptr, *next;
+      FILE *infile, *outfile;
+
+      if ((infile = fopen(tname, "r")) == NULL) {
+	alert("Error reading template file \"%s\":\n%s", tname,
+        	 strerror(errno));
+	modflag=0;
+	Undo::clear();
+	return;
+      }
+
+      if ((outfile = fopen(cutfname(1), "w")) == NULL) {
+	alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
+        	 strerror(errno));
+	fclose(infile);
+	modflag = 0;
+	Undo::clear();
+	return;
+      }
+
+      while (fgets(line, sizeof(line), infile)) {
+	// Replace @INSTANCE@ with the instance name...
+	for (ptr = line; (next = strstr(ptr, "@INSTANCE@")) != NULL; ptr = next + 10) {
+	  fwrite(ptr, next - ptr, 1, outfile);
+	  fputs(iname, outfile);
+	}
+
+	fputs(ptr, outfile);
+      }
+
+      fclose(infile);
+      fclose(outfile);
+
+      Undo::suspend();
+      read_file(cutfname(1), 0);
+      unlink(cutfname(1));
+      Undo::resume();
+    } else {
+      // No instance name, so read the template without replacements...
+	Undo::suspend();
+      read_file(tname, 0);
+      Undo::resume();
+    }
+  }
+
+  modflag =0;
+  Undo::clear();
+}
+
+/*void new_cb(Widget *, void *v) {
     if (!v && modflag && !ask("Discard changes?")) return;
     const char *c;
     if (!(c = file_chooser("New:", "*.f[ld]", 0))) return;
@@ -317,7 +591,7 @@ void new_cb(Widget *, void *v) {
     set_filename(c);
     modflag = 0;
 }
-
+*/
 static int compile_only = 0;
 int header_file_set = 0;
 int code_file_set = 0;
@@ -376,21 +650,6 @@ void ungroup_cb(Widget *, void *);
 
 extern int pasteoffset;
 static int ipasteoffset;
-
-static char* cutfname() {
-#if defined (_WIN32) && !defined(__CYGWIN__)
-    static char name[1024] = "";
-    if (!name[0]) {
-	if (!GetTempPath(sizeof(name), name)) strcpy(name,"\\"); // failure
-	strcat(name, ".fluidcutbuffer");
-    }
-    return name;
-#else
-    static char name[1024] = "";
-    if (!name[0]) filename_absolute(name, 1024, "~/.fluid_cut_buffer");
-    return name;
-#endif
-}
 
 void copy_cb(Widget*, void*) {
     if (!FluidType::current) return;

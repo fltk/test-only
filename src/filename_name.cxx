@@ -25,6 +25,8 @@
   is no slash this returns a pointer to the start of \a name.
 */
 FL_API const char *fltk::filename_name(const char *name) {
+  if (!name) return 0;
+
   const char *p,*q;
   q = name;
 #ifdef _WIN32

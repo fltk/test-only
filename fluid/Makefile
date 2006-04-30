@@ -53,6 +53,7 @@ CPPFILES = \
 	Fl_Widget_Type.cxx \
 	Fl_Window_Type.cxx \
 	function_panel.cxx \
+	template_panel.cxx \
 	fluid_img.cxx \
 	widget_panel.cxx \
 	undo.cxx 

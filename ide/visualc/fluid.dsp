@@ -245,6 +245,10 @@ SOURCE=..\..\fluid\function_panel.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\template_panel.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\undo.cxx
 # End Source File
 # Begin Source File

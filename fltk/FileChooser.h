@@ -2,7 +2,7 @@
 
 #ifndef FileChooser_h
 #define FileChooser_h
-// Header for //\n// "$Id: FileChooser.fl 4910 2006-04-06 19:26...
+// Header for //\n// "$Id: FileChooser.fl 4960 2006-04-15 20:35...
 #include <fltk/DoubleBufferWindow.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -158,5 +158,5 @@ public:
 };
 extern FL_API void file_chooser_ok_label(const char*l);
 }
-// Header for //\n// End of "$Id: FileChooser.fl 4910 2006-04-0...
+// Header for //\n// End of "$Id: FileChooser.fl 4960 2006-04-1...
 #endif

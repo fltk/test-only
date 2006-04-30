@@ -295,8 +295,7 @@ FileChooser::favoritesCB(Widget *w)
       if (!pathname[0]) break;
 
       // Add the favorite to the list...
-      favList->add(pathname,
-                   FileIcon::find(pathname, FileIcon::DIRECTORY));
+      favList->add(pathname,FileIcon::find(pathname, FileIcon::DIRECTORY));
     }
 
     favUpButton->deactivate();
@@ -308,13 +307,13 @@ FileChooser::favoritesCB(Widget *w)
     favWindow->show();
   } else if (w == favList) {
     i = favList->value();
-    if (i) {
-      if (i > 1) favUpButton->activate();
+    if (i>=0) {
+      if (i >= 1) favUpButton->activate();
       else favUpButton->deactivate();
 
       favDeleteButton->activate();
 
-      if (i < favList->size()) favDownButton->activate();
+      if (i < favList->size()-1) favDownButton->activate();
       else favDownButton->deactivate();
     } else {
       favUpButton->deactivate();
@@ -324,11 +323,11 @@ FileChooser::favoritesCB(Widget *w)
   } else if (w == favUpButton) {
     i = favList->value();
 
-    favList->insert(i - 1, favList->child(i)->label(), favList->child(i)->user_data());
-    favList->remove(i + 1);
+    favList->Menu::insert(*favList->child(i),i-1);
+    //favList->remove(i + 1);
     favList->select(i - 1);
 
-    if (i == 2) favUpButton->deactivate();
+    if (i == 1) favUpButton->deactivate();
 
     favDownButton->activate();
 
@@ -353,11 +352,12 @@ FileChooser::favoritesCB(Widget *w)
   } else if (w == favDownButton) {
     i = favList->value();
 
-    favList->insert(i + 2, favList->child(i)->label(), favList->child(i)->user_data());
-    favList->remove(i);
+    favList->Menu::insert(*favList->child(i),i+2);
+    //favList->insert(i + 2, favList->child(i)->label(), favList->child(i)->user_data());
+    //favList->remove(i);
     favList->select(i + 1);
 
-    if ((i + 1) == favList->size()) favDownButton->deactivate();
+    if ((i+1) == favList->size()-1) favDownButton->deactivate();
 
     favUpButton->activate();
 
@@ -492,10 +492,7 @@ FileChooser::fileListCB()
 //
 // 'FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
 //
-
-void
-FileChooser::fileNameCB()
-{
+void FileChooser::fileNameCB() {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
 		pathname[1024],	// Full pathname to file
@@ -506,9 +503,6 @@ FileChooser::fileNameCB()
 		num_files,	// Number of files in directory
 		first_line;	// First matching line
   const char	*file;		// File from directory
-
-
-//  puts("fileNameCB()");
 
   // Get the filename from the text field...
   filename = (char *)fileName->text();
