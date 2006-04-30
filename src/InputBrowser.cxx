@@ -130,14 +130,13 @@ ComboBrowser::handle(int event) {
     fltk::focus(item());
   }
 
-  if ((event == KEY) &&  event_key()!=LeftAltKey && (event_state() | fltk::ALT) ) {
+  if ((event == KEY) &&  (is_accel_key(event_key()) || (event_state() & fltk::ACCELERATOR)) ) {
       return Browser::handle(event); // delegate to the Menu handler
   } else if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
-    if( (event_key()!=EscapeKey) &&
+    if (!is_accel_key(event_key()) && // give a chance to the browser to handle the menu shortcuts
+        (event_key()!=EscapeKey) &&
 	(event_key()!=UpKey) &&
-	(event_key()!=DownKey) &&
-	(event_key()!=LeftAltKey) && // give a chance to the browser to handle the menu shortcuts
-	(event_key()!=RightAltKey) &&
+	(event_key()!=DownKey) && 
 	(event_key()!=ReturnKey && !item()) )
       return ibinput->handle(KEY);
   }
@@ -256,7 +255,7 @@ InputBrowser::handle(int e) {
 	popup();
 //    else
     return win->handle(e);
-  } else if ((e == KEY) &&  (event_state() | fltk::ALT) ) {
+  } else if ((e == KEY) &&  (event_state() & fltk::ACCELERATOR) ) {
       return list ? list->handle(e) : Menu::handle(e); // delegate to the Menu handler
   // all other keys should be sent to Input
   } else if ((event_inside(m_input) || e == KEY)

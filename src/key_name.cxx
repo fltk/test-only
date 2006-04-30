@@ -177,7 +177,7 @@ unsigned fltk::key(const char* name) {
   int shifts = 0;
   while (name[0] && name[1]) {
     if (*name == '#') {
-      shifts |= fltk::ALT; name++;
+      shifts |= fltk::ACCELERATOR; name++;
     } else if (*name == '+') {
       shifts |= fltk::SHIFT; name++;
     } else if (*name == '^') {
@@ -190,6 +190,8 @@ unsigned fltk::key(const char* name) {
       shifts |= fltk::CTRL; name += 5;
     } else if (!strncasecmp(name, "meta", 4) && (name[4]=='-'||name[4]=='+')) {
       shifts |= fltk::META; name += 5;
+    } else if (!strncasecmp(name,"accelerator",11)&& (name[11]=='-'||name[11]=='+')) {
+      shifts |= fltk::ACCELERATOR; name += 12;
     } else if (!strncasecmp(name,"command",7)&& (name[7]=='-'||name[7]=='+')) {
       shifts |= fltk::COMMAND; name += 8;
     } else break;

@@ -116,7 +116,7 @@ static void innards(const uchar *buf,
     // add some way of specifying these patterns on Intel:
 # error Little-endian not supported
 #endif
-
+  default: break; // please gcc
   }
   CGImageRef img;
   if (pixeltype==MASK)

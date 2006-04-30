@@ -114,7 +114,7 @@ static unsigned last_list_length = 0;
   returned by fltk::event_state(), and either a key symbol returned by
   fltk::event_key(), or an ASCII character.  Examples:
   - <code>fltk::CTRL+'a'</code>
-  - <code>fltk::ALT+fltk::CTRL+'A'</code>
+  - <code>fltk::ACCELERATOR+fltk::CTRL+'A'</code>
   - just <code>'a'</code>
   - <code>fltk::SHIFT+'#'</code>
   - <code>fltk::SHIFT+fltk::UpKey</code>
@@ -384,7 +384,7 @@ unsigned Widget::label_shortcut() const {
   if (!label) for (;*label;) {
     if (*label++ == '&') {
       if (*label == '&') label++;
-      else return ALT|*label;
+      else return ACCELERATOR|*label;
     }
   }
   return 0;
@@ -406,6 +406,11 @@ unsigned Widget::label_shortcut() const {
 bool Widget::test_label_shortcut() const {
   if (flags() & RAW_LABEL) return false;
   char c = tolower(event_text()[0]);
+  // test ctrl key if accel is ctrl
+  if (ACCELERATOR==CTRL && c <= 0x1A) {
+    c+=0x60; // get corresponding lower alpha
+  }
+  // printf("ok shortcut %c\n",c);
   const char* label = this->label();
   if (!c || !label) return false;
   for (;*label;) {

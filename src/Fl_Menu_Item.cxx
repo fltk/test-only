@@ -29,6 +29,8 @@
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
 #include <fltk/Divider.h>
+#include <stdio.h>
+
 using namespace fltk;
 
 int Fl_Menu_Item::size() const {
@@ -121,7 +123,6 @@ Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
     return this + menu.value();
   return 0;
 }
-
 // Searches the array for a shortcut that matches the current event
 // and returns it:
 const Fl_Menu_Item*

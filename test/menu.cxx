@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
   ItemGroup file("&File");
   file.begin();
   Item* o = new Item("Quit");
-  o->shortcut(ALT+'q');
+  o->shortcut(COMMAND+'q');
   o->callback(quit_cb);
   new Divider();
   (new Slider(0,0,100,30))->value(.3);
@@ -94,10 +94,10 @@ int main(int argc, char **argv) {
   file.end();
   ItemGroup edit("&Edit");
   edit.begin();
-  (new Item("Undo"))->shortcut(ALT+'z');
-  (new Item("Cut"))->shortcut(ALT+'x');
-  (new Item("Copy"))->shortcut(ALT+'c');
-  (new Item("Paste"))->shortcut(ALT+'v');
+  (new Item("Undo"))->shortcut(COMMAND+'z');
+  (new Item("Cut"))->shortcut(COMMAND+'x');
+  (new Item("Copy"))->shortcut(COMMAND+'c');
+  (new Item("Paste"))->shortcut(COMMAND+'v');
   build_hierarchy();
   edit.end();
   //edit.deactivate();

@@ -172,13 +172,26 @@ enum {
   BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
   ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
-#ifdef __APPLE__
-  COMMAND = META /*!< On Apple it is the same as META, on other platforms CTRL. */
+#if  defined(__APPLE__)
+  ACCELERATOR = CTRL,       /*!< On Apple CTRL it the same as ALT for other platforms. */
+# define LeftAccKey  LeftCtrlKey
+# define RightAccKey RightCtrlKey
+  COMMAND = META       /*!< Meta is The same as CTRL on other platforms. */
+# define LeftCmdKey  LeftMetaKey
+# define RightCmdKey RightMetaKey
 #else
-  COMMAND = CTRL /*!< On Apple it is the same as META, on other platforms CTRL. */
+  ACCELERATOR = ALT,        /*!< For other platforms, ALT is used as accelerator. */
+# define LeftAccKey  LeftAltKey
+# define RightAccKey RightAltKey
+  COMMAND = CTRL       /*!< Plain CTRL. */
+# define LeftCmdKey  LeftCtrlKey
+# define RightCmdKey RightCtrlKey
 #endif // __APPLE__
 };
 
+
+//! will return true if an acelerator key has been pressed (useful for shortcut handling)
+inline bool is_accel_key(int k)  {return k==LeftAccKey || k==RightAccKey;}
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
 
 /*! Device identifier returned by event_device(). This enumeration
@@ -258,6 +271,9 @@ inline float event_pressure()	 	{return e_pressure;}
 inline float event_x_tilt()     	{return e_x_tilt;}
 inline float event_y_tilt()     	{return e_y_tilt;}
 inline int  event_device()      	{return e_device;}
+
+ inline bool is_accel_state()  {return event_key_state(LeftAccKey)  || event_key_state(RightAccKey);}
+ 
 
 // tests on current event:
 FL_API bool event_inside(const Rectangle&);
