@@ -200,7 +200,7 @@ public:
 
   bool position_to_xy(int pos, int *X, int *Y);
 
-
+  int count_lines(int start, int end, bool start_pos_is_line_start);
 protected:
   void draw_text(int X, int Y, int W, int H);
   void draw_range(int start, int end);
@@ -217,7 +217,6 @@ protected:
   void clear_rect(int style, int x, int y, int width, int height);
   void display_insert();
 
-  int count_lines(int start, int end, bool start_pos_is_line_start);
   int skip_lines(int startPos, int nLines, bool startPosIsLineStart);
   int rewind_lines(int startPos, int nLines);
   int position_style(int lineStartPos, int lineLen, int lineIndex, int dispIndex);
