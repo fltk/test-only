@@ -167,12 +167,12 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     history_item[8] = new Item(relative_history[8], COMMAND+'8', open_history_cb, absolute_history[8]);
     history_item[9] = new Item(relative_history[9], COMMAND+'9', open_history_cb, absolute_history[9]);
     new Divider();
-    new Item("Quit", COMMAND+'q', exit_cb);
+    new Item("&Quit", COMMAND+'q', exit_cb);
     g->end();
     
     g=new ItemGroup("&Edit",0,0);
-    undo_item[0] = new Item("Undo", COMMAND+'z', Undo::undo_cb,0,INACTIVE);
-    undo_item[1] = new Item("Redo", SHIFT+COMMAND+'Z', Undo::redo_cb,0,INACTIVE);
+    undo_item[0] = new Item("U&ndo", COMMAND+'z', Undo::undo_cb,0,INACTIVE);
+    undo_item[1] = new Item("&Redo", SHIFT+COMMAND+'Z', Undo::redo_cb,0,INACTIVE);
     new Divider();
     new Item("&Cut", COMMAND+'x', cut_cb);
     new Item("C&opy", COMMAND+'c', copy_cb);
@@ -198,9 +198,9 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
     new Divider();
     new Item("&Preferences",COMMAND+'p',show_alignment_cb);
-    new Item("Coding Style", 0, show_coding_style_cb);
-    new Item("Theme", 0, theme_cb);
-    new Item("Set images root directory", COMMAND+'d', set_images_dir_cb);
+    new Item("Coding St&yle", 0, show_coding_style_cb);
+    new Item("T&heme", 0, theme_cb);
+    new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
     g->end();
     
     g=new ItemGroup("&New", 0, 0);
